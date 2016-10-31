@@ -1,0 +1,133 @@
+<div class="card-container">
+    <div id="wrap">
+        <!-- header -->
+        <div id="aboveNav">
+
+            <div id="icon"></div>
+            <div id="help" title="Click to display Artstor Help"></div>
+        </div>
+
+        <div class="clearFix"></div>
+
+        <!-- content-template -->
+        <div id="main-content">
+
+            <div id="column-one">
+                <!-- login box -->
+                <p class="header">Already registered? Log in remotely.</p>
+
+                <div id="logonErrorMsg">&nbsp;</div>
+                <div id="logonEmail" class="logonEntry darkText2 bold">Email address</div> 
+                <input [(ngModel)]="user.username" id="logonEmailInp" type="text" size="35" tabindex="0" />
+                <div class="clearFix"></div>
+                <div id="logonPW" class="logonEntry darkText2 bold">Password</div> 
+                <input [(ngModel)]="user.password" id="logonPWInp" type="password" size="35" tabindex="0" />
+                <span> {{ errorMsg }} </span>
+                <button (click)="login()" 
+                    class="btn waves-effect waves-light" 
+                    type="submit" name="action">Login</button>
+                <div class="clearFix"></div>
+                <div id="logonForgetPW" class="linkSmall">Forgot your password?</div>
+                <div id="logonButton" tabindex="58"></div>
+
+
+            </div>
+
+
+            <div id="column-two">
+                <p class="header header2">How do I register?</p>
+
+                <p class="text">To access the images in the Artstor Digital Library you need to be affiliated with a participating institution (university, college, museum, public library or K-12 school). </p>
+                <p class="text">Please check a current list of Artstor <a href="http://www.artstor.org/interested-in-participation/i-html/current-participants.shtml" target="_blank">Participants</a> to see if you have access.</p>
+                <p class="text">If you are at a participating institution, <a href="http://www.artstor.org/using-artstor/u-html/remote-access.shtml" target="_blank">learn more about accessing Artstor remotely</a></p>
+
+                <p class="text">If you are at a non-participating institution and are interested in getting access to Artstor for your institution, you can learn more about <a href="http://www.artstor.org/interested-in-participation/i-html/becoming-participant.shtml"
+                        target="_blank">Becoming a Participant</a> or contact <a href="mailto:participation@artstor.org" target="_blank">Artstor Library Relations.</a></p>
+            </div>
+            <div class="clearFix"></div>
+        </div>
+        <div class="clearFix"></div>
+    </div>
+
+
+    <!-- **************Popup Dialog************* -->
+    <div id="PWDialog" dojoType="dijit.Dialog" bgColor="white" bgOpacity="0.5" toggle="fade" followScroll="false" toggleDuration="350" closeOnBackgroundClick="false">
+
+        <div id="conSaveCommBorder" class="dialogBorder">
+            <div class="dialogLogo"> </div>
+            <div class="dialogTitle"> </div>
+            <div id="conSaveCommClose" class="dialogClose"></div>
+        </div>
+
+        <div class="clearFix"></div>
+        <div id="conSaveRemPeriod" style="display:block">
+            <div id="conSaveCommHead0" class="dialogHeading">Remote login successful! <span>You currently have <span id="conSavePer">120</span> days remaining.</span>
+            </div>
+
+            <div class="clearFix"></div>
+
+            <div id="conSaveCommContent0">
+
+                <div id="conSaveCommText0" class="lineHead">You can access Artstor from outside your institution's network for 120 days. To restart your 120-day timer, log in to your Artstor account while within your institution's network.</div>
+
+            </div>
+            <div class="clearFix"></div>
+            <div class="conSaveCommButts">
+
+                <div id="conSaveCommCont" class="jbutton jbuttR" tabindex="0">
+                    <div id="conSaveComButt" class="jbuttonR">Continue</div>
+                </div>
+
+            </div>
+
+            <div class="clearFix"></div>
+        </div>
+
+        <div id="conSavePWReq" style="display:none">
+            <div id="conSaveCommHead" class="dialogHeading">Forgot your password?</div>
+            <div class="clearFix"></div>
+
+            <div id="conSaveCommContent">
+
+                <div id="conSaveCommText" class="lineHead">Enter the email address that you used when registering.</div>
+                <p id="emailError">&nbsp;</p>
+                <p id="emailPW" class="loginTitle">Email Address:</p>
+                <input id="emailAddPW" type="text" size="35" tabindex="0" />
+            </div>
+            <div class="clearFix"></div>
+            <div class="conSaveCommButts">
+
+                <div id="conSaveCommYes" class="jbutton jbuttR" tabindex="0">
+                    <div class="jbuttonR">Submit</div>
+                </div>
+                <div id="conSaveCommNo" class="jbutton jbuttY" tabindex="0">
+                    <div class="jbuttonY">Cancel</div>
+                </div>
+
+            </div>
+
+            <div class="clearFix"></div>
+        </div>
+
+
+        <div id="conSavePWResp" style="display:none">
+
+            <div id="conSaveCommContent1">
+
+                <div id="conSaveCommText1" class="lineHead">Your password has been sent.</div>
+
+            </div>
+
+            <div class="conSaveCommButts">
+
+                <div id="conSaveCommOK" class="jbutton jbuttR" tabindex="0">
+                    <div class="jbuttonR">OK</div>
+                </div>
+            </div>
+
+            <div class="clearFix"></div>
+        </div>
+    </div>
+    <div id="genWait"></div>
+    <span style="height:1px; width:1px; " id="conSaveCommAudio"> </span>
+</div>

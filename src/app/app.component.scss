@@ -1,0 +1,19 @@
+// Main Sass File
+
+$gray: #cdcdcd;
+
+#logo {
+  height: 22px; // Half the image height 
+  width: auto;
+  padding: 45px 20px; 
+}
+
+html, body{
+  height: 100%;
+  font-family: Arial, Helvetica, sans-serif;
+  margin: 0px;
+}
+
+span.active {
+  background-color: $gray;
+}

@@ -1,0 +1,15 @@
+
+$navBg: rgb(225,232,225);
+
+#logo {
+    height: 20px;
+    width: auto;
+    
+}
+
+.nav {
+    background: $navBg;
+    width: 100%;
+    height: 108px;
+    display: block;
+}
