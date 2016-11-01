@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 // import { HttpModule } from '@angular/http';
 import { Http, Response, Headers, RequestOptions } from '@angular/http';
 import { Observable } from 'rxjs/Rx';
+import 'rxjs/add/operator/toPromise';
 
 export class User {
   constructor(
@@ -10,42 +11,53 @@ export class User {
     public password: string) { }
 }
  
-var users = [
-  new User('qa001@artstor.org','artstor')
-];
- 
 @Injectable()
 export class AuthenticationService {
     
     constructor(private _router: Router, private http: Http){}
-    // private instance var for base url
-    private loginUrl = 'http://library.artstor.org/library/secure/login';
     
+    // Use header rewrite proxy for local development
+    private proxyUrl = 'http://rocky-cliffs-9470.herokuapp.com/api?url=';
+     // private instance var for base url
+    private baseUrl = this.proxyUrl + 'http://library.artstor.org/library/secure';
+    
+    private formEncode = function (obj) {
+            var encodedString = '';
+            for (var key in obj) {
+                if (encodedString.length !== 0) {
+                    encodedString += '&';
+                }
+
+                encodedString += key + '=' + encodeURIComponent(obj[key]);
+            }
+            return encodedString.replace(/%20/g, '+');
+        };
+    
+    private extractData(res: Response) {
+        let body = res.json();
+        return body || { };
+    }
+
     logout() {
         localStorage.removeItem("user");
         this._router.navigate(['Login']);
     }
     
-    // We are maintaining strictness by ensuring that the service instance methods always return an observable of type
-    login(onNext: (user: Object) => void) {
-        let headers = new Headers({ 'Content-Type': 'application/json' }); // ... Set content type to JSON
-        let options = new RequestOptions({ headers: headers }); // Create a request option
+    login(user: User) {
+        var header = new Headers({ 'Content-Type': 'application/x-www-form-urlencoded' }); // ... Set content type to JSON
+        let options = new RequestOptions({ headers: header, withCredentials: true }); // Create a request option
+        var data = this.formEncode({ 
+                'j_username': user.username, 
+                'j_password': user.password 
+            });
 
-        this.http.post(this.loginUrl, { }, options)
-            // ...and calling .json() on the response to return data
-            .map((res:Response) => res.json())
-            //...errors if any
-            .subscribe(onNext,
-                       error => 
-                       console.log("An error occurred when requesting login.", error));
-    
-    // var authenticatedUser = users.find(u => u.username === user.username);
-    // if (authenticatedUser && authenticatedUser.password === user.password){
-    //     localStorage.setItem("user", authenticatedUser.username);
-    // //   this._router.navigate(['Home']);      
-    //     return true;
-    // }
-    // return false;
+        return this.http
+            .post(this.baseUrl + '/login', data, options)
+            .toPromise()
+            .then(this.extractData)
+            .catch(function() {
+                // error handling
+            });
 
     }
  

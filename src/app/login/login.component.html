@@ -23,7 +23,7 @@
                 <div id="logonPW" class="logonEntry darkText2 bold">Password</div> 
                 <input [(ngModel)]="user.password" id="logonPWInp" type="password" size="35" tabindex="0" />
                 <span> {{ errorMsg }} </span>
-                <button (click)="login()" 
+                <button (click)="login(user)" 
                     class="btn waves-effect waves-light" 
                     type="submit" name="action">Login</button>
                 <div class="clearFix"></div>

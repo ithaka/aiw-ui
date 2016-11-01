@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 
 import { AppState } from '../app.service';
 import { AuthenticationService, User } from './login.service';
@@ -23,18 +24,23 @@ export class Login {
   public user = new User('','');
   public errorMsg = '';
   // TypeScript public modifiers
-  constructor(public appState: AppState, private _service: AuthenticationService) { }
+  constructor(public appState: AppState, private _service: AuthenticationService, private router: Router) { 
+    
+  }
   
-  login() {
-    this._service.login(function(user) {
-      console.log(user);
-    });
-    //this.user
-      // if(!this._service.login()){
-      //     this.errorMsg = 'Failed to login';
-      // } else {
-      //     this.errorMsg = 'Success';
-      // }
+  loadForUser(user) {
+    if (user.user) {
+      console.log(user.user);
+    }
+    this.router.navigate(['/home']);
+  }
+  
+  login(user) {
+    this._service.login(user)
+      .then(
+        data  => this.loadForUser(data),
+        error =>  this.errorMsg = <any>error
+      );
   }
 
   ngOnInit() {
