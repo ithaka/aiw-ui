@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 
 import { AppState } from '../app.service';
 import { AuthenticationService, User } from './login.service';
+import { Location }                 from '@angular/common';
 
 @Component({
   // The selector is what angular internally uses
@@ -23,8 +24,9 @@ export class Login {
   localState = { value: '' };
   public user = new User('','');
   public errorMsg = '';
+  
   // TypeScript public modifiers
-  constructor(public appState: AppState, private _service: AuthenticationService, private router: Router) { 
+  constructor(public appState: AppState, private _service: AuthenticationService, private router: Router, private location: Location) { 
     
   }
   
@@ -33,6 +35,8 @@ export class Login {
       console.log(user.user);
     }
     this.router.navigate(['/home']);
+    // this.location.go('/home');
+
   }
   
   login(user) {
