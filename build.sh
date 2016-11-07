@@ -20,7 +20,7 @@ gem install sass
 export PATH=/usr/local/node-v6.3.1-linux-x64/bin:$PATH
 
 # Node bits
-npm install --global webpack webpack-dev-server karma karma-cli protractor typescript rimraf
+npm install --global webpack webpack-dev-server webpack-merge karma karma-cli protractor typescript rimraf
 
 # bower --allow-root install
 
