@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 // import { HttpModule } from '@angular/http';
 import { Http, Response, Headers, RequestOptions } from '@angular/http';
 import { Observable } from 'rxjs/Rx';
+import { LocalStorage, SessionStorage } from "angular2-localstorage/WebStorage";
 import 'rxjs/add/operator/toPromise';
 
 export class User {
@@ -20,6 +21,8 @@ export class AuthenticationService {
     private proxyUrl = 'http://rocky-cliffs-9470.herokuapp.com/api?url=';
      // private instance var for base url
     private baseUrl = this.proxyUrl + 'http://library.artstor.org/library/secure';
+
+    @LocalStorage() public user:Object = {};
     
     private formEncode = function (obj) {
             var encodedString = '';
@@ -38,8 +41,22 @@ export class AuthenticationService {
         return body || { };
     }
 
+    private saveUser(res: any) {
+        console.log("Save User!");
+        console.log(res);
+        if (res.user) {
+            localStorage.setItem('user', res.user);
+            this.user = res.user;
+        }
+        return res;
+    }
+
+    getUser() : Object {
+        return localStorage.getItem('user');
+    }
+
     logout() {
-        localStorage.removeItem("user");
+        localStorage.removeItem('user');
         this._router.navigate(['Login']);
     }
     
@@ -55,6 +72,7 @@ export class AuthenticationService {
             .post(this.baseUrl + '/login', data, options)
             .toPromise()
             .then(this.extractData)
+            .then(this.saveUser)
             .catch(function() {
                 // error handling
             });
@@ -62,7 +80,7 @@ export class AuthenticationService {
     }
  
    checkCredentials(){
-    if (localStorage.getItem("user") === null){
+    if (localStorage.getItem('user') === null){
         this._router.navigate(['Login']);
     }
   } 

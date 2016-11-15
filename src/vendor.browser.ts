@@ -21,6 +21,10 @@ import '@angularclass/hmr';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/mergeMap';
 
+// Bootstrap JS
+import '@ng-bootstrap/ng-bootstrap';
+// import 'bootstrap-sass/assets/javascripts/bootstrap';
+
 if ('production' === ENV) {
   // Production
 

@@ -1,6 +1,16 @@
 // Main Sass File
 
+// Bootstrap variable ovverides
+$btn-border-radius: 0px;
+
+@import '../../node_modules/bootstrap/scss/bootstrap.scss';
+
 $gray: #cdcdcd;
+
+
+.form-control {
+  border-radius: 0px;
+}
 
 #logo {
   height: 22px; // Half the image height 

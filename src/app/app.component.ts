@@ -16,43 +16,11 @@ import { AppState } from './app.service';
     './app.component.scss'
   ],
   template: `
-    <nav>
-    </nav>
-      <span>
-        <a [routerLink]=" ['./'] ">
-          Index
-        </a>
-      </span>
-      |
-      <span>
-        <a [routerLink]=" ['./home'] ">
-          Home
-        </a>
-      </span>
-      |
-      <span>
-        <a [routerLink]=" ['./detail'] ">
-          Detail
-        </a>
-      </span>
-      |
-      <span>
-        <a [routerLink]=" ['./about'] ">
-          About
-        </a>
-      </span>
-      |
-      <span>
-        <a [routerLink]=" ['./login'] ">
-          Login
-        </a>
-      </span>
+    <nav-bar></nav-bar>
 
     <main>
       <router-outlet></router-outlet>
     </main>
-
-    <pre class="app-state">this.appState.state = {{ appState.state | json }}</pre>
 
     <footer>
     </footer>
@@ -60,12 +28,11 @@ import { AppState } from './app.service';
 })
 export class App {
   angularclassLogo = 'assets/img/angularclass-avatar.png';
-  name = 'Angular 2 Webpack Starter';
-  url = 'https://twitter.com/AngularClass';
+  name = 'Artstor';
+  url = 'https://artstor.org/';
 
-  constructor(
-    public appState: AppState) {
-
+  constructor(public appState: AppState) {
+      
   }
 
   ngOnInit() {

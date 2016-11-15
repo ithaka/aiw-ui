@@ -1,31 +1,36 @@
 <div class="card-container">
-    <div id="wrap">
-        <!-- header -->
-        <div id="aboveNav">
-
-            <div id="icon"></div>
-            <div id="help" title="Click to display Artstor Help"></div>
-        </div>
+    <div class="container">
 
         <div class="clearFix"></div>
 
         <!-- content-template -->
-        <div id="main-content">
+        <div id="main-content" class="row">
 
-            <div id="column-one">
+            <div class="col-sm-6">
                 <!-- login box -->
-                <p class="header">Already registered? Log in remotely.</p>
+                <p class="header">Log in with your Artstor Account</p>
 
-                <div id="logonErrorMsg">&nbsp;</div>
-                <div id="logonEmail" class="logonEntry darkText2 bold">Email address</div> 
-                <input [(ngModel)]="user.username" id="logonEmailInp" type="text" size="35" tabindex="0" />
-                <div class="clearFix"></div>
-                <div id="logonPW" class="logonEntry darkText2 bold">Password</div> 
-                <input [(ngModel)]="user.password" id="logonPWInp" type="password" size="35" tabindex="0" />
-                <span> {{ errorMsg }} </span>
+                <!--<div id="logonErrorMsg">&nbsp;</div>-->
+                <!--<div id="logonEmail" class="logonEntry darkText2 bold">Email address</div> -->
+                <!--<input [(ngModel)]="user.username" id="logonEmailInp" type="text" size="35" tabindex="0" />-->
+                <form (ngSubmit)="login(user)">
+                    <label for="loginEmail">Email Address</label>
+                    <input [(ngModel)]="user.username" name="username" id="loginEmail" type="text" class="form-control" placeholder="Username" tabindex="0">
+
+                    <label for="loginPassword">Password</label>
+                    <input [(ngModel)]="user.password" name="password" id="loginPassword" type="password" class="form-control" placeholder="Password" tabindex="1">
+
+                    <span> {{ errorMsg }} </span>
+
+                    <button class="btn btn-default" type="submit" name="action">Login</button>
+                </form>
+
+                
+<!--
                 <button (click)="login(user)" 
                     class="btn waves-effect waves-light" 
-                    type="submit" name="action">Login</button>
+                    type="submit" name="action">Login</button>-->
+
                 <div class="clearFix"></div>
                 <div id="logonForgetPW" class="linkSmall">Forgot your password?</div>
                 <div id="logonButton" tabindex="58"></div>
@@ -33,8 +38,15 @@
 
             </div>
 
+            <div class="col-sm-6">
+                 <p class="header">Log in through your Institution</p>
+                 <select class="form-control">
+                     <option> Test</option>
+                 </select>
+            </div>
 
-            <div id="column-two">
+
+            <div class="col-sm-12">
                 <p class="header header2">How do I register?</p>
 
                 <p class="text">To access the images in the Artstor Digital Library you need to be affiliated with a participating institution (university, college, museum, public library or K-12 school). </p>
@@ -60,7 +72,7 @@
         </div>
 
         <div class="clearFix"></div>
-        <div id="conSaveRemPeriod" style="display:block">
+        <!--<div id="conSaveRemPeriod" style="display:block">
             <div id="conSaveCommHead0" class="dialogHeading">Remote login successful! <span>You currently have <span id="conSavePer">120</span> days remaining.</span>
             </div>
 
@@ -81,7 +93,7 @@
             </div>
 
             <div class="clearFix"></div>
-        </div>
+        </div>-->
 
         <div id="conSavePWReq" style="display:none">
             <div id="conSaveCommHead" class="dialogHeading">Forgot your password?</div>

@@ -1,15 +1,37 @@
 
 $navBg: rgb(225,232,225);
+$navBarHeight: 108px;
+$navBarLineHeight: $navBarHeight - 20px;
 
 #logo {
     height: 20px;
     width: auto;
-    
+    margin: 32px 20px;
+    padding: 0px;
 }
 
-.nav {
+.navbar-light {
     background: $navBg;
-    width: 100%;
-    height: 108px;
+    /*width: 100%;
+    height: 108px;*/
     display: block;
+    min-height: $navBarHeight;
+    border-radius: 0px;
+
+    & .navbar-collapse {
+        line-height: $navBarLineHeight;
+    }
+}
+
+// Navigation Items
+
+.navbar-nav > li > a, .navbar-nav > li > .btn-link {
+    line-height: $navBarLineHeight;
+    border: none;
+    padding: 0;
+}
+
+.navbar-form {
+    margin-top: 13px;
+    margin-bottom: 13px;
 }
