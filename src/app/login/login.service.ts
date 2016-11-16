@@ -42,21 +42,18 @@ export class AuthenticationService {
     }
 
     private saveUser(res: any) {
-        console.log("Save User!");
-        console.log(res);
         if (res.user) {
-            localStorage.setItem('user', res.user);
             this.user = res.user;
         }
         return res;
     }
 
     getUser() : Object {
-        return localStorage.getItem('user');
+        return this.user;
     }
 
     logout() {
-        localStorage.removeItem('user');
+        this.user = {};
         this._router.navigate(['Login']);
     }
     
@@ -80,7 +77,7 @@ export class AuthenticationService {
     }
  
    checkCredentials(){
-    if (localStorage.getItem('user') === null){
+    if (this.user === null || this.user === {}){
         this._router.navigate(['Login']);
     }
   } 

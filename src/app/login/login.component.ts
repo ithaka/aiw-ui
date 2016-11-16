@@ -31,7 +31,7 @@ export class Login {
   }
   
   loadForUser(user) {
-    if (user.user) {
+    if (user && user.user) {
       console.log(user.user);
     }
     this.router.navigate(['/home']);
