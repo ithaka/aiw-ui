@@ -22,7 +22,6 @@ export class AuthenticationService {
 
     constructor(private _router: Router, private http: Http, locker: Locker ){
         this._storage = locker;  
-        // locker.set('user', { 'user' : { 'username' : 'test'}});
     }
     
     // Use header rewrite proxy for local development
@@ -51,7 +50,7 @@ export class AuthenticationService {
         this._storage.set('user', user); 
     }
 
-    public getUser() : Object {
+    public getUser() : any {
         return this._storage.get('user');
     }
 
@@ -74,8 +73,6 @@ export class AuthenticationService {
                 'j_username': user.username, 
                 'j_password': user.password 
             });
-
-        this._storage.set('user', { 'username': 'from login function'});
 
         return this.http
             .post(this.baseUrl + '/login', data, options)

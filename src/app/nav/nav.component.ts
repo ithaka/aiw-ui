@@ -12,6 +12,7 @@ import { AuthenticationService } from '../login/login.service';
   styleUrls: [ './nav.component.scss' ],
 })
 export class Nav {
+  
   // TypeScript public modifiers
   constructor(private _auth: AuthenticationService) { 
     
@@ -21,8 +22,8 @@ export class Nav {
     this._auth.logout();
   }
 
-  getUser() : Object {
-    return this._auth.getUser();
+  getUserName() : String {
+    return this._auth.getUser() ? this._auth.getUser().username : "";
   }
   
   ngOnInit() {

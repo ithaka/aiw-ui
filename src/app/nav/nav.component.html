@@ -36,14 +36,14 @@
   </ul>
 
   <div class="nav float-xs-right">
-    <a [routerLink]=" ['./login'] " routerLinkActive="active">
+    <a [class.hidden]="getUserName()" [routerLink]=" ['./login'] " routerLinkActive="active">
       Login
     </a>
-    <a href="" class="link" ng-click="logout()">
+    <a [class.hidden]="!getUserName()" [routerLink]=" ['./login'] " (click)="logout()">
       Logout
     </a>
 
-    {{ getUser().username }}
+    {{ getUserName() }}
     
   </div>
   
