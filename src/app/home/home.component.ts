@@ -25,6 +25,7 @@ export class Home {
   // Set our default values
   localState = { value: '' };
   collections = [];
+  errors = {};
 
   // TypeScript public modifiers
   constructor(public appState: AppState, public title: Title, private _assets: AssetService) {
@@ -39,6 +40,9 @@ export class Home {
       .then(function(res) {
         console.log(res);
         homeScope.collections = res['Collections'];
+      })
+      .catch(function(err) {
+        homeScope.errors['collections'] = "Unable to load collections.";
       });
   }
 

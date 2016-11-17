@@ -17,6 +17,11 @@
               <a href="?collection={{ collection.collectionid}}">{{ collection.collectionname }}</a>
             </li>
           </ul>
+          <div *ngIf="errors.collections" class="card-block">
+            <div class="alert alert-warning" role="alert">
+              <strong>Error</strong> {{ errors.collections }}
+            </div>
+          </div>
         </div>
       </div>
       <div class="col-sm-4">
