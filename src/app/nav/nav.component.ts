@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 
 import { AuthenticationService } from '../login/login.service';
+// import { LocalStorage, SessionStorage } from "angular2-localstorage/WebStorage";
 
 @Component({
   selector: 'nav-bar',
@@ -16,8 +17,11 @@ export class Nav {
     
   }
 
+  logout() {
+    this._auth.logout();
+  }
+
   getUser() : Object {
-    console.log( this._auth.getUser() );
     return this._auth.getUser();
   }
   

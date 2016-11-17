@@ -3,8 +3,11 @@ import { Router } from '@angular/router';
 // import { HttpModule } from '@angular/http';
 import { Http, Response, Headers, RequestOptions } from '@angular/http';
 import { Observable } from 'rxjs/Rx';
-import { LocalStorage, SessionStorage } from "angular2-localstorage/WebStorage";
+// import { LocalStorage, SessionStorage } from "angular2-localstorage/WebStorage";
 import 'rxjs/add/operator/toPromise';
+
+import { Locker } from 'angular2-locker';
+// import { CoolLocalStorage } from 'angular2-cool-storage';
 
 export class User {
   constructor(
@@ -14,15 +17,18 @@ export class User {
  
 @Injectable()
 export class AuthenticationService {
-    
-    constructor(private _router: Router, private http: Http){}
+
+    public _storage;
+
+    constructor(private _router: Router, private http: Http, locker: Locker ){
+        this._storage = locker;  
+        // locker.set('user', { 'user' : { 'username' : 'test'}});
+    }
     
     // Use header rewrite proxy for local development
     private proxyUrl = 'http://rocky-cliffs-9470.herokuapp.com/api?url=';
      // private instance var for base url
     private baseUrl = this.proxyUrl + 'http://library.artstor.org/library/secure';
-
-    @LocalStorage() public user:Object = {};
     
     private formEncode = function (obj) {
             var encodedString = '';
@@ -41,20 +47,24 @@ export class AuthenticationService {
         return body || { };
     }
 
-    private saveUser(res: any) {
-        if (res.user) {
-            this.user = res.user;
-        }
-        return res;
+    public saveUser(user: any) {
+        this._storage.set('user', user); 
     }
 
-    getUser() : Object {
-        return this.user;
+    public getUser() : Object {
+        return this._storage.get('user');
     }
 
     logout() {
-        this.user = {};
+        // this.user = {};
+        this._storage.remove('user');
         this._router.navigate(['Login']);
+        return this.http
+            .post(this.baseUrl + '/logout', {})
+            .toPromise()
+            .catch(function() {
+                // error handling
+            });
     }
     
     login(user: User) {
@@ -65,11 +75,12 @@ export class AuthenticationService {
                 'j_password': user.password 
             });
 
+        this._storage.set('user', { 'username': 'from login function'});
+
         return this.http
             .post(this.baseUrl + '/login', data, options)
             .toPromise()
             .then(this.extractData)
-            .then(this.saveUser)
             .catch(function() {
                 // error handling
             });
@@ -77,7 +88,7 @@ export class AuthenticationService {
     }
  
    checkCredentials(){
-    if (this.user === null || this.user === {}){
+    if (this._storage.get('user') === null || this._storage.get('user') === {}){
         this._router.navigate(['Login']);
     }
   } 

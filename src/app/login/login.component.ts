@@ -26,13 +26,13 @@ export class Login {
   public errorMsg = '';
   
   // TypeScript public modifiers
-  constructor(public appState: AppState, private _service: AuthenticationService, private router: Router, private location: Location) { 
+  constructor(public appState: AppState, private _auth: AuthenticationService, private router: Router, private location: Location) { 
     
   }
   
   loadForUser(user) {
     if (user && user.user) {
-      console.log(user.user);
+      this._auth.saveUser(user.user);
     }
     this.router.navigate(['/home']);
     // this.location.go('/home');
@@ -40,7 +40,7 @@ export class Login {
   }
   
   login(user) {
-    this._service.login(user)
+    this._auth.login(user)
       .then(
         data  => this.loadForUser(data),
         error =>  this.errorMsg = <any>error

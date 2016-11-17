@@ -39,9 +39,12 @@
     <a [routerLink]=" ['./login'] " routerLinkActive="active">
       Login
     </a>
+    <a href="" class="link" ng-click="logout()">
+      Logout
+    </a>
 
-    {{ getUser() }}
     {{ getUser().username }}
+    
   </div>
   
 </nav>
