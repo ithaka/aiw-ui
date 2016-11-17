@@ -2,6 +2,7 @@
 
 // Bootstrap variable ovverides
 $btn-border-radius: 0px;
+$basePadding: 20px;
 
 @import '../../node_modules/bootstrap/scss/bootstrap.scss';
 
@@ -33,4 +34,9 @@ span.active {
     [class.hidden]="variable"
   */
   display: none !important;
+}
+
+.main-content {
+  padding-left: $basePadding;
+  padding-right: $basePadding;
 }
