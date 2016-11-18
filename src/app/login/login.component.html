@@ -49,3 +49,35 @@
             </div>
         </div>
 </div><!--.container-->
+
+<div id="pwd-modal" class="modal" [ngClass]="{'show': showPwdModal}"> <!-- Pwd Reset Modal -->
+    <div class="modal-content">
+        <div class="modal-header">
+            <img id="dialog-logo" src="/assets/img/dialogLogoTransp.gif" />
+            <span class="close-icon" (click)="hidePwdResetModal()">×</span>
+        </div>
+        <div class="modal-body">
+            <div *ngIf="!successMsgPwdRst">
+                <div class="body-hdr">Forgot your password?</div>
+                <div class="body-txt">Enter the email address that you used when registering.</div>
+                <div class="pwd-reset-cntnr">
+                    <span>Email Address:</span>
+                    <input type="text" [(ngModel)]="pwdRstEmail" />
+                </div>
+                <div class="pwd-rst-error-msg">{{ errorMsgPwdRst }}</div>
+            </div>
+            <div *ngIf="successMsgPwdRst">
+                <div class="success-msg"> {{ successMsgPwdRst }} </div>
+            </div>
+        </div>
+        <div class="submit-cntnr">
+            <div *ngIf="!successMsgPwdRst">
+                <button class="sub-btn btn" (click)="sendResetPwdRequest()">Submit</button>
+                <button class="cncl-btn btn" (click)="hidePwdResetModal()">Cancel</button>
+            </div>
+            <div *ngIf="successMsgPwdRst">
+                <button class="sub-btn btn" (click)="hidePwdResetModal()">Ok</button>
+            </div>
+        </div>
+    </div>
+</div>

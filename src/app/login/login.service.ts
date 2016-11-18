@@ -83,6 +83,16 @@ export class AuthenticationService {
             });
 
     }
+
+    pwdReset(email: string) {
+        let options = new RequestOptions({ withCredentials: true });
+        
+        return this.http
+            // .get(this.baseUrl + '/lostpw/123?email=' + email + '&portal=ARTstor', options)
+            .get('http://rocky-cliffs-9470.herokuapp.com/api?url=http://library.artstor.org/library/lostpw/123?email=' + email + '&portal=ARTstor', options)
+            .toPromise()
+            .then(this.extractData);
+    }
  
    checkCredentials(){
     if (this._storage.get('user') === null || this._storage.get('user') === {}){

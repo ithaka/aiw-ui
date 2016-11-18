@@ -24,6 +24,10 @@ export class Login {
   localState = { value: '' };
   public user = new User('','');
   public errorMsg = '';
+  public showPwdModal = false;
+  public pwdRstEmail = '';
+  public errorMsgPwdRst = '';
+  public successMsgPwdRst = '';
   
   // TypeScript public modifiers
   constructor(public appState: AppState, private _auth: AuthenticationService, private router: Router, private location: Location) { 
@@ -48,7 +52,32 @@ export class Login {
   }
 
   showPwdResetModal() {
-    console.log('works!');
+    this.showPwdModal = true;
+  }
+
+  hidePwdResetModal() {
+    this.pwdRstEmail = '';
+    this.successMsgPwdRst = '';
+    this.showPwdModal = false;
+  }
+  sendResetPwdRequest(){
+    this._auth.pwdReset(this.pwdRstEmail)
+      .then(
+        data  => this.loadPwdRstRes(data),
+        error =>  this.errorMsgPwdRst = <any>error
+      );
+  }
+  loadPwdRstRes(res: any){
+    if(res.status === false){
+      this.errorMsgPwdRst = 'Sorry! ' + this.pwdRstEmail + ' is invalid for ARTstor.';
+      setTimeout(() => {
+        this.errorMsgPwdRst = '';
+                },5000);
+      this.pwdRstEmail = '';
+    }
+    else{
+      this.successMsgPwdRst = 'Your password has been sent.';
+    }
   }
 
   ngOnInit() {
