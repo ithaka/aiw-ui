@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 
 import { AppState } from '../app.service';
 import { Title } from './title';
@@ -28,7 +29,7 @@ export class Home {
   errors = {};
 
   // TypeScript public modifiers
-  constructor(public appState: AppState, public title: Title, private _assets: AssetService) {
+  constructor(public appState: AppState, public title: Title, private _assets: AssetService, private router: Router) {
 
   }
 
@@ -44,6 +45,18 @@ export class Home {
       .catch(function(err) {
         homeScope.errors['collections'] = "Unable to load collections.";
       });
+  }
+
+  searchAssets(term) {
+    this.router.navigate(['/search?term='+ term]);
+    // let homeScope = this;
+    // this._assets.search(term)
+    //   .then(function(res){
+    //     console.log(res);
+    //   })
+    //   .catch(function(err) {
+    //     homeScope.errors['search'] = "Unable to load search.";
+    //   });
   }
 
   submitState(value: string) {

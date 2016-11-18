@@ -1,5 +1,6 @@
 import { Routes, RouterModule } from '@angular/router';
 import { Home } from './home';
+import { Search } from './search';
 import { Login } from './login';
 import { About } from './about';
 import { NoContent } from './no-content';
@@ -12,6 +13,7 @@ export const ROUTES: Routes = [
   { path: 'login', component: Login },
   { path: 'home',  component: Home },
   { path: 'about', component: About },
+  { path: 'search', component: Search },
   {
     path: 'detail', loadChildren: () => System.import('./+detail')
   },

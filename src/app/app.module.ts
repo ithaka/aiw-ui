@@ -22,6 +22,7 @@ import { APP_RESOLVER_PROVIDERS } from './app.resolver';
 import { AppState, InternalStateType } from './app.service';
 import { Nav } from './nav';
 import { Home } from './home';
+import { Search } from './search';
 import { Login } from './login';
 import { About } from './about';
 import { NoContent } from './no-content';
@@ -48,6 +49,7 @@ type StoreType = {
     App,
     Nav,
     About,
+    Search,
     Login,
     Home,
     NoContent,

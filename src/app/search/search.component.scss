@@ -1,0 +1,22 @@
+/*styles for search content only*/
+
+.card--asset {
+    margin-bottom: 0px;
+    height: 200px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding: 10px;
+    border: 0px solid transparent;
+
+    & .card-img-top {
+        text-align: center;
+    }
+
+    & .card-block {
+        text-align: left;
+    }
+
+    &:hover, &:active, &:focus {
+        background: #fafafa;
+    }
+}
