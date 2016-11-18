@@ -47,6 +47,10 @@ export class Login {
       );
   }
 
+  showPwdResetModal() {
+    console.log('works!');
+  }
+
   ngOnInit() {
     console.log('hello `Login` component');
     // this.title.getData().subscribe(data => this.data = data);
