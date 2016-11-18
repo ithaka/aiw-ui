@@ -4,12 +4,18 @@
             <div class="card">
               <div class="card-block">
                 <div class="input-group">
-                  <input [ngModel]="term" type="text" class="form-control" placeholder="Search term...">
+                  <input [(ngModel)]="term" (keyup.enter)="searchAssets(term)" type="text" class="form-control" placeholder="Search term...">
                   <span class="input-group-btn">
                     <button (click)="searchAssets(term)" class="btn btn-secondary" type="button">Go</button>
                   </span>
                 </div>
               </div>
+            </div>
+             <div class="card">
+                <div class="card-header">Placeholder: Browse (Geography, Classification, Collection, Teaching Resources)</div>
+            </div>
+             <div class="card">
+                <div class="card-header">Placeholder: What's New (Artstor Blog)</div>
             </div>
         </div>
         <div class="col-sm-4">
@@ -34,7 +40,28 @@
             </div>
         </div>
         <div class="col-sm-4">
-            One of three columns
+            <div class="card">
+                <div class="card-header">Placeholder: Artstor Ad Spot</div>
+            </div>
+            <div class="card">
+                <div class="card-header">Questions</div>
+                 <ul class="list-group list-group-flush">
+                    <li class="list-group-item">
+                        Email your [institutional contact](mailto:userservices@artstor.org)
+                    </li>
+                    <li>
+                    Email [Artstor](mailto:userservices@artstor.org)
+                    </li>
+                    Sign up for an Artstor webinar
+
+                    Take a survey: [Tell us what you think!]()
+
+                    Your access to Artstor is provided by:
+
+                    ARTstor
+                </ul>
+            </div>
+
         </div>
     </div>
 </div>

@@ -1,0 +1,11 @@
+// Forms: input elements
+
+$inputTextColor: #000;
+
+input.form-control {
+
+    &, &:focus {
+        color: $inputTextColor;
+    }
+  
+}

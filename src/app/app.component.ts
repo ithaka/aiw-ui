@@ -13,7 +13,7 @@ import { AppState } from './app.service';
   selector: 'app',
   encapsulation: ViewEncapsulation.None,
   styleUrls: [
-    './app.component.scss'
+    './sass/app.scss'
   ],
   template: `
     <nav-bar></nav-bar>

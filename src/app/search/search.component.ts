@@ -24,6 +24,8 @@ export class Search {
   localState = { value: '' };
   errors = {};
   results = [];
+  term;
+  sub;
 
   // TypeScript public modifiers
   constructor(public appState: AppState, private _assets: AssetService, private route: ActivatedRoute) {
@@ -34,7 +36,11 @@ export class Search {
     console.log('hello `Search` component');
     let searchScope = this;
 
-    console.log(this.route);
+    this.route.params.map(params => params['term'])
+            .subscribe(term => { 
+                searchScope.term = term;
+                searchScope.searchAssets(term);
+               });
   }
 
   searchAssets(term) {

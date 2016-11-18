@@ -48,7 +48,7 @@ export class Home {
   }
 
   searchAssets(term) {
-    this.router.navigate(['/search?term='+ term]);
+    this.router.navigate(['search', { 'term' : term } ]);
     // let homeScope = this;
     // this._assets.search(term)
     //   .then(function(res){

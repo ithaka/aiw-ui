@@ -1,19 +1,20 @@
 // Main Sass File
 
 // Core overrides
-@import './sass/core/variables';
+@import './core/variables';
 
 // Libraries
-@import '../../node_modules/bootstrap/scss/bootstrap.scss';
+@import '../../../node_modules/bootstrap/scss/bootstrap.scss';
 
 // Core (order matters here)
-@import './sass/core/reset';
-@import './sass/core/helpers';
-@import './sass/core/layout';
-@import './sass/core/typography';
+@import './core/reset';
+@import './core/helpers';
+@import './core/layout';
+@import './core/typography';
 
 // Modules
-@import './sass/modules/base';
+@import './modules/base';
+@import './modules/forms';
 
 
 

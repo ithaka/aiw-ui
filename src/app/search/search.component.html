@@ -4,9 +4,9 @@
             <div class="card">
               <div class="card-block">
                 <div class="input-group">
-                  <input [ngModel]="term" type="text" class="form-control" placeholder="Search term...">
+                  <input [(ngModel)]="term" (keyup.enter)="searchAssets(term)" type="text" class="form-control" placeholder="Search term...">
                   <span class="input-group-btn">
-                    <button (click)="searchAssets('mona lisa')" class="btn btn-secondary" type="button">Go</button>
+                    <button (click)="searchAssets(term)" class="btn btn-secondary" type="button">Go</button>
                   </span>
                 </div>
               </div>
