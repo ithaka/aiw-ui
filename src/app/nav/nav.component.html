@@ -36,12 +36,15 @@
   </ul>
 
   <div class="nav float-xs-right">
-    <a [routerLink]=" ['./login'] " routerLinkActive="active">
+    <a [class.hidden]="getUserName()" [routerLink]=" ['./login'] " routerLinkActive="active">
       Login
     </a>
+    <a [class.hidden]="!getUserName()" [routerLink]=" ['./login'] " (click)="logout()">
+      Logout
+    </a>
 
-    {{ getUser() }}
-
+    {{ getUserName() }}
+    
   </div>
   
 </nav>

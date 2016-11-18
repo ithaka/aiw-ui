@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 
-import { AuthenticationService, User } from '../login/login.service';
+import { AuthenticationService } from '../login/login.service';
+// import { LocalStorage, SessionStorage } from "angular2-localstorage/WebStorage";
 
 @Component({
   selector: 'nav-bar',
@@ -11,17 +12,21 @@ import { AuthenticationService, User } from '../login/login.service';
   styleUrls: [ './nav.component.scss' ],
 })
 export class Nav {
+  
   // TypeScript public modifiers
-  constructor(private auth: AuthenticationService) { 
+  constructor(private _auth: AuthenticationService) { 
     
   }
 
-  getUser() : Object {
-    console.log( this.auth.getUser() );
-    return this.auth.getUser();
+  logout() {
+    this._auth.logout();
+  }
+
+  getUserName() : String {
+    return this._auth.getUser() ? this._auth.getUser().username : "";
   }
   
   ngOnInit() {
-    // console.log( Login.user )
+    
   }
 }

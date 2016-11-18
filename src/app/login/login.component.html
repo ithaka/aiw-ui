@@ -1,11 +1,5 @@
-<div class="card-container">
-    <div class="container">
-
-        <div class="clearFix"></div>
-
-        <!-- content-template -->
-        <div id="main-content" class="row">
-
+<div class="container main-content">
+        <div class="row">
             <div class="col-sm-6">
                 <!-- login box -->
                 <p class="header">Log in with your Artstor Account</p>
@@ -14,23 +8,20 @@
                 <!--<div id="logonEmail" class="logonEntry darkText2 bold">Email address</div> -->
                 <!--<input [(ngModel)]="user.username" id="logonEmailInp" type="text" size="35" tabindex="0" />-->
                 <form (ngSubmit)="login(user)">
-                    <label for="loginEmail">Email Address</label>
-                    <input [(ngModel)]="user.username" name="username" id="loginEmail" type="text" class="form-control" placeholder="Username" tabindex="0">
-
-                    <label for="loginPassword">Password</label>
-                    <input [(ngModel)]="user.password" name="password" id="loginPassword" type="password" class="form-control" placeholder="Password" tabindex="1">
-
+                    <div class="form-group">
+                        <label for="loginEmail">Email Address</label>
+                        <input [(ngModel)]="user.username" name="username" id="loginEmail" type="text" class="form-control" placeholder="Username" tabindex="1" />
+                    </div>
+                    <div class="form-group">
+                        <label for="loginPassword">Password</label>
+                        <input [(ngModel)]="user.password" name="password" id="loginPassword" type="password" class="form-control" placeholder="Password" tabindex="2" />
+                    </div>   
                     <span> {{ errorMsg }} </span>
-
-                    <button class="btn btn-default" type="submit" name="action">Login</button>
+                    <div class="form-group">
+                        <button class="btn btn-default" type="submit" name="action" tabindex="3">Login</button>
+                    </div>
                 </form>
-
                 
-<!--
-                <button (click)="login(user)" 
-                    class="btn waves-effect waves-light" 
-                    type="submit" name="action">Login</button>-->
-
                 <div class="clearFix"></div>
                 <div id="logonForgetPW" class="linkSmall" (click)="showPwdResetModal()">Forgot your password?</div>
                 <div id="logonButton" tabindex="58"></div>
@@ -40,7 +31,7 @@
 
             <div class="col-sm-6">
                  <p class="header">Log in through your Institution</p>
-                 <select class="form-control">
+                 <select class="form-control" tabindex="3">
                      <option> Test</option>
                  </select>
             </div>
@@ -56,90 +47,5 @@
                 <p class="text">If you are at a non-participating institution and are interested in getting access to Artstor for your institution, you can learn more about <a href="http://www.artstor.org/interested-in-participation/i-html/becoming-participant.shtml"
                         target="_blank">Becoming a Participant</a> or contact <a href="mailto:participation@artstor.org" target="_blank">Artstor Library Relations.</a></p>
             </div>
-            <div class="clearFix"></div>
         </div>
-        <div class="clearFix"></div>
-    </div>
-
-
-    <!-- **************Popup Dialog************* -->
-    <div id="PWDialog" dojoType="dijit.Dialog" bgColor="white" bgOpacity="0.5" toggle="fade" followScroll="false" toggleDuration="350" closeOnBackgroundClick="false">
-
-        <div id="conSaveCommBorder" class="dialogBorder">
-            <div class="dialogLogo"> </div>
-            <div class="dialogTitle"> </div>
-            <div id="conSaveCommClose" class="dialogClose"></div>
-        </div>
-
-        <div class="clearFix"></div>
-        <!--<div id="conSaveRemPeriod" style="display:block">
-            <div id="conSaveCommHead0" class="dialogHeading">Remote login successful! <span>You currently have <span id="conSavePer">120</span> days remaining.</span>
-            </div>
-
-            <div class="clearFix"></div>
-
-            <div id="conSaveCommContent0">
-
-                <div id="conSaveCommText0" class="lineHead">You can access Artstor from outside your institution's network for 120 days. To restart your 120-day timer, log in to your Artstor account while within your institution's network.</div>
-
-            </div>
-            <div class="clearFix"></div>
-            <div class="conSaveCommButts">
-
-                <div id="conSaveCommCont" class="jbutton jbuttR" tabindex="0">
-                    <div id="conSaveComButt" class="jbuttonR">Continue</div>
-                </div>
-
-            </div>
-
-            <div class="clearFix"></div>
-        </div>-->
-
-        <div id="conSavePWReq" style="display:none">
-            <div id="conSaveCommHead" class="dialogHeading">Forgot your password?</div>
-            <div class="clearFix"></div>
-
-            <div id="conSaveCommContent">
-
-                <div id="conSaveCommText" class="lineHead">Enter the email address that you used when registering.</div>
-                <p id="emailError">&nbsp;</p>
-                <p id="emailPW" class="loginTitle">Email Address:</p>
-                <input id="emailAddPW" type="text" size="35" tabindex="0" />
-            </div>
-            <div class="clearFix"></div>
-            <div class="conSaveCommButts">
-
-                <div id="conSaveCommYes" class="jbutton jbuttR" tabindex="0">
-                    <div class="jbuttonR">Submit</div>
-                </div>
-                <div id="conSaveCommNo" class="jbutton jbuttY" tabindex="0">
-                    <div class="jbuttonY">Cancel</div>
-                </div>
-
-            </div>
-
-            <div class="clearFix"></div>
-        </div>
-
-
-        <div id="conSavePWResp" style="display:none">
-
-            <div id="conSaveCommContent1">
-
-                <div id="conSaveCommText1" class="lineHead">Your password has been sent.</div>
-
-            </div>
-
-            <div class="conSaveCommButts">
-
-                <div id="conSaveCommOK" class="jbutton jbuttR" tabindex="0">
-                    <div class="jbuttonR">OK</div>
-                </div>
-            </div>
-
-            <div class="clearFix"></div>
-        </div>
-    </div>
-    <div id="genWait"></div>
-    <span style="height:1px; width:1px; " id="conSaveCommAudio"> </span>
-</div>
+</div><!--.container-->

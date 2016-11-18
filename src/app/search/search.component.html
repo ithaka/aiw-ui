@@ -1,0 +1,35 @@
+<div class="container main-content">
+    <div class="row">
+        <div class="col-sm-4">
+            <div class="card">
+              <div class="card-block">
+                <div class="input-group">
+                  <input [ngModel]="term" type="text" class="form-control" placeholder="Search term...">
+                  <span class="input-group-btn">
+                    <button (click)="searchAssets('mona lisa')" class="btn btn-secondary" type="button">Go</button>
+                  </span>
+                </div>
+              </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="card-deck-wrapper">
+                <div class="card-deck">
+                    <div *ngFor="let asset of results" class="card card--asset col-sm-3">
+                        <div class="card-img-top">
+                            <img src="http://viewer2.artstor.org/{{ asset.thumbnailImgUrl }}" alt="Card image cap">
+                        </div>
+                        <div class="card-block">
+                            <p class="card-text">{{ asset.thumbnail1 }}</p>
+                            <p class="card-text">{{ asset.thumbnail2 }}</p>
+                            <p class="card-text">{{ asset.thumbnail3 }}</p>
+                            <p class="card-text">{{ asset.thumbnail4 }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

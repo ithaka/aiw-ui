@@ -1,8 +1,40 @@
-<div class="card-container">
-  
-  <div>
-    <h4>Home</h4>
-
-  </div>
-
+<div class="container-fluid main-content">
+    <div class="row">
+        <div class="col-sm-4">
+            <div class="card">
+              <div class="card-block">
+                <div class="input-group">
+                  <input [ngModel]="term" type="text" class="form-control" placeholder="Search term...">
+                  <span class="input-group-btn">
+                    <button (click)="searchAssets(term)" class="btn btn-secondary" type="button">Go</button>
+                  </span>
+                </div>
+              </div>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="card">
+                <div class="card-header">Placeholder: Featured Collection</div>
+            </div>
+            <div class="card">
+                <div class="card-header">Placeholder: Folders & Image Groups Link</div>
+            </div>
+            <div class="card">
+                <div class="card-header">WIP: Shared Shelf Commons</div>
+                <ul class="list-group list-group-flush list--home-collections">
+                    <li *ngFor="let collection of collections" class="list-group-item">
+                        <a href="?collection={{ collection.collectionid}}">{{ collection.collectionname }}</a>
+                    </li>
+                </ul>
+                <div *ngIf="errors.collections" class="card-block">
+                    <div class="alert alert-warning" role="alert">
+                        <strong>Error</strong> {{ errors.collections }}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            One of three columns
+        </div>
+    </div>
 </div>

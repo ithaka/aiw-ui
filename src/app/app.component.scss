@@ -2,6 +2,10 @@
 
 // Bootstrap variable ovverides
 $btn-border-radius: 0px;
+$basePadding: 20px;
+
+// Enable flexbox
+/*$enable-flex: true;*/
 
 @import '../../node_modules/bootstrap/scss/bootstrap.scss';
 
@@ -26,4 +30,16 @@ html, body{
 
 span.active {
   background-color: $gray;
+}
+
+.hidden {
+  /* Used to replicate ng-hide functionality:
+    [class.hidden]="variable"
+  */
+  display: none !important;
+}
+
+.main-content {
+  padding-top: $basePadding;
+  padding-bottom: $basePadding;
 }

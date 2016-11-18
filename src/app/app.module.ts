@@ -13,7 +13,8 @@ import { ROUTES } from './app.routes';
 
 // UI modules
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import {LocalStorageService} from "angular2-localstorage/LocalStorageEmitter";
+// import { CoolStorageModule } from 'angular2-cool-storage';
+import {LockerModule, Locker, LockerConfig} from 'angular2-locker'
 
 // App is our top level component
 import { App } from './app.component';
@@ -21,6 +22,7 @@ import { APP_RESOLVER_PROVIDERS } from './app.resolver';
 import { AppState, InternalStateType } from './app.service';
 import { Nav } from './nav';
 import { Home } from './home';
+import { Search } from './search';
 import { Login } from './login';
 import { About } from './about';
 import { NoContent } from './no-content';
@@ -47,6 +49,7 @@ type StoreType = {
     App,
     Nav,
     About,
+    Search,
     Login,
     Home,
     NoContent,
@@ -56,8 +59,10 @@ type StoreType = {
     BrowserModule,
     FormsModule,
     HttpModule,
+    // CoolStorageModule,
+    LockerModule,
     RouterModule.forRoot(ROUTES, { useHash: true }),
-    NgbModule.forRoot()
+    NgbModule.forRoot() // Ng Bootstrap Import
   ],
   providers: [ // expose our Services and Providers into Angular's dependency injection
     ENV_PROVIDERS,
