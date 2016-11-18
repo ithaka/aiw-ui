@@ -21,6 +21,7 @@ import { App } from './app.component';
 import { APP_RESOLVER_PROVIDERS } from './app.resolver';
 import { AppState, InternalStateType } from './app.service';
 import { Nav } from './nav';
+import { Footer } from './footer';
 import { Home } from './home';
 import { Search } from './search';
 import { Login } from './login';
@@ -48,6 +49,7 @@ type StoreType = {
   declarations: [
     App,
     Nav,
+    Footer,
     About,
     Search,
     Login,

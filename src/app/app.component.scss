@@ -1,16 +1,23 @@
 // Main Sass File
 
-// Bootstrap variable ovverides
-$btn-border-radius: 0px;
-$basePadding: 20px;
+// Core overrides
+@import './sass/core/variables';
 
-// Enable flexbox
-/*$enable-flex: true;*/
-
+// Libraries
 @import '../../node_modules/bootstrap/scss/bootstrap.scss';
 
-$gray: #cdcdcd;
+// Core (order matters here)
+@import './sass/core/reset';
+@import './sass/core/helpers';
+@import './sass/core/layout';
+@import './sass/core/typography';
 
+// Modules
+@import './sass/modules/base';
+
+
+
+// Inbox
 
 .form-control {
   border-radius: 0px;
