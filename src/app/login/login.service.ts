@@ -67,9 +67,9 @@ export class AuthenticationService {
     }
     
     login(user: User) {
-        var header = new Headers({ 'Content-Type': 'application/x-www-form-urlencoded' }); // ... Set content type to JSON
+        let header = new Headers({ 'Content-Type': 'application/x-www-form-urlencoded' }); // ... Set content type to JSON
         let options = new RequestOptions({ headers: header, withCredentials: true }); // Create a request option
-        var data = this.formEncode({ 
+        let data = this.formEncode({ 
                 'j_username': user.username, 
                 'j_password': user.password 
             });
@@ -82,6 +82,18 @@ export class AuthenticationService {
                 // error handling
             });
 
+    }
+
+    getInstitutions() {
+        // http://library.artstor.org/library/institutions/?_method=shibbolethOnly&dojo.preventCache=1479750011351
+        let header = new Headers({ 'Content-Type': 'application/x-www-form-urlencoded' }); // ... Set content type to JSON
+        let options = new RequestOptions({ headers: header, withCredentials: true });
+        let url = this.proxyUrl + 'http://library.artstor.org/library/institutions/?_method=shibbolethOnly';
+        
+        return this.http
+            .get(url)
+            .toPromise()
+            .then(this.extractData);
     }
 
     pwdReset(email: string) {

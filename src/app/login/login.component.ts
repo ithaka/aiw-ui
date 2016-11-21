@@ -28,10 +28,24 @@ export class Login {
   public pwdRstEmail = '';
   public errorMsgPwdRst = '';
   public successMsgPwdRst = '';
+  public loginInstitutions = [];
+  public loginInst;
   
   // TypeScript public modifiers
   constructor(public appState: AppState, private _auth: AuthenticationService, private router: Router, private location: Location) { 
     
+  }
+
+  ngOnInit() {
+    let scope = this;
+
+    this._auth.getInstitutions()
+      .then(function(data){
+        console.log(data);
+        if (data.items) {
+          scope.loginInstitutions = data.items;
+        }
+      });
   }
   
   loadForUser(user) {
@@ -49,6 +63,21 @@ export class Login {
         data  => this.loadForUser(data),
         error =>  this.errorMsg = <any>error
       );
+  }
+
+  goToInstLogin() {
+    let url = this.loginInst.entityID ? this.loginInst.entityID : '';
+    let type = this.loginInst.type ? this.loginInst.type : '';
+    let origin = window.location.origin + '/#/home';
+
+    if (type === 'proxy') {
+      // If proxy, simply open url:
+      window.open(this.loginInst.entityID);
+    } else {
+      // Else if Shibboleth, add parameters:
+      // eg. for AUSS https://sso.artstor.org/sso/shibssoinit?idpEntityID=https://idp.artstor.org/idp/shibboleth&target=https%3A%2F%2Fsso.artstor.org%2Fsso%2Fshibbolethapplication%3Fo%3D0049a162-7dbe-4fcf-adac-d257e8db95e5
+      window.open('https://sso.artstor.org/sso/shibssoinit?idpEntityID=' + encodeURIComponent(url) + '&o=' + encodeURIComponent(origin));
+    }
   }
 
   showPwdResetModal() {
@@ -78,11 +107,6 @@ export class Login {
     else{
       this.successMsgPwdRst = 'Your password has been sent.';
     }
-  }
-
-  ngOnInit() {
-    console.log('hello `Login` component');
-    // this.title.getData().subscribe(data => this.data = data);
   }
 
   submitState(value: string) {
