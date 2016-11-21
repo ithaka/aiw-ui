@@ -58,7 +58,7 @@
                     <li class="list-group-item">
                         <a href="https://www.surveymonkey.com/r/TW9SKC6" target="_blank">Take a survey: Tell us what you think!</a>
                     </li>
-                    <li class="list-group-item">
+                    <li class="list-group-item" *ngIf="user">
                         Your access to Artstor is provided by: {{ user.institutionName }}
                     </li>
                 </ul>
