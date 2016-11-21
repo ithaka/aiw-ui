@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 
 import { AuthenticationService } from '../login/login.service';
-// import { LocalStorage, SessionStorage } from "angular2-localstorage/WebStorage";
 
 @Component({
   selector: 'nav-bar',

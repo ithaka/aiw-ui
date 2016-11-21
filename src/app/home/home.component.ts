@@ -6,6 +6,7 @@ import { Title } from './title';
 import { XLarge } from './x-large';
 
 import { AssetService } from './assets.service';
+import { AuthenticationService } from '../login/login.service';
 
 @Component({
   // The selector is what angular internally uses
@@ -15,7 +16,8 @@ import { AssetService } from './assets.service';
   // We need to tell Angular's Dependency Injection which providers are in our app.
   providers: [
     Title,
-    AssetService
+    AssetService,
+    AuthenticationService
   ],
   // Our list of styles in our component. We may add more to compose many styles together
   styleUrls: [ './home.component.scss' ],
@@ -27,15 +29,25 @@ export class Home {
   localState = { value: '' };
   collections = [];
   errors = {};
+  user = {};
 
   // TypeScript public modifiers
-  constructor(public appState: AppState, public title: Title, private _assets: AssetService, private router: Router) {
+  constructor(
+      public appState: AppState, 
+      public title: Title, 
+      private _assets: AssetService, 
+      private router: Router,
+      private _auth: AuthenticationService
+    ) {
 
   }
 
   ngOnInit() {
     console.log('hello `Home` component');
     let homeScope = this;
+    
+    this.user = this._auth.getUser();
+    console.log(this.user);
     // this.title.getData().subscribe(data => this.data = data);
     this._assets.getCollections()
       .then(function(res) {
