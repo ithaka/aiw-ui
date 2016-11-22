@@ -1,24 +1,53 @@
-// Main Sass File
+/**
+ * # App Sass File
+ * app.scss is the main application stylesheet. It imports all
+ * stylesheets used throughout the application and is the only stylesheet in
+ * the Grunt configuration that is automatically processed.
+ *
+ * File organization inspired by MVCSS: http://mvcss.io/
+ * Default to and override Bootstrap 4 elements: http://v4-alpha.getbootstrap.com/
+ * Element naming generally follows: http://bem.info/method (unless a Boostrap element)
+ */
 
-// Core overrides
+// ----------------------------------------------------
+// [0] (Core) Variables
+// ----------------------------------------------------
+// - Some variables need to be overriden for Libraries, such as Bootstrap
+// - No styles, sass placeholders, or mixins should be defined in Variables
 @import './core/variables';
 
-// Libraries
+// ----------------------------------------------------
+// [I] Libraries
+// ----------------------------------------------------
+
 @import '../../../node_modules/bootstrap/scss/bootstrap.scss';
 
-// Core (order matters here)
+// ----------------------------------------------------
+// [II] Core Imports (Order of import matters)
+// ----------------------------------------------------
+
 @import './core/reset';
 @import './core/helpers';
 @import './core/layout';
 @import './core/typography';
 
-// Modules
+// ----------------------------------------------------
+// [III] Modules
+// ----------------------------------------------------
+
 @import './modules/base';
 @import './modules/forms';
 
+// ----------------------------------------------------
+// [IV] Component/Page Specific Styles
+// ----------------------------------------------------
 
+// Component level styles are automatically imported after app.scss
+// Do not import component-specific styles here
 
-// Inbox
+// ----------------------------------------------------
+// [+] Inbox
+// ----------------------------------------------------
 
 .form-control {
   border-radius: 0px;

@@ -1,4 +1,15 @@
 // Bootstrap variable ovverides
 $btn-border-radius: 0px;
+
+/**
+ * Base value for vertical/horizontal padding
+ *
+ * @nuclide Image-Folder
+ * @section Config > Spacing
+ */
 $basePadding: 20px;
+
+/** @color Gray */
 $gray: #cdcdcd;
+/** @color Teal */
+$teal: rgb(225,232,225);
