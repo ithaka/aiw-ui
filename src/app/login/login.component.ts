@@ -56,13 +56,33 @@ export class Login {
     // this.location.go('/home');
 
   }
+
+  getLoginError(user) {
+    console.log("LOGIN ERROR!");
+    this._auth.getLoginError(user)
+      .then(
+        data  =>  function(data) {
+          console.log(data);
+          if (data.message === 'loginExpired') {
+            this.errorMsg = 'To restart...';
+          } else if (data.message === 'loginFailed') {
+            this.errorMsg = 'To restart...';
+          }
+        },
+        error =>  console.log(error)
+      );
+  }
   
   login(user) {
+    let scope = this;
     this._auth.login(user)
       .then(
-        data  => this.loadForUser(data),
-        error =>  this.errorMsg = <any>error
-      );
+        data  => scope.loadForUser(data),
+        error =>  scope.getLoginError(user)
+      ).catch(function(err) {
+        console.log("Error!");
+        scope.getLoginError(user)
+      });
   }
 
   goToInstLogin() {

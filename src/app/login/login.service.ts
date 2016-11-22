@@ -77,11 +77,17 @@ export class AuthenticationService {
         return this.http
             .post(this.baseUrl + '/login', data, options)
             .toPromise()
-            .then(this.extractData)
-            .catch(function() {
-                // error handling
-            });
+            .then(this.extractData);
+    }
 
+    getLoginError(user: User) {
+        let header = new Headers({ 'Content-Type': 'application/x-www-form-urlencoded' }); // ... Set content type to JSON
+        let options = new RequestOptions({ headers: header, withCredentials: true }); // Create a request option
+
+        return this.http
+            .get(this.baseUrl + '/login?j_username=' + encodeURIComponent(user.username) + '&j_password=' + encodeURIComponent(user.password) )
+            .toPromise()
+            .then(this.extractData);
     }
 
     getInstitutions() {
