@@ -1,1 +1,15 @@
+/**
+ * # Base
+ * Styles for default HTML elements (not including type, eg. H1, H2, P...) 
+ */
 
+ /**
+ * @atom Horizontal Rule
+ * @section Base
+ * @markup
+ *  <hr />
+ */
+ hr {
+     background: none;
+     border-bottom: 1px solid $teal;
+ }

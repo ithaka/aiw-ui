@@ -1,0 +1,32 @@
+/**
+ * # Buttons
+ * Variations for buttons, links, and clickable icons
+ */
+
+
+/**
+ * @atom Button 
+ * @section Navigation > Buttons
+ * @markup
+ *  <button type="button" class="btn btn-primary">Primary</button>
+ *  <button type="button" class="btn btn-secondary">Secondary</button>
+ *  <button type="button" class="btn btn-success">Success</button>
+ *  <button type="button" class="btn btn-info">Info</button>
+ *  <button type="button" class="btn btn-warning">Warning</button>
+ *  <button type="button" class="btn btn-danger">Danger</button>
+ *  <button type="button" class="btn btn-link">Link</button>
+ */
+ .btn-primary {
+     background: $teal;
+     color: #000;
+     border-color: saturate($teal,10%);
+
+     &:hover, &:focus, &:active {
+        background: darken($teal,10%);
+        border-color: saturate($teal,10%);
+     }
+ }
+ 
+ .btn-secondary {
+     background: rgb(220,220,220);
+ }
