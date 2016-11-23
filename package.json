@@ -77,7 +77,7 @@
     "bootstrap": "^4.0.0-alpha.5",
     "core-js": "^2.4.1",
     "html-loader": "^0.4.4",
-    "html-webpack-plugin": "^2.24.1",
+    "html-webpack-plugin": "2.24.1",
     "http-server": "^0.9.0",
     "ie-shim": "^0.1.0",
     "karma-webpack": "^1.8.0",
@@ -145,7 +145,7 @@
     "url": "https://github.com/angularclass/angular2-webpack-starter/issues"
   },
   "engines": {
-    "node": ">= 4.2.1",
-    "npm": ">= 3"
+    "node": ">= 6.0.0",
+    "npm": ">= 4"
   }
 }
