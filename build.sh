@@ -11,19 +11,16 @@ echo "Using package $PACKAGE_NAME and version ${VERSION}"
 cd $SRC_DIR
 
 # Grab a newer node.js
-wget https://nodejs.org/dist/v6.3.1/node-v6.3.1-linux-x64.tar.xz
-xz -dc node-v6.3.1-linux-x64.tar.xz | tar xf - -C /usr/local/
+wget https://nodejs.org/dist/v6.9.1/node-v6.9.1-linux-x64.tar.xz
+xz -dc node-v6.9.1-linux-x64.tar.xz | tar xf - -C /usr/local/
 
 # Install sass cause that's how we roll
 gem install sass
 
-export PATH=/usr/local/node-v6.3.1-linux-x64/bin:$PATH
-
-# Ensure latest node and npm
-npm install --global npm n
+export PATH=/usr/local/node-v6.9.1-linux-x64/bin:$PATH
 
 # Install global build packages
-npm install --global webpack@2.1.0-beta.22 webpack-dev-server@2.1.0-beta.1 karma karma-cli protractor typescript rimraf
+npm install --global webpack webpack-dev-server karma karma-cli protractor typescript rimraf
 
 # Install dependencies
 npm install
