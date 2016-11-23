@@ -242,6 +242,7 @@ When writing styles:
 * **Use [BEM Naming](http://getbem.com/naming/)**  BEM makes our style names logical, consistent, and easy to interpret by other developers. The ✨magic  formula✨  is  `
 .block__element--modifier` which might look like `.button__icon--large`. Don't fear the double dashes and double underscores!
 * **Check out Bourbon** And find other ways to make writing Sass easier! [Bourbon](http://bourbon.io/docs/) is a super useful library of mixins that makes things such as *font includes* and *animations* much easier and cleaner.
+* **Add in-line documentation for the style guide** If it is a new style, or new modifier to a style, please [add documentation](https://holidaypirates.github.io/nucleus/annotation-reference.html) so the style will be added to the style guide.
 
 ---
 
