@@ -241,7 +241,7 @@ When writing styles:
 * **Use Bootstrap Elements** We don't need to write everything from scratch! When possible start off with a Bootstrap component or style ([Bootstrap 4](http://v4-alpha.getbootstrap.com/) and [ngBootstrap](https://ng-bootstrap.github.io/#/home)) and simply tweak the styles to your liking.
 * **Use [BEM Naming](http://getbem.com/naming/)**  BEM makes our style names logical, consistent, and easy to interpret by other developers. The ✨magic  formula✨  is  `
 .block__element--modifier` which might look like `.button__icon--large`. Don't fear the double dashes and double underscores!
-* **Check out Bourbon** And find other ways to make writing Sass easier! [Bourbon](http://bourbon.io/docs/) is a super useful library of mixins font that makes things such as *font includes* and *animations* much easier and cleaner.
+* **Check out Bourbon** And find other ways to make writing Sass easier! [Bourbon](http://bourbon.io/docs/) is a super useful library of mixins that makes things such as *font includes* and *animations* much easier and cleaner.
 
 ---
 
