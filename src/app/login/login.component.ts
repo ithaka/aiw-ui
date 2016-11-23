@@ -25,6 +25,8 @@ export class Login {
   public user = new User('','');
   public errorMsg = '';
   public showPwdModal = false;
+  public pwdReset = false;
+  public expirePwd = false;
   public pwdRstEmail = '';
   public errorMsgPwdRst = '';
   public successMsgPwdRst = '';
@@ -51,38 +53,61 @@ export class Login {
   loadForUser(user) {
     if (user && user.user) {
       this._auth.saveUser(user.user);
+      this.errorMsg = '';
+      this.router.navigate(['/home']);
     }
-    this.router.navigate(['/home']);
-    // this.location.go('/home');
-
   }
 
   getLoginError(user) {
     console.log("LOGIN ERROR!");
-    this._auth.getLoginError(user)
-      .then(
-        data  =>  function(data) {
-          console.log(data);
-          if (data.message === 'loginExpired') {
-            this.errorMsg = 'To restart...';
-          } else if (data.message === 'loginFailed') {
-            this.errorMsg = 'To restart...';
-          }
-        },
-        error =>  console.log(error)
-      );
+    let scopeObj = this;
+    scopeObj._auth.getLoginError(user)
+    .then(function(data){
+      console.log(data);
+      if(data.message === 'loginExpired'){
+        scopeObj.expirePwd = true;
+        scopeObj.showPwdModal = true;
+      }
+      else if(data.message === 'loginFailed'){
+        scopeObj.errorMsg = 'Invalid email address or password. Try again.';
+      }
+    });
   }
   
   login(user) {
     let scope = this;
-    this._auth.login(user)
+
+    if(!scope.validateEmail(user.username)){
+      scope.errorMsg = 'Please enter a valid email address';
+      return;
+    }
+    
+    if(!scope.validatePwd(user.password)){
+      scope.errorMsg = 'Password must be 7-20 characters';
+      return;
+    }
+
+    scope._auth.login(user)
       .then(
         data  => scope.loadForUser(data),
         error =>  scope.getLoginError(user)
       ).catch(function(err) {
-        console.log("Error!");
         scope.getLoginError(user)
       });
+  }
+  
+  validateEmail(email){
+    let re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(email);
+  }
+
+  validatePwd(pwd){
+    if((pwd.length >= 7) && (pwd.length <= 20) ){
+      return true;
+    }
+    else{
+      return false;
+    }
   }
 
   goToInstLogin() {
@@ -101,12 +126,15 @@ export class Login {
   }
 
   showPwdResetModal() {
+    this.pwdReset = true;
     this.showPwdModal = true;
   }
 
-  hidePwdResetModal() {
+  hidePwdModal() {
     this.pwdRstEmail = '';
     this.successMsgPwdRst = '';
+    this.pwdReset = false;
+    this.expirePwd = false;
     this.showPwdModal = false;
   }
   sendResetPwdRequest(){
@@ -125,6 +153,7 @@ export class Login {
       this.pwdRstEmail = '';
     }
     else{
+      this.pwdReset = false;
       this.successMsgPwdRst = 'Your password has been sent.';
     }
   }

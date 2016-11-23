@@ -71,7 +71,7 @@
 	padding: 15px 20px;
     background: #edecdf;
 }
-.modal-body .body-hdr{
+.modal-body .body-hdr, .expire-pwd div:nth-of-type(1){
 	padding-bottom: 15px;
     border-bottom: 1px solid white;
     font-size: 14px;
@@ -135,4 +135,18 @@
 	font-size: 14px;
     font-weight: bold;
     color: #4F5557;
+}
+
+.expire-pwd div:nth-of-type(2){
+    margin: 6px 0px 12px 0px;
+    font-size: 13px;
+    color: #4f5557;
+}
+
+.login-errorMsg{
+    height: 20px;
+    line-height: 20px;
+    margin-bottom: 10px;
+    color: red;
+    font-size: .75em;
 }

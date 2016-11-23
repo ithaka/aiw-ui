@@ -16,7 +16,7 @@
                         <label for="loginPassword">Password</label>
                         <input [(ngModel)]="user.password" name="password" id="loginPassword" type="password" class="form-control" placeholder="Password" tabindex="2" />
                     </div>   
-                    <span> {{ errorMsg }} </span>
+                    <div class="login-errorMsg"> {{ errorMsg }} </div>
                     <div class="form-group">
                         <button class="btn btn-primary" type="submit" name="action" tabindex="3">Log in</button>
                     </div>
@@ -59,10 +59,10 @@
     <div class="modal-content">
         <div class="modal-header">
             <img id="dialog-logo" src="/assets/img/dialogLogoTransp.gif" />
-            <span class="close-icon" (click)="hidePwdResetModal()">×</span>
+            <span class="close-icon" (click)="hidePwdModal()">×</span>
         </div>
         <div class="modal-body">
-            <div *ngIf="!successMsgPwdRst">
+            <div *ngIf="pwdReset">
                 <div class="body-hdr">Forgot your password?</div>
                 <div class="body-txt">Enter the email address that you used when registering.</div>
                 <div class="pwd-reset-cntnr">
@@ -74,14 +74,18 @@
             <div *ngIf="successMsgPwdRst">
                 <div class="success-msg"> {{ successMsgPwdRst }} </div>
             </div>
+            <div *ngIf="expirePwd" class="expire-pwd">
+                <div>Remote login was unsuccessful! Your 120 day access period expired.</div>
+                <div>To restart your 120-day timer, log in to your Artstor account while within your institution's network.</div>
+            </div>
         </div>
         <div class="submit-cntnr">
-            <div *ngIf="!successMsgPwdRst">
+            <div *ngIf="pwdReset">
                 <button class="sub-btn btn" (click)="sendResetPwdRequest()">Submit</button>
-                <button class="cncl-btn btn" (click)="hidePwdResetModal()">Cancel</button>
+                <button class="cncl-btn btn" (click)="hidePwdModal()">Cancel</button>
             </div>
-            <div *ngIf="successMsgPwdRst">
-                <button class="sub-btn btn" (click)="hidePwdResetModal()">Ok</button>
+            <div *ngIf="successMsgPwdRst || expirePwd">
+                <button class="sub-btn btn" (click)="hidePwdModal()">Ok</button>
             </div>
         </div>
     </div>
