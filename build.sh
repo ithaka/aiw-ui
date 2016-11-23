@@ -23,7 +23,7 @@ export PATH=/usr/local/node-v6.3.1-linux-x64/bin:$PATH
 npm install --global npm n
 
 # Install global build packages
-npm install --global webpack webpack-dev-server karma karma-cli protractor typescript rimraf
+npm install --global webpack@2.1.0-beta.22 webpack-dev-server@2.1.0-beta.1 karma karma-cli protractor typescript rimraf
 
 # Install dependencies
 npm install
