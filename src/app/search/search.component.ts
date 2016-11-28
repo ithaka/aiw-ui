@@ -24,6 +24,10 @@ export class Search {
   localState = { value: '' };
   errors = {};
   results = [];
+  activeSort = {
+    index : 0,
+    label : 'Relevance'
+  };
   term;
   sub;
 
@@ -45,7 +49,7 @@ export class Search {
 
   searchAssets(term) {
     let searchScope = this;
-    this._assets.search(term)
+    this._assets.search(term, this.activeSort.index)
       .then(function(res){
         console.log(res);
         searchScope.results = res.thumbnails;
@@ -53,6 +57,12 @@ export class Search {
       .catch(function(err) {
         searchScope.errors['search'] = "Unable to load search.";
       });
+  }
+
+  changeSortOpt(index, label) {
+    this.activeSort.index = index;
+    this.activeSort.label = label; 
+    this.searchAssets(this.term);
   }
 
   submitState(value: string) {

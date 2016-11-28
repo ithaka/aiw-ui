@@ -12,6 +12,18 @@
               </div>
             </div>
         </div>
+        <div class="col-sm-3">
+            <li class="dropdown" class="sortlist" ngbDropdown>
+                <button class="btn btn-link" id="sortdropdownMenu" ngbDropdownToggle>Sort</button>
+                <div class="dropdown-menu" aria-labelledby="sortdropdownMenu">
+                    <button class="dropdown-item" (click)="changeSortOpt('1', 'Title')">Title</button>
+                    <button class="dropdown-item" (click)="changeSortOpt('2', 'Creator')">Creator</button>
+                    <button class="dropdown-item" (click)="changeSortOpt('3', 'Date')">Date</button>
+                    <button class="dropdown-item" (click)="changeSortOpt('0', 'Relevance')">Relevance</button>
+                </div>
+            </li>
+            <span class="active-sort">{{ activeSort.label }}</span>
+        </div>
     </div>
     <div class="row">
         <div class="col-sm-12">
