@@ -10,41 +10,64 @@
 </nav>-->
 
 <nav class="navbar navbar-light">
-  <a class="navbar-brand" href="#">
-     <img id="logo" src="/assets/img/logo.png" />
-    </a>
-  <ul class="nav navbar-nav">
-    <li class="nav-item"> 
-      <a class="nav-link" routerLink="/home" routerLinkActive="active">Home</a>
-    </li>
-    <li class="nav-item dropdown" ngbDropdown>
-        <button class="btn btn-link" id="dropdownMenu1" ngbDropdownToggle>Find</button>
-        <div class="dropdown-menu" aria-labelledby="dropdownMenu1">
-          <button class="dropdown-item">Action - 1</button>
-          <button class="dropdown-item">Another Action</button>
-          <button class="dropdown-item">Something else is here</button>
-        </div>
-    </li>
-     <li class="nav-item dropdown" ngbDropdown>
-        <button class="btn btn-link" id="uploadMenu" ngbDropdownToggle>Upload</button>
-        <div class="dropdown-menu" aria-labelledby="uploadMenu">
-          <button class="dropdown-item">Action - 1</button>
-          <button class="dropdown-item">Another Action</button>
-          <button class="dropdown-item">Something else is here</button>
-        </div>
-    </li>
-  </ul>
+  <div class="row nav__row--color">
+    <div class="container" style="padding:0px;">
+      <div class="col-sm-8">
+        <a class="navbar-brand" href="#">
+          <img id="logo" src="/assets/img/logo.png" />
+        </a>
+      </div>
 
-  <div class="nav float-xs-right">
-    <a [class.hidden]="getUserName()" [routerLink]=" ['./login'] " routerLinkActive="active">
-      Login
-    </a>
-    <a [class.hidden]="!getUserName()" [routerLink]=" ['./login'] " (click)="logout()">
-      Logout
-    </a>
-
-    {{ getUserName() }}
-    
+      <div class="col-sm-4">
+        <div class="login-panel">
+          <div class="vertical-center-wrap">
+            <div class="login-panel__status">
+              <span *ngIf="getUserName()">Logged in as {{ getUserName() }}</span>
+              <span *ngIf="!getUserName()">Log in or <a href="#">!Register</a> for more features</span>
+            </div>
+            <div class="login-panel__links">
+              <a href="#" class="link--accent" [class.hidden]="!getUserName()" routerLinkActive="active">
+                !Take a Tour
+              </a>
+              <a class="link--accent" [class.hidden]="!getUserName()" [routerLink]=" ['./login'] " routerLinkActive="active">
+                !Edit Profile
+              </a>
+              <a class="link--accent" [class.hidden]="getUserName()" [routerLink]=" ['./login'] " routerLinkActive="active">
+                Log In
+              </a>
+              <a class="link--accent" [class.hidden]="!getUserName()" [routerLink]=" ['./login'] " (click)="logout()">
+                Log Out
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
   
+  <div class="row nav__row">
+    <div class="container">
+      <ul class="nav navbar-nav">
+        <li class="nav-item"> 
+          <a class="nav-link" routerLink="/home" routerLinkActive="active">Home</a>
+        </li>
+        <li class="nav-item dropdown" ngbDropdown>
+            <button class="btn btn-link" id="dropdownMenu1" ngbDropdownToggle>Find</button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenu1">
+              <button class="dropdown-item">Action - 1</button>
+              <button class="dropdown-item">Another Action</button>
+              <button class="dropdown-item">Something else is here</button>
+            </div>
+        </li>
+        <li class="nav-item dropdown" ngbDropdown>
+            <button class="btn btn-link" id="uploadMenu" ngbDropdownToggle>Upload</button>
+            <div class="dropdown-menu" aria-labelledby="uploadMenu">
+              <button class="dropdown-item">Action - 1</button>
+              <button class="dropdown-item">Another Action</button>
+              <button class="dropdown-item">Something else is here</button>
+            </div>
+        </li>
+      </ul>
+    </div>
+  </div>
 </nav>

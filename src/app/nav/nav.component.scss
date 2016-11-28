@@ -1,37 +1,88 @@
 
 $navBg: rgb(225,232,225);
 $navBarHeight: 108px;
-$navBarLineHeight: $navBarHeight - 20px;
 
 #logo {
     height: 20px;
     width: auto;
-    margin: 32px 20px;
+    margin: 32px 20px 32px 0px;
     padding: 0px;
 }
 
 .navbar-light {
-    background: $navBg;
+    background: transparent;
     /*width: 100%;
     height: 108px;*/
     display: block;
     min-height: $navBarHeight;
     border-radius: 0px;
+    padding-top: 0px;
+    padding-bottom: 0px;
 
     & .navbar-collapse {
-        line-height: $navBarLineHeight;
+        line-height: $navBarHeight - 20px;
     }
 }
+.nav__row {
+    display:block;
+
+    &--color {
+        @extend .nav__row;
+        background: $navBg;
+    }
+    
+}
+
 
 // Navigation Items
 
+$dropdownMenuHeight: 60px;
+
+.navbar-nav {
+    border-bottom: 1px solid #dcdcdc;
+    display: block;
+    height: $dropdownMenuHeight;
+}
+
 .navbar-nav > li > a, .navbar-nav > li > .btn-link {
-    line-height: $navBarLineHeight;
+    line-height: $dropdownMenuHeight;
+    font-size: 15px;
     border: none;
     padding: 0;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    color: #999;
+
+    &:active, &:focus, &:hover {
+        color: #000;
+        outline: none;
+    }
 }
 
 .navbar-form {
     margin-top: 13px;
     margin-bottom: 13px;
+}
+
+$loginPanelCollapseHeight: $navBarHeight - 15px;
+
+.login-panel {
+    position: relative;
+    min-height: $loginPanelCollapseHeight;
+    max-height: $loginPanelCollapseHeight;
+    background: #d4cd98;
+}
+
+.login-panel__status {
+    font-size: 12px;
+    text-align: center;
+}
+
+.login-panel__links {
+    text-align: center;
+    font-size: 12px;
+
+    & a {
+        margin: 6px 5px;
+    }
 }

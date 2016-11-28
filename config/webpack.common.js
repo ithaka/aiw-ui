@@ -4,6 +4,7 @@
 
 const webpack = require('webpack');
 const helpers = require('./helpers');
+const bourbon = require('node-bourbon').includePaths;
 
 /*
  * Webpack Plugins
@@ -163,7 +164,7 @@ module.exports = function(options) {
          */
         {
           test: /\.scss$/,
-          loaders: ['raw-loader','sass-loader']
+          loaders: ['raw-loader', 'sass-loader?includePaths[]=' + bourbon ]
         },
 
         /* Raw loader support for *.html

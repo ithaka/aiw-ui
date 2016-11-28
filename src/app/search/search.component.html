@@ -1,15 +1,16 @@
 <div class="container main-content">
     <div class="row">
+        <div class="col-sm-6">
+            <h2>Filtered Search</h2>
+        </div>
+    </div>
+    <div class="row row--search-bar">
         <div class="col-sm-4">
-            <div class="card">
-              <div class="card-block">
-                <div class="input-group">
-                  <input [(ngModel)]="term" (keyup.enter)="searchAssets(term)" type="text" class="form-control" placeholder="Search term...">
-                  <span class="input-group-btn">
-                    <button (click)="searchAssets(term)" class="btn btn-secondary" type="button">Go</button>
-                  </span>
-                </div>
-              </div>
+            <div class="input-group">
+                <input [(ngModel)]="term" (keyup.enter)="searchAssets(term)" type="text" class="form-control" placeholder="Search term...">
+                <span class="input-group-btn">
+                <button (click)="searchAssets(term)" class="btn btn-secondary" type="button">Go</button>
+                </span>
             </div>
         </div>
         <div class="col-sm-3">
@@ -26,18 +27,21 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-sm-12">
+        <div class="col-sm-2">
+            WIP: Filters
+        </div>
+        <div class="col-sm-10">
             <div class="card-deck-wrapper">
                 <div class="card-deck">
-                    <div *ngFor="let asset of results" class="card card--asset col-sm-3">
+                    <div *ngFor="let asset of results" class="card card--asset col-sm-2">
                         <div class="card-img-top">
                             <img src="http://viewer2.artstor.org/{{ asset.thumbnailImgUrl }}" alt="Card image cap">
                         </div>
-                        <div class="card-block">
-                            <p class="card-text">{{ asset.thumbnail1 }}</p>
-                            <p class="card-text">{{ asset.thumbnail2 }}</p>
-                            <p class="card-text">{{ asset.thumbnail3 }}</p>
-                            <p class="card-text">{{ asset.thumbnail4 }}</p>
+                        <div class="card-block card-text">
+                            <span>{{ asset.thumbnail1 }}</span>
+                            <span>{{ asset.thumbnail2 }}</span>
+                            <span>{{ asset.thumbnail3 }}</span>
+                            <span>{{ asset.thumbnail4 }}</span>
                         </div>
                     </div>
                 </div>

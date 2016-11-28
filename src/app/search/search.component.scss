@@ -6,10 +6,22 @@
     overflow: hidden;
     text-overflow: ellipsis;
     padding: 10px;
-    border: 0px solid transparent;
+    border: 1px solid transparent;
+    border-radius: 0px;
+    cursor: pointer;
 
     & .card-img-top {
         text-align: center;
+        height: 100px;
+        position: relative;
+
+        & img {
+            /*@extend %vertical-center;*/
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translateY(-50%) translateX(-50%);
+        }
     }
 
     & .card-block {
@@ -17,10 +29,32 @@
     }
 
     &:hover, &:active, &:focus {
-        background: #fafafa;
+        background: #fdfdfd;
+        border: 1px solid #eaeaea;
     }
 }
-.sortlist{
+
+.card-text {
+    font-size:12px;
+    line-height: 18px;
+    margin-top: 18px;
+    margin-bottom: 0px;
+    padding: 0px;
+    position: relative;
+
+    & span {
+        /*max-height: 2em;*/
+        white-space: nowrap;
+        display: block;
+        max-width: 100%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+}
+
+.row--search-bar {
+    margin-bottom: 20px;
+}.sortlist{
     list-style: none;
     display: inline-block;
 }

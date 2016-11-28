@@ -17,11 +17,13 @@
 @import './core/variables';
 
 // ----------------------------------------------------
-// [I] Libraries
+// [I] Libraries 
+// Imported by webpack in config/webpack.common.js
+// or referenced from node_modules
 // ----------------------------------------------------
 
 @import '../../node_modules/bootstrap/scss/bootstrap.scss';
-@import './libraries/bourbon/bourbon';
+@import 'bourbon';
 
 // ----------------------------------------------------
 // [II] Core Imports (Order of import matters)
@@ -54,13 +56,6 @@
 .form-control {
   border-radius: 0px;
 }
-
-#logo {
-  height: 22px; // Half the image height 
-  width: auto;
-  padding: 45px 20px; 
-}
-
 html, body{
   height: 100%;
   font-family: Arial, Helvetica, sans-serif;
@@ -81,4 +76,11 @@ span.active {
 .main-content {
   padding-top: $basePadding;
   padding-bottom: $basePadding;
+}
+
+.vertical-center-wrap {
+  position: absolute;
+  top: 50%;
+  width: 100%;
+  @include transform(translateY(-50%));
 }
