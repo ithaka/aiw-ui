@@ -15,7 +15,7 @@ import { AssetService } from '../home/assets.service';
     AssetService
   ],
   // Our list of styles in our component. We may add more to compose many styles together
-  styleUrls: [ './search.component.scss' ],
+  styleUrls: [ './search.component.scss', './filters.component.scss' ],
   // Every Angular template is first compiled by the browser before Angular runs it's compiler
   templateUrl: './search.component.html'
 })
@@ -24,6 +24,7 @@ export class Search {
   localState = { value: '' };
   errors = {};
   results = [];
+  filters = [];
   activeSort = {
     index : 0,
     label : 'Relevance'
@@ -63,6 +64,27 @@ export class Search {
     this.activeSort.index = index;
     this.activeSort.label = label; 
     this.searchAssets(this.term);
+  }
+
+  addFilter(value, group){
+    var filter = {
+      filterGroup : group,
+      filterValue : value
+    };
+    if(!this.filterExists(filter)){
+      this.filters.push(filter);
+    }
+    console.log(this.filters);
+  }
+  
+  filterExists(filterObj){
+    for(var i = 0; i < this.filters.length; i++){
+      var filter = this.filters[i];
+      if((filterObj.filterGroup === filter.filterGroup) && (filterObj.filterValue === filter.filterValue)){
+        return true;
+      }
+    }
+    return false;
   }
 
   submitState(value: string) {

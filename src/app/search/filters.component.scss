@@ -1,0 +1,389 @@
+/**
+ * # Filters
+ * Search filters, primarilly link styled elements which toggle on click.
+ */
+
+$activeFilterColor: #000;
+$filterUnfocusOpacity: 0.5;
+
+.filter-group[data-state="active"].collapsed .filter-group__label{
+    line-height: 34px;
+    margin-top: 0px;
+    background: #F6F6F2;
+}
+
+.filter-group {
+	/*@extend %boldBodyFontStyle;*/
+	opacity: 1.0;
+	padding: 6px 0;
+	display: block;
+	line-height: 18px;
+	float: left;
+    width: 100%;
+
+	transition: padding linear 0.2s, background linear 0.2s;
+
+	&.full-spacing {
+		margin-bottom: 12px;
+	}
+	
+	& .subtitle-alt {
+		padding: 2px;
+	}
+
+	&.no-margin {
+		margin: 0px;
+	}
+
+	&.border-top {
+		padding-top: 0px;
+		margin-top: 0px;
+	}
+
+	&.collapsed {
+		padding: 0px;
+		
+		&:hover, &:active, &:focus {
+			.filter-group__label {
+				line-height:34px;
+				margin-top: 0px;
+				background: #F6F6F2;
+			}
+		}
+
+		& .filter, & .filter .link, & .filter i{
+			pointer-events: none;
+			max-height: 0px;
+			min-height: 0px;
+			color: #fff;
+			padding-top: 0px;
+			padding-bottom: 0px;
+		}
+
+		& .filter form, & .filter .row {
+			opacity: 0;
+			max-height: 0px;
+		}
+
+		& .expandIcon {
+			transform: translateY(-50%);
+			&:before {
+				transform: rotate(180deg);
+				transform-origin: center center;
+			}
+		}
+
+		& .filter-group__label > span {
+			opacity: 1;
+		}
+	}
+}
+
+.filter-group__label {
+	position: relative;
+	width: 100%;
+	display: block;
+	background: transparent;
+	display: block;
+	padding: 2px; 
+	margin-top: 0px;
+	z-index: 5000;
+
+	transition: all linear 0.2s;
+
+	&:hover, &:focus, &:active {
+		cursor: pointer;
+		& i {
+			color: black;
+		}
+	}
+
+	& > span {
+		opacity: 0;
+		transition: opacity linear 0.1s;
+		font-weight: normal;
+	}
+
+	.collapsed & {
+		line-height: 22px; //34px;
+
+		&:hover, &:active, &:focus {
+			background: #F6F6F2;
+		}
+	}
+}
+
+
+/**
+ * Filter:
+ * `filter` - A simple link toggle that is used inside of the 'filter-group' component
+ *
+ *     @example
+ *     filter Example Filter
+ */
+ $filterColor: #555; //rgba(0,0,0,0.45);
+ $filterHoverBg: #f1f1f1;
+ $filterTextIndent: 15px;
+
+#filters {
+	/*padding: $pageMargin $gutterWidth/2 $sectionBottomMargin;*/
+}
+
+#filtersContent {
+	box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+
+	border-top: 8px solid #cdcdcd;
+	padding: 0px;
+	padding-top: 18px; // + 8px;
+}
+
+filter, .filter {
+    cursor: pointer;
+	/*@extend %bodyFontStyle;*/
+	display: block;
+	position: relative;
+	text-transform: capitalize;
+	background: transparent;
+
+	//Hanging Indent
+	padding: 2px;
+	padding-left: $filterTextIndent + 2px;
+	padding-right: 38px;
+	text-indent: -1 * $filterTextIndent;
+	
+	max-height: 100%;
+
+	&__inline-block {
+		display: inline-block;
+		width: 100;
+        transition:  color linear 0.2s, max-eight ease-out 0.2s, padding linear 0.2s, opacity linear 0.2s;
+    }
+	& form {
+		display: block;
+		width: 100%;
+		float: left;
+	}
+
+	&.filter--left-icon {
+		padding-left: $filterTextIndent + 20px;
+	}
+
+	& .link-wrap {
+		// Allows indent area to be clicked
+		&:before {
+			position: absolute;
+			content: ' ';
+			display: block;
+			left: 0px;
+			width: $filterTextIndent;
+			height: 100%;
+		}
+	}
+
+	// inactive filter color
+	color:  $filterColor;
+
+	&.no-buttons {
+		&:hover, &:active, &:focus {
+			padding-right: 0px;
+		}
+	}
+
+	&.active {
+		color: $activeFilterColor;
+		background: $filterHoverBg;
+	}
+
+	&:hover, &:active, &:focus{
+        transition:  color 0s linear;
+		color: $activeFilterColor;
+		cursor: pointer;
+		background: $filterHoverBg;
+
+		// Space for buttons
+		// padding-right: 38px;
+
+		&.active {
+			color: rgba($activeFilterColor, 0.7);
+			& i {
+				color: $activeFilterColor;
+			}
+		}
+
+		& .on-hover {
+			color: $activeFilterColor;
+		}
+
+		& .link {
+			color: #000;
+		}
+	}
+
+	& a {
+		color: $filterColor;
+		&:hover {
+			color: $activeFilterColor;
+		}
+	}
+
+	& .icon-context, & .icon-grid {
+		font-size: 1.3em !important;
+		position: absolute;
+    	left: 18px;
+    	top: 3px;
+	}
+
+	&:hover, &.active {
+		& .icon-context, & .icon-grid {
+			color: #000 !important;
+			display: inline;
+		}
+	}
+
+	& .icon-close, & .icon-close-circle,  {
+		display: none;
+		//padding-top: 1px;
+		float: right;
+		height: 1em;
+		font-size: 20px;
+	}
+
+	&.inactive {
+		color: rgba(0,0,0,0.45);
+	}
+
+	&.active {
+		color: $activeFilterColor;
+
+		& i {
+			display: inline-block;
+			color: rgba(0,0,0,0.2);
+		}
+	}
+
+	& span {
+		display: inline;
+	}
+}
+
+filter.date-span-input {
+	&:hover {
+		background: transparent;
+	}
+}
+
+i:hover ~ i.on-hover {
+	color: rgba(0,0,0,0.25);
+}
+
+
+.active-label {
+	/*@extend %bodyFontStyle;*/
+	//display: block;
+	position: relative;
+	color: $activeFilterColor;
+}
+
+
+.unfocus-styled {
+	& span {
+		opacity: $filterUnfocusOpacity;
+		transition: opacity 0.3s ease-in-out;
+	}
+
+	& .filter-group {
+		opacity: 1.0;
+	}
+
+	& filter {
+		opacity: $filterUnfocusOpacity;
+		transition: opacity 0.3s ease-in-out;
+
+		&.active {
+			opacity: 1.0;
+			transition: opacity 0.3s ease-in-out;
+			& i {
+				opacity: $filterUnfocusOpacity;
+				transition: opacity 0.3s ease-in-out;
+			}
+		}
+	}
+
+
+
+	& .unfocus-opaque {
+		opacity: 1.0 !important;
+	}
+
+	// & filter.active ~ span {
+	// 	opacity: 1.0 !important;
+	// }
+
+	&:hover, &:focus, &:active {
+		& h3 {
+			opacity: 1.0;
+		}
+
+		filter {
+			opacity: 1.0;
+
+			&.active {
+				opacity: 1.0;
+
+				& i {
+					opacity: 1.0;
+				}
+			}
+		}
+	}
+
+
+}
+
+filter.excluded{
+    text-decoration: line-through;
+}
+.removeIcon {
+	position: absolute;
+    right: 3px;
+    top: 3px;
+    visibility: visible;
+}
+.includeIcon{
+    position: absolute;
+    right: 19px;
+    top: 6px;
+    visibility: hidden;
+}
+.excludeIcon{
+    position: absolute;
+    right: 3px;
+    top: 6px;
+    visibility: hidden;
+}
+i.expandIcon {
+	position: absolute;
+	right: 6px;
+	top: 50%;
+	transform: translateY(-50%);
+	transition: transform ease 0.2s;
+
+	&:before {
+		display: block;
+		transform: rotate(0deg);
+		transform-origin: center center;
+	}
+}
+filter:hover .includeIcon, filter:hover .excludeIcon{
+	visibility: visible;
+}
+
+.filters-padding {
+	padding-left: 6px;
+	padding-top: 9px;
+	padding-bottom: 42px;
+	padding-right: 6px;
+}
+

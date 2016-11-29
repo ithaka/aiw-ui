@@ -27,10 +27,18 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-sm-2">
+        <div class="col-sm-3">
             WIP: Filters
+            <div class="filter-group"> 
+                    <span class="filter-group__label">Collection Type</span>
+                    <h2 class="small half-margin left-align">
+						<a class="link right-block">Clear</a>
+                    </h2>
+                    <div class="filter" (click)="addFilter('1', 'collTypes')">Artstor Digital Library</div>
+                    <div class="filter" (click)="addFilter('5', 'collTypes')">Shared Shelf Commons</div>
+            </div>
         </div>
-        <div class="col-sm-10">
+        <div class="col-sm-9">
             <div class="card-deck-wrapper">
                 <div class="card-deck">
                     <div *ngFor="let asset of results" class="card card--asset col-sm-2">
