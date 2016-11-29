@@ -37,6 +37,10 @@
                         <div class="card-img-top">
                             <img src="http://viewer2.artstor.org/{{ asset.thumbnailImgUrl }}" alt="Card image cap">
                         </div>
+                        <i *ngIf="asset.cfObjectId.length > 0" class="icon icon-collab"></i>
+                        <i *ngIf="asset.clustered == 1" class="icon icon-cluster"></i>
+                        <i *ngIf="asset.iapFlag > 0" class="icon icon-iap"></i>
+                        <i *ngIf="asset.objectTypeId == 24" class="icon icon-video"></i>
                         <div class="card-block card-text">
                             <span>{{ asset.thumbnail1 }}</span>
                             <span>{{ asset.thumbnail2 }}</span>

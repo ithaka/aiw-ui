@@ -1,0 +1,33 @@
+/**
+ * # Icons
+ */
+
+.icon {
+    width: 1em;
+    height: 1em;
+    display: inline-block;
+}
+
+@mixin icon--hover($name, $imageType) {
+    .icon-#{ $name } {
+        cursor: pointer;
+        background-image: url('/assets/img/icon-' + $name + '.' + $imageType);
+        background-repeat: no-repeat;
+        background-position: center center;
+        background-size: 100% auto;
+        
+        &:hover, &:focus, &:active {
+            background-image: url('/assets/img/icon-' + $name + '--hover.' + $imageType);
+        }
+    }
+}
+
+@include icon--hover('collab', 'gif');
+@include icon--hover('cluster', 'gif');
+@include icon--hover('iap', 'gif');
+@include icon--hover('video', 'gif');
+@include icon--hover('doc', 'gif');
+@include icon--hover('pdf', 'gif');
+@include icon--hover('ppt', 'gif');
+@include icon--hover('3d', 'gif');
+@include icon--hover('qtvr', 'gif');
