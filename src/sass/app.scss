@@ -43,6 +43,7 @@
 @import './modules/buttons';
 @import './modules/icons';
 @import './modules/cards';
+@import './modules/modals';
 
 // ----------------------------------------------------
 // [IV] Component/Page Specific Styles
@@ -62,6 +63,12 @@ html, body{
   height: 100%;
   font-family: Arial, Helvetica, sans-serif;
   margin: 0px;
+}
+
+.block-right {
+  display:block;
+  width: 100%;
+  text-align: right;
 }
 
 span.active {

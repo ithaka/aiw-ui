@@ -17,7 +17,7 @@ export class Nav {
 
   // TypeScript public modifiers
   constructor(private _auth: AuthenticationService, private _router:Router) { 
-    
+     
   }
 
   logout() {
@@ -36,6 +36,6 @@ export class Nav {
           this.showLoginPanel = false;
         }
     });
-  });
   }
-}
+  
+} 

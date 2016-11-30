@@ -170,12 +170,6 @@ a[href], a.link, .link {
   }
 }
 
-.block-right {
-  display:block;
-  width: 100%;
-  text-align: right;
-}
-
 p {
     @extend %baseFontStyle;
 }

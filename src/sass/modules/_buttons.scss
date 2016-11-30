@@ -4,6 +4,20 @@
  */
 
 $primaryBtnColor: #ca4d2d;
+$secondaryBtnColor: rgb(225,225,225);
+
+.btn {
+     @extend %Graphik-Bold-Web;
+     color: #fff;
+     font-size: 12px;
+     padding: 8px 24px;
+     text-transform: uppercase;
+     letter-spacing: 1px;
+
+     &:hover, &:focus, &:active {
+         color: #fff;
+     }
+}
 
 /**
  * @atom Button 
@@ -18,14 +32,8 @@ $primaryBtnColor: #ca4d2d;
  *  <button type="button" class="btn btn-link">Link</button>
  */
  .btn-primary {
-     @extend %Graphik-Bold-Web;
-     font-size: 12px;
      background: $primaryBtnColor;
-     color: #fff;
      border-color: $primaryBtnColor;
-     padding: 8px 24px;
-     text-transform: uppercase;
-     letter-spacing: 1px;
 
      &:hover, &:focus, &:active {
         background: darken($primaryBtnColor, 10%);
@@ -34,5 +42,11 @@ $primaryBtnColor: #ca4d2d;
  }
  
  .btn-secondary {
-     background: rgb(220,220,220);
+     background: $secondaryBtnColor;
+     border-color: $secondaryBtnColor;
+
+     &:hover, &:focus, &:active {
+        background: darken($secondaryBtnColor, 10%);
+        border-color: darken($secondaryBtnColor, 10%);
+     }
  }

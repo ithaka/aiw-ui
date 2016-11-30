@@ -57,26 +57,23 @@
 <!--.container-->
 
 <div id="helpModal" class="modal" [ngClass]="{'show': showHelpModal }">
-    <!-- Pwd Reset Modal -->
-    <div class="modal-content">
-        <div class="modal-header">
-            <img id="dialog-logo" src="/assets/img/dialogLogoTransp.gif" />
-            <span class="close-icon" (click)="toggleAccessHelpModal()">×</span>
-        </div>
-        <div class="modal-body">
-            <div class="col-sm-12">
-                <h1>How do I register?</h1>
-                <p class="text">To access the images in the Artstor Digital Library you need to be affiliated with a participating institution (university, college, museum, public library or K-12 school). </p>
-                <p class="text">Please check a current list of Artstor <a href="http://www.artstor.org/interested-in-participation/i-html/current-participants.shtml" target="_blank">Participants</a> to see if you have access.</p>
-                <p class="text">If you are at a participating institution, <a href="http://www.artstor.org/using-artstor/u-html/remote-access.shtml" target="_blank">learn more about accessing Artstor remotely</a></p>
-
-                <p class="text">If you are at a non-participating institution and are interested in getting access to Artstor for your institution, you can learn more about <a href="http://www.artstor.org/interested-in-participation/i-html/becoming-participant.shtml"
-                        target="_blank">Becoming a Participant</a> or contact <a href="mailto:participation@artstor.org" target="_blank">Artstor Library Relations.</a></p>
+    <!-- Login Help Modal -->
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="close-icon" (click)="toggleAccessHelpModal()">×</span>
             </div>
-        </div>
-        <div class="submit-cntnr">
-            <div>
-                <button class="sub-btn btn" (click)="toggleAccessHelpModal()">Ok</button>
+            <div class="modal-body">
+                    <h1>How do I register?</h1>
+                    <br/>
+                    <p class="text">To access the images in the Artstor Digital Library you need to be affiliated with a participating institution (university, college, museum, public library or K-12 school). </p>
+                    <p class="text">Please check a current list of Artstor <a href="http://www.artstor.org/interested-in-participation/i-html/current-participants.shtml" target="_blank">Participants</a> to see if you have access.</p>
+                    <p class="text">If you are at a participating institution, <a href="http://www.artstor.org/using-artstor/u-html/remote-access.shtml" target="_blank">learn more about accessing Artstor remotely</a></p>
+                    <p class="text">If you are at a non-participating institution and are interested in getting access to Artstor for your institution, you can learn more about <a href="http://www.artstor.org/interested-in-participation/i-html/becoming-participant.shtml"
+                            target="_blank">Becoming a Participant</a> or contact <a href="mailto:participation@artstor.org" target="_blank">Artstor Library Relations.</a></p>
+            </div>
+            <div class="modal-footer">
+                    <button class="btn btn-primary" (click)="toggleAccessHelpModal()">Ok</button>
             </div>
         </div>
     </div>
@@ -84,36 +81,36 @@
 
 <div id="pwd-modal" class="modal" [ngClass]="{'show': showPwdModal}">
     <!-- Pwd Reset Modal -->
-    <div class="modal-content">
-        <div class="modal-header">
-            <img id="dialog-logo" src="/assets/img/dialogLogoTransp.gif" />
-            <span class="close-icon" (click)="hidePwdModal()">×</span>
-        </div>
-        <div class="modal-body">
-            <div *ngIf="pwdReset">
-                <div class="body-hdr">Forgot your password?</div>
-                <div class="body-txt">Enter the email address that you used when registering.</div>
-                <div class="pwd-reset-cntnr">
-                    <span>Email Address:</span>
-                    <input type="text" [(ngModel)]="pwdRstEmail" />
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="close-icon" (click)="hidePwdModal()">×</span>
+            </div>
+            <div class="modal-body">
+                <h1>Password Reset</h1>
+                <br/>
+                <div *ngIf="pwdReset">
+                    <p>Enter the email address that you used when registering.</p>
+                    <div class="form-group" [ngClass]="{ 'has-danger' : errorMsgPwdRst }">
+                        <label>Email Address:</label>
+                        <input class="form-control" type="text" [(ngModel)]="pwdRstEmail" />
+                        <div *ngIf="errorMsgPwdRst" class="form-control-feedback">{{ errorMsgPwdRst }}</div>
+                    </div>
                 </div>
-                <div class="pwd-rst-error-msg">{{ errorMsgPwdRst }}</div>
+                <div *ngIf="successMsgPwdRst" class="has-success"> {{ successMsgPwdRst }} </div>
+                <div *ngIf="expirePwd" class="has-danger">
+                    <p class="form-control-feedback">Remote login was unsuccessful! Your 120 day access period expired.</p>
+                    <p class="form-control-feedback">To restart your 120-day timer, log in to your Artstor account while within your institution's network.</p>
+                </div>
             </div>
-            <div *ngIf="successMsgPwdRst">
-                <div class="success-msg"> {{ successMsgPwdRst }} </div>
-            </div>
-            <div *ngIf="expirePwd" class="expire-pwd">
-                <div>Remote login was unsuccessful! Your 120 day access period expired.</div>
-                <div>To restart your 120-day timer, log in to your Artstor account while within your institution's network.</div>
-            </div>
-        </div>
-        <div class="submit-cntnr">
-            <div *ngIf="pwdReset">
-                <button class="sub-btn btn" (click)="sendResetPwdRequest()">Submit</button>
-                <button class="cncl-btn btn" (click)="hidePwdModal()">Cancel</button>
-            </div>
-            <div *ngIf="successMsgPwdRst || expirePwd">
-                <button class="sub-btn btn" (click)="hidePwdModal()">Ok</button>
+            <div class="modal-footer">
+                <div *ngIf="pwdReset">
+                    <button class="btn btn-secondary" (click)="hidePwdModal()">Cancel</button>
+                    <button class="btn btn-primary" (click)="sendResetPwdRequest()">Submit</button>
+                </div>
+                <div *ngIf="successMsgPwdRst || expirePwd">
+                    <button class="btn btn-primary" (click)="hidePwdModal()">Ok</button>
+                </div>
             </div>
         </div>
     </div>

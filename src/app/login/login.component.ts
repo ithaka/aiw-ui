@@ -155,7 +155,7 @@ export class Login {
       this.errorMsgPwdRst = 'Sorry! ' + this.pwdRstEmail + ' is invalid for ARTstor.';
       setTimeout(() => {
         this.errorMsgPwdRst = '';
-                },5000);
+                }, 8000);
       this.pwdRstEmail = '';
     }
     else{
