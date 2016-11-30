@@ -144,7 +144,7 @@ a {
   color: $linkColor;
 }
 
-a[href], .link {
+a[href], a.link, .link {
   @extend a;
   padding-bottom: 1px;
   border-bottom: 1px solid rgba($linkColor, 0.3);
@@ -153,7 +153,6 @@ a[href], .link {
     color: $brightTeal;
     text-decoration: none;
     border-bottom: 1px solid $brightTeal;
-
   }
 }
 
