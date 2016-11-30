@@ -3,6 +3,7 @@
  * Variations for buttons, links, and clickable icons
  */
 
+$primaryBtnColor: #ca4d2d;
 
 /**
  * @atom Button 
@@ -17,13 +18,18 @@
  *  <button type="button" class="btn btn-link">Link</button>
  */
  .btn-primary {
-     background: $teal;
-     color: #000;
-     border-color: saturate($teal,10%);
+     @extend %Graphik-Bold-Web;
+     font-size: 12px;
+     background: $primaryBtnColor;
+     color: #fff;
+     border-color: $primaryBtnColor;
+     padding: 8px 24px;
+     text-transform: uppercase;
+     letter-spacing: 1px;
 
      &:hover, &:focus, &:active {
-        background: darken($teal,10%);
-        border-color: saturate($teal,10%);
+        background: darken($primaryBtnColor, 10%);
+        border-color: darken($primaryBtnColor, 10%);
      }
  }
  

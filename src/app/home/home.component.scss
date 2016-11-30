@@ -1,5 +1,12 @@
 /*styles for home content only*/
 .list--home-collections {
+    border: 1px solid #cdcdcd;
     max-height: 400px;
     overflow-y: scroll;
+}
+
+.list-group.list-group-clean {
+    li {
+        border: none;
+    }
 }

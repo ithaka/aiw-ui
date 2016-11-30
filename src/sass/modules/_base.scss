@@ -10,6 +10,8 @@
  *  <hr />
  */
  hr {
-     background: none;
+     background: none;    
+     height: 0px;
+     border-top: none;
      border-bottom: 1px solid $teal;
  }

@@ -5,6 +5,8 @@
 
 $inputTextColor: #000;
 
+$inputBorderFocusColor: #918f92;
+
 /**
  * @atom Form Group
  * @section Forms > Input
@@ -16,7 +18,7 @@ $inputTextColor: #000;
  */
  .form-group {
      & label {
-         font-weight: bold;
+        //  font-weight: bold;
      }
  }
 
@@ -26,14 +28,21 @@ $inputTextColor: #000;
  * @markup
  *  <input class="form-control" placeholder="Form control..." />
  */
-input.form-control {
+input.form-control, select.form-control {
 
     &, &:focus {
         color: $inputTextColor;
     }
-  
+    
+    &:focus {
+        border-color: $inputBorderFocusColor;
+    }
 }
 
 .dropdown-menu {
     border-radius: 0px;
+}
+
+select.form-control {
+    border-radius: 0 !important;
 }

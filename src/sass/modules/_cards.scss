@@ -1,0 +1,32 @@
+/**
+ * # Cards
+ * Modifications to the Bootstrap element:
+ * https://v4-alpha.getbootstrap.com/components/card/
+ */
+
+$cardPadding: 24px;
+
+.card{
+    border-radius: 0px;
+    border: 0px solid transparent;
+}
+
+.card--light {
+    padding: $cardPadding;
+    background: $bgLightAccent;
+
+    & hr {
+        border-color: #fff;
+        margin: $cardPadding/2 -1*$cardPadding;
+    }
+}
+
+.card--v-pad {
+    padding: 24px 0px;
+}
+
+ .card-header {
+     padding: $cardPadding/2 0px;
+     background: transparent;
+    border: 0px solid transparent;
+ } 

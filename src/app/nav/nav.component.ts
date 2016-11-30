@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 
 import { AuthenticationService } from '../login/login.service';
+import { Router, NavigationEnd, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'nav-bar',
@@ -11,9 +12,11 @@ import { AuthenticationService } from '../login/login.service';
   styleUrls: [ './nav.component.scss' ],
 })
 export class Nav {
-  
+  private sub: any;
+  public showLoginPanel = false;
+
   // TypeScript public modifiers
-  constructor(private _auth: AuthenticationService) { 
+  constructor(private _auth: AuthenticationService, private _router:Router) { 
     
   }
 
@@ -26,6 +29,13 @@ export class Nav {
   }
   
   ngOnInit() {
-    
+    this.sub = this._router.events.subscribe(e => {
+        if (e instanceof NavigationEnd && e.url != '/login') {
+          this.showLoginPanel = true;
+        } else {
+          this.showLoginPanel = false;
+        }
+    });
+  });
   }
 }

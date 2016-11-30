@@ -42,6 +42,7 @@
 @import './modules/forms';
 @import './modules/buttons';
 @import './modules/icons';
+@import './modules/cards';
 
 // ----------------------------------------------------
 // [IV] Component/Page Specific Styles
@@ -77,6 +78,10 @@ span.active {
 .main-content {
   padding-top: $basePadding;
   padding-bottom: $basePadding;
+
+  nav-menu + & {
+    padding-top: 0px;
+  }
 }
 
 .vertical-center-wrap {

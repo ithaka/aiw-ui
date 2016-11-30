@@ -25,6 +25,7 @@ export class Login {
   public user = new User('','');
   public errorMsg = '';
   public showPwdModal = false;
+  public showHelpModal = false;
   public pwdReset = false;
   public expirePwd = false;
   public pwdRstEmail = '';
@@ -137,6 +138,11 @@ export class Login {
     this.expirePwd = false;
     this.showPwdModal = false;
   }
+
+  toggleAccessHelpModal() {
+    this.showHelpModal = !this.showHelpModal;
+  }
+
   sendResetPwdRequest(){
     this._auth.pwdReset(this.pwdRstEmail)
       .then(
