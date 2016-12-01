@@ -15,17 +15,34 @@ exports.config = {
   ],
   exclude: [],
 
-  framework: 'jasmine2',
+  // framework: 'jasmine2',
+
+   // set to "custom" instead of cucumber.
+  framework: 'custom',
+
+  // path relative to the current config file
+  frameworkPath: require.resolve('protractor-cucumber-framework'),
+
+  // require feature files
+  specs: [
+        '/features/**/*.feature' // accepts a glob
+    ],
+  cucumberOpts: {
+      // require step definitions
+    require: [
+        '/features/**/*.steps.js' // accepts a glob
+    ]
+  },
 
   allScriptsTimeout: 110000,
 
-  jasmineNodeOpts: {
-    showTiming: true,
-    showColors: true,
-    isVerbose: false,
-    includeStackTrace: false,
-    defaultTimeoutInterval: 400000
-  },
+  // jasmineNodeOpts: {
+  //   showTiming: true,
+  //   showColors: true,
+  //   isVerbose: false,
+  //   includeStackTrace: false,
+  //   defaultTimeoutInterval: 400000
+  // },
   directConnect: true,
 
   capabilities: {
