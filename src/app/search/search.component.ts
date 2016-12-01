@@ -25,6 +25,17 @@ export class Search {
   errors = {};
   results = [];
   filters = [];
+  collTypeFacets = [
+    {
+      id : '1',
+      label: 'Artstor Digital Library'
+    },
+    {
+      id : '5',
+      label : 'Shared Shelf Commons' 
+    }
+  ];
+
   activeSort = {
     index : 0,
     label : 'Relevance'
@@ -66,15 +77,41 @@ export class Search {
     this.searchAssets(this.term);
   }
 
-  addFilter(value, group){
+  toggleFilter(value, group){
     var filter = {
       filterGroup : group,
       filterValue : value
     };
-    if(!this.filterExists(filter)){
+    if(this.filterExists(filter)){ // Remove Filter
+      this.removeFilter(filter);
+    }
+    else{ // Add Filter
       this.filters.push(filter);
     }
     console.log(this.filters);
+  }
+
+  filterApplied(value, group){
+    var filter = {
+      filterGroup : group,
+      filterValue : value
+    };
+    if(this.filterExists(filter)){
+      return true;
+    }
+    else{
+      return false;
+    }
+  }
+
+  removeFilter(filterObj){
+    for(var i = 0; i < this.filters.length; i++){
+      var filter = this.filters[i];
+      if((filterObj.filterGroup === filter.filterGroup) && (filterObj.filterValue === filter.filterValue)){
+        this.filters.splice(i, 1);
+        break;
+      }
+    }
   }
   
   filterExists(filterObj){
@@ -85,6 +122,19 @@ export class Search {
       }
     }
     return false;
+  }
+
+  getUniqueColTypeIds(facetArray){
+    var colTypeIds = [];
+    for(var i = 0; i < facetArray.length; i++){
+      var facetObj = facetArray[i];
+      var idArray = facetObj.collectionType.split(',');
+      for(var j = 0; j < idArray.length; i++){
+        if(colTypeIds.indexOf(idArray[j]) === -1){
+          colTypeIds.push(idArray[j]);
+        }
+      }
+    }
   }
 
   submitState(value: string) {

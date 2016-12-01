@@ -86,3 +86,12 @@
 .card-text li{
     cursor: pointer;
 } 
+
+.filter-group__label{
+    display: inline-block !important;
+    width: 85% !important;
+}
+.filter-group h2{
+    display: inline-block;
+    cursor: pointer;
+}

@@ -30,12 +30,9 @@
         <div class="col-sm-3">
             WIP: Filters
             <div class="filter-group"> 
-                    <span class="filter-group__label">Collection Type</span>
-                    <h2 class="small half-margin left-align">
-						<a class="link right-block">Clear</a>
-                    </h2>
-                    <div class="filter" (click)="addFilter('1', 'collTypes')">Artstor Digital Library</div>
-                    <div class="filter" (click)="addFilter('5', 'collTypes')">Shared Shelf Commons</div>
+                <span class="filter-group__label">Collection Type</span>
+                <h2 class="small half-margin left-align"><a class="link right-block">Clear</a></h2>
+                <div class="filter" *ngFor="let collTypeFacet of collTypeFacets" (click)="toggleFilter(collTypeFacet.id, 'collTypes')" [ngClass]="{'active': filterApplied(collTypeFacet.id, 'collTypes')}">{{ collTypeFacet.label }}</div>
             </div>
         </div>
         <div class="col-sm-9">
