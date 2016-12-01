@@ -25,16 +25,7 @@ export class Search {
   errors = {};
   results = [];
   filters = [];
-  collTypeFacets = [
-    {
-      id : '1',
-      label: 'Artstor Digital Library'
-    },
-    {
-      id : '5',
-      label : 'Shared Shelf Commons' 
-    }
-  ];
+  collTypeFacets = [];
 
   activeSort = {
     index : 0,
@@ -61,9 +52,10 @@ export class Search {
 
   searchAssets(term) {
     let searchScope = this;
-    this._assets.search(term, this.activeSort.index)
+    this._assets.search(term, this.filters, this.activeSort.index)
       .then(function(res){
         console.log(res);
+        searchScope.generateColTypeFacets( searchScope.getUniqueColTypeIds(res.collTypeFacets) );
         searchScope.results = res.thumbnails;
       })
       .catch(function(err) {
@@ -88,7 +80,11 @@ export class Search {
     else{ // Add Filter
       this.filters.push(filter);
     }
+    
+    console.log('Applied Filters:-');
     console.log(this.filters);
+
+    this.searchAssets(this.term);
   }
 
   filterApplied(value, group){
@@ -102,6 +98,16 @@ export class Search {
     else{
       return false;
     }
+  }
+
+  clearAllFilterGroup(group){
+    for(var i = 0; i < this.filters.length; i++){
+      var filter = this.filters[i];
+      if(filter.filterGroup === group){
+        this.filters.splice(i, 1);
+      }
+    }
+    this.searchAssets(this.term);
   }
 
   removeFilter(filterObj){
@@ -129,12 +135,32 @@ export class Search {
     for(var i = 0; i < facetArray.length; i++){
       var facetObj = facetArray[i];
       var idArray = facetObj.collectionType.split(',');
-      for(var j = 0; j < idArray.length; i++){
+      for(var j = 0; j < idArray.length; j++){
+        idArray[j] = idArray[j].trim();
         if(colTypeIds.indexOf(idArray[j]) === -1){
           colTypeIds.push(idArray[j]);
         }
       }
     }
+    return colTypeIds;
+  }
+
+  generateColTypeFacets(idsArray){
+    var generatedFacetsArray = [];
+    for(var i = 0; i < idsArray.length; i++){
+      var facetObj = {
+        id : idsArray[i],
+        label: ''
+      };
+      if(facetObj.id === '1'){
+        facetObj.label = 'Artstor Digital Library';
+      }
+      else if(facetObj.id === '5'){
+        facetObj.label = 'Shared Shelf Commons';
+      }
+      generatedFacetsArray.push(facetObj);
+    }
+    this.collTypeFacets = generatedFacetsArray;
   }
 
   submitState(value: string) {

@@ -57,34 +57,19 @@
 
 .row--search-bar {
     margin-bottom: 20px;
-}.sortlist{
+}
+.btn#sortdropdownMenu{
+    color: #000;
+}
+.sortlist{
     list-style: none;
     display: inline-block;
 }
 .active-sort{
     display: inline-block;
 }
-
-.filter-grp{
-    margin: 10px 0px;
-    padding-bottom: 10px;
-    border-bottom: 1px solid #CECBA5;
-}
-/*.filter-hdr span{
-    font-size: 15px;
-    border: none;
-    padding: 0;
-    font-weight: 700;
-    letter-spacing: 0.5px;
-    color: #4f5557;
-}*/
 .filter-hdr a{
     color: #b64403;
-    /*font-size: 13px;
-    cursor: pointer;
-    float: right;
-    line-height: 22px;
-    height: 22px;*/
 }  
 .card-text li{
     cursor: pointer;
@@ -93,8 +78,13 @@
 .filter-group__label{
     display: inline-block !important;
     width: 85% !important;
+    font-weight: bold;
+    color: #4f5557;
 }
 .filter-group h2{
     display: inline-block;
     cursor: pointer;
+}
+.filter-group{
+    border-bottom: 1px solid #CECBA5;
 }

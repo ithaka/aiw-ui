@@ -37,17 +37,24 @@ export class AssetService {
         return body || { };
     }
 
-    search(term, sortIndex) {
+    search(term, filters, sortIndex) {
         let keyword = encodeURIComponent(term);
         let options = new RequestOptions({ withCredentials: true });
         let pageNo = 1;
         let pagesize = 48;
         let thumbSize = 0;
         let type = 6;
+        let colTypeIds = '';
+
+        for(var i = 0; i < filters.length; i++){ // Applied filters
+            if(filters[i].filterGroup === 'collTypes'){ // Collection Types
+                colTypeIds = filters[i].filterValue;
+            }
+        }
         // /search/1/{start_idx}/{page_size}/0?type= 1&kw={keyword}&origKW=&id={collection_ids}&name=All Collections&order={order}&tn={thumbnail_size}
         
         return this.http
-            .get(this.baseUrl + '/search/' + type + '/' + pageNo + '/' + pagesize + '/' + sortIndex + '?' + 'type=' + type + '&kw=' + keyword + '&origKW=&geoIds=&clsIds=&collTypes=&id=all&name=All%20Collections&bDate=&eDate=&dExact=&order=0&isHistory=false&prGeoId=&tn=1', options)
+            .get(this.baseUrl + '/search/' + type + '/' + pageNo + '/' + pagesize + '/' + sortIndex + '?' + 'type=' + type + '&kw=' + keyword + '&origKW=&geoIds=&clsIds=&collTypes=' + colTypeIds + '&id=all&name=All%20Collections&bDate=&eDate=&dExact=&order=0&isHistory=false&prGeoId=&tn=1', options)
             .toPromise()
             .then(this.extractData);
     }
