@@ -50,3 +50,7 @@ $secondaryBtnColor: rgb(225,225,225);
         border-color: darken($secondaryBtnColor, 10%);
      }
  }
+
+ .btn-link {
+     text-transform: none !important;
+ }
