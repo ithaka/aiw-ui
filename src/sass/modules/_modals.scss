@@ -1,0 +1,75 @@
+/**
+ * # Modals
+ * Modifications to the Bootstrap element:
+ * https://v4-alpha.getbootstrap.com/components/modal/
+ */
+
+.modal {
+    display: none;
+    background-color: rgba(238, 238, 238, 0.5);
+}
+
+.modal.show{
+	display: block !important;
+}
+
+.modal-content {
+    position: relative;
+    background-color: #fefefe;
+    margin: auto;
+    padding: 0;
+    border: none;
+    border-radius: 3px;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
+    -webkit-animation-name: animatetop;
+    -webkit-animation-duration: 0.4s;
+    animation-name: animatetop;
+    animation-duration: 0.4s
+}
+
+@-webkit-keyframes animatetop {
+    from {top:-300px; opacity:0}
+    to {top:0; opacity:1}
+}
+
+@keyframes animatetop {
+    from {top:-300px; opacity:0}
+    to {top:0; opacity:1}
+}
+
+.close-icon {
+    color: #444;
+    float: right;
+	font-size: 22px;
+    height: 30px;
+    line-height: 32px;
+
+    &:hover,
+    &:focus {
+        color: $brightOrange;
+        text-decoration: none;
+        cursor: pointer;
+    }
+}
+
+.modal-header {
+	padding: 2px 16px;
+    background: #fff;
+    border: none; 
+}
+
+.modal-body {
+	padding: $basePadding;
+    background-color: $bgLightAccent;
+}
+
+.modal-footer {
+    border: none;
+    background-color: $bgLightAccent;
+}
+
+.modal-body .success-msg {
+	font-size: 14px;
+    font-weight: bold;
+    color: #4F5557;
+}

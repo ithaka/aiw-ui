@@ -1,0 +1,30 @@
+
+.nav-menu {
+    padding: 0 15px;
+}
+
+
+// Navigation Items
+
+$dropdownMenuHeight: 60px;
+
+.navbar-nav {
+    border:none;
+    display: block;
+    height: $dropdownMenuHeight;
+}
+
+.navbar-nav > li > a, .navbar-nav > li > .btn-link {
+    line-height: $dropdownMenuHeight;
+    font-size: 14px;
+    border: none;
+    padding: 0;
+    font-weight: 700;
+    letter-spacing: 1px;
+    color: #999;
+
+    &:active, &:focus, &:hover {
+        color: #000;
+        outline: none;
+    }
+}

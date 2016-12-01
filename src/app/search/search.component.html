@@ -1,3 +1,4 @@
+<nav-menu></nav-menu>
 <div class="container main-content">
     <div class="row">
         <div class="col-sm-6">
@@ -42,15 +43,16 @@
                         <div class="card-img-top">
                             <img src="http://viewer2.artstor.org/{{ asset.thumbnailImgUrl }}" alt="Card image cap">
                         </div>
-                        <i *ngIf="asset.cfObjectId.length > 0" class="icon icon-collab"></i>
-                        <i *ngIf="asset.clustered == 1" class="icon icon-cluster"></i>
-                        <i *ngIf="asset.iapFlag > 0" class="icon icon-iap"></i>
-                        <i *ngIf="asset.objectTypeId == 24" class="icon icon-video"></i>
                         <div class="card-block card-text">
-                            <span>{{ asset.thumbnail1 }}</span>
-                            <span>{{ asset.thumbnail2 }}</span>
-                            <span>{{ asset.thumbnail3 }}</span>
-                            <span>{{ asset.thumbnail4 }}</span>
+                            <i *ngIf="asset.cfObjectId.length > 0" class="icon icon-collab"></i>
+                            <i *ngIf="asset.clustered == 1" class="icon icon-cluster"></i>
+                            <i *ngIf="asset.iapFlag > 0" class="icon icon-iap"></i>
+                            <i *ngIf="asset.objectTypeId == 24" class="icon icon-video"></i>
+                            <i class="icon"><!--spacer--></i>
+                            <span title="{{ asset.thumbnail1 }}">{{ asset.thumbnail1 }}</span>
+                            <span title="{{ asset.thumbnail2 }}">{{ asset.thumbnail2 }}</span>
+                            <span title="{{ asset.thumbnail3 }}">{{ asset.thumbnail3 }}</span>
+                            <span title="{{ asset.thumbnail4 }}">{{ asset.thumbnail4 }}</span>
                         </div>
                     </div>
                 </div>

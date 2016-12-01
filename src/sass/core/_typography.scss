@@ -3,7 +3,13 @@
  * All type styles 
  */
 
+// Sizes
+$baseFontSize: 14px;
+
+
+// Colors
 $typeAccent: $burntOrange;
+
 
 // Font Imports
 // ----------------------------------------------------
@@ -118,6 +124,11 @@ $typeAccent: $burntOrange;
  */
  %baseFontStyle {
      @extend %Graphik-Regular-Web;
+     font-size: $baseFontSize;
+ }
+
+ html {
+   font-size: $baseFontSize;
  }
 
 
@@ -126,20 +137,61 @@ a, button {
   @extend %Graphik-Regular-Web;
 }
 
-.link--accent {
-  @extend a;
+$linkColor : #444;
+
+a {
   cursor: pointer;
-  font-weight: bold;
+  color: $linkColor;
+}
+
+a[href], a.link, .link {
+  @extend a;
+  padding-bottom: 1px;
+  border-bottom: 1px solid rgba($linkColor, 0.3);
+  
+  &:hover, &:focus {
+    color: $brightTeal;
+    text-decoration: none;
+    border-bottom: 1px solid $brightTeal;
+  }
+}
+
+.link--accent {
+  @extend .link;
+  cursor: pointer;
+  font-weight: normal;
   color: $typeAccent;
+  border-bottom: 1px solid rgba($typeAccent, 0.4);
 
   &:hover, &:focus, &:active {
-    color: darken($typeAccent, 15%);
+    color: $brightOrange;
+    border-color: $brightOrange; 
     text-decoration: none;
   }
 }
 
 p {
-    @extend %Graphik-Regular-Web;
+    @extend %baseFontStyle;
+}
+
+label {
+  @extend %Graphik-Bold-Web;
+  letter-spacing: 0.5px;
+  color: #444;
+  font-size: 12px;
+}
+
+h1, h2, h3, h4 {
+  // Do not use type styles to handle layout spacing (other than line-height)
+  margin: 0;
+  padding: 0;
+}
+
+h1 {
+  @extend %Graphik-Regular-Web;
+  color: $typeAccent;
+  font-size: 18px;
+  line-height: 22px;
 }
 
 h2 {

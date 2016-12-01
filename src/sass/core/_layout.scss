@@ -2,3 +2,10 @@
  * # Layout
  * Columns, rows, and other spatial organization structures
  */
+
+$navOffset: 80px;
+$footerOffset: 60px;
+
+main {
+     min-height: calc(100% - #{ $navOffset + $footerOffset });
+ }

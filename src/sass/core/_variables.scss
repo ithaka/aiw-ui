@@ -7,13 +7,19 @@ $btn-border-radius: 0px;
  * @nuclide Image-Folder
  * @section Config > Spacing
  */
-$basePadding: 20px;
+$basePadding: 24px;
 
 /** @color Gray */
 $gray: #cdcdcd;
 /** @color Teal */
 $teal: rgb(225,232,225);
+$brightTeal: #45bfab;
+
 /** @color Burnt Orange */
-$burntOrange:#b64403;
+$burntOrange: #ca4f10;// #b64403;
 /** @color Beige */
 $beige: #d4cd98;
+
+$brightOrange: #fd7740;
+
+$bgLightAccent: #f8faf8;

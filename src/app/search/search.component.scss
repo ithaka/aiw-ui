@@ -2,7 +2,7 @@
 
 .card--asset {
     margin-bottom: 0px;
-    height: 200px;
+    height: 220px;
     overflow: hidden;
     text-overflow: ellipsis;
     padding: 10px;
@@ -35,13 +35,16 @@
 }
 
 .card-text {
-    font-size:12px;
-    line-height: 18px;
-    margin-top: 18px;
+    font-size:11px;
+    line-height: 14px;
+    margin-top: 12px;
     margin-bottom: 0px;
     padding: 0px;
     position: relative;
 
+    & i {
+        font-size: 16px;
+    }
     & span {
         /*max-height: 2em;*/
         white-space: nowrap;
