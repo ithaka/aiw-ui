@@ -8,6 +8,15 @@
     display: inline-block;
 }
 
+@mixin icon($name, $imageType) {
+    .icon-#{ $name } {
+        background-image: url('/assets/img/icon-' + $name + '.' + $imageType);
+        background-repeat: no-repeat;
+        background-position: center center;
+        background-size: 100% auto;
+    }
+}
+
 @mixin icon--hover($name, $imageType) {
     .icon-#{ $name } {
         cursor: pointer;
@@ -22,6 +31,8 @@
     }
 }
 
+@include icon('search', 'svg');
+@include icon('loading', 'gif');
 @include icon--hover('collab', 'gif');
 @include icon--hover('cluster', 'gif');
 @include icon--hover('iap', 'gif');
@@ -31,3 +42,12 @@
 @include icon--hover('ppt', 'gif');
 @include icon--hover('3d', 'gif');
 @include icon--hover('qtvr', 'gif');
+
+.icon-search {
+    cursor: pointer;
+    opacity: 0.6;
+
+    &:hover, &:focus {
+        opacity: 1;
+    }    
+}

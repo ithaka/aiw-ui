@@ -5,7 +5,7 @@
 
 $inputTextColor: #000;
 
-$inputBorderFocusColor: #918f92;
+$inputBorderFocusColor: #918f92; 
 
 /**
  * @atom Form Group
@@ -29,7 +29,8 @@ $inputBorderFocusColor: #918f92;
  *  <input class="form-control" placeholder="Form control..." />
  */
 input.form-control, select.form-control {
-
+    text-overflow: ellipsis;
+    
     &, &:focus {
         color: $inputTextColor;
     }
@@ -45,4 +46,22 @@ input.form-control, select.form-control {
 
 select.form-control {
     border-radius: 0 !important;
+}
+
+.form-control {
+    &.has-icon {
+        padding-right: 2rem
+    }
+}
+
+.form-control__icon {
+    &, &.icon {
+        position: absolute;
+        top: 50%;
+        right: 0.5rem;
+        z-index: 1000;
+        @include transform(translateY(-50%));
+        height: 100%;
+        width: 1.5em;
+    }
 }

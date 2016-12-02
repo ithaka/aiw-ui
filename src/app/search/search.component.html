@@ -1,20 +1,21 @@
 <nav-menu></nav-menu>
 <div class="container main-content">
-    <div class="row">
-        <div class="col-sm-6">
-            <h2>Filtered Search</h2>
-        </div>
-    </div>
     <div class="row row--search-bar">
-        <div class="col-sm-4">
+        <div class="col-sm-3">
             <div class="input-group">
-                <input [(ngModel)]="term" (keyup.enter)="searchAssets(term)" type="text" class="form-control" placeholder="Search term...">
-                <span class="input-group-btn">
-                <button (click)="searchAssets(term)" class="btn btn-secondary" type="button">Go</button>
-                </span>
+                <input [(ngModel)]="term" (keyup.enter)="searchAssets(term)"  aria-describedby="search-label" type="text" class="form-control has-icon" placeholder="Search">
+                <i *ngIf="!searchLoading" (click)="searchAssets(term)" class="icon icon-search form-control__icon"></i>
+                <i *ngIf="searchLoading" class="icon icon-loading form-control__icon"></i>
             </div>
         </div>
-        <div class="col-sm-2">
+        <div class="col-sm-6">
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-3">
+            <h2>Filters</h2>
+        </div>
+        <div class="col-sm-3">
             <li class="dropdown" class="sortlist" ngbDropdown>
                 <button class="btn btn-link" id="sortdropdownMenu" ngbDropdownToggle>Sort</button>
                 <div class="dropdown-menu" aria-labelledby="sortdropdownMenu">
@@ -40,7 +41,7 @@
         <div class="col-sm-3 pag-controls">
             <span class="pag pag-first" (click)="firstPage()" [ngClass]="{'disable': isfirstPage()}"></span>
             <span class="pag pag-prev" (click)="prevPage()" [ngClass]="{'disable': isfirstPage()}"></span>
-            <span class="pag-info">Page</span>
+            <!--<span class="pag-info">Page</span>-->
             <input type="text" [(ngModel)]="pagination.currentPage" (blur)="currentPageOnblurr()" />
             <span class="pag-info">of {{ pagination.totalPages }}</span>
             <span class="pag pag-next" (click)="nextPage()" [ngClass]="{'disable': isLastPage()}"></span>
@@ -49,7 +50,11 @@
     </div>
     <div class="row">
         <div class="col-sm-3">
-            WIP: Filters
+            <div class="filter-group"> 
+                <span class="filter-group__label">Collection</span>
+                <!--<h2 class="small half-margin left-align"><a class="link right-block" (click)="clearAllFilterGroup('collTypes')">Clear</a></h2>-->
+                <div class="filter active" [ngClass]="{ }">All Collections</div>
+            </div>
             <div class="filter-group"> 
                 <span class="filter-group__label">Collection Type</span>
                 <h2 class="small half-margin left-align"><a class="link right-block" (click)="clearAllFilterGroup('collTypes')">Clear</a></h2>

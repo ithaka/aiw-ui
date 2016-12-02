@@ -21,7 +21,7 @@ import { AssetService } from '../home/assets.service';
 })
 export class Search {
   // Set our default values
-  localState = { value: '' };
+  public searchLoading: boolean;
   errors = {};
   results = [];
   filters = [];
@@ -45,26 +45,29 @@ export class Search {
 
   ngOnInit() {
     console.log('hello `Search` component');
-    let searchScope = this;
+    let scope = this;
 
     this.route.params.map(params => params['term'])
             .subscribe(term => { 
-                searchScope.term = term;
-                searchScope.searchAssets(term);
+                scope.term = term;
+                scope.searchAssets(term);
                });
   }
 
   searchAssets(term) {
-    let searchScope = this;
+    let scope = this;
+    this.searchLoading = true;
     this._assets.search(term, this.filters, this.activeSort.index, this.pagination)
       .then(function(res){
         console.log(res);
-        searchScope.generateColTypeFacets( searchScope.getUniqueColTypeIds(res.collTypeFacets) );
-        searchScope.setTotalPages(res.count);     
-        searchScope.results = res.thumbnails;
+        scope.generateColTypeFacets( scope.getUniqueColTypeIds(res.collTypeFacets) );
+        scope.setTotalPages(res.count);     
+        scope.results = res.thumbnails;
+        scope.searchLoading = false;
       })
       .catch(function(err) {
-        searchScope.errors['search'] = "Unable to load search.";
+        scope.errors['search'] = "Unable to load search.";
+        scope.searchLoading = false;
       });
   }
 
@@ -226,11 +229,5 @@ export class Search {
       generatedFacetsArray.push(facetObj);
     }
     this.collTypeFacets = generatedFacetsArray;
-  }
-
-  submitState(value: string) {
-    console.log('submitState', value);
-    this.appState.set('value', value);
-    this.localState.value = '';
   }
 }

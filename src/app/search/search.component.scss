@@ -1,5 +1,7 @@
 /*styles for search content only*/
 
+$filterBorderStyle: 1px solid rgba(0, 0, 0, 0.15);
+
 .card--asset {
     margin-bottom: 0px;
     height: 220px;
@@ -86,8 +88,10 @@
     cursor: pointer;
 }
 .filter-group{
-    border-bottom: 1px solid #CECBA5;
+    border-bottom: $filterBorderStyle;
 }
+
+
 .pag-controls{
     text-align: right;
 }
@@ -99,17 +103,17 @@
     text-align: center;
 }
 .pag-controls input:hover{
-    border: 1px solid #b64404;
+    // border: 1px solid #b64404;
 }
 .pag-controls input:focus{
-    border: 1px solid #b64404;
+    // border: 1px solid #b64404;
     outline: none;
 }
 .pag-controls .pag-info{
     vertical-align: middle;
     padding: 0px 5px;
 }
-.pag{
+.pag {
     display: inline-block;
     text-align: center;
     width: 1.35em;
