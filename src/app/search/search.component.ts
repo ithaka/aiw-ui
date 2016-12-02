@@ -22,6 +22,7 @@ import { AssetService } from '../home/assets.service';
 export class Search {
   // Set our default values
   public searchLoading: boolean;
+  public showFilters: boolean = true;
   errors = {};
   results = [];
   filters = [];

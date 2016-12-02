@@ -3,10 +3,8 @@
     <div class="row">
         <div class="col-sm-4">
             <div class="input-group">
-                <input [(ngModel)]="term" (keyup.enter)="searchAssets(term)" type="text" class="form-control" placeholder="Search term...">
-                <span class="input-group-btn">
-                <button (click)="searchAssets(term)" class="btn btn-secondary" type="button">Go</button>
-                </span>
+                <input [(ngModel)]="term" (keyup.enter)="searchAssets(term)"  aria-describedby="search-label" type="text" class="form-control has-icon" placeholder="Search">
+                <i (click)="searchAssets(term)" class="icon icon-search form-control__icon"></i>
             </div>
             <br />
              <div class="card">

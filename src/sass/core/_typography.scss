@@ -185,6 +185,7 @@ h1, h2, h3, h4 {
   // Do not use type styles to handle layout spacing (other than line-height)
   margin: 0;
   padding: 0;
+  position: relative;
 }
 
 h1 {
@@ -199,4 +200,27 @@ h2 {
   color: $typeAccent;
   font-size: 15px;
   line-height: 22px;
+
+  &.header-button {
+    &:hover, &:focus {
+      color: $brightOrange;
+    }
+  }
+}
+
+h3 {
+  @extend %Graphik-Regular-Web;
+  font-size: 13px;
+  font-weight: bold;
+  color: #444;
+  line-height: 22px;
+}
+
+.header-button {
+  cursor: pointer;
+}
+
+.small {
+  font-size: 11px;
+  line-height: 13px;
 }

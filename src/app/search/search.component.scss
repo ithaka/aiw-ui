@@ -1,6 +1,5 @@
 /*styles for search content only*/
 
-$filterBorderStyle: 1px solid rgba(0, 0, 0, 0.15);
 
 .card--asset {
     margin-bottom: 0px;
@@ -74,20 +73,6 @@ $filterBorderStyle: 1px solid rgba(0, 0, 0, 0.15);
 .card-text li{
     cursor: pointer;
 } 
-
-.filter-group__label{
-    display: inline-block !important;
-    width: 85% !important;
-    font-weight: bold;
-    color: #4f5557;
-}
-.filter-group h2{
-    display: inline-block;
-    cursor: pointer;
-}
-.filter-group{
-    border-bottom: $filterBorderStyle;
-}
 
 
 .pag-controls{

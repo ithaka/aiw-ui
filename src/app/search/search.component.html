@@ -13,11 +13,11 @@
     </div>
     <div class="row">
         <div class="col-sm-3">
-            <h2>Filters</h2>
+            <h2 class="header-button" (click)="showFilters = !showFilters">Filters <i class="icon icon-direction absolute-right" [ngClass]="{ 'icon-down' : showFilters, 'icon-left' : !showFilters }"></i></h2>
         </div>
         <div class="col-sm-6">
             <li class="dropdown" class="sortlist" ngbDropdown>
-                <button class="btn btn-link" id="sortdropdownMenu" ngbDropdownToggle>Sort: <span class="value">{{ activeSort.label }}</span></button>
+                <button class="btn btn-link" id="sortdropdownMenu" ngbDropdownToggle>Sort: <span class="value">{{ activeSort.label ? activeSort.label : 'Relevance' }}</span></button>
                 <div class="dropdown-menu" aria-labelledby="sortdropdownMenu">
                     <button class="dropdown-item" (click)="changeSortOpt('1', 'Title')">Title</button>
                     <button class="dropdown-item" (click)="changeSortOpt('2', 'Creator')">Creator</button>
@@ -27,7 +27,7 @@
             </li>
             <!--<span class="active-sort">{{ activeSort.label }}</span>-->
             <li class="dropdown" class="pagesizelist" ngbDropdown>
-                <button class="btn btn-link" id="pagesizedropdownMenu" ngbDropdownToggle>Images/page: <span class="value">{{ pagination.pageSize }}</span></button>
+                <button class="btn btn-link" id="pagesizedropdownMenu" ngbDropdownToggle>Images/page: <span class="value">{{ pagination.pageSize ? pagination.pageSize : '24' }}</span></button>
                 <div class="dropdown-menu" aria-labelledby="pagesizedropdownMenu">
                     <button class="dropdown-item" (click)="changePageSize('24')">24</button>
                     <button class="dropdown-item" (click)="changePageSize('48')">48</button>
@@ -46,20 +46,17 @@
             <span class="pag pag-last" (click)="lastPage()" [ngClass]="{'disable': isLastPage()}"></span>
         </div>
     </div>
-    <div class="row">
-        <div class="col-sm-3">
+    <div class="row row--no-overflow">
+        <div class="col-sm-3 col--filter-border col--sliding" [ngClass]="{ 'slide-up' : !showFilters }">
             <div class="filter-group"> 
-                <span class="filter-group__label">Collection</span>
-                <!--<h2 class="small half-margin left-align"><a class="link right-block" (click)="clearAllFilterGroup('collTypes')">Clear</a></h2>-->
-                <div class="filter active" [ngClass]="{ }">All Collections</div>
-            </div>
-            <div class="filter-group"> 
-                <span class="filter-group__label">Collection Type</span>
-                <h2 class="small half-margin left-align"><a class="link right-block" (click)="clearAllFilterGroup('collTypes')">Clear</a></h2>
+                <span class="filter-group__label">
+                    <h3>Collection Type <a tabindex="" class="link--accent small" style="float:right;" (click)="clearAllFilterGroup('collTypes')">Clear</a></h3>
+                </span>
+                <div class="filter" [ngClass]="{ 'active': true }">All Collections</div>
                 <div class="filter" *ngFor="let collTypeFacet of collTypeFacets" (click)="toggleFilter(collTypeFacet.id, 'collTypes')" [ngClass]="{'active': filterApplied(collTypeFacet.id, 'collTypes')}">{{ collTypeFacet.label }}</div>
             </div>
         </div>
-        <div class="col-sm-9">
+        <div class="col-sm-9 col--expanding" [ngClass]="{ 'col--expand-12' : !showFilters }">
             <div class="card-deck-wrapper">
                 <div class="card-deck">
                     <div *ngFor="let asset of results" class="card card--asset col-sm-2">

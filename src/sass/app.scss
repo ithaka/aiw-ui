@@ -71,6 +71,11 @@ html, body{
   text-align: right;
 }
 
+.absolute-right {
+  position: absolute;
+  right: 0; 
+}
+
 span.active {
   background-color: $gray;
 }

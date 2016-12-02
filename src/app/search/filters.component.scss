@@ -5,6 +5,35 @@
 
 $activeFilterColor: #000;
 $filterUnfocusOpacity: 0.5;
+$filterBorderStyle: 1px solid rgba(0, 0, 0, 0.15);
+
+.col--filter-border {
+	border-right: $filterBorderStyle;
+}
+
+.col--sliding {
+	transform: translateY(0);
+	transition: transform linear 0.3s, margin linear 0.3s;
+	
+	&.slide-up {
+		pointer-events: none;
+		transform: translateY(-100%);
+		margin-right:-100%;
+	}
+}
+
+.col--expanding {
+	min-width: (1/12)*100%;
+	transition: min-width linear 0.3s;
+
+	&.col-sm-9 {
+		min-width: (9/12)*100%;
+	}
+
+	&.col--expand-12 {
+		min-width: 100%;
+	}
+}
 
 .filter-group[data-state="active"].collapsed .filter-group__label{
     line-height: 34px;
@@ -12,16 +41,27 @@ $filterUnfocusOpacity: 0.5;
     background: #F6F6F2;
 }
 
+.filter-group h2{
+    display: inline-block;
+    cursor: pointer;
+}
+
 .filter-group {
 	/*@extend %boldBodyFontStyle;*/
 	opacity: 1.0;
-	padding: 6px 0;
+	padding: 8px 0;
 	display: block;
 	line-height: 18px;
 	float: left;
     width: 100%;
 
 	transition: padding linear 0.2s, background linear 0.2s;
+
+    border-bottom: $filterBorderStyle;
+
+	&:last-of-type {
+		border-bottom: none;
+	}
 
 	&.full-spacing {
 		margin-bottom: 12px;
@@ -79,14 +119,15 @@ $filterUnfocusOpacity: 0.5;
 	}
 }
 
-.filter-group__label {
+
+.filter-group__label{
+    display: block;
+    width: 100%;
+    margin-top: 6px;
+    margin-bottom: 6px;
+    padding: 0;
 	position: relative;
-	width: 100%;
-	display: block;
 	background: transparent;
-	display: block;
-	padding: 2px; 
-	margin-top: 0px;
 	z-index: 5000;
 
 	transition: all linear 0.2s;
