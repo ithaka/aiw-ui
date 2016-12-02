@@ -118,42 +118,35 @@
                         <div class="col-sm-6">
                             <div class="form-group">
                                <div class="input-group">
-                                   <div class="input-group-btn">
-                                        <div class="dropdown-menu">
-                                            <a class="dropdown-item" href="#">AND</a>
-                                            <a class="dropdown-item" href="#">OR</a>
-                                            <a class="dropdown-item" href="#">NOT</a>
-                                        </div>
-                                    </div>
                                     <input type="text" class="form-control">
-                                     <div class="input-group-btn">
-                                        <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <div ngbDropdown class="input-group-btn">
+                                        <button id="fieldDropdown" ngbDropdownToggle type="button" class="btn btn-secondary dropdown-toggle">
                                             in any field
                                         </button>
-                                        <div class="dropdown-menu">
-                                            <a *ngFor="let field of fields" >{{ field.name }}</a>
+                                        <div class="dropdown-menu" aria-labelledby="fieldDropdown">
+                                            <a *ngFor="let field of fields" class="dropdown-item">{{ field.name }}</a>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                             <div *ngFor="let query of advanceQueries" class="form-group">
                                <div class="input-group">
-                                   <div class="input-group-btn">
-                                        <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                   <div ngbDropdown class="input-group-btn">
+                                        <button id="dropdown" ngbDropdownToggle type="button" class="btn btn-secondary dropdown-toggle">
                                             AND
                                         </button>
-                                        <div class="dropdown-menu">
+                                        <div class="dropdown-menu"  aria-labelledby="dropdown">
                                             <a class="dropdown-item" href="#">AND</a>
                                             <a class="dropdown-item" href="#">OR</a>
                                             <a class="dropdown-item" href="#">NOT</a>
                                         </div>
                                     </div>
                                     <input [ngModel]="query.term" type="text" class="form-control">
-                                     <div class="input-group-btn">
-                                        <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                     <div ngbDropdown class="input-group-btn">
+                                        <button id="fieldDropdown" ngbDropdownToggle type="button" class="btn btn-secondary dropdown-toggle">
                                             in any field
                                         </button>
-                                        <div class="dropdown-menu">
+                                        <div class="dropdown-menu" aria-labelledby="fieldDropdown">
                                             <a *ngFor="let field of fields" class="dropdown-item">{{ field.name }}</a>
                                         </div>
                                     </div>
