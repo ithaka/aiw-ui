@@ -4,7 +4,7 @@
  */
 
 $navOffset: 80px;
-$footerOffset: 60px;
+$footerOffset: 80px;
 
 main {
      min-height: calc(100% - #{ $navOffset + $footerOffset });

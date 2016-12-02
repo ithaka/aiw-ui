@@ -3,7 +3,9 @@
 .footer {
     padding: 20px;
     text-align: center;
-    font-size: 12px;
+    font-size: 11px;
+    line-height: 18px;
+    border-top: 1px solid rgba(0, 0, 0, 0.15);
 
     & a {
         border-bottom: none;
