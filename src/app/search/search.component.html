@@ -15,9 +15,9 @@
         <div class="col-sm-3">
             <h2>Filters</h2>
         </div>
-        <div class="col-sm-3">
+        <div class="col-sm-6">
             <li class="dropdown" class="sortlist" ngbDropdown>
-                <button class="btn btn-link" id="sortdropdownMenu" ngbDropdownToggle>Sort</button>
+                <button class="btn btn-link" id="sortdropdownMenu" ngbDropdownToggle>Sort: <span class="value">{{ activeSort.label }}</span></button>
                 <div class="dropdown-menu" aria-labelledby="sortdropdownMenu">
                     <button class="dropdown-item" (click)="changeSortOpt('1', 'Title')">Title</button>
                     <button class="dropdown-item" (click)="changeSortOpt('2', 'Creator')">Creator</button>
@@ -25,18 +25,16 @@
                     <button class="dropdown-item" (click)="changeSortOpt('0', 'Relevance')">Relevance</button>
                 </div>
             </li>
-            <span class="active-sort">{{ activeSort.label }}</span>
-        </div>
-        <div class="col-sm-3">
+            <!--<span class="active-sort">{{ activeSort.label }}</span>-->
             <li class="dropdown" class="pagesizelist" ngbDropdown>
-                <button class="btn btn-link" id="pagesizedropdownMenu" ngbDropdownToggle>Images/page</button>
+                <button class="btn btn-link" id="pagesizedropdownMenu" ngbDropdownToggle>Images/page: <span class="value">{{ pagination.pageSize }}</span></button>
                 <div class="dropdown-menu" aria-labelledby="pagesizedropdownMenu">
                     <button class="dropdown-item" (click)="changePageSize('24')">24</button>
                     <button class="dropdown-item" (click)="changePageSize('48')">48</button>
                     <button class="dropdown-item" (click)="changePageSize('72')">72</button>
                 </div>
             </li>
-            <span class="page-size">{{ pagination.pageSize }}</span>
+            <!--<span class="page-size">{{ pagination.pageSize }}</span>-->
         </div>
         <div class="col-sm-3 pag-controls">
             <span class="pag pag-first" (click)="firstPage()" [ngClass]="{'disable': isfirstPage()}"></span>

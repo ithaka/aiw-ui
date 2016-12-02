@@ -5,6 +5,7 @@
 
 $primaryBtnColor: #ca4d2d;
 $secondaryBtnColor: rgb(225,225,225);
+$btnLinkHoverBg: rgb(230,230,230);
 
 .btn {
      @extend %Graphik-Bold-Web;
@@ -51,6 +52,33 @@ $secondaryBtnColor: rgb(225,225,225);
      }
  }
 
- .btn-link {
+ .btn.btn-link {
      text-transform: none !important;
+     padding: 0px 3px;
+     color: #999;
+
+     &:active {
+         text-decoration: none;
+         outline: none;
+     }
+
+     &:hover, &:focus  {
+         text-decoration: none;
+         color: #000;
+         outline: none;
+
+         & .value {
+             text-decoration: underline;
+         }
+     }
+
+     & .value {
+         color: #000;
+         letter-spacing: 0px;
+         font-weight: normal;
+     }
+ }
+
+ .btn.dropdown-toggle {
+     padding-right: 10px;
  }

@@ -12,16 +12,25 @@ $dropdownMenuHeight: 60px;
     border:none;
     display: block;
     height: $dropdownMenuHeight;
+    padding: ($dropdownMenuHeight - 20px)/2 0;
+
+    & li.dropdown {
+        line-height: 20px;
+    }
 }
 
-.navbar-nav > li > a, .navbar-nav > li > .btn-link {
-    line-height: $dropdownMenuHeight;
+.navbar-nav > li > .nav-link  {
+    // Workaround for spacing, need to fix alignment
+    margin-top:1px;
+}
+
+.navbar-nav > li > a, .navbar-nav > li > .btn-link, .navbar-nav > li > .nav-link {
+    line-height: 20px;
     font-size: 14px;
     border: none;
     padding: 0;
     font-weight: 700;
     letter-spacing: 1px;
-    color: #999;
 
     &:active, &:focus, &:hover {
         color: #000;

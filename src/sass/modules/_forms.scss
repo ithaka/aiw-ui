@@ -7,6 +7,8 @@ $inputTextColor: #000;
 
 $inputBorderFocusColor: #918f92; 
 
+$dropdownShadow: 0px 2px 3px 0px rgba(0,0,0,0.2);
+
 /**
  * @atom Form Group
  * @section Forms > Input
@@ -30,7 +32,7 @@ $inputBorderFocusColor: #918f92;
  */
 input.form-control, select.form-control {
     text-overflow: ellipsis;
-    
+
     &, &:focus {
         color: $inputTextColor;
     }
@@ -40,8 +42,31 @@ input.form-control, select.form-control {
     }
 }
 
+.dropdown:hover {
+    & > .btn-link.dropdown-toggle {
+        text-decoration: none;
+        color: #000;
+        outline: none;
+
+        & .value {
+            text-decoration: underline;
+        }
+    }
+}
+
+.dropdown:hover .dropdown-menu {
+    display: block;
+}
+
 .dropdown-menu {
+    margin-top: 0px;
     border-radius: 0px;
+    z-index: 2000;
+    box-shadow: $dropdownShadow;
+}
+
+button.dropdown-item {
+    cursor: pointer;
 }
 
 select.form-control {
