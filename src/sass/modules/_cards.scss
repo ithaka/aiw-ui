@@ -5,6 +5,7 @@
  */
 
 $cardPadding: 24px;
+$cardBorderStyle: 1px solid rgba(0, 0, 0, 0.15);
 
 .card{
     border-radius: 0px;
@@ -30,3 +31,21 @@ $cardPadding: 24px;
      background: transparent;
     border: 0px solid transparent;
  } 
+
+.form-card {
+    border: $cardBorderStyle; 
+    & .list-group {
+        max-height: 100px;
+        overflow-y: scroll;
+    }
+}
+
+.list-group.compact {
+    padding: 0.5rem 0;
+
+    & .list-group-item {
+        border: none;
+        padding-top: 0.1rem;
+        padding-bottom: 0.1rem;
+    }
+}

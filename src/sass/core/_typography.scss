@@ -148,7 +148,7 @@ a[href], a.link, .link {
   @extend a;
   padding-bottom: 1px;
   border-bottom: 1px solid rgba($linkColor, 0.3);
-  
+
   &:hover, &:focus {
     color: $brightTeal;
     text-decoration: none;

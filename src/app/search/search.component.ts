@@ -23,6 +23,7 @@ export class Search {
   // Set our default values
   public searchLoading: boolean;
   public showFilters: boolean = true;
+  public showAdvancedModal: boolean = false;
   errors = {};
   results = [];
   filters = [];
@@ -38,6 +39,28 @@ export class Search {
   };
   term;
   sub;
+  // TO-DO: Fields should be pulled dynamically!
+  public fields = [
+    {name: 'Title' },
+    {name: 'Creator' },
+    {name: 'Location' },
+    {name: 'Repository' }
+  ];
+  public geographyFields = [
+    {name: 'North America'},
+    {name: 'Central America and the Caribbean'},
+    {name: 'South America'},
+    {name: 'Europe'},
+    {name: 'Africa North of the Sahara'},
+    {name: 'Sub-Saharan Africa'}
+  ];
+
+  public advQueryTemplate = { term: '' };
+
+  public advanceQueries = [
+    { term: ''},
+    { term: ''}
+  ];
 
   // TypeScript public modifiers
   constructor(public appState: AppState, private _assets: AssetService, private route: ActivatedRoute) {
@@ -212,7 +235,7 @@ export class Search {
       }
     }
     return colTypeIds;
-  }
+  } 
 
   generateColTypeFacets(idsArray){
     var generatedFacetsArray = [];
