@@ -37,11 +37,10 @@ export class AssetService {
         return body || { };
     }
 
-    search(term, filters, sortIndex) {
+    search(term, filters, sortIndex, pagination) {
         let keyword = encodeURIComponent(term);
         let options = new RequestOptions({ withCredentials: true });
-        let pageNo = 1;
-        let pagesize = 48;
+        let startIndex = ((pagination.currentPage - 1) * pagination.pageSize) + 1;
         let thumbSize = 0;
         let type = 6;
         let colTypeIds = '';
@@ -54,7 +53,7 @@ export class AssetService {
         // /search/1/{start_idx}/{page_size}/0?type= 1&kw={keyword}&origKW=&id={collection_ids}&name=All Collections&order={order}&tn={thumbnail_size}
         
         return this.http
-            .get(this.baseUrl + '/search/' + type + '/' + pageNo + '/' + pagesize + '/' + sortIndex + '?' + 'type=' + type + '&kw=' + keyword + '&origKW=&geoIds=&clsIds=&collTypes=' + colTypeIds + '&id=all&name=All%20Collections&bDate=&eDate=&dExact=&order=0&isHistory=false&prGeoId=&tn=1', options)
+            .get(this.baseUrl + '/search/' + type + '/' + startIndex + '/' + pagination.pageSize + '/' + sortIndex + '?' + 'type=' + type + '&kw=' + keyword + '&origKW=&geoIds=&clsIds=&collTypes=' + colTypeIds + '&id=all&name=All%20Collections&bDate=&eDate=&dExact=&order=0&isHistory=false&prGeoId=&tn=1', options)
             .toPromise()
             .then(this.extractData);
     }

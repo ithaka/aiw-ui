@@ -26,7 +26,11 @@ export class Search {
   results = [];
   filters = [];
   collTypeFacets = [];
-
+  pagination = {
+    currentPage : 1,
+    totalPages : 1,
+    pageSize : 24
+  };
   activeSort = {
     index : 0,
     label : 'Relevance'
@@ -52,10 +56,11 @@ export class Search {
 
   searchAssets(term) {
     let searchScope = this;
-    this._assets.search(term, this.filters, this.activeSort.index)
+    this._assets.search(term, this.filters, this.activeSort.index, this.pagination)
       .then(function(res){
         console.log(res);
         searchScope.generateColTypeFacets( searchScope.getUniqueColTypeIds(res.collTypeFacets) );
+        searchScope.setTotalPages(res.count);     
         searchScope.results = res.thumbnails;
       })
       .catch(function(err) {
@@ -63,9 +68,67 @@ export class Search {
       });
   }
 
+  setTotalPages(count){
+    this.pagination.totalPages = Math.ceil( count / this.pagination.pageSize );
+  }
+
+
+  isfirstPage(){
+    if(this.pagination.currentPage === 1){
+      return true;
+    }
+    else{
+      return false;
+    }
+  }
+  isLastPage(){
+    if(this.pagination.currentPage === this.pagination.totalPages){
+      return true;
+    }
+    else{
+      return false;
+    }
+  }
+
+  firstPage(){
+    if(this.pagination.currentPage > 1){
+      this.pagination.currentPage = 1;
+      this.searchAssets(this.term);
+    }
+  }
+  lastPage(){
+    if(this.pagination.currentPage < this.pagination.totalPages){
+      this.pagination.currentPage = this.pagination.totalPages;
+      this.searchAssets(this.term);
+    }
+  }
+  prevPage(){
+    if(this.pagination.currentPage > 1){
+      this.pagination.currentPage--;
+      this.searchAssets(this.term);
+    }
+  }
+  nextPage(){
+    if(this.pagination.currentPage < this.pagination.totalPages){
+      this.pagination.currentPage++;
+      this.searchAssets(this.term);
+    }
+  }
+
   changeSortOpt(index, label) {
     this.activeSort.index = index;
     this.activeSort.label = label; 
+    this.pagination.currentPage = 1;
+    this.searchAssets(this.term);
+  }
+
+  changePageSize(size){
+    this.pagination.pageSize = size;
+    this.pagination.currentPage = 1;
+    this.searchAssets(this.term);
+  }
+
+  currentPageOnblurr(){
     this.searchAssets(this.term);
   }
 
@@ -84,6 +147,7 @@ export class Search {
     console.log('Applied Filters:-');
     console.log(this.filters);
 
+    this.pagination.currentPage = 1;
     this.searchAssets(this.term);
   }
 
@@ -107,6 +171,7 @@ export class Search {
         this.filters.splice(i, 1);
       }
     }
+    this.pagination.currentPage = 1;
     this.searchAssets(this.term);
   }
 
