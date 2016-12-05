@@ -50,6 +50,10 @@ You won't regret it.
 
 ## Quick Start
 **Requires Node version >= 6.9 and NPM >= 4**
+Mac: Recommended to install Node/NPM with [Homebrew](http://brew.sh/)
+Windows: Install Node/NPM using their Windows installer from the [Node website](https://nodejs.org/en/#download)
+
+Instructions for Mac:
 ```bash
 # clone the project
 git clone https://github.com/ithaka/ang-ui.git
@@ -61,7 +65,7 @@ cd ang-ui
 brew install node
 
 # install global dependencies
-npm install --global webpack webpack-dev-server karma karma-cli protractor typescript rimraf nucleus-styleguide
+sudo npm install --global webpack webpack-dev-server karma karma-cli protractor typescript rimraf nucleus-styleguide
 
 # install the repo with npm
 npm install
