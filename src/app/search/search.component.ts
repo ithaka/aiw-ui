@@ -28,6 +28,7 @@ export class Search {
   results = [];
   filters = [];
   collTypeFacets = [];
+  classificationFacets = [];
   pagination = {
     currentPage : 1,
     totalPages : 1,
@@ -85,6 +86,7 @@ export class Search {
       .then(function(res){
         console.log(res);
         scope.generateColTypeFacets( scope.getUniqueColTypeIds(res.collTypeFacets) );
+        scope.classificationFacets = res.classificationFacets;
         scope.setTotalPages(res.count);     
         scope.results = res.thumbnails;
         scope.searchLoading = false;
@@ -196,6 +198,7 @@ export class Search {
       var filter = this.filters[i];
       if(filter.filterGroup === group){
         this.filters.splice(i, 1);
+        i = -1;
       }
     }
     this.pagination.currentPage = 1;
