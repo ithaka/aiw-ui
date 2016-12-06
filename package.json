@@ -45,7 +45,7 @@
     "styleguide": "./node_modules/.bin/node-sass src/sass/app.scss styleguide/styles/all.css && nucleus --config styleguide/config.nucleus.json",
     "test": "karma start",
     "tslint": "tslint",
-    "typedoc": "typedoc -- --options typedoc.json --exclude '**/*.spec.ts' ./src/",
+    "typedoc": "typedoc --options typedoc.json --exclude '**/*.spec.ts' ./src/",
     "version": "npm run build",
     "watch:dev:hmr": "npm run watch:dev -- --hot",
     "watch:dev": "npm run build:dev -- --watch",
