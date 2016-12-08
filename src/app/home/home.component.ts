@@ -47,7 +47,7 @@ export class Home {
     let homeScope = this;
     
     this.user = this._auth.getUser();
-    console.log(this.user);
+    
     // this.title.getData().subscribe(data => this.data = data);
     this._assets.getCollections()
       .then(function(res) {
