@@ -29,7 +29,7 @@
                 </div>
             </div>
             <div class="block-right">
-                <a tabindex="" class="link" (click)="toggleAccessHelpModal()">How do I get access?</a>
+                <a tabindex="7" class="link" (click)="toggleAccessHelpModal()">How do I get access?</a>
             </div>
         </div>
 
@@ -41,12 +41,12 @@
                 <div class="card-body">
                     <div class="form-group">
                         <label>Select your institution's name</label>
-                        <select id="selectLoginInstitution" class="form-control" tabindex="3" [(ngModel)]="loginInst">
+                        <select id="selectLoginInstitution" class="form-control" tabindex="8" [(ngModel)]="loginInst">
                             <option *ngFor="let inst of loginInstitutions" [ngValue]="inst">{{ inst.name }}</option>
                         </select>
                     </div>
                     <div class="form-group">
-                        <button id="btnLoginProxy" (click)="goToInstLogin()" class="btn btn-primary" type="submit" name="action" tabindex="4">Log in</button>
+                        <button id="btnLoginProxy" (click)="goToInstLogin()" class="btn btn-primary" type="submit" name="action" tabindex="9">Log in</button>
                     </div>
                 </div>
             </div>

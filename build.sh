@@ -17,16 +17,19 @@ xz -dc node-v6.9.1-linux-x64.tar.xz | tar xf - -C /usr/local/
 # Install sass cause that's how we roll
 gem install sass
 
+# Install yarn
+curl -o- -L https://yarnpkg.com/install.sh | bash
+
 export PATH=/usr/local/node-v6.9.1-linux-x64/bin:$PATH
 
 # Install global build packages
-npm install --global webpack webpack-dev-server karma karma-cli protractor typescript rimraf npm npm-install-missing
+yarn global add webpack webpack-dev-server karma karma-cli protractor typescript rimraf npm npm-install-missing
 
 # Install dependencies
-npm install
+yarn install
 
 # This is almost comical—-can we use yarn yet?
-npm-install-missing
+# npm-install-missing
 
 # bower --allow-root install
 
