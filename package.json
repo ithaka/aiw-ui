@@ -83,7 +83,7 @@
     "node-sass": "^3.13.0",
     "rxjs": "^5.0.0-rc.5",
     "sass-loader": "^4.0.2",
-    "typedoc": "^0.4.5",
+    "typedoc": "^0.5.1",
     "url-loader": "^0.5.7",
     "zone.js": "^0.6.26"
   },
