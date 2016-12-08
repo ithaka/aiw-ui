@@ -20,10 +20,13 @@ gem install sass
 export PATH=/usr/local/node-v6.9.1-linux-x64/bin:$PATH
 
 # Install global build packages
-npm install --global webpack webpack-dev-server karma karma-cli protractor typescript rimraf
+npm install --global webpack webpack-dev-server karma karma-cli protractor typescript rimraf npm npm-install-missing
 
 # Install dependencies
 npm install
+
+# This is almost comical—-can we use yarn yet?
+npm-install-missing
 
 # bower --allow-root install
 
