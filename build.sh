@@ -20,6 +20,7 @@ gem install sass
 # Install yarn
 curl -o- -L https://yarnpkg.com/install.sh | bash
 
+export PATH=$HOME/.yarn/bin:$PATH
 export PATH=/usr/local/node-v6.9.1-linux-x64/bin:$PATH
 
 # Install global build packages
