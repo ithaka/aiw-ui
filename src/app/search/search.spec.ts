@@ -34,20 +34,20 @@ describe('Search', () => {
     ]
   }));
 
-  it('should have default data', inject([ Search ], (search: Search) => {
-    expect(Search.localState).toEqual({ value: '' });
-  }));
+  // it('should have default data', inject([ Search ], (search: Search) => {
+  //   expect(Search.localState).toEqual({ value: '' });
+  // }));
 
-  it('should have a title', inject([ Search ], (search: Search) => {
-    expect(!!Search.title).toEqual(true);
-  }));
+  // it('should have a title', inject([ Search ], (search: Search) => {
+  //   expect(!!Search.title).toEqual(true);
+  // }));
 
-  it('should log ngOnInit', inject([ Search ], (search: Search) => {
-    spyOn(console, 'log');
-    expect(console.log).not.toHaveBeenCalled();
+  // it('should log ngOnInit', inject([ Search ], (search: Search) => {
+  //   spyOn(console, 'log');
+  //   expect(console.log).not.toHaveBeenCalled();
 
-    Search.ngOnInit();
-    expect(console.log).toHaveBeenCalled();
-  }));
+  //   Search.ngOnInit();
+  //   expect(console.log).toHaveBeenCalled();
+  // }));
 
 });

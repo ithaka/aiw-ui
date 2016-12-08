@@ -61,20 +61,20 @@ git clone https://github.com/ithaka/ang-ui.git
 # change directory to our repo
 cd ang-ui
 
-# install node and npm with Homebrew)
-brew install node
+# install node, npm, and yarn with Homebrew
+brew install node yarn
 
-# install global dependencies
-sudo npm install --global webpack webpack-dev-server karma karma-cli protractor typescript rimraf nucleus-styleguide
+# Install global build packages
+yarn global add webpack webpack-dev-server karma karma-cli protractor typescript rimraf phantomjs-prebuilt
 
 # install the repo with npm
-npm install
+yarn install
 
 # start the server
-npm start
+yarn start
 
 # use Hot Module Replacement
-npm run server:dev:hmr
+yarn run server:dev:hmr
 
 ```
 Access at [http://0.0.0.0:3000](http://0.0.0.0:3000) or [http://localhost:3000](http://localhost:3000) in your browser. 
