@@ -1,3 +1,6 @@
+/**
+ * Assets service
+ */
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Http, Response, Headers, RequestOptions } from '@angular/http';
@@ -37,6 +40,14 @@ export class AssetService {
         return body || { };
     }
 
+    /**
+     * Search assets service
+     * @param term          String to search for.
+     * @param filters       Array of filter objects (with filterGroup and filterValue properties)
+     * @param sortIndex     An integer representing a type of sort.
+     * @param pagination    Object with properties currentPage and pageSize
+     * @returns       Returns an object with the properties: thumbnails, count, altKey, classificationFacets, geographyFacets, minDate, maxDate, collTypeFacets, dateFacets
+     */
     search(term, filters, sortIndex, pagination) {
         let keyword = encodeURIComponent(term);
         let options = new RequestOptions({ withCredentials: true });

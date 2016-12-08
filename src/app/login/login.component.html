@@ -9,19 +9,19 @@
                     <form (ngSubmit)="login(user)">
                         <div class="form-group">
                             <label for="loginEmail">Email Address</label>
-                            <input [(ngModel)]="user.username" name="username" id="loginEmail" type="text" class="form-control" placeholder="Username" tabindex="1" />
+                            <input id="inputLoginEmail" [(ngModel)]="user.username" name="username" type="text" class="form-control" placeholder="Username" tabindex="1" />
                         </div>
                         <div class="form-group">
                             <label for="loginPassword">Password</label>
-                            <input [(ngModel)]="user.password" name="password" id="loginPassword" type="password" class="form-control" placeholder="Password" tabindex="2" />
+                            <input id="inputLoginPassword" [(ngModel)]="user.password" name="password" type="password" class="form-control" placeholder="Password" tabindex="2" />
                         </div>
                         <div *ngIf="errorMsg" class="login-errorMsg"> {{ errorMsg }} </div>
                         <div class="form-group">
-                            <button class="btn btn-primary" type="submit" name="action" tabindex="3">Log in</button>
+                            <button id="btnLoginRemote" class="btn btn-primary" type="submit" name="action" tabindex="3">Log in</button>
                         </div>
                     </form>
 
-                    <a tabindex="4" class="link" (click)="showPwdResetModal()">Forgot password?</a>
+                    <a id="linkLoginResetModal" tabindex="4" class="link" (click)="showPwdResetModal()">Forgot password?</a>
                     <br/>
                     <a tabindex="5" class="link">! Not Registered?</a>
                     <hr/>
@@ -29,7 +29,7 @@
                 </div>
             </div>
             <div class="block-right">
-                <a tabindex="" class="link" (click)="toggleAccessHelpModal()">How do I get access?</a>
+                <a tabindex="7" class="link" (click)="toggleAccessHelpModal()">How do I get access?</a>
             </div>
         </div>
 
@@ -41,12 +41,12 @@
                 <div class="card-body">
                     <div class="form-group">
                         <label>Select your institution's name</label>
-                        <select class="form-control" tabindex="3" [(ngModel)]="loginInst">
+                        <select id="selectLoginInstitution" class="form-control" tabindex="8" [(ngModel)]="loginInst">
                             <option *ngFor="let inst of loginInstitutions" [ngValue]="inst">{{ inst.name }}</option>
                         </select>
                     </div>
                     <div class="form-group">
-                        <button (click)="goToInstLogin()" class="btn btn-primary" type="submit" name="action" tabindex="4">Log in</button>
+                        <button id="btnLoginProxy" (click)="goToInstLogin()" class="btn btn-primary" type="submit" name="action" tabindex="9">Log in</button>
                     </div>
                 </div>
             </div>
@@ -73,7 +73,7 @@
                             target="_blank">Becoming a Participant</a> or contact <a href="mailto:participation@artstor.org" target="_blank">Artstor Library Relations.</a></p>
             </div>
             <div class="modal-footer">
-                    <button class="btn btn-primary" (click)="toggleAccessHelpModal()">Ok</button>
+                    <button id="btnLoginDismissHelp" class="btn btn-primary" (click)="toggleAccessHelpModal()">Ok</button>
             </div>
         </div>
     </div>
@@ -109,7 +109,7 @@
                     <button class="btn btn-primary" (click)="sendResetPwdRequest()">Submit</button>
                 </div>
                 <div *ngIf="successMsgPwdRst || expirePwd">
-                    <button class="btn btn-primary" (click)="hidePwdModal()">Ok</button>
+                    <button id="btnLoginDismissReset" class="btn btn-primary" (click)="hidePwdModal()">Ok</button>
                 </div>
             </div>
         </div>

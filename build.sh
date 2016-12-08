@@ -14,22 +14,22 @@ cd $SRC_DIR
 wget https://nodejs.org/dist/v6.9.1/node-v6.9.1-linux-x64.tar.xz
 xz -dc node-v6.9.1-linux-x64.tar.xz | tar xf - -C /usr/local/
 
-# Install sass cause that's how we roll
-gem install sass
-
 export PATH=/usr/local/node-v6.9.1-linux-x64/bin:$PATH
 
+# Get Yarn and use it for NPM dependencies
+npm install --global yarn
+
 # Install global build packages
-npm install --global webpack webpack-dev-server karma karma-cli protractor typescript rimraf
+yarn global add webpack webpack-dev-server karma karma-cli protractor typescript rimraf phantomjs-prebuilt
 
 # Install dependencies
-npm install
+yarn install
 
-# bower --allow-root install
+# Build the project! (uses Webpack)
+yarn run build:prod
 
-# webpack our way to success
-webpack --config config/webpack.prod.js  --progress --profile --bail
-
+# Collect our built files
 rsync -a ${SRC_DIR}/dist/* ${BUILD_DIR}/
 
+# Package our built app
 tar -cvzf package.tgz ${SRC_DIR}/dist/
