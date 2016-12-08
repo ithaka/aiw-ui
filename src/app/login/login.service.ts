@@ -26,7 +26,7 @@ export class AuthenticationService {
     
     // Use header rewrite proxy for local development
     private proxyUrl = 'http://rocky-cliffs-9470.herokuapp.com/api?url=';
-     // private instance var for base url
+    // private instance var for base url
     private baseUrl = this.proxyUrl + 'http://library.artstor.org/library/secure';
     
     private formEncode = function (obj) {
@@ -111,10 +111,4 @@ export class AuthenticationService {
             .toPromise()
             .then(this.extractData);
     }
- 
-   checkCredentials(){
-    if (this._storage.get('user') === null || this._storage.get('user') === {}){
-        this._router.navigate(['Login']);
-    }
-  } 
 }

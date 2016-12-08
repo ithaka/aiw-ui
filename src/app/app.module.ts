@@ -31,9 +31,11 @@ import { NoContent } from './no-content';
 import { XLarge } from './home/x-large';
 
 // Application wide providers
+import { AuthService } from './shared/auth.service';
 const APP_PROVIDERS = [
   ...APP_RESOLVER_PROVIDERS,
-  AppState
+  AppState,
+  AuthService
 ];
 
 type StoreType = {
