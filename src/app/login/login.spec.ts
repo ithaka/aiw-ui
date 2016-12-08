@@ -37,9 +37,9 @@ describe('Login', () => {
     expect(login.localState).toEqual({ value: '' });
   }));
 
-  it('should have a title', inject([ Login ], (login: Login) => {
-    expect(!!login.title).toEqual(true);
-  }));
+  // it('should have a title', inject([ Login ], (login: Login) => {
+  //   expect(!!login.title).toEqual(true);
+  // }));
 
   it('should log ngOnInit', inject([ Login ], (login: Login) => {
     spyOn(console, 'log');
