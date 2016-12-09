@@ -146,8 +146,8 @@ export class Login {
   sendResetPwdRequest(){
     this._auth.pwdReset(this.pwdRstEmail)
       .then(
-        data  => this.loadPwdRstRes(data),
-        error =>  this.errorMsgPwdRst = <any>error
+        (data)  => { this.loadPwdRstRes(data) },
+        (error) => { this.errorMsgPwdRst = <any>error }
       );
   }
   loadPwdRstRes(res: any){
