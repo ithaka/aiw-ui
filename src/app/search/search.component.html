@@ -68,6 +68,39 @@
                 <div class="filter" *ngFor="let classificationFacet of classificationFacets" (click)="toggleFilter(classificationFacet.id, 'classification')" [ngClass]="{'active': filterApplied(classificationFacet.id, 'classification')}">{{ classificationFacet.name }}</div>
             </div>
 
+            <div class="filter-group"> 
+                <span class="filter-group__label">
+                    <h3>Geography <a tabindex="" class="link--accent small" style="float:right;" (click)="clearAllFilterGroup('geography')">Clear</a></h3>
+                </span>
+                <!--<div class="filter" [ngClass]="{ 'active': true }">All Collections</div>-->
+                <div *ngFor="let geographyFacet of geographyFacets">
+                    <i class="icon icon-direction absolute-left tree-icon" (click)="toggleTree(geographyFacet)" [ngClass]="{ 'icon-down' : geographyFacet.expanded, 'icon-right' : !geographyFacet.expanded }"></i>
+                    <div class="filter parent" (click)="toggleFilter(geographyFacet.id, 'geography')" [ngClass]="{'active': filterApplied(geographyFacet.id, 'geography')}"> {{ geographyFacet.name }} </div>
+                    <div class="child-cntnr collapse" [ngClass]="{ 'in' : geographyFacet.expanded }">
+                        <div class="filter child" *ngFor="let child of geographyFacet.children" (click)="toggleFilter(child.id, 'geography')" [ngClass]="{'active': filterApplied(child.id, 'geography')}">{{ child.name }}</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="filter-group"> 
+                <span class="filter-group__label">
+                    <h3>Date <a tabindex="" class="link--accent small" style="float:right;" (click)="clearAllFilterGroup('date')">Clear</a></h3>
+                </span>
+                <div class="date-filter-row">
+                    <input [(ngModel)]="dateFacet.earliest.date" type="text" class="form-control" placeholder="Start Date">
+                    <div class="toggle-btn" (click)="toggleEra(dateFacet.earliest)">{{ dateFacet.earliest.era }}</div>
+                </div>
+                <div class="date-filter-row">
+                    <input [(ngModel)]="dateFacet.latest.date" type="text" class="form-control" placeholder="End Date">
+                    <div class="toggle-btn" (click)="toggleEra(dateFacet.latest)">{{ dateFacet.latest.era }}</div>
+                </div>
+                <div class="date-filter-row">
+                    <div class="btn" (click)="generateDateFacets(dateFacetsArray)">RESET</div>
+                    <div class="btn" (click)="applyDateFilter()">APPLY</div>
+                </div>
+                
+            </div>
+
         </div>
         <div class="col-md-9 col--expanding" [ngClass]="{ 'col--expand-12' : !showFilters }">
             <div class="card-deck-wrapper">
