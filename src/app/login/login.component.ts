@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { AppState } from '../app.service';
+import { AuthService } from './../shared/auth.service';
 import { LoginService, User } from './login.service';
 import { Location } from '@angular/common';
 
@@ -35,14 +36,14 @@ export class Login {
   public loginInst;
   
   // TypeScript public modifiers
-  constructor(public appState: AppState, private _auth: LoginService, private router: Router, private location: Location) { 
+  constructor(public appState: AppState, private _auth: AuthService, private _login: LoginService, private router: Router, private location: Location) { 
     
   }
 
   ngOnInit() {
     let scope = this;
 
-    this._auth.getInstitutions()
+    this._login.getInstitutions()
       .then(function(data){
         console.log(data);
         if (data.items) {
@@ -62,7 +63,7 @@ export class Login {
   getLoginError(user) {
     console.log("LOGIN ERROR!");
     let scopeObj = this;
-    scopeObj._auth.getLoginError(user)
+    scopeObj._login.getLoginError(user)
     .then(function(data){
       console.log(data);
       if(data.message === 'loginExpired'){
@@ -88,7 +89,7 @@ export class Login {
       return;
     }
 
-    scope._auth.login(user)
+    scope._login.login(user)
       .then(
         data  => scope.loadForUser(data),
         error =>  scope.getLoginError(user)
@@ -144,7 +145,7 @@ export class Login {
   }
 
   sendResetPwdRequest(){
-    this._auth.pwdReset(this.pwdRstEmail)
+    this._login.pwdReset(this.pwdRstEmail)
       .then(
         data  => this.loadPwdRstRes(data),
         error =>  this.errorMsgPwdRst = <any>error

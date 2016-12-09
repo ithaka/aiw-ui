@@ -32,7 +32,7 @@ export class AuthService implements CanActivate {
       return encodedString.replace(/%20/g, '+');
   }
 
-  public extractData(res: Response): Object {
+  public extractData(res: Response): any {
       let body = res.json();
       return body || { };
   }
