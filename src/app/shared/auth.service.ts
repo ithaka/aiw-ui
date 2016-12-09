@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { Locker } from 'angular2-locker';
-import { LocationStrategy } from '@angular/common';
 import { Http, Response, Headers, RequestOptions } from '@angular/http';
 import {
   CanActivate,
@@ -20,12 +19,13 @@ export class AuthService implements CanActivate {
   // Use header rewrite proxy for local development
   private proxyUrl = 'http://rocky-cliffs-9470.herokuapp.com/api?url=';
   
-  constructor(private _router:Router, locker:Locker, private http: Http, private locationStrategy: LocationStrategy) {
+  constructor(private _router:Router, locker:Locker, private http: Http) {
     this._storage = locker;
     this._router = _router;
     
     // Check domain
-    if ( this.locationStrategy.getBaseHref().indexOf('test.cirrostratus.org') > -1 ) {
+    console.log(document.location.hostname);
+    if ( document.location.hostname.indexOf('test.cirrostratus.org') > -1 ) {
       this.baseUrl = '//library-debian01.test.cirrostratus.org:8080/library/secure';
     } else {
       this.baseUrl =  this.proxyUrl + 'http://library.artstor.org/library/secure';
