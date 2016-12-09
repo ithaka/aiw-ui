@@ -58,20 +58,25 @@ export class AuthService implements CanActivate {
     if (this.getUser() === null || this.getUser() === {}) {
       this.getUserInfo()
         .then(
-          data  => function(data) {
+          (data)  => {
             console.log(data);
+            if (data.status === true) {
+              // User is IP auth or logged in!
+              this.saveUser(data);
+            } else {
+              return false;
+            }
           },
-          error =>  function(error) {
-
+          (error) => {
+            console.log(error);
+            return false
           }
         ).catch(function(err) {
-          // 
+          return false;
         });
-
     } else {
       return true;
     }
-    return true;
   }
 
   //route guard
