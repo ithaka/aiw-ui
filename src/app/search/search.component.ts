@@ -29,6 +29,21 @@ export class Search {
   filters = [];
   collTypeFacets = [];
   classificationFacets = [];
+  geoTree = [];
+  geographyFacets = [];
+  dateFacetsArray = [];
+  dateFacet = {
+    earliest : {
+      date : 1000,
+      era : 'BCE'
+    },
+    latest : {
+      date : 2016,
+      era : 'CE'
+    },
+    modified : false
+  };
+  
   pagination = {
     currentPage : 1,
     totalPages : 1,
@@ -71,6 +86,7 @@ export class Search {
   ngOnInit() {
     console.log('hello `Search` component');
     let scope = this;
+    scope.getTermsList();
 
     this.route.params.map(params => params['term'])
             .subscribe(term => { 
@@ -79,13 +95,28 @@ export class Search {
                });
   }
 
+  getTermsList(){
+    let scope = this;
+    this._assets.termList()
+      .then(function(res){
+        scope.geoTree = res.geoTree;
+        // console.log(scope);
+      })
+      .catch(function(err) {
+        console.log('Unable to load terms list.');
+      });
+  }
+
   searchAssets(term) {
     let scope = this;
     this.searchLoading = true;
-    this._assets.search(term, this.filters, this.activeSort.index, this.pagination)
+    this._assets.search(term, this.filters, this.activeSort.index, this.pagination, this.dateFacet)
       .then(function(res){
         console.log(res);
         scope.generateColTypeFacets( scope.getUniqueColTypeIds(res.collTypeFacets) );
+        scope.generateGeoFacets( res.geographyFacets );
+        scope.generateDateFacets( res.dateFacets );
+        // console.log(scope);
         scope.classificationFacets = res.classificationFacets;
         scope.setTotalPages(res.count);     
         scope.results = res.thumbnails;
@@ -161,6 +192,25 @@ export class Search {
     this.searchAssets(this.term);
   }
 
+  toggleEra(dateObj){
+    if(dateObj.era == 'BCE'){
+      dateObj.era = 'CE';
+    }
+    else{
+      dateObj.era = 'BCE';
+    }
+  }
+
+  toggleTree(geoFacet){
+    if(geoFacet.expanded){
+      geoFacet.expanded = false;
+    }
+    else{
+      geoFacet.expanded = true;
+    } 
+
+  }
+
   toggleFilter(value, group){
     var filter = {
       filterGroup : group,
@@ -194,13 +244,19 @@ export class Search {
   }
 
   clearAllFilterGroup(group){
-    for(var i = 0; i < this.filters.length; i++){
-      var filter = this.filters[i];
-      if(filter.filterGroup === group){
-        this.filters.splice(i, 1);
-        i = -1;
+    if(group == 'date'){
+      this.dateFacet.modified = false;
+    }
+    else{
+      for(var i = 0; i < this.filters.length; i++){
+        var filter = this.filters[i];
+        if(filter.filterGroup === group){
+          this.filters.splice(i, 1);
+          i = -1;
+        }
       }
     }
+    
     this.pagination.currentPage = 1;
     this.searchAssets(this.term);
   }
@@ -257,4 +313,89 @@ export class Search {
     }
     this.collTypeFacets = generatedFacetsArray;
   }
+
+  generateGeoFacets(resGeoFacetsArray){
+    var generatedGeoFacets = [];
+    var countriesArray = [];
+    // Extract Regions
+    for(var i = 0; i < resGeoFacetsArray.length; i++){
+      var resGeoFacet = resGeoFacetsArray[i];
+      var match = false;
+
+      for(var j = 0; j < this.geoTree.length; j++){
+        var geoTreeObj = this.geoTree[j];
+        if((geoTreeObj.type == 'region') && (resGeoFacet.id == geoTreeObj.nodeId)){
+          resGeoFacet.expanded = false;
+          resGeoFacet.childrenIds = geoTreeObj.children;
+          resGeoFacet.children = [];
+          match = true;
+          break;
+        }
+      }
+
+      if(match){
+          generatedGeoFacets.push(resGeoFacet);
+      }
+      else{
+          countriesArray.push(resGeoFacet);
+      }
+
+    }
+
+    // console.log(countriesArray);
+
+    // Extract Countries
+    for(var i = 0; i < countriesArray.length; i++){
+      var country = countriesArray[i];
+
+      for(var j = 0; j < generatedGeoFacets.length; j++){
+        var generatedGeoFacet = generatedGeoFacets[j];
+        if(this.existsInRegion(country.id, generatedGeoFacet.childrenIds)){
+          // country.parentId = generatedGeoFacet.id;
+          generatedGeoFacet.children.push(country);
+          break;
+        }
+      }
+
+    }
+
+    this.geographyFacets = generatedGeoFacets;
+    console.log(this.geographyFacets);
+  }
+
+  generateDateFacets(dateFacetsArray){
+    var startDate = dateFacetsArray[0].date;
+    var endDate = dateFacetsArray[dateFacetsArray.length - 1].date;
+    
+    this.dateFacet.earliest.date = Math.abs(startDate);
+    this.dateFacet.earliest.era = startDate < 0 ? "BCE" : "CE";
+
+    this.dateFacet.latest.date = Math.abs(endDate);
+    this.dateFacet.latest.era = endDate < 0 ? "BCE" : "CE";
+
+    this.dateFacet.modified = false;
+
+    this.dateFacetsArray = dateFacetsArray;
+  }
+
+  applyDateFilter(){
+    this.dateFacet.modified = true;
+
+    this.pagination.currentPage = 1;
+    this.searchAssets(this.term);
+  }
+
+  existsInRegion(countryId, childerenIds){
+    var result = false;
+    for(var i = 0; i < childerenIds.length; i++){
+      var child = childerenIds[i];
+      if(child._reference == countryId){
+        result = true;
+        break;
+      }
+    }
+    return result;
+  }
+
+
 }

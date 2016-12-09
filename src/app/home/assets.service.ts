@@ -41,21 +41,49 @@ export class AssetService {
     }
 
     /**
+     * Term List Service
+     * @returns       Returns the Geo Tree Object used for generating the geofacets tree.
+     */
+
+    termList(){
+        let options = new RequestOptions({ withCredentials: true });
+        
+        return this.http
+            .get(this.baseUrl + '/termslist/', options)
+            .toPromise()
+            .then(this.extractData);   
+    }
+
+    /**
      * Search assets service
      * @param term          String to search for.
      * @param filters       Array of filter objects (with filterGroup and filterValue properties)
      * @param sortIndex     An integer representing a type of sort.
      * @param pagination    Object with properties currentPage and pageSize
+     * @param dateFacet     Object with the dateFacet values
      * @returns       Returns an object with the properties: thumbnails, count, altKey, classificationFacets, geographyFacets, minDate, maxDate, collTypeFacets, dateFacets
      */
-    search(term, filters, sortIndex, pagination) {
+
+    search(term, filters, sortIndex, pagination, dateFacet) {
         let keyword = encodeURIComponent(term);
         let options = new RequestOptions({ withCredentials: true });
         let startIndex = ((pagination.currentPage - 1) * pagination.pageSize) + 1;
         let thumbSize = 0;
         let type = 6;
         let colTypeIds = '';
-        let classificationIds = ''
+        let classificationIds = '';
+        let geographyIds = '';
+
+        let earliestDate = '';
+        let latestDate = '';
+
+        if(dateFacet.modified){
+            earliestDate = dateFacet.earliest.date;
+            earliestDate = ( dateFacet.earliest.era == 'BCE' ) ? ( parseInt(earliestDate) * -1 ).toString() : earliestDate;
+
+            latestDate = dateFacet.latest.date;
+            latestDate = ( dateFacet.latest.era == 'BCE' ) ? ( parseInt(latestDate) * -1 ).toString() : latestDate;
+        }
 
         for(var i = 0; i < filters.length; i++){ // Applied filters
             if(filters[i].filterGroup === 'collTypes'){ // Collection Types
@@ -67,11 +95,17 @@ export class AssetService {
                 }
                 classificationIds += filters[i].filterValue;
             }
+            if(filters[i].filterGroup === 'geography'){ // Geography
+                if(geographyIds != ''){
+                    geographyIds += ',';
+                }
+                geographyIds += filters[i].filterValue;
+            }
         }
         // /search/1/{start_idx}/{page_size}/0?type= 1&kw={keyword}&origKW=&id={collection_ids}&name=All Collections&order={order}&tn={thumbnail_size}
         
         return this.http
-            .get(this.baseUrl + '/search/' + type + '/' + startIndex + '/' + pagination.pageSize + '/' + sortIndex + '?' + 'type=' + type + '&kw=' + keyword + '&origKW=&geoIds=&clsIds=' + classificationIds + '&collTypes=' + colTypeIds + '&id=all&name=All%20Collections&bDate=&eDate=&dExact=&order=0&isHistory=false&prGeoId=&tn=1', options)
+            .get(this.baseUrl + '/search/' + type + '/' + startIndex + '/' + pagination.pageSize + '/' + sortIndex + '?' + 'type=' + type + '&kw=' + keyword + '&origKW=&geoIds=' + geographyIds + '&clsIds=' + classificationIds + '&collTypes=' + colTypeIds + '&id=all&name=All%20Collections&bDate=' + earliestDate + '&eDate=' + latestDate + '&dExact=&order=0&isHistory=false&prGeoId=&tn=1', options)
             .toPromise()
             .then(this.extractData);
     }
