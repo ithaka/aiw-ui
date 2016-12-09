@@ -25,7 +25,7 @@ export class LoginService {
     logout() {
         // this.user = {};
         this._storage.remove('user');
-        this._router.navigate(['Login']);
+        this._router.navigate(['login']);
         return this.http
             .post(this._auth.getUrl() + '/logout', {})
             .toPromise()

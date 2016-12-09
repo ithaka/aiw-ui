@@ -77,24 +77,23 @@ export class Login {
   }
   
   login(user) {
-    let scope = this;
 
-    if(!scope.validateEmail(user.username)){
-      scope.errorMsg = 'Please enter a valid email address';
+    if(!this.validateEmail(user.username)){
+      this.errorMsg = 'Please enter a valid email address';
       return;
     }
     
-    if(!scope.validatePwd(user.password)){
-      scope.errorMsg = 'Password must be 7-20 characters';
+    if(!this.validatePwd(user.password)){
+      this.errorMsg = 'Password must be 7-20 characters';
       return;
     }
 
-    scope._login.login(user)
+    this._login.login(user)
       .then(
-        data  => scope.loadForUser(data),
-        error =>  scope.getLoginError(user)
+        (data)  => { this.loadForUser(data) },
+        (error) =>  { this.getLoginError(user) }
       ).catch(function(err) {
-        scope.getLoginError(user)
+        this.getLoginError(user)
       });
   }
   
