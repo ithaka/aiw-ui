@@ -35,7 +35,7 @@ export class Login {
   public loginInst;
   
   // TypeScript public modifiers
-  constructor(public appState: AppState, private _auth: AuthenticationService, private router: Router, private location: Location) { 
+  constructor(public appState: AppState, private _auth: LoginService, private router: Router, private location: Location) { 
     
   }
 

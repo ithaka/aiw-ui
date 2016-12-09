@@ -37,7 +37,7 @@ export class Home {
       public title: Title, 
       private _assets: AssetService, 
       private router: Router,
-      private _auth: AuthenticationService
+      private _auth: LoginService
     ) {
 
   }
