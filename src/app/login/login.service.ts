@@ -22,6 +22,9 @@ export class LoginService {
         this._storage = locker;  
     }
 
+    /**
+     * Logs out and redirects the user to the login component
+     */
     logout() {
         // this.user = {};
         this._storage.remove('user');
@@ -34,6 +37,10 @@ export class LoginService {
             });
     }
     
+    /**
+     * Logs user in
+     * @param user User must have username (which is an email address) and password to be passed in the request
+     */
     login(user: User) {
         let header = new Headers({ 'Content-Type': 'application/x-www-form-urlencoded' }); // ... Set content type to JSON
         let options = new RequestOptions({ headers: header, withCredentials: true }); // Create a request option
