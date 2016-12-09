@@ -10,11 +10,18 @@ import {
 @Injectable()
 export class AuthService implements CanActivate {
   private _storage;
+  
+  // Use header rewrite proxy for local development
+  private proxyUrl = 'http://rocky-cliffs-9470.herokuapp.com/api?url=';
+  // private instance var for base url
+  private baseUrl = this.proxyUrl + 'http://library.artstor.org/library/secure';
+  
 
   constructor(private _router:Router, locker:Locker) {
     this._storage = locker;
     this._router = _router;
   }
+  
 
   //check user authentication
   isAuthenticated(): boolean {
