@@ -20,9 +20,9 @@ import {LockerModule, Locker, LockerConfig} from 'angular2-locker'
 import { App } from './app.component';
 import { APP_RESOLVER_PROVIDERS } from './app.resolver';
 import { AppState, InternalStateType } from './app.service';
-import { Nav } from './nav';
+import { Nav } from './shared/nav';
 import { NavMenu } from './nav-menu';
-import { Footer } from './footer';
+import { Footer } from './shared/footer';
 import { Home } from './home';
 import { Search } from './search';
 import { Login } from './login';
