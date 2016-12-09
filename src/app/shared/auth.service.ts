@@ -17,7 +17,7 @@ export class AuthService implements CanActivate {
   }
 
   //check user authentication
-  isAuthenticated(){
+  isAuthenticated(): boolean {
     if (this._storage.get('user') === null || this._storage.get('user') === {}) {
       return false;
     }

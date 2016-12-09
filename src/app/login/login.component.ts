@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { AppState } from '../app.service';
-import { AuthenticationService, User } from './login.service';
+import { LoginService, User } from './login.service';
 import { Location } from '@angular/common';
 
 @Component({
@@ -12,7 +12,7 @@ import { Location } from '@angular/common';
   selector: 'login',
   // We need to tell Angular's Dependency Injection which providers are in our app.
   providers: [
-    AuthenticationService
+    LoginService
   ],
   // Our list of styles in our component. We may add more to compose many styles together
   styleUrls: [ './login.component.scss' ],

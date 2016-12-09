@@ -16,7 +16,7 @@ export class User {
 }
  
 @Injectable()
-export class AuthenticationService {
+export class LoginService {
 
     public _storage;
 
