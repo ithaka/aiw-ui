@@ -32,6 +32,10 @@ export class AuthService implements CanActivate {
     }
   }
 
+  /**
+   * Encodes javascript object into a URI component
+   * @param obj The object to be encoded
+   */
   public formEncode(obj: Object): string {
       var encodedString = '';
       for (var key in obj) {
@@ -58,10 +62,13 @@ export class AuthService implements CanActivate {
 
   /**
    * Saves user to local storage
+   * @param user The user should be an object to store in sessionstorage
    */
   public saveUser(user: any) {
-        this._storage.set('user', user); 
+    this._storage.set('user', user);
   }
+
+  //TODO create deleteUser object
 
   /**
    * Gets user object from local storage
