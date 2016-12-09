@@ -41,13 +41,11 @@ export class Login {
   }
 
   ngOnInit() {
-    let scope = this;
-
     this._login.getInstitutions()
-      .then(function(data){
+      .then((data) => {
         console.log(data);
         if (data.items) {
-          scope.loginInstitutions = data.items;
+          this.loginInstitutions = data.items;
         }
       });
   }
@@ -62,16 +60,15 @@ export class Login {
 
   getLoginError(user) {
     console.log("LOGIN ERROR!");
-    let scopeObj = this;
-    scopeObj._login.getLoginError(user)
-    .then(function(data){
+    this._login.getLoginError(user)
+    .then((data) => {
       console.log(data);
       if(data.message === 'loginExpired'){
-        scopeObj.expirePwd = true;
-        scopeObj.showPwdModal = true;
+        this.expirePwd = true;
+        this.showPwdModal = true;
       }
       else if(data.message === 'loginFailed'){
-        scopeObj.errorMsg = 'Invalid email address or password. Try again.';
+        this.errorMsg = 'Invalid email address or password. Try again.';
       }
     });
   }
