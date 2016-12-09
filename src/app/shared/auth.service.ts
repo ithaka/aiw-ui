@@ -47,6 +47,9 @@ export class AuthService implements CanActivate {
       return encodedString.replace(/%20/g, '+');
   }
 
+  /**
+   * Takes a response object and turn the data into an object
+   */
   public extractData(res: Response): any {
       let body = res.json();
       return body || { };
@@ -118,6 +121,10 @@ export class AuthService implements CanActivate {
     return authenticated;
   }
 
+  /**
+   * Retrieves user info from server
+   * @returns a user object or an empty object
+   */
   getUserInfo() {
     let options = new RequestOptions({ withCredentials: true });
     return this.http

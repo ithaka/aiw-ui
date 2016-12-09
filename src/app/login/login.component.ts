@@ -76,7 +76,7 @@ export class Login {
     });
   }
   
-  login(user) {
+  login(user: User) {
 
     if(!this.validateEmail(user.username)){
       this.errorMsg = 'Please enter a valid email address';
