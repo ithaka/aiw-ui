@@ -68,7 +68,7 @@ export class AuthService implements CanActivate {
           (data)  => {
             console.log(data);
             if (data.status === true) {
-              // User is IP auth or logged in!
+              // User is IP auth'd!
               this.saveUser(data);
             } else {
               return false;
@@ -76,7 +76,7 @@ export class AuthService implements CanActivate {
           },
           (error) => {
             console.log(error);
-            return false
+            return false;
           }
         ).catch(function(err) {
           console.log(err);
