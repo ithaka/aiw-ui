@@ -72,6 +72,7 @@ export class AuthService implements CanActivate {
             return false
           }
         ).catch(function(err) {
+          console.log(err);
           return false;
         });
     } else {
