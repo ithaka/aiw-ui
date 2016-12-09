@@ -9,6 +9,10 @@ import {
   RouterStateSnapshot
 } from '@angular/router';
 
+/**
+ * Controls authorization through IP address and locally stored user object
+ */
+
 @Injectable()
 export class AuthService implements CanActivate {
   private _storage;
@@ -52,21 +56,29 @@ export class AuthService implements CanActivate {
     return this.baseUrl;
   }
 
+  /**
+   * Saves user to local storage
+   */
   public saveUser(user: any) {
         this._storage.set('user', user); 
   }
 
+  /**
+   * Gets user object from local storage
+   */
   public getUser() : any {
       return this._storage.get('user');
   }
 
-  // Check user authentication
+  /**
+   * Checks to see if user is either authorized by login or IP auth'd
+   * @returns indicates whether or not user is authorized
+   */
   isAuthenticated(): boolean {
     if (this.getUser() === null || this.getUser() === {}) {
       this.getUserInfo()
         .then(
           (data)  => {
-            console.log(data);
             if (data.status === true) {
               // User is IP auth'd!
               this.saveUser(data);
@@ -87,7 +99,9 @@ export class AuthService implements CanActivate {
     }
   }
 
-  //route guard
+  /**
+   * Required by implementing CanActivate, and is called on routes which are protected by canActivate: [AuthService]
+   */
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
     let authenticated: boolean  = this.isAuthenticated();
     if (!authenticated) {
