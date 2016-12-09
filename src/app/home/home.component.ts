@@ -6,7 +6,7 @@ import { Title } from './title';
 import { XLarge } from './x-large';
 
 import { AssetService } from './assets.service';
-import { LoginService } from '../login/login.service';
+import { AuthService } from '../shared/auth.service';
 
 @Component({
   // The selector is what angular internally uses
@@ -17,7 +17,7 @@ import { LoginService } from '../login/login.service';
   providers: [
     Title,
     AssetService,
-    LoginService
+    AuthService
   ],
   // Our list of styles in our component. We may add more to compose many styles together
   styleUrls: [ './home.component.scss' ],
@@ -37,7 +37,7 @@ export class Home {
       public title: Title, 
       private _assets: AssetService, 
       private router: Router,
-      private _auth: LoginService
+      private _auth: AuthService
     ) {
 
   }

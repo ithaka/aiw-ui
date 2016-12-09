@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { AppState } from '../app.service';
+import { AuthService } from './../shared/auth.service';
 import { LoginService, User } from './login.service';
 import { Location } from '@angular/common';
 
@@ -35,14 +36,14 @@ export class Login {
   public loginInst;
   
   // TypeScript public modifiers
-  constructor(public appState: AppState, private _auth: LoginService, private router: Router, private location: Location) { 
+  constructor(public appState: AppState, private _auth: AuthService, private _login: LoginService, private router: Router, private location: Location) { 
     
   }
 
   ngOnInit() {
     let scope = this;
 
-    this._auth.getInstitutions()
+    this._login.getInstitutions()
       .then(function(data){
         console.log(data);
         if (data.items) {
@@ -62,7 +63,7 @@ export class Login {
   getLoginError(user) {
     console.log("LOGIN ERROR!");
     let scopeObj = this;
-    scopeObj._auth.getLoginError(user)
+    scopeObj._login.getLoginError(user)
     .then(function(data){
       console.log(data);
       if(data.message === 'loginExpired'){
@@ -75,25 +76,24 @@ export class Login {
     });
   }
   
-  login(user) {
-    let scope = this;
+  login(user: User) {
 
-    if(!scope.validateEmail(user.username)){
-      scope.errorMsg = 'Please enter a valid email address';
+    if(!this.validateEmail(user.username)){
+      this.errorMsg = 'Please enter a valid email address';
       return;
     }
     
-    if(!scope.validatePwd(user.password)){
-      scope.errorMsg = 'Password must be 7-20 characters';
+    if(!this.validatePwd(user.password)){
+      this.errorMsg = 'Password must be 7-20 characters';
       return;
     }
 
-    scope._auth.login(user)
+    this._login.login(user)
       .then(
-        data  => scope.loadForUser(data),
-        error =>  scope.getLoginError(user)
+        (data)  => { this.loadForUser(data) },
+        (error) =>  { this.getLoginError(user) }
       ).catch(function(err) {
-        scope.getLoginError(user)
+        this.getLoginError(user)
       });
   }
   
@@ -144,7 +144,7 @@ export class Login {
   }
 
   sendResetPwdRequest(){
-    this._auth.pwdReset(this.pwdRstEmail)
+    this._login.pwdReset(this.pwdRstEmail)
       .then(
         (data)  => { this.loadPwdRstRes(data) },
         (error) => { this.errorMsgPwdRst = <any>error }

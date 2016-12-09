@@ -1,11 +1,13 @@
 import { Component } from '@angular/core';
 
 import { LoginService } from '../../login/login.service';
+import { AuthService } from '../auth.service';
 import { Router, NavigationEnd, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'nav-bar',
   providers: [
+    AuthService,
     LoginService
   ],
   templateUrl: './nav.component.html',
@@ -16,12 +18,12 @@ export class Nav {
   public showLoginPanel = false;
 
   // TypeScript public modifiers
-  constructor(private _auth: LoginService, private _router:Router) { 
+  constructor(private _auth: AuthService, private _login: LoginService, private _router:Router) { 
      
   }
 
   logout() {
-    this._auth.logout();
+    this._login.logout();
   }
 
   getUserName() : String {
