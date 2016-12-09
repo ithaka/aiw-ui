@@ -24,12 +24,11 @@ export class AuthService implements CanActivate {
     this._router = _router;
     
     // Check domain
-    console.log(document.location.hostname);
-    if ( document.location.hostname.indexOf('test.cirrostratus.org') > -1 ) {
-      this.baseUrl = '//library-debian01.test.cirrostratus.org:8080/library/secure';
-    } else {
+    // if ( document.location.hostname.indexOf('test.cirrostratus.org') > -1 ) {
+    //   this.baseUrl = '//library-debian01.test.cirrostratus.org:8080/library/secure';
+    // } else {
       this.baseUrl =  this.proxyUrl + 'http://library.artstor.org/library/secure';
-    }
+    // }
   }
 
   /**
