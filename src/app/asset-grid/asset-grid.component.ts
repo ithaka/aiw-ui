@@ -9,17 +9,17 @@ import { AssetService } from '../home/assets.service';
   // The selector is what angular internally uses
   // for `document.querySelectorAll(selector)` in our index.html
   // where, in this case, selector is the string 'home'
-  selector: 'ang-search-grid', 
+  selector: 'ang-asset-grid', 
   // We need to tell Angular's Dependency Injection which providers are in our app.
   providers: [
     AssetService
   ],
   // Our list of styles in our component. We may add more to compose many styles together
-  styleUrls: [ './search-grid.component.scss', './filters.component.scss' ],
+  styleUrls: [ './asset-grid.component.scss', './filters.component.scss' ],
   // Every Angular template is first compiled by the browser before Angular runs it's compiler
-  templateUrl: './search-grid.component.html'
+  templateUrl: './asset-grid.component.html'
 })
-export class SearchGrid {
+export class AssetGrid {
   // Set our default values
   public searchLoading: boolean;
   public showFilters: boolean = true;
