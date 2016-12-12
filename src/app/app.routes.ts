@@ -17,8 +17,5 @@ export const ROUTES: Routes = [
   { path: 'search', component: SearchPage, canActivate:[AuthService] },
   { path: 'collection', component: CollectionPage, canActivate:[AuthService] },
   { path: 'about', component: About },
-  {
-    path: 'detail', loadChildren: () => System.import('./+detail')
-  },
   { path: '**',    component: NoContent },
 ];
