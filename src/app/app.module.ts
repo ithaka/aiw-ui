@@ -22,6 +22,7 @@ import { APP_RESOLVER_PROVIDERS } from './app.resolver';
 import { AppState, InternalStateType } from './app.service';
 import { Nav } from './shared/nav';
 import { NavMenu } from './nav-menu';
+import { SearchGrid } from './search-grid';
 import { Footer } from './shared/footer';
 import { Home } from './home';
 import { Search } from './search';
@@ -56,6 +57,7 @@ type StoreType = {
     Footer,
     About,
     Search,
+    SearchGrid,
     Login,
     Home,
     NoContent,
