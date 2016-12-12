@@ -27,6 +27,7 @@ import { Footer } from './shared/footer';
 import { Home } from './home';
 import { SearchPage } from './search-page';
 import { CollectionPage } from './collection-page';
+import { ImageGroupPage } from './image-group-page';
 import { Login } from './login';
 import { About } from './about';
 import { NoContent } from './no-content';
@@ -60,6 +61,7 @@ type StoreType = {
     SearchPage,
     CollectionPage,
     AssetGrid,
+    ImageGroupPage,
     Login,
     Home,
     NoContent,
