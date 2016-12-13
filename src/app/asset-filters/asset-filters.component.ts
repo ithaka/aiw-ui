@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Router, ActivatedRoute, Params } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 
 import { AppState } from '../app.service'; 
 
@@ -9,22 +9,22 @@ import { AssetService } from '../home/assets.service';
   // The selector is what angular internally uses
   // for `document.querySelectorAll(selector)` in our index.html
   // where, in this case, selector is the string 'home'
-  selector: 'ang-asset-grid', 
+  selector: 'ang-asset-filters', 
   // We need to tell Angular's Dependency Injection which providers are in our app.
   providers: [
     AssetService
   ],
   // Our list of styles in our component. We may add more to compose many styles together
-  styleUrls: [ './asset-grid.component.scss' ],
+  styleUrls: [ './asset-filters.component.scss' ],
   // Every Angular template is first compiled by the browser before Angular runs it's compiler
-  templateUrl: './asset-grid.component.html'
+  templateUrl: './asset-filters.component.html'
 })
-
-export class AssetGrid {
+export class AssetFilters {
   // Set our default values
   public searchLoading: boolean;
   public showFilters: boolean = true;
   public showAdvancedModal: boolean = false;
+
   errors = {};
   results = [];
   filters = [];
@@ -80,32 +80,18 @@ export class AssetGrid {
   ];
 
   // TypeScript public modifiers
-  constructor(public appState: AppState, private _assets: AssetService, private route: ActivatedRoute) {
+  constructor(public appState: AppState, private _assets: AssetService, private route: ActivatedRoute, private router: Router) {
 
-  } 
+  }
 
   ngOnInit() {
-    console.log('hello `Search` component');
-    // let scope = this;
     this.getTermsList();
-// .map(params => params)
-    this.route.params
-          .subscribe((params: Params) => { 
-              console.log(params);
-              // if (params.hasOwnProperty('term')) {
-              //   this.term = params.term;
-              // }
-              for (let param in params) {
-                if (param == 'term') {
-                  this.term = params[param];
-                } else {
-                  // Otherwise, it is a filter!
-                  this.toggleFilter(param, params[param]);
-                }
-              }
-              
-              this.searchAssets(this.term);
-              });
+
+    this.route.params.map(params => params['term'])
+            .subscribe(term => { 
+                this.term = term;
+                // scope.searchAssets(term);
+               });
   }
 
   getTermsList(){
@@ -120,92 +106,26 @@ export class AssetGrid {
       });
   }
 
-  searchAssets(term) {
-    if (!term) {
-      let term = "*";
+  loadRoute() {
+    let params = { 'term' : this.term };
+
+    for (let filter of this.filters) {
+      params[filter.filterGroup] =  filter.filterValue;
     }
-    let scope = this;
-    this.searchLoading = true;
-    this._assets.search(term, this.filters, this.activeSort.index, this.pagination, this.dateFacet)
-      .then(function(res){
-        console.log(res);
-        scope.generateColTypeFacets( scope.getUniqueColTypeIds(res.collTypeFacets) );
-        scope.generateGeoFacets( res.geographyFacets );
-        scope.generateDateFacets( res.dateFacets );
-        // console.log(scope);
-        scope.classificationFacets = res.classificationFacets;
-        scope.setTotalPages(res.count);     
-        scope.results = res.thumbnails;
-        scope.searchLoading = false;
-      })
-      .catch(function(err) {
-        scope.errors['search'] = "Unable to load search.";
-        scope.searchLoading = false;
-      });
+
+    this.router.navigate(['search', params ]);
   }
 
-  setTotalPages(count){
-    this.pagination.totalPages = Math.ceil( count / this.pagination.pageSize );
-  }
-
-
-  isfirstPage(){
-    if(this.pagination.currentPage === 1){
-      return true;
-    }
-    else{
-      return false;
-    }
-  }
-  isLastPage(){
-    if(this.pagination.currentPage === this.pagination.totalPages){
-      return true;
-    }
-    else{
-      return false;
-    }
-  }
-
-  firstPage(){
-    if(this.pagination.currentPage > 1){
-      this.pagination.currentPage = 1;
-      this.searchAssets(this.term);
-    }
-  }
-  lastPage(){
-    if(this.pagination.currentPage < this.pagination.totalPages){
-      this.pagination.currentPage = this.pagination.totalPages;
-      this.searchAssets(this.term);
-    }
-  }
-  prevPage(){
-    if(this.pagination.currentPage > 1){
-      this.pagination.currentPage--;
-      this.searchAssets(this.term);
-    }
-  }
-  nextPage(){
-    if(this.pagination.currentPage < this.pagination.totalPages){
-      this.pagination.currentPage++;
-      this.searchAssets(this.term);
-    }
-  }
 
   changeSortOpt(index, label) {
     this.activeSort.index = index;
     this.activeSort.label = label; 
     this.pagination.currentPage = 1;
-    this.searchAssets(this.term);
-  }
-
-  changePageSize(size){
-    this.pagination.pageSize = size;
-    this.pagination.currentPage = 1;
-    this.searchAssets(this.term);
+    this.loadRoute();
   }
 
   currentPageOnblurr(){
-    this.searchAssets(this.term);
+    this.loadRoute();
   }
 
   toggleEra(dateObj){
@@ -215,6 +135,16 @@ export class AssetGrid {
     else{
       dateObj.era = 'BCE';
     }
+  }
+
+  toggleTree(geoFacet){
+    if(geoFacet.expanded){
+      geoFacet.expanded = false;
+    }
+    else{
+      geoFacet.expanded = true;
+    } 
+
   }
 
   toggleFilter(value, group){
@@ -233,7 +163,8 @@ export class AssetGrid {
     console.log(this.filters);
 
     this.pagination.currentPage = 1;
-    this.searchAssets(this.term);
+    
+    this.loadRoute();
   }
 
   filterApplied(value, group){
@@ -264,7 +195,8 @@ export class AssetGrid {
     }
     
     this.pagination.currentPage = 1;
-    this.searchAssets(this.term);
+
+    this.loadRoute();
   }
 
   removeFilter(filterObj){
@@ -275,6 +207,7 @@ export class AssetGrid {
         break;
       }
     }
+    this.loadRoute();
   }
   
   filterExists(filterObj){
@@ -388,7 +321,7 @@ export class AssetGrid {
     this.dateFacet.modified = true;
 
     this.pagination.currentPage = 1;
-    this.searchAssets(this.term);
+    this.loadRoute();
   }
 
   existsInRegion(countryId, childerenIds){

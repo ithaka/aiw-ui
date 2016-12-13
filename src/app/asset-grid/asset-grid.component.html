@@ -1,5 +1,5 @@
 <div class="row row--search-bar">
-    <div class="col-sm-3">
+    <div class="col-sm-6">
         <div class="form-group">
             <div class="input-group">
                 <input [(ngModel)]="term" (keyup.enter)="searchAssets(term)"  aria-describedby="search-label" type="text" class="form-control has-icon" placeholder="Search">
@@ -14,9 +14,9 @@
     </div>
 </div>
 <div class="row">
-    <div class="col-sm-3">
+    <!--<div class="col-sm-3">
         <h2 class="header-button" (click)="showFilters = !showFilters">Filters <i class="icon icon-direction absolute-right" [ngClass]="{ 'icon-down' : showFilters, 'icon-left' : !showFilters }"></i></h2>
-    </div>
+    </div>-->
     <div class="col-sm-3 col-md-5 col-lg-6">
         <li class="dropdown" class="sortlist" ngbDropdown>
             <button class="btn btn-link" id="sortdropdownMenu" ngbDropdownToggle>Sort: <span class="value">{{ activeSort.label ? activeSort.label : 'Relevance' }}</span></button>
@@ -38,7 +38,7 @@
         </li>
         <!--<span class="page-size">{{ pagination.pageSize }}</span>-->
     </div>
-    <div class="col-sm-6 col-md-4 col-lg-3 pag-controls">
+    <div class="col-sm-6 col-md-6 col-lg-6 pag-controls">
         <span class="pag pag-first" (click)="firstPage()" [ngClass]="{'disable': isfirstPage()}"></span>
         <span class="pag pag-prev" (click)="prevPage()" [ngClass]="{'disable': isfirstPage()}"></span>
         <!--<span class="pag-info">Page</span>-->
@@ -49,58 +49,7 @@
     </div>
 </div>
 <div class="row row--no-overflow">
-    <div class="col-md-3 col--filter-border col--sliding" [ngClass]="{ 'slide-up' : !showFilters }">
-        <div class="filter-group"> 
-            <span class="filter-group__label">
-                <h3>Collection Type <a tabindex="" class="link--accent small" style="float:right;" (click)="clearAllFilterGroup('collTypes')">Clear</a></h3>
-            </span>
-            <div class="filter" [ngClass]="{ 'active': true }">All Collections</div>
-            <div class="filter" *ngFor="let collTypeFacet of collTypeFacets" (click)="toggleFilter(collTypeFacet.id, 'collTypes')" [ngClass]="{'active': filterApplied(collTypeFacet.id, 'collTypes')}">{{ collTypeFacet.label }}</div>
-        </div>
-
-        <div class="filter-group"> 
-            <span class="filter-group__label">
-                <h3>Classification <a tabindex="" class="link--accent small" style="float:right;" (click)="clearAllFilterGroup('classification')">Clear</a></h3>
-            </span>
-            <!--<div class="filter" [ngClass]="{ 'active': true }">All Collections</div>-->
-            <div class="filter" *ngFor="let classificationFacet of classificationFacets" (click)="toggleFilter(classificationFacet.id, 'classification')" [ngClass]="{'active': filterApplied(classificationFacet.id, 'classification')}">{{ classificationFacet.name }}</div>
-        </div>
-
-        <div class="filter-group"> 
-            <span class="filter-group__label">
-                <h3>Geography <a tabindex="" class="link--accent small" style="float:right;" (click)="clearAllFilterGroup('geography')">Clear</a></h3>
-            </span>
-            <!--<div class="filter" [ngClass]="{ 'active': true }">All Collections</div>-->
-            <div *ngFor="let geographyFacet of geographyFacets">
-                <i class="icon icon-direction absolute-left tree-icon" (click)="toggleTree(geographyFacet)" [ngClass]="{ 'icon-down' : geographyFacet.expanded, 'icon-right' : !geographyFacet.expanded }"></i>
-                <div class="filter parent" (click)="toggleFilter(geographyFacet.id, 'geography')" [ngClass]="{'active': filterApplied(geographyFacet.id, 'geography')}"> {{ geographyFacet.name }} </div>
-                <div class="child-cntnr collapse" [ngClass]="{ 'in' : geographyFacet.expanded }">
-                    <div class="filter child" *ngFor="let child of geographyFacet.children" (click)="toggleFilter(child.id, 'geography')" [ngClass]="{'active': filterApplied(child.id, 'geography')}">{{ child.name }}</div>
-                </div>
-            </div>
-        </div>
-
-        <div class="filter-group"> 
-            <span class="filter-group__label">
-                <h3>Date <a tabindex="" class="link--accent small" style="float:right;" (click)="clearAllFilterGroup('date')">Clear</a></h3>
-            </span>
-            <div class="date-filter-row">
-                <input [(ngModel)]="dateFacet.earliest.date" type="text" class="form-control" placeholder="Start Date">
-                <div class="toggle-btn" (click)="toggleEra(dateFacet.earliest)">{{ dateFacet.earliest.era }}</div>
-            </div>
-            <div class="date-filter-row">
-                <input [(ngModel)]="dateFacet.latest.date" type="text" class="form-control" placeholder="End Date">
-                <div class="toggle-btn" (click)="toggleEra(dateFacet.latest)">{{ dateFacet.latest.era }}</div>
-            </div>
-            <div class="date-filter-row">
-                <div class="btn" (click)="generateDateFacets(dateFacetsArray)">RESET</div>
-                <div class="btn" (click)="applyDateFilter()">APPLY</div>
-            </div>
-            
-        </div>
-
-    </div>
-    <div class="col-md-9 col--expanding" [ngClass]="{ 'col--expand-12' : !showFilters }">
+    <div class="col-md-12 col--expanding" [ngClass]="{ 'col--expand-12' : !showFilters }">
         <div class="card-deck-wrapper">
             <div class="card-deck">
                 <div *ngFor="let asset of results" class="card card--asset col-sm-2">
