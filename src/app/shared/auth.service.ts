@@ -51,7 +51,6 @@ export class AuthService implements CanActivate {
    */
   public extractData(res: Response): any {
       let body = res.json();
-      console.log(body);
       return body || { };
   }
 
