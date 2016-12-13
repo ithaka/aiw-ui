@@ -106,7 +106,7 @@ export class AssetFilters {
       });
   }
 
-  loadRoute() {
+  private loadRoute() {
     let params = { 'term' : this.term };
 
     for (let filter of this.filters) {
