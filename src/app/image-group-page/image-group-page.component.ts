@@ -1,5 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
+import { Subscription }   from 'rxjs/Subscription';
 
 import { ImageGroupService } from './image-group.service';
 
@@ -13,16 +14,19 @@ import { ImageGroupService } from './image-group.service';
 export class ImageGroupPage implements OnInit, OnDestroy {
   private igDesc: string;
   private imageGroup: string;
+  private subscriptions: Subscription[] = [];
 
   constructor(private _igService: ImageGroupService, private _router: Router, private _route: ActivatedRoute) {
   }
 
   ngOnInit() {
     this._route.snapshot.params["imageGroup"];
-    this._route.params.subscribe((matrixParams) => {
-      this.imageGroup = matrixParams["imageGroup"];
-      console.log(this.imageGroup);
-    });
+    this.subscriptions.push(
+      this._route.params.subscribe((matrixParams) => {
+        this.imageGroup = matrixParams["imageGroup"];
+        console.log(this.imageGroup);
+      })
+    );
 
 
 
@@ -55,6 +59,6 @@ export class ImageGroupPage implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-
+    this.subscriptions.forEach((sub) => { sub.unsubscribe(); });
   }
 }
