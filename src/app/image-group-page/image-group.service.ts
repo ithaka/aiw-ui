@@ -10,6 +10,9 @@ export class ImageGroupService {
   private proxyUrl = 'http://rocky-cliffs-9470.herokuapp.com/api?url=';
   private baseUrl =  this.proxyUrl + 'http://library.artstor.org/library/secure';
 
+  private header = new Headers({ 'Content-Type': 'application/json' }); // ... Set content type to JSON
+  private options = new RequestOptions({ headers: this.header, withCredentials: true }); // Create a request option
+
   constructor(private _router: Router, private http: Http, private _auth: AuthService ){
   }
 
@@ -18,29 +21,27 @@ export class ImageGroupService {
    * @param folderId A single folder id for which to get the image group description
    */
   getFromFolderId(folderId: string): Promise<any> {
-    let header = new Headers({ 'Content-Type': 'application/json' }); // ... Set content type to JSON
-    let options = new RequestOptions({ headers: header, withCredentials: true }); // Create a request option
 
     return this.http
-      .get(this.baseUrl + "/folders/" + folderId + "/imagegroups?studWkFldrs=true", options)
+      .get(this.baseUrl + "/folders/" + folderId + "/imagegroups?studWkFldrs=true", this.options)
       .toPromise()
       .then((data) => { return this._auth.extractData(data); });
   }
 
 
-  // /**
-  //  * Get an image group from a category id
-  //  * @param catIds An array of category ids which contain image groups
-  //  */
-  // getFromCatId(catIds: string[]) {
-  //   for (let id of catIds) {
-  //   return this.http
-  //     .get(this.baseUrl + "/categories/" + catIds + "")
-  //     .toPromise()
-  //     .then(
-  //       (data) => { console.log(data); },
-  //       (error) => { console.log(error); }
-  //     )
-  //   }
-  // }
+  /**
+   * Get array of folder and image group information
+   * @param catIds An array of category ids which contain image groups
+   * @returns Array of JS Objects with image group and folder ids & info
+   */
+  getFromCatId(catId: string) {
+    return this.http
+      .get(this.baseUrl + "/categories/" + catId + "/subcategories", this.options)
+      .toPromise()
+      .then((data) => {
+        console.log(data);
+        return this._auth.extractData(data);
+      });
+  }
+  // http://library.artstor.org/library/secure/categories/1034568975/thumbnails/1/72/0
 }

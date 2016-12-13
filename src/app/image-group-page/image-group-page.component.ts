@@ -16,17 +16,31 @@ export class ImageGroupPage implements OnInit {
   }
 
   ngOnInit() {
-    this.igService.getFromFolderId("683295")
-    .then((data) => {
-      if (!data) {
-        throw new Error("No data in image group response");
-      }
-      data = data.pop();
+    // test for getFromFolderId
+    // this.igService.getFromFolderId("683295")
+    //   .then((data) => {
+    //     if (!data) {
+    //       throw new Error("No data in image group description response");
+    //     }
+    //     data = data.pop();
 
-      console.log("Good data: ");
-      console.log(data);
-      this.igDesc = data.igDesc;
-    })
-    .catch((error) => { console.error(error); });
+    //     console.log("Good data: ");
+    //     console.log(data);
+    //     this.igDesc = data.igDesc;
+    //   })
+    //   .catch((error) => { console.error(error); });
+
+    // test for getFromCatId
+    this.igService.getFromCatId("1034568975")
+      .then((data) => {
+        if (!data) {
+          throw new Error("No data in image group description response");
+        }
+        
+        console.log("Description response data: ");
+        console.log(data);
+        // this.title = data.title;
+      })
+      .catch((error) => { console.error(error) });
   }
 }
