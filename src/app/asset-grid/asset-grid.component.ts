@@ -4,6 +4,7 @@ import { Router, ActivatedRoute, Params } from '@angular/router';
 import { AppState } from '../app.service'; 
 
 import { AssetService } from '../home/assets.service';
+import { AssetFiltersService } from '../asset-filters/asset-filters.service';
 
 @Component({
   // The selector is what angular internally uses
@@ -12,7 +13,8 @@ import { AssetService } from '../home/assets.service';
   selector: 'ang-asset-grid', 
   // We need to tell Angular's Dependency Injection which providers are in our app.
   providers: [
-    AssetService
+    AssetService,
+    AssetFiltersService
   ],
   // Our list of styles in our component. We may add more to compose many styles together
   styleUrls: [ './asset-grid.component.scss' ],
@@ -80,7 +82,12 @@ export class AssetGrid {
   ];
 
   // TypeScript public modifiers
-  constructor(public appState: AppState, private _assets: AssetService, private route: ActivatedRoute) {
+  constructor(
+        public appState: AppState, 
+        private _assets: AssetService,
+        private _filters: AssetFiltersService, 
+        private route: ActivatedRoute
+      ) {
 
   } 
 
