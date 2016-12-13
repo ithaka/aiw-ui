@@ -13,24 +13,35 @@ import { ImageGroupService } from './image-group.service';
 
 export class ImageGroupPage implements OnInit, OnDestroy {
   private igDesc: string;
-  private imageGroup: string;
+  private folderId: string;
   private subscriptions: Subscription[] = [];
 
   constructor(private _igService: ImageGroupService, private _router: Router, private _route: ActivatedRoute) {
   }
 
   ngOnInit() {
-    this._route.snapshot.params["imageGroup"];
+    this._route.snapshot.params["folderId"];
     this.subscriptions.push(
       this._route.params.subscribe((matrixParams) => {
-        this.imageGroup = matrixParams["imageGroup"];
-        console.log(this.imageGroup);
+        this.folderId = matrixParams["folderId"];
+        this._igService.getFromFolderId(this.folderId)
+          .then((data) => {
+            if (!data) {
+              throw new Error("No data in image group description response");
+            }
+            data = data.pop();
+
+            console.log("Good data: ");
+            console.log(data);
+            this.igDesc = data.igDesc;
+          })
+          .catch((error) => { console.error(error); });
       })
     );
 
 
 
-    // test for getFromFolderId
+    // // test for getFromFolderId
     // this._igService.getFromFolderId("683295")
     //   .then((data) => {
     //     if (!data) {
