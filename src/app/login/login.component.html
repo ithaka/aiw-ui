@@ -93,7 +93,7 @@
                     <p>Enter the email address that you used when registering.</p>
                     <div class="form-group" [ngClass]="{ 'has-danger' : errorMsgPwdRst }">
                         <label>Email Address:</label>
-                        <input class="form-control" type="text" [(ngModel)]="pwdRstEmail" />
+                        <input id="inputLoginResetEmail" class="form-control" type="text" [(ngModel)]="pwdRstEmail" />
                         <div *ngIf="errorMsgPwdRst" class="form-control-feedback">{{ errorMsgPwdRst }}</div>
                     </div>
                 </div>
@@ -105,8 +105,8 @@
             </div>
             <div class="modal-footer">
                 <div *ngIf="pwdReset">
-                    <button class="btn btn-secondary" (click)="hidePwdModal()">Cancel</button>
-                    <button class="btn btn-primary" (click)="sendResetPwdRequest()">Submit</button>
+                    <button id="btnLoginCancelReset" class="btn btn-secondary" (click)="hidePwdModal()">Cancel</button>
+                    <button id="btnLoginSubmitReset" class="btn btn-primary" (click)="sendResetPwdRequest()">Submit</button>
                 </div>
                 <div *ngIf="successMsgPwdRst || expirePwd">
                     <button id="btnLoginDismissReset" class="btn btn-primary" (click)="hidePwdModal()">Ok</button>
