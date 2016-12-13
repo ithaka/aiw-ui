@@ -47,10 +47,11 @@ export class AuthService implements CanActivate {
   }
 
   /**
-   * Takes a response object and turn the data into an object
+   * Takes a response object and turn the data into a json object
    */
   public extractData(res: Response): any {
       let body = res.json();
+      console.log(body);
       return body || { };
   }
 
