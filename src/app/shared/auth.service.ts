@@ -17,7 +17,8 @@ export class AuthService implements CanActivate {
   private _storage;
   private baseUrl;
   // Use header rewrite proxy for local development
-  private proxyUrl = 'http://rocky-cliffs-9470.herokuapp.com/api?url=';
+  private proxyUrl = 'http://54.237.41.239/api?url='; 
+// 'http://rocky-cliffs-9470.herokuapp.com/api?url=';
   
   constructor(private _router:Router, locker:Locker, private http: Http) {
     this._storage = locker;
@@ -27,9 +28,12 @@ export class AuthService implements CanActivate {
     // if ( document.location.hostname.indexOf('test.cirrostratus.org') > -1 ) {
     //   this.baseUrl = '//library-debian01.test.cirrostratus.org:8080/library/secure';
     // } else {
-      this.baseUrl =  this.proxyUrl + 'http://library.artstor.org/library/secure';
+      // this.baseUrl = 'http://192.168.97.66:28081/library/secure';
+      // this.baseUrl = 'http://192.168.97.66/library/secure';
+      this.baseUrl = this.proxyUrl + 'http://library.artstor.org/library/secure';
     // }
   }
+
 
   /**
    * Encodes javascript object into a URI component
