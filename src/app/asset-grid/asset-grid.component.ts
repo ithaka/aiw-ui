@@ -25,7 +25,6 @@ import { AssetFiltersService } from '../asset-filters/asset-filters.service';
 export class AssetGrid {
   // Set our default values
   private subscriptions: Subscription[] = [];
-  private igId: string;
 
   public searchLoading: boolean;
   public showFilters: boolean = true;
@@ -90,23 +89,6 @@ export class AssetGrid {
     private _filters: AssetFiltersService, 
     private route: ActivatedRoute
   ) {
-    this.route.snapshot.params["igId"];
-    this.subscriptions.push(
-      this.route.params.subscribe((matrixParams) => {
-        this.igId = matrixParams["igId"];
-        this._assets.getFromIgId(this.igId)
-          .then((data) => {
-            if (!data) {
-              throw new Error("No data in image group thumbnails response");
-            }
-            console.log(data);
-            this.results = data.thumbnails;
-          })
-          .catch((error) => {
-            console.log(error);
-          });
-      })
-    );
       
   } 
 
@@ -125,7 +107,7 @@ export class AssetGrid {
                 if (param == 'term') {
                   this.term = params[param];
                 } else if (param == 'igId') {
-                  this.igId = params[param];
+                  this.loadIgAssets(params[param]);
                 } else {
                   // Otherwise, it is a filter!
                   this.toggleFilter(param, params[param]);
@@ -169,6 +151,20 @@ export class AssetGrid {
       .catch(function(err) {
         scope.errors['search'] = "Unable to load search.";
         scope.searchLoading = false;
+      });
+  }
+
+  loadIgAssets(igId: string) {
+    this._assets.getFromIgId(igId)
+      .then((data) => {
+        if (!data) {
+          throw new Error("No data in image group thumbnails response");
+        }
+        console.log(data);
+        this.results = data.thumbnails;
+      })
+      .catch((error) => {
+        console.log(error);
       });
   }
 
