@@ -2,7 +2,7 @@
 <div class="container main-content">
   <div class="row">
     <div class="col-sm-3">
-      <div class="ig-description-container">
+      <div *ngIf="igDesc" class="ig-description-container">
         <h2>Description</h2>
         <div [innerHTML]="igDesc"></div>
         <!--{{igDesc}}-->

@@ -25,7 +25,8 @@ export class ImageGroupPage implements OnInit, OnDestroy {
     this.subscriptions.push(
       this.route.params.subscribe((matrixParams) => {
         this.igId = matrixParams["igId"];
-        this._igService.getGroupDescription(this.igId)
+        if (this.igId) {
+          this._igService.getGroupDescription(this.igId)
           .then((data) => {
             if (!data) {
               throw new Error("No data in image group description response");
@@ -33,6 +34,8 @@ export class ImageGroupPage implements OnInit, OnDestroy {
             this.igDesc = data.igNotes;
           })
           .catch((error) => { console.error(error); });
+        }
+        
       })
     );
 
