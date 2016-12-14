@@ -16,7 +16,6 @@ import { AuthService } from '../shared/auth.service';
   // We need to tell Angular's Dependency Injection which providers are in our app.
   providers: [
     Title,
-    AssetService,
     AuthService
   ],
   // Our list of styles in our component. We may add more to compose many styles together

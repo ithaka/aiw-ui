@@ -41,6 +41,11 @@ export class ImageGroupService {
       .then((data) => { return this._auth.extractData(data); });
   }
   
+  /**
+   * Get image group description from image group id
+   * @param groupId Id of desired image group
+   * @returns JS Object with parameters: count, igId, igName, igNotes and more if it is a folder
+   */
   getGroupDescription(groupId: string) {
     return this.http
       .get(this.baseUrl + "/imagegroup/" + groupId + "?_method=igdescription", this.options)

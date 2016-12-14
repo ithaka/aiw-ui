@@ -12,9 +12,7 @@ import { AssetFiltersService } from '../asset-filters/asset-filters.service';
   // where, in this case, selector is the string 'home'
   selector: 'ang-asset-grid', 
   // We need to tell Angular's Dependency Injection which providers are in our app.
-  providers: [
-    AssetService
-  ],
+  providers: [],
   // Our list of styles in our component. We may add more to compose many styles together
   styleUrls: [ './asset-grid.component.scss' ],
   // Every Angular template is first compiled by the browser before Angular runs it's compiler

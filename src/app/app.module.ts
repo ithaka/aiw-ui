@@ -37,11 +37,13 @@ import { XLarge } from './home/x-large';
 
 // Application wide providers
 import { AuthService } from './shared/auth.service';
+import { AssetService } from './home/assets.service';
 import { AssetFiltersService } from './asset-filters/asset-filters.service';
 
 const APP_PROVIDERS = [
   ...APP_RESOLVER_PROVIDERS,
   AppState,
+  AssetService,
   AuthService,
   AssetFiltersService
 ];

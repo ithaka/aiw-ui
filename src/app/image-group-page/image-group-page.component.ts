@@ -7,7 +7,7 @@ import { AssetService } from './../home/assets.service';
 
 @Component({
   selector: 'ang-image-group', 
-  providers: [ImageGroupService, AssetService],
+  providers: [ImageGroupService],
   styles: [ './image-group-page.component.scss' ],
   templateUrl: './image-group-page.component.html'
 })
@@ -17,7 +17,7 @@ export class ImageGroupPage implements OnInit, OnDestroy {
   private igId: string;
   private subscriptions: Subscription[] = [];
 
-  constructor(private _igService: ImageGroupService, private _assetService: AssetService, private _router: Router, private route: ActivatedRoute) {
+  constructor(private _igService: ImageGroupService, private _router: Router, private route: ActivatedRoute) {
   }
 
   ngOnInit() {
@@ -30,10 +30,6 @@ export class ImageGroupPage implements OnInit, OnDestroy {
             if (!data) {
               throw new Error("No data in image group description response");
             }
-            // data = data.pop();
-
-            console.log("Good data: ");
-            console.log(data);
             this.igDesc = data.igNotes;
           })
           .catch((error) => { console.error(error); });
