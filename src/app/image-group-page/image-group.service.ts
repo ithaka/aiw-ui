@@ -38,13 +38,13 @@ export class ImageGroupService {
     return this.http
       .get(this.baseUrl + "/categories/" + catId + "/subcategories", this.options)
       .toPromise()
-      .then((data) => {
-        console.log(data);
-        return this._auth.extractData(data);
-      });
+      .then((data) => { return this._auth.extractData(data); });
   }
   
-  // getGroupDescription(groupId: string) {
-
-  // }
+  getGroupDescription(groupId: string) {
+    return this.http
+      .get(this.baseUrl + "/imagegroup/" + groupId + "?_method=igdescription", this.options)
+      .toPromise()
+      .then((data) => { return this._auth.extractData(data); });
+  }
 }

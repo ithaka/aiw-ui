@@ -169,7 +169,6 @@ export class AssetGrid implements OnInit, OnDestroy {
         if (!data) {
           throw new Error("No data in image group thumbnails response");
         }
-        console.log(data);
         this.results = data.thumbnails;
       })
       .catch((error) => {

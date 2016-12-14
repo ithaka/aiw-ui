@@ -7,7 +7,7 @@ import { AssetService } from './../home/assets.service';
 
 @Component({
   selector: 'ang-image-group', 
-  providers: [ImageGroupService],
+  providers: [ImageGroupService, AssetService],
   styles: [ './image-group-page.component.scss' ],
   templateUrl: './image-group-page.component.html'
 })
@@ -21,24 +21,24 @@ export class ImageGroupPage implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    // this.route.snapshot.params["igId"];
-    // this.subscriptions.push(
-    //   this.route.params.subscribe((matrixParams) => {
-    //     this.igId = matrixParams["igId"];
-    //     this._igService.getGroupDescription(this.igId)
-    //       .then((data) => {
-    //         if (!data) {
-    //           throw new Error("No data in image group description response");
-    //         }
-    //         data = data.pop();
+    this.route.snapshot.params["igId"];
+    this.subscriptions.push(
+      this.route.params.subscribe((matrixParams) => {
+        this.igId = matrixParams["igId"];
+        this._igService.getGroupDescription(this.igId)
+          .then((data) => {
+            if (!data) {
+              throw new Error("No data in image group description response");
+            }
+            // data = data.pop();
 
-    //         console.log("Good data: ");
-    //         console.log(data);
-    //         this.igDesc = data.igDesc;
-    //       })
-    //       .catch((error) => { console.error(error); });
-    //   })
-    // );
+            console.log("Good data: ");
+            console.log(data);
+            this.igDesc = data.igNotes;
+          })
+          .catch((error) => { console.error(error); });
+      })
+    );
 
 
 
