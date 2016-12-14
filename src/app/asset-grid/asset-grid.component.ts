@@ -100,7 +100,7 @@ export class AssetGrid {
               throw new Error("No data in image group thumbnails response");
             }
             console.log(data);
-
+            this.results = data.thumbnails;
           })
           .catch((error) => {
             console.log(error);
@@ -124,6 +124,8 @@ export class AssetGrid {
               for (let param in params) {
                 if (param == 'term') {
                   this.term = params[param];
+                } else if (param == 'igId') {
+                  this.igId = params[param];
                 } else {
                   // Otherwise, it is a filter!
                   this.toggleFilter(param, params[param]);
@@ -147,7 +149,7 @@ export class AssetGrid {
   }
 
   searchAssets(term) {
-    if (!term) {
+    if (!term && this.results === []) {
       let term = "*";
     }
     let scope = this;
