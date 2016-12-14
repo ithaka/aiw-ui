@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 
 import { Subscription }   from 'rxjs/Subscription';
@@ -22,7 +22,7 @@ import { AssetFiltersService } from '../asset-filters/asset-filters.service';
   templateUrl: './asset-grid.component.html'
 })
 
-export class AssetGrid {
+export class AssetGrid implements OnInit, OnDestroy {
   // Set our default values
   private subscriptions: Subscription[] = [];
 
@@ -97,25 +97,30 @@ export class AssetGrid {
     // let scope = this;
     this.getTermsList();
 // .map(params => params)
-    this.route.params
-          .subscribe((params: Params) => { 
-              console.log(params);
-              // if (params.hasOwnProperty('term')) {
-              //   this.term = params.term;
-              // }
-              for (let param in params) {
-                if (param == 'term') {
-                  this.term = params[param];
-                } else if (param == 'igId') {
-                  this.loadIgAssets(params[param]);
-                } else {
-                  // Otherwise, it is a filter!
-                  this.toggleFilter(param, params[param]);
-                }
-              }
-              
-              this.searchAssets(this.term);
-              });
+    this.subscriptions.push(
+      this.route.params
+      .subscribe((params: Params) => { 
+        console.log(params);
+        // if (params.hasOwnProperty('term')) {
+        //   this.term = params.term;
+        // }
+        for (let param in params) {
+          if (param == 'term') {
+            this.term = params[param];
+          } else if (param == 'igId') {
+            this.loadIgAssets(params[param]);
+          } else {
+            // Otherwise, it is a filter!
+            this.toggleFilter(param, params[param]);
+          }
+        }
+        this.searchAssets(this.term);
+      })
+    );
+  }
+
+  ngOnDestroy() {
+    this.subscriptions.forEach((sub) => { sub.unsubscribe(); });
   }
 
   getTermsList(){
