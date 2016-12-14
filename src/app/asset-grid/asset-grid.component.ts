@@ -13,8 +13,7 @@ import { AssetFiltersService } from '../asset-filters/asset-filters.service';
   selector: 'ang-asset-grid', 
   // We need to tell Angular's Dependency Injection which providers are in our app.
   providers: [
-    AssetService,
-    AssetFiltersService
+    AssetService
   ],
   // Our list of styles in our component. We may add more to compose many styles together
   styleUrls: [ './asset-grid.component.scss' ],
@@ -141,21 +140,26 @@ export class AssetGrid implements OnInit, OnDestroy {
     }
     let scope = this;
     this.searchLoading = true;
+
     this._assets.search(term, this.filters, this.activeSort.index, this.pagination, this.dateFacet)
-      .then(function(res){
-        console.log(res);
-        scope.generateColTypeFacets( scope.getUniqueColTypeIds(res.collTypeFacets) );
-        scope.generateGeoFacets( res.geographyFacets );
-        scope.generateDateFacets( res.dateFacets );
-        // console.log(scope);
-        scope.classificationFacets = res.classificationFacets;
-        scope.setTotalPages(res.count);     
-        scope.results = res.thumbnails;
-        scope.searchLoading = false;
-      })
+      .then(
+        data => {
+          console.log(data);
+          this.generateColTypeFacets( this.getUniqueColTypeIds(data.collTypeFacets) );
+          this.generateGeoFacets( data.geographyFacets );
+          this.generateDateFacets( data.dateFacets );
+          this._filters.setFacets('classification', data.classificationFacets);
+          this.setTotalPages(data.count);
+          this.results = data.thumbnails;
+          this.searchLoading = false;
+        },
+        error => {
+          this.errors['search'] = "Unable to load search.";
+          this.searchLoading = false;
+        })
       .catch(function(err) {
-        scope.errors['search'] = "Unable to load search.";
-        scope.searchLoading = false;
+        this.errors['search'] = "Unable to load search.";
+        this.searchLoading = false;
       });
   }
 
@@ -346,7 +350,9 @@ export class AssetGrid implements OnInit, OnDestroy {
       }
       generatedFacetsArray.push(facetObj);
     }
+    
     this.collTypeFacets = generatedFacetsArray;
+    this._filters.setFacets('collType', generatedFacetsArray); 
   }
 
   generateGeoFacets(resGeoFacetsArray){
@@ -394,8 +400,9 @@ export class AssetGrid implements OnInit, OnDestroy {
 
     }
 
+
+    this._filters.setFacets('geography', generatedGeoFacets);
     this.geographyFacets = generatedGeoFacets;
-    console.log(this.geographyFacets);
   }
 
   generateDateFacets(dateFacetsArray){
@@ -410,6 +417,7 @@ export class AssetGrid implements OnInit, OnDestroy {
 
     this.dateFacet.modified = false;
 
+    this._filters.setFacets('date', dateFacetsArray);
     this.dateFacetsArray = dateFacetsArray;
   }
 

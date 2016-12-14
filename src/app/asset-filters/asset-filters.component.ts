@@ -1,22 +1,17 @@
 import { Component } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router'
+import { Subscription } from 'rxjs/Subscription';
 
 import { AppState } from '../app.service'; 
-
 import { AssetService } from '../home/assets.service';
+import { AssetFiltersService } from '../asset-filters/asset-filters.service';
 
 @Component({
-  // The selector is what angular internally uses
-  // for `document.querySelectorAll(selector)` in our index.html
-  // where, in this case, selector is the string 'home'
   selector: 'ang-asset-filters', 
-  // We need to tell Angular's Dependency Injection which providers are in our app.
   providers: [
     AssetService
   ],
-  // Our list of styles in our component. We may add more to compose many styles together
   styleUrls: [ './asset-filters.component.scss' ],
-  // Every Angular template is first compiled by the browser before Angular runs it's compiler
   templateUrl: './asset-filters.component.html'
 })
 export class AssetFilters {
@@ -24,15 +19,19 @@ export class AssetFilters {
   public searchLoading: boolean;
   public showFilters: boolean = true;
   public showAdvancedModal: boolean = false;
+  private subscriptions: Subscription[] = [];
 
   errors = {};
   results = [];
   filters = [];
-  collTypeFacets = [];
-  classificationFacets = [];
+  facets = {};
+
+  // collTypeFacets = [];
+  // classificationFacets = [];
   geoTree = [];
-  geographyFacets = [];
-  dateFacetsArray = [];
+  // geographyFacets = [];
+  // dateFacetsArray = [];
+
   dateFacet = {
     earliest : {
       date : 1000,
@@ -54,8 +53,7 @@ export class AssetFilters {
     index : 0,
     label : 'Relevance'
   };
-  term;
-  sub;
+  term; 
   // TO-DO: Fields should be pulled dynamically!
   public fields = [
     {name: 'Title' },
@@ -63,14 +61,8 @@ export class AssetFilters {
     {name: 'Location' },
     {name: 'Repository' }
   ];
-  public geographyFields = [
-    {name: 'North America'},
-    {name: 'Central America and the Caribbean'},
-    {name: 'South America'},
-    {name: 'Europe'},
-    {name: 'Africa North of the Sahara'},
-    {name: 'Sub-Saharan Africa'}
-  ];
+  
+  public geographyFields = [ ];
 
   public advQueryTemplate = { term: '' };
 
@@ -80,9 +72,26 @@ export class AssetFilters {
   ];
 
   // TypeScript public modifiers
-  constructor(public appState: AppState, private _assets: AssetService, private route: ActivatedRoute, private router: Router) {
-
+  constructor(
+      public appState: AppState, 
+      private _assets: AssetService,
+      private _filters: AssetFiltersService,
+      private route: ActivatedRoute, 
+      private router: Router) {
+   
+   
+    // Keep an eye for facet updates 
+    this.subscriptions.push(
+      _filters.facetChange$.subscribe(
+        facets => { 
+          console.log("Facet updated:");
+          console.log(facets);
+          this.facets = facets; 
+        }
+      )
+    );
   }
+
 
   ngOnInit() {
     this.getTermsList();
@@ -92,6 +101,13 @@ export class AssetFilters {
                 this.term = term;
                 // scope.searchAssets(term);
                });
+
+    // Subscribe to all filter params
+
+    // Initally set facets
+    // this.filters = this._filters.getFacets();
+
+   
   }
 
   getTermsList(){
@@ -148,6 +164,9 @@ export class AssetFilters {
   }
 
   toggleFilter(value, group){
+
+    // this._filters.setFilter( group, value )
+
     var filter = {
       filterGroup : group,
       filterValue : value
@@ -235,87 +254,6 @@ export class AssetFilters {
     return colTypeIds;
   } 
 
-  generateColTypeFacets(idsArray){
-    var generatedFacetsArray = [];
-    for(var i = 0; i < idsArray.length; i++){
-      var facetObj = {
-        id : idsArray[i],
-        label: ''
-      };
-      if(facetObj.id === '1'){
-        facetObj.label = 'Artstor Digital Library';
-      }
-      else if(facetObj.id === '5'){
-        facetObj.label = 'Shared Shelf Commons';
-      }
-      generatedFacetsArray.push(facetObj);
-    }
-    this.collTypeFacets = generatedFacetsArray;
-  }
-
-  generateGeoFacets(resGeoFacetsArray){
-    var generatedGeoFacets = [];
-    var countriesArray = [];
-    // Extract Regions
-    for(var i = 0; i < resGeoFacetsArray.length; i++){
-      var resGeoFacet = resGeoFacetsArray[i];
-      var match = false;
-
-      for(var j = 0; j < this.geoTree.length; j++){
-        var geoTreeObj = this.geoTree[j];
-        if((geoTreeObj.type == 'region') && (resGeoFacet.id == geoTreeObj.nodeId)){
-          resGeoFacet.expanded = false;
-          resGeoFacet.childrenIds = geoTreeObj.children;
-          resGeoFacet.children = [];
-          match = true;
-          break;
-        }
-      }
-
-      if(match){
-          generatedGeoFacets.push(resGeoFacet);
-      }
-      else{
-          countriesArray.push(resGeoFacet);
-      }
-
-    }
-
-    // console.log(countriesArray);
-
-    // Extract Countries
-    for(var i = 0; i < countriesArray.length; i++){
-      var country = countriesArray[i];
-
-      for(var j = 0; j < generatedGeoFacets.length; j++){
-        var generatedGeoFacet = generatedGeoFacets[j];
-        if(this.existsInRegion(country.id, generatedGeoFacet.childrenIds)){
-          // country.parentId = generatedGeoFacet.id;
-          generatedGeoFacet.children.push(country);
-          break;
-        }
-      }
-
-    }
-
-    this.geographyFacets = generatedGeoFacets;
-    console.log(this.geographyFacets);
-  }
-
-  generateDateFacets(dateFacetsArray){
-    var startDate = dateFacetsArray[0].date;
-    var endDate = dateFacetsArray[dateFacetsArray.length - 1].date;
-    
-    this.dateFacet.earliest.date = Math.abs(startDate);
-    this.dateFacet.earliest.era = startDate < 0 ? "BCE" : "CE";
-
-    this.dateFacet.latest.date = Math.abs(endDate);
-    this.dateFacet.latest.era = endDate < 0 ? "BCE" : "CE";
-
-    this.dateFacet.modified = false;
-
-    this.dateFacetsArray = dateFacetsArray;
-  }
 
   applyDateFilter(){
     this.dateFacet.modified = true;
@@ -336,5 +274,8 @@ export class AssetFilters {
     return result;
   }
 
+  ngOnDestroy() {
+    this.subscriptions.forEach((sub) => { sub.unsubscribe(); });
+  }
 
 }

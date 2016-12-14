@@ -94,7 +94,7 @@
                     <div class="form-group" [ngClass]="{ 'has-danger' : errorMsgPwdRst }">
                         <label>Email Address:</label>
                         <input id="inputLoginResetEmail" class="form-control" type="text" [(ngModel)]="pwdRstEmail" />
-                        <div *ngIf="errorMsgPwdRst" class="form-control-feedback">{{ errorMsgPwdRst }}</div>
+                        <div id="msgLoginResetError" *ngIf="errorMsgPwdRst" class="form-control-feedback">{{ errorMsgPwdRst }}</div>
                     </div>
                 </div>
                 <div *ngIf="successMsgPwdRst" class="has-success"> {{ successMsgPwdRst }} </div>
