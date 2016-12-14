@@ -4,14 +4,7 @@ import { Subject } from 'rxjs/Subject';
 @Injectable()
 export class AssetFiltersService {
 
-    // Applied Facets
-    // private filters: any;
-
     // Facets
-    // private collTypeFacets = [];
-    // private classificationFacets = [];
-    // private geographyFacets = [];
-    // private dateFacetsArray = [];
     // private geoTree = [];
     
     private facets: any = {
@@ -41,9 +34,7 @@ export class AssetFiltersService {
         
     }
     
-    public setFacets(name: string, facets: any[] ) {
-        console.log("Set facets!");
-        console.log(facets);
+    public setFacets(name: string, facets: any ) {
         this.facets[name] = facets;
         this.facetChangeSource.next(this.facets);
     }
