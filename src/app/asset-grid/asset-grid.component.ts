@@ -98,9 +98,25 @@ export class AssetGrid implements OnInit, OnDestroy {
       this.route.params
       .subscribe((params: Params) => { 
         console.log(params);
-        // if (params.hasOwnProperty('term')) {
-        //   this.term = params.term;
-        // }
+        
+        if (params['startDate'] && params['endDate']) {
+          this.dateFacet.earliest.date = Math.abs(params['startDate']);
+          this.dateFacet.latest.date = Math.abs(params['endDate']);
+
+          if (params['startDate'] < 0) {
+            this.dateFacet.earliest.era = "BCE";
+          } else {
+            this.dateFacet.earliest.era = "CE";
+          }
+          if (params['endDate'] < 0) {
+            this.dateFacet.latest.era = "BCE";
+          } else {
+            this.dateFacet.latest.era = "CE";
+          }
+
+          this._filters.setFacets('dateObj', this.dateFacet);
+        }
+
         for (let param in params) {
           if (param == 'term') {
             this.term = params[param];
@@ -415,6 +431,7 @@ export class AssetGrid implements OnInit, OnDestroy {
     this.dateFacet.modified = false;
 
     this._filters.setFacets('date', dateFacetsArray);
+    this._filters.setFacets('dateObj', this.dateFacet);
     this.dateFacetsArray = dateFacetsArray;
   }
 

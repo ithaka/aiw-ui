@@ -24,25 +24,12 @@ export class AssetFilters {
   errors = {};
   results = [];
   filters = [];
-  facets = {};
+  facets: any = {};
 
   // collTypeFacets = [];
   // classificationFacets = [];
   geoTree = [];
   // geographyFacets = [];
-  // dateFacetsArray = [];
-
-  dateFacet = {
-    earliest : {
-      date : 1000,
-      era : 'BCE'
-    },
-    latest : {
-      date : 2016,
-      era : 'CE'
-    },
-    modified : false
-  };
   
   pagination = {
     currentPage : 1,
@@ -125,6 +112,11 @@ export class AssetFilters {
   private loadRoute() {
     let params = { 'term' : this.term };
 
+    if (this.facets.dateObj && this.facets.dateObj.modified == true) {
+      params['startDate'] = this.facets.dateObj.earliest.date * (this.facets.dateObj.earliest.era == 'BCE' ? -1 : 1);
+      params['endDate'] = this.facets.dateObj.latest.date * (this.facets.dateObj.latest.era == 'BCE' ? -1 : 1);
+    }
+
     for (let filter of this.filters) {
       params[filter.filterGroup] =  filter.filterValue;
     }
@@ -201,7 +193,7 @@ export class AssetFilters {
 
   clearAllFilterGroup(group){
     if(group == 'date'){
-      this.dateFacet.modified = false;
+      this.facets.dateObj.modified = false;
     }
     else{
       for(var i = 0; i < this.filters.length; i++){
@@ -256,8 +248,7 @@ export class AssetFilters {
 
 
   applyDateFilter(){
-    this.dateFacet.modified = true;
-
+    this.facets.dateObj.modified = true;
     this.pagination.currentPage = 1;
     this.loadRoute();
   }
