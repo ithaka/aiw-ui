@@ -132,21 +132,26 @@ export class AssetGrid {
     }
     let scope = this;
     this.searchLoading = true;
+
     this._assets.search(term, this.filters, this.activeSort.index, this.pagination, this.dateFacet)
-      .then(function(res){
-        console.log(res);
-        scope.generateColTypeFacets( scope.getUniqueColTypeIds(res.collTypeFacets) );
-        // scope.generateGeoFacets( res.geographyFacets );
-        // scope.generateDateFacets( res.dateFacets );
-        // // console.log(scope);
-        // scope.classificationFacets = res.classificationFacets;
-        // scope.setTotalPages(res.count);     
-        scope.results = res.thumbnails;
-        scope.searchLoading = false;
-      })
+      .then(
+        data => {
+          console.log(data);
+          this.generateColTypeFacets( this.getUniqueColTypeIds(data.collTypeFacets) );
+          this.generateGeoFacets( data.geographyFacets );
+          this.generateDateFacets( data.dateFacets );
+          this._filters.setFacets('classification', data.classificationFacets);
+          this.setTotalPages(data.count);     
+          this.results = data.thumbnails;
+          this.searchLoading = false;
+        },
+        error => {
+          this.errors['search'] = "Unable to load search.";
+          this.searchLoading = false;
+        })
       .catch(function(err) {
-        scope.errors['search'] = "Unable to load search.";
-        scope.searchLoading = false;
+        this.errors['search'] = "Unable to load search.";
+        this.searchLoading = false;
       });
   }
 
