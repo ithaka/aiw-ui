@@ -141,7 +141,7 @@ export class AssetGrid {
           this.generateGeoFacets( data.geographyFacets );
           this.generateDateFacets( data.dateFacets );
           this._filters.setFacets('classification', data.classificationFacets);
-          this.setTotalPages(data.count);     
+          this.setTotalPages(data.count);
           this.results = data.thumbnails;
           this.searchLoading = false;
         },

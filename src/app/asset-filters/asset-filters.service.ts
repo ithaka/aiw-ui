@@ -18,7 +18,8 @@ export class AssetFiltersService {
         collType : [],
         classification: [],
         geography: [],
-        date : {
+        date: [],
+        dateObj : {
             earliest : {
                 date : 1000,
                 era : 'BCE'
@@ -27,7 +28,7 @@ export class AssetFiltersService {
                 date : 2016,
                 era : 'CE'
             },
-            modified : false
+        modified : false
         }
     };
 

@@ -7,17 +7,11 @@ import { AssetService } from '../home/assets.service';
 import { AssetFiltersService } from '../asset-filters/asset-filters.service';
 
 @Component({
-  // The selector is what angular internally uses
-  // for `document.querySelectorAll(selector)` in our index.html
-  // where, in this case, selector is the string 'home'
   selector: 'ang-asset-filters', 
-  // We need to tell Angular's Dependency Injection which providers are in our app.
   providers: [
     AssetService
   ],
-  // Our list of styles in our component. We may add more to compose many styles together
   styleUrls: [ './asset-filters.component.scss' ],
-  // Every Angular template is first compiled by the browser before Angular runs it's compiler
   templateUrl: './asset-filters.component.html'
 })
 export class AssetFilters {

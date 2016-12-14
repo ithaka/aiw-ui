@@ -29,17 +29,17 @@
         </div>
     </div>
 
-    <div *ngIf="facets.date" class="filter-group">
+    <div *ngIf="facets && facets.dateObj" class="filter-group">
         <span class="filter-group__label">
                 <h3>Date <a tabindex="" class="link--accent small" style="float:right;" (click)="clearAllFilterGroup('date')">Clear</a></h3>
             </span>
         <div class="date-filter-row">
-            <input [(ngModel)]="facets.date.earliest.date" type="text" class="form-control" placeholder="Start Date">
-            <div class="toggle-btn" (click)="toggleEra(facets.date.earliest)">{{ facets.date.earliest.era }}</div>
+            <input [(ngModel)]="facets.dateObj.earliest.date" type="text" class="form-control" placeholder="Start Date">
+            <div class="toggle-btn" (click)="toggleEra(facets.dateObj.earliest)">{{ facets.dateObj.earliest.era }}</div>
         </div>
         <div class="date-filter-row">
-            <input [(ngModel)]="facets.date.latest.date" type="text" class="form-control" placeholder="End Date">
-            <div class="toggle-btn" (click)="toggleEra(facets.date.latest)">{{ facets.date.latest.era }}</div>
+            <input [(ngModel)]="facets.dateObj.latest.date" type="text" class="form-control" placeholder="End Date">
+            <div class="toggle-btn" (click)="toggleEra(facets.dateObj.latest)">{{ facets.dateObj.latest.era }}</div>
         </div>
         <div class="date-filter-row">
             <div class="btn" (click)="generatefacets.dates(facets.datesArray)">RESET</div>
