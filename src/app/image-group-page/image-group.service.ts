@@ -43,5 +43,8 @@ export class ImageGroupService {
         return this._auth.extractData(data);
       });
   }
-  // http://library.artstor.org/library/secure/categories/1034568975/thumbnails/1/72/0
+  
+  // getGroupDescription(groupId: string) {
+
+  // }
 }

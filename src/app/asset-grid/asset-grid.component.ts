@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 
-import { AppState } from '../app.service'; 
+import { Subscription }   from 'rxjs/Subscription';
 
 import { AssetService } from '../home/assets.service';
 import { AssetFiltersService } from '../asset-filters/asset-filters.service';
@@ -24,6 +24,9 @@ import { AssetFiltersService } from '../asset-filters/asset-filters.service';
 
 export class AssetGrid {
   // Set our default values
+  private subscriptions: Subscription[] = [];
+  private igId: string;
+
   public searchLoading: boolean;
   public showFilters: boolean = true;
   public showAdvancedModal: boolean = false;
@@ -83,12 +86,28 @@ export class AssetGrid {
 
   // TypeScript public modifiers
   constructor(
-        public appState: AppState, 
-        private _assets: AssetService,
-        private _filters: AssetFiltersService, 
-        private route: ActivatedRoute
-      ) {
+    private _assets: AssetService,
+    private _filters: AssetFiltersService, 
+    private route: ActivatedRoute
+  ) {
+    this.route.snapshot.params["igId"];
+    this.subscriptions.push(
+      this.route.params.subscribe((matrixParams) => {
+        this.igId = matrixParams["igId"];
+        this._assets.getFromIgId(this.igId)
+          .then((data) => {
+            if (!data) {
+              throw new Error("No data in image group thumbnails response");
+            }
+            console.log(data);
 
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      })
+    );
+      
   } 
 
   ngOnInit() {

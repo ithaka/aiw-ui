@@ -3,6 +3,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { Subscription }   from 'rxjs/Subscription';
 
 import { ImageGroupService } from './image-group.service';
+import { AssetService } from './../home/assets.service';
 
 @Component({
   selector: 'ang-image-group', 
@@ -13,31 +14,31 @@ import { ImageGroupService } from './image-group.service';
 
 export class ImageGroupPage implements OnInit, OnDestroy {
   private igDesc: string;
-  private folderId: string;
+  private igId: string;
   private subscriptions: Subscription[] = [];
 
-  constructor(private _igService: ImageGroupService, private _router: Router, private _route: ActivatedRoute) {
+  constructor(private _igService: ImageGroupService, private _assetService: AssetService, private _router: Router, private route: ActivatedRoute) {
   }
 
   ngOnInit() {
-    this._route.snapshot.params["folderId"];
-    this.subscriptions.push(
-      this._route.params.subscribe((matrixParams) => {
-        this.folderId = matrixParams["folderId"];
-        this._igService.getFromFolderId(this.folderId)
-          .then((data) => {
-            if (!data) {
-              throw new Error("No data in image group description response");
-            }
-            data = data.pop();
+    // this.route.snapshot.params["igId"];
+    // this.subscriptions.push(
+    //   this.route.params.subscribe((matrixParams) => {
+    //     this.igId = matrixParams["igId"];
+    //     this._igService.getGroupDescription(this.igId)
+    //       .then((data) => {
+    //         if (!data) {
+    //           throw new Error("No data in image group description response");
+    //         }
+    //         data = data.pop();
 
-            console.log("Good data: ");
-            console.log(data);
-            this.igDesc = data.igDesc;
-          })
-          .catch((error) => { console.error(error); });
-      })
-    );
+    //         console.log("Good data: ");
+    //         console.log(data);
+    //         this.igDesc = data.igDesc;
+    //       })
+    //       .catch((error) => { console.error(error); });
+    //   })
+    // );
 
 
 

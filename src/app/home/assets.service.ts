@@ -118,6 +118,21 @@ export class AssetService {
             .toPromise()
             .then(this.extractData);
     }
+
+    /**
+     * Gets thumbnails from image group Id
+     * @param groupId Id of desired image group
+     * @returns Promise, which is resolved with thumbnail data object
+     */
+    getFromIgId(groupId: string) {
+          let header = new Headers({ 'Content-Type': 'application/json' }); // ... Set content type to JSON
+          let options = new RequestOptions({ headers: header, withCredentials: true }); // Create a request option
+
+        return this.http
+            .get(this.baseUrl + "/imagegroup/" + groupId + "/thumbnails", options)
+            .toPromise()
+            .then((data) => { return this.extractData(data); });
+    }
     
     // login(user: User) {
     //     var header = new Headers({ 'Content-Type': 'application/x-www-form-urlencoded' }); // ... Set content type to JSON
