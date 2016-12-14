@@ -9,19 +9,16 @@ import { Locker } from 'angular2-locker';
 
 import 'rxjs/add/operator/toPromise';
  
+import { AuthService } from '../shared/auth.service';
+
 @Injectable()
 export class AssetService {
 
     public _storage;
 
-    constructor(private _router: Router, private http: Http, locker: Locker ){
+    constructor(private _router: Router, private http: Http, locker: Locker, private _auth: AuthService ){
         this._storage = locker;  
     }
-    
-    // Use header rewrite proxy for local development
-    private proxyUrl = 'http://rocky-cliffs-9470.herokuapp.com/api?url=';
-     // private instance var for base url
-    private baseUrl = this.proxyUrl + 'http://library.artstor.org/library/secure';
     
     private formEncode = function (obj) {
             var encodedString = '';
@@ -49,7 +46,7 @@ export class AssetService {
         let options = new RequestOptions({ withCredentials: true });
         
         return this.http
-            .get(this.baseUrl + '/termslist/', options)
+            .get(this._auth.getUrl() + '/termslist/', options)
             .toPromise()
             .then(this.extractData);   
     }
@@ -105,7 +102,7 @@ export class AssetService {
         // /search/1/{start_idx}/{page_size}/0?type= 1&kw={keyword}&origKW=&id={collection_ids}&name=All Collections&order={order}&tn={thumbnail_size}
         
         return this.http
-            .get(this.baseUrl + '/search/' + type + '/' + startIndex + '/' + pagination.pageSize + '/' + sortIndex + '?' + 'type=' + type + '&kw=' + keyword + '&origKW=&geoIds=' + geographyIds + '&clsIds=' + classificationIds + '&collTypes=' + colTypeIds + '&id=all&name=All%20Collections&bDate=' + earliestDate + '&eDate=' + latestDate + '&dExact=&order=0&isHistory=false&prGeoId=&tn=1', options)
+            .get(this._auth.getUrl() + '/search/' + type + '/' + startIndex + '/' + pagination.pageSize + '/' + sortIndex + '?' + 'type=' + type + '&kw=' + keyword + '&origKW=&geoIds=' + geographyIds + '&clsIds=' + classificationIds + '&collTypes=' + colTypeIds + '&id=all&name=All%20Collections&bDate=' + earliestDate + '&eDate=' + latestDate + '&dExact=&order=0&isHistory=false&prGeoId=&tn=1', options)
             .toPromise()
             .then(this.extractData);
     }
@@ -114,7 +111,7 @@ export class AssetService {
         let options = new RequestOptions({ withCredentials: true });
         // Returns all of the collections names
         return this.http
-            .get(this.baseUrl + '/institutions/', options)
+            .get(this._auth.getUrl() + '/institutions/', options)
             .toPromise()
             .then(this.extractData);
     }
@@ -129,7 +126,7 @@ export class AssetService {
           let options = new RequestOptions({ headers: header, withCredentials: true }); // Create a request option
 
         return this.http
-            .get(this.baseUrl + "/imagegroup/" + groupId + "/thumbnails", options)
+            .get(this._auth.getUrl() + "/imagegroup/" + groupId + "/thumbnails", options)
             .toPromise()
             .then((data) => { return this.extractData(data); });
     }
@@ -143,7 +140,7 @@ export class AssetService {
     //         });
 
     //     return this.http
-    //         .post(this.baseUrl + '/login', data, options)
+    //         .post(this._auth.getUrl() + '/login', data, options)
     //         .toPromise()
     //         .then(this.extractData)
     //         .catch(function() {
