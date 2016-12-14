@@ -13,8 +13,7 @@ import { AssetFiltersService } from '../asset-filters/asset-filters.service';
   selector: 'ang-asset-grid', 
   // We need to tell Angular's Dependency Injection which providers are in our app.
   providers: [
-    AssetService,
-    AssetFiltersService
+    AssetService
   ],
   // Our list of styles in our component. We may add more to compose many styles together
   styleUrls: [ './asset-grid.component.scss' ],
@@ -137,11 +136,11 @@ export class AssetGrid {
       .then(function(res){
         console.log(res);
         scope.generateColTypeFacets( scope.getUniqueColTypeIds(res.collTypeFacets) );
-        scope.generateGeoFacets( res.geographyFacets );
-        scope.generateDateFacets( res.dateFacets );
-        // console.log(scope);
-        scope.classificationFacets = res.classificationFacets;
-        scope.setTotalPages(res.count);     
+        // scope.generateGeoFacets( res.geographyFacets );
+        // scope.generateDateFacets( res.dateFacets );
+        // // console.log(scope);
+        // scope.classificationFacets = res.classificationFacets;
+        // scope.setTotalPages(res.count);     
         scope.results = res.thumbnails;
         scope.searchLoading = false;
       })
@@ -324,7 +323,9 @@ export class AssetGrid {
       }
       generatedFacetsArray.push(facetObj);
     }
+    
     this.collTypeFacets = generatedFacetsArray;
+    this._filters.setFacets('collType', generatedFacetsArray); 
   }
 
   generateGeoFacets(resGeoFacetsArray){
@@ -372,8 +373,9 @@ export class AssetGrid {
 
     }
 
+
+    this._filters.setFacets('geography', generatedGeoFacets);
     this.geographyFacets = generatedGeoFacets;
-    console.log(this.geographyFacets);
   }
 
   generateDateFacets(dateFacetsArray){
@@ -388,6 +390,7 @@ export class AssetGrid {
 
     this.dateFacet.modified = false;
 
+    this._filters.setFacets('date', dateFacetsArray);
     this.dateFacetsArray = dateFacetsArray;
   }
 
