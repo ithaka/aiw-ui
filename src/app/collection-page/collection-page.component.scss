@@ -1,0 +1,19 @@
+
+@import '../../../node_modules/bootstrap/scss/mixins/_gradients.scss';
+
+.thumbnail-shelf {
+    border-bottom: 1px solid #bebebe;
+    text-align: center;
+    // margin: 20px;
+    margin-bottom: 20px;
+    padding-top: 20px;
+
+    background: #f7f7f7;
+    // @include linear-gradient(to bottom, #ffffff, #f7f7f7);
+    @include gradient-y(#ffffff, #f7f7f7, 0%, 100%);
+}
+
+img.collection-thumb {
+    max-height: 100px;
+    width: auto;
+}
