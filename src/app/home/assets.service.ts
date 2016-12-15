@@ -186,8 +186,6 @@ export class AssetService {
             .get(requestRoute, options)
             .toPromise()
             .then((data) => { return this.extractData(data); });
-
-        // http://library.artstor.org/library/secure/collaboratoryfiltering/SCALA_ARCHIVES_1039931976/thumbnails/1/72/0?collectionId=103
     }
  
  
