@@ -81,9 +81,11 @@ export class AssetGrid implements OnInit, OnDestroy {
   ];
 
   // Object Id parameter, for Clusters
-  objectId : string = ''; 
+  private objectId : string = ''; 
   // Collection Id parameter
-  colId : string = '';
+  private colId : string = '';
+  // Image group Id
+  private igId : string = '';
 
   // TypeScript public modifiers
   constructor(
@@ -124,7 +126,7 @@ export class AssetGrid implements OnInit, OnDestroy {
             this.term = params[param];
           } 
           else if (param == 'igId') {
-            this.loadIgAssets(params[param]);
+            this.igId = (params[param]);
           }
           else if(param == 'objectId'){
             this.objectId = params[param];
@@ -146,6 +148,21 @@ export class AssetGrid implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.subscriptions.forEach((sub) => { sub.unsubscribe(); });
+  }
+
+  runAssetLoader() {
+    if (this.colId.length > 0 && this.objectId.length > 0) {
+      this.loadAssociated(this.objectId, this.colId);
+    } else if (this.colId.length > 0) {
+      this.loadCollection(this.colId);
+    } else if (this.objectId.length > 0) {
+      this.loadCluster(this.objectId);
+    } else if (this.igId.length > 0) {
+      this.loadIgAssets(this.igId);
+    } else {
+      this.getTermsList();
+      this.loadSearch(this.term);
+    }
   }
 
   loadCluster(objectId){
@@ -180,10 +197,6 @@ export class AssetGrid implements OnInit, OnDestroy {
       });
   }
 
-  showAssociated(colId, objectId) {
-
-  }
-
   getTermsList(){
     let scope = this;
     this._assets.termList()
@@ -194,17 +207,6 @@ export class AssetGrid implements OnInit, OnDestroy {
       .catch(function(err) {
         console.log('Unable to load terms list.');
       });
-  }
-
-  runAssetLoader() {
-    if (this.colId.length > 0) {
-      this.loadCollection(this.colId);
-    } else if (this.objectId.length > 0) {
-      this.loadCluster(this.objectId);
-    } else {
-      this.getTermsList();
-      this.loadSearch(this.term);
-    }
   }
 
   loadSearch(term) {
@@ -238,6 +240,19 @@ export class AssetGrid implements OnInit, OnDestroy {
 
   loadIgAssets(igId: string) {
     this._assets.getFromIgId(igId)
+      .then((data) => {
+        if (!data) {
+          throw new Error("No data in image group thumbnails response");
+        }
+        this.results = data.thumbnails;
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
+  loadAssociated(objectId: string, colId: string) {
+    this._assets.getAssociated(objectId, colId, this.pagination.currentPage, this.pagination.pageSize)
       .then((data) => {
         if (!data) {
           throw new Error("No data in image group thumbnails response");

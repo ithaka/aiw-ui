@@ -50,7 +50,7 @@ export class AssetService {
     /**
      * Get Collection
      * @param colId id of collection to fetch
-     * @returns thumbnails of assets for a collection, and colleciton information
+     * @returns thumbnails of assets for a collection, and collection information
      */
     getCollection(colId) {
         let options = new RequestOptions({ withCredentials: true });
@@ -70,7 +70,7 @@ export class AssetService {
         if (!pageSize) { pageSize = 72; }
 
         return this.http
-            .get(this._auth.getUrl() + '/collections/' + colId + '/thumbails/' + pageNo + '/' + pageSize + '/' + imageSize, options)
+            .get(this._auth.getUrl() + '/collections/' + colId + '/thumbnails/' + pageNo + '/' + pageSize + '/' + imageSize, options)
             .toPromise()
             .then(this.extractData);
     }   
@@ -160,32 +160,35 @@ export class AssetService {
      * @returns Promise, which is resolved with thumbnail data object
      */
     getFromIgId(groupId: string) {
-          let header = new Headers({ 'Content-Type': 'application/json' }); // ... Set content type to JSON
-          let options = new RequestOptions({ headers: header, withCredentials: true }); // Create a request option
+        let header = new Headers({ 'Content-Type': 'application/json' }); // ... Set content type to JSON
+        let options = new RequestOptions({ headers: header, withCredentials: true }); // Create a request option
 
         return this.http
             .get(this._auth.getUrl() + "/imagegroup/" + groupId + "/thumbnails", options)
             .toPromise()
             .then((data) => { return this.extractData(data); });
     }
-    
-    // login(user: User) {
-    //     var header = new Headers({ 'Content-Type': 'application/x-www-form-urlencoded' }); // ... Set content type to JSON
-    //     let options = new RequestOptions({ headers: header, withCredentials: true }); // Create a request option
-    //     var data = this.formEncode({ 
-    //             'j_username': user.username, 
-    //             'j_password': user.password 
-    //         });
 
-    //     return this.http
-    //         .post(this._auth.getUrl() + '/login', data, options)
-    //         .toPromise()
-    //         .then(this.extractData)
-    //         .catch(function() {
-    //             // error handling
-    //         });
+    /**
+     * Get associated images
+     * @param objectId The id of the object for which you want associated items
+     * @param colId The id of the collection from which the asset came
+     * @param pageNum Value for pagination
+     * @param pageSize How many thumbnails per page
+     */
+    getAssociated(objectId: string, colId: string, pageNum: number, pageSize: number) {
+        let header = new Headers({ 'Content-Type': 'application/json' }); // ... Set content type to JSON
+        let options = new RequestOptions({ headers: header, withCredentials: true }); // Create a request option
+        let requestRoute: string = this._auth.getUrl() + "/" + ["collaboratoryfiltering", objectId, "thumbnails", pageNum, pageSize].join("/") + "?collectionId=" + colId;
+        console.log(requestRoute);
 
-    // }
+        return this.http
+            .get(requestRoute, options)
+            .toPromise()
+            .then((data) => { return this.extractData(data); });
+
+        // http://library.artstor.org/library/secure/collaboratoryfiltering/SCALA_ARCHIVES_1039931976/thumbnails/1/72/0?collectionId=103
+    }
  
  
 }
