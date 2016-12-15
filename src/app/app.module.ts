@@ -29,6 +29,7 @@ import { Home } from './home';
 import { SearchPage } from './search-page';
 import { CollectionPage } from './collection-page';
 import { ClusterPage } from './cluster-page';
+import { AssociatedPage } from './associated-page';
 import { ImageGroupPage } from './image-group-page';
 import { Login } from './login';
 import { About } from './about';
@@ -68,6 +69,7 @@ type StoreType = {
     SearchPage,
     CollectionPage,
     ClusterPage,
+    AssociatedPage,
     AssetFilters,
     AssetGrid,
     ImageGroupPage,

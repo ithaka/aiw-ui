@@ -180,6 +180,10 @@ export class AssetGrid implements OnInit, OnDestroy {
       });
   }
 
+  showAssociated(colId, objectId) {
+
+  }
+
   getTermsList(){
     let scope = this;
     this._assets.termList()

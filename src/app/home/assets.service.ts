@@ -49,7 +49,8 @@ export class AssetService {
 
     /**
      * Get Collection
-     * Returns thumbnails of assets for a collection, and colleciton information
+     * @param colId id of collection to fetch
+     * @returns thumbnails of assets for a collection, and colleciton information
      */
     getCollection(colId) {
         let options = new RequestOptions({ withCredentials: true });
