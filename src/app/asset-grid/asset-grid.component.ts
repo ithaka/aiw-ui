@@ -80,6 +80,8 @@ export class AssetGrid implements OnInit, OnDestroy {
     { term: ''}
   ];
 
+  objectId = ''; // For Clusters
+
   // TypeScript public modifiers
   constructor(
     private _assets: AssetService,
@@ -90,10 +92,7 @@ export class AssetGrid implements OnInit, OnDestroy {
   } 
 
   ngOnInit() {
-    console.log('hello `Search` component');
-    // let scope = this;
-    this.getTermsList();
-// .map(params => params)
+    
     this.subscriptions.push(
       this.route.params
       .subscribe((params: Params) => { 
@@ -120,20 +119,49 @@ export class AssetGrid implements OnInit, OnDestroy {
         for (let param in params) {
           if (param == 'term') {
             this.term = params[param];
-          } else if (param == 'igId') {
+          } 
+          else if (param == 'igId') {
             this.loadIgAssets(params[param]);
-          } else {
+          }
+          else if(param == 'objectId'){
+            this.objectId = params[param];
+          } 
+          else {
             // Otherwise, it is a filter!
             this.toggleFilter(param, params[param]);
           }
         }
-        this.searchAssets(this.term);
+        
+        if(this.objectId){ // For cluster page
+          this.showCluster(this.objectId);
+        }
+        else{ // For search page
+          this.getTermsList();
+          this.searchAssets(this.term);
+        }
+
       })
     );
   }
 
   ngOnDestroy() {
     this.subscriptions.forEach((sub) => { sub.unsubscribe(); });
+  }
+
+  showCluster(objectId){
+    let scope = this;
+    this.searchLoading = true;
+    this._assets.cluster(objectId, this.activeSort.index, this.pagination)
+      .then(function(res){
+        console.log(res);
+        scope.setTotalPages(res.count);     
+        scope.results = res.thumbnails;
+        scope.searchLoading = false;
+      })
+      .catch(function(err) {
+        scope.errors['search'] = "Unable to load cluster results.";
+        scope.searchLoading = false;
+      });
   }
 
   getTermsList(){
@@ -215,25 +243,45 @@ export class AssetGrid implements OnInit, OnDestroy {
   firstPage(){
     if(this.pagination.currentPage > 1){
       this.pagination.currentPage = 1;
-      this.searchAssets(this.term);
+      if(this.objectId){
+        this.showCluster(this.objectId);
+      }
+      else{
+        this.searchAssets(this.term);
+      }
     }
   }
   lastPage(){
     if(this.pagination.currentPage < this.pagination.totalPages){
       this.pagination.currentPage = this.pagination.totalPages;
-      this.searchAssets(this.term);
+      if(this.objectId){
+        this.showCluster(this.objectId);
+      }
+      else{
+        this.searchAssets(this.term);
+      }
     }
   }
   prevPage(){
     if(this.pagination.currentPage > 1){
       this.pagination.currentPage--;
-      this.searchAssets(this.term);
+      if(this.objectId){
+        this.showCluster(this.objectId);
+      }
+      else{
+        this.searchAssets(this.term);
+      }
     }
   }
   nextPage(){
     if(this.pagination.currentPage < this.pagination.totalPages){
       this.pagination.currentPage++;
-      this.searchAssets(this.term);
+      if(this.objectId){
+        this.showCluster(this.objectId);
+      }
+      else{
+        this.searchAssets(this.term);
+      }
     }
   }
 
@@ -241,17 +289,32 @@ export class AssetGrid implements OnInit, OnDestroy {
     this.activeSort.index = index;
     this.activeSort.label = label; 
     this.pagination.currentPage = 1;
-    this.searchAssets(this.term);
+    if(this.objectId){
+      this.showCluster(this.objectId);
+    }
+    else{
+      this.searchAssets(this.term);
+    }
   }
 
   changePageSize(size){
     this.pagination.pageSize = size;
     this.pagination.currentPage = 1;
-    this.searchAssets(this.term);
+    if(this.objectId){
+      this.showCluster(this.objectId);
+    }
+    else{
+      this.searchAssets(this.term);
+    }
   }
 
   currentPageOnblurr(){
-    this.searchAssets(this.term);
+    if(this.objectId){
+      this.showCluster(this.objectId);
+    }
+    else{
+      this.searchAssets(this.term);
+    }
   }
 
   toggleEra(dateObj){

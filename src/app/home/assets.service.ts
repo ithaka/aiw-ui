@@ -37,6 +37,16 @@ export class AssetService {
         return body || { };
     }
 
+    cluster(objectId, sortIndex, pagination) {
+        let options = new RequestOptions({ withCredentials: true });
+        let startIndex = ((pagination.currentPage - 1) * pagination.pageSize) + 1;
+
+        return this.http
+            .get(this._auth.getUrl() + '/cluster/' + objectId + '/thumbnails/' + startIndex + '/' + pagination.pageSize + '/' + sortIndex, options)
+            .toPromise()
+            .then(this.extractData);
+    }
+
     /**
      * Term List Service
      * @returns       Returns the Geo Tree Object used for generating the geofacets tree.
