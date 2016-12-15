@@ -28,7 +28,6 @@ export class ImageGroupService {
       .then((data) => { return this._auth.extractData(data); });
   }
 
-
   /**
    * Get array of folder and image group information
    * @param catIds An array of category ids which contain image groups

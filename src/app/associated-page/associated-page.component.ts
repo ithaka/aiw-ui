@@ -15,13 +15,19 @@ import { AuthService } from './../shared/auth.service';
 })
 
 export class AssociatedPage implements OnInit, OnDestroy {
+  // array of all subscriptions, which is destroyed OnDestroy
   private subscriptions: Subscription[] = [];
+  // the object id for which to retrieve related assets (retrieved from matrix param)
   private objectId: string;
+  // gets assigned with the asset's title
   private assetTitle: string;
 
   constructor(private _router: Router, private route: ActivatedRoute, private http: Http, private _auth: AuthService) {
   }
 
+  /**
+   * Sets up subscription to objectId matrix param, which gets assetTitle from service
+   */
   ngOnInit() {
     let header = new Headers({ 'Content-Type': 'application/json' }); // ... Set content type to JSON
     let options = new RequestOptions({ headers: header, withCredentials: true }); // Create a request option
