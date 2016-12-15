@@ -138,17 +138,7 @@ export class AssetGrid implements OnInit, OnDestroy {
           }
         }
         
-        if(this.objectId.length > 0){ 
-          // For cluster page
-          this.showCluster(this.objectId);
-        }
-        else if (this.colId.length > 0) {
-          this.showCollection(this.colId);
-        }
-        else{ // For search page
-          this.getTermsList();
-          this.searchAssets(this.term);
-        }
+        this.runAssetLoader();
 
       })
     );
@@ -158,7 +148,7 @@ export class AssetGrid implements OnInit, OnDestroy {
     this.subscriptions.forEach((sub) => { sub.unsubscribe(); });
   }
 
-  showCluster(objectId){
+  loadCluster(objectId){
     let scope = this;
     this.searchLoading = true;
     this._assets.cluster(objectId, this.activeSort.index, this.pagination)
@@ -174,7 +164,7 @@ export class AssetGrid implements OnInit, OnDestroy {
       });
   }
 
-  showCollection(colId) {
+  loadCollection(colId) {
     this._assets.getCollectionThumbs(colId, this.pagination.currentPage, this.pagination.pageSize)
       .then(
         data => {
@@ -202,7 +192,18 @@ export class AssetGrid implements OnInit, OnDestroy {
       });
   }
 
-  searchAssets(term) {
+  runAssetLoader() {
+    if (this.colId.length > 0) {
+      this.loadCollection(this.colId);
+    } else if (this.objectId.length > 0) {
+      this.loadCluster(this.objectId);
+    } else {
+      this.getTermsList();
+      this.loadSearch(this.term);
+    }
+  }
+
+  loadSearch(term) {
     if (!term && this.results === []) {
       let term = "*";
     }
@@ -269,45 +270,25 @@ export class AssetGrid implements OnInit, OnDestroy {
   firstPage(){
     if(this.pagination.currentPage > 1){
       this.pagination.currentPage = 1;
-      if(this.objectId){
-        this.showCluster(this.objectId);
-      }
-      else{
-        this.searchAssets(this.term);
-      }
+      this.runAssetLoader();
     }
   }
   lastPage(){
     if(this.pagination.currentPage < this.pagination.totalPages){
       this.pagination.currentPage = this.pagination.totalPages;
-      if(this.objectId){
-        this.showCluster(this.objectId);
-      }
-      else{
-        this.searchAssets(this.term);
-      }
+      this.runAssetLoader();
     }
   }
   prevPage(){
     if(this.pagination.currentPage > 1){
       this.pagination.currentPage--;
-      if(this.objectId){
-        this.showCluster(this.objectId);
-      }
-      else{
-        this.searchAssets(this.term);
-      }
+      this.runAssetLoader();
     }
   }
   nextPage(){
     if(this.pagination.currentPage < this.pagination.totalPages){
       this.pagination.currentPage++;
-      if(this.objectId){
-        this.showCluster(this.objectId);
-      }
-      else{
-        this.searchAssets(this.term);
-      }
+      this.runAssetLoader();
     }
   }
 
@@ -315,32 +296,17 @@ export class AssetGrid implements OnInit, OnDestroy {
     this.activeSort.index = index;
     this.activeSort.label = label; 
     this.pagination.currentPage = 1;
-    if(this.objectId){
-      this.showCluster(this.objectId);
-    }
-    else{
-      this.searchAssets(this.term);
-    }
+    this.runAssetLoader();
   }
 
   changePageSize(size){
     this.pagination.pageSize = size;
     this.pagination.currentPage = 1;
-    if(this.objectId){
-      this.showCluster(this.objectId);
-    }
-    else{
-      this.searchAssets(this.term);
-    }
+    this.runAssetLoader();
   }
 
   currentPageOnblurr(){
-    if(this.objectId){
-      this.showCluster(this.objectId);
-    }
-    else{
-      this.searchAssets(this.term);
-    }
+    this.runAssetLoader();
   }
 
   toggleEra(dateObj){
@@ -368,7 +334,7 @@ export class AssetGrid implements OnInit, OnDestroy {
     console.log(this.filters);
 
     this.pagination.currentPage = 1;
-    this.searchAssets(this.term);
+    this.runAssetLoader();
   }
 
   filterApplied(value, group){
@@ -399,7 +365,7 @@ export class AssetGrid implements OnInit, OnDestroy {
     }
     
     this.pagination.currentPage = 1;
-    this.searchAssets(this.term);
+    this.runAssetLoader();
   }
 
   removeFilter(filterObj){
@@ -528,7 +494,7 @@ export class AssetGrid implements OnInit, OnDestroy {
     this.dateFacet.modified = true;
 
     this.pagination.currentPage = 1;
-    this.searchAssets(this.term);
+    this.runAssetLoader();
   }
 
   existsInRegion(countryId, childerenIds){
