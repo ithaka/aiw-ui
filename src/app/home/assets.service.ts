@@ -52,17 +52,7 @@ export class AssetService {
      * @param colId id of collection to fetch
      * @returns thumbnails of assets for a collection, and collection information
      */
-    getCollection(colId) {
-        let options = new RequestOptions({ withCredentials: true });
-
-        return this.http
-            .get(this._auth.getUrl() + '/collections/' + colId, options)
-            .toPromise()
-            .then(this.extractData);
-    }
-
     getCollectionThumbs(colId: string, pageNo?: number, pageSize?: number) {
-        ///87730739/thumbnails/1/72/0
         let options = new RequestOptions({withCredentials: true});
         let imageSize = 0;
         
@@ -70,7 +60,7 @@ export class AssetService {
         if (!pageSize) { pageSize = 72; }
 
         return this.http
-            .get(this._auth.getUrl() + '/collections/' + colId + '/thumbnails/' + pageNo + '/' + pageSize + '/' + imageSize, options)
+            .get( [this._auth.getUrl(), 'collections', colId, 'thumbnails', pageNo, pageSize, imageSize].join('/'), options)
             .toPromise()
             .then(this.extractData);
     }   

@@ -62,20 +62,20 @@
     background-position: center center;
     background-size: 100% auto;
 
-    @include transition(transform linear 0.2s);
-    @include transform(rotate(0deg));
+    transition: transform linear 0.2s;
+    transform: rotate(0deg);
 
     &.icon-down, &.icon-up, &.icon-right, &.icon-left {
         background-image: url('/assets/img/icon-down.svg');
     }
 
     &.icon-up {
-        @include transform(rotate(180deg));
+        transform: rotate(180deg);
     } 
     &.icon-right {
-        @include transform(rotate(-90deg));
+        transform: rotate(-90deg);
     } 
     &.icon-left {
-        @include transform(rotate(90deg));
+        transform: rotate(90deg);
     }
 }

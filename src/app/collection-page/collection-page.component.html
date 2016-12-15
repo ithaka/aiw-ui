@@ -1,4 +1,21 @@
 <nav-menu></nav-menu>
 <div class="container main-content">
-  <ang-asset-grid></ang-asset-grid>
+    <div class="row">
+        <div class="col-sm-12">
+            <h2>Browse Collection</h2>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-9">
+            <h3>{{ colName }}</h3>
+            <p [innerHtml]="colDescription"></p>
+            
+        </div>
+        <div class="col-sm-3 ">
+            <div class="thumbnail-shelf">
+                <img class="collection-thumb" src="http://viewer2.artstor.org{{ colThumbnail }}" />
+            </div>
+        </div>
+    </div>
+    <ang-asset-grid></ang-asset-grid>
 </div>

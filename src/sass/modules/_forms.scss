@@ -85,7 +85,7 @@ select.form-control {
         top: 50%;
         right: 0.5rem;
         z-index: 1000;
-        @include transform(translateY(-50%));
+        transform: translateY(-50%);
         height: 100%;
         width: 1.5em;
     }
