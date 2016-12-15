@@ -152,7 +152,7 @@ export class AssetGrid implements OnInit, OnDestroy {
 
   runAssetLoader() {
     if (this.colId.length > 0 && this.objectId.length > 0) {
-      this.loadAssociated(this.objectId, this.colId);
+      this.loadAssociatedAssets(this.objectId, this.colId);
     } else if (this.colId.length > 0) {
       this.loadCollection(this.colId);
     } else if (this.objectId.length > 0) {
@@ -171,7 +171,7 @@ export class AssetGrid implements OnInit, OnDestroy {
     this._assets.cluster(objectId, this.activeSort.index, this.pagination)
       .then(function(res){
         console.log(res);
-        scope.setTotalPages(res.count);     
+        this.pagination.totalPages = scope.setTotalPages(res.count);     
         scope.results = res.thumbnails;
         scope.searchLoading = false;
       })
@@ -181,6 +181,10 @@ export class AssetGrid implements OnInit, OnDestroy {
       });
   }
 
+  /**
+   * Loads thumbnails from a collectionType
+   * @param colId Collection Id for which to fetch results
+   */
   loadCollection(colId) {
     this._assets.getCollectionThumbs(colId, this.pagination.currentPage, this.pagination.pageSize)
       .then(
@@ -209,6 +213,9 @@ export class AssetGrid implements OnInit, OnDestroy {
       });
   }
 
+  /**
+   * Executes searchn and sets relevant asset-grid parameters
+   */
   loadSearch(term) {
     if (!term && this.results === []) {
       let term = "*";
@@ -224,7 +231,7 @@ export class AssetGrid implements OnInit, OnDestroy {
           this.generateGeoFacets( data.geographyFacets );
           this.generateDateFacets( data.dateFacets );
           this._filters.setFacets('classification', data.classificationFacets);
-          this.setTotalPages(data.count);
+          this.pagination.totalPages = this.setTotalPages(data.count);
           this.results = data.thumbnails;
           this.searchLoading = false;
         },
@@ -238,6 +245,10 @@ export class AssetGrid implements OnInit, OnDestroy {
       });
   }
 
+  /**
+   * Gets array of thumbnails and sets equal to results
+   * @param igId Image group id for which to retrieve thumbnails
+   */
   loadIgAssets(igId: string) {
     this._assets.getFromIgId(igId)
       .then((data) => {
@@ -251,7 +262,12 @@ export class AssetGrid implements OnInit, OnDestroy {
       });
   }
 
-  loadAssociated(objectId: string, colId: string) {
+  /**
+   * Gets array of thumbnails associated to objectId
+   * @param objectId Object Id for which to retrieve image results
+   * @param colId Collection Id in which the Object resides
+   */
+  loadAssociatedAssets(objectId: string, colId: string) {
     this._assets.getAssociated(objectId, colId, this.pagination.currentPage, this.pagination.pageSize)
       .then((data) => {
         if (!data) {
@@ -264,11 +280,18 @@ export class AssetGrid implements OnInit, OnDestroy {
       });
   }
 
+  /**
+   * Sets the number of total pages in pagination
+   * @param count The total number of images in results
+   * @returns the total number of pages the assets will fill
+   */
   setTotalPages(count){
-    this.pagination.totalPages = Math.ceil( count / this.pagination.pageSize );
+     return Math.ceil( count / this.pagination.pageSize );
   }
 
-
+  /**
+   * Determines if the asset-grid is on the first page of results
+   */
   isfirstPage(){
     if(this.pagination.currentPage === 1){
       return true;
@@ -277,6 +300,10 @@ export class AssetGrid implements OnInit, OnDestroy {
       return false;
     }
   }
+
+  /**
+   * Determines if the asset-grid is on the last page of results
+   */
   isLastPage(){
     if(this.pagination.currentPage === this.pagination.totalPages){
       return true;
@@ -286,24 +313,39 @@ export class AssetGrid implements OnInit, OnDestroy {
     }
   }
 
+  /**
+   * Returns the asset-grid to the first page of results
+   */
   firstPage(){
     if(this.pagination.currentPage > 1){
       this.pagination.currentPage = 1;
       this.runAssetLoader();
     }
   }
+
+  /**
+   * Sends the asset-grid to the last page of results
+   */
   lastPage(){
     if(this.pagination.currentPage < this.pagination.totalPages){
       this.pagination.currentPage = this.pagination.totalPages;
       this.runAssetLoader();
     }
   }
+
+  /**
+   * Navigates the asset-grid to the previous page of results
+   */
   prevPage(){
     if(this.pagination.currentPage > 1){
       this.pagination.currentPage--;
       this.runAssetLoader();
     }
   }
+
+  /**
+   * Navigates the asset-grid to the next page of results
+   */
   nextPage(){
     if(this.pagination.currentPage < this.pagination.totalPages){
       this.pagination.currentPage++;
