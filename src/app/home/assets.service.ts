@@ -48,6 +48,33 @@ export class AssetService {
     }
 
     /**
+     * Get Collection
+     * Returns thumbnails of assets for a collection, and colleciton information
+     */
+    getCollection(colId) {
+        let options = new RequestOptions({ withCredentials: true });
+
+        return this.http
+            .get(this._auth.getUrl() + '/collections/' + colId, options)
+            .toPromise()
+            .then(this.extractData);
+    }
+
+    getCollectionThumbs(colId: string, pageNo?: number, pageSize?: number) {
+        ///87730739/thumbnails/1/72/0
+        let options = new RequestOptions({withCredentials: true});
+        let imageSize = 0;
+        
+        if (!pageNo) { pageNo = 1; }
+        if (!pageSize) { pageSize = 72; }
+
+        return this.http
+            .get(this._auth.getUrl() + '/collections/' + colId + '/thumbails/' + pageNo + '/' + pageSize + '/' + imageSize, options)
+            .toPromise()
+            .then(this.extractData);
+    }   
+
+    /**
      * Term List Service
      * @returns       Returns the Geo Tree Object used for generating the geofacets tree.
      */
