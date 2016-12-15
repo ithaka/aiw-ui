@@ -80,7 +80,10 @@ export class AssetGrid implements OnInit, OnDestroy {
     { term: ''}
   ];
 
-  objectId = ''; // For Clusters
+  // Object Id parameter, for Clusters
+  objectId : string = ''; 
+  // Collection Id parameter
+  colId : string = '';
 
   // TypeScript public modifiers
   constructor(
@@ -126,14 +129,21 @@ export class AssetGrid implements OnInit, OnDestroy {
           else if(param == 'objectId'){
             this.objectId = params[param];
           } 
+          else if(param == 'colId'){
+            this.colId = params[param];
+          } 
           else {
             // Otherwise, it is a filter!
             this.toggleFilter(param, params[param]);
           }
         }
         
-        if(this.objectId){ // For cluster page
+        if(this.objectId.length > 0){ 
+          // For cluster page
           this.showCluster(this.objectId);
+        }
+        else if (this.colId.length > 0) {
+          this.showCollection(this.colId);
         }
         else{ // For search page
           this.getTermsList();
@@ -161,6 +171,22 @@ export class AssetGrid implements OnInit, OnDestroy {
       .catch(function(err) {
         scope.errors['search'] = "Unable to load cluster results.";
         scope.searchLoading = false;
+      });
+  }
+
+  showCollection(colId) {
+    this._assets.getCollectionThumbs(colId, this.pagination.currentPage, this.pagination.pageSize)
+      .then(
+        data => {
+          console.log(data);
+          this.results = data.thumbnails;
+        },
+        error => {
+          
+        }
+      )
+      .catch(error => {
+
       });
   }
 
