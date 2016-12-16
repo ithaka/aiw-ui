@@ -8,10 +8,34 @@
             </div>
             <br />
              <div class="card">
-                <div class="card-header">Placeholder: Browse (Geography, Classification, Collection, Teaching Resources)</div>
+                <div class="card-header">
+                    <h1>Browse</h1>
+                </div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">
+                        <a class="" href="#/browse;view=geography">!Geography</a>
+                        <p class="small">(Afghanistan, Albania, Algeria...)</p>
+                    </li>
+                    <li class="list-group-item">
+                        <a href="#/browse;view=classification">!Classification</a>
+                        <p class="small">(painting, performing arts, photography...)</p>
+                    </li>
+                    <li class="list-group-item">
+                        <a href="#/browse;view=classification">!Collection</a>
+                        <p class="small">(Artstor, Shared Shelf, Shared Shelf Commons, My Collections...)</p>
+                    </li>
+                    <li class="list-group-item">
+                         <a href="#/browse;view=classification">!Teaching Resources</a>
+                        <p class="small">(Curriculum Guides, AP® Resources, Surveys and Case Studies: Art History, Humanities and Social Sciences)</p>
+                    </li>
+                </ul>
+
             </div>
              <div class="card">
-                <div class="card-header">Placeholder: What's New (Artstor Blog)</div>
+                <div class="card-header">
+                    <h2>What's New</h2>
+                </div>
+                Placeholder: What's New (Artstor Blog)
             </div>
         </div>
         <div class="col-sm-4">
@@ -22,7 +46,9 @@
                 <div class="card-header">Placeholder: Folders & Image Groups Link</div>
             </div>
             <div class="card">
-                <div class="card-header">WIP: Shared Shelf Commons</div>
+                <div class="card-header">
+                    <h2>Shared Shelf Commons</h2>
+                </div>
                 <ul class="list-group list-group-flush list--home-collections">
                     <li *ngFor="let collection of collections" class="list-group-item">
                         <a href="#/collection;colId={{ collection.collectionid}}">{{ collection.collectionname }}</a>
