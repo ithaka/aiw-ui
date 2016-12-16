@@ -66,7 +66,6 @@ export class BrowsePage {
   } 
 
   ngOnInit() {
-    var scope = this;
     this.subscriptions.push(
       this.route.params
       .subscribe((params: Params) => { 
@@ -74,7 +73,7 @@ export class BrowsePage {
       })
     );
 
-    scope.loadCategory();
+    this.loadCategory();
   }
 
   selectColMenu( id ){
@@ -86,12 +85,11 @@ export class BrowsePage {
   }
 
   loadCategory(){
-    let scope = this;
     // this.searchLoading = true;
-    this._assets.category( scope.selectedBrowseId )
-      .then(function(res){
+    this._assets.category( this.selectedBrowseId )
+      .then((res) => {
         console.log(res);
-        scope.currentBrowseRes = res;
+        this.currentBrowseRes = res;
       })
       .catch(function(err) {
        console.log('Unable to load category results.');
