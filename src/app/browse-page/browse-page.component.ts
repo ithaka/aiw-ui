@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { Subscription }   from 'rxjs/Subscription';
-import { AssetService } from '../home/assets.service';
+import { AssetService } from '../shared/assets.service';
 
 @Component({
   selector: 'ang-browse-page', 
