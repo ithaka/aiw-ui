@@ -171,7 +171,7 @@ export class AssetGrid implements OnInit, OnDestroy {
     this._assets.cluster(objectId, this.activeSort.index, this.pagination)
       .then(function(res){
         console.log(res);
-        this.pagination.totalPages = scope.setTotalPages(res.count);     
+        scope.pagination.totalPages = scope.setTotalPages(res.count);     
         scope.results = res.thumbnails;
         scope.searchLoading = false;
       })

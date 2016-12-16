@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { Router, ActivatedRoute, Params } from '@angular/router';
+import { Subscription }   from 'rxjs/Subscription';
 
 @Component({
   selector: 'ang-cluster-page', 
@@ -8,5 +10,27 @@ import { Component } from '@angular/core';
 })
 
 export class ClusterPage {
+  private subscriptions: Subscription[] = [];
+  // Cluster Asset Title
+  private clusterObjTitle: string;
+
+  // TypeScript public modifiers
+  constructor(
+    private route: ActivatedRoute
+  ) {   
+  } 
+
+  ngOnInit() {
+    var scope = this;
+    this.subscriptions.push(
+      this.route.params
+      .subscribe((params: Params) => { 
+        console.log(params);
+        if(params['objTitle']){
+          scope.clusterObjTitle = params['objTitle'];
+        }
+      })
+    );
+  }
 
 }
