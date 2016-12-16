@@ -1,0 +1,27 @@
+.coll-nav .nav-link, .browse-nav .nav-link{
+    cursor: pointer;
+}
+.coll-nav .nav-link.active{
+    font-weight: 700;
+    padding-bottom: 5px;
+    border-bottom: 2px solid;
+}
+.browse-nav{
+    margin-top: 10px;
+}
+.browse-nav .nav-link.active{
+    font-weight: 700;
+}
+.browse-nav .label{
+    color: #999;
+    padding-right: 10px;
+}
+.browse-info{
+    background-color: #f5f9f5;
+    padding: 25px;
+}
+.browse-info .title{
+    text-align: center;
+    font-weight: 700;
+    padding-bottom: 10px;
+}

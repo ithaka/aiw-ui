@@ -47,6 +47,15 @@ export class AssetService {
             .then(this.extractData);
     }
 
+    category(id) {
+        let options = new RequestOptions({ withCredentials: true });
+
+        return this.http
+            .get(this._auth.getUrl() + '/collections/' + id + '/categoryroot', options)
+            .toPromise()
+            .then(this.extractData);
+    }
+
     /**
      * Get Collection
      * @param colId id of collection to fetch
