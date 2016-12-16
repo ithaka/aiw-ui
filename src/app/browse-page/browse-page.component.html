@@ -1,0 +1,21 @@
+<nav-menu></nav-menu>
+<div class="container main-content">
+    <nav class="nav nav-inline coll-nav">
+        <a class="nav-link" *ngFor="let colOpt of colMenuArray" [ngClass]="{'active': colOpt.id == selectedColMenuId}" (click)="selectColMenu(colOpt.id)">{{ colOpt.label }}</a>
+    </nav>
+    <nav class="nav nav-inline browse-nav">
+        <a class="label">Browse By:</a>
+        <a class="nav-link" *ngFor="let browseOpt of browseMenuArray" [ngClass]="{'active': browseOpt.id == selectedBrowseId}" (click)="selectBrowseOpt(browseOpt.id)">{{ browseOpt.label }}</a>
+    </nav>
+    <div class="row mt-1">
+        <div class="col-md-8">
+            Tree goes here
+        </div>
+        <div class="col-md-4">
+            <div class="browse-info">
+                <div class="title">{{ currentBrowseRes.collectionname }}</div>
+                <div [innerHTML]="currentBrowseRes.blurburl"></div>
+            </div>
+        </div>
+    </div>
+</div>

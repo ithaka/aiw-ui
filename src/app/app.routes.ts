@@ -4,6 +4,7 @@ import { SearchPage } from './search-page';
 import { CollectionPage } from './collection-page';
 import { ImageGroupPage } from './image-group-page';
 import { ClusterPage } from './cluster-page';
+import { BrowsePage } from './browse-page';
 import { AssociatedPage } from './associated-page';
 import { Login } from './login';
 import { About } from './about';
@@ -21,6 +22,7 @@ export const ROUTES: Routes = [
   { path: 'collection', component: CollectionPage, canActivate:[AuthService] },
   { path: 'image-group', component: ImageGroupPage, canActivate:[AuthService]},
   { path: 'cluster', component: ClusterPage, canActivate:[AuthService]},
+  { path: 'browse', component: BrowsePage, canActivate:[AuthService]},
   { path: 'associated', component: AssociatedPage, canActivate:[AuthService]},
   { path: 'about', component: About },
   { path: '**',    component: NoContent },
