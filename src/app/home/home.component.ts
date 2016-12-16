@@ -5,7 +5,7 @@ import { AppState } from '../app.service';
 import { Title } from './title';
 import { XLarge } from './x-large';
 
-import { AssetService } from './assets.service';
+import { AssetService } from '../shared/assets.service';
 import { AuthService } from '../shared/auth.service';
 
 @Component({

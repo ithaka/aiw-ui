@@ -3,7 +3,7 @@ import { Router, ActivatedRoute, Params } from '@angular/router';
 
 import { Subscription }   from 'rxjs/Subscription';
 
-import { AssetService } from '../home/assets.service';
+import { AssetService } from '../shared/assets.service';
 import { AssetFiltersService } from '../asset-filters/asset-filters.service';
 
 @Component({

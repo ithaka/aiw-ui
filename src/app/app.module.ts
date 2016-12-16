@@ -38,7 +38,7 @@ import { XLarge } from './home/x-large';
 
 // Application wide providers
 import { AuthService } from './shared/auth.service';
-import { AssetService } from './home/assets.service';
+import { AssetService } from './shared/assets.service';
 import { AssetFiltersService } from './asset-filters/asset-filters.service';
 
 const APP_PROVIDERS = [
