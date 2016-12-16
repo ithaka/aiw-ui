@@ -86,7 +86,7 @@ export class AssetFilters {
     this.route.params.map(params => params['term'])
             .subscribe(term => { 
                 this.term = term;
-                // scope.searchAssets(term);
+                // this.searchAssets(term);
                });
 
     // Subscribe to all filter params
@@ -97,12 +97,10 @@ export class AssetFilters {
    
   }
 
-  getTermsList(){
-    let scope = this;
+  getTermsList() {
     this._assets.termList()
-      .then(function(res){
-        scope.geoTree = res.geoTree;
-        // console.log(scope);
+      .then((res) => {
+        this.geoTree = res.geoTree;
       })
       .catch(function(err) {
         console.log('Unable to load terms list.');

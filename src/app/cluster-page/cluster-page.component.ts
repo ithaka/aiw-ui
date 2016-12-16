@@ -21,13 +21,12 @@ export class ClusterPage {
   } 
 
   ngOnInit() {
-    var scope = this;
     this.subscriptions.push(
       this.route.params
       .subscribe((params: Params) => { 
         console.log(params);
         if(params['objTitle']){
-          scope.clusterObjTitle = params['objTitle'];
+          this.clusterObjTitle = params['objTitle'];
         }
       })
     );

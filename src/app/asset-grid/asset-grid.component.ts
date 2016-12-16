@@ -166,18 +166,17 @@ export class AssetGrid implements OnInit, OnDestroy {
   }
 
   loadCluster(objectId){
-    let scope = this;
     this.searchLoading = true;
     this._assets.cluster(objectId, this.activeSort.index, this.pagination)
-      .then(function(res){
+      .then((res) => {
         console.log(res);
-        scope.pagination.totalPages = scope.setTotalPages(res.count);     
-        scope.results = res.thumbnails;
-        scope.searchLoading = false;
+        this.pagination.totalPages = this.setTotalPages(res.count);     
+        this.results = res.thumbnails;
+        this.searchLoading = false;
       })
       .catch(function(err) {
-        scope.errors['search'] = "Unable to load cluster results.";
-        scope.searchLoading = false;
+        this.errors['search'] = "Unable to load cluster results.";
+        this.searchLoading = false;
       });
   }
 
@@ -202,13 +201,11 @@ export class AssetGrid implements OnInit, OnDestroy {
   }
 
   getTermsList(){
-    let scope = this;
     this._assets.termList()
-      .then(function(res){
-        scope.geoTree = res.geoTree;
-        // console.log(scope);
+      .then((res) => {
+        this.geoTree = res.geoTree;
       })
-      .catch(function(err) {
+      .catch((err) => {
         console.log('Unable to load terms list.');
       });
   }
@@ -220,7 +217,6 @@ export class AssetGrid implements OnInit, OnDestroy {
     if (!term && this.results === []) {
       let term = "*";
     }
-    let scope = this;
     this.searchLoading = true;
 
     this._assets.search(term, this.filters, this.activeSort.index, this.pagination, this.dateFacet)
@@ -234,11 +230,7 @@ export class AssetGrid implements OnInit, OnDestroy {
           this.pagination.totalPages = this.setTotalPages(data.count);
           this.results = data.thumbnails;
           this.searchLoading = false;
-        },
-        error => {
-          this.errors['search'] = "Unable to load search.";
-          this.searchLoading = false;
-        })
+      })
       .catch(function(err) {
         this.errors['search'] = "Unable to load search.";
         this.searchLoading = false;

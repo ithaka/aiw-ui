@@ -41,20 +41,17 @@ export class Home {
 
   }
 
-  ngOnInit() {
-    console.log('hello `Home` component');
-    let homeScope = this;
-    
+  ngOnInit() {    
     this.user = this._auth.getUser();
     
     // this.title.getData().subscribe(data => this.data = data);
     this._assets.getCollections()
-      .then(function(res) {
+      .then((res) => {
         console.log(res);
-        homeScope.collections = res['Collections'];
+        this.collections = res['Collections'];
       })
       .catch(function(err) {
-        homeScope.errors['collections'] = "Unable to load collections.";
+        this.errors['collections'] = "Unable to load collections.";
       });
   }
 
