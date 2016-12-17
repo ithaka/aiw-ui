@@ -27,7 +27,7 @@ export class AssetGrid implements OnInit, OnDestroy {
   public showFilters: boolean = true;
   public showAdvancedModal: boolean = false;
   errors = {};
-  results = [];
+  private results = [];
   filters = [];
   private knownFilters: any = {};
   /**
@@ -115,7 +115,6 @@ export class AssetGrid implements OnInit, OnDestroy {
     this.subscriptions.push(
       this.route.params
       .subscribe((params: Params) => { 
-        console.log(params);
         
         if (params['startDate'] && params['endDate']) {
           this.dateFacet.earliest.date = Math.abs(params['startDate']);
@@ -152,6 +151,14 @@ export class AssetGrid implements OnInit, OnDestroy {
 
       })
     );
+
+    this.subscriptions.push(
+      this._assets.allResults.subscribe((allResults: any[]) => {
+        console.log("just got some results!!!");
+        console.log(allResults);
+        this.results = allResults;
+      })
+    );
   }
 
   ngOnDestroy() {
@@ -166,7 +173,7 @@ export class AssetGrid implements OnInit, OnDestroy {
     } else if (this.urlParams.objectId.length > 0) {
       this.loadCluster(this.urlParams.objectId);
     } else if (this.urlParams.igId.length > 0) {
-      this.loadIgAssets(this.urlParams.igId);
+      // this.loadIgAssets(this.urlParams.igId);
     } else {
       this.getTermsList();
       this.loadSearch(this.urlParams.term);
@@ -242,23 +249,6 @@ export class AssetGrid implements OnInit, OnDestroy {
       .catch(function(err) {
         this.errors['search'] = "Unable to load search.";
         this.searchLoading = false;
-      });
-  }
-
-  /**
-   * Gets array of thumbnails and sets equal to results
-   * @param igId Image group id for which to retrieve thumbnails
-   */
-  loadIgAssets(igId: string) {
-    this._assets.getFromIgId(igId)
-      .then((data) => {
-        if (!data) {
-          throw new Error("No data in image group thumbnails response");
-        }
-        this.results = data.thumbnails;
-      })
-      .catch((error) => {
-        console.log(error);
       });
   }
 

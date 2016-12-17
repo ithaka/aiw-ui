@@ -24,11 +24,10 @@ export class ImageGroupPage implements OnInit, OnDestroy {
   ngOnInit() {
     // Subscribe to ID in params
     this.subscriptions.push(
-      this.route.params.subscribe((matrixParams) => {
-        this.igId = matrixParams["igId"];
+      this.route.params.subscribe((routeParams) => {
+        this.igId = routeParams["igId"];
         if (this.igId) {
-          // this._assets.queryAll({igId: this.igId});
-            
+          this._assets.queryAll({igId: this.igId});
 
           this._igService.getGroupDescription(this.igId)
           .then((data) => {

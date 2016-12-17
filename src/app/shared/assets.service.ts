@@ -5,6 +5,7 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Http, Response, Headers, RequestOptions } from '@angular/http';
 import { Observable } from 'rxjs/Rx';
+import { Subject } from 'rxjs/Subject';
 import { Locker } from 'angular2-locker';
 
 import 'rxjs/add/operator/toPromise';
@@ -14,10 +15,13 @@ import { AuthService } from '../shared/auth.service';
 @Injectable()
 export class AssetService {
 
+    private allResultsSource = new Subject<any[]>();
+    public allResults = this.allResultsSource.asObservable();
+    
     public _storage;
 
     constructor(private _router: Router, private http: Http, locker: Locker, private _auth: AuthService ){
-        this._storage = locker;  
+        this._storage = locker;
     }
     
     private formEncode = function (obj) {
@@ -38,7 +42,33 @@ export class AssetService {
     }
 
     public queryAll(queryObject: any) {
-        console.log("querying all!");
+        if (queryObject.hasOwnProperty("igId")) {
+            console.log("querying image groups for " + queryObject.igId);
+            this.loadIgAssets(queryObject.igId);
+        } else {
+            console.log("don't know what to query!");
+        }
+        
+    }
+
+    /**
+     * Gets array of thumbnails and sets equal to results
+     * @param igId Image group id for which to retrieve thumbnails
+     */
+    private loadIgAssets(igId: string) {
+        this.getFromIgId(igId)
+        .then((data) => {
+            if (!data) {
+            throw new Error("No data in image group thumbnails response");
+            }
+            // this.allResultsSource = data.thumbnails;
+            //notify allResults observers
+            this.allResultsSource.next(data.thumbnails);
+            console.log(this.allResultsSource);
+        })
+        .catch((error) => {
+            console.log(error);
+        });
     }
 
     cluster(objectId, sortIndex, pagination) {
