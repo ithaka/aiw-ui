@@ -29,6 +29,18 @@ export class AssetGrid implements OnInit, OnDestroy {
   errors = {};
   results = [];
   filters = [];
+  private knownFilters: any = {};
+  private urlParams: any = {
+    term: "",
+    pageSize: "",
+    totalPages: "",
+    currentPage: "",
+    startDate: "",
+    endDate: "",
+    igId: "",
+    objectId: "",
+    colId: ""
+  };
   collTypeFacets = [];
   classificationFacets = [];
   geoTree = [];
@@ -97,7 +109,6 @@ export class AssetGrid implements OnInit, OnDestroy {
   } 
 
   ngOnInit() {
-    
     this.subscriptions.push(
       this.route.params
       .subscribe((params: Params) => { 
@@ -121,22 +132,16 @@ export class AssetGrid implements OnInit, OnDestroy {
           this._filters.setFacets('dateObj', this.dateFacet);
         }
 
+        //loop through url matrix parameters
         for (let param in params) {
-          if (param == 'term') {
-            this.term = params[param];
-          } 
-          else if (param == 'igId') {
-            this.igId = (params[param]);
-          }
-          else if(param == 'objectId'){
-            this.objectId = params[param];
-          } 
-          else if(param == 'colId'){
-            this.colId = params[param];
-          } 
-          else {
-            // Otherwise, it is a filter!
-            this.toggleFilter(param, params[param]);
+          //test if param is a special parameter
+          if (this.urlParams.hasOwnProperty(param)) {
+            //param is a special parameter - assign the value
+            this.urlParams[param] = params[param];
+          } else {
+            //param is (likely) a filter (or I messed up) - add it to knownFilters
+            this.knownFilters[param] = params[param];
+            this.toggleFilter(param, this.knownFilters[param]);
           }
         }
         
@@ -151,17 +156,17 @@ export class AssetGrid implements OnInit, OnDestroy {
   }
 
   runAssetLoader() {
-    if (this.colId.length > 0 && this.objectId.length > 0) {
-      this.loadAssociatedAssets(this.objectId, this.colId);
-    } else if (this.colId.length > 0) {
-      this.loadCollection(this.colId);
-    } else if (this.objectId.length > 0) {
-      this.loadCluster(this.objectId);
-    } else if (this.igId.length > 0) {
-      this.loadIgAssets(this.igId);
+    if (this.urlParams.colId.length > 0 && this.urlParams.objectId.length > 0) {
+      this.loadAssociatedAssets(this.urlParams.objectId, this.urlParams.colId);
+    } else if (this.urlParams.colId.length > 0) {
+      this.loadCollection(this.urlParams.colId);
+    } else if (this.urlParams.objectId.length > 0) {
+      this.loadCluster(this.urlParams.objectId);
+    } else if (this.urlParams.igId.length > 0) {
+      this.loadIgAssets(this.urlParams.igId);
     } else {
       this.getTermsList();
-      this.loadSearch(this.term);
+      this.loadSearch(this.urlParams.term);
     }
   }
 
