@@ -43,8 +43,9 @@ export class AssetService {
 
     public queryAll(queryObject: any) {
         if (queryObject.hasOwnProperty("igId")) {
-            console.log("querying image groups for " + queryObject.igId);
             this.loadIgAssets(queryObject.igId);
+        } else if (queryObject.hasOwnProperty("colId")) {
+            //get assets from collection id
         } else {
             console.log("don't know what to query!");
         }

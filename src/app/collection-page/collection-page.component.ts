@@ -28,8 +28,9 @@ export class CollectionPage implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.subscriptions.push(
-      this.route.params.subscribe((matrixParams) => {
-        this.colId = matrixParams["colId"];
+      this.route.params.subscribe((routeParams) => {
+        console.log(routeParams);
+        this.colId = routeParams["colId"];
         if (this.colId) {
           this._collection.getCollectionInfo(this.colId)
           .then((data) => {

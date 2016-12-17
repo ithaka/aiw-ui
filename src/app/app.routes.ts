@@ -19,7 +19,7 @@ export const ROUTES: Routes = [
   { path: 'login', component: Login },
   { path: 'home',  component: Home, canActivate:[AuthService] },
   { path: 'search', component: SearchPage, canActivate:[AuthService] },
-  { path: 'collection', component: CollectionPage, canActivate:[AuthService] },
+  { path: 'collection/:colId', component: CollectionPage, canActivate:[AuthService] },
   { path: 'image-group/:igId', component: ImageGroupPage, canActivate:[AuthService]},
   { path: 'cluster', component: ClusterPage, canActivate:[AuthService]},
   { path: 'browse', component: BrowsePage, canActivate:[AuthService]},

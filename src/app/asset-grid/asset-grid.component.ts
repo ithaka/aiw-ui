@@ -154,8 +154,6 @@ export class AssetGrid implements OnInit, OnDestroy {
 
     this.subscriptions.push(
       this._assets.allResults.subscribe((allResults: any[]) => {
-        console.log("just got some results!!!");
-        console.log(allResults);
         this.results = allResults;
       })
     );
