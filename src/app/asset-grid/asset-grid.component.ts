@@ -30,6 +30,9 @@ export class AssetGrid implements OnInit, OnDestroy {
   results = [];
   filters = [];
   private knownFilters: any = {};
+  /**
+   * urlParams is used as an enum for special parameters
+   */
   private urlParams: any = {
     term: "",
     pageSize: "",

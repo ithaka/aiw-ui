@@ -37,6 +37,10 @@ export class AssetService {
         return body || { };
     }
 
+    public queryAll(queryObject: any) {
+        console.log("querying all!");
+    }
+
     cluster(objectId, sortIndex, pagination) {
         let options = new RequestOptions({ withCredentials: true });
         let startIndex = ((pagination.currentPage - 1) * pagination.pageSize) + 1;

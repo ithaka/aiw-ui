@@ -4,7 +4,7 @@ import { Subscription }   from 'rxjs/Subscription';
 
 // Internal Dependencies
 import { ImageGroupService } from './image-group.service';
-import { AssetService } from './../home/assets.service';
+import { AssetService } from './../shared/assets.service';
 
 @Component({
   selector: 'ang-image-group', 
@@ -18,18 +18,18 @@ export class ImageGroupPage implements OnInit, OnDestroy {
   private igId: string;
   private subscriptions: Subscription[] = [];
 
-  constructor(private _igService: ImageGroupService, private _router: Router, private route: ActivatedRoute) {
+  constructor(private _igService: ImageGroupService, private _router: Router, private _assets: AssetService, private route: ActivatedRoute) {
   }
 
   ngOnInit() {
-    // This is a test: not really sure why we are running this? But this is the only place we do it
-    this.route.snapshot.params["igId"];
-    
     // Subscribe to ID in params
     this.subscriptions.push(
       this.route.params.subscribe((matrixParams) => {
         this.igId = matrixParams["igId"];
         if (this.igId) {
+          // this._assets.queryAll({igId: this.igId});
+            
+
           this._igService.getGroupDescription(this.igId)
           .then((data) => {
             if (!data) {
