@@ -46,6 +46,7 @@ export class AssetService {
             this.loadIgAssets(queryObject.igId);
         } else if (queryObject.hasOwnProperty("colId")) {
             //get assets from collection id
+        this.loadCollection(queryObject.colId, 1, 24);
         } else {
             console.log("don't know what to query!");
         }
@@ -68,6 +69,24 @@ export class AssetService {
             console.log(this.allResultsSource);
         })
         .catch((error) => {
+            console.log(error);
+        });
+    }
+
+    /**
+     * Loads thumbnails from a collectionType
+     * @param colId Collection Id for which to fetch results
+     */
+    loadCollection(colId: string, currentPage?: number, pageSize?: number) {
+        // this.getCollectionThumbs(colId, currentPage, pageSize)
+        this.getCollectionThumbs(colId, currentPage, pageSize)
+        .then((data) => {
+            console.log(data);
+            // this.results = data.thumbnails;
+            this.allResultsSource.next(data.thumbnails);
+            }
+        )
+        .catch(error => {
             console.log(error);
         });
     }

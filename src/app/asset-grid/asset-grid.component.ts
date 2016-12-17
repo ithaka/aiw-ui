@@ -167,7 +167,7 @@ export class AssetGrid implements OnInit, OnDestroy {
     if (this.urlParams.colId.length > 0 && this.urlParams.objectId.length > 0) {
       this.loadAssociatedAssets(this.urlParams.objectId, this.urlParams.colId);
     } else if (this.urlParams.colId.length > 0) {
-      this.loadCollection(this.urlParams.colId);
+      // this.loadCollection(this.urlParams.colId);
     } else if (this.urlParams.objectId.length > 0) {
       this.loadCluster(this.urlParams.objectId);
     } else if (this.urlParams.igId.length > 0) {
@@ -190,26 +190,6 @@ export class AssetGrid implements OnInit, OnDestroy {
       .catch(function(err) {
         this.errors['search'] = "Unable to load cluster results.";
         this.searchLoading = false;
-      });
-  }
-
-  /**
-   * Loads thumbnails from a collectionType
-   * @param colId Collection Id for which to fetch results
-   */
-  loadCollection(colId) {
-    this._assets.getCollectionThumbs(colId, this.pagination.currentPage, this.pagination.pageSize)
-      .then(
-        data => {
-          console.log(data);
-          this.results = data.thumbnails;
-        },
-        error => {
-          
-        }
-      )
-      .catch(error => {
-
       });
   }
 
