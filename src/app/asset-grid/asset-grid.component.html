@@ -29,23 +29,23 @@
         </li>
         <!--<span class="active-sort">{{ activeSort.label }}</span>-->
         <li class="dropdown" class="pagesizelist" ngbDropdown>
-            <button class="btn btn-link" id="pagesizedropdownMenu" ngbDropdownToggle>Images/page: <span class="value">{{ pagination.pageSize ? pagination.pageSize : '24' }}</span></button>
+            <button class="btn btn-link" id="pagesizedropdownMenu" ngbDropdownToggle>Images/page: <span class="value">{{ urlParams.pageSize ? urlParams.pageSize : '24' }}</span></button>
             <div class="dropdown-menu" aria-labelledby="pagesizedropdownMenu">
                 <button class="dropdown-item" (click)="changePageSize('24')">24</button>
                 <button class="dropdown-item" (click)="changePageSize('48')">48</button>
                 <button class="dropdown-item" (click)="changePageSize('72')">72</button>
             </div>
         </li>
-        <!--<span class="page-size">{{ pagination.pageSize }}</span>-->
+        <!--<span class="page-size">{{ urlParams.pageSize }}</span>-->
     </div>
     <div class="col-sm-6 col-md-6 col-lg-6 pag-controls">
-        <span class="pag pag-first" (click)="goToPage(1)" [ngClass]="{'disable': (pagination.currentPage === 1)}"></span>
-        <span class="pag pag-prev" (click)="goToPage(pagination.currentPage - 1)" [ngClass]="{'disable': (pagination.currentPage === 1)}"></span>
+        <span class="pag pag-first" (click)="goToPage(1)" [ngClass]="{'disable': (urlParams.currentPage === 1)}"></span>
+        <span class="pag pag-prev" (click)="goToPage(urlParams.currentPage - 1)" [ngClass]="{'disable': (urlParams.currentPage === 1)}"></span>
         <!--<span class="pag-info">Page</span>-->
-        <input type="text" [(ngModel)]="pagination.currentPage" (blur)="currentPageOnblurr()" />
-        <span class="pag-info">of {{ pagination.totalPages }}</span>
-        <span class="pag pag-next" (click)="goToPage(pagination.currentPage + 1)" [ngClass]="{'disable': (pagination.currentPage === pagination.totalPages)}"></span>
-        <span class="pag pag-last" (click)="goToPage(pagination.totalPages)" [ngClass]="{'disable': (pagination.currentPage === pagination.totalPages)}"></span>
+        <input type="number" [(ngModel)]="urlParams.currentPage" (keyup.enter)="goToPage(urlParams.currentPage)" />
+        <span class="pag-info">of {{ urlParams.totalPages }}</span>
+        <span class="pag pag-next" (click)="goToPage(urlParams.currentPage + 1)" [ngClass]="{'disable': (urlParams.currentPage === urlParams.totalPages)}"></span>
+        <span class="pag pag-last" (click)="goToPage(urlParams.totalPages)" [ngClass]="{'disable': (urlParams.currentPage === urlParams.totalPages)}"></span>
     </div>
 </div>
 <div class="row row--no-overflow">

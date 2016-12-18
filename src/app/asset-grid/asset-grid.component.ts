@@ -35,9 +35,9 @@ export class AssetGrid implements OnInit, OnDestroy {
    */
   private urlParams: any = {
     term: "",
-    pageSize: "",
-    totalPages: "",
-    currentPage: "",
+    pageSize: 24,
+    totalPages: 1,
+    currentPage: 1,
     startDate: "",
     endDate: "",
     igId: "",
@@ -115,8 +115,8 @@ export class AssetGrid implements OnInit, OnDestroy {
   ngOnInit() {
     this.subscriptions.push(
       this.route.params
-      .subscribe((params: Params) => { 
-        
+      .subscribe((params: Params) => {
+                
         if (params['startDate'] && params['endDate']) {
           this.dateFacet.earliest.date = Math.abs(params['startDate']);
           this.dateFacet.latest.date = Math.abs(params['endDate']);
@@ -196,7 +196,7 @@ export class AssetGrid implements OnInit, OnDestroy {
           this.generateGeoFacets( data.geographyFacets );
           this.generateDateFacets( data.dateFacets );
           this._filters.setFacets('classification', data.classificationFacets);
-          this.pagination.totalPages = this.setTotalPages(data.count);
+          this.urlParams.totalPages = this.setTotalPages(data.count);
           this.results = data.thumbnails;
           this.searchLoading = false;
       })
@@ -207,14 +207,18 @@ export class AssetGrid implements OnInit, OnDestroy {
   }
 
   goToPage(pageNum: number) {
-    if (this.pagination.currentPage !== pageNum) {
-      this.pagination.currentPage = pageNum;
-      console.log(this._router.parseUrl(this._router.url));
-      let newPath = this._router.url;
-      // this._router.navigate(["..", {currentPage: this.pagination.currentPage}]);
-      this._router.navigate(["..", {currentPage: this.pagination.currentPage}], { preserveQueryParams: true }); //good, but ditches existing params
-      // this._router.navigate([this._router.url, {currentPage: this.pagination.currentPage}], { preserveQueryParams: true }); //encodes semicolon
-      // this._router.navigate([this._router.url, {currentPage: this.pagination.currentPage}]); //encodes semicolon
+    if (this.urlParams.currentPage !== pageNum) {
+      // this shouldn't be done here...
+      // this.urlParams.currentPage = pageNum;
+
+      let currentParamsArr: Params = this.route.snapshot.params;
+      let currentParamsObj: any = { };
+      for (let param in currentParamsArr) {
+        currentParamsObj[param] = currentParamsArr[param];
+      }
+      currentParamsObj.currentPage = +pageNum;
+
+      this._router.navigate([currentParamsObj], { relativeTo: this.route }); //good, but ditches existing params
     }
   }
 
@@ -224,20 +228,28 @@ export class AssetGrid implements OnInit, OnDestroy {
    * @returns the total number of pages the assets will fill
    */
   setTotalPages(count){
-     return Math.ceil( count / this.pagination.pageSize );
+     return Math.ceil( count / this.urlParams.pageSize );
   }
 
   changeSortOpt(index, label) {
     this.activeSort.index = index;
     this.activeSort.label = label; 
-    this.pagination.currentPage = 1;
+    this.urlParams.currentPage = 1;
     
   }
 
-  changePageSize(size){
-    this.pagination.pageSize = size;
-    this.pagination.currentPage = 1;
+  changePageSize(pageSize){
+    this.urlParams.pageSize = pageSize;
+    this.urlParams.currentPage = 1;
     
+    let currentParamsArr: Params = this.route.snapshot.params;
+    let currentParamsObj: any = { };
+    for (let param in currentParamsArr) {
+      currentParamsObj[param] = currentParamsArr[param];
+    }
+    currentParamsObj.pageSize = +pageSize;
+
+    this._router.navigate([currentParamsObj], { relativeTo: this.route }); //good, but ditches existing params
   }
 
   toggleEra(dateObj){
@@ -264,7 +276,7 @@ export class AssetGrid implements OnInit, OnDestroy {
     console.log('Applied Filters:-');
     console.log(this.filters);
 
-    this.pagination.currentPage = 1;
+    this.urlParams.currentPage = 1;
     
   }
 
@@ -295,7 +307,7 @@ export class AssetGrid implements OnInit, OnDestroy {
       }
     }
     
-    this.pagination.currentPage = 1;
+    this.urlParams.currentPage = 1;
     
   }
 
@@ -427,7 +439,7 @@ export class AssetGrid implements OnInit, OnDestroy {
   applyDateFilter(){
     this.dateFacet.modified = true;
 
-    this.pagination.currentPage = 1;
+    this.urlParams.currentPage = 1;
     
   }
 
