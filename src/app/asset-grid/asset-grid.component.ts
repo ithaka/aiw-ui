@@ -147,8 +147,11 @@ export class AssetGrid implements OnInit, OnDestroy {
           }
         }
         
-        this.runAssetLoader();
-
+        //only searching currently takes place in asset-grid, and should be moved to asset.service
+        if(this.urlParams.term) {
+          this.getTermsList();
+          this.loadSearch(this.urlParams.term);
+        }
       })
     );
 
@@ -164,21 +167,6 @@ export class AssetGrid implements OnInit, OnDestroy {
     this.subscriptions.forEach((sub) => { sub.unsubscribe(); });
   }
 
-  runAssetLoader() {
-    if (this.urlParams.colId.length > 0 && this.urlParams.objectId.length > 0) {
-      // this.loadAssociatedAssets(this.urlParams.objectId, this.urlParams.colId);
-    } else if (this.urlParams.colId.length > 0) {
-      // this.loadCollection(this.urlParams.colId);
-    } else if (this.urlParams.objectId.length > 0) {
-      // this.loadCluster(this.urlParams.objectId);
-    } else if (this.urlParams.igId.length > 0) {
-      // this.loadIgAssets(this.urlParams.igId);
-    } else {
-      this.getTermsList();
-      this.loadSearch(this.urlParams.term);
-    }
-  }
-
   getTermsList(){
     this._assets.termList()
       .then((res) => {
@@ -186,6 +174,7 @@ export class AssetGrid implements OnInit, OnDestroy {
       })
       .catch((err) => {
         console.log('Unable to load terms list.');
+        console.log(err);
       });
   }
 
@@ -211,7 +200,7 @@ export class AssetGrid implements OnInit, OnDestroy {
           this.searchLoading = false;
       })
       .catch(function(err) {
-        this.errors['search'] = "Unable to load search.";
+        // this.errors['search'] = "Unable to load search.";
         this.searchLoading = false;
       });
   }
@@ -255,7 +244,7 @@ export class AssetGrid implements OnInit, OnDestroy {
   firstPage(){
     if(this.pagination.currentPage > 1){
       this.pagination.currentPage = 1;
-      this.runAssetLoader();
+      
     }
   }
 
@@ -265,7 +254,7 @@ export class AssetGrid implements OnInit, OnDestroy {
   lastPage(){
     if(this.pagination.currentPage < this.pagination.totalPages){
       this.pagination.currentPage = this.pagination.totalPages;
-      this.runAssetLoader();
+      
     }
   }
 
@@ -275,7 +264,7 @@ export class AssetGrid implements OnInit, OnDestroy {
   prevPage(){
     if(this.pagination.currentPage > 1){
       this.pagination.currentPage--;
-      this.runAssetLoader();
+      
     }
   }
 
@@ -285,7 +274,7 @@ export class AssetGrid implements OnInit, OnDestroy {
   nextPage(){
     if(this.pagination.currentPage < this.pagination.totalPages){
       this.pagination.currentPage++;
-      this.runAssetLoader();
+      
     }
   }
 
@@ -293,17 +282,13 @@ export class AssetGrid implements OnInit, OnDestroy {
     this.activeSort.index = index;
     this.activeSort.label = label; 
     this.pagination.currentPage = 1;
-    this.runAssetLoader();
+    
   }
 
   changePageSize(size){
     this.pagination.pageSize = size;
     this.pagination.currentPage = 1;
-    this.runAssetLoader();
-  }
-
-  currentPageOnblurr(){
-    this.runAssetLoader();
+    
   }
 
   toggleEra(dateObj){
@@ -331,7 +316,7 @@ export class AssetGrid implements OnInit, OnDestroy {
     console.log(this.filters);
 
     this.pagination.currentPage = 1;
-    this.runAssetLoader();
+    
   }
 
   filterApplied(value, group){
@@ -362,7 +347,7 @@ export class AssetGrid implements OnInit, OnDestroy {
     }
     
     this.pagination.currentPage = 1;
-    this.runAssetLoader();
+    
   }
 
   removeFilter(filterObj){
@@ -376,8 +361,11 @@ export class AssetGrid implements OnInit, OnDestroy {
   }
   
   filterExists(filterObj){
+    console.log("original filter object");
+    console.log(filterObj);
     for(var i = 0; i < this.filters.length; i++){
       var filter = this.filters[i];
+      console.log(filter);
       if((filterObj.filterGroup === filter.filterGroup) && (filterObj.filterValue === filter.filterValue)){
         return true;
       }
@@ -491,7 +479,7 @@ export class AssetGrid implements OnInit, OnDestroy {
     this.dateFacet.modified = true;
 
     this.pagination.currentPage = 1;
-    this.runAssetLoader();
+    
   }
 
   existsInRegion(countryId, childerenIds){

@@ -1,27 +1,64 @@
 /**
  * Assets service
  */
-import { Injectable } from '@angular/core';
-import { Router } from '@angular/router';
+import { Injectable, OnDestroy } from '@angular/core';
+import { Router, ActivatedRoute, Params } from '@angular/router';
 import { Http, Response, Headers, RequestOptions } from '@angular/http';
 import { Observable } from 'rxjs/Rx';
 import { Subject } from 'rxjs/Subject';
 import { Locker } from 'angular2-locker';
 
 import 'rxjs/add/operator/toPromise';
+import { Subscription }   from 'rxjs/Subscription';
  
 import { AuthService } from '../shared/auth.service';
 
 @Injectable()
 export class AssetService {
 
+    //set up thumbnail observables
     private allResultsSource = new Subject<any[]>();
     public allResults = this.allResultsSource.asObservable();
-    
+
+    private subscriptions: Subscription[] = [];
+
+    /**
+     * urlParams is used as an enum for special parameters
+     */
+    private urlParams: any = {
+        term: "",
+        pageSize: "",
+        totalPages: "",
+        currentPage: "",
+        startDate: "",
+        endDate: "",
+        igId: "",
+        objectId: "",
+        colId: ""
+    };
+    /** Keeps track of all filters available in url */
+    private knownFilters: any = {};
     public _storage;
 
-    constructor(private _router: Router, private http: Http, locker: Locker, private _auth: AuthService ){
+    constructor(private _router: Router, private route: ActivatedRoute, private http: Http, locker: Locker, private _auth: AuthService ){
         this._storage = locker;
+        this.subscriptions.push(
+            this.route.params
+                .subscribe((params: Params) => { 
+
+                    // Creates filters and list of relevant url parameters for use by search
+                    for (let param in params) {
+                        // test if param is a special parameter
+                        if (this.urlParams.hasOwnProperty(param)) {
+                            // param is a special parameter - assign the value
+                            this.urlParams[param] = params[param];
+                        } else {
+                            // param is (likely) a filter (or I messed up) - add it to knownFilters
+                            this.knownFilters[param] = params[param];
+                        }
+                    }
+                })
+        );
     }
     
     private formEncode = function (obj) {
@@ -182,8 +219,10 @@ export class AssetService {
         if (!pageNo) { pageNo = 1; }
         if (!pageSize) { pageSize = 72; }
 
+        let requestString = [this._auth.getUrl(), 'collections', colId, 'thumbnails', pageNo, pageSize, imageSize].join('/');
+
         return this.http
-            .get( [this._auth.getUrl(), 'collections', colId, 'thumbnails', pageNo, pageSize, imageSize].join('/'), options)
+            .get(requestString, options)
             .toPromise()
             .then(this.extractData);
     }   
