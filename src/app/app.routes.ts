@@ -23,7 +23,7 @@ export const ROUTES: Routes = [
   { path: 'image-group/:igId', component: ImageGroupPage, canActivate:[AuthService]},
   { path: 'cluster/:objectId', component: ClusterPage, canActivate:[AuthService]},
   { path: 'browse', component: BrowsePage, canActivate:[AuthService]},
-  { path: 'associated', component: AssociatedPage, canActivate:[AuthService]},
+  { path: 'associated/:objectId/:colId', component: AssociatedPage, canActivate:[AuthService]},
   { path: 'about', component: About },
   { path: '**',    component: NoContent },
 ];
