@@ -205,6 +205,12 @@ export class AssetGrid implements OnInit, OnDestroy {
       });
   }
 
+  goToPage(pageNum: number) {
+    if (this.pagination.currentPage !== pageNum) {
+      this.pagination.currentPage = pageNum;
+    }
+  }
+
   /**
    * Sets the number of total pages in pagination
    * @param count The total number of images in results
@@ -212,70 +218,6 @@ export class AssetGrid implements OnInit, OnDestroy {
    */
   setTotalPages(count){
      return Math.ceil( count / this.pagination.pageSize );
-  }
-
-  /**
-   * Determines if the asset-grid is on the first page of results
-   */
-  isfirstPage(){
-    if(this.pagination.currentPage === 1){
-      return true;
-    }
-    else{
-      return false;
-    }
-  }
-
-  /**
-   * Determines if the asset-grid is on the last page of results
-   */
-  isLastPage(){
-    if(this.pagination.currentPage === this.pagination.totalPages){
-      return true;
-    }
-    else{
-      return false;
-    }
-  }
-
-  /**
-   * Returns the asset-grid to the first page of results
-   */
-  firstPage(){
-    if(this.pagination.currentPage > 1){
-      this.pagination.currentPage = 1;
-      
-    }
-  }
-
-  /**
-   * Sends the asset-grid to the last page of results
-   */
-  lastPage(){
-    if(this.pagination.currentPage < this.pagination.totalPages){
-      this.pagination.currentPage = this.pagination.totalPages;
-      
-    }
-  }
-
-  /**
-   * Navigates the asset-grid to the previous page of results
-   */
-  prevPage(){
-    if(this.pagination.currentPage > 1){
-      this.pagination.currentPage--;
-      
-    }
-  }
-
-  /**
-   * Navigates the asset-grid to the next page of results
-   */
-  nextPage(){
-    if(this.pagination.currentPage < this.pagination.totalPages){
-      this.pagination.currentPage++;
-      
-    }
   }
 
   changeSortOpt(index, label) {
