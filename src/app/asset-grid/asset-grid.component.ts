@@ -169,28 +169,13 @@ export class AssetGrid implements OnInit, OnDestroy {
     } else if (this.urlParams.colId.length > 0) {
       // this.loadCollection(this.urlParams.colId);
     } else if (this.urlParams.objectId.length > 0) {
-      this.loadCluster(this.urlParams.objectId);
+      // this.loadCluster(this.urlParams.objectId);
     } else if (this.urlParams.igId.length > 0) {
       // this.loadIgAssets(this.urlParams.igId);
     } else {
       this.getTermsList();
       this.loadSearch(this.urlParams.term);
     }
-  }
-
-  loadCluster(objectId){
-    this.searchLoading = true;
-    this._assets.cluster(objectId, this.activeSort.index, this.pagination)
-      .then((res) => {
-        console.log(res);
-        this.pagination.totalPages = this.setTotalPages(res.count);     
-        this.results = res.thumbnails;
-        this.searchLoading = false;
-      })
-      .catch(function(err) {
-        this.errors['search'] = "Unable to load cluster results.";
-        this.searchLoading = false;
-      });
   }
 
   getTermsList(){

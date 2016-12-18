@@ -43,10 +43,14 @@ export class AssetService {
 
     public queryAll(queryObject: any) {
         if (queryObject.hasOwnProperty("igId")) {
+            //get image group from igId
             this.loadIgAssets(queryObject.igId);
+        } else if (queryObject.hasOwnProperty("objectId")) {
+            //get clustered images from objectId
+            this.loadCluster(queryObject.objectId);
         } else if (queryObject.hasOwnProperty("colId")) {
             //get assets from collection id
-        this.loadCollection(queryObject.colId, 1, 24);
+            this.loadCollection(queryObject.colId, 1, 24);
         } else {
             console.log("don't know what to query!");
         }
@@ -80,23 +84,56 @@ export class AssetService {
     loadCollection(colId: string, currentPage?: number, pageSize?: number) {
         // this.getCollectionThumbs(colId, currentPage, pageSize)
         this.getCollectionThumbs(colId, currentPage, pageSize)
-        .then((data) => {
-            console.log(data);
-            // this.results = data.thumbnails;
-            this.allResultsSource.next(data.thumbnails);
-            }
-        )
-        .catch(error => {
-            console.log(error);
-        });
+            .then((data) => {
+                console.log(data);
+                // this.results = data.thumbnails;
+                this.allResultsSource.next(data.thumbnails);
+                }
+            )
+            .catch(error => {
+                console.log(error);
+            });
     }
 
-    cluster(objectId, sortIndex, pagination) {
+    loadCluster(objectId){
+        // this.searchLoading = true;
+        this.cluster(objectId, {
+                index : 0,
+                label : 'Relevance'
+            }, {
+                currentPage: 1,
+                pageSize: 24
+            })
+            .then((res) => {
+                console.log(res);
+                // this.pagination.totalPages = this.setTotalPages(res.count);
+                // this.results = res.thumbnails;
+                // this.searchLoading = false;
+                if (res.thumbnails) {
+                    this.allResultsSource.next(res.thumbnails);
+                } else {
+                    throw new Error("There are no thumbnails. Server responsed with status " + res.status);
+                }
+                
+            })
+            .catch(function(err) {
+                // this.errors['search'] = "Unable to load cluster results.";
+                // this.searchLoading = false;
+                console.log(err);
+            });
+    }
+
+    cluster(objectId: string, sortIndex, pagination) {
         let options = new RequestOptions({ withCredentials: true });
         let startIndex = ((pagination.currentPage - 1) * pagination.pageSize) + 1;
 
+        //sortIndex was tacked onto this before, but the call was not working
+        let requestString = [this._auth.getUrl(), "cluster", objectId, "thumbnails", startIndex, pagination.pageSize].join("/");
+        console.log(requestString);
+        //  + '/cluster/' + objectId + '/thumbnails/' + startIndex + '/' + pagination.pageSize + '/' + sortIndex
+
         return this.http
-            .get(this._auth.getUrl() + '/cluster/' + objectId + '/thumbnails/' + startIndex + '/' + pagination.pageSize + '/' + sortIndex, options)
+            .get(requestString, options)
             .toPromise()
             .then(this.extractData);
     }
