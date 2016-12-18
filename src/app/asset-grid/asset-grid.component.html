@@ -39,13 +39,13 @@
         <!--<span class="page-size">{{ pagination.pageSize }}</span>-->
     </div>
     <div class="col-sm-6 col-md-6 col-lg-6 pag-controls">
-        <span class="pag pag-first" (click)="goToPage(1)" [ngClass]="{'disable': isfirstPage()}"></span>
-        <span class="pag pag-prev" (click)="goToPage(pagination.currentPage - 1)" [ngClass]="{'disable': isfirstPage()}"></span>
+        <span class="pag pag-first" (click)="goToPage(1)" [ngClass]="{'disable': (pagination.currentPage === 1)}"></span>
+        <span class="pag pag-prev" (click)="goToPage(pagination.currentPage - 1)" [ngClass]="{'disable': (pagination.currentPage === 1)}"></span>
         <!--<span class="pag-info">Page</span>-->
         <input type="text" [(ngModel)]="pagination.currentPage" (blur)="currentPageOnblurr()" />
         <span class="pag-info">of {{ pagination.totalPages }}</span>
-        <span class="pag pag-next" (click)="goToPage(pagination.currentPage + 1)" [ngClass]="{'disable': isLastPage()}"></span>
-        <span class="pag pag-last" (click)="goToPage(pagination.totalPages)" [ngClass]="{'disable': isLastPage()}"></span>
+        <span class="pag pag-next" (click)="goToPage(pagination.currentPage + 1)" [ngClass]="{'disable': (pagination.currentPage === pagination.totalPages)}"></span>
+        <span class="pag pag-last" (click)="goToPage(pagination.totalPages)" [ngClass]="{'disable': (pagination.currentPage === pagination.totalPages)}"></span>
     </div>
 </div>
 <div class="row row--no-overflow">

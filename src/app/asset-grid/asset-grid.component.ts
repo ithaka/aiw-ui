@@ -105,7 +105,8 @@ export class AssetGrid implements OnInit, OnDestroy {
   // TypeScript public modifiers
   constructor(
     private _assets: AssetService,
-    private _filters: AssetFiltersService, 
+    private _filters: AssetFiltersService,
+    private _router: Router,
     private route: ActivatedRoute
   ) {
       
@@ -208,6 +209,12 @@ export class AssetGrid implements OnInit, OnDestroy {
   goToPage(pageNum: number) {
     if (this.pagination.currentPage !== pageNum) {
       this.pagination.currentPage = pageNum;
+      console.log(this._router.parseUrl(this._router.url));
+      let newPath = this._router.url;
+      // this._router.navigate(["..", {currentPage: this.pagination.currentPage}]);
+      this._router.navigate(["..", {currentPage: this.pagination.currentPage}], { preserveQueryParams: true }); //good, but ditches existing params
+      // this._router.navigate([this._router.url, {currentPage: this.pagination.currentPage}], { preserveQueryParams: true }); //encodes semicolon
+      // this._router.navigate([this._router.url, {currentPage: this.pagination.currentPage}]); //encodes semicolon
     }
   }
 
