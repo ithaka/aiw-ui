@@ -42,14 +42,17 @@ export class AssetService {
     }
 
     public queryAll(queryObject: any) {
-        if (queryObject.hasOwnProperty("igId")) {
-            //get image group from igId
+        if (queryObject.hasOwnProperty("igId") && queryObject.hasOwnProperty("objectId")) {
+            //gets associated images thumbnails
+            this.loadAssociatedAssets(queryObject.objectId, queryObject.colId);
+        } else if (queryObject.hasOwnProperty("igId")) {
+            //get image group thumbnails
             this.loadIgAssets(queryObject.igId);
         } else if (queryObject.hasOwnProperty("objectId")) {
-            //get clustered images from objectId
+            //get clustered images thumbnails
             this.loadCluster(queryObject.objectId);
         } else if (queryObject.hasOwnProperty("colId")) {
-            //get assets from collection id
+            //get collection thumbnails
             this.loadCollection(queryObject.colId, 1, 24);
         } else {
             console.log("don't know what to query!");
@@ -58,23 +61,43 @@ export class AssetService {
     }
 
     /**
+     * Gets array of thumbnails associated to objectId
+     * @param objectId Object Id for which to retrieve image results
+     * @param colId Collection Id in which the Object resides
+     */
+    loadAssociatedAssets(objectId: string, colId: string) {
+        // this.getAssociated(objectId, colId, this.pagination.currentPage, this.pagination.pageSize)
+        this.getAssociated(objectId, colId, 1, 24)
+        .then((data) => {
+            if (!data) {
+            throw new Error("No data in image group thumbnails response");
+            }
+            // this.results = data.thumbnails;
+            this.allResultsSource.next(data.thumbnails);
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+    }
+
+    /**
      * Gets array of thumbnails and sets equal to results
      * @param igId Image group id for which to retrieve thumbnails
      */
     private loadIgAssets(igId: string) {
         this.getFromIgId(igId)
-        .then((data) => {
-            if (!data) {
-            throw new Error("No data in image group thumbnails response");
-            }
-            // this.allResultsSource = data.thumbnails;
-            //notify allResults observers
-            this.allResultsSource.next(data.thumbnails);
-            console.log(this.allResultsSource);
-        })
-        .catch((error) => {
-            console.log(error);
-        });
+            .then((data) => {
+                if (!data) {
+                throw new Error("No data in image group thumbnails response");
+                }
+                // this.allResultsSource = data.thumbnails;
+                //notify allResults observers
+                this.allResultsSource.next(data.thumbnails);
+                console.log(this.allResultsSource);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
     }
 
     /**

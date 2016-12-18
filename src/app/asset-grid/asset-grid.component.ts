@@ -152,6 +152,7 @@ export class AssetGrid implements OnInit, OnDestroy {
       })
     );
 
+    // sets up subscription to allResults, which is the service providing thumbnails
     this.subscriptions.push(
       this._assets.allResults.subscribe((allResults: any[]) => {
         this.results = allResults;
@@ -165,7 +166,7 @@ export class AssetGrid implements OnInit, OnDestroy {
 
   runAssetLoader() {
     if (this.urlParams.colId.length > 0 && this.urlParams.objectId.length > 0) {
-      this.loadAssociatedAssets(this.urlParams.objectId, this.urlParams.colId);
+      // this.loadAssociatedAssets(this.urlParams.objectId, this.urlParams.colId);
     } else if (this.urlParams.colId.length > 0) {
       // this.loadCollection(this.urlParams.colId);
     } else if (this.urlParams.objectId.length > 0) {
@@ -212,24 +213,6 @@ export class AssetGrid implements OnInit, OnDestroy {
       .catch(function(err) {
         this.errors['search'] = "Unable to load search.";
         this.searchLoading = false;
-      });
-  }
-
-  /**
-   * Gets array of thumbnails associated to objectId
-   * @param objectId Object Id for which to retrieve image results
-   * @param colId Collection Id in which the Object resides
-   */
-  loadAssociatedAssets(objectId: string, colId: string) {
-    this._assets.getAssociated(objectId, colId, this.pagination.currentPage, this.pagination.pageSize)
-      .then((data) => {
-        if (!data) {
-          throw new Error("No data in image group thumbnails response");
-        }
-        this.results = data.thumbnails;
-      })
-      .catch((error) => {
-        console.log(error);
       });
   }
 
