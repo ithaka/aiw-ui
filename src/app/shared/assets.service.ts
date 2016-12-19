@@ -20,58 +20,56 @@ export class AssetService {
     private allResultsSource = new Subject<any[]>();
     public allResults = this.allResultsSource.asObservable();
 
-    private subscriptions: Subscription[] = [];
-
     /**
      * urlParams is used as an enum for special parameters
      */
     private urlParams: any = {
         term: "",
-        pageSize: "",
-        totalPages: "",
-        currentPage: "",
+        pageSize: 24,
+        totalPages: 1,
+        currentPage: 1,
         startDate: "",
         endDate: "",
         igId: "",
         objectId: "",
         colId: ""
     };
+
     /** Keeps track of all filters available in url */
     private knownFilters: any = {};
     public _storage;
 
     constructor(private _router: Router, private route: ActivatedRoute, private http: Http, locker: Locker, private _auth: AuthService ){
         this._storage = locker;
-        this.subscriptions.push(
-            this.route.params
-                .subscribe((params: Params) => { 
+    }
 
-                    // Creates filters and list of relevant url parameters for use by search
-                    for (let param in params) {
-                        // test if param is a special parameter
-                        if (this.urlParams.hasOwnProperty(param)) {
-                            // param is a special parameter - assign the value
-                            this.urlParams[param] = params[param];
-                        } else {
-                            // param is (likely) a filter (or I messed up) - add it to knownFilters
-                            this.knownFilters[param] = params[param];
-                        }
-                    }
-                })
-        );
+    private readUrlParams() {
+        let params = this.route.snapshot.params;
+
+        // Creates filters and list of relevant url parameters for use by search
+        for (let param in params) {
+            // test if param is a special parameter
+            if (this.urlParams.hasOwnProperty(param)) {
+                // param is a special parameter - assign the value
+                this.urlParams[param] = params[param];
+            } else {
+                // param is (likely) a filter (or I messed up) - add it to knownFilters
+                this.knownFilters[param] = params[param];
+            }
+        }
     }
     
     private formEncode = function (obj) {
-            var encodedString = '';
-            for (var key in obj) {
-                if (encodedString.length !== 0) {
-                    encodedString += '&';
-                }
-
-                encodedString += key + '=' + encodeURIComponent(obj[key]);
+        var encodedString = '';
+        for (var key in obj) {
+            if (encodedString.length !== 0) {
+                encodedString += '&';
             }
-            return encodedString.replace(/%20/g, '+');
-        };
+
+            encodedString += key + '=' + encodeURIComponent(obj[key]);
+        }
+        return encodedString.replace(/%20/g, '+');
+    };
     
     private extractData(res: Response) {
         let body = res.json();
@@ -79,6 +77,8 @@ export class AssetService {
     }
 
     public queryAll(queryObject: any) {
+        this.readUrlParams();
+
         if (queryObject.hasOwnProperty("igId") && queryObject.hasOwnProperty("objectId")) {
             //gets associated images thumbnails
             this.loadAssociatedAssets(queryObject.objectId, queryObject.colId);
@@ -105,16 +105,16 @@ export class AssetService {
     loadAssociatedAssets(objectId: string, colId: string) {
         // this.getAssociated(objectId, colId, this.pagination.currentPage, this.pagination.pageSize)
         this.getAssociated(objectId, colId, 1, 24)
-        .then((data) => {
-            if (!data) {
-            throw new Error("No data in image group thumbnails response");
-            }
-            // this.results = data.thumbnails;
-            this.allResultsSource.next(data.thumbnails);
-        })
-        .catch((error) => {
-            console.log(error);
-        });
+            .then((data) => {
+                if (!data) {
+                throw new Error("No data in image group thumbnails response");
+                }
+                // this.results = data.thumbnails;
+                this.allResultsSource.next(data.thumbnails);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
     }
 
     /**

@@ -218,7 +218,7 @@ export class AssetGrid implements OnInit, OnDestroy {
       }
       currentParamsObj.currentPage = +pageNum;
 
-      this._router.navigate([currentParamsObj], { relativeTo: this.route }); //good, but ditches existing params
+      this._router.navigate([currentParamsObj], { relativeTo: this.route });
     }
   }
 
@@ -238,7 +238,7 @@ export class AssetGrid implements OnInit, OnDestroy {
     
   }
 
-  changePageSize(pageSize){
+  changePageSize(pageSize: number){
     this.urlParams.pageSize = pageSize;
     this.urlParams.currentPage = 1;
     
