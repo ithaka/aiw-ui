@@ -54,21 +54,22 @@ export class AssetService {
         };
     }
 
-    private readUrlParams(passedParams) : any {
-        let params = passedParams;
-
+    /**
+     * Sets urlParams based on matching keys with the url params that are passed in
+     * @param passedParams The current url parameters; must be passed in b/c only components have access to url parameters
+     */
+    private readUrlParams(passedParams: any) {
         // Creates filters and list of relevant url parameters for use by search
-        for (let param in params) {
+        for (let param in passedParams) {
             // test if param is a special parameter
             if (this.urlParams.hasOwnProperty(param)) {
                 // param is a special parameter - assign the value
-                console.log("changing " + this.urlParams[param] + " to " + params[param]);
-                this.urlParams[param] = params[param];
+                console.log("changing " + this.urlParams[param] + " to " + passedParams[param]);
+                this.urlParams[param] = passedParams[param];
             } else {
                 // Any other filters are managed by Asset Filters
             }
         }
-        console.log(this.urlParams);
     }
     
     private formEncode = function (obj) {
@@ -88,7 +89,11 @@ export class AssetService {
         return body || { };
     }
 
-    public queryAll(params) {
+    /**
+     * Determines which service to call based on which route parameters exist
+     * @param params Object conaining all route params
+     */
+    public queryAll(params: any) {
         this.readUrlParams(params);
 
         if (params.hasOwnProperty("igId") && params.hasOwnProperty("objectId")) {
@@ -261,16 +266,13 @@ export class AssetService {
             .then((res) => {
                 this.geoTree = res.geoTree;
             });
-            // .catch((err) => {
-            //     console.log('Unable to load terms list.');
-            //     console.log(err);
-            // });
     }
 
     /**
      * Executes search and sets relevant asset-grid parameters
+     * @param term Search term for which a search should be executed
      */
-    private loadSearch(term) {
+    private loadSearch(term: string) {
         this.search(term, this.activeSort.index)
             .then(
                 (res) => {
@@ -346,7 +348,10 @@ export class AssetService {
             .then(this.extractData);
     }
 
-    // Used by Home component
+    /**
+     * Wrapper function for HTTP call to get collections. Used by both home component and asset.service
+     * @returns Chainable promise containing collection data
+     */
     public getCollections() {
         let options = new RequestOptions({ withCredentials: true });
         // Returns all of the collections names

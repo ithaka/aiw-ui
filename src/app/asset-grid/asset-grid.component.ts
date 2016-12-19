@@ -172,11 +172,15 @@ export class AssetGrid implements OnInit, OnDestroy {
     this.addRouteParam("currentPage", currentPage);
   }
 
+  /**
+   * Change size of page and go to currentPage=1
+   * @param pageSize Number of assets requested on page
+   */
   private changePageSize(pageSize: number){
     this.pagination.pageSize = pageSize;
+    //this currently calls naviage twice through addRouteParam
     this.goToPage(1);
     this.addRouteParam("pageSize", pageSize);
-    
   }
 
   changeSortOpt(index, label) {
@@ -268,6 +272,11 @@ export class AssetGrid implements OnInit, OnDestroy {
     return false;
   }
 
+  /**
+   * Adds a parameter to the route and navigates to new route
+   * @param key Parameter you want added to route (as matrix param)
+   * @param value The value of the parameter
+   */
   private addRouteParam(key: string, value: any) {
     let currentParamsObj: Params = Object.assign({}, this.route.snapshot.params);
     currentParamsObj[key] = value;
