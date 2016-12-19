@@ -1,48 +1,199 @@
 /**
  * Assets service
  */
-import { Injectable } from '@angular/core';
-import { Router } from '@angular/router';
+import { Injectable, OnDestroy } from '@angular/core';
+import { Router, ActivatedRoute, Params } from '@angular/router';
 import { Http, Response, Headers, RequestOptions } from '@angular/http';
 import { Observable } from 'rxjs/Rx';
+import { Subject } from 'rxjs/Subject';
 import { Locker } from 'angular2-locker';
 
 import 'rxjs/add/operator/toPromise';
+import { Subscription }   from 'rxjs/Subscription';
  
 import { AuthService } from '../shared/auth.service';
 
 @Injectable()
 export class AssetService {
 
+    //set up thumbnail observables
+    private allResultsSource = new Subject<any[]>();
+    public allResults = this.allResultsSource.asObservable();
+
+    /**
+     * urlParams is used as an enum for special parameters
+     */
+    private urlParams: any = {
+        term: "",
+        pageSize: 24,
+        totalPages: 1,
+        currentPage: 1,
+        startDate: "",
+        endDate: "",
+        igId: "",
+        objectId: "",
+        colId: ""
+    };
+
+    /** Keeps track of all filters available in url */
+    private knownFilters: any = {};
     public _storage;
 
-    constructor(private _router: Router, private http: Http, locker: Locker, private _auth: AuthService ){
-        this._storage = locker;  
+    constructor(private _router: Router, private route: ActivatedRoute, private http: Http, locker: Locker, private _auth: AuthService ){
+        this._storage = locker;
+    }
+
+    private readUrlParams() {
+        let params = this.route.snapshot.params;
+
+        // Creates filters and list of relevant url parameters for use by search
+        for (let param in params) {
+            // test if param is a special parameter
+            if (this.urlParams.hasOwnProperty(param)) {
+                // param is a special parameter - assign the value
+                this.urlParams[param] = params[param];
+            } else {
+                // param is (likely) a filter (or I messed up) - add it to knownFilters
+                this.knownFilters[param] = params[param];
+            }
+        }
     }
     
     private formEncode = function (obj) {
-            var encodedString = '';
-            for (var key in obj) {
-                if (encodedString.length !== 0) {
-                    encodedString += '&';
-                }
-
-                encodedString += key + '=' + encodeURIComponent(obj[key]);
+        var encodedString = '';
+        for (var key in obj) {
+            if (encodedString.length !== 0) {
+                encodedString += '&';
             }
-            return encodedString.replace(/%20/g, '+');
-        };
+
+            encodedString += key + '=' + encodeURIComponent(obj[key]);
+        }
+        return encodedString.replace(/%20/g, '+');
+    };
     
     private extractData(res: Response) {
         let body = res.json();
         return body || { };
     }
 
-    cluster(objectId, sortIndex, pagination) {
+    public queryAll(queryObject: any) {
+        this.readUrlParams();
+
+        if (queryObject.hasOwnProperty("igId") && queryObject.hasOwnProperty("objectId")) {
+            //gets associated images thumbnails
+            this.loadAssociatedAssets(queryObject.objectId, queryObject.colId);
+        } else if (queryObject.hasOwnProperty("igId")) {
+            //get image group thumbnails
+            this.loadIgAssets(queryObject.igId);
+        } else if (queryObject.hasOwnProperty("objectId")) {
+            //get clustered images thumbnails
+            this.loadCluster(queryObject.objectId);
+        } else if (queryObject.hasOwnProperty("colId")) {
+            //get collection thumbnails
+            this.loadCollection(queryObject.colId, 1, 24);
+        } else {
+            console.log("don't know what to query!");
+        }
+        
+    }
+
+    /**
+     * Gets array of thumbnails associated to objectId
+     * @param objectId Object Id for which to retrieve image results
+     * @param colId Collection Id in which the Object resides
+     */
+    loadAssociatedAssets(objectId: string, colId: string) {
+        // this.getAssociated(objectId, colId, this.pagination.currentPage, this.pagination.pageSize)
+        this.getAssociated(objectId, colId, 1, 24)
+            .then((data) => {
+                if (!data) {
+                throw new Error("No data in image group thumbnails response");
+                }
+                // this.results = data.thumbnails;
+                this.allResultsSource.next(data.thumbnails);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    }
+
+    /**
+     * Gets array of thumbnails and sets equal to results
+     * @param igId Image group id for which to retrieve thumbnails
+     */
+    private loadIgAssets(igId: string) {
+        this.getFromIgId(igId)
+            .then((data) => {
+                if (!data) {
+                throw new Error("No data in image group thumbnails response");
+                }
+                // this.allResultsSource = data.thumbnails;
+                //notify allResults observers
+                this.allResultsSource.next(data.thumbnails);
+                console.log(this.allResultsSource);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    }
+
+    /**
+     * Loads thumbnails from a collectionType
+     * @param colId Collection Id for which to fetch results
+     */
+    loadCollection(colId: string, currentPage?: number, pageSize?: number) {
+        // this.getCollectionThumbs(colId, currentPage, pageSize)
+        this.getCollectionThumbs(colId, currentPage, pageSize)
+            .then((data) => {
+                console.log(data);
+                // this.results = data.thumbnails;
+                this.allResultsSource.next(data.thumbnails);
+                }
+            )
+            .catch(error => {
+                console.log(error);
+            });
+    }
+
+    loadCluster(objectId){
+        // this.searchLoading = true;
+        this.cluster(objectId, {
+                index : 0,
+                label : 'Relevance'
+            }, {
+                currentPage: 1,
+                pageSize: 24
+            })
+            .then((res) => {
+                console.log(res);
+                // this.pagination.totalPages = this.setTotalPages(res.count);
+                // this.results = res.thumbnails;
+                // this.searchLoading = false;
+                if (res.thumbnails) {
+                    this.allResultsSource.next(res.thumbnails);
+                } else {
+                    throw new Error("There are no thumbnails. Server responsed with status " + res.status);
+                }
+                
+            })
+            .catch(function(err) {
+                // this.errors['search'] = "Unable to load cluster results.";
+                // this.searchLoading = false;
+                console.log(err);
+            });
+    }
+
+    cluster(objectId: string, sortIndex, pagination) {
         let options = new RequestOptions({ withCredentials: true });
         let startIndex = ((pagination.currentPage - 1) * pagination.pageSize) + 1;
 
+        //sortIndex was tacked onto this before, but the call was not working
+        let requestString = [this._auth.getUrl(), "cluster", objectId, "thumbnails", startIndex, pagination.pageSize].join("/");
+        console.log(requestString);
+        //  + '/cluster/' + objectId + '/thumbnails/' + startIndex + '/' + pagination.pageSize + '/' + sortIndex
+
         return this.http
-            .get(this._auth.getUrl() + '/cluster/' + objectId + '/thumbnails/' + startIndex + '/' + pagination.pageSize + '/' + sortIndex, options)
+            .get(requestString, options)
             .toPromise()
             .then(this.extractData);
     }
@@ -86,8 +237,10 @@ export class AssetService {
         if (!pageNo) { pageNo = 1; }
         if (!pageSize) { pageSize = 72; }
 
+        let requestString = [this._auth.getUrl(), 'collections', colId, 'thumbnails', pageNo, pageSize, imageSize].join('/');
+
         return this.http
-            .get( [this._auth.getUrl(), 'collections', colId, 'thumbnails', pageNo, pageSize, imageSize].join('/'), options)
+            .get(requestString, options)
             .toPromise()
             .then(this.extractData);
     }   

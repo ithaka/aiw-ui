@@ -1,6 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { Subscription }   from 'rxjs/Subscription';
+
+import { AssetService } from './../shared/assets.service';
 
 @Component({
   selector: 'ang-cluster-page', 
@@ -9,27 +11,39 @@ import { Subscription }   from 'rxjs/Subscription';
   templateUrl: './cluster-page.component.html'
 })
 
-export class ClusterPage {
+export class ClusterPage implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = [];
   // Cluster Asset Title
   private clusterObjTitle: string;
+  private objectId: string;
 
   // TypeScript public modifiers
   constructor(
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private _assets: AssetService
   ) {   
   } 
 
   ngOnInit() {
     this.subscriptions.push(
       this.route.params
-      .subscribe((params: Params) => { 
-        console.log(params);
-        if(params['objTitle']){
-          this.clusterObjTitle = params['objTitle'];
-        }
-      })
+        .subscribe((routeParams: Params) => {
+          this.objectId = routeParams["objectId"];
+          if (this.objectId) {
+            this._assets.queryAll({ objectId: this.objectId });
+          }
+          // console.log(routeParams);
+          if(routeParams['objTitle']) {
+            
+
+            this.clusterObjTitle = routeParams['objTitle'];
+          }
+        })
     );
+  }
+
+  ngOnDestroy() {
+    this.subscriptions.forEach((sub) => { sub.unsubscribe(); });
   }
 
 }

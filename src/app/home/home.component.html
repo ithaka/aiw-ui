@@ -51,7 +51,7 @@
                 </div>
                 <ul class="list-group list-group-flush list--home-collections">
                     <li *ngFor="let collection of collections" class="list-group-item">
-                        <a href="#/collection;colId={{ collection.collectionid}}">{{ collection.collectionname }}</a>
+                        <a [routerLink]="[ '/collection/' + collection.collectionid ]">{{ collection.collectionname }}</a>
                     </li>
                 </ul>
                 <div *ngIf="errors.collections" class="card-block">

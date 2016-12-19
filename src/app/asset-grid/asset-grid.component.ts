@@ -27,8 +27,23 @@ export class AssetGrid implements OnInit, OnDestroy {
   public showFilters: boolean = true;
   public showAdvancedModal: boolean = false;
   errors = {};
-  results = [];
+  private results = [];
   filters = [];
+  private knownFilters: any = {};
+  /**
+   * urlParams is used as an enum for special parameters
+   */
+  private urlParams: any = {
+    term: "",
+    pageSize: 24,
+    totalPages: 1,
+    currentPage: 1,
+    startDate: "",
+    endDate: "",
+    igId: "",
+    objectId: "",
+    colId: ""
+  };
   collTypeFacets = [];
   classificationFacets = [];
   geoTree = [];
@@ -90,19 +105,18 @@ export class AssetGrid implements OnInit, OnDestroy {
   // TypeScript public modifiers
   constructor(
     private _assets: AssetService,
-    private _filters: AssetFiltersService, 
+    private _filters: AssetFiltersService,
+    private _router: Router,
     private route: ActivatedRoute
   ) {
       
   } 
 
   ngOnInit() {
-    
     this.subscriptions.push(
       this.route.params
-      .subscribe((params: Params) => { 
-        console.log(params);
-        
+      .subscribe((params: Params) => {
+                
         if (params['startDate'] && params['endDate']) {
           this.dateFacet.earliest.date = Math.abs(params['startDate']);
           this.dateFacet.latest.date = Math.abs(params['endDate']);
@@ -121,83 +135,37 @@ export class AssetGrid implements OnInit, OnDestroy {
           this._filters.setFacets('dateObj', this.dateFacet);
         }
 
+        //loop through url matrix parameters
         for (let param in params) {
-          if (param == 'term') {
-            this.term = params[param];
-          } 
-          else if (param == 'igId') {
-            this.igId = (params[param]);
-          }
-          else if(param == 'objectId'){
-            this.objectId = params[param];
-          } 
-          else if(param == 'colId'){
-            this.colId = params[param];
-          } 
-          else {
-            // Otherwise, it is a filter!
-            this.toggleFilter(param, params[param]);
+          //test if param is a special parameter
+          if (this.urlParams.hasOwnProperty(param)) {
+            //param is a special parameter - assign the value
+            this.urlParams[param] = params[param];
+          } else {
+            //param is (likely) a filter (or I messed up) - add it to knownFilters
+            this.knownFilters[param] = params[param];
+            this.toggleFilter(param, this.knownFilters[param]);
           }
         }
         
-        this.runAssetLoader();
+        //only searching currently takes place in asset-grid, and should be moved to asset.service
+        if(this.urlParams.term) {
+          this.getTermsList();
+          this.loadSearch(this.urlParams.term);
+        }
+      })
+    );
 
+    // sets up subscription to allResults, which is the service providing thumbnails
+    this.subscriptions.push(
+      this._assets.allResults.subscribe((allResults: any[]) => {
+        this.results = allResults;
       })
     );
   }
 
   ngOnDestroy() {
     this.subscriptions.forEach((sub) => { sub.unsubscribe(); });
-  }
-
-  runAssetLoader() {
-    if (this.colId.length > 0 && this.objectId.length > 0) {
-      this.loadAssociatedAssets(this.objectId, this.colId);
-    } else if (this.colId.length > 0) {
-      this.loadCollection(this.colId);
-    } else if (this.objectId.length > 0) {
-      this.loadCluster(this.objectId);
-    } else if (this.igId.length > 0) {
-      this.loadIgAssets(this.igId);
-    } else {
-      this.getTermsList();
-      this.loadSearch(this.term);
-    }
-  }
-
-  loadCluster(objectId){
-    this.searchLoading = true;
-    this._assets.cluster(objectId, this.activeSort.index, this.pagination)
-      .then((res) => {
-        console.log(res);
-        this.pagination.totalPages = this.setTotalPages(res.count);     
-        this.results = res.thumbnails;
-        this.searchLoading = false;
-      })
-      .catch(function(err) {
-        this.errors['search'] = "Unable to load cluster results.";
-        this.searchLoading = false;
-      });
-  }
-
-  /**
-   * Loads thumbnails from a collectionType
-   * @param colId Collection Id for which to fetch results
-   */
-  loadCollection(colId) {
-    this._assets.getCollectionThumbs(colId, this.pagination.currentPage, this.pagination.pageSize)
-      .then(
-        data => {
-          console.log(data);
-          this.results = data.thumbnails;
-        },
-        error => {
-          
-        }
-      )
-      .catch(error => {
-
-      });
   }
 
   getTermsList(){
@@ -207,6 +175,7 @@ export class AssetGrid implements OnInit, OnDestroy {
       })
       .catch((err) => {
         console.log('Unable to load terms list.');
+        console.log(err);
       });
   }
 
@@ -227,49 +196,30 @@ export class AssetGrid implements OnInit, OnDestroy {
           this.generateGeoFacets( data.geographyFacets );
           this.generateDateFacets( data.dateFacets );
           this._filters.setFacets('classification', data.classificationFacets);
-          this.pagination.totalPages = this.setTotalPages(data.count);
+          this.urlParams.totalPages = this.setTotalPages(data.count);
           this.results = data.thumbnails;
           this.searchLoading = false;
       })
       .catch(function(err) {
-        this.errors['search'] = "Unable to load search.";
+        // this.errors['search'] = "Unable to load search.";
         this.searchLoading = false;
       });
   }
 
-  /**
-   * Gets array of thumbnails and sets equal to results
-   * @param igId Image group id for which to retrieve thumbnails
-   */
-  loadIgAssets(igId: string) {
-    this._assets.getFromIgId(igId)
-      .then((data) => {
-        if (!data) {
-          throw new Error("No data in image group thumbnails response");
-        }
-        this.results = data.thumbnails;
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }
+  goToPage(pageNum: number) {
+    if (this.urlParams.currentPage !== pageNum) {
+      // this shouldn't be done here...
+      // this.urlParams.currentPage = pageNum;
 
-  /**
-   * Gets array of thumbnails associated to objectId
-   * @param objectId Object Id for which to retrieve image results
-   * @param colId Collection Id in which the Object resides
-   */
-  loadAssociatedAssets(objectId: string, colId: string) {
-    this._assets.getAssociated(objectId, colId, this.pagination.currentPage, this.pagination.pageSize)
-      .then((data) => {
-        if (!data) {
-          throw new Error("No data in image group thumbnails response");
-        }
-        this.results = data.thumbnails;
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+      let currentParamsArr: Params = this.route.snapshot.params;
+      let currentParamsObj: any = { };
+      for (let param in currentParamsArr) {
+        currentParamsObj[param] = currentParamsArr[param];
+      }
+      currentParamsObj.currentPage = +pageNum;
+
+      this._router.navigate([currentParamsObj], { relativeTo: this.route });
+    }
   }
 
   /**
@@ -278,88 +228,28 @@ export class AssetGrid implements OnInit, OnDestroy {
    * @returns the total number of pages the assets will fill
    */
   setTotalPages(count){
-     return Math.ceil( count / this.pagination.pageSize );
-  }
-
-  /**
-   * Determines if the asset-grid is on the first page of results
-   */
-  isfirstPage(){
-    if(this.pagination.currentPage === 1){
-      return true;
-    }
-    else{
-      return false;
-    }
-  }
-
-  /**
-   * Determines if the asset-grid is on the last page of results
-   */
-  isLastPage(){
-    if(this.pagination.currentPage === this.pagination.totalPages){
-      return true;
-    }
-    else{
-      return false;
-    }
-  }
-
-  /**
-   * Returns the asset-grid to the first page of results
-   */
-  firstPage(){
-    if(this.pagination.currentPage > 1){
-      this.pagination.currentPage = 1;
-      this.runAssetLoader();
-    }
-  }
-
-  /**
-   * Sends the asset-grid to the last page of results
-   */
-  lastPage(){
-    if(this.pagination.currentPage < this.pagination.totalPages){
-      this.pagination.currentPage = this.pagination.totalPages;
-      this.runAssetLoader();
-    }
-  }
-
-  /**
-   * Navigates the asset-grid to the previous page of results
-   */
-  prevPage(){
-    if(this.pagination.currentPage > 1){
-      this.pagination.currentPage--;
-      this.runAssetLoader();
-    }
-  }
-
-  /**
-   * Navigates the asset-grid to the next page of results
-   */
-  nextPage(){
-    if(this.pagination.currentPage < this.pagination.totalPages){
-      this.pagination.currentPage++;
-      this.runAssetLoader();
-    }
+     return Math.ceil( count / this.urlParams.pageSize );
   }
 
   changeSortOpt(index, label) {
     this.activeSort.index = index;
     this.activeSort.label = label; 
-    this.pagination.currentPage = 1;
-    this.runAssetLoader();
+    this.urlParams.currentPage = 1;
+    
   }
 
-  changePageSize(size){
-    this.pagination.pageSize = size;
-    this.pagination.currentPage = 1;
-    this.runAssetLoader();
-  }
+  changePageSize(pageSize: number){
+    this.urlParams.pageSize = pageSize;
+    this.urlParams.currentPage = 1;
+    
+    let currentParamsArr: Params = this.route.snapshot.params;
+    let currentParamsObj: any = { };
+    for (let param in currentParamsArr) {
+      currentParamsObj[param] = currentParamsArr[param];
+    }
+    currentParamsObj.pageSize = +pageSize;
 
-  currentPageOnblurr(){
-    this.runAssetLoader();
+    this._router.navigate([currentParamsObj], { relativeTo: this.route }); //good, but ditches existing params
   }
 
   toggleEra(dateObj){
@@ -386,8 +276,8 @@ export class AssetGrid implements OnInit, OnDestroy {
     console.log('Applied Filters:-');
     console.log(this.filters);
 
-    this.pagination.currentPage = 1;
-    this.runAssetLoader();
+    this.urlParams.currentPage = 1;
+    
   }
 
   filterApplied(value, group){
@@ -417,8 +307,8 @@ export class AssetGrid implements OnInit, OnDestroy {
       }
     }
     
-    this.pagination.currentPage = 1;
-    this.runAssetLoader();
+    this.urlParams.currentPage = 1;
+    
   }
 
   removeFilter(filterObj){
@@ -432,8 +322,11 @@ export class AssetGrid implements OnInit, OnDestroy {
   }
   
   filterExists(filterObj){
+    console.log("original filter object");
+    console.log(filterObj);
     for(var i = 0; i < this.filters.length; i++){
       var filter = this.filters[i];
+      console.log(filter);
       if((filterObj.filterGroup === filter.filterGroup) && (filterObj.filterValue === filter.filterValue)){
         return true;
       }
@@ -546,8 +439,8 @@ export class AssetGrid implements OnInit, OnDestroy {
   applyDateFilter(){
     this.dateFacet.modified = true;
 
-    this.pagination.currentPage = 1;
-    this.runAssetLoader();
+    this.urlParams.currentPage = 1;
+    
   }
 
   existsInRegion(countryId, childerenIds){
