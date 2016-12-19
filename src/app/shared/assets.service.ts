@@ -126,7 +126,6 @@ export class AssetService {
                 if (!data) {
                 throw new Error("No data in image group thumbnails response");
                 }
-                // this.results = data.thumbnails;
                 this.allResultsSource.next(data);
             })
             .catch((error) => {
@@ -176,8 +175,6 @@ export class AssetService {
             .toPromise()
             .then(this.extractData)
             .then((data) => {
-                data.count = data.thumbnails.length;
-                console.log(data);
                 this.allResultsSource.next(data);
             })
             .catch(error => {

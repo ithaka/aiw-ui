@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 
 import { Subscription }   from 'rxjs/Subscription';
@@ -33,8 +33,10 @@ export class AssetGrid implements OnInit, OnDestroy {
   // Default show as loading until results have update
   private isLoading: boolean = true;
 
+  @Input()
+  private assetCount: number;
+
   private pagination: any = {
-    totalPages: 1,
     pageSize: 24,
     currentPage: 1
   };
@@ -130,7 +132,6 @@ export class AssetGrid implements OnInit, OnDestroy {
           this._filters.setAvailable('dateObj', this.dateFacet);
         }
         
-        //only searching currently takes place in asset-grid, and should be moved to asset.service
         this.isLoading = true;
         this._assets.queryAll(params);
       })
@@ -144,7 +145,13 @@ export class AssetGrid implements OnInit, OnDestroy {
           this.goToPage(1);
         } else {
           this.results = allResults;
-          this.pagination.totalPages = Math.ceil( allResults.count / this.pagination.pageSize );
+
+          // this conditional because allResults from collections page does not have count of assets
+          if (allResults.count) {
+            this.pagination.totalPages = Math.ceil( allResults.count / this.pagination.pageSize );
+          } else {
+            this.pagination.totalPages = Math.ceil( this.assetCount / this.pagination.pageSize );
+          }
         }        
         this.isLoading = false;
       })
