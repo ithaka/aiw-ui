@@ -29,6 +29,7 @@ export class Home {
   collections = [];
   errors = {};
   user = {};
+  private term: string = "";
 
   // TypeScript public modifiers
   constructor(
@@ -55,8 +56,8 @@ export class Home {
       });
   }
 
-  searchAssets(term) {
-    this.router.navigate(['search', { 'term' : term } ]);
+  searchAssets(term: string) {
+    this.router.navigate(['search', term]);
   }
 
   submitState(value: string) {
