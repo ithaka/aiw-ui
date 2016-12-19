@@ -2,8 +2,8 @@
     <div class="col-sm-6">
         <div class="form-group">
             <div class="input-group">
-                <input [(ngModel)]="term" (keyup.enter)="updateSearchTerm()"  aria-describedby="search-label" type="text" class="form-control has-icon" placeholder="Search">
-                <i *ngIf="!searchLoading" (click)="updateSearchTerm()" class="icon icon-search form-control__icon"></i>
+                <input [(ngModel)]="term" (keyup.enter)="updateSearchTerm(term)"  aria-describedby="search-label" type="text" class="form-control has-icon" placeholder="Search">
+                <i *ngIf="!searchLoading" (click)="updateSearchTerm(term)" class="icon icon-search form-control__icon"></i>
                 <i *ngIf="searchLoading" class="icon icon-loading form-control__icon"></i>
             </div>
         </div>

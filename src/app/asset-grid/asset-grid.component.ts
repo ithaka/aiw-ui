@@ -39,7 +39,6 @@ export class AssetGrid implements OnInit, OnDestroy {
 
   collTypeFacets = [];
   classificationFacets = [];
-  geoTree = [];
   geographyFacets = [];
   dateFacetsArray = [];
   dateFacet = {

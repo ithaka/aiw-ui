@@ -25,8 +25,6 @@ export class AssetService {
      * urlParams is used as an enum for special parameters
      */
     private urlParams: any;
-
-    private geoTree = [];
     private activeSort: any = {
         index: 0
      };
@@ -257,8 +255,8 @@ export class AssetService {
             .then(
                 (res) => {
                 console.log(res);
-                this.generateColTypeFacets( this.getUniqueColTypeIds(res.collTypeFacets) );
-                this.generateGeoFacets( res.geographyFacets );
+                this._filters.generateColTypeFacets( res.collTypeFacets );
+                this._filters.generateGeoFilters( res.geographyFacets );
                 // this.generateDateFacets( res.dateFacets );
                 this._filters.setAvailable('classification', res.classificationFacets);
                 this.allResultsSource.next(res);
@@ -268,103 +266,6 @@ export class AssetService {
                 // this.searchLoading = false;
                 console.error(err);
             });
-    }
-
-    private generateColTypeFacets(idsArray){
-        var generatedFacetsArray = [];
-        for(var i = 0; i < idsArray.length; i++){
-        var facetObj = {
-            id : idsArray[i],
-            label: ''
-        };
-        if(facetObj.id === '1'){
-            facetObj.label = 'Artstor Digital Library';
-        }
-        else if(facetObj.id === '5'){
-            facetObj.label = 'Shared Shelf Commons';
-        }
-        generatedFacetsArray.push(facetObj);
-        }
-        
-        // this.collTypeFacets = generatedFacetsArray;
-        this._filters.setAvailable('collType', generatedFacetsArray); 
-    }
-
-    private getUniqueColTypeIds(facetArray){
-        var colTypeIds = [];
-        for(var i = 0; i < facetArray.length; i++){
-        var facetObj = facetArray[i];
-        var idArray = facetObj.collectionType.split(',');
-        for(var j = 0; j < idArray.length; j++){
-            idArray[j] = idArray[j].trim();
-            if(colTypeIds.indexOf(idArray[j]) === -1){
-            colTypeIds.push(idArray[j]);
-            }
-        }
-        }
-        return colTypeIds;
-    }
-
-    private generateGeoFacets(resGeoFacetsArray){
-        var generatedGeoFacets = [];
-        var countriesArray = [];
-        // Extract Regions
-        for(var i = 0; i < resGeoFacetsArray.length; i++){
-        var resGeoFacet = resGeoFacetsArray[i];
-        var match = false;
-
-        for(var j = 0; j < this.geoTree.length; j++){
-            var geoTreeObj = this.geoTree[j];
-            if((geoTreeObj.type == 'region') && (resGeoFacet.id == geoTreeObj.nodeId)){
-            resGeoFacet.expanded = false;
-            resGeoFacet.childrenIds = geoTreeObj.children;
-            resGeoFacet.children = [];
-            match = true;
-            break;
-            }
-        }
-
-        if(match){
-            generatedGeoFacets.push(resGeoFacet);
-        }
-        else{
-            countriesArray.push(resGeoFacet);
-        }
-
-        }
-
-        // console.log(countriesArray);
-
-        // Extract Countries
-        for(var i = 0; i < countriesArray.length; i++){
-        var country = countriesArray[i];
-
-        for(var j = 0; j < generatedGeoFacets.length; j++){
-            var generatedGeoFacet = generatedGeoFacets[j];
-            if(this.existsInRegion(country.id, generatedGeoFacet.childrenIds)){
-            // country.parentId = generatedGeoFacet.id;
-            generatedGeoFacet.children.push(country);
-            break;
-            }
-        }
-
-        }
-
-
-        this._filters.setAvailable('geography', generatedGeoFacets);
-        // this.geographyFacets = generatedGeoFacets;
-    }
-
-    private existsInRegion(countryId, childerenIds){
-        var result = false;
-        for(var i = 0; i < childerenIds.length; i++){
-            var child = childerenIds[i];
-            if(child._reference == countryId){
-                result = true;
-                break;
-            }
-        }
-        return result;
     }
 
     /**
