@@ -41,16 +41,24 @@
     max-height: 100%;
     color: #555;
 }
-.tree .child{
+.tree .child {
     cursor: pointer;
     font-size: 13px;
     display: block;
     position: relative;
     text-transform: capitalize;
-    text-indent: 45px;
+    // text-indent: 45px;
     max-height: 100%;
     color: #555;
 }
+
+
+@for $i from 1 through 20 {
+    .tree__branch-#{$i} {
+        padding-left: 45px * $i;
+    }
+}
+
 .tree .info-icon{
     width: 20px;
     cursor: pointer;

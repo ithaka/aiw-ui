@@ -53,10 +53,11 @@ export class BrowsePage {
       }
   ];
 
-  selectedColMenuId = '1';
-  selectedBrowseId = '250';
-  currentBrowseRes = {};
-  categories = [];
+  private selectedColMenuId = '1';
+  private selectedBrowseId = '250';
+  private currentBrowseRes = {};
+  private categories = [];
+  private expandedCategories: any = {};
 
 
   // TypeScript public modifiers
@@ -101,42 +102,55 @@ export class BrowsePage {
       });
   }
 
-  loadSubcategories(category){
+  loadSubcategories(category, index){
       this._assets.subcategories( category.widgetId )
       .then((res) => {
-        // console.log(res);
-        category.subcategories = res;
+        let depth: number;
+        if (!category.depth) {
+            category.depth = 0;
+        }
+        // Make depth one deeper than parent
+        depth = category.depth + 1;
+        for (let cat of res) {
+            // Add parent Id for expand/collapse logic
+            cat.parentId = category.widgetId;
+            // Add subcategory depth value for styling
+            cat.depth = depth;
+        }
+        let beforeItems = this.categories.slice(0, index + 1);
+        let afterItems = this.categories.slice(index + 1);
+        // Insert loaded categories below parent category
+        this.categories = beforeItems.concat(res).concat(afterItems);
       })
       .catch(function(err) {
        console.log('Unable to load subcategories.');
       });
   }
 
-  toggleTree(category){
-      if(category.expanded){
-          category.expanded = false;
+  toggleTree(category, index){
+      if(this.expandedCategories[category.widgetId]){
+          this.expandedCategories[category.widgetId] = false;
       }
       else{
-          if(typeof category.expanded == 'undefined'){
-              category.subcategories = [];
-              this.loadSubcategories(category);
+          if(typeof this.expandedCategories[category.widgetId] == 'undefined'){
+              this.loadSubcategories(category, index);
           }
-          category.expanded = true;
+          this.expandedCategories[category.widgetId] = true;
       }
   }
 
-  toggleSubTree(subCategory){
-      if(subCategory.expanded){
-          subCategory.expanded = false;
-      }
-      else{
-          if(typeof subCategory.expanded == 'undefined'){
-              subCategory.subcategories = [];
-              this.loadSubcategories(subCategory);
-          }
-          subCategory.expanded = true;
-      }
-  }
+//   toggleSubTree(subCategory){
+//       if(subCategory.expanded){
+//           subCategory.expanded = false;
+//       }
+//       else{
+//           if(typeof subCategory.expanded == 'undefined'){
+//               subCategory.subcategories = [];
+//               this.loadSubcategories(subCategory, index);
+//           }
+//           subCategory.expanded = true;
+//       }
+//   }
 
   toggleInfo(node){
       if(node.info_expanded){
