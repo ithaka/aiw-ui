@@ -27,10 +27,12 @@ export class AssetService {
     private urlParams: any;
 
     private geoTree = [];
-    private activeSort: any = { };
+    private activeSort: any = {
+        index: 0
+     };
 
     /** Keeps track of all filters available in url */
-    private knownFilters: any = {};
+    // private knownFilters: any = {};
     public _storage;
 
     constructor(
@@ -55,7 +57,7 @@ export class AssetService {
         };
     }
 
-    private readUrlParams() {
+    private readUrlParams() : any {
         let params = this.route.snapshot.params;
 
         // Creates filters and list of relevant url parameters for use by search
@@ -65,10 +67,11 @@ export class AssetService {
                 // param is a special parameter - assign the value
                 this.urlParams[param] = params[param];
             } else {
-                // param is (likely) a filter (or I messed up) - add it to knownFilters
-                this.knownFilters[param] = params[param];
+                // Any other filters are managed by Asset Filters
             }
         }
+
+        return this.urlParams;
     }
     
     private formEncode = function (obj) {
@@ -88,24 +91,26 @@ export class AssetService {
         return body || { };
     }
 
-    public queryAll(queryObject: any) {
-        this.readUrlParams();
+    public queryAll() {
+        console.log('QUERY ALL');
+        let urlParams: any = this.route.snapshot.params;
+        console.log(urlParams);
 
-        if (queryObject.hasOwnProperty("igId") && queryObject.hasOwnProperty("objectId")) {
+        if (urlParams.hasOwnProperty("igId") && urlParams.hasOwnProperty("objectId")) {
             //gets associated images thumbnails
-            this.loadAssociatedAssets(queryObject.objectId, queryObject.colId);
-        } else if (queryObject.hasOwnProperty("igId")) {
+            this.loadAssociatedAssets(urlParams.objectId, urlParams.colId);
+        } else if (urlParams.hasOwnProperty("igId")) {
             //get image group thumbnails
-            this.loadIgAssets(queryObject.igId);
-        } else if (queryObject.hasOwnProperty("objectId")) {
+            this.loadIgAssets(urlParams.igId);
+        } else if (urlParams.hasOwnProperty("objectId")) {
             //get clustered images thumbnails
-            this.loadCluster(queryObject.objectId);
-        } else if (queryObject.hasOwnProperty("colId")) {
+            this.loadCluster(urlParams.objectId);
+        } else if (urlParams.hasOwnProperty("colId")) {
             //get collection thumbnails
-            this.loadCollection(queryObject.colId, 1, 24);
-        } else if (queryObject.hasOwnProperty("term")) {
+            this.loadCollection(urlParams.colId, 1, 24);
+        } else if (urlParams.hasOwnProperty("term")) {
             console.log("beginning search!");
-            this.loadSearch(queryObject.term);
+            this.loadSearch(urlParams.term);
         } else {
             console.log("don't know what to query!");
         }

@@ -30,7 +30,7 @@ export class ClusterPage implements OnInit, OnDestroy {
         .subscribe((routeParams: Params) => {
           this.objectId = routeParams["objectId"];
           if (this.objectId) {
-            this._assets.queryAll({ objectId: this.objectId });
+            this._assets.queryAll();
           }
           // console.log(routeParams);
           if(routeParams['objTitle']) {

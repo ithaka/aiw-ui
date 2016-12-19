@@ -168,6 +168,9 @@ export class AssetGrid implements OnInit, OnDestroy {
     this.subscriptions.forEach((sub) => { sub.unsubscribe(); });
   }
 
+  updateSearchTerm(term) {
+    this._assets.queryAll();
+  }
   // getTermsList(){
   //   this._assets.termList()
   //     .then((res) => {

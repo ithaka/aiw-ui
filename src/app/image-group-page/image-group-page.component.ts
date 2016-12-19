@@ -27,7 +27,7 @@ export class ImageGroupPage implements OnInit, OnDestroy {
       this.route.params.subscribe((routeParams) => {
         this.igId = routeParams["igId"];
         if (this.igId) {
-          this._assets.queryAll({ igId: this.igId });
+          this._assets.queryAll();
 
           this._igService.getGroupDescription(this.igId)
             .then((data) => {

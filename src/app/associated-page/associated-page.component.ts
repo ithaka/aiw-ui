@@ -41,10 +41,7 @@ export class AssociatedPage implements OnInit, OnDestroy {
         this.colId = routeParams["colId"];
 
         if (this.objectId && this.colId) {
-          this._assets.queryAll({
-            objectId: this.objectId,
-            colId: this.colId
-          });
+          this._assets.queryAll();
 
           // get the associated images title
           this.http

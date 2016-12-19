@@ -26,7 +26,7 @@ export class SearchPage implements OnInit, OnDestroy {
       this.route.params.subscribe((routeParams) => {
         this.term = routeParams["term"];
         if (this.term) {
-          this._assets.queryAll({ term: this.term });
+          this._assets.queryAll();
         } else {
           throw new Error("Search error - no search term");
         }
