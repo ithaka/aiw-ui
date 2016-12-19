@@ -29,18 +29,16 @@ export class AssetGrid implements OnInit, OnDestroy {
   errors = {};
   private results = [];
   filters = [];
-  private knownFilters: any = {};
+
+  // Default show as loading until results have update
+  private isLoading: boolean = true;
 
   private pagination: any = {
     totalPages: 1,
     pageSize: 24,
     currentPage: 1
   };
-
-  collTypeFacets = [];
-  classificationFacets = [];
-  geographyFacets = [];
-  dateFacetsArray = [];
+  
   dateFacet = {
     earliest : {
       date : 1000,
@@ -133,6 +131,7 @@ export class AssetGrid implements OnInit, OnDestroy {
         }
         
         //only searching currently takes place in asset-grid, and should be moved to asset.service
+        this.isLoading = true;
         this._assets.queryAll(params);
       })
     );
@@ -147,6 +146,7 @@ export class AssetGrid implements OnInit, OnDestroy {
           this.results = allResults;
           this.pagination.totalPages = Math.ceil( allResults.count / this.pagination.pageSize );
         }        
+        this.isLoading = false;
       })
     );
   }
