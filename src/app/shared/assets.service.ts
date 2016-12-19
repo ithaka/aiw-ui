@@ -62,11 +62,13 @@ export class AssetService {
             // test if param is a special parameter
             if (this.urlParams.hasOwnProperty(param)) {
                 // param is a special parameter - assign the value
+                console.log("changing " + this.urlParams[param] + " to " + params[param]);
                 this.urlParams[param] = params[param];
             } else {
                 // Any other filters are managed by Asset Filters
             }
         }
+        console.log(this.urlParams);
     }
     
     private formEncode = function (obj) {
