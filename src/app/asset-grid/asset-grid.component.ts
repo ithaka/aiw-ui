@@ -30,23 +30,15 @@ export class AssetGrid implements OnInit, OnDestroy {
   private results = [];
   filters = [];
   private knownFilters: any = {};
-  /**
-   * urlParams is used as an enum for special parameters
-   */
-  private urlParams: any = {
-    term: "",
-    pageSize: 24,
+
+  private pagination: any = {
     totalPages: 1,
-    currentPage: 1,
-    startDate: "",
-    endDate: "",
-    igId: "",
-    objectId: "",
-    colId: ""
+    pageSize: 24,
+    currentPage: 1
   };
+
   collTypeFacets = [];
   classificationFacets = [];
-  geoTree = [];
   geographyFacets = [];
   dateFacetsArray = [];
   dateFacet = {
@@ -61,11 +53,6 @@ export class AssetGrid implements OnInit, OnDestroy {
     modified : false
   };
   
-  pagination = {
-    currentPage : 1,
-    totalPages : 1,
-    pageSize : 24
-  };
   activeSort = {
     index : 0,
     label : 'Relevance'
@@ -132,34 +119,20 @@ export class AssetGrid implements OnInit, OnDestroy {
             this.dateFacet.latest.era = "CE";
           }
 
-          this._filters.setFacets('dateObj', this.dateFacet);
-        }
-
-        //loop through url matrix parameters
-        for (let param in params) {
-          //test if param is a special parameter
-          if (this.urlParams.hasOwnProperty(param)) {
-            //param is a special parameter - assign the value
-            this.urlParams[param] = params[param];
-          } else {
-            //param is (likely) a filter (or I messed up) - add it to knownFilters
-            this.knownFilters[param] = params[param];
-            this.toggleFilter(param, this.knownFilters[param]);
-          }
+          this._filters.setAvailable('dateObj', this.dateFacet);
         }
         
         //only searching currently takes place in asset-grid, and should be moved to asset.service
-        if(this.urlParams.term) {
-          this.getTermsList();
-          this.loadSearch(this.urlParams.term);
-        }
+        this._assets.queryAll(params);
       })
     );
 
     // sets up subscription to allResults, which is the service providing thumbnails
     this.subscriptions.push(
-      this._assets.allResults.subscribe((allResults: any[]) => {
+      this._assets.allResults.subscribe((allResults: any) => {
+        console.log("asset grid results changed");
         this.results = allResults;
+        this.pagination.totalPages = Math.ceil( allResults.count / this.pagination.pageSize )
       })
     );
   }
@@ -168,88 +141,33 @@ export class AssetGrid implements OnInit, OnDestroy {
     this.subscriptions.forEach((sub) => { sub.unsubscribe(); });
   }
 
-  getTermsList(){
-    this._assets.termList()
-      .then((res) => {
-        this.geoTree = res.geoTree;
-      })
-      .catch((err) => {
-        console.log('Unable to load terms list.');
-        console.log(err);
-      });
+  /**
+   * Called from template when new search term is entered
+   * @param term Term for desired search
+   */
+  updateSearchTerm(term: string) {
+    this._router.navigate(['/search', term]);
   }
 
   /**
-   * Executes searchn and sets relevant asset-grid parameters
+   * Set currentPage in url and navigate, which triggers this._assets.queryAll() again
+   * @param pageNum number of desired page
    */
-  loadSearch(term) {
-    if (!term && this.results === []) {
-      let term = "*";
-    }
-    this.searchLoading = true;
-
-    this._assets.search(term, this.filters, this.activeSort.index, this.pagination, this.dateFacet)
-      .then(
-        data => {
-          console.log(data);
-          this.generateColTypeFacets( this.getUniqueColTypeIds(data.collTypeFacets) );
-          this.generateGeoFacets( data.geographyFacets );
-          this.generateDateFacets( data.dateFacets );
-          this._filters.setFacets('classification', data.classificationFacets);
-          this.urlParams.totalPages = this.setTotalPages(data.count);
-          this.results = data.thumbnails;
-          this.searchLoading = false;
-      })
-      .catch(function(err) {
-        // this.errors['search'] = "Unable to load search.";
-        this.searchLoading = false;
-      });
-  }
-
   goToPage(pageNum: number) {
-    if (this.urlParams.currentPage !== pageNum) {
-      // this shouldn't be done here...
-      // this.urlParams.currentPage = pageNum;
-
-      let currentParamsArr: Params = this.route.snapshot.params;
-      let currentParamsObj: any = { };
-      for (let param in currentParamsArr) {
-        currentParamsObj[param] = currentParamsArr[param];
-      }
-      currentParamsObj.currentPage = +pageNum;
-
-      this._router.navigate([currentParamsObj], { relativeTo: this.route });
-    }
-  }
-
-  /**
-   * Sets the number of total pages in pagination
-   * @param count The total number of images in results
-   * @returns the total number of pages the assets will fill
-   */
-  setTotalPages(count){
-     return Math.ceil( count / this.urlParams.pageSize );
+    this.addRouteParam("pageNum", pageNum);
+    this.pagination.currentPage++;
   }
 
   changeSortOpt(index, label) {
     this.activeSort.index = index;
     this.activeSort.label = label; 
-    this.urlParams.currentPage = 1;
+    this.pagination.currentPage = 1;
     
   }
 
   changePageSize(pageSize: number){
-    this.urlParams.pageSize = pageSize;
-    this.urlParams.currentPage = 1;
-    
-    let currentParamsArr: Params = this.route.snapshot.params;
-    let currentParamsObj: any = { };
-    for (let param in currentParamsArr) {
-      currentParamsObj[param] = currentParamsArr[param];
-    }
-    currentParamsObj.pageSize = +pageSize;
-
-    this._router.navigate([currentParamsObj], { relativeTo: this.route }); //good, but ditches existing params
+    this.addRouteParam("pageSize", pageSize);
+    this.pagination.pageSize = pageSize;
   }
 
   toggleEra(dateObj){
@@ -276,7 +194,7 @@ export class AssetGrid implements OnInit, OnDestroy {
     console.log('Applied Filters:-');
     console.log(this.filters);
 
-    this.urlParams.currentPage = 1;
+    this.pagination.currentPage = 1;
     
   }
 
@@ -307,7 +225,7 @@ export class AssetGrid implements OnInit, OnDestroy {
       }
     }
     
-    this.urlParams.currentPage = 1;
+    this.pagination.currentPage = 1;
     
   }
 
@@ -334,126 +252,10 @@ export class AssetGrid implements OnInit, OnDestroy {
     return false;
   }
 
-  getUniqueColTypeIds(facetArray){
-    var colTypeIds = [];
-    for(var i = 0; i < facetArray.length; i++){
-      var facetObj = facetArray[i];
-      var idArray = facetObj.collectionType.split(',');
-      for(var j = 0; j < idArray.length; j++){
-        idArray[j] = idArray[j].trim();
-        if(colTypeIds.indexOf(idArray[j]) === -1){
-          colTypeIds.push(idArray[j]);
-        }
-      }
-    }
-    return colTypeIds;
-  } 
+  private addRouteParam(key: string, value: any) {
+    let currentParamsObj: Params = Object.assign({}, this.route.snapshot.params);
+    currentParamsObj[key] = value;
 
-  generateColTypeFacets(idsArray){
-    var generatedFacetsArray = [];
-    for(var i = 0; i < idsArray.length; i++){
-      var facetObj = {
-        id : idsArray[i],
-        label: ''
-      };
-      if(facetObj.id === '1'){
-        facetObj.label = 'Artstor Digital Library';
-      }
-      else if(facetObj.id === '5'){
-        facetObj.label = 'Shared Shelf Commons';
-      }
-      generatedFacetsArray.push(facetObj);
-    }
-    
-    this.collTypeFacets = generatedFacetsArray;
-    this._filters.setFacets('collType', generatedFacetsArray); 
+    this._router.navigate([currentParamsObj], { relativeTo: this.route }); //good, but ditches existing params
   }
-
-  generateGeoFacets(resGeoFacetsArray){
-    var generatedGeoFacets = [];
-    var countriesArray = [];
-    // Extract Regions
-    for(var i = 0; i < resGeoFacetsArray.length; i++){
-      var resGeoFacet = resGeoFacetsArray[i];
-      var match = false;
-
-      for(var j = 0; j < this.geoTree.length; j++){
-        var geoTreeObj = this.geoTree[j];
-        if((geoTreeObj.type == 'region') && (resGeoFacet.id == geoTreeObj.nodeId)){
-          resGeoFacet.expanded = false;
-          resGeoFacet.childrenIds = geoTreeObj.children;
-          resGeoFacet.children = [];
-          match = true;
-          break;
-        }
-      }
-
-      if(match){
-          generatedGeoFacets.push(resGeoFacet);
-      }
-      else{
-          countriesArray.push(resGeoFacet);
-      }
-
-    }
-
-    // console.log(countriesArray);
-
-    // Extract Countries
-    for(var i = 0; i < countriesArray.length; i++){
-      var country = countriesArray[i];
-
-      for(var j = 0; j < generatedGeoFacets.length; j++){
-        var generatedGeoFacet = generatedGeoFacets[j];
-        if(this.existsInRegion(country.id, generatedGeoFacet.childrenIds)){
-          // country.parentId = generatedGeoFacet.id;
-          generatedGeoFacet.children.push(country);
-          break;
-        }
-      }
-
-    }
-
-
-    this._filters.setFacets('geography', generatedGeoFacets);
-    this.geographyFacets = generatedGeoFacets;
-  }
-
-  generateDateFacets(dateFacetsArray){
-    var startDate = dateFacetsArray[0].date;
-    var endDate = dateFacetsArray[dateFacetsArray.length - 1].date;
-    
-    this.dateFacet.earliest.date = Math.abs(startDate);
-    this.dateFacet.earliest.era = startDate < 0 ? "BCE" : "CE";
-
-    this.dateFacet.latest.date = Math.abs(endDate);
-    this.dateFacet.latest.era = endDate < 0 ? "BCE" : "CE";
-
-    this.dateFacet.modified = false;
-
-    this._filters.setFacets('date', dateFacetsArray);
-    this._filters.setFacets('dateObj', this.dateFacet);
-    this.dateFacetsArray = dateFacetsArray;
-  }
-
-  applyDateFilter(){
-    this.dateFacet.modified = true;
-
-    this.urlParams.currentPage = 1;
-    
-  }
-
-  existsInRegion(countryId, childerenIds){
-    var result = false;
-    for(var i = 0; i < childerenIds.length; i++){
-      var child = childerenIds[i];
-      if(child._reference == countryId){
-        result = true;
-        break;
-      }
-    }
-    return result;
-  }
-
-
 }

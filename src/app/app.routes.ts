@@ -19,6 +19,7 @@ export const ROUTES: Routes = [
   { path: 'login', component: Login },
   { path: 'home',  component: Home, canActivate:[AuthService] },
   { path: 'search', redirectTo: '/search/*', pathMatch: 'full', canActivate:[AuthService] },
+  { path: 'search/', redirectTo: '/search/*', pathMatch: 'full', canActivate:[AuthService] },
   { path: 'search/:term', component: SearchPage, canActivate:[AuthService] },
   { path: 'collection/:colId', component: CollectionPage, canActivate:[AuthService] },
   { path: 'image-group/:igId', component: ImageGroupPage, canActivate:[AuthService] },

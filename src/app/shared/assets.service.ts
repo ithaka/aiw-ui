@@ -12,6 +12,7 @@ import 'rxjs/add/operator/toPromise';
 import { Subscription }   from 'rxjs/Subscription';
  
 import { AuthService } from '../shared/auth.service';
+import { AssetFiltersService } from './../asset-filters/asset-filters.service';
 
 @Injectable()
 export class AssetService {
@@ -23,40 +24,51 @@ export class AssetService {
     /**
      * urlParams is used as an enum for special parameters
      */
-    private urlParams: any = {
-        term: "",
-        pageSize: 24,
-        totalPages: 1,
-        currentPage: 1,
-        startDate: "",
-        endDate: "",
-        igId: "",
-        objectId: "",
-        colId: ""
-    };
+    private urlParams: any;
+    private activeSort: any = {
+        index: 0
+     };
 
     /** Keeps track of all filters available in url */
-    private knownFilters: any = {};
+    // private knownFilters: any = {};
     public _storage;
 
-    constructor(private _router: Router, private route: ActivatedRoute, private http: Http, locker: Locker, private _auth: AuthService ){
+    constructor(
+        private _filters: AssetFiltersService,
+        private _router: Router,
+        private route: ActivatedRoute,
+        private http: Http,
+        locker: Locker,
+        private _auth: AuthService
+    ) {
         this._storage = locker;
+        this.urlParams = {
+            term: "",
+            pageSize: 24,
+            currentPage: 1,
+            startDate: 0,
+            endDate: 0,
+            igId: "",
+            objectId: "",
+            colId: ""
+        };
     }
 
-    private readUrlParams() {
-        let params = this.route.snapshot.params;
+    private readUrlParams(passedParams) : any {
+        let params = passedParams;
 
         // Creates filters and list of relevant url parameters for use by search
         for (let param in params) {
             // test if param is a special parameter
             if (this.urlParams.hasOwnProperty(param)) {
                 // param is a special parameter - assign the value
+                console.log("changing " + this.urlParams[param] + " to " + params[param]);
                 this.urlParams[param] = params[param];
             } else {
-                // param is (likely) a filter (or I messed up) - add it to knownFilters
-                this.knownFilters[param] = params[param];
+                // Any other filters are managed by Asset Filters
             }
         }
+        console.log(this.urlParams);
     }
     
     private formEncode = function (obj) {
@@ -76,25 +88,27 @@ export class AssetService {
         return body || { };
     }
 
-    public queryAll(queryObject: any) {
-        this.readUrlParams();
+    public queryAll(params) {
+        this.readUrlParams(params);
 
-        if (queryObject.hasOwnProperty("igId") && queryObject.hasOwnProperty("objectId")) {
+        if (params.hasOwnProperty("igId") && params.hasOwnProperty("objectId")) {
             //gets associated images thumbnails
-            this.loadAssociatedAssets(queryObject.objectId, queryObject.colId);
-        } else if (queryObject.hasOwnProperty("igId")) {
+            this.loadAssociatedAssets(params.objectId, params.colId);
+        } else if (params.hasOwnProperty("igId")) {
             //get image group thumbnails
-            this.loadIgAssets(queryObject.igId);
-        } else if (queryObject.hasOwnProperty("objectId")) {
+            this.loadIgAssets(params.igId);
+        } else if (params.hasOwnProperty("objectId")) {
             //get clustered images thumbnails
-            this.loadCluster(queryObject.objectId);
-        } else if (queryObject.hasOwnProperty("colId")) {
+            this.loadCluster(params.objectId);
+        } else if (params.hasOwnProperty("colId")) {
             //get collection thumbnails
-            this.loadCollection(queryObject.colId, 1, 24);
+            this.loadCollection(params.colId, 1, 24);
+        } else if (params.hasOwnProperty("term")) {
+            console.log("beginning search!");
+            this.loadSearch(params.term);
         } else {
             console.log("don't know what to query!");
-        }
-        
+        } 
     }
 
     /**
@@ -102,7 +116,7 @@ export class AssetService {
      * @param objectId Object Id for which to retrieve image results
      * @param colId Collection Id in which the Object resides
      */
-    loadAssociatedAssets(objectId: string, colId: string) {
+    private loadAssociatedAssets(objectId: string, colId: string) {
         // this.getAssociated(objectId, colId, this.pagination.currentPage, this.pagination.pageSize)
         this.getAssociated(objectId, colId, 1, 24)
             .then((data) => {
@@ -110,7 +124,7 @@ export class AssetService {
                 throw new Error("No data in image group thumbnails response");
                 }
                 // this.results = data.thumbnails;
-                this.allResultsSource.next(data.thumbnails);
+                this.allResultsSource.next(data);
             })
             .catch((error) => {
                 console.log(error);
@@ -127,10 +141,8 @@ export class AssetService {
                 if (!data) {
                 throw new Error("No data in image group thumbnails response");
                 }
-                // this.allResultsSource = data.thumbnails;
                 //notify allResults observers
-                this.allResultsSource.next(data.thumbnails);
-                console.log(this.allResultsSource);
+                this.allResultsSource.next(data);
             })
             .catch((error) => {
                 console.log(error);
@@ -141,13 +153,12 @@ export class AssetService {
      * Loads thumbnails from a collectionType
      * @param colId Collection Id for which to fetch results
      */
-    loadCollection(colId: string, currentPage?: number, pageSize?: number) {
+    private loadCollection(colId: string, currentPage?: number, pageSize?: number) {
         // this.getCollectionThumbs(colId, currentPage, pageSize)
         this.getCollectionThumbs(colId, currentPage, pageSize)
             .then((data) => {
                 console.log(data);
-                // this.results = data.thumbnails;
-                this.allResultsSource.next(data.thumbnails);
+                this.allResultsSource.next(data);
                 }
             )
             .catch(error => {
@@ -155,54 +166,45 @@ export class AssetService {
             });
     }
 
-    loadCluster(objectId){
+    private loadCluster(objectId: string){
         // this.searchLoading = true;
         this.cluster(objectId, {
                 index : 0,
                 label : 'Relevance'
-            }, {
-                currentPage: 1,
-                pageSize: 24
             })
             .then((res) => {
-                console.log(res);
-                // this.pagination.totalPages = this.setTotalPages(res.count);
-                // this.results = res.thumbnails;
-                // this.searchLoading = false;
                 if (res.thumbnails) {
-                    this.allResultsSource.next(res.thumbnails);
+                    this.allResultsSource.next(res);
                 } else {
                     throw new Error("There are no thumbnails. Server responsed with status " + res.status);
                 }
                 
             })
             .catch(function(err) {
-                // this.errors['search'] = "Unable to load cluster results.";
-                // this.searchLoading = false;
                 console.log(err);
             });
     }
 
-    cluster(objectId: string, sortIndex, pagination) {
+    private cluster(objectId: string, sortIndex) {
         let options = new RequestOptions({ withCredentials: true });
-        let startIndex = ((pagination.currentPage - 1) * pagination.pageSize) + 1;
+        let startIndex = ((this.urlParams.currentPage - 1) * this.urlParams.pageSize) + 1;
 
         //sortIndex was tacked onto this before, but the call was not working
-        let requestString = [this._auth.getUrl(), "cluster", objectId, "thumbnails", startIndex, pagination.pageSize].join("/");
-        console.log(requestString);
-        //  + '/cluster/' + objectId + '/thumbnails/' + startIndex + '/' + pagination.pageSize + '/' + sortIndex
+        let requestString = [this._auth.getUrl(), "cluster", objectId, "thumbnails", startIndex, this.urlParams.pageSize].join("/");
+        //  + '/cluster/' + objectId + '/thumbnails/' + startIndex + '/' + this.urlParams.pageSize + '/' + sortIndex
 
         return this.http
             .get(requestString, options)
             .toPromise()
             .then(this.extractData);
     }
-
-    category(id) {
+    
+    // Used by Browse page
+    public category(catId: string) {
         let options = new RequestOptions({ withCredentials: true });
 
         return this.http
-            .get(this._auth.getUrl() + '/collections/' + id + '/categoryroot', options)
+            .get(this._auth.getUrl() + '/collections/' + catId + '/categoryroot', options)
             .toPromise()
             .then(this.extractData);
     }
@@ -230,7 +232,7 @@ export class AssetService {
      * @param colId id of collection to fetch
      * @returns thumbnails of assets for a collection, and collection information
      */
-    getCollectionThumbs(colId: string, pageNo?: number, pageSize?: number) {
+    private getCollectionThumbs(colId: string, pageNo?: number, pageSize?: number) {
         let options = new RequestOptions({withCredentials: true});
         let imageSize = 0;
         
@@ -247,16 +249,43 @@ export class AssetService {
 
     /**
      * Term List Service
-     * @returns       Returns the Geo Tree Object used for generating the geofacets tree.
+     * @returns Returns the Geo Tree Object used for generating the geofacets tree.
      */
-
-    termList(){
+    public termList(){
         let options = new RequestOptions({ withCredentials: true });
         
         return this.http
             .get(this._auth.getUrl() + '/termslist/', options)
             .toPromise()
-            .then(this.extractData);   
+            .then(this.extractData)
+            .then((res) => {
+                this.geoTree = res.geoTree;
+            });
+            // .catch((err) => {
+            //     console.log('Unable to load terms list.');
+            //     console.log(err);
+            // });
+    }
+
+    /**
+     * Executes search and sets relevant asset-grid parameters
+     */
+    private loadSearch(term) {
+        this.search(term, this.activeSort.index)
+            .then(
+                (res) => {
+                console.log(res);
+                this._filters.generateColTypeFacets( res.collTypeFacets );
+                this._filters.generateGeoFilters( res.geographyFacets );
+                // this.generateDateFacets( res.dateFacets );
+                this._filters.setAvailable('classification', res.classificationFacets);
+                this.allResultsSource.next(res);
+                // this.searchLoading = false;
+            })
+            .catch(function(err) {
+                // this.searchLoading = false;
+                console.error(err);
+            });
     }
 
     /**
@@ -264,15 +293,13 @@ export class AssetService {
      * @param term          String to search for.
      * @param filters       Array of filter objects (with filterGroup and filterValue properties)
      * @param sortIndex     An integer representing a type of sort.
-     * @param pagination    Object with properties currentPage and pageSize
      * @param dateFacet     Object with the dateFacet values
      * @returns       Returns an object with the properties: thumbnails, count, altKey, classificationFacets, geographyFacets, minDate, maxDate, collTypeFacets, dateFacets
      */
-
-    search(term, filters, sortIndex, pagination, dateFacet) {
+    private search(term: string, sortIndex) {
         let keyword = encodeURIComponent(term);
         let options = new RequestOptions({ withCredentials: true });
-        let startIndex = ((pagination.currentPage - 1) * pagination.pageSize) + 1;
+        let startIndex = ((this.urlParams.currentPage - 1) * this.urlParams.pageSize) + 1;
         let thumbSize = 0;
         let type = 6;
         let colTypeIds = '';
@@ -282,6 +309,10 @@ export class AssetService {
         let earliestDate = '';
         let latestDate = '';
 
+        let filters = this._filters.getApplied(); 
+        // To-do: break dateObj out of available filters
+        let dateFacet = this._filters.getAvailable()['dateObj'];
+        
         if(dateFacet.modified){
             earliestDate = dateFacet.earliest.date;
             earliestDate = ( dateFacet.earliest.era == 'BCE' ) ? ( parseInt(earliestDate) * -1 ).toString() : earliestDate;
@@ -310,12 +341,13 @@ export class AssetService {
         // /search/1/{start_idx}/{page_size}/0?type= 1&kw={keyword}&origKW=&id={collection_ids}&name=All Collections&order={order}&tn={thumbnail_size}
         
         return this.http
-            .get(this._auth.getUrl() + '/search/' + type + '/' + startIndex + '/' + pagination.pageSize + '/' + sortIndex + '?' + 'type=' + type + '&kw=' + keyword + '&origKW=&geoIds=' + geographyIds + '&clsIds=' + classificationIds + '&collTypes=' + colTypeIds + '&id=all&name=All%20Collections&bDate=' + earliestDate + '&eDate=' + latestDate + '&dExact=&order=0&isHistory=false&prGeoId=&tn=1', options)
+            .get(this._auth.getUrl() + '/search/' + type + '/' + startIndex + '/' + this.urlParams.pageSize + '/' + sortIndex + '?' + 'type=' + type + '&kw=' + keyword + '&origKW=&geoIds=' + geographyIds + '&clsIds=' + classificationIds + '&collTypes=' + colTypeIds + '&id=all&name=All%20Collections&bDate=' + earliestDate + '&eDate=' + latestDate + '&dExact=&order=0&isHistory=false&prGeoId=&tn=1', options)
             .toPromise()
             .then(this.extractData);
     }
 
-    getCollections() {
+    // Used by Home component
+    public getCollections() {
         let options = new RequestOptions({ withCredentials: true });
         // Returns all of the collections names
         return this.http
@@ -329,7 +361,7 @@ export class AssetService {
      * @param groupId Id of desired image group
      * @returns Promise, which is resolved with thumbnail data object
      */
-    getFromIgId(groupId: string) {
+    private getFromIgId(groupId: string) {
         let header = new Headers({ 'Content-Type': 'application/json' }); // ... Set content type to JSON
         let options = new RequestOptions({ headers: header, withCredentials: true }); // Create a request option
 
@@ -346,7 +378,7 @@ export class AssetService {
      * @param pageNum Value for pagination
      * @param pageSize How many thumbnails per page
      */
-    getAssociated(objectId: string, colId: string, pageNum: number, pageSize: number) {
+    private getAssociated(objectId: string, colId: string, pageNum: number, pageSize: number) {
         let header = new Headers({ 'Content-Type': 'application/json' }); // ... Set content type to JSON
         let options = new RequestOptions({ headers: header, withCredentials: true }); // Create a request option
         let requestRoute: string = this._auth.getUrl() + "/" + ["collaboratoryfiltering", objectId, "thumbnails", pageNum, pageSize].join("/") + "?collectionId=" + colId;
