@@ -63,7 +63,8 @@ export class BrowsePage {
   // TypeScript public modifiers
   constructor(
       private _assets: AssetService,
-      private route: ActivatedRoute
+      private route: ActivatedRoute,
+      private router: Router
   ) {   
   } 
 
@@ -179,8 +180,14 @@ export class BrowsePage {
   }
 
   openAssets(node){
-      if(!node.isFolder){
-          window.open('/#/collection;colId=' + node.widgetId, '_self');
+     if(!node.isFolder){
+        if (node.hasOwnProperty('grpId')) {
+            // Navigate to Collection
+            this.router.navigate(['image-group', { 'igId' : node.grpId }]);
+        } else {
+            // Navigate to Image Group
+            this.router.navigate(['collection', { 'colId' : node.widgetId } ]);
+        }
       }
   }
 
