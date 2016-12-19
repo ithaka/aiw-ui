@@ -37,6 +37,7 @@ export class AssetGrid implements OnInit, OnDestroy {
   private assetCount: number;
 
   private pagination: any = {
+    totalPages: 1,
     pageSize: 24,
     currentPage: 1
   };
@@ -140,19 +141,24 @@ export class AssetGrid implements OnInit, OnDestroy {
     // sets up subscription to allResults, which is the service providing thumbnails
     this.subscriptions.push(
       this._assets.allResults.subscribe((allResults: any) => {
+
+        // this conditional because allResults from collections page does not have count of assets
+        if (allResults.count) {
+          this.pagination.totalPages = Math.ceil( allResults.count / this.pagination.pageSize );
+        } else {
+          this.pagination.totalPages = Math.ceil( this.assetCount / this.pagination.pageSize );
+        }
+
         // handles case when currentPage * pageSize > allResults.count
-        if (allResults.count === 0 && this.pagination.currentPage > 1) {
+        if (
+          (allResults.count === 0 && this.pagination.currentPage > 1)
+          ||
+          (this.pagination.currentPage > this.pagination.totalPages)
+        ) {
           this.goToPage(1);
         } else {
           this.results = allResults;
-
-          // this conditional because allResults from collections page does not have count of assets
-          if (allResults.count) {
-            this.pagination.totalPages = Math.ceil( allResults.count / this.pagination.pageSize );
-          } else {
-            this.pagination.totalPages = Math.ceil( this.assetCount / this.pagination.pageSize );
-          }
-        }        
+        }
         this.isLoading = false;
       })
     );
