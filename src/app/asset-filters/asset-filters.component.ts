@@ -108,7 +108,7 @@ export class AssetFilters {
   }
 
   private loadRoute() {
-    let params = { 'term' : this.term };
+    let params = {};
 
     if (this.facets.dateObj && this.facets.dateObj.modified == true) {
       params['startDate'] = this.facets.dateObj.earliest.date * (this.facets.dateObj.earliest.era == 'BCE' ? -1 : 1);
@@ -119,7 +119,7 @@ export class AssetFilters {
       params[filter.filterGroup] =  filter.filterValue;
     }
 
-    this.router.navigate(['search', params ]);
+    this.router.navigate(['search', this.term, params]);
   }
 
 
