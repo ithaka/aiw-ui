@@ -132,7 +132,7 @@ export class AssetGrid implements OnInit, OnDestroy {
             this.dateFacet.latest.era = "CE";
           }
 
-          this._filters.setFacets('dateObj', this.dateFacet);
+          this._filters.setAvailable('dateObj', this.dateFacet);
         }
 
         //loop through url matrix parameters

@@ -6,8 +6,10 @@ export class AssetFiltersService {
 
     // Facets
     // private geoTree = [];
+
+    private appliedFilters: any = [];
     
-    private facets: any = {
+    private availableFilters: any = {
         collType : [],
         classification: [],
         geography: [],
@@ -25,22 +27,36 @@ export class AssetFiltersService {
         }
     };
 
+    private dateFacet: any = {};
+    private dateFacetsArray = [];
+
     // Observable object sources
-    private facetChangeSource = new Subject<any>();
+    private availableSource = new Subject<any>();
+    private appliedSource = new Subject<any>();
     // Observable object streams
-    public facetChange$ = this.facetChangeSource.asObservable();
+    public available$ = this.availableSource.asObservable();
+    public applied$ = this.appliedSource.asObservable();
 
     constructor(){
         
     }
     
-    public setFacets(name: string, facets: any ) {
-        this.facets[name] = facets;
-        this.facetChangeSource.next(this.facets);
+    public setAvailable(name: string, filters: any ) {
+        this.availableFilters[name] = filters;
+        this.availableSource.next(this.availableFilters);
     }
 
-    public getFacets(): any {
-        return this.facets;
+    public getAvailable(): any {
+        return this.availableFilters;
+    }
+
+    public apply(filter) {
+        this.appliedFilters.push(filter);
+        this.appliedSource.next(this.appliedFilters);
+    }
+
+    public getApplied(): any[] {
+        return this.appliedFilters;
     }
 
     // public setFilters(filters) {
@@ -51,5 +67,22 @@ export class AssetFiltersService {
     //     return this.filters;
     // }
 
+
+    private generateDateFacets(dateFacetsArray) {
+        var startDate = dateFacetsArray[0].date;
+        var endDate = dateFacetsArray[dateFacetsArray.length - 1].date;
+        
+        this.dateFacet.earliest.date = Math.abs(startDate);
+        this.dateFacet.earliest.era = startDate < 0 ? "BCE" : "CE";
+
+        this.dateFacet.latest.date = Math.abs(endDate);
+        this.dateFacet.latest.era = endDate < 0 ? "BCE" : "CE";
+
+        this.dateFacet.modified = false;
+
+        this.setAvailable('date', dateFacetsArray);
+        this.setAvailable('dateObj', this.dateFacet);
+        this.dateFacetsArray = dateFacetsArray;
+    }
 
 }

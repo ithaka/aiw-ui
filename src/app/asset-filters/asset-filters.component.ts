@@ -69,7 +69,7 @@ export class AssetFilters {
    
     // Keep an eye for facet updates 
     this.subscriptions.push(
-      _filters.facetChange$.subscribe(
+      _filters.available$.subscribe(
         facets => { 
           console.log("Facet updated:");
           console.log(facets);

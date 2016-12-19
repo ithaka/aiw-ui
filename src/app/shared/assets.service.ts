@@ -27,6 +27,7 @@ export class AssetService {
     private urlParams: any;
 
     private geoTree = [];
+    private activeSort: any = { };
 
     /** Keeps track of all filters available in url */
     private knownFilters: any = {};
@@ -104,6 +105,7 @@ export class AssetService {
             this.loadCollection(queryObject.colId, 1, 24);
         } else if (queryObject.hasOwnProperty("term")) {
             console.log("beginning search!");
+            this.loadSearch(queryObject.term);
         } else {
             console.log("don't know what to query!");
         }
@@ -206,8 +208,9 @@ export class AssetService {
             .toPromise()
             .then(this.extractData);
     }
-
-    private category(catId: string) {
+    
+    // Used by Browse page
+    public category(catId: string) {
         let options = new RequestOptions({ withCredentials: true });
 
         return this.http
@@ -240,7 +243,7 @@ export class AssetService {
      * Term List Service
      * @returns Returns the Geo Tree Object used for generating the geofacets tree.
      */
-    private termList(){
+    public termList(){
         let options = new RequestOptions({ withCredentials: true });
         
         return this.http
@@ -260,28 +263,23 @@ export class AssetService {
      * Executes search and sets relevant asset-grid parameters
      */
     private loadSearch(term) {
-        // if (!term && this.results === []) {
-        // let term = "*";
-        // }
-        // this.searchLoading = true;
-
-        this.search(term, this.filters, this.activeSort.index, this.dateFacet)
-        .then(
-            (res) => {
-            console.log(res);
-            this.generateColTypeFacets( this.getUniqueColTypeIds(res.collTypeFacets) );
-            this.generateGeoFacets( res.geographyFacets );
-            // this.generateDateFacets( res.dateFacets );
-            this._filters.setFacets('classification', res.classificationFacets);
-            this.urlParams.totalPages = Math.ceil( res.count / this.urlParams.pageSize );
-            this.allResultsSource.next(res.thumbnails);
-            // this.results = res.thumbnails;
-            // this.searchLoading = false;
-        })
-        .catch(function(err) {
-            // this.errors['search'] = "Unable to load search.";
-            this.searchLoading = false;
-        });
+        this.search(term, this.activeSort.index)
+            .then(
+                (res) => {
+                console.log(res);
+                this.generateColTypeFacets( this.getUniqueColTypeIds(res.collTypeFacets) );
+                this.generateGeoFacets( res.geographyFacets );
+                // this.generateDateFacets( res.dateFacets );
+                this._filters.setAvailable('classification', res.classificationFacets);
+                this.urlParams.totalPages = Math.ceil( res.count / this.urlParams.pageSize );
+                this.allResultsSource.next(res.thumbnails);
+                // this.results = res.thumbnails;
+                // this.searchLoading = false;
+            })
+            .catch(function(err) {
+                // this.errors['search'] = "Unable to load search.";
+                // this.searchLoading = false;
+            });
     }
 
     private generateColTypeFacets(idsArray){
@@ -301,7 +299,7 @@ export class AssetService {
         }
         
         // this.collTypeFacets = generatedFacetsArray;
-        this._filters.setFacets('collType', generatedFacetsArray); 
+        this._filters.setAvailable('collType', generatedFacetsArray); 
     }
 
     private getUniqueColTypeIds(facetArray){
@@ -365,7 +363,7 @@ export class AssetService {
         }
 
 
-        this._filters.setFacets('geography', generatedGeoFacets);
+        this._filters.setAvailable('geography', generatedGeoFacets);
         // this.geographyFacets = generatedGeoFacets;
     }
 
@@ -381,23 +379,6 @@ export class AssetService {
         return result;
     }
 
-    private generateDateFacets(dateFacetsArray) {
-        var startDate = dateFacetsArray[0].date;
-        var endDate = dateFacetsArray[dateFacetsArray.length - 1].date;
-        
-        this.dateFacet.earliest.date = Math.abs(startDate);
-        this.dateFacet.earliest.era = startDate < 0 ? "BCE" : "CE";
-
-        this.dateFacet.latest.date = Math.abs(endDate);
-        this.dateFacet.latest.era = endDate < 0 ? "BCE" : "CE";
-
-        this.dateFacet.modified = false;
-
-        this._filters.setFacets('date', dateFacetsArray);
-        this._filters.setFacets('dateObj', this.dateFacet);
-        this.dateFacetsArray = dateFacetsArray;
-    }
-
     /**
      * Search assets service
      * @param term          String to search for.
@@ -406,7 +387,7 @@ export class AssetService {
      * @param dateFacet     Object with the dateFacet values
      * @returns       Returns an object with the properties: thumbnails, count, altKey, classificationFacets, geographyFacets, minDate, maxDate, collTypeFacets, dateFacets
      */
-    private search(term: string, filters, sortIndex, dateFacet) {
+    private search(term: string, sortIndex) {
         let keyword = encodeURIComponent(term);
         let options = new RequestOptions({ withCredentials: true });
         let startIndex = ((this.urlParams.currentPage - 1) * this.urlParams.pageSize) + 1;
@@ -419,6 +400,10 @@ export class AssetService {
         let earliestDate = '';
         let latestDate = '';
 
+        let filters = this._filters.getApplied(); 
+        // To-do: break dateObj out of available filters
+        let dateFacet = this._filters.getAvailable()['dateObj'];
+        
         if(dateFacet.modified){
             earliestDate = dateFacet.earliest.date;
             earliestDate = ( dateFacet.earliest.era == 'BCE' ) ? ( parseInt(earliestDate) * -1 ).toString() : earliestDate;
@@ -452,7 +437,8 @@ export class AssetService {
             .then(this.extractData);
     }
 
-    private getCollections() {
+    // Used by Home component
+    public getCollections() {
         let options = new RequestOptions({ withCredentials: true });
         // Returns all of the collections names
         return this.http
