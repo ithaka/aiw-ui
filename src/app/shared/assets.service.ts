@@ -234,20 +234,24 @@ export class AssetService {
     }
 
     /**
-     * Term List Service
-     * @returns Returns the Geo Tree Object used for generating the geofacets tree.
+     * Get Collection
+     * @param colId id of collection to fetch
+     * @returns thumbnails of assets for a collection, and collection information
      */
-    public termList(){
-        let options = new RequestOptions({ withCredentials: true });
+    private getCollectionThumbs(colId: string, pageNo?: number, pageSize?: number) {
+        let options = new RequestOptions({withCredentials: true});
+        let imageSize = 0;
         
+        if (!pageNo) { pageNo = 1; }
+        if (!pageSize) { pageSize = 72; }
+
+        let requestString = [this._auth.getUrl(), 'collections', colId, 'thumbnails', pageNo, pageSize, imageSize].join('/');
+
         return this.http
-            .get(this._auth.getUrl() + '/termslist/', options)
+            .get(requestString, options)
             .toPromise()
-            .then(this.extractData)
-            .then((res) => {
-                this.geoTree = res.geoTree;
-            });
-    }
+            .then(this.extractData);
+    }   
 
     /**
      * Executes search and sets relevant asset-grid parameters
@@ -260,13 +264,11 @@ export class AssetService {
                 console.log(res);
                 this._filters.generateColTypeFacets( res.collTypeFacets );
                 this._filters.generateGeoFilters( res.geographyFacets );
-                // this.generateDateFacets( res.dateFacets );
+                this._filters.generateDateFacets( res.dateFacets );
                 this._filters.setAvailable('classification', res.classificationFacets);
                 this.allResultsSource.next(res);
-                // this.searchLoading = false;
             })
             .catch(function(err) {
-                // this.searchLoading = false;
                 console.error(err);
             });
     }

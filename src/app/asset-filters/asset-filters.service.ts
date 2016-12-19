@@ -1,7 +1,11 @@
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs/Subject';
 import { Locker } from 'angular2-locker';
- 
+import { Http, Response, Headers, RequestOptions } from '@angular/http';
+import 'rxjs/add/operator/toPromise';
+
+import { AuthService } from '../shared/auth.service';
+
 @Injectable()
 export class AssetFiltersService {
 
@@ -38,7 +42,11 @@ export class AssetFiltersService {
     public available$ = this.availableSource.asObservable();
     public applied$ = this.appliedSource.asObservable();
     
-    constructor(private locker: Locker){
+    constructor(
+        private locker: Locker,
+        private http: Http,
+        private _auth: AuthService
+    ){
         
     }
     
@@ -76,24 +84,44 @@ export class AssetFiltersService {
     // }
 
 
-    private generateDateFacets(dateFacetsArray) {
+    public generateDateFacets(dateFacetsArray ?) {
+        if (!dateFacetsArray) {
+            dateFacetsArray = this.availableFilters.date;
+        }
         var startDate = dateFacetsArray[0].date;
         var endDate = dateFacetsArray[dateFacetsArray.length - 1].date;
         
-        this.dateFacet.earliest.date = Math.abs(startDate);
-        this.dateFacet.earliest.era = startDate < 0 ? "BCE" : "CE";
+        this.availableFilters.dateObj.earliest.date = Math.abs(startDate);
+        this.availableFilters.dateObj.earliest.era = startDate < 0 ? "BCE" : "CE";
 
-        this.dateFacet.latest.date = Math.abs(endDate);
-        this.dateFacet.latest.era = endDate < 0 ? "BCE" : "CE";
+        this.availableFilters.dateObj.latest.date = Math.abs(endDate);
+        this.availableFilters.dateObj.latest.era = endDate < 0 ? "BCE" : "CE";
 
-        this.dateFacet.modified = false;
+        this.availableFilters.dateObj.modified = false;
 
         this.setAvailable('date', dateFacetsArray);
-        this.setAvailable('dateObj', this.dateFacet);
+        this.setAvailable('dateObj', this.availableFilters.dateObj);
         this.dateFacetsArray = dateFacetsArray;
     }
 
     public generateGeoFilters(resGeoFacetsArray){
+        console.log("Generate geo!");
+        if (this.geoTree.length < 1) {
+            console.log("Not enough geo!");
+            let options = new RequestOptions({ withCredentials: true });
+        
+            this.http.get(this._auth.getUrl() + '/termslist/', options)
+                .toPromise()
+                .then(res => {
+                    console.log(res.json());
+                    this.geoTree = res.json().geoTree;
+                    this.generateGeoFilters(resGeoFacetsArray);
+                }, err => {
+                    console.error(err);
+                });
+                
+            return;
+        }
         var generatedGeoFacets = [];
         var countriesArray = [];
         // Extract Regions
@@ -190,4 +218,20 @@ export class AssetFiltersService {
         }
         return result;
     }
+
+
+    /**
+     * Term List Service
+     * @returns Returns the Geo Tree Object used for generating the geofacets tree.
+     */
+    // public loadTermList(){
+    //     let options = new RequestOptions({ withCredentials: true });
+        
+    //     return this.http
+    //         .get(this._auth.getUrl() + '/termslist/', options)
+    //         .map(res => {
+    //             this.geoTree = res.json().geoTree;
+    //             this.generateGeoFilters();
+    //         });
+    // }
 }

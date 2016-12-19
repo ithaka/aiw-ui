@@ -23,8 +23,8 @@ export class AssetFilters {
 
   errors = {};
   results = [];
-  filters = [];
-  facets: any = {};
+  appliedFilters = [];
+  availableFilters: any = {};
 
   // collTypeFacets = [];
   // classificationFacets = [];
@@ -67,55 +67,44 @@ export class AssetFilters {
       private router: Router) {
    
    
-    // Keep an eye for facet updates 
-    this.subscriptions.push(
-      _filters.available$.subscribe(
-        facets => { 
-          console.log("Facet updated:");
-          console.log(facets);
-          this.facets = facets; 
-        }
-      )
-    );
+   
   }
 
 
   ngOnInit() {
-    this.getTermsList();
-
-    this.route.params.map(params => params['term'])
+    this.subscriptions.push(
+      this.route.params.map(params => params['term'])
             .subscribe(term => { 
                 this.term = term;
-                // this.searchAssets(term);
-               });
-
-    // Subscribe to all filter params
-
-    // Initally set facets
-    // this.filters = this._filters.getFacets();
-
+               })
+    );
+     // Keep an eye for available filter updates 
+    this.subscriptions.push(
+      this._filters.available$.subscribe(
+        filters => { 
+          this.availableFilters = filters; 
+        }
+      )
+    );
+    // Subscribe to all applied filters in case something fires outside this component
+    this.subscriptions.push(
+      this._filters.applied$
+            .subscribe(filters => { 
+                this.appliedFilters = filters;
+               })
+    );
    
-  }
-
-  getTermsList() {
-    this._assets.termList()
-      .then((res) => {
-        this.geoTree = res.geoTree;
-      })
-      .catch(function(err) {
-        console.log('Unable to load terms list.');
-      });
   }
 
   private loadRoute() {
     let params = {};
 
-    if (this.facets.dateObj && this.facets.dateObj.modified == true) {
-      params['startDate'] = this.facets.dateObj.earliest.date * (this.facets.dateObj.earliest.era == 'BCE' ? -1 : 1);
-      params['endDate'] = this.facets.dateObj.latest.date * (this.facets.dateObj.latest.era == 'BCE' ? -1 : 1);
+    if (this.availableFilters.dateObj && this.availableFilters.dateObj.modified == true) {
+      params['startDate'] = this.availableFilters.dateObj.earliest.date * (this.availableFilters.dateObj.earliest.era == 'BCE' ? -1 : 1);
+      params['endDate'] = this.availableFilters.dateObj.latest.date * (this.availableFilters.dateObj.latest.era == 'BCE' ? -1 : 1);
     }
 
-    for (let filter of this.filters) {
+    for (let filter of this.appliedFilters) {
       params[filter.filterGroup] =  filter.filterValue;
     }
 
@@ -165,12 +154,8 @@ export class AssetFilters {
       this.removeFilter(filter);
     }
     else{ // Add Filter
-      this.filters.push(filter);
+      this.appliedFilters.push(filter);
     }
-    
-    console.log('Applied Filters:-');
-    console.log(this.filters);
-
     this.pagination.currentPage = 1;
     
     this.loadRoute();
@@ -191,13 +176,13 @@ export class AssetFilters {
 
   clearAllFilterGroup(group){
     if(group == 'date'){
-      this.facets.dateObj.modified = false;
+      this.availableFilters.dateObj.modified = false;
     }
     else{
-      for(var i = 0; i < this.filters.length; i++){
-        var filter = this.filters[i];
+      for(var i = 0; i < this.appliedFilters.length; i++){
+        var filter = this.appliedFilters[i];
         if(filter.filterGroup === group){
-          this.filters.splice(i, 1);
+          this.appliedFilters.splice(i, 1);
           i = -1;
         }
       }
@@ -208,11 +193,15 @@ export class AssetFilters {
     this.loadRoute();
   }
 
+  clearDateFilter() {
+    this._filters.generateDateFacets();
+  }
+
   removeFilter(filterObj){
-    for(var i = 0; i < this.filters.length; i++){
-      var filter = this.filters[i];
+    for(var i = 0; i < this.appliedFilters.length; i++){
+      var filter = this.appliedFilters[i];
       if((filterObj.filterGroup === filter.filterGroup) && (filterObj.filterValue === filter.filterValue)){
-        this.filters.splice(i, 1);
+        this.appliedFilters.splice(i, 1);
         break;
       }
     }
@@ -220,8 +209,8 @@ export class AssetFilters {
   }
   
   filterExists(filterObj){
-    for(var i = 0; i < this.filters.length; i++){
-      var filter = this.filters[i];
+    for(var i = 0; i < this.appliedFilters.length; i++){
+      var filter = this.appliedFilters[i];
       if((filterObj.filterGroup === filter.filterGroup) && (filterObj.filterValue === filter.filterValue)){
         return true;
       }
@@ -246,7 +235,7 @@ export class AssetFilters {
 
 
   applyDateFilter(){
-    this.facets.dateObj.modified = true;
+    this.availableFilters.dateObj.modified = true;
     this.pagination.currentPage = 1;
     this.loadRoute();
   }
