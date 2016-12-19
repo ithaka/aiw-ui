@@ -61,11 +61,6 @@ export class AssetGrid implements OnInit, OnDestroy {
     modified : false
   };
   
-  pagination = {
-    currentPage : 1,
-    totalPages : 1,
-    pageSize : 24
-  };
   activeSort = {
     index : 0,
     label : 'Relevance'
@@ -165,17 +160,7 @@ export class AssetGrid implements OnInit, OnDestroy {
    * @param pageNum number of desired page
    */
   goToPage(pageNum: number) {
-    if (this.urlParams.currentPage !== pageNum) {
-
-      let currentParamsArr: Params = this.route.snapshot.params;
-      let currentParamsObj: any = { };
-      for (let param in currentParamsArr) {
-        currentParamsObj[param] = currentParamsArr[param];
-      }
-      currentParamsObj.currentPage = +pageNum;
-
-      this._router.navigate([currentParamsObj], { relativeTo: this.route });
-    }
+    this.addRouteParam("pageNum", pageNum);
   }
 
   changeSortOpt(index, label) {
@@ -186,17 +171,7 @@ export class AssetGrid implements OnInit, OnDestroy {
   }
 
   changePageSize(pageSize: number){
-    this.urlParams.pageSize = pageSize;
-    this.urlParams.currentPage = 1;
-    
-    let currentParamsArr: Params = this.route.snapshot.params;
-    let currentParamsObj: any = { };
-    for (let param in currentParamsArr) {
-      currentParamsObj[param] = currentParamsArr[param];
-    }
-    currentParamsObj.pageSize = +pageSize;
-
-    this._router.navigate([currentParamsObj], { relativeTo: this.route }); //good, but ditches existing params
+    this.addRouteParam("pageSize", pageSize);
   }
 
   toggleEra(dateObj){
@@ -281,9 +256,9 @@ export class AssetGrid implements OnInit, OnDestroy {
     return false;
   }
 
-  private addRouteParam(param: string) {
+  private addRouteParam(key: string, value: any) {
     let currentParamsObj: any = this.route.snapshot.params;
-    currentParamsObj[param] = param;
+    currentParamsObj[key] = value;
 
     this._router.navigate([currentParamsObj], { relativeTo: this.route }); //good, but ditches existing params
   }
