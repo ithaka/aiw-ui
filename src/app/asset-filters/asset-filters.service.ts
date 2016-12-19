@@ -39,9 +39,9 @@ export class AssetFiltersService {
         this.facetChangeSource.next(this.facets);
     }
 
-    // public getFacets() {
-    //     return this.facets;
-    // }
+    public getFacets(): any {
+        return this.facets;
+    }
 
     // public setFilters(filters) {
     //     this.filters = filters;

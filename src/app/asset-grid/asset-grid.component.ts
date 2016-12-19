@@ -150,8 +150,8 @@ export class AssetGrid implements OnInit, OnDestroy {
         
         //only searching currently takes place in asset-grid, and should be moved to asset.service
         if(this.urlParams.term) {
-          this.getTermsList();
-          this.loadSearch(this.urlParams.term);
+          // this.getTermsList();
+          // this.loadSearch(this.urlParams.term);
         }
       })
     );
@@ -168,43 +168,43 @@ export class AssetGrid implements OnInit, OnDestroy {
     this.subscriptions.forEach((sub) => { sub.unsubscribe(); });
   }
 
-  getTermsList(){
-    this._assets.termList()
-      .then((res) => {
-        this.geoTree = res.geoTree;
-      })
-      .catch((err) => {
-        console.log('Unable to load terms list.');
-        console.log(err);
-      });
-  }
+  // getTermsList(){
+  //   this._assets.termList()
+  //     .then((res) => {
+  //       this.geoTree = res.geoTree;
+  //     })
+  //     .catch((err) => {
+  //       console.log('Unable to load terms list.');
+  //       console.log(err);
+  //     });
+  // }
 
-  /**
-   * Executes searchn and sets relevant asset-grid parameters
-   */
-  loadSearch(term) {
-    if (!term && this.results === []) {
-      let term = "*";
-    }
-    this.searchLoading = true;
+  // /**
+  //  * Executes search and sets relevant asset-grid parameters
+  //  */
+  // loadSearch(term) {
+  //   if (!term && this.results === []) {
+  //     let term = "*";
+  //   }
+  //   this.searchLoading = true;
 
-    this._assets.search(term, this.filters, this.activeSort.index, this.pagination, this.dateFacet)
-      .then(
-        data => {
-          console.log(data);
-          this.generateColTypeFacets( this.getUniqueColTypeIds(data.collTypeFacets) );
-          this.generateGeoFacets( data.geographyFacets );
-          this.generateDateFacets( data.dateFacets );
-          this._filters.setFacets('classification', data.classificationFacets);
-          this.urlParams.totalPages = this.setTotalPages(data.count);
-          this.results = data.thumbnails;
-          this.searchLoading = false;
-      })
-      .catch(function(err) {
-        // this.errors['search'] = "Unable to load search.";
-        this.searchLoading = false;
-      });
-  }
+  //   this._assets.search(term, this.filters, this.activeSort.index, this.pagination, this.dateFacet)
+  //     .then(
+  //       data => {
+  //         console.log(data);
+  //         this.generateColTypeFacets( this.getUniqueColTypeIds(data.collTypeFacets) );
+  //         this.generateGeoFacets( data.geographyFacets );
+  //         this.generateDateFacets( data.dateFacets );
+  //         this._filters.setFacets('classification', data.classificationFacets);
+  //         this.urlParams.totalPages = this.setTotalPages(data.count);
+  //         this.results = data.thumbnails;
+  //         this.searchLoading = false;
+  //     })
+  //     .catch(function(err) {
+  //       // this.errors['search'] = "Unable to load search.";
+  //       this.searchLoading = false;
+  //     });
+  // }
 
   goToPage(pageNum: number) {
     if (this.urlParams.currentPage !== pageNum) {
@@ -222,14 +222,14 @@ export class AssetGrid implements OnInit, OnDestroy {
     }
   }
 
-  /**
-   * Sets the number of total pages in pagination
-   * @param count The total number of images in results
-   * @returns the total number of pages the assets will fill
-   */
-  setTotalPages(count){
-     return Math.ceil( count / this.urlParams.pageSize );
-  }
+  // /**
+  //  * Sets the number of total pages in pagination
+  //  * @param count The total number of images in results
+  //  * @returns the total number of pages the assets will fill
+  //  */
+  // setTotalPages(count){
+  //    return Math.ceil( count / this.urlParams.pageSize );
+  // }
 
   changeSortOpt(index, label) {
     this.activeSort.index = index;
@@ -334,126 +334,127 @@ export class AssetGrid implements OnInit, OnDestroy {
     return false;
   }
 
-  getUniqueColTypeIds(facetArray){
-    var colTypeIds = [];
-    for(var i = 0; i < facetArray.length; i++){
-      var facetObj = facetArray[i];
-      var idArray = facetObj.collectionType.split(',');
-      for(var j = 0; j < idArray.length; j++){
-        idArray[j] = idArray[j].trim();
-        if(colTypeIds.indexOf(idArray[j]) === -1){
-          colTypeIds.push(idArray[j]);
-        }
-      }
-    }
-    return colTypeIds;
-  } 
+  // getUniqueColTypeIds(facetArray){
+  //   var colTypeIds = [];
+  //   for(var i = 0; i < facetArray.length; i++){
+  //     var facetObj = facetArray[i];
+  //     var idArray = facetObj.collectionType.split(',');
+  //     for(var j = 0; j < idArray.length; j++){
+  //       idArray[j] = idArray[j].trim();
+  //       if(colTypeIds.indexOf(idArray[j]) === -1){
+  //         colTypeIds.push(idArray[j]);
+  //       }
+  //     }
+  //   }
+  //   return colTypeIds;
+  // } 
 
-  generateColTypeFacets(idsArray){
-    var generatedFacetsArray = [];
-    for(var i = 0; i < idsArray.length; i++){
-      var facetObj = {
-        id : idsArray[i],
-        label: ''
-      };
-      if(facetObj.id === '1'){
-        facetObj.label = 'Artstor Digital Library';
-      }
-      else if(facetObj.id === '5'){
-        facetObj.label = 'Shared Shelf Commons';
-      }
-      generatedFacetsArray.push(facetObj);
-    }
+  // generateColTypeFacets(idsArray){
+  //   var generatedFacetsArray = [];
+  //   for(var i = 0; i < idsArray.length; i++){
+  //     var facetObj = {
+  //       id : idsArray[i],
+  //       label: ''
+  //     };
+  //     if(facetObj.id === '1'){
+  //       facetObj.label = 'Artstor Digital Library';
+  //     }
+  //     else if(facetObj.id === '5'){
+  //       facetObj.label = 'Shared Shelf Commons';
+  //     }
+  //     generatedFacetsArray.push(facetObj);
+  //   }
     
-    this.collTypeFacets = generatedFacetsArray;
-    this._filters.setFacets('collType', generatedFacetsArray); 
-  }
+  //   this.collTypeFacets = generatedFacetsArray;
+  //   this._filters.setFacets('collType', generatedFacetsArray); 
+  // }
 
-  generateGeoFacets(resGeoFacetsArray){
-    var generatedGeoFacets = [];
-    var countriesArray = [];
-    // Extract Regions
-    for(var i = 0; i < resGeoFacetsArray.length; i++){
-      var resGeoFacet = resGeoFacetsArray[i];
-      var match = false;
+  // generateGeoFacets(resGeoFacetsArray){
+  //   var generatedGeoFacets = [];
+  //   var countriesArray = [];
+  //   // Extract Regions
+  //   for(var i = 0; i < resGeoFacetsArray.length; i++){
+  //     var resGeoFacet = resGeoFacetsArray[i];
+  //     var match = false;
 
-      for(var j = 0; j < this.geoTree.length; j++){
-        var geoTreeObj = this.geoTree[j];
-        if((geoTreeObj.type == 'region') && (resGeoFacet.id == geoTreeObj.nodeId)){
-          resGeoFacet.expanded = false;
-          resGeoFacet.childrenIds = geoTreeObj.children;
-          resGeoFacet.children = [];
-          match = true;
-          break;
-        }
-      }
+  //     for(var j = 0; j < this.geoTree.length; j++){
+  //       var geoTreeObj = this.geoTree[j];
+  //       if((geoTreeObj.type == 'region') && (resGeoFacet.id == geoTreeObj.nodeId)){
+  //         resGeoFacet.expanded = false;
+  //         resGeoFacet.childrenIds = geoTreeObj.children;
+  //         resGeoFacet.children = [];
+  //         match = true;
+  //         break;
+  //       }
+  //     }
 
-      if(match){
-          generatedGeoFacets.push(resGeoFacet);
-      }
-      else{
-          countriesArray.push(resGeoFacet);
-      }
+  //     if(match){
+  //         generatedGeoFacets.push(resGeoFacet);
+  //     }
+  //     else{
+  //         countriesArray.push(resGeoFacet);
+  //     }
 
-    }
+  //   }
 
-    // console.log(countriesArray);
+  //   // console.log(countriesArray);
 
-    // Extract Countries
-    for(var i = 0; i < countriesArray.length; i++){
-      var country = countriesArray[i];
+  //   // Extract Countries
+  //   for(var i = 0; i < countriesArray.length; i++){
+  //     var country = countriesArray[i];
 
-      for(var j = 0; j < generatedGeoFacets.length; j++){
-        var generatedGeoFacet = generatedGeoFacets[j];
-        if(this.existsInRegion(country.id, generatedGeoFacet.childrenIds)){
-          // country.parentId = generatedGeoFacet.id;
-          generatedGeoFacet.children.push(country);
-          break;
-        }
-      }
+  //     for(var j = 0; j < generatedGeoFacets.length; j++){
+  //       var generatedGeoFacet = generatedGeoFacets[j];
+  //       if(this.existsInRegion(country.id, generatedGeoFacet.childrenIds)){
+  //         // country.parentId = generatedGeoFacet.id;
+  //         generatedGeoFacet.children.push(country);
+  //         break;
+  //       }
+  //     }
 
-    }
+  //   }
 
 
-    this._filters.setFacets('geography', generatedGeoFacets);
-    this.geographyFacets = generatedGeoFacets;
-  }
+  //   this._filters.setFacets('geography', generatedGeoFacets);
+  //   this.geographyFacets = generatedGeoFacets;
+  // }
 
-  generateDateFacets(dateFacetsArray){
-    var startDate = dateFacetsArray[0].date;
-    var endDate = dateFacetsArray[dateFacetsArray.length - 1].date;
+  // generateDateFacets(dateFacetsArray){
+  //   var startDate = dateFacetsArray[0].date;
+  //   var endDate = dateFacetsArray[dateFacetsArray.length - 1].date;
     
-    this.dateFacet.earliest.date = Math.abs(startDate);
-    this.dateFacet.earliest.era = startDate < 0 ? "BCE" : "CE";
+  //   this.dateFacet.earliest.date = Math.abs(startDate);
+  //   this.dateFacet.earliest.era = startDate < 0 ? "BCE" : "CE";
 
-    this.dateFacet.latest.date = Math.abs(endDate);
-    this.dateFacet.latest.era = endDate < 0 ? "BCE" : "CE";
+  //   this.dateFacet.latest.date = Math.abs(endDate);
+  //   this.dateFacet.latest.era = endDate < 0 ? "BCE" : "CE";
 
-    this.dateFacet.modified = false;
+  //   this.dateFacet.modified = false;
 
-    this._filters.setFacets('date', dateFacetsArray);
-    this._filters.setFacets('dateObj', this.dateFacet);
-    this.dateFacetsArray = dateFacetsArray;
-  }
+  //   this._filters.setFacets('date', dateFacetsArray);
+  //   this._filters.setFacets('dateObj', this.dateFacet);
+  //   this.dateFacetsArray = dateFacetsArray;
+  // }
 
-  applyDateFilter(){
-    this.dateFacet.modified = true;
+  //NEVER USED HERE
+  // applyDateFilter(){
+  //   this.dateFacet.modified = true;
 
-    this.urlParams.currentPage = 1;
+  //   this.urlParams.currentPage = 1;
     
-  }
+  // }
 
-  existsInRegion(countryId, childerenIds){
-    var result = false;
-    for(var i = 0; i < childerenIds.length; i++){
-      var child = childerenIds[i];
-      if(child._reference == countryId){
-        result = true;
-        break;
-      }
-    }
-    return result;
-  }
+  // existsInRegion(countryId, childerenIds){
+  //   var result = false;
+  //   for(var i = 0; i < childerenIds.length; i++){
+  //     var child = childerenIds[i];
+  //     if(child._reference == countryId){
+  //       result = true;
+  //       break;
+  //     }
+  //   }
+  //   return result;
+  // }
 
 
 }

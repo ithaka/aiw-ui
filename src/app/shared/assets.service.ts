@@ -12,6 +12,7 @@ import 'rxjs/add/operator/toPromise';
 import { Subscription }   from 'rxjs/Subscription';
  
 import { AuthService } from '../shared/auth.service';
+import { AssetFiltersService } from './../asset-filters/asset-filters.service';
 
 @Injectable()
 export class AssetService {
@@ -23,24 +24,34 @@ export class AssetService {
     /**
      * urlParams is used as an enum for special parameters
      */
-    private urlParams: any = {
-        term: "",
-        pageSize: 24,
-        totalPages: 1,
-        currentPage: 1,
-        startDate: "",
-        endDate: "",
-        igId: "",
-        objectId: "",
-        colId: ""
-    };
+    private urlParams: any;
+
+    private geoTree = [];
 
     /** Keeps track of all filters available in url */
     private knownFilters: any = {};
     public _storage;
 
-    constructor(private _router: Router, private route: ActivatedRoute, private http: Http, locker: Locker, private _auth: AuthService ){
+    constructor(
+        private _filters: AssetFiltersService,
+        private _router: Router,
+        private route: ActivatedRoute,
+        private http: Http,
+        locker: Locker,
+        private _auth: AuthService
+    ) {
         this._storage = locker;
+        this.urlParams = {
+            term: "",
+            pageSize: 24,
+            totalPages: 1,
+            currentPage: 1,
+            startDate: 0,
+            endDate: 0,
+            igId: "",
+            objectId: "",
+            colId: ""
+        };
     }
 
     private readUrlParams() {
@@ -91,6 +102,8 @@ export class AssetService {
         } else if (queryObject.hasOwnProperty("colId")) {
             //get collection thumbnails
             this.loadCollection(queryObject.colId, 1, 24);
+        } else if (queryObject.hasOwnProperty("term")) {
+            console.log("beginning search!");
         } else {
             console.log("don't know what to query!");
         }
@@ -102,7 +115,7 @@ export class AssetService {
      * @param objectId Object Id for which to retrieve image results
      * @param colId Collection Id in which the Object resides
      */
-    loadAssociatedAssets(objectId: string, colId: string) {
+    private loadAssociatedAssets(objectId: string, colId: string) {
         // this.getAssociated(objectId, colId, this.pagination.currentPage, this.pagination.pageSize)
         this.getAssociated(objectId, colId, 1, 24)
             .then((data) => {
@@ -141,7 +154,7 @@ export class AssetService {
      * Loads thumbnails from a collectionType
      * @param colId Collection Id for which to fetch results
      */
-    loadCollection(colId: string, currentPage?: number, pageSize?: number) {
+    private loadCollection(colId: string, currentPage?: number, pageSize?: number) {
         // this.getCollectionThumbs(colId, currentPage, pageSize)
         this.getCollectionThumbs(colId, currentPage, pageSize)
             .then((data) => {
@@ -155,14 +168,11 @@ export class AssetService {
             });
     }
 
-    loadCluster(objectId){
+    private loadCluster(objectId: string){
         // this.searchLoading = true;
         this.cluster(objectId, {
                 index : 0,
                 label : 'Relevance'
-            }, {
-                currentPage: 1,
-                pageSize: 24
             })
             .then((res) => {
                 console.log(res);
@@ -183,14 +193,13 @@ export class AssetService {
             });
     }
 
-    cluster(objectId: string, sortIndex, pagination) {
+    private cluster(objectId: string, sortIndex) {
         let options = new RequestOptions({ withCredentials: true });
-        let startIndex = ((pagination.currentPage - 1) * pagination.pageSize) + 1;
+        let startIndex = ((this.urlParams.currentPage - 1) * this.urlParams.pageSize) + 1;
 
         //sortIndex was tacked onto this before, but the call was not working
-        let requestString = [this._auth.getUrl(), "cluster", objectId, "thumbnails", startIndex, pagination.pageSize].join("/");
-        console.log(requestString);
-        //  + '/cluster/' + objectId + '/thumbnails/' + startIndex + '/' + pagination.pageSize + '/' + sortIndex
+        let requestString = [this._auth.getUrl(), "cluster", objectId, "thumbnails", startIndex, this.urlParams.pageSize].join("/");
+        //  + '/cluster/' + objectId + '/thumbnails/' + startIndex + '/' + this.urlParams.pageSize + '/' + sortIndex
 
         return this.http
             .get(requestString, options)
@@ -198,11 +207,11 @@ export class AssetService {
             .then(this.extractData);
     }
 
-    category(id) {
+    private category(catId: string) {
         let options = new RequestOptions({ withCredentials: true });
 
         return this.http
-            .get(this._auth.getUrl() + '/collections/' + id + '/categoryroot', options)
+            .get(this._auth.getUrl() + '/collections/' + catId + '/categoryroot', options)
             .toPromise()
             .then(this.extractData);
     }
@@ -212,7 +221,7 @@ export class AssetService {
      * @param colId id of collection to fetch
      * @returns thumbnails of assets for a collection, and collection information
      */
-    getCollectionThumbs(colId: string, pageNo?: number, pageSize?: number) {
+    private getCollectionThumbs(colId: string, pageNo?: number, pageSize?: number) {
         let options = new RequestOptions({withCredentials: true});
         let imageSize = 0;
         
@@ -229,16 +238,164 @@ export class AssetService {
 
     /**
      * Term List Service
-     * @returns       Returns the Geo Tree Object used for generating the geofacets tree.
+     * @returns Returns the Geo Tree Object used for generating the geofacets tree.
      */
-
-    termList(){
+    private termList(){
         let options = new RequestOptions({ withCredentials: true });
         
         return this.http
             .get(this._auth.getUrl() + '/termslist/', options)
             .toPromise()
-            .then(this.extractData);   
+            .then(this.extractData)
+            .then((res) => {
+                this.geoTree = res.geoTree;
+            });
+            // .catch((err) => {
+            //     console.log('Unable to load terms list.');
+            //     console.log(err);
+            // });
+    }
+
+    /**
+     * Executes search and sets relevant asset-grid parameters
+     */
+    private loadSearch(term) {
+        // if (!term && this.results === []) {
+        // let term = "*";
+        // }
+        // this.searchLoading = true;
+
+        this.search(term, this.filters, this.activeSort.index, this.dateFacet)
+        .then(
+            (res) => {
+            console.log(res);
+            this.generateColTypeFacets( this.getUniqueColTypeIds(res.collTypeFacets) );
+            this.generateGeoFacets( res.geographyFacets );
+            // this.generateDateFacets( res.dateFacets );
+            this._filters.setFacets('classification', res.classificationFacets);
+            this.urlParams.totalPages = Math.ceil( res.count / this.urlParams.pageSize );
+            this.allResultsSource.next(res.thumbnails);
+            // this.results = res.thumbnails;
+            // this.searchLoading = false;
+        })
+        .catch(function(err) {
+            // this.errors['search'] = "Unable to load search.";
+            this.searchLoading = false;
+        });
+    }
+
+    private generateColTypeFacets(idsArray){
+        var generatedFacetsArray = [];
+        for(var i = 0; i < idsArray.length; i++){
+        var facetObj = {
+            id : idsArray[i],
+            label: ''
+        };
+        if(facetObj.id === '1'){
+            facetObj.label = 'Artstor Digital Library';
+        }
+        else if(facetObj.id === '5'){
+            facetObj.label = 'Shared Shelf Commons';
+        }
+        generatedFacetsArray.push(facetObj);
+        }
+        
+        // this.collTypeFacets = generatedFacetsArray;
+        this._filters.setFacets('collType', generatedFacetsArray); 
+    }
+
+    private getUniqueColTypeIds(facetArray){
+        var colTypeIds = [];
+        for(var i = 0; i < facetArray.length; i++){
+        var facetObj = facetArray[i];
+        var idArray = facetObj.collectionType.split(',');
+        for(var j = 0; j < idArray.length; j++){
+            idArray[j] = idArray[j].trim();
+            if(colTypeIds.indexOf(idArray[j]) === -1){
+            colTypeIds.push(idArray[j]);
+            }
+        }
+        }
+        return colTypeIds;
+    }
+
+    private generateGeoFacets(resGeoFacetsArray){
+        var generatedGeoFacets = [];
+        var countriesArray = [];
+        // Extract Regions
+        for(var i = 0; i < resGeoFacetsArray.length; i++){
+        var resGeoFacet = resGeoFacetsArray[i];
+        var match = false;
+
+        for(var j = 0; j < this.geoTree.length; j++){
+            var geoTreeObj = this.geoTree[j];
+            if((geoTreeObj.type == 'region') && (resGeoFacet.id == geoTreeObj.nodeId)){
+            resGeoFacet.expanded = false;
+            resGeoFacet.childrenIds = geoTreeObj.children;
+            resGeoFacet.children = [];
+            match = true;
+            break;
+            }
+        }
+
+        if(match){
+            generatedGeoFacets.push(resGeoFacet);
+        }
+        else{
+            countriesArray.push(resGeoFacet);
+        }
+
+        }
+
+        // console.log(countriesArray);
+
+        // Extract Countries
+        for(var i = 0; i < countriesArray.length; i++){
+        var country = countriesArray[i];
+
+        for(var j = 0; j < generatedGeoFacets.length; j++){
+            var generatedGeoFacet = generatedGeoFacets[j];
+            if(this.existsInRegion(country.id, generatedGeoFacet.childrenIds)){
+            // country.parentId = generatedGeoFacet.id;
+            generatedGeoFacet.children.push(country);
+            break;
+            }
+        }
+
+        }
+
+
+        this._filters.setFacets('geography', generatedGeoFacets);
+        // this.geographyFacets = generatedGeoFacets;
+    }
+
+    private existsInRegion(countryId, childerenIds){
+        var result = false;
+        for(var i = 0; i < childerenIds.length; i++){
+            var child = childerenIds[i];
+            if(child._reference == countryId){
+                result = true;
+                break;
+            }
+        }
+        return result;
+    }
+
+    private generateDateFacets(dateFacetsArray) {
+        var startDate = dateFacetsArray[0].date;
+        var endDate = dateFacetsArray[dateFacetsArray.length - 1].date;
+        
+        this.dateFacet.earliest.date = Math.abs(startDate);
+        this.dateFacet.earliest.era = startDate < 0 ? "BCE" : "CE";
+
+        this.dateFacet.latest.date = Math.abs(endDate);
+        this.dateFacet.latest.era = endDate < 0 ? "BCE" : "CE";
+
+        this.dateFacet.modified = false;
+
+        this._filters.setFacets('date', dateFacetsArray);
+        this._filters.setFacets('dateObj', this.dateFacet);
+        this.dateFacetsArray = dateFacetsArray;
     }
 
     /**
@@ -246,15 +403,13 @@ export class AssetService {
      * @param term          String to search for.
      * @param filters       Array of filter objects (with filterGroup and filterValue properties)
      * @param sortIndex     An integer representing a type of sort.
-     * @param pagination    Object with properties currentPage and pageSize
      * @param dateFacet     Object with the dateFacet values
      * @returns       Returns an object with the properties: thumbnails, count, altKey, classificationFacets, geographyFacets, minDate, maxDate, collTypeFacets, dateFacets
      */
-
-    search(term, filters, sortIndex, pagination, dateFacet) {
+    private search(term: string, filters, sortIndex, dateFacet) {
         let keyword = encodeURIComponent(term);
         let options = new RequestOptions({ withCredentials: true });
-        let startIndex = ((pagination.currentPage - 1) * pagination.pageSize) + 1;
+        let startIndex = ((this.urlParams.currentPage - 1) * this.urlParams.pageSize) + 1;
         let thumbSize = 0;
         let type = 6;
         let colTypeIds = '';
@@ -292,12 +447,12 @@ export class AssetService {
         // /search/1/{start_idx}/{page_size}/0?type= 1&kw={keyword}&origKW=&id={collection_ids}&name=All Collections&order={order}&tn={thumbnail_size}
         
         return this.http
-            .get(this._auth.getUrl() + '/search/' + type + '/' + startIndex + '/' + pagination.pageSize + '/' + sortIndex + '?' + 'type=' + type + '&kw=' + keyword + '&origKW=&geoIds=' + geographyIds + '&clsIds=' + classificationIds + '&collTypes=' + colTypeIds + '&id=all&name=All%20Collections&bDate=' + earliestDate + '&eDate=' + latestDate + '&dExact=&order=0&isHistory=false&prGeoId=&tn=1', options)
+            .get(this._auth.getUrl() + '/search/' + type + '/' + startIndex + '/' + this.urlParams.pageSize + '/' + sortIndex + '?' + 'type=' + type + '&kw=' + keyword + '&origKW=&geoIds=' + geographyIds + '&clsIds=' + classificationIds + '&collTypes=' + colTypeIds + '&id=all&name=All%20Collections&bDate=' + earliestDate + '&eDate=' + latestDate + '&dExact=&order=0&isHistory=false&prGeoId=&tn=1', options)
             .toPromise()
             .then(this.extractData);
     }
 
-    getCollections() {
+    private getCollections() {
         let options = new RequestOptions({ withCredentials: true });
         // Returns all of the collections names
         return this.http
@@ -311,7 +466,7 @@ export class AssetService {
      * @param groupId Id of desired image group
      * @returns Promise, which is resolved with thumbnail data object
      */
-    getFromIgId(groupId: string) {
+    private getFromIgId(groupId: string) {
         let header = new Headers({ 'Content-Type': 'application/json' }); // ... Set content type to JSON
         let options = new RequestOptions({ headers: header, withCredentials: true }); // Create a request option
 
@@ -328,7 +483,7 @@ export class AssetService {
      * @param pageNum Value for pagination
      * @param pageSize How many thumbnails per page
      */
-    getAssociated(objectId: string, colId: string, pageNum: number, pageSize: number) {
+    private getAssociated(objectId: string, colId: string, pageNum: number, pageSize: number) {
         let header = new Headers({ 'Content-Type': 'application/json' }); // ... Set content type to JSON
         let options = new RequestOptions({ headers: header, withCredentials: true }); // Create a request option
         let requestRoute: string = this._auth.getUrl() + "/" + ["collaboratoryfiltering", objectId, "thumbnails", pageNum, pageSize].join("/") + "?collectionId=" + colId;
