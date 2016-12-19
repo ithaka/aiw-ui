@@ -151,10 +151,10 @@ export class AssetGrid implements OnInit, OnDestroy {
 
   /**
    * Set currentPage in url and navigate, which triggers this._assets.queryAll() again
-   * @param pageNum number of desired page
+   * @param currentPage number of desired page
    */
-  goToPage(pageNum: number) {
-    this.addRouteParam("pageNum", pageNum);
+  goToPage(currentPage: number) {
+    this.addRouteParam("currentPage", currentPage);
     this.pagination.currentPage++;
   }
 
