@@ -134,25 +134,9 @@ export class AssetGrid implements OnInit, OnDestroy {
 
           this._filters.setAvailable('dateObj', this.dateFacet);
         }
-
-        //loop through url matrix parameters
-        for (let param in params) {
-          //test if param is a special parameter
-          if (this.urlParams.hasOwnProperty(param)) {
-            //param is a special parameter - assign the value
-            this.urlParams[param] = params[param];
-          } else {
-            //param is (likely) a filter (or I messed up) - add it to knownFilters
-            this.knownFilters[param] = params[param];
-            this.toggleFilter(param, this.knownFilters[param]);
-          }
-        }
         
         //only searching currently takes place in asset-grid, and should be moved to asset.service
-        if(this.urlParams.term) {
-          // this.getTermsList();
-          this._assets.queryAll(params);
-        }
+        this._assets.queryAll(params);
       })
     );
 
@@ -168,51 +152,20 @@ export class AssetGrid implements OnInit, OnDestroy {
     this.subscriptions.forEach((sub) => { sub.unsubscribe(); });
   }
 
-  updateSearchTerm(term) {
-    this._router.navigate(['/search', { 'term': term }]);
+  /**
+   * Called from template when new search term is entered
+   * @param term Term for desired search
+   */
+  updateSearchTerm(term: string) {
+    this._router.navigate(['/search', term]);
   }
-  // getTermsList(){
-  //   this._assets.termList()
-  //     .then((res) => {
-  //       this.geoTree = res.geoTree;
-  //     })
-  //     .catch((err) => {
-  //       console.log('Unable to load terms list.');
-  //       console.log(err);
-  //     });
-  // }
 
-  // /**
-  //  * Executes search and sets relevant asset-grid parameters
-  //  */
-  // loadSearch(term) {
-  //   if (!term && this.results === []) {
-  //     let term = "*";
-  //   }
-  //   this.searchLoading = true;
-
-  //   this._assets.search(term, this.filters, this.activeSort.index, this.pagination, this.dateFacet)
-  //     .then(
-  //       data => {
-  //         console.log(data);
-  //         this.generateColTypeFacets( this.getUniqueColTypeIds(data.collTypeFacets) );
-  //         this.generateGeoFacets( data.geographyFacets );
-  //         this.generateDateFacets( data.dateFacets );
-  //         this._filters.setFacets('classification', data.classificationFacets);
-  //         this.urlParams.totalPages = this.setTotalPages(data.count);
-  //         this.results = data.thumbnails;
-  //         this.searchLoading = false;
-  //     })
-  //     .catch(function(err) {
-  //       // this.errors['search'] = "Unable to load search.";
-  //       this.searchLoading = false;
-  //     });
-  // }
-
+  /**
+   * Set currentPage in url and navigate, which triggers this._assets.queryAll() again
+   * @param pageNum number of desired page
+   */
   goToPage(pageNum: number) {
     if (this.urlParams.currentPage !== pageNum) {
-      // this shouldn't be done here...
-      // this.urlParams.currentPage = pageNum;
 
       let currentParamsArr: Params = this.route.snapshot.params;
       let currentParamsObj: any = { };
@@ -224,15 +177,6 @@ export class AssetGrid implements OnInit, OnDestroy {
       this._router.navigate([currentParamsObj], { relativeTo: this.route });
     }
   }
-
-  // /**
-  //  * Sets the number of total pages in pagination
-  //  * @param count The total number of images in results
-  //  * @returns the total number of pages the assets will fill
-  //  */
-  // setTotalPages(count){
-  //    return Math.ceil( count / this.urlParams.pageSize );
-  // }
 
   changeSortOpt(index, label) {
     this.activeSort.index = index;
