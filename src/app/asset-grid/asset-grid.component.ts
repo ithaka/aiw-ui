@@ -103,6 +103,16 @@ export class AssetGrid implements OnInit, OnDestroy {
     this.subscriptions.push(
       this.route.params
       .subscribe((params: Params) => {
+
+        for (let param in params) {
+            // test if param is a special parameter
+            if (this.pagination.hasOwnProperty(param)) {
+                // param is a special parameter - assign the value
+                this.pagination[param] = params[param];
+            } else {
+                // Any other filters are managed by Asset Filters
+            }
+        }
                 
         if (params['startDate'] && params['endDate']) {
           this.dateFacet.earliest.date = Math.abs(params['startDate']);
@@ -130,9 +140,13 @@ export class AssetGrid implements OnInit, OnDestroy {
     // sets up subscription to allResults, which is the service providing thumbnails
     this.subscriptions.push(
       this._assets.allResults.subscribe((allResults: any) => {
-        console.log("asset grid results changed");
-        this.results = allResults;
-        this.pagination.totalPages = Math.ceil( allResults.count / this.pagination.pageSize )
+        // handles case when currentPage * pageSize > allResults.count
+        if (allResults.count === 0 && this.pagination.currentPage > 1) {
+          this.goToPage(1);
+        } else {
+          this.results = allResults;
+          this.pagination.totalPages = Math.ceil( allResults.count / this.pagination.pageSize );
+        }        
       })
     );
   }
@@ -153,9 +167,16 @@ export class AssetGrid implements OnInit, OnDestroy {
    * Set currentPage in url and navigate, which triggers this._assets.queryAll() again
    * @param currentPage number of desired page
    */
-  goToPage(currentPage: number) {
+  private goToPage(currentPage: number) {
+    this.pagination.currentPage = currentPage;
     this.addRouteParam("currentPage", currentPage);
-    this.pagination.currentPage++;
+  }
+
+  private changePageSize(pageSize: number){
+    this.pagination.pageSize = pageSize;
+    this.goToPage(1);
+    this.addRouteParam("pageSize", pageSize);
+    
   }
 
   changeSortOpt(index, label) {
@@ -163,11 +184,6 @@ export class AssetGrid implements OnInit, OnDestroy {
     this.activeSort.label = label; 
     this.pagination.currentPage = 1;
     
-  }
-
-  changePageSize(pageSize: number){
-    this.addRouteParam("pageSize", pageSize);
-    this.pagination.pageSize = pageSize;
   }
 
   toggleEra(dateObj){
