@@ -106,7 +106,7 @@ export class AssetService {
             this.loadCluster(params.objectId);
         } else if (params.hasOwnProperty("colId")) {
             //get collection thumbnails
-            this.loadCollection(params.colId, 1, 24);
+            this.loadCollection(params.colId);
         } else if (params.hasOwnProperty("term")) {
             this.loadSearch(params.term);
         } else {
@@ -207,20 +207,6 @@ export class AssetService {
                 console.log(err);
             });
     }
-
-    // private cluster(objectId: string, sortIndex) {
-    //     let options = new RequestOptions({ withCredentials: true });
-    //     let startIndex = ((this.urlParams.currentPage - 1) * this.urlParams.pageSize) + 1;
-
-    //     //sortIndex was tacked onto this before, but the call was not working
-    //     let requestString = [this._auth.getUrl(), "cluster", objectId, "thumbnails", startIndex, this.urlParams.pageSize].join("/");
-    //     //  + '/cluster/' + objectId + '/thumbnails/' + startIndex + '/' + this.urlParams.pageSize + '/' + sortIndex
-
-    //     return this.http
-    //         .get(requestString, options)
-    //         .toPromise()
-    //         .then(this.extractData);
-    // }
     
     // Used by Browse page
     public category(catId: string) {
