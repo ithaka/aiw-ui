@@ -165,25 +165,36 @@ export class AssetService {
      * Loads thumbnails from a collectionType
      * @param colId Collection Id for which to fetch results
      */
-    private loadCollection(colId: string, currentPage?: number, pageSize?: number) {
-        // this.getCollectionThumbs(colId, currentPage, pageSize)
-        this.getCollectionThumbs(colId, currentPage, pageSize)
+    private loadCollection(colId: string) {
+        let options = new RequestOptions({withCredentials: true});
+        let imageSize = 0;
+
+        let requestString = [this._auth.getUrl(), 'collections', colId, 'thumbnails', this.urlParams.currentPage, this.urlParams.pageSize, imageSize].join('/');
+
+        return this.http
+            .get(requestString, options)
+            .toPromise()
+            .then(this.extractData)
             .then((data) => {
+                data.count = data.thumbnails.length;
                 console.log(data);
                 this.allResultsSource.next(data);
-                }
-            )
+            })
             .catch(error => {
                 console.log(error);
             });
     }
 
     private loadCluster(objectId: string){
-        // this.searchLoading = true;
-        this.cluster(objectId, {
-                index : 0,
-                label : 'Relevance'
-            })
+        let options = new RequestOptions({ withCredentials: true });
+        let startIndex = ((this.urlParams.currentPage - 1) * this.urlParams.pageSize) + 1;
+
+        let requestString = [this._auth.getUrl(), "cluster", objectId, "thumbnails", startIndex, this.urlParams.pageSize].join("/");
+
+        this.http
+            .get(requestString, options)
+            .toPromise()
+            .then(this.extractData)
             .then((res) => {
                 if (res.thumbnails) {
                     this.allResultsSource.next(res);
@@ -197,19 +208,19 @@ export class AssetService {
             });
     }
 
-    private cluster(objectId: string, sortIndex) {
-        let options = new RequestOptions({ withCredentials: true });
-        let startIndex = ((this.urlParams.currentPage - 1) * this.urlParams.pageSize) + 1;
+    // private cluster(objectId: string, sortIndex) {
+    //     let options = new RequestOptions({ withCredentials: true });
+    //     let startIndex = ((this.urlParams.currentPage - 1) * this.urlParams.pageSize) + 1;
 
-        //sortIndex was tacked onto this before, but the call was not working
-        let requestString = [this._auth.getUrl(), "cluster", objectId, "thumbnails", startIndex, this.urlParams.pageSize].join("/");
-        //  + '/cluster/' + objectId + '/thumbnails/' + startIndex + '/' + this.urlParams.pageSize + '/' + sortIndex
+    //     //sortIndex was tacked onto this before, but the call was not working
+    //     let requestString = [this._auth.getUrl(), "cluster", objectId, "thumbnails", startIndex, this.urlParams.pageSize].join("/");
+    //     //  + '/cluster/' + objectId + '/thumbnails/' + startIndex + '/' + this.urlParams.pageSize + '/' + sortIndex
 
-        return this.http
-            .get(requestString, options)
-            .toPromise()
-            .then(this.extractData);
-    }
+    //     return this.http
+    //         .get(requestString, options)
+    //         .toPromise()
+    //         .then(this.extractData);
+    // }
     
     // Used by Browse page
     public category(catId: string) {
@@ -238,26 +249,6 @@ export class AssetService {
             .toPromise()
             .then(this.extractData);
     }
-
-    /**
-     * Get Collection
-     * @param colId id of collection to fetch
-     * @returns thumbnails of assets for a collection, and collection information
-     */
-    private getCollectionThumbs(colId: string, pageNo?: number, pageSize?: number) {
-        let options = new RequestOptions({withCredentials: true});
-        let imageSize = 0;
-        
-        if (!pageNo) { pageNo = 1; }
-        if (!pageSize) { pageSize = 72; }
-
-        let requestString = [this._auth.getUrl(), 'collections', colId, 'thumbnails', pageNo, pageSize, imageSize].join('/');
-
-        return this.http
-            .get(requestString, options)
-            .toPromise()
-            .then(this.extractData);
-    }   
 
     /**
      * Term List Service
@@ -368,21 +359,6 @@ export class AssetService {
             .then(this.extractData);
     }
 
-    // /**
-    //  * Gets thumbnails from image group Id
-    //  * @param groupId Id of desired image group
-    //  * @returns Promise, which is resolved with thumbnail data object
-    //  */
-    // private getFromIgId(groupId: string) {
-    //     let header = new Headers({ 'Content-Type': 'application/json' }); // ... Set content type to JSON
-    //     let options = new RequestOptions({ headers: header, withCredentials: true }); // Create a request option
-
-    //     return this.http
-    //         .get(this._auth.getUrl() + "/imagegroup/" + groupId + "/thumbnails", options)
-    //         .toPromise()
-    //         .then((data) => { return this.extractData(data); });
-    // }
-
     /**
      * Get associated images
      * @param objectId The id of the object for which you want associated items
@@ -390,14 +366,13 @@ export class AssetService {
      * @param pageNum Value for pagination
      * @param pageSize How many thumbnails per page
      */
-    private getAssociated(objectId: string, colId: string, pageNum: number, pageSize: number) {
+    private getAssociated(objectId: string, colId: string, currentPage: number, pageSize: number) {
         let header = new Headers({ 'Content-Type': 'application/json' }); // ... Set content type to JSON
         let options = new RequestOptions({ headers: header, withCredentials: true }); // Create a request option
-        let requestRoute: string = this._auth.getUrl() + "/" + ["collaboratoryfiltering", objectId, "thumbnails", pageNum, pageSize].join("/") + "?collectionId=" + colId;
-        console.log(requestRoute);
+        let requestString: string = [this._auth.getUrl(), "collaboratoryfiltering", objectId, "thumbnails", currentPage, pageSize].join("/") + "?collectionId=" + colId;
 
         return this.http
-            .get(requestRoute, options)
+            .get(requestString, options)
             .toPromise()
             .then((data) => { return this.extractData(data); });
     }
