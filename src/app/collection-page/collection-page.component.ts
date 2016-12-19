@@ -34,7 +34,7 @@ export class CollectionPage implements OnInit, OnDestroy {
         if (this.colId) {
           this._collection.getCollectionInfo(this.colId)
             .then((data) => {
-              this._assets.queryAll();
+              this._assets.queryAll(routeParams);
 
               if (!data) {
                 throw new Error("No data!");

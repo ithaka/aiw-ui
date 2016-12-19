@@ -151,7 +151,7 @@ export class AssetGrid implements OnInit, OnDestroy {
         //only searching currently takes place in asset-grid, and should be moved to asset.service
         if(this.urlParams.term) {
           // this.getTermsList();
-          // this.loadSearch(this.urlParams.term);
+          this._assets.queryAll(params);
         }
       })
     );
@@ -169,7 +169,7 @@ export class AssetGrid implements OnInit, OnDestroy {
   }
 
   updateSearchTerm(term) {
-    this._assets.queryAll();
+    this._router.navigate(['/search', { 'term': term }]);
   }
   // getTermsList(){
   //   this._assets.termList()

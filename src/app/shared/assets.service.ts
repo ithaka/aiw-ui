@@ -57,8 +57,8 @@ export class AssetService {
         };
     }
 
-    private readUrlParams() : any {
-        let params = this.route.snapshot.params;
+    private readUrlParams(passedParams) : any {
+        let params = passedParams;
 
         // Creates filters and list of relevant url parameters for use by search
         for (let param in params) {
@@ -70,8 +70,6 @@ export class AssetService {
                 // Any other filters are managed by Asset Filters
             }
         }
-
-        return this.urlParams;
     }
     
     private formEncode = function (obj) {
@@ -91,30 +89,27 @@ export class AssetService {
         return body || { };
     }
 
-    public queryAll() {
-        console.log('QUERY ALL');
-        let urlParams: any = this.route.snapshot.params;
-        console.log(urlParams);
+    public queryAll(params) {
+        this.readUrlParams(params);
 
-        if (urlParams.hasOwnProperty("igId") && urlParams.hasOwnProperty("objectId")) {
+        if (params.hasOwnProperty("igId") && params.hasOwnProperty("objectId")) {
             //gets associated images thumbnails
-            this.loadAssociatedAssets(urlParams.objectId, urlParams.colId);
-        } else if (urlParams.hasOwnProperty("igId")) {
+            this.loadAssociatedAssets(params.objectId, params.colId);
+        } else if (params.hasOwnProperty("igId")) {
             //get image group thumbnails
-            this.loadIgAssets(urlParams.igId);
-        } else if (urlParams.hasOwnProperty("objectId")) {
+            this.loadIgAssets(params.igId);
+        } else if (params.hasOwnProperty("objectId")) {
             //get clustered images thumbnails
-            this.loadCluster(urlParams.objectId);
-        } else if (urlParams.hasOwnProperty("colId")) {
+            this.loadCluster(params.objectId);
+        } else if (params.hasOwnProperty("colId")) {
             //get collection thumbnails
-            this.loadCollection(urlParams.colId, 1, 24);
-        } else if (urlParams.hasOwnProperty("term")) {
+            this.loadCollection(params.colId, 1, 24);
+        } else if (params.hasOwnProperty("term")) {
             console.log("beginning search!");
-            this.loadSearch(urlParams.term);
+            this.loadSearch(params.term);
         } else {
             console.log("don't know what to query!");
-        }
-        
+        } 
     }
 
     /**

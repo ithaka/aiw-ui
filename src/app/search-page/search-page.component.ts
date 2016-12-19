@@ -26,13 +26,13 @@ export class SearchPage implements OnInit, OnDestroy {
       this.route.params.subscribe((routeParams) => {
         this.term = routeParams["term"];
         if (this.term) {
-          this._assets.queryAll();
+          this._assets.queryAll(routeParams);
         } else {
           throw new Error("Search error - no search term");
         }
         
       })
-    );
+    ); 
   }
 
   ngOnDestroy() {
