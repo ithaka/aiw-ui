@@ -281,6 +281,6 @@ export class AssetGrid implements OnInit, OnDestroy {
     let currentParamsObj: Params = Object.assign({}, this.route.snapshot.params);
     currentParamsObj[key] = value;
 
-    this._router.navigate([currentParamsObj], { relativeTo: this.route }); //good, but ditches existing params
+    this._router.navigate([currentParamsObj], { relativeTo: this.route });
   }
 }

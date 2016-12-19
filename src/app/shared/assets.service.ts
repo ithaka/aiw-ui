@@ -64,7 +64,6 @@ export class AssetService {
             // test if param is a special parameter
             if (this.urlParams.hasOwnProperty(param)) {
                 // param is a special parameter - assign the value
-                console.log("changing " + this.urlParams[param] + " to " + passedParams[param]);
                 this.urlParams[param] = passedParams[param];
             } else {
                 // Any other filters are managed by Asset Filters
@@ -109,7 +108,6 @@ export class AssetService {
             //get collection thumbnails
             this.loadCollection(params.colId, 1, 24);
         } else if (params.hasOwnProperty("term")) {
-            console.log("beginning search!");
             this.loadSearch(params.term);
         } else {
             console.log("don't know what to query!");
@@ -123,7 +121,7 @@ export class AssetService {
      */
     private loadAssociatedAssets(objectId: string, colId: string) {
         // this.getAssociated(objectId, colId, this.pagination.currentPage, this.pagination.pageSize)
-        this.getAssociated(objectId, colId, 1, 24)
+        this.getAssociated(objectId, colId, this.urlParams.currentPage, this.urlParams.pageSize)
             .then((data) => {
                 if (!data) {
                 throw new Error("No data in image group thumbnails response");
@@ -141,7 +139,16 @@ export class AssetService {
      * @param igId Image group id for which to retrieve thumbnails
      */
     private loadIgAssets(igId: string) {
-        this.getFromIgId(igId)
+
+        let header = new Headers({ 'Content-Type': 'application/json' }); // ... Set content type to JSON
+        let options = new RequestOptions({ headers: header, withCredentials: true }); // Create a request option
+
+        let requestString: string = [this._auth.getUrl(), "imagegroup",igId, "thumbnails", this.urlParams.currentPage, this.urlParams.pageSize, this.activeSort.index].join("/");
+
+        this.http
+            .get(requestString, options)
+            .toPromise()
+            .then((data) => { return this.extractData(data); })
             .then((data) => {
                 if (!data) {
                 throw new Error("No data in image group thumbnails response");
@@ -361,20 +368,20 @@ export class AssetService {
             .then(this.extractData);
     }
 
-    /**
-     * Gets thumbnails from image group Id
-     * @param groupId Id of desired image group
-     * @returns Promise, which is resolved with thumbnail data object
-     */
-    private getFromIgId(groupId: string) {
-        let header = new Headers({ 'Content-Type': 'application/json' }); // ... Set content type to JSON
-        let options = new RequestOptions({ headers: header, withCredentials: true }); // Create a request option
+    // /**
+    //  * Gets thumbnails from image group Id
+    //  * @param groupId Id of desired image group
+    //  * @returns Promise, which is resolved with thumbnail data object
+    //  */
+    // private getFromIgId(groupId: string) {
+    //     let header = new Headers({ 'Content-Type': 'application/json' }); // ... Set content type to JSON
+    //     let options = new RequestOptions({ headers: header, withCredentials: true }); // Create a request option
 
-        return this.http
-            .get(this._auth.getUrl() + "/imagegroup/" + groupId + "/thumbnails", options)
-            .toPromise()
-            .then((data) => { return this.extractData(data); });
-    }
+    //     return this.http
+    //         .get(this._auth.getUrl() + "/imagegroup/" + groupId + "/thumbnails", options)
+    //         .toPromise()
+    //         .then((data) => { return this.extractData(data); });
+    // }
 
     /**
      * Get associated images
