@@ -30,20 +30,13 @@ export class AssetGrid implements OnInit, OnDestroy {
   private results = [];
   filters = [];
   private knownFilters: any = {};
-  /**
-   * urlParams is used as an enum for special parameters
-   */
-  private urlParams: any = {
-    term: "",
-    pageSize: 24,
+
+  private pagination: any = {
     totalPages: 1,
-    currentPage: 1,
-    startDate: "",
-    endDate: "",
-    igId: "",
-    objectId: "",
-    colId: ""
+    pageSize: 24,
+    currentPage: 1
   };
+
   collTypeFacets = [];
   classificationFacets = [];
   geoTree = [];
@@ -137,8 +130,10 @@ export class AssetGrid implements OnInit, OnDestroy {
 
     // sets up subscription to allResults, which is the service providing thumbnails
     this.subscriptions.push(
-      this._assets.allResults.subscribe((allResults: any[]) => {
+      this._assets.allResults.subscribe((allResults: any) => {
+        console.log("asset grid results changed");
         this.results = allResults;
+        this.pagination.totalPages = Math.ceil( allResults.count / this.pagination.pageSize )
       })
     );
   }
@@ -161,17 +156,19 @@ export class AssetGrid implements OnInit, OnDestroy {
    */
   goToPage(pageNum: number) {
     this.addRouteParam("pageNum", pageNum);
+    this.pagination.currentPage++;
   }
 
   changeSortOpt(index, label) {
     this.activeSort.index = index;
     this.activeSort.label = label; 
-    this.urlParams.currentPage = 1;
+    this.pagination.currentPage = 1;
     
   }
 
   changePageSize(pageSize: number){
     this.addRouteParam("pageSize", pageSize);
+    this.pagination.pageSize = pageSize;
   }
 
   toggleEra(dateObj){
@@ -198,7 +195,7 @@ export class AssetGrid implements OnInit, OnDestroy {
     console.log('Applied Filters:-');
     console.log(this.filters);
 
-    this.urlParams.currentPage = 1;
+    this.pagination.currentPage = 1;
     
   }
 
@@ -229,7 +226,7 @@ export class AssetGrid implements OnInit, OnDestroy {
       }
     }
     
-    this.urlParams.currentPage = 1;
+    this.pagination.currentPage = 1;
     
   }
 
@@ -257,7 +254,7 @@ export class AssetGrid implements OnInit, OnDestroy {
   }
 
   private addRouteParam(key: string, value: any) {
-    let currentParamsObj: any = this.route.snapshot.params;
+    let currentParamsObj: Params = Object.assign({}, this.route.snapshot.params);
     currentParamsObj[key] = value;
 
     this._router.navigate([currentParamsObj], { relativeTo: this.route }); //good, but ditches existing params

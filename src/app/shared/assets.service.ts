@@ -47,7 +47,6 @@ export class AssetService {
         this.urlParams = {
             term: "",
             pageSize: 24,
-            totalPages: 1,
             currentPage: 1,
             startDate: 0,
             endDate: 0,
@@ -125,7 +124,7 @@ export class AssetService {
                 throw new Error("No data in image group thumbnails response");
                 }
                 // this.results = data.thumbnails;
-                this.allResultsSource.next(data.thumbnails);
+                this.allResultsSource.next(data);
             })
             .catch((error) => {
                 console.log(error);
@@ -142,10 +141,8 @@ export class AssetService {
                 if (!data) {
                 throw new Error("No data in image group thumbnails response");
                 }
-                // this.allResultsSource = data.thumbnails;
                 //notify allResults observers
-                this.allResultsSource.next(data.thumbnails);
-                console.log(this.allResultsSource);
+                this.allResultsSource.next(data);
             })
             .catch((error) => {
                 console.log(error);
@@ -161,8 +158,7 @@ export class AssetService {
         this.getCollectionThumbs(colId, currentPage, pageSize)
             .then((data) => {
                 console.log(data);
-                // this.results = data.thumbnails;
-                this.allResultsSource.next(data.thumbnails);
+                this.allResultsSource.next(data);
                 }
             )
             .catch(error => {
@@ -177,20 +173,14 @@ export class AssetService {
                 label : 'Relevance'
             })
             .then((res) => {
-                console.log(res);
-                // this.pagination.totalPages = this.setTotalPages(res.count);
-                // this.results = res.thumbnails;
-                // this.searchLoading = false;
                 if (res.thumbnails) {
-                    this.allResultsSource.next(res.thumbnails);
+                    this.allResultsSource.next(res);
                 } else {
                     throw new Error("There are no thumbnails. Server responsed with status " + res.status);
                 }
                 
             })
             .catch(function(err) {
-                // this.errors['search'] = "Unable to load cluster results.";
-                // this.searchLoading = false;
                 console.log(err);
             });
     }
@@ -271,14 +261,12 @@ export class AssetService {
                 this.generateGeoFacets( res.geographyFacets );
                 // this.generateDateFacets( res.dateFacets );
                 this._filters.setAvailable('classification', res.classificationFacets);
-                this.urlParams.totalPages = Math.ceil( res.count / this.urlParams.pageSize );
-                this.allResultsSource.next(res.thumbnails);
-                // this.results = res.thumbnails;
+                this.allResultsSource.next(res);
                 // this.searchLoading = false;
             })
             .catch(function(err) {
-                // this.errors['search'] = "Unable to load search.";
                 // this.searchLoading = false;
+                console.error(err);
             });
     }
 
