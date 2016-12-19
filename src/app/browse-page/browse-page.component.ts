@@ -56,6 +56,7 @@ export class BrowsePage {
   selectedColMenuId = '1';
   selectedBrowseId = '250';
   currentBrowseRes = {};
+  categories = [];
 
 
   // TypeScript public modifiers
@@ -70,6 +71,9 @@ export class BrowsePage {
       this.route.params
       .subscribe((params: Params) => { 
         console.log(params);
+        if(params && params['viewId']){
+            this.selectedBrowseId = params['viewId'];
+        }
       })
     );
 
@@ -88,12 +92,82 @@ export class BrowsePage {
     // this.searchLoading = true;
     this._assets.category( this.selectedBrowseId )
       .then((res) => {
-        console.log(res);
+        // console.log(res);
         this.currentBrowseRes = res;
+        this.categories = res.Categories;
       })
       .catch(function(err) {
        console.log('Unable to load category results.');
       });
+  }
+
+  loadSubcategories(category){
+      this._assets.subcategories( category.widgetId )
+      .then((res) => {
+        // console.log(res);
+        category.subcategories = res;
+      })
+      .catch(function(err) {
+       console.log('Unable to load subcategories.');
+      });
+  }
+
+  toggleTree(category){
+      if(category.expanded){
+          category.expanded = false;
+      }
+      else{
+          if(typeof category.expanded == 'undefined'){
+              category.subcategories = [];
+              this.loadSubcategories(category);
+          }
+          category.expanded = true;
+      }
+  }
+
+  toggleSubTree(subCategory){
+      if(subCategory.expanded){
+          subCategory.expanded = false;
+      }
+      else{
+          if(typeof subCategory.expanded == 'undefined'){
+              subCategory.subcategories = [];
+              this.loadSubcategories(subCategory);
+          }
+          subCategory.expanded = true;
+      }
+  }
+
+  toggleInfo(node){
+      if(node.info_expanded){
+          node.info_expanded = false;
+      }
+      else{
+          if(typeof node.info_expanded == 'undefined'){
+              this.showNodeDesc(node);
+          }
+          node.info_expanded = true;
+      }
+  }
+
+  showNodeDesc(node){
+      this._assets.nodeDesc( node.descriptionId, node.widgetId )
+      .then((res) => {
+        // console.log(res);
+        if(res.blurbUrl){
+            node.info_desc = res.blurbUrl;
+            node.info_img = res.imageUrl;
+        }
+      })
+      .catch(function(err) {
+       console.log('Unable to load Description.');
+      });
+  }
+
+  openAssets(node){
+      if(!node.isFolder){
+          window.open('/#/collection;colId=' + node.widgetId, '_self');
+      }
   }
 
 }

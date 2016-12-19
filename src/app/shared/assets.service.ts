@@ -56,6 +56,24 @@ export class AssetService {
             .then(this.extractData);
     }
 
+    subcategories(id) {
+        let options = new RequestOptions({ withCredentials: true });
+
+        return this.http
+            .get(this._auth.getUrl() + '/categories/' + id + '/subcategories', options)
+            .toPromise()
+            .then(this.extractData);
+    }
+
+    nodeDesc(descId, widgetId){
+        let options = new RequestOptions({ withCredentials: true });
+
+        return this.http
+            .get(this._auth.getUrl() + '/categorydesc/' + descId + '/' + widgetId, options)
+            .toPromise()
+            .then(this.extractData);
+    }
+
     /**
      * Get Collection
      * @param colId id of collection to fetch

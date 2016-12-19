@@ -9,7 +9,26 @@
     </nav>
     <div class="row mt-1">
         <div class="col-md-8">
-            Tree goes here
+            
+            <div class="tree">
+                <div *ngFor="let category of categories">
+                    <i class="icon icon-direction absolute-left tree-icon" (click)="toggleTree(category)" [ngClass]="{ 'icon-down' : category.expanded, 'icon-right' : !category.expanded }"></i>
+                    <div class="parent" (click)="toggleTree(category)"> {{ category.title }} </div>
+                    <div class="child-cntnr collapse" [ngClass]="{ 'in' : category.expanded }">
+                        <div class="child" *ngFor="let subcategory of category.subcategories">
+                            <img class="info-icon" *ngIf="subcategory.descriptionId && !subcategory.isFolder" src="/assets/img/info-icon.png" (click)="toggleInfo(subcategory)">
+                            <i class="icon icon-direction absolute-left tree-icon" *ngIf="subcategory.isFolder" (click)="toggleSubTree(subcategory)" [ngClass]="{ 'icon-down' : subcategory.expanded, 'icon-right' : !subcategory.expanded }"></i>
+                            <span (click)="openAssets(subcategory)">{{ subcategory.title }}</span>
+                            <div class="info-cntnr collapse" *ngIf="subcategory.info_desc || subcategory.info_img" [ngClass]="{ 'in' : subcategory.info_expanded }">
+                                <img src="http://viewer2.artstor.org/{{ subcategory.info_img }}" />
+                                <div class="desc" [innerHTML]="subcategory.info_desc"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
         </div>
         <div class="col-md-4">
             <div class="browse-info">
