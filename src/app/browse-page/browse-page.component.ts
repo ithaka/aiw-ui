@@ -78,11 +78,13 @@ export class BrowsePage implements OnInit, OnDestroy {
 
         if(params && params['menuId']) {
             this.selectedColMenuId = params['menuId'];
+            console.log("just changed menu id!");
         }
+        this.loadCategory();
       })
     );
 
-    this.loadCategory();
+    
   }
 
   ngOnDestroy() {
@@ -101,23 +103,39 @@ export class BrowsePage implements OnInit, OnDestroy {
       this.expandedCategories = {};
       this.selectedBrowseId = id;
       this.addRouteParam('viewId', id);
-      this.loadCategory();
   }
 
   loadCategory(){
-    this._assets.category( this.selectedBrowseId )
-      .then((res) => {
-        this.currentBrowseRes = res;
-        this.categories = res.Categories;
+      switch (this.selectedColMenuId) {
+          case '1':
+            this._assets.category( this.selectedBrowseId )
+                .then((res) => {
+                    this.currentBrowseRes = res;
+                    this.categories = res.Categories;
 
-        for (let cat of this.categories) { // Add default depth of 0 to every top level node
-            cat.depth = 0;
-        }
+                    for (let cat of this.categories) { // Add default depth of 0 to every top level node
+                        cat.depth = 0;
+                    }
+                    console.log(res);
+                })
+                .catch(function(err) {
+                    console.log('Unable to load category results.');
+                });
+            break;
+        case '3':
+            this._assets.getCollections()
+                .then((res) => {
+                    this.categories = res.Collections;
 
-      })
-      .catch(function(err) {
-        console.log('Unable to load category results.');
-      });
+                    for (let cat of this.categories) { // Add default depth of 0 to every top level node
+                        cat.depth = 0;
+                    }
+                    console.log(res);
+                })
+                .catch((err) => { console.error(err); });
+            break;
+      }
+    
   }
 
   loadSubcategories(category, index){

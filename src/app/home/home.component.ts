@@ -48,7 +48,6 @@ export class Home {
     // this.title.getData().subscribe(data => this.data = data);
     this._assets.getCollections()
       .then((res) => {
-        console.log(res);
         this.collections = res['Collections'];
       })
       .catch(function(err) {
