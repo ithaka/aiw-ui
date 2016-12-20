@@ -30,7 +30,7 @@ export class AuthService implements CanActivate {
     // } else {
       // this.baseUrl = 'http://192.168.97.66:28081/library/secure';
       // this.baseUrl = 'http://192.168.97.66/library/secure';
-      this.baseUrl = this.proxyUrl + 'http://stage3.artstor.org/library/secure';
+      this.baseUrl = this.proxyUrl + 'http://library.artstor.org/library/secure';
     // }
   }
 
