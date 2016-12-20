@@ -8,7 +8,7 @@
             <li class="nav-item dropdown" ngbDropdown>
                 <button class="btn btn-link" id="dropdownMenu1" ngbDropdownToggle>Find</button>
                 <div class="dropdown-menu" aria-labelledby="dropdownMenu1">
-                    <button class="dropdown-item">Action - 1</button>
+                    <button class="dropdown-item" [routerLink]="['browse', { viewId: 103 }]">Browse Shared Shelf Commons</button>
                     <button class="dropdown-item">Another Action</button>
                     <button class="dropdown-item">Something else is here</button>
                 </div>
