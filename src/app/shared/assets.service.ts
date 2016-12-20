@@ -332,7 +332,7 @@ export class AssetService {
     }
 
     /**
-     * Wrapper function for HTTP call to get collections. Used by both home component and asset.service
+     * Wrapper function for HTTP call to get collections. Used by home component
      * @returns Chainable promise containing collection data
      */
     public getCollections() {
@@ -341,7 +341,18 @@ export class AssetService {
         return this.http
             .get(this._auth.getUrl() + '/institutions/', options)
             .toPromise()
-            .then(this.extractData);
+            .then(this.extractData)
+            .then((data) => {
+                // there are collections named "Browse by ..." which need to be filtered out
+                for (let i = data.Collections.length - 1; i >= 0; i--) {
+                    let collection = data.Collections[i];
+                    if (collection.collectionname && collection.collectionname.substring(0, 6).toLowerCase() === "browse") {
+                        //cut that element out
+                        data.Collections.splice(data.Collections.indexOf(collection), 1);
+                    }
+                }
+                return data;
+            });
     }
 
     /**
