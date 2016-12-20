@@ -91,6 +91,7 @@ export class AssetFilters {
       this._filters.applied$
             .subscribe(filters => { 
                 this.appliedFilters = filters;
+                this.loadRoute();
                })
     );
    
@@ -150,15 +151,14 @@ export class AssetFilters {
       filterGroup : group,
       filterValue : value
     };
-    if(this.filterExists(filter)){ // Remove Filter
-      this.removeFilter(filter);
-    }
-    else{ // Add Filter
-      this.appliedFilters.push(filter);
+    if(this._filters.isApplied(filter)){ // Remove Filter
+      this._filters.remove(filter);
+    } else { // Add Filter
+      this._filters.apply(filter);
     }
     this.pagination.currentPage = 1;
     
-    this.loadRoute();
+    // this.loadRoute();
   }
 
   filterApplied(value, group){
@@ -166,12 +166,7 @@ export class AssetFilters {
       filterGroup : group,
       filterValue : value
     };
-    if(this.filterExists(filter)){
-      return true;
-    }
-    else{
-      return false;
-    }
+    return this._filters.isApplied(filter);
   }
 
   clearAllFilterGroup(group){
@@ -198,25 +193,8 @@ export class AssetFilters {
   }
 
   removeFilter(filterObj){
-    for(var i = 0; i < this.appliedFilters.length; i++){
-      var filter = this.appliedFilters[i];
-      if((filterObj.filterGroup === filter.filterGroup) && (filterObj.filterValue === filter.filterValue)){
-        this.appliedFilters.splice(i, 1);
-        break;
-      }
-    }
-    this.loadRoute();
-  }
-  
-  filterExists(filterObj){
-    for(var i = 0; i < this.appliedFilters.length; i++){
-      var filter = this.appliedFilters[i];
-      if((filterObj.filterGroup === filter.filterGroup) && (filterObj.filterValue === filter.filterValue)){
-        return true;
-      }
-    }
-    return false;
-  }
+    this._filters.remove(filterObj);
+  } 
 
   getUniqueColTypeIds(facetArray){
     var colTypeIds = [];

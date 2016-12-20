@@ -64,6 +64,24 @@ export class AssetFiltersService {
         this.appliedSource.next(this.appliedFilters);
     }
 
+    public isApplied(filterObj) {
+        for(var i = 0; i < this.appliedFilters.length; i++){
+            var filter = this.appliedFilters[i];
+            if((filterObj.filterGroup === filter.filterGroup) && (filterObj.filterValue === filter.filterValue)){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public remove(filter) {
+        let filterIndex = this.appliedFilters.indexOf(filter);
+        if (filterIndex >= 0) {
+            this.appliedFilters.splice(filterIndex);
+            this.appliedSource.next(this.appliedFilters);
+        }
+    }
+
     public getApplied(): any[] {
         return this.appliedFilters;
     }
