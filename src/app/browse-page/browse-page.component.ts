@@ -86,17 +86,21 @@ export class BrowsePage {
       this.selectedColMenuId = id;
   }
   selectBrowseOpt ( id ){
+      this.expandedCategories = {};
       this.selectedBrowseId = id;
       this.loadCategory();
   }
 
   loadCategory(){
-    // this.searchLoading = true;
     this._assets.category( this.selectedBrowseId )
       .then((res) => {
-        // console.log(res);
         this.currentBrowseRes = res;
         this.categories = res.Categories;
+
+        for (let cat of this.categories) { // Add default depth of 0 to every top level node
+            cat.depth = 0;
+        }
+
       })
       .catch(function(err) {
        console.log('Unable to load category results.');
@@ -107,9 +111,7 @@ export class BrowsePage {
       this._assets.subcategories( category.widgetId )
       .then((res) => {
         let depth: number;
-        if (!category.depth) {
-            category.depth = 0;
-        }
+        
         // Make depth one deeper than parent
         depth = category.depth + 1;
         for (let cat of res) {
@@ -117,11 +119,17 @@ export class BrowsePage {
             cat.parentId = category.widgetId;
             // Add subcategory depth value for styling
             cat.depth = depth;
+
+            if(category.descriptionId){
+                cat.parentDescId = category.descriptionId;
+            }
         }
         let beforeItems = this.categories.slice(0, index + 1);
         let afterItems = this.categories.slice(index + 1);
         // Insert loaded categories below parent category
         this.categories = beforeItems.concat(res).concat(afterItems);
+
+        console.log(this.categories);
       })
       .catch(function(err) {
        console.log('Unable to load subcategories.');
@@ -140,19 +148,6 @@ export class BrowsePage {
       }
   }
 
-//   toggleSubTree(subCategory){
-//       if(subCategory.expanded){
-//           subCategory.expanded = false;
-//       }
-//       else{
-//           if(typeof subCategory.expanded == 'undefined'){
-//               subCategory.subcategories = [];
-//               this.loadSubcategories(subCategory, index);
-//           }
-//           subCategory.expanded = true;
-//       }
-//   }
-
   toggleInfo(node){
       if(node.info_expanded){
           node.info_expanded = false;
@@ -166,17 +161,28 @@ export class BrowsePage {
   }
 
   showNodeDesc(node){
-      this._assets.nodeDesc( node.descriptionId, node.widgetId )
-      .then((res) => {
-        // console.log(res);
+    var descId = '';
+    var nodeId = '';
+      
+    if(node.descriptionId){
+        descId = node.descriptionId;
+        nodeId = node.widgetId;
+    }
+    else if(node.parentDescId){
+        descId = node.parentDescId;
+        nodeId = node.parentId;
+    }
+
+    this._assets.nodeDesc( descId, nodeId )
+    .then((res) => {
         if(res.blurbUrl){
             node.info_desc = res.blurbUrl;
             node.info_img = res.imageUrl;
         }
-      })
-      .catch(function(err) {
-       console.log('Unable to load Description.');
-      });
+    })
+    .catch(function(err) {
+        console.log('Unable to load Description.');
+    });
   }
 
   openAssets(node){
@@ -189,6 +195,32 @@ export class BrowsePage {
             this.router.navigate(['collection', { 'colId' : node.widgetId } ]);
         }
       }
+  }
+
+  showHideNode(node){
+    // A node in the tree will only be hidden if any of its parent nodes, going up the hierarchy, is collapsed.
+    var isExpanded = true;
+    var parentNode : any = {};
+    if(node.parentId){
+        parentNode = this.getNodeByWidgetId(node.parentId);
+        if(this.expandedCategories[parentNode.widgetId] == false){
+            isExpanded = false;
+        }
+        else{
+            isExpanded = this.showHideNode(parentNode);
+        }
+    }
+    return isExpanded;
+  }
+
+  getNodeByWidgetId( id ){
+      var node = {};
+      for( let cat of this.categories){
+          if(cat.widgetId == id){
+              node = cat;
+          }
+      }
+      return node;
   }
 
 }
