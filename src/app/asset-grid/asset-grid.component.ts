@@ -172,7 +172,7 @@ export class AssetGrid implements OnInit, OnDestroy {
    * Called from template when new search term is entered
    * @param term Term for desired search
    */
-  updateSearchTerm(term: string) {
+  private updateSearchTerm(term: string) {
     this._router.navigate(['/search', term]);
   }
 
@@ -196,93 +196,11 @@ export class AssetGrid implements OnInit, OnDestroy {
     this.addRouteParam("pageSize", pageSize);
   }
 
-  changeSortOpt(index, label) {
+  private changeSortOpt(index, label) {
     this.activeSort.index = index;
     this.activeSort.label = label; 
     this.pagination.currentPage = 1;
     
-  }
-
-  toggleEra(dateObj){
-    if(dateObj.era == 'BCE'){
-      dateObj.era = 'CE';
-    }
-    else{
-      dateObj.era = 'BCE';
-    }
-  }
-
-  toggleFilter(value, group){
-    var filter = {
-      filterGroup : group,
-      filterValue : value
-    };
-    if(this.filterExists(filter)){ // Remove Filter
-      this.removeFilter(filter);
-    }
-    else{ // Add Filter
-      this.filters.push(filter);
-    }
-    
-    console.log('Applied Filters:-');
-    console.log(this.filters);
-
-    this.pagination.currentPage = 1;
-    
-  }
-
-  filterApplied(value, group){
-    var filter = {
-      filterGroup : group,
-      filterValue : value
-    };
-    if(this.filterExists(filter)){
-      return true;
-    }
-    else{
-      return false;
-    }
-  }
-
-  clearAllFilterGroup(group){
-    if(group == 'date'){
-      this.dateFacet.modified = false;
-    }
-    else{
-      for(var i = 0; i < this.filters.length; i++){
-        var filter = this.filters[i];
-        if(filter.filterGroup === group){
-          this.filters.splice(i, 1);
-          i = -1;
-        }
-      }
-    }
-    
-    this.pagination.currentPage = 1;
-    
-  }
-
-  removeFilter(filterObj){
-    for(var i = 0; i < this.filters.length; i++){
-      var filter = this.filters[i];
-      if((filterObj.filterGroup === filter.filterGroup) && (filterObj.filterValue === filter.filterValue)){
-        this.filters.splice(i, 1);
-        break;
-      }
-    }
-  }
-  
-  filterExists(filterObj){
-    console.log("original filter object");
-    console.log(filterObj);
-    for(var i = 0; i < this.filters.length; i++){
-      var filter = this.filters[i];
-      console.log(filter);
-      if((filterObj.filterGroup === filter.filterGroup) && (filterObj.filterValue === filter.filterValue)){
-        return true;
-      }
-    }
-    return false;
   }
 
   /**
