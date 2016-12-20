@@ -3,7 +3,7 @@
     <nav class="nav nav-inline coll-nav">
         <a class="nav-link" *ngFor="let colOpt of colMenuArray" [ngClass]="{'active': colOpt.id == selectedColMenuId}" (click)="selectColMenu(colOpt.id)">{{ colOpt.label }}</a>
     </nav>
-    <nav class="nav nav-inline browse-nav">
+    <nav class="nav nav-inline browse-nav" *ngIf="selectedColMenuId == 1">
         <a class="label">Browse By:</a>
         <a class="nav-link" *ngFor="let browseOpt of browseMenuArray" [ngClass]="{'active': browseOpt.id == selectedBrowseId}" (click)="selectBrowseOpt(browseOpt.id)">{{ browseOpt.label }}</a>
     </nav>

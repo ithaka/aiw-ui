@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { Subscription }   from 'rxjs/Subscription';
 import { AssetService } from '../shared/assets.service';
@@ -10,7 +10,7 @@ import { AssetService } from '../shared/assets.service';
   templateUrl: './browse-page.component.html'
 })
 
-export class BrowsePage {
+export class BrowsePage implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = [];
   colMenuArray = [
       {
@@ -53,9 +53,9 @@ export class BrowsePage {
       }
   ];
 
-  private selectedColMenuId = '1';
-  private selectedBrowseId = '250';
-  private currentBrowseRes = {};
+  private selectedColMenuId: string = '1';
+  private selectedBrowseId: string = '250';
+  private currentBrowseRes: any = {};
   private categories = [];
   private expandedCategories: any = {};
 
@@ -72,9 +72,12 @@ export class BrowsePage {
     this.subscriptions.push(
       this.route.params
       .subscribe((params: Params) => { 
-        console.log(params);
         if(params && params['viewId']){
             this.selectedBrowseId = params['viewId'];
+        }
+
+        if(params && params['menuId']) {
+            this.selectedColMenuId = params['menuId'];
         }
       })
     );
@@ -82,12 +85,22 @@ export class BrowsePage {
     this.loadCategory();
   }
 
-  selectColMenu( id ){
-      this.selectedColMenuId = id;
+  ngOnDestroy() {
+    this.subscriptions.forEach((sub) => { sub.unsubscribe(); });
   }
-  selectBrowseOpt ( id ){
+
+  /**
+   * Changes menu between ADL, University Collections, Open Collections, etc...
+   * @param id Id of desired menu from colMenuArray enum
+   */
+  private selectColMenu( id: string ){
+      this.selectedColMenuId = id;
+      this.addRouteParam('menuId', id);
+  }
+  selectBrowseOpt ( id: string ){
       this.expandedCategories = {};
       this.selectedBrowseId = id;
+      this.addRouteParam('viewId', id);
       this.loadCategory();
   }
 
@@ -103,7 +116,7 @@ export class BrowsePage {
 
       })
       .catch(function(err) {
-       console.log('Unable to load category results.');
+        console.log('Unable to load category results.');
       });
   }
 
@@ -222,5 +235,17 @@ export class BrowsePage {
       }
       return node;
   }
+
+    /**
+     * Adds a parameter to the route and navigates to new route
+     * @param key Parameter you want added to route (as matrix param)
+     * @param value The value of the parameter
+     */
+    private addRouteParam(key: string, value: any) {
+        let currentParamsObj: Params = Object.assign({}, this.route.snapshot.params);
+        currentParamsObj[key] = value;
+
+        this.router.navigate([currentParamsObj], { relativeTo: this.route });
+    }
 
 }
