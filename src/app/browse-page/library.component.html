@@ -1,0 +1,33 @@
+<nav class="nav nav-inline browse-nav">
+    <a class="label">Browse By:</a>
+    <a class="nav-link" *ngFor="let browseOpt of browseMenuArray" [ngClass]="{'active': browseOpt.id == selectedBrowseId}" (click)="selectBrowseOpt(browseOpt.id)">{{ browseOpt.label }}</a>
+</nav>
+<div class="col-md-8">
+    <div class="tree">
+        <div *ngFor="let category of categories; let i = index;" [ngClass]=" 'tree__branch-' + category.depth ">
+            <!--Folder items-->
+            <div *ngIf="category.isFolder == true" class="collapse" [ngClass]="{ 'in' : showHideNode(category) || category.depth == 0 }" (click)="toggleTree(category, i)">
+                <i class="icon icon-direction absolute-left tree-icon"  [ngClass]="{ 'icon-down' : expandedCategories[category.widgetId], 'icon-right' : !expandedCategories[category.widgetId] }"></i>
+                <div class="parent"> {{ category.title }} </div>
+            </div>
+            <!--Non-folder items-->
+            <div *ngIf="category.isFolder == false" class="child-cntnr collapse" [ngClass]="{ 'in' : showHideNode(category) }">
+                    <img class="info-icon" *ngIf="(category.descriptionId || category.parentDescId) && !category.isFolder" src="/assets/img/info-icon.png" (click)="toggleInfo(category)" />
+                    <i *ngIf="category.isFolder"  class="icon icon-direction absolute-left tree-icon" [ngClass]="{ 'icon-down' : category.expanded, 'icon-right' : !category.expanded }"></i>
+                    <span (click)="openAssets(category)">{{ category.title }}</span>
+                    <div class="info-cntnr collapse" *ngIf="category.info_desc || category.info_img" [ngClass]="{ 'in' : category.info_expanded }">
+                        <img src="http://viewer2.artstor.org/{{ category.info_img }}" />
+                        <div class="desc" [innerHTML]="category.info_desc"></div>
+                    </div>
+            </div>
+            
+        </div>
+    </div>
+</div>
+
+<div class="col-md-4">
+    <div class="browse-info">
+        <div class="title">{{ currentBrowseRes.collectionname }}</div>
+        <div [innerHTML]="currentBrowseRes.blurburl"></div>
+    </div>
+</div>

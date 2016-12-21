@@ -29,7 +29,8 @@ import { Home } from './home';
 import { SearchPage } from './search-page';
 import { CollectionPage } from './collection-page';
 import { ClusterPage } from './cluster-page';
-import { BrowsePage } from './browse-page';
+import { BrowsePage, LibraryComponent, BrowseCommonsComponent,
+  MyCollectionsComponent, BrowseInstitutionComponent, BrowseGroupsComponent } from './browse-page';
 import { AssociatedPage } from './associated-page';
 import { ImageGroupPage } from './image-group-page';
 import { Login } from './login';
@@ -71,6 +72,11 @@ type StoreType = {
     CollectionPage,
     ClusterPage,
     BrowsePage,
+    LibraryComponent,
+    BrowseCommonsComponent,
+    MyCollectionsComponent,
+    BrowseInstitutionComponent,
+    BrowseGroupsComponent,
     AssociatedPage,
     AssetFilters,
     AssetGrid,
