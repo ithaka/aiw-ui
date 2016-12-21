@@ -1,7 +1,7 @@
 <nav-menu></nav-menu>
 <div class="container main-content">
     <nav class="nav nav-inline coll-nav">
-        <a class="nav-link" *ngFor="let colOpt of colMenuArray" [ngClass]="{'active': colOpt.id == selectedColMenuId}" (click)="selectColMenu(colOpt.id)">{{ colOpt.label }}</a>
+        <a class="nav-link" *ngFor="let colOpt of colMenuArray" [routerLink]="[colOpt.link]" [ngClass]="{'active': colOpt.id == selectedColMenuId}" (click)="selectColMenu(colOpt.id)">{{ colOpt.label }}</a>
     </nav>
     <div class="row mt-1">
         <router-outlet></router-outlet>

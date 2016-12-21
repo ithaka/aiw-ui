@@ -1,8 +1,13 @@
 import { Routes } from '@angular/router';
 
-import { LibraryComponent } from '.';
+import { LibraryComponent, BrowseCommonsComponent, MyCollectionsComponent,
+  BrowseInstitutionComponent, BrowseGroupsComponent } from '.';
 
 export const BrowseRoutes: Routes = [
   { path: '', redirectTo: 'library', pathMatch: 'full'},
-  { path: 'library', component: LibraryComponent }
+  { path: 'library', component: LibraryComponent },
+  { path: 'institution', component: BrowseInstitutionComponent },
+  { path: 'commons', component: BrowseCommonsComponent },
+  { path: 'mycollections', component: MyCollectionsComponent },
+  { path: 'groups', component: BrowseGroupsComponent }
 ];
