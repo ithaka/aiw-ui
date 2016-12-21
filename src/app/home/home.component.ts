@@ -46,7 +46,7 @@ export class Home {
     this.user = this._auth.getUser();
     
     // this.title.getData().subscribe(data => this.data = data);
-    this._assets.getCollections()
+    this._assets.getCollections('ssc')
       .then((res) => {
         this.collections = res['Collections'];
       })

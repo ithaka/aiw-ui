@@ -17,6 +17,9 @@ import { AssetFiltersService } from './../asset-filters/asset-filters.service';
 @Injectable()
 export class AssetService {
 
+    /** Constant that defines which collectionType belongs to institutions */
+    static readonly institutionCollectionType: number = 2;
+
     //set up thumbnail observables
     private allResultsSource = new Subject<any[]>();
     public allResults = this.allResultsSource.asObservable();
@@ -333,9 +336,10 @@ export class AssetService {
 
     /**
      * Wrapper function for HTTP call to get collections. Used by home component
+     * @param type Can either be 'ssc' or 'institution'
      * @returns Chainable promise containing collection data
      */
-    public getCollections() {
+    public getCollections(type: string) {
         let options = new RequestOptions({ withCredentials: true });
         // Returns all of the collections names
         return this.http
@@ -343,14 +347,35 @@ export class AssetService {
             .toPromise()
             .then(this.extractData)
             .then((data) => {
+                let returnCollections: any[] = [];
+                let addToArr: boolean;
+
                 // there are collections named "Browse by ..." which need to be filtered out
+                // array also needs to be filtered by collection type
                 for (let i = data.Collections.length - 1; i >= 0; i--) {
-                    let collection = data.Collections[i];
+                    // assume addToArr is true until logical tests prove false
+                    addToArr = true;
+                    let collection: any = data.Collections[i];
+
+                    // remove collections that start with "Browse"
                     if (collection.collectionname && collection.collectionname.substring(0, 6).toLowerCase() === "browse") {
-                        //cut that element out
-                        data.Collections.splice(data.Collections.indexOf(collection), 1);
+                        addToArr = false;
+                    }
+
+                    // if institution collections requested, remove any SSC collections
+                    //  otherwise, remove institution collections
+                    if (
+                        (type === 'institution' && collection.collectionType !== AssetService.institutionCollectionType)
+                        ||
+                        (type === 'ssc' && collection.collectionType === AssetService.institutionCollectionType)
+                    ) { addToArr = false; }
+
+                    if (addToArr) {
+                        returnCollections.unshift(collection);
                     }
                 }
+                data.Collections = returnCollections;
+                console.log(data.Collections);
                 return data;
             });
     }
