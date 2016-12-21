@@ -12,6 +12,7 @@ import { NoContent } from './no-content';
 import { AuthService } from './shared/auth.service';
 
 import { DataResolver } from './app.resolver';
+import { BrowseRoutes } from './browse-page/browse-page.routes';
 
 
 export const ROUTES: Routes = [
@@ -24,7 +25,7 @@ export const ROUTES: Routes = [
   { path: 'collection/:colId', component: CollectionPage, canActivate:[AuthService] },
   { path: 'image-group/:igId', component: ImageGroupPage, canActivate:[AuthService] },
   { path: 'cluster/:objectId', component: ClusterPage, canActivate:[AuthService] },
-  { path: 'browse', component: BrowsePage, canActivate:[AuthService] },
+  { path: 'browse', component: BrowsePage, canActivate:[AuthService], children: BrowseRoutes },
   { path: 'associated/:objectId/:colId', component: AssociatedPage, canActivate:[AuthService] },
   { path: 'about', component: About },
   { path: '**',    component: NoContent },
