@@ -24,7 +24,7 @@
             <i class="icon icon-direction absolute-left tree-icon" (click)="toggleTree(geographyFacet)" [ngClass]="{ 'icon-down' : geographyFacet.expanded, 'icon-right' : !geographyFacet.expanded }"></i>
             <div class="filter parent" (click)="toggleFilter(geographyFacet.id, 'geography')" [ngClass]="{'active': filterApplied(geographyFacet.id, 'geography')}"> {{ geographyFacet.name }} </div>
             <div class="child-cntnr collapse" [ngClass]="{ 'in' : geographyFacet.expanded }">
-                <div class="filter child" *ngFor="let child of geographyFacet.children; let i = index" id="filterGeographyChildItem{{ removeSpaces(geographyFacet.name) + (i + 1) }}" (click)="toggleFilter(child.id, 'geography')" [ngClass]="{'active': filterApplied(child.id, 'geography')}">{{ child.name }}</div>
+                <div class="filter child" *ngFor="let child of geographyFacet.children; let childIndex = index" id="filterGeographyItem{{ (i + 1) + 'Child' + childIndex }}" (click)="toggleFilter(child.id, 'geography')" [ngClass]="{'active': filterApplied(child.id, 'geography')}">{{ child.name }}</div>
             </div>
         </div>
     </div>

@@ -229,14 +229,7 @@ export class AssetFilters {
     }
     return result;
   }
-
-  /**
-   * Used in template to clean filter name for use in the id, specifically sub items of Geography
-   */
-  removeSpaces(string: string): string {
-    return string.replace(/\s+/g, '');
-  }
-
+  
   ngOnDestroy() {
     this.subscriptions.forEach((sub) => { sub.unsubscribe(); });
   }
