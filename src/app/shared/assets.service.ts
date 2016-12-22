@@ -237,8 +237,17 @@ export class AssetService {
                 console.log(err);
             });
     }
-    
+
     // Used by Browse page
+    public pccollection(){
+        let options = new RequestOptions({ withCredentials: true });
+
+        return this.http
+            .get(this._auth.getUrl() + '/pccollection', options)
+            .toPromise()
+            .then(this.extractData);
+    }
+
     public category(catId: string) {
         let options = new RequestOptions({ withCredentials: true });
 
