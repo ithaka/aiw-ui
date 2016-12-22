@@ -74,10 +74,10 @@ export class LibraryComponent implements OnInit {
           this.currentBrowseRes = res;
           this.categories = res.Categories;
 
+          // should be abstracted to the _assets.category method b/c it is a data operation?
           for (let cat of this.categories) { // Add default depth of 0 to every top level node
               cat.depth = 0;
           }
-          console.log(res);
       })
       .catch(function(err) {
           console.log('Unable to load category results.');

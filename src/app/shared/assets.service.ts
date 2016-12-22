@@ -350,6 +350,7 @@ export class AssetService {
                 let returnCollections: any[] = [];
                 let addToArr: boolean;
 
+                // this loop is for data cleaning/alteration
                 // there are collections named "Browse by ..." which need to be filtered out
                 // array also needs to be filtered by collection type
                 for (let i = data.Collections.length - 1; i >= 0; i--) {
@@ -371,13 +372,25 @@ export class AssetService {
                     ) { addToArr = false; }
 
                     if (addToArr) {
+                        // add default depth for use in folder operations
+                        collection.depth = 0;
                         returnCollections.unshift(collection);
                     }
                 }
                 data.Collections = returnCollections;
-                console.log(data.Collections);
                 return data;
             });
+    }
+
+    public getFolders() {
+        let options = new RequestOptions({ withCredentials: true });
+
+        let requestString = [this._auth.getUrl(), "folders"].join("/");
+
+        return this.http
+            .get(requestString)
+            .toPromise()
+            .then(this.extractData);
     }
 
     /**
