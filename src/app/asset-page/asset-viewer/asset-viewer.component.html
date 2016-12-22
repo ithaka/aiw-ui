@@ -1,0 +1,51 @@
+<!-- IIIF Image Viewer -->
+<!--<div class="asset-viewer"  ng-show="OSDFileTypes.indexOf(asset.File.type.toLowerCase()) > -1  && !mediaLoadingFailed">
+    <button-group id="imageButtons-{{ asset['Meta-Id'] + '-' + index }}" ng-show="openSeaDragonReady" class="top-right vertical icons-block circle">
+        <button id="zoomIn-{{ asset['Meta-Id'] + '-' + index }}" title="Zoom In"><i class="icon-zoom-in"></i></button>
+        <button id="zoomOut-{{ asset['Meta-Id'] + '-' + index }}" title="Zoom Out"><i class="icon-zoom-out"></i></button>
+        <button id="zoomFit-{{ asset['Meta-Id'] + '-' + index }}" title="Zoom Fit"><i class="icon-zoom-fit"></i></button>
+        <button class="hide-in-fullscreen" ng-click="togglePresentationMode()" id="fullScreen-{{ asset['Meta-Id'] + '-' + index }}" title="Full Screen"><i class="icon-full-screen"></i></button>
+        <button ng-if="removableAsset" class="removeAsset show-in-fullscreen" ng-click="removeComparedAsset(asset['Meta-Id'])" title="Remove from Comparison"><i class="icon-clear"/></button>
+    </button-group>
+    <div id="loader-wrapper" class="more-results overlay-wrap--center" ng-hide="openSeaDragonReady">
+        <i class="icon-asterisk icon-spin icon-large"></i>
+    </div>
+    <div id="viewer-{{ asset['Meta-Id'] + '-' + index }}" style="position: relative; height: 100%; width: 100%;"></div>
+</div>-->
+
+<!-- Audio/Video Player -->
+<!--<div class="asset-viewer" ng-hide="mediaLoadingFailed" ng-if="KalturaFileTypes.indexOf(asset.File.type) > -1">
+    <button-group id="imageButtons-{{ asset['Meta-Id'] + '-' + index }}" class="top-right vertical icons-block circle">
+        <button class="hide-in-fullscreen" ng-click="togglePresentationMode()" id="fullScreen-{{ asset['Meta-Id'] + '-' + index }}" title="Full Screen"><i class="icon-full-screen"></i></button>
+        <button ng-if="removableAsset" class="show-in-fullscreen" ng-click="removeComparedAsset(asset['Meta-Id'])" title="Remove from Comparison"><i class="icon-clear"/></button>
+    </button-group>
+
+    <audio id="audio-{{ asset['Meta-Id'] + '-' + index }}" class="item video-player" controls style="display:none;">
+        <source src="{{ mediaUrl }}" type="audio/{{ mediaType }}">
+        {{ 'audio_error' | i18next }}
+    </audio>
+
+    <div id="video-{{ asset['Meta-Id'] + '-' + index }}" class="item video-player"></div>
+</div>-->
+
+<!-- PDF Viewer -->
+<!--<div class="asset-viewer" ng-hide="mediaLoadingFailed" ng-if="asset.File.type == 'pdf' || asset.File.format == 'pdf'">
+    <ng-pdf style="height: 100%;width:100%; position: relative;overflow:hidden;" template-url="item/pdfViewer.tpl.html" scale="page-fit"></ng-pdf>
+</div>-->
+
+<!-- Large thumbnail fallback -->
+<div id="fallbackViewer" class="asset-viewer" *ngIf="mediaLoadingFailed && !fallbackFailed">
+    <img alt="{{ asset.title }}" class="item" src="" />
+</div>
+<!-- Error if asset failed to load even the fallback thumbnail -->
+<!--<div class="asset-viewer" ng-show="fallbackFailed">
+    <div class="asset-viewer__message">
+    {{ "asset_error.failed" | i18next }}
+    </div>
+</div>-->
+<!-- Error if asset has no media/File -->
+<!--<div class="asset-viewer" ng-show="isEmpty(asset.File) || !asset.File">
+    <div class="asset-viewer__message">
+    {{ "asset_error.none" | i18next }}
+    </div>
+</div>-->

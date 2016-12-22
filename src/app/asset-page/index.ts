@@ -1,0 +1,1 @@
+export * from './asset-page.component';

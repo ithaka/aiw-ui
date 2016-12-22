@@ -118,6 +118,36 @@ export class AssetService {
     }
 
     /**
+     * Gets metadata for a single asset by ID
+     * @param assetId string Asset or object ID
+     */
+    public getById(assetId: string) {
+        let header = new Headers({ 'Content-Type': 'application/json' }); // ... Set content type to JSON
+        let options = new RequestOptions({ headers: header, withCredentials: true }); // Create a request option
+
+        return this.http
+            .get(this._auth.getUrl() + '/metadata/' + assetId, options)
+            .map(data => {
+                console.log(data.json());
+            });
+    }
+
+    /**
+     * Get IIIF tilesource for an Asset
+     * @param assetId string Asset or object ID
+     */
+    public getTileSource(assetId: string) {
+        let header = new Headers({ 'Content-Type': 'application/json' }); // ... Set content type to JSON
+        let options = new RequestOptions({ headers: header, withCredentials: false }); // Create a request option
+
+        return this.http
+            .get('http://catalog.sharedshelf.artstor.org/iiifmap/ss/' + assetId, options)
+            .map(data => {
+                console.log(data.json());
+            });
+    }
+
+    /**
      * Gets array of thumbnails associated to objectId
      * @param objectId Object Id for which to retrieve image results
      * @param colId Collection Id in which the Object resides
