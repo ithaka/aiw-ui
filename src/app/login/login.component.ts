@@ -47,7 +47,11 @@ export class Login {
         if (data.items) {
           this.loginInstitutions = data.items;
         }
-      });
+      })
+      .catch((error) => {
+        this.errorMsg = "We're experiencing an error, please try again! If the problem persists, try again later.";
+        console.error(error);
+      })
   }
   
   loadForUser(user) {
@@ -87,9 +91,11 @@ export class Login {
 
     this._login.login(user)
       .then(
-        (data)  => { this.loadForUser(data) },
-        (error) =>  { this.getLoginError(user) }
+        (data)  => { this.loadForUser(data) }
       ).catch(function(err) {
+        // if (err.status === 500) {
+        //   console.log("CORS issues suck");
+        // }
         this.getLoginError(user)
       });
   }
