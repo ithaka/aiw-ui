@@ -1,3 +1,6 @@
+/**
+ * Structure to be implemented in a tag component (can be constructed and then injected into a component to implement view)
+ */
 export class Tag {
   //in constructor
   tagId: string;

@@ -1,7 +1,10 @@
-<div (click)="tag.isCollapsed = !tag.isCollapsed; toggleFolder(tag)" [ngbCollapse]="isDisplayed" [ngClass]="['tree__branch-' + tag.getLevel()]">
+<!--Sets up the tag passed into the component-->
+<div (click)="tag.isCollapsed = !tag.isCollapsed; toggleFolder(tag)" [ngClass]="['tree__branch-' + tag.getLevel()]">
   <i *ngIf="showAsFolder" class="icon icon-direction absolute-left tree-icon"  [ngClass]="[tag.isCollapsed ? 'icon-right' : 'icon-down']"></i>
   {{tag.title}}
 </div>
-<div [ngClass]="{ collapse : tag.isCollapsed }">
+<!--Sets up for tag's children, and applies ngbCollapse (hides child element) based on whether or not parent is collapsed-->
+<div [ngbCollapse]="tag.isCollapsed">
+  <!--loop through children and inject the children into new nag components-->
   <ang-tag *ngFor="let child of tag.children" [tag]="child"></ang-tag>
 </div>
