@@ -374,6 +374,39 @@ export class AssetService {
     }
 
     /**
+     * Wrapper function for HTTP call to get Image Groups. Used by browse component
+     * @returns Chainable promise containing Image Groups data
+     */
+    public getIgs(){
+        let options = new RequestOptions({ withCredentials: true });
+
+        return this.http
+            .get(this._auth.getUrl() + '/folders/110', options)
+            .toPromise()
+            .then(this.extractData)
+            .then((data) => {
+                return data;
+            });
+    }
+
+    /**
+     * Wrapper function for HTTP call to get subImageGroups. Used by browse/groups component
+     * @param subImageGroup id
+     * @returns Chainable promise containing subImageGroups data
+     */
+    public subGroups(id: string){
+        let options = new RequestOptions({ withCredentials: true });
+
+        return this.http
+            .get(this._auth.getUrl() + '/folders/' + id + '/imagegroups?studWkFldrs=true&parentWritable=true', options)
+            .toPromise()
+            .then(this.extractData)
+            .then((data) => {
+                return data;
+            });
+    }
+
+    /**
      * Wrapper function for HTTP call to get collections. Used by home component
      * @param type Can either be 'ssc' or 'institution'
      * @returns Chainable promise containing collection data
