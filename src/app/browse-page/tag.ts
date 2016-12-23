@@ -10,7 +10,7 @@ export class Tag {
   private children: Tag[];
   isDisplayed: boolean = true;
   levelsDeep: number = 0;
-  // touched: boolean = false;
+  touched: boolean = false;
 
   //type can be: 'collection', 'category', or 'subcategory'
   constructor(tagId: string, title: string, isCollapsed?: boolean, parentTag?: Tag, type?: string) {
@@ -30,7 +30,7 @@ export class Tag {
   }
 
   public toggleChildren(): void {
-    // this.touched = true;
+    this.touched = true;
 
     // loop through all of this tag's children
     for(let child of this.children) {
