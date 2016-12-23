@@ -1,7 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 
 import { AssetService } from './../shared/assets.service';
-import { Tag } from './tag';
+import { Tag } from './tag.class';
 
 @Component({
   selector: 'ang-tag',
@@ -22,7 +22,6 @@ export class TagComponent implements OnInit {
   }
 
   private setFolderView() {
-    console.log("setting folder view!");
     this.showAsFolder = (
       (this.tag.type.folder && !this.tag.touched)
       ||
@@ -67,4 +66,5 @@ export class TagComponent implements OnInit {
       }
 
     }
+  }
 }
