@@ -229,7 +229,7 @@ export class AssetFilters {
     }
     return result;
   }
-
+  
   ngOnDestroy() {
     this.subscriptions.forEach((sub) => { sub.unsubscribe(); });
   }
