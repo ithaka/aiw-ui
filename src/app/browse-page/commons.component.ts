@@ -82,7 +82,7 @@ export class BrowseCommonsComponent implements OnInit {
               childArr.push(categoryTag);
               this.tags.splice(this.tags.indexOf(tag) + 1, 0, categoryTag);
             }
-            // tag.setChildren(childArr);
+            tag.setChildren(childArr);
           })
           .catch((err) => {
             console.error(err);
