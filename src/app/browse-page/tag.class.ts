@@ -18,24 +18,42 @@ export class Tag {
   /** has getters and setters - allows implementation to determine when touched is set */
   touched: boolean = false;
 
+  private setChildren: (tag: Tag, helper: any) => any;
+  private helper: any;
+
   //type can be: 'collection', 'category', or 'subcategory'
-  constructor(tagId: string, title: string, isCollapsed?: boolean, parentTag?: Tag, type?: any) {
+  constructor(tagId: string, title: string, isCollapsed?: boolean, parentTag?: Tag, type?: any, setChildren?: (tag: Tag, helper: any) => any, helperObj?: any) {
     this.tagId = tagId;
     this.title = title;
     this.isCollapsed = isCollapsed;
     this.parentTag = parentTag;
     this.type = type;
+    console.log(setChildren);
+    this.setChildren = setChildren;
+    this.helper = helperObj;
     this.levelsDeep = this.setLevel();
   }
 
-  /**
-   * Sets the tag's array of children
-   * @param children An array of tags which become children of the parent tag
-   */
-  public setChildren(children: Tag[]): void {
-    this.children = children;
-    // this.touched = true;
+  public refreshChildren(): void {
+    console.log("calling refresh children");
+    this.setChildren(this, this.helper).then((tags: Tag[]) => {
+      this.children = tags;
+      console.log(this.children);
+    })
+    .catch((err) => {
+      console.error(err);
+    })
+    
   }
+
+  // /**
+  //  * Sets the tag's array of children
+  //  * @param children An array of tags which become children of the parent tag
+  //  */
+  // public setChildren(children: Tag[]): void {
+  //   this.children = children;
+  //   // this.touched = true;
+  // }
 
   /**
    * Getter method for tag's array of children
