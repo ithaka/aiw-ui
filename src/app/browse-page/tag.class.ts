@@ -13,8 +13,6 @@ export class Tag {
   //in functions
   /** array of tags that are categorized beneath this tag */
   private children: Tag[] = [];
-  /** switch to use with styles to display/not */
-  isDisplayed: boolean = true;
   /** number of parents that the tag has */
   private levelsDeep: number = 0;
   /** has getters and setters - allows implementation to determine when touched is set */
@@ -44,25 +42,6 @@ export class Tag {
    */
   public getChildren(): Tag[] {
     return this.children;
-  }
-
-  /**
-   * Given a tag, loops through all children recursively to toggle child.isDisplayed
-   */
-  public toggleChildren(): void {
-    this.touched = true;
-    
-    // loop through all of this tag's children
-    for(let child of this.children) {
-      console.log(child);
-      // toggle all of that tag's children
-      child.isDisplayed = !child.isDisplayed;
-
-      // if it has children, toggle them!
-      if (child.getChildren()) {
-        child.toggleChildren();
-      }
-    }
   }
 
   /** Getter method for number of tag ancestors */

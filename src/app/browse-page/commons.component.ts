@@ -17,7 +17,7 @@ export class BrowseCommonsComponent implements OnInit {
   constructor(private _assets: AssetService) { }
 
 
-
+  /** Initializes array of Tags based on collections */
   ngOnInit() {
     this._assets.getCollections( 'ssc' )
       .then((data) => {
