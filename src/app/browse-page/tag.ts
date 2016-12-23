@@ -4,7 +4,8 @@ export class Tag {
   title: string;
   isCollapsed: boolean = false;
   parentTag: Tag;
-  type: string;
+  /** object with assignable properties to be stored by the tag */
+  type: any = {};
 
   //in functions
   private children: Tag[];
@@ -13,7 +14,7 @@ export class Tag {
   touched: boolean = false;
 
   //type can be: 'collection', 'category', or 'subcategory'
-  constructor(tagId: string, title: string, isCollapsed?: boolean, parentTag?: Tag, type?: string) {
+  constructor(tagId: string, title: string, isCollapsed?: boolean, parentTag?: Tag, type?: any) {
     this.tagId = tagId;
     this.title = title;
     this.isCollapsed = isCollapsed;
@@ -24,6 +25,7 @@ export class Tag {
 
   public setChildren(children: Tag[]): void {
     this.children = children;
+    this.touched = true;
   }
 
   public getChildren(): Tag[] {
@@ -32,9 +34,10 @@ export class Tag {
 
   public toggleChildren(): void {
     this.touched = true;
-
+    
     // loop through all of this tag's children
     for(let child of this.children) {
+      console.log(child);
       // toggle all of that tag's children
       child.isDisplayed = !child.isDisplayed;
 
@@ -43,6 +46,18 @@ export class Tag {
         child.toggleChildren();
       }
     }
+  }
+
+  public familyDisplayed(): boolean {
+    let currentTag: Tag = this;
+
+    while (currentTag.parentTag) {
+      if(currentTag.isCollapsed) {
+        return false;
+      }
+      currentTag = currentTag.parentTag;
+    }
+    return true;
   }
 
   public getLevel(): number {

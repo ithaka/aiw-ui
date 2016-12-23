@@ -1,6 +1,5 @@
-<!--<div [ngbCollapse]="tag.isCollapsed" (click)="tag.isCollapsed = !tag.isCollapsed">-->
-<div (click)="tag.isCollapsed = !tag.isCollapsed" [ngbCollapse]="!tag.isDisplayed">
-
-  <i class="icon icon-direction absolute-left tree-icon"  [ngClass]="tag.isCollapsed ? 'icon-right' : 'icon-down'"></i>
+<div (click)="tag.isCollapsed = !tag.isCollapsed; setFolderView();" [ngbCollapse]="familyDisplayed" [ngClass]="['tree__branch-' + tag.getLevel()]">
+  <i *ngIf="showAsFolder" class="icon icon-direction absolute-left tree-icon"  [ngClass]="[tag.isCollapsed ? 'icon-right' : 'icon-down']"></i>
   {{tag.title}}
+  <ang-tag *ngFor="let child of children"></ang-tag>
 </div>
