@@ -1,4 +1,6 @@
-<div [ngbCollapse]="tag.isCollapsed" (click)="tag.isCollapsed = !tag.isCollapsed">
-  <!--<i class="icon icon-direction absolute-left tree-icon"></i>-->
+<!--<div [ngbCollapse]="tag.isCollapsed" (click)="tag.isCollapsed = !tag.isCollapsed">-->
+<div (click)="tag.isCollapsed = !tag.isCollapsed" [ngbCollapse]="!tag.isDisplayed">
+
+  <i class="icon icon-direction absolute-left tree-icon"  [ngClass]="tag.isCollapsed ? 'icon-down' : 'icon-right'"></i>
   {{tag.title}}
 </div>

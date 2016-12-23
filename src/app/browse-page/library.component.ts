@@ -82,8 +82,6 @@ export class LibraryComponent implements OnInit {
       .catch(function(err) {
           console.log('Unable to load category results.');
       });
-    
-    
   }
 
   loadSubcategories(category, index){

@@ -19,20 +19,13 @@ export class BrowseCommonsComponent implements OnInit {
 
 
   ngOnInit() {
-    this._assets.getCollections( this.selectedCollectionId )
+    this._assets.getCollections( 'ssc' )
       .then((data) => {
         console.log(data.Collections);
-        // for (let [index, collection] of data.Collections) {
-          // console.log("index:");
-          // console.log(index);
-          // console.log("collection:");
-          // console.log(collection);
-        //   this.tags.push(new Tag(index, collection.collectionname, false, "someParentId"));
-        // }
 
         if (data && data.Collections) {
           data.Collections.forEach((collection, index) => {
-            this.tags.push(new Tag(index, collection.collectionname, false, "someParentId"));
+            this.tags.push(new Tag(collection.collectionid, collection.collectionname, false, null, "collection"));
           });
         }
 
@@ -40,7 +33,7 @@ export class BrowseCommonsComponent implements OnInit {
       })
       .catch((err) => {
         console.error(err);
-      })
+      });
   }
 
   private loadCommons() {
@@ -51,7 +44,41 @@ export class BrowseCommonsComponent implements OnInit {
       })
       .catch((err) => {
         console.error(err);
-      })
+      });
+  }
+
+  private toggleFolder(tag: Tag) {
+    console.log(tag.tagId + " was clicked!");
+
+    //if the tag has been expanded but has no children and gets clicked again, this still fires
+    //  is there a way to prevent that?
+    //  it should have children if it's been clicked
+    if (!tag.getChildren()) {
+      //the tag doesn't have any children, so we run a call to get any
+      let childArr: Tag[] = [];
+
+      this._assets.category(tag.tagId)
+        .then((data) => {
+          console.log(data);
+          for(let category of data.Categories) {
+            let categoryTag = new Tag(category.widgetId, category.title, false, tag.tagId, "category");
+            childArr.push(categoryTag);
+            // this.tags.push(categoryTag);
+            this.tags.splice(this.tags.indexOf(tag) + 1, 0, categoryTag);
+          }
+          tag.setChildren(childArr);
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    } else {
+      //the tag has children, so we just set their displays differently
+      console.log("it's got children!");
+      for (let childTag of tag.getChildren()) {
+        childTag.toggleDisplay();
+      }
+    }
+
   }
 
   // loadCategory(){
