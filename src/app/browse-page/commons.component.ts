@@ -25,7 +25,7 @@ export class BrowseCommonsComponent implements OnInit {
 
         if (data && data.Collections) {
           data.Collections.forEach((collection, index) => {
-            this.tags.push(new Tag(collection.collectionid, collection.collectionname, false, null, "collection"));
+            this.tags.push(new Tag(collection.collectionid, collection.collectionname, true, null, "collection"));
           });
         }
 
@@ -61,9 +61,8 @@ export class BrowseCommonsComponent implements OnInit {
       if (tag.type === "collection") {
         this._assets.category(tag.tagId)
           .then((data) => {
-            console.log(data);
             for(let category of data.Categories) {
-              let categoryTag = new Tag(category.widgetId, category.title, false, tag.tagId, "category");
+              let categoryTag = new Tag(category.widgetId, category.title, true, tag, "category");
               childArr.push(categoryTag);
               this.tags.splice(this.tags.indexOf(tag) + 1, 0, categoryTag);
             }
@@ -75,10 +74,8 @@ export class BrowseCommonsComponent implements OnInit {
       } else if (tag.type === "category") {
         this._assets.subcategories(tag.tagId)
           .then((data) => {
-            console.log(data);
             for(let category of data) {
-              console.log(category);
-              let categoryTag = new Tag(category.widgetId, category.title, false, tag.tagId, "subcategory");
+              let categoryTag = new Tag(category.widgetId, category.title, true, tag, "subcategory");
               childArr.push(categoryTag);
               this.tags.splice(this.tags.indexOf(tag) + 1, 0, categoryTag);
             }
@@ -90,10 +87,27 @@ export class BrowseCommonsComponent implements OnInit {
       }
 
     } else {
-      //the tag has children, so we just set their displays differently
-      for (let childTag of tag.getChildren()) {
-        childTag.toggleDisplay();
+      //the tag has children, so we just toggle the childrens' display property
+      if (tag.isCollapsed) {
+        console.log("this tag is collapsed! let's open it!");
+        tag.toggleChildren();
+        // //loop through children
+        // for(let childTag of tag.getChildren()) {
+        //   //  if !childTag.isCollapsed then show its child tags, and so on
+        //   if (!childTag.isCollapsed) {
+
+        //   }
+        // }
+
+        
+      } else {
+        console.log("this tag is open! let's close it!");
+        tag.toggleChildren();
+        //loop through children && childrens'
       }
+      // for (let childTag of tag.getChildren()) {
+      //   childTag.toggleDisplay();
+      // }
     }
 
   }
