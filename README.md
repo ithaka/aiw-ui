@@ -251,6 +251,87 @@ When writing styles:
 ---
 
 # TypeScript
+
+## Quality Rules
+
+#### 1. Variable and function should be scoped as private or public
+
+```TypeScript
+export class ExampleComponent {
+  // Ugly
+  term;
+  
+  // Scoped!
+  private term;
+  
+  // Typed!
+  private term: string;
+  
+  ...
+}
+
+```
+
+#### 2. Variable should be typed and declared at the top of its relevant scope
+
+```TypeScript
+specialAlgorithm(): number {
+  // Declare here
+  let a: number = 2;
+  
+  a = a * 2;
+  
+  // Don't declare here!
+  let b: number = 5;
+  
+  return a + b;
+}
+
+```
+
+
+#### 3. Function should have a return type! And ‘void’ if it returns nothing!
+
+```TypeScript
+// Vague!
+specialAlgorithm() {
+  let a: number = 10;
+  return a;
+}
+
+// Great!
+specialAlgorithm(): number {
+  let a: number = 10;
+  return a;
+}
+
+```
+
+#### 4. Function should, at minimum, have a description of its purpose in an inline block before it.
+
+
+```TypeScript
+/**
+ * Special Algorithm's purpose is to give us an even number
+ */
+specialAlgorithm(): number {
+  ...
+}
+
+```
+
+#### 5. Function’s parameters should be typed
+
+```TypeScript
+/**
+ * Special Algorithm's purpose is to give us an even number
+ */
+specialAlgorithm(input: number): number {
+  return 2 * input;
+}
+
+```
+
 To take full advantage of TypeScript with autocomplete you would have to install it globally and use an editor with the correct TypeScript plugins.
 
 ## Use latest TypeScript compiler

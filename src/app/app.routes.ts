@@ -6,6 +6,7 @@ import { ImageGroupPage } from './image-group-page';
 import { ClusterPage } from './cluster-page';
 import { BrowsePage } from './browse-page';
 import { AssociatedPage } from './associated-page';
+import { AssetPage } from './asset-page';
 import { Login } from './login';
 import { About } from './about';
 import { NoContent } from './no-content';
@@ -21,6 +22,7 @@ export const ROUTES: Routes = [
   { path: 'home',  component: Home, canActivate:[AuthService] },
   { path: 'search', redirectTo: '/search/*', pathMatch: 'full', canActivate:[AuthService] },
   { path: 'search/', redirectTo: '/search/*', pathMatch: 'full', canActivate:[AuthService] },
+  { path: 'asset/:assetId', component: AssetPage, pathMatch: 'full', canActivate:[AuthService] },
   { path: 'search/:term', component: SearchPage, canActivate:[AuthService] },
   { path: 'collection/:colId', component: CollectionPage, canActivate:[AuthService] },
   { path: 'image-group/:igId', component: ImageGroupPage, canActivate:[AuthService] },

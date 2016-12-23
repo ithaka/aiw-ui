@@ -114,6 +114,10 @@ export class AssetGrid implements OnInit, OnDestroy {
                 // Any other filters are managed by Asset Filters
             }
         }
+
+        if (params['term']) {
+          this.term = params['term'];
+        }
                 
         if (params['startDate'] && params['endDate']) {
           this.dateFacet.earliest.date = Math.abs(params['startDate']);

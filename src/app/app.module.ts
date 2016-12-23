@@ -31,6 +31,8 @@ import { CollectionPage } from './collection-page';
 import { ClusterPage } from './cluster-page';
 import { BrowsePage, LibraryComponent, BrowseCommonsComponent,
   MyCollectionsComponent, BrowseInstitutionComponent, BrowseGroupsComponent, TagComponent } from './browse-page';
+import { AssetPage } from './asset-page';
+import { AssetViewerComponent } from './asset-page/asset-viewer';
 import { AssociatedPage } from './associated-page';
 import { ImageGroupPage } from './image-group-page';
 import { Login } from './login';
@@ -73,6 +75,8 @@ type StoreType = {
     ClusterPage,
     BrowsePage,
     TagComponent,
+    AssetViewerComponent,
+    AssetPage,
     LibraryComponent,
     BrowseCommonsComponent,
     MyCollectionsComponent,
