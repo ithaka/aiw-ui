@@ -9,13 +9,23 @@ export class TagsService {
   constructor(private _assets: AssetService) {
   }
 
+  /**
+   * Should be first call to get tags that a page makes
+   * @param type Can be values: "commons", and nothing else yet
+   * @returns a chainable promise resolved with an array of tags
+   */
   public initTags(type: string): Promise<Tag[]> {
     if (type === "commons") {
       return this.getCollections();
     }
   }
 
-  public getChildTags(tag: Tag) {
+  /**
+   * This is the call that the tag.component uses to get child tags
+   * @param tag tag.type.label should contain the value which lets TagsService know which function to call
+   * @returns a chanable promise, resolved with an array of tags
+   */
+  public getChildTags(tag: Tag): Promise<Tag[]> {
     if (tag.type && tag.type.label) {
       let label = tag.type.label;
       if (label === "collection" || label === "category") {
@@ -24,6 +34,10 @@ export class TagsService {
     }
   }
 
+  /**
+   * Called by initTags
+   * @returns a chainable promise, resolved with an array of tags
+   */
   private getCollections(): Promise<Tag[]> {
     return this._assets.getCollections( 'ssc' )
       .then((data) => {
@@ -41,6 +55,10 @@ export class TagsService {
       });
   }
 
+  /**
+   * Called by getChildTags
+   * @returns a chainable promise, resolved with an array of tags
+   */
   private getCategories(tag: Tag): Promise<Tag[]> {
     //the tag doesn't have any children, so we run a call to get any
     let childArr: Tag[] = [];

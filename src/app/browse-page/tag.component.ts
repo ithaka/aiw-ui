@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 import { AssetService } from './../shared/assets.service';
 import { TagsService } from './tags.service';
@@ -9,7 +9,7 @@ import { Tag } from './tag.class';
   templateUrl: 'tag.component.html',
   styleUrls: ['./browse-page.component.scss']
 })
-export class TagComponent implements OnInit {
+export class TagComponent {
 
   @Input()
   public tag: Tag;
@@ -21,19 +21,10 @@ export class TagComponent implements OnInit {
   ) {
   }
 
-  ngOnInit() { 
-    this.setFolderView()
-  }
-
-  private setFolderView() {
-    this.showAsFolder = (
-      (this.tag.type.folder && !this.tag.touched)
-      ||
-      (this.tag.type.folder && this.tag.getChildren().length > 0) 
-    );
-  }
-
-  private getChildren() {
+  /**
+   * Sends tag to tagService in order to retrieve and assign child tags
+   */
+  private getChildren(): void {
     // only want to make the http call once, and then the info will be stored on the tag
     if (!this.tag.touched) {
       //make sure the tag has a type and a type.label, which getTags uses as a switch
