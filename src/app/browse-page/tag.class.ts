@@ -34,7 +34,7 @@ export class Tag {
    */
   public setChildren(children: Tag[]): void {
     this.children = children;
-    this.touched = true;
+    // this.touched = true;
   }
 
   /**
