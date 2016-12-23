@@ -237,8 +237,17 @@ export class AssetService {
                 console.log(err);
             });
     }
-    
+
     // Used by Browse page
+    public pccollection(){
+        let options = new RequestOptions({ withCredentials: true });
+
+        return this.http
+            .get(this._auth.getUrl() + '/pccollection', options)
+            .toPromise()
+            .then(this.extractData);
+    }
+
     public category(catId: string) {
         let options = new RequestOptions({ withCredentials: true });
 
@@ -362,6 +371,39 @@ export class AssetService {
             .get(this._auth.getUrl() + '/search/' + type + '/' + startIndex + '/' + this.urlParams.pageSize + '/' + sortIndex + '?' + 'type=' + type + '&kw=' + keyword + '&origKW=&geoIds=' + geographyIds + '&clsIds=' + classificationIds + '&collTypes=' + colTypeIds + '&id=all&name=All%20Collections&bDate=' + earliestDate + '&eDate=' + latestDate + '&dExact=&order=0&isHistory=false&prGeoId=&tn=1', options)
             .toPromise()
             .then(this.extractData);
+    }
+
+    /**
+     * Wrapper function for HTTP call to get Image Groups. Used by browse component
+     * @returns Chainable promise containing Image Groups data
+     */
+    public getIgs(){
+        let options = new RequestOptions({ withCredentials: true });
+
+        return this.http
+            .get(this._auth.getUrl() + '/folders/110', options)
+            .toPromise()
+            .then(this.extractData)
+            .then((data) => {
+                return data;
+            });
+    }
+
+    /**
+     * Wrapper function for HTTP call to get subImageGroups. Used by browse/groups component
+     * @param subImageGroup id
+     * @returns Chainable promise containing subImageGroups data
+     */
+    public subGroups(id: string){
+        let options = new RequestOptions({ withCredentials: true });
+
+        return this.http
+            .get(this._auth.getUrl() + '/folders/' + id + '/imagegroups?studWkFldrs=true&parentWritable=true', options)
+            .toPromise()
+            .then(this.extractData)
+            .then((data) => {
+                return data;
+            });
     }
 
     /**
