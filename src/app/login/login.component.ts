@@ -23,28 +23,27 @@ import { Location } from '@angular/common';
 export class Login {
   // Set our default values
   localState = { value: '' };
-  private user = new User('','');
-  private errorMsg: string = '';
-  private instErrorMsg: string = '';
-  private showPwdModal = false;
-  private showHelpModal = false;
-  private pwdReset = false;
-  private expirePwd = false;
-  private pwdRstEmail = '';
-  private errorMsgPwdRst = '';
-  private successMsgPwdRst = '';
-  private loginInstitutions = [];
-  private loginInst;
+  public user = new User('','');
+  public errorMsg: string = '';
+  public instErrorMsg: string = '';
+  public showPwdModal = false;
+  public showHelpModal = false;
+  public pwdReset = false;
+  public expirePwd = false;
+  public pwdRstEmail = '';
+  public errorMsgPwdRst = '';
+  public successMsgPwdRst = '';
+  public loginInstitutions = [];
+  public loginInst;
   
-  // TypeScript private modifiers
-  constructor(private appState: AppState, private _auth: AuthService, private _login: LoginService, private router: Router, private location: Location) { 
+  // TypeScript public modifiers
+  constructor(public appState: AppState, private _auth: AuthService, private _login: LoginService, private router: Router, private location: Location) { 
     
   }
 
   ngOnInit() {
     this._login.getInstitutions()
       .then((data) => {
-        console.log(data);
         if (data.items) {
           this.loginInstitutions = data.items;
         }
@@ -75,6 +74,7 @@ export class Login {
       else if(data.message === 'loginFailed'){
         this.errorMsg = 'Invalid email address or password. Try again.';
       } else {
+        //handles any server errors
         this.errorMsg = "We're experiencing an error, please try again! If the problem persists, try again later.";
       }
     });
@@ -92,15 +92,12 @@ export class Login {
       return;
     }
 
-    this._login.login(user)
-      .then(
-        (data)  => { this.loadForUser(data) }
-      ).catch(function(err) {
-        // if (err.status === 500) {
-        //   console.log("CORS issues suck");
-        // }
-        this.getLoginError(user)
-      });
+  this._login.login(user)
+    .then(
+      (data)  => { this.loadForUser(data); }
+    ).catch((err) => {
+      this.getLoginError(user)
+    });
   }
   
   validateEmail(email){
