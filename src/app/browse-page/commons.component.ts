@@ -50,10 +50,8 @@ export class BrowseCommonsComponent implements OnInit {
   private toggleFolder(tag: Tag) {
     console.log(tag.tagId + " was clicked!");
 
-    //if the tag has been expanded but has no children and gets clicked again, this still fires
-    //  is there a way to prevent that?
-    //  it should have children if it's been clicked
-    if (!tag.getChildren()) {
+    // has the tag been opened before?
+    if (!tag.touched) {
       //the tag doesn't have any children, so we run a call to get any
       let childArr: Tag[] = [];
       
@@ -87,27 +85,12 @@ export class BrowseCommonsComponent implements OnInit {
       }
 
     } else {
-      //the tag has children, so we just toggle the childrens' display property
-      if (tag.isCollapsed) {
-        console.log("this tag is collapsed! let's open it!");
+      if (tag.getChildren()) {
+        //the tag has children, so we just toggle the childrens' display property through this VERY USEFUL FEATURE
         tag.toggleChildren();
-        // //loop through children
-        // for(let childTag of tag.getChildren()) {
-        //   //  if !childTag.isCollapsed then show its child tags, and so on
-        //   if (!childTag.isCollapsed) {
-
-        //   }
-        // }
-
-        
-      } else {
-        console.log("this tag is open! let's close it!");
-        tag.toggleChildren();
-        //loop through children && childrens'
       }
-      // for (let childTag of tag.getChildren()) {
-      //   childTag.toggleDisplay();
-      // }
+
+      console.log(tag.getLevel());
     }
 
   }

@@ -9,7 +9,7 @@ export class Tag {
   //in functions
   private children: Tag[];
   isDisplayed: boolean = true;
-  levelsDeep: number = 0;
+  private levelsDeep: number = 0;
   touched: boolean = false;
 
   //type can be: 'collection', 'category', or 'subcategory'
@@ -19,6 +19,7 @@ export class Tag {
     this.isCollapsed = isCollapsed;
     this.parentTag = parentTag;
     this.type = type;
+    this.levelsDeep = this.setLevel();
   }
 
   public setChildren(children: Tag[]): void {
@@ -48,7 +49,19 @@ export class Tag {
     return this.levelsDeep;
   }
 
-  public setLevel(level: number): void {
-    this.levelsDeep = level;
+  /**
+   * Figures out how many tags are above this tag so that the consumer doesn't have to control it
+   * @returns Number of parent tags
+   */
+  private setLevel(): number {
+    let level: number = 0;
+    let currentTag: Tag = this;
+
+    while (currentTag.parentTag) {
+      level++;
+      currentTag = currentTag.parentTag;
+    }
+
+    return level;
   }
 }
