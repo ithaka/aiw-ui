@@ -8,9 +8,13 @@ export class Tag {
   type: any = {};
 
   //in functions
+  /** array of tags that are categorized beneath this tag */
   private children: Tag[] = [];
+  /** switch to use with styles to display/not */
   isDisplayed: boolean = true;
+  /** number of parents that the tag has */
   private levelsDeep: number = 0;
+  /** has getters and setters - allows implementation to determine when touched is set */
   touched: boolean = false;
 
   //type can be: 'collection', 'category', or 'subcategory'
@@ -23,15 +27,25 @@ export class Tag {
     this.levelsDeep = this.setLevel();
   }
 
+  /**
+   * Sets the tag's array of children
+   * @param children An array of tags which become children of the parent tag
+   */
   public setChildren(children: Tag[]): void {
     this.children = children;
     this.touched = true;
   }
 
+  /**
+   * Getter method for tag's array of children
+   */
   public getChildren(): Tag[] {
     return this.children;
   }
 
+  /**
+   * Given a tag, loops through all children recursively to toggle child.isDisplayed
+   */
   public toggleChildren(): void {
     this.touched = true;
     
@@ -48,6 +62,7 @@ export class Tag {
     }
   }
 
+  /** Getter method for number of tag ancestors */
   public getLevel(): number {
     return this.levelsDeep;
   }
