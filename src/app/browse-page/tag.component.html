@@ -1,6 +1,6 @@
 <!--Sets up the tag passed into the component-->
 <div (click)="tag.isCollapsed = !tag.isCollapsed; toggleFolder(tag)" [ngClass]="['tree__branch-' + tag.getLevel()]">
-  <i *ngIf="showAsFolder" class="icon icon-direction absolute-left tree-icon"  [ngClass]="[tag.isCollapsed ? 'icon-right' : 'icon-down']"></i>
+  <i *ngIf="!tag.touched || (tag.touched && tag.children.length > 0)" class="icon icon-direction absolute-left tree-icon"  [ngClass]="[tag.isCollapsed ? 'icon-right' : 'icon-down']"></i>
   {{tag.title}}
 </div>
 <!--Sets up for tag's children, and applies ngbCollapse (hides child element) based on whether or not parent is collapsed-->
