@@ -21,7 +21,7 @@
             </span>
         <!--<div class="filter" [ngClass]="{ 'active': true }">All Collections</div>-->
         <div *ngFor="let geographyFacet of availableFilters.geography; let i = index" id="filterGeographyItem{{ i + 1 }}">
-            <i class="icon icon-direction absolute-left tree-icon" (click)="toggleTree(geographyFacet)" [ngClass]="{ 'icon-down' : geographyFacet.expanded, 'icon-right' : !geographyFacet.expanded }"></i>
+            <i id="filterGeographyExpand{{ i + 1 }}" class="icon icon-direction absolute-left tree-icon" (click)="toggleTree(geographyFacet)" [ngClass]="{ 'icon-down' : geographyFacet.expanded, 'icon-right' : !geographyFacet.expanded }"></i>
             <div class="filter parent" (click)="toggleFilter(geographyFacet.id, 'geography')" [ngClass]="{'active': filterApplied(geographyFacet.id, 'geography')}"> {{ geographyFacet.name }} </div>
             <div class="child-cntnr collapse" [ngClass]="{ 'in' : geographyFacet.expanded }">
                 <div class="filter child" *ngFor="let child of geographyFacet.children; let childIndex = index" id="filterGeographyItem{{ (i + 1) + 'Child' + childIndex }}" (click)="toggleFilter(child.id, 'geography')" [ngClass]="{'active': filterApplied(child.id, 'geography')}">{{ child.name }}</div>
