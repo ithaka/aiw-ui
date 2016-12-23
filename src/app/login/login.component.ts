@@ -23,20 +23,21 @@ import { Location } from '@angular/common';
 export class Login {
   // Set our default values
   localState = { value: '' };
-  public user = new User('','');
-  public errorMsg = '';
-  public showPwdModal = false;
-  public showHelpModal = false;
-  public pwdReset = false;
-  public expirePwd = false;
-  public pwdRstEmail = '';
-  public errorMsgPwdRst = '';
-  public successMsgPwdRst = '';
-  public loginInstitutions = [];
-  public loginInst;
+  private user = new User('','');
+  private errorMsg: string = '';
+  private instErrorMsg: string = '';
+  private showPwdModal = false;
+  private showHelpModal = false;
+  private pwdReset = false;
+  private expirePwd = false;
+  private pwdRstEmail = '';
+  private errorMsgPwdRst = '';
+  private successMsgPwdRst = '';
+  private loginInstitutions = [];
+  private loginInst;
   
-  // TypeScript public modifiers
-  constructor(public appState: AppState, private _auth: AuthService, private _login: LoginService, private router: Router, private location: Location) { 
+  // TypeScript private modifiers
+  constructor(private appState: AppState, private _auth: AuthService, private _login: LoginService, private router: Router, private location: Location) { 
     
   }
 
@@ -49,7 +50,7 @@ export class Login {
         }
       })
       .catch((error) => {
-        this.errorMsg = "We're experiencing an error, please try again! If the problem persists, try again later.";
+        this.instErrorMsg = "We've experience an error and are unable to retrieve the insitutions";
         console.error(error);
       })
   }
@@ -73,6 +74,8 @@ export class Login {
       }
       else if(data.message === 'loginFailed'){
         this.errorMsg = 'Invalid email address or password. Try again.';
+      } else {
+        this.errorMsg = "We're experiencing an error, please try again! If the problem persists, try again later.";
       }
     });
   }
