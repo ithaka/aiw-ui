@@ -56,46 +56,46 @@ export class BrowseCommonsComponent implements OnInit {
     if (!tag.getChildren()) {
       //the tag doesn't have any children, so we run a call to get any
       let childArr: Tag[] = [];
+      
+      // logic determines which call to make, to categories or subcategories
+      if (tag.type === "collection") {
+        this._assets.category(tag.tagId)
+          .then((data) => {
+            console.log(data);
+            for(let category of data.Categories) {
+              let categoryTag = new Tag(category.widgetId, category.title, false, tag.tagId, "category");
+              childArr.push(categoryTag);
+              this.tags.splice(this.tags.indexOf(tag) + 1, 0, categoryTag);
+            }
+            tag.setChildren(childArr);
+          })
+          .catch((err) => {
+            console.error(err);
+          });
+      } else if (tag.type === "category") {
+        this._assets.subcategories(tag.tagId)
+          .then((data) => {
+            console.log(data);
+            for(let category of data) {
+              console.log(category);
+              let categoryTag = new Tag(category.widgetId, category.title, false, tag.tagId, "subcategory");
+              childArr.push(categoryTag);
+              this.tags.splice(this.tags.indexOf(tag) + 1, 0, categoryTag);
+            }
+            // tag.setChildren(childArr);
+          })
+          .catch((err) => {
+            console.error(err);
+          });
+      }
 
-      this._assets.category(tag.tagId)
-        .then((data) => {
-          console.log(data);
-          for(let category of data.Categories) {
-            let categoryTag = new Tag(category.widgetId, category.title, false, tag.tagId, "category");
-            childArr.push(categoryTag);
-            // this.tags.push(categoryTag);
-            this.tags.splice(this.tags.indexOf(tag) + 1, 0, categoryTag);
-          }
-          tag.setChildren(childArr);
-        })
-        .catch((err) => {
-          console.error(err);
-        });
     } else {
       //the tag has children, so we just set their displays differently
-      console.log("it's got children!");
       for (let childTag of tag.getChildren()) {
         childTag.toggleDisplay();
       }
     }
 
   }
-
-  // loadCategory(){
-  //   this._assets.category( this.selectedCollectionId )
-  //     .then((data) => {
-  //         // this.currentBrowseRes = res;
-  //         this.categories = data.Categories;
-  //         console.log(this.categories);
-
-  //         // should be abstracted to the _assets.category method b/c it is a data operation?
-  //         for (let cat of this.categories) { // Add default depth of 0 to every top level node
-  //             cat.depth = 0;
-  //         }
-  //     });
-      // .catch(function(err) {
-      //     console.log('Unable to load category results.');
-      // });
-
   
 }
