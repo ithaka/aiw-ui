@@ -8,7 +8,7 @@ export class Tag {
   type: any = {};
 
   //in functions
-  private children: Tag[];
+  private children: Tag[] = [];
   isDisplayed: boolean = true;
   private levelsDeep: number = 0;
   touched: boolean = false;
@@ -46,18 +46,6 @@ export class Tag {
         child.toggleChildren();
       }
     }
-  }
-
-  public familyDisplayed(): boolean {
-    let currentTag: Tag = this;
-
-    while (currentTag.parentTag) {
-      if(currentTag.isCollapsed) {
-        return false;
-      }
-      currentTag = currentTag.parentTag;
-    }
-    return true;
   }
 
   public getLevel(): number {
