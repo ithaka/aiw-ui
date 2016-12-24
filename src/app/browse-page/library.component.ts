@@ -4,7 +4,7 @@ import { Subscription }   from 'rxjs/Subscription';
 
 import { AssetService } from './../shared/assets.service';
 import { TagsService } from './tags.service';
-import { Tag } from './tag.class';
+import { Tag } from './tag/tag.class';
 
 @Component({
   selector: 'ang-lib',
