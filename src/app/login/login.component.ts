@@ -24,7 +24,8 @@ export class Login {
   // Set our default values
   localState = { value: '' };
   public user = new User('','');
-  public errorMsg = '';
+  public errorMsg: string = '';
+  public instErrorMsg: string = '';
   public showPwdModal = false;
   public showHelpModal = false;
   public pwdReset = false;
@@ -43,11 +44,14 @@ export class Login {
   ngOnInit() {
     this._login.getInstitutions()
       .then((data) => {
-        console.log(data);
         if (data.items) {
           this.loginInstitutions = data.items;
         }
-      });
+      })
+      .catch((error) => {
+        this.instErrorMsg = "We've experience an error and are unable to retrieve the insitutions";
+        console.error(error);
+      })
   }
   
   loadForUser(user) {
@@ -61,16 +65,22 @@ export class Login {
   getLoginError(user) {
     console.log("LOGIN ERROR!");
     this._login.getLoginError(user)
-    .then((data) => {
-      console.log(data);
-      if(data.message === 'loginExpired'){
-        this.expirePwd = true;
-        this.showPwdModal = true;
-      }
-      else if(data.message === 'loginFailed'){
-        this.errorMsg = 'Invalid email address or password. Try again.';
-      }
-    });
+      .then((data) => {
+        console.log(data);
+        if(data.message === 'loginExpired'){
+          this.expirePwd = true;
+          this.showPwdModal = true;
+        }
+        else if(data.message === 'loginFailed'){
+          this.errorMsg = 'Invalid email address or password. Try again.';
+        } else {
+          //handles any server errors
+          this.errorMsg = "There was a connection error, please try again! If the problem persists, try again later.";
+        }
+      })
+      .catch((error) => {
+        this.errorMsg = "There was a connection error, please try again! If the problem persists, try again later.";
+      });
   }
   
   login(user: User) {
@@ -87,9 +97,10 @@ export class Login {
 
     this._login.login(user)
       .then(
-        (data)  => { this.loadForUser(data) },
-        (error) =>  { this.getLoginError(user) }
-      ).catch(function(err) {
+        (data)  => { 
+          this.loadForUser(data); 
+        }
+      ).catch((err) => {
         this.getLoginError(user)
       });
   }

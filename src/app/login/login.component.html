@@ -44,6 +44,7 @@
                         <select id="selectLoginInstitution" class="form-control" tabindex="8" [(ngModel)]="loginInst">
                             <option *ngFor="let inst of loginInstitutions" [ngValue]="inst">{{ inst.name }}</option>
                         </select>
+                        <div *ngIf="instErrorMsg" class="login-errorMsg"> {{ instErrorMsg }} </div>
                     </div>
                     <div class="form-group">
                         <button id="btnLoginProxy" (click)="goToInstLogin()" class="btn btn-primary" type="submit" name="action" tabindex="9">Log in</button>
