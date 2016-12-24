@@ -14,11 +14,27 @@ export class TagComponent {
   @Input()
   public tag: Tag;
   private showAsFolder: boolean;
+  public linkRoute: string = "";
 
   constructor(
     private _assets: AssetService, 
     private _tags: TagsService  
   ) {
+
+  }
+
+  ngOnInit() {
+    if (this.tag.type) {
+      if (this.tag.type.label === 'collection') {
+        this.linkRoute = '/collection';
+      }
+      if (this.tag.type.label === 'group') {
+        this.linkRoute = '/group';
+      }
+      if (this.tag.type.label === 'category') {
+        this.linkRoute = '/category';
+      }
+    }
   }
 
   /**
