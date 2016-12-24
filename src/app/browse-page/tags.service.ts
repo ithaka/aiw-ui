@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 
 import { AssetService } from './../shared/assets.service';
-import { Tag } from './tag.class';
+import { Tag } from './tag/tag.class';
 
 @Injectable()
 export class TagsService {

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 
 import { AssetService } from './../shared/assets.service';
 import { TagsService } from './tags.service';
-import { Tag } from './tag.class';
+import { Tag } from './tag/tag.class';
 
 @Component({
   selector: 'ang-browse-commons',

@@ -1,6 +1,6 @@
 <!--Sets up the tag passed into the component-->
-<div (click)="tag.isCollapsed = !tag.isCollapsed; getChildren(); tag.touched = true;" [ngClass]="['tree__branch-' + tag.getLevel()]">
-  <i *ngIf="!tag.touched || (tag.touched && tag.children.length > 0)" class="icon icon-direction absolute-left tree-icon"  [ngClass]="[tag.isCollapsed ? 'icon-right' : 'icon-down']"></i>
+<div (click)="tag.isCollapsed = !tag.isCollapsed; getChildren(); tag.touched = true;" [ngClass]="['tag-item', 'tag-item__indent-' + tag.getLevel()]">
+  <i [ngClass]="[ tag.isCollapsed ? 'icon-right' : 'icon-down', (!tag.touched || (tag.touched && tag.children.length > 0)) ? 'icon-direction' : 'icon-empty']" class="icon absolute-left tree-icon" ></i>
   {{tag.title}}
 </div>
 <!--Sets up for tag's children, and applies ngbCollapse (hides child element) based on whether or not parent is collapsed-->
