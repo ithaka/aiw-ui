@@ -1,13 +1,13 @@
 import { Component, Input } from '@angular/core';
 
-import { AssetService } from './../shared/assets.service';
-import { TagsService } from './tags.service';
+import { AssetService } from '../../shared/assets.service';
+import { TagsService } from '../tags.service';
 import { Tag } from './tag.class';
 
 @Component({
   selector: 'ang-tag',
   templateUrl: 'tag.component.html',
-  styleUrls: ['./browse-page.component.scss']
+  styleUrls: ['./tag.component.scss']
 })
 export class TagComponent {
 

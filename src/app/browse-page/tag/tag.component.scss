@@ -1,0 +1,23 @@
+/**
+  * Tag Component Styles
+  */
+
+  .tag-item { 
+    color: #555;
+    font-size: 13px;
+    line-height: 20px;
+    padding: 2px;
+    cursor: pointer;
+
+    &:hover {
+        background: #f4f4f4;
+    }
+  }
+
+
+@for $i from 1 through 20 {
+    .tag-item__indent-#{$i} {
+        padding-left: 45px * $i;
+    }
+}
+
