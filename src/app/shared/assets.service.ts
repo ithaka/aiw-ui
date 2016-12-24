@@ -237,8 +237,17 @@ export class AssetService {
                 console.log(err);
             });
     }
-    
+
     // Used by Browse page
+    public pccollection(){
+        let options = new RequestOptions({ withCredentials: true });
+
+        return this.http
+            .get(this._auth.getUrl() + '/pccollection', options)
+            .toPromise()
+            .then(this.extractData);
+    }
+
     public category(catId: string) {
         let options = new RequestOptions({ withCredentials: true });
 
@@ -365,6 +374,39 @@ export class AssetService {
     }
 
     /**
+     * Wrapper function for HTTP call to get Image Groups. Used by browse component
+     * @returns Chainable promise containing Image Groups data
+     */
+    public getIgs(){
+        let options = new RequestOptions({ withCredentials: true });
+
+        return this.http
+            .get(this._auth.getUrl() + '/folders/110', options)
+            .toPromise()
+            .then(this.extractData)
+            .then((data) => {
+                return data;
+            });
+    }
+
+    /**
+     * Wrapper function for HTTP call to get subImageGroups. Used by browse/groups component
+     * @param subImageGroup id
+     * @returns Chainable promise containing subImageGroups data
+     */
+    public subGroups(id: string){
+        let options = new RequestOptions({ withCredentials: true });
+
+        return this.http
+            .get(this._auth.getUrl() + '/folders/' + id + '/imagegroups?studWkFldrs=true&parentWritable=true', options)
+            .toPromise()
+            .then(this.extractData)
+            .then((data) => {
+                return data;
+            });
+    }
+
+    /**
      * Wrapper function for HTTP call to get collections. Used by home component
      * @param type Can either be 'ssc' or 'institution'
      * @returns Chainable promise containing collection data
@@ -380,6 +422,7 @@ export class AssetService {
                 let returnCollections: any[] = [];
                 let addToArr: boolean;
 
+                // this loop is for data cleaning/alteration
                 // there are collections named "Browse by ..." which need to be filtered out
                 // array also needs to be filtered by collection type
                 for (let i = data.Collections.length - 1; i >= 0; i--) {
@@ -401,13 +444,25 @@ export class AssetService {
                     ) { addToArr = false; }
 
                     if (addToArr) {
+                        // add default depth for use in folder operations
+                        collection.depth = 0;
                         returnCollections.unshift(collection);
                     }
                 }
                 data.Collections = returnCollections;
-                console.log(data.Collections);
                 return data;
             });
+    }
+
+    public getFolders() {
+        let options = new RequestOptions({ withCredentials: true });
+
+        let requestString = [this._auth.getUrl(), "folders"].join("/");
+
+        return this.http
+            .get(requestString)
+            .toPromise()
+            .then(this.extractData);
     }
 
     /**

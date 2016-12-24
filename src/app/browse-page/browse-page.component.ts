@@ -2,10 +2,13 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { Subscription }   from 'rxjs/Subscription';
 import { AssetService } from '../shared/assets.service';
+import { AuthService } from '../shared/auth.service';
 
 @Component({
   selector: 'ang-browse-page', 
-  providers: [],
+  providers: [
+      AuthService
+  ],
   styleUrls: [ './browse-page.component.scss' ],
   templateUrl: './browse-page.component.html'
 })
@@ -19,19 +22,9 @@ export class BrowsePage implements OnInit, OnDestroy {
           link: 'library'
       },
       {
-          label : 'Sample U Collections',
-          id: '2',
-          link: 'institution'
-      },
-      {
           label : 'Open Collections',
           id: '3',
           link: 'commons'
-      },
-      {
-          label : 'My Collections',
-          id: '4',
-          link: 'mycollections'
       },
       {
           label : 'Groups',
@@ -39,11 +32,14 @@ export class BrowsePage implements OnInit, OnDestroy {
           link: 'groups'
       }
   ];
-
+  
+  private userPCallowed: string;
+  private userTypeId: any;
   private selectedColMenuId: string = '1';
 
   // TypeScript public modifiers
   constructor(
+      private _auth: AuthService,
       private _assets: AssetService,
       private route: ActivatedRoute,
       private router: Router
@@ -59,8 +55,42 @@ export class BrowsePage implements OnInit, OnDestroy {
             this.selectedColMenuId = params['menuId'];
             console.log("just changed menu id!");
         }
+
       })
     );
+
+    this.userPCallowed = this._auth.getUser().userPCAllowed;
+    if(this.userPCallowed == '1'){
+        var obj = {
+            label : 'My Collections',
+            id: '4',
+            link: 'mycollections'
+        }
+        this.colMenuArray.splice(2, 0 ,obj);
+    }
+
+    this.userTypeId = this._auth.getUser().typeId;
+    if(this.userTypeId == 2){
+        this._assets.getCollections('institution')
+        .then(
+          (data)  => {
+            console.log(data);
+            var obj = {
+                label : data.institutionName,
+                id: '2',
+                link: 'institution'
+            }
+            this.colMenuArray.splice(1, 0 ,obj);
+          },
+          (error) => {
+            console.log(error);
+            return false;
+          }
+        ).catch(function(err) {
+          console.log(err);
+          return false;
+        });
+    }
   }
 
   ngOnDestroy() {
