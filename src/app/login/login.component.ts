@@ -65,19 +65,22 @@ export class Login {
   getLoginError(user) {
     console.log("LOGIN ERROR!");
     this._login.getLoginError(user)
-    .then((data) => {
-      console.log(data);
-      if(data.message === 'loginExpired'){
-        this.expirePwd = true;
-        this.showPwdModal = true;
-      }
-      else if(data.message === 'loginFailed'){
-        this.errorMsg = 'Invalid email address or password. Try again.';
-      } else {
-        //handles any server errors
-        this.errorMsg = "We're experiencing an error, please try again! If the problem persists, try again later.";
-      }
-    });
+      .then((data) => {
+        console.log(data);
+        if(data.message === 'loginExpired'){
+          this.expirePwd = true;
+          this.showPwdModal = true;
+        }
+        else if(data.message === 'loginFailed'){
+          this.errorMsg = 'Invalid email address or password. Try again.';
+        } else {
+          //handles any server errors
+          this.errorMsg = "There was a connection error, please try again! If the problem persists, try again later.";
+        }
+      })
+      .catch((error) => {
+        this.errorMsg = "There was a connection error, please try again! If the problem persists, try again later.";
+      });
   }
   
   login(user: User) {
@@ -92,12 +95,14 @@ export class Login {
       return;
     }
 
-  this._login.login(user)
-    .then(
-      (data)  => { this.loadForUser(data); }
-    ).catch((err) => {
-      this.getLoginError(user)
-    });
+    this._login.login(user)
+      .then(
+        (data)  => { 
+          this.loadForUser(data); 
+        }
+      ).catch((err) => {
+        this.getLoginError(user)
+      });
   }
   
   validateEmail(email){
