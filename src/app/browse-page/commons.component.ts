@@ -21,8 +21,7 @@ export class BrowseCommonsComponent implements OnInit {
 
   /** Initializes array of Tags based on collections */
   ngOnInit() {
-    // console.log(this._tags);
-    this._tags.initTags("commons")
+    this._tags.initTags({type: "commons"})
       .then((tags) => {
         console.log(tags);
         this.tags = tags;
