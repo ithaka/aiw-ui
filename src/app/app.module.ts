@@ -30,7 +30,7 @@ import { SearchPage } from './search-page';
 import { CollectionPage } from './collection-page';
 import { ClusterPage } from './cluster-page';
 import { BrowsePage, LibraryComponent, BrowseCommonsComponent,
-  MyCollectionsComponent, BrowseInstitutionComponent, BrowseGroupsComponent } from './browse-page';
+  MyCollectionsComponent, BrowseInstitutionComponent, BrowseGroupsComponent, TagComponent } from './browse-page';
 import { AssetPage } from './asset-page';
 import { AssetViewerComponent } from './asset-page/asset-viewer';
 import { AssociatedPage } from './associated-page';
@@ -44,13 +44,15 @@ import { XLarge } from './home/x-large';
 import { AuthService } from './shared/auth.service';
 import { AssetService } from './shared/assets.service';
 import { AssetFiltersService } from './asset-filters/asset-filters.service';
+import { TagsService } from './browse-page/tags.service';
 
 const APP_PROVIDERS = [
   ...APP_RESOLVER_PROVIDERS,
   AppState,
   AssetService,
   AuthService,
-  AssetFiltersService
+  AssetFiltersService,
+  TagsService
 ];
 
 type StoreType = {
@@ -74,6 +76,7 @@ type StoreType = {
     CollectionPage,
     ClusterPage,
     BrowsePage,
+    TagComponent,
     AssetViewerComponent,
     AssetPage,
     LibraryComponent,
