@@ -65,7 +65,7 @@ export class TagsService {
   private getCategories(tag?: Tag, collectionId?: string): Promise<Tag[]> {
     //the tag doesn't have any children, so we run a call to get any
     let childArr: Tag[] = [];
-    if (tag) {
+    if (tag && tag.type && tag.type.label === "collection") {
       console.log(tag);
       collectionId = tag.tagId;
     }

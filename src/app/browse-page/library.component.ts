@@ -51,7 +51,7 @@ export class LibraryComponent implements OnInit {
         if(params && params['viewId']){
             this.selectedBrowseId = params['viewId'];
         }
-
+        this.loadCategory();
         this.getTags();
       })
     );
@@ -76,12 +76,15 @@ export class LibraryComponent implements OnInit {
    * Changes menu between ADL, University Collections, Open Collections, etc...
    * @param id Id of desired menu from colMenuArray enum
    */
-  selectBrowseOpt ( id: string ){
+  private selectBrowseOpt ( id: string ){
     this.selectedBrowseId = id;
     this.addRouteParam('viewId', id);
   }
 
-  loadCategory(){
+  /**
+   * Sets browser response for description
+   */
+  private loadCategory(): void{
     this._assets.category( this.selectedBrowseId )
       .then((res) => {
           this.currentBrowseRes = res;
