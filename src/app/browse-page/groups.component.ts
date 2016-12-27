@@ -111,20 +111,6 @@ export class BrowseGroupsComponent implements OnInit {
   }
 
   loadCategory(){
-    // this._assets.category( this.selectedBrowseId )
-    //   .then((res) => {
-    //       this.currentBrowseRes = res;
-    //       this.categories = res.Categories;
-
-    //       for (let cat of this.categories) { // Add default depth of 0 to every top level node
-    //           cat.depth = 0;
-    //       }
-    //       console.log(res);
-    //   })
-    //   .catch(function(err) {
-    //       console.log('Unable to load category results.');
-    //   });
-
     this.currentBrowseRes = this.foldersObj[this.selectedBrowseId];
     this.categories = this.foldersObj[this.selectedBrowseId];
 
