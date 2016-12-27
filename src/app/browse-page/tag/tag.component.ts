@@ -15,6 +15,7 @@ export class TagComponent {
   public tag: Tag;
   private showAsFolder: boolean;
   public linkRoute: string = "";
+  public showDescription: boolean = false;
 
   constructor(
     private _assets: AssetService, 
@@ -35,6 +36,12 @@ export class TagComponent {
         this.linkRoute = '/category';
       }
     }
+  }
+
+  toggleDescription(): void {
+    console.log("Toggle description!");
+    console.log(this.tag);
+    this.showDescription = !this.showDescription;
   }
 
   /**

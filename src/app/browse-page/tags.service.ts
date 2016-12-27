@@ -32,7 +32,7 @@ export class TagsService {
   public getChildTags(tag: Tag): Promise<Tag[]> {
     if (tag.type && tag.type.label) {
       let label = tag.type.label;
-      if (label === "collection" || label === "category") {
+      if (label === "collection" || label === "category" || label === "group") {
         return this.getCategories(tag);
       }
     }
@@ -63,6 +63,7 @@ export class TagsService {
    * @returns a chainable promise, resolved with an array of tags
    */
   private getCategories(tag?: Tag, collectionId?: string): Promise<Tag[]> {
+    console.log("RUNNING GET CATEGORIES");
     //the tag doesn't have any children, so we run a call to get any
     let childArr: Tag[] = [];
     if (tag && tag.type && tag.type.label === "collection") {
@@ -77,6 +78,25 @@ export class TagsService {
           for(let category of data.Categories) {
             let categoryTag = new Tag(category.widgetId, category.title, true, tag, { label: "category", folder: category.isFolder });
             childArr.push(categoryTag);
+          }
+          return childArr;
+        });
+    } else if (tag.type.label === "group") {
+      // Image Group folders come through with ugly widgetIds
+      let tagId = tag.tagId.replace('fldr_','');
+      
+      return this._assets.subGroups(tagId)
+        .then((data) => {
+          console.log(data);
+          for(let group of data) {
+            let groupTag = new Tag(group.widgetId.replace('fldr_',''), group.title, true, tag, { label: "group", folder: group.isFolder });
+            // Is folder property cleaning: comes through as string
+            group.isFolder = (group.isFolder === 'true') ?  true : false;
+            // Set description if it exists
+            if (group.igDesc) {
+              groupTag.setDescription(group.igDesc);
+            }
+            childArr.push(groupTag);
           }
           return childArr;
         });

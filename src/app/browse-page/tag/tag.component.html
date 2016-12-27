@@ -1,9 +1,18 @@
 <!--Sets up the tag passed into the component-->
 <div (click)="tag.isCollapsed = !tag.isCollapsed; getChildren(); tag.touched = true;" [ngClass]="['tag-item', 'tag-item__indent-' + tag.getLevel()]">
-  <i [ngClass]="[ tag.isCollapsed ? 'icon-right' : 'icon-down', (!tag.touched || (tag.touched && tag.children.length > 0)) ? 'icon-direction' : 'icon-empty']" class="icon absolute-left tree-icon" ></i>
+  <i [ngClass]="[ tag.isCollapsed ? 'icon-right' : 'icon-down', (!tag.touched || (tag.touched && tag.children.length > 0)) ? 'icon-direction' : 'icon-empty']"
+    class="icon absolute-left tree-icon" ></i>
+  
+  <img class="info-icon" *ngIf="(tag.description.length > 0) && !tag.type.isFolder" src="/assets/img/info-icon.png" (click)="toggleDescription()" />
+  
   {{tag.title}}
   <i *ngIf="linkRoute.length > 0" class="icon icon-open-link icon--tag-button" [routerLink]="[ linkRoute, tag.tagId ]"></i>
+
+  <div [ngbCollapse]="!showDescription" class="info-cntnr collapse">
+      <div class="desc" [innerHTML]="tag.description"></div>
+  </div>
 </div>
+
 <!--Sets up for tag's children, and applies ngbCollapse (hides child element) based on whether or not parent is collapsed-->
 <div [ngbCollapse]="tag.isCollapsed">
   <!--loop through children and inject the children into new nag components-->
