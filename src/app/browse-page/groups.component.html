@@ -13,12 +13,10 @@
             </div>
             <!--Non-folder items-->
             <div *ngIf="(category.isFolder == 'false') || !category.isFolder" class="child-cntnr collapse" [ngClass]="{ 'in' : showHideNode(category) }">
-                    <img class="info-icon" *ngIf="(category.descriptionId || category.parentDescId) && ((category.isFolder == 'false') || !category.isFolder)" src="/assets/img/info-icon.png" (click)="toggleInfo(category)" />
-                    <!--<i *ngIf="category.isFolder == 'true'"  class="icon icon-direction absolute-left tree-icon" [ngClass]="{ 'icon-down' : category.expanded, 'icon-right' : !category.expanded }"></i>-->
+                    <img class="info-icon" *ngIf="(category.igDesc) && ((category.isFolder == 'false') || !category.isFolder)" src="/assets/img/info-icon.png" (click)="toggleInfo(category)" />
                     <span (click)="openAssets(category)">{{ category.title }}</span>
-                    <div class="info-cntnr collapse" *ngIf="category.info_desc || category.info_img" [ngClass]="{ 'in' : category.info_expanded }">
-                        <img src="http://viewer2.artstor.org/{{ category.info_img }}" />
-                        <div class="desc" [innerHTML]="category.info_desc"></div>
+                    <div class="info-cntnr collapse" *ngIf="category.igDesc" [ngClass]="{ 'in' : category.info_expanded }">
+                        <div class="desc" [innerHTML]="category.igDesc"></div>
                     </div>
             </div>
             
@@ -27,7 +25,7 @@
 </div>
 
 <div class="col-md-4">
-    <div class="browse-info">
+    <div class="browse-info" *ngIf="currentBrowseRes.collectionname">
         <div class="title">{{ currentBrowseRes.collectionname }}</div>
         <div [innerHTML]="currentBrowseRes.blurburl"></div>
     </div>

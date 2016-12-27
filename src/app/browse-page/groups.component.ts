@@ -184,37 +184,37 @@ export class BrowseGroupsComponent implements OnInit {
           node.info_expanded = false;
       }
       else{
-          if(typeof node.info_expanded == 'undefined'){
-              this.showNodeDesc(node);
-          }
+          // if(typeof node.info_expanded == 'undefined'){
+          //     this.showNodeDesc(node);
+          // }
           node.info_expanded = true;
       }
   }
 
-  showNodeDesc(node){
-    var descId = '';
-    var nodeId = '';
+  // showNodeDesc(node){
+  //   var descId = '';
+  //   var nodeId = '';
       
-    if(node.descriptionId){
-        descId = node.descriptionId;
-        nodeId = node.widgetId;
-    }
-    else if(node.parentDescId){
-        descId = node.parentDescId;
-        nodeId = node.parentId;
-    }
+  //   if(node.descriptionId){
+  //       descId = node.descriptionId;
+  //       nodeId = node.widgetId;
+  //   }
+  //   else if(node.parentDescId){
+  //       descId = node.parentDescId;
+  //       nodeId = node.parentId;
+  //   }
 
-    this._assets.nodeDesc( descId, nodeId )
-    .then((res) => {
-        if(res.blurbUrl){
-            node.info_desc = res.blurbUrl;
-            node.info_img = res.imageUrl;
-        }
-    })
-    .catch(function(err) {
-        console.log('Unable to load Description.');
-    });
-  }
+  //   this._assets.nodeDesc( descId, nodeId )
+  //   .then((res) => {
+  //       if(res.blurbUrl){
+  //           node.info_desc = res.blurbUrl;
+  //           node.info_img = res.imageUrl;
+  //       }
+  //   })
+  //   .catch(function(err) {
+  //       console.log('Unable to load Description.');
+  //   });
+  // }
 
   openAssets(node){
      if(!node.isFolder){
