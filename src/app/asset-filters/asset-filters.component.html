@@ -4,7 +4,7 @@
                 <h3>Collection Type <a id="buttonCollectionTypeClear" tabindex="" class="link--accent small" style="float:right;" (click)="clearAllFilterGroup('collTypes')">Clear</a></h3>
             </span>
         <div class="filter" [ngClass]="{ 'active': true }">All Collections</div>
-        <div class="filter" *ngFor="let facet of availableFilters.collType; let i = index" id="filterCollectionTypeItem{{ i + 1 }}"  (click)="toggleFilter(facet.id, 'collTypes')" [ngClass]="{'active': filterApplied(facet.id, 'collTypes')}">{{ facet.label }}</div>
+        <div class="filter" *ngFor="let facet of availableFilters.collType" id="filterCollectionTypeItem{{ facet.id }}"  (click)="toggleFilter(facet.id, 'collTypes')" [ngClass]="{'active': filterApplied(facet.id, 'collTypes')}">{{ facet.label }}</div>
     </div>
 
     <div class="filter-group">
@@ -12,7 +12,7 @@
                 <h3>Classification <a id="filterClassificationClear" tabindex="" class="link--accent small" style="float:right;" (click)="clearAllFilterGroup('classification')">Clear</a></h3>
             </span>
         <!--<div class="filter" [ngClass]="{ 'active': true }">All Collections</div>-->
-        <div class="filter" *ngFor="let classificationFacet of availableFilters.classification; let i = index" id="filterClassificationItem{{ i + 1 }}" (click)="toggleFilter(classificationFacet.id, 'classification')" [ngClass]="{'active': filterApplied(classificationFacet.id, 'classification')}">{{ classificationFacet.name }}</div>
+        <div class="filter" *ngFor="let classificationFacet of availableFilters.classification" id="filterClassificationItem{{ classificationFacet.id }}" (click)="toggleFilter(classificationFacet.id, 'classification')" [ngClass]="{'active': filterApplied(classificationFacet.id, 'classification')}">{{ classificationFacet.name }}</div>
     </div>
 
     <div class="filter-group">
@@ -20,11 +20,11 @@
                 <h3>Geography <a tabindex="" class="link--accent small" style="float:right;" (click)="clearAllFilterGroup('geography')">Clear</a></h3>
             </span>
         <!--<div class="filter" [ngClass]="{ 'active': true }">All Collections</div>-->
-        <div *ngFor="let geographyFacet of availableFilters.geography; let i = index" id="filterGeographyItem{{ i + 1 }}">
-            <i id="filterGeographyExpand{{ i + 1 }}" class="icon icon-direction absolute-left tree-icon" (click)="toggleTree(geographyFacet)" [ngClass]="{ 'icon-down' : geographyFacet.expanded, 'icon-right' : !geographyFacet.expanded }"></i>
+        <div *ngFor="let geographyFacet of availableFilters.geography" id="filterGeographyItem{{ geographyFacet.id }}">
+            <i id="filterGeography{{ geographyFacet.id }}Expand" class="icon icon-direction absolute-left tree-icon" (click)="toggleTree(geographyFacet)" [ngClass]="{ 'icon-down' : geographyFacet.expanded, 'icon-right' : !geographyFacet.expanded }"></i>
             <div class="filter parent" (click)="toggleFilter(geographyFacet.id, 'geography')" [ngClass]="{'active': filterApplied(geographyFacet.id, 'geography')}"> {{ geographyFacet.name }} </div>
             <div class="child-cntnr collapse" [ngClass]="{ 'in' : geographyFacet.expanded }">
-                <div class="filter child" *ngFor="let child of geographyFacet.children; let childIndex = index" id="filterGeographyItem{{ (i + 1) + 'Child' + childIndex }}" (click)="toggleFilter(child.id, 'geography')" [ngClass]="{'active': filterApplied(child.id, 'geography')}">{{ child.name }}</div>
+                <div class="filter child" *ngFor="let child of geographyFacet.children; let childIndex = index" id="filterGeographyItem{{ 'Child' + child.id }}" (click)="toggleFilter(child.id, 'geography')" [ngClass]="{'active': filterApplied(child.id, 'geography')}">{{ child.name }}</div>
             </div>
         </div>
     </div>
