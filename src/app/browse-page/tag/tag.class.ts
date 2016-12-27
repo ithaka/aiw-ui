@@ -7,8 +7,14 @@ export class Tag {
   title: string;
   isCollapsed: boolean = false;
   parentTag: Tag;
-  /** object with assignable properties to be stored by the tag */
+  /** object with assignable properties to be stored by the tag 
+   *  common properties:
+   *  isFolder : true/false
+   *  label : 'group' or 'collection'
+  */
   type: any = {};
+  /** Used for showing Image Group and Collection Description */
+  description: string = "";
 
   //in functions
   /** array of tags that are categorized beneath this tag */
@@ -35,6 +41,14 @@ export class Tag {
   public setChildren(children: Tag[]): void {
     this.children = children;
     // this.touched = true;
+  }
+
+  /**
+   * Sets the tags Description property
+   * @param description as a string
+   */
+  public setDescription(description: string): void {
+    this.description = description;
   }
 
   /**

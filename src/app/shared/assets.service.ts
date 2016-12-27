@@ -400,10 +400,7 @@ export class AssetService {
         return this.http
             .get(this._auth.getUrl() + '/folders/' + id + '/imagegroups?studWkFldrs=true&parentWritable=true', options)
             .toPromise()
-            .then(this.extractData)
-            .then((data) => {
-                return data;
-            });
+            .then(this.extractData);
     }
 
     /**
