@@ -2,6 +2,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { Home } from './home';
 import { SearchPage } from './search-page';
 import { CollectionPage } from './collection-page';
+import { CategoryPage } from './category-page';
 import { ImageGroupPage } from './image-group-page';
 import { ClusterPage } from './cluster-page';
 import { BrowsePage } from './browse-page';
@@ -25,6 +26,7 @@ export const ROUTES: Routes = [
   { path: 'asset/:assetId', component: AssetPage, pathMatch: 'full', canActivate:[AuthService] },
   { path: 'search/:term', component: SearchPage, canActivate:[AuthService] },
   { path: 'collection/:colId', component: CollectionPage, canActivate:[AuthService] },
+  { path: 'category/:catId', component: CategoryPage, canActivate:[AuthService] },
   { path: 'group/:igId', component: ImageGroupPage, canActivate:[AuthService] },
   { path: 'cluster/:objectId', component: ClusterPage, canActivate:[AuthService] },
   { path: 'browse', component: BrowsePage, canActivate:[AuthService], children: BrowseRoutes },

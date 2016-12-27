@@ -28,6 +28,7 @@ import { Footer } from './shared/footer';
 import { Home } from './home';
 import { SearchPage } from './search-page';
 import { CollectionPage } from './collection-page';
+import { CategoryPage } from './category-page';
 import { ClusterPage } from './cluster-page';
 import { BrowsePage, LibraryComponent, BrowseCommonsComponent,
   MyCollectionsComponent, BrowseInstitutionComponent, BrowseGroupsComponent, TagComponent } from './browse-page';
@@ -74,6 +75,7 @@ type StoreType = {
     About,
     SearchPage,
     CollectionPage,
+    CategoryPage,
     ClusterPage,
     BrowsePage,
     TagComponent,

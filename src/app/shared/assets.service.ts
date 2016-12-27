@@ -36,6 +36,11 @@ export class AssetService {
     // private knownFilters: any = {};
     public _storage;
 
+    /** Default Headers for this service */
+    // ... Set content type to JSON
+    private header = new Headers({ 'Content-Type': 'application/json' }); 
+    private defaultOptions = new RequestOptions({ headers: this.header, withCredentials: true });
+
     constructor(
         private _filters: AssetFiltersService,
         private _router: Router,
@@ -53,7 +58,8 @@ export class AssetService {
             endDate: 0,
             igId: "",
             objectId: "",
-            colId: ""
+            colId: "",
+            catId: ""
         };
     }
 
@@ -107,7 +113,10 @@ export class AssetService {
         } else if (params.hasOwnProperty("objectId")) {
             //get clustered images thumbnails
             this.loadCluster(params.objectId);
-        } else if (params.hasOwnProperty("colId")) {
+        } else if (params.hasOwnProperty("catId")) {
+            //get collection thumbnails
+            this.loadCategory(params.catId);
+        }  else if (params.hasOwnProperty("colId")) {
             //get collection thumbnails
             this.loadCollection(params.colId);
         } else if (params.hasOwnProperty("term")) {
@@ -122,11 +131,9 @@ export class AssetService {
      * @param assetId string Asset or object ID
      */
     public getById(assetId: string) {
-        let header = new Headers({ 'Content-Type': 'application/json' }); // ... Set content type to JSON
-        let options = new RequestOptions({ headers: header, withCredentials: true }); // Create a request option
-
+        
         return this.http
-            .get(this._auth.getUrl() + '/metadata/' + assetId, options)
+            .get(this._auth.getUrl() + '/metadata/' + assetId, this.defaultOptions)
             .map(data => {
                 console.log(data.json());
             });
@@ -205,6 +212,26 @@ export class AssetService {
 
         return this.http
             .get(requestString, options)
+            .toPromise()
+            .then(this.extractData)
+            .then((data) => {
+                this.allResultsSource.next(data);
+            })
+            .catch(error => {
+                console.log(error);
+            });
+    }
+
+    /** 
+     *  Loads thumbnails for a Category/Subcategory to this.AllResults
+     *  @param catId Category ID
+     */
+    private loadCategory(catId: string): Promise<any> {
+        let imageSize = 0;
+        let requestString = [this._auth.getUrl(), 'categories', catId, 'thumbnails',this.urlParams.currentPage, this.urlParams.pageSize, imageSize].join('/');
+
+        return this.http
+            .get(requestString, this.defaultOptions)
             .toPromise()
             .then(this.extractData)
             .then((data) => {

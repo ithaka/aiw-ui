@@ -1,0 +1,21 @@
+<nav-menu></nav-menu>
+<div class="container main-content">
+    <div class="row">
+        <div class="col-sm-12">
+            <h2>Browse Category</h2>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-9">
+            <h3>{{ catName }}</h3>
+            <p [innerHtml]="catDescription"></p>
+            
+        </div>
+        <div class="col-sm-3 ">
+            <div class="thumbnail-shelf">
+                <img class="collection-thumb" src="http://viewer2.artstor.org{{ catThumbnail }}" />
+            </div>
+        </div>
+    </div>
+    <ang-asset-grid [assetCount]="assetCount"></ang-asset-grid>
+</div>

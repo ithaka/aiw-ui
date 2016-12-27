@@ -32,7 +32,7 @@ export class TagComponent {
       if (this.tag.type.label === 'group') {
         this.linkRoute = '/group';
       }
-      if (this.tag.type.label === 'category') {
+      if (this.tag.type.label === 'category' || this.tag.type.label === "subcategory") {
         this.linkRoute = '/category';
       }
     }
