@@ -124,6 +124,9 @@ export class BrowseGroupsComponent implements OnInit {
               this.foldersObj['4'] = this.createGroupTags(data.MyCourseFolders);
             }
 
+            this.selectedBrowseId = '3';
+            this.loadCategory();
+
           },
           (error) => {
             console.log(error);
