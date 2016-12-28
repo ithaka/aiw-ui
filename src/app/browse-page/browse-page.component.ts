@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Router, ActivatedRoute, Params } from '@angular/router';
+import { Router, ActivatedRoute, Params, UrlSegment } from '@angular/router';
 import { Subscription }   from 'rxjs/Subscription';
 import { AssetService } from '../shared/assets.service';
 import { AuthService } from '../shared/auth.service';
@@ -47,15 +47,11 @@ export class BrowsePage implements OnInit, OnDestroy {
   } 
 
   ngOnInit() {
+      console.log(  this.route.firstChild );
     this.subscriptions.push(
-      this.route.params
-      .subscribe((params: Params) => { 
-
-        if(params && params['menuId']) {
-            this.selectedColMenuId = params['menuId'];
-            console.log("just changed menu id!");
-        }
-
+      this.route.firstChild.url
+      .subscribe((url: UrlSegment[]) => {  
+        this.selectedColMenuId = url.toString();
       })
     );
 
