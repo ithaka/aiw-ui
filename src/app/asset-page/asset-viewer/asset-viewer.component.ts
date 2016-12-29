@@ -6,6 +6,7 @@ import { AssetService } from '../../shared/assets.service'
 
 @Component({
     selector: 'ang-asset-viewer',
+    styleUrls: ['./asset-viewer.component.scss'],
     templateUrl: 'asset-viewer.component.html'
 })
 export class AssetViewerComponent implements OnInit, OnDestroy {

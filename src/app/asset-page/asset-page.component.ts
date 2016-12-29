@@ -7,28 +7,46 @@ import { AssetService } from '../shared/assets.service';
 
 @Component({
     selector: 'ang-asset-page',
-    templateUrl: 'asset-page.component.html'
+    templateUrl: 'asset-page.component.html',
+    styleUrls: [ './asset-page.component.scss' ]
 })
 export class AssetPage implements OnInit, OnDestroy {
 
-    private asset: Asset = new Asset;
+    private asset: Asset;
     private subscriptions: Subscription[] = [];
     // http://library.artstor.org/library/secure/metadata/
 
     constructor(private _assets: AssetService, private route: ActivatedRoute) { }
 
     ngOnInit() {
-        let params: any = this.route.snapshot.params;
-        this.asset.id = params.assetId;
-
         this.subscriptions.push(
-            this._assets.getById(this.asset.id)
-                .subscribe(asset => {
-                    console.log(asset);
-                })
-        );
+            this.route.params.subscribe((routeParams) => {
+                this.asset = new Asset(routeParams["assetId"]);
+                this.loadAssetMetaData( this.asset.id );
+            })
+        )
+    }
 
-        
+    /**
+        Get asset metadata via service call
+    */
+    private loadAssetMetaData( asset_id: string): void {
+
+        this._assets.getById( asset_id )
+            .then((res) => {
+                if(res.objectId){
+                    this.asset.metaDataArray = res.metaData;
+                    this.asset.filePropertiesArray = res.fileProperties;
+                    this.asset.title = res.title;
+                    this.asset.imgURL = res.imageUrl;
+
+                    document.title = this.asset.title;
+                    console.log(this.asset);
+                }
+            })
+            .catch(function(err) {
+                console.log('Unable to load category results.');
+            });
     }
 
     ngOnDestroy() {
