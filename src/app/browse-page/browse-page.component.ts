@@ -51,7 +51,7 @@ export class BrowsePage implements OnInit, OnDestroy {
     this.subscriptions.push(
       this.route.firstChild.url
       .subscribe((url: UrlSegment[]) => {  
-        this.selectedColMenuId = url.toString();
+        this.selectedColMenuId = url[0].path;
       })
     );
 
