@@ -6,7 +6,7 @@
   <img class="info-icon" *ngIf="(tag.description.length > 0) && !tag.type.isFolder" src="/assets/img/info-icon.png" (click)="toggleDescription()" />
   
   {{tag.title}}
-  <i *ngIf="linkRoute.length > 0" class="icon icon-open-link icon--tag-button" [routerLink]="[ linkRoute, tag.tagId ]"></i>
+  <i *ngIf="linkRoute.length > 0" class="icon icon-open-link icon--tag-button" [routerLink]="[ linkRoute, tag.tagId, { 'name' : tag.title } ]"></i>
 
   <div [ngbCollapse]="!showDescription" class="info-cntnr collapse">
       <div class="desc" [innerHTML]="tag.description"></div>
