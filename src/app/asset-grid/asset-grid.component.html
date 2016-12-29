@@ -62,9 +62,9 @@
                         <i *ngIf="asset.iapFlag > 0" class="icon icon-iap"></i>
                         <i *ngIf="asset.objectTypeId == 24" class="icon icon-video"></i>
                         <i class="icon"><!--spacer--></i>
-                        <span title="{{ asset.thumbnail1 }}">{{ asset.thumbnail1 }}</span>
-                        <span title="{{ asset.thumbnail2 }}">{{ asset.thumbnail2 }}</span>
-                        <span title="{{ asset.thumbnail3 }}">{{ asset.thumbnail3 }}</span>
+                        <span class="asset-title" title="{{ asset.thumbnail1 }}">{{ asset.thumbnail1 }}</span>
+                        <span class="asset-agent" title="{{ asset.thumbnail2 }}">{{ asset.thumbnail2 }}</span>
+                        <span class="asset-date" title="{{ asset.thumbnail3 }}">{{ asset.thumbnail3 }}</span>
                         <span title="{{ asset.thumbnail4 }}">{{ asset.thumbnail4 }}</span>
                     </div>
                 </div>

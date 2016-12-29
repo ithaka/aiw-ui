@@ -4,7 +4,7 @@
     <div *ngIf="igDesc" class="col-sm-3">
       <div class="ig-description-container">
         <h2>Description</h2>
-        <div [innerHTML]="igDesc"></div>
+        <div id="pageDescription" [innerHTML]="igDesc"></div>
       </div>
     </div>
     <div [ngClass]="{ 'col-sm-9' : igDesc, 'col-sm-12' : !igDesc }" class="col-sm-9">

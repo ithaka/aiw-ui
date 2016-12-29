@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Http, Response, Headers, RequestOptions } from '@angular/http';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute, UrlSegment } from '@angular/router';
 import { Subscription }   from 'rxjs/Subscription';
 
 // Internal Dependencies
@@ -24,6 +24,9 @@ export class CategoryPage implements OnInit, OnDestroy {
   private catDescription: string;
   private catThumbnail: string;
   private assetCount: number;
+
+  // Anomalies
+  private isSubCategory: boolean = false;
   
   private subscriptions: Subscription[] = [];
 
@@ -39,7 +42,9 @@ export class CategoryPage implements OnInit, OnDestroy {
   ngOnInit() {
     this.subscriptions.push(
       this.route.params.subscribe((routeParams) => {
-        this.catId = routeParams["catId"];
+        this.catId = routeParams['catId'];
+        this.catName = routeParams['name'];
+        
         if (this.catId) {
           this.getCategoryInfo(this.catId)
             .then((data) => {
@@ -49,8 +54,6 @@ export class CategoryPage implements OnInit, OnDestroy {
                 throw new Error("No data!");
               }
 
-              // this.assetCount = data.objCount;
-              // this.catName = data.collectionname;
               this.catDescription = data.blurbUrl;
               this.catThumbnail = data.imageUrl;
             })
@@ -59,7 +62,15 @@ export class CategoryPage implements OnInit, OnDestroy {
             });
         }
       })
-    )// End push to subscription
+    );// End push to subscription
+    
+    this.subscriptions.push(
+       this.route.url
+        .subscribe((url: UrlSegment[]) => {  
+          this.isSubCategory = url[0].path === 'subcategory';
+        })
+    );
+
   }
 
   /**

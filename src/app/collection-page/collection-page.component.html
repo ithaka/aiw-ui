@@ -2,13 +2,13 @@
 <div class="container main-content">
     <div class="row">
         <div class="col-sm-12">
-            <h2>Browse Collection</h2>
+            <h3 id="pageType">Browse Collection</h3>
         </div>
     </div>
     <div class="row">
         <div class="col-sm-9">
-            <h3>{{ colName }}</h3>
-            <p [innerHtml]="colDescription"></p>
+            <h1 id="pageTitle">{{ colName }}</h1>
+            <p id="pageDescription" [innerHtml]="colDescription"></p>
             
         </div>
         <div class="col-sm-3 ">

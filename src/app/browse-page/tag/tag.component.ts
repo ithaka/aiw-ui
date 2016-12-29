@@ -32,15 +32,16 @@ export class TagComponent {
       if (this.tag.type.label === 'group') {
         this.linkRoute = '/group';
       }
-      if (this.tag.type.label === 'category' || this.tag.type.label === "subcategory") {
+      if (this.tag.type.label === 'category') {
         this.linkRoute = '/category';
+      }
+      if (this.tag.type.label === "subcategory") {
+        this.linkRoute = '/subcategory';
       }
     }
   }
 
   toggleDescription(): void {
-    console.log("Toggle description!");
-    console.log(this.tag);
     this.showDescription = !this.showDescription;
   }
 

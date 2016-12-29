@@ -27,6 +27,7 @@ export const ROUTES: Routes = [
   { path: 'search/:term', component: SearchPage, canActivate:[AuthService] },
   { path: 'collection/:colId', component: CollectionPage, canActivate:[AuthService] },
   { path: 'category/:catId', component: CategoryPage, canActivate:[AuthService] },
+  { path: 'subcategory/:catId', component: CategoryPage, canActivate:[AuthService] },
   { path: 'group/:igId', component: ImageGroupPage, canActivate:[AuthService] },
   { path: 'cluster/:objectId', component: ClusterPage, canActivate:[AuthService] },
   { path: 'browse', component: BrowsePage, canActivate:[AuthService], children: BrowseRoutes },

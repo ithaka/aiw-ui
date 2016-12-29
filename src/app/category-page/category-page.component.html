@@ -2,13 +2,13 @@
 <div class="container main-content">
     <div class="row">
         <div class="col-sm-12">
-            <h2>Browse Category</h2>
+            <h3 id="pageType">Browse Category</h3>
         </div>
     </div>
     <div class="row">
-        <div ngClass="[ catThumbnail ? 'col-sm-9' : 'col-sm-12' ]">
-            <h3>{{ catName }}</h3>
-            <p [innerHtml]="catDescription"></p>
+        <div [ngClass]="catThumbnail ? 'col-sm-9' : 'col-sm-12'">
+            <h1 id="pageTitle">{{ catName }}</h1>
+            <p id="pageDescription" [innerHtml]="catDescription"></p>
             
         </div>
         <div *ngIf="catThumbnail" class="col-sm-3">
