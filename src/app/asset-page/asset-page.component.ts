@@ -39,6 +39,8 @@ export class AssetPage implements OnInit, OnDestroy {
                     this.asset.filePropertiesArray = res.fileProperties;
                     this.asset.title = res.title;
                     this.asset.imgURL = res.imageUrl;
+
+                    document.title = this.asset.title;
                     console.log(this.asset);
                 }
             })
