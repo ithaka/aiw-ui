@@ -131,12 +131,11 @@ export class AssetService {
      * @param assetId string Asset or object ID
      */
     public getById(assetId: string) {
-        
+
         return this.http
             .get(this._auth.getUrl() + '/metadata/' + assetId, this.defaultOptions)
-            .map(data => {
-                console.log(data.json());
-            });
+            .toPromise()
+            .then(this.extractData);
     }
 
     /**
