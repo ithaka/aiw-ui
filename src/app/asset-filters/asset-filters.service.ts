@@ -14,7 +14,7 @@ export class AssetFiltersService {
 
     private appliedFilters: any = [];
     
-    private availableFilters: any = {
+    private defaultAvailable: any = {
         collType : [],
         classification: [],
         geography: [],
@@ -31,6 +31,8 @@ export class AssetFiltersService {
         modified : false
         }
     };
+
+    private availableFilters: any = this.defaultAvailable;
 
     private dateFacet: any = {};
     private dateFacetsArray = [];
@@ -50,6 +52,11 @@ export class AssetFiltersService {
         
     }
     
+    // Empties all filter objects without publishing them
+    public clearApplied():void {
+        this.appliedFilters = [];
+    }
+
     public setAvailable(name: string, filters: any ) {
         this.availableFilters[name] = filters;
         this.availableSource.next(this.availableFilters);
@@ -72,6 +79,12 @@ export class AssetFiltersService {
             }
         }
         return false;
+    }
+
+    // Available Filters is used to determine which parameters are true filter parameters
+    // This method returns whether a filter group exists or not
+    public isFilterGroup(groupName:string): boolean {
+        return this.availableFilters.hasOwnProperty(groupName);
     }
 
     public remove(filter) {

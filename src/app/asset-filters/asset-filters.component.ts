@@ -72,13 +72,27 @@ export class AssetFilters {
 
 
   ngOnInit() {
+
+    // Read filters from URL
     this.subscriptions.push(
-      this.route.params.map(params => params['term'])
-            .subscribe(term => { 
-                this.term = term;
-               })
-    );
-     // Keep an eye for available filter updates 
+      this.route.params.subscribe((routeParams) => {
+        this.term = routeParams["term"];
+
+        // When params are adjusted, applied filters need to be cleared
+        this._filters.clearApplied();
+
+        for (let paramName in routeParams) {
+            if (this._filters.isFilterGroup(paramName)) {
+              this._filters.apply({
+                filterGroup: paramName,
+                filterValue: routeParams[paramName]
+              });
+            }
+        }
+      })
+    ); 
+    
+    // Keep an eye for available filter updates 
     this.subscriptions.push(
       this._filters.available$.subscribe(
         filters => { 
