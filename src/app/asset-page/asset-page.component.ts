@@ -8,7 +8,7 @@ import { AssetService } from '../shared/assets.service';
 @Component({
     selector: 'ang-asset-page',
     templateUrl: 'asset-page.component.html',
-    styleUrls: [ 'asset-page.component.scss' ]
+    styleUrls: [ './asset-page.component.scss' ]
 })
 export class AssetPage implements OnInit, OnDestroy {
 

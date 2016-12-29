@@ -34,8 +34,8 @@
 </div>-->
 
 <!-- Large thumbnail fallback -->
-<div id="fallbackViewer" class="asset-viewer" *ngIf="mediaLoadingFailed && !fallbackFailed">
-    <img alt="{{ asset.title }}" class="item" src="http://viewer2.artstor.org/{{asset.imgURL}}" />
+<div id="fallbackViewer" class="asset-viewer" >
+    <img alt="{{ asset.title }}" class="item" src="http://viewer2.artstor.org{{ ( asset.imgURL + '' ).replace('size0','size2') }}" />
 </div>
 <!-- Error if asset failed to load even the fallback thumbnail -->
 <!--<div class="asset-viewer" ng-show="fallbackFailed">
