@@ -149,7 +149,7 @@ export class AssetGrid implements OnInit, OnDestroy {
         // this conditional because allResults from collections page does not have count of assets
         if (allResults.count) {
           this.pagination.totalPages = Math.ceil( allResults.count / this.pagination.pageSize );
-        } else {
+        } else if (this.assetCount) {
           this.pagination.totalPages = Math.ceil( this.assetCount / this.pagination.pageSize );
         }
 

@@ -46,6 +46,16 @@ export class TagComponent {
   }
 
   /**
+   * Collection/Category titles often have the count appended to the title
+   * We want to remove these parantheses wrapping the count for:
+   * - Cleaner formatting
+   * - Simpler route behavior (can't pass paranthesis as a route)
+   */
+  private cleanTitle(title: string): string {
+    return title.replace(/[\(\)]/g,'');
+  }
+
+  /**
    * Sends tag to tagService in order to retrieve and assign child tags
    */
   private getChildren(): void {

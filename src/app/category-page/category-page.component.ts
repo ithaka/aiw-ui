@@ -43,19 +43,30 @@ export class CategoryPage implements OnInit, OnDestroy {
     this.subscriptions.push(
       this.route.params.subscribe((routeParams) => {
         this.catId = routeParams['catId'];
-        this.catName = routeParams['name'];
-        
+
+        /**
+         * Due to legacy services, the asset count is passed in the Category Name
+         * And nowhere else! What fun... Let's pull it out of there.
+         */
+        let name = routeParams['name'];
+        if (name.match(/\d+$/)){
+          this.assetCount = name.match(/\d+$/);
+          name = name.replace(/\d+$/,'');
+        }
+        this.catName = name;
+
         if (this.catId) {
           this.getCategoryInfo(this.catId)
             .then((data) => {
               this._assets.queryAll(routeParams);
 
-              if (!data) {
-                throw new Error("No data!");
+              if (data) {
+                this.catDescription = data.blurbUrl;
+                this.catThumbnail = data.imageUrl;
+              } else {
+                // Some categories don't have descriptions
               }
-
-              this.catDescription = data.blurbUrl;
-              this.catThumbnail = data.imageUrl;
+              
             })
             .catch((error) => { 
               console.error(error); 
