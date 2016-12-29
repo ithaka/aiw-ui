@@ -21,7 +21,7 @@ export class AuthService implements CanActivate {
 // 'http://rocky-cliffs-9470.herokuapp.com/api?url=';
   
   constructor(private _router:Router, locker:Locker, private http: Http) {
-    this._storage = locker;
+    this._storage = locker.useDriver(Locker.DRIVERS.LOCAL);
     this._router = _router;
     
     // Check domain
