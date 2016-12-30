@@ -19,7 +19,7 @@ export class AssetViewerComponent implements OnInit, OnDestroy {
     private isOpenSeaDragonAsset: boolean = true;
     private mediaLoadingFailed: boolean = false;
     private fallbackFailed: boolean = false;
-    private tilesource: string; //: any[] = [];
+    private tileSource: string; //: any[] = [];
 
     constructor(private _assets: AssetService) { }
 
@@ -40,7 +40,7 @@ export class AssetViewerComponent implements OnInit, OnDestroy {
                 .subscribe(data => {
                     if (data) {
                         let imgPath = '/' + data['imageUrl'].substring(0, data['imageUrl'].lastIndexOf('.fpx') + 4);
-                        this.tilesource = 'https://tsprod.artstor.org/rosa-iiif-endpoint-1.0-SNAPSHOT/fpx' + encodeURIComponent( imgPath ) + '/info.json';
+                        this.tileSource = 'https://tsprod.artstor.org/rosa-iiif-endpoint-1.0-SNAPSHOT/fpx' + encodeURIComponent( imgPath ) + '/info.json';
                         this.loadOpenSea();
                     }
                 })
@@ -97,13 +97,15 @@ export class AssetViewerComponent implements OnInit, OnDestroy {
 
         var viewer = new OpenSeadragon({
           id: 'viewer-' + id,
-          prefixUrl: 'assets/img/',
+          // prefix for Icon Images
+          prefixUrl: 'assets/img/osd/',
           tileSources: this.tileSource,
           gestureSettingsMouse : {
             scrollToZoom : true,
             pinchToZoom: true
           },
           controlsFadeLength: 500,
+        //   debugMode: true,
           autoHideControls: false,
         //   zoomInButton: 'zoomIn-' + id,
         //   zoomOutButton: 'zoomOut-' + id,
@@ -112,6 +114,30 @@ export class AssetViewerComponent implements OnInit, OnDestroy {
           initialPage: 0,
           nextButton: 'nextButton'
         });
+
+        // ---- Use handler in case other error crops up
+        viewer.addOnceHandler('open-failed', () => {
+          console.warn("Opening source failed");
+          this.mediaLoadingFailed = true;
+          viewer.destroy();
+        });
+        
+        viewer.addOnceHandler('tile-load-failed', () => {
+          console.warn("Loading tiles failed");
+          this.mediaLoadingFailed = true;
+          viewer.destroy();
+        });
+
+        viewer.addOnceHandler('ready', () => {
+          console.info("Tiles are ready");
+          this.openSeaDragonReady = true;
+        });
+
+        if(viewer && viewer.ButtonGroup){
+            viewer.ButtonGroup.element.addClass('button-group');
+        }
+
+        console.log(viewer);
     }
 
     //     if( $scope.index == 1) {
