@@ -1,11 +1,11 @@
 <!--Sets up the tag passed into the component-->
-<div id="tagItem{{ tag.id }}" title="{{ tag.title }}" (click)="tag.isCollapsed = !tag.isCollapsed; getChildren(); tag.touched = true;" [ngClass]="['tag-item', 'tag-item__indent-' + tag.getLevel()]">
+<div id="tagItem{{ tag.tagId }}" title="{{ tag.title }}" (click)="tag.isCollapsed = !tag.isCollapsed; getChildren(); tag.touched = true;" [ngClass]="['tag-item', 'tag-item__indent-' + tag.getLevel()]">
   <i [ngClass]="[ tag.isCollapsed ? 'icon-right' : 'icon-down', (!tag.touched || (tag.touched && tag.children.length > 0)) ? 'icon-direction' : 'icon-empty']"
     class="icon absolute-left tree-icon" ></i>
   
   <img class="info-icon" *ngIf="(tag.description.length > 0) && !tag.type.isFolder" src="/assets/img/info-icon.png" (click)="toggleDescription()" />
   {{tag.title}}
-  <i *ngIf="linkRoute.length > 0" id="tagItem{{ tag.id }}Open" class="icon icon-open-link icon--tag-button" [routerLink]="[ linkRoute, tag.tagId, { 'name' : cleanTitle(tag.title) } ]"></i>
+  <i *ngIf="linkRoute.length > 0" id="tagItem{{ tag.tagId }}Open" class="icon icon-open-link icon--tag-button" [routerLink]="[ linkRoute, tag.tagId, { 'name' : cleanTitle(tag.title) } ]"></i>
 
   <div [ngbCollapse]="!showDescription" class="info-cntnr collapse">
       <div class="desc" [innerHTML]="tag.description"></div>
