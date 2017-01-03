@@ -6,6 +6,9 @@
 $primaryBtnColor: #ca4d2d;
 $secondaryBtnColor: rgb(200,200,200);
 $btnLinkHoverBg: rgb(230,230,230);
+$btnShadow: none;
+
+$iconBtnSize: 30px;
 
 .btn, a.btn {
      @extend %Graphik-Bold-Web;
@@ -85,4 +88,35 @@ $btnLinkHoverBg: rgb(230,230,230);
 
  .btn.dropdown-toggle {
      padding-right: 10px;
+ }
+
+ .btn.btn--icon {
+    position: relative;
+    cursor: pointer;
+    border-radius: 50%;
+    height: $iconBtnSize;
+    width: $iconBtnSize;
+    margin: 0;
+    background: rgba(250,250,250,0.8);
+    color: #333;
+    box-shadow: $btnShadow;
+    padding: 0px;
+    text-align: center;
+
+    & .icon {
+        opacity: 0.8;
+        height: 18px;
+        width: 18px;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate3d(-50%, -50%, 0);
+    }
+
+    &:hover, &:active {
+        background: rgba(255,255,255,1);
+        & .icon {
+            opacity: 1;
+        }
+    }
  }

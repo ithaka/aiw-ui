@@ -14,7 +14,6 @@ export class AssetPage implements OnInit, OnDestroy {
 
     private asset: Asset;
     private subscriptions: Subscription[] = [];
-    // http://library.artstor.org/library/secure/metadata/
 
     /** controls whether or not to show the agreement modal before download */
     // private downloadAuth: boolean = false;
