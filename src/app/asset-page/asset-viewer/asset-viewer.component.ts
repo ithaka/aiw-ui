@@ -36,7 +36,7 @@ export class AssetViewerComponent implements OnInit, OnDestroy {
          * Get tilesource/url for use with OpenSeaDragon IIIF Viewer
          */
         this.subscriptions.push(
-            this._assets.getTileSource(this.asset.id)
+            this._assets.getImageSource(this.asset.id)
                 .subscribe(data => {
                     if (data) {
                         let imgPath = '/' + data['imageUrl'].substring(0, data['imageUrl'].lastIndexOf('.fpx') + 4);

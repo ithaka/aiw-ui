@@ -156,7 +156,7 @@ export class AssetService {
      * Get IIIF tilesource for an Asset
      * @param assetId string Asset or object ID
      */
-    public getTileSource(assetId: string) {
+    public getImageSource(assetId: string) {
         let collectionId = 103;
         
         return this.http
