@@ -84,6 +84,10 @@ export class AuthService implements CanActivate {
       return this._storage.get('user');
   }
 
+  public clearStorage(): void {
+    this._storage.clear();
+  }
+
   /**
    * Checks to see if user is either authorized by login or IP auth'd
    * @returns indicates whether or not user is authorized
