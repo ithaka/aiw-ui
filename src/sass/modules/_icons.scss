@@ -38,8 +38,16 @@
 @include icon('right', 'svg');
 @include icon('loading', 'gif');
 @include icon('open-link', 'svg');
+@include icon('download', 'svg');
+@include icon('cluster', 'svg');
+@include icon('fit', 'svg');
+@include icon('fullscreen', 'svg');
+@include icon('more', 'svg');
+@include icon('share', 'svg');
+@include icon('star', 'svg');
+@include icon('zoom-in', 'svg');
+@include icon('zoom-out', 'svg');
 @include icon--hover('collab', 'gif');
-@include icon--hover('cluster', 'gif');
 @include icon--hover('iap', 'gif');
 @include icon--hover('video', 'gif');
 @include icon--hover('doc', 'gif');
@@ -83,4 +91,12 @@
 
 .icon-empty {
     background-image: none !important;
+}
+
+a .icon {
+    opacity: 0.8;
+
+    &:hover {
+        opacity: 1;
+    }
 }
