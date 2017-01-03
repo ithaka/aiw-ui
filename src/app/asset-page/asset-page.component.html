@@ -4,6 +4,8 @@
         <div class="row">
             <ang-asset-viewer [asset]="asset" index="1"></ang-asset-viewer>
         </div>
+        <!--<a *ngIf="asset.downloadLink" href="{{asset.downloadLink}}">Hello there!</a>-->
+        <a *ngIf="asset.downloadLink" href="{{asset.downloadLink}}" download="logo.jpg">Hello there!</a>
     </div>
     <!--Asset Metadata Row-->
     <div class="col-md-5">
