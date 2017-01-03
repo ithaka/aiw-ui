@@ -1,4 +1,5 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Output, Input, EventEmitter } from '@angular/core';
+import { Asset } from './../asset';
 
 @Component({
   selector: 'ang-agree-modal',
@@ -12,12 +13,14 @@ export class AgreeModalComponent implements OnInit {
   /** Tells asset-page to download the asset */
   @Output()
   downloadAsset = new EventEmitter();
+  @Input()
+  asset: Asset;
 
   constructor() { }
 
   ngOnInit() { }
 
-  private acceptTerms() {
+  private agree() {
     this.closeModal.emit();
   }
 }

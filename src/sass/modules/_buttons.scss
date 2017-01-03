@@ -7,7 +7,7 @@ $primaryBtnColor: #ca4d2d;
 $secondaryBtnColor: rgb(200,200,200);
 $btnLinkHoverBg: rgb(230,230,230);
 
-.btn {
+.btn, a.btn {
      @extend %Graphik-Bold-Web;
      color: #fff;
      font-size: 12px;
@@ -32,7 +32,7 @@ $btnLinkHoverBg: rgb(230,230,230);
  *  <button type="button" class="btn btn-danger">Danger</button>
  *  <button type="button" class="btn btn-link">Link</button>
  */
- .btn-primary {
+ .btn-primary, a.btn-primary {
      background: $primaryBtnColor;
      border-color: $primaryBtnColor;
 

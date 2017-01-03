@@ -520,6 +520,6 @@ export class AssetService {
             .toPromise()
             .then((data) => { return this.extractData(data); });
     }
- 
+
  
 }

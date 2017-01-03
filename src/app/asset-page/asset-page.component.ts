@@ -16,6 +16,9 @@ export class AssetPage implements OnInit, OnDestroy {
     private subscriptions: Subscription[] = [];
     // http://library.artstor.org/library/secure/metadata/
 
+    /** controls whether or not to show the agreement modal before download */
+    private downloadAuth: boolean = false;
+    /** controls whether or not the agreement modal is visible */
     private showAgreeModal: boolean = false;
 
     constructor(private _assets: AssetService, private route: ActivatedRoute) { }
@@ -26,6 +29,8 @@ export class AssetPage implements OnInit, OnDestroy {
                 this.asset = new Asset(routeParams["assetId"], this._assets);
             })
         )
+
+
     }
 
     ngOnDestroy() {

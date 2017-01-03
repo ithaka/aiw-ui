@@ -13,7 +13,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" (click)="closeModal.emit()">I reject</button>
-        <button type="button" class="btn btn-primary" (click)="acceptTerms()">I accept</button>
+        <a class="btn btn-primary" (click)="agree()" [href]="asset.downloadLink" download="asset.title">I accept</a>
       </div>
     </div><!-- /.modal-content -->
   </div><!-- /.modal-dialog -->
