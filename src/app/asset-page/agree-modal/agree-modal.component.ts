@@ -1,4 +1,6 @@
 import { Component, OnInit, Output, Input, EventEmitter } from '@angular/core';
+
+import { AuthService } from './../../shared/auth.service';
 import { Asset } from './../asset';
 
 @Component({
@@ -16,11 +18,15 @@ export class AgreeModalComponent implements OnInit {
   @Input()
   asset: Asset;
 
-  constructor() { }
+  constructor(private _auth: AuthService) { }
 
   ngOnInit() { }
 
-  private agree() {
+  /**
+   * Authorizes download and closes modal
+   */
+  private agree(): void {
+    this._auth.authorizeDownload();
     this.closeModal.emit();
   }
 }

@@ -14,7 +14,7 @@ import {
 
 @Injectable()
 export class AuthService implements CanActivate {
-  private _storage;
+  private _storage: Locker;
   private baseUrl;
   // Use header rewrite proxy for local development
   private proxyUrl = 'http://54.237.41.239/api?url='; 
@@ -135,5 +135,13 @@ export class AuthService implements CanActivate {
       .get(this.getUrl() + '/userinfo', options)
       .toPromise()
       .then(this.extractData);
+  }
+
+  public downloadAuthorized(): boolean {
+    return this._storage.get('downloadAuthorized');
+  }
+
+  public authorizeDownload(): void {
+    this._storage.set('downloadAuthorized', true);
   }
 }
