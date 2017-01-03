@@ -21,32 +21,9 @@ export class AssetPage implements OnInit, OnDestroy {
     ngOnInit() {
         this.subscriptions.push(
             this.route.params.subscribe((routeParams) => {
-                this.asset = new Asset(routeParams["assetId"]);
-                this.loadAssetMetaData( this.asset.id );
+                this.asset = new Asset(routeParams["assetId"], this._assets);
             })
         )
-    }
-
-    /**
-        Get asset metadata via service call
-    */
-    private loadAssetMetaData( asset_id: string): void {
-
-        this._assets.getById( asset_id )
-            .then((res) => {
-                if(res.objectId){
-                    this.asset.metaDataArray = res.metaData;
-                    this.asset.filePropertiesArray = res.fileProperties;
-                    this.asset.title = res.title;
-                    this.asset.imgURL = res.imageUrl;
-
-                    document.title = this.asset.title;
-                    console.log(this.asset);
-                }
-            })
-            .catch(function(err) {
-                console.log('Unable to load category results.');
-            });
     }
 
     ngOnDestroy() {
