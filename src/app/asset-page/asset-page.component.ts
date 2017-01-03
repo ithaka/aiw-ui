@@ -16,6 +16,8 @@ export class AssetPage implements OnInit, OnDestroy {
     private subscriptions: Subscription[] = [];
     // http://library.artstor.org/library/secure/metadata/
 
+    private showAgreeModal: boolean = false;
+
     constructor(private _assets: AssetService, private route: ActivatedRoute) { }
 
     ngOnInit() {
