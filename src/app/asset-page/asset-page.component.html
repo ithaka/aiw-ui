@@ -4,6 +4,17 @@
         <div class="row">
             <ang-asset-viewer [asset]="asset" index="1"></ang-asset-viewer>
         </div>
+        <!--If the user has not accepted the agreement, show modal when clicked, otherwise download immediately-->
+        <a *ngIf="asset.downloadLink" 
+            [attr.href]="downloadAuth() ? asset.downloadLink : null"
+            [attr.download]="downloadAuth() ? asset.title : null"
+            (click)="!downloadAuth() ? showAgreeModal = true : null"
+        >
+            <i class="icon icon-download" ></i>
+        </a><!--setting name to asset.title does not currently work - it is always named "download" - see below-->
+        <!--http://stackoverflow.com/questions/33909763/download-attribute-with-a-file-name-not-working-->
+
+        <div (click)="showAgreeModal = true">Test Agree Modal</div>
     </div>
     <!--Asset Metadata Row-->
     <div class="col-md-4">
@@ -24,3 +35,4 @@
         </div>
     </div>
 </div>
+<ang-agree-modal *ngIf="showAgreeModal" (closeModal)="showAgreeModal = false" [asset]="asset"></ang-agree-modal>

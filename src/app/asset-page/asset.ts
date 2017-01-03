@@ -6,6 +6,7 @@ export class Asset {
   id: string;
   title: string;
   imgURL: string;
+  downloadLink: string;
   tileSource: any;
 
   /** Used for holding asset metadata array from the service response */
@@ -17,6 +18,7 @@ export class Asset {
     this.id = asset_id;
     this._assets = _assets;
     this.loadAssetMetaData();
+    this.getDownloadLink();
   }
 
   /**
@@ -38,6 +40,20 @@ export class Asset {
           .catch(function(err) {
               console.log('Unable to load category results.');
           });
+  }
+
+  private getDownloadLink(): void {
+      this._assets.getImageSource( this.id )
+        .subscribe((data) => {
+            console.log(data);
+
+            if (data && data.imageServer && data.imageUrl) {
+                this.downloadLink = data.imageServer + data.imageUrl + "?cell=1024,1024&rgnn=0,0,1,1&cvt=JPEG";
+                console.log(this.downloadLink);
+            }
+        }, (error) => {
+            console.error(error);
+        });
   }
 
   

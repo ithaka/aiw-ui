@@ -10,7 +10,7 @@ $btnShadow: none;
 
 $iconBtnSize: 30px;
 
-.btn {
+.btn, a.btn {
      @extend %Graphik-Bold-Web;
      color: #fff;
      font-size: 12px;
@@ -35,7 +35,7 @@ $iconBtnSize: 30px;
  *  <button type="button" class="btn btn-danger">Danger</button>
  *  <button type="button" class="btn btn-link">Link</button>
  */
- .btn-primary {
+ .btn-primary, a.btn-primary {
      background: $primaryBtnColor;
      border-color: $primaryBtnColor;
 

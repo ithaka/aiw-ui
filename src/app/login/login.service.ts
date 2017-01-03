@@ -16,10 +16,7 @@ export class User {
 @Injectable()
 export class LoginService {
 
-    public _storage;
-
     constructor(private _router: Router, private _auth: AuthService, private http: Http, locker: Locker ){
-        this._storage = locker;  
     }
 
     /**
@@ -27,7 +24,7 @@ export class LoginService {
      */
     logout() {
         // this.user = {};
-        this._storage.remove('user');
+        this._auth.clearStorage();
         this._router.navigate(['login']);
         return this.http
             .post(this._auth.getUrl() + '/logout', {})
