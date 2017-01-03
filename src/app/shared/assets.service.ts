@@ -128,7 +128,7 @@ export class AssetService {
 
     /**
      * Gets metadata for a single asset by ID
-     * @param assetId string Asset or object ID
+     * @param assetId: string Asset or object ID
      */
     public getById(assetId: string) {
 
@@ -139,17 +139,32 @@ export class AssetService {
     }
 
     /**
+     * Gets File Properties table for an asset
+     * @param assetId Id for an asset/object
+     */
+    public getFileProperties(assetId: string): Promise<any> {
+        return this.http
+            .get(this._auth.getUrl() + '/metadata/' + assetId + '?_method=FpHtml')
+            .toPromise()
+            .then(data => {
+                // This call only returns Html!
+                return data['_body'].toString();
+            });
+    } 
+
+    /**
      * Get IIIF tilesource for an Asset
      * @param assetId string Asset or object ID
      */
     public getTileSource(assetId: string) {
-        let header = new Headers({ 'Content-Type': 'application/json' }); // ... Set content type to JSON
-        let options = new RequestOptions({ headers: header, withCredentials: false }); // Create a request option
-
+        let collectionId = 103;
+        
         return this.http
-            .get('http://catalog.sharedshelf.artstor.org/iiifmap/ss/' + assetId, options)
+            .get( this._auth.getUrl() + '/imagefpx/' + assetId + '/' + collectionId + '/5', this.defaultOptions)
             .map(data => {
-                console.log(data.json());
+                // This call returns an array-- maybe it supports querying multiple ids?
+                // For now let's just grab the first item in the array
+                return(data.json()[0]);
             });
     }
 

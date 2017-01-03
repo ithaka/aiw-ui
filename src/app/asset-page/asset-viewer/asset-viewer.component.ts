@@ -1,30 +1,48 @@
 import { Component, OnInit, OnDestroy, Input } from '@angular/core';
 import { Subscription }   from 'rxjs/Subscription';
+import * as OpenSeadragon from 'openseadragon';
 
 import { Asset } from '../asset';
 import { AssetService } from '../../shared/assets.service'
 
 @Component({
     selector: 'ang-asset-viewer',
-    styleUrls: ['./asset-viewer.component.scss'],
-    templateUrl: 'asset-viewer.component.html'
+    templateUrl: 'asset-viewer.component.html',
+    styleUrls: [ './asset-viewer.component.scss' ]
 })
 export class AssetViewerComponent implements OnInit, OnDestroy {
 
-    @Input()
-    asset: Asset;
+    @Input() asset: Asset;
+    @Input() index: number;
 
     private subscriptions: Subscription[] = [];
+    private isOpenSeaDragonAsset: boolean = true;
     private mediaLoadingFailed: boolean = false;
     private fallbackFailed: boolean = false;
+    private tileSource: string; //: any[] = [];
 
     constructor(private _assets: AssetService) { }
 
     ngOnInit() {
+        // this._assets.getFileProperties(this.asset.id)
+        //     .then(data => {
+        //         console.log( data.match('table') );
+        //     })
+        //     .catch(error => {
+        //         console.error(error);
+        //     });
+
+        /**
+         * Get tilesource/url for use with OpenSeaDragon IIIF Viewer
+         */
         this.subscriptions.push(
             this._assets.getTileSource(this.asset.id)
-                .subscribe(tileSource => {
-                    console.log(tileSource);
+                .subscribe(data => {
+                    if (data) {
+                        let imgPath = '/' + data['imageUrl'].substring(0, data['imageUrl'].lastIndexOf('.fpx') + 4);
+                        this.tileSource = 'https://tsprod.artstor.org/rosa-iiif-endpoint-1.0-SNAPSHOT/fpx' + encodeURIComponent( imgPath ) + '/info.json';
+                        this.loadOpenSea();
+                    }
                 })
         );
     }
@@ -72,28 +90,55 @@ export class AssetViewerComponent implements OnInit, OnDestroy {
     //     }
     //   }
       
-    //   $scope.loadOpenSea = function(id) {
-    //     // OpenSeaDragon Initializer
-    //     id = id  + '-' + $scope.index;
+    loadOpenSea = function() {
+        this.isOpenSeaDragonAsset = true;
+        // OpenSeaDragon Initializer
+        let id = this.asset.id  + '-' + this.index;
 
-    //     var viewer = new OpenSeadragon({
-    //       id: 'viewer-' + id,
-    //       prefixUrl: 'assets/images/',
-    //       tileSources:   tileSource,
-    //       gestureSettingsMouse : {
-    //         scrollToZoom : true,
-    //         pinchToZoom: true
-    //       },
-    //       controlsFadeLength: 500,
-    //       autoHideControls: false,
-    //       zoomInButton: 'zoomIn-' + id,
-    //       zoomOutButton: 'zoomOut-' + id,
-    //       homeButton: 'zoomFit-' + id,
-    //       sequenceMode: true,
-    //       initialPage: 0,
-    //       nextButton: 'nextButton'
-    //     });
+        var viewer = new OpenSeadragon({
+          id: 'viewer-' + id,
+          // prefix for Icon Images
+          prefixUrl: 'assets/img/osd/',
+          tileSources: this.tileSource,
+          gestureSettingsMouse : {
+            scrollToZoom : true,
+            pinchToZoom: true
+          },
+          controlsFadeLength: 500,
+        //   debugMode: true,
+          autoHideControls: false,
+        //   zoomInButton: 'zoomIn-' + id,
+        //   zoomOutButton: 'zoomOut-' + id,
+        //   homeButton: 'zoomFit-' + id,
+          sequenceMode: true,
+          initialPage: 0,
+          nextButton: 'nextButton'
+        });
 
+        // ---- Use handler in case other error crops up
+        viewer.addOnceHandler('open-failed', () => {
+          console.warn("Opening source failed");
+          this.mediaLoadingFailed = true;
+          viewer.destroy();
+        });
+        
+        viewer.addOnceHandler('tile-load-failed', () => {
+          console.warn("Loading tiles failed");
+          this.mediaLoadingFailed = true;
+          viewer.destroy();
+        });
+
+        viewer.addOnceHandler('ready', () => {
+          console.info("Tiles are ready");
+          this.openSeaDragonReady = true;
+        });
+
+        if(viewer && viewer.ButtonGroup){
+            viewer.ButtonGroup.element.addClass('button-group');
+        }
+
+        console.log(viewer);
+    }
 
     //     if( $scope.index == 1) {
     //        hotkeys      
