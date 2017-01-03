@@ -16,10 +16,13 @@ export class AssetViewerComponent implements OnInit, OnDestroy {
     @Input() index: number;
 
     private subscriptions: Subscription[] = [];
-    private isOpenSeaDragonAsset: boolean = true;
-    private mediaLoadingFailed: boolean = false;
     private fallbackFailed: boolean = false;
     private tileSource: string; //: any[] = [];
+
+
+    public isOpenSeaDragonAsset: boolean = true;
+    public mediaLoadingFailed: boolean = false;
+    removableAsset: boolean = false;
 
     constructor(private _assets: AssetService) { }
 
@@ -89,8 +92,12 @@ export class AssetViewerComponent implements OnInit, OnDestroy {
     //       document.getElementById('columnTwoContent').style.minHeight = ( window.innerHeight - 50) + 'px';
     //     }
     //   }
-      
-    loadOpenSea = function() {
+    
+    /**
+     * Loads the OpenSeaDragon on element at 'viewer-' + id
+     * - Requires this.asset to have an id
+     */
+    loadOpenSea = function():void {
         this.isOpenSeaDragonAsset = true;
         // OpenSeaDragon Initializer
         let id = this.asset.id  + '-' + this.index;
@@ -107,9 +114,9 @@ export class AssetViewerComponent implements OnInit, OnDestroy {
           controlsFadeLength: 500,
         //   debugMode: true,
           autoHideControls: false,
-        //   zoomInButton: 'zoomIn-' + id,
-        //   zoomOutButton: 'zoomOut-' + id,
-        //   homeButton: 'zoomFit-' + id,
+          zoomInButton: 'zoomIn-' + id,
+          zoomOutButton: 'zoomOut-' + id,
+          homeButton: 'zoomFit-' + id,
           sequenceMode: true,
           initialPage: 0,
           nextButton: 'nextButton'
@@ -159,48 +166,6 @@ export class AssetViewerComponent implements OnInit, OnDestroy {
     //         });
     //     }
         
-    //     // Check if Tile Source is available
-    //     // ---- The OpenSeaDragon handler is too slow for providing a fallback
-    //     $http.get(tileSource)
-    //       .success(function(response) {
-    //         $log.info("Tile source is available for asset " + $scope.index);
-
-    //         // This is a temporary lie, since the 'ready' handler fails to trigger
-    //         $scope.openSeaDragonReady = true;
-    //       })
-    //       .error(function(data){
-    //         $log.warn("Loading tiles failed");
-    //         $scope.mediaLoadingFailed = true;
-    //         viewer.destroy();
-    //       });
-          
-    //     // ---- Use handler in case other error crops up
-    //     viewer.addHandler('open-failed', function() {
-    //       $log.warn("Opening source failed");
-    //       $scope.mediaLoadingFailed = true;
-    //       viewer.destroy();
-    //     });
-        
-    //     viewer.addHandler('tile-load-failed', function() {
-    //       $log.warn("Loading tiles failed");
-    //       $scope.mediaLoadingFailed = true;
-    //       viewer.destroy();
-    //     });
-
-    //     viewer.addHandler('ready', function() {
-    //       $log.info("Tiles are ready");
-    //       $scope.openSeaDragonReady = true;
-    //     });
-
-    //     $timeout(function() {
-    //       if(viewer && viewer.ButtonGroup){
-    //         viewer.ButtonGroup.element.addClass('button-group');
-    //       }
-    //       document.getElementById('viewer-' + id).appendChild( document.getElementById('imageButtons-' + id) );
-    //       setColumnHeight();
-    //     });
-    //   };
-
     //   window.addEventListener('resize', setColumnHeight);
 
     //   function requestFullScreen(el) {
@@ -289,6 +254,9 @@ export class AssetViewerComponent implements OnInit, OnDestroy {
     //       $rootScope.$broadcast('removeComparedAsset', assetId);
     //     }
     //   };
+    removeComparedAsset(assetId): void {
+
+    }
 
     //   // WORKAROUND: Get IDs and build the Kaltura url
     //   var kalturaId = "";

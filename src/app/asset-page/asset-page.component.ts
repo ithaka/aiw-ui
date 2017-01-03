@@ -14,7 +14,6 @@ export class AssetPage implements OnInit, OnDestroy {
 
     private asset: Asset;
     private subscriptions: Subscription[] = [];
-    // http://library.artstor.org/library/secure/metadata/
 
     constructor(private _assets: AssetService, private route: ActivatedRoute) { }
 

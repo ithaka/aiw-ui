@@ -1,6 +1,17 @@
 
+$assetViewerPad: 20px;
+
 .asset-viewer {
     text-align: center;
-    padding: 20px;
+    padding: $assetViewerPad;
+    position: relative;
+    z-index: 0;
+}
 
+.asset-viewer__buttons {
+    position: absolute;
+    bottom: $assetViewerPad;
+    right: $assetViewerPad;
+    z-index: 1000;
+    padding: 10px;
 }

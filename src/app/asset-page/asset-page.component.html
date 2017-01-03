@@ -1,12 +1,12 @@
-<div class="container">
+<div class="container-fluid">
     <!--Asset Viewer Row-->
-    <div class="col-md-7">
+    <div class="col-md-8">
         <div class="row">
             <ang-asset-viewer [asset]="asset" index="1"></ang-asset-viewer>
         </div>
     </div>
     <!--Asset Metadata Row-->
-    <div class="col-md-5">
+    <div class="col-md-4">
         <div class="row pb-1">
             <div class="row-hdr pt-1" *ngIf="asset.metaDataArray.length > 0">Object Details</div>
             <!--Loop through metaData Array-->

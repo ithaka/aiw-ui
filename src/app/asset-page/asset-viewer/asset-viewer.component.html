@@ -1,14 +1,14 @@
 <!-- IIIF Image Viewer -->
 <div class="asset-viewer"  *ngIf="isOpenSeaDragonAsset && !mediaLoadingFailed">
     <!-- *ngIf="openSeaDragonReady"-->
-    <div id="imageButtons-{{ asset.id + '-' + index }}" class="button-group top-right vertical icons-block circle">
-        <button id="zoomIn-{{ asset.id + '-' + index }}" title="Zoom In">
+    <div id="imageButtons-{{ asset.id + '-' + index }}" class="button-group asset-viewer__buttons">
+        <button id="zoomIn-{{ asset.id + '-' + index}}" title="Zoom In" class="btn btn--icon">
             <i class="icon icon-zoom-in"></i>
         </button>
-        <button id="zoomOut-{{ asset.id + '-' + index }}" title="Zoom Out">
+        <button id="zoomOut-{{ asset.id + '-' + index }}" title="Zoom Out"  class="btn btn--icon">
             <i class="icon icon-zoom-out"></i>
         </button>
-        <button id="zoomFit-{{ asset.id + '-' + index }}" title="Zoom Fit">
+        <button id="zoomFit-{{ asset.id + '-' + index }}" title="Zoom Fit"  class="btn btn--icon">
                 <i class="icon icon-fit"></i>
         </button>
         <!--<button class="hide-in-fullscreen" (click)="togglePresentationMode()" id="fullScreen-{{ asset.id + '-' + index }}" title="Full Screen">

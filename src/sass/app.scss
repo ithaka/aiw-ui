@@ -103,7 +103,14 @@ span.active {
   transform: translateY(-50%);
 }
 
+// OpenSeaDragon overrides
+.openseadragon-canvas {
+  outline: none !important;
+  cursor: move;
+}
 
 .openseadragon-container {
     min-height: 600px;
+    // Need to override inline styles
+    background: #f8faf8 !important;
 }
