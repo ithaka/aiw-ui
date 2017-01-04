@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ActivatedRoute, Params } from '@angular/router';
+import { Router, ActivatedRoute, Params } from '@angular/router';
 import { Subscription }   from 'rxjs/Subscription';
 
 import { Asset } from './asset';
@@ -21,12 +21,12 @@ export class AssetPage implements OnInit, OnDestroy {
     // Boolean set by Asset Viewer output
     private isFullscreen: boolean;
 
-    constructor(private _assets: AssetService, private _auth: AuthService, private route: ActivatedRoute) { }
+    constructor(private _assets: AssetService, private _auth: AuthService, private router: Router, private route: ActivatedRoute) { }
 
     ngOnInit() {
         this.subscriptions.push(
             this.route.params.subscribe((routeParams) => {
-                this.asset = new Asset(routeParams["assetId"], this._assets);
+                this.asset = new Asset(routeParams["assetId"], this.router, this._assets, this._auth);
             })
         )
     }

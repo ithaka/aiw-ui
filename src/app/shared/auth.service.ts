@@ -124,7 +124,7 @@ export class AuthService implements CanActivate {
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
     let authenticated: boolean  = this.isAuthenticated();
     if (!authenticated) {
-      this._router.navigate(["login"]);
+      this._router.navigate(["/login"]);
     }
 
     return authenticated;

@@ -1,7 +1,11 @@
-import { AssetService } from './../shared/assets.service';
+import { Router } from '@angular/router';
+
+import { AssetService, AuthService } from './../shared';
 
 export class Asset {
   private _assets: AssetService;
+  private _auth: AuthService;
+  private router: Router;
 
   id: string;
   title: string;
@@ -14,16 +18,16 @@ export class Asset {
   /** Used for holding asset file properties array from the service response */
   filePropertiesArray: any = [];
 
-  constructor(asset_id: string, _assets: AssetService) {
+  constructor(asset_id: string, router ?: Router, _assets ?: AssetService, _auth ?: AuthService) {
     this.id = asset_id;
+    this.router = router;
     this._assets = _assets;
+    this._auth = _auth;
     this.loadAssetMetaData();
     this.getDownloadLink();
   }
 
-  /**
-      Get asset metadata via service call
-  */
+  /** Get asset metadata via service call */
   private loadAssetMetaData(): void {
 
       this._assets.getById( this.id )
@@ -38,7 +42,7 @@ export class Asset {
               }
           })
           .catch(function(err) {
-              console.log('Unable to load category results.');
+              console.error('Unable to load category results.');
           });
   }
 
@@ -47,7 +51,12 @@ export class Asset {
       this._assets.getImageSource( this.id )
         .subscribe((data) => {
             if (data && data.imageServer && data.imageUrl) {
-                this.downloadLink = data.imageServer + data.imageUrl + "?cell=1024,1024&rgnn=0,0,1,1&cvt=JPEG";
+                let url = data.imageServer + data.imageUrl + "?cell=1024,1024&rgnn=0,0,1,1&cvt=JPEG";
+                let queryParams: any = {
+                    imgid: this.id,
+                    url: encodeURIComponent(url)
+                }
+                this.downloadLink = "http://library.artstor.org/library/secure/download?imgid=" + this.id + "&url=" + encodeURIComponent(url);
             }
         }, (error) => {
             console.error(error);
