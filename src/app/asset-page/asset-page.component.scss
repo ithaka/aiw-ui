@@ -14,3 +14,10 @@
 .meta-block .value{
     line-height: 16px;
 }
+
+/**
+  * Because these component scoped styles, we can simply use .fullscreen!
+  */
+.fullscreen {
+    background: #000;
+}

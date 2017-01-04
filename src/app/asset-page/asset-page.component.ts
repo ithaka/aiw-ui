@@ -20,6 +20,9 @@ export class AssetPage implements OnInit, OnDestroy {
     /** controls whether or not the agreement modal is visible */
     private showAgreeModal: boolean = false;
 
+    // Boolean set by Asset Viewer output
+    private isFullscreen: boolean;
+
     constructor(private _assets: AssetService, private _auth: AuthService, private route: ActivatedRoute) { }
 
     ngOnInit() {
@@ -32,6 +35,14 @@ export class AssetPage implements OnInit, OnDestroy {
 
     ngOnDestroy() {
         this.subscriptions.forEach((sub) => { sub.unsubscribe(); });
+    }
+
+    /**
+     * Maintains the isFullscreen variable, as set by child AssetViewers
+     */
+    updateFullscreenVar(isFullscreen: boolean): void {
+        console.log(isFullscreen);
+        this.isFullscreen = isFullscreen;
     }
 
     private downloadAuth(): boolean {
