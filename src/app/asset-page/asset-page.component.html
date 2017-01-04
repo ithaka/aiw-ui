@@ -1,8 +1,8 @@
-<div class="container-fluid">
+<div class="container-fluid" [class.fullscreen]="isFullscreen">
     <!--Asset Viewer Row-->
     <div class="col-md-8">
         <div class="row">
-            <ang-asset-viewer [asset]="asset" index="1"></ang-asset-viewer>
+            <ang-asset-viewer [asset]="asset" (fullscreenChange)="updateFullscreenVar($event)" index="1"></ang-asset-viewer>
         </div>
         <!--If the user has not accepted the agreement, show modal when clicked, otherwise download immediately-->
         <a *ngIf="asset.downloadLink" 

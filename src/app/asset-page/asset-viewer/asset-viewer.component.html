@@ -1,5 +1,5 @@
 <!-- IIIF Image Viewer -->
-<div class="asset-viewer"  *ngIf="isOpenSeaDragonAsset && !mediaLoadingFailed">
+<div class="asset-viewer" [class.fullscreen]="isFullscreen"  *ngIf="isOpenSeaDragonAsset && !mediaLoadingFailed">
     <!-- *ngIf="openSeaDragonReady"-->
     <div id="imageButtons-{{ asset.id + '-' + index }}" class="button-group asset-viewer__buttons">
         <button id="zoomIn-{{ asset.id + '-' + index}}" title="Zoom In" class="btn btn--icon">
@@ -11,9 +11,9 @@
         <button id="zoomFit-{{ asset.id + '-' + index }}" title="Zoom Fit"  class="btn btn--icon">
                 <i class="icon icon-fit"></i>
         </button>
-        <!--<button class="hide-in-fullscreen" (click)="togglePresentationMode()" id="fullScreen-{{ asset.id + '-' + index }}" title="Full Screen">
-                <i class="icon-full-screen"></i>
-        </button>-->
+        <button id="fullScreen-{{ asset.id + '-' + index }}" class="btn btn--icon" (click)="togglePresentationMode()" title="Full Screen">
+                <i class="icon icon-fullscreen"></i>
+        </button>
         <button *ngIf="removableAsset" class="removeAsset show-in-fullscreen" (click)="removeComparedAsset(asset.id)" title="Remove from Comparison">
                 <i class="icon icon-close"></i>
         </button>
