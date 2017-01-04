@@ -42,14 +42,12 @@ export class Asset {
           });
   }
 
+  /** Assigns the asset's downloadLink parameter */
   private getDownloadLink(): void {
       this._assets.getImageSource( this.id )
         .subscribe((data) => {
-            console.log(data);
-
             if (data && data.imageServer && data.imageUrl) {
                 this.downloadLink = data.imageServer + data.imageUrl + "?cell=1024,1024&rgnn=0,0,1,1&cvt=JPEG";
-                console.log(this.downloadLink);
             }
         }, (error) => {
             console.error(error);

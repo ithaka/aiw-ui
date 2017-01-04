@@ -15,8 +15,6 @@ export class AssetPage implements OnInit, OnDestroy {
     private asset: Asset;
     private subscriptions: Subscription[] = [];
 
-    /** controls whether or not to show the agreement modal before download */
-    // private downloadAuth: boolean = false;
     /** controls whether or not the agreement modal is visible */
     private showAgreeModal: boolean = false;
 
@@ -34,6 +32,10 @@ export class AssetPage implements OnInit, OnDestroy {
         this.subscriptions.forEach((sub) => { sub.unsubscribe(); });
     }
 
+    /**
+     * Find out if the user has accepted the agreement during this session
+     * @returns boolean which is true if the user has accepted the agreement
+     */
     private downloadAuth(): boolean {
         return this._auth.downloadAuthorized();
     }
