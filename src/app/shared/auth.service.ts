@@ -84,6 +84,7 @@ export class AuthService implements CanActivate {
       return this._storage.get('user');
   }
 
+  /** Clears all variables held in local storage */
   public clearStorage(): void {
     this._storage.clear();
   }
@@ -141,10 +142,12 @@ export class AuthService implements CanActivate {
       .then(this.extractData);
   }
 
+  /** Getter for downloadAuthorized parameter of local storage */
   public downloadAuthorized(): boolean {
     return this._storage.get('downloadAuthorized');
   }
 
+  /** Setter for downloadAuthorized parameter of local storage */
   public authorizeDownload(): void {
     this._storage.set('downloadAuthorized', true);
   }
