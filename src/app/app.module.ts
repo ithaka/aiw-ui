@@ -39,7 +39,6 @@ import { ImageGroupPage } from './image-group-page';
 import { Login } from './login';
 import { About } from './about';
 import { NoContent } from './no-content';
-import { XLarge } from './home/x-large';
 
 // Application wide providers
 import { AuthService } from './shared/auth.service';
@@ -93,8 +92,7 @@ type StoreType = {
     ImageGroupPage,
     Login,
     Home,
-    NoContent,
-    XLarge
+    NoContent
   ],
   imports: [ // import Angular's modules
     BrowserModule,

@@ -198,12 +198,14 @@ export class AssetViewerComponent implements OnInit, OnDestroy {
       }
 
       private exitFullScreen(): void {
+        // Being permissive to reference possible Document methods
+        let document: any = window.document;
         if (document.mozCancelFullScreen) {
           document.mozCancelFullScreen();
-        } else if (document.webkitCancelFullScreen) {
-          document.webkitCancelFullScreen();
-        } else if (document.cancelFullScreen) {
-          document.cancelFullScreen();
+        } else if (document.webkitExitFullscreen) {
+          document.webkitExitFullscreen();
+        } else if (document.exitFullscreen) {
+          document.exitFullscreen();
         }
       } 
 
