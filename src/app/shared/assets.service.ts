@@ -4,8 +4,7 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { Http, Response, Headers, RequestOptions } from '@angular/http';
-import { Observable } from 'rxjs/Rx';
-import { Subject } from 'rxjs/Subject';
+import { Observable, BehaviorSubject } from 'rxjs/Rx';
 import { Locker } from 'angular2-locker';
 
 import 'rxjs/add/operator/toPromise';
@@ -21,7 +20,9 @@ export class AssetService {
     static readonly institutionCollectionType: number = 2;
 
     //set up thumbnail observables
-    private allResultsSource = new Subject<any[]>();
+    private allResultsValue: any[] = [];
+    // BehaviorSubjects push last value on subscribe
+    private allResultsSource = new BehaviorSubject<any[]>(this.allResultsValue);
     public allResults = this.allResultsSource.asObservable();
 
     /**
@@ -62,6 +63,11 @@ export class AssetService {
             catId: ""
         };
     }
+
+    private updateLocalResults(results: any[]) {
+        this.allResultsValue = results;
+        this.allResultsSource.next(results);
+    } 
 
     /**
      * Sets urlParams based on matching keys with the url params that are passed in
@@ -180,7 +186,7 @@ export class AssetService {
                 if (!data) {
                 throw new Error("No data in image group thumbnails response");
                 }
-                this.allResultsSource.next(data);
+                this.updateLocalResults(data);
             })
             .catch((error) => {
                 console.log(error);
@@ -207,7 +213,7 @@ export class AssetService {
                 throw new Error("No data in image group thumbnails response");
                 }
                 //notify allResults observers
-                this.allResultsSource.next(data);
+                this.updateLocalResults(data);
             })
             .catch((error) => {
                 console.log(error);
@@ -229,7 +235,7 @@ export class AssetService {
             .toPromise()
             .then(this.extractData)
             .then((data) => {
-                this.allResultsSource.next(data);
+                this.updateLocalResults(data);
             })
             .catch(error => {
                 console.log(error);
@@ -249,7 +255,7 @@ export class AssetService {
             .toPromise()
             .then(this.extractData)
             .then((data) => {
-                this.allResultsSource.next(data);
+                this.updateLocalResults(data);
             })
             .catch(error => {
                 console.log(error);

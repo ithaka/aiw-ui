@@ -14,6 +14,7 @@ export class AssetPage implements OnInit, OnDestroy {
 
     private asset: Asset;
     private subscriptions: Subscription[] = [];
+    private results: any[] = [];
 
     /** controls whether or not to show the agreement modal before download */
     // private downloadAuth: boolean = false;
@@ -27,7 +28,14 @@ export class AssetPage implements OnInit, OnDestroy {
             this.route.params.subscribe((routeParams) => {
                 this.asset = new Asset(routeParams["assetId"], this._assets);
             })
-        )
+        );
+
+        // sets up subscription to allResults, which is the service providing thumbnails
+        this.subscriptions.push(
+          this._assets.allResults.subscribe((allResults: any) => {
+            this.results = allResults;
+          })
+        );
     }
 
     ngOnDestroy() {
