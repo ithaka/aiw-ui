@@ -68,7 +68,7 @@ export class Asset {
             console.error(error);
         });
   }
-
+  
   
 
 }

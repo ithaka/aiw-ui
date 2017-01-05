@@ -50,4 +50,11 @@ export class AssetPage implements OnInit, OnDestroy {
     private downloadAuth(): boolean {
         return this._auth.downloadAuthorized();
     }
+
+    /** 
+     * Clean up the field label for use as an ID (used in testing)
+     */
+    private cleanId(label: string): string {
+        return label.toLowerCase().replace(/\s/g,'');
+    }
 }

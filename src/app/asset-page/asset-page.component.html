@@ -20,15 +20,17 @@
             <div class="row-hdr pt-1" *ngIf="asset.metaDataArray.length > 0">Object Details</div>
             <!--Loop through metaData Array-->
             <div class="meta-block" *ngFor="let metadataObj of asset.metaDataArray">
-                <div class="label">{{ metadataObj.fieldName }}</div>
-                <div class="value" [innerHTML]="metadataObj.fieldValue"></div>
+                <div class="label">{{ metadataObj.fieldName }}
+                 <div [attr.id]="cleanId(metadataObj.fieldName)" class="value" [innerHTML]="metadataObj.fieldValue"></div>
+                </div>
             </div>
 
             <div class="row-hdr pt-1" *ngIf="asset.filePropertiesArray.length > 0">File Properties</div>
             <!--Loop through File Properties Array-->
             <div class="meta-block" *ngFor="let filePropObj of asset.filePropertiesArray">
-                <div class="label">{{ filePropObj.fieldName }}</div>
-                <div class="value" [innerHTML]="filePropObj.fieldValue"></div>
+                <div class="label">{{ filePropObj.fieldName }}
+                    <div [attr.id]="cleanId(filePropObj.fieldName)" class="value" [innerHTML]="filePropObj.fieldValue"></div>
+                </div>
             </div>
         </div>
     </div>
