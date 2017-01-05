@@ -119,20 +119,22 @@ export class AssetFiltersService {
         if (!dateFacetsArray) {
             dateFacetsArray = this.availableFilters.date;
         }
-        var startDate = dateFacetsArray[0].date;
-        var endDate = dateFacetsArray[dateFacetsArray.length - 1].date;
-        
-        this.availableFilters.dateObj.earliest.date = Math.abs(startDate);
-        this.availableFilters.dateObj.earliest.era = startDate < 0 ? "BCE" : "CE";
 
-        this.availableFilters.dateObj.latest.date = Math.abs(endDate);
-        this.availableFilters.dateObj.latest.era = endDate < 0 ? "BCE" : "CE";
+        if (dateFacetsArray[0] && dateFacetsArray[0].date) {
+            let startDate = dateFacetsArray[0].date;
+            let endDate = dateFacetsArray[dateFacetsArray.length - 1].date;
+            this.availableFilters.dateObj.earliest.date = Math.abs(startDate);
+            this.availableFilters.dateObj.earliest.era = startDate < 0 ? "BCE" : "CE";
 
-        this.availableFilters.dateObj.modified = false;
+            this.availableFilters.dateObj.latest.date = Math.abs(endDate);
+            this.availableFilters.dateObj.latest.era = endDate < 0 ? "BCE" : "CE";
 
-        this.setAvailable('date', dateFacetsArray);
-        this.setAvailable('dateObj', this.availableFilters.dateObj);
-        this.dateFacetsArray = dateFacetsArray;
+            this.availableFilters.dateObj.modified = false;
+
+            this.setAvailable('date', dateFacetsArray);
+            this.setAvailable('dateObj', this.availableFilters.dateObj);
+            this.dateFacetsArray = dateFacetsArray;
+        }
     }
 
     public generateGeoFilters(resGeoFacetsArray){
