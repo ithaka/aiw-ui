@@ -58,6 +58,8 @@ export class AssetFilters {
     { term: ''}
   ];
 
+  private dateError: boolean = false; 
+
   // TypeScript public modifiers
   constructor(
       public appState: AppState, 
@@ -227,6 +229,28 @@ export class AssetFilters {
 
 
   applyDateFilter(){
+    var sdate = parseInt(this.availableFilters.dateObj.earliest.date);
+    sdate = this.availableFilters.dateObj.earliest.era == 'BCE' ? (sdate * -1) : sdate;
+
+    var edate = parseInt(this.availableFilters.dateObj.latest.date);
+    edate = this.availableFilters.dateObj.latest.era == 'BCE' ? (edate * -1) : edate;
+    
+    // Show error message if Start date is greater than End date
+    if(sdate > edate){
+      this.availableFilters.dateObj.earliest.date = this.availableFilters.prevDateObj.earliest.date;
+      this.availableFilters.dateObj.earliest.era = this.availableFilters.prevDateObj.earliest.era;
+
+      this.availableFilters.dateObj.latest.date = this.availableFilters.prevDateObj.latest.date;
+      this.availableFilters.dateObj.latest.era = this.availableFilters.prevDateObj.latest.era;
+
+      this.dateError = true;
+      setTimeout(() => {
+        this.dateError = false;
+      }, 3000);
+      console.log('End date must be greater than or equal to Start date.');
+      return;
+    }
+
     this.availableFilters.dateObj.modified = true;
     this.pagination.currentPage = 1;
     this.loadRoute();
@@ -242,6 +266,14 @@ export class AssetFilters {
       }
     }
     return result;
+  }
+
+  private dateKeyPress(event: any): boolean{
+      if(!((event.keyCode > 95 && event.keyCode < 106)
+      || (event.keyCode > 47 && event.keyCode < 58) 
+      || event.keyCode == 8)) {
+          return false;
+      }
   }
   
   ngOnDestroy() {

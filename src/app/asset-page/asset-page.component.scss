@@ -14,3 +14,51 @@
 .meta-block .value{
     line-height: 16px;
 }
+
+// Title Prev / Next Asset
+.title-nav-cntnr{
+    border-bottom: 1px solid #ddd;
+    padding: 1rem 0;
+    text-align: center;
+    font-weight: bold;
+}
+.title-nav-cntnr i{
+    vertical-align: top;
+    margin: 3px;
+    cursor: pointer;
+}
+.title-nav-cntnr .title{
+    display: inline-block;
+    // width: 250px;
+    margin: auto;
+    white-space: nowrap;
+    // overflow: hidden;
+    // text-overflow: ellipsis;
+    vertical-align: top;
+}
+.title-nav-cntnr .page-tooltip{
+    font-weight: normal;
+    font-size: 10px;
+    min-width: 120px;
+    line-height: 21px;
+    display: block;
+    position: fixed;
+    top: 135px;
+    left: 50%;
+    -webkit-transform: translateX(-50%);
+    -moz-transform: translateX(-50%);
+    -ms-transform: translateX(-50%);
+    -o-transform: translateX(-50%);
+    transform: translateX(-50%);
+    box-shadow: 1px 2px 3px rgba(0, 0, 0, 0.3);
+    background: white;
+    color: black;
+    padding: 2px 15px 0px;
+    opacity: 0;
+    -webkit-transition: opacity linear 0.3s;
+    -moz-transition: opacity linear 0.3s;
+    transition: opacity linear 0.3s;
+}
+.title-nav-cntnr:hover .page-tooltip{
+    opacity: 1;
+}

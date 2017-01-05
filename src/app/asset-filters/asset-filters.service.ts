@@ -29,6 +29,16 @@ export class AssetFiltersService {
                 era : 'CE'
             },
         modified : false
+        },
+        prevDateObj : {
+            earliest : {
+                date : 1000,
+                era : 'BCE'
+            },
+            latest : {
+                date : 2016,
+                era : 'CE'
+            }
         }
     };
 
@@ -129,6 +139,13 @@ export class AssetFiltersService {
         this.availableFilters.dateObj.latest.era = endDate < 0 ? "BCE" : "CE";
 
         this.availableFilters.dateObj.modified = false;
+
+        // Fallback date filter values
+        this.availableFilters.prevDateObj.earliest.date = Math.abs(startDate);
+        this.availableFilters.prevDateObj.earliest.era = startDate < 0 ? "BCE" : "CE";
+
+        this.availableFilters.prevDateObj.latest.date = Math.abs(endDate);
+        this.availableFilters.prevDateObj.latest.era = endDate < 0 ? "BCE" : "CE";
 
         this.setAvailable('date', dateFacetsArray);
         this.setAvailable('dateObj', this.availableFilters.dateObj);

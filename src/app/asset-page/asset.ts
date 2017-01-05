@@ -1,7 +1,9 @@
 import { AssetService } from './../shared/assets.service';
+import { Subscription }   from 'rxjs/Subscription';
 
 export class Asset {
   private _assets: AssetService;
+  private subscriptions: Subscription[] = [];
 
   id: string;
   title: string;
@@ -17,6 +19,18 @@ export class Asset {
   constructor(asset_id: string, _assets: AssetService) {
     this.id = asset_id;
     this._assets = _assets;
+    
+    // this._assets.allResults.last();
+    // // sets up subscription to allResults, which is the service providing thumbnails
+    // this.subscriptions.push(
+    //   this._assets.allResults.subscribe((allResults: any) => {
+
+    //     console.log(allResults);
+    //   })
+    // );
+
+
+
     this.loadAssetMetaData();
     this.getDownloadLink();
   }
