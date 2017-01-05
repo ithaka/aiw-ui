@@ -104,7 +104,7 @@ export class AssetService {
     public queryAll(params: any) {
         this.readUrlParams(params);
 
-        if (params.hasOwnProperty("igId") && params.hasOwnProperty("objectId")) {
+        if (params.hasOwnProperty("objectId") && params.hasOwnProperty("colId")) {
             //gets associated images thumbnails
             this.loadAssociatedAssets(params.objectId, params.colId);
         } else if (params.hasOwnProperty("igId")) {
