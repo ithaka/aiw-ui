@@ -35,7 +35,7 @@ import { BrowsePage, LibraryComponent, BrowseCommonsComponent,
 import { AssetPage, AgreeModalComponent } from './asset-page';
 import { AssetViewerComponent } from './asset-page/asset-viewer';
 import { AssociatedPage } from './associated-page';
-import { ImageGroupPage } from './image-group-page';
+import { ImageGroupPage, PptModalComponent } from './image-group-page';
 import { Login } from './login';
 import { About } from './about';
 import { NoContent } from './no-content';
@@ -90,6 +90,7 @@ type StoreType = {
     AssetFilters,
     AssetGrid,
     ImageGroupPage,
+    PptModalComponent,
     Login,
     Home,
     NoContent

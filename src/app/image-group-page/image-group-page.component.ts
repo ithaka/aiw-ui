@@ -18,6 +18,9 @@ export class ImageGroupPage implements OnInit, OnDestroy {
   private igId: string;
   private subscriptions: Subscription[] = [];
 
+  /** controls when PPT agreement modal is or is not shown */
+  private showPptModal: boolean = true;
+
   constructor(private _igService: ImageGroupService, private _router: Router, private _assets: AssetService, private route: ActivatedRoute) {
   }
 
