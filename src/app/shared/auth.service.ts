@@ -66,6 +66,11 @@ export class AuthService implements CanActivate {
     return this.baseUrl;
   }
 
+  /** Returns url used for downloading some media, such as documents */
+  public getMediaUrl(): string {
+    return this.proxyUrl + 'http://proxy.library.artstor.org/media';
+  }
+
   /**
    * Saves user to local storage
    * @param user The user should be an object to store in sessionstorage

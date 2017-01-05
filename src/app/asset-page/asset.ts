@@ -8,6 +8,8 @@ export class Asset {
   private router: Router;
 
   id: string;
+  /** typeId determines what media type the asset is */
+  typeId: number;
   title: string;
   imgURL: string;
   downloadLink: string;
@@ -60,9 +62,17 @@ export class Asset {
   private getDownloadLink(): void {
       this._assets.getImageSource( this.id )
         .subscribe((data) => {
-            if (data && data.imageServer && data.imageUrl) {
+            if (!data) {
+                throw new Error("No data returned from image source call!");
+            }
+            this.typeId = data.objectTypeId;
+
+            /** This determines how to build the downloadLink, which is different for different typeIds */            
+            if (this.typeId === 10 && data.imageServer && data.imageUrl) {
                 let url = data.imageServer + data.imageUrl + "?cell=1024,1024&rgnn=0,0,1,1&cvt=JPEG";
                 this.downloadLink = this._auth.getUrl() + "/download?imgid=" + this.id + "&url=" + encodeURIComponent(url);
+            } else if (this.typeId === 20 || this.typeId === 21 || this.typeId === 22 || this.typeId === 23) { //all of the typeIds for documents
+                this.downloadLink = [this._auth.getMediaUrl(), this.id, this.typeId].join("/");
             }
         }, (error) => {
             console.error(error);
