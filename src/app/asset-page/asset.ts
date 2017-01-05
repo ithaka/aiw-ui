@@ -44,6 +44,16 @@ export class Asset {
           .catch(function(err) {
               console.error('Unable to load category results.');
           });
+    
+    // This call returns an html table as a string! Fun.
+    //   this._assets.getFileProperties(this.id)
+    //     .then((res) => {
+    //         console.log(res);
+
+    //     })
+    //     .catch(error => {
+    //         console.error('Unable to load asset file properties');
+    //     })
   }
 
   /** Assigns the asset's downloadLink parameter */
