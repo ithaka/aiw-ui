@@ -14,7 +14,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" (click)="closeModal.emit()">I reject</button>
-        <a class="btn btn-primary" (click)="agree()" [href]="downloadLink" download="title">I accept</a>
+        <a class="btn btn-primary" (click)="closeModal.emit()" [href]="downloadLink" download="title">I accept</a>
       </div>
     </div><!-- /.modal-content -->
   </div><!-- /.modal-dialog -->

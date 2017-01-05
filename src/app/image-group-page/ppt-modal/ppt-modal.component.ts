@@ -21,9 +21,4 @@ export class PptModalComponent implements OnInit {
   constructor() { }
 
   ngOnInit() { }
-
-  /** Executes when the user agrees to the statement */
-  private agree() {
-
-  }
 }
