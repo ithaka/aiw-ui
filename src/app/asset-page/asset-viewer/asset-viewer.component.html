@@ -21,7 +21,7 @@
     <div id="loader-wrapper" class="more-results overlay-wrap--center" *ngIf="!openSeaDragonReady">
         <i class="icon-asterisk icon-spin icon-large"></i>
     </div>
-    <div id="viewer-{{ asset.id + '-' + index }}" style="position: relative; height: 100%; width: 100%; min-height:600px;"></div>
+    <div id="viewer-{{ asset.id + '-' + index }}" [attr.zoomValue]="lastZoomValue" style="position: relative; height: 100%; width: 100%; min-height:600px;"></div>
 </div>
 
 <!-- Audio/Video Player -->

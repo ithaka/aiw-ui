@@ -144,7 +144,7 @@ export class AssetService {
      */
     public getFileProperties(assetId: string): Promise<any> {
         return this.http
-            .get(this._auth.getUrl() + '/metadata/' + assetId + '?_method=FpHtml')
+            .get(this._auth.getUrl() + '/metadata/' + assetId + '?_method=FpHtml', this.defaultOptions)
             .toPromise()
             .then(data => {
                 // This call only returns Html!

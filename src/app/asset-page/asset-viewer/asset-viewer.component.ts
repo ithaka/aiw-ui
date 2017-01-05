@@ -25,6 +25,7 @@ export class AssetViewerComponent implements OnInit, OnDestroy {
     private subscriptions: Subscription[] = [];
     private fallbackFailed: boolean = false;
     private tileSource: string;
+    private lastZoomValue: number;
 
     constructor(private _assets: AssetService) { }
 
@@ -142,6 +143,10 @@ export class AssetViewerComponent implements OnInit, OnDestroy {
           console.warn("Opening source failed");
           this.mediaLoadingFailed = true;
           viewer.destroy();
+        });
+
+        viewer.addHandler('zoom', (value) => {
+          this.lastZoomValue = value.zoom;
         });
         
         viewer.addOnceHandler('tile-load-failed', () => {
