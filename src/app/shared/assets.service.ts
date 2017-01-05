@@ -521,5 +521,13 @@ export class AssetService {
             .then((data) => { return this.extractData(data); });
     }
 
- 
+    public getFpxInfo(objectId: string, objectTypeId: ): Promise<any> {
+        // http://library.artstor.org/library/secure/imagefpx/SS7730295_7730295_8847273/24
+        let requestUrl = this._auth.getUrl() + '/imagefpx/' + objectId + '/' + objectTypeId;
+        
+        return this.http
+            .get(requestUrl, this.defaultOptions)
+            .toPromise()
+            .then((data) => { return this.extractData(data); });
+    }
 }
