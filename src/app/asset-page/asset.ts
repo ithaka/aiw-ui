@@ -52,7 +52,7 @@ export class Asset {
         .subscribe((data) => {
             if (data && data.imageServer && data.imageUrl) {
                 let url = data.imageServer + data.imageUrl + "?cell=1024,1024&rgnn=0,0,1,1&cvt=JPEG";
-                this.downloadLink = "http://library.artstor.org/library/secure/download?imgid=" + this.id + "&url=" + encodeURIComponent(url);
+                this.downloadLink = this._auth.getUrl() + "/download?imgid=" + this.id + "&url=" + encodeURIComponent(url);
             }
         }, (error) => {
             console.error(error);
