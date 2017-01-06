@@ -2,7 +2,7 @@ import { NgModule, ApplicationRef } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
-import { RouterModule } from '@angular/router';
+import { RouterModule, RouteReuseStrategy } from '@angular/router';
 import { removeNgStyles, createNewHosts, createInputTransfer } from '@angularclass/hmr';
 
 /*
@@ -45,6 +45,7 @@ import { AuthService } from './shared/auth.service';
 import { AssetService } from './shared/assets.service';
 import { AssetFiltersService } from './asset-filters/asset-filters.service';
 import { TagsService } from './browse-page/tags.service';
+import { CustomReuseStrategy } from './reuse-strategy';
 
 const APP_PROVIDERS = [
   ...APP_RESOLVER_PROVIDERS,
@@ -52,7 +53,8 @@ const APP_PROVIDERS = [
   AssetService,
   AuthService,
   AssetFiltersService,
-  TagsService
+  TagsService,
+  { provide: RouteReuseStrategy, useClass: CustomReuseStrategy }
 ];
 
 type StoreType = {
