@@ -24,6 +24,7 @@ export class CustomReuseStrategy implements RouteReuseStrategy {
      * Decides when the route should be stored
      * If the route should be stored, I believe the boolean is indicating to a controller whether or not to fire this.store
      * _When_ it is called though does not particularly matter, just know that this determines whether or not we store the route
+     * An idea of what to do here: check the route.routeConfig.path to see if it is a path you would like to store
      * @param route This is, at least as I understand it, the route that the user is currently on, and we would like to know if we want to store it
      * @returns boolean indicating that we want to (true) or do not want to (false) store that route
      */
@@ -100,8 +101,7 @@ export class CustomReuseStrategy implements RouteReuseStrategy {
      * @returns boolean indicating whether or not to return route: it seems to be backward of what is logical, with a value of false triggering this.retrieve
      */
     shouldReuseRoute(future: ActivatedRouteSnapshot, curr: ActivatedRouteSnapshot): boolean {
-        console.log("deciding");
-        // console.log('deciding', future.routeConfig, curr.routeConfig, "return: ", future.routeConfig === curr.routeConfig);
+        console.log('deciding between', future.routeConfig, "and", curr.routeConfig, "return: ", future.routeConfig === curr.routeConfig);
         return future.routeConfig === curr.routeConfig;
     }
 
