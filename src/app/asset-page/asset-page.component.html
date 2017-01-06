@@ -1,10 +1,10 @@
 <div class="container-fluid">
     <!--View prev/next asset-->
     <div class="col-md-12 title-nav-cntnr">
-        <i title="Previous in results" class="icon icon-direction icon-left"></i>
+        <i title="Previous in results" (click)="showPrevAsset()" class="icon icon-direction icon-left"></i>
         <div class="title">{{ asset.title }}</div>
-        <i title="Next in results" class="icon icon-direction icon-right"></i>
-        <div class="page-tooltip">4 OF 7213</div>
+        <i title="Next in results" (click)="showNextAsset()" class="icon icon-direction icon-right"></i>
+        <div class="page-tooltip">{{ assetIndex + 1 }} OF {{ totalAssetCount }}</div>
     </div>
     <!--Asset Viewer Row-->
     <div class="col-md-8">
