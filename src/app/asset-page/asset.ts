@@ -67,12 +67,12 @@ export class Asset {
             }
             this.typeId = data.objectTypeId;
 
-            /** This determines how to build the downloadLink, which is different for different typeIds */            
-            if (this.typeId === 10 || this.typeId === 24 && data.imageServer && data.imageUrl) { //typeId for images and video thumbnails
+            /** This determines how to build the downloadLink, which is different for different typeIds */
+            if (this.typeId === 20 || this.typeId === 21 || this.typeId === 22 || this.typeId === 23) { //all of the typeIds for documents
+                this.downloadLink = [this._auth.getMediaUrl(), this.id, this.typeId].join("/");
+            } else if (data.imageServer && data.imageUrl) { //this is a general fallback, but should work specifically for images and video thumbnails
                 let url = data.imageServer + data.imageUrl + "?cell=1024,1024&rgnn=0,0,1,1&cvt=JPEG";
                 this.downloadLink = this._auth.getUrl() + "/download?imgid=" + this.id + "&url=" + encodeURIComponent(url);
-            } else if (this.typeId === 20 || this.typeId === 21 || this.typeId === 22 || this.typeId === 23) { //all of the typeIds for documents
-                this.downloadLink = [this._auth.getMediaUrl(), this.id, this.typeId].join("/");
             }
         }, (error) => {
             console.error(error);
