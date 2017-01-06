@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input, Output, EventEmitter, AfterViewInit } from '@angular/core';
 import { Subscription }   from 'rxjs/Subscription';
 import * as OpenSeadragon from 'openseadragon';
 
@@ -6,13 +6,14 @@ import { Asset } from '../asset';
 import { AssetService } from '../../shared/assets.service'
 
 declare var ActiveXObject: (type: string) => void;
+declare var kWidget: any;
 
 @Component({
     selector: 'ang-asset-viewer',
     templateUrl: 'asset-viewer.component.html',
     styleUrls: [ './asset-viewer.component.scss' ]
 })
-export class AssetViewerComponent implements OnInit, OnDestroy {
+export class AssetViewerComponent implements OnInit, OnDestroy, AfterViewInit {
 
     @Input() asset: Asset;
     @Input() index: number;
@@ -20,6 +21,7 @@ export class AssetViewerComponent implements OnInit, OnDestroy {
     
     private isFullscreen: boolean = false;
     private isOpenSeaDragonAsset: boolean = true;
+    private isKalturaAsset: boolean = false;
     private mediaLoadingFailed: boolean = false;
     private removableAsset: boolean = false;
     private subscriptions: Subscription[] = [];
@@ -70,6 +72,12 @@ export class AssetViewerComponent implements OnInit, OnDestroy {
         this.subscriptions.forEach((sub) => { sub.unsubscribe(); });
     }
 
+    ngAfterViewInit() {
+      // Script embed is in the template, so we need to wait for it to load
+      setTimeout(() => {
+        this.loadKaltura();
+      }, 1000);
+    }
 
 
     //   this.findAssetField = findAssetField;
@@ -269,42 +277,126 @@ export class AssetViewerComponent implements OnInit, OnDestroy {
     //   this.mediaUrl = $sce.trustAsResourceUrl( this.asset.File.url.replace('stor//','stor/') );
     //   this.mediaType = this.asset.File.format;
       
-    //   this.loadKaltura = function() {
-    //     $http.get(this.asset.File.url.replace('stor//','stor/') + '_kplayer')
-    //       .success(function(data) {
-    //         var htmlPage = data;
-    //         spId = htmlPage.slice(htmlPage.indexOf('/sp/') + 4 );
-    //         spId = spId.slice(0,spId.indexOf('/'));
-    //         htmlPage = htmlPage.slice(htmlPage.indexOf('thumbnail/entry_id/') + 19 );
-    //         kalturaId = htmlPage.slice(0,htmlPage.indexOf('/'));
+      loadKaltura(): void {
+        let kalturaId: string;
+        let targetId = 'video-' + this.asset.id + '-' + this.index;
+        console.log(targetId);
+
+        this._assets.getFpxInfo(this.asset.id, this.asset.typeId)
+          .then(data => {
+            if (data['imageUrl']) {
+              kalturaId = data['imageUrl'].substr(data['imageUrl'].lastIndexOf(':') + 1, data['imageUrl'].length -1);
+            }
+
+            if (kalturaId && kalturaId.length > 0) {
+              this.isKalturaAsset = true;
+              this.isOpenSeaDragonAsset = false;
               
-    //         kWidget.embed({
-    //           'targetId': 'video-' + this.asset['Meta-Id'] + '-' + this.index,
-    //           'wid': '_101',
-    //           'uiconf_id' : '23448189',
-    //           'entry_id' : kalturaId,
-    //           'flashvars': {
-    //             'fullScreenBtn.plugin': false
-    //           },
-    //           'readyCallback' : function(playerId) {
-    //             var kdp = document.getElementById( playerId );
-    //             kdp.kBind( 'mediaError', function(){
-    //               if (findAssetField.filetype(this.asset) === 'aud') {
-    //                 document.getElementById(playerId).style.display = 'none';
-    //                 document.getElementById(playerId.replace('video','audio')).style.display = 'block';
-    //               } else {
-    //                 this.mediaLoadingFailed = true;
-    //                 this.$apply();
-    //               }
-    //             });
-    //           }
-    //         }); 
-    //       })
-    //       .error(function(data) {
-    //         console.log('Failed to find Kaltura!');
-    //         this.mediaLoadingFailed = true;
-    //       });
-    //   };
+              kWidget.embed({
+                  'targetId': targetId,
+                  'wid': '_101',
+                  'uiconf_id' : '23448189',
+                  'entry_id' : kalturaId,
+                  'flashvars': {
+                    // We provide our own fullscreen interface
+                    'fullScreenBtn.plugin': false
+                  },
+                  'readyCallback' : function(playerId) {
+                    console.log('Kaltura player is ready!');
+                    var kdp = document.getElementById( playerId );
+                  // kdp.kBind( 'mediaError', function(){
+                  //   console.error('Media error!');
+                    // if (findAssetField.filetype(this.asset) === 'aud') {
+                    //   document.getElementById(playerId).style.display = 'none';
+                    //   document.getElementById(playerId.replace('video','audio')).style.display = 'block';
+                    // } else {
+                    //   this.mediaLoadingFailed = true;
+                    //   this.$apply();
+                    // }
+                  // });
+                }
+              }); 
+              let kPlayer = document.getElementById(targetId);
+              console.log(kPlayer);
+            }
+            
+
+          })
+          .catch(err => {
+            console.log(err);
+          });
+        // this._assets.getKalturaId()
+        //   $http.get($scope.asset.File.url.replace('stor//','stor/') + '_kplayer')
+        //   .success(function(data) {
+        //     var htmlPage = data;
+        //     spId = htmlPage.slice(htmlPage.indexOf('/sp/') + 4 );
+        //     spId = spId.slice(0,spId.indexOf('/'));
+        //     htmlPage = htmlPage.slice(htmlPage.indexOf('thumbnail/entry_id/') + 19 );
+        //     kalturaId = htmlPage.slice(0,htmlPage.indexOf('/'));
+              
+          // .error(function(data) {
+          //   console.log('Failed to find Kaltura!');
+          //   this.mediaLoadingFailed = true;
+          // });
+
+        // kWidget.embed({
+        //   'targetId': 'video-' + this.asset['Meta-Id'] + '-' + this.index,
+        //   'wid': '_101',
+        //   'uiconf_id' : '23448189',
+        //   'entry_id' : kalturaId,
+        //   'flashvars': {
+        //     'fullScreenBtn.plugin': false
+        //   },
+        //   'readyCallback' : function(playerId) {
+        //     var kdp = document.getElementById( playerId );
+        //     kdp.kBind( 'mediaError', () => {
+        //       this.mediaLoadingFailed = true;
+        //       // if (findAssetField.filetype(this.asset) === 'aud') {
+        //       //   document.getElementById(playerId).style.display = 'none';
+        //       //   document.getElementById(playerId.replace('video','audio')).style.display = 'block';
+        //       // } else {
+        //       //   this.mediaLoadingFailed = true;
+        //       //   this.$apply();
+        //       // }
+        //     });
+        //   }
+        // }); 
+
+        // $http.get(this.asset.File.url.replace('stor//','stor/') + '_kplayer')
+        //   .success(function(data) {
+        //     var htmlPage = data;
+        //     spId = htmlPage.slice(htmlPage.indexOf('/sp/') + 4 );
+        //     spId = spId.slice(0,spId.indexOf('/'));
+        //     htmlPage = htmlPage.slice(htmlPage.indexOf('thumbnail/entry_id/') + 19 );
+        //     kalturaId = htmlPage.slice(0,htmlPage.indexOf('/'));
+              
+        //     kWidget.embed({
+        //       'targetId': 'video-' + this.asset['Meta-Id'] + '-' + this.index,
+        //       'wid': '_101',
+        //       'uiconf_id' : '23448189',
+        //       'entry_id' : kalturaId,
+        //       'flashvars': {
+        //         'fullScreenBtn.plugin': false
+        //       },
+        //       'readyCallback' : function(playerId) {
+        //         var kdp = document.getElementById( playerId );
+        //         kdp.kBind( 'mediaError', function(){
+        //           if (findAssetField.filetype(this.asset) === 'aud') {
+        //             document.getElementById(playerId).style.display = 'none';
+        //             document.getElementById(playerId.replace('video','audio')).style.display = 'block';
+        //           } else {
+        //             this.mediaLoadingFailed = true;
+        //             this.$apply();
+        //           }
+        //         });
+        //       }
+        //     }); 
+        //   })
+        //   .error(function(data) {
+        //     console.log('Failed to find Kaltura!');
+        //     this.mediaLoadingFailed = true;
+        //   });
+      };
         
           
     //   this.isPDF = function() {

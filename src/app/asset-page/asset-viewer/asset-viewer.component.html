@@ -25,19 +25,24 @@
 </div>
 
 <!-- Audio/Video Player -->
-<!--<div class="asset-viewer" ng-hide="mediaLoadingFailed" ng-if="KalturaFileTypes.indexOf(asset.File.type) > -1">
-    <button-group id="imageButtons-{{ asset.id + '-' + index }}" class="top-right vertical icons-block circle">
-        <button class="hide-in-fullscreen" ng-click="togglePresentationMode()" id="fullScreen-{{ asset.id + '-' + index }}" title="Full Screen"><i class="icon-full-screen"></i></button>
-        <button ng-if="removableAsset" class="show-in-fullscreen" ng-click="removeComparedAsset(asset.id)" title="Remove from Comparison"><i class="icon-clear"/></button>
-    </button-group>
+<div class="asset-viewer" [class.hidden]="!isKalturaAsset || mediaLoadingFailed">
+    <!--<div id="imageButtons-{{ asset.id + '-' + index }}" class="button-group top-right vertical icons-block circle">
+        <button class="hide-in-fullscreen" (click)="togglePresentationMode()" id="fullScreen-{{ asset.id + '-' + index }}" title="Full Screen"><i class="icon-full-screen"></i></button>
+        <button *ngIf="removableAsset" class="show-in-fullscreen" (click)="removeComparedAsset(asset.id)" title="Remove from Comparison"><i class="icon-clear"></i></button>
+    </div>-->
 
     <audio id="audio-{{ asset.id + '-' + index }}" class="item video-player" controls style="display:none;">
-        <source src="{{ mediaUrl }}" type="audio/{{ mediaType }}">
-        {{ 'audio_error' | i18next }}
+        <source [attr.src]="mediaUrl" type="audio/{{ mediaType }}">
+        {{ 'audio_error' }}
     </audio>
 
-    <div id="video-{{ asset.id + '-' + index }}" class="item video-player"></div>
-</div>-->
+    <div [attr.id]="'video-' + asset.id + '-' + index" class="item video-player"></div>
+    <!--<kaltura-player [config]="kalturaConfig" 
+                    [videoId]="videoId" 
+                    [secure]="true"
+                    (ready)="doSomethingOnReady(targetId)">
+    </kaltura-player>-->
+</div>
 
 <!-- PDF Viewer -->
 <!--<div class="asset-viewer" ng-hide="mediaLoadingFailed" ng-if="asset.File.type == 'pdf' || asset.File.format == 'pdf'">
@@ -45,7 +50,7 @@
 </div>-->
 
 <!-- Large thumbnail fallback -->
-<div *ngIf="!isOpenSeaDragonAsset || mediaLoadingFailed" id="fallbackViewer" class="asset-viewer" >
+<div *ngIf="(!isOpenSeaDragonAsset && !isKalturaAsset) || mediaLoadingFailed" id="fallbackViewer" class="asset-viewer">
     <img alt="{{ asset.title }}" class="item" src="http://viewer2.artstor.org{{ ( asset.imgURL + '' ).replace('size0','size2') }}" />
 </div>
 <!-- Error if asset failed to load even the fallback thumbnail -->
