@@ -13,7 +13,7 @@ import { AuthService, AssetService } from './../shared';
 export class AssetPage implements OnInit, OnDestroy {
 
     private asset: Asset;
-    private assetIndex: number = 1;
+    private assetIndex: number = 0;
     private totalAssetCount: number = 1;
     private subscriptions: Subscription[] = [];
     private prevAssetResults: any = {};
@@ -73,7 +73,7 @@ export class AssetPage implements OnInit, OnDestroy {
     }
 
     private showNextAsset(): void{
-        if(this.assetIndex < (this.prevAssetResults.thumbnails.length - 1)){
+        if((this.prevAssetResults.thumbnails) && (this.assetIndex < (this.prevAssetResults.thumbnails.length - 1))){
             this._router.navigate(['/asset', this.prevAssetResults.thumbnails[this.assetIndex + 1].objectId]);
         }
     }
