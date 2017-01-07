@@ -20,6 +20,24 @@ export class Asset {
   /** Used for holding asset file properties array from the service response */
   filePropertiesArray: any = [];
 
+  private objectTypeNames: any = {
+      1: 'specimen',
+      2: 'visual',
+      3: 'use',
+      6: 'publication',
+      7: 'synonyms',
+      8: 'people',
+      9: 'repository', 
+      10: 'image',
+      11: 'qtvr',
+      12: 'audio',
+      13: '3d',
+      21: 'powerpoint',
+      22: 'document',
+      23: 'excel',
+      24: 'kaltura'
+  };
+
   constructor(asset_id: string, router ?: Router, _assets ?: AssetService, _auth ?: AuthService) {
     this.id = asset_id;
     this.router = router;
@@ -27,6 +45,13 @@ export class Asset {
     this._auth = _auth;
     this.loadAssetMetaData();
     this.getDownloadLink();
+  }
+
+  /**
+   * Get name for Object Type
+   */
+  public typeName(): string {
+      return this.objectTypeNames[this.typeId];
   }
 
   /** Get asset metadata via service call */
