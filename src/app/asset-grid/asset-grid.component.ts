@@ -145,6 +145,8 @@ export class AssetGrid implements OnInit, OnDestroy {
     this.subscriptions.push(
       this._assets.allResults.subscribe((allResults: any) => {
 
+        console.log(allResults);
+
         // this conditional because allResults from collections page does not have count of assets
         if (allResults.count) {
           this.pagination.totalPages = Math.ceil( allResults.count / this.pagination.pageSize );

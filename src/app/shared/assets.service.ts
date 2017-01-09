@@ -13,6 +13,8 @@ import { Subscription }   from 'rxjs/Subscription';
 import { AuthService } from '../shared/auth.service';
 import { AssetFiltersService } from './../asset-filters/asset-filters.service';
 
+import { ImageGroup } from '.';
+
 @Injectable()
 export class AssetService {
 
@@ -563,5 +565,29 @@ export class AssetService {
             .get(requestUrl, this.defaultOptions)
             .toPromise()
             .then((data) => { return this.extractData(data); });
+    }
+
+    public downloadPpt(ig: ImageGroup): Observable<any> {
+        let requestUrl = [this._auth.getUrl(), 'downloadpptimages'].join("/");
+
+        let imgStr: string = "";
+        ig.thumbnails.forEach((thumb, index, thumbs) => {
+            imgStr += (index + 1) + ":" + thumb.objectId + ":" + "1024x1024";
+            if (index !== thumbs.length - 1) {
+                imgStr += ",";
+            }
+        });
+        console.log(imgStr);
+
+        let requestData = {
+            _method: "createPPT",
+            igId: ig.igId,
+            igName: ig.igName,
+            images: imgStr,
+            zooms: null,
+            zip: false
+        }
+
+        return this.http.post(requestUrl, requestData , this.defaultOptions);
     }
 }

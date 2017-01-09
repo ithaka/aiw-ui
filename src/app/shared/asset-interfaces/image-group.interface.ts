@@ -2,7 +2,7 @@ import { Thumbnail } from './thumbnail.interface';
 
 export interface ImageGroup {
   igId: string;
-  name: string;
+  igName: string;
   count: number;
   thumbnails: Thumbnail[];
   description?: string;

@@ -48,7 +48,6 @@ export class ImageGroupService {
    */
   getGroupDescription(groupId: string): Observable<string> {
     let requestUrl = [this.baseUrl, "imagegroup", groupId].join("/") + "?_method=igdescription";
-    console.log(requestUrl);
 
     return this.http
       .get(requestUrl, this.options)
