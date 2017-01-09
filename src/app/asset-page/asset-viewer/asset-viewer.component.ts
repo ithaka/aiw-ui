@@ -50,8 +50,6 @@ export class AssetViewerComponent implements OnInit, OnDestroy, AfterViewInit {
           console.log(error);
         })
       );
-     
-     
 
         // Events for fullscreen/Presentation mode
         document.addEventListener('fullscreenchange', () =>{
@@ -245,7 +243,8 @@ export class AssetViewerComponent implements OnInit, OnDestroy, AfterViewInit {
         let kalturaId: string;
         let targetId = 'video-' + this.asset.id + '-' + this.index;
 
-        this._assets.getFpxInfo(this.asset.id, this.asset.typeId)
+        // We gotta always say it's type 24, the type id for Kaltura!
+        this._assets.getFpxInfo(this.asset.id, 24)
           .then(data => {
             if (data['imageUrl']) {
               kalturaId = data['imageUrl'].substr(data['imageUrl'].lastIndexOf(':') + 1, data['imageUrl'].length -1);
