@@ -6,6 +6,8 @@ import { Subscription }   from 'rxjs/Subscription';
 import { ImageGroupService } from './image-group.service';
 import { AssetService } from './../shared/assets.service';
 
+import { ImageGroup } from './../shared';
+
 @Component({
   selector: 'ang-image-group', 
   providers: [ImageGroupService],
@@ -42,6 +44,12 @@ export class ImageGroupPage implements OnInit, OnDestroy {
             .catch((error) => { console.error(error); });
         }
         
+      })
+    );
+
+    this.subscriptions.push(
+      this._assets.allResults.subscribe((results: any) => {
+        console.log(results);
       })
     );
   }
