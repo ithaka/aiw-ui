@@ -344,7 +344,6 @@ export class AssetService {
         this.search(term, this.activeSort.index)
             .then(
                 (res) => {
-                console.log(res);
                 this._filters.generateColTypeFacets( res.collTypeFacets );
                 this._filters.generateGeoFilters( res.geographyFacets );
                 this._filters.generateDateFacets( res.dateFacets );

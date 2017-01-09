@@ -2,7 +2,7 @@ import { NgModule, ApplicationRef } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
-import { RouterModule } from '@angular/router';
+import { RouterModule, RouteReuseStrategy } from '@angular/router';
 import { removeNgStyles, createNewHosts, createInputTransfer } from '@angularclass/hmr';
 
 /*
@@ -35,7 +35,7 @@ import { BrowsePage, LibraryComponent, BrowseCommonsComponent,
 import { AssetPage, AgreeModalComponent } from './asset-page';
 import { AssetViewerComponent } from './asset-page/asset-viewer';
 import { AssociatedPage } from './associated-page';
-import { ImageGroupPage } from './image-group-page';
+import { ImageGroupPage, PptModalComponent } from './image-group-page';
 import { Login } from './login';
 import { About } from './about';
 import { NoContent } from './no-content';
@@ -45,6 +45,7 @@ import { AuthService } from './shared/auth.service';
 import { AssetService } from './shared/assets.service';
 import { AssetFiltersService } from './asset-filters/asset-filters.service';
 import { TagsService } from './browse-page/tags.service';
+import { CustomReuseStrategy } from './reuse-strategy';
 
 const APP_PROVIDERS = [
   ...APP_RESOLVER_PROVIDERS,
@@ -53,6 +54,7 @@ const APP_PROVIDERS = [
   AuthService,
   AssetFiltersService,
   TagsService
+  // { provide: RouteReuseStrategy, useClass: CustomReuseStrategy } // to be implemented later
 ];
 
 type StoreType = {
@@ -90,6 +92,7 @@ type StoreType = {
     AssetFilters,
     AssetGrid,
     ImageGroupPage,
+    PptModalComponent,
     Login,
     Home,
     NoContent
