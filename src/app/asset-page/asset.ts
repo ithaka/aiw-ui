@@ -1,4 +1,5 @@
 import { Router } from '@angular/router';
+import { Observable, Subject } from 'rxjs/Rx';
 
 import { AssetService, AuthService } from './../shared';
 
@@ -15,6 +16,11 @@ export class Asset {
   downloadLink: string;
   tileSource: any;
 
+  private metadataLoaded = false;
+  private imageSourceLoaded = false;
+  private dataLoadedSource = new Subject<boolean>();
+  public isDataLoaded = this.dataLoadedSource.asObservable();
+  
   /** Used for holding asset metadata array from the service response */
   metaDataArray: any = [];
   /** Used for holding asset file properties array from the service response */
@@ -66,6 +72,9 @@ export class Asset {
                   this.imgURL = res.imageUrl;
 
                   document.title = this.title;
+
+                  this.metadataLoaded = true;
+                  this.dataLoadedSource.next(this.metadataLoaded && this.imageSourceLoaded);
               }
           })
           .catch(function(err) {
@@ -91,7 +100,7 @@ export class Asset {
                 throw new Error("No data returned from image source call!");
             }
             this.typeId = data.objectTypeId;
-
+            
             /** This determines how to build the downloadLink, which is different for different typeIds */
             if (this.typeId === 20 || this.typeId === 21 || this.typeId === 22 || this.typeId === 23) { //all of the typeIds for documents
                 this.downloadLink = [this._auth.getMediaUrl(), this.id, this.typeId].join("/");
@@ -99,6 +108,9 @@ export class Asset {
                 let url = data.imageServer + data.imageUrl + "?cell=1024,1024&rgnn=0,0,1,1&cvt=JPEG";
                 this.downloadLink = this._auth.getUrl() + "/download?imgid=" + this.id + "&url=" + encodeURIComponent(url);
             }
+
+            this.imageSourceLoaded = true;
+            this.dataLoadedSource.next(this.metadataLoaded && this.imageSourceLoaded);
         }, (error) => {
             console.error(error);
         });

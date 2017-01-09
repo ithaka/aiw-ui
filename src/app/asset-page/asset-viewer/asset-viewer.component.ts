@@ -20,8 +20,8 @@ export class AssetViewerComponent implements OnInit, OnDestroy, AfterViewInit {
     @Output() fullscreenChange =  new EventEmitter();
     
     private isLoading: boolean = true;
-
     private isFullscreen: boolean = false;
+    private openSeaDragonReady: boolean = false;
     private isOpenSeaDragonAsset: boolean = false;
     private isKalturaAsset: boolean = false;
     private mediaLoadingFailed: boolean = false;
@@ -35,36 +35,23 @@ export class AssetViewerComponent implements OnInit, OnDestroy, AfterViewInit {
 
     ngOnInit() {
       console.log(this.asset);
-      //  this._assets.getFileProperties(this.asset.id)
-      //       .then(data => {
-      //           console.log(data);
-      //           console.log( data.match('table') );
-      //       })
-      //       .catch(error => {
-      //           console.error(error);
-      //       });
 
-      // PROBLEM HERE
-      console.log(this.asset.typeName());
-      console.log(this.asset.typeName);
-
-        // Object types that need loaders
-        switch(this.asset.typeName()) {
-          // default:
-          //   this.mediaLoadingFailed = true;
-          case 'image':
-            // Image, try IIF
-            this.loadIIIF();
-            break;
-          case 'audio':
-            // Kaltura media
-            this.loadKaltura();
-            break;
-          case 'kaltura':
-            // Kaltura media
-            this.loadKaltura();
-            break;
-        }
+      // Wait for the asset to have its metadata
+      this.subscriptions.push(
+        this.asset.isDataLoaded.subscribe(assetInfoLoaded => {
+          if (assetInfoLoaded === true && this.isLoading) {
+              // PROBLEM HERE
+          console.log(this.asset.typeId);
+          console.log(this.asset.typeName());
+          console.log(this.asset.typeName);
+          this.loadViewer();
+          }
+        }, error =>{
+          console.log(error);
+        })
+      );
+     
+     
 
         // Events for fullscreen/Presentation mode
         document.addEventListener('fullscreenchange', () =>{
@@ -90,6 +77,26 @@ export class AssetViewerComponent implements OnInit, OnDestroy, AfterViewInit {
       //   this.loadKaltura();
       // }, 1000);
     }
+
+    private loadViewer(): void {
+      // Object types that need loaders
+      switch(this.asset.typeName()) {
+        // default:
+        //   this.mediaLoadingFailed = true;
+        case 'image':
+          // Image, try IIF
+          this.loadIIIF();
+          break;
+        case 'audio':
+          // Kaltura media
+          this.loadKaltura();
+          break;
+        case 'kaltura':
+          // Kaltura media
+          this.loadKaltura();
+          break;
+        }
+      }
 
 
     /**
@@ -237,7 +244,6 @@ export class AssetViewerComponent implements OnInit, OnDestroy, AfterViewInit {
     private loadKaltura(): void {
         let kalturaId: string;
         let targetId = 'video-' + this.asset.id + '-' + this.index;
-        console.log(targetId);
 
         this._assets.getFpxInfo(this.asset.id, this.asset.typeId)
           .then(data => {
