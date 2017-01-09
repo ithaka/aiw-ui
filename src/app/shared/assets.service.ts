@@ -25,6 +25,10 @@ export class AssetService {
     private allResultsSource = new BehaviorSubject<any[]>(this.allResultsValue);
     public allResults = this.allResultsSource.asObservable();
 
+    // For loading the assets in the next page - Asset Page
+    public lastSearchParams: any = {};
+    public searchPageSize: number = 24;
+
     /**
      * urlParams is used as an enum for special parameters
      */
@@ -50,7 +54,7 @@ export class AssetService {
         locker: Locker,
         private _auth: AuthService
     ) {
-        this._storage = locker;
+        this._storage = locker.useDriver(Locker.DRIVERS.LOCAL);
         this.urlParams = {
             term: "",
             pageSize: 24,
@@ -103,11 +107,36 @@ export class AssetService {
         return body || { };
     }
 
+    public loadPrevAssetPage(): void{
+        let currentParamsObj: Params = Object.assign({}, this.lastSearchParams);
+        
+        if(this.lastSearchParams.currentPage){
+            currentParamsObj['currentPage']--;
+        }
+
+        this.queryAll(currentParamsObj);
+    }
+    
+    public loadNextAssetPage(): void{
+        let currentParamsObj: Params = Object.assign({}, this.lastSearchParams);
+        
+        if(this.lastSearchParams.currentPage){
+            currentParamsObj['currentPage']++;
+        }
+        else{
+            currentParamsObj['currentPage'] = 2;
+        }
+        this.queryAll(currentParamsObj);
+    }
+
     /**
      * Determines which service to call based on which route parameters exist
      * @param params Object conaining all route params
      */
     public queryAll(params: any) {
+        this.lastSearchParams = params;
+        this.searchPageSize = this.urlParams.pageSize;
+
         this.readUrlParams(params);
 
         if (params.hasOwnProperty("igId") && params.hasOwnProperty("objectId")) {

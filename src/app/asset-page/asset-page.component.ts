@@ -14,9 +14,12 @@ export class AssetPage implements OnInit, OnDestroy {
 
     private asset: Asset;
     private assetIndex: number = 0;
+    private assetNumber: number = 0;
     private totalAssetCount: number = 1;
     private subscriptions: Subscription[] = [];
     private prevAssetResults: any = {};
+    private loadArrayFirstAsset: Boolean = false;
+    private loadArrayLastAsset: Boolean = false;
 
     /** controls whether or not to show the agreement modal before download */
     // private downloadAuth: boolean = false;
@@ -32,6 +35,7 @@ export class AssetPage implements OnInit, OnDestroy {
                 if(this.prevAssetResults.thumbnails){
                     this.totalAssetCount = this.prevAssetResults.count ? this.prevAssetResults.count : this.prevAssetResults.thumbnails.length;
                     this.assetIndex = this.currentAssetIndex();
+                    this.assetNumber = this._assets.lastSearchParams.currentPage ? this.assetIndex + 1 + ((this._assets.lastSearchParams.currentPage - 1) * this._assets.searchPageSize) : this.assetIndex + 1;
                 }
             })
         );
@@ -40,9 +44,25 @@ export class AssetPage implements OnInit, OnDestroy {
         this.subscriptions.push(
           this._assets.allResults.subscribe((allResults: any) => {
               if(allResults.thumbnails){
+                  console.log(allResults);
                   this.prevAssetResults = allResults;
-                  this.totalAssetCount = this.prevAssetResults.count ? this.prevAssetResults.count : this.prevAssetResults.thumbnails.length;
-                  this.assetIndex = this.currentAssetIndex();
+                  if(this.loadArrayFirstAsset){
+                      this.loadArrayFirstAsset = false;
+                      if((this.prevAssetResults.thumbnails) && (this.prevAssetResults.thumbnails.length > 0)){
+                          this._router.navigate(['/asset', this.prevAssetResults.thumbnails[0].objectId]);
+                      }
+                  }
+                  else if(this.loadArrayLastAsset){
+                      this.loadArrayLastAsset = false;
+                      if((this.prevAssetResults.thumbnails) && (this.prevAssetResults.thumbnails.length > 0)){
+                          this._router.navigate(['/asset', this.prevAssetResults.thumbnails[this.prevAssetResults.thumbnails.length - 1].objectId]);
+                      }
+                  }
+                  else{
+                    this.totalAssetCount = this.prevAssetResults.count ? this.prevAssetResults.count : this.prevAssetResults.thumbnails.length;
+                    this.assetIndex = this.currentAssetIndex();
+                    this.assetNumber = this._assets.lastSearchParams.currentPage ? this.assetIndex + 1 + ((this._assets.lastSearchParams.currentPage - 1) * this._assets.searchPageSize) : this.assetIndex + 1;
+                  }
               }
           })
         );
@@ -67,14 +87,26 @@ export class AssetPage implements OnInit, OnDestroy {
     }
     
     private showPrevAsset(): void{
-        if((this.assetIndex > 0)){
-            this._router.navigate(['/asset', this.prevAssetResults.thumbnails[this.assetIndex - 1].objectId]);
+        if(this.assetNumber > 1){
+            if((this.assetIndex > 0)){
+                this._router.navigate(['/asset', this.prevAssetResults.thumbnails[this.assetIndex - 1].objectId]);
+            }
+            else if(this.assetIndex == 0){
+                this.loadArrayLastAsset = true;
+                this._assets.loadPrevAssetPage();
+            }
         }
     }
 
     private showNextAsset(): void{
-        if((this.prevAssetResults.thumbnails) && (this.assetIndex < (this.prevAssetResults.thumbnails.length - 1))){
-            this._router.navigate(['/asset', this.prevAssetResults.thumbnails[this.assetIndex + 1].objectId]);
+        if(this.assetNumber < this.totalAssetCount){
+            if((this.prevAssetResults.thumbnails) && (this.assetIndex < (this.prevAssetResults.thumbnails.length - 1))){
+                this._router.navigate(['/asset', this.prevAssetResults.thumbnails[this.assetIndex + 1].objectId]);
+            }
+            else if((this.prevAssetResults.thumbnails) && (this.assetIndex == (this.prevAssetResults.thumbnails.length - 1))){
+                this.loadArrayFirstAsset = true;
+                this._assets.loadNextAssetPage();
+            }
         }
     }
 }
