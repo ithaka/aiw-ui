@@ -45,10 +45,8 @@ export class AssetViewerComponent implements OnInit, OnDestroy, AfterViewInit {
         // Wait for the asset to have its metadata
         this.subscriptions.push(
             this.asset.isDataLoaded.subscribe(assetInfoLoaded => {
-                console.log(assetInfoLoaded);
                 if (assetInfoLoaded === true && this.isLoading) {
                     this.loadViewer();
-                    console.log("g2g");
                 }
             }, error => {
                 console.log(error);
@@ -82,8 +80,9 @@ export class AssetViewerComponent implements OnInit, OnDestroy, AfterViewInit {
     private loadViewer(): void {
         // Object types that need loaders
         switch (this.asset.typeName()) {
-            // default:
-            //   this.mediaLoadingFailed = true;
+            default:
+                // Display thumbnail
+                this.mediaLoadingFailed = true;
             case 'image':
                 // Image, try IIF
                 this.loadIIIF();
