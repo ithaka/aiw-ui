@@ -12,7 +12,8 @@ import { AuthService, AssetService } from './../shared';
 })
 export class AssetPage implements OnInit, OnDestroy {
 
-    private asset: Asset;
+    // Array to support multiple viewers on the page
+    private assets: Asset[] = [];
     private assetIndex: number = 0;
     private assetNumber: number = 0;
     private totalAssetCount: number = 1;
@@ -30,7 +31,11 @@ export class AssetPage implements OnInit, OnDestroy {
     ngOnInit() {
         this.subscriptions.push(
             this.route.params.subscribe((routeParams) => {
-                this.asset = new Asset(routeParams["assetId"], this._assets, this._auth);
+                if (this.assets[0]) {
+                    this.assets.splice(0);
+                }
+                this.assets[0] = new Asset(routeParams["assetId"], this._assets, this._auth);
+
                 if(this.prevAssetResults.thumbnails){
                     this.totalAssetCount = this.prevAssetResults.count ? this.prevAssetResults.count : this.prevAssetResults.thumbnails.length;
                     this.assetIndex = this.currentAssetIndex();
@@ -90,7 +95,7 @@ export class AssetPage implements OnInit, OnDestroy {
     // Calculate the index of current asset from the previous assets result set
     private currentAssetIndex(): number{
         for(var i = 0; i < this.prevAssetResults.thumbnails.length; i++){
-            if(this.prevAssetResults.thumbnails[i].objectId == this.asset.id){
+            if(this.prevAssetResults.thumbnails[i].objectId == this.assets[0].id){
                 return i;
             }
         }

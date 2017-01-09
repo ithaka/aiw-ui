@@ -2,39 +2,39 @@
     <!--View prev/next asset-->
     <div class="col-md-12 title-nav-cntnr">
         <i title="Previous in results" (click)="showPrevAsset()" class="icon icon-direction icon-left"></i>
-        <div class="title">{{ asset.title }}</div>
+        <div class="title">{{ assets[0].title }}</div>
         <i title="Next in results" (click)="showNextAsset()" class="icon icon-direction icon-right"></i>
         <div class="page-tooltip">{{ assetNumber }} OF {{ totalAssetCount }}</div>
     </div>
     <!--Asset Viewer Row-->
     <div class="col-md-8">
         <div class="row">
-            <ang-asset-viewer [asset]="asset" (fullscreenChange)="updateFullscreenVar($event)" index="1"></ang-asset-viewer>
+            <ang-asset-viewer *ngFor="let asset of assets" [asset]="asset" (fullscreenChange)="updateFullscreenVar($event)" index="1"></ang-asset-viewer>
         </div>
         <!--If the user has not accepted the agreement, show modal when clicked, otherwise download immediately-->
-        <a *ngIf="asset.downloadLink" 
-            [attr.href]="downloadAuth() ? asset.downloadLink : null"
-            [attr.download]="downloadAuth() ? asset.title : null"
+        <a *ngIf="assets[0].downloadLink" 
+            [attr.href]="downloadAuth() ? assets[0].downloadLink : null"
+            [attr.download]="downloadAuth() ? assets[0].title : null"
             (click)="!downloadAuth() ? showAgreeModal = true : null"
         >
             <i id="downloadAssetLink" class="icon icon-download" ></i>
-        </a><!--setting name to asset.title does not currently work - it is always named "download" - see below-->
+        </a><!--setting name to assets[0].title does not currently work - it is always named "download" - see below-->
         <!--http://stackoverflow.com/questions/33909763/download-attribute-with-a-file-name-not-working-->
     </div>
     <!--Asset Metadata Row-->
     <div class="col-md-4">
         <div class="row pb-1">
-            <div class="row-hdr pt-1" *ngIf="asset.metaDataArray.length > 0">Object Details</div>
+            <div class="row-hdr pt-1" *ngIf="assets[0].metaDataArray.length > 0">Object Details</div>
             <!--Loop through metaData Array-->
-            <div class="meta-block" *ngFor="let metadataObj of asset.metaDataArray">
+            <div class="meta-block" *ngFor="let metadataObj of assets[0].metaDataArray">
                 <div [attr.id]="cleanId(metadataObj.fieldName)" class="label">{{ metadataObj.fieldName }}
                  <div class="value" [innerHTML]="metadataObj.fieldValue"></div>
                 </div>
             </div>
 
-            <div class="row-hdr pt-1" *ngIf="asset.filePropertiesArray.length > 0">File Properties</div>
+            <div class="row-hdr pt-1" *ngIf="assets[0].filePropertiesArray.length > 0">File Properties</div>
             <!--Loop through File Properties Array-->
-            <div class="meta-block" *ngFor="let filePropObj of asset.filePropertiesArray">
+            <div class="meta-block" *ngFor="let filePropObj of assets[0].filePropertiesArray">
                 <div [attr.id]="cleanId(filePropObj.fieldName)" class="label">{{ filePropObj.fieldName }}
                     <div class="value" [innerHTML]="filePropObj.fieldValue"></div>
                 </div>
