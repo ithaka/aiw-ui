@@ -53,8 +53,8 @@ const APP_PROVIDERS = [
   AssetService,
   AuthService,
   AssetFiltersService,
-  TagsService,
-  { provide: RouteReuseStrategy, useClass: CustomReuseStrategy }
+  TagsService
+  // { provide: RouteReuseStrategy, useClass: CustomReuseStrategy } // to be implemented later
 ];
 
 type StoreType = {
