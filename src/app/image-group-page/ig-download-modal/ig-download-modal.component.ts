@@ -3,8 +3,8 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { AssetService, ImageGroup } from './../../shared';
 
 @Component({
-  selector: 'ang-ppt-modal',
-  templateUrl: 'ppt-modal.component.html',
+  selector: 'ang-ig-download-modal',
+  templateUrl: 'ig-download-modal.component.html',
   styles: [`
     .modal {
       display: block;
