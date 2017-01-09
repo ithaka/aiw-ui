@@ -1,5 +1,10 @@
 //https://www.softwarearchitekt.at/post/2016/12/02/sticky-routes-in-angular-2-3-with-routereusestrategy.aspx
 
+/**
+ * reuse-strategy.ts
+ * by corbfon 1/6/17
+ */
+
 import { ActivatedRouteSnapshot, RouteReuseStrategy, DetachedRouteHandle } from '@angular/router';
 
 /** Object which can store both: 
@@ -29,8 +34,9 @@ export class CustomReuseStrategy implements RouteReuseStrategy {
      * @returns boolean indicating that we want to (true) or do not want to (false) store that route
      */
     shouldDetach(route: ActivatedRouteSnapshot): boolean {
-        console.log("detaching", route, "return: ", true);
-        return true;
+        let detach: boolean = true;
+        console.log("detaching", route, "return: ", detach);
+        return detach;
     }
 
     /**
@@ -95,13 +101,13 @@ export class CustomReuseStrategy implements RouteReuseStrategy {
     }
 
     /** 
-     * Determines whether or not the route should be reused
+     * Determines whether or not the current route should be reused
      * @param future The route the user is going to, as triggered by the router
      * @param curr The route the user is currently on
-     * @returns boolean indicating whether or not to return route: it seems to be backward of what is logical, with a value of false triggering this.retrieve
+     * @returns boolean basically indicating true if the user intends to leave the current route
      */
     shouldReuseRoute(future: ActivatedRouteSnapshot, curr: ActivatedRouteSnapshot): boolean {
-        console.log('deciding between', future.routeConfig, "and", curr.routeConfig, "return: ", future.routeConfig === curr.routeConfig);
+        console.log("deciding to reuse", "future", future.routeConfig, "current", curr.routeConfig, "return: ", future.routeConfig === curr.routeConfig);
         return future.routeConfig === curr.routeConfig;
     }
 
