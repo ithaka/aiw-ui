@@ -1,332 +1,288 @@
-import { Component, OnInit, OnDestroy, Input } from '@angular/core';
-import { Subscription }   from 'rxjs/Subscription';
+import {
+    Component,
+    OnInit,
+    OnDestroy,
+    Input,
+    Output,
+    EventEmitter,
+    AfterViewInit
+} from '@angular/core';
+import { Subscription } from 'rxjs/Subscription';
 import * as OpenSeadragon from 'openseadragon';
 
 import { Asset } from '../asset';
 import { AssetService } from '../../shared/assets.service'
 
+declare var ActiveXObject: (type: string) => void;
+declare var kWidget: any;
+
 @Component({
     selector: 'ang-asset-viewer',
     templateUrl: 'asset-viewer.component.html',
-    styleUrls: [ './asset-viewer.component.scss' ]
+    styleUrls: ['./asset-viewer.component.scss']
 })
-export class AssetViewerComponent implements OnInit, OnDestroy {
+export class AssetViewerComponent implements OnInit, OnDestroy, AfterViewInit {
 
     @Input() asset: Asset;
     @Input() index: number;
+    @Output() fullscreenChange = new EventEmitter();
 
+    private isLoading: boolean = true;
+    private isFullscreen: boolean = false;
+    private openSeaDragonReady: boolean = false;
+    private isOpenSeaDragonAsset: boolean = false;
+    private isKalturaAsset: boolean = false;
+    private mediaLoadingFailed: boolean = false;
+    private removableAsset: boolean = false;
     private subscriptions: Subscription[] = [];
     private fallbackFailed: boolean = false;
-    private tileSource: string; //: any[] = [];
+    private tileSource: string;
+    private lastZoomValue: number;
 
-
-    public isOpenSeaDragonAsset: boolean = true;
-    public mediaLoadingFailed: boolean = false;
-    removableAsset: boolean = false;
-
-    constructor(private _assets: AssetService) { }
+    constructor(private _assets: AssetService) {}
 
     ngOnInit() {
-        // this._assets.getFileProperties(this.asset.id)
-        //     .then(data => {
-        //         console.log( data.match('table') );
-        //     })
-        //     .catch(error => {
-        //         console.error(error);
-        //     });
+        // Wait for the asset to have its metadata
+        this.subscriptions.push(
+            this.asset.isDataLoaded.subscribe(assetInfoLoaded => {
+                console.log(assetInfoLoaded);
+                if (assetInfoLoaded === true && this.isLoading) {
+                    this.loadViewer();
+                    console.log("g2g");
+                }
+            }, error => {
+                console.log(error);
+            })
+        );
 
+        // Events for fullscreen/Presentation mode
+        document.addEventListener('fullscreenchange', () => {
+            this.changeHandler();
+        }, false);
+
+        document.addEventListener('mozfullscreenchange', () => {
+            this.changeHandler();
+        }, false);
+
+        document.addEventListener('webkitfullscreenchange', () => {
+            this.changeHandler();
+        }, false);
+    }
+
+    ngOnDestroy() {
+        this.subscriptions.forEach((sub) => {
+            sub.unsubscribe();
+        });
+    }
+
+    ngAfterViewInit() {
+      
+    }
+
+    private loadViewer(): void {
+        // Object types that need loaders
+        switch (this.asset.typeName()) {
+            // default:
+            //   this.mediaLoadingFailed = true;
+            case 'image':
+                // Image, try IIF
+                this.loadIIIF();
+                break;
+            case 'audio':
+                // Kaltura media
+                this.loadKaltura();
+                break;
+            case 'kaltura':
+                // Kaltura media
+                this.loadKaltura();
+                break;
+        }
+    }
+
+
+    /**
+     * Gets information needed to load IIIF viewers, such as OpenSeaDragon
+     */
+    private loadIIIF(): void {
         /**
          * Get tilesource/url for use with OpenSeaDragon IIIF Viewer
          */
         this.subscriptions.push(
             this._assets.getImageSource(this.asset.id)
-                .subscribe(data => {
-                    if (data) {
-                        let imgPath = '/' + data['imageUrl'].substring(0, data['imageUrl'].lastIndexOf('.fpx') + 4);
-                        this.tileSource = 'https://tsprod.artstor.org/rosa-iiif-endpoint-1.0-SNAPSHOT/fpx' + encodeURIComponent( imgPath ) + '/info.json';
-                        this.loadOpenSea();
-                    }
-                })
+            .subscribe(data => {
+                if (data) {
+                    let imgPath = '/' + data['imageUrl'].substring(0, data['imageUrl'].lastIndexOf('.fpx') + 4);
+                    this.tileSource = 'https://tsprod.artstor.org/rosa-iiif-endpoint-1.0-SNAPSHOT/fpx' + encodeURIComponent(imgPath) + '/info.json';
+                    this.loadOpenSea();
+                }
+            })
         );
     }
 
-    ngOnDestroy() {
-        this.subscriptions.forEach((sub) => { sub.unsubscribe(); });
-    }
-
-
-
-    //   $scope.findAssetField = findAssetField;
-    //   $scope.OSDFileTypes = ["img","image","file","pdf","ppt","doc"];
-    //   $scope.KalturaFileTypes = ["video", "audio", "vid", "aud"];
-      
-    //   var assetLoaded = false;
-    //   var tilesource = [];
-
-    //   $timeout( function() {
-    //     $scope.$watch($scope.asset, function() {
-    //       if ($scope.asset && $scope.asset['Meta-Id'] && !assetLoaded) {
-    //         assetLoaded = true;
-    //         $http.get('http://catalog.sharedshelf.artstor.org/iiifmap/ss/' + $scope.asset['Meta-Id'])
-    //           .success(function(res) {
-    //             tileSource = res.info_url;
-    //             if ($scope.KalturaFileTypes.indexOf(findAssetField.filetype($scope.asset)) > 0) {
-    //               $scope.loadKaltura();  
-    //             } else {
-    //               $scope.loadOpenSea($scope.asset['Meta-Id']);
-    //             }
-    //         })
-    //         .error(function(res) {
-    //           // No IIIF URLs
-    //           $log.warn("No IIIF tiles to load");
-    //           $scope.mediaLoadingFailed = true;
-    //         });  
-    //       }
-    //     });
-    //   });
-
-    //   function setColumnHeight() {
-    //     // Column height adjustment
-    //     if(!$scope.fullscreen && $scope.asset && $scope.asset['Meta-Id'] && document.getElementById('wrap-' + $scope.asset['Meta-Id'] + '-' + $scope.index) ){
-    //       document.getElementById('wrap-' + $scope.asset['Meta-Id'] + '-' + $scope.index).style.height = ( window.innerHeight - 162) + 'px';
-    //       document.getElementById('columnTwoContent').style.minHeight = ( window.innerHeight - 50) + 'px';
-    //     }
-    //   }
-    
     /**
      * Loads the OpenSeaDragon on element at 'viewer-' + id
      * - Requires this.asset to have an id
      */
-    loadOpenSea = function():void {
+    private loadOpenSea(): void {
         this.isOpenSeaDragonAsset = true;
         // OpenSeaDragon Initializer
-        let id = this.asset.id  + '-' + this.index;
+        let id = this.asset.id + '-' + this.index;
 
         var viewer = new OpenSeadragon({
-          id: 'viewer-' + id,
-          // prefix for Icon Images
-          prefixUrl: 'assets/img/osd/',
-          tileSources: this.tileSource,
-          gestureSettingsMouse : {
-            scrollToZoom : true,
-            pinchToZoom: true
-          },
-          controlsFadeLength: 500,
-        //   debugMode: true,
-          autoHideControls: false,
-          zoomInButton: 'zoomIn-' + id,
-          zoomOutButton: 'zoomOut-' + id,
-          homeButton: 'zoomFit-' + id,
-          sequenceMode: true,
-          initialPage: 0,
-          nextButton: 'nextButton'
+            id: 'viewer-' + id,
+            // prefix for Icon Images
+            prefixUrl: 'assets/img/osd/',
+            tileSources: this.tileSource,
+            gestureSettingsMouse: {
+                scrollToZoom: true,
+                pinchToZoom: true
+            },
+            controlsFadeLength: 500,
+            //   debugMode: true,
+            autoHideControls: false,
+            zoomInButton: 'zoomIn-' + id,
+            zoomOutButton: 'zoomOut-' + id,
+            homeButton: 'zoomFit-' + id,
+            sequenceMode: true,
+            initialPage: 0,
+            nextButton: 'nextButton'
         });
 
         // ---- Use handler in case other error crops up
         viewer.addOnceHandler('open-failed', () => {
-          console.warn("Opening source failed");
-          this.mediaLoadingFailed = true;
-          viewer.destroy();
+            console.warn("Opening source failed");
+            this.mediaLoadingFailed = true;
+            viewer.destroy();
         });
-        
+
+        viewer.addHandler('zoom', (value) => {
+            this.lastZoomValue = value.zoom;
+        });
+
         viewer.addOnceHandler('tile-load-failed', () => {
-          console.warn("Loading tiles failed");
-          this.mediaLoadingFailed = true;
-          viewer.destroy();
+            console.warn("Loading tiles failed");
+            this.mediaLoadingFailed = true;
+            viewer.destroy();
         });
 
         viewer.addOnceHandler('ready', () => {
-          console.info("Tiles are ready");
-          this.openSeaDragonReady = true;
+            console.info("Tiles are ready");
+            this.openSeaDragonReady = true;
         });
 
-        if(viewer && viewer.ButtonGroup){
+        if (viewer && viewer.ButtonGroup) {
             viewer.ButtonGroup.element.addClass('button-group');
         }
-
-        console.log(viewer);
     }
 
-    //     if( $scope.index == 1) {
-    //        hotkeys      
-    //         .bindTo($scope)
-    //         .add({
-    //           combo: ['+','='],
-    //           description: 'Image viewer: Zoom In',
-    //           callback: function() {
-    //             viewer.viewport.zoomBy(1.2);
-    //           }
-    //         })
-    //         .add({
-    //           combo: ['-'],
-    //           description: 'Image viewer: Zoom Out',
-    //           callback: function() {
-    //             viewer.viewport.zoomBy(0.8);
-    //           }
-    //         });
-    //     }
-        
-    //   window.addEventListener('resize', setColumnHeight);
+    private requestFullScreen(el): void {
+        // Supports most browsers and their versions.
+        var requestMethod = el.requestFullScreen || el.webkitRequestFullScreen || el.mozRequestFullScreen || el.msRequestFullScreen;
 
-    //   function requestFullScreen(el) {
-    //     // Supports most browsers and their versions.
-    //     var requestMethod = el.requestFullScreen || el.webkitRequestFullScreen || el.mozRequestFullScreen || el.msRequestFullScreen;
+        if (requestMethod) { // Native full screen.
+            requestMethod.call(el);
+        } else if (window['ActiveXObject'] && typeof window['ActiveXObject'] !== "undefined") { // Older IE.
+            var wscript = new ActiveXObject("WScript.Shell");
+            if (wscript !== null) {
+                wscript.SendKeys("{F11}");
+            }
+        }
+    }
 
-    //     if (requestMethod) { // Native full screen.
-    //       requestMethod.call(el);
-    //     } else if (typeof window.ActiveXObject !== "undefined") { // Older IE.
-    //       var wscript = new ActiveXObject("WScript.Shell");
-    //       if (wscript !== null) {
-    //           wscript.SendKeys("{F11}");
-    //       }
-    //     }
-    //   }
+    private exitFullScreen(): void {
+        // Being permissive to reference possible Document methods
+        let document: any = window.document;
+        if (document.mozCancelFullScreen) {
+            document.mozCancelFullScreen();
+        } else if (document.webkitExitFullscreen) {
+            document.webkitExitFullscreen();
+        } else if (document.exitFullscreen) {
+            document.exitFullscreen();
+        }
+    }
 
-    //   function exitFullScreen() {
-    //     if (document.cancelFullScreen) {
-    //       document.cancelFullScreen();
-    //     } else if (document.mozCancelFullScreen) {
-    //       document.mozCancelFullScreen();
-    //     } else if (document.webkitCancelFullScreen) {
-    //       document.webkitCancelFullScreen();
-    //     }
-    //   }
+    private changeHandler() {
+        if (document['webkitIsFullScreen'] || document['mozFullScreen'] || document['fullscreen']) {
+            this.setFullscreen(true);
+        } else {
+            this.setFullscreen(false);
+        }
+    }
 
+    private togglePresentationMode(): void {
+        // Make the body go full screen.
+        var elem = document.body;
 
-    //   $scope.fullscreen = false; //false;
+        if (!this.isFullscreen) {
+            this.requestFullScreen(elem);
+            this.setFullscreen(true);
+        } else {
+            this.exitFullScreen();
+            this.setFullscreen(false);
+        }
+    };
 
-    //   var changeHandler = function(){                      
-    //     if (document.webkitIsFullScreen || document.mozFullScreen || document.fullscreen) {
-    //       $scope.fullscreen = true;
-    //     } else {
-    //       $scope.fullscreen = false;
-    //       $timeout(function() {
-    //         // Fix for when setColumnHeight runs during fullscreen mode
-    //         // 3s wait to ensure it runs after exiting fullscreen animation is complete
-    //         setColumnHeight();
-    //       }, 3000);
-    //     }  
-    //     // Angular isn't applying scope after the 'ESC' to exit key event
-    //     $scope.$apply();     
-    //   };
+    /**
+     * Setter for isFullscreen
+     * - Ensures event is sent out to the Asset Page!
+     */
+    private setFullscreen(isFullscreen: boolean): void {
+        this.isFullscreen = isFullscreen;
+        this.fullscreenChange.emit(isFullscreen);
+    }
 
-    //   document.addEventListener('fullscreenchange', function () {
-    //         changeHandler();
-    //     }, false);
-
-    //     document.addEventListener('mozfullscreenchange', function () {
-    //         changeHandler();
-    //     }, false);
-
-    //     document.addEventListener('webkitfullscreenchange', function () {
-    //         changeHandler();
-    //     }, false);
-
-    //   $scope.togglePresentationMode = function(){
-
-    //     var elem = document.body; // Make the body go full screen.
-
-    //     if (!$scope.fullscreen) {
-    //       ga('send', {
-    //         hitType: 'event',
-    //         eventCategory: 'Access',
-    //         eventAction: 'Enter Full Screen Mode',
-    //         eventLabel: $scope.assetId
-    //       });
-    //       requestFullScreen(elem);
-    //       $scope.fullscreen = true;
-    //     } else {
-    //       exitFullScreen();
-    //       $scope.fullscreen = false;
-    //     }
-    //   };
-
-    //   if (document.getElementById('fallbackViewer')) {
-    //     angular.element( document.getElementById('fallbackViewer') ).find('img')[0].onerror = function() {
-    //       $scope.fallbackFailed = true;
-    //     };
-    //   }
-      
-    //   $scope.removeComparedAsset = function(assetId) {
-    //     // Verify asset can be removed
-    //     if ($scope.removableAsset) {
-    //       // Tell item.js to remove asset from array
-    //       $rootScope.$broadcast('removeComparedAsset', assetId);
-    //     }
-    //   };
     removeComparedAsset(assetId): void {
-
+        //     // Verify asset can be removed
+        //     if (this.removableAsset) {
+        //       // Tell item.js to remove asset from array
+        //       $rootScope.$broadcast('removeComparedAsset', assetId);
+        //     }
     }
 
-    //   // WORKAROUND: Get IDs and build the Kaltura url
-    //   var kalturaId = "";
-    //   var spId = "";
+    /**
+     * Setup the embedded Kaltura player
+     */
+    private loadKaltura(): void {
+        let kalturaId: string;
+        let targetId = 'video-' + this.asset.id + '-' + this.index;
 
-    //   // For media player backups
-    //   $scope.mediaUrl = $sce.trustAsResourceUrl( $scope.asset.File.url.replace('stor//','stor/') );
-    //   $scope.mediaType = $scope.asset.File.format;
-      
-    //   $scope.loadKaltura = function() {
-    //     $http.get($scope.asset.File.url.replace('stor//','stor/') + '_kplayer')
-    //       .success(function(data) {
-    //         var htmlPage = data;
-    //         spId = htmlPage.slice(htmlPage.indexOf('/sp/') + 4 );
-    //         spId = spId.slice(0,spId.indexOf('/'));
-    //         htmlPage = htmlPage.slice(htmlPage.indexOf('thumbnail/entry_id/') + 19 );
-    //         kalturaId = htmlPage.slice(0,htmlPage.indexOf('/'));
-              
-    //         kWidget.embed({
-    //           'targetId': 'video-' + $scope.asset['Meta-Id'] + '-' + $scope.index,
-    //           'wid': '_101',
-    //           'uiconf_id' : '23448189',
-    //           'entry_id' : kalturaId,
-    //           'flashvars': {
-    //             'fullScreenBtn.plugin': false
-    //           },
-    //           'readyCallback' : function(playerId) {
-    //             var kdp = document.getElementById( playerId );
-    //             kdp.kBind( 'mediaError', function(){
-    //               if (findAssetField.filetype($scope.asset) === 'aud') {
-    //                 document.getElementById(playerId).style.display = 'none';
-    //                 document.getElementById(playerId.replace('video','audio')).style.display = 'block';
-    //               } else {
-    //                 $scope.mediaLoadingFailed = true;
-    //                 $scope.$apply();
-    //               }
-    //             });
-    //           }
-    //         }); 
-    //       })
-    //       .error(function(data) {
-    //         console.log('Failed to find Kaltura!');
-    //         $scope.mediaLoadingFailed = true;
-    //       });
-    //   };
-        
-          
-    //   $scope.isPDF = function() {
-    //     if ($scope.asset && $scope.asset.File) {
-    //       if ($scope.asset.File.type.indexOf('pdf') > -1) {
-    //         return true;
-    //       }
-    //       if ($scope.asset.File.format.indexOf('pdf') > -1) {
-    //         return true;
-    //       }
-    //     }
-    //     return false;
-    //   };
-      
-    //   $scope.isPPT = function() {
-    //     if ($scope.asset && $scope.asset.File) {
-    //       if ($scope.asset.File.type.indexOf('ppt') > -1) {
-    //         return true;
-    //       }
-    //       if ($scope.asset.File.format.indexOf('ppt') > -1) {
-    //         return true;
-    //       }
-    //     }
-    //     return false;
-    //   };
+        // We gotta always say it's type 24, the type id for Kaltura!
+        this._assets.getFpxInfo(this.asset.id, 24)
+            .then(data => {
+                if (data['imageUrl']) {
+                    kalturaId = data['imageUrl'].substr(data['imageUrl'].lastIndexOf(':') + 1, data['imageUrl'].length - 1);
+                }
 
+                if (kalturaId && kalturaId.length > 0) {
+                    this.isKalturaAsset = true;
+                    this.isOpenSeaDragonAsset = false;
+
+                    kWidget.embed({
+                        'targetId': targetId,
+                        'wid': '_101',
+                        'uiconf_id': '23448189',
+                        'entry_id': kalturaId,
+                        'flashvars': {
+                            // We provide our own fullscreen interface
+                            'fullScreenBtn.plugin': false
+                        },
+                        'readyCallback': function(playerId) {
+                            var kdp: any = document.getElementById(playerId);
+                            kdp.kBind('mediaError', function() {
+                                console.error('Media error!');
+                                this.mediaLoadingFailed = true;
+                            });
+                        }
+                    });
+                    let kPlayer = document.getElementById(targetId);
+                    console.log(kPlayer);
+                }
+
+
+            })
+            .catch(err => {
+                console.log(err);
+            });
+    };
 
 }

@@ -63,6 +63,11 @@ html, body{
   height: 100%;
   font-family: Arial, Helvetica, sans-serif;
   margin: 0px;
+  background: $bgDefault;
+  
+  &:fullscreen, &:-webkit-full-screen {
+    background: $bgDefault;
+  }
 }
 
 .block-right {
@@ -113,4 +118,25 @@ span.active {
     min-height: 600px;
     // Need to override inline styles
     background: #f8faf8 !important;
+
+    .fullscreen & {
+      background: #000 !important;
+    }
 }
+
+ .mwEmbedKalturaIframe {
+      min-height: 600px !important;
+  }
+
+  .loading {
+    &:after {
+      display: block;
+      content: ' ';
+      background: url('/assets/img/icon-loading-large.gif') center center;
+      z-index: 5000;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate3d(-50%, -50%, 0);
+    }
+  }

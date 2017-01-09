@@ -2,11 +2,9 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { AppState } from '../app.service';
-import { Title } from './title';
-import { XLarge } from './x-large';
 
-import { AssetService } from '../shared/assets.service';
-import { AuthService } from '../shared/auth.service';
+import { AssetService } from '../shared';
+import { AuthService } from '../shared';
 
 @Component({
   // The selector is what angular internally uses
@@ -15,7 +13,6 @@ import { AuthService } from '../shared/auth.service';
   selector: 'home',  // <home></home>
   // We need to tell Angular's Dependency Injection which providers are in our app.
   providers: [
-    Title,
     AuthService
   ],
   // Our list of styles in our component. We may add more to compose many styles together
@@ -34,7 +31,6 @@ export class Home {
   // TypeScript public modifiers
   constructor(
       public appState: AppState, 
-      public title: Title, 
       private _assets: AssetService, 
       private router: Router,
       private _auth: AuthService

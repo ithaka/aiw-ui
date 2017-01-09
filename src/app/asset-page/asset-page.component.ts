@@ -18,11 +18,10 @@ export class AssetPage implements OnInit, OnDestroy {
     private totalAssetCount: number = 1;
     private subscriptions: Subscription[] = [];
     private prevAssetResults: any = {};
-    private loadArrayFirstAsset: Boolean = false;
-    private loadArrayLastAsset: Boolean = false;
+    private loadArrayFirstAsset: boolean = false;
+    private loadArrayLastAsset: boolean = false;
+    private isFullscreen: boolean = false;
 
-    /** controls whether or not to show the agreement modal before download */
-    // private downloadAuth: boolean = false;
     /** controls whether or not the agreement modal is visible */
     private showAgreeModal: boolean = false;
 
@@ -31,7 +30,7 @@ export class AssetPage implements OnInit, OnDestroy {
     ngOnInit() {
         this.subscriptions.push(
             this.route.params.subscribe((routeParams) => {
-                this.asset = new Asset(routeParams["assetId"], this._assets);
+                this.asset = new Asset(routeParams["assetId"], this._assets, this._auth);
                 if(this.prevAssetResults.thumbnails){
                     this.totalAssetCount = this.prevAssetResults.count ? this.prevAssetResults.count : this.prevAssetResults.thumbnails.length;
                     this.assetIndex = this.currentAssetIndex();
@@ -72,6 +71,18 @@ export class AssetPage implements OnInit, OnDestroy {
         this.subscriptions.forEach((sub) => { sub.unsubscribe(); });
     }
 
+    /**
+     * Maintains the isFullscreen variable, as set by child AssetViewers
+     */
+    updateFullscreenVar(isFullscreen: boolean): void {
+        console.log(isFullscreen);
+        this.isFullscreen = isFullscreen;
+    }
+
+    /**
+     * Find out if the user has accepted the agreement during this session
+     * @returns boolean which is true if the user has accepted the agreement
+     */
     private downloadAuth(): boolean {
         return this._auth.downloadAuthorized();
     }
@@ -108,5 +119,12 @@ export class AssetPage implements OnInit, OnDestroy {
                 this._assets.loadNextAssetPage();
             }
         }
+    }
+
+     /** 
+     * Clean up the field label for use as an ID (used in testing)
+     */
+    private cleanId(label: string): string {
+        return label.toLowerCase().replace(/\s/g,'');
     }
 }

@@ -138,7 +138,6 @@ export class AssetGrid implements OnInit, OnDestroy {
         }
         
         this.isLoading = true;
-        this._assets.queryAll(params);
       })
     );
 

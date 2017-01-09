@@ -23,11 +23,12 @@ export class LoginService {
      * Logs out and redirects the user to the login component
      */
     logout() {
+        let options = new RequestOptions({ withCredentials: true });
         // this.user = {};
         this._auth.clearStorage();
         this._router.navigate(['login']);
         return this.http
-            .post(this._auth.getUrl() + '/logout', {})
+            .post(this._auth.getUrl() + '/logout', {}, options)
             .toPromise()
             .catch(function() {
                 // error handling

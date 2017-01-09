@@ -139,7 +139,7 @@ export class AssetService {
 
         this.readUrlParams(params);
 
-        if (params.hasOwnProperty("igId") && params.hasOwnProperty("objectId")) {
+        if (params.hasOwnProperty("objectId") && params.hasOwnProperty("colId")) {
             //gets associated images thumbnails
             this.loadAssociatedAssets(params.objectId, params.colId);
         } else if (params.hasOwnProperty("igId")) {
@@ -179,7 +179,7 @@ export class AssetService {
      */
     public getFileProperties(assetId: string): Promise<any> {
         return this.http
-            .get(this._auth.getUrl() + '/metadata/' + assetId + '?_method=FpHtml')
+            .get(this._auth.getUrl() + '/metadata/' + assetId + '?_method=FpHtml', this.defaultOptions)
             .toPromise()
             .then(data => {
                 // This call only returns Html!
@@ -379,7 +379,6 @@ export class AssetService {
         this.search(term, this.activeSort.index)
             .then(
                 (res) => {
-                console.log(res);
                 this._filters.generateColTypeFacets( res.collTypeFacets );
                 this._filters.generateGeoFilters( res.geographyFacets );
                 this._filters.generateDateFacets( res.dateFacets );
@@ -556,5 +555,13 @@ export class AssetService {
             .then((data) => { return this.extractData(data); });
     }
 
- 
+    public getFpxInfo(objectId: string, objectTypeId: number): Promise<any> {
+        // http://library.artstor.org/library/secure/imagefpx/SS7730295_7730295_8847273/24
+        let requestUrl = this._auth.getUrl() + '/imagefpx/' + objectId + '/' + objectTypeId;
+        
+        return this.http
+            .get(requestUrl, this.defaultOptions)
+            .toPromise()
+            .then((data) => { return this.extractData(data); });
+    }
 }

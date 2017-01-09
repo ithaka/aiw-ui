@@ -153,15 +153,12 @@ export class AssetFiltersService {
     }
 
     public generateGeoFilters(resGeoFacetsArray){
-        console.log("Generate geo!");
         if (this.geoTree.length < 1) {
-            console.log("Not enough geo!");
             let options = new RequestOptions({ withCredentials: true });
         
             this.http.get(this._auth.getUrl() + '/termslist/', options)
                 .toPromise()
                 .then(res => {
-                    console.log(res.json());
                     this.geoTree = res.json().geoTree;
                     this.generateGeoFilters(resGeoFacetsArray);
                 }, err => {
