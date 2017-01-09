@@ -55,7 +55,7 @@
 </div>-->
 
 <!-- Large thumbnail fallback -->
-<div *ngIf="(!isOpenSeaDragonAsset && !isKalturaAsset) || mediaLoadingFailed" id="fallbackViewer" [class.loading]="isLoading" class="asset-viewer">
+<div *ngIf="mediaLoadingFailed" id="fallbackViewer" [class.loading]="isLoading" class="asset-viewer">
     <img alt="{{ asset.title }}" class="item" src="http://viewer2.artstor.org{{ ( asset.imgURL + '' ).replace('size0','size2') }}" />
 </div>
 <!-- Error if asset failed to load even the fallback thumbnail -->
