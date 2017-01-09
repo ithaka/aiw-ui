@@ -1,5 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
+import { AssetService, ImageGroup } from './../../shared';
+
 @Component({
   selector: 'ang-ppt-modal',
   templateUrl: 'ppt-modal.component.html',
@@ -16,9 +18,18 @@ export class PptModalComponent implements OnInit {
   @Input()
   private downloadLink: string;
   @Input()
-  private title: string;
+  private ig: ImageGroup;
 
-  constructor() { }
+  constructor(private _assets: AssetService) { }
 
   ngOnInit() { }
+
+  private downloadImageGroup() {
+    // make call to get number of allowed downloads
+    // not sure which service to call yet - contacted Will about it
+    this._assets.downloadPpt(this.ig).take(1).subscribe(
+      (data) => { console.log(data); },
+      (error) => { console.log(error); }
+    )
+  }
 }

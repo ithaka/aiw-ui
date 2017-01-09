@@ -51,13 +51,4 @@ export class ImageGroupPage implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.subscriptions.forEach((sub) => { sub.unsubscribe(); });
   }
-
-  private downloadImageGroup() {
-    // make call to get number of allowed downloads
-    // not sure which service to call yet - contacted Will about it
-    this._assets.downloadPpt(this.ig).take(1).subscribe(
-      (data) => { console.log(data); },
-      (error) => { console.log(error); }
-    )
-  }
 }

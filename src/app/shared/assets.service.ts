@@ -572,7 +572,7 @@ export class AssetService {
 
         let imgStr: string = "";
         ig.thumbnails.forEach((thumb, index, thumbs) => {
-            imgStr += (index + 1) + ":" + thumb.objectId + ":" + "1024x1024";
+            imgStr += [(index + 1), thumb.objectId, "1024x1024"].join(":");
             if (index !== thumbs.length - 1) {
                 imgStr += ",";
             }
