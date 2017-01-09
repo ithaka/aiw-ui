@@ -4,8 +4,7 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { Http, Response, Headers, RequestOptions } from '@angular/http';
-import { Observable } from 'rxjs/Rx';
-import { Subject } from 'rxjs/Subject';
+import { Observable, BehaviorSubject } from 'rxjs/Rx';
 import { Locker } from 'angular2-locker';
 
 import 'rxjs/add/operator/toPromise';
@@ -21,8 +20,14 @@ export class AssetService {
     static readonly institutionCollectionType: number = 2;
 
     //set up thumbnail observables
-    private allResultsSource = new Subject<any[]>();
+    private allResultsValue: any[] = [];
+    // BehaviorSubjects push last value on subscribe
+    private allResultsSource = new BehaviorSubject<any[]>(this.allResultsValue);
     public allResults = this.allResultsSource.asObservable();
+
+    // For loading the assets in the next page - Asset Page
+    public lastSearchParams: any = {};
+    public searchPageSize: number = 24;
 
     /**
      * urlParams is used as an enum for special parameters
@@ -49,7 +54,7 @@ export class AssetService {
         locker: Locker,
         private _auth: AuthService
     ) {
-        this._storage = locker;
+        this._storage = locker.useDriver(Locker.DRIVERS.LOCAL);
         this.urlParams = {
             term: "",
             pageSize: 24,
@@ -62,6 +67,11 @@ export class AssetService {
             catId: ""
         };
     }
+
+    private updateLocalResults(results: any[]) {
+        this.allResultsValue = results;
+        this.allResultsSource.next(results);
+    } 
 
     /**
      * Sets urlParams based on matching keys with the url params that are passed in
@@ -97,11 +107,36 @@ export class AssetService {
         return body || { };
     }
 
+    public loadPrevAssetPage(): void{
+        let currentParamsObj: Params = Object.assign({}, this.lastSearchParams);
+        
+        if(this.lastSearchParams.currentPage){
+            currentParamsObj['currentPage']--;
+        }
+
+        this.queryAll(currentParamsObj);
+    }
+    
+    public loadNextAssetPage(): void{
+        let currentParamsObj: Params = Object.assign({}, this.lastSearchParams);
+        
+        if(this.lastSearchParams.currentPage){
+            currentParamsObj['currentPage']++;
+        }
+        else{
+            currentParamsObj['currentPage'] = 2;
+        }
+        this.queryAll(currentParamsObj);
+    }
+
     /**
      * Determines which service to call based on which route parameters exist
      * @param params Object conaining all route params
      */
     public queryAll(params: any) {
+        this.lastSearchParams = params;
+        this.searchPageSize = this.urlParams.pageSize;
+
         this.readUrlParams(params);
 
         if (params.hasOwnProperty("objectId") && params.hasOwnProperty("colId")) {
@@ -180,7 +215,7 @@ export class AssetService {
                 if (!data) {
                 throw new Error("No data in image group thumbnails response");
                 }
-                this.allResultsSource.next(data);
+                this.updateLocalResults(data);
             })
             .catch((error) => {
                 console.log(error);
@@ -207,7 +242,7 @@ export class AssetService {
                 throw new Error("No data in image group thumbnails response");
                 }
                 //notify allResults observers
-                this.allResultsSource.next(data);
+                this.updateLocalResults(data);
             })
             .catch((error) => {
                 console.log(error);
@@ -229,7 +264,7 @@ export class AssetService {
             .toPromise()
             .then(this.extractData)
             .then((data) => {
-                this.allResultsSource.next(data);
+                this.updateLocalResults(data);
             })
             .catch(error => {
                 console.log(error);
@@ -249,7 +284,7 @@ export class AssetService {
             .toPromise()
             .then(this.extractData)
             .then((data) => {
-                this.allResultsSource.next(data);
+                this.updateLocalResults(data);
             })
             .catch(error => {
                 console.log(error);
