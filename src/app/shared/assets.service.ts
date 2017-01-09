@@ -22,7 +22,7 @@ export class AssetService {
     //set up thumbnail observables
     private allResultsValue: any[] = [];
     // BehaviorSubjects push last value on subscribe
-    private allResultsSource = new BehaviorSubject<any[]>(this.allResultsValue);
+    private allResultsSource = new BehaviorSubject<any>(this.allResultsValue);
     public allResults = this.allResultsSource.asObservable();
 
     // For loading the assets in the next page - Asset Page

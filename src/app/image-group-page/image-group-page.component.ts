@@ -16,8 +16,8 @@ import { ImageGroup } from './../shared';
 })
 
 export class ImageGroupPage implements OnInit, OnDestroy {
-  private igDesc: string;
-  private igId: string;
+  private ig: ImageGroup;
+
   private subscriptions: Subscription[] = [];
 
   /** controls when PPT agreement modal is or is not shown */
@@ -30,26 +30,20 @@ export class ImageGroupPage implements OnInit, OnDestroy {
     // Subscribe to ID in params
     this.subscriptions.push(
       this.route.params.subscribe((routeParams) => {
-        this.igId = routeParams["igId"];
-        if (this.igId) {
+        let id = routeParams["igId"];
+        if (id) {
           this._assets.queryAll(routeParams);
-
-          this._igService.getGroupDescription(this.igId)
-            .then((data) => {
-              if (!data) {
-                throw new Error("No data in image group description response");
-              }
-              this.igDesc = data.igNotes;
-            })
-            .catch((error) => { console.error(error); });
         }
-        
       })
     );
 
     this.subscriptions.push(
-      this._assets.allResults.subscribe((results: any) => {
-        console.log(results);
+      this._assets.allResults.subscribe((results: ImageGroup) => {
+        this.ig = results;
+        if (this.ig && this.ig.igId) {
+          this._igService.getGroupDescription(this.ig.igId).take(1)
+            .subscribe((desc: string) => { this.ig.description = desc; });
+        }
       })
     );
   }
