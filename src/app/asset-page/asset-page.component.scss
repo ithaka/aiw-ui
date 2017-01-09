@@ -42,8 +42,9 @@
     min-width: 120px;
     line-height: 21px;
     display: block;
-    position: fixed;
-    top: 135px;
+    position: absolute;
+    z-index: 5000;
+    top: 100%;
     left: 50%;
     -webkit-transform: translateX(-50%);
     -moz-transform: translateX(-50%);
