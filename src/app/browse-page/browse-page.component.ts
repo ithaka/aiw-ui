@@ -66,7 +66,8 @@ export class BrowsePage implements OnInit, OnDestroy {
     }
 
     this.userTypeId = this._auth.getUser().typeId;
-    if(this.userTypeId == 2){
+    
+    if(this.userTypeId == 1 || this.userTypeId == 2){
         this._assets.getCollections('institution')
         .then(
           (data)  => {
