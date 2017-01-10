@@ -17,21 +17,3 @@ export interface Thumbnail {
   thumbnail3: any;
   thumbnail4: any;
 }
-
-export enum mediaTypes {
-  specimen = 1,
-  visual = 2,
-  use = 3,
-  publication = 6,
-  synonyms = 7,
-  people = 8,
-  repository = 9,
-  image = 10,
-  qtvr = 11,
-  audio = 12,
-  threeD = 13,
-  powerpoint = 21,
-  document = 22,
-  excel = 23,
-  kaltura = 24
-}
