@@ -4,6 +4,8 @@ import { Subscription }   from 'rxjs/Subscription';
 
 import { AssetService } from './../shared/assets.service';
 import { AuthService } from './../shared/auth.service';
+import { TagsService } from './tags.service';
+import { Tag } from './tag/tag.class';
 
 @Component({
   selector: 'ang-my-collections',
@@ -26,6 +28,7 @@ export class MyCollectionsComponent implements OnInit {
   private userPCallowed: string;
   private currentBrowseRes: any = {};
   private categories = [];
+  private tags : Tag[] = [];
   private expandedCategories: any = {};
   private selectedBrowseId: string = '';
   private browseMenuArray: any[] = [];
@@ -37,7 +40,7 @@ export class MyCollectionsComponent implements OnInit {
       .subscribe((params: Params) => { 
         if(params && params['viewId']){
             this.selectedBrowseId = params['viewId'];
-            this.loadCategory();
+            // this.loadCategory();
         }
       })
     );
@@ -67,13 +70,10 @@ export class MyCollectionsComponent implements OnInit {
       .then((res) => {
           console.log(res);
           var obj;
+
           if(res.pcCollection && res.pcCollection.collectionid){
-            obj = {
-              id: res.pcCollection.collectionid,
-              label: res.pcCollection.collectionname
-            }
-            this.browseMenuArray.push(obj);
-            this.selectedBrowseId = obj.id;
+            let colTag = new Tag(res.pcCollection.collectionid, res.pcCollection.collectionname, true, null, { label: "collection", folder: false });
+            this.tags.push(colTag); 
           }
           if(res.privateCollection && (res.privateCollection.length > 0)){
             for (let colObj of res.privateCollection){
@@ -85,71 +85,72 @@ export class MyCollectionsComponent implements OnInit {
             }
           }
 
-          this.loadCategory();
+        //   this.loadCategory();
       })
       .catch(function(err) {
           console.log('Unable to load User Personal Collections.');
       });
   }
 
-  loadCategory(){
-    this._assets.category( this.selectedBrowseId )
-      .then((res) => {
-          this.currentBrowseRes = res;
-          this.categories = res.Categories;
+//   loadCategory(){
+//     this._assets.category( this.selectedBrowseId )
+//       .then((res) => {
+//           this.currentBrowseRes = res;
+//           this.categories = res.Categories;
 
-          for (let cat of this.categories) { // Add default depth of 0 to every top level node
-              cat.depth = 0;
-          }
-          console.log(res);
-      })
-      .catch(function(err) {
-          console.log('Unable to load category results.');
-      });
-    
-    
-  }
+//           let childArr : Tag[] = [];
+//           for (let cat of this.categories) { 
+//               console.log(cat);
+//               let categoryTag = new Tag(cat.widgetId, cat.title, true, null, { label: "subcategory", folder: cat.isFolder });
+//               childArr.push(categoryTag);
+//           }
+//           this.tags.concat(childArr); // = childArr;
+//       })
+//       .catch(function(err) {
+//           console.log('Unable to load category results.');
+//       }); 
+//   }
 
-  loadSubcategories(category, index){
-    this._assets.subcategories( category.widgetId )
-      .then((res) => {
-        let depth: number;
+//   loadSubcategories(category, index){
+//     this._assets.subcategories( category.widgetId )
+//       .then((res) => {
+//         let depth: number;
         
-        // Make depth one deeper than parent
-        depth = category.depth + 1;
-        for (let cat of res) {
-            // Add parent Id for expand/collapse logic
-            cat.parentId = category.widgetId;
-            // Add subcategory depth value for styling
-            cat.depth = depth;
+//         // Make depth one deeper than parent
+//         depth = category.depth + 1;
+//         for (let cat of res) {
+//             // Add parent Id for expand/collapse logic
+//             cat.parentId = category.widgetId;
+//             // Add subcategory depth value for styling
+//             cat.depth = depth;
 
-            if(category.descriptionId){
-                cat.parentDescId = category.descriptionId;
-            }
-        }
-        let beforeItems = this.categories.slice(0, index + 1);
-        let afterItems = this.categories.slice(index + 1);
-        // Insert loaded categories below parent category
-        this.categories = beforeItems.concat(res).concat(afterItems);
+//             if(category.descriptionId){
+//                 cat.parentDescId = category.descriptionId;
+//             }
+//         }
+//         let beforeItems = this.categories.slice(0, index + 1);
+//         let afterItems = this.categories.slice(index + 1);
+//         // Insert loaded categories below parent category
+//         this.categories = beforeItems.concat(res).concat(afterItems);
 
-        console.log(this.categories);
-      })
-      .catch(function(err) {
-        console.log('Unable to load subcategories.');
-      });
-  }
+//         console.log(this.categories);
+//       })
+//       .catch(function(err) {
+//         console.log('Unable to load subcategories.');
+//       });
+//   }
 
-  toggleTree(category, index){
-    if(this.expandedCategories[category.widgetId]){
-      this.expandedCategories[category.widgetId] = false;
-    }
-    else{
-      if(typeof this.expandedCategories[category.widgetId] == 'undefined'){
-          this.loadSubcategories(category, index);
-      }
-      this.expandedCategories[category.widgetId] = true;
-    }
-  }
+//   toggleTree(category, index){
+//     if(this.expandedCategories[category.widgetId]){
+//       this.expandedCategories[category.widgetId] = false;
+//     }
+//     else{
+//       if(typeof this.expandedCategories[category.widgetId] == 'undefined'){
+//           this.loadSubcategories(category, index);
+//       }
+//       this.expandedCategories[category.widgetId] = true;
+//     }
+//   }
 
   toggleInfo(node){
       if(node.info_expanded){

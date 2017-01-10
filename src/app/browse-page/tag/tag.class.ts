@@ -30,7 +30,12 @@ export class Tag {
     this.title = title;
     this.isCollapsed = isCollapsed;
     this.parentTag = parentTag;
-    this.type = type;
+    if (type) {
+      this.type = type;
+    } else {
+      this.type = 'category';
+    }
+    
     this.levelsDeep = this.setLevel();
   }
 
