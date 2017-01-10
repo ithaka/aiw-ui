@@ -3,4 +3,4 @@ export * from './auth.service';
 export * from './assets.service';
 export * from './nav';
 export * from './footer';
-export * from './asset-interfaces';
+export * from './datatypes';

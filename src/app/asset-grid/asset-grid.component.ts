@@ -5,6 +5,7 @@ import { Subscription }   from 'rxjs/Subscription';
 
 import { AssetService } from '../shared/assets.service';
 import { AssetFiltersService } from '../asset-filters/asset-filters.service';
+import { Thumbnail } from './../shared';
 
 @Component({
   // The selector is what angular internally uses
@@ -27,7 +28,7 @@ export class AssetGrid implements OnInit, OnDestroy {
   public showFilters: boolean = true;
   public showAdvancedModal: boolean = false;
   errors = {};
-  private results = [];
+  private results: Thumbnail[] = [];
   filters = [];
 
   // Default show as loading until results have update
@@ -160,7 +161,7 @@ export class AssetGrid implements OnInit, OnDestroy {
         ) {
           this.goToPage(1);
         } else {
-          this.results = allResults;
+          this.results = allResults.thumbnails;
         }
         this.isLoading = false;
       })

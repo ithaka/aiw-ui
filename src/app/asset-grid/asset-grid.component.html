@@ -52,7 +52,7 @@
     <div class="col-md-12 col--expanding" [ngClass]="{ 'col--expand-12' : !showFilters }">
         <div class="card-deck-wrapper">
             <div class="card-deck">
-                <div *ngFor="let asset of results.thumbnails" [routerLink]="['/asset', asset.objectId ]" class="card card--asset col-sm-2">
+                <div *ngFor="let asset of results" [routerLink]="['/asset', asset.objectId ]" class="card card--asset col-sm-2">
                     <div class="card-img-top">
                         <img src="http://viewer2.artstor.org/{{ asset.thumbnailImgUrl }}" alt="Card image cap">
                     </div>
