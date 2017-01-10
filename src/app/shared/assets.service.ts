@@ -566,28 +566,4 @@ export class AssetService {
             .toPromise()
             .then((data) => { return this.extractData(data); });
     }
-
-    public downloadPpt(ig: ImageGroup): Observable<any> {
-        let requestUrl = [this._auth.getUrl(), 'downloadpptimages'].join("/");
-
-        let imgStr: string = "";
-        ig.thumbnails.forEach((thumb, index, thumbs) => {
-            imgStr += [(index + 1), thumb.objectId, "1024x1024"].join(":");
-            if (index !== thumbs.length - 1) {
-                imgStr += ",";
-            }
-        });
-        console.log(imgStr);
-
-        let requestData = {
-            _method: "createPPT",
-            igId: ig.igId,
-            igName: ig.igName,
-            images: imgStr,
-            zooms: null,
-            zip: false
-        }
-
-        return this.http.post(requestUrl, requestData , this.defaultOptions);
-    }
 }

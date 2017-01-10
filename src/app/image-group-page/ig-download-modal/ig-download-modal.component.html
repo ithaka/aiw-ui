@@ -15,7 +15,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" (click)="closeModal.emit()">I reject</button>
-        <button *ngIf="!isLoading" class="btn btn-primary" (click)="downloadImageGroup()">I accept</button>
+        <button *ngIf="!isLoading" class="btn btn-primary" (click)="getDownloadLink()">I accept</button>
         <i *ngIf="isLoading" class="icon icon-loading form-control__icon"></i>
       </div>
     </div><!-- /.modal-content -->
