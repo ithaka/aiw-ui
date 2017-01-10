@@ -41,8 +41,7 @@ import { About } from './about';
 import { NoContent } from './no-content';
 
 // Application wide providers
-import { AuthService } from './shared/auth.service';
-import { AssetService } from './shared/assets.service';
+import { AuthService, AssetService, TypeIdPipe } from './shared';
 import { AssetFiltersService } from './asset-filters/asset-filters.service';
 import { TagsService } from './browse-page/tags.service';
 import { CustomReuseStrategy } from './reuse-strategy';
@@ -95,7 +94,8 @@ type StoreType = {
     PptModalComponent,
     Login,
     Home,
-    NoContent
+    NoContent,
+    TypeIdPipe
   ],
   imports: [ // import Angular's modules
     BrowserModule,
