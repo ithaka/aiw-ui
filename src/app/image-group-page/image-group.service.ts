@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Http, Response, Headers, RequestOptions } from '@angular/http';
 import { Router } from '@angular/router';
 import 'rxjs/add/operator/toPromise';
+import { Observable } from 'rxjs/Observable';
 
 import { AuthService } from './../shared/auth.service';
 
@@ -45,10 +46,16 @@ export class ImageGroupService {
    * @param groupId Id of desired image group
    * @returns JS Object with parameters: count, igId, igName, igNotes and more if it is a folder
    */
-  getGroupDescription(groupId: string) {
+  getGroupDescription(groupId: string): Observable<string> {
+    let requestUrl = [this.baseUrl, "imagegroup", groupId].join("/") + "?_method=igdescription";
+
     return this.http
-      .get(this.baseUrl + "/imagegroup/" + groupId + "?_method=igdescription", this.options)
-      .toPromise()
-      .then((data) => { return this._auth.extractData(data); });
+      .get(requestUrl, this.options)
+        .map((data) => {
+          if (!data) {
+            throw new Error("No data in image group description response");
+          }
+          return data.json().igNotes;
+        });
   }
 }

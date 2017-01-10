@@ -15,7 +15,8 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" (click)="closeModal.emit()">I reject</button>
-        <a class="btn btn-primary" (click)="closeModal.emit()" [href]="downloadLink" download="title">I accept</a>
+        <button *ngIf="!isLoading" class="btn btn-primary" (click)="getDownloadLink()">I accept</button>
+        <i *ngIf="isLoading" class="icon icon-loading form-control__icon"></i>
       </div>
     </div><!-- /.modal-content -->
   </div><!-- /.modal-dialog -->

@@ -37,20 +37,37 @@
     to {top:0; opacity:1}
 }
 
-.close-icon {
-    color: #444;
-    float: right;
-	font-size: 22px;
-    height: 30px;
-    line-height: 32px;
+.modal-header {
+    padding: 15px !important;
 
-    &:hover,
-    &:focus {
-        color: $brightOrange;
-        text-decoration: none;
+    &  button.close {
+        height: 30px;
+        width:30px;
         cursor: pointer;
+
+        &:hover, &:active, &:focus{
+            background: #cdcdcd;
+        }
+    }
+
+    & h1, & h2, & h3, & h4{
+        position: static;
     }
 }
+// .close-icon {
+//     color: #444;
+//     float: right;
+// 	font-size: 22px;
+//     height: 30px;
+//     line-height: 32px;
+
+//     &:hover,
+//     &:focus {
+//         color: $brightOrange;
+//         text-decoration: none;
+//         cursor: pointer;
+//     }
+// }
 
 .modal-header {
 	padding: 2px 16px;
