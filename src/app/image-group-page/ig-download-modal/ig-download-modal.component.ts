@@ -31,9 +31,17 @@ export class PptModalComponent implements OnInit {
 
   ngOnInit() {
     this.isLoading = true;
+    this.getDownloadLink(this.ig)
+      .take(1)
+      .subscribe(
+        (data) => { console.log(data); this.isLoading = false; },
+        (error) => { console.log(error); this.isLoading = false; }
+      );
+
     this.downloadStatusCall().take(1).subscribe((data) => {
-      this.getDownloadLink(this.ig);
-    })
+      
+    });
+    
     
     
   }
@@ -48,7 +56,7 @@ export class PptModalComponent implements OnInit {
   //   )
   // }
 
-  private getDownloadLink(ig: ImageGroup): void {
+  private getDownloadLink(ig: ImageGroup): Observable<any> {
     let requestUrl = [this._auth.getUrl(), 'downloadpptimages'].join("/");
 
     let imgStr: string = "";
@@ -77,14 +85,7 @@ export class PptModalComponent implements OnInit {
       zip:false
     }
 
-
-    console.log("calling getDownloadLink");
-    this.http.post(requestUrl, this._auth.formEncode(requestData) , this.defaultOptions)
-      .take(1)
-      .subscribe(
-        (data) => { console.log(data); this.isLoading = false; },
-        (error) => { console.log(error); this.isLoading = false; }
-      )
+    return this.http.post(requestUrl, this._auth.formEncode(requestData) , this.defaultOptions);
   }
 
   private downloadStatusCall() {
