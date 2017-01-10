@@ -25,7 +25,7 @@ export class AssetFiltersService {
                 era : 'BCE'
             },
             latest : {
-                date : 2016,
+                date : 2017,
                 era : 'CE'
             },
         modified : false
@@ -129,27 +129,30 @@ export class AssetFiltersService {
         if (!dateFacetsArray) {
             dateFacetsArray = this.availableFilters.date;
         }
-        var startDate = dateFacetsArray[0].date;
-        var endDate = dateFacetsArray[dateFacetsArray.length - 1].date;
-        
-        this.availableFilters.dateObj.earliest.date = Math.abs(startDate);
-        this.availableFilters.dateObj.earliest.era = startDate < 0 ? "BCE" : "CE";
 
-        this.availableFilters.dateObj.latest.date = Math.abs(endDate);
-        this.availableFilters.dateObj.latest.era = endDate < 0 ? "BCE" : "CE";
+        if(dateFacetsArray.length > 0){
+            var startDate = dateFacetsArray[0].date;
+            var endDate = dateFacetsArray[dateFacetsArray.length - 1].date;
+            
+            this.availableFilters.dateObj.earliest.date = Math.abs(startDate);
+            this.availableFilters.dateObj.earliest.era = startDate < 0 ? "BCE" : "CE";
 
-        this.availableFilters.dateObj.modified = false;
+            this.availableFilters.dateObj.latest.date = Math.abs(endDate);
+            this.availableFilters.dateObj.latest.era = endDate < 0 ? "BCE" : "CE";
 
-        // Fallback date filter values
-        this.availableFilters.prevDateObj.earliest.date = Math.abs(startDate);
-        this.availableFilters.prevDateObj.earliest.era = startDate < 0 ? "BCE" : "CE";
+            // this.availableFilters.dateObj.modified = false;
 
-        this.availableFilters.prevDateObj.latest.date = Math.abs(endDate);
-        this.availableFilters.prevDateObj.latest.era = endDate < 0 ? "BCE" : "CE";
+            // Fallback date filter values
+            this.availableFilters.prevDateObj.earliest.date = Math.abs(startDate);
+            this.availableFilters.prevDateObj.earliest.era = startDate < 0 ? "BCE" : "CE";
 
-        this.setAvailable('date', dateFacetsArray);
-        this.setAvailable('dateObj', this.availableFilters.dateObj);
-        this.dateFacetsArray = dateFacetsArray;
+            this.availableFilters.prevDateObj.latest.date = Math.abs(endDate);
+            this.availableFilters.prevDateObj.latest.era = endDate < 0 ? "BCE" : "CE";
+
+            this.setAvailable('date', dateFacetsArray);
+            this.setAvailable('dateObj', this.availableFilters.dateObj);
+            this.dateFacetsArray = dateFacetsArray;
+        }
     }
 
     public generateGeoFilters(resGeoFacetsArray){
