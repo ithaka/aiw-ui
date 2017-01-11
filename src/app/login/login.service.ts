@@ -79,7 +79,7 @@ export class LoginService {
         let options = new RequestOptions({ withCredentials: true });
         
         return this.http
-            .get('http://rocky-cliffs-9470.herokuapp.com/api?url=http://library.artstor.org/library/lostpw/123?email=' + email + '&portal=ARTstor', options)
+            .get('http://library.artstor.org/library/lostpw/123?email=' + email + '&portal=ARTstor', options)
             .toPromise()
             .then(this._auth.extractData);
     }
