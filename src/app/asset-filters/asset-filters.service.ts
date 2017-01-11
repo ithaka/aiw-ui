@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs/Subject';
+import { Observable, BehaviorSubject } from 'rxjs/Rx';
 import { Locker } from 'angular2-locker';
 import { Http, Response, Headers, RequestOptions } from '@angular/http';
 import 'rxjs/add/operator/toPromise';
@@ -15,7 +16,7 @@ export class AssetFiltersService {
     private appliedFilters: any = [];
     
     private defaultAvailable: any = {
-        collType : [],
+        collTypes : [],
         classification: [],
         geography: [],
         date: [],
@@ -48,8 +49,8 @@ export class AssetFiltersService {
     private dateFacetsArray = [];
 
     // Observable object sources
-    private availableSource = new Subject<any>();
-    private appliedSource = new Subject<any>();
+    private availableSource = new BehaviorSubject<any>(this.availableFilters);
+    private appliedSource = new BehaviorSubject<any>(this.appliedFilters);
     // Observable object streams
     public available$ = this.availableSource.asObservable();
     public applied$ = this.appliedSource.asObservable();
@@ -94,7 +95,12 @@ export class AssetFiltersService {
     // Available Filters is used to determine which parameters are true filter parameters
     // This method returns whether a filter group exists or not
     public isFilterGroup(groupName:string): boolean {
-        return this.availableFilters.hasOwnProperty(groupName);
+        if((groupName == 'startDate') || (groupName == 'endDate')){
+            return true;
+        }
+        else{
+            return this.availableFilters.hasOwnProperty(groupName);
+        }
     }
 
     public remove(filter) {

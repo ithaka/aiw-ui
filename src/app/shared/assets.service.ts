@@ -64,7 +64,8 @@ export class AssetService {
             igId: "",
             objectId: "",
             colId: "",
-            catId: ""
+            catId: "",
+            collTypes: ""
         };
     }
 
@@ -138,6 +139,8 @@ export class AssetService {
         this.searchPageSize = this.urlParams.pageSize;
 
         this.readUrlParams(params);
+        this.setFiltersFromURLParams(params);
+
 
         if (params.hasOwnProperty("objectId") && params.hasOwnProperty("colId")) {
             //gets associated images thumbnails
@@ -159,6 +162,43 @@ export class AssetService {
         } else {
             console.log("don't know what to query!");
         } 
+    }
+
+    /**
+     * Set the filters using filter service from URL params
+     * @param params Object conaining all route params
+     */
+    private setFiltersFromURLParams(params: any): void{
+        var thisObj = this;
+        Object.keys(params).forEach(function(key) {
+            // console.log(params[key]);
+            var filter = {};
+            if((key == 'collTypes') || (key == 'classification') || (key == 'geography')){
+                filter = {
+                    filterGroup : key,
+                    filterValue : params[key] 
+                };
+                
+                if(!thisObj._filters.isApplied(filter)){ // Add Filter
+                    thisObj._filters.apply(filter);
+                }
+            }
+        });
+
+        if(params['startDate'] && params['endDate']){
+            var dateObj = {
+                modified : true,
+                earliest : {
+                    date : Math.abs(params['startDate']),
+                    era : params['startDate'] < 0 ? 'BCE' : 'CE'
+                },
+                latest : {
+                    date : Math.abs(params['endDate']),
+                    era : params['endDate'] < 0 ? 'BCE' : 'CE'
+                }
+            }
+            this._filters.setAvailable('dateObj', dateObj);
+        }
     }
 
     /**
