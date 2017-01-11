@@ -20,10 +20,10 @@ export class CollectionPage implements OnInit, OnDestroy {
   private header = new Headers({ 'Content-Type': 'application/json' }); // ... Set content type to JSON
   private options = new RequestOptions({ headers: this.header, withCredentials: true }); // Create a request option
 
-  private colId: string;
-  private colName: string;
-  private colDescription: string;
-  private colThumbnail: string;
+  private colId: string = '';
+  private colName: string = '';
+  private colDescription: string = '';
+  private colThumbnail: string = '';
   private assetCount: number;
   
   private subscriptions: Subscription[] = [];
@@ -53,7 +53,7 @@ export class CollectionPage implements OnInit, OnDestroy {
               this.assetCount = data.objCount;
               this.colName = data.collectionname;
               this.colDescription = data.blurburl;
-              this.colThumbnail = data.bigimageurl;
+              this.colThumbnail = data.leadImageURL;
             })
             .catch((error) => { 
               console.error(error); 
