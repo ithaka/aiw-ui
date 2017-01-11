@@ -23,7 +23,8 @@ export class CustomReuseStrategy implements RouteReuseStrategy {
      * The keys will all be a path (as in route.routeConfig.path)
      * This allows us to see if we've got a route stored for the requested path
      */
-    storedRoutes: { [key: string]: RouteStorageObject } = {};
+    private storedRoutes: { [key: string]: RouteStorageObject } = {};
+    private acceptedRoutes: string[] = ["search/:term"];
 
     /** 
      * Decides when the route should be stored
@@ -34,9 +35,13 @@ export class CustomReuseStrategy implements RouteReuseStrategy {
      * @returns boolean indicating that we want to (true) or do not want to (false) store that route
      */
     shouldDetach(route: ActivatedRouteSnapshot): boolean {
-        let detach: boolean = true;
-        console.log("detaching", route, "return: ", detach);
-        return detach;
+        // check if the route is a route we would like to store
+        if (this.acceptedRoutes.indexOf(route.routeConfig.path) > -1) {
+            console.log("detaching", route);
+            return true;
+        } else {
+            return false; // will be "search/:resultId" when user navigates to result
+        }
     }
 
     /**
