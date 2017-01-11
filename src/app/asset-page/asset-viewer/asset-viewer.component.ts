@@ -128,7 +128,7 @@ export class AssetViewerComponent implements OnInit, OnDestroy, AfterViewInit {
         let id = this.asset.id + '-' + this.index;
 
         var viewer = new OpenSeadragon({
-            id: 'viewer-' + id,
+            id: 'osd-' + id,
             // prefix for Icon Images
             prefixUrl: 'assets/img/osd/',
             tileSources: this.tileSource,
