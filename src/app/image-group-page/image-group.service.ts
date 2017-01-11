@@ -8,11 +8,11 @@ import { AuthService } from './../shared/auth.service';
 
 @Injectable()
 export class ImageGroupService {
-  private proxyUrl = 'http://rocky-cliffs-9470.herokuapp.com/api?url=';
+  private proxyUrl = '';
   private baseUrl =  this.proxyUrl + 'http://library.artstor.org/library/secure';
 
   private header = new Headers({ 'Content-Type': 'application/json' }); // ... Set content type to JSON
-  private options = new RequestOptions({ headers: this.header, withCredentials: true }); // Create a request option
+  private options = new RequestOptions({ withCredentials: true }); // Create a request option
 
   constructor(private _router: Router, private http: Http, private _auth: AuthService ){
   }
