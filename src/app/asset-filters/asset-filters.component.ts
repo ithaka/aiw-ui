@@ -205,6 +205,7 @@ export class AssetFilters {
   }
 
   clearDateFilter() {
+    // this.availableFilters.dateObj.modified = false;
     this._filters.generateDateFacets();
   }
 

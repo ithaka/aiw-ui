@@ -17,8 +17,8 @@ export class AuthService implements CanActivate {
   private _storage: Locker;
   private baseUrl;
   // Use header rewrite proxy for local development
-  // private proxyUrl = 'http://54.237.41.239/api?url='; 
-  private proxyUrl = 'http://rocky-cliffs-9470.herokuapp.com/api?url='; 
+  // - don't use proxy for now
+  private proxyUrl = ''; 
   
   constructor(private _router:Router, locker:Locker, private http: Http) {
     this._storage = locker.useDriver(Locker.DRIVERS.LOCAL);
