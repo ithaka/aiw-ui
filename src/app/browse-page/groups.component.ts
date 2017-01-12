@@ -62,7 +62,6 @@ export class BrowseGroupsComponent implements OnInit {
     let parentTag = null;
 
     for(let group of folderArray) {
-            group.isFolder = (group.isFolder === 'true') ?  true : false;
             let groupTag = new Tag(group.widgetId, group.title, true, null, { label: "group", folder: group.isFolder });
             childArr.push(groupTag);
           }
