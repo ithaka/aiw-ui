@@ -98,9 +98,17 @@ export class Login {
     this._login.login(user)
       .then(
         (data)  => { 
-          this.loadForUser(data); 
+          if (data.status === false) {
+            if(data.message === 'loginFailed'){
+              this.errorMsg = 'Invalid email address or password. Try again.';
+            }
+          } else {
+             this.loadForUser(data); 
+          }
+         
         }
       ).catch((err) => {
+        console.log(err);
         this.getLoginError(user)
       });
   }
