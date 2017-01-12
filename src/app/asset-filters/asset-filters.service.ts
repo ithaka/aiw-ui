@@ -40,7 +40,9 @@ export class AssetFiltersService {
                 date : 2016,
                 era : 'CE'
             }
-        }
+        },
+        currentPage : 1,
+        pageSize : 24
     };
 
     private availableFilters: any = this.defaultAvailable;
