@@ -25,6 +25,7 @@ export class AssetViewerComponent implements OnInit, OnDestroy, AfterViewInit {
 
     @Input() asset: Asset;
     @Input() index: number;
+    @Input() assetGroupCount: number;
     @Output() fullscreenChange = new EventEmitter();
 
     private isLoading: boolean = true;
