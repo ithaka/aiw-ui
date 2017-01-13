@@ -54,9 +54,10 @@ export class Login {
       })
   }
   
-  loadForUser(user) {
-    if (user && user.user) {
-      this._auth.saveUser(user.user);
+  loadForUser(data: any) {
+    if (data && data.user) {
+      data.user.isLoggedIn = true;
+      this._auth.saveUser(data.user);
       this.errorMsg = '';
       this.router.navigate(['/home']);
     }
@@ -103,7 +104,6 @@ export class Login {
               this.errorMsg = 'Invalid email address or password. Try again.';
             }
           } else {
-            data.isLoggedIn = true;
             this.loadForUser(data); 
           }
          
