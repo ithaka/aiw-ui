@@ -122,7 +122,12 @@ export class AssetFilters {
     }
 
     for (let filter of this.appliedFilters) {
-      params[filter.filterGroup] =  filter.filterValue;
+      if(filter.filterGroup == 'currentPage'){
+        params[filter.filterGroup] =  parseInt(filter.filterValue);
+      }
+      else{
+        params[filter.filterGroup] =  filter.filterValue;
+      }
     }
 
     this.router.navigate(['search', this.term, params]);

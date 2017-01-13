@@ -86,7 +86,13 @@ export class AssetService {
             // test if param is a special parameter
             if (this.urlParams.hasOwnProperty(param)) {
                 // param is a special parameter - assign the value
-                this.urlParams[param] = passedParams[param];
+                if((param == 'currentPage') || (param == 'pageSize')){
+                    this.urlParams[param] = parseInt(passedParams[param]);
+                }
+                else{
+                    this.urlParams[param] = passedParams[param];
+                }
+                
             } else {
                 // Any other filters are managed by Asset Filters
             }
