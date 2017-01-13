@@ -10,8 +10,9 @@ import { Locker } from 'angular2-locker';
 import 'rxjs/add/operator/toPromise';
 import { Subscription }   from 'rxjs/Subscription';
  
-import { AuthService } from '../shared/auth.service';
+import { AuthService } from './auth.service';
 import { AssetFiltersService } from './../asset-filters/asset-filters.service';
+import { ToolboxService } from './toolbox.service';
 
 import { ImageGroup } from '.';
 
@@ -26,6 +27,9 @@ export class AssetService {
     // BehaviorSubjects push last value on subscribe
     private allResultsSource = new BehaviorSubject<any>(this.allResultsValue);
     public allResults = this.allResultsSource.asObservable();
+
+    // Keep track of which params the current results are related to
+    private currentLoadedParams: any = {};
 
     // For loading the assets in the next page - Asset Page
     public lastSearchParams: any = {};
@@ -54,7 +58,8 @@ export class AssetService {
         private route: ActivatedRoute,
         private http: Http,
         locker: Locker,
-        private _auth: AuthService
+        private _auth: AuthService,
+        private _toolbox: ToolboxService
     ) {
         this._storage = locker.useDriver(Locker.DRIVERS.LOCAL);
         this.urlParams = {
@@ -143,6 +148,14 @@ export class AssetService {
      * @param params Object conaining all route params
      */
     public queryAll(params: any) {
+        // Reset allResults
+        if (this._toolbox.compareObjects(this.currentLoadedParams, params) === false) {
+            // Params are different, clear the assets!
+            this.allResultsSource.next([]);
+        }
+
+        this.currentLoadedParams = params;
+
         this.lastSearchParams = params;
         this.searchPageSize = this.urlParams.pageSize;
 

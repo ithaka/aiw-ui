@@ -37,6 +37,23 @@ export class ToolboxService {
             }
         }
 
+        for (let compareProperty in compare) {
+
+            // determine if comparrison object has that property, if not: return false
+            if (base.hasOwnProperty(compareProperty)) {
+                switch(typeof compare[compareProperty]) {
+                    case 'object':
+                        if ( typeof base[compareProperty] !== 'object' || !this.compareObjects(compare[compareProperty], base[compareProperty]) ) { return false; } break;
+                    case 'function':
+                        if ( typeof base[compareProperty] !== 'function' || compare[compareProperty].toString() !== base[compareProperty].toString() ) { return false; } break;
+                    default:
+                        if ( compare[compareProperty] != base[compareProperty] ) { return false; }
+                }
+            } else {
+                return false;
+            }
+        }
+
         // returns true only after false HAS NOT BEEN returned through all loops
         return true;
     }

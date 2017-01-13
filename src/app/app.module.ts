@@ -41,7 +41,7 @@ import { About } from './about';
 import { NoContent } from './no-content';
 
 // Application wide providers
-import { AuthService, AssetService, TypeIdPipe } from './shared';
+import { AuthService, AssetService, TypeIdPipe, ToolboxService } from './shared';
 import { AssetFiltersService } from './asset-filters/asset-filters.service';
 import { TagsService } from './browse-page/tags.service';
 import { CustomReuseStrategy } from './reuse-strategy';
@@ -52,7 +52,8 @@ const APP_PROVIDERS = [
   AssetService,
   AuthService,
   AssetFiltersService,
-  TagsService
+  TagsService,
+  ToolboxService
   // { provide: RouteReuseStrategy, useClass: CustomReuseStrategy } // to be implemented later
 ];
 
