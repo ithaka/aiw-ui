@@ -48,8 +48,8 @@
 @include icon('star', 'svg');
 @include icon('zoom-in', 'svg');
 @include icon('zoom-out', 'svg');
-@include icon--hover('collab', 'gif');
-@include icon--hover('iap', 'gif');
+@include icon('collab', 'gif');
+@include icon('iap', 'gif');
 @include icon('pdf', 'gif');
 @include icon('doc', 'gif');
 @include icon('xls', 'gif');
@@ -58,10 +58,10 @@
 @include icon('audio', 'gif');
 @include icon('3d', 'gif');
 @include icon('qtvr', 'gif');
-@include icon('personal-asset', 'gif');
-@include icon('ssc-asset', 'gif');
-@include icon('institution-asset', 'gif');
-@include icon('artstor-asset', 'gif');
+@include icon('personal-asset', 'png');
+@include icon('ssc-asset', 'png');
+@include icon('institution-asset', 'png');
+@include icon('artstor-asset', 'png');
 
 .icon-search {
     cursor: pointer;
