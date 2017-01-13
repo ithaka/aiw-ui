@@ -20,8 +20,8 @@ export class TypeIdPipe implements PipeTransform {
     20: 'pdf', // used in styles
     21: 'ppt', // used in styles
     22: 'doc', // used in styles
-    23: 'excel',
-    24: 'kaltura'
+    23: 'xls', // used in styles
+    24: 'video' // used in styles
   };
 
   // perhaps could take a 'style' or 'name' arg, depending on if you want abbrevs?
