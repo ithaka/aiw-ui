@@ -4,8 +4,9 @@ $assetViewerPad: 20px;
 .asset-viewer {
     text-align: center;
     padding: $assetViewerPad;
-    position: relative;
     z-index: 0;
+    position: relative;
+    min-height: 100px;
 }
 
 .asset-viewer__buttons {
@@ -43,4 +44,14 @@ $assetViewerPad: 20px;
             width: 100%/$n;
         }
     }
+}
+
+.fullscreen-metadata {
+    position: fixed;
+    background: #e1e8e1;
+    bottom: 0;
+    z-index: 1000;
+    opacity: 0.95;
+    width: 100%;
+    min-height: 50px;
 }

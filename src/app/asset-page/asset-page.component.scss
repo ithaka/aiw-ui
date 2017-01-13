@@ -69,17 +69,9 @@
 }
 .title-nav-cntnr:hover .page-tooltip{
     opacity: 1;
-}
+} 
 
-.fullscreen {
-    & .title-nav-cntnr {
-        position: fixed;
-        background: #e1e8e1;
-        bottom: 0;
-        z-index: 1000;
-        opacity: 0.95;
-    }
-}
+
 
 .asset-page.fullscreen {
     background: #000;

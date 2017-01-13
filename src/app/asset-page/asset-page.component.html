@@ -1,6 +1,6 @@
 <div class="container-fluid asset-page" [class.fullscreen]="isFullscreen">
     <!--View prev/next asset-->
-    <div class="title-nav-cntnr col-md-12">
+    <div class="title-nav-cntnr col-md-12" [class.hidden]="isFullscreen">
         <i title="Previous in results" (click)="showPrevAsset()" class="icon icon-direction icon-left"></i>
         <div class="title">{{ assets[0].title }}</div>
         <i title="Next in results" (click)="showNextAsset()" class="icon icon-direction icon-right"></i>
@@ -9,7 +9,15 @@
     <!--Asset Viewer Row-->
     <div [ngClass]="[ isFullscreen ? 'col-md-12' : 'col-md-8' ]">
         <div class="row">
-            <ang-asset-viewer *ngFor="let asset of assets; let i = index" [asset]="asset" (fullscreenChange)="updateFullscreenVar($event)" [index]="i" [assetGroupCount]="assets.length"></ang-asset-viewer>
+            <ang-asset-viewer *ngFor="let asset of assets; let i = index" 
+                [asset]="asset" 
+                (fullscreenChange)="updateFullscreenVar($event)" 
+                [index]="i" 
+                [assetCompareCount]="assets.length"
+                [assetNumber]="assetNumber"
+                [assetGroupCount]="totalAssetCount"
+                (nextPage)="showNextAsset()"
+                (prevPage)="showPrevAsset()"></ang-asset-viewer>
         </div>
         <!--If the user has not accepted the agreement, show modal when clicked, otherwise download immediately-->
         <a *ngIf="assets[0].downloadLink && _auth.getUser().isLoggedIn" 

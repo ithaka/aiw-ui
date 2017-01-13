@@ -1,72 +1,64 @@
-<!-- IIIF Image Viewer -->
-<div class="asset-viewer" [class.hidden]="!isOpenSeaDragonAsset || mediaLoadingFailed" [class.fullscreen]="isFullscreen" [ngClass]="[ 'asset-viewer-' + assetGroupCount ]">
-    <!-- *ngIf="openSeaDragonReady"-->
-    <div id="imageButtons-{{ asset.id + '-' + index }}" class="button-group asset-viewer__buttons">
-        <button id="zoomIn-{{ asset.id + '-' + index}}" title="Zoom In" class="btn btn--icon">
-            <i class="icon icon-zoom-in"></i>
-        </button>
-        <button id="zoomOut-{{ asset.id + '-' + index }}" title="Zoom Out"  class="btn btn--icon">
-            <i class="icon icon-zoom-out"></i>
-        </button>
-        <button id="zoomFit-{{ asset.id + '-' + index }}" title="Zoom Fit"  class="btn btn--icon">
-                <i class="icon icon-fit"></i>
-        </button>
-        <button id="fullScreen-{{ asset.id + '-' + index }}" class="btn btn--icon" (click)="togglePresentationMode()" title="Full Screen">
-                <i class="icon icon-fullscreen"></i>
-        </button>
-        <button *ngIf="removableAsset" class="removeAsset show-in-fullscreen" (click)="removeComparedAsset(asset.id)" title="Remove from Comparison">
-                <i class="icon icon-close"></i>
-        </button>
-    </div>
-    <div id="loader-wrapper" class="more-results overlay-wrap--center" *ngIf="!openSeaDragonReady">
-        <i class="icon-asterisk icon-spin icon-large"></i>
-    </div>
-    <div class="item" [attr.id]="'osd-' + asset.id + '-' + index" [attr.zoomValue]="lastZoomValue" style="position: relative; height: 100%; width: 100%; min-height:600px;"></div>
-</div>
+<div class="asset-viewer" [class.fullscreen]="isFullscreen" [ngClass]="[ 'asset-viewer-' + assetGroupCount ]">
+    <!-- IIIF Image Viewer -->
+    <div [class.hidden]="!isOpenSeaDragonAsset || mediaLoadingFailed">
+        <!-- *ngIf="openSeaDragonReady"-->
 
-<!-- Video Player -->
-<div class="asset-viewer" [class.hidden]="!isKalturaAsset || mediaLoadingFailed">
-    <!--<div id="imageButtons-{{ asset.id + '-' + index }}" class="button-group top-right vertical icons-block circle">
+        <div id="loader-wrapper" class="more-results overlay-wrap--center" *ngIf="!openSeaDragonReady">
+            <i class="icon-asterisk icon-spin icon-large"></i>
+        </div>
+        <div class="item" [attr.id]="'osd-' + asset.id + '-' + index" [attr.zoomValue]="lastZoomValue" style="position: relative; height: 100%; width: 100%; min-height:600px;"></div>
+    </div>
+
+    <!-- Video Player -->
+    <div [class.hidden]="!isKalturaAsset || mediaLoadingFailed">
+        <!--<div id="imageButtons-{{ asset.id + '-' + index }}" class="button-group top-right vertical icons-block circle">
         <button class="hide-in-fullscreen" (click)="togglePresentationMode()" id="fullScreen-{{ asset.id + '-' + index }}" title="Full Screen"><i class="icon-full-screen"></i></button>
         <button *ngIf="removableAsset" class="show-in-fullscreen" (click)="removeComparedAsset(asset.id)" title="Remove from Comparison"><i class="icon-clear"></i></button>
     </div>-->
-
-    <div [attr.id]="'video-' + asset.id + '-' + index" class="item video-player"></div>
-    <!--<kaltura-player [config]="kalturaConfig" 
-                    [videoId]="videoId" 
-                    [secure]="true"
-                    (ready)="doSomethingOnReady(targetId)">
-    </kaltura-player>-->
-</div>
-
-
-<!--Audio Player-->
-<div class="asset-viewer" *ngIf="asset.typeName() == 'audio'">
-    <audio id="audio-{{ asset.id + '-' + index }}" class="item video-player" controls style="display:none;">
-        <source [attr.src]="asset.downloadLink" type="audio/MPEG"> 
-        <!--{{ mediaType }}-->
-        {{ 'audio_error' }}
-    </audio>
-</div>
-
-<!-- PDF Viewer -->
-<!--<div class="asset-viewer" ng-hide="mediaLoadingFailed" ng-if="asset.File.type == 'pdf' || asset.File.format == 'pdf'">
-    <ng-pdf style="height: 100%;width:100%; position: relative;overflow:hidden;" template-url="item/pdfViewer.tpl.html" scale="page-fit"></ng-pdf>
-</div>-->
-
-<!-- Large thumbnail fallback -->
-<div *ngIf="mediaLoadingFailed" id="fallbackViewer" [class.loading]="isLoading" class="asset-viewer">
-    <img alt="{{ asset.title }}" class="item" src="http://viewer2.artstor.org{{ ( asset.imgURL + '' ).replace('size0','size2') }}" />
-</div>
-<!-- Error if asset failed to load even the fallback thumbnail -->
-<!--<div class="asset-viewer" ng-show="fallbackFailed">
-    <div class="asset-viewer__message">
-    {{ "asset_error.failed" | i18next }}
+        <div [attr.id]="'video-' + asset.id + '-' + index" class="item video-player"></div>
     </div>
-</div>-->
-<!-- Error if asset has no media/File -->
-<!--<div class="asset-viewer" ng-show="isEmpty(asset.File) || !asset.File">
-    <div class="asset-viewer__message">
-    {{ "asset_error.none" | i18next }}
+
+    <!--Audio Player-->
+    <div *ngIf="asset.typeName() == 'audio'">
+        <audio id="audio-{{ asset.id + '-' + index }}" class="item video-player" controls style="display:none;">
+            <source [attr.src]="asset.downloadLink" type="audio/MPEG"> 
+            <!--{{ mediaType }}-->
+            {{ 'audio_error' }}
+        </audio>
     </div>
-</div>-->
+
+    <!-- PDF Viewer -->
+        <!--<div ng-hide="mediaLoadingFailed" ng-if="asset.File.type == 'pdf' || asset.File.format == 'pdf'">
+        <ng-pdf style="height: 100%;width:100%; position: relative;overflow:hidden;" template-url="item/pdfViewer.tpl.html" scale="page-fit"></ng-pdf>
+    </div>-->
+
+    <!-- Large thumbnail fallback -->
+    <div *ngIf="mediaLoadingFailed" id="fallbackViewer" [class.loading]="isLoading" class="asset-viewer">
+        <img alt="{{ asset.title }}" class="item" src="http://viewer2.artstor.org{{ ( asset.imgURL + '' ).replace('size0','size2') }}" />
+    </div>
+
+    <div id="imageButtons-{{ asset.id + '-' + index }}" class="button-group asset-viewer__buttons">
+        <button *ngIf="isOpenSeaDragonAsset" id="zoomIn-{{ asset.id + '-' + index}}" title="Zoom In" class="btn btn--icon">
+        <i class="icon icon-zoom-in"></i>
+    </button>
+        <button *ngIf="isOpenSeaDragonAsset" id="zoomOut-{{ asset.id + '-' + index }}" title="Zoom Out" class="btn btn--icon">
+        <i class="icon icon-zoom-out"></i>
+    </button>
+        <button *ngIf="isOpenSeaDragonAsset" id="zoomFit-{{ asset.id + '-' + index }}" title="Zoom Fit" class="btn btn--icon">
+            <i class="icon icon-fit"></i>
+    </button>
+        <button id="fullScreen-{{ asset.id + '-' + index }}" class="btn btn--icon" (click)="togglePresentationMode()" title="Full Screen">
+            <i class="icon icon-fullscreen"></i>
+    </button>
+        <button *ngIf="removableAsset" class="removeAsset show-in-fullscreen" (click)="removeComparedAsset(asset.id)" title="Remove from Comparison">
+            <i class="icon icon-close"></i>
+    </button>
+    </div>
+
+    <div *ngIf="isFullscreen" class="fullscreen-metadata">
+        <i title="Previous in results" (click)="prevPage.emit()" class="icon icon-direction icon-left"></i>
+        <div class="title">{{ asset.title }}</div>
+        <i title="Next in results" (click)="nextPage.emit()" class="icon icon-direction icon-right"></i>
+        <div class="page-tooltip">{{ assetNumber }} OF {{ totalAssetCount }}</div>
+    </div>
+</div>
