@@ -9,7 +9,7 @@
     </div>
     <div [ngClass]="{ 'col-sm-9' : igDesc, 'col-sm-12' : !igDesc }" class="col-sm-9">
       <ang-asset-grid></ang-asset-grid>
-        <a (click)="showPptModal = true">
+        <a *ngIf="_auth.getUser().isLoggedIn" (click)="showPptModal = true">
             <i id="downloadAssetLink" class="icon icon-download" ></i>
         </a><!--setting name to asset.title does not currently work - it is always named "download" - see below-->
         <!--http://stackoverflow.com/questions/33909763/download-attribute-with-a-file-name-not-working-->
