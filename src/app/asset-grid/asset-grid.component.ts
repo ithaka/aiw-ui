@@ -170,7 +170,12 @@ export class AssetGrid implements OnInit, OnDestroy {
         } else {
           this.results = allResults.thumbnails;
         }
-        this.isLoading = false;
+        if (allResults.length == 0) {
+          // We push an empty array when assets are old
+          this.isLoading = true;
+        } else {
+          this.isLoading = false;
+        }
       })
     );
   }
