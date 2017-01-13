@@ -50,12 +50,13 @@
 @include icon('zoom-out', 'svg');
 @include icon--hover('collab', 'gif');
 @include icon--hover('iap', 'gif');
-@include icon--hover('video', 'gif');
-@include icon--hover('doc', 'gif');
-@include icon--hover('pdf', 'gif');
-@include icon--hover('ppt', 'gif');
-@include icon--hover('3d', 'gif');
-@include icon--hover('qtvr', 'gif');
+@include icon('pdf', 'gif');
+@include icon('doc', 'gif');
+@include icon('xls', 'gif');
+@include icon('ppt', 'gif');
+@include icon('video', 'gif');
+@include icon('3d', 'gif');
+@include icon('qtvr', 'gif');
 
 .icon-search {
     cursor: pointer;
