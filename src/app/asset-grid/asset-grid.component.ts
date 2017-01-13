@@ -84,6 +84,13 @@ export class AssetGrid implements OnInit, OnDestroy {
     { term: ''}
   ];
 
+  private collectionTypeMap: any = {
+    1: "artstor-asset",
+    2: "institution-asset",
+    3: "personal-asset",
+    5: "ssc-asset"
+  }
+
   // Object Id parameter, for Clusters
   private objectId : string = ''; 
   // Collection Id parameter
@@ -234,5 +241,12 @@ export class AssetGrid implements OnInit, OnDestroy {
 
     this._router.navigate([extractedParams], { relativeTo: this.route });
     // this._router.navigate(['/search', term, extractedParams]);
+  }
+
+  private convertCollectionTypes(collectionId: number) {
+    switch (collectionId) {
+      case 3:
+        return "personal-asset";
+    }
   }
 }

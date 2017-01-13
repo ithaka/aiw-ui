@@ -60,8 +60,8 @@
                         <i *ngIf="asset.cfObjectId.length > 0" [id]="asset.objectId + '_associated_images'" class="icon icon-collab" [routerLink]="['/associated', asset.cfObjectId, asset.collectionId]"></i>
                         <i *ngIf="asset.clustered == 1" [id]="asset.objectId + '_clustered_images'" class="icon icon-cluster" [routerLink]="['/cluster', asset.objectId, { objTitle :  asset.thumbnail1 }]"></i>
                         <i *ngIf="asset.iapFlag > 0" class="icon icon-iap"></i>
-                        <i *ngIf="asset.objectTypeId" class="icon icon-{{asset.objectTypeId | typeIdPipe}}"></i>
-                        <i class="icon"><!--spacer--></i>
+                        <i *ngIf="asset.objectTypeId && asset.objectTypeId != 10" class="icon icon-{{asset.objectTypeId | typeIdPipe}}"></i>
+                        <i class="icon icon-{{collectionTypeMap[asset.collectionType]}}"></i>
                         <span class="asset-title" title="{{ asset.thumbnail1 }}">{{ asset.thumbnail1 }}</span>
                         <span class="asset-agent" title="{{ asset.thumbnail2 }}">{{ asset.thumbnail2 }}</span>
                         <span class="asset-date" title="{{ asset.thumbnail3 }}">{{ asset.thumbnail3 }}</span>
