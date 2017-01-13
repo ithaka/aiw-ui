@@ -51,7 +51,53 @@ $assetViewerPad: 20px;
     background: #e1e8e1;
     bottom: 0;
     z-index: 1000;
-    opacity: 0.95;
+    opacity: 0.98;
     width: 100%;
     min-height: 50px;
+    padding: 20px;
+
+    & i{
+        vertical-align: top;
+        margin: 3px;
+        cursor: pointer;
+    }
+    & .title{
+        font-family: 'Lyon Display Web', Georgia, Times;
+        font-size: 18px;
+        display: inline-block;
+        width: 350px;
+        margin: auto;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        vertical-align: top;
+    }
+    & .page-tooltip{
+        font-weight: normal;
+        font-size: 10px;
+        min-width: 120px;
+        line-height: 21px;
+        display: block;
+        position: absolute;
+        z-index: 5000;
+        top: 100%;
+        left: 50%;
+        -webkit-transform: translateX(-50%);
+        -moz-transform: translateX(-50%);
+        -ms-transform: translateX(-50%);
+        -o-transform: translateX(-50%);
+        transform: translateX(-50%);
+        box-shadow: 1px 2px 3px rgba(0, 0, 0, 0.3);
+        background: white;
+        color: black;
+        padding: 2px 15px 0px;
+        opacity: 0;
+        -webkit-transition: opacity linear 0.3s;
+        -moz-transition: opacity linear 0.3s;
+        transition: opacity linear 0.3s;
+    }
+    &:hover .page-tooltip{
+        opacity: 1;
+    } 
+
 }
