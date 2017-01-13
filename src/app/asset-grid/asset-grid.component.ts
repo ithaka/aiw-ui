@@ -110,7 +110,7 @@ export class AssetGrid implements OnInit, OnDestroy {
             // test if param is a special parameter
             if (this.pagination.hasOwnProperty(param)) {
                 // param is a special parameter - assign the value
-                this.pagination[param] = params[param];
+                this.pagination[param] = parseInt(params[param]);
             } else {
                 // Any other filters are managed by Asset Filters
             }
@@ -159,7 +159,7 @@ export class AssetGrid implements OnInit, OnDestroy {
           ||
           (this.pagination.currentPage > this.pagination.totalPages)
         ) {
-          this.goToPage(1);
+          // this.goToPage(1);
         } else {
           this.results = allResults.thumbnails;
         }
@@ -216,6 +216,23 @@ export class AssetGrid implements OnInit, OnDestroy {
     let currentParamsObj: Params = Object.assign({}, this.route.snapshot.params);
     currentParamsObj[key] = value;
 
-    this._router.navigate([currentParamsObj], { relativeTo: this.route });
+    let term: string = '';
+    let extractedParams = {};
+    let scpObj = this;
+
+    Object.keys(currentParamsObj).forEach(function(key) {
+            if(key == 'term'){
+                term = currentParamsObj[key];
+            }
+            else{
+              if(key == 'currentPage'){
+                extractedParams['pageSize'] = scpObj.pagination.pageSize;
+              }
+              extractedParams[key] = currentParamsObj[key];
+            }
+        });
+
+    this._router.navigate([extractedParams], { relativeTo: this.route });
+    // this._router.navigate(['/search', term, extractedParams]);
   }
 }

@@ -11,9 +11,9 @@
             <p id="pageDescription" [innerHtml]="colDescription"></p>
             
         </div>
-        <div class="col-sm-3 ">
+        <div *ngIf="colThumbnail.length > 0" class="col-sm-3 ">
             <div class="thumbnail-shelf">
-                <img class="collection-thumb" src="http://viewer2.artstor.org{{ colThumbnail }}" />
+                <img class="collection-thumb" src="http://viewer2.artstor.org/{{ colThumbnail }}" />
             </div>
         </div>
     </div>

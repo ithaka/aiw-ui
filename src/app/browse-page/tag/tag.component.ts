@@ -29,7 +29,7 @@ export class TagComponent {
       if (this.tag.type.label === 'collection') {
         this.linkRoute = '/collection';
       }
-      if (this.tag.type.label === 'group') {
+      if (this.tag.type.label === 'group' && this.tag.type.folder !== true) {
         this.linkRoute = '/group';
       }
       if (this.tag.type.label === 'category') {

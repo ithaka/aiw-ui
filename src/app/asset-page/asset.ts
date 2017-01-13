@@ -65,7 +65,7 @@ export class Asset {
               if(res.objectId){
                   this.metaDataArray = res.metaData;
                   this.filePropertiesArray = res.fileProperties;
-                  this.title = res.title;
+                  this.title = res.title ? res.title : 'Untitled';
                   this.imgURL = res.imageUrl;
 
                   document.title = this.title;

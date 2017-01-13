@@ -32,6 +32,8 @@ export class Tag {
     this.parentTag = parentTag;
     if (type) {
       this.type = type;
+      // A disappointing number of booleans come back as strings...
+      this.type.folder = (type.folder === 'true' || type.folder === true) ?  true : false;
     } else {
       this.type = 'category';
     }

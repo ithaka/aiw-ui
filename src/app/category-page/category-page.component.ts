@@ -56,9 +56,12 @@ export class CategoryPage implements OnInit, OnDestroy {
         this.catName = name;
 
         if (this.catId) {
+          // Tell AssetService to load thumbnails (Asset Grid will get them)
+          this._assets.queryAll(routeParams);
+
+          // Get Category metadata
           this.getCategoryInfo(this.catId)
             .then((data) => {
-              this._assets.queryAll(routeParams);
 
               if (data) {
                 this.catDescription = data.blurbUrl;
