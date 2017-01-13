@@ -12,7 +12,7 @@
             <ang-asset-viewer *ngFor="let asset of assets; let i = index" [asset]="asset" (fullscreenChange)="updateFullscreenVar($event)" [index]="i" [assetGroupCount]="assets.length"></ang-asset-viewer>
         </div>
         <!--If the user has not accepted the agreement, show modal when clicked, otherwise download immediately-->
-        <a *ngIf="assets[0].downloadLink" 
+        <a *ngIf="assets[0].downloadLink && _auth.getUser().isLoggedIn" 
             [attr.href]="downloadAuth() ? assets[0].downloadLink : null"
             [attr.download]="downloadAuth() ? assets[0].title : null"
             (click)="!downloadAuth() ? showAgreeModal = true : null"

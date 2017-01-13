@@ -103,7 +103,8 @@ export class Login {
               this.errorMsg = 'Invalid email address or password. Try again.';
             }
           } else {
-             this.loadForUser(data); 
+            data.isLoggedIn = true;
+            this.loadForUser(data); 
           }
          
         }
