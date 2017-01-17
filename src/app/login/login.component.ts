@@ -64,6 +64,12 @@ export class Login {
   
   loadForUser(data: any) {
     if (data && data.user) {
+      data.user.hasOwnProperty("username") && this.angulartics.setUsername.next(data.user.username);
+      data.user.hasOwnProperty("institutionId") && this.angulartics.setUserProperties.next({ institutionId: data.user.institutionId });
+      data.user.hasOwnProperty("isLoggedIn") && this.angulartics.setUserProperties.next({ isLoggedIn: data.user.isLoggedIn });
+      data.user.hasOwnProperty("shibbolethUser") && this.angulartics.setUserProperties.next({ shibbolethUser: data.user.shibbolethUser });
+      data.user.hasOwnProperty("dept") && this.angulartics.setUserProperties.next({ dept: data.user.dept });
+
       data.user.isLoggedIn = true;
       this._auth.saveUser(data.user);
       this.errorMsg = '';
