@@ -10,6 +10,8 @@ export class Asset {
   /** typeId determines what media type the asset is */
   typeId: number;
   title: string;
+  creator: string;
+  date: string;
   imgURL: string;
   downloadLink: string;
   tileSource: any;
@@ -69,13 +71,14 @@ export class Asset {
                   this.imgURL = res.imageUrl;
 
                   document.title = this.title;
+                  this.setCreatorDate();
 
                   this.metadataLoaded = true;
                   this.dataLoadedSource.next(this.metadataLoaded && this.imageSourceLoaded);
               }
           })
           .catch(function(err) {
-              console.error('Unable to load category results.');
+              console.error('Unable to load asset metadata.');
           });
     
     // This call returns an html table as a string! Fun.
@@ -88,6 +91,19 @@ export class Asset {
     //         console.error('Unable to load asset file properties');
     //     })
   }
+
+  /** Set Creator and Date for the asset from the metadata Array; to be used for tombstone data on fullscreen mode */
+  private setCreatorDate(): void {
+      for(var i = 0; i < this.metaDataArray.length; i++){
+          if(this.metaDataArray[i].fieldName == 'Creator'){
+              this.creator = this.metaDataArray[i].fieldValue;
+          }
+          else if(this.metaDataArray[i].fieldName == 'Date'){
+              this.date = this.metaDataArray[i].fieldValue;
+          }
+      }
+  }
+
 
   /** Assigns the asset's downloadLink parameter */
   private getDownloadLink(): void {

@@ -100,4 +100,19 @@ $assetViewerPad: 20px;
         opacity: 1;
     } 
 
+    & .caption-link{
+        display: inline-block;
+        float: left;
+        font-size: 12px;
+        cursor: pointer;
+        border-bottom: 1px dotted #373a3c;
+    }
+
+}
+
+.caption-cntnr{
+    display: block;
+    padding: 10px;
+    position: fixed;
+    bottom: 60px;
 }

@@ -43,6 +43,7 @@ export class AssetViewerComponent implements OnInit, OnDestroy, AfterViewInit {
     private fallbackFailed: boolean = false;
     private tileSource: string;
     private lastZoomValue: number;
+    private showCaption: boolean = true;
 
     constructor(private _assets: AssetService) {}
 
