@@ -1,10 +1,11 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-
 import { AppState } from '../app.service';
 import { AuthService } from './../shared/auth.service';
 import { LoginService, User } from './login.service';
 import { Location } from '@angular/common';
+
+import { Angulartics2 } from 'angulartics2';
 
 @Component({
   // The selector is what angular internally uses
@@ -37,7 +38,14 @@ export class Login {
   public loginInst;
   
   // TypeScript public modifiers
-  constructor(public appState: AppState, private _auth: AuthService, private _login: LoginService, private router: Router, private location: Location) { 
+  constructor(
+    public appState: AppState,
+    private _auth: AuthService,
+    private _login: LoginService,
+    private router: Router,
+    private location: Location,
+    private angulartics: Angulartics2
+  ) { 
     
   }
 
@@ -96,6 +104,8 @@ export class Login {
       return;
     }
 
+    this.angulartics.eventTrack.next({ action:"remoteLogin", properties: { category: "login", label: "attempt" }});
+
     this._login.login(user)
       .then(
         (data)  => { 
@@ -104,6 +114,7 @@ export class Login {
               this.errorMsg = 'Invalid email address or password. Try again.';
             }
           } else {
+            this.angulartics.eventTrack.next({ action:"remoteLogin", properties: { category: "login", label: "success" }});
             this.loadForUser(data); 
           }
          
@@ -111,6 +122,7 @@ export class Login {
       ).catch((err) => {
         console.log(err);
         this.getLoginError(user)
+        this.angulartics.eventTrack.next({ action:"remoteLogin", properties: { category: "login", label: "failed" }});
       });
   }
   
