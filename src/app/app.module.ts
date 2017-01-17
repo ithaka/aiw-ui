@@ -15,6 +15,7 @@ import { ROUTES } from './app.routes';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 // import { CoolStorageModule } from 'angular2-cool-storage';
 import {LockerModule, Locker, LockerConfig} from 'angular2-locker'
+import { Angulartics2Module, Angulartics2GoogleAnalytics } from 'angulartics2';
 
 // App is our top level component
 import { App } from './app.component';
@@ -105,6 +106,7 @@ type StoreType = {
     // CoolStorageModule,
     LockerModule,
     RouterModule.forRoot(ROUTES, { useHash: true }),
+    Angulartics2Module.forRoot([ Angulartics2GoogleAnalytics ]),
     NgbModule.forRoot() // Ng Bootstrap Import
   ],
   providers: [ // expose our Services and Providers into Angular's dependency injection
