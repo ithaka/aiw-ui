@@ -616,6 +616,10 @@ export class AssetService {
             .then((data) => { return this.extractData(data); });
     }
 
+    /**
+     * Expected to return an object with a imageUrl at all costs
+     * eg. http://kts.stage.artstor.org/service/get_player/?entry_id=1:0_s6agwcv9
+     */
     public getFpxInfo(objectId: string, objectTypeId: number): Promise<any> {
         // http://library.artstor.org/library/secure/imagefpx/SS7730295_7730295_8847273/24
         let requestUrl = this._auth.getUrl() + '/imagefpx/' + objectId + '/' + objectTypeId;
@@ -623,6 +627,18 @@ export class AssetService {
         return this.http
             .get(requestUrl, this.defaultOptions)
             .toPromise()
-            .then((data) => { return this.extractData(data); });
+            .then((data) => { 
+                return data.json() || {}; 
+            });
+    }
+
+    /** 
+     * Generate Thumbnail URL
+     */
+    public makeThumbUrl(imagePath: string, size ?: number): string {
+        if (size) {
+            imagePath = imagePath.replace(/(size)[0-4]/g, 'size' + size);
+        }
+        return this._auth.getThumbUrl() + imagePath;
     }
 }
