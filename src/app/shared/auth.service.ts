@@ -93,6 +93,25 @@ export class AuthService implements CanActivate {
       return this._storage.get('user');
   }
 
+  /** Stores an object in local storage for you - your welcome */
+  public store(key: string, value: any): void {
+      if (key != "user" && key != "token") {
+          this._storage.set(key, value);
+      }
+  }
+
+  /** Gets an object from local storage */
+  public getFromStorage(key: string): any {
+      return this._storage.get(key);
+  }
+
+  /** Deletes things (not user or token) from local storage */
+  public deleteFromStorage(key: string): void {
+      if (key != "user" && key != "token") {
+          this._storage.remove(key);
+      }
+  }
+
   /** Clears all variables held in local storage */
   public clearStorage(): void {
     this._storage.clear();
