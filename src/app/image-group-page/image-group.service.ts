@@ -9,7 +9,8 @@ import { AuthService } from './../shared/auth.service';
 @Injectable()
 export class ImageGroupService {
   private proxyUrl = '';
-  private baseUrl =  this.proxyUrl + 'http://library.artstor.org/library/secure';
+  // private baseUrl =  this.proxyUrl + 'http://library.artstor.org/library/secure';
+  private baseUrl = 'http://stagely.artstor.org/library/secure';
 
   private header = new Headers({ 'Content-Type': 'application/json' }); // ... Set content type to JSON
   private options = new RequestOptions({ withCredentials: true }); // Create a request option
@@ -57,5 +58,40 @@ export class ImageGroupService {
           }
           return data.json().igNotes;
         });
+  }
+
+  /**
+   * Get image group data from image group id
+   * @param groupId Id of desired image group
+   * @returns JS Object with parameters: count, igId, igName, igNotes and more if it is a folder
+   */
+  getGroupData(groupId: string): Observable<string> {
+    let requestUrl = [this.baseUrl, "imagegroup", groupId].join("/") + "?_method=igdescription";
+
+    return this.http
+      .get(requestUrl, this.options)
+        .map((data) => {
+          if (!data) {
+            throw new Error("No data in image group description response");
+          }
+          return data.json();
+        });
+  }
+
+  /**
+   * Load image group assets
+   * @param igId Image group id for which to retrieve assets
+   */
+  loadIgAssets(igId: string): Observable<string> {
+      let requestString: string = [this._auth.getUrl(), "imagegroup",igId, "thumbnails", 1, 24, 0].join("/");
+
+      return this.http
+          .get(requestString, this.options)
+          .map((data) => {
+            if (!data) {
+              throw new Error("No data in image group description response");
+            }
+            return data.json();
+          });
   }
 }
