@@ -74,7 +74,12 @@ export class Login {
       data.user.isLoggedIn = true;
       this._auth.saveUser(data.user);
       this.errorMsg = '';
-      this.router.navigate(['/home']);
+      if (this._auth.getFromStorage("stashedRoute")) {
+        this.router.navigateByUrl(this._auth.getFromStorage("stashedRoute"));
+        this._auth.deleteFromStorage("stagedRoute");
+      } else {
+        this.router.navigate(['/home']);
+      }
     }
   }
 
