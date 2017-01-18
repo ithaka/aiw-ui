@@ -26,8 +26,10 @@
             (click)="!downloadAuth() ? showAgreeModal = true : null"
         >
             <i id="downloadAssetLink" class="icon icon-download" ></i>
+        </a>
+        <a *ngIf="assets[0].downloadLink && !_auth.getUser().isLoggedIn" (click)="showLoginModal = true">
+            <i id="downloadAssetLink" class="icon icon-download" ></i>
         </a><!--setting name to assets[0].title does not currently work - it is always named "download" - see below-->
-        <!--http://stackoverflow.com/questions/33909763/download-attribute-with-a-file-name-not-working-->
     </div>
     <!--Asset Metadata Row-->
     <div [class.hidden]="isFullscreen" class="col-md-4">
@@ -51,3 +53,4 @@
     </div>
 </div>
 <ang-agree-modal *ngIf="showAgreeModal" (closeModal)="showAgreeModal = false" [asset]="assets[0]"></ang-agree-modal>
+<ang-login-req-modal *ngIf="showLoginModal" (closeModal)="showLoginModal = false"></ang-login-req-modal>

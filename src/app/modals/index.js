@@ -1,1 +1,1 @@
-export * from './login-req-modal';
+export * from './login-req-modal/login-req-modal.component';

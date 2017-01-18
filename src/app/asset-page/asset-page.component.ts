@@ -23,8 +23,9 @@ export class AssetPage implements OnInit, OnDestroy {
     private loadArrayLastAsset: boolean = false;
     private isFullscreen: boolean = false;
 
-    /** controls whether or not the agreement modal is visible */
+    /** controls whether or not the modals are visible */
     private showAgreeModal: boolean = false;
+    private showLoginModal: boolean = false;
 
     constructor(private _assets: AssetService, private _auth: AuthService, private route: ActivatedRoute, private _router: Router,) { }
 
