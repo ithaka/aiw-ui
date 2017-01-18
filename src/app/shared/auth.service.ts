@@ -16,6 +16,7 @@ import {
 export class AuthService implements CanActivate {
   private _storage: Locker;
   private baseUrl;
+  private thumbUrl;
   // Use header rewrite proxy for local development
   // - don't use proxy for now
   private proxyUrl = ''; 
@@ -32,6 +33,10 @@ export class AuthService implements CanActivate {
       this.baseUrl = 'http://stagely.artstor.org/library/secure';
       // this.baseUrl = this.proxyUrl + 'http://library.artstor.org/library/secure';
     // }
+      this.thumbUrl = '//mdxstage.artstor.org';
+
+    // maintain thumb servers
+    // mdxdv.artstor.org
   }
 
 
@@ -64,6 +69,13 @@ export class AuthService implements CanActivate {
   
   public getUrl(): string {
     return this.baseUrl;
+  }
+
+  /**
+   * Our thumbnails come 
+   */
+  public getThumbUrl(): string {
+    return this.thumbUrl;
   }
 
   public getPublicUrl(): string {
