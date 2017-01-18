@@ -41,6 +41,7 @@ import { ImageGroupPage, PptModalComponent } from './image-group-page';
 import { Login } from './login';
 import { About } from './about';
 import { NoContent } from './no-content';
+import { LoginReqModal } from './modals';
 
 // Application wide providers
 import { AuthService, AssetService, TypeIdPipe, ToolboxService } from './shared';
@@ -96,6 +97,7 @@ type StoreType = {
     AssetGrid,
     ImageGroupPage,
     PptModalComponent,
+    LoginReqModal,
     Login,
     Home,
     NoContent,

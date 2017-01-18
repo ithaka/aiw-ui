@@ -1,0 +1,22 @@
+<div class="modal fade-in">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" (click)="closeModal.emit()" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <h4 class="modal-title">Export/Download Guidelines</h4>
+      </div>
+      <div class="modal-body">
+        <p>All logged in users may export/download up to <b>2000</b> images in a <b>120</b> day period. Multimedia files are not exported.</p>
+        <p>You have exported or downloaded <b>some number</b> of images in the last <b>120</b> days, which means you can currently export or download up to <b>some other number</b> images.</p>
+        <p>Also note that, by accepting this download, you are agreeing to the <a href="http://www.artstor.org/terms" name="Terms and conditions of use" target="_blank">terms and conditions of use.</a></p>
+        <p>Would you like to proceed?</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="closeModal.emit()">Cancel</button>
+        <button class="btn btn-primary" (click)="goToLogin()">Login</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
