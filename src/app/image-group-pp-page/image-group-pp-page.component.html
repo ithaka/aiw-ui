@@ -1,0 +1,21 @@
+<div (click)="printGroup()">Print Group</div>
+<div class="container-fluid" id="printable-cntnr">
+    <div class="ig-title">{{ igName }}</div>
+    <div *ngIf="igDesc" class="ig-desc" [innerHTML]="igDesc"></div>
+    <div class="assets-cntnr">
+        <div class="assets-block col-md-12" *ngFor="let asset of assets">
+            <div class="col-md-4">
+                <div class="thmbnail-cntnr">
+                    <img src="http://viewer2.artstor.org/{{ asset.largeImgUrl }}" alt="{{ asset.thumbnail1 }}">
+                </div>
+            </div>
+            <div class="col-md-8">
+                <div class="meta-block" *ngFor="let metadata of asset.metaData">
+                    <div class="label">{{ metadata.fieldName }}
+                    <div class="value" [innerHTML]="metadata.fieldValue"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -55,7 +55,15 @@
     </button>
     </div>
 
+    <div *ngIf="isFullscreen" class="caption-cntnr" [hidden]="!showCaption">
+        <div>{{ asset.title }}</div>
+        <div>{{ asset.creator }}</div>
+        <div>{{ asset.date }}</div>
+    </div>
+
+
     <div *ngIf="isFullscreen" class="fullscreen-metadata">
+        <div class="caption-link" (click)="showCaption = !showCaption">Hide / Show Caption</div>
         <i title="Previous in results" (click)="prevPage.emit()" class="icon icon-direction icon-left"></i>
         <div class="title">{{ asset.title }}</div>
         <i title="Next in results" (click)="nextPage.emit()" class="icon icon-direction icon-right"></i>

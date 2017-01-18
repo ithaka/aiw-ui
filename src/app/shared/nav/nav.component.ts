@@ -32,7 +32,7 @@ export class Nav {
   
   ngOnInit() {
     this.sub = this._router.events.subscribe(e => {
-        if (e instanceof NavigationEnd && e.url != '/login') {
+    if (e instanceof NavigationEnd && (e.url != '/login') && (e.url.split('/')[1] != 'printpreview')) {
           this.showLoginPanel = true;
         } else {
           this.showLoginPanel = false;

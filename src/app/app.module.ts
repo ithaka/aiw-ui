@@ -30,6 +30,7 @@ import { Home } from './home';
 import { SearchPage } from './search-page';
 import { CollectionPage } from './collection-page';
 import { CategoryPage } from './category-page';
+import { ImageGroupPPPage } from './image-group-pp-page';
 import { ClusterPage } from './cluster-page';
 import { BrowsePage, LibraryComponent, BrowseCommonsComponent,
   MyCollectionsComponent, BrowseInstitutionComponent, BrowseGroupsComponent, TagComponent } from './browse-page';
@@ -78,6 +79,7 @@ type StoreType = {
     SearchPage,
     CollectionPage,
     CategoryPage,
+    ImageGroupPPPage,
     ClusterPage,
     BrowsePage,
     TagComponent,
