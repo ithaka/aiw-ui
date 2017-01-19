@@ -9,6 +9,8 @@ import {
 } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 
+import { ToolboxService } from '.';
+
 /**
  * Controls authorization through IP address and locally stored user object
  */
@@ -134,6 +136,8 @@ export class AuthService implements CanActivate {
    * Required by implementing CanActivate, and is called on routes which are protected by canActivate: [AuthService]
    */
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
+    let _tool = new ToolboxService();
+
     return this.getUserInfo()
       .map(
         (data)  => {
@@ -142,6 +146,7 @@ export class AuthService implements CanActivate {
             this.saveUser(data.user);
             return true;
           } else {
+            this.store("stashedRoute", _tool.urlToString(route));
             return false;
           }
         },
