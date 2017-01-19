@@ -7,6 +7,7 @@ import {
   ActivatedRouteSnapshot,
   RouterStateSnapshot
 } from '@angular/router';
+import { Observable } from 'rxjs/Observable';
 
 /**
  * Controls authorization through IP address and locally stored user object
@@ -129,57 +130,68 @@ export class AuthService implements CanActivate {
     this._storage.clear();
   }
 
-  /**
-   * Checks to see if user is either authorized by login or IP auth'd
-   * @returns indicates whether or not user is authorized
-   */
-  isAuthenticated(): boolean {
-    if (this.getUser() === null || this.getUser() === {}) {
-      this.getUserInfo()
-        .then(
-          (data)  => {
-            if (data.status === true) {
-              // User is IP auth'd!
-              this.saveUser(data);
-            } else {
-              return false;
-            }
-          },
-          (error) => {
-            console.log(error);
-            return false;
-          }
-        ).catch(function(err) {
-          console.log(err);
-          return false;
-        });
-    } else {
-      return true;
-    }
-  }
+  // /**
+  //  * Checks to see if user is either authorized by login or IP auth'd
+  //  * @returns indicates whether or not user is authorized
+  //  */
+  // isAuthenticated(): Observable<boolean> {
+  //   // return new Promise((resolve, reject) => {
+  //     if (this.getUser() === null || this.getUser() === {}) {
+  //       this.getUserInfo()
+  //         .take(1)
+  //         .subscribe(
+  //           (data)  => {
+  //             console.log(data);
+  //             if (data.status === true) {
+  //               // User is IP auth'd!
+  //               this.saveUser(data);
+  //             } else {
+  //               return false;
+  //             }
+  //           },
+  //           (error) => {
+  //             console.log(error);
+  //             return false;
+  //           }
+  //         );
+  //     } else {
+  //       return true;
+  //     }
+  //   // })
+  // }
 
   /**
    * Required by implementing CanActivate, and is called on routes which are protected by canActivate: [AuthService]
    */
-  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
-    let authenticated: boolean  = this.isAuthenticated();
-    if (!authenticated) {
-      this._router.navigate(["/login"]);
-    }
-
-    return authenticated;
+  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
+    return this.getUserInfo()
+      .map(
+        (data)  => {
+          if (data.status === true) {
+            // User is authorized
+            this.saveUser(data);
+            return true;
+          } else {
+            return false;
+          }
+        },
+        (error) => {
+          console.log(error);
+          return false;
+        }
+      );
   }
 
   /**
    * Retrieves user info from server
    * @returns a user object or an empty object
    */
-  getUserInfo() {
+  public getUserInfo(): Observable<any> {
     let options = new RequestOptions({ withCredentials: true });
     return this.http
       .get(this.getUrl() + '/userinfo', options)
-      .toPromise()
-      .then(this.extractData);
+      .map((data) => { return data.json(); })
+      .catch((error) => { return error.json(); });
   }
 
   /** Getter for downloadAuthorized parameter of local storage */
