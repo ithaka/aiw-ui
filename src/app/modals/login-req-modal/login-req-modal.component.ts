@@ -2,7 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 
-import { AuthService } from './../../shared';
+import { AuthService, ToolboxService } from './../../shared';
 
 @Component({
   selector: 'ang-login-req-modal',
@@ -18,27 +18,15 @@ export class LoginReqModal implements OnInit {
   @Output()
   private closeModal: EventEmitter<any> = new EventEmitter();
 
-  constructor(private _router: Router, private _auth: AuthService, private route: ActivatedRoute) { }
+  constructor(private _router: Router, private _auth: AuthService, private route: ActivatedRoute, private _tool: ToolboxService) { }
 
   ngOnInit() {
   }
 
   goToLogin() {
-    // save user info here
-    let newUrl = this.route.snapshot;
-    // let newUrl = [this.route.snapshot.params]
+    // could utilize RouteReuseStrategy here
 
-    let stringUrl: string;
-    let urlArr: string[] = [];
-    this.route.snapshot.url.forEach((segment) => {
-      urlArr.push(segment.path);
-    });
-    stringUrl = "/" + urlArr.join("/");
-
-    // console.log(stringUrl);
-
-    // console.log(this._router.routerState.snapshot);
-    this._auth.store("stashedRoute", stringUrl);
+    this._auth.store("stashedRoute", this._tool.urlToString(this.route.snapshot));
 
     this._router.navigate(['/login']);
   }
