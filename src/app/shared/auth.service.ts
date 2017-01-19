@@ -99,8 +99,6 @@ export class AuthService implements CanActivate {
     this._storage.set('user', user);
   }
 
-  //TODO create deleteUser object
-
   /**
    * Gets user object from local storage
    */
