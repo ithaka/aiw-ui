@@ -58,7 +58,7 @@
                         <img [attr.src]="_assets.makeThumbUrl(asset.thumbnailImgUrl, 0)" alt="Card image cap">
                     </div>
                     <div class="card-block card-text">
-                        <div id="card-icon-group">
+                        <div>
                             <i *ngIf="asset.cfObjectId.length > 0" [id]="asset.objectId + '_associated_images'" class="icon icon-collab" [routerLink]="['/associated', asset.cfObjectId, asset.collectionId]"></i>
                             <i *ngIf="asset.clustered == 1" [id]="asset.objectId + '_clustered_images'" class="icon icon-cluster" [routerLink]="['/cluster', asset.objectId, { objTitle :  asset.thumbnail1 }]"></i>
                             <i *ngIf="asset.iapFlag > 0" class="icon icon-iap"></i>

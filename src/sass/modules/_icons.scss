@@ -83,6 +83,10 @@
 @include icon('institution-asset', 'png');
 @include icon('artstor-asset', 'png');
 
+.icon-collection-type {
+    float: right;
+}
+
 .icon-search {
     cursor: pointer;
     opacity: 0.6;
