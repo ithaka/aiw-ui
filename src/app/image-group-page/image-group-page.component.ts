@@ -4,7 +4,7 @@ import { Subscription }   from 'rxjs/Subscription';
 
 // Internal Dependencies
 import { ImageGroupService } from './image-group.service';
-import { AssetService } from './../shared/assets.service';
+import { AssetService, AuthService } from './../shared';
 
 import { ImageGroup } from './../shared';
 
@@ -23,7 +23,13 @@ export class ImageGroupPage implements OnInit, OnDestroy {
   /** controls when PPT agreement modal is or is not shown */
   private showPptModal: boolean = false;
 
-  constructor(private _igService: ImageGroupService, private _router: Router, private _assets: AssetService, private route: ActivatedRoute) {
+  constructor(
+    private _igService: ImageGroupService,
+    private _router: Router,
+    private _assets: AssetService,
+    private _auth: AuthService,
+    private route: ActivatedRoute
+  ) {
   }
 
   ngOnInit() {
