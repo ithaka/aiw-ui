@@ -130,36 +130,6 @@ export class AuthService implements CanActivate {
     this._storage.clear();
   }
 
-  // /**
-  //  * Checks to see if user is either authorized by login or IP auth'd
-  //  * @returns indicates whether or not user is authorized
-  //  */
-  // isAuthenticated(): Observable<boolean> {
-  //   // return new Promise((resolve, reject) => {
-  //     if (this.getUser() === null || this.getUser() === {}) {
-  //       this.getUserInfo()
-  //         .take(1)
-  //         .subscribe(
-  //           (data)  => {
-  //             console.log(data);
-  //             if (data.status === true) {
-  //               // User is IP auth'd!
-  //               this.saveUser(data);
-  //             } else {
-  //               return false;
-  //             }
-  //           },
-  //           (error) => {
-  //             console.log(error);
-  //             return false;
-  //           }
-  //         );
-  //     } else {
-  //       return true;
-  //     }
-  //   // })
-  // }
-
   /**
    * Required by implementing CanActivate, and is called on routes which are protected by canActivate: [AuthService]
    */
