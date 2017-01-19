@@ -139,7 +139,7 @@ export class AuthService implements CanActivate {
         (data)  => {
           if (data.status === true) {
             // User is authorized
-            this.saveUser(data);
+            this.saveUser(data.user);
             return true;
           } else {
             return false;
