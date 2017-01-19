@@ -44,9 +44,45 @@ export class ImageGroupPPPage implements OnInit, OnDestroy {
 
         if (this.igId) {
             this.loadIgDesc(this.igId);
-            this.loadIgAssets(this.igId);
+            this.loadIgAssets();
         }
       })
+    );
+
+    this.subscriptions.push(
+          this._igService.assets.subscribe((data: any) => {
+              if(data.igId){
+                  this.igName = data.igName;
+                  this.assets = this.assets.concat(data.thumbnails);
+                  
+                  for(var i = 0; i < this.assets.length; i++){
+                      // preserve newlines, etc - use valid JSON
+                      let jsonString = this.assets[i].jsonListSt.replace(/\\n/g, "\\n")  
+                                           .replace(/\\'/g, "\\'")
+                                           .replace(/\\"/g, '\\"')
+                                           .replace(/\\&/g, "\\&")
+                                           .replace(/\\r/g, "\\r")
+                                           .replace(/\\t/g, "\\t")
+                                           .replace(/\\b/g, "\\b")
+                                           .replace(/\\f/g, "\\f");
+                      // remove non-printable and other non-valid JSON chars
+                      jsonString = jsonString.replace(/[\u0000-\u0019]+/g,""); 
+                      let jsonObj;
+                      try {
+                          jsonObj = JSON.parse(jsonString);
+                      }
+                      catch (e) {
+                          jsonObj = [];
+                      }
+                      this.assets[i].metaData = jsonObj;
+                  }
+
+                  if(this.assets.length < parseInt(data.count)){
+                      console.log('Load assets from next page');
+                      this._igService.loadIgAssets(this.igId, this.assets.length + 1);
+                  }
+            }
+         })
     );
   }
 
@@ -61,31 +97,8 @@ export class ImageGroupPPPage implements OnInit, OnDestroy {
   }
 
   // Load Image Group Assets
-  loadIgAssets(igId: string): void{
-      this._igService.loadIgAssets(igId).take(1)
-            .subscribe((data: any) => { 
-                if(data){
-                    this.igName = data.igName;
-                    this.assets = data.thumbnails;
-
-                    for(var i = 0; i < this.assets.length; i++){
-                        this.assets[i].metaData = JSON.parse(this.assets[i].jsonListSt);
-                    }
-
-                    console.log(this.assets);
-                }
-             });
-  }
-
-  printGroup(): void{
-     var printContents = document.getElementById('printable-cntnr').innerHTML;
-     var originalContents = document.body.innerHTML;
-
-     document.body.innerHTML = printContents;
-
-     window.print();
-
-     document.body.innerHTML = originalContents;
+  loadIgAssets(): void{
+      this._igService.loadIgAssets(this.igId, this.assets.length + 1);
   }
 
   ngOnDestroy() {
