@@ -134,37 +134,29 @@ export class AuthService implements CanActivate {
    * Required by implementing CanActivate, and is called on routes which are protected by canActivate: [AuthService]
    */
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
+
     let _tool = new ToolboxService();
-
-    return this.getUserInfo()
-      .map(
-        (data)  => {
-          if (data.status === true) {
-            // User is authorized
-            this.saveUser(data.user);
-            return true;
-          } else {
-            this.store("stashedRoute", _tool.urlToString(route));
-            return false;
-          }
-        },
-        (error) => {
-          console.log(error);
-          return false;
-        }
-      );
-  }
-
-  /**
-   * Retrieves user info from server
-   * @returns a user object or an empty object
-   */
-  public getUserInfo(): Observable<any> {
     let options = new RequestOptions({ withCredentials: true });
     return this.http
       .get(this.getUrl() + '/userinfo', options)
-      .map((data) => { return data.json(); })
-      .catch((error) => { return error.json(); });
+      .map(
+        (data)  => {
+          try {
+            let jsonData = data.json()
+            console.log("Got data!")
+            if (jsonData.status === true) {
+              // User is authorized
+              this.saveUser(jsonData.user);
+              return true;
+            } else {
+              this.store("stashedRoute", _tool.urlToString(route));
+              return false;
+            }
+          } catch (err) {
+            console.error(err);
+            return false;
+          }
+        });
   }
 
   /** Getter for downloadAuthorized parameter of local storage */
