@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Http, Response, Headers, RequestOptions } from '@angular/http';
 import { Router } from '@angular/router';
 import 'rxjs/add/operator/toPromise';
-import { Observable } from 'rxjs/Observable';
+import { Observable, BehaviorSubject } from 'rxjs/Rx';
 
 import { AuthService } from './../shared/auth.service';
 
@@ -14,6 +14,11 @@ export class ImageGroupService {
 
   private header = new Headers({ 'Content-Type': 'application/json' }); // ... Set content type to JSON
   private options = new RequestOptions({ withCredentials: true }); // Create a request option
+
+  private assetsValue: any[] = [];
+  // BehaviorSubjects push last value on subscribe
+  private assetsSource = new BehaviorSubject<any>(this.assetsValue);
+  public assets = this.assetsSource.asObservable();
 
   constructor(private _router: Router, private http: Http, private _auth: AuthService ){
   }
@@ -81,17 +86,16 @@ export class ImageGroupService {
   /**
    * Load image group assets
    * @param igId Image group id for which to retrieve assets
+   * @param startIndex Starting index for the image group assets
    */
-  loadIgAssets(igId: string): Observable<string> {
-      let requestString: string = [this._auth.getUrl(), "imagegroup",igId, "thumbnails", 1, 24, 0].join("/");
-
-      return this.http
+  loadIgAssets(igId: string, startIndex: number): void {
+      let requestString: string = [this._auth.getUrl(), "imagegroup",igId, "thumbnails", startIndex, 72, 0].join("/");
+      this.http
           .get(requestString, this.options)
-          .map((data) => {
-            if (!data) {
-              throw new Error("No data in image group description response");
-            }
-            return data.json();
+          .toPromise()
+          .then(
+            (res) => {
+                this.assetsSource.next(res.json());
           });
   }
 }
