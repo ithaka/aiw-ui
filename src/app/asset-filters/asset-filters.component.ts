@@ -280,11 +280,20 @@ export class AssetFilters {
   }
 
   private dateKeyPress(event: any): boolean{
-      if(!((event.keyCode > 95 && event.keyCode < 106)
-      || (event.keyCode > 47 && event.keyCode < 58) 
-      || event.keyCode == 8)) {
-          return false;
+      if((event.key == 'ArrowUp') || (event.key == 'ArrowDown') || (event.key == 'Backspace')){
+        return true;
       }
+
+      var theEvent = event || window.event;
+      var key = theEvent.keyCode || theEvent.which;
+      key = String.fromCharCode( key );
+      var regex = /[0-9]|\./;
+      if( !regex.test(key) ) {
+        theEvent.returnValue = false;
+        if(theEvent.preventDefault) theEvent.preventDefault();
+      }
+
+      return theEvent.returnValue;
   }
   
   ngOnDestroy() {
