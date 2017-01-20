@@ -141,6 +141,8 @@ export class AuthService implements CanActivate {
       .get(this.getUrl() + '/userinfo', options)
       .map(
         (data)  => {
+          if (this.getUser()) { return true; } // should be moved out of observable when I know how...
+
           try {
             let jsonData = data.json();
             if (jsonData.status === true) {

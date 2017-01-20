@@ -12,6 +12,8 @@ import { AuthService, AssetService } from './../shared';
 })
 export class AssetPage implements OnInit, OnDestroy {
 
+    private user: any;
+
     // Array to support multiple viewers on the page
     private assets: Asset[] = [];
     private assetIndex: number = 0;
@@ -27,9 +29,11 @@ export class AssetPage implements OnInit, OnDestroy {
     private showAgreeModal: boolean = false;
     private showLoginModal: boolean = false;
 
-    constructor(private _assets: AssetService, private _auth: AuthService, private route: ActivatedRoute, private _router: Router,) { }
+    constructor(private _assets: AssetService, private _auth: AuthService, private route: ActivatedRoute, private _router: Router) { }
 
     ngOnInit() {
+        this.user = this._auth.getUser();
+
         this.subscriptions.push(
             this.route.params.subscribe((routeParams) => {
                 if (this.assets[0]) {
