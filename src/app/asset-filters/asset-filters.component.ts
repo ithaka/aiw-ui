@@ -125,7 +125,7 @@ export class AssetFilters {
       if(filter.filterGroup == 'currentPage'){
         params[filter.filterGroup] =  parseInt(filter.filterValue);
       }
-      else{
+      else if((filter.filterGroup != 'startDate') && (filter.filterGroup != 'endDate')){
         params[filter.filterGroup] =  filter.filterValue;
       }
     }
@@ -210,8 +210,13 @@ export class AssetFilters {
   }
 
   clearDateFilter() {
-    // this.availableFilters.dateObj.modified = false;
-    this._filters.generateDateFacets();
+    this.availableFilters.dateObj.modified = false;
+    this.availableFilters.dateObj.earliest.date = this.availableFilters.prevDateObj.earliest.date;
+    this.availableFilters.dateObj.earliest.era = this.availableFilters.prevDateObj.earliest.era;
+
+    this.availableFilters.dateObj.latest.date = this.availableFilters.prevDateObj.latest.date;
+    this.availableFilters.dateObj.latest.era = this.availableFilters.prevDateObj.latest.era;
+    // this._filters.generateDateFacets();
   }
 
   removeFilter(filterObj){
