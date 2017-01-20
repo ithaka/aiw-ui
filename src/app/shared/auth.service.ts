@@ -142,8 +142,7 @@ export class AuthService implements CanActivate {
       .map(
         (data)  => {
           try {
-            let jsonData = data.json()
-            console.log("Got data!")
+            let jsonData = data.json();
             if (jsonData.status === true) {
               // User is authorized
               this.saveUser(jsonData.user);
