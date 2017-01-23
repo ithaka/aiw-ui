@@ -163,9 +163,14 @@ export class AuthService implements CanActivate {
             console.error(err);
             return false;
           }
-        },
-        (error) => {
-          return false;
+        })
+        .catch((error) => {
+          // Workaround to ensure routes don't get stuck when this call fails
+          this._router.navigate(['/login']);
+          return new Observable(observer => {
+            observer.next(false);  
+            observer.complete();
+          });
         });
   }
 
