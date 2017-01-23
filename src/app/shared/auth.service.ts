@@ -149,14 +149,21 @@ export class AuthService implements CanActivate {
 
     let _tool = new ToolboxService();
     let options = new RequestOptions({ withCredentials: true });
-    return this.http
+    // If user object already exists, we're done here
+    if (this.getUser()) { 
+      return new Observable(observer => {
+          observer.next(true);  
+          observer.complete();
+        });
+    }
+
+    // If user object doesn't exist, try to get one!
+    return Observable.create(observer => {
+      this.http
       .get(this.getUrl() + '/userinfo', options)
       .map(
         (data)  => {
-          if (this.getUser()) { return true; } // should be moved out of observable when I know how...
-          console.log(data);
           try {
-            console.log(data.json());
             let jsonData = data.json();
             if (jsonData.status === true) {
               // User is authorized
@@ -170,15 +177,12 @@ export class AuthService implements CanActivate {
             console.error(err);
             return false;
           }
-        })
-        .catch((error) => {
-          // Workaround to ensure routes don't get stuck when this call fails
-          this._router.navigate(['/login']);
-          return new Observable(observer => {
-            observer.next(false);  
-            observer.complete();
-          });
-        });
+        }
+      )
+      .subscribe(res => observer.complete(), err => {
+        observer.next(false);
+      });
+    });
   }
 
   /** Getter for downloadAuthorized parameter of local storage */
