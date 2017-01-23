@@ -8,6 +8,7 @@ import {
   RouterStateSnapshot
 } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
+import { Angulartics2 } from 'angulartics2';
 
 import { ToolboxService } from '.';
 
@@ -24,7 +25,12 @@ export class AuthService implements CanActivate {
   // - don't use proxy for now
   private proxyUrl = ''; 
   
-  constructor(private _router:Router, locker:Locker, private http: Http) {
+  constructor(
+    private _router:Router,
+    locker:Locker,
+    private http: Http,
+    private angulartics: Angulartics2
+  ) {
     this._storage = locker.useDriver(Locker.DRIVERS.LOCAL);
     this._router = _router;
     
