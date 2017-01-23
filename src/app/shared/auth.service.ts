@@ -153,8 +153,7 @@ export class AuthService implements CanActivate {
     if (this.getUser()) { 
       return new Observable(observer => {
           observer.next(true);  
-          observer.complete();
-        });
+      });
     }
 
     // If user object doesn't exist, try to get one!
@@ -180,10 +179,15 @@ export class AuthService implements CanActivate {
         }
       )
       .subscribe(res => {
+          // CanActivate is not handling the Observable value properly, 
+          // ... so we do an extra redirect in here
+          if (res === false) {
+            this._router.navigate(['/login']);
+          }
           observer.next(res); 
-          observer.complete()
         }, err => {
-        observer.next(false);
+          this._router.navigate(['/login']);
+          observer.next(false);
       });
     });
   }
