@@ -20,6 +20,7 @@ import { ToolboxService } from '.';
 export class AuthService implements CanActivate {
   private _storage: Locker;
   private baseUrl;
+  private subdomain;
   private thumbUrl;
   // Use header rewrite proxy for local development
   // - don't use proxy for now
@@ -38,6 +39,7 @@ export class AuthService implements CanActivate {
     // if ( document.location.hostname.indexOf('test.cirrostratus.org') > -1 ) {
     //   this.baseUrl = '//library-debian01.test.cirrostratus.org:8080/library/secure';
     // } else {
+      this.subdomain = 'stagely';
       // this.baseUrl = 'http://192.168.97.66/library/secure';
       this.baseUrl = 'http://stagely.artstor.org/library/secure';
       // this.baseUrl = this.proxyUrl + 'http://library.artstor.org/library/secure';
@@ -80,6 +82,10 @@ export class AuthService implements CanActivate {
     return this.baseUrl;
   }
 
+  public getSubdomain(): string {
+    return this.subdomain;
+  }
+
   /**
    * Our thumbnails come 
    */
@@ -93,7 +99,7 @@ export class AuthService implements CanActivate {
 
   /** Returns url used for downloading some media, such as documents */
   public getMediaUrl(): string {
-    return 'http://proxy.stagely.artstor.org/media';
+    return 'http://proxy.' + this.getSubdomain() + '.artstor.org/media';
   }
 
   /**
@@ -143,12 +149,20 @@ export class AuthService implements CanActivate {
 
     let _tool = new ToolboxService();
     let options = new RequestOptions({ withCredentials: true });
-    return this.http
+    // If user object already exists, we're done here
+    if (this.getUser()) { 
+      return new Observable(observer => {
+          observer.next(true);  
+          observer.complete();
+        });
+    }
+
+    // If user object doesn't exist, try to get one!
+    return new Observable(observer => {
+      this.http
       .get(this.getUrl() + '/userinfo', options)
       .map(
         (data)  => {
-          if (this.getUser()) { return true; } // should be moved out of observable when I know how...
-
           try {
             let jsonData = data.json();
             if (jsonData.status === true) {
@@ -163,10 +177,15 @@ export class AuthService implements CanActivate {
             console.error(err);
             return false;
           }
-        },
-        (error) => {
-          return false;
-        });
+        }
+      )
+      .subscribe(res => {
+          observer.next(res); 
+          observer.complete()
+        }, err => {
+        observer.next(false);
+      });
+    });
   }
 
   /** Getter for downloadAuthorized parameter of local storage */

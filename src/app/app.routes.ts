@@ -19,7 +19,7 @@ import { BrowseRoutes } from './browse-page/browse-page.routes';
 
 
 export const ROUTES: Routes = [
-  { path: '',      component: Home, canActivate:[AuthService] },
+  { path: '', component: Home, canActivate:[AuthService], pathMatch: 'full' },
   { path: 'login', component: Login },
   { path: 'home',  component: Home, canActivate:[AuthService] },
   { path: 'search', redirectTo: '/search/*', pathMatch: 'full', canActivate:[AuthService] },
@@ -35,5 +35,5 @@ export const ROUTES: Routes = [
   { path: 'browse', component: BrowsePage, canActivate:[AuthService], children: BrowseRoutes },
   { path: 'associated/:objectId/:colId', component: AssociatedPage, canActivate:[AuthService] },
   { path: 'about', component: About },
-  { path: '**',    component: NoContent },
+  { path: '**', component: NoContent }
 ];
