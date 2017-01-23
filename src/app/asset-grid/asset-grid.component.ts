@@ -197,6 +197,7 @@ export class AssetGrid implements OnInit, OnDestroy {
    * @param currentPage number of desired page
    */
   private goToPage(currentPage: number) {
+    if (currentPage < 1 || currentPage > this.pagination.totalPages) { return; } // make sure the user can't go past page limits
     this.pagination.currentPage = currentPage;
     this.addRouteParam("currentPage", currentPage);
   }
