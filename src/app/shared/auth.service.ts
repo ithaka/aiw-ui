@@ -157,6 +157,9 @@ export class AuthService implements CanActivate {
             console.error(err);
             return false;
           }
+        },
+        (error) => {
+          return false;
         });
   }
 
