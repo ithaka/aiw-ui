@@ -49,3 +49,59 @@ $cardBorderStyle: 1px solid rgba(0, 0, 0, 0.15);
         padding-bottom: 0.1rem;
     }
 }
+
+
+.card--asset {
+    margin-bottom: 0px;
+    height: 220px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding: 10px;
+    border: 1px solid transparent;
+    border-radius: 0px;
+    cursor: pointer;
+
+    & .card-img-top {
+        text-align: center;
+        height: 100px;
+        position: relative;
+
+        & img {
+            /*@extend %vertical-center;*/
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translateY(-50%) translateX(-50%);
+        }
+    }
+
+    & .card-block {
+        text-align: left;
+    }
+
+    &:hover, &:active, &:focus {
+        background: #fdfdfd;
+        border: 1px solid #eaeaea;
+    }
+}
+
+.card-text {
+    font-size:11px;
+    line-height: 14px;
+    margin-top: 12px;
+    margin-bottom: 0px;
+    padding: 0px;
+    position: relative;
+
+    & i {
+        font-size: 16px;
+    }
+    & span {
+        /*max-height: 2em;*/
+        white-space: nowrap;
+        display: block;
+        max-width: 100%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+}

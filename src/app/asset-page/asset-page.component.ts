@@ -20,14 +20,16 @@ export class AssetPage implements OnInit, OnDestroy {
     private assetNumber: number = 0;
     private totalAssetCount: number = 1;
     private subscriptions: Subscription[] = [];
-    private prevAssetResults: any = {};
+    private prevAssetResults: any = { thumbnails : [] };
     private loadArrayFirstAsset: boolean = false;
     private loadArrayLastAsset: boolean = false;
     private isFullscreen: boolean = false;
+    private showAssetDrawer: boolean = false;
 
     /** controls whether or not the modals are visible */
     private showAgreeModal: boolean = false;
     private showLoginModal: boolean = false;
+    
 
     constructor(private _assets: AssetService, private _auth: AuthService, private route: ActivatedRoute, private _router: Router) { }
 
@@ -53,7 +55,6 @@ export class AssetPage implements OnInit, OnDestroy {
         this.subscriptions.push(
           this._assets.allResults.subscribe((allResults: any) => {
               if(allResults.thumbnails){
-                  console.log(allResults);
                   this.prevAssetResults = allResults;
                   if(this.loadArrayFirstAsset){
                       this.loadArrayFirstAsset = false;
