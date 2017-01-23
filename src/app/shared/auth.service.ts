@@ -39,8 +39,8 @@ export class AuthService implements CanActivate {
     //   this.baseUrl = '//library-debian01.test.cirrostratus.org:8080/library/secure';
     // } else {
       // this.baseUrl = 'http://192.168.97.66/library/secure';
-      // this.baseUrl = 'http://stagely.artstor.org/library/secure';
-      this.baseUrl = this.proxyUrl + 'http://library.artstor.org/library/secure';
+      this.baseUrl = 'http://stagely.artstor.org/library/secure';
+      // this.baseUrl = this.proxyUrl + 'http://library.artstor.org/library/secure';
     // }
       this.thumbUrl = '//mdxstage.artstor.org';
 
@@ -163,6 +163,9 @@ export class AuthService implements CanActivate {
             console.error(err);
             return false;
           }
+        },
+        (error) => {
+          return false;
         });
   }
 
