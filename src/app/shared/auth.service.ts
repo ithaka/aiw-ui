@@ -158,7 +158,7 @@ export class AuthService implements CanActivate {
     }
 
     // If user object doesn't exist, try to get one!
-    return Observable.create(observer => {
+    return new Observable(observer => {
       this.http
       .get(this.getUrl() + '/userinfo', options)
       .map(
@@ -179,7 +179,10 @@ export class AuthService implements CanActivate {
           }
         }
       )
-      .subscribe(res => observer.complete(), err => {
+      .subscribe(res => {
+          observer.next(res); 
+          observer.complete()
+        }, err => {
         observer.next(false);
       });
     });
