@@ -81,13 +81,13 @@ export class AuthService implements CanActivate {
     return this.thumbUrl;
   }
 
-  public getPublicUrl(): string {
-    return this.proxyUrl + 'http://library.artstor.org/library';
-  }
+  // public getPublicUrl(): string {
+  //   return this.proxyUrl + 'http://library.artstor.org/library';
+  // }
 
   /** Returns url used for downloading some media, such as documents */
   public getMediaUrl(): string {
-    return this.proxyUrl + 'http://proxy.library.artstor.org/media';
+    return 'http://proxy.stagely.artstor.org/media';
   }
 
   /**
