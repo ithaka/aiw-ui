@@ -20,6 +20,7 @@ import { ToolboxService } from '.';
 export class AuthService implements CanActivate {
   private _storage: Locker;
   private baseUrl;
+  private subdomain;
   private thumbUrl;
   // Use header rewrite proxy for local development
   // - don't use proxy for now
@@ -38,6 +39,7 @@ export class AuthService implements CanActivate {
     // if ( document.location.hostname.indexOf('test.cirrostratus.org') > -1 ) {
     //   this.baseUrl = '//library-debian01.test.cirrostratus.org:8080/library/secure';
     // } else {
+      this.subdomain = 'stagely';
       // this.baseUrl = 'http://192.168.97.66/library/secure';
       this.baseUrl = 'http://stagely.artstor.org/library/secure';
       // this.baseUrl = this.proxyUrl + 'http://library.artstor.org/library/secure';
@@ -80,6 +82,10 @@ export class AuthService implements CanActivate {
     return this.baseUrl;
   }
 
+  public getSubdomain(): string {
+    return this.subdomain;
+  }
+
   /**
    * Our thumbnails come 
    */
@@ -93,7 +99,7 @@ export class AuthService implements CanActivate {
 
   /** Returns url used for downloading some media, such as documents */
   public getMediaUrl(): string {
-    return 'http://proxy.stagely.artstor.org/media';
+    return 'http://proxy.' + this.getSubdomain() + '.artstor.org/media';
   }
 
   /**
