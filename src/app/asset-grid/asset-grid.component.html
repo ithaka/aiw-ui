@@ -42,7 +42,7 @@
         <span class="pag pag-first" (click)="goToPage(1)" [ngClass]="{'disable': (pagination.currentPage === 1)}"></span>
         <span class="pag pag-prev" (click)="goToPage(pagination.currentPage - 1)" [ngClass]="{'disable': (pagination.currentPage === 1)}"></span>
         <!--<span class="pag-info">Page</span>-->
-        <input type="number" [(ngModel)]="pagination.currentPage" (keyup.enter)="goToPage(pagination.currentPage)" />
+        <input type="number" min="1" (keypress)="pageNumberKeyPress($event)" [(ngModel)]="pagination.currentPage" (keyup.enter)="goToPage(pagination.currentPage)" />
         <span class="pag-info">of {{ pagination.totalPages }}</span>
         <span class="pag pag-next" (click)="goToPage(pagination.currentPage + 1)" [ngClass]="{'disable': (pagination.currentPage === pagination.totalPages)}"></span>
         <span class="pag pag-last" (click)="goToPage(pagination.totalPages)" [ngClass]="{'disable': (pagination.currentPage === pagination.totalPages)}"></span>
