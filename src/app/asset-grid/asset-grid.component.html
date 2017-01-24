@@ -36,6 +36,8 @@
                 <button class="dropdown-item" (click)="changePageSize(72)">72</button>
             </div>
         </li>
+
+        <li class="editMode" (click)="editMode = !editMode; selectedAssets = [];" [ngClass]="{'active': editMode}">Edit Mode</li>
         <!--<span class="page-size">{{ pagination.pageSize }}</span>-->
     </div>
     <div class="col-sm-6 col-md-6 col-lg-6 pag-controls">
@@ -48,12 +50,12 @@
         <span class="pag pag-last" (click)="goToPage(pagination.totalPages)" [ngClass]="{'disable': (pagination.currentPage === pagination.totalPages)}"></span>
     </div>
 </div>
-<div class="row row--no-overflow">
+<div class="row row--no-overflow" [ngClass]="{'edit': editMode}">
     <div class="col-md-12 col--expanding has-icon-overlay" [ngClass]="{ 'col--expand-12' : !showFilters }">
         <i *ngIf="isLoading" class="icon-lg icon-overlay icon-loading-large"></i>
         <div class="card-deck-wrapper">
             <div class="card-deck">
-                <div *ngFor="let asset of results" [routerLink]="['/asset', asset.objectId ]" class="card card--asset col-sm-2">
+                <div *ngFor="let asset of results" [routerLink]="editMode ? [] : ['/asset', asset.objectId ]" class="card card--asset col-sm-2" [ngClass]="{'selected': ( isSelectedAsset(asset) > -1 ) }" (click)="selectAsset(asset)">
                     <div class="card-img-top">
                         <img [attr.src]="_assets.makeThumbUrl(asset.thumbnailImgUrl, 0)" alt="Card image cap">
                     </div>

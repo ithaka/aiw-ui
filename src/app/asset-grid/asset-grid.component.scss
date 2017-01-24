@@ -64,9 +64,21 @@
     margin-bottom: 20px;
 }
 
-.sortlist, .pagesizelist{
+.sortlist, .pagesizelist, .editMode{
     list-style: none;
     display: inline-block;
+}
+.editMode{
+    padding: 0px 3px;
+    color: #999;
+    font-size: 12px;
+    letter-spacing: 1px;
+    font-family: 'Graphik Web', sans-serif;
+    font-weight: 700;
+    cursor: pointer;
+}
+.editMode.active{
+    color: #000;
 }
 .active-sort, .page-size{
     display: inline-block;
@@ -159,4 +171,11 @@ input[type=number]::-webkit-outer-spin-button {
 }
 input[type=number] {
   -moz-appearance: textfield;
+}
+.edit .card--asset{
+    opacity: 0.5;
+}
+.edit .card--asset.selected{
+    opacity: 1 !important;
+    border: 4px solid #e1e8e1;
 }

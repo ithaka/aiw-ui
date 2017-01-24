@@ -30,6 +30,8 @@ export class AssetGrid implements OnInit, OnDestroy {
   errors = {};
   private results: Thumbnail[] = [];
   filters = [];
+  private editMode: boolean = false;
+  private selectedAssets: any[] = [];
 
   // Default show as loading until results have update
   private isLoading: boolean = true;
@@ -241,6 +243,39 @@ export class AssetGrid implements OnInit, OnDestroy {
       }
 
       return theEvent.returnValue;
+  }
+
+  /**
+   * Edit Mode : Selects / deselects an asset - Inserts / Removes the asset object to the selectedAssets array 
+   * @param asset object to be selected / deselected
+   */
+  private selectAsset(asset: any): void{
+    if(this.editMode){
+      let index: number = this.isSelectedAsset(asset);
+      if(index > -1){
+        this.selectedAssets.splice(index, 1);
+      }
+      else{
+        this.selectedAssets.push(asset);
+      }
+    }
+    console.log(this.selectedAssets);
+  }
+
+  /**
+   * Edit Mode : Is the asset selected or not 
+   * @param asset object whose selection / deselection is to be determined
+   * @returns index if the asset is already selected, else returns -1
+   */
+  private isSelectedAsset(asset: any): number{
+    let index: number = -1;
+    for(var i = 0; i < this.selectedAssets.length; i++){
+      if(this.selectedAssets[i].objectId === asset.objectId){
+        index = i;
+        break;
+      }
+    }
+    return index;
   }
 
   /**
