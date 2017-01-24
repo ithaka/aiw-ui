@@ -2,6 +2,7 @@
  * Angular 2 decorators and services
  */
 import { Component, ViewEncapsulation } from '@angular/core';
+import { Angulartics2GoogleAnalytics } from 'angulartics2';
 
 import { AppState } from './app.service';
 
@@ -31,7 +32,7 @@ export class App {
   name = 'Artstor';
   url = 'https://artstor.org/';
 
-  constructor(public appState: AppState) {
+  constructor(public appState: AppState, angulartics2GoogleAnalytics: Angulartics2GoogleAnalytics) {
       
   }
 

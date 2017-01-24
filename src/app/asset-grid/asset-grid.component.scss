@@ -56,10 +56,6 @@
     }
 }
 
-.card-text-group {
-    float: left;
-}
-
 .row--search-bar {
     margin-bottom: 20px;
 }
@@ -120,47 +116,34 @@
     border: 1px solid #b64404;
     cursor: pointer;
     vertical-align: middle;
+
+    &.pag-first {
+        background: url(/assets/img/pagination-icons/first.gif) 50% 50% no-repeat #b64404;
+        &:hover { background: url(/assets/img/pagination-icons/first-hover.gif) 50% 50% no-repeat #b64404; }
+        &.disable { background: url(/assets/img/pagination-icons/first-disable.gif) 50% 50% no-repeat #b64404 !important; }
+    }
+    &.pag-prev {
+        background: url(/assets/img/pagination-icons/prev.gif) 50% 50% no-repeat #b64404;
+        &:hover { background: url(/assets/img/pagination-icons/prev-hover.gif) 50% 50% no-repeat #b64404; }
+        &.disable { background: url(/assets/img/pagination-icons/prev-disable.gif) 50% 50% no-repeat #b64404 !important; }
+    }
+    &.pag.pag-next {
+        background: url(/assets/img/pagination-icons/next.gif) 50% 50% no-repeat #b64404;
+        &:hover { background: url(/assets/img/pagination-icons/next-hover.gif) 50% 50% no-repeat #b64404; }
+        &.disable { background: url(/assets/img/pagination-icons/next-disable.gif) 50% 50% no-repeat #b64404 !important; }
+    }
+    &.pag-last {
+        background: url(/assets/img/pagination-icons/last.gif) 50% 50% no-repeat #b64404;
+        &:hover { background: url(/assets/img/pagination-icons/last-hover.gif) 50% 50% no-repeat #b64404; }
+        &.disable { background: url(/assets/img/pagination-icons/last-disable.gif) 50% 50% no-repeat #b64404 !important; }
+    }
+
+    &.disable {
+        border: 1px solid #cecba5;
+        cursor: initial;
+    }
 }
-.pag.pag-first{
-    background: url(/assets/img/pagination-icons/first.gif) 50% 50% no-repeat #b64404;
-}
-.pag.pag-first.disable{
-    background: url(/assets/img/pagination-icons/first-disable.gif) 50% 50% no-repeat #b64404 !important;
-    border: 1px solid #cecba5;
-}
-.pag.pag-first:hover{
-    background: url(/assets/img/pagination-icons/first-hover.gif) 50% 50% no-repeat #b64404;
-}
-.pag.pag-prev{
-    background: url(/assets/img/pagination-icons/prev.gif) 50% 50% no-repeat #b64404;
-}
-.pag.pag-prev.disable{
-    background: url(/assets/img/pagination-icons/prev-disable.gif) 50% 50% no-repeat #b64404 !important;
-    border: 1px solid #cecba5;
-}
-.pag.pag-prev:hover{
-    background: url(/assets/img/pagination-icons/prev-hover.gif) 50% 50% no-repeat #b64404;
-}
-.pag.pag-last{
-    background: url(/assets/img/pagination-icons/last.gif) 50% 50% no-repeat #b64404;
-}
-.pag.pag-last.disable{
-    background: url(/assets/img/pagination-icons/last-disable.gif) 50% 50% no-repeat #b64404 !important;
-    border: 1px solid #cecba5;
-}
-.pag.pag-last:hover{
-    background: url(/assets/img/pagination-icons/last-hover.gif) 50% 50% no-repeat #b64404;
-}
-.pag.pag-next{
-    background: url(/assets/img/pagination-icons/next.gif) 50% 50% no-repeat #b64404;
-}
-.pag.pag-next.disable{
-    background: url(/assets/img/pagination-icons/next-disable.gif) 50% 50% no-repeat #b64404 !important;
-    border: 1px solid #cecba5;
-}
-.pag.pag-next:hover{
-    background: url(/assets/img/pagination-icons/next-hover.gif) 50% 50% no-repeat #b64404;
-}
+
 .no-border{
     border: none !important;
 }
