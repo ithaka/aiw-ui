@@ -37,10 +37,6 @@ export class LibraryComponent implements OnInit {
     {
       label : 'Geography',
       id: '260'
-    },
-    {
-      label : 'Teaching Resources',
-      id: '270'
     }
   ];
 

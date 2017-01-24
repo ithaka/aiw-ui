@@ -30,6 +30,8 @@ export class AssetGrid implements OnInit, OnDestroy {
   errors = {};
   private results: Thumbnail[] = [];
   filters = [];
+  private editMode: boolean = false;
+  private selectedAssets: any[] = [];
 
   // Default show as loading until results have update
   private isLoading: boolean = true;
@@ -197,9 +199,11 @@ export class AssetGrid implements OnInit, OnDestroy {
    * @param currentPage number of desired page
    */
   private goToPage(currentPage: number) {
-    if (currentPage < 1 || currentPage > this.pagination.totalPages) { return; } // make sure the user can't go past page limits
-    this.pagination.currentPage = currentPage;
-    this.addRouteParam("currentPage", currentPage);
+    // The requested page should be within the limits (i.e 1 to totalPages)
+    if((currentPage >= 1) && (currentPage <= this.pagination.totalPages)){
+      this.pagination.currentPage = currentPage;
+      this.addRouteParam("currentPage", currentPage);
+    }
   }
 
   /**
@@ -218,6 +222,60 @@ export class AssetGrid implements OnInit, OnDestroy {
     this.activeSort.label = label; 
     this.pagination.currentPage = 1;
     
+  }
+
+  /**
+   * Allows to input only numbers [1 - 9] 
+   * @param event Event emitted on keypress inside the current page number field
+   */
+  private pageNumberKeyPress(event: any): boolean{
+      if((event.key == 'ArrowUp') || (event.key == 'ArrowDown') || (event.key == 'ArrowRight') || (event.key == 'ArrowLeft') || (event.key == 'Backspace')){
+        return true;
+      }
+
+      var theEvent = event || window.event;
+      var key = theEvent.keyCode || theEvent.which;
+      key = String.fromCharCode( key );
+      var regex = /[1-9]|\./;
+      if( !regex.test(key) ) {
+        theEvent.returnValue = false;
+        if(theEvent.preventDefault) theEvent.preventDefault();
+      }
+
+      return theEvent.returnValue;
+  }
+
+  /**
+   * Edit Mode : Selects / deselects an asset - Inserts / Removes the asset object to the selectedAssets array 
+   * @param asset object to be selected / deselected
+   */
+  private selectAsset(asset: any): void{
+    if(this.editMode){
+      let index: number = this.isSelectedAsset(asset);
+      if(index > -1){
+        this.selectedAssets.splice(index, 1);
+      }
+      else{
+        this.selectedAssets.push(asset);
+      }
+    }
+    console.log(this.selectedAssets);
+  }
+
+  /**
+   * Edit Mode : Is the asset selected or not 
+   * @param asset object whose selection / deselection is to be determined
+   * @returns index if the asset is already selected, else returns -1
+   */
+  private isSelectedAsset(asset: any): number{
+    let index: number = -1;
+    for(var i = 0; i < this.selectedAssets.length; i++){
+      if(this.selectedAssets[i].objectId === asset.objectId){
+        index = i;
+        break;
+      }
+    }
+    return index;
   }
 
   /**
