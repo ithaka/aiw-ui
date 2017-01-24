@@ -280,7 +280,7 @@ export class AssetFilters {
   }
 
   private dateKeyPress(event: any): boolean{
-      if((event.key == 'ArrowUp') || (event.key == 'ArrowDown') || (event.key == 'Backspace')){
+      if((event.key == 'ArrowUp') || (event.key == 'ArrowDown') || (event.key == 'ArrowRight') || (event.key == 'ArrowLeft') || (event.key == 'Backspace')){
         return true;
       }
 

@@ -1,68 +1,25 @@
 /*styles for search content only*/
-
-
-.card--asset {
-    margin-bottom: 0px;
-    height: 220px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    padding: 10px;
-    border: 1px solid transparent;
-    border-radius: 0px;
-    cursor: pointer;
-
-    & .card-img-top {
-        text-align: center;
-        height: 100px;
-        position: relative;
-
-        & img {
-            /*@extend %vertical-center;*/
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translateY(-50%) translateX(-50%);
-        }
-    }
-
-    & .card-block {
-        text-align: left;
-    }
-
-    &:hover, &:active, &:focus {
-        background: #fdfdfd;
-        border: 1px solid #eaeaea;
-    }
-}
-
-.card-text {
-    font-size:11px;
-    line-height: 14px;
-    margin-top: 12px;
-    margin-bottom: 0px;
-    padding: 0px;
-    position: relative;
-
-    & i {
-        font-size: 16px;
-    }
-    & span {
-        /*max-height: 2em;*/
-        white-space: nowrap;
-        display: block;
-        max-width: 100%;
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
-}
+@import '../../sass/core/variables';
 
 .row--search-bar {
     margin-bottom: 20px;
 }
 
-.sortlist, .pagesizelist{
+.sortlist, .pagesizelist, .editMode{
     list-style: none;
     display: inline-block;
+}
+.editMode{
+    padding: 0px 3px;
+    color: #999;
+    font-size: 12px;
+    letter-spacing: 1px;
+    font-family: 'Graphik Web', sans-serif;
+    font-weight: 700;
+    cursor: pointer;
+}
+.editMode.active{
+    color: #000;
 }
 .active-sort, .page-size{
     display: inline-block;
@@ -70,9 +27,6 @@
 .filter-hdr a{
     color: #b64403;
 }  
-.card-text li{
-    cursor: pointer;
-} 
 
 
 .pag-controls{
@@ -101,7 +55,7 @@
     text-align: center;
     width: 1.35em;
     height: 1.35em;
-    border: 1px solid #b64404;
+    border: 1px solid $burntOrange;
     cursor: pointer;
     vertical-align: middle;
 
@@ -134,4 +88,12 @@
 
 .no-border{
     border: none !important;
+}
+input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button { 
+  -webkit-appearance: none; 
+  margin: 0; 
+}
+input[type=number] {
+  -moz-appearance: textfield;
 }
