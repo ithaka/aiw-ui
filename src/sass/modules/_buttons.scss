@@ -17,9 +17,11 @@ $iconBtnSize: 30px;
      padding: 8px 24px;
      text-transform: uppercase;
      letter-spacing: 1px;
+     border-bottom: none;
 
      &:hover, &:focus, &:active {
          color: #fff;
+        border-bottom: none;
      }
 }
 
@@ -102,6 +104,7 @@ $iconBtnSize: 30px;
     box-shadow: $btnShadow;
     padding: 0px;
     text-align: center;
+    border-bottom: none;
 
     & .icon {
         opacity: 0.8;

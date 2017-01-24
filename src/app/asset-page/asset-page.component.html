@@ -20,14 +20,14 @@
                 (prevPage)="showPrevAsset()"></ang-asset-viewer>
         </div>
         <!--If the user has not accepted the agreement, show modal when clicked, otherwise download immediately-->
-        <a *ngIf="assets[0].downloadLink && user.isLoggedIn" 
+        <a class="btn btn--icon" *ngIf="assets[0].downloadLink && user.isLoggedIn" 
             [attr.href]="downloadAuth() ? assets[0].downloadLink : null"
             [attr.download]="downloadAuth() ? assets[0].title : null"
             (click)="!downloadAuth() ? showAgreeModal = true : null"
         >
             <i id="downloadAssetLink" class="icon icon-download" ></i>
         </a>
-        <a *ngIf="assets[0].downloadLink && !user.isLoggedIn" (click)="showLoginModal = true">
+        <a class="btn btn--icon" *ngIf="assets[0].downloadLink && !user.isLoggedIn" (click)="showLoginModal = true">
             <i id="downloadAssetLink" class="icon icon-download" ></i>
         </a>
     </div>

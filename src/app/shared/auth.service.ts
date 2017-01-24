@@ -99,7 +99,8 @@ export class AuthService implements CanActivate {
 
   /** Returns url used for downloading some media, such as documents */
   public getMediaUrl(): string {
-    return 'http://proxy.' + this.getSubdomain() + '.artstor.org/media';
+    // This is a special case, and should always points to library.artstor or stage3.artstor
+    return 'http://proxy.stage3.artstor.org/media';
   }
 
   /**
