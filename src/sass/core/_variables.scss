@@ -1,6 +1,13 @@
 // Bootstrap variable ovverides
 $btn-border-radius: 0px;
 
+$enable-grid-classes: true;
+
+// List-Group
+$list-group-item-padding-x:      1.25rem;
+$list-group-item-padding-y:      .75rem;
+
+$list-group-border-radius: 3px;
 /**
  * Base value for vertical/horizontal padding
  *

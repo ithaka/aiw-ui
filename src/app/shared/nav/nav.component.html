@@ -1,33 +1,33 @@
 <nav class="navbar navbar-light">
   <div class="container" style="padding:0px;">
     <div class="row">
-      <div class="col-8">
-        <a class="navbar-brand" href="#">
-          <img id="logo" src="/assets/img/logo.png" />
-        </a>
-      </div>
+    <div class="col-8">
+      <a class="navbar-brand" href="#">
+        <img id="logo" src="/assets/img/logo.png" />
+      </a>
+    </div>
 
-      <div class="col-4">
-        <div *ngIf="showLoginPanel" class="login-panel">
-          <div class="vertical-center-wrap">
-            <div class="login-panel__status">
-              <span *ngIf="getUserName()">Logged in as {{ getUserName() }}</span>
-              <span *ngIf="!getUserName()">Log in or <a href="#" class="link">!Register</a> for more features</span>
-            </div>
-            <div class="login-panel__links">
-              <a class="link--accent" [class.hidden]="!getUserName()" [routerLink]=" ['./login'] " routerLinkActive="active">
-                !Settings
-              </a>
-              <a class="link--accent" [class.hidden]="getUserName()" [routerLink]=" ['./login'] " routerLinkActive="active">
-                Log In
-              </a>
-              <a class="link--accent" [class.hidden]="!getUserName()" [routerLink]=" ['./login'] " (click)="logout()">
-                Log Out
-              </a>
-            </div>
+    <div class="col-4">
+      <div *ngIf="showLoginPanel" class="login-panel">
+        <div class="vertical-center-wrap">
+          <div class="login-panel__status">
+            <span *ngIf="getUserName()">Logged in as {{ getUserName() }}</span>
+            <span *ngIf="!getUserName()">Log in or <a href="#" class="link">!Register</a> for more features</span>
+          </div>
+          <div class="login-panel__links">
+            <a class="link--accent" [class.hidden]="!getUserName()" [routerLink]=" ['./login'] " routerLinkActive="active">
+              !Settings
+            </a>
+            <a class="link--accent" [class.hidden]="getUserName()" [routerLink]=" ['./login'] " routerLinkActive="active">
+              Log In
+            </a>
+            <a class="link--accent" [class.hidden]="!getUserName()" [routerLink]=" ['./login'] " (click)="logout()">
+              Log Out
+            </a>
           </div>
         </div>
       </div>
+    </div>
     </div>
   </div>
 </nav>

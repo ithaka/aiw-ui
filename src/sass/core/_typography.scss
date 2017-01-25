@@ -146,13 +146,14 @@ a {
 
 a[href], a.link, .link {
   @extend a;
-  padding-bottom: 1px;
-  border-bottom: 1px solid rgba($linkColor, 0.3);
+  text-decoration-color: $linkColor;
+  // border-bottom: 1px solid rgba($linkColor, 0.3);
 
-  &:hover, &:focus {
+  &:hover, &:focus, &:visited {
     color: $brightTeal;
-    text-decoration: none;
-    border-bottom: 1px solid $brightTeal;
+    text-decoration: underline;
+    text-decoration-color: $brightTeal;
+    // border-bottom: 1px solid $brightTeal;
   }
 }
 
