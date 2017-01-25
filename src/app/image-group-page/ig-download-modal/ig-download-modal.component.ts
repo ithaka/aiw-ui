@@ -51,7 +51,6 @@ export class PptModalComponent implements OnInit {
   }
 
   private getDownloadLink(group: ImageGroup): Observable<any> {
-    // let data = "_method=createPPT&igId=836667&igName=Esto%20(5)&images=1%3AASTOLLERIG_10311329794%3A1024x1024%2C2%3AASTOLLERIG_10311329786%3A1024x1024%2C3%3AASTOLLERIG_10311329752%3A1024x1024%2C4%3AASTOLLERIG_10311329769%3A1024x1024%2C5%3AASTOLLERIG_10311329768%3A1024x1024&zoom=&zip=false";
     let header = new Headers({ 'content-type': 'application/x-www-form-urlencoded' }); 
     let options = new RequestOptions({ headers: header, withCredentials: true});
     let imgStr: string = "";
@@ -68,7 +67,7 @@ export class PptModalComponent implements OnInit {
         igId: group.igId,
         igName: group.igName,
         images: imgStr,
-        zooms: null,
+        zoom: '',
         zip: false
     }
 
@@ -79,24 +78,6 @@ export class PptModalComponent implements OnInit {
       .map(data => {
         return data.json() || {};
       });
-
-    // return new Observable(observer => {
-    //   var xhr = new XMLHttpRequest();
-    //   xhr.withCredentials = true;
-
-    //   xhr.addEventListener("readystatechange", (event, data) => {
-    //     if (data.readyState === 4) {
-    //       console.log(data.responseText);
-    //       console.log(data);
-    //       observer.next(data);
-    //     }
-    //   });
-
-    //   xhr.open("POST", this._auth.getUrl() + "/downloadpptimages");
-    //   xhr.setRequestHeader("content-type", "application/x-www-form-urlencoded");
-
-    //   xhr.send(data);
-    // });
   }
 
   // /** Gets the link at which the resource can be downloaded. Will be set to the "accept" button's download property */
