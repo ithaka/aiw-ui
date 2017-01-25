@@ -1,7 +1,7 @@
 /**
  * Assets service
  */
-import { Injectable, OnDestroy } from '@angular/core';
+import { Injectable, OnDestroy, OnInit } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { Http, Response, Headers, RequestOptions } from '@angular/http';
 import { Observable, BehaviorSubject } from 'rxjs/Rx';
@@ -17,7 +17,7 @@ import { ToolboxService } from './toolbox.service';
 import { ImageGroup } from '.';
 
 @Injectable()
-export class AssetService {
+export class AssetService implements OnInit {
 
     /** Constant that defines which collectionType belongs to institutions */
     static readonly institutionCollectionType: number = 2;
@@ -76,7 +76,15 @@ export class AssetService {
         };
     }
 
+    ngOnInit() {
+        // Restore AllResults from localstorage
+        if (this._storage.get('results')) {
+            this.updateLocalResults(this._storage.get('results'));
+        }
+    }
+
     private updateLocalResults(results: any[]) {
+        this._storage.set('results', results);
         this.allResultsValue = results;
         this.allResultsSource.next(results);
     } 

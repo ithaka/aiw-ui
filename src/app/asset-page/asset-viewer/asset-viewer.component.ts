@@ -49,6 +49,7 @@ export class AssetViewerComponent implements OnInit, OnDestroy, AfterViewInit {
     constructor(private _assets: AssetService, private http: Http) {}
 
     ngOnInit() {
+        console.log(this.asset);
         // Wait for the asset to have its metadata
         this.subscriptions.push(
             this.asset.isDataLoaded.subscribe(assetInfoLoaded => {
@@ -59,6 +60,12 @@ export class AssetViewerComponent implements OnInit, OnDestroy, AfterViewInit {
                 console.log(error);
             })
         );
+
+        // Assets don't initialize with fullscreen variable
+        // And assets beyond the first/primary only show in fullscreen
+        if (this.index > 0) {
+            this.isFullscreen = true;
+        }
 
         // Events for fullscreen/Presentation mode
         document.addEventListener('fullscreenchange', () => {

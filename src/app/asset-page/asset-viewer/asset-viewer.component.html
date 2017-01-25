@@ -1,4 +1,4 @@
-<div class="asset-viewer" [class.fullscreen]="isFullscreen" [ngClass]="[ 'asset-viewer-' + assetGroupCount ]">
+<div class="asset-viewer" [class.fullscreen]="isFullscreen">
     <!-- IIIF Image Viewer -->
     <div [class.hidden]="!isOpenSeaDragonAsset || mediaLoadingFailed">
         <!-- *ngIf="openSeaDragonReady"-->
@@ -64,9 +64,9 @@
 
     <div *ngIf="isFullscreen" class="fullscreen-metadata">
         <div class="caption-link" (click)="showCaption = !showCaption">Hide / Show Caption</div>
-        <i title="Previous in results" (click)="prevPage.emit()" class="icon icon-direction icon-left"></i>
+        <i *ngIf="assetCompareCount == 1" title="Previous in results" (click)="prevPage.emit()" class="icon icon-direction icon-left"></i>
         <div class="title">{{ asset.title }}</div>
-        <i title="Next in results" (click)="nextPage.emit()" class="icon icon-direction icon-right"></i>
+        <i *ngIf="assetCompareCount == 1" title="Next in results" (click)="nextPage.emit()" class="icon icon-direction icon-right"></i>
         <div class="page-tooltip">{{ assetNumber }} OF {{ totalAssetCount }}</div>
     </div>
 </div>
