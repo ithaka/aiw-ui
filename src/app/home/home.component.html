@@ -50,13 +50,13 @@
                     <h2>Shared Shelf Commons</h2>
                 </div>
                 <div class="list--home-collections">
-                    <ul class="list-group list-group-flush">
-                        <li *ngFor="let collection of collections" class="list-group-item">
-                            <a [routerLink]="[ '/collection', collection.collectionid ]">
+                    <div class="list-group list-group-flush">
+                        <a *ngFor="let collection of collections" class="list-group-item list-group-item-action" [routerLink]="[ '/collection', collection.collectionid ]">
+                            <!--<a [routerLink]="[ '/collection', collection.collectionid ]">-->
                                 {{ collection.collectionname }}
-                            </a>
-                        </li>
-                    </ul>
+                            <!--</a>-->
+                        </a>
+                    </div>
                 </div>
                 <div *ngIf="errors.collections" class="card-block">
                     <div class="alert alert-warning" role="alert">

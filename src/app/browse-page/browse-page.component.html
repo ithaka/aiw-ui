@@ -3,7 +3,7 @@
     <nav class="nav nav-inline coll-nav">
         <a class="nav-link" *ngFor="let colOpt of colMenuArray" [routerLink]="[colOpt.link]" [ngClass]="{'active': colOpt.link == selectedColMenuId}" (click)="selectColMenu(colOpt.link)">{{ colOpt.label }}</a>
     </nav>
-    <div class="row mt-1">
+    <!--<div class="row mt-1">-->
         <router-outlet></router-outlet>
-    </div>
+    <!--</div>-->
 </div>

@@ -2,16 +2,17 @@
     <a class="label">Browse By:</a>
     <a class="nav-link" *ngFor="let browseOpt of browseMenuArray" [ngClass]="{'active': browseOpt.id == selectedBrowseId}" (click)="selectBrowseOpt(browseOpt.id)">{{ browseOpt.label }}</a>
 </nav>
-<div class="col-md-8">
-    <div class="tree">
-        <ang-tag *ngFor="let tag of tags" [tag]="tag"></ang-tag>
-            <!--End of tags-->
+<div class="row">
+    <div class="col-md-8">
+        <div class="tree">
+            <ang-tag *ngFor="let tag of tags" [tag]="tag"></ang-tag>
+        </div>
     </div>
-</div>
 
-<div class="col-md-4">
-    <div class="browse-info">
-        <div class="title">{{ currentBrowseRes.collectionname }}</div>
-        <div [innerHTML]="currentBrowseRes.blurburl"></div>
+    <div class="col-md-4">
+        <div class="browse-info">
+            <div class="title">{{ currentBrowseRes.collectionname }}</div>
+            <div [innerHTML]="currentBrowseRes.blurburl"></div>
+        </div>
     </div>
 </div>

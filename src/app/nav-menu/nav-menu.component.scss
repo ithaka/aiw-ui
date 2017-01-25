@@ -8,32 +8,22 @@
 
 $dropdownMenuHeight: 60px;
 
-.navbar-nav {
-    border:none;
-    display: block;
+.navbar-light {
+    background: #fff;
+}
+
+.navbar {
+    // border:none;
+    // display: block;
     height: $dropdownMenuHeight;
-    padding: ($dropdownMenuHeight - 20px)/2 0;
+    // padding: ($dropdownMenuHeight - 20px)/2 0;
 
     & li.dropdown {
         line-height: 20px;
     }
 }
 
-.navbar-nav > li > .nav-link  {
-    // Workaround for spacing, need to fix alignment
-    margin-top:1px;
-}
-
-.navbar-nav > li > a, .navbar-nav > li > .btn-link, .navbar-nav > li > .nav-link {
-    line-height: 20px;
-    font-size: 14px;
-    border: none;
-    padding: 0;
-    font-weight: 700;
-    letter-spacing: 1px;
-
-    &:active, &:focus, &:hover {
-        color: #000;
-        outline: none;
-    }
+.nav-container {
+    padding-left: 0px;
+    padding-right: 0px;
 }

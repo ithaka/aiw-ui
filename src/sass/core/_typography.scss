@@ -148,8 +148,10 @@ a[href], a.link, .link {
   @extend a;
   text-decoration-color: $linkColor;
   // border-bottom: 1px solid rgba($linkColor, 0.3);
-
-  &:hover, &:focus, &:visited {
+  &:visited {
+    color: $linkColor;
+  }
+  &:hover, &:focus {
     color: $brightTeal;
     text-decoration: underline;
     text-decoration-color: $brightTeal;
@@ -162,12 +164,14 @@ a[href], a.link, .link {
   cursor: pointer;
   font-weight: normal;
   color: $typeAccent;
-  border-bottom: 1px solid rgba($typeAccent, 0.4);
+  text-decoration-color: $typeAccent;
+  // border-bottom: 1px solid rgba($typeAccent, 0.4);
 
   &:hover, &:focus, &:active {
     color: $brightOrange;
-    border-color: $brightOrange; 
-    text-decoration: none;
+    text-decoration-color: $typeAccent;
+    // border-color: $brightOrange; 
+    // text-decoration: none;
   }
 }
 
