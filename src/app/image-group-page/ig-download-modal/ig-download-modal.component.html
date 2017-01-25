@@ -17,11 +17,27 @@
         <button type="button" class="btn btn-secondary" (click)="closeModal.emit()">I reject</button>
         <!--<button *ngIf="!isLoading" class="btn btn-primary" (click)="getDownloadLink()">I accept</button>--> 
         <a *ngIf="!isLoading" class="btn btn-primary"
+            id="downloadPowerpointLink"
             [attr.href]="downloadLink"
             [attr.download]="downloadTitle">
-            <i id="downloadAssetLink" class="icon icon-download" ></i>
+            Download PPT 
+            <!--<i id="downloadAssetLink" class="icon icon-slideshow" ></i>-->
         </a>
-        <i *ngIf="isLoading" class="icon icon-loading form-control__icon"></i>
+        <button *ngIf="isLoading" class="btn btn-primary" disabled>
+          <i class="icon icon-loading"></i>
+        </button>
+
+        <a *ngIf="!zipLoading" class="btn btn-primary"
+            id="downloadZipLink"
+            [attr.href]="zipDownloadLink"
+            [attr.download]="downloadTitle">
+            Download Zip 
+            <!--<i id="downloadAssetLink" class="icon icon-download" ></i>-->
+        </a>
+        <button *ngIf="zipLoading" class="btn btn-primary" disabled>
+          <i class="icon icon-loading"></i>
+        </button>
+        
       </div>
     </div><!-- /.modal-content -->
   </div><!-- /.modal-dialog -->

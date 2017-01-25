@@ -82,6 +82,7 @@
 @include icon('ssc-asset', 'png');
 @include icon('institution-asset', 'png');
 @include icon('artstor-asset', 'png');
+@include icon--hover('icon-slideshow', 'gif');
 
 .icon-collection-type {
     float: right;

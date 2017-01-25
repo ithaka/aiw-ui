@@ -21,7 +21,9 @@ export class PptModalComponent implements OnInit {
   private ig: ImageGroup;
 
   private isLoading: boolean = false;
+  private zipLoading: boolean = false;
   private downloadLink: string = '';
+  private zipDownloadLink: string = '';
   private downloadTitle: string = 'Image Group'
 
   private header = new Headers({ 'Content-Type': 'application/x-www-form-urlencoded' }); 
@@ -32,6 +34,9 @@ export class PptModalComponent implements OnInit {
 
   ngOnInit() {
     this.isLoading = true;
+    this.zipLoading = true;
+
+    // Setup PPT Download
     this.getDownloadLink(this.ig)
       .take(1)
       .subscribe(
@@ -45,15 +50,32 @@ export class PptModalComponent implements OnInit {
         },
         (error) => { console.log(error); this.isLoading = false; }
       );
-
     
+    // Setup Zip download
+    this.getDownloadLink(this.ig, true)
+      .take(1)
+      .subscribe(
+        (data) => { 
+          this.zipLoading = false;
+          // Goal: A downlink that looks like:
+          // http://library.artstor.org/thumb/imgstor/pptx/80664bd7-361e-4075-b832-aedfad9788c9/public_des.pptx?userid=706217&igid=873256
+          if (data.path) {
+            this.zipDownloadLink = '//stage3.artstor.org' + data.path.replace('/nas/','/thumb/');
+          }
+        },
+        (error) => { console.log(error); this.zipLoading = false; }
+      );
     
   }
 
-  private getDownloadLink(group: ImageGroup): Observable<any> {
+  private getDownloadLink(group: ImageGroup, zip ?: boolean): Observable<any> {
     let header = new Headers({ 'content-type': 'application/x-www-form-urlencoded' }); 
     let options = new RequestOptions({ headers: header, withCredentials: true});
     let imgStr: string = "";
+
+    if (!zip) {
+      zip = false;
+    }
 
     group.thumbnails.forEach((thumb, index, thumbs) => {
         imgStr += [(index + 1), thumb.objectId, "1024x1024"].join(":");
@@ -68,7 +90,7 @@ export class PptModalComponent implements OnInit {
         igName: group.igName,
         images: imgStr,
         zoom: '',
-        zip: false
+        zip: zip
     }
 
     let encodedData: string = this._auth.formEncode(data);
