@@ -4,7 +4,8 @@
         <i title="Previous in results" (click)="showPrevAsset()" class="icon icon-direction icon-left"></i>
         <div class="title">{{ assets[0].title }}</div>
         <i title="Next in results" (click)="showNextAsset()" class="icon icon-direction icon-right"></i>
-        <div class="page-tooltip">{{ assetNumber }} OF {{ totalAssetCount }}</div>
+        <div class="page-tooltip">
+            <span id="assetPageNumber">{{ assetNumber }}</span> OF <span id="assetPageCount">{{ totalAssetCount }}</span></div>
     </div>
     <!--Asset Viewer Row-->
     <div [ngClass]="[ isFullscreen ? 'col-md-12' : 'col-md-8' ]">
