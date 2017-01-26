@@ -46,7 +46,7 @@ export class Home {
       .then((res) => {
         this.collections = res['Collections'];
       })
-      .catch(function(err) {
+      .catch((err) => {
         this.errors['collections'] = "Unable to load collections.";
       });
   }

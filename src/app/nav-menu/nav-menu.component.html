@@ -1,71 +1,75 @@
-<div class="nav-menu">
-    <div class="row nav__row">
-        <div class="container">
-            <ul class="nav navbar-nav">
-                <li class="nav-item"> 
-                    <a class="btn btn-link" routerLink="/home" routerLinkActive="active">Home</a>
-                </li>
-                <li class="nav-item dropdown" ngbDropdown>
-                    <button class="btn btn-link" id="dropdownMenu1" ngbDropdownToggle>Browse</button>
-                    <div class="dropdown-menu" aria-labelledby="dropdownMenu1">
-                        <button class="dropdown-item" [routerLink]="['/browse', 'library']">Artstor Collections</button>
-                        <button class="dropdown-item" [routerLink]="['/browse', 'institution']">Institutional Collections</button>
-                        <button class="dropdown-item" [routerLink]="['/browse', 'commons']">Open Collections</button>
-                        <button class="dropdown-item" [routerLink]="['/browse', 'mycollections']">My Collections</button>
-                        <button class="dropdown-item" [routerLink]="['/browse', 'groups']">Image Groups</button>
-                    </div>
-                </li>
-                <li class="nav-item dropdown" ngbDropdown>
-                    <button class="btn btn-link" id="organizeMenu" ngbDropdownToggle>Organize</button>
-                    <div class="dropdown-menu" aria-labelledby="organizeMenu">
-                        <button class="dropdown-item">!Manage Folders and Groups</button>
-                        <div class="dropdown-divider"></div>
-                        <!--Active on Image Group Page-->
-                        <button class="dropdown-item">!View All</button>
-                        <button class="dropdown-item">!Select All</button>
-                        <button class="dropdown-item">!Save Selections to > New Image Group</button>
-                        <button class="dropdown-item">!Delete Selections form Image Group</button>
-                        <button class="dropdown-item">!Deselect All</button>
-                        <!--Active on Image Group Page-->
-                        <button class="dropdown-item">!Save Image Group</button>
-                        <!--Active on Image Group Page-->
-                        <button class="dropdown-item">!Save Image Group as...</button>
-                        <div class="dropdown-divider"></div>
-                        <button class="dropdown-item">!Manage Personal Collection</button>
-                        <button class="dropdown-item">!Upload to Personal Collection</button>
-                    </div>
-                </li>
-                <li class="nav-item dropdown" ngbDropdown>
-                    <button class="btn btn-link" id="shareMenu" ngbDropdownToggle>Share</button>
-                    <div class="dropdown-menu" aria-labelledby="shareMenu">
-                        <button class="dropdown-item">!Generate Image Link</button>
-                        <!--Active on Image Group Page-->
-                        <button class="dropdown-item">!Generate Image Group Link</button>
-                        <!--Active on Image Group Page-->
-                        <button class="dropdown-item">!Print Image Group</button>
-                        <!--Active on Image Group Page-->
-                        <button class="dropdown-item">!Export Image Group to PowerPoint</button>
-                        <!--Active on Image Group Page-->
-                        <button class="dropdown-item">!Download Image Group</button>
-                        <div class="dropdown-divider"></div>
-                        <!--Active on Image Group Page-->
-                        <button class="dropdown-item">!Copy Citations for Image Group</button>
-                        <button class="dropdown-item">!Copy Citations for Selection</button>
-                        <div class="dropdown-divider"></div>
-                        <button class="dropdown-item">!Download Offline Presentation Tool (OIV)</button>
-                    </div>
-                </li>
-                <li class="nav-item dropdown" ngbDropdown>
-                    <button class="btn btn-link" id="viewMenu" ngbDropdownToggle>View</button>
-                    <div class="dropdown-menu" aria-labelledby="viewMenu">
-                        <button class="dropdown-item">!Small Thumbnails</button>
-                        <button class="dropdown-item">!Large Thumbnails</button>
-                    </div>
-                </li>
-                <li class="nav-item" >
-                    <a class="btn btn-link" id="viewMenu" href="//support.artstor.org" target="_blank">Support</a>
-                </li>
-            </ul>
-        </div>
+<div class="container nav-container">
+    <nav class="navbar navbar-toggleable-sm navbar-light bg-faded">
+    <button (click)="mobileCollapsed = !mobileCollapsed" class="navbar-toggler navbar-toggler-right" type="button" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <!--<a class="navbar-brand" href="#">Navbar</a>-->
+    <div [class.collapse]="mobileCollapsed" class="navbar-collapse" id="navMenu">
+                <ul class="nav navbar-nav">
+                    <li class="nav-item"> 
+                        <a class="btn btn-link" [routerLink]="['/home']" routerLinkActive="active">Home</a>
+                    </li>
+                    <li class="nav-item dropdown" ngbDropdown>
+                        <button class="btn btn-link" id="dropdownMenu1" ngbDropdownToggle>Browse</button>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                            <button class="dropdown-item" [routerLink]="['/browse', 'library']">Artstor Collections</button>
+                            <button class="dropdown-item" [routerLink]="['/browse', 'institution']">Institutional Collections</button>
+                            <button class="dropdown-item" [routerLink]="['/browse', 'commons']">Open Collections</button>
+                            <button class="dropdown-item" [routerLink]="['/browse', 'mycollections']">My Collections</button>
+                            <button class="dropdown-item" [routerLink]="['/browse', 'groups']">Image Groups</button>
+                        </div>
+                    </li>
+                    <li class="nav-item dropdown" ngbDropdown>
+                        <button class="btn btn-link" id="organizeMenu" ngbDropdownToggle>Organize</button>
+                        <div class="dropdown-menu" aria-labelledby="organizeMenu">
+                            <button class="dropdown-item">!Manage Folders and Groups</button>
+                            <div class="dropdown-divider"></div>
+                            <!--Active on Image Group Page-->
+                            <button class="dropdown-item">!View All</button>
+                            <button class="dropdown-item">!Select All</button>
+                            <button class="dropdown-item">!Save Selections to > New Image Group</button>
+                            <button class="dropdown-item">!Delete Selections form Image Group</button>
+                            <button class="dropdown-item">!Deselect All</button>
+                            <!--Active on Image Group Page-->
+                            <button class="dropdown-item">!Save Image Group</button>
+                            <!--Active on Image Group Page-->
+                            <button class="dropdown-item">!Save Image Group as...</button>
+                            <div class="dropdown-divider"></div>
+                            <button class="dropdown-item">!Manage Personal Collection</button>
+                            <button class="dropdown-item">!Upload to Personal Collection</button>
+                        </div>
+                    </li>
+                    <li class="nav-item dropdown" ngbDropdown>
+                        <button class="btn btn-link" id="shareMenu" ngbDropdownToggle>Share</button>
+                        <div class="dropdown-menu" aria-labelledby="shareMenu">
+                            <button class="dropdown-item">!Generate Image Link</button>
+                            <!--Active on Image Group Page-->
+                            <button class="dropdown-item">!Generate Image Group Link</button>
+                            <!--Active on Image Group Page-->
+                            <button class="dropdown-item">!Print Image Group</button>
+                            <!--Active on Image Group Page-->
+                            <button class="dropdown-item">!Export Image Group to PowerPoint</button>
+                            <!--Active on Image Group Page-->
+                            <button class="dropdown-item">!Download Image Group</button>
+                            <div class="dropdown-divider"></div>
+                            <!--Active on Image Group Page-->
+                            <button class="dropdown-item">!Copy Citations for Image Group</button>
+                            <button class="dropdown-item">!Copy Citations for Selection</button>
+                            <div class="dropdown-divider"></div>
+                            <button class="dropdown-item">!Download Offline Presentation Tool (OIV)</button>
+                        </div>
+                    </li>
+                    <li class="nav-item dropdown" ngbDropdown>
+                        <button class="btn btn-link" id="viewMenu" ngbDropdownToggle>View</button>
+                        <div class="dropdown-menu" aria-labelledby="viewMenu">
+                            <button class="dropdown-item">!Small Thumbnails</button>
+                            <button class="dropdown-item">!Large Thumbnails</button>
+                        </div>
+                    </li>
+                    <li class="nav-item" >
+                        <a class="btn btn-link" id="viewMenu" href="//support.artstor.org" target="_blank">Support</a>
+                    </li>
+                </ul>
     </div>
+    </nav>
 </div>

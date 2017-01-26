@@ -1,12 +1,13 @@
-<nav class="navbar navbar-light">
+<header class="navbar navbar-light">
   <div class="container" style="padding:0px;">
-    <div class="col-xs-8">
-      <a class="navbar-brand" href="#">
+    <div class="row">
+    <div class="col-8">
+      <a class="navbar-brand" [routerLink]="['/home']">
         <img id="logo" src="/assets/img/logo.png" />
       </a>
     </div>
 
-    <div class="col-xs-4">
+    <div class="col-4">
       <div *ngIf="showLoginPanel" class="login-panel">
         <div class="vertical-center-wrap">
           <div class="login-panel__status">
@@ -27,5 +28,6 @@
         </div>
       </div>
     </div>
+    </div>
   </div>
-</nav>
+</header>

@@ -22,6 +22,7 @@ export class AuthService implements CanActivate {
   private baseUrl;
   private subdomain;
   private thumbUrl;
+  private IIIFUrl;
   // Use header rewrite proxy for local development
   // - don't use proxy for now
   private proxyUrl = ''; 
@@ -45,6 +46,7 @@ export class AuthService implements CanActivate {
       // this.baseUrl = this.proxyUrl + 'http://library.artstor.org/library/secure';
     // }
       this.thumbUrl = '//mdxstage.artstor.org';
+      this.IIIFUrl = '//tsprod.artstor.org/rosa-iiif-endpoint-1.0-SNAPSHOT/fpx';
 
     // maintain thumb servers
     // mdxdv.artstor.org
@@ -84,6 +86,10 @@ export class AuthService implements CanActivate {
 
   public getSubdomain(): string {
     return this.subdomain;
+  }
+
+  public getIIIFUrl(): string {
+    return this.IIIFUrl;
   }
 
   /**

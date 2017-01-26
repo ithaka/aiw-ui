@@ -1,12 +1,13 @@
 
 $assetViewerPad: 20px;
+$viewerMinHeight: 600px;
 
 .asset-viewer {
     text-align: center;
     padding: $assetViewerPad;
     z-index: 0;
     position: relative;
-    min-height: 100px;
+    min-height: $viewerMinHeight;
 }
 
 .asset-viewer__buttons {
@@ -18,7 +19,7 @@ $assetViewerPad: 20px;
 }
 
 .video-player {
-    min-height: 600px;
+    min-height: $viewerMinHeight;
 }
 
 .asset-viewer.fullscreen {
