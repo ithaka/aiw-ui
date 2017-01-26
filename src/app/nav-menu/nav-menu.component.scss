@@ -7,6 +7,12 @@ $dropdownMenuHeight: 60px;
     background: #fff;
 }
 
+.nav {
+    z-index: 2000;
+    background-color: #fff;
+    background-clip: padding-box;
+}
+
 .navbar {
     // border:none;
     // display: block;
@@ -16,6 +22,10 @@ $dropdownMenuHeight: 60px;
     & li.dropdown {
         line-height: 20px;
     }
+}
+
+.nav-item {
+    margin: 6px;
 }
 
 .nav-item > button, .nav-item > a {
@@ -29,11 +39,19 @@ $dropdownMenuHeight: 60px;
 
 .navbar-collapse {
     padding-top: 40px;
+    position: absolute;
+    left: 0;
+    width: 80%;
+
+    @media (min-width: 768px) {
+        padding-top: 0;
+        width: 60%;
+    }
 }
 
-// .dropdown-menu {
-//     display: block;
-// }
+.nav-menu {
+    display: none;
+}
 
 .nav-menu {
     display: flex;
@@ -43,7 +61,6 @@ $dropdownMenuHeight: 60px;
     }
     // margin-top: 0px;
     // border-radius: 0px;
-    // z-index: 2000;
     // box-shadow: $dropdownShadow;
 }
 
