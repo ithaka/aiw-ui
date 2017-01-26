@@ -268,7 +268,12 @@ export class AssetService implements OnInit {
             .map(data => {
                 // This call returns an array-- maybe it supports querying multiple ids?
                 // For now let's just grab the first item in the array
-                return(data.json()[0]);
+                if (data.json() && data.json().length > 0) {
+                    return(data.json()[0]);
+                } else {
+                    return(data.json() || {});
+                }
+               
             });
     }
 
@@ -647,6 +652,11 @@ export class AssetService implements OnInit {
         if (size) {
             imagePath = imagePath.replace(/(size)[0-4]/g, 'size' + size);
         }
+        // Ensure relative
+        if (imagePath.indexOf('artstor.org') > -1) {
+            imagePath = imagePath.substring(imagePath.indexOf('artstor.org') + 12);
+        }
+        // Ceanup
         return this._auth.getThumbUrl() + imagePath;
     }
 }
