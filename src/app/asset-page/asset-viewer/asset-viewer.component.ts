@@ -12,7 +12,7 @@ import { Subscription } from 'rxjs/Subscription';
 import * as OpenSeadragon from 'openseadragon';
 
 import { Asset } from '../asset';
-import { AssetService } from '../../shared/assets.service'
+import { AssetService, AuthService } from '../../shared';
 
 declare var ActiveXObject: (type: string) => void;
 declare var kWidget: any;
@@ -46,7 +46,7 @@ export class AssetViewerComponent implements OnInit, OnDestroy, AfterViewInit {
     private lastZoomValue: number;
     private showCaption: boolean = true;
 
-    constructor(private _assets: AssetService, private http: Http) {}
+    constructor(private _assets: AssetService, private _auth: AuthService, private http: Http) {}
 
     ngOnInit() {
         // Wait for the asset to have its metadata
@@ -118,7 +118,7 @@ export class AssetViewerComponent implements OnInit, OnDestroy, AfterViewInit {
             .subscribe(data => {
                 if (data) {
                     let imgPath = '/' + data['imageUrl'].substring(0, data['imageUrl'].lastIndexOf('.fpx') + 4);
-                    this.tileSource = 'https://tsprod.artstor.org/rosa-iiif-endpoint-1.0-SNAPSHOT/fpx' + encodeURIComponent(imgPath) + '/info.json';
+                    this.tileSource = this._auth.getIIIFUrl() + encodeURIComponent(imgPath) + '/info.json';
                     this.loadOpenSea();
                 }
             })

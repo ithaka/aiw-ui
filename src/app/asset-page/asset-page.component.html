@@ -12,6 +12,7 @@
         <div [ngClass]="[ isFullscreen ? 'col-md-12' : 'col-md-8' ]">
             <div class="row">
                 <ang-asset-viewer *ngFor="let asset of assets; let i = index" 
+                    class="col-12"
                     [asset]="asset" 
                     (fullscreenChange)="updateFullscreenVar($event)" 
                     [index]="i" 
