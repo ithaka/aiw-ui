@@ -13,7 +13,7 @@ export class NavMenu {
   private mobileCollapsed: boolean = true;
   
   // TypeScript public modifiers
-  constructor( ) { 
+  constructor( ) {
     
   }
   

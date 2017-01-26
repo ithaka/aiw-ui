@@ -35,6 +35,13 @@ $dropdownMenuHeight: 60px;
     left: 0;
     width: 80%;
 
+    max-height: 0px;
+    transition: max-height 0.3s linear;
+
+    &.show {
+        max-height: auto;
+    }
+
     @media (min-width: 768px) {
         padding-top: 0;
         width: 60%;
@@ -61,24 +68,33 @@ $dropdownMenuHeight: 60px;
     }
 }
 
-// .nav-item > button, .nav-item > a {
-//     font-size: larger;
-// }
+.dropdown-menu {
+    border: none;
+    box-shadow: none;
 
-// .nav-item:hover > .dropdown-menu {
-//     @media (min-width: 768px) {
-//         display: block;
-//     }
-// }
-
-// .nav-item.open > .dropdown-menu {
-//     display: flex;
-//     flex-direction: column;
-// }
-
+    @media (min-width: 768px) {
+        border: 1px solid rgba(0, 0, 0, 0.15);
+        box-shadow: 0px 2px 3px 0px rgba(0, 0, 0, 0.2);
+    }
+}
 
 .navbar-toggleable-sm {
     @media (min-width: 768px) {
         flex-direction: column;
     }
+}
+
+.cover {
+    background-color: rgba(114, 114, 114, 0.5);
+    display: block;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    z-index: 5000;
+}
+
+.navbar-toggler-icon {
+    z-index: 10000;
 }
