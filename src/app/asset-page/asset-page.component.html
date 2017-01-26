@@ -62,8 +62,11 @@
         </div>
 
     <!-- Asset Drawer -->
-    <div class="asset-drawer" [class.slideOut]="showAssetDrawer">
+    <div class="asset-drawer" [class.slideOut]="showAssetDrawer && isFullscreen">
         <div class="col-sm-12">
+            <div *ngIf="prevAssetResults.thumbnails.length < 1">
+                <div class="alert alert-info">To compare assets, you will need to access an asset through as set of results first. Then those results will show here.</div>
+            </div>
             <div *ngFor="let asset of prevAssetResults.thumbnails" class="card card--asset" [ngClass]="{'selected' : ( assetsIds.indexOf(asset.id) > -1 ), 'disabled' : assetsIds[0] == asset.id }" (click)="toggleAsset(asset)">
                 <div class="card-block card-text">
                     <div class="card-img-top">
