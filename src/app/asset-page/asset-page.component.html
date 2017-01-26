@@ -1,27 +1,4 @@
 <div class="container-fluid asset-page" [class.fullscreen]="isFullscreen">
-<<<<<<< HEAD
-    <!--View prev/next asset-->
-    <div class="title-nav-cntnr col-md-12" [class.hidden]="isFullscreen">
-        <i title="Previous in results" (click)="showPrevAsset()" class="icon icon-direction icon-left"></i>
-        <div class="title">{{ assets[0].title }}</div>
-        <i title="Next in results" (click)="showNextAsset()" class="icon icon-direction icon-right"></i>
-        <div class="page-tooltip">
-            <span id="assetPageNumber">{{ assetNumber }}</span> OF <span id="assetPageCount">{{ totalAssetCount }}</span></div>
-    </div>
-    <!--Asset Viewer Row-->
-    <div [ngClass]="[ isFullscreen ? 'col-md-12' : 'col-md-8' ]">
-        <div class="row asset-viewer-row">
-            <ang-asset-viewer *ngFor="let asset of assets; let i = index" 
-                [asset]="asset" 
-                [ngClass]="[ 'asset-viewer-' + assets.length ]"
-                (fullscreenChange)="updateFullscreenVar($event)" 
-                [index]="i" 
-                [assetCompareCount]="assets.length"
-                [assetNumber]="assetNumber"
-                [assetGroupCount]="totalAssetCount"
-                (nextPage)="showNextAsset()"
-                (prevPage)="showPrevAsset()"></ang-asset-viewer>
-=======
     <div class="row">
         <!--View prev/next asset-->
         <div class="title-nav-cntnr col-md-12" [class.hidden]="isFullscreen">
@@ -30,14 +7,13 @@
             <i title="Next in results" (click)="showNextAsset()" class="icon icon-direction icon-right"></i>
             <div class="page-tooltip">
                 <span id="assetPageNumber">{{ assetNumber }}</span> OF <span id="assetPageCount">{{ totalAssetCount }}</span></div>
->>>>>>> master
         </div>
         <!--Asset Viewer Row-->
-        <div [ngClass]="[ isFullscreen ? 'col-md-12' : 'col-md-8' ]">
-            <div class="row">
-                <ang-asset-viewer *ngFor="let asset of assets; let i = index" 
-                    class="col-12"
+        <div [ngClass]="[ isFullscreen ? 'fullscreen-container' : 'col-md-8' ]">
+            <!--<div class="row asset-row">-->
+                <ang-asset-viewer *ngFor="let asset of (isFullscreen ? assets : [assets[0]]); let i = index"
                     [asset]="asset" 
+                    [ngClass]="[ 'asset-viewer-' + assets.length ]"
                     (fullscreenChange)="updateFullscreenVar($event)" 
                     [index]="i" 
                     [assetCompareCount]="assets.length"
@@ -45,7 +21,7 @@
                     [assetGroupCount]="totalAssetCount"
                     (nextPage)="showNextAsset()"
                     (prevPage)="showPrevAsset()"></ang-asset-viewer>
-            </div>
+            <!--</div>-->
             <!--If the user has not accepted the agreement, show modal when clicked, otherwise download immediately-->
             <a class="btn btn--icon" *ngIf="assets[0].downloadLink && user.isLoggedIn" 
                 [attr.href]="downloadAuth() ? assets[0].downloadLink : null"
@@ -88,29 +64,28 @@
     <!-- Asset Drawer -->
     <div class="asset-drawer" [class.slideOut]="showAssetDrawer">
         <div class="col-sm-12">
-         <div *ngFor="let asset of prevAssetResults.thumbnails" class="card card--asset" [ngClass]="{'selected' : ( assetsIds.indexOf(asset.id) > -1 ), 'disabled' : assetsIds[0] == asset.id }" (click)="toggleAsset(asset)">
-             <div class="card-img-top">
-                    <img [attr.src]="_assets.makeThumbUrl(asset.thumbnailImgUrl, 0)" alt="Card image cap">
-            </div>
-            <div class="card-block card-text">
-                <!--<div>
-                    <i *ngIf="asset.cfObjectId.length > 0" [id]="asset.objectId + '_associated_images'" class="icon icon-collab" [routerLink]="['/associated', asset.cfObjectId, asset.collectionId]"></i>
-                    <i *ngIf="asset.clustered == 1" [id]="asset.objectId + '_clustered_images'" class="icon icon-cluster" [routerLink]="['/cluster', asset.objectId, { objTitle :  asset.thumbnail1 }]"></i>
-                    <i *ngIf="asset.iapFlag > 0" class="icon icon-iap"></i>
-                    <i *ngIf="asset.objectTypeId && asset.objectTypeId != 10" class="icon icon-{{asset.objectTypeId | typeIdPipe}}"></i>
-                    <i class="icon icon-{{collectionTypeMap[asset.collectionType]}} icon-collection-type"></i>
-                </div>-->
-                <div class="card-text-group">
-                    <span class="asset-title" title="{{ asset.thumbnail1 }}">{{ asset.thumbnail1 }}</span>
-                    <span class="asset-agent" title="{{ asset.thumbnail2 }}">{{ asset.thumbnail2 }}</span>
-                    <span class="asset-date" title="{{ asset.thumbnail3 }}">{{ asset.thumbnail3 }}</span>
-                    <span title="{{ asset.thumbnail4 }}">{{ asset.thumbnail4 }}</span>
+            <div *ngFor="let asset of prevAssetResults.thumbnails" class="card card--asset" [ngClass]="{'selected' : ( assetsIds.indexOf(asset.id) > -1 ), 'disabled' : assetsIds[0] == asset.id }" (click)="toggleAsset(asset)">
+                <div class="card-block card-text">
+                    <div class="card-img-top">
+                        <img [attr.src]="_assets.makeThumbUrl(asset.thumbnailImgUrl, 0)" alt="Card image cap">
+                    </div>
+                    <!--<div>
+                        <i *ngIf="asset.cfObjectId.length > 0" [id]="asset.objectId + '_associated_images'" class="icon icon-collab" [routerLink]="['/associated', asset.cfObjectId, asset.collectionId]"></i>
+                        <i *ngIf="asset.clustered == 1" [id]="asset.objectId + '_clustered_images'" class="icon icon-cluster" [routerLink]="['/cluster', asset.objectId, { objTitle :  asset.thumbnail1 }]"></i>
+                        <i *ngIf="asset.iapFlag > 0" class="icon icon-iap"></i>
+                        <i *ngIf="asset.objectTypeId && asset.objectTypeId != 10" class="icon icon-{{asset.objectTypeId | typeIdPipe}}"></i>
+                        <i class="icon icon-{{collectionTypeMap[asset.collectionType]}} icon-collection-type"></i>
+                    </div>-->
+                    <div class="card-text-group">
+                        <span class="asset-title" title="{{ asset.thumbnail1 }}">{{ asset.thumbnail1 }}</span>
+                        <span class="asset-agent" title="{{ asset.thumbnail2 }}">{{ asset.thumbnail2 }}</span>
+                        <span class="asset-date" title="{{ asset.thumbnail3 }}">{{ asset.thumbnail3 }}</span>
+                        <span title="{{ asset.thumbnail4 }}">{{ asset.thumbnail4 }}</span>
+                    </div>
                 </div>
             </div>
         </div>
-
-
-        </div>
+    </div>
 </div>
 <ang-agree-modal *ngIf="showAgreeModal" (closeModal)="showAgreeModal = false" [asset]="assets[0]"></ang-agree-modal>
 <ang-login-req-modal *ngIf="showLoginModal" (closeModal)="showLoginModal = false"></ang-login-req-modal>

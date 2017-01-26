@@ -151,11 +151,13 @@ export class AssetPage implements OnInit, OnDestroy {
                 add = false;
             }
         })
+        if (this.assets.length >= 10) {
+            add = false;
+            // TO-DO: Show Error message
+        }
         if (add == true) {
             this.assets.push( new Asset(asset.objectId, this._assets, this._auth) );
             this.assetsIds.push(asset.objectId);
         }
-        console.log(this.assetsIds);
-        console.log(this.assets[1].id);
     }
 }
