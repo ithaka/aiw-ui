@@ -49,19 +49,15 @@ $dropdownMenuHeight: 60px;
     }
 }
 
-.nav-menu {
-    display: none;
-}
-
-.nav-menu {
-    display: flex;
-    flex-direction: column;
+.nav-item:hover > .dropdown-menu {
     @media (min-width: 768px) {
         display: block;
     }
-    // margin-top: 0px;
-    // border-radius: 0px;
-    // box-shadow: $dropdownShadow;
+}
+
+.nav-item.open > .dropdown-menu {
+    display: flex;
+    flex-direction: column;
 }
 
 
