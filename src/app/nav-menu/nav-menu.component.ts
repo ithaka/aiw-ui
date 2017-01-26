@@ -9,6 +9,8 @@ import { Component } from '@angular/core';
   styleUrls: [ './nav-menu.component.scss' ],
 })
 export class NavMenu {
+
+  private mobileCollapsed: boolean = false;
   
   // TypeScript public modifiers
   constructor( ) { 
