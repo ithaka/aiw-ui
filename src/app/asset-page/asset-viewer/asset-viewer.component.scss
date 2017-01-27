@@ -36,11 +36,7 @@ $metadataBg: #f1f8f1;
     min-height: 100%;
     width: 100%;
     z-index: 1;
-    padding: 0px;
-
-    & .asset-viewer__buttons {
-        bottom: 55px;
-    }
+    padding: 0px; 
 
     & .item  {
         position: absolute !important;
