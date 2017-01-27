@@ -10,6 +10,7 @@ import { Subscription }   from 'rxjs/Subscription';
 export class SearchComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = [];
 
+  private showSearchModal: boolean = false;
   private term: string;
 
   constructor(
