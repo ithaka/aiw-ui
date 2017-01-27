@@ -16,7 +16,6 @@ export class AssetPage implements OnInit, OnDestroy {
 
     // Array to support multiple viewers on the page
     private assets: Asset[] = [];
-    private assetsIds: string[] = [];
     private assetIndex: number = 0;
     private assetNumber: number = 0;
     private totalAssetCount: number = 1;
@@ -43,7 +42,6 @@ export class AssetPage implements OnInit, OnDestroy {
                     this.assets.splice(0);
                 }
                 this.assets[0] = new Asset(routeParams["assetId"], this._assets, this._auth);
-                this.assetsIds[0] = this.assets[0].id;
 
                 if(this.prevAssetResults.thumbnails){
                     this.totalAssetCount = this.prevAssetResults.count ? this.prevAssetResults.count : this.prevAssetResults.thumbnails.length;
@@ -121,9 +119,9 @@ export class AssetPage implements OnInit, OnDestroy {
     private toggleAsset(asset: any): void {
         let add = true;
         this.assets.forEach( (viewAsset, i) => {
-            if (asset.id == viewAsset.id) {
+            if (asset.objectId == viewAsset.id) {
+                asset.selected = false;
                 this.assets.splice(i, 1);
-                this.assetsIds.splice(this.assetsIds.indexOf(asset.id), 1);
                 add = false;
             }
         })
@@ -132,8 +130,8 @@ export class AssetPage implements OnInit, OnDestroy {
             // TO-DO: Show Error message
         }
         if (add == true) {
+            asset.selected = true;
             this.assets.push( new Asset(asset.objectId, this._assets, this._auth) );
-            this.assetsIds.push(asset.objectId);
         }
     }
 }
