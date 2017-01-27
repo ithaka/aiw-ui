@@ -23,7 +23,7 @@
         <div *ngFor="let geographyFacet of availableFilters.geography" id="filterGeographyItem{{ geographyFacet.id }}">
             <i id="filterGeography{{ geographyFacet.id }}Expand" class="icon icon-direction absolute-left tree-icon" (click)="toggleTree(geographyFacet)" [ngClass]="{ 'icon-down' : geographyFacet.expanded, 'icon-right' : !geographyFacet.expanded }"></i>
             <div class="filter parent" (click)="toggleFilter(geographyFacet.id, 'geography')" [ngClass]="{'active': filterApplied(geographyFacet.id, 'geography')}"> {{ geographyFacet.name }} </div>
-            <div class="child-cntnr collapse" [ngClass]="{ 'in' : geographyFacet.expanded }">
+            <div class="child-cntnr collapse" [ngClass]="{ 'show' : geographyFacet.expanded }">
                 <div class="filter child" *ngFor="let child of geographyFacet.children; let childIndex = index" id="filterGeographyItem{{ 'Child' + child.id }}" (click)="toggleFilter(child.id, 'geography')" [ngClass]="{'active': filterApplied(child.id, 'geography')}">{{ child.name }}</div>
             </div>
         </div>

@@ -1,7 +1,7 @@
 /**
  * Assets service
  */
-import { Injectable, OnDestroy } from '@angular/core';
+import { Injectable, OnDestroy, OnInit } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { Http, Response, Headers, RequestOptions } from '@angular/http';
 import { Observable, BehaviorSubject } from 'rxjs/Rx';
@@ -17,7 +17,7 @@ import { ToolboxService } from './toolbox.service';
 import { ImageGroup } from '.';
 
 @Injectable()
-export class AssetService {
+export class AssetService implements OnInit {
 
     /** Constant that defines which collectionType belongs to institutions */
     static readonly institutionCollectionType: number = 2;
@@ -76,10 +76,30 @@ export class AssetService {
         };
     }
 
+    ngOnInit() {
+        
+    }
+
     private updateLocalResults(results: any[]) {
         this.allResultsValue = results;
         this.allResultsSource.next(results);
+
+        // Set Recent Results (used by Compare Mode)
+        if (results['thumbnails'] && results['thumbnails'].length > 0) {
+            this._storage.set('results', results);
+        }
     } 
+
+    /**
+     * Return most recent results set with at least one asset
+     */
+    public getRecentResults(): any {
+        if (this._storage.get('results')) {
+            return this._storage.get('results');
+        } else {
+            return { thumbnails: [] };
+        }
+    }
 
     /**
      * Sets urlParams based on matching keys with the url params that are passed in
@@ -260,7 +280,12 @@ export class AssetService {
             .map(data => {
                 // This call returns an array-- maybe it supports querying multiple ids?
                 // For now let's just grab the first item in the array
-                return(data.json()[0]);
+                if (data.json() && data.json().length > 0) {
+                    return(data.json()[0]);
+                } else {
+                    return(data.json() || {});
+                }
+               
             });
     }
 
@@ -444,7 +469,9 @@ export class AssetService {
                 this._filters.generateGeoFilters( res.geographyFacets );
                 this._filters.generateDateFacets( res.dateFacets );
                 this._filters.setAvailable('classification', res.classificationFacets);
-                this.allResultsSource.next(res);
+                
+                // Set the allResults object
+                this.updateLocalResults(res);
             })
             .catch(function(err) {
                 console.error(err);
@@ -639,6 +666,11 @@ export class AssetService {
         if (size) {
             imagePath = imagePath.replace(/(size)[0-4]/g, 'size' + size);
         }
+        // Ensure relative
+        if (imagePath.indexOf('artstor.org') > -1) {
+            imagePath = imagePath.substring(imagePath.indexOf('artstor.org') + 12);
+        }
+        // Ceanup
         return this._auth.getThumbUrl() + imagePath;
     }
 }

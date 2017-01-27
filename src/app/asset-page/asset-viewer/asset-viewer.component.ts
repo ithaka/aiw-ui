@@ -12,7 +12,7 @@ import { Subscription } from 'rxjs/Subscription';
 import * as OpenSeadragon from 'openseadragon';
 
 import { Asset } from '../asset';
-import { AssetService } from '../../shared/assets.service'
+import { AssetService, AuthService } from '../../shared';
 
 declare var ActiveXObject: (type: string) => void;
 declare var kWidget: any;
@@ -32,6 +32,7 @@ export class AssetViewerComponent implements OnInit, OnDestroy, AfterViewInit {
     @Output() fullscreenChange = new EventEmitter();
     @Output() nextPage = new EventEmitter();
     @Output() prevPage = new EventEmitter();
+    @Output() removeAsset = new EventEmitter();
 
     private isLoading: boolean = true;
     private isFullscreen: boolean = false;
@@ -46,9 +47,10 @@ export class AssetViewerComponent implements OnInit, OnDestroy, AfterViewInit {
     private lastZoomValue: number;
     private showCaption: boolean = true;
 
-    constructor(private _assets: AssetService, private http: Http) {}
+    constructor(private _assets: AssetService, private _auth: AuthService, private http: Http) {}
 
     ngOnInit() {
+        console.log(this.asset);
         // Wait for the asset to have its metadata
         this.subscriptions.push(
             this.asset.isDataLoaded.subscribe(assetInfoLoaded => {
@@ -59,6 +61,12 @@ export class AssetViewerComponent implements OnInit, OnDestroy, AfterViewInit {
                 console.log(error);
             })
         );
+
+        // Assets don't initialize with fullscreen variable
+        // And assets beyond the first/primary only show in fullscreen
+        if (this.index > 0) {
+            this.isFullscreen = true;
+        }
 
         // Events for fullscreen/Presentation mode
         document.addEventListener('fullscreenchange', () => {
@@ -118,7 +126,7 @@ export class AssetViewerComponent implements OnInit, OnDestroy, AfterViewInit {
             .subscribe(data => {
                 if (data) {
                     let imgPath = '/' + data['imageUrl'].substring(0, data['imageUrl'].lastIndexOf('.fpx') + 4);
-                    this.tileSource = 'https://tsprod.artstor.org/rosa-iiif-endpoint-1.0-SNAPSHOT/fpx' + encodeURIComponent(imgPath) + '/info.json';
+                    this.tileSource = this._auth.getIIIFUrl() + encodeURIComponent(imgPath) + '/info.json';
                     this.loadOpenSea();
                 }
             })
@@ -238,11 +246,7 @@ export class AssetViewerComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     removeComparedAsset(assetId): void {
-        //     // Verify asset can be removed
-        //     if (this.removableAsset) {
-        //       // Tell item.js to remove asset from array
-        //       $rootScope.$broadcast('removeComparedAsset', assetId);
-        //     }
+        this.removeAsset.emit(this.index);
     }
 
     /**
