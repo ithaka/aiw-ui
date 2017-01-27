@@ -10,15 +10,3 @@
         border: none;
     }
 }
-
-ang-search {
-    position: fixed;
-    top: 7px;
-    left: 15px;
-    z-index: 2000;
-    width: calc(100% - 100px);
-
-    @media (min-width: 768px) {
-        position: static;
-    }
-}
