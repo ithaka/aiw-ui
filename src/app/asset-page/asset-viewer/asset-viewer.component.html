@@ -33,8 +33,8 @@
     </div>-->
 
     <!-- Large thumbnail fallback -->
-    <div *ngIf="mediaLoadingFailed" id="fallbackViewer" [class.loading]="isLoading" class="asset-viewer">
-        <img alt="{{ asset.title }}" class="item" [attr.src]="_assets.makeThumbUrl(asset.imgURL, 2)" />
+    <div *ngIf="mediaLoadingFailed" id="fallbackViewer" [class.loading]="isLoading">
+        <img alt="{{ asset.title }}" class="item item--thumbnail" [attr.src]="_assets.makeThumbUrl(asset.imgURL, 2)" />
     </div>
 
     <div id="imageButtons-{{ asset.id + '-' + index }}" class="button-group asset-viewer__buttons">
@@ -62,7 +62,7 @@
     </div>-->
 
 
-    <div *ngIf="isFullscreen" class="fullscreen-metadata" [hidden]="!showCaption">
+    <div *ngIf="isFullscreen" class="fullscreen-metadata" [class.slideAway]="!showCaption">
         <div class="vertical-center-wrap">
             <i *ngIf="assetCompareCount == 1" title="Previous in results" (click)="prevPage.emit()" class="icon icon-direction icon-left"></i>
             <div class="title">{{ asset.title }}</div>
