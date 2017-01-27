@@ -32,6 +32,11 @@
             <a class="btn btn--icon" *ngIf="assets[0].downloadLink && !user.isLoggedIn" (click)="showLoginModal = true">
                 <i id="downloadAssetLink" class="icon icon-download" ></i>
             </a>
+            <a class="btn btn--icon" (click)="generateImgURL()">
+                <i id="genImgURLlink" class="icon icon-share" ></i>
+            </a>
+            <div id="generatedImgURL">{{generatedImgURL}}</div>
+            <div>{{copyURLStatusMsg}}</div>
         </div>
         <!--Asset Metadata Row-->
         <div [class.hidden]="isFullscreen" class="col-md-4">

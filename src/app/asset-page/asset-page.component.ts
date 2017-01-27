@@ -29,6 +29,9 @@ export class AssetPage implements OnInit, OnDestroy {
     /** controls whether or not the modals are visible */
     private showAgreeModal: boolean = false;
     private showLoginModal: boolean = false;
+
+    private copyURLStatusMsg: string = '';
+    private generatedImgURL: string = '';
     
 
     constructor(private _assets: AssetService, private _auth: AuthService, private route: ActivatedRoute, private _router: Router) { }
@@ -137,5 +140,72 @@ export class AssetPage implements OnInit, OnDestroy {
      */
     private cleanId(label: string): string {
         return label.toLowerCase().replace(/\s/g,'');
+    }
+
+    private generateImgURL(): void{
+        console.log(this.assets[0]);
+        this._assets.genrateImageURL( this.assets[0].id )
+          .then((imgURLData) => {
+              this._assets.encryptuserId()
+                .then((userEncryptData) => {
+                  var imgEncryptId = imgURLData.encryptId;
+                  var usrEncryptId = userEncryptData.encryptId;
+                  this.generatedImgURL = this._auth.getUrl() + '/ViewImages?id=' + imgEncryptId + '&userId=' + usrEncryptId + '&zoomparams=&fs=true';
+                  
+                  this.copyTextToClipBoard();
+                })
+                .catch(function(err){
+                  console.log('Unable to Encrypt userid');
+                  console.error(err);
+                });
+          })
+          .catch(function(err) {
+              console.log('Unable to generate image URL');
+              console.error(err);
+          });
+    }
+
+    private copyTextToClipBoard(): void{
+        var textArea = document.createElement("textarea");
+
+        textArea.style.position = 'fixed';
+        textArea.style.top = '0';
+        textArea.style.left = '0';
+
+        textArea.style.width = '2em';
+        textArea.style.height = '2em';
+        textArea.style.padding = '0';
+        textArea.style.border = 'none';
+        textArea.style.outline = 'none';
+        textArea.style.boxShadow = 'none';
+        textArea.style.background = 'transparent';
+
+        var element = document.getElementById('generatedImgURL');
+        textArea.value = element.textContent;
+
+        document.body.appendChild(textArea);
+        textArea.select();
+
+        try {
+
+            var successful = document.execCommand('copy');
+            var msg = '';
+        
+            if(successful){
+                msg = 'Successfully Copied!';
+            }
+            else{
+                msg = 'Not able to copy!';
+            }
+
+            this.copyURLStatusMsg = msg;
+                setTimeout(() => {
+                    this.copyURLStatusMsg = '';
+                }, 8000);
+        } catch (err) {
+            console.log('Unable to copy');
+        }
+
+        document.body.removeChild(textArea);
     }
 }
