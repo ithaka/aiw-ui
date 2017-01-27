@@ -61,7 +61,6 @@ export class AssetGrid implements OnInit, OnDestroy {
     index : 0,
     label : 'Relevance'
   };
-  term;
   sub;
   // TO-DO: Fields should be pulled dynamically!
   public fields = [
@@ -116,10 +115,6 @@ export class AssetGrid implements OnInit, OnDestroy {
             } else {
                 // Any other filters are managed by Asset Filters
             }
-        }
-
-        if (params['term']) {
-          this.term = params['term'];
         }
                 
         if (params['startDate'] && params['endDate']) {

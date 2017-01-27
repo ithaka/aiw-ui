@@ -1,0 +1,8 @@
+<div class="form-group">
+    <div class="input-group">
+        <input id="inputSearchTerm" [(ngModel)]="term" (keyup.enter)="updateSearchTerm(term)"  aria-describedby="search-label" type="text" class="form-control has-icon" placeholder="Search">
+        <i id="iconSearchSubmit" (click)="updateSearchTerm(term)" class="icon icon-search form-control__icon"></i>
+        <!--<i *ngIf="isLoading" class="icon icon-loading form-control__icon"></i>-->
+    </div>
+</div>
+<a class="link small" (click)="showAdvancedModal = !showAdvancedModal" tabindex="">!Advanced Search</a>
