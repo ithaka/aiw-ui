@@ -1,7 +1,6 @@
 
 // Navigation Items
 $dropdownShadow: 0px 2px 3px 0px rgba(0,0,0,0.2);
-$dropdownMenuHeight: 60px;
 
 .navbar-light {
     background: #fff;
@@ -16,8 +15,10 @@ $dropdownMenuHeight: 60px;
 .navbar {
     // border:none;
     // display: block;
-    height: $dropdownMenuHeight;
-    // padding: ($dropdownMenuHeight - 20px)/2 0;
+    height: 80px;
+    @media (min-width: 768px) {
+        height: 60px;
+    }
 
     & li.dropdown {
         line-height: 20px;
@@ -25,8 +26,17 @@ $dropdownMenuHeight: 60px;
 }
 
 .nav-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+
     padding-left: 0px;
     padding-right: 0px;
+    z-index: 2000;
+    @media (min-width: 768px) {
+        position: relative;
+    }
 }
 
 .navbar-collapse {
@@ -34,6 +44,7 @@ $dropdownMenuHeight: 60px;
     position: absolute;
     left: 0;
     width: 100%;
+    z-index: 1000;
 
     // max-height: 0px;
     transition: transform 0.3s linear;
@@ -44,8 +55,7 @@ $dropdownMenuHeight: 60px;
     }
 
     &.show {
-        // max-height: auto;
-            transform:translate3d(0,0,0);
+        transform:translate3d(0,0,0);
     }
 
     & > ul {
@@ -57,7 +67,7 @@ $dropdownMenuHeight: 60px;
     }
 
     @media (min-width: 768px) {
-        padding-top: 0;
+        margin-top: 0;
         transform:translate3d(0, 0, 0);
     }
 }
@@ -99,16 +109,21 @@ $dropdownMenuHeight: 60px;
 }
 
 .cover {
-    background-color: rgba(114, 114, 114, 0.5);
+    background-color: rgba(114, 114, 114, 0);
+    transition: opacity .3s linear;
+    opacity: 0;
     display: block;
-    position: absolute;
+    position: fixed;
     left: 0;
     right: 0;
     top: 0;
     bottom: 0;
-    z-index: 5000;
-}
+    z-index: 1000;
+    pointer-events: none;
 
-.navbar-toggler-icon {
-    z-index: 10000;
+    &.show {
+        background-color: rgba(114, 114, 114, 0.5);
+        opacity: 1;
+        pointer-events: all;
+    }
 }
