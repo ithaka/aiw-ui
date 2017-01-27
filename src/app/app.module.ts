@@ -24,7 +24,7 @@ import { AppState, InternalStateType } from './app.service';
 import { Nav } from './shared/nav';
 import { NavMenu } from './nav-menu';
 import { AssetFilters } from './asset-filters';
-import { AssetGrid } from './asset-grid';
+import { AssetGrid, ThumbnailComponent } from './asset-grid';
 import { Footer } from './shared/footer';
 import { Home } from './home';
 import { SearchPage } from './search-page';
@@ -95,6 +95,7 @@ type StoreType = {
     AssociatedPage,
     AssetFilters,
     AssetGrid,
+    ThumbnailComponent,
     ImageGroupPage,
     PptModalComponent,
     LoginReqModal,
