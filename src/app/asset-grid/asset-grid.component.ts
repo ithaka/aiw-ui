@@ -175,14 +175,6 @@ export class AssetGrid implements OnInit, OnDestroy {
   }
 
   /**
-   * Called from template when new search term is entered
-   * @param term Term for desired search
-   */
-  private updateSearchTerm(term: string) {
-    this._router.navigate(['/search', term]);
-  }
-
-  /**
    * Set currentPage in url and navigate, which triggers this._assets.queryAll() again
    * @param currentPage number of desired page
    */

@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 
 import { Subscription }   from 'rxjs/Subscription';
 
@@ -13,6 +13,7 @@ export class SearchComponent implements OnInit, OnDestroy {
   private term: string;
 
   constructor(
+    private _router: Router,
     private route: ActivatedRoute
   ) { }
 
@@ -28,5 +29,13 @@ export class SearchComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.subscriptions.forEach((sub) => { sub.unsubscribe(); });
+  }
+
+  /**
+   * Called from template when new search term is entered
+   * @param term Term for desired search
+   */
+  private updateSearchTerm(term: string) {
+    this._router.navigate(['/search', term]);
   }
 }
