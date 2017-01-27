@@ -30,21 +30,35 @@ $dropdownMenuHeight: 60px;
 }
 
 .navbar-collapse {
-    padding-top: 40px;
+    margin-top: 40px;
     position: absolute;
     left: 0;
-    width: 80%;
+    width: 100%;
 
-    max-height: 0px;
-    transition: max-height 0.3s linear;
+    // max-height: 0px;
+    transition: transform 0.3s linear;
+    transform:translate3d(-100%, 0, 0);
+
+    &.collapse {
+        display: block;
+    }
 
     &.show {
-        max-height: auto;
+        // max-height: auto;
+            transform:translate3d(0,0,0);
+    }
+
+    & > ul {
+        padding-bottom: 20px;
+        box-shadow: 0px 2px 3px 0px rgba(0, 0, 0, 0.2);
+        @media (min-width: 768px) {
+            box-shadow: none !important;
+        }
     }
 
     @media (min-width: 768px) {
         padding-top: 0;
-        width: 60%;
+        transform:translate3d(0, 0, 0);
     }
 }
 
