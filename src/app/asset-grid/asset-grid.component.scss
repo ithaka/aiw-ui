@@ -1,5 +1,9 @@
 @import '../../sass/core/variables';
 
+.row--search-bar {
+    margin: 20px 0;
+}
+
 .sortlist, .pagesizelist, .editMode{
     list-style: none;
     display: inline-block;

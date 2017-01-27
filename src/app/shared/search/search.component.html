@@ -5,5 +5,5 @@
         <!--<i *ngIf="isLoading" class="icon icon-loading form-control__icon"></i>-->
     </div>
 </div>
-<a class="link small" (click)="showSearchModal = true" tabindex="">!Advanced Search</a>
+<a class="link small open-modal" (click)="showSearchModal = true" tabindex="">!Advanced Search</a>
 <ang-search-modal *ngIf="showSearchModal" (closeModal)="showSearchModal = false"></ang-search-modal>

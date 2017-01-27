@@ -5,7 +5,8 @@ import { Subscription }   from 'rxjs/Subscription';
 
 @Component({
   selector: 'ang-search',
-  templateUrl: 'search.component.html'
+  templateUrl: 'search.component.html',
+  styleUrls: [ './search.component.scss' ],
 })
 export class SearchComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = [];
