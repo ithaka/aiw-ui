@@ -187,3 +187,62 @@
         </div>
     </div>
 </div>
+
+<div id="genImgURL" class="modal" [ngClass]="{'show': showgenImgURLModal }">
+    <!-- Login Help Modal -->
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="close-icon" (click)="showgenImgURLModal = false">×</span>
+            </div>
+            <div class="modal-body">
+                <div class="container-fluid">
+                    <div class="row">
+                        <h1>Image URL</h1>
+                    </div>
+                    <div class="row pt-3 main-content">
+                        <div class="col-sm-8">
+                            <div class="asset-title" *ngIf="selectedAssets.length > 0">"{{ selectedAssets[0].thumbnail1 }}"</div>
+                            <div class="imgURL-gen-info">Copy the image URL or the HTML code to share this image with others at your institution.</div>
+                            <div class="pt-3">
+                                <input class="mr-2" type="radio" [(ngModel)]="genImgMode"  name="genImgMode" value="half">Half screen viewer
+                                <input class="ml-2 mr-2" type="radio" [(ngModel)]="genImgMode"  name="genImgMode" value="full">Full screen viewer (no pop-up window)
+                            </div>
+                            <div class="pt-3">
+                                <div class="pb-3">
+                                    <div class="label">Image Viewer URL:</div>
+                                    <div class="value" *ngIf="genImgMode == 'half'">
+                                        <textarea id="copyURL" readonly>{{ baseURL + "/ViewImages?id=" + imgEncryptId + "&userId=" + usrEncryptId + "&zoomparams=" }}</textarea>
+                                    </div>
+                                    <div class="value" *ngIf="genImgMode == 'full'">
+                                        <textarea id="copyURL" readonly>{{ baseURL + "/ViewImages?id=" + imgEncryptId + "&userId=" + usrEncryptId + "&zoomparams=&fs=true" }}</textarea>
+                                    </div>
+                                    <div class="copy-clipboard" (click)="copyTexttoClipBoard('copyURL')">Copy to Clipboard</div>
+                                    <div class="copy-status-msg">{{ copyURLStatusMsg }}</div>
+                                </div>
+                                <div class="pb-3">
+                                    <div class="label">Thumbnail hyperlink to the Image Viewer:</div>
+                                    <div class="value" *ngIf="genImgMode == 'half'">
+                                        <textarea id="copyHTML" readonly *ngIf="selectedAssets.length > 0">{{ '<a target="_blank" href="' + baseURL + '/ViewImages?id=' + imgEncryptId + '&userId=' + usrEncryptId + '&zoomparams=' + '"><img src="' + _assets.makeThumbUrl(selectedAssets[0].largeImgUrl, 0) + '"  alt="' + selectedAssets[0].thumbnail1 + '" title="' + selectedAssets[0].thumbnail1 + '" /></a>' }}</textarea>
+                                    </div>
+                                    <div class="value" *ngIf="genImgMode == 'full'">
+                                        <textarea id="copyHTML" readonly *ngIf="selectedAssets.length > 0">{{ '<a target="_blank" href="' + baseURL + '/ViewImages?id=' + imgEncryptId + '&userId=' + usrEncryptId + '&zoomparams=&fs=true' + '"><img src="' + _assets.makeThumbUrl(selectedAssets[0].largeImgUrl, 0) + '"  alt="' + selectedAssets[0].thumbnail1 + '" title="' + selectedAssets[0].thumbnail1 + '" /></a>' }}</textarea>
+                                    </div>
+                                    <div class="copy-clipboard" (click)="copyTexttoClipBoard('copyHTML')">Copy to Clipboard</div>
+                                    <div class="copy-status-msg">{{ copyHTMLStatusMsg }}</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <img *ngIf="selectedAssets.length > 0" [attr.src]="_assets.makeThumbUrl(selectedAssets[0].largeImgUrl, 0)" alt="selectedAssets[0].thumbnail1">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                    <a class="btn btn-link with-pad" href="javascript:window.open('http://support.artstor.org/','Artstor Support','width=600,height=500')">Help</a>
+                    <button class="btn btn-primary" (click)="showgenImgURLModal = false">Close</button>
+            </div>
+        </div>
+    </div>
+</div>

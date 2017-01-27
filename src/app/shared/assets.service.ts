@@ -235,6 +235,29 @@ export class AssetService {
     }
 
     /**
+     * Generates Image URL
+     * @param assetId: string Asset or object ID
+     */
+    public genrateImageURL(assetId: string) {
+
+        return this.http
+            .get(this._auth.getUrl() + '/encrypt/'+ assetId + '?_method=encrypt', this.defaultOptions)
+            .toPromise()
+            .then(this.extractData);
+    }
+
+    /**
+     * Encrypt User Id
+     */
+    public encryptuserId() {
+
+        return this.http
+            .get(this._auth.getUrl() + '/encrypt/?_method=encryptuserId', this.defaultOptions)
+            .toPromise()
+            .then(this.extractData);
+    }
+
+    /**
      * Gets File Properties table for an asset
      * @param assetId Id for an asset/object
      */

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'nav-menu',
@@ -9,6 +9,9 @@ import { Component } from '@angular/core';
   styleUrls: [ './nav-menu.component.scss' ],
 })
 export class NavMenu {
+
+  @Output()
+  generateImgUrl = new EventEmitter();
   
   // TypeScript public modifiers
   constructor( ) { 
@@ -17,5 +20,9 @@ export class NavMenu {
   
   ngOnInit() {
     
+  }
+
+  private generateSelectedImgURL(): void{
+    this.generateImgUrl.emit();
   }
 }
