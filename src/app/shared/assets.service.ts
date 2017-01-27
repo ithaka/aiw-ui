@@ -77,17 +77,29 @@ export class AssetService implements OnInit {
     }
 
     ngOnInit() {
-        // Restore AllResults from localstorage
-        if (this._storage.get('results')) {
-            this.updateLocalResults(this._storage.get('results'));
-        }
+        
     }
 
     private updateLocalResults(results: any[]) {
-        this._storage.set('results', results);
         this.allResultsValue = results;
         this.allResultsSource.next(results);
+
+        // Set Recent Results (used by Compare Mode)
+        if (results['thumbnails'] && results['thumbnails'].length > 0) {
+            this._storage.set('results', results);
+        }
     } 
+
+    /**
+     * Return most recent results set with at least one asset
+     */
+    public getRecentResults(): any {
+        if (this._storage.get('results')) {
+            return this._storage.get('results');
+        } else {
+            return { thumbnails: [] };
+        }
+    }
 
     /**
      * Sets urlParams based on matching keys with the url params that are passed in
@@ -457,7 +469,9 @@ export class AssetService implements OnInit {
                 this._filters.generateGeoFilters( res.geographyFacets );
                 this._filters.generateDateFacets( res.dateFacets );
                 this._filters.setAvailable('classification', res.classificationFacets);
-                this.allResultsSource.next(res);
+                
+                // Set the allResults object
+                this.updateLocalResults(res);
             })
             .catch(function(err) {
                 console.error(err);
