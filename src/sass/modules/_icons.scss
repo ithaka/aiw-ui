@@ -84,6 +84,16 @@
 @include icon('artstor-asset', 'png');
 @include icon--hover('icon-slideshow', 'gif');
 
+// Icons with adjustments
+@include icon('close', 'svg');
+.icon-close {
+    background-size: 70% 70%;
+}
+@include icon('text', 'svg');
+.icon-text {
+    background-size: 70% 70%;
+}
+
 .icon-collection-type {
     float: right;
 }

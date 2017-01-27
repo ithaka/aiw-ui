@@ -131,6 +131,10 @@ $iconBtnSize: 30px;
             opacity: 1;
         }
     }
+
+    &.active {
+        background: rgb(200,200,200);
+    }
  }
 
  .button-group {

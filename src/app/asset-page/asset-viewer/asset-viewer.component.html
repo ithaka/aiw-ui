@@ -47,7 +47,7 @@
     </button><button id="fullScreen-{{ asset.id + '-' + index }}" class="btn btn--icon" (click)="togglePresentationMode()" title="Full Screen">
             <i class="icon icon-fullscreen"></i>
     </button><button *ngIf="isFullscreen" class="btn btn--icon" (click)="showCaption = !showCaption" [class.active]="showCaption" title="Toggle Caption">
-                T<!--<i class="icon icon-close"></i>-->
+            <i class="icon icon-text"></i>
         </button><button *ngIf="isFullscreen && index !== 0" class="btn btn--icon" (click)="removeComparedAsset(asset.id)" title="Remove from Comparison">
             <i class="icon icon-close"></i>
     </button>
