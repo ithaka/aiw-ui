@@ -19,6 +19,6 @@ ang-search {
     width: calc(100% - 100px);
 
     @media (min-width: 768px) {
-        position: relative;
+        position: static;
     }
 }
