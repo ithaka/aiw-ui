@@ -38,11 +38,11 @@
     </div>
 
     <div id="imageButtons-{{ asset.id + '-' + index }}" class="button-group asset-viewer__buttons">
-        <button *ngIf="isOpenSeaDragonAsset && !mediaLoadingFailed" id="zoomIn-{{ asset.id + '-' + index}}" title="Zoom In" class="btn btn--icon">
+        <button [class.hidden]="!isOpenSeaDragonAsset || mediaLoadingFailed" id="zoomIn-{{ asset.id + '-' + index}}" title="Zoom In" class="btn btn--icon">
         <i class="icon icon-zoom-in"></i>
-    </button><button *ngIf="isOpenSeaDragonAsset && !mediaLoadingFailed" id="zoomOut-{{ asset.id + '-' + index }}" title="Zoom Out" class="btn btn--icon">
+    </button><button [class.hidden]="!isOpenSeaDragonAsset || mediaLoadingFailed" id="zoomOut-{{ asset.id + '-' + index }}" title="Zoom Out" class="btn btn--icon">
         <i class="icon icon-zoom-out"></i>
-    </button><button *ngIf="isOpenSeaDragonAsset && !mediaLoadingFailed" id="zoomFit-{{ asset.id + '-' + index }}" title="Zoom Fit" class="btn btn--icon">
+    </button><button [class.hidden]="!isOpenSeaDragonAsset || mediaLoadingFailed" id="zoomFit-{{ asset.id + '-' + index }}" title="Zoom Fit" class="btn btn--icon">
             <i class="icon icon-fit"></i>
     </button><button id="fullScreen-{{ asset.id + '-' + index }}" class="btn btn--icon" (click)="togglePresentationMode()" title="Full Screen">
             <i class="icon icon-fullscreen"></i>
