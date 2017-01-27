@@ -33,8 +33,8 @@
     </div>-->
 
     <!-- Large thumbnail fallback -->
-    <div *ngIf="mediaLoadingFailed" id="fallbackViewer" [class.loading]="isLoading" class="asset-viewer">
-        <img alt="{{ asset.title }}" class="item" [attr.src]="_assets.makeThumbUrl(asset.imgURL, 2)" />
+    <div *ngIf="mediaLoadingFailed" id="fallbackViewer" [class.loading]="isLoading">
+        <img alt="{{ asset.title }}" class="item item--thumbnail" [attr.src]="_assets.makeThumbUrl(asset.imgURL, 2)" />
     </div>
 
     <div id="imageButtons-{{ asset.id + '-' + index }}" class="button-group asset-viewer__buttons">
