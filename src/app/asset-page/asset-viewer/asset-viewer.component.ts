@@ -32,6 +32,7 @@ export class AssetViewerComponent implements OnInit, OnDestroy, AfterViewInit {
     @Output() fullscreenChange = new EventEmitter();
     @Output() nextPage = new EventEmitter();
     @Output() prevPage = new EventEmitter();
+    @Output() removeAsset = new EventEmitter();
 
     private isLoading: boolean = true;
     private isFullscreen: boolean = false;
@@ -245,11 +246,7 @@ export class AssetViewerComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     removeComparedAsset(assetId): void {
-        //     // Verify asset can be removed
-        //     if (this.removableAsset) {
-        //       // Tell item.js to remove asset from array
-        //       $rootScope.$broadcast('removeComparedAsset', assetId);
-        //     }
+        this.removeAsset.emit(this.index);
     }
 
     /**
