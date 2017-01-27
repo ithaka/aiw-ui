@@ -45,6 +45,7 @@ export class AssetPage implements OnInit, OnDestroy {
                     this.assets.splice(0);
                 }
                 this.assets[0] = new Asset(routeParams["assetId"], this._assets, this._auth);
+                this.generateImgURL();
 
                 if(this.prevAssetResults.thumbnails){
                     this.totalAssetCount = this.prevAssetResults.count ? this.prevAssetResults.count : this.prevAssetResults.thumbnails.length;
@@ -143,7 +144,6 @@ export class AssetPage implements OnInit, OnDestroy {
     }
 
     private generateImgURL(): void{
-        console.log(this.assets[0]);
         this._assets.genrateImageURL( this.assets[0].id )
           .then((imgURLData) => {
               this._assets.encryptuserId()
@@ -151,8 +151,6 @@ export class AssetPage implements OnInit, OnDestroy {
                   var imgEncryptId = imgURLData.encryptId;
                   var usrEncryptId = userEncryptData.encryptId;
                   this.generatedImgURL = this._auth.getUrl() + '/ViewImages?id=' + imgEncryptId + '&userId=' + usrEncryptId + '&zoomparams=&fs=true';
-                  
-                  this.copyTextToClipBoard();
                 })
                 .catch(function(err){
                   console.log('Unable to Encrypt userid');
@@ -165,47 +163,27 @@ export class AssetPage implements OnInit, OnDestroy {
           });
     }
 
-    private copyTextToClipBoard(): void{
-        var textArea = document.createElement("textarea");
-
-        textArea.style.position = 'fixed';
-        textArea.style.top = '0';
-        textArea.style.left = '0';
-
-        textArea.style.width = '2em';
-        textArea.style.height = '2em';
-        textArea.style.padding = '0';
-        textArea.style.border = 'none';
-        textArea.style.outline = 'none';
-        textArea.style.boxShadow = 'none';
-        textArea.style.background = 'transparent';
-
-        var element = document.getElementById('generatedImgURL');
-        textArea.value = element.textContent;
-
-        document.body.appendChild(textArea);
-        textArea.select();
-
-        try {
-
-            var successful = document.execCommand('copy');
-            var msg = '';
+    private copyGeneratedImgURL(): void {
+       var input = document.createElement('textarea');
         
-            if(successful){
-                msg = 'Successfully Copied!';
-            }
-            else{
-                msg = 'Not able to copy!';
-            }
+        document.body.appendChild(input);
+        input.value = this.generatedImgURL;
+        input.focus();
+        input.select();
 
-            this.copyURLStatusMsg = msg;
-                setTimeout(() => {
-                    this.copyURLStatusMsg = '';
-                }, 8000);
-        } catch (err) {
-            console.log('Unable to copy');
+        var statusMsg = '';
+        if(document.execCommand('Copy')){
+            statusMsg = 'Image URL successfully copied to the clipboard!';
+        }
+        else{
+            statusMsg = 'Not able to copy image URL to the clipboard!';
         }
 
-        document.body.removeChild(textArea);
+        this.copyURLStatusMsg = statusMsg;
+        setTimeout(() => {
+            this.copyURLStatusMsg = '';
+        }, 8000);
+
+        input.remove();
     }
 }
