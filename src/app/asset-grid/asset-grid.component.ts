@@ -86,13 +86,6 @@ export class AssetGrid implements OnInit, OnDestroy {
     { term: ''}
   ];
 
-  private collectionTypeMap: any = {
-    1: "artstor-asset",
-    2: "institution-asset",
-    3: "personal-asset",
-    5: "ssc-asset"
-  }
-
   // Object Id parameter, for Clusters
   private objectId : string = ''; 
   // Collection Id parameter
