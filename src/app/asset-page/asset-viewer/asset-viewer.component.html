@@ -40,33 +40,38 @@
     <div id="imageButtons-{{ asset.id + '-' + index }}" class="button-group asset-viewer__buttons">
         <button *ngIf="isOpenSeaDragonAsset && !mediaLoadingFailed" id="zoomIn-{{ asset.id + '-' + index}}" title="Zoom In" class="btn btn--icon">
         <i class="icon icon-zoom-in"></i>
-    </button>
-        <button *ngIf="isOpenSeaDragonAsset && !mediaLoadingFailed" id="zoomOut-{{ asset.id + '-' + index }}" title="Zoom Out" class="btn btn--icon">
+    </button><button *ngIf="isOpenSeaDragonAsset && !mediaLoadingFailed" id="zoomOut-{{ asset.id + '-' + index }}" title="Zoom Out" class="btn btn--icon">
         <i class="icon icon-zoom-out"></i>
-    </button>
-        <button *ngIf="isOpenSeaDragonAsset && !mediaLoadingFailed" id="zoomFit-{{ asset.id + '-' + index }}" title="Zoom Fit" class="btn btn--icon">
+    </button><button *ngIf="isOpenSeaDragonAsset && !mediaLoadingFailed" id="zoomFit-{{ asset.id + '-' + index }}" title="Zoom Fit" class="btn btn--icon">
             <i class="icon icon-fit"></i>
-    </button>
-        <button id="fullScreen-{{ asset.id + '-' + index }}" class="btn btn--icon" (click)="togglePresentationMode()" title="Full Screen">
+    </button><button id="fullScreen-{{ asset.id + '-' + index }}" class="btn btn--icon" (click)="togglePresentationMode()" title="Full Screen">
             <i class="icon icon-fullscreen"></i>
-    </button>
-        <button *ngIf="removableAsset" class="removeAsset show-in-fullscreen" (click)="removeComparedAsset(asset.id)" title="Remove from Comparison">
+    </button><button *ngIf="isFullscreen" class="btn btn--icon" (click)="showCaption = !showCaption" [class.active]="showCaption" title="Toggle Caption">
+                T<!--<i class="icon icon-close"></i>-->
+        </button><button *ngIf="isFullscreen && index !== 0" class="btn btn--icon" (click)="removeComparedAsset(asset.id)" title="Remove from Comparison">
             <i class="icon icon-close"></i>
     </button>
     </div>
 
-    <div *ngIf="isFullscreen" class="caption-cntnr" [hidden]="!showCaption">
-        <div>{{ asset.title }}</div>
-        <div>{{ asset.creator }}</div>
-        <div>{{ asset.date }}</div>
-    </div>
+    <!--<div *ngIf="isFullscreen" class="caption-cntnr" [hidden]="!showCaption">
+        <div class="meta-block">
+            <div class="title">{{ asset.title }}</div>
+            <div class="creator">{{ asset.creator }}</div>
+            <div class="date">{{ asset.date }}</div>
+        </div>
+    </div>-->
 
 
-    <div *ngIf="isFullscreen" class="fullscreen-metadata">
-        <div class="caption-link" (click)="showCaption = !showCaption">Hide / Show Caption</div>
-        <i *ngIf="assetCompareCount == 1" title="Previous in results" (click)="prevPage.emit()" class="icon icon-direction icon-left"></i>
-        <div class="title">{{ asset.title }}</div>
-        <i *ngIf="assetCompareCount == 1" title="Next in results" (click)="nextPage.emit()" class="icon icon-direction icon-right"></i>
-        <div class="page-tooltip">{{ assetNumber }} OF {{ totalAssetCount }}</div>
+    <div *ngIf="isFullscreen" class="fullscreen-metadata" [hidden]="!showCaption">
+        <div class="vertical-center-wrap">
+            <i *ngIf="assetCompareCount == 1" title="Previous in results" (click)="prevPage.emit()" class="icon icon-direction icon-left"></i>
+            <div class="title">{{ asset.title }}</div>
+            <i *ngIf="assetCompareCount == 1" title="Next in results" (click)="nextPage.emit()" class="icon icon-direction icon-right"></i>
+            <!--<div class="page-tooltip">{{ assetNumber }} OF {{ totalAssetCount }}</div>-->
+            <div  class="meta-block small">
+                <div class="creator">{{ asset.creator }}</div>
+                <div class="date">{{ asset.date }}</div>
+            </div>
+        </div>
     </div>
 </div>

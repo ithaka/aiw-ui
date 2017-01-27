@@ -36,7 +36,7 @@
         </div>
         <!--Asset Metadata Row-->
         <div [class.hidden]="isFullscreen" class="col-md-4">
-            <div class="row pb-1">
+            <div class="pb-1 pt-1">
                 <div class="row-hdr pt-1" *ngIf="assets[0].metaDataArray.length > 0">Object Details</div>
                 <!--Loop through metaData Array-->
                 <div class="meta-block" *ngFor="let metadataObj of assets[0].metaDataArray">
@@ -56,7 +56,7 @@
         </div>
 
         <div *ngIf="isFullscreen" class="fullscreen-btns">
-            <button class="btn" (click)="showAssetDrawer = !showAssetDrawer">
+            <button class="btn btn-dark" (click)="showAssetDrawer = !showAssetDrawer">
                 Compare
             </button>
         </div>

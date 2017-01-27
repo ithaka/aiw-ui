@@ -4,23 +4,6 @@
     border-bottom: 1px solid #ddd;
     font-family: 'Graphik', Futura, Helvetica, sans-serif;
 }
-.meta-block{
-    padding-top: 10px;
-    font-size: 14px;
-    font-family: 'Graphik', Futura, Helvetica, sans-serif;
-}
-.meta-block .label{
-    color: #c9d0c9;
-    font-size: 13px;
-    font-weight: 600;
-    letter-spacing: 0.5px;
-}
-.meta-block .value{
-    color: #000;
-    line-height: 16px;
-    font-weight: normal;
-    letter-spacing: 0px;
-}
 
 // Title Prev / Next Asset
 .title-nav-cntnr{
@@ -75,8 +58,15 @@
     position: fixed;
     top:0;
     right: 0;
-    padding: 20px;
+    padding: 20px*2;
     z-index: 2000;
+
+    opacity: 0.8;
+    transition: opacity 0.2s linear;
+
+    &:hover, &:active {
+        opacity: 1;
+    }
 }
 
 .asset-page.fullscreen {
@@ -99,7 +89,7 @@
     bottom: 0;
     height: 100%;
     width: 200px;
-    background: rgba(255,255,255,0.9);
+    background: rgba(255,255,255,0.98);
     overflow-y: scroll;
     padding: 80px 0px;
 
