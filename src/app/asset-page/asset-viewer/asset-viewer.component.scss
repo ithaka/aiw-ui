@@ -10,6 +10,7 @@ $metadataBg: #f1f8f1;
     z-index: 0;
     position: relative;
     min-height: $viewerMinHeight;
+    overflow: hidden;
 
     &:hover {
         .asset-viewer__buttons {
@@ -76,6 +77,12 @@ $metadataBg: #f1f8f1;
     width: 100%;
     height: 80px;
     padding: 20px;
+    transition: transform 0.2s linear;
+    transform: translateY(0px);
+
+    &.slideAway {
+        transform: translateY(100%);
+    }
 
     & i{
         vertical-align: top;

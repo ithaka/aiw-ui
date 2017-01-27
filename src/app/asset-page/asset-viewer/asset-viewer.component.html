@@ -62,7 +62,7 @@
     </div>-->
 
 
-    <div *ngIf="isFullscreen" class="fullscreen-metadata" [hidden]="!showCaption">
+    <div *ngIf="isFullscreen" class="fullscreen-metadata" [class.slideAway]="!showCaption">
         <div class="vertical-center-wrap">
             <i *ngIf="assetCompareCount == 1" title="Previous in results" (click)="prevPage.emit()" class="icon icon-direction icon-left"></i>
             <div class="title">{{ asset.title }}</div>
