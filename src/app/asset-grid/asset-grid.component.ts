@@ -62,28 +62,6 @@ export class AssetGrid implements OnInit, OnDestroy {
     label : 'Relevance'
   };
   sub;
-  // TO-DO: Fields should be pulled dynamically!
-  public fields = [
-    {name: 'Title' },
-    {name: 'Creator' },
-    {name: 'Location' },
-    {name: 'Repository' }
-  ];
-  public geographyFields = [
-    {name: 'North America'},
-    {name: 'Central America and the Caribbean'},
-    {name: 'South America'},
-    {name: 'Europe'},
-    {name: 'Africa North of the Sahara'},
-    {name: 'Sub-Saharan Africa'}
-  ];
-
-  public advQueryTemplate = { term: '' };
-
-  public advanceQueries = [
-    { term: ''},
-    { term: ''}
-  ];
 
   // Object Id parameter, for Clusters
   private objectId : string = ''; 

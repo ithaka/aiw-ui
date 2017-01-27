@@ -40,7 +40,7 @@ import { ImageGroupPage, PptModalComponent } from './image-group-page';
 import { Login } from './login';
 import { About } from './about';
 import { NoContent } from './no-content';
-import { LoginReqModal } from './modals';
+import { LoginReqModal, SearchModal } from './modals';
 
 // Application wide providers
 import { AuthService, AssetService, TypeIdPipe, ToolboxService } from './shared';
@@ -99,6 +99,7 @@ type StoreType = {
     ImageGroupPage,
     PptModalComponent,
     LoginReqModal,
+    SearchModal,
     Login,
     Home,
     NoContent,
