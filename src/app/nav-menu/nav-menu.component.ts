@@ -10,10 +10,10 @@ import { Component } from '@angular/core';
 })
 export class NavMenu {
 
-  private mobileCollapsed: boolean = false;
+  private mobileCollapsed: boolean = true;
   
   // TypeScript public modifiers
-  constructor( ) { 
+  constructor( ) {
     
   }
   

@@ -1,22 +1,24 @@
 
-.nav-menu {
-    padding: 0 15px;
-}
-
-
 // Navigation Items
-
-$dropdownMenuHeight: 60px;
+$dropdownShadow: 0px 2px 3px 0px rgba(0,0,0,0.2);
 
 .navbar-light {
     background: #fff;
 }
 
+.nav {
+    z-index: 2000;
+    background-color: #fff;
+    background-clip: padding-box;
+}
+
 .navbar {
     // border:none;
     // display: block;
-    height: $dropdownMenuHeight;
-    // padding: ($dropdownMenuHeight - 20px)/2 0;
+    height: 60px;
+    @media (min-width: 768px) {
+        height: 60px;
+    }
 
     & li.dropdown {
         line-height: 20px;
@@ -24,10 +26,105 @@ $dropdownMenuHeight: 60px;
 }
 
 .nav-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+
     padding-left: 0px;
     padding-right: 0px;
+    z-index: 2000;
+    @media (min-width: 768px) {
+        position: relative;
+    }
 }
 
-// .dropdown-menu {
-//     display: block;
-// }
+.navbar-collapse {
+    margin-top: 40px;
+    position: absolute;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+
+    // max-height: 0px;
+    transition: transform 0.3s linear;
+    transform:translate3d(-105%, 0, 0);
+
+    &.collapse {
+        display: block;
+    }
+
+    &.show {
+        transform:translate3d(0,0,0);
+    }
+
+    & > ul {
+        padding-bottom: 20px;
+        box-shadow: 0px 2px 3px 0px rgba(0, 0, 0, 0.2);
+        @media (min-width: 768px) {
+            box-shadow: none !important;
+            padding-bottom: 0;
+        }
+    }
+
+    @media (min-width: 768px) {
+        margin-top: 0;
+        transform:translate3d(0, 0, 0);
+    }
+}
+
+.nav-item {
+    margin: 6px;
+
+    & > button, a {
+        font-size: larger;
+    }
+
+    // handles hovering on non-mobile
+    &:hover > .dropdown-menu {
+        @media (min-width: 768px) {
+            display: block;
+        }
+    }
+
+    &.open > .dropdown-menu {
+        display: flex;
+        flex-direction: column;
+    }
+}
+
+.dropdown-menu {
+    border: none;
+    box-shadow: none;
+
+    @media (min-width: 768px) {
+        border: 1px solid rgba(0, 0, 0, 0.15);
+        box-shadow: 0px 2px 3px 0px rgba(0, 0, 0, 0.2);
+    }
+}
+
+.navbar-toggleable-sm {
+    @media (min-width: 768px) {
+        flex-direction: column;
+    }
+}
+
+.cover {
+    background-color: rgba(114, 114, 114, 0);
+    transition: opacity .3s linear;
+    opacity: 0;
+    display: block;
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    z-index: 1000;
+    pointer-events: none;
+
+    &.show {
+        background-color: rgba(114, 114, 114, 0.5);
+        opacity: 1;
+        pointer-events: all;
+    }
+}

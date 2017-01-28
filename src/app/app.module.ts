@@ -21,11 +21,10 @@ import { Angulartics2Module, Angulartics2GoogleAnalytics } from 'angulartics2';
 import { App } from './app.component';
 import { APP_RESOLVER_PROVIDERS } from './app.resolver';
 import { AppState, InternalStateType } from './app.service';
-import { Nav } from './shared/nav';
+import { Nav, Footer, SearchComponent } from './shared';
 import { NavMenu } from './nav-menu';
 import { AssetFilters } from './asset-filters';
-import { AssetGrid } from './asset-grid';
-import { Footer } from './shared/footer';
+import { AssetGrid, ThumbnailComponent } from './asset-grid';
 import { Home } from './home';
 import { SearchPage } from './search-page';
 import { CollectionPage } from './collection-page';
@@ -41,7 +40,7 @@ import { ImageGroupPage, PptModalComponent } from './image-group-page';
 import { Login } from './login';
 import { About } from './about';
 import { NoContent } from './no-content';
-import { LoginReqModal } from './modals';
+import { LoginReqModal, SearchModal } from './modals';
 
 // Application wide providers
 import { AuthService, AssetService, TypeIdPipe, ToolboxService } from './shared';
@@ -95,9 +94,12 @@ type StoreType = {
     AssociatedPage,
     AssetFilters,
     AssetGrid,
+    SearchComponent,
+    ThumbnailComponent,
     ImageGroupPage,
     PptModalComponent,
     LoginReqModal,
+    SearchModal,
     Login,
     Home,
     NoContent,
