@@ -1,9 +1,9 @@
 
-$navBg: rgb(225,232,225);
+// $navBg: rgb(225,232,225);
 $navBarHeight: 80px;
 $mobileNavHeight: 60px;
 
-$loginPanelBg: #f5f9f5; //#d4cd98
+$loginPanelBg: #f9f9f9; //#f5f9f5; //#d4cd98
 
 #logo {
     height: 20px;
@@ -23,7 +23,7 @@ $loginPanelBg: #f5f9f5; //#d4cd98
 }
 
 .navbar-light {
-    background: $navBg;
+    // background: $navBg;
     /*width: 100%;
     height: 108px;*/
     display: block;
