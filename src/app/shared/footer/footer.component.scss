@@ -1,11 +1,14 @@
 /*Footer styles only*/
 
+$footerBg: #f9f9f9;
+
 .footer {
     padding: 15px;
     text-align: center;
     font-size: 11px;
     line-height: 24px;
-    border-top: 1px solid rgba(0, 0, 0, 0.15);
+    background: $footerBg;
+    // border-top: 1px solid rgba(0, 0, 0, 0.15);
 
     & a {
         border-bottom: none;

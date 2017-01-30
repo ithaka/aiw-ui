@@ -10,9 +10,21 @@
 .list-group.list-group-clean {
     li, a.list-group-item {
         border: none;
+        padding-right: 2px;
+        padding-left: 2px;
     }
 }
 
 h1, h2 {
     color: $green;
+}
+
+h3 {
+    color: $green;
+    font-weight: normal;
+}
+
+.main-content {
+    padding-left: 0px;
+    padding-right: 0px;
 }
