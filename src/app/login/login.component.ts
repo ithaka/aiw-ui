@@ -23,7 +23,6 @@ import { Angulartics2 } from 'angulartics2';
 })
 export class Login {
   // Set our default values
-  localState = { value: '' };
   public user = new User('','');
   public errorMsg: string = '';
   public instErrorMsg: string = '';
@@ -36,6 +35,8 @@ export class Login {
   public successMsgPwdRst = '';
   public loginInstitutions = [];
   public loginInst;
+  
+  private loginLoading = false;
   
   // TypeScript public modifiers
   constructor(
@@ -106,14 +107,16 @@ export class Login {
   }
   
   login(user: User) {
-
+    this.loginLoading = true;
     if(!this.validateEmail(user.username)){
       this.errorMsg = 'Please enter a valid email address';
+      this.loginLoading = false;
       return;
     }
     
     if(!this.validatePwd(user.password)){
       this.errorMsg = 'Password must be 7-20 characters';
+      this.loginLoading = false;
       return;
     }
 
@@ -122,6 +125,7 @@ export class Login {
     this._login.login(user)
       .then(
         (data)  => { 
+          this.loginLoading = false;
           if (data.status === false) {
             if(data.message === 'loginFailed'){
               this.errorMsg = 'Invalid email address or password. Try again.';
@@ -133,6 +137,7 @@ export class Login {
          
         }
       ).catch((err) => {
+        this.loginLoading = false;
         console.log(err);
         this.getLoginError(user)
         this.angulartics.eventTrack.next({ action:"remoteLogin", properties: { category: "login", label: "failed" }});
@@ -204,11 +209,5 @@ export class Login {
       this.pwdReset = false;
       this.successMsgPwdRst = 'Your password has been sent.';
     }
-  }
-
-  submitState(value: string) {
-    console.log('submitState', value);
-    this.appState.set('value', value);
-    this.localState.value = '';
   }
 }

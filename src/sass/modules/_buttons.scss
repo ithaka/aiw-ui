@@ -102,6 +102,13 @@ $iconBtnSize: 30px;
      padding-right: 10px;
  }
 
+ .btn.loading {
+    @extend .progress-bar-striped;
+    @extend .progress-bar-animated;
+    color: rgba(255,255,255,0.5);
+    pointer-events: none;
+ }
+
  $btnBorderRadius: 2px;
 
  .btn.btn--icon {
