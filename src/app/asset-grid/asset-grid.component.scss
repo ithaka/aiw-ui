@@ -61,28 +61,33 @@
     &.pag-first {
         background: url(/assets/img/pagination-icons/first.gif) 50% 50% no-repeat #b64404;
         &:hover { background: url(/assets/img/pagination-icons/first-hover.gif) 50% 50% no-repeat #b64404; }
-        &.disable { background: url(/assets/img/pagination-icons/first-disable.gif) 50% 50% no-repeat #b64404 !important; }
+        &:disabled { background: url(/assets/img/pagination-icons/first-disable.gif) 50% 50% no-repeat #b64404 !important; }
     }
     &.pag-prev {
         background: url(/assets/img/pagination-icons/prev.gif) 50% 50% no-repeat #b64404;
         &:hover { background: url(/assets/img/pagination-icons/prev-hover.gif) 50% 50% no-repeat #b64404; }
-        &.disable { background: url(/assets/img/pagination-icons/prev-disable.gif) 50% 50% no-repeat #b64404 !important; }
+        &:disabled { background: url(/assets/img/pagination-icons/prev-disable.gif) 50% 50% no-repeat #b64404 !important; }
     }
     &.pag.pag-next {
         background: url(/assets/img/pagination-icons/next.gif) 50% 50% no-repeat #b64404;
         &:hover { background: url(/assets/img/pagination-icons/next-hover.gif) 50% 50% no-repeat #b64404; }
-        &.disable { background: url(/assets/img/pagination-icons/next-disable.gif) 50% 50% no-repeat #b64404 !important; }
+        &:disabled { background: url(/assets/img/pagination-icons/next-disable.gif) 50% 50% no-repeat #b64404 !important; }
     }
     &.pag-last {
         background: url(/assets/img/pagination-icons/last.gif) 50% 50% no-repeat #b64404;
         &:hover { background: url(/assets/img/pagination-icons/last-hover.gif) 50% 50% no-repeat #b64404; }
-        &.disable { background: url(/assets/img/pagination-icons/last-disable.gif) 50% 50% no-repeat #b64404 !important; }
+        &:disabled { background: url(/assets/img/pagination-icons/last-disable.gif) 50% 50% no-repeat #b64404 !important; }
     }
 
-    &.disable {
+    &:disabled {
         border: 1px solid #cecba5;
         cursor: initial;
     }
+}
+
+.pag-wrap {
+    display: inline-block;
+    cursor: default;
 }
 
 .no-border{
