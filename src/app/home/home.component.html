@@ -2,12 +2,8 @@
 <div class="container main-content">
     <div class="row">
         <div class="col-sm-4">
-            <div class="input-group">
-                <input [(ngModel)]="term" (keyup.enter)="searchAssets(term)"  aria-describedby="search-label" type="text" class="form-control has-icon" placeholder="Search">
-                <i (click)="searchAssets(term)" class="icon icon-search form-control__icon"></i>
-            </div>
-            <br />
-             <div class="card">
+            <ang-search></ang-search>
+            <div class="card">
                 <div class="card-header">
                     <h1>Browse</h1>
                 </div>
@@ -52,9 +48,7 @@
                 <div class="list--home-collections">
                     <div class="list-group list-group-flush">
                         <a *ngFor="let collection of collections" class="list-group-item list-group-item-action" [routerLink]="[ '/collection', collection.collectionid ]">
-                            <!--<a [routerLink]="[ '/collection', collection.collectionid ]">-->
                                 {{ collection.collectionname }}
-                            <!--</a>-->
                         </a>
                     </div>
                 </div>

@@ -61,6 +61,16 @@ $assetCardBorderSize: 1px;
     margin: 0px;
     cursor: pointer;
 
+    &.disabled {
+        opacity: 0.8;
+        pointer-events: none;
+        cursor: default;
+
+        & .card-block {
+            background: #eee;
+        }
+    }
+
     & .card-block {
         margin: 3px;
         padding: 9px;
@@ -126,7 +136,7 @@ $assetCardBorderSize: 1px;
 .edit .card--asset{
     opacity: 0.6;
 }
-.edit .card--asset.selected{
+.card--asset.selected{
     opacity: 1 !important;
     & .card-block {
         border-color: #ababab;

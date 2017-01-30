@@ -1,15 +1,20 @@
 
 $navBg: rgb(225,232,225);
 $navBarHeight: 80px;
+$mobileNavHeight: 60px;
 
 $loginPanelBg: #f5f9f5; //#d4cd98
 
 #logo {
     height: 20px;
     width: auto;
-    margin: ($navBarHeight - 20px)/2 0;
+    margin: ($mobileNavHeight - 20px)/2 0;
     margin-right: 20px;
     padding: 0px;
+
+    @media (min-width: 768px) {
+        margin: ($navBarHeight - 20px)/2 0;
+    }
 }
 
 .navbar-brand {
@@ -27,12 +32,11 @@ $loginPanelBg: #f5f9f5; //#d4cd98
     padding-bottom: 0px;
 
     & .navbar-collapse {
-        line-height: $navBarHeight - 20px;
+        line-height: $mobileNavHeight - 20px;
+        @media (min-width: 768px) {
+            margin: ($navBarHeight - 20px)/2 0;
+        }
     }
-}
-
-.navbar > .container {
-    min-height: $navBarHeight;
 }
 
 .navbar-form {
@@ -41,11 +45,17 @@ $loginPanelBg: #f5f9f5; //#d4cd98
 }
 
 $loginPanelCollapseHeight: $navBarHeight;
+$loginPanelMobileHeight: 0px;
 
 .login-panel {
     position: relative;
-    min-height: $loginPanelCollapseHeight;
-    max-height: $loginPanelCollapseHeight;
+    min-height: $loginPanelMobileHeight;
+    max-height: $loginPanelMobileHeight;
+    @media (min-width: 768px) {
+        min-height: $loginPanelCollapseHeight;
+        max-height: $loginPanelCollapseHeight;
+    }
+
     background: $loginPanelBg;
 }
 

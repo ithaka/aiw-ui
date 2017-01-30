@@ -1,15 +1,17 @@
+<div [class.show]="!mobileCollapsed" class="cover"></div>
 <div class="container nav-container">
+    <!--<div class="row">-->
     <nav class="navbar navbar-toggleable-sm navbar-light bg-faded">
-    <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <button (click)="this.mobileCollapsed = !this.mobileCollapsed" [class.collapsed]="mobileCollapsed" class="navbar-toggler navbar-toggler-right" type="button" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
     <!--<a class="navbar-brand" href="#">Navbar</a>-->
-    <div class="collapse navbar-collapse" id="navMenu">
+    <div [class.show]="!mobileCollapsed" class="navbar-collapse collapse" id="navMenu">
                 <ul class="nav navbar-nav">
                     <li class="nav-item"> 
-                        <a class="btn btn-link" routerLink="/home" routerLinkActive="active">Home</a>
+                        <a class="btn btn-link" [routerLink]="['/home']" routerLinkActive="active">Home</a>
                     </li>
-                    <li class="nav-item dropdown" ngbDropdown>
+                    <li class="nav-item" ngbDropdown>
                         <button class="btn btn-link" id="dropdownMenu1" ngbDropdownToggle>Browse</button>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenu1">
                             <button class="dropdown-item" [routerLink]="['/browse', 'library']">Artstor Collections</button>
@@ -19,7 +21,7 @@
                             <button class="dropdown-item" [routerLink]="['/browse', 'groups']">Image Groups</button>
                         </div>
                     </li>
-                    <li class="nav-item dropdown" ngbDropdown>
+                    <li class="nav-item" ngbDropdown>
                         <button class="btn btn-link" id="organizeMenu" ngbDropdownToggle>Organize</button>
                         <div class="dropdown-menu" aria-labelledby="organizeMenu">
                             <button class="dropdown-item">!Manage Folders and Groups</button>
@@ -39,7 +41,7 @@
                             <button class="dropdown-item">!Upload to Personal Collection</button>
                         </div>
                     </li>
-                    <li class="nav-item dropdown" ngbDropdown>
+                    <li class="nav-item" ngbDropdown>
                         <button class="btn btn-link" id="shareMenu" ngbDropdownToggle>Share</button>
                         <div class="dropdown-menu" aria-labelledby="shareMenu">
                             <button class="dropdown-item" (click)="generateSelectedImgURL()">Generate Image Link</button>
@@ -59,7 +61,7 @@
                             <button class="dropdown-item">!Download Offline Presentation Tool (OIV)</button>
                         </div>
                     </li>
-                    <li class="nav-item dropdown" ngbDropdown>
+                    <li class="nav-item" ngbDropdown>
                         <button class="btn btn-link" id="viewMenu" ngbDropdownToggle>View</button>
                         <div class="dropdown-menu" aria-labelledby="viewMenu">
                             <button class="dropdown-item">!Small Thumbnails</button>
@@ -72,4 +74,5 @@
                 </ul>
     </div>
     </nav>
+    <!--</div>-->
 </div>

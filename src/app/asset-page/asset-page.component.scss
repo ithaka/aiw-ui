@@ -4,23 +4,6 @@
     border-bottom: 1px solid #ddd;
     font-family: 'Graphik', Futura, Helvetica, sans-serif;
 }
-.meta-block{
-    padding-top: 10px;
-    font-size: 14px;
-    font-family: 'Graphik', Futura, Helvetica, sans-serif;
-}
-.meta-block .label{
-    color: #c9d0c9;
-    font-size: 13px;
-    font-weight: 600;
-    letter-spacing: 0.5px;
-}
-.meta-block .value{
-    color: #000;
-    line-height: 16px;
-    font-weight: normal;
-    letter-spacing: 0px;
-}
 
 // Title Prev / Next Asset
 .title-nav-cntnr{
@@ -75,8 +58,15 @@
     position: fixed;
     top:0;
     right: 0;
-    padding: 20px;
+    padding: 20px*2;
     z-index: 2000;
+
+    opacity: 0.8;
+    transition: opacity 0.2s linear;
+
+    &:hover, &:active {
+        opacity: 1;
+    }
 }
 
 .asset-page.fullscreen {
@@ -98,9 +88,10 @@
     right: 0;
     bottom: 0;
     height: 100%;
-    width: 300px;
-    background: #fff;
+    width: 200px;
+    background: rgba(255,255,255,0.98);
     overflow-y: scroll;
+    padding: 80px 0px;
 
     transform: translateX(102%);
     transition: transform 0.2s linear;
@@ -109,6 +100,9 @@
     &.slideOut {
         transform: translateX(0%);
     }
+    & .card {
+        background: transparent;
+    }
 }
 
 .copy-status-msg{
@@ -116,4 +110,77 @@
     font-size: 12px;
     color: #000;
     padding-bottom: 2px;
+}
+
+.fullscreen .asset-viewer-row {
+    position: fixed !important;
+    width: 100%  !important;
+    height: 100%  !important;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+
+.fullscreen-container {
+    width: 100%;
+    height: 100%;
+    position: fixed;
+}
+
+.fullscreen {
+    @for $n from 1 through 24 {
+        & .asset-viewer-#{ $n } {
+            float: left !important;
+            width: 100%/$n;
+            height: 100%;
+        }
+    }
+
+    & .asset-viewer-4 {
+        width: 50%;
+        height: 50%;
+    }
+
+    & .asset-viewer-5 {
+        width: 50%;
+        height: 50%;
+        
+        &:nth-child(3), &:nth-child(4), &:nth-child(5) {
+            width: 100%*1/3;
+        }
+    }
+
+    & .asset-viewer-6 {
+        width: 100%*1/3;
+        height: 50%;
+    }
+
+    & .asset-viewer-7 {
+        width: 100%*1/3;
+        height: 50%;
+        
+        &:nth-child(4), &:nth-child(4), &:nth-child(5) {
+            width: 100%*1/4;
+        }
+    }
+
+    & .asset-viewer-8 {
+        width: 100%*1/4;
+        height: 50%;
+    }
+
+    & .asset-viewer-9 {
+        width: 100%*1/4;
+        height: 50%;
+        
+        &:nth-child(3), &:nth-child(4), &:nth-child(5) {
+            width: 100%*1/5;
+        }
+    }
+
+    & .asset-viewer-10 {
+        width: 100%/5;
+        height: 50%;
+    }
 }

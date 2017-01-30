@@ -10,11 +10,14 @@ import { Component, Output, EventEmitter } from '@angular/core';
 })
 export class NavMenu {
 
+
   @Output()
   generateImgUrl = new EventEmitter();
   
+  private mobileCollapsed: boolean = true;
+  
   // TypeScript public modifiers
-  constructor( ) { 
+  constructor( ) {
     
   }
   

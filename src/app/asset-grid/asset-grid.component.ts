@@ -71,37 +71,7 @@ export class AssetGrid implements OnInit, OnDestroy {
     index : 0,
     label : 'Relevance'
   };
-  term;
   sub;
-  // TO-DO: Fields should be pulled dynamically!
-  public fields = [
-    {name: 'Title' },
-    {name: 'Creator' },
-    {name: 'Location' },
-    {name: 'Repository' }
-  ];
-  public geographyFields = [
-    {name: 'North America'},
-    {name: 'Central America and the Caribbean'},
-    {name: 'South America'},
-    {name: 'Europe'},
-    {name: 'Africa North of the Sahara'},
-    {name: 'Sub-Saharan Africa'}
-  ];
-
-  public advQueryTemplate = { term: '' };
-
-  public advanceQueries = [
-    { term: ''},
-    { term: ''}
-  ];
-
-  private collectionTypeMap: any = {
-    1: "artstor-asset",
-    2: "institution-asset",
-    3: "personal-asset",
-    5: "ssc-asset"
-  }
 
   // Object Id parameter, for Clusters
   private objectId : string = ''; 
@@ -134,10 +104,6 @@ export class AssetGrid implements OnInit, OnDestroy {
             } else {
                 // Any other filters are managed by Asset Filters
             }
-        }
-
-        if (params['term']) {
-          this.term = params['term'];
         }
                 
         if (params['startDate'] && params['endDate']) {
@@ -195,14 +161,6 @@ export class AssetGrid implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.subscriptions.forEach((sub) => { sub.unsubscribe(); });
-  }
-
-  /**
-   * Called from template when new search term is entered
-   * @param term Term for desired search
-   */
-  private updateSearchTerm(term: string) {
-    this._router.navigate(['/search', term]);
   }
 
   /**

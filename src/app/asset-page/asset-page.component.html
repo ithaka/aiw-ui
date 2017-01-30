@@ -9,18 +9,20 @@
                 <span id="assetPageNumber">{{ assetNumber }}</span> OF <span id="assetPageCount">{{ totalAssetCount }}</span></div>
         </div>
         <!--Asset Viewer Row-->
-        <div [ngClass]="[ isFullscreen ? 'col-md-12' : 'col-md-8' ]">
-            <div class="row">
-                <ang-asset-viewer *ngFor="let asset of assets; let i = index" 
+        <div [ngClass]="[ isFullscreen ? 'fullscreen-container' : 'col-md-8' ]">
+            <!--<div class="row asset-row">-->
+                <ang-asset-viewer *ngFor="let asset of (isFullscreen ? assets : [assets[0]]); let i = index"
                     [asset]="asset" 
+                    [ngClass]="[ 'asset-viewer-' + assets.length ]"
                     (fullscreenChange)="updateFullscreenVar($event)" 
                     [index]="i" 
                     [assetCompareCount]="assets.length"
                     [assetNumber]="assetNumber"
                     [assetGroupCount]="totalAssetCount"
+                    (removeAsset)="toggleAsset(asset)"
                     (nextPage)="showNextAsset()"
                     (prevPage)="showPrevAsset()"></ang-asset-viewer>
-            </div>
+            <!--</div>-->
             <!--If the user has not accepted the agreement, show modal when clicked, otherwise download immediately-->
             <a class="btn btn--icon" *ngIf="assets[0].downloadLink && user.isLoggedIn" 
                 [attr.href]="downloadAuth() ? assets[0].downloadLink : null"
@@ -39,7 +41,7 @@
         </div>
         <!--Asset Metadata Row-->
         <div [class.hidden]="isFullscreen" class="col-md-4">
-            <div class="row pb-1">
+            <div class="pb-1 pt-1">
                 <div class="row-hdr pt-1" *ngIf="assets[0].metaDataArray.length > 0">Object Details</div>
                 <!--Loop through metaData Array-->
                 <div class="meta-block" *ngFor="let metadataObj of assets[0].metaDataArray">
@@ -59,19 +61,22 @@
         </div>
 
         <div *ngIf="isFullscreen" class="fullscreen-btns">
-            <button class="btn" (click)="showAssetDrawer = !showAssetDrawer">
+            <button class="btn btn-dark" (click)="showAssetDrawer = !showAssetDrawer">
                 Compare
             </button>
         </div>
 
-        <!-- Asset Drawer -->
-        <div class="asset-drawer" [class.slideOut]="showAssetDrawer">
-            <div class="col-sm-12">
-            <div *ngFor="let asset of prevAssetResults.thumbnails" class="card card--asset" (click)="assets.push(asset)">
-                <div class="card-img-top">
-                    <img [attr.src]="_assets.makeThumbUrl(asset.thumbnailImgUrl, 0)" alt="Card image cap">
-                </div>
+    <!-- Asset Drawer -->
+    <div class="asset-drawer" [class.slideOut]="showAssetDrawer && isFullscreen">
+        <div class="col-sm-12">
+            <div *ngIf="prevAssetResults.thumbnails.length < 1">
+                <div class="alert alert-info">To compare assets, you will need to access an asset through a set of results first. Then those results will show here.</div>
+            </div>
+            <div *ngFor="let asset of prevAssetResults.thumbnails" class="card card--asset" [ngClass]="{'selected' : asset.selected, 'disabled' : assets[0].id == asset.objectId }" (click)="toggleAsset(asset)">
                 <div class="card-block card-text">
+                    <div class="card-img-top">
+                        <img [attr.src]="_assets.makeThumbUrl(asset.thumbnailImgUrl, 0)" alt="Card image cap">
+                    </div>
                     <!--<div>
                         <i *ngIf="asset.cfObjectId.length > 0" [id]="asset.objectId + '_associated_images'" class="icon icon-collab" [routerLink]="['/associated', asset.cfObjectId, asset.collectionId]"></i>
                         <i *ngIf="asset.clustered == 1" [id]="asset.objectId + '_clustered_images'" class="icon icon-cluster" [routerLink]="['/cluster', asset.objectId, { objTitle :  asset.thumbnail1 }]"></i>
@@ -87,9 +92,8 @@
                     </div>
                 </div>
             </div>
-            </div>
         </div>
-        </div>
+    </div>
 </div>
 <ang-agree-modal *ngIf="showAgreeModal" (closeModal)="showAgreeModal = false" [asset]="assets[0]"></ang-agree-modal>
 <ang-login-req-modal *ngIf="showLoginModal" (closeModal)="showLoginModal = false"></ang-login-req-modal>
