@@ -1,22 +1,46 @@
+@import '../../sass/core/variables';
 
 // Navigation Items
 $dropdownShadow: 0px 2px 3px 0px rgba(0,0,0,0.2);
+$navBarLightBg: #eee;
+$navBarHeight: 60px;
+$navBarPad: 0.5rem;
 
 .navbar-light {
-    background: #fff;
+    background: $navBarLightBg;
+
+    &:before, &:after {
+        background: $navBarLightBg;
+        content: ' ';
+        display: block;
+        position: absolute;
+        top: 0;
+        min-width: 500px;
+        height: 100%;
+    }
+
+    &:before {
+        right: 100%;
+    }
+
+    &:after {
+        left: 100%;
+    }
 }
 
 .nav {
     z-index: 2000;
-    background-color: #fff;
+    background-color: $navBarLightBg;
     background-clip: padding-box;
 }
 
 .navbar {
     // border:none;
     // display: block;
-    height: 60px;
-    @media (min-width: 768px) {
+    height: $navBarHeight;
+    margin-bottom: $basePadding;
+
+    @media (min-width: $phone) {
         height: 60px;
     }
 
@@ -34,7 +58,7 @@ $dropdownShadow: 0px 2px 3px 0px rgba(0,0,0,0.2);
     padding-left: 0px;
     padding-right: 0px;
     z-index: 2000;
-    @media (min-width: 768px) {
+    @media (min-width: $phone) {
         position: relative;
     }
 }
@@ -61,13 +85,13 @@ $dropdownShadow: 0px 2px 3px 0px rgba(0,0,0,0.2);
     & > ul {
         padding-bottom: 20px;
         box-shadow: 0px 2px 3px 0px rgba(0, 0, 0, 0.2);
-        @media (min-width: 768px) {
+        @media (min-width: $phone) {
             box-shadow: none !important;
             padding-bottom: 0;
         }
     }
 
-    @media (min-width: 768px) {
+    @media (min-width: $phone) {
         margin-top: 0;
         transform:translate3d(0, 0, 0);
     }
@@ -77,12 +101,13 @@ $dropdownShadow: 0px 2px 3px 0px rgba(0,0,0,0.2);
     margin: 6px;
 
     & > button, a {
-        font-size: larger;
+        font-size: 14px;
+        line-height: calc( #{ $navBarHeight } - #{ 4 * $navBarPad });
     }
 
     // handles hovering on non-mobile
     &:hover > .dropdown-menu {
-        @media (min-width: 768px) {
+        @media (min-width: $phone) {
             display: block;
         }
     }
@@ -97,14 +122,14 @@ $dropdownShadow: 0px 2px 3px 0px rgba(0,0,0,0.2);
     border: none;
     box-shadow: none;
 
-    @media (min-width: 768px) {
+    @media (min-width: $phone) {
         border: 1px solid rgba(0, 0, 0, 0.15);
         box-shadow: 0px 2px 3px 0px rgba(0, 0, 0, 0.2);
     }
 }
 
 .navbar-toggleable-sm {
-    @media (min-width: 768px) {
+    @media (min-width: $phone) {
         flex-direction: column;
     }
 }

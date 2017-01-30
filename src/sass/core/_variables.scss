@@ -1,3 +1,15 @@
+// Breakpoints
+$xsmall-screen: 320px;
+$small-screen: 576px;
+$medium-screen: 768px;
+$large-screen: 992px;
+
+// Nice References
+$xsphone: $xsmall-screen;
+$phone: $small-screen;
+$tablet: $medium-screen;
+$desktop: $large-screen;
+
 // Bootstrap variable ovverides
 $btn-border-radius: 0px;
 
