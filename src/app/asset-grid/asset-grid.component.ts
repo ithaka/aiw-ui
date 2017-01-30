@@ -145,7 +145,7 @@ export class AssetGrid implements OnInit, OnDestroy {
           ||
           (this.pagination.currentPage > this.pagination.totalPages)
         ) {
-          // this.goToPage(1);
+          this.goToPage(1);
         } else {
           this.results = allResults.thumbnails;
         }
@@ -168,7 +168,6 @@ export class AssetGrid implements OnInit, OnDestroy {
    * @param currentPage number of desired page
    */
   private goToPage(currentPage: number) {
-    console.log(currentPage);
     // The requested page should be within the limits (i.e 1 to totalPages)
     if((currentPage >= 1) && (currentPage <= this.pagination.totalPages)){
       this.pagination.currentPage = currentPage;
