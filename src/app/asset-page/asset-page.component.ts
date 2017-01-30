@@ -126,7 +126,8 @@ export class AssetPage implements OnInit, OnDestroy {
                 .then((userEncryptData) => {
                   var imgEncryptId = imgURLData.encryptId;
                   var usrEncryptId = userEncryptData.encryptId;
-                  this.generatedImgURL = this._auth.getUrl() + '/ViewImages?id=' + imgEncryptId + '&userId=' + usrEncryptId + '&zoomparams=&fs=true';
+                  // Links in the clipboard need a protocol defined
+                  this.generatedImgURL =  'http:' + this._auth.getUrl() + '/ViewImages?id=' + imgEncryptId + '&userId=' + usrEncryptId + '&zoomparams=&fs=true';
                 })
                 .catch(function(err){
                   console.log('Unable to Encrypt userid');
