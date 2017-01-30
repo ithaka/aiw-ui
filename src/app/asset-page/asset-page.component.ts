@@ -29,6 +29,9 @@ export class AssetPage implements OnInit, OnDestroy {
     /** controls whether or not the modals are visible */
     private showAgreeModal: boolean = false;
     private showLoginModal: boolean = false;
+
+    private copyURLStatusMsg: string = '';
+    private generatedImgURL: string = '';
     
 
     constructor(private _assets: AssetService, private _auth: AuthService, private route: ActivatedRoute, private _router: Router) { }
@@ -42,6 +45,7 @@ export class AssetPage implements OnInit, OnDestroy {
                     this.assets.splice(0);
                 }
                 this.assets[0] = new Asset(routeParams["assetId"], this._assets, this._auth);
+                this.generateImgURL();
 
                 if(this.prevAssetResults.thumbnails){
                     this.totalAssetCount = this.prevAssetResults.count ? this.prevAssetResults.count : this.prevAssetResults.thumbnails.length;
@@ -115,7 +119,52 @@ export class AssetPage implements OnInit, OnDestroy {
         return label.toLowerCase().replace(/\s/g,'');
     }
 
-    // Add or remove assets from Assets array for comparison in full screen
+    private generateImgURL(): void{
+        this._assets.genrateImageURL( this.assets[0].id )
+          .then((imgURLData) => {
+              this._assets.encryptuserId()
+                .then((userEncryptData) => {
+                  var imgEncryptId = imgURLData.encryptId;
+                  var usrEncryptId = userEncryptData.encryptId;
+                  // Links in the clipboard need a protocol defined
+                  this.generatedImgURL =  'http:' + this._auth.getUrl() + '/ViewImages?id=' + imgEncryptId + '&userId=' + usrEncryptId + '&zoomparams=&fs=true';
+                })
+                .catch(function(err){
+                  console.log('Unable to Encrypt userid');
+                  console.error(err);
+                });
+          })
+          .catch(function(err) {
+              console.log('Unable to generate image URL');
+              console.error(err);
+          });
+    }
+
+    private copyGeneratedImgURL(): void {
+       var input = document.createElement('textarea');
+        
+        document.body.appendChild(input);
+        input.value = this.generatedImgURL;
+        input.focus();
+        input.select();
+
+        var statusMsg = '';
+        if(document.execCommand('Copy')){
+            statusMsg = 'Image URL successfully copied to the clipboard!';
+        }
+        else{
+            statusMsg = 'Not able to copy image URL to the clipboard!';
+        }
+
+        this.copyURLStatusMsg = statusMsg;
+        setTimeout(() => {
+            this.copyURLStatusMsg = '';
+        }, 8000);
+
+        input.remove();
+    }
+
+     // Add or remove assets from Assets array for comparison in full screen
     private toggleAsset(asset: any): void {
         let add = true;
         this.assets.forEach( (viewAsset, i) => {
