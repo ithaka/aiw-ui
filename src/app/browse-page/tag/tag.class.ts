@@ -14,7 +14,8 @@ export class Tag {
   */
   type: any = {};
   /** Used for showing Image Group and Collection Description */
-  description: string = "";
+  public description: string = "";
+  public thumbnail: string = "";
 
   //in functions
   /** array of tags that are categorized beneath this tag */
@@ -56,6 +57,10 @@ export class Tag {
    */
   public setDescription(description: string): void {
     this.description = description;
+  }
+
+  public setThumbnail(thumbUrl: string) : void {
+    this.thumbnail = thumbUrl;
   }
 
   /**

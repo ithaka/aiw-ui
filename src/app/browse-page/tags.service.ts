@@ -65,11 +65,9 @@ export class TagsService {
    * @returns a chainable promise, resolved with an array of tags
    */
   private getCategories(tag?: Tag, collectionId?: string): Promise<Tag[]> {
-    console.log("RUNNING GET CATEGORIES");
     //the tag doesn't have any children, so we run a call to get any
     let childArr: Tag[] = [];
     if (tag && tag.type && tag.type.label === "collection") {
-      console.log(tag);
       collectionId = tag.tagId;
     }
     
@@ -89,7 +87,6 @@ export class TagsService {
       
       return this._assets.subGroups(tagId)
         .then((data) => {
-          console.log(data);
           for(let group of data) {
             let groupTag = new Tag(group.widgetId.replace('fldr_',''), group.title, true, tag, { label: "group", folder: group.isFolder });
             // Is folder property cleaning: comes through as string
@@ -105,7 +102,6 @@ export class TagsService {
     } else if (tag.type.label === "category") {
       return this._assets.subcategories(tag.tagId)
         .then((data) => {
-          console.log(data);
           for(let category of data) {
             let categoryTag = new Tag(category.widgetId, category.title, true, tag, { label: "subcategory", folder: category.isFolder });
             childArr.push(categoryTag);

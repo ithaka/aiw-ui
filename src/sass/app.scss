@@ -145,3 +145,8 @@ span.active {
       transform: translate3d(-50%, -50%, 0);
     }
   }
+
+// Required for toggles to work
+.collapse.in {
+  display: block;
+}

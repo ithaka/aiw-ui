@@ -3,14 +3,29 @@
   */
 
   .tag-item { 
-    color: #555;
+    color: #333;
     font-size: 13px;
-    line-height: 20px;
-    padding: 2px;
+    line-height: 16px;
     cursor: pointer;
+    padding: 0px;
 
-    &:hover {
-        background: #f4f4f4;
+    // &:hover {
+    //     background: #f4f4f4;
+    // }
+
+    & .no-link {
+        color: #999;
+        cursor: default;
+        pointer-events: none;
+    }
+
+    & a {
+        display: inline-block;
+        padding: 2px;
+
+        &:hover, &:active, &:focus {
+            text-decoration: none;
+        }
     }
   }
 
@@ -30,10 +45,47 @@
     }
 }
 
+.expand-button {
+    padding: 5px;
+    display: inline-block;
+    font-size: 1.1em;
+    vertical-align: middle;
+    
+    & i {
+        opacity: 0.5;
+    }
+
+    &:hover, &:focus, &:active {
+        // background: #fafafa;
+        & i {
+            opacity: 1;
+        }
+    }
+}
+
 .info-icon{
     width: 20px;
     cursor: pointer;
     vertical-align: middle;
     margin-top: -4px;
 
+}
+
+.info-cntnr {
+    min-height: 120px;
+    padding: 10px;
+    background: #fafafa;
+    margin: 5px;
+    overflow: hidden;
+    width: 100%;
+    position: relative;
+
+    & img {
+        max-height: 100px;
+        max-width: 100px;
+        width: auto;
+        height: auto;
+        float:left;
+        margin: 10px 20px 20px;
+    }
 }
