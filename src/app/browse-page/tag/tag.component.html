@@ -9,7 +9,7 @@
     </div>
 </div>
 <!--Sets up for tag's children, and applies ngbCollapse (hides child element) based on whether or not parent is collapsed-->
-<div [ngbCollapse]="tag.isCollapsed">
+<div [class.hidden]="tag.isCollapsed">
     <!--loop through children and inject the children into new nag components-->
     <ang-tag *ngFor="let child of tag.children" [tag]="child"></ang-tag>
 </div>

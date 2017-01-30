@@ -31,7 +31,6 @@ export class MyCollectionsComponent implements OnInit {
   private tags : Tag[] = [];
   private expandedCategories: any = {};
   private selectedBrowseId: string = '';
-  private browseMenuArray: any[] = [];
 
   ngOnInit() {
 
@@ -68,7 +67,6 @@ export class MyCollectionsComponent implements OnInit {
   getUserPCol(){
     this._assets.pccollection()
       .then((res) => {
-          console.log(res);
           var obj;
 
           if(res.pcCollection && res.pcCollection.collectionid){
@@ -77,11 +75,8 @@ export class MyCollectionsComponent implements OnInit {
           }
           if(res.privateCollection && (res.privateCollection.length > 0)){
             for (let colObj of res.privateCollection){
-              obj = {
-                id: colObj.collectionid,
-                label: colObj.collectionname
-              }
-              this.browseMenuArray.push(obj);
+              let privTag = new Tag(colObj.collectionid, colObj.collectionname, true, null, { label: "collection", folder: true });
+              this.tags.push(privTag);
             }
           }
 
