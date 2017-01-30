@@ -184,6 +184,7 @@ a[href], a.link, .link {
 
 p {
     @extend %baseFontStyle;
+    width: 100%;
 }
 
 label {

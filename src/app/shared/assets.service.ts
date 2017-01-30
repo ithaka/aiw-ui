@@ -101,6 +101,10 @@ export class AssetService implements OnInit {
         }
     }
 
+    public getCurrentInstitution(): any {
+        return this._storage.get('institution');
+    }
+
     /**
      * Sets urlParams based on matching keys with the url params that are passed in
      * @param passedParams The current url parameters; must be passed in b/c only components have access to url parameters
@@ -602,6 +606,8 @@ export class AssetService implements OnInit {
             .toPromise()
             .then(this.extractData)
             .then((data) => {
+                this._storage.set('institution', data);
+
                 let returnCollections: any[] = [];
                 let addToArr: boolean;
 

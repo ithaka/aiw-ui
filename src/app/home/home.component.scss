@@ -1,3 +1,5 @@
+@import '../../sass/core/variables';
+
 /*styles for home content only*/
 .list--home-collections {
     border: 1px solid #cdcdcd;
@@ -6,7 +8,11 @@
 }
 
 .list-group.list-group-clean {
-    li {
+    li, a.list-group-item {
         border: none;
     }
+}
+
+h1, h2 {
+    color: $green;
 }
