@@ -145,7 +145,6 @@ export class AssetPage implements OnInit, OnDestroy {
         
         document.body.appendChild(input);
         input.value = this.generatedImgURL;
-        input.focus();
         input.select();
 
         var statusMsg = '';

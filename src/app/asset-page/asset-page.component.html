@@ -9,7 +9,7 @@
                 <span id="assetPageNumber">{{ assetNumber }}</span> OF <span id="assetPageCount">{{ totalAssetCount }}</span></div>
         </div>
         <!--Asset Viewer Row-->
-        <div [ngClass]="[ isFullscreen ? 'fullscreen-container' : 'col-md-8' ]">
+        <div class="asset-col" [ngClass]="[ isFullscreen ? 'fullscreen-container' : 'col-md-8' ]">
             <!--<div class="row asset-row">-->
                 <ang-asset-viewer *ngFor="let asset of (isFullscreen ? assets : [assets[0]]); let i = index"
                     [asset]="asset" 
@@ -23,26 +23,31 @@
                     (nextPage)="showNextAsset()"
                     (prevPage)="showPrevAsset()"></ang-asset-viewer>
             <!--</div>-->
-            <!--If the user has not accepted the agreement, show modal when clicked, otherwise download immediately-->
-            <a class="btn btn--icon" *ngIf="assets[0].downloadLink && user.isLoggedIn" 
-                [attr.href]="downloadAuth() ? assets[0].downloadLink : null"
-                [attr.download]="downloadAuth() ? assets[0].title : null"
-                (click)="!downloadAuth() ? showAgreeModal = true : null"
-            >
-                <i id="downloadAssetLink" class="icon icon-download" ></i>
-            </a>
-            <a class="btn btn--icon" *ngIf="assets[0].downloadLink && !user.isLoggedIn" (click)="showLoginModal = true">
-                <i id="downloadAssetLink" class="icon icon-download" ></i>
-            </a>
-            <a class="btn btn--icon" (click)="copyGeneratedImgURL()">
-                <i id="genImgURLlink" class="icon icon-share" ></i>
-            </a>
-            <div class="copy-status-msg">{{ copyURLStatusMsg }}</div>
         </div>
         <!--Asset Metadata Row-->
         <div [class.hidden]="isFullscreen" class="col-md-4">
-            <div class="pb-1 pt-1">
-                <div class="row-hdr pt-1" *ngIf="assets[0].metaDataArray.length > 0">Object Details</div>
+            <div class="py-3">
+                 <!--If the user has not accepted the agreement, show modal when clicked, otherwise download immediately-->
+                
+                <a class="btn btn-secondary"  tabindex="1" (click)="copyGeneratedImgURL()">
+                    Share
+                    <i id="genImgURLlink" class="icon icon-share-white" ></i>
+                </a>
+                <a class="btn btn-secondary" tabindex="1" *ngIf="assets[0].downloadLink && user.isLoggedIn" 
+                    [attr.href]="downloadAuth() ? assets[0].downloadLink : null"
+                    [attr.download]="downloadAuth() ? assets[0].title : null"
+                    (click)="!downloadAuth() ? showAgreeModal = true : null"
+                >
+                    Download
+                    <i id="downloadAssetLink" class="icon icon-download-white" ></i>
+                </a>
+                <a class="btn btn-secondary" tabindex="1" *ngIf="assets[0].downloadLink && !user.isLoggedIn" (click)="showLoginModal = true">
+                    Download
+                    <i id="downloadAssetLink" class="icon icon-download-white" ></i>
+                </a>
+                <div *ngIf="copyURLStatusMsg" class="alert alert-info">{{ copyURLStatusMsg }}</div>
+
+                <div class="row-hdr pt-3" *ngIf="assets[0].metaDataArray.length > 0">Object Details</div>
                 <!--Loop through metaData Array-->
                 <div class="meta-block" *ngFor="let metadataObj of assets[0].metaDataArray">
                     <div [attr.id]="cleanId(metadataObj.fieldName)" class="label">{{ metadataObj.fieldName }}

@@ -1,14 +1,16 @@
 
 $assetViewerPad: 20px;
-$viewerMinHeight: 600px;
+$viewerMinHeight: 95vh;
+$viewerOldBrowserMinHeight: 600px;
 
 $metadataBg: #f1f8f1;
 
 .asset-viewer {
     text-align: center;
-    padding: $assetViewerPad;
+    padding: 0; //$assetViewerPad;
     z-index: 0;
     position: relative;
+    min-height: $viewerOldBrowserMinHeight;
     min-height: $viewerMinHeight;
     overflow: hidden;
 
@@ -30,6 +32,15 @@ $metadataBg: #f1f8f1;
 }
 
 .video-player {
+    min-height: $viewerOldBrowserMinHeight;
+    min-height: $viewerMinHeight;
+}
+
+.osd-wrap {
+    position: relative; 
+    height: $viewerOldBrowserMinHeight;
+    height: $viewerMinHeight; 
+    width: 100%; 
     min-height: $viewerMinHeight;
 }
 
