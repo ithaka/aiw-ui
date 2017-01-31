@@ -2,8 +2,10 @@
   * Tag Component Styles
   */
 
+  $tagLinkBg: #eee;
+
   .tag-item { 
-    color: #333;
+    color: #000;
     font-size: 13px;
     line-height: 16px;
     cursor: pointer;
@@ -17,14 +19,19 @@
         color: #999;
         cursor: default;
         pointer-events: none;
+        text-decoration: none;
+        background: transparent;
     }
 
     & a {
         display: inline-block;
         padding: 2px;
+        background: $tagLinkBg;
+        border-radius: 2px;
 
         &:hover, &:active, &:focus {
             text-decoration: none;
+            background: darken($tagLinkBg, 10%);
         }
     }
   }
