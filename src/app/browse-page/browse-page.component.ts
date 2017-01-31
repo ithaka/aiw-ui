@@ -72,7 +72,7 @@ export class BrowsePage implements OnInit, OnDestroy {
         .then(
           (data)  => {
             var obj = {
-                label : data.shortName,
+                label : data.shortName + ' Collections',
                 id: '2',
                 link: 'institution'
             }
