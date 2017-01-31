@@ -134,7 +134,7 @@ export class Login {
             }
           } else {
             this.angulartics.eventTrack.next({ action:"remoteLogin", properties: { category: "login", label: "success" }});
-            this.loadForUser(data);
+            this.loadForUser(data); 
           }
          
         }
