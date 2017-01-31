@@ -140,14 +140,14 @@ export class AssetGrid implements OnInit, OnDestroy {
         }
 
         // handles case when currentPage * pageSize > allResults.count
-        if (
-          (allResults.count === 0 && this.pagination.currentPage > 1)
-          ||
-          (this.pagination.currentPage > this.pagination.totalPages)
-        ) {
+        if (allResults.count === 0 && this.pagination.currentPage > 1) {
           this.goToPage(1);
         } else {
           this.results = allResults.thumbnails;
+
+          if (this.pagination.currentPage > this.pagination.totalPages) {
+            this.goToPage(this.pagination.totalPages);
+          }
         }
         if (allResults.length == 0) {
           // We push an empty array when assets are old
