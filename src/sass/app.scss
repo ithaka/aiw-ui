@@ -164,3 +164,9 @@ span.active {
         font-family: 'Graphik', Arial, Helvetica, sans-serif !important;
     }
 }
+
+.page__description, .page__description * {
+      padding-top: $baseLineHeight/2;
+      font-size: 12px !important;
+      font-family: 'Graphik', Arial, Helvetica, sans-serif !important;
+  }
