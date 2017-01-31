@@ -64,11 +64,11 @@ export class TagComponent {
     if (this.tag.type.label === "subcategory") {
       return;
     }
-    this.loading = true;
     // only want to make the http call once, and then the info will be stored on the tag
     if (!this.tag.touched) {
       //make sure the tag has a type and a type.label, which getTags uses as a switch
       if (this.tag.type && this.tag.type.label) {
+        this.loading = true;
         this._tags.getChildTags(this.tag)
           .then((tags) => {
             this.loading = false;
