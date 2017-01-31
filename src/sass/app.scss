@@ -150,3 +150,17 @@ span.active {
 .collapse.in {
   display: block;
 }
+
+// Browse page descriptions
+.browse-info{
+    & .title{
+        text-align: left;
+        font-weight: 700;
+        margin: $basePadding/2 0;
+    }
+
+    & .browse__description, & .browse__description * {
+        font-size: 12px !important;
+        font-family: 'Graphik', Arial, Helvetica, sans-serif !important;
+    }
+}

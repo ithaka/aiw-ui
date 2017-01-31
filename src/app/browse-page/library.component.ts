@@ -24,7 +24,7 @@ export class LibraryComponent implements OnInit {
   private tags: Tag[] = [];
 
   private currentBrowseRes: any = {};
-  private selectedBrowseId: string = '250';
+  private selectedBrowseId: string = '103';
   private browseMenuArray: any[] = [
     {
       label : 'Collection',

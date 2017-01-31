@@ -2,7 +2,7 @@
   * Tag Component Styles
   */
 
-  $tagLinkBg: #eee;
+  $tagLinkBg: #efefef;
 
   .tag-item { 
     color: #000;
@@ -28,6 +28,10 @@
         padding: 2px;
         background: $tagLinkBg;
         border-radius: 2px;
+        max-height: 19px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 90%;
 
         &:hover, &:active, &:focus {
             text-decoration: none;
@@ -53,10 +57,10 @@
 }
 
 .expand-button {
-    padding: 5px;
+    padding: 2px 5px 5px 5px;
     display: inline-block;
     font-size: 1.1em;
-    vertical-align: middle;
+    vertical-align: top;
     
     & i {
         opacity: 0.5;
