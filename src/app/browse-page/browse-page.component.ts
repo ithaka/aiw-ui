@@ -67,13 +67,12 @@ export class BrowsePage implements OnInit, OnDestroy {
 
     this.userTypeId = this._auth.getUser().typeId;
     
-    if(this.userTypeId == 1 || this.userTypeId == 2){
+    if(this.userTypeId == 1 || this.userTypeId == 2 || this.userTypeId == 3){
         this._assets.getCollections('institution')
         .then(
           (data)  => {
-            console.log(data);
             var obj = {
-                label : data.institutionName,
+                label : data.shortName,
                 id: '2',
                 link: 'institution'
             }

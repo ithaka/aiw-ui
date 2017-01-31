@@ -1,15 +1,20 @@
 <!--Sets up the tag passed into the component-->
-<div id="tagItem{{ tag.tagId }}" title="{{ tag.title }}" (click)="tag.isCollapsed = !tag.isCollapsed; getChildren(); tag.touched = true;" [ngClass]="['tag-item', 'tag-item__indent-' + tag.getLevel()]">
-    <i [ngClass]="[ tag.isCollapsed ? 'icon-right' : 'icon-down', (!tag.touched || (tag.touched && tag.children.length > 0)) ? 'icon-direction' : 'icon-empty']" class="icon absolute-left tree-icon"></i>
-    <img class="info-icon" *ngIf="(tag.description.length > 0) && !tag.type.isFolder" src="/assets/img/info-icon.png" (click)="toggleDescription()" /> 
-    {{tag.title}}
-    <i *ngIf="linkRoute.length > 0" id="tagItem{{ tag.tagId }}Open" class="icon icon-open-link icon--tag-button" [routerLink]="[ linkRoute, tag.tagId, { 'name' : cleanTitle(tag.title) } ]"></i>
-    <div [ngbCollapse]="!showDescription" class="info-cntnr collapse">
+<div id="tagItem{{ tag.tagId }}" title="{{ tag.title }}"  [ngClass]="['tag-item', 'tag-item__indent-' + tag.getLevel(), linkRoute.length < 1 ? 'no-link' : '']">
+    <div class="expand-button" (click)="tag.isCollapsed = !tag.isCollapsed; getChildren(); tag.touched = true;">
+        <i [ngClass]="[ tag.isCollapsed ? 'icon-right' : 'icon-down', (!tag.touched || (tag.touched && tag.children.length > 0)) ? 'icon-direction' : 'icon-empty']" class="icon absolute-left tree-icon "></i>
+    </div>
+    <a id="tagItem{{ tag.tagId }}Open" [routerLink]="[ linkRoute, tag.tagId, { 'name' : cleanTitle(tag.title) } ]">
+        <!--<img class="info-icon" *ngIf="(tag.description.length > 0) && !tag.type.isFolder" src="/assets/img/info-icon.png" (click)="toggleDescription()" /> -->
+        {{tag.title}}
+        <!--<i *ngIf="linkRoute.length > 0" id="tagItem{{ tag.tagId }}Open" class="icon icon-open-link icon--tag-button" [routerLink]="[ linkRoute, tag.tagId, { 'name' : cleanTitle(tag.title) } ]"></i>-->
+    </a>
+    <div [ngbCollapse]="tag.isCollapsed" *ngIf="tag.description" class="info-cntnr">
+        <img *ngIf="tag.thumbnail.length > 0" [src]="_assets.makeThumbUrl(tag.thumbnail)" >
         <div class="desc" [innerHTML]="tag.description"></div>
     </div>
 </div>
 <!--Sets up for tag's children, and applies ngbCollapse (hides child element) based on whether or not parent is collapsed-->
-<div [ngbCollapse]="tag.isCollapsed">
+<div [class.hidden]="tag.isCollapsed">
     <!--loop through children and inject the children into new nag components-->
     <ang-tag *ngFor="let child of tag.children" [tag]="child"></ang-tag>
 </div>

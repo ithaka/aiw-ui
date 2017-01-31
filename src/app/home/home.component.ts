@@ -19,6 +19,7 @@ export class Home {
   // Set our default values
   localState = { value: '' };
   collections = [];
+  institution: any = {};
   errors = {};
   private user: any;
 
@@ -34,11 +35,13 @@ export class Home {
 
   ngOnInit() {    
     this.user = this._auth.getUser();
+    console.log(this.user);
     
     // this.title.getData().subscribe(data => this.data = data);
     this._assets.getCollections('ssc')
       .then((res) => {
         this.collections = res['Collections'];
+        this.institution = this._assets.getCurrentInstitution();
       })
       .catch((err) => {
         this.errors['collections'] = "Unable to load collections.";
