@@ -6,6 +6,7 @@ export class Tag {
   tagId: string;
   title: string;
   isCollapsed: boolean = false;
+  isLoading: boolean = false;
   parentTag: Tag;
   /** object with assignable properties to be stored by the tag 
    *  common properties:
