@@ -1,9 +1,25 @@
 /**
  * # Helpers
- * Sass mixins and placeholders for convenience!
  */
 
  /*%vertical-center {
      top: 50%;
      @include transform(translateY(-50%));
  }*/
+
+.container--slide {
+    overflow: hidden;
+
+    & > .slide-wrap {
+        margin-top: -100%;
+        // transform: translateY(-100%);
+        transition: margin 0.3s cubic-bezier(0.55, 0.07, 0.44, 0.93);
+        // height: 0;
+
+        &.show {
+            // transform: translateY(0);
+            // height: auto;
+            margin-top: 0%;
+        }
+    }
+}
