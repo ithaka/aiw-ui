@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'nav-menu',
@@ -10,6 +10,10 @@ import { Component } from '@angular/core';
 })
 export class NavMenu {
 
+
+  @Output()
+  generateImgUrl = new EventEmitter();
+  
   private mobileCollapsed: boolean = true;
   
   // TypeScript public modifiers
@@ -19,5 +23,9 @@ export class NavMenu {
   
   ngOnInit() {
     
+  }
+
+  private generateSelectedImgURL(): void{
+    this.generateImgUrl.emit();
   }
 }

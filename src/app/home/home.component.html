@@ -34,7 +34,7 @@
                 Placeholder: What's New (Artstor Blog)
             </div>
         </div>
-        <div class="col-sm-4">
+        <div class="col-sm-5">
             <div class="card">
                 <div class="card-header">Placeholder: Featured Collection</div>
             </div>
@@ -59,27 +59,30 @@
                 </div>
             </div>
         </div>
-        <div class="col-sm-4">
-            <div class="card">
-                <div class="card-header">Placeholder: Artstor Ad Spot</div>
-            </div>
-            <div class="card">
-                <div class="card-header">Questions</div>
+        <div class="col-sm-3">
+            <a class="card" href="http://www.artstor.org/webinars?view=ADL" target="_blank">
+                <img class="card-img-top no-stretch" src="/assets/img/promo-webinar.gif" alt="Try a webinar!">
+            </a>
+            <div class="card pt-4">
+                <div class="card-header">
+                    <h3>Questions</h3>
+                </div>
                  <ul class="list-group list-group-flush list-group-clean">
-                    <li class="list-group-item">
-                        Email your <a href="mailto:userservices@artstor.org">institutional contact</a>
-                    </li>
-                    <li class="list-group-item">
-                    Email <a href="mailto:userservices@artstor.org">Artstor</a>
-                    </li>
-                    <li class="list-group-item">
-                        <a href="http://support.artstor.org/Online_training_schedule/" target="_blank">Sign up for an Artstor webinar</a>
-                    </li>
-                    <li class="list-group-item">
-                        <a href="https://www.surveymonkey.com/r/TW9SKC6" target="_blank">Take a survey: Tell us what you think!</a>
-                    </li>
-                    <li class="list-group-item" *ngIf="user">
-                        Your access to Artstor is provided by: {{ user.institutionName }}
+                    <a class="list-group-item small" [href]="institution.institutionContact && institution.institutionContact.email ?  'mailto:' + institution.institutionContact.email : 'mailto:userservices@artstor.org'">
+                        Email your institutional contact
+                    </a>
+                    <a class="list-group-item small" href="mailto:userservices@artstor.org">
+                        Email Artstor
+                    </a>
+                    <a class="list-group-item small" href="http://support.artstor.org/Online_training_schedule/" target="_blank">
+                        Sign up for an Artstor webinar
+                    </a>
+                    <a class="list-group-item small" href="https://www.surveymonkey.com/r/TW9SKC6" target="_blank">
+                        Take a survey: Tell us what you think!
+                    </a>
+                    <li class="list-group-item small" *ngIf="institution.displayName">
+                        Your access to Artstor is provided by:<br/>
+                        <b>{{ institution.displayName }}</b>
                     </li>
                 </ul>
             </div>

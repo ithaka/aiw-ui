@@ -3,8 +3,10 @@
  * Variations for buttons, links, and clickable icons
  */
 
-$primaryBtnColor: #ca4d2d;
-$secondaryBtnColor: rgb(200,200,200);
+$primaryBtnBg: $orange;
+$primaryBtnColor: #fff;
+$secondaryBtnBg: rgb(200,200,200);
+$secondaryBtnColor: #fff;
 $btnLinkHoverBg: rgb(230,230,230);
 $btnShadow: none;
 
@@ -39,22 +41,24 @@ $iconBtnSize: 30px;
  *  <button type="button" class="btn btn-link">Link</button>
  */
  .btn-primary, a.btn-primary {
-     background: $primaryBtnColor;
-     border-color: $primaryBtnColor;
+     background: $primaryBtnBg;
+     border-color: $primaryBtnBg;
 
      &:hover, &:focus, &:active {
-        background: darken($primaryBtnColor, 10%);
-        border-color: darken($primaryBtnColor, 10%);
+        background: darken($primaryBtnBg, 10%);
+        border-color: darken($primaryBtnBg, 10%);
      }
  }
  
  .btn-secondary {
-     background: $secondaryBtnColor;
-     border-color: $secondaryBtnColor;
+     background: $secondaryBtnBg;
+     border-color: $secondaryBtnBg;
+     color: $secondaryBtnColor; 
 
      &:hover, &:focus, &:active {
-        background: darken($secondaryBtnColor, 10%);
-        border-color: darken($secondaryBtnColor, 10%);
+        background: darken($secondaryBtnBg, 10%);
+        border-color: darken($secondaryBtnBg, 10%);
+        color: $secondaryBtnColor;
      }
  }
 
@@ -96,6 +100,13 @@ $iconBtnSize: 30px;
 
  .btn.dropdown-toggle {
      padding-right: 10px;
+ }
+
+ .btn.loading {
+    @extend .progress-bar-striped;
+    @extend .progress-bar-animated;
+    color: rgba(255,255,255,0.5);
+    pointer-events: none;
  }
 
  $btnBorderRadius: 2px;

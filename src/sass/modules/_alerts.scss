@@ -1,0 +1,16 @@
+
+$infoColor: $blue;
+
+.alert {
+    @extend %SansRegular;
+    font-size: 12px;
+    line-height: 14px;
+    margin: $basePadding/2 0px;
+    background: #fafafa;
+    border-radius: 0px;
+}
+
+.alert-info {
+    border-color: $infoColor;
+    color: $infoColor;
+}

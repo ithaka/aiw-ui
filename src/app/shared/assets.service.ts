@@ -101,6 +101,10 @@ export class AssetService implements OnInit {
         }
     }
 
+    public getCurrentInstitution(): any {
+        return this._storage.get('institution');
+    }
+
     /**
      * Sets urlParams based on matching keys with the url params that are passed in
      * @param passedParams The current url parameters; must be passed in b/c only components have access to url parameters
@@ -250,6 +254,29 @@ export class AssetService implements OnInit {
 
         return this.http
             .get(this._auth.getUrl() + '/metadata/' + assetId, this.defaultOptions)
+            .toPromise()
+            .then(this.extractData);
+    }
+
+    /**
+     * Generates Image URL
+     * @param assetId: string Asset or object ID
+     */
+    public genrateImageURL(assetId: string) {
+
+        return this.http
+            .get(this._auth.getUrl() + '/encrypt/'+ assetId + '?_method=encrypt', this.defaultOptions)
+            .toPromise()
+            .then(this.extractData);
+    }
+
+    /**
+     * Encrypt User Id
+     */
+    public encryptuserId() {
+
+        return this.http
+            .get(this._auth.getUrl() + '/encrypt/?_method=encryptuserId', this.defaultOptions)
             .toPromise()
             .then(this.extractData);
     }
@@ -579,6 +606,8 @@ export class AssetService implements OnInit {
             .toPromise()
             .then(this.extractData)
             .then((data) => {
+                this._storage.set('institution', data);
+
                 let returnCollections: any[] = [];
                 let addToArr: boolean;
 

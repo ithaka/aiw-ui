@@ -1,3 +1,15 @@
+// Breakpoints
+$xsmall-screen: 320px;
+$small-screen: 576px;
+$medium-screen: 768px;
+$large-screen: 992px;
+
+// Nice References
+$xsphone: $xsmall-screen;
+$phone: $small-screen;
+$tablet: $medium-screen;
+$desktop: $large-screen;
+
 // Bootstrap variable ovverides
 $btn-border-radius: 0px;
 
@@ -30,3 +42,14 @@ $brightOrange: #fd7740;
 
 $bgLightAccent: #f8faf8;
 $bgDefault: #fff;
+
+/**
+ Brand Colors from Public Site
+ */
+ $blue: #0039c6;
+ $green: #afc128;
+ $red: #e21c28;
+ $orange: #ef6e1e;
+ $purple: #8300e0;
+ $darkGreen: #008d58;
+ $yellow: #f2be19;

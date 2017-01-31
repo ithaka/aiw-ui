@@ -5,6 +5,7 @@ import { Subscription }   from 'rxjs/Subscription';
 
 import { AssetService } from '../shared/assets.service';
 import { AssetFiltersService } from '../asset-filters/asset-filters.service';
+import { AuthService } from '../shared/auth.service';
 import { Thumbnail } from './../shared';
 
 @Component({
@@ -35,6 +36,15 @@ export class AssetGrid implements OnInit, OnDestroy {
 
   // Default show as loading until results have update
   private isLoading: boolean = true;
+
+  private baseURL: string = '';
+  private imgEncryptId: string = '';
+  private usrEncryptId: string = '';
+  private showgenImgURLModal: boolean = false;
+  private genImgMode: string = 'half';
+  private imgURLCopied: boolean = false;
+  private copyURLStatusMsg: string = '';
+  private copyHTMLStatusMsg: string = '';
 
   @Input()
   private assetCount: number;
@@ -74,10 +84,11 @@ export class AssetGrid implements OnInit, OnDestroy {
   constructor(
     private _assets: AssetService,
     private _filters: AssetFiltersService,
+    private _auth:AuthService,
     private _router: Router,
     private route: ActivatedRoute
   ) {
-      
+      this.baseURL = this._auth.getUrl();
   } 
 
   ngOnInit() {
@@ -134,7 +145,7 @@ export class AssetGrid implements OnInit, OnDestroy {
           ||
           (this.pagination.currentPage > this.pagination.totalPages)
         ) {
-          // this.goToPage(1);
+          this.goToPage(1);
         } else {
           this.results = allResults.thumbnails;
         }
@@ -204,6 +215,35 @@ export class AssetGrid implements OnInit, OnDestroy {
   }
 
   /**
+   * Generate Image URL for the selected image in Edit Mode 
+   */
+  public generateImgUrl(): void{
+      if(this.selectedAssets.length > 0){
+        this._assets.genrateImageURL( this.selectedAssets[0].objectId )
+          .then((imgURLData) => {
+              this._assets.encryptuserId()
+                .then((userEncryptData) => {
+                  this.imgEncryptId = imgURLData.encryptId;
+                  this.usrEncryptId = userEncryptData.encryptId;
+                  this.showgenImgURLModal = true;
+                })
+                .catch(function(err){
+                  console.log('Unable to Encrypt userid');
+                  console.error(err);
+                });
+          })
+          .catch(function(err) {
+              console.log('Unable to generate image URL');
+              console.error(err);
+          });
+      }
+      else{
+        console.log('No Asset Selected!');
+      }
+  }
+
+
+  /**
    * Edit Mode : Selects / deselects an asset - Inserts / Removes the asset object to the selectedAssets array 
    * @param asset object to be selected / deselected
    */
@@ -270,5 +310,60 @@ export class AssetGrid implements OnInit, OnDestroy {
       case 3:
         return "personal-asset";
     }
+  }
+
+  /**
+   * Copies innerText of an element to the clipboard
+   * @param id of the field whose innerText is to be copied to the clipboard
+   */
+  private copyTexttoClipBoard(id: string): void{
+    var textArea = document.createElement("textarea");
+
+    textArea.style.position = 'fixed';
+    textArea.style.top = '0';
+    textArea.style.left = '0';
+
+    textArea.style.width = '2em';
+    textArea.style.height = '2em';
+    textArea.style.padding = '0';
+    textArea.style.border = 'none';
+    textArea.style.outline = 'none';
+    textArea.style.boxShadow = 'none';
+    textArea.style.background = 'transparent';
+
+    var element = document.getElementById(id);
+    textArea.value = element.textContent;
+
+    document.body.appendChild(textArea);
+    textArea.select();
+
+    try {
+      var successful = document.execCommand('copy');
+      var msg = '';
+      
+      if(successful){
+        msg = 'Successfully Copied!';
+      }
+      else{
+        msg = 'Not able to copy!';
+      }
+
+      if(id === 'copyURL'){
+        this.copyURLStatusMsg = msg;
+        setTimeout(() => {
+          this.copyURLStatusMsg = '';
+        }, 8000);
+      }
+      else if(id === 'copyHTML'){
+        this.copyHTMLStatusMsg = msg;
+        setTimeout(() => {
+          this.copyHTMLStatusMsg = '';
+        }, 8000);
+      }
+    } catch (err) {
+      console.log('Unable to copy');
+    }
+
+    document.body.removeChild(textArea);
   }
 }

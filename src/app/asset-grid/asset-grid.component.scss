@@ -61,28 +61,33 @@
     &.pag-first {
         background: url(/assets/img/pagination-icons/first.gif) 50% 50% no-repeat #b64404;
         &:hover { background: url(/assets/img/pagination-icons/first-hover.gif) 50% 50% no-repeat #b64404; }
-        &.disable { background: url(/assets/img/pagination-icons/first-disable.gif) 50% 50% no-repeat #b64404 !important; }
+        &:disabled { background: url(/assets/img/pagination-icons/first-disable.gif) 50% 50% no-repeat #b64404 !important; }
     }
     &.pag-prev {
         background: url(/assets/img/pagination-icons/prev.gif) 50% 50% no-repeat #b64404;
         &:hover { background: url(/assets/img/pagination-icons/prev-hover.gif) 50% 50% no-repeat #b64404; }
-        &.disable { background: url(/assets/img/pagination-icons/prev-disable.gif) 50% 50% no-repeat #b64404 !important; }
+        &:disabled { background: url(/assets/img/pagination-icons/prev-disable.gif) 50% 50% no-repeat #b64404 !important; }
     }
     &.pag.pag-next {
         background: url(/assets/img/pagination-icons/next.gif) 50% 50% no-repeat #b64404;
         &:hover { background: url(/assets/img/pagination-icons/next-hover.gif) 50% 50% no-repeat #b64404; }
-        &.disable { background: url(/assets/img/pagination-icons/next-disable.gif) 50% 50% no-repeat #b64404 !important; }
+        &:disabled { background: url(/assets/img/pagination-icons/next-disable.gif) 50% 50% no-repeat #b64404 !important; }
     }
     &.pag-last {
         background: url(/assets/img/pagination-icons/last.gif) 50% 50% no-repeat #b64404;
         &:hover { background: url(/assets/img/pagination-icons/last-hover.gif) 50% 50% no-repeat #b64404; }
-        &.disable { background: url(/assets/img/pagination-icons/last-disable.gif) 50% 50% no-repeat #b64404 !important; }
+        &:disabled { background: url(/assets/img/pagination-icons/last-disable.gif) 50% 50% no-repeat #b64404 !important; }
     }
 
-    &.disable {
+    &:disabled {
         border: 1px solid #cecba5;
         cursor: initial;
     }
+}
+
+.pag-wrap {
+    display: inline-block;
+    cursor: default;
 }
 
 .no-border{
@@ -95,4 +100,70 @@ input[type=number]::-webkit-outer-spin-button {
 }
 input[type=number] {
   -moz-appearance: textfield;
+}
+// For generate image URL Modal
+#genImgURL .modal-body{
+    font-family: 'Graphik Web', sans-serif;
+}
+#genImgURL .main-content{
+    border-bottom: 1px solid #ddd;
+}
+#genImgURL .asset-title{
+    font-size: 13px;
+    font-weight: 600;
+    border-bottom: 1px solid #ddd;
+    font-family: 'Graphik', Futura, Helvetica, sans-serif;
+    padding-bottom: 5px;
+}
+#genImgURL .imgURL-gen-info{
+    font-weight: 400;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 18px;
+    padding-top: 10px;
+}
+#genImgURL .label{
+    color: #c9d0c9;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+#genImgURL .value{
+    font-size: 13px;
+    word-wrap: break-word;
+    padding: 5px 0px;
+}
+#genImgURL .copy-clipboard{
+    font-size: 12px;
+    color: #a4a4a4;
+    border-bottom: 1px dotted #ddd;
+    display: inline-block;
+    padding-bottom: 2px;
+    cursor: pointer;
+}
+#genImgURL .copy-status-msg{
+    display: inline-block;
+    font-size: 12px;
+    color: #000;
+    padding-bottom: 2px;
+    margin-left: 20px;
+}
+#genImgURL .value textarea{
+    font-family: 'Graphik Web', sans-serif;
+    font-size: 13px;
+    word-wrap: break-word;
+    word-break: break-all;
+    width: 475px;
+    min-height: 50px;
+    padding: 5px 10px;
+    text-align: left;
+    margin-top: 10px;
+    border: 1px solid #ddd;
+    resize: none;
+}
+#genImgURL .value #copyHTML{
+    min-height: 110px !important;
+}
+.close-icon{
+    cursor: pointer;
 }

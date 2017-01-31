@@ -45,6 +45,7 @@
 @import './modules/cards';
 @import './modules/modals';
 @import './modules/metadata';
+@import './modules/alerts';
 
 // ----------------------------------------------------
 // [IV] Component/Page Specific Styles
@@ -144,3 +145,8 @@ span.active {
       transform: translate3d(-50%, -50%, 0);
     }
   }
+
+// Required for toggles to work
+.collapse.in {
+  display: block;
+}

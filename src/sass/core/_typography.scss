@@ -8,7 +8,7 @@ $baseFontSize: 14px;
 
 
 // Colors
-$typeAccent: $burntOrange;
+$typeAccent: $red;
 
 
 // Font Imports
@@ -152,10 +152,17 @@ a[href], a.link, .link {
     color: $linkColor;
   }
   &:hover, &:focus {
-    color: $brightTeal;
+    color: $blue;
     text-decoration: underline;
-    text-decoration-color: $brightTeal;
-    // border-bottom: 1px solid $brightTeal;
+    text-decoration-color: $blue;
+    // border-bottom: 1px solid #8300e0;
+  }
+
+  &.list-group-item  {
+    &:hover, &:focus {
+      text-decoration: none;
+      background: #fafafa;
+    }
   }
 }
 
@@ -168,8 +175,8 @@ a[href], a.link, .link {
   // border-bottom: 1px solid rgba($typeAccent, 0.4);
 
   &:hover, &:focus, &:active {
-    color: $brightOrange;
-    text-decoration-color: $typeAccent;
+    color: #000;
+    text-decoration-color: #000;
     // border-color: $brightOrange; 
     // text-decoration: none;
   }
@@ -177,6 +184,7 @@ a[href], a.link, .link {
 
 p {
     @extend %baseFontStyle;
+    width: 100%;
 }
 
 label {

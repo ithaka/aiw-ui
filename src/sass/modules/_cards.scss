@@ -51,6 +51,15 @@ $assetCardBorderSize: 1px;
     }
 }
 
+.card--link {
+    cursor: pointer;
+    opacity: 0.95;
+}
+
+img.no-stretch {
+    width: 100%;
+    height: auto;
+}
 
 .card.card--asset, .card--asset {
     margin-bottom: 0px;

@@ -1,10 +1,23 @@
-.coll-nav .nav-link, .browse-nav .nav-link{
+.nav-link{
     cursor: pointer;
+    border-bottom: 2px solid transparent;
+    padding-right: 0px;
+    padding-left: 0px;
+    margin-right: 1rem;
+
+    &:hover, &:active, &:focus {
+        color: #000 !important;
+        text-decoration: none;
+        border-color: rgba(0,0,0,0.2);
+    }
 }
+
 .coll-nav .nav-link.active{
     font-weight: 700;
     padding-bottom: 5px;
     border-bottom: 2px solid;
+    color: #000 !important;
+    text-decoration: none;
 }
 .browse-nav{
     margin-bottom: 10px;
@@ -17,6 +30,7 @@
 .browse-nav .label{
     color: #999;
     padding-right: 10px;
+    line-height: 34px;
 }
 .browse-info{
     background-color: #f5f9f5;
