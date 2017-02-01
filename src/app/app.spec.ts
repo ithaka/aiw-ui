@@ -5,19 +5,20 @@ import {
 
 // Load the implementations that should be tested
 import { App } from './app.component';
-import { AppState } from './app.service';
+import { AppModule } from './app.module';
 
-import { Angulartics2Module, Angulartics2GoogleAnalytics } from 'angulartics2';
+import {  Angulartics2GoogleAnalytics } from 'angulartics2';
 
 describe('App', () => {
   // provide our implementations or mocks to the dependency injector
   beforeEach(() => TestBed.configureTestingModule({
     providers: [
-      AppState,
-      App,
-      Angulartics2Module,
-      Angulartics2GoogleAnalytics
-    ]}));
+      {
+        provide: Angulartics2GoogleAnalytics
+      },
+      App
+    ]
+  }));
 
   it('should log ngOnInit', inject([ App ], (app: App) => {
     spyOn(console, 'log');
