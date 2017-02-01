@@ -83,15 +83,15 @@ export class MyCollectionsComponent implements OnInit {
           }
           if(res.privateCollection && (res.privateCollection.length > 0)){
             for (let colObj of res.privateCollection){
-                console.log(colObj);
-              let privTag = new Tag(colObj.collectionid, colObj.collectionname, true, null, { label: "collection", folder: true });
-              if(colObj.blurburl) {
-                  privTag.setDescription(colObj.blurburl);
-              }
-              if(colObj.bigimageurl) {
-                  privTag.setThumbnail(colObj.bigimageurl);
-              }
-              this.tags.push(privTag);
+                let privTag = new Tag(colObj.collectionid, colObj.collectionname, true, null, { label: "collection", folder: true });
+                // We've decided to show collection descriptions on the Collection page, and not in Browse
+                //   if(colObj.blurburl) {
+                //       privTag.setDescription(colObj.blurburl);
+                //   }
+                //   if(colObj.bigimageurl) {
+                //       privTag.setThumbnail(colObj.bigimageurl);
+                //   }
+                this.tags.push(privTag);
             }
           }
 

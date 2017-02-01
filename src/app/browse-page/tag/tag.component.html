@@ -1,9 +1,10 @@
 <!--Sets up the tag passed into the component-->
 <div id="tagItem{{ tag.tagId }}" title="{{ tag.title }}"  [ngClass]="['tag-item', 'tag-item__indent-' + tag.getLevel(), linkRoute.length < 1 ? 'no-link' : '']">
     <div class="expand-button" (click)="tag.isCollapsed = !tag.isCollapsed; getChildren(); tag.touched = true;">
-        <i [ngClass]="[ tag.isCollapsed ? 'icon-right' : 'icon-down', (!tag.touched || (tag.touched && tag.children.length > 0)) ? 'icon-direction' : 'icon-empty']" class="icon absolute-left tree-icon "></i>
+        <i *ngIf="!loading" [ngClass]="[ tag.isCollapsed ? 'icon-right' : 'icon-down', (!tag.touched || (tag.touched && tag.children.length > 0)) && tag.type.label !== 'subcategory' ? 'icon-direction' : 'icon-empty']" class="icon absolute-left tree-icon"></i>
+        <i *ngIf="loading" class="icon icon-loading absolute-left tree-icon" ></i>
     </div>
-    <a id="tagItem{{ tag.tagId }}Open" [routerLink]="[ linkRoute, tag.tagId, { 'name' : cleanTitle(tag.title) } ]">
+    <a id="tagItem{{ tag.tagId }}Open" [ngClass]="{ 'no-link' : linkRoute.length < 1 }" [routerLink]="[ linkRoute, tag.tagId, { 'name' : cleanTitle(tag.title) } ]">
         <!--<img class="info-icon" *ngIf="(tag.description.length > 0) && !tag.type.isFolder" src="/assets/img/info-icon.png" (click)="toggleDescription()" /> -->
         {{tag.title}}
         <!--<i *ngIf="linkRoute.length > 0" id="tagItem{{ tag.tagId }}Open" class="icon icon-open-link icon--tag-button" [routerLink]="[ linkRoute, tag.tagId, { 'name' : cleanTitle(tag.title) } ]"></i>-->

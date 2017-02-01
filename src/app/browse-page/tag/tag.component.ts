@@ -16,6 +16,7 @@ export class TagComponent {
   private showAsFolder: boolean;
   public linkRoute: string = "";
   public showDescription: boolean = false;
+  private loading: boolean = false;
 
   constructor(
     private _assets: AssetService, 
@@ -67,11 +68,14 @@ export class TagComponent {
     if (!this.tag.touched) {
       //make sure the tag has a type and a type.label, which getTags uses as a switch
       if (this.tag.type && this.tag.type.label) {
+        this.loading = true;
         this._tags.getChildTags(this.tag)
           .then((tags) => {
+            this.loading = false;
             this.tag.setChildren(tags);
           })
           .catch((err) => {
+            this.loading = false;
             console.error(err);
           });
       }

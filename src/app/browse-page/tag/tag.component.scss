@@ -2,8 +2,10 @@
   * Tag Component Styles
   */
 
+  $tagLinkBg: #efefef;
+
   .tag-item { 
-    color: #333;
+    color: #000;
     font-size: 13px;
     line-height: 16px;
     cursor: pointer;
@@ -17,14 +19,23 @@
         color: #999;
         cursor: default;
         pointer-events: none;
+        text-decoration: none;
+        background: transparent;
     }
 
     & a {
         display: inline-block;
         padding: 2px;
+        background: $tagLinkBg;
+        border-radius: 2px;
+        max-height: 19px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 90%;
 
         &:hover, &:active, &:focus {
             text-decoration: none;
+            background: darken($tagLinkBg, 10%);
         }
     }
   }
@@ -46,10 +57,10 @@
 }
 
 .expand-button {
-    padding: 5px;
+    padding: 2px 5px 5px 5px;
     display: inline-block;
     font-size: 1.1em;
-    vertical-align: middle;
+    vertical-align: top;
     
     & i {
         opacity: 0.5;

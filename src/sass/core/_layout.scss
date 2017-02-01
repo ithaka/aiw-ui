@@ -8,6 +8,7 @@ $footerOffset: 80px;
 
 main {
      min-height: calc(100% - #{ $navOffset + $footerOffset });
+     overflow-x: hidden;
  }
 
 .row--no-overflow {
