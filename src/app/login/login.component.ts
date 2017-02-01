@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { AppState } from '../app.service';
+import { Location } from '@angular/common';
+import { Angulartics2 } from 'angulartics2';
+
 import { AuthService } from './../shared/auth.service';
 import { LoginService, User } from './login.service';
-import { Location } from '@angular/common';
-
-import { Angulartics2 } from 'angulartics2';
 
 @Component({
   // The selector is what angular internally uses
@@ -19,7 +19,8 @@ import { Angulartics2 } from 'angulartics2';
   // Our list of styles in our component. We may add more to compose many styles together
   styleUrls: [ './login.component.scss' ],
   // Every Angular template is first compiled by the browser before Angular runs it's compiler
-  templateUrl: './login.component.html'
+  // templateUrl: './login.component.html'
+  template: `<h1>Test title</h1>`
 })
 export class Login {
   // Set our default values
