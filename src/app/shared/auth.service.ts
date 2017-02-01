@@ -42,7 +42,7 @@ export class AuthService implements CanActivate {
     // } else {
       this.subdomain = 'stagely';
       // this.baseUrl = 'http://192.168.97.66/library/secure';
-      this.baseUrl = '//stagely.artstor.org/library/secure';
+      this.baseUrl = '//artstor-earth-library.apps.test.cirrostratus.org/secure'; //stagely.artstor.org/library/secure';
       // this.baseUrl = this.proxyUrl + 'http://library.artstor.org/library/secure';
     // }
       this.thumbUrl = '//mdxstage.artstor.org';
