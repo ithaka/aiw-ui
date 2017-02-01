@@ -7,16 +7,24 @@ import {
 import { App } from './app.component';
 import { AppState } from './app.service';
 
+import { Angulartics2Module, Angulartics2GoogleAnalytics } from 'angulartics2';
+
 describe('App', () => {
   // provide our implementations or mocks to the dependency injector
   beforeEach(() => TestBed.configureTestingModule({
     providers: [
       AppState,
-      App
+      App,
+      Angulartics2Module,
+      Angulartics2GoogleAnalytics
     ]}));
 
-  it('should have a url', inject([ App ], (app: App) => {
-    expect(app.url).toEqual('https://twitter.com/AngularClass');
+  it('should log ngOnInit', inject([ App ], (app: App) => {
+    spyOn(console, 'log');
+    expect(console.log).not.toHaveBeenCalled();
+
+    app.ngOnInit();
+    expect(console.log).toHaveBeenCalled();
   }));
 
 });
