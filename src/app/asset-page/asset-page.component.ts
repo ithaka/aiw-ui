@@ -47,7 +47,7 @@ export class AssetPage implements OnInit, OnDestroy {
                 this.assets[0] = new Asset(routeParams["assetId"], this._assets, this._auth);
                 this.generateImgURL();
 
-                if(this.prevAssetResults.thumbnails){
+                if(this.prevAssetResults.thumbnails.length > 0){
                     this.totalAssetCount = this.prevAssetResults.count ? this.prevAssetResults.count : this.prevAssetResults.thumbnails.length;
                     this.assetIndex = this.currentAssetIndex();
                     this.assetNumber = this._assets.lastSearchParams.currentPage ? this.assetIndex + 1 + ((this._assets.lastSearchParams.currentPage - 1) * this._assets.searchPageSize) : this.assetIndex + 1;
@@ -56,7 +56,34 @@ export class AssetPage implements OnInit, OnDestroy {
         );
 
         // Get latest set of results with at least one asset
-        this.prevAssetResults = this._assets.getRecentResults();
+        // this.prevAssetResults = this._assets.getRecentResults();
+
+
+        // sets up subscription to allResults, which is the service providing thumbnails
+        this.subscriptions.push(
+          this._assets.allResults.subscribe((allResults: any) => {
+              if(allResults.thumbnails){
+                  this.prevAssetResults = allResults;
+                  if(this.loadArrayFirstAsset){
+                      this.loadArrayFirstAsset = false;
+                      if((this.prevAssetResults.thumbnails) && (this.prevAssetResults.thumbnails.length > 0)){
+                          this._router.navigate(['/asset', this.prevAssetResults.thumbnails[0].objectId]);
+                      }
+                  }
+                  else if(this.loadArrayLastAsset){
+                      this.loadArrayLastAsset = false;
+                      if((this.prevAssetResults.thumbnails) && (this.prevAssetResults.thumbnails.length > 0)){
+                          this._router.navigate(['/asset', this.prevAssetResults.thumbnails[this.prevAssetResults.thumbnails.length - 1].objectId]);
+                      }
+                  }
+                  else{
+                    this.totalAssetCount = this.prevAssetResults.count ? this.prevAssetResults.count : this.prevAssetResults.thumbnails.length;
+                    this.assetIndex = this.currentAssetIndex();
+                    this.assetNumber = this._assets.lastSearchParams.currentPage ? this.assetIndex + 1 + ((this._assets.lastSearchParams.currentPage - 1) * this._assets.searchPageSize) : this.assetIndex + 1;
+                  }
+              }
+          })
+        );
     }
 
     ngOnDestroy() {
