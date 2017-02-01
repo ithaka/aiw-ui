@@ -71,11 +71,11 @@ module.exports = function(options) {
          *
          * See: https://github.com/wbuchwalter/tslint-loader
          */
-        {
-          test: /\.ts$/,
-          loader: 'tslint-loader',
-          exclude: [helpers.root('node_modules')]
-        },
+        // {
+        //   test: /\.ts$/,
+        //   loader: 'tslint-loader',
+        //   exclude: [helpers.root('node_modules')]
+        // },
 
         /**
          * Source map loader support for *.js files
