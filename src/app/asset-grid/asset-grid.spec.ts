@@ -12,8 +12,6 @@ import { MockBackend } from '@angular/http/testing';
 
 // Load the implementations that should be tested
 import { AppState } from '../app.service';
-import { Search } from './search.component';
-import { Title } from './title';
 
 describe('Search', () => {
   // provide our implementations or mocks to the dependency injector
@@ -28,9 +26,7 @@ describe('Search', () => {
         },
         deps: [MockBackend, BaseRequestOptions]
       },
-      AppState,
-      Title,
-      Search
+      AppState
     ]
   }));
 
