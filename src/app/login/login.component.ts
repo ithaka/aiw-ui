@@ -19,8 +19,7 @@ import { LoginService, User } from './login.service';
   // Our list of styles in our component. We may add more to compose many styles together
   styleUrls: [ './login.component.scss' ],
   // Every Angular template is first compiled by the browser before Angular runs it's compiler
-  // templateUrl: './login.component.html'
-  template: `<h1>Test title</h1>`
+  templateUrl: './login.component.html'
 })
 export class Login {
   // Set our default values

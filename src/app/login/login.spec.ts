@@ -55,6 +55,6 @@ describe("Login component inline template", () => {
   it("should have a title", () => {
     console.log("test ran");
     console.log(el.textContent);
-    // expect(el.textContent).toBe("Log in with your Artstor Account");
+    expect(el.textContent).toBe("Log in with your Artstor Account");
   });
 });
