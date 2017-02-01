@@ -1,9 +1,11 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { Subscription }   from 'rxjs/Subscription';
 
 import { Asset } from './asset';
 import { AuthService, AssetService } from './../shared';
+
+import { AssetViewerComponent } from './asset-viewer/asset-viewer.component';
 
 @Component({
     selector: 'ang-asset-page',
@@ -11,6 +13,9 @@ import { AuthService, AssetService } from './../shared';
     styleUrls: [ './asset-page.component.scss' ]
 })
 export class AssetPage implements OnInit, OnDestroy {
+
+    @ViewChild(AssetViewerComponent)
+    private assetViewer: AssetViewerComponent;
 
     private user: any;
 
@@ -208,5 +213,14 @@ export class AssetPage implements OnInit, OnDestroy {
             asset.selected = true;
             this.assets.push( new Asset(asset.objectId, this._assets, this._auth) );
         }
+    }
+
+    // Exit Presentation / Fullscreen mode and reset assets comparison array
+    private exitPresentationMode(): void{
+        this.assets.splice(1);
+        for(let i = 0; i < this.prevAssetResults.thumbnails.length; i++){
+            this.prevAssetResults.thumbnails[i].selected = false;
+        }
+        this.assetViewer.togglePresentationMode();
     }
 }
