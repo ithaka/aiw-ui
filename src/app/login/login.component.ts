@@ -54,7 +54,6 @@ export class Login {
   ngOnInit() {
     this._login.getInstitutions()
       .then((data) => {
-        console.log(data);
         if (data.items) {
           this.loginInstitutions = data.items;
         }
