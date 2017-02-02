@@ -54,9 +54,13 @@ describe("Login component inline template", () => {
     el = de.nativeElement;
   });
 
-  it("should have a title", () => {
-    console.log("test ran");
-    console.log(el.textContent);
-    expect(el.textContent).toBe("Log in with your Artstor Account");
+  it("should have a heading", () => {
+    // initial test to verify that heading exists
+    let heading = fixture.debugElement.queryAll(By.css('#loginHeading'));
+    expect(heading.length).toEqual(1);
+
+    // negative test for good measure
+    let negative = fixture.debugElement.queryAll(By.css('#nothingshouldhavethisid'));
+    expect(negative.length).toEqual(0);
   });
 });
