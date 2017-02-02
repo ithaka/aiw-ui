@@ -54,6 +54,7 @@ export class Login {
   ngOnInit() {
     this._login.getInstitutions()
       .then((data) => {
+        console.log(data);
         if (data.items) {
           this.loginInstitutions = data.items;
         }
@@ -61,7 +62,7 @@ export class Login {
       .catch((error) => {
         this.instErrorMsg = "We've experience an error and are unable to retrieve the insitutions";
         console.error(error);
-      })
+      });
   }
   
   loadForUser(data: any) {
