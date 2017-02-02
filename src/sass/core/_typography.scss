@@ -139,15 +139,18 @@ a, button {
 
 $linkColor : #444;
 
-a {
+a, a[href] {
   cursor: pointer;
   color: $linkColor;
+  text-decoration: none;
 }
 
-a[href], a.link, .link {
-  @extend a;
+a.link, .link {
+  cursor: pointer;
+  color: $linkColor;
+  text-decoration: underline;
   text-decoration-color: $linkColor;
-  // border-bottom: 1px solid rgba($linkColor, 0.3);
+
   &:visited {
     color: $linkColor;
   }
@@ -158,11 +161,15 @@ a[href], a.link, .link {
     // border-bottom: 1px solid #8300e0;
   }
 
-  &.list-group-item  {
-    &:hover, &:focus {
-      text-decoration: none;
-      background: #fafafa;
-    }
+  
+}
+
+a.list-group-item, a.list-group-item-action, a.btn  {
+  text-decoration: none;
+  &:hover, &:focus {
+    color: $blue;
+    text-decoration: none;
+    background: #fafafa;
   }
 }
 

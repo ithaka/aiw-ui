@@ -39,9 +39,13 @@ export class AssociatedPage implements OnInit, OnDestroy {
       this.route.params.subscribe((routeParams) => {
         this.objectId = routeParams["objectId"];
         this.colId = routeParams["colId"];
-
+        let params = Object.assign({}, routeParams);
+        // If a page number isn't set, reset to page 1!
+        if (!params['currentPage']){
+          params['currentPage'] = 1;
+        } 
         if (this.objectId && this.colId) {
-          this._assets.queryAll(routeParams);
+          this._assets.queryAll(params);
 
           // get the associated images title
           this.http

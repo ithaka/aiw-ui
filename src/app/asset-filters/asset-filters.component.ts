@@ -8,9 +8,6 @@ import { AssetFiltersService } from '../asset-filters/asset-filters.service';
 
 @Component({
   selector: 'ang-asset-filters', 
-  providers: [
-    AssetService
-  ],
   styleUrls: [ './asset-filters.component.scss' ],
   templateUrl: './asset-filters.component.html'
 })
