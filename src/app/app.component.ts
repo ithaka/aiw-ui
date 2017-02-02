@@ -3,6 +3,10 @@
  */
 import { Component, ViewEncapsulation } from '@angular/core';
 import { Angulartics2GoogleAnalytics } from 'angulartics2';
+import { Title } from '@angular/platform-browser';
+import { Router, NavigationStart } from '@angular/router';
+
+import { AppState } from './app.service';
 
 /*
  * App Component
@@ -30,8 +34,17 @@ export class App {
   name = 'Artstor';
   url = 'https://artstor.org/';
 
-  constructor(angulartics2GoogleAnalytics: Angulartics2GoogleAnalytics) {
-      
+  constructor(public appState: AppState, angulartics2GoogleAnalytics: Angulartics2GoogleAnalytics, private titleService: Title, private router:Router) {
+    
+    // Set metatitle to "Artstor" except for asset page where metatitle is {{ Asset Title }}
+    router.events.subscribe(event => {
+      if(event instanceof NavigationStart) {
+        let event_url_array = event.url.split('/');
+        if(event_url_array && (event_url_array.length > 1) && (event_url_array[1] !== 'asset')){
+          this.titleService.setTitle('Artstor');
+        }
+      }
+    });
   }
 
   ngOnInit() {
