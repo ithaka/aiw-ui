@@ -245,18 +245,17 @@ export class AssetFilters {
     
     // Show error message if Start date is greater than End date
     if(sdate > edate){
-      this.availableFilters.dateObj.earliest.date = this.availableFilters.prevDateObj.earliest.date;
-      this.availableFilters.dateObj.earliest.era = this.availableFilters.prevDateObj.earliest.era;
+      // this.availableFilters.dateObj.earliest.date = this.availableFilters.prevDateObj.earliest.date;
+      // this.availableFilters.dateObj.earliest.era = this.availableFilters.prevDateObj.earliest.era;
 
-      this.availableFilters.dateObj.latest.date = this.availableFilters.prevDateObj.latest.date;
-      this.availableFilters.dateObj.latest.era = this.availableFilters.prevDateObj.latest.era;
+      // this.availableFilters.dateObj.latest.date = this.availableFilters.prevDateObj.latest.date;
+      // this.availableFilters.dateObj.latest.era = this.availableFilters.prevDateObj.latest.era;
 
       this.dateError = true;
-      setTimeout(() => {
-        this.dateError = false;
-      }, 3000);
-      console.log('End date must be greater than or equal to Start date.');
       return;
+    }
+    else{
+      this.dateError = false;
     }
 
     this.availableFilters.dateObj.modified = true;

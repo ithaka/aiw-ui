@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router'
 import { Subscription }   from 'rxjs/Subscription';
 
 import { AssetService } from './../shared/assets.service';
+import { AssetFiltersService } from '../asset-filters/asset-filters.service';
 
 import { AssetGrid } from './../asset-grid/asset-grid.component';
 
@@ -21,14 +22,15 @@ export class SearchPage implements OnInit, OnDestroy {
   @ViewChild(AssetGrid)
   private assetGrid: AssetGrid;
 
-  constructor(private _assets: AssetService, private route: ActivatedRoute, private _router: Router) {
+  constructor(private _assets: AssetService, private route: ActivatedRoute, private _filters: AssetFiltersService, private _router: Router) {
 
   }
 
   ngOnInit() {
     // Subscribe to term in params
     this.subscriptions.push(
-      this.route.params.subscribe((routeParams) => {
+      this.route.params.subscribe( (routeParams) => {
+        this._filters.clearApplied();
         let params = Object.assign({}, routeParams);
         // If a page number isn't set, reset to page 1!
         if (!params['currentPage']){

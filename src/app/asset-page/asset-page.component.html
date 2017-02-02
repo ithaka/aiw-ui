@@ -66,6 +66,9 @@
         </div>
 
         <div *ngIf="isFullscreen" class="fullscreen-btns">
+            <button class="btn btn-dark" (click)="exitPresentationMode()">
+                Exit
+            </button>
             <button class="btn btn-dark" (click)="showAssetDrawer = !showAssetDrawer">
                 Compare
             </button>

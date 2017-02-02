@@ -1,9 +1,11 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { Subscription }   from 'rxjs/Subscription';
 
 import { Asset } from './asset';
 import { AuthService, AssetService } from './../shared';
+
+import { AssetViewerComponent } from './asset-viewer/asset-viewer.component';
 
 @Component({
     selector: 'ang-asset-page',
@@ -11,6 +13,9 @@ import { AuthService, AssetService } from './../shared';
     styleUrls: [ './asset-page.component.scss' ]
 })
 export class AssetPage implements OnInit, OnDestroy {
+
+    @ViewChild(AssetViewerComponent)
+    private assetViewer: AssetViewerComponent;
 
     private user: any;
 
@@ -47,7 +52,7 @@ export class AssetPage implements OnInit, OnDestroy {
                 this.assets[0] = new Asset(routeParams["assetId"], this._assets, this._auth);
                 this.generateImgURL();
 
-                if(this.prevAssetResults.thumbnails){
+                if(this.prevAssetResults.thumbnails.length > 0){
                     this.totalAssetCount = this.prevAssetResults.count ? this.prevAssetResults.count : this.prevAssetResults.thumbnails.length;
                     this.assetIndex = this.currentAssetIndex();
                     this.assetNumber = this._assets.currentLoadedParams.currentPage; // ? this.assetIndex + 1 + ((this._assets.lastSearchParams.currentPage - 1) * this._assets.searchPageSize) : this.assetIndex + 1;
@@ -56,7 +61,34 @@ export class AssetPage implements OnInit, OnDestroy {
         );
 
         // Get latest set of results with at least one asset
-        this.prevAssetResults = this._assets.getRecentResults();
+        // this.prevAssetResults = this._assets.getRecentResults();
+
+
+        // sets up subscription to allResults, which is the service providing thumbnails
+        this.subscriptions.push(
+          this._assets.allResults.subscribe((allResults: any) => {
+              if(allResults.thumbnails){
+                  this.prevAssetResults = allResults;
+                  if(this.loadArrayFirstAsset){
+                      this.loadArrayFirstAsset = false;
+                      if((this.prevAssetResults.thumbnails) && (this.prevAssetResults.thumbnails.length > 0)){
+                          this._router.navigate(['/asset', this.prevAssetResults.thumbnails[0].objectId]);
+                      }
+                  }
+                  else if(this.loadArrayLastAsset){
+                      this.loadArrayLastAsset = false;
+                      if((this.prevAssetResults.thumbnails) && (this.prevAssetResults.thumbnails.length > 0)){
+                          this._router.navigate(['/asset', this.prevAssetResults.thumbnails[this.prevAssetResults.thumbnails.length - 1].objectId]);
+                      }
+                  }
+                  else{
+                    this.totalAssetCount = this.prevAssetResults.count ? this.prevAssetResults.count : this.prevAssetResults.thumbnails.length;
+                    this.assetIndex = this.currentAssetIndex();
+                    this.assetNumber = this._assets.currentSearchParams.currentPage ? this.assetIndex + 1 + ((this._assets.currentSearchParams.currentPage - 1) * this._assets.searchPageSize) : this.assetIndex + 1;
+                  }
+              }
+          })
+        );
     }
 
     ngOnDestroy() {
@@ -181,5 +213,14 @@ export class AssetPage implements OnInit, OnDestroy {
             asset.selected = true;
             this.assets.push( new Asset(asset.objectId, this._assets, this._auth) );
         }
+    }
+
+    // Exit Presentation / Fullscreen mode and reset assets comparison array
+    private exitPresentationMode(): void{
+        this.assets.splice(1);
+        for(let i = 0; i < this.prevAssetResults.thumbnails.length; i++){
+            this.prevAssetResults.thumbnails[i].selected = false;
+        }
+        this.assetViewer.togglePresentationMode();
     }
 }

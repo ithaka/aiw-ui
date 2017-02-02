@@ -223,7 +223,7 @@ export class AssetViewerComponent implements OnInit, OnDestroy, AfterViewInit {
         }
     }
 
-    private togglePresentationMode(): void {
+    public togglePresentationMode(): void {
         // Make the body go full screen.
         var elem = document.body;
 
