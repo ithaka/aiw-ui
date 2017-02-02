@@ -17,7 +17,7 @@ import { ToolboxService } from './toolbox.service';
 import { ImageGroup } from '.';
 
 @Injectable()
-export class AssetService implements OnInit {
+export class AssetService {
 
     /** Constant that defines which collectionType belongs to institutions */
     static readonly institutionCollectionType: number = 2;
@@ -25,20 +25,39 @@ export class AssetService implements OnInit {
     //set up thumbnail observables
     private allResultsValue: any[] = [];
     // BehaviorSubjects push last value on subscribe
-    private allResultsSource = new BehaviorSubject<any>(this.allResultsValue);
-    public allResults = this.allResultsSource.asObservable();
+    private allResultsSource: BehaviorSubject<any> = new BehaviorSubject<any[]>(this.allResultsValue);
+    public allResults: Observable<any> = this.allResultsSource.asObservable();
+
+    // Pagination value observable
+    private paginationValue: any = {
+        totalPages: 1,
+        pageSize: 24,
+        currentPage: 1
+    };
+    private paginationSource = new BehaviorSubject<any>(this.paginationValue);
+    public pagination = this.paginationSource.asObservable();
 
     // Keep track of which params the current results are related to
-    private currentLoadedParams: any = {};
+    public currentLoadedParams: any = {};
 
-    // For loading the assets in the next page - Asset Page
-    public lastSearchParams: any = {};
-    public searchPageSize: number = 24;
+    private subscriptions: Subscription[] = [];
 
     /**
      * urlParams is used as an enum for special parameters
      */
     private urlParams: any;
+    private defaultUrlParams: any = {
+            term: "",
+            pageSize: 24,
+            currentPage: 1,
+            startDate: 0,
+            endDate: 0,
+            igId: "",
+            objectId: "",
+            colId: "",
+            catId: "",
+            collTypes: ""
+        };
     private activeSort: any = {
         index: 0
      };
@@ -62,31 +81,34 @@ export class AssetService implements OnInit {
         private _toolbox: ToolboxService
     ) {
         this._storage = locker.useDriver(Locker.DRIVERS.LOCAL);
-        this.urlParams = {
-            term: "",
-            pageSize: 24,
-            currentPage: 1,
-            startDate: 0,
-            endDate: 0,
-            igId: "",
-            objectId: "",
-            colId: "",
-            catId: "",
-            collTypes: ""
-        };
-    }
+    } 
 
-    ngOnInit() {
+    private updateLocalResults(resultObj: any) {
+        // These Params have been loaded now
+        this.currentLoadedParams = Object.assign(this.defaultUrlParams, this.urlParams);
+
+        let totalPages = 1;
         
-    }
+        if (resultObj.count) {
+          totalPages = Math.ceil( resultObj.count / this.urlParams.pageSize );
+        }
 
-    private updateLocalResults(results: any[]) {
-        this.allResultsValue = results;
-        this.allResultsSource.next(results);
+        // Update pagination object
+        let paginationValue = {
+            totalPages: totalPages,
+            pageSize: this.urlParams.pageSize,
+            currentPage: this.urlParams.currentPage
+        };
+        this.paginationValue = paginationValue;
+        this.paginationSource.next(paginationValue);
+
+        // Update results thumbnail array 
+        this.allResultsValue = resultObj.thumbnails;
+        this.allResultsSource.next(resultObj.thumbnails);
 
         // Set Recent Results (used by Compare Mode)
-        if (results['thumbnails'] && results['thumbnails'].length > 0) {
-            this._storage.set('results', results);
+        if (resultObj.thumbnails && resultObj.thumbnails.length > 0) {
+            this._storage.set('results', resultObj);
         }
     } 
 
@@ -105,27 +127,26 @@ export class AssetService implements OnInit {
         return this._storage.get('institution');
     }
 
-    /**
-     * Sets urlParams based on matching keys with the url params that are passed in
-     * @param passedParams The current url parameters; must be passed in b/c only components have access to url parameters
-     */
-    private readUrlParams(passedParams: any) {
-        // Creates filters and list of relevant url parameters for use by search
-        for (let param in passedParams) {
-            // test if param is a special parameter
-            if (this.urlParams.hasOwnProperty(param)) {
-                // param is a special parameter - assign the value
-                if((param == 'currentPage') || (param == 'pageSize')){
-                    this.urlParams[param] = parseInt(passedParams[param]);
-                }
-                else{
-                    this.urlParams[param] = passedParams[param];
-                }
-                
-            } else {
-                // Any other filters are managed by Asset Filters
-            }
-        }
+    public goToPage(page: number) {
+        this.setUrlParam('currentPage', page);
+    }
+
+    public setPageSize(size: number) {
+        this.setUrlParam('pageSize', size);
+    }
+
+    private setUrlParam(key: string, value: any) {
+        let route = this._router.routerState.snapshot.root.children[0];
+        let currentParamsObj: Params = Object.assign({}, route.params);
+
+        let newParam = {};
+        newParam[key] = value;
+
+        let newUrl = this._router.createUrlTree([
+                Object.assign(currentParamsObj, newParam)
+            ], {relativeTo: this.route });
+
+        this._router.navigateByUrl(newUrl);
     }
     
     private formEncode = function (obj) {
@@ -146,9 +167,9 @@ export class AssetService implements OnInit {
     }
 
     public loadPrevAssetPage(): void{
-        let currentParamsObj: Params = Object.assign({}, this.lastSearchParams);
+        let currentParamsObj: Params = Object.assign({}, this.currentLoadedParams);
         
-        if(this.lastSearchParams.currentPage){
+        if(this.currentLoadedParams.currentPage){
             currentParamsObj['currentPage']--;
         }
 
@@ -156,9 +177,9 @@ export class AssetService implements OnInit {
     }
     
     public loadNextAssetPage(): void{
-        let currentParamsObj: Params = Object.assign({}, this.lastSearchParams);
+        let currentParamsObj: Params = Object.assign({}, this.currentLoadedParams);
         
-        if(this.lastSearchParams.currentPage){
+        if(this.currentLoadedParams.currentPage){
             currentParamsObj['currentPage']++;
         }
         else{
@@ -172,20 +193,20 @@ export class AssetService implements OnInit {
      * @param params Object conaining all route params
      */
     public queryAll(params: any) {
+        console.log( Object.assign({ }, this.currentLoadedParams) );
         // Reset allResults
         if (this._toolbox.compareObjects(this.currentLoadedParams, params) === false) {
             // Params are different, clear the assets!
             this.allResultsSource.next([]);
         }
 
-        this.currentLoadedParams = params;
-
-        this.lastSearchParams = params;
-        this.searchPageSize = this.urlParams.pageSize;
-
-        this.readUrlParams(params);
+        this.urlParams = Object.assign(this.defaultUrlParams, params);
         this.setFiltersFromURLParams(params);
 
+        // Read Pagination values
+        this.paginationValue.pageSize = parseInt(this.urlParams.pageSize);
+        this.paginationValue.currentPage =  parseInt(this.urlParams.currentPage);
+        this.paginationSource.next(this.paginationValue);
 
         if (params.hasOwnProperty("objectId") && params.hasOwnProperty("colId")) {
             //gets associated images thumbnails
@@ -205,7 +226,7 @@ export class AssetService implements OnInit {
         } else if (params.hasOwnProperty("term")) {
             this.loadSearch(params.term);
         } else {
-            console.log("don't know what to query!");
+            console.log("Don't know what to query!");
         } 
     }
 
@@ -491,14 +512,15 @@ export class AssetService implements OnInit {
     private loadSearch(term: string) {
         this.search(term, this.activeSort.index)
             .then(
-                (res) => {
-                this._filters.generateColTypeFacets( res.collTypeFacets );
-                this._filters.generateGeoFilters( res.geographyFacets );
-                this._filters.generateDateFacets( res.dateFacets );
-                this._filters.setAvailable('classification', res.classificationFacets);
-                
-                // Set the allResults object
-                this.updateLocalResults(res);
+                (data) => {
+                    if (data && data.collTypeFacets) {
+                        this._filters.generateColTypeFacets( data.collTypeFacets );
+                        this._filters.generateGeoFilters( data.geographyFacets );
+                        this._filters.generateDateFacets( data.dateFacets );
+                        this._filters.setAvailable('classification', data.classificationFacets);
+                    }
+                    // Set the allResults object
+                    this.updateLocalResults(data);
             })
             .catch(function(err) {
                 console.error(err);
@@ -555,7 +577,6 @@ export class AssetService implements OnInit {
                 geographyIds += filters[i].filterValue;
             }
         }
-        // /search/1/{start_idx}/{page_size}/0?type= 1&kw={keyword}&origKW=&id={collection_ids}&name=All Collections&order={order}&tn={thumbnail_size}
         
         return this.http
             .get(this._auth.getUrl() + '/search/' + type + '/' + startIndex + '/' + this.urlParams.pageSize + '/' + sortIndex + '?' + 'type=' + type + '&kw=' + keyword + '&origKW=&geoIds=' + geographyIds + '&clsIds=' + classificationIds + '&collTypes=' + colTypeIds + '&id=all&name=All%20Collections&bDate=' + earliestDate + '&eDate=' + latestDate + '&dExact=&order=0&isHistory=false&prGeoId=&tn=1', options)

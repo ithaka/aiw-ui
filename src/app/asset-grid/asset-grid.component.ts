@@ -9,15 +9,9 @@ import { AuthService } from '../shared/auth.service';
 import { Thumbnail } from './../shared';
 
 @Component({
-  // The selector is what angular internally uses
-  // for `document.querySelectorAll(selector)` in our index.html
-  // where, in this case, selector is the string 'home'
   selector: 'ang-asset-grid', 
-  // We need to tell Angular's Dependency Injection which providers are in our app.
   providers: [],
-  // Our list of styles in our component. We may add more to compose many styles together
   styleUrls: [ './asset-grid.component.scss' ],
-  // Every Angular template is first compiled by the browser before Angular runs it's compiler
   templateUrl: './asset-grid.component.html'
 })
 
@@ -29,7 +23,7 @@ export class AssetGrid implements OnInit, OnDestroy {
   public showFilters: boolean = true;
   public showAdvancedModal: boolean = false;
   errors = {};
-  private results: Thumbnail[] = [];
+  private results: any[] = [];
   filters = [];
   private editMode: boolean = false;
   private selectedAssets: any[] = [];
@@ -95,62 +89,46 @@ export class AssetGrid implements OnInit, OnDestroy {
     this.subscriptions.push(
       this.route.params
       .subscribe((params: Params) => {
-
-        for (let param in params) {
-            // test if param is a special parameter
-            if (this.pagination.hasOwnProperty(param)) {
-                // param is a special parameter - assign the value
-                this.pagination[param] = parseInt(params[param]);
-            } else {
-                // Any other filters are managed by Asset Filters
-            }
-        }
                 
-        if (params['startDate'] && params['endDate']) {
-          this.dateFacet.earliest.date = Math.abs(params['startDate']);
-          this.dateFacet.latest.date = Math.abs(params['endDate']);
+        // if (params['startDate'] && params['endDate']) {
+        //   this.dateFacet.earliest.date = Math.abs(params['startDate']);
+        //   this.dateFacet.latest.date = Math.abs(params['endDate']);
 
-          if (params['startDate'] < 0) {
-            this.dateFacet.earliest.era = "BCE";
-          } else {
-            this.dateFacet.earliest.era = "CE";
-          }
-          if (params['endDate'] < 0) {
-            this.dateFacet.latest.era = "BCE";
-          } else {
-            this.dateFacet.latest.era = "CE";
-          }
+        //   if (params['startDate'] < 0) {
+        //     this.dateFacet.earliest.era = "BCE";
+        //   } else {
+        //     this.dateFacet.earliest.era = "CE";
+        //   }
+        //   if (params['endDate'] < 0) {
+        //     this.dateFacet.latest.era = "BCE";
+        //   } else {
+        //     this.dateFacet.latest.era = "CE";
+        //   }
 
-          this._filters.setAvailable('dateObj', this.dateFacet);
-        }
+        //   this._filters.setAvailable('dateObj', this.dateFacet);
+        // }
         
         this.isLoading = true;
+      })
+    );
+
+    // Subscribe to pagination values
+    this.subscriptions.push(
+      this._assets.pagination.subscribe((pagination: any) => {
+        this.pagination.currentPage = parseInt(pagination.currentPage);
+        this.pagination.totalPages = parseInt(pagination.totalPages);
+        this.pagination.pageSize = parseInt(pagination.pageSize);
       })
     );
 
     // sets up subscription to allResults, which is the service providing thumbnails
     this.subscriptions.push(
       this._assets.allResults.subscribe((allResults: any) => {
-
-        // this conditional because allResults from collections page does not have count of assets
-        if (allResults.count) {
-          this.pagination.totalPages = Math.ceil( allResults.count / this.pagination.pageSize );
-        } else if (this.assetCount) {
-          this.pagination.totalPages = Math.ceil( this.assetCount / this.pagination.pageSize );
-        }
-
-        // handles case when currentPage * pageSize > allResults.count
-        if (allResults.count === 0 && this.pagination.currentPage > 1) {
-          this.goToPage(1);
-        } else {
-          this.results = allResults.thumbnails;
-
-          if (this.pagination.currentPage > this.pagination.totalPages) {
-            this.goToPage(this.pagination.totalPages);
-          }
-        }
+        // Update results array
+        this.results = allResults;
+          
         if (allResults.length == 0) {
-          // We push an empty array when assets are old
+          // We push an empty array on new search to clear assets
           this.isLoading = true;
         } else {
           this.isLoading = false;
@@ -164,14 +142,17 @@ export class AssetGrid implements OnInit, OnDestroy {
   }
 
   /**
-   * Set currentPage in url and navigate, which triggers this._assets.queryAll() again
-   * @param currentPage number of desired page
+   * Set newPage in url and navigate, which triggers this._assets.queryAll() again
+   * @param newPage number of desired page
    */
-  private goToPage(currentPage: number) {
+  private goToPage(newPage: number) {
     // The requested page should be within the limits (i.e 1 to totalPages)
-    if((currentPage >= 1) && (currentPage <= this.pagination.totalPages)){
-      this.pagination.currentPage = currentPage;
-      this.addRouteParam("currentPage", currentPage);
+    if((newPage >= 1) && (newPage <= this.pagination.totalPages)){
+
+      this.isLoading = true;
+      //   this.pagination.currentPage = currentPage;
+      this.pagination.currentPage = newPage;
+      this._assets.goToPage(newPage);
     }
   }
 
@@ -180,17 +161,14 @@ export class AssetGrid implements OnInit, OnDestroy {
    * @param pageSize Number of assets requested on page
    */
   private changePageSize(pageSize: number){
-    this.pagination.pageSize = pageSize;
-    //this currently calls naviage twice through addRouteParam
-    this.goToPage(1);
-    this.addRouteParam("pageSize", pageSize);
+    this._assets.goToPage(1);
+    this._assets.setPageSize(pageSize);
   }
 
   private changeSortOpt(index, label) {
     this.activeSort.index = index;
     this.activeSort.label = label; 
     this.pagination.currentPage = 1;
-    
   }
 
   /**
@@ -274,35 +252,6 @@ export class AssetGrid implements OnInit, OnDestroy {
       }
     }
     return index;
-  }
-
-  /**
-   * Adds a parameter to the route and navigates to new route
-   * @param key Parameter you want added to route (as matrix param)
-   * @param value The value of the parameter
-   */
-  private addRouteParam(key: string, value: any) {
-    let currentParamsObj: Params = Object.assign({}, this.route.snapshot.params);
-    currentParamsObj[key] = value;
-
-    let term: string = '';
-    let extractedParams = {};
-    let scpObj = this;
-
-    Object.keys(currentParamsObj).forEach(function(key) {
-            if(key == 'term'){
-                term = currentParamsObj[key];
-            }
-            else{
-              if(key == 'currentPage'){
-                extractedParams['pageSize'] = scpObj.pagination.pageSize;
-              }
-              extractedParams[key] = currentParamsObj[key];
-            }
-        });
-
-    this._router.navigate([extractedParams], { relativeTo: this.route });
-    // this._router.navigate(['/search', term, extractedParams]);
   }
 
   private convertCollectionTypes(collectionId: number) {

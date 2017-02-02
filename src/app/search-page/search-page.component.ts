@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
-import { ActivatedRoute } from '@angular/router'
+import { ActivatedRoute, Router } from '@angular/router'
 import { Subscription }   from 'rxjs/Subscription';
 
 import { AssetService } from './../shared/assets.service';
@@ -21,7 +21,7 @@ export class SearchPage implements OnInit, OnDestroy {
   @ViewChild(AssetGrid)
   private assetGrid: AssetGrid;
 
-  constructor(private _assets: AssetService, private route: ActivatedRoute) {
+  constructor(private _assets: AssetService, private route: ActivatedRoute, private _router: Router) {
 
   }
 
@@ -29,13 +29,16 @@ export class SearchPage implements OnInit, OnDestroy {
     // Subscribe to term in params
     this.subscriptions.push(
       this.route.params.subscribe((routeParams) => {
-        this.term = routeParams["term"];
-        if (this.term) {
-          this._assets.queryAll(routeParams);
+        let params = Object.assign({}, routeParams);
+        // If a page number isn't set, reset to page 1!
+        if (!params['currentPage']){
+          params['currentPage'] = 1;
+        } 
+        if (params["term"]) {
+          this._assets.queryAll(params);
         } else {
           throw new Error("Search error - no search term");
         }
-        
       })
     ); 
   }
