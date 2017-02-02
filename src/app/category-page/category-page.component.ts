@@ -55,9 +55,15 @@ export class CategoryPage implements OnInit, OnDestroy {
         }
         this.catName = name;
 
+        let params = Object.assign({}, routeParams);
+        // If a page number isn't set, reset to page 1!
+        if (!params['currentPage']){
+          params['currentPage'] = 1;
+        } 
+
         if (this.catId) {
           // Tell AssetService to load thumbnails (Asset Grid will get them)
-          this._assets.queryAll(routeParams);
+          this._assets.queryAll(params);
 
           // Get Category metadata
           this.getCategoryInfo(this.catId)

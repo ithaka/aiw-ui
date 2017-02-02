@@ -50,7 +50,7 @@ export class AssetPage implements OnInit, OnDestroy {
                 if(this.prevAssetResults.thumbnails){
                     this.totalAssetCount = this.prevAssetResults.count ? this.prevAssetResults.count : this.prevAssetResults.thumbnails.length;
                     this.assetIndex = this.currentAssetIndex();
-                    this.assetNumber = this._assets.lastSearchParams.currentPage ? this.assetIndex + 1 + ((this._assets.lastSearchParams.currentPage - 1) * this._assets.searchPageSize) : this.assetIndex + 1;
+                    this.assetNumber = this._assets.currentLoadedParams.currentPage; // ? this.assetIndex + 1 + ((this._assets.lastSearchParams.currentPage - 1) * this._assets.searchPageSize) : this.assetIndex + 1;
                 }
             })
         );

@@ -29,8 +29,13 @@ export class ClusterPage implements OnInit, OnDestroy {
       this.route.params
         .subscribe((routeParams: Params) => {
           this.objectId = routeParams["objectId"];
+          let params = Object.assign({}, routeParams);
+          // If a page number isn't set, reset to page 1!
+          if (!params['currentPage']){
+            params['currentPage'] = 1;
+          } 
           if (this.objectId) {
-            this._assets.queryAll(routeParams);
+            this._assets.queryAll(params);
           }
           if(routeParams['objTitle']) {
             this.clusterObjTitle = routeParams['objTitle'];
