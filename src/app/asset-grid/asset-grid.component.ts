@@ -116,7 +116,11 @@ export class AssetGrid implements OnInit, OnDestroy {
     this.subscriptions.push(
       this._assets.pagination.subscribe((pagination: any) => {
         this.pagination.currentPage = parseInt(pagination.currentPage);
-        this.pagination.totalPages = parseInt(pagination.totalPages);
+        if (this.assetCount) {
+          this.pagination.totalPages = Math.floor(this.assetCount/parseInt(pagination.pageSize)) + 1;
+        } else {
+          this.pagination.totalPages = parseInt(pagination.totalPages);
+        }
         this.pagination.pageSize = parseInt(pagination.pageSize);
       })
     );
