@@ -193,7 +193,6 @@ export class AssetService {
      * @param params Object conaining all route params
      */
     public queryAll(params: any) {
-        console.log( Object.assign({ }, this.currentLoadedParams) );
         // Reset allResults
         if (this._toolbox.compareObjects(this.currentLoadedParams, params) === false) {
             // Params are different, clear the assets!
@@ -237,7 +236,6 @@ export class AssetService {
     private setFiltersFromURLParams(params: any): void{
         var thisObj = this;
         Object.keys(params).forEach(function(key) {
-            // console.log(params[key]);
             var filter = {};
             if((key == 'collTypes') || (key == 'classification') || (key == 'geography')){
                 filter = {
@@ -343,11 +341,11 @@ export class AssetService {
      * @param colId Collection Id in which the Object resides
      */
     private loadAssociatedAssets(objectId: string, colId: string) {
-        // this.getAssociated(objectId, colId, this.pagination.currentPage, this.pagination.pageSize)
-        this.getAssociated(objectId, colId, this.urlParams.currentPage, this.urlParams.pageSize)
+        let startIndex = ((this.urlParams.currentPage - 1) * this.urlParams.pageSize) + 1;
+        this.getAssociated(objectId, colId, startIndex, this.urlParams.pageSize)
             .then((data) => {
                 if (!data) {
-                throw new Error("No data in image group thumbnails response");
+                    throw new Error("No data in image group thumbnails response");
                 }
                 this.updateLocalResults(data);
             })
@@ -364,8 +362,9 @@ export class AssetService {
 
         let header = new Headers({ 'Content-Type': 'application/json' }); // ... Set content type to JSON
         let options = new RequestOptions({ headers: header, withCredentials: true }); // Create a request option
+        let startIndex = ((this.urlParams.currentPage - 1) * this.urlParams.pageSize) + 1;
 
-        let requestString: string = [this._auth.getUrl(), "imagegroup",igId, "thumbnails", this.urlParams.currentPage, this.urlParams.pageSize, this.activeSort.index].join("/");
+        let requestString: string = [this._auth.getUrl(), "imagegroup",igId, "thumbnails", startIndex, this.urlParams.pageSize, this.activeSort.index].join("/");
 
         this.http
             .get(requestString, options)
@@ -390,8 +389,9 @@ export class AssetService {
     private loadCollection(colId: string) {
         let options = new RequestOptions({withCredentials: true});
         let imageSize = 0;
+        let startIndex = ((this.urlParams.currentPage - 1) * this.urlParams.pageSize) + 1;
 
-        let requestString = [this._auth.getUrl(), 'collections', colId, 'thumbnails', this.urlParams.currentPage, this.urlParams.pageSize, imageSize].join('/');
+        let requestString = [this._auth.getUrl(), 'collections', colId, 'thumbnails', startIndex, this.urlParams.pageSize, imageSize].join('/');
 
         return this.http
             .get(requestString, options)
@@ -411,7 +411,8 @@ export class AssetService {
      */
     private loadCategory(catId: string): Promise<any> {
         let imageSize = 0;
-        let requestString = [this._auth.getUrl(), 'categories', catId, 'thumbnails',this.urlParams.currentPage, this.urlParams.pageSize, imageSize].join('/');
+        let startIndex = ((this.urlParams.currentPage - 1) * this.urlParams.pageSize) + 1;
+        let requestString = [this._auth.getUrl(), 'categories', catId, 'thumbnails', startIndex, this.urlParams.pageSize, imageSize].join('/');
 
         return this.http
             .get(requestString, this.defaultOptions)
