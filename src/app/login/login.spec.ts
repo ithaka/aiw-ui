@@ -4,7 +4,7 @@ import { By }              from '@angular/platform-browser';
 import { DebugElement }    from '@angular/core';
 
 // angular imports
-import { AppState } from '../app.service';
+import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Http } from '@angular/http';
 import { Locker } from 'angular2-locker';
@@ -12,6 +12,7 @@ import { Location } from '@angular/common';
 import { Angulartics2 } from 'angulartics2';
 
 // our file imports
+import { AppState } from '../app.service';
 import { Login } from './login.component';
 import { AuthService } from './../shared/auth.service';
 import { LoginService, User } from './login.service';
@@ -30,6 +31,7 @@ describe("Login component inline template", () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
+      imports: [ FormsModule ],
       declarations: [ Login ],
       providers: [
         { provide: Router, useValue: {} },
