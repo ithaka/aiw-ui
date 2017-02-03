@@ -10,9 +10,11 @@
     <div class="col-4">
       <div *ngIf="showLoginPanel" class="login-panel">
         <div class="vertical-center-wrap">
-          <div class="login-panel__status">
-            <span *ngIf="user.username">Logged in as {{ user.username }}</span>
-            <span *ngIf="!user.username">Log in or <a href="#" class="link">!Register</a> for more features</span>
+          <div *ngIf="user.isLoggedIn" class="login-panel__status">
+            <div>Welcome, {{ user.username ? user.username : ''}}</div>
+          </div>
+          <div *ngIf="!user.isLoggedIn" class="login-panel__status">
+            <div>Log in or <a href="#" class="link">!Register</a> for more features</div>
           </div>
           <div class="login-panel__links">
             <a class="link--accent" [class.hidden]="!user.username" [routerLink]=" ['./login'] " routerLinkActive="active">

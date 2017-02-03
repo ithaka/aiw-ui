@@ -7,7 +7,7 @@ import {
   ActivatedRouteSnapshot,
   RouterStateSnapshot
 } from '@angular/router';
-import { Observable } from 'rxjs/Observable';
+import { Observable, BehaviorSubject } from 'rxjs/Rx';
 import { Angulartics2 } from 'angulartics2';
 
 import { ToolboxService } from '.';
@@ -25,7 +25,11 @@ export class AuthService implements CanActivate {
   private IIIFUrl;
   // Use header rewrite proxy for local development
   // - don't use proxy for now
-  private proxyUrl = ''; 
+  private proxyUrl = '';
+
+  private institutionValue: string = '';
+  private institutionSource: BehaviorSubject<string> = new BehaviorSubject(this.institutionValue);
+  private currentInstitution: Observable<string> = this.institutionSource.asObservable();
   
   constructor(
     private _router:Router,
@@ -66,6 +70,15 @@ export class AuthService implements CanActivate {
           encodedString += key + '=' + encodeURIComponent(obj[key]);
       }
       return encodedString.replace(/%20/g, '+');
+  }
+
+  public getInstitution(): Observable<string> {
+    return this.currentInstitution;
+  }
+
+  public setInstitution(institution: string): void {
+    this.institutionValue = institution;
+    this.institutionSource.next(this.institutionValue);
   }
 
   /**

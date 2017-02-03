@@ -25,7 +25,7 @@ export class AssetService {
     //set up thumbnail observables
     private allResultsValue: any[] = [];
     // BehaviorSubjects push last value on subscribe
-    private allResultsSource: BehaviorSubject<any> = new BehaviorSubject<any[]>(this.allResultsValue);
+    private allResultsSource: BehaviorSubject<any[]> = new BehaviorSubject(this.allResultsValue);
     public allResults: Observable<any> = this.allResultsSource.asObservable();
 
     // Pagination value observable
@@ -629,6 +629,7 @@ export class AssetService {
             .then(this.extractData)
             .then((data) => {
                 this._storage.set('institution', data);
+                data.institutionName && this._auth.setInstitution(data.institutionName);
 
                 let returnCollections: any[] = [];
                 let addToArr: boolean;
