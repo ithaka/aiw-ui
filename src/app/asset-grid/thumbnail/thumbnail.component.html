@@ -2,14 +2,13 @@
     <div class="card-img-top">
         <img [attr.src]="_assets.makeThumbUrl(thumbnail.thumbnailImgUrl, 0)" alt="Card image cap">
     </div>
-    <div>
+    <div class="card-icon-group">
         <i *ngIf="thumbnail.cfObjectId.length > 0" [id]="thumbnail.objectId + '_associated_images'" class="icon icon-collab" [routerLink]="['/associated', thumbnail.cfObjectId, thumbnail.collectionId]"></i>
         <i *ngIf="thumbnail.clustered == 1" [id]="thumbnail.objectId + '_clustered_images'" class="icon icon-cluster" [routerLink]="['/cluster', thumbnail.objectId, { objTitle :  thumbnail.thumbnail1 }]"></i>
-        <i *ngIf="thumbnail.iapFlag > 0" class="icon icon-iap"></i>
         <i *ngIf="thumbnail.objectTypeId && thumbnail.objectTypeId != 10" class="icon icon-{{thumbnail.objectTypeId | typeIdPipe}}"></i>
         <i class="icon icon-{{collectionTypeMap[thumbnail.collectionType]}} icon-collection-type"></i>
     </div>
-    <div class="card-text-group">
+    <div>
         <span class="asset-title" title="{{ thumbnail.thumbnail1 }}">{{ thumbnail.thumbnail1 }}</span>
         <span class="asset-agent" title="{{ thumbnail.thumbnail2 }}">{{ thumbnail.thumbnail2 }}</span>
         <span class="asset-date" title="{{ thumbnail.thumbnail3 }}">{{ thumbnail.thumbnail3 }}</span>
