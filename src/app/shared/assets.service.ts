@@ -103,8 +103,8 @@ export class AssetService {
         this.paginationSource.next(paginationValue);
 
         // Update results thumbnail array 
-        this.allResultsValue = resultObj.thumbnails;
-        this.allResultsSource.next(resultObj.thumbnails);
+        this.allResultsValue = resultObj;
+        this.allResultsSource.next(resultObj);
 
         // Set Recent Results (used by Compare Mode)
         if (resultObj.thumbnails && resultObj.thumbnails.length > 0) {

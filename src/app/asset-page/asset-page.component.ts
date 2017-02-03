@@ -67,8 +67,8 @@ export class AssetPage implements OnInit, OnDestroy {
         // sets up subscription to allResults, which is the service providing thumbnails
         this.subscriptions.push(
           this._assets.allResults.subscribe((allResults: any) => {
-              if(allResults){
-                  this.prevAssetResults.thumbnails = allResults;
+              if(allResults.thumbnails){
+                  this.prevAssetResults.thumbnails = allResults.thumbnails;
                   if(this.loadArrayFirstAsset){
                       this.loadArrayFirstAsset = false;
                       if((this.prevAssetResults) && (this.prevAssetResults.thumbnails.length > 0)){
