@@ -1,6 +1,6 @@
 <div class="card-block card-text">
     <div class="card-img-top">
-        <img [attr.src]="_assets.makeThumbUrl(thumbnail.thumbnailImgUrl, 0)" [attr.alt]="'Thumbnail of ' + thumbnail.thumbnail1">
+        <img [attr.src]="_assets.makeThumbUrl(thumbnail.thumbnailImgUrl, 0)" [attr.alt]="thumbnail.thumbnail1 ? 'Thumbnail of ' + thumbnail.thumbnail1 : 'No title available'">
     </div>
     <div class="card-icon-group">
         <i *ngIf="thumbnail.cfObjectId.length > 0" [id]="thumbnail.objectId + '_associated_images'" class="icon icon-collab" [routerLink]="['/associated', thumbnail.cfObjectId, thumbnail.collectionId]"></i>
