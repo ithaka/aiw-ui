@@ -39,7 +39,6 @@ export class Nav implements OnInit, OnDestroy {
 
     this.subscriptions.push(
       this._auth.getInstitution().subscribe((institutionObj) => {
-        console.log(institutionObj);
         this.institutionObj = institutionObj;
       })
     );
