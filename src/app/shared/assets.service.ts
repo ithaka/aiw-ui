@@ -6,10 +6,10 @@ import { Router, ActivatedRoute, Params } from '@angular/router';
 import { Http, Response, Headers, RequestOptions } from '@angular/http';
 import { Observable, BehaviorSubject } from 'rxjs/Rx';
 import { Locker } from 'angular2-locker';
-
 import 'rxjs/add/operator/toPromise';
 import { Subscription }   from 'rxjs/Subscription';
  
+// Project Dependencies
 import { AuthService } from './auth.service';
 import { AssetFiltersService } from './../asset-filters/asset-filters.service';
 import { ToolboxService } from './toolbox.service';
