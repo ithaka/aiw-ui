@@ -131,7 +131,7 @@ export class Login {
             if(data.message === 'loginFailed'){
               this.errorMsg = 'Invalid email address or password. Try again.';
             } else if (data.message === 'loginExpired') {
-              this.errorMsg = 'Whoops, that login don’t work no mo. Please login from campus to renew your account.';
+              this.errorMsg = 'That login is expired. Please login from campus to renew your account.';
             }
           } else {
             this.angulartics.eventTrack.next({ action:"remoteLogin", properties: { category: "login", label: "success" }});
