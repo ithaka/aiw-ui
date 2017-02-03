@@ -12,7 +12,6 @@ import { Location } from '@angular/common';
 import { Angulartics2 } from 'angulartics2';
 
 // our file imports
-import { AppState } from '../app.service';
 import { Login } from './login.component';
 import { AuthService } from './../shared/auth.service';
 import { LoginService, User } from './login.service';
@@ -48,7 +47,6 @@ describe("Login component inline template", () => {
         { provide: LoginService },
         { provide: Http, useValue: {} },
         { provide: Locker, useValue: {} },
-        { provide: AppState, useValue: {} },
         { provide: Location, useValue: {} },
         { provide: Angulartics2, useValue: {} }
       ]
