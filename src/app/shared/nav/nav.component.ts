@@ -1,4 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Location } from '@angular/common';
 import { Router, NavigationEnd, ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
 
@@ -21,7 +22,7 @@ export class Nav implements OnInit, OnDestroy {
   private _tool: ToolboxService = new ToolboxService();
 
   // TypeScript public modifiers
-  constructor(private _auth: AuthService, private _login: LoginService, private _router:Router, private route: ActivatedRoute) {  
+  constructor(private _auth: AuthService, private _login: LoginService, private _router:Router, private route: ActivatedRoute, private location: Location) {  
   }
 
   ngOnInit() {
@@ -53,7 +54,7 @@ export class Nav implements OnInit, OnDestroy {
   }
 
   loginAndSaveRoute(): void {
-    this._auth.store("stashedRoute", this._tool.urlToString(this.route.snapshot));
+    this._auth.store("stashedRoute", this.location.path(false));
 
     this._router.navigate(['/login']);
   }
