@@ -1,10 +1,9 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Router, NavigationEnd, ActivatedRoute } from '@angular/router';
+import { Subscription } from 'rxjs/Subscription';
 
 import { LoginService } from '../../login/login.service';
-import { AuthService } from '../auth.service';
-import { Router, NavigationEnd, ActivatedRoute } from '@angular/router';
-
-import { Subscription } from 'rxjs/Subscription';
+import { AuthService, ToolboxService } from '..';
 
 @Component({
   selector: 'nav-bar',
@@ -19,9 +18,10 @@ export class Nav implements OnInit, OnDestroy {
   public showLoginPanel = false;
   private user: any;
   private institutionObj: any;
+  private _tool: ToolboxService = new ToolboxService();
 
   // TypeScript public modifiers
-  constructor(private _auth: AuthService, private _login: LoginService, private _router:Router) {  
+  constructor(private _auth: AuthService, private _login: LoginService, private _router:Router, private route: ActivatedRoute) {  
   }
 
   ngOnInit() {
@@ -48,8 +48,14 @@ export class Nav implements OnInit, OnDestroy {
     this.subscriptions.forEach((sub) => { sub.unsubscribe(); });
   }
 
-  logout() {
+  logout(): void {
     this._login.logout();
+  }
+
+  loginAndSaveRoute(): void {
+    this._auth.store("stashedRoute", this._tool.urlToString(this.route.snapshot));
+
+    this._router.navigate(['/login']);
   }
   
 } 
