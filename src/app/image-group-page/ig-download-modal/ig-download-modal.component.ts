@@ -45,7 +45,7 @@ export class PptModalComponent implements OnInit {
           // Goal: A downlink that looks like:
           // http://library.artstor.org/thumb/imgstor/pptx/80664bd7-361e-4075-b832-aedfad9788c9/public_des.pptx?userid=706217&igid=873256
           if (data.path) {
-            this.downloadLink = '//stage3.artstor.org' + data.path.replace('/nas/','/thumb/');
+            this.downloadLink = '//' + this._auth.getSubdomain() + '.artstor.org' + data.path.replace('/nas/','/thumb/');
           }
         },
         (error) => { console.log(error); this.isLoading = false; }
@@ -60,7 +60,7 @@ export class PptModalComponent implements OnInit {
           // Goal: A downlink that looks like:
           // http://library.artstor.org/thumb/imgstor/pptx/80664bd7-361e-4075-b832-aedfad9788c9/public_des.pptx?userid=706217&igid=873256
           if (data.path) {
-            this.zipDownloadLink = '//stage3.artstor.org' + data.path.replace('/nas/','/thumb/');
+            this.zipDownloadLink = '//' + this._auth.getSubdomain() + '.artstor.org' + data.path.replace('/nas/','/thumb/');
           }
         },
         (error) => { console.log(error); this.zipLoading = false; }
