@@ -57,7 +57,7 @@ $navBarPad: 0.5rem;
 
     padding-left: 0px;
     padding-right: 0px;
-    z-index: 2000;
+    z-index: 900;
     @media (min-width: $phone) {
         position: relative;
     }
@@ -144,7 +144,7 @@ $navBarPad: 0.5rem;
     right: 0;
     top: 0;
     bottom: 0;
-    z-index: 1000;
+    z-index: 800;
     pointer-events: none;
 
     &.show {
