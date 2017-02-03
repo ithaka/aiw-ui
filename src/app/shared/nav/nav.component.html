@@ -12,6 +12,7 @@
         <div class="vertical-center-wrap">
           <div *ngIf="user.isLoggedIn" class="login-panel__status">
             <div>Welcome, {{ user.username ? user.username : ''}}</div>
+            <div>Institution: {{ institution }}</div>
           </div>
           <div *ngIf="!user.isLoggedIn" class="login-panel__status">
             <div>Log in or <a href="#" class="link">!Register</a> for more features</div>

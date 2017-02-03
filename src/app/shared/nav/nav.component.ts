@@ -9,7 +9,6 @@ import { Subscription } from 'rxjs/Subscription';
 @Component({
   selector: 'nav-bar',
   providers: [
-    AuthService,
     LoginService
   ],
   templateUrl: './nav.component.html',
@@ -27,6 +26,8 @@ export class Nav implements OnInit, OnDestroy {
 
   ngOnInit() {
 
+    console.log("nav init");
+
     this.subscriptions.push(
       this._router.events.subscribe(e => {
         if (e instanceof NavigationEnd && (e.url != '/login') && (e.url.split('/')[1] != 'printpreview')) {
@@ -40,6 +41,7 @@ export class Nav implements OnInit, OnDestroy {
 
     this.subscriptions.push(
       this._auth.getInstitution().subscribe((institution) => {
+        console.log("got institution in nav:", institution);
         this.institution = institution;
       })
     );
