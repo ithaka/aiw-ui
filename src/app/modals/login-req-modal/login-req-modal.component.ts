@@ -1,4 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Location } from '@angular/common';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 
@@ -18,7 +19,7 @@ export class LoginReqModal implements OnInit {
   @Output()
   private closeModal: EventEmitter<any> = new EventEmitter();
 
-  constructor(private _router: Router, private _auth: AuthService, private route: ActivatedRoute, private _tool: ToolboxService) { }
+  constructor(private _router: Router, private _auth: AuthService, private route: ActivatedRoute, private _tool: ToolboxService, private location: Location) { }
 
   ngOnInit() {
   }
@@ -26,7 +27,7 @@ export class LoginReqModal implements OnInit {
   goToLogin() {
     // could utilize RouteReuseStrategy here
 
-    this._auth.store("stashedRoute", this._tool.urlToString(this.route.snapshot));
+    this._auth.store("stashedRoute", this.location.path(false));
 
     this._router.navigate(['/login']);
   }

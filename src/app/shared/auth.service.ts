@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { Location } from '@angular/common';
 import { Locker } from 'angular2-locker';
 import { Http, Response, Headers, RequestOptions } from '@angular/http';
 import {
@@ -9,8 +10,6 @@ import {
 } from '@angular/router';
 import { Observable, BehaviorSubject } from 'rxjs/Rx';
 import { Angulartics2 } from 'angulartics2';
-
-import { ToolboxService } from '.';
 
 /**
  * Controls authorization through IP address and locally stored user object
@@ -35,6 +34,7 @@ export class AuthService implements CanActivate {
     private _router:Router,
     locker:Locker,
     private http: Http,
+    private location: Location,
     private angulartics: Angulartics2
   ) {
     this._storage = locker.useDriver(Locker.DRIVERS.LOCAL);
@@ -166,8 +166,6 @@ export class AuthService implements CanActivate {
    * Required by implementing CanActivate, and is called on routes which are protected by canActivate: [AuthService]
    */
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
-
-    let _tool = new ToolboxService();
     let options = new RequestOptions({ withCredentials: true });
     // If user object already exists, we're done here
     if (this.getUser()) { 
@@ -191,7 +189,7 @@ export class AuthService implements CanActivate {
               return true;
             } else {
               // store the route so that we know where to put them after login!
-              this.store("stashedRoute", _tool.urlToString(route));
+              this.store("stashedRoute", this.location.path(false));
               return false;
             }
           } catch (err) {

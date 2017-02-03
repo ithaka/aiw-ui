@@ -58,16 +58,4 @@ export class ToolboxService {
         // returns true only after false HAS NOT BEEN returned through all loops
         return true;
     }
-
-    public urlToString(route: ActivatedRouteSnapshot): string {
-
-        let stringUrl: string;
-        let urlArr: string[] = [];
-        route.url.forEach((segment) => {
-            urlArr.push(segment.path);
-        });
-        stringUrl = "/" + urlArr.join("/");
-
-        return stringUrl;
-    }
 }
