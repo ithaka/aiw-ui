@@ -27,9 +27,9 @@ export class AuthService implements CanActivate {
   // - don't use proxy for now
   private proxyUrl = '';
 
-  private institutionValue: string = '';
-  private institutionSource: BehaviorSubject<string> = new BehaviorSubject(this.institutionValue);
-  private currentInstitution: Observable<string> = this.institutionSource.asObservable();
+  private institutionObjValue: any = {};
+  private institutionObjSource: BehaviorSubject<any> = new BehaviorSubject(this.institutionObjValue);
+  private currentInstitutionObj: Observable<any> = this.institutionObjSource.asObservable();
   
   constructor(
     private _router:Router,
@@ -72,13 +72,13 @@ export class AuthService implements CanActivate {
       return encodedString.replace(/%20/g, '+');
   }
 
-  public getInstitution(): Observable<string> {
-    return this.currentInstitution;
+  public getInstitution(): Observable<any> {
+    return this.currentInstitutionObj;
   }
 
-  public setInstitution(institution: string): void {
-    this.institutionValue = institution;
-    this.institutionSource.next(this.institutionValue);
+  public setInstitution(institutionObj: any): void {
+    this.institutionObjValue = institutionObj;
+    this.institutionObjSource.next(this.institutionObjValue);
   }
 
   /**

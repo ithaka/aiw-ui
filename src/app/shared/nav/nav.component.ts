@@ -18,7 +18,7 @@ export class Nav implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = [];
   public showLoginPanel = false;
   private user: any;
-  private institution: string = '';
+  private institutionObj: any;
 
   // TypeScript public modifiers
   constructor(private _auth: AuthService, private _login: LoginService, private _router:Router) {  
@@ -38,8 +38,8 @@ export class Nav implements OnInit, OnDestroy {
     );
 
     this.subscriptions.push(
-      this._auth.getInstitution().subscribe((institution) => {
-        this.institution = institution;
+      this._auth.getInstitution().subscribe((institutionObj) => {
+        this.institutionObj = institutionObj;
       })
     );
   }

@@ -629,7 +629,7 @@ export class AssetService {
             .then(this.extractData)
             .then((data) => {
                 this._storage.set('institution', data);
-                data.institutionName && this._auth.setInstitution(data.institutionName);
+                data && this._auth.setInstitution(data);
 
                 let returnCollections: any[] = [];
                 let addToArr: boolean;
