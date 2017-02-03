@@ -170,12 +170,14 @@ export class AuthService implements CanActivate {
       .map(
         (data)  => {
           try {
-            let jsonData = data.json();
+            let jsonData = data.json() || {};
             if (jsonData.status === true) {
-              // User is authorized
-              this.saveUser(jsonData.user);
+              // User is authorized - if you want to check ipAuth then you can tell on the individual route by user.isLoggedIn = false
+              let user = jsonData.user;
+              this.saveUser(user);
               return true;
             } else {
+              // store the route so that we know where to put them after login!
               this.store("stashedRoute", _tool.urlToString(route));
               return false;
             }
