@@ -67,10 +67,11 @@ $iconBtnSize: 30px;
      color: #fff;
  }
 
- .btn.btn-link {
+ .btn.btn-link, a.btn.btn-link {
      text-transform: none !important;
      padding: 0px 3px;
      color: #999;
+     background: none;
      
      &.with-pad {
         margin: 0px 24px;
@@ -85,6 +86,7 @@ $iconBtnSize: 30px;
          text-decoration: none;
          color: #000;
          outline: none;
+         background: none;
 
          & .value {
              text-decoration: underline;

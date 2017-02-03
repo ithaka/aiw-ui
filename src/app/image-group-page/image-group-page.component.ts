@@ -37,14 +37,19 @@ export class ImageGroupPage implements OnInit, OnDestroy {
     this.subscriptions.push(
       this.route.params.subscribe((routeParams) => {
         let id = routeParams["igId"];
+        let params = Object.assign({}, routeParams);
+        // If a page number isn't set, reset to page 1!
+        if (!params['currentPage']){
+          params['currentPage'] = 1;
+        } 
         if (id) {
-          this._assets.queryAll(routeParams);
+          this._assets.queryAll(params);
         }
       })
     );
 
     this.subscriptions.push(
-      this._assets.allResults.subscribe((results: ImageGroup) => {
+      this._assets.allResults.subscribe((results: any) => {
         this.ig = results;
         if (this.ig && this.ig.igId) {
           this._igService.getGroupDescription(this.ig.igId).take(1)
