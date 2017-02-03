@@ -50,14 +50,16 @@ $iconBtnSize: 30px;
      }
  }
  
- .btn-secondary {
+ .btn-secondary, a.btn-secondary {
      background: $secondaryBtnBg;
-     border-color: $secondaryBtnBg;
+    //  border-color: $secondaryBtnBg;
+    border: none;
      color: $secondaryBtnColor; 
 
      &:hover, &:focus, &:active {
         background: darken($secondaryBtnBg, 10%);
-        border-color: darken($secondaryBtnBg, 10%);
+        // border-color: darken($secondaryBtnBg, 10%);
+        background-color: #000000;
         color: $secondaryBtnColor;
      }
  }
