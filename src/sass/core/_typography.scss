@@ -189,6 +189,15 @@ a.list-group-item, a.list-group-item-action, a.btn  {
   }
 }
 
+.link--action {
+  @extend .link;
+  text-decoration: none !important;
+
+  &:hover, &:focus, &:active {
+    color: $gray;
+  }
+}
+
 p {
     @extend %baseFontStyle;
     width: 100%;
