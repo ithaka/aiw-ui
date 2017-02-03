@@ -7,8 +7,6 @@ import { Angulartics2GoogleAnalytics } from 'angulartics2';
 import { Title } from '@angular/platform-browser';
 import { Router, NavigationStart } from '@angular/router';
 
-import { AppState } from './app.service';
-
 /*
  * App Component
  * Top Level Component
@@ -35,8 +33,9 @@ export class App {
   name = 'Artstor';
   url = 'https://artstor.org/';
 
-  constructor(public appState: AppState, angulartics2GoogleAnalytics: Angulartics2GoogleAnalytics, private titleService: Title, private router:Router) {
-    
+  // constructor(angulartics2GoogleAnalytics: Angulartics2GoogleAnalytics) {
+  constructor(angulartics2GoogleAnalytics: Angulartics2GoogleAnalytics, private titleService: Title, private router:Router) {
+
     // Set metatitle to "Artstor" except for asset page where metatitle is {{ Asset Title }}
     router.events.subscribe(event => {
       if(event instanceof NavigationStart) {
@@ -46,18 +45,11 @@ export class App {
         }
       }
     });
+
   }
 
   ngOnInit() {
-    console.log('Initial App State', this.appState.state);
+    console.log('App Component has loaded');
   }
 
 }
-
-/*
- * Please review the https://github.com/AngularClass/angular2-examples/ repo for
- * more angular app examples that you may copy/paste
- * (The examples may not be updated as quickly. Please open an issue on github for us to update it)
- * For help or questions please contact us at @AngularClass on twitter
- * or our chat on Slack at https://AngularClass.com/slack-join
- */

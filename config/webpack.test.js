@@ -71,11 +71,11 @@ module.exports = function(options) {
          *
          * See: https://github.com/wbuchwalter/tslint-loader
          */
-        {
-          test: /\.ts$/,
-          loader: 'tslint-loader',
-          exclude: [helpers.root('node_modules')]
-        },
+        // {
+        //   test: /\.ts$/,
+        //   loader: 'tslint-loader',
+        //   exclude: [helpers.root('node_modules')]
+        // },
 
         /**
          * Source map loader support for *.js files
@@ -109,21 +109,31 @@ module.exports = function(options) {
          *
          * See: https://github.com/s-panferov/awesome-typescript-loader
          */
+        // {
+        //   test: /\.ts$/,
+        //   loader: 'awesome-typescript-loader',
+        //   query: {
+        //     // use inline sourcemaps for "karma-remap-coverage" reporter
+        //     sourceMap: false,
+        //     inlineSourceMap: true,
+        //     compilerOptions: {
+
+        //       // Remove TypeScript helpers to be injected
+        //       // below by DefinePlugin
+        //       removeComments: true
+
+        //     }
+        //   },
+        //   exclude: [/\.e2e\.ts$/]
+        // },
+
         {
           test: /\.ts$/,
-          loader: 'awesome-typescript-loader',
-          query: {
-            // use inline sourcemaps for "karma-remap-coverage" reporter
-            sourceMap: false,
-            inlineSourceMap: true,
-            compilerOptions: {
-
-              // Remove TypeScript helpers to be injected
-              // below by DefinePlugin
-              removeComments: true
-
-            }
-          },
+          loaders: [
+            // '@angularclass/hmr-loader?pretty=' + !isProd + '&prod=' + isProd,
+            'awesome-typescript-loader',
+            'angular2-template-loader'
+          ],
           exclude: [/\.e2e\.ts$/]
         },
 
@@ -133,7 +143,15 @@ module.exports = function(options) {
          * See: https://github.com/webpack/json-loader
          */
         { test: /\.json$/, loader: 'json-loader', exclude: [helpers.root('src/index.html')] },
-
+        
+        /*
+         * Compile sass files
+         * Returns file content as string
+         */
+        {
+          test: /\.scss$/,
+          loaders: ['raw-loader', 'sass-loader' ]
+        },
         /**
          * Raw loader support for *.css files
          * Returns file content as string
