@@ -37,8 +37,6 @@ export class AuthService implements CanActivate {
     private http: Http,
     private angulartics: Angulartics2
   ) {
-    console.log("JUST MADE A NEW AUTH SERVICE");
-
     this._storage = locker.useDriver(Locker.DRIVERS.LOCAL);
     this._router = _router;
     
@@ -75,12 +73,10 @@ export class AuthService implements CanActivate {
   }
 
   public getInstitution(): Observable<string> {
-    console.log("got a new subscriber!");
     return this.currentInstitution;
   }
 
   public setInstitution(institution: string): void {
-    console.log("got institution to set:", institution);
     this.institutionValue = institution;
     this.institutionSource.next(this.institutionValue);
   }
