@@ -11,17 +11,17 @@
       <div *ngIf="showLoginPanel" class="login-panel">
         <div class="vertical-center-wrap">
           <div class="login-panel__status">
-            <span *ngIf="getUserName()">Logged in as {{ getUserName() }}</span>
-            <span *ngIf="!getUserName()">Log in or <a href="#" class="link">!Register</a> for more features</span>
+            <span *ngIf="user.username">Logged in as {{ user.username }}</span>
+            <span *ngIf="!user.username">Log in or <a href="#" class="link">!Register</a> for more features</span>
           </div>
           <div class="login-panel__links">
-            <a class="link--accent" [class.hidden]="!getUserName()" [routerLink]=" ['./login'] " routerLinkActive="active">
+            <a class="link--accent" [class.hidden]="!user.username" [routerLink]=" ['./login'] " routerLinkActive="active">
               !Settings
             </a>
-            <a class="link--accent" [class.hidden]="getUserName()" [routerLink]=" ['./login'] " routerLinkActive="active">
+            <a class="link--accent" [class.hidden]="user.username" [routerLink]=" ['./login'] " routerLinkActive="active">
               Log In
             </a>
-            <a class="link--accent" [class.hidden]="!getUserName()" [routerLink]=" ['./login'] " (click)="logout()">
+            <a class="link--accent" [class.hidden]="!user.username" [routerLink]=" ['./login'] " (click)="logout()">
               Log Out
             </a>
           </div>

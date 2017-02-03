@@ -1,8 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 
 import { LoginService } from '../../login/login.service';
 import { AuthService } from '../auth.service';
 import { Router, NavigationEnd, ActivatedRoute } from '@angular/router';
+
+import { Subscription } from 'rxjs/Subscription';
 
 @Component({
   selector: 'nav-bar',
@@ -13,31 +15,35 @@ import { Router, NavigationEnd, ActivatedRoute } from '@angular/router';
   templateUrl: './nav.component.html',
   styleUrls: [ './nav.component.scss' ],
 })
-export class Nav {
-  private sub: any;
+export class Nav implements OnInit, OnDestroy {
+  private subscriptions: Subscription[] = [];
   public showLoginPanel = false;
+  private user: any;
 
   // TypeScript public modifiers
-  constructor(private _auth: AuthService, private _login: LoginService, private _router:Router) { 
-     
+  constructor(private _auth: AuthService, private _login: LoginService, private _router:Router) {  
+  }
+
+  ngOnInit() {
+
+    this.subscriptions.push(
+      this._router.events.subscribe(e => {
+        if (e instanceof NavigationEnd && (e.url != '/login') && (e.url.split('/')[1] != 'printpreview')) {
+            this.showLoginPanel = true;
+          } else {
+            this.showLoginPanel = false;
+          }
+        this.user = this._auth.getUser();
+      })
+    )
+  }
+
+  ngOnDestroy() {
+    this.subscriptions.forEach((sub) => { sub.unsubscribe(); });
   }
 
   logout() {
     this._login.logout();
-  }
-
-  getUserName() : String {
-    return this._auth.getUser() ? this._auth.getUser().username : "";
-  }
-  
-  ngOnInit() {
-    this.sub = this._router.events.subscribe(e => {
-    if (e instanceof NavigationEnd && (e.url != '/login') && (e.url.split('/')[1] != 'printpreview')) {
-          this.showLoginPanel = true;
-        } else {
-          this.showLoginPanel = false;
-        }
-    });
   }
   
 } 
