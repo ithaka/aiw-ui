@@ -17,6 +17,8 @@ import { ImageGroup } from './../shared';
 
 export class ImageGroupPage implements OnInit, OnDestroy {
   private ig: ImageGroup;
+  private user: any;
+  private showLoginModal: boolean = false;
 
   private subscriptions: Subscription[] = [];
 
@@ -33,6 +35,9 @@ export class ImageGroupPage implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.user = this._auth.getUser();
+
+
     // Subscribe to ID in params
     this.subscriptions.push(
       this.route.params.subscribe((routeParams) => {
