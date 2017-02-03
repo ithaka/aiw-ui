@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { AppState } from '../app.service';
 import { Location } from '@angular/common';
 import { Angulartics2 } from 'angulartics2';
 
@@ -41,7 +40,6 @@ export class Login {
   
   // TypeScript public modifiers
   constructor(
-    public appState: AppState,
     private _auth: AuthService,
     private _login: LoginService,
     private router: Router,
