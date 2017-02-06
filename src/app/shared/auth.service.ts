@@ -45,7 +45,7 @@ export class AuthService implements CanActivate {
       // Prod/Lively endpoints
       this.subdomain = 'lively';
       this.baseUrl =  '//lively.artstor.org/library/secure'; 
-      this.thumbUrl = '//mdxprod.artstor.org';
+      this.thumbUrl = '//mdxdv.artstor.org';
       this.IIIFUrl = '//tsprod.artstor.org/rosa-iiif-endpoint-1.0-SNAPSHOT/fpx';
     } else {
       // Dev/Stage endpoints
