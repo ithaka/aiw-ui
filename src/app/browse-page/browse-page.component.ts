@@ -71,6 +71,7 @@ export class BrowsePage implements OnInit, OnDestroy {
         this._assets.getCollections('institution')
         .then(
           (data)  => {
+            let instName = data.shortName ? data.shortName : 'Institutional';
             var obj = {
                 label : data.shortName + ' Collections',
                 id: '2',
