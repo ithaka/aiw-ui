@@ -38,5 +38,12 @@ export class SearchModal implements OnInit {
 
   constructor() { }
 
-  ngOnInit() { }
+  ngOnInit() { 
+    document.body.style.overflow = 'hidden';
+  }
+
+  private close(): void {
+    document.body.style.overflow = 'auto';
+    this.closeModal.emit()
+  }
 }
