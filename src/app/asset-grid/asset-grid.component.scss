@@ -33,6 +33,9 @@
 
 .pag-controls{
     text-align: right;
+    @media (max-width: $phone) {
+        text-align: center;    
+    }
 }
 .pag-controls input{
     font-size: 13px;
