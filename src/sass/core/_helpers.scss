@@ -2,6 +2,8 @@
  * # Helpers
  */
 
+ @import './variables';
+
  /*%vertical-center {
      top: 50%;
      @include transform(translateY(-50%));
@@ -21,5 +23,21 @@
             // height: auto;
             margin-top: 0%;
         }
+    }
+}
+
+// hides on mobile
+.mobile--hide {
+    @media (max-width: $phone) {
+        display: none;
+    }
+}
+
+// shows only on mobile
+.mobile--show {
+    display: none;
+
+    @media (max-width: $phone) {
+      display: inherit;
     }
 }
