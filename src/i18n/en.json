@@ -1,0 +1,7 @@
+{
+  "TEST": "the test is a success!",
+  "LOGIN": {
+    "LOGIN_HEADING": "Log in with your Artstor account",
+    "INSTITUTION_HEADING": "Log in through your Institution"
+  }
+}

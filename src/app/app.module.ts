@@ -16,6 +16,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 // import { CoolStorageModule } from 'angular2-cool-storage';
 import {LockerModule, Locker, LockerConfig} from 'angular2-locker'
 import { Angulartics2Module, Angulartics2GoogleAnalytics } from 'angulartics2';
+import {TranslateModule} from 'ng2-translate';
 
 // App is our top level component
 import { App } from './app.component';
@@ -113,6 +114,7 @@ type StoreType = {
     LockerModule,
     RouterModule.forRoot(ROUTES, { useHash: true }),
     Angulartics2Module.forRoot([ Angulartics2GoogleAnalytics ]),
+    TranslateModule.forRoot(),
     NgbModule.forRoot() // Ng Bootstrap Import
   ],
   providers: [ // expose our Services and Providers into Angular's dependency injection

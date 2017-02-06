@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { AppState } from '../app.service';
-
 import { AssetService, AuthService } from '../shared';
 
 @Component({
@@ -29,7 +28,7 @@ export class Home {
       private _assets: AssetService, 
       private router: Router,
       private _auth: AuthService
-    ) {
+  ) {
 
   }
 
