@@ -6,10 +6,10 @@ import { Router, ActivatedRoute, Params } from '@angular/router';
 import { Http, Response, Headers, RequestOptions } from '@angular/http';
 import { Observable, BehaviorSubject } from 'rxjs/Rx';
 import { Locker } from 'angular2-locker';
-
 import 'rxjs/add/operator/toPromise';
 import { Subscription }   from 'rxjs/Subscription';
  
+// Project Dependencies
 import { AuthService } from './auth.service';
 import { AssetFiltersService } from './../asset-filters/asset-filters.service';
 import { ToolboxService } from './toolbox.service';
@@ -25,7 +25,7 @@ export class AssetService {
     //set up thumbnail observables
     private allResultsValue: any[] = [];
     // BehaviorSubjects push last value on subscribe
-    private allResultsSource: BehaviorSubject<any> = new BehaviorSubject<any[]>(this.allResultsValue);
+    private allResultsSource: BehaviorSubject<any[]> = new BehaviorSubject(this.allResultsValue);
     public allResults: Observable<any> = this.allResultsSource.asObservable();
 
     // Pagination value observable
@@ -103,8 +103,8 @@ export class AssetService {
         this.paginationSource.next(paginationValue);
 
         // Update results thumbnail array 
-        this.allResultsValue = resultObj.thumbnails;
-        this.allResultsSource.next(resultObj.thumbnails);
+        this.allResultsValue = resultObj;
+        this.allResultsSource.next(resultObj);
 
         // Set Recent Results (used by Compare Mode)
         if (resultObj.thumbnails && resultObj.thumbnails.length > 0) {
@@ -629,6 +629,7 @@ export class AssetService {
             .then(this.extractData)
             .then((data) => {
                 this._storage.set('institution', data);
+                data && this._auth.setInstitution(data);
 
                 let returnCollections: any[] = [];
                 let addToArr: boolean;

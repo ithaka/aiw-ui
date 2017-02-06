@@ -129,9 +129,9 @@ export class AssetGrid implements OnInit, OnDestroy {
     this.subscriptions.push(
       this._assets.allResults.subscribe((allResults: any) => {
         // Update results array
-        this.results = allResults;
+        this.results = allResults.thumbnails;
           
-        if (allResults.length == 0) {
+        if (allResults.thumbnails && allResults.thumbnails.length == 0) {
           // We push an empty array on new search to clear assets
           this.isLoading = true;
         } else {

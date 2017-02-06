@@ -1,4 +1,5 @@
-import { Component, Output, EventEmitter } from '@angular/core';
+import { Component, Output, EventEmitter, Input } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'nav-menu',
@@ -10,6 +11,15 @@ import { Component, Output, EventEmitter } from '@angular/core';
 })
 export class NavMenu {
 
+  /**
+   * Action options so far include:
+   * {
+   *   group: true,
+   *   ...
+   * }
+   */
+  @Input()
+  private actionOptions: any = {};
 
   @Output()
   generateImgUrl = new EventEmitter();
@@ -17,7 +27,7 @@ export class NavMenu {
   private mobileCollapsed: boolean = true;
   
   // TypeScript public modifiers
-  constructor( ) {
+  constructor(private _router: Router, private route: ActivatedRoute) {
     
   }
   
@@ -27,5 +37,15 @@ export class NavMenu {
 
   private generateSelectedImgURL(): void{
     this.generateImgUrl.emit();
+  }
+
+  private printImageGroupPage(): void {
+    if (this.actionOptions.group) {
+      let params = this.route.snapshot.params;
+
+      if (params['igId']) {
+        this._router.navigate(['/printpreview/' + params['igId']]);
+      }
+    }
   }
 }

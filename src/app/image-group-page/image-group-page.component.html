@@ -1,4 +1,4 @@
-<nav-menu></nav-menu>
+<nav-menu [actionOptions]="{group: true}"></nav-menu>
 <div class="container main-content">
     <div class="row">
         <div class="col-sm-12">
@@ -9,7 +9,10 @@
         <div class="col-sm-9">
             <h1 id="pageTitle">
               {{ ig.igName }} 
-              <a *ngIf="ig.igName && _auth.getUser() && _auth.getUser().isLoggedIn" (click)="showPptModal = true">
+              <a *ngIf="ig.igName && user.isLoggedIn" (click)="showPptModal = true">
+                  <i id="downloadGroupLink" class="icon icon-download"></i>
+              </a>
+              <a *ngIf="ig.igName && !user.isLoggedIn" (click)="showLoginModal = true">
                   <i id="downloadGroupLink" class="icon icon-download"></i>
               </a>
             </h1>
@@ -19,3 +22,4 @@
     <ang-asset-grid></ang-asset-grid>
 </div>
 <ang-ig-download-modal *ngIf="showPptModal" (closeModal)="showPptModal = false" [ig]="ig"></ang-ig-download-modal>
+<ang-login-req-modal *ngIf="showLoginModal" (closeModal)="showLoginModal = false"></ang-login-req-modal>

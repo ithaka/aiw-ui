@@ -17,3 +17,17 @@ img.collection-thumb {
     max-height: 100px;
     width: auto;
 }
+
+.page__description {
+    overflow: hidden;
+    transition: max-height 1s linear;
+
+    &.limit {
+        max-height: 80px;
+    }
+}
+
+.expander {
+    text-align: center;
+    margin-top: -.5em;
+}

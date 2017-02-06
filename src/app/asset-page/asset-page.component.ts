@@ -68,10 +68,10 @@ export class AssetPage implements OnInit, OnDestroy {
         this.subscriptions.push(
           this._assets.allResults.subscribe((allResults: any) => {
               if(allResults.thumbnails){
-                  this.prevAssetResults = allResults;
+                  this.prevAssetResults.thumbnails = allResults.thumbnails;
                   if(this.loadArrayFirstAsset){
                       this.loadArrayFirstAsset = false;
-                      if((this.prevAssetResults.thumbnails) && (this.prevAssetResults.thumbnails.length > 0)){
+                      if((this.prevAssetResults) && (this.prevAssetResults.thumbnails.length > 0)){
                           this._router.navigate(['/asset', this.prevAssetResults.thumbnails[0].objectId]);
                       }
                   }

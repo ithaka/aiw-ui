@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { Location } from '@angular/common';
 import { Locker } from 'angular2-locker';
 import { Http, Response, Headers, RequestOptions } from '@angular/http';
 import {
@@ -7,10 +8,8 @@ import {
   ActivatedRouteSnapshot,
   RouterStateSnapshot
 } from '@angular/router';
-import { Observable } from 'rxjs/Observable';
+import { Observable, BehaviorSubject } from 'rxjs/Rx';
 import { Angulartics2 } from 'angulartics2';
-
-import { ToolboxService } from '.';
 
 /**
  * Controls authorization through IP address and locally stored user object
@@ -25,12 +24,17 @@ export class AuthService implements CanActivate {
   private IIIFUrl;
   // Use header rewrite proxy for local development
   // - don't use proxy for now
-  private proxyUrl = ''; 
+  private proxyUrl = '';
+
+  private institutionObjValue: any = {};
+  private institutionObjSource: BehaviorSubject<any> = new BehaviorSubject(this.institutionObjValue);
+  private currentInstitutionObj: Observable<any> = this.institutionObjSource.asObservable();
   
   constructor(
     private _router:Router,
     locker:Locker,
     private http: Http,
+    private location: Location,
     private angulartics: Angulartics2
   ) {
     this._storage = locker.useDriver(Locker.DRIVERS.LOCAL);
@@ -42,7 +46,7 @@ export class AuthService implements CanActivate {
     // } else {
       this.subdomain = 'stagely';
       // this.baseUrl = 'http://192.168.97.66/library/secure';
-      this.baseUrl = '//stagely.artstor.org/library/secure'; //artstor-earth-library.apps.test.cirrostratus.org/secure';
+      this.baseUrl =  '//stagely.artstor.org/library/secure'; //'//artstor-earth-library.apps.test.cirrostratus.org/secure';
       // this.baseUrl = this.proxyUrl + 'http://library.artstor.org/library/secure';
     // }
       this.thumbUrl = '//mdxstage.artstor.org';
@@ -66,6 +70,15 @@ export class AuthService implements CanActivate {
           encodedString += key + '=' + encodeURIComponent(obj[key]);
       }
       return encodedString.replace(/%20/g, '+');
+  }
+
+  public getInstitution(): Observable<any> {
+    return this.currentInstitutionObj;
+  }
+
+  public setInstitution(institutionObj: any): void {
+    this.institutionObjValue = institutionObj;
+    this.institutionObjSource.next(this.institutionObjValue);
   }
 
   /**
@@ -105,8 +118,8 @@ export class AuthService implements CanActivate {
 
   /** Returns url used for downloading some media, such as documents */
   public getMediaUrl(): string {
-    // This is a special case, and should always points to library.artstor or stage3.artstor
-    return 'http://proxy.stage3.artstor.org/media';
+    // This is a special case, and should always points to library.artstor or stage 
+    return 'http://proxy.' + this.getSubdomain() + '.artstor.org/media';
   }
 
   /**
@@ -153,8 +166,6 @@ export class AuthService implements CanActivate {
    * Required by implementing CanActivate, and is called on routes which are protected by canActivate: [AuthService]
    */
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
-
-    let _tool = new ToolboxService();
     let options = new RequestOptions({ withCredentials: true });
     // If user object already exists, we're done here
     if (this.getUser()) { 
@@ -170,13 +181,15 @@ export class AuthService implements CanActivate {
       .map(
         (data)  => {
           try {
-            let jsonData = data.json();
+            let jsonData = data.json() || {};
             if (jsonData.status === true) {
-              // User is authorized
-              this.saveUser(jsonData.user);
+              // User is authorized - if you want to check ipAuth then you can tell on the individual route by user.isLoggedIn = false
+              let user = jsonData.user;
+              this.saveUser(user);
               return true;
             } else {
-              this.store("stashedRoute", _tool.urlToString(route));
+              // store the route so that we know where to put them after login!
+              this.store("stashedRoute", this.location.path(false));
               return false;
             }
           } catch (err) {

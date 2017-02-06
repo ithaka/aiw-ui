@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { AppState } from '../app.service';
 import { Location } from '@angular/common';
 import { Angulartics2 } from 'angulartics2';
 
@@ -41,7 +40,6 @@ export class Login {
   
   // TypeScript public modifiers
   constructor(
-    public appState: AppState,
     private _auth: AuthService,
     private _login: LoginService,
     private router: Router,
@@ -54,7 +52,6 @@ export class Login {
   ngOnInit() {
     this._login.getInstitutions()
       .then((data) => {
-        console.log(data);
         if (data.items) {
           this.loginInstitutions = data.items;
         }
@@ -132,7 +129,7 @@ export class Login {
             if(data.message === 'loginFailed'){
               this.errorMsg = 'Invalid email address or password. Try again.';
             } else if (data.message === 'loginExpired') {
-              this.errorMsg = 'Whoops, that login don’t work no mo. Please login from campus to renew your account.';
+              this.errorMsg = 'That login is expired. Please login from campus to renew your account.';
             }
           } else {
             this.angulartics.eventTrack.next({ action:"remoteLogin", properties: { category: "login", label: "success" }});

@@ -67,6 +67,11 @@ input.form-control, select.form-control {
 
 button.dropdown-item {
     cursor: pointer;
+
+    &:disabled, &.disabled {
+        pointer-events: none;
+        color: #ddd;
+    }
 }
 
 select.form-control {

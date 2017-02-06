@@ -25,6 +25,7 @@ export class CollectionPage implements OnInit, OnDestroy {
   private colDescription: string = '';
   private colThumbnail: string = '';
   private assetCount: number;
+  private descCollapsed: boolean = true;
   
   private subscriptions: Subscription[] = [];
 

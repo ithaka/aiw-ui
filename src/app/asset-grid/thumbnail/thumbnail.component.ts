@@ -5,7 +5,12 @@ import { AssetService } from './../../shared';
 
 @Component({
   selector: 'ang-thumbnail',
-  templateUrl: 'thumbnail.component.html'
+  templateUrl: 'thumbnail.component.html',
+  styles: [`
+    .card-icon-group {
+      height: 19px;
+    }
+  `]
 })
 export class ThumbnailComponent implements OnInit {
   @Input()

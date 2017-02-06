@@ -3,27 +3,28 @@
     <div class="row">
     <div class="col-8">
       <a class="navbar-brand" [routerLink]="['/home']">
-        <img id="logo" src="/assets/img/logo.png" />
+        <img id="logo" src="/assets/img/logo.png" alt="Artstor logo" />
       </a>
     </div>
 
     <div class="col-4">
       <div *ngIf="showLoginPanel" class="login-panel">
         <div class="vertical-center-wrap">
-          <div class="login-panel__status">
-            <span *ngIf="getUserName()">Logged in as {{ getUserName() }}</span>
-            <span *ngIf="!getUserName()">Log in or <a href="#" class="link">!Register</a> for more features</span>
+          <div *ngIf="user.isLoggedIn" class="login-panel__status">
+            <div>Welcome, {{ user.username ? user.username : ''}}</div>
+            <div *ngIf="institutionObj.shortName || institutionObj.institutionName">Institution: {{ institutionObj.shortName ? institutionObj.shortName : institutionObj.institutionName }}</div>
+            <div class="login-panel__links">
+              <a class="link--accent" [routerLink]=" ['./login'] " routerLinkActive="active" tabindex="1">
+                !Settings
+              </a>
+              <a class="link--accent" [routerLink]=" ['./login'] " (click)="logout()" tabindex="1">
+                Log Out
+              </a>
+            </div>
           </div>
-          <div class="login-panel__links">
-            <a class="link--accent" [class.hidden]="!getUserName()" [routerLink]=" ['./login'] " routerLinkActive="active">
-              !Settings
-            </a>
-            <a class="link--accent" [class.hidden]="getUserName()" [routerLink]=" ['./login'] " routerLinkActive="active">
-              Log In
-            </a>
-            <a class="link--accent" [class.hidden]="!getUserName()" [routerLink]=" ['./login'] " (click)="logout()">
-              Log Out
-            </a>
+          <div *ngIf="!user.isLoggedIn" class="login-panel__status">
+            <div><a (click)="loginAndSaveRoute()" class="link" tabindex="1">Log in</a> or <a [routerLink]="['/register']" class="link" tabindex="1">!Register</a> for more features</div>
+            <div *ngIf="institutionObj.shortName || institutionObj.institutionName">Institution: {{ institutionObj.shortName ? institutionObj.shortName : institutionObj.institutionName }}</div>
           </div>
         </div>
       </div>

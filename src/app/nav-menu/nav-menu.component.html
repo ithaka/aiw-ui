@@ -48,7 +48,7 @@
                             <!--Active on Image Group Page-->
                             <button class="dropdown-item">!Generate Image Group Link</button>
                             <!--Active on Image Group Page-->
-                            <button class="dropdown-item">!Print Image Group</button>
+                            <button class="dropdown-item" [disabled]="!actionOptions.group" (click)="printImageGroupPage()">Print Image Group</button>
                             <!--Active on Image Group Page-->
                             <button class="dropdown-item">!Export Image Group to PowerPoint</button>
                             <!--Active on Image Group Page-->

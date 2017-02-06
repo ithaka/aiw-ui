@@ -12,7 +12,6 @@ import { Location } from '@angular/common';
 import { Angulartics2 } from 'angulartics2';
 
 // our file imports
-import { AppState } from '../app.service';
 import { Login } from './login.component';
 import { AuthService } from './../shared/auth.service';
 import { LoginService, User } from './login.service';
@@ -48,7 +47,6 @@ describe("Login component inline template", () => {
         { provide: LoginService },
         { provide: Http, useValue: {} },
         { provide: Locker, useValue: {} },
-        { provide: AppState, useValue: {} },
         { provide: Location, useValue: {} },
         { provide: Angulartics2, useValue: {} }
       ]
@@ -80,38 +78,19 @@ describe("Login component inline template", () => {
   // this test wasn't working so I gave up on it. fixture.detectChanges() caused an error that has something to do with the services
   it("it should show an error message", () => {
     // check that there are no error messages to begin with
-    // let messages = fixture.debugElement.queryAll(By.css('#errorMsg'));
-    // expect(messages.length).toEqual(0);
+    let messages = fixture.debugElement.queryAll(By.css('#errorMsg'));
+    expect(messages.length).toEqual(0);
 
-    // login.errorMsg = "this is an error message";
+    login.errorMsg = "this is an error message";
     fixture.detectChanges();
-    // let msg = fixture.debugElement.query(By.css('#errorMsg')).nativeElement;
-    // expect(msg.textContent).toContain(login.errorMsg);
+    let msg = fixture.debugElement.queryAll(By.css('#errorMsg'));
+    // console.log(msg.nativeElement);
+    // expect(msg.nativeElement.getText()).toContain(login.errorMsg);
+    expect(msg.length).toEqual(1);
   });
 
 
 });
-
-// class authStub {
-//   constructor() {}
-
-//   public getSubdomain() {
-//     return "stagely";
-//   }
-// }
-
-// class LoginStub {
-
-//   private institutionData: any = {
-//     identifier: "name",
-//     items: [{ entityId: "test1", name: "Test College 1" }, { entityId: "test2", name: "Test College 2" }],
-//     label: "name"
-//   }
-
-//   getInstitutions() {
-//     return Promise.resolve(this.institutionData);
-//   }
-// }
 
 class TestData {
   public institutionData: any = {
