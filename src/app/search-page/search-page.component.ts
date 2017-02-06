@@ -17,8 +17,6 @@ import { AssetGrid } from './../asset-grid/asset-grid.component';
 export class SearchPage implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = [];
 
-  private term: string;
-
   @ViewChild(AssetGrid)
   private assetGrid: AssetGrid;
 
