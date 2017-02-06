@@ -38,6 +38,6 @@ export class SearchComponent implements OnInit, OnDestroy {
    * @param term Term for desired search
    */
   private updateSearchTerm(term: string) {
-    this._router.navigate(['/search', term]);
+    this._router.navigate(['/search', term, { currentPage: 1 }]);
   }
 }
