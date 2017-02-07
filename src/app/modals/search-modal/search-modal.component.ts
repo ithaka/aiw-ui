@@ -1,13 +1,10 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { AssetService } from './../../shared/assets.service';
 
 @Component({
   selector: 'ang-search-modal',
   templateUrl: 'search-modal.component.html',
-  styles: [`
-    .modal {
-      display: block;
-    }
-  `]
+  styleUrls: [ 'search-modal.component.scss' ]
 })
 export class SearchModal implements OnInit {
   @Output()
@@ -32,11 +29,24 @@ export class SearchModal implements OnInit {
   public advQueryTemplate = { term: '' };
 
   public advanceQueries = [
-    { term: ''},
-    { term: ''}
+      { 
+        term: '',
+        field: 'in any field',
+      }
   ];
 
-  constructor() { }
+  private termsList: any = {};
+
+  constructor(private _assets: AssetService) { 
+    this._assets.loadTermList( )
+          .then((res) => {
+              console.log(res);
+              this.termsList = res;
+          })
+          .catch(function(err) {
+              console.error('Unable to load Terms List.');
+          });
+  }
 
   ngOnInit() { 
     document.body.style.overflow = 'hidden';
@@ -45,5 +55,17 @@ export class SearchModal implements OnInit {
   private close(): void {
     document.body.style.overflow = 'auto';
     this.closeModal.emit()
+  }
+
+  private addNewQuery(query: any, index: number): void{
+    if(query.term){
+      if(this.advanceQueries.length === (index + 1)){
+        let newQuery: any = {};
+        newQuery.term = '';
+        newQuery.field = 'in any field';
+        newQuery.operator = 'AND';
+        this.advanceQueries.push(newQuery);
+      }
+    }
   }
 }

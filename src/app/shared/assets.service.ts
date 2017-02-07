@@ -742,4 +742,17 @@ export class AssetService {
         // Ceanup
         return this._auth.getThumbUrl() + imagePath;
     }
+
+    /**
+     * Term List Service
+     * @returns Returns the Terms list Object for Advance Search
+     */
+    public loadTermList(){
+        let options = new RequestOptions({ withCredentials: true });
+        
+        return this.http
+            .get(this._auth.getUrl() + '/termslist/', options)
+            .toPromise()
+            .then(this.extractData);
+    }
 }

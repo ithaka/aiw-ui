@@ -1,0 +1,19 @@
+.modal{
+    display: block;
+
+    .dropdown{
+        &.open .dropdown-menu{
+            display: block;
+        }
+        .dropdown-item.active, .dropdown-item:active{
+            background-color: #f7f7f9;
+        }
+    }
+
+    .list-group{
+        .list-group-item{
+            padding: 10px
+        }
+    }
+    
+}

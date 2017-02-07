@@ -18,42 +18,47 @@
                     <!--</div>
                     <div class="row">-->
                         <div class="col-12 pb-3">
-                            <div class="form-group">
-                            <div class="input-group">
+                            
+                            <!--<div class="form-group">
+                                <div class="input-group">
                                     <input type="text" class="form-control">
-                                    <div ngbDropdown class="input-group-btn">
-                                        <button id="fieldDropdown" ngbDropdownToggle type="button" class="btn btn-secondary dropdown-toggle">
+
+
+                                    <div class="dropdown">
+                                        <button (click)="showFields()"class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                             in any field
                                         </button>
-                                        <div class="dropdown-menu" aria-labelledby="fieldDropdown">
+                                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                             <a *ngFor="let field of fields" class="dropdown-item">{{ field.name }}</a>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div *ngFor="let query of advanceQueries" class="form-group">
-                            <div class="input-group">
-                                <div ngbDropdown class="input-group-btn">
+                            </div>-->
+                            
+                            <div *ngFor="let query of advanceQueries; let i = index;" class="form-group">
+                                <div class="input-group">
+                                    <div ngbDropdown class="input-group-btn" *ngIf="i !== 0">
                                         <button id="dropdown" ngbDropdownToggle type="button" class="btn btn-secondary dropdown-toggle">
-                                            AND
+                                            {{ query.operator }}
                                         </button>
                                         <div class="dropdown-menu"  aria-labelledby="dropdown">
-                                            <a class="dropdown-item" href="#">AND</a>
-                                            <a class="dropdown-item" href="#">OR</a>
-                                            <a class="dropdown-item" href="#">NOT</a>
+                                            <a class="dropdown-item" (click)="query.operator = 'AND'">AND</a>
+                                            <a class="dropdown-item" (click)="query.operator = 'OR'">OR</a>
+                                            <a class="dropdown-item" (click)="query.operator = 'NOT'">NOT</a>
                                         </div>
                                     </div>
-                                    <input [ngModel]="query.term" type="text" class="form-control">
+                                    <input [(ngModel)]="query.term" type="text" class="form-control" (blur)="addNewQuery(query, i)">
                                     <div ngbDropdown class="input-group-btn">
                                         <button id="fieldDropdown" ngbDropdownToggle type="button" class="btn btn-secondary dropdown-toggle">
-                                            in any field
+                                            {{ query.field }}
                                         </button>
                                         <div class="dropdown-menu" aria-labelledby="fieldDropdown">
-                                            <a *ngFor="let field of fields" class="dropdown-item">{{ field.name }}</a>
+                                            <a *ngFor="let field of fields" class="dropdown-item" (click)="query.field = field.name">{{ field.name }}</a>
                                         </div>
                                     </div>
                                 </div>
                             </div>
+                            
                             <div class="form-group">
                                 <button class="btn btn-secondary" (click)="advanceQueries.push(advQueryTemplate)">Add Query</button>
                             </div>
@@ -63,13 +68,13 @@
                             <p>You can narrow your search results by filtering on both the Geography and Classification areas.</p>
                             <div class="form-group">
                                 <label>Geography</label>
-                                <div class="form-card card">
+                                <div *ngIf="termsList.geoTree && (termsList.geoTree.length > 0)" class="form-card card">
                                     <ul class="list-group list-group-flush compact">
-                                        <li *ngFor="let field of geographyFields" class="list-group-item">
+                                        <li *ngFor="let geoNode of termsList.geoTree" class="list-group-item">
                                             <label class="custom-control custom-checkbox">
                                                 <input type="checkbox" class="custom-control-input">
                                                 <span class="custom-control-indicator"></span>
-                                                <span class="custom-control-description">{{ field.name }}</span>
+                                                <span class="custom-control-description">{{ geoNode.name }}</span>
                                             </label>
                                         </li>
                                     </ul>
@@ -77,6 +82,17 @@
                             </div>
                             <div class="form-group">
                                 <label>Classification</label>
+                                <div *ngIf="termsList.classification && (termsList.classification.length > 0)" class="form-card card">
+                                    <ul class="list-group list-group-flush compact">
+                                        <li *ngFor="let clsNode of termsList.classification" class="list-group-item">
+                                            <label class="custom-control custom-checkbox">
+                                                <input type="checkbox" class="custom-control-input">
+                                                <span class="custom-control-indicator"></span>
+                                                <span class="custom-control-description">{{ clsNode.name }}</span>
+                                            </label>
+                                        </li>
+                                    </ul>
+                                </div>
                             </div>
                             <div class="form-group">
                                 <label>Collection</label>
