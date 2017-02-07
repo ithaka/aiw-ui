@@ -36,6 +36,18 @@ export class SearchModal implements OnInit {
   ];
 
   private termsList: any = {};
+  private colTree: any = [
+    {
+      id: 'allART',
+      name: 'Artstor Collections'
+    },
+    {
+      id: 'allSSC',
+      name: 'Shared Shelf Commons Collections'
+    }
+  ];
+  private instName: string = "";
+  private instCollections: any[] = [];
 
   constructor(private _assets: AssetService) { 
     this._assets.loadTermList( )
@@ -46,6 +58,25 @@ export class SearchModal implements OnInit {
           .catch(function(err) {
               console.error('Unable to load Terms List.');
           });
+    this._assets.getCollections('institution')
+        .then(
+          (data)  => {
+            if (data['shortName']) {
+              this.instName = data['shortName'];
+              this.colTree.push({
+                id: 'allSS',
+                name: 'Institutional Collections',
+                collections: data['Collections']
+              });
+            }
+            
+          },
+          (error) => {
+            console.log(error);
+          }
+        ).catch(function(err) {
+          console.log(err);
+        });
   }
 
   ngOnInit() { 
