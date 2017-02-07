@@ -39,11 +39,13 @@ export class SearchModal implements OnInit {
   private colTree: any = [
     {
       id: 'allART',
-      name: 'Artstor Collections'
+      name: 'Artstor Collections',
+      collections: []
     },
     {
       id: 'allSSC',
-      name: 'Shared Shelf Commons Collections'
+      name: 'Shared Shelf Commons Collections',
+      collections: []
     }
   ];
   private instName: string = "";
