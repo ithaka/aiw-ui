@@ -68,7 +68,7 @@
                     <h3>Questions</h3>
                 </div>
                  <ul class="list-group list-group-flush list-group-clean">
-                    <a class="list-group-item small" [href]="institution.institutionContact && institution.institutionContact.email ?  'mailto:' + institution.institutionContact.email : 'mailto:userservices@artstor.org'">
+                    <a class="list-group-item small" [href]="institution.institutionContact && institution.institutionContact[0] && institution.institutionContact[0].email ? 'mailto:' + institution.institutionContact[0].email : 'mailto:userservices@artstor.org'">
                         Email your institutional contact
                     </a>
                     <a class="list-group-item small" href="mailto:userservices@artstor.org">
