@@ -87,7 +87,7 @@ export class AssetService {
 
     private updateLocalResults(resultObj: any) {
         // These Params have been loaded now
-        this.currentLoadedParams = Object.assign(this.defaultUrlParams, this.urlParams);
+        this.currentLoadedParams = Object.assign(Object.assign({}, this.defaultUrlParams), this.urlParams);
 
         let totalPages = 1;
         
@@ -205,11 +205,12 @@ export class AssetService {
             // Don't query again if the params are identical
             return;
         }
+
         // Params are different, clear the assets!
         this.allResultsSource.next([]);
 
         // urlParams is used by the below load functions
-        this.urlParams = Object.assign(this.defaultUrlParams, params);
+        this.urlParams = params;
 
         // Tell the filters service we have some updates
         this.setFiltersFromURLParams(params);
