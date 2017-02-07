@@ -7,9 +7,13 @@
     }
 }
 
-.sortlist, .pagesizelist, .editMode{
+.sortlist, .pagesizelist, .editMode, .number-results{
     list-style: none;
     display: inline-block;
+}
+.number-results{
+    font-size: 12px;
+    padding-right: 10px;
 }
 .editMode{
     padding: 0px 3px;

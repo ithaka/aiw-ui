@@ -199,7 +199,7 @@ export class AssetPage implements OnInit, OnDestroy {
     private toggleAsset(asset: any): void {
         let add = true;
         this.assets.forEach( (viewAsset, i) => {
-            if (asset.objectId == viewAsset.id) {
+            if (asset.id == viewAsset.id) {
                 asset.selected = false;
                 this.assets.splice(i, 1);
                 add = false;

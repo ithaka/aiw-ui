@@ -40,6 +40,9 @@ export class AssetGrid implements OnInit, OnDestroy {
   private copyURLStatusMsg: string = '';
   private copyHTMLStatusMsg: string = '';
 
+  private searchTerm: string = '';
+  private totalAssets: string = '';
+
   @Input()
   private assetCount: number;
 
@@ -107,6 +110,9 @@ export class AssetGrid implements OnInit, OnDestroy {
 
         //   this._filters.setAvailable('dateObj', this.dateFacet);
         // }
+        if(params['term']){
+          this.searchTerm = params['term'];
+        }
         
         this.isLoading = true;
       })
@@ -130,6 +136,10 @@ export class AssetGrid implements OnInit, OnDestroy {
       this._assets.allResults.subscribe((allResults: any) => {
         // Update results array
         this.results = allResults.thumbnails;
+
+        if(allResults.count){
+          this.totalAssets = allResults.count;
+        }
           
         if (allResults.thumbnails && allResults.thumbnails.length == 0) {
           // We push an empty array on new search to clear assets
