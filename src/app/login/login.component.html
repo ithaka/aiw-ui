@@ -3,7 +3,7 @@
         <div class="col-sm-6">
             <div class="card card--light">
                 <div class="card-header">
-                    <h1 id="loginHeading">Log in with your Artstor Account</h1>
+                    <h1 translate id="loginHeading">LOGIN.LOGIN_HEADING</h1>
                 </div>
                 <div class="card-body">
                     <form (ngSubmit)="login(user)">
@@ -27,21 +27,21 @@
                     <hr/>
                     <a tabindex="6" class="link">! Login Help</a>
                 </div>
-            </div>
-            <div class="block-right">
-                <a tabindex="7" class="link" (click)="toggleAccessHelpModal()">How do I get access?</a>
+                <div class="block-right">
+                    <a tabindex="7" class="link" (click)="toggleAccessHelpModal()">How do I get access?</a>
+                </div>
             </div>
         </div>
 
         <div class="col-sm-6">
             <div class="card card--v-pad">
                 <div class="card-header">
-                    <h1>Log in through your Institution</h1>
+                    <h1 translate id="institutionHeading">LOGIN.INSTITUTION_HEADING</h1>
                 </div>
                 <div class="card-body">
                     <div class="form-group">
                         <label>Select your institution's name</label>
-                        <select id="selectLoginInstitution" class="form-control" tabindex="8" [(ngModel)]="loginInst">
+                        <select id="selectLoginInstitution" class="form-control custom-select" tabindex="8" [(ngModel)]="loginInst">
                             <option *ngFor="let inst of loginInstitutions" [ngValue]="inst">{{ inst.name }}</option>
                         </select>
                         <div *ngIf="instErrorMsg" class="login-errorMsg"> {{ instErrorMsg }} </div>

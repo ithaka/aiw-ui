@@ -2,10 +2,13 @@
 <div class="container main-content">
   <div class="row">
     <div class="col-sm-3">
-      <h1>Filtered Search</h1>
-      <ang-asset-filters></ang-asset-filters>
+      <div class="mobile--hide">
+        <h1>Filtered Search</h1>
+        <ang-asset-filters></ang-asset-filters>
+      </div>
     </div>
     <div class="col-sm-9">
+        <h1 class="mobile--show">Results</h1>
       <ang-asset-grid></ang-asset-grid>
     </div>
   </div>

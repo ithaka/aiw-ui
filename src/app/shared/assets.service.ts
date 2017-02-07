@@ -42,6 +42,8 @@ export class AssetService {
 
     private subscriptions: Subscription[] = [];
 
+    private searchSubscription: Subscription;
+
     /**
      * urlParams is used as an enum for special parameters
      */
@@ -193,13 +195,23 @@ export class AssetService {
      * @param params Object conaining all route params
      */
     public queryAll(params: any) {
-        // Reset allResults
-        if (this._toolbox.compareObjects(this.currentLoadedParams, params) === false) {
-            // Params are different, clear the assets!
-            this.allResultsSource.next([]);
-        }
+        // Make sure number params are parsed
+        params =  Object.assign( Object.assign({}, this.defaultUrlParams), params);
+        params.pageSize = parseInt(params.pageSize);
+        params.currentPage =  parseInt(params.currentPage);
 
+        // Reset allResults
+        if (this._toolbox.compareObjects(this.currentLoadedParams, params) === true) {
+            // Don't query again if the params are identical
+            return;
+        }
+        // Params are different, clear the assets!
+        this.allResultsSource.next([]);
+
+        // urlParams is used by the below load functions
         this.urlParams = Object.assign(this.defaultUrlParams, params);
+
+        // Tell the filters service we have some updates
         this.setFiltersFromURLParams(params);
 
         // Read Pagination values
@@ -207,22 +219,23 @@ export class AssetService {
         this.paginationValue.currentPage =  parseInt(this.urlParams.currentPage);
         this.paginationSource.next(this.paginationValue);
 
-        if (params.hasOwnProperty("objectId") && params.hasOwnProperty("colId")) {
+        // Pick function to load this query!
+        if (params.hasOwnProperty("objectId") && params["objectId"].length > 0 && params.hasOwnProperty("colId") && params["colId"].length > 0) {
             //gets associated images thumbnails
             this.loadAssociatedAssets(params.objectId, params.colId);
-        } else if (params.hasOwnProperty("igId")) {
+        } else if (params.hasOwnProperty("igId") && params["objectId"].length > 0) {
             //get image group thumbnails
             this.loadIgAssets(params.igId);
-        } else if (params.hasOwnProperty("objectId")) {
+        } else if (params.hasOwnProperty("objectId") && params["objectId"].length > 0) {
             //get clustered images thumbnails
             this.loadCluster(params.objectId);
-        } else if (params.hasOwnProperty("catId")) {
+        } else if (params.hasOwnProperty("catId")  && params["catId"].length > 0) {
             //get collection thumbnails
             this.loadCategory(params.catId);
-        }  else if (params.hasOwnProperty("colId")) {
+        }  else if (params.hasOwnProperty("colId") && params["colId"].length > 0) {
             //get collection thumbnails
             this.loadCollection(params.colId);
-        } else if (params.hasOwnProperty("term")) {
+        } else if (params.hasOwnProperty("term") && params["term"].length > 0) {
             this.loadSearch(params.term);
         } else {
             console.log("Don't know what to query!");
@@ -511,9 +524,16 @@ export class AssetService {
      * @param term Search term for which a search should be executed
      */
     private loadSearch(term: string) {
-        this.search(term, this.activeSort.index)
-            .then(
-                (data) => {
+        // Don't wait for previous subscription anymore
+        if (this.searchSubscription && this.searchSubscription.hasOwnProperty('unsubscribe')) {
+            this.searchSubscription.unsubscribe();
+        }
+
+        // Subscribe to most recent search
+        this.searchSubscription = this.search(term, this.activeSort.index)
+            .subscribe(
+                (res) => {
+                    let data = res.json();
                     if (data && data.collTypeFacets) {
                         this._filters.generateColTypeFacets( data.collTypeFacets );
                         this._filters.generateGeoFilters( data.geographyFacets );
@@ -522,9 +542,8 @@ export class AssetService {
                     }
                     // Set the allResults object
                     this.updateLocalResults(data);
-            })
-            .catch(function(err) {
-                console.error(err);
+            }, (error) => {
+                console.log(error);
             });
     }
 
@@ -580,9 +599,7 @@ export class AssetService {
         }
         
         return this.http
-            .get(this._auth.getUrl() + '/search/' + type + '/' + startIndex + '/' + this.urlParams.pageSize + '/' + sortIndex + '?' + 'type=' + type + '&kw=' + keyword + '&origKW=&geoIds=' + geographyIds + '&clsIds=' + classificationIds + '&collTypes=' + colTypeIds + '&id=all&name=All%20Collections&bDate=' + earliestDate + '&eDate=' + latestDate + '&dExact=&order=0&isHistory=false&prGeoId=&tn=1', options)
-            .toPromise()
-            .then(this.extractData);
+            .get(this._auth.getUrl() + '/search/' + type + '/' + startIndex + '/' + this.urlParams.pageSize + '/' + sortIndex + '?' + 'type=' + type + '&kw=' + keyword + '&origKW=&geoIds=' + geographyIds + '&clsIds=' + classificationIds + '&collTypes=' + colTypeIds + '&id=all&name=All%20Collections&bDate=' + earliestDate + '&eDate=' + latestDate + '&dExact=&order=0&isHistory=false&prGeoId=&tn=1', options);
     }
 
     /**

@@ -73,6 +73,7 @@ export class LibraryComponent implements OnInit {
    * @param id Id of desired menu from colMenuArray enum
    */
   private selectBrowseOpt ( id: string ){
+    this.tags = [];
     this.selectedBrowseId = id;
     this.addRouteParam('viewId', id);
   }

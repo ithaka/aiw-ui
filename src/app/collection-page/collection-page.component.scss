@@ -20,10 +20,14 @@ img.collection-thumb {
 
 .page__description {
     overflow: hidden;
-    transition: max-height 1s linear;
+    // transition: max-height 1s linear;
 
     &.limit {
         max-height: 80px;
+        display: -webkit-box;
+        text-overflow: ellipsis;
+        -webkit-line-clamp: 4;
+        -webkit-box-orient: vertical;
     }
 }
 

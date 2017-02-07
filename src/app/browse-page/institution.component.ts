@@ -12,6 +12,7 @@ import { Tag } from './tag/tag.class';
 })
 export class BrowseInstitutionComponent implements OnInit {
   private tags: Tag[] = [];
+  private loading: boolean = true;
 
   constructor(
     private _assets: AssetService,
@@ -23,9 +24,11 @@ export class BrowseInstitutionComponent implements OnInit {
       .then((tags) => {
         console.log(tags);
         this.tags = tags;
+        this.loading = false;
       })
       .catch((err) => {
         console.error(err);
+        this.loading = false;
       });
   }
   

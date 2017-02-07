@@ -41,19 +41,20 @@ export class AuthService implements CanActivate {
     this._router = _router;
     
     // Check domain
-    // if ( document.location.hostname.indexOf('test.cirrostratus.org') > -1 ) {
-    //   this.baseUrl = '//library-debian01.test.cirrostratus.org:8080/library/secure';
-    // } else {
+    if ( document.location.hostname.indexOf('prod.cirrostratus.org') > -1 || document.location.hostname.indexOf('lively.artstor.org') > -1 ) {
+      // Prod/Lively endpoints
+      this.subdomain = 'lively';
+      this.baseUrl =  '//lively.artstor.org/library/secure'; 
+      this.thumbUrl = '//mdxdv.artstor.org';
+      this.IIIFUrl = '//tsprod.artstor.org/rosa-iiif-endpoint-1.0-SNAPSHOT/fpx';
+    } else {
+      // Dev/Stage endpoints
       this.subdomain = 'stagely';
-      // this.baseUrl = 'http://192.168.97.66/library/secure';
-      this.baseUrl =  '//stagely.artstor.org/library/secure'; //'//artstor-earth-library.apps.test.cirrostratus.org/secure';
-      // this.baseUrl = this.proxyUrl + 'http://library.artstor.org/library/secure';
-    // }
+      this.baseUrl =  '//stagely.artstor.org/library/secure'; 
       this.thumbUrl = '//mdxstage.artstor.org';
       this.IIIFUrl = '//tsprod.artstor.org/rosa-iiif-endpoint-1.0-SNAPSHOT/fpx';
-
-    // maintain thumb servers
-    // mdxdv.artstor.org
+      // this.baseUrl = '//artstor-earth-library.apps.test.cirrostratus.org/secure';
+    }
   }
 
 

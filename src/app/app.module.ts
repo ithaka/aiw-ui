@@ -1,7 +1,7 @@
 import { NgModule, ApplicationRef } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
-import { HttpModule } from '@angular/http';
+import { Http, HttpModule } from '@angular/http';
 import { RouterModule, RouteReuseStrategy } from '@angular/router';
 import { removeNgStyles, createNewHosts, createInputTransfer } from '@angularclass/hmr';
 
@@ -16,6 +16,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 // import { CoolStorageModule } from 'angular2-cool-storage';
 import {LockerModule, Locker, LockerConfig} from 'angular2-locker'
 import { Angulartics2Module, Angulartics2GoogleAnalytics } from 'angulartics2';
+import { TranslateModule, TranslateStaticLoader, TranslateLoader } from 'ng2-translate';
 
 // App is our top level component
 import { App } from './app.component';
@@ -113,6 +114,11 @@ type StoreType = {
     LockerModule,
     RouterModule.forRoot(ROUTES, { useHash: true }),
     Angulartics2Module.forRoot([ Angulartics2GoogleAnalytics ]),
+    TranslateModule.forRoot({
+        provide: TranslateLoader,
+        useFactory: (http: Http) => new TranslateStaticLoader(http, '/assets/i18n', '.json'),
+        deps: [Http]
+    }),
     NgbModule.forRoot() // Ng Bootstrap Import
   ],
   providers: [ // expose our Services and Providers into Angular's dependency injection

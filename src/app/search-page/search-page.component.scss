@@ -1,0 +1,8 @@
+@import '../../sass/core/variables';
+
+.container.main-content {
+  padding: 25px 25px 0 25px;
+  @media (min-width: $phone) {
+    padding: 0;
+  }
+}

@@ -10,14 +10,12 @@ import { AssetGrid } from './../asset-grid/asset-grid.component';
 @Component({
   selector: 'ang-search-page', 
   providers: [],
-  styles: [ '' ],
-  templateUrl: './search-page.component.html'
+  styleUrls: ['./search-page.component.scss'],
+  templateUrl: './search-page.component.html',
 })
 
 export class SearchPage implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = [];
-
-  private term: string;
 
   @ViewChild(AssetGrid)
   private assetGrid: AssetGrid;

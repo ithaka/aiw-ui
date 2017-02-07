@@ -23,8 +23,13 @@ $assetCardBorderSize: 1px;
     }
 }
 
+
+
 .card--v-pad {
     padding: 24px 0px;
+    @media (max-width: $phone) {
+        padding: $cardPadding;
+    }
 }
 
  .card-header {

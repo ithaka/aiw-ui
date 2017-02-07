@@ -61,7 +61,11 @@ export class CollectionPage implements OnInit, OnDestroy {
             });
         }
       })
-    )// End push to subscription
+    );// End push to subscription
+  }
+
+  ngOnDestroy() {
+    this.subscriptions.forEach((sub) => { sub.unsubscribe(); });
   }
 
   /**
@@ -75,9 +79,5 @@ export class CollectionPage implements OnInit, OnDestroy {
           .get(this._auth.getUrl() + '/collections/' + colId, options)
           .toPromise()
           .then(this._auth.extractData);
-  }
-
-  ngOnDestroy() {
-    this.subscriptions.forEach((sub) => { sub.unsubscribe(); });
   }
 }

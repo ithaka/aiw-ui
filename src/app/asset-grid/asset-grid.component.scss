@@ -2,6 +2,9 @@
 
 .row--search-bar {
     margin: 20px 0;
+    @media (max-width: $phone) {
+        margin: 10px 0;
+    }
 }
 
 .sortlist, .pagesizelist, .editMode, .number-results{
@@ -34,6 +37,9 @@
 
 .pag-controls{
     text-align: right;
+    @media (max-width: $phone) {
+        text-align: center;    
+    }
 }
 .pag-controls input{
     font-size: 13px;

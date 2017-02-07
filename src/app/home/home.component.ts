@@ -1,8 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
+import { Subscription } from 'rxjs/Subscription';
 
 import { AppState } from '../app.service';
-
 import { AssetService, AuthService } from '../shared';
 
 @Component({
@@ -15,7 +15,9 @@ import { AssetService, AuthService } from '../shared';
   // Every Angular template is first compiled by the browser before Angular runs it's compiler
   templateUrl: './home.component.html'
 })
-export class Home {
+export class Home implements OnInit, OnDestroy {
+  private subscriptions: Subscription[] = [];
+
   // Set our default values
   localState = { value: '' };
   collections = [];
@@ -29,22 +31,32 @@ export class Home {
       private _assets: AssetService, 
       private router: Router,
       private _auth: AuthService
-    ) {
+  ) {
 
   }
 
   ngOnInit() {    
     this.user = this._auth.getUser();
+
+    this.subscriptions.push(
+      this._auth.getInstitution().subscribe((institutionObj) => {
+        this.institution = institutionObj;
+        console.log(this.institution);
+      })
+    );
     
     // this.title.getData().subscribe(data => this.data = data);
     this._assets.getCollections('ssc')
       .then((res) => {
         this.collections = res['Collections'];
-        this.institution = this._assets.getCurrentInstitution();
       })
       .catch((err) => {
         this.errors['collections'] = "Unable to load collections.";
       });
+  }
+
+  ngOnDestroy() {
+    this.subscriptions.forEach((sub) => { sub.unsubscribe(); });
   }
 
   submitState(value: string) {

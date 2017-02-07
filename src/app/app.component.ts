@@ -5,6 +5,7 @@ import { Component, ViewEncapsulation } from '@angular/core';
 import { Angulartics2GoogleAnalytics } from 'angulartics2';
 import { Title } from '@angular/platform-browser';
 import { Router, NavigationStart } from '@angular/router';
+import { TranslateService } from 'ng2-translate';
 
 import { AppState } from './app.service';
 
@@ -34,7 +35,18 @@ export class App {
   name = 'Artstor';
   url = 'https://artstor.org/';
 
-  constructor(public appState: AppState, angulartics2GoogleAnalytics: Angulartics2GoogleAnalytics, private titleService: Title, private router:Router) {
+  constructor(
+    public appState: AppState,
+    angulartics2GoogleAnalytics: Angulartics2GoogleAnalytics,
+    private titleService: Title,
+    private router:Router,
+    private translate: TranslateService
+  ) {
+    // I'm hoping this sets these for the entire app
+    // this language will be used as a fallback when a translation isn't found in the current language
+    translate.setDefaultLang('en');
+      // the lang to use, if the lang isn't available, it will use the current loader to get them
+    translate.use('en');
     
     // Set metatitle to "Artstor" except for asset page where metatitle is {{ Asset Title }}
     router.events.subscribe(event => {
