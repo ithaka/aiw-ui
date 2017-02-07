@@ -221,22 +221,22 @@ export class AssetService {
         this.paginationSource.next(this.paginationValue);
 
         // Pick function to load this query!
-        if (params.hasOwnProperty("objectId") && params["objectId"].length > 0 && params.hasOwnProperty("colId") && params["colId"].length > 0) {
+        if (params.hasOwnProperty("objectId") && params["objectId"] !== "" && params.hasOwnProperty("colId") && params["colId"] !== "") {
             //gets associated images thumbnails
             this.loadAssociatedAssets(params.objectId, params.colId);
-        } else if (params.hasOwnProperty("igId") && params["objectId"].length > 0) {
+        } else if (params.hasOwnProperty("igId") && params["igId"] !== "") {
             //get image group thumbnails
             this.loadIgAssets(params.igId);
-        } else if (params.hasOwnProperty("objectId") && params["objectId"].length > 0) {
+        } else if (params.hasOwnProperty("objectId") && params["objectId"] !== "") {
             //get clustered images thumbnails
             this.loadCluster(params.objectId);
-        } else if (params.hasOwnProperty("catId")  && params["catId"].length > 0) {
+        } else if (params.hasOwnProperty("catId")  && params["catId"] !== "") {
             //get collection thumbnails
             this.loadCategory(params.catId);
-        }  else if (params.hasOwnProperty("colId") && params["colId"].length > 0) {
+        }  else if (params.hasOwnProperty("colId") && params["colId"] !== "") {
             //get collection thumbnails
             this.loadCollection(params.colId);
-        } else if (params.hasOwnProperty("term") && params["term"].length > 0) {
+        } else if (params.hasOwnProperty("term") && params["term"] !== "") {
             this.loadSearch(params.term);
         } else {
             console.log("Don't know what to query!");
