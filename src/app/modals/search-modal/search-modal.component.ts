@@ -34,6 +34,12 @@ export class SearchModal implements OnInit {
         field: 'in any field',
       }
   ];
+  public advanceSearchDate: any = {
+    'startDate' : '',
+    'startEra' : 'BCE',
+    'endDate' : '',
+    'endEra' : 'CE'
+  }
 
   private termsList: any = {};
   private colTree: any = [
@@ -100,5 +106,31 @@ export class SearchModal implements OnInit {
         this.advanceQueries.push(newQuery);
       }
     }
+  }
+
+  private toggleEra(dateEra): void{
+    if(this.advanceSearchDate[dateEra] == 'BCE'){
+      this.advanceSearchDate[dateEra] = 'CE';
+    }
+    else{
+      this.advanceSearchDate[dateEra] = 'BCE';
+    }
+  }
+
+  private dateKeyPress(event: any): boolean{
+      if((event.key == 'ArrowUp') || (event.key == 'ArrowDown') || (event.key == 'ArrowRight') || (event.key == 'ArrowLeft') || (event.key == 'Backspace')){
+        return true;
+      }
+
+      var theEvent = event || window.event;
+      var key = theEvent.keyCode || theEvent.which;
+      key = String.fromCharCode( key );
+      var regex = /[0-9]|\./;
+      if( !regex.test(key) ) {
+        theEvent.returnValue = false;
+        if(theEvent.preventDefault) theEvent.preventDefault();
+      }
+
+      return theEvent.returnValue;
   }
 }
