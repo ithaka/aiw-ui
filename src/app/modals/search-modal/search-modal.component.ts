@@ -1,5 +1,9 @@
+import { Router } from '@angular/router';
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+
+// Project dependencies
 import { AssetService } from './../../shared/assets.service';
+import { AssetFiltersService } from './../../asset-filters/asset-filters.service';
 
 @Component({
   selector: 'ang-search-modal',
@@ -12,8 +16,8 @@ export class SearchModal implements OnInit {
 
   // TO-DO: Fields should be pulled dynamically!
   public fields = [
-    {name: 'Title' },
-    {name: 'Creator' },
+    {name: 'Title', value: 101 },
+    {name: 'Creator', value: 100 },
     {name: 'Location' },
     {name: 'Repository' }
   ];
@@ -31,7 +35,10 @@ export class SearchModal implements OnInit {
   public advanceQueries = [
       { 
         term: '',
-        field: 'in any field',
+        field: {
+          'name' : 'in any field',
+          'value' : ''
+        }
       }
   ];
   public advanceSearchDate: any = {
@@ -57,7 +64,7 @@ export class SearchModal implements OnInit {
   private instName: string = "";
   private instCollections: any[] = [];
 
-  constructor(private _assets: AssetService) { 
+  constructor(  private _assets: AssetService, private _filters: AssetFiltersService, private _router: Router) { 
     this._assets.loadTermList( )
           .then((res) => {
               console.log(res);
@@ -132,5 +139,38 @@ export class SearchModal implements OnInit {
       }
 
       return theEvent.returnValue;
+  }
+
+  private resetFilters(): void {
+    
+  }
+
+  private applyAllFilters(): void {
+    let queryString = "";
+
+    this.advanceQueries.forEach( (query, index) => {
+      if (!query.field || !query.field.name) {
+        return;
+      }
+      // if (query.filterGroup === 'in any field') {
+      //   // add as search term
+      // } else {
+      //   this._filters.apply(query);
+      // }
+      // kw=flavin|100#and,untitled|101
+      if (index !== 0) {
+        queryString += "#and,";
+      }
+
+      queryString += query.term + '|' + query.field.value;
+
+      
+
+    });
+
+    console.log(queryString);
+
+    this._router.navigate(['/search', queryString]);
+    this.closeModal.emit();
   }
 }

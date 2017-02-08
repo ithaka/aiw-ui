@@ -82,3 +82,9 @@ input[type=number]::-webkit-outer-spin-button {
 input[type=number] {
     -moz-appearance: textfield;
 }
+
+.custom-control-description {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow-x: hidden;
+}

@@ -50,10 +50,10 @@
                                     <input [(ngModel)]="query.term" type="text" class="form-control" (blur)="addNewQuery(query, i)">
                                     <div ngbDropdown class="input-group-btn">
                                         <button id="fieldDropdown" ngbDropdownToggle type="button" class="btn btn-secondary dropdown-toggle">
-                                            {{ query.field }}
+                                            {{ query.field.name }}
                                         </button>
                                         <div class="dropdown-menu" aria-labelledby="fieldDropdown">
-                                            <a *ngFor="let field of fields" class="dropdown-item" (click)="query.field = field.name">{{ field.name }}</a>
+                                            <a *ngFor="let field of fields" class="dropdown-item" (click)="query.field = field">{{ field.name }}</a>
                                         </div>
                                     </div>
                                 </div>
@@ -141,8 +141,8 @@
             </div>
             <div class="modal-footer">
                     <a class="btn btn-link with-pad" href="javascript:window.open('http://support.artstor.org/?article=advanced-search','Advanced Search Support','width=600,height=500')">Help</a>
-                    <button class="btn btn-secondary" (click)="showAdvancedModal = false">!Clear</button>
-                    <button class="btn btn-primary">!Search</button>
+                    <button class="btn btn-secondary" (click)="resetFilters()">Clear</button>
+                    <button (click)="applyAllFilters()" class="btn btn-primary">Search</button>
             </div>
         </div>
     </div>

@@ -165,7 +165,7 @@ export class AssetFilters {
 
     // this._filters.setFilter( group, value )
 
-    var filter = {
+    let filter = {
       filterGroup : group,
       filterValue : value
     };
