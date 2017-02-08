@@ -544,7 +544,8 @@ export class AssetService {
                     // Set the allResults object
                     this.updateLocalResults(data);
             }, (error) => {
-                console.log(error);
+                // Pass error down to allResults listeners
+                this.allResultsSource.error(error); // .throw(error);
             });
     }
 

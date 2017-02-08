@@ -51,13 +51,18 @@
     <div class="col-md-12 col--expanding has-icon-overlay" [ngClass]="{ 'col--expand-12' : !showFilters }">
         <i [class.hidden]="!isLoading" class="icon-lg icon-overlay icon-loading-large"></i>
         <div class="row no-gutters">
-            <!--<div class="card-deck">-->
-                <div class="col-sm-2" *ngFor="let asset of results">
-                    <div [routerLink]="editMode ? [] : ['/asset', asset.objectId ]" class="card card--asset" [ngClass]="{'selected': ( isSelectedAsset(asset) > -1 ) }" (click)="selectAsset(asset)">
-                    <ang-thumbnail [thumbnail]="asset"></ang-thumbnail>
-                    </div>
-                </div> <!-- .col -->
-            <!--</div>-->
+            <div *ngIf="!isLoading && totalAssets == 0 && searchError.length < 1" class="alert alert-warning">
+                <b>Unable to find any assets</b><br/>
+                A less specific query might be able to find what you are looking for.
+            </div>
+            <div *ngIf="!isLoading && searchError.length > 0" class="alert alert-danger">
+                {{ searchError }}
+            </div>
+            <div class="col-sm-2" *ngFor="let asset of results">
+                <div [routerLink]="editMode ? [] : ['/asset', asset.objectId ]" class="card card--asset" [ngClass]="{'selected': ( isSelectedAsset(asset) > -1 ) }" (click)="selectAsset(asset)">
+                <ang-thumbnail [thumbnail]="asset"></ang-thumbnail>
+                </div>
+            </div> <!-- .col -->
         </div>
     </div>
 </div>

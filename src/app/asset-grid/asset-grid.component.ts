@@ -30,6 +30,7 @@ export class AssetGrid implements OnInit, OnDestroy {
 
   // Default show as loading until results have update
   private isLoading: boolean = true;
+  private searchError: string = "";
 
   private baseURL: string = '';
   private imgEncryptId: string = '';
@@ -133,21 +134,25 @@ export class AssetGrid implements OnInit, OnDestroy {
 
     // sets up subscription to allResults, which is the service providing thumbnails
     this.subscriptions.push(
-      this._assets.allResults.subscribe((allResults: any) => {
-        // Update results array
-        this.results = allResults.thumbnails;
-
-        if(allResults.count){
-          this.totalAssets = allResults.count;
-        }
-          
-        if (allResults.thumbnails && allResults.thumbnails.length == 0) {
-          // We push an empty array on new search to clear assets
-          this.isLoading = true;
-        } else {
+      this._assets.allResults.subscribe(
+        (allResults: any) => {
+          // Update results array
+          this.results = allResults.thumbnails;
+          console.log(allResults);
+          if(allResults.hasOwnProperty('count')){
+            this.totalAssets = allResults.count;
+            this.isLoading = false;
+          } else {
+            // We push an empty array on new search to clear assets
+            this.isLoading = true;
+          }
+        },
+        (error) => {
+          console.log(error);
           this.isLoading = false;
+          this.searchError = "There was a server error loading your search. Please try again later.";
         }
-      })
+      )
     );
   }
 
