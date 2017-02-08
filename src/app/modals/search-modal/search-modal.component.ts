@@ -71,12 +71,14 @@ export class SearchModal implements OnInit {
   ];
   private instName: string = "";
   private instCollections: any[] = [];
+  private filterParams: any = {};
 
   constructor(  private _assets: AssetService, private _filters: AssetFiltersService, private _router: Router) { 
     // Setup two query fields
     this.advanceQueries.push(Object.assign({}, this.advQueryTemplate));
     this.advanceQueries.push(Object.assign({}, this.advQueryTemplate));
     
+    // Get GeoTree and Classifications
     this._assets.loadTermList( )
           .then((res) => {
               console.log(res);
@@ -85,6 +87,8 @@ export class SearchModal implements OnInit {
           .catch(function(err) {
               console.error('Unable to load Terms List.');
           });
+        
+    // Get institutional collections
     this._assets.getCollections('institution')
         .then(
           (data)  => {
@@ -180,10 +184,44 @@ export class SearchModal implements OnInit {
       advQuery += query.term + '|' + query.field.value;
     });
 
-    console.log(advQuery);
+    // Load filters!
+    this.filterParams = {};
+    let appliedFilters = this._filters.getApplied();
 
-    this._router.navigate(['/search', advQuery]);
+    for (let filter of appliedFilters) {
+      if(filter.filterGroup == 'currentPage'){
+        this.filterParams[filter.filterGroup] =  parseInt(filter.filterValue);
+      } else if(filter.filterValue && (filter.filterGroup != 'startDate') && (filter.filterGroup != 'endDate')){
+        this.filterParams[filter.filterGroup] =  filter.filterValue;
+      }
+    }
+
+    if (advQuery.length < 1) {
+      advQuery = "*";
+    }
+    this.filterParams['term'] = advQuery;
+    
+    // console.log(this.filterParams);
+    this._router.navigate(['/search', this.filterParams]);
+
+    // this._router.navigate(['/search', advQuery]);
     this.close();
+  }
+
+  private toggleFilter(value, group): void{
+    let filter = {
+      filterGroup : group,
+      filterValue : value
+    };
+
+    if(this._filters.isApplied(filter)){ // Remove Filter
+      this._filters.remove(filter);
+    } else { // Add Filter
+      this._filters.apply(filter);
+    }
+    
+    console.log( this._filters.getApplied() );
+    // this.loadRoute();
   }
 }
 

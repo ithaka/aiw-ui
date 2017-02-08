@@ -64,7 +64,7 @@
                                 <label>Geography</label>
                                 <div class="form-card card">
                                     <ul class="list-group list-group-flush compact">
-                                        <li *ngFor="let geoNode of termsList.geoTree" class="list-group-item">
+                                        <li *ngFor="let geoNode of termsList.geoTree" (click)="toggleFilter(geoNode.id, 'geography')" class="list-group-item">
                                             <label class="custom-control custom-checkbox">
                                                 <input type="checkbox" class="custom-control-input">
                                                 <span class="custom-control-indicator"></span>
@@ -78,7 +78,7 @@
                                 <label>Classification</label>
                                 <div class="form-card card">
                                     <ul class="list-group list-group-flush compact">
-                                        <li *ngFor="let clsNode of termsList.classification" class="list-group-item">
+                                        <li *ngFor="let clsNode of termsList.classification" (click)="toggleFilter(clsNode.id, 'classification')" class="list-group-item">
                                             <label class="custom-control custom-checkbox">
                                                 <input type="checkbox" class="custom-control-input">
                                                 <span class="custom-control-indicator"></span>
@@ -100,7 +100,7 @@
                                                 <span class="custom-control-description">{{ colTop.name }}</span>
                                             </label>
                                             <ul *ngIf="colTop.collections.length > 0">
-                                                <li *ngFor="let colChild of colTop.collections" class="list-group-item">
+                                                <li *ngFor="let colChild of colTop.collections" (click)="toggleFilter(colChild.id, 'classification')" class="list-group-item">
                                                     <label class="custom-control custom-checkbox">
                                                         <input type="checkbox" class="custom-control-input">
                                                         <span class="custom-control-indicator"></span>

@@ -209,6 +209,11 @@ export class AssetService {
         // Params are different, clear the assets!
         this.allResultsSource.next([]);
 
+        // Set asterisk search to blank string (expected by service)
+        if (params["term"] === "*") {
+            params["term"] = "";
+        }
+
         // urlParams is used by the below load functions
         this.urlParams = params;
 
@@ -236,7 +241,7 @@ export class AssetService {
         }  else if (params.hasOwnProperty("colId") && params["colId"] !== "") {
             //get collection thumbnails
             this.loadCollection(params.colId);
-        } else if (params.hasOwnProperty("term") && params["term"] !== "") {
+        } else if (params.hasOwnProperty("term")) {
             this.loadSearch(params.term);
         } else {
             console.log("Don't know what to query!");
