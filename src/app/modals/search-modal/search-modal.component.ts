@@ -39,17 +39,16 @@ export class SearchModal implements OnInit {
     {name: 'Sub-Saharan Africa'}
   ];
 
-  public advQueryTemplate = { term: '' };
+  public advQueryTemplate = { 
+      term: '',
+      field: {
+            'name' : 'in any field',
+            'value' : ''
+          },
+      operator: 'AND'
+    };
 
-  public advanceQueries = [
-      { 
-        term: '',
-        field: {
-          'name' : 'in any field',
-          'value' : ''
-        }
-      }
-  ];
+  public advanceQueries = [];
   public advanceSearchDate: any = {
     'startDate' : '',
     'startEra' : 'BCE',
@@ -74,6 +73,10 @@ export class SearchModal implements OnInit {
   private instCollections: any[] = [];
 
   constructor(  private _assets: AssetService, private _filters: AssetFiltersService, private _router: Router) { 
+    // Setup two query fields
+    this.advanceQueries.push(Object.assign({}, this.advQueryTemplate));
+    this.advanceQueries.push(Object.assign({}, this.advQueryTemplate));
+    
     this._assets.loadTermList( )
           .then((res) => {
               console.log(res);
@@ -151,14 +154,17 @@ export class SearchModal implements OnInit {
   }
 
   private resetFilters(): void {
-    
+    this.advanceQueries = [];
+     // Setup two query fields
+    this.advanceQueries.push(Object.assign({}, this.advQueryTemplate));
+    this.advanceQueries.push(Object.assign({}, this.advQueryTemplate));
   }
 
   private applyAllFilters(): void {
     let advQuery = "";
 
     this.advanceQueries.forEach( (query, index) => {
-      if (!query.field || !query.field.name) {
+      if (!query.field || !query.field.name || query.term.length < 1) {
         return;
       }
       // if (query.filterGroup === 'in any field') {
@@ -168,19 +174,16 @@ export class SearchModal implements OnInit {
       // }
       // kw=flavin|100#and,untitled|101
       if (index !== 0) {
-        advQuery += "#and,";
+        advQuery += "#" + query.operator.toLowerCase() + ",";
       }
 
       advQuery += query.term + '|' + query.field.value;
-
-      
-
     });
 
     console.log(advQuery);
 
     this._router.navigate(['/search', advQuery]);
-    this.closeModal.emit();
+    this.close();
   }
 }
 
