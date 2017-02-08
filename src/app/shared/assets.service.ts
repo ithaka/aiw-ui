@@ -757,4 +757,18 @@ export class AssetService {
             .toPromise()
             .then(this.extractData);
     }
+
+    public getBlogEntries(query ?: string) {
+        if (!query || query == "*") {
+            // An asterisk query on the Wordpress API *LIMITS* results to those with an asterisk!
+            query = "";
+        } else {
+            // Force exact phrase match
+            query = '"'+ query +'"';
+        }
+        return this.http
+            .get("https://public-api.wordpress.com/rest/v1.1/sites/artstor.wordpress.com/posts/?number=24&search=" + query)
+            .toPromise()
+            .then(this.extractData);
+    }
 }

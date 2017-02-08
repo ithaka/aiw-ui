@@ -24,6 +24,8 @@ export class Home implements OnInit, OnDestroy {
   institution: any = {};
   errors = {};
   private user: any;
+  private blogPosts: any[] = [];
+  private blogLoading: boolean = true;
 
   // TypeScript public modifiers
   constructor(
@@ -53,6 +55,20 @@ export class Home implements OnInit, OnDestroy {
       .catch((err) => {
         this.errors['collections'] = "Unable to load collections.";
       });
+
+
+      this._assets.getBlogEntries()
+        .then((data) => {
+          console.log(data);
+          if (data.posts) {
+            this.blogPosts = data.posts;
+          }
+          this.blogLoading = false;
+        },)
+        .catch((error) => {
+          console.log(error);
+          this.blogLoading = false;
+        });
   }
 
   ngOnDestroy() {
