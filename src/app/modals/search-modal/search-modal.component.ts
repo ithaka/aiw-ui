@@ -187,7 +187,7 @@ export class SearchModal implements OnInit {
     // Load filters!
     this.filterParams = {};
     let appliedFilters = this._filters.getApplied();
-
+    
     for (let filter of appliedFilters) {
       if(filter.filterGroup == 'currentPage'){
         this.filterParams[filter.filterGroup] =  parseInt(filter.filterValue);
@@ -199,10 +199,8 @@ export class SearchModal implements OnInit {
     if (advQuery.length < 1) {
       advQuery = "*";
     }
-    this.filterParams['term'] = advQuery;
     
-    // console.log(this.filterParams);
-    this._router.navigate(['/search', this.filterParams]);
+    this._router.navigate(['/search', advQuery, this.filterParams]);
 
     // this._router.navigate(['/search', advQuery]);
     this.close();
@@ -215,9 +213,9 @@ export class SearchModal implements OnInit {
     };
 
     if(this._filters.isApplied(filter)){ // Remove Filter
-      this._filters.remove(filter);
+      this._filters.remove(filter, true);
     } else { // Add Filter
-      this._filters.apply(filter);
+      this._filters.apply(filter, true);
     }
     
     console.log( this._filters.getApplied() );

@@ -177,7 +177,6 @@ a.blog-post {
   display: block;
 
   &:hover, &:active {
-    background: $gray;
     
     & .blog-post__title {
       color: $blue;

@@ -80,9 +80,11 @@ export class AssetFiltersService {
         return this.availableFilters;
     }
 
-    public apply(filter) {
+    public apply(filter, isQuiet ?: boolean) {
         this.appliedFilters.push(filter);
-        this.appliedSource.next(this.appliedFilters);
+        if (!isQuiet) {
+          this.appliedSource.next(this.appliedFilters);
+        } 
     }
 
     public isApplied(filterObj) {
@@ -106,11 +108,13 @@ export class AssetFiltersService {
         }
     }
 
-    public remove(filter) {
+    public remove(filter, isQuiet ?: boolean) {
         let filterIndex = this.appliedFilters.indexOf(filter);
         if (filterIndex >= 0) {
             this.appliedFilters.splice(filterIndex);
-            this.appliedSource.next(this.appliedFilters);
+            if (!isQuiet) {
+                this.appliedSource.next(this.appliedFilters);
+            }
         }
     }
 
