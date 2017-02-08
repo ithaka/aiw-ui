@@ -11,30 +11,9 @@
             <div class="modal-body">
                 <div class="container-fluid">
                     <div class="row">
-                        <div class="col-12">
+                        <div class="col-6">
                             <h3>Search for words or phrases</h3>
-                            <p>You can enter multiple words and use quotes to indicate exact search terms (e.g., fresco, "costume design").</p>
-                        </div>
-                    <!--</div>
-                    <div class="row">-->
-                        <div class="col-12 pb-3">
-                            
-                            <!--<div class="form-group">
-                                <div class="input-group">
-                                    <input type="text" class="form-control">
-
-
-                                    <div class="dropdown">
-                                        <button (click)="showFields()"class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                            in any field
-                                        </button>
-                                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                            <a *ngFor="let field of fields" class="dropdown-item">{{ field.name }}</a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>-->
-                            
+                            <p class="small">You can enter multiple words and use quotes to indicate exact search terms (e.g., fresco, "costume design").</p>
                             <div *ngFor="let query of advanceQueries; let i = index;" class="form-group">
                                 <div class="input-group">
                                     <div ngbDropdown class="input-group-btn" *ngIf="i !== 0">
@@ -62,10 +41,25 @@
                             <div class="form-group">
                                 <button class="btn btn-secondary" (click)="advanceQueries.push(advQueryTemplate)">Add Query</button>
                             </div>
+
+                            <div class="form-group pt-3">
+                                <h3>Date</h3>
+                                <p class="small">Enter a year or range (numbers only) to limit your search.</p>
+                                <div class="form-card card dt-grp">
+                                    <div class="date-filter-row">
+                                        <input id="inputDateFilterStart" [(ngModel)]="advanceSearchDate['startDate']" type="number" (keypress)="dateKeyPress($event)" min="0" class="form-control" placeholder="Start Date">
+                                        <div id="buttonDateFilterStartEra" class="toggle-btn" (click)="toggleEra('startEra')">{{ advanceSearchDate['startEra'] }}</div>
+                                    </div>
+                                    <div class="date-filter-row">
+                                        <input id="inputDateFilterEnd" [(ngModel)]="advanceSearchDate['endDate']" type="number" (keypress)="dateKeyPress($event)" min="0" class="form-control" placeholder="End Date">
+                                        <div id="buttonDateFilterEndEra" class="toggle-btn" (click)="toggleEra('endEra')">{{ advanceSearchDate['endEra'] }}</div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <div class="col-12">
+                        <div class="col-6">
                             <h3>Search by geography, classification, and/or collections</h3>
-                            <p>You can narrow your search results by filtering on both the Geography and Classification areas.</p>
+                            <p class="small">You can narrow your search results by filtering on both the Geography and Classification areas.</p>
                             <div class="form-group" *ngIf="termsList.geoTree && (termsList.geoTree.length > 0)">
                                 <label>Geography</label>
                                 <div class="form-card card">
@@ -118,24 +112,7 @@
                                     </ul>
                                 </div>
                             </div>
-
-
-                            <div class="form-group" >
-                                <label>Date</label>
-                                
-                                <div class="form-card card dt-grp">
-                                    <div class="date-filter-row">
-                                        <input id="inputDateFilterStart" [(ngModel)]="advanceSearchDate['startDate']" type="number" (keypress)="dateKeyPress($event)" min="0" class="form-control" placeholder="Start Date">
-                                        <div id="buttonDateFilterStartEra" class="toggle-btn" (click)="toggleEra('startEra')">{{ advanceSearchDate['startEra'] }}</div>
-                                    </div>
-                                    <div class="date-filter-row">
-                                        <input id="inputDateFilterEnd" [(ngModel)]="advanceSearchDate['endDate']" type="number" (keypress)="dateKeyPress($event)" min="0" class="form-control" placeholder="End Date">
-                                        <div id="buttonDateFilterEndEra" class="toggle-btn" (click)="toggleEra('endEra')">{{ advanceSearchDate['endEra'] }}</div>
-                                    </div>
-                                </div>
-                            </div>
-
-                        </div>
+                        </div><!--end second column-->
                     </div>
                 </div>
             </div>
