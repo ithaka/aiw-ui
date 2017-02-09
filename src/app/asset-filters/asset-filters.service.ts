@@ -80,26 +80,26 @@ export class AssetFiltersService {
         return this.availableFilters;
     }
 
-    public apply(group: string, filter: any, isQuiet ?: boolean) {
+    public apply(group: string, value: string, isQuiet ?: boolean) {
         let groupExists = false;
 
-        for(var i = 0; i < this.appliedFilters.length; i++){
-            var filterObj = this.appliedFilters[i];
-            if((group === filterObj.filterGroup)){
-                filterObj.filterValue.push()
-                if (filterObj.filterValue.indexOf(filter) < 1) {
-                     filterObj.filterValue.push(filter);
+        for(let i = 0; i < this.appliedFilters.length; i++){
+            if(group === this.appliedFilters[i].filterGroup){
+                if (this.appliedFilters[i].filterValue.indexOf(value) < 0) {
+                    this.appliedFilters[i].filterValue.push(value);
                 }
                 groupExists = true;
             }
         }
+
         if (!groupExists) {
-            this.appliedFilters.push({
+            let filterObj = {
                 filterGroup: group,
-                filterValue: [filter]
-            });
+                filterValue: [value]
+            };
+            this.appliedFilters.push(filterObj);
         }
-        
+
         if (!isQuiet) {
           this.appliedSource.next(this.appliedFilters);
         } 
@@ -130,7 +130,6 @@ export class AssetFiltersService {
 
     public remove(group, filter, isQuiet ?: boolean) {
         let filterRemoved = false;
-
         for(var i = 0; i < this.appliedFilters.length; i++){
             var filterObj = this.appliedFilters[i];
             if((group === filterObj.filterGroup)){

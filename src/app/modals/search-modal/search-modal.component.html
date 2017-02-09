@@ -99,9 +99,9 @@
                                                 <span class="custom-control-description">{{ colTop.name }}</span>
                                             </label>
                                             <ul *ngIf="colTop.collections.length > 0">
-                                                <li *ngFor="let colChild of colTop.collections" (click)="toggleFilter(colChild.collectionid, 'coll')" class="list-group-item">
-                                                    <label class="custom-control custom-checkbox">
-                                                        <input type="checkbox" class="custom-control-input">
+                                                <li *ngFor="let colChild of colTop.collections" class="list-group-item">
+                                                    <label  class="custom-control custom-checkbox">
+                                                        <input (click)="toggleFilter(colChild.collectionid, 'coll')" type="checkbox" class="custom-control-input">
                                                         <span class="custom-control-indicator"></span>
                                                         <span class="custom-control-description">{{ colChild.collectionname }}</span>
                                                     </label>

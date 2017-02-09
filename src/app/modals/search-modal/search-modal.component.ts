@@ -206,15 +206,12 @@ export class SearchModal implements OnInit {
     this.close();
   }
 
-  private toggleFilter(value, group): void{
+  private toggleFilter(value: string, group: string): void {
     if(this._filters.isApplied(group, value)){ // Remove Filter
       this._filters.remove(group, value, true);
     } else { // Add Filter
       this._filters.apply(group, value, true);
     }
-    
-    console.log( this._filters.getApplied() );
-    // this.loadRoute();
   }
 }
 
