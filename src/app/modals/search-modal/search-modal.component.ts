@@ -207,15 +207,10 @@ export class SearchModal implements OnInit {
   }
 
   private toggleFilter(value, group): void{
-    let filter = {
-      filterGroup : group,
-      filterValue : value
-    };
-
-    if(this._filters.isApplied(filter)){ // Remove Filter
-      this._filters.remove(filter, true);
+    if(this._filters.isApplied(group, value)){ // Remove Filter
+      this._filters.remove(group, value, true);
     } else { // Add Filter
-      this._filters.apply(filter, true);
+      this._filters.apply(group, value, true);
     }
     
     console.log( this._filters.getApplied() );

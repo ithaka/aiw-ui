@@ -82,10 +82,14 @@ export class AssetFilters {
 
         for (let paramName in routeParams) {
             if (this._filters.isFilterGroup(paramName)) {
-              this._filters.apply({
-                filterGroup: paramName,
-                filterValue: routeParams[paramName]
-              });
+              if (routeParams[paramName].indexOf(',')) {
+                let multiFilters = routeParams[paramName].split(',');
+                multiFilters.forEach( value => {
+                  this._filters.apply(paramName, value);
+                });
+              } else {
+                this._filters.apply(paramName, routeParams[paramName]);
+              }
             }
         }
       })
@@ -104,8 +108,7 @@ export class AssetFilters {
       this._filters.applied$
             .subscribe(filters => { 
                 this.appliedFilters = filters;
-                this.loadRoute();
-               })
+            })
     );
    
   }
@@ -162,29 +165,18 @@ export class AssetFilters {
   }
 
   toggleFilter(value, group){
-
-    // this._filters.setFilter( group, value )
-
-    let filter = {
-      filterGroup : group,
-      filterValue : value
-    };
-    if(this._filters.isApplied(filter)){ // Remove Filter
-      this._filters.remove(filter);
+    if(this._filters.isApplied(group, value)){ // Remove Filter
+      this._filters.remove(group, value);
     } else { // Add Filter
-      this._filters.apply(filter);
+      this._filters.apply(group, value);
     }
     this.pagination.currentPage = 1;
     
-    // this.loadRoute();
+    this.loadRoute();
   }
 
   filterApplied(value, group){
-    var filter = {
-      filterGroup : group,
-      filterValue : value
-    };
-    return this._filters.isApplied(filter);
+    return this._filters.isApplied(group, value);
   }
 
   clearAllFilterGroup(group){
@@ -217,7 +209,7 @@ export class AssetFilters {
   }
 
   removeFilter(filterObj){
-    this._filters.remove(filterObj);
+    this._filters.remove(filterObj.filterGroup, filterObj.filterValue);
   } 
 
   getUniqueColTypeIds(facetArray){

@@ -11,7 +11,7 @@
             <div class="modal-body">
                 <div class="container-fluid">
                     <div class="row">
-                        <div class="col-6">
+                        <div class="col-lg-6">
                             <h3>Search for words or phrases</h3>
                             <p class="small">You can enter multiple words and use quotes to indicate exact search terms (e.g., fresco, "costume design").</p>
                             <div *ngFor="let query of advanceQueries; let i = index;" class="form-group">
@@ -57,7 +57,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-6">
+                        <div class="col-lg-6">
                             <h3>Search by geography, classification, and/or collections</h3>
                             <p class="small">You can narrow your search results by filtering on both the Geography and Classification areas.</p>
                             <div class="form-group" *ngIf="termsList.geoTree && (termsList.geoTree.length > 0)">

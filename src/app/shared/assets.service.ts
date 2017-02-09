@@ -58,7 +58,8 @@ export class AssetService {
             objectId: "",
             colId: "",
             catId: "",
-            collTypes: ""
+            collTypes: "",
+            coll: ""
         };
     private activeSort: any = {
         index: 0
@@ -195,6 +196,7 @@ export class AssetService {
      * @param params Object conaining all route params
      */
     public queryAll(params: any) {
+        console.log(params);
         // Make sure number params are parsed
         params =  Object.assign( Object.assign({}, this.defaultUrlParams), params);
         params.pageSize = parseInt(params.pageSize);
@@ -257,13 +259,8 @@ export class AssetService {
         Object.keys(params).forEach(function(key) {
             var filter = {};
             if((key == 'collTypes') || (key == 'classification') || (key == 'geography')){
-                filter = {
-                    filterGroup : key,
-                    filterValue : params[key] 
-                };
-                
-                if(!thisObj._filters.isApplied(filter)){ // Add Filter
-                    thisObj._filters.apply(filter);
+                if(!thisObj._filters.isApplied(key, params[key])){ // Add Filter
+                    thisObj._filters.apply(key, params[key]);
                 }
             }
         });
@@ -569,6 +566,7 @@ export class AssetService {
         let thumbSize = 0;
         let type = 6;
         let colTypeIds = '';
+        let coll = '';
         let classificationIds = '';
         let geographyIds = '';
 
