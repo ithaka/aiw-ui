@@ -354,4 +354,8 @@ export class AssetGrid implements OnInit, OnDestroy {
 
     document.body.removeChild(textArea);
   }
+
+  private showHelp(): void{
+    window.open('http://support.artstor.org/?article=creating-links','Artstor Support','width=600,height=500');
+  }
 }
