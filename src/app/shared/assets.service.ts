@@ -58,7 +58,8 @@ export class AssetService {
             objectId: "",
             colId: "",
             catId: "",
-            collTypes: ""
+            collTypes: "",
+            sort: "0"
         };
     private activeSort: any = {
         index: 0
@@ -129,26 +130,45 @@ export class AssetService {
         return this._storage.get('institution');
     }
 
-    public goToPage(page: number) {
-        this.setUrlParam('currentPage', page);
+    public setSortOpt(sortIndex: string): void{
+        this.activeSort.index = sortIndex;
+        this.setUrlParam('sort', this.activeSort.index);
+    }
+
+    public goToPage(page: number, quiet?: boolean) {
+        this.setUrlParam('currentPage', page, quiet);
     }
 
     public setPageSize(size: number) {
         this.setUrlParam('pageSize', size);
     }
 
-    private setUrlParam(key: string, value: any) {
-        let route = this._router.routerState.snapshot.root.children[0];
-        let currentParamsObj: Params = Object.assign({}, route.params);
+    private setUrlParam(key: string, value: any, quiet?: boolean) {
+        this.urlParams[key] = value;
+        let currentParamsObj: Params = {};
 
-        let newParam = {};
-        newParam[key] = value;
+        let term: string = '';
+        for(let paramKey in this.urlParams){
+            if(paramKey == 'term'){
+                term = this.urlParams[paramKey];
+                continue;
+            }
+            if((this.urlParams[paramKey] !== '') && (this.urlParams[paramKey] !== 0)){
+                currentParamsObj[paramKey] = this.urlParams[paramKey];
+            }
+        }
 
-        let newUrl = this._router.createUrlTree([
-                Object.assign(currentParamsObj, newParam)
-            ], {relativeTo: this.route });
-
-        this._router.navigateByUrl(newUrl);
+        if(!quiet){
+            if(term.length > 0){
+                this._router.navigate(['/search', term, currentParamsObj]);
+            }
+            else{
+                let newUrl = this._router.createUrlTree([
+                    currentParamsObj
+                ], {relativeTo: this.route });
+                this._router.navigateByUrl(newUrl);
+            }
+        }
     }
     
     private formEncode = function (obj) {
@@ -219,6 +239,11 @@ export class AssetService {
 
         // Tell the filters service we have some updates
         this.setFiltersFromURLParams(params);
+
+        //Set sort param
+        if(params['sort']){
+            this.activeSort.index = params['sort'];
+        }
 
         // Read Pagination values
         this.paginationValue.pageSize = parseInt(this.urlParams.pageSize);

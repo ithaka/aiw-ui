@@ -42,7 +42,8 @@ export class AssetFiltersService {
             }
         },
         currentPage : 1,
-        pageSize : 24
+        pageSize : 24,
+        sort: "0"
     };
 
     private availableFilters: any = this.defaultAvailable;
