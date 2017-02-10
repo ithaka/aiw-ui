@@ -273,11 +273,31 @@ export class AssetGrid implements OnInit, OnDestroy {
     return index;
   }
 
-  private convertCollectionTypes(collectionId: number) {
+  private convertCollectionTypes(collectionId: number) : string {
     switch (collectionId) {
       case 3:
         return "personal-asset";
+      default:
+        return "";
     }
+  }
+
+  /**
+   * Format the search term to display advance search queries nicely
+   */
+  private formatSearchTerm(query: string) : string {
+    let fQuery = '<b>' + query;
+    // Cleanup filter pipes
+    // fQuery = fQuery.replace(/\|[0-9]{3}/g, );
+    // Add field names
+    this._assets.filterFields.forEach(field => {
+      fQuery = fQuery.replace(field.value, ' in ' + field.name);
+    });
+    fQuery = fQuery.replace(/\|/g, '</b>');
+    fQuery = fQuery.replace(/(#or,)/g, ' or <b>');
+    fQuery = fQuery.replace(/(#and,)/g, ' and <b>');
+    fQuery = fQuery.replace(/(#not,)/g, ' not <b>');
+    return fQuery;
   }
 
   /**

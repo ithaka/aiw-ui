@@ -14,21 +14,7 @@ export class SearchModal implements OnInit {
   @Output()
   private closeModal: EventEmitter<any> = new EventEmitter();
   
-  public fields = [
-    {name: "In any field", value: "all"},
-    {name: "Creator", value: "100" },
-    {name: "Title", value: "101" },
-    {name: "Location", value: "102" },
-    {name: "Repository", value: "103" },
-    {name: "Subject", value: "104" },
-    {name: "Material", value: "105" },
-    {name: "Style or Period", value: "106" },
-    {name: "Work Type", value: "107" },
-    {name: "Culture", value: "108" },
-    {name: "Description", value: "109" },
-    {name: "Technique", value: "110" },
-    {name: "Number", value: "111" }
-  ];
+  public fields = [];
 
   public geographyFields = [
     {name: 'North America'},
@@ -75,6 +61,9 @@ export class SearchModal implements OnInit {
   private filterSelections: any[] = [];
 
   constructor(  private _assets: AssetService, private _filters: AssetFiltersService, private _router: Router) { 
+    // Pull in filterFields
+    this.fields = _assets.filterFields;
+    
     // Setup two query fields
     this.advanceQueries.push(Object.assign({}, this.advQueryTemplate));
     this.advanceQueries.push(Object.assign({}, this.advQueryTemplate));

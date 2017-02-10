@@ -8,7 +8,6 @@
         <h2 class="header-button" (click)="showFilters = !showFilters">Filters <i class="icon icon-direction absolute-right" [ngClass]="{ 'icon-down' : showFilters, 'icon-left' : !showFilters }"></i></h2>
     </div>-->
     <div class="col-sm-3 col-md-5 col-lg-6 mobile--hide">
-        <li class="number-results" *ngIf="totalAssets && !isLoading">{{ totalAssets }}{{ totalAssets == 2000 ? '+' : '' }} results  <span *ngIf="searchTerm">for {{ searchTerm }}</span></li> 
         <li class="dropdown" class="sortlist" ngbDropdown>
             <button class="btn btn-link" id="sortdropdownMenu" ngbDropdownToggle>Sort: <span class="value">{{ activeSort.label ? activeSort.label : 'Relevance' }}</span></button>
             <div class="dropdown-menu" aria-labelledby="sortdropdownMenu">
@@ -43,6 +42,12 @@
             <button class="pag pag-next" (click)="goToPage(pagination.currentPage + 1)" [disabled]="!pagination.currentPage || pagination.currentPage >= pagination.totalPages"></button>
             <button class="pag pag-last" (click)="goToPage(pagination.totalPages)" [disabled]="!pagination.currentPage || pagination.currentPage >= pagination.totalPages"></button>
         </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-10">
+        <div class="number-results" *ngIf="totalAssets && !isLoading">{{ totalAssets }}{{ totalAssets == 2000 ? '+' : '' }} results  <span *ngIf="searchTerm">for <span [innerHtml]="formatSearchTerm(searchTerm)"></span></span></div>
     </div>
 </div>
 

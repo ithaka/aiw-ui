@@ -44,6 +44,22 @@ export class AssetService {
 
     private searchSubscription: Subscription;
 
+    public filterFields = [
+        {name: "In any field", value: "all"},
+        {name: "Creator", value: "100" },
+        {name: "Title", value: "101" },
+        {name: "Location", value: "102" },
+        {name: "Repository", value: "103" },
+        {name: "Subject", value: "104" },
+        {name: "Material", value: "105" },
+        {name: "Style or Period", value: "106" },
+        {name: "Work Type", value: "107" },
+        {name: "Culture", value: "108" },
+        {name: "Description", value: "109" },
+        {name: "Technique", value: "110" },
+        {name: "Number", value: "111" }
+    ];
+
     /**
      * urlParams is used as an enum for special parameters
      */
