@@ -17,6 +17,7 @@ export class AssetFilters {
   public showFilters: boolean = true;
   public showAdvancedModal: boolean = false;
   private subscriptions: Subscription[] = [];
+  private filterDate: boolean = false;
 
   errors = {};
   results = [];
@@ -77,6 +78,10 @@ export class AssetFilters {
       this.route.params.subscribe((routeParams) => {
         this.term = routeParams["term"];
 
+        if(routeParams['startDate'] && routeParams['endDate']){
+          this.filterDate = true;
+        }
+
         // When params are adjusted, applied filters need to be cleared
         this._filters.clearApplied();
 
@@ -113,7 +118,7 @@ export class AssetFilters {
   private loadRoute() {
     let params = {};
 
-    if (this.availableFilters.dateObj && this.availableFilters.dateObj.modified == true) {
+    if (this.availableFilters.dateObj && this.availableFilters.dateObj.modified == true && this.filterDate) {
       params['startDate'] = this.availableFilters.dateObj.earliest.date * (this.availableFilters.dateObj.earliest.era == 'BCE' ? -1 : 1);
       params['endDate'] = this.availableFilters.dateObj.latest.date * (this.availableFilters.dateObj.latest.era == 'BCE' ? -1 : 1);
     }
@@ -259,6 +264,7 @@ export class AssetFilters {
     }
 
     this.availableFilters.dateObj.modified = true;
+    this.filterDate = true;
     this.pagination.currentPage = 1;
     this.loadRoute();
   }

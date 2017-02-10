@@ -307,6 +307,20 @@ export class AssetService {
             }
             this._filters.setAvailable('dateObj', dateObj);
         }
+        else{
+            var dateObj = {
+                modified : false,
+                earliest : {
+                    date : 1000,
+                    era : 'BCE'
+                },
+                latest : {
+                    date : 2017,
+                    era : 'CE'
+                }
+            }
+            this._filters.setAvailable('dateObj', dateObj);
+        }
     }
 
     /**

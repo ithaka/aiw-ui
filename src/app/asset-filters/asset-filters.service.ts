@@ -37,7 +37,7 @@ export class AssetFiltersService {
                 era : 'BCE'
             },
             latest : {
-                date : 2016,
+                date : 2017,
                 era : 'CE'
             }
         },
