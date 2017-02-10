@@ -34,10 +34,10 @@ export class SearchPage implements OnInit, OnDestroy {
         if (!params['currentPage']){
           params['currentPage'] = 1;
         } 
-        if (params["term"]) {
+        if (params["term"] ) {
           this._assets.queryAll(params);
         } else {
-          throw new Error("Search error - no search term");
+          console.log('No search term');
         }
       })
     ); 

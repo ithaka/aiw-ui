@@ -170,3 +170,35 @@ span.active {
       font-size: 12px !important;
       font-family: 'Graphik', Arial, Helvetica, sans-serif !important;
   }
+
+// Blog posts on Homepage (embeeded html requires global style)
+a.blog-post {
+  cursor: pointer;
+  display: block;
+
+  &:hover, &:active {
+    
+    & .blog-post__title {
+      color: $blue;
+    }
+  }
+}
+
+.blog-post__title {
+  font-weight: normal;
+  line-height: 16px;  
+}
+
+.blog-post__preview {
+  padding: 6px 0px;
+
+  &, & * {
+    font-family: 'Graphik', Arial, Helvetica, sans-serif !important;
+    font-size: 11px !important;
+    line-height: 14px !important;
+  }
+
+  & p {
+    padding: 0px !important;
+  }
+}

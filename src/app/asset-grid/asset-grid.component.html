@@ -8,7 +8,6 @@
         <h2 class="header-button" (click)="showFilters = !showFilters">Filters <i class="icon icon-direction absolute-right" [ngClass]="{ 'icon-down' : showFilters, 'icon-left' : !showFilters }"></i></h2>
     </div>-->
     <div class="col-sm-3 col-md-5 col-lg-6 mobile--hide">
-        <li class="number-results" *ngIf="totalAssets && !isLoading">{{ totalAssets }}{{ totalAssets == 2000 ? '+' : '' }} results  <span *ngIf="searchTerm">for {{ searchTerm }}</span></li> 
         <li class="dropdown" class="sortlist" ngbDropdown>
             <button class="btn btn-link" id="sortdropdownMenu" ngbDropdownToggle>Sort: <span class="value">{{ activeSort.label ? activeSort.label : 'Relevance' }}</span></button>
             <div class="dropdown-menu" aria-labelledby="sortdropdownMenu">
@@ -46,18 +45,29 @@
     </div>
 </div>
 
+<div class="row">
+    <div class="col-10">
+        <div class="number-results" *ngIf="!isLoading">{{ totalAssets }}{{ totalAssets == 2000 ? '+' : '' }} results  <span *ngIf="searchTerm">for <span [innerHtml]="formatSearchTerm(searchTerm)"></span></span></div>
+    </div>
+</div>
+
 <!--Thumbnail Grid-->
 <div class="row row--no-overflow" [ngClass]="{'edit': editMode}">
     <div class="col-md-12 col--expanding has-icon-overlay" [ngClass]="{ 'col--expand-12' : !showFilters }">
         <i [class.hidden]="!isLoading" class="icon-lg icon-overlay icon-loading-large"></i>
         <div class="row no-gutters">
-            <!--<div class="card-deck">-->
-                <div class="col-sm-6 col-md-3 col-lg-2" *ngFor="let asset of results">
-                    <div [routerLink]="editMode ? [] : ['/asset', asset.objectId ]" class="card card--asset" [ngClass]="{'selected': ( isSelectedAsset(asset) > -1 ) }" (click)="selectAsset(asset)">
-                    <ang-thumbnail [thumbnail]="asset"></ang-thumbnail>
-                    </div>
-                </div> <!-- .col -->
-            <!--</div>-->
+            <div *ngIf="!isLoading && totalAssets == 0 && searchError.length < 1" class="alert alert-warning">
+                <b>Unable to find any assets</b><br/>
+                A less specific query might be able to find what you are looking for.
+            </div>
+            <div *ngIf="!isLoading && searchError.length > 0" class="alert alert-danger">
+                {{ searchError }}
+            </div>
+            <div class="col-sm-6 col-md-3 col-lg-2" *ngFor="let asset of results">
+                <div [routerLink]="editMode ? [] : ['/asset', asset.objectId ]" class="card card--asset" [ngClass]="{'selected': ( isSelectedAsset(asset) > -1 ) }" (click)="selectAsset(asset)">
+                <ang-thumbnail [thumbnail]="asset"></ang-thumbnail>
+                </div>
+            </div> <!-- .col -->
         </div>
     </div>
 </div>

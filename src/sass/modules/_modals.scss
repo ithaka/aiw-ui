@@ -7,7 +7,8 @@
 .modal {
     display: none;
     background-color: rgba(238, 238, 238, 0.5);
-    z-index: 5000;
+    z-index: 6000;
+    overflow-y: auto;
 }
 
 .modal.show{

@@ -30,6 +30,7 @@ export class AssetGrid implements OnInit, OnDestroy {
 
   // Default show as loading until results have update
   private isLoading: boolean = true;
+  private searchError: string = "";
 
   private baseURL: string = '';
   private imgEncryptId: string = '';
@@ -133,21 +134,25 @@ export class AssetGrid implements OnInit, OnDestroy {
 
     // sets up subscription to allResults, which is the service providing thumbnails
     this.subscriptions.push(
-      this._assets.allResults.subscribe((allResults: any) => {
-        // Update results array
-        this.results = allResults.thumbnails;
-
-        if(allResults.count){
-          this.totalAssets = allResults.count;
-        }
-          
-        if (allResults.thumbnails && allResults.thumbnails.length == 0) {
-          // We push an empty array on new search to clear assets
-          this.isLoading = true;
-        } else {
+      this._assets.allResults.subscribe(
+        (allResults: any) => {
+          // Update results array
+          this.results = allResults.thumbnails;
+          console.log(allResults);
+          if(allResults.hasOwnProperty('count')){
+            this.totalAssets = allResults.count;
+            this.isLoading = false;
+          } else {
+            // We push an empty array on new search to clear assets
+            this.isLoading = true;
+          }
+        },
+        (error) => {
+          console.log(error);
           this.isLoading = false;
+          this.searchError = "There was a server error loading your search. Please try again later.";
         }
-      })
+      )
     );
   }
 
@@ -268,11 +273,32 @@ export class AssetGrid implements OnInit, OnDestroy {
     return index;
   }
 
-  private convertCollectionTypes(collectionId: number) {
+  private convertCollectionTypes(collectionId: number) : string {
     switch (collectionId) {
       case 3:
         return "personal-asset";
+      default:
+        return "";
     }
+  }
+
+  /**
+   * Format the search term to display advance search queries nicely
+   */
+  private formatSearchTerm(query: string) : string {
+    let fQuery = '<b>' + query;
+    // Cleanup filter pipes
+    // fQuery = fQuery.replace(/\|[0-9]{3}/g, );
+    // Add field names
+    this._assets.filterFields.forEach(field => {
+      fQuery = fQuery.replace(field.value, ' (in ' + field.name + ')');
+    });
+    fQuery = fQuery.replace(/\|\#/g, '| (in any) #');
+    fQuery = fQuery.replace(/\|/g, '</b>');
+    fQuery = fQuery.replace(/(#or,)/g, ' or <b>');
+    fQuery = fQuery.replace(/(#and,)/g, ' and <b>');
+    fQuery = fQuery.replace(/(#not,)/g, ' not <b>');
+    return fQuery;
   }
 
   /**

@@ -1,0 +1,92 @@
+.modal{
+    display: block;
+
+    .dropdown{
+        &.open .dropdown-menu{
+            display: block;
+        }
+        .dropdown-item.active, .dropdown-item:active{
+            background-color: #f7f7f9;
+        }
+    }
+
+    .list-group{
+        .list-group-item{
+            padding: 10px;
+            height: 23px;
+            line-height: 22px;
+        }
+    }
+
+    .dt-grp{
+
+        display: block;
+    
+        .date-filter-row{
+            margin: 8px;
+            display: inline-block;
+            width: 45%;
+            
+            input[type="number"]{
+                width: 65%;
+                display: inline-block;
+            }
+
+            .toggle-btn{
+                display: inline-block;
+                width: 35%;
+                padding: 0.5rem 0.75rem;
+                font-size: 1rem;
+                line-height: 1.25;
+                border-top: 1px solid rgba(0, 0, 0, 0.15);
+                border-right: 1px solid rgba(0, 0, 0, 0.15);
+                border-bottom: 1px solid rgba(0, 0, 0, 0.15);
+                text-align: center;
+                cursor: pointer;
+                background: #f1f1f1;
+                margin-left: -4px;
+            }
+
+            .toggle-btn:hover{
+                background: #fff;
+            }
+
+            .btn{
+                width: 50%;
+                cursor: pointer;
+                color: #373a3c;
+                border: 1px solid rgba(0, 0, 0, 0.15);
+            }
+
+            .btn:hover{
+                background: #373a3c;
+                color: #fff;
+            }
+
+            .btn:nth-of-type(2){
+                margin-left: -5px;
+                border-left: none;
+            }
+        }
+    }
+    .date-filter-error-msg{
+        line-height: 20px;
+        margin-bottom: 10px;
+        color: red;
+        font-size: .75em;
+    }
+}
+input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button { 
+    -webkit-appearance: none; 
+    margin: 0; 
+}
+input[type=number] {
+    -moz-appearance: textfield;
+}
+
+.custom-control-description {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow-x: hidden;
+}
