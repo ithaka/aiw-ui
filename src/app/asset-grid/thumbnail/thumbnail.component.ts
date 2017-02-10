@@ -20,7 +20,9 @@ export class ThumbnailComponent implements OnInit {
     1: "artstor-asset",
     2: "institution-asset",
     3: "personal-asset",
-    5: "ssc-asset"
+    4: "institution-asset",
+    5: "ssc-asset",
+    6: "personal-asset"
   }
 
   constructor(
