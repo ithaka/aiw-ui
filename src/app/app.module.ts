@@ -112,7 +112,7 @@ type StoreType = {
     HttpModule,
     // CoolStorageModule,
     LockerModule,
-    RouterModule.forRoot(ROUTES, { useHash: true }),
+    RouterModule.forRoot(ROUTES, { useHash: false }),
     Angulartics2Module.forRoot([ Angulartics2GoogleAnalytics ]),
     TranslateModule.forRoot({
         provide: TranslateLoader,
