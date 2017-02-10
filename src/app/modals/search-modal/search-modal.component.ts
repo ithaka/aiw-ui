@@ -72,6 +72,7 @@ export class SearchModal implements OnInit {
   private instName: string = "";
   private instCollections: any[] = [];
   private filterParams: any = {};
+  private filterSelections: any[] = [];
 
   constructor(  private _assets: AssetService, private _filters: AssetFiltersService, private _router: Router) { 
     // Setup two query fields
@@ -187,13 +188,14 @@ export class SearchModal implements OnInit {
       this.filterParams['endDate'] = this.advanceSearchDate['endDate'] * (this.advanceSearchDate['endEra'] == 'BCE' ? -1 : 1);
     }
 
+    // Apply filters
     let appliedFilters = this._filters.getApplied();
 
-    for (let filter of appliedFilters) {
-      if(filter.filterGroup == 'currentPage'){
-        this.filterParams[filter.filterGroup] =  parseInt(filter.filterValue);
-      } else if(filter.filterValue && (filter.filterGroup != 'startDate') && (filter.filterGroup != 'endDate')){
-        this.filterParams[filter.filterGroup] =  filter.filterValue;
+    for (let filter of this.filterSelections) {
+      if (this.filterParams[filter.group]) {
+        this.filterParams[filter.group].push(filter.value);
+      } else {
+        this.filterParams[filter.group] = [filter.value];
       }
     }
     
@@ -208,10 +210,15 @@ export class SearchModal implements OnInit {
   }
 
   private toggleFilter(value: string, group: string): void {
-    if(this._filters.isApplied(group, value)){ // Remove Filter
-      this._filters.remove(group, value, true);
-    } else { // Add Filter
-      this._filters.apply(group, value, true);
+    let filter = {
+      'group': group,
+      'value' : value
+    };
+    
+    if (this.filterSelections.indexOf(filter) < 0) {
+      this.filterSelections.push(filter);
+    } else {
+      this.filterSelections.splice(this.filterSelections.indexOf(filter), 1);
     }
   }
 }
