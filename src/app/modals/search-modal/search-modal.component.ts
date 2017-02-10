@@ -178,9 +178,15 @@ export class SearchModal implements OnInit {
 
       advQuery += query.term + '|' + query.field.value;
     });
-
     // Load filters!
     this.filterParams = {};
+
+    // Apply date filter
+    if (this.advanceSearchDate['startDate'] && this.advanceSearchDate['endDate']) {
+      this.filterParams['startDate'] = this.advanceSearchDate['startDate'] * (this.advanceSearchDate['startEra'] == 'BCE' ? -1 : 1);
+      this.filterParams['endDate'] = this.advanceSearchDate['endDate'] * (this.advanceSearchDate['endEra'] == 'BCE' ? -1 : 1);
+    }
+
     let appliedFilters = this._filters.getApplied();
 
     for (let filter of appliedFilters) {
@@ -209,90 +215,3 @@ export class SearchModal implements OnInit {
     }
   }
 }
-
-// if (curSearchData.kw.indexOf("|")<0){
-// 					curSearchData.kw = curSearchData.kw+'|all'; //Fix for issue GWS-858 - Search different terms within this search result 
-// 				}
-// 				if ((curSearchData.kw.indexOf("#or")>0) && (curSearchData.kw.indexOf("#WITHIN")<0)){
-// 					newKw = curSearchData.kw + '#WITHIN,' + keyword + '|all'; //Fix for issue GWS-886 - Production issue: After Adv search with value "OR" then search in "Within the search result" again, the search result will not matched with search value.
-// 					newOrigKW = curSearchData.origKW + '#WITHIN,' + origKW + '|all';//for interntlization
-// 				} else {
-// 					newKw = curSearchData.kw + '#and,' + keyword + '|all';
-// 					newOrigKW = curSearchData.origKW + '#and,' + origKW + '|all';//for interntlization
-// 				}
-
-	// if (data.kw!=undefined){
-	// 							kw=data.kw;
-	// 							//kw=kw.replace(/(\|all)/g," (in any field),");
-	// 							kw=kw.replace(/(\|all)/g,",");
-								
-	// 							kw=kw.replace(/(\#and\,)/g,' "and" ');
-	// 							kw=kw.replace(/(\#or,)/g,' "or" ');
-	// 							kw=kw.replace(/(\#not,)/g,' "not" ');
-	// 							if (kw.charAt(kw.length-1)==","){
-									
-	// 								var word=kw.substring(0,kw.length-1);
-	// 								//console.log("*****KW "+word);
-	// 								kw=word;
-	// 							}
-	// 						}
-	// 						var bDate="";
-	// 						var eDate="";
-	// 						if (data.bDate==undefined){
-								
-	// 						}
-	// 						else {
-	// 							bDate=data.bDate;
-								
-	// 						}
-	// 						if (data.eDate==undefined){
-								
-	// 						}
-	// 						else {
-	// 							eDate=data.eDate;
-								
-	// 						}
-	// 						var dExact="";
-	// 						if (data.dExact==undefined){
-								
-	// 						}
-	// 						else {
-	// 							dExact=data.dExact;
-								
-	// 						}
-	// 						var prGeoId="";
-	// 						if (data.prGeoId==undefined){
-								
-	// 						}
-	// 						else {
-	// 							prGeoId=data.prGeoId;
-								
-	// 						}
-	// 						this.SSArray.splice(0,0,{"title":title,"recCount":recCount,"url":hash, "bDate":bDate,"clsids":classif,"dExact":dExact,"eDate":eDate,"geoIds":geoIds,
-
-	// 							"id":colls,"kw":kw,"prGeoId":prGeoId,"type":data.type,"name":coll,"savedDate":this.newDate, "collTypes":collTypes});
-
-	// 						//thumbStatusMsg("searchSaved");	
-	// 						this.check4SScroll(ul);
-	// 						//this.saveMySearch();
-
-// /ase "SAHARA":
-// 								
-// 								 break;
-// 							 case "Archaeo":
-// 								label1="Site Name";
-// 								label2="Artifact Title";
-// 								label3="Site Mod. Location";
-// 									break;    
-// 							 case "FLEXspace":
-// 								 label1="Campus";
-// 								 label2="Space Design Type";
-// 								 label3="Space Date of Service...";
-								
-// 								 break;
-								
-// 							  default:
-// 								var label1="Title";
-// 								var label2="Creator";
-// 								var label3="";	
-// 								break; 
