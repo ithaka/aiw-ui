@@ -66,9 +66,11 @@ export class AssetFiltersService {
     }
     
     // Empties all filter objects without publishing them
-    public clearApplied():void {
+    public clearApplied(isQuiet ?: boolean):void {
         this.appliedFilters = [];
-        this.appliedSource.next(this.appliedFilters);
+        if (!isQuiet) {
+            this.appliedSource.next(this.appliedFilters);
+        }
     }
 
     public setAvailable(name: string, filters: any ) {

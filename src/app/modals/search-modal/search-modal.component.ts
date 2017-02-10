@@ -171,12 +171,7 @@ export class SearchModal implements OnInit {
       if (!query.field || !query.field.name || query.term.length < 1) {
         return;
       }
-      // if (query.filterGroup === 'in any field') {
-      //   // add as search term
-      // } else {
-      //   this._filters.apply(query);
-      // }
-      // kw=flavin|100#and,untitled|101
+      
       if (index !== 0) {
         advQuery += "#" + query.operator.toLowerCase() + ",";
       }
@@ -187,7 +182,7 @@ export class SearchModal implements OnInit {
     // Load filters!
     this.filterParams = {};
     let appliedFilters = this._filters.getApplied();
-    
+
     for (let filter of appliedFilters) {
       if(filter.filterGroup == 'currentPage'){
         this.filterParams[filter.filterGroup] =  parseInt(filter.filterValue);
@@ -195,7 +190,7 @@ export class SearchModal implements OnInit {
         this.filterParams[filter.filterGroup] =  filter.filterValue;
       }
     }
-
+    
     if (advQuery.length < 1) {
       advQuery = "*";
     }
