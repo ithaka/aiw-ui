@@ -47,7 +47,7 @@
 
 <div class="row">
     <div class="col-10">
-        <div class="number-results" *ngIf="totalAssets && !isLoading">{{ totalAssets }}{{ totalAssets == 2000 ? '+' : '' }} results  <span *ngIf="searchTerm">for <span [innerHtml]="formatSearchTerm(searchTerm)"></span></span></div>
+        <div class="number-results" *ngIf="!isLoading">{{ totalAssets }}{{ totalAssets == 2000 ? '+' : '' }} results  <span *ngIf="searchTerm">for <span [innerHtml]="formatSearchTerm(searchTerm)"></span></span></div>
     </div>
 </div>
 
