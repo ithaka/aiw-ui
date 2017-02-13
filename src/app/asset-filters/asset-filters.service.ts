@@ -67,9 +67,11 @@ export class AssetFiltersService {
     }
     
     // Empties all filter objects without publishing them
-    public clearApplied():void {
+    public clearApplied(isQuiet ?: boolean):void {
         this.appliedFilters = [];
-        this.appliedSource.next(this.appliedFilters);
+        if (!isQuiet) {
+            this.appliedSource.next(this.appliedFilters);
+        }
     }
 
     public setAvailable(name: string, filters: any ) {
@@ -81,18 +83,38 @@ export class AssetFiltersService {
         return this.availableFilters;
     }
 
-    public apply(filter, isQuiet ?: boolean) {
-        this.appliedFilters.push(filter);
+    public apply(group: string, value: string, isQuiet ?: boolean) {
+        let groupExists = false;
+
+        for(let i = 0; i < this.appliedFilters.length; i++){
+            if(group === this.appliedFilters[i].filterGroup){
+                if (this.appliedFilters[i].filterValue.indexOf(value) < 0) {
+                    this.appliedFilters[i].filterValue.push(value);
+                }
+                groupExists = true;
+            }
+        }
+
+        if (!groupExists) {
+            let filterObj = {
+                filterGroup: group,
+                filterValue: [value]
+            };
+            this.appliedFilters.push(filterObj);
+        }
+
         if (!isQuiet) {
           this.appliedSource.next(this.appliedFilters);
         } 
     }
 
-    public isApplied(filterObj) {
+    public isApplied(group: string, filter: any) {
         for(var i = 0; i < this.appliedFilters.length; i++){
-            var filter = this.appliedFilters[i];
-            if((filterObj.filterGroup === filter.filterGroup) && (filterObj.filterValue === filter.filterValue)){
-                return true;
+            var filterObj = this.appliedFilters[i];
+            if((group === filterObj.filterGroup)){
+                if (filterObj.filterValue.indexOf(filter) > -1) {
+                    return true;
+                }
             }
         }
         return false;
@@ -109,13 +131,21 @@ export class AssetFiltersService {
         }
     }
 
-    public remove(filter, isQuiet ?: boolean) {
-        let filterIndex = this.appliedFilters.indexOf(filter);
-        if (filterIndex >= 0) {
-            this.appliedFilters.splice(filterIndex);
-            if (!isQuiet) {
-                this.appliedSource.next(this.appliedFilters);
+    public remove(group, filter, isQuiet ?: boolean) {
+        let filterRemoved = false;
+        for(var i = 0; i < this.appliedFilters.length; i++){
+            var filterObj = this.appliedFilters[i];
+            if((group === filterObj.filterGroup)){
+                let valueIndex = filterObj.filterValue.indexOf(filter);
+                if (valueIndex > -1) {
+                    filterObj.filterValue.splice(valueIndex, 1);
+                    filterRemoved = true;
+                }
             }
+        }
+
+        if (filterRemoved && !isQuiet) {
+            this.appliedSource.next(this.appliedFilters);
         }
     }
 

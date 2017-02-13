@@ -14,21 +14,7 @@ export class SearchModal implements OnInit {
   @Output()
   private closeModal: EventEmitter<any> = new EventEmitter();
   
-  public fields = [
-    {name: "In any field", value: "all"},
-    {name: "Creator", value: "100" },
-    {name: "Title", value: "101" },
-    {name: "Location", value: "102" },
-    {name: "Repository", value: "103" },
-    {name: "Subject", value: "104" },
-    {name: "Material", value: "105" },
-    {name: "Style or Period", value: "106" },
-    {name: "Work Type", value: "107" },
-    {name: "Culture", value: "108" },
-    {name: "Description", value: "109" },
-    {name: "Technique", value: "110" },
-    {name: "Number", value: "111" }
-  ];
+  public fields = [];
 
   public geographyFields = [
     {name: 'North America'},
@@ -72,8 +58,12 @@ export class SearchModal implements OnInit {
   private instName: string = "";
   private instCollections: any[] = [];
   private filterParams: any = {};
+  private filterSelections: any[] = [];
 
   constructor(  private _assets: AssetService, private _filters: AssetFiltersService, private _router: Router) { 
+    // Pull in filterFields
+    this.fields = _assets.filterFields;
+    
     // Setup two query fields
     this.advanceQueries.push(Object.assign({}, this.advQueryTemplate));
     this.advanceQueries.push(Object.assign({}, this.advQueryTemplate));
@@ -171,31 +161,33 @@ export class SearchModal implements OnInit {
       if (!query.field || !query.field.name || query.term.length < 1) {
         return;
       }
-      // if (query.filterGroup === 'in any field') {
-      //   // add as search term
-      // } else {
-      //   this._filters.apply(query);
-      // }
-      // kw=flavin|100#and,untitled|101
+      
       if (index !== 0) {
         advQuery += "#" + query.operator.toLowerCase() + ",";
       }
 
       advQuery += query.term + '|' + query.field.value;
     });
-
     // Load filters!
     this.filterParams = {};
-    let appliedFilters = this._filters.getApplied();
-    
-    for (let filter of appliedFilters) {
-      if(filter.filterGroup == 'currentPage'){
-        this.filterParams[filter.filterGroup] =  parseInt(filter.filterValue);
-      } else if(filter.filterValue && (filter.filterGroup != 'startDate') && (filter.filterGroup != 'endDate')){
-        this.filterParams[filter.filterGroup] =  filter.filterValue;
-      }
+
+    // Apply date filter
+    if (this.advanceSearchDate['startDate'] && this.advanceSearchDate['endDate']) {
+      this.filterParams['startDate'] = this.advanceSearchDate['startDate'] * (this.advanceSearchDate['startEra'] == 'BCE' ? -1 : 1);
+      this.filterParams['endDate'] = this.advanceSearchDate['endDate'] * (this.advanceSearchDate['endEra'] == 'BCE' ? -1 : 1);
     }
 
+    // Apply filters
+    let appliedFilters = this._filters.getApplied();
+
+    for (let filter of this.filterSelections) {
+      if (this.filterParams[filter.group]) {
+        this.filterParams[filter.group].push(filter.value);
+      } else {
+        this.filterParams[filter.group] = [filter.value];
+      }
+    }
+    
     if (advQuery.length < 1) {
       advQuery = "*";
     }
@@ -206,106 +198,16 @@ export class SearchModal implements OnInit {
     this.close();
   }
 
-  private toggleFilter(value, group): void{
+  private toggleFilter(value: string, group: string): void {
     let filter = {
-      filterGroup : group,
-      filterValue : value
+      'group': group,
+      'value' : value
     };
-
-    if(this._filters.isApplied(filter)){ // Remove Filter
-      this._filters.remove(filter, true);
-    } else { // Add Filter
-      this._filters.apply(filter, true);
-    }
     
-    console.log( this._filters.getApplied() );
-    // this.loadRoute();
+    if (this.filterSelections.indexOf(filter) < 0) {
+      this.filterSelections.push(filter);
+    } else {
+      this.filterSelections.splice(this.filterSelections.indexOf(filter), 1);
+    }
   }
 }
-
-// if (curSearchData.kw.indexOf("|")<0){
-// 					curSearchData.kw = curSearchData.kw+'|all'; //Fix for issue GWS-858 - Search different terms within this search result 
-// 				}
-// 				if ((curSearchData.kw.indexOf("#or")>0) && (curSearchData.kw.indexOf("#WITHIN")<0)){
-// 					newKw = curSearchData.kw + '#WITHIN,' + keyword + '|all'; //Fix for issue GWS-886 - Production issue: After Adv search with value "OR" then search in "Within the search result" again, the search result will not matched with search value.
-// 					newOrigKW = curSearchData.origKW + '#WITHIN,' + origKW + '|all';//for interntlization
-// 				} else {
-// 					newKw = curSearchData.kw + '#and,' + keyword + '|all';
-// 					newOrigKW = curSearchData.origKW + '#and,' + origKW + '|all';//for interntlization
-// 				}
-
-	// if (data.kw!=undefined){
-	// 							kw=data.kw;
-	// 							//kw=kw.replace(/(\|all)/g," (in any field),");
-	// 							kw=kw.replace(/(\|all)/g,",");
-								
-	// 							kw=kw.replace(/(\#and\,)/g,' "and" ');
-	// 							kw=kw.replace(/(\#or,)/g,' "or" ');
-	// 							kw=kw.replace(/(\#not,)/g,' "not" ');
-	// 							if (kw.charAt(kw.length-1)==","){
-									
-	// 								var word=kw.substring(0,kw.length-1);
-	// 								//console.log("*****KW "+word);
-	// 								kw=word;
-	// 							}
-	// 						}
-	// 						var bDate="";
-	// 						var eDate="";
-	// 						if (data.bDate==undefined){
-								
-	// 						}
-	// 						else {
-	// 							bDate=data.bDate;
-								
-	// 						}
-	// 						if (data.eDate==undefined){
-								
-	// 						}
-	// 						else {
-	// 							eDate=data.eDate;
-								
-	// 						}
-	// 						var dExact="";
-	// 						if (data.dExact==undefined){
-								
-	// 						}
-	// 						else {
-	// 							dExact=data.dExact;
-								
-	// 						}
-	// 						var prGeoId="";
-	// 						if (data.prGeoId==undefined){
-								
-	// 						}
-	// 						else {
-	// 							prGeoId=data.prGeoId;
-								
-	// 						}
-	// 						this.SSArray.splice(0,0,{"title":title,"recCount":recCount,"url":hash, "bDate":bDate,"clsids":classif,"dExact":dExact,"eDate":eDate,"geoIds":geoIds,
-
-	// 							"id":colls,"kw":kw,"prGeoId":prGeoId,"type":data.type,"name":coll,"savedDate":this.newDate, "collTypes":collTypes});
-
-	// 						//thumbStatusMsg("searchSaved");	
-	// 						this.check4SScroll(ul);
-	// 						//this.saveMySearch();
-
-// /ase "SAHARA":
-// 								
-// 								 break;
-// 							 case "Archaeo":
-// 								label1="Site Name";
-// 								label2="Artifact Title";
-// 								label3="Site Mod. Location";
-// 									break;    
-// 							 case "FLEXspace":
-// 								 label1="Campus";
-// 								 label2="Space Design Type";
-// 								 label3="Space Date of Service...";
-								
-// 								 break;
-								
-// 							  default:
-// 								var label1="Title";
-// 								var label2="Creator";
-// 								var label3="";	
-// 								break; 

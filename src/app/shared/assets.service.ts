@@ -44,6 +44,22 @@ export class AssetService {
 
     private searchSubscription: Subscription;
 
+    public filterFields = [
+        {name: "In any field", value: "all"},
+        {name: "Creator", value: "100" },
+        {name: "Title", value: "101" },
+        {name: "Location", value: "102" },
+        {name: "Repository", value: "103" },
+        {name: "Subject", value: "104" },
+        {name: "Material", value: "105" },
+        {name: "Style or Period", value: "106" },
+        {name: "Work Type", value: "107" },
+        {name: "Culture", value: "108" },
+        {name: "Description", value: "109" },
+        {name: "Technique", value: "110" },
+        {name: "Number", value: "111" }
+    ];
+
     /**
      * urlParams is used as an enum for special parameters
      */
@@ -59,7 +75,8 @@ export class AssetService {
             colId: "",
             catId: "",
             collTypes: "",
-            sort: "0"
+            sort: "0",
+            coll: ""
         };
     private activeSort: any = {
         index: 0
@@ -282,13 +299,8 @@ export class AssetService {
         Object.keys(params).forEach(function(key) {
             var filter = {};
             if((key == 'collTypes') || (key == 'classification') || (key == 'geography')){
-                filter = {
-                    filterGroup : key,
-                    filterValue : params[key] 
-                };
-                
-                if(!thisObj._filters.isApplied(filter)){ // Add Filter
-                    thisObj._filters.apply(filter);
+                if(!thisObj._filters.isApplied(key, params[key])){ // Add Filter
+                    thisObj._filters.apply(key, params[key]);
                 }
             }
         });
@@ -608,6 +620,7 @@ export class AssetService {
         let thumbSize = 0;
         let type = 6;
         let colTypeIds = '';
+        let collIds = encodeURIComponent(this.urlParams['coll']);
         let classificationIds = '';
         let geographyIds = '';
 
@@ -645,7 +658,7 @@ export class AssetService {
         }
         
         return this.http
-            .get(this._auth.getUrl() + '/search/' + type + '/' + startIndex + '/' + this.urlParams.pageSize + '/' + sortIndex + '?' + 'type=' + type + '&kw=' + keyword + '&origKW=&geoIds=' + geographyIds + '&clsIds=' + classificationIds + '&collTypes=' + colTypeIds + '&id=all&name=All%20Collections&bDate=' + earliestDate + '&eDate=' + latestDate + '&dExact=&order=0&isHistory=false&prGeoId=&tn=1', options);
+            .get(this._auth.getUrl() + '/search/' + type + '/' + startIndex + '/' + this.urlParams.pageSize + '/' + sortIndex + '?' + 'type=' + type + '&kw=' + keyword + '&origKW=' + keyword + '&geoIds=' + geographyIds + '&clsIds=' + classificationIds + '&collTypes=' + colTypeIds + '&id=' + (collIds.length > 0 ? collIds : 'all') + '&name=All%20Collections&bDate=' + earliestDate + '&eDate=' + latestDate + '&dExact=&order=0&isHistory=false&prGeoId=&tn=1', options);
     }
 
     /**
