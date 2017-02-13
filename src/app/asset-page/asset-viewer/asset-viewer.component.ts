@@ -29,6 +29,8 @@ export class AssetViewerComponent implements OnInit, OnDestroy, AfterViewInit {
     @Input() assetCompareCount: number;
     @Input() assetGroupCount: number;
     @Input() assetNumber: number;
+    @Input() assets:Asset[];
+    @Input() prevAssetResults: any;
     @Output() fullscreenChange = new EventEmitter();
     @Output() nextPage = new EventEmitter();
     @Output() prevPage = new EventEmitter();
@@ -219,6 +221,11 @@ export class AssetViewerComponent implements OnInit, OnDestroy, AfterViewInit {
         if (document['webkitIsFullScreen'] || document['mozFullScreen'] || document['fullscreen']) {
             this.setFullscreen(true);
         } else {
+            this.assets.splice(1);
+            for(let i = 0; i < this.prevAssetResults.thumbnails.length; i++){
+                this.prevAssetResults.thumbnails[i].selected = false;
+            }
+
             this.setFullscreen(false);
         }
     }

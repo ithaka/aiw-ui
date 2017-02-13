@@ -177,3 +177,9 @@ input[type=number] {
 .close-icon{
     cursor: pointer;
 }
+
+.dropdown{
+    &.open .dropdown-menu{
+        display: block;
+    }
+}
