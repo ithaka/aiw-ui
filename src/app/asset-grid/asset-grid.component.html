@@ -86,7 +86,7 @@
                     </div>
                     <div class="row pt-3 main-content">
                         <div class="col-sm-8">
-                            <div class="asset-title" *ngIf="selectedAssets.length > 0">"{{ selectedAssets[0].thumbnail1 }}"</div>
+                            <div class="asset-title" *ngIf="selectedAssets.length > 0" [innerHTML]="selectedAssets[0].thumbnail1"></div>
                             <div class="imgURL-gen-info">Copy the image URL or the HTML code to share this image with others at your institution.</div>
                             <div class="pt-3">
                                 <input class="mr-2" type="radio" [(ngModel)]="genImgMode"  name="genImgMode" value="half">Half screen viewer

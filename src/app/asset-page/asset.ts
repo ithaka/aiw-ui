@@ -70,7 +70,7 @@ export class Asset {
                   this.title = res.title ? res.title : 'Untitled';
                   this.imgURL = res.imageUrl;
 
-                  document.title = this.title;
+                  document.getElementsByTagName('title')[0].innerHTML = this.title;
                   this.setCreatorDate();
 
                   this.metadataLoaded = true;
