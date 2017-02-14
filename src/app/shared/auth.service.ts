@@ -22,6 +22,7 @@ export class AuthService implements CanActivate {
   private subdomain;
   private thumbUrl;
   private IIIFUrl;
+  private logUrl: string;
   // Use header rewrite proxy for local development
   // - don't use proxy for now
   private proxyUrl = '';
@@ -39,21 +40,25 @@ export class AuthService implements CanActivate {
   ) {
     this._storage = locker.useDriver(Locker.DRIVERS.LOCAL);
     this._router = _router;
+
+    // these can be moved inside the if statement when we want to change services based on dev/prod
+    this.subdomain = 'lively';
+    this.baseUrl =  '//lively.artstor.org/library/secure'; 
+    this.thumbUrl = '//mdxdv.artstor.org';
+    this.IIIFUrl = '//tsprod.artstor.org/rosa-iiif-endpoint-1.0-SNAPSHOT/fpx';
     
     // Check domain
-    // if ( document.location.hostname.indexOf('prod.cirrostratus.org') > -1 || document.location.hostname.indexOf('lively.artstor.org') > -1 ) {
+    if ( document.location.hostname.indexOf('prod.cirrostratus.org') > -1 || document.location.hostname.indexOf('lively.artstor.org') > -1 ) {
       // Prod/Lively endpoints
-      this.subdomain = 'lively';
-      this.baseUrl =  '//lively.artstor.org/library/secure'; 
-      this.thumbUrl = '//mdxdv.artstor.org';
-      this.IIIFUrl = '//tsprod.artstor.org/rosa-iiif-endpoint-1.0-SNAPSHOT/fpx';
-    // } else {
-    //   // Dev/Stage endpoints
-    //   this.subdomain = 'stagely';
-    //   this.baseUrl =  '//stagely.artstor.org/library/secure'; 
-    //   this.thumbUrl = '//mdxstage.artstor.org';
-    //   this.IIIFUrl = '//tsprod.artstor.org/rosa-iiif-endpoint-1.0-SNAPSHOT/fpx';
-    // }
+      this.logUrl = '//ang-ui-logger.apps.prod.cirrostratus.org/api/v1';
+    } else {
+      this.logUrl = '//ang-ui-logger.apps.test.cirrostratus.org/api/v1';
+      // Dev/Stage endpoints
+      // this.subdomain = 'stagely';
+      // this.baseUrl =  '//stagely.artstor.org/library/secure'; 
+      // this.thumbUrl = '//mdxstage.artstor.org';
+      // this.IIIFUrl = '//tsprod.artstor.org/rosa-iiif-endpoint-1.0-SNAPSHOT/fpx';
+    }
   }
 
 

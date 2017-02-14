@@ -4,7 +4,7 @@ import { Http, Headers, RequestOptions } from '@angular/http'
 @Injectable()
 export class LoggingService {
 
-  private loggerUrl: string = "//ang-ui-logger.apps.test.cirrostratus.org/api/v1"
+  private loggerUrl: string = "//ang-ui-logger.apps.test.cirrostratus.org/api/v1";
 
   /** Default Headers for this service */
   // ... Set content type to JSON
@@ -16,7 +16,6 @@ export class LoggingService {
   ) { }
 
   public Warp6 (data: logObj) {
-    console.log("logging..");
 
     this.http.post(this.loggerUrl + "/log", data, this.defaultOptions)
       .map((data) => { return data.json() || {}; })
