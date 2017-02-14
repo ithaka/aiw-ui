@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { Location } from '@angular/common';
 import { Angulartics2 } from 'angulartics2';
 
-import { AuthService } from './../shared/auth.service';
+import { AuthService, LoggingService } from './../shared';
 import { LoginService, User } from './login.service';
 
 @Component({
@@ -42,11 +42,11 @@ export class Login {
   constructor(
     private _auth: AuthService,
     private _login: LoginService,
+    private _log: LoggingService,
     private router: Router,
     private location: Location,
     private angulartics: Angulartics2
   ) { 
-    
   }
 
   ngOnInit() {
@@ -74,7 +74,6 @@ export class Login {
       data.user.isLoggedIn = true;
       this._auth.saveUser(data.user);
       this.errorMsg = '';
-      console.log(this._auth.getUser());
       if (this._auth.getFromStorage("stashedRoute")) {
         this.router.navigateByUrl(this._auth.getFromStorage("stashedRoute"));
         this._auth.deleteFromStorage("stagedRoute");
@@ -133,7 +132,8 @@ export class Login {
             }
           } else {
             this.angulartics.eventTrack.next({ action:"remoteLogin", properties: { category: "login", label: "success" }});
-            this.loadForUser(data); 
+            this._log.Warp6({ eventType: "remote_login" });
+            this.loadForUser(data);
           }
          
         }

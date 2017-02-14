@@ -37,12 +37,13 @@ export class AssetFiltersService {
                 era : 'BCE'
             },
             latest : {
-                date : 2016,
+                date : 2017,
                 era : 'CE'
             }
         },
         currentPage : 1,
-        pageSize : 24
+        pageSize : 24,
+        sort: "0"
     };
 
     private availableFilters: any = this.defaultAvailable;

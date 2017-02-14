@@ -67,7 +67,7 @@ export class AssetGrid implements OnInit, OnDestroy {
   };
   
   activeSort = {
-    index : 0,
+    index : '0',
     label : 'Relevance'
   };
   sub;
@@ -118,6 +118,23 @@ export class AssetGrid implements OnInit, OnDestroy {
         // }
         if(params['term']){
           this.searchTerm = params['term'];
+        }
+
+        if(params['sort']){
+          this.activeSort.index = params['sort'];
+
+          if(this.activeSort.index == '0'){
+            this.activeSort.label = 'Relevance';
+          }
+          else if(this.activeSort.index == '1'){
+            this.activeSort.label = 'Title';
+          }
+          else if(this.activeSort.index == '2'){
+            this.activeSort.label = 'Creator';
+          }
+          else if(this.activeSort.index == '3'){
+            this.activeSort.label = 'Date';
+          }
         }
         
         this.isLoading = true;
@@ -185,14 +202,17 @@ export class AssetGrid implements OnInit, OnDestroy {
    * @param pageSize Number of assets requested on page
    */
   private changePageSize(pageSize: number){
-    this._assets.goToPage(1);
+    this._assets.goToPage(1, true);
     this._assets.setPageSize(pageSize);
   }
 
   private changeSortOpt(index, label) {
     this.activeSort.index = index;
     this.activeSort.label = label; 
-    this.pagination.currentPage = 1;
+
+    // this.pagination.currentPage = 1;
+    this._assets.goToPage(1, true);
+    this._assets.setSortOpt(index);
   }
 
   /**
@@ -364,5 +384,9 @@ export class AssetGrid implements OnInit, OnDestroy {
     }
 
     document.body.removeChild(textArea);
+  }
+
+  private showHelp(): void{
+    window.open('http://support.artstor.org/?article=creating-links','Artstor Support','width=600,height=500');
   }
 }

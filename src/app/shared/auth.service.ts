@@ -41,20 +41,19 @@ export class AuthService implements CanActivate {
     this._router = _router;
     
     // Check domain
-    if ( document.location.hostname.indexOf('prod.cirrostratus.org') > -1 || document.location.hostname.indexOf('lively.artstor.org') > -1 ) {
+    // if ( document.location.hostname.indexOf('prod.cirrostratus.org') > -1 || document.location.hostname.indexOf('lively.artstor.org') > -1 ) {
       // Prod/Lively endpoints
       this.subdomain = 'lively';
       this.baseUrl =  '//lively.artstor.org/library/secure'; 
       this.thumbUrl = '//mdxdv.artstor.org';
       this.IIIFUrl = '//tsprod.artstor.org/rosa-iiif-endpoint-1.0-SNAPSHOT/fpx';
-    } else {
-      // Dev/Stage endpoints
-      this.subdomain = 'stagely';
-      this.baseUrl =  '//stagely.artstor.org/library/secure'; 
-      this.thumbUrl = '//mdxstage.artstor.org';
-      this.IIIFUrl = '//tsprod.artstor.org/rosa-iiif-endpoint-1.0-SNAPSHOT/fpx';
-      // this.baseUrl = '//artstor-earth-library.apps.test.cirrostratus.org/secure';
-    }
+    // } else {
+    //   // Dev/Stage endpoints
+    //   this.subdomain = 'stagely';
+    //   this.baseUrl =  '//stagely.artstor.org/library/secure'; 
+    //   this.thumbUrl = '//mdxstage.artstor.org';
+    //   this.IIIFUrl = '//tsprod.artstor.org/rosa-iiif-endpoint-1.0-SNAPSHOT/fpx';
+    // }
   }
 
 

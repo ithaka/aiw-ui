@@ -43,7 +43,6 @@ export class Home implements OnInit, OnDestroy {
     this.subscriptions.push(
       this._auth.getInstitution().subscribe((institutionObj) => {
         this.institution = institutionObj;
-        console.log(this.institution);
       })
     );
     

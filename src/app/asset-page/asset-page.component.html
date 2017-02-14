@@ -21,6 +21,8 @@
                     [assetCompareCount]="assets.length"
                     [assetNumber]="assetNumber"
                     [assetGroupCount]="totalAssetCount"
+                    [assets]="assets"
+                    [prevAssetResults]="prevAssetResults"
                     (removeAsset)="toggleAsset(asset)"
                     (nextPage)="showNextAsset()"
                     (prevPage)="showPrevAsset()"></ang-asset-viewer>
