@@ -22,7 +22,7 @@ export class LoggingService {
       .map((data) => { return data.json() || {}; })
       .take(1)
       .subscribe((res) => {
-        console.log(res);
+        // console.log(res);
       });
   }
 }
