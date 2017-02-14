@@ -44,7 +44,7 @@ import { NoContent } from './no-content';
 import { LoginReqModal, SearchModal } from './modals';
 
 // Application wide providers
-import { AuthService, AssetService, TypeIdPipe, ToolboxService } from './shared';
+import { AuthService, AssetService, TypeIdPipe, ToolboxService, LoggingService } from './shared';
 import { AssetFiltersService } from './asset-filters/asset-filters.service';
 import { TagsService } from './browse-page/tags.service';
 import { CustomReuseStrategy } from './reuse-strategy';
@@ -56,7 +56,8 @@ const APP_PROVIDERS = [
   AuthService,
   AssetFiltersService,
   TagsService,
-  ToolboxService
+  ToolboxService,
+  LoggingService
   // { provide: RouteReuseStrategy, useClass: CustomReuseStrategy } // to be implemented later
 ];
 

@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { Location } from '@angular/common';
 import { Angulartics2 } from 'angulartics2';
 
-import { AuthService } from './../shared';
+import { AuthService, LoggingService } from './../shared';
 import { LoginService, User } from './login.service';
 
 @Component({
@@ -42,11 +42,11 @@ export class Login {
   constructor(
     private _auth: AuthService,
     private _login: LoginService,
+    private _log: LoggingService,
     private router: Router,
     private location: Location,
     private angulartics: Angulartics2
   ) { 
-    
   }
 
   ngOnInit() {
@@ -133,7 +133,8 @@ export class Login {
             }
           } else {
             this.angulartics.eventTrack.next({ action:"remoteLogin", properties: { category: "login", label: "success" }});
-            this.loadForUser(data); 
+            this._log.Warp6();
+            this.loadForUser(data);
           }
          
         }

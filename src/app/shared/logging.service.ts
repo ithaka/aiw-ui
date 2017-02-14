@@ -24,10 +24,10 @@ export class LoggingService {
       "project_id": "test",
       "file_type": "test",
       "reason": "test"
-    }
+    };
 
     this.http.post(this.loggerUrl + "/log", data, this.defaultOptions)
-      .map((data) => { return data.json() || {} })
+      .map((data) => { return data.json() || {}; })
       .take(1)
       .subscribe((res) => {
         console.log(res);
