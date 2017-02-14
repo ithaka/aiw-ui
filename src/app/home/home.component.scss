@@ -3,8 +3,9 @@
 /*styles for home content only*/
 .list--home-collections {
     border: 1px solid #cdcdcd;
-    max-height: 400px;
-    overflow-y: scroll;
+    min-height: 100px;
+    max-height: 350px;
+    overflow-y: auto;
 }
 
 .list-group.list-group-clean {

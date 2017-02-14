@@ -21,8 +21,10 @@ export class Home implements OnInit, OnDestroy {
   // Set our default values
   localState = { value: '' };
   collections = [];
+  instCollections = [];
   institution: any = {};
   errors = {};
+  loaders = {};
   private user: any;
   private blogPosts: any[] = [];
   private blogLoading: boolean = true;
@@ -46,13 +48,29 @@ export class Home implements OnInit, OnDestroy {
       })
     );
     
-    // this.title.getData().subscribe(data => this.data = data);
+    this.loaders['collections'] = true;
+    this.loaders['instCollections'] = true;
+    
+    // Pull Shared Shelf Collections
     this._assets.getCollections('ssc')
       .then((res) => {
         this.collections = res['Collections'];
+        this.loaders['collections'] = false;
       })
       .catch((err) => {
         this.errors['collections'] = "Unable to load collections.";
+        this.loaders['collections'] = false;
+      });
+    
+     // Pull Institution Collections
+    this._assets.getCollections('institution')
+      .then((res) => {
+        this.instCollections = res['Collections'];
+        this.loaders['instCollections'] = false;
+      })
+      .catch((err) => {
+        this.errors['instCollections'] = "Unable to load your institution's collections.";
+        this.loaders['instCollections'] = false;
       });
 
 

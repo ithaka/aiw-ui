@@ -44,11 +44,12 @@
             <div class="card">
                 <div class="card-header">Placeholder: Featured Collection</div>
             </div>
+            <!--Shared Shelf Commons Collections-->
             <div class="card">
                 <div class="card-header">
                     <h2>Shared Shelf Commons</h2>
                 </div>
-                <div class="list--home-collections">
+                <div class="list--home-collections" [class.loading]="loaders['collections']">
                     <div class="list-group list-group-flush">
                         <a *ngFor="let collection of collections" class="list-group-item list-group-item-action" [routerLink]="[ '/collection', collection.collectionid ]">
                                 {{ collection.collectionname }}
@@ -58,6 +59,24 @@
                 <div *ngIf="errors.collections" class="card-block">
                     <div id="errorCollectionsLoading" class="alert alert-warning" role="alert">
                         <strong>Error</strong> {{ errors.collections }}
+                    </div>
+                </div>
+            </div>
+             <!-- Institution Shared Shelf Collections-->
+            <div *ngIf="institution && institution.displayName" class="card">
+                <div class="card-header">
+                    <h2>{{ institution.displayName }} Collections</h2>
+                </div>
+                <div class="list--home-collections" [class.loading]="loaders['instCollections']">
+                    <div class="list-group list-group-flush">
+                        <a *ngFor="let collection of instCollections" class="list-group-item list-group-item-action" [routerLink]="[ '/collection', collection.collectionid ]">
+                                {{ collection.collectionname }}
+                        </a>
+                    </div>
+                </div>
+                <div *ngIf="errors.instCollections" class="card-block">
+                    <div id="errorCollectionsLoading" class="alert alert-warning" role="alert">
+                        <strong>Error</strong> {{ errors.instCollections }}
                     </div>
                 </div>
             </div>
