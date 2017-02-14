@@ -111,6 +111,11 @@ $iconBtnSize: 30px;
     @extend .progress-bar-animated;
     color: rgba(255,255,255,0.5);
     pointer-events: none;
+
+    // Hide other class
+    &:after {
+        display: none !important;
+    }
  }
 
  $btnBorderRadius: 2px;
