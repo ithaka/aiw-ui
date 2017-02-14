@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { Location } from '@angular/common';
 import { Angulartics2 } from 'angulartics2';
 
-import { AuthService } from './../shared/auth.service';
+import { AuthService } from './../shared';
 import { LoginService, User } from './login.service';
 
 @Component({
