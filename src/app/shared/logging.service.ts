@@ -15,16 +15,8 @@ export class LoggingService {
     private http: Http
   ) { }
 
-  public Warp6 () {
-    let data = {
-      "eventType": "test",
-      "origin": "test",
-      "uri": "test",
-      "status_code": "test",
-      "project_id": "test",
-      "file_type": "test",
-      "reason": "test"
-    };
+  public Warp6 (data: logObj) {
+    console.log("logging..");
 
     this.http.post(this.loggerUrl + "/log", data, this.defaultOptions)
       .map((data) => { return data.json() || {}; })
@@ -33,4 +25,13 @@ export class LoggingService {
         console.log(res);
       });
   }
+}
+
+interface logObj {
+  eventType: string,
+  uri?: string,
+  status_code?: string,
+  project_id?: string,
+  file_type?: string,
+  reason?: string
 }

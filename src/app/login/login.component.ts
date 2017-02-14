@@ -133,7 +133,7 @@ export class Login {
             }
           } else {
             this.angulartics.eventTrack.next({ action:"remoteLogin", properties: { category: "login", label: "success" }});
-            this._log.Warp6();
+            this._log.Warp6({ eventType: "remote_login" });
             this.loadForUser(data);
           }
          
