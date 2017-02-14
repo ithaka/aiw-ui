@@ -1,6 +1,7 @@
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { Subscription }   from 'rxjs/Subscription';
+import { Locker } from 'angular2-locker';
 
 import { Asset } from './asset';
 import { AuthService, AssetService } from './../shared';
@@ -37,12 +38,26 @@ export class AssetPage implements OnInit, OnDestroy {
 
     private copyURLStatusMsg: string = '';
     private generatedImgURL: string = '';
+    private prevRouteParams: any = [];
+
+    private _storage;
     
 
-    constructor(private _assets: AssetService, private _auth: AuthService, private route: ActivatedRoute, private _router: Router) { }
+    constructor(private _assets: AssetService, private _auth: AuthService, private route: ActivatedRoute, private _router: Router, private locker: Locker) { 
+        this._storage = locker.useDriver(Locker.DRIVERS.LOCAL);
+    }
 
     ngOnInit() {
         this.user = this._auth.getUser();
+
+        // For "Go Back to Results"
+        let prevRouteParams = this._storage.get('prevRouteParams');
+        if(prevRouteParams && (prevRouteParams.length > 0)){
+            this.prevRouteParams = prevRouteParams;
+        }
+        this._storage.remove('prevRouteParams');
+        
+        console.log(this.prevRouteParams);
 
         this.subscriptions.push(
             this.route.params.subscribe((routeParams) => {
@@ -222,5 +237,12 @@ export class AssetPage implements OnInit, OnDestroy {
             this.prevAssetResults.thumbnails[i].selected = false;
         }
         this.assetViewer.togglePresentationMode();
+    }
+
+    private backToResults(): void{
+        if(this.prevRouteParams.length > 0){
+            this._router.navigate(['/' + this.prevRouteParams[0].path, this.prevRouteParams[1].path, this.prevRouteParams[1].parameters]);
+            this.prevRouteParams = [];
+        }
     }
 }

@@ -18,6 +18,14 @@ $titleNavBg: #eee;
     padding: 1rem 0;
     text-align: center;
     font-weight: bold;
+
+    .back-results{
+        position: absolute;
+        left: 20px;
+        font-weight: 400;
+        text-decoration: underline;
+        cursor: pointer;
+    }
 }
 .title-nav-cntnr i{
     vertical-align: top;

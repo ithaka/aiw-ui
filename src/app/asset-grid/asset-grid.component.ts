@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy, Input } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 
 import { Subscription }   from 'rxjs/Subscription';
+import { Locker } from 'angular2-locker';
 
 import { AssetService } from '../shared/assets.service';
 import { AssetFiltersService } from '../asset-filters/asset-filters.service';
@@ -78,15 +79,19 @@ export class AssetGrid implements OnInit, OnDestroy {
   // Image group Id
   private igId : string = '';
 
+  private _storage;
+
   // TypeScript public modifiers
   constructor(
     private _assets: AssetService,
     private _filters: AssetFiltersService,
     private _auth:AuthService,
     private _router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private locker: Locker
   ) {
       this.baseURL = this._auth.getUrl();
+      this._storage = locker.useDriver(Locker.DRIVERS.LOCAL);
   } 
 
   ngOnInit() {
@@ -273,6 +278,11 @@ export class AssetGrid implements OnInit, OnDestroy {
       else{
         this.selectedAssets.push(asset);
       }
+    }
+    else{
+      // [routerLink]="editMode ? [] : ['/asset', asset.objectId, {prev: route.snapshot.url} ]" 
+      this._storage.set('prevRouteParams', this.route.snapshot.url);
+      this._router.navigate(['/asset', asset.objectId]);
     }
     console.log(this.selectedAssets);
   }

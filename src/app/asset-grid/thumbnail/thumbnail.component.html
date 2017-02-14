@@ -9,9 +9,9 @@
         <i class="icon icon-{{collectionTypeMap[thumbnail.collectionType]}} icon-collection-type"></i>
     </div>
     <div>
-        <span class="asset-title" title="{{ thumbnail.thumbnail1 }}">{{ thumbnail.thumbnail1 }}</span>
-        <span class="asset-agent" title="{{ thumbnail.thumbnail2 }}">{{ thumbnail.thumbnail2 }}</span>
-        <span class="asset-date" title="{{ thumbnail.thumbnail3 }}">{{ thumbnail.thumbnail3 }}</span>
-        <span title="{{ thumbnail.thumbnail4 }}">{{ thumbnail.thumbnail4 }}</span>
+        <span class="asset-title" title="{{ thumbnail.thumbnail1 }}" [innerHTML]="thumbnail.thumbnail1"></span>
+        <span class="asset-agent" title="{{ thumbnail.thumbnail2 }}" [innerHTML]="thumbnail.thumbnail2"></span>
+        <span class="asset-date" title="{{ thumbnail.thumbnail3 }}" [innerHTML]="thumbnail.thumbnail3"></span>
+        <span title="{{ thumbnail.thumbnail4 }}" [innerHTML]="thumbnail.thumbnail4"></span>
     </div>
 </div>
