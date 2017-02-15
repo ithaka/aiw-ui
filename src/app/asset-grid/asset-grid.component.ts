@@ -160,13 +160,16 @@ export class AssetGrid implements OnInit, OnDestroy {
         (allResults: any) => {
           // Update results array
           this.results = allResults.thumbnails;
+          this.isLoading = false;
+          
           console.log(allResults);
           if(allResults.hasOwnProperty('count')){
             this.totalAssets = allResults.count;
-            this.isLoading = false;
-          } else {
+            // this.isLoading = false;
+          } else if(this.assetCount) {
+            this.totalAssets = this.assetCount.toString();
             // We push an empty array on new search to clear assets
-            this.isLoading = true;
+            // this.isLoading = true;
           }
         },
         (error) => {
