@@ -11,19 +11,19 @@
         <li class="dropdown" class="sortlist" ngbDropdown>
             <button class="btn btn-link" id="sortdropdownMenu" ngbDropdownToggle>Sort: <span class="value">{{ activeSort.label ? activeSort.label : 'Relevance' }}</span></button>
             <div class="dropdown-menu" aria-labelledby="sortdropdownMenu">
-                <button class="dropdown-item" (click)="changeSortOpt('1', 'Title')">Title</button>
-                <button class="dropdown-item" (click)="changeSortOpt('2', 'Creator')">Creator</button>
-                <button class="dropdown-item" (click)="changeSortOpt('3', 'Date')">Date</button>
-                <button class="dropdown-item" (click)="changeSortOpt('0', 'Relevance')">Relevance</button>
+                <button [ngClass]="{ 'disable': activeSort.index == '1' }" class="dropdown-item" (click)="changeSortOpt('1', 'Title')">Title</button>
+                <button [ngClass]="{ 'disable': activeSort.index == '2' }" class="dropdown-item" (click)="changeSortOpt('2', 'Creator')">Creator</button>
+                <button [ngClass]="{ 'disable': activeSort.index == '3' }" class="dropdown-item" (click)="changeSortOpt('3', 'Date')">Date</button>
+                <button [ngClass]="{ 'disable': activeSort.index == '0' }" class="dropdown-item" (click)="changeSortOpt('0', 'Relevance')">Relevance</button>
             </div>
         </li>
         <!--<span class="active-sort">{{ activeSort.label }}</span>-->
         <li class="dropdown" class="pagesizelist" ngbDropdown>
             <button class="btn btn-link" id="pagesizedropdownMenu" ngbDropdownToggle>Images/page: <span class="value">{{ pagination.pageSize ? pagination.pageSize : '24' }}</span></button>
             <div class="dropdown-menu" aria-labelledby="pagesizedropdownMenu">
-                <button class="dropdown-item" (click)="changePageSize(24)">24</button>
-                <button class="dropdown-item" (click)="changePageSize(48)">48</button>
-                <button class="dropdown-item" (click)="changePageSize(72)">72</button>
+                <button [ngClass]="{ 'disable': pagination.pageSize == 24 }" class="dropdown-item" (click)="changePageSize(24)">24</button>
+                <button [ngClass]="{ 'disable': pagination.pageSize == 48 }" class="dropdown-item" (click)="changePageSize(48)">48</button>
+                <button [ngClass]="{ 'disable': pagination.pageSize == 72 }" class="dropdown-item" (click)="changePageSize(72)">72</button>
             </div>
         </li>
 

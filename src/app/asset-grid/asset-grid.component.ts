@@ -205,17 +205,21 @@ export class AssetGrid implements OnInit, OnDestroy {
    * @param pageSize Number of assets requested on page
    */
   private changePageSize(pageSize: number){
-    this._assets.goToPage(1, true);
-    this._assets.setPageSize(pageSize);
+    if(this.pagination.pageSize != pageSize){
+      this._assets.goToPage(1, true);
+      this._assets.setPageSize(pageSize);
+    }
   }
 
   private changeSortOpt(index, label) {
-    this.activeSort.index = index;
-    this.activeSort.label = label; 
+    if( this.activeSort.index != index){
+      this.activeSort.index = index;
+      this.activeSort.label = label; 
 
-    // this.pagination.currentPage = 1;
-    this._assets.goToPage(1, true);
-    this._assets.setSortOpt(index);
+      // this.pagination.currentPage = 1;
+      this._assets.goToPage(1, true);
+      this._assets.setSortOpt(index);
+    }
   }
 
   /**
