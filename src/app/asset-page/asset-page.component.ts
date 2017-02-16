@@ -218,6 +218,14 @@ export class AssetPage implements OnInit, OnDestroy {
                 asset.selected = false;
                 this.assets.splice(i, 1);
                 add = false;
+
+                // Set 'selected' to 'false' for the asset in asset drawer
+                this.prevAssetResults.thumbnails.forEach( (thumbnail, i) => {
+                    if (asset.id == thumbnail.objectId) {
+                        thumbnail.selected = false;
+                    }
+                });
+                
             }
         })
         if (this.assets.length >= 10) {
@@ -240,7 +248,11 @@ export class AssetPage implements OnInit, OnDestroy {
     }
 
     private backToResults(): void{
-        if(this.prevRouteParams.length > 0){
+        if(this.prevRouteParams.length == 1){
+            this._router.navigate(['/' + this.prevRouteParams[0].path, this.prevRouteParams[0].parameters]);
+            this.prevRouteParams = [];
+        }
+        else if(this.prevRouteParams.length == 2){
             this._router.navigate(['/' + this.prevRouteParams[0].path, this.prevRouteParams[1].path, this.prevRouteParams[1].parameters]);
             this.prevRouteParams = [];
         }
