@@ -3,6 +3,8 @@
  * Columns, rows, and other spatial organization structures
  */
 
+ @import './variables';
+
 $navOffset: 80px;
 $footerOffset: 80px;
 
@@ -22,4 +24,11 @@ main {
 .container.main-content {
     padding-left: 0px;
     padding-right: 0px;
+}
+
+.row--search-bar {
+    margin: 20px 0;
+    @media (max-width: $phone) {
+        margin: 10px 0;
+    }
 }
