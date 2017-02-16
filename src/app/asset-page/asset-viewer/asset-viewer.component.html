@@ -33,7 +33,7 @@
     </div>-->
 
     <!-- Large thumbnail fallback -->
-    <div *ngIf="mediaLoadingFailed" id="fallbackViewer" [class.loading]="isLoading">
+    <div *ngIf="mediaLoadingFailed" id="fallbackViewer">
         <img alt="{{ asset.title }}" class="item item--thumbnail" [attr.src]="_assets.makeThumbUrl(asset.imgURL, 2)" />
     </div>
 

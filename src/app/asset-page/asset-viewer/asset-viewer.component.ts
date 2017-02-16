@@ -52,7 +52,6 @@ export class AssetViewerComponent implements OnInit, OnDestroy, AfterViewInit {
     constructor(private _assets: AssetService, private _auth: AuthService, private http: Http) {}
 
     ngOnInit() {
-        console.log(this.asset);
         // Wait for the asset to have its metadata
         this.subscriptions.push(
             this.asset.isDataLoaded.subscribe(assetInfoLoaded => {
