@@ -218,6 +218,14 @@ export class AssetPage implements OnInit, OnDestroy {
                 asset.selected = false;
                 this.assets.splice(i, 1);
                 add = false;
+
+                // Set 'selected' to 'false' for the asset in asset drawer
+                this.prevAssetResults.thumbnails.forEach( (thumbnail, i) => {
+                    if (asset.id == thumbnail.objectId) {
+                        thumbnail.selected = false;
+                    }
+                });
+                
             }
         })
         if (this.assets.length >= 10) {
