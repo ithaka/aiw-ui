@@ -138,13 +138,14 @@ span.active {
       display: block;
       content: ' ';
       background: url('/assets/img/icon-loading-large.gif') center center;
+      background-size: 40px 40px;
       z-index: 5000;
       position: absolute;
       top: 50%;
       left: 50%;
       transform: translate3d(-50%, -50%, 0);
-      width: 66px;
-      height: 66px;
+      width: 40px;
+      height: 40px;
     }
   }
 
