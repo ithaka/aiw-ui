@@ -6,7 +6,7 @@
 }
 .number-results{
     font-size: 12px;
-    padding-right: 10px;
+    padding: .5em 10px .5em 0;
 }
 .editMode{
     padding: 0px 3px;
@@ -85,6 +85,17 @@
     &:disabled {
         border: 1px solid #cecba5;
         cursor: initial;
+    }
+}
+
+.pag__index {
+    display: inline-block;
+    @media (max-width: $phone) {
+        width: calc(100% - 6.6em);
+    }
+
+    & input {
+        border: 1px solid $gray;
     }
 }
 
