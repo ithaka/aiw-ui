@@ -63,9 +63,9 @@
                 </div>
             </div>
              <!-- Institution Shared Shelf Collections-->
-            <div *ngIf="institution && institution.displayName" class="card">
+            <div *ngIf="institution && instCollections.length > 0" class="card">
                 <div class="card-header">
-                    <h2>{{ institution.displayName }} Collections</h2>
+                    <h2>{{ institution.displayName ? institution.displayName : "Institutional" }} Collections</h2>
                 </div>
                 <div class="list--home-collections" [class.loading]="loaders['instCollections']">
                     <div class="list-group list-group-flush">
