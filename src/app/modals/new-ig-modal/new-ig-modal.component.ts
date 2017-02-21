@@ -10,14 +10,15 @@ export class NewIgModal implements OnInit {
   @Output() closeModal: EventEmitter<any> = new EventEmitter();
 
   private newIgForm: FormGroup;
-  private isLoading: boolean = false;
+  private isArtstorUser: boolean = true;
   private tags: string[] = [];
 
-  // private emptyArray: string[] = [];
+  private isLoading: boolean = false;
+
   constructor(_fb: FormBuilder) {
     this.newIgForm = _fb.group({
       title: [null, Validators.required],
-      artstorPermissions: ["private"],
+      artstorPermissions: [this.isArtstorUser ? "private" : null],
       public: [null],
       tags: [this.tags]
     })
