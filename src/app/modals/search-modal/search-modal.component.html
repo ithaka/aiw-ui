@@ -116,7 +116,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                    <a class="btn btn-link with-pad" href="javascript:window.open('http://support.artstor.org/?article=advanced-search','Advanced Search Support','width=600,height=500')">Help</a>
+                    <a class="btn btn-link with-pad" tabindex="1" (click)="openHelp()">Help</a>
                     <button class="btn btn-secondary" (click)="resetFilters()">Clear</button>
                     <button (click)="applyAllFilters()" class="btn btn-primary">Search</button>
             </div>

@@ -219,4 +219,11 @@ export class SearchModal implements OnInit {
       this.filterSelections.splice(this.filterSelections.indexOf(filter), 1);
     }
   }
+
+  /**
+   * Open Help page on Advanced Search
+   */
+  private openHelp(): void {
+    window.open('http://support.artstor.org/?article=advanced-search','Advanced Search Support','width=800,height=600');
+  }
 }
