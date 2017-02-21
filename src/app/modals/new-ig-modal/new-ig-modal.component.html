@@ -2,22 +2,36 @@
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title">Create Image Group</h5>
+        <h5 class="modal-title">New Image Group</h5>
         <button (click)="closeModal.emit()" type="button" class="close" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <form id="newIgForm" [formGroup]="newIgForm" (ngSubmit)="igFormSubmit(newIgForm.value)">
       <div class="modal-body">
-        <p>Below is the form for creating an image group.</p>
           <div class="form-group">
             <label for="igTitleInput">Title</label>
             <input id="igTitleInput" type="text" [formControl]="newIgForm.controls['title']" tabindex="0"/>
           </div>
           <div class="form-group">
+            <label for="artstorPermissionsGroup">Who should see this image group?</label>
+            <div id="artstorPermissionsGroup" ngbRadioGroup class="btn-group" name="permissions type" [formControl]="newIgForm.controls['artstorPermissions']">
+              <label class="btn btn-secondary">
+                <input type="radio" name="options" id="artstorPermissionsRadioGlobal" autocomplete="off" value="global"> Everyone
+              </label>
+              <label class="btn btn-secondary">
+                <input type="radio" name="options" id="artstorPermissionsRadioInstitution" autocomplete="off" value="institution"> This Institution
+              </label>
+              <label class="btn btn-secondary">
+                <input type="radio" name="options" id="artstorPermissionsRadioPrivate" autocomplete="off" value="private"> Only Me
+              </label>
+            </div>
+          </div>
+
+          <div class="form-group">
             <div class="form-check">
               <label id="publicPermissionLabel" class="form-check-label">
-                <input class="form-check-input" type="checkbox" [formControl]="newIgForm.controls['public']" value=""> Make Public
+                <input id="makePublicCheckbox" class="form-check-input" type="checkbox" [formControl]="newIgForm.controls['public']" value=""> Make Public Image Group
               </label>
             </div>
           </div>
