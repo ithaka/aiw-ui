@@ -149,9 +149,18 @@ export class SearchModal implements OnInit {
 
   private resetFilters(): void {
     this.advanceQueries = [];
-     // Setup two query fields
+     // Set up two query fields
     this.advanceQueries.push(Object.assign({}, this.advQueryTemplate));
     this.advanceQueries.push(Object.assign({}, this.advQueryTemplate));
+
+    // Clear selected filters
+    this.filterSelections = [];
+
+    // Clear checkbox UI
+    let checkboxes: Array<any> = Array.from( document.querySelectorAll("#advancedModal input[type='checkbox']") );
+    checkboxes.forEach(field => {
+      field.checked = false;
+    });
   }
 
   private applyAllFilters(): void {
