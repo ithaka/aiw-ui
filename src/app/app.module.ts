@@ -1,6 +1,6 @@
 import { NgModule, ApplicationRef } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Http, HttpModule } from '@angular/http';
 import { RouterModule, RouteReuseStrategy } from '@angular/router';
 import { removeNgStyles, createNewHosts, createInputTransfer } from '@angularclass/hmr';
@@ -111,6 +111,7 @@ type StoreType = {
   imports: [ // import Angular's modules
     BrowserModule,
     FormsModule,
+    ReactiveFormsModule,
     HttpModule,
     // CoolStorageModule,
     LockerModule,

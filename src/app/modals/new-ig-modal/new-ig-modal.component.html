@@ -1,19 +1,32 @@
-<div class="modal fade">
+<div class="modal fade show">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title">Modal title</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <h5 class="modal-title">Create Image Group</h5>
+        <button (click)="closeModal.emit()" type="button" class="close" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
+      <form id="newIgForm" [formGroup]="newIgForm" (ngSubmit)="igFormSubmit(newIgForm.value)">
       <div class="modal-body">
-        <p>Modal body text goes here.</p>
+        <p>Below is the form for creating an image group.</p>
+          <div class="form-group">
+            <label for="igTitleInput">Title</label>
+            <input id="igTitleInput" type="text" [formControl]="newIgForm.controls['title']" tabindex="0"/>
+          </div>
+          <div class="form-group">
+            <div class="form-check">
+              <label id="publicPermissionLabel" class="form-check-label">
+                <input class="form-check-input" type="checkbox" [formControl]="newIgForm.controls['public']" value=""> Make Public
+              </label>
+            </div>
+          </div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-primary">Save changes</button>
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary">Save changes</button>
+        <button type="button" (click)="closeModal.emit()" class="btn btn-secondary">Close</button>
       </div>
+      </form>
     </div>
   </div>
 </div>
