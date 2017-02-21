@@ -192,6 +192,10 @@ angular2-locker@^0.5.0:
   version "0.5.0"
   resolved "https://registry.yarnpkg.com/angular2-locker/-/angular2-locker-0.5.0.tgz#5f60837d310d20c39ffa997d54ef7654367f2c62"
 
+angular2-tag-input@^1.2.3:
+  version "1.2.3"
+  resolved "https://registry.yarnpkg.com/angular2-tag-input/-/angular2-tag-input-1.2.3.tgz#3fb6be73bd924570b13f3828f3f14c825592eca7"
+
 angular2-template-loader@^0.5.0:
   version "0.5.0"
   resolved "https://registry.yarnpkg.com/angular2-template-loader/-/angular2-template-loader-0.5.0.tgz#a16db190faaf9f8e8e9410f3c468370de75127a6"

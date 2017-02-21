@@ -11,12 +11,14 @@ export class NewIgModal implements OnInit {
 
   private newIgForm: FormGroup;
   private isLoading: boolean = false;
+  private tags: string[] = [];
 
-
+  // private emptyArray: string[] = [];
   constructor(_fb: FormBuilder) {
     this.newIgForm = _fb.group({
       title: [null, Validators.required],
-      public: [null]
+      public: [null],
+      tags: [this.tags]
     })
   }
 
@@ -24,5 +26,6 @@ export class NewIgModal implements OnInit {
 
   private igFormSubmit(formValue: any): void {
     console.log(formValue);
+    // console.log(this.tags);
   }
 }

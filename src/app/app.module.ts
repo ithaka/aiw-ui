@@ -17,6 +17,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import {LockerModule, Locker, LockerConfig} from 'angular2-locker'
 import { Angulartics2Module, Angulartics2GoogleAnalytics } from 'angulartics2';
 import { TranslateModule, TranslateStaticLoader, TranslateLoader } from 'ng2-translate';
+import { RlTagInputModule } from 'angular2-tag-input';
 
 // App is our top level component
 import { App } from './app.component';
@@ -113,6 +114,7 @@ type StoreType = {
     FormsModule,
     ReactiveFormsModule,
     HttpModule,
+    RlTagInputModule,
     // CoolStorageModule,
     LockerModule,
     RouterModule.forRoot(ROUTES, { useHash: true }),
