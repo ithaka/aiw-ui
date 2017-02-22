@@ -50,7 +50,7 @@ export class CategoryPage implements OnInit, OnDestroy {
          */
         let name = routeParams['name'];
         if (name && name.match(/\d+$/)){
-          this.assetCount = name.match(/\d+$/);
+          this.assetCount = name.match(/\d+$/)[0];
           name = name.replace(/\d+$/,'');
         }
         this.catName = name;

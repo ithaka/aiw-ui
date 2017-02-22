@@ -22,8 +22,8 @@ export class AssetPage implements OnInit, OnDestroy {
 
     // Array to support multiple viewers on the page
     private assets: Asset[] = [];
-    private assetIndex: number = 0;
-    private assetNumber: number = 0;
+    private assetIndex: number = 1;
+    private assetNumber: number = 1;
     private totalAssetCount: number = 1;
     private subscriptions: Subscription[] = [];
     private prevAssetResults: any = { thumbnails : [] };
@@ -56,8 +56,16 @@ export class AssetPage implements OnInit, OnDestroy {
             this.prevRouteParams = prevRouteParams;
         }
         this._storage.remove('prevRouteParams');
-        
-        console.log(this.prevRouteParams);
+
+        // TotalAssets - for browsing between the assets
+        let totalAssets = this._storage.get('totalAssets');
+        if(totalAssets){
+            this.totalAssetCount = totalAssets;
+        }
+        else{
+            this.totalAssetCount = 1;
+        }
+        this._storage.remove('totalAssets');
 
         this.subscriptions.push(
             this.route.params.subscribe((routeParams) => {
@@ -68,7 +76,7 @@ export class AssetPage implements OnInit, OnDestroy {
                 this.generateImgURL();
 
                 if(this.prevAssetResults.thumbnails.length > 0){
-                    this.totalAssetCount = this.prevAssetResults.count ? this.prevAssetResults.count : this.prevAssetResults.thumbnails.length;
+                    // this.totalAssetCount = this.prevAssetResults.count ? this.prevAssetResults.count : this.prevAssetResults.thumbnails.length;
                     this.assetIndex = this.currentAssetIndex();
                     this.assetNumber = this._assets.currentLoadedParams.currentPage ? this.assetIndex + 1 + ((this._assets.currentLoadedParams.currentPage - 1) * this._assets.currentLoadedParams.pageSize) : this.assetIndex + 1;
                 }
@@ -97,7 +105,7 @@ export class AssetPage implements OnInit, OnDestroy {
                       }
                   }
                   else{
-                    this.totalAssetCount = this.prevAssetResults.count ? this.prevAssetResults.count : this.prevAssetResults.thumbnails.length;
+                    // this.totalAssetCount = this.prevAssetResults.count ? this.prevAssetResults.count : this.prevAssetResults.thumbnails.length;
                     this.assetIndex = this.currentAssetIndex();
                     this.assetNumber = this._assets.currentLoadedParams.currentPage ? this.assetIndex + 1 + ((this._assets.currentLoadedParams.currentPage - 1) * this._assets.currentLoadedParams.pageSize) : this.assetIndex + 1;
                   }
