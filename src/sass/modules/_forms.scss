@@ -96,10 +96,15 @@ select.form-control {
     }
 }
 
+rl-tag-input {
+    line-height: 40px;
+}
+
 rl-tag-input > form > input {
     border-radius: 5px;
     height: 34px;
-    margin-top: 5px;
+    width: 100px !important;
+    text-align: center;
 }
 
 rl-tag-input-item {
