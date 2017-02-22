@@ -12,7 +12,8 @@ export class NewIgModal implements OnInit {
   private newIgForm: FormGroup;
   private isArtstorUser: boolean = true;
   private tags: string[] = [];
-  private igDescription: string = "Medium Editor is here but it has no styles!";
+  // We need to seed the medium editor with an empty div to fix line return issues in Firefox!
+  private igDescription: string = "<div>&nbsp;</div>";
 
   private isLoading: boolean = false;
 
