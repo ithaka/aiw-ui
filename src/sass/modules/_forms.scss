@@ -95,3 +95,14 @@ select.form-control {
         width: 1.5em;
     }
 }
+
+rl-tag-input > form > input {
+    border-radius: 5px;
+    height: 34px;
+    margin-top: 5px;
+}
+
+rl-tag-input-item {
+    border-radius: 5px !important;
+    height: 34px !important;
+}
