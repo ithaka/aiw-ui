@@ -15,11 +15,13 @@
             <input id="igTitleInput" type="text" [formControl]="newIgForm.controls['title']" tabindex="0"/>
           </div>
 
-          <medium-editor 
-            style="display:block; min-height: 2em;"
-            [(editorModel)]="igDescription"
-            [editorOptions]="{'toolbar': {'buttons': ['bold', 'italic', 'underline', 'h1', 'h2', 'h3']}}" 
-            [editorPlaceholder]="'Give your image group a description...'"></medium-editor>
+          <div class="form-group">
+            <label for="igDescription">Description</label>
+            <medium-editor 
+              [(editorModel)]="igDescription"
+              [editorOptions]="{ 'toolbar': {'buttons': ['bold', 'italic', 'underline', 'h1', 'h2', 'h3']}}" 
+              [editorPlaceholder]="'Give your image group a description...'"></medium-editor>
+          </div>
 
           <div *ngIf="isArtstorUser" class="form-group">
             <label for="artstorPermissionsGroup">Who should see this image group?</label>

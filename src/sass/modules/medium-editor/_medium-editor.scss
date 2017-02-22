@@ -12,6 +12,10 @@
 .medium-editor-element {
     word-wrap: break-word;
     min-height: 30px;
+    display: block;
+    background: #fff;
+    border: 1px solid #cdcdcd;
+    padding: 3px;
 
     img {
         max-width: 100%;
