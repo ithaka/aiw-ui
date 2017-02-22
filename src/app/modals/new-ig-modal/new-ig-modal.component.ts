@@ -29,6 +29,6 @@ export class NewIgModal implements OnInit {
 
   private igFormSubmit(formValue: any): void {
     console.log(formValue);
-    // console.log(this.tags);
+    console.log(this.igDescription); // the description is not technically part of the form
   }
 }
