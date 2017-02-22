@@ -11,7 +11,7 @@
 // contenteditable rules
 .medium-editor-element {
     word-wrap: break-word;
-    min-height: 30px;
+    min-height: 60px;
     display: block;
     background: #fff;
     border: 1px solid #cdcdcd;
@@ -36,4 +36,8 @@
 
 .medium-editor-toolbar-active {
     z-index: 9000;
+}
+
+.medium-editor-placeholder {
+    font-style: normal !important;
 }
