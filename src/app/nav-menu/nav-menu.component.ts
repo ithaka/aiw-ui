@@ -26,6 +26,8 @@ export class NavMenu {
   
   private mobileCollapsed: boolean = true;
   
+  private showImageGroupModal: boolean = false;
+  
   // TypeScript public modifiers
   constructor(private _router: Router, private route: ActivatedRoute) {
     

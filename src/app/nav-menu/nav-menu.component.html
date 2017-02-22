@@ -29,13 +29,13 @@
                             <!--Active on Image Group Page-->
                             <button class="dropdown-item">!View All</button>
                             <button class="dropdown-item">!Select All</button>
-                            <button class="dropdown-item">!Save Selections to > New Image Group</button>
-                            <button class="dropdown-item">!Delete Selections form Image Group</button>
+                            <button (click)="showImageGroupModal = true" class="dropdown-item">Save Selections to > New Image Group</button>
+                            <button class="dropdown-item">!Delete Selections from Image Group</button>
                             <button class="dropdown-item">!Deselect All</button>
                             <!--Active on Image Group Page-->
                             <button class="dropdown-item">!Save Image Group</button>
                             <!--Active on Image Group Page-->
-                            <button class="dropdown-item">!Save Image Group as...</button>
+                            <button (click)="showImageGroupModal = true" class="dropdown-item">!Save Image Group as...</button>
                             <div class="dropdown-divider"></div>
                             <button class="dropdown-item">!Manage Personal Collection</button>
                             <button class="dropdown-item">!Upload to Personal Collection</button>
@@ -76,3 +76,5 @@
     </nav>
     <!--</div>-->
 </div>
+
+<ang-new-ig-modal *ngIf="showImageGroupModal" (closeModal)="showImageGroupModal = false"></ang-new-ig-modal>
