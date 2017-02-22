@@ -18,6 +18,7 @@ import {LockerModule, Locker, LockerConfig} from 'angular2-locker'
 import { Angulartics2Module, Angulartics2GoogleAnalytics } from 'angulartics2';
 import { TranslateModule, TranslateStaticLoader, TranslateLoader } from 'ng2-translate';
 import { RlTagInputModule } from 'angular2-tag-input';
+import { MediumEditorDirective } from 'angular2-medium-editor/medium-editor.directive.ts';
 
 // App is our top level component
 import { App } from './app.component';
@@ -107,7 +108,8 @@ type StoreType = {
     Login,
     Home,
     NoContent,
-    TypeIdPipe
+    TypeIdPipe,
+    MediumEditorDirective
   ],
   imports: [ // import Angular's modules
     BrowserModule,

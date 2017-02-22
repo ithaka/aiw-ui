@@ -15,6 +15,10 @@
             <input id="igTitleInput" type="text" [formControl]="newIgForm.controls['title']" tabindex="0"/>
           </div>
 
+          <medium-editor [(editorModel)]="textVar"
+            [editorOptions]="{'toolbar': {'buttons': ['bold', 'italic', 'underline', 'h1', 'h2', 'h3']}}" 
+            [editorPlaceholder]="placeholderVar"></medium-editor>
+
           <div *ngIf="isArtstorUser" class="form-group">
             <label for="artstorPermissionsGroup">Who should see this image group?</label>
             <div id="artstorPermissionsGroup" ngbRadioGroup class="btn-group" name="permissions type" [formControl]="newIgForm.controls['artstorPermissions']">
