@@ -19,7 +19,7 @@
             <label for="igDescription">Description</label>
             <medium-editor 
               [(editorModel)]="igDescription"
-              [editorOptions]="{ 'toolbar': {'buttons': ['bold', 'italic', 'underline', 'h1', 'h2', 'h3']}}" 
+              [editorOptions]="{ 'toolbar': {'buttons': ['bold', 'italic', 'underline', 'h1', 'h2', 'h3']}, 'autoLink': true}"
               [editorPlaceholder]="'Give your image group a description...'"></medium-editor>
           </div>
 
