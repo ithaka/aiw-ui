@@ -10,7 +10,7 @@ import { AuthService } from './../shared/auth.service';
 export class ImageGroupService {
   private proxyUrl = '';
   // private baseUrl =  this.proxyUrl + 'http://library.artstor.org/library/secure';
-  private baseUrl = 'http://stagely.artstor.org/library/secure';
+  private baseUrl: string;
 
   private header = new Headers({ 'Content-Type': 'application/json' }); // ... Set content type to JSON
   private options = new RequestOptions({ withCredentials: true }); // Create a request option
@@ -21,6 +21,7 @@ export class ImageGroupService {
   public assets = this.assetsSource.asObservable();
 
   constructor(private _router: Router, private http: Http, private _auth: AuthService ){
+    this.baseUrl = this._auth.getUrl();
   }
 
   /**
