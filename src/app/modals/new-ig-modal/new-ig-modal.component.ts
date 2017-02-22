@@ -12,6 +12,7 @@ export class NewIgModal implements OnInit {
   private newIgForm: FormGroup;
   private isArtstorUser: boolean = true;
   private tags: string[] = [];
+  private igDescription: string = "Medium Editor is here but it has no styles!";
 
   private isLoading: boolean = false;
 
