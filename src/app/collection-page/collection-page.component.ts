@@ -26,6 +26,7 @@ export class CollectionPage implements OnInit, OnDestroy {
   private colThumbnail: string = '';
   private assetCount: number;
   private descCollapsed: boolean = true;
+  private showaccessDeniedModal: boolean = false;
   
   private subscriptions: Subscription[] = [];
 
@@ -43,6 +44,7 @@ export class CollectionPage implements OnInit, OnDestroy {
       this.route.params.subscribe((routeParams) => {
         this.colId = routeParams["colId"];
         if (this.colId) {
+          this._assets.clearAssets();
           this.getCollectionInfo(this.colId)
             .then((data) => {
               this._assets.queryAll(routeParams);
@@ -58,6 +60,9 @@ export class CollectionPage implements OnInit, OnDestroy {
             })
             .catch((error) => { 
               console.error(error); 
+              if(error.status === 401){
+                this.showaccessDeniedModal = true;
+              }
             });
         }
       })
@@ -79,5 +84,11 @@ export class CollectionPage implements OnInit, OnDestroy {
           .get(this._auth.getUrl() + '/collections/' + colId, options)
           .toPromise()
           .then(this._auth.extractData);
+  }
+
+
+  private resourceAccessDenied(): void{
+    this.showaccessDeniedModal = false;
+     this._router.navigate(['/home']);
   }
 }

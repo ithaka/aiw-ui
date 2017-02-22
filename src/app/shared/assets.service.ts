@@ -228,6 +228,14 @@ export class AssetService {
     }
 
     /**
+     * Clear Assets for asset grid
+     */
+
+    public clearAssets(): void{
+        this.allResultsSource.next([]);
+    }
+
+    /**
      * Determines which service to call based on which route parameters exist
      * @param params Object conaining all route params
      */

@@ -171,6 +171,10 @@ export class AssetGrid implements OnInit, OnDestroy {
             this.totalAssets = allResults.count;
             this.isLoading = false;
           }
+          else if(this.assetCount){
+            this.totalAssets = this.assetCount.toString();
+            this.isLoading = false;
+          }
         },
         (error) => {
           console.log(error);
@@ -288,6 +292,7 @@ export class AssetGrid implements OnInit, OnDestroy {
     }
     else{
       // [routerLink]="editMode ? [] : ['/asset', asset.objectId, {prev: route.snapshot.url} ]" 
+      this._storage.set('totalAssets', this.totalAssets);
       this._storage.set('prevRouteParams', this.route.snapshot.url);
       this._router.navigate(['/asset', asset.objectId]);
     }

@@ -71,6 +71,9 @@ export class Asset {
                   this.imgURL = res.imageUrl;
 
                   document.getElementsByTagName('title')[0].innerHTML = this.title;
+                  document.querySelector('meta[name="DC.type"]').setAttribute('content', 'Artwork');
+                  document.querySelector('meta[name="DC.title"]').setAttribute('content', this.title);
+
                   this.setCreatorDate();
 
                   this.metadataLoaded = true;
@@ -97,9 +100,14 @@ export class Asset {
       for(var i = 0; i < this.metaDataArray.length; i++){
           if(this.metaDataArray[i].fieldName == 'Creator'){
               this.creator = this.metaDataArray[i].fieldValue;
+              document.querySelector('meta[name="DC.creator"]').setAttribute('content', this.creator);
           }
           else if(this.metaDataArray[i].fieldName == 'Date'){
               this.date = this.metaDataArray[i].fieldValue;
+              document.querySelector('meta[name="DCTERMS.issued"]').setAttribute('content', this.date);
+          }
+          else if(this.metaDataArray[i].fieldName == 'Description'){
+              document.querySelector('meta[name="DC.description"]').setAttribute('content', this.metaDataArray[i].fieldValue);
           }
       }
   }
