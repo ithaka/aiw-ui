@@ -34,6 +34,7 @@ export class SearchModal implements OnInit {
       operator: 'AND'
     };
 
+  private error: any = {};
   public advanceQueries = [];
   public advanceSearchDate: any = {
     'startDate' : '',
@@ -163,7 +164,30 @@ export class SearchModal implements OnInit {
     });
   }
 
+  /**
+   * Simple validation to test if the form is empty (This form is structured oddly, so it's simpler to do our own minimum validation)
+   */
+  private validateForm(): boolean {
+    let isValid = false;
+    if (this.filterSelections.length < 1 && this.advanceQueries[0].term.length < 1 && this.advanceSearchDate['startDate'].length < 1 && this.advanceSearchDate['endDate'].length < 1 ) {
+      // Nothing was selected! Tell the user to select something
+      this.error.empty = true;
+    } else {
+      this.error.empty = false;
+      isValid = true;
+    }
+    return isValid;
+  }
+
   private applyAllFilters(): void {
+    if (!this.validateForm()) {
+      // Nothing was selected! Tell the user to select something
+      this.error.empty = true;
+      return;
+    } else {
+      this.error.empty = false;
+    }
+
     let advQuery = "";
 
     this.advanceQueries.forEach( (query, index) => {
