@@ -4,6 +4,7 @@
  */
 
 $inputTextColor: #000;
+$inputPlaceholderColor: #b3b3b1;
 
 $inputBorderFocusColor: #918f92; 
 
@@ -94,4 +95,52 @@ select.form-control {
         height: 100%;
         width: 1.5em;
     }
+}
+
+rl-tag-input, rl-tag-input-item, .ng2-tag-input-field {
+    font-size: 12px !important;
+    line-height: 36px !important;
+    font-family: Graphik, Futura, Arial !important;
+    color: $inputTextColor;
+}
+
+.ng2-tag-input-field {
+    background: transparent;
+    text-align: left;
+    background: #fff;
+    padding-left: 5px !important;
+    border: 1px dotted #cdcdcd !important;
+
+    &::-webkit-input-placeholder {
+    color: $inputPlaceholderColor !important;
+    }
+    &:-moz-placeholder {
+    color: $inputPlaceholderColor !important;
+    }
+    &::-moz-placeholder {
+    color: $inputPlaceholderColor !important;
+    }
+    &:-ms-input-placeholder {
+    color: $inputPlaceholderColor !important;
+    }
+}
+
+rl-tag-input {
+    line-height: 40px;
+    background: #fff;
+    padding: 6px !important;
+    border: 1px solid #cdcdcd;
+    box-shadow: none !important;
+}
+
+rl-tag-input > form > input {
+    border-radius: 5px;
+    height: 34px;
+    width: 100px !important;
+    text-align: center;
+}
+
+rl-tag-input-item {
+    border-radius: 5px !important;
+    height: 34px !important;
 }

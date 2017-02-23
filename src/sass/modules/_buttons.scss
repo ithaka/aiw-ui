@@ -56,7 +56,7 @@ $iconBtnSize: 30px;
     border: none;
      color: $secondaryBtnColor; 
 
-     &:hover, &:focus, &:active {
+     &:hover, &:focus, &:active, &.active {
         background: darken($secondaryBtnBg, 10%);
         // border-color: darken($secondaryBtnBg, 10%);
         background-color: #000000;
