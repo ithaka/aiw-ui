@@ -31,13 +31,14 @@ export class AssetViewerComponent implements OnInit, OnDestroy, AfterViewInit {
     @Input() assetNumber: number;
     @Input() assets:Asset[];
     @Input() prevAssetResults: any;
+    @Input() isFullscreen: boolean;
     @Output() fullscreenChange = new EventEmitter();
     @Output() nextPage = new EventEmitter();
     @Output() prevPage = new EventEmitter();
     @Output() removeAsset = new EventEmitter();
 
     private isLoading: boolean = true;
-    private isFullscreen: boolean = false;
+    // private isFullscreen: boolean = false;
     private openSeaDragonReady: boolean = false;
     private isOpenSeaDragonAsset: boolean = false;
     private isKalturaAsset: boolean = false;
