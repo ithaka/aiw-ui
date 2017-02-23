@@ -185,6 +185,22 @@ export class AssetGrid implements OnInit, OnDestroy {
         }
       )
     );
+
+    /**
+     * Selected Assets subscription
+     * We want to subscribe to Asset Selection in case another component modifies the collection
+     */
+    this.subscriptions.push(
+      this._assets.selection.subscribe(
+        selectedAssets => {
+          this.selectedAssets = selectedAssets;
+        },
+        error => {
+          console.log(error);
+        }
+      );
+    );
+
   }
 
   ngOnDestroy() {
