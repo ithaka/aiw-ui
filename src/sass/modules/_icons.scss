@@ -6,6 +6,11 @@
     width: 1em;
     height: 1em;
     display: inline-block;
+
+    &.disabled {
+        pointer-events: none;
+        opacity: 0.05;
+    }
 }
 
 .icon-lg {

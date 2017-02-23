@@ -3,9 +3,9 @@
         <!--View prev/next asset-->
         <div class="title-nav-cntnr col-md-12" [class.hidden]="isFullscreen">
             <span *ngIf="prevRouteParams.length > 0" class="back-results" (click)="backToResults()">Back to Results</span>
-            <i title="Previous in results" (click)="showPrevAsset()" class="icon icon-direction icon-left"></i>
+            <i title="Previous in results" (click)="showPrevAsset()" [class.disabled]="assetNumber <= 1" class="icon icon-direction icon-left"></i>
             <div class="title" [innerHTML]="assets[0].title"></div>
-            <i title="Next in results" (click)="showNextAsset()" class="icon icon-direction icon-right"></i>
+            <i title="Next in results" (click)="showNextAsset()" [class.disabled]="assetNumber >= totalAssetCount" class="icon icon-direction icon-right"></i>
             <div class="page-tooltip">
                 <span id="assetPageNumber">{{ assetNumber }}</span> OF <span id="assetPageCount">{{ totalAssetCount }}</span>
             </div>
