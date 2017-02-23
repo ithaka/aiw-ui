@@ -10,6 +10,7 @@ import { BrowsePage } from './browse-page';
 import { AssociatedPage } from './associated-page';
 import { AssetPage } from './asset-page';
 import { Login } from './login';
+import { RegisterComponent } from './register/register.component';
 import { About } from './about';
 import { NoContent } from './no-content';
 import { AuthService } from './shared/auth.service';
@@ -40,5 +41,6 @@ export const ROUTES: Routes = [
   { path: 'browse', component: BrowsePage, canActivate:[AuthService], children: BrowseRoutes },
   { path: 'associated/:objectId/:colId', component: AssociatedPage, canActivate:[AuthService] },
   { path: 'about', component: About },
+  { path: 'register', component: RegisterComponent },
   { path: '**', component: NoContent }
 ];

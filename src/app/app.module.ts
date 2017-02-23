@@ -44,6 +44,7 @@ import { Login } from './login';
 import { About } from './about';
 import { NoContent } from './no-content';
 import { LoginReqModal, SearchModal, NewIgModal } from './modals';
+import { RegisterComponent } from './register/register.component';
 
 // Application wide providers
 import { AuthService, AssetService, TypeIdPipe, ToolboxService, LoggingService } from './shared';
@@ -109,7 +110,8 @@ type StoreType = {
     Home,
     NoContent,
     TypeIdPipe,
-    MediumEditorDirective
+    MediumEditorDirective,
+    RegisterComponent
   ],
   imports: [ // import Angular's modules
     BrowserModule,
