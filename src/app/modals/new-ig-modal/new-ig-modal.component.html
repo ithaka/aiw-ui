@@ -11,8 +11,12 @@
       <div class="modal-body">
 
           <div class="form-group">
-            <label for="igTitleInput" placeholder="Give your image group a title...">Title</label>
-            <input class="form-control" id="igTitleInput" type="text" [formControl]="newIgForm.controls['title']" spellcheck="false" tabindex="0"/>
+            <label for="igTitleInput">Title</label>
+            <input class="form-control" id="igTitleInput" type="text" [formControl]="newIgForm.controls['title']" placeholder="Give your image group a title..." spellcheck="false" tabindex="0"/>
+            <div *ngIf="submitted && newIgForm.controls['title'].hasError('required')" class="has-danger">
+              <p class="form-control-feedback">A title is required</p>
+            </div>
+            
           </div>
 
           <div class="form-group">

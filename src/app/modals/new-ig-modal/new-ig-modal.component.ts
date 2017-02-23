@@ -18,6 +18,7 @@ export class NewIgModal implements OnInit {
   private igDescription: string = "<div>&nbsp;</div>";
 
   private isLoading: boolean = false;
+  private submitted: boolean = false;
 
   constructor(private _auth: AuthService, _fb: FormBuilder) {
     this.newIgForm = _fb.group({
@@ -33,6 +34,15 @@ export class NewIgModal implements OnInit {
   }
 
   private igFormSubmit(formValue: any): void {
+    this.submitted = true;
+
+    // avoid making the service calls, but still trigger error display
+    if (!this.newIgForm.valid) {
+      return;
+    }
+
+    // anything after here will run if the form is valid
+
     console.log(formValue);
     console.log(this.igDescription); // the description is not technically part of the form
   }
