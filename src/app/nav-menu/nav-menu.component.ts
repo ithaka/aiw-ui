@@ -51,6 +51,10 @@ export class NavMenu {
     );
   }
 
+  ngOnDestroy() {
+    this.subscriptions.forEach((sub) => { sub.unsubscribe(); });
+  }
+
   private generateSelectedImgURL(): void{
     this.generateImgUrl.emit();
   }
@@ -63,5 +67,26 @@ export class NavMenu {
         this._router.navigate(['/printpreview/' + params['igId']]);
       }
     }
+  }
+
+  /**
+   * Select All for Edit Mode
+   * - Takes all current results from Asset Service, and selects them!
+   * - The selection then broadcasts out to the Asset Grid by observable
+   */
+  private selectAllInAssetGrid(): void {
+    this._assets.allResults.take(1).subscribe(
+      assets => {
+        if (assets.thumbnails) {
+          // Make a copy of the Results array
+          let assetsOnPage = [];
+          for(var i=0;i<assets.thumbnails.length;i++){
+              assetsOnPage.push(assets.thumbnails[i]);
+          }
+          // Set all assets on page as selected
+          this._assets.setSelectedAssets(assetsOnPage);
+        }
+      }
+    );
   }
 }

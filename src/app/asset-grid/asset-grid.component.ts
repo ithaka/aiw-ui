@@ -188,17 +188,23 @@ export class AssetGrid implements OnInit, OnDestroy {
 
     /**
      * Selected Assets subscription
-     * We want to subscribe to Asset Selection in case another component modifies the collection
+     * - We want to subscribe to Asset Selection in case another component modifies the collection
+     * - (Nav Menu modifies selection)
      */
     this.subscriptions.push(
       this._assets.selection.subscribe(
         selectedAssets => {
+          // Set selected assets
           this.selectedAssets = selectedAssets;
+          // Trigger Edit Mode if items are being added to the selection
+          if ( this.selectedAssets.length > 0 ) {
+            this.editMode = true;
+          }
         },
         error => {
           console.log(error);
         }
-      );
+      )
     );
 
   }
