@@ -88,10 +88,10 @@ export class ImageGroupPPPage implements OnInit, OnDestroy {
 
   // Load Image Group Descrition
   loadIgDesc(igId: string): void{
-      this._igService.getGroupDescription(igId).take(1)
-            .subscribe((desc: string) => { 
-                if(desc){
-                    this.igDesc = desc; 
+      this._igService.getGroupInfo(igId).take(1)
+            .subscribe((data: any) => { 
+                if(data){
+                    this.igDesc = data.igNotes; 
                 }
             });
   }

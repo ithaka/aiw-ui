@@ -53,7 +53,7 @@ export class ImageGroupService {
    * @param groupId Id of desired image group
    * @returns JS Object with parameters: count, igId, igName, igNotes and more if it is a folder
    */
-  getGroupDescription(groupId: string): Observable<string> {
+  getGroupInfo(groupId: string): Observable<string> {
     let requestUrl = [this.baseUrl, "imagegroup", groupId].join("/") + "?_method=igdescription";
 
     return this.http
@@ -62,7 +62,7 @@ export class ImageGroupService {
           if (!data) {
             throw new Error("No data in image group description response");
           }
-          return data.json().igNotes;
+          return data.json() || {};
         });
   }
 
