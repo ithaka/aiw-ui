@@ -2,5 +2,8 @@
   "LOGIN": {
     "LOGIN_HEADING": "Log in with your Artstor account",
     "INSTITUTION_HEADING": "Log in through your Institution"
+  },
+  "REGISTER": {
+    "REGISTER_HEADING": "Register for a new Artstor account"
   }
 }

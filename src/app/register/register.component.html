@@ -1,2 +1,58 @@
 <nav-menu></nav-menu>
-<p>This is the register component!</p>
+<div class="container main-content">
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="card card--light">
+                <div class="card-header">
+                    <h1 translate id="loginHeading">REGISTER.REGISTER_HEADING</h1>
+                </div>
+                <div class="card-body">
+                    <!--<form (ngSubmit)="login(user)">
+                        <div class="form-group">
+                            <label for="loginEmail">Email Address</label>
+                            <input id="inputLoginEmail" [(ngModel)]="user.username" name="username" type="text" class="form-control" placeholder="Username" tabindex="1" />
+                        </div>
+                        <div class="form-group">
+                            <label for="loginPassword">Password</label>
+                            <input id="inputLoginPassword" [(ngModel)]="user.password" name="password" type="password" class="form-control" placeholder="Password" tabindex="2" />
+                        </div>
+                        <div id="errorMsg" *ngIf="errorMsg" class="login-errorMsg"> {{ errorMsg }} </div>
+                        <div class="form-group">
+                            <button id="btnLoginRemote" class="btn btn-primary" [class.loading]="loginLoading" type="submit" name="action" tabindex="3">Log in</button>
+                        </div>
+                    </form>-->
+
+                    <form id="registerForm" [formGroup]="registerForm" (ngSubmit)="registerSubmit(registerForm.value)">
+                      <div class="form-group">
+                        <label for="emailInput">Email Address</label>
+                        <input id="emailInput" class="form-control" type="text" spellcheck="false" [formControl]="registerForm.controls['email']" tabindex="0"/>
+                      </div>
+                      <div class="form-group">
+                        <label for="emailConfirmInput">Confirm Email Address</label>
+                        <input id="emailConfirmInput" class="form-control" type="text" spellcheck="false" [formControl]="registerForm.controls['emailConfirm']" tabindex="0"/>
+                      </div>
+                      <div class="form-group">
+                        <label for="passwordInput">Password</label>
+                        <input id="passwordInput" class="form-control" type="text" spellcheck="false" [formControl]="registerForm.controls['password']" tabindex="0"/>
+                      </div>
+                      <div class="form-group">
+                        <label for="passwordConfirmInput">Confirm Password</label>
+                        <input id="passwordConfirmInput" class="form-control" type="text" spellcheck="false" [formControl]="registerForm.controls['passwordConfirm']" tabindex="0"/>
+                      </div>
+                    </form>
+
+                    <!--<a id="linkLoginResetModal" tabindex="4" class="link" (click)="showPwdResetModal()">Forgot password?</a>
+                    <br/>
+                    <a tabindex="5" class="link">! Not Registered?</a>
+                    <hr/>
+                    <a tabindex="6" class="link">! Login Help</a>-->
+                </div>
+                <!--<div class="block-right">
+                    <a tabindex="7" class="link" (click)="toggleAccessHelpModal()">How do I get access?</a>
+                </div>-->
+            </div>
+        </div>
+
+    </div>
+</div>
+<!--.container-->
