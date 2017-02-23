@@ -210,7 +210,8 @@ label {
   font-size: 12px;
 }
 
-h1, h2, h3, h4 {
+h1, h2, h3, h4, h5 {
+  @extend %SansRegular;
   // Do not use type styles to handle layout spacing (other than line-height)
   margin: 0;
   padding: 0;

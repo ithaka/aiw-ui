@@ -22,7 +22,7 @@
             </div>
         </li>
 
-        <li class="editMode" (click)="editMode = !editMode; selectedAssets = [];" [ngClass]="{'active': editMode}">Edit Mode</li>
+        <li class="editMode" (click)="toggleEditMode()" [ngClass]="{'active': editMode}">Edit Mode</li>
         <!--<span class="page-size">{{ pagination.pageSize }}</span>-->
     </div>
     <div class="col-sm-6 pag-controls">

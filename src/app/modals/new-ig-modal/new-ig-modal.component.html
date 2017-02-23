@@ -1,0 +1,68 @@
+<div class="modal fade show">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">New Image Group</h5>
+        <button (click)="closeModal.emit()" type="button" class="close" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form id="newIgForm" [formGroup]="newIgForm" (ngSubmit)="igFormSubmit(newIgForm.value)">
+      <div class="modal-body">
+
+          <div class="form-group">
+            <label for="igTitleInput">Title</label>
+            <input class="form-control" id="igTitleInput" type="text" [formControl]="newIgForm.controls['title']" placeholder="Give your image group a title..." spellcheck="false" tabindex="0"/>
+            <div *ngIf="submitted && newIgForm.controls['title'].hasError('required')" class="has-danger">
+              <p class="form-control-feedback">A title is required</p>
+            </div>
+            
+          </div>
+
+          <div class="form-group">
+            <label for="igDescription">Description</label>
+            <medium-editor
+              [(editorModel)]="igDescription"
+              [editorOptions]="{ 'toolbar': {'buttons': ['bold', 'italic', 'underline', 'h1', 'h2', 'h3']}, 'autoLink': true}"
+              [editorPlaceholder]="'Give your image group a description...'"></medium-editor>
+          </div>
+
+          <div *ngIf="isArtstorUser" class="form-group">
+            <label for="artstorPermissionsGroup">Who should see this image group?</label>
+            <div id="artstorPermissionsGroup" ngbRadioGroup class="btn-group" name="permissions type" [formControl]="newIgForm.controls['artstorPermissions']">
+
+              <label class="btn btn-secondary">
+                <input type="radio" name="options" id="artstorPermissionsRadioGlobal" autocomplete="off" value="global"> Everyone
+              </label>
+
+              <label class="btn btn-secondary">
+                <input type="radio" name="options" id="artstorPermissionsRadioInstitution" autocomplete="off" value="institution"> This Institution
+              </label>
+
+              <label class="btn btn-secondary">
+                <input type="radio" name="options" id="artstorPermissionsRadioPrivate" autocomplete="off" value="private"> Only Me
+              </label>
+            </div>
+          </div>
+
+          <div *ngIf="!isArtstorUser" class="form-group">
+            <div class="form-check">
+              <label id="publicPermissionLabel" class="form-check-label">
+                <input id="makePublicCheckbox" class="form-check-input" type="checkbox" [formControl]="newIgForm.controls['public']" value=""> Make Public Image Group
+              </label>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="igTagInput">Tags</label>
+            <rl-tag-input id="igTagInput" [formControl]="newIgForm.controls['tags']" placeholder="Add a tag..."></rl-tag-input>
+          </div>
+      </div>
+      <div class="modal-footer">
+        <button type="submit" class="btn btn-primary">Save changes</button>
+        <button type="button" (click)="closeModal.emit()" class="btn btn-secondary">Close</button>
+      </div>
+      </form>
+    </div>
+  </div>
+</div>
