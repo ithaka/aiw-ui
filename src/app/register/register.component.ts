@@ -9,6 +9,7 @@ import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms'
 export class RegisterComponent implements OnInit {
 
   private registerForm: FormGroup;
+  private submitted: boolean = false;
   
   constructor(_fb: FormBuilder) {
     this.registerForm = _fb.group({
@@ -40,6 +41,7 @@ export class RegisterComponent implements OnInit {
 
   /** Gets called when the registration form is submitted */
   private registerSubmit(formValue: any) {
-
+    this.submitted = true;
+    console.log(formValue);
   }
 }
