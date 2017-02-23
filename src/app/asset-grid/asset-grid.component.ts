@@ -1,6 +1,7 @@
 import { Component, OnInit, OnDestroy, Input } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 
+import { BehaviorSubject } from 'rxjs/Rx';
 import { Subscription }   from 'rxjs/Subscription';
 import { Locker } from 'angular2-locker';
 
@@ -27,8 +28,9 @@ export class AssetGrid implements OnInit, OnDestroy {
   private results: any[] = [];
   filters = [];
   private editMode: boolean = false;
-  private selectedAssets: any[] = [];
 
+  private selectedAssets: any[] = [];
+  
   // Default show as loading until results have update
   private isLoading: boolean = true;
   private searchError: string = "";
@@ -285,9 +287,11 @@ export class AssetGrid implements OnInit, OnDestroy {
       let index: number = this.isSelectedAsset(asset);
       if(index > -1){
         this.selectedAssets.splice(index, 1);
+        this._assets.setSelectedAssets(this.selectedAssets);
       }
       else{
         this.selectedAssets.push(asset);
+        this._assets.setSelectedAssets(this.selectedAssets);
       }
     }
     else{
@@ -296,7 +300,19 @@ export class AssetGrid implements OnInit, OnDestroy {
       this._storage.set('prevRouteParams', this.route.snapshot.url);
       this._router.navigate(['/asset', asset.objectId]);
     }
-    console.log(this.selectedAssets);
+  }
+
+  /**
+   * Toggle Edit Mode
+   * - Set up as a function to tie in clearing selection
+   */
+  private toggleEditMode(): void {
+    this.editMode = !this.editMode; 
+    if (this.editMode == false) {
+      // Clear asset selection 
+      this.selectedAssets = [];
+      this._assets.setSelectedAssets(this.selectedAssets);
+    }
   }
 
   /**

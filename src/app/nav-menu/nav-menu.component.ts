@@ -1,5 +1,9 @@
+import { Subscription } from 'rxjs/Rx';
 import { Component, Output, EventEmitter, Input } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+
+// Project Dependencies
+import { AssetService } from '../shared/assets.service';
 
 @Component({
   selector: 'nav-menu',
@@ -25,16 +29,26 @@ export class NavMenu {
   generateImgUrl = new EventEmitter();
   
   private mobileCollapsed: boolean = true;
+  private selectedAssets: any[] = [];
+  private subscriptions: Subscription[] = [];
   
   private showImageGroupModal: boolean = false;
   
   // TypeScript public modifiers
-  constructor(private _router: Router, private route: ActivatedRoute) {
+  constructor(private _router: Router, private route: ActivatedRoute, private _assets: AssetService) {
     
   }
   
   ngOnInit() {
-    
+    this.subscriptions.push(
+      this._assets.selection.subscribe( 
+        selectedAssets => {
+          this.selectedAssets = selectedAssets;
+        },
+        error => {
+          //
+        })
+    );
   }
 
   private generateSelectedImgURL(): void{

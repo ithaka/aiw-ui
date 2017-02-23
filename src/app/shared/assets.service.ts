@@ -37,6 +37,15 @@ export class AssetService {
     private paginationSource = new BehaviorSubject<any>(this.paginationValue);
     public pagination = this.paginationSource.asObservable();
 
+    /**
+     * Asset Selection Observable 
+     * - Allow other components to access selected assets via subscription
+     */
+    private selectedAssets: any[] = [];
+    private selectedAssetsSource = new BehaviorSubject<any[]>(this.selectedAssets);
+    public selection = this.selectedAssetsSource.asObservable();
+
+
     // Keep track of which params the current results are related to
     public currentLoadedParams: any = {};
 
@@ -141,6 +150,14 @@ export class AssetService {
         } else {
             return { thumbnails: [] };
         }
+    }
+
+    /**
+     * Update Selected Assets observable
+     */
+    public setSelectedAssets(assets: any[]): void {
+        this.selectedAssets = assets;
+        this.selectedAssetsSource.next(assets);
     }
 
     public getCurrentInstitution(): any {

@@ -29,7 +29,7 @@
                             <!--Active on Image Group Page-->
                             <button class="dropdown-item">!View All</button>
                             <button class="dropdown-item">!Select All</button>
-                            <button (click)="showImageGroupModal = true" class="dropdown-item">Save Selections to > New Image Group</button>
+                            <button [class.disabled]="selectedAssets.length < 1" (click)="showImageGroupModal = true" class="dropdown-item">Save Selections to > New Image Group</button>
                             <button class="dropdown-item">!Delete Selections from Image Group</button>
                             <button class="dropdown-item">!Deselect All</button>
                             <!--Active on Image Group Page-->
