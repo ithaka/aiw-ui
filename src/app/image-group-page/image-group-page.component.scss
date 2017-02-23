@@ -1,3 +1,28 @@
 .ig-description {
   border-right: 1px solid rgba(0, 0, 0, 0.15);
 }
+
+.page__description {
+    overflow: hidden;
+    // transition: max-height 1s linear;
+
+    &.limit {
+        max-height: 80px;
+        display: -webkit-box;
+        text-overflow: ellipsis;
+        -webkit-line-clamp: 4;
+        -webkit-box-orient: vertical;
+    }
+}
+
+.expander {
+    position: relative;
+    z-index: 1000;
+    text-align: center;
+    line-height: 28px;
+    margin-top: -2.3em;
+    padding-top: 20px;
+    &.collapsed {
+        background-image: linear-gradient(to bottom, transparent 0%, white 50%);
+    }
+}

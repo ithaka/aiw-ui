@@ -22,7 +22,10 @@
                   <i id="downloadGroupLink" class="icon icon-download"></i>
               </a>
             </h1>
-            <div *ngIf="ig && ig.description && ig.description.igNotes" id="pageDescription" [innerHTML]="ig.description.igNotes"></div>
+            <div *ngIf="ig && ig.description && ig.description.igNotes">
+                <div #igDesc class="page__description" id="pageDescription" [class.limit]="descCollapsed" [innerHTML]="ig.description.igNotes"></div>
+                <div [class.hidden]="igDesc.clientHeight < 75" [class.collapsed]="descCollapsed" (click)="descCollapsed = !descCollapsed" class="expander link--action small" [innerHtml]="descCollapsed ? 'More' : 'Less'" role="button"><div></div>
+            </div>
         </div>
     </div>
     <ang-asset-grid></ang-asset-grid>
