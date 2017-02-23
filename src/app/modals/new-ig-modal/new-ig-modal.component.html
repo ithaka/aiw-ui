@@ -11,13 +11,13 @@
       <div class="modal-body">
 
           <div class="form-group">
-            <label for="igTitleInput">Title</label>
-            <input class="form-control" id="igTitleInput" type="text" [formControl]="newIgForm.controls['title']" tabindex="0"/>
+            <label for="igTitleInput" placeholder="Give your image group a title...">Title</label>
+            <input class="form-control" id="igTitleInput" type="text" [formControl]="newIgForm.controls['title']" spellcheck="false" tabindex="0"/>
           </div>
 
           <div class="form-group">
             <label for="igDescription">Description</label>
-            <medium-editor 
+            <medium-editor
               [(editorModel)]="igDescription"
               [editorOptions]="{ 'toolbar': {'buttons': ['bold', 'italic', 'underline', 'h1', 'h2', 'h3']}, 'autoLink': true}"
               [editorPlaceholder]="'Give your image group a description...'"></medium-editor>
