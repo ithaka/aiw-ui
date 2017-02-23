@@ -23,7 +23,7 @@
             </div>
           </div>
           <div *ngIf="!user.isLoggedIn" class="login-panel__status">
-            <div><a (click)="loginAndSaveRoute()" class="link" tabindex="1">Log in</a> or <a [routerLink]="['/register']" class="link" tabindex="1">!Register</a> for more features</div>
+            <div><a (click)="loginAndSaveRoute()" class="link" tabindex="1">Log in</a> or <a [routerLink]="['/register']" class="link" tabindex="1">Register</a> for more features</div>
             <div *ngIf="institutionObj.shortName || institutionObj.institutionName">Institution: {{ institutionObj.shortName ? institutionObj.shortName : institutionObj.institutionName }}</div>
           </div>
         </div>
