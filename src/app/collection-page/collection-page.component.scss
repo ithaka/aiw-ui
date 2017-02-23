@@ -35,3 +35,18 @@ img.collection-thumb {
     text-align: center;
     margin-top: -.5em;
 }
+
+// For generate image URL Modal
+#accessDeniedModal{ 
+    .modal-body{
+        font-family: 'Graphik Web', sans-serif;
+
+        .hdr{
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 10px;
+        }
+    }
+    .close-icon{
+        cursor: pointer;
+    }
+}
