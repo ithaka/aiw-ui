@@ -6,7 +6,7 @@ import { Subscription }   from 'rxjs/Subscription';
 import { ImageGroupService } from './image-group.service';
 import { AssetService, AuthService } from './../shared';
 
-import { ImageGroup } from './../shared';
+import { ImageGroup, ImageGroupDescription } from './../shared';
 
 @Component({
   selector: 'ang-image-group', 
@@ -58,8 +58,8 @@ export class ImageGroupPage implements OnInit, OnDestroy {
         this.ig = results;
         console.log(this.ig);
         if (this.ig && this.ig.igId) {
-          this._igService.getGroupInfo(this.ig.igId).take(1)
-            .subscribe((desc: string) => { this.ig.description = desc; });
+          this._igService.getGroupDescription(this.ig.igId).take(1)
+            .subscribe((desc: ImageGroupDescription) => { this.ig.description = desc; });
         }
       })
     );

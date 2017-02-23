@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import 'rxjs/add/operator/toPromise';
 import { Observable, BehaviorSubject } from 'rxjs/Rx';
 
-import { AuthService } from './../shared/auth.service';
+import { AuthService, ImageGroupDescription } from './../shared';
 
 @Injectable()
 export class ImageGroupService {
@@ -53,7 +53,7 @@ export class ImageGroupService {
    * @param groupId Id of desired image group
    * @returns JS Object with parameters: count, igId, igName, igNotes and more if it is a folder
    */
-  getGroupInfo(groupId: string): Observable<string> {
+  getGroupDescription(groupId: string): Observable<ImageGroupDescription> {
     let requestUrl = [this.baseUrl, "imagegroup", groupId].join("/") + "?_method=igdescription";
 
     return this.http

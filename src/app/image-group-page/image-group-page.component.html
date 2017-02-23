@@ -22,7 +22,7 @@
                   <i id="downloadGroupLink" class="icon icon-download"></i>
               </a>
             </h1>
-            <div id="pageDescription" [innerHTML]="igDesc"></div>
+            <div *ngIf="ig && ig.description && ig.description.igNotes" id="pageDescription" [innerHTML]="ig.description.igNotes"></div>
         </div>
     </div>
     <ang-asset-grid></ang-asset-grid>

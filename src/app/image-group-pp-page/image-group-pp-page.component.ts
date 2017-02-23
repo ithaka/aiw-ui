@@ -4,8 +4,7 @@ import { Router, ActivatedRoute, UrlSegment } from '@angular/router';
 import { Subscription }   from 'rxjs/Subscription';
 
 // Internal Dependencies
-import { AssetService } from './../shared/assets.service';
-import { AuthService } from './../shared/auth.service';
+import { AssetService, AuthService, ImageGroupDescription } from './../shared';
 import { ImageGroupService } from './../image-group-page/image-group.service';
 
 @Component({
@@ -88,8 +87,8 @@ export class ImageGroupPPPage implements OnInit, OnDestroy {
 
   // Load Image Group Descrition
   loadIgDesc(igId: string): void{
-      this._igService.getGroupInfo(igId).take(1)
-            .subscribe((data: any) => { 
+      this._igService.getGroupDescription(igId).take(1)
+            .subscribe((data: ImageGroupDescription) => { 
                 if(data){
                     this.igDesc = data.igNotes; 
                 }
