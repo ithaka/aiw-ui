@@ -24,9 +24,6 @@ export class NavMenu {
    */
   @Input()
   private actionOptions: any = {};
-
-  @Output()
-  generateImgUrl = new EventEmitter();
   
   private mobileCollapsed: boolean = true;
   private selectedAssets: any[] = [];
@@ -54,11 +51,7 @@ export class NavMenu {
   ngOnDestroy() {
     this.subscriptions.forEach((sub) => { sub.unsubscribe(); });
   }
-
-  private generateSelectedImgURL(): void{
-    this.generateImgUrl.emit();
-  }
-
+  
   private printImageGroupPage(): void {
     if (this.actionOptions.group) {
       let params = this.route.snapshot.params;

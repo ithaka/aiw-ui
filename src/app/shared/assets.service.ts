@@ -376,12 +376,40 @@ export class AssetService {
      * Generates Image URL
      * @param assetId: string Asset or object ID
      */
-    public genrateImageURL(assetId: string) {
+    public generateImageURL(assetId: string) {
 
         return this.http
             .get(this._auth.getUrl() + '/encrypt/'+ assetId + '?_method=encrypt', this.defaultOptions)
             .toPromise()
             .then(this.extractData);
+    }
+
+    /**
+     * Generate asset share link
+     */
+    public getShareLink(assetId: string) {
+        //   Links in the clipboard need a protocol defined
+        return 'http://' + window.location.host + '/#/asset/' + assetId;
+
+        // For Reference: Old service for generating share url:
+        // this._assets.genrateImageURL( this.assets[0].id )
+        //   .then((imgURLData) => {
+        //       this._assets.encryptuserId()
+        //         .then((userEncryptData) => {
+        //           var imgEncryptId = imgURLData.encryptId;
+        //           var usrEncryptId = userEncryptData.encryptId;
+        //         //   Links in the clipboard need a protocol defined
+        //             this.generatedImgURL =  'http:' + this._auth.getUrl() + '/ViewImages?id=' + imgEncryptId + '&userId=' + usrEncryptId + '&zoomparams=&fs=true';                  
+        //         })
+        //         .catch(function(err){
+        //           console.log('Unable to Encrypt userid');
+        //           console.error(err);
+        //         });
+        //   })
+        //   .catch(function(err) {
+        //       console.log('Unable to generate image URL');
+        //       console.error(err);
+        //   });
     }
 
     /**
