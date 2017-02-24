@@ -10,6 +10,7 @@ export class RegisterComponent implements OnInit {
 
   private registerForm: FormGroup;
   private submitted: boolean = false;
+  private isLoading: boolean = false;
   
   constructor(_fb: FormBuilder) {
     this.registerForm = _fb.group({
