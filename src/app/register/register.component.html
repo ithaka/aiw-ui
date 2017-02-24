@@ -59,11 +59,22 @@
                         </div>
                         <div class="form-group">
                             <label>Role at Institution</label>
-                            <select id="selectLoginInstitution" class="form-control custom-select" tabindex="0">
+                            <select id="selectUserRole" [formControl]="registerForm.controls['role']" class="form-control custom-select" tabindex="0">
                                 <option *ngFor="let role of userRoles" [ngValue]="role.id">{{ role.desc }}</option>
                             </select>
+                            <div *ngIf="submitted && registerForm.controls['role'].hasError('required')" class="has-danger">
+                                <p id="errRoleRequired" class="form-control-feedback">REGISTER.ERRORS.INSTITUTION_ROLE_REQUIRED</p>
+                            </div>
                         </div>
-
+                        <div class="form-group">
+                            <label>Academic Department</label>
+                            <select id="selectUserDept" [formControl]="registerForm.controls['dept']" class="form-control custom-select" tabindex="0">
+                                <option *ngFor="let dept of userDepts" [ngValue]="dept.id">{{ dept.desc }}</option>
+                            </select>
+                            <div *ngIf="submitted && registerForm.controls['dept'].hasError('required')" class="has-danger">
+                                <p id="errDeptRequired" class="form-control-feedback">REGISTER.ERRORS.ACADEMIC_DEPT_REQUIRED</p>
+                            </div>
+                        </div>
                         <div class="form-group">
                             <button id="btnRegister" class="btn btn-primary" [class.loading]="isLoading" type="submit" name="action" tabindex="0">Log in</button>
                         </div>

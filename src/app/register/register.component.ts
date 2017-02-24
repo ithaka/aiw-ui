@@ -24,7 +24,9 @@ export class RegisterComponent implements OnInit {
       email: [null, Validators.compose([Validators.required, this.emailValidator])],
       emailConfirm: [null, Validators.required],
       password: [null, Validators.compose([Validators.required, Validators.minLength(7)])],
-      passwordConfirm: [null, Validators.required]
+      passwordConfirm: [null, Validators.required],
+      role: [null, Validators.required],
+      dept: [null, Validators.required]
     }, { validator: Validators.compose([ this.passwordsEqual, this.emailsEqual ])});
   }
 
