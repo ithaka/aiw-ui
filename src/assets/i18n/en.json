@@ -13,9 +13,13 @@
       "PASSWORD_REQUIRED": "Password must be 7-20 characters",
       "PASSWORD_MINLENGTH": "Password must be 7-20 characters",
       "PASSWORD_MISMATCH": "Password confirmation does not match",
-      "OVER_13_REQUIRED": "Please confirm you are 13 or older",
+      "AGE_REQUIRED": "Please confirm you are 13 or older",
       "INSTITUTION_ROLE_REQUIRED": "Please select a role",
       "ACADEMIC_DEPT_REQUIRED": "Please select a department"
-    }
+    },
+    "AGE_PROMPT": "AGE_PROMPT",
+    "INFO_PROMPT": "INFO_PROMPT",
+    "SURVEY_PROMPT": "SURVEY_PROMPT",
+    "PRIVACY_DISCLAIMER": "PRIVACY_DISCLAIMER"
   }
 }
