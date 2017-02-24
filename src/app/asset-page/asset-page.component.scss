@@ -199,3 +199,11 @@ $titleNavBg: #eee;
         height: 50%;
     }
 }
+
+.btn.disable{
+    &:hover, &:focus, &:active {
+        background: #c8c8c8 !important;
+        border: none !important;
+        color: #fff !important;
+    }
+}
