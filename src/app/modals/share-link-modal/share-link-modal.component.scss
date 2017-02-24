@@ -2,9 +2,7 @@
 .modal-body{
     font-family: 'Graphik Web', sans-serif;
 }
-.main-content{
-    border-bottom: 1px solid #ddd;
-}
+
 .asset-title{
     font-size: 13px;
     font-weight: 600;
@@ -18,13 +16,7 @@
     font-stretch: normal;
     line-height: 18px;
     padding-top: 10px;
-}
-.label{
-    color: #c9d0c9;
-    font-size: 13px;
-    font-weight: 600;
-    letter-spacing: 0.5px;
-}
+} 
 .value{
     font-size: 13px;
     word-wrap: break-word;
@@ -54,7 +46,7 @@
     min-height: 50px;
     padding: 5px 10px;
     text-align: left;
-    margin-top: 10px;
+    margin-top: 0px;
     border: 1px solid #ddd;
     resize: none;
 }

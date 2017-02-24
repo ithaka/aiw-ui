@@ -83,7 +83,6 @@ export class AssetGrid implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private locker: Locker
   ) {
-      this.baseURL = this._auth.getUrl();
       this._storage = locker.useDriver(Locker.DRIVERS.LOCAL);
   } 
 
