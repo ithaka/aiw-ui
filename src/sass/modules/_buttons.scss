@@ -71,7 +71,7 @@ $iconBtnSize: 30px;
 
  .btn.btn-link, a.btn.btn-link {
      text-transform: none !important;
-     padding: 0px 3px;
+     padding: 0px 6px 0px 0px;
      color: #999;
      background: none;
      
@@ -82,6 +82,10 @@ $iconBtnSize: 30px;
      &:active {
          text-decoration: none;
          outline: none;
+     }
+
+     &.active{
+        color: #000;
      }
 
      &:hover, &:focus  {

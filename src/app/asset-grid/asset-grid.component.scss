@@ -8,18 +8,6 @@
     font-size: 12px;
     padding: .5em 10px .5em 0;
 }
-.editMode{
-    padding: 0px 3px;
-    color: #999;
-    font-size: 12px;
-    letter-spacing: 1px;
-    font-family: 'Graphik Web', sans-serif;
-    font-weight: 700;
-    cursor: pointer;
-}
-.editMode.active{
-    color: #000;
-}
 .active-sort, .page-size{
     display: inline-block;
 }

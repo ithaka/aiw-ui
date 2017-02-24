@@ -10,11 +10,11 @@
     </div>
     <div>
         <span class="asset-title" title="{{ thumbnail.thumbnail1 }}" [class.overflow]="thumbnail.thumbnail1.length > 50" [innerHTML]="thumbnail.thumbnail1 | slice:0:50"></span>
-        <br *ngIf="thumbnail.thumbnail2"/>
+        <br *ngIf="thumbnail.thumbnail1"/>
         <span class="asset-agent" title="{{ thumbnail.thumbnail2 }}" [class.overflow]="thumbnail.thumbnail2.length > 50" [innerHTML]="thumbnail.thumbnail2 | slice:0:50"></span>
-        <br *ngIf="thumbnail.thumbnail3"/>
+        <br *ngIf="thumbnail.thumbnail2"/>
         <span class="asset-date" title="{{ thumbnail.thumbnail3 }}" [innerHTML]="thumbnail.thumbnail3"></span>
-        <br *ngIf="thumbnail.thumbnail4"/>
+        <br *ngIf="thumbnail.thumbnail3"/>
         <span title="{{ thumbnail.thumbnail4 }}" [innerHTML]="thumbnail.thumbnail4"></span>
     </div>
 </div>

@@ -2,7 +2,7 @@
     <!--<div class="col-sm-3">
         <h2 class="header-button" (click)="showFilters = !showFilters">Filters <i class="icon icon-direction absolute-right" [ngClass]="{ 'icon-down' : showFilters, 'icon-left' : !showFilters }"></i></h2>
     </div>-->
-    <div class="col-sm-3 col-md-5 col-lg-6 mobile--hide">
+    <div class="col-sm-6 mobile--hide">
         <li class="dropdown" class="sortlist" ngbDropdown>
             <button class="btn btn-link" id="sortdropdownMenu" ngbDropdownToggle>Sort: <span class="value">{{ activeSort.label ? activeSort.label : 'Relevance' }}</span></button>
             <div class="dropdown-menu" aria-labelledby="sortdropdownMenu">
@@ -22,7 +22,7 @@
             </div>
         </li>
 
-        <li class="editMode" (click)="toggleEditMode()" [ngClass]="{'active': editMode}">Edit Mode</li>
+        <li class="btn btn-link" (click)="toggleEditMode()" [ngClass]="{'active': editMode}">Edit Mode</li>
         <!--<span class="page-size">{{ pagination.pageSize }}</span>-->
     </div>
     <div class="col-sm-6 pag-controls">
