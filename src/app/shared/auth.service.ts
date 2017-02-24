@@ -86,6 +86,13 @@ export class AuthService implements CanActivate {
     this.institutionObjSource.next(this.institutionObjValue);
   }
 
+  public getUserRoles(): Observable<any> {
+    return this.http.get(this.baseUrl + "/user?_method=deptRoles")
+      .map((res) => {
+        return res.json() || {};
+      });
+  }
+
   /**
    * Takes a response object and turn the data into a json object
    */

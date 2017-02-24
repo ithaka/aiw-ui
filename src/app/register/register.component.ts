@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { formGroupNameProvider } from '@angular/forms/src/directives/reactive_directives/form_group_name';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 
+import { AuthService } from './../shared';
+
 @Component({
   selector: 'ang-register-page',
   templateUrl: 'register.component.html'
@@ -11,8 +13,11 @@ export class RegisterComponent implements OnInit {
   private registerForm: FormGroup;
   private submitted: boolean = false;
   private isLoading: boolean = false;
+
+  private userDepts: any[] = [];
+  private userRoles: any[] = [];
   
-  constructor(_fb: FormBuilder) {
+  constructor(private _auth: AuthService, _fb: FormBuilder) {
     this.registerForm = _fb.group({
       // The first value of this array is the initial value for the control, the second is the
       //  validator for the control. Validators.compose allows you to use multiple validators against a single field
@@ -23,7 +28,17 @@ export class RegisterComponent implements OnInit {
     }, { validator: Validators.compose([ this.passwordsEqual, this.emailsEqual ])});
   }
 
-  ngOnInit() { }
+  ngOnInit() {
+    this._auth.getUserRoles()
+      .take(1)
+      .subscribe((data) => {
+        this.userDepts = data.deptArray;
+        this.userRoles = data.roleArray;
+
+        console.log(this.userDepts);
+        console.log(this.userRoles);
+      });
+  }
 
   //https://angular.io/docs/ts/latest/api/forms/index/FormGroup-class.html
   /** Validates that the passwords are equal and assigns error if not
