@@ -135,11 +135,17 @@ img.no-stretch {
     }
     & span {
         /*max-height: 2em;*/
-        white-space: nowrap;
-        display: block;
+        max-height: 28px;
+        // white-space: nowrap;
+        // display: block;
         max-width: 100%;
         overflow: hidden;
         text-overflow: ellipsis;
+
+        &.overflow:after {
+            content: '…';
+            display: inline;
+        }
     }
 }
 
