@@ -8,21 +8,6 @@
                     <h1 translate id="loginHeading">REGISTER.REGISTER_HEADING</h1>
                 </div>
                 <div class="card-body">
-                    <!--<form (ngSubmit)="login(user)">
-                        <div class="form-group">
-                            <label for="loginEmail">Email Address</label>
-                            <input id="inputLoginEmail" [(ngModel)]="user.username" name="username" type="text" class="form-control" placeholder="Username" tabindex="1" />
-                        </div>
-                        <div class="form-group">
-                            <label for="loginPassword">Password</label>
-                            <input id="inputLoginPassword" [(ngModel)]="user.password" name="password" type="password" class="form-control" placeholder="Password" tabindex="2" />
-                        </div>
-                        <div id="errorMsg" *ngIf="errorMsg" class="login-errorMsg"> {{ errorMsg }} </div>
-                        <div class="form-group">
-                            <button id="btnLoginRemote" class="btn btn-primary" [class.loading]="loginLoading" type="submit" name="action" tabindex="3">Log in</button>
-                        </div>
-                    </form>-->
-
                     <form id="registerForm" [formGroup]="registerForm" (ngSubmit)="registerSubmit(registerForm.value)">
                         <div class="form-group">
                             <label for="emailInput">Email Address</label>

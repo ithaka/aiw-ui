@@ -86,6 +86,10 @@ export class AuthService implements CanActivate {
     this.institutionObjSource.next(this.institutionObjValue);
   }
 
+  /**
+   * Gets the roles and departments lists, which are used in the registration page
+   * @returns Observable resolved with object containing: roleArray, deptArray
+   */
   public getUserRoles(): Observable<any> {
     return this.http.get(this.baseUrl + "/user?_method=deptRoles")
       .map((res) => {

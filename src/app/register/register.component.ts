@@ -31,14 +31,12 @@ export class RegisterComponent implements OnInit {
   }
 
   ngOnInit() {
+    // Gets the roles and departments for the select controls
     this._auth.getUserRoles()
       .take(1)
       .subscribe((data) => {
         this.userDepts = data.deptArray;
         this.userRoles = data.roleArray;
-
-        console.log(this.userDepts);
-        console.log(this.userRoles);
       });
   }
 
