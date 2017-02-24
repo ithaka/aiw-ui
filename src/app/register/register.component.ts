@@ -69,5 +69,7 @@ export class RegisterComponent implements OnInit {
   private registerSubmit(formValue: any) {
     this.submitted = true;
     console.log(formValue);
+
+    // if the call is unsuccessful, you will get a 200 w/o a user and with a field called 'statusMessage'
   }
 }

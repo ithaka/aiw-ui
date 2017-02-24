@@ -97,6 +97,10 @@ export class AuthService implements CanActivate {
       });
   }
 
+  public registerUser(registration: any) {
+    this.http.post(this.baseUrl + "/register", registration)
+  }
+
   /**
    * Takes a response object and turn the data into a json object
    */
