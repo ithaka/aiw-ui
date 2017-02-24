@@ -4,13 +4,13 @@ import { Router } from '@angular/router';
 import 'rxjs/add/operator/toPromise';
 import { Observable, BehaviorSubject } from 'rxjs/Rx';
 
-import { AuthService } from './../shared/auth.service';
+import { AuthService, ImageGroupDescription } from './../shared';
 
 @Injectable()
 export class ImageGroupService {
   private proxyUrl = '';
   // private baseUrl =  this.proxyUrl + 'http://library.artstor.org/library/secure';
-  private baseUrl = 'http://stagely.artstor.org/library/secure';
+  private baseUrl: string;
 
   private header = new Headers({ 'Content-Type': 'application/json' }); // ... Set content type to JSON
   private options = new RequestOptions({ withCredentials: true }); // Create a request option
@@ -21,6 +21,7 @@ export class ImageGroupService {
   public assets = this.assetsSource.asObservable();
 
   constructor(private _router: Router, private http: Http, private _auth: AuthService ){
+    this.baseUrl = this._auth.getUrl();
   }
 
   /**
@@ -52,7 +53,7 @@ export class ImageGroupService {
    * @param groupId Id of desired image group
    * @returns JS Object with parameters: count, igId, igName, igNotes and more if it is a folder
    */
-  getGroupDescription(groupId: string): Observable<string> {
+  getGroupDescription(groupId: string): Observable<ImageGroupDescription> {
     let requestUrl = [this.baseUrl, "imagegroup", groupId].join("/") + "?_method=igdescription";
 
     return this.http
@@ -61,7 +62,7 @@ export class ImageGroupService {
           if (!data) {
             throw new Error("No data in image group description response");
           }
-          return data.json().igNotes;
+          return data.json() || {};
         });
   }
 
