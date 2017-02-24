@@ -51,16 +51,20 @@ $iconBtnSize: 30px;
  }
  
  .btn-secondary, a.btn-secondary {
-     background: $secondaryBtnBg;
+    background: $secondaryBtnBg;
     //  border-color: $secondaryBtnBg;
     border: none;
-     color: $secondaryBtnColor; 
+    color: $secondaryBtnColor; 
 
      &:hover, &:focus, &:active, &.active {
         background: darken($secondaryBtnBg, 10%);
         // border-color: darken($secondaryBtnBg, 10%);
         background-color: #000000;
         color: $secondaryBtnColor;
+     }
+
+     &.disabled, &:disabled {
+         background: lighten($secondaryBtnBg, 12%);
      }
  }
 
