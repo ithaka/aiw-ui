@@ -44,7 +44,7 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label>Role at Institution</label>
+                            <label for="selectUserDept">Role at Institution</label>
                             <select id="selectUserRole" [formControl]="registerForm.controls['role']" class="form-control custom-select" tabindex="0">
                                 <option *ngFor="let role of userRoles" [ngValue]="role.id">{{ role.desc }}</option>
                             </select>
@@ -53,7 +53,7 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label>Academic Department</label>
+                            <label for="selectUserDept">Academic Department</label>
                             <select id="selectUserDept" [formControl]="registerForm.controls['dept']" class="form-control custom-select" tabindex="0">
                                 <option *ngFor="let dept of userDepts" [ngValue]="dept.id">{{ dept.desc }}</option>
                             </select>
@@ -62,13 +62,23 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <button id="btnRegister" class="btn btn-primary" [class.loading]="isLoading" type="submit" name="action" tabindex="0">Log in</button>
+                            <div class="form-check">
+                                <label class="form-check-label">
+                                    <input class="form-check-input" type="checkbox" [formControl]="registerForm.controls['info']" tabindex="0"/> REGISTER.INFO_PROMPT</label>
+                            </div>
+                            <div class="form-check">
+                                <label class="form-check-label">
+                                    <input id="" class="form-check-input" type="checkbox" [formControl]="registerForm.controls['survey']" tabindex="0"/> REGISTER.SURVEY_PROMPT</label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <button id="btnRegister" class="btn btn-primary" [class.loading]="isLoading" type="submit" name="action" tabindex="0">Register</button>
                         </div>
                     </form>
                     <br/>
-                    Already registered? <a id="linkLoginResetModal" [routerLink]="['/login']" tabindex="2" class="link">Log in</a>
+                    Already registered? <a id="linkLoginResetModal" [routerLink]="['/login']" tabindex="1" class="link">Log in</a>
                     <br/>
-                    <a id="linkRegisterHelp" href="http://support.artstor.org/Registering/#Register_for_an_ARTstor_account" tabindex="3" class="link">Help</a>
+                    <a id="linkRegisterHelp" href="http://support.artstor.org/Registering/#Register_for_an_ARTstor_account" tabindex="1" class="link">Help</a>
                 </div>
             </div>
         </div>
