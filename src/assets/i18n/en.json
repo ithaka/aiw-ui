@@ -6,16 +6,16 @@
   "REGISTER": {
     "REGISTER_HEADING": "Register for a new Artstor account",
     "ERRORS": {
-      "EMAIL_REQUIRED": "EMAIL_REQUIRED",
-      "EMAIL_INVALID": "EMAIL_INVALID",
-      "EMAIL_MISMATCH": "EMAIL_MISMATCH",
-      "EMAIL_DUPLICATE": "EMAIL_DUPLICATE",
-      "PASSWORD_REQUIRED": "PASSWORD_REQUIRED",
-      "PASSWORD_MINLENGTH": "PASSWORD_MINLENGTH",
-      "PASSWORD_MISMATCH": "PASSWORD_MISMATCH",
-      "OVER_13_REQUIRED": "OVER_13_REQUIRED",
-      "INSTITUTION_ROLE_REQUIRED": "INSTITUTION_ROLE_REQUIRED",
-      "ACADEMIC_DEPT_REQUIRED": "ACADEMIC_DEPT_REQUIRED"
+      "EMAIL_REQUIRED": "Please enter your email address",
+      "EMAIL_INVALID": "Invalid email format",
+      "EMAIL_MISMATCH": "Email confirmation does not match",
+      "EMAIL_DUPLICATE": "Email address is already registered",
+      "PASSWORD_REQUIRED": "Password must be 7-20 characters",
+      "PASSWORD_MINLENGTH": "Password must be 7-20 characters",
+      "PASSWORD_MISMATCH": "Password confirmation does not match",
+      "OVER_13_REQUIRED": "Please confirm you are 13 or older",
+      "INSTITUTION_ROLE_REQUIRED": "Please select a role",
+      "ACADEMIC_DEPT_REQUIRED": "Please select a department"
     }
   }
 }
