@@ -35,15 +35,6 @@ export class AssetGrid implements OnInit, OnDestroy {
   private isLoading: boolean = true;
   private searchError: string = "";
 
-  private baseURL: string = '';
-  private imgEncryptId: string = '';
-  private usrEncryptId: string = '';
-  private showgenImgURLModal: boolean = false;
-  private genImgMode: string = 'half';
-  private imgURLCopied: boolean = false;
-  private copyURLStatusMsg: string = '';
-  private copyHTMLStatusMsg: string = '';
-
   private searchTerm: string = '';
   private totalAssets: string = '';
 
@@ -272,35 +263,6 @@ export class AssetGrid implements OnInit, OnDestroy {
   }
 
   /**
-   * Generate Image URL for the selected image in Edit Mode 
-   */
-  public generateImgUrl(): void{
-      if(this.selectedAssets.length > 0){
-        this._assets.genrateImageURL( this.selectedAssets[0].objectId )
-          .then((imgURLData) => {
-              this._assets.encryptuserId()
-                .then((userEncryptData) => {
-                  this.imgEncryptId = imgURLData.encryptId;
-                  this.usrEncryptId = userEncryptData.encryptId;
-                  this.showgenImgURLModal = true;
-                })
-                .catch(function(err){
-                  console.log('Unable to Encrypt userid');
-                  console.error(err);
-                });
-          })
-          .catch(function(err) {
-              console.log('Unable to generate image URL');
-              console.error(err);
-          });
-      }
-      else{
-        console.log('No Asset Selected!');
-      }
-  }
-
-
-  /**
    * Edit Mode : Selects / deselects an asset - Inserts / Removes the asset object to the selectedAssets array 
    * @param asset object to be selected / deselected
    */
@@ -379,61 +341,6 @@ export class AssetGrid implements OnInit, OnDestroy {
     fQuery = fQuery.replace(/(#and,)/g, ' and <b>');
     fQuery = fQuery.replace(/(#not,)/g, ' not <b>');
     return fQuery;
-  }
-
-  /**
-   * Copies innerText of an element to the clipboard
-   * @param id of the field whose innerText is to be copied to the clipboard
-   */
-  private copyTexttoClipBoard(id: string): void{
-    var textArea = document.createElement("textarea");
-
-    textArea.style.position = 'fixed';
-    textArea.style.top = '0';
-    textArea.style.left = '0';
-
-    textArea.style.width = '2em';
-    textArea.style.height = '2em';
-    textArea.style.padding = '0';
-    textArea.style.border = 'none';
-    textArea.style.outline = 'none';
-    textArea.style.boxShadow = 'none';
-    textArea.style.background = 'transparent';
-
-    var element = document.getElementById(id);
-    textArea.value = element.textContent;
-
-    document.body.appendChild(textArea);
-    textArea.select();
-
-    try {
-      var successful = document.execCommand('copy');
-      var msg = '';
-      
-      if(successful){
-        msg = 'Successfully Copied!';
-      }
-      else{
-        msg = 'Not able to copy!';
-      }
-
-      if(id === 'copyURL'){
-        this.copyURLStatusMsg = msg;
-        setTimeout(() => {
-          this.copyURLStatusMsg = '';
-        }, 8000);
-      }
-      else if(id === 'copyHTML'){
-        this.copyHTMLStatusMsg = msg;
-        setTimeout(() => {
-          this.copyHTMLStatusMsg = '';
-        }, 8000);
-      }
-    } catch (err) {
-      console.log('Unable to copy');
-    }
-
-    document.body.removeChild(textArea);
   }
 
   private showHelp(): void{

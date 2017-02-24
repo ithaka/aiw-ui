@@ -46,12 +46,4 @@ export class SearchPage implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.subscriptions.forEach((sub) => { sub.unsubscribe(); });
   }
-
-  /**
-   * Generate Image URL for the selected image in Edit Mode 
-   * @param event Event emitted from the nav-menu
-   */
-  private generateSelectedImgURL(event): void{
-      this.assetGrid.generateImgUrl();
-  }
 }
