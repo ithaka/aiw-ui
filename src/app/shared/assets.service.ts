@@ -37,6 +37,15 @@ export class AssetService {
     private paginationSource = new BehaviorSubject<any>(this.paginationValue);
     public pagination = this.paginationSource.asObservable();
 
+    /**
+     * Asset Selection Observable 
+     * - Allow other components to access selected assets via subscription
+     */
+    private selectedAssets: any[] = [];
+    private selectedAssetsSource = new BehaviorSubject<any[]>(this.selectedAssets);
+    public selection = this.selectedAssetsSource.asObservable();
+
+
     // Keep track of which params the current results are related to
     public currentLoadedParams: any = {};
 
@@ -141,6 +150,14 @@ export class AssetService {
         } else {
             return { thumbnails: [] };
         }
+    }
+
+    /**
+     * Update Selected Assets observable
+     */
+    public setSelectedAssets(assets: any[]): void {
+        this.selectedAssets = assets;
+        this.selectedAssetsSource.next(assets);
     }
 
     public getCurrentInstitution(): any {
@@ -359,12 +376,40 @@ export class AssetService {
      * Generates Image URL
      * @param assetId: string Asset or object ID
      */
-    public genrateImageURL(assetId: string) {
+    public generateImageURL(assetId: string) {
 
         return this.http
             .get(this._auth.getUrl() + '/encrypt/'+ assetId + '?_method=encrypt', this.defaultOptions)
             .toPromise()
             .then(this.extractData);
+    }
+
+    /**
+     * Generate asset share link
+     */
+    public getShareLink(assetId: string) {
+        //   Links in the clipboard need a protocol defined
+        return 'http://' + window.location.host + '/#/asset/' + assetId;
+
+        // For Reference: Old service for generating share url:
+        // this._assets.genrateImageURL( this.assets[0].id )
+        //   .then((imgURLData) => {
+        //       this._assets.encryptuserId()
+        //         .then((userEncryptData) => {
+        //           var imgEncryptId = imgURLData.encryptId;
+        //           var usrEncryptId = userEncryptData.encryptId;
+        //         //   Links in the clipboard need a protocol defined
+        //             this.generatedImgURL =  'http:' + this._auth.getUrl() + '/ViewImages?id=' + imgEncryptId + '&userId=' + usrEncryptId + '&zoomparams=&fs=true';                  
+        //         })
+        //         .catch(function(err){
+        //           console.log('Unable to Encrypt userid');
+        //           console.error(err);
+        //         });
+        //   })
+        //   .catch(function(err) {
+        //       console.log('Unable to generate image URL');
+        //       console.error(err);
+        //   });
     }
 
     /**

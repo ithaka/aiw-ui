@@ -1,6 +1,7 @@
 import { Component, OnInit, OnDestroy, Input } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 
+import { BehaviorSubject } from 'rxjs/Rx';
 import { Subscription }   from 'rxjs/Subscription';
 import { Locker } from 'angular2-locker';
 
@@ -27,20 +28,12 @@ export class AssetGrid implements OnInit, OnDestroy {
   private results: any[] = [];
   filters = [];
   private editMode: boolean = false;
-  private selectedAssets: any[] = [];
 
+  private selectedAssets: any[] = [];
+  
   // Default show as loading until results have update
   private isLoading: boolean = true;
   private searchError: string = "";
-
-  private baseURL: string = '';
-  private imgEncryptId: string = '';
-  private usrEncryptId: string = '';
-  private showgenImgURLModal: boolean = false;
-  private genImgMode: string = 'half';
-  private imgURLCopied: boolean = false;
-  private copyURLStatusMsg: string = '';
-  private copyHTMLStatusMsg: string = '';
 
   private searchTerm: string = '';
   private totalAssets: string = '';
@@ -90,7 +83,6 @@ export class AssetGrid implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private locker: Locker
   ) {
-      this.baseURL = this._auth.getUrl();
       this._storage = locker.useDriver(Locker.DRIVERS.LOCAL);
   } 
 
@@ -183,6 +175,28 @@ export class AssetGrid implements OnInit, OnDestroy {
         }
       )
     );
+
+    /**
+     * Selected Assets subscription
+     * - We want to subscribe to Asset Selection in case another component modifies the collection
+     * - (Nav Menu modifies selection)
+     */
+    this.subscriptions.push(
+      this._assets.selection.subscribe(
+        selectedAssets => {
+          // Set selected assets
+          this.selectedAssets = selectedAssets;
+          // Trigger Edit Mode if items are being added to the selection
+          if ( this.selectedAssets.length > 0 ) {
+            this.editMode = true;
+          }
+        },
+        error => {
+          console.log(error);
+        }
+      )
+    );
+
   }
 
   ngOnDestroy() {
@@ -248,35 +262,6 @@ export class AssetGrid implements OnInit, OnDestroy {
   }
 
   /**
-   * Generate Image URL for the selected image in Edit Mode 
-   */
-  public generateImgUrl(): void{
-      if(this.selectedAssets.length > 0){
-        this._assets.genrateImageURL( this.selectedAssets[0].objectId )
-          .then((imgURLData) => {
-              this._assets.encryptuserId()
-                .then((userEncryptData) => {
-                  this.imgEncryptId = imgURLData.encryptId;
-                  this.usrEncryptId = userEncryptData.encryptId;
-                  this.showgenImgURLModal = true;
-                })
-                .catch(function(err){
-                  console.log('Unable to Encrypt userid');
-                  console.error(err);
-                });
-          })
-          .catch(function(err) {
-              console.log('Unable to generate image URL');
-              console.error(err);
-          });
-      }
-      else{
-        console.log('No Asset Selected!');
-      }
-  }
-
-
-  /**
    * Edit Mode : Selects / deselects an asset - Inserts / Removes the asset object to the selectedAssets array 
    * @param asset object to be selected / deselected
    */
@@ -285,9 +270,11 @@ export class AssetGrid implements OnInit, OnDestroy {
       let index: number = this.isSelectedAsset(asset);
       if(index > -1){
         this.selectedAssets.splice(index, 1);
+        this._assets.setSelectedAssets(this.selectedAssets);
       }
       else{
         this.selectedAssets.push(asset);
+        this._assets.setSelectedAssets(this.selectedAssets);
       }
     }
     else{
@@ -296,7 +283,19 @@ export class AssetGrid implements OnInit, OnDestroy {
       this._storage.set('prevRouteParams', this.route.snapshot.url);
       this._router.navigate(['/asset', asset.objectId]);
     }
-    console.log(this.selectedAssets);
+  }
+
+  /**
+   * Toggle Edit Mode
+   * - Set up as a function to tie in clearing selection
+   */
+  private toggleEditMode(): void {
+    this.editMode = !this.editMode; 
+    if (this.editMode == false) {
+      // Clear asset selection 
+      this.selectedAssets = [];
+      this._assets.setSelectedAssets(this.selectedAssets);
+    }
   }
 
   /**
@@ -341,61 +340,6 @@ export class AssetGrid implements OnInit, OnDestroy {
     fQuery = fQuery.replace(/(#and,)/g, ' and <b>');
     fQuery = fQuery.replace(/(#not,)/g, ' not <b>');
     return fQuery;
-  }
-
-  /**
-   * Copies innerText of an element to the clipboard
-   * @param id of the field whose innerText is to be copied to the clipboard
-   */
-  private copyTexttoClipBoard(id: string): void{
-    var textArea = document.createElement("textarea");
-
-    textArea.style.position = 'fixed';
-    textArea.style.top = '0';
-    textArea.style.left = '0';
-
-    textArea.style.width = '2em';
-    textArea.style.height = '2em';
-    textArea.style.padding = '0';
-    textArea.style.border = 'none';
-    textArea.style.outline = 'none';
-    textArea.style.boxShadow = 'none';
-    textArea.style.background = 'transparent';
-
-    var element = document.getElementById(id);
-    textArea.value = element.textContent;
-
-    document.body.appendChild(textArea);
-    textArea.select();
-
-    try {
-      var successful = document.execCommand('copy');
-      var msg = '';
-      
-      if(successful){
-        msg = 'Successfully Copied!';
-      }
-      else{
-        msg = 'Not able to copy!';
-      }
-
-      if(id === 'copyURL'){
-        this.copyURLStatusMsg = msg;
-        setTimeout(() => {
-          this.copyURLStatusMsg = '';
-        }, 8000);
-      }
-      else if(id === 'copyHTML'){
-        this.copyHTMLStatusMsg = msg;
-        setTimeout(() => {
-          this.copyHTMLStatusMsg = '';
-        }, 8000);
-      }
-    } catch (err) {
-      console.log('Unable to copy');
-    }
-
-    document.body.removeChild(textArea);
   }
 
   private showHelp(): void{

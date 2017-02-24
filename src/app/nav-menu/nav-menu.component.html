@@ -27,15 +27,15 @@
                             <button class="dropdown-item">!Manage Folders and Groups</button>
                             <div class="dropdown-divider"></div>
                             <!--Active on Image Group Page-->
-                            <button class="dropdown-item">!View All</button>
-                            <button class="dropdown-item">!Select All</button>
-                            <button class="dropdown-item">!Save Selections to > New Image Group</button>
-                            <button class="dropdown-item">!Delete Selections form Image Group</button>
-                            <button class="dropdown-item">!Deselect All</button>
+                            <!--Future slide sorter function <button class="dropdown-item">!View All</button>-->
+                            <button (click)="selectAllInAssetGrid()" class="dropdown-item">Select All</button>
+                            <button [class.disabled]="selectedAssets.length < 1" (click)="showImageGroupModal = true" class="dropdown-item">Save Selections to > New Image Group</button>
+                            <button [class.disabled]="selectedAssets.length < 1" class="dropdown-item">!Delete Selections from Image Group</button>
+                            <button [class.disabled]="selectedAssets.length < 1" (click)="_assets.setSelectedAssets([])" class="dropdown-item">Deselect All</button>
                             <!--Active on Image Group Page-->
                             <button class="dropdown-item">!Save Image Group</button>
                             <!--Active on Image Group Page-->
-                            <button class="dropdown-item">!Save Image Group as...</button>
+                            <button (click)="showImageGroupModal = true" class="dropdown-item">!Save Image Group as...</button>
                             <div class="dropdown-divider"></div>
                             <button class="dropdown-item">!Manage Personal Collection</button>
                             <button class="dropdown-item">!Upload to Personal Collection</button>
@@ -44,7 +44,7 @@
                     <li class="nav-item" ngbDropdown>
                         <button class="btn btn-link" id="shareMenu" ngbDropdownToggle>Share</button>
                         <div class="dropdown-menu" aria-labelledby="shareMenu">
-                            <button class="dropdown-item" (click)="generateSelectedImgURL()">Generate Image Link</button>
+                            <button [class.disabled]="selectedAssets.length !== 1" class="dropdown-item" (click)="showShareLinkModal = true">Generate Image Link</button>
                             <!--Active on Image Group Page-->
                             <button class="dropdown-item">!Generate Image Group Link</button>
                             <!--Active on Image Group Page-->
@@ -76,3 +76,6 @@
     </nav>
     <!--</div>-->
 </div>
+
+<ang-new-ig-modal *ngIf="showImageGroupModal" (closeModal)="showImageGroupModal = false"></ang-new-ig-modal>
+<ang-share-link-modal *ngIf="showShareLinkModal" [asset]="selectedAssets[0]" (closeModal)="showShareLinkModal = false"></ang-share-link-modal>

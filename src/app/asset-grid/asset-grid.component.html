@@ -2,7 +2,7 @@
     <!--<div class="col-sm-3">
         <h2 class="header-button" (click)="showFilters = !showFilters">Filters <i class="icon icon-direction absolute-right" [ngClass]="{ 'icon-down' : showFilters, 'icon-left' : !showFilters }"></i></h2>
     </div>-->
-    <div class="col-sm-3 col-md-5 col-lg-6 mobile--hide">
+    <div class="col-sm-6 mobile--hide">
         <li class="dropdown" class="sortlist" ngbDropdown>
             <button class="btn btn-link" id="sortdropdownMenu" ngbDropdownToggle>Sort: <span class="value">{{ activeSort.label ? activeSort.label : 'Relevance' }}</span></button>
             <div class="dropdown-menu" aria-labelledby="sortdropdownMenu">
@@ -22,7 +22,7 @@
             </div>
         </li>
 
-        <li class="editMode" (click)="editMode = !editMode; selectedAssets = [];" [ngClass]="{'active': editMode}">Edit Mode</li>
+        <li class="btn btn-link" (click)="toggleEditMode()" [ngClass]="{'active': editMode}">Edit Mode</li>
         <!--<span class="page-size">{{ pagination.pageSize }}</span>-->
     </div>
     <div class="col-sm-6 pag-controls">
@@ -65,64 +65,6 @@
                     <ang-thumbnail [thumbnail]="asset"></ang-thumbnail>
                 </div>
             </div> <!-- .col -->
-        </div>
-    </div>
-</div>
-
-<div id="genImgURL" class="modal" [ngClass]="{'show': showgenImgURLModal }">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <span class="close-icon" (click)="showgenImgURLModal = false">×</span>
-            </div>
-            <div class="modal-body">
-                <div class="container-fluid">
-                    <div class="row">
-                        <h1>Image URL</h1>
-                    </div>
-                    <div class="row pt-3 main-content">
-                        <div class="col-sm-8">
-                            <div class="asset-title" *ngIf="selectedAssets.length > 0" [innerHTML]="selectedAssets[0].thumbnail1"></div>
-                            <div class="imgURL-gen-info">Copy the image URL or the HTML code to share this image with others at your institution.</div>
-                            <div class="pt-3">
-                                <input class="mr-2" type="radio" [(ngModel)]="genImgMode"  name="genImgMode" value="half">Half screen viewer
-                                <input class="ml-2 mr-2" type="radio" [(ngModel)]="genImgMode"  name="genImgMode" value="full">Full screen viewer (no pop-up window)
-                            </div>
-                            <div class="pt-3">
-                                <div class="pb-3">
-                                    <div class="label">Image Viewer URL:</div>
-                                    <div class="value" *ngIf="genImgMode == 'half'">
-                                        <textarea id="copyURL" readonly>{{ baseURL + "/ViewImages?id=" + imgEncryptId + "&userId=" + usrEncryptId + "&zoomparams=" }}</textarea>
-                                    </div>
-                                    <div class="value" *ngIf="genImgMode == 'full'">
-                                        <textarea id="copyURL" readonly>{{ baseURL + "/ViewImages?id=" + imgEncryptId + "&userId=" + usrEncryptId + "&zoomparams=&fs=true" }}</textarea>
-                                    </div>
-                                    <div class="copy-clipboard" (click)="copyTexttoClipBoard('copyURL')">Copy to Clipboard</div>
-                                    <div class="copy-status-msg">{{ copyURLStatusMsg }}</div>
-                                </div>
-                                <div class="pb-3">
-                                    <div class="label">Thumbnail hyperlink to the Image Viewer:</div>
-                                    <div class="value" *ngIf="genImgMode == 'half'">
-                                        <textarea id="copyHTML" readonly *ngIf="selectedAssets.length > 0">{{ '<a target="_blank" href="' + baseURL + '/ViewImages?id=' + imgEncryptId + '&userId=' + usrEncryptId + '&zoomparams=' + '"><img src="' + _assets.makeThumbUrl(selectedAssets[0].largeImgUrl, 0) + '"  alt="' + selectedAssets[0].thumbnail1 + '" title="' + selectedAssets[0].thumbnail1 + '" /></a>' }}</textarea>
-                                    </div>
-                                    <div class="value" *ngIf="genImgMode == 'full'">
-                                        <textarea id="copyHTML" readonly *ngIf="selectedAssets.length > 0">{{ '<a target="_blank" href="' + baseURL + '/ViewImages?id=' + imgEncryptId + '&userId=' + usrEncryptId + '&zoomparams=&fs=true' + '"><img src="' + _assets.makeThumbUrl(selectedAssets[0].largeImgUrl, 0) + '"  alt="' + selectedAssets[0].thumbnail1 + '" title="' + selectedAssets[0].thumbnail1 + '" /></a>' }}</textarea>
-                                    </div>
-                                    <div class="copy-clipboard" (click)="copyTexttoClipBoard('copyHTML')">Copy to Clipboard</div>
-                                    <div class="copy-status-msg">{{ copyHTMLStatusMsg }}</div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-sm-4">
-                            <img *ngIf="selectedAssets.length > 0" [attr.src]="_assets.makeThumbUrl(selectedAssets[0].largeImgUrl, 0)" alt="selectedAssets[0].thumbnail1">
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                    <a class="btn btn-link with-pad" (click)="showHelp()">Help</a>
-                    <button class="btn btn-primary" (click)="showgenImgURLModal = false">Close</button>
-            </div>
         </div>
     </div>
 </div>

@@ -6,7 +6,7 @@ import { Subscription }   from 'rxjs/Subscription';
 import { ImageGroupService } from './image-group.service';
 import { AssetService, AuthService } from './../shared';
 
-import { ImageGroup } from './../shared';
+import { ImageGroup, ImageGroupDescription } from './../shared';
 
 @Component({
   selector: 'ang-image-group', 
@@ -24,6 +24,8 @@ export class ImageGroupPage implements OnInit, OnDestroy {
 
   /** controls when PPT agreement modal is or is not shown */
   private showPptModal: boolean = false;
+  /** controls collapsing/expanding of image group description */
+  private descCollapsed: boolean = true;
 
   constructor(
     private _igService: ImageGroupService,
@@ -59,7 +61,7 @@ export class ImageGroupPage implements OnInit, OnDestroy {
         console.log(this.ig);
         if (this.ig && this.ig.igId) {
           this._igService.getGroupDescription(this.ig.igId).take(1)
-            .subscribe((desc: string) => { this.ig.description = desc; });
+            .subscribe((desc: ImageGroupDescription) => { this.ig.description = desc; });
         }
       })
     );
