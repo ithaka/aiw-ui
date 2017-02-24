@@ -13,11 +13,13 @@ export class RegisterComponent implements OnInit {
   
   constructor(_fb: FormBuilder) {
     this.registerForm = _fb.group({
+      // The first value of this array is the initial value for the control, the second is the
+      //  validator for the control. Validators.compose allows you to use multiple validators against a single field
       email: [null, Validators.compose([Validators.required, this.emailValidator])],
       emailConfirm: [null, Validators.required],
       password: [null, Validators.compose([Validators.required, Validators.minLength(7)])],
       passwordConfirm: [null, Validators.required]
-    });
+    }, { validator: Validators.compose([ this.passwordsEqual, this.emailsEqual ])});
   }
 
   ngOnInit() { }
@@ -28,7 +30,15 @@ export class RegisterComponent implements OnInit {
    */
   private passwordsEqual(group: FormGroup): any {
     return group.get('password').value === group.get('passwordConfirm').value
-      ? null : { mismatch: true };
+      ? null : { passwordMismatch: true };
+  }
+
+  /** Validates that the emails are equal and assigns error if not
+   * @returns error to FormGroup called 'mismatch' if the emails are not equal
+   */
+  private emailsEqual(group: FormGroup): any {
+    return group.get('email').value === group.get('emailConfirm').value
+      ? null : { emailMismatch: true };
   }
 
   /** Validates email against the same regex used on the server
@@ -36,7 +46,7 @@ export class RegisterComponent implements OnInit {
    */
   private emailValidator(control: FormControl): any {
     let emailRe: RegExp = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-    return emailRe.test(control.value) ? null : { 'emailIncorrect': true };
+    return emailRe.test(control.value) ? null : { 'emailInvalid': true };
   }
 
   /** Gets called when the registration form is submitted */

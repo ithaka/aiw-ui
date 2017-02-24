@@ -4,6 +4,9 @@
     "INSTITUTION_HEADING": "Log in through your Institution"
   },
   "REGISTER": {
-    "REGISTER_HEADING": "Register for a new Artstor account"
+    "REGISTER_HEADING": "Register for a new Artstor account",
+    "ERRORS": {
+      
+    }
   }
 }
