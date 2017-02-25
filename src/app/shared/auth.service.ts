@@ -26,6 +26,7 @@ export class AuthService implements CanActivate {
   // Use header rewrite proxy for local development
   // - don't use proxy for now
   private proxyUrl = '';
+  private groupUrl = '';
 
   private institutionObjValue: any = {};
   private institutionObjSource: BehaviorSubject<any> = new BehaviorSubject(this.institutionObjValue);
