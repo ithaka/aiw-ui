@@ -2,5 +2,24 @@
   "LOGIN": {
     "LOGIN_HEADING": "Log in with your Artstor account",
     "INSTITUTION_HEADING": "Log in through your Institution"
+  },
+  "REGISTER": {
+    "REGISTER_HEADING": "Register for a new Artstor account",
+    "ERRORS": {
+      "EMAIL_REQUIRED": "Please enter your email address",
+      "EMAIL_INVALID": "Invalid email format",
+      "EMAIL_MISMATCH": "Email confirmation does not match",
+      "EMAIL_DUPLICATE": "Email address is already registered",
+      "PASSWORD_REQUIRED": "Password must be 7-20 characters",
+      "PASSWORD_MINLENGTH": "Password must be 7-20 characters",
+      "PASSWORD_MISMATCH": "Password confirmation does not match",
+      "AGE_REQUIRED": "Please confirm you are 13 or older",
+      "INSTITUTION_ROLE_REQUIRED": "Please select a role",
+      "ACADEMIC_DEPT_REQUIRED": "Please select a department"
+    },
+    "AGE_PROMPT": "AGE_PROMPT",
+    "INFO_PROMPT": "INFO_PROMPT",
+    "SURVEY_PROMPT": "SURVEY_PROMPT",
+    "PRIVACY_DISCLAIMER": "PRIVACY_DISCLAIMER"
   }
 }

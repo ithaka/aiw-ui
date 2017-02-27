@@ -53,10 +53,10 @@ export class Nav implements OnInit, OnDestroy {
     this._login.logout();
   }
 
-  loginAndSaveRoute(): void {
+  navigateAndSaveRoute(route: string): void {
     this._auth.store("stashedRoute", this.location.path(false));
 
-    this._router.navigate(['/login']);
+    this._router.navigate([route]);
   }
   
 } 
