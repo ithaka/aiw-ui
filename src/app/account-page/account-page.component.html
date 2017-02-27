@@ -1,8 +1,47 @@
 <div class="container main-content">
   <div class="row">
       <div class="col-md-8 offset-md-2">
-        <h1>Your Artstor Account</h1>
+        <div class="card card--light">
+          <div class="card-header">
+            <h1>Your Artstor Account</h1>
+          </div>
+          <div class="card-body">
+            <div class="form-group">
+              <label>Email Address</label>
+              <p class="form-control-static">{{ user.username }}</p>
+            </div>
+            <!--<div class="form-group">
+              <label class="col-form-label">Access</label>
+              <p class="form-control-static">Provided by: {{ institutionObj.institutionName }}</p>
+            </div>-->
 
+            <!--Change Password Form-->
+            <form>
+              <div class="form-group">
+                <label for="inputOldPassword">Old Password</label>
+                <input type="password" class="form-control" id="inputOldPassword">
+              </div>
+              <div class="form-group">
+                <label for="inputNewPassword">New Password</label>
+                <input type="password" class="form-control" id="inputNewPassword" minlength="7">
+                <div class="alert alert-info">
+                  Passwords must be 7 characters minimum
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="inputOldPassword">Confirm New Password</label>
+                <input type="password" class="form-control" id="inputNewPasswordConfirm">
+              </div>
+              <div class="form-group">
+                  <button id="btnSubmitChangePassword" class="btn btn-primary" [class.loading]="changePassLoading" type="submit" name="action">
+                    Update
+                  </button>
+              </div>
+            </form>
+            <br />
+            <a class="link" href="http://support.artstor.org/?article=user-preferences">Account Help</a>
+          </div><!-- End .card-body -->
+        </div><!-- End .card -->
       </div>
   </div>
 </div>
