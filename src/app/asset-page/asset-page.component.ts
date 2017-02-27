@@ -175,26 +175,12 @@ export class AssetPage implements OnInit, OnDestroy {
     }
 
     private generateImgURL(): void{
-        this._assets.genrateImageURL( this.assets[0].id )
-          .then((imgURLData) => {
-              this._assets.encryptuserId()
-                .then((userEncryptData) => {
-                  var imgEncryptId = imgURLData.encryptId;
-                  var usrEncryptId = userEncryptData.encryptId;
-                  // Links in the clipboard need a protocol defined
-                  this.generatedImgURL =  'http:' + this._auth.getUrl() + '/ViewImages?id=' + imgEncryptId + '&userId=' + usrEncryptId + '&zoomparams=&fs=true';
-                })
-                .catch(function(err){
-                  console.log('Unable to Encrypt userid');
-                  console.error(err);
-                });
-          })
-          .catch(function(err) {
-              console.log('Unable to generate image URL');
-              console.error(err);
-          });
+        this.generatedImgURL = this._assets.getShareLink(this.assets[0].id);
     }
 
+    /**
+     * Adds a link to the current asset page to the user's clipboard
+     */
     private copyGeneratedImgURL(): void {
        var input = document.createElement('textarea');
         

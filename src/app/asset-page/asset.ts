@@ -20,6 +20,8 @@ export class Asset {
   private imageSourceLoaded = false;
   private dataLoadedSource = new Subject<boolean>();
   public isDataLoaded = this.dataLoadedSource.asObservable();
+
+  public disableDownload: boolean = false;
   
   /** Used for holding asset metadata array from the service response */
   metaDataArray: any = [];
@@ -120,6 +122,14 @@ export class Asset {
             if (!data) {
                 throw new Error("No data returned from image source call!");
             }
+
+            if(data.downloadSize === '0,0'){
+                this.disableDownload = true;
+            }
+            else{
+                this.disableDownload = false;
+            }
+            
             this.typeId = data.objectTypeId;
             
             /** This determines how to build the downloadLink, which is different for different typeIds */

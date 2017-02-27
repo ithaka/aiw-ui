@@ -38,13 +38,14 @@ import { BrowsePage, LibraryComponent, BrowseCommonsComponent,
   MyCollectionsComponent, BrowseInstitutionComponent, BrowseGroupsComponent, TagComponent } from './browse-page';
 import { AssetPage, AgreeModalComponent } from './asset-page';
 import { AssetViewerComponent } from './asset-page/asset-viewer';
+import { AccountPage } from './account-page';
 import { AssociatedPage } from './associated-page';
 import { ImageGroupPage, PptModalComponent } from './image-group-page';
 import { Login } from './login';
 import { About } from './about';
 import { NoContent } from './no-content';
-import { LoginReqModal, SearchModal, NewIgModal } from './modals';
 import { RegisterComponent } from './register/register.component';
+import { LoginReqModal, SearchModal, NewIgModal, ShareLinkModal } from './modals';
 
 // Application wide providers
 import { AuthService, AssetService, TypeIdPipe, ToolboxService, LoggingService } from './shared';
@@ -88,6 +89,7 @@ type StoreType = {
     ClusterPage,
     BrowsePage,
     TagComponent,
+    AccountPage,
     AssetViewerComponent,
     AssetPage,
     AgreeModalComponent,
@@ -106,6 +108,7 @@ type StoreType = {
     LoginReqModal,
     SearchModal,
     NewIgModal,
+    ShareLinkModal,
     Login,
     Home,
     NoContent,

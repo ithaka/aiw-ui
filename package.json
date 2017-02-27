@@ -1,6 +1,6 @@
 {
   "name": "avatar",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Front End for the Artstor Digital Library",
   "author": "Artstor Team Air",
   "license": "",
@@ -28,7 +28,6 @@
     "preclean:install": "npm run clean",
     "preclean:start": "npm run clean",
     "pree2e": "npm run webdriver:update -- --standalone",
-    "preversion": "npm test",
     "protractor": "protractor",
     "rimraf": "rimraf",
     "server:dev:hmr": "npm run server:dev -- --inline --hot",
@@ -43,7 +42,6 @@
     "tslint": "tslint",
     "typedoc": "typedoc --options typedoc.json --exclude '**/*.spec.ts' ./src/ && npm run open:typedoc",
     "open:typedoc": "open ./doc/index.html",
-    "version": "npm run build",
     "watch:dev:hmr": "npm run watch:dev -- --hot",
     "watch:dev": "npm run build:dev -- --watch",
     "watch:prod": "npm run build:prod -- --watch",

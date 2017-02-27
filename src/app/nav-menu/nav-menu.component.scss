@@ -98,7 +98,11 @@ $navBarPad: 0.5rem;
 }
 
 .nav-item {
-    margin: 6px;
+    margin: 6px 6px 6px 15px;
+
+    @media (min-width: $tablet) {
+        margin: 6px 12px 6px 0px;
+    }
 
     & > button, a {
         font-size: 14px;

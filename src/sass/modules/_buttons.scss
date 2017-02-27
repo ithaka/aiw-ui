@@ -51,16 +51,20 @@ $iconBtnSize: 30px;
  }
  
  .btn-secondary, a.btn-secondary {
-     background: $secondaryBtnBg;
+    background: $secondaryBtnBg;
     //  border-color: $secondaryBtnBg;
     border: none;
-     color: $secondaryBtnColor; 
+    color: $secondaryBtnColor; 
 
      &:hover, &:focus, &:active, &.active {
         background: darken($secondaryBtnBg, 10%);
         // border-color: darken($secondaryBtnBg, 10%);
         background-color: #000000;
         color: $secondaryBtnColor;
+     }
+
+     &.disabled, &:disabled {
+         background: lighten($secondaryBtnBg, 12%);
      }
  }
 
@@ -71,7 +75,7 @@ $iconBtnSize: 30px;
 
  .btn.btn-link, a.btn.btn-link {
      text-transform: none !important;
-     padding: 0px 3px;
+     padding: 0px 6px 0px 0px;
      color: #999;
      background: none;
      
@@ -82,6 +86,10 @@ $iconBtnSize: 30px;
      &:active {
          text-decoration: none;
          outline: none;
+     }
+
+     &.active{
+        color: #000;
      }
 
      &:hover, &:focus  {

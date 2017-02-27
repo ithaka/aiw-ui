@@ -14,8 +14,8 @@
             <div>Welcome, {{ user.username ? user.username : ''}}</div>
             <div *ngIf="institutionObj.shortName || institutionObj.institutionName">Institution: {{ institutionObj.shortName ? institutionObj.shortName : institutionObj.institutionName }}</div>
             <div class="login-panel__links">
-              <a class="link--accent" [routerLink]=" ['./login'] " routerLinkActive="active" tabindex="1">
-                !Settings
+              <a class="link--accent" [routerLink]=" ['./account'] " routerLinkActive="active" tabindex="1">
+                Settings
               </a>
               <a class="link--accent" [routerLink]=" ['./login'] " (click)="logout()" tabindex="1">
                 Log Out
