@@ -1,6 +1,6 @@
 {
   "name": "avatar",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Front End for the Artstor Digital Library",
   "author": "Artstor Team Air",
   "license": "",
@@ -9,6 +9,10 @@
     "build:docker": "npm run build:prod && docker build -t angular2-webpack-start:latest .",
     "build:prod": "webpack --config config/webpack.prod.js  --profile --bail",
     "build": "npm run build:dev",
+    "bump": "npm run bump:patch",
+    "bump:patch": "yarn version --new-version patch",
+    "bump:minor": "yarn version --new-version minor",
+    "bump:major": "yarn version --new-version major",
     "ci": "npm run lint && npm test && npm run e2e",
     "clean:dist": "npm run rimraf -- dist",
     "clean:install": "npm set progress=false && npm install",
