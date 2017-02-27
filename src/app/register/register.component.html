@@ -82,6 +82,9 @@
                         <p>By using Artstor Digital Library, I agree to the <a id="linkTermsAndConditions" href="http://www.artstor.org/terms" tabindex="0" class="link">Terms</a></p>
                         <div class="form-group">
                             <button id="btnRegister" class="btn btn-primary" [class.loading]="isLoading" type="submit" name="action" tabindex="0">Register</button>
+                            <div *ngIf="submitted && serviceErrors.duplicate" class="has-danger">
+                                <p id="errDuplicateUser" class="form-control-feedback">REGISTER.ERRORS.DUPLICATE</p>
+                            </div>
                         </div>
                     </form>
                     <br/>

@@ -16,6 +16,10 @@ export class RegisterComponent implements OnInit {
 
   private userDepts: any[] = [];
   private userRoles: any[] = [];
+
+  private serviceErrors: {
+    duplicate?: boolean
+  } = {};
   
   constructor(private _auth: AuthService, _fb: FormBuilder) {
     this.registerForm = _fb.group({
@@ -70,6 +74,7 @@ export class RegisterComponent implements OnInit {
 
   /** Gets called when the registration form is submitted */
   private registerSubmit(formValue: any) {
+    this.serviceErrors = {};
     this.submitted = true;
     console.log(formValue);
 
@@ -89,15 +94,15 @@ export class RegisterComponent implements OnInit {
       .take(1)
       .subscribe((data) => {
         console.log(data);
+        if (data.user) {
+          // do something useful
+        } else {
+          if (data.statusMessage === "User already exist") {
+            this.serviceErrors.duplicate = true;
+          }
+        }
       }, (error) => {
         console.error(error);
-        this._auth.getRegisterError(userInfo)
-          .take(1)
-          .subscribe((data) => {
-            console.log(data);
-          }, (err) => {
-            console.error(err);
-          });
       });
 
     // if the call is unsuccessful, you will get a 200 w/o a user and with a field called 'statusMessage'
