@@ -169,11 +169,27 @@ export class SearchModal implements OnInit {
    */
   private validateForm(): boolean {
     let isValid = false;
+
+    let startDate = 0;
+    let endDate = 0;
+    if (this.advanceSearchDate['startDate'] && this.advanceSearchDate['endDate']) {
+      startDate = this.advanceSearchDate['startDate'] * (this.advanceSearchDate['startEra'] == 'BCE' ? -1 : 1);
+      endDate = this.advanceSearchDate['endDate'] * (this.advanceSearchDate['endEra'] == 'BCE' ? -1 : 1);
+    }
+
     if (this.filterSelections.length < 1 && this.advanceQueries[0].term.length < 1 && this.advanceSearchDate['startDate'].length < 1 && this.advanceSearchDate['endDate'].length < 1 ) {
       // Nothing was selected! Tell the user to select something
       this.error.empty = true;
-    } else {
+      this.error.date = false;
+    } 
+    else if(startDate > endDate){
+      // Start Date is greater than End Date
+      this.error.date = true;
       this.error.empty = false;
+    }
+    else {
+      this.error.empty = false;
+      this.error.date = false;
       isValid = true;
     }
     return isValid;
@@ -181,11 +197,7 @@ export class SearchModal implements OnInit {
 
   private applyAllFilters(): void {
     if (!this.validateForm()) {
-      // Nothing was selected! Tell the user to select something
-      this.error.empty = true;
       return;
-    } else {
-      this.error.empty = false;
     }
 
     let advQuery = "";

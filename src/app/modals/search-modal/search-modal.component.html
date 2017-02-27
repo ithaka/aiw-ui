@@ -119,6 +119,9 @@
                     <div *ngIf="error.empty" class="alert alert-warning">
                         <b>Search is Empty</b> Please add a search term or select a filter
                     </div>
+                    <div *ngIf="error.date" class="alert alert-warning">
+                        <b>End Date is less than Start Date</b> End date must be greater than or equal to Start date.
+                    </div>
                     <a class="btn btn-link with-pad" tabindex="1" (click)="openHelp()">Help</a>
                     <button class="btn btn-secondary" (click)="resetFilters()">Clear</button>
                     <button (click)="applyAllFilters()" class="btn btn-primary">Search</button>
