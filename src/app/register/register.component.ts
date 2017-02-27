@@ -21,10 +21,10 @@ export class RegisterComponent implements OnInit {
     this.registerForm = _fb.group({
       // The first value of this array is the initial value for the control, the second is the
       //  validator for the control. Validators.compose allows you to use multiple validators against a single field
-      email: [null, Validators.compose([Validators.required, this.emailValidator])],
-      emailConfirm: [null, Validators.required],
-      password: [null, Validators.compose([Validators.required, Validators.minLength(7)])],
-      passwordConfirm: [null, Validators.required],
+      email: ["corbin@artstor.org", Validators.compose([Validators.required, this.emailValidator])],
+      emailConfirm: ["corbin@artstor.org", Validators.required],
+      password: ["corbins", Validators.compose([Validators.required, Validators.minLength(7)])],
+      passwordConfirm: ["corbins", Validators.required],
       role: [null, Validators.required],
       dept: [null, Validators.required],
       age: [true, Validators.requiredTrue],
@@ -72,6 +72,33 @@ export class RegisterComponent implements OnInit {
   private registerSubmit(formValue: any) {
     this.submitted = true;
     console.log(formValue);
+
+    // this is the object that the service will receive
+    let userInfo: any = {
+      _method: "update",
+      username: formValue.email,
+      password: formValue.password,
+      role: formValue.role,
+      dept: formValue.dept,
+      info: formValue.info,
+      survey: formValue.survey,
+      portal: "library"
+    }
+
+    this._auth.registerUser(userInfo)
+      .take(1)
+      .subscribe((data) => {
+        console.log(data);
+      }, (error) => {
+        console.error(error);
+        this._auth.getRegisterError(userInfo)
+          .take(1)
+          .subscribe((data) => {
+            console.log(data);
+          }, (err) => {
+            console.error(err);
+          });
+      });
 
     // if the call is unsuccessful, you will get a 200 w/o a user and with a field called 'statusMessage'
   }

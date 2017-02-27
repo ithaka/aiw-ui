@@ -97,8 +97,22 @@ export class AuthService implements CanActivate {
       });
   }
 
-  public registerUser(registration: any) {
-    this.http.post(this.baseUrl + "/register", registration)
+  public registerUser(registration: any): Observable<any> {
+    let data = this.formEncode(registration);
+
+    let header = new Headers({ 'Content-Type': 'application/x-www-form-urlencoded' }); // form encode it
+    let options = new RequestOptions({ headers: header, withCredentials: true }); // Create a request option
+    return this.http.post(this.baseUrl + "/register", data , options)
+      .map((data) => {
+        return data.json() || {};
+      });
+  }
+
+  public getRegisterError(registration: any): Observable<any> {
+    return this.http.post(this.baseUrl + "/register", registration)
+      .map((data) => {
+        return data.json() || {};
+      });
   }
 
   /**

@@ -28,7 +28,7 @@
                         </div>
                         <div class="form-group">
                             <label for="passwordInput">Password</label>
-                            <input id="passwordInput" class="form-control" type="text" spellcheck="false" [formControl]="registerForm.controls['password']" tabindex="0"/>
+                            <input id="passwordInput" class="form-control" type="password" spellcheck="false" [formControl]="registerForm.controls['password']" tabindex="0"/>
                             <div *ngIf="submitted && registerForm.controls['password'].hasError('required')" class="has-danger">
                                 <p id="errPasswordRequired" class="form-control-feedback">REGISTER.ERRORS.PASSWORD_REQUIRED</p>
                             </div>
@@ -38,7 +38,7 @@
                         </div>
                         <div class="form-group">
                             <label for="passwordConfirmInput">Confirm Password</label>
-                            <input id="passwordConfirmInput" class="form-control" type="text" spellcheck="false" [formControl]="registerForm.controls['passwordConfirm']" tabindex="0"/>
+                            <input id="passwordConfirmInput" class="form-control" type="password" spellcheck="false" [formControl]="registerForm.controls['passwordConfirm']" tabindex="0"/>
                             <div *ngIf="submitted && registerForm.hasError('passwordMismatch')" class="has-danger">
                                 <p id="errPasswordMismatch" class="form-control-feedback">REGISTER.ERRORS.PASSWORD_MISMATCH</p>
                             </div>
