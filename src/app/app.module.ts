@@ -38,6 +38,7 @@ import { BrowsePage, LibraryComponent, BrowseCommonsComponent,
   MyCollectionsComponent, BrowseInstitutionComponent, BrowseGroupsComponent, TagComponent } from './browse-page';
 import { AssetPage, AgreeModalComponent } from './asset-page';
 import { AssetViewerComponent } from './asset-page/asset-viewer';
+import { AccountPage } from './account-page';
 import { AssociatedPage } from './associated-page';
 import { ImageGroupPage, PptModalComponent } from './image-group-page';
 import { Login } from './login';
@@ -87,6 +88,7 @@ type StoreType = {
     ClusterPage,
     BrowsePage,
     TagComponent,
+    AccountPage,
     AssetViewerComponent,
     AssetPage,
     AgreeModalComponent,
@@ -111,7 +113,7 @@ type StoreType = {
     NoContent,
     TypeIdPipe,
     MediumEditorDirective
-  ],
+],
   imports: [ // import Angular's modules
     BrowserModule,
     FormsModule,
