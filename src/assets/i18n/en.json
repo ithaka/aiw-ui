@@ -15,7 +15,8 @@
       "PASSWORD_MISMATCH": "Password confirmation does not match",
       "AGE_REQUIRED": "Please confirm you are 13 or older",
       "INSTITUTION_ROLE_REQUIRED": "Please select a role",
-      "ACADEMIC_DEPT_REQUIRED": "Please select a department"
+      "ACADEMIC_DEPT_REQUIRED": "Please select a department",
+      "LOGIN_SERVER": "Server is not responding. Please try again later."
     },
     "AGE_PROMPT": "AGE_PROMPT",
     "INFO_PROMPT": "INFO_PROMPT",

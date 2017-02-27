@@ -96,11 +96,11 @@ export class Login {
           this.errorMsg = 'Invalid email address or password. Try again.';
         } else {
           //handles any server errors
-          this.errorMsg = "Server is not responding. Please try again later.";
+          this.errorMsg = "ERRORS.LOGIN_SERVER";
         }
       })
       .catch((error) => {
-        this.errorMsg = "Server is not responding. Please try again later.";
+        this.errorMsg = "ERRORS.LOGIN_SERVER";
       });
   }
   
