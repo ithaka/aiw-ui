@@ -35,7 +35,7 @@
                             <!--Active on Image Group Page-->
                             <button class="dropdown-item">!Save Image Group</button>
                             <!--Active on Image Group Page-->
-                            <button (click)="showImageGroupModal = true" class="dropdown-item">!Save Image Group as...</button>
+                            <button  [disabled]="!actionOptions.group" (click)="showImageGroupModal = true" class="dropdown-item">Save Image Group as...</button>
                             <div class="dropdown-divider"></div>
                             <button class="dropdown-item">!Manage Personal Collection</button>
                             <button class="dropdown-item">!Upload to Personal Collection</button>

@@ -112,7 +112,7 @@ export class SearchModal implements OnInit {
 
   private addNewQuery(query: any, index: number): void{
     if(query.term){
-      if(this.advanceQueries.length === (index + 1)){
+      if((this.advanceQueries.length === (index + 1)) && (this.advanceQueries.length < 5)){
         let newQuery: any = {};
         newQuery.term = '';
         newQuery.field = 'in any field';
