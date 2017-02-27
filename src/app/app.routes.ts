@@ -1,4 +1,6 @@
 import { Routes, RouterModule } from '@angular/router';
+
+// Project Dependencies
 import { Home } from './home';
 import { SearchPage } from './search-page';
 import { CollectionPage } from './collection-page';
@@ -13,13 +15,14 @@ import { Login } from './login';
 import { About } from './about';
 import { NoContent } from './no-content';
 import { AuthService } from './shared/auth.service';
-
 import { DataResolver } from './app.resolver';
 import { BrowseRoutes } from './browse-page/browse-page.routes';
+import { AccountPage } from './account-page/account-page.component';
 
 
 export const ROUTES: Routes = [
   { path: '', component: Home, canActivate:[AuthService], pathMatch: 'full' },
+  { path: 'account', component: AccountPage },
   { path: 'login', component: Login },
   { path: 'home',  component: Home, canActivate:[AuthService] },
   { path: 'search/', redirectTo: '/search/*', pathMatch: 'full', canActivate:[AuthService] },
