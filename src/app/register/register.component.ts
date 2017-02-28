@@ -83,6 +83,8 @@ export class RegisterComponent implements OnInit {
     this.submitted = true;
     this.isLoading = true;
 
+    if (!this.registerForm.valid) { return; }
+
     // this is the object that the service will receive
     let userInfo: any = {
       _method: "update",
