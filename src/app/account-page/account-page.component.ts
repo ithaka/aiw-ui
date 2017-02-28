@@ -1,5 +1,7 @@
 import { Subscription } from 'rxjs/Rx';
 import { Component, OnInit } from '@angular/core';
+import { formGroupNameProvider } from '@angular/forms/src/directives/reactive_directives/form_group_name';
+import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 
 // Project Dependencies
 import { AuthService } from '../shared';
@@ -15,11 +17,18 @@ export class AccountPage implements OnInit {
   private subscriptions: Subscription[] = [];
   private changePassLoading: boolean = false;
 
-  constructor(private _auth: AuthService) { }
+  private passForm: FormGroup;
+
+  constructor(private _auth: AuthService, _fb: FormBuilder) {
+    this.passForm = _fb.group({
+      oldPass: [null, Validators.required],
+      newPass: [null, Validators.required],
+      newPassConfirm: [null, Validators.required]
+    }, { validator: this.passwordsEqual });
+  }
 
   ngOnInit() {
     this.user = this._auth.getUser();
-    console.log(this.user);
 
     this.subscriptions.push(
       this._auth.getInstitution().subscribe((institutionObj) => {
@@ -30,6 +39,18 @@ export class AccountPage implements OnInit {
 
   ngOnDestroy() {
     this.subscriptions.forEach((sub) => { sub.unsubscribe(); });
+  }
+
+  /** Validates that the passwords are equal and assigns error if not
+   * @returns error to FormGroup called 'mismatch' if the passwords are not equal
+   */
+  private passwordsEqual(group: FormGroup): any {
+    return group.get('newPass').value === group.get('newPassConfirm').value
+      ? null : { passwordMismatch: true };
+  }
+
+  private changePass(formValue: any): void {
+
   }
 
 }

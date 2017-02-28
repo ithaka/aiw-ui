@@ -16,21 +16,21 @@
             </div>-->
 
             <!--Change Password Form-->
-            <form>
+            <form id="changePasswordForm" [formGroup]="passForm" (ngSubmit)="changePass(passForm.value)">
               <div class="form-group">
                 <label for="inputOldPassword">Old Password</label>
-                <input type="password" class="form-control" id="inputOldPassword">
+                <input [formControl]="passForm.controls['oldPass']" type="password" class="form-control" id="inputOldPassword">
               </div>
               <div class="form-group">
                 <label for="inputNewPassword">New Password</label>
-                <input type="password" class="form-control" id="inputNewPassword" minlength="7">
+                <input [formControl]="passForm.controls['newPass']" type="password" class="form-control" id="inputNewPassword" minlength="7">
                 <div class="alert alert-info">
                   Passwords must be 7 characters minimum
                 </div>
               </div>
               <div class="form-group">
                 <label for="inputOldPassword">Confirm New Password</label>
-                <input type="password" class="form-control" id="inputNewPasswordConfirm">
+                <input [formControl]="passForm.controls['newPassConfirm']" type="password" class="form-control" id="inputNewPasswordConfirm">
               </div>
               <div class="form-group">
                   <button id="btnSubmitChangePassword" class="btn btn-primary" [class.loading]="changePassLoading" type="submit" name="action">
