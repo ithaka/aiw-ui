@@ -39,6 +39,10 @@ export class RegisterComponent implements OnInit {
   }
 
   ngOnInit() {
+    if (this._auth.getUser) {
+      this._router.navigate(['/home']);
+    }
+
     // Gets the roles and departments for the select controls
     this._auth.getUserRoles()
       .take(1)
