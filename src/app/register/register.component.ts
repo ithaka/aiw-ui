@@ -39,7 +39,7 @@ export class RegisterComponent implements OnInit {
   }
 
   ngOnInit() {
-    if (this._auth.getUser) {
+    if (this._auth.getUser && this._auth.getUser().isLoggedIn) {
       this._router.navigate(['/home']);
     }
 
@@ -100,6 +100,9 @@ export class RegisterComponent implements OnInit {
       .subscribe((data) => {
         this.isLoading = false;
         if (data.user) {
+          let user: any;
+          Object.assign(user, data.user);
+          user.isLoggedIn = true;
           this._auth.saveUser(data.user);
           this._router.navigate(['/home']);
         } else {
