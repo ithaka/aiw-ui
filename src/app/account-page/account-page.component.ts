@@ -18,11 +18,12 @@ export class AccountPage implements OnInit {
   private changePassLoading: boolean = false;
 
   private passForm: FormGroup;
+  private submitted: boolean = false;
 
   constructor(private _auth: AuthService, _fb: FormBuilder) {
     this.passForm = _fb.group({
       oldPass: [null, Validators.required],
-      newPass: [null, Validators.required],
+      newPass: [null, Validators.compose([Validators.required, Validators.minLength(7)])],
       newPassConfirm: [null, Validators.required]
     }, { validator: this.passwordsEqual });
   }
@@ -50,7 +51,10 @@ export class AccountPage implements OnInit {
   }
 
   private changePass(formValue: any): void {
-
+    console.log(formValue);
+    console.log(this.passForm.controls['newPass'].hasError('minlength'));
+    console.log(this.passForm.controls['newPass'].hasError('required'));
+    console.log(this.passForm.controls['newPass'].errors);
   }
 
 }

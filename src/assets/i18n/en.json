@@ -22,5 +22,8 @@
     "INFO_PROMPT": "INFO_PROMPT",
     "SURVEY_PROMPT": "SURVEY_PROMPT",
     "PRIVACY_DISCLAIMER": "PRIVACY_DISCLAIMER"
+  },
+  "ACCOUNT": {
+    "MIN_LENGTH_PROMPT": "Passwords must be 7 characters minimum"
   }
 }
