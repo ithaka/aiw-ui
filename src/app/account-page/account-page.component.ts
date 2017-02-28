@@ -16,6 +16,7 @@ export class AccountPage implements OnInit {
   private institutionObj: any = {};
   private subscriptions: Subscription[] = [];
   private changePassLoading: boolean = false;
+  private changePassSuccess: boolean;
 
   private passForm: FormGroup;
   private submitted: boolean = false;
@@ -63,6 +64,7 @@ export class AccountPage implements OnInit {
       .take(1)
       .subscribe((res) => {
         this.changePassLoading = false;
+        this.changePassSuccess = true;
         console.log(res);
       }, (err) => {
         this.changePassLoading = false;

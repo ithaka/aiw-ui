@@ -25,7 +25,7 @@
                 <label for="inputNewPassword">New Password</label>
                 <input [formControl]="passForm.controls['newPass']" type="password" class="form-control" id="inputNewPassword">
                 <div translate *ngIf="passForm.controls['newPass'].hasError('required') || passForm.controls['newPass'].hasError('minlength')" class="alert alert-info form-control-feedback">
-                  ACCOUNT.MIN_LENGTH_PROMPT
+                  ACCOUNT.CHANGE_PASS.MIN_LENGTH_PROMPT
                 </div>
               </div>
               <div class="form-group">
@@ -36,6 +36,9 @@
                   <button id="btnSubmitChangePassword" class="btn btn-primary" [class.loading]="changePassLoading" type="submit" name="action">
                     Update
                   </button>
+                <div translate *ngIf="changePassSuccess" class="alert alert-success form-control-feedback">
+                  ACCOUNT.CHANGE_PASS.CHANGE_SUCCESS
+                </div>
               </div>
             </form>
             <br />
