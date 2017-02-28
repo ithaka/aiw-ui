@@ -15,7 +15,7 @@
                             <div *ngIf="submitted && registerForm.controls['email'].hasError('required')" class="has-danger">
                                 <p id="errEmailRequired" class="form-control-feedback" translate>REGISTER.ERRORS.EMAIL_REQUIRED</p>
                             </div>
-                            <div *ngIf="submitted && registerForm.controls['email'].hasError('emailInvalid')" class="has-danger">
+                            <div *ngIf="submitted && registerForm.controls['email'].hasError('emailInvalid') && !registerForm.controls['email'].hasError('required')" class="has-danger">
                                 <p id="errEmailInvalid" class="form-control-feedback" translate>REGISTER.ERRORS.EMAIL_INVALID</p>
                             </div>
                         </div>
