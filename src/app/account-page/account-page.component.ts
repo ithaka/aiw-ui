@@ -52,9 +52,24 @@ export class AccountPage implements OnInit {
 
   private changePass(formValue: any): void {
     console.log(formValue);
-    console.log(this.passForm.controls['newPass'].hasError('minlength'));
-    console.log(this.passForm.controls['newPass'].hasError('required'));
-    console.log(this.passForm.controls['newPass'].errors);
+    this.submitted = true;
+
+    // don't call the service if the form isn't valid
+    if ( !this.passForm.valid ) { return; }
+
+    this.changePassLoading = true;
+
+    this._auth.changePassword(formValue.oldPass, formValue.newPass)
+      .take(1)
+      .subscribe((res) => {
+        this.changePassLoading = false;
+        console.log(res);
+      }, (err) => {
+        this.changePassLoading = false;
+        console.error(err);
+      });
+
+
   }
 
 }
