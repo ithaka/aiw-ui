@@ -17,6 +17,7 @@ export class AccountPage implements OnInit {
   private subscriptions: Subscription[] = [];
   private changePassLoading: boolean = false;
   private changePassSuccess: boolean;
+  private changePassFailure: boolean;
 
   private passForm: FormGroup;
   private submitted: boolean = false;
@@ -52,8 +53,9 @@ export class AccountPage implements OnInit {
   }
 
   private changePass(formValue: any): void {
-    console.log(formValue);
     this.submitted = true;
+    this.changePassFailure = false;
+    this.changePassSuccess = false;
 
     // don't call the service if the form isn't valid
     if ( !this.passForm.valid ) { return; }
@@ -65,9 +67,9 @@ export class AccountPage implements OnInit {
       .subscribe((res) => {
         this.changePassLoading = false;
         this.changePassSuccess = true;
-        console.log(res);
       }, (err) => {
         this.changePassLoading = false;
+        this.changePassFailure = true;
         console.error(err);
       });
 

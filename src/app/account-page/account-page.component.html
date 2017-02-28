@@ -17,27 +17,39 @@
 
             <!--Change Password Form-->
             <form id="changePasswordForm" [formGroup]="passForm" (ngSubmit)="changePass(passForm.value)">
-              <div class="form-group">
+              <div class="form-group" [class.has-danger]="submitted && passForm.controls['oldPass'].hasError('required')">
                 <label for="inputOldPassword">Old Password</label>
                 <input [formControl]="passForm.controls['oldPass']" type="password" class="form-control" id="inputOldPassword">
-              </div>
-              <div class="form-group">
-                <label for="inputNewPassword">New Password</label>
-                <input [formControl]="passForm.controls['newPass']" type="password" class="form-control" id="inputNewPassword">
-                <div translate *ngIf="passForm.controls['newPass'].hasError('required') || passForm.controls['newPass'].hasError('minlength')" class="alert alert-info form-control-feedback">
-                  ACCOUNT.CHANGE_PASS.MIN_LENGTH_PROMPT
+                <div id="msgOldPassRequired" translate *ngIf="submitted && passForm.controls['oldPass'].hasError('required')" class="form-control-feedback">
+                  ACCOUNT.CHANGE_PASS.OLD_PASS_REQUIRED
                 </div>
               </div>
-              <div class="form-group">
+              <div class="form-group" [class.has-danger]="submitted && passForm.controls['newPass'].hasError('required')" [class.has-warning]="passForm.controls['newPass'].dirty && passForm.controls['newPass'].hasError('required') || passForm.controls['newPass'].hasError('minlength')">
+                <label for="inputNewPassword">New Password</label>
+                <input [formControl]="passForm.controls['newPass']" type="password" class="form-control" id="inputNewPassword">
+                <div id="msgNewPassMinLength" translate *ngIf="passForm.controls['newPass'].dirty && passForm.controls['newPass'].hasError('required') || passForm.controls['newPass'].hasError('minlength')" class="form-control-feedback">
+                  ACCOUNT.CHANGE_PASS.MIN_LENGTH_PROMPT
+                </div>
+                <div id="msgNewPassRequired" translate *ngIf="submitted && passForm.controls['newPass'].hasError('required')" class="form-control-feedback">
+                  ACCOUNT.CHANGE_PASS.NEW_PASS_REQUIRED
+                </div>
+              </div>
+              <div class="form-group" [class.has-danger]="submitted && passForm.controls['newPassConfirm'].hasError('required')" [class.has-warning]="passForm.hasError('passwordMismatch')">
                 <label for="inputOldPassword">Confirm New Password</label>
                 <input [formControl]="passForm.controls['newPassConfirm']" type="password" class="form-control" id="inputNewPasswordConfirm">
+                <div id="msgPassConfirmError" translate *ngIf="passForm.hasError('passwordMismatch')" class="form-control-feedback">
+                  ACCOUNT.CHANGE_PASS.PASS_CONFIRM_ERROR
+                </div>
               </div>
               <div class="form-group">
                   <button id="btnSubmitChangePassword" class="btn btn-primary" [class.loading]="changePassLoading" type="submit" name="action">
                     Update
                   </button>
-                <div translate *ngIf="changePassSuccess" class="alert alert-success form-control-feedback">
+                <div translate *ngIf="changePassSuccess" class="form-control-feedback">
                   ACCOUNT.CHANGE_PASS.CHANGE_SUCCESS
+                </div>
+                <div translate *ngIf="changePassFailure" class="form-control-feedback">
+                  ACCOUNT.CHANGE_PASS.CHANGE_FAILURE
                 </div>
               </div>
             </form>
