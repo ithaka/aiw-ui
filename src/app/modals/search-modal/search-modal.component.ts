@@ -112,7 +112,7 @@ export class SearchModal implements OnInit {
 
   private addNewQuery(query: any, index: number): void{
     if(query.term){
-      if((this.advanceQueries.length === (index + 1)) && (this.advanceQueries.length < 5)){
+      if((this.advanceQueries.length === (index + 1)) && (this.advanceQueries.length < 10)){
         let newQuery: any = {};
         newQuery.term = '';
         newQuery.field = 'in any field';
@@ -120,6 +120,10 @@ export class SearchModal implements OnInit {
         this.advanceQueries.push(newQuery);
       }
     }
+  }
+
+  private clearAdvanceQuery(index): void{
+    this.advanceQueries.splice(index, 1);
   }
 
   private toggleEra(dateEra): void{

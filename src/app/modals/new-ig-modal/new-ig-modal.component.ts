@@ -1,5 +1,5 @@
 import { Router } from '@angular/router';
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { formGroupNameProvider } from '@angular/forms/src/directives/reactive_directives/form_group_name';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs/Rx';
@@ -16,6 +16,9 @@ import { AssetService, AuthService, GroupService } from './../../shared';
 })
 export class NewIgModal implements OnInit {
   @Output() closeModal: EventEmitter<any> = new EventEmitter();
+
+  @Input()
+  private copyIG: boolean = false;
 
   private newIgForm: FormGroup;
   private isArtstorUser: boolean = false;
@@ -95,23 +98,30 @@ export class NewIgModal implements OnInit {
       items: itemIds
     };
 
-    this._group.create(group)
-      .subscribe(
-        data => {
-          console.log(data);
-          this.isLoading = false;
-          // Close the modal
-          this.closeModal.emit();
-          // Show the user their new group!
-          if (data.id) {
-            this.router.navigate(['/group', data.id]);
+    if(this.copyIG){
+      console.log('Copy Image Group!');
+      console.log(group);
+    }
+    else{
+
+      this._group.create(group)
+        .subscribe(
+          data => {
+            console.log(data);
+            this.isLoading = false;
+            // Close the modal
+            this.closeModal.emit();
+            // Show the user their new group!
+            if (data.id) {
+              this.router.navigate(['/group', data.id]);
+            }
+          },
+          error => {
+            console.log(error);
+            this.isLoading = false;
           }
-        },
-        error => {
-          console.log(error);
-          this.isLoading = false;
-        }
-      );
+        );
+    }
 
     console.log(formValue);
     console.log(this.igDescription); // the description is not technically part of the form
