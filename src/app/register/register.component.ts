@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { formGroupNameProvider } from '@angular/forms/src/directives/reactive_directives/form_group_name';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 
@@ -21,7 +22,7 @@ export class RegisterComponent implements OnInit {
     duplicate?: boolean
   } = {};
   
-  constructor(private _auth: AuthService, _fb: FormBuilder) {
+  constructor(private _auth: AuthService, private _router: Router, _fb: FormBuilder) {
     this.registerForm = _fb.group({
       // The first value of this array is the initial value for the control, the second is the
       //  validator for the control. Validators.compose allows you to use multiple validators against a single field
@@ -76,7 +77,7 @@ export class RegisterComponent implements OnInit {
   private registerSubmit(formValue: any) {
     this.serviceErrors = {};
     this.submitted = true;
-    console.log(formValue);
+    this.isLoading = true;
 
     // this is the object that the service will receive
     let userInfo: any = {
@@ -93,9 +94,10 @@ export class RegisterComponent implements OnInit {
     this._auth.registerUser(userInfo)
       .take(1)
       .subscribe((data) => {
-        console.log(data);
+        this.isLoading = false;
         if (data.user) {
-          // do something useful
+          this._auth.saveUser(data.user);
+          this._router.navigate(['/home']);
         } else {
           if (data.statusMessage === "User already exist") {
             this.serviceErrors.duplicate = true;
