@@ -13,34 +13,34 @@
                             <label for="emailInput">Email Address</label>
                             <input id="emailInput" class="form-control" type="text" spellcheck="false" [formControl]="registerForm.controls['email']" tabindex="0"/>
                             <div *ngIf="submitted && registerForm.controls['email'].hasError('required')" class="has-danger">
-                                <p id="errEmailRequired" class="form-control-feedback">REGISTER.ERRORS.EMAIL_REQUIRED</p>
+                                <p id="errEmailRequired" class="form-control-feedback" translate>REGISTER.ERRORS.EMAIL_REQUIRED</p>
                             </div>
                             <div *ngIf="submitted && registerForm.controls['email'].hasError('emailInvalid')" class="has-danger">
-                                <p id="errEmailInvalid" class="form-control-feedback">REGISTER.ERRORS.EMAIL_INVALID</p>
+                                <p id="errEmailInvalid" class="form-control-feedback" translate>REGISTER.ERRORS.EMAIL_INVALID</p>
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="emailConfirmInput">Confirm Email Address</label>
                             <input id="emailConfirmInput" class="form-control" type="text" spellcheck="false" [formControl]="registerForm.controls['emailConfirm']" tabindex="0"/>
                             <div *ngIf="submitted && registerForm.hasError('emailMismatch')" class="has-danger">
-                                <p id="errEmailMismatch" class="form-control-feedback">REGISTER.ERRORS.EMAIL_MISMATCH</p>
+                                <p id="errEmailMismatch" class="form-control-feedback" translate>REGISTER.ERRORS.EMAIL_MISMATCH</p>
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="passwordInput">Password</label>
                             <input id="passwordInput" class="form-control" type="password" spellcheck="false" [formControl]="registerForm.controls['password']" tabindex="0"/>
                             <div *ngIf="submitted && registerForm.controls['password'].hasError('required')" class="has-danger">
-                                <p id="errPasswordRequired" class="form-control-feedback">REGISTER.ERRORS.PASSWORD_REQUIRED</p>
+                                <p id="errPasswordRequired" class="form-control-feedback" translate>REGISTER.ERRORS.PASSWORD_REQUIRED</p>
                             </div>
                             <div *ngIf="submitted && registerForm.controls['password'].hasError('minlength')" class="has-danger">
-                                <p id="errPasswordMinlength" class="form-control-feedback">REGISTER.ERRORS.PASSWORD_MINLENGTH</p>
+                                <p id="errPasswordMinlength" class="form-control-feedback" translate>REGISTER.ERRORS.PASSWORD_MINLENGTH</p>
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="passwordConfirmInput">Confirm Password</label>
                             <input id="passwordConfirmInput" class="form-control" type="password" spellcheck="false" [formControl]="registerForm.controls['passwordConfirm']" tabindex="0"/>
                             <div *ngIf="submitted && registerForm.hasError('passwordMismatch')" class="has-danger">
-                                <p id="errPasswordMismatch" class="form-control-feedback">REGISTER.ERRORS.PASSWORD_MISMATCH</p>
+                                <p id="errPasswordMismatch" class="form-control-feedback" translate>REGISTER.ERRORS.PASSWORD_MISMATCH</p>
                             </div>
                         </div>
                         <div class="form-group">
@@ -49,7 +49,7 @@
                                 <option *ngFor="let role of userRoles" [ngValue]="role.id">{{ role.desc }}</option>
                             </select>
                             <div *ngIf="submitted && registerForm.controls['role'].hasError('required')" class="has-danger">
-                                <p id="errRoleRequired" class="form-control-feedback">REGISTER.ERRORS.INSTITUTION_ROLE_REQUIRED</p>
+                                <p id="errRoleRequired" class="form-control-feedback" translate>REGISTER.ERRORS.INSTITUTION_ROLE_REQUIRED</p>
                             </div>
                         </div>
                         <div class="form-group">
@@ -58,7 +58,7 @@
                                 <option *ngFor="let dept of userDepts" [ngValue]="dept.id">{{ dept.desc }}</option>
                             </select>
                             <div *ngIf="submitted && registerForm.controls['dept'].hasError('required')" class="has-danger">
-                                <p id="errDeptRequired" class="form-control-feedback">REGISTER.ERRORS.ACADEMIC_DEPT_REQUIRED</p>
+                                <p id="errDeptRequired" class="form-control-feedback" translate>REGISTER.ERRORS.ACADEMIC_DEPT_REQUIRED</p>
                             </div>
                         </div>
                         <div class="form-group">
@@ -75,15 +75,15 @@
                                     <input id="checkSurvey" class="form-check-input" type="checkbox" [formControl]="registerForm.controls['survey']" tabindex="0"/> REGISTER.SURVEY_PROMPT</label>
                             </div>
                             <div *ngIf="submitted && registerForm.controls['age'].hasError('required')" class="has-danger">
-                                <p id="errAgeRequired" class="form-control-feedback">REGISTER.ERRORS.AGE_REQUIRED</p>
+                                <p id="errAgeRequired" class="form-control-feedback" translate>REGISTER.ERRORS.AGE_REQUIRED</p>
                             </div>
                         </div>
-                        <p>REGISTER.PRIVACY_DISCLAIMER</p>
+                        <p translate>REGISTER.PRIVACY_DISCLAIMER</p>
                         <p>By using Artstor Digital Library, I agree to the <a id="linkTermsAndConditions" href="http://www.artstor.org/terms" tabindex="0" class="link">Terms</a></p>
                         <div class="form-group">
                             <button id="btnRegister" class="btn btn-primary" [class.loading]="isLoading" type="submit" name="action" tabindex="0">Register</button>
                             <div *ngIf="submitted && serviceErrors.duplicate" class="has-danger">
-                                <p id="errDuplicateUser" class="form-control-feedback">REGISTER.ERRORS.DUPLICATE</p>
+                                <p id="errDuplicateUser" class="form-control-feedback" translate>REGISTER.ERRORS.DUPLICATE</p>
                             </div>
                         </div>
                     </form>

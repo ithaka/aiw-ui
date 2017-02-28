@@ -28,7 +28,7 @@ export class RegisterComponent implements OnInit {
       //  validator for the control. Validators.compose allows you to use multiple validators against a single field
       email: [null, Validators.compose([Validators.required, this.emailValidator])],
       emailConfirm: [null, Validators.required],
-      password: [null, Validators.compose([Validators.required, Validators.minLength(7)])],
+      password: [null, Validators.minLength(7)],
       passwordConfirm: [null, Validators.required],
       role: [null, Validators.required],
       dept: [null, Validators.required],
@@ -81,9 +81,9 @@ export class RegisterComponent implements OnInit {
   private registerSubmit(formValue: any) {
     this.serviceErrors = {};
     this.submitted = true;
-    this.isLoading = true;
 
     if (!this.registerForm.valid) { return; }
+    this.isLoading = true;
 
     // this is the object that the service will receive
     let userInfo: any = {
