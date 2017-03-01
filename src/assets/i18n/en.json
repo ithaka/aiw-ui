@@ -18,9 +18,9 @@
       "ACADEMIC_DEPT_REQUIRED": "Please select a department",
       "LOGIN_SERVER": "Server is not responding. Please try again later."
     },
-    "AGE_PROMPT": "AGE_PROMPT",
-    "INFO_PROMPT": "INFO_PROMPT",
-    "SURVEY_PROMPT": "SURVEY_PROMPT",
-    "PRIVACY_DISCLAIMER": "PRIVACY_DISCLAIMER"
+    "AGE_PROMPT": "I confirm that I am 13 years or older",
+    "INFO_PROMPT": "Yes, send me information about new Artstor content and tools",
+    "SURVEY_PROMPT": "Yes, send me surveys",
+    "PRIVACY_DISCLAIMER": "Artstor will not share your personal information except in limited instances as set forth in its <a href="http://www.artstor.org/privacy-policy">privacy policy</a>."
   }
 }
