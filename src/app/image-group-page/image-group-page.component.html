@@ -7,24 +7,23 @@
   </div>
 
     <div class="row">
-        <div class="col-sm-12">
+        <div class="col-12 pb-4">
             <h3 id="pageType">Browse Group</h3>
+             <h1 id="pageTitle">
+                {{ ig.igName }} 
+                <a *ngIf="ig.igName && user.isLoggedIn" (click)="showPptModal = true">
+                    <i id="downloadGroupLink" class="icon icon-download"></i>
+                </a>
+                <a *ngIf="ig.igName && !user.isLoggedIn" (click)="showLoginModal = true">
+                    <i id="downloadGroupLink" class="icon icon-download"></i>
+                </a>
+            </h1>
         </div>
-    </div>
-    <div class="row">
-        <div class="col-9">
+        <div [ngClass]="[ ig.description ? 'col-md-9' : 'col-md-12'  ]">
             <ang-asset-grid></ang-asset-grid>
         </div>
-        <div class="col-3">
-            <h1 id="pageTitle">
-            {{ ig.igName }} 
-            <a *ngIf="ig.igName && user.isLoggedIn" (click)="showPptModal = true">
-                <i id="downloadGroupLink" class="icon icon-download"></i>
-            </a>
-            <a *ngIf="ig.igName && !user.isLoggedIn" (click)="showLoginModal = true">
-                <i id="downloadGroupLink" class="icon icon-download"></i>
-            </a>
-            </h1>
+        <div *ngIf="ig.description" class="col-md-3">
+            <h3 class="row-hdr">Description</h3>
             <div *ngIf="ig && ig.description && ig.description.igNotes" class="page__description" id="pageDescription" [innerHTML]="ig.description.igNotes"></div>
         </div>
     </div>

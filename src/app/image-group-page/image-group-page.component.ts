@@ -16,7 +16,7 @@ import { ImageGroup, ImageGroupDescription } from './../shared';
 })
 
 export class ImageGroupPage implements OnInit, OnDestroy {
-  private ig: ImageGroup;
+  private ig: ImageGroup = <ImageGroup>{};
   private user: any;
   private showLoginModal: boolean = false;
 
@@ -55,11 +55,17 @@ export class ImageGroupPage implements OnInit, OnDestroy {
 
     this.subscriptions.push(
       this._assets.allResults.subscribe((results: any) => {
-        this.ig = results;
-        console.log(this.ig);
-        if (this.ig && this.ig.igId) {
-          this._igService.getGroupDescription(this.ig.igId).take(1)
-            .subscribe((desc: ImageGroupDescription) => { this.ig.description = desc; console.log(desc);});
+        if (results.igId) {
+          // Set ig properties from results
+          this.ig.igName = results.igName;
+          this.ig.count = results.count;
+          this.ig.igName = results.igName;
+
+          // Get IG description, since we can rely on it from 
+          this._igService.getGroupDescription(results.igId).take(1)
+            .subscribe((desc: ImageGroupDescription) => { 
+              this.ig.description = desc;
+            });
         }
       })
     );
