@@ -26,7 +26,8 @@
                                             <a class="dropdown-item" (click)="query.operator = 'NOT'">NOT</a>
                                         </div>
                                     </div>
-                                    <input id="inputAdvanceQuery{{i + 1}}" [(ngModel)]="query.term" (change)="validateForm()" type="text" class="form-control" (blur)="addNewQuery(query, i)">
+                                    <input id="inputAdvanceQuery{{i + 1}}" [(ngModel)]="query.term" (change)="validateForm()" type="text" class="form-control">
+                                     <!--(blur)="addNewQuery(query, i)"-->
                                     <div ngbDropdown class="input-group-btn">
                                         <button id="advanceQueryField{{i + 1}}" ngbDropdownToggle type="button" class="btn btn-secondary dropdown-toggle">
                                             {{ query.field.name }}
@@ -35,11 +36,14 @@
                                             <a *ngFor="let field of fields" class="dropdown-item" (click)="query.field = field">{{ field.name }}</a>
                                         </div>
                                     </div>
+                                    <button type="button" (click)="clearAdvanceQuery(i)" class="close">
+                                        <span>&times;</span>
+                                    </button>
                                 </div>
                             </div>
                             
-                            <div class="form-group">
-                                <button class="btn btn-secondary" (click)="advanceQueries.push(advQueryTemplate)">Add Query</button>
+                            <div class="form-group" *ngIf="advanceQueries.length < 10">
+                                <button title="Add up to 10 field queries" class="btn btn-secondary" (click)="addAdvanceQuery()">Add Query</button>
                             </div>
 
                             <div class="form-group pt-3">
@@ -118,6 +122,9 @@
             <div class="modal-footer">
                     <div *ngIf="error.empty" class="alert alert-warning">
                         <b>Search is Empty</b> Please add a search term or select a filter
+                    </div>
+                    <div *ngIf="error.date" class="alert alert-warning">
+                        <b>End Date is less than Start Date</b> End date must be greater than or equal to Start date.
                     </div>
                     <a class="btn btn-link with-pad" tabindex="1" (click)="openHelp()">Help</a>
                     <button class="btn btn-secondary" (click)="resetFilters()">Clear</button>

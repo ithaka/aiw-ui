@@ -29,13 +29,13 @@
                             <!--Active on Image Group Page-->
                             <!--Future slide sorter function <button class="dropdown-item">!View All</button>-->
                             <button (click)="selectAllInAssetGrid()" class="dropdown-item">Select All</button>
-                            <button [class.disabled]="selectedAssets.length < 1" (click)="showImageGroupModal = true" class="dropdown-item">Save Selections to > New Image Group</button>
+                            <button [class.disabled]="selectedAssets.length < 1" (click)="copyIG = false; showImageGroupModal = true;" class="dropdown-item">Save Selections to > New Image Group</button>
                             <button [class.disabled]="selectedAssets.length < 1" class="dropdown-item">!Delete Selections from Image Group</button>
                             <button [class.disabled]="selectedAssets.length < 1" (click)="_assets.setSelectedAssets([])" class="dropdown-item">Deselect All</button>
                             <!--Active on Image Group Page-->
                             <button class="dropdown-item">!Save Image Group</button>
                             <!--Active on Image Group Page-->
-                            <button (click)="showImageGroupModal = true" class="dropdown-item">!Save Image Group as...</button>
+                            <button  [disabled]="!actionOptions.group" (click)="copyIG = true; showImageGroupModal = true;" class="dropdown-item">Save Image Group as...</button>
                             <div class="dropdown-divider"></div>
                             <button class="dropdown-item">!Manage Personal Collection</button>
                             <button class="dropdown-item">!Upload to Personal Collection</button>
@@ -77,5 +77,5 @@
     <!--</div>-->
 </div>
 
-<ang-new-ig-modal *ngIf="showImageGroupModal" (closeModal)="showImageGroupModal = false"></ang-new-ig-modal>
+<ang-new-ig-modal *ngIf="showImageGroupModal" [copyIG]="copyIG" (closeModal)="showImageGroupModal = false"></ang-new-ig-modal>
 <ang-share-link-modal *ngIf="showShareLinkModal" [asset]="selectedAssets[0]" (closeModal)="showShareLinkModal = false"></ang-share-link-modal>

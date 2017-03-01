@@ -30,6 +30,8 @@ export class NavMenu {
   private subscriptions: Subscription[] = [];
   
   private showImageGroupModal: boolean = false;
+
+  private copyIG: boolean = false;
   
   // TypeScript public modifiers
   constructor(private _router: Router, private route: ActivatedRoute, private _assets: AssetService) {
