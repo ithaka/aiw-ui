@@ -64,9 +64,9 @@
 
     <div *ngIf="isFullscreen" class="fullscreen-metadata" [class.slideAway]="!showCaption">
         <div class="vertical-center-wrap">
-            <i *ngIf="assetCompareCount == 1" title="Previous in results" (click)="prevPage.emit()" class="icon icon-direction icon-left"></i>
+            <i *ngIf="assetCompareCount == 1" [class.disabled]="assetNumber <= 1" title="Previous in results" (click)="prevPage.emit()" class="icon icon-direction icon-left"></i>
             <div class="title">{{ asset.title }}</div>
-            <i *ngIf="assetCompareCount == 1" title="Next in results" (click)="nextPage.emit()" class="icon icon-direction icon-right"></i>
+            <i *ngIf="assetCompareCount == 1" [class.disabled]="assetNumber >= assetGroupCount" title="Next in results" (click)="nextPage.emit()" class="icon icon-direction icon-right"></i>
             <!--<div class="page-tooltip">{{ assetNumber }} OF {{ totalAssetCount }}</div>-->
             <div  class="meta-block small">
                 <div class="creator">{{ asset.creator }}</div>

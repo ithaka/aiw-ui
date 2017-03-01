@@ -109,17 +109,19 @@ export class SearchModal implements OnInit {
     document.body.style.overflow = 'auto';
     this.closeModal.emit()
   }
+  
+  /**
+   * Add query to array of field queries
+   */
+  private addAdvanceQuery(): void {
+    this.advanceQueries.push(Object.assign({}, this.advQueryTemplate));
+  }
 
-  private addNewQuery(query: any, index: number): void{
-    if(query.term){
-      if(this.advanceQueries.length === (index + 1)){
-        let newQuery: any = {};
-        newQuery.term = '';
-        newQuery.field = 'in any field';
-        newQuery.operator = 'AND';
-        this.advanceQueries.push(newQuery);
-      }
-    }
+  /**
+   * Remove query from array of field queries
+   */
+  private clearAdvanceQuery(index): void{
+    this.advanceQueries.splice(index, 1);
   }
 
   private toggleEra(dateEra): void{
@@ -169,11 +171,27 @@ export class SearchModal implements OnInit {
    */
   private validateForm(): boolean {
     let isValid = false;
+
+    let startDate = 0;
+    let endDate = 0;
+    if (this.advanceSearchDate['startDate'] && this.advanceSearchDate['endDate']) {
+      startDate = this.advanceSearchDate['startDate'] * (this.advanceSearchDate['startEra'] == 'BCE' ? -1 : 1);
+      endDate = this.advanceSearchDate['endDate'] * (this.advanceSearchDate['endEra'] == 'BCE' ? -1 : 1);
+    }
+
     if (this.filterSelections.length < 1 && this.advanceQueries[0].term.length < 1 && this.advanceSearchDate['startDate'].length < 1 && this.advanceSearchDate['endDate'].length < 1 ) {
       // Nothing was selected! Tell the user to select something
       this.error.empty = true;
-    } else {
+      this.error.date = false;
+    } 
+    else if(startDate > endDate){
+      // Start Date is greater than End Date
+      this.error.date = true;
       this.error.empty = false;
+    }
+    else {
+      this.error.empty = false;
+      this.error.date = false;
       isValid = true;
     }
     return isValid;
@@ -181,11 +199,7 @@ export class SearchModal implements OnInit {
 
   private applyAllFilters(): void {
     if (!this.validateForm()) {
-      // Nothing was selected! Tell the user to select something
-      this.error.empty = true;
       return;
-    } else {
-      this.error.empty = false;
     }
 
     let advQuery = "";
