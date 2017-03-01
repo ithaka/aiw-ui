@@ -61,7 +61,7 @@ export class ImageGroupPage implements OnInit, OnDestroy {
         console.log(this.ig);
         if (this.ig && this.ig.igId) {
           this._igService.getGroupDescription(this.ig.igId).take(1)
-            .subscribe((desc: ImageGroupDescription) => { this.ig.description = desc; });
+            .subscribe((desc: ImageGroupDescription) => { this.ig.description = desc; console.log(desc);});
         }
       })
     );
