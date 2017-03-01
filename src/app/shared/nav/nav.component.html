@@ -32,3 +32,26 @@
     </div>
   </div>
 </header>
+
+<div id="inactiveUserLogoutModal" class="modal" [ngClass]="{'show': showinactiveUserLogoutModal }">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="close-icon" (click)="showinactiveUserLogoutModal = false">×</span>
+            </div>
+            <div class="modal-body">
+                <div class="container-fluid">
+                    <div class="row hdr">
+                        <h1>Logged out</h1>
+                    </div>
+                    <div class="row pt-3 main-content">
+                        We logged you out after being idle for 60 minutes. Please login again.
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                    <button class="btn btn-primary" (click)="inactiveUsrLogOut()">Okay</button>
+            </div>
+        </div>
+    </div>
+</div>

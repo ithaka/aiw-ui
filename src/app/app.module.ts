@@ -20,6 +20,10 @@ import { TranslateModule, TranslateStaticLoader, TranslateLoader } from 'ng2-tra
 import { RlTagInputModule } from 'angular2-tag-input';
 import { MediumEditorDirective } from 'angular2-medium-editor/medium-editor.directive.ts';
 
+// ng2-idle
+import { NgIdleKeepaliveModule } from '@ng-idle/keepalive'; // this includes the core NgIdleModule but includes keepalive providers for easy wireup
+import { MomentModule } from 'angular2-moment'; // optional, provides moment-style pipes for date formatting
+
 // App is our top level component
 import { App } from './app.component';
 import { APP_RESOLVER_PROVIDERS } from './app.resolver';
@@ -127,7 +131,8 @@ type StoreType = {
         useFactory: (http: Http) => new TranslateStaticLoader(http, '/assets/i18n', '.json'),
         deps: [Http]
     }),
-    NgbModule.forRoot() // Ng Bootstrap Import
+    NgbModule.forRoot(), // Ng Bootstrap Import
+    NgIdleKeepaliveModule.forRoot()
   ],
   providers: [ // expose our Services and Providers into Angular's dependency injection
     ENV_PROVIDERS,

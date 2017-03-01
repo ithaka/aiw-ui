@@ -6,6 +6,9 @@ import { Subscription } from 'rxjs/Subscription';
 import { LoginService } from '../../login/login.service';
 import { AuthService, ToolboxService } from '..';
 
+import {Idle, DEFAULT_INTERRUPTSOURCES} from '@ng-idle/core';
+import {Keepalive} from '@ng-idle/keepalive';
+
 @Component({
   selector: 'nav-bar',
   providers: [
@@ -20,9 +23,41 @@ export class Nav implements OnInit, OnDestroy {
   private user: any;
   private institutionObj: any;
   private _tool: ToolboxService = new ToolboxService();
+  private showinactiveUserLogoutModal: boolean = false;
+  private idleState: string = 'Not started.';
 
   // TypeScript public modifiers
-  constructor(private _auth: AuthService, private _login: LoginService, private _router:Router, private route: ActivatedRoute, private location: Location) {  
+  constructor(private _auth: AuthService, private _login: LoginService, private _router:Router, private route: ActivatedRoute, private location: Location, private idle: Idle, private keepalive: Keepalive) {  
+    idle.setIdle(60);
+    idle.setTimeout(3600);
+    idle.setInterrupts(DEFAULT_INTERRUPTSOURCES);
+
+    idle.onIdleEnd.subscribe(() => {
+      this.idleState = 'No longer idle.';
+      console.log(this.idleState);
+    });
+    idle.onTimeout.subscribe(() => {
+      if(this.user && this.user.isLoggedIn){
+        this.logout();
+        this.showinactiveUserLogoutModal = true;
+
+        this.idleState = 'Timed out!';
+        console.log(this.idleState);
+      }
+      else{
+        this.resetIdleWatcher()
+      }
+    });
+    idle.onIdleStart.subscribe(() => {
+      this.idleState = 'You\'ve gone idle!';
+      console.log(this.idleState);
+    });
+    idle.onTimeoutWarning.subscribe((countdown) => {
+      this.idleState = 'You will time out in ' + countdown + ' seconds!'
+      console.log(this.idleState);
+    });
+
+    this.resetIdleWatcher();
   }
 
   ngOnInit() {
@@ -57,6 +92,19 @@ export class Nav implements OnInit, OnDestroy {
     this._auth.store("stashedRoute", this.location.path(false));
 
     this._router.navigate(['/login']);
+  }
+
+  // Reset the idle watcher
+  resetIdleWatcher() {
+    this.idle.watch();
+    this.idleState = 'Idle watcher started'
+    console.log(this.idleState);
+  }
+
+  // Reset the idle watcher and navigate to remote login page
+  inactiveUsrLogOut(): void{
+    this.resetIdleWatcher();
+    this.showinactiveUserLogoutModal = false;
   }
   
 } 
