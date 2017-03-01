@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { formGroupNameProvider } from '@angular/forms/src/directives/reactive_directives/form_group_name';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 
@@ -16,8 +17,12 @@ export class RegisterComponent implements OnInit {
 
   private userDepts: any[] = [];
   private userRoles: any[] = [];
+
+  private serviceErrors: {
+    duplicate?: boolean
+  } = {};
   
-  constructor(private _auth: AuthService, _fb: FormBuilder) {
+  constructor(private _auth: AuthService, private _router: Router, _fb: FormBuilder) {
     this.registerForm = _fb.group({
       // The first value of this array is the initial value for the control, the second is the
       //  validator for the control. Validators.compose allows you to use multiple validators against a single field
@@ -34,6 +39,10 @@ export class RegisterComponent implements OnInit {
   }
 
   ngOnInit() {
+    if (this._auth.getUser && this._auth.getUser().isLoggedIn) {
+      this._router.navigate(['/home']);
+    }
+
     // Gets the roles and departments for the select controls
     this._auth.getUserRoles()
       .take(1)
@@ -70,8 +79,13 @@ export class RegisterComponent implements OnInit {
 
   /** Gets called when the registration form is submitted */
   private registerSubmit(formValue: any) {
+    this.serviceErrors = {};
     this.submitted = true;
-    console.log(formValue);
+
+    console.log(this.registerForm.controls['password'].errors);
+
+    if (!this.registerForm.valid) { return; }
+    this.isLoading = true;
 
     // this is the object that the service will receive
     let userInfo: any = {
@@ -88,16 +102,20 @@ export class RegisterComponent implements OnInit {
     this._auth.registerUser(userInfo)
       .take(1)
       .subscribe((data) => {
-        console.log(data);
+        this.isLoading = false;
+        if (data.user) {
+          let user: any;
+          Object.assign(user, data.user);
+          user.isLoggedIn = true;
+          this._auth.saveUser(data.user);
+          this._router.navigate(['/home']);
+        } else {
+          if (data.statusMessage === "User already exist") {
+            this.serviceErrors.duplicate = true;
+          }
+        }
       }, (error) => {
         console.error(error);
-        this._auth.getRegisterError(userInfo)
-          .take(1)
-          .subscribe((data) => {
-            console.log(data);
-          }, (err) => {
-            console.error(err);
-          });
       });
 
     // if the call is unsuccessful, you will get a 200 w/o a user and with a field called 'statusMessage'
