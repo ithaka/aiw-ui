@@ -1,5 +1,6 @@
 import { Subscription } from 'rxjs/Rx';
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { formGroupNameProvider } from '@angular/forms/src/directives/reactive_directives/form_group_name';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 
@@ -22,7 +23,7 @@ export class AccountPage implements OnInit {
   private passForm: FormGroup;
   private submitted: boolean = false;
 
-  constructor(private _auth: AuthService, _fb: FormBuilder) {
+  constructor(private _auth: AuthService, private _router: Router, _fb: FormBuilder) {
     this.passForm = _fb.group({
       oldPass: [null, Validators.required],
       newPass: [null, Validators.compose([Validators.required, Validators.minLength(7)])],
@@ -32,6 +33,10 @@ export class AccountPage implements OnInit {
 
   ngOnInit() {
     this.user = this._auth.getUser();
+
+    if (!this.user.isLoggedIn) {
+      this._router.navigate(['/home']);
+    }
 
     this.subscriptions.push(
       this._auth.getInstitution().subscribe((institutionObj) => {
