@@ -39,7 +39,8 @@ export class RegisterComponent implements OnInit {
   }
 
   ngOnInit() {
-    if (this._auth.getUser && this._auth.getUser().isLoggedIn) {
+    console.log(this._auth.getUser());
+    if (this._auth.getUser() && this._auth.getUser().isLoggedIn) {
       this._router.navigate(['/home']);
     }
 
@@ -81,8 +82,6 @@ export class RegisterComponent implements OnInit {
   private registerSubmit(formValue: any) {
     this.serviceErrors = {};
     this.submitted = true;
-
-    console.log(this.registerForm.controls['password'].errors);
 
     if (!this.registerForm.valid) { return; }
     this.isLoading = true;
