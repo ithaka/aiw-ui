@@ -87,27 +87,11 @@ export class AssetGrid implements OnInit, OnDestroy {
   } 
 
   ngOnInit() {
+    // Subscribe to asset search params
     this.subscriptions.push(
       this.route.params
       .subscribe((params: Params) => {
-                
-        // if (params['startDate'] && params['endDate']) {
-        //   this.dateFacet.earliest.date = Math.abs(params['startDate']);
-        //   this.dateFacet.latest.date = Math.abs(params['endDate']);
-
-        //   if (params['startDate'] < 0) {
-        //     this.dateFacet.earliest.era = "BCE";
-        //   } else {
-        //     this.dateFacet.earliest.era = "CE";
-        //   }
-        //   if (params['endDate'] < 0) {
-        //     this.dateFacet.latest.era = "BCE";
-        //   } else {
-        //     this.dateFacet.latest.era = "CE";
-        //   }
-
-        //   this._filters.setAvailable('dateObj', this.dateFacet);
-        // }
+        
         if(params['term']){
           this.searchTerm = params['term'];
         }
@@ -200,7 +184,11 @@ export class AssetGrid implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    // Kill subscriptions
     this.subscriptions.forEach((sub) => { sub.unsubscribe(); });
+
+    // Clear asset selection
+    this._assets.setSelectedAssets([]);
   }
 
   /**
