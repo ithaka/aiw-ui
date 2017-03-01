@@ -11,26 +11,23 @@
             <h3 id="pageType">Browse Group</h3>
         </div>
     </div>
-    <div class="row text-row">
-        <div class="col-sm-9">
+    <div class="row">
+        <div class="col-9">
+            <ang-asset-grid></ang-asset-grid>
+        </div>
+        <div class="col-3">
             <h1 id="pageTitle">
-              {{ ig.igName }} 
-              <a *ngIf="ig.igName && user.isLoggedIn" (click)="showPptModal = true">
-                  <i id="downloadGroupLink" class="icon icon-download"></i>
-              </a>
-              <a *ngIf="ig.igName && !user.isLoggedIn" (click)="showLoginModal = true">
-                  <i id="downloadGroupLink" class="icon icon-download"></i>
-              </a>
+            {{ ig.igName }} 
+            <a *ngIf="ig.igName && user.isLoggedIn" (click)="showPptModal = true">
+                <i id="downloadGroupLink" class="icon icon-download"></i>
+            </a>
+            <a *ngIf="ig.igName && !user.isLoggedIn" (click)="showLoginModal = true">
+                <i id="downloadGroupLink" class="icon icon-download"></i>
+            </a>
             </h1>
-            <div *ngIf="ig && ig.description && ig.description.igNotes">
-                <div #igDesc class="page__description" id="pageDescription" [class.limit]="descCollapsed" [innerHTML]="ig.description.igNotes">
-                </div>
-                <div [class.hidden]="igDesc.clientHeight < 75" [class.collapsed]="descCollapsed" (click)="descCollapsed = !descCollapsed" class="expander link--action small" [innerHtml]="descCollapsed ? 'More' : 'Less'" role="button">
-                </div>
-            </div>
+            <div *ngIf="ig && ig.description && ig.description.igNotes" class="page__description" id="pageDescription" [innerHTML]="ig.description.igNotes"></div>
         </div>
     </div>
-    <ang-asset-grid></ang-asset-grid>
 </div>
 <ang-ig-download-modal *ngIf="showPptModal" (closeModal)="showPptModal = false" [ig]="ig"></ang-ig-download-modal>
 <ang-login-req-modal *ngIf="showLoginModal" (closeModal)="showLoginModal = false"></ang-login-req-modal>
