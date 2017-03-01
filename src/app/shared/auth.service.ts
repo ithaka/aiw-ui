@@ -112,6 +112,21 @@ export class AuthService implements CanActivate {
       });
   }
 
+  public changePassword(oldPass: string, newPass: string): Observable<any> {
+    let header = new Headers({ 'Content-Type': 'application/x-www-form-urlencoded' }); // form encode it
+    let options = new RequestOptions({ headers: header, withCredentials: true }); // Create a request option
+    let data = this.formEncode({
+      _method: "updatePassword",
+      oldPassword: oldPass,
+      password: newPass
+    });
+
+    return this.http.post(this.baseUrl + "/profile", data, options)
+      .map((res) => {
+        return res.json() || {};
+      });
+  }
+
   /**
    * Takes a response object and turn the data into a json object
    */

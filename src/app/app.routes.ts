@@ -23,7 +23,7 @@ import { AccountPage } from './account-page/account-page.component';
 
 export const ROUTES: Routes = [
   { path: '', component: Home, canActivate:[AuthService], pathMatch: 'full' },
-  { path: 'account', component: AccountPage },
+  { path: 'account', component: AccountPage, canActivate: [AuthService] },
   { path: 'login', component: Login },
   { path: 'home',  component: Home, canActivate:[AuthService] },
   { path: 'search/', redirectTo: '/search/*', pathMatch: 'full', canActivate:[AuthService] },

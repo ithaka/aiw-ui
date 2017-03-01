@@ -22,5 +22,14 @@
     "INFO_PROMPT": "Yes, send me information about new Artstor content and tools",
     "SURVEY_PROMPT": "Yes, send me surveys",
     "PRIVACY_DISCLAIMER": "Artstor will not share your personal information except in limited instances as set forth in its <a href=\"http://www.artstor.org/privacy-policy\">privacy policy</a>."
+  },
+  "ACCOUNT": {
+    "CHANGE_PASS": {
+      "OLD_PASS_REQUIRED": "OLD_PASS_REQUIRED",
+      "NEW_PASS_REQUIRED": "NEW_PASS_REQUIRED",
+      "PASS_CONFIRM_ERROR": "PASS_CONFIRM_ERROR",
+      "MIN_LENGTH_PROMPT": "Passwords must be 7 characters minimum",
+      "CHANGE_SUCCESS": "CHANGE_SUCCESS"
+    }
   }
 }
