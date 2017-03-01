@@ -21,7 +21,7 @@
     "AGE_PROMPT": "I confirm that I am 13 or older",
     "INFO_PROMPT": "Yes, send me information about new Artstor content and tools",
     "SURVEY_PROMPT": "Yes, send me surveys",
-    "PRIVACY_DISCLAIMER": "Artstor will not share your personal information except in limited instances as set forth in its <a href=\"http://www.artstor.org/privacy-policy\">privacy policy</a>."
+    "PRIVACY_DISCLAIMER": "Artstor will not share your personal information except in limited instances as set forth in its <a class=\"link\" href=\"http://www.artstor.org/privacy-policy\">privacy policy</a>."
   },
   "ACCOUNT": {
     "CHANGE_PASS": {
