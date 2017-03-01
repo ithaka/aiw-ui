@@ -88,6 +88,35 @@ export class AuthService implements CanActivate {
   }
 
   /**
+   * Gets the roles and departments lists, which are used in the registration page
+   * @returns Observable resolved with object containing: roleArray, deptArray
+   */
+  public getUserRoles(): Observable<any> {
+    return this.http.get(this.baseUrl + "/user?_method=deptRoles")
+      .map((res) => {
+        return res.json() || {};
+      });
+  }
+
+  public registerUser(registration: any): Observable<any> {
+    let data = this.formEncode(registration);
+
+    let header = new Headers({ 'Content-Type': 'application/x-www-form-urlencoded' }); // form encode it
+    let options = new RequestOptions({ headers: header, withCredentials: true }); // Create a request option
+    return this.http.post(this.baseUrl + "/register", data , options)
+      .map((data) => {
+        return data.json() || {};
+      });
+  }
+
+  public getRegisterError(registration: any): Observable<any> {
+    return this.http.post(this.baseUrl + "/register", registration)
+      .map((data) => {
+        return data.json() || {};
+      });
+  }
+
+  /**
    * Takes a response object and turn the data into a json object
    */
   public extractData(res: Response): any {

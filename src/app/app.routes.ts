@@ -1,4 +1,6 @@
 import { Routes, RouterModule } from '@angular/router';
+
+// Project Dependencies
 import { Home } from './home';
 import { SearchPage } from './search-page';
 import { CollectionPage } from './collection-page';
@@ -10,16 +12,18 @@ import { BrowsePage } from './browse-page';
 import { AssociatedPage } from './associated-page';
 import { AssetPage } from './asset-page';
 import { Login } from './login';
+import { RegisterComponent } from './register/register.component';
 import { About } from './about';
 import { NoContent } from './no-content';
 import { AuthService } from './shared/auth.service';
-
 import { DataResolver } from './app.resolver';
 import { BrowseRoutes } from './browse-page/browse-page.routes';
+import { AccountPage } from './account-page/account-page.component';
 
 
 export const ROUTES: Routes = [
   { path: '', component: Home, canActivate:[AuthService], pathMatch: 'full' },
+  { path: 'account', component: AccountPage },
   { path: 'login', component: Login },
   { path: 'home',  component: Home, canActivate:[AuthService] },
   { path: 'search/', redirectTo: '/search/*', pathMatch: 'full', canActivate:[AuthService] },
@@ -40,5 +44,6 @@ export const ROUTES: Routes = [
   { path: 'browse', component: BrowsePage, canActivate:[AuthService], children: BrowseRoutes },
   { path: 'associated/:objectId/:colId', component: AssociatedPage, canActivate:[AuthService] },
   { path: 'about', component: About },
+  { path: 'register', component: RegisterComponent, canActivate: [AuthService] },
   { path: '**', component: NoContent }
 ];

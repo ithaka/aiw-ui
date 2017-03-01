@@ -17,7 +17,7 @@
                             <div *ngFor="let query of advanceQueries; let i = index;" class="form-group">
                                 <div id="advanceQueryGroup{{i + 1}}" class="input-group">
                                     <div ngbDropdown class="input-group-btn" *ngIf="i !== 0">
-                                        <button id="dropdown" ngbDropdownToggle type="button" class="btn btn-secondary dropdown-toggle">
+                                        <button id="advanceQueryOperator{{i + 1}}" ngbDropdownToggle type="button" class="btn btn-secondary dropdown-toggle">
                                             {{ query.operator }}
                                         </button>
                                         <div class="dropdown-menu"  aria-labelledby="dropdown">
@@ -28,7 +28,7 @@
                                     </div>
                                     <input id="inputAdvanceQuery{{i + 1}}" [(ngModel)]="query.term" (change)="validateForm()" type="text" class="form-control" (blur)="addNewQuery(query, i)">
                                     <div ngbDropdown class="input-group-btn">
-                                        <button id="fieldDropdown" ngbDropdownToggle type="button" class="btn btn-secondary dropdown-toggle">
+                                        <button id="advanceQueryField{{i + 1}}" ngbDropdownToggle type="button" class="btn btn-secondary dropdown-toggle">
                                             {{ query.field.name }}
                                         </button>
                                         <div class="dropdown-menu" aria-labelledby="fieldDropdown">

@@ -11,11 +11,11 @@
       <div *ngIf="showLoginPanel" class="login-panel">
         <div class="vertical-center-wrap">
           <div *ngIf="user.isLoggedIn" class="login-panel__status">
-            <div>Welcome, {{ user.username ? user.username : ''}}</div>
-            <div *ngIf="institutionObj.shortName || institutionObj.institutionName">Institution: {{ institutionObj.shortName ? institutionObj.shortName : institutionObj.institutionName }}</div>
+            <div id="navMessageWelcome">Welcome, {{ user.username ? user.username : ''}}</div>
+            <div id="navMessageInstitution" *ngIf="institutionObj.shortName || institutionObj.institutionName">Institution: {{ institutionObj.shortName ? institutionObj.shortName : institutionObj.institutionName }}</div>
             <div class="login-panel__links">
-              <a class="link--accent" [routerLink]=" ['./login'] " routerLinkActive="active" tabindex="1">
-                !Settings
+              <a class="link--accent" [routerLink]=" ['./account'] " routerLinkActive="active" tabindex="1">
+                Settings
               </a>
               <a class="link--accent" [routerLink]=" ['./login'] " (click)="logout()" tabindex="1">
                 Log Out
@@ -23,7 +23,7 @@
             </div>
           </div>
           <div *ngIf="!user.isLoggedIn" class="login-panel__status">
-            <div><a (click)="loginAndSaveRoute()" class="link" tabindex="1">Log in</a> or <a [routerLink]="['/register']" class="link" tabindex="1">!Register</a> for more features</div>
+            <div><a (click)="navigateAndSaveRoute('/login')" class="link" tabindex="1">Log in</a> or <a (click)="navigateAndSaveRoute('/register')" class="link" tabindex="1">Register</a> for more features</div>
             <div *ngIf="institutionObj.shortName || institutionObj.institutionName">Institution: {{ institutionObj.shortName ? institutionObj.shortName : institutionObj.institutionName }}</div>
           </div>
         </div>
