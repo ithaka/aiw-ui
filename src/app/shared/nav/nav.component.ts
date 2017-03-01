@@ -54,7 +54,7 @@ export class Nav implements OnInit, OnDestroy {
     });
     idle.onTimeoutWarning.subscribe((countdown) => {
       this.idleState = 'You will time out in ' + countdown + ' seconds!'
-      console.log(this.idleState);
+      // console.log(this.idleState);
     });
 
     this.resetIdleWatcher();

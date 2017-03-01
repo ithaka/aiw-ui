@@ -109,19 +109,17 @@ export class SearchModal implements OnInit {
     document.body.style.overflow = 'auto';
     this.closeModal.emit()
   }
-
-  private addNewQuery(query: any, index: number): void{
-    if(query.term){
-      if((this.advanceQueries.length === (index + 1)) && (this.advanceQueries.length < 10)){
-        let newQuery: any = {};
-        newQuery.term = '';
-        newQuery.field = 'in any field';
-        newQuery.operator = 'AND';
-        this.advanceQueries.push(newQuery);
-      }
-    }
+  
+  /**
+   * Add query to array of field queries
+   */
+  private addAdvanceQuery(): void {
+    this.advanceQueries.push(Object.assign({}, this.advQueryTemplate));
   }
 
+  /**
+   * Remove query from array of field queries
+   */
   private clearAdvanceQuery(index): void{
     this.advanceQueries.splice(index, 1);
   }
