@@ -25,11 +25,11 @@
   },
   "ACCOUNT": {
     "CHANGE_PASS": {
-      "OLD_PASS_REQUIRED": "OLD_PASS_REQUIRED",
-      "NEW_PASS_REQUIRED": "NEW_PASS_REQUIRED",
-      "PASS_CONFIRM_ERROR": "PASS_CONFIRM_ERROR",
+      "OLD_PASS_REQUIRED": "Current password is required",
+      "NEW_PASS_REQUIRED": "New password is required",
+      "PASS_CONFIRM_ERROR": "Password confirmation does not match",
       "MIN_LENGTH_PROMPT": "Passwords must be 7 characters minimum",
-      "CHANGE_SUCCESS": "CHANGE_SUCCESS"
+      "CHANGE_SUCCESS": "Password successfully changed"
     }
   }
 }
