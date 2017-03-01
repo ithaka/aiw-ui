@@ -39,7 +39,6 @@ export class RegisterComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.log(this._auth.getUser());
     if (this._auth.getUser() && this._auth.getUser().isLoggedIn) {
       this._router.navigate(['/home']);
     }
