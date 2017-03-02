@@ -563,7 +563,8 @@ export class AssetService {
             .then(this.extractData)
             .then((res) => {
                 if (res.thumbnails) {
-                    this.allResultsSource.next(res);
+                    // Set the allResults object
+                    this.updateLocalResults(res);
                 } else {
                     throw new Error("There are no thumbnails. Server responsed with status " + res.status);
                 }
