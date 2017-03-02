@@ -79,18 +79,11 @@ export class PptModalComponent implements OnInit {
       zip = false;
     }
 
-    group.thumbnails.forEach((thumb, index, thumbs) => {
-        imgStr += [(index + 1), thumb.objectId, "1024x1024"].join(":");
-        if (index !== thumbs.length - 1) {
-            imgStr += ",";
-        }
-    });
-
     let data = {
         _method: "createPPT",
         igId: group.igId,
         igName: group.igName,
-        images: imgStr,
+        images: group.igDownloadInfo.images,
         zoom: '',
         zip: zip
     }
