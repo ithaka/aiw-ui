@@ -14,8 +14,9 @@
                         <div class="form-group">
                             <label for="loginPassword">Password</label>
                             <input id="inputLoginPassword" [(ngModel)]="user.password" name="password" type="password" class="form-control" placeholder="Password" tabindex="2" />
+                            <div id="errorMsg" *ngIf="errorMsg" class="login-errorMsg"> {{ errorMsg | translate }} </div>
                         </div>
-                        <div id="errorMsg" *ngIf="errorMsg" class="login-errorMsg"> {{ errorMsg | translate }} </div>
+                        <p>By using Artstor Digital Library, I agree to the <a id="linkTermsAndConditions" href="http://www.artstor.org/terms" tabindex="0" class="link">Terms</a></p>
                         <div class="form-group">
                             <button id="btnLoginRemote" class="btn btn-primary" [class.loading]="loginLoading" type="submit" name="action" tabindex="3">Log in</button>
                         </div>
