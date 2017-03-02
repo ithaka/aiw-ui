@@ -550,6 +550,8 @@ export class AssetService {
     }
 
     private loadCluster(objectId: string){
+        this.currentLoadedParams = Object.assign(Object.assign({}, this.defaultUrlParams), this.urlParams);
+        
         let options = new RequestOptions({ withCredentials: true });
         let startIndex = ((this.urlParams.currentPage - 1) * this.urlParams.pageSize) + 1;
 
