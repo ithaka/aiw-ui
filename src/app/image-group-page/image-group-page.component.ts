@@ -6,7 +6,7 @@ import { Subscription }   from 'rxjs/Subscription';
 import { ImageGroupService } from './image-group.service';
 import { AssetService, AuthService } from './../shared';
 
-import { ImageGroup, ImageGroupDescription } from './../shared';
+import { ImageGroup, ImageGroupDescription, IgDownloadInfo } from './../shared';
 
 @Component({
   selector: 'ang-image-group', 
@@ -37,7 +37,6 @@ export class ImageGroupPage implements OnInit, OnDestroy {
   ngOnInit() {
     this.user = this._auth.getUser();
 
-
     // Subscribe to ID in params
     this.subscriptions.push(
       this.route.params.subscribe((routeParams) => {
@@ -54,10 +53,11 @@ export class ImageGroupPage implements OnInit, OnDestroy {
     );
 
     this.subscriptions.push(
-      this._assets.allResults.subscribe((results: any) => {
+      this._assets.allResults.subscribe((results: ImageGroup) => {
+
         if (results.igId) {
           // Set ig properties from results
-          this.ig.igName = results.igName;
+          this.ig.igId = results.igId;
           this.ig.count = results.count;
           this.ig.igName = results.igName;
 
@@ -65,6 +65,15 @@ export class ImageGroupPage implements OnInit, OnDestroy {
           this._igService.getGroupDescription(results.igId).take(1)
             .subscribe((desc: ImageGroupDescription) => { 
               this.ig.description = desc;
+            });
+
+          // get the user's download count
+          this._igService.getDownloadCount(this.ig.igId)
+            .take(1)
+            .subscribe((res: IgDownloadInfo) => {
+              this.ig.igDownloadInfo = res;
+            }, (err) => {
+              console.error(err);
             });
         }
       })

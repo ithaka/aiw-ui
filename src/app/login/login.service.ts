@@ -83,4 +83,16 @@ export class LoginService {
             .toPromise()
             .then(this._auth.extractData);
     }
+
+  /** 
+   * This is the same call we use in canActivate to determine if the user is IP Auth'd
+   * @returns json which should have 
+   */
+  public getIpAuth(): Observable<any> {
+    let options = new RequestOptions({ withCredentials: true });
+    return this.http.get(this._auth.getUrl() + "/userinfo", options)
+        .map((res) => {
+            return res.json() || {};
+        });
+  }
 }

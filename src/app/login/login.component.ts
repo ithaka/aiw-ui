@@ -35,6 +35,7 @@ export class Login {
   public successMsgPwdRst = '';
   public loginInstitutions = [];
   public loginInst;
+  public showRegister: boolean = false;
   
   private loginLoading = false;
   
@@ -50,6 +51,18 @@ export class Login {
   }
 
   ngOnInit() {
+    // this handles showing the register link for only ip auth'd users
+    this._login.getIpAuth()
+      .take(1)
+      .subscribe((res) => {
+        console.log(res)
+        if (res.status === true) {
+          this.showRegister = true;
+        }
+      }, (err) => {
+        console.error(err);
+      });
+
     this._login.getInstitutions()
       .then((data) => {
         if (data.items) {

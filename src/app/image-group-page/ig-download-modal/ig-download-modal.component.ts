@@ -24,7 +24,9 @@ export class PptModalComponent implements OnInit {
   private zipLoading: boolean = false;
   private downloadLink: string = '';
   private zipDownloadLink: string = '';
-  private downloadTitle: string = 'Image Group'
+  private downloadTitle: string = 'Image Group';
+  private allowedDownloads: number = 0;
+  private imgCount: number = 0;
 
   private header = new Headers({ 'Content-Type': 'application/x-www-form-urlencoded' }); 
   private defaultOptions = new RequestOptions({ withCredentials: true});
@@ -48,7 +50,7 @@ export class PptModalComponent implements OnInit {
             this.downloadLink = '//' + this._auth.getSubdomain() + '.artstor.org' + data.path.replace('/nas/','/thumb/');
           }
         },
-        (error) => { console.log(error); this.isLoading = false; }
+        (error) => { console.error(error); this.isLoading = false; }
       );
     
     // Setup Zip download
@@ -63,9 +65,8 @@ export class PptModalComponent implements OnInit {
             this.zipDownloadLink = '//' + this._auth.getSubdomain() + '.artstor.org' + data.path.replace('/nas/','/thumb/');
           }
         },
-        (error) => { console.log(error); this.zipLoading = false; }
+        (error) => { console.error(error); this.zipLoading = false; }
       );
-    
   }
 
   /** Gets the link at which the resource can be downloaded. Will be set to the "accept" button's download property */
@@ -78,18 +79,11 @@ export class PptModalComponent implements OnInit {
       zip = false;
     }
 
-    group.thumbnails.forEach((thumb, index, thumbs) => {
-        imgStr += [(index + 1), thumb.objectId, "1024x1024"].join(":");
-        if (index !== thumbs.length - 1) {
-            imgStr += ",";
-        }
-    });
-
     let data = {
         _method: "createPPT",
         igId: group.igId,
         igName: group.igName,
-        images: imgStr,
+        images: group.igDownloadInfo.images,
         zoom: '',
         zip: zip
     }
