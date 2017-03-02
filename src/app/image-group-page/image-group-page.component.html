@@ -11,7 +11,7 @@
             <h3 id="pageType">Browse Group</h3>
              <h1 id="pageTitle">
                 {{ ig.igName }} 
-                <a *ngIf="ig.igName && ig.igDownloadInfo && user.isLoggedIn" (click)="showPptModal = true">
+                <a *ngIf="ig.igName && ig.igDownloadInfo && ig.igDownloadInfo.pptExportAllowed && user.isLoggedIn" (click)="showPptModal = true">
                     <i id="downloadGroupLink" class="icon icon-download"></i>
                 </a>
                 <a *ngIf="ig.igName && !user.isLoggedIn" (click)="showLoginModal = true">

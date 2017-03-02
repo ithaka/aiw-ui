@@ -50,7 +50,7 @@ export class PptModalComponent implements OnInit {
             this.downloadLink = '//' + this._auth.getSubdomain() + '.artstor.org' + data.path.replace('/nas/','/thumb/');
           }
         },
-        (error) => { console.log(error); this.isLoading = false; }
+        (error) => { console.error(error); this.isLoading = false; }
       );
     
     // Setup Zip download
@@ -65,7 +65,7 @@ export class PptModalComponent implements OnInit {
             this.zipDownloadLink = '//' + this._auth.getSubdomain() + '.artstor.org' + data.path.replace('/nas/','/thumb/');
           }
         },
-        (error) => { console.log(error); this.zipLoading = false; }
+        (error) => { console.error(error); this.zipLoading = false; }
       );
   }
 
