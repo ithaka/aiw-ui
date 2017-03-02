@@ -38,6 +38,8 @@ export class PptModalComponent implements OnInit {
     this.isLoading = true;
     this.zipLoading = true;
 
+    console.log(this.ig.igDownloadInfo);
+
     // Setup PPT Download
     this.getDownloadLink(this.ig)
       .take(1)
