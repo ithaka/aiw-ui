@@ -30,8 +30,8 @@
       "PASS_CONFIRM_ERROR": "Password confirmation does not match",
       "MIN_LENGTH_PROMPT": "Passwords must be 7 characters minimum",
       "CHANGE_SUCCESS": "Password successfully changed",
-      "GENERAL_ERROR": "GENERAL_ERROR",
-      "WRONG_PASS_ERROR": "WRONG_PASS_ERROR"
+      "GENERAL_ERROR": "There was a network error. Please try again some other time.",
+      "WRONG_PASS_ERROR": "The password is not correct for this account"
     }
   }
 }
