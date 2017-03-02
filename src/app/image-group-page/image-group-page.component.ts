@@ -37,7 +37,6 @@ export class ImageGroupPage implements OnInit, OnDestroy {
   ngOnInit() {
     this.user = this._auth.getUser();
 
-
     // Subscribe to ID in params
     this.subscriptions.push(
       this.route.params.subscribe((routeParams) => {
@@ -58,8 +57,19 @@ export class ImageGroupPage implements OnInit, OnDestroy {
         this.ig = results;
         console.log(this.ig);
         if (this.ig && this.ig.igId) {
-          this._igService.getGroupDescription(this.ig.igId).take(1)
-            .subscribe((desc: ImageGroupDescription) => { this.ig.description = desc; console.log(desc);});
+          // get the image group description, if there is one
+          this._igService.getGroupDescription(this.ig.igId)
+            .take(1)
+            .subscribe((desc: ImageGroupDescription) => { this.ig.description = desc; console.log(desc); });
+            
+          // get the user's download count
+          this._igService.getDownloadCount(this.ig.igId)
+            .take(1)
+            .subscribe((res) => {
+              console.log(res);
+            }, (err) => {
+              console.error(err);
+            });
         }
       })
     );

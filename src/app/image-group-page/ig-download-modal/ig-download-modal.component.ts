@@ -38,14 +38,6 @@ export class PptModalComponent implements OnInit {
     this.isLoading = true;
     this.zipLoading = true;
 
-    this.getDownloadCount()
-      .take(1)
-      .subscribe((res) => {
-        console.log(res);
-      }, (err) => {
-        console.error(err);
-      });
-
     // Setup PPT Download
     this.getDownloadLink(this.ig)
       .take(1)
@@ -110,18 +102,6 @@ export class PptModalComponent implements OnInit {
       .map(data => {
         return data.json() || {};
       });
-  }
-
-  private getDownloadCount(): Observable<any> {
-    let header = new Headers({ 'content-type': 'application/x-www-form-urlencoded' }); 
-    let options = new RequestOptions({ headers: header, withCredentials: true});
-    let data = this._auth.formEncode({
-      _method: "isExportToPPTAllowed",
-      igId: "601202"
-    });
-
-    return this.http.post(this._auth.getUrl() + "/downloadpptimages", data, options)
-      .map((res) => { return res.json() || {} });
   }
 
 }
