@@ -23,8 +23,10 @@
 
                     <a id="linkLoginResetModal" tabindex="4" class="link" (click)="showPwdResetModal()">Forgot password?</a>
                     <br/>
-                    <a [routerLink]="['/register']" tabindex="5" class="link">Not Registered?</a>
-                    <br/>
+                    <div *ngIf="showRegister">
+                        <a [routerLink]="['/register']" tabindex="5" class="link">Not Registered?</a>
+                        <br/>
+                    </div>
                     <a tabindex="6" class="link">! Login Help</a>
                 </div>
                 <div class="block-right">

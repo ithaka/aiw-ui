@@ -24,7 +24,9 @@ export class PptModalComponent implements OnInit {
   private zipLoading: boolean = false;
   private downloadLink: string = '';
   private zipDownloadLink: string = '';
-  private downloadTitle: string = 'Image Group'
+  private downloadTitle: string = 'Image Group';
+  private allowedDownloads: number = 0;
+  private imgCount: number = 0;
 
   private header = new Headers({ 'Content-Type': 'application/x-www-form-urlencoded' }); 
   private defaultOptions = new RequestOptions({ withCredentials: true});
@@ -35,6 +37,14 @@ export class PptModalComponent implements OnInit {
   ngOnInit() {
     this.isLoading = true;
     this.zipLoading = true;
+
+    this.getDownloadCount()
+      .take(1)
+      .subscribe((res) => {
+        console.log(res);
+      }, (err) => {
+        console.error(err);
+      });
 
     // Setup PPT Download
     this.getDownloadLink(this.ig)
@@ -65,7 +75,6 @@ export class PptModalComponent implements OnInit {
         },
         (error) => { console.log(error); this.zipLoading = false; }
       );
-    
   }
 
   /** Gets the link at which the resource can be downloaded. Will be set to the "accept" button's download property */
@@ -101,6 +110,18 @@ export class PptModalComponent implements OnInit {
       .map(data => {
         return data.json() || {};
       });
+  }
+
+  private getDownloadCount(): Observable<any> {
+    let header = new Headers({ 'content-type': 'application/x-www-form-urlencoded' }); 
+    let options = new RequestOptions({ headers: header, withCredentials: true});
+    let data = this._auth.formEncode({
+      _method: "isExportToPPTAllowed",
+      igId: "601202"
+    });
+
+    return this.http.post(this._auth.getUrl() + "/downloadpptimages", data, options)
+      .map((res) => { return res.json() || {} });
   }
 
 }
