@@ -70,7 +70,7 @@ export class LoginService {
         let url = 'http://' + this._auth.getSubdomain() + '.artstor.org/library/institutions/?_method=shibbolethOnly';
         
         return this.http
-            .get(url)
+            .get(url, options)
             .toPromise()
             .then(this._auth.extractData);
     }
