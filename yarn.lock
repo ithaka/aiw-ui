@@ -200,9 +200,9 @@ angular2-locker@^0.5.0:
   version "0.5.0"
   resolved "https://registry.yarnpkg.com/angular2-locker/-/angular2-locker-0.5.0.tgz#5f60837d310d20c39ffa997d54ef7654367f2c62"
 
-angular2-medium-editor@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/angular2-medium-editor/-/angular2-medium-editor-1.0.0.tgz#b3026f8b5b193ba81b74871b1183f09806a0cd21"
+angular2-medium-editor@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/angular2-medium-editor/-/angular2-medium-editor-1.0.1.tgz#3d3c0a3c0478a5f758753abd8babb7fc9ae296bf"
 
 angular2-moment@^1.2.0:
   version "1.2.0"
