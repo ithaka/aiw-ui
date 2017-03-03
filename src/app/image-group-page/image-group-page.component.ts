@@ -25,7 +25,7 @@ export class ImageGroupPage implements OnInit, OnDestroy {
   /** controls when PPT agreement modal is or is not shown */
   private showPptModal: boolean = false;
   /** controls the modal that tells a user he/she has met the download limit */
-  private showDownloadLimitModal: boolean = true;
+  private showDownloadLimitModal: boolean = false;
 
   constructor(
     private _igService: ImageGroupService,
@@ -84,5 +84,26 @@ export class ImageGroupPage implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.subscriptions.forEach((sub) => { sub.unsubscribe(); });
+  }
+
+  /**
+   * Decides which download modal should be shown
+   * - If the user is not logged in -> login required modal
+   * - If the user is logged in but has met download limit -> download limit modal
+   * - If the user is logged in and is allowed to download the image group -> download modal
+   */
+  private showDownloadModal() {
+    // the template will not show the button if there is not an ig.igName and ig.igDownloadInfo
+    // if the user is logged in and the download info is available
+    if (this.user.isLoggedIn) {
+      if (this.ig.igDownloadInfo.pptExportAllowed) {
+        this.showPptModal = true;
+      } else {
+        this.showDownloadLimitModal = true;
+      }
+    } else if (!this.user.isLoggedIn) {
+      // show login required modal if they're not logged in
+      this.showLoginModal = true;
+    }
   }
 }
