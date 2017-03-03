@@ -14,7 +14,7 @@
                 <!--<a *ngIf="ig.igName && ig.igDownloadInfo && ig.igDownloadInfo.pptExportAllowed && user.isLoggedIn" (click)="showPptModal = true">
                     <i id="downloadGroupLink" class="icon icon-download"></i>
                 </a>-->
-                <a *ngIf="ig.igName" (click)="showDownloadModal()">
+                <a *ngIf="ig.igName && downloadInfoReturned" (click)="showDownloadModal()">
                     <i id="downloadGroupLink" class="icon icon-download"></i>
                 </a>
                 <!--<a *ngIf="ig.igName && !user.isLoggedIn" (click)="showLoginModal = true">

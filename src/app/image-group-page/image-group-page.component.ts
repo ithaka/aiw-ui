@@ -18,7 +18,6 @@ import { ImageGroup, ImageGroupDescription, IgDownloadInfo } from './../shared';
 export class ImageGroupPage implements OnInit, OnDestroy {
   private ig: ImageGroup = <ImageGroup>{};
   private user: any;
-  private showLoginModal: boolean = false;
 
   private subscriptions: Subscription[] = [];
 
@@ -26,6 +25,10 @@ export class ImageGroupPage implements OnInit, OnDestroy {
   private showPptModal: boolean = false;
   /** controls the modal that tells a user he/she has met the download limit */
   private showDownloadLimitModal: boolean = false;
+  /** controls the modal to tell the user to login */
+  private showLoginModal: boolean = false;
+  /** set to true when the call to download info has returned. We won't know what modal to show before that */
+  private downloadInfoReturned: boolean = false;
 
   constructor(
     private _igService: ImageGroupService,
@@ -73,6 +76,7 @@ export class ImageGroupPage implements OnInit, OnDestroy {
           this._igService.getDownloadCount(this.ig.igId)
             .take(1)
             .subscribe((res: IgDownloadInfo) => {
+              this.downloadInfoReturned = true;
               this.ig.igDownloadInfo = res;
             }, (err) => {
               console.error(err);
