@@ -33,5 +33,12 @@
       "GENERAL_ERROR": "There was a network error. Please try again some other time.",
       "WRONG_PASS_ERROR": "The password is not correct for this account"
     }
+  },
+  "IMAGE_GROUP_PAGE": {
+    "DOWNLOAD_LIMIT_MODAL": {
+      "TITLE": "Download Limit Reached",
+      "CLOSE_BUTTON": "Ok",
+      "MAIN_BODY": "You have met your download limit."
+    }
   }
 }

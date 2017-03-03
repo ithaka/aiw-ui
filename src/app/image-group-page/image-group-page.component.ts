@@ -24,6 +24,8 @@ export class ImageGroupPage implements OnInit, OnDestroy {
 
   /** controls when PPT agreement modal is or is not shown */
   private showPptModal: boolean = false;
+  /** controls the modal that tells a user he/she has met the download limit */
+  private showDownloadLimitModal: boolean = true;
 
   constructor(
     private _igService: ImageGroupService,
