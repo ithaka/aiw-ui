@@ -373,6 +373,7 @@ export class AssetService {
     }
 
     /**
+     * DEPRECATED
      * Generates Image URL
      * @param assetId: string Asset or object ID
      */

@@ -25,20 +25,37 @@
         <li class="btn btn-link" (click)="toggleEditMode()" [ngClass]="{'active': editMode}">Edit Mode</li>
         <!--<span class="page-size">{{ pagination.pageSize }}</span>-->
     </div>
-    <div class="col-sm-6 pag-controls">
-        <div class="pag-wrap">
-            <button class="pag pag-first" (click)="goToPage(1)" [disabled]="!pagination.currentPage || pagination.currentPage <= 1"></button>
-            <button class="pag pag-prev" (click)="goToPage(pagination.currentPage - 1)" [disabled]="!pagination.currentPage || pagination.currentPage <= 1"></button>
-        </div>
-        <!--<span class="pag-info">Page</span>-->
-        <div class="pag__index">
-            <input type="number" min="1" (keypress)="pageNumberKeyPress($event)" [(ngModel)]="pagination.currentPage" (keyup.enter)="goToPage(pagination.currentPage)" />
-            <span class="pag-info">of {{ pagination.totalPages }}</span>
-        </div>
-        <div class="pag-wrap">
-            <button class="pag pag-next" (click)="goToPage(pagination.currentPage + 1)" [disabled]="!pagination.currentPage || pagination.currentPage >= pagination.totalPages"></button>
-            <button class="pag pag-last" (click)="goToPage(pagination.totalPages)" [disabled]="!pagination.currentPage || pagination.currentPage >= pagination.totalPages"></button>
-        </div>
+    <div class="col-sm-6 text-right">
+        <ul class="pagination" style="float:right;">
+            <li class="page-item">
+                <button class="page-link" (click)="goToPage(1)" [disabled]="!pagination.currentPage || pagination.currentPage <= 1" title="First" aria-label="First">
+                    <span aria-hidden="true">|&#10094;</span>
+                    <span class="sr-only">First</span>
+                </button>
+            </li>
+            <li class="page-item">
+                <button class="page-link" (click)="goToPage(pagination.currentPage - 1)" [disabled]="!pagination.currentPage || pagination.currentPage <= 1" title="Previous" aria-label="Previous">
+                    <span aria-hidden="true">&#10094;</span>
+                    <span class="sr-only">Previous</span>
+                </button>
+            </li>
+            <li class="page-item">
+                <input class="page-input" type="number" min="1" (keypress)="pageNumberKeyPress($event)" [(ngModel)]="pagination.currentPage" (keyup.enter)="goToPage(pagination.currentPage)" />
+                <span class="page-info">of {{ pagination.totalPages }}</span>
+            </li>
+            <li class="page-item">
+                <button class="page-link" (click)="goToPage(pagination.currentPage + 1)" [disabled]="!pagination.currentPage || pagination.currentPage >= pagination.totalPages" title="Next" aria-label="Next">
+                    <span aria-hidden="true">&#10095;</span>
+                    <span class="sr-only">Next</span>
+                </button>
+            </li>
+            <li class="page-item">
+                <button class="page-link" (click)="goToPage(pagination.totalPages)" [disabled]="!pagination.currentPage || pagination.currentPage >= pagination.totalPages" title="Last" aria-label="Last">
+                    <span aria-hidden="true">&#10095;|</span>
+                    <span class="sr-only">Last</span>
+                </button>
+            </li>
+        </ul>
     </div>
 </div>
 

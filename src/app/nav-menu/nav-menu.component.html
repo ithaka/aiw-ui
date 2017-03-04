@@ -24,21 +24,24 @@
                     <li class="nav-item" ngbDropdown>
                         <button class="btn btn-link" id="organizeMenu" ngbDropdownToggle>Organize</button>
                         <div class="dropdown-menu" aria-labelledby="organizeMenu">
-                            <button class="dropdown-item">!Manage Folders and Groups</button>
-                            <div class="dropdown-divider"></div>
+                            <!--Amber <button class="dropdown-item">!Manage Folders and Groups</button>
+                            <div class="dropdown-divider"></div>-->
                             <!--Active on Image Group Page-->
                             <!--Future slide sorter function <button class="dropdown-item">!View All</button>-->
                             <button (click)="selectAllInAssetGrid()" class="dropdown-item">Select All</button>
                             <button [class.disabled]="selectedAssets.length < 1" (click)="copyIG = false; showImageGroupModal = true;" class="dropdown-item">Save Selections to > New Image Group</button>
+                            <button [class.disabled]="selectedAssets.length < 1" class="dropdown-item">!Save Selections to > Existing Image Group</button>
                             <button [class.disabled]="selectedAssets.length < 1" class="dropdown-item">!Delete Selections from Image Group</button>
                             <button [class.disabled]="selectedAssets.length < 1" (click)="_assets.setSelectedAssets([])" class="dropdown-item">Deselect All</button>
+                            <div class="dropdown-divider"></div>
                             <!--Active on Image Group Page-->
                             <button class="dropdown-item">!Save Image Group</button>
                             <!--Active on Image Group Page-->
-                            <button  [disabled]="!actionOptions.group" (click)="copyIG = true; showImageGroupModal = true;" class="dropdown-item">Save Image Group as...</button>
-                            <div class="dropdown-divider"></div>
-                            <button class="dropdown-item">!Manage Personal Collection</button>
-                            <button class="dropdown-item">!Upload to Personal Collection</button>
+                            <button [disabled]="!actionOptions.group" (click)="copyIG = true; showImageGroupModal = true;" class="dropdown-item">Save Image Group as...</button>
+                            <button [disabled]="!actionOptions.group" class="dropdown-item">!Delete Image Group</button>
+                            <!--Amber <div class="dropdown-divider"></div>-->
+                            <!--Amber <button class="dropdown-item">!Manage Personal Collection</button>-->
+                            <!--Amber <button class="dropdown-item">!Upload to Personal Collection</button>-->
                         </div>
                     </li>
                     <li class="nav-item" ngbDropdown>
@@ -53,21 +56,20 @@
                             <button class="dropdown-item">!Export Image Group to PowerPoint</button>
                             <!--Active on Image Group Page-->
                             <button class="dropdown-item">!Download Image Group</button>
-                            <div class="dropdown-divider"></div>
+                            <!--Amber<div class="dropdown-divider"></div>-->
                             <!--Active on Image Group Page-->
-                            <button class="dropdown-item">!Copy Citations for Image Group</button>
-                            <button class="dropdown-item">!Copy Citations for Selection</button>
-                            <div class="dropdown-divider"></div>
-                            <button class="dropdown-item">!Download Offline Presentation Tool (OIV)</button>
+                            <!--Amber <button class="dropdown-item">!Copy Citations for Image Group</button>-->
+                            <!--Amber <button class="dropdown-item">!Copy Citations for Selection</button>-->
                         </div>
                     </li>
+                    <!--Amber
                     <li class="nav-item" ngbDropdown>
                         <button class="btn btn-link" id="viewMenu" ngbDropdownToggle>View</button>
                         <div class="dropdown-menu" aria-labelledby="viewMenu">
                             <button class="dropdown-item">!Small Thumbnails</button>
                             <button class="dropdown-item">!Large Thumbnails</button>
                         </div>
-                    </li>
+                    </li>-->
                     <li class="nav-item" >
                         <a class="btn btn-link" id="viewMenu" href="//support.artstor.org" target="_blank">Support</a>
                     </li>
