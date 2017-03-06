@@ -49,7 +49,7 @@ import { Login } from './login';
 import { About } from './about';
 import { NoContent } from './no-content';
 import { RegisterComponent } from './register/register.component';
-import { LoginReqModal, SearchModal, NewIgModal, ShareLinkModal, DownloadLimitModal } from './modals';
+import { LoginReqModal, SearchModal, NewIgModal, ShareLinkModal, DownloadLimitModal, AddToGroupModal } from './modals';
 
 // Application wide providers
 import { AuthService, AssetService, TypeIdPipe, ToolboxService, LoggingService } from './shared';
@@ -118,6 +118,7 @@ type StoreType = {
     Home,
     NoContent,
     TypeIdPipe,
+    AddToGroupModal,
     MediumEditorDirective,
     RegisterComponent
   ],
