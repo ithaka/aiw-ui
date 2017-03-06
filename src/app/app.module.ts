@@ -52,7 +52,7 @@ import { RegisterComponent } from './register/register.component';
 import { LoginReqModal, SearchModal, NewIgModal, ShareLinkModal, DownloadLimitModal } from './modals';
 
 // Application wide providers
-import { AuthService, AssetService, TypeIdPipe, ToolboxService, LoggingService } from './shared';
+import { AuthService, AssetService, GroupService, TypeIdPipe, ToolboxService, LoggingService } from './shared';
 import { AssetFiltersService } from './asset-filters/asset-filters.service';
 import { TagsService } from './browse-page/tags.service';
 import { CustomReuseStrategy } from './reuse-strategy';
@@ -61,6 +61,7 @@ const APP_PROVIDERS = [
   ...APP_RESOLVER_PROVIDERS,
   AppState,
   AssetService,
+  GroupService,
   AuthService,
   AssetFiltersService,
   TagsService,

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { Subscription }   from 'rxjs/Subscription';
 
-import { AssetService } from './../shared/assets.service';
+import { AssetService, GroupService } from './../shared';
 import { Tag } from './tag/tag.class';
 // import { AuthService } from './../shared/auth.service';
 
@@ -15,7 +15,8 @@ export class BrowseGroupsComponent implements OnInit {
   constructor(
     private router: Router,
     private route: ActivatedRoute,
-    private _assets: AssetService
+    private _assets: AssetService,
+    private _groups: GroupService
   ) { }
 
   private subscriptions: Subscription[] = [];
@@ -62,7 +63,7 @@ export class BrowseGroupsComponent implements OnInit {
     let parentTag = null;
 
     for(let group of folderArray) {
-            let groupTag = new Tag(group.widgetId, group.title, true, null, { label: "group", folder: group.isFolder });
+            let groupTag = new Tag(group.id, group.name, true, null, { label: "group", folder: false });
             childArr.push(groupTag);
           }
     return childArr;
@@ -72,35 +73,37 @@ export class BrowseGroupsComponent implements OnInit {
    * Loads Image Groups data for the current user in the array
    */
   private loadIGs(): void{
-    this._assets.getIgs()
-        .then(
+    this._groups.getAll()
+        .take(1).subscribe(
           (data)  => {
             console.log(data);
             
-            var obj = {};
-            if(data.PrivateFolders.length > 0){
-              // Create Menu Link
-              obj = {
-                id: 1,
-                label: 'Private Folders'
-              };
-              this.browseMenuArray.push(obj);
+            this.foldersObj['3'] = this.createGroupTags(data.groups);
 
-              // Process Tags
-              this.foldersObj['1'] = this.createGroupTags(data.PrivateFolders);
-            }
-            if(data.PublicFolders.length > 0){
+            var obj = {};
+            // if(data.PrivateFolders.length > 0){
+            //   // Create Menu Link
+            //   obj = {
+            //     id: 1,
+            //     label: 'Private Folders'
+            //   };
+            //   this.browseMenuArray.push(obj);
+
+            //   // Process Tags
+            //   this.foldersObj['1'] = this.createGroupTags(data.PrivateFolders);
+            // }
+            // if(data.PublicFolders.length > 0){
               // Create Menu Link
-              obj = {
-                id: 2,
-                label: 'Institutional Folders'
-              };
-              this.browseMenuArray.push(obj);
+              // obj = {
+              //   id: 2,
+              //   label: 'Institutional Folders'
+              // };
+              // this.browseMenuArray.push(obj);
               
               // Process Tags
-              this.foldersObj['2'] = this.createGroupTags(data.PublicFolders);
-            }
-            if(data.CrossInstFolders.length > 0){
+              // this.foldersObj['2'] = this.createGroupTags(data.PublicFolders);
+            // }
+            // if(data.CrossInstFolders.length > 0){
               // Create Menu Link
               obj = {
                 id: 3,
@@ -108,33 +111,30 @@ export class BrowseGroupsComponent implements OnInit {
               };
               this.browseMenuArray.push(obj);
 
-              // Process Tags
-              this.foldersObj['3'] = this.createGroupTags(data.CrossInstFolders);
-            }
-            if(data.MyCourseFolders.length > 0){
-              // Create Menu Link
-              obj = {
-                id: 4,
-                label: 'My Course Folders'
-              };
-              this.browseMenuArray.push(obj);
+            //   // Process Tags
+            //   this.foldersObj['3'] = this.createGroupTags(data.CrossInstFolders);
+            // }
+            // if(data.MyCourseFolders.length > 0){
+            //   // Create Menu Link
+            //   obj = {
+            //     id: 4,
+            //     label: 'My Course Folders'
+            //   };
+            //   this.browseMenuArray.push(obj);
 
-              // Process Tags
-              this.foldersObj['4'] = this.createGroupTags(data.MyCourseFolders);
-            }
+            //   // Process Tags
+            //   this.foldersObj['4'] = this.createGroupTags(data.MyCourseFolders);
+            // }
 
-            this.selectedBrowseId = '3';
-            this.loadCategory();
+            // this.selectedBrowseId = '3';
+            // this.loadCategory();
 
           },
           (error) => {
             console.log(error);
             return false;
           }
-        ).catch(function(err) {
-          console.log(err);
-          return false;
-        });
+        );
   }
 
   loadCategory(){
