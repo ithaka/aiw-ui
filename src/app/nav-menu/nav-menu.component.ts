@@ -30,6 +30,7 @@ export class NavMenu {
   private subscriptions: Subscription[] = [];
   
   private showImageGroupModal: boolean = false;
+  private showAddToGroupModal: boolean = false;
 
   private copyIG: boolean = false;
   

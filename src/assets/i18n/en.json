@@ -40,5 +40,9 @@
       "CLOSE_BUTTON": "Ok",
       "MAIN_BODY": "You have met your download limit."
     }
+  },
+  "ADD_TO_GROUP_MODAL": {
+    "TITLE": "Add to Image Group",
+    "SELECT_PROMPT": "Select an image group"
   }
 }
