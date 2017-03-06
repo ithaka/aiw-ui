@@ -396,7 +396,7 @@ Note that `tabindex='0'` is effectively the default value, and adding a `tabinde
 #### Focus and state styles
 Elements should not rely solely on color to indicate they are focused or have changed state, leaving a color blind user clueless. Providing an additional indicator also makes interactions more obvious to other users. 
 
-*Bonus* If you want to remove the outline of a `:focus` style, replace it with something equally clear to the user! `:focus` is how a user navigate when they use keyboard navigation.
+*Bonus* If you want to remove the outline of a `:focus` style, replace it with something equally clear to the user! `:focus` is how a user can see where they are when they use keyboard navigation.
 
 #### Heading tags are for... Headings?
 And not for styles! `H1`, `H2`, `H3`... are interpretted by screenreaders as indicating sections within a document. Now it's okay to style those tags, but in this project we use `.h1`, `.h2`, `.h3`... when we want the style but element is not a true heading or subheading.
