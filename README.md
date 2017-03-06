@@ -19,6 +19,7 @@ You won't regret it.
 * [Configuration](#configuration)
 * [Styles](#styles)
 * [TypeScript](#typescript)
+* [Accessibility](#accessibility)
 * [@Types](#types)
 * [Frequently asked questions](#frequently-asked-questions)
 
@@ -351,6 +352,7 @@ TypeScript-aware editors:
 ---
 
 # Accessibility
+
 Improving accessibilty makes our site accessible to those who are disabled and to those who are temporarily unable to see well, hear well, or use both of their hands. These are some simple things we can do to make a big difference.
 
 
