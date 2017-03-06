@@ -10,13 +10,16 @@
         <div class="col-12 pb-4">
             <h3 id="pageType">Browse Group</h3>
              <h1 id="pageTitle">
-                {{ ig.igName }} 
-                <a *ngIf="ig.igName && ig.igDownloadInfo && ig.igDownloadInfo.pptExportAllowed && user.isLoggedIn" (click)="showPptModal = true">
+                {{ ig.igName }}
+                <!--<a *ngIf="ig.igName && ig.igDownloadInfo && ig.igDownloadInfo.pptExportAllowed && user.isLoggedIn" (click)="showPptModal = true">
+                    <i id="downloadGroupLink" class="icon icon-download"></i>
+                </a>-->
+                <a *ngIf="ig.igName && downloadInfoReturned" (click)="showDownloadModal()">
                     <i id="downloadGroupLink" class="icon icon-download"></i>
                 </a>
-                <a *ngIf="ig.igName && !user.isLoggedIn" (click)="showLoginModal = true">
+                <!--<a *ngIf="ig.igName && !user.isLoggedIn" (click)="showLoginModal = true">
                     <i id="downloadGroupLink" class="icon icon-download"></i>
-                </a>
+                </a>-->
             </h1>
         </div>
         <div [ngClass]="[ ig.description ? 'col-md-9' : 'col-md-12'  ]">
@@ -29,4 +32,5 @@
     </div>
 </div>
 <ang-ig-download-modal *ngIf="showPptModal" (closeModal)="showPptModal = false" [ig]="ig"></ang-ig-download-modal>
+<ang-download-limit-modal *ngIf="showDownloadLimitModal" (closeModal)="showDownloadLimitModal = false" [ig]="ig"></ang-download-limit-modal>
 <ang-login-req-modal *ngIf="showLoginModal" (closeModal)="showLoginModal = false"></ang-login-req-modal>

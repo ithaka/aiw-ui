@@ -55,7 +55,6 @@ export class Login {
     this._login.getIpAuth()
       .take(1)
       .subscribe((res) => {
-        console.log(res)
         if (res.status === true) {
           this.showRegister = true;
         }
@@ -97,10 +96,8 @@ export class Login {
   }
 
   getLoginError(user) {
-    console.log("LOGIN ERROR!");
     this._login.getLoginError(user)
       .then((data) => {
-        console.log(data);
         if(data.message === 'loginExpired'){
           this.expirePwd = true;
           this.showPwdModal = true;
@@ -173,6 +170,11 @@ export class Login {
   }
 
   goToInstLogin() {
+    if (!this.loginInst) {
+      this.instErrorMsg = "Please select an institution";
+      return;
+    }
+
     let url = this.loginInst.entityID ? this.loginInst.entityID : '';
     let type = this.loginInst.type ? this.loginInst.type : '';
     let origin = window.location.origin + '/#/home';

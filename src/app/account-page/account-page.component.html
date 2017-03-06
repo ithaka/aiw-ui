@@ -41,15 +41,18 @@
                   ACCOUNT.CHANGE_PASS.PASS_CONFIRM_ERROR
                 </div>
               </div>
-              <div class="form-group">
+              <div class="form-group" [class.has-danger]="serviceResponses.generalError || serviceResponses.wrongPass" [class.has-success]="serviceResponses.success">
                   <button id="btnSubmitChangePassword" class="btn btn-primary" [class.loading]="changePassLoading" type="submit" name="action">
                     Update
                   </button>
-                <div translate *ngIf="changePassSuccess" class="form-control-feedback">
+                <div translate *ngIf="serviceResponses.success" class="form-control-feedback">
                   ACCOUNT.CHANGE_PASS.CHANGE_SUCCESS
                 </div>
-                <div translate *ngIf="changePassFailure" class="form-control-feedback">
-                  ACCOUNT.CHANGE_PASS.CHANGE_FAILURE
+                <div translate *ngIf="serviceResponses.generalError" class="form-control-feedback">
+                  ACCOUNT.CHANGE_PASS.GENERAL_ERROR
+                </div>
+                <div translate *ngIf="serviceResponses.wrongPass" class="form-control-feedback">
+                  ACCOUNT.CHANGE_PASS.WRONG_PASS_ERROR
                 </div>
               </div>
             </form>

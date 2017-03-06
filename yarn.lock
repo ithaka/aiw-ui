@@ -200,9 +200,9 @@ angular2-locker@^0.5.0:
   version "0.5.0"
   resolved "https://registry.yarnpkg.com/angular2-locker/-/angular2-locker-0.5.0.tgz#5f60837d310d20c39ffa997d54ef7654367f2c62"
 
-angular2-medium-editor@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/angular2-medium-editor/-/angular2-medium-editor-1.0.0.tgz#b3026f8b5b193ba81b74871b1183f09806a0cd21"
+angular2-medium-editor@^1.0.4:
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/angular2-medium-editor/-/angular2-medium-editor-1.0.4.tgz#128e9e424932ceb12d46216134a0f63b838e3e9f"
 
 angular2-moment@^1.2.0:
   version "1.2.0"
@@ -3360,9 +3360,9 @@ media-typer@0.3.0:
   version "0.3.0"
   resolved "https://registry.yarnpkg.com/media-typer/-/media-typer-0.3.0.tgz#8710d7af0aa626f8fffa1ce00168545263255748"
 
-medium-editor@^5.22.2:
-  version "5.22.2"
-  resolved "https://registry.yarnpkg.com/medium-editor/-/medium-editor-5.22.2.tgz#31f274d0b0a259bc358818bb1373b40d3130ace3"
+medium-editor@^5.23.0:
+  version "5.23.0"
+  resolved "https://registry.yarnpkg.com/medium-editor/-/medium-editor-5.23.0.tgz#7d16c15cdf152b95ced2a583bf07203e8539a3c6"
 
 memory-fs@^0.3.0, memory-fs@~0.3.0:
   version "0.3.0"
