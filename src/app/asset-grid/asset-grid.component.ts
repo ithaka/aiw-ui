@@ -145,11 +145,8 @@ export class AssetGrid implements OnInit, OnDestroy {
           }
           if(allResults.hasOwnProperty('count')){
             this.totalAssets = allResults.count;
-            this.isLoading = false;
-          }
-          else if(this.assetCount){
+          } else if(this.assetCount){
             this.totalAssets = this.assetCount.toString();
-            this.isLoading = false;
           }
         },
         (error) => {
