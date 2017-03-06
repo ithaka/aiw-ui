@@ -10,11 +10,11 @@
         <div class="col-12 pb-4">
             <h3 id="pageType">Browse Group</h3>
              <h1 id="pageTitle">
-                {{ ig.igName }}
+                {{ ig.name }}
                 <!--<a *ngIf="ig.igName && ig.igDownloadInfo && ig.igDownloadInfo.pptExportAllowed && user.isLoggedIn" (click)="showPptModal = true">
                     <i id="downloadGroupLink" class="icon icon-download"></i>
                 </a>-->
-                <a *ngIf="ig.igName && downloadInfoReturned" (click)="showDownloadModal()">
+                <a *ngIf="ig.name && downloadInfoReturned" (click)="showDownloadModal()">
                     <i id="downloadGroupLink" class="icon icon-download"></i>
                 </a>
                 <!--<a *ngIf="ig.igName && !user.isLoggedIn" (click)="showLoginModal = true">

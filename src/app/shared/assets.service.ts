@@ -11,6 +11,7 @@ import { Subscription }   from 'rxjs/Subscription';
  
 // Project Dependencies
 import { AuthService } from './auth.service';
+import { GroupService } from './group.service';
 import { AssetFiltersService } from './../asset-filters/asset-filters.service';
 import { ToolboxService } from './toolbox.service';
 
@@ -107,6 +108,7 @@ export class AssetService {
         private http: Http,
         locker: Locker,
         private _auth: AuthService,
+        private _groups: GroupService,
         private _toolbox: ToolboxService
     ) {
         this._storage = locker.useDriver(Locker.DRIVERS.LOCAL);
@@ -483,15 +485,12 @@ export class AssetService {
      * @param igId Image group id for which to retrieve thumbnails
      */
     private loadIgAssets(igId: string) {
-
-        let header = new Headers({ 'Content-Type': 'application/json' }); // ... Set content type to JSON
-        let options = new RequestOptions({ headers: header, withCredentials: true }); // Create a request option
+        // Create a request option
         let startIndex = ((this.urlParams.currentPage - 1) * this.urlParams.pageSize) + 1;
 
         let requestString: string = [this._auth.getUrl(), "imagegroup",igId, "thumbnails", startIndex, this.urlParams.pageSize, this.activeSort.index].join("/");
 
-        this.http
-            .get(requestString, options)
+        this._groups.get(igId)
             .toPromise()
             .then((data) => { return this.extractData(data); })
             .then((data) => {
