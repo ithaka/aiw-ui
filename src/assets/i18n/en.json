@@ -42,7 +42,7 @@
     }
   },
   "ADD_TO_GROUP_MODAL": {
-    "TITLE": "Add to Image Group",
+    "TITLE": "Add Images to Group",
     "SELECT_PROMPT": "Select an image group"
   }
 }

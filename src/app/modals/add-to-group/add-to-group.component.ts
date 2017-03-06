@@ -12,6 +12,7 @@ export class AddToGroupModal implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = [];
 
   private selectedAssets: any[] = [];
+  private selectedIg: any;
 
   constructor(
     private _assets: AssetService
@@ -25,7 +26,7 @@ export class AddToGroupModal implements OnInit, OnDestroy {
           this.selectedAssets = assets;
         },
         error => {
-          console.log(error);
+          console.error(error);
         }
       )
     );
@@ -33,5 +34,9 @@ export class AddToGroupModal implements OnInit, OnDestroy {
 
   ngOnDestroy() {
       this.subscriptions.forEach((sub) => { sub.unsubscribe(); });
+  }
+
+  private onSubmit(value: any) {
+    console.log(value);
   }
 }
