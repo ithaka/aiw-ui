@@ -1,11 +1,12 @@
 import { Component, OnInit, OnDestroy, Output, EventEmitter } from '@angular/core';
 import { Subscription } from 'rxjs/Rx';
 
-import { AssetService } from './../../shared';
+import { AssetService, GroupService } from './../../shared';
 
 @Component({
   selector: 'ang-add-to-group',
-  templateUrl: 'add-to-group.component.html'
+  templateUrl: 'add-to-group.component.html',
+  providers: [ GroupService ]
 })
 export class AddToGroupModal implements OnInit, OnDestroy {
   @Output() closeModal: EventEmitter<any> = new EventEmitter();
@@ -15,7 +16,8 @@ export class AddToGroupModal implements OnInit, OnDestroy {
   private selectedIg: any;
 
   constructor(
-    private _assets: AssetService
+    private _assets: AssetService,
+    private _group: GroupService
   ) { }
 
   ngOnInit() {
@@ -30,6 +32,10 @@ export class AddToGroupModal implements OnInit, OnDestroy {
         }
       )
     );
+
+    this._group.getAll()
+      .take(1)
+      .subscribe((res) => {console.log(res); }, (err) => { console.log(err); });
   }
 
   ngOnDestroy() {

@@ -23,7 +23,7 @@ export class GroupService {
     public getAll(): Observable<any> {
         return this.http.get(
             this.groupUrl
-        );
+        ).map((res) => { return res.json() || {} });
     }
 
      /**

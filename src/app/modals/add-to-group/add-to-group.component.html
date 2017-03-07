@@ -10,7 +10,7 @@
       <form #igForm="ngForm" (ngSubmit)="onSubmit(igForm)">
         <div class="modal-body">
           <label translate for="selectImageGroup">ADD_TO_GROUP_MODAL.SELECT_PROMPT</label>
-          <select [ngModel]="selectedIg" name="imageGroup" id="selectImageGroup" class="form-control custom-select" tabindex="0">
+          <select required [ngModel]="selectedIg" name="imageGroup" id="selectImageGroup" class="form-control custom-select" tabindex="0">
             <option [ngValue]="mockGroup" [innerHtml]="'Mock Image Group'"></option>
           </select>
         </div>
