@@ -495,10 +495,27 @@ export class AssetService {
             .then((data) => { return this.extractData(data); })
             .then((data) => {
                 if (!data) {
-                throw new Error("No data in image group thumbnails response");
+                    throw new Error("No data in image group thumbnails response");
                 }
+                
+                console.log(data);
+
+                let idsAsTerm: string = data.items.join(' or ').replace(/_/g, ' ');
                 //notify allResults observers
-                this.updateLocalResults(data);
+                // this.updateLocalResults(data);
+                this.search(idsAsTerm, this.activeSort.index)
+                    .subscribe(
+                        (res) => {
+                            console.log(res);
+                            let results = res.json();
+                            data.thumbnails = results.thumbnails;
+                            // Set the allResults object
+                            this.updateLocalResults(data);
+                    }, (error) => {
+                        // Pass error down to allResults listeners
+                        this.allResultsSource.error(error); // .throw(error);
+                    });
+                
             })
             .catch((error) => {
                 console.log(error);
