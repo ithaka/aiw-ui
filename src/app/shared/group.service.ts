@@ -23,6 +23,11 @@ export class GroupService {
     public getAll(): Observable<any> {
         return this.http.get(
             this.groupUrl
+        ).map(
+            res => {
+                let body = res.json();
+                return body || { };
+            }
         );
     }
 

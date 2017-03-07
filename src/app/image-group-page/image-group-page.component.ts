@@ -60,17 +60,14 @@ export class ImageGroupPage implements OnInit, OnDestroy {
     this.subscriptions.push(
       this._assets.allResults.subscribe((results: ImageGroup) => {
 
-        if (results.igId) {
+        if (results.id) {
           // Set ig properties from results
-          this.ig.igId = results.igId;
-          this.ig.count = results.count;
-          this.ig.igName = results.igName;
-
+          this.ig = results;
           // Get IG description, since we can rely on it from 
-          this._igService.getGroupDescription(results.igId).take(1)
-            .subscribe((desc: ImageGroupDescription) => { 
-              this.ig.description = desc;
-            });
+          // this._igService.getGroupDescription(results.igId).take(1)
+          //   .subscribe((desc: ImageGroupDescription) => { 
+          //     this.ig.description = desc;
+          //   });
 
           // get the user's download count
           this._igService.getDownloadCount(this.ig.igId)

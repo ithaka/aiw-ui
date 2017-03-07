@@ -82,7 +82,7 @@ export class PptModalComponent implements OnInit {
     let data = {
         _method: "createPPT",
         igId: group.igId,
-        igName: group.igName,
+        igName: group.name,
         images: group.igDownloadInfo.images,
         zoom: '',
         zip: zip
