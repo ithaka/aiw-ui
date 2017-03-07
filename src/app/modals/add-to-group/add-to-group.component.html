@@ -1,0 +1,24 @@
+<div class="modal fade show">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 translate class="modal-title">ADD_TO_GROUP_MODAL.TITLE</h5>
+        <button (click)="closeModal.emit()" type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form #igForm="ngForm" (ngSubmit)="onSubmit(igForm)">
+        <div class="modal-body">
+          <label translate for="selectImageGroup">ADD_TO_GROUP_MODAL.SELECT_PROMPT</label>
+          <select required [ngModel]="selectedIg" name="imageGroup" id="selectImageGroup" class="form-control custom-select" tabindex="0">
+            <option [ngValue]="mockGroup" [innerHtml]="'Mock Image Group'"></option>
+          </select>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary">Save changes</button>
+          <button (click)="closeModal.emit()" type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

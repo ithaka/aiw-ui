@@ -30,7 +30,7 @@
                             <!--Future slide sorter function <button class="dropdown-item">!View All</button>-->
                             <button (click)="selectAllInAssetGrid()" class="dropdown-item">Select All</button>
                             <button [class.disabled]="selectedAssets.length < 1" (click)="copyIG = false; showImageGroupModal = true;" class="dropdown-item">Save Selections to > New Image Group</button>
-                            <button [class.disabled]="selectedAssets.length < 1" class="dropdown-item">!Save Selections to > Existing Image Group</button>
+                            <button [class.disabled]="selectedAssets.length < 1" (click)="showAddToGroupModal = true;" class="dropdown-item">Save Selections to > Existing Image Group</button>
                             <button [class.disabled]="selectedAssets.length < 1" class="dropdown-item">!Delete Selections from Image Group</button>
                             <button [class.disabled]="selectedAssets.length < 1" (click)="_assets.setSelectedAssets([])" class="dropdown-item">Deselect All</button>
                             <div class="dropdown-divider"></div>
@@ -81,3 +81,4 @@
 
 <ang-new-ig-modal *ngIf="showImageGroupModal" [copyIG]="copyIG" (closeModal)="showImageGroupModal = false"></ang-new-ig-modal>
 <ang-share-link-modal *ngIf="showShareLinkModal" [asset]="selectedAssets[0]" (closeModal)="showShareLinkModal = false"></ang-share-link-modal>
+<ang-add-to-group *ngIf="showAddToGroupModal" (closeModal)="showAddToGroupModal = false"></ang-add-to-group>
