@@ -45,7 +45,7 @@ export class AddToGroupModal implements OnInit, OnDestroy {
 
   private onSubmit(form: NgForm) {
     console.log(this.groups);
-    console.log(form.value);
+    console.log(form.value.imageGroup);
 
     this._group.update(form.value.imageGroup)
       .take(1)
