@@ -16,6 +16,11 @@ export class AddToGroupModal implements OnInit, OnDestroy {
   private groups: ImageGroup[] = [];
   private selectedIg: ImageGroup;
 
+  private serviceResponse: {
+    success?: boolean,
+    failure?: boolean
+  } = {};
+
   constructor(
     private _assets: AssetService,
     private _group: GroupService
@@ -44,6 +49,8 @@ export class AddToGroupModal implements OnInit, OnDestroy {
   }
 
   private onSubmit(form: NgForm) {
+    this.serviceResponse = {}; // clear any service status
+
     console.log(this.groups);
     console.log(form.value.imageGroup);
 

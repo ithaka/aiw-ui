@@ -9,12 +9,16 @@
       </div>
       <form #igForm="ngForm" (ngSubmit)="onSubmit(igForm)">
         <div class="modal-body">
-          <label translate for="selectImageGroup">ADD_TO_GROUP_MODAL.SELECT_PROMPT</label>
-          <select required [ngModel]="selectedIg" name="imageGroup" id="selectImageGroup" class="form-control custom-select" tabindex="0">
-            <option *ngFor="let group of groups" [ngValue]="group" [innerHtml]="group.name"></option>
-          </select>
+          <div class="form-group" [class.has-success]="serviceResponse.success" [class.has-danger]="serviceResponse.failure">
+            <label translate for="selectImageGroup">ADD_TO_GROUP_MODAL.SELECT_PROMPT</label>
+            <select required [ngModel]="selectedIg" name="imageGroup" id="selectImageGroup" class="form-control custom-select" tabindex="0">
+              <option *ngFor="let group of groups" [ngValue]="group" [innerHtml]="group.name"></option>
+            </select>
+            <div *ngIf="serviceResponse.success" translate class="form-control-feedback">ADD_TO_GROUP_MODAL.ADD_SUCCESS</div>
+            <div *ngIf="serviceResponse.failure" translate class="form-control-feedback">ADD_TO_GROUP_MODAL.ADD_FAILURE</div>
+          </div>
         </div>
-        <div class="modal-footer">
+        <div class="modal-footer form-group has-success">
           <button type="submit" class="btn btn-primary">Save changes</button>
           <button (click)="closeModal.emit()" type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
         </div>

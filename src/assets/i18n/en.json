@@ -43,6 +43,8 @@
   },
   "ADD_TO_GROUP_MODAL": {
     "TITLE": "Add Images to Group",
-    "SELECT_PROMPT": "Select an image group"
+    "SELECT_PROMPT": "Select an image group",
+    "ADD_SUCCESS": "Images successfully added to group",
+    "ADD_FAILURE": "Unable to add images to group. Sorry about that."
   }
 }
