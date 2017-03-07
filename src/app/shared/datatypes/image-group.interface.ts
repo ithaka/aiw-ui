@@ -1,9 +1,9 @@
 import { Thumbnail } from './thumbnail.interface';
 
 export interface ImageGroup {
-  id: string;
+  id: string; // new ig property
+  name: string; // new ig property
   igId: string;
-  name: string;
   count: number;
   thumbnails: Thumbnail[];
   items: string[];

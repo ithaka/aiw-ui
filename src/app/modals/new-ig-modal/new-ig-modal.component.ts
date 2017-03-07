@@ -9,10 +9,7 @@ import { AssetService, AuthService, GroupService } from './../../shared';
 
 @Component({
   selector: 'ang-new-ig-modal',
-  templateUrl: 'new-ig-modal.component.html',
-  providers: [
-    GroupService
-  ]
+  templateUrl: 'new-ig-modal.component.html'
 })
 export class NewIgModal implements OnInit {
   @Output() closeModal: EventEmitter<any> = new EventEmitter();
@@ -37,7 +34,7 @@ export class NewIgModal implements OnInit {
       private _fb: FormBuilder, 
       private _group: GroupService,
       private router: Router
-    ) {
+  ) {
     this.newIgForm = _fb.group({
       title: [null, Validators.required],
       artstorPermissions: [this.isArtstorUser ? "private" : null],

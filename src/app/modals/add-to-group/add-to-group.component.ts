@@ -1,19 +1,20 @@
 import { Component, OnInit, OnDestroy, Output, EventEmitter } from '@angular/core';
+import { NgForm } from '@angular/forms';
 import { Subscription } from 'rxjs/Rx';
 
-import { AssetService, GroupService } from './../../shared';
+import { AssetService, GroupService, ImageGroup } from './../../shared';
 
 @Component({
   selector: 'ang-add-to-group',
-  templateUrl: 'add-to-group.component.html',
-  providers: [ GroupService ]
+  templateUrl: 'add-to-group.component.html'
 })
 export class AddToGroupModal implements OnInit, OnDestroy {
   @Output() closeModal: EventEmitter<any> = new EventEmitter();
   private subscriptions: Subscription[] = [];
 
   private selectedAssets: any[] = [];
-  private selectedIg: any;
+  private groups: ImageGroup[] = [];
+  private selectedIg: ImageGroup;
 
   constructor(
     private _assets: AssetService,
@@ -35,14 +36,14 @@ export class AddToGroupModal implements OnInit, OnDestroy {
 
     this._group.getAll()
       .take(1)
-      .subscribe((res) => {console.log(res); }, (err) => { console.log(err); });
+      .subscribe((res) => { if (res.groups) { this.groups = res.groups; } }, (err) => { console.log(err); });
   }
 
   ngOnDestroy() {
       this.subscriptions.forEach((sub) => { sub.unsubscribe(); });
   }
 
-  private onSubmit(value: any) {
-    console.log(value);
+  private onSubmit(form: NgForm) {
+    console.log(form.value);
   }
 }
