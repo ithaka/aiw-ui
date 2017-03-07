@@ -36,7 +36,7 @@ export class AddToGroupModal implements OnInit, OnDestroy {
 
     this._group.getAll()
       .take(1)
-      .subscribe((res) => { if (res.groups) { this.groups = res.groups; } }, (err) => { console.log(err); });
+      .subscribe((res) => { if (res.groups) { this.groups = res.groups; } }, (err) => { console.error(err); });
   }
 
   ngOnDestroy() {
@@ -44,6 +44,11 @@ export class AddToGroupModal implements OnInit, OnDestroy {
   }
 
   private onSubmit(form: NgForm) {
+    console.log(this.groups);
     console.log(form.value);
+
+    this._group.update(form.value.imageGroup)
+      .take(1)
+      .subscribe((res) => { console.log(res); }, (err) => { console.error(err); })
   }
 }

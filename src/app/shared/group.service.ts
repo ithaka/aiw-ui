@@ -3,7 +3,7 @@ import { Http, Response } from '@angular/http';
 import { Observable } from 'rxjs/Rx';
 
 // Project Dependencies
-import { AuthService } from './auth.service';
+import { AuthService, ImageGroup } from '.';
 
 @Injectable()
 export class GroupService {
@@ -67,10 +67,11 @@ export class GroupService {
     /**
      * Update Group
      */
-    public update(group: any): Observable<any> {
-        return this.http.post(
+    public update(group: ImageGroup): Observable<any> {
+        return this.http.put(
             this.groupUrl + '/' + group.id,
             group
-        );
+        )
+        .map((res) => { return res.json() || {}; });
     }
 }
