@@ -92,7 +92,8 @@ export class NewIgModal implements OnInit {
         "entity_identifier": this._auth.getUser().baseProfileId.toString(),
         "access_type": 300
       } ],
-      items: itemIds
+      items: itemIds,
+      tags: formValue.tags
     };
 
     if(this.copyIG){
