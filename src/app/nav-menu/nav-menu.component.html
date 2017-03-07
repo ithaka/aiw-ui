@@ -38,7 +38,7 @@
                             <button class="dropdown-item">!Save Image Group</button>
                             <!--Active on Image Group Page-->
                             <button [disabled]="!actionOptions.group" (click)="copyIG = true; showImageGroupModal = true;" class="dropdown-item">Save Image Group as...</button>
-                            <button [disabled]="!actionOptions.group" class="dropdown-item">!Delete Image Group</button>
+                            <button [disabled]="!actionOptions.group" (click)="deleteIgModal = true" class="dropdown-item">Delete Image Group</button>
                             <!--Amber <div class="dropdown-divider"></div>-->
                             <!--Amber <button class="dropdown-item">!Manage Personal Collection</button>-->
                             <!--Amber <button class="dropdown-item">!Upload to Personal Collection</button>-->
@@ -78,6 +78,6 @@
     </nav>
     <!--</div>-->
 </div>
-
+<ang-delete-ig-modal *ngIf="deleteIgModal" (closeModal)="deleteIgModal = false" [igId]="route.snapshot.params.igId" [igName]="route.snapshot.params.name"></ang-delete-ig-modal>
 <ang-new-ig-modal *ngIf="showImageGroupModal" [copyIG]="copyIG" (closeModal)="showImageGroupModal = false"></ang-new-ig-modal>
 <ang-share-link-modal *ngIf="showShareLinkModal" [asset]="selectedAssets[0]" (closeModal)="showShareLinkModal = false"></ang-share-link-modal>

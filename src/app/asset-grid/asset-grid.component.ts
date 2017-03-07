@@ -329,8 +329,4 @@ export class AssetGrid implements OnInit, OnDestroy {
     fQuery = fQuery.replace(/(#not,)/g, ' not <b>');
     return fQuery;
   }
-
-  private showHelp(): void{
-    window.open('http://support.artstor.org/?article=creating-links','Artstor Support','width=600,height=500');
-  }
 }

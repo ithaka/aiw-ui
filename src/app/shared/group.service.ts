@@ -54,9 +54,11 @@ export class GroupService {
      * Remove Group
      */
     public delete(groupId: string): Observable<any> {
-        return this.http.delete(
-            this.groupUrl + '/' + groupId
-        );
+        // return this.http.delete(
+        //     this.groupUrl + '/' + groupId
+        // );
+        return this.http.delete(this.groupUrl + '/' + groupId)
+            .map(res => <any> res.json());
     }
 
     /**
