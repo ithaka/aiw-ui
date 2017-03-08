@@ -14,6 +14,7 @@ export interface ImageGroupDescription {
   igName: string;
   igNotes: string;
   count: number;
+  isFldrOwner: boolean;
 }
 
 export interface IgDownloadInfo {
