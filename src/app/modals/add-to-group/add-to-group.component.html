@@ -18,9 +18,15 @@
             <div *ngIf="serviceResponse.failure" translate class="form-control-feedback">ADD_TO_GROUP_MODAL.ADD_FAILURE</div>
           </div>
         </div>
-        <div class="modal-footer form-group has-success">
-          <button type="submit" class="btn btn-primary">Save changes</button>
-          <button (click)="closeModal.emit()" type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <div class="modal-footer">
+          <div *ngIf="!serviceResponse.success" class="form-group">
+            <button type="submit" class="btn btn-primary">Save changes</button>
+            <button (click)="closeModal.emit()" type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          </div>
+          <div *ngIf="serviceResponse.success" class="form-group">
+            <button [routerLink]="['/group', selectedIg.id]" type="button" class="btn btn-primary">Go to group</button>
+            <button (click)="closeModal.emit()" type="button" class="btn btn-secondary">Return to search</button>
+          </div>
         </div>
       </form>
     </div>
