@@ -39,6 +39,13 @@
       "TITLE": "Download Limit Reached",
       "CLOSE_BUTTON": "Ok",
       "MAIN_BODY": "You have met your download limit."
+    },
+    "DELETE_IG": {
+      "TITLE": "Delete Image Group",
+      "DELETE_BUTTON": "Delete",
+      "CANCEL_BUTTON": "Cancel",
+      "MAIN_BODY1": "Are you sure you want to delete",
+      "MAIN_BODY2":  "This can not be reverted."
     }
   },
   "ADD_TO_GROUP_MODAL": {

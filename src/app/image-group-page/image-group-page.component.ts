@@ -29,6 +29,8 @@ export class ImageGroupPage implements OnInit, OnDestroy {
   private showLoginModal: boolean = false;
   /** set to true when the call to download info has returned. We won't know what modal to show before that */
   private downloadInfoReturned: boolean = false;
+  /** Enables / Disables the IG deletion based on user ownership */
+  private disableIgDelete: boolean = false;
 
   constructor(
     private _igService: ImageGroupService,
@@ -64,10 +66,17 @@ export class ImageGroupPage implements OnInit, OnDestroy {
           // Set ig properties from results
           this.ig = results;
           // Get IG description, since we can rely on it from 
+
           // this._igService.getGroupDescription(results.igId).take(1)
           //   .subscribe((desc: ImageGroupDescription) => { 
           //     this.ig.description = desc;
           //   });
+
+          this._igService.getGroupDescription(results.igId).take(1)
+            .subscribe((desc: ImageGroupDescription) => { 
+              this.disableIgDelete = !desc.isFldrOwner;
+            });
+
 
           // get the user's download count
           this._igService.getDownloadCount(this.ig.igId)
