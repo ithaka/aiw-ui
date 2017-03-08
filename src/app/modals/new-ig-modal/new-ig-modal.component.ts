@@ -13,9 +13,10 @@ import { AssetService, AuthService, GroupService } from './../../shared';
 })
 export class NewIgModal implements OnInit {
   @Output() closeModal: EventEmitter<any> = new EventEmitter();
+  @Output() addToGroup: EventEmitter<any> = new EventEmitter();
 
-  @Input()
-  private copyIG: boolean = false;
+  @Input() private copyIG: boolean = false;
+  @Input() private showAddToGroup: boolean = false;
 
   private newIgForm: FormGroup;
   private isArtstorUser: boolean = false;

@@ -58,6 +58,7 @@
             <label for="igTagInput">Tags</label>
             <rl-tag-input id="igTagInput" [formControl]="newIgForm.controls['tags']" placeholder="Add a tag..."></rl-tag-input>
           </div>
+          <div *ngIf="showAddToGroup" (click)="addToGroup.emit()" class="link">Add to image group</div>
       </div>
       <div class="modal-footer">
         <button type="button" (click)="closeModal.emit()" class="btn btn-secondary">Close</button>
