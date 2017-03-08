@@ -12,9 +12,12 @@
 
     .list-group{
         .list-group-item{
-            padding: 10px;
+            padding-left: 10px;
             height: 23px;
             line-height: 22px;
+            position: relative;
+            display: block;
+            background:transparent
         }
     }
 
