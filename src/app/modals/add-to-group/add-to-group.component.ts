@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Subscription } from 'rxjs/Rx';
 
@@ -10,6 +10,8 @@ import { AssetService, GroupService, ImageGroup } from './../../shared';
 })
 export class AddToGroupModal implements OnInit, OnDestroy {
   @Output() closeModal: EventEmitter<any> = new EventEmitter();
+  @Output() createGroup: EventEmitter<any> = new EventEmitter();
+  @Input() showCreateGroup: boolean = false;
   private subscriptions: Subscription[] = [];
 
   private selectedAssets: any[] = [];

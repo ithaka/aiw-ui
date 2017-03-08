@@ -35,6 +35,8 @@ export class AssetPage implements OnInit, OnDestroy {
     /** controls whether or not the modals are visible */
     private showAgreeModal: boolean = false;
     private showLoginModal: boolean = false;
+    private showAddModal: boolean = false;
+    private showCreateGroupModal: boolean = false;
 
     private copyURLStatusMsg: string = '';
     private generatedImgURL: string = '';
