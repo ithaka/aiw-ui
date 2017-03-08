@@ -18,7 +18,7 @@ export class GroupService {
         // this.groupUrl = '//artstor-group-service.apps.test.cirrostratus.org/api/v1/group';
         this.groupUrl = '//' + this._auth.getSubdomain() + '.artstor.org/api/v1/group';
         let headers = new Headers({ 'Content-Type': 'application/json' });
-        this.options = new RequestOptions(headers);
+        this.options = new RequestOptions({ headers: headers, withCredentials: true });
     }
 
     /**

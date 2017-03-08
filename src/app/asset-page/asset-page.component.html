@@ -34,11 +34,11 @@
             <div class="py-3">
                  <!--If the user has not accepted the agreement, show modal when clicked, otherwise download immediately-->
                 
-                <a class="btn btn-secondary"  tabindex="1" (click)="copyGeneratedImgURL()">
+                <button class="btn btn-secondary"  tabindex="1" (click)="copyGeneratedImgURL()">
                     Share
                     <i id="genImgURLlink" class="icon icon-share-white" ></i>
-                </a>
-                <a class="btn btn-secondary" tabindex="1" *ngIf="assets[0].downloadLink && user.isLoggedIn" 
+                </button>
+                <button class="btn btn-secondary" tabindex="1" *ngIf="assets[0].downloadLink && user.isLoggedIn" 
                     [attr.href]="downloadAuth() && !assets[0].disableDownload ? assets[0].downloadLink : null"
                     [attr.download]="downloadAuth() && !assets[0].disableDownload ? assets[0].title : null"
                     (click)="!downloadAuth() && !assets[0].disableDownload ? showAgreeModal = true : null"
@@ -46,11 +46,14 @@
                     title="{{ assets[0].disableDownload ? 'Image is not available for download.' : ''}}">
                     Download
                     <i id="downloadAssetLink" class="icon icon-download-white" ></i>
-                </a>
-                <a class="btn btn-secondary" tabindex="1" *ngIf="assets[0].downloadLink && !user.isLoggedIn" (click)="showLoginModal = true">
+                </button>
+                <button class="btn btn-secondary" tabindex="1" *ngIf="assets[0].downloadLink && !user.isLoggedIn" (click)="showLoginModal = true">
                     Download
                     <i id="downloadAssetLink" class="icon icon-download-white" ></i>
-                </a>
+                </button>
+                <button class="btn btn-primary">
+                    <i class="icon icon-add-white" aria-hidden="true"></i>
+                </button>
                 <div *ngIf="copyURLStatusMsg" class="alert alert-info">{{ copyURLStatusMsg }}</div>
 
                 <div class="row-hdr pt-3" *ngIf="assets[0].metaDataArray.length > 0">Object Details</div>

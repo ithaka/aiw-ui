@@ -96,6 +96,18 @@
 .icon-close {
     background-size: 70% 70%;
 }
+.icon-add {
+    @extend .icon-close;
+    transform: rotate(45deg);
+}
+@include icon('close-white', 'svg');
+.icon-close-white {
+    background-size: 70% 70%;
+}
+.icon-add-white {
+    @extend .icon-close-white;
+    transform: rotate(45deg);
+}
 @include icon('text', 'svg');
 .icon-text {
     background-size: 70% 70%;
