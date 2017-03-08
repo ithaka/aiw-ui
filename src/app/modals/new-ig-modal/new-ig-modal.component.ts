@@ -1,4 +1,4 @@
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { formGroupNameProvider } from '@angular/forms/src/directives/reactive_directives/form_group_name';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
@@ -36,7 +36,8 @@ export class NewIgModal implements OnInit {
       private _auth: AuthService, 
       private _fb: FormBuilder, 
       private _group: GroupService,
-      private router: Router
+      private router: Router,
+      private route?: ActivatedRoute
     ) {
     this.newIgForm = _fb.group({
       title: [null, Validators.required],
@@ -101,6 +102,25 @@ export class NewIgModal implements OnInit {
     if(this.copyIG){
       console.log('Copy Image Group!');
       console.log(group);
+      this._group.copy(this.route.snapshot.params.igId, group)
+      .subscribe(
+        data => {
+            console.log(data);
+            this.isLoading = false;
+
+            // Close the modal
+            this.closeModal.emit();
+
+            // Show the user their new group!
+            if (data.id) {
+              this.router.navigate(['/group', data.id]);
+            }
+        },
+        error => {
+          console.log(error);
+          this.isLoading = false;
+        }
+      );
     }
     else{
 

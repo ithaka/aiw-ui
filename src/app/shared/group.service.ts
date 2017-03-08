@@ -51,6 +51,21 @@ export class GroupService {
     }
 
     /**
+     * Copy Group
+     */
+    public copy(igId: string, copygroup: any): Observable<any> {
+        return this.http.post(
+            this.groupUrl + '/' + igId + '/copy',
+            copygroup
+        ).map(
+            res => {
+                let body = res.json();
+                return body || { };
+            }
+        );
+    }
+
+    /**
      * Remove Group
      */
     public delete(groupId: string): Observable<any> {
