@@ -33,10 +33,13 @@ export class Home implements OnInit, OnDestroy {
   constructor(
       public appState: AppState, 
       private _assets: AssetService, 
-      private router: Router,
+      private _router: Router,
       private _auth: AuthService
   ) {
-
+    // this makes the window always render scrolled to the top
+    this._router.events.subscribe(() => {
+      window.scrollTo(0, 0);
+    });
   }
 
   ngOnInit() {    

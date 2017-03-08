@@ -21,7 +21,10 @@ export class SearchPage implements OnInit, OnDestroy {
   private assetGrid: AssetGrid;
 
   constructor(private _assets: AssetService, private route: ActivatedRoute, private _filters: AssetFiltersService, private _router: Router) {
-
+    // this makes the window always render scrolled to the top
+    this._router.events.subscribe(() => {
+      window.scrollTo(0, 0);
+    });
   }
 
   ngOnInit() {
