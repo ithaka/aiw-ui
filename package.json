@@ -74,7 +74,7 @@
     "@ng-idle/core": "^2.0.0-beta.8",
     "@ng-idle/keepalive": "^2.0.0-beta.8",
     "angular2-locker": "^0.5.0",
-    "angular2-medium-editor": "^1.0.4",
+    "angular2-medium-editor": "^1.0.5",
     "angular2-moment": "^1.2.0",
     "angular2-tag-input": "^1.2.3",
     "angulartics2": "^1.6.3",
