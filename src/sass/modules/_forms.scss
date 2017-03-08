@@ -75,6 +75,12 @@ button.dropdown-item {
     }
 }
 
+// Style untouched: Safari fix
+select.ng-untouched,
+option.placeholder {
+    color: $inputPlaceholderColor;
+}
+
 select.form-control {
     border-radius: 0 !important;
 }
