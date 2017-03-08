@@ -502,10 +502,8 @@ export class AssetService {
                 data.count = data.items.length;
                 let pageStart = (this.urlParams.currentPage - 1)*this.urlParams.pageSize;
                 let pageEnd = this.urlParams.currentPage*this.urlParams.pageSize;
-                let idsAsTerm: string = data.items.slice(pageStart,pageEnd).join(' or ').replace(/_/g, ' ');
-                //.replace('IAP 103', '');
-                //notify allResults observers
-                // this.updateLocalResults(data);
+                let idsAsTerm: string =  data.items.slice(pageStart,pageEnd).join(' or ').replace(/[A-Z_]/g, '');
+
                 this.search(idsAsTerm, this.activeSort.index)
                     .subscribe(
                         (res) => {
