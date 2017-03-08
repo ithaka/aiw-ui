@@ -24,6 +24,9 @@ export class NavMenu {
    */
   @Input()
   private actionOptions: any = {};
+
+  @Input()
+  private disableIgDelete: boolean = false;
   
   private mobileCollapsed: boolean = true;
   private selectedAssets: any[] = [];

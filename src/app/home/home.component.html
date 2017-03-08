@@ -9,42 +9,42 @@
                 </div>
                 <ul class="list-group list-group-flush list-group-clean">
                     <a id="linkBrowseGeography" class="list-group-item" [routerLink]="['/browse','library', {viewId: 260}]">
-                        Geography
+                        <h3 class="browse-category">Geography</h3>
                         <p class="small">(Afghanistan, Albania, Algeria...)</p>
                     </a>
                     <a id="linkBrowseClassification" class="list-group-item" [routerLink]="['/browse','library', {viewId: 250}]">
-                        Classification
+                        <h3 class="browse-category">Classification</h3>
                         <p class="small">(painting, performing arts, photography...)</p>
                     </a>
                     <a id="linkBrowseCollection" class="list-group-item" [routerLink]="['/browse','library', {viewId: 103}]">
-                        Collection
+                        <h3 class="browse-category">Collection</h3>
                         <p class="small">(Artstor, Shared Shelf, Shared Shelf Commons, My Collections...)</p>
                     </a>
                     <a id="linkBrowseTeaching" class="list-group-item" [routerLink]="['/browse','groups']">
-                        Teaching Resources
+                        <h3 class="browse-category">Teaching Resources</h3>
                         <p class="small">(Curriculum Guides, AP® Resources, Surveys and Case Studies: Art History, Humanities and Social Sciences)</p>
                     </a>
                 </ul>
 
             </div>
-             <div class="card">
+             <!-- Institution Shared Shelf Collections-->
+            <div *ngIf="institution && instCollections.length > 0" class="card">
                 <div class="card-header">
-                    <h2>What's New</h2>
+                    <h2>{{ institution.displayName ? institution.displayName : "Institutional" }} Collections</h2>
                 </div>
-                <div class="loading" *ngIf="blogLoading"></div>
-                <div *ngIf="!blogLoading">
-                    <a class="blog-post" *ngFor="let post of blogPosts | slice:0:3" [href]="post['URL']">
-                        <h3 class="blog-post__title">{{ post.title }}</h3>
-                        <p class="blog-post__preview" [innerHtml]="post.excerpt"></p>
-                    </a>
+                <div class="list--home-collections" [class.loading]="loaders['instCollections']">
+                    <div class="list-group list-group-flush">
+                        <a *ngFor="let collection of instCollections" class="list-group-item list-group-item-action" [routerLink]="[ '/collection', collection.collectionid ]">
+                                {{ collection.collectionname }}
+                        </a>
+                    </div>
+                </div>
+                <div *ngIf="errors.instCollections" class="card-block">
+                    <div id="errorCollectionsLoading" class="alert alert-warning" role="alert">
+                        <strong>Error</strong> {{ errors.instCollections }}
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="col-sm-5">
-            <a id="featuredCollectionLink" class="card" href="/#/category/1034602260;name=Ezra%20Stoller%20Archive%2C%20Esto%20Photographics%20Inc.%20Esto%2014548" target="_blank"> 
-                <img class="card-img no-stretch" src="/assets/img/featured-collection.jpg" alt="Collection: Ezra Stoller Archive (Esto)">
-            </a>
-            <div class="featured-caption">Hirshhorn Museum and Sculpture Garden (exterior, stairs), Skidmore, Owings & Merrill | Gordon Bunshaft, designer | 1966-1974 | Washington, DC | Ezra Stoller © Esto | Image and original data provided by Esto</div>
             <!--Shared Shelf Commons Collections-->
             <div class="card pb-3">
                 <div class="card-header">
@@ -63,22 +63,26 @@
                     </div>
                 </div>
             </div>
-             <!-- Institution Shared Shelf Collections-->
-            <div *ngIf="institution && instCollections.length > 0" class="card">
+        </div>
+        <div class="col-sm-5">
+            <a id="featuredCollectionLink" class="card featured-card" href="/#/category/1034602260;name=Ezra%20Stoller%20Archive%2C%20Esto%20Photographics%20Inc.%20Esto%2014548" target="_blank"> 
+                <img class="card-img-top no-stretch" src="/assets/img/featured-collection.jpg" alt="Collection: Ezra Stoller Archive (Esto)">
+                <div class="card-body pt-1">
+                    <label style="margin-bottom:0px;">Featured Collection</label>
+                    <p>Ezra Stoller Archive (Esto)</p>
+                </div>
+            </a>
+            <div class="featured-caption">Hirshhorn Museum and Sculpture Garden (exterior, stairs), Skidmore, Owings & Merrill | Gordon Bunshaft, designer | 1966-1974 | Washington, DC | Ezra Stoller © Esto | Image and original data provided by Esto</div>
+            <div class="card">
                 <div class="card-header">
-                    <h2>{{ institution.displayName ? institution.displayName : "Institutional" }} Collections</h2>
+                    <h2>What's New</h2>
                 </div>
-                <div class="list--home-collections" [class.loading]="loaders['instCollections']">
-                    <div class="list-group list-group-flush">
-                        <a *ngFor="let collection of instCollections" class="list-group-item list-group-item-action" [routerLink]="[ '/collection', collection.collectionid ]">
-                                {{ collection.collectionname }}
-                        </a>
-                    </div>
-                </div>
-                <div *ngIf="errors.instCollections" class="card-block">
-                    <div id="errorCollectionsLoading" class="alert alert-warning" role="alert">
-                        <strong>Error</strong> {{ errors.instCollections }}
-                    </div>
+                <div class="loading" *ngIf="blogLoading"></div>
+                <div *ngIf="!blogLoading">
+                    <a class="blog-post" *ngFor="let post of blogPosts | slice:0:3" [href]="post['URL']">
+                        <h3 class="blog-post__title">{{ post.title }}</h3>
+                        <p class="blog-post__preview" [innerHtml]="post.excerpt"></p>
+                    </a>
                 </div>
             </div>
         </div>
