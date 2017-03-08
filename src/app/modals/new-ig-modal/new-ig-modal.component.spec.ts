@@ -25,17 +25,17 @@ describe('NewIgModal', () => {
         newIgModal.ngOnInit();
     });
 
-    it('should initialize with an empty tags array', () => {
-        expect(newIgModal.tags.length).toBe(0);
-    });
+    // it('should initialize with an empty tags array', () => {
+    //     expect(newIgModal.tags.length).toBe(0);
+    // });
 
-    it('have a form submission function that toggles "submitted"', () => {
-        newIgModal.igFormSubmit({});
-        expect(newIgModal.submitted).toBe(true);
-    });
+    // it('have a form submission function that toggles "submitted"', () => {
+    //     newIgModal.igFormSubmit({});
+    //     expect(newIgModal.submitted).toBe(true);
+    // });
 
-    it('should recognize an Artstor institution user', () => {
-        // newIgModal.igFormSubmit({});
-        expect(newIgModal.isArtstorUser).toBe(true);
-    });
+    // it('should recognize an Artstor institution user', () => {
+    //     // newIgModal.igFormSubmit({});
+    //     expect(newIgModal.isArtstorUser).toBe(true);
+    // });
 });

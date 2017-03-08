@@ -19,6 +19,7 @@ You won't regret it.
 * [Configuration](#configuration)
 * [Styles](#styles)
 * [TypeScript](#typescript)
+* [Accessibility](#accessibility)
 * [@Types](#types)
 * [Frequently asked questions](#frequently-asked-questions)
 
@@ -347,10 +348,61 @@ TypeScript-aware editors:
 * [Atom](https://atom.io/) with [TypeScript plugin](https://atom.io/packages/atom-typescript)
 * [Sublime Text](http://www.sublimetext.com/3) with [Typescript-Sublime-Plugin](https://github.com/Microsoft/Typescript-Sublime-plugin#installation)
 
-### Visual Studio Code + Debugger for Chrome
-> Install [Debugger for Chrome](https://marketplace.visualstudio.com/items?itemName=msjsdiag.debugger-for-chrome) and see docs for instructions to launch Chrome 
 
-The included `.vscode` automatically connects to the webpack development server on port `3000`.
+---
+
+# Accessibility
+
+Improving accessibilty makes our site accessible to those who are disabled and to those who are temporarily unable to see well, hear well, or use both of their hands. These are some simple things we can do to make a big difference.
+
+
+#### Add labels to buttons
+```
+<button class="close" aria-label="Close">
+  <span aria-hidden="true">&times;</span>
+</button>
+```
+* Note the `aria-hidden` attribute, telling screenreaders to not read the contained text
+
+
+#### Add alt text to images and icons
+```
+<img src="/logo.png" alt="Artstor" />
+<i class="icon icon-loading" alt="Loading"></i>
+```
+
+
+#### Enable tabbing flow
+To assist in keyboard navigation, add `tabindex` attributes in an appropriate order.
+For example, the login form might be tabbed first:
+```
+<label for="inputEmail">Email</label>
+<input tabindex="1" type="text" class="form-control" id="inputEmail" placeholder="Password">
+
+<label for="inputPassword">Password</label>
+<input tabindex="1" type="password" class="form-control" id="inputPassword" placeholder="Password">
+```
+So each input element is given a `tabindex` of `1`, effectively grouping them together. The main navigation might be next in the tabbing sequence:
+```
+<nav>
+  <a tabindex="2" class="nav-link" href="#">Link</a>
+  <a tabindex="2" class="nav-link" href="#">Link</a>
+  <a tabindex="2" class="nav-link" href="#">Link</a>
+</nav>
+```
+Note that `tabindex='0'` is effectively the default value, and adding a `tabindex` of `0` will put that element after any elements with a `tabindex` greater than `0`. And lastly, assigning a negative `tabindex` will remove the element from the tabbing sequence entirely!
+
+
+#### Focus and state styles
+Elements should not rely solely on color to indicate they are focused or have changed state, leaving a color blind user clueless. Providing an additional indicator also makes interactions more obvious to other users. 
+
+*Bonus* If you want to remove the outline of a `:focus` style, replace it with something equally clear to the user! `:focus` is how a user can see where they are when they use keyboard navigation.
+
+#### Heading tags are for... Headings?
+And not for styles! `H1`, `H2`, `H3`... are interpretted by screenreaders as indicating sections within a document. Now it's okay to style those tags, but in this project we use `.h1`, `.h2`, `.h3`... when we want the style but element is not a true heading or subheading.
+
+#### Human centered design
+We should always be considering visual clarity, hierarchy, and flow of information in this context. With a little bit of extra thought each time we implement a new feature or add content, the quality of our alt text, keyboard navigation, and ultimately the user experience, will improve 🎉 
 
 ---
 

@@ -215,7 +215,8 @@ label {
   font-size: 12px;
 }
 
-h1, h2, h3, h4, h5 {
+h1, h2, h3, h4, h5,
+.h1, .h2, .h3, .h4, .h5 {
   @extend %SansRegular;
   // Do not use type styles to handle layout spacing (other than line-height)
   margin: 0;
@@ -223,14 +224,14 @@ h1, h2, h3, h4, h5 {
   position: relative;
 }
 
-h1 {
+h1, .h1 {
   @extend %Graphik-Regular-Web;
   color: $typeAccent;
   font-size: 18px;
   line-height: 22px;
 }
 
-h2 {
+h2, .h2 {
   @extend %Graphik-Regular-Web;
   color: $typeAccent;
   font-size: 15px;
@@ -243,7 +244,7 @@ h2 {
   }
 }
 
-h3 {
+h3, .h3 {
   @extend %Graphik-Regular-Web;
   font-size: 13px;
   font-weight: bold;

@@ -47,7 +47,7 @@ export class NewIgModal implements OnInit {
   }
 
   ngOnInit() {
-    this.isArtstorUser = this._auth.getUser().institutionId == 24615;
+    this.isArtstorUser = this._auth.getUser().institutionId == 1000;
 
     // Subscribe to asset selection
     this.subscriptions.push(
