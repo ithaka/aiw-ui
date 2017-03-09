@@ -99,9 +99,12 @@ export class NewIgModal implements OnInit {
     };
 
     if(this.copyIG){
-      console.log('Copy Image Group!');
-      console.log(group);
-      this._group.copy(this.route.snapshot.params.igId, group)
+      // console.log('Copy Image Group!');
+      // console.log(group);
+      let copyReqBody = {
+        'name' : group.name
+      };
+      this._group.copy(this.route.snapshot.params.igId, copyReqBody)
       .subscribe(
         data => {
             console.log(data);
