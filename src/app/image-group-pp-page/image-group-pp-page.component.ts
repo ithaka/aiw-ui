@@ -4,12 +4,10 @@ import { Router, ActivatedRoute, UrlSegment } from '@angular/router';
 import { Subscription }   from 'rxjs/Subscription';
 
 // Internal Dependencies
-import { AssetService, AuthService, ImageGroupDescription } from './../shared';
-import { ImageGroupService } from './../image-group-page/image-group.service';
+import { AssetService, AuthService, ImageGroupDescription, ImageGroupService } from './../shared';
 
 @Component({
   selector: 'ang-image-group-pp-page', 
-  providers: [ImageGroupService],
   styleUrls: [ './image-group-pp-page.component.scss' ],
   templateUrl: './image-group-pp-page.component.html'
 })
