@@ -15,10 +15,11 @@ export class GroupService {
         private http: Http,
         private _auth: AuthService
     ) {
-        // this.groupUrl = '//artstor-group-service.apps.test.cirrostratus.org/api/v1/group';
-        // this.groupUrl = '//' + this._auth.getSubdomain() + '.artstor.org/api/v1/group';
-        this.groupUrl = '//stagely.artstor.org/api/v1/group'
-        let headers = new Headers({ 'Content-Type': 'application/json' });
+
+        // ' + this._auth.getSubdomain() + '
+        this.groupUrl = '//stagely.artstor.org/api/v1/group';
+        let headers = new Headers({ });
+
         this.options = new RequestOptions({ headers: headers, withCredentials: true });
     }
 
@@ -79,10 +80,10 @@ export class GroupService {
      * Remove Group
      */
     public delete(groupId: string): Observable<any> {
-        // return this.http.delete(
-        //     this.groupUrl + '/' + groupId
-        // );
-        return this.http.delete(this.groupUrl + '/' + groupId)
+        let headers = new Headers({ 'Accept' : 'application/json' });
+        let options = new RequestOptions({ headers: headers });
+
+        return this.http.delete(this.groupUrl + '/' + groupId, options)
             .map(res => <any> res.json());
     }
 
