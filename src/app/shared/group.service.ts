@@ -78,10 +78,10 @@ export class GroupService {
      * Remove Group
      */
     public delete(groupId: string): Observable<any> {
-        // return this.http.delete(
-        //     this.groupUrl + '/' + groupId
-        // );
-        return this.http.delete(this.groupUrl + '/' + groupId)
+        let headers = new Headers({ 'Accept' : 'application/json' });
+        let options = new RequestOptions({ headers: headers });
+
+        return this.http.delete(this.groupUrl + '/' + groupId, options)
             .map(res => <any> res.json());
     }
 
