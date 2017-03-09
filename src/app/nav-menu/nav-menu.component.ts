@@ -7,9 +7,6 @@ import { AssetService, ImageGroupService } from '../shared';
 
 @Component({
   selector: 'nav-menu',
-  providers: [ 
-
-  ],
   templateUrl: './nav-menu.component.html',
   styleUrls: [ './nav-menu.component.scss' ],
 })
@@ -39,8 +36,12 @@ export class NavMenu implements OnInit, OnDestroy {
   private params: any = {};
   
   // TypeScript public modifiers
-  constructor(private _router: Router, private route: ActivatedRoute, private _assets: AssetService) {
-    
+  constructor(
+    private _router: Router,
+    private _assets: AssetService,
+    private _ig: ImageGroupService,
+    private route: ActivatedRoute
+  ) {
   }
   
   ngOnInit() {
