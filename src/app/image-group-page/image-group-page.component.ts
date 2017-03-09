@@ -3,14 +3,11 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { Subscription }   from 'rxjs/Subscription';
 
 // Internal Dependencies
-import { ImageGroupService } from './image-group.service';
 import { AssetService, AuthService } from './../shared';
-
-import { ImageGroup, ImageGroupDescription, IgDownloadInfo } from './../shared';
+import { ImageGroup, ImageGroupDescription, IgDownloadInfo, ImageGroupService } from './../shared';
 
 @Component({
-  selector: 'ang-image-group', 
-  providers: [ImageGroupService],
+  selector: 'ang-image-group',
   styleUrls: [ './image-group-page.component.scss' ],
   templateUrl: './image-group-page.component.html'
 })

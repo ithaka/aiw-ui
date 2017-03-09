@@ -53,9 +53,7 @@
                             <!--Active on Image Group Page-->
                             <button class="dropdown-item" [disabled]="!actionOptions.group" (click)="printImageGroupPage()">Print Image Group</button>
                             <!--Active on Image Group Page-->
-                            <button class="dropdown-item">!Export Image Group to PowerPoint</button>
-                            <!--Active on Image Group Page-->
-                            <button class="dropdown-item">!Download Image Group</button>
+                            <button *ngIf="params['igId']" class="dropdown-item">Download Image Group</button>
                             <!--Amber<div class="dropdown-divider"></div>-->
                             <!--Active on Image Group Page-->
                             <!--Amber <button class="dropdown-item">!Copy Citations for Image Group</button>-->
