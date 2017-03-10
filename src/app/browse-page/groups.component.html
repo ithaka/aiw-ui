@@ -9,9 +9,12 @@
             {{ tag['key'] }} ({{ tag.doc_count }})
         </div>
     </div>
-    <div class="col-md-8">
-        <h3 style="margin-bottom:12px;">Groups</h3>
-        <div class="tree">
+    <div class="col-md-8" style="columns:2;">
+        <h3 style="margin-bottom:12px;">Groups
+            <pagination [pageObj]="pagination" (goToPage)="goToPage($event)">
+            </pagination>
+        </h3>
+        <div class="group-list">
             <ang-tag *ngFor="let tag of tags" [tag]="tag" link="true"></ang-tag>
         </div>
     </div>

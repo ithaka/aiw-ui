@@ -28,7 +28,7 @@ import { MomentModule } from 'angular2-moment'; // optional, provides moment-sty
 import { App } from './app.component';
 import { APP_RESOLVER_PROVIDERS } from './app.resolver';
 import { AppState, InternalStateType } from './app.service';
-import { Nav, Footer, SearchComponent } from './shared';
+import { Nav, Footer, SearchComponent, PaginationComponent } from './shared';
 import { NavMenu } from './nav-menu';
 import { AssetFilters } from './asset-filters';
 import { AssetGrid, ThumbnailComponent } from './asset-grid';
@@ -109,6 +109,7 @@ type StoreType = {
     BrowseGroupsComponent,
     AssociatedPage,
     AssetFilters,
+    PaginationComponent,
     AssetGrid,
     SearchComponent,
     ThumbnailComponent,

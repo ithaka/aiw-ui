@@ -1,0 +1,30 @@
+<ul class="pagination" style="float:right;">
+    <li class="page-item">
+        <button class="page-link" (click)="goToPage.emit(1)" [disabled]="!pageObj.currentPage || pageObj.currentPage <= 1" title="First" aria-label="First">
+            <span aria-hidden="true">|&#10094;</span>
+            <span class="sr-only">First</span>
+        </button>
+    </li>
+    <li class="page-item">
+        <button class="page-link" (click)="goToPage.emit(pageObj.currentPage - 1)" [disabled]="!pageObj.currentPage || pageObj.currentPage <= 1" title="Previous" aria-label="Previous">
+            <span aria-hidden="true">&#10094;</span>
+            <span class="sr-only">Previous</span>
+        </button>
+    </li>
+    <li class="page-item">
+        <input class="page-input" type="number" min="1" (keypress)="pageNumberKeyPress($event)" [(ngModel)]="pageObj.currentPage" (keyup.enter)="goToPage.emit(pageObj.currentPage)" />
+        <span class="page-info">of {{ pageObj.totalPages }}</span>
+    </li>
+    <li class="page-item">
+        <button class="page-link" (click)="goToPage.emit(pageObj.currentPage + 1)" [disabled]="!pageObj.currentPage || pageObj.currentPage >= pageObj.totalPages" title="Next" aria-label="Next">
+            <span aria-hidden="true">&#10095;</span>
+            <span class="sr-only">Next</span>
+        </button>
+    </li>
+    <li class="page-item">
+        <button class="page-link" (click)="goToPage.emit(pageObj.totalPages)" [disabled]="!pageObj.currentPage || pageObj.currentPage >= pageObj.totalPages" title="Last" aria-label="Last">
+            <span aria-hidden="true">&#10095;|</span>
+            <span class="sr-only">Last</span>
+        </button>
+    </li>
+</ul>
