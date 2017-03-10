@@ -14,7 +14,7 @@ export class AddToGroupModal implements OnInit, OnDestroy {
   @Input() showCreateGroup: boolean = false;
   private subscriptions: Subscription[] = [];
 
-  private selectedAssets: any[] = [];
+  @Input() private selectedAssets: any[] = []; // this is used in the asset page, where a single asset can be injected directly
   private groups: ImageGroup[] = [];
   private selectedIg: ImageGroup;
 
@@ -29,17 +29,19 @@ export class AddToGroupModal implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
-    // Subscribe to asset selection
-    this.subscriptions.push(
-      this._assets.selection.subscribe(
-        assets => {
-          this.selectedAssets = assets;
-        },
-        error => {
-          console.error(error);
-        }
-      )
-    );
+    if (this.selectedAssets.length < 1) { // if no assets were added when component was initialized, the component gets the current selection list
+      // Subscribe to asset selection
+      this.subscriptions.push(
+        this._assets.selection.subscribe(
+          assets => {
+            this.selectedAssets = assets;
+          },
+          error => {
+            console.error(error);
+          }
+        )
+      );
+    }
 
     this._group.getAll()
       .take(1)

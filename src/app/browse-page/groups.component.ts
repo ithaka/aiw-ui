@@ -107,7 +107,7 @@ export class BrowseGroupsComponent implements OnInit {
               // Create Menu Link
               obj = {
                 id: 3,
-                label: 'Global Folders'
+                label: 'Artstor Curated'
               };
               this.browseMenuArray.push(obj);
 
@@ -126,8 +126,8 @@ export class BrowseGroupsComponent implements OnInit {
             //   this.foldersObj['4'] = this.createGroupTags(data.MyCourseFolders);
             // }
 
-            // this.selectedBrowseId = '3';
-            // this.loadCategory();
+            this.selectedBrowseId = '3';
+            this.loadCategory();
 
           },
           (error) => {

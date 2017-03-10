@@ -162,6 +162,13 @@ export class AssetService {
         this.selectedAssetsSource.next(assets);
     }
 
+    /**
+     * Getter for array of selected assets
+     */
+    public getSelectedAssets(): any[] {
+        return this.selectedAssets;
+    }
+
     public getCurrentInstitution(): any {
         return this._storage.get('institution');
     }

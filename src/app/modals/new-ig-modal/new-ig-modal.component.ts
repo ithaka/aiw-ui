@@ -23,7 +23,7 @@ export class NewIgModal implements OnInit {
   private tags: string[] = [];
   // We need to seed the medium editor with an empty div to fix line return issues in Firefox!
   private igDescription: string = "<div>&nbsp;</div>";
-  private selectedAssets: any[] = [];
+  @Input() private selectedAssets: any[] = [];
 
   private subscriptions: Subscription[] = [];
   private isLoading: boolean = false;
@@ -48,17 +48,19 @@ export class NewIgModal implements OnInit {
   ngOnInit() {
     this.isArtstorUser = this._auth.getUser().institutionId == 1000;
 
-    // Subscribe to asset selection
-    this.subscriptions.push(
-      this._assets.selection.subscribe(
-        assets => {
-          this.selectedAssets = assets;
-        },
-        error => {
-          console.log(error);
-        }
-      )
-    );
+    if (this.selectedAssets.length < 1) { // if an asset hasn't been injected, the component gets assets from list of selected assets
+      // Subscribe to asset selection
+      this.subscriptions.push(
+        this._assets.selection.subscribe(
+          assets => {
+            this.selectedAssets = assets;
+          },
+          error => {
+            console.log(error);
+          }
+        )
+      );
+    }
   }
 
   ngOnDestroy() {

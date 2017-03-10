@@ -19,6 +19,7 @@
       "LOGIN_SERVER": "Server is not responding. Please try again later."
     },
     "AGE_PROMPT": "I confirm that I am 13 or older",
+    "AGE_PROMPT_HOVER": "If you are under 13, please provide your legal guardian's email address to register",
     "INFO_PROMPT": "Yes, send me information about new Artstor content and tools",
     "SURVEY_PROMPT": "Yes, send me surveys",
     "PRIVACY_DISCLAIMER": "Artstor will not share your personal information except in limited instances as set forth in its <a class=\"link\" href=\"http://www.artstor.org/privacy-policy\">privacy policy</a>."

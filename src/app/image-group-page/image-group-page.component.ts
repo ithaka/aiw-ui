@@ -3,14 +3,11 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { Subscription }   from 'rxjs/Subscription';
 
 // Internal Dependencies
-import { ImageGroupService } from './image-group.service';
 import { AssetService, AuthService } from './../shared';
-
-import { ImageGroup, ImageGroupDescription, IgDownloadInfo } from './../shared';
+import { ImageGroup, ImageGroupDescription, IgDownloadInfo, ImageGroupService } from './../shared';
 
 @Component({
-  selector: 'ang-image-group', 
-  providers: [ImageGroupService],
+  selector: 'ang-image-group',
   styleUrls: [ './image-group-page.component.scss' ],
   templateUrl: './image-group-page.component.html'
 })
@@ -33,7 +30,7 @@ export class ImageGroupPage implements OnInit, OnDestroy {
   private disableIgDelete: boolean = false;
 
   constructor(
-    private _igService: ImageGroupService,
+    private _ig: ImageGroupService,
     private _router: Router,
     private _assets: AssetService,
     private _auth: AuthService,
@@ -67,19 +64,19 @@ export class ImageGroupPage implements OnInit, OnDestroy {
           this.ig = results;
           // Get IG description, since we can rely on it from 
 
-          // this._igService.getGroupDescription(results.igId).take(1)
+          // this._ig.getGroupDescription(results.igId).take(1)
           //   .subscribe((desc: ImageGroupDescription) => { 
           //     this.ig.description = desc;
           //   });
 
-          this._igService.getGroupDescription(results.igId).take(1)
+          this._ig.getGroupDescription(results.igId).take(1)
             .subscribe((desc: ImageGroupDescription) => { 
               this.disableIgDelete = !desc.isFldrOwner;
             });
 
 
           // get the user's download count
-          this._igService.getDownloadCount(this.ig.igId)
+          this._ig.getDownloadCount(this.ig.igId)
             .take(1)
             .subscribe((res: IgDownloadInfo) => {
               this.downloadInfoReturned = true;
@@ -87,6 +84,15 @@ export class ImageGroupPage implements OnInit, OnDestroy {
             }, (err) => {
               console.error(err);
             });
+        }
+      })
+    );
+
+    this.subscriptions.push(
+      this._ig.igDownloadTrigger.subscribe((event) => { // right now event will be undefined, it is just a dumb trigger
+        // make sure we have the info we need
+        if (this.ig.name && this.downloadInfoReturned) {
+          this.showDownloadModal();
         }
       })
     );

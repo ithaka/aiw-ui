@@ -53,7 +53,7 @@ import { LoginReqModal, SearchModal, NewIgModal, ShareLinkModal, DownloadLimitMo
 
 
 // Application wide providers
-import { AuthService, AssetService, GroupService, TypeIdPipe, ToolboxService, LoggingService } from './shared';
+import { AuthService, AssetService, GroupService, TypeIdPipe, ToolboxService, LoggingService, ImageGroupService } from './shared';
 import { AssetFiltersService } from './asset-filters/asset-filters.service';
 import { TagsService } from './browse-page/tags.service';
 import { CustomReuseStrategy } from './reuse-strategy';
@@ -64,6 +64,7 @@ const APP_PROVIDERS = [
   AssetService,
   GroupService,
   AuthService,
+  ImageGroupService,
   AssetFiltersService,
   TagsService,
   ToolboxService,

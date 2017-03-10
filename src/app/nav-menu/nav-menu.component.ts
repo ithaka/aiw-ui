@@ -1,19 +1,16 @@
 import { Subscription } from 'rxjs/Rx';
-import { Component, Output, EventEmitter, Input } from '@angular/core';
+import { Component, OnInit, OnDestroy, Output, EventEmitter, Input } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 // Project Dependencies
-import { AssetService } from '../shared/assets.service';
+import { AssetService, ImageGroupService } from '../shared';
 
 @Component({
   selector: 'nav-menu',
-  providers: [ 
-
-  ],
   templateUrl: './nav-menu.component.html',
   styleUrls: [ './nav-menu.component.scss' ],
 })
-export class NavMenu {
+export class NavMenu implements OnInit, OnDestroy {
 
   /**
    * Action options so far include:
@@ -36,10 +33,15 @@ export class NavMenu {
   private showAddToGroupModal: boolean = false;
 
   private copyIG: boolean = false;
+  private params: any = {};
   
   // TypeScript public modifiers
-  constructor(private _router: Router, private route: ActivatedRoute, private _assets: AssetService) {
-    
+  constructor(
+    private _router: Router,
+    private _assets: AssetService,
+    private _ig: ImageGroupService,
+    private route: ActivatedRoute
+  ) {
   }
   
   ngOnInit() {
@@ -51,6 +53,12 @@ export class NavMenu {
         error => {
           //
         })
+    );
+
+    this.subscriptions.push(
+      this.route.params.subscribe((params) => {
+        this.params = params;
+      })
     );
   }
 
@@ -87,5 +95,14 @@ export class NavMenu {
         }
       }
     );
+  }
+
+  /**
+   * Uses a combination of groups service and asset service to delete the assets selected in the asset grid
+   */
+  private deleteSelectedAssets(): void {
+    let ig = this.route.snapshot.params['igId'];
+    console.log(ig);
+    console.log(this._assets.getSelectedAssets());
   }
 }

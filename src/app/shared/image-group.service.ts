@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, EventEmitter } from '@angular/core';
 import { Http, Response, Headers, RequestOptions } from '@angular/http';
 import { Router } from '@angular/router';
 import 'rxjs/add/operator/toPromise';
@@ -19,6 +19,8 @@ export class ImageGroupService {
   // BehaviorSubjects push last value on subscribe
   private assetsSource = new BehaviorSubject<any>(this.assetsValue);
   public assets = this.assetsSource.asObservable();
+  
+  public igDownloadTrigger: EventEmitter<any> = new EventEmitter();
 
   constructor(private _router: Router, private http: Http, private _auth: AuthService ){
     this.baseUrl = this._auth.getUrl();
@@ -115,5 +117,9 @@ export class ImageGroupService {
 
     return this.http.post(this._auth.getUrl() + "/downloadpptimages", data, options)
       .map((res) => { return res.json() || {} });
+  }
+
+  public triggerIgDownload(): void {
+    this.igDownloadTrigger.emit();
   }
 }
