@@ -89,17 +89,16 @@ export class GroupService {
      * Update Group
      */
     public update(group: ImageGroup): Observable<any> {
-        let putGroup: ImageGroup = <ImageGroup>{};
-        Object.assign(putGroup, group);
-        delete putGroup.id;
-        delete putGroup['users-with-access'];
-        delete putGroup['insts-with-access'];
-        if (putGroup.tags[0] == null) { putGroup.tags = [] }
-        console.log(putGroup);
+
+        delete group.id;
+        delete group['users-with-access'];
+        delete group['insts-with-access'];
+        if (group.tags[0] == null) { group.tags = [] }
+        console.log(group);
 
         return this.http.put(
             this.groupUrl + '/' + group.id,
-            putGroup
+            group
             // this.options
             // {}
         )
