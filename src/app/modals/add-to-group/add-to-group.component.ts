@@ -29,8 +29,10 @@ export class AddToGroupModal implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
+    console.log(this.selectedAssets);
     if (this.selectedAssets.length < 1) { // if no assets were added when component was initialized, the component gets the current selection list
       // Subscribe to asset selection
+      console.log("we've got to get the assets");
       this.subscriptions.push(
         this._assets.selection.subscribe(
           assets => {
@@ -59,9 +61,16 @@ export class AddToGroupModal implements OnInit, OnDestroy {
     let putGroup: ImageGroup = <ImageGroup>{};
     Object.assign(putGroup, form.value.imageGroup);
 
+    // assets come from different places and sometimes have id and sometimes objectId
     this.selectedAssets.forEach((asset: any) => {
-      if (putGroup.items.indexOf(asset.objectId) < 0) {
-        putGroup.items.push(asset.objectId);
+      if (asset && asset.id) {
+        if (putGroup.items.indexOf(asset.id) < 0) {
+          putGroup.items.push(asset.id);
+        }
+      } else if (asset && asset.objectId) {
+        if (putGroup.items.indexOf(asset.objectId) < 0) {
+          putGroup.items.push(asset.objectId);
+        }
       }
     });
 
