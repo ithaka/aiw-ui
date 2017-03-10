@@ -1,3 +1,5 @@
+@import '../../../sass/core/variables';
+
 /**
   * Tag Component Styles
   */
@@ -14,7 +16,6 @@
     // &:hover {
     //     background: #f4f4f4;
     // }
-
     & .no-link {
         color: #999;
         cursor: default;
@@ -38,6 +39,17 @@
             background: darken($tagLinkBg, 10%);
         }
     }
+
+    &.tag-link a {
+        background: transparent;
+        text-decoration: underline;
+
+        &:hover, &:active, &:focus {
+            text-decoration: underline;
+            color: $blue;
+        }
+    }
+
   }
 
 

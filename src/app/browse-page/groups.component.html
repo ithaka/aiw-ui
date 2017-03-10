@@ -5,14 +5,14 @@
 <div class="row">
     <div class="col-md-4">
         <h3 style="margin-bottom:12px;">Tags</h3>
-        <div class="filter" *ngFor="let tag of tagFilters">
+        <div class="filter" *ngFor="let tag of tagFilters" >
             {{ tag['key'] }} ({{ tag.doc_count }})
         </div>
     </div>
     <div class="col-md-8">
         <h3 style="margin-bottom:12px;">Groups</h3>
         <div class="tree">
-            <ang-tag *ngFor="let tag of tags" [tag]="tag"></ang-tag>
+            <ang-tag *ngFor="let tag of tags" [tag]="tag" link="true"></ang-tag>
         </div>
     </div>
 </div>
