@@ -26,6 +26,7 @@ export class BrowseGroupsComponent implements OnInit {
   private tags: Tag[] = [];
 
   private tagFilters = [];
+  private appliedTags = [];
 
   private expandedCategories: any = {};
   private selectedBrowseId: string = '';
@@ -44,6 +45,23 @@ export class BrowseGroupsComponent implements OnInit {
       })
     );
 
+    this.browseMenuArray.push({
+      id: 1,
+      label: 'Private'
+    });
+
+    this.browseMenuArray.push({
+      id: 2,
+      label: 'Institutional'
+    });
+    
+    this.browseMenuArray.push({
+      id: 3,
+      label: 'Artstor Curated'
+    });
+
+    this.selectedBrowseId = '3';
+    this.loadCategory();
     this.loadIGs();
   }
 
@@ -76,33 +94,13 @@ export class BrowseGroupsComponent implements OnInit {
    * Loads Image Groups data for the current user in the array
    */
   private loadIGs(): void{
-    this._groups.getAll()
+    this._groups.getAll(this.appliedTags)
         .take(1).subscribe(
           (data)  => {
             console.log(data);
-
             this.tagFilters = data.tags;
-            
             this.foldersObj['3'] = this.createGroupTags(data.groups);
-
-            this.browseMenuArray.push({
-              id: 1,
-              label: 'Private'
-            });
-
-            this.browseMenuArray.push({
-              id: 2,
-              label: 'Institutional'
-            });
-            
-            this.browseMenuArray.push({
-              id: 3,
-              label: 'Artstor Curated'
-            });
-
-            this.selectedBrowseId = '3';
             this.loadCategory();
-
           },
           (error) => {
             console.log(error);
@@ -116,6 +114,14 @@ export class BrowseGroupsComponent implements OnInit {
     this.tags = this.foldersObj[this.selectedBrowseId];
   }
 
+  toggleFilterBy(tag: string) {
+    if (this.appliedTags.indexOf(tag) > -1) {
+      this.appliedTags.splice(this.appliedTags.indexOf(tag));
+    } else {
+      this.appliedTags.push(tag);
+    }
+    this.loadIGs();
+  }
   // showHideNode(node){
   //   // A node in the tree will only be hidden if any of its parent nodes, going up the hierarchy, is collapsed.
   //   var isExpanded = true;

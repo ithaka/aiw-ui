@@ -24,9 +24,18 @@ export class GroupService {
     /**
      * Get All Groups
      */
-    public getAll(): Observable<any> {
+    public getAll(tags ?: string[] ): Observable<any> {
+        if (!tags) {
+            tags = [];
+        }
+
+        let tagParam = "";
+        tags.forEach( tag => { 
+            tagParam += '&tags=' + tag;
+        });
+
         return this.http.get(
-            this.groupUrl + "?size=100"
+            this.groupUrl + "?size=100" +  tagParam,
         ).map(
             res => {
                 let body = res.json();
