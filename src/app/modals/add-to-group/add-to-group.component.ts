@@ -57,6 +57,7 @@ export class AddToGroupModal implements OnInit, OnDestroy {
 
     console.log(this.groups);
     console.log(form.value.imageGroup);
+    console.log(this.selectedAssets);
 
     this._group.update(form.value.imageGroup)
       .take(1)

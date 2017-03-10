@@ -94,6 +94,8 @@ export class GroupService {
         delete putGroup.id;
         delete putGroup['users-with-access'];
         delete putGroup['insts-with-access'];
+        if (putGroup.tags[0] == null) { putGroup.tags = [] }
+        console.log(putGroup);
 
         return this.http.put(
             this.groupUrl + '/' + group.id,
