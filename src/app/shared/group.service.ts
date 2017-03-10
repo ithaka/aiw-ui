@@ -98,15 +98,15 @@ export class GroupService {
      * Update Group
      */
     public update(group: ImageGroup): Observable<any> {
+        let id = group.id;
 
         delete group.id;
         delete group['users-with-access'];
         delete group['insts-with-access'];
         if (group.tags[0] == null) { group.tags = [] }
-        console.log(group);
 
         return this.http.put(
-            this.groupUrl + '/' + group.id,
+            this.groupUrl + '/' + id,
             group
             // this.options
             // {}

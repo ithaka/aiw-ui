@@ -58,7 +58,8 @@ export class AddToGroupModal implements OnInit, OnDestroy {
     console.log(this.groups);
     console.log(form.value.imageGroup);
     console.log(this.selectedAssets);
-
+    this.selectedIg = form.value.imageGroup;
+    console.log(this.selectedIg);
     let putGroup: ImageGroup = <ImageGroup>{};
     Object.assign(putGroup, form.value.imageGroup);
 
@@ -68,8 +69,11 @@ export class AddToGroupModal implements OnInit, OnDestroy {
       }
     });
 
-    this._group.update(form.value.imageGroup)
+    this._group.update(putGroup)
       .take(1)
-      .subscribe((res) => { console.log(res); }, (err) => { console.error(err); })
+      .subscribe(
+        (res) => { this.serviceResponse.success = true; },
+        (err) => { console.error(err); this.serviceResponse.failure = true;
+      })
   }
 }
