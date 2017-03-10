@@ -26,7 +26,7 @@ export class GroupService {
      */
     public getAll(): Observable<any> {
         return this.http.get(
-            this.groupUrl
+            this.groupUrl + "?size=100"
         ).map(
             res => {
                 let body = res.json();

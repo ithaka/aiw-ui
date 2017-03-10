@@ -24,6 +24,9 @@ export class BrowseGroupsComponent implements OnInit {
   private userTypeId: any;
   private currentBrowseRes: any = {};
   private tags: Tag[] = [];
+
+  private tagFilters = [];
+
   private expandedCategories: any = {};
   private selectedBrowseId: string = '';
   private browseMenuArray: any[] = [];
@@ -77,54 +80,25 @@ export class BrowseGroupsComponent implements OnInit {
         .take(1).subscribe(
           (data)  => {
             console.log(data);
+
+            this.tagFilters = data.tags;
             
             this.foldersObj['3'] = this.createGroupTags(data.groups);
 
-            var obj = {};
-            // if(data.PrivateFolders.length > 0){
-            //   // Create Menu Link
-            //   obj = {
-            //     id: 1,
-            //     label: 'Private Folders'
-            //   };
-            //   this.browseMenuArray.push(obj);
+            this.browseMenuArray.push({
+              id: 1,
+              label: 'Private'
+            });
 
-            //   // Process Tags
-            //   this.foldersObj['1'] = this.createGroupTags(data.PrivateFolders);
-            // }
-            // if(data.PublicFolders.length > 0){
-              // Create Menu Link
-              // obj = {
-              //   id: 2,
-              //   label: 'Institutional Folders'
-              // };
-              // this.browseMenuArray.push(obj);
-              
-              // Process Tags
-              // this.foldersObj['2'] = this.createGroupTags(data.PublicFolders);
-            // }
-            // if(data.CrossInstFolders.length > 0){
-              // Create Menu Link
-              obj = {
-                id: 3,
-                label: 'Artstor Curated'
-              };
-              this.browseMenuArray.push(obj);
-
-            //   // Process Tags
-            //   this.foldersObj['3'] = this.createGroupTags(data.CrossInstFolders);
-            // }
-            // if(data.MyCourseFolders.length > 0){
-            //   // Create Menu Link
-            //   obj = {
-            //     id: 4,
-            //     label: 'My Course Folders'
-            //   };
-            //   this.browseMenuArray.push(obj);
-
-            //   // Process Tags
-            //   this.foldersObj['4'] = this.createGroupTags(data.MyCourseFolders);
-            // }
+            this.browseMenuArray.push({
+              id: 2,
+              label: 'Institutional'
+            });
+            
+            this.browseMenuArray.push({
+              id: 3,
+              label: 'Artstor Curated'
+            });
 
             this.selectedBrowseId = '3';
             this.loadCategory();
