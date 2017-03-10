@@ -95,7 +95,7 @@ export class GroupService {
     }
 
     /**
-     * Update Group
+     * Update Group. The body sent cannot contain id, insts-with-access or users-with-access
      */
     public update(group: ImageGroup): Observable<any> {
         let id = group.id;
@@ -108,8 +108,6 @@ export class GroupService {
         return this.http.put(
             this.groupUrl + '/' + id,
             group
-            // this.options
-            // {}
         )
         .map((res) => { return res.json() || {}; });
     }

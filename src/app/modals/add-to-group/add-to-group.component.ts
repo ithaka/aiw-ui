@@ -55,11 +55,7 @@ export class AddToGroupModal implements OnInit, OnDestroy {
   private onSubmit(form: NgForm) {
     this.serviceResponse = {}; // clear any service status
 
-    console.log(this.groups);
-    console.log(form.value.imageGroup);
-    console.log(this.selectedAssets);
     this.selectedIg = form.value.imageGroup;
-    console.log(this.selectedIg);
     let putGroup: ImageGroup = <ImageGroup>{};
     Object.assign(putGroup, form.value.imageGroup);
 
