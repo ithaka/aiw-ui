@@ -1,6 +1,6 @@
 <div class="modal fade show">
   <div class="modal-dialog" role="document">
-    <div class="modal-content">
+    <div *ngIf="!serviceResponse.success" class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" *ngIf="!copyIG">New Image Group</h5>
         <h5 class="modal-title" *ngIf="copyIG">Copy Image Group</h5>
@@ -54,25 +54,37 @@
             </div>
           </div>
 
-          <div class="form-group" *ngIf="!copyIG" [class.has-success]="serviceResponse.success" [class.has-danger]="serviceResponse.failure">
+          <div class="form-group" *ngIf="!copyIG" [class.has-danger]="serviceResponse.failure">
             <label for="igTagInput">Tags</label>
             <rl-tag-input id="igTagInput" [formControl]="newIgForm.controls['tags']" placeholder="Add a tag..."></rl-tag-input>
             <div *ngIf="serviceResponse.failure" translate class="form-control-feedback">NEW_GROUP_MODAL.CREATE_FAILURE</div>
-            <div *ngIf="serviceResponse.success" translate class="form-control-feedback">NEW_GROUP_MODAL.CREATE_SUCCESS</div>
           </div>
           <div *ngIf="showAddToGroup" (click)="addToGroup.emit()" class="link">Add to image group</div>
       </div>
       <div class="modal-footer">
-        <div *ngIf="!serviceResponse.success" class="form-group">
+        <div class="form-group">
           <button type="button" (click)="closeModal.emit()" class="btn btn-secondary">Close</button>
           <button type="submit" [class.loading]="isLoading" class="btn btn-primary">Save changes</button>         
         </div>
-        <div *ngIf="serviceResponse.success" class="form-group">
+      </div>
+      </form>
+    </div>
+    <div *ngIf="serviceResponse.success" class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Image group created</h5>
+        <button (click)="closeModal.emit()" type="button" class="close" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p><b>{{newGroup.name}}</b> created</p>
+      </div>
+      <div class="modal-footer">
+        <div class="form-group">
           <button (click)="closeModal.emit()" type="button" class="btn btn-secondary">Return to search</button>
           <button [routerLink]="['/group', newGroup.id]" type="button" class="btn btn-primary">Go to group</button>
         </div>
       </div>
-      </form>
     </div>
   </div>
 </div>
