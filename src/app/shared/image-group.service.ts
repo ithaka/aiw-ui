@@ -25,30 +25,6 @@ export class ImageGroupService {
   constructor(private _router: Router, private http: Http, private _auth: AuthService ){
     this.baseUrl = this._auth.getUrl();
   }
-
-  /**
-   * Get an image group from folder IDs
-   * @param folderId A single folder id for which to get the image group description
-   */
-  getFromFolderId(folderId: string): Promise<any> {
-
-    return this.http
-      .get(this.baseUrl + "/folders/" + folderId + "/imagegroups?studWkFldrs=true", this.options)
-      .toPromise()
-      .then((data) => { return this._auth.extractData(data); });
-  }
-
-  /**
-   * Get array of folder and image group information
-   * @param catIds An array of category ids which contain image groups
-   * @returns Array of JS Objects with image group and folder ids & info
-   */
-  getFromCatId(catId: string) {
-    return this.http
-      .get(this.baseUrl + "/categories/" + catId + "/subcategories", this.options)
-      .toPromise()
-      .then((data) => { return this._auth.extractData(data); });
-  }
   
   /**
    * Get image group description from image group id
@@ -65,24 +41,6 @@ export class ImageGroupService {
             throw new Error("No data in image group description response");
           }
           return data.json() || {};
-        });
-  }
-
-  /**
-   * Get image group data from image group id
-   * @param groupId Id of desired image group
-   * @returns JS Object with parameters: count, igId, igName, igNotes and more if it is a folder
-   */
-  getGroupData(groupId: string): Observable<string> {
-    let requestUrl = [this.baseUrl, "imagegroup", groupId].join("/") + "?_method=igdescription";
-
-    return this.http
-      .get(requestUrl, this.options)
-        .map((data) => {
-          if (!data) {
-            throw new Error("No data in image group description response");
-          }
-          return data.json();
         });
   }
 
