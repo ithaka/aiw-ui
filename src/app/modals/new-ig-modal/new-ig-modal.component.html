@@ -68,8 +68,8 @@
           <button type="submit" [class.loading]="isLoading" class="btn btn-primary">Save changes</button>         
         </div>
         <div *ngIf="serviceResponse.success" class="form-group">
-          <button [routerLink]="['/group', newGroup.id]" type="button" class="btn btn-primary">Go to group</button>
           <button (click)="closeModal.emit()" type="button" class="btn btn-secondary">Return to search</button>
+          <button [routerLink]="['/group', newGroup.id]" type="button" class="btn btn-primary">Go to group</button>
         </div>
       </div>
       </form>
