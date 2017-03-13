@@ -66,6 +66,7 @@ img.no-stretch {
     height: auto;
 }
 
+
 .card.card--asset, .card--asset {
     margin-bottom: 0px;
     height: 210px;
@@ -87,7 +88,7 @@ img.no-stretch {
 
     & .card-block {
         margin: 3px;
-        padding: 9px;
+        padding: 5px;
         // prevents odd spacing change in edit mode
         border: $assetCardBorderSize solid transparent;
         border-radius: 3px;
@@ -96,7 +97,7 @@ img.no-stretch {
 
     & .card-img-top {
         text-align: center;
-        height: 100px;
+        height: 120px;
         position: relative;
         margin-bottom: 6px;
 
@@ -104,6 +105,7 @@ img.no-stretch {
             /*@extend %vertical-center;*/
             position: absolute;
             max-width: 100%;
+            max-height: 115px;
             top: 50%;
             left: 50%;
             transform: translateY(-50%) translateX(-50%);
@@ -135,17 +137,12 @@ img.no-stretch {
     }
     & span {
         /*max-height: 2em;*/
-        max-height: 28px;
-        // white-space: nowrap;
-        // display: block;
+        max-height: 14px;
+        white-space: nowrap;
+        display: block;
         max-width: 100%;
         overflow: hidden;
         text-overflow: ellipsis;
-
-        &.overflow:after {
-            content: '…';
-            display: inline;
-        }
     }
 }
 
