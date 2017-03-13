@@ -110,7 +110,7 @@ export class NewIgModal implements OnInit {
       let copyReqBody = {
         'name' : group.name
       };
-      this._group.copy(this.route.snapshot.params.igId, copyReqBody)
+      this._group.copy(this.route.snapshot.params['igId'], copyReqBody)
 
       .subscribe(
         data => {
