@@ -62,7 +62,7 @@ export class ImageGroupPage implements OnInit, OnDestroy {
         if (results.id) {
           // Set ig properties from results
           this.ig = results;
-          // Get IG description, since we can rely on it from 
+          console.log(this.ig)
 
           // this._ig.getGroupDescription(results.igId).take(1)
           //   .subscribe((desc: ImageGroupDescription) => { 
