@@ -24,6 +24,16 @@ export class BrowseGroupsComponent implements OnInit {
   private userTypeId: any;
   private currentBrowseRes: any = {};
   private tags: Tag[] = [];
+
+  private pagination: any = {
+    totalPages: 1,
+    pageSize: 48,
+    currentPage: 1
+  };
+
+  private tagFilters = [];
+  private appliedTags = [];
+
   private expandedCategories: any = {};
   private selectedBrowseId: string = '';
   private browseMenuArray: any[] = [];
@@ -41,6 +51,23 @@ export class BrowseGroupsComponent implements OnInit {
       })
     );
 
+    this.browseMenuArray.push({
+      id: 1,
+      label: 'Private'
+    });
+
+    this.browseMenuArray.push({
+      id: 2,
+      label: 'Institutional'
+    });
+    
+    this.browseMenuArray.push({
+      id: 3,
+      label: 'Artstor Curated'
+    });
+
+    this.selectedBrowseId = '3';
+    this.loadCategory();
     this.loadIGs();
   }
 
@@ -73,62 +100,14 @@ export class BrowseGroupsComponent implements OnInit {
    * Loads Image Groups data for the current user in the array
    */
   private loadIGs(): void{
-    this._groups.getAll()
+    this._groups.getAll(this.pagination.pageSize, this.pagination.currentPage, this.appliedTags)
         .take(1).subscribe(
           (data)  => {
             console.log(data);
-            
+            this.tagFilters = data.tags;
             this.foldersObj['3'] = this.createGroupTags(data.groups);
-
-            var obj = {};
-            // if(data.PrivateFolders.length > 0){
-            //   // Create Menu Link
-            //   obj = {
-            //     id: 1,
-            //     label: 'Private Folders'
-            //   };
-            //   this.browseMenuArray.push(obj);
-
-            //   // Process Tags
-            //   this.foldersObj['1'] = this.createGroupTags(data.PrivateFolders);
-            // }
-            // if(data.PublicFolders.length > 0){
-              // Create Menu Link
-              // obj = {
-              //   id: 2,
-              //   label: 'Institutional Folders'
-              // };
-              // this.browseMenuArray.push(obj);
-              
-              // Process Tags
-              // this.foldersObj['2'] = this.createGroupTags(data.PublicFolders);
-            // }
-            // if(data.CrossInstFolders.length > 0){
-              // Create Menu Link
-              obj = {
-                id: 3,
-                label: 'Artstor Curated'
-              };
-              this.browseMenuArray.push(obj);
-
-            //   // Process Tags
-            //   this.foldersObj['3'] = this.createGroupTags(data.CrossInstFolders);
-            // }
-            // if(data.MyCourseFolders.length > 0){
-            //   // Create Menu Link
-            //   obj = {
-            //     id: 4,
-            //     label: 'My Course Folders'
-            //   };
-            //   this.browseMenuArray.push(obj);
-
-            //   // Process Tags
-            //   this.foldersObj['4'] = this.createGroupTags(data.MyCourseFolders);
-            // }
-
-            this.selectedBrowseId = '3';
+            this.pagination.totalPages = Math.floor(data.total / this.pagination.pageSize) + 1;
             this.loadCategory();
-
           },
           (error) => {
             console.log(error);
@@ -142,31 +121,19 @@ export class BrowseGroupsComponent implements OnInit {
     this.tags = this.foldersObj[this.selectedBrowseId];
   }
 
-  // showHideNode(node){
-  //   // A node in the tree will only be hidden if any of its parent nodes, going up the hierarchy, is collapsed.
-  //   var isExpanded = true;
-  //   var parentNode : any = {};
-  //   if(node.parentId){
-  //       parentNode = this.getNodeByWidgetId(node.parentId);
-  //       if(this.expandedCategories[parentNode.widgetId] == false){
-  //           isExpanded = false;
-  //       }
-  //       else{
-  //           isExpanded = this.showHideNode(parentNode);
-  //       }
-  //   }
-  //   return isExpanded;
-  // }
-
-  // getNodeByWidgetId( id ){
-  //     var node = {};
-  //     for( let cat of this.categories){
-  //         if(cat.widgetId == id){
-  //             node = cat;
-  //         }
-  //     }
-  //     return node;
-  // }
+  toggleFilterBy(tag: string) {
+    if (this.appliedTags.indexOf(tag) > -1) {
+      this.appliedTags.splice(this.appliedTags.indexOf(tag));
+    } else {
+      this.appliedTags.push(tag);
+    }
+    this.loadIGs();
+  }
+  
+  goToPage(pageNo: number): void {
+    this.pagination.currentPage = pageNo;
+    this.loadIGs();
+  }
 
     /**
    * Adds a parameter to the route and navigates to new route

@@ -1,0 +1,151 @@
+
+$activeFilterColor: #000;
+$filterUnfocusOpacity: 0.5;
+$filterBorderStyle: 1px solid rgba(0, 0, 0, 0.15);
+
+/**
+ * Filter:
+ * `filter` - A simple link toggle that is used inside of the 'filter-group' component
+ *
+ *     @example
+ *     filter Example Filter
+ */
+ $filterColor: #555; //rgba(0,0,0,0.45);
+ $filterHoverBg: #f1f1f1;
+ $filterTextIndent: 15px;
+ 
+filter, .filter {
+    cursor: pointer;
+	font-size: 13px;
+	/*@extend %bodyFontStyle;*/
+	display: block;
+	position: relative;
+	text-transform: capitalize;
+	background: transparent;
+
+	//Hanging Indent
+	padding: 2px;
+	padding-left: $filterTextIndent + 2px;
+	padding-right: 38px;
+	text-indent: -1 * $filterTextIndent;
+	
+	max-height: 100%;
+
+	&__inline-block {
+		display: inline-block;
+		width: 100;
+        transition:  color linear 0.2s, max-eight ease-out 0.2s, padding linear 0.2s, opacity linear 0.2s;
+    }
+	& form {
+		display: block;
+		width: 100%;
+		float: left;
+	}
+
+	&.filter--left-icon {
+		padding-left: $filterTextIndent + 20px;
+	}
+
+	& .link-wrap {
+		// Allows indent area to be clicked
+		&:before {
+			position: absolute;
+			content: ' ';
+			display: block;
+			left: 0px;
+			width: $filterTextIndent;
+			height: 100%;
+		}
+	}
+
+	// inactive filter color
+	color:  $filterColor;
+
+	&.no-buttons {
+		&:hover, &:active, &:focus {
+			padding-right: 0px;
+		}
+	}
+
+	&.active {
+		color: $activeFilterColor;
+		background: $filterHoverBg;
+	}
+
+	&:hover, &:active, &:focus{
+        transition:  color 0s linear;
+		color: $activeFilterColor;
+		cursor: pointer;
+		background: $filterHoverBg;
+
+		// Space for buttons
+		// padding-right: 38px;
+
+		&.active {
+			color: rgba($activeFilterColor, 0.7);
+			& i {
+				color: $activeFilterColor;
+			}
+		}
+
+		& .on-hover {
+			color: $activeFilterColor;
+		}
+
+		& .link {
+			color: #000;
+		}
+	}
+
+	& a {
+		color: $filterColor;
+		&:hover {
+			color: $activeFilterColor;
+		}
+	}
+
+	& .icon-context, & .icon-grid {
+		font-size: 1.3em !important;
+		position: absolute;
+    	left: 18px;
+    	top: 3px;
+	}
+
+	&:hover, &.active {
+		& .icon-context, & .icon-grid {
+			color: #000 !important;
+			display: inline;
+		}
+	}
+
+	& .icon-close, & .icon-close-circle,  {
+		display: none;
+		//padding-top: 1px;
+		float: right;
+		height: 1em;
+		font-size: 20px;
+	}
+
+	&.inactive {
+		color: rgba(0,0,0,0.45);
+	}
+
+	&.active {
+		color: $activeFilterColor;
+
+		& i {
+			display: inline-block;
+			color: rgba(0,0,0,0.2);
+		}
+	}
+
+	& span {
+		display: inline;
+	}
+}
+
+filter.date-span-input {
+	&:hover {
+		background: transparent;
+	}
+}

@@ -28,6 +28,11 @@ export class NewIgModal implements OnInit {
   private subscriptions: Subscription[] = [];
   private isLoading: boolean = false;
   private submitted: boolean = false;
+  private serviceResponse: {
+    success?: boolean,
+    failure?: boolean
+  } = {};
+  private newGroup: any;
 
   constructor(
       private _assets: AssetService,
@@ -133,15 +138,12 @@ export class NewIgModal implements OnInit {
           data => {
             console.log(data);
             this.isLoading = false;
-            // Close the modal
-            this.closeModal.emit();
-            // Show the user their new group!
-            if (data.id) {
-              this.router.navigate(['/group', data.id]);
-            }
+            this.newGroup = data;
+            this.serviceResponse.success = true;
           },
           error => {
-            console.log(error);
+            console.error(error);
+            this.serviceResponse.failure = true;
             this.isLoading = false;
           }
         );
