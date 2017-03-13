@@ -15,9 +15,11 @@ export class GroupService {
         private http: Http,
         private _auth: AuthService
     ) {
+
         // ' + this._auth.getSubdomain() + '
         this.groupUrl = '//stagely.artstor.org/api/v1/group';
         let headers = new Headers({ });
+
         this.options = new RequestOptions({ headers: headers, withCredentials: true });
     }
 
