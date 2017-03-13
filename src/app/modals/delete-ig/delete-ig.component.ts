@@ -42,11 +42,4 @@ export class DeleteIgModal implements OnInit {
     });
   }
 
-  returnHome(): void {
-    this._router.navigate(['/home']);
-  }
-
-  browseGroups(): void {
-    this._router.navigate(['/browse', 'groups']);
-  }
 }

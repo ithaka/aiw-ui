@@ -1,5 +1,6 @@
 <div class="modal fade-in show">
   <div class="modal-dialog" role="document">
+    <!--modal content: Ask to delete -->
     <div *ngIf="!groupDeleted" class="modal-content">
       <div class="modal-header">
         <h4 translate class="modal-title">IMAGE_GROUP_PAGE.DELETE_IG.TITLE</h4>
@@ -16,6 +17,7 @@
         <button translate type="button" class="btn btn-primary" (click)="deleteImageGroup()">IMAGE_GROUP_PAGE.DELETE_IG.DELETE_BUTTON</button>
       </div>
     </div><!-- /.modal-content -->
+    <!--modal content: Is deleted, now what? -->
     <div *ngIf="groupDeleted" class="modal-content">
       <div class="modal-header">
         <h4 translate class="modal-title">IMAGE_GROUP_PAGE.DELETE_IG.TITLE_DELETED</h4>
@@ -27,8 +29,8 @@
         <p><b>"{{ igName }}"</b> was successfully deleted.</p>
       </div>
       <div class="modal-footer">
-        <button translate type="button" class="btn btn-primary" (click)="returnHome()">RETURN_HOME</button>
-        <button translate type="button" class="btn btn-secondary" (click)="browseGroups()">BROWSE_GROUPS</button>
+        <a translate class="btn btn-secondary" [routerLink]="['/browse', 'groups']">BROWSE_GROUPS</a>
+        <a translate class="btn btn-primary" [routerLink]="['/home']">RETURN_HOME</a>
       </div>
     </div><!-- /.modal-content -->
   </div><!-- /.modal-dialog -->
