@@ -136,9 +136,11 @@ export class NewIgModal implements OnInit {
             console.log(data);
             this.isLoading = false;
             this.newGroup = data;
+            this.serviceResponse.success = true;
           },
           error => {
             console.error(error);
+            this.serviceResponse.failure = true;
             this.isLoading = false;
           }
         );
