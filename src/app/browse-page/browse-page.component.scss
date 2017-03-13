@@ -31,12 +31,22 @@
     margin-bottom: $basePadding;
     padding: 10px 0px;
     border-bottom: 1px solid #f0f0f0;
+
+    & .nav-link {
+        &:hover, &:active, &:focus {
+            color: lighten($red,15%) !important;
+            text-decoration: none;
+            border-color: rgba(0,0,0,0);
+        }
+    }
 }
 .browse-nav .nav-link.active{
-    font-weight: 700;
+    // font-weight: 700;
+    // font-size: 13.5px;
+    color: $red;
 }
 .browse-nav .label{
-    color: #999;
+    color: #888; //$red;
     padding-right: 10px;
     line-height: 34px;
 }

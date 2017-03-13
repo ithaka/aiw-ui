@@ -11,6 +11,9 @@
     z-index:1;
     position: relative;
 
+    // Hide increment arrows on Firefox
+    -moz-appearance:textfield;
+
     &:hover, &:focus {
         outline: none;
         background: #fafafa;
