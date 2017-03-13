@@ -23,7 +23,7 @@ export class NavMenu implements OnInit, OnDestroy {
   private actionOptions: any = {};
 
   @Input()
-  private disableIgDelete: boolean = false;
+  private allowIgUpdate: boolean = false;
   
   private mobileCollapsed: boolean = true;
   private selectedAssets: any[] = [];

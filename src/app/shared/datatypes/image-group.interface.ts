@@ -3,6 +3,11 @@ import { Thumbnail } from './thumbnail.interface';
 export interface ImageGroup {
   id: string; // new ig property
   name: string; // new ig property
+  access: {
+    entity_type: number,
+    entity_identifier: string,
+    access_type: number
+  }[];
   igId: string;
   count: number;
   thumbnails: Thumbnail[];
