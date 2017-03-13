@@ -38,7 +38,7 @@
                             <button class="dropdown-item">!Save Image Group</button>
                             <!--Active on Image Group Page-->
                             <button [disabled]="!actionOptions.group" (click)="copyIG = true; showImageGroupModal = true;" class="dropdown-item">Save Image Group as...</button>
-                            <button [disabled]="!actionOptions.group || disableIgDelete" (click)="deleteIgModal = true" class="dropdown-item">Delete Image Group</button>
+                            <button [disabled]="!actionOptions.group || !allowIgUpdate" (click)="deleteIgModal = true" class="dropdown-item">Delete Image Group</button>
                             <!--Amber <div class="dropdown-divider"></div>-->
                             <!--Amber <button class="dropdown-item">!Manage Personal Collection</button>-->
                             <!--Amber <button class="dropdown-item">!Upload to Personal Collection</button>-->
