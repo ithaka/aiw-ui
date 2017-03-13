@@ -46,7 +46,8 @@
       "DELETE_BUTTON": "Delete",
       "CANCEL_BUTTON": "Cancel",
       "MAIN_BODY1": "Are you sure you want to delete",
-      "MAIN_BODY2":  "This can not be reverted."
+      "MAIN_BODY2":  "This can not be reverted.",
+      "TITLE_DELETED": "Group was Deleted"
     }
   },
   "ADD_TO_GROUP_MODAL": {
@@ -58,5 +59,7 @@
   "NEW_GROUP_MODAL": {
     "CREATE_SUCCESS": "You've successfully created an image group",
     "CREATE_FAILURE": "Something went wrong, and your group was not created"
-  }
+  },
+  "RETURN_HOME" : "Return Home",
+  "BROWSE_GROUPS" : "Browse Groups"
 }

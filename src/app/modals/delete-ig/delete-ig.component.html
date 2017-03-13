@@ -1,6 +1,6 @@
 <div class="modal fade-in show">
   <div class="modal-dialog" role="document">
-    <div class="modal-content">
+    <div *ngIf="!groupDeleted" class="modal-content">
       <div class="modal-header">
         <h4 translate class="modal-title">IMAGE_GROUP_PAGE.DELETE_IG.TITLE</h4>
         <button type="button" class="close" (click)="closeModal.emit()" aria-label="Close">
@@ -8,11 +8,27 @@
         </button>
       </div>
       <div class="modal-body">
-        <p>Are you sure you want to delete <b>"{{ igName }}"</b>? This can not be reverted.</p>
+        <p>Are you sure you want to delete <b>"{{ igName }}"</b>? <br/>
+        This can not be reverted.</p>
       </div>
       <div class="modal-footer">
-        <button translate type="button" class="btn btn-primary" (click)="deleteImageGroup()">IMAGE_GROUP_PAGE.DELETE_IG.DELETE_BUTTON</button>
         <button translate type="button" class="btn btn-secondary" (click)="closeModal.emit()">IMAGE_GROUP_PAGE.DELETE_IG.CANCEL_BUTTON</button>
+        <button translate type="button" class="btn btn-primary" (click)="deleteImageGroup()">IMAGE_GROUP_PAGE.DELETE_IG.DELETE_BUTTON</button>
+      </div>
+    </div><!-- /.modal-content -->
+    <div *ngIf="groupDeleted" class="modal-content">
+      <div class="modal-header">
+        <h4 translate class="modal-title">IMAGE_GROUP_PAGE.DELETE_IG.TITLE_DELETED</h4>
+        <button type="button" class="close" (click)="closeModal.emit()" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p><b>"{{ igName }}"</b> was successfully deleted.</p>
+      </div>
+      <div class="modal-footer">
+        <button translate type="button" class="btn btn-primary" (click)="returnHome()">RETURN_HOME</button>
+        <button translate type="button" class="btn btn-secondary" (click)="browseGroups()">BROWSE_GROUPS</button>
       </div>
     </div><!-- /.modal-content -->
   </div><!-- /.modal-dialog -->
