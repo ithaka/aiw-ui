@@ -11,8 +11,9 @@ import { Tag } from './tag.class';
 })
 export class TagComponent {
 
-  @Input()
-  public tag: Tag;
+  @Input() public tag: Tag;
+  @Input() public link: boolean;
+
   private showAsFolder: boolean;
   public linkRoute: string = "";
   public showDescription: boolean = false;

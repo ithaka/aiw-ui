@@ -68,6 +68,11 @@
     color: #555;
 }
 
+.group-list {
+    // -webkit-column-count: 2; /* Chrome, Safari, Opera */
+    // -moz-column-count: 2; /* Firefox */
+    // column-count: 2;
+}
 
 @for $i from 1 through 20 {
     .tree__branch-#{$i} {

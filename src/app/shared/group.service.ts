@@ -26,9 +26,24 @@ export class GroupService {
     /**
      * Get All Groups
      */
-    public getAll(): Observable<any> {
+    public getAll(size?: number, pageNo ?: number, tags ?: string[] ): Observable<any> {
+        if (!tags) {
+            tags = [];
+        }
+        if (!size) {
+            size = 48;
+        }
+        if (!pageNo) {
+            pageNo = 1;
+        }
+
+        let tagParam = "";
+        tags.forEach( tag => { 
+            tagParam += '&tags=' + tag;
+        });
+
         return this.http.get(
-            this.groupUrl
+            this.groupUrl + "?size=" + size + '&from=' + ( (pageNo - 1) * size) +  tagParam,
         ).map(
             res => {
                 let body = res.json();
@@ -88,20 +103,19 @@ export class GroupService {
     }
 
     /**
-     * Update Group
+     * Update Group. The body sent cannot contain id, insts-with-access or users-with-access
      */
     public update(group: ImageGroup): Observable<any> {
-        let putGroup: ImageGroup = <ImageGroup>{};
-        Object.assign(putGroup, group);
-        delete putGroup.id;
-        delete putGroup['users-with-access'];
-        delete putGroup['insts-with-access'];
+        let id = group.id;
+
+        delete group.id;
+        delete group['users-with-access'];
+        delete group['insts-with-access'];
+        if (group.tags[0] == null) { group.tags = [] }
 
         return this.http.put(
-            this.groupUrl + '/' + group.id,
-            putGroup
-            // this.options
-            // {}
+            this.groupUrl + '/' + id,
+            group
         )
         .map((res) => { return res.json() || {}; });
     }

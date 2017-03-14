@@ -9,3 +9,4 @@ export * from './datatypes';
 export * from './search/search.component';
 export * from './logging.service';
 export * from './image-group.service';
+export * from './pagination/pagination.component';

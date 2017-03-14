@@ -9,6 +9,7 @@ export interface ImageGroup {
   items: string[];
   description?: ImageGroupDescription; // this does not naturally come with image groups, but sometimes we attach it
   igDownloadInfo?: IgDownloadInfo; // we also attach this to image groups when we have it
+  tags: string[];
 }
 
 export interface ImageGroupDescription {

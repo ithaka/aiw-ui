@@ -54,5 +54,9 @@
     "SELECT_PROMPT": "Select an image group",
     "ADD_SUCCESS": "Images successfully added to group",
     "ADD_FAILURE": "Unable to add images to group. Sorry about that."
+  },
+  "NEW_GROUP_MODAL": {
+    "CREATE_SUCCESS": "You've successfully created an image group",
+    "CREATE_FAILURE": "Something went wrong, and your group was not created"
   }
 }

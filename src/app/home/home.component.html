@@ -80,7 +80,7 @@
                 <div class="loading" *ngIf="blogLoading"></div>
                 <div *ngIf="!blogLoading">
                     <a class="blog-post" *ngFor="let post of blogPosts | slice:0:3" [href]="post['URL']">
-                        <h3 class="blog-post__title">{{ post.title }}</h3>
+                        <h3 class="blog-post__title" [innerHtml]="post.title"></h3>
                         <p class="blog-post__preview" [innerHtml]="post.excerpt"></p>
                     </a>
                 </div>
