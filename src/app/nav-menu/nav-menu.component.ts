@@ -24,6 +24,9 @@ export class NavMenu implements OnInit, OnDestroy {
 
   @Input()
   private disableIgDelete: boolean = false;
+
+  @Input()
+  private ig: any = {};
   
   private mobileCollapsed: boolean = true;
   private selectedAssets: any[] = [];
@@ -33,6 +36,7 @@ export class NavMenu implements OnInit, OnDestroy {
   private showAddToGroupModal: boolean = false;
 
   private copyIG: boolean = false;
+  private editIG: boolean = false;
   private params: any = {};
   
   // TypeScript public modifiers

@@ -2,8 +2,9 @@
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" *ngIf="!copyIG">New Image Group</h5>
+        <h5 class="modal-title" *ngIf="!copyIG && !editIG">New Image Group</h5>
         <h5 class="modal-title" *ngIf="copyIG">Copy Image Group</h5>
+        <h5 class="modal-title" *ngIf="editIG">Edit Image Group</h5>
         <button (click)="closeModal.emit()" type="button" class="close" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>

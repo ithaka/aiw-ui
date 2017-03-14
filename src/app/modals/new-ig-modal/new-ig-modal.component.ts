@@ -16,6 +16,8 @@ export class NewIgModal implements OnInit {
   @Output() addToGroup: EventEmitter<any> = new EventEmitter();
 
   @Input() private copyIG: boolean = false;
+  @Input() private editIG: boolean = false;
+  @Input() private ig: any = false;
   @Input() private showAddToGroup: boolean = false;
 
   private newIgForm: FormGroup;
@@ -47,6 +49,7 @@ export class NewIgModal implements OnInit {
 
   ngOnInit() {
     this.isArtstorUser = this._auth.getUser().institutionId == 1000;
+    console.log(this.ig);
 
     if (this.selectedAssets.length < 1) { // if an asset hasn't been injected, the component gets assets from list of selected assets
       // Subscribe to asset selection
@@ -69,7 +72,6 @@ export class NewIgModal implements OnInit {
 
   private igFormSubmit(formValue: any): void {
     this.submitted = true;
-
     // avoid making the service calls, but still trigger error display
     if (!this.newIgForm.valid) {
       return;
