@@ -33,6 +33,7 @@ export class NewIgModal implements OnInit {
   private serviceResponse: {
     success?: boolean,
     failure?: boolean
+    // editSuccess?: boolean
   } = {};
   private newGroup: any;
 
@@ -54,7 +55,19 @@ export class NewIgModal implements OnInit {
 
   ngOnInit() {
     this.isArtstorUser = this._auth.getUser().institutionId == 1000;
-    console.log(this.ig);
+    if(this.ig.id && this.editIG){
+      console.log(this.ig);
+      (<FormControl>this.newIgForm.controls['title']).setValue(this.ig.name);
+
+      this.tags = this.ig.tags;
+      (<FormControl>this.newIgForm.controls['tags']).setValue(this.tags);
+
+      if(this.ig.description){
+        let parentElement = document.createElement('div');
+        parentElement.innerHTML = this.ig.description;
+        this.igDescription = (<HTMLElement>parentElement.firstChild).innerHTML;
+      }
+    }
 
     if (this.selectedAssets.length < 1) { // if an asset hasn't been injected, the component gets assets from list of selected assets
       // Subscribe to asset selection
@@ -93,24 +106,10 @@ export class NewIgModal implements OnInit {
       }
     );
 
-    let group = {
-      name: formValue.title,
-      description: this.igDescription == '<div>&nbsp;</div>' ? '' : this.igDescription,
-      sequence_number: 0,
-      access: [ {
-        // This is the user's access object
-        "entity_type": 100,
-        "entity_identifier": this._auth.getUser().baseProfileId.toString(),
-        "access_type": 300
-      } ],
-      items: itemIds,
-      tags: formValue.tags
-    };
-
     if(this.copyIG){
       
       let copyReqBody = {
-        'name' : group.name
+        'name' : formValue.title
       };
       this._group.copy(this.route.snapshot.params.igId, copyReqBody)
 
@@ -133,7 +132,55 @@ export class NewIgModal implements OnInit {
         }
       );
     }
+    else if(this.editIG){
+      let editGroup = {
+        name: formValue.title,
+        description: this.igDescription == '<div>&nbsp;</div>' ? '' : this.igDescription,
+        sequence_number: 0,
+        access: [ {
+          // This is the user's access object
+          "entity_type": 100,
+          "entity_identifier": this._auth.getUser().baseProfileId.toString(),
+          "access_type": 300
+        } ],
+        items: this.ig.items,
+        tags: formValue.tags,
+        id: this.ig.id
+      };
+
+      console.log('edit IG !');
+      console.log(editGroup);
+
+      this._group.update(editGroup)
+        .subscribe(
+          data => {
+            console.log(data);
+            this.isLoading = false;
+            this.newGroup = data;
+            // this.serviceResponse.editSuccess = true;
+            this.serviceResponse.success = true;
+          },
+          error => {
+            console.error(error);
+            this.isLoading = false;
+          }
+        );
+    }
     else{
+
+      let group = {
+        name: formValue.title,
+        description: this.igDescription == '<div>&nbsp;</div>' ? '' : this.igDescription,
+        sequence_number: 0,
+        access: [ {
+          // This is the user's access object
+          "entity_type": 100,
+          "entity_identifier": this._auth.getUser().baseProfileId.toString(),
+          "access_type": 300
+        } ],
+        items: itemIds,
+        tags: formValue.tags
+      };
 
       this._group.create(group)
         .subscribe(

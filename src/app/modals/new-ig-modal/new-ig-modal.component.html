@@ -59,7 +59,10 @@
             <label for="igTagInput">Tags</label>
             <rl-tag-input id="igTagInput" [formControl]="newIgForm.controls['tags']" placeholder="Add a tag..."></rl-tag-input>
             <div *ngIf="serviceResponse.failure" translate class="form-control-feedback">NEW_GROUP_MODAL.CREATE_FAILURE</div>
-            <div *ngIf="serviceResponse.success" translate class="form-control-feedback">NEW_GROUP_MODAL.CREATE_SUCCESS</div>
+            <div *ngIf="serviceResponse.success && !editIG" translate class="form-control-feedback">NEW_GROUP_MODAL.CREATE_SUCCESS</div>
+            <div *ngIf="serviceResponse.success && editIG" translate class="form-control-feedback">NEW_GROUP_MODAL.EDIT_SUCCESS</div>
+            <!--<div *ngIf="serviceResponse.editSuccess" translate class="form-control-feedback edit-success">NEW_GROUP_MODAL.EDIT_SUCCESS</div>-->
+            
           </div>
           <div *ngIf="showAddToGroup" (click)="addToGroup.emit()" class="link">Add to image group</div>
       </div>
@@ -68,9 +71,12 @@
           <button type="button" (click)="closeModal.emit()" class="btn btn-secondary">Close</button>
           <button type="submit" [class.loading]="isLoading" class="btn btn-primary">Save changes</button>         
         </div>
-        <div *ngIf="serviceResponse.success" class="form-group">
+        <div *ngIf="serviceResponse.success && !editIG" class="form-group">
           <button (click)="closeModal.emit()" type="button" class="btn btn-secondary">Return to search</button>
           <button [routerLink]="['/group', newGroup.id]" type="button" class="btn btn-primary">Go to group</button>
+        </div>
+        <div *ngIf="serviceResponse.success && editIG" class="form-group">
+          <button (click)="closeModal.emit()" type="button" class="btn btn-primary">Ok</button>
         </div>
       </div>
       </form>
