@@ -35,51 +35,36 @@ export class ImageGroupPPPage implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-      this.subscriptions.push(
-      this.route.params.subscribe((routeParams) => {
-        this.igId = routeParams['igId'];
 
-        if (this.igId) {
-            this.loadIgDesc(this.igId);
-            this.loadIgAssets();
+
+    // Subscribe to ID in params
+    this.subscriptions.push(
+      this.route.params.subscribe((routeParams) => {
+        let id = routeParams["igId"];
+        let params = Object.assign({}, routeParams);
+        // If a page number isn't set, reset to page 1!
+        if (!params['currentPage']){
+          params['currentPage'] = 1;
+        } 
+        if (id) {
+          this._assets.queryAll(params);
         }
       })
     );
 
     this.subscriptions.push(
-          this._igService.assets.subscribe((data: any) => {
-              if(data.igId){
-                  this.igName = data.igName;
-                  this.assets = this.assets.concat(data.thumbnails);
+      this._assets.allResults.subscribe((results: any) => {
+        console.log(results);
+        if(results.id){
+            this.igDesc = results.description;
+            this.assets = this.assets.concat(results.thumbnails);
                   
-                  for(var i = 0; i < this.assets.length; i++){
-                      // preserve newlines, etc - use valid JSON
-                      let jsonString = this.assets[i].jsonListSt.replace(/\\n/g, "\\n")  
-                                           .replace(/\\'/g, "\\'")
-                                           .replace(/\\"/g, '\\"')
-                                           .replace(/\\&/g, "\\&")
-                                           .replace(/\\r/g, "\\r")
-                                           .replace(/\\t/g, "\\t")
-                                           .replace(/\\b/g, "\\b")
-                                           .replace(/\\f/g, "\\f");
-                      // remove non-printable and other non-valid JSON chars
-                      jsonString = jsonString.replace(/[\u0000-\u0019]+/g,""); 
-                      let jsonObj;
-                      try {
-                          jsonObj = JSON.parse(jsonString);
-                      }
-                      catch (e) {
-                          jsonObj = [];
-                      }
-                      this.assets[i].metaData = jsonObj;
-                  }
-
-                  if(this.assets.length < parseInt(data.count)){
-                      console.log('Load assets from next page');
-                      this._igService.loadIgAssets(this.igId, this.assets.length + 1);
-                  }
+            for(var i = 0; i < this.assets.length; i++){
+                this.assets[i].metaData = this.assets[i].jsonListSt;
             }
-         })
+
+        }
+      })
     );
   }
 
