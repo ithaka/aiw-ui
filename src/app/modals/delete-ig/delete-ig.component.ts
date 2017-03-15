@@ -1,6 +1,8 @@
+import { Router } from '@angular/router';
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
-import { GroupService } from './../../shared';
+// Project Dependencies
+import { GroupService, AssetService } from './../../shared';
 
 @Component({
   selector: 'ang-delete-ig-modal',
@@ -19,16 +21,25 @@ export class DeleteIgModal implements OnInit {
   @Input()
   igName: string;
 
-  constructor(private _group: GroupService) { }
+  private groupDeleted: boolean = false;
 
-  ngOnInit() { console.log(this.igId); }
+  constructor(
+      private _group: GroupService, 
+      private _assets: AssetService,
+      private _router: Router) { }
+
+  ngOnInit() {
+    
+  }
 
   deleteImageGroup(): void{
     this._group.delete(this.igId).subscribe(res =>{
       if(res){
-        console.log(res);
-        this.closeModal.emit();
+        // Clear Group Assets locally
+        this._assets.clearAssets();
+        this.groupDeleted = true;
       }
     });
   }
+
 }

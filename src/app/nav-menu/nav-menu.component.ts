@@ -3,7 +3,7 @@ import { Component, OnInit, OnDestroy, Output, EventEmitter, Input } from '@angu
 import { ActivatedRoute, Router } from '@angular/router';
 
 // Project Dependencies
-import { AssetService, ImageGroupService } from '../shared';
+import { AssetService, ImageGroupService, ImageGroup, GroupService } from '../shared';
 
 @Component({
   selector: 'nav-menu',
@@ -26,7 +26,11 @@ export class NavMenu implements OnInit, OnDestroy {
   private disableIgDelete: boolean = false;
 
   @Input()
+  private allowIgUpdate: boolean = false;
+
+  @Input()
   private ig: any = {};
+
   
   private mobileCollapsed: boolean = true;
   private selectedAssets: any[] = [];
@@ -44,6 +48,7 @@ export class NavMenu implements OnInit, OnDestroy {
     private _router: Router,
     private _assets: AssetService,
     private _ig: ImageGroupService,
+    private _group: GroupService,
     private route: ActivatedRoute
   ) {
   }
@@ -105,8 +110,28 @@ export class NavMenu implements OnInit, OnDestroy {
    * Uses a combination of groups service and asset service to delete the assets selected in the asset grid
    */
   private deleteSelectedAssets(): void {
-    let ig = this.route.snapshot.params['igId'];
-    console.log(ig);
-    console.log(this._assets.getSelectedAssets());
+    let igId = this.params['igId']
+
+    // make a new object b/c we don't want to be messing up the real ig object
+    let putGroup = Object.assign({}, this.ig)
+
+    let assetFound: boolean
+    putGroup.items = putGroup.items.filter((item) => {
+      assetFound = false
+      this._assets.getSelectedAssets().forEach((asset) => {
+        if (asset.objectId == item) {
+          assetFound = true
+          return
+        }
+      })
+      return !assetFound // if the asset was not found, we want to keep it
+    })
+
+    console.log(putGroup)
+    this._group.update(putGroup)
+      .take(1)
+      .subscribe((res) => {
+        console.log(res)
+      })
   }
 }

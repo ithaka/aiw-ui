@@ -102,8 +102,7 @@ export class RegisterComponent implements OnInit {
       .subscribe((data) => {
         this.isLoading = false;
         if (data.user) {
-          let user: any;
-          Object.assign(user, data.user);
+          let user: any = Object.assign({}, data.user);
           user.isLoggedIn = true;
           this._auth.saveUser(data.user);
           this._router.navigate(['/home']);

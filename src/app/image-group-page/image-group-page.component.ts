@@ -27,7 +27,7 @@ export class ImageGroupPage implements OnInit, OnDestroy {
   /** set to true when the call to download info has returned. We won't know what modal to show before that */
   private downloadInfoReturned: boolean = false;
   /** Enables / Disables the IG deletion based on user ownership */
-  private disableIgDelete: boolean = false;
+  private allowIgUpdate: boolean = false;
 
   constructor(
     private _ig: ImageGroupService,
@@ -62,28 +62,37 @@ export class ImageGroupPage implements OnInit, OnDestroy {
         if (results.id) {
           // Set ig properties from results
           this.ig = results;
-          // Get IG description, since we can rely on it from 
+
+          console.log(this.ig)
+
+          // if the user has write access, then allow them to update the image group
+          this.ig.access.forEach((accessObj) => {
+            if (accessObj.entity_identifier == this.user.baseProfileId && accessObj.access_type >= 300) {
+              this.allowIgUpdate = true;
+            }
+          })
 
           // this._ig.getGroupDescription(results.igId).take(1)
           //   .subscribe((desc: ImageGroupDescription) => { 
           //     this.ig.description = desc;
           //   });
 
-          this._ig.getGroupDescription(results.igId).take(1)
-            .subscribe((desc: ImageGroupDescription) => { 
-              this.disableIgDelete = !desc.isFldrOwner;
-            });
+          // this._ig.getGroupDescription(results.igId).take(1)
+          //   .subscribe((desc: ImageGroupDescription) => { 
+          //     console.log(desc)
+          //     this.disableIgDelete = !desc.isFldrOwner;
+          //   });
 
 
-          // get the user's download count
-          this._ig.getDownloadCount(this.ig.igId)
-            .take(1)
-            .subscribe((res: IgDownloadInfo) => {
-              this.downloadInfoReturned = true;
-              this.ig.igDownloadInfo = res;
-            }, (err) => {
-              console.error(err);
-            });
+          // // get the user's download count
+          // this._ig.getDownloadCount(this.ig.igId)
+          //   .take(1)
+          //   .subscribe((res: IgDownloadInfo) => {
+          //     this.downloadInfoReturned = true;
+          //     this.ig.igDownloadInfo = res;
+          //   }, (err) => {
+          //     console.error(err);
+          //   });
         }
       })
     );
