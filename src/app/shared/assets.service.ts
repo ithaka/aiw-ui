@@ -264,15 +264,16 @@ export class AssetService {
     /**
      * Determines which service to call based on which route parameters exist
      * @param params Object conaining all route params
+     * @param refresh boolean value specifing if the results need to be refreshed
      */
-    public queryAll(params: any) {
+    public queryAll(params: any, refresh?: boolean) {
         // Make sure number params are parsed
         params =  Object.assign( Object.assign({}, this.defaultUrlParams), params);
         params.pageSize = parseInt(params.pageSize);
         params.currentPage =  parseInt(params.currentPage);
 
         // Reset allResults
-        if (this._toolbox.compareObjects(this.currentLoadedParams, params) === true) {
+        if ((this._toolbox.compareObjects(this.currentLoadedParams, params) === true) && !refresh) {
             // Don't query again if the params are identical
             return;
         }

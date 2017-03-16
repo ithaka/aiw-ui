@@ -1,4 +1,4 @@
-<nav-menu [actionOptions]="{group: true}" [allowIgUpdate]="allowIgUpdate" [disableIgDelete]="disableIgDelete" [ig]="ig"></nav-menu>
+<nav-menu [actionOptions]="{group: true}" (refreshIG)="refreshIG()" [allowIgUpdate]="allowIgUpdate" [disableIgDelete]="disableIgDelete" [ig]="ig"></nav-menu>
 <div class="container main-content">
   <div class="row no-gutters row--search-bar">
     <div class="col-md-5">

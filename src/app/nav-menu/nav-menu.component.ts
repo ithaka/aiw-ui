@@ -31,6 +31,7 @@ export class NavMenu implements OnInit, OnDestroy {
   @Input()
   private ig: any = {};
 
+  @Output() refreshIG: EventEmitter<any> = new EventEmitter();
   
   private mobileCollapsed: boolean = true;
   private selectedAssets: any[] = [];
@@ -133,5 +134,10 @@ export class NavMenu implements OnInit, OnDestroy {
       .subscribe((res) => {
         console.log(res)
       })
+  }
+
+
+  private reloadIG():void{
+    this.refreshIG.emit();
   }
 }

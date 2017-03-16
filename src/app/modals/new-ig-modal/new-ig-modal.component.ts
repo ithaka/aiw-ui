@@ -14,6 +14,7 @@ import { AssetService, AuthService, GroupService } from './../../shared';
 export class NewIgModal implements OnInit {
   @Output() closeModal: EventEmitter<any> = new EventEmitter();
   @Output() addToGroup: EventEmitter<any> = new EventEmitter();
+  @Output() igReloadTriggered: EventEmitter<any> = new EventEmitter();
 
   @Input() private copyIG: boolean = false;
   @Input() private editIG: boolean = false;
@@ -33,7 +34,6 @@ export class NewIgModal implements OnInit {
   private serviceResponse: {
     success?: boolean,
     failure?: boolean
-    // editSuccess?: boolean
   } = {};
   private newGroup: any;
 
@@ -86,6 +86,11 @@ export class NewIgModal implements OnInit {
 
   ngOnDestroy() {
       this.subscriptions.forEach((sub) => { sub.unsubscribe(); });
+  }
+
+  private refreshIG(): void{
+    this.igReloadTriggered.emit();
+    this.closeModal.emit();
   }
 
   private igFormSubmit(formValue: any): void {
@@ -157,11 +162,11 @@ export class NewIgModal implements OnInit {
             console.log(data);
             this.isLoading = false;
             this.newGroup = data;
-            // this.serviceResponse.editSuccess = true;
             this.serviceResponse.success = true;
           },
           error => {
             console.error(error);
+            this.serviceResponse.failure = true;
             this.isLoading = false;
           }
         );

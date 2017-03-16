@@ -131,4 +131,10 @@ export class ImageGroupPage implements OnInit, OnDestroy {
       this.showLoginModal = true;
     }
   }
+
+  private refreshIG(): void{
+    console.log('Refresh IG from IG page!');
+    console.log(this.route.snapshot.params);
+    this._assets.queryAll(this.route.snapshot.params, true);
+  }
 }
