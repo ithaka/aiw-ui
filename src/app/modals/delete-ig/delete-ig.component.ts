@@ -19,6 +19,9 @@ export class DeleteIgModal implements OnInit {
   igId: string;
 
   @Input()
+  ig: any;
+
+  @Input()
   igName: string;
 
   private groupDeleted: boolean = false;
@@ -29,7 +32,9 @@ export class DeleteIgModal implements OnInit {
       private _router: Router) { }
 
   ngOnInit() {
-    
+    if(this.ig.id){
+      this.igName = this.ig.name;
+    }
   }
 
   deleteImageGroup(): void{

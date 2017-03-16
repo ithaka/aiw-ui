@@ -78,7 +78,7 @@
     </nav>
     <!--</div>-->
 </div>
-<ang-delete-ig-modal *ngIf="deleteIgModal" (closeModal)="deleteIgModal = false" [igId]="route.snapshot.params.igId" [igName]="route.snapshot.params.name"></ang-delete-ig-modal>
+<ang-delete-ig-modal *ngIf="deleteIgModal" (closeModal)="deleteIgModal = false" [ig]="ig" [igId]="route.snapshot.params.igId" [igName]="route.snapshot.params.name"></ang-delete-ig-modal>
 <ang-new-ig-modal *ngIf="showImageGroupModal" [copyIG]="copyIG" [editIG]="editIG" [ig]="ig" (igReloadTriggered)="reloadIG()" (closeModal)="showImageGroupModal = false"></ang-new-ig-modal>
 <ang-share-link-modal *ngIf="showShareLinkModal" [asset]="selectedAssets[0]" (closeModal)="showShareLinkModal = false"></ang-share-link-modal>
 <ang-add-to-group *ngIf="showAddToGroupModal" (closeModal)="showAddToGroupModal = false"></ang-add-to-group>

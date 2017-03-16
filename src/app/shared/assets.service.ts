@@ -29,6 +29,11 @@ export class AssetService {
     private allResultsSource: BehaviorSubject<any[]> = new BehaviorSubject(this.allResultsValue);
     public allResults: Observable<any> = this.allResultsSource.asObservable();
 
+    //set up noIG observables
+    private noIGValue: boolean = false;
+    private noIGSource: BehaviorSubject<boolean> = new BehaviorSubject(this.noIGValue);
+    public noIG: Observable<any> = this.noIGSource.asObservable();
+
     // Pagination value observable
     private paginationValue: any = {
         totalPages: 1,
@@ -493,6 +498,9 @@ export class AssetService {
      * @param igId Image group id for which to retrieve thumbnails
      */
     private loadIgAssets(igId: string) {
+        // Reset No IG observable
+        this.noIGSource.next(false);
+
         // Create a request option
         let startIndex = ((this.urlParams.currentPage - 1) * this.urlParams.pageSize) + 1;
 
@@ -528,6 +536,9 @@ export class AssetService {
             })
             .catch((error) => {
                 console.log(error);
+                if(error.status === 404){
+                    this.noIGSource.next(true);
+                }
             });
     }
 
