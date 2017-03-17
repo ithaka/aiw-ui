@@ -29,16 +29,18 @@
                             <!--Active on Image Group Page-->
                             <!--Future slide sorter function <button class="dropdown-item">!View All</button>-->
                             <button (click)="selectAllInAssetGrid()" class="dropdown-item">Select All</button>
-                            <button [class.disabled]="selectedAssets.length < 1" (click)="copyIG = false; showImageGroupModal = true;" class="dropdown-item">Save Selections to > New Image Group</button>
+                            <button [class.disabled]="selectedAssets.length < 1" (click)="copyIG = false; editIG = false; showImageGroupModal = true;" class="dropdown-item">Save Selections to > New Image Group</button>
                             <button [class.disabled]="selectedAssets.length < 1" (click)="showAddToGroupModal = true;" class="dropdown-item">Save Selections to > Existing Image Group</button>
                             <button *ngIf="params['igId']" [class.disabled]="selectedAssets.length < 1 || !allowIgUpdate" (click)="deleteSelectedAssets()" class="dropdown-item">Delete Selections from Image Group</button>
                             <button [class.disabled]="selectedAssets.length < 1" (click)="_assets.setSelectedAssets([])" class="dropdown-item">Deselect All</button>
                             <div class="dropdown-divider"></div>
+
                             <!--Active on Image Group Page-->
                             <button class="dropdown-item">!Save Image Group</button>
-                            <!--Active on Image Group Page-->
-                            <button [disabled]="!actionOptions.group" (click)="copyIG = true; showImageGroupModal = true;" class="dropdown-item">Save Image Group as...</button>
-                            <button [disabled]="!actionOptions.group || !allowIgUpdate" (click)="deleteIgModal = true" class="dropdown-item">Delete Image Group</button>
+                            <button [disabled]="!actionOptions.group || disableIgDelete" (click)="editIG = true; copyIG = false; showImageGroupModal = true;" class="dropdown-item">Edit Image Group</button>
+                            <button [disabled]="!actionOptions.group" (click)="copyIG = true; editIG = false; showImageGroupModal = true;" class="dropdown-item">Save Image Group as...</button>
+                            <button [disabled]="!actionOptions.group || !allowIgUpdate" (click)="deleteIgModal = true" class="dropdown-item">Delete Image Group</button>                 
+
                             <!--Amber <div class="dropdown-divider"></div>-->
                             <!--Amber <button class="dropdown-item">!Manage Personal Collection</button>-->
                             <!--Amber <button class="dropdown-item">!Upload to Personal Collection</button>-->
@@ -76,7 +78,7 @@
     </nav>
     <!--</div>-->
 </div>
-<ang-delete-ig-modal *ngIf="deleteIgModal" (closeModal)="deleteIgModal = false" [igId]="route.snapshot.params.igId" [igName]="route.snapshot.params.name"></ang-delete-ig-modal>
-<ang-new-ig-modal *ngIf="showImageGroupModal" [copyIG]="copyIG" (closeModal)="showImageGroupModal = false"></ang-new-ig-modal>
+<ang-delete-ig-modal *ngIf="deleteIgModal" (closeModal)="deleteIgModal = false" [ig]="ig" [igId]="route.snapshot.params.igId" [igName]="route.snapshot.params.name"></ang-delete-ig-modal>
+<ang-new-ig-modal *ngIf="showImageGroupModal" [copyIG]="copyIG" [editIG]="editIG" [ig]="ig" (igReloadTriggered)="reloadIG()" (closeModal)="showImageGroupModal = false"></ang-new-ig-modal>
 <ang-share-link-modal *ngIf="showShareLinkModal" [asset]="selectedAssets[0]" (closeModal)="showShareLinkModal = false"></ang-share-link-modal>
 <ang-add-to-group *ngIf="showAddToGroupModal" (closeModal)="showAddToGroupModal = false"></ang-add-to-group>

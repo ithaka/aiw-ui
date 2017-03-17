@@ -58,7 +58,8 @@
   },
   "NEW_GROUP_MODAL": {
     "CREATE_SUCCESS": "You've successfully created an image group",
-    "CREATE_FAILURE": "Something went wrong, and your group was not created"
+    "CREATE_FAILURE": "Something went wrong, and your group was not created",
+    "EDIT_SUCCESS" : "You've successfully edited the image group"
   },
   "RETURN_HOME" : "Return Home",
   "BROWSE_GROUPS" : "Browse Groups"

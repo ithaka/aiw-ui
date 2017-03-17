@@ -151,6 +151,12 @@ export class SearchModal implements OnInit {
   }
 
   private resetFilters(): void {
+    this.advanceSearchDate = {
+      'startDate' : '',
+      'startEra' : 'BCE',
+      'endDate' : '',
+      'endEra' : 'CE'
+    };
     this.advanceQueries = [];
      // Set up two query fields
     this.advanceQueries.push(Object.assign({}, this.advQueryTemplate));

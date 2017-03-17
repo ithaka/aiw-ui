@@ -23,7 +23,8 @@ export class SearchComponent implements OnInit, OnDestroy {
     this.subscriptions.push(
       this.route.params.subscribe((params) => {
         if (params['term']) {
-          this.term = params['term'];
+          this.formatSearchTerm(params['term']);
+          // this.term = params['term'];
         }
       })
     )
@@ -42,5 +43,27 @@ export class SearchComponent implements OnInit, OnDestroy {
       term = "*";
     }
     this._router.navigate(['/search', term, { currentPage: 1 }]);
+  }
+
+  /**
+   * Formats search string to strip symbols
+   * @param searchString Search term from the URL
+   */
+  private formatSearchTerm(searchString: string) {
+    let queries = searchString.split('#');
+    let searchTerm = '';
+
+    for(let query of queries){
+      let queryParts = query.split(',');
+      if(queryParts.length > 1){
+        searchTerm += ' ' + queryParts[0].toUpperCase();
+        searchTerm += ' ' + queryParts[1].split('|')[0];
+      }
+      else if(queryParts.length === 1){
+        searchTerm += queryParts[0].split('|')[0];
+      }
+    }
+
+    this.term = searchTerm;
   }
 }

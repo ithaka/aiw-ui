@@ -2,8 +2,9 @@
   <div class="modal-dialog" role="document">
     <div *ngIf="!serviceResponse.success" class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" *ngIf="!copyIG">New Image Group</h5>
+        <h5 class="modal-title" *ngIf="!copyIG && !editIG">New Image Group</h5>
         <h5 class="modal-title" *ngIf="copyIG">Copy Image Group</h5>
+        <h5 class="modal-title" *ngIf="editIG">Edit Image Group</h5>
         <button (click)="closeModal.emit()" type="button" class="close" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -69,7 +70,7 @@
       </div>
       </form>
     </div>
-    <div *ngIf="serviceResponse.success" class="modal-content">
+    <div *ngIf="serviceResponse.success && !editIG" class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title">Image group created</h5>
         <button (click)="closeModal.emit()" type="button" class="close" aria-label="Close">
@@ -83,6 +84,22 @@
         <div class="form-group">
           <button (click)="closeModal.emit()" type="button" class="btn btn-secondary">Return to search</button>
           <button [routerLink]="['/group', newGroup.id]" type="button" class="btn btn-primary">Go to group</button>
+        </div>
+      </div>
+    </div> 
+    <div *ngIf="serviceResponse.success && editIG" class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Image group saved</h5>
+        <button (click)="closeModal.emit()" type="button" class="close" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p><b>{{newGroup.name}}</b> updated</p>
+      </div>
+      <div class="modal-footer">
+        <div class="form-group">
+          <button (click)="refreshIG()" type="button" class="btn btn-primary">Refresh image group</button>
         </div>
       </div>
     </div>

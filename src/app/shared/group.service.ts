@@ -105,7 +105,7 @@ export class GroupService {
     /**
      * Update Group. The body sent cannot contain id, insts-with-access or users-with-access
      */
-    public update(group: ImageGroup): Observable<any> {
+    public update(group: any): Observable<any> {
         let id = group.id;
 
         delete group.id;

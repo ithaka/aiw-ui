@@ -24,6 +24,8 @@ export class ImageGroupPage implements OnInit, OnDestroy {
   private showDownloadLimitModal: boolean = false;
   /** controls the modal to tell the user to login */
   private showLoginModal: boolean = false;
+  /** controls the modal to tell the user that the IG doesn't exists */
+  private showNoIgModal: boolean = false;
   /** set to true when the call to download info has returned. We won't know what modal to show before that */
   private downloadInfoReturned: boolean = false;
   /** Enables / Disables the IG deletion based on user ownership */
@@ -98,6 +100,12 @@ export class ImageGroupPage implements OnInit, OnDestroy {
     );
 
     this.subscriptions.push(
+      this._assets.noIG.subscribe((res: any) => {
+        this.showNoIgModal = res;
+      })
+    );
+
+    this.subscriptions.push(
       this._ig.igDownloadTrigger.subscribe((event) => { // right now event will be undefined, it is just a dumb trigger
         // make sure we have the info we need
         if (this.ig.name && this.downloadInfoReturned) {
@@ -130,5 +138,10 @@ export class ImageGroupPage implements OnInit, OnDestroy {
       // show login required modal if they're not logged in
       this.showLoginModal = true;
     }
+  }
+
+  private refreshIG(): void{
+    console.log('Refresh IG from IG page!');
+    this._assets.queryAll(this.route.snapshot.params, true);
   }
 }

@@ -14,8 +14,11 @@ import { AssetService, AuthService, GroupService } from './../../shared';
 export class NewIgModal implements OnInit {
   @Output() closeModal: EventEmitter<any> = new EventEmitter();
   @Output() addToGroup: EventEmitter<any> = new EventEmitter();
+  @Output() igReloadTriggered: EventEmitter<any> = new EventEmitter();
 
   @Input() private copyIG: boolean = false;
+  @Input() private editIG: boolean = false;
+  @Input() private ig: any = false;
   @Input() private showAddToGroup: boolean = false;
 
   private newIgForm: FormGroup;
@@ -52,6 +55,19 @@ export class NewIgModal implements OnInit {
 
   ngOnInit() {
     this.isArtstorUser = this._auth.getUser().institutionId == 1000;
+    if(this.ig.id && this.editIG){
+      console.log(this.ig);
+      (<FormControl>this.newIgForm.controls['title']).setValue(this.ig.name);
+
+      this.tags = this.ig.tags;
+      (<FormControl>this.newIgForm.controls['tags']).setValue(this.tags);
+
+      if(this.ig.description){
+        let parentElement = document.createElement('div');
+        parentElement.innerHTML = this.ig.description;
+        this.igDescription = (<HTMLElement>parentElement.firstChild).innerHTML;
+      }
+    }
 
     if (this.selectedAssets.length < 1) { // if an asset hasn't been injected, the component gets assets from list of selected assets
       // Subscribe to asset selection
@@ -72,9 +88,13 @@ export class NewIgModal implements OnInit {
       this.subscriptions.forEach((sub) => { sub.unsubscribe(); });
   }
 
+  private refreshIG(): void{
+    this.igReloadTriggered.emit();
+    this.closeModal.emit();
+  }
+
   private igFormSubmit(formValue: any): void {
     this.submitted = true;
-
     // avoid making the service calls, but still trigger error display
     if (!this.newIgForm.valid) {
       return;
@@ -91,24 +111,10 @@ export class NewIgModal implements OnInit {
       }
     );
 
-    let group = {
-      name: formValue.title,
-      description: this.igDescription == '<div>&nbsp;</div>' ? '' : this.igDescription,
-      sequence_number: 0,
-      access: [ {
-        // This is the user's access object
-        "entity_type": 100,
-        "entity_identifier": this._auth.getUser().baseProfileId.toString(),
-        "access_type": 300
-      } ],
-      items: itemIds,
-      tags: formValue.tags
-    };
-
     if(this.copyIG){
       
       let copyReqBody = {
-        'name' : group.name
+        'name' : formValue.title
       };
       this._group.copy(this.route.snapshot.params['igId'], copyReqBody)
 
@@ -131,7 +137,55 @@ export class NewIgModal implements OnInit {
         }
       );
     }
+    else if(this.editIG){
+      let editGroup = {
+        name: formValue.title,
+        description: this.igDescription == '<div>&nbsp;</div>' ? '' : this.igDescription,
+        sequence_number: 0,
+        access: [ {
+          // This is the user's access object
+          "entity_type": 100,
+          "entity_identifier": this._auth.getUser().baseProfileId.toString(),
+          "access_type": 300
+        } ],
+        items: this.ig.items,
+        tags: formValue.tags,
+        id: this.ig.id
+      };
+
+      console.log('edit IG !');
+      console.log(editGroup);
+
+      this._group.update(editGroup)
+        .subscribe(
+          data => {
+            console.log(data);
+            this.isLoading = false;
+            this.newGroup = data;
+            this.serviceResponse.success = true;
+          },
+          error => {
+            console.error(error);
+            this.serviceResponse.failure = true;
+            this.isLoading = false;
+          }
+        );
+    }
     else{
+
+      let group = {
+        name: formValue.title,
+        description: this.igDescription == '<div>&nbsp;</div>' ? '' : this.igDescription,
+        sequence_number: 0,
+        access: [ {
+          // This is the user's access object
+          "entity_type": 100,
+          "entity_identifier": this._auth.getUser().baseProfileId.toString(),
+          "access_type": 300
+        } ],
+        items: itemIds,
+        tags: formValue.tags
+      };
 
       this._group.create(group)
         .subscribe(

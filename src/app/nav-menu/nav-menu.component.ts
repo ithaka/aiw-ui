@@ -23,9 +23,15 @@ export class NavMenu implements OnInit, OnDestroy {
   private actionOptions: any = {};
 
   @Input()
-  private allowIgUpdate: boolean = false;
+  private disableIgDelete: boolean = false;
+
   @Input()
-  private ig: ImageGroup;
+  private allowIgUpdate: boolean = false;
+
+  @Input()
+  private ig: any = {};
+
+  @Output() refreshIG: EventEmitter<any> = new EventEmitter();
   
   private mobileCollapsed: boolean = true;
   private selectedAssets: any[] = [];
@@ -35,6 +41,7 @@ export class NavMenu implements OnInit, OnDestroy {
   private showAddToGroupModal: boolean = false;
 
   private copyIG: boolean = false;
+  private editIG: boolean = false;
   private params: any = {};
   
   // TypeScript public modifiers
@@ -127,5 +134,10 @@ export class NavMenu implements OnInit, OnDestroy {
       .subscribe((res) => {
         console.log(res)
       })
+  }
+
+
+  private reloadIG():void{
+    this.refreshIG.emit();
   }
 }

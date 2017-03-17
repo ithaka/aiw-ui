@@ -15,6 +15,11 @@
 .assets-block{
     padding: 20px 0px;
     border-bottom: 1px dotted #627267;
+
+    .inline{
+        display: inline-block;
+        vertical-align: top;
+    }
 }
 .meta-block{
     padding-top: 10px;
