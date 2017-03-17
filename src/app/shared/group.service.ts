@@ -17,7 +17,8 @@ export class GroupService {
     ) {
 
         // ' + this._auth.getSubdomain() + '
-        this.groupUrl = '//stagely.artstor.org/api/v1/group';
+        // this.groupUrl = '//stagely.artstor.org/api/v1/group';
+        this.groupUrl = '//lively.artstor.org/api/v1/group';
         let headers = new Headers({ });
 
         this.options = new RequestOptions({ headers: headers, withCredentials: true });
