@@ -266,18 +266,19 @@ export class AssetFiltersService {
     public generateColTypeFacets(idsArray){
         idsArray = this.getUniqueColTypeIds(idsArray);
         var generatedFacetsArray = [];
+        
         for(var i = 0; i < idsArray.length; i++){
-        var facetObj = {
-            id : idsArray[i],
-            label: ''
-        };
-        if(facetObj.id === '1'){
-            facetObj.label = 'Artstor Digital Library';
-        }
-        else if(facetObj.id === '5'){
-            facetObj.label = 'Shared Shelf Commons';
-        }
-        generatedFacetsArray.push(facetObj);
+            var facetObj = {
+                id : idsArray[i],
+                label: ''
+            };
+            if(facetObj.id === '1'){
+                facetObj.label = 'Artstor Digital Library';
+            }
+            else if(facetObj.id === '5'){
+                facetObj.label = 'Shared Shelf Commons';
+            }
+            generatedFacetsArray.push(facetObj);
         }
         
         // this.collTypeFacets = generatedFacetsArray;

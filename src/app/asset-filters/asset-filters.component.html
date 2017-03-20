@@ -1,9 +1,9 @@
 <div class="col--filter-border col--sliding" [ngClass]="{ 'slide-up' : !showFilters }">
     <div class="filter-group">
         <span class="filter-group__label">
-                <h3>Collection Type <a id="buttonCollectionTypeClear" tabindex="" class="link--accent small" style="float:right;" (click)="clearAllFilterGroup('collTypes')">Clear</a></h3>
-            </span>
-        <div class="filter" [ngClass]="{ 'active': true }">All Collections</div>
+            <h3>Collection Type <a id="buttonCollectionTypeClear" tabindex="" class="link--accent small" style="float:right;" (click)="clearAllFilterGroup('collTypes')">Clear</a></h3>
+        </span>
+        <!--<div class="filter" [ngClass]="{ 'active': true }">All Collections</div>-->
         <div class="filter" *ngFor="let facet of availableFilters.collType" id="filterCollectionTypeItem{{ facet.id }}"  (click)="toggleFilter(facet.id, 'collTypes')" [ngClass]="{'active': filterApplied(facet.id, 'collTypes')}">{{ facet.label }}</div>
     </div>
 
