@@ -44,7 +44,7 @@ export class GroupService {
         });
 
         return this.http.get(
-            this.groupUrl + "?size=" + size + '&from=' + ( (pageNo - 1) * size) +  tagParam,
+            this.groupUrl + "?size=" + size + '&from=' + ( (pageNo - 1) * size) +  tagParam, this.options
         ).map(
             res => {
                 let body = res.json();
@@ -58,7 +58,7 @@ export class GroupService {
      */
     public get(groupId: string): Observable<any> {
         return this.http.get(
-            this.groupUrl + '/' + groupId
+            this.groupUrl + '/' + groupId, this.options
         );
     }
         
@@ -68,7 +68,8 @@ export class GroupService {
     public create(group: any): Observable<any> {
         return this.http.post(
             this.groupUrl,
-            group
+            group,
+            this.options
         ).map(
             res => {
                 let body = res.json();
@@ -83,7 +84,8 @@ export class GroupService {
     public copy(igId: string, copygroup: any): Observable<any> {
         return this.http.post(
             this.groupUrl + '/' + igId + '/copy',
-            copygroup
+            copygroup,
+            this.options
         ).map(
             res => {
                 let body = res.json();
@@ -99,7 +101,7 @@ export class GroupService {
         let headers = new Headers({ 'Accept' : 'application/json' });
         let options = new RequestOptions({ headers: headers });
 
-        return this.http.delete(this.groupUrl + '/' + groupId, options)
+        return this.http.delete(this.groupUrl + '/' + groupId, this.options)
             .map(res => <any> res.json());
     }
 
@@ -116,7 +118,8 @@ export class GroupService {
 
         return this.http.put(
             this.groupUrl + '/' + id,
-            group
+            group,
+            this.options
         )
         .map((res) => { return res.json() || {}; });
     }
