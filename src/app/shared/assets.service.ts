@@ -551,7 +551,7 @@ export class AssetService {
         let imageSize = 0;
         let startIndex = ((this.urlParams.currentPage - 1) * this.urlParams.pageSize) + 1;
 
-        let requestString = [this._auth.getUrl(), 'collections', colId, 'thumbnails', startIndex, this.urlParams.pageSize, imageSize].join('/');
+        let requestString = [this._auth.getUrl(), 'collections', colId, 'thumbnails', startIndex, this.urlParams.pageSize, this.activeSort.index].join('/');
 
         return this.http
             .get(requestString, options)

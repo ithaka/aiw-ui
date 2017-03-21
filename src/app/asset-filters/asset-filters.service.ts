@@ -278,6 +278,10 @@ export class AssetFiltersService {
             else if(facetObj.id === '5'){
                 facetObj.label = 'Shared Shelf Commons';
             }
+            else{
+                // facetObj.label = this.locker.get('institution').institutionName + 'Collections';
+                facetObj.label = 'Institutional Collections';
+            }
             generatedFacetsArray.push(facetObj);
         }
         
