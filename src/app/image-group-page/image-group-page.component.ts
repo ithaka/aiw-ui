@@ -14,6 +14,7 @@ import { ImageGroup, ImageGroupDescription, IgDownloadInfo, ImageGroupService } 
 
 export class ImageGroupPage implements OnInit, OnDestroy {
   private ig: ImageGroup = <ImageGroup>{};
+  private hasDesc: boolean = false;
   private user: any;
 
   private subscriptions: Subscription[] = [];
@@ -65,7 +66,8 @@ export class ImageGroupPage implements OnInit, OnDestroy {
           // Set ig properties from results
           this.ig = results;
 
-          console.log(this.ig)
+          console.log(this.ig);
+          this.checkDesc();
 
           // if the user has write access, then allow them to update the image group
           this.ig.access.forEach((accessObj) => {
@@ -143,5 +145,18 @@ export class ImageGroupPage implements OnInit, OnDestroy {
   private refreshIG(): void{
     console.log('Refresh IG from IG page!');
     this._assets.queryAll(this.route.snapshot.params, true);
+  }
+
+  private checkDesc(): void{
+    let descHTML = this.ig.description;
+
+    if(descHTML){
+      let parentElement = <HTMLElement> document.createElement('div');
+      parentElement.innerHTML = descHTML.toString(); 
+
+      if(parentElement.firstElementChild.innerHTML != '<div>&nbsp;</div>'){
+        this.hasDesc = true;
+      }
+    }
   }
 }
