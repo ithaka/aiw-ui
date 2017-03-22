@@ -113,6 +113,12 @@ export class AssetGrid implements OnInit, OnDestroy {
           }
         }
         
+        if(params['igId'] && !params['currentPage']){
+          this.editMode = false;
+          this.selectedAssets = [];
+          this._assets.setSelectedAssets(this.selectedAssets);
+        }
+        
         this.isLoading = true;
       })
     );

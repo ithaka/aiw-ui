@@ -68,6 +68,10 @@ export class NavMenu implements OnInit, OnDestroy {
     this.subscriptions.push(
       this.route.params.subscribe((params) => {
         this.params = params;
+
+        if(params['igId'] && !params['currentPage']){
+          this.showImageGroupModal = false;
+        }
       })
     );
   }
