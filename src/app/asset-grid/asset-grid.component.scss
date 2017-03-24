@@ -95,3 +95,21 @@ input[type=number] {
 .card--asset ang-thumbnail {
     height: 100%;
 }
+
+.btn-link{
+
+    .icon{
+        width: 20px;
+        height: 20px;
+        vertical-align: middle;
+        margin: 0px 10px;
+    }
+
+    &:hover .icon-download-white{
+        background-image: url("/assets/img/icon-download-black.svg");
+    }
+
+    &.active .icon-select-white, &:hover .icon-select-white{
+        background-image: url("/assets/img/icon-select-black.svg");
+    }
+}

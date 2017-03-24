@@ -2,7 +2,7 @@
     <!--<div class="col-sm-3">
         <h2 class="header-button" (click)="showFilters = !showFilters">Filters <i class="icon icon-direction absolute-right" [ngClass]="{ 'icon-down' : showFilters, 'icon-left' : !showFilters }"></i></h2>
     </div>-->
-    <div class="col-sm-6 mobile--hide">
+    <div class="col-sm-8 mobile--hide">
         <li class="dropdown" class="sortlist" ngbDropdown>
             <button class="btn btn-link" id="sortdropdownMenu" ngbDropdownToggle>Sort: <span class="value">{{ activeSort.label ? activeSort.label : 'Relevance' }}</span></button>
             <div class="dropdown-menu" aria-labelledby="sortdropdownMenu">
@@ -22,10 +22,12 @@
             </div>
         </li>
 
-        <li class="btn btn-link" (click)="toggleEditMode()" [ngClass]="{'active': editMode}">Edit Mode</li>
+        <li class="btn btn-link" (click)="toggleEditMode()" [ngClass]="{'active': editMode}"><i class="icon icon-select-white"></i>Select</li>
+
+        <li class="btn btn-link" (click)="_ig.triggerIgDownload()" *ngIf="actionOptions.group"><i class="icon icon-download-white"></i>Download</li>
         <!--<span class="page-size">{{ pagination.pageSize }}</span>-->
     </div>
-    <div class="col-sm-6 text-right">
+    <div class="col-sm-4 text-right">
         <pagination [pageObj]="pagination" (goToPage)="goToPage($event)">
         </pagination>
     </div>
@@ -33,7 +35,7 @@
 
 <div class="row">
     <div class="col-10">
-        <div class="number-results" *ngIf="!isLoading">{{ totalAssets }}{{ totalAssets == 2000 ? '+' : '' }} results  <span *ngIf="searchTerm">for <span [innerHtml]="formatSearchTerm(searchTerm)"></span></span></div>
+        <div class="number-results" *ngIf="isLoading">{{ totalAssets }}{{ totalAssets == 2000 ? '+' : '' }} results  <span *ngIf="searchTerm">for <span [innerHtml]="formatSearchTerm(searchTerm)"></span></span></div>
     </div>
 </div>
 

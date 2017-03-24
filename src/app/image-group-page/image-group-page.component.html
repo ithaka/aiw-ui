@@ -23,7 +23,7 @@
             </h1>
         </div>
         <div [ngClass]="[ hasDesc ? 'col-md-9' : 'col-md-12'  ]">
-            <ang-asset-grid></ang-asset-grid>
+            <ang-asset-grid [actionOptions]="{group: true}" ></ang-asset-grid>
         </div>
         <div *ngIf="hasDesc" class="col-md-3">
             <h3 class="row-hdr">Description</h3>
