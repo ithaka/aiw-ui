@@ -572,7 +572,7 @@ export class AssetService {
     private loadCategory(catId: string): Promise<any> {
         let imageSize = 0;
         let startIndex = ((this.urlParams.currentPage - 1) * this.urlParams.pageSize) + 1;
-        let requestString = [this._auth.getUrl(), 'categories', catId, 'thumbnails', startIndex, this.urlParams.pageSize, imageSize].join('/');
+        let requestString = [this._auth.getUrl(), 'categories', catId, 'thumbnails', startIndex, this.urlParams.pageSize, this.activeSort.index].join('/');
 
         return this.http
             .get(requestString, this.defaultOptions)

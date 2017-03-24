@@ -10,6 +10,8 @@ import { AssetFiltersService } from '../asset-filters/asset-filters.service';
 import { AuthService } from '../shared/auth.service';
 import { Thumbnail } from './../shared';
 
+import { ImageGroupService } from '../shared';
+
 @Component({
   selector: 'ang-asset-grid', 
   providers: [],
@@ -37,6 +39,9 @@ export class AssetGrid implements OnInit, OnDestroy {
 
   private searchTerm: string = '';
   private totalAssets: string = '';
+
+  @Input()
+  private actionOptions: any = {};
 
   @Input()
   private assetCount: number;
@@ -77,6 +82,7 @@ export class AssetGrid implements OnInit, OnDestroy {
   // TypeScript public modifiers
   constructor(
     private _assets: AssetService,
+    private _ig: ImageGroupService,
     private _filters: AssetFiltersService,
     private _auth:AuthService,
     private _router: Router,

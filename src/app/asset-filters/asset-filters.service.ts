@@ -58,12 +58,16 @@ export class AssetFiltersService {
     public available$ = this.availableSource.asObservable();
     public applied$ = this.appliedSource.asObservable();
     
+    private _storage;
+    private institution: any = {};
+
     constructor(
         private locker: Locker,
         private http: Http,
         private _auth: AuthService
     ){
-        
+        this._storage = locker.useDriver(Locker.DRIVERS.LOCAL);
+        this.institution = this._storage.get('institution');
     }
     
     // Empties all filter objects without publishing them
@@ -279,8 +283,8 @@ export class AssetFiltersService {
                 facetObj.label = 'Shared Shelf Commons';
             }
             else{
-                // facetObj.label = this.locker.get('institution').institutionName + 'Collections';
-                facetObj.label = 'Institutional Collections';
+                facetObj.label = this.institution.shortName ? this.institution.shortName : 'Institutional';
+                facetObj.label += ' Collections';
             }
             generatedFacetsArray.push(facetObj);
         }
