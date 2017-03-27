@@ -151,12 +151,13 @@ export class ImageGroupPage implements OnInit, OnDestroy {
     let descHTML = this.ig.description;
 
     if(descHTML){
-      let parentElement = <HTMLElement> document.createElement('div');
-      parentElement.innerHTML = descHTML.toString(); 
+      this.hasDesc = true;
+      // let parentElement = <HTMLElement> document.createElement('div');
+      // parentElement.innerHTML = descHTML.toString(); 
 
-      if(parentElement.firstElementChild.innerHTML != '<div>&nbsp;</div>'){
-        this.hasDesc = true;
-      }
+      // if(parentElement.firstElementChild.innerHTML != '<div>&nbsp;</div>'){
+      //   this.hasDesc = true;
+      // }
     }
   }
 }
