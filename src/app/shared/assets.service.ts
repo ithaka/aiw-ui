@@ -536,7 +536,7 @@ export class AssetService {
             })
             .catch((error) => {
                 console.log(error);
-                if(error.status === 404){
+                if((error.status === 404) || (error.status === 403)){
                     this.noIGSource.next(true);
                 }
             });
