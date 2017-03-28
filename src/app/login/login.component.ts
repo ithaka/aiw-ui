@@ -55,7 +55,7 @@ export class Login {
     this._login.getIpAuth()
       .take(1)
       .subscribe((res) => {
-        if (res.status === true) {
+        if (res.remoteaccess === false) {
           this.showRegister = true;
         }
       }, (err) => {

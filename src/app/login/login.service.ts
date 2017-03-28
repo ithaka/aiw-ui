@@ -23,7 +23,8 @@ export class LoginService {
      * Logs out and redirects the user to the login component
      */
     logout() {
-        let options = new RequestOptions({ withCredentials: true });
+        let header = new Headers({ 'Content-Type': 'application/x-www-form-urlencoded' }); // ... Set content type to JSON
+        let options = new RequestOptions({ headers: header, withCredentials: true });
         // this.user = {};
         this._auth.clearStorage();
         this._router.navigate(['login']);
