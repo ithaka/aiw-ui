@@ -45,7 +45,7 @@ export class AddToGroupModal implements OnInit, OnDestroy {
       );
     }
 
-    this._group.getAll()
+    this._group.getAll('private')
       .take(1)
       .subscribe((res) => { if (res.groups) { this.groups = res.groups; } }, (err) => { console.error(err); });
   }
