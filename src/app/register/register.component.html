@@ -83,7 +83,7 @@
                         <div class="form-group">
                             <button id="btnRegister" class="btn btn-primary" [class.loading]="isLoading" type="submit" name="action" tabindex="0">Register</button>
                             <div *ngIf="submitted && serviceErrors.duplicate" class="has-danger">
-                                <p id="errDuplicateUser" class="form-control-feedback" translate>REGISTER.ERRORS.DUPLICATE</p>
+                                <p id="errDuplicateUser" class="form-control-feedback" translate>REGISTER.ERRORS.EMAIL_DUPLICATE</p>
                             </div>
                         </div>
                     </form>
