@@ -80,4 +80,8 @@ export class ImageGroupService {
   public triggerIgDownload(): void {
     this.igDownloadTrigger.emit();
   }
+
+  public triggerIgExport(): void {
+    console.log('triggerIgExport called!');
+  }
 }
