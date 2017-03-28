@@ -518,9 +518,11 @@ export class AssetService {
                 data.count = data.items.length;
                 let pageStart = (this.urlParams.currentPage - 1)*this.urlParams.pageSize;
                 let pageEnd = this.urlParams.currentPage*this.urlParams.pageSize;
-                let idsAsTerm: string =  data.items.slice(pageStart,pageEnd).join(' or ').replace(/[A-Z_]/g, '');
+                let idsAsTerm: string =  data.items.slice(pageStart,pageEnd).join('&object_id='); //.replace(/[A-Z_]/g, '');
 
-                this.search(idsAsTerm, this.activeSort.index)
+                console.log(idsAsTerm);
+
+                this.http.get('//artstor-thumbnail-service.apps.test.cirrostratus.org/api/v1/items?object_id=' + idsAsTerm)
                     .subscribe(
                         (res) => {
                             console.log(res);
