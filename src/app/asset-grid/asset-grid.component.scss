@@ -51,6 +51,13 @@
 //     }
 // }
 
+.grid-tool-bar{
+    padding-right: 0px; 
+}
+.grid-pagination-bar{
+    padding: 0px;
+}
+
 .pag__index {
     display: inline-block;
     @media (max-width: $phone) {
@@ -99,17 +106,25 @@ input[type=number] {
 .btn-link{
 
     .icon{
-        width: 20px;
-        height: 20px;
+        width: 18px;
+        height: 18px;
         vertical-align: middle;
-        margin: 0px 10px;
+        margin: 0px 5px 0px 0px;
     }
 
     &:hover .icon-download-white{
         background-image: url("/assets/img/icon-download-black.svg");
     }
 
+    &:hover .icon-export-white{
+        background-image: url("/assets/img/icon-export-black.svg");
+    }
+
     &.active .icon-select-white, &:hover .icon-select-white{
         background-image: url("/assets/img/icon-select-black.svg");
+    }
+
+    &.active .icon-reorder-white, &:hover .icon-reorder-white{
+        background-image: url("/assets/img/icon-reorder-black.svg");
     }
 }

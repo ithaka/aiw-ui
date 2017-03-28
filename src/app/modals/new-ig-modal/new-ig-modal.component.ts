@@ -65,7 +65,13 @@ export class NewIgModal implements OnInit {
       if(this.ig.description){
         let parentElement = document.createElement('div');
         parentElement.innerHTML = this.ig.description;
-        this.igDescription = (<HTMLElement>parentElement.firstChild).innerHTML;
+
+        if( parentElement.firstElementChild && (parentElement.firstElementChild.id === 'angularMediumEditor' )){
+          this.igDescription = parentElement.firstElementChild.innerHTML;
+        }
+        else{
+          this.igDescription =  parentElement.innerHTML;
+        }
       }
     }
 
@@ -100,6 +106,19 @@ export class NewIgModal implements OnInit {
       return;
     }
     this.isLoading = true;
+
+    let igDescValue = '';
+    if(this.igDescription){
+      let parentElement = document.createElement('div');
+      parentElement.innerHTML = this.igDescription;
+
+      if( parentElement.firstElementChild && (parentElement.firstElementChild.id === 'angularMediumEditor' )){
+        igDescValue = parentElement.firstElementChild.innerHTML;
+      }
+      else{
+        igDescValue =  parentElement.innerHTML;
+      }
+    }
 
     // Form is valid! Create Group object
     let itemIds = [];
@@ -140,7 +159,7 @@ export class NewIgModal implements OnInit {
     else if(this.editIG){
       let editGroup = {
         name: formValue.title,
-        description: this.igDescription == '<div>&nbsp;</div>' ? '' : this.igDescription,
+        description: igDescValue == '<div>&nbsp;</div>' ? '' : igDescValue,
         sequence_number: 0,
         access: [ {
           // This is the user's access object
@@ -175,7 +194,7 @@ export class NewIgModal implements OnInit {
 
       let group = {
         name: formValue.title,
-        description: this.igDescription == '<div>&nbsp;</div>' ? '' : this.igDescription,
+        description: igDescValue == '<div>&nbsp;</div>' ? '' : igDescValue,
         sequence_number: 0,
         access: [ {
           // This is the user's access object

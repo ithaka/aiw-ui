@@ -48,6 +48,7 @@
     font-weight: normal;
 }
 
+
 button.page-link {
     cursor: pointer;
     color: $red;
@@ -56,6 +57,7 @@ button.page-link {
     // vertical alignment adjustment
     // border-color: transparent;
     border-radius: 0px !important;
+    padding: 0.5rem;
 
     &:hover {
         background: #f8f8f8;

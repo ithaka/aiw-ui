@@ -2,7 +2,7 @@
     <!--<div class="col-sm-3">
         <h2 class="header-button" (click)="showFilters = !showFilters">Filters <i class="icon icon-direction absolute-right" [ngClass]="{ 'icon-down' : showFilters, 'icon-left' : !showFilters }"></i></h2>
     </div>-->
-    <div class="col-sm-8 mobile--hide">
+    <div class="col-sm-9 mobile--hide grid-tool-bar">
         <li class="dropdown" class="sortlist" ngbDropdown>
             <button class="btn btn-link" id="sortdropdownMenu" ngbDropdownToggle>Sort: <span class="value">{{ activeSort.label ? activeSort.label : 'Relevance' }}</span></button>
             <div class="dropdown-menu" aria-labelledby="sortdropdownMenu">
@@ -23,11 +23,12 @@
         </li>
 
         <li class="btn btn-link" (click)="toggleEditMode()" [ngClass]="{'active': editMode}"><i class="icon icon-select-white"></i>Select</li>
-
+        <li class="btn btn-link" (click)="toggleReorderMode()" [ngClass]="{'active': reorderMode}" *ngIf="actionOptions.group && actionOptions.isowner"><i class="icon icon-reorder-white"></i>Reorder</li>
         <li class="btn btn-link" (click)="_ig.triggerIgDownload()" *ngIf="actionOptions.group"><i class="icon icon-download-white"></i>Download</li>
+        <li class="btn btn-link" (click)="_ig.triggerIgExport()" *ngIf="actionOptions.group"><i class="icon icon-export-white"></i>Export</li>
         <!--<span class="page-size">{{ pagination.pageSize }}</span>-->
     </div>
-    <div class="col-sm-4 text-right">
+    <div class="col-sm-3 text-right grid-pagination-bar">
         <pagination [pageObj]="pagination" (goToPage)="goToPage($event)">
         </pagination>
     </div>
@@ -35,7 +36,7 @@
 
 <div class="row">
     <div class="col-10">
-        <div class="number-results" *ngIf="isLoading">{{ totalAssets }}{{ totalAssets == 2000 ? '+' : '' }} results  <span *ngIf="searchTerm">for <span [innerHtml]="formatSearchTerm(searchTerm)"></span></span></div>
+        <div class="number-results" *ngIf="!isLoading">{{ totalAssets }}{{ totalAssets == 2000 ? '+' : '' }} results  <span *ngIf="searchTerm">for <span [innerHtml]="formatSearchTerm(searchTerm)"></span></span></div>
     </div>
 </div>
 

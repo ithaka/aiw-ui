@@ -30,6 +30,7 @@ export class AssetGrid implements OnInit, OnDestroy {
   private results: any[] = [];
   filters = [];
   private editMode: boolean = false;
+  private reorderMode: boolean = false;
 
   private selectedAssets: any[] = [];
   
@@ -295,6 +296,14 @@ export class AssetGrid implements OnInit, OnDestroy {
       this.selectedAssets = [];
       this._assets.setSelectedAssets(this.selectedAssets);
     }
+  }
+
+  /**
+   * Toggle Reorder Mode
+   * - Set up as a function to toggle the reorder mode
+   */
+  private toggleReorderMode(): void {
+    this.reorderMode = !this.reorderMode;
   }
 
   /**

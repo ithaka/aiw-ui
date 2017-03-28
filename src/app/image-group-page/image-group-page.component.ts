@@ -31,6 +31,11 @@ export class ImageGroupPage implements OnInit, OnDestroy {
   private downloadInfoReturned: boolean = false;
   /** Enables / Disables the IG deletion based on user ownership */
   private allowIgUpdate: boolean = false;
+  /** Options object passed to the asset-grid component */
+  private actionOptions: any = {
+    group: true,
+    isowner: false
+  }
 
   constructor(
     private _ig: ImageGroupService,
@@ -67,12 +72,14 @@ export class ImageGroupPage implements OnInit, OnDestroy {
           this.ig = results;
 
           console.log(this.ig);
+
           this.checkDesc();
 
           // if the user has write access, then allow them to update the image group
           this.ig.access.forEach((accessObj) => {
             if (accessObj.entity_identifier == this.user.baseProfileId && accessObj.access_type >= 300) {
               this.allowIgUpdate = true;
+              this.actionOptions.isowner = true;
             }
           })
 
@@ -149,14 +156,8 @@ export class ImageGroupPage implements OnInit, OnDestroy {
 
   private checkDesc(): void{
     let descHTML = this.ig.description;
-
     if(descHTML){
-      let parentElement = <HTMLElement> document.createElement('div');
-      parentElement.innerHTML = descHTML.toString(); 
-
-      if(parentElement.firstElementChild.innerHTML != '<div>&nbsp;</div>'){
-        this.hasDesc = true;
-      }
+      this.hasDesc = true;
     }
   }
 }
