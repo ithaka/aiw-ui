@@ -3,7 +3,7 @@ import { Component, OnInit, OnDestroy, Output, EventEmitter, Input } from '@angu
 import { ActivatedRoute, Router } from '@angular/router';
 
 // Project Dependencies
-import { AssetService, ImageGroupService, ImageGroup, GroupService } from '../shared';
+import { AssetService, ImageGroupService, ImageGroup, GroupService, AuthService } from '../shared';
 
 @Component({
   selector: 'nav-menu',
@@ -32,6 +32,8 @@ export class NavMenu implements OnInit, OnDestroy {
   private ig: any = {};
 
   @Output() refreshIG: EventEmitter<any> = new EventEmitter();
+
+  private user: any = {};
   
   private mobileCollapsed: boolean = true;
   private selectedAssets: any[] = [];
@@ -50,11 +52,13 @@ export class NavMenu implements OnInit, OnDestroy {
     private _assets: AssetService,
     private _ig: ImageGroupService,
     private _group: GroupService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private _auth: AuthService
   ) {
   }
   
   ngOnInit() {
+    this.user = this._auth.getUser();
     this.subscriptions.push(
       this._assets.selection.subscribe( 
         selectedAssets => {
