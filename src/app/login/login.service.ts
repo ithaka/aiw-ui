@@ -27,10 +27,12 @@ export class LoginService {
         let options = new RequestOptions({ headers: header, withCredentials: true });
         // this.user = {};
         this._auth.clearStorage();
-        this._router.navigate(['login']);
         return this.http
             .post(this._auth.getUrl() + '/logout', {}, options)
             .toPromise()
+            .then(() => {
+                this._router.navigate(['login']);
+            })
             .catch(function() {
                 // error handling
             });
