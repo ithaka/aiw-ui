@@ -33,7 +33,7 @@ export class GroupService {
     /**
      * Get All Groups
      */
-    public getAll(size?: number, pageNo ?: number, tags ?: string[] ): Observable<any> {
+    public getAll(level: string, size?: number, pageNo ?: number, tags ?: string[] ): Observable<any> {
         if (!tags) {
             tags = [];
         }
@@ -50,7 +50,7 @@ export class GroupService {
         });
 
         return this.http.get(
-            this.groupUrl + "?size=" + size + '&from=' + ( (pageNo - 1) * size) +  tagParam, this.options
+            this.groupUrl + "?size=" + size + '&level=' + level + '&from=' + ( (pageNo - 1) * size) +  tagParam, this.options
         ).map(
             res => {
                 let body = res.json();

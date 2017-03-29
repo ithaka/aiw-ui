@@ -35,38 +35,39 @@ export class BrowseGroupsComponent implements OnInit {
   private appliedTags = [];
 
   private expandedCategories: any = {};
-  private selectedBrowseId: string = '';
+  private selectedBrowseLevel: string = 'public';
   private browseMenuArray: any[] = [];
   private foldersObj: any = {};
-
+  private tagsObj: any = {};
+  private errorObj: any = {};
+  
   ngOnInit() {
 
     this.subscriptions.push(
       this.route.params
       .subscribe((params: Params) => { 
-        if(params && params['viewId']){
-            this.selectedBrowseId = params['viewId'];
+        if(params && params['view']){
+            this.selectedBrowseLevel = params['view'];
             this.loadCategory();
         }
       })
     );
 
     this.browseMenuArray.push({
-      id: 1,
-      label: 'Private'
+      label: 'Private',
+      level: 'private'
     });
 
     this.browseMenuArray.push({
-      id: 2,
-      label: 'Institutional'
+      label: 'Institutional',
+      level: 'institution'
     });
     
     this.browseMenuArray.push({
-      id: 3,
-      label: 'Artstor Curated'
+      label: 'Artstor Curated',
+      level: 'public'
     });
 
-    this.selectedBrowseId = '3';
     this.loadCategory();
     this.loadIGs();
   }
@@ -77,12 +78,13 @@ export class BrowseGroupsComponent implements OnInit {
 
   /**
    * Changes menu between ADL, University Collections, Open Collections, etc...
-   * @param id Id of desired menu from colMenuArray enum
+   * @param level Level of desired menu from colMenuArray enum
    */
-  selectBrowseOpt ( id: string ){
+  selectBrowseOpt ( level: string ){
     this.expandedCategories = {};
-    this.selectedBrowseId = id;
-    this.addRouteParam('viewId', id);
+    this.selectedBrowseLevel = level;
+    this.addRouteParam('view', level);
+    this.loadCategory();
   }
 
   private createGroupTags(folderArray) {
@@ -100,25 +102,34 @@ export class BrowseGroupsComponent implements OnInit {
    * Loads Image Groups data for the current user in the array
    */
   private loadIGs(): void{
-    this._groups.getAll(this.pagination.pageSize, this.pagination.currentPage, this.appliedTags)
+    this._groups.getAll(this.selectedBrowseLevel, this.pagination.pageSize, this.pagination.currentPage, this.appliedTags)
         .take(1).subscribe(
           (data)  => {
             console.log(data);
             this.tagFilters = data.tags;
-            this.foldersObj['3'] = this.createGroupTags(data.groups);
+            this.tagsObj[this.selectedBrowseLevel] = data.tags;
+            this.foldersObj[this.selectedBrowseLevel] = this.createGroupTags(data.groups);
             this.pagination.totalPages = Math.floor(data.total / this.pagination.pageSize) + 1;
             this.loadCategory();
           },
           (error) => {
             console.log(error);
-            return false;
+            this.foldersObj[this.selectedBrowseLevel] = [];
+            this.errorObj[this.selectedBrowseLevel] = "Sorry, we were unable to load these Image Groups";
+            this.pagination.totalPages = 1;
+            this.loadCategory();
           }
         );
   }
 
   loadCategory(){
-    this.currentBrowseRes = this.foldersObj[this.selectedBrowseId];
-    this.tags = this.foldersObj[this.selectedBrowseId];
+    if (this.foldersObj[this.selectedBrowseLevel]) {
+      this.currentBrowseRes = this.foldersObj[this.selectedBrowseLevel];
+      this.tags = this.foldersObj[this.selectedBrowseLevel];
+      this.tagFilters
+    } else {
+      this.loadIGs();
+    }
   }
 
   toggleFilterBy(tag: string) {
