@@ -2,10 +2,15 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { formGroupNameProvider } from '@angular/forms/src/directives/reactive_directives/form_group_name';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
+import { Angulartics2 } from 'angulartics2';
 
 import { AuthService } from './../shared';
+import { LoginService } from './../login/login.service';
 
 @Component({
+  providers: [
+    LoginService
+  ],
   selector: 'ang-register-page',
   templateUrl: 'register.component.html'
 })
@@ -22,7 +27,13 @@ export class RegisterComponent implements OnInit {
     duplicate?: boolean
   } = {};
   
-  constructor(private _auth: AuthService, private _router: Router, _fb: FormBuilder) {
+  constructor(
+    private _auth: AuthService,
+    private _router: Router,
+    private _login: LoginService,
+    private angulartics: Angulartics2,
+    _fb: FormBuilder
+  ) {
     this.registerForm = _fb.group({
       // The first value of this array is the initial value for the control, the second is the
       //  validator for the control. Validators.compose allows you to use multiple validators against a single field
@@ -105,7 +116,18 @@ export class RegisterComponent implements OnInit {
           let user: any = Object.assign({}, data.user);
           user.isLoggedIn = true;
           this._auth.saveUser(data.user);
-          this._router.navigate(['/home']);
+          this._login.login(userInfo)
+            .then(
+              (data)  => {
+                // this.loginLoading = false;
+                this.angulartics.eventTrack.next({ action:"remoteLogin", properties: { category: "login", label: "success" }});
+                // this._log.Warp6({ eventType: "remote_login" });
+                this.loadForUser(data);
+              }
+            )
+            .catch((err) => {
+              console.error(err);
+            })
         } else {
           if (data.statusMessage === "User already exist") {
             this.serviceErrors.duplicate = true;
@@ -116,5 +138,25 @@ export class RegisterComponent implements OnInit {
       });
 
     // if the call is unsuccessful, you will get a 200 w/o a user and with a field called 'statusMessage'
+  }
+
+  loadForUser(data: any) {
+    if (data && data.user) {
+      data.user.hasOwnProperty("username") && this.angulartics.setUsername.next(data.user.username);
+      data.user.hasOwnProperty("institutionId") && this.angulartics.setUserProperties.next({ institutionId: data.user.institutionId });
+      data.user.hasOwnProperty("isLoggedIn") && this.angulartics.setUserProperties.next({ isLoggedIn: data.user.isLoggedIn });
+      data.user.hasOwnProperty("shibbolethUser") && this.angulartics.setUserProperties.next({ shibbolethUser: data.user.shibbolethUser });
+      data.user.hasOwnProperty("dept") && this.angulartics.setUserProperties.next({ dept: data.user.dept });
+      data.user.hasOwnProperty("ssEnabled") && this.angulartics.setUserProperties.next({ ssEnabled: data.user.ssEnabled })
+
+      data.user.isLoggedIn = true;
+      this._auth.saveUser(data.user);
+      if (this._auth.getFromStorage("stashedRoute")) {
+        this._router.navigateByUrl(this._auth.getFromStorage("stashedRoute"));
+        this._auth.deleteFromStorage("stagedRoute");
+      } else {
+        this._router.navigate(['/home']);
+      }
+    }
   }
 }
