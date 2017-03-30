@@ -20,8 +20,7 @@ export class LibraryComponent implements OnInit {
   ) { }
 
   private subscriptions: Subscription[] = [];
-  private currentBrowseRes: any = {};
-  private selectedBrowseId: string = '103';
+  private selectedBrowseId: string = '';
   private browseMenuArray: any[] = [
     {
       label : 'Collection',
@@ -47,28 +46,33 @@ export class LibraryComponent implements OnInit {
     260 : [],
     270 : []
   };
+  private descObj: any  = {};
 
   ngOnInit() {
     this.subscriptions.push(
       this.route.params
       .subscribe((params: Params) => { 
         if(params && params['viewId']){
+            if (this.selectedBrowseId !== params['viewId']){
+              this.getTags(params['viewId']);
+            }
             this.selectedBrowseId = params['viewId'];
         }
-        this.loadCategory();
-        this.getTags(this.selectedBrowseId);
+        this.loadDescription(this.selectedBrowseId);
       })
     );
   }
 
   private getTags(browseId): void {
-    this._tags.initTags({ type: "library", collectionId: browseId})
+    if (!this.tagsObj[browseId] || this.tagsObj[browseId].length < 1) {
+      this._tags.initTags({ type: "library", collectionId: browseId})
       .then((tags) => {
         this.tagsObj[browseId] = tags;
       })
       .catch((err) => {
         console.error(err);
       });
+    }
   }
 
   ngOnDestroy() {
@@ -88,14 +92,16 @@ export class LibraryComponent implements OnInit {
   /**
    * Sets browser response for description
    */
-  private loadCategory(): void{
-    this._assets.category( this.selectedBrowseId )
-      .then((res) => {
-          this.currentBrowseRes = res;
-      })
-      .catch(function(err) {
-          console.log('Unable to load category results.');
-      });
+  private loadDescription(browseId): void{
+    if (!this.descObj[browseId]) {
+      this._assets.category( browseId )
+        .then((res) => {
+            this.descObj[browseId] = res;
+        })
+        .catch(function(err) {
+            console.log('Unable to load category results.');
+        });
+    }
   }
 
     /**
