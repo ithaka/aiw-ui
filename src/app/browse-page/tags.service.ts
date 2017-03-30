@@ -99,7 +99,13 @@ export class TagsService {
       return this._assets.subcategories(tag.tagId)
         .then((data) => {
           for(let category of data) {
-            let categoryTag = new Tag(category.widgetId, category.title, true, tag, { label: "subcategory", folder: category.isFolder }, category['enableDblClick']);
+            let categoryTag;
+            if (category.grpId) {
+              categoryTag = new Tag(category.grpId, category.title, true, tag, { label: "group", folder: false }, category['enableDblClick']);
+            } else {
+              categoryTag = new Tag(category.widgetId, category.title, true, tag, { label: "subcategory", folder: category.isFolder }, category['enableDblClick']);
+            }
+            
             childArr.push(categoryTag);
           }
           return childArr;
