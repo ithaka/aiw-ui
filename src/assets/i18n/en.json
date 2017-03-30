@@ -5,6 +5,7 @@
   },
   "REGISTER": {
     "REGISTER_HEADING": "Register for a new Artstor account",
+    "REGISTER_DESCRIPTION": "Registering for an account lets you download images, save them to groups, create presentations, and share them with other Artstor users.",
     "ERRORS": {
       "EMAIL_REQUIRED": "Please enter your email address",
       "EMAIL_INVALID": "Invalid email format",
@@ -22,7 +23,8 @@
     "AGE_PROMPT_HOVER": "If you are under 13, please provide your legal guardian's email address to register",
     "INFO_PROMPT": "Yes, send me information about new Artstor content and tools",
     "SURVEY_PROMPT": "Yes, send me surveys",
-    "PRIVACY_DISCLAIMER": "Artstor will not share your personal information except in limited instances as set forth in its <a class=\"link\" href=\"http://www.artstor.org/privacy-policy\">privacy policy</a>."
+    "PRIVACY_DISCLAIMER": "Artstor will not share your personal information except in limited instances as set forth in its <a class=\"link\" href=\"http://www.artstor.org/privacy-policy\">privacy policy</a>.",
+    "FIELDS_REQUIRED": "Please note that all form fields are required."
   },
   "ACCOUNT": {
     "CHANGE_PASS": {
