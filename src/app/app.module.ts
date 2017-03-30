@@ -49,7 +49,7 @@ import { Login } from './login';
 import { About } from './about';
 import { NoContent } from './no-content';
 import { RegisterComponent } from './register/register.component';
-import { LoginReqModal, SearchModal, NewIgModal, ShareLinkModal, DownloadLimitModal, AddToGroupModal, DeleteIgModal, NoIgModal } from './modals';
+import { LoginReqModal, SearchModal, NewIgModal, ShareLinkModal, DownloadLimitModal, AddToGroupModal, DeleteIgModal, NoIgModal, AccessDeniedModal } from './modals';
 
 
 // Application wide providers
@@ -111,6 +111,7 @@ type StoreType = {
     AssociatedPage,
     AssetFilters,
     PaginationComponent,
+    AccessDeniedModal,
     AssetGrid,
     SearchComponent,
     ThumbnailComponent,
