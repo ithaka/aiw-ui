@@ -68,5 +68,11 @@
   "LOGIN_REQUIRED_MODAL": {
     "HEADING": "User account required",
     "PROMPT": "Please <a href=\"/#/login\" class=\"link\">Log In</a> or <a href=\"/#/register\" class=\"link\">Register</a>"
+  },
+  "BROWSE": {
+    "ERRORS": {
+      "NO_INSTITUTIONAL_COLLECTIONS_HEADING": "No Institutional Collections found",
+      "NO_INSTITUTIONAL_COLLECTIONS_PROMPT": "<p>There are no institutional collections available for your institution. You can add institutional collections using Shared Shelf.</p><p>Learn more about <a href=\"http://artstor.org/sharedshelf\" class=\"link\">Shared Shelf</a>.</p>"
+    }
   }
 }

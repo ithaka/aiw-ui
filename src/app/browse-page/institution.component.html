@@ -7,8 +7,8 @@
             <ang-tag *ngFor="let tag of tags" [tag]="tag"></ang-tag>
         </div>
         <div *ngIf="!loading && tags.length < 1" class="alert alert-info">
-            <b>No Institutional Collections found</b><br/>
-            You will need to log in to an account tied to an institution with collections.
+            <h3 translate>BROWSE.ERRORS.NO_INSTITUTIONAL_COLLECTIONS_HEADING</h3><br/>
+            <div [innerHtml]="'BROWSE.ERRORS.NO_INSTITUTIONAL_COLLECTIONS_PROMPT' | translate"></div>
         </div>
     </div>
 </div>
