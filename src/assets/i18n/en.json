@@ -64,5 +64,9 @@
     "EDIT_SUCCESS" : "You've successfully edited the image group"
   },
   "RETURN_HOME" : "Return Home",
-  "BROWSE_GROUPS" : "Browse Groups"
+  "BROWSE_GROUPS" : "Browse Groups",
+  "LOGIN_REQUIRED_MODAL": {
+    "HEADING": "User account required",
+    "PROMPT": "Please <a href=\"/#/login\" class=\"link\">Log In</a> or <a href=\"/#/register\" class=\"link\">Register</a>"
+  }
 }
