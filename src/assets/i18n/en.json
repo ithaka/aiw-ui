@@ -29,6 +29,11 @@
   },
   "ACCOUNT": {
     "CHANGE_PASS": {
+      "LABELS": {
+        "OLD_PASS": "Current Password",
+        "NEW_PASS": "New Password",
+        "NEW_PASS_CONFIRM": "Confirm New Password"
+      },
       "OLD_PASS_REQUIRED": "Current password is required",
       "NEW_PASS_REQUIRED": "New password is required",
       "PASS_CONFIRM_ERROR": "Password confirmation does not match",
