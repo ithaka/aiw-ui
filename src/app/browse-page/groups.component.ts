@@ -92,7 +92,7 @@ export class BrowseGroupsComponent implements OnInit {
     let parentTag = null;
 
     for(let group of folderArray) {
-            let groupTag = new Tag(group.id, group.name, true, null, { label: "group", folder: false });
+            let groupTag = new Tag(group.id, group.name, true, null, { label: "group", folder: false }, true);
             childArr.push(groupTag);
           }
     return childArr;
@@ -105,7 +105,6 @@ export class BrowseGroupsComponent implements OnInit {
     this._groups.getAll(this.selectedBrowseLevel, this.pagination.pageSize, this.pagination.currentPage, this.appliedTags)
         .take(1).subscribe(
           (data)  => {
-            console.log(data);
             this.tagFilters = data.tags;
             this.tagsObj[this.selectedBrowseLevel] = data.tags;
             this.foldersObj[this.selectedBrowseLevel] = this.createGroupTags(data.groups);

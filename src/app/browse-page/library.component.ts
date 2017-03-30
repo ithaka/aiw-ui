@@ -20,15 +20,12 @@ export class LibraryComponent implements OnInit {
   ) { }
 
   private subscriptions: Subscription[] = [];
-
-  private tags: Tag[] = [];
-
   private currentBrowseRes: any = {};
   private selectedBrowseId: string = '103';
   private browseMenuArray: any[] = [
     {
       label : 'Collection',
-      id: '103'
+      id: '103',
     },
     {
       label : 'Classification',
@@ -44,6 +41,13 @@ export class LibraryComponent implements OnInit {
     }
   ];
 
+  private tagsObj: any = {
+    103 : [],
+    250 : [],
+    260 : [],
+    270 : []
+  };
+
   ngOnInit() {
     this.subscriptions.push(
       this.route.params
@@ -52,16 +56,15 @@ export class LibraryComponent implements OnInit {
             this.selectedBrowseId = params['viewId'];
         }
         this.loadCategory();
-        this.getTags();
+        this.getTags(this.selectedBrowseId);
       })
     );
   }
 
-  private getTags(): void {
-    this._tags.initTags({ type: "library", collectionId: this.selectedBrowseId})
+  private getTags(browseId): void {
+    this._tags.initTags({ type: "library", collectionId: browseId})
       .then((tags) => {
-        console.log(tags);
-        this.tags = tags;
+        this.tagsObj[browseId] = tags;
       })
       .catch((err) => {
         console.error(err);
@@ -77,7 +80,7 @@ export class LibraryComponent implements OnInit {
    * @param id Id of desired menu from colMenuArray enum
    */
   private selectBrowseOpt ( id: string ){
-    this.tags = [];
+    this.getTags(id);
     this.selectedBrowseId = id;
     this.addRouteParam('viewId', id);
   }
@@ -94,8 +97,6 @@ export class LibraryComponent implements OnInit {
           console.log('Unable to load category results.');
       });
   }
-
-
 
     /**
    * Adds a parameter to the route and navigates to new route
