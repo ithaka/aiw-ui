@@ -120,6 +120,8 @@ export class GroupService {
         delete group.id;
         delete group['users-with-access'];
         delete group['insts-with-access'];
+        delete group['public'];
+        
         if (group.tags[0] == null) { group.tags = [] }
 
         return this.http.put(
