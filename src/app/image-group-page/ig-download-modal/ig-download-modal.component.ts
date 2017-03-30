@@ -37,6 +37,7 @@ export class PptModalComponent implements OnInit {
   ngOnInit() {
     this.isLoading = true;
     this.zipLoading = true;
+    console.log(this.ig);
 
     // Setup PPT Download
     this.getDownloadLink(this.ig)
@@ -79,11 +80,20 @@ export class PptModalComponent implements OnInit {
       zip = false;
     }
 
+
+    group.thumbnails.forEach((thumb, index, thumbs) => {
+        imgStr += [(index + 1), thumb.objectId, "1024x1024"].join(":")
+        if (index !== thumbs.length - 1) {
+            imgStr += ","
+        }
+    })
+
     let data = {
         _method: "createPPT",
         igId: group.igId,
         igName: group.name,
-        images: group.igDownloadInfo.images,
+        // images: group.igDownloadInfo.images,
+        images: imgStr,
         zoom: '',
         zip: zip
     }
