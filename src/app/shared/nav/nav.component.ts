@@ -4,7 +4,7 @@ import { Router, NavigationEnd, ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
 
 import { LoginService } from '../../login/login.service';
-import { AuthService, ToolboxService } from '..';
+import { AuthService, AssetService, ToolboxService } from '..';
 
 import {Idle, DEFAULT_INTERRUPTSOURCES} from '@ng-idle/core';
 import {Keepalive} from '@ng-idle/keepalive';
@@ -27,7 +27,16 @@ export class Nav implements OnInit, OnDestroy {
   private idleState: string = 'Not started.';
 
   // TypeScript public modifiers
-  constructor(private _auth: AuthService, private _login: LoginService, private _router:Router, private route: ActivatedRoute, private location: Location, private idle: Idle, private keepalive: Keepalive) {  
+  constructor(
+    private _auth: AuthService,
+    private _assets: AssetService,
+    private _login: LoginService,
+    private _router: Router,
+    private route: ActivatedRoute,
+    private location: Location,
+    private idle: Idle,
+    private keepalive: Keepalive
+  ) {  
     idle.setIdle(60);
     idle.setTimeout(3600);
     idle.setInterrupts(DEFAULT_INTERRUPTSOURCES);
@@ -78,6 +87,9 @@ export class Nav implements OnInit, OnDestroy {
         this.institutionObj = institutionObj;
       })
     );
+
+    this._assets.getCollections("ssc")
+      .then((data) => {  })
   }
 
   ngOnDestroy() {
