@@ -1,4 +1,4 @@
-<div id="accessDeniedModal" class="modal" [ngClass]="{'show': showaccessDeniedModal }">
+<div id="accessDeniedModal" class="modal show">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-body">
@@ -12,7 +12,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                    <button class="btn btn-primary" (click)="resourceAccessDenied()">Return to Home</button>
+                    <button class="btn btn-primary" [routerLink]="['/home']" >Return to Home</button>
             </div>
         </div>
     </div>

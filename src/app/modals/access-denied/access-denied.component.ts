@@ -1,11 +1,14 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, EventEmitter, Output } from '@angular/core';
 
 @Component({
   selector: 'ang-access-denied-modal',
   templateUrl: 'access-denied.component.html'
 })
 export class AccessDeniedModal implements OnInit {
-  constructor() { }
+  @Output() closeModal: EventEmitter<any> = new EventEmitter();
+
+  constructor(
+  ) { }
 
   ngOnInit() { }
 }

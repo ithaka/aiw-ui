@@ -25,7 +25,7 @@
     </div>
     <ang-asset-grid [assetCount]="assetCount"></ang-asset-grid>
 
-    <div id="accessDeniedModal" class="modal" [ngClass]="{'show': showaccessDeniedModal }">
+    <!--<div id="accessDeniedModal" class="modal" [ngClass]="{'show': showaccessDeniedModal }">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-body">
@@ -43,5 +43,6 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div>-->
+    <ang-access-denied-modal *ngIf="showaccessDeniedModal"></ang-access-denied-modal>
 </div>
