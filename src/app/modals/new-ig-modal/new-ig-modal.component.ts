@@ -127,6 +127,9 @@ export class NewIgModal implements OnInit {
         if (item.objectId) {
           itemIds.push(item.objectId);
         }
+        else if(item.id) {
+          itemIds.push(item.id);
+        }
       }
     );
 
