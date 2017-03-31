@@ -2,13 +2,13 @@
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
+        <h4 class="modal-title" translate>LOGIN_REQUIRED_MODAL.HEADING</h4>
         <button type="button" class="close" (click)="closeModal.emit()" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
-        <h4 class="modal-title">Login Required</h4>
       </div>
       <div class="modal-body">
-        <p>Please log in to download images</p>
+        <p [innerHtml]="'LOGIN_REQUIRED_MODAL.PROMPT' | translate"></p>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" (click)="closeModal.emit()">Cancel</button>

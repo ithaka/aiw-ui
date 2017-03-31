@@ -1,10 +1,12 @@
 {
   "LOGIN": {
     "LOGIN_HEADING": "Log in with your Artstor account",
-    "INSTITUTION_HEADING": "Log in through your Institution"
+    "INSTITUTION_HEADING": "Log in through your Institution",
+    "INSTITUTION_LIST_INFO": "This is not a complete list of subscribing institutions. Institutions listed have provided single sign-on or proxy access. If your school is listed, select it from the dropdown and you will be redirected to your institutional login page to gain access to Artstor."
   },
   "REGISTER": {
     "REGISTER_HEADING": "Register for a new Artstor account",
+    "REGISTER_DESCRIPTION": "Registering for an account lets you download images, save them to groups, create presentations, and share them with other Artstor users.",
     "ERRORS": {
       "EMAIL_REQUIRED": "Please enter your email address",
       "EMAIL_INVALID": "Invalid email format",
@@ -22,10 +24,16 @@
     "AGE_PROMPT_HOVER": "If you are under 13, please provide your legal guardian's email address to register",
     "INFO_PROMPT": "Yes, send me information about new Artstor content and tools",
     "SURVEY_PROMPT": "Yes, send me surveys",
-    "PRIVACY_DISCLAIMER": "Artstor will not share your personal information except in limited instances as set forth in its <a class=\"link\" href=\"http://www.artstor.org/privacy-policy\">privacy policy</a>."
+    "PRIVACY_DISCLAIMER": "Artstor will not share your personal information except in limited instances as set forth in its <a class=\"link\" href=\"http://www.artstor.org/privacy-policy\">privacy policy</a>.",
+    "FIELDS_REQUIRED": "Please note that all form fields are required."
   },
   "ACCOUNT": {
     "CHANGE_PASS": {
+      "LABELS": {
+        "OLD_PASS": "Current Password",
+        "NEW_PASS": "New Password",
+        "NEW_PASS_CONFIRM": "Confirm New Password"
+      },
       "OLD_PASS_REQUIRED": "Current password is required",
       "NEW_PASS_REQUIRED": "New password is required",
       "PASS_CONFIRM_ERROR": "Password confirmation does not match",
@@ -62,5 +70,23 @@
     "EDIT_SUCCESS" : "You've successfully edited the image group"
   },
   "RETURN_HOME" : "Return Home",
-  "BROWSE_GROUPS" : "Browse Groups"
+  "BROWSE_GROUPS" : "Browse Groups",
+  "LOGIN_REQUIRED_MODAL": {
+    "HEADING": "User account required",
+    "PROMPT": "Please <a href=\"/#/login\" class=\"link\">Log in</a> or <a href=\"/#/register\" class=\"link\">Register</a> to save images."
+  },
+  "BROWSE": {
+    "ERRORS": {
+      "NO_INSTITUTIONAL_COLLECTIONS_HEADING": "No Institutional Collections found",
+      "NO_INSTITUTIONAL_COLLECTIONS_PROMPT": "<p>There are no institutional collections available for your institution. You can add institutional collections using Shared Shelf.</p><p>Learn more about <a href=\"http://artstor.org/sharedshelf\" class=\"link\">Shared Shelf</a>.</p>"
+    }
+  },
+  "ACCESS_HELP_MODAL": {
+    "HEADING": "How do I register?",
+    "PROMPT": "<p>Access is provided to <a href=\"http://www.artstor.org/content/subscribers\" class=\"link\">subscribing institutions</a></p><p>If you belong to a subscribing institution, find out how to <a href=\"http://support.artstor.org/?article=remote-and-proxy-access\" class=\"link\">use remote access methods</a></p><p>If your institution is not a subscriber, find out how <a href=\"http://www.artstor.org/trial\" class=\"link\">to subscribe</a></p>"
+  },
+  "ACCESS_DENIED_MODAL": {
+    "HEADING": "Content Unavailable",
+    "PROMPT": "If you are already <a href=\"/#/login\" class=\"link\">logged in</a>, this may be due to content limitations or your institutional access."
+  }
 }

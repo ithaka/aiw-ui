@@ -15,13 +15,11 @@ export class TagsService {
    * @returns a chainable promise resolved with an array of tags
    */
   public initTags(switchObj: any): Promise<Tag[]> {
-    console.log(switchObj);
     if (switchObj.type === "commons") {
       return this.getCollections('ssc');
     } else if (switchObj.type === "institution") {
       return this.getCollections('institution');
     } else if (switchObj.type === "library" && switchObj.collectionId) {
-      console.log("library it is!");
       return this.getCategories(null, switchObj.collectionId);
     }
   }
@@ -34,9 +32,7 @@ export class TagsService {
   public getChildTags(tag: Tag): Promise<Tag[]> {
     if (tag.type && tag.type.label) {
       let label = tag.type.label;
-      if (label === "collection" || label === "category" || label === "group") {
-        return this.getCategories(tag);
-      }
+      return this.getCategories(tag);
     }
   }
 
@@ -76,7 +72,7 @@ export class TagsService {
       return this._assets.category(collectionId)
         .then((data) => {
           for(let category of data.Categories) {
-            let categoryTag = new Tag(category.widgetId, category.title, true, tag, { label: "category", folder: category.isFolder });
+            let categoryTag = new Tag(category.widgetId, category.title, true, tag, { label: "category", folder: category.isFolder }, category['enableDblClick'] );
             childArr.push(categoryTag);
           }
           return childArr;
@@ -88,7 +84,7 @@ export class TagsService {
       return this._assets.subGroups(tagId)
         .then((data) => {
           for(let group of data) {
-            let groupTag = new Tag(group.widgetId.replace('fldr_',''), group.title, true, tag, { label: "group", folder: group.isFolder });
+            let groupTag = new Tag(group.widgetId.replace('fldr_',''), group.title, true, tag, { label: "group", folder: group.isFolder }, true);
             // Is folder property cleaning: comes through as string
             group.isFolder = (group.isFolder === 'true') ?  true : false;
             // Set description if it exists
@@ -99,11 +95,17 @@ export class TagsService {
           }
           return childArr;
         });
-    } else if (tag.type.label === "category") {
+    } else {
       return this._assets.subcategories(tag.tagId)
         .then((data) => {
           for(let category of data) {
-            let categoryTag = new Tag(category.widgetId, category.title, true, tag, { label: "subcategory", folder: category.isFolder });
+            let categoryTag;
+            if (category.grpId) {
+              categoryTag = new Tag(category.grpId, category.title, true, tag, { label: "group", folder: false }, category['enableDblClick']);
+            } else {
+              categoryTag = new Tag(category.widgetId, category.title, true, tag, { label: "subcategory", folder: category.isFolder }, category['enableDblClick']);
+            }
+            
             childArr.push(categoryTag);
           }
           return childArr;

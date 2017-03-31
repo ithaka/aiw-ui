@@ -6,5 +6,4 @@ export * from './download-limit/download-limit.component';
 export * from './add-to-group/add-to-group.component';
 export * from './delete-ig/delete-ig.component';
 export * from './no-ig/no-ig.component';
-
-
+export * from './access-denied/access-denied.component';

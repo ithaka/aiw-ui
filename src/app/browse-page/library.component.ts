@@ -20,15 +20,11 @@ export class LibraryComponent implements OnInit {
   ) { }
 
   private subscriptions: Subscription[] = [];
-
-  private tags: Tag[] = [];
-
-  private currentBrowseRes: any = {};
-  private selectedBrowseId: string = '103';
+  private selectedBrowseId: string = '';
   private browseMenuArray: any[] = [
     {
       label : 'Collection',
-      id: '103'
+      id: '103',
     },
     {
       label : 'Classification',
@@ -37,31 +33,46 @@ export class LibraryComponent implements OnInit {
     {
       label : 'Geography',
       id: '260'
+    },
+    {
+      label : 'Teaching Resources',
+      id: '270'
     }
   ];
+
+  private tagsObj: any = {
+    103 : [],
+    250 : [],
+    260 : [],
+    270 : []
+  };
+  private descObj: any  = {};
 
   ngOnInit() {
     this.subscriptions.push(
       this.route.params
       .subscribe((params: Params) => { 
         if(params && params['viewId']){
+            if (this.selectedBrowseId !== params['viewId']){
+              this.getTags(params['viewId']);
+            }
             this.selectedBrowseId = params['viewId'];
         }
-        this.loadCategory();
-        this.getTags();
+        this.loadDescription(this.selectedBrowseId);
       })
     );
   }
 
-  private getTags(): void {
-    this._tags.initTags({ type: "library", collectionId: this.selectedBrowseId})
+  private getTags(browseId): void {
+    if (!this.tagsObj[browseId] || this.tagsObj[browseId].length < 1) {
+      this._tags.initTags({ type: "library", collectionId: browseId})
       .then((tags) => {
-        console.log(tags);
-        this.tags = tags;
+        this.tagsObj[browseId] = tags;
       })
       .catch((err) => {
         console.error(err);
       });
+    }
   }
 
   ngOnDestroy() {
@@ -73,7 +84,7 @@ export class LibraryComponent implements OnInit {
    * @param id Id of desired menu from colMenuArray enum
    */
   private selectBrowseOpt ( id: string ){
-    this.tags = [];
+    this.getTags(id);
     this.selectedBrowseId = id;
     this.addRouteParam('viewId', id);
   }
@@ -81,17 +92,17 @@ export class LibraryComponent implements OnInit {
   /**
    * Sets browser response for description
    */
-  private loadCategory(): void{
-    this._assets.category( this.selectedBrowseId )
-      .then((res) => {
-          this.currentBrowseRes = res;
-      })
-      .catch(function(err) {
-          console.log('Unable to load category results.');
-      });
+  private loadDescription(browseId): void{
+    if (!this.descObj[browseId]) {
+      this._assets.category( browseId )
+        .then((res) => {
+            this.descObj[browseId] = res;
+        })
+        .catch(function(err) {
+            console.log('Unable to load category results.');
+        });
+    }
   }
-
-
 
     /**
    * Adds a parameter to the route and navigates to new route

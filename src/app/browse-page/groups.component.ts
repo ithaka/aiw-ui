@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { Subscription }   from 'rxjs/Subscription';
 
-import { AssetService, GroupService } from './../shared';
+import { AssetService, AuthService, GroupService } from './../shared';
 import { Tag } from './tag/tag.class';
 // import { AuthService } from './../shared/auth.service';
 
@@ -16,7 +16,8 @@ export class BrowseGroupsComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private _assets: AssetService,
-    private _groups: GroupService
+    private _groups: GroupService,
+    private _auth: AuthService
   ) { }
 
   private subscriptions: Subscription[] = [];
@@ -52,11 +53,13 @@ export class BrowseGroupsComponent implements OnInit {
         }
       })
     );
-
-    this.browseMenuArray.push({
-      label: 'Private',
-      level: 'private'
-    });
+    
+    if (this._auth.getUser() && this._auth.getUser().isLoggedIn) {
+      this.browseMenuArray.push({
+        label: 'Private',
+        level: 'private'
+      });
+    }
 
     this.browseMenuArray.push({
       label: 'Institutional',
@@ -92,7 +95,7 @@ export class BrowseGroupsComponent implements OnInit {
     let parentTag = null;
 
     for(let group of folderArray) {
-            let groupTag = new Tag(group.id, group.name, true, null, { label: "group", folder: false });
+            let groupTag = new Tag(group.id, group.name, true, null, { label: "group", folder: false }, true);
             childArr.push(groupTag);
           }
     return childArr;
@@ -105,7 +108,6 @@ export class BrowseGroupsComponent implements OnInit {
     this._groups.getAll(this.selectedBrowseLevel, this.pagination.pageSize, this.pagination.currentPage, this.appliedTags)
         .take(1).subscribe(
           (data)  => {
-            console.log(data);
             this.tagFilters = data.tags;
             this.tagsObj[this.selectedBrowseLevel] = data.tags;
             this.foldersObj[this.selectedBrowseLevel] = this.createGroupTags(data.groups);
