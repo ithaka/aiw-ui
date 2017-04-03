@@ -23,7 +23,6 @@ export class BrowseCommonsComponent implements OnInit {
   ngOnInit() {
     this._tags.initTags({type: "commons"})
       .then((tags) => {
-        console.log(tags);
         this.tags = tags;
       })
       .catch((err) => {

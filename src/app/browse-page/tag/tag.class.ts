@@ -32,7 +32,7 @@ export class Tag {
     this.title = title;
     this.isCollapsed = isCollapsed;
     this.parentTag = parentTag;
-    this.canOpen = canOpen;
+    this.canOpen = !!canOpen;
 
     if (type) {
       this.type = type;

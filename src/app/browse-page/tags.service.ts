@@ -44,10 +44,10 @@ export class TagsService {
     return this._assets.getCollections( type )
       .then((data) => {
         if (data && data.Collections) {
-          console.log(data.Collections)
           let tags: Tag[] = [];
           data.Collections.forEach((collection, index) => {
-            tags.push(new Tag(collection.collectionid, collection.collectionname, true, null, { label: "collection", folder: true }));
+            let openable = collection.collectionType === 5;
+            tags.push(new Tag(collection.collectionid, collection.collectionname, true, null, { label: "collection", folder: true }, openable));
           });
           return tags;
         } else {
