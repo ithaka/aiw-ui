@@ -95,6 +95,10 @@ filter, .filter {
 		& .link {
 			color: #000;
 		}
+
+		& .icon-add {
+			display: block;
+		}
 	}
 
 	& a {
@@ -126,6 +130,14 @@ filter, .filter {
 		font-size: 20px;
 	}
 
+	& .icon-add, & .icon-close {
+		position: absolute;
+		right: 4px;
+		top: 5px;
+		padding: 5px;
+		font-size: 14px;
+	}
+
 	&.inactive {
 		color: rgba(0,0,0,0.45);
 	}
@@ -136,6 +148,10 @@ filter, .filter {
 		& i {
 			display: inline-block;
 			color: rgba(0,0,0,0.2);
+		}
+
+		& .icon-add {
+			display: none !important;
 		}
 	}
 

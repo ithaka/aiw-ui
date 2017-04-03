@@ -521,8 +521,8 @@ export class AssetService {
                 let idsAsTerm: string =  data.items.slice(pageStart,pageEnd).join('&object_id='); //.replace(/[A-Z_]/g, '');
 
                 console.log(idsAsTerm);
-
-                this.http.get('//lively.artstor.org/api/v1/items?object_id=' + idsAsTerm)
+                
+                this.http.get('//lively.artstor.org/api/v1/items?object_id=' + idsAsTerm, )
                     .subscribe(
                         (res) => {
                             console.log(res);

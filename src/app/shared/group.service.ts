@@ -24,16 +24,14 @@ export class GroupService {
         } else {
             this.groupUrl = '//lively.artstor.org/api/v1/group';
         }
-        let headers = new Headers({ });
-        
-
-        this.options = new RequestOptions({ headers: headers, withCredentials: true });
+        this.options = new RequestOptions({ withCredentials: true });
     }
 
     /**
      * Get All Groups
      */
-    public getAll(level: string, size?: number, pageNo ?: number, tags ?: string[] ): Observable<any> {
+    public getAll(level: string, size?: number, pageNo ?: number, tags ?: string[] ):
+     Observable<any> {
         if (!tags) {
             tags = [];
         }
