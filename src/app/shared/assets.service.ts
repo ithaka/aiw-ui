@@ -522,7 +522,7 @@ export class AssetService {
 
                 console.log(idsAsTerm);
 
-                this.http.get('//artstor-thumbnail-service.apps.test.cirrostratus.org/api/v1/items?object_id=' + idsAsTerm)
+                this.http.get('//lively.artstor.org/api/v1/items?object_id=' + idsAsTerm)
                     .subscribe(
                         (res) => {
                             console.log(res);
