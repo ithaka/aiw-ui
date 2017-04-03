@@ -49,6 +49,11 @@ export class LibraryComponent implements OnInit {
   private descObj: any  = {};
 
   ngOnInit() {
+    if (!this.route.snapshot.params['viewId']) {
+      this.selectedBrowseId = "103";
+      this.getTags(this.selectedBrowseId);
+    }
+
     this.subscriptions.push(
       this.route.params
       .subscribe((params: Params) => { 
