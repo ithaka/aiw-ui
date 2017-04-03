@@ -142,6 +142,14 @@ export class BrowseGroupsComponent implements OnInit {
     }
     this.loadIGs();
   }
+
+  /**
+   * Clear tag filters, and reload groups
+   */
+  clearFilters() : void {
+    this.appliedTags = [];
+    this.loadIGs();
+  }
   
   goToPage(pageNo: number): void {
     this.pagination.currentPage = pageNo;
