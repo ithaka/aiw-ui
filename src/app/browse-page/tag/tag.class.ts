@@ -39,7 +39,7 @@ export class Tag {
       // A disappointing number of booleans come back as strings...
       this.type.folder = (type.folder === 'true' || type.folder === true) ?  true : false;
     } else {
-      this.type = 'category';
+      this.type = {label: 'category'};
     }
     
     this.levelsDeep = this.setLevel();
