@@ -19,7 +19,7 @@ import { Angulartics2 } from 'angulartics2';
 export class AuthService implements CanActivate {
   private _storage: Locker;
   private baseUrl;
-  private subdomain;
+  private hostname;
   private thumbUrl;
   private IIIFUrl;
   private logUrl: string;
@@ -43,7 +43,7 @@ export class AuthService implements CanActivate {
     this._router = _router;
 
     // these can be moved inside the if statement when we want to change services based on dev/prod
-    this.subdomain = 'lively';
+    this.hostname = '//lively.artstor.org';
     this.baseUrl =  '//lively.artstor.org/library/secure'; 
     this.thumbUrl = '//mdxdv.artstor.org';
     this.IIIFUrl = '//tsprod.artstor.org/rosa-iiif-endpoint-1.0-SNAPSHOT/fpx';
@@ -54,11 +54,11 @@ export class AuthService implements CanActivate {
       this.logUrl = '//ang-ui-logger.apps.prod.cirrostratus.org/api/v1';
     } else if( document.location.hostname.indexOf('ang-ui-earth.apps.test.cirrostratus.org') > -1 ) {
       // Earth test instance endpoints
+      this.hostname = '//artstor-earth-library.apps.test.cirrostratus.org';
       this.baseUrl = '//artstor-earth-library.apps.test.cirrostratus.org/secure';
     } else {
       this.logUrl = '//ang-ui-logger.apps.test.cirrostratus.org/api/v1';
       // Dev/Stage endpoints
-      // this.subdomain = 'stagely';
       // this.baseUrl =  '//stagely.artstor.org/library/secure'; 
       // this.thumbUrl = '//mdxstage.artstor.org';
       // this.IIIFUrl = '//tsprod.artstor.org/rosa-iiif-endpoint-1.0-SNAPSHOT/fpx';
@@ -146,8 +146,8 @@ export class AuthService implements CanActivate {
     return this.baseUrl;
   }
 
-  public getSubdomain(): string {
-    return this.subdomain;
+  public getHostname(): string {
+    return this.hostname;
   }
 
   public getIIIFUrl(): string {
@@ -168,7 +168,7 @@ export class AuthService implements CanActivate {
   /** Returns url used for downloading some media, such as documents */
   public getMediaUrl(): string {
     // This is a special case, and should always points to library.artstor or stage 
-    return '//' + this.getSubdomain() + '.artstor.org/media';
+    return this.getHostname() + '/media';
   }
 
   /**

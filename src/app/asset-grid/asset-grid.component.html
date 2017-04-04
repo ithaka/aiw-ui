@@ -2,43 +2,45 @@
     <!--<div class="col-sm-3">
         <h2 class="header-button" (click)="showFilters = !showFilters">Filters <i class="icon icon-direction absolute-right" [ngClass]="{ 'icon-down' : showFilters, 'icon-left' : !showFilters }"></i></h2>
     </div>-->
-    <div class="col-sm-9 mobile--hide grid-tool-bar">
-        <li class="dropdown" class="sortlist" ngbDropdown>
-            <button class="btn btn-link" id="sortdropdownMenu" ngbDropdownToggle>Sort: <span class="value">{{ activeSort.label ? activeSort.label : 'Relevance' }}</span></button>
-            <div class="dropdown-menu" aria-labelledby="sortdropdownMenu">
-                <button [ngClass]="{ 'disable': activeSort.index == '1' }" class="dropdown-item" (click)="changeSortOpt('1', 'Title')">Title</button>
-                <button [ngClass]="{ 'disable': activeSort.index == '2' }" class="dropdown-item" (click)="changeSortOpt('2', 'Creator')">Creator</button>
-                <button [ngClass]="{ 'disable': activeSort.index == '3' }" class="dropdown-item" (click)="changeSortOpt('3', 'Date')">Date</button>
-                <button [ngClass]="{ 'disable': activeSort.index == '0' }" class="dropdown-item" (click)="changeSortOpt('0', 'Relevance')">Relevance</button>
-            </div>
-        </li>
-        <!--<span class="active-sort">{{ activeSort.label }}</span>-->
-        <li class="dropdown" class="pagesizelist" ngbDropdown>
-            <button class="btn btn-link" id="pagesizedropdownMenu" ngbDropdownToggle>Images/page: <span class="value">{{ pagination.pageSize ? pagination.pageSize : '24' }}</span></button>
-            <div class="dropdown-menu" aria-labelledby="pagesizedropdownMenu">
-                <button [ngClass]="{ 'disable': pagination.pageSize == 24 }" class="dropdown-item" (click)="changePageSize(24)">24</button>
-                <button [ngClass]="{ 'disable': pagination.pageSize == 48 }" class="dropdown-item" (click)="changePageSize(48)">48</button>
-                <button [ngClass]="{ 'disable': pagination.pageSize == 72 }" class="dropdown-item" (click)="changePageSize(72)">72</button>
-            </div>
-        </li>
+    <div class="col-sm-8 col-md-8 col-lg-9 mobile--hide grid-tool-bar">
+        <div class="row">
+            <div class="col-12">
+                <li class="dropdown" class="sortlist" ngbDropdown>
+                    <button class="btn btn-link" id="sortdropdownMenu" ngbDropdownToggle>Sort: <span class="value">{{ activeSort.label ? activeSort.label : 'Relevance' }}</span></button>
+                    <div class="dropdown-menu" aria-labelledby="sortdropdownMenu">
+                        <button [ngClass]="{ 'disable': activeSort.index == '1' }" class="dropdown-item" (click)="changeSortOpt('1', 'Title')">Title</button>
+                        <button [ngClass]="{ 'disable': activeSort.index == '2' }" class="dropdown-item" (click)="changeSortOpt('2', 'Creator')">Creator</button>
+                        <button [ngClass]="{ 'disable': activeSort.index == '3' }" class="dropdown-item" (click)="changeSortOpt('3', 'Date')">Date</button>
+                        <button [ngClass]="{ 'disable': activeSort.index == '0' }" class="dropdown-item" (click)="changeSortOpt('0', 'Relevance')">Relevance</button>
+                    </div>
+                </li>
+                <!--<span class="active-sort">{{ activeSort.label }}</span>-->
+                <li class="dropdown" class="pagesizelist" ngbDropdown>
+                    <button class="btn btn-link" id="pagesizedropdownMenu" ngbDropdownToggle>Images/page: <span class="value">{{ pagination.pageSize ? pagination.pageSize : '24' }}</span></button>
+                    <div class="dropdown-menu" aria-labelledby="pagesizedropdownMenu">
+                        <button [ngClass]="{ 'disable': pagination.pageSize == 24 }" class="dropdown-item" (click)="changePageSize(24)">24</button>
+                        <button [ngClass]="{ 'disable': pagination.pageSize == 48 }" class="dropdown-item" (click)="changePageSize(48)">48</button>
+                        <button [ngClass]="{ 'disable': pagination.pageSize == 72 }" class="dropdown-item" (click)="changePageSize(72)">72</button>
+                    </div>
+                </li>
 
-        <li class="btn btn-link" (click)="toggleEditMode()" [ngClass]="{'active': editMode}"><i class="icon icon-select-white"></i>Select</li>
-        <li class="btn btn-link" (click)="toggleReorderMode()" [ngClass]="{'active': reorderMode}" *ngIf="actionOptions.group && actionOptions.isowner"><i class="icon icon-reorder-white"></i>Reorder</li>
-        <li class="btn btn-link" (click)="_ig.triggerIgDownload()" *ngIf="actionOptions.group"><i class="icon icon-download-white"></i>Download</li>
-        <li class="btn btn-link" (click)="_ig.triggerIgExport()" *ngIf="actionOptions.group"><i class="icon icon-export-white"></i>Export</li>
+                <div class="number-results" *ngIf="!isLoading">{{ totalAssets }}{{ totalAssets == 2000 ? '+' : '' }} results  <span *ngIf="searchTerm">for <span [innerHtml]="formatSearchTerm(searchTerm)"></span></span></div>
+            </div>
+            <div class="col-12 pb-3">
+                <li class="btn btn-link" (click)="toggleEditMode()" [ngClass]="{'active': editMode}"><i class="icon icon-select-white"></i>Select</li>
+                <li class="btn btn-link" (click)="toggleReorderMode()" [ngClass]="{'active': reorderMode}" *ngIf="actionOptions.group && actionOptions.isowner"><i class="icon icon-reorder-white"></i>Reorder</li>
+                <li class="btn btn-link" (click)="_ig.triggerIgDownload()" *ngIf="actionOptions.group"><i class="icon icon-download-white"></i>Download</li>
+                <li class="btn btn-link" (click)="_ig.triggerIgExport()" *ngIf="actionOptions.group"><i class="icon icon-export-white"></i>Export</li>
+            </div>
+        </div>
         <!--<span class="page-size">{{ pagination.pageSize }}</span>-->
     </div>
-    <div class="col-sm-3 text-right grid-pagination-bar">
+    <div class="col-sm-4 col-md-4 col-lg-3 text-right grid-pagination-bar">
         <pagination [pageObj]="pagination" (goToPage)="goToPage($event)">
         </pagination>
     </div>
 </div>
 
-<div class="row">
-    <div class="col-10">
-        <div class="number-results" *ngIf="!isLoading">{{ totalAssets }}{{ totalAssets == 2000 ? '+' : '' }} results  <span *ngIf="searchTerm">for <span [innerHtml]="formatSearchTerm(searchTerm)"></span></span></div>
-    </div>
-</div>
 
 <!--Thumbnail Grid-->
 <div class="row row--no-overflow pb-5" [ngClass]="{'edit': editMode}">

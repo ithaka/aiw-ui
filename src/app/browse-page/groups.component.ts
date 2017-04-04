@@ -128,7 +128,7 @@ export class BrowseGroupsComponent implements OnInit {
     if (this.foldersObj[this.selectedBrowseLevel]) {
       this.currentBrowseRes = this.foldersObj[this.selectedBrowseLevel];
       this.tags = this.foldersObj[this.selectedBrowseLevel];
-      this.tagFilters
+      this.tagFilters = this.tagsObj[this.selectedBrowseLevel];
     } else {
       this.loadIGs();
     }

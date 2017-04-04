@@ -58,6 +58,7 @@ button.page-link {
     // border-color: transparent;
     border-radius: 0px !important;
     padding: 0.5rem;
+    white-space: nowrap;
 
     &:hover {
         background: #f8f8f8;
@@ -78,3 +79,4 @@ button.page-link {
     padding: 0.5rem 4px 0.5rem 0px;
     border-bottom: 1px solid transparent;
 }
+
