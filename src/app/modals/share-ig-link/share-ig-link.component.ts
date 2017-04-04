@@ -1,4 +1,6 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+
+import { ImageGroup } from './../../shared';
 
 @Component({
   moduleId: module.id,
@@ -10,12 +12,16 @@ export class ShareIgLinkModal implements OnInit {
   @Output()
   private closeModal: EventEmitter<any> = new EventEmitter();
 
+  @Input()
+  private ig: ImageGroup;
+
   private document = document;
 
   private shareLink: string = "test"; // this is the url which will be copied to the user's clipboard
-  private shareHyperlink: string = "this is another test"; // this is the hyperlink which will be copied to the user's clipboard
 
   constructor() { }
 
-  ngOnInit() { }
+  ngOnInit() {
+    console.log(this.ig);
+  }
 }

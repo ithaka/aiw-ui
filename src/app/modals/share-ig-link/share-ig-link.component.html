@@ -4,7 +4,7 @@
     <!--modal content: Is deleted, now what? -->
     <div class="modal-content">
       <div class="modal-header">
-        <h4 translate class="modal-title">SHARE_IG_LINK_MODAL.MAIN_HEADER</h4>
+        <h4 translate class="modal-title">SHARE_IG_LINK_MODAL.MAIN_HEADING</h4>
         <button type="button" class="close" (click)="closeModal.emit()" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -19,16 +19,6 @@
             <div class="copy-clipboard" (click)=" copyURL.focus(); document.execCommand('SelectAll'); document.execCommand('Copy', false, null); ">Copy to Clipboard</div>
             <div class="copy-status-msg">{{ copyURLStatusMsg }}</div>
           </div>
-          <div class="pb-3">
-            <label translate for="copyHyperlink">SHARE_IG_LINK_MODAL.HYPERLINK_LABEL</label>
-            <div class="value">
-                <textarea #copyHyperlink id="copyHyperlink" readonly>{{ shareHyperlink }}</textarea>
-            </div>
-            <div class="copy-clipboard" (click)=" copyHyperlink.focus(); document.execCommand('SelectAll'); document.execCommand('Copy', false, null); ">Copy to Clipboard</div>
-            <div class="copy-status-msg">{{ copyURLStatusMsg }}</div>
-          </div>
-
-
         </div>
       </div>
       <div class="modal-footer">
