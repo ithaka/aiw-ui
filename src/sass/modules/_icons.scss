@@ -27,9 +27,15 @@
     background-size: 40px 40px !important;
     background-color: rgba(255,255,255,0.5);
     z-index: 5000;
+    pointer-events: none;
 }
 
-.has-icon-overlay.loading {
+.icon-overlay--top {
+    @extend .icon-overlay;
+    background-position: 50% 100px !important;
+}
+
+.has-icon-overlay {
     min-height: 90px;
 }
 
