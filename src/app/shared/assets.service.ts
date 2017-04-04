@@ -518,9 +518,7 @@ export class AssetService {
                 data.count = data.items.length;
                 let pageStart = (this.urlParams.currentPage - 1)*this.urlParams.pageSize;
                 let pageEnd = this.urlParams.currentPage*this.urlParams.pageSize;
-                let idsAsTerm: string =  data.items.slice(pageStart,pageEnd).join('&object_id='); //.replace(/[A-Z_]/g, '');
-
-                console.log(idsAsTerm);
+                let idsAsTerm: string =  data.items.slice(pageStart,pageEnd).join('&object_id=');
                 
                 this.http.get('//lively.artstor.org/api/v1/items?object_id=' + idsAsTerm, )
                     .subscribe(
@@ -531,6 +529,8 @@ export class AssetService {
                             // Set the allResults object
                             this.updateLocalResults(data);
                     }, (error) => {
+                        // Pass portion of the data we have
+                        this.updateLocalResults(data);
                         // Pass error down to allResults listeners
                         this.allResultsSource.error(error); // .throw(error);
                     });

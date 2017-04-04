@@ -49,7 +49,10 @@ export class ImageGroupPage implements OnInit, OnDestroy {
   ngOnInit() {
     this.user = this._auth.getUser();
 
-    // Subscribe to ID in params
+    /**
+     * Get Route Params
+     * - Let Assets service know what group to load
+     */
     this.subscriptions.push(
       this.route.params.subscribe((routeParams) => {
         let id = routeParams["igId"];
@@ -64,15 +67,15 @@ export class ImageGroupPage implements OnInit, OnDestroy {
       })
     );
 
+    /**
+     * Get image group assets
+     * - Assets service will provide the image group and its assets
+     */
     this.subscriptions.push(
       this._assets.allResults.subscribe((results: ImageGroup) => {
-
-        if (results.id) {
+        if ('id' in results) {
           // Set ig properties from results
           this.ig = results;
-
-          console.log(this.ig);
-
           this.checkDesc();
 
           // if the user has write access, then allow them to update the image group
@@ -82,18 +85,6 @@ export class ImageGroupPage implements OnInit, OnDestroy {
               this.actionOptions.isowner = true;
             }
           })
-
-          // this._ig.getGroupDescription(results.igId).take(1)
-          //   .subscribe((desc: ImageGroupDescription) => { 
-          //     this.ig.description = desc;
-          //   });
-
-          // this._ig.getGroupDescription(results.igId).take(1)
-          //   .subscribe((desc: ImageGroupDescription) => { 
-          //     console.log(desc)
-          //     this.disableIgDelete = !desc.isFldrOwner;
-          //   });
-
 
           // // get the user's download count
           // this._ig.getDownloadCount(this.ig.igId)
