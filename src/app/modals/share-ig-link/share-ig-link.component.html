@@ -11,13 +11,13 @@
       </div>
       <div class="modal-body">
         <div class="pt-3">
-          <div class="pb-3">
+          <div class="pb-3 form-group" [class.has-success]="igCopied">
             <label translate for="copyURL">SHARE_IG_LINK_MODAL.URL_LABEL</label>
             <div class="value">
                 <textarea #copyURL id="copyURL" readonly>{{ shareLink }}</textarea>
             </div>
-            <div class="copy-clipboard" (click)=" copyURL.focus(); document.execCommand('SelectAll'); document.execCommand('Copy', false, null); ">Copy to Clipboard</div>
-            <div class="copy-status-msg">{{ copyURLStatusMsg }}</div>
+            <div class="copy-clipboard" (click)=" copyURL.focus(); document.execCommand('SelectAll'); document.execCommand('Copy', false, null); igCopied = true; ">Copy to Clipboard</div>
+            <div *ngIf="igCopied" translate class="form-control-feedback">SHARE_IG_LINK_MODAL.COPY_SUCCESS</div>
           </div>
         </div>
       </div>
