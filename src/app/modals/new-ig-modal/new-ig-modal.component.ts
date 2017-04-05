@@ -174,10 +174,7 @@ export class NewIgModal implements OnInit {
         tags: formValue.tags,
         id: this.ig.id
       };
-
-      console.log('edit IG !');
-      console.log(editGroup);
-
+      
       this._group.update(editGroup)
         .subscribe(
           data => {
@@ -208,6 +205,17 @@ export class NewIgModal implements OnInit {
         items: itemIds,
         tags: formValue.tags
       };
+
+      /**
+       * Add institution access object if shared with Institution
+       */
+      if (formValue.public) {
+        group.access.push({
+          entity_type: 200,
+          entity_identifier: this._auth.getUser() && this._auth.getUser().institutionId.toString(),
+          access_type: 100
+        });
+      }
 
       this._group.create(group)
         .subscribe(
