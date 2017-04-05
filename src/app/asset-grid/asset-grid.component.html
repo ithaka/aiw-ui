@@ -36,7 +36,7 @@
                 <!--Reorder-->
                 <li class="btn btn-link" (click)="toggleReorderMode()" [ngClass]="{'active': reorderMode}" *ngIf="actionOptions.group && actionOptions.isowner"><i class="icon icon-reorder-white"></i>Reorder</li>
                 <!--Save Order-->
-                <li *ngIf="reorderMode" [class.disabled]="!orderChanged" class="btn btn-link" (click)="toggleReorderMode()"><i class="icon icon-reorder-white"></i>Save Order</li>
+                <li *ngIf="reorderMode" [class.disabled]="!orderChanged" class="btn btn-link" (click)="saveReorder()"><i class="icon icon-reorder-white"></i>Save Order</li>
                 <!--Save Order-->
                 <li *ngIf="reorderMode" class="btn btn-link" (click)="cancelReorder()"><i class="icon icon-close-white--round"></i>Cancel Reorder</li>
             </div>
@@ -54,7 +54,9 @@
 <div class="row row--no-overflow pb-5" [ngClass]="{'edit': editMode}">
     <div class="col-md-12 col--expanding has-icon-overlay" [ngClass]="{ 'col--expand-12' : !showFilters }">
         <i [hidden]="!isLoading" class="icon-lg icon-overlay icon-loading-large"></i>
-        <div id="assetThumbnailsRow" class="row no-gutters" dnd-sortable-container [sortableData]="results">
+
+        <!--Display Thumbnails  -->
+        <div *ngIf="!reorderMode" id="assetThumbnailsRow" class="row no-gutters">
             <div *ngIf="!isLoading && (totalAssets == '0') && (!results || results.length < 1) && (searchError.length < 1)" class="alert alert-warning">
                 <b>Unable to find any assets</b><br/>
                 A less specific query might be able to find what you are looking for.
@@ -62,8 +64,24 @@
             <div *ngIf="!isLoading && searchError.length > 0" class="alert alert-danger">
                 {{ searchError }}
             </div>
-            <div [ngClass]="[ reorderMode ? 'col-sm-4 col-md-2 col-lg-1 draggable' : 'col-sm-6 col-md-3 col-lg-2']" *ngFor="let asset of results; let i = index" dnd-sortable [dragEnabled]="reorderMode && !isLoading" [sortableIndex]="i" (onDragEnd)="orderChanged = true">
+            <div class="col-sm-6 col-md-3 col-lg-2" *ngFor="let asset of results">
                 <div class="card card--asset" [ngClass]="{'selected': ( isSelectedAsset(asset) > -1 ) }" (click)="!reorderMode && selectAsset(asset)">
+                    <ang-thumbnail [thumbnail]="asset"></ang-thumbnail>
+                </div>
+            </div> <!-- .col -->
+        </div>
+
+        <!--Sortable Thumbails-->
+        <div *ngIf="reorderMode" id="assetThumbnailsRow" class="row no-gutters" dnd-sortable-container [sortableData]="allResults">
+            <div *ngIf="!isLoading && (totalAssets == '0') && (!results || results.length < 1) && (searchError.length < 1)" class="alert alert-warning">
+                <b>Unable to find any assets</b><br/>
+                A less specific query might be able to find what you are looking for.
+            </div>
+            <div *ngIf="!isLoading && searchError.length > 0" class="alert alert-danger">
+                {{ searchError }}
+            </div>
+            <div class="col-sm-4 col-md-2 col-lg-1 draggable" *ngFor="let asset of results; let i = index" dnd-sortable [dragEnabled]="reorderMode && !isLoading" [sortableIndex]="i" (onDragEnd)="orderChanged = true">
+                <div class="card card--asset">
                     <ang-thumbnail [thumbnail]="asset"></ang-thumbnail>
                 </div>
             </div> <!-- .col -->

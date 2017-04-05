@@ -115,7 +115,7 @@ export class GroupService {
         delete putGroup['count']
         delete putGroup['thumbnails']
         
-        if (putGroup.tags[0] == null) { putGroup.tags = [] }
+        if (!putGroup.tags || putGroup.tags[0] == null) { putGroup.tags = [] }
 
         return this.http.put(
             this.groupUrl + '/' + id,

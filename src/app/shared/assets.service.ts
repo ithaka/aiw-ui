@@ -182,8 +182,8 @@ export class AssetService {
     public removeFromResults(ids: string[]): void {
         this.allResultsValue['thumbnails'] = this.allResultsValue['thumbnails'].filter((thumbnail: Thumbnail) => {
             return ids.indexOf(thumbnail.objectId) < 0
-        })
-        this.allResultsSource.next(this.allResultsValue)
+        });
+        this.allResultsSource.next(this.allResultsValue);
     }
 
     public getCurrentInstitution(): any {

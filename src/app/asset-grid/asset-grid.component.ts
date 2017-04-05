@@ -5,12 +5,9 @@ import { BehaviorSubject } from 'rxjs/Rx';
 import { Subscription }   from 'rxjs/Subscription';
 import { Locker } from 'angular2-locker';
 
-import { AssetService } from '../shared/assets.service';
+import { AssetService, ImageGroupService, GroupService, Thumbnail } from '../shared';
 import { AssetFiltersService } from '../asset-filters/asset-filters.service';
 import { AuthService } from '../shared/auth.service';
-import { Thumbnail } from './../shared';
-
-import { ImageGroupService } from '../shared';
 
 @Component({
   selector: 'ang-asset-grid', 
@@ -82,8 +79,8 @@ export class AssetGrid implements OnInit, OnDestroy {
   private objectId : string = ''; 
   // Collection Id parameter
   private colId : string = '';
-  // Image group Id
-  private igId : string = '';
+  // Image group 
+  private ig : any = {};
 
   private _storage;
 
@@ -91,6 +88,7 @@ export class AssetGrid implements OnInit, OnDestroy {
   constructor(
     private _assets: AssetService,
     private _ig: ImageGroupService,
+    private _groups: GroupService,
     private _filters: AssetFiltersService,
     private _auth:AuthService,
     private _router: Router,
@@ -154,9 +152,13 @@ export class AssetGrid implements OnInit, OnDestroy {
     this.subscriptions.push(
       this._assets.allResults.subscribe(
         (allResults: any) => {
+          console.log("RESULTS CHANGE")
           // Update results array
           this.results = allResults.thumbnails;
-          this.itemIds = allResults.items;
+          if ('items' in allResults) {
+            this.itemIds = allResults.items;
+            this.ig = allResults;
+          }
           
           if (this.results && this.results.length > 0) {
             this.isLoading = false;
@@ -224,9 +226,7 @@ export class AssetGrid implements OnInit, OnDestroy {
   private goToPage(newPage: number) {
     // The requested page should be within the limits (i.e 1 to totalPages)
     if((newPage >= 1) && (newPage <= this.pagination.totalPages)){
-
       this.isLoading = true;
-      //   this.pagination.currentPage = currentPage;
       this.pagination.currentPage = newPage;
       this._assets.goToPage(newPage);
     }
@@ -328,22 +328,48 @@ export class AssetGrid implements OnInit, OnDestroy {
         .then( allThumbnails => {
           this.isLoading = false;
           this.allResults = allThumbnails;
-
-          console.log(allThumbnails);
           this.results = this.allResults;
         })
         .catch( error => {
           this.isLoading = false;
           this.reorderMode = false;
-        })
+        });
     } else {
-      this.goToPage(1);
+      this.cancelReorder();
     }
   }
 
   private cancelReorder(): void {
     this.reorderMode = false;
     this.reordering.emit(this.reorderMode);
+    this.goToPage(1);
+    // Force refresh
+    this._assets.clearAssets();
+    this._assets.queryAll(this.route.snapshot.params, true);
+  }
+
+  private saveReorder(): void {
+    this.isLoading = true;
+    
+    let newItemsArray = [];
+
+    for (let i = 0; i < this.allResults.length; i++) {
+      if ('objectId' in this.allResults[i]) {
+        newItemsArray.push(this.allResults[i]['objectId'])
+      }
+    };
+
+    this.ig.items = newItemsArray;
+    this._groups.update(this.ig)
+      .take(1)
+      .subscribe( 
+        data => {
+          console.log(data);
+          this.cancelReorder();
+        }, error => {
+          console.log(error);
+          this.cancelReorder();
+        });
   }
 
   /**

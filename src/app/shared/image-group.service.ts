@@ -6,6 +6,14 @@ import { Observable, BehaviorSubject } from 'rxjs/Rx';
 
 import { AuthService, ImageGroupDescription } from './../shared';
 
+/**
+ * 
+ * OLD SERVICE FOR GROUPS
+ * 
+ * THIS SERVICE IS DEPRECATED
+ *  
+ */
+
 @Injectable()
 export class ImageGroupService {
   private proxyUrl = '';
