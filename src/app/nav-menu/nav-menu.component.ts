@@ -41,6 +41,7 @@ export class NavMenu implements OnInit, OnDestroy {
   
   private showImageGroupModal: boolean = false;
   private showAddToGroupModal: boolean = false;
+  private showShareIgModal: boolean = false;
 
   private copyIG: boolean = false;
   private editIG: boolean = false;

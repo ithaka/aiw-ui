@@ -96,5 +96,10 @@
   "ACCESS_DENIED_MODAL": {
     "HEADING": "Content Unavailable",
     "PROMPT": "If you are already <a href=\"/#/login\" class=\"link\">logged in</a>, this may be due to content limitations or your institutional access."
+  },
+  "SHARE_IG_LINK_MODAL": {
+    "MAIN_HEADING": "Share link to image group",
+    "URL_LABEL": "Copy URL",
+    "COPY_SUCCESS": "Link copied to clipboard"
   }
 }
