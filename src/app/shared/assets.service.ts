@@ -15,7 +15,7 @@ import { GroupService } from './group.service';
 import { AssetFiltersService } from './../asset-filters/asset-filters.service';
 import { ToolboxService } from './toolbox.service';
 
-import { ImageGroup } from '.';
+import { ImageGroup, Thumbnail } from '.';
 
 @Injectable()
 export class AssetService {
@@ -172,6 +172,17 @@ export class AssetService {
      */
     public getSelectedAssets(): any[] {
         return this.selectedAssets;
+    }
+    
+    /**
+     * Removes all object ids in allResults which match one of the ids in ids
+     * @param ids The array of object ids to remove from allResults
+     */
+    public removeFromResults(ids: string[]): void {
+        this.allResultsValue['thumbnails'] = this.allResultsValue['thumbnails'].filter((thumbnail: Thumbnail) => {
+            return ids.indexOf(thumbnail.objectId) < 0
+        })
+        this.allResultsSource.next(this.allResultsValue)
     }
 
     public getCurrentInstitution(): any {
