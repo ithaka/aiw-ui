@@ -13,5 +13,7 @@
         <span class="asset-agent" title="{{ thumbnail.thumbnail2 }}" [innerHTML]="thumbnail.thumbnail2"></span>
         <span class="asset-date" title="{{ thumbnail.thumbnail3 }}" [innerHTML]="thumbnail.thumbnail3"></span>
         <span title="{{ thumbnail.thumbnail4 }}" [innerHTML]="thumbnail.thumbnail4"></span>
+        <!--Schema moving forward-->
+        <span *ngFor="let data of thumbnail.tombstone" [innerHtml]="data"></span>
     </div>
 </div>
