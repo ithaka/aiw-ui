@@ -63,7 +63,14 @@
     "TITLE": "Add Images to Group",
     "SELECT_PROMPT": "Select an image group",
     "ADD_SUCCESS": "Images successfully added to group",
-    "ADD_FAILURE": "Unable to add images to group. Sorry about that."
+    "ADD_FAILURE": "Unable to add images to group. Sorry about that.",
+    "CONTROLS": {
+      "SAVE": "Save Changes",
+      "NAV_TO_GROUP": "Go to group",
+      "CLOSE": "Close",
+      "RETURN_TO_RESULTS": "Return to search",
+      "HELP": "Help"
+    }
   },
   "NEW_GROUP_MODAL": {
     "CREATE_SUCCESS": "You've successfully created an image group",
