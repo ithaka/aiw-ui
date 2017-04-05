@@ -105,20 +105,23 @@ export class GroupService {
      * Update Group. The body sent cannot contain id, insts-with-access or users-with-access
      */
     public update(group: any): Observable<any> {
-        let id = group.id;
+        let id = group.id
+        let putGroup = Object.assign({}, group)
 
-        delete group.id;
-        delete group['users-with-access'];
-        delete group['insts-with-access'];
-        delete group['public'];
+        delete putGroup.id
+        delete putGroup['users-with-access']
+        delete putGroup['insts-with-access']
+        delete putGroup['public']
+        delete putGroup['count']
+        delete putGroup['thumbnails']
         
-        if (group.tags[0] == null) { group.tags = [] }
+        if (putGroup.tags[0] == null) { putGroup.tags = [] }
 
         return this.http.put(
             this.groupUrl + '/' + id,
-            group,
+            putGroup,
             this.options
         )
-        .map((res) => { return res.json() || {}; });
+        .map((res) => { return res.json() || {} })
     }
 }
