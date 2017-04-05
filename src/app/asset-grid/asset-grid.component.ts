@@ -200,6 +200,12 @@ export class AssetGrid implements OnInit, OnDestroy {
       )
     );
 
+    this.subscriptions.push(
+      this._assets.selectModeToggle.subscribe(() => {
+        this.toggleEditMode()
+      })
+    )
+
   }
 
   ngOnDestroy() {

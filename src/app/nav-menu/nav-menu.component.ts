@@ -146,6 +146,7 @@ export class NavMenu implements OnInit, OnDestroy {
           removeIds.push(asset.objectId)
         })
         this._assets.removeFromResults(removeIds) // make the call to asset service which will update the asset grid with modified assets
+        this._assets.selectModeToggle.emit()
       })
   }
 

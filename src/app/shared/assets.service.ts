@@ -1,7 +1,7 @@
 /**
  * Assets service
  */
-import { Injectable, OnDestroy, OnInit } from '@angular/core';
+import { Injectable, OnDestroy, OnInit, EventEmitter } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { Http, Response, Headers, RequestOptions } from '@angular/http';
 import { Observable, BehaviorSubject } from 'rxjs/Rx';
@@ -50,6 +50,7 @@ export class AssetService {
     private selectedAssets: any[] = [];
     private selectedAssetsSource = new BehaviorSubject<any[]>(this.selectedAssets);
     public selection = this.selectedAssetsSource.asObservable();
+    public selectModeToggle: EventEmitter<any> = new EventEmitter()
 
 
     // Keep track of which params the current results are related to
