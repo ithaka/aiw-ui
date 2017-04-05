@@ -50,7 +50,7 @@
 <div class="row row--no-overflow pb-5" [ngClass]="{'edit': editMode}">
     <div class="col-md-12 col--expanding has-icon-overlay" [ngClass]="{ 'col--expand-12' : !showFilters }">
         <i [hidden]="!isLoading" class="icon-lg icon-overlay icon-loading-large"></i>
-        <div id="assetThumbnailsRow" class="row no-gutters">
+        <div id="assetThumbnailsRow" class="row no-gutters" dnd-sortable-container [sortableData]="results">
             <div *ngIf="!isLoading && (totalAssets == '0') && (!results || results.length < 1) && (searchError.length < 1)" class="alert alert-warning">
                 <b>Unable to find any assets</b><br/>
                 A less specific query might be able to find what you are looking for.
@@ -58,8 +58,8 @@
             <div *ngIf="!isLoading && searchError.length > 0" class="alert alert-danger">
                 {{ searchError }}
             </div>
-            <div [ngClass]="[ reorderMode ? 'col-sm-4 col-md-2 col-lg-1' : 'col-sm-6 col-md-3 col-lg-2']" *ngFor="let asset of results">
-                <div class="card card--asset" [ngClass]="{'selected': ( isSelectedAsset(asset) > -1 ) }" (click)="selectAsset(asset)">
+            <div [ngClass]="[ reorderMode ? 'col-sm-4 col-md-2 col-lg-1 draggable' : 'col-sm-6 col-md-3 col-lg-2']" *ngFor="let asset of results; let i = index" dnd-sortable [dragEnabled]="reorderMode && !isLoading" [sortableIndex]="i">
+                <div class="card card--asset" [ngClass]="{'selected': ( isSelectedAsset(asset) > -1 ) }" (click)="!reorderMode && selectAsset(asset)">
                     <ang-thumbnail [thumbnail]="asset"></ang-thumbnail>
                 </div>
             </div> <!-- .col -->

@@ -153,6 +153,21 @@ img.no-stretch {
 .edit .card--asset{
     opacity: 0.6;
 }
+
+.draggable .card--asset {
+    cursor: move;
+}
+
+.dnd-sortable-drag .card--asset {
+    cursor: move;
+    & .card-block {
+        background: #fafafa;
+        border-color: #ababab;
+        transform: translateY(-1px);
+        box-shadow: 0px 1px 3px 0px rgba(0,0,0,0.3);
+    }
+}
+
 .card--asset.selected{
     opacity: 1 !important;
     & .card-block {
