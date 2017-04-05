@@ -22,8 +22,8 @@
         </div>
       </div>
       <div class="modal-footer">
-        <a translate class="btn btn-secondary" [routerLink]="['/browse', 'groups']">BROWSE_GROUPS</a>
-        <a translate class="btn btn-primary" [routerLink]="['/home']">RETURN_HOME</a>
+        <a class="btn btn-link with-pad" href="http://support.artstor.org/?article=creating-links" target="_blank">Help</a>
+        <button translate class="btn btn-primary" (click)="closeModal.emit()">Close</button>
       </div>
     </div><!-- /.modal-content -->
     
