@@ -3,7 +3,6 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core'
 import { ImageGroup } from './../../shared'
 
 @Component({
-  moduleId: module.id,
   selector: 'ang-share-ig-link',
   templateUrl: 'share-ig-link.component.html',
   styleUrls: ['./share-ig-link.component.scss']
