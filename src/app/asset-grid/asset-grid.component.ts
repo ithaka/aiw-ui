@@ -35,6 +35,7 @@ export class AssetGrid implements OnInit, OnDestroy {
   filters = [];
   private editMode: boolean = false;
   private reorderMode: boolean = false;
+  private orderChanged: boolean = false;
 
   private selectedAssets: any[] = [];
   
@@ -319,21 +320,30 @@ export class AssetGrid implements OnInit, OnDestroy {
     this.reorderMode = !this.reorderMode;
     this.reordering.emit(this.reorderMode);
 
-    // Start loading
-    this.isLoading = true;
+    if (this.reorderMode == true) {
+      // Start loading
+      this.isLoading = true;
 
-    this._assets.getAllThumbnails(this.itemIds)
-      .then( allThumbnails => {
-        this.isLoading = false;
-        this.allResults = allThumbnails;
-        console.log(allThumbnails);
-        this.results = this.allResults;
-      })
-      .catch( error => {
-        this.isLoading = false;
-        this.reorderMode = false;
-      })
+      this._assets.getAllThumbnails(this.itemIds)
+        .then( allThumbnails => {
+          this.isLoading = false;
+          this.allResults = allThumbnails;
 
+          console.log(allThumbnails);
+          this.results = this.allResults;
+        })
+        .catch( error => {
+          this.isLoading = false;
+          this.reorderMode = false;
+        })
+    } else {
+      this.goToPage(1);
+    }
+  }
+
+  private cancelReorder(): void {
+    this.reorderMode = false;
+    this.reordering.emit(this.reorderMode);
   }
 
   /**

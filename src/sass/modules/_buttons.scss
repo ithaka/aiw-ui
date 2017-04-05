@@ -27,8 +27,9 @@ $iconBtnSize: 30px;
         border-bottom: none;
      }
 
-     &.disabled {
+     &.disabled, &:disabled {
          pointer-events: none;
+         opacity: 0.25;
      }
 }
 
