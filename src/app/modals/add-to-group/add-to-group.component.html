@@ -21,10 +21,12 @@
         </div>
         <div class="modal-footer">
           <div *ngIf="!serviceResponse.success" class="form-group">
+            <a translate class="btn btn-link with-pad" href="http://support.artstor.org/?article=create-and-manage-image-groups" target="_blank">ADD_TO_GROUP_MODAL.CONTROLS.HELP</a>
             <button translate type="submit" class="btn btn-primary">ADD_TO_GROUP_MODAL.CONTROLS.SAVE</button>
             <button translate (click)="closeModal.emit()" type="button" class="btn btn-secondary" data-dismiss="modal">ADD_TO_GROUP_MODAL.CONTROLS.CLOSE</button>
           </div>
           <div *ngIf="serviceResponse.success" class="form-group">
+            <a translate class="btn btn-link with-pad" href="http://support.artstor.org/?article=create-and-manage-image-groups" target="_blank">ADD_TO_GROUP_MODAL.CONTROLS.HELP</a>
             <button translate (click)="closeModal.emit()" [routerLink]="['/group', selectedIg.id]" type="button" class="btn btn-primary">ADD_TO_GROUP_MODAL.CONTROLS.NAV_TO_GROUP</button>
             <button translate (click)="closeModal.emit()" type="button" class="btn btn-secondary">ADD_TO_GROUP_MODAL.CONTROLS.RETURN_TO_RESULTS</button>
           </div>

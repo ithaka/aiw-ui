@@ -68,7 +68,8 @@
       "SAVE": "Save Changes",
       "NAV_TO_GROUP": "Go to group",
       "CLOSE": "Close",
-      "RETURN_TO_RESULTS": "Return to search"
+      "RETURN_TO_RESULTS": "Return to search",
+      "HELP": "Help"
     }
   },
   "NEW_GROUP_MODAL": {
