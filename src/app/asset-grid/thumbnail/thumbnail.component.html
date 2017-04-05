@@ -3,7 +3,7 @@
         <img [attr.src]="_assets.makeThumbUrl(thumbnail.thumbnailImgUrl, 1)" [attr.alt]="thumbnail.thumbnail1 ? 'Thumbnail of ' + thumbnail.thumbnail1 : 'No title available'">
     </div>
     <div class="card-icon-group">
-        <i *ngIf="thumbnail.cfObjectId.length > 0" [id]="thumbnail.objectId + '_associated_images'" class="icon icon-collab" [routerLink]="['/associated', thumbnail.cfObjectId, thumbnail.collectionId]" title="Others are also interested in..."></i>
+        <i *ngIf="thumbnail.cfObjectId && thumbnail.cfObjectId.length > 0" [id]="thumbnail.objectId + '_associated_images'" class="icon icon-collab" [routerLink]="['/associated', thumbnail.cfObjectId, thumbnail.collectionId]" title="Others are also interested in..."></i>
         <i *ngIf="thumbnail.clustered == 1" [id]="thumbnail.objectId + '_clustered_images'" class="icon icon-cluster" [routerLink]="['/cluster', thumbnail.objectId, { objTitle :  thumbnail.thumbnail1 }]" title="View related media"></i>
         <i *ngIf="thumbnail.objectTypeId && thumbnail.objectTypeId != 10" class="icon icon-{{thumbnail.objectTypeId | typeIdPipe}}"></i>
         <i class="icon icon-{{collectionTypeMap[thumbnail.collectionType].name}} icon-collection-type" [attr.title]="collectionTypeMap[thumbnail.collectionType].alt"></i>

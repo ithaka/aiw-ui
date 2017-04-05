@@ -123,7 +123,6 @@ export class BrowseGroupsComponent implements OnInit {
             this.loading = false;
           },
           (error) => {
-            console.log(error);
             this.foldersObj[browseLevel] = [];
             this.errorObj[browseLevel] = "Sorry, we were unable to load these Image Groups";
             this.pageObj[browseLevel].totalPages = 1;
