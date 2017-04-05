@@ -544,6 +544,30 @@ export class AssetService {
             });
     }
 
+    public getAllThumbnails(igIds: string[]) : Promise<any> {
+        // return new Promise
+        return new Promise( (resolve, reject) => {
+            let allThumbnails = [];
+            let options = new RequestOptions({ withCredentials: true });
+                    
+            for (let i = 0; i < igIds.length; i += 100) {
+                let idsAsTerm: string =  igIds.slice(i,i+100).join('&object_id=');
+                this.http.get('//lively.artstor.org/api/v1/items?object_id=' + idsAsTerm, options)
+                        .toPromise()
+                        .then(
+                            (res) => {
+                                let results = res.json();
+                                allThumbnails = allThumbnails.concat(results.items);
+                                if (i + 100 >= igIds.length) {
+                                    resolve(allThumbnails);
+                                }
+                        }, (error) => {
+                                reject('Failure');
+                        });
+            }
+        });
+    }
+
     /**
      * Loads thumbnails from a collectionType
      * @param colId Collection Id for which to fetch results

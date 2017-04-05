@@ -26,6 +26,10 @@ $iconBtnSize: 30px;
          color: #fff;
         border-bottom: none;
      }
+
+     &.disabled {
+         pointer-events: none;
+     }
 }
 
 /**

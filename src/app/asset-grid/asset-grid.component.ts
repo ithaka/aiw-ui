@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, Input } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 
 import { BehaviorSubject } from 'rxjs/Rx';
@@ -28,6 +28,10 @@ export class AssetGrid implements OnInit, OnDestroy {
   public showAdvancedModal: boolean = false;
   errors = {};
   private results: any[] = [];
+  // Sometimes we get all the ids but not thumbnails for assets (eg. Groups)
+  private itemIds: string[] = [];
+  // Array to be filled with *all* assets for reorder mode
+  private allResults: any[] = [];
   filters = [];
   private editMode: boolean = false;
   private reorderMode: boolean = false;
@@ -46,6 +50,8 @@ export class AssetGrid implements OnInit, OnDestroy {
 
   @Input()
   private assetCount: number;
+
+  @Output() reordering: EventEmitter<boolean> = new EventEmitter();
 
   private pagination: any = {
     totalPages: 1,
@@ -149,6 +155,7 @@ export class AssetGrid implements OnInit, OnDestroy {
         (allResults: any) => {
           // Update results array
           this.results = allResults.thumbnails;
+          this.itemIds = allResults.items;
           
           if (this.results && this.results.length > 0) {
             this.isLoading = false;
@@ -304,6 +311,23 @@ export class AssetGrid implements OnInit, OnDestroy {
    */
   private toggleReorderMode(): void {
     this.reorderMode = !this.reorderMode;
+    this.reordering.emit(this.reorderMode);
+
+    // Start loading
+    this.isLoading = true;
+
+    this._assets.getAllThumbnails(this.itemIds)
+      .then( allThumbnails => {
+        this.isLoading = false;
+        this.allResults = allThumbnails;
+        console.log(allThumbnails);
+        this.results = this.allResults;
+      })
+      .catch( error => {
+        this.isLoading = false;
+        this.reorderMode = false;
+      })
+
   }
 
   /**

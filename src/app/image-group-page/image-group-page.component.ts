@@ -36,6 +36,8 @@ export class ImageGroupPage implements OnInit, OnDestroy {
     group: true,
     isowner: false
   }
+  /** Reorder: Modifies the layout */
+  private reorderMode: boolean = false;
 
   constructor(
     private _ig: ImageGroupService,
@@ -76,7 +78,6 @@ export class ImageGroupPage implements OnInit, OnDestroy {
         if ('id' in results) {
           // Set ig properties from results
           this.ig = results;
-          this.checkDesc();
 
           // if the user has write access, then allow them to update the image group
           this.ig.access.forEach((accessObj) => {
@@ -145,10 +146,23 @@ export class ImageGroupPage implements OnInit, OnDestroy {
     this._assets.queryAll(this.route.snapshot.params, true);
   }
 
-  private checkDesc(): void{
-    let descHTML = this.ig.description;
-    if(descHTML){
-      this.hasDesc = true;
+  /**
+   * Show Description, returns true if:
+   * - A description exists
+   * - View hasn't changed to hide the description
+   */
+  private showDesc(): boolean {
+    if (this.ig && this.ig.description && !this.reorderMode) {
+      return true;
+    } else {
+      return false;
     }
+  }
+
+  /**
+   * Toggle Reorder: Handle output from the Asset Grid
+   */
+  private toggleReorder(isReordering: boolean): void {
+    this.reorderMode = isReordering;
   }
 }

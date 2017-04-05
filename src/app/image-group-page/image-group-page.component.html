@@ -22,13 +22,13 @@
                 </a>-->
             </h1>
         </div>
-        <div [ngClass]="[ hasDesc ? 'col-md-9' : 'col-md-12'  ]">
-            <ang-asset-grid [actionOptions]="actionOptions" ></ang-asset-grid>
+        <div [ngClass]="[ showDesc() ? 'col-md-9' : 'col-md-12'  ]">
+            <ang-asset-grid [actionOptions]="actionOptions" (reordering)="toggleReorder($event)" ></ang-asset-grid>
             <div *ngIf="ig.items && ig.items.length > 0 && !ig.thumbnails" class="alert alert-warning">
                 <b>Error Loading</b> Unable to load the thumbnails for this group.
             </div>
         </div>
-        <div *ngIf="hasDesc" class="col-md-3">
+        <div *ngIf="showDesc()" class="col-md-3">
             <h3 class="row-hdr">Description</h3>
             <div *ngIf="ig && ig.description" class="page__description" id="pageDescription" [innerHTML]="ig.description"></div>
         </div>
