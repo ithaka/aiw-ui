@@ -25,7 +25,7 @@
             <button (click)="closeModal.emit()" type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
           </div>
           <div *ngIf="serviceResponse.success" class="form-group">
-            <button [routerLink]="['/group', selectedIg.id]" type="button" class="btn btn-primary">Go to group</button>
+            <button (click)="closeModal.emit()" [routerLink]="['/group', selectedIg.id]" type="button" class="btn btn-primary">Go to group</button>
             <button (click)="closeModal.emit()" type="button" class="btn btn-secondary">Return to search</button>
           </div>
         </div>

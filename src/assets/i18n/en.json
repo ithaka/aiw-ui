@@ -2,7 +2,8 @@
   "LOGIN": {
     "LOGIN_HEADING": "Log in with your Artstor account",
     "INSTITUTION_HEADING": "Log in through your Institution",
-    "INSTITUTION_LIST_INFO": "This is not a complete list of subscribing institutions. Institutions listed have provided single sign-on or proxy access. If your school is listed, select it from the dropdown and you will be redirected to your institutional login page to gain access to Artstor."
+    "INSTITUTION_LIST_INFO": "This is not a complete list of subscribing institutions. Institutions listed have provided single sign-on or proxy access. If your school is listed, select it from the dropdown and you will be redirected to your institutional login page to gain access to Artstor.",
+    "SERVER_ERROR": "Server is not responding. Please try again later."
   },
   "REGISTER": {
     "REGISTER_HEADING": "Register for a new Artstor account",

@@ -25,6 +25,7 @@ export class BrowseGroupsComponent implements OnInit {
   private userTypeId: any;
   private currentBrowseRes: any = {};
   private tags: Tag[] = [];
+  private loading: boolean = true;
 
   private pagination: any = {
     totalPages: 1,
@@ -38,8 +39,11 @@ export class BrowseGroupsComponent implements OnInit {
   private expandedCategories: any = {};
   private selectedBrowseLevel: string = 'public';
   private browseMenuArray: any[] = [];
+
   private foldersObj: any = {};
   private tagsObj: any = {};
+  private pageObj: any = {};
+
   private errorObj: any = {};
   
   ngOnInit() {
@@ -49,7 +53,7 @@ export class BrowseGroupsComponent implements OnInit {
       .subscribe((params: Params) => { 
         if(params && params['view']){
             this.selectedBrowseLevel = params['view'];
-            this.loadCategory();
+            this.loadCategory(this.selectedBrowseLevel);
         }
       })
     );
@@ -71,8 +75,7 @@ export class BrowseGroupsComponent implements OnInit {
       level: 'public'
     });
 
-    this.loadCategory();
-    this.loadIGs();
+    this.loadCategory(this.selectedBrowseLevel);
   }
 
   ngOnDestroy() {
@@ -87,7 +90,7 @@ export class BrowseGroupsComponent implements OnInit {
     this.expandedCategories = {};
     this.selectedBrowseLevel = level;
     this.addRouteParam('view', level);
-    this.loadCategory();
+    this.loadCategory(level);
   }
 
   private createGroupTags(folderArray) {
@@ -104,33 +107,38 @@ export class BrowseGroupsComponent implements OnInit {
   /**
    * Loads Image Groups data for the current user in the array
    */
-  private loadIGs(): void{
-    this._groups.getAll(this.selectedBrowseLevel, this.pagination.pageSize, this.pagination.currentPage, this.appliedTags)
+  private loadIGs(browseLevel: string): void{
+    this.loading = true;
+    if (!this.pageObj[browseLevel]) {
+      this.pageObj[browseLevel] = Object.assign({}, this.pagination);
+    }
+    this._groups.getAll(browseLevel, this.pageObj[browseLevel].pageSize, this.pageObj[browseLevel].currentPage, this.appliedTags)
         .take(1).subscribe(
           (data)  => {
             this.tagFilters = data.tags;
-            this.tagsObj[this.selectedBrowseLevel] = data.tags;
-            this.foldersObj[this.selectedBrowseLevel] = this.createGroupTags(data.groups);
-            this.pagination.totalPages = Math.floor(data.total / this.pagination.pageSize) + 1;
-            this.loadCategory();
+            this.tagsObj[browseLevel] = data.tags;
+            this.foldersObj[browseLevel] = this.createGroupTags(data.groups);
+            this.pageObj[browseLevel].totalPages = Math.floor(data.total / this.pagination.pageSize) + 1;
+            this.loadCategory(browseLevel);
+            this.loading = false;
           },
           (error) => {
-            console.log(error);
-            this.foldersObj[this.selectedBrowseLevel] = [];
-            this.errorObj[this.selectedBrowseLevel] = "Sorry, we were unable to load these Image Groups";
-            this.pagination.totalPages = 1;
-            this.loadCategory();
+            this.foldersObj[browseLevel] = [];
+            this.errorObj[browseLevel] = "Sorry, we were unable to load these Image Groups";
+            this.pageObj[browseLevel].totalPages = 1;
+            this.loadCategory(browseLevel);
+            this.loading = false;
           }
         );
   }
 
-  loadCategory(){
-    if (this.foldersObj[this.selectedBrowseLevel]) {
-      this.currentBrowseRes = this.foldersObj[this.selectedBrowseLevel];
-      this.tags = this.foldersObj[this.selectedBrowseLevel];
-      this.tagFilters = this.tagsObj[this.selectedBrowseLevel];
+  loadCategory(browseLevel: string){
+    if (this.foldersObj[browseLevel]) {
+      this.currentBrowseRes = this.foldersObj[browseLevel];
+      this.tags = this.foldersObj[browseLevel];
+      this.tagFilters = this.tagsObj[browseLevel];
     } else {
-      this.loadIGs();
+      this.loadIGs(browseLevel);
     }
   }
 
@@ -140,7 +148,7 @@ export class BrowseGroupsComponent implements OnInit {
     } else {
       this.appliedTags.push(tag);
     }
-    this.loadIGs();
+    this.loadIGs(this.selectedBrowseLevel);
   }
 
   /**
@@ -148,12 +156,12 @@ export class BrowseGroupsComponent implements OnInit {
    */
   clearFilters() : void {
     this.appliedTags = [];
-    this.loadIGs();
+    this.loadIGs(this.selectedBrowseLevel);
   }
   
   goToPage(pageNo: number): void {
-    this.pagination.currentPage = pageNo;
-    this.loadIGs();
+    this.pageObj[this.selectedBrowseLevel].currentPage = pageNo;
+    this.loadIGs(this.selectedBrowseLevel);
   }
 
     /**

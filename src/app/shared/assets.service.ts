@@ -514,18 +514,18 @@ export class AssetService {
                     throw new Error("No data in image group thumbnails response");
                 }
                 
-                console.log(data);
                 data.count = data.items.length;
                 let pageStart = (this.urlParams.currentPage - 1)*this.urlParams.pageSize;
                 let pageEnd = this.urlParams.currentPage*this.urlParams.pageSize;
                 let idsAsTerm: string =  data.items.slice(pageStart,pageEnd).join('&object_id=');
+
+                let options = new RequestOptions({ withCredentials: true });
                 
-                this.http.get('//lively.artstor.org/api/v1/items?object_id=' + idsAsTerm, )
+                this.http.get('//lively.artstor.org/api/v1/items?object_id=' + idsAsTerm, options)
                     .subscribe(
                         (res) => {
-                            console.log(res);
                             let results = res.json();
-                            data.thumbnails = results.thumbnails;
+                            data.thumbnails = results.items;
                             // Set the allResults object
                             this.updateLocalResults(data);
                     }, (error) => {
@@ -892,6 +892,10 @@ export class AssetService {
         // Ensure relative
         if (imagePath.indexOf('artstor.org') > -1) {
             imagePath = imagePath.substring(imagePath.indexOf('artstor.org') + 12);
+        }
+
+        if (imagePath[0] != '/') {
+            imagePath = '/' + imagePath;
         }
         // Ceanup
         return this._auth.getThumbUrl() + imagePath;
