@@ -13,15 +13,22 @@
     overflow: hidden;
 
     & > .slide-wrap {
-        margin-top: -100%;
-        // transform: translateY(-100%);
-        transition: margin 0.3s cubic-bezier(0.55, 0.07, 0.44, 0.93);
-        // height: 0;
+        // margin-top: -100%;
+        // transition: margin 0.3s cubic-bezier(0.55, 0.07, 0.44, 0.93);
+        & .tag-item {
+            min-height: 0px;
+            max-height: 0px;
+            transition: max-height 0.3s linear;
+        }
 
         &.show {
             // transform: translateY(0);
             // height: auto;
-            margin-top: 0%;
+            // margin-top: 0%;
+
+            & .tag-item {
+                max-height: 2em;
+            }
         }
     }
 }
