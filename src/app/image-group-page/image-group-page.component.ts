@@ -87,6 +87,16 @@ export class ImageGroupPage implements OnInit, OnDestroy {
             }
           })
 
+          // THIS IS MOCK CODE FOR THE USER'S DOWNLOAD PERMISSIONS
+          // IT HELPS THIS PAGE AND THE IMAGE GROUP DOWNLOAD MODAL FUNCTION IN THE ABSENCE OF DOWNLOAD INFORMATION
+          this.ig.igDownloadInfo = {
+            alreadyDwnldImgCnt: 1992,
+            curAllowedDwnldCnt: 8,
+            igImgCount: this.ig.items.length,
+            igId: this.ig.id,
+            pptExportAllowed: this.ig.items.length <= 8
+          }
+
           // // get the user's download count
           // this._ig.getDownloadCount(this.ig.igId)
           //   .take(1)
@@ -108,8 +118,10 @@ export class ImageGroupPage implements OnInit, OnDestroy {
 
     this.subscriptions.push(
       this._ig.igDownloadTrigger.subscribe((event) => { // right now event will be undefined, it is just a dumb trigger
+        console.log("got the emit")
         // make sure we have the info we need
-        if (this.ig.name && this.downloadInfoReturned) {
+        if (this.ig.id) {
+          console.log("triggering download function")
           this.showDownloadModal();
         }
       })
@@ -127,12 +139,17 @@ export class ImageGroupPage implements OnInit, OnDestroy {
    * - If the user is logged in and is allowed to download the image group -> download modal
    */
   private showDownloadModal() {
+    console.log("deciding which modal")
     // the template will not show the button if there is not an ig.igName and ig.igDownloadInfo
     // if the user is logged in and the download info is available
     if (this.user.isLoggedIn) {
+      console.log("logged in")
+      // we will need a new way to know whether or not the user is authorized to download - for now, I will always enable them
       if (this.ig.igDownloadInfo.pptExportAllowed) {
+        console.log("showing download modal")
         this.showPptModal = true;
       } else {
+        console.log("showing limit modal")
         this.showDownloadLimitModal = true;
       }
     } else if (!this.user.isLoggedIn) {

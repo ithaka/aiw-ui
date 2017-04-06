@@ -27,19 +27,19 @@ export interface ImageGroupDescription {
 
 export interface IgDownloadInfo {
   alreadyDwnldImgCnt: number;
-  canCache: boolean;
+  canCache?: boolean;
   curAllowedDwnldCnt: number;
-  dwnldDuration: number;
-  igId: string;
+  dwnldDuration?: number;
+  igId?: string;
   igImgCount: number;
-  igName: string;
-  images: string; // this is a big string of concatenated images and resolutions
-  mediaCnt: number;
-  message: string;
-  nonPrivateImgCnt: number;
-  origDwnldLimit: number;
+  igName?: string;
+  images?: string; // this is a big string of concatenated images and resolutions
+  mediaCnt?: number;
+  message?: string;
+  nonPrivateImgCnt?: number;
+  origDwnldLimit?: number;
   pptExportAllowed: boolean;
-  pubAudioCnt: number;
-  qtvrCnt: number;
-  zooms: boolean;
+  pubAudioCnt?: number;
+  qtvrCnt?: number;
+  zooms?: boolean;
 }
