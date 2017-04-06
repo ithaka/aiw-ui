@@ -13,20 +13,27 @@
     overflow: hidden;
 
     & > .slide-wrap {
-        // margin-top: -100%;
+        margin-top: -2em;
         // transition: margin 0.3s cubic-bezier(0.55, 0.07, 0.44, 0.93);
-        & .tag-item {
+        & ang-tag {
             min-height: 0px;
             max-height: 0px;
-            transition: max-height 0.3s linear;
+            transition: max-height 0.02s linear;
+            display: block;
+            overflow: hidden;
+
+            @for $i from 1 through 200 {
+                &:nth-of-type(#{$i}) { 
+                    transition-delay: $i*0.005s !important;
+                }
+            }
         }
 
         &.show {
-            // transform: translateY(0);
-            // height: auto;
-            // margin-top: 0%;
 
-            & .tag-item {
+            margin-top: 0%;
+
+            & ang-tag {
                 max-height: 2em;
             }
         }
