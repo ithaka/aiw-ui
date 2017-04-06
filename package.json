@@ -1,6 +1,6 @@
 {
   "name": "avatar",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Front End for the Artstor Digital Library",
   "author": "Artstor Team Air",
   "license": "",
@@ -89,6 +89,7 @@
     "http-server": "^0.9.0",
     "ie-shim": "^0.1.0",
     "medium-editor": "^5.23.0",
+    "ng2-dnd": "^4.0.0",
     "ng2-translate": "^5.0.0",
     "openseadragon": "^2.2.1",
     "rxjs": "^5.0.1",

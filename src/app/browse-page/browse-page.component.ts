@@ -47,7 +47,6 @@ export class BrowsePage implements OnInit, OnDestroy {
   } 
 
   ngOnInit() {
-      console.log(  this.route.firstChild );
     this.subscriptions.push(
       this.route.firstChild.url
       .subscribe((url: UrlSegment[]) => {  

@@ -41,6 +41,7 @@ export class NavMenu implements OnInit, OnDestroy {
   
   private showImageGroupModal: boolean = false;
   private showAddToGroupModal: boolean = false;
+  private showShareIgModal: boolean = false;
 
   private copyIG: boolean = false;
   private editIG: boolean = false;
@@ -136,11 +137,16 @@ export class NavMenu implements OnInit, OnDestroy {
       return !assetFound // if the asset was not found, we want to keep it
     })
 
-    console.log(putGroup)
     this._group.update(putGroup)
       .take(1)
       .subscribe((res) => {
-        console.log(res)
+        this.ig = putGroup
+        let removeIds: string[] = []
+        this._assets.getSelectedAssets().forEach((asset) => {
+          removeIds.push(asset.objectId)
+        })
+        this._assets.removeFromResults(removeIds) // make the call to asset service which will update the asset grid with modified assets
+        this._assets.selectModeToggle.emit()
       })
   }
 

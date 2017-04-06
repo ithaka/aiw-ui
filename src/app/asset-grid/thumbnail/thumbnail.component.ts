@@ -17,12 +17,12 @@ export class ThumbnailComponent implements OnInit {
   private thumbnail: Thumbnail;
 
   private collectionTypeMap: any = {
-    1: "artstor-asset",
-    2: "institution-asset",
-    3: "personal-asset",
-    4: "institution-asset",
-    5: "ssc-asset",
-    6: "personal-asset"
+    1: { name: "artstor-asset", alt: "Artstor Digital Library" },
+    2: { name: "institution-asset", alt: "Institution Collections" },
+    3: { name: "personal-asset", alt: "Private Collections" },
+    4: { name: "institution-asset", alt: "Institution Collections" },
+    5: { name: "ssc-asset", alt: "Shared Shelf Commons" },
+    6: { name: "personal-asset", alt: "Private Collections" }
   }
 
   constructor(

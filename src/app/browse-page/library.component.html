@@ -4,15 +4,15 @@
 </nav>
 <div class="row">
     <div class="col-md-8">
-        <div class="tree">
-            <ang-tag *ngFor="let tag of tags" [tag]="tag"></ang-tag>
+        <div *ngFor="let browseOpt of browseMenuArray" [class.hidden]="selectedBrowseId != browseOpt.id" class="tree">
+            <ang-tag *ngFor="let tag of tagsObj[browseOpt.id]" [tag]="tag"></ang-tag>
         </div>
     </div>
 
     <div class="col-md-4">
-        <div class="browse-info">
-            <div class="title">{{ currentBrowseRes.collectionname }}</div>
-            <div class="browse__description" [innerHTML]="currentBrowseRes.blurburl"></div>
+        <div class="browse-info" *ngIf="descObj[selectedBrowseId]">
+            <div class="title">{{ descObj[selectedBrowseId].collectionname }}</div>
+            <div class="browse__description" [innerHTML]="descObj[selectedBrowseId].blurburl"></div>
         </div>
     </div>
 </div>

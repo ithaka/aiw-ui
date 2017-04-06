@@ -23,6 +23,7 @@ import { MediumEditorDirective } from 'angular2-medium-editor/medium-editor.dire
 // ng2-idle
 import { NgIdleKeepaliveModule } from '@ng-idle/keepalive'; // this includes the core NgIdleModule but includes keepalive providers for easy wireup
 import { MomentModule } from 'angular2-moment'; // optional, provides moment-style pipes for date formatting
+import {DndModule} from 'ng2-dnd';
 
 // App is our top level component
 import { App } from './app.component';
@@ -49,7 +50,7 @@ import { Login } from './login';
 import { About } from './about';
 import { NoContent } from './no-content';
 import { RegisterComponent } from './register/register.component';
-import { LoginReqModal, SearchModal, NewIgModal, ShareLinkModal, DownloadLimitModal, AddToGroupModal, DeleteIgModal, NoIgModal } from './modals';
+import { LoginReqModal, SearchModal, NewIgModal, ShareLinkModal, DownloadLimitModal, AddToGroupModal, DeleteIgModal, NoIgModal, AccessDeniedModal, ShareIgLinkModal } from './modals';
 
 
 // Application wide providers
@@ -94,6 +95,7 @@ type StoreType = {
     CategoryPage,
     ImageGroupPPPage,
     DownloadLimitModal,
+    ShareIgLinkModal,
     DeleteIgModal,
     NoIgModal,
     ClusterPage,
@@ -111,6 +113,7 @@ type StoreType = {
     AssociatedPage,
     AssetFilters,
     PaginationComponent,
+    AccessDeniedModal,
     AssetGrid,
     SearchComponent,
     ThumbnailComponent,
@@ -144,7 +147,8 @@ type StoreType = {
         deps: [Http]
     }),
     NgbModule.forRoot(), // Ng Bootstrap Import
-    NgIdleKeepaliveModule.forRoot()
+    NgIdleKeepaliveModule.forRoot(),
+    DndModule.forRoot() // Drag n Drop import
   ],
   providers: [ // expose our Services and Providers into Angular's dependency injection
     ENV_PROVIDERS,

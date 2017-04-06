@@ -43,6 +43,7 @@ export const ROUTES: Routes = [
   { path: 'cluster', component: ClusterPage, canActivate:[AuthService] },
   { path: 'browse', component: BrowsePage, canActivate:[AuthService], children: BrowseRoutes },
   { path: 'associated/:objectId/:colId', component: AssociatedPage, canActivate:[AuthService] },
+  { path: 'associated', component: AssociatedPage, canActivate:[AuthService] },
   { path: 'about', component: About },
   { path: 'register', component: RegisterComponent, canActivate: [AuthService] },
   { path: '**', component: NoContent }

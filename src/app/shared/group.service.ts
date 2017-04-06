@@ -15,25 +15,15 @@ export class GroupService {
         private http: Http,
         private _auth: AuthService
     ) {
-
-        // ' + this._auth.getSubdomain() + '
-        // this.groupUrl = '//stagely.artstor.org/api/v1/group';
-        if( document.location.hostname.indexOf('ang-ui-earth.apps.test.cirrostratus.org') > -1 ) {
-            // Earth test instance endpoints
-            this.groupUrl = 'http://artstor-group-service.apps.test.cirrostratus.org/api/v1/group';
-        } else {
-            this.groupUrl = '//lively.artstor.org/api/v1/group';
-        }
-        let headers = new Headers({ });
-        
-
-        this.options = new RequestOptions({ headers: headers, withCredentials: true });
+        this.groupUrl = this._auth.getHostname() + '/api/v1/group';
+        this.options = new RequestOptions({ withCredentials: true });
     }
 
     /**
      * Get All Groups
      */
-    public getAll(level: string, size?: number, pageNo ?: number, tags ?: string[] ): Observable<any> {
+    public getAll(level: string, size?: number, pageNo ?: number, tags ?: string[] ):
+     Observable<any> {
         if (!tags) {
             tags = [];
         }
@@ -115,18 +105,23 @@ export class GroupService {
      * Update Group. The body sent cannot contain id, insts-with-access or users-with-access
      */
     public update(group: any): Observable<any> {
-        let id = group.id;
+        let id = group.id
+        let putGroup = Object.assign({}, group)
 
-        delete group.id;
-        delete group['users-with-access'];
-        delete group['insts-with-access'];
-        if (group.tags[0] == null) { group.tags = [] }
+        delete putGroup.id
+        delete putGroup['users-with-access']
+        delete putGroup['insts-with-access']
+        delete putGroup['public']
+        delete putGroup['count']
+        delete putGroup['thumbnails']
+        
+        if (!putGroup.tags || putGroup.tags[0] == null) { putGroup.tags = [] }
 
         return this.http.put(
             this.groupUrl + '/' + id,
-            group,
+            putGroup,
             this.options
         )
-        .map((res) => { return res.json() || {}; });
+        .map((res) => { return res.json() || {} })
     }
 }

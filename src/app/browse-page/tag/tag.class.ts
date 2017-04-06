@@ -6,6 +6,7 @@ export class Tag {
   tagId: string;
   title: string;
   isCollapsed: boolean = false;
+  canOpen: boolean = false;
   parentTag: Tag;
   /** object with assignable properties to be stored by the tag 
    *  common properties:
@@ -26,17 +27,19 @@ export class Tag {
   touched: boolean = false;
 
   //type can be: 'collection', 'category', or 'subcategory'
-  constructor(tagId: string, title: string, isCollapsed?: boolean, parentTag?: Tag, type?: any) {
+  constructor(tagId: string, title: string, isCollapsed?: boolean, parentTag?: Tag, type?: any, canOpen ?: boolean) {
     this.tagId = tagId;
     this.title = title;
     this.isCollapsed = isCollapsed;
     this.parentTag = parentTag;
+    this.canOpen = !!canOpen;
+
     if (type) {
       this.type = type;
       // A disappointing number of booleans come back as strings...
       this.type.folder = (type.folder === 'true' || type.folder === true) ?  true : false;
     } else {
-      this.type = 'category';
+      this.type = {label: 'category'};
     }
     
     this.levelsDeep = this.setLevel();

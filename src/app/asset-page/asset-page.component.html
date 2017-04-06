@@ -35,7 +35,7 @@
                  <!--If the user has not accepted the agreement, show modal when clicked, otherwise download immediately-->
                 
                 <button class="btn btn-secondary"  tabindex="1" (click)="copyGeneratedImgURL()">
-                    Share
+                    Link
                     <i id="genImgURLlink" class="icon icon-share-white" ></i>
                 </button>
                 <a class="btn btn-secondary" tabindex="1" *ngIf="assets[0].downloadLink && user.isLoggedIn" 
@@ -114,5 +114,5 @@
 </div>
 <ang-agree-modal *ngIf="showAgreeModal" (closeModal)="showAgreeModal = false" [asset]="assets[0]"></ang-agree-modal>
 <ang-login-req-modal *ngIf="showLoginModal" (closeModal)="showLoginModal = false"></ang-login-req-modal>
-<ang-add-to-group *ngIf="showAddModal" [selectedAssets]="[assets[assetIndex - 1]]" [showCreateGroup]="true" (createGroup)="showCreateGroupModal = true; showAddModal = false;" (closeModal)="showAddModal = false"></ang-add-to-group>
-<ang-new-ig-modal *ngIf="showCreateGroupModal" [selectedAssets]="[assets[assetIndex - 1]]" [showAddToGroup]="true" (addToGroup)="showAddModal = true; showCreateGroupModal = false;" (closeModal)="showCreateGroupModal = false"></ang-new-ig-modal>
+<ang-add-to-group *ngIf="showAddModal" [selectedAssets]="[ assets[assetIndex - 1] ]" [showCreateGroup]="true" (createGroup)="showCreateGroupModal = true; showAddModal = false;" (closeModal)="showAddModal = false"></ang-add-to-group>
+<ang-new-ig-modal *ngIf="showCreateGroupModal" [selectedAssets]="[ assets[assetIndex - 1] ]" [showAddToGroup]="true" (addToGroup)="showAddModal = true; showCreateGroupModal = false;" (closeModal)="showCreateGroupModal = false"></ang-new-ig-modal>

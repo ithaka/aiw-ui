@@ -1,7 +1,7 @@
 /**
  * Assets service
  */
-import { Injectable, OnDestroy, OnInit } from '@angular/core';
+import { Injectable, OnDestroy, OnInit, EventEmitter } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { Http, Response, Headers, RequestOptions } from '@angular/http';
 import { Observable, BehaviorSubject } from 'rxjs/Rx';
@@ -15,7 +15,7 @@ import { GroupService } from './group.service';
 import { AssetFiltersService } from './../asset-filters/asset-filters.service';
 import { ToolboxService } from './toolbox.service';
 
-import { ImageGroup } from '.';
+import { ImageGroup, Thumbnail } from '.';
 
 @Injectable()
 export class AssetService {
@@ -50,6 +50,7 @@ export class AssetService {
     private selectedAssets: any[] = [];
     private selectedAssetsSource = new BehaviorSubject<any[]>(this.selectedAssets);
     public selection = this.selectedAssetsSource.asObservable();
+    public selectModeToggle: EventEmitter<any> = new EventEmitter()
 
 
     // Keep track of which params the current results are related to
@@ -172,6 +173,17 @@ export class AssetService {
      */
     public getSelectedAssets(): any[] {
         return this.selectedAssets;
+    }
+    
+    /**
+     * Removes all object ids in allResults which match one of the ids in ids
+     * @param ids The array of object ids to remove from allResults
+     */
+    public removeFromResults(ids: string[]): void {
+        this.allResultsValue['thumbnails'] = this.allResultsValue['thumbnails'].filter((thumbnail: Thumbnail) => {
+            return ids.indexOf(thumbnail.objectId) < 0
+        });
+        this.allResultsSource.next(this.allResultsValue);
     }
 
     public getCurrentInstitution(): any {
@@ -514,23 +526,23 @@ export class AssetService {
                     throw new Error("No data in image group thumbnails response");
                 }
                 
-                console.log(data);
                 data.count = data.items.length;
                 let pageStart = (this.urlParams.currentPage - 1)*this.urlParams.pageSize;
                 let pageEnd = this.urlParams.currentPage*this.urlParams.pageSize;
-                let idsAsTerm: string =  data.items.slice(pageStart,pageEnd).join('&object_id='); //.replace(/[A-Z_]/g, '');
+                let idsAsTerm: string =  data.items.slice(pageStart,pageEnd).join('&object_id=');
 
-                console.log(idsAsTerm);
-
-                this.http.get('//artstor-thumbnail-service.apps.test.cirrostratus.org/api/v1/items?object_id=' + idsAsTerm)
+                let options = new RequestOptions({ withCredentials: true });
+                
+                this.http.get('//lively.artstor.org/api/v1/items?object_id=' + idsAsTerm, options)
                     .subscribe(
                         (res) => {
-                            console.log(res);
                             let results = res.json();
-                            data.thumbnails = results.thumbnails;
+                            data.thumbnails = results.items;
                             // Set the allResults object
                             this.updateLocalResults(data);
                     }, (error) => {
+                        // Pass portion of the data we have
+                        this.updateLocalResults(data);
                         // Pass error down to allResults listeners
                         this.allResultsSource.error(error); // .throw(error);
                     });
@@ -542,6 +554,30 @@ export class AssetService {
                     this.noIGSource.next(true);
                 }
             });
+    }
+
+    public getAllThumbnails(igIds: string[]) : Promise<any> {
+        // return new Promise
+        return new Promise( (resolve, reject) => {
+            let allThumbnails = [];
+            let options = new RequestOptions({ withCredentials: true });
+                    
+            for (let i = 0; i < igIds.length; i += 100) {
+                let idsAsTerm: string =  igIds.slice(i,i+100).join('&object_id=');
+                this.http.get('//lively.artstor.org/api/v1/items?object_id=' + idsAsTerm, options)
+                        .toPromise()
+                        .then(
+                            (res) => {
+                                let results = res.json();
+                                allThumbnails = allThumbnails.concat(results.items);
+                                if (i + 100 >= igIds.length) {
+                                    resolve(allThumbnails);
+                                }
+                        }, (error) => {
+                                reject('Failure');
+                        });
+            }
+        });
     }
 
     /**
@@ -892,6 +928,10 @@ export class AssetService {
         // Ensure relative
         if (imagePath.indexOf('artstor.org') > -1) {
             imagePath = imagePath.substring(imagePath.indexOf('artstor.org') + 12);
+        }
+
+        if (imagePath[0] != '/') {
+            imagePath = '/' + imagePath;
         }
         // Ceanup
         return this._auth.getThumbUrl() + imagePath;

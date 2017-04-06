@@ -68,12 +68,10 @@ export class LoginService {
 
     getInstitutions() {
         // http://library.artstor.org/library/institutions/?_method=shibbolethOnly&dojo.preventCache=1479750011351
-        let header = new Headers({ 'Content-Type': 'application/x-www-form-urlencoded' }); // ... Set content type to JSON
-        let options = new RequestOptions({ headers: header, withCredentials: true });
-        let url = 'http://' + this._auth.getSubdomain() + '.artstor.org/library/institutions/?_method=shibbolethOnly';
+        let url = this._auth.getHostname() + '/library/institutions/?_method=shibbolethOnly';
         
         return this.http
-            .get(url, options)
+            .get(url)
             .toPromise()
             .then(this._auth.extractData);
     }
@@ -82,7 +80,7 @@ export class LoginService {
         let options = new RequestOptions({ withCredentials: true });
         
         return this.http
-            .get('http://' + this._auth.getSubdomain() + '.artstor.org/library/lostpw/123?email=' + email + '&portal=ARTstor', options)
+            .get( this._auth.getHostname() + '/library/lostpw/123?email=' + email + '&portal=ARTstor', options)
             .toPromise()
             .then(this._auth.extractData);
     }

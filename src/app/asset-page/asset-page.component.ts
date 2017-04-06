@@ -257,5 +257,10 @@ export class AssetPage implements OnInit, OnDestroy {
             this._router.navigate(['/' + this.prevRouteParams[0].path, this.prevRouteParams[1].path, this.prevRouteParams[1].parameters]);
             this.prevRouteParams = [];
         }
+        else if(this.prevRouteParams.length == 3){
+            this._router.navigate(['/' + this.prevRouteParams[0].path, this.prevRouteParams[1].path, this.prevRouteParams[2].path]);
+            this.prevRouteParams = [];
+        }
+
     }
 }
