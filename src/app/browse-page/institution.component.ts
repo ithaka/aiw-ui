@@ -22,7 +22,6 @@ export class BrowseInstitutionComponent implements OnInit {
   ngOnInit() {
     this._tags.initTags({type: "institution"})
       .then((tags) => {
-        console.log(tags);
         this.tags = tags;
         this.loading = false;
       })

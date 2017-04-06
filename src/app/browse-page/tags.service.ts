@@ -46,7 +46,7 @@ export class TagsService {
         if (data && data.Collections) {
           let tags: Tag[] = [];
           data.Collections.forEach((collection, index) => {
-            let openable = collection.collectionType === 5;
+            let openable = collection.collectionType === 5 || collection.collectionType === 2;
             tags.push(new Tag(collection.collectionid, collection.collectionname, true, null, { label: "collection", folder: true }, openable));
           });
           return tags;
