@@ -15,7 +15,7 @@
     & > .slide-wrap {
         margin-top: -2em;
         // transition: margin 0.3s cubic-bezier(0.55, 0.07, 0.44, 0.93);
-        & ang-tag {
+        & > ang-tag {
             min-height: 0px;
             max-height: 0px;
             transition: max-height 0.02s linear;
@@ -33,8 +33,8 @@
 
             margin-top: 0%;
 
-            & ang-tag {
-                max-height: 2em;
+            & > ang-tag {
+                max-height: none !important;
             }
         }
     }
