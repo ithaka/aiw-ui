@@ -17,6 +17,10 @@ export class ShareIgLinkModal implements OnInit {
 
   private shareLink: string = "test" // this is the url which will be copied to the user's clipboard
   private igCopied: boolean = false
+  private serviceStatus: {
+    isLoading?: boolean,
+    tokenError?: boolean
+  } = {}
 
   constructor( private _group: GroupService ) { }
 
@@ -25,13 +29,19 @@ export class ShareIgLinkModal implements OnInit {
   }
 
   createIgLink(ig: ImageGroup): string {
+    // if the group is public, we simply give back the url of the group
     if (this.ig.public) { return ['http://', document.location.host, "/#/group/", ig.id].join("") }
     else {
+      // if the image group is private, we call a service to generate a token, then attach that to the route so the user can share it
+      this.serviceStatus.isLoading = true
       this._group.generateToken(this.ig.id, { access_type: 100 })
         .take(1)
         .subscribe((res) => {
+          this.serviceStatus.isLoading = false
           if (res.success && res.token) {
             return ['http://', document.location.host, "/#/group/redeem/", res.token].join("")
+          } else {
+            this.serviceStatus.tokenError = true
           }
         })
     }
