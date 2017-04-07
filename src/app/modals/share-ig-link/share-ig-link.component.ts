@@ -15,7 +15,7 @@ export class ShareIgLinkModal implements OnInit {
 
   private document = document
 
-  private shareLink: string = "test" // this is the url which will be copied to the user's clipboard
+  private shareLink: string = "" // this is the url which will be copied to the user's clipboard
   private igCopied: boolean = false
   private serviceStatus: {
     isLoading?: boolean,
