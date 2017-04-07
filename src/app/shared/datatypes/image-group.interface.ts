@@ -8,6 +8,7 @@ export interface ImageGroup {
     entity_identifier: string,
     access_type: number
   }[];
+  public: boolean;
   igId: string;
   count: number;
   thumbnails: Thumbnail[];

@@ -124,4 +124,16 @@ export class GroupService {
         )
         .map((res) => { return res.json() || {} })
     }
+
+    /** 
+     * Makes call to generate a private group share token
+     */
+    public generateToken(id: string, options: { access_type: number, expiration_time?: Date }): Observable<any> {
+        return this.http.post(
+            [this.groupUrl, id, "share"].join("/"),
+            {},
+            this.options
+        )
+        .map((res) => { return res.json() || {} })
+    }
 }
