@@ -69,33 +69,19 @@ export class MyCollectionsComponent implements OnInit {
   getUserPCol(){
     this._assets.pccollection()
       .then((res) => {
-          var obj;
-
           if(res.pcCollection && res.pcCollection.collectionid){
+            // we made this tag always expandable
             let colTag = new Tag(res.pcCollection.collectionid, res.pcCollection.collectionname, true, null, { label: "collection", folder: true }, true);
-            // if(res.pcCollection.blurburl) {
-            //       colTag.setDescription(res.pcCollection.blurburl);
-            //   }
-            //   if(res.pcCollection.bigimageurl) {
-            //       colTag.setThumbnail(res.pcCollection.bigimageurl);
-            //   }
             this.tags.push(colTag); 
           }
           if(res.privateCollection && (res.privateCollection.length > 0)){
             for (let colObj of res.privateCollection){
+                // we made this tag always expandable
                 let privTag = new Tag(colObj.collectionid, colObj.collectionname, true, null, { label: "collection", folder: true });
-                // We've decided to show collection descriptions on the Collection page, and not in Browse
-                //   if(colObj.blurburl) {
-                //       privTag.setDescription(colObj.blurburl);
-                //   }
-                //   if(colObj.bigimageurl) {
-                //       privTag.setThumbnail(colObj.bigimageurl);
-                //   }
                 this.tags.push(privTag);
             }
           }
 
-        //   this.loadCategory();
       })
       .catch(function(err) {
           console.log('Unable to load User Personal Collections.');
