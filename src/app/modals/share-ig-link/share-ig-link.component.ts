@@ -25,12 +25,12 @@ export class ShareIgLinkModal implements OnInit {
   constructor( private _group: GroupService ) { }
 
   ngOnInit() {
-    this.shareLink = this.createIgLink(this.ig)
+    this.createIgLink(this.ig)
   }
 
-  createIgLink(ig: ImageGroup): string {
+  createIgLink(ig: ImageGroup): void {
     // if the group is public, we simply give back the url of the group
-    if (this.ig.public) { return ['http://', document.location.host, "/#/group/", ig.id].join("") }
+    if (this.ig.public) { this.shareLink = ['http://', document.location.host, "/#/group/", ig.id].join("") }
     else {
       // if the image group is private, we call a service to generate a token, then attach that to the route so the user can share it
       this.serviceStatus.isLoading = true
@@ -38,8 +38,10 @@ export class ShareIgLinkModal implements OnInit {
         .take(1)
         .subscribe((res) => {
           this.serviceStatus.isLoading = false
+          console.log(res)
           if (res.success && res.token) {
-            return ['http://', document.location.host, "/#/group/redeem/", res.token].join("")
+            console.log(['http://', document.location.host, "/#/group/redeem/", res.token].join(""))
+            this.shareLink = ['http://', document.location.host, "/#/group/redeem/", res.token].join("")
           } else {
             this.serviceStatus.tokenError = true
           }
