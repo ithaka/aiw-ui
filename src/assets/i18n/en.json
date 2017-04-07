@@ -100,6 +100,7 @@
   "SHARE_IG_LINK_MODAL": {
     "MAIN_HEADING": "Share link to image group",
     "URL_LABEL": "Copy URL",
-    "COPY_SUCCESS": "Link copied to clipboard"
+    "COPY_SUCCESS": "Link copied to clipboard",
+    "SERVICE_ERROR": "We've encountered an error in getting a share token. Please refresh or try again later."
   }
 }
