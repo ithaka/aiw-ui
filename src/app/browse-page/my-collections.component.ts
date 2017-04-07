@@ -72,7 +72,7 @@ export class MyCollectionsComponent implements OnInit {
           var obj;
 
           if(res.pcCollection && res.pcCollection.collectionid){
-            let colTag = new Tag(res.pcCollection.collectionid, res.pcCollection.collectionname, true, null, { label: "collection", folder: false });
+            let colTag = new Tag(res.pcCollection.collectionid, res.pcCollection.collectionname, true, null, { label: "collection", folder: false }, true);
             if(res.pcCollection.blurburl) {
                   colTag.setDescription(res.pcCollection.blurburl);
               }
