@@ -72,13 +72,13 @@ export class MyCollectionsComponent implements OnInit {
           var obj;
 
           if(res.pcCollection && res.pcCollection.collectionid){
-            let colTag = new Tag(res.pcCollection.collectionid, res.pcCollection.collectionname, true, null, { label: "collection", folder: false }, true);
-            if(res.pcCollection.blurburl) {
-                  colTag.setDescription(res.pcCollection.blurburl);
-              }
-              if(res.pcCollection.bigimageurl) {
-                  colTag.setThumbnail(res.pcCollection.bigimageurl);
-              }
+            let colTag = new Tag(res.pcCollection.collectionid, res.pcCollection.collectionname, true, null, { label: "collection", folder: true }, true);
+            // if(res.pcCollection.blurburl) {
+            //       colTag.setDescription(res.pcCollection.blurburl);
+            //   }
+            //   if(res.pcCollection.bigimageurl) {
+            //       colTag.setThumbnail(res.pcCollection.bigimageurl);
+            //   }
             this.tags.push(colTag); 
           }
           if(res.privateCollection && (res.privateCollection.length > 0)){
