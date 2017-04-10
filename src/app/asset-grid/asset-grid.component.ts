@@ -295,7 +295,7 @@ export class AssetGrid implements OnInit, OnDestroy {
       // [routerLink]="editMode ? [] : ['/asset', asset.objectId, {prev: route.snapshot.url} ]" 
       this._storage.set('totalAssets', this.totalAssets);
       this._storage.set('prevRouteParams', this.route.snapshot.url);
-      this._router.navigate(['/asset', asset.objectId]);
+      this._router.navigate(['/asset', asset.artstorid]);
     }
   }
 

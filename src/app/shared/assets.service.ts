@@ -757,7 +757,7 @@ export class AssetService {
      * @returns       Returns an object with the properties: thumbnails, count, altKey, classificationFacets, geographyFacets, minDate, maxDate, collTypeFacets, dateFacets
      */
     private search(term: string, sortIndex) {
-        let keyword = encodeURIComponent(term);
+        let keyword = term;
         let options = new RequestOptions({ withCredentials: true });
         let startIndex = ((this.urlParams.currentPage - 1) * this.urlParams.pageSize) + 1;
         let thumbSize = 0;
@@ -806,10 +806,11 @@ export class AssetService {
         // } else {
             let query = {
                 "limit" : this.urlParams.pageSize,
+                "page" : this.urlParams.currentPage,
                 "content_types" : [
                     "art"
                 ],
-                "query" : "arttitle:" + keyword
+                "query" : "arttitle:'" + keyword + "' OR artcreator:'" + keyword + "'"
             };
 
             return this.http.post('//search-service.apps.test.cirrostratus.org/browse/', query, options);
