@@ -107,6 +107,9 @@ export class AssetService {
     private header = new Headers({ 'Content-Type': 'application/json' }); 
     private defaultOptions = new RequestOptions({ headers: this.header, withCredentials: true });
 
+    // Switch for using Sycamore's New Search interface
+    private newSearch : boolean = false;
+
     constructor(
         private _filters: AssetFiltersService,
         private _router: Router,
@@ -118,6 +121,11 @@ export class AssetService {
         private _toolbox: ToolboxService
     ) {
         this._storage = locker.useDriver(Locker.DRIVERS.LOCAL);
+
+        // Flip switch for Sycamore's New Search
+        if( document.location.hostname.indexOf('ang-ui-sycamore-search.apps.test.cirrostratus.org') > -1 ) {
+            this.newSearch = true;
+        }
     } 
 
     private updateLocalResults(resultObj: any) {
@@ -788,8 +796,21 @@ export class AssetService {
             }
         }
         
-        return this.http
-            .get(this._auth.getUrl() + '/search/' + type + '/' + startIndex + '/' + this.urlParams.pageSize + '/' + sortIndex + '?' + 'type=' + type + '&kw=' + keyword + '&origKW=' + keyword + '&geoIds=' + geographyIds + '&clsIds=' + classificationIds + '&collTypes=' + colTypeIds + '&id=' + (collIds.length > 0 ? collIds : 'all') + '&name=All%20Collections&bDate=' + earliestDate + '&eDate=' + latestDate + '&dExact=&order=0&isHistory=false&prGeoId=&tn=1', options);
+        if (this.newSearch === false) {
+            return this.http
+                .get(this._auth.getUrl() + '/search/' + type + '/' + startIndex + '/' + this.urlParams.pageSize + '/' + sortIndex + '?' + 'type=' + type + '&kw=' + keyword + '&origKW=' + keyword + '&geoIds=' + geographyIds + '&clsIds=' + classificationIds + '&collTypes=' + colTypeIds + '&id=' + (collIds.length > 0 ? collIds : 'all') + '&name=All%20Collections&bDate=' + earliestDate + '&eDate=' + latestDate + '&dExact=&order=0&isHistory=false&prGeoId=&tn=1', options);
+        } else {
+            let query = {
+                "limit" : this.urlParams.pageSize,
+                "content_types" : [
+                    "art"
+                ],
+                "query" : keyword
+            };
+
+            return this.http.get('//search-service-ui.apps.test.cirrostratus.org/' + this.formEncode(query), options);
+        }
+        
     }
 
     /**
