@@ -800,10 +800,10 @@ export class AssetService {
             }
         }
         
-        if (this.newSearch === false) {
-            return this.http
-                .get(this._auth.getUrl() + '/search/' + type + '/' + startIndex + '/' + this.urlParams.pageSize + '/' + sortIndex + '?' + 'type=' + type + '&kw=' + keyword + '&origKW=' + keyword + '&geoIds=' + geographyIds + '&clsIds=' + classificationIds + '&collTypes=' + colTypeIds + '&id=' + (collIds.length > 0 ? collIds : 'all') + '&name=All%20Collections&bDate=' + earliestDate + '&eDate=' + latestDate + '&dExact=&order=0&isHistory=false&prGeoId=&tn=1', options);
-        } else {
+        // if (this.newSearch === false) {
+        //     return this.http
+        //         .get(this._auth.getUrl() + '/search/' + type + '/' + startIndex + '/' + this.urlParams.pageSize + '/' + sortIndex + '?' + 'type=' + type + '&kw=' + keyword + '&origKW=' + keyword + '&geoIds=' + geographyIds + '&clsIds=' + classificationIds + '&collTypes=' + colTypeIds + '&id=' + (collIds.length > 0 ? collIds : 'all') + '&name=All%20Collections&bDate=' + earliestDate + '&eDate=' + latestDate + '&dExact=&order=0&isHistory=false&prGeoId=&tn=1', options);
+        // } else {
             let query = {
                 "limit" : this.urlParams.pageSize,
                 "content_types" : [
@@ -813,7 +813,7 @@ export class AssetService {
             };
 
             return this.http.post('//search-service.apps.test.cirrostratus.org/browse/', query, options);
-        }
+        // }
         
     }
 
