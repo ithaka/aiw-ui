@@ -30,7 +30,7 @@
                 <!--Download-->
                 <li [class.disabled]="reorderMode" class="btn btn-link" (click)="_ig.triggerIgDownload()" *ngIf="actionOptions.group"><i class="icon icon-download-white"></i>Download</li>
                 <!--Export-->
-                <li [class.disabled]="reorderMode" class="btn btn-link" (click)="_ig.triggerIgExport()" *ngIf="actionOptions.group"><i class="icon icon-export-white"></i>Export</li>
+                <!--<li [class.disabled]="reorderMode" class="btn btn-link" (click)="_ig.triggerIgExport()" *ngIf="actionOptions.group"><i class="icon icon-export-white"></i>Export</li>-->
                 <!--Select-->
                 <li [class.disabled]="reorderMode" class="btn btn-link" (click)="toggleEditMode()" [ngClass]="{'active': editMode}"><i class="icon icon-select-white"></i>Select</li>
                 <!--Reorder-->
