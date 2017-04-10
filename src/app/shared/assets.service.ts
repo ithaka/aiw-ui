@@ -947,6 +947,8 @@ export class AssetService {
      * Generate Thumbnail URL
      */
     public makeThumbUrl(imagePath: string, size ?: number): string {
+        imagePath = JSON.parse(imagePath).thumbnailSizeOnePath;
+        
         if (imagePath) {
             if (size) {
                 imagePath = imagePath.replace(/(size)[0-4]/g, 'size' + size);
