@@ -135,7 +135,11 @@ export class NavMenu implements OnInit, OnDestroy {
         }
       })
       return !assetFound // if the asset was not found, we want to keep it
-    })
+    });
+
+    if(putGroup.igDownloadInfo){
+      delete putGroup.igDownloadInfo;
+    }
 
     this._group.update(putGroup)
       .take(1)
