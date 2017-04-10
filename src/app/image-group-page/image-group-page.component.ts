@@ -51,6 +51,14 @@ export class ImageGroupPage implements OnInit, OnDestroy {
   ngOnInit() {
     this.user = this._auth.getUser();
 
+    this.subscriptions.push(
+      this.route.queryParams.subscribe((params) => {
+        if ( params['token'] ) {
+          // go redeem the token here
+        }
+      })
+    )
+
     /**
      * Get Route Params
      * - Let Assets service know what group to load
