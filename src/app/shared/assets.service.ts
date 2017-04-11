@@ -736,6 +736,10 @@ export class AssetService {
                         this._filters.generateDateFacets( data.dateFacets );
                         this._filters.setAvailable('classification', data.classificationFacets);
                     }
+                    // Transform data from SOLR queries
+                    if (data.results) {
+                        data.thumbnails = data.results;
+                    }
                     // Set the allResults object
                     this.updateLocalResults(data);
             }, (error) => {
@@ -805,10 +809,10 @@ export class AssetService {
                 "content_types" : [
                     "art"
                 ],
-                "query" : keyword
+                "query" : "arttitle:" + keyword
             };
 
-            return this.http.get('//search-service-ui.apps.test.cirrostratus.org/' + this.formEncode(query), options);
+            return this.http.post('//search-service.apps.test.cirrostratus.org/browse/', query, options);
         }
         
     }
@@ -943,17 +947,22 @@ export class AssetService {
      * Generate Thumbnail URL
      */
     public makeThumbUrl(imagePath: string, size ?: number): string {
-        if (size) {
-            imagePath = imagePath.replace(/(size)[0-4]/g, 'size' + size);
-        }
-        // Ensure relative
-        if (imagePath.indexOf('artstor.org') > -1) {
-            imagePath = imagePath.substring(imagePath.indexOf('artstor.org') + 12);
-        }
+        if (imagePath) {
+            if (size) {
+                imagePath = imagePath.replace(/(size)[0-4]/g, 'size' + size);
+            }
+            // Ensure relative
+            if (imagePath.indexOf('artstor.org') > -1) {
+                imagePath = imagePath.substring(imagePath.indexOf('artstor.org') + 12);
+            }
 
-        if (imagePath[0] != '/') {
-            imagePath = '/' + imagePath;
+            if (imagePath[0] != '/') {
+                imagePath = '/' + imagePath;
+            }
+        } else {
+            imagePath = '';
         }
+        
         // Ceanup
         return this._auth.getThumbUrl() + imagePath;
     }
