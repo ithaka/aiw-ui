@@ -557,11 +557,38 @@ export class AssetService {
                 
             })
             .catch((error) => {
-                console.log(error);
+                console.error(error);
                 if((error.status === 404) || (error.status === 403)){
                     this.noIGSource.next(true);
                 }
             });
+    }
+
+    public setResultsFromIg(ig: ImageGroup): void {
+        // Reset No IG observable
+        this.noIGSource.next(false)
+
+        // set up the string for calling search
+        ig.count = ig.items.length
+        let pageStart = (this.urlParams.currentPage - 1)*this.urlParams.pageSize
+        let pageEnd = this.urlParams.currentPage*this.urlParams.pageSize
+        let idsAsTerm: string =  ig.items.slice(pageStart,pageEnd).join('&object_id=')
+
+        let options = new RequestOptions({ withCredentials: true })
+        
+        this.http.get('//lively.artstor.org/api/v1/items?object_id=' + idsAsTerm, options)
+            .subscribe(
+                (res) => {
+                    let results = res.json()
+                    ig.thumbnails = results.items
+                    // Set the allResults object
+                    this.updateLocalResults(ig)
+            }, (error) => {
+                // Pass portion of the data we have
+                this.updateLocalResults(ig)
+                // Pass error down to allResults listeners
+                this.allResultsSource.error(error) // .throw(error)
+            })
     }
 
     public getAllThumbnails(igIds: string[]) : Promise<any> {

@@ -4,7 +4,7 @@ import { Subscription }   from 'rxjs/Subscription';
 
 // Internal Dependencies
 import { AssetService, AuthService } from './../shared';
-import { ImageGroup, ImageGroupDescription, IgDownloadInfo, ImageGroupService } from './../shared';
+import { ImageGroup, ImageGroupDescription, IgDownloadInfo, ImageGroupService, GroupService } from './../shared';
 
 @Component({
   selector: 'ang-image-group',
@@ -40,7 +40,8 @@ export class ImageGroupPage implements OnInit, OnDestroy {
   private reorderMode: boolean = false;
 
   constructor(
-    private _ig: ImageGroupService,
+    private _ig: ImageGroupService, // this will be confusing for a bit. ImageGroupService deals with all the old image group service stuff, and some state management
+    private _group: GroupService, // GroupService is dealing with the new image groups service
     private _router: Router,
     private _assets: AssetService,
     private _auth: AuthService,
@@ -55,6 +56,13 @@ export class ImageGroupPage implements OnInit, OnDestroy {
       this.route.queryParams.subscribe((params) => {
         if ( params['token'] ) {
           // go redeem the token here
+          this._group.redeemToken(params['token'])
+            .take(1)
+            .subscribe((res: { success: boolean, group: ImageGroup }) => {
+              if (res.success && res.group) {
+                this._assets.setResultsFromIg(res.group)
+              }
+            })
         }
       })
     )
