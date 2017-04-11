@@ -142,7 +142,7 @@ export class GroupService {
      * @param token The image group share token
      * @returns Observable with { success: boolean, group: ImageGroup }, although I'm not sure how to specify that in the typescript
      */
-    public redeemToken(token: string): Observable<any> {
+    public redeemToken(token: string): Observable<{ success: boolean, group: ImageGroup }> {
         return this.http.post(
             [this.groupUrl, "redeem", token].join("/"),
             {},
