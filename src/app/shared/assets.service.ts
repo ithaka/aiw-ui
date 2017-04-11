@@ -564,6 +564,10 @@ export class AssetService {
             });
     }
 
+    /** 
+     * When given an image group, updates the allResultsSource with the ids from that image group
+     * @param ig Image group for which you want the results
+     */
     public setResultsFromIg(ig: ImageGroup): void {
         // Reset No IG observable
         this.noIGSource.next(false)

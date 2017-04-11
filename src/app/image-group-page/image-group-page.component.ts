@@ -54,6 +54,7 @@ export class ImageGroupPage implements OnInit, OnDestroy {
 
     this.subscriptions.push(
       this.route.queryParams.subscribe((params) => {
+        // if we have a token param, it is a share link and we need to redeem the token
         if ( params['token'] ) {
           // go redeem the token here
           this._group.redeemToken(params['token'])
