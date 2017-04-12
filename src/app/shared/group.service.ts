@@ -105,8 +105,12 @@ export class GroupService {
      * Update Group. The body sent cannot contain id, insts-with-access or users-with-access
      */
     public update(group: any): Observable<any> {
-        let id = group.id
-        let putGroup = Object.assign({}, group)
+        let id = group.id;
+        let putGroup = Object.assign({}, group);
+
+        if(putGroup.igDownloadInfo){
+            delete putGroup.igDownloadInfo;
+        }
 
         delete putGroup.id
         delete putGroup['users-with-access']
@@ -114,6 +118,7 @@ export class GroupService {
         delete putGroup['public']
         delete putGroup['count']
         delete putGroup['thumbnails']
+        delete putGroup['igDownloadInfo']
         
         if (!putGroup.tags || putGroup.tags[0] == null) { putGroup.tags = [] }
 
