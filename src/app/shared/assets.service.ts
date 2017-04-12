@@ -600,8 +600,8 @@ export class AssetService {
         return new Promise( (resolve, reject) => {
             let allThumbnails = [];
             let options = new RequestOptions({ withCredentials: true });
-                    
-            for (let i = 0; i < igIds.length; i += 100) {
+            
+            let loadBatch = (i) => {
                 let idsAsTerm: string =  igIds.slice(i,i+100).join('&object_id=');
                 this.http.get('//lively.artstor.org/api/v1/items?object_id=' + idsAsTerm, options)
                         .toPromise()
@@ -611,11 +611,14 @@ export class AssetService {
                                 allThumbnails = allThumbnails.concat(results.items);
                                 if (i + 100 >= igIds.length) {
                                     resolve(allThumbnails);
+                                } else {
+                                    loadBatch(i + 101)
                                 }
                         }, (error) => {
                                 reject('Failure');
                         });
             }
+            loadBatch(0);
         });
     }
 
