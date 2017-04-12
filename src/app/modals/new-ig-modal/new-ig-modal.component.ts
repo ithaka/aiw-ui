@@ -62,6 +62,10 @@ export class NewIgModal implements OnInit {
       this.tags = this.ig.tags;
       (<FormControl>this.newIgForm.controls['tags']).setValue(this.tags);
 
+      (<FormControl>this.newIgForm.controls['public']).setValue(this.checkIfPublic());
+
+
+
       if(this.ig.description){
         let parentElement = document.createElement('div');
         parentElement.innerHTML = this.ig.description;
@@ -92,6 +96,18 @@ export class NewIgModal implements OnInit {
 
   ngOnDestroy() {
       this.subscriptions.forEach((sub) => { sub.unsubscribe(); });
+  }
+
+  private checkIfPublic(): boolean{
+    let publicIG = false;
+    for(let accessObj of this.ig.access){
+      if(accessObj.entity_type === 200){
+        publicIG = true;
+        break;
+      }
+    }
+
+    return publicIG;
   }
 
   private refreshIG(): void{
@@ -174,6 +190,17 @@ export class NewIgModal implements OnInit {
         tags: formValue.tags,
         id: this.ig.id
       };
+
+      /**
+       * Add institution access object if shared with Institution
+       */
+      if (formValue.public) {
+        editGroup.access.push({
+          entity_type: 200,
+          entity_identifier: this._auth.getUser() && this._auth.getUser().institutionId.toString(),
+          access_type: 100
+        });
+      }
       
       this._group.update(editGroup)
         .subscribe(
