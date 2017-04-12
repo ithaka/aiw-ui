@@ -114,6 +114,7 @@ export class GroupService {
         delete putGroup['public']
         delete putGroup['count']
         delete putGroup['thumbnails']
+        delete putGroup['igDownloadInfo']
         
         if (!putGroup.tags || putGroup.tags[0] == null) { putGroup.tags = [] }
 
