@@ -135,6 +135,20 @@ export class GroupService {
     public generateToken(id: string, options: { access_type: number, expiration_time?: Date }): Observable<any> {
         return this.http.post(
             [this.groupUrl, id, "share"].join("/"),
+            {}, // this call does not have any options for a body
+            this.options
+        )
+        .map((res) => { return res.json() || {} })
+    }
+
+    /**
+     * Redeems an image group share token and returns an image group
+     * @param token The image group share token
+     * @returns Observable with { success: boolean, group: ImageGroup }, although I'm not sure how to specify that in the typescript
+     */
+    public redeemToken(token: string): Observable<any> {
+        return this.http.post(
+            [this.groupUrl, "redeem", token].join("/"),
             {},
             this.options
         )

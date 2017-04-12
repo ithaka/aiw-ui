@@ -107,6 +107,9 @@ export class AssetService {
     private header = new Headers({ 'Content-Type': 'application/json' }); 
     private defaultOptions = new RequestOptions({ headers: this.header, withCredentials: true });
 
+    // Switch for using Sycamore's New Search interface
+    private newSearch : boolean = false;
+
     constructor(
         private _filters: AssetFiltersService,
         private _router: Router,
@@ -118,6 +121,11 @@ export class AssetService {
         private _toolbox: ToolboxService
     ) {
         this._storage = locker.useDriver(Locker.DRIVERS.LOCAL);
+
+        // Flip switch for Sycamore's New Search
+        if( document.location.hostname.indexOf('ang-ui-sycamore-search.apps.test.cirrostratus.org') > -1 ) {
+            this.newSearch = true;
+        }
     } 
 
     private updateLocalResults(resultObj: any) {
@@ -549,11 +557,42 @@ export class AssetService {
                 
             })
             .catch((error) => {
-                console.log(error);
+                console.error(error);
                 if((error.status === 404) || (error.status === 403)){
                     this.noIGSource.next(true);
                 }
             });
+    }
+
+    /** 
+     * When given an image group, updates the allResultsSource with the ids from that image group
+     * @param ig Image group for which you want the results
+     */
+    public setResultsFromIg(ig: ImageGroup): void {
+        // Reset No IG observable
+        this.noIGSource.next(false)
+
+        // set up the string for calling search
+        ig.count = ig.items.length
+        let pageStart = (this.urlParams.currentPage - 1)*this.urlParams.pageSize
+        let pageEnd = this.urlParams.currentPage*this.urlParams.pageSize
+        let idsAsTerm: string =  ig.items.slice(pageStart,pageEnd).join('&object_id=')
+
+        let options = new RequestOptions({ withCredentials: true })
+        
+        this.http.get('//lively.artstor.org/api/v1/items?object_id=' + idsAsTerm, options)
+            .subscribe(
+                (res) => {
+                    let results = res.json()
+                    ig.thumbnails = results.items
+                    // Set the allResults object
+                    this.updateLocalResults(ig)
+            }, (error) => {
+                // Pass portion of the data we have
+                this.updateLocalResults(ig)
+                // Pass error down to allResults listeners
+                this.allResultsSource.error(error) // .throw(error)
+            })
     }
 
     public getAllThumbnails(igIds: string[]) : Promise<any> {
@@ -728,6 +767,10 @@ export class AssetService {
                         this._filters.generateDateFacets( data.dateFacets );
                         this._filters.setAvailable('classification', data.classificationFacets);
                     }
+                    // Transform data from SOLR queries
+                    if (data.results) {
+                        data.thumbnails = data.results;
+                    }
                     // Set the allResults object
                     this.updateLocalResults(data);
             }, (error) => {
@@ -788,8 +831,21 @@ export class AssetService {
             }
         }
         
-        return this.http
-            .get(this._auth.getUrl() + '/search/' + type + '/' + startIndex + '/' + this.urlParams.pageSize + '/' + sortIndex + '?' + 'type=' + type + '&kw=' + keyword + '&origKW=' + keyword + '&geoIds=' + geographyIds + '&clsIds=' + classificationIds + '&collTypes=' + colTypeIds + '&id=' + (collIds.length > 0 ? collIds : 'all') + '&name=All%20Collections&bDate=' + earliestDate + '&eDate=' + latestDate + '&dExact=&order=0&isHistory=false&prGeoId=&tn=1', options);
+        if (this.newSearch === false) {
+            return this.http
+                .get(this._auth.getUrl() + '/search/' + type + '/' + startIndex + '/' + this.urlParams.pageSize + '/' + sortIndex + '?' + 'type=' + type + '&kw=' + keyword + '&origKW=' + keyword + '&geoIds=' + geographyIds + '&clsIds=' + classificationIds + '&collTypes=' + colTypeIds + '&id=' + (collIds.length > 0 ? collIds : 'all') + '&name=All%20Collections&bDate=' + earliestDate + '&eDate=' + latestDate + '&dExact=&order=0&isHistory=false&prGeoId=&tn=1', options);
+        } else {
+            let query = {
+                "limit" : this.urlParams.pageSize,
+                "content_types" : [
+                    "art"
+                ],
+                "query" : "arttitle:" + keyword
+            };
+
+            return this.http.post('//search-service.apps.test.cirrostratus.org/browse/', query, options);
+        }
+        
     }
 
     /**
@@ -922,17 +978,22 @@ export class AssetService {
      * Generate Thumbnail URL
      */
     public makeThumbUrl(imagePath: string, size ?: number): string {
-        if (size) {
-            imagePath = imagePath.replace(/(size)[0-4]/g, 'size' + size);
-        }
-        // Ensure relative
-        if (imagePath.indexOf('artstor.org') > -1) {
-            imagePath = imagePath.substring(imagePath.indexOf('artstor.org') + 12);
-        }
+        if (imagePath) {
+            if (size) {
+                imagePath = imagePath.replace(/(size)[0-4]/g, 'size' + size);
+            }
+            // Ensure relative
+            if (imagePath.indexOf('artstor.org') > -1) {
+                imagePath = imagePath.substring(imagePath.indexOf('artstor.org') + 12);
+            }
 
-        if (imagePath[0] != '/') {
-            imagePath = '/' + imagePath;
+            if (imagePath[0] != '/') {
+                imagePath = '/' + imagePath;
+            }
+        } else {
+            imagePath = '';
         }
+        
         // Ceanup
         return this._auth.getThumbUrl() + imagePath;
     }
