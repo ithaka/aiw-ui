@@ -740,6 +740,9 @@ export class AssetService {
                     if (data.results) {
                         data.thumbnails = data.results;
                     }
+                    if (data.total) {
+                        data.count = data.total;
+                    }
                     // Set the allResults object
                     this.updateLocalResults(data);
             }, (error) => {
@@ -806,7 +809,7 @@ export class AssetService {
         // } else {
             let query = {
                 "limit" : this.urlParams.pageSize,
-                "page" : this.urlParams.currentPage,
+                "start" : this.urlParams.currentPage * this.urlParams.pageSize,
                 "content_types" : [
                     "art"
                 ],
