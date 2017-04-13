@@ -37,7 +37,7 @@
 
                             <!--Active on Image Group Page-->
                             <button class="dropdown-item">!Save Image Group</button>
-                            <button [disabled]="!actionOptions.group || disableIgDelete" (click)="editIG = true; copyIG = false; showImageGroupModal = true;" class="dropdown-item">Edit Image Group</button>
+                            <button [disabled]="!actionOptions.group || !allowIgUpdate" (click)="editIG = true; copyIG = false; showImageGroupModal = true;" class="dropdown-item">Edit Image Group</button>
                             <button [disabled]="!actionOptions.group" (click)="copyIG = true; editIG = false; showImageGroupModal = true;" class="dropdown-item">Save Image Group as...</button>
                             <button [disabled]="!actionOptions.group || !allowIgUpdate" (click)="deleteIgModal = true" class="dropdown-item">Delete Image Group</button>                 
 
