@@ -36,7 +36,7 @@
                             <div class="dropdown-divider"></div>
 
                             <!--Active on Image Group Page-->
-                            <button class="dropdown-item">!Save Image Group</button>
+                            <button id="btnSaveGroup" class="dropdown-item">!Save Image Group</button>
                             <button id="btnEditGroup" [disabled]="!actionOptions.group || disableIgDelete" (click)="editIG = true; copyIG = false; showImageGroupModal = true;" class="dropdown-item">Edit Image Group</button>
                             <button id="btnSaveGroupAs" [disabled]="!actionOptions.group" (click)="copyIG = true; editIG = false; showImageGroupModal = true;" class="dropdown-item">Save Image Group as...</button>
                             <button id="btnDeleteGroup" [disabled]="!actionOptions.group || !allowIgUpdate" (click)="deleteIgModal = true" class="dropdown-item">Delete Image Group</button>                 
