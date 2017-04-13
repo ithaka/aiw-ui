@@ -5,7 +5,7 @@
     <div class="mobile--hide grid-tool-bar" [ngClass]="[ reorderMode ? 'col-12' : 'col-sm-8 col-md-8 col-lg-9']">
         <div class="row">
             <div *ngIf="!reorderMode" class="col-12">
-                <li *ngIf="!actionOptions.associated && !(actionOptions.group && totalAssets >= 2000) && !(actionOptions.collection && totalAssets >= 2000)" class="dropdown" class="sortlist" ngbDropdown>
+                <li *ngIf="!actionOptions.associated && !(actionOptions.group && totalAssets >= 2000) && !(actionOptions.category && totalAssets >= 2000) && !(actionOptions.collection && totalAssets >= 2000)" class="dropdown" class="sortlist" ngbDropdown>
                     <button class="btn btn-link" id="sortdropdownMenu" ngbDropdownToggle>Sort: <span class="value">{{ activeSort.label ? activeSort.label : 'Relevance' }}</span></button>
                     <div class="dropdown-menu" aria-labelledby="sortdropdownMenu">
                         <button [ngClass]="{ 'disable': activeSort.index == '1' }" class="dropdown-item" (click)="changeSortOpt('1', 'Title')">Title</button>
