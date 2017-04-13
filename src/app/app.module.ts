@@ -58,6 +58,7 @@ import { AuthService, AssetService, GroupService, TypeIdPipe, ToolboxService, Lo
 import { AssetFiltersService } from './asset-filters/asset-filters.service';
 import { TagsService } from './browse-page/tags.service';
 import { CustomReuseStrategy } from './reuse-strategy';
+import { LegacyRouteResolver } from './legacy.service'
 
 const APP_PROVIDERS = [
   ...APP_RESOLVER_PROVIDERS,
@@ -69,7 +70,8 @@ const APP_PROVIDERS = [
   AssetFiltersService,
   TagsService,
   ToolboxService,
-  LoggingService
+  LoggingService,
+  LegacyRouteResolver
   // { provide: RouteReuseStrategy, useClass: CustomReuseStrategy } // to be implemented later
 ];
 
