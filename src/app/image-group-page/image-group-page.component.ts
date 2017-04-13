@@ -38,6 +38,7 @@ export class ImageGroupPage implements OnInit, OnDestroy {
   }
   /** Reorder: Modifies the layout */
   private reorderMode: boolean = false;
+  private showLoseReorder: boolean = false;
 
   constructor(
     private _ig: ImageGroupService, // this will be confusing for a bit. ImageGroupService deals with all the old image group service stuff, and some state management
@@ -198,5 +199,22 @@ export class ImageGroupPage implements OnInit, OnDestroy {
    */
   private toggleReorder(isReordering: boolean): void {
     this.reorderMode = isReordering;
+  }
+
+  private leaveReorderEvent: Event;
+
+  private shouldSaveModal(event) {
+    event.stopPropagation();
+    // this.leaveReorderEvent = event;
+    if (this.reorderMode) {
+      this.showLoseReorder = true;
+    }
+  }
+
+  private ditchingReorder(isDitching) {
+    this.showLoseReorder = false;
+    if (isDitching == true) {
+
+    }
   }
 }

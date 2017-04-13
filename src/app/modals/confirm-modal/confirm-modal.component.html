@@ -1,0 +1,20 @@
+<div class="modal fade-in show">
+  <div class="modal-dialog" role="document">
+    <!--modal content: Ask to delete -->
+    <div *ngIf="!groupDeleted" class="modal-content">
+      <div class="modal-header">
+        <h4 translate class="modal-title">{{ title }}</h4>
+        <button type="button" class="close" (click)="closeModal.emit()" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p [innerHtml]="description"></p>
+      </div>
+      <div class="modal-footer">
+        <button translate type="button" class="btn btn-secondary" (click)="closeModal.emit(false)">Cancel</button>
+        <button translate type="button" class="btn btn-primary" (click)="closeModal.emit(true)">Okay</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
