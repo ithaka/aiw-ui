@@ -46,8 +46,8 @@ export class LoginService {
         let header = new Headers({ 'Content-Type': 'application/x-www-form-urlencoded' }); // ... Set content type to JSON
         let options = new RequestOptions({ headers: header, withCredentials: true }); // Create a request option
         let data = this._auth.formEncode({ 
-                'j_username': user.username, 
-                'j_password': user.password 
+                'j_username': user.username.toLowerCase(), 
+                'j_password': user.password
             });
 
         return this.http
