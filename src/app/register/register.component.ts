@@ -99,7 +99,7 @@ export class RegisterComponent implements OnInit {
     // this is the object that the service will receive
     let userInfo: any = {
       _method: "update",
-      username: formValue.email,
+      username: formValue.email.toLowerCase(),
       password: formValue.password,
       role: formValue.role,
       dept: formValue.dept,
