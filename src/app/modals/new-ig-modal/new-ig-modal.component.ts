@@ -48,7 +48,7 @@ export class NewIgModal implements OnInit {
     this.newIgForm = _fb.group({
       title: [null, Validators.required],
       artstorPermissions: [this.isArtstorUser ? "private" : null],
-      public: [null],
+      public: [false],
       tags: [this.tags]
     })
   }
