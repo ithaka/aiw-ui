@@ -2,7 +2,7 @@
     <a class="label">Browse By:</a>
     <a class="nav-link" *ngFor="let browseOpt of browseMenuArray" [ngClass]="{'active': browseOpt.level == selectedBrowseLevel}" (click)="selectBrowseOpt(browseOpt.level)">{{ browseOpt.label }}</a>
 </nav>
-<div class="row">
+<div *ngIf="tags.length > 0" class="row">
     <div class="col-md-4">
         <h3 style="margin-bottom:12px;">Tags<a id="groupTagsClear" tabindex="" class="link--accent small" [class.hidden]="appliedTags.length < 1" style="float:right;" (click)="clearFilters()">Clear All</a></h3>
         <div class="filter" *ngFor="let tag of tagFilters" (click)="toggleFilterBy(tag['key'])" [class.active]="appliedTags.indexOf(tag['key']) > -1">
@@ -22,4 +22,10 @@
             <ang-tag *ngFor="let tag of tags" [tag]="tag" link="true"></ang-tag>
         </div>
     </div>
+</div>
+
+<div *ngIf="tags.length < 1" class="alert alert-info">
+    <h3 translate>BROWSE.ERRORS.NO_GROUPS_COLLECTIONS_HEADING</h3><br/>
+    <div *ngIf="selectedBrowseLevel === 'private'" [innerHtml]="'BROWSE.ERRORS.NO_PRIVATE_GROUPS_COLLECTIONS_PROMPT' | translate"></div>
+    <div *ngIf="selectedBrowseLevel === 'institution'" [innerHtml]="'BROWSE.ERRORS.NO_INSTITUTIONAL_GROUPS_COLLECTIONS_PROMPT' | translate"></div>
 </div>
