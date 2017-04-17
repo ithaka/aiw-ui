@@ -3,6 +3,8 @@ import { Router, ActivatedRoute } from '@angular/router';
 
 import { Subscription }   from 'rxjs/Subscription';
 
+import { AssetService } from '../';
+
 @Component({
   selector: 'ang-search',
   templateUrl: 'search.component.html',
@@ -14,7 +16,10 @@ export class SearchComponent implements OnInit, OnDestroy {
   private showSearchModal: boolean = false;
   private term: string;
 
+  private pageSize: number = 24;
+
   constructor(
+    private _assets: AssetService,
     private _router: Router,
     private route: ActivatedRoute
   ) { }
@@ -27,7 +32,14 @@ export class SearchComponent implements OnInit, OnDestroy {
           // this.term = params['term'];
         }
       })
-    )
+    );
+
+    // Subscribe to pagination values
+    this.subscriptions.push(
+      this._assets.pagination.subscribe((pagination: any) => {
+        this.pageSize = parseInt(pagination.pageSize);
+      })
+    );
   }
 
   ngOnDestroy() {
@@ -42,7 +54,7 @@ export class SearchComponent implements OnInit, OnDestroy {
     if (!term || term === "") {
       term = "*";
     }
-    this._router.navigate(['/search', term, { currentPage: 1 }]);
+    this._router.navigate(['/search', term, { currentPage: 1, pageSize: this.pageSize }]);
   }
 
   /**
