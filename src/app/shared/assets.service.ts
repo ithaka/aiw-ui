@@ -993,6 +993,10 @@ export class AssetService {
             if (imagePath[0] != '/') {
                 imagePath = '/' + imagePath;
             }
+
+            if (imagePath.indexOf('thumb') < 0) {
+                imagePath = '/thumb' + imagePath;
+            }
         } else {
             imagePath = '';
         }
