@@ -52,16 +52,16 @@ export class AuthService implements CanActivate {
     if ( document.location.hostname.indexOf('beta.artstor.org') > -1 || document.location.hostname.indexOf('prod.cirrostratus.org') > -1 || document.location.hostname.indexOf('lively.artstor.org') > -1 ) {
       // Prod/Lively endpoints
       this.logUrl = '//ang-ui-logger.apps.prod.cirrostratus.org/api/v1';
+    } else if (document.location.hostname.indexOf('localhost') > -1 || document.location.hostname.indexOf('test.stagely.artstor.org') > -1 || document.location.hostname.indexOf('test.cirrostratus.org') > -1) {
+      // Test Endpoints
+      this.hostname = '//test.stagely.artstor.org';
+      this.baseUrl = '//test.stagely.artstor.org/api/secure';
+      this.IIIFUrl = '//tsprod.artstor.org/rosa-iiif-endpoint-1.0-SNAPSHOT/fpx';
+      this.logUrl = '//ang-ui-logger.apps.test.cirrostratus.org/api/v1';
     } else if( document.location.hostname.indexOf('ang-ui-earth.apps.test.cirrostratus.org') > -1 ) {
       // Earth test instance endpoints
       this.hostname = '//artstor-earth-library.apps.test.cirrostratus.org';
       this.baseUrl = '//artstor-earth-library.apps.test.cirrostratus.org/secure';
-    } else {
-      this.logUrl = '//ang-ui-logger.apps.test.cirrostratus.org/api/v1';
-      // Dev/Stage endpoints
-      // this.baseUrl =  '//stagely.artstor.org/library/secure'; 
-      // this.thumbUrl = '//mdxstage.artstor.org';
-      // this.IIIFUrl = '//tsprod.artstor.org/rosa-iiif-endpoint-1.0-SNAPSHOT/fpx';
     }
   }
 
@@ -259,6 +259,28 @@ export class AuthService implements CanActivate {
           observer.next(false);
       });
     });
+  }
+
+  public getUserInfo(): Observable<any> {
+    let options = new RequestOptions({ withCredentials: true });
+
+    return this.http
+      .get(this.getUrl() + '/userinfo', options)
+      .map(
+        (res)  => {
+          try {
+            let data = res.json() || {};
+            if (data.status === true) {
+              // User is authorized - if you want to check ipAuth then you can tell on the individual route by user.isLoggedIn = false
+              let user = data.user;
+              this.saveUser(user);
+            } 
+            return data;
+          } catch (err) {
+            console.error(err);
+          }
+        }
+      )
   }
 
   /** Getter for downloadAuthorized parameter of local storage */
