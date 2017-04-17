@@ -39,6 +39,10 @@ export class LegacyRouteResolver implements Resolve<boolean> {
                 console.log("routing to collections")
                 this._router.navigate(["/collection", pipeArr[2]]) // the 3rd item in the array is the collection id
                 break
+              case "imagegroup":
+                console.log("routing to image group")
+                this._router.navigate(["group", pipeArr[2]])
+                break
               default:
                 console.log("got the default case")
             }
