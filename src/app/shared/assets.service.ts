@@ -541,7 +541,7 @@ export class AssetService {
 
                 let options = new RequestOptions({ withCredentials: true });
                 
-                this.http.get('//lively.artstor.org/api/v1/items?object_id=' + idsAsTerm, options)
+                this.http.get(this._auth.getHostname() + '/api/v1/items?object_id=' + idsAsTerm, options)
                     .subscribe(
                         (res) => {
                             let results = res.json();
