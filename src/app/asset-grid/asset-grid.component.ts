@@ -428,14 +428,22 @@ export class AssetGrid implements OnInit, OnDestroy {
     return fQuery;
   }
 
+  /**
+   * Display "exiting reorder" modal
+   */
   private shouldSaveModal(event) {
     if (this.reorderMode && this.showLoseReorder == false) {
       this.showLoseReorder = true;
     }
   }
 
+  /**
+   * Closes "exiting reorder" modal
+   */
   private ditchingReorder(isDitching) {
     this.showLoseReorder = false;
-    this.reorderMode = false;
+    if (isDitching == true) {
+      this.reorderMode = false;
+    }
   }
 }
