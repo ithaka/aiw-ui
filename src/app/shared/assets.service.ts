@@ -774,6 +774,9 @@ export class AssetService {
                     if (data.results) {
                         data.thumbnails = data.results;
                     }
+                    if (data.total) {
+                        data.count = data.total;
+                    }
                     // Set the allResults object
                     this.updateLocalResults(data);
             }, (error) => {
@@ -791,7 +794,7 @@ export class AssetService {
      * @returns       Returns an object with the properties: thumbnails, count, altKey, classificationFacets, geographyFacets, minDate, maxDate, collTypeFacets, dateFacets
      */
     private search(term: string, sortIndex) {
-        let keyword = encodeURIComponent(term);
+        let keyword = term;
         let options = new RequestOptions({ withCredentials: true });
         let startIndex = ((this.urlParams.currentPage - 1) * this.urlParams.pageSize) + 1;
         let thumbSize = 0;
@@ -834,20 +837,21 @@ export class AssetService {
             }
         }
         
-        if (this.newSearch === false) {
-            return this.http
-                .get(this._auth.getUrl() + '/search/' + type + '/' + startIndex + '/' + this.urlParams.pageSize + '/' + sortIndex + '?' + 'type=' + type + '&kw=' + keyword + '&origKW=' + keyword + '&geoIds=' + geographyIds + '&clsIds=' + classificationIds + '&collTypes=' + colTypeIds + '&id=' + (collIds.length > 0 ? collIds : 'all') + '&name=All%20Collections&bDate=' + earliestDate + '&eDate=' + latestDate + '&dExact=&order=0&isHistory=false&prGeoId=&tn=1', options);
-        } else {
+        // if (this.newSearch === false) {
+        //     return this.http
+        //         .get(this._auth.getUrl() + '/search/' + type + '/' + startIndex + '/' + this.urlParams.pageSize + '/' + sortIndex + '?' + 'type=' + type + '&kw=' + keyword + '&origKW=' + keyword + '&geoIds=' + geographyIds + '&clsIds=' + classificationIds + '&collTypes=' + colTypeIds + '&id=' + (collIds.length > 0 ? collIds : 'all') + '&name=All%20Collections&bDate=' + earliestDate + '&eDate=' + latestDate + '&dExact=&order=0&isHistory=false&prGeoId=&tn=1', options);
+        // } else {
             let query = {
                 "limit" : this.urlParams.pageSize,
+                "start" : this.urlParams.currentPage * this.urlParams.pageSize,
                 "content_types" : [
                     "art"
                 ],
-                "query" : "arttitle:" + keyword
+                "query" : "arttitle:'" + keyword + "' OR artcreator:'" + keyword + "'"
             };
 
             return this.http.post('//search-service.apps.test.cirrostratus.org/browse/', query, options);
-        }
+        // }
         
     }
 
@@ -981,6 +985,8 @@ export class AssetService {
      * Generate Thumbnail URL
      */
     public makeThumbUrl(imagePath: string, size ?: number): string {
+        imagePath = JSON.parse(imagePath).thumbnailSizeOnePath;
+        
         if (imagePath) {
             if (size) {
                 imagePath = imagePath.replace(/(size)[0-4]/g, 'size' + size);
