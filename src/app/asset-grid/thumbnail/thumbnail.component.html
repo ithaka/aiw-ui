@@ -1,6 +1,6 @@
 <div class="card-block card-text">
     <div class="card-img-top">
-        <img [attr.src]="_assets.makeThumbUrl(thumbnail.media, 1)" [attr.alt]="thumbnail.thumbnail1 ? 'Thumbnail of ' + thumbnail.thumbnail1 : 'No title available'">
+        <img [attr.src]="_assets.makeThumbUrl(thumbnail.thumbnailImgUrl, 1)" [attr.alt]="thumbnail.thumbnail1 ? 'Thumbnail of ' + thumbnail.thumbnail1 : 'No title available'">
     </div>
     <div class="card-icon-group">
         <i *ngIf="thumbnail.cfObjectId && thumbnail.cfObjectId.length > 0" [id]="thumbnail.objectId + '_associated_images'" class="icon icon-collab" [routerLink]="['/associated', thumbnail.cfObjectId, thumbnail.collectionId]" title="Others are also interested in..."></i>
@@ -9,11 +9,11 @@
         <i class="icon icon-{{collectionTypeMap[thumbnail.collectionType] && collectionTypeMap[thumbnail.collectionType].name}} icon-collection-type" [attr.title]="collectionTypeMap[thumbnail.collectionType] && collectionTypeMap[thumbnail.collectionType].alt"></i>
     </div>
     <div>
-        <span class="asset-title" title="{{ thumbnail.arttitle[0] }}" [innerHTML]="thumbnail.arttitle[0]"></span>
-        <span class="asset-agent" title="{{ thumbnail.artcreator[0] }}" [innerHTML]="thumbnail.artcreator[0]"></span>
-        <span class="asset-date" title="{{ thumbnail.artdate[0] }}" [innerHTML]="thumbnail.artdate[0]"></span>
-        <!--<span title="{{ thumbnail.thumbnail4 }}" [innerHTML]="thumbnail.thumbnail4"></span>-->
+        <span class="asset-title" title="{{ thumbnail.thumbnail1 }}" [innerHTML]="thumbnail.thumbnail1"></span>
+        <span class="asset-agent" title="{{ thumbnail.thumbnail2 }}" [innerHTML]="thumbnail.thumbnail2"></span>
+        <span class="asset-date" title="{{ thumbnail.thumbnail3 }}" [innerHTML]="thumbnail.thumbnail3"></span>
+        <span title="{{ thumbnail.thumbnail4 }}" [innerHTML]="thumbnail.thumbnail4"></span>
         <!--Schema moving forward-->
-        <!--<span *ngFor="let data of thumbnail.tombstone" [innerHtml]="data"></span>-->
+        <span *ngFor="let data of thumbnail.tombstone" [innerHtml]="data"></span>
     </div>
 </div>
