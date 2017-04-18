@@ -14,7 +14,7 @@
             </h1>
         </div>
         <div [ngClass]="[ showDesc() ? 'col-md-9' : 'col-md-12'  ]">
-            <ang-asset-grid [actionOptions]="actionOptions" (reordering)="toggleReorder($event)" (clickOutside)="shouldSaveModal($event)" ></ang-asset-grid>
+            <ang-asset-grid [actionOptions]="actionOptions" (reordering)="toggleReorder($event)"></ang-asset-grid>
             <div *ngIf="ig.items && ig.items.length > 0 && !ig.thumbnails" class="alert alert-warning">
                 <b>Error Loading</b> Unable to load the thumbnails for this group.
             </div>
@@ -29,4 +29,3 @@
 <ang-download-limit-modal *ngIf="showDownloadLimitModal" (closeModal)="showDownloadLimitModal = false" [ig]="ig"></ang-download-limit-modal>
 <ang-login-req-modal *ngIf="showLoginModal" (closeModal)="showLoginModal = false"></ang-login-req-modal>
 <ang-no-ig-modal *ngIf="showNoIgModal" (closeModal)="showNoIgModal = false"></ang-no-ig-modal>
-<ang-confirm-modal *ngIf="showLoseReorder" (closeModal)="ditchingReorder($event)" [title]="'Exit Reordering'" [description]="'Are you sure you would like to exit reordering this image group? You will lose any changes made.'"></ang-confirm-modal>
