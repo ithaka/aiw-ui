@@ -603,7 +603,7 @@ export class AssetService {
             
             let loadBatch = (i) => {
                 let idsAsTerm: string =  igIds.slice(i,i+100).join('&object_id=');
-                this.http.get('//lively.artstor.org/api/v1/items?object_id=' + idsAsTerm, options)
+                this.http.get(this._auth.getHostname() + '/api/v1/items?object_id=' + idsAsTerm, options)
                         .toPromise()
                         .then(
                             (res) => {
