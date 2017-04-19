@@ -74,11 +74,36 @@ export class AddToGroupModal implements OnInit, OnDestroy {
       }
     });
 
-    this._group.update(putGroup)
-      .take(1)
-      .subscribe(
-        (res) => { this.serviceResponse.success = true; },
-        (err) => { console.error(err); this.serviceResponse.failure = true;
+    // this._group.get(this.selectedIg.id)
+    //   .subscribe(res => {
+    //     console.log(res);
+    //   }
+    // );
+
+    this._group.get(this.selectedIg.id)
+      .toPromise()
+      .then((data) => { return this.extractData(data); })
+      .then((data) => { 
+        console.log(data);
+        data.items = putGroup.items;
+
+        this._group.update(data)
+          .take(1)
+          .subscribe(
+            (res) => { this.serviceResponse.success = true; },
+            (err) => { console.error(err); this.serviceResponse.failure = true;
+          })
+
       })
+      .catch((error) => {
+          console.error(error);
+      });
+
+    
+  }
+
+  private extractData(res: any) {
+      let body = res.json();
+      return body || { };
   }
 }
