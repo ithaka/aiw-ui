@@ -199,4 +199,5 @@ export class ImageGroupPage implements OnInit, OnDestroy {
   private toggleReorder(isReordering: boolean): void {
     this.reorderMode = isReordering;
   }
+  
 }

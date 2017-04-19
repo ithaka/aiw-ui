@@ -18,6 +18,9 @@ import {LockerModule, Locker, LockerConfig} from 'angular2-locker'
 import { Angulartics2Module, Angulartics2GoogleAnalytics } from 'angulartics2';
 import { TranslateModule, TranslateStaticLoader, TranslateLoader } from 'ng2-translate';
 import { RlTagInputModule } from 'angular2-tag-input';
+
+// Directives
+import { ClickOutsideDirective } from 'angular2-click-outside/clickOutside.directive.ts';
 import { MediumEditorDirective } from 'angular2-medium-editor/medium-editor.directive.ts';
 
 // ng2-idle
@@ -50,7 +53,19 @@ import { Login } from './login';
 import { About } from './about';
 import { NoContent } from './no-content';
 import { RegisterComponent } from './register/register.component';
-import { LoginReqModal, SearchModal, NewIgModal, ShareLinkModal, DownloadLimitModal, AddToGroupModal, DeleteIgModal, NoIgModal, AccessDeniedModal, ShareIgLinkModal } from './modals';
+import { 
+  LoginReqModal, 
+  SearchModal, 
+  NewIgModal, 
+  ShareLinkModal, 
+  DownloadLimitModal, 
+  AddToGroupModal, 
+  DeleteIgModal, 
+  NoIgModal, 
+  AccessDeniedModal, 
+  ShareIgLinkModal, 
+  ConfirmModal 
+} from './modals';
 
 
 // Application wide providers
@@ -94,8 +109,10 @@ type StoreType = {
     CollectionPage,
     CategoryPage,
     ImageGroupPPPage,
+    ClickOutsideDirective,
     DownloadLimitModal,
     ShareIgLinkModal,
+    ConfirmModal,
     DeleteIgModal,
     NoIgModal,
     ClusterPage,
