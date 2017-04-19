@@ -43,6 +43,11 @@ export class LegacyRouteResolver implements Resolve<boolean> {
                 console.log("routing to image group")
                 this._router.navigate(["group", pipeArr[2]])
                 break
+              case "search":
+                console.log("searching...")
+                // console.log(pipeArr)
+                this.splitParams(pipeArr[7])
+                break
               default:
                 console.log("got the default case")
             }
@@ -55,5 +60,20 @@ export class LegacyRouteResolver implements Resolve<boolean> {
     }
 
     return true
+  }
+
+  private splitParams(params: string) {
+
+    // for handling geography ids
+    let geoRe = /geoIds3D(.*?(?=26))/
+    let geoIds = geoRe.exec(params)[1].split("2C")
+    console.log("Geo", geoIds)
+
+    // for handling classifications
+    let clsRe = /clsIds3D(.*?(?=26))/
+    let clsIds = clsRe.exec(params)[1].split("2C")
+    console.log("Class", clsIds)
+    // this.unUrlIds(clsIds)
+    // console.log(match[1].split("2C"))
   }
 }
