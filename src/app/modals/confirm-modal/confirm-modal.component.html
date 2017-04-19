@@ -12,8 +12,9 @@
         <p [innerHtml]="description"></p>
       </div>
       <div class="modal-footer">
-        <button translate type="button" class="btn btn-secondary" (click)="closeModal.emit(false)">Cancel</button>
-        <button translate type="button" class="btn btn-primary" (click)="closeModal.emit(true)">Okay</button>
+        <button translate type="button" class="btn btn-secondary" (click)="closeModal.emit(dismiss)">{{ dismiss }}</button>
+        <button *ngIf="secondary" translate type="button" class="btn btn-primary" (click)="closeModal.emit(secondary)">{{ secondary }}</button>
+        <button translate type="button" class="btn btn-primary" (click)="closeModal.emit(primary)">{{ primary }}</button>
       </div>
     </div><!-- /.modal-content -->
   </div><!-- /.modal-dialog -->

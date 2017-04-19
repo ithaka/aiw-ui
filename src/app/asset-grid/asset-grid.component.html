@@ -92,4 +92,8 @@
     </div>
 </div>
 
-<ang-confirm-modal *ngIf="showLoseReorder" (closeModal)="ditchingReorder($event)" [title]="'Exit Reordering'" [description]="'Are you sure you would like to exit reordering this image group? You will lose any changes made.'"></ang-confirm-modal>
+<ang-confirm-modal *ngIf="showLoseReorder" (closeModal)="ditchingReorder($event)" [title]="'Exit Reordering'" 
+    [description]="'You have made changes to your group\'s order. Do you want to save them?'"
+    [dismiss]="'Cancel'"
+    [secondary]="'Discard Changes'"
+    [primary]="'Save Changes'"></ang-confirm-modal>
