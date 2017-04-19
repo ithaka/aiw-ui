@@ -43,8 +43,8 @@ export class AuthService implements CanActivate {
     this._router = _router;
 
     // these can be moved inside the if statement when we want to change services based on dev/prod
-    this.hostname = '//lively.artstor.org';
-    this.baseUrl =  '//lively.artstor.org/library/secure'; 
+    this.hostname = '//beta.artstor.org';
+    this.baseUrl =  '//beta.artstor.org/api/secure'; 
     this.thumbUrl = '//mdxdv.artstor.org';
     this.IIIFUrl = '//tsprod.artstor.org/rosa-iiif-endpoint-1.0-SNAPSHOT/fpx';
     
