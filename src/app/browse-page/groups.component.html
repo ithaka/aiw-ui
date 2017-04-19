@@ -3,7 +3,7 @@
     <a class="nav-link" *ngFor="let browseOpt of browseMenuArray" [ngClass]="{'active': browseOpt.level == selectedBrowseLevel}" (click)="selectBrowseOpt(browseOpt.level)">{{ browseOpt.label }}</a>
 </nav>
 <div *ngIf="tags.length > 0" class="row">
-    <div class="col-md-4">
+    <div class="col-md-4 hidden-sm-down">
         <h3 style="margin-bottom:12px;">Tags<a id="groupTagsClear" tabindex="" class="link--accent small" [class.hidden]="appliedTags.length < 1" style="float:right;" (click)="clearFilters()">Clear All</a></h3>
         <div class="filter" *ngFor="let tag of tagFilters" (click)="toggleFilterBy(tag['key'])" [class.active]="appliedTags.indexOf(tag['key']) > -1">
             {{ tag['key'] }} ({{ tag.doc_count }})
@@ -12,11 +12,11 @@
         </div>
     </div>
     <div class="col-md-8">
-        <h3 style="margin-bottom:12px;">Groups
+        <h3 class="pb-1 px-2">Groups
             <pagination [pageObj]="pageObj[selectedBrowseLevel] ? pageObj[selectedBrowseLevel] : pagination" (goToPage)="goToPage($event)">
             </pagination>
         </h3>
-        <div class="group-list has-icon-overlay">
+        <div class="group-list has-icon-overlay px-2">
             <i [class.hidden]="!loading" class="icon-lg icon-overlay--top icon-loading-large"></i>
             <div *ngIf="errorObj[selectedBrowseLevel]" class="alert alert-warning" [innerHtml]="errorObj[selectedBrowseLevel]"></div>
             <ang-tag *ngFor="let tag of tags" [tag]="tag" link="true"></ang-tag>

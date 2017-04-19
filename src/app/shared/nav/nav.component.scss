@@ -17,6 +17,17 @@ $loginPanelBg: #f9f9f9; //#f5f9f5; //#d4cd98
     }
 }
 
+#logoMobile {
+    position: fixed;
+    top: 8px;
+    left: 14px;
+    z-index: 9000;
+    height: 32px;
+
+    @media (min-width: 768px) {
+        display: none;
+    }
+}
 .navbar-brand {
     border: none !important;
     padding: 0px;
