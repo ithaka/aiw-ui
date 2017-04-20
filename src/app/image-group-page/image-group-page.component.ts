@@ -31,6 +31,9 @@ export class ImageGroupPage implements OnInit, OnDestroy {
   private downloadInfoReturned: boolean = false;
   /** Enables / Disables the IG deletion based on user ownership */
   private allowIgUpdate: boolean = false;
+
+  private genImgGrpLink: boolean = false;
+
   /** Options object passed to the asset-grid component */
   private actionOptions: any = {
     group: true,
@@ -102,7 +105,17 @@ export class ImageGroupPage implements OnInit, OnDestroy {
               this.allowIgUpdate = true;
               this.actionOptions.isowner = true;
             }
-          })
+
+            // If the user has private / instituional access, then allow Generate Image Group Link
+            if( (accessObj.entity_identifier == this.user.baseProfileId && accessObj.entity_type == 100) || (accessObj.entity_identifier == this._auth.getUser().institutionId.toString() && accessObj.entity_type == 200) ){
+              this.genImgGrpLink = true;
+            }
+          });
+
+          // Allow Generate Image Group Link for Artstor curated IGs
+          if(this.ig.access.length === 0){
+            this.genImgGrpLink = true;
+          }
 
           // THIS IS MOCK CODE FOR THE USER'S DOWNLOAD PERMISSIONS
           // IT HELPS THIS PAGE AND THE IMAGE GROUP DOWNLOAD MODAL FUNCTION IN THE ABSENCE OF DOWNLOAD INFORMATION
@@ -199,4 +212,5 @@ export class ImageGroupPage implements OnInit, OnDestroy {
   private toggleReorder(isReordering: boolean): void {
     this.reorderMode = isReordering;
   }
+  
 }

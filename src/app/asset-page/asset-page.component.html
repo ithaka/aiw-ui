@@ -114,5 +114,5 @@
 </div>
 <ang-agree-modal *ngIf="showAgreeModal" (closeModal)="showAgreeModal = false" [asset]="assets[0]"></ang-agree-modal>
 <ang-login-req-modal *ngIf="showLoginModal" (closeModal)="showLoginModal = false"></ang-login-req-modal>
-<ang-add-to-group *ngIf="showAddModal" [selectedAssets]="[ assets[assetIndex - 1] ]" [showCreateGroup]="true" (createGroup)="showCreateGroupModal = true; showAddModal = false;" (closeModal)="showAddModal = false"></ang-add-to-group>
-<ang-new-ig-modal *ngIf="showCreateGroupModal" [selectedAssets]="[ assets[assetIndex - 1] ]" [showAddToGroup]="true" (addToGroup)="showAddModal = true; showCreateGroupModal = false;" (closeModal)="showCreateGroupModal = false"></ang-new-ig-modal>
+<ang-add-to-group *ngIf="showAddModal" [selectedAssets]="[ assets[0] ]" [showCreateGroup]="true" (createGroup)="showCreateGroupModal = true; showAddModal = false;" (closeModal)="showAddModal = false"></ang-add-to-group>
+<ang-new-ig-modal *ngIf="showCreateGroupModal" [selectedAssets]="[ assets[0] ]" [showAddToGroup]="true" (addToGroup)="showAddModal = true; showCreateGroupModal = false;" (closeModal)="showCreateGroupModal = false"></ang-new-ig-modal>

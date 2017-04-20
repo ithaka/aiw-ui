@@ -29,6 +29,9 @@ export class NavMenu implements OnInit, OnDestroy {
   private allowIgUpdate: boolean = false;
 
   @Input()
+  private genImgGrpLink: boolean = false;
+
+  @Input()
   private ig: any = {};
 
   @Output() refreshIG: EventEmitter<any> = new EventEmitter();

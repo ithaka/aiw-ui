@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
-import { Router, ActivatedRoute, Params } from '@angular/router';
+import { ActivatedRoute, NavigationStart, Params, Router } from '@angular/router';
 
 import { BehaviorSubject } from 'rxjs/Rx';
 import { Subscription }   from 'rxjs/Subscription';
@@ -32,6 +32,7 @@ export class AssetGrid implements OnInit, OnDestroy {
   filters = [];
   private editMode: boolean = false;
   private reorderMode: boolean = false;
+  private showLoseReorder: boolean = false;
   private orderChanged: boolean = false;
 
   private selectedAssets: any[] = [];
@@ -99,6 +100,17 @@ export class AssetGrid implements OnInit, OnDestroy {
   } 
 
   ngOnInit() {
+    this._router.events.subscribe(event => {
+      console.log(event)
+      if(event instanceof NavigationStart) {
+        console.log('Oh!')
+        console.log(event);
+      }
+      // NavigationEnd
+      // NavigationCancel
+      // NavigationError
+      // RoutesRecognized
+    });
     // Subscribe to asset search params
     this.subscriptions.push(
       this.route.params
@@ -414,5 +426,29 @@ export class AssetGrid implements OnInit, OnDestroy {
     fQuery = fQuery.replace(/(#and,)/g, ' and <b>');
     fQuery = fQuery.replace(/(#not,)/g, ' not <b>');
     return fQuery;
+  }
+
+  /**
+   * Display "exiting reorder" modal
+   */
+  private shouldSaveModal(event) {
+    if (this.reorderMode && this.showLoseReorder == false) {
+      this.showLoseReorder = true;
+    }
+  }
+
+  /**
+   * Closes "exiting reorder" modal
+   */
+  private ditchingReorder(command) {
+    // Hide modal
+    this.showLoseReorder = false;
+    if (command.includes('Save')) {
+      this.saveReorder();
+    } else if (command.includes('Discard')) {
+      this.cancelReorder();
+    } else {
+      // Return to Reorder
+    }
   }
 }

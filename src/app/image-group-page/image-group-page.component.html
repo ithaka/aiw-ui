@@ -1,4 +1,4 @@
-<nav-menu [actionOptions]="{group: true}" (refreshIG)="refreshIG()" [allowIgUpdate]="allowIgUpdate" [disableIgDelete]="disableIgDelete" [ig]="ig"></nav-menu>
+<nav-menu [actionOptions]="{group: true}" (refreshIG)="refreshIG()" [allowIgUpdate]="allowIgUpdate" [genImgGrpLink]="genImgGrpLink" [disableIgDelete]="disableIgDelete" [ig]="ig"></nav-menu>
 <div class="container main-content">
   <div class="row no-gutters row--search-bar">
     <div class="col-md-5">
@@ -14,7 +14,7 @@
             </h1>
         </div>
         <div [ngClass]="[ showDesc() ? 'col-md-9' : 'col-md-12'  ]">
-            <ang-asset-grid [actionOptions]="actionOptions" (reordering)="toggleReorder($event)" ></ang-asset-grid>
+            <ang-asset-grid [actionOptions]="actionOptions" (reordering)="toggleReorder($event)"></ang-asset-grid>
             <div *ngIf="ig.items && ig.items.length > 0 && !ig.thumbnails" class="alert alert-warning">
                 <b>Error Loading</b> Unable to load the thumbnails for this group.
             </div>

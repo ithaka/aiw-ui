@@ -12,9 +12,9 @@
 .search-wrap {
     position: fixed;
     top: 7px;
-    left: 15px;
+    left: 60px;
     z-index: 2000;
-    width: calc(100% - 100px);
+    width: calc(100% - 145px);
 
     @media (min-width: 768px) {
         position: static;
