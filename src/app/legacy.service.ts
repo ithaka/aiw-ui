@@ -66,17 +66,18 @@ export class LegacyRouteResolver implements Resolve<boolean> {
 
     // for handling geography ids
     let geoRe = /geoIds3D(.*?(?=26))/
-    let geoIds = this.unUrlIds(geoRe.exec(params)[1].split("2C"))
+    let geoIds = this.hydrateUrlArr(geoRe.exec(params)[1].split("2C"))
     console.log("Geo", geoIds)
 
     // for handling classifications
     let clsRe = /clsIds3D(.*?(?=26))/
-    let clsIds = this.unUrlIds(clsRe.exec(params)[1].split("2C"))
+    console.log(clsRe.exec(params))
+    let clsIds = this.hydrateUrlArr(clsRe.exec(params)[1].split("2C"))
     console.log("Class", clsIds)
 
     // for handling collection ids
     let colRe = /id3D(.*?(?=26))/
-    console.log("Collection", colRe.exec(params)[1])
+    console.log("Collection", colRe.exec(params)[1].split("2C"))
 
     // handles beginning date
     let bDateRe = /bDate3D(.*?(?=26))/
@@ -106,16 +107,34 @@ export class LegacyRouteResolver implements Resolve<boolean> {
     } else { return [] }
   }
 
-  // this function should be given a url encoded string with the % signs removed. It will put them back in and decode the string
+  /**
+   * This function should be given a url encoded string with the % signs removed. It will put them back in and decode the string
+   * @param url The dehydrated url you wish to be turned into a real string
+   */
   private hydrateUrlString(url: string): string {
-    let strArray: string[] = url.split("")
-    for(let i = strArray.length - 1; i >= 0; i--) {
-      // if there should be a percent sign there, put one there
-      if (i % 2 == 0) {
-        strArray.splice(i, 0, "%")
+    if (url && url.length && url[0] != "") {
+      let strArray: string[] = url.split("")
+      for(let i = strArray.length - 1; i >= 0; i--) {
+        // if there should be a percent sign there, put one there
+        if (i % 2 == 0) {
+          strArray.splice(i, 0, "%")
+        }
       }
-    }
-    return decodeURIComponent(strArray.join(""))
-    
+      return decodeURIComponent(strArray.join(""))
+    } else { return }
+  }
+
+  /**
+   * Give this function an array of strings to run hydrateUrlString on. Returns empty array if passed an empty string
+   * @param urls Array of dehydrated strings
+   */
+  private hydrateUrlArr(urls: string[]): string[] {
+    if (urls && urls.length && urls[0] != "") {
+      let hydrated: string[] = []
+      urls.forEach((url) => {
+        hydrated.push(this.hydrateUrlString(url))
+      })
+      return hydrated
+    } else { return [] }
   }
 }
