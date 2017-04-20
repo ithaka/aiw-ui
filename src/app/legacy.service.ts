@@ -77,7 +77,8 @@ export class LegacyRouteResolver implements Resolve<boolean> {
 
     // for handling collection ids
     let colRe = /id3D(.*?(?=26))/
-    console.log("Collection", colRe.exec(params)[1].split("2C"))
+    console.log(colRe.exec(params)[1].split("2C"))
+    console.log("Collection", this.hydrateUrlArr(colRe.exec(params)[1].split("2C")))
 
     // handles beginning date
     let bDateRe = /bDate3D(.*?(?=26))/
@@ -116,7 +117,11 @@ export class LegacyRouteResolver implements Resolve<boolean> {
     if (urls && urls.length && urls[0] != "") {
       let hydrated: string[] = []
       urls.forEach((url) => {
-        hydrated.push(this.hydrateUrlString(url))
+        try {
+          hydrated.push(this.hydrateUrlString(url))
+        } catch (err) {
+          hydrated.push(url)
+        }
       })
       return hydrated
     } else { return [] }
