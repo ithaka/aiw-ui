@@ -76,7 +76,18 @@ export class LegacyRouteResolver implements Resolve<boolean> {
 
     // for handling collection ids
     let colRe = /id3D(.*?(?=26))/
-    console.log(colRe.exec(params)[1])
+    console.log("Collection", colRe.exec(params)[1])
+
+    // handles beginning date
+    let bDateRe = /bDate3D(.*?(?=26))/
+    let bDate = this.hydrateUrlString(bDateRe.exec(params)[1])
+    console.log("bDate", bDate)
+
+    // handles end date
+    let eDateRe = /eDate3D(.*?(?=26))/
+    let eDate = this.hydrateUrlString(eDateRe.exec(params)[1])
+    console.log("eDate", eDate)
+
   }
 
   // receives an array of urlencoded Ids (all numeric) and spits out the real ids
@@ -93,5 +104,18 @@ export class LegacyRouteResolver implements Resolve<boolean> {
       })
       return decodedIds
     } else { return [] }
+  }
+
+  // this function should be given a url encoded string with the % signs removed. It will put them back in and decode the string
+  private hydrateUrlString(url: string): string {
+    let strArray: string[] = url.split("")
+    for(let i = strArray.length - 1; i >= 0; i--) {
+      // if there should be a percent sign there, put one there
+      if (i % 2 == 0) {
+        strArray.splice(i, 0, "%")
+      }
+    }
+    return decodeURIComponent(strArray.join(""))
+    
   }
 }
