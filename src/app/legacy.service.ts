@@ -91,22 +91,6 @@ export class LegacyRouteResolver implements Resolve<boolean> {
 
   }
 
-  // receives an array of urlencoded Ids (all numeric) and spits out the real ids
-  private unUrlIds(ids: string[]): string[] {
-    if (ids && ids.length && ids[0] != "") {
-      let decodedIds: string[] = [] 
-      ids.forEach((id) => {
-        let matches = id.match(/.{2}/g)
-        let realId = ""
-        matches.forEach((match) => {
-          realId += match.substr(1)
-        })
-        decodedIds.push(realId)
-      })
-      return decodedIds
-    } else { return [] }
-  }
-
   /**
    * This function should be given a url encoded string with the % signs removed. It will put them back in and decode the string
    * @param url The dehydrated url you wish to be turned into a real string
