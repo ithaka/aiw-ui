@@ -66,14 +66,32 @@ export class LegacyRouteResolver implements Resolve<boolean> {
 
     // for handling geography ids
     let geoRe = /geoIds3D(.*?(?=26))/
-    let geoIds = geoRe.exec(params)[1].split("2C")
+    let geoIds = this.unUrlIds(geoRe.exec(params)[1].split("2C"))
     console.log("Geo", geoIds)
 
     // for handling classifications
     let clsRe = /clsIds3D(.*?(?=26))/
-    let clsIds = clsRe.exec(params)[1].split("2C")
+    let clsIds = this.unUrlIds(clsRe.exec(params)[1].split("2C"))
     console.log("Class", clsIds)
-    // this.unUrlIds(clsIds)
-    // console.log(match[1].split("2C"))
+
+    // for handling collection ids
+    let colRe = /id3D(.*?(?=26))/
+    console.log(colRe.exec(params)[1])
+  }
+
+  // receives an array of urlencoded Ids (all numeric) and spits out the real ids
+  private unUrlIds(ids: string[]): string[] {
+    if (ids && ids.length && ids[0] != "") {
+      let decodedIds: string[] = [] 
+      ids.forEach((id) => {
+        let matches = id.match(/.{2}/g)
+        let realId = ""
+        matches.forEach((match) => {
+          realId += match.substr(1)
+        })
+        decodedIds.push(realId)
+      })
+      return decodedIds
+    } else { return [] }
   }
 }
