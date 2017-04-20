@@ -105,7 +105,14 @@ export class LegacyRouteResolver implements Resolve<boolean> {
           strArray.splice(i, 0, "%")
         }
       }
-      return decodeURIComponent(strArray.join(""))
+
+      try {
+        return decodeURIComponent(strArray.join(""))
+      } catch (err) {
+        // we know we'll get some error here about decodeURIComponent not working - we'll go ahead and ignore that
+        return url
+      }
+
     } else { return }
   }
 
@@ -117,11 +124,7 @@ export class LegacyRouteResolver implements Resolve<boolean> {
     if (urls && urls.length && urls[0] != "") {
       let hydrated: string[] = []
       urls.forEach((url) => {
-        try {
-          hydrated.push(this.hydrateUrlString(url))
-        } catch (err) {
-          hydrated.push(url)
-        }
+        hydrated.push(this.hydrateUrlString(url))
       })
       return hydrated
     } else { return [] }
