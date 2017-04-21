@@ -100,7 +100,7 @@ input[type=number] {
 }
 
 .container.in-front {
-    z-index: 9000;
+    z-index: 6000;
     position: relative;
     min-width: 100%;
     background: #fff;
@@ -115,7 +115,7 @@ input[type=number] {
     left: 0;
     right: 0;
     bottom: 0;
-    z-index: 8000;
+    z-index: 5500;
     background: rgba(0,0,0,0.05);
     pointer-events: none;
 

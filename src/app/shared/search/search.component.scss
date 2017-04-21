@@ -1,3 +1,5 @@
+@import '../../../sass/core/variables';
+
 .open-modal {
   display: none;
   @media (min-width: 768px) {
@@ -16,7 +18,7 @@
     z-index: 2000;
     width: calc(100% - 145px);
 
-    @media (min-width: 768px) {
+    @media (min-width: $phone) {
         position: static;
         width: 100%;
     }
