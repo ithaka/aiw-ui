@@ -47,6 +47,10 @@ $navBarPad: 0.5rem;
     & li.dropdown {
         line-height: 20px;
     }
+
+    .navbar-nav{
+        flex-direction: row;
+    }
 }
 
 .nav-container {
