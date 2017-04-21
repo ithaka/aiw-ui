@@ -78,15 +78,11 @@ export class LegacyRouteResolver implements Resolve<boolean> {
       endDate?: string
     } = {}
 
-    // thought about wrapping all of these sections into a single generic function, but thought it would be less readable
-    // so the pattern is pretty much the same between all of these different regex matching sections, except some end with arrays
-    //  and some end with a regular string. Any way about it, the function returns an object full of strings to use in a url
-
     // handle the keyword(s) & conditions
     let kwRe = /kw3D(.*?(?=26))/
     let kwMatch = kwRe.exec(params)
     if (kwMatch && kwMatch[1]) {
-      let keywords: string = this.parseKeywords(kwMatch[1])
+      let keywords: string = this.hydrateKeywords(kwMatch[1])
       console.log(keywords)
     }
 
@@ -192,8 +188,13 @@ export class LegacyRouteResolver implements Resolve<boolean> {
     } else { return [] }
   }
 
-  private parseKeywords(keywordStr: string) {
-    console.log(keywordStr)
-    return keywordStr
+  private hydrateKeywords(keywordStr: string) {
+    // just make a bunch of specific replacements for badly urlencoded characters
+    // then decode that sucker
+    return decodeURIComponent(
+      keywordStr.replace("7C", "%7C")
+        .replace("23", "%23")
+        .replace("2C", "%2C")
+    )
   }
 }
