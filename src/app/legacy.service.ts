@@ -90,64 +90,24 @@ export class LegacyRouteResolver implements Resolve<boolean> {
       console.log(keywords)
     }
 
-    // // for handling geography ids
-    // let geoRe = /geoIds3D(.*?(?=26))/
-    // let geoMatch = geoRe.exec(params)
-    // if (geoMatch && geoMatch[1]) {
-    //   let geoIds: string[] = this.hydrateUrlArr(geoMatch[1].split("2C"))
-    //   if (geoIds && geoIds.length > 0) { searchParams.geography = geoIds.join(",") }
-    //   // console.log("Geo", geoIds)
-    // }
-
+    // geography handler
     let geo = this.execRegExp(/geoIds3D(.*?(?=26))/, params)
     if (geo) { searchParams.geography = geo.join(",") }
-    
-    // // for handling classifications
-    // let clsRe = /clsIds3D(.*?(?=26))/
-    // let clsMatch = clsRe.exec(params)
-    // if (clsMatch && clsMatch[1]) {
-    //   let clsIds: string[] = this.hydrateUrlArr(clsMatch[1].split("2C"))
-    //   if (clsIds && clsIds.length > 0) { searchParams.classification = clsIds.join(",") }
-    //   // console.log("Class", clsIds)
-    // }
 
+    // classification handler
     let cls = this.execRegExp(/clsIds3D(.*?(?=26))/, params)
     if (cls) { searchParams.classification = cls.join(",") }
 
-    // // for handling collection ids
-    // let colRe = /id3D(.*?(?=26))/
-    // let colMatch = colRe.exec(params)
-    // if (colMatch && colMatch[1]) {
-    //   let colIds: string[] = this.hydrateUrlArr(colMatch[1].split("2C"))
-    //   if (colIds && colIds.length > 0) { searchParams.coll = colIds.join(",") }
-    //   // console.log("Collection", colIds)
-    // }
-
+    // collection handler
     let col = this.execRegExp(/id3D(.*?(?=26))/, params)
     if (col) { searchParams.coll = cls.join(",") }
 
-    // // handles beginning date
-    // let bDateRe = /bDate3D(.*?(?=26))/
-    // let bDateMatch = bDateRe.exec(params)
-    // if (bDateMatch && bDateMatch[1]) {
-    //   let bDate: string = this.hydrateUrlString(bDateMatch[1])
-    //   if (bDate && bDate.length > 0) { searchParams.startDate = bDate }
-    //   // console.log("bDate", bDate)
-    // }
-
+    // beginning date handler
     // bDate isn't ever a list, so we need to make sure it's a single parameter that comes back
     let bDate = this.execRegExp(/bDate3D(.*?(?=26))/, params)
     if (bDate && bDate.length == 1) { searchParams.startDate = bDate.join("") }
 
-    // // handles end date
-    // let eDateRe = /eDate3D(.*?(?=26))/
-    // let eDateMatch = eDateRe.exec(params)
-    // if (eDateMatch && eDateMatch[1]) {
-    //   let eDate: string = this.hydrateUrlString(eDateMatch[1])
-    //   if (eDate && eDate.length) { searchParams.endDate = eDate }
-    //   // console.log("eDate", eDate)
-    // }
-
+    // end date handler
     // eDate, like bDate, should never be an array with length more than one
     let eDate = this.execRegExp(/eDate3D(.*?(?=26))/, params)
     if (eDate && eDate.length == 1) { searchParams.endDate = eDate.join("") }
@@ -156,6 +116,25 @@ export class LegacyRouteResolver implements Resolve<boolean> {
 
   }
 
+  /**
+   * There used to be a regex handler like this for every parameter type
+   * I took them out to make more robust code, but wanted to leave this here for readability and reference
+   */
+  // // for handling geography ids
+  // let geoRe = /geoIds3D(.*?(?=26))/
+  // let geoMatch = geoRe.exec(params)
+  // if (geoMatch && geoMatch[1]) {
+  //   let geoIds: string[] = this.hydrateUrlArr(geoMatch[1].split("2C"))
+  //   if (geoIds && geoIds.length > 0) { searchParams.geography = geoIds.join(",") }
+  //   // console.log("Geo", geoIds)
+  // }
+
+  /**
+   * Check out the comment above. This function basically accomplishes that in a more robust way, 
+   * since everything is run through the same place
+   * @param re A regular expression which should return the dehydrated string match in position 1 of the array
+   * @param target The string of parameters from the old search
+   */
   private execRegExp(re: RegExp, target: string): string[] {
     let match = re.exec(target)
     if (match && match[1]) {
