@@ -62,28 +62,17 @@ export class LegacyRouteResolver implements Resolve<boolean> {
     return true
   }
 
-  private splitParams(params: string): {
-    geography?: string,
-    classification?: string,
-    coll?: string,
-    startDate?: string,
-    endDate?: string
-  } {
+  private splitParams(params: string): SearchParams {
 
-    let searchParams: {
-      geography?: string,
-      classification?: string,
-      coll?: string,
-      startDate?: string,
-      endDate?: string
-    } = {}
+    // we init search with a term of * and only replace it if the query has a search term
+    let searchParams: SearchParams = { term: "*" }
 
     // handle the keyword(s) & conditions
+    // this is the only parameter that's not handled with the execRegExp
     let kwRe = /kw3D(.*?(?=26))/
     let kwMatch = kwRe.exec(params)
     if (kwMatch && kwMatch[1]) {
-      let keywords: string = this.hydrateKeywords(kwMatch[1])
-      console.log(keywords)
+      searchParams.term = this.hydrateKeywordExpression(kwMatch[1])
     }
 
     // geography handler
@@ -188,7 +177,7 @@ export class LegacyRouteResolver implements Resolve<boolean> {
     } else { return [] }
   }
 
-  private hydrateKeywords(keywordStr: string) {
+  private hydrateKeywordExpression(keywordStr: string) {
     // just make a bunch of specific replacements for badly urlencoded characters
     // then decode that sucker
     return decodeURIComponent(
@@ -197,4 +186,13 @@ export class LegacyRouteResolver implements Resolve<boolean> {
         .replace("2C", "%2C")
     )
   }
+}
+
+interface SearchParams {
+  term: string,
+  geography?: string,
+  classification?: string,
+  coll?: string,
+  startDate?: string,
+  endDate?: string
 }
