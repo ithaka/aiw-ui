@@ -5,6 +5,10 @@ import { Router, Resolve, RouterStateSnapshot, ActivatedRouteSnapshot } from '@a
 export class LegacyRouteResolver implements Resolve<boolean> {
   constructor( private _router: Router ) { }
 
+  /** 
+   * By implimenting Resolve, we have to have this function. The router is responsible for calling it on specified routes.
+   * This is the top-level function for parsing out legacy urls (a router of sorts)
+   */
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
     console.log(route, state)
     let urlArr = state.url.split("/")
@@ -46,7 +50,12 @@ export class LegacyRouteResolver implements Resolve<boolean> {
               case "search":
                 console.log("searching...")
                 // console.log(pipeArr)
-                console.log(this.splitParams(pipeArr[7]))
+                let params = this.splitParams(pipeArr[7])
+                // break out the term separately, just to clean up the url a little
+                let term = params.term
+                delete params.term
+                console.log(params)
+                this._router.navigate(["/search", term, params])
                 break
               default:
                 console.log("got the default case")
@@ -62,7 +71,30 @@ export class LegacyRouteResolver implements Resolve<boolean> {
     return true
   }
 
+  /**
+   * Takes the unmodified, "unhydrated" string of search params from the legacy search url and transforms it into an object that is
+   *  useful to our router for navigation
+   * @param params The params section of the legacy search url. Can come from different parts of the url for different search conditions
+   * @returns SearchParams object which can be fed directly to the router for navigation
+   */
   private splitParams(params: string): SearchParams {
+
+    // If you're looking at old search urls, then you'll soon find out that they often urlencoded things
+    //  that they didn't have to. Then, for some reason, they cut out all of the "%" symbols to make a dilapidated sort
+    //  of url encoding. I call it "unhydrated" url encoding, and have a few functions in here that deal with the
+    //  "rehydration" of said urls. You might find the following list handy, if you ever have to deal with this. It is a
+    //  list of common url encodings that they have dehydrated.
+
+    // Handy chart of url encodings		
+    // Character	Hydrated	Dehydrated
+    // [space]	  %20	      20
+    // =	        %3D	      3D
+    // ,	        %2C	      2C
+    // &	        %26	      26
+    // :	        %3A	      3A
+    // -	        %2D	      2D
+    // 1 digit #  %3#       3#
+  
 
     // we init search with a term of * and only replace it if the query has a search term
     let searchParams: SearchParams = { term: "*" }
@@ -119,6 +151,7 @@ export class LegacyRouteResolver implements Resolve<boolean> {
    * since everything is run through the same place
    * @param re A regular expression which should return the dehydrated string match in position 1 of the array
    * @param target The string of parameters from the old search
+   * @returns Array of rehydrated strings, each of which were separated by "2C", or what should be "%2C", a urlencoded comma
    */
   private execRegExp(re: RegExp, target: string): string[] {
     let match = re.exec(target)
@@ -177,6 +210,11 @@ export class LegacyRouteResolver implements Resolve<boolean> {
     } else { return [] }
   }
 
+  /**
+   * Makes all the necessary replacements in the Keyword in order to url decode it, and returns the string as
+   *  it should appear in the url for our search url schema
+   * @param keywordStr This is the keyword string taken out of the legacy search params by regex
+   */
   private hydrateKeywordExpression(keywordStr: string) {
     // just make a bunch of specific replacements for badly urlencoded characters
     // then decode that sucker
@@ -188,6 +226,10 @@ export class LegacyRouteResolver implements Resolve<boolean> {
   }
 }
 
+/**
+ * The properties SearchParams correspond directly to properties in our URL schema for search, that way we can pass it
+ *  straight to the router as route params
+ */
 interface SearchParams {
   term: string,
   geography?: string,
