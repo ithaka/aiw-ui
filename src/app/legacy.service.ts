@@ -46,7 +46,7 @@ export class LegacyRouteResolver implements Resolve<boolean> {
               case "search":
                 console.log("searching...")
                 // console.log(pipeArr)
-                this.splitParams(pipeArr[7])
+                console.log(this.splitParams(pipeArr[7]))
                 break
               default:
                 console.log("got the default case")
@@ -62,33 +62,53 @@ export class LegacyRouteResolver implements Resolve<boolean> {
     return true
   }
 
-  private splitParams(params: string) {
+  private splitParams(params: string): {
+    geography?: string,
+    classification?: string,
+    coll?: string,
+    startDate?: string,
+    endDate?: string
+  } {
+
+    let searchParams: {
+      geography?: string,
+      classification?: string,
+      coll?: string,
+      startDate?: string,
+      endDate?: string
+    } = {}
 
     // for handling geography ids
     let geoRe = /geoIds3D(.*?(?=26))/
-    let geoIds = this.hydrateUrlArr(geoRe.exec(params)[1].split("2C"))
+    let geoIds: string[] = this.hydrateUrlArr(geoRe.exec(params)[1].split("2C"))
+    if (geoIds && geoIds.length > 0) { searchParams.geography = geoIds.join(",") }
     console.log("Geo", geoIds)
 
     // for handling classifications
     let clsRe = /clsIds3D(.*?(?=26))/
-    console.log(clsRe.exec(params))
-    let clsIds = this.hydrateUrlArr(clsRe.exec(params)[1].split("2C"))
+    let clsIds: string[] = this.hydrateUrlArr(clsRe.exec(params)[1].split("2C"))
+    if (clsIds && clsIds.length > 0) { searchParams.classification = clsIds.join(",") }
     console.log("Class", clsIds)
 
     // for handling collection ids
     let colRe = /id3D(.*?(?=26))/
-    console.log(colRe.exec(params)[1].split("2C"))
+    let colIds: string[] = this.hydrateUrlArr(colRe.exec(params)[1].split("2C"))
+    if (colIds && colIds.length > 0) { searchParams.coll = colIds.join(",") }
     console.log("Collection", this.hydrateUrlArr(colRe.exec(params)[1].split("2C")))
 
     // handles beginning date
     let bDateRe = /bDate3D(.*?(?=26))/
-    let bDate = this.hydrateUrlString(bDateRe.exec(params)[1])
+    let bDate: string = this.hydrateUrlString(bDateRe.exec(params)[1])
+    if (bDate && bDate.length > 0) { searchParams.startDate = bDate }
     console.log("bDate", bDate)
 
     // handles end date
     let eDateRe = /eDate3D(.*?(?=26))/
-    let eDate = this.hydrateUrlString(eDateRe.exec(params)[1])
+    let eDate: string = this.hydrateUrlString(eDateRe.exec(params)[1])
+    if (eDate && eDate.length) { searchParams.endDate = eDate }
     console.log("eDate", eDate)
+
+    return searchParams
 
   }
 
