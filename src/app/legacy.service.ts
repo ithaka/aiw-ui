@@ -95,12 +95,16 @@ export class LegacyRouteResolver implements Resolve<boolean> {
   /**
    * This function should be given a url encoded string with the % signs removed. It will put them back in and decode the string
    * @param url The dehydrated url you wish to be turned into a real string
+   * @returns String that has been url decoded
    */
   private hydrateUrlString(url: string): string {
+    // make sure the string really exists and is not empty
     if (url && url.length && url[0] != "") {
+      // split string into array
       let strArray: string[] = url.split("")
+      // cycle backward through the array
       for(let i = strArray.length - 1; i >= 0; i--) {
-        // if there should be a percent sign there, put one there
+        // if there should be a percent sign there, put one there (that should be every 3rd character)
         if (i % 2 == 0) {
           strArray.splice(i, 0, "%")
         }
@@ -110,6 +114,7 @@ export class LegacyRouteResolver implements Resolve<boolean> {
         return decodeURIComponent(strArray.join(""))
       } catch (err) {
         // we know we'll get some error here about decodeURIComponent not working - we'll go ahead and ignore that
+        // this happens when non-urlencoded info comes through, "allArt" for example
         return url
       }
 
@@ -119,10 +124,14 @@ export class LegacyRouteResolver implements Resolve<boolean> {
   /**
    * Give this function an array of strings to run hydrateUrlString on. Returns empty array if passed an empty string
    * @param urls Array of dehydrated strings
+   * @returns Array of strings that have been urldecoded
    */
   private hydrateUrlArr(urls: string[]): string[] {
+    // make sure the first item in the array is a non-empty string
     if (urls && urls.length && urls[0] != "") {
+      // the array we'll return
       let hydrated: string[] = []
+      // cycle through urls and use hydrateUrlString to convert the string individually
       urls.forEach((url) => {
         hydrated.push(this.hydrateUrlString(url))
       })
