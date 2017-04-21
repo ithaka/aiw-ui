@@ -46,13 +46,7 @@ export class LegacyRouteResolver implements Resolve<boolean> {
               case "search":
                 console.log("searching...")
                 // console.log(pipeArr)
-                if (pipeArr[2] == "1") { // it's a simple keyword search
-                  console.log("term", pipeArr[3])
-                  this._router.navigate(["/search", "samurai"])
-                } else {
-                  console.log(this.splitParams(pipeArr[7]))
-                }
-                
+                console.log(this.splitParams(pipeArr[7]))
                 break
               default:
                 console.log("got the default case")
@@ -169,10 +163,4 @@ export class LegacyRouteResolver implements Resolve<boolean> {
       return hydrated
     } else { return [] }
   }
-
-  // private parseKeywords(keywords: string[]): string[] {
-  //   keywords.forEach((keyword) => {
-  //     keyword.split("")
-  //   })
-  // }
 }
