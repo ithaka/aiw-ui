@@ -102,41 +102,55 @@ export class LegacyRouteResolver implements Resolve<boolean> {
     let geo = this.execRegExp(/geoIds3D(.*?(?=26))/, params)
     if (geo) { searchParams.geography = geo.join(",") }
     
-    // for handling classifications
-    let clsRe = /clsIds3D(.*?(?=26))/
-    let clsMatch = clsRe.exec(params)
-    if (clsMatch && clsMatch[1]) {
-      let clsIds: string[] = this.hydrateUrlArr(clsMatch[1].split("2C"))
-      if (clsIds && clsIds.length > 0) { searchParams.classification = clsIds.join(",") }
-      // console.log("Class", clsIds)
-    }
+    // // for handling classifications
+    // let clsRe = /clsIds3D(.*?(?=26))/
+    // let clsMatch = clsRe.exec(params)
+    // if (clsMatch && clsMatch[1]) {
+    //   let clsIds: string[] = this.hydrateUrlArr(clsMatch[1].split("2C"))
+    //   if (clsIds && clsIds.length > 0) { searchParams.classification = clsIds.join(",") }
+    //   // console.log("Class", clsIds)
+    // }
 
-    // for handling collection ids
-    let colRe = /id3D(.*?(?=26))/
-    let colMatch = colRe.exec(params)
-    if (colMatch && colMatch[1]) {
-      let colIds: string[] = this.hydrateUrlArr(colMatch[1].split("2C"))
-      if (colIds && colIds.length > 0) { searchParams.coll = colIds.join(",") }
-      // console.log("Collection", colIds)
-    }
+    let cls = this.execRegExp(/clsIds3D(.*?(?=26))/, params)
+    if (cls) { searchParams.classification = cls.join(",") }
 
-    // handles beginning date
-    let bDateRe = /bDate3D(.*?(?=26))/
-    let bDateMatch = bDateRe.exec(params)
-    if (bDateMatch && bDateMatch[1]) {
-      let bDate: string = this.hydrateUrlString(bDateMatch[1])
-      if (bDate && bDate.length > 0) { searchParams.startDate = bDate }
-      // console.log("bDate", bDate)
-    }
+    // // for handling collection ids
+    // let colRe = /id3D(.*?(?=26))/
+    // let colMatch = colRe.exec(params)
+    // if (colMatch && colMatch[1]) {
+    //   let colIds: string[] = this.hydrateUrlArr(colMatch[1].split("2C"))
+    //   if (colIds && colIds.length > 0) { searchParams.coll = colIds.join(",") }
+    //   // console.log("Collection", colIds)
+    // }
 
-    // handles end date
-    let eDateRe = /eDate3D(.*?(?=26))/
-    let eDateMatch = eDateRe.exec(params)
-    if (eDateMatch && eDateMatch[1]) {
-      let eDate: string = this.hydrateUrlString(eDateMatch[1])
-      if (eDate && eDate.length) { searchParams.endDate = eDate }
-      // console.log("eDate", eDate)
-    }
+    let col = this.execRegExp(/id3D(.*?(?=26))/, params)
+    if (col) { searchParams.coll = cls.join(",") }
+
+    // // handles beginning date
+    // let bDateRe = /bDate3D(.*?(?=26))/
+    // let bDateMatch = bDateRe.exec(params)
+    // if (bDateMatch && bDateMatch[1]) {
+    //   let bDate: string = this.hydrateUrlString(bDateMatch[1])
+    //   if (bDate && bDate.length > 0) { searchParams.startDate = bDate }
+    //   // console.log("bDate", bDate)
+    // }
+
+    // bDate isn't ever a list, so we need to make sure it's a single parameter that comes back
+    let bDate = this.execRegExp(/bDate3D(.*?(?=26))/, params)
+    if (bDate && bDate.length == 1) { searchParams.startDate = bDate.join("") }
+
+    // // handles end date
+    // let eDateRe = /eDate3D(.*?(?=26))/
+    // let eDateMatch = eDateRe.exec(params)
+    // if (eDateMatch && eDateMatch[1]) {
+    //   let eDate: string = this.hydrateUrlString(eDateMatch[1])
+    //   if (eDate && eDate.length) { searchParams.endDate = eDate }
+    //   // console.log("eDate", eDate)
+    // }
+
+    // eDate, like bDate, should never be an array with length more than one
+    let eDate = this.execRegExp(/eDate3D(.*?(?=26))/, params)
+    if (eDate && eDate.length == 1) { searchParams.endDate = eDate.join("") }
 
     return searchParams
 
