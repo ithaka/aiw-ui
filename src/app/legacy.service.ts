@@ -78,40 +78,62 @@ export class LegacyRouteResolver implements Resolve<boolean> {
       endDate?: string
     } = {}
 
+    // thought about wrapping all of these sections into a single generic function, but thought it would be less readable
+    // so the pattern is pretty much the same between all of these different regex matching sections, except some end with arrays
+    //  and some end with a regular string. Any way about it, the function returns an object full of strings to use in a url
+
     // handle the keyword(s) & conditions
     let kwRe = /kw3D(.*?(?=26))/
-    let keywords: string[] = this.hydrateUrlArr(kwRe.exec(params)[1].split("2C"))
-    console.log(keywords)
+    let kwMatch = kwRe.exec(params)
+    if (kwMatch && kwMatch[1]) {
+      let keywords: string = this.parseKeywords(kwMatch[1])
+      console.log(keywords)
+    }
 
     // for handling geography ids
     let geoRe = /geoIds3D(.*?(?=26))/
-    let geoIds: string[] = this.hydrateUrlArr(geoRe.exec(params)[1].split("2C"))
-    if (geoIds && geoIds.length > 0) { searchParams.geography = geoIds.join(",") }
-    // console.log("Geo", geoIds)
-
+    let geoMatch = geoRe.exec(params)
+    if (geoMatch && geoMatch[1]) {
+      let geoIds: string[] = this.hydrateUrlArr(geoMatch[1].split("2C"))
+      if (geoIds && geoIds.length > 0) { searchParams.geography = geoIds.join(",") }
+      // console.log("Geo", geoIds)
+    }
+    
     // for handling classifications
     let clsRe = /clsIds3D(.*?(?=26))/
-    let clsIds: string[] = this.hydrateUrlArr(clsRe.exec(params)[1].split("2C"))
-    if (clsIds && clsIds.length > 0) { searchParams.classification = clsIds.join(",") }
-    // console.log("Class", clsIds)
+    let clsMatch = clsRe.exec(params)
+    if (clsMatch && clsMatch[1]) {
+      let clsIds: string[] = this.hydrateUrlArr(clsMatch[1].split("2C"))
+      if (clsIds && clsIds.length > 0) { searchParams.classification = clsIds.join(",") }
+      // console.log("Class", clsIds)
+    }
 
     // for handling collection ids
     let colRe = /id3D(.*?(?=26))/
-    let colIds: string[] = this.hydrateUrlArr(colRe.exec(params)[1].split("2C"))
-    if (colIds && colIds.length > 0) { searchParams.coll = colIds.join(",") }
-    // console.log("Collection", colIds)
+    let colMatch = colRe.exec(params)
+    if (colMatch && colMatch[1]) {
+      let colIds: string[] = this.hydrateUrlArr(colMatch[1].split("2C"))
+      if (colIds && colIds.length > 0) { searchParams.coll = colIds.join(",") }
+      // console.log("Collection", colIds)
+    }
 
     // handles beginning date
     let bDateRe = /bDate3D(.*?(?=26))/
-    let bDate: string = this.hydrateUrlString(bDateRe.exec(params)[1])
-    if (bDate && bDate.length > 0) { searchParams.startDate = bDate }
-    // console.log("bDate", bDate)
+    let bDateMatch = bDateRe.exec(params)
+    if (bDateMatch && bDateMatch[1]) {
+      let bDate: string = this.hydrateUrlString(bDateMatch[1])
+      if (bDate && bDate.length > 0) { searchParams.startDate = bDate }
+      // console.log("bDate", bDate)
+    }
 
     // handles end date
     let eDateRe = /eDate3D(.*?(?=26))/
-    let eDate: string = this.hydrateUrlString(eDateRe.exec(params)[1])
-    if (eDate && eDate.length) { searchParams.endDate = eDate }
-    // console.log("eDate", eDate)
+    let eDateMatch = eDateRe.exec(params)
+    if (eDateMatch && eDateMatch[1]) {
+      let eDate: string = this.hydrateUrlString(eDateMatch[1])
+      if (eDate && eDate.length) { searchParams.endDate = eDate }
+      // console.log("eDate", eDate)
+    }
 
     return searchParams
 
@@ -162,5 +184,10 @@ export class LegacyRouteResolver implements Resolve<boolean> {
       })
       return hydrated
     } else { return [] }
+  }
+
+  private parseKeywords(keywordStr: string) {
+    console.log(keywordStr)
+    return keywordStr
   }
 }
