@@ -78,35 +78,40 @@ export class LegacyRouteResolver implements Resolve<boolean> {
       endDate?: string
     } = {}
 
+    // handle the keyword(s) & conditions
+    let kwRe = /kw3D(.*?(?=26))/
+    let keywords: string[] = this.hydrateUrlArr(kwRe.exec(params)[1].split("2C"))
+    console.log(keywords)
+
     // for handling geography ids
     let geoRe = /geoIds3D(.*?(?=26))/
     let geoIds: string[] = this.hydrateUrlArr(geoRe.exec(params)[1].split("2C"))
     if (geoIds && geoIds.length > 0) { searchParams.geography = geoIds.join(",") }
-    console.log("Geo", geoIds)
+    // console.log("Geo", geoIds)
 
     // for handling classifications
     let clsRe = /clsIds3D(.*?(?=26))/
     let clsIds: string[] = this.hydrateUrlArr(clsRe.exec(params)[1].split("2C"))
     if (clsIds && clsIds.length > 0) { searchParams.classification = clsIds.join(",") }
-    console.log("Class", clsIds)
+    // console.log("Class", clsIds)
 
     // for handling collection ids
     let colRe = /id3D(.*?(?=26))/
     let colIds: string[] = this.hydrateUrlArr(colRe.exec(params)[1].split("2C"))
     if (colIds && colIds.length > 0) { searchParams.coll = colIds.join(",") }
-    console.log("Collection", this.hydrateUrlArr(colRe.exec(params)[1].split("2C")))
+    // console.log("Collection", colIds)
 
     // handles beginning date
     let bDateRe = /bDate3D(.*?(?=26))/
     let bDate: string = this.hydrateUrlString(bDateRe.exec(params)[1])
     if (bDate && bDate.length > 0) { searchParams.startDate = bDate }
-    console.log("bDate", bDate)
+    // console.log("bDate", bDate)
 
     // handles end date
     let eDateRe = /eDate3D(.*?(?=26))/
     let eDate: string = this.hydrateUrlString(eDateRe.exec(params)[1])
     if (eDate && eDate.length) { searchParams.endDate = eDate }
-    console.log("eDate", eDate)
+    // console.log("eDate", eDate)
 
     return searchParams
 
