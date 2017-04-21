@@ -1,4 +1,4 @@
-
+@import '../../../sass/core/variables';
 // $navBg: rgb(225,232,225);
 $navBarHeight: 80px;
 $mobileNavHeight: 60px;
@@ -24,7 +24,7 @@ $loginPanelBg: #f9f9f9; //#f5f9f5; //#d4cd98
     z-index: 9000;
     height: 32px;
 
-    @media (min-width: 768px) {
+    @media (min-width: $phone) {
         display: none;
     }
 }

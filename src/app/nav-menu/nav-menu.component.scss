@@ -96,8 +96,14 @@ $navBarPad: 0.5rem;
     }
 
     @media (min-width: $phone) {
-        margin-top: 0;
+        margin-top: 6px;
         transform:translate3d(0, 0, 0);
+    }
+}
+
+.navbar-toggler {
+    @media (min-width: $phone) {
+        display: none;
     }
 }
 
@@ -159,5 +165,13 @@ $navBarPad: 0.5rem;
         background-color: rgba(114, 114, 114, 0.5);
         opacity: 1;
         pointer-events: all;
+    }
+}
+
+
+.navbar-toggleable-sm .navbar-nav .dropdown-menu {
+    @media (max-width: 767px) {
+        position: absolute;
+        float: none;
     }
 }
