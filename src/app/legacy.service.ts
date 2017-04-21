@@ -48,7 +48,7 @@ export class LegacyRouteResolver implements Resolve<boolean> {
                 // console.log(pipeArr)
                 if (pipeArr[2] == "1") { // it's a simple keyword search
                   console.log("term", pipeArr[3])
-                  this._router.navigate(["/search", "samurai"])
+                  this._router.navigate(["/search", pipeArr[3]])
                 } else {
                   console.log(this.splitParams(pipeArr[7]))
                 }
