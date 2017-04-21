@@ -90,14 +90,17 @@ export class LegacyRouteResolver implements Resolve<boolean> {
       console.log(keywords)
     }
 
-    // for handling geography ids
-    let geoRe = /geoIds3D(.*?(?=26))/
-    let geoMatch = geoRe.exec(params)
-    if (geoMatch && geoMatch[1]) {
-      let geoIds: string[] = this.hydrateUrlArr(geoMatch[1].split("2C"))
-      if (geoIds && geoIds.length > 0) { searchParams.geography = geoIds.join(",") }
-      // console.log("Geo", geoIds)
-    }
+    // // for handling geography ids
+    // let geoRe = /geoIds3D(.*?(?=26))/
+    // let geoMatch = geoRe.exec(params)
+    // if (geoMatch && geoMatch[1]) {
+    //   let geoIds: string[] = this.hydrateUrlArr(geoMatch[1].split("2C"))
+    //   if (geoIds && geoIds.length > 0) { searchParams.geography = geoIds.join(",") }
+    //   // console.log("Geo", geoIds)
+    // }
+
+    let geo = this.execRegExp(/geoIds3D(.*?(?=26))/, params)
+    if (geo) { searchParams.geography = geo.join(",") }
     
     // for handling classifications
     let clsRe = /clsIds3D(.*?(?=26))/
@@ -137,6 +140,16 @@ export class LegacyRouteResolver implements Resolve<boolean> {
 
     return searchParams
 
+  }
+
+  private execRegExp(re: RegExp, target: string): string[] {
+    let match = re.exec(target)
+    if (match && match[1]) {
+      let res: string[] = this.hydrateUrlArr(match[1].split("2C"))
+      if (res && res.length > 0) {
+        return res
+      } else { return }
+    }
   }
 
   /**
