@@ -100,17 +100,6 @@ export class AssetGrid implements OnInit, OnDestroy {
   } 
 
   ngOnInit() {
-    this._router.events.subscribe(event => {
-      console.log(event)
-      if(event instanceof NavigationStart) {
-        console.log('Oh!')
-        console.log(event);
-      }
-      // NavigationEnd
-      // NavigationCancel
-      // NavigationError
-      // RoutesRecognized
-    });
     // Subscribe to asset search params
     this.subscriptions.push(
       this.route.params
@@ -164,7 +153,6 @@ export class AssetGrid implements OnInit, OnDestroy {
     this.subscriptions.push(
       this._assets.allResults.subscribe(
         (allResults: any) => {
-          console.log("RESULTS CHANGE")
           // Update results array
           this.results = allResults.thumbnails;
           if ('items' in allResults) {
@@ -187,7 +175,7 @@ export class AssetGrid implements OnInit, OnDestroy {
           }
         },
         (error) => {
-          console.log(error);
+          console.error(error);
           this.isLoading = false;
           this.searchError = "There was a server error loading your search. Please try again later.";
         }
@@ -210,7 +198,7 @@ export class AssetGrid implements OnInit, OnDestroy {
           }
         },
         error => {
-          console.log(error);
+          console.error(error);
         }
       )
     );
@@ -376,10 +364,9 @@ export class AssetGrid implements OnInit, OnDestroy {
       .take(1)
       .subscribe( 
         data => {
-          console.log(data);
           this.cancelReorder();
         }, error => {
-          console.log(error);
+          console.error(error);
           this.cancelReorder();
         });
   }
