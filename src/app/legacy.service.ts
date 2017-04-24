@@ -10,7 +10,6 @@ export class LegacyRouteResolver implements Resolve<boolean> {
    * This is the top-level function for parsing out legacy urls (a router of sorts)
    */
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
-    console.log(route, state)
     let urlArr = state.url.split("/")
     urlArr.splice(0,2)
 
@@ -23,48 +22,39 @@ export class LegacyRouteResolver implements Resolve<boolean> {
         urlArr[index] = decodeURIComponent(value)
       })
 
-      console.log(urlArr)
-
       let pipeArr = urlArr[0].split("|")
-      console.log(pipeArr)
 
       switch (routeNum) {
         case "#2": // handles all of the #2 routes
-          console.log("i got #2")
           this._router.navigate(["/browse", "library", { viewId: pipeArr[1] }])
           break
         case "#3": // handles all of the #3 routes
-          console.log("i got #3")
           // #3 routes are usually an array split by the pipe symbol, and the key is the second value in that array (index 1)
 
           if (pipeArr && pipeArr.length > 0) {
             switch (pipeArr[1]) {
               case "collections":
-                console.log("routing to collections")
                 this._router.navigate(["/collection", pipeArr[2]]) // the 3rd item in the array is the collection id
                 break
               case "imagegroup":
-                console.log("routing to image group")
                 this._router.navigate(["group", pipeArr[2]])
                 break
               case "search":
-                console.log("searching...")
-                // console.log(pipeArr)
                 let params = this.splitParams(pipeArr[7])
                 // break out the term separately, just to clean up the url a little
                 let term = params.term
                 delete params.term
-                console.log(params)
                 this._router.navigate(["/search", term, params])
                 break
               default:
-                console.log("got the default case")
+                // we might want to provide some feedback to the user here
+                console.error("we didn't find a match!")
             }
           }
 
           break
         default:
-          console.log(urlArr[0].substr(0, 2))
+          console.error("we didn't find a match!")
       }
     }
 
@@ -135,7 +125,7 @@ export class LegacyRouteResolver implements Resolve<boolean> {
 
   /**
    * There used to be a regex handler like this for every parameter type
-   * I took them out to make more robust code, but wanted to leave this here for readability and reference
+   * I abstracted them to execRegExp to make more robust code, but wanted to leave this here for readability and reference
    */
   // // for handling geography ids
   // let geoRe = /geoIds3D(.*?(?=26))/
@@ -143,7 +133,6 @@ export class LegacyRouteResolver implements Resolve<boolean> {
   // if (geoMatch && geoMatch[1]) {
   //   let geoIds: string[] = this.hydrateUrlArr(geoMatch[1].split("2C"))
   //   if (geoIds && geoIds.length > 0) { searchParams.geography = geoIds.join(",") }
-  //   // console.log("Geo", geoIds)
   // }
 
   /**
