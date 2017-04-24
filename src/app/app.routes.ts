@@ -1,24 +1,25 @@
-import { Routes, RouterModule } from '@angular/router';
+import { Routes, RouterModule } from '@angular/router'
 
 // Project Dependencies
-import { Home } from './home';
-import { SearchPage } from './search-page';
-import { CollectionPage } from './collection-page';
-import { CategoryPage } from './category-page';
-import { ImageGroupPPPage } from './image-group-pp-page';
-import { ImageGroupPage } from './image-group-page';
-import { ClusterPage } from './cluster-page';
-import { BrowsePage } from './browse-page';
-import { AssociatedPage } from './associated-page';
-import { AssetPage } from './asset-page';
-import { Login } from './login';
-import { RegisterComponent } from './register/register.component';
-import { About } from './about';
-import { NoContent } from './no-content';
-import { AuthService } from './shared/auth.service';
-import { DataResolver } from './app.resolver';
-import { BrowseRoutes } from './browse-page/browse-page.routes';
-import { AccountPage } from './account-page/account-page.component';
+import { Home } from './home'
+import { SearchPage } from './search-page'
+import { CollectionPage } from './collection-page'
+import { CategoryPage } from './category-page'
+import { ImageGroupPPPage } from './image-group-pp-page'
+import { ImageGroupPage } from './image-group-page'
+import { ClusterPage } from './cluster-page'
+import { BrowsePage } from './browse-page'
+import { AssociatedPage } from './associated-page'
+import { AssetPage } from './asset-page'
+import { Login } from './login'
+import { RegisterComponent } from './register/register.component'
+import { About } from './about'
+import { NoContent } from './no-content'
+import { AuthService } from './shared/auth.service'
+import { DataResolver } from './app.resolver'
+import { BrowseRoutes } from './browse-page/browse-page.routes'
+import { AccountPage } from './account-page/account-page.component'
+import { LegacyRouteResolver } from './legacy.service'
 
 
 export const ROUTES: Routes = [
@@ -46,5 +47,8 @@ export const ROUTES: Routes = [
   { path: 'associated', component: AssociatedPage, canActivate:[AuthService] },
   { path: 'about', component: About },
   { path: 'register', component: RegisterComponent, canActivate: [AuthService] },
+  { path: 'library', children: [
+    { path: '**', component: NoContent, resolve: [LegacyRouteResolver] }
+  ] },
   { path: '**', component: NoContent }
-];
+]
