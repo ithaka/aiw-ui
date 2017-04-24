@@ -216,28 +216,24 @@ export class LegacyRouteResolver implements Resolve<boolean> {
    * @param keywordStr This is the keyword string taken out of the legacy search params by regex
    */
   private hydrateKeywordExpression(keywordStr: string) {
-    // just make a bunch of specific replacements for badly urlencoded characters
-    // then decode that sucker
-    console.log(keywordStr)
-    let keyRe = /7C([0-9]*)/g
-    // console.log(keyRe.exec(keywordStr))
+    // the "search within" fields are specified with dehydrated ids so we have to water them
+    let fieldRe = /7C([0-9]*)/g
 
+    // we'll cycle through all of the matches for ids and give them a drink
     let result
-    while ((result = keyRe.exec(keywordStr)) !== null) {
+    while ((result = fieldRe.exec(keywordStr)) !== null) {
       if (result[1] && result[1].length > 0) {
-        console.log(result)
-        console.log(keywordStr)
         keywordStr = keywordStr.replace(result[1], this.hydrateUrlString(result[1]))
-        console.log(keywordStr)
       }
     }
 
+    // just make a bunch of specific replacements for badly urlencoded characters
+    // then decode that sucker
     let decoded = decodeURIComponent(
       keywordStr.replace(/7C/g, "%7C")
         .replace(/23/g, "%23")
         .replace(/2C/g, "%2C")
     )
-    console.log(decoded)
 
     return decoded
   }
