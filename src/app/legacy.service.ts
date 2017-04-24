@@ -82,7 +82,7 @@ export class LegacyRouteResolver implements Resolve<boolean> {
     // If you're looking at old search urls, then you'll soon find out that they often urlencoded things
     //  that they didn't have to. Then, for some reason, they cut out all of the "%" symbols to make a dilapidated sort
     //  of url encoding. I call it "unhydrated" url encoding, and have a few functions in here that deal with the
-    //  "rehydration" of said urls. You might find the following list handy, if you ever have to deal with this. It is a
+    //  "rehydration" of said urls. You might find the following chart handy, if you ever have to deal with this. It is a
     //  list of common url encodings that they have dehydrated.
 
     // Handy chart of url encodings		
@@ -94,7 +94,7 @@ export class LegacyRouteResolver implements Resolve<boolean> {
     // :	        %3A	      3A
     // -	        %2D	      2D
     // 1 digit #  %3#       3#
-  
+
 
     // we init search with a term of * and only replace it if the query has a search term
     let searchParams: SearchParams = { term: "*" }
@@ -218,11 +218,28 @@ export class LegacyRouteResolver implements Resolve<boolean> {
   private hydrateKeywordExpression(keywordStr: string) {
     // just make a bunch of specific replacements for badly urlencoded characters
     // then decode that sucker
-    return decodeURIComponent(
-      keywordStr.replace("7C", "%7C")
-        .replace("23", "%23")
-        .replace("2C", "%2C")
+    console.log(keywordStr)
+    let keyRe = /7C([0-9]*)/g
+    // console.log(keyRe.exec(keywordStr))
+
+    let result
+    while ((result = keyRe.exec(keywordStr)) !== null) {
+      if (result[1] && result[1].length > 0) {
+        console.log(result)
+        console.log(keywordStr)
+        keywordStr = keywordStr.replace(result[1], this.hydrateUrlString(result[1]))
+        console.log(keywordStr)
+      }
+    }
+
+    let decoded = decodeURIComponent(
+      keywordStr.replace(/7C/g, "%7C")
+        .replace(/23/g, "%23")
+        .replace(/2C/g, "%2C")
     )
+    console.log(decoded)
+
+    return decoded
   }
 }
 
