@@ -794,7 +794,7 @@ export class AssetService {
         let keyword = encodeURIComponent(term);
         let options = new RequestOptions({ withCredentials: true });
         let startIndex = ((this.urlParams.currentPage - 1) * this.urlParams.pageSize) + 1;
-        let thumbSize = 0;
+        let thumbSize = 1;
         let type = 6;
         let colTypeIds = '';
         let collIds = encodeURIComponent(this.urlParams['coll']);
