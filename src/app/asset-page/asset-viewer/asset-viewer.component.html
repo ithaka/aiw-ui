@@ -1,4 +1,4 @@
-<div class="asset-viewer" [class.fullscreen]="isFullscreen">
+<div class="asset-viewer" [class.fullscreen]="isFullscreen" (contextmenu)="disableContextMenu($event)">
     <!-- IIIF Image Viewer -->
     <div [class.hidden]="!isOpenSeaDragonAsset || mediaLoadingFailed">
         <!-- *ngIf="openSeaDragonReady"-->
