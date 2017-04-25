@@ -12,6 +12,7 @@
           <div class="form-group" [class.has-success]="serviceResponse.success" [class.has-danger]="serviceResponse.failure">
             <label translate for="selectImageGroup">ADD_TO_GROUP_MODAL.SELECT_PROMPT</label>
             <select required [ngModel]="selectedIg" name="imageGroup" id="selectImageGroup" class="form-control custom-select" tabindex="0">
+              <option [ngValue]="null" [innerHtml]=""></option>
               <option *ngFor="let group of groups" [ngValue]="group" [innerHtml]="group.name"></option>
             </select>
             <div *ngIf="serviceResponse.success" translate class="form-control-feedback">ADD_TO_GROUP_MODAL.ADD_SUCCESS</div>
