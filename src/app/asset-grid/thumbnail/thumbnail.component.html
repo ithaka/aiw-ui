@@ -14,6 +14,6 @@
         <span *ngIf="thumbnail.thumbnail3" class="asset-date" title="{{ thumbnail.thumbnail3 }}" [innerHTML]="thumbnail.thumbnail3"></span>
         <span *ngIf="thumbnail.thumbnail4" title="{{ thumbnail.thumbnail4 }}" [innerHTML]="thumbnail.thumbnail4"></span>
         <!--Schema moving forward-->
-        <ng-container *ngFor="let data of thumbnail.tombstone"><span [innerHtml]="data"></span></ng-container>
+        <ng-container *ngFor="let data of thumbnail.tombstone"><span *ngIf="data" [innerHtml]="data"></span></ng-container>
     </div>
 </div>
