@@ -25,15 +25,11 @@ export class LoginService {
     logout() {
         let header = new Headers({ 'Content-Type': 'application/x-www-form-urlencoded' }); // ... Set content type to JSON
         let options = new RequestOptions({ headers: header, withCredentials: true });
-        // this.user = {};
+
         this._auth.clearStorage();
         return this.http
             .post(this._auth.getUrl() + '/logout', {}, options)
             .toPromise()
-            .then(() => {
-                // do nothing here
-                // this._router.navigate(['login']);
-            })
             .catch(function(err) {
                 // error handling
                 console.error(err)

@@ -94,10 +94,8 @@ export class Nav implements OnInit, OnDestroy {
   }
 
   logout(): void {
-    // console.log(this.location.path().indexOf("home"))
     this._login.logout()
       .then(() => {
-        // this._router.navigate(['/home'])
         if (this.location.path().indexOf("home") >= 0) {
           location.reload() // this will reload the app and give the user a feeling they actually logged out
         } else {
