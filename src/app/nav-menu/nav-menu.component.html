@@ -28,7 +28,7 @@
                             <div class="dropdown-divider"></div>-->
                             <!--Active on Image Group Page-->
                             <!--Future slide sorter function <button class="dropdown-item">!View All</button>-->
-                            <button (click)="selectAllInAssetGrid()" class="dropdown-item">Select All</button>
+                            <button (click)="selectAllInAssetGrid()" class="dropdown-item">Select All on Page</button>
                             <button id="btnSaveToNewGroup" [class.disabled]="selectedAssets.length < 1 || !user.isLoggedIn" (click)="copyIG = false; editIG = false; showImageGroupModal = true;" class="dropdown-item">Save Selections to > New Image Group</button>
                             <button id="btnSaveToExistingGroup" [class.disabled]="selectedAssets.length < 1 || !user.isLoggedIn" (click)="showAddToGroupModal = true;" class="dropdown-item">Save Selections to > Existing Image Group</button>
                             <button id="btnDeleteFromGroup" *ngIf="params['igId']" [class.disabled]="selectedAssets.length < 1 || !allowIgUpdate" (click)="deleteSelectedAssets()" class="dropdown-item">Delete Selections from Image Group</button>
