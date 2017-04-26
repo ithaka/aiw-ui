@@ -17,14 +17,15 @@
             </pagination>
         </h3>
         <div class="group-list has-icon-overlay px-2">
-            <i [class.hidden]="!loading" class="icon-lg icon-overlay--top icon-loading-large"></i>
             <div *ngIf="errorObj[selectedBrowseLevel]" class="alert alert-warning" [innerHtml]="errorObj[selectedBrowseLevel]"></div>
             <ang-tag *ngFor="let tag of tags" [tag]="tag" link="true"></ang-tag>
         </div>
     </div>
 </div>
-
-<div *ngIf="tags.length < 1" class="alert alert-info">
+<div *ngIf="loading" class="row has-icon-overlay">
+    <i class="icon-lg icon-overlay--top icon-loading-large"></i>
+</div>
+<div *ngIf="tags.length < 1 && !loading" class="alert alert-info">
     <h3 translate>BROWSE.ERRORS.NO_GROUPS_COLLECTIONS_HEADING</h3><br/>
     <div *ngIf="selectedBrowseLevel === 'private'" [innerHtml]="'BROWSE.ERRORS.NO_PRIVATE_GROUPS_COLLECTIONS_PROMPT' | translate"></div>
     <div *ngIf="selectedBrowseLevel === 'institution'" [innerHtml]="'BROWSE.ERRORS.NO_INSTITUTIONAL_GROUPS_COLLECTIONS_PROMPT' | translate"></div>
