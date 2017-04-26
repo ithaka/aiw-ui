@@ -54,7 +54,7 @@ export class BrowseGroupsComponent implements OnInit {
         if(params && params['tags']){
           // this.appliedTags = params['tags'].split('|');
           
-          this.appliedTags = JSON.parse(params['tags']);
+          this.appliedTags = JSON.parse(params['tags'].replace(/%28/g, '(').replace(/%29/g, ')'));
         }
         if(params && params['view']){
             this.selectedBrowseLevel = params['view'];
@@ -172,7 +172,7 @@ export class BrowseGroupsComponent implements OnInit {
     // }
     // this.addRouteParam('tags', tagsParam);
 
-    this.addRouteParam('tags', JSON.stringify(this.appliedTags));
+    this.addRouteParam('tags', JSON.stringify(this.appliedTags).replace(/\(/g, '%28').replace(/\)/g, '%29') );
     this.loadIGs(this.selectedBrowseLevel)
   }
 
