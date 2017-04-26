@@ -120,11 +120,11 @@ export class ImageGroupPage implements OnInit, OnDestroy {
           // THIS IS MOCK CODE FOR THE USER'S DOWNLOAD PERMISSIONS
           // IT HELPS THIS PAGE AND THE IMAGE GROUP DOWNLOAD MODAL FUNCTION IN THE ABSENCE OF DOWNLOAD INFORMATION
           this.ig.igDownloadInfo = {
-            alreadyDwnldImgCnt: 1992,
-            curAllowedDwnldCnt: 8,
+            alreadyDwnldImgCnt: 992,
+            curAllowedDwnldCnt: 1008,
             igImgCount: this.ig.items.length,
             igId: this.ig.id,
-            pptExportAllowed: this.ig.items.length <= 8
+            pptExportAllowed: this.ig.items.length <= 1008
           }
 
           // // get the user's download count
@@ -174,6 +174,7 @@ export class ImageGroupPage implements OnInit, OnDestroy {
     // if the user is logged in and the download info is available
     if (this.user.isLoggedIn) {
       console.log("logged in")
+      console.log(this.ig)
       // we will need a new way to know whether or not the user is authorized to download - for now, I will always enable them
       if (this.ig.igDownloadInfo.pptExportAllowed) {
         console.log("showing download modal")
