@@ -97,6 +97,7 @@ export class BrowseGroupsComponent implements OnInit {
    * @param level Level of desired menu from colMenuArray enum
    */
   selectBrowseOpt ( level: string ){
+    this.loading = true;
     this.expandedCategories = {}
     this.selectedBrowseLevel = level
     this.appliedTags = []
@@ -149,6 +150,7 @@ export class BrowseGroupsComponent implements OnInit {
       this.currentBrowseRes = this.foldersObj[browseLevel]
       this.tags = this.foldersObj[browseLevel]
       this.tagFilters = this.tagsObj[browseLevel]
+      this.loading = false;
     } else {
       this.loadIGs(browseLevel)
     }
