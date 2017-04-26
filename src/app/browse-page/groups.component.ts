@@ -51,10 +51,15 @@ export class BrowseGroupsComponent implements OnInit {
     this.subscriptions.push(
       this.route.params
       .subscribe((params: Params) => { 
-        if(params && params['view']){
-            this.selectedBrowseLevel = params['view']
-            this.loadCategory(this.selectedBrowseLevel)
+        if(params && params['tags']){
+          // this.appliedTags = params['tags'].split('|');
+          
+          this.appliedTags = JSON.parse(params['tags']);
         }
+        if(params && params['view']){
+            this.selectedBrowseLevel = params['view'];
+        }
+        this.loadCategory(this.selectedBrowseLevel);
       })
     )
     
@@ -94,8 +99,10 @@ export class BrowseGroupsComponent implements OnInit {
   selectBrowseOpt ( level: string ){
     this.expandedCategories = {}
     this.selectedBrowseLevel = level
-    this.addRouteParam('view', level)
-    this.loadCategory(level)
+    this.appliedTags = []
+    this.addRouteParam('view', level, true)
+    // this.loadCategory(level)
+    this.loadIGs(this.selectedBrowseLevel)
   }
 
   private createGroupTags(folderArray) {
@@ -153,6 +160,17 @@ export class BrowseGroupsComponent implements OnInit {
     } else {
       this.appliedTags.push(tag)
     }
+
+    // let tagsParam = '';
+    // for(let tag of this.appliedTags){
+    //   if(tagsParam){
+    //     tagsParam += '|';
+    //   }
+    //   tagsParam += tag;
+    // }
+    // this.addRouteParam('tags', tagsParam);
+
+    this.addRouteParam('tags', JSON.stringify(this.appliedTags));
     this.loadIGs(this.selectedBrowseLevel)
   }
 
@@ -160,8 +178,9 @@ export class BrowseGroupsComponent implements OnInit {
    * Clear tag filters, and reload groups
    */
   clearFilters() : void {
-    this.appliedTags = []
-    this.loadIGs(this.selectedBrowseLevel)
+    this.appliedTags = [];
+    this.addRouteParam('tags', '');
+    this.loadIGs(this.selectedBrowseLevel);
   }
   
   goToPage(pageNo: number): void {
@@ -174,9 +193,18 @@ export class BrowseGroupsComponent implements OnInit {
    * @param key Parameter you want added to route (as matrix param)
    * @param value The value of the parameter
    */
-  private addRouteParam(key: string, value: any) {
+  private addRouteParam(key: string, value: any, resetTags?: boolean) {
     let currentParamsObj: Params = Object.assign({}, this.route.snapshot.params)
-    currentParamsObj[key] = value
+    if(value){
+      currentParamsObj[key] = value;
+    }
+    else{
+      delete currentParamsObj[key];
+    }
+
+    if(currentParamsObj['tags'] && resetTags){
+      delete currentParamsObj['tags']; 
+    }
 
     this.router.navigate([currentParamsObj], { relativeTo: this.route })
   }
