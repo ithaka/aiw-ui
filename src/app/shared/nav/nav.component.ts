@@ -43,7 +43,6 @@ export class Nav implements OnInit, OnDestroy {
 
     idle.onIdleEnd.subscribe(() => {
       this.idleState = 'No longer idle.';
-      console.log(this.idleState);
     });
     idle.onTimeout.subscribe(() => {
       if(this.user && this.user.isLoggedIn){
@@ -51,7 +50,6 @@ export class Nav implements OnInit, OnDestroy {
         this.showinactiveUserLogoutModal = true;
 
         this.idleState = 'Timed out!';
-        console.log(this.idleState);
       }
       else{
         this.resetIdleWatcher()
@@ -59,7 +57,6 @@ export class Nav implements OnInit, OnDestroy {
     });
     idle.onIdleStart.subscribe(() => {
       this.idleState = 'You\'ve gone idle!';
-      console.log(this.idleState);
     });
     idle.onTimeoutWarning.subscribe((countdown) => {
       this.idleState = 'You will time out in ' + countdown + ' seconds!'
@@ -97,7 +94,16 @@ export class Nav implements OnInit, OnDestroy {
   }
 
   logout(): void {
-    this._login.logout();
+    // console.log(this.location.path().indexOf("home"))
+    this._login.logout()
+      .then(() => {
+        // this._router.navigate(['/home'])
+        if (this.location.path().indexOf("home") >= 0) {
+          location.reload() // this will reload the app and give the user a feeling they actually logged out
+        } else {
+          this._router.navigate(['/home'])
+        }
+      })
   }
 
   navigateAndSaveRoute(route: string): void {

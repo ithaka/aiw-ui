@@ -31,10 +31,12 @@ export class LoginService {
             .post(this._auth.getUrl() + '/logout', {}, options)
             .toPromise()
             .then(() => {
-                this._router.navigate(['login']);
+                // do nothing here
+                // this._router.navigate(['login']);
             })
-            .catch(function() {
+            .catch(function(err) {
                 // error handling
+                console.error(err)
             });
     }
     
