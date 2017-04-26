@@ -321,6 +321,14 @@ export class AssetViewerComponent implements OnInit, OnDestroy, AfterViewInit {
                 });
                 let kPlayer = document.getElementById(targetId);
             }
+    };
+
+    /**
+     * disableContextMenu
+     * - Disable browser context menu / right click on the image viewer
+     */
+    private disableContextMenu(event): boolean{
+        return false;
     }
 
 }

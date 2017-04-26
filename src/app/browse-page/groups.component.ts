@@ -51,10 +51,15 @@ export class BrowseGroupsComponent implements OnInit {
     this.subscriptions.push(
       this.route.params
       .subscribe((params: Params) => { 
-        if(params && params['view']){
-            this.selectedBrowseLevel = params['view']
-            this.loadCategory(this.selectedBrowseLevel)
+        if(params && params['tags']){
+          // this.appliedTags = params['tags'].split('|');
+          
+          this.appliedTags = JSON.parse(params['tags'].replace(/%28/g, '(').replace(/%29/g, ')'));
         }
+        if(params && params['view']){
+            this.selectedBrowseLevel = params['view'];
+        }
+        this.loadCategory(this.selectedBrowseLevel);
       })
     )
     
@@ -92,10 +97,13 @@ export class BrowseGroupsComponent implements OnInit {
    * @param level Level of desired menu from colMenuArray enum
    */
   selectBrowseOpt ( level: string ){
+    this.loading = true;
     this.expandedCategories = {}
     this.selectedBrowseLevel = level
-    this.addRouteParam('view', level)
-    this.loadCategory(level)
+    this.appliedTags = []
+    this.addRouteParam('view', level, true)
+    // this.loadCategory(level)
+    this.loadIGs(this.selectedBrowseLevel)
   }
 
   private createGroupTags(folderArray) {
@@ -142,6 +150,7 @@ export class BrowseGroupsComponent implements OnInit {
       this.currentBrowseRes = this.foldersObj[browseLevel]
       this.tags = this.foldersObj[browseLevel]
       this.tagFilters = this.tagsObj[browseLevel]
+      this.loading = false;
     } else {
       this.loadIGs(browseLevel)
     }
@@ -153,6 +162,17 @@ export class BrowseGroupsComponent implements OnInit {
     } else {
       this.appliedTags.push(tag)
     }
+
+    // let tagsParam = '';
+    // for(let tag of this.appliedTags){
+    //   if(tagsParam){
+    //     tagsParam += '|';
+    //   }
+    //   tagsParam += tag;
+    // }
+    // this.addRouteParam('tags', tagsParam);
+
+    this.addRouteParam('tags', JSON.stringify(this.appliedTags).replace(/\(/g, '%28').replace(/\)/g, '%29') );
     this.loadIGs(this.selectedBrowseLevel)
   }
 
@@ -160,8 +180,9 @@ export class BrowseGroupsComponent implements OnInit {
    * Clear tag filters, and reload groups
    */
   clearFilters() : void {
-    this.appliedTags = []
-    this.loadIGs(this.selectedBrowseLevel)
+    this.appliedTags = [];
+    this.addRouteParam('tags', '');
+    this.loadIGs(this.selectedBrowseLevel);
   }
   
   goToPage(pageNo: number): void {
@@ -174,9 +195,18 @@ export class BrowseGroupsComponent implements OnInit {
    * @param key Parameter you want added to route (as matrix param)
    * @param value The value of the parameter
    */
-  private addRouteParam(key: string, value: any) {
+  private addRouteParam(key: string, value: any, resetTags?: boolean) {
     let currentParamsObj: Params = Object.assign({}, this.route.snapshot.params)
-    currentParamsObj[key] = value
+    if(value){
+      currentParamsObj[key] = value;
+    }
+    else{
+      delete currentParamsObj[key];
+    }
+
+    if(currentParamsObj['tags'] && resetTags){
+      delete currentParamsObj['tags']; 
+    }
 
     this.router.navigate([currentParamsObj], { relativeTo: this.route })
   }
