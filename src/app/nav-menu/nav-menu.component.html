@@ -17,7 +17,7 @@
                             <button class="dropdown-item" [routerLink]="['/browse', 'library']">Artstor Collections</button>
                             <button class="dropdown-item" [routerLink]="['/browse', 'institution']">Institutional Collections</button>
                             <button class="dropdown-item" [routerLink]="['/browse', 'commons']">Open Collections</button>
-                            <button [class.disabled]="!user.isLoggedIn" class="dropdown-item" [routerLink]="['/browse', 'mycollections']">My Collections</button>
+                            <button [class.disabled]="!user.isLoggedIn || !(user && user.userPCAllowed == '1')" class="dropdown-item" [routerLink]="['/browse', 'mycollections']">My Collections</button>
                             <button class="dropdown-item" [routerLink]="['/browse', 'groups']">Image Groups</button>
                         </div>
                     </li>
