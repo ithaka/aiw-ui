@@ -18,6 +18,7 @@
     "clean:install": "npm set progress=false && npm install",
     "clean:start": "npm start",
     "clean": "npm cache clean && npm run rimraf -- node_modules doc coverage dist",
+    "dev" : "npm run server:dev",
     "docker": "docker",
     "docs": "npm run typedoc && npm run styleguide",
     "e2e:live": "npm run e2e -- --elementExplorer",
