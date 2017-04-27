@@ -409,6 +409,7 @@ export class AssetGrid implements OnInit, OnDestroy {
     });
 
     fQuery = fQuery.replace(/\|\#/g, '| (in any) #');
+    fQuery = fQuery.replace(/\|$/, '| (in any)')
     fQuery = fQuery.replace(/\|/g, '</b>');
     fQuery = fQuery.replace(/(#or,)/g, ' or <b>');
     fQuery = fQuery.replace(/(#and,)/g, ' and <b>');
