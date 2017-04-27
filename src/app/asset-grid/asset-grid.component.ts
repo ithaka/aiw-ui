@@ -405,8 +405,9 @@ export class AssetGrid implements OnInit, OnDestroy {
     // fQuery = fQuery.replace(/\|[0-9]{3}/g, );
     // Add field names
     this._assets.filterFields.forEach(field => {
-      fQuery = fQuery.replace(field.value, ' (in ' + field.name + ')');
+      fQuery = fQuery.replace(new RegExp(field.value, 'g'), ' (in ' + field.name + ')');
     });
+
     fQuery = fQuery.replace(/\|\#/g, '| (in any) #');
     fQuery = fQuery.replace(/\|/g, '</b>');
     fQuery = fQuery.replace(/(#or,)/g, ' or <b>');
