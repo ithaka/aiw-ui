@@ -27,7 +27,7 @@ export class LegacyRouteResolver implements Resolve<boolean> {
 
     if (urlArr[0].substr(0, 10).toLowerCase() === "externaliv") {
       let encryptedId = urlArr[0].split("=")[1]
-      console.log(encryptedId)
+
       this.decryptToken(encryptedId)
         .take(1)
         .subscribe((item) => {
