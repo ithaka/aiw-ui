@@ -35,6 +35,17 @@ export class LegacyRouteResolver implements Resolve<boolean> {
         }, (err) => {
           console.error(err)
         })
+    } else if (urlArr[0] === "secure") {
+      let idRe = /id=(.*?(?=&))/
+      let encryptedId = idRe.exec(urlArr[1])[1]
+
+      this.decryptToken(encryptedId)
+        .take(1)
+        .subscribe((item) => {
+          console.log(item)
+        }, (err) => {
+          console.error(err)
+        })
     } else {
       let routeNum = urlArr[0].substr(0, 2)
 
