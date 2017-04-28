@@ -1,9 +1,20 @@
 import { Injectable } from '@angular/core'
 import { Router, Resolve, RouterStateSnapshot, ActivatedRouteSnapshot } from '@angular/router'
+import { Http, Response, Headers, RequestOptions } from '@angular/http'
+import { Observable } from 'rxjs/Observable'
+
+import { AuthService } from './shared'
 
 @Injectable()
 export class LegacyRouteResolver implements Resolve<boolean> {
-  constructor( private _router: Router ) { }
+
+  constructor(
+    private _router: Router,
+    private _auth: AuthService,
+    private http: Http
+  ) {
+
+  }
 
   /** 
    * By implimenting Resolve, we have to have this function. The router is responsible for calling it on specified routes.
@@ -15,9 +26,15 @@ export class LegacyRouteResolver implements Resolve<boolean> {
     console.log(urlArr)
 
     if (urlArr[0].substr(0, 10).toLowerCase() === "externaliv") {
-      console.log("Hey it's external")
       let encryptedId = urlArr[0].split("=")[1]
       console.log(encryptedId)
+      this.decryptToken(encryptedId)
+        .take(1)
+        .subscribe((item) => {
+          console.log(item)
+        }, (err) => {
+          console.error(err)
+        })
     } else {
       let routeNum = urlArr[0].substr(0, 2)
 
@@ -228,6 +245,15 @@ export class LegacyRouteResolver implements Resolve<boolean> {
     )
 
     return decoded
+  }
+
+  private decryptToken(token: string): Observable<any> {
+    return this.http.get(this._auth.getHostname() + "/api/v1/items/resolve?encrypted_id=" + token)
+      .map((res) => {
+        let jsonRes = res.json() || {}
+        if (jsonRes && jsonRes.success && jsonRes.item) { return jsonRes.item }
+        else { throw new Error("No success or item found on response object") }
+      })
   }
 }
 
