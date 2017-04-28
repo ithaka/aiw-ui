@@ -12,9 +12,12 @@ export class LegacyRouteResolver implements Resolve<boolean> {
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
     let urlArr = state.url.split("/")
     urlArr.splice(0,2)
+    console.log(urlArr)
 
-    if (urlArr[0] === "secure") {
-
+    if (urlArr[0].substr(0, 10).toLowerCase() === "externaliv") {
+      console.log("Hey it's external")
+      let encryptedId = urlArr[0].split("=")[1]
+      console.log(encryptedId)
     } else {
       let routeNum = urlArr[0].substr(0, 2)
 
