@@ -50,7 +50,6 @@ import { AccountPage } from './account-page';
 import { AssociatedPage } from './associated-page';
 import { ImageGroupPage, PptModalComponent } from './image-group-page';
 import { Login } from './login';
-import { About } from './about';
 import { NoContent } from './no-content';
 import { RegisterComponent } from './register/register.component';
 import { 
@@ -106,7 +105,6 @@ type StoreType = {
     Nav,
     NavMenu,
     Footer,
-    About,
     SearchPage,
     CollectionPage,
     CategoryPage,

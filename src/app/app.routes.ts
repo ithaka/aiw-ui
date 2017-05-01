@@ -13,7 +13,6 @@ import { AssociatedPage } from './associated-page'
 import { AssetPage } from './asset-page'
 import { Login } from './login'
 import { RegisterComponent } from './register/register.component'
-import { About } from './about'
 import { NoContent } from './no-content'
 import { AuthService } from './shared/auth.service'
 import { DataResolver } from './app.resolver'
@@ -46,7 +45,6 @@ export const ROUTES: Routes = [
   { path: 'browse', component: BrowsePage, canActivate:[AuthService], children: BrowseRoutes },
   { path: 'associated/:objectId/:colId', component: AssociatedPage, canActivate:[AuthService] },
   { path: 'associated', component: AssociatedPage, canActivate:[AuthService] },
-  { path: 'about', component: About },
   { path: 'register', component: RegisterComponent, canActivate: [AuthService] },
   { path: 'library', children: [
     { path: '**', component: NoContent, resolve: [LegacyRouteResolver] }

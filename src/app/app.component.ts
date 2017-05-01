@@ -60,7 +60,7 @@ export class App {
   }
 
   ngOnInit() {
-    console.log('App Component has loaded');
+    // console.log('App Component has loaded');
   }
 
 }

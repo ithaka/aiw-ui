@@ -60,7 +60,6 @@ export class Nav implements OnInit, OnDestroy {
     });
     idle.onTimeoutWarning.subscribe((countdown) => {
       this.idleState = 'You will time out in ' + countdown + ' seconds!'
-      // console.log(this.idleState);
     });
 
     this.resetIdleWatcher();
@@ -114,7 +113,6 @@ export class Nav implements OnInit, OnDestroy {
   resetIdleWatcher() {
     this.idle.watch();
     this.idleState = 'Idle watcher started'
-    console.log(this.idleState);
   }
 
   // Reset the idle watcher and navigate to remote login page

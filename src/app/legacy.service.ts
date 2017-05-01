@@ -23,7 +23,6 @@ export class LegacyRouteResolver implements Resolve<boolean> {
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
     let urlArr = state.url.split("/")
     urlArr.splice(0,2)
-    console.log(urlArr)
 
     if (urlArr[0].substr(0, 10).toLowerCase() === "externaliv") {
       let encryptedId = urlArr[0].split("=")[1]
