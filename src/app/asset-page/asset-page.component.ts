@@ -79,6 +79,9 @@ export class AssetPage implements OnInit, OnDestroy {
                         .subscribe((asset) => {
                             this.assets[0] = new Asset(asset.objectId, this._assets, this._auth)
                             this.generateImgURL()
+                        }, (err) => {
+                            console.error(err)
+                            this._router.navigate(['/nocontent'])
                         })
                 } else {
                     this.assets[0] = new Asset(routeParams["assetId"], this._assets, this._auth);
