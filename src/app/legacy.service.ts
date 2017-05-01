@@ -27,25 +27,28 @@ export class LegacyRouteResolver implements Resolve<boolean> {
 
     if (urlArr[0].substr(0, 10).toLowerCase() === "externaliv") {
       let encryptedId = urlArr[0].split("=")[1]
+      this._router.navigate(['/asset', 'external', encryptedId])
 
-      this.decryptToken(encryptedId)
-        .take(1)
-        .subscribe((item) => {
-          console.log(item)
-        }, (err) => {
-          console.error(err)
-        })
+      // this.decryptToken(encryptedId)
+      //   .take(1)
+      //   .subscribe((item) => {
+      //     console.log(item)
+      //   }, (err) => {
+      //     console.error(err)
+      //   })
     } else if (urlArr[0] === "secure") {
       let idRe = /id=(.*?(?=&))/
       let encryptedId = idRe.exec(urlArr[1])[1]
 
-      this.decryptToken(encryptedId)
-        .take(1)
-        .subscribe((item) => {
-          console.log(item)
-        }, (err) => {
-          console.error(err)
-        })
+      this._router.navigate(['/asset', 'external', encryptedId])
+
+      // this.decryptToken(encryptedId)
+      //   .take(1)
+      //   .subscribe((item) => {
+      //     console.log(item)
+      //   }, (err) => {
+      //     console.error(err)
+      //   })
     } else {
       let routeNum = urlArr[0].substr(0, 2)
 
@@ -258,14 +261,14 @@ export class LegacyRouteResolver implements Resolve<boolean> {
     return decoded
   }
 
-  private decryptToken(token: string): Observable<any> {
-    return this.http.get(this._auth.getHostname() + "/api/v1/items/resolve?encrypted_id=" + token)
-      .map((res) => {
-        let jsonRes = res.json() || {}
-        if (jsonRes && jsonRes.success && jsonRes.item) { return jsonRes.item }
-        else { throw new Error("No success or item found on response object") }
-      })
-  }
+  // private decryptToken(token: string): Observable<any> {
+  //   return this.http.get(this._auth.getHostname() + "/api/v1/items/resolve?encrypted_id=" + token)
+  //     .map((res) => {
+  //       let jsonRes = res.json() || {}
+  //       if (jsonRes && jsonRes.success && jsonRes.item) { return jsonRes.item }
+  //       else { throw new Error("No success or item found on response object") }
+  //     })
+  // }
 }
 
 /**

@@ -1031,4 +1031,17 @@ export class AssetService {
             .toPromise()
             .then(this.extractData);
     }
+
+    /**
+     * Call to API which returns an asset, given an encrypted_id
+     * @param token The encrypted token that you want to know the asset id for
+     */
+    public decryptToken(token: string): Observable<any> {
+        return this.http.get(this._auth.getHostname() + "/api/v1/items/resolve?encrypted_id=" + token)
+        .map((res) => {
+            let jsonRes = res.json() || {}
+            if (jsonRes && jsonRes.success && jsonRes.item) { return jsonRes.item }
+            else { throw new Error("No success or item found on response object") }
+        })
+  }
 }

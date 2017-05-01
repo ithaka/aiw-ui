@@ -49,11 +49,6 @@ export class AssetPage implements OnInit, OnDestroy {
         this._storage = locker.useDriver(Locker.DRIVERS.LOCAL);
     }
 
-    private test() {
-        console.log(!this.assets[0].disableDownload);
-        console.log(this.downloadAuth());
-    }
-
     ngOnInit() {
         this.user = this._auth.getUser();
 
