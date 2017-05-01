@@ -1,4 +1,4 @@
-<div class="container-fluid asset-page" [class.fullscreen]="isFullscreen">
+<div *ngIf="assets[0]" class="container-fluid asset-page" [class.fullscreen]="isFullscreen">
     <div class="row">
         <!--View prev/next asset-->
         <div class="title-nav-cntnr col-md-12" [class.hidden]="isFullscreen">

@@ -71,17 +71,26 @@ export class AssetPage implements OnInit, OnDestroy {
 
         this.subscriptions.push(
             this.route.params.subscribe((routeParams) => {
-                if (this.assets[0]) {
-                    this.assets.splice(0);
-                }
-                this.assets[0] = new Asset(routeParams["assetId"], this._assets, this._auth);
-                this.generateImgURL();
+                this.assets = []
 
-                if(this.prevAssetResults.thumbnails.length > 0){
-                    // this.totalAssetCount = this.prevAssetResults.count ? this.prevAssetResults.count : this.prevAssetResults.thumbnails.length;
-                    this.assetIndex = this.currentAssetIndex();
-                    this.assetNumber = this._assets.currentLoadedParams.currentPage ? this.assetIndex + 1 + ((this._assets.currentLoadedParams.currentPage - 1) * this._assets.currentLoadedParams.pageSize) : this.assetIndex + 1;
+                if (routeParams['encryptedId']) {
+                    this._assets.decryptToken(routeParams['encryptedId'])
+                        .take(1)
+                        .subscribe((asset) => {
+                            this.assets[0] = new Asset(asset.objectId, this._assets, this._auth)
+                            this.generateImgURL()
+                        })
+                } else {
+                    this.assets[0] = new Asset(routeParams["assetId"], this._assets, this._auth);
+                    this.generateImgURL();
+
+                    if(this.prevAssetResults.thumbnails.length > 0){
+                        // this.totalAssetCount = this.prevAssetResults.count ? this.prevAssetResults.count : this.prevAssetResults.thumbnails.length;
+                        this.assetIndex = this.currentAssetIndex();
+                        this.assetNumber = this._assets.currentLoadedParams.currentPage ? this.assetIndex + 1 + ((this._assets.currentLoadedParams.currentPage - 1) * this._assets.currentLoadedParams.pageSize) : this.assetIndex + 1;
+                    }
                 }
+
             })
         );
 
