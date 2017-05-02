@@ -32,6 +32,9 @@ export class NavMenu implements OnInit, OnDestroy {
   private genImgGrpLink: boolean = false;
 
   @Input()
+  private allowSelectAll: boolean = false;
+
+  @Input()
   private ig: any = {};
 
   @Output() refreshIG: EventEmitter<any> = new EventEmitter();
@@ -62,38 +65,38 @@ export class NavMenu implements OnInit, OnDestroy {
   }
   
   ngOnInit() {
-    this.user = this._auth.getUser();
+    this.user = this._auth.getUser()
     this.subscriptions.push(
       this._assets.selection.subscribe( 
         selectedAssets => {
-          this.selectedAssets = selectedAssets;
+          this.selectedAssets = selectedAssets
         },
         error => {
-          //
+          console.error(error)
         })
     );
 
     this.subscriptions.push(
       this.route.params.subscribe((params) => {
-        this.params = params;
+        this.params = params
 
-        if(params['igId'] && !params['currentPage']){
-          this.showImageGroupModal = false;
+        if (params['igId'] && !params['currentPage']){
+          this.showImageGroupModal = false
         }
       })
-    );
+    )
   }
 
   ngOnDestroy() {
-    this.subscriptions.forEach((sub) => { sub.unsubscribe(); });
+    this.subscriptions.forEach((sub) => { sub.unsubscribe() })
   }
   
   private printImageGroupPage(): void {
     if (this.actionOptions.group) {
-      let params = this.route.snapshot.params;
+      let params = this.route.snapshot.params
 
       if (params['igId']) {
-        this._router.navigate(['/printpreview/' + params['igId']]);
+        this._router.navigate(['/printpreview/' + params['igId']])
       }
     }
   }
