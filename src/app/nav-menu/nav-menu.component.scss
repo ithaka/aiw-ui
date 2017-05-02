@@ -49,7 +49,9 @@ $navBarPad: 0.5rem;
     }
 
     .navbar-nav{
-        flex-direction: row;
+        @media (min-width: 575px) {
+            flex-direction: row;
+        }
     }
 }
 
