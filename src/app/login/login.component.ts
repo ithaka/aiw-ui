@@ -149,7 +149,7 @@ export class Login {
         }
       ).catch((err) => {
         this.loginLoading = false;
-        let errObj = err.json();
+        let errObj = err.json() ? err.json() : {};
          if(errObj.message === 'Invalid credentials'){
             this.errorMsg = 'Invalid email address or password. Try again.';
           } else if (errObj.message === 'Login Expired') {
