@@ -19,6 +19,7 @@ import { Angulartics2 } from 'angulartics2';
 export class AuthService implements CanActivate {
   private _storage: Locker;
   private baseUrl;
+  private imageFpxUrl;
   private hostname;
   private thumbUrl;
   private IIIFUrl;
@@ -44,7 +45,8 @@ export class AuthService implements CanActivate {
 
     // these can be moved inside the if statement when we want to change services based on dev/prod
     this.hostname = '//beta.artstor.org';
-    this.baseUrl =  '//beta.artstor.org/api/secure'; 
+    this.baseUrl =  '//beta.artstor.org/api/library/secure'; 
+    this.imageFpxUrl =  '//beta.artstor.org/api/library/secure/imagefpx'; 
     this.thumbUrl = '//mdxdv.artstor.org';
     this.IIIFUrl = '//tsprod.artstor.org/rosa-iiif-endpoint-1.0-SNAPSHOT/fpx';
     
@@ -56,6 +58,7 @@ export class AuthService implements CanActivate {
       // Test Endpoints
       this.hostname = '//test.stagely.artstor.org';
       this.baseUrl = '//test.stagely.artstor.org/api/secure';
+      // this.imageFpxUrl = '//test.stagely.artstor.org/api/library/secure/imagefpx';
       this.IIIFUrl = '//tsprod.artstor.org/rosa-iiif-endpoint-1.0-SNAPSHOT/fpx';
       this.logUrl = '//ang-ui-logger.apps.test.cirrostratus.org/api/v1';
     } else if( document.location.hostname.indexOf('ang-ui-earth.apps.test.cirrostratus.org') > -1 ) {
@@ -144,6 +147,10 @@ export class AuthService implements CanActivate {
   
   public getUrl(): string {
     return this.baseUrl;
+  }
+
+  public getImageFpxUrl(): string {
+    return this.imageFpxUrl;
   }
 
   public getHostname(): string {
