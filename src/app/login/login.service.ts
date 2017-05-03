@@ -78,7 +78,7 @@ export class LoginService {
         let options = new RequestOptions({ withCredentials: true });
         
         return this.http
-            .get( this._auth.getHostname() + '/library/lostpw/123?email=' + email + '&portal=ARTstor', options)
+            .get(this._auth.getLostPassUrl() + '/123?email=' + email + '&portal=ARTstor', options)
             .toPromise()
             .then(this._auth.extractData);
     }
