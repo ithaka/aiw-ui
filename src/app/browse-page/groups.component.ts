@@ -111,7 +111,7 @@ export class BrowseGroupsComponent implements OnInit {
     let parentTag = null
 
     for(let group of folderArray) {
-            let groupTag = new Tag(group.id, group.name, true, null, { label: "group", folder: false }, true)
+            let groupTag = new Tag(group.id, [group.name, ' (', group.items.length, ')'].join(""), true, null, { label: "group", folder: false }, true)
             childArr.push(groupTag)
           }
     return childArr
