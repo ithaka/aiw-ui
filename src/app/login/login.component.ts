@@ -148,32 +148,17 @@ export class Login {
          
         }
       ).catch((err) => {
-
-        /**
-         * WORKAROUND for TEST: Earth's login service isn't properly redirecting based on context
-         */
-        this._auth.getUserInfo().take(1)
-          .subscribe( data => {
-            console.log(data);
-            if (data.status === true && data.user && user.username == data.user.username) {
-              this.angulartics.eventTrack.next({ action:"remoteLogin", properties: { category: "login", label: "success" }});
-              this._log.Warp6({ eventType: "remote_login" });
-              this.loadForUser(data);
-            } else {
-               if(data.message === 'loginFailed'){
-                this.errorMsg = 'Invalid email address or password. Try again.';
-              } else if (data.message === 'loginExpired') {
-                this.errorMsg = 'That login is expired. Please login from campus to renew your account.';
-              }
-            }
-          }, error => {
-            
-          });
-
         this.loginLoading = false;
-        console.log(err);
-        this.getLoginError(user)
-        this.angulartics.eventTrack.next({ action:"remoteLogin", properties: { category: "login", label: "failed" }});
+        let errObj = err.json();
+         if(errObj.message === 'Invalid credentials'){
+            this.errorMsg = 'Invalid email address or password. Try again.';
+          } else if (errObj.message === 'Login Expired') {
+            this.errorMsg = 'That login is expired. Please login from campus to renew your account.';
+          } else {
+            console.log(err);
+            this.getLoginError(user)
+            this.angulartics.eventTrack.next({ action:"remoteLogin", properties: { category: "login", label: "failed" }});
+          }
       });
   }
   
