@@ -115,6 +115,7 @@ export class Login {
   }
   
   login(user: User) {
+    user.username = user.username.toLowerCase()
     this.loginLoading = true;
     if(!this.validateEmail(user.username)){
       this.errorMsg = 'Please enter a valid email address';
