@@ -967,7 +967,7 @@ export class AssetService {
      */
     public getFpxInfo(objectId: string, objectTypeId: number): Promise<any> {
         // http://library.artstor.org/library/secure/imagefpx/SS7730295_7730295_8847273/24
-        let requestUrl = this._auth.getUrl() + '/imagefpx/' + objectId + '/' + objectTypeId;
+        let requestUrl = this._auth.getImageFpxUrl() + '/' + objectId + '/' + objectTypeId;
         
         return this.http
             .get(requestUrl, this.defaultOptions)
