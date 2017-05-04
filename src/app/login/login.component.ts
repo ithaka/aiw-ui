@@ -115,7 +115,7 @@ export class Login {
   }
   
   login(user: User) {
-    user.username = user.username.toLowerCase()
+    user.username = user.username.toLowerCase().trim()
     this.loginLoading = true;
     if(!this.validateEmail(user.username)){
       this.errorMsg = 'Please enter a valid email address';
@@ -185,7 +185,7 @@ export class Login {
       });
   }
   
-  validateEmail(email){
+  validateEmail(email: string){
     let re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     return re.test(email);
   }
