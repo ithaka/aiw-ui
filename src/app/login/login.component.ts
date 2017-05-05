@@ -115,6 +115,7 @@ export class Login {
   }
   
   login(user: User) {
+    user.username = user.username.toLowerCase().trim()
     this.loginLoading = true;
     if(!this.validateEmail(user.username)){
       this.errorMsg = 'Please enter a valid email address';
@@ -148,8 +149,19 @@ export class Login {
          
         }
       ).catch((err) => {
+        this.loginLoading = false;
+        let errObj = err.json ? err.json() : {};
+         if(errObj.message === 'Invalid credentials'){
+            this.errorMsg = 'Invalid email address or password. Try again.';
+          } else if (errObj.message === 'Login Expired') {
+            this.errorMsg = 'That login is expired. Please login from campus to renew your account.';
+          } else {
+            console.log(err);
+            this.getLoginError(user)
+            this.angulartics.eventTrack.next({ action:"remoteLogin", properties: { category: "login", label: "failed" }});
+          }
 
-        /**
+         /**
          * WORKAROUND for TEST: Earth's login service isn't properly redirecting based on context
          */
         this._auth.getUserInfo().take(1)
@@ -170,14 +182,10 @@ export class Login {
             
           });
 
-        this.loginLoading = false;
-        console.log(err);
-        this.getLoginError(user)
-        this.angulartics.eventTrack.next({ action:"remoteLogin", properties: { category: "login", label: "failed" }});
       });
   }
   
-  validateEmail(email){
+  validateEmail(email: string){
     let re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     return re.test(email);
   }
