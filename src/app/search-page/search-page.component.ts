@@ -20,6 +20,8 @@ export class SearchPage implements OnInit, OnDestroy {
   @ViewChild(AssetGrid)
   private assetGrid: AssetGrid;
 
+  private searchInResults: boolean = false;
+
   constructor(private _assets: AssetService, private route: ActivatedRoute, private _filters: AssetFiltersService, private _router: Router) {
     // this makes the window always render scrolled to the top
     this._router.events.subscribe(() => {
@@ -48,5 +50,9 @@ export class SearchPage implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.subscriptions.forEach((sub) => { sub.unsubscribe(); });
+  }
+
+  private updateSearchInRes(value: boolean): void{
+   this.searchInResults = value; 
   }
 }

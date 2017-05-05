@@ -30,6 +30,8 @@ export class CollectionPage implements OnInit, OnDestroy {
   
   private subscriptions: Subscription[] = [];
 
+  private searchInResults: boolean = false;
+
 
   constructor(
     private _assets: AssetService,
@@ -90,5 +92,9 @@ export class CollectionPage implements OnInit, OnDestroy {
   private resourceAccessDenied(): void{
     this.showaccessDeniedModal = false;
      this._router.navigate(['/home']);
+  }
+
+  private updateSearchInRes(value: boolean): void{
+   this.searchInResults = value; 
   }
 }

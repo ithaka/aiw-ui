@@ -2,7 +2,7 @@
 <div class="container main-content">
     <div class="row no-gutters row--search-bar">
         <div class="col-md-5">
-        <ang-search></ang-search>
+        <ang-search [searchInResults]="searchInResults"></ang-search>
         </div>
     </div>
     
@@ -23,7 +23,7 @@
             </div>
         </div>
     </div>
-    <ang-asset-grid [actionOptions]="{collection: true}" [assetCount]="assetCount"></ang-asset-grid>
+    <ang-asset-grid [actionOptions]="{collection: true}" [assetCount]="assetCount" [allowSearchInRes]="true" (updateSearchInRes)="updateSearchInRes($event)"></ang-asset-grid>
 
     <!--<div id="accessDeniedModal" class="modal" [ngClass]="{'show': showaccessDeniedModal }">
         <div class="modal-dialog">
