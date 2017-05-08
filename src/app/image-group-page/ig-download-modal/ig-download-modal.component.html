@@ -19,7 +19,8 @@
         <a *ngIf="!isLoading" class="btn btn-primary"
             id="downloadPowerpointLink"
             [attr.href]="downloadLink"
-            [attr.download]="downloadTitle">
+            [attr.download]="downloadTitle" 
+            (click)="closeModal.emit()">
             Download PPT 
             <!--<i id="downloadAssetLink" class="icon icon-slideshow" ></i>-->
         </a>
@@ -30,7 +31,8 @@
         <a *ngIf="!zipLoading" class="btn btn-primary"
             id="downloadZipLink"
             [attr.href]="zipDownloadLink"
-            [attr.download]="downloadTitle">
+            [attr.download]="downloadTitle" 
+            (click)="closeModal.emit()">
             Download Zip 
             <!--<i id="downloadAssetLink" class="icon icon-download" ></i>-->
         </a>
