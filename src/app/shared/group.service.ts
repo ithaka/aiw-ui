@@ -154,4 +154,13 @@ export class GroupService {
         )
         .map((res) => { return res.json() || {} })
     }
+
+    public makeIgGlobal(igId: string) {
+        return this.http.put(
+            [this.groupUrl,igId, "admin", "public"].join("/"),
+            { public: true },
+            this.options
+        )
+        .map((res) => { return res.json() || {} })
+    }
 }
