@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input, Output } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
 import { Subscription }   from 'rxjs/Subscription';
@@ -17,6 +17,9 @@ export class SearchComponent implements OnInit, OnDestroy {
   private term: string;
 
   private pageSize: number = 24;
+  
+  @Input()
+  private searchInResults:boolean;
 
   constructor(
     private _assets: AssetService,
@@ -52,9 +55,47 @@ export class SearchComponent implements OnInit, OnDestroy {
    */
   private updateSearchTerm(term: string) {
     if (!term || term === "") {
-      term = "*";
+      // term = "*";
+      return;
     }
-    this._router.navigate(['/search', term, { currentPage: 1, pageSize: this.pageSize }]);
+
+    if(this.searchInResults){ // Search within results
+      let routeParams = this.route.snapshot.params;
+      let params = {
+        currentPage: 1, 
+        pageSize: this.pageSize
+      };
+      
+      if(routeParams['colId']){
+        params['coll'] = [ routeParams['colId'] ];
+      }
+      else if(routeParams['catId']){
+        params['categoryId'] = routeParams['catId'];
+      }
+      else if(routeParams['term']){
+        let updatedTermValue = routeParams['term'] + '#and,' + term;
+        term = updatedTermValue;
+
+        if(routeParams['classification']){
+          params['classification'] = routeParams['classification'].split(',');
+        }
+        if(routeParams['coll']){
+          params['coll'] = routeParams['coll'].split(',');
+        }
+        if(routeParams['collTypes']){
+          params['collTypes'] = routeParams['collTypes'].split(',');
+        }
+        if(routeParams['geography']){
+          params['geography'] = routeParams['geography'].split(',');
+        }
+      }
+
+      this._router.navigate(['/search', term, params]);
+    }
+    else{
+      this._router.navigate(['/search', term, { currentPage: 1, pageSize: this.pageSize }]);
+    }
+
   }
 
   /**

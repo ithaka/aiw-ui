@@ -11,11 +11,11 @@
       <h1 class="mobile--show">Results</h1>
       <div class="row no-gutters row--search-bar">
           <div class="col-md-5">
-              <ang-search></ang-search>
+              <ang-search [searchInResults]="searchInResults"></ang-search>
           </div>
       </div>
 
-      <ang-asset-grid></ang-asset-grid>
+      <ang-asset-grid [allowSearchInRes]="true" (updateSearchInRes)="updateSearchInRes($event)"></ang-asset-grid>
     </div>
   </div>
 </div>
