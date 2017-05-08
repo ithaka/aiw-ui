@@ -136,6 +136,8 @@ export class NewIgModal implements OnInit {
       }
     }
 
+    if (formValue.artstorPermissions == "institution") { formValue.public = true }
+
     // Form is valid! Create Group object
     let itemIds = [];
     this.selectedAssets.forEach(
@@ -158,11 +160,21 @@ export class NewIgModal implements OnInit {
 
       .subscribe(
         data => {
-            console.log(data);
             this.isLoading = false;
 
             // Close the modal
             this.closeModal.emit();
+
+            if (formValue.artstorPermissions == "global") {
+              this._group.makeIgGlobal(this.ig.id)
+                .take(1)
+                .subscribe((res) => {
+                  // not really sure what to do here?
+                }, (err) => {
+                  console.error(err)
+                  // also not really sure what to do here...
+                })
+            }
 
             // Show the user their new group!
             if (data.id) {
