@@ -105,5 +105,34 @@
     "URL_LABEL": "Copy URL",
     "COPY_SUCCESS": "Link copied to clipboard",
     "SERVICE_ERROR": "We've encountered an error in getting a share token. Please refresh or try again later."
+  },
+  "NAV_MENU": {
+    "HOME": "Home",
+    "BROWSE": "Browse",
+    "COLLECTIONS": {
+      "ARTSTOR": "Artstor Collections",
+      "INSTITUTION": "Institutional Collections",
+      "OPEN": "Open Collections",
+      "OWNED": "My Collections",
+      "GROUPS": "Image Groups"
+    },
+    "ORGANIZE": {
+      "TITLE": "Organize",
+      "SELECT_ALL": "Select All on Page",
+      "NEW_GROUP": "Save Selections to New Image Group",
+      "EXISTING_GROUP": "Save Selections to Existing Image Group",
+      "DELETE_SELECTIONS": "Delete Selections from Image Group",
+      "DESELECT": "Deselect All",
+      "EDIT": "Edit Image Group Info",
+      "SAVE": "Save Image Group as...",
+      "DELETE_GROUP": "Delete Image Group"
+    },
+    "SHARE": {
+      "TITLE": "Share",
+      "GENERATE_IMAGE_LINK": "Generate Image Link",
+      "GENERATE_GROUP_LINK": "Generate Image Group Link",
+      "PRINT_GROUP": "Print Image Group",
+      "DOWNLOAD_GROUP": "Download Image Group"
+    }
   }
 }

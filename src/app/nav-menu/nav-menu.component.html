@@ -9,36 +9,36 @@
     <div [class.show]="!mobileCollapsed" class="navbar-collapse collapse" id="navMenu">
                 <ul class="nav navbar-nav">
                     <li class="nav-item"> 
-                        <a class="btn btn-link" [routerLink]="['/home']" routerLinkActive="active">Home</a>
+                        <a translate class="btn btn-link" [routerLink]="['/home']" routerLinkActive="active">NAV_MENU.HOME</a>
                     </li>
                     <li class="nav-item" ngbDropdown>
-                        <button class="btn btn-link" id="dropdownMenu1" ngbDropdownToggle>Browse</button>
+                        <button translate class="btn btn-link" id="dropdownMenu1" ngbDropdownToggle>NAV_MENU.BROWSE</button>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenu1">
-                            <button class="dropdown-item" [routerLink]="['/browse', 'library']">Artstor Collections</button>
-                            <button class="dropdown-item" [routerLink]="['/browse', 'institution']">Institutional Collections</button>
-                            <button class="dropdown-item" [routerLink]="['/browse', 'commons']">Open Collections</button>
-                            <button [class.disabled]="!user.isLoggedIn || !(user && user.userPCAllowed == '1')" class="dropdown-item" [routerLink]="['/browse', 'mycollections']">My Collections</button>
-                            <button class="dropdown-item" [routerLink]="['/browse', 'groups']">Image Groups</button>
+                            <button translate class="dropdown-item" [routerLink]="['/browse', 'library']">NAV_MENU.COLLECTIONS.ARTSTOR</button>
+                            <button translate class="dropdown-item" [routerLink]="['/browse', 'institution']">NAV_MENU.COLLECTIONS.INSTITUTION</button>
+                            <button translate class="dropdown-item" [routerLink]="['/browse', 'commons']">NAV_MENU.COLLECTIONS.OPEN</button>
+                            <button translate [class.disabled]="!user.isLoggedIn || !(user && user.userPCAllowed == '1')" class="dropdown-item" [routerLink]="['/browse', 'mycollections']">NAV_MENU.COLLECTIONS.OWNED</button>
+                            <button translate class="dropdown-item" [routerLink]="['/browse', 'groups']">NAV_MENU.COLLECTIONS.GROUPS</button>
                         </div>
                     </li>
                     <li class="nav-item" ngbDropdown>
-                        <button class="btn btn-link" id="organizeMenu" ngbDropdownToggle>Organize</button>
+                        <button translate class="btn btn-link" id="organizeMenu" ngbDropdownToggle>NAV_MENU.ORGANIZE.TITLE</button>
                         <div class="dropdown-menu" aria-labelledby="organizeMenu">
                             <!--Amber <button class="dropdown-item">!Manage Folders and Groups</button>
                             <div class="dropdown-divider"></div>-->
                             <!--Active on Image Group Page-->
                             <!--Future slide sorter function <button class="dropdown-item">!View All</button>-->
-                            <button (click)="selectAllInAssetGrid()" [class.disabled]="!allowSelectAll" class="dropdown-item">Select All on Page</button>
-                            <button id="btnSaveToNewGroup" [class.disabled]="selectedAssets.length < 1 || !user.isLoggedIn" (click)="copyIG = false; editIG = false; showImageGroupModal = true;" class="dropdown-item">Save Selections to > New Image Group</button>
-                            <button id="btnSaveToExistingGroup" [class.disabled]="selectedAssets.length < 1 || !user.isLoggedIn" (click)="showAddToGroupModal = true;" class="dropdown-item">Save Selections to > Existing Image Group</button>
-                            <button id="btnDeleteFromGroup" *ngIf="params['igId']" [class.disabled]="selectedAssets.length < 1 || !allowIgUpdate" (click)="deleteSelectedAssets()" class="dropdown-item">Delete Selections from Image Group</button>
-                            <button id="btnDeselectImages" [class.disabled]="selectedAssets.length < 1" (click)="_assets.setSelectedAssets([])" class="dropdown-item">Deselect All</button>
+                            <button translate (click)="selectAllInAssetGrid()" [class.disabled]="!allowSelectAll" class="dropdown-item">NAV_MENU.ORGANIZE.SELECT_ALL</button>
+                            <button translate id="btnSaveToNewGroup" [class.disabled]="selectedAssets.length < 1 || !user.isLoggedIn" (click)="copyIG = false; editIG = false; showImageGroupModal = true;" class="dropdown-item">NAV_MENU.ORGANIZE.NEW_GROUP</button>
+                            <button translate id="btnSaveToExistingGroup" [class.disabled]="selectedAssets.length < 1 || !user.isLoggedIn" (click)="showAddToGroupModal = true;" class="dropdown-item">NAV_MENU.ORGANIZE.EXISTING_GROUP</button>
+                            <button translate id="btnDeleteFromGroup" *ngIf="params['igId']" [class.disabled]="selectedAssets.length < 1 || !allowIgUpdate" (click)="deleteSelectedAssets()" class="dropdown-item">NAV_MENU.ORGANIZE.DELETE_SELECTIONS</button>
+                            <button translate id="btnDeselectImages" [class.disabled]="selectedAssets.length < 1" (click)="_assets.setSelectedAssets([])" class="dropdown-item">NAV_MENU.ORGANIZE.DESELECT</button>
                             <div class="dropdown-divider"></div>
 
                             <!--Active on Image Group Page-->
-                            <button id="btnEditGroup" [disabled]="!actionOptions.group || !allowIgUpdate" (click)="editIG = true; copyIG = false; showImageGroupModal = true;" class="dropdown-item">Edit Image Group</button>
-                            <button id="btnSaveGroupAs" [disabled]="!actionOptions.group" (click)="copyIG = true; editIG = false; showImageGroupModal = true;" class="dropdown-item">Save Image Group as...</button>
-                            <button id="btnDeleteGroup" [disabled]="!actionOptions.group || !allowIgUpdate" (click)="deleteIgModal = true" class="dropdown-item">Delete Image Group</button>                 
+                            <button translate id="btnEditGroup" [disabled]="!actionOptions.group || !allowIgUpdate" (click)="editIG = true; copyIG = false; showImageGroupModal = true;" class="dropdown-item">NAV_MENU.ORGANIZE.EDIT</button>
+                            <button translate id="btnSaveGroupAs" [disabled]="!actionOptions.group" (click)="copyIG = true; editIG = false; showImageGroupModal = true;" class="dropdown-item">NAV_MENU.ORGANIZE.SAVE</button>
+                            <button translate id="btnDeleteGroup" [disabled]="!actionOptions.group || !allowIgUpdate" (click)="deleteIgModal = true" class="dropdown-item">NAV_MENU.ORGANIZE.DELETE_GROUP</button>                 
 
                             <!--Amber <div class="dropdown-divider"></div>-->
                             <!--Amber <button class="dropdown-item">!Manage Personal Collection</button>-->
@@ -46,15 +46,15 @@
                         </div>
                     </li>
                     <li class="nav-item" ngbDropdown>
-                        <button class="btn btn-link" id="shareMenu" ngbDropdownToggle>Share</button>
+                        <button translate class="btn btn-link" id="shareMenu" ngbDropdownToggle>NAV_MENU.SHARE.TITLE</button>
                         <div class="dropdown-menu" aria-labelledby="shareMenu">
-                            <button [class.disabled]="selectedAssets.length !== 1" class="dropdown-item" (click)="showShareLinkModal = true">Generate Image Link</button>
+                            <button translate [class.disabled]="selectedAssets.length !== 1" class="dropdown-item" (click)="showShareLinkModal = true">NAV_MENU.SHARE.GENERATE_IMAGE_LINK</button>
                             <!--Active on Image Group Page-->
-                            <button [disabled]="!actionOptions.group || !genImgGrpLink" (click)="showShareIgModal = true" class="dropdown-item">Generate Image Group Link</button>
+                            <button translate [disabled]="!actionOptions.group || !genImgGrpLink" (click)="showShareIgModal = true" class="dropdown-item">NAV_MENU.SHARE.GENERATE_GROUP_LINK</button>
                             <!--Active on Image Group Page-->
-                            <button class="dropdown-item" [disabled]="!actionOptions.group" (click)="printImageGroupPage()">Print Image Group</button>
+                            <button translate class="dropdown-item" [disabled]="!actionOptions.group" (click)="printImageGroupPage()">NAV_MENU.SHARE.PRINT_GROUP</button>
                             <!--Active on Image Group Page-->
-                            <button *ngIf="params['igId']" (click)="_ig.triggerIgDownload()" class="dropdown-item">Download Image Group</button>
+                            <button translate *ngIf="params['igId']" (click)="_ig.triggerIgDownload()" class="dropdown-item">NAV_MENU.SHARE.DOWNLOAD_GROUP</button>
                             <!--Amber<div class="dropdown-divider"></div>-->
                             <!--Active on Image Group Page-->
                             <!--Amber <button class="dropdown-item">!Copy Citations for Image Group</button>-->
