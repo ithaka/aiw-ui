@@ -3,6 +3,7 @@ import { Router, ActivatedRoute, Params, UrlSegment } from '@angular/router';
 import { Subscription }   from 'rxjs/Subscription';
 import { AssetService } from '../shared/assets.service';
 import { AuthService } from '../shared/auth.service';
+import { Locker } from 'angular2-locker';
 
 @Component({
   selector: 'ang-browse-page', 
@@ -14,7 +15,11 @@ import { AuthService } from '../shared/auth.service';
 })
 
 export class BrowsePage implements OnInit, OnDestroy {
+
+  private _storage: Locker;
   private subscriptions: Subscription[] = [];
+  private institution: any = {};
+
   colMenuArray = [
       {
           label : 'Artstor Digital Library',
@@ -39,11 +44,14 @@ export class BrowsePage implements OnInit, OnDestroy {
 
   // TypeScript public modifiers
   constructor(
+      locker: Locker,
       private _auth: AuthService,
       private _assets: AssetService,
       private route: ActivatedRoute,
       private router: Router
-  ) {   
+  ) {  
+      this._storage = locker.useDriver(Locker.DRIVERS.LOCAL);
+      this.institution = this._storage.get('institution'); 
   } 
 
   ngOnInit() {
@@ -67,25 +75,33 @@ export class BrowsePage implements OnInit, OnDestroy {
     this.userTypeId = this._auth.getUser().typeId;
     
     if(this.userTypeId == 1 || this.userTypeId == 2 || this.userTypeId == 3){
-        this._assets.getCollections('institution')
-        .then(
-          (data)  => {
-            let instName = data.shortName ? data.shortName : 'Institutional';
-            var obj = {
-                label : instName + ' Collections',
-                id: '2',
-                link: 'institution'
-            }
-            this.colMenuArray.splice(1, 0 ,obj);
-          },
-          (error) => {
-            console.log(error);
-            return false;
-          }
-        ).catch(function(err) {
-          console.log(err);
-          return false;
-        });
+        let instName = this.institution && this.institution.shortName ? this.institution.shortName : 'Institutional';
+        var obj = {
+            label : instName + ' Collections',
+            id: '2',
+            link: 'institution'
+        }
+        this.colMenuArray.splice(1, 0 ,obj);
+
+        // this._assets.getCollections('institution')
+        // .then(
+        //   (data)  => {
+        //     let instName = data.shortName ? data.shortName : 'Institutional';
+        //     var obj = {
+        //         label : instName + ' Collections',
+        //         id: '2',
+        //         link: 'institution'
+        //     }
+        //     this.colMenuArray.splice(1, 0 ,obj);
+        //   },
+        //   (error) => {
+        //     console.log(error);
+        //     return false;
+        //   }
+        // ).catch(function(err) {
+        //   console.log(err);
+        //   return false;
+        // });
     }
   }
 
