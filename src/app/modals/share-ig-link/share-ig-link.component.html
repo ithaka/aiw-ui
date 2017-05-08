@@ -16,7 +16,7 @@
             <div class="value">
                 <textarea #copyURL id="copyURL" readonly>{{ shareLink }}</textarea>
             </div>
-            <div class="copy-clipboard" (click)=" copyURL.focus(); document.execCommand('SelectAll'); document.execCommand('Copy', false, null); igCopied = true; ">Copy to Clipboard</div>
+            <div class="copy-clipboard" (click)=" copyURL.select(); document.execCommand('copy', false, null); igCopied = true; ">Copy to Clipboard</div>
             <div *ngIf="igCopied" translate class="form-control-feedback">SHARE_IG_LINK_MODAL.COPY_SUCCESS</div>
             <div *ngIf="serviceStatus.tokenError" translate class="form-control-feedback">SHARE_IG_LINK_MODAL.SERVICE_ERROR</div>
           </div>
