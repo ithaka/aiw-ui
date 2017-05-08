@@ -55,7 +55,8 @@ export class SearchComponent implements OnInit, OnDestroy {
    */
   private updateSearchTerm(term: string) {
     if (!term || term === "") {
-      term = "*";
+      // term = "*";
+      return;
     }
 
     if(this.searchInResults){ // Search within results
