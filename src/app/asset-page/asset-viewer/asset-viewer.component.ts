@@ -1,11 +1,12 @@
 import {
+    AfterViewInit,
+    ChangeDetectionStrategy,
     Component,
-    OnInit,
-    OnDestroy,
-    Input,
-    Output,
     EventEmitter,
-    AfterViewInit
+    Input,
+    OnDestroy,
+    OnInit,
+    Output
 } from '@angular/core';
 import { Http } from '@angular/http';
 import { Subscription } from 'rxjs/Subscription';
@@ -50,7 +51,11 @@ export class AssetViewerComponent implements OnInit, OnDestroy, AfterViewInit {
     private lastZoomValue: number;
     private showCaption: boolean = true;
 
-    constructor(private _assets: AssetService, private _auth: AuthService, private http: Http) {}
+    private kalturaUrl: string;
+
+    constructor(private _assets: AssetService, private _auth: AuthService, private http: Http) {
+        
+    }
 
     ngOnInit() {
         if (this.asset.isDataLoaded) {
@@ -265,68 +270,56 @@ export class AssetViewerComponent implements OnInit, OnDestroy, AfterViewInit {
      * Setup the embedded Kaltura player
      */
     private loadKaltura(): void {
+        let targetId = 'kalturaIframe-' + this.index;
 
         // We gotta always say it's type 24, the type id for Kaltura!
         this._assets.getFpxInfo(this.asset.id, 24)
             .then(data => {
                 console.log(data);
-                
-                if (data['imageUrl'] && data['imageUrl'].indexOf('entry_id') < 0) {
-                    // imageUrl comes through without an appropriate URL, follow it to get what we want
-                    this.http
-                        .get(data['imageUrl'] + '.xml')
-                        .toPromise()
-                        .then(dataB => {
-                            dataB = dataB.json() || {}; 
+                this.kalturaUrl = data['imageUrl'];
+                document.getElementById(targetId).setAttribute('src', this.kalturaUrl);
 
-                            // Attach imageUrl
-                            dataB['imageUrl'] = 'http://kts.stage.artstor.org/service/get_player/?entry_id=' + dataB['external_id'];
-                            // data = dataB;
-                            this.getAndLoadKalturaId(dataB);
-                        });
-                }  else {
-                    this.getAndLoadKalturaId(data);
-                }
-
-
+                this.isKalturaAsset = true;
+                this.isOpenSeaDragonAsset = false;
             })
             .catch(err => {
                 console.log(err);
             });
     };
 
-    private getAndLoadKalturaId(data): void {
-        let kalturaId: string;
-        let targetId = 'video-' + this.asset.id + '-' + this.index;
+    // Keep: We will want to dynamically load the Kaltura player
+    // private getAndLoadKalturaId(data): void {
+        // let kalturaId: string;
+        // let targetId = 'video-' + this.asset.id + '-' + this.index;
 
-         if (data['imageUrl']) {
-                kalturaId = data['imageUrl'].substr(data['imageUrl'].lastIndexOf(':') + 1, data['imageUrl'].length - 1);
-            }
+        //  if (data['imageUrl']) {
+        //         kalturaId = data['imageUrl'].substr(data['imageUrl'].lastIndexOf(':') + 1, data['imageUrl'].length - 1);
+        //     }
 
-            if (kalturaId && kalturaId.length > 0) {
-                this.isKalturaAsset = true;
-                this.isOpenSeaDragonAsset = false;
+        //     if (kalturaId && kalturaId.length > 0) {
+        //         this.isKalturaAsset = true;
+        //         this.isOpenSeaDragonAsset = false;
 
-                kWidget.embed({
-                    'targetId': targetId,
-                    'wid': '_101',
-                    'uiconf_id': '23448189',
-                    'entry_id': kalturaId,
-                    'flashvars': {
-                        // We provide our own fullscreen interface
-                        'fullScreenBtn.plugin': false
-                    },
-                    'readyCallback': function(playerId) {
-                        var kdp: any = document.getElementById(playerId);
-                        kdp.kBind('mediaError', function() {
-                            console.error('Media error!');
-                            this.mediaLoadingFailed = true;
-                        });
-                    }
-                });
-                let kPlayer = document.getElementById(targetId);
-            }
-    };
+        //         kWidget.embed({
+        //             'targetId': targetId,
+        //             'wid': '_101',
+        //             'uiconf_id': '23448189',
+        //             'entry_id': kalturaId,
+        //             'flashvars': {
+        //                 // We provide our own fullscreen interface
+        //                 'fullScreenBtn.plugin': false
+        //             },
+        //             'readyCallback': function(playerId) {
+        //                 var kdp: any = document.getElementById(playerId);
+        //                 kdp.kBind('mediaError', function() {
+        //                     console.error('Media error!');
+        //                     this.mediaLoadingFailed = true;
+        //                 });
+        //             }
+        //         });
+        //         let kPlayer = document.getElementById(targetId);
+        //     }
+    // };
 
     /**
      * disableContextMenu

@@ -1,6 +1,6 @@
 
 $assetViewerPad: 20px;
-$viewerMinHeight: 95vh;
+$viewerMinHeight: 90vh;
 $viewerOldBrowserMinHeight: 600px;
 
 $metadataBg: #f1f8f1;
@@ -34,6 +34,12 @@ $metadataBg: #f1f8f1;
 .video-player {
     min-height: $viewerOldBrowserMinHeight;
     min-height: $viewerMinHeight;
+
+    & iframe {
+        min-width:100%;
+        min-height: $viewerOldBrowserMinHeight;
+        min-height: $viewerMinHeight;
+    }
 }
 
 .osd-wrap {
