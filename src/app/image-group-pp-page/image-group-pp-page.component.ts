@@ -57,11 +57,20 @@ export class ImageGroupPPPage implements OnInit, OnDestroy {
         console.log(results);
         if(results.id){
             this.igDesc = results.description;
-            this.assets = this.assets.concat(results.thumbnails);
+            
+            this._assets.getAllThumbnails(results.items)
+              .then( allThumbnails => {
+                this.assets = allThumbnails;
+              })
+              .catch( error => {
+                console.error(error);
+              });
+
+            // this.assets = this.assets.concat(results.thumbnails);
                   
-            for(var i = 0; i < this.assets.length; i++){
-                this.assets[i].metaData = this.assets[i].jsonListSt;
-            }
+            // for(var i = 0; i < this.assets.length; i++){
+            //     this.assets[i].metaData = this.assets[i].jsonListSt;
+            // }
 
         }
       })

@@ -795,9 +795,10 @@ export class AssetService {
         let options = new RequestOptions({ withCredentials: true });
         let startIndex = ((this.urlParams.currentPage - 1) * this.urlParams.pageSize) + 1;
         let thumbSize = 1;
-        let type = 6;
+        let categoryId = this.urlParams['categoryId'];
+        let type = categoryId ? 2 : 6;
         let colTypeIds = '';
-        let collIds = encodeURIComponent(this.urlParams['coll']);
+        let collIds = categoryId ? encodeURIComponent(categoryId) : encodeURIComponent(this.urlParams['coll']);
         let classificationIds = '';
         let geographyIds = '';
 

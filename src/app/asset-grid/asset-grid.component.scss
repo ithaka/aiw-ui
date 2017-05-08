@@ -1,12 +1,20 @@
 @import '../../sass/core/variables';
 
-.sortlist, .pagesizelist, .editMode, .number-results{
+.sortlist, .pagesizelist, .editMode, .number-results, .search-in-results{
     list-style: none;
     display: inline-block;
 }
-.number-results{
+.number-results, .search-in-results{
     font-size: 12px;
     padding: .5em 10px .5em 0;
+}
+.search-in-results{
+    label{
+        font-weight: 400;
+        font-family: inherit;
+        padding-left: 3px;
+    }
+
 }
 .active-sort, .page-size{
     display: inline-block;
