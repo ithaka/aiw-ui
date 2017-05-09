@@ -60,7 +60,7 @@ export class AuthService implements CanActivate {
       // Test Endpoints
       this.hostname = '//test.stagely.artstor.org';
       this.baseUrl = '//test.stagely.artstor.org/api/secure';
-      // this.imageFpxUrl = '//test.stagely.artstor.org/api/library/secure/imagefpx';
+      this.imageFpxUrl =  '//test.stagely.artstor.org/api/secure/imagefpx'; 
       this.lostPassUrl = '//test.stagely.artstor.org/api/lostpw'; 
       this.IIIFUrl = '//tsprod.artstor.org/rosa-iiif-endpoint-1.0-SNAPSHOT/fpx';
       this.logUrl = '//ang-ui-logger.apps.test.cirrostratus.org/api/v1';
