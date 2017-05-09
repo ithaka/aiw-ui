@@ -59,7 +59,6 @@ export class NewIgModal implements OnInit {
     if (this.isArtstorUser) { (<FormControl>this.newIgForm.controls['artstorPermissions']).setValue("private") }
 
     if(this.ig.id && this.editIG){
-      console.log(this.ig);
       (<FormControl>this.newIgForm.controls['title']).setValue(this.ig.name);
 
       this.tags = this.ig.tags;
@@ -67,7 +66,8 @@ export class NewIgModal implements OnInit {
 
       (<FormControl>this.newIgForm.controls['public']).setValue(this.checkIfPublic());
 
-      // this.ig.public && (<FormControl>this.newIgForm.controls['artstorPermissions']).setValue("global")
+      if (this.ig.public) { (<FormControl>this.newIgForm.controls['artstorPermissions']).setValue("global") }
+      else if (this.checkIfPublic()) { (<FormControl>this.newIgForm.controls['artstorPermissions']).setValue("institution") }
 
 
 
