@@ -35,7 +35,7 @@ export class GroupService {
 
         let tagParam = ""
         tags.forEach( tag => { 
-            tagParam += '&tags=' + tag
+            tagParam += '&tags=' + encodeURIComponent(tag)
         })
 
         return this.http.get(
