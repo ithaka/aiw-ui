@@ -120,11 +120,11 @@ export class ImageGroupPage implements OnInit, OnDestroy {
           // THIS IS MOCK CODE FOR THE USER'S DOWNLOAD PERMISSIONS
           // IT HELPS THIS PAGE AND THE IMAGE GROUP DOWNLOAD MODAL FUNCTION IN THE ABSENCE OF DOWNLOAD INFORMATION
           this.ig.igDownloadInfo = {
-            alreadyDwnldImgCnt: 992,
-            curAllowedDwnldCnt: 1008,
+            alreadyDwnldImgCnt: 0,
+            curAllowedDwnldCnt: 2000,
             igImgCount: this.ig.items.length,
             igId: this.ig.id,
-            pptExportAllowed: this.ig.items.length <= 1008
+            pptExportAllowed: this.ig.items.length <= 2000
           }
 
           // // get the user's download count
