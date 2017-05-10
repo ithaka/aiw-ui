@@ -27,7 +27,7 @@ $typeAccent: $red;
 }
 
 %Graphik-Regular-Web, %SansRegular {
-  font-family: 'Graphik Web', 'Franklin Gothic Medium', Arial, sans-serif;
+  font-family: 'Graphik Web', 'Helvetica', Arial, sans-serif;
   font-weight:  400;
   font-style:   normal;
   font-stretch: normal;
@@ -47,7 +47,7 @@ $typeAccent: $red;
 }
 
 %Graphik-RegularItalic-Web, %SansItalic {
-  font-family: 'Graphik Web', sans-serif;
+  font-family: 'Graphik Web', 'Helvetica', Arial, sans-serif;
   font-weight:  400;
   font-style:   italic;
   font-stretch: normal;
@@ -67,7 +67,7 @@ $typeAccent: $red;
 }
 
 %Graphik-Bold-Web {
-  font-family: 'Graphik Web', sans-serif;
+  font-family: 'Graphik Web', 'Helvetica', Arial, sans-serif;
   font-weight:  700;
   font-style:   normal;
   font-stretch: normal;
@@ -245,9 +245,9 @@ h2, .h2 {
 }
 
 h3, .h3 {
-  @extend %Graphik-Regular-Web;
+  @extend %Graphik-Bold-Web;
   font-size: 13px;
-  font-weight: bold;
+  // font-weight: bold;
   color: #444;
   line-height: 18px;
   margin: 2px 0;
