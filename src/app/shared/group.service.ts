@@ -154,4 +154,18 @@ export class GroupService {
         )
         .map((res) => { return res.json() || {} })
     }
+
+    /**
+     * Make image group viewable to all users from all institutions - only allowable by Artstor user
+     * @param igId The image group id to make global
+     * @returns Observable resolved with { success: boolean, message: string }
+     */
+    public makeIgGlobal(igId: string) {
+        return this.http.put(
+            [this.groupUrl,igId, "admin", "public"].join("/"),
+            { public: true },
+            this.options
+        )
+        .map((res) => { return res.json() || {} })
+    }
 }

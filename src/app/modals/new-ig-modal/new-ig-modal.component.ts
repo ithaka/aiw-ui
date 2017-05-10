@@ -136,6 +136,8 @@ export class NewIgModal implements OnInit {
       }
     }
 
+    if (formValue.artstorPermissions == "institution" || formValue.artstorPermissions == "global") { formValue.public = true }
+
     // Form is valid! Create Group object
     let itemIds = [];
     this.selectedAssets.forEach(
@@ -158,7 +160,6 @@ export class NewIgModal implements OnInit {
 
       .subscribe(
         data => {
-            console.log(data);
             this.isLoading = false;
 
             // Close the modal
@@ -251,6 +252,18 @@ export class NewIgModal implements OnInit {
             this.isLoading = false;
             this.newGroup = data;
             this.serviceResponse.success = true;
+
+            // if an Artstor user set it so that "Everyone" can see it, call the server to make it global
+            if (formValue.artstorPermissions == "global") {
+              this._group.makeIgGlobal(this.newGroup.id)
+                .take(1)
+                .subscribe((res) => {
+                  // not really sure what to do here?
+                }, (err) => {
+                  console.error(err)
+                  // also not really sure what to do here...
+                })
+            }
           },
           error => {
             console.error(error);
