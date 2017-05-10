@@ -6,6 +6,8 @@ import { AppState } from '../app.service';
 import { AssetService } from '../shared/assets.service';
 import { AssetFiltersService } from '../asset-filters/asset-filters.service';
 
+declare var _satellite: any;
+
 @Component({
   selector: 'ang-asset-filters', 
   styleUrls: [ './asset-filters.component.scss' ],
@@ -170,9 +172,13 @@ export class AssetFilters {
   }
 
   toggleFilter(value, group){
+
     if(this._filters.isApplied(group, value)){ // Remove Filter
       this._filters.remove(group, value);
     } else { // Add Filter
+      // Track in Adobe Analytics
+      _satellite.track("advanced_search_filters");
+      
       this._filters.apply(group, value);
     }
     this.pagination.currentPage = 1;
