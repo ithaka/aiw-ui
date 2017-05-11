@@ -60,7 +60,7 @@ export class AuthService implements CanActivate {
       this.hostname = '//test.stagely.artstor.org';
       this.baseUrl = '//test.stagely.artstor.org/api/secure';
       this.imageFpxUrl =  '//test.stagely.artstor.org/api/secure/imagefpx'; 
-      this.lostPassUrl = '//test.stagely.artstor.org/api/lostpw'; 
+      this.lostPassUrl = '//test.stagely.artstor.org/library/lostpw'; 
       this.IIIFUrl = '//tsprod.artstor.org/rosa-iiif-endpoint-1.0-SNAPSHOT/fpx';
       this.logUrl = '//ang-ui-logger.apps.test.cirrostratus.org/api/v1';
     } else if( document.location.hostname.indexOf('ang-ui-earth.apps.test.cirrostratus.org') > -1 ) {
