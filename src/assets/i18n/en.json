@@ -108,8 +108,8 @@
   },
   "NAV_MENU": {
     "HOME": "Home",
-    "BROWSE": "Browse",
     "COLLECTIONS": {
+      "TITLE": "Browse",
       "ARTSTOR": "Artstor Collections",
       "INSTITUTION": "Institutional Collections",
       "OPEN": "Open Collections",
