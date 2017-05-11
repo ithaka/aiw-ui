@@ -41,7 +41,7 @@
                 <a class="btn btn-secondary" tabindex="1" *ngIf="assets[0].downloadLink && user.isLoggedIn" 
                     [attr.href]="downloadAuth() && !assets[0].disableDownload ? assets[0].downloadLink : null"
                     (click)="downloadAuth() && !assets[0].disableDownload ? null : showAgreeModal = true"
-                    [attr.download]="downloadAuth() && assets[0].title"
+                    [attr.download]="downloadAuth() && assets[0]?.title"
                     [class.disabled]="assets[0].disableDownload"
                     title="{{ assets[0].disableDownload ? 'Image is not available for download.' : 'Image download'}}">
                     Download
