@@ -291,7 +291,7 @@ export class AssetService {
      * @param params Object conaining all route params
      * @param refresh boolean value specifing if the results need to be refreshed
      */
-    public queryAll(params: any, refresh?: boolean) {
+    public queryAll(params: any, refresh?: boolean): void {
         // Make sure number params are parsed
         params =  Object.assign( Object.assign({}, this.defaultUrlParams), params);
         params.pageSize = parseInt(params.pageSize);
@@ -753,7 +753,7 @@ export class AssetService {
      * Executes search and sets relevant asset-grid parameters
      * @param term Search term for which a search should be executed
      */
-    private loadSearch(term: string) {
+    private loadSearch(term: string): void {
         // Don't wait for previous subscription anymore
         if (this.searchSubscription && this.searchSubscription.hasOwnProperty('unsubscribe')) {
             this.searchSubscription.unsubscribe();
@@ -777,8 +777,26 @@ export class AssetService {
                     // Set the allResults object
                     this.updateLocalResults(data);
             }, (error) => {
+                // as far as I can tell, the ADL services never respond with proper errors
+                // so all errors will be routed through the success channel above
+                // so if there's an error, we can be sure it's not from the services
+                // which is great because Fastly throws errors when searches take longer than 20 seconds
+                // which is common
+                // so here's the flow chart for the fix:
+                // <--------FLOW CHART-------->
+                //  search something -> it takes too long ->
+                //  Fastly throws error and disconnects (w/ 900 status and no Access-Control-Allow-Origin headers,
+                //  so we can't actually tell that we're getting a 900 status, we're mostly guessing) ->
+                //  the search will complete soon and will be cached -> rerun the search and it will work
+                // <-------------------------->
+                // we just recursively call this function until search results load
+                // so, the user never sees an error (woohoo) also, if they refresh it will likely work anyway
+                // ok i'm done
+
+                this.loadSearch(term)
                 // Pass error down to allResults listeners
-                this.allResultsSource.error(error); // .throw(error);
+                // console.error(error, error.status)
+                // this.allResultsSource.error(error); // .throw(error);
             });
     }
 
