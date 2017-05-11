@@ -65,6 +65,7 @@ import {
   ShareIgLinkModal, 
   ConfirmModal 
 } from './modals';
+import { SkyBannerComponent } from './sky-banner/sky-banner.component'
 
 
 // Application wide providers
@@ -113,6 +114,7 @@ type StoreType = {
     DownloadLimitModal,
     ShareIgLinkModal,
     ConfirmModal,
+    SkyBannerComponent,
     DeleteIgModal,
     NoIgModal,
     ClusterPage,
