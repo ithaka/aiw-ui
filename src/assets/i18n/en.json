@@ -68,7 +68,7 @@
       "SAVE": "Save Changes",
       "NAV_TO_GROUP": "Go to group",
       "CLOSE": "Close",
-      "RETURN_TO_RESULTS": "Return to search",
+      "RETURN_TO_RESULTS": "Return",
       "HELP": "Help"
     }
   },
@@ -108,8 +108,8 @@
   },
   "NAV_MENU": {
     "HOME": "Home",
-    "BROWSE": "Browse",
     "COLLECTIONS": {
+      "TITLE": "Browse",
       "ARTSTOR": "Artstor Collections",
       "INSTITUTION": "Institutional Collections",
       "OPEN": "Open Collections",

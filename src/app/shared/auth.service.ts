@@ -25,9 +25,8 @@ export class AuthService implements CanActivate {
   private thumbUrl;
   private IIIFUrl;
   private logUrl: string;
-  // Use header rewrite proxy for local development
-  // - don't use proxy for now
-  private proxyUrl = '';
+  // Media download proxy
+  private proxyUrl = '//proxy.lively.artstor.org';
   private groupUrl = '';
 
   private institutionObjValue: any = {};
@@ -182,7 +181,7 @@ export class AuthService implements CanActivate {
   /** Returns url used for downloading some media, such as documents */
   public getMediaUrl(): string {
     // This is a special case, and should always points to library.artstor or stage 
-    return this.getHostname() + '/media';
+    return this.getProxyUrl() + '/media';
   }
 
   /**

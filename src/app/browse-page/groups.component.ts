@@ -80,10 +80,12 @@ export class BrowseGroupsComponent implements OnInit {
       level: 'public'
     })
 
-    this.browseMenuArray.push({
-      label: 'Shared with Me',
-      level: 'shared'
-    })
+    if (this._auth.getUser() && this._auth.getUser().isLoggedIn) {
+      this.browseMenuArray.push({
+        label: 'Shared with Me',
+        level: 'shared'
+      })
+    }
 
     this.loadCategory(this.selectedBrowseLevel)
   }
