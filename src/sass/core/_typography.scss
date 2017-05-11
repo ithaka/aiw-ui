@@ -14,104 +14,104 @@ $typeAccent: $red;
 // Font Imports
 // ----------------------------------------------------
 
-@font-face {
-  font-family: 'Graphik Web';
-  src: url('/assets/fonts/Graphik-Regular-Web.eot');
-  src: url('/assets/fonts/Graphik-Regular-Web.eot?#iefix') format('embedded-opentype'),
-     url('/assets/fonts/Graphik-Regular-Web.woff') format('woff'),
-     url('/assets/fonts/Graphik-Regular-Web.ttf') format('truetype'),
-     url('/assets/fonts/Graphik-Regular-Web.svg#Graphik-Regular') format('svg');
-  font-weight:  400;
-  font-style:   normal;
-  font-stretch: normal;
-}
+// @font-face {
+//   font-family: 'Graphik Web';
+//   src: url('/assets/fonts/Graphik-Regular-Web.eot');
+//   src: url('/assets/fonts/Graphik-Regular-Web.eot?#iefix') format('embedded-opentype'),
+//      url('/assets/fonts/Graphik-Regular-Web.woff') format('woff'),
+//      url('/assets/fonts/Graphik-Regular-Web.ttf') format('truetype'),
+//      url('/assets/fonts/Graphik-Regular-Web.svg#Graphik-Regular') format('svg');
+//   font-weight:  400;
+//   font-style:   normal;
+//   font-stretch: normal;
+// }
 
 %Graphik-Regular-Web, %SansRegular {
-  font-family: 'Graphik Web', 'Helvetica', Arial, sans-serif;
+  font-family: Verdana, Arial, sans-serif;
   font-weight:  400;
   font-style:   normal;
   font-stretch: normal;
 }
 
 
-@font-face {
-  font-family: 'Graphik Web';
-  src: url('/assets/fonts/Graphik-RegularItalic-Web.eot');
-  src: url('/assets/fonts/Graphik-RegularItalic-Web.eot?#iefix') format('embedded-opentype'),
-     url('/assets/fonts/Graphik-RegularItalic-Web.woff') format('woff'),
-     url('/assets/fonts/Graphik-RegularItalic-Web.ttf') format('truetype'),
-     url('/assets/fonts/Graphik-RegularItalic-Web.svg#Graphik-RegularItalic') format('svg');
-  font-weight:  400;
-  font-style:   italic;
-  font-stretch: normal;
-}
+// @font-face {
+//   font-family: 'Graphik Web';
+//   src: url('/assets/fonts/Graphik-RegularItalic-Web.eot');
+//   src: url('/assets/fonts/Graphik-RegularItalic-Web.eot?#iefix') format('embedded-opentype'),
+//      url('/assets/fonts/Graphik-RegularItalic-Web.woff') format('woff'),
+//      url('/assets/fonts/Graphik-RegularItalic-Web.ttf') format('truetype'),
+//      url('/assets/fonts/Graphik-RegularItalic-Web.svg#Graphik-RegularItalic') format('svg');
+//   font-weight:  400;
+//   font-style:   italic;
+//   font-stretch: normal;
+// }
 
 %Graphik-RegularItalic-Web, %SansItalic {
-  font-family: 'Graphik Web', 'Helvetica', Arial, sans-serif;
+  font-family: Verdana, Arial, sans-serif;
   font-weight:  400;
   font-style:   italic;
   font-stretch: normal;
 }
 
 
-@font-face {
-  font-family: 'Graphik Web';
-  src: url('/assets/fonts/Graphik-Bold-Web.eot');
-  src: url('/assets/fonts/Graphik-Bold-Web.eot?#iefix') format('embedded-opentype'),
-     url('/assets/fonts/Graphik-Bold-Web.woff') format('woff'),
-     url('/assets/fonts/Graphik-Bold-Web.ttf') format('truetype'),
-     url('/assets/fonts/Graphik-Bold-Web.svg#Graphik-Bold') format('svg');
-  font-weight:  700;
-  font-style:   normal;
-  font-stretch: normal;
-}
+// @font-face {
+//   font-family: 'Graphik Web';
+//   src: url('/assets/fonts/Graphik-Bold-Web.eot');
+//   src: url('/assets/fonts/Graphik-Bold-Web.eot?#iefix') format('embedded-opentype'),
+//      url('/assets/fonts/Graphik-Bold-Web.woff') format('woff'),
+//      url('/assets/fonts/Graphik-Bold-Web.ttf') format('truetype'),
+//      url('/assets/fonts/Graphik-Bold-Web.svg#Graphik-Bold') format('svg');
+//   font-weight:  700;
+//   font-style:   normal;
+//   font-stretch: normal;
+// }
 
 %Graphik-Bold-Web {
-  font-family: 'Graphik Web', 'Helvetica', Arial, sans-serif;
+  font-family: Verdana, Arial, sans-serif;
   font-weight:  700;
   font-style:   normal;
   font-stretch: normal;
 }
 
 
-@font-face {
-  font-family: 'Lyon Display Web';
-  src: url('/assets/fonts/LyonDisplay-Regular-Web.eot');
-  src: url('/assets/fonts/LyonDisplay-Regular-Web.eot?#iefix') format('embedded-opentype'),
-     url('/assets/fonts/LyonDisplay-Regular-Web.woff') format('woff'),
-     url('/assets/fonts/LyonDisplay-Regular-Web.ttf') format('truetype'),
-     url('/assets/fonts/LyonDisplay-Regular-Web.svg#Lyon Display Web') format('svg');
-  font-weight:  400;
-  font-style:   normal;
-  font-stretch: normal;
-}
+// @font-face {
+//   font-family: 'Lyon Display Web';
+//   src: url('/assets/fonts/LyonDisplay-Regular-Web.eot');
+//   src: url('/assets/fonts/LyonDisplay-Regular-Web.eot?#iefix') format('embedded-opentype'),
+//      url('/assets/fonts/LyonDisplay-Regular-Web.woff') format('woff'),
+//      url('/assets/fonts/LyonDisplay-Regular-Web.ttf') format('truetype'),
+//      url('/assets/fonts/LyonDisplay-Regular-Web.svg#Lyon Display Web') format('svg');
+//   font-weight:  400;
+//   font-style:   normal;
+//   font-stretch: normal;
+// }
 
-%LyonDisplay-Regular-Web {
-  font-family: 'Lyon Display Web', serif;
-  font-weight:  400;
-  font-style:   normal;
-  font-stretch: normal;
-}
+// %LyonDisplay-Regular-Web {
+//   font-family: 'Lyon Display Web', serif;
+//   font-weight:  400;
+//   font-style:   normal;
+//   font-stretch: normal;
+// }
 
 
-@font-face {
-  font-family: 'Lyon Display Web', serif;
-  src: url('/assets/fonts/LyonDisplay-RegularItalic-Web.eot');
-  src: url('/assets/fonts/LyonDisplay-RegularItalic-Web.eot?#iefix') format('embedded-opentype'),
-     url('/assets/fonts/LyonDisplay-RegularItalic-Web.woff') format('woff'),
-     url('/assets/fonts/LyonDisplay-RegularItalic-Web.ttf') format('truetype'),
-     url('/assets/fonts/LyonDisplay-RegularItalic-Web.svg#Lyon Display Web') format('svg');
-  font-weight:  400;
-  font-style:   italic;
-  font-stretch: normal;
-}
+// @font-face {
+//   font-family: 'Lyon Display Web', serif;
+//   src: url('/assets/fonts/LyonDisplay-RegularItalic-Web.eot');
+//   src: url('/assets/fonts/LyonDisplay-RegularItalic-Web.eot?#iefix') format('embedded-opentype'),
+//      url('/assets/fonts/LyonDisplay-RegularItalic-Web.woff') format('woff'),
+//      url('/assets/fonts/LyonDisplay-RegularItalic-Web.ttf') format('truetype'),
+//      url('/assets/fonts/LyonDisplay-RegularItalic-Web.svg#Lyon Display Web') format('svg');
+//   font-weight:  400;
+//   font-style:   italic;
+//   font-stretch: normal;
+// }
 
-%LyonDisplay-RegularItalic-Web {
-  font-family: 'Lyon Display Web', serif;
-  font-weight:  400;
-  font-style:   italic;
-  font-stretch: normal;
-} 
+// %LyonDisplay-RegularItalic-Web {
+//   font-family: 'Lyon Display Web', serif;
+//   font-weight:  400;
+//   font-style:   italic;
+//   font-stretch: normal;
+// } 
 
 // Core Type Styles
 // ----------------------------------------------------
@@ -245,9 +245,9 @@ h2, .h2 {
 }
 
 h3, .h3 {
-  @extend %Graphik-Bold-Web;
+  @extend %Graphik-Regular-Web;
   font-size: 13px;
-  // font-weight: bold;
+  font-weight: bold;
   color: #444;
   line-height: 18px;
   margin: 2px 0;
@@ -266,5 +266,5 @@ h3, .h3 {
     font-size: 13px;
     font-weight: 600;
     border-bottom: 1px solid #ddd;
-    font-family: 'Graphik', Futura, Helvetica, sans-serif;
+    @extend %Graphik-Regular-Web;
 }

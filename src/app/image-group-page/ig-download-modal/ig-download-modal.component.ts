@@ -81,9 +81,9 @@ export class PptModalComponent implements OnInit {
     }
 
 
-    group.thumbnails.forEach((thumb, index, thumbs) => {
-        imgStr += [(index + 1), thumb.objectId, "1024x1024"].join(":")
-        if (index !== thumbs.length - 1) {
+    group.items.forEach((item, index, items) => {
+        imgStr += [(index + 1), item, "1024x1024"].join(":")
+        if (index !== items.length - 1) {
             imgStr += ","
         }
     })

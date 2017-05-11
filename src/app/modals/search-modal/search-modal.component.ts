@@ -5,6 +5,8 @@ import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { AssetService } from './../../shared/assets.service';
 import { AssetFiltersService } from './../../asset-filters/asset-filters.service';
 
+declare var _satellite: any;
+
 @Component({
   selector: 'ang-search-modal',
   templateUrl: 'search-modal.component.html',
@@ -244,6 +246,9 @@ export class SearchModal implements OnInit {
     if (advQuery.length < 1) {
       advQuery = "*";
     }
+    
+    // Track in Adobe Analytics
+    _satellite.track("advanced_search");
     
     this._router.navigate(['/search', advQuery, this.filterParams]);
 

@@ -5,6 +5,8 @@ import { Subscription }   from 'rxjs/Subscription';
 
 import { AssetService } from '../';
 
+declare var _satellite: any;
+
 @Component({
   selector: 'ang-search',
   templateUrl: 'search.component.html',
@@ -58,6 +60,9 @@ export class SearchComponent implements OnInit, OnDestroy {
       // term = "*";
       return;
     }
+
+    // Track in Adobe Analytics
+    _satellite.track("search");
 
     if(this.searchInResults){ // Search within results
       let routeParams = this.route.snapshot.params;

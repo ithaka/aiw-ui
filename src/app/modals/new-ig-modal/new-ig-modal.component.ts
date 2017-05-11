@@ -47,7 +47,7 @@ export class NewIgModal implements OnInit {
   ) {
     this.newIgForm = _fb.group({
       title: [null, Validators.required],
-      artstorPermissions: [this.isArtstorUser ? "private" : null],
+      artstorPermissions: [null],
       public: [false],
       tags: [this.tags]
     })
@@ -55,14 +55,19 @@ export class NewIgModal implements OnInit {
 
   ngOnInit() {
     this.isArtstorUser = this._auth.getUser().institutionId == 1000;
+    // initialize the artstorPermissions to private
+    if (this.isArtstorUser) { (<FormControl>this.newIgForm.controls['artstorPermissions']).setValue("private") }
+
     if(this.ig.id && this.editIG){
-      console.log(this.ig);
       (<FormControl>this.newIgForm.controls['title']).setValue(this.ig.name);
 
       this.tags = this.ig.tags;
       (<FormControl>this.newIgForm.controls['tags']).setValue(this.tags);
 
       (<FormControl>this.newIgForm.controls['public']).setValue(this.checkIfPublic());
+
+      if (this.ig.public) { (<FormControl>this.newIgForm.controls['artstorPermissions']).setValue("global") }
+      else if (this.checkIfPublic()) { (<FormControl>this.newIgForm.controls['artstorPermissions']).setValue("institution") }
 
 
 
