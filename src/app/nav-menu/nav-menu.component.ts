@@ -52,6 +52,9 @@ export class NavMenu implements OnInit, OnDestroy {
   private copyIG: boolean = false;
   private editIG: boolean = false;
   private params: any = {};
+
+  // Flag for confimation popup for deleting selected asset(s) from the IG
+  private showConfirmationModal: boolean = false;
   
   // TypeScript public modifiers
   constructor(
@@ -154,6 +157,20 @@ export class NavMenu implements OnInit, OnDestroy {
         this._assets.removeFromResults(removeIds) // make the call to asset service which will update the asset grid with modified assets
         this._assets.selectModeToggle.emit()
       })
+  }
+
+
+  /**
+   * Closes confirmation modal
+   */
+  private closeConfirmationModal(command) {
+    console.log(this.params);
+    // Hide modal
+    this.showConfirmationModal = false;
+
+    if (command && command.includes('Save')) {
+      this.deleteSelectedAssets();
+    }
   }
 
 
