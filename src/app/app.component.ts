@@ -20,7 +20,7 @@ import { AppState } from './app.service';
     '../sass/app.scss'
   ],
   template: `
-    <ang-sky-banner></ang-sky-banner>
+    <ang-sky-banner *ngIf="showSkyBanner" (closeBanner)="showSkyBanner = false"></ang-sky-banner>
     <nav-bar></nav-bar>
 
     <main>
@@ -35,6 +35,8 @@ export class App {
   angularclassLogo = 'assets/img/angularclass-avatar.png';
   name = 'Artstor';
   url = 'https://artstor.org/';
+
+  private showSkyBanner: boolean = true
 
   constructor(
     public appState: AppState,
@@ -61,7 +63,9 @@ export class App {
   }
 
   ngOnInit() {
-    // console.log('App Component has loaded');
+    // if ( document.location.hostname.indexOf('beta.artstor.org') > -1 || document.location.hostname.indexOf('prod.cirrostratus.org') > -1 || document.location.hostname.indexOf('lively.artstor.org') > -1 ) {
+    //   this.showSkyBanner = true
+    // }
   }
 
 }
