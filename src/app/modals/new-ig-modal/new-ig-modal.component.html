@@ -82,8 +82,8 @@
       </div>
       <div class="modal-footer">
         <div class="form-group">
-          <button (click)="closeModal.emit()" type="button" class="btn btn-secondary">Return to search</button>
-          <button [routerLink]="['/group', newGroup.id]" type="button" class="btn btn-primary">Go to group</button>
+          <button translate (click)="closeModal.emit()" type="button" class="btn btn-secondary">NEW_GROUP_MODAL.CONTROLS.RETURN_TO_RESULTS</button>
+          <button translate [routerLink]="['/group', newGroup.id]" type="button" class="btn btn-primary">NEW_GROUP_MODAL.CONTROLS.NAV_TO_GROUP</button>
         </div>
       </div>
     </div> 
