@@ -20,6 +20,7 @@ import { AppState } from './app.service';
     '../sass/app.scss'
   ],
   template: `
+    <ang-sky-banner></ang-sky-banner>
     <nav-bar></nav-bar>
 
     <main>
