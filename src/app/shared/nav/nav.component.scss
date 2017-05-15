@@ -61,7 +61,14 @@ $loginPanelMobileHeight: 0px;
 .login-panel {
     position: relative;
     min-height: $loginPanelMobileHeight;
-    max-height: $loginPanelMobileHeight;
+    // max-height: $loginPanelMobileHeight;
+    overflow: hidden;
+    height: 100%;
+
+    @media (max-width: $phone) {
+        max-height: 0px;
+    }
+
     @media (min-width: 768px) {
         min-height: $loginPanelCollapseHeight;
         max-height: $loginPanelCollapseHeight;
