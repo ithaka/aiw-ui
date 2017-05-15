@@ -8,13 +8,19 @@ import { AssetService } from './../../shared';
   templateUrl: 'thumbnail.component.html',
   styles: [`
     .card-icon-group {
-      height: 19px;
+        height: 19px;
+    }
+    .disablePointerEvents{
+        pointer-events: none;
     }
   `]
 })
 export class ThumbnailComponent implements OnInit {
   @Input()
   private thumbnail: Thumbnail;
+
+  @Input()
+  private reorderMode: boolean;
 
   private collectionTypeMap: any = {
     1: { name: "artstor-asset", alt: "Artstor Digital Library" },
@@ -27,7 +33,8 @@ export class ThumbnailComponent implements OnInit {
 
   constructor(
     private _assets: AssetService
-  ) { }
+  ) {
+   }
 
   ngOnInit() { 
   }
