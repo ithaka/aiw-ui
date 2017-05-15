@@ -36,7 +36,7 @@ export class App {
   name = 'Artstor';
   url = 'https://artstor.org/';
 
-  private showSkyBanner: boolean = true
+  private showSkyBanner: boolean = false
 
   constructor(
     public appState: AppState,
@@ -63,9 +63,9 @@ export class App {
   }
 
   ngOnInit() {
-    // if ( document.location.hostname.indexOf('beta.artstor.org') > -1 || document.location.hostname.indexOf('prod.cirrostratus.org') > -1 || document.location.hostname.indexOf('lively.artstor.org') > -1 ) {
-    //   this.showSkyBanner = true
-    // }
+    if ( document.location.hostname.indexOf('beta.artstor.org') > -1 || document.location.hostname.indexOf('prod.cirrostratus.org') > -1 || document.location.hostname.indexOf('lively.artstor.org') > -1 ) {
+      this.showSkyBanner = true
+    }
   }
 
 }
