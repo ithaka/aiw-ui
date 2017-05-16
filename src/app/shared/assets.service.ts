@@ -793,10 +793,15 @@ export class AssetService {
                 // so, the user never sees an error (woohoo) also, if they refresh it will likely work anyway
                 // ok i'm done
 
-                this.loadSearch(term)
+                if (error.status == 0) {
+                    this.loadSearch(term)
+                } else {
+                    console.error(error)
+                    this.allResultsSource.error(error); // .throw(error);
+                }
+                
                 // Pass error down to allResults listeners
                 // console.error(error, error.status)
-                // this.allResultsSource.error(error); // .throw(error);
             });
     }
 
