@@ -794,7 +794,7 @@ export class AssetService {
                 // ok i'm done
 
                 if (error.status == 0) {
-                    this.loadSearch(term)
+                    setTimeout(this.loadSearch(term), 7000)
                 } else {
                     console.error(error)
                     this.allResultsSource.error(error); // .throw(error);
