@@ -110,6 +110,9 @@ export class AssetService {
     // Switch for using Sycamore's New Search interface
     private newSearch : boolean = false;
 
+    // bandaid for the re-search functionality
+    private searchErrorCount: number = 0
+
     constructor(
         private _filters: AssetFiltersService,
         private _router: Router,
@@ -793,9 +796,11 @@ export class AssetService {
                 // so, the user never sees an error (woohoo) also, if they refresh it will likely work anyway
                 // ok i'm done
 
-                if (error.status == 0) {
+                if (error.status == 0 && this.searchErrorCount < 3) {
+                    this.searchErrorCount++
                     setTimeout(this.loadSearch(term), 7000)
                 } else {
+                    this.searchErrorCount = 0
                     console.error(error)
                     this.allResultsSource.error(error); // .throw(error);
                 }
