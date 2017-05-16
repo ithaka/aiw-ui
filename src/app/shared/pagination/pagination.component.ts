@@ -17,4 +17,23 @@ export class PaginationComponent implements OnInit {
 
   }
 
+  /**
+   * pageNumberKeyPress
+   * on keypress of pagination input field - makes sure the user can't enter page number less than 1 or great than the total pages
+   * @param event 
+   */
+
+  private pageNumberKeyPress(event): boolean{
+    let currentPageNumber = this.pageObj.currentPage ? this.pageObj.currentPage : '';
+    let nextPagenumber = parseInt(currentPageNumber.toString() + event.key);
+
+    if((nextPagenumber < 1) || (nextPagenumber > this.pageObj.totalPages)){
+      event.stopPropagation();
+      return false;
+    }
+    else{
+      return true;
+    }
+  }
+
 }
