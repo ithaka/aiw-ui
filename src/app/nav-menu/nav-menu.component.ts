@@ -168,7 +168,7 @@ export class NavMenu implements OnInit, OnDestroy {
     // Hide modal
     this.showConfirmationModal = false;
 
-    if (command && command.includes('Save')) {
+    if (command && command.includes('Yes')) {
       this.deleteSelectedAssets();
     }
   }
