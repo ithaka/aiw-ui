@@ -44,8 +44,8 @@ export class NewIgModal implements OnInit {
       private _fb: FormBuilder, 
       private _group: GroupService,
       private router: Router,
-      private route?: ActivatedRoute,
-      private _analytics: AnalyticsService
+      private _analytics: AnalyticsService,
+      private route?: ActivatedRoute
   ) {
     this.newIgForm = _fb.group({
       title: [null, Validators.required],
