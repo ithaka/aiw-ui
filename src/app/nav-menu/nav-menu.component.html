@@ -50,7 +50,7 @@
                         <div class="dropdown-menu" aria-labelledby="shareMenu">
                             <button translate [class.disabled]="selectedAssets.length !== 1" class="dropdown-item" (click)="showShareLinkModal = true">NAV_MENU.SHARE.GENERATE_IMAGE_LINK</button>
                             <!--Active on Image Group Page-->
-                            <button translate [disabled]="!actionOptions.group || !allowIgUpdate || !genImgGrpLink" (click)="showShareIgModal = true" class="dropdown-item">NAV_MENU.SHARE.GENERATE_GROUP_LINK</button>
+                            <button translate [disabled]="!actionOptions.group || !genImgGrpLink" (click)="showShareIgModal = true" class="dropdown-item">NAV_MENU.SHARE.GENERATE_GROUP_LINK</button>
                             <!--Active on Image Group Page-->
                             <button translate class="dropdown-item" [disabled]="!actionOptions.group" (click)="printImageGroupPage()">NAV_MENU.SHARE.PRINT_GROUP</button>
                             <!--Active on Image Group Page-->

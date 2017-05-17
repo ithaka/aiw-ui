@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core'
 
-import { ImageGroup, GroupService } from './../../shared'
+import { ImageGroup, GroupService, AuthService } from './../../shared'
 
 @Component({
   selector: 'ang-share-ig-link',
@@ -22,15 +22,22 @@ export class ShareIgLinkModal implements OnInit {
     tokenError?: boolean
   } = {}
 
-  constructor( private _group: GroupService ) { }
+  constructor( private _group: GroupService, private _auth: AuthService ) { }
 
   ngOnInit() {
     this.createIgLink(this.ig)
   }
 
   createIgLink(ig: ImageGroup): void {
+    let instituionalGrp = false;
+    this.ig.access.forEach((accessObj) => {
+      if((accessObj.entity_identifier == this._auth.getUser().institutionId.toString() && accessObj.entity_type == 200) ){
+        instituionalGrp = true;
+      }
+    });
+
     // if the group is public, we simply give back the url of the group
-    if (this.ig.public) { this.shareLink = ['http://', document.location.host, "/#/group/", ig.id].join("") }
+    if (this.ig.public || instituionalGrp) { this.shareLink = ['http://', document.location.host, "/#/group/", ig.id].join("") }
     else {
       // if the image group is private, we call a service to generate a token, then attach that to the route so the user can share it
       this.serviceStatus.isLoading = true
