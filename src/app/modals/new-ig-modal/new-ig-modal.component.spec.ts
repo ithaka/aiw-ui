@@ -20,7 +20,7 @@ describe('NewIgModal', () => {
         mockAssets = {
             selection: new BehaviorSubject([]).asObservable()
         }
-        newIgModal = new NewIgModal(mockAssets, mockAuth, mockFormBuilder, null, null)
+        newIgModal = new NewIgModal(mockAssets, mockAuth, mockFormBuilder, null, null, null)
         // Initialize
         newIgModal.ngOnInit()
     })

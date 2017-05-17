@@ -56,9 +56,9 @@ export class NewIgModal implements OnInit {
       private _auth: AuthService, 
       private _fb: FormBuilder, 
       private _group: GroupService,
+      private _analytics: AnalyticsService,
       private router: Router,
-      private route?: ActivatedRoute,
-      private _analytics: AnalyticsService
+      private route?: ActivatedRoute
   ) {
     this.newIgForm = _fb.group({
       title: [null, Validators.required],
@@ -142,7 +142,7 @@ export class NewIgModal implements OnInit {
   }
 
   /** Called on form submission */
-  private igFormSubmit(formValue: FormValue): void {
+  private igFormSubmit(formValue: any): void {
     this.submitted = true;
     // avoid making the service calls, but still trigger error display
     if (!this.newIgForm.valid) {
@@ -311,36 +311,6 @@ export class NewIgModal implements OnInit {
         );
     }
   }
-
-  // /**
-  //  * Prepares and returns the image group object from the form
-  //  * @param form The value of the submitted form
-  //  * @param description The string value of the description pulled out of the medium editor
-  //  */
-  // private prepareGroup(form: FormValue, description: string): ImageGroup {
-    
-  // }
-
-  // /**
-  //  * Process the string put into the medium editor and return a prettier description string
-  //  */
-  // private extractDescription(mediumDesc: string): string {
-
-  // }
-
-  // /**
-  //  * Sets the values of the new image group form based on a pre-existing image group
-  //  * @param ig Image group to base the values off of
-  //  */
-  // private setFormValues(ig: ImageGroup): void {
-    
-  // }
 }
 
 /** Just describes the form value for this form (not meant to be exported) */
-interface FormValue {
-  title: string,
-  artstorPermissions: string,
-  public: boolean,
-  tags: string[]
-}
