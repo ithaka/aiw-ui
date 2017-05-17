@@ -7,7 +7,7 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <form #igForm="ngForm" (ngSubmit)="onSubmit(igForm)">
+      <form #igForm="ngForm" (ngSubmit)="submitGroupUpdate(igForm)">
         <div class="modal-body">
           <div class="form-group" [class.has-success]="serviceResponse.success" [class.has-danger]="serviceResponse.failure">
             <label translate for="selectImageGroup">ADD_TO_GROUP_MODAL.SELECT_PROMPT</label>

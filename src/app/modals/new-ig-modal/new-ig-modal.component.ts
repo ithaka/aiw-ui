@@ -6,6 +6,7 @@ import { Subscription } from 'rxjs/Rx';
 
 // Project dependencies
 import { AssetService, AuthService, GroupService } from './../../shared';
+import { AnalyticsService } from './../../analytics.service';
 
 @Component({
   selector: 'ang-new-ig-modal',
@@ -43,7 +44,8 @@ export class NewIgModal implements OnInit {
       private _fb: FormBuilder, 
       private _group: GroupService,
       private router: Router,
-      private route?: ActivatedRoute
+      private route?: ActivatedRoute,
+      private _analytics: AnalyticsService
   ) {
     this.newIgForm = _fb.group({
       title: [null, Validators.required],
@@ -157,7 +159,9 @@ export class NewIgModal implements OnInit {
     );
 
     if(this.copyIG){
-      
+      // Save Group as
+      this._analytics.directCall('save_img_group_as')
+
       let copyReqBody = {
         'name' : formValue.title
       };
@@ -182,6 +186,9 @@ export class NewIgModal implements OnInit {
       );
     }
     else if(this.editIG){
+      // Editing group
+      this._analytics.directCall('edit_img_group')
+
       let editGroup = {
         name: formValue.title,
         description: igDescValue == '<div>&nbsp;</div>' ? '' : igDescValue,
@@ -224,6 +231,8 @@ export class NewIgModal implements OnInit {
         );
     }
     else{
+      // Create New Group
+      this._analytics.directCall('save_selections_new_img_group')
 
       let group = {
         name: formValue.title,
