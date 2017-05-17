@@ -138,5 +138,8 @@
       "PRINT_GROUP": "Print Image Group",
       "DOWNLOAD_GROUP": "Download Image Group"
     }
+  },
+  "BETA_SKY_BANNER": {
+    "MESSAGE": "You are previewing the beta site of the new Artstor Digital Library platform. Learn about <a href=\"http://support.artstor.org/?article=upcoming-changes-to-artstor\" target=\"_blank\" class=\"link\">what's new</a>."
   }
 }

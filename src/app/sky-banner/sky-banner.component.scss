@@ -1,0 +1,34 @@
+ @import './../../sass/core/variables';
+
+.vertical-center {
+  min-height: 50px;
+
+  display: flex;
+  align-items: center;
+}
+
+.banner-sky {
+  & p {
+    padding: 0;
+    margin: 0;
+    text-align: center;
+  }
+  
+  background: #bcffeb;
+  border: 1px solid $gray;
+  padding: 0 35px;
+
+  @media (max-width: $phone) {
+    position: fixed;
+    width: 100%;
+    z-index: 9500;
+    background: #eee;
+    bottom: 0;
+  }
+}
+
+.close {
+  position: absolute;
+  top: 13px;
+  right: 15px;
+}
