@@ -4,11 +4,12 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { Subscription }   from 'rxjs/Subscription';
 
 import { AssetService } from '../../shared';
+import { AnalyticsService } from '../../analytics.service';
 
 @Component({
   selector: 'ang-search',
   templateUrl: 'search.component.html',
-  styleUrls: [ './search.component.scss' ],
+  styleUrls: [ './search.component.scss' ]
 })
 export class SearchComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = [];
@@ -19,14 +20,16 @@ export class SearchComponent implements OnInit, OnDestroy {
   private pageSize: number = 24;
   
   @Input()
-  private searchInResults:boolean;
+  private searchInResults: boolean;
 
   constructor(
+    private _analytics: AnalyticsService,
     private _assets: AssetService,
     private _router: Router,
-    private route: ActivatedRoute,
-    // private _analytics: AnalyticsService
-  ) { }
+    private route: ActivatedRoute
+  ) {
+
+  }
 
   ngOnInit() {
     this.subscriptions.push(
@@ -60,6 +63,7 @@ export class SearchComponent implements OnInit, OnDestroy {
       return;
     }
     
+    this._analytics.directCall('search')
 
     if(this.searchInResults){ // Search within results
       let routeParams = this.route.snapshot.params;

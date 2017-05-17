@@ -3,7 +3,8 @@ import { Component, OnInit, OnDestroy, Output, EventEmitter, Input } from '@angu
 import { ActivatedRoute, Router } from '@angular/router';
 
 // Project Dependencies
-import { AssetService, ImageGroupService, ImageGroup, GroupService, AuthService, AnalyticsService } from '../shared';
+import { AssetService, ImageGroupService, ImageGroup, GroupService, AuthService } from '../shared';
+import { AnalyticsService } from '../analytics.service';
 
 @Component({
   selector: 'nav-menu',

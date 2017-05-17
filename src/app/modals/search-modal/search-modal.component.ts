@@ -2,7 +2,8 @@ import { Router } from '@angular/router';
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 
 // Project dependencies
-import { AssetService, AnalyticsService } from './../../shared';
+import { AssetService } from './../../shared';
+import { AnalyticsService } from '../../analytics.service';
 import { AssetFiltersService } from './../../asset-filters/asset-filters.service';
 
 @Component({

@@ -9,6 +9,10 @@ export class AnalyticsService {
     constructor() { }
     
     public directCall(eventName: string) {
-        _satellite.track && _satellite.track(eventName);
+        try {
+            _satellite && _satellite.track && _satellite.track(eventName);
+        } catch(error) {
+            console.error(error)
+        }   
     }
 }
