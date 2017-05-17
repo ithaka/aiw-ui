@@ -5,7 +5,7 @@ import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms'
 import { Subscription } from 'rxjs/Rx';
 
 // Project dependencies
-import { AssetService, AuthService, GroupService } from './../../shared';
+import { AssetService, AuthService, GroupService, ImageGroup } from './../../shared';
 import { AnalyticsService } from './../../analytics.service';
 
 @Component({
@@ -17,26 +17,39 @@ export class NewIgModal implements OnInit {
   @Output() addToGroup: EventEmitter<any> = new EventEmitter();
   @Output() igReloadTriggered: EventEmitter<any> = new EventEmitter();
 
+  /** Switch for running logic to copy image group */
   @Input() private copyIG: boolean = false;
+  /** Switch for running loginc to edit image group */
   @Input() private editIG: boolean = false;
+  /** The image group object */
   @Input() private ig: any = false;
+  /** Controls the user seeing the toggle to add images to group or create a new group */
   @Input() private showAddToGroup: boolean = false;
 
+  /** The form */
   private newIgForm: FormGroup;
+  /** Gives artstor institution users the ability to curate image public image groups */
   private isArtstorUser: boolean = false;
+  /** List of tags provided for the image group by the user */
   private tags: string[] = [];
   // We need to seed the medium editor with an empty div to fix line return issues in Firefox!
   private igDescription: string = "<div>&nbsp;</div>";
+  /** The list of assets which are currently selected from the asset grid */
   @Input() private selectedAssets: any[] = [];
 
+  /** List of subscriptions to add to and then destroy ngOnDestroy */
   private subscriptions: Subscription[] = [];
+  /** Controls display of loading symbol(s) */
   private isLoading: boolean = false;
+  /** Set to true once the form is submitted */
   private submitted: boolean = false;
+  /** Quick interface for controlling display of errors/response feedback */
   private serviceResponse: {
     success?: boolean,
     failure?: boolean
   } = {};
-  private newGroup: any;
+  /** The new group created after it comes back from the service */
+  private newGroup: ImageGroup;
 
   constructor(
       private _assets: AssetService,
@@ -56,10 +69,12 @@ export class NewIgModal implements OnInit {
   }
 
   ngOnInit() {
+    /** Set isArtstorUser to true if the user's institution is 1000. This will let them make global image groups */
     this.isArtstorUser = this._auth.getUser().institutionId == 1000;
     // initialize the artstorPermissions to private
     if (this.isArtstorUser) { (<FormControl>this.newIgForm.controls['artstorPermissions']).setValue("private") }
 
+    /** Set the field values, depending on the image group that is input  */
     if(this.ig.id && this.editIG){
       (<FormControl>this.newIgForm.controls['title']).setValue(this.ig.name);
 
@@ -72,7 +87,7 @@ export class NewIgModal implements OnInit {
       else if (this.checkIfPublic()) { (<FormControl>this.newIgForm.controls['artstorPermissions']).setValue("institution") }
 
 
-
+      /** Setting the description based on the current image group's description requires some workarounds */
       if(this.ig.description){
         let parentElement = document.createElement('div');
         parentElement.innerHTML = this.ig.description;
@@ -94,7 +109,7 @@ export class NewIgModal implements OnInit {
             this.selectedAssets = assets;
           },
           error => {
-            console.log(error);
+            console.error(error);
           }
         )
       );
@@ -105,6 +120,10 @@ export class NewIgModal implements OnInit {
       this.subscriptions.forEach((sub) => { sub.unsubscribe(); });
   }
 
+  /**
+   * Checks if the user's institution has permission to view the image group
+   * @returns true if the user's institution has permission to view the image group
+   */
   private checkIfPublic(): boolean{
     let publicIG = false;
     for(let accessObj of this.ig.access){
@@ -122,7 +141,8 @@ export class NewIgModal implements OnInit {
     this.closeModal.emit();
   }
 
-  private igFormSubmit(formValue: any): void {
+  /** Called on form submission */
+  private igFormSubmit(formValue: FormValue): void {
     this.submitted = true;
     // avoid making the service calls, but still trigger error display
     if (!this.newIgForm.valid) {
@@ -130,6 +150,7 @@ export class NewIgModal implements OnInit {
     }
     this.isLoading = true;
 
+    /** extract the image group description and attach it to the igDescValue */
     let igDescValue = '';
     if(this.igDescription){
       let parentElement = document.createElement('div');
@@ -143,9 +164,11 @@ export class NewIgModal implements OnInit {
       }
     }
 
+    /** I don't think this is happening correctly... institution-viewable should not set public (I don't think) */
     if (formValue.artstorPermissions == "institution" || formValue.artstorPermissions == "global") { formValue.public = true }
 
     // Form is valid! Create Group object
+    /** put this into a function */
     let itemIds = [];
     this.selectedAssets.forEach(
       item => {
@@ -158,6 +181,7 @@ export class NewIgModal implements OnInit {
       }
     );
 
+    /** This if statement should be broken out to run different functions */
     if(this.copyIG){
       // Save Group as
       this._analytics.directCall('save_img_group_as')
@@ -180,7 +204,7 @@ export class NewIgModal implements OnInit {
             }
         },
         error => {
-          console.log(error);
+          console.error(error);
           this.isLoading = false;
         }
       );
@@ -234,6 +258,7 @@ export class NewIgModal implements OnInit {
       // Create New Group
       this._analytics.directCall('save_selections_new_img_group')
 
+      /** Group creation should be factored into a function */
       let group = {
         name: formValue.title,
         description: igDescValue == '<div>&nbsp;</div>' ? '' : igDescValue,
@@ -262,7 +287,6 @@ export class NewIgModal implements OnInit {
       this._group.create(group)
         .subscribe(
           data => {
-            console.log(data);
             this.isLoading = false;
             this.newGroup = data;
             this.serviceResponse.success = true;
@@ -286,8 +310,29 @@ export class NewIgModal implements OnInit {
           }
         );
     }
-
-    console.log(formValue);
-    console.log(this.igDescription); // the description is not technically part of the form
   }
+
+  // /**
+  //  * Prepares and returns the image group object from the form
+  //  * @param form The value of the submitted form
+  //  * @param description The string value of the description pulled out of the medium editor
+  //  */
+  // private prepareGroup(form: FormValue, description: string): ImageGroup {
+    
+  // }
+
+  // /**
+  //  * Process the string put into the medium editor and return a prettier description string
+  //  */
+  // private extractDescription(mediumDesc: string): string {
+
+  // }
+}
+
+/** Just describes the form value for this form (not meant to be exported) */
+interface FormValue {
+  title: string,
+  artstorPermissions: string,
+  public: boolean,
+  tags: string[]
 }
