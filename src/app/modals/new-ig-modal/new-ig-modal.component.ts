@@ -327,6 +327,14 @@ export class NewIgModal implements OnInit {
   // private extractDescription(mediumDesc: string): string {
 
   // }
+
+  // /**
+  //  * Sets the values of the new image group form based on a pre-existing image group
+  //  * @param ig Image group to base the values off of
+  //  */
+  // private setFormValues(ig: ImageGroup): void {
+    
+  // }
 }
 
 /** Just describes the form value for this form (not meant to be exported) */
