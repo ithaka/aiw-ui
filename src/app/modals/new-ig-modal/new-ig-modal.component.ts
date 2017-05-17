@@ -148,6 +148,7 @@ export class NewIgModal implements OnInit {
     }
     this.isLoading = true;
 
+    /** extract the image group description and attach it to the igDescValue */
     let igDescValue = '';
     if(this.igDescription){
       let parentElement = document.createElement('div');
@@ -161,9 +162,11 @@ export class NewIgModal implements OnInit {
       }
     }
 
+    /** I don't think this is happening correctly... institution-viewable should not set public (I don't think) */
     if (formValue.artstorPermissions == "institution" || formValue.artstorPermissions == "global") { formValue.public = true }
 
     // Form is valid! Create Group object
+    /** put this into a function */
     let itemIds = [];
     this.selectedAssets.forEach(
       item => {
@@ -176,6 +179,7 @@ export class NewIgModal implements OnInit {
       }
     );
 
+    /** This if statement should be broken out to run different functions */
     if(this.copyIG){
       
       let copyReqBody = {
@@ -196,7 +200,7 @@ export class NewIgModal implements OnInit {
             }
         },
         error => {
-          console.log(error);
+          console.error(error);
           this.isLoading = false;
         }
       );
@@ -245,6 +249,7 @@ export class NewIgModal implements OnInit {
     }
     else{
 
+      /** Group creation should be factored into a function */
       let group = {
         name: formValue.title,
         description: igDescValue == '<div>&nbsp;</div>' ? '' : igDescValue,
@@ -273,7 +278,6 @@ export class NewIgModal implements OnInit {
       this._group.create(group)
         .subscribe(
           data => {
-            console.log(data);
             this.isLoading = false;
             this.newGroup = data;
             this.serviceResponse.success = true;
@@ -297,10 +301,23 @@ export class NewIgModal implements OnInit {
           }
         );
     }
-
-    console.log(formValue);
-    console.log(this.igDescription); // the description is not technically part of the form
   }
+
+  // /**
+  //  * Prepares and returns the image group object from the form
+  //  * @param form The value of the submitted form
+  //  * @param description The string value of the description pulled out of the medium editor
+  //  */
+  // private prepareGroup(form: FormValue, description: string): ImageGroup {
+    
+  // }
+
+  // /**
+  //  * Process the string put into the medium editor and return a prettier description string
+  //  */
+  // private extractDescription(mediumDesc: string): string {
+
+  // }
 }
 
 /** Just describes the form value for this form (not meant to be exported) */
