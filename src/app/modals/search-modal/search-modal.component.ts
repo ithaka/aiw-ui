@@ -2,10 +2,8 @@ import { Router } from '@angular/router';
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 
 // Project dependencies
-import { AssetService } from './../../shared/assets.service';
+import { AssetService, AnalyticsService } from './../../shared';
 import { AssetFiltersService } from './../../asset-filters/asset-filters.service';
-
-declare var _satellite: any;
 
 @Component({
   selector: 'ang-search-modal',
@@ -63,7 +61,12 @@ export class SearchModal implements OnInit {
   private filterParams: any = {};
   private filterSelections: any[] = [];
 
-  constructor(  private _assets: AssetService, private _filters: AssetFiltersService, private _router: Router) { 
+  constructor(  
+        private _assets: AssetService, 
+        private _filters: AssetFiltersService, 
+        private _router: Router,
+        private _analytics: AnalyticsService
+      ) { 
     // Pull in filterFields
     this.fields = _assets.filterFields;
     
@@ -248,7 +251,7 @@ export class SearchModal implements OnInit {
     }
     
     // Track in Adobe Analytics
-    _satellite.track("advanced_search");
+    this._analytics.directCall('advanced_search');
     
     this._router.navigate(['/search', advQuery, this.filterParams]);
 

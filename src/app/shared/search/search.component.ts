@@ -3,9 +3,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 
 import { Subscription }   from 'rxjs/Subscription';
 
-import { AssetService } from '../';
-
-declare var _satellite: any;
+import { AssetService } from '../../shared';
 
 @Component({
   selector: 'ang-search',
@@ -26,7 +24,8 @@ export class SearchComponent implements OnInit, OnDestroy {
   constructor(
     private _assets: AssetService,
     private _router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    // private _analytics: AnalyticsService
   ) { }
 
   ngOnInit() {
@@ -60,9 +59,7 @@ export class SearchComponent implements OnInit, OnDestroy {
       // term = "*";
       return;
     }
-
-    // Track in Adobe Analytics
-    _satellite.track("search");
+    
 
     if(this.searchInResults){ // Search within results
       let routeParams = this.route.snapshot.params;
