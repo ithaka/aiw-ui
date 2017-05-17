@@ -52,11 +52,11 @@
                     <li class="nav-item" ngbDropdown>
                         <button translate class="btn btn-link" id="shareMenu" ngbDropdownToggle>NAV_MENU.SHARE.TITLE</button>
                         <div class="dropdown-menu" aria-labelledby="shareMenu">
-                            <button translate [class.disabled]="selectedAssets.length !== 1" class="dropdown-item" (click)="showShareLinkModal = true">NAV_MENU.SHARE.GENERATE_IMAGE_LINK</button>
+                            <button translate [class.disabled]="selectedAssets.length !== 1" class="dropdown-item" (click)="_analytics.directCall('generate_img_link'); showShareLinkModal = true">NAV_MENU.SHARE.GENERATE_IMAGE_LINK</button>
                             <!--Active on Image Group Page-->
-                            <button translate [disabled]="!actionOptions.group || !allowIgUpdate || !genImgGrpLink" (click)="showShareIgModal = true" class="dropdown-item">NAV_MENU.SHARE.GENERATE_GROUP_LINK</button>
+                            <button translate [disabled]="!actionOptions.group || !allowIgUpdate || !genImgGrpLink" (click)="_analytics.directCall('generate_img_group_link'); showShareIgModal = true" class="dropdown-item">NAV_MENU.SHARE.GENERATE_GROUP_LINK</button>
                             <!--Active on Image Group Page-->
-                            <button translate class="dropdown-item" [disabled]="!actionOptions.group" (click)="printImageGroupPage()">NAV_MENU.SHARE.PRINT_GROUP</button>
+                            <button translate class="dropdown-item" [disabled]="!actionOptions.group" (click)="_analytics.directCall('print_img_group'); printImageGroupPage()">NAV_MENU.SHARE.PRINT_GROUP</button>
                             <!--Active on Image Group Page-->
                             <button translate *ngIf="params['igId']" (click)="_ig.triggerIgDownload()" class="dropdown-item">NAV_MENU.SHARE.DOWNLOAD_GROUP</button>
                             <!--Amber<div class="dropdown-divider"></div>-->
