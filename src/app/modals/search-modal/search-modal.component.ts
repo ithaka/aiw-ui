@@ -271,6 +271,7 @@ export class SearchModal implements OnInit {
     } else {
       this.filterSelections.splice(this.filterSelections.indexOf(filter), 1);
     }
+    this.validateForm();
   }
 
   /**

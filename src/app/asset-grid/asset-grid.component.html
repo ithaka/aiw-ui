@@ -27,7 +27,7 @@
                     </li>
 
                     <div class="number-results" *ngIf="!isLoading">{{ totalAssets }}{{ totalAssets == 2000 ? '+' : '' }} results  <span *ngIf="searchTerm">for <span [innerHtml]="formatSearchTerm(searchTerm)"></span></span></div>
-                    <div class="search-in-results" *ngIf="allowSearchInRes"><input type="checkbox" id="searchInResChkBx" [(ngModel)]="searchInResults" (change)="updateSrchInRes()" /> <label for="searchInResChkBx">Search within results</label></div>
+                    <!--<div class="search-in-results" *ngIf="allowSearchInRes"><input type="checkbox" id="searchInResChkBx" [(ngModel)]="searchInResults" (change)="updateSrchInRes()" /> <label for="searchInResChkBx">Search within results</label></div>-->
                 </div>
                 <div class="col-12 pb-3">
                     <!--Download-->
@@ -69,7 +69,7 @@
                 </div>
                 <div class="col-sm-6 col-md-3 col-lg-2" *ngFor="let asset of results">
                     <div class="card card--asset" [ngClass]="{'selected': ( isSelectedAsset(asset) > -1 ) }" (click)="!reorderMode && selectAsset(asset)">
-                        <ang-thumbnail [thumbnail]="asset"></ang-thumbnail>
+                        <ang-thumbnail [thumbnail]="asset" [reorderMode]="reorderMode"></ang-thumbnail>
                     </div>
                 </div> <!-- .col -->
             </div>
@@ -85,7 +85,7 @@
                 </div>
                 <div class="col-sm-4 col-md-2 col-lg-1 draggable" *ngFor="let asset of results; let i = index" dnd-sortable [dragEnabled]="reorderMode && !isLoading" [sortableIndex]="i" (onDragEnd)="orderChanged = true">
                     <div class="card card--asset">
-                        <ang-thumbnail [thumbnail]="asset"></ang-thumbnail>
+                        <ang-thumbnail [thumbnail]="asset" [reorderMode]="reorderMode"></ang-thumbnail>
                     </div>
                 </div> <!-- .col -->
             </div>

@@ -47,7 +47,8 @@ export class AuthService implements CanActivate {
     this.hostname = '//beta.artstor.org';
     this.baseUrl =  '//beta.artstor.org/api/secure'; 
     this.imageFpxUrl =  '//beta.artstor.org/api/secure/imagefpx'; 
-    this.lostPassUrl =  '//beta.artstor.org/lostpw'; 
+    // this.lostPassUrl =  '//beta.artstor.org/lostpw'; 
+    this.lostPassUrl = '//beta.artstor.org/library/lostpw'
     this.thumbUrl = '//mdxdv.artstor.org';
     this.IIIFUrl = '//tsprod.artstor.org/rosa-iiif-endpoint-1.0-SNAPSHOT/fpx';
     

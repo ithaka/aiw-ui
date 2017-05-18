@@ -19,8 +19,11 @@ export class SearchComponent implements OnInit, OnDestroy {
 
   private pageSize: number = 24;
   
+  // @Input()
+  private searchInResults: boolean = false;
+
   @Input()
-  private searchInResults: boolean;
+  private allowSearchInRes:boolean;
 
   constructor(
     private _analytics: AnalyticsService,
