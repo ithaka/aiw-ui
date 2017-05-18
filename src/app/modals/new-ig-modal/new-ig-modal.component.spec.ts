@@ -34,7 +34,7 @@ describe('IgFormUtil', () => {
 
             let form: IgFormValue = {
                 title: "Test Ig",
-                artstorPermissions: "global", // this can be global, institution or private
+                artstorPermissions: "private", // this can be global, institution or private
                 institutionView: false,
                 tags: ["tag1", "tag2"]
             }
@@ -44,7 +44,7 @@ describe('IgFormUtil', () => {
             let group = util.prepareGroup(form, description, mockAssets, { institutionId: 1234567 })
             
             expect(group.name).toBe(form.title)
-            expect(group.access.length).toBe(2)
+            expect(group.access.length).toBe(1)
         })
     })
 })

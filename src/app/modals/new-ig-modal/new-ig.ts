@@ -33,7 +33,7 @@ export class IgFormUtil {
       access: [ {
         // This is the user's access object
         "entity_type": 100,
-        "entity_identifier": user.baseProfileId.toString(),
+        "entity_identifier": user.baseProfileId,
         "access_type": 300
       } ],
       items: itemIds,
@@ -44,7 +44,7 @@ export class IgFormUtil {
     if (form.institutionView) {
       group.access.push({
         entity_type: 200,
-        entity_identifier: user && user.institutionId.toString(),
+        entity_identifier: user && user.institutionId,
         access_type: 100
       })
     }
