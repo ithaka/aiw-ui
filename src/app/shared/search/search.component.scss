@@ -22,4 +22,23 @@
         position: static;
         width: 100%;
     }
+
+    .row{
+        margin: 0 0 1rem !important;
+
+        .input-group{
+            padding: 0px !important;
+        }
+    }
+}
+.search-in-results{
+    height: 35px;
+    line-height: 35px;
+
+    label{
+        font-weight: 400;
+        font-family: inherit;
+        padding-left: 3px;
+    }
+
 }

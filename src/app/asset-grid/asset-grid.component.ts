@@ -51,12 +51,12 @@ export class AssetGrid implements OnInit, OnDestroy {
   @Input()
   private assetCount: number;
 
-  @Input()
-  private allowSearchInRes:boolean;
+  // @Input()
+  // private allowSearchInRes:boolean;
 
   @Output() reordering: EventEmitter<boolean> = new EventEmitter();
 
-  @Output() updateSearchInRes: EventEmitter<boolean> = new EventEmitter();
+  // @Output() updateSearchInRes: EventEmitter<boolean> = new EventEmitter();
 
   private pagination: any = {
     totalPages: 1,
@@ -448,8 +448,8 @@ export class AssetGrid implements OnInit, OnDestroy {
   }
 
 
-  private updateSrchInRes(){
-    // console.log(this.searchInResults);
-    this.updateSearchInRes.emit(this.searchInResults);
-  }
+  // private updateSrchInRes(){
+  //   // console.log(this.searchInResults);
+  //   this.updateSearchInRes.emit(this.searchInResults);
+  // }
 }
