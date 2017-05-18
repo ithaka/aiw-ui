@@ -283,7 +283,7 @@ export class AssetFiltersService {
                 facetObj.label = 'Shared Shelf Commons';
             }
             else{
-                facetObj.label = this.institution.shortName ? this.institution.shortName : 'Institutional';
+                facetObj.label = this.institution && this.institution.shortName ? this.institution.shortName : 'Institutional';
                 facetObj.label += ' Collections';
             }
             generatedFacetsArray.push(facetObj);

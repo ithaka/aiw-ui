@@ -30,7 +30,7 @@ export class CategoryPage implements OnInit, OnDestroy {
   
   private subscriptions: Subscription[] = [];
 
-  private searchInResults: boolean = false;
+  // private searchInResults: boolean = false;
 
 
   constructor(
@@ -112,7 +112,7 @@ export class CategoryPage implements OnInit, OnDestroy {
     this.subscriptions.forEach((sub) => { sub.unsubscribe(); });
   }
 
-  private updateSearchInRes(value: boolean): void{
-   this.searchInResults = value; 
-  }
+  // private updateSearchInRes(value: boolean): void{
+  //  this.searchInResults = value; 
+  // }
 }
