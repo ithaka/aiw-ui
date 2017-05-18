@@ -40,10 +40,8 @@ export class IgFormUtil {
       tags: form.tags
     }
 
-    /**
-     * Add institution access object if shared with Institution
-     */
-    if (form.public) {
+    /** Add institution access object if shared with Institution */
+    if (form.institutionView) {
       group.access.push({
         entity_type: 200,
         entity_identifier: user && user.institutionId.toString(),
@@ -70,9 +68,9 @@ export class IgFormUtil {
   // }
 }
 
-interface IgFormValue {
+export interface IgFormValue {
   title: string,
   artstorPermissions: string,
-  public: boolean,
+  institutionView: boolean,
   tags: string[]
 }
