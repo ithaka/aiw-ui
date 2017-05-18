@@ -3,6 +3,7 @@ import { NgForm } from '@angular/forms';
 import { Subscription } from 'rxjs/Rx';
 
 import { AssetService, GroupService, ImageGroup } from './../../shared';
+import { AnalyticsService } from '../../analytics.service';
 
 @Component({
   selector: 'ang-add-to-group',
@@ -25,7 +26,8 @@ export class AddToGroupModal implements OnInit, OnDestroy {
 
   constructor(
     private _assets: AssetService,
-    private _group: GroupService
+    private _group: GroupService,
+    private _analytics: AnalyticsService
   ) { }
 
   ngOnInit() {
@@ -54,7 +56,11 @@ export class AddToGroupModal implements OnInit, OnDestroy {
       this.subscriptions.forEach((sub) => { sub.unsubscribe(); });
   }
 
-  private onSubmit(form: NgForm) {
+  /**
+   * Submits updates to Group
+   * @param form Values to update the group with
+   */
+  private submitGroupUpdate(form: NgForm) {
     this.serviceResponse = {}; // clear any service status
 
     this.selectedIg = form.value.imageGroup;
@@ -74,11 +80,7 @@ export class AddToGroupModal implements OnInit, OnDestroy {
       }
     });
 
-    // this._group.get(this.selectedIg.id)
-    //   .subscribe(res => {
-    //     console.log(res);
-    //   }
-    // );
+    this._analytics.directCall('save_selections_existing_img_group');
 
     this._group.get(this.selectedIg.id)
       .toPromise()

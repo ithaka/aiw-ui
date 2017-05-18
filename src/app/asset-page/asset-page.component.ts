@@ -3,10 +3,11 @@ import { ActivatedRoute, Params, Router } from '@angular/router';
 import { Subscription }   from 'rxjs/Subscription';
 import { Locker } from 'angular2-locker';
 
+// Project Dependencies
 import { Asset } from './asset';
 import { AuthService, AssetService } from './../shared';
-
 import { AssetViewerComponent } from './asset-viewer/asset-viewer.component';
+import { AnalyticsService } from '../analytics.service';
 
 @Component({
     selector: 'ang-asset-page',
@@ -45,8 +46,15 @@ export class AssetPage implements OnInit, OnDestroy {
     private _storage;
     
 
-    constructor(private _assets: AssetService, private _auth: AuthService, private route: ActivatedRoute, private _router: Router, private locker: Locker) { 
-        this._storage = locker.useDriver(Locker.DRIVERS.LOCAL);
+    constructor(
+            private _assets: AssetService, 
+            private _auth: AuthService, 
+            private route: ActivatedRoute, 
+            private _router: Router, 
+            private locker: Locker,
+            private _analytics: AnalyticsService
+        ) { 
+            this._storage = locker.useDriver(Locker.DRIVERS.LOCAL);
     }
 
     ngOnInit() {
@@ -196,7 +204,9 @@ export class AssetPage implements OnInit, OnDestroy {
      * Adds a link to the current asset page to the user's clipboard
      */
     private copyGeneratedImgURL(): void {
-       var input = document.createElement('textarea');
+        this._analytics.directCall('generate_img_link');
+
+        var input = document.createElement('textarea');
         
         document.body.appendChild(input);
         input.value = this.generatedImgURL;

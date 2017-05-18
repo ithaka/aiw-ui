@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 // Project Dependencies
 import { AssetService, ImageGroupService, ImageGroup, GroupService, AuthService } from '../shared';
+import { AnalyticsService } from '../analytics.service';
 
 @Component({
   selector: 'nav-menu',
@@ -63,7 +64,8 @@ export class NavMenu implements OnInit, OnDestroy {
     private _ig: ImageGroupService,
     private _group: GroupService,
     private route: ActivatedRoute,
-    private _auth: AuthService
+    private _auth: AuthService,
+    private _analytics: AnalyticsService
   ) {
   }
   
@@ -110,6 +112,7 @@ export class NavMenu implements OnInit, OnDestroy {
    * - The selection then broadcasts out to the Asset Grid by observable
    */
   private selectAllInAssetGrid(): void {
+
     this._assets.allResults.take(1).subscribe(
       assets => {
         if (assets.thumbnails) {

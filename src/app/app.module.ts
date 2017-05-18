@@ -73,10 +73,13 @@ import { AuthService, AssetService, GroupService, TypeIdPipe, ToolboxService, Lo
 import { AssetFiltersService } from './asset-filters/asset-filters.service';
 import { TagsService } from './browse-page/tags.service';
 import { CustomReuseStrategy } from './reuse-strategy';
-import { LegacyRouteResolver } from './legacy.service'
+import { LegacyRouteResolver } from './legacy.service';
+import { AnalyticsService } from './analytics.service';
+
 
 const APP_PROVIDERS = [
   ...APP_RESOLVER_PROVIDERS,
+  AnalyticsService,
   AppState,
   AssetService,
   GroupService,

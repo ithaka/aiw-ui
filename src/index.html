@@ -60,6 +60,11 @@
   <% } %>
 
   <!--Adobe Analytics: Sits before end of body-->
-  <script type="text/javascript">_satellite.pageBottom();</script>
+  <script type="text/javascript">
+    try {
+      _satellite.pageBottom();
+    } catch(error) {
+      //
+    }</script>
 </body>
 </html>

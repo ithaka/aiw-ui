@@ -5,6 +5,7 @@ import { Subscription } from 'rxjs/Subscription';
 import { AppState } from '../app.service'; 
 import { AssetService } from '../shared/assets.service';
 import { AssetFiltersService } from '../asset-filters/asset-filters.service';
+import { AnalyticsService } from '../analytics.service';
 
 declare var _satellite: any;
 
@@ -62,11 +63,13 @@ export class AssetFilters {
 
   // TypeScript public modifiers
   constructor(
-      public appState: AppState, 
-      private _assets: AssetService,
-      private _filters: AssetFiltersService,
-      private route: ActivatedRoute, 
-      private router: Router) {
+        public appState: AppState, 
+        private _assets: AssetService,
+        private _filters: AssetFiltersService,
+        private route: ActivatedRoute, 
+        private router: Router,
+        private _analytics: AnalyticsService
+      ) {
    
    
    
@@ -176,9 +179,7 @@ export class AssetFilters {
     if(this._filters.isApplied(group, value)){ // Remove Filter
       this._filters.remove(group, value);
     } else { // Add Filter
-      // Track in Adobe Analytics
-      _satellite.track("advanced_search_filters");
-      
+      this._analytics.directCall("advanced_search_filters");
       this._filters.apply(group, value);
     }
     this.pagination.currentPage = 1;
