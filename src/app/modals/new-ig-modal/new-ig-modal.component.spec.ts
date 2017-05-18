@@ -30,7 +30,7 @@ describe('IgFormUtil', () => {
     })
 
     describe("prepareGroup", () => {
-        it("should correctly process an image group", () => {
+        it("should correctly process a private image group", () => {
 
             let form: IgFormValue = {
                 title: "Test Ig",
@@ -43,8 +43,16 @@ describe('IgFormUtil', () => {
 
             let group = util.prepareGroup(form, description, mockAssets, { institutionId: 1234567 })
             
+            // basic assertions pertaining to each field that is required for group creation
             expect(group.name).toBe(form.title)
             expect(group.access.length).toBe(1)
+            expect(group.description).toBe(description)
+            expect(group.items.length).toBe(2)
+            expect(group.items.indexOf(mockAssets[0].objectId)).toBeGreaterThan(-1)
         })
+
+        // it("should correctly process a global image group", () => {
+
+        // })
     })
 })
