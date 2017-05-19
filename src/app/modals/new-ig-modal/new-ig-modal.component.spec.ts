@@ -89,19 +89,5 @@ fdescribe('IgFormUtil', () => {
             expect(group.public).toBeFalsy() // global DOES NOT set public here. It uses an API call after the group is created
         })
 
-        it("should remove an empty div from the description", () => {
-            let form: IgFormValue = {
-                title: "Global Test Ig",
-                artstorPermissions: "global",
-                tags: ["tag1", "tag2"]
-            }
-
-            let group = util.prepareGroup(form, "<div>&nbsp;</div>", mockAssets, mockUser)
-
-            expect(group.id).toBeFalsy()
-
-            expect(group.description).toBe("")
-        })
-
     })
 })

@@ -15,12 +15,11 @@ export class IgFormUtil {
     /** format an array of asset ids out of the asset */
     let itemIds = []
     assets.forEach(
-      item => {
+      (item) => {
         if (item.objectId) {
-          itemIds.push(item.objectId)
-        }
-        else if(item.id) {
-          itemIds.push(item.id)
+          itemIds.push(item.objectId) // sometimes this is an array of real assets
+        } else {
+          itemIds.push(item) // sometimes though it's just an array of strings
         }
       }
     )
@@ -28,7 +27,7 @@ export class IgFormUtil {
     /** Group creation should be factored into a function */
     let group = {
       name: form.title,
-      description: description == '<div>&nbsp;</div>' ? '' : description,
+      description: description,
       sequence_number: 0,
       access: [ {
         // This is the user's access object

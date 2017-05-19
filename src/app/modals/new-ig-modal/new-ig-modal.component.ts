@@ -150,35 +150,11 @@ export class NewIgModal implements OnInit {
     if (!this.newIgForm.valid) {
       return;
     }
+    // Form is valid! Create Group object
     this.isLoading = true;
 
     /** extract the image group description and attach it to the igDescValue */
-    let igDescValue = '';
-    if(this.igDescription){
-      let parentElement = document.createElement('div');
-      parentElement.innerHTML = this.igDescription;
-
-      if( parentElement.firstElementChild && (parentElement.firstElementChild.id === 'angularMediumEditor' )){
-        igDescValue = parentElement.firstElementChild.innerHTML;
-      }
-      else{
-        igDescValue =  parentElement.innerHTML;
-      }
-    }
-
-    // Form is valid! Create Group object
-    /** put this into a function */
-    let itemIds = [];
-    this.selectedAssets.forEach(
-      item => {
-        if (item.objectId) {
-          itemIds.push(item.objectId);
-        }
-        else if(item.id) {
-          itemIds.push(item.id);
-        }
-      }
-    );
+    let igDescValue = this.extractDescription()
 
     /** This if statement should be broken out to run different functions */
     if(this.copyIG){
@@ -189,59 +165,33 @@ export class NewIgModal implements OnInit {
         'name' : formValue.title
       };
       this._group.copy(this.route.snapshot.params['igId'], copyReqBody)
+        .subscribe(
+          data => {
+              this.isLoading = false;
 
-      .subscribe(
-        data => {
+              // Close the modal
+              this.closeModal.emit();
+
+              // Show the user their new group!
+              if (data.id) {
+                this.router.navigate(['/group', data.id]);
+              }
+          },
+          error => {
+            console.error(error);
             this.isLoading = false;
-
-            // Close the modal
-            this.closeModal.emit();
-
-            // Show the user their new group!
-            if (data.id) {
-              this.router.navigate(['/group', data.id]);
-            }
-        },
-        error => {
-          console.error(error);
-          this.isLoading = false;
-        }
-      );
+          }
+        );
     }
     else if(this.editIG){
       // Editing group
       this._analytics.directCall('edit_img_group')
 
-      let editGroup = {
-        name: formValue.title,
-        description: igDescValue == '<div>&nbsp;</div>' ? '' : igDescValue,
-        sequence_number: 0,
-        access: [ {
-          // This is the user's access object
-          "entity_type": 100,
-          "entity_identifier": this._auth.getUser().baseProfileId.toString(),
-          "access_type": 300
-        } ],
-        items: this.ig.items,
-        tags: formValue.tags,
-        id: this.ig.id
-      };
-
-      /**
-       * Add institution access object if shared with Institution
-       */
-      if (formValue.artstorPermissions == "institution") {
-        editGroup.access.push({
-          entity_type: 200,
-          entity_identifier: this._auth.getUser() && this._auth.getUser().institutionId.toString(),
-          access_type: 100
-        });
-      }
+      let editGroup = this.util.prepareGroup(formValue, igDescValue, this.selectedAssets, this._auth.getUser())
       
       this._group.update(editGroup)
         .subscribe(
           data => {
-            console.log(data);
             this.isLoading = false;
             this.newGroup = data;
             this.serviceResponse.success = true;
@@ -286,6 +236,23 @@ export class NewIgModal implements OnInit {
           }
         );
     }
+  }
+
+  private extractDescription(): string {
+    let igDescValue = ''
+    if(this.igDescription){
+      let parentElement = document.createElement('div');
+      parentElement.innerHTML = this.igDescription;
+
+      if( parentElement.firstElementChild && (parentElement.firstElementChild.id === 'angularMediumEditor' )){
+        igDescValue = parentElement.firstElementChild.innerHTML;
+      }
+      else{
+        igDescValue = parentElement.innerHTML;
+      }
+    }
+
+    return igDescValue == '<div>&nbsp;</div>' ? '' : igDescValue
   }
 }
 
