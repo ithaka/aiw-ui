@@ -33,8 +33,8 @@ $assetCardBorderSize: 1px;
 }
 
  .card-header {
-     padding: $cardPadding/2 0px;
-     background: transparent;
+    padding: $cardPadding 0px $cardPadding/2;
+    background: transparent;
     border: 0px solid transparent;
  } 
 
@@ -175,4 +175,9 @@ img.no-stretch {
         transform: translateY(-1px);
         box-shadow: 0px 1px 3px 0px rgba(0,0,0,0.3);
     }
+}
+
+
+.list-group-clean .list-group-item {   
+        padding-top: $basePadding/4;
 }
