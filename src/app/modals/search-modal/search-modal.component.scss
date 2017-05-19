@@ -54,27 +54,6 @@
                 background: #fff;
             }
 
-
-            .side-toggle-btn{
-                display: inline-block;
-                width: 17%;
-                padding: 0.5rem;
-                font-size: 1rem;
-                line-height: 1.25;
-                border-top: 1px solid rgba(0, 0, 0, 0.15);
-                border-right: 1px solid rgba(0, 0, 0, 0.15);
-                border-bottom: 1px solid rgba(0, 0, 0, 0.15);
-                text-align: center;
-                cursor: pointer;
-                background-color: #c8c8c8;
-                color: #fff;
-                margin-left: -4px;
-
-                &:hover, &.active{
-                    background-color: #000000;
-                }
-            }
-
             .btn{
                 width: 50%;
                 cursor: pointer;
