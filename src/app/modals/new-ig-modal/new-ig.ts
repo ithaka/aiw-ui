@@ -33,7 +33,7 @@ export class IgFormUtil {
       access: [ {
         // This is the user's access object
         "entity_type": 100,
-        "entity_identifier": user.baseProfileId,
+        "entity_identifier": user.baseProfileId.toString(),
         "access_type": 300
       } ],
       items: itemIds,
@@ -71,6 +71,5 @@ export class IgFormUtil {
 export interface IgFormValue {
   title: string,
   artstorPermissions: string,
-  institutionView: boolean,
   tags: string[]
 }

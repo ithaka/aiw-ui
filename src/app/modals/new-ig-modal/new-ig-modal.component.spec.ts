@@ -32,14 +32,13 @@ fdescribe('IgFormUtil', () => {
     describe("prepareGroup", () => {
         let description = "this is a string"
         let mockAssets = [{objectId: "12345"}, {objectId: "67890"}]
-        let mockUser = { institutionId: 1234567 }
+        let mockUser = { institutionId: 1234567, baseProfileId: 780280 }
 
         it("should correctly process a private image group made by an artstor user", () => {
 
             let form: IgFormValue = {
                 title: "Private Test Ig",
                 artstorPermissions: "private", // this can be global, institution or private
-                institutionView: null,
                 tags: ["tag1", "tag2"]
             }
 
@@ -62,7 +61,6 @@ fdescribe('IgFormUtil', () => {
             let form: IgFormValue = {
                 title: "Institution Test Ig",
                 artstorPermissions: "institution",
-                institutionView: null,
                 tags: ["tag1", "tag2"]
             }
 
@@ -80,7 +78,6 @@ fdescribe('IgFormUtil', () => {
             let form: IgFormValue = {
                 title: "Global Test Ig",
                 artstorPermissions: "global",
-                institutionView: null,
                 tags: ["tag1", "tag2"]
             }
 
