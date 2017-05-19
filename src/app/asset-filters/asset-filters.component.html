@@ -47,11 +47,15 @@
             </span>
         <div class="date-filter-row">
             <input id="inputDateFilterStart" [(ngModel)]="availableFilters.dateObj.earliest.date" type="number" (keypress)="dateKeyPress($event)" min="0" class="form-control" placeholder="Start Date">
-            <div id="buttonDateFilterStartEra" class="toggle-btn" (click)="toggleEra(availableFilters.dateObj.earliest)">{{ availableFilters.dateObj.earliest.era }}</div>
+            <!--<div id="buttonDateFilterStartEra" class="toggle-btn" (click)="toggleEra(availableFilters.dateObj.earliest)">{{ availableFilters.dateObj.earliest.era }}</div>-->
+            <div id="buttonDateFilterStartBCE" (click)="availableFilters.dateObj.earliest.era = 'BCE'" [ngClass]="{'active': availableFilters.dateObj.earliest.era == 'BCE' }" class="side-toggle-btn">BCE</div>
+            <div id="buttonDateFilterStartCE" (click)="availableFilters.dateObj.earliest.era = 'CE'" [ngClass]="{'active': availableFilters.dateObj.earliest.era == 'CE' }" class="side-toggle-btn">CE</div>
         </div>
         <div class="date-filter-row">
             <input id="inputDateFilterEnd" [(ngModel)]="availableFilters.dateObj.latest.date" type="number" (keypress)="dateKeyPress($event)" min="0" class="form-control" placeholder="End Date">
-            <div id="buttonDateFilterEndEra" class="toggle-btn" (click)="toggleEra(availableFilters.dateObj.latest)">{{ availableFilters.dateObj.latest.era }}</div>
+            <!--<div id="buttonDateFilterEndEra" class="toggle-btn" (click)="toggleEra(availableFilters.dateObj.latest)">{{ availableFilters.dateObj.latest.era }}</div>-->
+            <div id="buttonDateFilterEndBCE" (click)="availableFilters.dateObj.latest.era = 'BCE'" [ngClass]="{'active': availableFilters.dateObj.latest.era == 'BCE' }" class="side-toggle-btn">BCE</div>
+            <div id="buttonDateFilterEndCE" (click)="availableFilters.dateObj.latest.era = 'CE'" [ngClass]="{'active': availableFilters.dateObj.latest.era == 'CE' }" class="side-toggle-btn">CE</div>
         </div>
         <div class="date-filter-row">
             <div id="buttonDateFilterReset" class="btn" (click)="clearDateFilter()">RESET</div>
