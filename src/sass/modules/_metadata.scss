@@ -1,8 +1,8 @@
 
 .meta-block{
+    @extend %SansRegular;
     padding-top: 10px;
     font-size: 14px;
-    font-family: 'Graphik', Futura, Helvetica, sans-serif;
     display: block;
 
     &.small {
