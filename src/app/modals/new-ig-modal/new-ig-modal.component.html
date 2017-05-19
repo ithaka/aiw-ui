@@ -29,8 +29,10 @@
               [editorPlaceholder]="'Give your image group a description...'"></medium-editor>
           </div>
 
+          <!--Left this out of the div so that it remained left aligned...-->
+          <label for="artstorPermissionsGroup">Who should see this image group?</label>
           <div class="form-group text-center">
-            <label for="artstorPermissionsGroup">Who should see this image group?</label>
+            
             <div id="artstorPermissionsGroup" ngbRadioGroup class="btn-group" name="permissions type" [formControl]="newIgForm.controls['artstorPermissions']">
 
               <label *ngIf="isArtstorUser" class="btn btn-secondary">
