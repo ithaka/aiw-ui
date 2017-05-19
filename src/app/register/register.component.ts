@@ -116,18 +116,10 @@ export class RegisterComponent implements OnInit {
           let user: any = Object.assign({}, data.user);
           user.isLoggedIn = true;
           this._auth.saveUser(data.user);
-          this._login.login(userInfo)
-            .then(
-              (data)  => {
-                // this.loginLoading = false;
-                this.angulartics.eventTrack.next({ action:"remoteLogin", properties: { category: "login", label: "success" }});
-                // this._log.Warp6({ eventType: "remote_login" });
-                this.loadForUser(data);
-              }
-            )
-            .catch((err) => {
-              console.error(err);
-            })
+          // this.loginLoading = false;
+          this.angulartics.eventTrack.next({ action:"remoteLogin", properties: { category: "login", label: "success" }});
+          // this._log.Warp6({ eventType: "remote_login" });
+          this.loadForUser(data);
         } else {
           if (data.statusMessage === "User already exist") {
             this.serviceErrors.duplicate = true;
