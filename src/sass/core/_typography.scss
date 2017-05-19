@@ -123,11 +123,12 @@ $typeAccent: $red;
  * @section Typography > Core Styles
  */
  %baseFontStyle {
-     @extend %Graphik-Regular-Web;
+     @extend %SansRegular;
      font-size: $baseFontSize;
  }
 
  html {
+   @extend %SansRegular;
    font-size: $baseFontSize;
  }
 

@@ -5,6 +5,9 @@
     display: inline-block;
 }
 .number-results, .search-in-results{
+    font-family: Verdana;
+    line-height: 1.25;
+    vertical-align: middle;
     font-size: 12px;
     padding: .5em 10px .5em 0;
 }
@@ -123,4 +126,8 @@ input[type=number] {
         opacity: 1;
         pointer-events: all;
     }
+}
+
+.col--thumbnails {
+    padding: 0px;
 }

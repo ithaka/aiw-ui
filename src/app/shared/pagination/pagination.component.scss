@@ -65,8 +65,10 @@ button.page-link {
     // vertical alignment adjustment
     // border-color: transparent;
     border-radius: 0px !important;
-    padding: 0.35rem 0.5rem;
+    padding: 0.35rem 0.4rem;
     white-space: nowrap;
+    // Better arrow characters
+    font-family: 'Aria', Helvetica, sans-serif;
 
     &:hover {
         background: #f8f8f8;
@@ -84,6 +86,7 @@ button.page-link {
 }
 
 .page-info{
+    white-space: nowrap;
     color: #666;
     vertical-align: middle;
     padding: 0.5rem 4px 0.5rem 0px;
