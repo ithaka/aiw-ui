@@ -88,6 +88,14 @@ input[type=number] {
     -moz-appearance: textfield;
 }
 
+.list-group-item ul {
+    padding-left: 15px;
+}
+
+.custom-control {
+    margin-bottom: 0px;
+}
+
 .custom-control-description {
     white-space: nowrap;
     text-overflow: ellipsis;
