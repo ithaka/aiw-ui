@@ -7,6 +7,7 @@ import { Subscription } from 'rxjs/Rx';
 // Project dependencies
 import { AssetService, AuthService, GroupService, ImageGroup } from './../../shared';
 import { AnalyticsService } from './../../analytics.service';
+import { IgFormValue, IgFormUtil } from './new-ig';
 
 @Component({
   selector: 'ang-new-ig-modal',
@@ -51,6 +52,8 @@ export class NewIgModal implements OnInit {
   /** The new group created after it comes back from the service */
   private newGroup: ImageGroup;
 
+  private util: IgFormUtil = new IgFormUtil()
+
   constructor(
       private _assets: AssetService,
       private _auth: AuthService, 
@@ -62,8 +65,7 @@ export class NewIgModal implements OnInit {
   ) {
     this.newIgForm = _fb.group({
       title: [null, Validators.required],
-      artstorPermissions: [null],
-      public: [false],
+      artstorPermissions: ["private", Validators.required],
       tags: [this.tags]
     })
   }
@@ -142,7 +144,7 @@ export class NewIgModal implements OnInit {
   }
 
   /** Called on form submission */
-  private igFormSubmit(formValue: any): void {
+  private igFormSubmit(formValue: IgFormValue): void {
     this.submitted = true;
     // avoid making the service calls, but still trigger error display
     if (!this.newIgForm.valid) {
@@ -163,9 +165,6 @@ export class NewIgModal implements OnInit {
         igDescValue =  parentElement.innerHTML;
       }
     }
-
-    /** I don't think this is happening correctly... institution-viewable should not set public (I don't think) */
-    if (formValue.artstorPermissions == "institution" || formValue.artstorPermissions == "global") { formValue.public = true }
 
     // Form is valid! Create Group object
     /** put this into a function */
@@ -231,7 +230,7 @@ export class NewIgModal implements OnInit {
       /**
        * Add institution access object if shared with Institution
        */
-      if (formValue.public) {
+      if (formValue.artstorPermissions == "institution") {
         editGroup.access.push({
           entity_type: 200,
           entity_identifier: this._auth.getUser() && this._auth.getUser().institutionId.toString(),
@@ -259,30 +258,7 @@ export class NewIgModal implements OnInit {
       this._analytics.directCall('save_selections_new_img_group')
 
       /** Group creation should be factored into a function */
-      let group = {
-        name: formValue.title,
-        description: igDescValue == '<div>&nbsp;</div>' ? '' : igDescValue,
-        sequence_number: 0,
-        access: [ {
-          // This is the user's access object
-          "entity_type": 100,
-          "entity_identifier": this._auth.getUser().baseProfileId.toString(),
-          "access_type": 300
-        } ],
-        items: itemIds,
-        tags: formValue.tags
-      };
-
-      /**
-       * Add institution access object if shared with Institution
-       */
-      if (formValue.public) {
-        group.access.push({
-          entity_type: 200,
-          entity_identifier: this._auth.getUser() && this._auth.getUser().institutionId.toString(),
-          access_type: 100
-        });
-      }
+      let group = this.util.prepareGroup(formValue, igDescValue, this.selectedAssets, this._auth.getUser())
 
       this._group.create(group)
         .subscribe(
