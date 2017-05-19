@@ -5,7 +5,7 @@ import { Locker } from 'angular2-locker';
 
 // Project Dependencies
 import { Asset } from './asset';
-import { AuthService, AssetService } from './../shared';
+import { AuthService, AssetService, GroupService } from './../shared';
 import { AssetViewerComponent } from './asset-viewer/asset-viewer.component';
 import { AnalyticsService } from '../analytics.service';
 
@@ -20,6 +20,8 @@ export class AssetPage implements OnInit, OnDestroy {
     private assetViewer: AssetViewerComponent;
 
     private user: any;
+
+    private hasPrivateGroups: boolean = false;
 
     // Array to support multiple viewers on the page
     private assets: Asset[] = [];
@@ -48,6 +50,7 @@ export class AssetPage implements OnInit, OnDestroy {
 
     constructor(
             private _assets: AssetService, 
+            private _group: GroupService,
             private _auth: AuthService, 
             private route: ActivatedRoute, 
             private _router: Router, 
@@ -134,6 +137,13 @@ export class AssetPage implements OnInit, OnDestroy {
               }
           })
         );
+
+        if(this.user.isLoggedIn){
+            // Check if the logged-in user has private image groups
+            this._group.getAll('private')
+                        .take(1)
+                        .subscribe((res) => { if (res.groups && (res.groups.length > 0)) { this.hasPrivateGroups = true; } }, (err) => { console.error(err); });
+        }
     }
 
     ngOnDestroy() {
@@ -163,6 +173,20 @@ export class AssetPage implements OnInit, OnDestroy {
             }
         }
         return 1;
+    }
+
+    private addAssetToIG(): void{
+        if(this.user.isLoggedIn){
+            if(this.hasPrivateGroups){
+                this.showAddModal = true;
+            }
+            else{
+                this.showCreateGroupModal = true;
+            }
+        }
+        else{
+            this.showLoginModal = true;
+        }
     }
     
     private showPrevAsset(): void{
