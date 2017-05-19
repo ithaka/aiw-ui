@@ -25,8 +25,6 @@ export class AuthService implements CanActivate {
   private thumbUrl;
   private IIIFUrl;
   private logUrl: string;
-  // Media download proxy
-  private proxyUrl = '//proxy.lively.artstor.org';
   private groupUrl = '';
 
   private institutionObjValue: any = {};
@@ -143,10 +141,6 @@ export class AuthService implements CanActivate {
       let body = res.json();
       return body || { };
   }
-
-  public getProxyUrl(): string {
-    return this.proxyUrl;
-  }
   
   public getUrl(): string {
     return this.baseUrl;
@@ -182,7 +176,7 @@ export class AuthService implements CanActivate {
   /** Returns url used for downloading some media, such as documents */
   public getMediaUrl(): string {
     // This is a special case, and should always points to library.artstor or stage 
-    return this.getProxyUrl() + '/media';
+    return this.getHostname() + '/media';
   }
 
   /**
