@@ -51,7 +51,7 @@
                     Download
                     <i id="downloadAssetLink" class="icon icon-download" ></i>
                 </button>
-                <button (click)="user.isLoggedIn ? showAddModal = true : showLoginModal = true" class="btn btn-primary">
+                <button (click)="addAssetToIG()" class="btn btn-primary">
                     <i class="icon icon-add-white" aria-hidden="true"></i>
                 </button>
                 <div *ngIf="copyURLStatusMsg" class="alert alert-info">{{ copyURLStatusMsg }}</div>
