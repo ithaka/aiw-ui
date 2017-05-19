@@ -41,7 +41,7 @@ export class IgFormUtil {
     }
 
     /** Add institution access object if shared with Institution */
-    if (form.institutionView) {
+    if (form.artstorPermissions == "institution") {
       group.access.push({
         entity_type: 200,
         entity_identifier: user && user.institutionId,

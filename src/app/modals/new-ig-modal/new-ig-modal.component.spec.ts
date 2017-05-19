@@ -34,7 +34,7 @@ fdescribe('IgFormUtil', () => {
         let mockAssets = [{objectId: "12345"}, {objectId: "67890"}]
         let mockUser = { institutionId: 1234567 }
 
-        it("should correctly process a private image group", () => {
+        it("should correctly process a private image group made by an artstor user", () => {
 
             let form: IgFormValue = {
                 title: "Private Test Ig",
@@ -58,11 +58,11 @@ fdescribe('IgFormUtil', () => {
             expect(group.tags.length).toBe(2)
         })
 
-        it("should correctly process a global image group", () => {
+        it("should correctly process an institutional image group", () => {
             let form: IgFormValue = {
                 title: "Institution Test Ig",
-                artstorPermissions: null,
-                institutionView: true,
+                artstorPermissions: "institution",
+                institutionView: null,
                 tags: ["tag1", "tag2"]
             }
 
@@ -75,5 +75,6 @@ fdescribe('IgFormUtil', () => {
                 expect(group.access[1].entity_identifier).toBe(mockUser.institutionId)
             expect(group.public).toBeFalsy()
         })
+
     })
 })
