@@ -13,7 +13,7 @@
     </div>
     <div class="row">
         <div class="col-sm-9">
-            <h1 id="pageTitle">{{ colName }}</h1>
+            <h1 id="pageTitle" class="h1--title-block">{{ colName }}</h1>
             <p #colDesc id="pageDescription" class="page__description" [innerHtml]="colDescription" [class.limit]="descCollapsed"></p>
             <div [class.hidden]="colDesc.clientHeight < 75" (click)="descCollapsed = !descCollapsed" class="expander link--action small" [innerHtml]="descCollapsed ? 'More' : 'Less'" role="button">More</div>
         </div>

@@ -232,6 +232,11 @@ h1, .h1 {
   line-height: 22px;
 }
 
+.h1--title-block {
+  line-height: 26px;
+  margin: 6px 0px 12px;
+}
+
 h2, .h2 {
   @extend %Graphik-Regular-Web;
   color: $typeAccent;
