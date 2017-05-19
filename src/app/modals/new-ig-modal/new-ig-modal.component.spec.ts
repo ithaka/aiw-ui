@@ -76,5 +76,21 @@ fdescribe('IgFormUtil', () => {
             expect(group.public).toBeFalsy()
         })
 
+        it("should correctly process a global image group", () => {
+            let form: IgFormValue = {
+                title: "Global Test Ig",
+                artstorPermissions: "global",
+                institutionView: null,
+                tags: ["tag1", "tag2"]
+            }
+
+            let group = util.prepareGroup(form, description, mockAssets, mockUser)
+
+            expect(group.id).toBeFalsy()
+
+            expect(group.access.length).toBe(1)
+            expect(group.public).toBeFalsy() // global DOES NOT set public here. It uses an API call after the group is created
+        })
+
     })
 })
