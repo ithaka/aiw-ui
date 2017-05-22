@@ -23,7 +23,7 @@ export class NewIgModal implements OnInit {
   /** Switch for running loginc to edit image group */
   @Input() private editIG: boolean = false;
   /** The image group object */
-  @Input() private ig: any = false;
+  @Input() private ig: ImageGroup = <ImageGroup>{};
   /** Controls the user seeing the toggle to add images to group or create a new group */
   @Input() private showAddToGroup: boolean = false;
 
@@ -119,37 +119,13 @@ export class NewIgModal implements OnInit {
     /** extract the image group description and attach it to the igDescValue */
     let igDescValue = this.extractDescription()
 
-    /** create the group object that will be submitted to the server */
-    let group = this.util.prepareGroup(formValue, igDescValue, this.selectedAssets, this._auth.getUser())
+    /**
+     * Create the group object that will be submitted to the server 
+     *  only funky thing here is that sometimes we get the list of asset ids from the image group, and sometimes from selected assets
+     */
+    let group = this.util.prepareGroup(formValue, igDescValue, this.ig.id ? this.ig.items : this.selectedAssets, this._auth.getUser())
 
-    /** This if statement should be broken out to run different functions */
-    if(this.copyIG){
-      // Save Group as
-      this._analytics.directCall('save_img_group_as')
-
-      let copyReqBody = {
-        'name' : formValue.title
-      };
-      this._group.copy(this.route.snapshot.params['igId'], copyReqBody)
-        .subscribe(
-          data => {
-              this.isLoading = false;
-
-              // Close the modal
-              this.closeModal.emit();
-
-              // Show the user their new group!
-              if (data.id) {
-                this.router.navigate(['/group', data.id]);
-              }
-          },
-          error => {
-            console.error(error);
-            this.isLoading = false;
-          }
-        );
-    }
-    else if(this.editIG){
+    if(this.editIG){
       // Editing group
       this._analytics.directCall('edit_img_group')
 
@@ -167,9 +143,15 @@ export class NewIgModal implements OnInit {
           }
         );
     }
-    else{
-      // Create New Group
-      this._analytics.directCall('save_selections_new_img_group')
+    else {
+      // analytics events
+      if(this.copyIG) {
+        // Copying old group
+        this._analytics.directCall('save_img_group_as')
+      } else {
+        // Create New Group
+        this._analytics.directCall('save_selections_new_img_group')
+      }
 
       this._group.create(group)
         .subscribe(
