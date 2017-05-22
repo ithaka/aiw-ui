@@ -31,11 +31,6 @@ export class NewIgModal implements OnInit {
   private newIgForm: FormGroup;
   /** Gives artstor institution users the ability to curate image public image groups */
   private isArtstorUser: boolean = false;
-  /** 
-   * List of tags provided for the image group by the user
-   *  only gets used to store tags in t
-   */
-  private tags: string[] = [];
   // We need to seed the medium editor with an empty div to fix line return issues in Firefox!
   private igDescription: string = "<div>&nbsp;</div>";
   /** The list of assets which are currently selected from the asset grid */
@@ -69,7 +64,7 @@ export class NewIgModal implements OnInit {
     this.newIgForm = _fb.group({
       title: [null, Validators.required],
       artstorPermissions: ["private", Validators.required],
-      tags: [this.tags]
+      tags: [null] // the value gets set later, in ngOnInit, because we don't have access to this.ig here
     })
   }
 
@@ -78,11 +73,13 @@ export class NewIgModal implements OnInit {
     this.isArtstorUser = this._auth.getUser().institutionId == 1000;
 
     /** Set the field values, depending on the image group that is input  */
-    if(this.ig.id){
+    if(this.ig.id && (this.copyIG || this.editIG)){
       this.setFormValues()
     }
 
-    if (this.selectedAssets.length < 1) { // if an asset hasn't been injected, the component gets assets from list of selected assets
+    // if an asset hasn't been injected, the component gets assets from list of selected assets
+    // otherwise, the injected image group's assets will be used
+    if (this.selectedAssets.length < 1) {
       // Subscribe to asset selection
       this.subscriptions.push(
         this._assets.selection.subscribe(
@@ -153,6 +150,7 @@ export class NewIgModal implements OnInit {
         this._analytics.directCall('save_selections_new_img_group')
       }
 
+      // create the group using the group service
       this._group.create(group)
         .subscribe(
           data => {
@@ -203,16 +201,13 @@ export class NewIgModal implements OnInit {
    */
   private setFormValues(): void {
     // set title value
-    (<FormControl>this.newIgForm.controls['title']).setValue(this.ig.name);
+    this.newIgForm.controls['title'].setValue(this.ig.name);
 
-    /** WHAT IS GOING ON HERE */
     // set tags values
-    this.tags = this.ig.tags;
-    (<FormControl>this.newIgForm.controls['tags']).setValue(this.tags);
+    this.newIgForm.controls['tags'].setValue(this.ig.tags);
 
-    if (this.ig.public) { (<FormControl>this.newIgForm.controls['artstorPermissions']).setValue("global") }
-    else if (this.checkIfPublic()) { (<FormControl>this.newIgForm.controls['artstorPermissions']).setValue("institution") }
-
+    if (this.ig.public) { this.newIgForm.controls['artstorPermissions'].setValue("global") }
+    else if (this.institutionView()) { this.newIgForm.controls['artstorPermissions'].setValue("institution") }
 
     /** Setting the description based on the current image group's description requires some workarounds */
     if(this.ig.description){
@@ -232,17 +227,15 @@ export class NewIgModal implements OnInit {
    * Checks if the user's institution has permission to view the image group
    * @returns true if the user's institution has permission to view the image group
    */
-  private checkIfPublic(): boolean {
-    let publicIG = false
+  private institutionView(): boolean {
+    let institutionView = false
     for(let accessObj of this.ig.access) {
       if(accessObj.entity_type === 200) {
-        publicIG = true
+        institutionView = true
         break
       }
     }
 
-    return publicIG
+    return institutionView
   }
 }
-
-/** Just describes the form value for this form (not meant to be exported) */
