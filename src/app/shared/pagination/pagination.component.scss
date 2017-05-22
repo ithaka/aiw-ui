@@ -1,7 +1,8 @@
 @import '../../../sass/core/variables';
+@import '../../../sass/core/typography';
 
 .page-input {
-    padding: 0.5rem;
+    padding: 0.4rem;
     margin-left: -1px;
     line-height: 1.25;
     border: none;
@@ -13,6 +14,13 @@
 
     // Hide increment arrows on Firefox
     -moz-appearance:textfield;
+
+    &::-webkit-outer-spin-button,
+    &::-webkit-inner-spin-button {
+        /* display: none; <- Crashes Chrome on hover */
+        -webkit-appearance: none;
+        margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
+    }
 
     &:hover, &:focus {
         outline: none;
@@ -44,7 +52,7 @@
     font-size: 13px;
 }
 .page-input, .page-info, .page-link {
-    font-family: 'Graphik Web';
+    @extend %SansRegular;
     font-weight: normal;
 }
 
@@ -57,8 +65,10 @@ button.page-link {
     // vertical alignment adjustment
     // border-color: transparent;
     border-radius: 0px !important;
-    padding: 0.5rem;
+    padding: 0.35rem 0.4rem;
     white-space: nowrap;
+    // Better arrow characters
+    font-family: 'Aria', Helvetica, sans-serif;
 
     &:hover {
         background: #f8f8f8;
@@ -74,7 +84,10 @@ button.page-link {
         box-shadow: none;
     }
 }
+
 .page-info{
+    white-space: nowrap;
+    color: #666;
     vertical-align: middle;
     padding: 0.5rem 4px 0.5rem 0px;
     border-bottom: 1px solid transparent;
