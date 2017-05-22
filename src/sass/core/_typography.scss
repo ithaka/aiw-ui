@@ -192,10 +192,14 @@ a.list-group-item, a.list-group-item-action, a.btn  {
 
 .link--action {
   @extend .link;
+  color: $blue;
   text-decoration: none !important;
 
   &:hover, &:focus, &:active {
-    color: $gray;
+    color: lighten($blue, 10%);
+    text-decoration: underline;
+    -moz-text-decoration-color:  lighten($blue, 10%);
+    -webkit-text-decoration-color:  lighten($blue, 10%);
   }
 }
 
