@@ -73,8 +73,10 @@ img.no-stretch {
     overflow: hidden;
     text-overflow: ellipsis;
     padding: 3px 0px;
-    margin: 0px;
+    margin: 0px auto;
     cursor: pointer;
+
+    max-width: 300px;
 
     &.disabled {
         opacity: 0.8;
