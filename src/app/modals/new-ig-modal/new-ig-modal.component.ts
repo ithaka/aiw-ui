@@ -31,7 +31,10 @@ export class NewIgModal implements OnInit {
   private newIgForm: FormGroup;
   /** Gives artstor institution users the ability to curate image public image groups */
   private isArtstorUser: boolean = false;
-  /** List of tags provided for the image group by the user */
+  /** 
+   * List of tags provided for the image group by the user
+   *  only gets used to store tags in t
+   */
   private tags: string[] = [];
   // We need to seed the medium editor with an empty div to fix line return issues in Firefox!
   private igDescription: string = "<div>&nbsp;</div>";
@@ -73,34 +76,10 @@ export class NewIgModal implements OnInit {
   ngOnInit() {
     /** Set isArtstorUser to true if the user's institution is 1000. This will let them make global image groups */
     this.isArtstorUser = this._auth.getUser().institutionId == 1000;
-    // initialize the artstorPermissions to private
-    if (this.isArtstorUser) { (<FormControl>this.newIgForm.controls['artstorPermissions']).setValue("private") }
 
     /** Set the field values, depending on the image group that is input  */
     if(this.ig.id && this.editIG){
-      (<FormControl>this.newIgForm.controls['title']).setValue(this.ig.name);
-
-      this.tags = this.ig.tags;
-      (<FormControl>this.newIgForm.controls['tags']).setValue(this.tags);
-
-      (<FormControl>this.newIgForm.controls['public']).setValue(this.checkIfPublic());
-
-      if (this.ig.public) { (<FormControl>this.newIgForm.controls['artstorPermissions']).setValue("global") }
-      else if (this.checkIfPublic()) { (<FormControl>this.newIgForm.controls['artstorPermissions']).setValue("institution") }
-
-
-      /** Setting the description based on the current image group's description requires some workarounds */
-      if(this.ig.description){
-        let parentElement = document.createElement('div');
-        parentElement.innerHTML = this.ig.description;
-
-        if( parentElement.firstElementChild && (parentElement.firstElementChild.id === 'angularMediumEditor' )){
-          this.igDescription = parentElement.firstElementChild.innerHTML;
-        }
-        else{
-          this.igDescription =  parentElement.innerHTML;
-        }
-      }
+      this.setFormValues()
     }
 
     if (this.selectedAssets.length < 1) { // if an asset hasn't been injected, the component gets assets from list of selected assets
@@ -119,28 +98,12 @@ export class NewIgModal implements OnInit {
   }
 
   ngOnDestroy() {
-      this.subscriptions.forEach((sub) => { sub.unsubscribe(); });
-  }
-
-  /**
-   * Checks if the user's institution has permission to view the image group
-   * @returns true if the user's institution has permission to view the image group
-   */
-  private checkIfPublic(): boolean{
-    let publicIG = false;
-    for(let accessObj of this.ig.access){
-      if(accessObj.entity_type === 200){
-        publicIG = true;
-        break;
-      }
-    }
-
-    return publicIG;
+      this.subscriptions.forEach((sub) => { sub.unsubscribe() })
   }
 
   private refreshIG(): void{
-    this.igReloadTriggered.emit();
-    this.closeModal.emit();
+    this.igReloadTriggered.emit()
+    this.closeModal.emit()
   }
 
   /** Called on form submission */
@@ -188,7 +151,7 @@ export class NewIgModal implements OnInit {
       this._analytics.directCall('edit_img_group')
 
       let editGroup = this.util.prepareGroup(formValue, igDescValue, this.selectedAssets, this._auth.getUser())
-      
+
       this._group.update(editGroup)
         .subscribe(
           data => {
@@ -253,6 +216,52 @@ export class NewIgModal implements OnInit {
     }
 
     return igDescValue == '<div>&nbsp;</div>' ? '' : igDescValue
+  }
+
+  /**
+   * Sets the values of form members based on the injected image group
+   */
+  private setFormValues(): void {
+    // set title value
+    (<FormControl>this.newIgForm.controls['title']).setValue(this.ig.name);
+
+    /** WHAT IS GOING ON HERE */
+    // set tags values
+    this.tags = this.ig.tags;
+    (<FormControl>this.newIgForm.controls['tags']).setValue(this.tags);
+
+    if (this.ig.public) { (<FormControl>this.newIgForm.controls['artstorPermissions']).setValue("global") }
+    else if (this.checkIfPublic()) { (<FormControl>this.newIgForm.controls['artstorPermissions']).setValue("institution") }
+
+
+    /** Setting the description based on the current image group's description requires some workarounds */
+    if(this.ig.description){
+      let parentElement = document.createElement('div');
+      parentElement.innerHTML = this.ig.description;
+
+      if( parentElement.firstElementChild && (parentElement.firstElementChild.id === 'angularMediumEditor' )){
+        this.igDescription = parentElement.firstElementChild.innerHTML;
+      }
+      else{
+        this.igDescription =  parentElement.innerHTML;
+      }
+    }
+  }
+
+  /**
+   * Checks if the user's institution has permission to view the image group
+   * @returns true if the user's institution has permission to view the image group
+   */
+  private checkIfPublic(): boolean {
+    let publicIG = false
+    for(let accessObj of this.ig.access) {
+      if(accessObj.entity_type === 200) {
+        publicIG = true
+        break
+      }
+    }
+
+    return publicIG
   }
 }
 
