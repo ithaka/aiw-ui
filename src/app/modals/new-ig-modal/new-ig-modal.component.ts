@@ -72,7 +72,10 @@ export class NewIgModal implements OnInit {
     /** Set isArtstorUser to true if the user's institution is 1000. This will let them make global image groups */
     this.isArtstorUser = this._auth.getUser().institutionId == 1000;
 
-    /** Set the field values, depending on the image group that is input  */
+    /** 
+     * Set the field values, depending on the image group that is input
+     *  only set the field values if you are copying or editing - otherwise, you're trying to make a new image group
+     */
     if(this.ig.id && (this.copyIG || this.editIG)){
       this.setFormValues()
     }
@@ -119,8 +122,9 @@ export class NewIgModal implements OnInit {
     /**
      * Create the group object that will be submitted to the server 
      *  only funky thing here is that sometimes we get the list of asset ids from the image group, and sometimes from selected assets
+     *  that depends on whether you're copying an image group or making a new one
      */
-    let group = this.util.prepareGroup(formValue, igDescValue, this.ig.id ? this.ig.items : this.selectedAssets, this._auth.getUser())
+    let group = this.util.prepareGroup(formValue, igDescValue, this.copyIG ? this.ig.items : this.selectedAssets, this._auth.getUser())
 
     if(this.editIG){
       // Editing group
