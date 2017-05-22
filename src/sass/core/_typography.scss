@@ -123,11 +123,12 @@ $typeAccent: $red;
  * @section Typography > Core Styles
  */
  %baseFontStyle {
-     @extend %Graphik-Regular-Web;
+     @extend %SansRegular;
      font-size: $baseFontSize;
  }
 
  html {
+   @extend %SansRegular;
    font-size: $baseFontSize;
  }
 
@@ -191,10 +192,14 @@ a.list-group-item, a.list-group-item-action, a.btn  {
 
 .link--action {
   @extend .link;
+  color: $blue;
   text-decoration: none !important;
 
   &:hover, &:focus, &:active {
-    color: $gray;
+    color: lighten($blue, 10%);
+    text-decoration: underline;
+    -moz-text-decoration-color:  lighten($blue, 10%);
+    -webkit-text-decoration-color:  lighten($blue, 10%);
   }
 }
 
@@ -231,6 +236,11 @@ h1, .h1 {
   line-height: 22px;
 }
 
+.h1--title-block {
+  line-height: 26px;
+  margin: 6px 0px 12px;
+}
+
 h2, .h2 {
   @extend %Graphik-Regular-Web;
   color: $typeAccent;
@@ -263,7 +273,7 @@ h3, .h3 {
 }
 
 .row-hdr{
-    font-size: 13px;
+    font-size: 12px;
     font-weight: 600;
     border-bottom: 1px solid #ddd;
     @extend %Graphik-Regular-Web;

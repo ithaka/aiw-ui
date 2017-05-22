@@ -13,6 +13,13 @@ main {
      overflow-x: hidden;
  }
 
+.row {
+     @media(max-width: $phone) {
+         margin-right: 0px;
+         margin-left: 0px;
+     }
+}
+
 .row--no-overflow {
     overflow: hidden;
 }
