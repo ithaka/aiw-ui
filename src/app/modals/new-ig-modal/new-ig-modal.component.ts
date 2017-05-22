@@ -78,7 +78,7 @@ export class NewIgModal implements OnInit {
     this.isArtstorUser = this._auth.getUser().institutionId == 1000;
 
     /** Set the field values, depending on the image group that is input  */
-    if(this.ig.id && this.editIG){
+    if(this.ig.id){
       this.setFormValues()
     }
 
@@ -119,6 +119,9 @@ export class NewIgModal implements OnInit {
     /** extract the image group description and attach it to the igDescValue */
     let igDescValue = this.extractDescription()
 
+    /** create the group object that will be submitted to the server */
+    let group = this.util.prepareGroup(formValue, igDescValue, this.selectedAssets, this._auth.getUser())
+
     /** This if statement should be broken out to run different functions */
     if(this.copyIG){
       // Save Group as
@@ -150,9 +153,7 @@ export class NewIgModal implements OnInit {
       // Editing group
       this._analytics.directCall('edit_img_group')
 
-      let editGroup = this.util.prepareGroup(formValue, igDescValue, this.selectedAssets, this._auth.getUser())
-
-      this._group.update(editGroup)
+      this._group.update(group)
         .subscribe(
           data => {
             this.isLoading = false;
@@ -169,9 +170,6 @@ export class NewIgModal implements OnInit {
     else{
       // Create New Group
       this._analytics.directCall('save_selections_new_img_group')
-
-      /** Group creation should be factored into a function */
-      let group = this.util.prepareGroup(formValue, igDescValue, this.selectedAssets, this._auth.getUser())
 
       this._group.create(group)
         .subscribe(
