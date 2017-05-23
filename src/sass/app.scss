@@ -210,3 +210,11 @@ a.blog-post {
     padding: 0px !important;
   }
 }
+
+nav-menu {
+  @media(max-width: $phone) {
+    height: 20px;
+    display: block;
+    width: 100%;
+  }
+}

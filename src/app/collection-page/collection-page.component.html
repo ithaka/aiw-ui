@@ -11,11 +11,11 @@
             <h3 id="pageType">Browse Collection</h3>
         </div>
     </div>
-    <div class="row">
+    <div class="row pb-4">
         <div class="col-sm-9">
             <h1 id="pageTitle" class="h1--title-block">{{ colName }}</h1>
             <p #colDesc id="pageDescription" class="page__description" [innerHtml]="colDescription" [class.limit]="descCollapsed"></p>
-            <div [class.hidden]="colDesc.clientHeight < 75" (click)="descCollapsed = !descCollapsed" class="expander link--action small" [innerHtml]="descCollapsed ? 'More' : 'Less'" role="button">More</div>
+            <div [class.hidden]="colDesc.clientHeight < 75" [class.collapsed]="descCollapsed" (click)="descCollapsed = !descCollapsed" class="expander link--action small" [innerHtml]="descCollapsed ? 'More' : 'Less'" role="button">More</div>
         </div>
         <div *ngIf="colThumbnail.length > 0" class="col-sm-3 ">
             <div class="thumbnail-shelf">
