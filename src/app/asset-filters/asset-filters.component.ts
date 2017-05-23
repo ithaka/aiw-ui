@@ -209,6 +209,25 @@ export class AssetFilters {
 
     this.loadRoute();
   }
+  
+  // To check if a filter group has any applied filters
+  hasAppliedFilters(group): boolean{
+    let hasFilters: boolean = false;
+
+    if(group == 'date'){
+      hasFilters = this.availableFilters.dateObj.modified;
+    }
+    else{
+      for(var i = 0; i < this.appliedFilters.length; i++){
+        var filter = this.appliedFilters[i];
+        if(filter.filterGroup === group){
+          hasFilters = true;
+          break;
+        }
+      }
+    }
+    return hasFilters;
+  }
 
   clearDateFilter() {
     this.availableFilters.dateObj.modified = false;
