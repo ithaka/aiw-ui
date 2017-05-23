@@ -135,7 +135,7 @@ export class AssetFilters {
       if(filter.filterGroup == 'currentPage'){
         params[filter.filterGroup] =  parseInt(filter.filterValue);
       }
-      else if((filter.filterGroup != 'startDate') && (filter.filterGroup != 'endDate')){
+      else if((filter.filterGroup != 'startDate') && (filter.filterGroup != 'endDate') && (filter.filterValue && filter.filterValue.length > 0)){
         params[filter.filterGroup] =  filter.filterValue;
       }
     }
