@@ -6,6 +6,7 @@ import { Angulartics2 } from 'angulartics2';
 
 import { AuthService } from './../shared';
 import { LoginService } from './../login/login.service';
+import { AnalyticsService } from '../analytics.service';
 
 @Component({
   providers: [
@@ -32,7 +33,8 @@ export class RegisterComponent implements OnInit {
     private _router: Router,
     private _login: LoginService,
     private angulartics: Angulartics2,
-    _fb: FormBuilder
+    _fb: FormBuilder,
+    private _analytics: AnalyticsService
   ) {
     this.registerForm = _fb.group({
       // The first value of this array is the initial value for the control, the second is the
@@ -61,7 +63,8 @@ export class RegisterComponent implements OnInit {
         this.userDepts = data.deptArray;
         this.userRoles = data.roleArray;
       });
-  }
+    this._analytics.setPageValues('register', '')
+  } // OnInit
 
   //https://angular.io/docs/ts/latest/api/forms/index/FormGroup-class.html
   /** Validates that the passwords are equal and assigns error if not

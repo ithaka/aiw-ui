@@ -5,6 +5,7 @@ import { Subscription }   from 'rxjs/Subscription';
 // Internal Dependencies
 import { AssetService, AuthService } from './../shared';
 import { ImageGroup, ImageGroupDescription, IgDownloadInfo, ImageGroupService, GroupService } from './../shared';
+import { AnalyticsService } from '../analytics.service';
 
 @Component({
   selector: 'ang-image-group',
@@ -48,7 +49,8 @@ export class ImageGroupPage implements OnInit, OnDestroy {
     private _router: Router,
     private _assets: AssetService,
     private _auth: AuthService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private _analytics: AnalyticsService
   ) {
   }
 
@@ -156,7 +158,9 @@ export class ImageGroupPage implements OnInit, OnDestroy {
         }
       })
     );
-  }
+  
+    this._analytics.setPageValues('group', this.ig.id)
+  } // OnInit
 
   ngOnDestroy() {
     this.subscriptions.forEach((sub) => { sub.unsubscribe(); });

@@ -3,7 +3,8 @@ import { Router } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
 
 import { AppState } from '../app.service';
-import { AssetService, AuthService } from '../shared';
+import { AssetService, AuthService, } from '../shared';
+import { AnalyticsService } from '../analytics.service';
 
 @Component({
   // The selector is what angular internally uses
@@ -34,7 +35,8 @@ export class Home implements OnInit, OnDestroy {
       public appState: AppState, 
       private _assets: AssetService, 
       private _router: Router,
-      private _auth: AuthService
+      private _auth: AuthService,
+      private _analytics: AnalyticsService
   ) {
     // this makes the window always render scrolled to the top
     this._router.events.subscribe(() => {
@@ -88,7 +90,9 @@ export class Home implements OnInit, OnDestroy {
           console.log(error);
           this.blogLoading = false;
         });
-  }
+
+        this._analytics.setPageValues('Home', '')
+  } // OnInit
 
   ngOnDestroy() {
     this.subscriptions.forEach((sub) => { sub.unsubscribe(); });

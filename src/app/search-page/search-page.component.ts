@@ -4,7 +4,7 @@ import { Subscription }   from 'rxjs/Subscription';
 
 import { AssetService } from './../shared/assets.service';
 import { AssetFiltersService } from '../asset-filters/asset-filters.service';
-
+import { AnalyticsService } from '../analytics.service';
 import { AssetGrid } from './../asset-grid/asset-grid.component';
 
 @Component({
@@ -19,10 +19,15 @@ export class SearchPage implements OnInit, OnDestroy {
 
   @ViewChild(AssetGrid)
   private assetGrid: AssetGrid;
-
   // private searchInResults: boolean = false;
 
-  constructor(private _assets: AssetService, private route: ActivatedRoute, private _filters: AssetFiltersService, private _router: Router) {
+  constructor(
+        private _assets: AssetService, 
+        private route: ActivatedRoute, 
+        private _filters: AssetFiltersService, 
+        private _router: Router,
+        private _analytics: AnalyticsService
+      ) {
     // this makes the window always render scrolled to the top
     this._router.events.subscribe(() => {
       window.scrollTo(0, 0);
@@ -46,7 +51,8 @@ export class SearchPage implements OnInit, OnDestroy {
         }
       })
     ); 
-  }
+    this._analytics.setPageValues('search', '')
+  } // OnInit
 
   ngOnDestroy() {
     this.subscriptions.forEach((sub) => { sub.unsubscribe(); });

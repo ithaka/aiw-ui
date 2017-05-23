@@ -144,7 +144,9 @@ export class AssetPage implements OnInit, OnDestroy {
                         .take(1)
                         .subscribe((res) => { if (res.groups && (res.groups.length > 0)) { this.hasPrivateGroups = true; } }, (err) => { console.error(err); });
         }
-    }
+
+        this._analytics.setPageValues('asset', this.assets[0] && this.assets[0].id)
+    } // OnInit
 
     ngOnDestroy() {
         this.subscriptions.forEach((sub) => { sub.unsubscribe(); });

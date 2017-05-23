@@ -4,6 +4,7 @@ import { Router, ActivatedRoute, UrlSegment } from '@angular/router';
 import { Subscription }   from 'rxjs/Subscription';
 
 // Internal Dependencies
+import { AnalyticsService } from '../analytics.service';
 import { AssetService } from './../shared/assets.service';
 import { AuthService } from './../shared/auth.service';
 
@@ -38,7 +39,8 @@ export class CategoryPage implements OnInit, OnDestroy {
     private _auth: AuthService,
     private _router: Router,
     private route: ActivatedRoute,
-    private http: Http
+    private http: Http,
+    private _analytics: AnalyticsService
   ) {}
 
   ngOnInit() {
@@ -93,7 +95,9 @@ export class CategoryPage implements OnInit, OnDestroy {
         })
     );
 
-  }
+    this._analytics.setPageValues('category', this.catId)
+  } // OnInit
+
 
   /**
   * Get metadata about a Category
