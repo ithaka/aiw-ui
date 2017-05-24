@@ -43,7 +43,7 @@ export class IgFormUtil {
     if (form.artstorPermissions == "institution") {
       group.access.push({
         entity_type: 200,
-        entity_identifier: user && user.institutionId,
+        entity_identifier: user && user.institutionId.toString(),
         access_type: 100
       })
     }
