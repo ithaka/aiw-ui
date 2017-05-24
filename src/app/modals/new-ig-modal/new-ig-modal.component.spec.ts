@@ -70,7 +70,7 @@ fdescribe('IgFormUtil', () => {
 
             expect(group.access.length).toBe(2)
                 expect(group.access[1].entity_type).toBe(200)
-                expect(group.access[1].entity_identifier).toBe(mockUser.institutionId)
+                expect(group.access[1].entity_identifier).toBe(mockUser.institutionId.toString())
             expect(group.public).toBeFalsy()
         })
 
