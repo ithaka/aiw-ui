@@ -164,8 +164,8 @@ export class NewIgModal implements OnInit {
             this.newGroup = data;
             this.serviceResponse.success = true;
 
-            // if an Artstor user set it so that "Everyone" can see it, call the server to make it global
-            if (formValue.artstorPermissions == "global") {
+            // if an Artstor user, make sure the public property is set correctly
+            if (this.isArtstorUser) {
               this._group.updateIgPublic(this.newGroup.id, formValue.artstorPermissions == "global")
                 .take(1)
                 .subscribe((res) => {
