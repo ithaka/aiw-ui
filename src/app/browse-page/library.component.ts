@@ -3,6 +3,7 @@ import { Router, ActivatedRoute, Params } from '@angular/router';
 import { Subscription }   from 'rxjs/Subscription';
 
 import { AssetService } from './../shared/assets.service';
+import { AnalyticsService } from '../analytics.service';
 import { TagsService } from './tags.service';
 import { Tag } from './tag/tag.class';
 
@@ -16,7 +17,8 @@ export class LibraryComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private _assets: AssetService,
-    private _tags: TagsService
+    private _tags: TagsService,
+    private _analytics: AnalyticsService
   ) { }
 
   private subscriptions: Subscription[] = [];
@@ -66,7 +68,8 @@ export class LibraryComponent implements OnInit {
         this.loadDescription(this.selectedBrowseId);
       })
     );
-  }
+    this._analytics.setPageValues('library', '')
+  } // OnInit
 
   private getTags(browseId): void {
     if (!this.tagsObj[browseId] || this.tagsObj[browseId].length < 1) {

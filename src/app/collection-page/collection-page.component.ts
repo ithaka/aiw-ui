@@ -5,6 +5,7 @@ import { Subscription }   from 'rxjs/Subscription';
 
 // Internal Dependencies
 // import { CollectionService } from './collection.service';
+import { AnalyticsService } from '../analytics.service';
 import { AssetService } from './../shared/assets.service';
 import { AuthService } from './../shared/auth.service';
 
@@ -38,7 +39,8 @@ export class CollectionPage implements OnInit, OnDestroy {
     private _auth: AuthService,
     private _router: Router,
     private route: ActivatedRoute,
-    private http: Http
+    private http: Http,
+    private _analytics: AnalyticsService
   ) {}
 
   ngOnInit() {
@@ -69,7 +71,8 @@ export class CollectionPage implements OnInit, OnDestroy {
         }
       })
     );// End push to subscription
-  }
+    this._analytics.setPageValues('collection', this.colId)
+  } // OnInit
 
   ngOnDestroy() {
     this.subscriptions.forEach((sub) => { sub.unsubscribe(); });

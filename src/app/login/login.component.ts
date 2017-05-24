@@ -5,6 +5,7 @@ import { Angulartics2 } from 'angulartics2';
 
 import { AuthService, LoggingService } from './../shared';
 import { LoginService, User } from './login.service';
+import { AnalyticsService } from '../analytics.service';
 
 @Component({
   // The selector is what angular internally uses
@@ -46,7 +47,8 @@ export class Login {
     private _log: LoggingService,
     private router: Router,
     private location: Location,
-    private angulartics: Angulartics2
+    private angulartics: Angulartics2,
+    private _analytics: AnalyticsService
   ) { 
   }
 
@@ -72,7 +74,8 @@ export class Login {
         this.instErrorMsg = "We've experience an error and are unable to retrieve the insitutions";
         console.error(error);
       });
-  }
+    this._analytics.setPageValues('login', '')
+  } // OnInit
   
   loadForUser(data: any) {
     if (data && data.user) {

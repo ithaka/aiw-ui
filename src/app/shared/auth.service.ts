@@ -11,6 +11,9 @@ import {
 import { Observable, BehaviorSubject } from 'rxjs/Rx';
 import { Angulartics2 } from 'angulartics2';
 
+// Project dependencies
+import { AnalyticsService } from '../analytics.service';
+
 /**
  * Controls authorization through IP address and locally stored user object
  */
@@ -36,7 +39,8 @@ export class AuthService implements CanActivate {
     locker:Locker,
     private http: Http,
     private location: Location,
-    private angulartics: Angulartics2
+    private angulartics: Angulartics2,
+    private _analytics: AnalyticsService
   ) {
     this._storage = locker.useDriver(Locker.DRIVERS.LOCAL);
     this._router = _router;
@@ -92,6 +96,8 @@ export class AuthService implements CanActivate {
   public setInstitution(institutionObj: any): void {
     this.institutionObjValue = institutionObj;
     this.institutionObjSource.next(this.institutionObjValue);
+    // Update Analytics object
+    this._analytics.setUserInstitution(institutionObj.institutionId ? institutionObj.institutionId : '')
   }
 
   /**
@@ -186,6 +192,8 @@ export class AuthService implements CanActivate {
   public saveUser(user: any) {
     //should have session timeout, username, baseProfileId, typeId
     this._storage.set('user', user);
+    // Set analytics object
+    this._analytics.setUserInstitution(user.institutionId ? user.institutionId : '')
   }
 
   /**

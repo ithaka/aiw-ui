@@ -4,6 +4,7 @@ import { Subscription }   from 'rxjs/Subscription';
 
 import { AssetService } from './../shared/assets.service';
 import { AuthService } from './../shared/auth.service';
+import { AnalyticsService } from '../analytics.service';
 import { TagsService } from './tags.service';
 import { Tag } from './tag/tag.class';
 
@@ -20,7 +21,8 @@ export class MyCollectionsComponent implements OnInit {
     private _auth: AuthService,
     private router: Router,
     private route: ActivatedRoute,
-    private _assets: AssetService
+    private _assets: AssetService,
+    private _analytics: AnalyticsService
   ) { }
 
   private subscriptions: Subscription[] = [];
@@ -50,7 +52,8 @@ export class MyCollectionsComponent implements OnInit {
     if(this.userPCallowed == '1'){ // If user has personal collections get data for user's personal collections
       this.getUserPCol();
     }
-  }
+    this._analytics.setPageValues('mycollection', '')
+  } // OnInit
 
   ngOnDestroy() {
     this.subscriptions.forEach((sub) => { sub.unsubscribe(); });

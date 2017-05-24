@@ -1,3 +1,4 @@
+import { AnalyticsService } from '../analytics.service';
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { Subscription }   from 'rxjs/Subscription';
@@ -17,7 +18,8 @@ export class BrowseGroupsComponent implements OnInit {
     private route: ActivatedRoute,
     private _assets: AssetService,
     private _groups: GroupService,
-    private _auth: AuthService
+    private _auth: AuthService,
+    private _analytics: AnalyticsService
   ) { }
 
   private subscriptions: Subscription[] = []
@@ -88,7 +90,9 @@ export class BrowseGroupsComponent implements OnInit {
     }
 
     this.loadCategory(this.selectedBrowseLevel)
-  }
+  
+    this._analytics.setPageValues('groups', '')
+  } // OnInit
 
   ngOnDestroy() {
     this.subscriptions.forEach((sub) => { sub.unsubscribe() })

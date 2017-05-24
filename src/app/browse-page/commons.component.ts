@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { AssetService } from './../shared/assets.service';
 import { TagsService } from './tags.service';
 import { Tag } from './tag/tag.class';
+import { AnalyticsService } from '../analytics.service';
 
 @Component({
   selector: 'ang-browse-commons',
@@ -15,7 +16,8 @@ export class BrowseCommonsComponent implements OnInit {
 
   constructor(
     private _assets: AssetService,
-    private _tags: TagsService
+    private _tags: TagsService,
+    private _analytics: AnalyticsService
   ) { }
 
 
@@ -28,5 +30,7 @@ export class BrowseCommonsComponent implements OnInit {
       .catch((err) => {
         console.error(err);
       });
-  }
+  
+    this._analytics.setPageValues('commons', '')
+  } // OnInit
 }
