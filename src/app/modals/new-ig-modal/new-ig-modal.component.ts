@@ -64,7 +64,7 @@ export class NewIgModal implements OnInit {
     this.newIgForm = _fb.group({
       title: [null, Validators.required],
       artstorPermissions: ["private", Validators.required],
-      tags: [null] // the value gets set later, in ngOnInit, because we don't have access to this.ig here
+      tags: [[]] // just initialize an empty array
     })
   }
 
@@ -130,6 +130,8 @@ export class NewIgModal implements OnInit {
       // Editing group
       this._analytics.directCall('edit_img_group')
 
+      group.id = this.ig.id
+
       this._group.update(group)
         .subscribe(
           data => {
@@ -164,7 +166,7 @@ export class NewIgModal implements OnInit {
 
             // if an Artstor user set it so that "Everyone" can see it, call the server to make it global
             if (formValue.artstorPermissions == "global") {
-              this._group.makeIgGlobal(this.newGroup.id)
+              this._group.updateIgPublic(this.newGroup.id, formValue.artstorPermissions == "global")
                 .take(1)
                 .subscribe((res) => {
                   // not really sure what to do here?

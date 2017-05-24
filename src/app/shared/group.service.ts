@@ -160,10 +160,10 @@ export class GroupService {
      * @param igId The image group id to make global
      * @returns Observable resolved with { success: boolean, message: string }
      */
-    public makeIgGlobal(igId: string) {
+    public updateIgPublic(igId: string, makePublic: boolean) {
         return this.http.put(
             [this.groupUrl,igId, "admin", "public"].join("/"),
-            { public: true },
+            { public: makePublic },
             this.options
         )
         .map((res) => { return res.json() || {} })
