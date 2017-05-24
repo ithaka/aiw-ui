@@ -14,5 +14,12 @@ $footerBg: #f9f9f9;
         border-bottom: none;
         margin: 0 5px;
         text-decoration: none;
+
+        &.footer-logout{
+            display: inline-block;
+            @media (min-width: 576px) {
+                display: none;
+            }
+        }
     }
 }
