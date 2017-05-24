@@ -1,13 +1,18 @@
 import { Subscription } from 'rxjs/Rx';
 import { Component, OnInit, OnDestroy, Output, EventEmitter, Input } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Location } from '@angular/common';
 
 // Project Dependencies
 import { AssetService, ImageGroupService, ImageGroup, GroupService, AuthService } from '../shared';
+import { LoginService } from '../login/login.service';
 import { AnalyticsService } from '../analytics.service';
 
 @Component({
   selector: 'nav-menu',
+  providers: [
+    LoginService
+  ],
   templateUrl: './nav-menu.component.html',
   styleUrls: [ './nav-menu.component.scss' ],
 })
@@ -60,9 +65,11 @@ export class NavMenu implements OnInit, OnDestroy {
   // TypeScript public modifiers
   constructor(
     private _router: Router,
+    private location: Location,
     private _assets: AssetService,
     private _ig: ImageGroupService,
     private _group: GroupService,
+    private _login: LoginService,
     private route: ActivatedRoute,
     private _auth: AuthService,
     private _analytics: AnalyticsService
@@ -179,5 +186,16 @@ export class NavMenu implements OnInit, OnDestroy {
 
   private reloadIG():void{
     this.refreshIG.emit();
+  }
+
+  private logout(): void {
+    this._login.logout()
+      .then(() => {
+        if (this.location.path().indexOf("home") >= 0) {
+          location.reload() // this will reload the app and give the user a feeling they actually logged out
+        } else {
+          this._router.navigate(['/home'])
+        }
+      })
   }
 }

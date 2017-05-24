@@ -79,6 +79,9 @@
                     <li class="nav-item" >
                         <a class="btn btn-link" id="viewMenu" href="//support.artstor.org" target="_blank">Support</a>
                     </li>
+                    <li class="nav-item" *ngIf="!mobileCollapsed" >
+                        <a class="link--accent" (click)="logout()">Log Out</a>
+                    </li>
                 </ul>
     </div>
     </nav>

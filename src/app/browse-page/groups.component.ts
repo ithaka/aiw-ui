@@ -164,7 +164,7 @@ export class BrowseGroupsComponent implements OnInit {
 
   toggleFilterBy(tag: string) {
     if (this.appliedTags.indexOf(tag) > -1) {
-      this.appliedTags.splice(this.appliedTags.indexOf(tag))
+      this.appliedTags.splice(this.appliedTags.indexOf(tag), 1)
     } else {
       this.appliedTags.push(tag)
     }
@@ -178,7 +178,13 @@ export class BrowseGroupsComponent implements OnInit {
     // }
     // this.addRouteParam('tags', tagsParam);
 
-    this.addRouteParam('tags', JSON.stringify(this.appliedTags).replace(/\(/g, '%28').replace(/\)/g, '%29') );
+    if(this.appliedTags.length > 0) {
+      this.addRouteParam('tags', JSON.stringify(this.appliedTags).replace(/\(/g, '%28').replace(/\)/g, '%29') );
+    }
+    else {
+      this.addRouteParam('tags', '');
+    }
+    
     this.loadIGs(this.selectedBrowseLevel)
   }
 

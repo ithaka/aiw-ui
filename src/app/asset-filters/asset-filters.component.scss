@@ -41,6 +41,23 @@ $filterBorderStyle: 1px solid rgba(0, 0, 0, 0.15);
     background: #F6F6F2;
 }
 
+.filter-group__label {
+	h3{
+		a{
+			text-decoration: none;
+			border-bottom: 1px solid;
+			float: right;
+
+			&.disable{
+				pointer-events: none;
+				color: #ddd;
+				text-decoration: none;
+				border-bottom: 1px solid #ddd;
+			}
+		}
+	} 
+}
+
 .filter-group h2{
     display: inline-block;
     cursor: pointer;

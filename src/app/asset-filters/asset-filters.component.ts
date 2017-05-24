@@ -135,7 +135,7 @@ export class AssetFilters {
       if(filter.filterGroup == 'currentPage'){
         params[filter.filterGroup] =  parseInt(filter.filterValue);
       }
-      else if((filter.filterGroup != 'startDate') && (filter.filterGroup != 'endDate')){
+      else if((filter.filterGroup != 'startDate') && (filter.filterGroup != 'endDate') && (filter.filterValue && filter.filterValue.length > 0)){
         params[filter.filterGroup] =  filter.filterValue;
       }
     }
@@ -208,6 +208,25 @@ export class AssetFilters {
     this.pagination.currentPage = 1;
 
     this.loadRoute();
+  }
+  
+  // To check if a filter group has any applied filters
+  hasAppliedFilters(group): boolean{
+    let hasFilters: boolean = false;
+
+    if(group == 'date'){
+      hasFilters = this.availableFilters.dateObj.modified;
+    }
+    else{
+      for(var i = 0; i < this.appliedFilters.length; i++){
+        var filter = this.appliedFilters[i];
+        if(filter.filterGroup === group){
+          hasFilters = true;
+          break;
+        }
+      }
+    }
+    return hasFilters;
   }
 
   clearDateFilter() {
