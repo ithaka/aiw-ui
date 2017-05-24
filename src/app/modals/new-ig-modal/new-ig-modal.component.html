@@ -21,7 +21,7 @@
             
           </div>
 
-          <div class="form-group" *ngIf="!copyIG">
+          <div class="form-group">
             <label for="igDescription">Description</label>
             <medium-editor
               [(editorModel)]="igDescription"
@@ -29,11 +29,13 @@
               [editorPlaceholder]="'Give your image group a description...'"></medium-editor>
           </div>
 
-          <div *ngIf="isArtstorUser && !copyIG" class="form-group">
-            <label for="artstorPermissionsGroup">Who should see this image group?</label>
+          <!--Left this out of the div so that it remained left aligned...-->
+          <label for="artstorPermissionsGroup">Who should see this image group?</label>
+          <div class="form-group text-center">
+            
             <div id="artstorPermissionsGroup" ngbRadioGroup class="btn-group" name="permissions type" [formControl]="newIgForm.controls['artstorPermissions']">
 
-              <label class="btn btn-secondary">
+              <label *ngIf="isArtstorUser" class="btn btn-secondary">
                 <input type="radio" name="options" id="artstorPermissionsRadioGlobal" autocomplete="off" value="global"> Everyone
               </label>
 
@@ -47,15 +49,7 @@
             </div>
           </div>
 
-          <div *ngIf="!isArtstorUser && !copyIG" class="form-group">
-            <div class="form-check">
-              <label id="publicPermissionLabel" class="form-check-label">
-                <input id="makePublicCheckbox" class="form-check-input" type="checkbox" [formControl]="newIgForm.controls['public']" value=""> Share this group with your institution
-              </label>
-            </div>
-          </div>
-
-          <div class="form-group" *ngIf="!copyIG" [class.has-danger]="serviceResponse.failure">
+          <div class="form-group" [class.has-danger]="serviceResponse.failure">
             <label for="igTagInput">Tags</label>
             <rl-tag-input id="igTagInput" [formControl]="newIgForm.controls['tags']" placeholder="Add a tag..."></rl-tag-input>
             <div *ngIf="serviceResponse.failure" translate class="form-control-feedback">NEW_GROUP_MODAL.CREATE_FAILURE</div>
