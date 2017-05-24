@@ -124,7 +124,7 @@ export class NewIgModal implements OnInit {
      *  only funky thing here is that sometimes we get the list of asset ids from the image group, and sometimes from selected assets
      *  that depends on whether you're copying an image group or making a new one
      */
-    let group = this.util.prepareGroup(formValue, igDescValue, this.copyIG ? this.ig.items : this.selectedAssets, this._auth.getUser())
+    let group = this.util.prepareGroup(formValue, igDescValue, this.copyIG || this.editIG ? this.ig.items : this.selectedAssets, this._auth.getUser())
 
     if(this.editIG){
       // Editing group
