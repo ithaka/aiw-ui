@@ -145,6 +145,11 @@ export class NewIgModal implements OnInit {
             this.isLoading = false;
           }
         );
+      // if an Artstor user, make sure the public property is set correctly
+      if (this.isArtstorUser) {
+        this.changeGlobalSetting(group, formValue.artstorPermissions == "global")
+      }
+      
     }
     else {
       // analytics events
@@ -166,14 +171,7 @@ export class NewIgModal implements OnInit {
 
             // if an Artstor user, make sure the public property is set correctly
             if (this.isArtstorUser) {
-              this._group.updateIgPublic(this.newGroup.id, formValue.artstorPermissions == "global")
-                .take(1)
-                .subscribe((res) => {
-                  // not really sure what to do here?
-                }, (err) => {
-                  console.error(err)
-                  // also not really sure what to do here...
-                })
+              this.changeGlobalSetting(this.newGroup, formValue.artstorPermissions == "global")
             }
           },
           error => {
@@ -243,5 +241,17 @@ export class NewIgModal implements OnInit {
     }
 
     return institutionView
+  }
+
+  private changeGlobalSetting(group: ImageGroup, isPublic: boolean): void {
+    this._group.updateIgPublic(group.id, isPublic)
+      .take(1)
+      .subscribe((res) => {
+        // not really sure what to do here?
+        console.log(res)
+      }, (err) => {
+        console.error(err)
+        // also not really sure what to do here...
+      })
   }
 }
