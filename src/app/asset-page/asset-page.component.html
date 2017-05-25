@@ -34,7 +34,7 @@
             <div class="py-3">
                  <!--If the user has not accepted the agreement, show modal when clicked, otherwise download immediately-->
                 
-                <button class="btn btn-secondary"  tabindex="1" (click)="copyGeneratedImgURL()">
+                <button class="btn btn-secondary" [class.active]="showCopyUrl"  tabindex="1" (click)="showCopyUrl ? showCopyUrl = false : copyGeneratedImgURL()">
                     Link
                     <i id="genImgURLlink" class="icon icon-share-white" ></i>
                 </button>
@@ -54,7 +54,11 @@
                 <button (click)="addAssetToIG()" class="btn btn-primary">
                     <i class="icon icon-add-white" aria-hidden="true"></i>
                 </button>
-                <div *ngIf="copyURLStatusMsg" class="alert alert-info">{{ copyURLStatusMsg }}</div>
+                <div [class.hidden]="!showCopyUrl" class="form-group pt-1">
+                    <label>Share Link</label>
+                    <input #copyUrlInput readonly id="generatedImgURL" [ngModel]="generatedImgURL" class="form-control form-control__copy" />
+                    <div *ngIf="copyURLStatusMsg" class="alert alert-info">{{ copyURLStatusMsg }}</div>
+                </div>
 
                 <div class="row-hdr pt-3" *ngIf="assets[0].metaDataArray.length > 0">Object Details</div>
                 <!--Loop through metaData Array-->

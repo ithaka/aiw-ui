@@ -42,6 +42,7 @@ export class AssetPage implements OnInit, OnDestroy {
     private showCreateGroupModal: boolean = false;
 
     private copyURLStatusMsg: string = '';
+    private showCopyUrl: boolean = false;
     private generatedImgURL: string = '';
     private prevRouteParams: any = [];
 
@@ -230,28 +231,26 @@ export class AssetPage implements OnInit, OnDestroy {
      * Adds a link to the current asset page to the user's clipboard
      */
     private copyGeneratedImgURL(): void {
+        let statusMsg = '';
+        let input : any = document.getElementById('generatedImgURL');
+
         this._analytics.directCall('generate_img_link');
 
-        var input = document.createElement('textarea');
-        
-        document.body.appendChild(input);
-        input.value = this.generatedImgURL;
-        input.select();
+        this.showCopyUrl = true;
+        input.focus()
+        input.select()
 
-        var statusMsg = '';
-        if(document.execCommand('Copy')){
-            statusMsg = 'Image URL successfully copied to the clipboard!';
-        }
-        else{
-            statusMsg = 'Not able to copy image URL to the clipboard!';
-        }
-
-        this.copyURLStatusMsg = statusMsg;
-        setTimeout(() => {
-            this.copyURLStatusMsg = '';
-        }, 8000);
-
-        input.remove();
+        setTimeout( () => { 
+            input.select(); 
+            if(document.queryCommandSupported('copy')){
+                document.execCommand('copy')
+                statusMsg = 'Image URL successfully copied to the clipboard!';
+            }
+            else{
+                statusMsg = 'Select the above link, and copy to share!';
+            }
+            this.copyURLStatusMsg = statusMsg;
+        }, 50);
     }
 
      // Add or remove assets from Assets array for comparison in full screen
