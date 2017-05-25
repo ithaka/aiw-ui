@@ -1,0 +1,39 @@
+<div id="pwd-modal" class="modal fade show">
+    <!-- Pwd Reset Modal -->
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5>Password Reset</h5>
+                <button (click)="closeModal.emit()" type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form id="pwdResetForm" [formGroup]="pwdResetForm" (ngSubmit)="sendResetPwdRequest()">
+              <div class="modal-body">
+                  <div *ngIf="pwdReset">
+                      <p>Enter the email address that you used when registering.</p>
+                      <div class="form-group">
+                        <label for="pwdresetEmailInput">Email Address:</label>
+                        <input class="form-control" id="pwdresetEmailInput" type="text" [formControl]="pwdResetForm.controls['email']" spellcheck="false" tabindex="0"/>
+                      </div>
+                  </div>
+                  <div *ngIf="submitted && pwdResetForm.controls['email'].invalid && !errorMsgPwdRst && !successMsgPwdRst" class="has-danger"><p class="form-control-feedback">A valid email is required</p></div>
+                  <div *ngIf="errorMsgPwdRst" class="form-control-feedback has-danger"><p class="form-control-feedback">{{ errorMsgPwdRst }}</p></div>
+                  <div *ngIf="successMsgPwdRst" class="has-success"><p class="form-control-feedback">{{ successMsgPwdRst }}</p></div>
+              </div>
+              <div class="modal-footer">
+
+                  <div class="form-group" *ngIf="pwdReset">
+                    <button type="button" (click)="closeModal.emit()" class="btn btn-secondary">Cancel</button>
+                    <button type="submit" [class.loading]="isLoading" class="btn btn-primary">Submit</button>         
+                  </div>
+
+                  <div class="form-group" *ngIf="successMsgPwdRst">
+                    <button type="button" (click)="closeModal.emit()" class="btn btn-secondary">Ok</button>      
+                  </div>
+              </div>
+
+            </form>
+        </div>
+    </div>
+</div>
