@@ -33,7 +33,6 @@ export class SearchQueryUtil {
   }
 
   public generateFilters(appliedFilters: any, dateFilter: any) : any {
-      // Load filters!
     let filterParams = {}
 
     // Apply date filter

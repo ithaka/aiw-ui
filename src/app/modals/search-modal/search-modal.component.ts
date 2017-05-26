@@ -216,10 +216,9 @@ export class SearchModal implements OnInit {
     if (!this.validateForm()) {
       return;
     }
-
+    
     let advQuery = this.queryUtil.generateSearchQuery(this.advanceQueries)
-    let filterParams = this.queryUtil.generateFilters(this._filters.getApplied(), this.advanceSearchDate)
-
+    let filterParams = this.queryUtil.generateFilters(this.filterSelections, this.advanceSearchDate)
     // Track in Adobe Analytics
     this._analytics.directCall('advanced_search');
     
