@@ -222,41 +222,8 @@ export class Login {
     }
   }
 
-  showPwdResetModal() {
-    this.pwdReset = true;
-    this.showPwdModal = true;
-  }
-
-  hidePwdModal() {
-    this.pwdRstEmail = '';
-    this.successMsgPwdRst = '';
-    this.pwdReset = false;
-    this.expirePwd = false;
-    this.showPwdModal = false;
-  }
-
   toggleAccessHelpModal() {
     this.showHelpModal = !this.showHelpModal;
   }
-
-  sendResetPwdRequest(){
-    this._login.pwdReset(this.pwdRstEmail)
-      .then(
-        (data)  => { this.loadPwdRstRes(data) },
-        (error) => { this.errorMsgPwdRst = <any>error }
-      );
-  }
-  loadPwdRstRes(res: any){
-    if(res.status === false){
-      this.errorMsgPwdRst = 'Sorry! ' + this.pwdRstEmail + ' is invalid for ARTstor.';
-      setTimeout(() => {
-        this.errorMsgPwdRst = '';
-                }, 8000);
-      this.pwdRstEmail = '';
-    }
-    else{
-      this.pwdReset = false;
-      this.successMsgPwdRst = 'Your password has been sent.';
-    }
-  }
+  
 }

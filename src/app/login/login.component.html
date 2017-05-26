@@ -22,7 +22,7 @@
                         </div>
                     </form>
 
-                    <a id="linkLoginResetModal" tabindex="4" class="link" (click)="showPwdResetModal()">Forgot password?</a>
+                    <a id="linkLoginResetModal" tabindex="4" class="link" (click)="showPwdModal = true">Forgot password?</a>
                     <br/>
                     <div *ngIf="showRegister">
                         <a [routerLink]="['/register']" tabindex="5" class="link">Not Registered?</a>
@@ -80,40 +80,4 @@
     </div>
 </div>
 
-<div id="pwd-modal" class="modal" [ngClass]="{'show': showPwdModal}">
-    <!-- Pwd Reset Modal -->
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5>Password Reset</h5>
-                <button (click)="hidePwdModal()" type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div *ngIf="pwdReset">
-                    <p>Enter the email address that you used when registering.</p>
-                    <div class="form-group" [ngClass]="{ 'has-danger' : errorMsgPwdRst }">
-                        <label>Email Address:</label>
-                        <input id="inputLoginResetEmail" class="form-control" type="text" [(ngModel)]="pwdRstEmail" />
-                        <div id="msgLoginResetError" *ngIf="errorMsgPwdRst" class="form-control-feedback">{{ errorMsgPwdRst }}</div>
-                    </div>
-                </div>
-                <div *ngIf="successMsgPwdRst" class="has-success"> {{ successMsgPwdRst }} </div>
-                <div *ngIf="expirePwd" class="has-danger">
-                    <p class="form-control-feedback">Remote login was unsuccessful! Your 120 day access period expired.</p>
-                    <p class="form-control-feedback">To restart your 120-day timer, log in to your Artstor account while within your institution's network.</p>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <div *ngIf="pwdReset">
-                    <button id="btnLoginCancelReset" class="btn btn-secondary" (click)="hidePwdModal()">Cancel</button>
-                    <button id="btnLoginSubmitReset" class="btn btn-primary" (click)="sendResetPwdRequest()">Submit</button>
-                </div>
-                <div *ngIf="successMsgPwdRst || expirePwd">
-                    <button id="btnLoginDismissReset" class="btn btn-primary" (click)="hidePwdModal()">Ok</button>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+<ang-pwd-reset-modal *ngIf="showPwdModal" (closeModal)="showPwdModal = false"></ang-pwd-reset-modal>
