@@ -62,7 +62,7 @@ export class SearchModal implements OnInit {
   private instCollections: any[] = [];
   private filterSelections: any[] = [];
 
-  // Construct Utilities/classes
+  // Search query trasnformation logic is abstracted to a utility
   private queryUtil: SearchQueryUtil = new SearchQueryUtil()
 
   constructor(  
@@ -216,7 +216,7 @@ export class SearchModal implements OnInit {
     if (!this.validateForm()) {
       return;
     }
-    
+
     let advQuery = this.queryUtil.generateSearchQuery(this.advanceQueries)
     let filterParams = this.queryUtil.generateFilters(this.filterSelections, this.advanceSearchDate)
     // Track in Adobe Analytics
