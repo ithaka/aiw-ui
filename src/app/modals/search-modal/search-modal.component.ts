@@ -2,6 +2,7 @@ import { Router } from '@angular/router';
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 
 // Project dependencies
+import { SearchQueryUtil } from './search-query';
 import { AssetService } from './../../shared';
 import { AnalyticsService } from '../../analytics.service';
 import { AssetFiltersService } from './../../asset-filters/asset-filters.service';
@@ -59,8 +60,10 @@ export class SearchModal implements OnInit {
   ];
   private instName: string = "";
   private instCollections: any[] = [];
-  private filterParams: any = {};
   private filterSelections: any[] = [];
+
+  // Construct Utilities/classes
+  private queryUtil: SearchQueryUtil = new SearchQueryUtil()
 
   constructor(  
         private _assets: AssetService, 
@@ -214,49 +217,16 @@ export class SearchModal implements OnInit {
       return;
     }
 
-    let advQuery = "";
+    let advQuery = this.queryUtil.generateSearchQuery(this.advanceQueries)
+    let filterParams = this.queryUtil.generateFilters(this._filters.getApplied(), this.advanceSearchDate)
 
-    this.advanceQueries.forEach( (query, index) => {
-      if (!query.field || !query.field.name || query.term.length < 1) {
-        return;
-      }
-      
-      if (index !== 0) {
-        advQuery += "#" + query.operator.toLowerCase() + ",";
-      }
-
-      advQuery += query.term + '|' + query.field.value;
-    });
-    // Load filters!
-    this.filterParams = {};
-
-    // Apply date filter
-    if (this.advanceSearchDate['startDate'] && this.advanceSearchDate['endDate']) {
-      this.filterParams['startDate'] = this.advanceSearchDate['startDate'] * (this.advanceSearchDate['startEra'] == 'BCE' ? -1 : 1);
-      this.filterParams['endDate'] = this.advanceSearchDate['endDate'] * (this.advanceSearchDate['endEra'] == 'BCE' ? -1 : 1);
-    }
-
-    // Apply filters
-    let appliedFilters = this._filters.getApplied();
-
-    for (let filter of this.filterSelections) {
-      if (this.filterParams[filter.group]) {
-        this.filterParams[filter.group].push(filter.value);
-      } else {
-        this.filterParams[filter.group] = [filter.value];
-      }
-    }
-    
-    if (advQuery.length < 1) {
-      advQuery = "*";
-    }
-    
     // Track in Adobe Analytics
     this._analytics.directCall('advanced_search');
     
-    this._router.navigate(['/search', advQuery, this.filterParams]);
+    // Open search page with new query
+    this._router.navigate(['/search', advQuery, filterParams]);
 
-    // this._router.navigate(['/search', advQuery]);
+    // Close advance search modal
     this.close();
   }
 
