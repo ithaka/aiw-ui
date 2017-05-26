@@ -13,6 +13,7 @@ export class SearchQueryUtil {
 
     let advQuery = ""
 
+    // Process our query objects into the legacy search query syntax
     fieldQueries.forEach( (query, index) => {
       if (!query.field || !query.field.name || query.term.length < 1) {
         return
@@ -32,15 +33,19 @@ export class SearchQueryUtil {
     return advQuery
   }
 
+  /**
+   * Returns filter object to pass router.navigate
+   */
   public generateFilters(appliedFilters: any, dateFilter: any) : any {
     let filterParams = {}
 
-    // Apply date filter
     if (dateFilter['startDate'] && dateFilter['endDate']) {
+      // Pass BCE dates as negative numbers
       filterParams['startDate'] = dateFilter['startDate'] * (dateFilter['startEra'] == 'BCE' ? -1 : 1)
       filterParams['endDate'] = dateFilter['endDate'] * (dateFilter['endEra'] == 'BCE' ? -1 : 1)
     }
     
+    // Put filters into an object with field name as key
     for (let filter of appliedFilters) {
       if (filterParams[filter.group]) {
         filterParams[filter.group].push(filter.value)
