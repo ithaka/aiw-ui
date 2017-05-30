@@ -112,8 +112,6 @@ export class GroupService {
         }
 
         delete putGroup.id
-        delete putGroup['users-with-access']
-        delete putGroup['insts-with-access']
         delete putGroup['public']
         delete putGroup['count']
         delete putGroup['thumbnails']
