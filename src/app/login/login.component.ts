@@ -156,10 +156,9 @@ export class Login {
         let errObj = err.json ? err.json() : {};
          if(errObj.message === 'Invalid credentials'){
             this.errorMsg = 'Invalid email address or password. Try again.';
-          } else if (errObj.message === 'Login Expired') {
+          } else if (errObj.message === 'Login Expired' || errObj.message === 'loginExpired') {
             this.errorMsg = 'That login is expired. Please login from campus to renew your account.';
           } else {
-            console.log(err);
             this.getLoginError(user)
             this.angulartics.eventTrack.next({ action:"remoteLogin", properties: { category: "login", label: "failed" }});
           }
