@@ -33,6 +33,12 @@ fdescribe('SearchQueryUtil', () => {
 
             expect(generatedQuery).toBe('Van Gogh|100#or,Sunflowers|101')
         })
+
+        it("should process an empty multi-field query as wildcard", () => {
+            let generatedQuery: string = queryUtil.generateSearchQuery([])
+
+            expect(generatedQuery).toBe('*')
+        })
     })
 
     /**
