@@ -34,6 +34,11 @@ export class AssetService {
     private noIGSource: BehaviorSubject<boolean> = new BehaviorSubject(this.noIGValue);
     public noIG: Observable<any> = this.noIGSource.asObservable();
 
+    //set up igSaved observables
+    private igSavedValue: boolean = false;
+    public igSavedSource: BehaviorSubject<boolean> = new BehaviorSubject(this.igSavedValue);
+    public igSaved: Observable<any> = this.igSavedSource.asObservable();    
+
     // Pagination value observable
     private paginationValue: any = {
         totalPages: 1,

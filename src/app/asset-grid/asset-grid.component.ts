@@ -179,6 +179,10 @@ export class AssetGrid implements OnInit, OnDestroy {
             this.totalAssets = this.assetCount.toString();
             this.isLoading = false;
           }
+
+          this.editMode = false;
+          this.selectedAssets = [];
+          this._assets.setSelectedAssets(this.selectedAssets);
         },
         (error) => {
           console.error(error);
@@ -215,6 +219,16 @@ export class AssetGrid implements OnInit, OnDestroy {
       })
     )
 
+    // Clear all selected assets and close edit mode once an IG is saved
+    this.subscriptions.push(
+      this._assets.igSaved.subscribe((res: any) => {
+        if(res){
+          this.editMode = false;
+          this.selectedAssets = [];
+          this._assets.setSelectedAssets(this.selectedAssets);
+        }
+      })
+    );
   }
 
   ngOnDestroy() {
