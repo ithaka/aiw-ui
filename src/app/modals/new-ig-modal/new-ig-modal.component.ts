@@ -134,6 +134,7 @@ export class NewIgModal implements OnInit {
       this._analytics.directCall('edit_img_group')
 
       group.id = this.ig.id
+      group.access = this.ig.access
 
       this._group.update(group)
         .subscribe(
