@@ -62,6 +62,7 @@ import {
   DeleteIgModal, 
   NoIgModal, 
   AccessDeniedModal, 
+  PwdResetModal,
   ShareIgLinkModal, 
   ConfirmModal 
 } from './modals';
@@ -136,6 +137,7 @@ type StoreType = {
     AssetFilters,
     PaginationComponent,
     AccessDeniedModal,
+    PwdResetModal,
     AssetGrid,
     SearchComponent,
     ThumbnailComponent,
