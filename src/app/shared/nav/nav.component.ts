@@ -38,7 +38,7 @@ export class Nav implements OnInit, OnDestroy {
     private keepalive: Keepalive
   ) {  
     idle.setIdle(60);
-    idle.setTimeout(3600);
+    idle.setTimeout(5400); // Log user out after 90 mins of inactivity
     idle.setInterrupts(DEFAULT_INTERRUPTSOURCES);
 
     idle.onIdleEnd.subscribe(() => {
