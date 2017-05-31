@@ -1,6 +1,7 @@
 import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Subscription } from 'rxjs/Rx';
+import { CompleterService, CompleterData } from 'ng2-completer';
 
 import { AssetService, GroupService, ImageGroup } from './../../shared';
 import { AnalyticsService } from '../../analytics.service';
@@ -24,11 +25,16 @@ export class AddToGroupModal implements OnInit, OnDestroy {
     failure?: boolean
   } = {};
 
+  private dataService: CompleterData;
+
   constructor(
     private _assets: AssetService,
     private _group: GroupService,
-    private _analytics: AnalyticsService
-  ) { }
+    private _analytics: AnalyticsService,
+    private completerService: CompleterService
+  ) {
+    this.dataService = completerService.local(this.groups, name, name);
+  }
 
   ngOnInit() {
     console.log(this.selectedAssets);

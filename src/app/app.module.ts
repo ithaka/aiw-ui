@@ -18,7 +18,7 @@ import {LockerModule, Locker, LockerConfig} from 'angular2-locker'
 import { Angulartics2Module, Angulartics2GoogleAnalytics } from 'angulartics2';
 import { TranslateModule, TranslateStaticLoader, TranslateLoader } from 'ng2-translate';
 import { RlTagInputModule } from 'angular2-tag-input';
-import { Ng2CompleterModule } from "ng2-completer";
+import { Ng2CompleterModule } from 'ng2-completer';
 
 // Directives
 import { ClickOutsideDirective } from 'angular2-click-outside/clickOutside.directive.ts';
@@ -140,7 +140,7 @@ type StoreType = {
     Nav,
     NavMenu,
     NewIgModal,
-    Ng2CompleterModule,
+    // Ng2CompleterModule,
     NoContent,
     NoIgModal,
     PaginationComponent,
@@ -155,7 +155,7 @@ type StoreType = {
     SkyBannerComponent,
     TagComponent,
     ThumbnailComponent,
-    TypeIdPipe,
+    TypeIdPipe
   ],
   imports: [ // import Angular's modules
     BrowserModule,
@@ -163,6 +163,7 @@ type StoreType = {
     ReactiveFormsModule,
     HttpModule,
     RlTagInputModule,
+    Ng2CompleterModule,
     // CoolStorageModule,
     LockerModule,
     RouterModule.forRoot(ROUTES, { useHash: true }),
