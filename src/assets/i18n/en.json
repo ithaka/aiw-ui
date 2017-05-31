@@ -60,6 +60,9 @@
       "TITLE_DELETED": "Group was Deleted"
     }
   },
+  "ASSET_PAGE": {
+    "IAP_PROMPT": "Request Image for Academic Publishing"
+  },
   "ADD_TO_GROUP_MODAL": {
     "TITLE": "Add Images to Group",
     "SELECT_PROMPT": "Select an image group",
