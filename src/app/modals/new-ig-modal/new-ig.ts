@@ -18,6 +18,9 @@ export class IgFormUtil {
       (item) => {
         if (item.objectId) {
           itemIds.push(item.objectId) // sometimes this is an array of real assets
+        } 
+        else if(item.id) {
+          itemIds.push(item.id) // sometimes this is an array of real assets
         } else {
           itemIds.push(item) // sometimes though it's just an array of strings
         }

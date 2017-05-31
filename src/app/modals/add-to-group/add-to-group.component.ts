@@ -92,7 +92,7 @@ export class AddToGroupModal implements OnInit, OnDestroy {
         this._group.update(data)
           .take(1)
           .subscribe(
-            (res) => { this.serviceResponse.success = true; },
+            (res) => { this.serviceResponse.success = true; this._assets.igSavedSource.next(true); },
             (err) => { console.error(err); this.serviceResponse.failure = true;
           })
 

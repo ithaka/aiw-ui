@@ -38,7 +38,7 @@ export class Nav implements OnInit, OnDestroy {
     private keepalive: Keepalive
   ) {  
     idle.setIdle(60);
-    idle.setTimeout(3600);
+    idle.setTimeout(5400); // Log user out after 90 mins of inactivity
     idle.setInterrupts(DEFAULT_INTERRUPTSOURCES);
 
     idle.onIdleEnd.subscribe(() => {
@@ -66,6 +66,13 @@ export class Nav implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+
+    // If the user session has expired, then explicitly logout the user
+    this._auth.getUserInfo().subscribe( userInfo => {
+      if(!userInfo.status){
+        this.logout();
+      }
+    });
 
     this.subscriptions.push(
       this._router.events.subscribe(e => {
