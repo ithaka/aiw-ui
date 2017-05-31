@@ -68,9 +68,9 @@
                     {{ searchError }}
                 </div>
                 <div class="col-sm-6 col-md-3 col-lg-2" *ngFor="let asset of results">
-                    <div class="card card--asset" [ngClass]="{'selected': ( isSelectedAsset(asset) > -1 ) }" (click)="!reorderMode && selectAsset(asset)">
+                    <a class="card card--asset" [ngClass]="{'selected': ( isSelectedAsset(asset) > -1 ) }" [routerLink]="editMode ? ['./'] : ['/asset', asset.objectId]" (click)="selectAsset(asset)">
                         <ang-thumbnail [thumbnail]="asset" [reorderMode]="reorderMode"></ang-thumbnail>
-                    </div>
+                    </a>
                 </div> <!-- .col -->
             </div>
 

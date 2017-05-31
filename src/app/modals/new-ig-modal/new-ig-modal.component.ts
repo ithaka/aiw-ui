@@ -106,7 +106,10 @@ export class NewIgModal implements OnInit {
     this.closeModal.emit()
   }
 
-  /** Called on form submission */
+  /**
+   * Called on form submission
+   *  contains almost all of the logic for creating/editing the image group
+   */
   private igFormSubmit(formValue: IgFormValue): void {
     this.submitted = true;
     // avoid making the service calls, but still trigger error display
@@ -131,6 +134,7 @@ export class NewIgModal implements OnInit {
       this._analytics.directCall('edit_img_group')
 
       group.id = this.ig.id
+      group.access = this.ig.access
 
       this._group.update(group)
         .subscribe(
@@ -185,6 +189,11 @@ export class NewIgModal implements OnInit {
     }
   }
 
+  /**
+   * A method to get the description string out of the field
+   *  unfortunately, it seems like the only way to do that is with some direct dom references, for now
+   * @returns the description string
+   */
   private extractDescription(): string {
     let igDescValue = ''
     if(this.igDescription){
@@ -245,6 +254,11 @@ export class NewIgModal implements OnInit {
     return institutionView
   }
 
+  /**
+   * Updates a group's public property. Should only be called for artstor users.
+   * @param group the image group which needs the public property changed
+   * @param isPublic the value to set the public property to
+   */
   private changeGlobalSetting(group: ImageGroup, isPublic: boolean): void {
     this._group.updateIgPublic(group.id, isPublic)
       .take(1)

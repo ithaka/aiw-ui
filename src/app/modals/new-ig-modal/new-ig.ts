@@ -53,21 +53,6 @@ export class IgFormUtil {
 
     return group
   }
-
-  // /**
-  //  * Process the string put into the medium editor and return a prettier description string
-  //  */
-  // private extractDescription(mediumDesc: string): string {
-
-  // }
-
-  // /**
-  //  * Sets the values of the new image group form based on a pre-existing image group
-  //  * @param ig Image group to base the values off of
-  //  */
-  // private setFormValues(ig: ImageGroup): void {
-    
-  // }
 }
 
 export interface IgFormValue {
