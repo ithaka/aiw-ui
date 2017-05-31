@@ -19,6 +19,7 @@ export class AddToGroupModal implements OnInit, OnDestroy {
   @Input() private selectedAssets: any[] = []; // this is used in the asset page, where a single asset can be injected directly
   private groups: ImageGroup[] = [];
   private selectedIg: ImageGroup;
+  private selectedGroupName: string;
 
   private serviceResponse: {
     success?: boolean,
@@ -53,12 +54,14 @@ export class AddToGroupModal implements OnInit, OnDestroy {
       );
     }
 
-    this._group.getAll('private')
-      .take(1)
-      .subscribe((res) => { if (res.groups) { 
-        this.groups = res.groups; console.log(this.groups) 
-        this.dataService = this.completerService.local(this.groups, 'name', 'name');
-      } }, (err) => { console.error(err); });
+    // Load list of Groups, and update autocomplete as Groups load
+    this._group.getEveryGroup('private')
+      .subscribe((groups) => { 
+        if (groups) { 
+          this.groups = groups;
+          this.dataService = this.completerService.local(this.groups, 'name', 'name');
+        } 
+      }, (err) => { console.error(err); });
   }
 
   ngOnDestroy() {
@@ -72,9 +75,14 @@ export class AddToGroupModal implements OnInit, OnDestroy {
   private submitGroupUpdate(form: NgForm) {
     this.serviceResponse = {}; // clear any service status
 
-    this.selectedIg = form.value.imageGroup;
+    this.groups.forEach( (group, index) => {
+      if (group.name == this.selectedGroupName) {
+        this.selectedIg = group
+      }
+    })
+    // this.selectedIg = form.value.imageGroup;
     let putGroup: ImageGroup = <ImageGroup>{};
-    Object.assign(putGroup, form.value.imageGroup);
+    Object.assign(putGroup, this.selectedIg);
 
     // assets come from different places and sometimes have id and sometimes objectId
     this.selectedAssets.forEach((asset: any) => {

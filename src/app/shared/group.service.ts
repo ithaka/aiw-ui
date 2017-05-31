@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core'
 import { Http, Response, Headers, RequestOptions } from '@angular/http'
-import { Observable } from 'rxjs/Rx'
+import { Observable, Subject } from 'rxjs/Rx';
 
 // Project Dependencies
 import { AuthService, ImageGroup } from '.'
@@ -46,6 +46,52 @@ export class GroupService {
                 return body || { }
             }
         )
+    }
+
+    public getEveryGroup(level: string) : Observable<any[]> {
+        let everyGroupSubject = new Subject()
+        let everyGroupObservable = everyGroupSubject.asObservable()
+        let size = 100 // max the service handles
+        let pageNo = 1
+        let totalPages = 1
+        let groups: any [] = []
+
+        // Get first page to find out how many Groups are available
+        this.http.get(
+            this.groupUrl + "?size=" + size + '&level=' + level + '&from=' + ( (pageNo - 1) * size), this.options
+        ).map(
+            res => {
+                let body = res.json()
+                return body || { }
+            }
+        ).toPromise()
+        .then( data => {
+            groups.concat(data.groups)
+            totalPages = (data.total/size) + 1
+
+            for(pageNo; pageNo <= totalPages; pageNo++) {
+                this.http.get(
+                    this.groupUrl + "?size=" + size + '&level=' + level + '&from=' + ( (pageNo - 1) * size), this.options
+                ).map(
+                    res => {
+                        let body = res.json()
+                        return body || { }
+                    }
+                ).toPromise()
+                .then(data => {
+                    console.log(data)
+                    groups = groups.concat(data.groups)
+                    console.log(groups)
+                    everyGroupSubject.next(groups)
+                }, error => {
+                    everyGroupSubject.error(error)
+                })
+            }
+        }, error => {
+            everyGroupSubject.error(error)
+        })
+
+        return everyGroupObservable
     }
 
      /**
