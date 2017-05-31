@@ -16,7 +16,7 @@
                             <input id="inputLoginPassword" [(ngModel)]="user.password" name="password" type="password" class="form-control" placeholder="Password" tabindex="2" />
                             <div id="errorMsg" *ngIf="errorMsg" class="login-errorMsg"> {{ errorMsg | translate }} </div>
                         </div>
-                        <p>By using Artstor Digital Library, I agree to the <a id="linkTermsAndConditions" href="http://www.artstor.org/terms" tabindex="0" class="link">Terms</a></p>
+                        <p [innerHtml]="'LOGIN.TERMS' | translate"></p>
                         <div class="form-group">
                             <button id="btnLoginRemote" class="btn btn-primary" [class.loading]="loginLoading" type="submit" name="action" tabindex="3"  data-sc="account: remote user log in">Log in</button>
                         </div>
@@ -49,6 +49,7 @@
                             <option *ngFor="let inst of loginInstitutions" [ngValue]="inst" [innerHtml]="inst.name"></option>
                         </select>
                         <div *ngIf="instErrorMsg" class="login-errorMsg"> {{ instErrorMsg }} </div>
+                        <p [innerHtml]="'LOGIN.TERMS' | translate"></p>
                         <p translate class="small">LOGIN.INSTITUTION_LIST_INFO</p>
                     </div>
                     <div class="form-group">
