@@ -12,7 +12,7 @@
           <div class="form-group" [class.has-success]="serviceResponse.success" [class.has-danger]="serviceResponse.failure">
             <label translate for="selectImageGroup">ADD_TO_GROUP_MODAL.SELECT_PROMPT</label>
             
-            <ng2-completer [(ngModel)]="group" name="imageGroup" [datasource]="groups" [minSearchLength]="0"></ng2-completer>
+            <ng2-completer [(ngModel)]="group" name="imageGroup" [datasource]="dataService" [minSearchLength]="0" [openOnFocus]="true" [textSearching]="'Searching Groups...'"></ng2-completer>
 
             <!--<select required [ngModel]="selectedIg" name="imageGroup" id="selectImageGroup" class="form-control custom-select" tabindex="0">
               <option [ngValue]="null" [innerHtml]=""></option>

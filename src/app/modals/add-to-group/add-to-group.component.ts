@@ -33,7 +33,7 @@ export class AddToGroupModal implements OnInit, OnDestroy {
     private _analytics: AnalyticsService,
     private completerService: CompleterService
   ) {
-    this.dataService = completerService.local(this.groups, name, name);
+    
   }
 
   ngOnInit() {
@@ -55,7 +55,10 @@ export class AddToGroupModal implements OnInit, OnDestroy {
 
     this._group.getAll('private')
       .take(1)
-      .subscribe((res) => { if (res.groups) { this.groups = res.groups; } }, (err) => { console.error(err); });
+      .subscribe((res) => { if (res.groups) { 
+        this.groups = res.groups; console.log(this.groups) 
+        this.dataService = this.completerService.local(this.groups, 'name', 'name');
+      } }, (err) => { console.error(err); });
   }
 
   ngOnDestroy() {
