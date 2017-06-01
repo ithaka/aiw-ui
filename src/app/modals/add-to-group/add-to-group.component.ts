@@ -59,6 +59,7 @@ export class AddToGroupModal implements OnInit, OnDestroy {
       .subscribe((groups) => { 
         if (groups) { 
           this.groups = groups;
+          // Data service for the autocomplete component (ng2 completer)
           this.dataService = this.completerService.local(this.groups, 'name', 'name');
         } 
       }, (err) => { console.error(err); });
@@ -75,14 +76,15 @@ export class AddToGroupModal implements OnInit, OnDestroy {
   private submitGroupUpdate(form: NgForm) {
     this.serviceResponse = {}; // clear any service status
 
+    // Find full group object based on group name
     this.groups.forEach( (group, index) => {
       if (group.name == this.selectedGroupName) {
         this.selectedIg = group
       }
     })
-    // this.selectedIg = form.value.imageGroup;
-    let putGroup: ImageGroup = <ImageGroup>{};
-    Object.assign(putGroup, this.selectedIg);
+    
+    // Create object for new modified group
+    let putGroup: ImageGroup = Object.assign({}, this.selectedIg)
 
     // assets come from different places and sometimes have id and sometimes objectId
     this.selectedAssets.forEach((asset: any) => {

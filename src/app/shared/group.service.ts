@@ -21,6 +21,7 @@ export class GroupService {
 
     /**
      * Get All Groups
+     * @param level Indicates access level of group: 'institution', 'private', 'public', 'all' or 'shared'
      */
     public getAll(level: string, size?: number, pageNo ?: number, tags ?: string[] ): Observable<any> {
         if (!tags) {
@@ -48,10 +49,14 @@ export class GroupService {
         )
     }
 
+    /**
+     * Gets all group objects by looping through every page
+     * @param level Indicates access level of group: 'institution', 'private', 'public', 'all' or 'shared'
+     */
     public getEveryGroup(level: string) : Observable<any[]> {
         let everyGroupSubject = new Subject()
         let everyGroupObservable = everyGroupSubject.asObservable()
-        let size = 100 // max the service handles
+        let size = 10 // max the service handles
         let pageNo = 1
         let totalPages = 1
         let groups: any [] = []
@@ -70,22 +75,26 @@ export class GroupService {
             totalPages = (data.total/size) + 1
 
             for(pageNo; pageNo <= totalPages; pageNo++) {
-                this.http.get(
-                    this.groupUrl + "?size=" + size + '&level=' + level + '&from=' + ( (pageNo - 1) * size), this.options
-                ).map(
-                    res => {
-                        let body = res.json()
-                        return body || { }
-                    }
-                ).toPromise()
-                .then(data => {
-                    console.log(data)
-                    groups = groups.concat(data.groups)
-                    console.log(groups)
-                    everyGroupSubject.next(groups)
-                }, error => {
-                    everyGroupSubject.error(error)
-                })
+                // Timeout for debouncing to prevent spamming the service
+                setTimeout(() => {
+                    this.http.get(
+                        this.groupUrl + "?size=" + size + '&level=' + level + '&from=' + ( (pageNo - 1) * size), this.options
+                    ).map(
+                        res => {
+                            let body = res.json()
+                            return body || { }
+                        }
+                    ).toPromise()
+                    .then(data => {
+                        console.log(data)
+                        groups = groups.concat(data.groups)
+                        console.log(groups)
+                        everyGroupSubject.next(groups)
+                    }, error => {
+                        everyGroupSubject.error(error)
+                    })
+                // Provide a debounce for every set of 5 calls
+                }, Math.floor(pageNo/5) * 1000 )
             }
         }, error => {
             everyGroupSubject.error(error)
