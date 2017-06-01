@@ -3,6 +3,7 @@ import { Location } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { LoginService } from '../../login/login.service';
+import { AuthService } from '../auth.service';
 
 // Project Dependencies
 const { version: appVersion } = require('../../../../package.json');
@@ -18,12 +19,14 @@ const { version: appVersion } = require('../../../../package.json');
 export class Footer {
   private appVersion = '';
   private currentYear;
+  private user: any = {};
   
   // TypeScript public modifiers
   constructor( 
     private location: Location,
     private _router: Router,
-    private _login: LoginService
+    private _login: LoginService,
+    private _auth: AuthService
 
   ) { 
     // Get version number
@@ -35,7 +38,8 @@ export class Footer {
 
   
   ngOnInit() {
-    
+    this.user = this._auth.getUser();
+    console.log(this.user);
   }
 
   private logout(): void {
