@@ -67,6 +67,13 @@ export class Nav implements OnInit, OnDestroy {
 
   ngOnInit() {
 
+    // If the user session has expired, then explicitly logout the user
+    this._auth.getUserInfo().subscribe( userInfo => {
+      if(!userInfo.status){
+        this.logout();
+      }
+    });
+
     this.subscriptions.push(
       this._router.events.subscribe(e => {
         if (e instanceof NavigationEnd && (e.url != '/login') && (e.url.split('/')[1] != 'printpreview')) {
