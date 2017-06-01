@@ -132,6 +132,17 @@ rl-tag-input, rl-tag-input-item, .ng2-tag-input-field {
     }
 }
 
+.completer-input {
+    width: 100%;
+    background: #fff;
+    padding: 6px;
+    border: 1px solid #ededed;
+
+    &:hover, &:focus {
+        border: 1px solid #cdcdcd;
+    }
+}
+
 rl-tag-input {
     line-height: 40px;
     background: #fff;
