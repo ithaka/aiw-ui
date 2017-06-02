@@ -1,8 +1,10 @@
 import { Component } from '@angular/core';
 import { Location } from '@angular/common';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
+import { Subscription } from 'rxjs/Subscription';
 
 import { LoginService } from '../../login/login.service';
+import { AuthService } from '../auth.service';
 
 // Project Dependencies
 const { version: appVersion } = require('../../../../package.json');
@@ -16,14 +18,17 @@ const { version: appVersion } = require('../../../../package.json');
   styleUrls: [ './footer.component.scss' ],
 })
 export class Footer {
+  private subscriptions: Subscription[] = [];
   private appVersion = '';
   private currentYear;
+  private user: any = {};
   
   // TypeScript public modifiers
   constructor( 
     private location: Location,
     private _router: Router,
-    private _login: LoginService
+    private _login: LoginService,
+    private _auth: AuthService
 
   ) { 
     // Get version number
@@ -36,6 +41,13 @@ export class Footer {
   
   ngOnInit() {
     
+    this.subscriptions.push(
+      this._router.events.subscribe(e => {
+        if (e instanceof NavigationEnd) {
+            this.user = this._auth.getUser();
+        }
+      })
+    );
   }
 
   private logout(): void {
