@@ -117,6 +117,7 @@ export class RegisterComponent implements OnInit {
         this.isLoading = false;
         if (data.user) {
           let user: any = Object.assign({}, data.user);
+          // A user that just registered is obviously logged in as a user
           user.isLoggedIn = true;
           this._auth.saveUser(data.user);
           // this.loginLoading = false;
