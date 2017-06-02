@@ -11,7 +11,7 @@
     <div class="col-4">
       <div *ngIf="showLoginPanel" class="login-panel">
         <div class="vertical-center-wrap">
-          <div *ngIf="user.isLoggedIn" class="login-panel__status">
+          <div *ngIf="user.isLoggedIn && user.rememberMe" class="login-panel__status">
             <div id="navMessageWelcome">Welcome, {{ user.username ? user.username : ''}}</div>
             <div id="navMessageInstitution" *ngIf="institutionObj.shortName || institutionObj.institutionName">Institution: {{ institutionObj.shortName ? institutionObj.shortName : institutionObj.institutionName }}</div>
             <div class="login-panel__links">
@@ -23,7 +23,7 @@
               </a>
             </div>
           </div>
-          <div *ngIf="!user.isLoggedIn" class="login-panel__status">
+          <div *ngIf="!user.isLoggedIn || !user.rememberMe" class="login-panel__status">
             <div><a (click)="navigateAndSaveRoute('/login')" class="link" tabindex="1">Log in</a> or <a (click)="navigateAndSaveRoute('/register')" class="link" tabindex="1">Register</a> to save images</div>
             <div *ngIf="institutionObj.shortName || institutionObj.institutionName">Institution: {{ institutionObj.shortName ? institutionObj.shortName : institutionObj.institutionName }}</div>
           </div>
