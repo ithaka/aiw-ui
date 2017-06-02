@@ -111,6 +111,7 @@ export class NewIgModal implements OnInit {
    *  contains almost all of the logic for creating/editing the image group
    */
   private igFormSubmit(formValue: IgFormValue): void {
+    console.log(formValue)
     this.submitted = true;
     // avoid making the service calls, but still trigger error display
     if (!this.newIgForm.valid) {
@@ -134,7 +135,6 @@ export class NewIgModal implements OnInit {
       this._analytics.directCall('edit_img_group')
 
       group.id = this.ig.id
-      group.access = this.ig.access
 
       this._group.update(group)
         .subscribe(
