@@ -250,6 +250,7 @@ export class AuthService implements CanActivate {
             if (jsonData.status === true) {
               // User is authorized - if you want to check ipAuth then you can tell on the individual route by user.isLoggedIn = false
               let user = jsonData.user;
+              user.isLoggedIn = true;
               this.saveUser(user);
               return true;
             } else {
@@ -289,6 +290,7 @@ export class AuthService implements CanActivate {
             if (data.status === true) {
               // User is authorized - if you want to check ipAuth then you can tell on the individual route by user.isLoggedIn = false
               let user = data.user;
+              user.isLoggedIn = true;
               this.saveUser(user);
             } 
             return data;
