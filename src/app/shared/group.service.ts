@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core'
 import { Http, Response, Headers, RequestOptions } from '@angular/http'
-import { Observable, Subject } from 'rxjs/Rx';
+import { BehaviorSubject, Observable, Subject } from 'rxjs/Rx';
 
 // Project Dependencies
 import { AuthService, ImageGroup } from '.'
@@ -54,9 +54,9 @@ export class GroupService {
      * @param level Indicates access level of group: 'institution', 'private', 'public', 'all' or 'shared'
      */
     public getEveryGroup(level: string) : Observable<any[]> {
-        let everyGroupSubject = new Subject()
+        let everyGroupSubject = new BehaviorSubject([])
         let everyGroupObservable = everyGroupSubject.asObservable()
-        let size = 10 // max the service handles
+        let size = 100 // max the service handles
         let pageNo = 1
         let totalPages = 1
         let groups: any [] = []
@@ -67,11 +67,12 @@ export class GroupService {
         ).map(
             res => {
                 let body = res.json()
+                console.log(body)
                 return body || { }
             }
         ).toPromise()
         .then( data => {
-            groups.concat(data.groups)
+            groups = groups.concat(data.groups)
             totalPages = (data.total/size) + 1
 
             for(pageNo; pageNo <= totalPages; pageNo++) {
@@ -86,9 +87,7 @@ export class GroupService {
                         }
                     ).toPromise()
                     .then(data => {
-                        console.log(data)
                         groups = groups.concat(data.groups)
-                        console.log(groups)
                         everyGroupSubject.next(groups)
                     }, error => {
                         everyGroupSubject.error(error)
