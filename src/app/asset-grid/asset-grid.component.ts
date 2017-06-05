@@ -89,6 +89,9 @@ export class AssetGrid implements OnInit, OnDestroy {
   // Image group 
   private ig : any = {};
 
+  // For preserving the edit / select mode once paginating results
+  private paginated: boolean = false;
+
   private _storage;
 
   // TypeScript public modifiers
@@ -180,9 +183,17 @@ export class AssetGrid implements OnInit, OnDestroy {
             this.isLoading = false;
           }
 
-          this.editMode = false;
-          this.selectedAssets = [];
-          this._assets.setSelectedAssets(this.selectedAssets);
+          if(allResults.length !== 0){
+            if (this.paginated){ // Retain edit mode
+              this.paginated = false;
+            }
+            else{ // Clear edit mode
+              this.editMode = false;
+              this.selectedAssets = [];
+              this._assets.setSelectedAssets(this.selectedAssets);
+            }
+          }
+
         },
         (error) => {
           console.error(error);
@@ -246,6 +257,7 @@ export class AssetGrid implements OnInit, OnDestroy {
   private goToPage(newPage: number) {
     // The requested page should be within the limits (i.e 1 to totalPages)
     if((newPage >= 1) && (newPage <= this.pagination.totalPages)){
+      this.paginated = true;
       this.isLoading = true;
       this.pagination.currentPage = newPage;
       this._assets.goToPage(newPage);
