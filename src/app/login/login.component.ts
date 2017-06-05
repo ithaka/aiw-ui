@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { Location } from '@angular/common';
 import { Angulartics2 } from 'angulartics2';
+import { CompleterService, CompleterData } from 'ng2-completer';
 
 import { AuthService, LoggingService } from './../shared';
 import { LoginService, User } from './login.service';
@@ -35,16 +36,19 @@ export class Login {
   public errorMsgPwdRst = '';
   public successMsgPwdRst = '';
   public loginInstitutions = [];
-  public loginInst;
+  private loginInstName: string = ''
   public showRegister: boolean = false;
   
   private loginLoading = false;
+
+  private dataService: CompleterData
   
   // TypeScript public modifiers
   constructor(
     private _auth: AuthService,
     private _login: LoginService,
     private _log: LoggingService,
+    private _completer: CompleterService,
     private router: Router,
     private location: Location,
     private angulartics: Angulartics2,
@@ -68,6 +72,7 @@ export class Login {
       .then((data) => {
         if (data.items) {
           this.loginInstitutions = data.items;
+          this.dataService = this._completer.local(data.items, 'name', 'name')
         }
       })
       .catch((error) => {
@@ -204,19 +209,31 @@ export class Login {
   }
 
   goToInstLogin() {
-    if (!this.loginInst) {
+    let len = this.loginInstitutions.length
+    let selectedInst: any
+    for (let i = 0; i < len; i++) {
+      if (this.loginInstitutions[i].name == this.loginInstName) {
+        selectedInst = this.loginInstitutions[i]
+        break
+      }
+    }
+
+    if (!selectedInst) {
       this.instErrorMsg = "Please select an institution";
       return;
     }
+    
+    console.log(selectedInst)
 
-    let url = this.loginInst.entityID ? this.loginInst.entityID : '';
-    let type = this.loginInst.type ? this.loginInst.type : '';
+    let url = selectedInst.entityID ? selectedInst.entityID : '';
+    let type = selectedInst.type ? selectedInst.type : '';
     let origin = window.location.origin + '/#/home';
 
     if (type === 'proxy') {
       // If proxy, simply open url:
-      window.open(this.loginInst.entityID);
+      window.open(selectedInst.entityID);
     } else {
+      console.log(url, type, origin)
       // Else if Shibboleth, add parameters:
       // eg. for AUSS https://sso.artstor.org/sso/shibssoinit?idpEntityID=https://idp.artstor.org/idp/shibboleth&target=https%3A%2F%2Fsso.artstor.org%2Fsso%2Fshibbolethapplication%3Fo%3D0049a162-7dbe-4fcf-adac-d257e8db95e5
       window.open('https://sso.artstor.org/sso/shibssoinit?idpEntityID=' + encodeURIComponent(url) + '&o=' + encodeURIComponent(origin));
