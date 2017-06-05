@@ -21,6 +21,9 @@ export class AddToGroupModal implements OnInit, OnDestroy {
   private selectedIg: ImageGroup;
   private selectedGroupName: string;
 
+  @Input()
+  private copySelectionStr: string = 'ADD_TO_GROUP_MODAL.FROM_SELECTED'
+
   private serviceResponse: {
     success?: boolean,
     failure?: boolean
@@ -38,10 +41,8 @@ export class AddToGroupModal implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    console.log(this.selectedAssets);
     if (this.selectedAssets.length < 1) { // if no assets were added when component was initialized, the component gets the current selection list
       // Subscribe to asset selection
-      console.log("we've got to get the assets");
       this.subscriptions.push(
         this._assets.selection.subscribe(
           assets => {
