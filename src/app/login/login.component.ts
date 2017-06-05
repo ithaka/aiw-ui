@@ -208,9 +208,13 @@ export class Login {
     }
   }
 
-  goToInstLogin() {
-    let len = this.loginInstitutions.length
+  /** 
+   * Fired when the user logs in through their institution
+   */
+  goToInstLogin(): void {
+    let len: number = this.loginInstitutions.length
     let selectedInst: any
+    // search through the institutions store locally and see if the name the user selected matches one
     for (let i = 0; i < len; i++) {
       if (this.loginInstitutions[i].name == this.loginInstName) {
         selectedInst = this.loginInstitutions[i]
@@ -218,6 +222,7 @@ export class Login {
       }
     }
 
+    // if the user selected some institution that doesn't exist, kick them out!!
     if (!selectedInst) {
       this.instErrorMsg = "Please select an institution";
       return;
