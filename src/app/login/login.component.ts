@@ -93,7 +93,7 @@ export class Login {
       this.errorMsg = '';
       if (this._auth.getFromStorage("stashedRoute")) {
         this.router.navigateByUrl(this._auth.getFromStorage("stashedRoute"));
-        this._auth.deleteFromStorage("stagedRoute");
+        this._auth.deleteFromStorage("stashedRoute");
       } else {
         this.router.navigate(['/home']);
       }
