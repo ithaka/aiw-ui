@@ -264,7 +264,6 @@ export class NewIgModal implements OnInit {
       .take(1)
       .subscribe((res) => {
         // not really sure what to do here?
-        console.log(res)
       }, (err) => {
         console.error(err)
         // also not really sure what to do here...
