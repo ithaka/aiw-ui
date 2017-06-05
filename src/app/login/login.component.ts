@@ -35,8 +35,8 @@ export class Login {
   public pwdRstEmail = '';
   public errorMsgPwdRst = '';
   public successMsgPwdRst = '';
-  public loginInstitutions = [];
-  private loginInstName: string = ''
+  public loginInstitutions = []; /** Stores the institutions returned by the server */
+  private loginInstName: string = '' /** Bound to the autocomplete field */
   public showRegister: boolean = false;
   
   private loginLoading = false;
@@ -222,20 +222,15 @@ export class Login {
       this.instErrorMsg = "Please select an institution";
       return;
     }
-    
-    console.log(selectedInst)
 
-    let url = selectedInst.entityID ? selectedInst.entityID : '';
-    let type = selectedInst.type ? selectedInst.type : '';
-    let origin = window.location.origin + '/#/home';
-
-    if (type === 'proxy') {
+    if (selectedInst.type === 'proxy') {
       // If proxy, simply open url:
       window.open(selectedInst.entityID);
     } else {
-      console.log(url, type, origin)
       // Else if Shibboleth, add parameters:
       // eg. for AUSS https://sso.artstor.org/sso/shibssoinit?idpEntityID=https://idp.artstor.org/idp/shibboleth&target=https%3A%2F%2Fsso.artstor.org%2Fsso%2Fshibbolethapplication%3Fo%3D0049a162-7dbe-4fcf-adac-d257e8db95e5
+      let url = selectedInst.entityID ? selectedInst.entityID : '';
+      let origin = window.location.origin + '/#/home';
       window.open('https://sso.artstor.org/sso/shibssoinit?idpEntityID=' + encodeURIComponent(url) + '&o=' + encodeURIComponent(origin));
     }
   }

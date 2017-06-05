@@ -44,10 +44,6 @@
                 <div class="card-body">
                     <div class="form-group">
                         <label>Select your institution's name</label>
-                        <!--<select id="selectLoginInstitution" class="form-control custom-select" tabindex="8" [(ngModel)]="loginInst">
-                            <option [ngValue]="" class="placeholder" selected="true">Select an institution...</option>
-                            <option *ngFor="let inst of loginInstitutions" [ngValue]="inst" [innerHtml]="inst.name"></option>
-                        </select>-->
                         <ng2-completer [(ngModel)]="loginInstName" name="institutionSelector" 
                             [datasource]="dataService" 
                             [minSearchLength]="0" 
