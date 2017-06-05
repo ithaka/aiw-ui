@@ -14,6 +14,7 @@ import { AuthService } from './auth.service';
 import { GroupService } from './group.service';
 import { AssetFiltersService } from './../asset-filters/asset-filters.service';
 import { ToolboxService } from './toolbox.service';
+import { AssetSearchService } from './asset-search.service';
 
 import { ImageGroup, Thumbnail } from '.';
 
@@ -126,7 +127,8 @@ export class AssetService {
         locker: Locker,
         private _auth: AuthService,
         private _groups: GroupService,
-        private _toolbox: ToolboxService
+        private _toolbox: ToolboxService,
+        private _assetSearch: AssetSearchService
     ) {
         this._storage = locker.useDriver(Locker.DRIVERS.LOCAL);
 
@@ -768,16 +770,20 @@ export class AssetService {
         }
 
         // Subscribe to most recent search
-        this.searchSubscription = this.search(term, this.activeSort.index)
+        this.searchSubscription = this._assetSearch.search(this.urlParams, term, this.activeSort.index)
             .subscribe(
                 (res) => {
                     let data = res.json();
-                    if (data && data.collTypeFacets) {
-                        this._filters.generateColTypeFacets( data.collTypeFacets );
-                        this._filters.generateGeoFilters( data.geographyFacets );
-                        this._filters.generateDateFacets( data.dateFacets );
-                        this._filters.setAvailable('classification', data.classificationFacets);
-                    }
+                    data.facets.forEach( (facet, index) => {
+                        this._filters.setAvailable(facet.name, facet.values);
+                    })
+                    // this._filters.setAvailable('artclassification_str', data.classificationFacets);
+                    // if (data && data.collTypeFacets) {
+                    //     this._filters.generateColTypeFacets( data.collTypeFacets );
+                    //     this._filters.generateGeoFilters( data.geographyFacets );
+                    //     this._filters.generateDateFacets( data.dateFacets );
+                    //     this._filters.setAvailable('classification', data.classificationFacets);
+                    // }
                     // Transform data from SOLR queries
                     if (data.results) {
                         data.thumbnails = data.results;
@@ -813,76 +819,6 @@ export class AssetService {
                 // Pass error down to allResults listeners
                 // console.error(error, error.status)
             });
-    }
-
-    /**
-     * Search assets service
-     * @param term          String to search for.
-     * @param filters       Array of filter objects (with filterGroup and filterValue properties)
-     * @param sortIndex     An integer representing a type of sort.
-     * @param dateFacet     Object with the dateFacet values
-     * @returns       Returns an object with the properties: thumbnails, count, altKey, classificationFacets, geographyFacets, minDate, maxDate, collTypeFacets, dateFacets
-     */
-    private search(term: string, sortIndex) {
-        let keyword = encodeURIComponent(term);
-        let options = new RequestOptions({ withCredentials: true });
-        let startIndex = ((this.urlParams.currentPage - 1) * this.urlParams.pageSize) + 1;
-        let thumbSize = 1;
-        let categoryId = this.urlParams['categoryId'];
-        let type = categoryId ? 2 : 6;
-        let colTypeIds = '';
-        let collIds = categoryId ? encodeURIComponent(categoryId) : encodeURIComponent(this.urlParams['coll']);
-        let classificationIds = '';
-        let geographyIds = '';
-
-        let earliestDate = '';
-        let latestDate = '';
-
-        let filters = this._filters.getApplied(); 
-        // To-do: break dateObj out of available filters
-        let dateFacet = this._filters.getAvailable()['dateObj'];
-        
-        if(dateFacet.modified){
-            earliestDate = dateFacet.earliest.date;
-            earliestDate = ( dateFacet.earliest.era == 'BCE' ) ? ( parseInt(earliestDate) * -1 ).toString() : earliestDate;
-
-            latestDate = dateFacet.latest.date;
-            latestDate = ( dateFacet.latest.era == 'BCE' ) ? ( parseInt(latestDate) * -1 ).toString() : latestDate;
-        }
-
-        for(var i = 0; i < filters.length; i++){ // Applied filters
-            if(filters[i].filterGroup === 'collTypes'){ // Collection Types
-                colTypeIds = filters[i].filterValue;
-            }
-            if(filters[i].filterGroup === 'classification'){ // Classification
-                if(classificationIds != ''){
-                    classificationIds += ',';
-                }
-                classificationIds += filters[i].filterValue;
-            }
-            if(filters[i].filterGroup === 'geography'){ // Geography
-                if(geographyIds != ''){
-                    geographyIds += ',';
-                }
-                geographyIds += filters[i].filterValue;
-            }
-        }
-        
-        if (this.newSearch === false) {
-            return this.http
-                .get(this._auth.getUrl() + '/search/' + type + '/' + startIndex + '/' + this.urlParams.pageSize + '/' + sortIndex + '?' + 'type=' + type + '&kw=' + keyword + '&origKW=' + keyword + '&geoIds=' + geographyIds + '&clsIds=' + classificationIds + '&collTypes=' + colTypeIds + '&id=' + (collIds.length > 0 ? collIds : 'all') + '&name=All%20Collections&bDate=' + earliestDate + '&eDate=' + latestDate + '&dExact=&order=0&isHistory=false&prGeoId=&tn=1', options);
-        } else {
-            let query = {
-                "limit" : this.urlParams.pageSize,
-                "content_types" : [
-                    "art"
-                ],
-                "query" : "arttitle:" + keyword
-            };
-
-            return this.http.post('//search-service.apps.test.cirrostratus.org/browse/', query, options);
-        }
-        
     }
 
     /**

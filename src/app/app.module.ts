@@ -71,7 +71,7 @@ import { SkyBannerComponent } from './sky-banner/sky-banner.component'
 
 
 // Application wide providers
-import { AuthService, AssetService, GroupService, TypeIdPipe, ToolboxService, LoggingService, ImageGroupService } from './shared';
+import { AuthService, AssetService, AssetSearchService, GroupService, TypeIdPipe, ToolboxService, LoggingService, ImageGroupService } from './shared';
 import { AssetFiltersService } from './asset-filters/asset-filters.service';
 import { TagsService } from './browse-page/tags.service';
 import { CustomReuseStrategy } from './reuse-strategy';
@@ -84,6 +84,7 @@ const APP_PROVIDERS = [
   AnalyticsService,
   AppState,
   AssetService,
+  AssetSearchService,
   GroupService,
   AuthService,
   ImageGroupService,

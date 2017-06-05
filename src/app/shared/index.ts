@@ -1,6 +1,7 @@
 //barrel file for exporting directives from shared to app.module
 export * from './auth.service';
 export * from './assets.service';
+export * from './asset-search.service';
 export * from './group.service';
 export * from './toolbox.service';
 export * from './nav';

@@ -151,6 +151,14 @@ export class AssetFilters {
     this.loadRoute();
   }
 
+  keys(obj) : Array<string> {
+    return Object.keys(obj)
+  }
+
+  isArray(maybeArray: any) : boolean {
+    return Object.prototype.toString.call(maybeArray) === '[object Array]'
+  }
+
   currentPageOnblurr(){
     this.loadRoute();
   }
