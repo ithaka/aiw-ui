@@ -16,34 +16,34 @@ export class AssetFiltersService {
     private appliedFilters: any = [];
     
     private defaultAvailable: any = {
-        collTypes : [],
-        classification: [],
-        geography: [],
-        date: [],
-        dateObj : {
-            earliest : {
-                date : 1000,
-                era : 'BCE'
-            },
-            latest : {
-                date : 2017,
-                era : 'CE'
-            },
-        modified : false
-        },
-        prevDateObj : {
-            earliest : {
-                date : 1000,
-                era : 'BCE'
-            },
-            latest : {
-                date : 2017,
-                era : 'CE'
-            }
-        },
-        currentPage : 1,
-        pageSize : 24,
-        sort: "0"
+        // collTypes : [],
+        // classification: [],
+        // geography: [],
+        // date: [],
+        // dateObj : {
+        //     earliest : {
+        //         date : 1000,
+        //         era : 'BCE'
+        //     },
+        //     latest : {
+        //         date : 2017,
+        //         era : 'CE'
+        //     },
+        // modified : false
+        // },
+        // prevDateObj : {
+        //     earliest : {
+        //         date : 1000,
+        //         era : 'BCE'
+        //     },
+        //     latest : {
+        //         date : 2017,
+        //         era : 'CE'
+        //     }
+        // },
+        // currentPage : 1,
+        // pageSize : 24,
+        // sort: "0"
     };
 
     private availableFilters: any = this.defaultAvailable;
@@ -78,9 +78,17 @@ export class AssetFiltersService {
         }
     }
 
-    public setAvailable(name: string, filters: any ) {
-        this.availableFilters[name] = filters;
-        this.availableSource.next(this.availableFilters);
+    /**
+     * Returns a boolean if unable to add filters to available filters
+     */
+    public setAvailable(name: string, filters: any[] ) : boolean {
+        if (name && name.length > 0 && Object.prototype.toString.call(filters) === '[object Array]') {
+            this.availableFilters[name] = filters
+            this.availableSource.next(this.availableFilters)
+            return true
+        } else {
+            return false
+        }
     }
 
     public getAvailable(): any {

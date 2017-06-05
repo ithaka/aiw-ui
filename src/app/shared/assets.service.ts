@@ -387,7 +387,7 @@ export class AssetService {
                     era : params['endDate'] < 0 ? 'BCE' : 'CE'
                 }
             }
-            this._filters.setAvailable('dateObj', dateObj);
+            // this._filters.setAvailable('dateObj', dateObj);
         }
         else{
             var dateObj = {
@@ -401,7 +401,7 @@ export class AssetService {
                     era : 'CE'
                 }
             }
-            this._filters.setAvailable('dateObj', dateObj);
+            // this._filters.setAvailable('dateObj', dateObj);
         }
     }
 

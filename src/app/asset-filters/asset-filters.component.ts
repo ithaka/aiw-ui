@@ -126,19 +126,19 @@ export class AssetFilters {
   private loadRoute() {
     let params = {};
 
-    if (this.availableFilters.dateObj && this.availableFilters.dateObj.modified == true && this.filterDate) {
-      params['startDate'] = this.availableFilters.dateObj.earliest.date * (this.availableFilters.dateObj.earliest.era == 'BCE' ? -1 : 1);
-      params['endDate'] = this.availableFilters.dateObj.latest.date * (this.availableFilters.dateObj.latest.era == 'BCE' ? -1 : 1);
-    }
+    // if (this.availableFilters.dateObj && this.availableFilters.dateObj.modified == true && this.filterDate) {
+    //   params['startDate'] = this.availableFilters.dateObj.earliest.date * (this.availableFilters.dateObj.earliest.era == 'BCE' ? -1 : 1);
+    //   params['endDate'] = this.availableFilters.dateObj.latest.date * (this.availableFilters.dateObj.latest.era == 'BCE' ? -1 : 1);
+    // }
 
-    for (let filter of this.appliedFilters) {
-      if(filter.filterGroup == 'currentPage'){
-        params[filter.filterGroup] =  parseInt(filter.filterValue);
-      }
-      else if((filter.filterGroup != 'startDate') && (filter.filterGroup != 'endDate') && (filter.filterValue && filter.filterValue.length > 0)){
-        params[filter.filterGroup] =  filter.filterValue;
-      }
-    }
+    // for (let filter of this.appliedFilters) {
+    //   if(filter.filterGroup == 'currentPage'){
+    //     params[filter.filterGroup] =  parseInt(filter.filterValue);
+    //   }
+    //   else if((filter.filterGroup != 'startDate') && (filter.filterGroup != 'endDate') && (filter.filterValue && filter.filterValue.length > 0)){
+    //     params[filter.filterGroup] =  filter.filterValue;
+    //   }
+    // }
 
     this.router.navigate(['search', this.term, params]);
   }
@@ -153,10 +153,6 @@ export class AssetFilters {
 
   keys(obj) : Array<string> {
     return Object.keys(obj)
-  }
-
-  isArray(maybeArray: any) : boolean {
-    return Object.prototype.toString.call(maybeArray) === '[object Array]'
   }
 
   currentPageOnblurr(){
@@ -268,25 +264,25 @@ export class AssetFilters {
 
 
   applyDateFilter(){
-    var sdate = parseInt(this.availableFilters.dateObj.earliest.date);
-    sdate = this.availableFilters.dateObj.earliest.era == 'BCE' ? (sdate * -1) : sdate;
+    // var sdate = parseInt(this.availableFilters.dateObj.earliest.date);
+    // sdate = this.availableFilters.dateObj.earliest.era == 'BCE' ? (sdate * -1) : sdate;
 
-    var edate = parseInt(this.availableFilters.dateObj.latest.date);
-    edate = this.availableFilters.dateObj.latest.era == 'BCE' ? (edate * -1) : edate;
+    // var edate = parseInt(this.availableFilters.dateObj.latest.date);
+    // edate = this.availableFilters.dateObj.latest.era == 'BCE' ? (edate * -1) : edate;
     
-    // Show error message if Start date is greater than End date
-    if(sdate > edate){
-      this.dateError = true;
-      return;
-    }
-    else{
-      this.dateError = false;
-    }
+    // // Show error message if Start date is greater than End date
+    // if(sdate > edate){
+    //   this.dateError = true;
+    //   return;
+    // }
+    // else{
+    //   this.dateError = false;
+    // }
 
-    this.availableFilters.dateObj.modified = true;
-    this.filterDate = true;
-    this.pagination.currentPage = 1;
-    this.loadRoute();
+    // this.availableFilters.dateObj.modified = true;
+    // this.filterDate = true;
+    // this.pagination.currentPage = 1;
+    // this.loadRoute();
   }
 
   existsInRegion(countryId, childerenIds){
