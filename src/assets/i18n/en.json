@@ -61,10 +61,20 @@
     }
   },
   "ADD_TO_GROUP_MODAL": {
-    "TITLE": "Add Images to Group",
-    "SELECT_PROMPT": "Select an image group",
-    "ADD_SUCCESS": "Images successfully added to group",
-    "ADD_FAILURE": "Unable to add images to group. Sorry about that.",
+    "FROM_SELECTED": {
+      "TITLE": "Add Images to Group",
+      "SELECT_PROMPT": "Select an image group",
+      "ADD_SUCCESS": "Images successfully added to group",
+      "ADD_FAILURE": "Unable to add images to group. Sorry about that.",
+      "OPEN_CREATE_GROUP_MODAL": "Create a new image group with images"
+    },
+    "FROM_ASSET": {
+      "TITLE": "Add Image to Group",
+      "SELECT_PROMPT": "Select an image group",
+      "ADD_SUCCESS": "Image successfully added to group",
+      "ADD_FAILURE": "Unable to add image to group. Sorry about that.",
+      "OPEN_CREATE_GROUP_MODAL": "Create a new image group with image"
+    },
     "CONTROLS": {
       "SAVE": "Save Changes",
       "NAV_TO_GROUP": "Go to group",
@@ -72,6 +82,7 @@
       "RETURN_TO_RESULTS": "Return",
       "HELP": "Help"
     }
+
   },
   "NEW_GROUP_MODAL": {
     "CREATE_SUCCESS": "You've successfully created an image group",
