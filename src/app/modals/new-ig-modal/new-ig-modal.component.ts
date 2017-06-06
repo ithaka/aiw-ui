@@ -142,7 +142,7 @@ export class NewIgModal implements OnInit {
             this.isLoading = false;
             this.newGroup = data;
             this.serviceResponse.success = true;
-            this._assets.igSavedSource.next(true);
+            this._assets.clearSelectMode.next(true);
           },
           error => {
             console.error(error);
@@ -173,7 +173,7 @@ export class NewIgModal implements OnInit {
             this.isLoading = false;
             this.newGroup = data;
             this.serviceResponse.success = true;
-            this._assets.igSavedSource.next(true);
+            this._assets.clearSelectMode.next(true);
 
             // if an Artstor user, make sure the public property is set correctly
             if (this.isArtstorUser) {
