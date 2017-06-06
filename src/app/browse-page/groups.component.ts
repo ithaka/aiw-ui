@@ -184,6 +184,9 @@ export class BrowseGroupsComponent implements OnInit {
     else {
       this.addRouteParam('tags', '');
     }
+
+    // After applying or removing a tag/filter, show the first page results
+    this.pageObj[this.selectedBrowseLevel].currentPage = 1;
     
     this.loadIGs(this.selectedBrowseLevel)
   }
