@@ -1,8 +1,17 @@
-$titleNavBg: #eee;
+@import '../../sass/core/variables';
 
+$titleNavBg: #eee;
 
 .asset-col {
     padding: 0px !important;
+
+    @media(max-width: $phone) {
+        max-height: 66vh;
+        overflow: hidden;
+        margin-left: -15px;
+        margin-right: -15px;
+        width: calc(100% + 30px);
+    }
 }
 
 // Title Prev / Next Asset
@@ -12,6 +21,10 @@ $titleNavBg: #eee;
     padding: 1rem 0;
     text-align: center;
     font-weight: bold;
+
+    @media(max-width: $phone) {
+        background: transparent;
+    }
 
     .back-results{
         position: absolute;

@@ -124,6 +124,10 @@ span.active {
     // Need to override inline styles
     background: #f8faf8 !important;
 
+    @media(max-width: $phone) {
+      min-height: 66vh;
+    }
+
     .fullscreen & {
       background: #000 !important;
       width: 100%;

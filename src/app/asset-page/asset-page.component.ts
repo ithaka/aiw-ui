@@ -233,6 +233,7 @@ export class AssetPage implements OnInit, OnDestroy {
     private copyGeneratedImgURL(): void {
         let statusMsg = '';
         let input : any = document.getElementById('generatedImgURL');
+        let iOSuser: boolean = false;
 
         this._analytics.directCall('generate_img_link');
 
@@ -240,9 +241,14 @@ export class AssetPage implements OnInit, OnDestroy {
         input.focus()
         input.select()
 
+        // Determine if on iOS (no copy functionality)
+        if( /iPhone|iPad|iPod/i.test(navigator.userAgent) ) {
+            iOSuser = true
+        }
+    
         setTimeout( () => { 
             input.select(); 
-            if(document.queryCommandSupported('copy')){
+            if(document.queryCommandSupported('copy') && !iOSuser){
                 document.execCommand('copy')
                 statusMsg = 'Image URL successfully copied to the clipboard!';
             }
