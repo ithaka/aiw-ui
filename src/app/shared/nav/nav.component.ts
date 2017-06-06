@@ -5,6 +5,7 @@ import { Subscription } from 'rxjs/Subscription';
 
 import { LoginService } from '../../login/login.service';
 import { AuthService, AssetService, ToolboxService } from '..';
+import { IdleWatcherUtil } from './idle-watcher';
 
 import {Idle, DEFAULT_INTERRUPTSOURCES} from '@ng-idle/core';
 import {Keepalive} from '@ng-idle/keepalive';
@@ -26,6 +27,9 @@ export class Nav implements OnInit, OnDestroy {
   private showinactiveUserLogoutModal: boolean = false;
   private idleState: string = 'Not started.';
 
+  // Idle watcher, session timeout values are abstracted to a utility
+  private idleUtil: IdleWatcherUtil = new IdleWatcherUtil()
+
   // TypeScript public modifiers
   constructor(
     private _auth: AuthService,
@@ -37,8 +41,8 @@ export class Nav implements OnInit, OnDestroy {
     private idle: Idle,
     private keepalive: Keepalive
   ) {  
-    idle.setIdle(60);
-    idle.setTimeout(5400); // Log user out after 90 mins of inactivity
+    idle.setIdle(this.idleUtil.generateIdleTime()); // Set an idle time of 1 min, before starting to watch for timeout
+    idle.setTimeout(this.idleUtil.generateSessionLength()); // Log user out after 90 mins of inactivity
     idle.setInterrupts(DEFAULT_INTERRUPTSOURCES);
 
     idle.onIdleEnd.subscribe(() => {
