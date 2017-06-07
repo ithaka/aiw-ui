@@ -4,7 +4,7 @@ import { Location } from '@angular/common';
 import { Angulartics2 } from 'angulartics2';
 import { CompleterService, CompleterData } from 'ng2-completer';
 
-import { AuthService, LoggingService } from './../shared';
+import { AuthService } from './../shared';
 import { LoginService, User } from './login.service';
 import { AnalyticsService } from '../analytics.service';
 
@@ -47,7 +47,6 @@ export class Login {
   constructor(
     private _auth: AuthService,
     private _login: LoginService,
-    private _log: LoggingService,
     private _completer: CompleterService,
     private router: Router,
     private location: Location,
@@ -153,7 +152,6 @@ export class Login {
             }
           } else {
             this.angulartics.eventTrack.next({ action:"remoteLogin", properties: { category: "login", label: "success" }});
-            this._log.Warp6({ eventType: "remote_login" });
             this.loadForUser(data);
           }
          
@@ -175,10 +173,8 @@ export class Login {
          */
         this._auth.getUserInfo().take(1)
           .subscribe( data => {
-            console.log(data);
             if (data.status === true && data.user && user.username == data.user.username) {
               this.angulartics.eventTrack.next({ action:"remoteLogin", properties: { category: "login", label: "success" }});
-              this._log.Warp6({ eventType: "remote_login" });
               this.loadForUser(data);
             } else {
                if(data.message === 'loginFailed'){
