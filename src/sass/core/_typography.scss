@@ -203,6 +203,17 @@ a.list-group-item, a.list-group-item-action, a.btn  {
   }
 }
 
+.form-text {
+  font-size: 12px;
+  
+  & .link {
+    text-decoration: underline !important;
+    &:hover {
+      opacity: 0.8;
+    }
+  }
+}
+
 // sorry about this one! It wouldn't work in component styles because of [innerHtml]
 .page__description a {
   text-decoration: underline;
