@@ -195,23 +195,20 @@ export class Login {
       });
   }
 
-  /** 
+  /** **THIS CAN LIKELY BE REMOVED AFTER RELEVANT USERS' PASSWORDS HAVE BEEN CHANGED**
    * Tests if user's password is an old all lowercase password
    * @param user User must have username (which is an email address) and password to be passed in the request
    */
   isBadCasePassword(user) {
-    console.log("CHECK BAD CASE")
     // Try password all lowercase
     user.password = user.password.toLowerCase()
-    console.log(user)
     this._login.login(user).then((data) => {
-      console.log(data)
       if (data.status === true) { 
         this.forcePwdRst = true
         this.errorMsg = ''
       }
     }, (error) => {
-      console.log(error)
+      console.error(error)
 
       /**
        * WORKAROUND for TEST: Earth's login service isn't properly redirecting based on context
