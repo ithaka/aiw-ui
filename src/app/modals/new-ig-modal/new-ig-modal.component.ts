@@ -32,7 +32,7 @@ export class NewIgModal implements OnInit {
   /** Gives artstor institution users the ability to curate image public image groups */
   private isArtstorUser: boolean = false;
   // We need to seed the medium editor with an empty div to fix line return issues in Firefox!
-  private igDescription: string = "<div>&nbsp;</div>";
+  private igDescription: string = "";
   /** The list of assets which are currently selected from the asset grid */
   @Input() private selectedAssets: any[] = [];
 
