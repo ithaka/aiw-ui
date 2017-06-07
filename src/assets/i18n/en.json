@@ -85,12 +85,28 @@
 
   },
   "NEW_GROUP_MODAL": {
+    "CREATE_TITLE": "New Image Group",
+    "EDIT_TITLE": "Edit Image Group",
+    "COPY_TITLE": "Copy Image Group",
+    "TITLE_FIELD_LABEL": "Title",
+    "TITLE_REQUIRED_MSG": "A title is required",
+    "DESCRIPTION_FIELD_LABEL": "Description",
+    "PERMISSION_FIELD_LABEL": "Who should see this image group?",
+    "PERMISSIONS": {
+      "GLOBAL": "Everyone",
+      "INSTITUTIONAL": "This Institution",
+      "PRIVATE": "Only Me"
+    },
+    "TAGS_FIELD_LABEL": "Tags",
+    "SHOW_ADD_TO_IMAGE_GROUP": "Add to image group",
     "CREATE_SUCCESS": "You've successfully created an image group",
     "CREATE_FAILURE": "Oops, something went wrong and your group was not created. Please try again.",
     "EDIT_SUCCESS" : "You've successfully edited the image group",
     "CONTROLS": {
       "RETURN_TO_RESULTS": "Return",
-      "NAV_TO_GROUP": "Go to group"
+      "NAV_TO_GROUP": "Go to group",
+      "CLOSE": "Close",
+      "SAVE_EDIT": "Save changes"
     }
   },
   "RETURN_HOME" : "Return Home",
