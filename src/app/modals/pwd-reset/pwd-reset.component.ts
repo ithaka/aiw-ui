@@ -52,7 +52,7 @@ export class PwdResetModal implements OnInit {
       setTimeout(() => {
         this.errorMsgPwdRst = '';
                 }, 8000);
-      this.pwdResetForm.value.email = '';
+      this.pwdResetForm.controls['email'].setValue('');
     }
     else{
       this.pwdReset = false;
