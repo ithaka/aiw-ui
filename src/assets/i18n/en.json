@@ -66,14 +66,14 @@
       "SELECT_PROMPT": "Select an image group",
       "ADD_SUCCESS": "Images successfully added to group",
       "ADD_FAILURE": "Unable to add images to group. Sorry about that.",
-      "OPEN_CREATE_GROUP_MODAL": "Create a new image group with images"
+      "OPEN_CREATE_GROUP_MODAL": "Create a new group with images"
     },
     "FROM_ASSET": {
       "TITLE": "Add Image to Group",
       "SELECT_PROMPT": "Select an image group",
       "ADD_SUCCESS": "Image successfully added to group",
       "ADD_FAILURE": "Unable to add image to group. Sorry about that.",
-      "OPEN_CREATE_GROUP_MODAL": "Create a new image group with image"
+      "OPEN_CREATE_GROUP_MODAL": "Create a new group with image"
     },
     "CONTROLS": {
       "SAVE": "Save Changes",
