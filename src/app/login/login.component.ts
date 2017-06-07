@@ -113,7 +113,7 @@ export class Login {
           this.showPwdModal = true;
         }
         else if(data.message === 'loginFailed'){
-          this.errorMsg = 'Invalid email address or password. Try again.';
+          this.errorMsg = 'LOGIN.WRONG_PASSWORD';
         } else {
           //handles any server errors
           this.errorMsg = "LOGIN.SERVER_ERROR";
@@ -128,13 +128,13 @@ export class Login {
     user.username = user.username.toLowerCase().trim()
     this.loginLoading = true;
     if(!this.validateEmail(user.username)){
-      this.errorMsg = 'Please enter a valid email address';
+      this.errorMsg = 'LOGIN.INVALID_EMAIL';
       this.loginLoading = false;
       return;
     }
     
     if(!this.validatePwd(user.password)){
-      this.errorMsg = 'Password must be 7-20 characters';
+      this.errorMsg = 'LOGIN.PASSWORD_REQUIRED';
       this.loginLoading = false;
       return;
     }
@@ -149,9 +149,9 @@ export class Login {
             // Check if old bad-case password
             this.isBadCasePassword(user)
             if(data.message === 'loginFailed'){
-              this.errorMsg = 'Invalid email address or password. Try again.';
+              this.errorMsg = 'LOGIN.WRONG_PASSWORD';
             } else if (data.message === 'loginExpired') {
-              this.errorMsg = 'That login is expired. Please login from campus to renew your account.';
+              this.errorMsg = 'LOGIN.EXPIRED';
             }
           } else {
             this.angulartics.eventTrack.next({ action:"remoteLogin", properties: { category: "login", label: "success" }});
@@ -163,9 +163,9 @@ export class Login {
         this.loginLoading = false;
         let errObj = err.json ? err.json() : {};
         if(errObj.message === 'Invalid credentials'){
-          this.errorMsg = 'Invalid email address or password. Try again.';
+          this.errorMsg = 'LOGIN.WRONG_PASSWORD';
         } else if (errObj.message === 'Login Expired' || errObj.message === 'loginExpired') {
-          this.errorMsg = 'That login is expired. Please login from campus to renew your account.';
+          this.errorMsg = 'LOGIN.EXPIRED';
         } else {
           this.getLoginError(user)
           this.angulartics.eventTrack.next({ action:"remoteLogin", properties: { category: "login", label: "failed" }});
@@ -183,9 +183,9 @@ export class Login {
               this.loadForUser(data);
             } else {
                 if(data.message === 'loginFailed'){
-                this.errorMsg = 'Invalid email address or password. Try again.';
+                this.errorMsg = 'LOGIN.WRONG_PASSWORD';
               } else if (data.message === 'loginExpired') {
-                this.errorMsg = 'That login is expired. Please login from campus to renew your account.';
+                this.errorMsg = 'LOGIN.EXPIRED';
               }
             }
           }, error => {
@@ -208,7 +208,7 @@ export class Login {
       console.log(data)
       if (data.status === true) { 
         this.forcePwdRst = true
-        this.errorMsg = 'We need you to change your password'
+        this.errorMsg = ''
       }
     }, (error) => {
       console.log(error)
@@ -219,8 +219,8 @@ export class Login {
       this._auth.getUserInfo().take(1)
         .subscribe( data => {
           if (data.status === true && data.user && user.username == data.user.username) {
-             this.forcePwdRst = true
-            this.errorMsg = 'We need you to change your password'
+            this.forcePwdRst = true
+            this.errorMsg = ''
           } 
         }, error => {
           

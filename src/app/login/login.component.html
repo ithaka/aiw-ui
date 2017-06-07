@@ -14,14 +14,14 @@
                         <div class="form-group">
                             <label for="loginPassword">Password</label>
                             <input id="inputLoginPassword" [(ngModel)]="user.password" name="password" type="password" class="form-control" placeholder="Password" tabindex="2" />
-                            <div id="errorMsg" *ngIf="errorMsg" class="login-errorMsg"> {{ errorMsg | translate }} </div>
+                            <div id="errorMsg" *ngIf="errorMsg" class="form-text text-danger"> {{ errorMsg | translate }} </div>
+                            <p *ngIf="forcePwdRst" class="form-text text-danger">For security purposes, we need you to <a id="forcePwdResetModal" (click)="showPwdModal = true" class="link">reset your password</a> in order to log in.</p>
                         </div>
                         <p [innerHtml]="'LOGIN.TERMS' | translate"></p>
                         <div class="form-group">
                             <button id="btnLoginRemote" class="btn btn-primary" [class.loading]="loginLoading" type="submit" name="action" tabindex="3"  data-sc="account: remote user log in">Log in</button>
                         </div>
                     </form>
-
                     <a id="linkLoginResetModal" tabindex="4" class="link" (click)="showPwdModal = true">Forgot password?</a>
                     <br/>
                     <div *ngIf="showRegister">
