@@ -34,6 +34,7 @@ export class Login {
   public expirePwd = false;
   public pwdRstEmail = '';
   public errorMsgPwdRst = '';
+  public forcePwdRst = false
   public successMsgPwdRst = '';
   public loginInstitutions = []; /** Stores the institutions returned by the server */
   private loginInstName: string = '' /** Bound to the autocomplete field */
@@ -145,6 +146,8 @@ export class Login {
         (data)  => {
           this.loginLoading = false;
           if (data.status === false) {
+            // Check if old bad-case password
+            this.isBadCasePassword(user)
             if(data.message === 'loginFailed'){
               this.errorMsg = 'Invalid email address or password. Try again.';
             } else if (data.message === 'loginExpired') {
@@ -159,16 +162,18 @@ export class Login {
       ).catch((err) => {
         this.loginLoading = false;
         let errObj = err.json ? err.json() : {};
-         if(errObj.message === 'Invalid credentials'){
-            this.errorMsg = 'Invalid email address or password. Try again.';
-          } else if (errObj.message === 'Login Expired' || errObj.message === 'loginExpired') {
-            this.errorMsg = 'That login is expired. Please login from campus to renew your account.';
-          } else {
-            this.getLoginError(user)
-            this.angulartics.eventTrack.next({ action:"remoteLogin", properties: { category: "login", label: "failed" }});
-          }
+        if(errObj.message === 'Invalid credentials'){
+          this.errorMsg = 'Invalid email address or password. Try again.';
+        } else if (errObj.message === 'Login Expired' || errObj.message === 'loginExpired') {
+          this.errorMsg = 'That login is expired. Please login from campus to renew your account.';
+        } else {
+          this.getLoginError(user)
+          this.angulartics.eventTrack.next({ action:"remoteLogin", properties: { category: "login", label: "failed" }});
+        }
+        // Check if old bad-case password
+        this.isBadCasePassword(user)
 
-         /**
+          /**
          * WORKAROUND for TEST: Earth's login service isn't properly redirecting based on context
          */
         this._auth.getUserInfo().take(1)
@@ -177,7 +182,7 @@ export class Login {
               this.angulartics.eventTrack.next({ action:"remoteLogin", properties: { category: "login", label: "success" }});
               this.loadForUser(data);
             } else {
-               if(data.message === 'loginFailed'){
+                if(data.message === 'loginFailed'){
                 this.errorMsg = 'Invalid email address or password. Try again.';
               } else if (data.message === 'loginExpired') {
                 this.errorMsg = 'That login is expired. Please login from campus to renew your account.';
@@ -188,6 +193,39 @@ export class Login {
           });
 
       });
+  }
+
+  /** 
+   * Tests if user's password is an old all lowercase password
+   * @param user User must have username (which is an email address) and password to be passed in the request
+   */
+  isBadCasePassword(user) {
+    console.log("CHECK BAD CASE")
+    // Try password all lowercase
+    user.password = user.password.toLowerCase()
+    console.log(user)
+    this._login.login(user).then((data) => {
+      console.log(data)
+      if (data.status === true) { 
+        this.forcePwdRst = true
+        this.errorMsg = 'We need you to change your password'
+      }
+    }, (error) => {
+      console.log(error)
+
+      /**
+       * WORKAROUND for TEST: Earth's login service isn't properly redirecting based on context
+       */
+      this._auth.getUserInfo().take(1)
+        .subscribe( data => {
+          if (data.status === true && data.user && user.username == data.user.username) {
+             this.forcePwdRst = true
+            this.errorMsg = 'We need you to change your password'
+          } 
+        }, error => {
+          
+        });
+    })
   }
   
   validateEmail(email: string){
