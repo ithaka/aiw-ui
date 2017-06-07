@@ -2,7 +2,7 @@ import { NgModule, ApplicationRef } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Http, HttpModule } from '@angular/http';
-import { RouterModule, RouteReuseStrategy } from '@angular/router';
+import { NavigationEnd, Router, RouteReuseStrategy, RouterModule } from '@angular/router';
 import { removeNgStyles, createNewHosts, createInputTransfer } from '@angularclass/hmr';
 
 /*
@@ -180,7 +180,15 @@ type StoreType = {
   ]
 })
 export class AppModule {
-  constructor(public appRef: ApplicationRef, public appState: AppState) {}
+  constructor(public appRef: ApplicationRef, public appState: AppState, private router: Router, private _satellite: AnalyticsService) {
+    // Track page changes with Adobe Analytics
+    router.events.subscribe((val: NavigationEnd) => {
+      // If this is a different page, report it!
+      if (val.urlAfterRedirects != val.url) {
+        _satellite.directCall('page_name')
+      }
+    })
+  }
 
   hmrOnInit(store: StoreType) {
     if (!store || !store.state) return;
