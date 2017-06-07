@@ -34,6 +34,7 @@ export class Login {
   public expirePwd = false;
   public pwdRstEmail = '';
   public errorMsgPwdRst = '';
+  public forcePwdRst = false
   public successMsgPwdRst = '';
   public loginInstitutions = []; /** Stores the institutions returned by the server */
   private loginInstName: string = '' /** Bound to the autocomplete field */
@@ -112,7 +113,7 @@ export class Login {
           this.showPwdModal = true;
         }
         else if(data.message === 'loginFailed'){
-          this.errorMsg = 'Invalid email address or password. Try again.';
+          this.errorMsg = 'LOGIN.WRONG_PASSWORD';
         } else {
           //handles any server errors
           this.errorMsg = "LOGIN.SERVER_ERROR";
@@ -127,13 +128,13 @@ export class Login {
     user.username = user.username.toLowerCase().trim()
     this.loginLoading = true;
     if(!this.validateEmail(user.username)){
-      this.errorMsg = 'Please enter a valid email address';
+      this.errorMsg = 'LOGIN.INVALID_EMAIL';
       this.loginLoading = false;
       return;
     }
     
     if(!this.validatePwd(user.password)){
-      this.errorMsg = 'Password must be 7-20 characters';
+      this.errorMsg = 'LOGIN.PASSWORD_REQUIRED';
       this.loginLoading = false;
       return;
     }
@@ -145,10 +146,12 @@ export class Login {
         (data)  => {
           this.loginLoading = false;
           if (data.status === false) {
+            // Check if old bad-case password
+            this.isBadCasePassword(user)
             if(data.message === 'loginFailed'){
-              this.errorMsg = 'Invalid email address or password. Try again.';
+              this.errorMsg = 'LOGIN.WRONG_PASSWORD';
             } else if (data.message === 'loginExpired') {
-              this.errorMsg = 'That login is expired. Please login from campus to renew your account.';
+              this.errorMsg = 'LOGIN.EXPIRED';
             }
           } else {
             this.angulartics.eventTrack.next({ action:"remoteLogin", properties: { category: "login", label: "success" }});
@@ -159,16 +162,18 @@ export class Login {
       ).catch((err) => {
         this.loginLoading = false;
         let errObj = err.json ? err.json() : {};
-         if(errObj.message === 'Invalid credentials'){
-            this.errorMsg = 'Invalid email address or password. Try again.';
-          } else if (errObj.message === 'Login Expired' || errObj.message === 'loginExpired') {
-            this.errorMsg = 'That login is expired. Please login from campus to renew your account.';
-          } else {
-            this.getLoginError(user)
-            this.angulartics.eventTrack.next({ action:"remoteLogin", properties: { category: "login", label: "failed" }});
-          }
+        if(errObj.message === 'Invalid credentials'){
+          this.errorMsg = 'LOGIN.WRONG_PASSWORD';
+        } else if (errObj.message === 'Login Expired' || errObj.message === 'loginExpired') {
+          this.errorMsg = 'LOGIN.EXPIRED';
+        } else {
+          this.getLoginError(user)
+          this.angulartics.eventTrack.next({ action:"remoteLogin", properties: { category: "login", label: "failed" }});
+        }
+        // Check if old bad-case password
+        this.isBadCasePassword(user)
 
-         /**
+          /**
          * WORKAROUND for TEST: Earth's login service isn't properly redirecting based on context
          */
         this._auth.getUserInfo().take(1)
@@ -177,10 +182,10 @@ export class Login {
               this.angulartics.eventTrack.next({ action:"remoteLogin", properties: { category: "login", label: "success" }});
               this.loadForUser(data);
             } else {
-               if(data.message === 'loginFailed'){
-                this.errorMsg = 'Invalid email address or password. Try again.';
+                if(data.message === 'loginFailed'){
+                this.errorMsg = 'LOGIN.WRONG_PASSWORD';
               } else if (data.message === 'loginExpired') {
-                this.errorMsg = 'That login is expired. Please login from campus to renew your account.';
+                this.errorMsg = 'LOGIN.EXPIRED';
               }
             }
           }, error => {
@@ -188,6 +193,36 @@ export class Login {
           });
 
       });
+  }
+
+  /** **THIS CAN LIKELY BE REMOVED AFTER RELEVANT USERS' PASSWORDS HAVE BEEN CHANGED**
+   * Tests if user's password is an old all lowercase password
+   * @param user User must have username (which is an email address) and password to be passed in the request
+   */
+  isBadCasePassword(user) {
+    // Try password all lowercase
+    user.password = user.password.toLowerCase()
+    this._login.login(user).then((data) => {
+      if (data.status === true) { 
+        this.forcePwdRst = true
+        this.errorMsg = ''
+      }
+    }, (error) => {
+      console.error(error)
+
+      /**
+       * WORKAROUND for TEST: Earth's login service isn't properly redirecting based on context
+       */
+      this._auth.getUserInfo().take(1)
+        .subscribe( data => {
+          if (data.status === true && data.user && user.username == data.user.username) {
+            this.forcePwdRst = true
+            this.errorMsg = ''
+          } 
+        }, error => {
+          
+        });
+    })
   }
   
   validateEmail(email: string){
