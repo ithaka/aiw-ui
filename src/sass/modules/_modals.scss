@@ -4,6 +4,8 @@
  * https://v4-alpha.getbootstrap.com/components/modal/
  */
 
+ @import '../core/variables';
+
 .modal {
     display: none;
     background-color: rgba(238, 238, 238, 0.5);
@@ -85,6 +87,17 @@
 .modal-footer {
     border: none;
     background-color: $bgLightAccent;
+
+    @media(max-width: $phone) {
+        display: block !important;
+    }
+
+    .btn{
+        @media(max-width: $phone) {
+            display: block;
+            margin: 10px auto;
+        }
+    }
 }
 
 .modal-body .success-msg {
