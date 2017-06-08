@@ -146,10 +146,10 @@ export class Login {
         (data)  => {
           this.loginLoading = false;
           if (data.status === false) {
-            // Check if old bad-case password
-            this.isBadCasePassword(user)
             if(data.message === 'loginFailed'){
               this.errorMsg = 'LOGIN.WRONG_PASSWORD';
+              // Check if old bad-case password
+              this.isBadCasePassword(user)
             } else if (data.message === 'loginExpired') {
               this.errorMsg = 'LOGIN.EXPIRED';
             }
@@ -164,6 +164,8 @@ export class Login {
         let errObj = err.json ? err.json() : {};
         if(errObj.message === 'Invalid credentials'){
           this.errorMsg = 'LOGIN.WRONG_PASSWORD';
+          // Check if old bad-case password
+          this.isBadCasePassword(user)
         } else if (errObj.message === 'Login Expired' || errObj.message === 'loginExpired') {
           this.errorMsg = 'LOGIN.EXPIRED';
         } else {
