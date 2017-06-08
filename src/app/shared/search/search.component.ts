@@ -1,5 +1,6 @@
 import { Component, OnInit, OnDestroy, Input, Output } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
+import { Angulartics2 } from 'angulartics2/dist';
 
 import { Subscription }   from 'rxjs/Subscription';
 
@@ -29,7 +30,8 @@ export class SearchComponent implements OnInit, OnDestroy {
     private _analytics: AnalyticsService,
     private _assets: AssetService,
     private _router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private angulartics: Angulartics2
   ) {
 
   }
@@ -62,11 +64,11 @@ export class SearchComponent implements OnInit, OnDestroy {
    */
   private updateSearchTerm(term: string) {
     if (!term || term === "") {
-      // term = "*";
       return;
     }
     
     this._analytics.directCall('search')
+    this.angulartics.eventTrack.next({ action: "simpleSearch", properties: { category: "search", label: this.term }})
 
     if(this.searchInResults){ // Search within results
       let routeParams = this.route.snapshot.params;
