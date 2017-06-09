@@ -85,8 +85,8 @@
       "CLOSE": "Close",
       "RETURN_TO_RESULTS": "Return",
       "HELP": "Help"
-    }
-
+    },
+    "NO_GROUP" : "Please select a group."
   },
   "NEW_GROUP_MODAL": {
     "CREATE_TITLE": "Create New Image Group",

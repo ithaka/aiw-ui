@@ -22,8 +22,9 @@
               [textSearching]="'Searching Groups...'"
               [clearUnselected]="true"></ng2-completer>
             
-            <div *ngIf="serviceResponse.success" translate class="form-control-feedback">{{  copySelectionStr + '.ADD_SUCCESS' | translate}}</div>
-            <div *ngIf="serviceResponse.failure" translate class="form-control-feedback">{{  copySelectionStr + '.ADD_FAILURE' | translate}}</div>
+            <div *ngIf="serviceResponse.success" translate class="form-text text-success">{{  copySelectionStr + '.ADD_SUCCESS' | translate}}</div>
+            <div *ngIf="serviceResponse.failure" translate class="form-text text-danger">{{  copySelectionStr + '.ADD_FAILURE' | translate}}</div>
+            <div *ngIf="selectedGroupError" class="form-text text-warning">{{ selectedGroupError | translate }}</div>
           </div>
         </div>
         <div class="modal-footer">

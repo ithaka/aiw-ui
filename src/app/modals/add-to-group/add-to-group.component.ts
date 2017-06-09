@@ -20,6 +20,7 @@ export class AddToGroupModal implements OnInit, OnDestroy {
   private groups: ImageGroup[] = [];
   private selectedIg: ImageGroup;
   private selectedGroupName: string;
+  private selectedGroupError: string;
 
   @Input()
   private copySelectionStr: string = 'ADD_TO_GROUP_MODAL.FROM_SELECTED'
@@ -75,7 +76,9 @@ export class AddToGroupModal implements OnInit, OnDestroy {
    * @param form Values to update the group with
    */
   private submitGroupUpdate(form: NgForm) {
-    this.serviceResponse = {}; // clear any service status
+    // clear any service status
+    this.serviceResponse = {}
+    this.selectedGroupError = ''
 
     // Find full group object based on group name
     this.groups.forEach( (group, index) => {
@@ -83,6 +86,11 @@ export class AddToGroupModal implements OnInit, OnDestroy {
         this.selectedIg = group
       }
     })
+
+    if (!this.selectedIg || this.selectedGroupName.length < 1) {
+      this.selectedGroupError = "ADD_TO_GROUP_MODAL.NO_GROUP"
+      return
+    }
     
     // Create object for new modified group
     let putGroup: ImageGroup = Object.assign({}, this.selectedIg)
