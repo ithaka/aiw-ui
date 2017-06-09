@@ -222,3 +222,10 @@ nav-menu {
     width: 100%;
   }
 }
+
+// Autocomplete override
+.completer-dropdown {
+  height: 400px !important;
+  max-height: calc(95vh - 200px) !important;
+  overflow-y: auto !important;
+}
