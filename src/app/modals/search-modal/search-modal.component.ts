@@ -1,5 +1,6 @@
 import { Router } from '@angular/router';
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Angulartics2 } from 'angulartics2/dist';
 
 // Project dependencies
 import { SearchQueryUtil } from './search-query';
@@ -69,7 +70,8 @@ export class SearchModal implements OnInit {
         private _assets: AssetService, 
         private _filters: AssetFiltersService, 
         private _router: Router,
-        private _analytics: AnalyticsService
+        private _analytics: AnalyticsService,
+        private angulartics: Angulartics2
       ) { 
     // Pull in filterFields
     this.fields = _assets.filterFields;
@@ -221,6 +223,7 @@ export class SearchModal implements OnInit {
     let filterParams = this.queryUtil.generateFilters(this.filterSelections, this.advanceSearchDate)
     // Track in Adobe Analytics
     this._analytics.directCall('advanced_search');
+    this.angulartics.eventTrack.next({ action: "advSearch", properties: { category: "search", label: advQuery } })
     
     // Open search page with new query
     this._router.navigate(['/search', advQuery, filterParams]);
