@@ -127,6 +127,10 @@ export class Login {
   login(user: User) {
     user.username = user.username.toLowerCase().trim()
     this.loginLoading = true;
+    // Clear error messaging
+    this.errorMsg = ''
+    this.forcePwdRst = false
+
     if(!this.validateEmail(user.username)){
       this.errorMsg = 'LOGIN.INVALID_EMAIL';
       this.loginLoading = false;
