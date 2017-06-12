@@ -91,6 +91,14 @@
             </div>
         </div>
     </div>
+
+    <div class="row">
+        <div class="mobile--hide grid-tool-bar" [ngClass]="[ reorderMode ? 'col-12' : 'col-sm-8 col-md-8 col-lg-9']"></div>
+        <div *ngIf="!reorderMode" class="col-sm-4 col-md-4 col-lg-3 text-right grid-pagination-bar">
+            <pagination [pageObj]="pagination" (goToPage)="goToPage($event)">
+            </pagination>
+        </div>
+    </div>
 </div>
 
 <ang-confirm-modal *ngIf="showLoseReorder" (closeModal)="ditchingReorder($event)" [title]="'Exit Reordering'" 
