@@ -202,6 +202,10 @@ export class Login {
    * @param user User must have username (which is an email address) and password to be passed in the request
    */
   isBadCasePassword(user) {
+    // Do not test if the user isn't using upparcase characters
+    if(user.password == user.password.toLowerCase()) {
+      return;
+    }
     // Try password all lowercase
     user.password = user.password.toLowerCase()
     this._login.login(user).then((data) => {
