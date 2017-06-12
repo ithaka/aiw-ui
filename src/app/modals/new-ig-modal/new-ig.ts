@@ -10,6 +10,10 @@ export class IgFormUtil {
    * Prepares and returns the image group object from the form
    * @param form The value of the submitted form
    * @param description The string value of the description pulled out of the medium editor
+   * @param assets The array of assets (can be array of assets or of strings) which the image group should contain
+   * @param user The current user
+   * @param currentIg The ImageGroup which is currently being edited/copied (used for preparing the access object)
+   * @returns ImageGroup which can be POSTed or PUT to the groups API
    */
   public prepareGroup(form: IgFormValue, description: string, assets: any[], user: any, currentIg?: ImageGroup): ImageGroup {
     /** format an array of asset ids out of the asset */
