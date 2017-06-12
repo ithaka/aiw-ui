@@ -15,7 +15,7 @@
                             <label for="loginPassword">Password</label>
                             <input id="inputLoginPassword" [(ngModel)]="user.password" name="password" type="password" class="form-control" placeholder="Password" tabindex="2" />
                             <div id="errorMsg" *ngIf="errorMsg" class="form-text text-danger"> {{ errorMsg | translate }} </div>
-                            <p *ngIf="forcePwdRst" class="form-text text-danger">For security purposes, we need you to <a id="forcePwdResetModal" (click)="showPwdModal = true" class="link">reset your password</a> in order to log in.</p>
+                            <p *ngIf="forcePwdRst" class="form-text text-danger">Please <a id="forcePwdResetModal" (click)="showPwdModal = true" class="link">reset your password</a> in order to log in.</p>
                         </div>
                         <p [innerHtml]="'LOGIN.TERMS' | translate"></p>
                         <div class="form-group">
