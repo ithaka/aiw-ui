@@ -2,6 +2,8 @@
 import { IgFormUtil, IgFormValue } from './new-ig'
 import { BehaviorSubject, Observable } from 'rxjs/Rx'
 
+import { ImageGroup } from '../../shared/datatypes'
+
 fdescribe('IgFormUtil', () => {
     // let newIgModal: NewIgModal
     // let mockFormBuilder: any
@@ -33,6 +35,17 @@ fdescribe('IgFormUtil', () => {
         let description = "this is a string"
         let mockAssets = [{objectId: "12345"}, {objectId: "67890"}]
         let mockUser = { institutionId: 1234567, baseProfileId: 780280 }
+        // this group starts out with access for only the user (private)
+        let mockImageGroup: ImageGroup = {
+            access: [
+                { access_type: 300, entity_identifier: mockUser.baseProfileId.toString(), entity_type: 100 }
+            ],
+            name: "Some title",
+            id: "6e6cfa78-8fcd-4b6c-8a79-b183f766c9fb",
+            public: false,
+            tags: ["sword"],
+            description: ""
+        }
 
         it("should correctly process a private image group made by an artstor user", () => {
 
@@ -87,6 +100,22 @@ fdescribe('IgFormUtil', () => {
 
             expect(group.access.length).toBe(1)
             expect(group.public).toBeFalsy() // global DOES NOT set public here. It uses an API call after the group is created
+        })
+
+        it("should remove the institution's access from an image group", () => {
+            let form: IgFormValue = {
+                title: "Institution Test Ig",
+                artstorPermissions: "institution",
+                tags: ["tag1", "tag2"]
+            }
+
+            let group = util.prepareGroup(form, description, mockAssets, mockUser, mockImageGroup)
+
+            expect(group.name).toBe(form.title)
+            expect(group.access.find((access) => {
+                return access.entity_identifier == mockUser.institutionId.toString()
+            })).toBeTruthy()
+
         })
 
     })
