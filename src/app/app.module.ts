@@ -78,6 +78,7 @@ import { CustomReuseStrategy } from './reuse-strategy';
 import { LegacyRouteResolver } from './legacy.service';
 import { AnalyticsService } from './analytics.service';
 
+import { LinkifyPipe } from './shared/linkify.pipe';
 
 const APP_PROVIDERS = [
   ...APP_RESOLVER_PROVIDERS,
@@ -153,7 +154,8 @@ type StoreType = {
     SkyBannerComponent,
     TagComponent,
     ThumbnailComponent,
-    TypeIdPipe
+    TypeIdPipe,
+    LinkifyPipe
   ],
   imports: [ // import Angular's modules
     BrowserModule,

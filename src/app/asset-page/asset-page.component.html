@@ -64,7 +64,7 @@
                 <!--Loop through metaData Array-->
                 <div class="meta-block" *ngFor="let metadataObj of assets[0].metaDataArray">
                     <div [attr.id]="cleanId(metadataObj.fieldName)" class="label">{{ metadataObj.fieldName }}
-                    <div class="value" [innerHTML]="metadataObj.fieldValue"></div>
+                    <div class="value" [innerHTML]="metadataObj.fieldValue | linkify"></div>
                     </div>
                 </div>
 
