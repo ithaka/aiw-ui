@@ -227,6 +227,14 @@ export class AssetPage implements OnInit, OnDestroy {
         return label.toLowerCase().replace(/\s/g,'');
     }
 
+    /**
+     * Some html tags are ruining things:
+     * - <wbr> word break opportunities break our link detection
+     */
+    private cleanFieldValue(value: string): string {
+        return value.replace(/\<wbr\>/g, '').replace(/\<wbr\/\>/g, '')
+    }
+
     private generateImgURL(): void{
         this.generatedImgURL = this._assets.getShareLink(this.assets[0].id);
     }
