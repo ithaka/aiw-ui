@@ -125,7 +125,7 @@ span.active {
     background: #f8faf8 !important;
 
     @media(max-width: $phone) {
-      min-height: 66vh;
+      min-height: 50vh;
     }
 
     .fullscreen & {
