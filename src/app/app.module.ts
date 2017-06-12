@@ -65,7 +65,8 @@ import {
   AccessDeniedModal, 
   PwdResetModal,
   ShareIgLinkModal, 
-  ConfirmModal 
+  ConfirmModal,
+  SessionExpireModal
 } from './modals';
 import { SkyBannerComponent } from './sky-banner/sky-banner.component'
 
@@ -127,6 +128,7 @@ type StoreType = {
     CollectionPage,
     ConfirmModal,
     DeleteIgModal,
+    SessionExpireModal,
     DownloadLimitModal,
     Footer,
     Home,
