@@ -38,7 +38,8 @@ fdescribe('IgFormUtil', () => {
         // this group starts out with access for only the user (private)
         let mockImageGroup: ImageGroup = {
             access: [
-                { access_type: 300, entity_identifier: mockUser.baseProfileId.toString(), entity_type: 100 }
+                { access_type: 300, entity_identifier: mockUser.baseProfileId.toString(), entity_type: 100 }, // entity type 100 is a user
+                { access_type: 100, entity_identifier: "54321", entity_type: 100 } // this simulates another user with whom the image group has been shared
             ],
             name: "Some title",
             id: "6e6cfa78-8fcd-4b6c-8a79-b183f766c9fb",
@@ -102,7 +103,7 @@ fdescribe('IgFormUtil', () => {
             expect(group.public).toBeFalsy() // global DOES NOT set public here. It uses an API call after the group is created
         })
 
-        it("should remove the institution's access from an image group", () => {
+        it("should add the institution's access while preserving an existing image group's access", () => {
             let form: IgFormValue = {
                 title: "Institution Test Ig",
                 artstorPermissions: "institution",
@@ -112,8 +113,18 @@ fdescribe('IgFormUtil', () => {
             let group = util.prepareGroup(form, description, mockAssets, mockUser, mockImageGroup)
 
             expect(group.name).toBe(form.title)
+            
+            // negative test for the proceeding tests
+            expect(group.access.find((access) => {
+                return access.entity_identifier == "99999"
+            })).toBeFalsy()
+            // make sure that the prepared image group has the institution's identifier
             expect(group.access.find((access) => {
                 return access.entity_identifier == mockUser.institutionId.toString()
+            })).toBeTruthy()
+            // make sure that the auxiliary user still exists
+            expect(group.access.find((access) => {
+                return access.entity_identifier == "54321"
             })).toBeTruthy()
 
         })
