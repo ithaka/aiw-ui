@@ -41,7 +41,7 @@ $titleNavBg: #eee;
 }
 .title-nav-cntnr .title{
     display: inline-block;
-    width: 350px;
+    max-width: 400px;
     margin: auto;
     white-space: nowrap;
     overflow: hidden;
@@ -75,6 +75,14 @@ $titleNavBg: #eee;
 .title-nav-cntnr:hover .page-tooltip{
     opacity: 1;
 } 
+
+.title-wrap {
+    display: block;
+
+     & .title {
+         max-width: calc(100% - 50px);
+     }
+}
 
 .fullscreen-btns {
     position: fixed;
