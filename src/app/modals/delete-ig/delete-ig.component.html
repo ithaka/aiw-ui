@@ -4,9 +4,9 @@
     <div *ngIf="!groupDeleted" class="modal-content">
       <div class="modal-header">
         <h4 translate class="modal-title">IMAGE_GROUP_PAGE.DELETE_IG.TITLE</h4>
-        <button type="button" class="close" (click)="closeModal.emit()" aria-label="Close">
+        <!--<button type="button" class="close" (click)="closeModal.emit()" aria-label="Close">
           <span aria-hidden="true">&times;</span>
-        </button>
+        </button>-->
       </div>
       <div class="modal-body">
         <p>Are you sure you want to delete <b>"{{ igName }}"</b>? <br/>
@@ -21,9 +21,6 @@
     <div *ngIf="groupDeleted" class="modal-content">
       <div class="modal-header">
         <h4 translate class="modal-title">IMAGE_GROUP_PAGE.DELETE_IG.TITLE_DELETED</h4>
-        <button type="button" class="close" (click)="closeModal.emit()" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
       </div>
       <div class="modal-body">
         <p><b>"{{ igName }}"</b> was successfully deleted.</p>
