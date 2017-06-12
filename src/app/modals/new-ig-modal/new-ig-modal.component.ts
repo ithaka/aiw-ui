@@ -111,7 +111,7 @@ export class NewIgModal implements OnInit {
    *  contains almost all of the logic for creating/editing the image group
    */
   private igFormSubmit(formValue: IgFormValue): void {
-    console.log(formValue)
+
     this.submitted = true;
     // avoid making the service calls, but still trigger error display
     if (!this.newIgForm.valid) {

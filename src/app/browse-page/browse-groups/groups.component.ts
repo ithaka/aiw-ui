@@ -1,16 +1,15 @@
-import { AnalyticsService } from '../analytics.service';
-import { Component, OnInit } from '@angular/core';
-import { Router, ActivatedRoute, Params } from '@angular/router';
-import { Subscription }   from 'rxjs/Subscription';
+import { Component, OnInit } from '@angular/core'
+import { Router, ActivatedRoute, Params } from '@angular/router'
+import { Subscription }   from 'rxjs/Subscription'
 
-import { AssetService, AuthService, GroupService } from './../shared';
-import { Tag } from './tag/tag.class';
-// import { AuthService } from './../shared/auth.service';
+import { AssetService, AuthService, GroupService } from './../../shared'
+import { AnalyticsService } from './../../analytics.service'
+import { Tag } from './../tag'
 
 @Component({
   selector: 'ang-browse-groups',
-  templateUrl: 'groups.component.html',
-  styleUrls: [ './browse-page.component.scss' ]
+  templateUrl: 'groups.component.html'
+  // styleUrls: [ './browse-page.component.scss' ]
 })
 export class BrowseGroupsComponent implements OnInit {
   constructor(
