@@ -144,7 +144,7 @@ export class AssetService {
         this.currentLoadedParams = Object.assign(Object.assign({}, this.defaultUrlParams), this.urlParams);
 
         let totalPages = 1;
-        
+
         if (resultObj.count) {
           totalPages = Math.ceil( resultObj.count / this.urlParams.pageSize );
         }
@@ -391,7 +391,7 @@ export class AssetService {
         var thisObj = this;
         Object.keys(params).forEach(function(key) {
             var filter = {};
-            if((key == 'collTypes') || (key == 'classification') || (key == 'geography')){
+            if(key.indexOf('str') > -1){
                 if(!thisObj._filters.isApplied(key, params[key])){ // Add Filter
                     thisObj._filters.apply(key, params[key]);
                 }
@@ -811,6 +811,7 @@ export class AssetService {
                     if (data.results) {
                         data.thumbnails = data.results;
                     }
+                    data.count = data.total
                     // Set the allResults object
                     this.updateLocalResults(data);
             }, (error) => {

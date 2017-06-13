@@ -127,14 +127,14 @@ export class AssetFilters {
     //   params['endDate'] = this.availableFilters.dateObj.latest.date * (this.availableFilters.dateObj.latest.era == 'BCE' ? -1 : 1);
     // }
 
-    // for (let filter of this.appliedFilters) {
-    //   if(filter.filterGroup == 'currentPage'){
-    //     params[filter.filterGroup] =  parseInt(filter.filterValue);
-    //   }
-    //   else if((filter.filterGroup != 'startDate') && (filter.filterGroup != 'endDate') && (filter.filterValue && filter.filterValue.length > 0)){
-    //     params[filter.filterGroup] =  filter.filterValue;
-    //   }
-    // }
+    for (let filter of this.appliedFilters) {
+      if(filter.filterGroup == 'currentPage'){
+        params[filter.filterGroup] =  parseInt(filter.filterValue);
+      }
+      else if((filter.filterGroup != 'startDate') && (filter.filterGroup != 'endDate') && (filter.filterValue && filter.filterValue.length > 0)){
+        params[filter.filterGroup] =  filter.filterValue;
+      }
+    }
 
     this.angulartics.eventTrack.next({ action: "filteredSearch", properties: { category: "search", label: params } })
 
@@ -177,7 +177,6 @@ export class AssetFilters {
   }
 
   toggleFilter(value, group){
-
     if(this._filters.isApplied(group, value)){ // Remove Filter
       this._filters.remove(group, value);
     } else { // Add Filter

@@ -55,23 +55,34 @@ export class AssetSearchService {
     //   latestDate = dateFacet.latest.date;
     //   latestDate = (dateFacet.latest.era == 'BCE') ? (parseInt(latestDate) * -1).toString() : latestDate;
     // }
-
+    let filterArray = []
+    
     for (var i = 0; i < filters.length; i++) { // Applied filters
+      
+      
       if (filters[i].filterGroup === 'collTypes') { // Collection Types
-        colTypeIds = filters[i].filterValue;
-      }
-      if (filters[i].filterGroup === 'classification') { // Classification
-        if (classificationIds != '') {
-          classificationIds += ',';
+        // do nothing
+        // colTypeIds = filters[i].filterValue;
+      } else {
+        for (let j = 0; j < filters[i].filterValue.length; j++) {
+          filterArray.push(filters[i].filterValue[j])
         }
-        classificationIds += filters[i].filterValue;
+        // if (filters[i].filterValue && filters[i].filterValue.length > 0) {
+        //   filterArray.push(filters[i].filterValue)
+        // }
       }
-      if (filters[i].filterGroup === 'geography') { // Geography
-        if (geographyIds != '') {
-          geographyIds += ',';
-        }
-        geographyIds += filters[i].filterValue;
-      }
+      // if (filters[i].filterGroup === 'classification') { // Classification
+      //   if (classificationIds != '') {
+      //     classificationIds += ',';
+      //   }
+      //   classificationIds += filters[i].filterValue;
+      // }
+      // if (filters[i].filterGroup === 'geography') { // Geography
+      //   if (geographyIds != '') {
+      //     geographyIds += ',';
+      //   }
+      //   geographyIds += filters[i].filterValue;
+      // }
     }
 
     let query = {
@@ -104,8 +115,10 @@ export class AssetSearchService {
           "mincount" : 1,
           "limit" : 10
         }
-      ]
+      ],
+      "filter_query" : filterArray
     };
+    
 
     return this.http.post('//search-service.apps.test.cirrostratus.org/browse/', query, options);
   }
