@@ -44,7 +44,8 @@ import { CategoryPage } from './category-page';
 import { ImageGroupPPPage } from './image-group-pp-page';
 import { ClusterPage } from './cluster-page';
 import { BrowsePage, LibraryComponent, BrowseCommonsComponent,
-  MyCollectionsComponent, BrowseInstitutionComponent, BrowseGroupsComponent, TagComponent } from './browse-page';
+  MyCollectionsComponent, BrowseInstitutionComponent, BrowseGroupsComponent, TagComponent,
+  TagsListComponent } from './browse-page';
 import { AssetPage, AgreeModalComponent } from './asset-page';
 import { AssetViewerComponent } from './asset-page/asset-viewer';
 import { AccountPage } from './account-page';
@@ -155,6 +156,7 @@ type StoreType = {
     ShareLinkModal,
     SkyBannerComponent,
     TagComponent,
+    TagsListComponent,
     ThumbnailComponent,
     TypeIdPipe,
     LinkifyPipe
