@@ -98,7 +98,7 @@ $navBarPad: 0.5rem;
     }
 
     @media (min-width: $phone) {
-        margin-top: 6px;
+        margin-top: 2px;
         transform:translate3d(0, 0, 0);
     }
 }
@@ -116,9 +116,9 @@ $navBarPad: 0.5rem;
         margin: 6px 12px 6px 0px;
     }
 
-    & > button, a {
+    & > .btn, a {
         font-size: 14px;
-        line-height: calc( #{ $navBarHeight } - #{ 4 * $navBarPad });
+        line-height: 29px; //calc( #{ $navBarHeight } - #{ 4 * $navBarPad });
     }
 
     // handles hovering on non-mobile
@@ -172,8 +172,9 @@ $navBarPad: 0.5rem;
 
 
 .navbar-toggleable-sm .navbar-nav .dropdown-menu {
-    @media (max-width: 767px) {
-        position: absolute;
+    @media (max-width: $phone) {
+        position: relative;
         float: none;
+        width: 100%;
     }
 }

@@ -2,10 +2,12 @@
     <div class="row">
         <!--View prev/next asset-->
         <div class="title-nav-cntnr col-md-12" [class.hidden]="isFullscreen">
-            <span *ngIf="prevRouteParams.length > 0" class="back-results" (click)="backToResults()">Back to Results</span>
-            <i title="Previous in results" (click)="showPrevAsset()" [class.disabled]="assetNumber <= 1" class="icon icon-direction icon-left"></i>
-            <div class="title" [innerHTML]="assets[0].title ? assets[0].title : ''"></div>
-            <i title="Next in results" (click)="showNextAsset()" [class.disabled]="assetNumber >= totalAssetCount" class="icon icon-direction icon-right"></i>
+            <span *ngIf="prevRouteParams.length > 0" class="back-results hidden-sm-down" (click)="backToResults()">Back to Results</span>
+            <div class="title-wrap">
+                <i title="Previous in results" (click)="showPrevAsset()" [class.disabled]="assetNumber <= 1" class="icon icon-direction icon-left"></i>
+                <div class="title" [innerHTML]="assets[0].title ? assets[0].title : ''"></div>
+                <i title="Next in results" (click)="showNextAsset()" [class.disabled]="assetNumber >= totalAssetCount" class="icon icon-direction icon-right"></i>
+            </div>
             <div class="page-tooltip">
                 <span id="assetPageNumber">{{ assetNumber }}</span> OF <span id="assetPageCount">{{ totalAssetCount }}</span>
             </div>
@@ -51,7 +53,7 @@
                     Download
                     <i id="downloadAssetLink" class="icon icon-download" ></i>
                 </button>
-                <button (click)="addAssetToIG()" class="btn btn-primary">
+                <button (click)="addAssetToIG()" class="btn btn-primary btn--square">
                     <i class="icon icon-add-white" aria-hidden="true"></i>
                 </button>
                 <div [class.hidden]="!showCopyUrl" class="form-group pt-1">
