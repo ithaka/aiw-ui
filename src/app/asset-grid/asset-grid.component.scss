@@ -71,8 +71,7 @@ input[type=number] {
 }
 
 .btn-link{
-    padding: 2px;
-
+    
     &.active {
         border-radius: 3px;
         background: #ccefcf;
@@ -81,7 +80,7 @@ input[type=number] {
     .icon{
         width: 16px;
         height: 16px;
-        vertical-align: bottom;
+        vertical-align: middle;
         margin: 0px 5px 0px 0px;
     }
 

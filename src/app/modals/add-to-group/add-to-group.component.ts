@@ -20,6 +20,10 @@ export class AddToGroupModal implements OnInit, OnDestroy {
   private groups: ImageGroup[] = [];
   private selectedIg: ImageGroup;
   private selectedGroupName: string;
+  private selectedGroupError: string;
+
+  @Input()
+  private copySelectionStr: string = 'ADD_TO_GROUP_MODAL.FROM_SELECTED'
 
   private serviceResponse: {
     success?: boolean,
@@ -38,10 +42,8 @@ export class AddToGroupModal implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    console.log(this.selectedAssets);
     if (this.selectedAssets.length < 1) { // if no assets were added when component was initialized, the component gets the current selection list
       // Subscribe to asset selection
-      console.log("we've got to get the assets");
       this.subscriptions.push(
         this._assets.selection.subscribe(
           assets => {
@@ -74,7 +76,9 @@ export class AddToGroupModal implements OnInit, OnDestroy {
    * @param form Values to update the group with
    */
   private submitGroupUpdate(form: NgForm) {
-    this.serviceResponse = {}; // clear any service status
+    // clear any service status
+    this.serviceResponse = {}
+    this.selectedGroupError = ''
 
     // Find full group object based on group name
     this.groups.forEach( (group, index) => {
@@ -82,6 +86,11 @@ export class AddToGroupModal implements OnInit, OnDestroy {
         this.selectedIg = group
       }
     })
+
+    if (!this.selectedIg || this.selectedGroupName.length < 1) {
+      this.selectedGroupError = "ADD_TO_GROUP_MODAL.NO_GROUP"
+      return
+    }
     
     // Create object for new modified group
     let putGroup: ImageGroup = Object.assign({}, this.selectedIg)
@@ -111,7 +120,7 @@ export class AddToGroupModal implements OnInit, OnDestroy {
         this._group.update(data)
           .take(1)
           .subscribe(
-            (res) => { this.serviceResponse.success = true; this._assets.igSavedSource.next(true); },
+            (res) => { this.serviceResponse.success = true; this._assets.clearSelectMode.next(true); },
             (err) => { console.error(err); this.serviceResponse.failure = true;
           })
 

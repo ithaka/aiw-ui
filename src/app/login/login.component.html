@@ -14,14 +14,14 @@
                         <div class="form-group">
                             <label for="loginPassword">Password</label>
                             <input id="inputLoginPassword" [(ngModel)]="user.password" name="password" type="password" class="form-control" placeholder="Password" tabindex="2" />
-                            <div id="errorMsg" *ngIf="errorMsg" class="login-errorMsg"> {{ errorMsg | translate }} </div>
+                            <div id="errorMsg" *ngIf="errorMsg" class="form-text text-danger"> {{ errorMsg | translate }} </div>
+                            <p *ngIf="forcePwdRst" class="form-text text-danger">Please <a id="forcePwdResetModal" (click)="showPwdModal = true" class="link">reset your password</a> in order to log in.</p>
                         </div>
                         <p [innerHtml]="'LOGIN.TERMS' | translate"></p>
                         <div class="form-group">
                             <button id="btnLoginRemote" class="btn btn-primary" [class.loading]="loginLoading" type="submit" name="action" tabindex="3"  data-sc="account: remote user log in">Log in</button>
                         </div>
                     </form>
-
                     <a id="linkLoginResetModal" tabindex="4" class="link" (click)="showPwdModal = true">Forgot password?</a>
                     <br/>
                     <div *ngIf="showRegister">
@@ -44,11 +44,16 @@
                 <div class="card-body">
                     <div class="form-group">
                         <label>Select your institution's name</label>
-                        <select id="selectLoginInstitution" class="form-control custom-select" tabindex="8" [(ngModel)]="loginInst">
-                            <option [ngValue]="" class="placeholder" selected="true">Select an institution...</option>
-                            <option *ngFor="let inst of loginInstitutions" [ngValue]="inst" [innerHtml]="inst.name"></option>
-                        </select>
+                        <ng2-completer [(ngModel)]="loginInstName" name="institutionSelector" 
+                            [datasource]="dataService" 
+                            [minSearchLength]="0" 
+                            [openOnFocus]="true" 
+                            [placeholder]="'Type to search...'"
+                            [textSearching]="'Searching Institutions...'"
+                            [clearUnselected]="true"></ng2-completer>
                         <div *ngIf="instErrorMsg" class="login-errorMsg"> {{ instErrorMsg }} </div>
+                    </div>
+                    <div class="form-group">
                         <p [innerHtml]="'LOGIN.TERMS' | translate"></p>
                         <p translate class="small">LOGIN.INSTITUTION_LIST_INFO</p>
                     </div>

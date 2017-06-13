@@ -4,7 +4,11 @@
     "INSTITUTION_HEADING": "Log in through your Institution",
     "INSTITUTION_LIST_INFO": "This is not a complete list of subscribing institutions. Institutions listed have provided single sign-on or proxy access. If your school is listed, select it from the dropdown and you will be redirected to your institutional login page to gain access to Artstor.",
     "SERVER_ERROR": "Server is not responding. Please try again later.",
-    "TERMS": "By using Artstor Digital Library, I agree to the <a id=\"linkTermsAndConditions\" href=\"http://www.artstor.org/terms\" class=\"link\" target=\"_blank\">Terms</a>"
+    "TERMS": "By using Artstor Digital Library, I agree to the <a id=\"linkTermsAndConditions\" href=\"http://www.artstor.org/terms\" class=\"link\" target=\"_blank\">Terms</a>",
+    "WRONG_PASSWORD" : "Invalid email address or password. Try again.",
+    "INVALID_EMAIL" : "Please enter a valid email address",
+    "PASSWORD_REQUIRED": "Password must be 7-20 characters",
+    "EXPIRED" : "That login is expired. Please login from campus to renew your account."
   },
   "REGISTER": {
     "REGISTER_HEADING": "Register for a new Artstor account",
@@ -61,25 +65,52 @@
     }
   },
   "ADD_TO_GROUP_MODAL": {
-    "TITLE": "Add Images to Group",
-    "SELECT_PROMPT": "Select an image group",
-    "ADD_SUCCESS": "Images successfully added to group",
-    "ADD_FAILURE": "Unable to add images to group. Sorry about that.",
+    "FROM_SELECTED": {
+      "TITLE": "Add Images to Group",
+      "SELECT_PROMPT": "Select an image group",
+      "ADD_SUCCESS": "Images successfully added to group",
+      "ADD_FAILURE": "Unable to add images to group. Sorry about that.",
+      "OPEN_CREATE_GROUP_MODAL": "Create a new group with images"
+    },
+    "FROM_ASSET": {
+      "TITLE": "Add Image to Group",
+      "SELECT_PROMPT": "Select an image group",
+      "ADD_SUCCESS": "Image successfully added to group",
+      "ADD_FAILURE": "Unable to add image to group. Sorry about that.",
+      "OPEN_CREATE_GROUP_MODAL": "Create a new group with image"
+    },
     "CONTROLS": {
       "SAVE": "Save Changes",
       "NAV_TO_GROUP": "Go to group",
       "CLOSE": "Close",
       "RETURN_TO_RESULTS": "Return",
       "HELP": "Help"
-    }
+    },
+    "NO_GROUP" : "Please select a group."
   },
   "NEW_GROUP_MODAL": {
+    "CREATE_TITLE": "Create New Image Group",
+    "EDIT_TITLE": "Edit Image Group",
+    "COPY_TITLE": "Copy Image Group",
+    "TITLE_FIELD_LABEL": "Title",
+    "TITLE_REQUIRED_MSG": "A title is required",
+    "DESCRIPTION_FIELD_LABEL": "Description",
+    "PERMISSION_FIELD_LABEL": "Who should see this image group?",
+    "PERMISSIONS": {
+      "GLOBAL": "Everyone",
+      "INSTITUTIONAL": "This Institution",
+      "PRIVATE": "Only Me"
+    },
+    "TAGS_FIELD_LABEL": "Tags",
+    "SHOW_ADD_TO_IMAGE_GROUP": "Add item to existing image group",
     "CREATE_SUCCESS": "You've successfully created an image group",
     "CREATE_FAILURE": "Oops, something went wrong and your group was not created. Please try again.",
     "EDIT_SUCCESS" : "You've successfully edited the image group",
     "CONTROLS": {
       "RETURN_TO_RESULTS": "Return",
-      "NAV_TO_GROUP": "Go to group"
+      "NAV_TO_GROUP": "Go to group",
+      "CLOSE": "Close",
+      "SAVE_EDIT": "Save changes"
     }
   },
   "RETURN_HOME" : "Return Home",

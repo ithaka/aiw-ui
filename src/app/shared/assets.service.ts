@@ -4,7 +4,7 @@
 import { Injectable, OnDestroy, OnInit, EventEmitter } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { Http, Response, Headers, RequestOptions } from '@angular/http';
-import { Observable, BehaviorSubject } from 'rxjs/Rx';
+import { Observable, BehaviorSubject, Subject } from 'rxjs/Rx';
 import { Locker } from 'angular2-locker';
 import 'rxjs/add/operator/toPromise';
 import { Subscription }   from 'rxjs/Subscription';
@@ -35,10 +35,8 @@ export class AssetService {
     private noIGSource: BehaviorSubject<boolean> = new BehaviorSubject(this.noIGValue);
     public noIG: Observable<any> = this.noIGSource.asObservable();
 
-    //set up igSaved observables
-    private igSavedValue: boolean = false;
-    public igSavedSource: BehaviorSubject<boolean> = new BehaviorSubject(this.igSavedValue);
-    public igSaved: Observable<any> = this.igSavedSource.asObservable();    
+    //Set up subject observable for clearing select mode
+    public clearSelectMode: Subject<boolean> = new Subject();  
 
     // Pagination value observable
     private paginationValue: any = {
@@ -116,6 +114,9 @@ export class AssetService {
     // Switch for using Sycamore's New Search interface
     private newSearch : boolean = false;
 
+    // Pagination flag for preserving the select mode while paging through the results
+    public paginated: boolean = false;
+
     // bandaid for the re-search functionality
     private searchErrorCount: number = 0
 
@@ -164,6 +165,13 @@ export class AssetService {
         // Set Recent Results (used by Compare Mode)
         if (resultObj.thumbnails && resultObj.thumbnails.length > 0) {
             this._storage.set('results', resultObj);
+        }
+
+        if(this.paginated){
+            this.paginated = false;
+        }
+        else{
+            this.clearSelectMode.next(true);
         }
     } 
 
@@ -239,6 +247,21 @@ export class AssetService {
         if(!quiet){
             if(term.length > 0){
                 this._router.navigate(['/search', term, currentParamsObj]);
+            }
+            else if(currentParamsObj['catId']){
+                let cat_id = currentParamsObj['catId'];
+                delete currentParamsObj['catId'];
+                this._router.navigate(['/category', cat_id, currentParamsObj]);
+            }
+            else if(currentParamsObj['colId']){
+                let col_id = currentParamsObj['colId'];
+                delete currentParamsObj['colId'];
+                this._router.navigate(['/collection', col_id, currentParamsObj]);
+            }
+            else if(currentParamsObj['igId']){
+                let ig_id = currentParamsObj['igId'];
+                delete currentParamsObj['igId'];
+                this._router.navigate(['/group', ig_id, currentParamsObj]);
             }
             else{
                 let newUrl = this._router.createUrlTree([

@@ -6,7 +6,7 @@ $titleNavBg: #eee;
     padding: 0px !important;
 
     @media(max-width: $phone) {
-        max-height: 66vh;
+        max-height: 50vh;
         overflow: hidden;
         margin-left: -15px;
         margin-right: -15px;
@@ -23,6 +23,7 @@ $titleNavBg: #eee;
     font-weight: bold;
 
     @media(max-width: $phone) {
+        margin-top:22px;
         background: transparent;
     }
 
@@ -41,7 +42,7 @@ $titleNavBg: #eee;
 }
 .title-nav-cntnr .title{
     display: inline-block;
-    width: 350px;
+    max-width: 400px;
     margin: auto;
     white-space: nowrap;
     overflow: hidden;
@@ -75,6 +76,14 @@ $titleNavBg: #eee;
 .title-nav-cntnr:hover .page-tooltip{
     opacity: 1;
 } 
+
+.title-wrap {
+    display: block;
+
+     & .title {
+         max-width: calc(100% - 50px);
+     }
+}
 
 .fullscreen-btns {
     position: fixed;

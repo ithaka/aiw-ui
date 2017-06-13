@@ -2,15 +2,17 @@
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 translate class="modal-title">ADD_TO_GROUP_MODAL.TITLE</h5>
+        <h5 translate class="modal-title">{{ copySelectionStr + '.TITLE' | translate }}</h5>
         <button (click)="closeModal.emit()" type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <form #igForm="ngForm" (ngSubmit)="submitGroupUpdate(igForm)">
         <div class="modal-body">
+          <div *ngIf="showCreateGroup" (click)="createGroup.emit()" class="link">{{ copySelectionStr + '.OPEN_CREATE_GROUP_MODAL' | translate }}</div>
+          <br>
           <div class="form-group" [class.has-success]="serviceResponse.success" [class.has-danger]="serviceResponse.failure">
-            <label translate for="selectImageGroup">ADD_TO_GROUP_MODAL.SELECT_PROMPT</label>
+            <label for="selectImageGroup">{{ copySelectionStr + '.SELECT_PROMPT' | translate }}</label>
             
             <ng2-completer [(ngModel)]="selectedGroupName" name="imageGroup" 
               [datasource]="dataService" 
@@ -20,21 +22,21 @@
               [textSearching]="'Searching Groups...'"
               [clearUnselected]="true"></ng2-completer>
             
-            <div *ngIf="serviceResponse.success" translate class="form-control-feedback">ADD_TO_GROUP_MODAL.ADD_SUCCESS</div>
-            <div *ngIf="serviceResponse.failure" translate class="form-control-feedback">ADD_TO_GROUP_MODAL.ADD_FAILURE</div>
+            <div *ngIf="serviceResponse.success" translate class="form-text text-success">{{  copySelectionStr + '.ADD_SUCCESS' | translate}}</div>
+            <div *ngIf="serviceResponse.failure" translate class="form-text text-danger">{{  copySelectionStr + '.ADD_FAILURE' | translate}}</div>
+            <div *ngIf="selectedGroupError" class="form-text text-warning">{{ selectedGroupError | translate }}</div>
           </div>
-          <div *ngIf="showCreateGroup" (click)="createGroup.emit()" class="link">Create a new image group with asset</div>
         </div>
         <div class="modal-footer">
           <div *ngIf="!serviceResponse.success" class="form-group">
-            <a translate class="btn btn-link with-pad" href="http://support.artstor.org/?article=create-and-manage-image-groups" target="_blank">ADD_TO_GROUP_MODAL.CONTROLS.HELP</a>
-            <button translate type="submit" class="btn btn-primary">ADD_TO_GROUP_MODAL.CONTROLS.SAVE</button>
-            <button translate (click)="closeModal.emit()" type="button" class="btn btn-secondary" data-dismiss="modal">ADD_TO_GROUP_MODAL.CONTROLS.CLOSE</button>
+            <a class="btn btn-link with-pad" href="http://support.artstor.org/?article=create-and-manage-image-groups" target="_blank">{{ 'ADD_TO_GROUP_MODAL.CONTROLS.HELP' | translate }}</a>
+            <button type="submit" class="btn btn-primary">{{ 'ADD_TO_GROUP_MODAL.CONTROLS.SAVE' | translate }}</button>
+            <button (click)="closeModal.emit()" type="button" class="btn btn-secondary" data-dismiss="modal">{{ 'ADD_TO_GROUP_MODAL.CONTROLS.CLOSE' | translate}}</button>
           </div>
           <div *ngIf="serviceResponse.success" class="form-group">
-            <a translate class="btn btn-link with-pad" href="http://support.artstor.org/?article=create-and-manage-image-groups" target="_blank">ADD_TO_GROUP_MODAL.CONTROLS.HELP</a>
-            <button translate (click)="closeModal.emit()" [routerLink]="['/group', selectedIg.id]" type="button" class="btn btn-primary">ADD_TO_GROUP_MODAL.CONTROLS.NAV_TO_GROUP</button>
-            <button translate (click)="closeModal.emit()" type="button" class="btn btn-secondary">ADD_TO_GROUP_MODAL.CONTROLS.RETURN_TO_RESULTS</button>
+            <a class="btn btn-link with-pad" href="http://support.artstor.org/?article=create-and-manage-image-groups" target="_blank">{{ 'ADD_TO_GROUP_MODAL.CONTROLS.HELP' | translate}}</a>
+            <button (click)="closeModal.emit()" [routerLink]="['/group', selectedIg.id]" type="button" class="btn btn-primary">{{ 'ADD_TO_GROUP_MODAL.CONTROLS.NAV_TO_GROUP' | translate}}</button>
+            <button (click)="closeModal.emit()" type="button" class="btn btn-secondary">{{ 'ADD_TO_GROUP_MODAL.CONTROLS.RETURN_TO_RESULTS' | translate}}</button>
           </div>
         </div>
       </form>

@@ -149,7 +149,7 @@ export class RegisterComponent implements OnInit {
       this._auth.saveUser(data.user);
       if (this._auth.getFromStorage("stashedRoute")) {
         this._router.navigateByUrl(this._auth.getFromStorage("stashedRoute"));
-        this._auth.deleteFromStorage("stagedRoute");
+        this._auth.deleteFromStorage("stashedRoute");
       } else {
         this._router.navigate(['/home']);
       }

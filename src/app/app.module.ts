@@ -2,7 +2,7 @@ import { NgModule, ApplicationRef } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Http, HttpModule } from '@angular/http';
-import { RouterModule, RouteReuseStrategy } from '@angular/router';
+import { NavigationEnd, Router, RouteReuseStrategy, RouterModule } from '@angular/router';
 import { removeNgStyles, createNewHosts, createInputTransfer } from '@angularclass/hmr';
 
 /*
@@ -65,19 +65,21 @@ import {
   AccessDeniedModal, 
   PwdResetModal,
   ShareIgLinkModal, 
-  ConfirmModal 
+  ConfirmModal,
+  SessionExpireModal
 } from './modals';
 import { SkyBannerComponent } from './sky-banner/sky-banner.component'
 
 
 // Application wide providers
-import { AuthService, AssetService, AssetSearchService, GroupService, TypeIdPipe, ToolboxService, LoggingService, ImageGroupService } from './shared';
+import { AuthService, AssetService, GroupService, TypeIdPipe, ToolboxService, ImageGroupService } from './shared';
 import { AssetFiltersService } from './asset-filters/asset-filters.service';
 import { TagsService } from './browse-page/tags.service';
 import { CustomReuseStrategy } from './reuse-strategy';
 import { LegacyRouteResolver } from './legacy.service';
 import { AnalyticsService } from './analytics.service';
 
+import { LinkifyPipe } from './shared/linkify.pipe';
 
 const APP_PROVIDERS = [
   ...APP_RESOLVER_PROVIDERS,
@@ -91,7 +93,6 @@ const APP_PROVIDERS = [
   AssetFiltersService,
   TagsService,
   ToolboxService,
-  LoggingService,
   LegacyRouteResolver
   // { provide: RouteReuseStrategy, useClass: CustomReuseStrategy } // to be implemented later
 ];
@@ -128,6 +129,7 @@ type StoreType = {
     CollectionPage,
     ConfirmModal,
     DeleteIgModal,
+    SessionExpireModal,
     DownloadLimitModal,
     Footer,
     Home,
@@ -155,7 +157,8 @@ type StoreType = {
     SkyBannerComponent,
     TagComponent,
     ThumbnailComponent,
-    TypeIdPipe
+    TypeIdPipe,
+    LinkifyPipe
   ],
   imports: [ // import Angular's modules
     BrowserModule,
@@ -182,7 +185,15 @@ type StoreType = {
   ]
 })
 export class AppModule {
-  constructor(public appRef: ApplicationRef, public appState: AppState) {}
+  constructor(public appRef: ApplicationRef, public appState: AppState, private router: Router, private _satellite: AnalyticsService) {
+    // Track page changes with Adobe Analytics
+    router.events.subscribe((val: NavigationEnd) => {
+      // If this is a different page, report it!
+      if (val.urlAfterRedirects != val.url) {
+        _satellite.directCall('page_name')
+      }
+    })
+  }
 
   hmrOnInit(store: StoreType) {
     if (!store || !store.state) return;

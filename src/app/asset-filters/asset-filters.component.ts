@@ -1,13 +1,13 @@
-import { Component } from '@angular/core';
+import { Component } from '@angular/core'
 import { Router, ActivatedRoute } from '@angular/router'
-import { Subscription } from 'rxjs/Subscription';
+import { Subscription } from 'rxjs/Subscription'
+import { Angulartics2 } from 'angulartics2/dist'
 
-import { AppState } from '../app.service'; 
-import { AssetService } from '../shared/assets.service';
-import { AssetFiltersService } from '../asset-filters/asset-filters.service';
-import { AnalyticsService } from '../analytics.service';
+import { AssetService } from '../shared/assets.service'
+import { AssetFiltersService } from '../asset-filters/asset-filters.service'
+import { AnalyticsService } from '../analytics.service'
 
-declare var _satellite: any;
+declare var _satellite: any
 
 @Component({
   selector: 'ang-asset-filters', 
@@ -16,16 +16,16 @@ declare var _satellite: any;
 })
 export class AssetFilters {
   // Set our default values
-  public searchLoading: boolean;
-  public showFilters: boolean = true;
-  public showAdvancedModal: boolean = false;
-  private subscriptions: Subscription[] = [];
-  private filterDate: boolean = false;
+  public searchLoading: boolean
+  public showFilters: boolean = true
+  public showAdvancedModal: boolean = false
+  private subscriptions: Subscription[] = []
+  private filterDate: boolean = false
 
-  errors = {};
-  results = [];
-  appliedFilters = [];
-  availableFilters: any = {};
+  errors = {}
+  results = []
+  appliedFilters = []
+  availableFilters: any = {}
 
   // collTypeFacets = [];
   // classificationFacets = [];
@@ -63,16 +63,12 @@ export class AssetFilters {
 
   // TypeScript public modifiers
   constructor(
-        public appState: AppState, 
-        private _assets: AssetService,
-        private _filters: AssetFiltersService,
-        private route: ActivatedRoute, 
-        private router: Router,
-        private _analytics: AnalyticsService
-      ) {
-   
-   
-   
+    private _filters: AssetFiltersService,
+    private route: ActivatedRoute, 
+    private router: Router,
+    private _analytics: AnalyticsService,
+    private angulartics: Angulartics2
+  ) {
   }
 
 
@@ -139,6 +135,8 @@ export class AssetFilters {
     //     params[filter.filterGroup] =  filter.filterValue;
     //   }
     // }
+
+    this.angulartics.eventTrack.next({ action: "filteredSearch", properties: { category: "search", label: params } })
 
     this.router.navigate(['search', this.term, params]);
   }

@@ -32,7 +32,7 @@ export class NewIgModal implements OnInit {
   /** Gives artstor institution users the ability to curate image public image groups */
   private isArtstorUser: boolean = false;
   // We need to seed the medium editor with an empty div to fix line return issues in Firefox!
-  private igDescription: string = "<div>&nbsp;</div>";
+  private igDescription: string = "";
   /** The list of assets which are currently selected from the asset grid */
   @Input() private selectedAssets: any[] = [];
 
@@ -142,7 +142,7 @@ export class NewIgModal implements OnInit {
             this.isLoading = false;
             this.newGroup = data;
             this.serviceResponse.success = true;
-            this._assets.igSavedSource.next(true);
+            this._assets.clearSelectMode.next(true);
           },
           error => {
             console.error(error);
@@ -173,7 +173,7 @@ export class NewIgModal implements OnInit {
             this.isLoading = false;
             this.newGroup = data;
             this.serviceResponse.success = true;
-            this._assets.igSavedSource.next(true);
+            this._assets.clearSelectMode.next(true);
 
             // if an Artstor user, make sure the public property is set correctly
             if (this.isArtstorUser) {
@@ -264,7 +264,6 @@ export class NewIgModal implements OnInit {
       .take(1)
       .subscribe((res) => {
         // not really sure what to do here?
-        console.log(res)
       }, (err) => {
         console.error(err)
         // also not really sure what to do here...
