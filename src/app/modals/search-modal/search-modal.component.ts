@@ -237,13 +237,22 @@ export class SearchModal implements OnInit {
       'group': group,
       'value' : value
     };
+    let objIndex = this.arrayObjectIndexOf(this.filterSelections, filter);
     
-    if (this.filterSelections.indexOf(filter) < 0) {
+    if (objIndex < 0) {
       this.filterSelections.push(filter);
     } else {
-      this.filterSelections.splice(this.filterSelections.indexOf(filter), 1);
+      this.filterSelections.splice(objIndex, 1);
     }
     this.validateForm();
+  }
+
+  // Gives the index of an object in an array
+  private arrayObjectIndexOf(array, searchObj): number {
+    for(let i = 0; i < array.length; i++) {
+        if ( (array[i].group === searchObj.group) && (array[i].value === searchObj.value) ) return i;
+    }
+    return -1;
   }
 
   /**
