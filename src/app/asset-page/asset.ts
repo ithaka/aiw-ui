@@ -92,7 +92,9 @@ export class Asset {
               let asset = res['results'][0]
               if(asset.id) {
                   for (let i =0; i < this.metadataFields.length; i++) {
-                      this.metaDataArray.push( { fieldName: this.metadataFields[i], fieldValue: asset[this.metadataFields[i]][0] } )
+                      if (asset[this.metadataFields[i]][0]) {
+                        this.metaDataArray.push( { fieldName: this.metadataFields[i], fieldValue: asset[this.metadataFields[i]][0] } )
+                      }
                   }
                 //   this.filePropertiesArray = asset.fileProperties;
                   this.title = asset.arttitle[0] ? asset.arttitle[0] : 'Untitled';
