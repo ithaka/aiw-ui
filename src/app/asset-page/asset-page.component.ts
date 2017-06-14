@@ -48,6 +48,12 @@ export class AssetPage implements OnInit, OnDestroy {
     private prevRouteParams: any = [];
 
     private _storage;
+
+   
+    // additionalfields
+// :
+// "{"Work Number":["525311"],"Course Number":["ARTH 260"],"File Name":["38428.jpg"],"Order Number":["501434"]}"
+
     
 
     constructor(
@@ -224,7 +230,11 @@ export class AssetPage implements OnInit, OnDestroy {
      * Clean up the field label for use as an ID (used in testing)
      */
     private cleanId(label: string): string {
-        return label.toLowerCase().replace(/\s/g,'');
+        if (typeof(label) == 'string') {
+            return label.toLowerCase().replace(/\s/g,'')
+        } else {
+            return ''
+        }
     }
 
     /**
@@ -232,7 +242,11 @@ export class AssetPage implements OnInit, OnDestroy {
      * - <wbr> word break opportunities break our link detection
      */
     private cleanFieldValue(value: string): string {
-        return value.replace(/\<wbr\>/g, '').replace(/\<wbr\/\>/g, '')
+        if (typeof(value) == 'string') {
+            return value.replace(/\<wbr\>/g, '').replace(/\<wbr\/\>/g, '')
+        } else {
+            return ''
+        }
     }
 
     private generateImgURL(): void{

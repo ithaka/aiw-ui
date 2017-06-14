@@ -15,6 +15,7 @@ export class Asset {
   imgURL: string;
   downloadLink: string;
   tileSource: any;
+  record: any;
 
   private metadataLoaded = false;
   private imageSourceLoaded = false;
@@ -46,12 +47,34 @@ export class Asset {
       24: 'kaltura'
   };
 
+  metadataFields = [ 
+        "artclassification", 
+        "artcollectiontitle", 
+        "artcreator", 
+        "artculture", 
+        "artcurrentrepository", 
+        "artcurrentrepositoryidnumber", 
+        "artdate", 
+        "artidnumber", 
+        "artlocation", 
+        "artmaterial", 
+        "artmeasurements", 
+        "artrelation", 
+        "artrepository", 
+        "artsource", 
+        "artstyleperiod", 
+        "artsubject", 
+        "arttechnique", 
+        "arttitle", 
+        "artworktype"
+    ];
+
   constructor(asset_id: string, _assets ?: AssetService, _auth ?: AuthService) {
     this.id = asset_id;
     this._assets = _assets;
     this._auth = _auth;
     this.loadAssetMetaData();
-    this.loadMediaMetaData();
+    // this.loadMediaMetaData();
   }
 
   /**
@@ -66,23 +89,30 @@ export class Asset {
 
       this._assets.getById( this.id )
           .then((res) => {
-              if(res.objectId){
-                  this.metaDataArray = res.metaData;
-                  this.filePropertiesArray = res.fileProperties;
-                  this.title = res.title ? res.title : 'Untitled';
-                  this.imgURL = res.imageUrl;
+              let asset = res['results'][0]
+              if(asset.id) {
+                  for (let i =0; i < this.metadataFields.length; i++) {
+                      this.metaDataArray.push( { fieldName: this.metadataFields[i], fieldValue: asset[this.metadataFields[i]][0] } )
+                  }
+                //   this.filePropertiesArray = asset.fileProperties;
+                  this.title = asset.arttitle[0] ? asset.arttitle[0] : 'Untitled';
+
+                  if (asset['media']) {
+                    let media = JSON.parse(asset['media'])
+                    this.imgURL = media['thumbnailSizeOnePath']
+                  }
 
                   document.getElementsByTagName('title')[0].innerHTML = this.title;
                   document.querySelector('meta[name="DC.type"]').setAttribute('content', 'Artwork');
                   document.querySelector('meta[name="DC.title"]').setAttribute('content', this.title);
 
-                  this.setCreatorDate();
+                //   this.setCreatorDate();
 
                   this.metadataLoaded = true;
                   this.dataLoadedSource.next(this.metadataLoaded && this.imageSourceLoaded);
               }
           })
-          .catch(function(err) {
+          .catch((err) => {
               console.error('Unable to load asset metadata.');
           });
     

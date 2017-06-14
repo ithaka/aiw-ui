@@ -433,11 +433,23 @@ export class AssetService {
      * @param assetId: string Asset or object ID
      */
     public getById(assetId: string) {
+        let options = new RequestOptions({
+            withCredentials: true
+        });
+        let query = {
+            "content_types": [
+                "art"
+            ],
+            "query": 'id:' + assetId
+        };
 
-        return this.http
-            .get(this._auth.getUrl() + '/metadata/' + assetId, this.defaultOptions)
+        return this.http.post('//search-service.apps.test.cirrostratus.org/browse/', query, options)
             .toPromise()
-            .then(this.extractData);
+            .then(this.extractData)
+        // return this.http
+        //     .get(this._auth.getUrl() + '/metadata/' + assetId, this.defaultOptions)
+        //     .toPromise()
+        //     .then(this.extractData);
     }
 
     /**
