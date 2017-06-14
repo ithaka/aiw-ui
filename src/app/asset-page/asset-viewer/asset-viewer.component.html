@@ -1,15 +1,9 @@
 <div class="asset-viewer" [class.fullscreen]="isFullscreen" (contextmenu)="disableContextMenu($event)">
-    <div [hidden]="!isLoading" class="row icon-overlay">
-        <i class="icon-lg icon-overlay icon-loading-large"></i>
-    </div>
-    
     <!-- IIIF Image Viewer -->
     <div [class.hidden]="!isOpenSeaDragonAsset || mediaLoadingFailed">
         <!-- *ngIf="openSeaDragonReady"-->
-
         <div id="loader-wrapper" class="more-results overlay-wrap--center" *ngIf="!openSeaDragonReady">
             <i class="icon-asterisk icon-spin icon-large"></i>
-            <i class="icon-lg icon-overlay icon-loading-large"></i>
         </div>
         <div class="item osd-wrap" [attr.id]="'osd-' + asset.id + '-' + index" [attr.zoomValue]="lastZoomValue"></div>
     </div>

@@ -74,7 +74,6 @@ export class Asset {
     this._assets = _assets;
     this._auth = _auth;
     this.loadAssetMetaData();
-    // this.loadMediaMetaData();
   }
 
   /**
@@ -91,6 +90,8 @@ export class Asset {
           .then((res) => {
               let asset = res['results'][0]
               if(asset.id) {
+                this.loadMediaMetaData(asset.artstorid)
+
                   for (let i =0; i < this.metadataFields.length; i++) {
                       if (asset[this.metadataFields[i]][0]) {
                         this.metaDataArray.push( { fieldName: this.metadataFields[i], fieldValue: asset[this.metadataFields[i]][0] } )
@@ -102,6 +103,7 @@ export class Asset {
                   if (asset['media']) {
                     let media = JSON.parse(asset['media'])
                     this.imgURL = media['thumbnailSizeOnePath']
+                    this.typeId = media['adlObjectType']
                   }
 
                   document.getElementsByTagName('title')[0].innerHTML = this.title;
@@ -111,7 +113,7 @@ export class Asset {
                 //   this.setCreatorDate();
 
                   this.metadataLoaded = true;
-                  this.dataLoadedSource.next(this.metadataLoaded && this.imageSourceLoaded);
+                  this.dataLoadedSource.next(this.metadataLoaded);
               }
           })
           .catch((err) => {
@@ -153,8 +155,8 @@ export class Asset {
    * - Constructs the IIIF tile source URL
    * - Finds the asset Type id
   */
-  private loadMediaMetaData(): void {
-      this._assets.getImageSource( this.id )
+  private loadMediaMetaData(artstorId: string): void {
+      this._assets.getImageSource( artstorId )
         .subscribe((data) => {
             if (!data) {
                 throw new Error("No data returned from image source call!");

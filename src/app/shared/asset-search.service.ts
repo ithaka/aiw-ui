@@ -108,12 +108,12 @@ export class AssetSearchService {
         {
           "name" : "artcollectiontitle_str",
           "mincount" : 1,
-          "limit" : 10
+          "limit" : 20
         },
         {
           "name" : "artclassification_str",
           "mincount" : 1,
-          "limit" : 10
+          "limit" : 20
         }
       ],
       "filter_query" : filterArray

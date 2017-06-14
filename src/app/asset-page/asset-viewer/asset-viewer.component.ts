@@ -58,7 +58,6 @@ export class AssetViewerComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     ngOnInit() {
-        console.log(this.asset)
         if (this.asset.isDataLoaded) {
             // Wait for the asset to have its metadata
             this.subscriptions.push(
@@ -113,7 +112,8 @@ export class AssetViewerComponent implements OnInit, OnDestroy, AfterViewInit {
                 this.mediaLoadingFailed = true;
             case 'image':
                 // Image, try IIF
-                this.loadIIIF();
+                // this.loadIIIF();
+                this.mediaLoadingFailed = true;
                 break;
             case 'audio':
                 // Kaltura media
