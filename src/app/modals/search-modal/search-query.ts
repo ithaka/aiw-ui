@@ -20,10 +20,10 @@ export class SearchQueryUtil {
       }
       
       if (index !== 0) {
-        advQuery += "#" + query.operator.toLowerCase() + ","
+        advQuery += " " + query.operator.toUpperCase() + " "
       }
-
-      advQuery += query.term + '|' + query.field.value
+      
+      advQuery += query.field.value + ':' + "\"" + query.term + "\""
     })
     
     if (advQuery.length < 1) {
