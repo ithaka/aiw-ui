@@ -1,5 +1,5 @@
 import { BehaviorSubject, Observable } from 'rxjs/Rx'
-import { IdleWatcherUtil } from './idle-watcher';
+import { IdleWatcherUtil } from './../idle-watcher';
 
 fdescribe('IdleWatcherUtil', () => {
     let idleUtil: IdleWatcherUtil 

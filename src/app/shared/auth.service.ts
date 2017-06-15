@@ -8,11 +8,19 @@ import {
   ActivatedRouteSnapshot,
   RouterStateSnapshot
 } from '@angular/router';
-import { Observable, BehaviorSubject } from 'rxjs/Rx';
+import { Observable, BehaviorSubject, Subject } from 'rxjs/Rx';
 import { Angulartics2 } from 'angulartics2';
 
 // Project dependencies
 import { AnalyticsService } from '../analytics.service';
+
+// For session timeout management
+
+// import { LoginService } from '../login/login.service';
+
+import { IdleWatcherUtil } from './idle-watcher';
+import {Idle, DEFAULT_INTERRUPTSOURCES} from '@ng-idle/core';
+import {Keepalive} from '@ng-idle/keepalive';
 
 /**
  * Controls authorization through IP address and locally stored user object
@@ -33,14 +41,21 @@ export class AuthService implements CanActivate {
   private institutionObjValue: any = {};
   private institutionObjSource: BehaviorSubject<any> = new BehaviorSubject(this.institutionObjValue);
   private currentInstitutionObj: Observable<any> = this.institutionObjSource.asObservable();
-  
+
+  private idleState: string = 'Not started.';
+  private idleUtil: IdleWatcherUtil = new IdleWatcherUtil(); // Idle watcher, session timeout values are abstracted to a utility
+  public showUserInactiveModal: Subject<boolean> = new Subject(); //Set up subject observable for showing inactive user modal
+
   constructor(
     private _router:Router,
+    // private _login: LoginService,
     locker:Locker,
     private http: Http,
     private location: Location,
     private angulartics: Angulartics2,
-    private _analytics: AnalyticsService
+    private _analytics: AnalyticsService,
+    private idle: Idle,
+    private keepalive: Keepalive
   ) {
     this._storage = locker.useDriver(Locker.DRIVERS.LOCAL);
     this._router = _router;
@@ -71,6 +86,80 @@ export class AuthService implements CanActivate {
       this.hostname = '//artstor-earth-library.apps.test.cirrostratus.org';
       this.baseUrl = '//artstor-earth-library.apps.test.cirrostratus.org/secure';
     }
+
+
+    // For session timeout on user inactivity
+    idle.setIdle(this.idleUtil.generateIdleTime()); // Set an idle time of 1 min, before starting to watch for timeout
+    idle.setTimeout(this.idleUtil.generateSessionLength()); // Log user out after 90 mins of inactivity
+    idle.setInterrupts(DEFAULT_INTERRUPTSOURCES);
+
+    idle.onIdleEnd.subscribe(() => {
+      this.idleState = 'No longer idle.';
+      console.log(this.idleState);
+    });
+    idle.onTimeout.subscribe(() => {
+      let user = this.getUser();
+      console.log(user);
+      if(user && user.isLoggedIn){
+        this.expireSession();
+        this.showUserInactiveModal.next(true);
+        this.idleState = 'Timed out!';
+        console.log(this.idleState);
+      }
+      else{
+        this.resetIdleWatcher()
+      }
+    });
+    idle.onIdleStart.subscribe(() => {
+      this.idleState = 'You\'ve gone idle!';
+      console.log(this.idleState);
+
+      let currentDateTime = new Date().toUTCString();
+      this._storage.set('userGoneIdleAt', currentDateTime);
+    });
+    idle.onTimeoutWarning.subscribe((countdown) => {
+      this.idleState = 'You will time out in ' + countdown + ' seconds!'
+      console.log(this.idleState);
+    });
+
+    this.resetIdleWatcher();
+  }
+
+
+
+  // Reset the idle watcher
+  public resetIdleWatcher(): void {
+    this.idle.watch();
+    this.idleState = 'Idle watcher started';
+    console.log(this.idleState);
+  }
+
+  private expireSession(): void {
+    this.logoutUser()
+      .then(() => {
+        if (this.location.path().indexOf("home") >= 0) {
+          location.reload() // this will reload the app and give the user a feeling they actually logged out
+        } else {
+          this._router.navigate(['/home'])
+        }
+      })
+  }
+
+  /**
+   * Logs out and redirects the user to the login component
+   */
+  private logoutUser() {
+      let header = new Headers({ 'Content-Type': 'application/x-www-form-urlencoded' }); // ... Set content type to JSON
+      let options = new RequestOptions({ headers: header, withCredentials: true });
+
+      this.clearStorage();
+      return this.http
+          .post(this.getUrl() + '/logout', {}, options)
+          .toPromise()
+          .catch(function(err) {
+              // error handling
+              console.error(err)
+          });
   }
 
 
