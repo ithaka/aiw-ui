@@ -242,6 +242,13 @@ export class AssetService {
             }
         }
 
+        if(currentParamsObj['pageSize']){
+            currentParamsObj['pageSize'] = currentParamsObj['pageSize'].toString();
+        }
+        if(currentParamsObj['currentPage']){
+            currentParamsObj['currentPage'] = currentParamsObj['currentPage'].toString();
+        }
+
         if(!quiet){
             if(term.length > 0){
                 this._router.navigate(['/search', term, currentParamsObj]);
