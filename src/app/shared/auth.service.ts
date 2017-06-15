@@ -95,16 +95,16 @@ export class AuthService implements CanActivate {
 
     idle.onIdleEnd.subscribe(() => {
       this.idleState = 'No longer idle.';
-      console.log(this.idleState);
+      // console.log(this.idleState);
     });
     idle.onTimeout.subscribe(() => {
       let user = this.getUser();
-      console.log(user);
+      // console.log(user);
       if(user && user.isLoggedIn){
         this.expireSession();
         this.showUserInactiveModal.next(true);
         this.idleState = 'Timed out!';
-        console.log(this.idleState);
+        // console.log(this.idleState);
       }
       else{
         this.resetIdleWatcher()
@@ -112,14 +112,14 @@ export class AuthService implements CanActivate {
     });
     idle.onIdleStart.subscribe(() => {
       this.idleState = 'You\'ve gone idle!';
-      console.log(this.idleState);
+      // console.log(this.idleState);
 
       let currentDateTime = new Date().toUTCString();
       this._storage.set('userGoneIdleAt', currentDateTime);
     });
     idle.onTimeoutWarning.subscribe((countdown) => {
       this.idleState = 'You will time out in ' + countdown + ' seconds!'
-      console.log(this.idleState);
+      // console.log(this.idleState);
     });
 
     this.resetIdleWatcher();
@@ -131,7 +131,7 @@ export class AuthService implements CanActivate {
   public resetIdleWatcher(): void {
     this.idle.watch();
     this.idleState = 'Idle watcher started';
-    console.log(this.idleState);
+    // console.log(this.idleState);
   }
 
   private expireSession(): void {
