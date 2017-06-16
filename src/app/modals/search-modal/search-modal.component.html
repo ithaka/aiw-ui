@@ -46,26 +46,24 @@
                                 <button title="Add up to 10 field queries" class="btn btn-secondary" (click)="addAdvanceQuery()">Add Query</button>
                             </div>
 
-                            <div class="form-group pt-3">
+                            <!--<div class="form-group pt-3">
                                 <h3>Date</h3>
                                 <p class="small">Enter a year or range (numbers only) to limit your search.</p>
                                 <div class="form-card card dt-grp">
                                     <div class="date-filter-row">
                                         <input id="inputDateFilterStart" [(ngModel)]="advanceSearchDate['startDate']" (change)="validateForm()" type="number" (keypress)="dateKeyPress($event)" min="0" class="form-control" placeholder="Start Date">
-                                        <!--<div id="buttonDateFilterStartEra" class="toggle-btn" (click)="toggleEra('startEra')">{{ advanceSearchDate['startEra'] }}</div>-->
                                         <div id="buttonDateFilterStartBCE" (click)="advanceSearchDate['startEra'] = 'BCE'" [ngClass]="{'active': advanceSearchDate['startEra'] == 'BCE' }" class="side-toggle-btn">BCE</div>
                                         <div id="buttonDateFilterStartCE" (click)="advanceSearchDate['startEra'] = 'CE'" [ngClass]="{'active': advanceSearchDate['startEra'] == 'CE' }" class="side-toggle-btn">CE</div>
                                     </div>
                                     <div class="date-filter-row">
                                         <input id="inputDateFilterEnd" [(ngModel)]="advanceSearchDate['endDate']" (change)="validateForm()" type="number" (keypress)="dateKeyPress($event)" min="0" class="form-control" placeholder="End Date">
-                                        <!--<div id="buttonDateFilterEndEra" class="toggle-btn" (click)="toggleEra('endEra')">{{ advanceSearchDate['endEra'] }}</div>-->
                                         <div id="buttonDateFilterEndBCE" (click)="advanceSearchDate['endEra'] = 'BCE'" [ngClass]="{'active': advanceSearchDate['endEra'] == 'BCE' }" class="side-toggle-btn">BCE</div>
                                         <div id="buttonDateFilterEndCE" (click)="advanceSearchDate['endEra'] = 'CE'" [ngClass]="{'active': advanceSearchDate['endEra'] == 'CE' }" class="side-toggle-btn">CE</div>
                                     </div>
                                 </div>
-                            </div>
+                            </div>-->
                         </div>
-                        <div class="col-lg-6">
+                        <!--<div class="col-lg-6">
                             <h3>Search by geography, classification, and/or collections</h3>
                             <p class="small">You can narrow your search results by filtering on both the Geography and Classification areas.</p>
                             <div class="form-group" *ngIf="termsList.geoTree && (termsList.geoTree.length > 0)">
@@ -119,7 +117,8 @@
                                     </ul>
                                 </div>
                             </div>
-                        </div><!--end second column-->
+                        </div>-->
+                        <!--end second column-->
                     </div>
                 </div>
             </div>

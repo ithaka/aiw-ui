@@ -20,7 +20,7 @@ import { AppState } from './app.service';
     '../sass/app.scss'
   ],
   template: `
-    <ang-sky-banner *ngIf="showSkyBanner" [textValue]="'BETA_SKY_BANNER.MESSAGE' | translate" (closeBanner)="showSkyBanner = false"></ang-sky-banner>
+    <ang-sky-banner *ngIf="showSkyBanner" [textValue]="'SEARCH_SKY_BANNER.MESSAGE' | translate" (closeBanner)="showSkyBanner = false"></ang-sky-banner>
     <nav-bar></nav-bar>
 
     <main>
