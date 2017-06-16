@@ -2,6 +2,8 @@
 import { IgFormUtil, IgFormValue } from './new-ig'
 import { BehaviorSubject, Observable } from 'rxjs/Rx'
 
+import { ImageGroup } from '../../shared/datatypes'
+
 fdescribe('IgFormUtil', () => {
     // let newIgModal: NewIgModal
     // let mockFormBuilder: any
@@ -87,6 +89,89 @@ fdescribe('IgFormUtil', () => {
 
             expect(group.access.length).toBe(1)
             expect(group.public).toBeFalsy() // global DOES NOT set public here. It uses an API call after the group is created
+        })
+
+        it("should add the institution's access while preserving an existing image group's access", () => {
+            let form: IgFormValue = {
+                title: "Institution Test Ig",
+                artstorPermissions: "institution",
+                tags: ["tag1", "tag2"]
+            }
+
+            // this group starts out with access for only the user (private)
+            let mockImageGroup: ImageGroup = {
+                access: [
+                    { access_type: 300, entity_identifier: mockUser.baseProfileId.toString(), entity_type: 100 }, // entity type 100 is a user
+                    { access_type: 100, entity_identifier: "54321", entity_type: 100 } // this simulates another user with whom the image group has been shared
+                ],
+                name: "Some title",
+                id: "6e6cfa78-8fcd-4b6c-8a79-b183f766c9fb",
+                public: false,
+                tags: ["sword"],
+                description: ""
+            }
+
+            let group = util.prepareGroup(form, description, mockAssets, mockUser, mockImageGroup)
+
+            expect(group.name).toBe(form.title)
+
+            // negative test for the proceeding tests
+            expect(group.access.find((access) => {
+                return access.entity_identifier == "99999"
+            })).toBeFalsy()
+            // make sure that the prepared image group has the institution's identifier
+            expect(group.access.find((access) => {
+                return access.entity_identifier == mockUser.institutionId.toString()
+            })).toBeTruthy()
+            // make sure that the auxiliary user still exists
+            expect(group.access.find((access) => {
+                return access.entity_identifier == "54321"
+            })).toBeTruthy()
+
+        })
+
+        it("should remove an institution's access while preserving an existing image group's access", () => {
+            let form: IgFormValue = {
+                title: "Institution Test Ig",
+                artstorPermissions: "private",
+                tags: ["tag1", "tag2"]
+            }
+
+            // this group starts out with access for only the user (private)
+            let mockImageGroup: ImageGroup = {
+                access: [
+                    { access_type: 300, entity_identifier: mockUser.baseProfileId.toString(), entity_type: 100 }, // entity type 100 is a user
+                    { access_type: 100, entity_identifier: "54321", entity_type: 100 }, // this simulates another user with whom the image group has been shared
+                    { access_type: 100, entity_identifier: mockUser.institutionId.toString(), entity_type: 200 } // have to have the institution's id in here to make the test feasible
+                ],
+                name: "Some title",
+                id: "6e6cfa78-8fcd-4b6c-8a79-b183f766c9fb",
+                public: false,
+                tags: ["sword"],
+                description: ""
+            }
+
+            // make sure that the mock image group has the institution's identifier
+            expect(mockImageGroup.access.find((access) => {
+                return access.entity_identifier == mockUser.institutionId.toString()
+            })).toBeTruthy()
+
+            let group = util.prepareGroup(form, description, mockAssets, mockUser, mockImageGroup)
+
+            expect(group.name).toBe(form.title)
+
+            // negative test for the proceeding tests
+            expect(group.access.find((access) => {
+                return access.entity_identifier == "99999"
+            })).toBeFalsy()
+            // make sure that the prepared image group DOES NOT HAVE the institution's identifier
+            expect(group.access.find((access) => {
+                return access.entity_identifier == mockUser.institutionId.toString()
+            })).toBeFalsy()
+            // make sure that the auxiliary user still exists
+            expect(group.access.find((access) => {
+                return access.entity_identifier == "54321"
+            })).toBeTruthy()
         })
 
     })
