@@ -279,6 +279,8 @@ export class AuthService implements CanActivate {
    * @param user The user should be an object to store in sessionstorage
    */
   public saveUser(user: any) {
+    console.log("saveUser")
+    console.log(user)
     //should have session timeout, username, baseProfileId, typeId
     this._storage.set('user', user);
     // Set analytics object
