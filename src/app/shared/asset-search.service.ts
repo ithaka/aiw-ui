@@ -87,7 +87,7 @@ export class AssetSearchService {
 
     let query = {
       "limit": urlParams.pageSize,
-      "page": urlParams.currentPage,
+      "start": (urlParams.currentPage - 1) * urlParams.pageSize,
       "content_types": [
         "art"
       ],
