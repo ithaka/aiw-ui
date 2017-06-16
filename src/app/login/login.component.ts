@@ -99,7 +99,12 @@ export class Login {
       this._auth.saveUser(data.user);
       this.errorMsg = '';
       if (this._auth.getFromStorage("stashedRoute")) {
-        this.router.navigateByUrl(this._auth.getFromStorage("stashedRoute"));
+        // We do not want to navigate to the page we are already on
+        if (this._auth.getFromStorage("stashedRoute").indexOf('login')) {
+          this.router.navigate(['/home']);
+        } else {
+          this.router.navigateByUrl(this._auth.getFromStorage("stashedRoute"));
+        }
         this._auth.deleteFromStorage("stashedRoute");
       } else {
         this.router.navigate(['/home']);
