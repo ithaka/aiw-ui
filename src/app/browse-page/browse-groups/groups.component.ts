@@ -133,6 +133,7 @@ export class BrowseGroupsComponent implements OnInit {
     this._groups.getAll(browseLevel, this.pageObj[browseLevel].pageSize, this.pageObj[browseLevel].currentPage, this.appliedTags)
         .take(1).subscribe(
           (data)  => {
+            console.log(data)
             this.tagFilters = data.tags
             this.tagsObj[browseLevel] = data.tags
             this.foldersObj[browseLevel] = this.createGroupTags(data.groups)

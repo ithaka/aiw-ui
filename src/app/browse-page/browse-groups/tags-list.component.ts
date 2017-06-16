@@ -1,4 +1,6 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core'
+
+import { TagFiltersService } from './tag-filters.service'
 
 @Component({
   selector: 'ang-tags-list',
@@ -12,9 +14,12 @@ export class TagsListComponent implements OnInit {
   @Input() tagFilters: any[] = []
   @Input() appliedTags: any[] = []
 
-  constructor() { }
+  constructor(
+    private _tagFilters: TagFiltersService
+  ) {
+  }
 
   ngOnInit() {
-    console.log(this.tagFilters)
+    this._tagFilters.setFilters(this.tagFilters)
   }
 }

@@ -1,6 +1,6 @@
 <h3 style="margin-bottom:12px;">Tags<a id="groupTagsClear" tabindex="" class="link--accent small" [class.hidden]="appliedTags.length < 1" style="float:right;" (click)="clearFilters()">Clear All</a></h3>
-<div class="filter filter--tag" *ngFor="let tag of tagFilters" (click)="selectTag.emit(tag['key'])" [class.active]="appliedTags.indexOf(tag['key']) > -1">
-    {{ tag['key'] }} ({{ tag.doc_count }})
+<div class="filter filter--tag" *ngFor="let tag of _tagFilters.filters" (click)="tag.selected = !tag.selected" [class.active]="tag.selected">
+    {{ tag.key }} ({{ tag.doc_count }})
     <i class="icon icon-add"></i>
     <i class="icon icon-close"></i>
 </div>

@@ -45,7 +45,7 @@ import { ImageGroupPPPage } from './image-group-pp-page';
 import { ClusterPage } from './cluster-page';
 import { BrowsePage, LibraryComponent, BrowseCommonsComponent,
   MyCollectionsComponent, BrowseInstitutionComponent, BrowseGroupsComponent, TagComponent,
-  TagsListComponent } from './browse-page';
+  TagsListComponent, TagFiltersService } from './browse-page';
 import { AssetPage, AgreeModalComponent } from './asset-page';
 import { AssetViewerComponent } from './asset-page/asset-viewer';
 import { AccountPage } from './account-page';
@@ -91,6 +91,7 @@ const APP_PROVIDERS = [
   AuthService,
   ImageGroupService,
   AssetFiltersService,
+  TagFiltersService,
   TagsService,
   ToolboxService,
   LegacyRouteResolver
