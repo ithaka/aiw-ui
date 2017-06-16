@@ -40,11 +40,14 @@ export class SearchPage implements OnInit, OnDestroy {
       this.route.params.subscribe( (routeParams) => {
         this._filters.clearApplied();
         let params = Object.assign({}, routeParams);
+        
         // If a page number isn't set, reset to page 1!
         if (!params['currentPage']){
           params['currentPage'] = 1;
         } 
-        if (params["term"] ) {
+
+        // Make a search call if there is a search term or any selected filter
+        if (params["term"] || params["classification"] || params["geography"] || params["collTypes"] || params["startDate"] || params["endDate"]) {
           this._assets.queryAll(params);
         } else {
           console.log('No search term');

@@ -91,13 +91,18 @@ export class Login {
       data.user.hasOwnProperty("dept") && this.angulartics.setUserProperties.next({ dept: data.user.dept });
       data.user.hasOwnProperty("ssEnabled") && this.angulartics.setUserProperties.next({ ssEnabled: data.user.ssEnabled })
 
-      if (data.user.isRememberMe || data.user.remoteaccess) {
+      if (data.isRememberMe || data.remoteaccess) {
         data.user.isLoggedIn = true
       } 
       this._auth.saveUser(data.user);
       this.errorMsg = '';
       if (this._auth.getFromStorage("stashedRoute")) {
-        this.router.navigateByUrl(this._auth.getFromStorage("stashedRoute"));
+        // We do not want to navigate to the page we are already on
+        if (this._auth.getFromStorage("stashedRoute").indexOf('login')) {
+          this.router.navigate(['/home']);
+        } else {
+          this.router.navigateByUrl(this._auth.getFromStorage("stashedRoute"));
+        }
         this._auth.deleteFromStorage("stashedRoute");
       } else {
         this.router.navigate(['/home']);
