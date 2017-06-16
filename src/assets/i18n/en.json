@@ -180,5 +180,26 @@
   "FILTERS" : {
     "artcollectiontitle_str" : "Collection",
     "artclassification_str" : "Classification"
+  },
+  "FIELD" : {
+    "artclassification" : "Classification", 
+    "artcollectiontitle" : "Collection", 
+    "artcreator" : "Creator", 
+    "artculture" : "Culture", 
+    "artcurrentrepository" : "Repository", 
+    "artcurrentrepositoryidnumber" : "Repository Number", 
+    "artdate" : "Date", 
+    "artidnumber" : "ID Number", 
+    "artlocation" : "Location", 
+    "artmaterial" : "Material", 
+    "artmeasurements" : "Measurements", 
+    "artrelation" : "Relation", 
+    "artrepository" : "Repository", 
+    "artsource" : "Source", 
+    "artstyleperiod" : "Style Period", 
+    "artsubject" : "Subject", 
+    "arttechnique" : "Technique", 
+    "arttitle" : "Title",
+    "artworktype" : "Work Type"
   }
 }

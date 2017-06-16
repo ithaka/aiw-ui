@@ -48,6 +48,7 @@ export class Asset {
   };
 
   metadataFields = [ 
+        "arttitle", 
         "artclassification", 
         "artcollectiontitle", 
         "artcreator", 
@@ -65,7 +66,6 @@ export class Asset {
         "artstyleperiod", 
         "artsubject", 
         "arttechnique", 
-        "arttitle", 
         "artworktype"
     ];
 
