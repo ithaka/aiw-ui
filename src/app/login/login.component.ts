@@ -83,8 +83,6 @@ export class Login {
   } // OnInit
   
   loadForUser(data: any) {
-    console.log("Load for user")
-    console.log(data)
     if (data && data.user) {
       data.user.hasOwnProperty("username") && this.angulartics.setUsername.next(data.user.username);
       data.user.hasOwnProperty("institutionId") && this.angulartics.setUserProperties.next({ institutionId: data.user.institutionId });
@@ -155,8 +153,6 @@ export class Login {
     this._login.login(user)
       .then(
         (data)  => {
-          console.log("_login.login")
-          console.log(data)
           this.loginLoading = false;
           if (data.status === false) {
             if(data.message === 'loginFailed'){
@@ -173,7 +169,6 @@ export class Login {
          
         }
       ).catch((err) => {
-        console.log("_login.login error")
         this.loginLoading = false;
         let errObj = err.json ? err.json() : {};
         if(errObj.message === 'Invalid credentials'){
