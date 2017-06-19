@@ -1,3 +1,4 @@
+import { Title } from '@angular/platform-browser';
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { Subscription }   from 'rxjs/Subscription';
@@ -58,7 +59,8 @@ export class AssetPage implements OnInit, OnDestroy {
             private _router: Router, 
             private locker: Locker,
             private _analytics: AnalyticsService,
-            private angulartics: Angulartics2
+            private angulartics: Angulartics2,
+            private _title: Title 
         ) { 
             this._storage = locker.useDriver(Locker.DRIVERS.LOCAL);
     }
@@ -91,17 +93,13 @@ export class AssetPage implements OnInit, OnDestroy {
                     this._assets.decryptToken(routeParams['encryptedId'])
                         .take(1)
                         .subscribe((asset) => {
-                            this.assets[0] = new Asset(asset.objectId, this._assets, this._auth)
-                            this.angulartics.eventTrack.next({ action:"viewAsset", properties: { category: "asset", label: asset.objectId }});
-                            this.generateImgURL()
+                            this.renderPrimaryAsset(new Asset(asset.objectId, this._assets, this._auth))
                         }, (err) => {
                             console.error(err)
                             this._router.navigate(['/nocontent'])
                         })
                 } else {
-                    this.assets[0] = new Asset(routeParams["assetId"], this._assets, this._auth);
-                    this.angulartics.eventTrack.next({ action:"viewAsset", properties: { category: "asset", label: routeParams["assetId"] }});
-                    this.generateImgURL();
+                    this.renderPrimaryAsset(new Asset(routeParams["assetId"], this._assets, this._auth))
 
                     if(this.prevAssetResults.thumbnails.length > 0){
                         // this.totalAssetCount = this.prevAssetResults.count ? this.prevAssetResults.count : this.prevAssetResults.thumbnails.length;
@@ -155,6 +153,24 @@ export class AssetPage implements OnInit, OnDestroy {
 
     ngOnDestroy() {
         this.subscriptions.forEach((sub) => { sub.unsubscribe(); });
+    }
+
+    /** 
+     * Render Asset once its loaded
+     */
+    renderPrimaryAsset(asset: Asset) {
+        this.assets[0] = asset
+        asset.isDataLoaded.subscribe(
+            isLoaded => {
+                if (isLoaded) {
+                    this._title.setTitle( asset.title );
+                    document.querySelector('meta[name="DC.type"]').setAttribute('content', 'Artwork');
+                    document.querySelector('meta[name="DC.title"]').setAttribute('content', asset.title);
+                }
+            }
+        )
+        this.angulartics.eventTrack.next({ action:"viewAsset", properties: { category: "asset", label: asset.id }});
+        this.generateImgURL();
     }
 
     /**

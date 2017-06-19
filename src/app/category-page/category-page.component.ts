@@ -1,3 +1,4 @@
+import { Title } from '@angular/platform-browser';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Http, Response, Headers, RequestOptions } from '@angular/http';
 import { Router, ActivatedRoute, UrlSegment } from '@angular/router';
@@ -40,7 +41,8 @@ export class CategoryPage implements OnInit, OnDestroy {
     private _router: Router,
     private route: ActivatedRoute,
     private http: Http,
-    private _analytics: AnalyticsService
+    private _analytics: AnalyticsService,
+    private _title: Title
   ) {}
 
   ngOnInit() {
@@ -58,6 +60,9 @@ export class CategoryPage implements OnInit, OnDestroy {
           name = name.replace(/\d+$/,'');
         }
         this.catName = name;
+
+        // Set page title
+        this._title.setTitle("Artstor | " + this.catName)
 
         let params = Object.assign({}, routeParams);
         // If a page number isn't set, reset to page 1!

@@ -1,3 +1,4 @@
+import { Title } from '@angular/platform-browser';
 import { Component, OnInit } from '@angular/core';
 
 import { AssetService } from './../shared/assets.service';
@@ -18,12 +19,16 @@ export class BrowseCommonsComponent implements OnInit {
   constructor(
     private _assets: AssetService,
     private _tags: TagsService,
-    private _analytics: AnalyticsService
+    private _analytics: AnalyticsService,
+    private _title: Title
   ) { }
 
 
   /** Initializes array of Tags based on collections */
   ngOnInit() {
+    // Set page title
+    this._title.setTitle("Artstor | Browse Open Collections")
+
     this._tags.initTags({type: "commons"})
       .then((tags) => {
         this.tags = tags;

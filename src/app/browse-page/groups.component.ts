@@ -1,3 +1,4 @@
+import { Title } from '@angular/platform-browser';
 import { AnalyticsService } from '../analytics.service';
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
@@ -19,7 +20,8 @@ export class BrowseGroupsComponent implements OnInit {
     private _assets: AssetService,
     private _groups: GroupService,
     private _auth: AuthService,
-    private _analytics: AnalyticsService
+    private _analytics: AnalyticsService,
+    private _title: Title
   ) { }
 
   private subscriptions: Subscription[] = []
@@ -49,6 +51,8 @@ export class BrowseGroupsComponent implements OnInit {
   private errorObj: any = {}
   
   ngOnInit() {
+    // Set page title
+    this._title.setTitle("Artstor | Browse Groups")
 
     this.subscriptions.push(
       this.route.params
