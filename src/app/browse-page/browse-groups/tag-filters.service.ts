@@ -1,19 +1,44 @@
-import { Injectable } from '@angular/core'
-
-import { GroupService } from './../../shared'
+import { Injectable, EventEmitter } from '@angular/core'
+import { BehaviorSubject } from 'rxjs/BehaviorSubject'
 
 /** Anything that involves managing/combining many filters should be kept here */
 @Injectable()
 export class TagFiltersService {
 
   private _filters: TagFilter[] = []
+  private _updateFilters: EventEmitter<any>
+
+  public filterString: BehaviorSubject<string> = new BehaviorSubject("")
 
   constructor(
-    private _groups: GroupService
-  ) { }
+    // don't put other services in here
+    // data should be set from outside, and this service stores and curates it
+  ) {
+    this._updateFilters = new EventEmitter()
+    this._updateFilters.subscribe(() => {
+      console.log("triggering filter update")
+      this.filterString.next(this.createFilterString())
+    })
+  }
 
   get filters() {
     return this._filters
+  }
+
+  /** 
+   * Creates the tag filter string to put in the url
+   * @returns string containing tag filters
+   */
+  private createFilterString(): string {
+    let selectedArr = []
+    this._filters.forEach((filter) => {
+      if (filter.selected) {
+        selectedArr.push('"' + filter.key + '"')
+      }
+    })
+
+    // return the string array after the tags
+    return selectedArr.length > 0 ? encodeURIComponent("[" + selectedArr.toString() + "]") : ""
   }
 
   /**
@@ -24,7 +49,7 @@ export class TagFiltersService {
 
     // construct a new TagFilter for each of the items the service returns
     filters.forEach((filter) => {
-      this._filters.push(new TagFilter(filter))
+      this._filters.push(new TagFilter(filter, this._updateFilters))
     })
   }
 
@@ -52,15 +77,24 @@ class TagFilter {
   private _doc_count: number
   private _key: string
   private _selected: boolean = false
+  private _triggerUpdate: EventEmitter<TagFilter>
 
-  constructor(tag: iTagFilter, selected?: boolean) {
+  /**
+   * Regular old constructor
+   * @param tag The tag object that's returned from the server
+   * @param triggerUpdate A single event emitter that can be referenced from any tag to trigger an update of all selected filters
+   * @param selected Optional boolean to set the tag as selected. False by default.
+   */
+  constructor(tag: iTagFilter, triggerUpdate: EventEmitter<any>, selected?: boolean) {
     this._doc_count = tag.doc_count
     this._key = tag.key
+    this._triggerUpdate = triggerUpdate
     selected && (this.selected = selected)
   }
 
   set selected(value: boolean) {
     this._selected = value
+    this._triggerUpdate.emit()
   }
 
   get selected() {

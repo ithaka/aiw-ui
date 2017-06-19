@@ -20,6 +20,15 @@ export class TagsListComponent implements OnInit {
   }
 
   ngOnInit() {
+    console.log(this.tagFilters)
     this._tagFilters.setFilters(this.tagFilters)
+    this._tagFilters.filterString.subscribe((tagListString) => {
+      this.updateUrl(tagListString)
+    })
+  }
+
+  /** Updates the url to contain all of the selected filters */
+  private updateUrl(tagList: string): void {
+    console.log(tagList)
   }
 }
