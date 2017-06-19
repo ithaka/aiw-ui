@@ -72,10 +72,6 @@ export class Asset {
                   this.title = res.title ? res.title : 'Untitled';
                   this.imgURL = res.imageUrl;
 
-                  document.getElementsByTagName('title')[0].innerHTML = this.title;
-                  document.querySelector('meta[name="DC.type"]').setAttribute('content', 'Artwork');
-                  document.querySelector('meta[name="DC.title"]').setAttribute('content', this.title);
-
                   this.setCreatorDate();
 
                   this.metadataLoaded = true;
