@@ -21,6 +21,7 @@ export class LibraryComponent implements OnInit {
     private _analytics: AnalyticsService
   ) { }
 
+  private loading: boolean = false;
   private subscriptions: Subscription[] = [];
   private selectedBrowseId: string = '';
   private browseMenuArray: any[] = [
@@ -73,9 +74,11 @@ export class LibraryComponent implements OnInit {
 
   private getTags(browseId): void {
     if (!this.tagsObj[browseId] || this.tagsObj[browseId].length < 1) {
+      this.loading = true;
       this._tags.initTags({ type: "library", collectionId: browseId})
       .then((tags) => {
         this.tagsObj[browseId] = tags;
+        this.loading = false;
       })
       .catch((err) => {
         console.error(err);

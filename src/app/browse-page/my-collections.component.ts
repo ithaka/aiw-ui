@@ -36,6 +36,8 @@ export class MyCollectionsComponent implements OnInit {
   // Reference activeTag for description on side
   private activeTag:  Tag;
 
+  private loading: boolean = false;
+
   ngOnInit() {
 
     this.subscriptions.push(
@@ -70,6 +72,7 @@ export class MyCollectionsComponent implements OnInit {
   }
   
   getUserPCol(){
+    this.loading = true;
     this._assets.pccollection()
       .then((res) => {
           if(res.pcCollection && res.pcCollection.collectionid){
@@ -84,10 +87,12 @@ export class MyCollectionsComponent implements OnInit {
                 this.tags.push(privTag);
             }
           }
+          this.loading = false;
 
       })
       .catch(function(err) {
           console.log('Unable to load User Personal Collections.');
+          this.loading = false;
       });
   }
 
