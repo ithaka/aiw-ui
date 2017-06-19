@@ -1,4 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core'
+import { Router } from '@angular/router'
 
 import { TagFiltersService } from './tag-filters.service'
 
@@ -15,12 +16,12 @@ export class TagsListComponent implements OnInit {
   @Input() appliedTags: any[] = []
 
   constructor(
-    private _tagFilters: TagFiltersService
+    private _tagFilters: TagFiltersService,
+    private _router: Router
   ) {
   }
 
   ngOnInit() {
-    console.log(this.tagFilters)
     this._tagFilters.setFilters(this.tagFilters)
     this._tagFilters.filterString.subscribe((tagListString) => {
       this.updateUrl(tagListString)
@@ -30,5 +31,9 @@ export class TagsListComponent implements OnInit {
   /** Updates the url to contain all of the selected filters */
   private updateUrl(tagList: string): void {
     console.log(tagList)
+    let queryParams: any = {}
+    if (tagList) { queryParams.tags = tagList }
+
+    this._router.navigate(['/browse','groups'], { queryParams: queryParams })
   }
 }

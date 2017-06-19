@@ -15,8 +15,8 @@ export class TagFiltersService {
     // data should be set from outside, and this service stores and curates it
   ) {
     this._updateFilters = new EventEmitter()
+    // whenever a tag is updated, redistribute the tag filters string which is curated here
     this._updateFilters.subscribe(() => {
-      console.log("triggering filter update")
       this.filterString.next(this.createFilterString())
     })
   }
