@@ -1,10 +1,10 @@
 @import '../../sass/core/variables';
 
-.sortlist, .pagesizelist, .editMode, .number-results, .search-in-results{
+.sortlist, .pagesizelist, .editMode, .number-results, .search-in-results, .selected-assets{
     list-style: none;
     display: inline-block;
 }
-.number-results, .search-in-results{
+.number-results, .search-in-results, .selected-assets{
     font-family: Verdana;
     line-height: 1.25;
     vertical-align: middle;

@@ -30,8 +30,8 @@
         <div class="modal-footer">
           <div *ngIf="!serviceResponse.success" class="form-group">
             <a class="btn btn-link with-pad" href="http://support.artstor.org/?article=create-and-manage-image-groups" target="_blank">{{ 'ADD_TO_GROUP_MODAL.CONTROLS.HELP' | translate }}</a>
-            <button type="submit" class="btn btn-primary">{{ 'ADD_TO_GROUP_MODAL.CONTROLS.SAVE' | translate }}</button>
             <button (click)="closeModal.emit()" type="button" class="btn btn-secondary" data-dismiss="modal">{{ 'ADD_TO_GROUP_MODAL.CONTROLS.CLOSE' | translate}}</button>
+            <button type="submit" class="btn btn-primary">{{ 'ADD_TO_GROUP_MODAL.CONTROLS.SAVE' | translate }}</button>
           </div>
           <div *ngIf="serviceResponse.success" class="form-group">
             <a class="btn btn-link with-pad" href="http://support.artstor.org/?article=create-and-manage-image-groups" target="_blank">{{ 'ADD_TO_GROUP_MODAL.CONTROLS.HELP' | translate}}</a>

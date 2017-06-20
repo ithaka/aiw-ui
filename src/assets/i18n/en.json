@@ -49,6 +49,25 @@
       "WRONG_PASS_ERROR": "The password is not correct for this account"
     }
   },
+  "ASSET_PAGE": {
+    "HEADER_LABELS": {
+      "OBJ_DETAILS": "Object Details",
+      "FILE_PROPS" : "File Properties",
+      "SHR_LNK": "Share Link"
+    },
+    "BUTTONS": {
+      "DOWNLOAD": "Download",
+      "LINK": "Link",
+      "EXT": "Exit",
+      "COMPARE": "Compare"
+    },
+    "LINKS":{
+      "BACK": "Back to Results"
+    },
+    "MESSAGES": {
+      "NEEDASSETS": "To compare assets, you will need to access an asset through a set of results first. Then those results will show here."
+    }
+  },
   "IMAGE_GROUP_PAGE": {
     "DOWNLOAD_LIMIT_MODAL": {
       "TITLE": "Download Limit Reached",
