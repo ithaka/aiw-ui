@@ -16,7 +16,9 @@ export class TagFiltersService {
   ) {
     this._updateFilters = new EventEmitter()
     // whenever a tag is updated, redistribute the tag filters string which is curated here
-    this._updateFilters.subscribe(() => {
+    this._updateFilters.subscribe((filter) => {
+      console.log("tag event emitted", filter)
+      console.log("updating filters")
       this.filterKeys.next(this.createFilterKeys())
     })
   }
@@ -37,6 +39,8 @@ export class TagFiltersService {
       }
     })
 
+    console.log('creating filters')
+
     // return the string array after the tags
     return selectedArr
     // return selectedArr.length > 0 ? selectedArr.join('&') : ""
@@ -54,8 +58,16 @@ export class TagFiltersService {
   /**
    * The service responds with items that implement iTagFilter, so this builds them into TagFilter's
    */
-  public setFilters(filters: iTagFilter[]): void {
+  public setFilters(filters: iTagFilter[], appliedTags: string[]): void {
     this._filters = []
+
+    appliedTags.forEach((tag) => {
+      let placeholdFilter: iTagFilter = {
+        doc_count: 20,
+        key: tag
+      }
+      this._filters.push(new TagFilter(placeholdFilter, this._updateFilters, true))
+    })
 
     // construct a new TagFilter for each of the items the service returns
     filters.forEach((filter) => {
@@ -100,12 +112,12 @@ class TagFilter {
     this._doc_count = tag.doc_count
     this._key = tag.key
     this._triggerUpdate = triggerUpdate
-    selected && (this.selected = selected)
+    selected && (this._selected = selected) // here by setting _selected directly we bypass the emit in the setter
   }
 
   set selected(value: boolean) {
     this._selected = value
-    this._triggerUpdate.emit()
+    this._triggerUpdate.emit(this)
   }
 
   get selected() {

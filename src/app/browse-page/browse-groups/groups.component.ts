@@ -70,17 +70,16 @@ export class BrowseGroupsComponent implements OnInit {
     //   })
     // )
 
-    this._tagFilters.filterKeys.subscribe((filters) => {
-      this.updateUrl(filters)
-    })
+    // this._tagFilters.filterKeys.subscribe((filters) => {
+    //   this.updateUrl(filters)
+    // })
 
     this.subscriptions.push(
       this.route.queryParams.subscribe((query) => {
-        console.log(query)
-        console.log("test")
         if (query.tags) {
-          
-          console.log(this._tagFilters.processFilterString(query.tags))
+          console.log("detected url change")
+          let appliedTags = this._tagFilters.processFilterString(query.tags)
+          this.loadIGs(this.selectedBrowseLevel, appliedTags)
         }
         // MAKE ANOTHER CALL WHEN THIS HAPPENS, WITH THE REQUISITE FILTERS
       })
@@ -110,7 +109,7 @@ export class BrowseGroupsComponent implements OnInit {
       })
     }
 
-    this.loadIGs('public')
+    this.loadIGs(this.selectedBrowseLevel, [])
   
     this._analytics.setPageValues('groups', '')
   } // OnInit
@@ -130,7 +129,7 @@ export class BrowseGroupsComponent implements OnInit {
     this.appliedTags = []
     this.addRouteParam('view', level, true)
     // this.loadCategory(level)
-    this.loadIGs(this.selectedBrowseLevel)
+    this.loadIGs(this.selectedBrowseLevel, [])
   }
 
   private createGroupTags(folderArray) {
@@ -147,16 +146,16 @@ export class BrowseGroupsComponent implements OnInit {
   /**
    * Loads Image Groups data for the current user in the array
    */
-  private loadIGs(browseLevel: string): void{
+  private loadIGs(browseLevel: string, appliedTags: string[]): void{
     this.loading = true
     // if (!this.pageObj[browseLevel]) {
     //   this.pageObj[browseLevel] = Object.assign({}, this.pagination)
     // }
-    this._groups.getAll(browseLevel, 48, 1, this.appliedTags)
+    this._groups.getAll(browseLevel, this.pagination.pageSize, this.pagination.currentPage, appliedTags)
         .take(1).subscribe(
           (data)  => {
             console.log(data)
-            this._tagFilters.setFilters(data.tags)
+            this._tagFilters.setFilters(data.tags, appliedTags)
             // this.tagFilters = data.tags
             // this.tagsObj[browseLevel] = data.tags
             this.foldersObj[browseLevel] = this.createGroupTags(data.groups)
@@ -247,13 +246,5 @@ export class BrowseGroupsComponent implements OnInit {
     }
 
     // this._router.navigate([currentParamsObj], { relativeTo: this.route })
-  }
-
-  /** Updates the url to contain all of the selected filters */
-  private updateUrl(tagList: string[]): void {
-    let queryParams: any = {}
-    if (tagList && tagList.length > 0) { queryParams.tags = tagList }
-
-    this._router.navigate(['/browse','groups'], { queryParams: queryParams })
   }
 }
