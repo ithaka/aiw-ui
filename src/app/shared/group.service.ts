@@ -63,7 +63,7 @@ export class GroupService {
 
         // Get first page to find out how many Groups are available
         this.http.get(
-            this.groupUrl + "?size=" + size + '&level=' + level + '&from=' + ( (pageNo - 1) * size), this.options
+            this.groupUrl + "?size=" + size + '&level=' + level + '&from=0', this.options
         ).map(
             res => {
                 let body = res.json()
@@ -76,10 +76,12 @@ export class GroupService {
             totalPages = (data.total/size) + 1
 
             for(pageNo; pageNo <= totalPages; pageNo++) {
+                // Use locally scoped pageNo since Timeout fires after loop
+                let thisPageNo = pageNo
                 // Timeout for debouncing to prevent spamming the service
                 setTimeout(() => {
                     this.http.get(
-                        this.groupUrl + "?size=" + size + '&level=' + level + '&from=' + ( (pageNo - 1) * size), this.options
+                        this.groupUrl + "?size=" + size + '&level=' + level + '&from=' + ( (thisPageNo - 1) * size), this.options
                     ).map(
                         res => {
                             let body = res.json()
