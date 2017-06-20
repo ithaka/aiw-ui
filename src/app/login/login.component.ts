@@ -98,7 +98,7 @@ export class Login {
       this.errorMsg = '';
       if (this._auth.getFromStorage("stashedRoute")) {
         // We do not want to navigate to the page we are already on
-        if (this._auth.getFromStorage("stashedRoute").indexOf('login')) {
+        if (this._auth.getFromStorage("stashedRoute").indexOf('login') > -1) {
           this.router.navigate(['/home']);
         } else {
           this.router.navigateByUrl(this._auth.getFromStorage("stashedRoute"));
