@@ -66,7 +66,9 @@ export class TagFiltersService {
    * Sets the filters back to an empty array
    */
   public clearFilters(): void {
-    this._filters = []
+    this._filters.forEach((filter) => {
+      filter.selected = false
+    })
   }
 }
 
