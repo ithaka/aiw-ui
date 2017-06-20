@@ -53,21 +53,13 @@ export class TagFiltersService {
    * The service responds with items that implement iTagFilter, so this builds them into TagFilter's
    */
   public setFilters(filters: iTagFilter[], appliedTags: string[]): void {
-    this._filters = []
-
-    appliedTags.forEach((tag) => {
-      let placeholdFilter: iTagFilter = {
-        doc_count: 20,
-        key: tag
-      }
-      this._filters.push(new TagFilter(placeholdFilter, this._updateFilters, true))
-    })
+    let newFilters: TagFilter[] = []
 
     // construct a new TagFilter for each of the items the service returns
     filters.forEach((filter) => {
-      this._filters.push(new TagFilter(filter, this._updateFilters))
+      newFilters.push(new TagFilter(filter, this._updateFilters, appliedTags.indexOf(filter.key) > -1))
     })
-    console.log(this._filters)
+    this._filters = newFilters
   }
 
   /**
