@@ -17,8 +17,6 @@ export class TagFiltersService {
     this._updateFilters = new EventEmitter()
     // whenever a tag is updated, redistribute the tag filters string which is curated here
     this._updateFilters.subscribe((filter) => {
-      console.log("tag event emitted", filter)
-      console.log("updating filters")
       this.filterKeys.next(this.createFilterKeys())
     })
   }
@@ -39,12 +37,8 @@ export class TagFiltersService {
       }
     })
 
-    console.log('creating filters')
-
     // return the string array after the tags
     return selectedArr
-    // return selectedArr.length > 0 ? selectedArr.join('&') : ""
-    // return selectedArr.length > 0 ? selectedArr.join('&') : ""
   }
 
   public processFilterString(tags: string) : string[] {

@@ -55,25 +55,6 @@ export class BrowseGroupsComponent implements OnInit {
     // set the title
     this._title.setTitle("Artstor | Browse Groups")
 
-    // this.subscriptions.push(
-    //   this.route.params
-    //   .subscribe((params: Params) => { 
-    //     if(params && params['tags']){
-    //       // this.appliedTags = params['tags'].split('|');
-          
-    //       this.appliedTags = JSON.parse(params['tags'].replace(/%28/g, '(').replace(/%29/g, ')'));
-    //     }
-    //     if(params && params['view']){
-    //         this.selectedBrowseLevel = params['view'];
-    //     }
-    //     this.loadCategory(this.selectedBrowseLevel);
-    //   })
-    // )
-
-    // this._tagFilters.filterKeys.subscribe((filters) => {
-    //   this.updateUrl(filters)
-    // })
-
     this.subscriptions.push(
       this.route.queryParams.subscribe((query) => {
         if (query.tags) {
@@ -83,10 +64,10 @@ export class BrowseGroupsComponent implements OnInit {
         } else {
           this.loadIGs(this.selectedBrowseLevel, [])
         }
-        // MAKE ANOTHER CALL WHEN THIS HAPPENS, WITH THE REQUISITE FILTERS
       })
     )
     
+    /** Here, we push in all of the options for different browse levels the user has access to */
     if (this._auth.getUser() && this._auth.getUser().isLoggedIn) {
       this.browseMenuArray.push({
         label: 'Private',
@@ -110,8 +91,6 @@ export class BrowseGroupsComponent implements OnInit {
         level: 'shared'
       })
     }
-
-    // this.loadIGs(this.selectedBrowseLevel, [])
   
     this._analytics.setPageValues('groups', '')
   } // OnInit
@@ -130,7 +109,6 @@ export class BrowseGroupsComponent implements OnInit {
     this.selectedBrowseLevel = level
     this.appliedTags = []
     this.addRouteParam('view', level, true)
-    // this.loadCategory(level)
     this.loadIGs(this.selectedBrowseLevel, [])
   }
 
@@ -150,84 +128,19 @@ export class BrowseGroupsComponent implements OnInit {
    */
   private loadIGs(browseLevel: string, appliedTags: string[]): void{
     this.loading = true
-    // if (!this.pageObj[browseLevel]) {
-    //   this.pageObj[browseLevel] = Object.assign({}, this.pagination)
-    // }
     this._groups.getAll(browseLevel, this.pagination.pageSize, this.pagination.currentPage, appliedTags)
         .take(1).subscribe(
           (data)  => {
-            console.log(data)
             this._tagFilters.setFilters(data.tags, appliedTags)
-            // this.tagFilters = data.tags
-            // this.tagsObj[browseLevel] = data.tags
             this.foldersObj[browseLevel] = this.createGroupTags(data.groups)
-            // this.pageObj[browseLevel].totalPages = Math.floor(data.total / this.pagination.pageSize) + 1
-            // this.loadCategory(browseLevel)
             this.loading = false
           },
           (error) => {
-            // this.foldersObj[browseLevel] = []
             this.errorObj[browseLevel] = "Sorry, we were unable to load these Image Groups"
-            // this.pageObj[browseLevel].totalPages = 1
-            // this.loadCategory(browseLevel)
             this.loading = false
           }
         )
   }
-
-  // loadCategory(browseLevel: string){
-  //   if (this.foldersObj[browseLevel]) {
-  //     this.currentBrowseRes = this.foldersObj[browseLevel]
-  //     this.tags = this.foldersObj[browseLevel]
-  //     this.tagFilters = this.tagsObj[browseLevel]
-  //     this.loading = false;
-  //   } else {
-  //     this.loadIGs(browseLevel)
-  //   }
-  // }
-
-  // toggleFilterBy(tag: string) {
-  //   if (this.appliedTags.indexOf(tag) > -1) {
-  //     this.appliedTags.splice(this.appliedTags.indexOf(tag), 1)
-  //   } else {
-  //     this.appliedTags.push(tag)
-  //   }
-
-  //   // let tagsParam = '';
-  //   // for(let tag of this.appliedTags){
-  //   //   if(tagsParam){
-  //   //     tagsParam += '|';
-  //   //   }
-  //   //   tagsParam += tag;
-  //   // }
-  //   // this.addRouteParam('tags', tagsParam);
-
-  //   if(this.appliedTags.length > 0) {
-  //     this.addRouteParam('tags', JSON.stringify(this.appliedTags).replace(/\(/g, '%28').replace(/\)/g, '%29') );
-  //   }
-  //   else {
-  //     this.addRouteParam('tags', '');
-  //   }
-
-  //   // After applying or removing a tag/filter, show the first page results
-  //   this.pageObj[this.selectedBrowseLevel].currentPage = 1;
-    
-  //   this.loadIGs(this.selectedBrowseLevel)
-  // }
-
-  // /**
-  //  * Clear tag filters, and reload groups
-  //  */
-  // clearFilters() : void {
-  //   this.appliedTags = [];
-  //   this.addRouteParam('tags', '');
-  //   this.loadIGs(this.selectedBrowseLevel);
-  // }
-  
-  // goToPage(pageNo: number): void {
-  //   this.pageObj[this.selectedBrowseLevel].currentPage = pageNo
-  //   this.loadIGs(this.selectedBrowseLevel)
-  // }
 
     /**
    * Adds a parameter to the route and navigates to new route
@@ -247,6 +160,5 @@ export class BrowseGroupsComponent implements OnInit {
       delete currentParamsObj['tags']; 
     }
 
-    // this._router.navigate([currentParamsObj], { relativeTo: this.route })
   }
 }

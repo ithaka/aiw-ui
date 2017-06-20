@@ -10,11 +10,6 @@ import { TagFiltersService } from './tag-filters.service'
 })
 
 export class TagsListComponent implements OnInit {
-  // @Output() clearFilters: EventEmitter<any> = new EventEmitter()
-  // @Output() selectTag: EventEmitter<string> = new EventEmitter()
-
-  // @Input() tagFilters: any[] = []
-  // @Input() appliedTags: any[] = []
 
   private subscriptions: Subscription[] = []
 
@@ -28,9 +23,7 @@ export class TagsListComponent implements OnInit {
   ngOnInit() {
     this.subscriptions.push(
       this._tagFilters.filterKeys.subscribe((filters) => {
-        // if (filters && filters.length > 0) {
           this.updateUrl(filters)
-        // }
       })
     )
   }
@@ -41,7 +34,6 @@ export class TagsListComponent implements OnInit {
     if (tagList && tagList.length > 0) {
       queryParams.tags = tagList
     }
-    console.log("updating url")
 
     this._router.navigate(['/browse','groups'], { queryParams: queryParams })
   }
