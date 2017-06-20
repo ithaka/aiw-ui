@@ -58,7 +58,6 @@ export class BrowseGroupsComponent implements OnInit {
     this.subscriptions.push(
       this.route.queryParams.subscribe((query) => {
         if (query.tags) {
-          console.log("detected url change")
           let appliedTags = this._tagFilters.processFilterString(query.tags)
           this.loadIGs(this.selectedBrowseLevel, appliedTags)
         } else {
