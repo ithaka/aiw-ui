@@ -36,7 +36,7 @@ export class IgFormUtil {
       name: form.title,
       description: description,
       sequence_number: 0,
-      access: currentIg ? currentIg.access : [ { // if the image group already exists, use that access object
+      access: currentIg && currentIg.access ? currentIg.access : [ { // if the image group already exists, use that access object
         // This is the user's access object
         "entity_type": 100,
         "entity_identifier": user.baseProfileId.toString(),

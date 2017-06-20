@@ -1,3 +1,4 @@
+import { Title } from '@angular/platform-browser';
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { Subscription }   from 'rxjs/Subscription';
@@ -18,9 +19,11 @@ export class LibraryComponent implements OnInit {
     private route: ActivatedRoute,
     private _assets: AssetService,
     private _tags: TagsService,
-    private _analytics: AnalyticsService
+    private _analytics: AnalyticsService,
+    private _title: Title
   ) { }
 
+  private loading: boolean = false;
   private subscriptions: Subscription[] = [];
   private selectedBrowseId: string = '';
   private browseMenuArray: any[] = [
@@ -51,6 +54,9 @@ export class LibraryComponent implements OnInit {
   private descObj: any  = {};
 
   ngOnInit() {
+    // Set page title
+    this._title.setTitle("Artstor | Browse Collections")
+
     if (!this.route.snapshot.params['viewId']) {
       this.selectedBrowseId = "103";
       this.getTags(this.selectedBrowseId);
@@ -73,9 +79,11 @@ export class LibraryComponent implements OnInit {
 
   private getTags(browseId): void {
     if (!this.tagsObj[browseId] || this.tagsObj[browseId].length < 1) {
+      this.loading = true;
       this._tags.initTags({ type: "library", collectionId: browseId})
       .then((tags) => {
         this.tagsObj[browseId] = tags;
+        this.loading = false;
       })
       .catch((err) => {
         console.error(err);

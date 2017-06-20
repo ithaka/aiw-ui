@@ -4,7 +4,16 @@
 </nav>
 <div class="row">
     <div class="col-md-4 hidden-sm-down">
+<<<<<<< HEAD:src/app/browse-page/browse-groups/groups.component.html
         <ang-tags-list [tagFilters]="tagFilters" [appliedTags]="appliedTags" (selectTag)="toggleFilterBy($event)" (clearFilters)="clearFilters()"></ang-tags-list>
+=======
+        <h3>Tags <a title="How do I use tags?" href="http://support.artstor.org/?article-category=06-organizing" target="_blank" class="contextual-help">?</a><a id="groupTagsClear" tabindex="" class="link--accent small" [class.hidden]="appliedTags.length < 1" style="float:right;" (click)="clearFilters()">Clear All</a></h3>
+        <div class="filter filter--tag" *ngFor="let tag of tagFilters" (click)="toggleFilterBy(tag['key'])" [class.active]="appliedTags.indexOf(tag['key']) > -1">
+            {{ tag['key'] }} ({{ tag.doc_count }})
+            <i class="icon icon-add"></i>
+            <i class="icon icon-close"></i>
+        </div>
+>>>>>>> master:src/app/browse-page/groups.component.html
     </div>
     <div class="col-md-8">
         <h3 class="pb-1 px-2">Groups

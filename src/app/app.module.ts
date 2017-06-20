@@ -1,5 +1,5 @@
 import { NgModule, ApplicationRef } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
+import { BrowserModule, Title } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Http, HttpModule } from '@angular/http';
 import { NavigationEnd, Router, RouteReuseStrategy, RouterModule } from '@angular/router';
@@ -94,7 +94,8 @@ const APP_PROVIDERS = [
   TagFiltersService,
   TagsService,
   ToolboxService,
-  LegacyRouteResolver
+  LegacyRouteResolver,
+  Title
   // { provide: RouteReuseStrategy, useClass: CustomReuseStrategy } // to be implemented later
 ];
 

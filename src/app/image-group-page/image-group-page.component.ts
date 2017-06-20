@@ -1,3 +1,4 @@
+import { Title } from '@angular/platform-browser';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Subscription }   from 'rxjs/Subscription';
@@ -50,7 +51,8 @@ export class ImageGroupPage implements OnInit, OnDestroy {
     private _assets: AssetService,
     private _auth: AuthService,
     private route: ActivatedRoute,
-    private _analytics: AnalyticsService
+    private _analytics: AnalyticsService,
+    private _title: Title
   ) {
   }
 
@@ -100,6 +102,9 @@ export class ImageGroupPage implements OnInit, OnDestroy {
         if ('id' in results) {
           // Set ig properties from results
           this.ig = results;
+
+          // Set page title
+          this._title.setTitle("Artstor | " + this.ig.name)
 
           // if the user has write access, then allow them to update the image group
           this.ig.access.forEach((accessObj) => {
