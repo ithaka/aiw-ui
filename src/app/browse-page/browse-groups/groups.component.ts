@@ -1,11 +1,12 @@
+import { Title } from '@angular/platform-browser'
 import { Component, OnInit } from '@angular/core'
 import { Router, ActivatedRoute, Params } from '@angular/router'
 import { Subscription }   from 'rxjs/Subscription'
 
 import { AssetService, AuthService, GroupService } from './../../shared'
-import { AnalyticsService } from './../../analytics.service';
-import { Tag } from './../tag';
-import { TagFiltersService } from './tag-filters.service';
+import { AnalyticsService } from './../../analytics.service'
+import { Tag } from './../tag'
+import { TagFiltersService } from './tag-filters.service'
 
 @Component({
   selector: 'ang-browse-groups',
@@ -20,6 +21,7 @@ export class BrowseGroupsComponent implements OnInit {
     private _tagFilters: TagFiltersService,
     private _auth: AuthService,
     private _analytics: AnalyticsService,
+    private _title: Title,
     private route: ActivatedRoute
   ) { }
 
@@ -50,6 +52,8 @@ export class BrowseGroupsComponent implements OnInit {
   private errorObj: any = {}
   
   ngOnInit() {
+    // set the title
+    this._title.setTitle("Artstor | Browse Groups")
 
     // this.subscriptions.push(
     //   this.route.params
