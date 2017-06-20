@@ -80,6 +80,8 @@ export class BrowseGroupsComponent implements OnInit {
           console.log("detected url change")
           let appliedTags = this._tagFilters.processFilterString(query.tags)
           this.loadIGs(this.selectedBrowseLevel, appliedTags)
+        } else {
+          this.loadIGs(this.selectedBrowseLevel, [])
         }
         // MAKE ANOTHER CALL WHEN THIS HAPPENS, WITH THE REQUISITE FILTERS
       })
@@ -109,7 +111,7 @@ export class BrowseGroupsComponent implements OnInit {
       })
     }
 
-    this.loadIGs(this.selectedBrowseLevel, [])
+    // this.loadIGs(this.selectedBrowseLevel, [])
   
     this._analytics.setPageValues('groups', '')
   } // OnInit
