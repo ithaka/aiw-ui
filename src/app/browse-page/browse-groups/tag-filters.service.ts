@@ -8,7 +8,7 @@ export class TagFiltersService {
   private _filters: TagFilter[] = []
   private _updateFilters: EventEmitter<any>
 
-  public filterString: BehaviorSubject<string> = new BehaviorSubject("")
+  public filterKeys: BehaviorSubject<string[]> = new BehaviorSubject([])
 
   constructor(
     // don't put other services in here
@@ -17,7 +17,7 @@ export class TagFiltersService {
     this._updateFilters = new EventEmitter()
     // whenever a tag is updated, redistribute the tag filters string which is curated here
     this._updateFilters.subscribe(() => {
-      this.filterString.next(this.createFilterString())
+      this.filterKeys.next(this.createFilterKeys())
     })
   }
 
@@ -29,16 +29,26 @@ export class TagFiltersService {
    * Creates the tag filter string to put in the url
    * @returns string containing tag filters
    */
-  private createFilterString(): string {
+  private createFilterKeys(): string[] {
     let selectedArr = []
     this._filters.forEach((filter) => {
       if (filter.selected) {
-        selectedArr.push('"' + filter.key + '"')
+        selectedArr.push(encodeURIComponent(filter.key))
       }
     })
 
     // return the string array after the tags
-    return selectedArr.length > 0 ? encodeURIComponent("[" + selectedArr.toString() + "]") : ""
+    return selectedArr
+    // return selectedArr.length > 0 ? selectedArr.join('&') : ""
+    // return selectedArr.length > 0 ? selectedArr.join('&') : ""
+  }
+
+  public processFilterString(tags: string) : string[] {
+    let tagArr = tags.split(",")
+    tagArr.forEach((item, index) => {
+      tagArr[index] = decodeURIComponent(item)
+    })
+    return tagArr
   }
 
   /**
