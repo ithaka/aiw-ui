@@ -111,7 +111,11 @@ export class BrowseGroupsComponent implements OnInit {
     this.loadIGs(this.selectedBrowseLevel, [])
   }
 
-  private createGroupTags(folderArray) {
+  /**
+   * Turns the groups into a ui-usable Tag, which doesn't make logical sense but it's how it works
+   * @param folderArray An array of groups returned by the services
+   */
+  private createGroupTags(folderArray): Tag[] {
     let childArr: Tag[] = []
     let parentTag = null
 
@@ -131,7 +135,7 @@ export class BrowseGroupsComponent implements OnInit {
         .take(1).subscribe(
           (data)  => {
             this._tagFilters.setFilters(data.tags, appliedTags)
-            this.foldersObj[browseLevel] = this.createGroupTags(data.groups)
+            this.tags = this.createGroupTags(data.groups)
             this.loading = false
           },
           (error) => {
