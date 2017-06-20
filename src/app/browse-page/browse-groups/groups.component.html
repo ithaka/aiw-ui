@@ -2,7 +2,7 @@
     <a class="label">Browse By:</a>
     <a class="nav-link" *ngFor="let browseOpt of browseMenuArray" [ngClass]="{'active': browseOpt.level == selectedBrowseLevel}" (click)="selectBrowseOpt(browseOpt.level)">{{ browseOpt.label }}</a>
 </nav>
-<div *ngIf="tags.length > 0" class="row">
+<div class="row">
     <div class="col-md-4 hidden-sm-down">
         <ang-tags-list [tagFilters]="tagFilters" [appliedTags]="appliedTags" (selectTag)="toggleFilterBy($event)" (clearFilters)="clearFilters()"></ang-tags-list>
     </div>

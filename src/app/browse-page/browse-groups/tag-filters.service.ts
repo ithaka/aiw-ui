@@ -51,6 +51,7 @@ export class TagFiltersService {
     filters.forEach((filter) => {
       this._filters.push(new TagFilter(filter, this._updateFilters))
     })
+    console.log(this._filters)
   }
 
   /**
