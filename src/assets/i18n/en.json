@@ -51,7 +51,7 @@
   },
   "ASSET_PAGE": {
     "HEADER_LABELS": {
-      "OBJ_DETAILS": "Object Details",
+      "OBJ_DETAILS": "Item Details",
       "FILE_PROPS" : "File Properties",
       "SHR_LNK": "Share Link"
     },
