@@ -32,14 +32,18 @@ export class BrowseGroupsComponent implements OnInit {
   private tags: Tag[] = []
   private loading: boolean = true
 
-  private pagination: any = {
+  private pagination: {
+    totalPages: number,
+    pageSize: number,
+    currentPage: number
+  } = {
     totalPages: 1,
     pageSize: 48,
     currentPage: 1
   }
 
   private tagFilters = []
-  private appliedTags = []
+  private appliedTags: string[] = []
 
   private expandedCategories: any = {}
   private selectedBrowseLevel: string = 'public'
@@ -58,10 +62,10 @@ export class BrowseGroupsComponent implements OnInit {
     this.subscriptions.push(
       this.route.queryParams.subscribe((query) => {
         if (query.tags) {
-          let appliedTags = this._tagFilters.processFilterString(query.tags)
-          this.loadIGs(this.selectedBrowseLevel, appliedTags)
+          this.appliedTags = this._tagFilters.processFilterString(query.tags)
+          this.loadIGs(this.selectedBrowseLevel, this.appliedTags, 1)
         } else {
-          this.loadIGs(this.selectedBrowseLevel, [])
+          this.loadIGs(this.selectedBrowseLevel, [], 1)
         }
       })
     )
@@ -108,7 +112,7 @@ export class BrowseGroupsComponent implements OnInit {
     this.selectedBrowseLevel = level
     this.appliedTags = []
     this.addRouteParam('view', level, true)
-    this.loadIGs(this.selectedBrowseLevel, [])
+    this.loadIGs(this.selectedBrowseLevel, [], 1)
   }
 
   /**
@@ -129,11 +133,13 @@ export class BrowseGroupsComponent implements OnInit {
   /**
    * Loads Image Groups data for the current user in the array
    */
-  private loadIGs(browseLevel: string, appliedTags: string[]): void{
+  private loadIGs(browseLevel: string, appliedTags: string[], page: number): void{
     this.loading = true
-    this._groups.getAll(browseLevel, this.pagination.pageSize, this.pagination.currentPage, appliedTags)
+    this._groups.getAll(browseLevel, this.pagination.pageSize, page, appliedTags)
         .take(1).subscribe(
           (data)  => {
+            console.log(data)
+            this.pagination.totalPages = Math.ceil(data.total/this.pagination.pageSize)
             this._tagFilters.setFilters(data.tags, appliedTags)
             this.tags = this.createGroupTags(data.groups)
             this.loading = false
@@ -143,6 +149,11 @@ export class BrowseGroupsComponent implements OnInit {
             this.loading = false
           }
         )
+  }
+
+  private goToPage(newPageNum: number) {
+    this.pagination.currentPage = newPageNum
+    this.loadIGs(this.selectedBrowseLevel, this.appliedTags, newPageNum)
   }
 
     /**

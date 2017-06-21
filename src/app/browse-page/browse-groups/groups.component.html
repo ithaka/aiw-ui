@@ -8,7 +8,7 @@
     </div>
     <div class="col-md-8">
         <h3 class="pb-1 px-2">Groups
-            <pagination [pageObj]="pageObj[selectedBrowseLevel] ? pageObj[selectedBrowseLevel] : pagination" (goToPage)="goToPage($event)">
+            <pagination [pageObj]="pagination" (goToPage)="goToPage($event)">
             </pagination>
         </h3>
         <div class="group-list has-icon-overlay px-2">
