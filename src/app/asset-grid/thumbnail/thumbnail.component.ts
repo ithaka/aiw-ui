@@ -1,3 +1,4 @@
+import { Router } from '@angular/router';
 import { Component, OnInit, Input } from '@angular/core';
 
 import { Thumbnail } from './../../shared'
@@ -35,10 +36,19 @@ export class ThumbnailComponent implements OnInit {
   }
 
   constructor(
-    private _assets: AssetService
+    private _assets: AssetService,
+    private router: Router
   ) {
    }
 
   ngOnInit() { 
+  }
+
+  openLink(event: Event, urlParams: any[]) {
+    // Prevent the parent anchor tag from firing
+    event.preventDefault()
+    event.stopPropagation()
+
+    this.router.navigate(urlParams)
   }
 }
