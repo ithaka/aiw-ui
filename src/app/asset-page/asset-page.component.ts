@@ -340,8 +340,8 @@ export class AssetPage implements OnInit, OnDestroy {
 
     }
 
-    private genFilename(title: string) : string {
+    private genFilename(title: string, fileExt: string) : string {
         // Returning a filename with a "." is read as having a file extension
-        return title ? title.replace(/\./g,'-') : ''
+        return (title && fileExt) ? title.replace(/\./g,'-') + '.' + fileExt : ''
     }
 }
