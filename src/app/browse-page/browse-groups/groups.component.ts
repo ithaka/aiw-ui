@@ -45,7 +45,6 @@ export class BrowseGroupsComponent implements OnInit {
   private tagFilters = []
   private appliedTags: string[] = []
 
-  private expandedCategories: any = {}
   private selectedBrowseLevel: string = 'public'
   private browseMenuArray: { label: string, level: string }[] = []
 
@@ -59,6 +58,7 @@ export class BrowseGroupsComponent implements OnInit {
     // set the title
     this._title.setTitle("Artstor | Browse Groups")
 
+    /** Every time the url updates, we process the new tags and reload image groups if the tags query param changes */
     this.subscriptions.push(
       this.route.queryParams.subscribe((query) => {
         if (query.tags) {
@@ -108,7 +108,6 @@ export class BrowseGroupsComponent implements OnInit {
    */
   selectBrowseOpt ( level: string ){
     this.loading = true;
-    this.expandedCategories = {}
     this.selectedBrowseLevel = level
     this.appliedTags = []
     this.addRouteParam('view', level, true)
@@ -132,6 +131,9 @@ export class BrowseGroupsComponent implements OnInit {
   
   /**
    * Loads Image Groups data for the current user in the array
+   * @param browseLevel The currently selected browse level (a string corresponding to one of the available filters from _groups)
+   * @param appliedTags The array of tags which the user has selected to filter by
+   * @param page The desired page number to navigate to
    */
   private loadIGs(browseLevel: string, appliedTags: string[], page: number): void{
     this.loading = true
@@ -139,9 +141,9 @@ export class BrowseGroupsComponent implements OnInit {
         .take(1).subscribe(
           (data)  => {
             console.log(data)
-            this.pagination.totalPages = Math.ceil(data.total/this.pagination.pageSize)
-            this._tagFilters.setFilters(data.tags, appliedTags)
-            this.tags = this.createGroupTags(data.groups)
+            this.pagination.totalPages = Math.ceil(data.total/this.pagination.pageSize) // update pagination, which is injected into pagination component
+            this._tagFilters.setFilters(data.tags, appliedTags) // give the tag service the new data
+            this.tags = this.createGroupTags(data.groups) // save the image groups for display
             this.loading = false
           },
           (error) => {
@@ -151,6 +153,10 @@ export class BrowseGroupsComponent implements OnInit {
         )
   }
 
+  /**
+   * Gets the image groups for a new page - applies all currently applied filters, just updates the page number
+   * @param newPageNum The page number you wish to navigate to
+   */
   private goToPage(newPageNum: number) {
     this.pagination.currentPage = newPageNum
     this.loadIGs(this.selectedBrowseLevel, this.appliedTags, newPageNum)
