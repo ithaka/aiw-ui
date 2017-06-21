@@ -10,8 +10,8 @@ import { TagFiltersService } from './tag-filters.service'
 
 @Component({
   selector: 'ang-browse-groups',
-  templateUrl: 'groups.component.html'
-  // styleUrls: [ './browse-page.component.scss' ]
+  templateUrl: 'groups.component.html',
+  styleUrls: [ './../browse-page.component.scss' ]
 })
 export class BrowseGroupsComponent implements OnInit {
   constructor(
