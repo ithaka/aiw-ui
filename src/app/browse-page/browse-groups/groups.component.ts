@@ -63,12 +63,9 @@ export class BrowseGroupsComponent implements OnInit {
       this.route.queryParams.subscribe((query) => {
         console.log(query)
         if (query.tags) {
-          console.log(query.tags)
           this.appliedTags = this._tagFilters.processFilterString(query.tags)
-          console.log(this.appliedTags)
           this.loadIGs(this.selectedBrowseLevel, this.appliedTags, 1)
         } else {
-          console.log("no tag query parameters - i'mma go ahead and run this puppy again")
           this.loadIGs(this.selectedBrowseLevel, [], 1)
         }
       })
@@ -111,7 +108,6 @@ export class BrowseGroupsComponent implements OnInit {
    * @param level Level of desired menu from colMenuArray enum
    */
   selectBrowseOpt ( level: string ){
-    console.log("navigating browser level")
     this.loading = true;
     this.selectedBrowseLevel = level
     this.appliedTags = []
@@ -145,8 +141,6 @@ export class BrowseGroupsComponent implements OnInit {
     this._groups.getAll(browseLevel, this.pagination.pageSize, page, appliedTags)
         .take(1).subscribe(
           (data)  => {
-            console.log(data)
-            console.log(appliedTags)
             this.pagination.totalPages = Math.ceil(data.total/this.pagination.pageSize) // update pagination, which is injected into pagination component
             this._tagFilters.setFilters(data.tags, appliedTags) // give the tag service the new data
             this.tags = this.createGroupTags(data.groups) // save the image groups for display
@@ -164,7 +158,6 @@ export class BrowseGroupsComponent implements OnInit {
    * @param newPageNum The page number you wish to navigate to
    */
   private goToPage(newPageNum: number) {
-    console.log('got a page nav event')
     this.pagination.currentPage = newPageNum
     this.loadIGs(this.selectedBrowseLevel, this.appliedTags, newPageNum)
   }
@@ -176,7 +169,6 @@ export class BrowseGroupsComponent implements OnInit {
    */
   private addRouteParam(key: string, value: any, resetTags?: boolean) {
     let currentParamsObj: Params = Object.assign({}, this.route.snapshot.params)
-    console.log(currentParamsObj)
     if(value){
       currentParamsObj[key] = value;
     }

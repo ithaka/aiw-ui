@@ -30,8 +30,6 @@ export class TagsListComponent implements OnInit {
 
   /** Updates the url to contain all of the selected filters */
   private updateUrl(tagList: string[]): void {
-    console.log(tagList)
-    console.log("navigating from the tags list component")
     let queryParams: any = {}
     if (tagList && tagList.length > 0) {
       queryParams.tags = tagList
