@@ -66,7 +66,7 @@ export class LoginService {
 
     getInstitutions() {
         // http://library.artstor.org/library/institutions/?_method=shibbolethOnly&dojo.preventCache=1479750011351
-        let url = this._auth.getUrl() + '/institutions/?_method=shibbolethOnly';
+        let url = this._auth.getHostname() + '/api/institutions/?_method=shibbolethOnly';
         
         return this.http
             .get(url)
