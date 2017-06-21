@@ -120,19 +120,6 @@ export class BrowsePage implements OnInit, OnDestroy {
      */
     private selectColMenu( id: string ){
         this.selectedColMenuId = id;
-        //   this.addRouteParam('menuId', id);
-    }
-
-      /**
-     * Adds a parameter to the route and navigates to new route
-     * @param key Parameter you want added to route (as matrix param)
-     * @param value The value of the parameter
-     */
-    private addRouteParam(key: string, value: any) {
-        let currentParamsObj: Params = Object.assign({}, this.route.snapshot.params);
-        currentParamsObj[key] = value;
-
-        this.router.navigate([currentParamsObj], { relativeTo: this.route });
     }
 
 }

@@ -1,5 +1,5 @@
 import { Injectable, EventEmitter } from '@angular/core'
-import { BehaviorSubject } from 'rxjs/BehaviorSubject'
+import { Subject } from 'rxjs/Subject'
 
 /** Anything that involves managing/combining many filters should be kept here */
 @Injectable()
@@ -8,7 +8,7 @@ export class TagFiltersService {
   private _filters: TagFilter[] = []
   private _updateFilters: EventEmitter<any>
 
-  public filterKeys: BehaviorSubject<string[]> = new BehaviorSubject([])
+  public filterKeys: Subject<string[]> = new Subject()
 
   constructor(
     // don't put other services in here
