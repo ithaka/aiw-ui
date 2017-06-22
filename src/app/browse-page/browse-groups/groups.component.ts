@@ -58,15 +58,23 @@ export class BrowseGroupsComponent implements OnInit {
     // set the title
     this._title.setTitle("Artstor | Browse Groups")
 
+    this.subscriptions.push(
+      this.route.params.subscribe((params) => {
+        if (params.view != this.selectedBrowseLevel) {
+          this.loadIGs([], 1, params.view)
+          this.selectedBrowseLevel = params.view
+        }
+      })
+    )
+
     /** Every time the url updates, we process the new tags and reload image groups if the tags query param changes */
     this.subscriptions.push(
       this.route.queryParams.subscribe((query) => {
-        console.log(query)
         if (query.tags) {
           this.appliedTags = this._tagFilters.processFilterString(query.tags)
-          this.loadIGs(this.selectedBrowseLevel, this.appliedTags, 1)
+          this.loadIGs(this.appliedTags, 1)
         } else {
-          this.loadIGs(this.selectedBrowseLevel, [], 1)
+          this.loadIGs([], 1)
         }
       })
     )
@@ -112,7 +120,7 @@ export class BrowseGroupsComponent implements OnInit {
     this.selectedBrowseLevel = level
     this.appliedTags = []
     this.addRouteParam('view', level, true)
-    this.loadIGs(this.selectedBrowseLevel, [], 1)
+    this.loadIGs([], 1)
   }
 
   /**
@@ -132,12 +140,18 @@ export class BrowseGroupsComponent implements OnInit {
   
   /**
    * Loads Image Groups data for the current user in the array
-   * @param browseLevel The currently selected browse level (a string corresponding to one of the available filters from _groups)
    * @param appliedTags The array of tags which the user has selected to filter by
    * @param page The desired page number to navigate to
+   * @param level The query param for the groups call that indicates what share permissions the user has
    */
-  private loadIGs(browseLevel: string, appliedTags: string[], page: number): void {
+  private loadIGs(appliedTags: string[], page: number, level?: string): void {
     this.loading = true
+    let browseLevel: string
+    if (!level) {
+      browseLevel = this.route.snapshot.params.view || 'public'
+    } else {
+      browseLevel = level
+    }
     this._groups.getAll(browseLevel, this.pagination.pageSize, page, appliedTags)
         .take(1).subscribe(
           (data)  => {
@@ -159,7 +173,7 @@ export class BrowseGroupsComponent implements OnInit {
    */
   private goToPage(newPageNum: number) {
     this.pagination.currentPage = newPageNum
-    this.loadIGs(this.selectedBrowseLevel, this.appliedTags, newPageNum)
+    this.loadIGs(this.appliedTags, newPageNum)
   }
 
     /**
