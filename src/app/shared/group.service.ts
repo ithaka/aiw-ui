@@ -70,14 +70,18 @@ export class GroupService {
         ).map(
             res => {
                 let body = res.json()
-                console.log(body)
                 return body || { }
             }
         ).toPromise()
         .then( data => {
+            // Load first page
             groups = groups.concat(data.groups)
+            everyGroupSubject.next(groups)
+            // Set total number of pages
             totalPages = (data.total/size) + 1
-
+            // Increment pageNo since we just loaded the first page
+            pageNo++
+            
             for(pageNo; pageNo <= totalPages; pageNo++) {
                 // Use locally scoped pageNo since Timeout fires after loop
                 let thisPageNo = pageNo
