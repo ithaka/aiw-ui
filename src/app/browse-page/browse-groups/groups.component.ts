@@ -61,6 +61,7 @@ export class BrowseGroupsComponent implements OnInit {
     this.subscriptions.push(
       this.route.params.subscribe((params) => {
         if (params.view != this.selectedBrowseLevel) {
+          this.pagination.currentPage = 1
           this.loadIGs([], 1, params.view)
           this.selectedBrowseLevel = params.view
         }
@@ -123,7 +124,8 @@ export class BrowseGroupsComponent implements OnInit {
   selectBrowseOpt ( level: string ){
     this.loading = true;
     this.selectedBrowseLevel = level
-    this.appliedTags = []
+    this.pagination.currentPage = 1
+    this.appliedTags = [] 
     this.addRouteParam('view', level, true)
     this.loadIGs([], 1)
   }
