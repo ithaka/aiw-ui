@@ -134,24 +134,3 @@
 .child-cntnr span{
     cursor: pointer;
 }
-
-.contextual-help{
-    margin-left: 5px;
-    border: 1px solid;
-    border-radius: 30px;
-    width: 16px;
-    height: 16px;
-    line-height: 16px;
-    text-align: center;
-    display: inline-block;
-    cursor: pointer;
-    font-family: Arial, Helvetica, sans-serif;
-    font-size: 10px;
-    background-color: #999;
-    color: #fff !important;
-
-    &:hover{
-        background-color: #fff;
-        color: #999 !important;
-    }
-}

@@ -13,6 +13,7 @@ export class Asset {
   creator: string;
   date: string;
   imgURL: string;
+  fileExt: string;
   downloadLink: string;
   tileSource: any;
 
@@ -71,6 +72,7 @@ export class Asset {
                   this.filePropertiesArray = res.fileProperties;
                   this.title = res.title ? res.title : 'Untitled';
                   this.imgURL = res.imageUrl;
+                  this.fileExt = res.imageUrl ? res.imageUrl.substr(res.imageUrl.lastIndexOf('.') + 1) : ''
 
                   this.setCreatorDate();
 
