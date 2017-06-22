@@ -162,6 +162,9 @@ export class Login {
             } else if (data.message === 'loginExpired') {
               this.errorMsg = 'LOGIN.EXPIRED';
             }
+          } else if (!data.isRememberMe && !data.remoteaccess) {
+            // In some situations the service might return an ip auth object even tho login was unsuccessful
+            this.errorMsg = 'There was an issue with your account, please contact support.';
           } else {
             this.angulartics.eventTrack.next({ action:"remoteLogin", properties: { category: "login", label: "success" }});
             this.loadForUser(data);
