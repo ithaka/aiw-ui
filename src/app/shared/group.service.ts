@@ -23,7 +23,7 @@ export class GroupService {
      * Get All Groups
      * @param level Indicates access level of group: 'institution', 'private', 'public', 'all' or 'shared'
      */
-    public getAll(level: string, size?: number, pageNo ?: number, tags ?: string[] ): Observable<any> {
+    public getAll(level: string, size?: number, pageNo ?: number, tags ?: string[], query ?: string ): Observable<any> {
         if (!tags) {
             tags = []
         }
@@ -39,8 +39,11 @@ export class GroupService {
             tagParam += '&tags=' + encodeURIComponent(tag)
         })
 
+        let queryParam: string = ''
+        query && (queryParam = '&q=' + query)
+
         return this.http.get(
-            this.groupUrl + "?size=" + size + '&level=' + level + '&from=' + ( (pageNo - 1) * size) +  tagParam, this.options
+            [this.groupUrl, "?size=", size, '&level=', level, '&from=', ( (pageNo - 1) * size),  tagParam, queryParam].join(''), this.options
         ).map(
             res => {
                 let body = res.json()

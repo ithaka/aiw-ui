@@ -106,7 +106,7 @@ export class BrowseGroupsComponent implements OnInit {
 
     this.browseMenuArray.push({
       label: 'Search',
-      level: 'search'
+      level: 'all'
     })
   
     this._analytics.setPageValues('groups', '')
@@ -149,15 +149,16 @@ export class BrowseGroupsComponent implements OnInit {
    * @param page The desired page number to navigate to
    * @param level The query param for the groups call that indicates what share permissions the user has
    */
-  private loadIGs(appliedTags: string[], page: number, level?: string): void {
+  private loadIGs(appliedTags: string[], page: number, level?: string, searchTerm ?: string): void {
     this.loading = true
     let browseLevel: string
     if (!level) {
-      browseLevel = this.route.snapshot.params.view || 'public'
+      browseLevel = this.selectedBrowseLevel || 'public'
     } else {
       browseLevel = level
     }
-    this._groups.getAll(browseLevel, this.pagination.pageSize, page, appliedTags)
+
+    this._groups.getAll(browseLevel, this.pagination.pageSize, page, appliedTags, searchTerm)
         .take(1).subscribe(
           (data)  => {
             this.pagination.totalPages = Math.ceil(data.total/this.pagination.pageSize) // update pagination, which is injected into pagination component
@@ -206,6 +207,6 @@ export class BrowseGroupsComponent implements OnInit {
 
   // called when search is called
   private search(term: string) {
-    console.log("searching for" + term)
+    this.loadIGs([], 1, null, term)
   }
 }

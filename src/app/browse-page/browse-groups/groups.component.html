@@ -7,7 +7,7 @@
         <ang-tags-list></ang-tags-list>
     </div>
     <div class="col-md-8">
-        <ang-general-search (executeSearch)="search($event)"></ang-general-search>
+        <ang-general-search *ngIf="selectedBrowseLevel === 'all'" (executeSearch)="search($event)"></ang-general-search>
         <h3 class="pb-1 px-2">Groups
             <pagination [pageObj]="pagination" (goToPage)="goToPage($event)">
             </pagination>
