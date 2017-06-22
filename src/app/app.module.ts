@@ -69,7 +69,6 @@ import {
   ConfirmModal,
   SessionExpireModal
 } from './modals';
-import { GeneralSearchComponent } from './browse-page/browse-groups/general-search.component'
 import { SkyBannerComponent } from './sky-banner/sky-banner.component'
 
 
@@ -135,7 +134,6 @@ type StoreType = {
     SessionExpireModal,
     DownloadLimitModal,
     Footer,
-    GeneralSearchComponent,
     Home,
     ImageGroupPage,
     ImageGroupPPPage,

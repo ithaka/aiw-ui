@@ -182,17 +182,18 @@ export class BrowseGroupsComponent implements OnInit {
    * @param value The value of the parameter
    */
   private addRouteParam(key: string, value: any, resetTags?: boolean) {
-    let currentParamsObj: Params = Object.assign({}, this.route.snapshot.params)
+    let queryParams: Params = Object.assign({}, this.route.snapshot.queryParams)
+
     if(value){
-      currentParamsObj[key] = value;
+      queryParams[key] = value;
     }
     else{
-      delete currentParamsObj[key];
+      delete queryParams[key];
     }
 
-    if(currentParamsObj['tags'] && resetTags){
-      delete currentParamsObj['tags']; 
+    if(queryParams['tags'] && resetTags){
+      delete queryParams['tags']; 
     }
-
+    this._router.navigate(['/browse','groups'], { queryParams: queryParams })
   }
 }
