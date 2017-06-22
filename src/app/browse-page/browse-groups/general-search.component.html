@@ -1,0 +1,6 @@
+<div class="form-group">
+  <div class="input-group">
+    <input id="inputSearchTerm" [(ngModel)]="term" (keyup.enter)="executeSearch.emit(term)"  aria-describedby="search-label" type="text" class="form-control has-icon" placeholder="Search" data-sc="search: simple keyword">
+    <i id="iconSearchSubmit" (click)="executeSearch.emit(term)" class="icon icon-search form-control__icon"></i>
+  </div>
+</div>

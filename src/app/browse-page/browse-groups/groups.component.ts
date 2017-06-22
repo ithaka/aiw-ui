@@ -203,4 +203,9 @@ export class BrowseGroupsComponent implements OnInit {
     }
     this._router.navigate(['/browse','groups'], { queryParams: queryParams })
   }
+
+  // called when search is called
+  private search(term: string) {
+    console.log("searching for" + term)
+  }
 }
