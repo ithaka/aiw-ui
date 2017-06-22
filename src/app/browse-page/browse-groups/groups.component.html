@@ -1,12 +1,13 @@
 <nav class="nav nav-inline browse-nav">
     <a class="label">Browse By:</a>
-    <a class="nav-link" *ngFor="let browseOpt of browseMenuArray" [ngClass]="{'active': browseOpt.level == selectedBrowseLevel}" (click)="selectBrowseOpt(browseOpt.level)">{{ browseOpt.label }}</a>
+    <a class="nav-link" *ngFor="let browseOpt of browseMenuArray" [ngClass]="{'active': browseOpt.level == route.snapshot.params.view}" [routerLink]="['/browse', 'groups', browseOpt.level]">{{ browseOpt.label }}</a>
 </nav>
 <div class="row">
     <div class="col-md-4 hidden-sm-down">
-        <ang-tags-list></ang-tags-list>
+        <ang-tags-list [browseLevel]="selectedBrowseLevel"></ang-tags-list>
     </div>
     <div class="col-md-8">
+        <ang-general-search *ngIf="selectedBrowseLevel === 'all'" (executeSearch)="search($event)"></ang-general-search>
         <h3 class="pb-1 px-2">Groups
             <pagination [pageObj]="pagination" (goToPage)="goToPage($event)">
             </pagination>

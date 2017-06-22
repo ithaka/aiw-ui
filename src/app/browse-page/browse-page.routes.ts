@@ -9,5 +9,6 @@ export const BrowseRoutes: Routes = [
   { path: 'institution', component: BrowseInstitutionComponent },
   { path: 'commons', component: BrowseCommonsComponent },
   { path: 'mycollections', component: MyCollectionsComponent },
-  { path: 'groups', component: BrowseGroupsComponent }
+  { path: 'groups', redirectTo: 'groups/public'},
+  { path: 'groups/:view', component: BrowseGroupsComponent}
 ];
