@@ -103,6 +103,11 @@ export class BrowseGroupsComponent implements OnInit {
         level: 'shared'
       })
     }
+
+    this.browseMenuArray.push({
+      label: 'Search',
+      level: 'search'
+    })
   
     this._analytics.setPageValues('groups', '')
   } // OnInit
@@ -161,6 +166,8 @@ export class BrowseGroupsComponent implements OnInit {
             this.loading = false
           },
           (error) => {
+            this._tagFilters.setFilters([], appliedTags)
+            this.tags = []
             this.errorObj[browseLevel] = "Sorry, we were unable to load these Image Groups"
             this.loading = false
           }
