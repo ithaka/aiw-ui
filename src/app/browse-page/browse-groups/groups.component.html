@@ -4,7 +4,7 @@
 </nav>
 <div class="row">
     <div class="col-md-4 hidden-sm-down">
-        <ang-tags-list></ang-tags-list>
+        <ang-tags-list [browseLevel]="selectedBrowseLevel"></ang-tags-list>
     </div>
     <div class="col-md-8">
         <ang-general-search *ngIf="selectedBrowseLevel === 'all'" (executeSearch)="search($event)"></ang-general-search>
