@@ -72,9 +72,11 @@ export class GroupService {
             }
         ).toPromise()
         .then( data => {
-            // groups = groups.concat(data.groups)
+            groups = groups.concat(data.groups)
             totalPages = (data.total/size) + 1
-
+            // Increment pageNo since we just loaded the first page
+            pageNo++
+            
             for(pageNo; pageNo <= totalPages; pageNo++) {
                 // Use locally scoped pageNo since Timeout fires after loop
                 let thisPageNo = pageNo
