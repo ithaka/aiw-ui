@@ -72,7 +72,7 @@ export class GroupService {
             }
         ).toPromise()
         .then( data => {
-            groups = groups.concat(data.groups)
+            // groups = groups.concat(data.groups)
             totalPages = (data.total/size) + 1
 
             for(pageNo; pageNo <= totalPages; pageNo++) {
