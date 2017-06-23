@@ -50,16 +50,22 @@ export class LegacyRouteResolver implements Resolve<boolean> {
       //   })
     } else {
       let routeNum = urlArr[0].substr(0, 2)
-
+      
       urlArr.forEach((value, index) => {
         urlArr[index] = decodeURIComponent(value)
       })
 
       let pipeArr = urlArr[0].split("|")
+      
+      // At some point, someone made pretty urls as: '/library/collection/patel'
+      if (pipeArr[0] == 'collection' && urlArr[1]) {
+        this._router.navigate(["/collection", urlArr[1]])
+      }
 
       if (pipeArr[0].indexOf('#') > 0) {
         routeNum = pipeArr[0].substr(pipeArr[0].indexOf('#'), 2)
       }
+
       switch (routeNum) {
         case "#2": // handles all of the #2 routes
           this._router.navigate(["/browse", "library", { viewId: pipeArr[1] }])
