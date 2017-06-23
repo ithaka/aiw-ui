@@ -5,7 +5,7 @@
             <ang-search></ang-search>
             <div class="card pt-2">
                 <div class="card-header">
-                    <h1>Browse</h1>
+                    <h1>{{ 'HOME.HEADINGS.BRWSE' | translate}}</h1>
                 </div>
                 <ul class="list-group list-group-flush list-group-clean">
                     <a id="linkBrowseGeography" class="list-group-item" [routerLink]="['/browse','library', {viewId: 260}]">
@@ -52,7 +52,7 @@
             <!--Shared Shelf Commons Collections-->
             <div class="card pb-3">
                 <div class="card-header">
-                    <h2>Shared Shelf Commons</h2>
+                    <h2>{{ 'HOME.HEADINGS.SSC' | translate}}</h2>
                 </div>
                 <div class="list--home-collections" [class.loading]="loaders['collections']">
                     <div class="list-group list-group-flush">
@@ -79,7 +79,7 @@
             </a>
             <div class="card">
                 <div class="card-header">
-                    <h2>From Our Blog</h2>
+                    <h2>{{ 'HOME.HEADINGS.FRM_BLOG' | translate}}</h2>
                 </div>
                 <div class="loading" *ngIf="blogLoading"></div>
                 <div *ngIf="!blogLoading">
@@ -96,7 +96,7 @@
             </a>
             <div class="card pt-4">
                 <div class="card-header">
-                    <h3>Questions</h3>
+                    <h3>{{ 'HOME.HEADINGS.QUESTIONS' | translate}}</h3>
                 </div>
                  <ul class="list-group list-group-flush list-group-clean">
                     <a id="linkEmailInstitutionContact" class="list-group-item small" [href]="institution.institutionContact && institution.institutionContact[0] && institution.institutionContact[0].email ? 'mailto:' + institution.institutionContact[0].email : 'mailto:userservices@artstor.org'">
