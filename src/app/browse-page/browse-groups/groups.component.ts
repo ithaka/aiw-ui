@@ -75,6 +75,7 @@ export class BrowseGroupsComponent implements OnInit {
           this.appliedTags = this._tagFilters.processFilterString(query.tags)
           this.loadIGs(this.appliedTags, 1)
         } else {
+          this.appliedTags = []
           this.loadIGs([], 1)
         }
       })
@@ -105,10 +106,11 @@ export class BrowseGroupsComponent implements OnInit {
       })
     }
 
-    this.browseMenuArray.push({
-      label: 'Search',
-      level: 'all'
-    })
+    // Mary has edits before we reveal Search
+    // this.browseMenuArray.push({
+    //   label: 'Search',
+    //   level: 'all'
+    // })
   
     this._analytics.setPageValues('groups', '')
   } // OnInit
