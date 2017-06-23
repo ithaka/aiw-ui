@@ -57,6 +57,9 @@ export class LegacyRouteResolver implements Resolve<boolean> {
 
       let pipeArr = urlArr[0].split("|")
 
+      if (pipeArr[0].indexOf('#') > 0) {
+        routeNum = pipeArr[0].substr(pipeArr[0].indexOf('#'), 2)
+      }
       switch (routeNum) {
         case "#2": // handles all of the #2 routes
           this._router.navigate(["/browse", "library", { viewId: pipeArr[1] }])
@@ -66,6 +69,9 @@ export class LegacyRouteResolver implements Resolve<boolean> {
 
           if (pipeArr && pipeArr.length > 0) {
             switch (pipeArr[1]) {
+              case "categories":
+                this._router.navigate(["/category", pipeArr[2]]) // the 3rd item in the array is the category id
+                break
               case "collections":
                 this._router.navigate(["/collection", pipeArr[2]]) // the 3rd item in the array is the collection id
                 break
