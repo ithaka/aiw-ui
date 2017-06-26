@@ -42,9 +42,9 @@
                     <i id="genImgURLlink" class="icon icon-share-white" ></i>
                 </button>
                 <a class="btn btn-secondary" tabindex="1" *ngIf="assets[0].downloadLink && user.isLoggedIn" 
+                    [attr.download]="downloadAuth() && assets[0] && genFilename(assets[0].title, assets[0].fileExt)"
                     [attr.href]="downloadAuth() && !assets[0].disableDownload ? assets[0].downloadLink : null"
                     (click)="downloadAuth() && !assets[0].disableDownload ? null : showAgreeModal = true; _analytics.directCall('download_image')"
-                    [attr.download]="downloadAuth() && assets[0]?.title"
                     [class.disabled]="assets[0].disableDownload"
                     title="{{ assets[0].disableDownload ? 'Image is not available for download.' : 'Image download'}}">
                     {{ 'ASSET_PAGE.BUTTONS.DOWNLOAD' | translate}}

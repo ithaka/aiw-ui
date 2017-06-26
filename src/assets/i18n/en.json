@@ -51,7 +51,7 @@
   },
   "ASSET_PAGE": {
     "HEADER_LABELS": {
-      "OBJ_DETAILS": "Object Details",
+      "OBJ_DETAILS": "Item Details",
       "FILE_PROPS" : "File Properties",
       "SHR_LNK": "Share Link"
     },
@@ -194,6 +194,6 @@
     }
   },
   "BETA_SKY_BANNER": {
-    "MESSAGE": "You are previewing the beta site of the new Artstor Digital Library platform. Learn about <a href=\"http://support.artstor.org/?article=upcoming-changes-to-artstor\" target=\"_blank\" class=\"link\">what's new</a>."
+    "MESSAGE": "Welcome to the new Artstor Digital Library platform. Learn about <a href=\"http://support.artstor.org/?page_id=37\" target=\"_blank\" class=\"link\">what's new</a>."
   }
 }

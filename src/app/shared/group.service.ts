@@ -23,7 +23,7 @@ export class GroupService {
      * Get All Groups
      * @param level Indicates access level of group: 'institution', 'private', 'public', 'all' or 'shared'
      */
-    public getAll(level: string, size?: number, pageNo ?: number, tags ?: string[] ): Observable<any> {
+    public getAll(level: string, size?: number, pageNo ?: number, tags ?: string[], query ?: string ): Observable<any> {
         if (!tags) {
             tags = []
         }
@@ -39,8 +39,11 @@ export class GroupService {
             tagParam += '&tags=' + encodeURIComponent(tag)
         })
 
+        let queryParam: string = ''
+        query && (queryParam = '&q=' + query)
+
         return this.http.get(
-            this.groupUrl + "?size=" + size + '&level=' + level + '&from=' + ( (pageNo - 1) * size) +  tagParam, this.options
+            [this.groupUrl, "?size=", size, '&level=', level, '&from=', ( (pageNo - 1) * size),  tagParam, queryParam].join(''), this.options
         ).map(
             res => {
                 let body = res.json()
@@ -67,14 +70,18 @@ export class GroupService {
         ).map(
             res => {
                 let body = res.json()
-                console.log(body)
                 return body || { }
             }
         ).toPromise()
         .then( data => {
+            // Load first page
             groups = groups.concat(data.groups)
+            everyGroupSubject.next(groups)
+            // Set total number of pages
             totalPages = (data.total/size) + 1
-
+            // Increment pageNo since we just loaded the first page
+            pageNo++
+            
             for(pageNo; pageNo <= totalPages; pageNo++) {
                 // Use locally scoped pageNo since Timeout fires after loop
                 let thisPageNo = pageNo

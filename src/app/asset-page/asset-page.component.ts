@@ -190,9 +190,11 @@ export class AssetPage implements OnInit, OnDestroy {
 
     // Calculate the index of current asset from the previous assets result set
     private currentAssetIndex(): number{
-        for(var i = 0; i < this.prevAssetResults.thumbnails.length; i++){
-            if(this.prevAssetResults.thumbnails[i].objectId == this.assets[0].id){
-                return i;
+        if (this.assets[0]) {
+            for(var i = 0; i < this.prevAssetResults.thumbnails.length; i++){
+                if(this.prevAssetResults.thumbnails[i] && this.prevAssetResults.thumbnails[i].objectId == this.assets[0].id){
+                    return i;
+                }
             }
         }
         return 1;
@@ -338,5 +340,10 @@ export class AssetPage implements OnInit, OnDestroy {
             this.prevRouteParams = [];
         }
 
+    }
+
+    private genFilename(title: string, fileExt: string) : string {
+        // Returning a filename with a "." is read as having a file extension
+        return (title && fileExt) ? title.replace(/\./g,'-') + '.' + fileExt : ''
     }
 }

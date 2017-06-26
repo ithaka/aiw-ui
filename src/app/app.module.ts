@@ -44,7 +44,8 @@ import { CategoryPage } from './category-page';
 import { ImageGroupPPPage } from './image-group-pp-page';
 import { ClusterPage } from './cluster-page';
 import { BrowsePage, LibraryComponent, BrowseCommonsComponent,
-  MyCollectionsComponent, BrowseInstitutionComponent, BrowseGroupsComponent, TagComponent } from './browse-page';
+  MyCollectionsComponent, BrowseInstitutionComponent, BrowseGroupsComponent, TagComponent,
+  TagsListComponent, TagFiltersService } from './browse-page';
 import { AssetPage, AgreeModalComponent } from './asset-page';
 import { AssetViewerComponent } from './asset-page/asset-viewer';
 import { AccountPage } from './account-page';
@@ -68,6 +69,7 @@ import {
   ConfirmModal,
   SessionExpireModal
 } from './modals';
+import { GeneralSearchComponent } from './browse-page/browse-groups/general-search.component'
 import { SkyBannerComponent } from './sky-banner/sky-banner.component'
 
 
@@ -90,6 +92,7 @@ const APP_PROVIDERS = [
   AuthService,
   ImageGroupService,
   AssetFiltersService,
+  TagFiltersService,
   TagsService,
   ToolboxService,
   LegacyRouteResolver,
@@ -132,6 +135,7 @@ type StoreType = {
     SessionExpireModal,
     DownloadLimitModal,
     Footer,
+    GeneralSearchComponent,
     Home,
     ImageGroupPage,
     ImageGroupPPPage,
@@ -156,6 +160,7 @@ type StoreType = {
     ShareLinkModal,
     SkyBannerComponent,
     TagComponent,
+    TagsListComponent,
     ThumbnailComponent,
     TypeIdPipe,
     LinkifyPipe

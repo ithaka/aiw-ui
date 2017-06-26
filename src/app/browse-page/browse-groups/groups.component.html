@@ -1,0 +1,28 @@
+<nav class="nav nav-inline browse-nav">
+    <a class="label">Browse By:</a>
+    <a class="nav-link" *ngFor="let browseOpt of browseMenuArray" [ngClass]="{'active': browseOpt.level == route.snapshot.params.view}" [routerLink]="['/browse', 'groups', browseOpt.level]">{{ browseOpt.label }}</a>
+</nav>
+<div class="row">
+    <div class="col-md-4 hidden-sm-down">
+        <ang-tags-list [browseLevel]="selectedBrowseLevel"></ang-tags-list>
+    </div>
+    <div class="col-md-8">
+        <ang-general-search *ngIf="selectedBrowseLevel === 'all'" (executeSearch)="search($event)"></ang-general-search>
+        <h3 class="pb-1 px-2">Groups
+            <pagination [pageObj]="pagination" (goToPage)="goToPage($event)">
+            </pagination>
+        </h3>
+        <div class="group-list has-icon-overlay px-2">
+            <div *ngIf="errorObj[selectedBrowseLevel]" class="alert alert-warning" [innerHtml]="errorObj[selectedBrowseLevel]"></div>
+            <ang-tag *ngFor="let tag of tags" [tag]="tag" link="true"></ang-tag>
+        </div>
+    </div>
+</div>
+<div *ngIf="loading" class="row has-icon-overlay">
+    <i class="icon-lg icon-overlay--top icon-loading-large"></i>
+</div>
+<div *ngIf="_tagFilters.filters.length < 1 && !loading" class="alert alert-info">
+    <h3 translate>BROWSE.ERRORS.NO_GROUPS_COLLECTIONS_HEADING</h3><br/>
+    <div *ngIf="selectedBrowseLevel === 'private'" [innerHtml]="'BROWSE.ERRORS.NO_PRIVATE_GROUPS_COLLECTIONS_PROMPT' | translate"></div>
+    <div *ngIf="selectedBrowseLevel === 'institution'" [innerHtml]="'BROWSE.ERRORS.NO_INSTITUTIONAL_GROUPS_COLLECTIONS_PROMPT' | translate"></div>
+</div>
