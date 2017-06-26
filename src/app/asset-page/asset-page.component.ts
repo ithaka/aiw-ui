@@ -47,6 +47,7 @@ export class AssetPage implements OnInit, OnDestroy {
     private showCopyUrl: boolean = false;
     private generatedImgURL: string = '';
     private prevRouteParams: any = [];
+    private collectionName: string = ''
 
     private _storage;
     
@@ -163,6 +164,7 @@ export class AssetPage implements OnInit, OnDestroy {
         asset.isDataLoaded.subscribe(
             isLoaded => {
                 if (isLoaded) {
+                    console.log(this.assets[0])
                     this._title.setTitle( asset.title );
                     document.querySelector('meta[name="DC.type"]').setAttribute('content', 'Artwork');
                     document.querySelector('meta[name="DC.title"]').setAttribute('content', asset.title);

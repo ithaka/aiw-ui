@@ -16,6 +16,7 @@ export class Asset {
   fileExt: string;
   downloadLink: string;
   tileSource: any;
+  collectionName: string = ''
 
   private metadataLoaded = false;
   private imageSourceLoaded = false;
@@ -75,6 +76,7 @@ export class Asset {
                   this.fileExt = res.imageUrl ? res.imageUrl.substr(res.imageUrl.lastIndexOf('.') + 1) : ''
 
                   this.setCreatorDate();
+                  this.collectionName = this.getCollectionName()
 
                   this.metadataLoaded = true;
                   this.dataLoadedSource.next(this.metadataLoaded && this.imageSourceLoaded);
@@ -93,6 +95,18 @@ export class Asset {
     //     .catch(error => {
     //         console.error('Unable to load asset file properties');
     //     })
+  }
+
+  /**
+   * Searches through the metaDataArray for the asset's collection name
+   */
+  private getCollectionName(): string {
+    let len = this.metaDataArray.length
+    for (let i = 0; i < len; i++) {
+        if (this.metaDataArray[i].fieldName == "Collection") {
+            return this.metaDataArray[i].fieldValue
+        }
+    }
   }
 
   /** Set Creator and Date for the asset from the metadata Array; to be used for tombstone data on fullscreen mode */
