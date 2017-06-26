@@ -64,6 +64,15 @@ export class LoginService {
             .then(this._auth.extractData);
     }
 
+    getFallbackInstitutions() {
+        let url =  '/assets/institutions-initial.json';
+        
+        return this.http
+            .get(url)
+            .toPromise()
+            .then(this._auth.extractData);
+    }
+
     getInstitutions() {
         // http://library.artstor.org/library/institutions/?_method=shibbolethOnly&dojo.preventCache=1479750011351
         let url = this._auth.getHostname() + '/api/institutions/?_method=shibbolethOnly';
