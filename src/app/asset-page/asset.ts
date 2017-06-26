@@ -99,6 +99,7 @@ export class Asset {
 
   /**
    * Searches through the metaDataArray for the asset's collection name
+   * @returns The name of the asset's collection or undefined
    */
   private getCollectionName(): string {
     let len = this.metaDataArray.length
