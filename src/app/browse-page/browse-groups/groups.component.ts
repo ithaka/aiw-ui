@@ -75,6 +75,7 @@ export class BrowseGroupsComponent implements OnInit {
           this.appliedTags = this._tagFilters.processFilterString(query.tags)
           this.loadIGs(this.appliedTags, 1)
         } else {
+          this.appliedTags = []
           this.loadIGs([], 1)
         }
       })
@@ -105,10 +106,11 @@ export class BrowseGroupsComponent implements OnInit {
       })
     }
 
-    this.browseMenuArray.push({
-      label: 'Search',
-      level: 'all'
-    })
+    // Mary has edits before we reveal Search
+    // this.browseMenuArray.push({
+    //   label: 'Search',
+    //   level: 'all'
+    // })
   
     this._analytics.setPageValues('groups', '')
   } // OnInit
@@ -163,6 +165,7 @@ export class BrowseGroupsComponent implements OnInit {
     this._groups.getAll(browseLevel, this.pagination.pageSize, page, appliedTags, searchTerm)
         .take(1).subscribe(
           (data)  => {
+            this.pagination.currentPage = page
             this.pagination.totalPages = Math.ceil(data.total/this.pagination.pageSize) // update pagination, which is injected into pagination component
             this._tagFilters.setFilters(data.tags, appliedTags) // give the tag service the new data
             this.tags = this.createGroupTags(data.groups) // save the image groups for display

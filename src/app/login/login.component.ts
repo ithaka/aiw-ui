@@ -68,7 +68,8 @@ export class Login {
         console.error(err);
       });
 
-    this._login.getInstitutions()
+    // Until institutions call works without the auth cookie, we need to make sure we have a list available
+    this._login.getFallbackInstitutions()
       .then((data) => {
         if (data.items) {
           this.loginInstitutions = data.items;
@@ -79,6 +80,19 @@ export class Login {
         this.instErrorMsg = "We've experience an error and are unable to retrieve the insitutions";
         console.error(error);
       });
+
+    // The true institutions call. Don't throw an error, since the above call will provide a backup
+    this._login.getInstitutions()
+      .then((data) => {
+        if (data.items) {
+          this.loginInstitutions = data.items;
+          this.dataService = this._completer.local(data.items, 'name', 'name')
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+
     this._analytics.setPageValues('login', '')
   } // OnInit
   

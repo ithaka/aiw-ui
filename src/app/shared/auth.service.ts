@@ -73,7 +73,7 @@ export class AuthService implements CanActivate {
     if ( document.location.hostname.indexOf('beta.artstor.org') > -1 || document.location.hostname.indexOf('prod.cirrostratus.org') > -1 || document.location.hostname.indexOf('lively.artstor.org') > -1 ) {
       // Prod/Lively endpoints
       this.logUrl = '//ang-ui-logger.apps.prod.cirrostratus.org/api/v1';
-    } else if (document.location.hostname.indexOf('localhost') > -1 || document.location.hostname.indexOf('test.stagely.artstor.org') > -1 || document.location.hostname.indexOf('test.cirrostratus.org') > -1) {
+    } else if (document.location.hostname.indexOf('localhost') > -1 || document.location.hostname.indexOf('stage.artstor.org') > -1 || document.location.hostname.indexOf('test.stagely.artstor.org') > -1 || document.location.hostname.indexOf('test.cirrostratus.org') > -1) {
       // Test Endpoints
       this.hostname = '//test.stagely.artstor.org';
       this.baseUrl = '//test.stagely.artstor.org/api/secure';
