@@ -66,7 +66,8 @@
     },
     "MESSAGES": {
       "NEEDASSETS": "To compare assets, you will need to access an asset through a set of results first. Then those results will show here."
-    }
+    },
+    "IAP_PROMPT": "Request Image for Academic Publishing"
   },
   "IMAGE_GROUP_PAGE": {
     "DOWNLOAD_LIMIT_MODAL": {
@@ -82,9 +83,6 @@
       "MAIN_BODY2":  "This cannot be undone.",
       "TITLE_DELETED": "Group was Deleted"
     }
-  },
-  "ASSET_PAGE": {
-    "IAP_PROMPT": "Request Image for Academic Publishing"
   },
   "ADD_TO_GROUP_MODAL": {
     "FROM_SELECTED": {
