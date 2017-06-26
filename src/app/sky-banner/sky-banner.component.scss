@@ -27,6 +27,13 @@
     z-index: 9500;
     background: #eee;
     bottom: 0;
+    box-shadow: 0px -1px 6px 0px rgba(0,0,0,0.1);
+    
+    & p {
+      font-size: 12px;
+      line-height: 15px;
+      padding: 6px 0px;
+    }
   }
 }
 

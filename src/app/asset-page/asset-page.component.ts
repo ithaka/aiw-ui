@@ -1,7 +1,9 @@
+import { Title } from '@angular/platform-browser';
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { Subscription }   from 'rxjs/Subscription';
 import { Locker } from 'angular2-locker';
+import { Angulartics2 } from 'angulartics2/dist';
 
 // Project Dependencies
 import { Asset } from './asset';
@@ -56,7 +58,9 @@ export class AssetPage implements OnInit, OnDestroy {
             private route: ActivatedRoute, 
             private _router: Router, 
             private locker: Locker,
-            private _analytics: AnalyticsService
+            private _analytics: AnalyticsService,
+            private angulartics: Angulartics2,
+            private _title: Title 
         ) { 
             this._storage = locker.useDriver(Locker.DRIVERS.LOCAL);
     }
@@ -89,15 +93,13 @@ export class AssetPage implements OnInit, OnDestroy {
                     this._assets.decryptToken(routeParams['encryptedId'])
                         .take(1)
                         .subscribe((asset) => {
-                            this.assets[0] = new Asset(asset.objectId, this._assets, this._auth)
-                            this.generateImgURL()
+                            this.renderPrimaryAsset(new Asset(asset.objectId, this._assets, this._auth))
                         }, (err) => {
                             console.error(err)
                             this._router.navigate(['/nocontent'])
                         })
                 } else {
-                    this.assets[0] = new Asset(routeParams["assetId"], this._assets, this._auth);
-                    this.generateImgURL();
+                    this.renderPrimaryAsset(new Asset(routeParams["assetId"], this._assets, this._auth))
 
                     if(this.prevAssetResults.thumbnails.length > 0){
                         // this.totalAssetCount = this.prevAssetResults.count ? this.prevAssetResults.count : this.prevAssetResults.thumbnails.length;
@@ -151,6 +153,24 @@ export class AssetPage implements OnInit, OnDestroy {
 
     ngOnDestroy() {
         this.subscriptions.forEach((sub) => { sub.unsubscribe(); });
+    }
+
+    /** 
+     * Render Asset once its loaded
+     */
+    renderPrimaryAsset(asset: Asset) {
+        this.assets[0] = asset
+        asset.isDataLoaded.subscribe(
+            isLoaded => {
+                if (isLoaded) {
+                    this._title.setTitle( asset.title );
+                    document.querySelector('meta[name="DC.type"]').setAttribute('content', 'Artwork');
+                    document.querySelector('meta[name="DC.title"]').setAttribute('content', asset.title);
+                }
+            }
+        )
+        this.angulartics.eventTrack.next({ action:"viewAsset", properties: { category: "asset", label: asset.id }});
+        this.generateImgURL();
     }
 
     /**
@@ -223,6 +243,14 @@ export class AssetPage implements OnInit, OnDestroy {
         return label.toLowerCase().replace(/\s/g,'');
     }
 
+    /**
+     * Some html tags are ruining things:
+     * - <wbr> word break opportunities break our link detection
+     */
+    private cleanFieldValue(value: string): string {
+        return value.replace(/\<wbr\>/g, '').replace(/\<wbr\/\>/g, '')
+    }
+
     private generateImgURL(): void{
         this.generatedImgURL = this._assets.getShareLink(this.assets[0].id);
     }
@@ -233,6 +261,7 @@ export class AssetPage implements OnInit, OnDestroy {
     private copyGeneratedImgURL(): void {
         let statusMsg = '';
         let input : any = document.getElementById('generatedImgURL');
+        let iOSuser: boolean = false;
 
         this._analytics.directCall('generate_img_link');
 
@@ -240,9 +269,14 @@ export class AssetPage implements OnInit, OnDestroy {
         input.focus()
         input.select()
 
+        // Determine if on iOS (no copy functionality)
+        if( /iPhone|iPad|iPod/i.test(navigator.userAgent) ) {
+            iOSuser = true
+        }
+    
         setTimeout( () => { 
             input.select(); 
-            if(document.queryCommandSupported('copy')){
+            if(document.queryCommandSupported('copy') && !iOSuser){
                 document.execCommand('copy')
                 statusMsg = 'Image URL successfully copied to the clipboard!';
             }

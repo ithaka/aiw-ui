@@ -4,7 +4,7 @@
 </nav>
 <div *ngIf="tags.length > 0" class="row">
     <div class="col-md-4 hidden-sm-down">
-        <h3 style="margin-bottom:12px;">Tags<a id="groupTagsClear" tabindex="" class="link--accent small" [class.hidden]="appliedTags.length < 1" style="float:right;" (click)="clearFilters()">Clear All</a></h3>
+        <h3>Tags <a title="How do I use tags?" href="http://support.artstor.org/?article-category=06-organizing" target="_blank" class="contextual-help">?</a><a id="groupTagsClear" tabindex="" class="link--accent small" [class.hidden]="appliedTags.length < 1" style="float:right;" (click)="clearFilters()">Clear All</a></h3>
         <div class="filter filter--tag" *ngFor="let tag of tagFilters" (click)="toggleFilterBy(tag['key'])" [class.active]="appliedTags.indexOf(tag['key']) > -1">
             {{ tag['key'] }} ({{ tag.doc_count }})
             <i class="icon icon-add"></i>

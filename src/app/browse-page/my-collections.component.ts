@@ -1,3 +1,4 @@
+import { Title } from '@angular/platform-browser';
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { Subscription }   from 'rxjs/Subscription';
@@ -22,7 +23,8 @@ export class MyCollectionsComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private _assets: AssetService,
-    private _analytics: AnalyticsService
+    private _analytics: AnalyticsService,
+    private _title: Title
   ) { }
 
   private subscriptions: Subscription[] = [];
@@ -36,7 +38,11 @@ export class MyCollectionsComponent implements OnInit {
   // Reference activeTag for description on side
   private activeTag:  Tag;
 
+  private loading: boolean = false;
+
   ngOnInit() {
+    // Set page title
+    this._title.setTitle("Artstor | Browse My Collections")
 
     this.subscriptions.push(
       this.route.params
@@ -70,6 +76,7 @@ export class MyCollectionsComponent implements OnInit {
   }
   
   getUserPCol(){
+    this.loading = true;
     this._assets.pccollection()
       .then((res) => {
           if(res.pcCollection && res.pcCollection.collectionid){
@@ -84,10 +91,12 @@ export class MyCollectionsComponent implements OnInit {
                 this.tags.push(privTag);
             }
           }
+          this.loading = false;
 
       })
       .catch(function(err) {
           console.log('Unable to load User Personal Collections.');
+          this.loading = false;
       });
   }
 

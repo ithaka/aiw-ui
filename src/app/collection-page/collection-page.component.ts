@@ -1,3 +1,4 @@
+import { Title } from '@angular/platform-browser';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Http, Response, Headers, RequestOptions } from '@angular/http';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -40,7 +41,8 @@ export class CollectionPage implements OnInit, OnDestroy {
     private _router: Router,
     private route: ActivatedRoute,
     private http: Http,
-    private _analytics: AnalyticsService
+    private _analytics: AnalyticsService,
+    private _title: Title
   ) {}
 
   ngOnInit() {
@@ -61,6 +63,9 @@ export class CollectionPage implements OnInit, OnDestroy {
               this.colName = data.collectionname;
               this.colDescription = data.blurburl;
               this.colThumbnail = data.leadImageURL;
+
+              // Set page title
+              this._title.setTitle("Artstor | " + this.colName)
             })
             .catch((error) => { 
               console.error(error); 

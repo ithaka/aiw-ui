@@ -10,3 +10,4 @@ export * from './access-denied/access-denied.component';
 export * from './pwd-reset/pwd-reset.component';
 export * from './share-ig-link/share-ig-link.component';
 export * from './confirm-modal/confirm-modal.component';
+export * from './session-expire/session-expire.component';

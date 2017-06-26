@@ -51,7 +51,7 @@ export class Asset {
     this._assets = _assets;
     this._auth = _auth;
     this.loadAssetMetaData();
-    this.getDownloadLink();
+    this.loadMediaMetaData();
   }
 
   /**
@@ -71,10 +71,6 @@ export class Asset {
                   this.filePropertiesArray = res.fileProperties;
                   this.title = res.title ? res.title : 'Untitled';
                   this.imgURL = res.imageUrl;
-
-                  document.getElementsByTagName('title')[0].innerHTML = this.title;
-                  document.querySelector('meta[name="DC.type"]').setAttribute('content', 'Artwork');
-                  document.querySelector('meta[name="DC.title"]').setAttribute('content', this.title);
 
                   this.setCreatorDate();
 
@@ -115,8 +111,13 @@ export class Asset {
   }
 
 
-  /** Assigns the asset's downloadLink parameter */
-  private getDownloadLink(): void {
+  /** 
+   * Pulls additional media metadata
+   * - Constructs a download link
+   * - Constructs the IIIF tile source URL
+   * - Finds the asset Type id
+  */
+  private loadMediaMetaData(): void {
       this._assets.getImageSource( this.id )
         .subscribe((data) => {
             if (!data) {
@@ -140,13 +141,14 @@ export class Asset {
                 this.downloadLink = this._auth.getUrl() + "/download?imgid=" + this.id + "&url=" + encodeURIComponent(url);
             }
 
+            // Save the Tile Source for IIIF
+            let imgPath = '/' + data['imageUrl'].substring(0, data['imageUrl'].lastIndexOf('.fpx') + 4)
+            this.tileSource = this._auth.getIIIFUrl() + encodeURIComponent(imgPath) + '/info.json'
+
             this.imageSourceLoaded = true;
             this.dataLoadedSource.next(this.metadataLoaded && this.imageSourceLoaded);
         }, (error) => {
             console.error(error);
         });
   }
-  
-  
-
 }

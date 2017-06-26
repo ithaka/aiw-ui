@@ -48,11 +48,11 @@ export class PwdResetModal implements OnInit {
   }
   loadPwdRstRes(res: any){
     if(res.status === false){
-      this.errorMsgPwdRst = 'Sorry! ' + this.pwdResetForm.value.email + ' is invalid for ARTstor.';
+      this.errorMsgPwdRst = 'Sorry! ' + this.pwdResetForm.value.email + ' is invalid for Artstor.';
       setTimeout(() => {
         this.errorMsgPwdRst = '';
                 }, 8000);
-      this.pwdResetForm.value.email = '';
+      this.pwdResetForm.controls['email'].setValue('');
     }
     else{
       this.pwdReset = false;

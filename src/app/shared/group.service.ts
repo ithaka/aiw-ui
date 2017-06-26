@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core'
 import { Http, Response, Headers, RequestOptions } from '@angular/http'
-import { Observable } from 'rxjs/Rx'
+import { BehaviorSubject, Observable, Subject } from 'rxjs/Rx';
 
 // Project Dependencies
 import { AuthService, ImageGroup } from '.'
@@ -21,6 +21,7 @@ export class GroupService {
 
     /**
      * Get All Groups
+     * @param level Indicates access level of group: 'institution', 'private', 'public', 'all' or 'shared'
      */
     public getAll(level: string, size?: number, pageNo ?: number, tags ?: string[] ): Observable<any> {
         if (!tags) {
@@ -46,6 +47,61 @@ export class GroupService {
                 return body || { }
             }
         )
+    }
+
+    /**
+     * Gets all group objects by looping through every page
+     * @param level Indicates access level of group: 'institution', 'private', 'public', 'all' or 'shared'
+     */
+    public getEveryGroup(level: string) : Observable<any[]> {
+        let everyGroupSubject = new BehaviorSubject([])
+        let everyGroupObservable = everyGroupSubject.asObservable()
+        let size = 100 // max the service handles
+        let pageNo = 1
+        let totalPages = 1
+        let groups: any [] = []
+
+        // Get first page to find out how many Groups are available
+        this.http.get(
+            this.groupUrl + "?size=" + size + '&level=' + level + '&from=0', this.options
+        ).map(
+            res => {
+                let body = res.json()
+                console.log(body)
+                return body || { }
+            }
+        ).toPromise()
+        .then( data => {
+            groups = groups.concat(data.groups)
+            totalPages = (data.total/size) + 1
+
+            for(pageNo; pageNo <= totalPages; pageNo++) {
+                // Use locally scoped pageNo since Timeout fires after loop
+                let thisPageNo = pageNo
+                // Timeout for debouncing to prevent spamming the service
+                setTimeout(() => {
+                    this.http.get(
+                        this.groupUrl + "?size=" + size + '&level=' + level + '&from=' + ( (thisPageNo - 1) * size), this.options
+                    ).map(
+                        res => {
+                            let body = res.json()
+                            return body || { }
+                        }
+                    ).toPromise()
+                    .then(data => {
+                        groups = groups.concat(data.groups)
+                        everyGroupSubject.next(groups)
+                    }, error => {
+                        everyGroupSubject.error(error)
+                    })
+                // Provide a debounce for every set of 5 calls
+                }, Math.floor(pageNo/5) * 1000 )
+            }
+        }, error => {
+            everyGroupSubject.error(error)
+        })
+
+        return everyGroupObservable
     }
 
      /**

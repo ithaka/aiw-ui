@@ -32,7 +32,7 @@ export class NewIgModal implements OnInit {
   /** Gives artstor institution users the ability to curate image public image groups */
   private isArtstorUser: boolean = false;
   // We need to seed the medium editor with an empty div to fix line return issues in Firefox!
-  private igDescription: string = "<div>&nbsp;</div>";
+  private igDescription: string = "";
   /** The list of assets which are currently selected from the asset grid */
   @Input() private selectedAssets: any[] = [];
 
@@ -111,6 +111,7 @@ export class NewIgModal implements OnInit {
    *  contains almost all of the logic for creating/editing the image group
    */
   private igFormSubmit(formValue: IgFormValue): void {
+    console.log(formValue)
     this.submitted = true;
     // avoid making the service calls, but still trigger error display
     if (!this.newIgForm.valid) {
@@ -127,14 +128,13 @@ export class NewIgModal implements OnInit {
      *  only funky thing here is that sometimes we get the list of asset ids from the image group, and sometimes from selected assets
      *  that depends on whether you're copying an image group or making a new one
      */
-    let group = this.util.prepareGroup(formValue, igDescValue, this.copyIG || this.editIG ? this.ig.items : this.selectedAssets, this._auth.getUser())
+    let group = this.util.prepareGroup(formValue, igDescValue, this.copyIG || this.editIG ? this.ig.items : this.selectedAssets, this._auth.getUser(), this.ig)
 
     if(this.editIG){
       // Editing group
       this._analytics.directCall('edit_img_group')
 
-      group.id = this.ig.id
-      group.access = this.ig.access
+      group.id = this.ig.id // need this for the update call
 
       this._group.update(group)
         .subscribe(
@@ -142,7 +142,7 @@ export class NewIgModal implements OnInit {
             this.isLoading = false;
             this.newGroup = data;
             this.serviceResponse.success = true;
-            this._assets.igSavedSource.next(true);
+            this._assets.clearSelectMode.next(true);
           },
           error => {
             console.error(error);
@@ -173,7 +173,7 @@ export class NewIgModal implements OnInit {
             this.isLoading = false;
             this.newGroup = data;
             this.serviceResponse.success = true;
-            this._assets.igSavedSource.next(true);
+            this._assets.clearSelectMode.next(true);
 
             // if an Artstor user, make sure the public property is set correctly
             if (this.isArtstorUser) {
@@ -264,7 +264,6 @@ export class NewIgModal implements OnInit {
       .take(1)
       .subscribe((res) => {
         // not really sure what to do here?
-        console.log(res)
       }, (err) => {
         console.error(err)
         // also not really sure what to do here...

@@ -132,11 +132,11 @@ export class AssetGrid implements OnInit, OnDestroy {
           }
         }
         
-        if(params['igId'] && !params['currentPage']){
-          this.editMode = false;
-          this.selectedAssets = [];
-          this._assets.setSelectedAssets(this.selectedAssets);
-        }
+        // if(params['igId'] && !params['currentPage']){
+        //   this.editMode = false;
+        //   this.selectedAssets = [];
+        //   this._assets.setSelectedAssets(this.selectedAssets);
+        // }
         
         this.isLoading = true;
       })
@@ -180,9 +180,6 @@ export class AssetGrid implements OnInit, OnDestroy {
             this.isLoading = false;
           }
 
-          this.editMode = false;
-          this.selectedAssets = [];
-          this._assets.setSelectedAssets(this.selectedAssets);
         },
         (error) => {
           console.error(error);
@@ -219,16 +216,14 @@ export class AssetGrid implements OnInit, OnDestroy {
       })
     )
 
-    // Clear all selected assets and close edit mode once an IG is saved
+    // Clear all selected assets and close edit mode
     this.subscriptions.push(
-      this._assets.igSaved.subscribe((res: any) => {
-        if(res){
-          this.editMode = false;
-          this.selectedAssets = [];
-          this._assets.setSelectedAssets(this.selectedAssets);
+      this._assets.clearSelectMode.subscribe( value => {
+        if(value){
+          this.deactivateSelectMode();
         }
       })
-    );
+    )
   }
 
   ngOnDestroy() {
@@ -246,10 +241,20 @@ export class AssetGrid implements OnInit, OnDestroy {
   private goToPage(newPage: number) {
     // The requested page should be within the limits (i.e 1 to totalPages)
     if((newPage >= 1) && (newPage <= this.pagination.totalPages)){
+      this._assets.paginated = true;
       this.isLoading = true;
       this.pagination.currentPage = newPage;
       this._assets.goToPage(newPage);
     }
+  }
+
+  /**
+   * Clear select mode by re-setting the edit flag and clearing the selected assets array
+   */
+  private deactivateSelectMode() {
+    this.editMode = false;
+    this.selectedAssets = [];
+    this._assets.setSelectedAssets(this.selectedAssets);
   }
 
   /**

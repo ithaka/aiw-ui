@@ -42,6 +42,8 @@
                     <li *ngIf="reorderMode" [class.disabled]="!orderChanged" class="btn btn-link" (click)="saveReorder()"><i class="icon icon-reorder-white"></i>Save Order</li>
                     <!--Save Order-->
                     <li *ngIf="reorderMode" class="btn btn-link" (click)="cancelReorder()"><i class="icon icon-close-white--round"></i>Cancel Reorder</li>
+                    <!--Number of selected assets in edit mode-->
+                    <div class="selected-assets" *ngIf="editMode">{{ selectedAssets.length }} selected asset{{ selectedAssets.length > 1 ? 's' : '' }}</div>
                 </div>
             </div>
             <!--<span class="page-size">{{ pagination.pageSize }}</span>-->
@@ -69,7 +71,7 @@
                 </div>
                 <div class="col-sm-6 col-md-3 col-lg-2" *ngFor="let asset of results">
                     <a class="card card--asset" [ngClass]="{'selected': ( isSelectedAsset(asset) > -1 ) }" [routerLink]="editMode ? ['./'] : ['/asset', asset.objectId]" (click)="selectAsset(asset)">
-                        <ang-thumbnail [thumbnail]="asset" [reorderMode]="reorderMode"></ang-thumbnail>
+                        <ang-thumbnail [thumbnail]="asset" [reorderMode]="reorderMode" [editMode]="editMode"></ang-thumbnail>
                     </a>
                 </div> <!-- .col -->
             </div>
@@ -85,10 +87,18 @@
                 </div>
                 <div class="col-sm-4 col-md-2 col-lg-1 draggable" *ngFor="let asset of results; let i = index" dnd-sortable [dragEnabled]="reorderMode && !isLoading" [sortableIndex]="i" (onDragEnd)="orderChanged = true">
                     <div class="card card--asset">
-                        <ang-thumbnail [thumbnail]="asset" [reorderMode]="reorderMode"></ang-thumbnail>
+                        <ang-thumbnail [thumbnail]="asset" [reorderMode]="reorderMode" [editMode]="editMode"></ang-thumbnail>
                     </div>
                 </div> <!-- .col -->
             </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="mobile--hide grid-tool-bar" [ngClass]="[ reorderMode ? 'col-12' : 'col-sm-8 col-md-8 col-lg-9']"></div>
+        <div *ngIf="!reorderMode" class="col-sm-4 col-md-4 col-lg-3 text-right grid-pagination-bar">
+            <pagination [pageObj]="pagination" (goToPage)="goToPage($event)">
+            </pagination>
         </div>
     </div>
 </div>

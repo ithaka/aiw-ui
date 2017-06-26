@@ -1,7 +1,9 @@
+@import '../../../sass/core/variables';
 
 $assetViewerPad: 20px;
 $viewerMinHeight: 90vh;
 $viewerOldBrowserMinHeight: 600px;
+$viewerMobileHeight: 50vh;
 
 $metadataBg: #f1f8f1;
 
@@ -13,6 +15,15 @@ $metadataBg: #f1f8f1;
     min-height: $viewerOldBrowserMinHeight;
     min-height: $viewerMinHeight;
     overflow: hidden;
+
+    @media(max-width: $phone) {
+        height: $viewerMobileHeight;
+        min-height: $viewerMobileHeight;
+
+        .asset-viewer__buttons {
+            opacity: 1;
+        }
+    }
 
     &:hover {
         .asset-viewer__buttons {
@@ -29,11 +40,22 @@ $metadataBg: #f1f8f1;
     left: $assetViewerPad;
     z-index: 1000;
     padding: 10px;
+
+    @media(max-width: $phone) {
+        top: calc(100% - 40px);
+        left: 50%;
+        transform: translateX(-50%);
+    }
 }
 
 .video-player {
     min-height: $viewerOldBrowserMinHeight;
     min-height: $viewerMinHeight;
+
+    @media(max-width: $phone) {
+        height: $viewerMobileHeight;
+        min-height: $viewerMobileHeight;
+    }
 
     & iframe {
         min-width:100%;
@@ -48,6 +70,11 @@ $metadataBg: #f1f8f1;
     height: $viewerMinHeight; 
     width: 100%; 
     min-height: $viewerMinHeight;
+
+    @media(max-width: $phone) {
+        height: $viewerMobileHeight;
+        min-height: $viewerMobileHeight;
+    }
 }
 
 .asset-viewer.fullscreen {

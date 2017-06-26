@@ -1,6 +1,7 @@
 import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Subscription } from 'rxjs/Rx';
+import { CompleterService, CompleterData } from 'ng2-completer';
 
 import { AssetService, GroupService, ImageGroup } from './../../shared';
 import { AnalyticsService } from '../../analytics.service';
@@ -18,23 +19,31 @@ export class AddToGroupModal implements OnInit, OnDestroy {
   @Input() private selectedAssets: any[] = []; // this is used in the asset page, where a single asset can be injected directly
   private groups: ImageGroup[] = [];
   private selectedIg: ImageGroup;
+  private selectedGroupName: string;
+  private selectedGroupError: string;
+
+  @Input()
+  private copySelectionStr: string = 'ADD_TO_GROUP_MODAL.FROM_SELECTED'
 
   private serviceResponse: {
     success?: boolean,
     failure?: boolean
   } = {};
 
+  private dataService: CompleterData;
+
   constructor(
     private _assets: AssetService,
     private _group: GroupService,
-    private _analytics: AnalyticsService
-  ) { }
+    private _analytics: AnalyticsService,
+    private completerService: CompleterService
+  ) {
+    
+  }
 
   ngOnInit() {
-    console.log(this.selectedAssets);
     if (this.selectedAssets.length < 1) { // if no assets were added when component was initialized, the component gets the current selection list
       // Subscribe to asset selection
-      console.log("we've got to get the assets");
       this.subscriptions.push(
         this._assets.selection.subscribe(
           assets => {
@@ -47,9 +56,15 @@ export class AddToGroupModal implements OnInit, OnDestroy {
       );
     }
 
-    this._group.getAll('private')
-      .take(1)
-      .subscribe((res) => { if (res.groups) { this.groups = res.groups; } }, (err) => { console.error(err); });
+    // Load list of Groups, and update autocomplete as Groups load
+    this._group.getEveryGroup('private')
+      .subscribe((groups) => { 
+        if (groups) { 
+          this.groups = groups;
+          // Data service for the autocomplete component (ng2 completer)
+          this.dataService = this.completerService.local(this.groups, 'name', 'name');
+        } 
+      }, (err) => { console.error(err); });
   }
 
   ngOnDestroy() {
@@ -61,11 +76,24 @@ export class AddToGroupModal implements OnInit, OnDestroy {
    * @param form Values to update the group with
    */
   private submitGroupUpdate(form: NgForm) {
-    this.serviceResponse = {}; // clear any service status
+    // clear any service status
+    this.serviceResponse = {}
+    this.selectedGroupError = ''
 
-    this.selectedIg = form.value.imageGroup;
-    let putGroup: ImageGroup = <ImageGroup>{};
-    Object.assign(putGroup, form.value.imageGroup);
+    // Find full group object based on group name
+    this.groups.forEach( (group, index) => {
+      if (group.name == this.selectedGroupName) {
+        this.selectedIg = group
+      }
+    })
+
+    if (!this.selectedIg || this.selectedGroupName.length < 1) {
+      this.selectedGroupError = "ADD_TO_GROUP_MODAL.NO_GROUP"
+      return
+    }
+    
+    // Create object for new modified group
+    let putGroup: ImageGroup = Object.assign({}, this.selectedIg)
 
     // assets come from different places and sometimes have id and sometimes objectId
     this.selectedAssets.forEach((asset: any) => {
@@ -92,7 +120,7 @@ export class AddToGroupModal implements OnInit, OnDestroy {
         this._group.update(data)
           .take(1)
           .subscribe(
-            (res) => { this.serviceResponse.success = true; this._assets.igSavedSource.next(true); },
+            (res) => { this.serviceResponse.success = true; this._assets.clearSelectMode.next(true); },
             (err) => { console.error(err); this.serviceResponse.failure = true;
           })
 

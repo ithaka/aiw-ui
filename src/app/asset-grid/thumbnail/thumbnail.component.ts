@@ -22,6 +22,9 @@ export class ThumbnailComponent implements OnInit {
   @Input()
   private reorderMode: boolean;
 
+  @Input()
+  private editMode: boolean;
+
   private collectionTypeMap: any = {
     1: { name: "artstor-asset", alt: "Artstor Digital Library" },
     2: { name: "institution-asset", alt: "Institution Collections" },

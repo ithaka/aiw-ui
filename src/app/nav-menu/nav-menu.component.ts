@@ -46,6 +46,7 @@ export class NavMenu implements OnInit, OnDestroy {
   @Output() refreshIG: EventEmitter<any> = new EventEmitter();
 
   private user: any = {};
+  private institutionObj: any = {};
   
   private mobileCollapsed: boolean = true;
   private selectedAssets: any[] = [];
@@ -95,6 +96,12 @@ export class NavMenu implements OnInit, OnDestroy {
         if (params['igId'] && !params['currentPage']){
           this.showImageGroupModal = false
         }
+      })
+    )
+
+    this.subscriptions.push(
+      this._auth.getInstitution().subscribe((institutionObj) => {
+        this.institutionObj = institutionObj;
       })
     )
   }

@@ -1,3 +1,4 @@
+import { Title } from '@angular/platform-browser';
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router'
 import { Subscription }   from 'rxjs/Subscription';
@@ -26,7 +27,8 @@ export class SearchPage implements OnInit, OnDestroy {
         private route: ActivatedRoute, 
         private _filters: AssetFiltersService, 
         private _router: Router,
-        private _analytics: AnalyticsService
+        private _analytics: AnalyticsService,
+        private _title: Title
       ) {
     // this makes the window always render scrolled to the top
     this._router.events.subscribe(() => {
@@ -40,13 +42,18 @@ export class SearchPage implements OnInit, OnDestroy {
       this.route.params.subscribe( (routeParams) => {
         this._filters.clearApplied();
         let params = Object.assign({}, routeParams);
+        
         // If a page number isn't set, reset to page 1!
         if (!params['currentPage']){
           params['currentPage'] = 1;
         } 
-        if (params["term"] ) {
+
+        // Make a search call if there is a search term or any selected filter
+        if (params["term"] || params["classification"] || params["geography"] || params["collTypes"] || params["startDate"] || params["endDate"]) {
+          this._title.setTitle( 'Artstor | "'+ params["term"] + '"' )
           this._assets.queryAll(params);
         } else {
+          this._title.setTitle( 'Artstor' )
           console.log('No search term');
         }
       })

@@ -1,3 +1,4 @@
+import { Title } from '@angular/platform-browser';
 import { Component, OnInit } from '@angular/core';
 
 import { AssetService } from './../shared/assets.service';
@@ -18,10 +19,14 @@ export class BrowseInstitutionComponent implements OnInit {
   constructor(
     private _assets: AssetService,
     private _tags: TagsService,
-    private _analytics: AnalyticsService
+    private _analytics: AnalyticsService,
+    private _title: Title
   ) { }
 
   ngOnInit() {
+    // Set page title
+    this._title.setTitle("Artstor | Browse Institutional Collections")
+
     this._tags.initTags({type: "institution"})
       .then((tags) => {
         this.tags = tags;

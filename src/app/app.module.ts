@@ -1,8 +1,8 @@
 import { NgModule, ApplicationRef } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
+import { BrowserModule, Title } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Http, HttpModule } from '@angular/http';
-import { RouterModule, RouteReuseStrategy } from '@angular/router';
+import { NavigationEnd, Router, RouteReuseStrategy, RouterModule } from '@angular/router';
 import { removeNgStyles, createNewHosts, createInputTransfer } from '@angularclass/hmr';
 
 /*
@@ -18,6 +18,7 @@ import {LockerModule, Locker, LockerConfig} from 'angular2-locker'
 import { Angulartics2Module, Angulartics2GoogleAnalytics } from 'angulartics2';
 import { TranslateModule, TranslateStaticLoader, TranslateLoader } from 'ng2-translate';
 import { RlTagInputModule } from 'angular2-tag-input';
+import { Ng2CompleterModule } from 'ng2-completer';
 
 // Directives
 import { ClickOutsideDirective } from 'angular2-click-outside/clickOutside.directive.ts';
@@ -64,19 +65,21 @@ import {
   AccessDeniedModal, 
   PwdResetModal,
   ShareIgLinkModal, 
-  ConfirmModal 
+  ConfirmModal,
+  SessionExpireModal
 } from './modals';
 import { SkyBannerComponent } from './sky-banner/sky-banner.component'
 
 
 // Application wide providers
-import { AuthService, AssetService, GroupService, TypeIdPipe, ToolboxService, LoggingService, ImageGroupService } from './shared';
+import { AuthService, AssetService, GroupService, TypeIdPipe, ToolboxService, ImageGroupService } from './shared';
 import { AssetFiltersService } from './asset-filters/asset-filters.service';
 import { TagsService } from './browse-page/tags.service';
 import { CustomReuseStrategy } from './reuse-strategy';
 import { LegacyRouteResolver } from './legacy.service';
 import { AnalyticsService } from './analytics.service';
 
+import { LinkifyPipe } from './shared/linkify.pipe';
 
 const APP_PROVIDERS = [
   ...APP_RESOLVER_PROVIDERS,
@@ -89,8 +92,8 @@ const APP_PROVIDERS = [
   AssetFiltersService,
   TagsService,
   ToolboxService,
-  LoggingService,
-  LegacyRouteResolver
+  LegacyRouteResolver,
+  Title
   // { provide: RouteReuseStrategy, useClass: CustomReuseStrategy } // to be implemented later
 ];
 
@@ -106,54 +109,56 @@ type StoreType = {
 @NgModule({
   bootstrap: [ App ],
   declarations: [
+    AccessDeniedModal,
+    AccountPage,
+    AddToGroupModal,
+    AgreeModalComponent,
     App,
+    AssetFilters,
+    AssetGrid,
+    AssetPage,
+    AssetViewerComponent,
+    AssociatedPage,
+    BrowseCommonsComponent,
+    BrowseGroupsComponent,
+    BrowseInstitutionComponent,
+    BrowsePage,
+    CategoryPage,
+    ClickOutsideDirective,
+    ClusterPage,
+    CollectionPage,
+    ConfirmModal,
+    DeleteIgModal,
+    SessionExpireModal,
+    DownloadLimitModal,
+    Footer,
+    Home,
+    ImageGroupPage,
+    ImageGroupPPPage,
+    LibraryComponent,
+    Login,
+    LoginReqModal,
+    MediumEditorDirective,
+    MyCollectionsComponent,
     Nav,
     NavMenu,
-    Footer,
-    SearchPage,
-    CollectionPage,
-    CategoryPage,
-    ImageGroupPPPage,
-    ClickOutsideDirective,
-    DownloadLimitModal,
-    ShareIgLinkModal,
-    ConfirmModal,
-    SkyBannerComponent,
-    DeleteIgModal,
-    NoIgModal,
-    ClusterPage,
-    BrowsePage,
-    TagComponent,
-    AccountPage,
-    AssetViewerComponent,
-    AssetPage,
-    AgreeModalComponent,
-    LibraryComponent,
-    BrowseCommonsComponent,
-    MyCollectionsComponent,
-    BrowseInstitutionComponent,
-    BrowseGroupsComponent,
-    AssociatedPage,
-    AssetFilters,
-    PaginationComponent,
-    AccessDeniedModal,
-    PwdResetModal,
-    AssetGrid,
-    SearchComponent,
-    ThumbnailComponent,
-    ImageGroupPage,
-    PptModalComponent,
-    LoginReqModal,
-    SearchModal,
     NewIgModal,
-    ShareLinkModal,
-    Login,
-    Home,
     NoContent,
+    NoIgModal,
+    PaginationComponent,
+    PptModalComponent,
+    PwdResetModal,
+    RegisterComponent,
+    SearchComponent,
+    SearchModal,
+    SearchPage,
+    ShareIgLinkModal,
+    ShareLinkModal,
+    SkyBannerComponent,
+    TagComponent,
+    ThumbnailComponent,
     TypeIdPipe,
-    AddToGroupModal,
-    MediumEditorDirective,
-    RegisterComponent
+    LinkifyPipe
   ],
   imports: [ // import Angular's modules
     BrowserModule,
@@ -161,7 +166,7 @@ type StoreType = {
     ReactiveFormsModule,
     HttpModule,
     RlTagInputModule,
-    // CoolStorageModule,
+    Ng2CompleterModule,
     LockerModule,
     RouterModule.forRoot(ROUTES, { useHash: true }),
     Angulartics2Module.forRoot([ Angulartics2GoogleAnalytics ]),
@@ -180,7 +185,15 @@ type StoreType = {
   ]
 })
 export class AppModule {
-  constructor(public appRef: ApplicationRef, public appState: AppState) {}
+  constructor(public appRef: ApplicationRef, public appState: AppState, private router: Router, private _satellite: AnalyticsService) {
+    // Track page changes with Adobe Analytics
+    router.events.subscribe((val: NavigationEnd) => {
+      // If this is a different page, report it!
+      if (val.urlAfterRedirects != val.url) {
+        _satellite.directCall('page_name')
+      }
+    })
+  }
 
   hmrOnInit(store: StoreType) {
     if (!store || !store.state) return;

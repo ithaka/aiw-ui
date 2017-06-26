@@ -6,9 +6,6 @@ import { Subscription } from 'rxjs/Subscription';
 import { LoginService } from '../../login/login.service';
 import { AuthService, AssetService, ToolboxService } from '..';
 
-import {Idle, DEFAULT_INTERRUPTSOURCES} from '@ng-idle/core';
-import {Keepalive} from '@ng-idle/keepalive';
-
 @Component({
   selector: 'nav-bar',
   providers: [
@@ -23,8 +20,8 @@ export class Nav implements OnInit, OnDestroy {
   private user: any;
   private institutionObj: any;
   private _tool: ToolboxService = new ToolboxService();
+  
   private showinactiveUserLogoutModal: boolean = false;
-  private idleState: string = 'Not started.';
 
   // TypeScript public modifiers
   constructor(
@@ -33,39 +30,19 @@ export class Nav implements OnInit, OnDestroy {
     private _login: LoginService,
     private _router: Router,
     private route: ActivatedRoute,
-    private location: Location,
-    private idle: Idle,
-    private keepalive: Keepalive
-  ) {  
-    idle.setIdle(60);
-    idle.setTimeout(5400); // Log user out after 90 mins of inactivity
-    idle.setInterrupts(DEFAULT_INTERRUPTSOURCES);
+    private location: Location
+  ) { 
 
-    idle.onIdleEnd.subscribe(() => {
-      this.idleState = 'No longer idle.';
-    });
-    idle.onTimeout.subscribe(() => {
-      if(this.user && this.user.isLoggedIn){
-        this.logout();
-        this.showinactiveUserLogoutModal = true;
-
-        this.idleState = 'Timed out!';
-      }
-      else{
-        this.resetIdleWatcher()
-      }
-    });
-    idle.onIdleStart.subscribe(() => {
-      this.idleState = 'You\'ve gone idle!';
-    });
-    idle.onTimeoutWarning.subscribe((countdown) => {
-      this.idleState = 'You will time out in ' + countdown + ' seconds!'
-    });
-
-    this.resetIdleWatcher();
   }
 
   ngOnInit() {
+
+    // If the user session has expired, then explicitly logout the user
+    this._auth.getUserInfo().subscribe( userInfo => {
+      if(!userInfo.status){
+        this.logout();
+      }
+    });
 
     this.subscriptions.push(
       this._router.events.subscribe(e => {
@@ -81,6 +58,13 @@ export class Nav implements OnInit, OnDestroy {
     this.subscriptions.push(
       this._auth.getInstitution().subscribe((institutionObj) => {
         this.institutionObj = institutionObj;
+      })
+    );
+
+    // Show inactive user logout modal once the subject is set by auth.service
+    this.subscriptions.push(
+      this._auth.showUserInactiveModal.subscribe( value => {
+        this.showinactiveUserLogoutModal = value;
       })
     );
 
@@ -109,15 +93,9 @@ export class Nav implements OnInit, OnDestroy {
     this._router.navigate([route]);
   }
 
-  // Reset the idle watcher
-  resetIdleWatcher() {
-    this.idle.watch();
-    this.idleState = 'Idle watcher started'
-  }
-
   // Reset the idle watcher and navigate to remote login page
   inactiveUsrLogOut(): void{
-    this.resetIdleWatcher();
+    this._auth.resetIdleWatcher();
     this.showinactiveUserLogoutModal = false;
   }
   
