@@ -61,16 +61,24 @@ export class AuthService implements CanActivate {
     this._router = _router;
 
     // these can be moved inside the if statement when we want to change services based on dev/prod
-    this.hostname = '//library.artstor.org';
-    this.baseUrl =  '//library.artstor.org/api/secure'; 
-    this.imageFpxUrl =  '//library.artstor.org/api/secure/imagefpx'; 
-    // this.lostPassUrl =  '//library.artstor.org/lostpw'; 
-    this.lostPassUrl = '//library.artstor.org/library/lostpw'
+    this.hostname = '//beta.artstor.org';
+    this.baseUrl =  '//beta.artstor.org/api/secure'; 
+    this.imageFpxUrl =  '//beta.artstor.org/api/secure/imagefpx'; 
+    // this.lostPassUrl =  '//beta.artstor.org/lostpw'; 
+    this.lostPassUrl = '//beta.artstor.org/library/lostpw'
     this.thumbUrl = '//mdxdv.artstor.org';
     this.IIIFUrl = '//tsprod.artstor.org/rosa-iiif-endpoint-1.0-SNAPSHOT/fpx';
     
     // Check domain
-    if ( document.location.hostname.indexOf('library.artstor.org') > -1 || document.location.hostname.indexOf('beta.artstor.org') > -1 || document.location.hostname.indexOf('prod.cirrostratus.org') > -1 || document.location.hostname.indexOf('lively.artstor.org') > -1 ) {
+    if (document.location.hostname.indexOf('library.artstor.org') > -1) {
+      this.hostname = '//library.artstor.org';
+      this.baseUrl =  '//library.artstor.org/api/secure'; 
+      this.imageFpxUrl =  '//library.artstor.org/api/secure/imagefpx'; 
+      // this.lostPassUrl =  '//library.artstor.org/lostpw'; 
+      this.lostPassUrl = '//library.artstor.org/library/lostpw';
+      this.logUrl = '//ang-ui-logger.apps.prod.cirrostratus.org/api/v1';
+    }
+    else if ( document.location.hostname.indexOf('beta.artstor.org') > -1 || document.location.hostname.indexOf('prod.cirrostratus.org') > -1 || document.location.hostname.indexOf('lively.artstor.org') > -1 ) {
       // Prod/Lively endpoints
       this.logUrl = '//ang-ui-logger.apps.prod.cirrostratus.org/api/v1';
     } else if (document.location.hostname.indexOf('localhost') > -1 || document.location.hostname.indexOf('stage.artstor.org') > -1 || document.location.hostname.indexOf('test.stagely.artstor.org') > -1 || document.location.hostname.indexOf('test.cirrostratus.org') > -1) {
