@@ -161,6 +161,17 @@
     "COPY_SUCCESS": "Link copied to clipboard",
     "SERVICE_ERROR": "We've encountered an error in getting a share token. Please refresh or try again later."
   },
+  "HOME": {
+    "HEADINGS": {
+      "SSC": "Shared Shelf Commons",
+      "BRWSE": "Browse",
+      "FRM_BLOG": "From Our Blog",
+      "QUESTIONS": "Questions"
+    },
+    "LINKS":{
+      "ADVNC_SRCH": "Advanced Search"
+    }
+  },
   "NAV_MENU": {
     "HOME": "Home",
     "COLLECTIONS": {
