@@ -34,7 +34,7 @@
              <!-- Institution Shared Shelf Collections-->
             <div *ngIf="institution && instCollections.length > 0" class="card">
                 <div class="card-header">
-                    <h2>{{ institution.displayName ? institution.displayName : "Institutional" }} Collections</h2>
+                    <h2 translate [translateParams]="{ institutionName: institution.displayName ? institution.displayName : 'Institutional' }">HOME.HEADINGS.INSTITUTION_COLLECTIONS</h2>
                 </div>
                 <div class="list--home-collections" [class.loading]="loaders['instCollections']">
                     <div class="list-group list-group-flush">
@@ -52,12 +52,12 @@
             <!--Shared Shelf Commons Collections-->
             <div class="card pb-3">
                 <div class="card-header">
-                    <h2>{{ 'HOME.HEADINGS.SSC' | translate}}</h2>
+                    <h2>{{ 'HOME.HEADINGS.SSC' | translate }}</h2>
                 </div>
                 <div class="list--home-collections" [class.loading]="loaders['collections']">
                     <div class="list-group list-group-flush">
                         <a *ngFor="let collection of collections" class="list-group-item list-group-item-action" [routerLink]="[ '/collection', collection.collectionid ]">
-                                {{ collection.collectionname }}
+                            {{ collection.collectionname }}
                         </a>
                     </div>
                 </div>
@@ -69,13 +69,13 @@
             </div>
         </div>
         <div class="col-sm-5">
-            <a id="featuredCollectionLink" class="card featured-card" href="/#/category/10374058919;name=The%20Andy%20Warhol%20Foundation%20for%20the%20Visual%20Arts%3A%20Oeuvre%20458"> 
-                <img class="card-img-top no-stretch" src="/assets/img/featured-collection.jpg" alt="Collection: Ezra Stoller Archive (Esto)">
+            <a id="featuredCollectionLink" class="card featured-card" [attr.href]=" 'HOME.FEATURED.LINK' | translate "> 
+                <img class="card-img-top no-stretch" [attr.src]="'HOME.FEATURED.IMG_SOURCE' | translate" [attr.alt]="'HOME.FEATURED.LINK_TITLE' | translate" [attr.title]="'HOME.FEATURED.LINK_TITLE' | translate">
                 <div class="card-body pt-1">
-                    <label style="margin-bottom:0px;">Featured Collection</label>
-                    <p style="margin-bottom:6px;">The Andy Warhol Foundation for the Visual Arts: Oeuvre</p>
+                    <label style="margin-bottom:0px;">{{ 'HOME.FEATURED.HEADING' | translate }}</label>
+                    <p style="margin-bottom:6px;">{{ 'HOME.FEATURED.SUBHEADING' | translate }}</p>
                 </div>
-                <div class="featured-caption">Andy Warhol; Red Jackie; 1964. Images © The Andy Warhol Foundation for the Visual Arts, Inc. and Andy Warhol artwork © The Andy Warhol Foundation for the Visual Arts, Inc.</div>
+                <div class="featured-caption">{{ 'HOME.FEATURED.DESCRIPTION' | translate }}</div>
             </a>
             <div class="card">
                 <div class="card-header">
