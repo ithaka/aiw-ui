@@ -5,28 +5,28 @@
             <ang-search></ang-search>
             <div class="card pt-2">
                 <div class="card-header">
-                    <h1>{{ 'HOME.HEADINGS.BRWSE' | translate}}</h1>
+                    <h1>{{ 'HOME.BROWSE.TITLE' | translate }}</h1>
                 </div>
                 <ul class="list-group list-group-flush list-group-clean">
                     <a id="linkBrowseGeography" class="list-group-item" [routerLink]="['/browse','library', {viewId: 260}]">
-                        <h3 class="browse-category">Geography</h3>
-                        <p class="small">(Afghanistan, Albania, Algeria...)</p>
+                        <h3 class="browse-category">{{ 'HOME.BROWSE.GEO_HEADING' | translate }}</h3>
+                        <p class="small">{{ 'HOME.HEADINGS.GEO_LIST' | translate }}</p>
                     </a>
                     <a id="linkBrowseClassification" class="list-group-item" [routerLink]="['/browse','library', {viewId: 250}]">
-                        <h3 class="browse-category">Classification</h3>
-                        <p class="small">(painting, performing arts, photography...)</p>
+                        <h3 class="browse-category">{{ 'HOME.BROWSE.CLASS_HEADING' | translate }}</h3>
+                        <p class="small">{{ 'HOME.BROWSE.CLASS_LIST' | translate }}</p>
                     </a>
                     <a id="linkBrowseCollection" class="list-group-item" [routerLink]="['/browse','library', {viewId: 103}]">
-                        <h3 class="browse-category">Collection</h3>
-                        <p class="small">(Artstor, Shared Shelf, Shared Shelf Commons, My Collections...)</p>
+                        <h3 class="browse-category">{{ 'HOME.BROWSE.COLL_HEADING' | translate }}</h3>
+                        <p class="small">{{ 'HOME.BROWSE.COLL_LIST' | translate }}</p>
                     </a>
                     <a id="linkBrowseTeaching" class="list-group-item" [routerLink]="['/browse','groups', 'public']">
-                        <h3 class="browse-category">Teaching Resources</h3>
-                        <p class="small">(Curriculum Guides, AP® Resources, Surveys and Case Studies: Art History, Humanities and Social Sciences)</p>
+                        <h3 class="browse-category">{{ 'HOME.BROWSE.TEACHING_HEADING' | translate }}</h3>
+                        <p class="small">{{ 'HOME.BROWSE.TEACHING_LIST' | translate }}</p>
                     </a>
                     <a id="linkBrowseIGs" class="list-group-item" [routerLink]="['/browse','groups', 'institution']">
-                        <h3 class="browse-category">Image Groups</h3>
-                        <p class="small">(My groups and groups shared by others at my institution)</p>
+                        <h3 class="browse-category">{{ 'HOME.BROWSE.GROUPS_HEADING' | translate }}</h3>
+                        <p class="small">{{ 'HOME.BROWSE.GROUPS_LIST' | translate }}</p>
                     </a>
                 </ul>
 
