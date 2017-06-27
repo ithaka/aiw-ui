@@ -158,7 +158,7 @@ export class AssetGrid implements OnInit, OnDestroy {
     // sets up subscription to allResults, which is the service providing thumbnails
     this.subscriptions.push(
       this._assets.allResults.subscribe(
-        (allResults: any) => {
+        (allResults) => {
           // Update results array
           this.results = allResults.thumbnails;
           if ('items' in allResults) {
