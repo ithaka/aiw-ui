@@ -31,8 +31,8 @@
                     (prevPage)="showPrevAsset()"></ang-asset-viewer>
             <!--</div>-->
             <div class="text-left p-3">
-                <a [attr.href]="'http://www.artstor.org/form/iap-request-form?name=' + assets[0].title + '&collectionName=' + assets[0].collectionName + '&id=' + assets[0].id + '&email=' + user.username" class="btn btn-secondary" title="Request Image for Academic Publishing" tabindex="2" target="_blank">{{'ASSET_PAGE.BUTTONS.GET_IAP' | translate}}</a>
-            <a [attr.href]="'http://www.artstor.org/form/report-error?collectionName=' + assets[0].collectionName + '&id=' + assets[0].id + '&email=' + user.username" class="btn btn-secondary" title="Report an error" tabindex="2" target="_blank">{{'ASSET_PAGE.BUTTONS.REPORT_ERROR' | translate}}</a>
+                <a id="buttonRequestIap" [attr.href]="'http://www.artstor.org/form/iap-request-form?name=' + assets[0].title + '&collectionName=' + assets[0].collectionName + '&id=' + assets[0].id + '&email=' + user.username" class="btn btn-secondary" title="Request Image for Academic Publishing" tabindex="2" target="_blank">{{'ASSET_PAGE.BUTTONS.GET_IAP' | translate}}</a>
+            <a id="buttonReportAssetError" [attr.href]="'http://www.artstor.org/form/report-error?collectionName=' + assets[0].collectionName + '&id=' + assets[0].id + '&email=' + user.username" class="btn btn-secondary" title="Report an error" tabindex="2" target="_blank">{{'ASSET_PAGE.BUTTONS.REPORT_ERROR' | translate}}</a>
             </div>
         </div>
         <!--Asset Metadata Row-->
