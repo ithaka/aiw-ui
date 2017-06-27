@@ -165,6 +165,7 @@ export class BrowseGroupsComponent implements OnInit {
     this._groups.getAll(browseLevel, this.pagination.pageSize, page, appliedTags, searchTerm)
         .take(1).subscribe(
           (data)  => {
+            this.pagination.currentPage = page
             this.pagination.totalPages = Math.ceil(data.total/this.pagination.pageSize) // update pagination, which is injected into pagination component
             this._tagFilters.setFilters(data.tags, appliedTags) // give the tag service the new data
             this.tags = this.createGroupTags(data.groups) // save the image groups for display
