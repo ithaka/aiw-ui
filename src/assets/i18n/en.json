@@ -134,6 +134,32 @@
       "SAVE_EDIT": "Save changes"
     }
   },
+  "ADVANCED_SEARCH_MODAL": {
+    "TITLE": "Advanced Search",
+    "SEARCH_HEADING": "Search for words or phrases",
+    "SEARCH_DESCRIPTION": "You can enter multiple words and use quotes to indicate exact search terms (e.g., fresco, \"costume design\").",
+    "DATE_HEADING": "Date",
+    "DATE_DESCRIPTION": "Enter a year or range (numbers only) to limit your search.",
+    "FILTER_HEADING": "Search by geography, classification, and/or collections",
+    "FILTER_DESCRIPTION": "You can narrow your search results by filtering on both the Geography and Classification areas.",
+    "GEO_HEADING": "Geography",
+    "CLASS_HEADING": "Classification",
+    "COLLECTION_HEADING": "Collection",
+    "ERRORS": {
+      "EMPTY_SEARCH": "<b>Search is Empty</b> Please add a search term or select a filter",
+      "DUMB_DATE": "<b>End Date is less than Start Date</b> End date must be greater than or equal to Start date."
+    },
+    "BUTTONS":{
+      "HELP": "Help",
+      "SEARCH": "Search",
+      "CLEAR": "Clear"
+    },
+    "BOOLEAN_OPTIONS": {
+      "AND": "AND",
+      "OR": "OR",
+      "NOT": "NOT"
+    }
+  },
   "RETURN_HOME" : "Return Home",
   "BROWSE_GROUPS" : "Browse Groups",
   "LOGIN_REQUIRED_MODAL": {
