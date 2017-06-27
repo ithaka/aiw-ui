@@ -194,7 +194,6 @@
       "SSC": "Shared Shelf Commons",
       "BRWSE": "Browse",
       "FRM_BLOG": "From Our Blog",
-      "QUESTIONS": "Questions",
       "INSTITUTION_COLLECTIONS": "{{institutionName}} Collections"
     },
     "BROWSE": {
@@ -218,9 +217,17 @@
       "IMG_SOURCE": "/assets/img/featured-collection.jpg",
       "LINK_TITLE": "Collection: Ezra Stoller Archive (Esto)"
     },
+    "QUESTIONS": {
+      "HEADING": "Questions",
+      "EMAIL_INSTITUTION": "Email your institutional contact",
+      "EMAIL_ARTSTOR": "Email Artstor",
+      "WEBINAR": "Sign up for an Artstor webinar",
+      "SURVEY": "Take a survey: Tell us what you think!"
+    },
     "LINKS":{
       "ADVNC_SRCH": "Advanced Search"
-    }
+    },
+    "ACCESS_PROVIDED_BY": "Your access to Artstor is provided by:"
   },
   "NAV_MENU": {
     "HOME": "Home",

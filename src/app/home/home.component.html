@@ -96,23 +96,23 @@
             </a>
             <div class="card pt-4">
                 <div class="card-header">
-                    <h3>{{ 'HOME.HEADINGS.QUESTIONS' | translate}}</h3>
+                    <h3>{{ 'HOME.QUESTIONS.HEADING' | translate }}</h3>
                 </div>
                  <ul class="list-group list-group-flush list-group-clean">
                     <a id="linkEmailInstitutionContact" class="list-group-item small" [href]="institution.institutionContact && institution.institutionContact[0] && institution.institutionContact[0].email ? 'mailto:' + institution.institutionContact[0].email : 'mailto:userservices@artstor.org'">
-                        Email your institutional contact
+                        {{ 'HOME.QUESTIONS.EMAIL_INSTITUTION' | translate }}
                     </a>
                     <a id="linkEmailArtstor" class="list-group-item small" href="mailto:userservices@artstor.org">
-                        Email Artstor
+                        {{ 'HOME.QUESTIONS.EMAIL_ARTSTOR' | translate }}
                     </a>
                     <a id="linkArtstorWebinar" class="list-group-item small" href="http://www.artstor.org/webinars?view=ADL" target="_blank">
-                        Sign up for an Artstor webinar
+                        {{ 'HOME.QUESTIONS.WEBINAR' | translate }}
                     </a>
                     <a id="linkArtstorSurvey" class="list-group-item small" href="https://www.surveymonkey.com/r/TW9SKC6" target="_blank">
-                        Take a survey: Tell us what you think!
+                        {{ 'HOME.QUESTIONS.SURVEY' | translate }}
                     </a>
                     <li id="itemArtstorAccess" class="list-group-item small" *ngIf="institution.displayName">
-                        Your access to Artstor is provided by:<br/>
+                        {{ 'HOME.ACCESS_PROVIDED_BY' | translate }}<br/>
                         <b>{{ institution.displayName }}</b>
                     </li>
                 </ul>
