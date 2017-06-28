@@ -21,7 +21,6 @@ export class LegacyRouteResolver implements Resolve<boolean> {
    * This is the top-level function for parsing out legacy urls (a router of sorts)
    */
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
-    console.log('legacy triggered', state.url)
     let urlArr = state.url.split("/")
     urlArr.splice(0,2)
 
