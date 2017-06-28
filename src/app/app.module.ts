@@ -191,6 +191,7 @@ type StoreType = {
 })
 export class AppModule {
   constructor(public appRef: ApplicationRef, public appState: AppState, private router: Router, private _satellite: AnalyticsService) {
+    console.log(window.location)
     // Track page changes with Adobe Analytics
     router.events.subscribe((val: NavigationEnd) => {
       // If this is a different page, report it!
