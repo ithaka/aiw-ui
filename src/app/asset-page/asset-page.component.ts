@@ -68,7 +68,6 @@ export class AssetPage implements OnInit, OnDestroy {
 
     ngOnInit() {
         this.user = this._auth.getUser();
-        console.log(this.user)
 
         // For "Go Back to Results"
         let prevRouteParams = this._storage.get('prevRouteParams');
