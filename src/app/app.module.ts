@@ -191,13 +191,14 @@ type StoreType = {
 })
 export class AppModule {
   constructor(public appRef: ApplicationRef, public appState: AppState, private router: Router, private _satellite: AnalyticsService) {
-    console.log(window.location)
     let initHref = window.location.href
-    console.log(initHref)
-    console.log(initHref.indexOf('.org/library/ExternalIV.jsp') > -1)
-    if (initHref.indexOf('/library/ExternalIV.jsp') > -1) {
-      console.log(initHref.substr(initHref.indexOf('.org') + 4))
-      router.navigate([ initHref.substr(initHref.indexOf('.org') + 4) ])
+
+    if (initHref.indexOf('.org/library/ExternalIV.jsp') > -1 
+        || initHref.indexOf('.org/library/secure/ViewImages') > -1 
+        || initHref.indexOf('.org/library/collection') > -1 ) {
+        let path = initHref.substr(initHref.indexOf('.org') + 4)
+        console.log(path)
+        router.navigateByUrl(path)
     }
     // Track page changes with Adobe Analytics
     router.events.subscribe((val: NavigationEnd) => {
