@@ -193,7 +193,7 @@ export class AppModule {
   constructor(public appRef: ApplicationRef, public appState: AppState, private router: Router, private _satellite: AnalyticsService) {
     console.log(window.location)
     let initHref = window.location.href
-    
+    console.log(initHref)
     console.log(initHref.indexOf('.org/library/ExternalIV.jsp') > -1)
     if (initHref.indexOf('/library/ExternalIV.jsp') > -1) {
       console.log(initHref.substr(initHref.indexOf('.org') + 4))
