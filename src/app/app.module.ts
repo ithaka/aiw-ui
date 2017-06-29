@@ -199,6 +199,9 @@ export class AppModule {
         let path = initHref.substr(initHref.indexOf('.org') + 4)
         console.log(path)
         router.navigateByUrl(path)
+          .then( result => {
+            console.log('nav result:' + result)
+          })
     }
     // Track page changes with Adobe Analytics
     router.events.subscribe((val: NavigationEnd) => {
