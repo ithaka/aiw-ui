@@ -1,7 +1,20 @@
 <!DOCTYPE html>
 <html lang="">
 <head>
-  
+
+  <!--Track initial URL in cases where we need to re-route legacy links-->
+  <script type="text/javascript">
+    var initPath = window.location.href;
+    if (initPath.indexOf('.org/library/ExternalIV.jsp') > -1 
+        || initPath.indexOf('.org/library/secure/ViewImages') > -1 
+        || initPath.indexOf('.org/library/collection') > -1 ) {
+      initPath = initPath.substr(initPath.indexOf('.org') + 4);
+      console.log('Old path found: ', initPath);
+    } else {
+      initPath = null;
+    }
+  </script>
+
   <meta charset="utf-8">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no">
