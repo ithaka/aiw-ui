@@ -1,6 +1,6 @@
 import { Title } from '@angular/platform-browser'
 import { Component, OnInit } from '@angular/core'
-import { Router, ActivatedRoute, Params } from '@angular/router'
+import { Router, ActivatedRoute, Params, NavigationEnd } from '@angular/router'
 import { Subscription }   from 'rxjs/Subscription'
 
 import { AssetService, AuthService, GroupService } from './../../shared'
@@ -58,11 +58,19 @@ export class BrowseGroupsComponent implements OnInit {
     // set the title
     this._title.setTitle("Artstor | Browse Groups")
 
+    // Load IGs only when the navigation has ended & 'selectedBrowseLevel' + 'currentPage' + 'appliedTags' have been set
+    this._router.events.subscribe( (event) => {
+      if(event instanceof NavigationEnd) {
+        this.loadIGs(this.appliedTags, this.pagination.currentPage, this.selectedBrowseLevel);
+      }
+    });
+
     this.subscriptions.push(
       this.route.params.subscribe((params) => {
         if (params.view != this.selectedBrowseLevel) {
           this.pagination.currentPage = 1
-          this.loadIGs([], 1, params.view)
+          this.appliedTags = []
+          // this.loadIGs([], 1, params.view)
           this.selectedBrowseLevel = params.view
         }
       })
@@ -73,10 +81,12 @@ export class BrowseGroupsComponent implements OnInit {
       this.route.queryParams.subscribe((query) => {
         if (query.tags) {
           this.appliedTags = this._tagFilters.processFilterString(query.tags)
-          this.loadIGs(this.appliedTags, 1)
+          this.pagination.currentPage = 1
+          // this.loadIGs(this.appliedTags, 1)
         } else {
           this.appliedTags = []
-          this.loadIGs([], 1)
+          this.pagination.currentPage = 1
+          // this.loadIGs([], 1)
         }
       })
     )
