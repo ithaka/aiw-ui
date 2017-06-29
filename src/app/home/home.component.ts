@@ -52,6 +52,8 @@ export class Home implements OnInit, OnDestroy {
     if (initPath) {
        this._router.navigateByUrl(initPath)
           .then( result => {
+            // Clear variable to prevent further redirects
+            initPath = null
             console.log('Redirect to initial path attempt: ' + result)
           })
     }
