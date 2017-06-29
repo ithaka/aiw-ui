@@ -7,7 +7,8 @@
     var initPath = window.location.href;
     if (initPath.indexOf('.org/library/ExternalIV.jsp') > -1 
         || initPath.indexOf('.org/library/secure/ViewImages') > -1 
-        || initPath.indexOf('.org/library/collection') > -1 ) {
+        || initPath.indexOf('.org/library/collection') > -1 
+        || initPath.indexOf('.org/library/welcome.html') > -1 ) {
       initPath = initPath.substr(initPath.indexOf('.org') + 4);
       console.log('Old path found: ', initPath);
     } else {
