@@ -59,7 +59,9 @@
       "DOWNLOAD": "Download",
       "LINK": "Link",
       "EXT": "Exit",
-      "COMPARE": "Compare"
+      "COMPARE": "Compare",
+      "GET_IAP": "Request IAP",
+      "REPORT_ERROR": "Report Error"
     },
     "LINKS":{
       "BACK": "Back to Results"
@@ -132,6 +134,32 @@
       "SAVE_EDIT": "Save changes"
     }
   },
+  "ADVANCED_SEARCH_MODAL": {
+    "TITLE": "Advanced Search",
+    "SEARCH_HEADING": "Search for words or phrases",
+    "SEARCH_DESCRIPTION": "Enter single or multiple words. Use quotes to indicate exact search terms (e.g., fresco, \"costume design\")",
+    "DATE_HEADING": "Date",
+    "DATE_DESCRIPTION": "Enter a year or range (numbers only) to limit your search. Select BCE or CE.",
+    "FILTER_HEADING": "Search by geography, classification, and/or collections",
+    "FILTER_DESCRIPTION": "Narrow your search results by filtering on Geography, Classification, and Collection",
+    "GEO_HEADING": "Geography",
+    "CLASS_HEADING": "Classification",
+    "COLLECTION_HEADING": "Collection",
+    "ERRORS": {
+      "EMPTY_SEARCH": "<b>Search is Empty</b> Please add a search term or select a filter",
+      "DUMB_DATE": "<b>End Date is less than Start Date</b> End date must be greater than or equal to Start date."
+    },
+    "BUTTONS":{
+      "HELP": "Help",
+      "SEARCH": "Search",
+      "CLEAR": "Clear"
+    },
+    "BOOLEAN_OPTIONS": {
+      "AND": "AND",
+      "OR": "OR",
+      "NOT": "NOT"
+    }
+  },
   "RETURN_HOME" : "Return Home",
   "BROWSE_GROUPS" : "Browse Groups",
   "LOGIN_REQUIRED_MODAL": {
@@ -166,11 +194,40 @@
       "SSC": "Shared Shelf Commons",
       "BRWSE": "Browse",
       "FRM_BLOG": "From Our Blog",
-      "QUESTIONS": "Questions"
+      "INSTITUTION_COLLECTIONS": "{{institutionName}} Collections"
+    },
+    "BROWSE": {
+      "TITLE": "Browse",
+      "GEO_HEADING": "Geography",
+      "GEO_LIST": "(Afghanistan, Albania, Algeria...)",
+      "CLASS_HEADING": "Classification",
+      "CLASS_LIST": "(paintings, performing arts, photographs)",
+      "COLL_HEADING": "Collection",
+      "COLL_LIST": "(Artstor, Shared Shelf, Shared Shelf Commons, My Collections...)",
+      "TEACHING_HEADING": "Teaching Resources",
+      "TEACHING_LIST": "(Curriculum Guides, AP® Resources, Surveys and Case Studies: Art History, Humanities and Social Sciences)",
+      "GROUPS_HEADING": "Image Groups",
+      "GROUPS_LIST": "(My groups and groups shared by others at my institution)"
+    },
+    "FEATURED": {
+      "HEADING": "Featured Collection",
+      "SUBHEADING": "The Andy Warhol Foundation for the Visual Arts: Oeuvre",
+      "DESCRIPTION": "Andy Warhol; Red Jackie; 1964. Images © The Andy Warhol Foundation for the Visual Arts, Inc. and Andy Warhol artwork © The Andy Warhol Foundation for the Visual Arts, Inc.",
+      "LINK": "/#/category/10374058919;name=The%20Andy%20Warhol%20Foundation%20for%20the%20Visual%20Arts%3A%20Oeuvre%20458",
+      "IMG_SOURCE": "/assets/img/featured-collection.jpg",
+      "LINK_TITLE": "Collection: Ezra Stoller Archive (Esto)"
+    },
+    "QUESTIONS": {
+      "HEADING": "Questions",
+      "EMAIL_INSTITUTION": "Email your institutional contact",
+      "EMAIL_ARTSTOR": "Email Artstor",
+      "WEBINAR": "Sign up for an Artstor webinar",
+      "SURVEY": "Take a survey: Tell us what you think!"
     },
     "LINKS":{
       "ADVNC_SRCH": "Advanced Search"
-    }
+    },
+    "ACCESS_PROVIDED_BY": "Your access to Artstor is provided by:"
   },
   "NAV_MENU": {
     "HOME": "Home",

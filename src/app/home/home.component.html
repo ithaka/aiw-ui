@@ -5,28 +5,28 @@
             <ang-search></ang-search>
             <div class="card pt-2">
                 <div class="card-header">
-                    <h1>{{ 'HOME.HEADINGS.BRWSE' | translate}}</h1>
+                    <h1>{{ 'HOME.BROWSE.TITLE' | translate }}</h1>
                 </div>
                 <ul class="list-group list-group-flush list-group-clean">
                     <a id="linkBrowseGeography" class="list-group-item" [routerLink]="['/browse','library', {viewId: 260}]">
-                        <h3 class="browse-category">Geography</h3>
-                        <p class="small">(Afghanistan, Albania, Algeria...)</p>
+                        <h3 class="browse-category">{{ 'HOME.BROWSE.GEO_HEADING' | translate }}</h3>
+                        <p class="small">{{ 'HOME.BROWSE.GEO_LIST' | translate }}</p>
                     </a>
                     <a id="linkBrowseClassification" class="list-group-item" [routerLink]="['/browse','library', {viewId: 250}]">
-                        <h3 class="browse-category">Classification</h3>
-                        <p class="small">(painting, performing arts, photography...)</p>
+                        <h3 class="browse-category">{{ 'HOME.BROWSE.CLASS_HEADING' | translate }}</h3>
+                        <p class="small">{{ 'HOME.BROWSE.CLASS_LIST' | translate }}</p>
                     </a>
                     <a id="linkBrowseCollection" class="list-group-item" [routerLink]="['/browse','library', {viewId: 103}]">
-                        <h3 class="browse-category">Collection</h3>
-                        <p class="small">(Artstor, Shared Shelf, Shared Shelf Commons, My Collections...)</p>
+                        <h3 class="browse-category">{{ 'HOME.BROWSE.COLL_HEADING' | translate }}</h3>
+                        <p class="small">{{ 'HOME.BROWSE.COLL_LIST' | translate }}</p>
                     </a>
                     <a id="linkBrowseTeaching" class="list-group-item" [routerLink]="['/browse','groups', 'public']">
-                        <h3 class="browse-category">Teaching Resources</h3>
-                        <p class="small">(Curriculum Guides, AP® Resources, Surveys and Case Studies: Art History, Humanities and Social Sciences)</p>
+                        <h3 class="browse-category">{{ 'HOME.BROWSE.TEACHING_HEADING' | translate }}</h3>
+                        <p class="small">{{ 'HOME.BROWSE.TEACHING_LIST' | translate }}</p>
                     </a>
                     <a id="linkBrowseIGs" class="list-group-item" [routerLink]="['/browse','groups', 'institution']">
-                        <h3 class="browse-category">Image Groups</h3>
-                        <p class="small">(My groups and groups shared by others at my institution)</p>
+                        <h3 class="browse-category">{{ 'HOME.BROWSE.GROUPS_HEADING' | translate }}</h3>
+                        <p class="small">{{ 'HOME.BROWSE.GROUPS_LIST' | translate }}</p>
                     </a>
                 </ul>
 
@@ -34,7 +34,7 @@
              <!-- Institution Shared Shelf Collections-->
             <div *ngIf="institution && instCollections.length > 0" class="card">
                 <div class="card-header">
-                    <h2>{{ institution.displayName ? institution.displayName : "Institutional" }} Collections</h2>
+                    <h2 translate [translateParams]="{ institutionName: institution.displayName ? institution.displayName : 'Institutional' }">HOME.HEADINGS.INSTITUTION_COLLECTIONS</h2>
                 </div>
                 <div class="list--home-collections" [class.loading]="loaders['instCollections']">
                     <div class="list-group list-group-flush">
@@ -52,12 +52,12 @@
             <!--Shared Shelf Commons Collections-->
             <div class="card pb-3">
                 <div class="card-header">
-                    <h2>{{ 'HOME.HEADINGS.SSC' | translate}}</h2>
+                    <h2>{{ 'HOME.HEADINGS.SSC' | translate }}</h2>
                 </div>
                 <div class="list--home-collections" [class.loading]="loaders['collections']">
                     <div class="list-group list-group-flush">
                         <a *ngFor="let collection of collections" class="list-group-item list-group-item-action" [routerLink]="[ '/collection', collection.collectionid ]">
-                                {{ collection.collectionname }}
+                            {{ collection.collectionname }}
                         </a>
                     </div>
                 </div>
@@ -69,13 +69,13 @@
             </div>
         </div>
         <div class="col-sm-5">
-            <a id="featuredCollectionLink" class="card featured-card" href="/#/category/10374058919;name=The%20Andy%20Warhol%20Foundation%20for%20the%20Visual%20Arts%3A%20Oeuvre%20458"> 
-                <img class="card-img-top no-stretch" src="/assets/img/featured-collection.jpg" alt="Collection: Ezra Stoller Archive (Esto)">
+            <a id="featuredCollectionLink" class="card featured-card" [attr.href]=" 'HOME.FEATURED.LINK' | translate "> 
+                <img class="card-img-top no-stretch" [attr.src]="'HOME.FEATURED.IMG_SOURCE' | translate" [attr.alt]="'HOME.FEATURED.LINK_TITLE' | translate" [attr.title]="'HOME.FEATURED.LINK_TITLE' | translate">
                 <div class="card-body pt-1">
-                    <label style="margin-bottom:0px;">Featured Collection</label>
-                    <p style="margin-bottom:6px;">The Andy Warhol Foundation for the Visual Arts: Oeuvre</p>
+                    <label style="margin-bottom:0px;">{{ 'HOME.FEATURED.HEADING' | translate }}</label>
+                    <p style="margin-bottom:6px;">{{ 'HOME.FEATURED.SUBHEADING' | translate }}</p>
                 </div>
-                <div class="featured-caption">Andy Warhol; Red Jackie; 1964. Images © The Andy Warhol Foundation for the Visual Arts, Inc. and Andy Warhol artwork © The Andy Warhol Foundation for the Visual Arts, Inc.</div>
+                <div class="featured-caption">{{ 'HOME.FEATURED.DESCRIPTION' | translate }}</div>
             </a>
             <div class="card">
                 <div class="card-header">
@@ -96,23 +96,23 @@
             </a>
             <div class="card pt-4">
                 <div class="card-header">
-                    <h3>{{ 'HOME.HEADINGS.QUESTIONS' | translate}}</h3>
+                    <h3>{{ 'HOME.QUESTIONS.HEADING' | translate }}</h3>
                 </div>
                  <ul class="list-group list-group-flush list-group-clean">
                     <a id="linkEmailInstitutionContact" class="list-group-item small" [href]="institution.institutionContact && institution.institutionContact[0] && institution.institutionContact[0].email ? 'mailto:' + institution.institutionContact[0].email : 'mailto:userservices@artstor.org'">
-                        Email your institutional contact
+                        {{ 'HOME.QUESTIONS.EMAIL_INSTITUTION' | translate }}
                     </a>
                     <a id="linkEmailArtstor" class="list-group-item small" href="mailto:userservices@artstor.org">
-                        Email Artstor
+                        {{ 'HOME.QUESTIONS.EMAIL_ARTSTOR' | translate }}
                     </a>
                     <a id="linkArtstorWebinar" class="list-group-item small" href="http://www.artstor.org/webinars?view=ADL" target="_blank">
-                        Sign up for an Artstor webinar
+                        {{ 'HOME.QUESTIONS.WEBINAR' | translate }}
                     </a>
                     <a id="linkArtstorSurvey" class="list-group-item small" href="https://www.surveymonkey.com/r/TW9SKC6" target="_blank">
-                        Take a survey: Tell us what you think!
+                        {{ 'HOME.QUESTIONS.SURVEY' | translate }}
                     </a>
                     <li id="itemArtstorAccess" class="list-group-item small" *ngIf="institution.displayName">
-                        Your access to Artstor is provided by:<br/>
+                        {{ 'HOME.ACCESS_PROVIDED_BY' | translate }}<br/>
                         <b>{{ institution.displayName }}</b>
                     </li>
                 </ul>

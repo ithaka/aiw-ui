@@ -28,26 +28,12 @@ export class LegacyRouteResolver implements Resolve<boolean> {
       let encryptedId = urlArr[0].split("=")[1]
       this._router.navigate(['/asset', 'external', encryptedId])
 
-      // this.decryptToken(encryptedId)
-      //   .take(1)
-      //   .subscribe((item) => {
-      //     console.log(item)
-      //   }, (err) => {
-      //     console.error(err)
-      //   })
     } else if (urlArr[0] === "secure") {
-      let idRe = /id=(.*?(?=&))/
+      let idRe: RegExp = /id=(.*)/
       let encryptedId = idRe.exec(urlArr[1])[1]
 
       this._router.navigate(['/asset', 'external', encryptedId])
 
-      // this.decryptToken(encryptedId)
-      //   .take(1)
-      //   .subscribe((item) => {
-      //     console.log(item)
-      //   }, (err) => {
-      //     console.error(err)
-      //   })
     } else {
       let routeNum = urlArr[0].substr(0, 2)
       
