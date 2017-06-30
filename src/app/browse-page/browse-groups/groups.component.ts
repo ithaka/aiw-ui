@@ -46,7 +46,7 @@ export class BrowseGroupsComponent implements OnInit {
   private appliedTags: string[] = []
 
   private selectedBrowseLevel: string = 'public'
-  private browseMenuArray: { label: string, level: string }[] = []
+  private browseMenuArray: { label: string, level: string, selected ?: boolean }[] = []
 
   private foldersObj: any = {}
   private tagsObj: any = {}
@@ -60,7 +60,7 @@ export class BrowseGroupsComponent implements OnInit {
 
     this.subscriptions.push(
       this.route.params.subscribe((params) => {
-        if (params.view != this.selectedBrowseLevel) {
+        if (params.view != (this.selectedBrowseLevel || 'all')) {
           this.pagination.currentPage = 1
           this.loadIGs([], 1, params.view)
           this.selectedBrowseLevel = params.view
@@ -106,10 +106,10 @@ export class BrowseGroupsComponent implements OnInit {
       })
     }
 
-    // Mary has edits before we reveal Search
+    // // Mary has edits before we reveal Search
     // this.browseMenuArray.push({
     //   label: 'Search',
-    //   level: 'all'
+    //   level: 'search'
     // })
   
     this._analytics.setPageValues('groups', '')
@@ -130,6 +130,20 @@ export class BrowseGroupsComponent implements OnInit {
     this.appliedTags = [] 
     this.addRouteParam('view', level, true)
     this.loadIGs([], 1)
+  }
+
+  /**
+   * Makes sure that only one search filter can be selected (may change later if we can add multiple levels to search)
+   * @param level The level param you want to search groups with
+   */
+  private changeSearchLevel(level: string): void {
+    this.browseMenuArray.forEach((filter) => {
+      if (filter.level !== level) {
+        filter.selected = false
+      } else {
+        filter.selected = true
+      }
+    })
   }
 
   /**
