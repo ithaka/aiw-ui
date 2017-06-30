@@ -61,7 +61,7 @@ export class BrowseGroupsComponent implements OnInit {
 
     this.subscriptions.push(
       this.route.params.subscribe((params) => {
-        if (params.view != (this.selectedBrowseLevel || 'all')) {
+        if (params.view != (this.selectedBrowseLevel || 'search')) {
           this.pagination.currentPage = 1
           this.loadIGs([], 1, params.view)
           this.selectedBrowseLevel = params.view
@@ -154,13 +154,18 @@ export class BrowseGroupsComponent implements OnInit {
    * @returns The currently selected search level, defaulted to 'all
    */
   private getSearchLevel(): string {
+    // return undefined if search isn't even selected
+    if (this.route.snapshot.params.view !== 'search') {
+      return
+    }
+
     let selectedLevel: string
     this.browseMenuArray.forEach((filter) => {
       if (filter.selected) {
         selectedLevel = filter.level
       }
     })
-    return selectedLevel || 'all'
+    return selectedLevel || 'all' // default to 'all'
   }
 
   /**
@@ -187,8 +192,10 @@ export class BrowseGroupsComponent implements OnInit {
   private loadIGs(appliedTags: string[], page: number, level?: string, searchTerm ?: string): void {
     this.loading = true
     let browseLevel: string
+
+    // if level is not provided explicitly, here is some logic for determining what it should be - search takes priority, then browse level, default to 'public'
     if (!level) {
-      browseLevel = this.selectedBrowseLevel || 'public'
+      browseLevel = this.getSearchLevel() || this.selectedBrowseLevel || 'public'
     } else {
       browseLevel = level
     }

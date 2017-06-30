@@ -6,7 +6,7 @@
 <div class="row">
     <div class="col-md-4 hidden-sm-down">
         <div *ngIf="route.snapshot.params.view == 'search'" id="searchFilterList" class="mb-3">
-            <h3>Group Type Filter<a id="searchFilterClear" tabindex="" class="link--accent small" style="float:right;" (click)="setSearchLevel('none')">Clear All</a></h3>
+            <h3>Group Type Filter<a id="searchFilterClear" tabindex="" class="link--accent small" style="float:right;" (click)="setSearchLevel('none')">Clear</a></h3>
             <div class="filter filter--tag" *ngFor="let filter of browseMenuArray" (click)="setSearchLevel(filter.level)" [class.active]="filter.selected">
                 {{ filter.label }}
                 <!--<i class="icon icon-add"></i>
