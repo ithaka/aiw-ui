@@ -48,6 +48,11 @@ export class LegacyRouteResolver implements Resolve<boolean> {
         this._router.navigate(["/collection", urlArr[1]])
       }
 
+      // Handling for '/library/welcome.html'
+      if (pipeArr[0] == 'welcome.html') {
+        this._router.navigate(["/home"])
+      }
+
       if (pipeArr[0].indexOf('#') > 0) {
         routeNum = pipeArr[0].substr(pipeArr[0].indexOf('#'), 2)
       }
