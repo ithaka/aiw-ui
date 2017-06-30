@@ -41,6 +41,9 @@ export class Nav implements OnInit, OnDestroy {
     this._auth.getUserInfo().subscribe( userInfo => {
       if(!userInfo.status){
         this.logout();
+      } else {
+        // Update component's user object
+        this.user = this._auth.getUser();
       }
     });
 
