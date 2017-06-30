@@ -12,7 +12,7 @@
         </button>
     </li>
     <li class="page-item">
-        <input class="page-input" type="number" min="1" (keypress)="pageNumberKeyPress($event)" [(ngModel)]="pageObj.currentPage" (keyup.enter)="goToPage.emit(pageObj.currentPage)" />
+        <input class="page-input" type="number" min="1" (keypress)="pageNumberKeyPress($event)" (keyup)="pageNumberKeyUp($event)" [(ngModel)]="pageObj.currentPage" (keyup.enter)="goToPage.emit(pageObj.currentPage)" />
         <span class="page-info">of {{ pageObj.totalPages }}</span>
     </li>
     <li class="page-item">
