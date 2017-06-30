@@ -51,6 +51,7 @@ export class BrowseGroupsComponent implements OnInit {
   private foldersObj: any = {}
   private tagsObj: any = {}
   private pageObj: any = {}
+  private latestSearchTerm: string = ''
 
   private errorObj: any = {}
   
@@ -119,24 +120,24 @@ export class BrowseGroupsComponent implements OnInit {
     this.subscriptions.forEach((sub) => { sub.unsubscribe() })
   }
 
-  /**
-   * Changes menu between ADL, University Collections, Open Collections, etc...
-   * @param level Level of desired menu from colMenuArray enum
-   */
-  selectBrowseOpt ( level: string ){
-    this.loading = true;
-    this.selectedBrowseLevel = level
-    this.pagination.currentPage = 1
-    this.appliedTags = [] 
-    this.addRouteParam('view', level, true)
-    this.loadIGs([], 1)
-  }
+  // /**
+  //  * Changes menu between ADL, University Collections, Open Collections, etc...
+  //  * @param level Level of desired menu from colMenuArray enum
+  //  */
+  // selectBrowseOpt ( level: string ){
+  //   this.loading = true;
+  //   this.selectedBrowseLevel = level
+  //   this.pagination.currentPage = 1
+  //   this.appliedTags = [] 
+  //   this.addRouteParam('view', level, true)
+  //   this.loadIGs([], 1)
+  // }
 
   /**
    * Makes sure that only one search filter can be selected (may change later if we can add multiple levels to search)
    * @param level The level param you want to search groups with
    */
-  private changeSearchLevel(level: string): void {
+  private setSearchLevel(level: string): void {
     this.browseMenuArray.forEach((filter) => {
       if (filter.level !== level) {
         filter.selected = false
@@ -144,6 +145,22 @@ export class BrowseGroupsComponent implements OnInit {
         filter.selected = true
       }
     })
+
+    this.search(this.latestSearchTerm)
+  }
+
+  /**
+   * Getter for the selected search level
+   * @returns The currently selected search level, defaulted to 'all
+   */
+  private getSearchLevel(): string {
+    let selectedLevel: string
+    this.browseMenuArray.forEach((filter) => {
+      if (filter.selected) {
+        selectedLevel = filter.level
+      }
+    })
+    return selectedLevel || 'all'
   }
 
   /**
@@ -226,6 +243,7 @@ export class BrowseGroupsComponent implements OnInit {
 
   // called when search is called
   private search(term: string) {
-    this.loadIGs([], 1, null, term)
+    this.latestSearchTerm = term
+    this.loadIGs([], 1, this.getSearchLevel(), term)
   }
 }

@@ -5,9 +5,9 @@
 </nav>
 <div class="row">
     <div class="col-md-4 hidden-sm-down">
-        <div id="searchFilterList" class="mb-3">
-            <h3>Group Type <a id="searchFilterClear" tabindex="" class="link--accent small" style="float:right;" (click)="changeSearchLevel('none')">Clear All</a></h3>
-            <div class="filter filter--tag" *ngFor="let filter of browseMenuArray" (click)="changeSearchLevel(filter.level)" [class.active]="filter.selected">
+        <div *ngIf="route.snapshot.params.view == 'search'" id="searchFilterList" class="mb-3">
+            <h3>Group Type Filter<a id="searchFilterClear" tabindex="" class="link--accent small" style="float:right;" (click)="setSearchLevel('none')">Clear All</a></h3>
+            <div class="filter filter--tag" *ngFor="let filter of browseMenuArray" (click)="setSearchLevel(filter.level)" [class.active]="filter.selected">
                 {{ filter.label }}
                 <!--<i class="icon icon-add"></i>
                 <i class="icon icon-close"></i>-->
@@ -16,7 +16,7 @@
         <ang-tags-list [browseLevel]="selectedBrowseLevel"></ang-tags-list>
     </div>
     <div class="col-md-8">
-        <ang-general-search *ngIf="selectedBrowseLevel === 'all'" (executeSearch)="search($event)"></ang-general-search>
+        <ang-general-search *ngIf="route.snapshot.params.view == 'search'" (executeSearch)="search($event)"></ang-general-search>
         <h3 class="pb-1 px-2">Groups
             <pagination [pageObj]="pagination" (goToPage)="goToPage($event)">
             </pagination>
