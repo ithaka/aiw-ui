@@ -511,13 +511,23 @@ export class AssetService {
             });
     } 
 
+    public getRegionCollection(): number {
+        let collectionId = 103
+        let user = this._auth.getUser()
+
+        if (user.regionId !== 1) {
+            collectionId = parseInt( (3+user.regionId) + "103" )
+        }
+        return collectionId
+    }
+
     /**
      * Get IIIF tilesource for an Asset
      * @param assetId string Asset or object ID
      */
     public getImageSource(assetId: string) {
-        let collectionId = 103;
-        
+        let collectionId = this.getRegionCollection()
+
         return this.http
             .get( this._auth.getUrl() + '/imagefpx/' + assetId + '/' + collectionId + '/5', this.defaultOptions)
             .map(data => {

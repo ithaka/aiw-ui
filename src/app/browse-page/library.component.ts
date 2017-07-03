@@ -29,7 +29,7 @@ export class LibraryComponent implements OnInit {
   private browseMenuArray: any[] = [
     {
       label : 'Collection',
-      id: '103',
+      id: this._assets.getRegionCollection().toString(),
     },
     {
       label : 'Classification',
@@ -58,7 +58,7 @@ export class LibraryComponent implements OnInit {
     this._title.setTitle("Artstor | Browse Collections")
 
     if (!this.route.snapshot.params['viewId']) {
-      this.selectedBrowseId = "103";
+      this.selectedBrowseId = this._assets.getRegionCollection().toString();
       this.getTags(this.selectedBrowseId);
     }
 
