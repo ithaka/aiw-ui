@@ -511,12 +511,12 @@ export class AssetService {
             });
     } 
 
-    public getRegionCollection(): number {
-        let collectionId = 103
+    public getRegionCollection(rootId ?: number): number {
+        let collectionId = rootId ? rootId : 103
         let user = this._auth.getUser()
 
         if (user.regionId !== 1) {
-            collectionId = parseInt( (3+user.regionId) + "103" )
+            collectionId = parseInt( (3+user.regionId) + collectionId.toString() )
         }
         return collectionId
     }

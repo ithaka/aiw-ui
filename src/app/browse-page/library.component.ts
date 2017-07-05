@@ -26,24 +26,7 @@ export class LibraryComponent implements OnInit {
   private loading: boolean = false;
   private subscriptions: Subscription[] = [];
   private selectedBrowseId: string = '';
-  private browseMenuArray: any[] = [
-    {
-      label : 'Collection',
-      id: this._assets.getRegionCollection().toString(),
-    },
-    {
-      label : 'Classification',
-      id: '250'
-    },
-    {
-      label : 'Geography',
-      id: '260'
-    },
-    {
-      label : 'Teaching Resources',
-      id: '270'
-    }
-  ];
+  private browseMenuArray: any[];
 
   private tagsObj: any = {
     103 : [],
@@ -54,6 +37,30 @@ export class LibraryComponent implements OnInit {
   private descObj: any  = {};
 
   ngOnInit() {
+    // Set browse array
+    this.browseMenuArray = [
+      {
+        label : 'Collection',
+        id: this._assets.getRegionCollection().toString()
+      },
+      {
+        label : 'Classification',
+        id: this._assets.getRegionCollection(250).toString()
+      },
+      {
+        label : 'Geography',
+        id: this._assets.getRegionCollection(260).toString()
+      },
+      {
+        label : 'Teaching Resources',
+        id: this._assets.getRegionCollection(270).toString()
+      }
+    ];
+    // Update based on IDs
+    this.tagsObj[this._assets.getRegionCollection().toString()]
+    this.tagsObj[this._assets.getRegionCollection(250).toString()]
+    this.tagsObj[this._assets.getRegionCollection(260).toString()]
+    this.tagsObj[this._assets.getRegionCollection(270).toString()]
     // Set page title
     this._title.setTitle("Artstor | Browse Collections")
 
@@ -66,10 +73,14 @@ export class LibraryComponent implements OnInit {
       this.route.params
       .subscribe((params: Params) => { 
         if(params && params['viewId']){
-            if (this.selectedBrowseId !== params['viewId']){
-              this.getTags(params['viewId']);
+            let adjustedId = params['viewId']
+            if (adjustedId.length < 4) {
+              adjustedId = this._assets.getRegionCollection(params['viewId']).toString()
             }
-            this.selectedBrowseId = params['viewId'];
+            if (this.selectedBrowseId !== adjustedId){
+              this.getTags(adjustedId);
+            }
+            this.selectedBrowseId = adjustedId;
         }
         this.loadDescription(this.selectedBrowseId);
       })
