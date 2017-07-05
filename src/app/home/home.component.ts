@@ -50,12 +50,13 @@ export class Home implements OnInit, OnDestroy {
 
     // Provide redirects for initPath detected in index.html from inital load
     if (initPath) {
-       this._router.navigateByUrl(initPath)
-          .then( result => {
-            // Clear variable to prevent further redirects
-            initPath = null
-            console.log('Redirect to initial path attempt: ' + result)
-          })
+      initPath = initPath.replace(/#/g,'%23')
+      this._router.navigateByUrl(initPath)
+        .then( result => {
+          // Clear variable to prevent further redirects
+          initPath = null
+          console.log('Redirect to initial path attempt: ' + result)
+        })
     }
 
     this.user = this._auth.getUser();

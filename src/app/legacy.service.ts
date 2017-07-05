@@ -21,8 +21,17 @@ export class LegacyRouteResolver implements Resolve<boolean> {
    * This is the top-level function for parsing out legacy urls (a router of sorts)
    */
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
-    let urlArr = state.url.split("/")
+    let url = state.url
+
+    if (url.indexOf('%7C') > -1) {
+      url = decodeURI(url)
+    }
+
+    let urlArr = url.split("/")
+
+
     urlArr.splice(0,2)
+    
 
     if (urlArr[0].substr(0, 10).toLowerCase() === "externaliv") {
       let encryptedId = urlArr[0].split("=")[1]
