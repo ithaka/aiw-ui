@@ -22,17 +22,23 @@ export class LegacyRouteResolver implements Resolve<boolean> {
    */
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
     let url = state.url
+    
+    if (url.indexOf('/3') == 0 ) {
+      // Anchors in some old links cause some of the path to be lost
+      url = '/library/welcome.html#' + url.substr(1)
+    } else if (url.indexOf('/library') == 0) {
+      // This is the normal expectation for old links!
+    } else {
+      return true
+    }
 
     if (url.indexOf('%7C') > -1) {
       url = decodeURI(url)
     }
 
     let urlArr = url.split("/")
-
-
     urlArr.splice(0,2)
     
-
     if (urlArr[0].substr(0, 10).toLowerCase() === "externaliv") {
       let encryptedId = urlArr[0].split("=")[1]
       this._router.navigate(['/asset', 'external', encryptedId])

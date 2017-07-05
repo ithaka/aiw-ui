@@ -49,5 +49,5 @@ export const ROUTES: Routes = [
   { path: 'library', children: [
     { path: '**', component: NoContent, resolve: [LegacyRouteResolver] }
   ] },
-  { path: '**', component: NoContent }
+  { path: '**', component: NoContent, resolve: [LegacyRouteResolver] }
 ]

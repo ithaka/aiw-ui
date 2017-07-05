@@ -50,7 +50,6 @@ export class Home implements OnInit, OnDestroy {
 
     // Provide redirects for initPath detected in index.html from inital load
     if (initPath) {
-      initPath = initPath.replace(/#/g,'%23')
       this._router.navigateByUrl(initPath)
         .then( result => {
           // Clear variable to prevent further redirects
