@@ -527,7 +527,7 @@ export class AssetService {
      */
     public getImageSource(assetId: string, collectionId?: number) {
         if (!collectionId) {
-            let collectionId = this.getRegionCollection()
+            collectionId = this.getRegionCollection()
         }
 
         return this.http
