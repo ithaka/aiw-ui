@@ -18,6 +18,7 @@ export class ImageGroupPage implements OnInit, OnDestroy {
   private ig: ImageGroup = <ImageGroup>{};
   private hasDesc: boolean = false;
   private user: any;
+  private descExpanded: boolean = true;
 
   private subscriptions: Subscription[] = [];
 
@@ -209,7 +210,7 @@ export class ImageGroupPage implements OnInit, OnDestroy {
    * - View hasn't changed to hide the description
    */
   private showDesc(): boolean {
-    if (this.ig && this.ig.description && !this.reorderMode) {
+    if (this.ig && this.ig.description && !this.reorderMode && this.descExpanded) {
       return true;
     } else {
       return false;

@@ -9,9 +9,10 @@
     <div class="row">
         <div class="col-12 pb-4">
             <h3 id="pageType">Browse Group</h3>
-             <h1 id="pageTitle" class="h1--title-block">
-                {{ ig.name }}
-            </h1>
+            <div class="row">
+                <h1 id="pageTitle" class="h1--title-block col-md-9">{{ ig.name }}</h1>
+                <h3 class="row-hdr col-md-3"><i class="icon icon-direction tree-icon desc-expnd-clps-icon" [ngClass]="{ 'icon-down' : descExpanded, 'icon-right' : !descExpanded }" (click)="descExpanded = !descExpanded"></i> Description</h3>
+            </div>
         </div>
         <div [ngClass]="[ showDesc() ? 'col-md-9' : 'col-md-12'  ]">
             <ang-asset-grid [actionOptions]="actionOptions" (reordering)="toggleReorder($event)"></ang-asset-grid>
@@ -19,8 +20,7 @@
                 <b>Error Loading</b> Unable to load the thumbnails for this group.
             </div>
         </div>
-        <div *ngIf="showDesc()" class="col-md-3">
-            <h3 class="row-hdr">Description</h3>
+        <div *ngIf="showDesc()" [ngClass]="[ showDesc() ? 'col-md-3' : 'col-md-0'  ]">
             <div *ngIf="ig && ig.description" class="page__description" id="pageDescription" [innerHTML]="ig.description"></div>
         </div>
     </div>
