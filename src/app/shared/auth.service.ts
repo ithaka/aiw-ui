@@ -70,13 +70,20 @@ export class AuthService implements CanActivate {
     this.IIIFUrl = '//tsprod.artstor.org/rosa-iiif-endpoint-1.0-SNAPSHOT/fpx';
     
     // Check domain
-    if (document.location.hostname.indexOf('library.artstor.org') > -1) {
+    if (document.location.hostname.indexOf('library.artstor.org') > -1 || document.location.hostname.indexOf('beta.artstor.org') > -1) {
       // Relative live endpoints
       this.hostname = '';
       this.baseUrl =  '/api/secure'; 
       this.imageFpxUrl =  '/api/secure/imagefpx'; 
       this.lostPassUrl = '/library/lostpw';
       this.logUrl = '//ang-ui-logger.apps.prod.cirrostratus.org/api/v1';
+    }
+    else if (document.location.hostname.indexOf('proxy.artstor.org') > -1) {
+      // Relative live endpoints
+      this.hostname = '';
+      this.baseUrl =  '/api/secure'; 
+      this.imageFpxUrl =  '/api/secure/imagefpx'; 
+      this.lostPassUrl = '/library/lostpw';
     }
     else if ( document.location.hostname.indexOf('beta.artstor.org') > -1 || document.location.hostname.indexOf('prod.cirrostratus.org') > -1 || document.location.hostname.indexOf('lively.artstor.org') > -1 ) {
       // Prod/Lively endpoints
