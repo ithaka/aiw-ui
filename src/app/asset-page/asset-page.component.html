@@ -53,6 +53,10 @@
                     {{ 'ASSET_PAGE.BUTTONS.DOWNLOAD' | translate}}
                     <i id="downloadAssetLink" class="icon icon-download" ></i>
                 </button>
+                <button *ngIf="assets[0]" class="btn btn-secondary" tabindex="2" [routerLink]="['/assetprint', assets[0].id]">
+                    {{ 'ASSET_PAGE.BUTTONS.PRINT' | translate}}
+                    <!--<i id="printAssetLink" class="icon icon-print" ></i>-->
+                </button>
                 <button (click)="addAssetToIG()" class="btn btn-primary btn--square">
                     <i class="icon icon-add-white" aria-hidden="true"></i>
                 </button>

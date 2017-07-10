@@ -57,6 +57,7 @@
     },
     "BUTTONS": {
       "DOWNLOAD": "Download",
+      "PRINT": "Print",
       "LINK": "Link",
       "EXT": "Exit",
       "COMPARE": "Compare",
