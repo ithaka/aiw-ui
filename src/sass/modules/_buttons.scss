@@ -197,3 +197,9 @@ $iconBtnSize: $btnHeight;
          }
      }
  }
+
+ .btn-row {
+     & .btn {
+         margin: 1px;
+     }
+ }

@@ -6,6 +6,7 @@ import { SearchPage } from './search-page'
 import { CollectionPage } from './collection-page'
 import { CategoryPage } from './category-page'
 import { ImageGroupPPPage } from './image-group-pp-page'
+import { AssetPPPage } from './asset-pp-page'
 import { ImageGroupPage } from './image-group-page'
 import { ClusterPage } from './cluster-page'
 import { BrowsePage } from './browse-page'
@@ -34,6 +35,7 @@ export const ROUTES: Routes = [
   { path: 'collection/:colId', component: CollectionPage, canActivate:[AuthService] },
   { path: 'collection', component: CollectionPage, canActivate:[AuthService] },
   { path: 'printpreview/:igId', component: ImageGroupPPPage, canActivate:[AuthService] },
+  { path: 'assetprint/:assetId', component: AssetPPPage },
   { path: 'category/:catId', component: CategoryPage, canActivate:[AuthService] },
   { path: 'category', component: CategoryPage, canActivate:[AuthService] },
   { path: 'subcategory/:catId', component: CategoryPage, canActivate:[AuthService] },

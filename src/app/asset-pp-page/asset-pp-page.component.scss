@@ -1,0 +1,31 @@
+.asset-img{
+    text-align: center;
+    margin: 15px 0px;
+}
+.disclaimer{
+    text-align: center;
+}
+
+.meta-cntnr{
+    margin: 30px auto;
+    display: block;
+    width: 950px;
+
+    h2{
+        padding: 10px 0px;
+    }
+
+    .table{
+        border: 1px solid #f0f0f0;
+
+        .meta-row{
+            padding: 10px 0px;
+            border-bottom: 1px solid #f0f0f0;
+            margin: 0px;
+
+            .lbl{
+                font-weight: 800;
+            }
+        }
+    }
+}

@@ -215,3 +215,13 @@ $titleNavBg: #eee;
         height: 50%;
     }
 }
+
+.btn{
+
+    .icon-print{
+        background-image: url("/assets/img/icon-print-white.svg");
+        background-repeat: no-repeat;
+        background-position: center center;
+        background-size: 100% auto;
+    }
+}
