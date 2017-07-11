@@ -51,10 +51,10 @@
                     </a><button class="btn btn-secondary" tabindex="1" *ngIf="assets[0].downloadLink && !user.isLoggedIn" (click)="showLoginModal = true">
                         {{ 'ASSET_PAGE.BUTTONS.DOWNLOAD' | translate}}
                         <i id="downloadAssetLink" class="icon icon-download" ></i>
-                    </button><button *ngIf="assets[0]" class="btn btn-secondary" tabindex="2" [routerLink]="['/assetprint', assets[0].id]">
+                    </button>
+                    <a *ngIf="assets[0]" class="btn btn-secondary" tabindex="2" [attr.href]=" '/#/assetprint/' + assets[0].id " target="_blank">
                         {{ 'ASSET_PAGE.BUTTONS.PRINT' | translate}}
-                        <!--<i id="printAssetLink" class="icon icon-print" ></i>-->
-                    </button><button (click)="addAssetToIG()" class="btn btn-primary btn--square">
+                    </a><button (click)="addAssetToIG()" class="btn btn-primary btn--square">
                         <i class="icon icon-add-white" aria-hidden="true"></i>
                     </button>
                     <div [class.hidden]="!showCopyUrl" class="form-group pt-1">
@@ -66,9 +66,11 @@
 
                 <div class="row-hdr pt-3" *ngIf="assets[0].metaDataArray.length > 0">{{ 'ASSET_PAGE.HEADER_LABELS.OBJ_DETAILS' | translate}}</div>
                 <!--Loop through metaData Array-->
-                <div class="meta-block" *ngFor="let metadataObj of assets[0].metaDataArray">
+                <div class="meta-block" *ngFor="let metadataObj of assets[0].formattedMetaArray">
                     <div [attr.id]="cleanId(metadataObj.fieldName)" class="label">{{ metadataObj.fieldName }}
-                    <div class="value" [innerHTML]="cleanFieldValue(metadataObj.fieldValue) | linkify"></div>
+                    <div *ngFor="let value of metadataObj.fieldValue">
+                        <div class="value" [innerHTML]="cleanFieldValue(value) | linkify"></div>
+                    </div>
                     </div>
                 </div>
 

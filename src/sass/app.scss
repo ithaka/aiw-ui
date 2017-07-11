@@ -233,3 +233,16 @@ nav-menu {
   max-height: calc(95vh - 200px) !important;
   overflow-y: auto !important;
 }
+
+
+.footer {
+  & a {
+      border-bottom: none;
+      margin: 0 5px;
+      text-decoration: none;
+
+      &:hover{
+        text-decoration: none;
+      }
+  }
+}

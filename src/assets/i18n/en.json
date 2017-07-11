@@ -176,6 +176,18 @@
       "NO_INSTITUTIONAL_GROUPS_COLLECTIONS_PROMPT": "<p>You haven't made any institutional groups yet. Learn more about <a href='http://support.artstor.org/?article=create-and-manage-image-groups' class='link'>groups</a>.</p>"
     }
   },
+  "FOOTER": {
+    "LINKS": {
+      "ABOUT": "<a href=\"http://www.artstor.org/content/artstor-digital-library-features-benefits\" class=\"link\" target=\"_blank\">About</a>",
+      "GETTING_STARTED": "<a href=\"http://support.artstor.org/?page_id=52\" class=\"link\" target=\"_blank\">Getting Started</a>",
+      "TEACHING_IDEAS": "<a href=\"http://www.artstor.org/content/teaching-resources-overview\" class=\"link\" target=\"_blank\">Teaching and Study Ideas</a>",
+      "STAY_INFORMED": "<a href=\"http://www.artstor.org/content/join-our-mailing-list\" class=\"link\" target=\"_blank\">Stay Informed</a>",
+      "TERMS": "<a href=\"http://www.artstor.org/terms\" class=\"link\" target=\"_blank\">Terms</a>",
+      "PRIVACY": "<a href=\"http://www.artstor.org/privacy\" class=\"link\" target=\"_blank\">Privacy</a>",
+      "COPYRIGHT": "<a href=\"http://www.artstor.org/copyright\" class=\"link\" target=\"_blank\">Copyright Concerns</a>",
+      "SUPPORT": "<a href=\"http://www.support.artstor.org\" class=\"link\" target=\"_blank\">Support</a>"
+    }
+  },
   "ACCESS_HELP_MODAL": {
     "HEADING": "How do I get access?",
     "PROMPT": "<p>Access is provided to <a href=\"http://www.artstor.org/content/subscribers\" class=\"link\">subscribing institutions</a></p><p>If you belong to a subscribing institution, find out how to <a href=\"http://support.artstor.org/?article=remote-and-proxy-access\" class=\"link\">use remote access methods</a></p><p>If your institution is not a subscriber, find out <a href=\"http://www.artstor.org/trial\" class=\"link\">how they can be</a></p>"

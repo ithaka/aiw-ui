@@ -1,7 +1,8 @@
 
 .meta-block{
     @extend %SansRegular;
-    padding-top: 10px;
+    padding-top: 8px;
+    padding-bottom: 8px;
     font-size: 14px;
     display: block;
 
@@ -22,6 +23,7 @@
     line-height: 18px;
     font-weight: normal;
     letter-spacing: 0px;
+    padding: 2px 0px;
 
     a{
         text-decoration: underline !important;

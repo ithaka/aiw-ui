@@ -4,10 +4,10 @@
     <div class="meta-cntnr">
         <h2>Image Information</h2>
         <div class="table">
-            <div class="meta-row row" *ngFor="let dataObj of metaArray">
+            <div class="meta-row row" *ngFor="let dataObj of metaArray; let isLast = last" [ngClass]="{'last-row': isLast }">
                 <div class="col-md-4 lbl">{{ dataObj.fieldName }}</div>
                 <div class="col-md-8">
-                    <div *ngFor="let value of dataObj.fieldValue">{{ value }}</div>
+                    <div *ngFor="let value of dataObj.fieldValue" [innerHTML]="value"></div>
                 </div>
             </div>
         </div>
