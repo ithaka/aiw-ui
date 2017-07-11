@@ -22,8 +22,8 @@ export class AssetPage implements OnInit, OnDestroy {
     private assetViewer: AssetViewerComponent;
 
     private user: any;
-
     private hasPrivateGroups: boolean = false;
+    private document = document
 
     // Array to support multiple viewers on the page
     private assets: Asset[] = [];
@@ -281,7 +281,7 @@ export class AssetPage implements OnInit, OnDestroy {
         setTimeout( () => { 
             input.select(); 
             if(document.queryCommandSupported('copy') && !iOSuser){
-                document.execCommand('copy')
+                document.execCommand('copy', false, null)
                 statusMsg = 'Image URL successfully copied to the clipboard!';
             }
             else{
