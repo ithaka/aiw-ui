@@ -127,6 +127,35 @@ export class Asset {
       }
   }
 
+  private useImageSourceRes(data: any): void {
+    if (!data) {
+        throw new Error("No data returned from image source call!");
+    }
+
+    if(data.downloadSize === '0,0'){
+        this.disableDownload = true;
+    }
+    else{
+        this.disableDownload = false;
+    }
+    
+    this.typeId = data.objectTypeId;
+    
+    /** This determines how to build the downloadLink, which is different for different typeIds */
+    if (this.typeId === 20 || this.typeId === 21 || this.typeId === 22 || this.typeId === 23) { //all of the typeIds for documents
+        this.downloadLink = [this._auth.getMediaUrl(), this.id, this.typeId].join("/");
+    } else if (data.imageServer && data.imageUrl) { //this is a general fallback, but should work specifically for images and video thumbnails
+        let url = data.imageServer + data.imageUrl + "?cell=1024,1024&rgnn=0,0,1,1&cvt=JPEG";
+        this.downloadLink = this._auth.getHostname() + "/api/download?imgid=" + this.id + "&url=" + encodeURIComponent(url);
+    }
+
+    // Save the Tile Source for IIIF
+    let imgPath = '/' + data['imageUrl'].substring(0, data['imageUrl'].lastIndexOf('.fpx') + 4)
+    this.tileSource = this._auth.getIIIFUrl() + encodeURIComponent(imgPath) + '/info.json'
+
+    this.imageSourceLoaded = true;
+    this.dataLoadedSource.next(this.metadataLoaded && this.imageSourceLoaded);
+  }
 
   /** 
    * Pulls additional media metadata
@@ -137,35 +166,15 @@ export class Asset {
   private loadMediaMetaData(): void {
       this._assets.getImageSource( this.id )
         .subscribe((data) => {
-            if (!data) {
-                throw new Error("No data returned from image source call!");
-            }
-
-            if(data.downloadSize === '0,0'){
-                this.disableDownload = true;
-            }
-            else{
-                this.disableDownload = false;
-            }
-            
-            this.typeId = data.objectTypeId;
-            
-            /** This determines how to build the downloadLink, which is different for different typeIds */
-            if (this.typeId === 20 || this.typeId === 21 || this.typeId === 22 || this.typeId === 23) { //all of the typeIds for documents
-                this.downloadLink = [this._auth.getMediaUrl(), this.id, this.typeId].join("/");
-            } else if (data.imageServer && data.imageUrl) { //this is a general fallback, but should work specifically for images and video thumbnails
-                let url = data.imageServer + data.imageUrl + "?cell=1024,1024&rgnn=0,0,1,1&cvt=JPEG";
-                this.downloadLink = this._auth.getHostname() + "/api/download?imgid=" + this.id + "&url=" + encodeURIComponent(url);
-            }
-
-            // Save the Tile Source for IIIF
-            let imgPath = '/' + data['imageUrl'].substring(0, data['imageUrl'].lastIndexOf('.fpx') + 4)
-            this.tileSource = this._auth.getIIIFUrl() + encodeURIComponent(imgPath) + '/info.json'
-
-            this.imageSourceLoaded = true;
-            this.dataLoadedSource.next(this.metadataLoaded && this.imageSourceLoaded);
+            this.useImageSourceRes(data)
         }, (error) => {
-            console.error(error);
+            // Non-Artstor collection assets don't require a Region ID
+            this._assets.getImageSource( this.id, 103 )
+                .subscribe((data) => {
+                    this.useImageSourceRes(data)
+                }, (error) => {
+                    console.error(error);
+                });
         });
   }
 }

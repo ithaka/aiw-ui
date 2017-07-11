@@ -217,7 +217,7 @@ export class Login {
               }
             }
           }, error => {
-            
+            console.error("/userinfo error")
           });
 
       });

@@ -51,10 +51,17 @@ export class CollectionPage implements OnInit, OnDestroy {
         this.colId = routeParams["colId"];
         // Old links pass a name into the ID, just use that as a search term instead
         if (!/^[0-9]+$/.test(this.colId)) {
-          this._router.navigate(['/search', this.colId.replace('_', ' ')])
-        }
-
-        if (this.colId) {
+          this.http.get('/assets/collection-links.json')
+            .subscribe(data => {
+              let linkObj = data.json()
+              let link = linkObj[this.colId]
+              if (link) {
+                this._router.navigateByUrl(link)
+              } else {
+                this._router.navigate(['/search', this.colId.replace('_', ' ')])
+              }
+            })
+        } else if (this.colId) {
           this._assets.clearAssets();
           this.getCollectionInfo(this.colId)
             .then((data) => {

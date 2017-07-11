@@ -59,11 +59,13 @@ export class BrowseGroupsComponent implements OnInit {
     this._title.setTitle("Artstor | Browse Groups")
 
     // Load IGs only when the navigation has ended & 'selectedBrowseLevel' + 'currentPage' + 'appliedTags' have been set
-    this._router.events.subscribe( (event) => {
-      if(event instanceof NavigationEnd) {
-        this.loadIGs(this.appliedTags, this.pagination.currentPage, this.selectedBrowseLevel);
-      }
-    });
+    this.subscriptions.push(
+      this._router.events.subscribe( (event) => {
+        if(event instanceof NavigationEnd) {
+          this.loadIGs(this.appliedTags, this.pagination.currentPage, this.selectedBrowseLevel);
+        }
+      })
+    )
 
     this.subscriptions.push(
       this.route.params.subscribe((params) => {

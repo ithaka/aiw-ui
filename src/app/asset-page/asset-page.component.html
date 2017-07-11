@@ -35,31 +35,32 @@
         <div [class.hidden]="isFullscreen" class="col-md-4">
             <div class="py-3">
                  <!--If the user has not accepted the agreement, show modal when clicked, otherwise download immediately-->
-                
-                <button class="btn btn-secondary" [class.active]="showCopyUrl"  tabindex="1" (click)="showCopyUrl ? showCopyUrl = false : copyGeneratedImgURL()">
-                    {{ 'ASSET_PAGE.BUTTONS.LINK' | translate}}
-                    <i id="genImgURLlink" class="icon icon-share-white" ></i>
-                </button>
-                <a class="btn btn-secondary" tabindex="1" *ngIf="assets[0].downloadLink && user.isLoggedIn" 
-                    [attr.download]="(downloadAuth() && assets[0]) && genFilename(assets[0].title, assets[0].fileExt)"
-                    [attr.href]="downloadAuth() && !assets[0].disableDownload ? assets[0].downloadLink : null"
-                    (click)="downloadAuth() && !assets[0].disableDownload ? null : showAgreeModal = true; _analytics.directCall('download_image'); test();"
-                    [class.disabled]="assets[0].disableDownload"
-                    title="{{ assets[0].disableDownload ? 'Image is not available for download.' : 'Image download'}}">
-                    {{ 'ASSET_PAGE.BUTTONS.DOWNLOAD' | translate}}
-                    <i id="downloadAssetLink" class="icon icon-download" ></i>
-                </a>
-                <button class="btn btn-secondary" tabindex="1" *ngIf="assets[0].downloadLink && !user.isLoggedIn" (click)="showLoginModal = true">
-                    {{ 'ASSET_PAGE.BUTTONS.DOWNLOAD' | translate}}
-                    <i id="downloadAssetLink" class="icon icon-download" ></i>
-                </button>
-                <button (click)="addAssetToIG()" class="btn btn-primary btn--square">
-                    <i class="icon icon-add-white" aria-hidden="true"></i>
-                </button>
-                <div [class.hidden]="!showCopyUrl" class="form-group pt-1">
-                    <label>{{ 'ASSET_PAGE.HEADER_LABELS.SHR_LNK' | translate}}</label>
-                    <input #copyUrlInput readonly id="generatedImgURL" [ngModel]="generatedImgURL" class="form-control form-control__copy" />
-                    <div *ngIf="copyURLStatusMsg" class="alert alert-info">{{ copyURLStatusMsg }}</div>
+                <div class="btn-row">
+                    <button class="btn btn-secondary" [class.active]="showCopyUrl"  tabindex="1" (click)="showCopyUrl ? showCopyUrl = false : copyGeneratedImgURL()">
+                        {{ 'ASSET_PAGE.BUTTONS.LINK' | translate}}
+                        <i id="genImgURLlink" class="icon icon-share-white" ></i>
+                    </button><a class="btn btn-secondary" tabindex="1" *ngIf="assets[0].downloadLink && user.isLoggedIn" 
+                        [attr.download]="downloadAuth() && assets[0] && genFilename(assets[0].title, assets[0].fileExt)"
+                        [attr.href]="downloadAuth() && !assets[0].disableDownload ? assets[0].downloadLink : null"
+                        (click)="downloadAuth() && !assets[0].disableDownload ? null : showAgreeModal = true; _analytics.directCall('download_image'); test()"
+                        [class.disabled]="assets[0].disableDownload"
+                        title="{{ assets[0].disableDownload ? 'Image is not available for download.' : 'Image download'}}">
+                        {{ 'ASSET_PAGE.BUTTONS.DOWNLOAD' | translate}}
+                        <i id="downloadAssetLink" class="icon icon-download" ></i>
+                    </a><button class="btn btn-secondary" tabindex="1" *ngIf="assets[0].downloadLink && !user.isLoggedIn" (click)="showLoginModal = true">
+                        {{ 'ASSET_PAGE.BUTTONS.DOWNLOAD' | translate}}
+                        <i id="downloadAssetLink" class="icon icon-download" ></i>
+                    </button><button *ngIf="assets[0]" class="btn btn-secondary" tabindex="2" [routerLink]="['/assetprint', assets[0].id]">
+                        {{ 'ASSET_PAGE.BUTTONS.PRINT' | translate}}
+                        <!--<i id="printAssetLink" class="icon icon-print" ></i>-->
+                    </button><button (click)="addAssetToIG()" class="btn btn-primary btn--square">
+                        <i class="icon icon-add-white" aria-hidden="true"></i>
+                    </button>
+                    <div [class.hidden]="!showCopyUrl" class="form-group pt-1">
+                        <label>{{ 'ASSET_PAGE.HEADER_LABELS.SHR_LNK' | translate}}</label>
+                        <input #copyUrlInput readonly id="generatedImgURL" [ngModel]="generatedImgURL" class="form-control form-control__copy" />
+                        <div *ngIf="copyURLStatusMsg" class="alert alert-info">{{ copyURLStatusMsg }}</div>
+                    </div>
                 </div>
 
                 <div class="row-hdr pt-3" *ngIf="assets[0].metaDataArray.length > 0">{{ 'ASSET_PAGE.HEADER_LABELS.OBJ_DETAILS' | translate}}</div>
@@ -77,11 +78,13 @@
                         <div class="value" [innerHTML]="filePropObj.fieldValue"></div>
                     </div>
                 </div>
-            </div>
-            <div class="text-left">
-                <a *ngIf="route.snapshot.queryParams.iap == 'true'" id="buttonRequestIap" [attr.href]="'http://www.artstor.org/form/iap-request-form?name=' + assets[0].title + '&collectionName=' + assets[0].collectionName + '&id=' + assets[0].id + '&email=' + user.username" class="btn btn-secondary my-1" title="Request Image for Academic Publishing" tabindex="2" target="_blank">{{'ASSET_PAGE.BUTTONS.GET_IAP' | translate}}</a>
-                <a id="buttonReportAssetError" [attr.href]="'http://www.artstor.org/form/report-error?collectionName=' + assets[0].collectionName + '&id=' + assets[0].id + '&email=' + user.username" class="btn btn-secondary my-1" title="Report an error" tabindex="2" target="_blank">{{'ASSET_PAGE.BUTTONS.REPORT_ERROR' | translate}}</a>
-            </div>
+
+                <div class="text-left pt-2">
+                    <a *ngIf="route.snapshot.queryParams.iap == 'true'" id="buttonRequestIap" [attr.href]="'http://www.artstor.org/form/iap-request-form?name=' + assets[0].title + '&collectionName=' + assets[0].collectionName + '&id=' + assets[0].id + '&email=' + user.username" class="btn btn-secondary my-1" title="Request Image for Academic Publishing" tabindex="2" target="_blank">{{'ASSET_PAGE.BUTTONS.GET_IAP' | translate}}</a>
+                    <a id="buttonReportAssetError" [attr.href]="'http://www.artstor.org/form/report-error?collectionName=' + assets[0].collectionName + '&id=' + assets[0].id + '&email=' + user.username" class="btn btn-secondary my-1" title="Report an error" tabindex="2" target="_blank">{{'ASSET_PAGE.BUTTONS.REPORT_ERROR' | translate}}</a>
+                </div>
+            </div><!--padding wrap-->
+           
         </div>
 
         <div *ngIf="isFullscreen" class="fullscreen-btns">
