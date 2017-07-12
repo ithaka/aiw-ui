@@ -28,6 +28,9 @@ export class LegacyRouteResolver implements Resolve<boolean> {
       // Anchors in some old links cause some of the path to be lost
       this._router.navigate(['/home'])
       return true
+    } else if (url.indexOf('welcome.html') > -1) {
+      this._router.navigate(['/home'])
+      return true
     } else if (url.indexOf('/library') == 0) {
       // This is the normal expectation for old links!
     } else {
