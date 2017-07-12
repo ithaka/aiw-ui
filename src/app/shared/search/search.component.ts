@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy, Input, Output } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 import { Angulartics2 } from 'angulartics2/dist';
 
 import { Subscription }   from 'rxjs/Subscription';
@@ -22,6 +22,8 @@ export class SearchComponent implements OnInit, OnDestroy {
   
   // @Input()
   private searchInResults: boolean = false;
+
+  private nestedSrchLbl: string = 'results';
 
   @Input()
   private allowSearchInRes:boolean;
@@ -52,6 +54,20 @@ export class SearchComponent implements OnInit, OnDestroy {
         this.pageSize = parseInt(pagination.pageSize);
       })
     );
+
+    this.subscriptions.push(
+      this._router.events.subscribe( (event) => {
+        if(event instanceof NavigationEnd) {
+          let routeName = event.url.split('/')[1];
+          if((routeName === 'category') || (routeName === 'collection')){
+            this.nestedSrchLbl = routeName;
+          }
+          else{
+            this.nestedSrchLbl = 'results';
+          }
+        }
+      })
+    )
   }
 
   ngOnDestroy() {

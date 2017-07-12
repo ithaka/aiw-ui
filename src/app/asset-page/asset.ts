@@ -29,6 +29,8 @@ export class Asset {
   metaDataArray: any = [];
   /** Used for holding asset file properties array from the service response */
   filePropertiesArray: any = [];
+  /** Used for holding formatted asset metadata from the service response */
+  formattedMetaArray: any = [];
 
   private objectTypeNames: any = {
       1: 'specimen',
@@ -70,6 +72,8 @@ export class Asset {
           .then((res) => {
               if(res.objectId){
                   this.metaDataArray = res.metaData;
+                  this.formatMetadata();
+
                   this.filePropertiesArray = res.fileProperties;
                   this.title = res.title ? res.title : 'Untitled';
                   this.imgURL = res.imageUrl;
@@ -95,6 +99,34 @@ export class Asset {
     //     .catch(error => {
     //         console.error('Unable to load asset file properties');
     //     })
+  }
+
+
+  private formatMetadata(){
+    let metaArray = [];
+    for(let data of this.metaDataArray){
+        let fieldExists = false;
+
+        for(let metaData of metaArray){
+            if(metaData['fieldName'] === data.fieldName){
+                metaData['fieldValue'].push(data.fieldValue);
+                fieldExists = true;
+                break;
+            }
+        }
+
+        if(!fieldExists){
+            let fieldObj = {
+                'fieldName': data.fieldName,
+                'fieldValue': []
+            }
+            fieldObj['fieldValue'].push(data.fieldValue);
+            metaArray.push(fieldObj);
+        }
+
+    }
+
+    this.formattedMetaArray = metaArray;
   }
 
   /**

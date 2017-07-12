@@ -36,7 +36,8 @@
             <div class="py-3">
                  <!--If the user has not accepted the agreement, show modal when clicked, otherwise download immediately-->
                 <div class="btn-row">
-                    <button class="btn btn-secondary" [class.active]="showCopyUrl"  tabindex="1" (click)="showCopyUrl ? showCopyUrl = false : copyGeneratedImgURL()">
+                    <!--(mouseup) is a Firefox fix for firing the copy event-->
+                    <button class="btn btn-secondary" [class.active]="showCopyUrl"  tabindex="1" (mousedown)="showCopyUrl ? showCopyUrl = false : copyGeneratedImgURL()" (mouseup)="copyUrlInput.select(); document.execCommand('copy', false, null)">
                         {{ 'ASSET_PAGE.BUTTONS.LINK' | translate}}
                         <i id="genImgURLlink" class="icon icon-share-white" ></i>
                     </button><a class="btn btn-secondary" tabindex="1" *ngIf="assets[0].downloadLink && user.isLoggedIn" 
@@ -50,24 +51,26 @@
                     </a><button class="btn btn-secondary" tabindex="1" *ngIf="assets[0].downloadLink && !user.isLoggedIn" (click)="showLoginModal = true">
                         {{ 'ASSET_PAGE.BUTTONS.DOWNLOAD' | translate}}
                         <i id="downloadAssetLink" class="icon icon-download" ></i>
-                    </button><button *ngIf="assets[0]" class="btn btn-secondary" tabindex="2" [routerLink]="['/assetprint', assets[0].id]">
+                    </button>
+                    <a *ngIf="assets[0]" class="btn btn-secondary" tabindex="2" [attr.href]=" '/#/assetprint/' + assets[0].id " target="_blank">
                         {{ 'ASSET_PAGE.BUTTONS.PRINT' | translate}}
-                        <!--<i id="printAssetLink" class="icon icon-print" ></i>-->
-                    </button><button (click)="addAssetToIG()" class="btn btn-primary btn--square">
+                    </a><button (click)="addAssetToIG()" class="btn btn-primary btn--square">
                         <i class="icon icon-add-white" aria-hidden="true"></i>
                     </button>
                     <div [class.hidden]="!showCopyUrl" class="form-group pt-1">
                         <label>{{ 'ASSET_PAGE.HEADER_LABELS.SHR_LNK' | translate}}</label>
-                        <input #copyUrlInput readonly id="generatedImgURL" [ngModel]="generatedImgURL" class="form-control form-control__copy" />
+                        <input #copyUrlInput readonly id="generatedImgURL" [ngModel]="generatedImgURL" class="form-control form-control__copy" (click)="copyUrlInput.select(); document.execCommand('copy', false, null)"/>
                         <div *ngIf="copyURLStatusMsg" class="alert alert-info">{{ copyURLStatusMsg }}</div>
                     </div>
                 </div>
 
                 <div class="row-hdr pt-3" *ngIf="assets[0].metaDataArray.length > 0">{{ 'ASSET_PAGE.HEADER_LABELS.OBJ_DETAILS' | translate}}</div>
                 <!--Loop through metaData Array-->
-                <div class="meta-block" *ngFor="let metadataObj of assets[0].metaDataArray">
+                <div class="meta-block" *ngFor="let metadataObj of assets[0].formattedMetaArray">
                     <div [attr.id]="cleanId(metadataObj.fieldName)" class="label">{{ metadataObj.fieldName }}
-                    <div class="value" [innerHTML]="cleanFieldValue(metadataObj.fieldValue) | linkify"></div>
+                    <div *ngFor="let value of metadataObj.fieldValue">
+                        <div class="value" [innerHTML]="cleanFieldValue(value) | linkify"></div>
+                    </div>
                     </div>
                 </div>
 

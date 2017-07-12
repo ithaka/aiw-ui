@@ -23,6 +23,10 @@
             border-bottom: 1px solid #f0f0f0;
             margin: 0px;
 
+            &.last-row{
+                border-bottom: none;
+            }
+
             .lbl{
                 font-weight: 800;
             }
