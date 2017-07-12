@@ -19,37 +19,38 @@ import { AnalyticsService } from '../analytics.service';
 export class AssetPage implements OnInit, OnDestroy {
 
     @ViewChild(AssetViewerComponent)
-    private assetViewer: AssetViewerComponent;
+    private assetViewer: AssetViewerComponent
 
-    private user: any;
-    private hasPrivateGroups: boolean = false;
+    private user: any
+    private hasPrivateGroups: boolean = false
     private document = document
 
     // Array to support multiple viewers on the page
-    private assets: Asset[] = [];
-    private assetIndex: number = 1;
-    private assetNumber: number = 1;
-    private totalAssetCount: number = 1;
-    private subscriptions: Subscription[] = [];
-    private prevAssetResults: any = { thumbnails : [] };
-    private loadArrayFirstAsset: boolean = false;
-    private loadArrayLastAsset: boolean = false;
-    private isFullscreen: boolean = false;
-    private showAssetDrawer: boolean = false;
+    private assets: Asset[] = []
+    private assetIndex: number = 1
+    private assetNumber: number = 1
+    private totalAssetCount: number = 1
+    private subscriptions: Subscription[] = []
+    private prevAssetResults: any = { thumbnails : [] }
+    private loadArrayFirstAsset: boolean = false
+    private loadArrayLastAsset: boolean = false
+    private isFullscreen: boolean = false
+    private showAssetDrawer: boolean = false
 
     /** controls whether or not the modals are visible */
-    private showAgreeModal: boolean = false;
-    private showLoginModal: boolean = false;
-    private showAddModal: boolean = false;
-    private showCreateGroupModal: boolean = false;
+    private showAgreeModal: boolean = false
+    private showLoginModal: boolean = false
+    private showAddModal: boolean = false
+    private showCreateGroupModal: boolean = false
+    private showAccessDeniedModal: boolean = false
 
-    private copyURLStatusMsg: string = '';
-    private showCopyUrl: boolean = false;
-    private generatedImgURL: string = '';
-    private prevRouteParams: any = [];
+    private copyURLStatusMsg: string = ''
+    private showCopyUrl: boolean = false
+    private generatedImgURL: string = ''
+    private prevRouteParams: any = []
     private collectionName: string = ''
 
-    private _storage;
+    private _storage
     
 
     constructor(
@@ -162,12 +163,20 @@ export class AssetPage implements OnInit, OnDestroy {
     renderPrimaryAsset(asset: Asset) {
         this.assets[0] = asset
         asset.isDataLoaded.subscribe(
-            isLoaded => {
+            (isLoaded) => {
                 if (isLoaded) {
                     console.log(this.assets[0])
                     this._title.setTitle( asset.title );
                     document.querySelector('meta[name="DC.type"]').setAttribute('content', 'Artwork');
                     document.querySelector('meta[name="DC.title"]').setAttribute('content', asset.title);
+                }
+            }, (err) => {
+                if (err.status === 403) {
+                    // here is where we make the "access denied" modal appear
+                    this.showAccessDeniedModal = true
+                } else {
+                    // don't have a clue why this would happen, so just log it
+                    console.error(err)
                 }
             }
         )
