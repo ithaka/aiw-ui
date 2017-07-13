@@ -21,9 +21,29 @@ export class LegacyRouteResolver implements Resolve<boolean> {
    * This is the top-level function for parsing out legacy urls (a router of sorts)
    */
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
-    let urlArr = state.url.split("/")
-    urlArr.splice(0,2)
+    let url = state.url
+    
+    
+    if (!isNaN(Number(url.substr(1,2)))) { // catches routes that start with "/1", "/3", "/{{number}}", etc...
+      // Anchors in some old links cause some of the path to be lost
+      this._router.navigate(['/home'])
+      return true
+    } else if (url.indexOf('welcome.html') > -1) {
+      this._router.navigate(['/home'])
+      return true
+    } else if (url.indexOf('/library') == 0) {
+      // This is the normal expectation for old links!
+    } else {
+      return true
+    }
 
+    if (url.indexOf('%7C') > -1) {
+      url = decodeURI(url)
+    }
+
+    let urlArr = url.split("/")
+    urlArr.splice(0,2)
+    
     if (urlArr[0].substr(0, 10).toLowerCase() === "externaliv") {
       let encryptedId = urlArr[0].split("=")[1]
       this._router.navigate(['/asset', 'external', encryptedId])
@@ -46,6 +66,11 @@ export class LegacyRouteResolver implements Resolve<boolean> {
       // At some point, someone made pretty urls as: '/library/collection/patel'
       if (pipeArr[0] == 'collection' && urlArr[1]) {
         this._router.navigate(["/collection", urlArr[1]])
+      }
+
+      // Handling for '/library/welcome.html'
+      if (pipeArr[0] == 'welcome.html') {
+        this._router.navigate(["/home"])
       }
 
       if (pipeArr[0].indexOf('#') > 0) {

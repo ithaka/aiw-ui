@@ -70,17 +70,32 @@ export class AuthService implements CanActivate {
     this.IIIFUrl = '//tsprod.artstor.org/rosa-iiif-endpoint-1.0-SNAPSHOT/fpx';
     
     // Check domain
-    if (document.location.hostname.indexOf('library.artstor.org') > -1) {
-      this.hostname = '//library.artstor.org';
-      this.baseUrl =  '//library.artstor.org/api/secure'; 
-      this.imageFpxUrl =  '//library.artstor.org/api/secure/imagefpx'; 
-      // this.lostPassUrl =  '//library.artstor.org/lostpw'; 
-      this.lostPassUrl = '//library.artstor.org/library/lostpw';
+    if (document.location.hostname.indexOf('library.artstor.org') > -1 || document.location.hostname.indexOf('beta.artstor.org') > -1) {
+      // Relative live endpoints
+      this.hostname = '';
+      this.baseUrl =  '/api/secure'; 
+      this.imageFpxUrl =  '/api/secure/imagefpx'; 
+      this.lostPassUrl = '/library/lostpw';
       this.logUrl = '//ang-ui-logger.apps.prod.cirrostratus.org/api/v1';
+    }
+    else if (document.location.hostname.indexOf('proxy.artstor.org') > -1) {
+      // Relative live endpoints
+      this.hostname = '';
+      this.baseUrl =  '/api/secure'; 
+      this.imageFpxUrl =  '/api/secure/imagefpx'; 
+      this.lostPassUrl = '/library/lostpw';
     }
     else if ( document.location.hostname.indexOf('beta.artstor.org') > -1 || document.location.hostname.indexOf('prod.cirrostratus.org') > -1 || document.location.hostname.indexOf('lively.artstor.org') > -1 ) {
       // Prod/Lively endpoints
       this.logUrl = '//ang-ui-logger.apps.prod.cirrostratus.org/api/v1';
+    } else if (document.location.hostname.indexOf('test.stagely.artstor.org') > -1) {
+      // Relative Test Endpoints
+      this.hostname = '';
+      this.baseUrl = '/api/secure';
+      this.imageFpxUrl =  '/api/secure/imagefpx'; 
+      this.lostPassUrl = '/library/lostpw'; 
+      this.IIIFUrl = '//tsprod.artstor.org/rosa-iiif-endpoint-1.0-SNAPSHOT/fpx';
+      this.logUrl = '//ang-ui-logger.apps.test.cirrostratus.org/api/v1';
     } else if (document.location.hostname.indexOf('localhost') > -1 || document.location.hostname.indexOf('stage.artstor.org') > -1 || document.location.hostname.indexOf('test.stagely.artstor.org') > -1 || document.location.hostname.indexOf('test.cirrostratus.org') > -1) {
       // Test Endpoints
       this.hostname = '//test.stagely.artstor.org';

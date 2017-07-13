@@ -42,6 +42,7 @@ import { SearchPage } from './search-page';
 import { CollectionPage } from './collection-page';
 import { CategoryPage } from './category-page';
 import { ImageGroupPPPage } from './image-group-pp-page';
+import { AssetPPPage } from './asset-pp-page';
 import { ClusterPage } from './cluster-page';
 import { BrowsePage, LibraryComponent, BrowseCommonsComponent,
   MyCollectionsComponent, BrowseInstitutionComponent, BrowseGroupsComponent, TagComponent,
@@ -139,6 +140,7 @@ type StoreType = {
     Home,
     ImageGroupPage,
     ImageGroupPPPage,
+    AssetPPPage,
     LibraryComponent,
     Login,
     LoginReqModal,
