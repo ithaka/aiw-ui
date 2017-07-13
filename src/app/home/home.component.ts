@@ -6,6 +6,8 @@ import { AppState } from '../app.service';
 import { AssetService, AuthService, } from '../shared';
 import { AnalyticsService } from '../analytics.service';
 
+declare var initPath: string
+
 @Component({
   // The selector is what angular internally uses
   // for `document.querySelectorAll(selector)` in our index.html
@@ -45,6 +47,16 @@ export class Home implements OnInit, OnDestroy {
   }
 
   ngOnInit() {    
+
+    // Provide redirects for initPath detected in index.html from inital load
+    if (initPath) {
+      this._router.navigateByUrl(initPath)
+        .then( result => {
+          // Clear variable to prevent further redirects
+          initPath = null
+          console.log('Redirect to initial path attempt: ' + result)
+        })
+    }
 
     this.user = this._auth.getUser();
 
