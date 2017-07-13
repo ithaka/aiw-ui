@@ -5,6 +5,8 @@ import { Observable } from 'rxjs/Observable'
 
 import { AuthService } from './shared'
 
+declare var initPath: string
+
 @Injectable()
 export class LegacyRouteResolver implements Resolve<boolean> {
 
@@ -22,6 +24,11 @@ export class LegacyRouteResolver implements Resolve<boolean> {
    */
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
     let url = state.url
+
+    // Provide redirects for initPath detected in index.html from inital load
+    if (initPath) {
+      url = initPath
+    }
     
     if (!isNaN(Number(url.substr(1,2)))) {
       // Anchors in some old links cause some of the path to be lost
