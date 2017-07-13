@@ -29,6 +29,9 @@ export class LegacyRouteResolver implements Resolve<boolean> {
     if (initPath) {
       url = initPath
     }
+
+    // Keep this log around: we have a lot of exceptions
+    console.log("Attempting to resolve legacy url:\n", url)
     
     if (!isNaN(Number(url.substr(1,2)))) {
       // Anchors in some old links cause some of the path to be lost
