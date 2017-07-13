@@ -15,6 +15,7 @@ export class Asset {
   imgURL: string;
   fileExt: string;
   downloadLink: string;
+  downloadName: string
   tileSource: any;
   collectionName: string = ''
 
@@ -78,6 +79,10 @@ export class Asset {
                   this.title = res.title ? res.title : 'Untitled';
                   this.imgURL = res.imageUrl;
                   this.fileExt = res.imageUrl ? res.imageUrl.substr(res.imageUrl.lastIndexOf('.') + 1) : ''
+
+                  this.downloadName = this.title.replace(/\./g,'-') + '.' + this.fileExt
+
+                console.log(this.title, this.fileExt, this.downloadName)
 
                   this.setCreatorDate();
                   this.collectionName = this.getCollectionName()
@@ -200,13 +205,18 @@ export class Asset {
         .subscribe((data) => {
             this.useImageSourceRes(data)
         }, (error) => {
-            // Non-Artstor collection assets don't require a Region ID
-            this._assets.getImageSource( this.id, 103 )
-                .subscribe((data) => {
-                    this.useImageSourceRes(data)
-                }, (error) => {
-                    console.error(error);
-                });
+            // if it's an access denied error, throw that to the subscribers
+            if (error.status === 403) {
+                this.dataLoadedSource.error(error)
+            } else {
+                // Non-Artstor collection assets don't require a Region ID
+                this._assets.getImageSource( this.id, 103 )
+                    .subscribe((data) => {
+                        this.useImageSourceRes(data)
+                    }, (error) => {
+                        console.error(error);
+                    });
+            }
         });
   }
 }
