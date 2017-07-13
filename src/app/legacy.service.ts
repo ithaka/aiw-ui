@@ -22,13 +22,10 @@ export class LegacyRouteResolver implements Resolve<boolean> {
    */
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
     let url = state.url
-    console.log("redirecting from:", url)
     
-    
-    if (!isNaN(Number(url.substr(1,2)))) { // catches routes that start with "/1", "/3", "/{{number}}", etc...
+    if (!isNaN(Number(url.substr(1,2)))) {
       // Anchors in some old links cause some of the path to be lost
-      this._router.navigate(['/home'])
-      return true
+      url = '/library/welcome.html#' + url.substr(1)
     } else if (url.indexOf('welcome.html') > -1) {
       this._router.navigate(['/home'])
       return true
