@@ -41,7 +41,7 @@
                         {{ 'ASSET_PAGE.BUTTONS.LINK' | translate}}
                         <i id="genImgURLlink" class="icon icon-share-white" ></i>
                     </button><a class="btn btn-secondary" tabindex="1" *ngIf="assets[0].downloadLink && user.isLoggedIn" 
-                        [attr.download]="downloadAuth() && assets[0] && assets[0].downloadName"
+                        download
                         [attr.href]="downloadAuth() && !assets[0].disableDownload ? assets[0].downloadLink : null"
                         (click)="downloadAuth() && !assets[0].disableDownload ? null : showAgreeModal = true; _analytics.directCall('download_image'); test()"
                         [class.disabled]="assets[0].disableDownload"

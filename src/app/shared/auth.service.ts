@@ -60,42 +60,26 @@ export class AuthService implements CanActivate {
     this._storage = locker.useDriver(Locker.DRIVERS.LOCAL);
     this._router = _router;
 
-    // these can be moved inside the if statement when we want to change services based on dev/prod
-    this.hostname = '//beta.artstor.org';
-    this.baseUrl =  '//beta.artstor.org/api/secure'; 
-    this.imageFpxUrl =  '//beta.artstor.org/api/secure/imagefpx'; 
-    // this.lostPassUrl =  '//beta.artstor.org/lostpw'; 
-    this.lostPassUrl = '//beta.artstor.org/library/lostpw'
+    // Default to relative endpoints
+    this.hostname = '';
+    this.baseUrl =  '/api/secure'; 
+    this.imageFpxUrl =  '/api/secure/imagefpx'; 
+    this.lostPassUrl = '/library/lostpw';
     this.thumbUrl = '//mdxdv.artstor.org';
     this.IIIFUrl = '//tsprod.artstor.org/rosa-iiif-endpoint-1.0-SNAPSHOT/fpx';
     
     // Check domain
-    if (document.location.hostname.indexOf('library.artstor.org') > -1 || document.location.hostname.indexOf('beta.artstor.org') > -1) {
-      // Relative live endpoints
-      this.hostname = '';
-      this.baseUrl =  '/api/secure'; 
-      this.imageFpxUrl =  '/api/secure/imagefpx'; 
-      this.lostPassUrl = '/library/lostpw';
+    if (document.location.hostname.indexOf('library.artstor.org') > -1 || document.location.hostname.indexOf('beta.artstor.org') > -1 || document.location.hostname.indexOf('lively.artstor.org') > -1 || document.location.hostname.indexOf('proxy.artstor.org') > -1) {
+      // Explicit live endpoints
       this.logUrl = '//ang-ui-logger.apps.prod.cirrostratus.org/api/v1';
     }
-    else if (document.location.hostname.indexOf('proxy.artstor.org') > -1) {
-      // Relative live endpoints
-      this.hostname = '';
-      this.baseUrl =  '/api/secure'; 
-      this.imageFpxUrl =  '/api/secure/imagefpx'; 
-      this.lostPassUrl = '/library/lostpw';
-    }
-    else if ( document.location.hostname.indexOf('beta.artstor.org') > -1 || document.location.hostname.indexOf('prod.cirrostratus.org') > -1 || document.location.hostname.indexOf('lively.artstor.org') > -1 ) {
+    else if ( document.location.hostname.indexOf('prod.cirrostratus.org') > -1 ) {
       // Prod/Lively endpoints
+      this.hostname = '//library.artstor.org';
+      this.baseUrl =  '//library.artstor.org/api/secure'; 
+      this.imageFpxUrl =  '//library.artstor.org/api/secure/imagefpx'; 
+      this.lostPassUrl = '//library.artstor.org/library/lostpw';
       this.logUrl = '//ang-ui-logger.apps.prod.cirrostratus.org/api/v1';
-    } else if (document.location.hostname.indexOf('test.stagely.artstor.org') > -1) {
-      // Relative Test Endpoints
-      this.hostname = '';
-      this.baseUrl = '/api/secure';
-      this.imageFpxUrl =  '/api/secure/imagefpx'; 
-      this.lostPassUrl = '/library/lostpw'; 
-      this.IIIFUrl = '//tsprod.artstor.org/rosa-iiif-endpoint-1.0-SNAPSHOT/fpx';
-      this.logUrl = '//ang-ui-logger.apps.test.cirrostratus.org/api/v1';
     } else if (document.location.hostname.indexOf('localhost') > -1 || document.location.hostname.indexOf('stage.artstor.org') > -1 || document.location.hostname.indexOf('test.stagely.artstor.org') > -1 || document.location.hostname.indexOf('test.cirrostratus.org') > -1) {
       // Test Endpoints
       this.hostname = '//test.stagely.artstor.org';
@@ -104,10 +88,6 @@ export class AuthService implements CanActivate {
       this.lostPassUrl = '//test.stagely.artstor.org/library/lostpw'; 
       this.IIIFUrl = '//tsprod.artstor.org/rosa-iiif-endpoint-1.0-SNAPSHOT/fpx';
       this.logUrl = '//ang-ui-logger.apps.test.cirrostratus.org/api/v1';
-    } else if( document.location.hostname.indexOf('ang-ui-earth.apps.test.cirrostratus.org') > -1 ) {
-      // Earth test instance endpoints
-      this.hostname = '//artstor-earth-library.apps.test.cirrostratus.org';
-      this.baseUrl = '//artstor-earth-library.apps.test.cirrostratus.org/secure';
     }
 
 
