@@ -288,7 +288,7 @@ export class AuthService implements CanActivate {
    * Gets user object from local storage
    */
   public getUser() : any {
-      return this._storage.get('user');
+      return this._storage.get('user') ? this._storage.get('user') : {};
   }
 
   /** Stores an object in local storage for you - your welcome */
@@ -321,7 +321,7 @@ export class AuthService implements CanActivate {
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
     let options = new RequestOptions({ withCredentials: true });
     // If user object already exists, we're done here
-    if (this.getUser()) { 
+    if (this.getUser() && this.getUser().hasOwnProperty('status')) { 
       return new Observable(observer => {
           observer.next(true);  
       });

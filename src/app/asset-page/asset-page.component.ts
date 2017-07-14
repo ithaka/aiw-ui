@@ -22,6 +22,7 @@ export class AssetPage implements OnInit, OnDestroy {
     private assetViewer: AssetViewerComponent
 
     private user: any
+    private hasExternalAccess: boolean = false
     private hasPrivateGroups: boolean = false
     private document = document
 
@@ -92,10 +93,11 @@ export class AssetPage implements OnInit, OnDestroy {
                 this.assets = []
 
                 if (routeParams['encryptedId']) {
+                    this.hasExternalAccess = true
                     this._assets.decryptToken(routeParams['encryptedId'])
                         .take(1)
                         .subscribe((asset) => {
-                            this.renderPrimaryAsset(new Asset(asset.objectId, this._assets, this._auth))
+                            this.renderPrimaryAsset(new Asset(asset.objectId, this._assets, this._auth, asset))
                         }, (err) => {
                             console.error(err)
                             this._router.navigate(['/nocontent'])
@@ -143,7 +145,7 @@ export class AssetPage implements OnInit, OnDestroy {
           })
         );
 
-        if(this.user.isLoggedIn){
+        if(this.user && this.user.isLoggedIn){
             // Check if the logged-in user has private image groups
             this._group.getAll('private')
                         .take(1)
@@ -177,7 +179,9 @@ export class AssetPage implements OnInit, OnDestroy {
             }, (err) => {
                 if (err.status === 403) {
                     // here is where we make the "access denied" modal appear
-                    this.showAccessDeniedModal = true
+                    if (!this.hasExternalAccess) {
+                        this.showAccessDeniedModal = true
+                    }   
                 } else {
                     // don't have a clue why this would happen, so just log it
                     console.error(err)
@@ -216,15 +220,14 @@ export class AssetPage implements OnInit, OnDestroy {
     }
 
     private addAssetToIG(): void{
-        if(this.user.isLoggedIn){
+        if (this.user.isLoggedIn) {
             if(this.hasPrivateGroups){
                 this.showAddModal = true;
             }
             else{
                 this.showCreateGroupModal = true;
             }
-        }
-        else{
+        } else{
             this.showLoginModal = true;
         }
     }
