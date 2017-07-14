@@ -30,7 +30,7 @@ export class AddToGroupModal implements OnInit, OnDestroy {
     failure?: boolean
   } = {};
 
-  private dataService: CompleterData;
+  private dataService: any;
 
   constructor(
     private _assets: AssetService,
