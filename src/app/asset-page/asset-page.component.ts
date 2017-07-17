@@ -169,6 +169,7 @@ export class AssetPage implements OnInit, OnDestroy {
      */
     renderPrimaryAsset(asset: Asset) {
         this.assets[0] = asset
+        console.log(asset)
         asset.isDataLoaded.subscribe(
             (isLoaded) => {
                 if (isLoaded) {
