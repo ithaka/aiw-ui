@@ -17,8 +17,8 @@ import { AuthService, AssetService, ToolboxService } from '..';
 export class Nav implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = [];
   public showLoginPanel = false;
-  private user: any;
-  private institutionObj: any;
+  private user: any = {};
+  private institutionObj: any = {};
   private _tool: ToolboxService = new ToolboxService();
   
   private showinactiveUserLogoutModal: boolean = false;
@@ -37,31 +37,26 @@ export class Nav implements OnInit, OnDestroy {
 
   ngOnInit() {
 
-    // If the user session has expired, then explicitly logout the user
-    this._auth.getUserInfo().subscribe( userInfo => {
-      if(!userInfo.status){
-        this.logout();
-      } else {
-        // Update component's user object
-        this.user = this._auth.getUser();
-      }
-    });
-
     this.subscriptions.push(
       this._router.events.subscribe(e => {
         if (e instanceof NavigationEnd && (e.url != '/login') && (e.url.split('/')[1] != 'printpreview') && (e.url.split('/')[1] != 'assetprint')) {
             this.showLoginPanel = true;
-          } else {
+        } else {
             this.showLoginPanel = false;
-          }
+        }
         this.user = this._auth.getUser();
       })
     );
 
     this.subscriptions.push(
-      this._auth.getInstitution().subscribe((institutionObj) => {
-        this.institutionObj = institutionObj;
-      })
+      this._auth.getInstitution().subscribe(
+        (institutionObj) => {
+          this.institutionObj = institutionObj;
+        },
+        (err) => {
+          console.log("Nav failed to load Institution information", err)
+        }
+      )
     );
 
     // Show inactive user logout modal once the subject is set by auth.service

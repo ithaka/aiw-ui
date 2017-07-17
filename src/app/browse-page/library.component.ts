@@ -27,6 +27,7 @@ export class LibraryComponent implements OnInit {
   private subscriptions: Subscription[] = [];
   private selectedBrowseId: string = '';
   private browseMenuArray: any[];
+  private splashImgURL: string = '';
 
   private tagsObj: any = {
     103 : [],
@@ -67,6 +68,7 @@ export class LibraryComponent implements OnInit {
     if (!this.route.snapshot.params['viewId']) {
       this.selectedBrowseId = this._assets.getRegionCollection().toString();
       this.getTags(this.selectedBrowseId);
+      this.updateSplashImgURL();
     }
 
     this.subscriptions.push(
@@ -81,12 +83,28 @@ export class LibraryComponent implements OnInit {
               this.getTags(adjustedId);
             }
             this.selectedBrowseId = adjustedId;
+            this.updateSplashImgURL();
         }
         this.loadDescription(this.selectedBrowseId);
       })
     );
     this._analytics.setPageValues('library', '')
   } // OnInit
+
+  private updateSplashImgURL(): void{
+    if(this.selectedBrowseId === '103'){
+      this.splashImgURL = '/assets/img/collection-splash.png';
+    }
+    else if(this.selectedBrowseId === '250'){
+      this.splashImgURL = '/assets/img/classification-splash.png';
+    }
+    else if(this.selectedBrowseId === '260'){
+      this.splashImgURL = '/assets/img/geography-splash.png';
+    }
+    else{
+      this.splashImgURL = '';
+    }
+  }
 
   private getTags(browseId): void {
     if (!this.tagsObj[browseId] || this.tagsObj[browseId].length < 1) {

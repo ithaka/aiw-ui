@@ -1,4 +1,4 @@
-import { Observable, Subject } from 'rxjs/Rx';
+import { BehaviorSubject, Observable } from 'rxjs/Rx';
 
 import { AssetService, AuthService } from './../shared';
 
@@ -18,10 +18,12 @@ export class Asset {
   downloadName: string
   tileSource: any;
   collectionName: string = ''
+  // Not reliably available
+  collectionId: number
 
   private metadataLoaded = false;
   private imageSourceLoaded = false;
-  private dataLoadedSource = new Subject<boolean>();
+  private dataLoadedSource = new BehaviorSubject<boolean>(false);
   public isDataLoaded = this.dataLoadedSource.asObservable();
 
   public disableDownload: boolean = false;
@@ -51,12 +53,39 @@ export class Asset {
       24: 'kaltura'
   };
 
-  constructor(asset_id: string, _assets ?: AssetService, _auth ?: AuthService) {
+  constructor(asset_id: string, _assets ?: AssetService, _auth ?: AuthService, assetObj ?: any) {
     this.id = asset_id;
     this._assets = _assets;
     this._auth = _auth;
-    this.loadAssetMetaData();
-    this.loadMediaMetaData();
+    if (assetObj) {
+        this.metadataLoaded = true
+        this.title = assetObj.tombstone[0]
+        this.metaDataArray = [{
+                fieldName : 'Title',
+                fieldValue : assetObj.tombstone[0]
+            },{
+                fieldName : 'Creator',
+                fieldValue : assetObj.tombstone[1]
+            },
+            {
+                fieldName : 'Date',
+                fieldValue : assetObj.tombstone[2]
+            }
+        ]
+        this.formatMetadata()
+        this.collectionId = assetObj.collectionId
+        this.imgURL = assetObj.largeImgUrl
+        this.typeId = assetObj.objectTypeId
+            // .push({
+            //     Date : [assetObj.tombstone[2]]
+            // })
+        this.metadataLoaded = true
+        this.imageSourceLoaded = true
+        this.dataLoadedSource.next(true);
+    } else {
+        this.loadAssetMetaData();
+        this.loadMediaMetaData();
+    }
   }
 
   /**
@@ -82,7 +111,7 @@ export class Asset {
 
                   this.downloadName = this.title.replace(/\./g,'-') + '.' + this.fileExt
 
-                console.log(this.title, this.fileExt, this.downloadName)
+                  console.log(this.title, this.fileExt, this.downloadName)
 
                   this.setCreatorDate();
                   this.collectionName = this.getCollectionName()
@@ -91,19 +120,9 @@ export class Asset {
                   this.dataLoadedSource.next(this.metadataLoaded && this.imageSourceLoaded);
               }
           })
-          .catch(function(err) {
+          .catch((err) => {
               console.error('Unable to load asset metadata.');
           });
-    
-    // This call returns an html table as a string! Fun.
-    //   this._assets.getFileProperties(this.id)
-    //     .then((res) => {
-    //         console.log(res);
-
-    //     })
-    //     .catch(error => {
-    //         console.error('Unable to load asset file properties');
-    //     })
   }
 
 
@@ -181,6 +200,8 @@ export class Asset {
     /** This determines how to build the downloadLink, which is different for different typeIds */
     if (this.typeId === 20 || this.typeId === 21 || this.typeId === 22 || this.typeId === 23) { //all of the typeIds for documents
         this.downloadLink = [this._auth.getMediaUrl(), this.id, this.typeId].join("/");
+        console.log("just assembled downloadLink:", this.downloadLink)
+        console.log("components used:", this._auth.getMediaUrl(), this.id, this.typeId)
     } else if (data.imageServer && data.imageUrl) { //this is a general fallback, but should work specifically for images and video thumbnails
         let url = data.imageServer + data.imageUrl + "?cell=1024,1024&rgnn=0,0,1,1&cvt=JPEG";
         this.downloadLink = this._auth.getHostname() + "/api/download?imgid=" + this.id + "&url=" + encodeURIComponent(url);
@@ -201,7 +222,7 @@ export class Asset {
    * - Finds the asset Type id
   */
   private loadMediaMetaData(): void {
-      this._assets.getImageSource( this.id )
+      this._assets.getImageSource( this.id, this.collectionId )
         .subscribe((data) => {
             this.useImageSourceRes(data)
         }, (error) => {
