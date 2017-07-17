@@ -202,7 +202,6 @@ export class BrowseGroupsComponent implements OnInit {
    * @param level The query param for the groups call that indicates what share permissions the user has
    */
   private loadIGs(appliedTags: string[], page: number, level?: string, searchTerm ?: string): void {
-    console.log("calling loadIgs")
     // this makes sure we don't search as soon as the user clicks the search tab, and also triggers some display items on search
     if (this.firstSearch) {
       this.firstSearch = false
@@ -211,7 +210,6 @@ export class BrowseGroupsComponent implements OnInit {
       this.errorObj["search"] = ""
       return
     }
-    console.log("searching...")
     
     this.loading = true
     let browseLevel: string

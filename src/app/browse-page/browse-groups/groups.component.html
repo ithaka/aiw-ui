@@ -1,6 +1,6 @@
 <nav class="nav nav-inline browse-nav">
     <a class="label">Browse By:</a>
-    <a class="nav-link" *ngFor="let browseOpt of browseMenuArray" [ngClass]="{'active': browseOpt.level == route.snapshot.params.view}" [routerLink]="['/browse', 'groups', browseOpt.level]" (click)="browseOpt.level === 'search' && firstSearch = true">{{ browseOpt.label }}</a>
+    <a class="nav-link" *ngFor="let browseOpt of browseMenuArray" [ngClass]="{'active': browseOpt.level == route.snapshot.params.view}" [routerLink]="['/browse', 'groups', browseOpt.level]" (click)="browseOpt.level === 'search' ? firstSearch = true : firstSearch = false">{{ browseOpt.label }}</a>
 </nav>
 <div class="row">
     <div class="col-md-4 hidden-sm-down">
@@ -29,7 +29,8 @@
 <div *ngIf="loading" class="row has-icon-overlay">
     <i class="icon-lg icon-overlay--top icon-loading-large"></i>
 </div>
-<div *ngIf="_tagFilters.filters.length < 1 && !loading" class="alert alert-info">
+<!-- Don't show this if there is a filters list, if it's loading, or if the user hasn't searched for anything yet -->
+<div *ngIf="_tagFilters.filters.length < 1 && !loading && route.snapshot.params.view !== 'search'" class="alert alert-info">
     <h3 translate>BROWSE.ERRORS.NO_GROUPS_COLLECTIONS_HEADING</h3><br/>
     <div *ngIf="selectedBrowseLevel === 'private'" [innerHtml]="'BROWSE.ERRORS.NO_PRIVATE_GROUPS_COLLECTIONS_PROMPT' | translate"></div>
     <div *ngIf="selectedBrowseLevel === 'institution'" [innerHtml]="'BROWSE.ERRORS.NO_INSTITUTIONAL_GROUPS_COLLECTIONS_PROMPT' | translate"></div>
