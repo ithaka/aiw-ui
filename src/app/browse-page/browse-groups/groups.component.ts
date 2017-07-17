@@ -119,11 +119,11 @@ export class BrowseGroupsComponent implements OnInit {
       })
     }
 
-    // // Mary has edits before we reveal Search
-    // this.browseMenuArray.push({
-    //   label: 'Search',
-    //   level: 'search'
-    // })
+    // Mary has edits before we reveal Search
+    this.browseMenuArray.push({
+      label: 'Search',
+      level: 'search'
+    })
   
     this._analytics.setPageValues('groups', '')
   } // OnInit
@@ -206,7 +206,9 @@ export class BrowseGroupsComponent implements OnInit {
     let browseLevel: string
 
     // if level is not provided explicitly, here is some logic for determining what it should be - search takes priority, then browse level, default to 'public'
-    if (!level) {
+    if (level === 'search') {
+      browseLevel = this.getSearchLevel()
+    } else if (!level) {
       browseLevel = this.getSearchLevel() || this.selectedBrowseLevel || 'public'
     } else {
       browseLevel = level
