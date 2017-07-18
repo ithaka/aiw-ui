@@ -75,11 +75,16 @@ export class PptModalComponent implements OnInit {
     let header = new Headers({ 'content-type': 'application/x-www-form-urlencoded' }); 
     let options = new RequestOptions({ headers: header, withCredentials: true});
     let imgStr: string = "";
+    let useLegacyMetadata: boolean = true
+    let url = this._auth.getHostname() + '/api/group/export' 
+    let format: string
+    let data: any
 
     if (!zip) {
-      zip = false;
+      format = 'pptx'
+    } else {
+      format = 'zip'
     }
-
 
     group.items.forEach((item, index, items) => {
         imgStr += [(index + 1), item, "1024x1024"].join(":")
@@ -88,20 +93,22 @@ export class PptModalComponent implements OnInit {
         }
     })
 
-    let data = {
-        _method: "createPPT",
-        igId: group.id,
+    data = {
         igName: group.name,
-        // images: group.igDownloadInfo.images,
-        images: imgStr,
-        zoom: '',
-        zip: zip
+        images: imgStr
     }
 
-    let encodedData: string = this._auth.formEncode(data);
+    // Make authorization call to increment download count
+    this.http
+      .get(url + '/auth/' + group.id + '/true', options)
+      .map(data => {
+        return data.json() || {};
+      })
+      .toPromise()
 
+    // Return request that provides file URL
     return this.http
-      .post(this._auth.getUrl() + "/downloadpptimages", encodedData, options)
+      .post(url + '/' + format + '/' + group.id + '/' + useLegacyMetadata, this._auth.formEncode(data), options)
       .map(data => {
         return data.json() || {};
       });
