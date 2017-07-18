@@ -15,7 +15,7 @@
         <ang-tags-list [browseLevel]="selectedBrowseLevel"></ang-tags-list>
     </div>
     <div class="col-md-8">
-        <ang-general-search *ngIf="route.snapshot.params.view == 'search'" (executeSearch)="search($event)"></ang-general-search>
+        <ang-general-search *ngIf="route.snapshot.params.view == 'search'" (executeSearch)="addQueryParams({ term: $event }, true)"></ang-general-search>
         <h3 class="pb-1 px-2">Groups
             <pagination [pageObj]="pagination" (goToPage)="goToPage($event)">
             </pagination>

@@ -61,29 +61,48 @@ export class BrowseGroupsComponent implements OnInit {
     // set the title
     this._title.setTitle("Artstor | Browse Groups")
 
-    // Load IGs only when the navigation has ended & 'selectedBrowseLevel' + 'currentPage' + 'appliedTags' have been set
-    this.subscriptions.push(
-      this._router.events.subscribe( (event) => {
-        if(event instanceof NavigationEnd) {
-          this.loadIGs(this.appliedTags, this.pagination.currentPage, this.selectedBrowseLevel);
-        }
-      })
-    )
+    // // Load IGs only when the navigation has ended & 'selectedBrowseLevel' + 'currentPage' + 'appliedTags' have been set
+    // this.subscriptions.push(
+    //   this._router.events.subscribe((event) => {
+    //     if(event instanceof NavigationEnd) {
+    //       console.log("navigating with router event", "term:", this.route.snapshot.queryParams.term)
+    //       if (this.route.snapshot.params.view === 'search') {
+    //         this.search(this.route.snapshot.queryParams.term)
+    //       } else {
+    //         this.loadIGs(this.appliedTags, this.pagination.currentPage, this.selectedBrowseLevel)
+    //       }
+    //     }
+    //   })
+    // )
 
     this.subscriptions.push(
       this.route.params.subscribe((params) => {
-        if (params.view != (this.selectedBrowseLevel || 'search')) {
+        if (params.view !== (this.selectedBrowseLevel || 'search')) {
           this.pagination.currentPage = 1
           this.appliedTags = []
           // this.loadIGs([], 1, params.view)
           this.selectedBrowseLevel = params.view
         }
+        // if (this.route.snapshot.params.view === 'search') {
+        //   this.search(this.route.snapshot.queryParams.term)
+        // } else {
+          this.loadIGs(this.appliedTags, this.pagination.currentPage, this.selectedBrowseLevel, this.route.snapshot.queryParams.term)
+        // }
+
+        // else if (params.view === 'search') {
+        //   console.log("got search routing event")
+        //   let term = this.route.snapshot.queryParams.term
+        //   if (term) {
+        //     this.search(term)
+        //   }
+        // }
       })
     )
 
     /** Every time the url updates, we process the new tags and reload image groups if the tags query param changes */
     this.subscriptions.push(
       this.route.queryParams.subscribe((query) => {
+        console.log("got query param event:", query)
         if (query.tags) {
           this.appliedTags = this._tagFilters.processFilterString(query.tags)
           this.pagination.currentPage = 1
@@ -91,6 +110,13 @@ export class BrowseGroupsComponent implements OnInit {
           this.appliedTags = []
           this.pagination.currentPage = 1
         }
+
+        // if (this.route.snapshot.params.view === 'search') {
+        //   this.search(this.route.snapshot.queryParams.term)
+        // } else {
+
+          this.loadIGs(this.appliedTags, query.page || 0, query.level || 'public', query.term)
+        // }
       })
     )
     
@@ -124,6 +150,8 @@ export class BrowseGroupsComponent implements OnInit {
       label: 'Search',
       level: 'search'
     })
+
+    this.loadIGs(this.appliedTags, this.pagination.currentPage, this.selectedBrowseLevel)
   
     this._analytics.setPageValues('groups', '')
   } // OnInit
@@ -158,7 +186,9 @@ export class BrowseGroupsComponent implements OnInit {
       }
     })
 
-    this.search(this.latestSearchTerm)
+    this.addQueryParams({ level: level })
+
+    // this.search(this.latestSearchTerm)
   }
 
   /**
@@ -249,35 +279,52 @@ export class BrowseGroupsComponent implements OnInit {
    * @param newPageNum The page number you wish to navigate to
    */
   private goToPage(newPageNum: number) {
-    this.pagination.currentPage = newPageNum
-    this.loadIGs(this.appliedTags, newPageNum)
+    // this.addRouteParam("page", newPageNum)
+    this.addQueryParams({ page: newPageNum })
+    // this.pagination.currentPage = newPageNum
+    // this.loadIGs(this.appliedTags, newPageNum)
   }
 
-    /**
-   * Adds a parameter to the route and navigates to new route
-   * @param key Parameter you want added to route (as matrix param)
-   * @param value The value of the parameter
-   */
-  private addRouteParam(key: string, value: any, resetTags?: boolean) {
-    let queryParams: Params = Object.assign({}, this.route.snapshot.queryParams)
+  //   /**
+  //  * Adds a parameter to the route and navigates to new route
+  //  * @param key Parameter you want added to route (as matrix param)
+  //  * @param value The value of the parameter
+  //  */
+  // private addRouteParam(key: string, value: any, resetTags?: boolean) {
+  //   console.log("adding a route parameter now")
+  //   let queryParams: Params = Object.assign({}, this.route.snapshot.queryParams)
 
-    if(value){
-      queryParams[key] = value;
-    }
-    else{
-      delete queryParams[key];
+  //   if(value){
+  //     queryParams[key] = value;
+  //   }
+  //   else{
+  //     delete queryParams[key];
+  //   }
+
+  //   if(queryParams['tags'] && resetTags){
+  //     delete queryParams['tags']; 
+  //   }
+  //   this._router.navigate(['/browse','groups', this.selectedBrowseLevel], { queryParams: queryParams })
+  // }
+
+  private addQueryParams(params: { [key: string]: any }, reset?: boolean) {
+
+    let queryParams
+    if (reset) {
+      queryParams = params
+    } else {
+      queryParams = Object.assign(Object.assign({}, this.route.snapshot.params.queryParams), params)
     }
 
-    if(queryParams['tags'] && resetTags){
-      delete queryParams['tags']; 
-    }
+    console.log("navigating to new query params:", queryParams)
     this._router.navigate(['/browse','groups', this.selectedBrowseLevel], { queryParams: queryParams })
   }
 
-  // called when search is called
-  private search(term: string) {
-    this.latestSearchTerm = term
-    this.addRouteParam("term", term, true)
-    this.loadIGs([], 1, this.getSearchLevel(), term)
-  }
+  // // called when search is called
+  // private search(term: string) {
+  //   this.latestSearchTerm = term
+  //   this.addRouteParam("term", term, true)
+  //   console.log("calling the search")
+  //   // this.loadIGs([], 1, this.getSearchLevel(), term)// this call is wrong! The term is in the wrong place
+  // }
 }
