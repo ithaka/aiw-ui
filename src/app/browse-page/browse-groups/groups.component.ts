@@ -202,12 +202,15 @@ export class BrowseGroupsComponent implements OnInit {
    * @param level The query param for the groups call that indicates what share permissions the user has
    */
   private loadIGs(appliedTags: string[], page: number, level?: string, searchTerm ?: string): void {
+    console.log("appliedTags", appliedTags, "level", level, "searchTerm", searchTerm)
     // this makes sure we don't search as soon as the user clicks the search tab, and also triggers some display items on search
-    if (this.firstSearch) {
+    // we actually want to stop the search if there's not a keyword or a selected filter/level. those will come from the url
+    if (appliedTags.length === 0 && level === 'search' && !searchTerm) {
       this.firstSearch = false
       this._tagFilters.setFilters([], [])
       this.tags = []
       this.errorObj["search"] = ""
+      this.loading = false
       return
     }
     
@@ -268,12 +271,13 @@ export class BrowseGroupsComponent implements OnInit {
     if(queryParams['tags'] && resetTags){
       delete queryParams['tags']; 
     }
-    this._router.navigate(['/browse','groups'], { queryParams: queryParams })
+    this._router.navigate(['/browse','groups', this.selectedBrowseLevel], { queryParams: queryParams })
   }
 
   // called when search is called
   private search(term: string) {
     this.latestSearchTerm = term
+    this.addRouteParam("term", term, true)
     this.loadIGs([], 1, this.getSearchLevel(), term)
   }
 }
