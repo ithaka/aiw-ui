@@ -72,11 +72,14 @@ export class PptModalComponent implements OnInit {
 
   /** Gets the link at which the resource can be downloaded. Will be set to the "accept" button's download property */
   private getDownloadLink(group: ImageGroup, zip ?: boolean): Observable<any> {
-    let header = new Headers({ 'content-type': 'application/x-www-form-urlencoded' })
-    let options = new RequestOptions({ headers: header, withCredentials: true})
-    let imgStr: string = ""
-    let data : any
-    let url : string
+    let header = new Headers({ 'content-type': 'application/x-www-form-urlencoded' }); 
+    let options = new RequestOptions({ headers: header, withCredentials: true});
+    let imgStr: string = "";
+
+    if (!zip) {
+      zip = false;
+    }
+
 
     group.items.forEach((item, index, items) => {
         imgStr += [(index + 1), item, "1024x1024"].join(":")
@@ -85,34 +88,20 @@ export class PptModalComponent implements OnInit {
         }
     })
 
-    data = {
+    let data = {
+        _method: "createPPT",
         igId: group.id,
         igName: group.name,
-        images: imgStr
+        // images: group.igDownloadInfo.images,
+        images: imgStr,
+        zoom: '',
+        zip: zip
     }
 
-    url = this._auth.getHostname() + '/api/group/export'
+    let encodedData: string = this._auth.formEncode(data);
 
-    // Make authorization call to increment download count
-    this.http
-      .get(url + '/auth/' + group.id + '/true', options)
-      .map(data => {
-        return data.json() || {};
-      })
-      .toPromise()
-
-    if (zip) { 
-      url += "/zip"
-      // To deprecate
-      data["_method"] = "createZip"
-    } else {
-      url += "/pptx"
-      // To deprecate
-      data["_method"] = "createPPTX"
-    }
-    
     return this.http
-      .post(url, data, options)
+      .post(this._auth.getUrl() + "/downloadpptimages", encodedData, options)
       .map(data => {
         return data.json() || {};
       });
