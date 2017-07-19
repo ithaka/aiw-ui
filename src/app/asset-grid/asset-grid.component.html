@@ -70,7 +70,7 @@
                     {{ searchError }}
                 </div>
                 <div class="col-sm-6 col-md-3 col-lg-2" *ngFor="let asset of results">
-                    <a class="card card--asset" [ngClass]="{'selected': ( isSelectedAsset(asset) > -1 ) }" [routerLink]="editMode ? ['./'] : ['/asset', asset.objectId]" [queryParams]="asset.iapFlag > 1 ? { iap: true } : {}" (click)="selectAsset(asset)">
+                    <a class="card card--asset" [ngClass]="{'selected': ( isSelectedAsset(asset) > -1 ) }" [routerLink]="editMode ? ['./'] : ['/asset', asset.objectId]" [queryParams]="asset.iapFlag > 0 ? { iap: 'true' } : {}" (click)="selectAsset(asset)">
                         <ang-thumbnail [thumbnail]="asset" [reorderMode]="reorderMode" [editMode]="editMode"></ang-thumbnail>
                     </a>
                 </div> <!-- .col -->
