@@ -1,11 +1,12 @@
 <nav-menu></nav-menu>
 <div class="container main-content">
+    <h1 class="hidden">Artstor Home Page</h1><!--for accessibility so that page has title-->
     <div class="row">
         <div class="col-sm-4">
             <ang-search></ang-search>
             <div class="card pt-2">
                 <div class="card-header">
-                    <h1>{{ 'HOME.BROWSE.TITLE' | translate }}</h1>
+                    <h2 class="h1">{{ 'HOME.BROWSE.TITLE' | translate }}</h2>
                 </div>
                 <ul class="list-group list-group-flush list-group-clean">
                     <a id="linkBrowseGeography" class="list-group-item" [routerLink]="['/browse','library', {viewId: 260}]">
