@@ -29,11 +29,11 @@ export class LoginService {
         this._auth.clearStorage();
 
         // We must also make sure to log out of Shared Shelf, as it sets a *.artstor.org cookie
-        // this.http.delete('//catalog.sharedshelf.artstor.org/account', options)
-        //     .toPromise()
-        //     .catch((err) => {
-        //         console.log(err)
-        //     })
+        this.http.delete('//catalog.sharedshelf.artstor.org/account', options)
+            .toPromise()
+            .catch((err) => {
+                console.log(err)
+            })
 
         return this.http
             .post(this._auth.getUrl() + '/logout', {}, options)
