@@ -86,6 +86,14 @@
       "TITLE_DELETED": "Group was Deleted"
     }
   },
+  "UPLOAD_IMAGES_MODAL": {
+    "TITLE": "Upload Images",
+    "FORMAT_LBL": "JPEG File Format Required",
+    "DROP_TXT": "Drop Files Here",
+    "UPLOAD_LBL": "Upload new media",
+    "SELECT_BUTTON_TXT": "SELECT FILES",
+    "HELP": "Help"
+  },
   "ADD_TO_GROUP_MODAL": {
     "FROM_SELECTED": {
       "TITLE": "Add Images to Group",
