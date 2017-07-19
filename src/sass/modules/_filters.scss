@@ -22,6 +22,12 @@ filter, .filter {
 	position: relative;
 	background: transparent;
 
+	// Clear button styles
+	box-shadow: none;
+	border: none;
+	outline: none;
+	text-align: left;
+
 	//Hanging Indent
 	padding: 2px;
 	padding-left: $filterTextIndent + 2px;
