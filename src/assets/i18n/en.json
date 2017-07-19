@@ -239,6 +239,11 @@
       "LINK_TITLE": "The Andy Warhol Foundation for the Visual Arts: Oeuvre",
       "ALT_TEXT": "The Andy Warhol Foundation for the Visual Arts: Oeuvre"
     },
+    "AD": {
+      "LINK": "http://support.artstor.org/?page_id=37",
+      "IMG_SOURCE": "/assets/img/promo-webinar.jpg",
+      "ALT_TEXT": "Welcome to the new Artstor Digital Library! Check out what's new."
+    },
     "QUESTIONS": {
       "HEADING": "Questions",
       "EMAIL_INSTITUTION": "Email your institutional contact",
