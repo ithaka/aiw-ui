@@ -82,10 +82,10 @@ export class AuthService implements CanActivate {
       this.logUrl = '//ang-ui-logger.apps.prod.cirrostratus.org/api/v1';
     } else if (document.location.hostname.indexOf('localhost') > -1 || document.location.hostname.indexOf('stage.artstor.org') > -1 || document.location.hostname.indexOf('test.stagely.artstor.org') > -1 || document.location.hostname.indexOf('test.cirrostratus.org') > -1) {
       // Test Endpoints
-      this.hostname = '//test.stagely.artstor.org';
-      this.baseUrl = '//test.stagely.artstor.org/api/secure';
-      this.imageFpxUrl =  '//test.stagely.artstor.org/api/secure/imagefpx'; 
-      this.lostPassUrl = '//test.stagely.artstor.org/library/lostpw'; 
+      this.hostname = '//stage.artstor.org';
+      this.baseUrl = '//stage.artstor.org/api/secure';
+      this.imageFpxUrl =  '//stage.artstor.org/api/secure/imagefpx'; 
+      this.lostPassUrl = '//stage.artstor.org/library/lostpw'; 
       this.IIIFUrl = '//tsprod.artstor.org/rosa-iiif-endpoint-1.0-SNAPSHOT/fpx';
       this.logUrl = '//ang-ui-logger.apps.test.cirrostratus.org/api/v1';
     }
