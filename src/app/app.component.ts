@@ -24,7 +24,7 @@ import { AppState } from './app.service';
     <ang-sky-banner *ngIf="showSkyBanner" [textValue]="'BETA_SKY_BANNER.MESSAGE' | translate" (closeBanner)="showSkyBanner = false"></ang-sky-banner>
     <nav-bar></nav-bar>
 
-    <main id="mainContent" tabindex="-1">
+    <main tabindex="-1">
       <router-outlet></router-outlet>
     </main>
 
@@ -71,6 +71,7 @@ export class App {
   }
 
   private findMainContent(): void {
+    console.log("finding mainContent")
     document.getElementById("mainContent").focus()
   }
 
