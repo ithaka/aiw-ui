@@ -20,11 +20,11 @@ import { AppState } from './app.service';
     '../sass/app.scss'
   ],
   template: `
-    <a href="#mainContent" class="sr-only sr-only-focusable">Skip to main content</a>
+    <a (click)="findMainContent()" (keydown.enter)="findMainContent()" tabindex="0" class="sr-only sr-only-focusable">Skip to main content</a>
     <ang-sky-banner *ngIf="showSkyBanner" [textValue]="'BETA_SKY_BANNER.MESSAGE' | translate" (closeBanner)="showSkyBanner = false"></ang-sky-banner>
     <nav-bar></nav-bar>
 
-    <main>
+    <main id="mainContent" tabindex="-1">
       <router-outlet></router-outlet>
     </main>
 
@@ -68,6 +68,10 @@ export class App {
     // if ( document.location.hostname.indexOf('beta.artstor.org') > -1 || document.location.hostname.indexOf('prod.cirrostratus.org') > -1 || document.location.hostname.indexOf('lively.artstor.org') > -1 ) {
     //   this.showSkyBanner = true
     // }
+  }
+
+  private findMainContent(): void {
+    document.getElementById("mainContent").focus()
   }
 
 }
