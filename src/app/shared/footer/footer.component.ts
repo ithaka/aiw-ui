@@ -9,6 +9,8 @@ import { AuthService } from '../auth.service';
 // Project Dependencies
 const { version: appVersion } = require('../../../../package.json');
 
+declare let google
+
 @Component({
   selector: 'footer',
   providers: [
@@ -48,6 +50,15 @@ export class Footer {
         }
       })
     );
+
+    new google.translate.TranslateElement(
+        {
+            pageLanguage: 'en',
+            layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
+            autoDisplay: false
+        },
+        'google_translate_element'
+    )
   }
 
   private logout(): void {
