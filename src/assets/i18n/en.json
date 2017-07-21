@@ -252,7 +252,8 @@
       "SURVEY": "Take a survey: Tell us what you think!"
     },
     "LINKS":{
-      "ADVNC_SRCH": "Advanced Search"
+      "ADVNC_SRCH": "Advanced Search",
+      "SKIP_COLLECTIONS": "Skip collections list"
     },
     "ACCESS_PROVIDED_BY": "Your access to Artstor is provided by:"
   },

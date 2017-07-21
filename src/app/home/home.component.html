@@ -55,12 +55,13 @@
                 <div class="card-header">
                     <h2>{{ 'HOME.HEADINGS.SSC' | translate }}</h2>
                 </div>
+                <a (click)="featuredCollection.focus()" (keydown.enter)="featuredCollection.focus()" tabindex="0" class="link sr-only sr-only-focusable">{{ 'HOME.LINKS.SKIP_COLLECTIONS' | translate }}</a>
                 <div class="list--home-collections" [class.loading]="loaders['collections']">
-                    <div class="list-group list-group-flush">
-                        <a *ngFor="let collection of collections" class="list-group-item list-group-item-action" [routerLink]="[ '/collection', collection.collectionid ]">
+                    <ul class="list-group list-group-flush">
+                        <li *ngFor="let collection of collections"><a class="list-group-item list-group-item-action" [routerLink]="[ '/collection', collection.collectionid ]">
                             {{ collection.collectionname }}
-                        </a>
-                    </div>
+                        </a></li>
+                    </ul>
                 </div>
                 <div *ngIf="errors.collections" class="card-block">
                     <div id="errorCollectionsLoading" class="alert alert-warning" role="alert">
@@ -70,7 +71,7 @@
             </div>
         </div>
         <div class="col-sm-5">
-            <a id="featuredCollectionLink" class="card featured-card" [attr.href]=" 'HOME.FEATURED.LINK' | translate "> 
+            <a #featuredCollection id="featuredCollectionLink" class="card featured-card" [attr.href]=" 'HOME.FEATURED.LINK' | translate "> 
                 <img class="card-img-top no-stretch" [attr.src]="'HOME.FEATURED.IMG_SOURCE' | translate" [attr.alt]="'HOME.FEATURED.ALT_TEXT' | translate" [attr.title]="'HOME.FEATURED.LINK_TITLE' | translate">
                 <div class="card-body pt-1">
                     <label style="margin-bottom:0px;">{{ 'HOME.FEATURED.HEADING' | translate }}</label>

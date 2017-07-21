@@ -30,6 +30,7 @@ import { AppState } from './app.service';
 
     <footer>
     </footer>
+
   `
 })
 export class App {
@@ -74,5 +75,4 @@ export class App {
     console.log("finding mainContent")
     document.getElementById("mainContent").focus()
   }
-
 }
