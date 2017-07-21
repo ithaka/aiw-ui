@@ -58,7 +58,7 @@
                 <a (click)="featuredCollection.focus()" (keydown.enter)="featuredCollection.focus()" tabindex="0" class="link sr-only sr-only-focusable">{{ 'HOME.LINKS.SKIP_COLLECTIONS' | translate }}</a>
                 <div class="list--home-collections" [class.loading]="loaders['collections']">
                     <ul class="list-group list-group-flush">
-                        <li *ngFor="let collection of collections"><a class="list-group-item list-group-item-action" [routerLink]="[ '/collection', collection.collectionid ]">
+                        <li *ngFor="let collection of collections" class="list-group-item list-group-item-action"><a [routerLink]="[ '/collection', collection.collectionid ]">
                             {{ collection.collectionname }}
                         </a></li>
                     </ul>
