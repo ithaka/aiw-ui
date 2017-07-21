@@ -14,7 +14,7 @@
           <div class="form-group" [class.has-success]="serviceResponse.success" [class.has-danger]="serviceResponse.failure">
             <label for="selectImageGroup">{{ copySelectionStr + '.SELECT_PROMPT' | translate }}</label>
             
-            <ng2-completer [(ngModel)]="selectedGroupName" name="imageGroup" 
+            <ng2-completer class="notranslate" [(ngModel)]="selectedGroupName" name="imageGroup" 
               [datasource]="dataService" 
               [minSearchLength]="0" 
               [openOnFocus]="true" 
