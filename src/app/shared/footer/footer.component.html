@@ -9,6 +9,7 @@
       <span [innerHtml]="'FOOTER.LINKS.PRIVACY' | translate"></span>
       <span [innerHtml]="'FOOTER.LINKS.COPYRIGHT' | translate"></span>
       <span [innerHtml]="'FOOTER.LINKS.SUPPORT' | translate"></span>
+      <div class="translate-flyout" id="google_translate_element"></div>
       
       <!--<a class="link footer-logout" (click)="logout()">Log Out</a>-->
       <a class="link footer-logout" (click)="logout()" *ngIf="user && user.isLoggedIn">Log Out</a>
@@ -18,6 +19,5 @@
       <a href="http://artstor.org" target="_blank">&copy; {{ currentYear }} Artstor, Inc.</a><br/>
       <span style="color: #cdcdcd;">v{{ appVersion }}</span>
     </div>
-    <div id="google_translate_element"></div>
   </div>
 </div>
