@@ -80,13 +80,12 @@ export class BrowseGroupsComponent implements OnInit {
         console.log("got query param event:", query)
         if (query.tags) {
           this.appliedTags = this._tagFilters.processFilterString(query.tags)
-          this.pagination.currentPage = 1
         } else {
           this.appliedTags = []
-          this.pagination.currentPage = 1
         }
+        this.pagination.currentPage = Number(query.page) || 1
 
-          this.loadIGs(this.appliedTags, query.page || 1, query.level || 'public', query.term)
+        this.loadIGs(this.appliedTags, this.pagination.currentPage, query.level || 'public', query.term)
       })
     )
     
