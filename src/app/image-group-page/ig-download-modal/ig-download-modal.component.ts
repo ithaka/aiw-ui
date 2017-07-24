@@ -39,9 +39,6 @@ export class PptModalComponent implements OnInit {
     this.zipLoading = true;
     console.log(this.ig);
 
-    // For counter reporting
-    let trackingString = '?IGID=' + this.ig.id
-
     // Setup PPT Download
     this.getDownloadLink(this.ig)
       .take(1)
@@ -51,7 +48,7 @@ export class PptModalComponent implements OnInit {
           // Goal: A downlink that looks like:
           // http://mdxdv.artstor.org/thumb/imgstor/...
           if (data.path) {
-            this.downloadLink = this._auth.getThumbUrl() + data.path.replace('/nas/','/thumb/') + trackingString
+            this.downloadLink = this._auth.getThumbUrl() + data.path.replace('/nas/','/thumb/');
           }
         },
         (error) => { console.error(error); this.isLoading = false; }
@@ -66,7 +63,7 @@ export class PptModalComponent implements OnInit {
           // Goal: A downlink that looks like:
           // http://mdxdv.artstor.org/thumb/imgstor/...
           if (data.path) {
-            this.zipDownloadLink = this._auth.getThumbUrl() + data.path.replace('/nas/','/thumb/') + trackingString
+            this.zipDownloadLink = this._auth.getThumbUrl() + data.path.replace('/nas/','/thumb/');
           }
         },
         (error) => { console.error(error); this.zipLoading = false; }
