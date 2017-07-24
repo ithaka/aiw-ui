@@ -61,20 +61,6 @@ export class BrowseGroupsComponent implements OnInit {
     // set the title
     this._title.setTitle("Artstor | Browse Groups")
 
-    // // Load IGs only when the navigation has ended & 'selectedBrowseLevel' + 'currentPage' + 'appliedTags' have been set
-    // this.subscriptions.push(
-    //   this._router.events.subscribe((event) => {
-    //     if(event instanceof NavigationEnd) {
-    //       console.log("navigating with router event", "term:", this.route.snapshot.queryParams.term)
-    //       if (this.route.snapshot.params.view === 'search') {
-    //         this.search(this.route.snapshot.queryParams.term)
-    //       } else {
-    //         this.loadIGs(this.appliedTags, this.pagination.currentPage, this.selectedBrowseLevel)
-    //       }
-    //     }
-    //   })
-    // )
-
     this.subscriptions.push(
       this.route.params.subscribe((params) => {
         if (params.view !== (this.selectedBrowseLevel || 'search')) {
@@ -83,19 +69,8 @@ export class BrowseGroupsComponent implements OnInit {
           // this.loadIGs([], 1, params.view)
           this.selectedBrowseLevel = params.view
         }
-        // if (this.route.snapshot.params.view === 'search') {
-        //   this.search(this.route.snapshot.queryParams.term)
-        // } else {
-          this.loadIGs(this.appliedTags, this.pagination.currentPage, this.selectedBrowseLevel, this.route.snapshot.queryParams.term)
-        // }
 
-        // else if (params.view === 'search') {
-        //   console.log("got search routing event")
-        //   let term = this.route.snapshot.queryParams.term
-        //   if (term) {
-        //     this.search(term)
-        //   }
-        // }
+          this.loadIGs(this.appliedTags, this.pagination.currentPage, this.selectedBrowseLevel, this.route.snapshot.queryParams.term)
       })
     )
 
@@ -111,12 +86,7 @@ export class BrowseGroupsComponent implements OnInit {
           this.pagination.currentPage = 1
         }
 
-        // if (this.route.snapshot.params.view === 'search') {
-        //   this.search(this.route.snapshot.queryParams.term)
-        // } else {
-
-          this.loadIGs(this.appliedTags, query.page || 0, query.level || 'public', query.term)
-        // }
+          this.loadIGs(this.appliedTags, query.page || 1, query.level || 'public', query.term)
       })
     )
     
@@ -159,19 +129,6 @@ export class BrowseGroupsComponent implements OnInit {
   ngOnDestroy() {
     this.subscriptions.forEach((sub) => { sub.unsubscribe() })
   }
-
-  // /**
-  //  * Changes menu between ADL, University Collections, Open Collections, etc...
-  //  * @param level Level of desired menu from colMenuArray enum
-  //  */
-  // selectBrowseOpt ( level: string ){
-  //   this.loading = true;
-  //   this.selectedBrowseLevel = level
-  //   this.pagination.currentPage = 1
-  //   this.appliedTags = [] 
-  //   this.addRouteParam('view', level, true)
-  //   this.loadIGs([], 1)
-  // }
 
   /**
    * Makes sure that only one search filter can be selected (may change later if we can add multiple levels to search)
