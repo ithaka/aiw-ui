@@ -235,33 +235,8 @@ export class BrowseGroupsComponent implements OnInit {
    * @param newPageNum The page number you wish to navigate to
    */
   private goToPage(newPageNum: number) {
-    // this.addRouteParam("page", newPageNum)
     this.addQueryParams({ page: newPageNum })
-    // this.pagination.currentPage = newPageNum
-    // this.loadIGs(this.appliedTags, newPageNum)
   }
-
-  //   /**
-  //  * Adds a parameter to the route and navigates to new route
-  //  * @param key Parameter you want added to route (as matrix param)
-  //  * @param value The value of the parameter
-  //  */
-  // private addRouteParam(key: string, value: any, resetTags?: boolean) {
-  //   console.log("adding a route parameter now")
-  //   let queryParams: Params = Object.assign({}, this.route.snapshot.queryParams)
-
-  //   if(value){
-  //     queryParams[key] = value;
-  //   }
-  //   else{
-  //     delete queryParams[key];
-  //   }
-
-  //   if(queryParams['tags'] && resetTags){
-  //     delete queryParams['tags']; 
-  //   }
-  //   this._router.navigate(['/browse','groups', this.selectedBrowseLevel], { queryParams: queryParams })
-  // }
 
   private addQueryParams(params: { [key: string]: any }, reset?: boolean) {
 
@@ -275,12 +250,4 @@ export class BrowseGroupsComponent implements OnInit {
     console.log("navigating to new query params:", queryParams)
     this._router.navigate(['/browse','groups', this.selectedBrowseLevel], { queryParams: queryParams })
   }
-
-  // // called when search is called
-  // private search(term: string) {
-  //   this.latestSearchTerm = term
-  //   this.addRouteParam("term", term, true)
-  //   console.log("calling the search")
-  //   // this.loadIGs([], 1, this.getSearchLevel(), term)// this call is wrong! The term is in the wrong place
-  // }
 }
