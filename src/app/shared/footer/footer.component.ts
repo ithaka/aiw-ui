@@ -51,14 +51,16 @@ export class Footer {
       })
     );
 
-    new google.translate.TranslateElement(
-        {
-            pageLanguage: 'en',
-            layout: google.translate.TranslateElement && google.translate.TranslateElement.InlineLayout.SIMPLE,
-            autoDisplay: false
-        },
-        'google_translate_element'
-    )
+    if (google && google.translate) {
+      new google.translate.TranslateElement(
+          {
+              pageLanguage: 'en',
+              layout: google.translate.TranslateElement && google.translate.TranslateElement.InlineLayout.SIMPLE,
+              autoDisplay: false
+          },
+          'google_translate_element'
+      )
+    }
   }
 
   private logout(): void {
