@@ -40,7 +40,7 @@
                 <div class="list--home-collections" [class.loading]="loaders['instCollections']">
                     <div class="list-group list-group-flush">
                         <a *ngFor="let collection of instCollections" class="list-group-item list-group-item-action" [routerLink]="[ '/collection', collection.collectionid ]">
-                                {{ collection.collectionname }}
+                                <span class="notranslate">{{ collection.collectionname }}</span>
                         </a>
                     </div>
                 </div>
@@ -59,7 +59,7 @@
                 <div class="list--home-collections" [class.loading]="loaders['collections']">
                     <ul class="list-group list-group-flush">
                         <li *ngFor="let collection of collections" class="list-group-item list-group-item-action"><a [routerLink]="[ '/collection', collection.collectionid ]">
-                            {{ collection.collectionname }}
+                            <span class="notranslate">{{ collection.collectionname }}</span>
                         </a></li>
                     </ul>
                 </div>
