@@ -54,7 +54,7 @@ export class Footer {
     new google.translate.TranslateElement(
         {
             pageLanguage: 'en',
-            layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
+            layout: google.translate.TranslateElement && google.translate.TranslateElement.InlineLayout.SIMPLE,
             autoDisplay: false
         },
         'google_translate_element'

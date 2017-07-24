@@ -267,10 +267,10 @@ nav-menu {
 
     & a, & a.goog-te-menu-value {
       @extend a;
-      & span { display: none; }
+      // & span { display: none; }
     }
 
-    & span[style*=""] {
-      display: none;
-    }
+    // & span[style*=""] {
+    //   display: none;
+    // }
 }
