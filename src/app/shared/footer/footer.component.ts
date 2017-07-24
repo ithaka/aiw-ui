@@ -51,16 +51,20 @@ export class Footer {
       })
     );
 
-    if (google && google.translate) {
-      new google.translate.TranslateElement(
-          {
-              pageLanguage: 'en',
-              layout: google.translate.TranslateElement && google.translate.TranslateElement.InlineLayout.SIMPLE,
-              autoDisplay: false
-          },
-          'google_translate_element'
-      )
-    }
+    // Workaround: Make sure Google translate has loaded
+    setTimeout(() => {
+      if (google && google.translate && typeof(google.translate.TranslateElement) == 'function' ) {
+        new google.translate.TranslateElement(
+            {
+                pageLanguage: 'en',
+                layout: google.translate.TranslateElement && google.translate.TranslateElement.InlineLayout.SIMPLE,
+                autoDisplay: false
+            },
+            'google_translate_element'
+        )
+      }
+    }, 1000)
+    
   }
 
   private logout(): void {
