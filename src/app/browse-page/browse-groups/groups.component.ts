@@ -48,10 +48,6 @@ export class BrowseGroupsComponent implements OnInit {
   private selectedBrowseLevel: string = 'public'
   private browseMenuArray: { label: string, level: string, selected ?: boolean }[] = []
 
-  private foldersObj: any = {}
-  private tagsObj: any = {}
-  private pageObj: any = {}
-  private latestSearchTerm: string = ''
   // when the user first clicks the search tab, we set this to true because we don't want to trigger a general search - it's checked before searching groups
   private firstSearch: boolean = false
 
@@ -83,8 +79,10 @@ export class BrowseGroupsComponent implements OnInit {
 
         let requestedPage = Number(query.page) || 1
         if (requestedPage < 1) { return this.goToPage(1) } // STOP THEM if they're trying to enter a negative number
+        let requestedLevel = query.level || 'public'
+        this.setSearchLevel(query.level)
 
-        this.loadIGs(this.appliedTags, requestedPage, query.level || 'public', query.term)
+        this.loadIGs(this.appliedTags, requestedPage, requestedLevel, query.term)
       })
     )
     
@@ -119,15 +117,17 @@ export class BrowseGroupsComponent implements OnInit {
       level: 'search'
     })
 
-    // set up the initially selected search level
-    let selectedSearchLevel = this.route.snapshot.queryParams.level
-    if (selectedSearchLevel) {
-      this.browseMenuArray.forEach((filter) => {
-        if (filter.level === selectedSearchLevel) {
-          return filter.selected = true
-        }
-      })
-    }
+    // // set up the initially selected search level
+    // let selectedSearchLevel = this.route.snapshot.queryParams.level
+    // if (selectedSearchLevel) {
+    //   this.browseMenuArray.forEach((filter) => {
+    //     if (filter.level === selectedSearchLevel) {
+    //       return filter.selected = true
+    //     }
+    //   })
+    // }
+
+    this.setSearchLevel(this.route.snapshot.queryParams.level)
 
     this.loadIGs(this.appliedTags, this.pagination.currentPage, this.selectedBrowseLevel)
   
@@ -151,7 +151,7 @@ export class BrowseGroupsComponent implements OnInit {
       }
     })
 
-    this.addQueryParams({ level: level })
+    level && this.addQueryParams({ level: level })
   }
 
   /**
@@ -229,6 +229,12 @@ export class BrowseGroupsComponent implements OnInit {
             this._tagFilters.setFilters(data.tags, appliedTags) // give the tag service the new data
             this.tags = this.createGroupTags(data.groups) // save the image groups for display
             this.loading = false
+
+            console.log(data.total, level)
+            // show them the search error
+            if (data.total === 0 && this.route.snapshot.params.view === 'search') {
+              this.errorObj['search'] = 'No search results found'
+            }
           },
           (error) => {
             this._tagFilters.setFilters([], appliedTags)
