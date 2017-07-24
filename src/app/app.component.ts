@@ -65,10 +65,7 @@ export class App {
   }
 
   ngOnInit() {
-    // until told differently, I'll just leave this up for always
-    // if ( document.location.hostname.indexOf('beta.artstor.org') > -1 || document.location.hostname.indexOf('prod.cirrostratus.org') > -1 || document.location.hostname.indexOf('lively.artstor.org') > -1 ) {
-    //   this.showSkyBanner = true
-    // }
+    
   }
 
   private findMainContent(): void {

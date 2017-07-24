@@ -53,6 +53,13 @@ export class MyCollectionsComponent implements OnInit {
             this.selectedBrowseId = params['viewId'];
             // this.loadCategory();
         }
+        if(params && params['featureFlag']){
+            console.log(params['featureFlag'])
+            this._auth.featureFlags[params['featureFlag']] = true;
+            if (this._auth.featureFlags['uploadPC']) {
+                this.uploadPC = true
+            }
+        }
       })
     );
 
@@ -94,7 +101,7 @@ export class MyCollectionsComponent implements OnInit {
             }
           }
 
-          if(this.tags.length === 0){
+          if(this.tags.length === 0 || this._auth.featureFlags['uploadPC']){
               this.uploadPC = true;
           }
           else{

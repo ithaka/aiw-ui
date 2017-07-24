@@ -46,6 +46,15 @@ export class AuthService implements CanActivate {
   private idleUtil: IdleWatcherUtil = new IdleWatcherUtil(); // Idle watcher, session timeout values are abstracted to a utility
   public showUserInactiveModal: Subject<boolean> = new Subject(); //Set up subject observable for showing inactive user modal
 
+  /**
+   * Global Feature Flag object
+   * - Keep updated when flags are added or removed, for reference
+   * - Update via url param subscriptions inside of relevant components
+   */
+  public featureFlags = {
+    pcUpload : false
+  }
+
   constructor(
     private _router:Router,
     // private _login: LoginService,
