@@ -64,13 +64,11 @@ export class BrowseGroupsComponent implements OnInit {
     this.subscriptions.push(
       this.route.params.subscribe((params) => {
         if (params.view !== (this.selectedBrowseLevel || 'search')) {
-          this.pagination.currentPage = 1
           this.appliedTags = []
-          // this.loadIGs([], 1, params.view)
           this.selectedBrowseLevel = params.view
         }
 
-          this.loadIGs(this.appliedTags, this.pagination.currentPage, this.selectedBrowseLevel, this.route.snapshot.queryParams.term)
+          this.loadIGs(this.appliedTags, 1, this.selectedBrowseLevel, this.route.snapshot.queryParams.term)
       })
     )
 
@@ -83,9 +81,11 @@ export class BrowseGroupsComponent implements OnInit {
         } else {
           this.appliedTags = []
         }
-        this.pagination.currentPage = Number(query.page) || 1
 
-        this.loadIGs(this.appliedTags, this.pagination.currentPage, query.level || 'public', query.term)
+        let requestedPage = Number(query.page) || 1
+        if (requestedPage < 1) { return this.goToPage(1) } // STOP THEM if they're trying to enter a negative number
+
+        this.loadIGs(this.appliedTags, requestedPage, query.level || 'public', query.term)
       })
     )
     
@@ -120,6 +120,16 @@ export class BrowseGroupsComponent implements OnInit {
       level: 'search'
     })
 
+    // set up the initially selected search level
+    let selectedSearchLevel = this.route.snapshot.queryParams.level
+    if (selectedSearchLevel) {
+      this.browseMenuArray.forEach((filter) => {
+        if (filter.level === selectedSearchLevel) {
+          return filter.selected = true
+        }
+      })
+    }
+
     this.loadIGs(this.appliedTags, this.pagination.currentPage, this.selectedBrowseLevel)
   
     this._analytics.setPageValues('groups', '')
@@ -143,8 +153,6 @@ export class BrowseGroupsComponent implements OnInit {
     })
 
     this.addQueryParams({ level: level })
-
-    // this.search(this.latestSearchTerm)
   }
 
   /**
@@ -217,6 +225,9 @@ export class BrowseGroupsComponent implements OnInit {
           (data)  => {
             this.pagination.currentPage = page
             this.pagination.totalPages = Math.ceil(data.total/this.pagination.pageSize) // update pagination, which is injected into pagination component
+            if (this.pagination.currentPage > this.pagination.totalPages && data.total > 0) {
+              return this.goToPage(this.pagination.totalPages) // go to the last results page if they try to navigate to a page that is more than results
+            }
             this._tagFilters.setFilters(data.tags, appliedTags) // give the tag service the new data
             this.tags = this.createGroupTags(data.groups) // save the image groups for display
             this.loading = false
