@@ -37,7 +37,7 @@ export class TagsListComponent implements OnInit {
     } else if (queryParams.tags) {
       delete queryParams['tags']
     }
-    console.log("calling updateUrl once")
+
     this._router.navigate(['/browse','groups', this.browseLevel], { queryParams: queryParams })
   }
 }

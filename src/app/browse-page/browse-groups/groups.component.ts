@@ -75,7 +75,6 @@ export class BrowseGroupsComponent implements OnInit {
     /** Every time the url updates, we process the new tags and reload image groups if the tags query param changes */
     this.subscriptions.push(
       this.route.queryParams.subscribe((query) => {
-        console.log("got query param event:", query)
         if (query.tags) {
           this.appliedTags = this._tagFilters.processFilterString(query.tags)
         } else {
@@ -196,7 +195,6 @@ export class BrowseGroupsComponent implements OnInit {
    * @param level The query param for the groups call that indicates what share permissions the user has
    */
   private loadIGs(appliedTags: string[], page: number, level?: string, searchTerm ?: string): void {
-    console.log("appliedTags", appliedTags, "level", level, "searchTerm", searchTerm)
     // this makes sure we don't search as soon as the user clicks the search tab, and also triggers some display items on search
     // we actually want to stop the search if there's not a keyword or a selected filter/level. those will come from the url
     if (appliedTags.length === 0 && level === 'search' && !searchTerm) {
@@ -258,7 +256,6 @@ export class BrowseGroupsComponent implements OnInit {
       queryParams = Object.assign(Object.assign({}, this.route.snapshot.params.queryParams), params)
     }
 
-    console.log("navigating to new query params:", queryParams)
     this._router.navigate(['/browse','groups', this.selectedBrowseLevel], { queryParams: queryParams })
   }
 }
