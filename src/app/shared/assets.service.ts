@@ -440,23 +440,24 @@ export class AssetService {
      * @param assetId: string Asset or object ID
      */
     public getById(assetId: string) {
-        let options = new RequestOptions({
-            withCredentials: true
-        });
-        let query = {
-            "content_types": [
-                "art"
-            ],
-            "query": 'id:' + assetId
-        };
+        // let options = new RequestOptions({
+        //     withCredentials: true
+        // });
+        // let query = {
+        //     "content_types": [
+        //         "art"
+        //     ],
+        //     "query": 'id:' + assetId
+        // };
 
-        return this.http.post('//search-service.apps.test.cirrostratus.org/browse/', query, options)
-            .toPromise()
-            .then(this.extractData)
-        // return this.http
-        //     .get(this._auth.getUrl() + '/metadata/' + assetId, this.defaultOptions)
+        // return this.http.post('//search-service.apps.test.cirrostratus.org/browse/', query, options)
         //     .toPromise()
-        //     .then(this.extractData);
+        //     .then(this.extractData)
+
+        return this.http
+            .get(this._auth.getUrl() + '/metadata/' + assetId, this.defaultOptions)
+            .toPromise()
+            .then(this.extractData);
     }
 
     /**
@@ -826,6 +827,82 @@ export class AssetService {
         }
 
         // Subscribe to most recent search
+        if (this._auth.featureFlags['solrSearch']) {
+            // Solr Search
+             this.searchSubscription = this._assetSearch.search(this.urlParams, term, this.activeSort.index)
+            .subscribe(
+                (res) => {
+                    let data = res.json();
+                    data.facets.forEach( (facet, index) => {
+                        this._filters.setAvailable(facet.name, facet.values);
+                    })
+                    // this._filters.setAvailable('artclassification_str', data.classificationFacets);
+                    // if (data && data.collTypeFacets) {
+                    //     this._filters.generateColTypeFacets( data.collTypeFacets );
+                    //     this._filters.generateGeoFilters( data.geographyFacets );
+                    //     this._filters.generateDateFacets( data.dateFacets );
+                    //     this._filters.setAvailable('classification', data.classificationFacets);
+                    // }
+                    // Transform data from SOLR queries
+                    if (data.results) {
+                        data.thumbnails = data.results;
+                    }
+                    data.count = data.total
+                    // Set the allResults object
+                    this.updateLocalResults(data);
+            }, (error) => {
+                    console.error(error)
+                    this.allResultsSource.error(error); 
+            });
+        } else {
+            // Earth Library Search
+             this.searchSubscription = this.search(term, this.activeSort.index)
+            .subscribe(
+                (res) => {
+                    let data = res.json();
+                    // data.facets.forEach( (facet, index) => {
+                    //     this._filters.setAvailable(facet.name, facet.values);
+                    // })
+                    // this._filters.setAvailable('artclassification_str', data.classificationFacets);
+                    if (data && data.collTypeFacets) {
+                        this._filters.generateColTypeFacets( data.collTypeFacets );
+                        this._filters.generateGeoFilters( data.geographyFacets );
+                        this._filters.generateDateFacets( data.dateFacets );
+                        this._filters.setAvailable('classification', data.classificationFacets);
+                    }
+                    data.count = data.total
+                    // Set the allResults object
+                    this.updateLocalResults(data);
+            }, (error) => {
+                // as far as I can tell, the ADL services never respond with proper errors
+                // so all errors will be routed through the success channel above
+                // so if there's an error, we can be sure it's not from the services
+                // which is great because Fastly throws errors when searches take longer than 20 seconds
+                // which is common
+                // so here's the flow chart for the fix:
+                // <--------FLOW CHART-------->
+                //  search something -> it takes too long ->
+                //  Fastly throws error and disconnects (w/ 900 status and no Access-Control-Allow-Origin headers,
+                //  so we can't actually tell that we're getting a 900 status, we're mostly guessing) ->
+                //  the search will complete soon and will be cached -> rerun the search and it will work
+                // <-------------------------->
+                // we just recursively call this function until search results load
+                // so, the user never sees an error (woohoo) also, if they refresh it will likely work anyway
+                // ok i'm done
+
+                if (error.status == 0 && this.searchErrorCount < 3) {
+                    this.searchErrorCount++
+                    setTimeout(this.loadSearch(term), 7000)
+                } else {
+                    this.searchErrorCount = 0
+                    console.error(error)
+                    this.allResultsSource.error(error); // .throw(error);
+                }
+                
+                // Pass error down to allResults listeners
+                // console.error(error, error.status)
+            });
+        }
         this.searchSubscription = this._assetSearch.search(this.urlParams, term, this.activeSort.index)
             .subscribe(
                 (res) => {
@@ -876,6 +953,76 @@ export class AssetService {
                 // Pass error down to allResults listeners
                 // console.error(error, error.status)
             });
+    }
+    
+    /**
+     * Search assets service
+     * @param term          String to search for.
+     * @param filters       Array of filter objects (with filterGroup and filterValue properties)
+     * @param sortIndex     An integer representing a type of sort.
+     * @param dateFacet     Object with the dateFacet values
+     * @returns       Returns an object with the properties: thumbnails, count, altKey, classificationFacets, geographyFacets, minDate, maxDate, collTypeFacets, dateFacets
+     */
+    private search(term: string, sortIndex) {
+        let keyword = encodeURIComponent(term);
+        let options = new RequestOptions({ withCredentials: true });
+        let startIndex = ((this.urlParams.currentPage - 1) * this.urlParams.pageSize) + 1;
+        let thumbSize = 1;
+        let categoryId = this.urlParams['categoryId'];
+        let type = categoryId ? 2 : 6;
+        let colTypeIds = '';
+        let collIds = categoryId ? encodeURIComponent(categoryId) : encodeURIComponent(this.urlParams['coll']);
+        let classificationIds = '';
+        let geographyIds = '';
+
+        let earliestDate = '';
+        let latestDate = '';
+
+        let filters = this._filters.getApplied(); 
+        // To-do: break dateObj out of available filters
+        let dateFacet = this._filters.getAvailable()['dateObj'];
+        
+        if(dateFacet && dateFacet.modified){
+            earliestDate = dateFacet.earliest.date;
+            earliestDate = ( dateFacet.earliest.era == 'BCE' ) ? ( parseInt(earliestDate) * -1 ).toString() : earliestDate;
+
+            latestDate = dateFacet.latest.date;
+            latestDate = ( dateFacet.latest.era == 'BCE' ) ? ( parseInt(latestDate) * -1 ).toString() : latestDate;
+        }
+
+        for(var i = 0; i < filters.length; i++){ // Applied filters
+            if(filters[i].filterGroup === 'collTypes'){ // Collection Types
+                colTypeIds = filters[i].filterValue;
+            }
+            if(filters[i].filterGroup === 'classification'){ // Classification
+                if(classificationIds != ''){
+                    classificationIds += ',';
+                }
+                classificationIds += filters[i].filterValue;
+            }
+            if(filters[i].filterGroup === 'geography'){ // Geography
+                if(geographyIds != ''){
+                    geographyIds += ',';
+                }
+                geographyIds += filters[i].filterValue;
+            }
+        }
+        
+        if (this.newSearch === false) {
+            return this.http
+                .get(this._auth.getUrl() + '/search/' + type + '/' + startIndex + '/' + this.urlParams.pageSize + '/' + sortIndex + '?' + 'type=' + type + '&kw=' + keyword + '&origKW=' + keyword + '&geoIds=' + geographyIds + '&clsIds=' + classificationIds + '&collTypes=' + colTypeIds + '&id=' + (collIds.length > 0 ? collIds : 'all') + '&name=All%20Collections&bDate=' + earliestDate + '&eDate=' + latestDate + '&dExact=&order=0&isHistory=false&prGeoId=&tn=1', options);
+        } else {
+            let query = {
+                "limit" : this.urlParams.pageSize,
+                "content_types" : [
+                    "art"
+                ],
+                "query" : "arttitle:" + keyword
+            };
+
+            return this.http.post('//search-service.apps.test.cirrostratus.org/browse/', query, options);
+        }
+        
     }
 
     /**
