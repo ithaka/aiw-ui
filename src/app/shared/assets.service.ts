@@ -244,6 +244,13 @@ export class AssetService {
             }
         }
 
+        if(currentParamsObj['pageSize']){
+            currentParamsObj['pageSize'] = currentParamsObj['pageSize'].toString();
+        }
+        if(currentParamsObj['currentPage']){
+            currentParamsObj['currentPage'] = currentParamsObj['currentPage'].toString();
+        }
+
         if(!quiet){
             if(term.length > 0){
                 this._router.navigate(['/search', term, currentParamsObj]);
@@ -518,13 +525,25 @@ export class AssetService {
             });
     } 
 
+    public getRegionCollection(rootId ?: number): number {
+        let collectionId = rootId ? rootId : 103
+        let user = this._auth.getUser()
+
+        if (user.regionId !== 1) {
+            collectionId = parseInt( (3+user.regionId) + collectionId.toString() )
+        }
+        return collectionId
+    }
+
     /**
      * Get IIIF tilesource for an Asset
      * @param assetId string Asset or object ID
      */
-    public getImageSource(assetId: string) {
-        let collectionId = 103;
-        
+    public getImageSource(assetId: string, collectionId?: number) {
+        if (!collectionId) {
+            collectionId = this.getRegionCollection()
+        }
+
         return this.http
             .get( this._auth.getUrl() + '/imagefpx/' + assetId + '/' + collectionId + '/5', this.defaultOptions)
             .map(data => {
@@ -535,7 +554,6 @@ export class AssetService {
                 } else {
                     return(data.json() || {});
                 }
-               
             });
     }
 
@@ -697,6 +715,9 @@ export class AssetService {
     private loadCategory(catId: string): Promise<any> {
         let imageSize = 0;
         let startIndex = ((this.urlParams.currentPage - 1) * this.urlParams.pageSize) + 1;
+        if (catId.startsWith('103')) {
+            catId = this.getRegionCollection(parseInt(catId)).toString()
+        }
         let requestString = [this._auth.getUrl(), 'categories', catId, 'thumbnails', startIndex, this.urlParams.pageSize, this.activeSort.index].join('/');
 
         return this.http

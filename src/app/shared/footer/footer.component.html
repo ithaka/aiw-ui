@@ -1,14 +1,16 @@
 <div class="container-fluid">
   <div class="footer row">
     <div class="col-12">
-      <a class="link" target="_blank" href="http://www.artstor.org/what-is-artstor/w-html/artstor-overview.shtml">About</a>
-      <a class="link" target="_blank" href="http://www.artstor.org/using-artstor/u-html/getting-started.shtml">Getting Started</a>
-      <a class="link" target="_blank" href="http://www.artstor.org/blog">Teaching and Study Ideas</a>
-      <a class="link" target="_blank" href="http://www.artstor.org/news/n-html/send-me-artstor-news.shtml">Stay Informed</a>
-      <a class="link" target="_blank" href="http://www.artstor.org/terms">Terms</a>
-      <a class="link" target="_blank" href="http://www.artstor.org/our-organization/o-html/privacy-policy.shtml">Privacy</a>
-      <a class="link" target="_blank" href="http://www.artstor.org/our-organization/o-html/copyright.shtml">Copyright Concerns</a>
-      <a class="link" target="_blank" href="http://support.artstor.org/">Support</a>
+      <span [innerHtml]="'FOOTER.LINKS.ABOUT' | translate"></span>
+      <span [innerHtml]="'FOOTER.LINKS.GETTING_STARTED' | translate"></span>
+      <span [innerHtml]="'FOOTER.LINKS.TEACHING_IDEAS' | translate"></span>
+      <span [innerHtml]="'FOOTER.LINKS.STAY_INFORMED' | translate"></span>
+      <span [innerHtml]="'FOOTER.LINKS.TERMS' | translate"></span>
+      <span [innerHtml]="'FOOTER.LINKS.PRIVACY' | translate"></span>
+      <span [innerHtml]="'FOOTER.LINKS.COPYRIGHT' | translate"></span>
+      <span [innerHtml]="'FOOTER.LINKS.SUPPORT' | translate"></span>
+      <div class="translate-flyout" id="google_translate_element"></div>
+      
       <!--<a class="link footer-logout" (click)="logout()">Log Out</a>-->
       <a class="link footer-logout" (click)="logout()" *ngIf="user && user.isLoggedIn">Log Out</a>
       <a class="link footer-logout" [routerLink]="['/login']" *ngIf="!user || !user.isLoggedIn">Log In</a>

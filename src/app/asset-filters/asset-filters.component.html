@@ -1,4 +1,6 @@
 <div class="col--filter-border col--sliding" [ngClass]="{ 'slide-up' : !showFilters }">
+    
+    <!--New Search Filters-->
     <div *ngFor="let filterKey of keys(availableFilters); let i = index" class="filter-group">
         <div *ngIf="availableFilters[filterKey]">
             <span class="filter-group__label">
@@ -12,6 +14,29 @@
         </div>
     </div>
 
+    <!--Legacy Search Filters-->
+    <div class="filter-group">
+        <span class="filter-group__label">
+            <h3>Collection Type <a id="buttonCollectionTypeClear" tabindex="" class="link--accent small" [ngClass]="{ 'disable': !hasAppliedFilters('collTypes') }" (click)="clearAllFilterGroup('collTypes')">Clear</a></h3>
+        </span>
+        <!--<div class="filter" [ngClass]="{ 'active': true }">All Collections</div>-->
+        <button class="filter" *ngFor="let facet of availableFilters.collType" id="filterCollectionTypeItem{{ facet.id }}"  (click)="toggleFilter(facet.id, 'collTypes')" [ngClass]="{'active': filterApplied(facet.id, 'collTypes')}" data-sc="search: facet">{{ facet.label }}
+            <i class="icon icon-add"></i>
+            <i class="icon icon-close"></i>
+        </button>
+    </div>
+
+    <div class="filter-group">
+        <span class="filter-group__label">
+                <h3>Classification <a id="filterClassificationClear" tabindex="" class="link--accent small" [ngClass]="{ 'disable': !hasAppliedFilters('classification') }" (click)="clearAllFilterGroup('classification')">Clear</a></h3>
+            </span>
+        <!--<div class="filter" [ngClass]="{ 'active': true }">All Collections</div>-->
+        <button class="filter" *ngFor="let classificationFacet of availableFilters.classification" id="filterClassificationItem{{ classificationFacet.id }}" (click)="toggleFilter(classificationFacet.id, 'classification')" [ngClass]="{'active': filterApplied(classificationFacet.id, 'classification')}" data-sc="search: facet">{{ classificationFacet.name }}
+            <i class="icon icon-add"></i>
+            <i class="icon icon-close"></i>
+        </button>
+    </div>
+
    
     <!--<div class="filter-group">
         <span class="filter-group__label">
@@ -19,15 +44,15 @@
             </span>
         <div *ngFor="let geographyFacet of availableFilters.geography" id="filterGeographyItem{{ geographyFacet.id }}">
             <i id="filterGeography{{ geographyFacet.id }}Expand" class="icon icon-direction absolute-left tree-icon" (click)="toggleTree(geographyFacet)" [ngClass]="{ 'icon-down' : geographyFacet.expanded, 'icon-right' : !geographyFacet.expanded }"></i>
-            <div class="filter parent" (click)="toggleFilter(geographyFacet.id, 'geography')" [ngClass]="{'active': filterApplied(geographyFacet.id, 'geography')}" data-sc="search: facet"> {{ geographyFacet.name }} 
+            <button class="filter parent" (click)="toggleFilter(geographyFacet.id, 'geography')" [ngClass]="{'active': filterApplied(geographyFacet.id, 'geography')}" data-sc="search: facet"> {{ geographyFacet.name }} 
                 <i class="icon icon-add"></i>
                 <i class="icon icon-close"></i>
-            </div>
+            </button>
             <div class="child-cntnr collapse" [ngClass]="{ 'show' : geographyFacet.expanded }">
-                <div class="filter child" *ngFor="let child of geographyFacet.children; let childIndex = index" id="filterGeographyItem{{ 'Child' + child.id }}" (click)="toggleFilter(child.id, 'geography')" [ngClass]="{'active': filterApplied(child.id, 'geography')}" data-sc="search: facet">{{ child.name }}
+                <button class="filter child" *ngFor="let child of geographyFacet.children; let childIndex = index" id="filterGeographyItem{{ 'Child' + child.id }}" (click)="toggleFilter(child.id, 'geography')" [ngClass]="{'active': filterApplied(child.id, 'geography')}" data-sc="search: facet">{{ child.name }}
                     <i class="icon icon-add"></i>
                     <i class="icon icon-close"></i>
-                </div>
+                </button>
             </div>
         </div>
     </div>-->

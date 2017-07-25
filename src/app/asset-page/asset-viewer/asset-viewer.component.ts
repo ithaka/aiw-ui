@@ -131,8 +131,12 @@ export class AssetViewerComponent implements OnInit, OnDestroy, AfterViewInit {
      * Gets information needed to load IIIF viewers, such as OpenSeaDragon
      */
     private loadIIIF(): void {
-        this.tileSource = this.asset.tileSource
-        this.loadOpenSea()
+        if (this.asset.tileSource) { 
+            this.tileSource = this.asset.tileSource
+            this.loadOpenSea()
+        } else {
+            this.mediaLoadingFailed = true
+        }
     }
 
     /**

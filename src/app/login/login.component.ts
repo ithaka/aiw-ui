@@ -8,6 +8,8 @@ import { AuthService } from './../shared';
 import { LoginService, User } from './login.service';
 import { AnalyticsService } from '../analytics.service';
 
+declare var initPath: string
+
 @Component({
   // The selector is what angular internally uses
   // for `document.querySelectorAll(selector)` in our index.html
@@ -57,6 +59,16 @@ export class Login {
   }
 
   ngOnInit() {
+    // Provide redirects for initPath detected in index.html from inital load
+    if ( initPath && (initPath.indexOf('ViewImages') > -1 || initPath.indexOf('ExternalIV') > -1 ) ) {
+      this.router.navigateByUrl(initPath)
+        .then( result => {
+          // Clear variable to prevent further redirects
+          initPath = null
+          console.log('Redirect to initial path attempt: ' + result)
+        })
+    }
+
     // this handles showing the register link for only ip auth'd users
     this._login.getIpAuth()
       .take(1)
@@ -68,7 +80,8 @@ export class Login {
         console.error(err);
       });
 
-    this._login.getInstitutions()
+    // Until institutions call works without the auth cookie, we need to make sure we have a list available
+    this._login.getFallbackInstitutions()
       .then((data) => {
         if (data.items) {
           this.loginInstitutions = data.items;
@@ -79,6 +92,19 @@ export class Login {
         this.instErrorMsg = "We've experience an error and are unable to retrieve the insitutions";
         console.error(error);
       });
+
+    // The true institutions call. Don't throw an error, since the above call will provide a backup
+    this._login.getInstitutions()
+      .then((data) => {
+        if (data.items) {
+          this.loginInstitutions = data.items;
+          this.dataService = this._completer.local(data.items, 'name', 'name')
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+
     this._analytics.setPageValues('login', '')
   } // OnInit
   
@@ -97,7 +123,12 @@ export class Login {
       this._auth.saveUser(data.user);
       this.errorMsg = '';
       if (this._auth.getFromStorage("stashedRoute")) {
-        this.router.navigateByUrl(this._auth.getFromStorage("stashedRoute"));
+        // We do not want to navigate to the page we are already on
+        if (this._auth.getFromStorage("stashedRoute").indexOf('login') > -1) {
+          this.router.navigate(['/home']);
+        } else {
+          this.router.navigateByUrl(this._auth.getFromStorage("stashedRoute"));
+        }
         this._auth.deleteFromStorage("stashedRoute");
       } else {
         this.router.navigate(['/home']);
@@ -157,6 +188,9 @@ export class Login {
             } else if (data.message === 'loginExpired') {
               this.errorMsg = 'LOGIN.EXPIRED';
             }
+          } else if (!data.isRememberMe && !data.remoteaccess) {
+            // In some situations the service might return an ip auth object even tho login was unsuccessful
+            this.errorMsg = 'There was an issue with your account, please contact support.';
           } else {
             this.angulartics.eventTrack.next({ action:"remoteLogin", properties: { category: "login", label: "success" }});
             this.loadForUser(data);
@@ -195,7 +229,7 @@ export class Login {
               }
             }
           }, error => {
-            
+            console.error("/userinfo error")
           });
 
       });

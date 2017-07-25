@@ -7,13 +7,13 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <div class="modal-body">
+      <div class="notranslate modal-body">
         <p>I have read, understand and agree to the <a class="link" href="http://www.artstor.org/terms" name="Terms and conditions of use" target="_blank">terms and conditions of use.</a></p>
         <p>Note that the descriptive information has been embedded into the corresponding image file. For help on how to view embedded metadata, <a class="link" href="http://support.artstor.org/?article=embedded-metadata" name="Embedded metadata viewing help" target="_blank">click here.</a></p>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" (click)="closeModal.emit()">I reject</button>
-        <a class="btn btn-primary" (click)="agree()" [href]="asset.downloadLink" download="asset.title">I accept</a>
+        <a class="btn btn-primary" (click)="agree()" [href]="asset.downloadLink" download>I accept</a>
       </div>
     </div><!-- /.modal-content -->
   </div><!-- /.modal-dialog -->

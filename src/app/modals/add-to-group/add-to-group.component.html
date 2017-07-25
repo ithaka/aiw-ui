@@ -14,7 +14,7 @@
           <div class="form-group" [class.has-success]="serviceResponse.success" [class.has-danger]="serviceResponse.failure">
             <label for="selectImageGroup">{{ copySelectionStr + '.SELECT_PROMPT' | translate }}</label>
             
-            <ng2-completer [(ngModel)]="selectedGroupName" name="imageGroup" 
+            <ng2-completer class="notranslate" [(ngModel)]="selectedGroupName" name="imageGroup" 
               [datasource]="dataService" 
               [minSearchLength]="0" 
               [openOnFocus]="true" 
@@ -30,8 +30,8 @@
         <div class="modal-footer">
           <div *ngIf="!serviceResponse.success" class="form-group">
             <a class="btn btn-link with-pad" href="http://support.artstor.org/?article=create-and-manage-image-groups" target="_blank">{{ 'ADD_TO_GROUP_MODAL.CONTROLS.HELP' | translate }}</a>
-            <button type="submit" class="btn btn-primary">{{ 'ADD_TO_GROUP_MODAL.CONTROLS.SAVE' | translate }}</button>
             <button (click)="closeModal.emit()" type="button" class="btn btn-secondary" data-dismiss="modal">{{ 'ADD_TO_GROUP_MODAL.CONTROLS.CLOSE' | translate}}</button>
+            <button type="submit" class="btn btn-primary">{{ 'ADD_TO_GROUP_MODAL.CONTROLS.SAVE' | translate }}</button>
           </div>
           <div *ngIf="serviceResponse.success" class="form-group">
             <a class="btn btn-link with-pad" href="http://support.artstor.org/?article=create-and-manage-image-groups" target="_blank">{{ 'ADD_TO_GROUP_MODAL.CONTROLS.HELP' | translate}}</a>

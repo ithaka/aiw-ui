@@ -1,3 +1,4 @@
+import { Title } from '@angular/platform-browser';
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { Subscription }   from 'rxjs/Subscription';
@@ -22,7 +23,8 @@ export class MyCollectionsComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private _assets: AssetService,
-    private _analytics: AnalyticsService
+    private _analytics: AnalyticsService,
+    private _title: Title
   ) { }
 
   private subscriptions: Subscription[] = [];
@@ -32,11 +34,17 @@ export class MyCollectionsComponent implements OnInit {
   private tags : Tag[] = [];
   private expandedCategories: any = {};
   private selectedBrowseId: string = '';
+  private showUploadImgsModal: boolean = false;
+  private uploadPC: boolean = false;
 
   // Reference activeTag for description on side
   private activeTag:  Tag;
 
+  private loading: boolean = false;
+
   ngOnInit() {
+    // Set page title
+    this._title.setTitle("Artstor | Browse My Collections")
 
     this.subscriptions.push(
       this.route.params
@@ -44,6 +52,13 @@ export class MyCollectionsComponent implements OnInit {
         if(params && params['viewId']){
             this.selectedBrowseId = params['viewId'];
             // this.loadCategory();
+        }
+        if(params && params['featureFlag']){
+            console.log(params['featureFlag'])
+            this._auth.featureFlags[params['featureFlag']] = true;
+            if (this._auth.featureFlags['uploadPC']) {
+                this.uploadPC = true
+            }
         }
       })
     );
@@ -70,6 +85,7 @@ export class MyCollectionsComponent implements OnInit {
   }
   
   getUserPCol(){
+    this.loading = true;
     this._assets.pccollection()
       .then((res) => {
           if(res.pcCollection && res.pcCollection.collectionid){
@@ -85,9 +101,19 @@ export class MyCollectionsComponent implements OnInit {
             }
           }
 
+          if(this.tags.length === 0 || this._auth.featureFlags['uploadPC']){
+              this.uploadPC = true;
+          }
+          else{
+              this.uploadPC = false;
+          }
+            
+          this.loading = false;
+
       })
       .catch(function(err) {
           console.log('Unable to load User Personal Collections.');
+          this.loading = false;
       });
   }
 

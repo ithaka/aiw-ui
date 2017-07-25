@@ -5,6 +5,8 @@ import { Observable } from 'rxjs/Observable'
 
 import { AuthService } from './shared'
 
+declare var initPath: string
+
 @Injectable()
 export class LegacyRouteResolver implements Resolve<boolean> {
 
@@ -21,41 +23,67 @@ export class LegacyRouteResolver implements Resolve<boolean> {
    * This is the top-level function for parsing out legacy urls (a router of sorts)
    */
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
-    let urlArr = state.url.split("/")
-    urlArr.splice(0,2)
+    let url = state.url
 
+    // Provide redirects for initPath detected in index.html from inital load
+    if (initPath) {
+      url = initPath
+    }
+
+    // Keep this log around: we have a lot of exceptions
+    console.log("Attempting to resolve legacy url:\n", url)
+    
+    if (!isNaN(Number(url.substr(1,2)))) {
+      // Anchors in some old links cause some of the path to be lost
+      url = '/library/welcome.html#' + url.substr(1)
+    } else if (url.indexOf('welcome.html') > -1) {
+      this._router.navigate(['/home'])
+      return true
+    } else if (url.indexOf('/library') == 0) {
+      // This is the normal expectation for old links!
+    } else {
+      return true
+    }
+
+    if (url.indexOf('%7C') > -1) {
+      url = decodeURI(url)
+    }
+
+    let urlArr = url.split("/")
+    urlArr.splice(0,2)
+    
     if (urlArr[0].substr(0, 10).toLowerCase() === "externaliv") {
       let encryptedId = urlArr[0].split("=")[1]
       this._router.navigate(['/asset', 'external', encryptedId])
 
-      // this.decryptToken(encryptedId)
-      //   .take(1)
-      //   .subscribe((item) => {
-      //     console.log(item)
-      //   }, (err) => {
-      //     console.error(err)
-      //   })
     } else if (urlArr[0] === "secure") {
-      let idRe = /id=(.*?(?=&))/
+      let idRe: RegExp = /id=(.*)/
       let encryptedId = idRe.exec(urlArr[1])[1]
 
       this._router.navigate(['/asset', 'external', encryptedId])
 
-      // this.decryptToken(encryptedId)
-      //   .take(1)
-      //   .subscribe((item) => {
-      //     console.log(item)
-      //   }, (err) => {
-      //     console.error(err)
-      //   })
     } else {
       let routeNum = urlArr[0].substr(0, 2)
-
+      
       urlArr.forEach((value, index) => {
         urlArr[index] = decodeURIComponent(value)
       })
 
       let pipeArr = urlArr[0].split("|")
+      
+      // At some point, someone made pretty urls as: '/library/collection/patel'
+      if (pipeArr[0] == 'collection' && urlArr[1]) {
+        this._router.navigate(["/collection", urlArr[1]])
+      }
+
+      // Handling for '/library/welcome.html'
+      if (pipeArr[0] == 'welcome.html') {
+        this._router.navigate(["/home"])
+      }
+
+      if (pipeArr[0].indexOf('#') > 0) {
+        routeNum = pipeArr[0].substr(pipeArr[0].indexOf('#'), 2)
+      }
 
       switch (routeNum) {
         case "#2": // handles all of the #2 routes
@@ -66,6 +94,9 @@ export class LegacyRouteResolver implements Resolve<boolean> {
 
           if (pipeArr && pipeArr.length > 0) {
             switch (pipeArr[1]) {
+              case "categories":
+                this._router.navigate(["/category", pipeArr[2]]) // the 3rd item in the array is the category id
+                break
               case "collections":
                 this._router.navigate(["/collection", pipeArr[2]]) // the 3rd item in the array is the collection id
                 break

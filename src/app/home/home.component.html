@@ -1,32 +1,33 @@
 <nav-menu></nav-menu>
-<div class="container main-content">
+<div id="mainContent" tabindex="-1" class="container main-content">
+    <h1 class="hidden">Artstor Home Page</h1><!--for accessibility so that page has title-->
     <div class="row">
         <div class="col-sm-4">
             <ang-search></ang-search>
-            <div class="card pt-2">
+            <div id="mainContent" class="card pt-2">
                 <div class="card-header">
-                    <h1>Browse</h1>
+                    <h2 class="h1">{{ 'HOME.BROWSE.TITLE' | translate }}</h2>
                 </div>
                 <ul class="list-group list-group-flush list-group-clean">
                     <a id="linkBrowseGeography" class="list-group-item" [routerLink]="['/browse','library', {viewId: 260}]">
-                        <h3 class="browse-category">Geography</h3>
-                        <p class="small">(Afghanistan, Albania, Algeria...)</p>
+                        <h3 class="browse-category">{{ 'HOME.BROWSE.GEO_HEADING' | translate }}</h3>
+                        <p class="small">{{ 'HOME.BROWSE.GEO_LIST' | translate }}</p>
                     </a>
                     <a id="linkBrowseClassification" class="list-group-item" [routerLink]="['/browse','library', {viewId: 250}]">
-                        <h3 class="browse-category">Classification</h3>
-                        <p class="small">(painting, performing arts, photography...)</p>
+                        <h3 class="browse-category">{{ 'HOME.BROWSE.CLASS_HEADING' | translate }}</h3>
+                        <p class="small">{{ 'HOME.BROWSE.CLASS_LIST' | translate }}</p>
                     </a>
                     <a id="linkBrowseCollection" class="list-group-item" [routerLink]="['/browse','library', {viewId: 103}]">
-                        <h3 class="browse-category">Collection</h3>
-                        <p class="small">(Artstor, Shared Shelf, Shared Shelf Commons, My Collections...)</p>
+                        <h3 class="browse-category">{{ 'HOME.BROWSE.COLL_HEADING' | translate }}</h3>
+                        <p class="small">{{ 'HOME.BROWSE.COLL_LIST' | translate }}</p>
                     </a>
-                    <a id="linkBrowseTeaching" class="list-group-item" [routerLink]="['/browse','library', {viewId: 270}]">
-                        <h3 class="browse-category">Teaching Resources</h3>
-                        <p class="small">(Curriculum Guides, AP® Resources, Surveys and Case Studies: Art History, Humanities and Social Sciences)</p>
+                    <a id="linkBrowseTeaching" class="list-group-item" [routerLink]="['/browse','groups', 'public']">
+                        <h3 class="browse-category">{{ 'HOME.BROWSE.TEACHING_HEADING' | translate }}</h3>
+                        <p class="small">{{ 'HOME.BROWSE.TEACHING_LIST' | translate }}</p>
                     </a>
-                    <a id="linkBrowseIGs" class="list-group-item" [routerLink]="['/browse','groups', {viewId: 1}]">
-                        <h3 class="browse-category">Image Groups</h3>
-                        <p class="small">(My groups and groups shared by others at my institution)</p>
+                    <a id="linkBrowseIGs" class="list-group-item" [routerLink]="['/browse','groups', 'institution']">
+                        <h3 class="browse-category">{{ 'HOME.BROWSE.GROUPS_HEADING' | translate }}</h3>
+                        <p class="small">{{ 'HOME.BROWSE.GROUPS_LIST' | translate }}</p>
                     </a>
                 </ul>
 
@@ -34,12 +35,12 @@
              <!-- Institution Shared Shelf Collections-->
             <div *ngIf="institution && instCollections.length > 0" class="card">
                 <div class="card-header">
-                    <h2>{{ institution.displayName ? institution.displayName : "Institutional" }} Collections</h2>
+                    <h2 translate [translateParams]="{ institutionName: institution.displayName ? institution.displayName : 'Institutional' }">HOME.HEADINGS.INSTITUTION_COLLECTIONS</h2>
                 </div>
                 <div class="list--home-collections" [class.loading]="loaders['instCollections']">
                     <div class="list-group list-group-flush">
                         <a *ngFor="let collection of instCollections" class="list-group-item list-group-item-action" [routerLink]="[ '/collection', collection.collectionid ]">
-                                {{ collection.collectionname }}
+                                <span class="notranslate">{{ collection.collectionname }}</span>
                         </a>
                     </div>
                 </div>
@@ -52,14 +53,15 @@
             <!--Shared Shelf Commons Collections-->
             <div class="card pb-3">
                 <div class="card-header">
-                    <h2>Shared Shelf Commons</h2>
+                    <h2>{{ 'HOME.HEADINGS.SSC' | translate }}</h2>
                 </div>
+                <a (click)="featuredCollection.focus()" (keydown.enter)="featuredCollection.focus()" tabindex="0" class="link sr-only sr-only-focusable">{{ 'HOME.LINKS.SKIP_COLLECTIONS' | translate }}</a>
                 <div class="list--home-collections" [class.loading]="loaders['collections']">
-                    <div class="list-group list-group-flush">
-                        <a *ngFor="let collection of collections" class="list-group-item list-group-item-action" [routerLink]="[ '/collection', collection.collectionid ]">
-                                {{ collection.collectionname }}
-                        </a>
-                    </div>
+                    <ul class="list-group list-group-flush">
+                        <li *ngFor="let collection of collections" class="list-group-item list-group-item-action"><a [routerLink]="[ '/collection', collection.collectionid ]">
+                            <span class="notranslate">{{ collection.collectionname }}</span>
+                        </a></li>
+                    </ul>
                 </div>
                 <div *ngIf="errors.collections" class="card-block">
                     <div id="errorCollectionsLoading" class="alert alert-warning" role="alert">
@@ -69,17 +71,17 @@
             </div>
         </div>
         <div class="col-sm-5">
-            <a id="featuredCollectionLink" class="card featured-card" href="/#/category/1034602260;name=Ezra%20Stoller%20Archive%2C%20Esto%20Photographics%20Inc.%20Esto%2014548"> 
-                <img class="card-img-top no-stretch" src="/assets/img/featured-collection.jpg" alt="Collection: Ezra Stoller Archive (Esto)">
+            <a #featuredCollection id="featuredCollectionLink" class="card featured-card" [attr.href]=" 'HOME.FEATURED.LINK' | translate "> 
+                <img class="card-img-top no-stretch" [attr.src]="'HOME.FEATURED.IMG_SOURCE' | translate" [attr.alt]="'HOME.FEATURED.ALT_TEXT' | translate" [attr.title]="'HOME.FEATURED.LINK_TITLE' | translate">
                 <div class="card-body pt-1">
-                    <label style="margin-bottom:0px;">Featured Collection</label>
-                    <p style="margin-bottom:6px;">Ezra Stoller Archive (Esto)</p>
+                    <label style="margin-bottom:0px;">{{ 'HOME.FEATURED.HEADING' | translate }}</label>
+                    <p style="margin-bottom:6px;">{{ 'HOME.FEATURED.SUBHEADING' | translate }}</p>
                 </div>
-                <div class="featured-caption">Hirshhorn Museum and Sculpture Garden (exterior, stairs), Skidmore, Owings & Merrill | Gordon Bunshaft, designer | 1966-1974 | Washington, DC | Ezra Stoller © Esto | Image and original data provided by Esto</div>
+                <div class="featured-caption">{{ 'HOME.FEATURED.DESCRIPTION' | translate }}</div>
             </a>
             <div class="card">
                 <div class="card-header">
-                    <h2>From Our Blog</h2>
+                    <h2>{{ 'HOME.HEADINGS.FRM_BLOG' | translate}}</h2>
                 </div>
                 <div class="loading" *ngIf="blogLoading"></div>
                 <div *ngIf="!blogLoading">
@@ -91,28 +93,28 @@
             </div>
         </div>
         <div class="col-sm-3">
-            <a id="imageAdSpaceLink" class="card hidden-xs-down" href="http://www.artstor.org/webinars?view=ADL" target="_blank">
-                <img class="card-img no-stretch" src="/assets/img/promo-webinar.gif" alt="Try a webinar!">
+            <a id="imageAdSpaceLink" class="card hidden-xs-down" [attr.href]=" 'HOME.AD.LINK' | translate " target="_blank">
+                <img class="card-img no-stretch" [attr.src]="'HOME.AD.IMG_SOURCE' | translate" [attr.alt]="'HOME.AD.ALT_TEXT' | translate">
             </a>
             <div class="card pt-4">
                 <div class="card-header">
-                    <h3>Questions</h3>
+                    <h3>{{ 'HOME.QUESTIONS.HEADING' | translate }}</h3>
                 </div>
                  <ul class="list-group list-group-flush list-group-clean">
                     <a id="linkEmailInstitutionContact" class="list-group-item small" [href]="institution.institutionContact && institution.institutionContact[0] && institution.institutionContact[0].email ? 'mailto:' + institution.institutionContact[0].email : 'mailto:userservices@artstor.org'">
-                        Email your institutional contact
+                        {{ 'HOME.QUESTIONS.EMAIL_INSTITUTION' | translate }}
                     </a>
                     <a id="linkEmailArtstor" class="list-group-item small" href="mailto:userservices@artstor.org">
-                        Email Artstor
+                        {{ 'HOME.QUESTIONS.EMAIL_ARTSTOR' | translate }}
                     </a>
                     <a id="linkArtstorWebinar" class="list-group-item small" href="http://www.artstor.org/webinars?view=ADL" target="_blank">
-                        Sign up for an Artstor webinar
+                        {{ 'HOME.QUESTIONS.WEBINAR' | translate }}
                     </a>
                     <a id="linkArtstorSurvey" class="list-group-item small" href="https://www.surveymonkey.com/r/TW9SKC6" target="_blank">
-                        Take a survey: Tell us what you think!
+                        {{ 'HOME.QUESTIONS.SURVEY' | translate }}
                     </a>
                     <li id="itemArtstorAccess" class="list-group-item small" *ngIf="institution.displayName">
-                        Your access to Artstor is provided by:<br/>
+                        {{ 'HOME.ACCESS_PROVIDED_BY' | translate }}<br/>
                         <b>{{ institution.displayName }}</b>
                     </li>
                 </ul>

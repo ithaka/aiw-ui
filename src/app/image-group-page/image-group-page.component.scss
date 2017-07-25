@@ -1,7 +1,13 @@
 .ig-description {
   border-right: 1px solid rgba(0, 0, 0, 0.15);
 }
-
+.desc-expnd-clps-icon{
+  cursor: pointer;
+  margin-right: 5px;
+}
+.desc-no-expand {
+  color: #dedede;
+}
 // removed expander because of moving description into column
 // may want to implement this gradient on collection page
 // .page__description {

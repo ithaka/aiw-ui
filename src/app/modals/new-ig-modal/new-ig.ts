@@ -10,8 +10,12 @@ export class IgFormUtil {
    * Prepares and returns the image group object from the form
    * @param form The value of the submitted form
    * @param description The string value of the description pulled out of the medium editor
+   * @param assets The array of assets (can be array of assets or of strings) which the image group should contain
+   * @param user The current user
+   * @param currentIg The ImageGroup which is currently being edited/copied (used for preparing the access object)
+   * @returns ImageGroup which can be POSTed or PUT to the groups API
    */
-  public prepareGroup(form: IgFormValue, description: string, assets: any[], user: any): ImageGroup {
+  public prepareGroup(form: IgFormValue, description: string, assets: any[], user: any, currentIg?: ImageGroup): ImageGroup {
     /** format an array of asset ids out of the asset */
     let itemIds = []
     assets.forEach(
@@ -32,7 +36,7 @@ export class IgFormUtil {
       name: form.title,
       description: description,
       sequence_number: 0,
-      access: [ {
+      access: currentIg && currentIg.access ? currentIg.access : [ { // if the image group already exists, use that access object
         // This is the user's access object
         "entity_type": 100,
         "entity_identifier": user.baseProfileId.toString(),
@@ -42,12 +46,22 @@ export class IgFormUtil {
       tags: form.tags
     }
 
-    /** Add institution access object if shared with Institution */
+    /** The access object for the user's institution */
+    let institutionAccessObj = {
+      entity_type: 200,
+      entity_identifier: user && user.institutionId.toString(),
+      access_type: 100
+    }
+
+    /**
+     * Add institution access object if shared with Institution
+     *  otherwise, remove the institution access obj (this won't fail if it doesn't exist, but will remove it if it does)
+     */
     if (form.artstorPermissions == "institution") {
-      group.access.push({
-        entity_type: 200,
-        entity_identifier: user && user.institutionId.toString(),
-        access_type: 100
+      group.access.push(institutionAccessObj)
+    } else {
+      group.access = group.access.filter((item) => {
+        return item.entity_identifier != institutionAccessObj.entity_identifier
       })
     }
 

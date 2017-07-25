@@ -27,10 +27,11 @@ export class LoginService {
         let options = new RequestOptions({ headers: header, withCredentials: true });
 
         this._auth.clearStorage();
+
         return this.http
             .post(this._auth.getUrl() + '/logout', {}, options)
             .toPromise()
-            .catch(function(err) {
+            .catch((err) => {
                 // error handling
                 console.error(err)
             });
@@ -64,9 +65,18 @@ export class LoginService {
             .then(this._auth.extractData);
     }
 
+    getFallbackInstitutions() {
+        let url =  '/assets/institutions-initial.json';
+        
+        return this.http
+            .get(url)
+            .toPromise()
+            .then(this._auth.extractData);
+    }
+
     getInstitutions() {
         // http://library.artstor.org/library/institutions/?_method=shibbolethOnly&dojo.preventCache=1479750011351
-        let url = this._auth.getUrl() + '/institutions/?_method=shibbolethOnly';
+        let url = this._auth.getHostname() + '/api/institutions?_method=ShibbolethOnly';
         
         return this.http
             .get(url)

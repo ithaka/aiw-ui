@@ -11,8 +11,12 @@
 
     <div class="col-md-4">
         <div class="browse-info" *ngIf="descObj[selectedBrowseId]">
+            <div class="img" *ngIf="splashImgURL"><img [attr.src]="splashImgURL" alt="Splash image for browse id: {{ selectedBrowseId }}"></div>
             <div class="title">{{ descObj[selectedBrowseId].collectionname }}</div>
             <div class="browse__description" [innerHTML]="descObj[selectedBrowseId].blurburl"></div>
         </div>
     </div>
+</div>
+<div *ngIf="loading" class="row has-icon-overlay">
+    <i class="icon-lg icon-overlay--top icon-loading-large"></i>
 </div>

@@ -3,7 +3,7 @@
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h1>Advanced Search</h1>
+                <h1>{{ 'ADVANCED_SEARCH_MODAL.TITLE' | translate }}</h1>
                 <button type="button" (click)="close()" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -12,8 +12,8 @@
                 <div class="container-fluid">
                     <div class="row">
                         <div class="col-lg-6">
-                            <h3>Search for words or phrases</h3>
-                            <p class="small">You can enter multiple words and use quotes to indicate exact search terms (e.g., fresco, "costume design").</p>
+                            <h3>{{ 'ADVANCED_SEARCH_MODAL.SEARCH_HEADING' | translate }}</h3>
+                            <p class="small">{{ 'ADVANCED_SEARCH_MODAL.SEARCH_DESCRIPTION' | translate }}</p>
                             <div *ngFor="let query of advanceQueries; let i = index;" class="form-group">
                                 <div id="advanceQueryGroup{{i + 1}}" class="input-group">
                                     <div ngbDropdown class="input-group-btn" *ngIf="i !== 0">
@@ -21,9 +21,9 @@
                                             {{ query.operator }}
                                         </button>
                                         <div class="dropdown-menu"  aria-labelledby="dropdown">
-                                            <a class="dropdown-item" (click)="query.operator = 'AND'">AND</a>
-                                            <a class="dropdown-item" (click)="query.operator = 'OR'">OR</a>
-                                            <a class="dropdown-item" (click)="query.operator = 'NOT'">NOT</a>
+                                            <a class="dropdown-item" (click)="query.operator = 'AND'">{{ 'ADVANCED_SEARCH_MODAL.BOOLEAN_OPTIONS.AND' | translate }}</a>
+                                            <a class="dropdown-item" (click)="query.operator = 'OR'">{{ 'ADVANCED_SEARCH_MODAL.BOOLEAN_OPTIONS.OR' | translate }}</a>
+                                            <a class="dropdown-item" (click)="query.operator = 'NOT'">{{ 'ADVANCED_SEARCH_MODAL.BOOLEAN_OPTIONS.NOT' | translate }}</a>
                                         </div>
                                     </div>
                                     <input id="inputAdvanceQuery{{i + 1}}" [(ngModel)]="query.term" (change)="validateForm()" type="text" class="form-control">
@@ -46,9 +46,9 @@
                                 <button title="Add up to 10 field queries" class="btn btn-secondary" (click)="addAdvanceQuery()">Add Query</button>
                             </div>
 
-                            <!--<div class="form-group pt-3">
-                                <h3>Date</h3>
-                                <p class="small">Enter a year or range (numbers only) to limit your search.</p>
+                            <div class="form-group pt-3">
+                                <h3>{{ 'ADVANCED_SEARCH_MODAL.DATE_HEADING' | translate }}</h3>
+                                <p class="small">{{ 'ADVANCED_SEARCH_MODAL.DATE_DESCRIPTION' | translate }}</p>
                                 <div class="form-card card dt-grp">
                                     <div class="date-filter-row">
                                         <input id="inputDateFilterStart" [(ngModel)]="advanceSearchDate['startDate']" (change)="validateForm()" type="number" (keypress)="dateKeyPress($event)" min="0" class="form-control" placeholder="Start Date">
@@ -63,11 +63,11 @@
                                 </div>
                             </div>-->
                         </div>
-                        <!--<div class="col-lg-6">
-                            <h3>Search by geography, classification, and/or collections</h3>
-                            <p class="small">You can narrow your search results by filtering on both the Geography and Classification areas.</p>
+                        <div class="col-lg-6">
+                            <h3>{{ 'ADVANCED_SEARCH_MODAL.FILTER_HEADING' | translate }}</h3>
+                            <p class="small">{{ 'ADVANCED_SEARCH_MODAL.FILTER_DESCRIPTION' | translate }}</p>
                             <div class="form-group" *ngIf="termsList.geoTree && (termsList.geoTree.length > 0)">
-                                <label>Geography</label>
+                                <label>{{ 'ADVANCED_SEARCH_MODAL.GEO_HEADING' | translate }}</label>
                                 <div class="form-card card">
                                     <ul class="list-group list-group-flush compact">
                                         <li *ngFor="let geoNode of termsList.geography" class="list-group-item">
@@ -81,7 +81,7 @@
                                 </div>
                             </div>
                             <div class="form-group" *ngIf="termsList.classification && (termsList.classification.length > 0)">
-                                <label>Classification</label>
+                                <label>{{ 'ADVANCED_SEARCH_MODAL.CLASS_HEADING' | translate }}</label>
                                 <div class="form-card card">
                                     <ul class="list-group list-group-flush compact">
                                         <li *ngFor="let clsNode of termsList.classification" class="list-group-item">
@@ -95,7 +95,7 @@
                                 </div>
                             </div>
                             <div class="form-group" >
-                                <label>Collection</label>
+                                <label>{{ 'ADVANCED_SEARCH_MODAL.COLLECTION_HEADING' | translate }}</label>
                                 <div class="form-card card">
                                     <ul class="list-group list-group-flush compact">
                                         <li *ngFor="let colTop of colTree"  class="list-group-item">
@@ -123,15 +123,11 @@
                 </div>
             </div>
             <div class="modal-footer">
-                    <div *ngIf="error.empty" class="alert alert-warning">
-                        <b>Search is Empty</b> Please add a search term or select a filter
-                    </div>
-                    <div *ngIf="error.date" class="alert alert-warning">
-                        <b>End Date is less than Start Date</b> End date must be greater than or equal to Start date.
-                    </div>
-                    <a class="btn btn-link with-pad" tabindex="1" (click)="openHelp()">Help</a>
-                    <button class="btn btn-secondary" (click)="resetFilters()">Clear</button>
-                    <button (click)="applyAllFilters()" class="btn btn-primary" data-sc="search: advanced query">Search</button>
+                    <div *ngIf="error.empty" class="alert alert-warning" [innerHtml]="'ADVANCED_SEARCH_MODAL.ERRORS.EMPTY_SEARCH' | translate"></div>
+                    <div *ngIf="error.date" class="alert alert-warning" [innerHtml]="'ADVANCED_SEARCH_MODAL.ERRORS.DUMB_DATE' | translate"></div>
+                    <a class="btn btn-link with-pad" tabindex="1" (click)="openHelp()">{{ 'ADVANCED_SEARCH_MODAL.BUTTONS.HELP' | translate }}</a>
+                    <button class="btn btn-secondary" (click)="resetFilters()">{{ 'ADVANCED_SEARCH_MODAL.BUTTONS.CLEAR' | translate }}</button>
+                    <button (click)="applyAllFilters()" class="btn btn-primary" data-sc="search: advanced query">{{ 'ADVANCED_SEARCH_MODAL.BUTTONS.SEARCH' | translate }}</button>
             </div>
         </div>
     </div>

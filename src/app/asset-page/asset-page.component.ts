@@ -1,3 +1,4 @@
+import { Title } from '@angular/platform-browser';
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { Subscription }   from 'rxjs/Subscription';
@@ -18,42 +19,39 @@ import { AnalyticsService } from '../analytics.service';
 export class AssetPage implements OnInit, OnDestroy {
 
     @ViewChild(AssetViewerComponent)
-    private assetViewer: AssetViewerComponent;
+    private assetViewer: AssetViewerComponent
 
-    private user: any;
-
-    private hasPrivateGroups: boolean = false;
+    private user: any
+    private hasExternalAccess: boolean = false
+    private hasPrivateGroups: boolean = false
+    private document = document
 
     // Array to support multiple viewers on the page
-    private assets: Asset[] = [];
-    private assetIndex: number = 1;
-    private assetNumber: number = 1;
-    private totalAssetCount: number = 1;
-    private subscriptions: Subscription[] = [];
-    private prevAssetResults: any = { thumbnails : [] };
-    private loadArrayFirstAsset: boolean = false;
-    private loadArrayLastAsset: boolean = false;
-    private isFullscreen: boolean = false;
-    private showAssetDrawer: boolean = false;
+    private assets: Asset[] = []
+    private assetIndex: number = 1
+    private assetNumber: number = 1
+    private totalAssetCount: number = 1
+    private subscriptions: Subscription[] = []
+    private prevAssetResults: any = { thumbnails : [] }
+    private loadArrayFirstAsset: boolean = false
+    private loadArrayLastAsset: boolean = false
+    private isFullscreen: boolean = false
+    private showAssetDrawer: boolean = false
 
     /** controls whether or not the modals are visible */
-    private showAgreeModal: boolean = false;
-    private showLoginModal: boolean = false;
-    private showAddModal: boolean = false;
-    private showCreateGroupModal: boolean = false;
+    private showAgreeModal: boolean = false
+    private showLoginModal: boolean = false
+    private showAddModal: boolean = false
+    private showCreateGroupModal: boolean = false
+    private showAccessDeniedModal: boolean = false
 
-    private copyURLStatusMsg: string = '';
-    private showCopyUrl: boolean = false;
-    private generatedImgURL: string = '';
-    private prevRouteParams: any = [];
+    private copyURLStatusMsg: string = ''
+    private showCopyUrl: boolean = false
+    private generatedImgURL: string = ''
+    private prevRouteParams: any = []
+    private collectionName: string = ''
 
-    private _storage;
-
-   
-    // additionalfields
-// :
-// "{"Work Number":["525311"],"Course Number":["ARTH 260"],"File Name":["38428.jpg"],"Order Number":["501434"]}"
-
+    private _storage
     
 
     constructor(
@@ -64,7 +62,8 @@ export class AssetPage implements OnInit, OnDestroy {
             private _router: Router, 
             private locker: Locker,
             private _analytics: AnalyticsService,
-            private angulartics: Angulartics2
+            private angulartics: Angulartics2,
+            private _title: Title 
         ) { 
             this._storage = locker.useDriver(Locker.DRIVERS.LOCAL);
     }
@@ -94,20 +93,17 @@ export class AssetPage implements OnInit, OnDestroy {
                 this.assets = []
 
                 if (routeParams['encryptedId']) {
+                    this.hasExternalAccess = true
                     this._assets.decryptToken(routeParams['encryptedId'])
                         .take(1)
                         .subscribe((asset) => {
-                            this.assets[0] = new Asset(asset.objectId, this._assets, this._auth)
-                            this.angulartics.eventTrack.next({ action:"viewAsset", properties: { category: "asset", label: asset.objectId }});
-                            this.generateImgURL()
+                            this.renderPrimaryAsset(new Asset(asset.objectId, this._assets, this._auth, asset))
                         }, (err) => {
                             console.error(err)
                             this._router.navigate(['/nocontent'])
                         })
                 } else {
-                    this.assets[0] = new Asset(routeParams["assetId"], this._assets, this._auth);
-                    this.angulartics.eventTrack.next({ action:"viewAsset", properties: { category: "asset", label: routeParams["assetId"] }});
-                    this.generateImgURL();
+                    this.renderPrimaryAsset(new Asset(routeParams["assetId"], this._assets, this._auth))
 
                     if(this.prevAssetResults.thumbnails.length > 0){
                         // this.totalAssetCount = this.prevAssetResults.count ? this.prevAssetResults.count : this.prevAssetResults.thumbnails.length;
@@ -149,7 +145,7 @@ export class AssetPage implements OnInit, OnDestroy {
           })
         );
 
-        if(this.user.isLoggedIn){
+        if(this.user && this.user.isLoggedIn){
             // Check if the logged-in user has private image groups
             this._group.getAll('private')
                         .take(1)
@@ -157,10 +153,43 @@ export class AssetPage implements OnInit, OnDestroy {
         }
 
         this._analytics.setPageValues('asset', this.assets[0] && this.assets[0].id)
+        console.log("init component")
     } // OnInit
 
     ngOnDestroy() {
         this.subscriptions.forEach((sub) => { sub.unsubscribe(); });
+    }
+
+    test() {
+        console.log("testing...", this.assets[0])
+    }
+
+    /** 
+     * Render Asset once its loaded
+     */
+    renderPrimaryAsset(asset: Asset) {
+        this.assets[0] = asset
+        asset.isDataLoaded.subscribe(
+            (isLoaded) => {
+                if (isLoaded) {
+                    this._title.setTitle( asset.title );
+                    document.querySelector('meta[name="DC.type"]').setAttribute('content', 'Artwork');
+                    document.querySelector('meta[name="DC.title"]').setAttribute('content', asset.title);
+                }
+            }, (err) => {
+                if (err.status === 403) {
+                    // here is where we make the "access denied" modal appear
+                    if (!this.hasExternalAccess) {
+                        this.showAccessDeniedModal = true
+                    }   
+                } else {
+                    // don't have a clue why this would happen, so just log it
+                    console.error(err)
+                }
+            }
+        )
+        this.angulartics.eventTrack.next({ action:"viewAsset", properties: { category: "asset", label: asset.id }});
+        this.generateImgURL();
     }
 
     /**
@@ -180,24 +209,25 @@ export class AssetPage implements OnInit, OnDestroy {
 
     // Calculate the index of current asset from the previous assets result set
     private currentAssetIndex(): number{
-        for(var i = 0; i < this.prevAssetResults.thumbnails.length; i++){
-            if(this.prevAssetResults.thumbnails[i].objectId == this.assets[0].id){
-                return i;
+        if (this.assets[0]) {
+            for(var i = 0; i < this.prevAssetResults.thumbnails.length; i++){
+                if(this.prevAssetResults.thumbnails[i] && this.prevAssetResults.thumbnails[i].objectId == this.assets[0].id){
+                    return i;
+                }
             }
         }
         return 1;
     }
 
     private addAssetToIG(): void{
-        if(this.user.isLoggedIn){
+        if (this.user.isLoggedIn) {
             if(this.hasPrivateGroups){
                 this.showAddModal = true;
             }
             else{
                 this.showCreateGroupModal = true;
             }
-        }
-        else{
+        } else{
             this.showLoginModal = true;
         }
     }
@@ -275,7 +305,7 @@ export class AssetPage implements OnInit, OnDestroy {
         setTimeout( () => { 
             input.select(); 
             if(document.queryCommandSupported('copy') && !iOSuser){
-                document.execCommand('copy')
+                document.execCommand('copy', false, null)
                 statusMsg = 'Image URL successfully copied to the clipboard!';
             }
             else{
@@ -336,5 +366,10 @@ export class AssetPage implements OnInit, OnDestroy {
             this.prevRouteParams = [];
         }
 
+    }
+
+    private genFilename(title: string, fileExt: string) : string {
+        // Returning a filename with a "." is read as having a file extension
+        return (title && fileExt) ? title.replace(/\./g,'-') + '.' + fileExt : ''
     }
 }

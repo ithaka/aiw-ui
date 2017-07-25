@@ -111,7 +111,7 @@ export class NewIgModal implements OnInit {
    *  contains almost all of the logic for creating/editing the image group
    */
   private igFormSubmit(formValue: IgFormValue): void {
-    console.log(formValue)
+
     this.submitted = true;
     // avoid making the service calls, but still trigger error display
     if (!this.newIgForm.valid) {
@@ -128,13 +128,13 @@ export class NewIgModal implements OnInit {
      *  only funky thing here is that sometimes we get the list of asset ids from the image group, and sometimes from selected assets
      *  that depends on whether you're copying an image group or making a new one
      */
-    let group = this.util.prepareGroup(formValue, igDescValue, this.copyIG || this.editIG ? this.ig.items : this.selectedAssets, this._auth.getUser())
+    let group = this.util.prepareGroup(formValue, igDescValue, this.copyIG || this.editIG ? this.ig.items : this.selectedAssets, this._auth.getUser(), this.ig)
 
     if(this.editIG){
       // Editing group
       this._analytics.directCall('edit_img_group')
 
-      group.id = this.ig.id
+      group.id = this.ig.id // need this for the update call
 
       this._group.update(group)
         .subscribe(

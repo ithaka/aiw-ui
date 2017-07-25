@@ -1,5 +1,5 @@
 import { NgModule, ApplicationRef } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
+import { BrowserModule, Title } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Http, HttpModule } from '@angular/http';
 import { NavigationEnd, Router, RouteReuseStrategy, RouterModule } from '@angular/router';
@@ -29,6 +29,9 @@ import { NgIdleKeepaliveModule } from '@ng-idle/keepalive'; // this includes the
 import { MomentModule } from 'angular2-moment'; // optional, provides moment-style pipes for date formatting
 import {DndModule} from 'ng2-dnd';
 
+// File Uploader
+import { FileUploadModule } from "ng2-file-upload";
+
 // App is our top level component
 import { App } from './app.component';
 import { APP_RESOLVER_PROVIDERS } from './app.resolver';
@@ -42,9 +45,11 @@ import { SearchPage } from './search-page';
 import { CollectionPage } from './collection-page';
 import { CategoryPage } from './category-page';
 import { ImageGroupPPPage } from './image-group-pp-page';
+import { AssetPPPage } from './asset-pp-page';
 import { ClusterPage } from './cluster-page';
 import { BrowsePage, LibraryComponent, BrowseCommonsComponent,
-  MyCollectionsComponent, BrowseInstitutionComponent, BrowseGroupsComponent, TagComponent } from './browse-page';
+  MyCollectionsComponent, BrowseInstitutionComponent, BrowseGroupsComponent, TagComponent,
+  TagsListComponent, TagFiltersService } from './browse-page';
 import { AssetPage, AgreeModalComponent } from './asset-page';
 import { AssetViewerComponent } from './asset-page/asset-viewer';
 import { AccountPage } from './account-page';
@@ -58,7 +63,8 @@ import {
   SearchModal, 
   NewIgModal, 
   ShareLinkModal, 
-  DownloadLimitModal, 
+  DownloadLimitModal,
+  UploadImagesModal, 
   AddToGroupModal, 
   DeleteIgModal, 
   NoIgModal, 
@@ -68,6 +74,7 @@ import {
   ConfirmModal,
   SessionExpireModal
 } from './modals';
+import { GeneralSearchComponent } from './browse-page/browse-groups/general-search.component'
 import { SkyBannerComponent } from './sky-banner/sky-banner.component'
 
 
@@ -91,9 +98,11 @@ const APP_PROVIDERS = [
   AuthService,
   ImageGroupService,
   AssetFiltersService,
+  TagFiltersService,
   TagsService,
   ToolboxService,
-  LegacyRouteResolver
+  LegacyRouteResolver,
+  Title
   // { provide: RouteReuseStrategy, useClass: CustomReuseStrategy } // to be implemented later
 ];
 
@@ -111,6 +120,7 @@ type StoreType = {
   declarations: [
     AccessDeniedModal,
     AccountPage,
+    UploadImagesModal,
     AddToGroupModal,
     AgreeModalComponent,
     App,
@@ -132,9 +142,11 @@ type StoreType = {
     SessionExpireModal,
     DownloadLimitModal,
     Footer,
+    GeneralSearchComponent,
     Home,
     ImageGroupPage,
     ImageGroupPPPage,
+    AssetPPPage,
     LibraryComponent,
     Login,
     LoginReqModal,
@@ -156,6 +168,7 @@ type StoreType = {
     ShareLinkModal,
     SkyBannerComponent,
     TagComponent,
+    TagsListComponent,
     ThumbnailComponent,
     TypeIdPipe,
     LinkifyPipe
@@ -168,6 +181,7 @@ type StoreType = {
     RlTagInputModule,
     Ng2CompleterModule,
     LockerModule,
+    FileUploadModule,
     RouterModule.forRoot(ROUTES, { useHash: true }),
     Angulartics2Module.forRoot([ Angulartics2GoogleAnalytics ]),
     TranslateModule.forRoot({
@@ -186,6 +200,7 @@ type StoreType = {
 })
 export class AppModule {
   constructor(public appRef: ApplicationRef, public appState: AppState, private router: Router, private _satellite: AnalyticsService) {
+   
     // Track page changes with Adobe Analytics
     router.events.subscribe((val: NavigationEnd) => {
       // If this is a different page, report it!

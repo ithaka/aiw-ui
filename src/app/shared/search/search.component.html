@@ -5,8 +5,8 @@
             <i id="iconSearchSubmit" (click)="updateSearchTerm(term)" class="icon icon-search form-control__icon"></i>
             <!--<i *ngIf="isLoading" class="icon icon-loading form-control__icon"></i>-->
         </div>
-        <div class="search-in-results col-md-5 hidden-sm-down" *ngIf="allowSearchInRes"><input type="checkbox" id="searchInResChkBx" [(ngModel)]="searchInResults" /> <label for="searchInResChkBx">Search within results</label></div>
+        <div class="search-in-results col-md-5 hidden-sm-down" *ngIf="allowSearchInRes"><input type="checkbox" id="searchInResChkBx" [(ngModel)]="searchInResults" /> <label for="searchInResChkBx">Search within {{ nestedSrchLbl }}</label></div>
     </div>
 </div>
-<a class="link small open-modal" (click)="showSearchModal = true" tabindex="">Advanced Search</a>
+<a class="link small open-modal" (click)="showSearchModal = true" tabindex="0">{{ 'HOME.LINKS.ADVNC_SRCH' | translate}}</a>
 <ang-search-modal *ngIf="showSearchModal" (closeModal)="showSearchModal = false"></ang-search-modal>

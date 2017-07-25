@@ -138,6 +138,10 @@ export class AssetFilters {
 
     this.angulartics.eventTrack.next({ action: "filteredSearch", properties: { category: "search", label: params } })
 
+    if(params['currentPage']){
+      params['currentPage'] = this.pagination.currentPage;
+    }
+    
     this.router.navigate(['search', this.term, params]);
   }
 

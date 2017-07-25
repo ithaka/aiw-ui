@@ -1,0 +1,15 @@
+<div class="container-fluid" id="printable-cntnr" *ngIf="asset.objectId">
+    <div class="asset-img"><img [class.disablePointerEvents]="reorderMode" [attr.src]="_assets.makeThumbUrl(asset.imageUrl, 2)" [attr.alt]="asset.title ? 'Thumbnail of ' + asset.title : 'No title available'"></div>
+    <div class="disclaimer">This image and the text corresponding to this image may only be used for noncommercial educational and scholarly purposes.</div>
+    <div class="meta-cntnr">
+        <h2>Image Information</h2>
+        <div class="table">
+            <div class="meta-row row" *ngFor="let dataObj of metaArray; let isLast = last" [ngClass]="{'last-row': isLast }">
+                <div class="col-md-4 lbl">{{ dataObj.fieldName }}</div>
+                <div class="col-md-8">
+                    <div *ngFor="let value of dataObj.fieldValue" [innerHTML]="value"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

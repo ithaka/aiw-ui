@@ -136,6 +136,10 @@ span.active {
     }
 }
 
+.navigator .openseadragon-container {
+  min-height: 50px;
+}
+
  .mwEmbedKalturaIframe {
       min-height: 600px !important;
   }
@@ -228,4 +232,45 @@ nav-menu {
   height: 400px !important;
   max-height: calc(95vh - 200px) !important;
   overflow-y: auto !important;
+}
+
+
+.footer {
+  & a {
+      border-bottom: none;
+      margin: 0 5px;
+      text-decoration: none;
+
+      &:hover{
+        text-decoration: none;
+      }
+  }
+}
+
+/**
+ * Google Translate override style
+ **/
+.translate-flyout {
+    display: inline-block;
+
+    & .goog-te-gadget-simple {
+      @extend %SansRegular;
+      border: none;
+      background: rgba(255,255,255,0.75);
+      font-size: 11px;
+      line-height: 24px;
+    }
+
+    & img.goog-te-gadget-icon {
+      margin-right: 0px;
+    }
+
+    & a, & a.goog-te-menu-value {
+      @extend a;
+      // & span { display: none; }
+    }
+
+    // & span[style*=""] {
+    //   display: none;
+    // }
 }

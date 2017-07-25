@@ -1,3 +1,4 @@
+import { Title } from '@angular/platform-browser';
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { Subscription }   from 'rxjs/Subscription';
@@ -18,29 +19,15 @@ export class LibraryComponent implements OnInit {
     private route: ActivatedRoute,
     private _assets: AssetService,
     private _tags: TagsService,
-    private _analytics: AnalyticsService
+    private _analytics: AnalyticsService,
+    private _title: Title
   ) { }
 
+  private loading: boolean = false;
   private subscriptions: Subscription[] = [];
   private selectedBrowseId: string = '';
-  private browseMenuArray: any[] = [
-    {
-      label : 'Collection',
-      id: '103',
-    },
-    {
-      label : 'Classification',
-      id: '250'
-    },
-    {
-      label : 'Geography',
-      id: '260'
-    },
-    {
-      label : 'Teaching Resources',
-      id: '270'
-    }
-  ];
+  private browseMenuArray: any[];
+  private splashImgURL: string = '';
 
   private tagsObj: any = {
     103 : [],
@@ -51,19 +38,52 @@ export class LibraryComponent implements OnInit {
   private descObj: any  = {};
 
   ngOnInit() {
+    // Set browse array
+    this.browseMenuArray = [
+      {
+        label : 'Collection',
+        id: this._assets.getRegionCollection().toString()
+      },
+      {
+        label : 'Classification',
+        id: this._assets.getRegionCollection(250).toString()
+      },
+      {
+        label : 'Geography',
+        id: this._assets.getRegionCollection(260).toString()
+      },
+      {
+        label : 'Teaching Resources',
+        id: this._assets.getRegionCollection(270).toString()
+      }
+    ];
+    // Update based on IDs
+    this.tagsObj[this._assets.getRegionCollection().toString()]
+    this.tagsObj[this._assets.getRegionCollection(250).toString()]
+    this.tagsObj[this._assets.getRegionCollection(260).toString()]
+    this.tagsObj[this._assets.getRegionCollection(270).toString()]
+    // Set page title
+    this._title.setTitle("Artstor | Browse Collections")
+
     if (!this.route.snapshot.params['viewId']) {
-      this.selectedBrowseId = "103";
+      this.selectedBrowseId = this._assets.getRegionCollection().toString();
       this.getTags(this.selectedBrowseId);
+      this.updateSplashImgURL();
     }
 
     this.subscriptions.push(
       this.route.params
       .subscribe((params: Params) => { 
         if(params && params['viewId']){
-            if (this.selectedBrowseId !== params['viewId']){
-              this.getTags(params['viewId']);
+            let adjustedId = params['viewId']
+            if (adjustedId.length < 4) {
+              adjustedId = this._assets.getRegionCollection(params['viewId']).toString()
             }
-            this.selectedBrowseId = params['viewId'];
+            if (this.selectedBrowseId !== adjustedId){
+              this.getTags(adjustedId);
+            }
+            this.selectedBrowseId = adjustedId;
+            this.updateSplashImgURL();
         }
         this.loadDescription(this.selectedBrowseId);
       })
@@ -71,11 +91,28 @@ export class LibraryComponent implements OnInit {
     this._analytics.setPageValues('library', '')
   } // OnInit
 
+  private updateSplashImgURL(): void{
+    if(this.selectedBrowseId === '103'){
+      this.splashImgURL = '/assets/img/collection-splash.png';
+    }
+    else if(this.selectedBrowseId === '250'){
+      this.splashImgURL = '/assets/img/classification-splash.png';
+    }
+    else if(this.selectedBrowseId === '260'){
+      this.splashImgURL = '/assets/img/geography-splash.png';
+    }
+    else{
+      this.splashImgURL = '';
+    }
+  }
+
   private getTags(browseId): void {
     if (!this.tagsObj[browseId] || this.tagsObj[browseId].length < 1) {
+      this.loading = true;
       this._tags.initTags({ type: "library", collectionId: browseId})
       .then((tags) => {
         this.tagsObj[browseId] = tags;
+        this.loading = false;
       })
       .catch((err) => {
         console.error(err);

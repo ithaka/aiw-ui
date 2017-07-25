@@ -20,15 +20,17 @@ import { AppState } from './app.service';
     '../sass/app.scss'
   ],
   template: `
-    <ang-sky-banner *ngIf="showSkyBanner" [textValue]="'SEARCH_SKY_BANNER.MESSAGE' | translate" (closeBanner)="showSkyBanner = false"></ang-sky-banner>
+    <a (click)="findMainContent()" (keydown.enter)="findMainContent()" tabindex="1" class="sr-only sr-only-focusable">Skip to main content</a>
+    <ang-sky-banner *ngIf="showSkyBanner" [textValue]="'BETA_SKY_BANNER.MESSAGE' | translate" (closeBanner)="showSkyBanner = false"></ang-sky-banner>
     <nav-bar></nav-bar>
 
-    <main>
+    <main tabindex="-1">
       <router-outlet></router-outlet>
     </main>
 
     <footer>
     </footer>
+
   `
 })
 export class App {
@@ -63,10 +65,11 @@ export class App {
   }
 
   ngOnInit() {
-    // until told differently, I'll just leave this up for always
-    // if ( document.location.hostname.indexOf('beta.artstor.org') > -1 || document.location.hostname.indexOf('prod.cirrostratus.org') > -1 || document.location.hostname.indexOf('lively.artstor.org') > -1 ) {
-    //   this.showSkyBanner = true
-    // }
+    
   }
 
+  private findMainContent(): void {
+    console.log("finding mainContent")
+    document.getElementById("mainContent").focus()
+  }
 }

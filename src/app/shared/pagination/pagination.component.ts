@@ -7,6 +7,7 @@ import { EventEmitter } from '@angular/common/src/facade/async';
   styleUrls: ['./pagination.component.scss']
 })
 export class PaginationComponent implements OnInit {
+  private pageValueOnKeyPress: number;
   @Input() pageObj: any;
 
   @Output() goToPage: EventEmitter<any> = new EventEmitter();
@@ -14,25 +15,36 @@ export class PaginationComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-
+    // Initialize 'pageValueOnKeyPress' with the pageObj.currentPage 
+    this.pageValueOnKeyPress = this.pageObj.currentPage;
   }
 
   /**
    * pageNumberKeyPress
-   * on keypress of pagination input field - makes sure the user can't enter page number less than 1 or great than the total pages
+   * on keypress of pagination input field - save currentPage value on keypress
    * @param event 
    */
 
   private pageNumberKeyPress(event): boolean{
-    let currentPageNumber = this.pageObj.currentPage ? this.pageObj.currentPage : '';
-    let nextPagenumber = parseInt(currentPageNumber.toString() + event.key);
+    this.pageValueOnKeyPress = this.pageObj.currentPage;
+    return true;
+  }
 
-    if((nextPagenumber < 1) || (nextPagenumber > this.pageObj.totalPages)){
-      event.stopPropagation();
-      return false;
-    }
-    else{
-      return true;
+  /**
+   * pageNumberKeyPress
+   * on keyup of pagination input field - Make sure that the current page is greater than 0 and is not greater than total pages
+   * @param event 
+   */
+  private pageNumberKeyUp(event): boolean{
+    if(this.pageObj.currentPage){  
+      if((this.pageObj.currentPage < 1) || (this.pageObj.currentPage > this.pageObj.totalPages)){
+        this.pageObj.currentPage = this.pageValueOnKeyPress;
+        event.stopPropagation();
+        return false;
+      }
+      else{
+        return true;
+      }
     }
   }
 
