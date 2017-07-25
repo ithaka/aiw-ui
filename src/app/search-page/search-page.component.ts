@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router'
 import { Subscription }   from 'rxjs/Subscription';
 
 import { AssetService } from './../shared/assets.service';
+import { AuthService } from '../shared';
 import { AssetFiltersService } from '../asset-filters/asset-filters.service';
 import { AnalyticsService } from '../analytics.service';
 import { AssetGrid } from './../asset-grid/asset-grid.component';
@@ -28,7 +29,8 @@ export class SearchPage implements OnInit, OnDestroy {
         private _filters: AssetFiltersService, 
         private _router: Router,
         private _analytics: AnalyticsService,
-        private _title: Title
+        private _title: Title,
+        private _auth: AuthService
       ) {
     // this makes the window always render scrolled to the top
     this._router.events.subscribe(() => {
@@ -55,6 +57,12 @@ export class SearchPage implements OnInit, OnDestroy {
         } else {
           this._title.setTitle( 'Artstor' )
           console.log('No search term');
+        }
+
+        // Find feature flags
+        if(params && params['featureFlag']){
+            console.log(params['featureFlag'])
+            this._auth.featureFlags[params['featureFlag']] = true;
         }
       })
     ); 
