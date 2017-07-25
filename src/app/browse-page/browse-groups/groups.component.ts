@@ -87,7 +87,13 @@ export class BrowseGroupsComponent implements OnInit {
         this.loadIGs(this.appliedTags, requestedPage, requestedLevel, query.term)
       })
     )
-    
+
+    // this is only for the search page and won't show in the top-level menu
+    this.browseMenuArray.push({
+      label: 'All',
+      level: 'all'
+    })
+
     /** Here, we push in all of the options for different browse levels the user has access to */
     if (this._auth.getUser() && this._auth.getUser().isLoggedIn) {
       this.browseMenuArray.push({
@@ -113,7 +119,6 @@ export class BrowseGroupsComponent implements OnInit {
       })
     }
 
-    // Mary has edits before we reveal Search
     this.browseMenuArray.push({
       label: 'Search',
       level: 'search'
