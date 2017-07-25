@@ -31,7 +31,6 @@ export class TagsListComponent implements OnInit {
 
   /** Updates the url to contain all of the selected filters */
   private updateUrl(tagList: string[]): void {
-    console.log(this.route.snapshot.queryParams)
     let queryParams: any = Object.assign({}, this.route.snapshot.queryParams)
     if (tagList && tagList.length > 0) {
       queryParams.tags = tagList
