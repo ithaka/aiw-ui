@@ -60,7 +60,7 @@ export class BrowseGroupsComponent implements OnInit {
 
     this.subscriptions.push(
       this.route.params.subscribe((params) => {
-        if (params.view !== (this.selectedBrowseLevel || 'search')) {
+        if (params.view !== (this.selectedBrowseLevel)) {
           this.appliedTags = []
           this.selectedBrowseLevel = params.view
         }
@@ -74,6 +74,7 @@ export class BrowseGroupsComponent implements OnInit {
     /** Every time the url updates, we process the new tags and reload image groups if the tags query param changes */
     this.subscriptions.push(
       this.route.queryParams.subscribe((query) => {
+        // this is only expected to run when searching
         if (query.tags) {
           this.appliedTags = this._tagFilters.processFilterString(query.tags)
         } else {
@@ -85,7 +86,7 @@ export class BrowseGroupsComponent implements OnInit {
         let requestedLevel = query.level
         this.setSearchLevel(requestedLevel, false) // makes sure that the correct level filter is selected even if the user just navigated here from the url
 
-        console.log('loading igs from query params')
+        console.log('loading igs from query params', this.route.snapshot.queryParams)
         this.loadIGs(this.appliedTags, requestedPage, requestedLevel, query.term)
       })
     )
@@ -146,7 +147,7 @@ export class BrowseGroupsComponent implements OnInit {
       }
     })
 
-    level && console.log("setting search level")
+    level && console.log("setting search level. navigating:", !!navigate)
     level && navigate && this.addQueryParams({ level: level })
   }
 
@@ -194,36 +195,42 @@ export class BrowseGroupsComponent implements OnInit {
    */
   private loadIGs(appliedTags: string[], page: number, level?: string, searchTerm ?: string): void {
     console.log("tag length:", appliedTags.length, "level:", level, "term:", searchTerm)
-    // console.log(appliedTags.length === 0 && level === 'search' && !searchTerm)
-    // this makes sure we don't search as soon as the user clicks the search tab, and also triggers some display items on search
-    // we actually want to stop the search if there's not a keyword or a selected filter/level. those will come from the url
-    if (appliedTags.length === 0 && level === 'search' && !searchTerm) {
-      this.firstSearch = false
-      this._tagFilters.setFilters([], [])
-      this.tags = []
-      this.errorObj["search"] = ""
+    // // console.log(appliedTags.length === 0 && level === 'search' && !searchTerm)
+    // // this makes sure we don't search as soon as the user clicks the search tab, and also triggers some display items on search
+    // // we actually want to stop the search if there's not a keyword or a selected filter/level. those will come from the url
+    // if (appliedTags.length === 0 && level === 'search' && !searchTerm) {
+    //   this.firstSearch = false
+    //   this._tagFilters.setFilters([], [])
+    //   this.tags = []
+    //   this.errorObj["search"] = ""
+    //   this.loading = false
+    //   return
+    // }
+
+    // if (level === 'search') { level = null }
+
+
+    // short out the function if the user has just navigated to the search page without query params
+    console.log("about to run shouldSearch")
+    if (!this.shouldSearch(appliedTags, level)) {
       this.loading = false
       return
     }
     
+    this.errorObj[this.selectedBrowseLevel] = ''
     this.loading = true
     let browseLevel: string
 
     // if level is not provided explicitly, here is some logic for determining what it should be - search takes priority, then browse level, default to 'public'
     if (level === 'search') {
-      console.log(1)
       browseLevel = this.getSearchLevel()
-      console.log(browseLevel)
     } else if (!level) {
-      console.log(2)
       browseLevel = this.getSearchLevel() || this.selectedBrowseLevel || 'public'
     } else {
-      console.log(3)
       browseLevel = level
     }
 
     console.log("selected browse level:", browseLevel)
-    this.errorObj[this.selectedBrowseLevel] = ''
 
     this._groups.getAll(browseLevel, this.pagination.pageSize, page, appliedTags, searchTerm)
         .take(1).subscribe(
@@ -259,6 +266,40 @@ export class BrowseGroupsComponent implements OnInit {
   private goToPage(newPageNum: number) {
     console.log('going to new page')
     this.addQueryParams({ page: newPageNum })
+  }
+
+  /**
+   * shouldSearch is where any logic is packaged that determines whether or not to search image groups. Right now,
+   *  the only reason not to search is if the user is on the 'vanilla' search route (they have no tags or levels specified).
+   *  If they get straight to the search page, we don't want to fill it with groups before they've searched anything.
+   * @returns boolean indicating whether or not the search for image groups should continue
+   */
+  private shouldSearch(appliedTags: string[], level: string): boolean {
+    console.log("determining search")
+    // this first part determines whether or not the search should execute
+    let search = false
+    if (appliedTags && appliedTags.length > 0) {
+      console.log("found tags:", appliedTags)
+      search = true
+    }
+    if (level && level !== 'search') {
+      console.log("found level:", level)
+      search = true
+    }
+
+    console.log(this.route.snapshot.queryParams)
+
+    // this second part resets the tags and groups if no search is taking place
+    if (!search) {
+      this._tagFilters.setFilters([], [])
+      this.tags = []
+      this.pagination.currentPage = 1
+      this.pagination.totalPages = 1
+    }
+
+    console.log("shouldSearch:", search)
+
+    return search
   }
 
   private addQueryParams(params: { [key: string]: any }, reset?: boolean) {
