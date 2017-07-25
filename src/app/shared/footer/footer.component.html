@@ -9,6 +9,7 @@
       <span [innerHtml]="'FOOTER.LINKS.PRIVACY' | translate"></span>
       <span [innerHtml]="'FOOTER.LINKS.COPYRIGHT' | translate"></span>
       <span [innerHtml]="'FOOTER.LINKS.SUPPORT' | translate"></span>
+      <div class="translate-flyout" id="google_translate_element"></div>
       
       <!--<a class="link footer-logout" (click)="logout()">Log Out</a>-->
       <a class="link footer-logout" (click)="logout()" *ngIf="user && user.isLoggedIn">Log Out</a>

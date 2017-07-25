@@ -29,15 +29,17 @@ export class ShareIgLinkModal implements OnInit {
   }
 
   createIgLink(ig: ImageGroup): void {
-    let instituionalGrp = false;
+    // Find out if group is owned by user
+    let userOwned = false;
     this.ig.access.forEach((accessObj) => {
-      if((accessObj.entity_identifier == this._auth.getUser().institutionId.toString() && accessObj.entity_type == 200) ){
-        instituionalGrp = true;
+      if((accessObj.entity_identifier == this._auth.getUser().baseProfileId.toString() && accessObj.entity_type == 300) ){
+        userOwned = true;
       }
     });
 
-    // if the group is public, we simply give back the url of the group
-    if (this.ig.public || instituionalGrp) { this.shareLink = ['http://', document.location.host, "/#/group/", ig.id].join("") }
+    // If the group is not owned by the user, we simply give back the url of the group
+    // Only a group owner can generate a token share link
+    if (!userOwned) { this.shareLink = ['http://', document.location.host, "/#/group/", ig.id].join("") }
     else {
       // if the image group is private, we call a service to generate a token, then attach that to the route so the user can share it
       this.serviceStatus.isLoading = true

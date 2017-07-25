@@ -8,6 +8,8 @@ import { AuthService } from './../shared';
 import { LoginService, User } from './login.service';
 import { AnalyticsService } from '../analytics.service';
 
+declare var initPath: string
+
 @Component({
   // The selector is what angular internally uses
   // for `document.querySelectorAll(selector)` in our index.html
@@ -57,6 +59,16 @@ export class Login {
   }
 
   ngOnInit() {
+    // Provide redirects for initPath detected in index.html from inital load
+    if ( initPath && (initPath.indexOf('ViewImages') > -1 || initPath.indexOf('ExternalIV') > -1 ) ) {
+      this.router.navigateByUrl(initPath)
+        .then( result => {
+          // Clear variable to prevent further redirects
+          initPath = null
+          console.log('Redirect to initial path attempt: ' + result)
+        })
+    }
+
     // this handles showing the register link for only ip auth'd users
     this._login.getIpAuth()
       .take(1)

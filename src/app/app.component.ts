@@ -30,6 +30,7 @@ import { AppState } from './app.service';
 
     <footer>
     </footer>
+
   `
 })
 export class App {
@@ -64,15 +65,11 @@ export class App {
   }
 
   ngOnInit() {
-    // until told differently, I'll just leave this up for always
-    // if ( document.location.hostname.indexOf('beta.artstor.org') > -1 || document.location.hostname.indexOf('prod.cirrostratus.org') > -1 || document.location.hostname.indexOf('lively.artstor.org') > -1 ) {
-    //   this.showSkyBanner = true
-    // }
+    
   }
 
   private findMainContent(): void {
     console.log("finding mainContent")
     document.getElementById("mainContent").focus()
   }
-
 }
