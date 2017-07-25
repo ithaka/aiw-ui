@@ -123,3 +123,19 @@
         margin: 10px 20px 20px;
     }
 }
+
+.edit{
+    cursor: pointer;
+    background: rgba(100, 99, 100, 0.25);
+    color: #fff;
+    display: inline-block;
+    padding: 2px;
+    border-radius: 2px;
+    overflow: hidden;
+    margin: 0px 5px;
+    letter-spacing: 0.5px;
+
+    &:hover{
+        background: rgba(100, 99, 100, 0.55);
+    }
+}

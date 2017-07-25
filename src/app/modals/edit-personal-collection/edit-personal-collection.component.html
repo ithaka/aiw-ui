@@ -1,0 +1,84 @@
+<div class="modal fade show">
+  <div [ngClass]="{ 'edit-mode': editMode }" class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 translate class="modal-title">EDIT_PC_MODAL.TITLE</h5>
+        <a translate class="btn btn-link help" href="http://support.artstor.org/?article-category=09-using-your-own-images" target="_blank">EDIT_PC_MODAL.HELP</a>
+        <button (click)="closeModal.emit()" type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        
+        <div class="row no-gutters">
+          
+          <div [ngClass]="{ 'col-md-6': editMode, 'col-md-12': !editMode }" class="thmb-cntnr">
+            <div class="lbl" translate>EDIT_PC_MODAL.EDIT_COL</div>
+
+            <div class="thumb-preview-cntnr">
+              <div class="row no-gutters">
+                <div [ngClass]="{ 'selected': selectedAsset && (selectedAsset.objectId === thumb.objectId) }" class="col-md-4 thumb" *ngFor="let thumb of pcColThumbs">
+                  <img [attr.src]="_assets.makeThumbUrl(thumb.thumbnailImgUrl, 1)" [attr.alt]="thumb.thumbnail1 ? 'Thumbnail of ' + thumb.thumbnail1 : 'No title available'">
+                  <div class="thumb-overlay">
+                    <div class="close-icon" *ngIf="selectedAsset && (selectedAsset.objectId === thumb.objectId)" (click)="clearSelectedAsset()">&times;</div>
+                    <div class="edit-icon" (click)="editAssetMeta( thumb )"><i  [ngClass]="{ 'active': selectedAsset && (selectedAsset.objectId === thumb.objectId) }" class="icon icon-reorder-white"></i></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div translate class="info-lbl">EDIT_PC_MODAL.META_ADD_INFO</div>
+          </div>
+          <div *ngIf="editMode" class="edit-cntnr col-md-6">
+            <label class="asset-hdr">{{ selectedAsset.thumbnail1 }}</label>
+
+            <form id="editAssetMetaForm" [formGroup]="editAssetMetaForm" (ngSubmit)="editMetaFormSubmit(editAssetMetaForm.value)">
+              
+              <div class="form-group">
+                <label translate for="assetCreatorInput">EDIT_PC_MODAL.FORM.CREATOR</label>
+                <input class="form-control" id="assetCreatorInput" type="text" [formControl]="editAssetMetaForm.controls['creator']" tabindex="0"/>
+              </div>
+              <div class="form-group">
+                <label translate for="assetTitleInput">EDIT_PC_MODAL.FORM.TITLE</label>
+                <input class="form-control" id="assetTitleInput" type="text" [formControl]="editAssetMetaForm.controls['title']" tabindex="1"/>
+              </div>
+              <div class="form-group">
+                <label translate for="assetWrkTypInput">EDIT_PC_MODAL.FORM.WRK_TYP</label>
+                <input class="form-control" id="assetWrkTypInput" type="text" [formControl]="editAssetMetaForm.controls['work_type']" tabindex="2"/>
+              </div>
+              <div class="form-group">
+                <label translate for="assetDateInput">EDIT_PC_MODAL.FORM.DATE</label>
+                <input class="form-control" id="assetDateInput" type="text" [formControl]="editAssetMetaForm.controls['date']" tabindex="3"/>
+              </div>
+              <div class="form-group">
+                <label translate for="assetLocInput">EDIT_PC_MODAL.FORM.LOCATION</label>
+                <input class="form-control" id="assetLocInput" type="text" [formControl]="editAssetMetaForm.controls['location']" tabindex="4"/>
+              </div>
+              <div class="form-group">
+                <label translate for="assetMatInput">EDIT_PC_MODAL.FORM.MATERIAL</label>
+                <input class="form-control" id="assetMatInput" type="text" [formControl]="editAssetMetaForm.controls['material']" tabindex="5"/>
+              </div>
+              <div class="form-group">
+                <label translate for="assetDescInput">EDIT_PC_MODAL.FORM.DESCRIPTION</label>
+                <input class="form-control" id="assetDescInput" type="text" [formControl]="editAssetMetaForm.controls['description']" tabindex="6"/>
+              </div>
+              <div class="form-group">
+                <label translate for="assetSubjectInput">EDIT_PC_MODAL.FORM.SUBJECT</label>
+                <input class="form-control" id="assetSubjectInput" type="text" [formControl]="editAssetMetaForm.controls['subject']" tabindex="7"/>
+              </div>
+
+            </form>
+          </div>
+
+      </div>
+
+      <div class="modal-footer">
+        <div class="form-group">
+          <button translate  *ngIf="selectedAsset && selectedAsset.objectId" (click)="clearSelectedAsset()" type="button" class="btn btn-secondary">EDIT_PC_MODAL.CLOSE</button>
+          <button translate class="btn btn-primary" type="button">EDIT_PC_MODAL.SAVE</button>         
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>

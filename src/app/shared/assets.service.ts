@@ -786,7 +786,7 @@ export class AssetService {
      * @param colId id of collection to fetch
      * @returns thumbnails of assets for a collection, and collection information
      */
-    private getCollectionThumbs(colId: string, pageNo?: number, pageSize?: number) {
+    public getCollectionThumbs(colId: string, pageNo?: number, pageSize?: number) {
         let options = new RequestOptions({withCredentials: true});
         let imageSize = 0;
         

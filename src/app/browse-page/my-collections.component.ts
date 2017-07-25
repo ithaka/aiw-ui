@@ -35,7 +35,11 @@ export class MyCollectionsComponent implements OnInit {
   private expandedCategories: any = {};
   private selectedBrowseId: string = '';
   private showUploadImgsModal: boolean = false;
+  private showEditPCModal: boolean = false;
   private uploadPC: boolean = false;
+
+  private pcFeatureFlag: boolean = false;
+  private editTagId: string = '';
 
   // Reference activeTag for description on side
   private activeTag:  Tag;
@@ -52,6 +56,13 @@ export class MyCollectionsComponent implements OnInit {
         if(params && params['viewId']){
             this.selectedBrowseId = params['viewId'];
             // this.loadCategory();
+        }
+
+        if(params && params['pcFeatureFlag']){
+            this.pcFeatureFlag = params['pcFeatureFlag'];
+        }
+        else{
+            this.pcFeatureFlag = false;
         }
       })
     );
@@ -100,7 +111,7 @@ export class MyCollectionsComponent implements OnInit {
           else{
               this.uploadPC = false;
           }
-            
+
           this.loading = false;
 
       })
@@ -108,6 +119,11 @@ export class MyCollectionsComponent implements OnInit {
           console.log('Unable to load User Personal Collections.');
           this.loading = false;
       });
+  }
+
+  private showEditModal(tag): void{
+      this.editTagId = tag.tagId;
+      this.showEditPCModal = true;
   }
 
   toggleInfo(node){

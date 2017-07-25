@@ -9,6 +9,7 @@
         {{tag.title}}
         <!--<i *ngIf="linkRoute.length > 0" id="tagItem{{ tag.tagId }}Open" class="icon icon-open-link icon--tag-button" [routerLink]="[ linkRoute, tag.tagId, { 'name' : cleanTitle(tag.title) } ]"></i>-->
     </a>
+    <span *ngIf="edit" class="edit" (click)="editTag.emit()">Edit</span>
     <div [ngbCollapse]="tag.isCollapsed" *ngIf="tag.description" class="info-cntnr">
         <img *ngIf="tag.thumbnail.length > 0" [src]="_assets.makeThumbUrl(tag.thumbnail)" >
         <div class="desc" [innerHTML]="tag.description"></div>
