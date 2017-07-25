@@ -58,12 +58,19 @@ export class MyCollectionsComponent implements OnInit {
             // this.loadCategory();
         }
 
-        if(params && params['pcFeatureFlag']){
-            this.pcFeatureFlag = params['pcFeatureFlag'];
+        if(params && params['featureFlag']){
+            this._auth.featureFlags[params['featureFlag']] = true;
+            if (this._auth.featureFlags['uploadPC']) {
+                this.pcFeatureFlag = true;
+            }
+            else{
+                this.pcFeatureFlag = false;
+            }
         }
         else{
             this.pcFeatureFlag = false;
         }
+
       })
     );
 
