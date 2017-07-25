@@ -148,7 +148,13 @@ export class BrowseGroupsComponent implements OnInit {
     })
 
     level && console.log("setting search level. navigating:", !!navigate)
-    level && navigate && this.addQueryParams({ level: level })
+    /**
+     * Sometimes setSearchLevel is just used to control which one of the filters is active, such as when the user
+     *  first loads a page. If it's ?level=public, then we need to make that filter active, but do not need to navigate.
+     *  Sometimes we want to navigate though, like if they click a new filter. And finally, level=none is used by the
+     *  'Clear' button in order to reset your search.
+     */
+    level && navigate && this.addQueryParams({ level: level }, level === 'none')
   }
 
   /**
@@ -212,7 +218,7 @@ export class BrowseGroupsComponent implements OnInit {
 
     // short out the function if the user has just navigated to the search page without query params
     console.log("about to run shouldSearch")
-    if (!this.shouldSearch(appliedTags, level)) {
+    if (!this.shouldSearch(appliedTags, level, searchTerm)) {
       this.loading = false
       return
     }
@@ -274,7 +280,7 @@ export class BrowseGroupsComponent implements OnInit {
    *  If they get straight to the search page, we don't want to fill it with groups before they've searched anything.
    * @returns boolean indicating whether or not the search for image groups should continue
    */
-  private shouldSearch(appliedTags: string[], level: string): boolean {
+  private shouldSearch(appliedTags: string[], level: string, term: string): boolean {
     console.log("determining search")
     // this first part determines whether or not the search should execute
     let search = false
@@ -286,6 +292,10 @@ export class BrowseGroupsComponent implements OnInit {
       console.log("found level:", level)
       search = true
     }
+    if (term) {
+      search = true
+    }
+
 
     console.log(this.route.snapshot.queryParams)
 
@@ -309,7 +319,8 @@ export class BrowseGroupsComponent implements OnInit {
     if (reset) {
       queryParams = params
     } else {
-      queryParams = Object.assign(Object.assign({}, this.route.snapshot.params.queryParams), params)
+      console.log(this.route.snapshot.queryParams)
+      queryParams = Object.assign(Object.assign({}, this.route.snapshot.queryParams), params)
     }
 
     this._router.navigate(['/browse','groups', this.selectedBrowseLevel], { queryParams: queryParams })
