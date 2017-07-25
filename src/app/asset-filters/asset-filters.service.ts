@@ -182,8 +182,10 @@ export class AssetFiltersService {
 
 
     public generateDateFacets(dateFacetsArray ?) {
-        if (!dateFacetsArray) {
+        if (!dateFacetsArray && this.availableFilters.date) {
             dateFacetsArray = this.availableFilters.date;
+        } else {
+            dateFacetsArray = []
         }
 
         if(dateFacetsArray.length > 0){

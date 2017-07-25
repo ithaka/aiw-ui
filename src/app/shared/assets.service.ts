@@ -111,9 +111,6 @@ export class AssetService {
     private header = new Headers({ 'Content-Type': 'application/json' }); 
     private defaultOptions = new RequestOptions({ headers: this.header, withCredentials: true });
 
-    // Switch for using Sycamore's New Search interface
-    private newSearch : boolean = false;
-
     // Pagination flag for preserving the select mode while paging through the results
     public paginated: boolean = false;
 
@@ -132,11 +129,6 @@ export class AssetService {
         private _assetSearch: AssetSearchService
     ) {
         this._storage = locker.useDriver(Locker.DRIVERS.LOCAL);
-
-        // Flip switch for Sycamore's New Search
-        if( document.location.hostname.indexOf('ang-ui-sycamore-search.apps.test.cirrostratus.org') > -1 ) {
-            this.newSearch = true;
-        }
     } 
 
     private updateLocalResults(resultObj: any) {
@@ -830,30 +822,30 @@ export class AssetService {
         if (this._auth.featureFlags['solrSearch']) {
             // Solr Search
              this.searchSubscription = this._assetSearch.search(this.urlParams, term, this.activeSort.index)
-            .subscribe(
-                (res) => {
-                    let data = res.json();
-                    data.facets.forEach( (facet, index) => {
-                        this._filters.setAvailable(facet.name, facet.values);
-                    })
-                    // this._filters.setAvailable('artclassification_str', data.classificationFacets);
-                    // if (data && data.collTypeFacets) {
-                    //     this._filters.generateColTypeFacets( data.collTypeFacets );
-                    //     this._filters.generateGeoFilters( data.geographyFacets );
-                    //     this._filters.generateDateFacets( data.dateFacets );
-                    //     this._filters.setAvailable('classification', data.classificationFacets);
-                    // }
-                    // Transform data from SOLR queries
-                    if (data.results) {
-                        data.thumbnails = data.results;
-                    }
-                    data.count = data.total
-                    // Set the allResults object
-                    this.updateLocalResults(data);
-            }, (error) => {
-                    console.error(error)
-                    this.allResultsSource.error(error); 
-            });
+                .subscribe(
+                    (res) => {
+                        let data = res.json();
+                        data.facets.forEach( (facet, index) => {
+                            this._filters.setAvailable(facet.name, facet.values);
+                        })
+                        // this._filters.setAvailable('artclassification_str', data.classificationFacets);
+                        // if (data && data.collTypeFacets) {
+                        //     this._filters.generateColTypeFacets( data.collTypeFacets );
+                        //     this._filters.generateGeoFilters( data.geographyFacets );
+                        //     this._filters.generateDateFacets( data.dateFacets );
+                        //     this._filters.setAvailable('classification', data.classificationFacets);
+                        // }
+                        // Transform data from SOLR queries
+                        if (data.results) {
+                            data.thumbnails = data.results;
+                        }
+                        data.count = data.total
+                        // Set the allResults object
+                        this.updateLocalResults(data);
+                }, (error) => {
+                        console.error(error)
+                        this.allResultsSource.error(error); 
+                });
         } else {
             // Earth Library Search
              this.searchSubscription = this.search(term, this.activeSort.index)
@@ -903,56 +895,6 @@ export class AssetService {
                 // console.error(error, error.status)
             });
         }
-        this.searchSubscription = this._assetSearch.search(this.urlParams, term, this.activeSort.index)
-            .subscribe(
-                (res) => {
-                    let data = res.json();
-                    data.facets.forEach( (facet, index) => {
-                        this._filters.setAvailable(facet.name, facet.values);
-                    })
-                    // this._filters.setAvailable('artclassification_str', data.classificationFacets);
-                    // if (data && data.collTypeFacets) {
-                    //     this._filters.generateColTypeFacets( data.collTypeFacets );
-                    //     this._filters.generateGeoFilters( data.geographyFacets );
-                    //     this._filters.generateDateFacets( data.dateFacets );
-                    //     this._filters.setAvailable('classification', data.classificationFacets);
-                    // }
-                    // Transform data from SOLR queries
-                    if (data.results) {
-                        data.thumbnails = data.results;
-                    }
-                    data.count = data.total
-                    // Set the allResults object
-                    this.updateLocalResults(data);
-            }, (error) => {
-                // as far as I can tell, the ADL services never respond with proper errors
-                // so all errors will be routed through the success channel above
-                // so if there's an error, we can be sure it's not from the services
-                // which is great because Fastly throws errors when searches take longer than 20 seconds
-                // which is common
-                // so here's the flow chart for the fix:
-                // <--------FLOW CHART-------->
-                //  search something -> it takes too long ->
-                //  Fastly throws error and disconnects (w/ 900 status and no Access-Control-Allow-Origin headers,
-                //  so we can't actually tell that we're getting a 900 status, we're mostly guessing) ->
-                //  the search will complete soon and will be cached -> rerun the search and it will work
-                // <-------------------------->
-                // we just recursively call this function until search results load
-                // so, the user never sees an error (woohoo) also, if they refresh it will likely work anyway
-                // ok i'm done
-
-                if (error.status == 0 && this.searchErrorCount < 3) {
-                    this.searchErrorCount++
-                    setTimeout(this.loadSearch(term), 7000)
-                } else {
-                    this.searchErrorCount = 0
-                    console.error(error)
-                    this.allResultsSource.error(error); // .throw(error);
-                }
-                
-                // Pass error down to allResults listeners
-                // console.error(error, error.status)
-            });
     }
     
     /**
@@ -1007,21 +949,9 @@ export class AssetService {
                 geographyIds += filters[i].filterValue;
             }
         }
-        
-        if (this.newSearch === false) {
-            return this.http
-                .get(this._auth.getUrl() + '/search/' + type + '/' + startIndex + '/' + this.urlParams.pageSize + '/' + sortIndex + '?' + 'type=' + type + '&kw=' + keyword + '&origKW=' + keyword + '&geoIds=' + geographyIds + '&clsIds=' + classificationIds + '&collTypes=' + colTypeIds + '&id=' + (collIds.length > 0 ? collIds : 'all') + '&name=All%20Collections&bDate=' + earliestDate + '&eDate=' + latestDate + '&dExact=&order=0&isHistory=false&prGeoId=&tn=1', options);
-        } else {
-            let query = {
-                "limit" : this.urlParams.pageSize,
-                "content_types" : [
-                    "art"
-                ],
-                "query" : "arttitle:" + keyword
-            };
 
-            return this.http.post('//search-service.apps.test.cirrostratus.org/browse/', query, options);
-        }
+        return this.http
+            .get(this._auth.getUrl() + '/search/' + type + '/' + startIndex + '/' + this.urlParams.pageSize + '/' + sortIndex + '?' + 'type=' + type + '&kw=' + keyword + '&origKW=' + keyword + '&geoIds=' + geographyIds + '&clsIds=' + classificationIds + '&collTypes=' + colTypeIds + '&id=' + (collIds.length > 0 ? collIds : 'all') + '&name=All%20Collections&bDate=' + earliestDate + '&eDate=' + latestDate + '&dExact=&order=0&isHistory=false&prGeoId=&tn=1', options);
         
     }
 

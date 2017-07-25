@@ -29,6 +29,7 @@ export class AssetSearchService {
    * @returns       Returns an object with the properties: thumbnails, count, altKey, classificationFacets, geographyFacets, minDate, maxDate, collTypeFacets, dateFacets
    */
   public search(urlParams: any, term: string, sortIndex) {
+    console.log("Running Solr Search...")
     let keyword = term;
     let options = new RequestOptions({
       withCredentials: true
