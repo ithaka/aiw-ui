@@ -86,6 +86,14 @@
       "TITLE_DELETED": "Group was Deleted"
     }
   },
+  "UPLOAD_IMAGES_MODAL": {
+    "TITLE": "Upload Images",
+    "FORMAT_LBL": "JPEG File Format Required",
+    "DROP_TXT": "Drop Files Here",
+    "UPLOAD_LBL": "Upload new media",
+    "SELECT_BUTTON_TXT": "SELECT FILES",
+    "HELP": "Help"
+  },
   "ADD_TO_GROUP_MODAL": {
     "FROM_SELECTED": {
       "TITLE": "Add Images to Group",
@@ -229,7 +237,13 @@
       "DESCRIPTION": "Andy Warhol; Brooklyn Bridge; 1983. Images © The Andy Warhol Foundation for the Visual Arts, Inc. and Andy Warhol artwork © The Andy Warhol Foundation for the Visual Arts, Inc.",
       "LINK": "/#/category/10374058919;name=The%20Andy%20Warhol%20Foundation%20for%20the%20Visual%20Arts%3A%20Oeuvre%20458",
       "IMG_SOURCE": "/assets/img/featured-collection.jpg",
-      "LINK_TITLE": "The Andy Warhol Foundation for the Visual Arts: Oeuvre"
+      "LINK_TITLE": "The Andy Warhol Foundation for the Visual Arts: Oeuvre",
+      "ALT_TEXT": "The Andy Warhol Foundation for the Visual Arts: Oeuvre"
+    },
+    "AD": {
+      "LINK": "http://support.artstor.org/?page_id=37",
+      "IMG_SOURCE": "/assets/img/promo-webinar.jpg",
+      "ALT_TEXT": "Welcome to the new Artstor Digital Library! Check out what's new."
     },
     "QUESTIONS": {
       "HEADING": "Questions",
@@ -239,7 +253,8 @@
       "SURVEY": "Take a survey: Tell us what you think!"
     },
     "LINKS":{
-      "ADVNC_SRCH": "Advanced Search"
+      "ADVNC_SRCH": "Advanced Search",
+      "SKIP_COLLECTIONS": "Skip collections list"
     },
     "ACCESS_PROVIDED_BY": "Your access to Artstor is provided by:"
   },

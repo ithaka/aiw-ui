@@ -76,6 +76,22 @@
     padding: 30px 10px;
 }
 
+.mycol-info{
+    border-left: 1px solid #f0f0f0;
+    padding: 0px 20px;
+
+    .img{
+        text-align: center;
+        margin-bottom: 20px;
+    }
+    .desc{
+        p{
+            font-size: 12px !important;
+            font-family: 'Graphik', Arial, Helvetica, sans-serif !important;
+        }
+    }
+}
+
 .tree .tree-icon{
     cursor: pointer;
     vertical-align: top;
@@ -133,4 +149,48 @@
 }
 .child-cntnr span{
     cursor: pointer;
+}
+
+.add-pc-cntnr{
+    color: #000;
+    font-size: 13px;
+    line-height: 16px;
+    cursor: default;
+    padding: 0px;
+    display: inline-block;
+
+    .icon-cntnr{
+        padding: 2px 7px;
+        display: inline-block;
+        font-size: 13px;
+        vertical-align: top;
+        cursor: pointer;
+
+        i{
+            opacity: 0.5;
+
+            &:hover{
+                opacity: 1;
+            }
+        }
+    }
+
+    a{
+        cursor: pointer;
+        background: #efefef;
+        display: inline-block;
+        padding: 2px;
+        border-radius: 2px;
+        max-height: 19px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        max-width: 90%;
+        color: #444;
+
+        &:hover{
+            text-decoration: none;
+            background: #d6d6d6;
+        }
+    }
 }

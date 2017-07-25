@@ -12,6 +12,7 @@
       <div *ngIf="showLoginPanel" class="login-panel">
         <div class="vertical-center-wrap">
           <div *ngIf="user.isLoggedIn" class="login-panel__status">
+            <h2 class="hidden">Login Panel</h2>
             <div id="navMessageWelcome">Welcome, {{ user.username ? user.username : ''}}</div>
             <div id="navMessageInstitution" *ngIf="institutionObj.shortName || institutionObj.institutionName">Institution: {{ institutionObj.shortName ? institutionObj.shortName : institutionObj.institutionName }}</div>
             <div class="login-panel__links">

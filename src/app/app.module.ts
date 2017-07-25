@@ -29,6 +29,9 @@ import { NgIdleKeepaliveModule } from '@ng-idle/keepalive'; // this includes the
 import { MomentModule } from 'angular2-moment'; // optional, provides moment-style pipes for date formatting
 import {DndModule} from 'ng2-dnd';
 
+// File Uploader
+import { FileUploadModule } from "ng2-file-upload";
+
 // App is our top level component
 import { App } from './app.component';
 import { APP_RESOLVER_PROVIDERS } from './app.resolver';
@@ -60,7 +63,8 @@ import {
   SearchModal, 
   NewIgModal, 
   ShareLinkModal, 
-  DownloadLimitModal, 
+  DownloadLimitModal,
+  UploadImagesModal, 
   AddToGroupModal, 
   DeleteIgModal, 
   NoIgModal, 
@@ -115,6 +119,7 @@ type StoreType = {
   declarations: [
     AccessDeniedModal,
     AccountPage,
+    UploadImagesModal,
     AddToGroupModal,
     AgreeModalComponent,
     App,
@@ -175,6 +180,7 @@ type StoreType = {
     RlTagInputModule,
     Ng2CompleterModule,
     LockerModule,
+    FileUploadModule,
     RouterModule.forRoot(ROUTES, { useHash: true }),
     Angulartics2Module.forRoot([ Angulartics2GoogleAnalytics ]),
     TranslateModule.forRoot({

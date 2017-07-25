@@ -34,6 +34,8 @@ export class MyCollectionsComponent implements OnInit {
   private tags : Tag[] = [];
   private expandedCategories: any = {};
   private selectedBrowseId: string = '';
+  private showUploadImgsModal: boolean = false;
+  private uploadPC: boolean = false;
 
   // Reference activeTag for description on side
   private activeTag:  Tag;
@@ -50,6 +52,13 @@ export class MyCollectionsComponent implements OnInit {
         if(params && params['viewId']){
             this.selectedBrowseId = params['viewId'];
             // this.loadCategory();
+        }
+        if(params && params['featureFlag']){
+            console.log(params['featureFlag'])
+            this._auth.featureFlags[params['featureFlag']] = true;
+            if (this._auth.featureFlags['uploadPC']) {
+                this.uploadPC = true
+            }
         }
       })
     );
@@ -91,6 +100,14 @@ export class MyCollectionsComponent implements OnInit {
                 this.tags.push(privTag);
             }
           }
+
+          if(this.tags.length === 0 || this._auth.featureFlags['uploadPC']){
+              this.uploadPC = true;
+          }
+          else{
+              this.uploadPC = false;
+          }
+            
           this.loading = false;
 
       })

@@ -1,11 +1,12 @@
 <nav-menu></nav-menu>
-<div class="container main-content">
+<div id="mainContent" tabindex="-1" class="container main-content">
+    <h1 class="hidden">Artstor Home Page</h1><!--for accessibility so that page has title-->
     <div class="row">
         <div class="col-sm-4">
             <ang-search></ang-search>
-            <div class="card pt-2">
+            <div id="mainContent" class="card pt-2">
                 <div class="card-header">
-                    <h1>{{ 'HOME.BROWSE.TITLE' | translate }}</h1>
+                    <h2 class="h1">{{ 'HOME.BROWSE.TITLE' | translate }}</h2>
                 </div>
                 <ul class="list-group list-group-flush list-group-clean">
                     <a id="linkBrowseGeography" class="list-group-item" [routerLink]="['/browse','library', {viewId: 260}]">
@@ -39,7 +40,7 @@
                 <div class="list--home-collections" [class.loading]="loaders['instCollections']">
                     <div class="list-group list-group-flush">
                         <a *ngFor="let collection of instCollections" class="list-group-item list-group-item-action" [routerLink]="[ '/collection', collection.collectionid ]">
-                                {{ collection.collectionname }}
+                                <span class="notranslate">{{ collection.collectionname }}</span>
                         </a>
                     </div>
                 </div>
@@ -54,12 +55,13 @@
                 <div class="card-header">
                     <h2>{{ 'HOME.HEADINGS.SSC' | translate }}</h2>
                 </div>
+                <a (click)="featuredCollection.focus()" (keydown.enter)="featuredCollection.focus()" tabindex="0" class="link sr-only sr-only-focusable">{{ 'HOME.LINKS.SKIP_COLLECTIONS' | translate }}</a>
                 <div class="list--home-collections" [class.loading]="loaders['collections']">
-                    <div class="list-group list-group-flush">
-                        <a *ngFor="let collection of collections" class="list-group-item list-group-item-action" [routerLink]="[ '/collection', collection.collectionid ]">
-                            {{ collection.collectionname }}
-                        </a>
-                    </div>
+                    <ul class="list-group list-group-flush">
+                        <li *ngFor="let collection of collections" class="list-group-item list-group-item-action"><a [routerLink]="[ '/collection', collection.collectionid ]">
+                            <span class="notranslate">{{ collection.collectionname }}</span>
+                        </a></li>
+                    </ul>
                 </div>
                 <div *ngIf="errors.collections" class="card-block">
                     <div id="errorCollectionsLoading" class="alert alert-warning" role="alert">
@@ -69,8 +71,8 @@
             </div>
         </div>
         <div class="col-sm-5">
-            <a id="featuredCollectionLink" class="card featured-card" [attr.href]=" 'HOME.FEATURED.LINK' | translate "> 
-                <img class="card-img-top no-stretch" [attr.src]="'HOME.FEATURED.IMG_SOURCE' | translate" [attr.alt]="'HOME.FEATURED.LINK_TITLE' | translate" [attr.title]="'HOME.FEATURED.LINK_TITLE' | translate">
+            <a #featuredCollection id="featuredCollectionLink" class="card featured-card" [attr.href]=" 'HOME.FEATURED.LINK' | translate "> 
+                <img class="card-img-top no-stretch" [attr.src]="'HOME.FEATURED.IMG_SOURCE' | translate" [attr.alt]="'HOME.FEATURED.ALT_TEXT' | translate" [attr.title]="'HOME.FEATURED.LINK_TITLE' | translate">
                 <div class="card-body pt-1">
                     <label style="margin-bottom:0px;">{{ 'HOME.FEATURED.HEADING' | translate }}</label>
                     <p style="margin-bottom:6px;">{{ 'HOME.FEATURED.SUBHEADING' | translate }}</p>
@@ -91,8 +93,8 @@
             </div>
         </div>
         <div class="col-sm-3">
-            <a id="imageAdSpaceLink" class="card hidden-xs-down" href="http://support.artstor.org/?page_id=37" target="_blank">
-                <img class="card-img no-stretch" src="/assets/img/promo-webinar.jpg" alt="Try a webinar!">
+            <a id="imageAdSpaceLink" class="card hidden-xs-down" [attr.href]=" 'HOME.AD.LINK' | translate " target="_blank">
+                <img class="card-img no-stretch" [attr.src]="'HOME.AD.IMG_SOURCE' | translate" [attr.alt]="'HOME.AD.ALT_TEXT' | translate">
             </a>
             <div class="card pt-4">
                 <div class="card-header">
