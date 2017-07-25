@@ -83,7 +83,7 @@ export class BrowseGroupsComponent implements OnInit {
         let requestedPage = Number(query.page) || 1
         if (requestedPage < 1) { return this.goToPage(1) } // STOP THEM if they're trying to enter a negative number
         let requestedLevel = query.level
-        // requestedLevel && this.addQueryParams(requestedLevel, true)
+        this.setSearchLevel(requestedLevel, false) // makes sure that the correct level filter is selected even if the user just navigated here from the url
 
         console.log('loading igs from query params')
         this.loadIGs(this.appliedTags, requestedPage, requestedLevel, query.term)
@@ -137,7 +137,7 @@ export class BrowseGroupsComponent implements OnInit {
    * Makes sure that only one search filter can be selected (may change later if we can add multiple levels to search)
    * @param level The level param you want to search groups with
    */
-  private setSearchLevel(level: string, quiet?: boolean): void {
+  private setSearchLevel(level: string, navigate?: boolean): void {
     this.browseMenuArray.forEach((filter) => {
       if (filter.level !== level) {
         filter.selected = false
@@ -147,7 +147,7 @@ export class BrowseGroupsComponent implements OnInit {
     })
 
     level && console.log("setting search level")
-    level && !quiet && this.addQueryParams({ level: level })
+    level && navigate && this.addQueryParams({ level: level })
   }
 
   /**
