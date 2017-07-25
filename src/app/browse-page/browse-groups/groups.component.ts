@@ -47,10 +47,7 @@ export class BrowseGroupsComponent implements OnInit {
 
   private selectedBrowseLevel: string = 'public'
   private browseMenuArray: { label: string, level: string, selected ?: boolean }[] = []
-
-  // the firstSearch boolean controls whether or not the search is executed right when the user hits the search page
-  // if they don't have any special conditions (tags, search terms, levels, etc...) then we don't want to let them search at all
-  private firstSearch: boolean = true
+  private showSearchPrompt: boolean = false
 
   private errorObj: any = {}
   
@@ -307,6 +304,9 @@ export class BrowseGroupsComponent implements OnInit {
       this.tags = []
       this.pagination.currentPage = 1
       this.pagination.totalPages = 1
+      this.showSearchPrompt = true
+    } else {
+      this.showSearchPrompt = false
     }
 
     console.log("shouldSearch:", search)

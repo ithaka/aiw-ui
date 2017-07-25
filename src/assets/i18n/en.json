@@ -174,7 +174,7 @@
       "NO_GROUPS_COLLECTIONS_HEADING": "No Groups Found",
       "NO_PRIVATE_GROUPS_COLLECTIONS_PROMPT": "<p>You haven't made any private groups yet. Learn more about <a href='http://support.artstor.org/?article=create-and-manage-image-groups' class='link'>groups</a>.</p>",
       "NO_INSTITUTIONAL_GROUPS_COLLECTIONS_PROMPT": "<p>You haven't made any institutional groups yet. Learn more about <a href='http://support.artstor.org/?article=create-and-manage-image-groups' class='link'>groups</a>.</p>",
-      "NO_SEARCH_RESULTS_HEADING": "Enter a keyword to begin a search"
+      "SEARCH_PROMPT": "Enter a keyword or select a filter to begin a search"
     }
   },
   "FOOTER": {
