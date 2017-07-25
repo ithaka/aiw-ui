@@ -154,7 +154,9 @@ export class BrowseGroupsComponent implements OnInit {
      *  Sometimes we want to navigate though, like if they click a new filter. And finally, level=none is used by the
      *  'Clear' button in order to reset your search.
      */
-    level && navigate && this.addQueryParams({ level: level }, level === 'none')
+    if (level && navigate) {
+      this.addQueryParams(level === 'none' ? {} : { level: level }, true)
+    }
   }
 
   /**
@@ -315,18 +317,20 @@ export class BrowseGroupsComponent implements OnInit {
   /**
    * Allows direct modification of the url's query parameters and creates a navigation event
    * @param params the parameters to add to the url (if duplicate parameters already in url, this will overwrite them)
-   * @param reset allows resetting of queryParams to empty object
+   * @param reset allows resetting of queryParams to empty object plus whatever params you pass
    */
   private addQueryParams(params: { [key: string]: any }, reset?: boolean) {
     console.log("adding query params")
 
-    let queryParams
+    let baseParams
     if (reset) {
-      queryParams = {}
+      baseParams = {}
     } else {
-      console.log(this.route.snapshot.queryParams)
-      queryParams = Object.assign(Object.assign({}, this.route.snapshot.queryParams), params)
+      baseParams = Object.assign({}, this.route.snapshot.queryParams)
     }
+
+    console.log(this.route.snapshot.queryParams)
+    let queryParams = Object.assign(baseParams, params)
 
     this._router.navigate(['/browse','groups', this.selectedBrowseLevel], { queryParams: queryParams })
   }
