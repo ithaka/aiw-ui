@@ -6,6 +6,7 @@ import { Angulartics2 } from 'angulartics2/dist'
 import { AssetService } from '../shared/assets.service'
 import { AssetFiltersService } from '../asset-filters/asset-filters.service'
 import { AnalyticsService } from '../analytics.service'
+import { AuthService } from "app/shared";
 
 declare var _satellite: any
 
@@ -67,7 +68,8 @@ export class AssetFilters {
     private route: ActivatedRoute, 
     private router: Router,
     private _analytics: AnalyticsService,
-    private angulartics: Angulartics2
+    private angulartics: Angulartics2,
+    private _auth: AuthService
   ) {
   }
 
@@ -85,6 +87,11 @@ export class AssetFilters {
 
         // When params are adjusted, applied filters need to be cleared
         this._filters.clearApplied();
+
+        // Find feature flags
+        if(routeParams && routeParams['featureFlag']){
+            this._auth.featureFlags[routeParams['featureFlag']] = true;
+        }
 
         for (let paramName in routeParams) {
             if (this._filters.isFilterGroup(paramName)) {
