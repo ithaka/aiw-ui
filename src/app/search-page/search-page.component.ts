@@ -43,6 +43,7 @@ export class SearchPage implements OnInit, OnDestroy {
     this.subscriptions.push(
       this.route.params.subscribe( (routeParams) => {
         this._filters.clearApplied();
+        this._filters.clearAvailable();
         let params = Object.assign({}, routeParams);
         // Find feature flags (needs to be checked before running queryAll)
         if(params && params['featureFlag']){

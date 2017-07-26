@@ -78,6 +78,13 @@ export class AssetFiltersService {
         }
     }
 
+    public clearAvailable(isQuiet ?: boolean):void {
+        this.availableFilters = [];
+        if (!isQuiet) {
+            this.availableSource.next(this.availableFilters);
+        }
+    }
+
     /**
      * Returns a boolean if unable to add filters to available filters
      */

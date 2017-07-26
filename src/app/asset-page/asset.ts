@@ -129,7 +129,7 @@ export class Asset {
               let asset = res['results'][0]
 
               // New Search
-              if(asset.id) {
+              if(asset.artstorid) {
                 this.loadMediaMetaData()
 
                   for (let i =0; i < this.metadataFields.length; i++) {

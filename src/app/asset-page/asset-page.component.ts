@@ -91,13 +91,19 @@ export class AssetPage implements OnInit, OnDestroy {
         this.subscriptions.push(
             this.route.params.subscribe((routeParams) => {
                 this.assets = []
+                let assetIdProperty = this._auth.featureFlags[routeParams['featureFlag']]? 'artstorid' : 'objectId'
+
+                // Find feature flags
+                if(routeParams && routeParams['featureFlag']){
+                    this._auth.featureFlags[routeParams['featureFlag']] = true;
+                }
 
                 if (routeParams['encryptedId']) {
                     this.hasExternalAccess = true
                     this._assets.decryptToken(routeParams['encryptedId'])
                         .take(1)
                         .subscribe((asset) => {
-                            this.renderPrimaryAsset(new Asset(asset.objectId, this._assets, this._auth, asset))
+                            this.renderPrimaryAsset(new Asset(asset[assetIdProperty], this._assets, this._auth, asset))
                         }, (err) => {
                             console.error(err)
                             this._router.navigate(['/nocontent'])

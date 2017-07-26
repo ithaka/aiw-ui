@@ -465,6 +465,17 @@ export class AssetGrid implements OnInit, OnDestroy {
     }
   }
 
+  /**
+   * Returns asset path for linking
+   */
+  private getAssetPath(asset): string[] {
+    if (this._auth.featureFlags['solrSearch']) {
+      return this.editMode ? ['./'] : ['/asset', asset.artstorid]
+    } else {
+      return this.editMode ? ['./'] : ['/asset', asset.objectId]
+    }
+  }
+
 
   // private updateSrchInRes(){
   //   // console.log(this.searchInResults);
