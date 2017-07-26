@@ -46,11 +46,8 @@ export class BrowseGroupsComponent implements OnInit {
   private appliedTags: string[] = []
 
   private selectedBrowseLevel: string = 'public'
-  private browseMenuArray: { label: string, level: string }[] = []
-
-  private foldersObj: any = {}
-  private tagsObj: any = {}
-  private pageObj: any = {}
+  private browseMenuArray: { label: string, level: string, selected ?: boolean }[] = []
+  private showSearchPrompt: boolean = false
 
   private errorObj: any = {}
   
@@ -58,41 +55,43 @@ export class BrowseGroupsComponent implements OnInit {
     // set the title
     this._title.setTitle("Artstor | Browse Groups")
 
-    // Load IGs only when the navigation has ended & 'selectedBrowseLevel' + 'currentPage' + 'appliedTags' have been set
-    this.subscriptions.push(
-      this._router.events.subscribe( (event) => {
-        if(event instanceof NavigationEnd) {
-          this.loadIGs(this.appliedTags, this.pagination.currentPage, this.selectedBrowseLevel);
-        }
-      })
-    )
-
     this.subscriptions.push(
       this.route.params.subscribe((params) => {
-        if (params.view != this.selectedBrowseLevel) {
-          this.pagination.currentPage = 1
+        if (params.view !== (this.selectedBrowseLevel)) {
           this.appliedTags = []
-          // this.loadIGs([], 1, params.view)
           this.selectedBrowseLevel = params.view
         }
+
+        this.loadIGs(this.appliedTags, 1, this.selectedBrowseLevel, this.route.snapshot.queryParams.term) 
+        
       })
     )
 
     /** Every time the url updates, we process the new tags and reload image groups if the tags query param changes */
     this.subscriptions.push(
       this.route.queryParams.subscribe((query) => {
+        // this is only expected to run when searching
         if (query.tags) {
           this.appliedTags = this._tagFilters.processFilterString(query.tags)
-          this.pagination.currentPage = 1
-          // this.loadIGs(this.appliedTags, 1)
         } else {
           this.appliedTags = []
-          this.pagination.currentPage = 1
-          // this.loadIGs([], 1)
         }
+
+        let requestedPage = Number(query.page) || 1
+        if (requestedPage < 1) { return this.goToPage(1) } // STOP THEM if they're trying to enter a negative number
+        let requestedLevel = query.level
+        this.setSearchLevel(requestedLevel, false) // makes sure that the correct level filter is selected even if the user just navigated here from the url
+
+        this.loadIGs(this.appliedTags, requestedPage, requestedLevel, query.term)
       })
     )
-    
+
+    // this is only for the search page and won't show in the top-level menu
+    this.browseMenuArray.push({
+      label: 'All',
+      level: 'all'
+    })
+
     /** Here, we push in all of the options for different browse levels the user has access to */
     if (this._auth.getUser() && this._auth.getUser().isLoggedIn) {
       this.browseMenuArray.push({
@@ -118,11 +117,12 @@ export class BrowseGroupsComponent implements OnInit {
       })
     }
 
-    // Mary has edits before we reveal Search
-    // this.browseMenuArray.push({
-    //   label: 'Search',
-    //   level: 'all'
-    // })
+    this.browseMenuArray.push({
+      label: 'Search',
+      level: 'search'
+    })
+
+    this.setSearchLevel(this.route.snapshot.queryParams.level)
   
     this._analytics.setPageValues('groups', '')
   } // OnInit
@@ -132,16 +132,46 @@ export class BrowseGroupsComponent implements OnInit {
   }
 
   /**
-   * Changes menu between ADL, University Collections, Open Collections, etc...
-   * @param level Level of desired menu from colMenuArray enum
+   * Makes sure that only one search filter can be selected (may change later if we can add multiple levels to search)
+   * @param level The level param you want to search groups with
    */
-  selectBrowseOpt ( level: string ){
-    this.loading = true;
-    this.selectedBrowseLevel = level
-    this.pagination.currentPage = 1
-    this.appliedTags = [] 
-    this.addRouteParam('view', level, true)
-    this.loadIGs([], 1)
+  private setSearchLevel(level: string, navigate?: boolean): void {
+    this.browseMenuArray.forEach((filter) => {
+      if (filter.level !== level) {
+        filter.selected = false
+      } else {
+        filter.selected = true
+      }
+    })
+
+    /**
+     * Sometimes setSearchLevel is just used to control which one of the filters is active, such as when the user
+     *  first loads a page. If it's ?level=public, then we need to make that filter active, but do not need to navigate.
+     *  Sometimes we want to navigate though, like if they click a new filter. And finally, level=none is used by the
+     *  'Clear' button in order to reset your search.
+     */
+    if (level && navigate) {
+      this.addQueryParams(level === 'none' ? {} : { level: level }, true)
+    }
+  }
+
+  /**
+   * Getter for the selected search level
+   * @returns The currently selected search level, defaulted to 'all
+   */
+  private getSearchLevel(): string {
+    // return undefined if search isn't even selected
+    if (this.route.snapshot.params.view !== 'search') {
+      return
+    }
+
+    let selectedLevel: string
+    this.browseMenuArray.forEach((filter) => {
+      if (filter.selected) {
+        selectedLevel = filter.level
+      }
+    })
+    return selectedLevel || 'all' // default to 'all'
   }
 
   /**
@@ -166,10 +196,21 @@ export class BrowseGroupsComponent implements OnInit {
    * @param level The query param for the groups call that indicates what share permissions the user has
    */
   private loadIGs(appliedTags: string[], page: number, level?: string, searchTerm ?: string): void {
+    // short out the function if the user has just navigated to the search page without query params
+    if (!this.shouldSearch(appliedTags, level, searchTerm)) {
+      this.loading = false
+      return
+    }
+    
+    this.errorObj[this.selectedBrowseLevel] = ''
     this.loading = true
     let browseLevel: string
-    if (!level) {
-      browseLevel = this.selectedBrowseLevel || 'public'
+
+    // if level is not provided explicitly, here is some logic for determining what it should be - search takes priority, then browse level, default to 'public'
+    if (level === 'search') {
+      browseLevel = this.getSearchLevel()
+    } else if (!level) {
+      browseLevel = this.getSearchLevel() || this.selectedBrowseLevel || 'public'
     } else {
       browseLevel = level
     }
@@ -179,9 +220,17 @@ export class BrowseGroupsComponent implements OnInit {
           (data)  => {
             this.pagination.currentPage = page
             this.pagination.totalPages = Math.ceil(data.total/this.pagination.pageSize) // update pagination, which is injected into pagination component
+            if (this.pagination.currentPage > this.pagination.totalPages && data.total > 0) {
+              return this.goToPage(this.pagination.totalPages) // go to the last results page if they try to navigate to a page that is more than results
+            }
             this._tagFilters.setFilters(data.tags, appliedTags) // give the tag service the new data
             this.tags = this.createGroupTags(data.groups) // save the image groups for display
             this.loading = false
+
+            // show them the search error
+            if (data.total === 0 && this.route.snapshot.params.view === 'search') {
+              this.errorObj['search'] = 'No search results found'
+            }
           },
           (error) => {
             this._tagFilters.setFilters([], appliedTags)
@@ -197,33 +246,56 @@ export class BrowseGroupsComponent implements OnInit {
    * @param newPageNum The page number you wish to navigate to
    */
   private goToPage(newPageNum: number) {
-    this.pagination.currentPage = newPageNum
-    this.loadIGs(this.appliedTags, newPageNum)
+    this.addQueryParams({ page: newPageNum })
   }
 
-    /**
-   * Adds a parameter to the route and navigates to new route
-   * @param key Parameter you want added to route (as matrix param)
-   * @param value The value of the parameter
+  /**
+   * shouldSearch is where any logic is packaged that determines whether or not to search image groups. Right now,
+   *  the only reason not to search is if the user is on the 'vanilla' search route (they have no tags or levels specified).
+   *  If they get straight to the search page, we don't want to fill it with groups before they've searched anything.
+   * @returns boolean indicating whether or not the search for image groups should continue
    */
-  private addRouteParam(key: string, value: any, resetTags?: boolean) {
-    let queryParams: Params = Object.assign({}, this.route.snapshot.queryParams)
+  private shouldSearch(appliedTags: string[], level: string, term: string): boolean {
+    // this first part determines whether or not the search should execute
+    let search = false
+    if (appliedTags && appliedTags.length > 0) {
+      search = true
+    }
+    if (level && level !== 'search') {
+      search = true
+    }
+    if (term) {
+      search = true
+    }
 
-    if(value){
-      queryParams[key] = value;
-    }
-    else{
-      delete queryParams[key];
+    // this second part resets the tags and groups if no search is taking place
+    if (!search) {
+      this._tagFilters.setFilters([], [])
+      this.tags = []
+      this.pagination.currentPage = 1
+      this.pagination.totalPages = 1
+      this.showSearchPrompt = true
+    } else {
+      this.showSearchPrompt = false
     }
 
-    if(queryParams['tags'] && resetTags){
-      delete queryParams['tags']; 
-    }
-    this._router.navigate(['/browse','groups'], { queryParams: queryParams })
+    return search
   }
 
-  // called when search is called
-  private search(term: string) {
-    this.loadIGs([], 1, null, term)
+  /**
+   * Allows direct modification of the url's query parameters and creates a navigation event
+   * @param params the parameters to add to the url (if duplicate parameters already in url, this will overwrite them)
+   * @param reset allows resetting of queryParams to empty object plus whatever params you pass, instead of keeping old params
+   */
+  private addQueryParams(params: { [key: string]: any }, reset?: boolean) {
+    let baseParams
+    if (reset) {
+      baseParams = {}
+    } else {
+      baseParams = Object.assign({}, this.route.snapshot.queryParams)
+    }
+    let queryParams = Object.assign(baseParams, params)
+
+    this._router.navigate(['/browse','groups', this.selectedBrowseLevel], { queryParams: queryParams })
   }
 }
