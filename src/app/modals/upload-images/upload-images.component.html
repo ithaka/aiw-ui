@@ -14,9 +14,9 @@
               <div class="inner-wrapper">
                 <h3 translate>UPLOAD_IMAGES_MODAL.DROP_TXT</h3>
                 <button translate type="button" class="btn btn-primary file-select-btn" (click)="file.click()">UPLOAD_IMAGES_MODAL.SELECT_BUTTON_TXT</button>
-                <input type="file" ng2FileSelect [uploader]="uploader" #file />
+                <input type="file" accept=".jpg,.jpeg" multiple ng2FileSelect [uploader]="uploader" #file />
                 <div class="file-name" >
-                  <div *ngIf="uploader.queue.length > 0">{{ uploader.queue[0].file.name }}</div>
+                  <div *ngFor="let fileObj of uploader.queue">{{ fileObj.file.name }}</div>
                   <div *ngIf="!typeValid" class="error-msg">Invalid file format</div>
                 </div>
               </div>

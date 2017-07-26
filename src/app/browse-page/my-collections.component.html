@@ -4,8 +4,8 @@
 <div class="row">
     <div class="col-md-6">
         <div class="tree">
-            <ang-tag *ngFor="let tag of tags" [tag]="tag"></ang-tag>
-            <div *ngIf="uploadPC" class="add-pc-cntnr" (click)="showUploadImgsModal = true"><div class="icon-cntnr"><i class="icon absolute-left icon-add"></i></div><a>My Personal Collections</a></div>
+            <ang-tag *ngFor="let tag of tags" [tag]="tag" [edit]="pcFeatureFlag" (editTag)="showEditModal(tag)"></ang-tag>
+            <div *ngIf="(tags.length === 0) && pcFeatureFlag" class="add-pc-cntnr" (click)="showUploadImgsModal = true"><div class="icon-cntnr"><i class="icon absolute-left icon-add"></i></div><a>My Personal Collections</a></div>
         </div>
     </div>
     <div class="col-md-6">
@@ -21,3 +21,4 @@
     <i class="icon-lg icon-overlay--top icon-loading-large"></i>
 </div>
 <ang-upload-images *ngIf="showUploadImgsModal" (closeModal)="showUploadImgsModal = false"></ang-upload-images>
+<ang-edit-personal-collection *ngIf="showEditPCModal" (closeModal)="showEditPCModal = false" [colId]="editTagId"></ang-edit-personal-collection>

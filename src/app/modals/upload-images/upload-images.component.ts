@@ -28,11 +28,11 @@ export class UploadImagesModal implements OnInit, OnDestroy {
 
   ngOnInit() {
 
-    this.uploader.onAfterAddingFile = (item) => {
-      if(this.uploader.queue.length > 1){
-        this.uploader.queue[0].remove();
-      }
-    };
+    // this.uploader.onAfterAddingFile = (item) => {
+    //   if(this.uploader.queue.length > 1){
+    //     this.uploader.queue[0].remove();
+    //   }
+    // };
 
     this.uploader.onWhenAddingFileFailed = (item:FileLikeObject, filter:any, options:any) => {
       this.uploader.clearQueue(); 
