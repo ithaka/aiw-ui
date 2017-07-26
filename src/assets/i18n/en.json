@@ -94,6 +94,24 @@
     "SELECT_BUTTON_TXT": "SELECT FILES",
     "HELP": "Help"
   },
+  "EDIT_PC_MODAL": {
+    "TITLE": "Personal Collection",
+    "EDIT_COL": "Edit Collection",
+    "META_ADD_INFO": "Metadata can be added by clicking on the thumbnail image, or from the Personal Collection Administration dialog and image page.",
+    "HELP": "Help",
+    "CLOSE": "Close",
+    "SAVE": "Save",
+    "FORM": {
+      "TITLE": "Title",
+      "CREATOR": "Creator",
+      "WRK_TYP": "Work Type",
+      "DATE": "Date",
+      "LOCATION": "Location",
+      "MATERIAL": "Material",
+      "DESCRIPTION": "Description",
+      "SUBJECT": "Subject"
+    }
+  },
   "ADD_TO_GROUP_MODAL": {
     "FROM_SELECTED": {
       "TITLE": "Add Images to Group",

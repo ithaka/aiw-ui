@@ -35,7 +35,11 @@ export class MyCollectionsComponent implements OnInit {
   private expandedCategories: any = {};
   private selectedBrowseId: string = '';
   private showUploadImgsModal: boolean = false;
-  private uploadPC: boolean = false;
+  private showEditPCModal: boolean = false;
+//   private uploadPC: boolean = false;
+
+  private pcFeatureFlag: boolean = false;
+  private editTagId: string = '';
 
   // Reference activeTag for description on side
   private activeTag:  Tag;
@@ -53,13 +57,20 @@ export class MyCollectionsComponent implements OnInit {
             this.selectedBrowseId = params['viewId'];
             // this.loadCategory();
         }
+
         if(params && params['featureFlag']){
-            console.log(params['featureFlag'])
             this._auth.featureFlags[params['featureFlag']] = true;
             if (this._auth.featureFlags['uploadPC']) {
-                this.uploadPC = true
+                this.pcFeatureFlag = true;
+            }
+            else{
+                this.pcFeatureFlag = false;
             }
         }
+        else{
+            this.pcFeatureFlag = false;
+        }
+
       })
     );
 
@@ -101,13 +112,13 @@ export class MyCollectionsComponent implements OnInit {
             }
           }
 
-          if(this.tags.length === 0 || this._auth.featureFlags['uploadPC']){
-              this.uploadPC = true;
-          }
-          else{
-              this.uploadPC = false;
-          }
-            
+        //   if(this.tags.length === 0){
+        //       this.uploadPC = true;
+        //   }
+        //   else{
+        //       this.uploadPC = false;
+        //   }
+
           this.loading = false;
 
       })
@@ -115,6 +126,11 @@ export class MyCollectionsComponent implements OnInit {
           console.log('Unable to load User Personal Collections.');
           this.loading = false;
       });
+  }
+
+  private showEditModal(tag): void{
+      this.editTagId = tag.tagId;
+      this.showEditPCModal = true;
   }
 
   toggleInfo(node){

@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 
 import { AssetService } from '../../shared/assets.service';
 import { TagsService } from '../tags.service';
@@ -13,6 +13,9 @@ export class TagComponent {
 
   @Input() public tag: Tag;
   @Input() public link: boolean;
+
+  @Input() private edit: boolean;
+  @Output() editTag: EventEmitter<any> = new EventEmitter();
 
   private showAsFolder: boolean;
   public linkRoute: string = "";
