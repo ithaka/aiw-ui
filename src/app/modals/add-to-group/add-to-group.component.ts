@@ -27,7 +27,8 @@ export class AddToGroupModal implements OnInit, OnDestroy {
 
   private serviceResponse: {
     success?: boolean,
-    failure?: boolean
+    failure?: boolean,
+    tooManyAssets?: boolean
   } = {};
 
   private dataService: any;
@@ -106,16 +107,22 @@ export class AddToGroupModal implements OnInit, OnDestroy {
           putGroup.items.push(asset.objectId);
         }
       }
-    });
+    })
 
-    this._analytics.directCall('save_selections_existing_img_group');
+    // throw an error if the image group is going to be larger than 1000 images
+    //  otherwise the server will do that when we call it
+    if (putGroup.items && putGroup.items.length > 1000) {
+      return this.serviceResponse.tooManyAssets = true
+    }
 
+    this._analytics.directCall('save_selections_existing_img_group')
+
+    // go get the group from the server
     this._group.get(this.selectedIg.id)
       .toPromise()
-      .then((data) => { return this.extractData(data); })
+      .then((data) => { return this.extractData(data) })
       .then((data) => { 
-        console.log(data);
-        data.items = putGroup.items;
+        data.items = putGroup.items
 
         this._group.update(data)
           .take(1)
