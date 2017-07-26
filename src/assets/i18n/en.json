@@ -294,7 +294,8 @@
   },
   "FILTERS" : {
     "artcollectiontitle_str" : "Collection",
-    "artclassification_str" : "Classification"
+    "artclassification_str" : "Classification",
+    "geography" : "Geography"
   },
   "FIELD" : {
     "artclassification" : "Classification", 

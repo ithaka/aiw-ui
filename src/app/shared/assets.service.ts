@@ -817,7 +817,7 @@ export class AssetService {
         if (this.searchSubscription && this.searchSubscription.hasOwnProperty('unsubscribe')) {
             this.searchSubscription.unsubscribe();
         }
-
+        console.log(this._auth.featureFlags)
         // Subscribe to most recent search
         if (this._auth.featureFlags['solrSearch']) {
             // Solr Search
@@ -847,6 +847,7 @@ export class AssetService {
                         this.allResultsSource.error(error); 
                 });
         } else {
+            console.log("SEARCH EARTH LIBRARY")
             // Earth Library Search
              this.searchSubscription = this.search(term, this.activeSort.index)
             .subscribe(

@@ -112,7 +112,8 @@ export class AssetFilters {
     this.subscriptions.push(
       this._filters.available$.subscribe(
         filters => { 
-          this.availableFilters = filters; 
+          this.availableFilters = filters;
+          console.log(this.availableFilters)
         }
       )
     );

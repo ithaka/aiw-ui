@@ -17,7 +17,7 @@
     </div>
 
     <!--Legacy Search Filters-->
-    <div class="filter-group">
+    <div *ngIf="!_auth.featureFlags['solrSearch']" class="filter-group">
         <span class="filter-group__label">
             <h3>Collection Type <a id="buttonCollectionTypeClear" tabindex="" class="link--accent small" [ngClass]="{ 'disable': !hasAppliedFilters('collTypes') }" (click)="clearAllFilterGroup('collTypes')">Clear</a></h3>
         </span>
@@ -28,7 +28,7 @@
         </button>
     </div>
 
-    <div class="filter-group">
+    <div *ngIf="!_auth.featureFlags['solrSearch']" class="filter-group">
         <span class="filter-group__label">
                 <h3>Classification <a id="filterClassificationClear" tabindex="" class="link--accent small" [ngClass]="{ 'disable': !hasAppliedFilters('classification') }" (click)="clearAllFilterGroup('classification')">Clear</a></h3>
             </span>

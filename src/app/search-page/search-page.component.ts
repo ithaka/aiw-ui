@@ -44,7 +44,11 @@ export class SearchPage implements OnInit, OnDestroy {
       this.route.params.subscribe( (routeParams) => {
         this._filters.clearApplied();
         let params = Object.assign({}, routeParams);
-        
+        // Find feature flags (needs to be checked before running queryAll)
+        if(params && params['featureFlag']){
+            console.log(params['featureFlag'])
+            this._auth.featureFlags[params['featureFlag']] = true;
+        }
         // If a page number isn't set, reset to page 1!
         if (!params['currentPage']){
           params['currentPage'] = 1;
@@ -57,12 +61,6 @@ export class SearchPage implements OnInit, OnDestroy {
         } else {
           this._title.setTitle( 'Artstor' )
           console.log('No search term');
-        }
-
-        // Find feature flags
-        if(params && params['featureFlag']){
-            console.log(params['featureFlag'])
-            this._auth.featureFlags[params['featureFlag']] = true;
         }
       })
     ); 
