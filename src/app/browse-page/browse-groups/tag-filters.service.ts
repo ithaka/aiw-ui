@@ -57,7 +57,9 @@ export class TagFiltersService {
 
     // construct a new TagFilter for each of the items the service returns
     filters.forEach((filter) => {
-      newFilters.push(new TagFilter(filter, this._updateFilters, appliedTags.indexOf(filter.key) > -1))
+      let isSelected = appliedTags.indexOf(filter.key) > -1
+
+      newFilters.push(new TagFilter(filter, this._updateFilters, isSelected))
     })
     this._filters = newFilters
   }
