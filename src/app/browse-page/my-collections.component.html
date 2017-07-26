@@ -5,7 +5,7 @@
     <div class="col-md-6">
         <div class="tree">
             <ang-tag *ngFor="let tag of tags" [tag]="tag" [edit]="pcFeatureFlag" (editTag)="showEditModal(tag)"></ang-tag>
-            <div *ngIf="uploadPC && pcFeatureFlag" class="add-pc-cntnr" (click)="showUploadImgsModal = true"><div class="icon-cntnr"><i class="icon absolute-left icon-add"></i></div><a>My Personal Collections</a></div>
+            <div *ngIf="(tags.length === 0) && pcFeatureFlag" class="add-pc-cntnr" (click)="showUploadImgsModal = true"><div class="icon-cntnr"><i class="icon absolute-left icon-add"></i></div><a>My Personal Collections</a></div>
         </div>
     </div>
     <div class="col-md-6">

@@ -36,7 +36,7 @@ export class MyCollectionsComponent implements OnInit {
   private selectedBrowseId: string = '';
   private showUploadImgsModal: boolean = false;
   private showEditPCModal: boolean = false;
-  private uploadPC: boolean = false;
+//   private uploadPC: boolean = false;
 
   private pcFeatureFlag: boolean = false;
   private editTagId: string = '';
@@ -112,12 +112,12 @@ export class MyCollectionsComponent implements OnInit {
             }
           }
 
-          if(this.tags.length === 0){
-              this.uploadPC = true;
-          }
-          else{
-              this.uploadPC = false;
-          }
+        //   if(this.tags.length === 0){
+        //       this.uploadPC = true;
+        //   }
+        //   else{
+        //       this.uploadPC = false;
+        //   }
 
           this.loading = false;
 
