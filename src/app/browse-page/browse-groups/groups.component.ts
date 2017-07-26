@@ -1,5 +1,5 @@
 import { Title } from '@angular/platform-browser'
-import { Component, OnInit } from '@angular/core'
+import { Component, OnInit, EventEmitter } from '@angular/core'
 import { Router, ActivatedRoute, Params, NavigationEnd } from '@angular/router'
 import { Subscription }   from 'rxjs/Subscription'
 
@@ -42,6 +42,8 @@ export class BrowseGroupsComponent implements OnInit {
     currentPage: 1
   }
 
+  private updateSearchTerm: EventEmitter<string> = new EventEmitter()
+
   private tagFilters = []
   private appliedTags: string[] = []
 
@@ -81,6 +83,12 @@ export class BrowseGroupsComponent implements OnInit {
         if (requestedPage < 1) { return this.goToPage(1) } // STOP THEM if they're trying to enter a negative number
         let requestedLevel = query.level
         this.setSearchLevel(requestedLevel, false) // makes sure that the correct level filter is selected even if the user just navigated here from the url
+        
+        // if there is not a term, make sure the search term is cleared
+        if (!query.term) {
+          this.updateSearchTerm.emit('')
+        }
+
 
         this.loadIGs(this.appliedTags, requestedPage, requestedLevel, query.term)
       })
