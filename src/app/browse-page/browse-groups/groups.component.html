@@ -21,7 +21,7 @@
 <div *ngIf="loading" class="row has-icon-overlay">
     <i class="icon-lg icon-overlay--top icon-loading-large"></i>
 </div>
-<div *ngIf="_tagFilters.filters.length < 1 && !loading" class="alert alert-info">
+<div *ngIf="tags.length < 1 && !loading" class="alert alert-info">
     <h3 translate>BROWSE.ERRORS.NO_GROUPS_COLLECTIONS_HEADING</h3><br/>
     <div *ngIf="selectedBrowseLevel === 'private'" [innerHtml]="'BROWSE.ERRORS.NO_PRIVATE_GROUPS_COLLECTIONS_PROMPT' | translate"></div>
     <div *ngIf="selectedBrowseLevel === 'institution'" [innerHtml]="'BROWSE.ERRORS.NO_INSTITUTIONAL_GROUPS_COLLECTIONS_PROMPT' | translate"></div>
