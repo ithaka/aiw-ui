@@ -24,7 +24,7 @@
         </h3>
         <div class="group-list has-icon-overlay px-2">
             <div *ngIf="errorObj[selectedBrowseLevel]" class="alert alert-warning" [innerHtml]="errorObj[selectedBrowseLevel]"></div>
-            <div *ngIf="showSearchPrompt" class="alert alert-info">{{ 'BROWSE.ERRORS.SEARCH_PROMPT' | translate }}</div>
+            <div *ngIf="showSearchPrompt && route.snapshot.params.view == 'search'" class="alert alert-info">{{ 'BROWSE.ERRORS.SEARCH_PROMPT' | translate }}</div>
             <ang-tag *ngFor="let tag of tags" [tag]="tag" link="true"></ang-tag>
         </div>
     </div>
