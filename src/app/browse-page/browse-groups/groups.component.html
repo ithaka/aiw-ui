@@ -8,8 +8,8 @@
     <div class="col-md-4 hidden-sm-down">
         <div *ngIf="route.snapshot.params.view == 'search'" id="searchFilterList" class="mb-3">
             <h3>Group Type Filter<a id="searchFilterClear" tabindex="" class="link--accent small" style="float:right;" (click)="setSearchLevel('none', true)">Clear</a></h3>
-            <div class="filter filter--tag" *ngFor="let filter of browseMenuArray" (click)="setSearchLevel(filter.level, true)" [class.active]="filter.selected">
-                <div *ngIf="filter.level !== 'search'">{{ filter.label }}</div>
+            <div *ngFor="let filter of browseMenuArray" (click)="setSearchLevel(filter.level, true)" [class.active]="filter.selected">
+                <div *ngIf="filter.level !== 'search'" class="filter filter--tag" [attr.title]="'Filter by ' + filter.label + ' image groups'">{{ filter.label }}</div>
                 <!--<i class="icon icon-add"></i>
                 <i class="icon icon-close"></i>-->
             </div>
