@@ -94,12 +94,31 @@
     "SELECT_BUTTON_TXT": "SELECT FILES",
     "HELP": "Help"
   },
+  "EDIT_PC_MODAL": {
+    "TITLE": "Personal Collection",
+    "EDIT_COL": "Edit Collection",
+    "META_ADD_INFO": "Metadata can be added by clicking on the thumbnail image, or from the Personal Collection Administration dialog and image page.",
+    "HELP": "Help",
+    "CLOSE": "Close",
+    "SAVE": "Save",
+    "FORM": {
+      "TITLE": "Title",
+      "CREATOR": "Creator",
+      "WRK_TYP": "Work Type",
+      "DATE": "Date",
+      "LOCATION": "Location",
+      "MATERIAL": "Material",
+      "DESCRIPTION": "Description",
+      "SUBJECT": "Subject"
+    }
+  },
   "ADD_TO_GROUP_MODAL": {
     "FROM_SELECTED": {
       "TITLE": "Add Images to Group",
       "SELECT_PROMPT": "Select an image group",
       "ADD_SUCCESS": "Images successfully added to group",
       "ADD_FAILURE": "Unable to add images to group. Sorry about that.",
+      "TOO_MANY_ASSETS": "This image group has exceeded the 1000 image limit.",
       "OPEN_CREATE_GROUP_MODAL": "Create a new group with images"
     },
     "FROM_ASSET": {
@@ -107,6 +126,7 @@
       "SELECT_PROMPT": "Select an image group",
       "ADD_SUCCESS": "Image successfully added to group",
       "ADD_FAILURE": "Unable to add image to group. Sorry about that.",
+      "TOO_MANY_ASSETS": "This image group has exceeded the 1000 image limit.",
       "OPEN_CREATE_GROUP_MODAL": "Create a new group with image"
     },
     "CONTROLS": {
@@ -181,7 +201,8 @@
       "NO_INSTITUTIONAL_COLLECTIONS_PROMPT": "<p>There are no institutional collections available for your institution. You can add institutional collections using Shared Shelf.</p><p>Learn more about <a href=\"http://artstor.org/sharedshelf\" class=\"link\">Shared Shelf</a>.</p>",
       "NO_GROUPS_COLLECTIONS_HEADING": "No Groups Found",
       "NO_PRIVATE_GROUPS_COLLECTIONS_PROMPT": "<p>You haven't made any private groups yet. Learn more about <a href='http://support.artstor.org/?article=create-and-manage-image-groups' class='link'>groups</a>.</p>",
-      "NO_INSTITUTIONAL_GROUPS_COLLECTIONS_PROMPT": "<p>You haven't made any institutional groups yet. Learn more about <a href='http://support.artstor.org/?article=create-and-manage-image-groups' class='link'>groups</a>.</p>"
+      "NO_INSTITUTIONAL_GROUPS_COLLECTIONS_PROMPT": "<p>You haven't made any institutional groups yet. Learn more about <a href='http://support.artstor.org/?article=create-and-manage-image-groups' class='link'>groups</a>.</p>",
+      "SEARCH_PROMPT": "Enter a keyword or select a filter to begin a search"
     }
   },
   "FOOTER": {

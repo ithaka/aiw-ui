@@ -756,7 +756,7 @@ export class AssetService {
         let options = new RequestOptions({ withCredentials: true });
 
         return this.http
-            .get(this._auth.getUrl() + '/pccollection', options)
+            .get(this._auth.getHostname() + '/api/pccollection', options)
             .toPromise()
             .then(this.extractData);
     }
@@ -765,7 +765,7 @@ export class AssetService {
         let options = new RequestOptions({ withCredentials: true });
 
         return this.http
-            .get(this._auth.getUrl() + '/collections/' + catId + '/categoryroot', options)
+            .get(this._auth.getHostname() + '/api/collections/' + catId + '/categoryroot', options)
             .toPromise()
             .then(this.extractData);
     }
@@ -774,7 +774,7 @@ export class AssetService {
         let options = new RequestOptions({ withCredentials: true });
 
         return this.http
-            .get(this._auth.getUrl() + '/categories/' + id + '/subcategories', options)
+            .get(this._auth.getHostname() + '/api/categories/' + id + '/subcategories', options)
             .toPromise()
             .then(this.extractData);
     }
@@ -783,7 +783,7 @@ export class AssetService {
         let options = new RequestOptions({ withCredentials: true });
 
         return this.http
-            .get(this._auth.getUrl() + '/categorydesc/' + descId + '/' + widgetId, options)
+            .get(this._auth.getHostname() + '/api/categorydesc/' + descId + '/' + widgetId, options)
             .toPromise()
             .then(this.extractData);
     }
@@ -793,7 +793,7 @@ export class AssetService {
      * @param colId id of collection to fetch
      * @returns thumbnails of assets for a collection, and collection information
      */
-    private getCollectionThumbs(colId: string, pageNo?: number, pageSize?: number) {
+    public getCollectionThumbs(colId: string, pageNo?: number, pageSize?: number) {
         let options = new RequestOptions({withCredentials: true});
         let imageSize = 0;
         
