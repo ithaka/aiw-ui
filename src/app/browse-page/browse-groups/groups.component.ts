@@ -205,7 +205,7 @@ export class BrowseGroupsComponent implements OnInit {
    */
   private loadIGs(appliedTags: string[], page: number, level?: string, searchTerm ?: string): void {
     // short out the function if the user has just navigated to the search page without query params
-    if (!this.shouldSearch(appliedTags, level, searchTerm)) {
+    if (this.route.snapshot.params.view === 'search' && !this.shouldSearch(appliedTags, level, searchTerm)) {
       this.loading = false
       return
     }
