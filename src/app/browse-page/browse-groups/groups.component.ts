@@ -83,8 +83,10 @@ export class BrowseGroupsComponent implements OnInit {
         }
 
         let requestedPage = Number(query.page) || 1
-        if (requestedPage < 1) { return this.goToPage(1) } // STOP THEM if they're trying to enter a negative number
-        if (tagAdded) { requestedPage = 1 } // if they're adding a tag, we want to nav them back to page 1
+        if (requestedPage < 1 || tagAdded) {
+          this.addQueryParams({page: 1}, false, query)
+        } // STOP THEM if they're trying to enter a negative number
+        // if (tagAdded) { requestedPage = 1 } // if they're adding a tag, we want to nav them back to page 1
         let requestedLevel = query.level
         this.setSearchLevel(requestedLevel, false) // makes sure that the correct level filter is selected even if the user just navigated here from the url
         
@@ -299,10 +301,12 @@ export class BrowseGroupsComponent implements OnInit {
    * @param params the parameters to add to the url (if duplicate parameters already in url, this will overwrite them)
    * @param reset allows resetting of queryParams to empty object plus whatever params you pass, instead of keeping old params
    */
-  private addQueryParams(params: { [key: string]: any }, reset?: boolean) {
+  private addQueryParams(params: { [key: string]: any }, reset?: boolean, currentParams?: any) {
     let baseParams
     if (reset) {
       baseParams = {}
+    } else if (currentParams) {
+      baseParams = Object.assign({}, currentParams)
     } else {
       baseParams = Object.assign({}, this.route.snapshot.queryParams)
     }
