@@ -42,8 +42,11 @@
         .file-name{
             font-size: 13px;
             letter-spacing: 0.5px;
-            height: 18px;
             line-height: 18px;
+
+            display: block;
+            height: 60px;
+            overflow: auto;
 
             .error-msg{
                 color: #ea4335;
