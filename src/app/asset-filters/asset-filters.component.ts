@@ -86,7 +86,7 @@ export class AssetFilters {
         }
 
         // When params are adjusted, applied filters need to be cleared
-        this._filters.clearApplied();
+        // this._filters.clearApplied();
 
         // Find feature flags
         if(routeParams && routeParams['featureFlag']){
@@ -162,7 +162,11 @@ export class AssetFilters {
   }
 
   keys(obj) : Array<string> {
-    return Object.keys(obj)
+    return (Object.keys(obj) && Object.keys(obj).length > 0) ? Object.keys(obj) : []
+  }
+
+  isArray(thing) : boolean {
+    return Object.prototype.toString.call( thing ) === '[object Array]'
   }
 
   currentPageOnblurr(){

@@ -316,7 +316,10 @@
   "FILTERS" : {
     "artcollectiontitle_str" : "Collection",
     "artclassification_str" : "Classification",
-    "geography" : "Geography"
+    "classification" : "Classification",
+    "geography" : "Geography",
+    "collTypes" : "Collection Types",
+    "data" : "Date"
   },
   "FIELD" : {
     "artclassification" : "Classification", 
@@ -337,6 +340,7 @@
     "artsubject" : "Subject", 
     "arttechnique" : "Technique", 
     "arttitle" : "Title",
+    "title" : "Title",
     "artworktype" : "Work Type"
   }
 }

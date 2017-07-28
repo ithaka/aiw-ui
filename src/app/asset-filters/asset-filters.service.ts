@@ -16,37 +16,37 @@ export class AssetFiltersService {
     private appliedFilters: any = [];
     
     private defaultAvailable: any = {
-        // collTypes : [],
-        // classification: [],
-        // geography: [],
-        // date: [],
-        // dateObj : {
-        //     earliest : {
-        //         date : 1000,
-        //         era : 'BCE'
-        //     },
-        //     latest : {
-        //         date : 2017,
-        //         era : 'CE'
-        //     },
-        // modified : false
-        // },
-        // prevDateObj : {
-        //     earliest : {
-        //         date : 1000,
-        //         era : 'BCE'
-        //     },
-        //     latest : {
-        //         date : 2017,
-        //         era : 'CE'
-        //     }
-        // },
-        // currentPage : 1,
-        // pageSize : 24,
-        // sort: "0"
+        collTypes : [],
+        classification: [],
+        geography: [],
+        date: [],
+        dateObj : {
+            earliest : {
+                date : 1000,
+                era : 'BCE'
+            },
+            latest : {
+                date : 2017,
+                era : 'CE'
+            },
+        modified : false
+        },
+        prevDateObj : {
+            earliest : {
+                date : 1000,
+                era : 'BCE'
+            },
+            latest : {
+                date : 2017,
+                era : 'CE'
+            }
+        },
+        currentPage : 1,
+        pageSize : 24,
+        sort: "0"
     };
 
-    private availableFilters: any = this.defaultAvailable;
+    private availableFilters: any = Object.assign({},this.defaultAvailable);
 
     private dateFacet: any = {};
     private dateFacetsArray = [];
@@ -79,7 +79,7 @@ export class AssetFiltersService {
     }
 
     public clearAvailable(isQuiet ?: boolean):void {
-        this.availableFilters = [];
+        this.availableFilters = Object.assign({},this.defaultAvailable);
         if (!isQuiet) {
             this.availableSource.next(this.availableFilters);
         }
@@ -188,12 +188,15 @@ export class AssetFiltersService {
     // }
 
 
-    public generateDateFacets(dateFacetsArray ?) {
+    public generateDateFacets(dateFacetsArray ?: any[]) {
         if (!dateFacetsArray && this.availableFilters.date) {
             dateFacetsArray = this.availableFilters.date;
-        } else {
+        } else if(!dateFacetsArray) {
             dateFacetsArray = []
         }
+
+        console.log("YOU GOT THIS FAR")
+        console.log(dateFacetsArray)
 
         if(dateFacetsArray.length > 0){
             var startDate = dateFacetsArray[0].date;
