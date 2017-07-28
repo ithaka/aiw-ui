@@ -72,15 +72,19 @@ export class BrowseGroupsComponent implements OnInit {
     /** Every time the url updates, we process the new tags and reload image groups if the tags query param changes */
     this.subscriptions.push(
       this.route.queryParams.subscribe((query) => {
+        let tagAdded: boolean = false
         // this is only expected to run when searching
         if (query.tags) {
-          this.appliedTags = this._tagFilters.processFilterString(query.tags)
+          let newTags: string[] = this._tagFilters.processFilterString(query.tags)
+          tagAdded = this.appliedTags.join('') != newTags.join('') // if the two strings aren't equal, a tag must have changed
+          this.appliedTags = newTags
         } else {
           this.appliedTags = []
         }
 
         let requestedPage = Number(query.page) || 1
         if (requestedPage < 1) { return this.goToPage(1) } // STOP THEM if they're trying to enter a negative number
+        if (tagAdded) { requestedPage = 1 } // if they're adding a tag, we want to nav them back to page 1
         let requestedLevel = query.level
         this.setSearchLevel(requestedLevel, false) // makes sure that the correct level filter is selected even if the user just navigated here from the url
         
