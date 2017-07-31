@@ -111,8 +111,6 @@ export class Asset {
 
                   this.downloadName = this.title.replace(/\./g,'-') + '.' + this.fileExt
 
-                  console.log(this.title, this.fileExt, this.downloadName)
-
                   this.setCreatorDate();
                   this.collectionName = this.getCollectionName()
 
@@ -200,8 +198,6 @@ export class Asset {
     /** This determines how to build the downloadLink, which is different for different typeIds */
     if (this.typeId === 20 || this.typeId === 21 || this.typeId === 22 || this.typeId === 23) { //all of the typeIds for documents
         this.downloadLink = [this._auth.getMediaUrl(), this.id, this.typeId].join("/");
-        console.log("just assembled downloadLink:", this.downloadLink)
-        console.log("components used:", this._auth.getMediaUrl(), this.id, this.typeId)
     } else if (data.imageServer && data.imageUrl) { //this is a general fallback, but should work specifically for images and video thumbnails
         let url = data.imageServer + data.imageUrl + "?cell=1024,1024&rgnn=0,0,1,1&cvt=JPEG";
         this.downloadLink = this._auth.getHostname() + "/api/download?imgid=" + this.id + "&url=" + encodeURIComponent(url);
