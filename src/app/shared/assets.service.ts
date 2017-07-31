@@ -775,6 +775,11 @@ export class AssetService {
     nodeDesc(descId, widgetId){
         let options = new RequestOptions({ withCredentials: true });
 
+        // Can be removed once region specific ids are no longer used
+        if (descId.indexOf('103') == 1) {
+            descId = descId.slice(1)
+        }
+
         return this.http
             .get(this._auth.getHostname() + '/api/categorydesc/' + descId + '/' + widgetId, options)
             .toPromise()
