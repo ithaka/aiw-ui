@@ -156,10 +156,8 @@ export class ImageGroupPage implements OnInit, OnDestroy {
 
     this.subscriptions.push(
       this._ig.igDownloadTrigger.subscribe((event) => { // right now event will be undefined, it is just a dumb trigger
-        console.log("got the emit")
         // make sure we have the info we need
         if (this.ig.id) {
-          console.log("triggering download function")
           this.showDownloadModal();
         }
       })
@@ -179,18 +177,13 @@ export class ImageGroupPage implements OnInit, OnDestroy {
    * - If the user is logged in and is allowed to download the image group -> download modal
    */
   private showDownloadModal() {
-    console.log("deciding which modal")
     // the template will not show the button if there is not an ig.igName and ig.igDownloadInfo
     // if the user is logged in and the download info is available
     if (this.user.isLoggedIn) {
-      console.log("logged in")
-      console.log(this.ig)
       // we will need a new way to know whether or not the user is authorized to download - for now, I will always enable them
       if (this.ig.igDownloadInfo.pptExportAllowed) {
-        console.log("showing download modal")
         this.showPptModal = true;
       } else {
-        console.log("showing limit modal")
         this.showDownloadLimitModal = true;
       }
     } else if (!this.user.isLoggedIn) {
@@ -200,7 +193,6 @@ export class ImageGroupPage implements OnInit, OnDestroy {
   }
 
   private refreshIG(): void{
-    console.log('Refresh IG from IG page!');
     this._assets.queryAll(this.route.snapshot.params, true);
   }
 
