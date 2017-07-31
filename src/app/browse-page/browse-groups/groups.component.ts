@@ -72,15 +72,21 @@ export class BrowseGroupsComponent implements OnInit {
     /** Every time the url updates, we process the new tags and reload image groups if the tags query param changes */
     this.subscriptions.push(
       this.route.queryParams.subscribe((query) => {
+        let tagAdded: boolean = false
         // this is only expected to run when searching
         if (query.tags) {
-          this.appliedTags = this._tagFilters.processFilterString(query.tags)
+          let newTags: string[] = this._tagFilters.processFilterString(query.tags)
+          tagAdded = this.appliedTags.join('') != newTags.join('') // if the two strings aren't equal, a tag must have changed
+          this.appliedTags = newTags
         } else {
           this.appliedTags = []
         }
 
         let requestedPage = Number(query.page) || 1
-        if (requestedPage < 1) { return this.goToPage(1) } // STOP THEM if they're trying to enter a negative number
+        if (requestedPage < 1 || tagAdded) {
+          this.addQueryParams({page: 1}, false, query)
+        } // STOP THEM if they're trying to enter a negative number
+        // if (tagAdded) { requestedPage = 1 } // if they're adding a tag, we want to nav them back to page 1
         let requestedLevel = query.level
         this.setSearchLevel(requestedLevel, false) // makes sure that the correct level filter is selected even if the user just navigated here from the url
         
@@ -205,7 +211,7 @@ export class BrowseGroupsComponent implements OnInit {
    */
   private loadIGs(appliedTags: string[], page: number, level?: string, searchTerm ?: string): void {
     // short out the function if the user has just navigated to the search page without query params
-    if (this.route.snapshot.params.view === 'search' && !this.shouldSearch(appliedTags, level, searchTerm)) {
+    if (!this.shouldSearch(appliedTags, level, searchTerm) && this.route.snapshot.params.view == 'search') {
       this.loading = false
       return
     }
@@ -295,10 +301,12 @@ export class BrowseGroupsComponent implements OnInit {
    * @param params the parameters to add to the url (if duplicate parameters already in url, this will overwrite them)
    * @param reset allows resetting of queryParams to empty object plus whatever params you pass, instead of keeping old params
    */
-  private addQueryParams(params: { [key: string]: any }, reset?: boolean) {
+  private addQueryParams(params: { [key: string]: any }, reset?: boolean, currentParams?: any) {
     let baseParams
     if (reset) {
       baseParams = {}
+    } else if (currentParams) {
+      baseParams = Object.assign({}, currentParams)
     } else {
       baseParams = Object.assign({}, this.route.snapshot.queryParams)
     }

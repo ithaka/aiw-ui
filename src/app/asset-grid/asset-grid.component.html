@@ -26,9 +26,7 @@
                         </div>
                     </li>
 
-                    <div class="number-results" *ngIf="!isLoading">{{ totalAssets }}{{ totalAssets == 2000 ? '+' : '' }} results  
-                        <!--<span *ngIf="searchTerm">for <span [innerHtml]="formatSearchTerm(searchTerm)"></span></span>-->
-                    </div>
+                    <div class="number-results" *ngIf="!isLoading">{{ totalAssets }}{{ totalAssets == 2000 ? '+' : '' }} results  <span *ngIf="searchTerm">for <span [innerHtml]="formatSearchTerm(searchTerm)"></span></span></div>
                     <!--<div class="search-in-results" *ngIf="allowSearchInRes"><input type="checkbox" id="searchInResChkBx" [(ngModel)]="searchInResults" (change)="updateSrchInRes()" /> <label for="searchInResChkBx">Search within results</label></div>-->
                 </div>
                 <div class="col-12 pb-3">
@@ -72,8 +70,7 @@
                     {{ searchError }}
                 </div>
                 <div class="col-sm-6 col-md-3 col-lg-2" *ngFor="let asset of results">
-                    <!--New search needs asset.id-->
-                    <a class="card card--asset" [ngClass]="{'selected': ( isSelectedAsset(asset) > -1 ) }" [routerLink]="getAssetPath(asset)" [queryParams]="asset.iapFlag > 0 ? { iap: 'true' } : {}" (click)="selectAsset(asset)">
+                    <a class="card card--asset" [attr.data-id]="asset.objectId" [ngClass]="{'selected': ( isSelectedAsset(asset) > -1 ) }" [routerLink]="editMode ? ['./'] : ['/asset', asset.objectId]" [queryParams]="asset.iapFlag > 0 ? { iap: 'true' } : {}" (click)="selectAsset(asset)">
                         <ang-thumbnail [thumbnail]="asset" [reorderMode]="reorderMode" [editMode]="editMode"></ang-thumbnail>
                     </a>
                 </div> <!-- .col -->

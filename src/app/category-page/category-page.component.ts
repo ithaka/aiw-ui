@@ -111,6 +111,11 @@ export class CategoryPage implements OnInit, OnDestroy {
   private getCategoryInfo(catId: string) {
       let options = new RequestOptions({ withCredentials: true });
 
+      // Can be removed once region specific ids are no longer used
+      if (catId.indexOf('103') == 1) {
+        catId = catId.slice(1)
+      }
+
       return this.http
           .get(this._auth.getUrl() + '/categorydesc/' + catId, options)
           .toPromise()
