@@ -33,7 +33,7 @@
     <i class="icon-lg icon-overlay--top icon-loading-large"></i>
 </div>
 <!-- Don't show this if there is a filters list, if it's loading, or if the user hasn't searched for anything yet -->
-<div *ngIf="_tagFilters.filters.length < 1 && !loading && route.snapshot.params.view !== 'search'" class="alert alert-info">
+<div *ngIf="tags.length < 1 && !loading && route.snapshot.params.view !== 'search'" class="alert alert-info">
     <h3 translate>BROWSE.ERRORS.NO_GROUPS_COLLECTIONS_HEADING</h3><br/>
     <div *ngIf="selectedBrowseLevel === 'private'" [innerHtml]="'BROWSE.ERRORS.NO_PRIVATE_GROUPS_COLLECTIONS_PROMPT' | translate"></div>
     <div *ngIf="selectedBrowseLevel === 'institution'" [innerHtml]="'BROWSE.ERRORS.NO_INSTITUTIONAL_GROUPS_COLLECTIONS_PROMPT' | translate"></div>
