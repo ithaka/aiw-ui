@@ -175,6 +175,7 @@ export class AssetPage implements OnInit, OnDestroy {
                     this._title.setTitle( asset.title );
                     document.querySelector('meta[name="DC.type"]').setAttribute('content', 'Artwork');
                     document.querySelector('meta[name="DC.title"]').setAttribute('content', asset.title);
+                    document.querySelector('meta[name="asset.id"]').setAttribute('content', asset.id);
                 }
             }, (err) => {
                 if (err.status === 403) {
