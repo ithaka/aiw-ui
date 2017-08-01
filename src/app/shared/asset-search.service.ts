@@ -1,3 +1,7 @@
+/**
+ * BETA
+ * New Search Service
+ */
 import {
   Http,
   RequestOptions
@@ -14,11 +18,25 @@ import {
 @Injectable()
 export class AssetSearchService {
 
+   public filterFields = [
+        {name: "In any field", value: "*"},
+        {name: "Creator", value: "artcreator" },
+        {name: "Title", value: "arttitle" },
+        {name: "Location", value: "artlocation" },
+        {name: "Repository", value: "artrepository" },
+        {name: "Subject", value: "artsubject" },
+        {name: "Material", value: "artmaterial" },
+        {name: "Style or Period", value: "artstyleperiod" },
+        {name: "Work Type", value: "artworktype" },
+        {name: "Culture", value: "artculture" },
+        {name: "Technique", value: "arttechnique" },
+        {name: "Number", value: "artidnumber" }
+    ];
+
   constructor(
     private http: Http,
     private _filters: AssetFiltersService
   ) {}
-
 
   /**
    * Search assets service
