@@ -1,4 +1,6 @@
 .upload-cntnr{
+    line-height: 100%;
+    height: auto;
 
     .lbl{
         color: #444;
@@ -8,8 +10,8 @@
 
     .my-drop-zone { 
         border: dotted 3px lightgray;
-        height: 250px;
-        line-height: 250px;
+        height: auto;
+        padding-top: 20px;
         text-align: center;
         background-color: #fff; 
 
@@ -42,8 +44,12 @@
         .file-name{
             font-size: 13px;
             letter-spacing: 0.5px;
-            height: 18px;
             line-height: 18px;
+
+            display: block;
+            min-height: 60px;
+            max-height: 200px;
+            overflow: auto;
 
             .error-msg{
                 color: #ea4335;

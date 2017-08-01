@@ -74,7 +74,7 @@ export class CollectionPage implements OnInit, OnDestroy {
               this.assetCount = data.objCount;
               this.colName = data.collectionname;
               this.colDescription = data.blurburl;
-              this.colThumbnail = data.leadImageURL;
+              this.colThumbnail = data.leadImageURL ? data.leadImageURL : data.bigimageurl;
 
               // Set page title
               this._title.setTitle("Artstor | " + this.colName)
