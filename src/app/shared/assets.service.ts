@@ -67,7 +67,7 @@ export class AssetService {
     public filterFields = [
         {name: "In any field", value: "*"},
         {name: "Creator", value: "artcreator" },
-        {name: "Title", value: "arttilte" },
+        {name: "Title", value: "arttitle" },
         {name: "Location", value: "artlocation" },
         {name: "Repository", value: "artrepository" },
         {name: "Subject", value: "artsubject" },

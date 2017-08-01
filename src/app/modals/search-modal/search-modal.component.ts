@@ -7,6 +7,7 @@ import { SearchQueryUtil } from './search-query';
 import { AssetService } from './../../shared';
 import { AnalyticsService } from '../../analytics.service';
 import { AssetFiltersService } from './../../asset-filters/asset-filters.service';
+import { AuthService } from "app/shared/auth.service";
 
 @Component({
   selector: 'ang-search-modal',
@@ -71,7 +72,8 @@ export class SearchModal implements OnInit {
         private _filters: AssetFiltersService, 
         private _router: Router,
         private _analytics: AnalyticsService,
-        private angulartics: Angulartics2
+        private angulartics: Angulartics2,
+        private _auth: AuthService
       ) { 
     // Pull in filterFields
     this.fields = _assets.filterFields;
@@ -219,8 +221,18 @@ export class SearchModal implements OnInit {
       return;
     }
 
-    let advQuery = this.queryUtil.generateSearchQuery(this.advanceQueries)
-    let filterParams = this.queryUtil.generateFilters(this.filterSelections, this.advanceSearchDate)
+    let advQuery
+    let filterParams
+
+    // Check search feature flag
+    if (this._auth.featureFlags['solrSearch']) {
+      advQuery = this.queryUtil.generateSearchQuery(this.advanceQueries)
+      filterParams = this.queryUtil.generateFilters(this.filterSelections, this.advanceSearchDate)
+    } else {
+      advQuery = this.queryUtil.generateLegacySearchQuery(this.advanceQueries)
+      filterParams = this.queryUtil.generateLegacyFilters(this.filterSelections, this.advanceSearchDate)
+    }
+
     // Track in Adobe Analytics
     this._analytics.directCall('advanced_search');
     this.angulartics.eventTrack.next({ action: "advSearch", properties: { category: "search", label: advQuery } })
