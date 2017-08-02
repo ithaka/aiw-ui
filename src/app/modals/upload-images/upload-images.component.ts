@@ -35,7 +35,7 @@ export class UploadImagesModal implements OnInit, OnDestroy {
     // };
 
     this.uploader.onWhenAddingFileFailed = (item:FileLikeObject, filter:any, options:any) => {
-      this.uploader.clearQueue(); 
+      // this.uploader.clearQueue(); 
       this.typeValid = false;
       setTimeout(() => {
         this.typeValid = true;

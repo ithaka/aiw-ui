@@ -159,15 +159,10 @@ export class AssetPage implements OnInit, OnDestroy {
         }
 
         this._analytics.setPageValues('asset', this.assets[0] && this.assets[0].id)
-        console.log("init component")
     } // OnInit
 
     ngOnDestroy() {
         this.subscriptions.forEach((sub) => { sub.unsubscribe(); });
-    }
-
-    test() {
-        console.log("testing...", this.assets[0])
     }
 
     /** 
