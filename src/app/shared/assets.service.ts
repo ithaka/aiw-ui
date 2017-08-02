@@ -868,7 +868,6 @@ export class AssetService {
                         this._filters.generateDateFacets( data.dateFacets );
                         this._filters.setAvailable('classification', data.classificationFacets);
                     }
-                    data.count = data.total
                     // Set the allResults object
                     this.updateLocalResults(data);
             }, (error) => {
