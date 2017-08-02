@@ -1,4 +1,4 @@
-<div id="mainContent" tabindex="-1" class="container main-content">
+<div id="mainContent" tabindex="0" class="container main-content">
     <div class="row">
         <div class="col-sm-6">
             <div class="card card--light">
@@ -9,29 +9,29 @@
                     <form (ngSubmit)="login(user)">
                         <div class="form-group">
                             <label for="loginEmail">Email Address</label>
-                            <input id="inputLoginEmail" [(ngModel)]="user.username" name="username" type="text" class="form-control" placeholder="Username" tabindex="1" />
+                            <input id="inputLoginEmail" [(ngModel)]="user.username" name="username" type="text" class="form-control" placeholder="Username" />
                         </div>
                         <div class="form-group">
                             <label for="loginPassword">Password</label>
-                            <input id="inputLoginPassword" [(ngModel)]="user.password" name="password" type="password" class="form-control" placeholder="Password" tabindex="2" />
+                            <input id="inputLoginPassword" [(ngModel)]="user.password" name="password" type="password" class="form-control" placeholder="Password" />
                             <div id="errorMsg" *ngIf="errorMsg" class="form-text text-danger"> {{ errorMsg | translate }} </div>
                             <p *ngIf="forcePwdRst" class="form-text text-danger">Please <a id="forcePwdResetModal" (click)="showPwdModal = true" class="link">reset your password</a> in order to log in.</p>
                         </div>
                         <p class="notranslate" [innerHtml]="'LOGIN.TERMS' | translate"></p>
                         <div class="form-group">
-                            <button id="btnLoginRemote" class="btn btn-primary" [class.loading]="loginLoading" type="submit" name="action" tabindex="3"  data-sc="account: remote user log in">Log in</button>
+                            <button id="btnLoginRemote" class="btn btn-primary" [class.loading]="loginLoading" type="submit" name="action"  data-sc="account: remote user log in">Log in</button>
                         </div>
                     </form>
-                    <a id="linkLoginResetModal" tabindex="4" class="link" (click)="showPwdModal = true">Forgot password?</a>
+                    <a id="linkLoginResetModal" class="link" (click)="showPwdModal = true">Forgot password?</a>
                     <br/>
                     <div *ngIf="showRegister">
-                        <a [routerLink]="['/register']" tabindex="5" class="link">Not Registered?</a>
+                        <a [routerLink]="['/register']" class="link">Not Registered?</a>
                         <br/>
                     </div>
-                    <a tabindex="6" href="http://support.artstor.org/?article-category=03-accessing-the-artstor-digital-library" class="link" target="_blank">Login Help</a>
+                    <a href="http://support.artstor.org/?article-category=03-accessing-the-artstor-digital-library" class="link" target="_blank">Login Help</a>
                 </div>
                 <div class="block-right">
-                    <a tabindex="7" class="link" (click)="toggleAccessHelpModal()">How do I get access?</a>
+                    <a class="link" (click)="toggleAccessHelpModal()">How do I get access?</a>
                 </div>
             </div>
         </div>
@@ -58,7 +58,7 @@
                         <p translate class="small">LOGIN.INSTITUTION_LIST_INFO</p>
                     </div>
                     <div class="form-group">
-                        <button id="btnLoginProxy" (click)="goToInstLogin()" class="btn btn-primary" type="submit" name="action" tabindex="9" data-sc="account: institutional user log in">Log in</button>
+                        <button id="btnLoginProxy" (click)="goToInstLogin()" class="btn btn-primary" type="submit" name="action" data-sc="account: institutional user log in">Log in</button>
                     </div>
                 </div>
             </div>
