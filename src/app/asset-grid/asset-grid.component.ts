@@ -317,7 +317,7 @@ export class AssetGrid implements OnInit, OnDestroy {
       }
     }
     else{
-      this._storage.set('totalAssets', this.totalAssets);
+      this._storage.set('totalAssets', this.totalAssets ? this.totalAssets : '1');
       this._storage.set('prevRouteParams', this.route.snapshot.url);
       // Let template routerLink navigate at this point
     }
