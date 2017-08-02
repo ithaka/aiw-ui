@@ -157,11 +157,12 @@ export class Asset {
                   this.collectionName = this.getCollectionName()
 
                   this.metadataLoaded = true;
-                  this.dataLoadedSource.next(this.metadataLoaded);
+                  this.dataLoadedSource.next(this.metadataLoaded && this.imageSourceLoaded);
               }
 
               // Old Search
               if(asset.objectId){
+                  this.loadMediaMetaData();
                   this.metaDataArray = asset.metaData;
                   this.formatMetadata();
 
@@ -176,7 +177,7 @@ export class Asset {
                   this.collectionName = this.getCollectionName()
 
                   this.metadataLoaded = true;
-                  this.dataLoadedSource.next(this.metadataLoaded);
+                  this.dataLoadedSource.next(this.metadataLoaded && this.imageSourceLoaded);
               }
           },
           (err) => {
