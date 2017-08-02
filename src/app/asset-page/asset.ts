@@ -126,7 +126,14 @@ export class Asset {
 
       this._assets.getById( this.id )
           .then((res) => {
-              let asset = res['results'][0]
+              let asset 
+              if (res['results']) {
+                // As returned from Solr
+                asset = res['results'][0]
+              } else {
+                // As returned from legacy search
+                asset = res
+              }
 
               // New Search
               if(asset.artstorid) {
@@ -154,14 +161,14 @@ export class Asset {
               }
 
               // Old Search
-              if(res.objectId){
-                  this.metaDataArray = res.metaData;
+              if(asset.objectId){
+                  this.metaDataArray = asset.metaData;
                   this.formatMetadata();
 
-                  this.filePropertiesArray = res.fileProperties;
-                  this.title = res.title ? res.title : 'Untitled';
-                  this.imgURL = res.imageUrl;
-                  this.fileExt = res.imageUrl ? res.imageUrl.substr(res.imageUrl.lastIndexOf('.') + 1) : ''
+                  this.filePropertiesArray = asset.fileProperties;
+                  this.title = asset.title ? asset.title : 'Untitled';
+                  this.imgURL = asset.imageUrl;
+                  this.fileExt = asset.imageUrl ? asset.imageUrl.substr(asset.imageUrl.lastIndexOf('.') + 1) : ''
 
                   this.downloadName = this.title.replace(/\./g,'-') + '.' + this.fileExt
 
@@ -171,8 +178,8 @@ export class Asset {
                   this.metadataLoaded = true;
                   this.dataLoadedSource.next(this.metadataLoaded);
               }
-          })
-          .catch((err) => {
+          },
+          (err) => {
               console.error('Unable to load asset metadata.');
           });
   }
