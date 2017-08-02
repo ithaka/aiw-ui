@@ -324,6 +324,7 @@
   "FIELD" : {
     "artclassification" : "Classification", 
     "artcollectiontitle" : "Collection", 
+    "Creator" : "Creator",
     "artcreator" : "Creator", 
     "artculture" : "Culture", 
     "artcurrentrepository" : "Repository", 
