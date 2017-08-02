@@ -161,18 +161,19 @@ export class AssetFilters {
     this.loadRoute();
   }
 
-  keys(obj) : Array<string> {
+  /**
+   * Get keys of Object as an array of strings
+   * - Convenience function useful for ngFor loops
+   * @param obj Any Object
+   */
+  keys(obj: any) : Array<string> {
     return (Object.keys(obj) && Object.keys(obj).length > 0) ? Object.keys(obj) : []
   }
 
   isArray(thing) : boolean {
     return Object.prototype.toString.call( thing ) === '[object Array]'
   }
-
-  currentPageOnblurr(){
-    this.loadRoute();
-  }
-
+  
   toggleEra(dateObj){
     if(dateObj.era == 'BCE'){
       dateObj.era = 'CE';

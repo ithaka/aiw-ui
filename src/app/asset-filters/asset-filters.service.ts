@@ -187,17 +187,17 @@ export class AssetFiltersService {
     //     return this.filters;
     // }
 
-
-    public generateDateFacets(dateFacetsArray ?: any[]) {
+    /**
+     * Populates the "dateObj" on this.availableFilters for applying/displaying date constraints
+     * @param dateFacetsArray Array returned with search results with multiple data and era values
+     */
+    public generateDateFacets(dateFacetsArray ?: any[]) : void {
         if (!dateFacetsArray && this.availableFilters.date) {
             dateFacetsArray = this.availableFilters.date;
         } else if(!dateFacetsArray) {
             dateFacetsArray = []
         }
-
-        console.log("YOU GOT THIS FAR")
-        console.log(dateFacetsArray)
-
+        
         if(dateFacetsArray.length > 0){
             var startDate = dateFacetsArray[0].date;
             var endDate = dateFacetsArray[dateFacetsArray.length - 1].date;
