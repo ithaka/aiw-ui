@@ -91,13 +91,19 @@ export class AssetPage implements OnInit, OnDestroy {
         this.subscriptions.push(
             this.route.params.subscribe((routeParams) => {
                 this.assets = []
+                let assetIdProperty = this._auth.featureFlags[routeParams['featureFlag']]? 'artstorid' : 'objectId'
+
+                // Find feature flags
+                if(routeParams && routeParams['featureFlag']){
+                    this._auth.featureFlags[routeParams['featureFlag']] = true;
+                }
 
                 if (routeParams['encryptedId']) {
                     this.hasExternalAccess = true
                     this._assets.decryptToken(routeParams['encryptedId'])
                         .take(1)
                         .subscribe((asset) => {
-                            this.renderPrimaryAsset(new Asset(asset.objectId, this._assets, this._auth, asset))
+                            this.renderPrimaryAsset(new Asset(asset[assetIdProperty], this._assets, this._auth, asset))
                         }, (err) => {
                             console.error(err)
                             this._router.navigate(['/nocontent'])
@@ -256,7 +262,11 @@ export class AssetPage implements OnInit, OnDestroy {
      * Clean up the field label for use as an ID (used in testing)
      */
     private cleanId(label: string): string {
-        return label.toLowerCase().replace(/\s/g,'');
+        if (typeof(label) == 'string') {
+            return label.toLowerCase().replace(/\s/g,'')
+        } else {
+            return ''
+        }
     }
 
     /**
@@ -264,7 +274,11 @@ export class AssetPage implements OnInit, OnDestroy {
      * - <wbr> word break opportunities break our link detection
      */
     private cleanFieldValue(value: string): string {
-        return value.replace(/\<wbr\>/g, '').replace(/\<wbr\/\>/g, '')
+        if (typeof(value) == 'string') {
+            return value.replace(/\<wbr\>/g, '').replace(/\<wbr\/\>/g, '')
+        } else {
+            return ''
+        }
     }
 
     private generateImgURL(): void{

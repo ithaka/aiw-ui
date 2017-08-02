@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router'
 import { Subscription }   from 'rxjs/Subscription';
 
 import { AssetService } from './../shared/assets.service';
+import { AuthService } from '../shared';
 import { AssetFiltersService } from '../asset-filters/asset-filters.service';
 import { AnalyticsService } from '../analytics.service';
 import { AssetGrid } from './../asset-grid/asset-grid.component';
@@ -28,7 +29,8 @@ export class SearchPage implements OnInit, OnDestroy {
         private _filters: AssetFiltersService, 
         private _router: Router,
         private _analytics: AnalyticsService,
-        private _title: Title
+        private _title: Title,
+        private _auth: AuthService
       ) {
     // this makes the window always render scrolled to the top
     this._router.events.subscribe(() => {
@@ -41,8 +43,13 @@ export class SearchPage implements OnInit, OnDestroy {
     this.subscriptions.push(
       this.route.params.subscribe( (routeParams) => {
         this._filters.clearApplied();
+        this._filters.clearAvailable();
         let params = Object.assign({}, routeParams);
-        
+        // Find feature flags (needs to be checked before running queryAll)
+        if(params && params['featureFlag']){
+            console.log(params['featureFlag'])
+            this._auth.featureFlags[params['featureFlag']] = true;
+        }
         // If a page number isn't set, reset to page 1!
         if (!params['currentPage']){
           params['currentPage'] = 1;

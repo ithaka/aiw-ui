@@ -309,5 +309,38 @@
   },
   "BETA_SKY_BANNER": {
     "MESSAGE": "Welcome to the new Artstor Digital Library platform. Learn about <a href=\"http://support.artstor.org/?page_id=37\" target=\"_blank\" class=\"link\">what's new</a>."
+  },
+  "SEARCH_SKY_BANNER": {
+    "MESSAGE": "⚠️ This is a testing instance for the new Search index. Please excuse the broken bits."
+  },
+  "FILTERS" : {
+    "artcollectiontitle_str" : "Collection",
+    "artclassification_str" : "Classification",
+    "classification" : "Classification",
+    "geography" : "Geography",
+    "collTypes" : "Collection Types",
+    "data" : "Date"
+  },
+  "FIELD" : {
+    "artclassification" : "Classification", 
+    "artcollectiontitle" : "Collection", 
+    "artcreator" : "Creator", 
+    "artculture" : "Culture", 
+    "artcurrentrepository" : "Repository", 
+    "artcurrentrepositoryidnumber" : "Repository Number", 
+    "artdate" : "Date", 
+    "artidnumber" : "ID Number", 
+    "artlocation" : "Location", 
+    "artmaterial" : "Material", 
+    "artmeasurements" : "Measurements", 
+    "artrelation" : "Relation", 
+    "artrepository" : "Repository", 
+    "artsource" : "Source", 
+    "artstyleperiod" : "Style Period", 
+    "artsubject" : "Subject", 
+    "arttechnique" : "Technique", 
+    "arttitle" : "Title",
+    "title" : "Title",
+    "artworktype" : "Work Type"
   }
 }

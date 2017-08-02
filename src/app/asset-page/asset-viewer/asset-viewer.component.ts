@@ -112,7 +112,8 @@ export class AssetViewerComponent implements OnInit, OnDestroy, AfterViewInit {
                 this.mediaLoadingFailed = true;
             case 'image':
                 // Image, try IIF
-                this.loadIIIF();
+                // this.loadIIIF();
+                this.mediaLoadingFailed = true;
                 break;
             case 'audio':
                 // Kaltura media

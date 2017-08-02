@@ -17,6 +17,7 @@ export class Asset {
   downloadLink: string;
   downloadName: string
   tileSource: any;
+  record: any;
   collectionName: string = ''
   // Not reliably available
   collectionId: number
@@ -53,10 +54,35 @@ export class Asset {
       24: 'kaltura'
   };
 
+  metadataFields = [ 
+        "arttitle", 
+        "artclassification", 
+        "artcollectiontitle", 
+        "artcreator", 
+        "artculture", 
+        "artcurrentrepository", 
+        "artcurrentrepositoryidnumber", 
+        "artdate", 
+        "artidnumber", 
+        "artlocation", 
+        "artmaterial", 
+        "artmeasurements", 
+        "artrelation", 
+        "artrepository", 
+        "artsource", 
+        "artstyleperiod", 
+        "artsubject", 
+        "arttechnique", 
+        "artworktype"
+    ];
+
   constructor(asset_id: string, _assets ?: AssetService, _auth ?: AuthService, assetObj ?: any) {
     this.id = asset_id;
     this._assets = _assets;
     this._auth = _auth;
+    this.loadAssetMetaData();
+//   constructor(asset_id: string, _assets ?: AssetService, _auth ?: AuthService, assetObj ?: any) {
+    
     if (assetObj) {
         this.metadataLoaded = true
         this.title = assetObj.tombstone[0]
@@ -100,6 +126,34 @@ export class Asset {
 
       this._assets.getById( this.id )
           .then((res) => {
+              let asset = res['results'][0]
+
+              // New Search
+              if(asset.artstorid) {
+                this.loadMediaMetaData()
+
+                  for (let i =0; i < this.metadataFields.length; i++) {
+                      if (asset[this.metadataFields[i]][0]) {
+                        this.metaDataArray.push( { fieldName: this.metadataFields[i], fieldValue: asset[this.metadataFields[i]][0] } )
+                      }
+                  }
+                //   this.filePropertiesArray = asset.fileProperties;
+                  this.title = asset.arttitle[0] ? asset.arttitle[0] : 'Untitled';
+
+                  if (asset['media']) {
+                    let media = JSON.parse(asset['media'])
+                    this.imgURL = media['thumbnailSizeOnePath']
+                    this.typeId = media['adlObjectType']
+                  }
+                  
+                  this.setCreatorDate();
+                  this.collectionName = this.getCollectionName()
+
+                  this.metadataLoaded = true;
+                  this.dataLoadedSource.next(this.metadataLoaded);
+              }
+
+              // Old Search
               if(res.objectId){
                   this.metaDataArray = res.metaData;
                   this.formatMetadata();
@@ -115,7 +169,7 @@ export class Asset {
                   this.collectionName = this.getCollectionName()
 
                   this.metadataLoaded = true;
-                  this.dataLoadedSource.next(this.metadataLoaded && this.imageSourceLoaded);
+                  this.dataLoadedSource.next(this.metadataLoaded);
               }
           })
           .catch((err) => {

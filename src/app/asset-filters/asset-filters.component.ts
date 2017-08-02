@@ -6,6 +6,7 @@ import { Angulartics2 } from 'angulartics2/dist'
 import { AssetService } from '../shared/assets.service'
 import { AssetFiltersService } from '../asset-filters/asset-filters.service'
 import { AnalyticsService } from '../analytics.service'
+import { AuthService } from "app/shared";
 
 declare var _satellite: any
 
@@ -67,7 +68,8 @@ export class AssetFilters {
     private route: ActivatedRoute, 
     private router: Router,
     private _analytics: AnalyticsService,
-    private angulartics: Angulartics2
+    private angulartics: Angulartics2,
+    private _auth: AuthService
   ) {
   }
 
@@ -84,7 +86,12 @@ export class AssetFilters {
         }
 
         // When params are adjusted, applied filters need to be cleared
-        this._filters.clearApplied();
+        // this._filters.clearApplied();
+
+        // Find feature flags
+        if(routeParams && routeParams['featureFlag']){
+            this._auth.featureFlags[routeParams['featureFlag']] = true;
+        }
 
         for (let paramName in routeParams) {
             if (this._filters.isFilterGroup(paramName)) {
@@ -105,7 +112,8 @@ export class AssetFilters {
     this.subscriptions.push(
       this._filters.available$.subscribe(
         filters => { 
-          this.availableFilters = filters; 
+          this.availableFilters = filters;
+          console.log(this.availableFilters)
         }
       )
     );
@@ -122,10 +130,10 @@ export class AssetFilters {
   private loadRoute() {
     let params = {};
 
-    if (this.availableFilters.dateObj && this.availableFilters.dateObj.modified == true && this.filterDate) {
-      params['startDate'] = this.availableFilters.dateObj.earliest.date * (this.availableFilters.dateObj.earliest.era == 'BCE' ? -1 : 1);
-      params['endDate'] = this.availableFilters.dateObj.latest.date * (this.availableFilters.dateObj.latest.era == 'BCE' ? -1 : 1);
-    }
+    // if (this.availableFilters.dateObj && this.availableFilters.dateObj.modified == true && this.filterDate) {
+    //   params['startDate'] = this.availableFilters.dateObj.earliest.date * (this.availableFilters.dateObj.earliest.era == 'BCE' ? -1 : 1);
+    //   params['endDate'] = this.availableFilters.dateObj.latest.date * (this.availableFilters.dateObj.latest.era == 'BCE' ? -1 : 1);
+    // }
 
     for (let filter of this.appliedFilters) {
       if(filter.filterGroup == 'currentPage'){
@@ -153,10 +161,19 @@ export class AssetFilters {
     this.loadRoute();
   }
 
-  currentPageOnblurr(){
-    this.loadRoute();
+  /**
+   * Get keys of Object as an array of strings
+   * - Convenience function useful for ngFor loops
+   * @param obj Any Object
+   */
+  keys(obj: any) : Array<string> {
+    return (Object.keys(obj) && Object.keys(obj).length > 0) ? Object.keys(obj) : []
   }
 
+  isArray(thing) : boolean {
+    return Object.prototype.toString.call( thing ) === '[object Array]'
+  }
+  
   toggleEra(dateObj){
     if(dateObj.era == 'BCE'){
       dateObj.era = 'CE';
@@ -177,7 +194,6 @@ export class AssetFilters {
   }
 
   toggleFilter(value, group){
-
     if(this._filters.isApplied(group, value)){ // Remove Filter
       this._filters.remove(group, value);
     } else { // Add Filter
@@ -262,25 +278,25 @@ export class AssetFilters {
 
 
   applyDateFilter(){
-    var sdate = parseInt(this.availableFilters.dateObj.earliest.date);
-    sdate = this.availableFilters.dateObj.earliest.era == 'BCE' ? (sdate * -1) : sdate;
+    // var sdate = parseInt(this.availableFilters.dateObj.earliest.date);
+    // sdate = this.availableFilters.dateObj.earliest.era == 'BCE' ? (sdate * -1) : sdate;
 
-    var edate = parseInt(this.availableFilters.dateObj.latest.date);
-    edate = this.availableFilters.dateObj.latest.era == 'BCE' ? (edate * -1) : edate;
+    // var edate = parseInt(this.availableFilters.dateObj.latest.date);
+    // edate = this.availableFilters.dateObj.latest.era == 'BCE' ? (edate * -1) : edate;
     
-    // Show error message if Start date is greater than End date
-    if(sdate > edate){
-      this.dateError = true;
-      return;
-    }
-    else{
-      this.dateError = false;
-    }
+    // // Show error message if Start date is greater than End date
+    // if(sdate > edate){
+    //   this.dateError = true;
+    //   return;
+    // }
+    // else{
+    //   this.dateError = false;
+    // }
 
-    this.availableFilters.dateObj.modified = true;
-    this.filterDate = true;
-    this.pagination.currentPage = 1;
-    this.loadRoute();
+    // this.availableFilters.dateObj.modified = true;
+    // this.filterDate = true;
+    // this.pagination.currentPage = 1;
+    // this.loadRoute();
   }
 
   existsInRegion(countryId, childerenIds){

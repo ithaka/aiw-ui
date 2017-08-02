@@ -1,12 +1,13 @@
+
 import { Router } from '@angular/router';
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { Angulartics2 } from 'angulartics2/dist';
 
 // Project dependencies
 import { SearchQueryUtil } from './search-query';
-import { AssetService } from './../../shared';
 import { AnalyticsService } from '../../analytics.service';
 import { AssetFiltersService } from './../../asset-filters/asset-filters.service';
+import { AuthService, AssetService, AssetSearchService } from "app/shared";
 
 @Component({
   selector: 'ang-search-modal',
@@ -68,13 +69,13 @@ export class SearchModal implements OnInit {
 
   constructor(  
         private _assets: AssetService, 
+        private _search: AssetSearchService,
         private _filters: AssetFiltersService, 
         private _router: Router,
         private _analytics: AnalyticsService,
-        private angulartics: Angulartics2
+        private angulartics: Angulartics2,
+        private _auth: AuthService
       ) { 
-    // Pull in filterFields
-    this.fields = _assets.filterFields;
     
     // Setup two query fields
     this.advanceQueries.push(Object.assign({}, this.advQueryTemplate));
@@ -114,6 +115,16 @@ export class SearchModal implements OnInit {
 
   ngOnInit() { 
     document.body.style.overflow = 'hidden';
+
+
+    // Pull in filterFields
+    if (this._auth.featureFlags['solrSearch']) {
+      // New search filter map
+      this.fields = this._search.filterFields
+    } else {
+      // Old search filter map
+      this.fields = this._assets.filterFields
+    }
   }
 
   private close(): void {
@@ -219,8 +230,18 @@ export class SearchModal implements OnInit {
       return;
     }
 
-    let advQuery = this.queryUtil.generateSearchQuery(this.advanceQueries)
-    let filterParams = this.queryUtil.generateFilters(this.filterSelections, this.advanceSearchDate)
+    let advQuery
+    let filterParams
+
+    // Check search feature flag
+    if (this._auth.featureFlags['solrSearch']) {
+      advQuery = this.queryUtil.generateSearchQuery(this.advanceQueries)
+      filterParams = this.queryUtil.generateFilters(this.filterSelections, this.advanceSearchDate)
+    } else {
+      advQuery = this.queryUtil.generateLegacySearchQuery(this.advanceQueries)
+      filterParams = this.queryUtil.generateLegacyFilters(this.filterSelections, this.advanceSearchDate)
+    }
+
     // Track in Adobe Analytics
     this._analytics.directCall('advanced_search');
     this.angulartics.eventTrack.next({ action: "advSearch", properties: { category: "search", label: advQuery } })
