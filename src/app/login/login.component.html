@@ -3,35 +3,35 @@
         <div class="col-sm-6">
             <div class="card card--light">
                 <div class="card-header">
-                    <h1 translate id="loginHeading">LOGIN.LOGIN_HEADING</h1>
+                    <h1 id="loginHeading">{{ 'LOGIN.REG_LOGIN.HEADING' | translate }}</h1>
                 </div>
                 <div class="card-body">
                     <form (ngSubmit)="login(user)">
                         <div class="form-group">
-                            <label for="loginEmail">Email Address</label>
+                            <label for="loginEmail">{{ 'LOGIN.REG_LOGIN.EMAIL_LABEL' | translate }}</label>
                             <input id="inputLoginEmail" [(ngModel)]="user.username" name="username" type="text" class="form-control" placeholder="Username" />
                         </div>
                         <div class="form-group">
-                            <label for="loginPassword">Password</label>
+                            <label for="loginPassword">{{ 'LOGIN.REG_LOGIN.PASSWORD_LABEL' | translate }}</label>
                             <input id="inputLoginPassword" [(ngModel)]="user.password" name="password" type="password" class="form-control" placeholder="Password" />
                             <div id="errorMsg" *ngIf="errorMsg" class="form-text text-danger"> {{ errorMsg | translate }} </div>
-                            <p *ngIf="forcePwdRst" class="form-text text-danger">Please <a id="forcePwdResetModal" (click)="showPwdModal = true" class="link">reset your password</a> in order to log in.</p>
+                            <p *ngIf="forcePwdRst" class="form-text text-danger">{{ 'LOGIN.REG_LOGIN.FORCE_PW_RESET_MSG' | translate }}</p>
                         </div>
                         <p class="notranslate" [innerHtml]="'LOGIN.TERMS' | translate"></p>
                         <div class="form-group">
-                            <button id="btnLoginRemote" class="btn btn-primary" [class.loading]="loginLoading" type="submit" name="action"  data-sc="account: remote user log in">Log in</button>
+                            <button id="btnLoginRemote" class="btn btn-primary" [class.loading]="loginLoading" type="submit" name="action"  data-sc="account: remote user log in">{{ 'LOGIN.REG_LOGIN.LOGIN_BTN' | translate }}</button>
                         </div>
                     </form>
-                    <a id="linkLoginResetModal" class="link" (click)="showPwdModal = true">Forgot password?</a>
+                    <a id="linkLoginResetModal" tabindex="0" class="link" (click)="showPwdModal = true">{{ 'LOGIN.REG_LOGIN.FORGOT_PW_PROMPT' | translate }}</a>
                     <br/>
                     <div *ngIf="showRegister">
                         <a [routerLink]="['/register']" class="link">Not Registered?</a>
                         <br/>
                     </div>
-                    <a href="http://support.artstor.org/?article-category=03-accessing-the-artstor-digital-library" class="link" target="_blank">Login Help</a>
+                    <a [attr.href]="'LOGIN.REG_LOGIN.LOGIN_HELP_LINK' | translate" class="link" target="_blank">{{ 'LOGIN.REG_LOGIN.LOGIN_HELP_PROMPT' | translate }}</a>
                 </div>
                 <div class="block-right">
-                    <a class="link" (click)="toggleAccessHelpModal()">How do I get access?</a>
+                    <a class="link" tabindex="0" (click)="toggleAccessHelpModal()">How do I get access?</a>
                 </div>
             </div>
         </div>
