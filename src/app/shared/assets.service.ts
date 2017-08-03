@@ -346,9 +346,6 @@ export class AssetService {
         // urlParams is used by the below load functions
         this.urlParams = params;
 
-        // Tell the filters service we have some updates
-        this.setFiltersFromURLParams(params);
-
         //Set sort param
         if(params['sort']){
             this.activeSort.index = params['sort'];
@@ -359,73 +356,81 @@ export class AssetService {
         this.paginationValue.currentPage =  parseInt(this.urlParams.currentPage);
         this.paginationSource.next(this.paginationValue);
 
-        // Pick function to load this query!
-        if (params.hasOwnProperty("objectId") && params["objectId"] !== "" && params.hasOwnProperty("colId") && params["colId"] !== "") {
-            //gets associated images thumbnails
-            this.loadAssociatedAssets(params.objectId, params.colId);
-        } else if (params.hasOwnProperty("igId") && params["igId"] !== "") {
-            //get image group thumbnails
-            this.loadIgAssets(params.igId);
-        } else if (params.hasOwnProperty("objectId") && params["objectId"] !== "") {
-            //get clustered images thumbnails
-            this.loadCluster(params.objectId);
-        } else if (params.hasOwnProperty("catId")  && params["catId"] !== "") {
-            //get collection thumbnails
-            this.loadCategory(params.catId);
-        }  else if (params.hasOwnProperty("colId") && params["colId"] !== "") {
-            //get collection thumbnails
-            this.loadCollection(params.colId);
-        } else if (params.hasOwnProperty("term")) {
-            this.loadSearch(params.term);
-        } else {
-            console.log("Don't know what to query!");
-        } 
+
+        // Tell the filters service we have some updates
+        this.setFiltersFromURLParams(params)
+            .then(() => {
+                // Pick function to load this query!
+                if (params.hasOwnProperty("objectId") && params["objectId"] !== "" && params.hasOwnProperty("colId") && params["colId"] !== "") {
+                    //gets associated images thumbnails
+                    this.loadAssociatedAssets(params.objectId, params.colId);
+                } else if (params.hasOwnProperty("igId") && params["igId"] !== "") {
+                    //get image group thumbnails
+                    this.loadIgAssets(params.igId);
+                } else if (params.hasOwnProperty("objectId") && params["objectId"] !== "") {
+                    //get clustered images thumbnails
+                    this.loadCluster(params.objectId);
+                } else if (params.hasOwnProperty("catId")  && params["catId"] !== "") {
+                    //get collection thumbnails
+                    this.loadCategory(params.catId);
+                }  else if (params.hasOwnProperty("colId") && params["colId"] !== "") {
+                    //get collection thumbnails
+                    this.loadCollection(params.colId);
+                } else if (params.hasOwnProperty("term")) {
+                    this.loadSearch(params.term);
+                } else {
+                    console.log("Don't know what to query!");
+                } 
+            });
     }
 
     /**
      * Set the filters using filter service from URL params
      * @param params Object conaining all route params
      */
-    private setFiltersFromURLParams(params: any): void{
-        let dateObj;
+    private setFiltersFromURLParams(params: any): Promise<any>{
+        return new Promise((resolve, reject) => {
+            let dateObj;
 
-        Object.keys(params).forEach((key) => {
-            var filter = {};
-            if(key.indexOf('str') > -1){
-                if(!this._filters.isApplied(key, params[key])){ // Add Filter
-                    this._filters.apply(key, params[key]);
+            Object.keys(params).forEach((key) => {
+                var filter = {};
+                if(key.indexOf('str') > -1){
+                    if(!this._filters.isApplied(key, params[key])){ // Add Filter
+                        this._filters.apply(key, params[key]);
+                    }
                 }
-            }
-        });
+            });
 
-        if(params['startDate'] && params['endDate']){
-            dateObj = {
-                modified : true,
-                earliest : {
-                    date : Math.abs(params['startDate']),
-                    era : params['startDate'] < 0 ? 'BCE' : 'CE'
-                },
-                latest : {
-                    date : Math.abs(params['endDate']),
-                    era : params['endDate'] < 0 ? 'BCE' : 'CE'
+            if(params['startDate'] && params['endDate']){
+                dateObj = {
+                    modified : true,
+                    earliest : {
+                        date : Math.abs(params['startDate']),
+                        era : params['startDate'] < 0 ? 'BCE' : 'CE'
+                    },
+                    latest : {
+                        date : Math.abs(params['endDate']),
+                        era : params['endDate'] < 0 ? 'BCE' : 'CE'
+                    }
                 }
-            }
-            this._filters.setAvailable('dateObj', dateObj);
-        }
-        else{
-            dateObj = {
-                modified : false,
-                earliest : {
-                    date : 1000,
-                    era : 'BCE'
-                },
-                latest : {
-                    date : 2017,
-                    era : 'CE'
+                this._filters.setAvailable('dateObj', dateObj);
+                resolve(this._filters.getAvailable())
+            } else {
+                dateObj = {
+                    modified : false,
+                    earliest : {
+                        date : 1000,
+                        era : 'BCE'
+                    },
+                    latest : {
+                        date : 2017,
+                        era : 'CE'
+                    }
                 }
+                this._filters.setAvailable('dateObj', dateObj);
+                resolve(this._filters.getAvailable())
             }
-            this._filters.setAvailable('dateObj', dateObj);
-        }
+        })
     }
 
     /**
