@@ -30,12 +30,13 @@ export class ShareIgLinkModal implements OnInit {
 
   createIgLink(ig: ImageGroup): void {
     // Find out if group is owned by user
-    let userOwned = false;
+    let userOwned = false
+    let user = this._auth.getUser()
     this.ig.access.forEach((accessObj) => {
-      if((accessObj.entity_identifier == this._auth.getUser().baseProfileId.toString() && accessObj.entity_type == 300) ){
-        userOwned = true;
+      if((accessObj.entity_identifier == user.baseProfileId.toString() && accessObj.access_type == 300) ){
+        userOwned = true
       }
-    });
+    })
 
     // If the group is not owned by the user, we simply give back the url of the group
     // Only a group owner can generate a token share link
