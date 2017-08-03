@@ -150,6 +150,7 @@ export class AssetService {
         this.paginationValue = paginationValue;
         this.paginationSource.next(paginationValue);
 
+        console.log(resultObj)
         // Update results thumbnail array 
         this.allResultsValue = resultObj;
         this.allResultsSource.next(resultObj);
@@ -313,7 +314,6 @@ export class AssetService {
     /**
      * Clear Assets for asset grid
      */
-
     public clearAssets(): void{
         this.allResultsSource.next([]);
     }
@@ -732,7 +732,6 @@ export class AssetService {
     }
 
     private loadCluster(objectId: string){
-        this.currentLoadedParams = Object.assign(Object.assign({}, this.defaultUrlParams), this.urlParams);
         
         let options = new RequestOptions({ withCredentials: true });
         let startIndex = ((this.urlParams.currentPage - 1) * this.urlParams.pageSize) + 1;
@@ -838,13 +837,6 @@ export class AssetService {
                         data.facets.forEach( (facet, index) => {
                             this._filters.setAvailable(facet.name, facet.values);
                         })
-                        // this._filters.setAvailable('artclassification_str', data.classificationFacets);
-                        // if (data && data.collTypeFacets) {
-                        //     this._filters.generateColTypeFacets( data.collTypeFacets );
-                        //     this._filters.generateGeoFilters( data.geographyFacets );
-                        //     this._filters.generateDateFacets( data.dateFacets );
-                        //     this._filters.setAvailable('classification', data.classificationFacets);
-                        // }
                         // Transform data from SOLR queries
                         if (data.results) {
                             data.thumbnails = data.results;
@@ -862,10 +854,6 @@ export class AssetService {
             .subscribe(
                 (res) => {
                     let data = res.json();
-                    // data.facets.forEach( (facet, index) => {
-                    //     this._filters.setAvailable(facet.name, facet.values);
-                    // })
-                    // this._filters.setAvailable('artclassification_str', data.classificationFacets);
                     if (data && data.collTypeFacets) {
                         this._filters.generateColTypeFacets( data.collTypeFacets );
                         this._filters.generateGeoFilters( data.geographyFacets );
@@ -891,13 +879,16 @@ export class AssetService {
                 // so, the user never sees an error (woohoo) also, if they refresh it will likely work anyway
                 // ok i'm done
 
+                // Even though it's an error, indicate we loaded these params
+                this.currentLoadedParams = Object.assign(Object.assign({}, this.defaultUrlParams), this.urlParams);
+
                 if (error.status == 0 && this.searchErrorCount < 3) {
                     this.searchErrorCount++
                     setTimeout(this.loadSearch(term), 7000)
                 } else {
                     this.searchErrorCount = 0
                     console.error(error)
-                    this.allResultsSource.error(error); // .throw(error);
+                    this.allResultsSource.next(null)
                 }
                 
                 // Pass error down to allResults listeners
