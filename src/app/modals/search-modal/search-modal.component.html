@@ -52,13 +52,11 @@
                                 <div class="form-card card dt-grp">
                                     <div class="date-filter-row">
                                         <input id="inputDateFilterStart" [(ngModel)]="advanceSearchDate['startDate']" (change)="validateForm()" type="number" (keypress)="dateKeyPress($event)" min="0" class="form-control" placeholder="Start Date">
-                                        <!--<div id="buttonDateFilterStartEra" class="toggle-btn" (click)="toggleEra('startEra')">{{ advanceSearchDate['startEra'] }}</div>-->
                                         <div id="buttonDateFilterStartBCE" (click)="advanceSearchDate['startEra'] = 'BCE'" [ngClass]="{'active': advanceSearchDate['startEra'] == 'BCE' }" class="side-toggle-btn">BCE</div>
                                         <div id="buttonDateFilterStartCE" (click)="advanceSearchDate['startEra'] = 'CE'" [ngClass]="{'active': advanceSearchDate['startEra'] == 'CE' }" class="side-toggle-btn">CE</div>
                                     </div>
                                     <div class="date-filter-row">
                                         <input id="inputDateFilterEnd" [(ngModel)]="advanceSearchDate['endDate']" (change)="validateForm()" type="number" (keypress)="dateKeyPress($event)" min="0" class="form-control" placeholder="End Date">
-                                        <!--<div id="buttonDateFilterEndEra" class="toggle-btn" (click)="toggleEra('endEra')">{{ advanceSearchDate['endEra'] }}</div>-->
                                         <div id="buttonDateFilterEndBCE" (click)="advanceSearchDate['endEra'] = 'BCE'" [ngClass]="{'active': advanceSearchDate['endEra'] == 'BCE' }" class="side-toggle-btn">BCE</div>
                                         <div id="buttonDateFilterEndCE" (click)="advanceSearchDate['endEra'] = 'CE'" [ngClass]="{'active': advanceSearchDate['endEra'] == 'CE' }" class="side-toggle-btn">CE</div>
                                     </div>
@@ -119,7 +117,8 @@
                                     </ul>
                                 </div>
                             </div>
-                        </div><!--end second column-->
+                        </div>
+                        <!--end second column-->
                     </div>
                 </div>
             </div>

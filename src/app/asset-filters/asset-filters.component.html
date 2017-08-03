@@ -1,7 +1,30 @@
 <div class="col--filter-border col--sliding" [ngClass]="{ 'slide-up' : !showFilters }">
-    <div class="filter-group">
+    
+    <!--New Search Filters-->
+    <div *ngIf="_auth.featureFlags['solrSearch']">
+        <div *ngFor="let filterKey of keys(availableFilters); let i = index" [class.hidden]="">
+            <div *ngIf="availableFilters[filterKey] && isArray(availableFilters[filterKey]) && availableFilters[filterKey].length > 0" class="filter-group">
+                <span class="filter-group__label">
+                    <h3>{{ 'FILTERS.' + filterKey | translate }} <a id="buttonCollectionTypeClear" tabindex="1" class="link--accent small" [ngClass]="{ 'disable': !hasAppliedFilters('collTypes') }" (click)="clearAllFilterGroup('collTypes')">Clear</a></h3>
+                </span>
+                <!--<div class="filter" [ngClass]="{ 'active': true }">All Collections</div>-->
+                <!--<pre>{{availableFilters[filterKey]}}</pre>-->
+                <button class="filter" *ngFor="let facet of appliedFilters[filterKey]" id="filterCollectionTypeItem{{ facet.name }}"  (click)="toggleFilter(facet.efq, filterKey)" [ngClass]="{'active': filterApplied(facet.efq, filterKey)}" data-sc="search: facet">{{ facet.name }} ({{facet.count}})
+                    <i class="icon icon-add"></i>
+                    <i class="icon icon-close"></i>
+                </button>
+                <button class="filter" *ngFor="let facet of availableFilters[filterKey]" id="filterCollectionTypeItem{{ facet.name }}"  (click)="toggleFilter(facet.efq, filterKey)" [ngClass]="{'active': filterApplied(facet.efq, filterKey)}" data-sc="search: facet">{{ facet.name }} ({{facet.count}})
+                    <i class="icon icon-add"></i>
+                    <i class="icon icon-close"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!--Legacy Search Filters-->
+    <div *ngIf="!_auth.featureFlags['solrSearch']" class="filter-group">
         <span class="filter-group__label">
-            <h3>Collection Type <a id="buttonCollectionTypeClear" tabindex="" class="link--accent small" [ngClass]="{ 'disable': !hasAppliedFilters('collTypes') }" (click)="clearAllFilterGroup('collTypes')">Clear</a></h3>
+            <h3>Collection Type <a id="buttonCollectionTypeClear" tabindex="1" class="link--accent small" [ngClass]="{ 'disable': !hasAppliedFilters('collTypes') }" (click)="clearAllFilterGroup('collTypes')">Clear</a></h3>
         </span>
         <!--<div class="filter" [ngClass]="{ 'active': true }">All Collections</div>-->
         <button class="filter" *ngFor="let facet of availableFilters.collType" id="filterCollectionTypeItem{{ facet.id }}"  (click)="toggleFilter(facet.id, 'collTypes')" [ngClass]="{'active': filterApplied(facet.id, 'collTypes')}" data-sc="search: facet">{{ facet.label }}
@@ -10,9 +33,9 @@
         </button>
     </div>
 
-    <div class="filter-group">
+    <div *ngIf="!_auth.featureFlags['solrSearch']" class="filter-group">
         <span class="filter-group__label">
-                <h3>Classification <a id="filterClassificationClear" tabindex="" class="link--accent small" [ngClass]="{ 'disable': !hasAppliedFilters('classification') }" (click)="clearAllFilterGroup('classification')">Clear</a></h3>
+                <h3>Classification <a id="filterClassificationClear" tabindex="1" class="link--accent small" [ngClass]="{ 'disable': !hasAppliedFilters('classification') }" (click)="clearAllFilterGroup('classification')">Clear</a></h3>
             </span>
         <!--<div class="filter" [ngClass]="{ 'active': true }">All Collections</div>-->
         <button class="filter" *ngFor="let classificationFacet of availableFilters.classification" id="filterClassificationItem{{ classificationFacet.id }}" (click)="toggleFilter(classificationFacet.id, 'classification')" [ngClass]="{'active': filterApplied(classificationFacet.id, 'classification')}" data-sc="search: facet">{{ classificationFacet.name }}
@@ -21,11 +44,11 @@
         </button>
     </div>
 
-    <div class="filter-group">
+    <!--Legacy Geo Filters-->
+    <div *ngIf="!_auth.featureFlags['solrSearch']" class="filter-group">
         <span class="filter-group__label">
-                <h3>Geography <a tabindex="" class="link--accent small" [ngClass]="{ 'disable': !hasAppliedFilters('geography') }" (click)="clearAllFilterGroup('geography')">Clear</a></h3>
+                <h3>Geography <a tabindex="1" class="link--accent small" [ngClass]="{ 'disable': !hasAppliedFilters('geography') }" (click)="clearAllFilterGroup('geography')">Clear</a></h3>
             </span>
-        <!--<div class="filter" [ngClass]="{ 'active': true }">All Collections</div>-->
         <div *ngFor="let geographyFacet of availableFilters.geography" id="filterGeographyItem{{ geographyFacet.id }}">
             <i id="filterGeography{{ geographyFacet.id }}Expand" class="icon icon-direction absolute-left tree-icon" (click)="toggleTree(geographyFacet)" [ngClass]="{ 'icon-down' : geographyFacet.expanded, 'icon-right' : !geographyFacet.expanded }"></i>
             <button class="filter parent" (click)="toggleFilter(geographyFacet.id, 'geography')" [ngClass]="{'active': filterApplied(geographyFacet.id, 'geography')}" data-sc="search: facet"> {{ geographyFacet.name }} 
@@ -41,9 +64,9 @@
         </div>
     </div>
 
-    <div *ngIf="availableFilters.dateObj" class="filter-group">
+    <div *ngIf="!_auth.featureFlags['solrSearch'] && availableFilters.dateObj" class="filter-group">
         <span class="filter-group__label">
-                <h3>Date <a id="buttonDateFilterClear" tabindex="" class="link--accent small" [ngClass]="{ 'disable': !hasAppliedFilters('date') }" (click)="clearAllFilterGroup('date')">Clear</a></h3>
+                <h3>Date <a id="buttonDateFilterClear" tabindex="1" class="link--accent small" [ngClass]="{ 'disable': !hasAppliedFilters('date') }" (click)="clearAllFilterGroup('date')">Clear</a></h3>
             </span>
         <div class="date-filter-row">
             <input id="inputDateFilterStart" [(ngModel)]="availableFilters.dateObj.earliest.date" type="number" (keypress)="dateKeyPress($event)" min="0" class="form-control" placeholder="Start Date">

@@ -17,6 +17,7 @@ export class Asset {
   downloadLink: string;
   downloadName: string
   tileSource: any;
+  record: any;
   collectionName: string = ''
   // Not reliably available
   collectionId: number
@@ -53,10 +54,35 @@ export class Asset {
       24: 'kaltura'
   };
 
+  metadataFields = [ 
+        "arttitle", 
+        "artclassification", 
+        "artcollectiontitle", 
+        "artcreator", 
+        "artculture", 
+        "artcurrentrepository", 
+        "artcurrentrepositoryidnumber", 
+        "artdate", 
+        "artidnumber", 
+        "artlocation", 
+        "artmaterial", 
+        "artmeasurements", 
+        "artrelation", 
+        "artrepository", 
+        "artsource", 
+        "artstyleperiod", 
+        "artsubject", 
+        "arttechnique", 
+        "artworktype"
+    ];
+
   constructor(asset_id: string, _assets ?: AssetService, _auth ?: AuthService, assetObj ?: any) {
     this.id = asset_id;
     this._assets = _assets;
     this._auth = _auth;
+    this.loadAssetMetaData();
+//   constructor(asset_id: string, _assets ?: AssetService, _auth ?: AuthService, assetObj ?: any) {
+    
     if (assetObj) {
         this.metadataLoaded = true
         this.title = assetObj.tombstone[0]
@@ -100,18 +126,52 @@ export class Asset {
 
       this._assets.getById( this.id )
           .then((res) => {
-              if(res.objectId){
-                  this.metaDataArray = res.metaData;
+              let asset 
+              if (res['results']) {
+                // As returned from Solr
+                asset = res['results'][0]
+              } else {
+                // As returned from legacy search
+                asset = res
+              }
+
+              // New Search
+              if(asset.artstorid) {
+                this.loadMediaMetaData()
+
+                  for (let i =0; i < this.metadataFields.length; i++) {
+                      if (asset[this.metadataFields[i]][0]) {
+                        this.metaDataArray.push( { fieldName: this.metadataFields[i], fieldValue: asset[this.metadataFields[i]][0] } )
+                      }
+                  }
+                //   this.filePropertiesArray = asset.fileProperties;
+                  this.title = asset.arttitle[0] ? asset.arttitle[0] : 'Untitled';
+
+                  if (asset['media']) {
+                    let media = JSON.parse(asset['media'])
+                    this.imgURL = media['thumbnailSizeOnePath']
+                    this.typeId = media['adlObjectType']
+                  }
+                  
+                  this.setCreatorDate();
+                  this.collectionName = this.getCollectionName()
+
+                  this.metadataLoaded = true;
+                  this.dataLoadedSource.next(this.metadataLoaded && this.imageSourceLoaded);
+              }
+
+              // Old Search
+              if(asset.objectId){
+                  this.loadMediaMetaData();
+                  this.metaDataArray = asset.metaData;
                   this.formatMetadata();
 
-                  this.filePropertiesArray = res.fileProperties;
-                  this.title = res.title ? res.title : 'Untitled';
-                  this.imgURL = res.imageUrl;
-                  this.fileExt = res.imageUrl ? res.imageUrl.substr(res.imageUrl.lastIndexOf('.') + 1) : ''
+                  this.filePropertiesArray = asset.fileProperties;
+                  this.title = asset.title ? asset.title : 'Untitled';
+                  this.imgURL = asset.imageUrl;
+                  this.fileExt = asset.imageUrl ? asset.imageUrl.substr(asset.imageUrl.lastIndexOf('.') + 1) : ''
 
                   this.downloadName = this.title.replace(/\./g,'-') + '.' + this.fileExt
-
-                  console.log(this.title, this.fileExt, this.downloadName)
 
                   this.setCreatorDate();
                   this.collectionName = this.getCollectionName()
@@ -119,8 +179,8 @@ export class Asset {
                   this.metadataLoaded = true;
                   this.dataLoadedSource.next(this.metadataLoaded && this.imageSourceLoaded);
               }
-          })
-          .catch((err) => {
+          },
+          (err) => {
               console.error('Unable to load asset metadata.');
           });
   }
@@ -197,13 +257,13 @@ export class Asset {
     
     this.typeId = data.objectTypeId;
     
+    let downloadSize = data.downloadSize || '1024,1024'
+    
     /** This determines how to build the downloadLink, which is different for different typeIds */
     if (this.typeId === 20 || this.typeId === 21 || this.typeId === 22 || this.typeId === 23) { //all of the typeIds for documents
         this.downloadLink = [this._auth.getMediaUrl(), this.id, this.typeId].join("/");
-        console.log("just assembled downloadLink:", this.downloadLink)
-        console.log("components used:", this._auth.getMediaUrl(), this.id, this.typeId)
     } else if (data.imageServer && data.imageUrl) { //this is a general fallback, but should work specifically for images and video thumbnails
-        let url = data.imageServer + data.imageUrl + "?cell=1024,1024&rgnn=0,0,1,1&cvt=JPEG";
+        let url = data.imageServer + data.imageUrl + "?cell=" + downloadSize + "&rgnn=0,0,1,1&cvt=JPEG";
         this.downloadLink = this._auth.getHostname() + "/api/download?imgid=" + this.id + "&url=" + encodeURIComponent(url);
     }
 

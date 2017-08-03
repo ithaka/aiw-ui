@@ -1,19 +1,27 @@
 <div class="card-block card-text">
     <div class="card-img-top">
-        <img [class.disablePointerEvents]="reorderMode" [attr.src]="_assets.makeThumbUrl(thumbnail.thumbnailImgUrl, 1)" [attr.alt]="thumbnail.thumbnail1 ? 'Thumbnail of ' + thumbnail.thumbnail1 : 'No title available'">
+        <img [class.disablePointerEvents]="reorderMode" [attr.src]="_assets.makeThumbUrl(thumbnail.thumbnailImgUrl, 1)" [attr.alt]="thumbnail.arttitle && thumbnail.arttitle[0] ? 'Thumbnail of ' + thumbnail.thumbnail1 : 'No title available'">
     </div>
     <div class="card-icon-group" (click)="$event.stopPropagation(); $event.preventDefault();" [ngClass]="{ 'disablePointerEvents': editMode }" >
-        <i *ngIf="thumbnail.cfObjectId && thumbnail.cfObjectId.length > 0" [id]="thumbnail.objectId + '_associated_images'" class="icon icon-collab" (click)="openLink($event,['/associated', thumbnail.cfObjectId, thumbnail.collectionId])" title="Others are also interested in..."></i>
-        <i *ngIf="thumbnail.clustered == 1" [id]="thumbnail.objectId + '_clustered_images'" class="icon icon-cluster" (click)="openLink($event,['/cluster', thumbnail.objectId, { objTitle :  thumbnail.thumbnail1 }])" title="View related media"></i>
+        <i *ngIf="thumbnail.cfObjectId && thumbnail.cfObjectId.length > 0" [id]="thumbnail.objectId + '_associated_images'" class="icon icon-collab" [routerLink]="['/associated', thumbnail.cfObjectId, thumbnail.collectionId]" title="Others are also interested in..."></i>
+        <i *ngIf="thumbnail.clustered == 1" [id]="thumbnail.objectId + '_clustered_images'" class="icon icon-cluster" [routerLink]="['/cluster', thumbnail.objectId, { objTitle :  thumbnail.thumbnail1 }]" title="View related media"></i>
         <i *ngIf="thumbnail.iapFlag > 0" class="icon icon-iap"></i>
         <i *ngIf="thumbnail.objectTypeId && thumbnail.objectTypeId != 10" class="icon icon-{{thumbnail.objectTypeId | typeIdPipe}}"></i>
         <i class="icon icon-{{collectionTypeMap[thumbnail.collectionType] && collectionTypeMap[thumbnail.collectionType].name}} icon-collection-type" [attr.title]="collectionTypeMap[thumbnail.collectionType] && collectionTypeMap[thumbnail.collectionType].alt"></i>
     </div>
     <div>
+        <!--New Asset display-->
+        <span *ngIf="thumbnail.arttitle" class="asset-title" title="{{ thumbnail.arttitle[0] }}" [innerHTML]="thumbnail.arttitle[0]"></span>
+        <span *ngIf="thumbnail.artcreator" class="asset-agent" title="{{ thumbnail.artcreator[0] }}" [innerHTML]="thumbnail.artcreator[0]"></span>
+        <span *ngIf="thumbnail.artdate" class="asset-date" title="{{ thumbnail.artdate[0] }}" [innerHTML]="thumbnail.artdate[0]"></span>
+        <!--<span *ngIf="thumbnail.thumbnail4" title="{{ thumbnail.thumbnail4 }}" [innerHTML]="thumbnail.thumbnail4"></span>-->
+
+        <!--Old asset display-->
         <span *ngIf="thumbnail.thumbnail1" class="asset-title" title="{{ thumbnail.thumbnail1 }}" [innerHTML]="thumbnail.thumbnail1"></span>
         <span *ngIf="thumbnail.thumbnail2" class="asset-agent notranslate" title="{{ thumbnail.thumbnail2 }}" [innerHTML]="thumbnail.thumbnail2"></span>
         <span *ngIf="thumbnail.thumbnail3" class="asset-date" title="{{ thumbnail.thumbnail3 }}" [innerHTML]="thumbnail.thumbnail3"></span>
         <span *ngIf="thumbnail.thumbnail4" title="{{ thumbnail.thumbnail4 }}" [innerHTML]="thumbnail.thumbnail4"></span>
+        
         <!--Schema moving forward-->
         <ng-container *ngFor="let data of thumbnail.tombstone"><span *ngIf="data" [innerHtml]="data"></span></ng-container>
     </div>

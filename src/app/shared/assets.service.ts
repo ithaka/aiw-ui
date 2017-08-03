@@ -14,6 +14,7 @@ import { AuthService } from './auth.service';
 import { GroupService } from './group.service';
 import { AssetFiltersService } from './../asset-filters/asset-filters.service';
 import { ToolboxService } from './toolbox.service';
+import { AssetSearchService } from './asset-search.service';
 
 import { ImageGroup, Thumbnail } from '.';
 
@@ -63,7 +64,7 @@ export class AssetService {
 
     private searchSubscription: Subscription;
 
-    public filterFields = [
+     public filterFields = [
         {name: "In any field", value: "all"},
         {name: "Creator", value: "100" },
         {name: "Title", value: "101" },
@@ -110,9 +111,6 @@ export class AssetService {
     private header = new Headers({ 'Content-Type': 'application/json' }); 
     private defaultOptions = new RequestOptions({ headers: this.header, withCredentials: true });
 
-    // Switch for using Sycamore's New Search interface
-    private newSearch : boolean = false;
-
     // Pagination flag for preserving the select mode while paging through the results
     public paginated: boolean = false;
 
@@ -127,14 +125,10 @@ export class AssetService {
         locker: Locker,
         private _auth: AuthService,
         private _groups: GroupService,
-        private _toolbox: ToolboxService
+        private _toolbox: ToolboxService,
+        private _assetSearch: AssetSearchService
     ) {
         this._storage = locker.useDriver(Locker.DRIVERS.LOCAL);
-
-        // Flip switch for Sycamore's New Search
-        if( document.location.hostname.indexOf('ang-ui-sycamore-search.apps.test.cirrostratus.org') > -1 ) {
-            this.newSearch = true;
-        }
     } 
 
     private updateLocalResults(resultObj: any) {
@@ -142,7 +136,7 @@ export class AssetService {
         this.currentLoadedParams = Object.assign(Object.assign({}, this.defaultUrlParams), this.urlParams);
 
         let totalPages = 1;
-        
+
         if (resultObj.count) {
           totalPages = Math.ceil( resultObj.count / this.urlParams.pageSize );
         }
@@ -396,7 +390,7 @@ export class AssetService {
         var thisObj = this;
         Object.keys(params).forEach(function(key) {
             var filter = {};
-            if((key == 'collTypes') || (key == 'classification') || (key == 'geography')){
+            if(key.indexOf('str') > -1){
                 if(!thisObj._filters.isApplied(key, params[key])){ // Add Filter
                     thisObj._filters.apply(key, params[key]);
                 }
@@ -415,7 +409,7 @@ export class AssetService {
                     era : params['endDate'] < 0 ? 'BCE' : 'CE'
                 }
             }
-            this._filters.setAvailable('dateObj', dateObj);
+            // this._filters.setAvailable('dateObj', dateObj);
         }
         else{
             var dateObj = {
@@ -429,7 +423,7 @@ export class AssetService {
                     era : 'CE'
                 }
             }
-            this._filters.setAvailable('dateObj', dateObj);
+            // this._filters.setAvailable('dateObj', dateObj);
         }
     }
 
@@ -438,6 +432,19 @@ export class AssetService {
      * @param assetId: string Asset or object ID
      */
     public getById(assetId: string) {
+        // let options = new RequestOptions({
+        //     withCredentials: true
+        // });
+        // let query = {
+        //     "content_types": [
+        //         "art"
+        //     ],
+        //     "query": 'id:' + assetId
+        // };
+
+        // return this.http.post('//search-service.apps.test.cirrostratus.org/browse/', query, options)
+        //     .toPromise()
+        //     .then(this.extractData)
 
         return this.http
             .get(this._auth.getUrl() + '/metadata/' + assetId, this.defaultOptions)
@@ -815,21 +822,49 @@ export class AssetService {
         if (this.searchSubscription && this.searchSubscription.hasOwnProperty('unsubscribe')) {
             this.searchSubscription.unsubscribe();
         }
-
         // Subscribe to most recent search
-        this.searchSubscription = this.search(term, this.activeSort.index)
+        if (this._auth.featureFlags['solrSearch']) {
+            // Solr Search
+             this.searchSubscription = this._assetSearch.search(this.urlParams, term, this.activeSort.index)
+                .subscribe(
+                    (res) => {
+                        let data = res.json();
+                        data.facets.forEach( (facet, index) => {
+                            this._filters.setAvailable(facet.name, facet.values);
+                        })
+                        // this._filters.setAvailable('artclassification_str', data.classificationFacets);
+                        // if (data && data.collTypeFacets) {
+                        //     this._filters.generateColTypeFacets( data.collTypeFacets );
+                        //     this._filters.generateGeoFilters( data.geographyFacets );
+                        //     this._filters.generateDateFacets( data.dateFacets );
+                        //     this._filters.setAvailable('classification', data.classificationFacets);
+                        // }
+                        // Transform data from SOLR queries
+                        if (data.results) {
+                            data.thumbnails = data.results;
+                        }
+                        data.count = data.total
+                        // Set the allResults object
+                        this.updateLocalResults(data);
+                }, (error) => {
+                        console.error(error)
+                        this.allResultsSource.error(error); 
+                });
+        } else {
+            // Earth Library Search
+             this.searchSubscription = this.search(term, this.activeSort.index)
             .subscribe(
                 (res) => {
                     let data = res.json();
+                    // data.facets.forEach( (facet, index) => {
+                    //     this._filters.setAvailable(facet.name, facet.values);
+                    // })
+                    // this._filters.setAvailable('artclassification_str', data.classificationFacets);
                     if (data && data.collTypeFacets) {
                         this._filters.generateColTypeFacets( data.collTypeFacets );
                         this._filters.generateGeoFilters( data.geographyFacets );
                         this._filters.generateDateFacets( data.dateFacets );
                         this._filters.setAvailable('classification', data.classificationFacets);
-                    }
-                    // Transform data from SOLR queries
-                    if (data.results) {
-                        data.thumbnails = data.results;
                     }
                     // Set the allResults object
                     this.updateLocalResults(data);
@@ -862,8 +897,9 @@ export class AssetService {
                 // Pass error down to allResults listeners
                 // console.error(error, error.status)
             });
+        }
     }
-
+    
     /**
      * Search assets service
      * @param term          String to search for.
@@ -891,7 +927,7 @@ export class AssetService {
         // To-do: break dateObj out of available filters
         let dateFacet = this._filters.getAvailable()['dateObj'];
         
-        if(dateFacet.modified){
+        if(dateFacet && dateFacet.modified){
             earliestDate = dateFacet.earliest.date;
             earliestDate = ( dateFacet.earliest.era == 'BCE' ) ? ( parseInt(earliestDate) * -1 ).toString() : earliestDate;
 
@@ -916,21 +952,9 @@ export class AssetService {
                 geographyIds += filters[i].filterValue;
             }
         }
-        
-        if (this.newSearch === false) {
-            return this.http
-                .get(this._auth.getUrl() + '/search/' + type + '/' + startIndex + '/' + this.urlParams.pageSize + '/' + sortIndex + '?' + 'type=' + type + '&kw=' + keyword + '&origKW=' + keyword + '&geoIds=' + geographyIds + '&clsIds=' + classificationIds + '&collTypes=' + colTypeIds + '&id=' + (collIds.length > 0 ? collIds : 'all') + '&name=All%20Collections&bDate=' + earliestDate + '&eDate=' + latestDate + '&dExact=&order=0&isHistory=false&prGeoId=&tn=1', options);
-        } else {
-            let query = {
-                "limit" : this.urlParams.pageSize,
-                "content_types" : [
-                    "art"
-                ],
-                "query" : "arttitle:" + keyword
-            };
 
-            return this.http.post('//search-service.apps.test.cirrostratus.org/browse/', query, options);
-        }
+        return this.http
+            .get(this._auth.getUrl() + '/search/' + type + '/' + startIndex + '/' + this.urlParams.pageSize + '/' + sortIndex + '?' + 'type=' + type + '&kw=' + keyword + '&origKW=' + keyword + '&geoIds=' + geographyIds + '&clsIds=' + classificationIds + '&collTypes=' + colTypeIds + '&id=' + (collIds.length > 0 ? collIds : 'all') + '&name=All%20Collections&bDate=' + earliestDate + '&eDate=' + latestDate + '&dExact=&order=0&isHistory=false&prGeoId=&tn=1', options);
         
     }
 

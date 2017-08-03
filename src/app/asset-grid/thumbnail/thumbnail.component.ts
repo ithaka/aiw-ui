@@ -42,6 +42,11 @@ export class ThumbnailComponent implements OnInit {
    }
 
   ngOnInit() { 
+    // Clean search data
+    if (this.thumbnail['media']) {
+      let media = JSON.parse(this.thumbnail['media'])
+      this.thumbnail['thumbnailImgUrl'] = media['thumbnailSizeOnePath']
+    }
   }
 
   openLink(event: Event, urlParams: any[]) {

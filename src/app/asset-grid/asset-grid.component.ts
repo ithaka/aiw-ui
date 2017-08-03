@@ -317,7 +317,7 @@ export class AssetGrid implements OnInit, OnDestroy {
       }
     }
     else{
-      this._storage.set('totalAssets', this.totalAssets);
+      this._storage.set('totalAssets', this.totalAssets ? this.totalAssets : '1');
       this._storage.set('prevRouteParams', this.route.snapshot.url);
       // Let template routerLink navigate at this point
     }
@@ -429,7 +429,9 @@ export class AssetGrid implements OnInit, OnDestroy {
     // fQuery = fQuery.replace(/\|[0-9]{3}/g, );
     // Add field names
     this._assets.filterFields.forEach(field => {
-      fQuery = fQuery.replace(new RegExp(field.value, 'g'), ' (in ' + field.name + ')');
+      if (field.value && field.value != '*') {
+        fQuery = fQuery.replace(new RegExp(field.value, 'g'), ' (in ' + field.name + ')');
+      }
     });
 
     fQuery = fQuery.replace(/\|\#/g, '| (in any) #');
@@ -462,6 +464,17 @@ export class AssetGrid implements OnInit, OnDestroy {
       this.cancelReorder();
     } else {
       // Return to Reorder
+    }
+  }
+
+  /**
+   * Returns asset path for linking
+   */
+  private getAssetPath(asset): string[] {
+    if (this._auth.featureFlags['solrSearch']) {
+      return this.editMode ? ['./'] : ['/asset', asset.artstorid]
+    } else {
+      return this.editMode ? ['./'] : ['/asset', asset.objectId]
     }
   }
 

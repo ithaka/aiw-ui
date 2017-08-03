@@ -46,7 +46,7 @@ export class AssetFiltersService {
         sort: "0"
     };
 
-    private availableFilters: any = this.defaultAvailable;
+    private availableFilters: any = Object.assign({},this.defaultAvailable);
 
     private dateFacet: any = {};
     private dateFacetsArray = [];
@@ -78,9 +78,24 @@ export class AssetFiltersService {
         }
     }
 
-    public setAvailable(name: string, filters: any ) {
-        this.availableFilters[name] = filters;
-        this.availableSource.next(this.availableFilters);
+    public clearAvailable(isQuiet ?: boolean):void {
+        this.availableFilters = Object.assign({},this.defaultAvailable);
+        if (!isQuiet) {
+            this.availableSource.next(this.availableFilters);
+        }
+    }
+
+    /**
+     * Returns a boolean if unable to add filters to available filters
+     */
+    public setAvailable(name: string, filters: any[] ) : boolean {
+        if (name && name.length > 0 && Object.prototype.toString.call(filters) === '[object Array]') {
+            this.availableFilters[name] = filters
+            this.availableSource.next(this.availableFilters)
+            return true
+        } else {
+            return false
+        }
     }
 
     public getAvailable(): any {
@@ -172,12 +187,17 @@ export class AssetFiltersService {
     //     return this.filters;
     // }
 
-
-    public generateDateFacets(dateFacetsArray ?) {
-        if (!dateFacetsArray) {
+    /**
+     * Populates the "dateObj" on this.availableFilters for applying/displaying date constraints
+     * @param dateFacetsArray Array returned with search results with multiple data and era values
+     */
+    public generateDateFacets(dateFacetsArray ?: any[]) : void {
+        if (!dateFacetsArray && this.availableFilters.date) {
             dateFacetsArray = this.availableFilters.date;
+        } else if(!dateFacetsArray) {
+            dateFacetsArray = []
         }
-
+        
         if(dateFacetsArray.length > 0){
             var startDate = dateFacetsArray[0].date;
             var endDate = dateFacetsArray[dateFacetsArray.length - 1].date;
