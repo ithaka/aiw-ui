@@ -387,18 +387,19 @@ export class AssetService {
      * @param params Object conaining all route params
      */
     private setFiltersFromURLParams(params: any): void{
-        var thisObj = this;
-        Object.keys(params).forEach(function(key) {
+        let dateObj;
+
+        Object.keys(params).forEach((key) => {
             var filter = {};
             if(key.indexOf('str') > -1){
-                if(!thisObj._filters.isApplied(key, params[key])){ // Add Filter
-                    thisObj._filters.apply(key, params[key]);
+                if(!this._filters.isApplied(key, params[key])){ // Add Filter
+                    this._filters.apply(key, params[key]);
                 }
             }
         });
 
         if(params['startDate'] && params['endDate']){
-            var dateObj = {
+            dateObj = {
                 modified : true,
                 earliest : {
                     date : Math.abs(params['startDate']),
@@ -409,10 +410,10 @@ export class AssetService {
                     era : params['endDate'] < 0 ? 'BCE' : 'CE'
                 }
             }
-            // this._filters.setAvailable('dateObj', dateObj);
+            this._filters.setAvailable('dateObj', dateObj);
         }
         else{
-            var dateObj = {
+            dateObj = {
                 modified : false,
                 earliest : {
                     date : 1000,
@@ -423,7 +424,7 @@ export class AssetService {
                     era : 'CE'
                 }
             }
-            // this._filters.setAvailable('dateObj', dateObj);
+            this._filters.setAvailable('dateObj', dateObj);
         }
     }
 
@@ -432,6 +433,7 @@ export class AssetService {
      * @param assetId: string Asset or object ID
      */
     public getById(assetId: string) {
+        // Get Asset via SOLR
         // let options = new RequestOptions({
         //     withCredentials: true
         // });
@@ -441,7 +443,6 @@ export class AssetService {
         //     ],
         //     "query": 'id:' + assetId
         // };
-
         // return this.http.post('//search-service.apps.test.cirrostratus.org/browse/', query, options)
         //     .toPromise()
         //     .then(this.extractData)
