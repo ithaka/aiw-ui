@@ -11,14 +11,20 @@
             <h3 id="pageType">Browse Group</h3>
             <div class="row">
                 <h1 id="pageTitle" class="h1--title-block col-md-9">{{ ig.name }}</h1>
-                <h3 class="col-md-3" *ngIf="ig.description && ig.description.length > 0">
-                    <i class="icon icon-direction tree-icon desc-expnd-clps-icon" [ngClass]="{ 'icon-down' : descExpanded, 'icon-right' : !descExpanded }" (click)="descExpanded = !descExpanded"></i> Description
-                    <hr style="margin-bottom: 0px;" />
-                </h3>
-                <h3 class="col-md-3 desc-no-expand" *ngIf="!ig.description || ig.description.length <= 0">
-                    No Description
-                    <hr style="margin-bottom: 0px;" />
-                </h3>
+                <div class="col-md-3">
+                    <div class="ig-tags">
+                        <h3>Tags</h3>
+                        <a *ngFor="let tag of ig.tags" class="tag" [routerLink]="['/browse', 'groups', 'search']" [queryParams]="{ 'level': 'all', 'tags' : tag, 'page' : '1' }">{{ tag }}</a>
+                    </div>
+                    <h3 *ngIf="ig.description && ig.description.length > 0">
+                        <i class="icon icon-direction tree-icon desc-expnd-clps-icon" [ngClass]="{ 'icon-down' : descExpanded, 'icon-right' : !descExpanded }" (click)="descExpanded = !descExpanded"></i> Description
+                        <hr style="margin-bottom: 0px;" />
+                    </h3>
+                    <h3 class="desc-no-expand" *ngIf="!ig.description || ig.description.length <= 0">
+                        No Description
+                        <hr style="margin-bottom: 0px;" />
+                    </h3>
+                </div>
             </div>
         </div>
         <div [ngClass]="[ showDesc() ? 'col-md-9' : 'col-md-12'  ]">
