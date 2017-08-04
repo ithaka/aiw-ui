@@ -3,7 +3,6 @@ import { Location } from '@angular/common';
 import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
 
-import { LoginService } from '../../login/login.service';
 import { AuthService } from '../auth.service';
 
 // Project Dependencies
@@ -13,9 +12,6 @@ declare let google
 
 @Component({
   selector: 'footer',
-  providers: [
-    LoginService
-  ],
   templateUrl: './footer.component.html',
   styleUrls: [ './footer.component.scss' ],
 })
@@ -29,9 +25,7 @@ export class Footer {
   constructor( 
     private location: Location,
     private _router: Router,
-    private _login: LoginService,
     private _auth: AuthService
-
   ) { 
     // Get version number
     this.appVersion = appVersion;
@@ -68,7 +62,7 @@ export class Footer {
   }
 
   private logout(): void {
-    this._login.logout()
+    this._auth.logout()
       .then(() => {
         if (this.location.path().indexOf("home") >= 0) {
           location.reload() // this will reload the app and give the user a feeling they actually logged out

@@ -3,14 +3,10 @@ import { Location } from '@angular/common';
 import { Router, NavigationEnd, ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
 
-import { LoginService } from '../../login/login.service';
 import { AuthService, AssetService, ToolboxService } from '..';
 
 @Component({
   selector: 'nav-bar',
-  providers: [
-    LoginService
-  ],
   templateUrl: './nav.component.html',
   styleUrls: [ './nav.component.scss' ],
 })
@@ -27,7 +23,6 @@ export class Nav implements OnInit, OnDestroy {
   constructor(
     private _auth: AuthService,
     private _assets: AssetService,
-    private _login: LoginService,
     private _router: Router,
     private route: ActivatedRoute,
     private location: Location
@@ -75,7 +70,7 @@ export class Nav implements OnInit, OnDestroy {
   }
 
   logout(): void {
-    this._login.logout()
+    this._auth.logout()
       .then(() => {
         if (this.location.path().indexOf("home") >= 0) {
           location.reload() // this will reload the app and give the user a feeling they actually logged out
