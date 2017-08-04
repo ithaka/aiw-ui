@@ -150,6 +150,7 @@ export class AssetService {
         this.paginationValue = paginationValue;
         this.paginationSource.next(paginationValue);
 
+        console.log(resultObj)
         // Update results thumbnail array 
         this.allResultsValue = resultObj;
         this.allResultsSource.next(resultObj);
@@ -313,7 +314,6 @@ export class AssetService {
     /**
      * Clear Assets for asset grid
      */
-
     public clearAssets(): void{
         this.allResultsSource.next([]);
     }
@@ -346,9 +346,6 @@ export class AssetService {
         // urlParams is used by the below load functions
         this.urlParams = params;
 
-        // Tell the filters service we have some updates
-        this.setFiltersFromURLParams(params);
-
         //Set sort param
         if(params['sort']){
             this.activeSort.index = params['sort'];
@@ -359,72 +356,81 @@ export class AssetService {
         this.paginationValue.currentPage =  parseInt(this.urlParams.currentPage);
         this.paginationSource.next(this.paginationValue);
 
-        // Pick function to load this query!
-        if (params.hasOwnProperty("objectId") && params["objectId"] !== "" && params.hasOwnProperty("colId") && params["colId"] !== "") {
-            //gets associated images thumbnails
-            this.loadAssociatedAssets(params.objectId, params.colId);
-        } else if (params.hasOwnProperty("igId") && params["igId"] !== "") {
-            //get image group thumbnails
-            this.loadIgAssets(params.igId);
-        } else if (params.hasOwnProperty("objectId") && params["objectId"] !== "") {
-            //get clustered images thumbnails
-            this.loadCluster(params.objectId);
-        } else if (params.hasOwnProperty("catId")  && params["catId"] !== "") {
-            //get collection thumbnails
-            this.loadCategory(params.catId);
-        }  else if (params.hasOwnProperty("colId") && params["colId"] !== "") {
-            //get collection thumbnails
-            this.loadCollection(params.colId);
-        } else if (params.hasOwnProperty("term")) {
-            this.loadSearch(params.term);
-        } else {
-            console.log("Don't know what to query!");
-        } 
+
+        // Tell the filters service we have some updates
+        this.setFiltersFromURLParams(params)
+            .then(() => {
+                // Pick function to load this query!
+                if (params.hasOwnProperty("objectId") && params["objectId"] !== "" && params.hasOwnProperty("colId") && params["colId"] !== "") {
+                    //gets associated images thumbnails
+                    this.loadAssociatedAssets(params.objectId, params.colId);
+                } else if (params.hasOwnProperty("igId") && params["igId"] !== "") {
+                    //get image group thumbnails
+                    this.loadIgAssets(params.igId);
+                } else if (params.hasOwnProperty("objectId") && params["objectId"] !== "") {
+                    //get clustered images thumbnails
+                    this.loadCluster(params.objectId);
+                } else if (params.hasOwnProperty("catId")  && params["catId"] !== "") {
+                    //get collection thumbnails
+                    this.loadCategory(params.catId);
+                }  else if (params.hasOwnProperty("colId") && params["colId"] !== "") {
+                    //get collection thumbnails
+                    this.loadCollection(params.colId);
+                } else if (params.hasOwnProperty("term")) {
+                    this.loadSearch(params.term);
+                } else {
+                    console.log("Don't know what to query!");
+                } 
+            });
     }
 
     /**
      * Set the filters using filter service from URL params
      * @param params Object conaining all route params
      */
-    private setFiltersFromURLParams(params: any): void{
-        var thisObj = this;
-        Object.keys(params).forEach(function(key) {
-            var filter = {};
-            if(key.indexOf('str') > -1){
-                if(!thisObj._filters.isApplied(key, params[key])){ // Add Filter
-                    thisObj._filters.apply(key, params[key]);
-                }
-            }
-        });
+    private setFiltersFromURLParams(params: any): Promise<any>{
+        return new Promise((resolve, reject) => {
+            let dateObj;
 
-        if(params['startDate'] && params['endDate']){
-            var dateObj = {
-                modified : true,
-                earliest : {
-                    date : Math.abs(params['startDate']),
-                    era : params['startDate'] < 0 ? 'BCE' : 'CE'
-                },
-                latest : {
-                    date : Math.abs(params['endDate']),
-                    era : params['endDate'] < 0 ? 'BCE' : 'CE'
+            Object.keys(params).forEach((key) => {
+                var filter = {};
+                if(key.indexOf('str') > -1){
+                    if(!this._filters.isApplied(key, params[key])){ // Add Filter
+                        this._filters.apply(key, params[key]);
+                    }
                 }
-            }
-            // this._filters.setAvailable('dateObj', dateObj);
-        }
-        else{
-            var dateObj = {
-                modified : false,
-                earliest : {
-                    date : 1000,
-                    era : 'BCE'
-                },
-                latest : {
-                    date : 2017,
-                    era : 'CE'
+            });
+
+            if(params['startDate'] && params['endDate']){
+                dateObj = {
+                    modified : true,
+                    earliest : {
+                        date : Math.abs(params['startDate']),
+                        era : params['startDate'] < 0 ? 'BCE' : 'CE'
+                    },
+                    latest : {
+                        date : Math.abs(params['endDate']),
+                        era : params['endDate'] < 0 ? 'BCE' : 'CE'
+                    }
                 }
+                this._filters.setAvailable('dateObj', dateObj);
+                resolve(this._filters.getAvailable())
+            } else {
+                dateObj = {
+                    modified : false,
+                    earliest : {
+                        date : 1000,
+                        era : 'BCE'
+                    },
+                    latest : {
+                        date : 2017,
+                        era : 'CE'
+                    }
+                }
+                this._filters.setAvailable('dateObj', dateObj);
+                resolve(this._filters.getAvailable())
             }
-            // this._filters.setAvailable('dateObj', dateObj);
-        }
+        })
     }
 
     /**
@@ -432,6 +438,7 @@ export class AssetService {
      * @param assetId: string Asset or object ID
      */
     public getById(assetId: string) {
+        // Get Asset via SOLR
         // let options = new RequestOptions({
         //     withCredentials: true
         // });
@@ -441,7 +448,6 @@ export class AssetService {
         //     ],
         //     "query": 'id:' + assetId
         // };
-
         // return this.http.post('//search-service.apps.test.cirrostratus.org/browse/', query, options)
         //     .toPromise()
         //     .then(this.extractData)
@@ -726,7 +732,6 @@ export class AssetService {
     }
 
     private loadCluster(objectId: string){
-        this.currentLoadedParams = Object.assign(Object.assign({}, this.defaultUrlParams), this.urlParams);
         
         let options = new RequestOptions({ withCredentials: true });
         let startIndex = ((this.urlParams.currentPage - 1) * this.urlParams.pageSize) + 1;
@@ -822,7 +827,6 @@ export class AssetService {
         if (this.searchSubscription && this.searchSubscription.hasOwnProperty('unsubscribe')) {
             this.searchSubscription.unsubscribe();
         }
-        console.log(this._auth.featureFlags)
         // Subscribe to most recent search
         if (this._auth.featureFlags['solrSearch']) {
             // Solr Search
@@ -833,13 +837,6 @@ export class AssetService {
                         data.facets.forEach( (facet, index) => {
                             this._filters.setAvailable(facet.name, facet.values);
                         })
-                        // this._filters.setAvailable('artclassification_str', data.classificationFacets);
-                        // if (data && data.collTypeFacets) {
-                        //     this._filters.generateColTypeFacets( data.collTypeFacets );
-                        //     this._filters.generateGeoFilters( data.geographyFacets );
-                        //     this._filters.generateDateFacets( data.dateFacets );
-                        //     this._filters.setAvailable('classification', data.classificationFacets);
-                        // }
                         // Transform data from SOLR queries
                         if (data.results) {
                             data.thumbnails = data.results;
@@ -852,23 +849,17 @@ export class AssetService {
                         this.allResultsSource.error(error); 
                 });
         } else {
-            console.log("SEARCH EARTH LIBRARY")
             // Earth Library Search
              this.searchSubscription = this.search(term, this.activeSort.index)
             .subscribe(
                 (res) => {
                     let data = res.json();
-                    // data.facets.forEach( (facet, index) => {
-                    //     this._filters.setAvailable(facet.name, facet.values);
-                    // })
-                    // this._filters.setAvailable('artclassification_str', data.classificationFacets);
                     if (data && data.collTypeFacets) {
                         this._filters.generateColTypeFacets( data.collTypeFacets );
                         this._filters.generateGeoFilters( data.geographyFacets );
                         this._filters.generateDateFacets( data.dateFacets );
                         this._filters.setAvailable('classification', data.classificationFacets);
                     }
-                    data.count = data.total
                     // Set the allResults object
                     this.updateLocalResults(data);
             }, (error) => {
@@ -888,13 +879,16 @@ export class AssetService {
                 // so, the user never sees an error (woohoo) also, if they refresh it will likely work anyway
                 // ok i'm done
 
+                // Even though it's an error, indicate we loaded these params
+                this.currentLoadedParams = Object.assign(Object.assign({}, this.defaultUrlParams), this.urlParams);
+
                 if (error.status == 0 && this.searchErrorCount < 3) {
                     this.searchErrorCount++
                     setTimeout(this.loadSearch(term), 7000)
                 } else {
                     this.searchErrorCount = 0
                     console.error(error)
-                    this.allResultsSource.error(error); // .throw(error);
+                    this.allResultsSource.next(null)
                 }
                 
                 // Pass error down to allResults listeners

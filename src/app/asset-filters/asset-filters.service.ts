@@ -88,8 +88,13 @@ export class AssetFiltersService {
     /**
      * Returns a boolean if unable to add filters to available filters
      */
-    public setAvailable(name: string, filters: any[] ) : boolean {
+    public setAvailable(name: string, filters: any ) : boolean {
         if (name && name.length > 0 && Object.prototype.toString.call(filters) === '[object Array]') {
+            this.availableFilters[name] = filters
+            this.availableSource.next(this.availableFilters)
+            return true
+        } else if (name == 'dateObj')  {
+            // Provide exceptions for non-array filter formats
             this.availableFilters[name] = filters
             this.availableSource.next(this.availableFilters)
             return true
@@ -104,8 +109,8 @@ export class AssetFiltersService {
 
     public apply(group: string, value: string, isQuiet ?: boolean) {
         let groupExists = false;
-
         for(let i = 0; i < this.appliedFilters.length; i++){
+
             if(group === this.appliedFilters[i].filterGroup){
                 if (this.appliedFilters[i].filterValue.indexOf(value) < 0) {
                     this.appliedFilters[i].filterValue.push(value);

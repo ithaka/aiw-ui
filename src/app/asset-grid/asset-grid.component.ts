@@ -160,6 +160,15 @@ export class AssetGrid implements OnInit, OnDestroy {
       this._assets.allResults.subscribe(
         (allResults) => {
           // Update results array
+          this.searchError = ''
+
+          // Server error handling
+          if (allResults === null) {
+            this.isLoading = false;
+            this.searchError = "There was a server error loading your search. Please try again later.";
+            return;
+          }
+          
           this.results = allResults.thumbnails;
           if ('items' in allResults) {
             this.itemIds = allResults.items;
@@ -317,7 +326,7 @@ export class AssetGrid implements OnInit, OnDestroy {
       }
     }
     else{
-      this._storage.set('totalAssets', this.totalAssets);
+      this._storage.set('totalAssets', this.totalAssets ? this.totalAssets : '1');
       this._storage.set('prevRouteParams', this.route.snapshot.url);
       // Let template routerLink navigate at this point
     }

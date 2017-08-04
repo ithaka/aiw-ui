@@ -11,14 +11,12 @@
             <h3 id="pageType">Browse Group</h3>
             <div class="row">
                 <h1 id="pageTitle" class="h1--title-block col-md-9">{{ ig.name }}</h1>
-                <h3 class="col-md-3" *ngIf="ig.description && ig.description.length > 0">
-                    <i class="icon icon-direction tree-icon desc-expnd-clps-icon" [ngClass]="{ 'icon-down' : descExpanded, 'icon-right' : !descExpanded }" (click)="descExpanded = !descExpanded"></i> Description
-                    <hr style="margin-bottom: 0px;" />
-                </h3>
-                <h3 class="col-md-3 desc-no-expand" *ngIf="!ig.description || ig.description.length <= 0">
-                    No Description
-                    <hr style="margin-bottom: 0px;" />
-                </h3>
+                <div *ngIf="!showDesc()" class="col-md-3">
+                    <div class="row-hdr row-hdr--btn" (click)="descExpanded = !descExpanded">
+                        Group Details
+                        <i class="icon icon-direction tree-icon desc-expnd-clps-icon" [ngClass]="{ 'icon-down' : descExpanded, 'icon-left' : !descExpanded }" style="float:right"></i>
+                    </div>
+                </div>
             </div>
         </div>
         <div [ngClass]="[ showDesc() ? 'col-md-9' : 'col-md-12'  ]">
@@ -28,6 +26,24 @@
             </div>
         </div>
         <div *ngIf="showDesc()" [ngClass]="[ showDesc() ? 'col-md-3' : 'col-md-0'  ]">
+            <div class="row-hdr row-hdr--btn" (click)="descExpanded = !descExpanded">
+                Group Details
+                <i class="icon icon-direction tree-icon desc-expnd-clps-icon" [ngClass]="{ 'icon-down' : descExpanded, 'icon-left' : !descExpanded }" style="float:right"></i>
+            </div>
+            <div *ngIf="ig.tags && ig.tags.length > 0" class="ig-tags meta-block pt-4">
+                <div class="label">Tags</div>
+                <div>
+                    <a *ngFor="let tag of ig.tags" class="tag" [routerLink]="['/browse', 'groups', 'search']" [queryParams]="{ 'level': 'all', 'tags' : tag, 'page' : '1' }">{{ tag }}</a>
+                </div>
+            </div>
+            <div class="meta-block" *ngIf="ig.description && ig.description.length > 0">
+                <div class="label">Description</div>
+                <!--<hr style="margin-bottom: 0px;" />-->
+            </div>
+            <div class="desc-no-expand meta-block" *ngIf="!ig.description || ig.description.length <= 0">
+                <div class="label">No Description</div>
+                <!--<hr style="margin-bottom: 0px;" />-->
+            </div>
             <div *ngIf="ig && ig.description" class="page__description" id="pageDescription" [innerHTML]="ig.description"></div>
         </div>
     </div>
