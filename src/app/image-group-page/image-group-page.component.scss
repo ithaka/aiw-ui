@@ -1,31 +1,45 @@
+@import '../../sass/core/variables';
+
 .ig-description {
   border-right: 1px solid rgba(0, 0, 0, 0.15);
 }
 .desc-expnd-clps-icon{
   cursor: pointer;
   margin-right: 5px;
+  height: 32px;
 }
 .desc-no-expand {
   color: #dedede;
 }
 .ig-tags{
-  margin-bottom: 10px;
 
   h3{
     margin-bottom: 5px;
   }
 
   .tag{
-    margin-right: 5px;
+    margin-right: 3px;
     color: #8300e0;
     cursor: pointer;
     transition: color 0s linear;
-    padding: 5px;
+    padding: 3px;
+    background: #f8f8f8;
+    display: inline-block;
+    margin-bottom: 3px;
 
     &:hover{
       color: #000;
       background: #f1f1f1;
     }
+  }
+}
+
+.row-hdr--btn {
+  cursor: pointer;
+  line-height: 32px;
+
+  &:hover, &:focus {
+    border-color: $blue;
   }
 }
 // removed expander because of moving description into column
