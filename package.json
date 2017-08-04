@@ -99,6 +99,8 @@
     "ng2-file-upload": "^1.2.1",
     "ng2-translate": "^5.0.0",
     "openseadragon": "^2.2.1",
+    "pug": "^2.0.0-rc.2",
+    "pug-html-loader": "^1.1.5",
     "rxjs": "^5.0.1",
     "url-loader": "^0.5.7",
     "zone.js": "^0.6.26"

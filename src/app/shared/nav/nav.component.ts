@@ -11,7 +11,7 @@ import { AuthService, AssetService, ToolboxService } from '..';
   providers: [
     LoginService
   ],
-  templateUrl: './nav.component.html',
+  templateUrl: './nav.component.pug',
   styleUrls: [ './nav.component.scss' ],
 })
 export class Nav implements OnInit, OnDestroy {
