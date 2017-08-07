@@ -79,7 +79,8 @@ export class AssetSearchService {
     for (var i = 0; i < filters.length; i++) { // Applied filters
       
       
-      if (filters[i].filterGroup === 'collTypes') { // Collection Types
+      if (filters[i].filterGroup === 'collTypes' || filters[i].filterGroup === 'currentPage' || filters[i].filterGroup === 'pageSize') { 
+        // Collection Types and page info
         // do nothing
         // colTypeIds = filters[i].filterValue;
       } else {
