@@ -1141,7 +1141,18 @@ export class AssetService {
      * @param token The encrypted token that you want to know the asset id for
      */
     public decryptToken(token: string): Observable<any> {
-        return this.http.get(this._auth.getHostname() + "/api/v1/items/resolve?encrypted_id=" + token)
+        let header
+        let options
+        // if (document.referrer && document.referrer.indexOf('kressfoundation.org') > -1){
+            // Custom header makes this call function as if IP auth
+            header = new Headers({ fromKress : 'true' });
+        // } else {
+        //     header = new Headers({});
+        // }
+        
+        options = new RequestOptions({ headers: header, withCredentials: true }); // Create a request option
+
+        return this.http.get(this._auth.getHostname() + "/api/v1/items/resolve?encrypted_id=" + token, options)
         .map((res) => {
             let jsonRes = res.json() || {}
             if (jsonRes && jsonRes.success && jsonRes.item) { return jsonRes.item }
