@@ -102,8 +102,13 @@ export class AssetPage implements OnInit, OnDestroy {
                     this.hasExternalAccess = true
                     this._assets.decryptToken(routeParams['encryptedId'])
                         .take(1)
-                        .subscribe((asset) => {
-                            this.renderPrimaryAsset(new Asset(asset[assetIdProperty], this._assets, this._auth, asset))
+                        .subscribe((data) => {
+                            if (data.metadata) {
+                                data.item.metadata = data.metadata
+                            }
+                            data.item.imageUrl = data.imageUrl
+                            data.item.imageServer = data.imageServer
+                            this.renderPrimaryAsset(new Asset(data.item[assetIdProperty], this._assets, this._auth, data.item))
                         }, (err) => {
                             console.error(err)
                             this._router.navigate(['/nocontent'])

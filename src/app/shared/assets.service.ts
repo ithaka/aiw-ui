@@ -1155,7 +1155,9 @@ export class AssetService {
         return this.http.get(this._auth.getHostname() + "/api/v1/items/resolve?encrypted_id=" + token, options)
         .map((res) => {
             let jsonRes = res.json() || {}
-            if (jsonRes && jsonRes.success && jsonRes.item) { return jsonRes.item }
+            if (jsonRes && jsonRes.success && jsonRes.item) { 
+                return jsonRes 
+            }
             else { throw new Error("No success or item found on response object") }
         })
   }
