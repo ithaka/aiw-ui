@@ -6,14 +6,16 @@ $mobileNavHeight: 60px;
 $loginPanelBg: #f9f9f9; //#f5f9f5; //#d4cd98
 
 #logo {
-    height: 20px;
+    // Make sure height is a factor of the real image height for scaling
+    $logoHeight: 25px;
+    height: $logoHeight;
     width: auto;
-    margin: ($mobileNavHeight - 20px)/2 0;
+    margin: ($mobileNavHeight - $logoHeight)/2 0;
     margin-right: 20px;
     padding: 0px;
 
     @media (min-width: 768px) {
-        margin: ($navBarHeight - 20px)/2 0;
+        margin: ($navBarHeight - $logoHeight)/2 0;
     }
 }
 

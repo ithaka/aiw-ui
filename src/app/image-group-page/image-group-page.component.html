@@ -12,9 +12,12 @@
             <div class="row">
                 <h1 id="pageTitle" class="h1--title-block col-md-9">{{ ig.name }}</h1>
                 <div *ngIf="!showDesc()" class="col-md-3">
-                    <div class="row-hdr row-hdr--btn" (click)="descExpanded = !descExpanded">
+                    <div *ngIf="(ig.tags && ig.tags.length > 0) || ig.description" class="row-hdr row-hdr--btn" (click)="descExpanded = !descExpanded">
                         Group Details
                         <i class="icon icon-direction tree-icon desc-expnd-clps-icon" [ngClass]="{ 'icon-down' : descExpanded, 'icon-left' : !descExpanded }" style="float:right"></i>
+                    </div>
+                    <div *ngIf="(!ig.tags || ig.tags.length < 1) && !ig.description" class="row-hdr">
+                        No Group Details
                     </div>
                 </div>
             </div>
