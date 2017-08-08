@@ -52,6 +52,9 @@ export class AssetPage implements OnInit, OnDestroy {
     private collectionName: string = ''
 
     private _storage
+
+    private quizMode: boolean = false;
+    private showAssetCaption: boolean = true;
     
 
     constructor(
@@ -351,6 +354,10 @@ export class AssetPage implements OnInit, OnDestroy {
         for(let i = 0; i < this.prevAssetResults.thumbnails.length; i++){
             this.prevAssetResults.thumbnails[i].selected = false;
         }
+        
+        this.quizMode = false;
+        this.showAssetCaption = true;
+
         this.assetViewer.togglePresentationMode();
     }
 
@@ -373,5 +380,21 @@ export class AssetPage implements OnInit, OnDestroy {
     private genFilename(title: string, fileExt: string) : string {
         // Returning a filename with a "." is read as having a file extension
         return (title && fileExt) ? title.replace(/\./g,'-') + '.' + fileExt : ''
+    }
+
+    private toggleQuizMode(): void{
+        if(this.quizMode){ // Leave Quiz mode
+            this.quizMode = false;
+            this.showAssetCaption = true;
+        }
+        else{ // Enter Quiz mode
+            this.quizMode = true;
+            this.showAssetCaption = false;
+
+            this.assets.splice(1);
+            for(let i = 0; i < this.prevAssetResults.thumbnails.length; i++){
+                this.prevAssetResults.thumbnails[i].selected = false;
+            }
+        }
     }
 }
