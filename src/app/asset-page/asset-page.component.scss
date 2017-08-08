@@ -155,7 +155,8 @@ $titleNavBg: #eee;
 
 .fullscreen-container {
     width: 100%;
-    height: 100%;
+    height: calc(100% - 40px);
+    top: 0;
     position: fixed;
 }
 
@@ -228,11 +229,11 @@ $titleNavBg: #eee;
 
 .quiz-caption-cntnr{
     position: absolute;
-    background: transparent;
+    background: #f1f8f1;
     left: 0px;
-    bottom: 0px;
+    top: 100%;
     z-index: 1;
-    opacity: 0.98;
+    opacity: 1;
     width: 100%;
     height: 40px;
     padding: 10px;
