@@ -1150,7 +1150,7 @@ export class AssetService {
         //     header = new Headers({});
         // }
         
-        options = new RequestOptions({ headers: header, withCredentials: true }); // Create a request option
+        options = new RequestOptions({ headers: header }); // Create a request option
 
         return this.http.get(this._auth.getHostname() + "/api/v1/items/resolve?encrypted_id=" + token, options)
         .map((res) => {
