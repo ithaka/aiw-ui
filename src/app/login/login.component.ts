@@ -17,7 +17,7 @@ declare var initPath: string
   // Our list of styles in our component. We may add more to compose many styles together
   styleUrls: [ './login.component.scss' ],
   // Every Angular template is first compiled by the browser before Angular runs it's compiler
-  templateUrl: './login.component.html'
+  templateUrl: './login.component.pug'
   // template: `<h1>Test title</h1>`
 })
 export class Login {
@@ -308,10 +308,6 @@ export class Login {
       let ssoSubdomain = this._auth.getSubdomain() == 'library' ? 'sso' : 'sso.' + this._auth.getSubdomain()
       window.open('https://' + ssoSubdomain + '.artstor.org/sso/shibssoinit?idpEntityID=' + encodeURIComponent(url) + '&o=' + encodeURIComponent(origin));
     }
-  }
-
-  toggleAccessHelpModal() {
-    this.showHelpModal = !this.showHelpModal;
   }
   
 }
