@@ -14,6 +14,7 @@ import {
 import {
   AssetFiltersService
 } from '../asset-filters/asset-filters.service';
+import { AuthService } from './';
 
 @Injectable()
 export class AssetSearchService {
@@ -35,7 +36,8 @@ export class AssetSearchService {
 
   constructor(
     private http: Http,
-    private _filters: AssetFiltersService
+    private _filters: AssetFiltersService,
+    private _auth: AuthService
   ) {}
 
   /**
@@ -148,6 +150,6 @@ export class AssetSearchService {
     };
     
 
-    return this.http.post('//search-service.apps.test.cirrostratus.org/browse/', query, options);
+    return this.http.post(this._auth.getSearchUrl(), query, options);
   }
 }
