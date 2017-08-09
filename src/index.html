@@ -11,17 +11,23 @@
           || initPath.indexOf('.org/library/collection') > -1 
           || initPath.indexOf('.org/library/welcome.html') > -1 
           || initPath.indexOf('.org/library/#') > -1 
-          || initPath.indexOf('.org/asset/') > -1 
-          || initPath.indexOf('.org/group/') > -1 
-          || initPath.indexOf('.org/browse/') > -1 
-          || initPath.indexOf('.org/collection/') > -1 
-          || initPath.indexOf('.org/category/') > -1 
+          || initPath.indexOf('/asset/') > -1 
+          || initPath.indexOf('/group/') > -1 
+          || initPath.indexOf('/browse/') > -1 
+          || initPath.indexOf('/collection/') > -1 
+          || initPath.indexOf('/category/') > -1 
           )
         ) {
           if (initPath.indexOf('/library/') > -1) {
             initPath = initPath.substr(initPath.indexOf('/library/'));
-          } else {
+          } else if (initPath.indexOf('.org') > -1) {
             initPath = initPath.substr(initPath.indexOf('.org') + 4);
+          } else if (initPath.indexOf('.edu') > -1) {
+            initPath = initPath.substr(initPath.indexOf('.edu') + 4);
+          } else if (initPath.indexOf('.net') > -1) {
+            initPath = initPath.substr(initPath.indexOf('.net') + 4);
+          } else {
+            initPath = null
           }
           console.log('Old path found: ', initPath);
     } else {
