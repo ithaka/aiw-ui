@@ -17,6 +17,7 @@ export class AssetFiltersService {
     
     private defaultAvailable: any = {
         collTypes : [],
+        collectiontypes : [],
         classification: [],
         geography: [],
         date: [],
