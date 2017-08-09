@@ -127,6 +127,11 @@ export class AssetSearchService {
       "facet_fields" :
       [
         {
+          "name" : "collectiontypes",
+          "mincount" : 1,
+          "limit" : 15
+        },
+        {
           "name" : "artcollectiontitle_str",
           "mincount" : 1,
           "limit" : 15
@@ -136,7 +141,7 @@ export class AssetSearchService {
           "name" : "artclassification_str",
           "mincount" : 1,
           "limit" : 16
-        },
+        }
         
       ],
       "filter_query" : filterArray

@@ -318,7 +318,8 @@
     "artclassification_str" : "Classification",
     "classification" : "Classification",
     "geography" : "Geography",
-    "collTypes" : "Collection Types",
+    "collTypes" : "Collection Type",
+    "collectiontypes" : "Collection Type",
     "data" : "Date"
   },
   "FIELD" : {
