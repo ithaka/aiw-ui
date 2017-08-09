@@ -5,13 +5,9 @@ import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms'
 import { Angulartics2 } from 'angulartics2';
 
 import { AuthService } from './../shared';
-import { LoginService } from './../login/login.service';
 import { AnalyticsService } from '../analytics.service';
 
 @Component({
-  providers: [
-    LoginService
-  ],
   selector: 'ang-register-page',
   templateUrl: 'register.component.html'
 })
@@ -31,7 +27,6 @@ export class RegisterComponent implements OnInit {
   constructor(
     private _auth: AuthService,
     private _router: Router,
-    private _login: LoginService,
     private angulartics: Angulartics2,
     _fb: FormBuilder,
     private _analytics: AnalyticsService

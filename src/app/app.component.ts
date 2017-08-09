@@ -69,7 +69,6 @@ export class App {
   }
 
   private findMainContent(): void {
-    console.log("finding mainContent")
     document.getElementById("mainContent").focus()
   }
 }

@@ -4,8 +4,7 @@ import { Location } from '@angular/common';
 import { Angulartics2 } from 'angulartics2';
 import { CompleterService, CompleterData } from 'ng2-completer';
 
-import { AuthService } from './../shared';
-import { LoginService, User } from './login.service';
+import { AuthService, User } from './../shared';
 import { AnalyticsService } from '../analytics.service';
 
 declare var initPath: string
@@ -15,14 +14,10 @@ declare var initPath: string
   // for `document.querySelectorAll(selector)` in our index.html
   // where, in this case, selector is the string 'home'
   selector: 'login',
-  // We need to tell Angular's Dependency Injection which providers are in our app.
-  providers: [
-    LoginService
-  ],
   // Our list of styles in our component. We may add more to compose many styles together
   styleUrls: [ './login.component.scss' ],
   // Every Angular template is first compiled by the browser before Angular runs it's compiler
-  templateUrl: './login.component.html'
+  templateUrl: './login.component.pug'
   // template: `<h1>Test title</h1>`
 })
 export class Login {
@@ -49,7 +44,6 @@ export class Login {
   // TypeScript public modifiers
   constructor(
     private _auth: AuthService,
-    private _login: LoginService,
     private _completer: CompleterService,
     private router: Router,
     private location: Location,
@@ -70,7 +64,7 @@ export class Login {
     }
 
     // this handles showing the register link for only ip auth'd users
-    this._login.getIpAuth()
+    this._auth.getIpAuth()
       .take(1)
       .subscribe((res) => {
         if (res.remoteaccess === false && res.user) {
@@ -81,7 +75,7 @@ export class Login {
       });
 
     // Until institutions call works without the auth cookie, we need to make sure we have a list available
-    this._login.getFallbackInstitutions()
+    this._auth.getFallbackInstitutions()
       .then((data) => {
         if (data.items) {
           this.loginInstitutions = data.items;
@@ -94,7 +88,7 @@ export class Login {
       });
 
     // The true institutions call. Don't throw an error, since the above call will provide a backup
-    this._login.getInstitutions()
+    this._auth.getInstitutions()
       .then((data) => {
         if (data.items) {
           this.loginInstitutions = data.items;
@@ -137,7 +131,7 @@ export class Login {
   }
 
   getLoginError(user) {
-    this._login.getLoginError(user)
+    this._auth.getLoginError(user)
       .then((data) => {
         if(data.message === 'loginExpired'){
           this.expirePwd = true;
@@ -176,7 +170,7 @@ export class Login {
 
     this.angulartics.eventTrack.next({ action:"remoteLogin", properties: { category: "login", label: "attempt" }});
 
-    this._login.login(user)
+    this._auth.login(user)
       .then(
         (data)  => {
           this.loginLoading = false;
@@ -246,7 +240,7 @@ export class Login {
     }
     // Try password all lowercase
     user.password = user.password.toLowerCase()
-    this._login.login(user).then((data) => {
+    this._auth.login(user).then((data) => {
       if (data.status === true) { 
         this.forcePwdRst = true
         this.errorMsg = ''
@@ -314,10 +308,6 @@ export class Login {
       let ssoSubdomain = this._auth.getSubdomain() == 'library' ? 'sso' : 'sso.' + this._auth.getSubdomain()
       window.open('https://' + ssoSubdomain + '.artstor.org/sso/shibssoinit?idpEntityID=' + encodeURIComponent(url) + '&o=' + encodeURIComponent(origin));
     }
-  }
-
-  toggleAccessHelpModal() {
-    this.showHelpModal = !this.showHelpModal;
   }
   
 }

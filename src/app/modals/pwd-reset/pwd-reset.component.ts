@@ -1,14 +1,10 @@
+import { AuthService } from '../../shared';
 import { Component, OnInit, EventEmitter, Output } from '@angular/core';
 import { formGroupNameProvider } from '@angular/forms/src/directives/reactive_directives/form_group_name';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 
-import { LoginService } from '../../login/login.service';
-
 @Component({
   selector: 'ang-pwd-reset-modal',
-  providers: [
-    LoginService
-  ],
   templateUrl: 'pwd-reset.component.html'
 })
 export class PwdResetModal implements OnInit {
@@ -23,7 +19,7 @@ export class PwdResetModal implements OnInit {
   private submitted = false;
 
   constructor(
-    private _login: LoginService,
+    private _auth: AuthService,
     private _fb: FormBuilder
   ) {
     this.pwdResetForm = _fb.group({
@@ -40,7 +36,7 @@ export class PwdResetModal implements OnInit {
     if (!this.pwdResetForm.valid) {
       return;
     }
-    this._login.pwdReset(this.pwdResetForm.value.email)
+    this._auth.pwdReset(this.pwdResetForm.value.email)
       .then(
         (data)  => { this.loadPwdRstRes(data) },
         (error) => { this.errorMsgPwdRst = <any>error }

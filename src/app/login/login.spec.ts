@@ -33,7 +33,6 @@ describe("Login component inline template", () => {
   let fixture: ComponentFixture<Login>;
   let de: DebugElement;
   let el: HTMLElement;
-  let loginService: LoginService;
   let loginSpy;
   let data: TestData;
 
@@ -55,12 +54,6 @@ describe("Login component inline template", () => {
     data  = new TestData();
 
     fixture = TestBed.createComponent(Login);
-
-    // Get the LoginService actually injected into the component
-    loginService = fixture.debugElement.injector.get(LoginService);
-
-    loginSpy = spyOn(loginService, 'getInstitutions')
-          .and.returnValue(Promise.resolve(data.institutionData));
 
     login = fixture.componentInstance;
   });
