@@ -7,7 +7,7 @@ $loginPanelBg: #f9f9f9; //#f5f9f5; //#d4cd98
 
 #logo {
     // Make sure height is a factor of the real image height for scaling
-    $logoHeight: 25px;
+    $logoHeight: 24px;
     height: $logoHeight;
     width: auto;
     margin: ($mobileNavHeight - $logoHeight)/2 0;
