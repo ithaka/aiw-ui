@@ -27,9 +27,10 @@ export class ThumbnailComponent implements OnInit {
   private editMode: boolean;
 
   private constraints: any = {}
-  private collectionType: number = 1
+  private collectionType: number = 0
 
   private collectionTypeMap: any = {
+    0: { name: '', alt: '' },
     1: { name: "artstor-asset", alt: "Artstor Digital Library" },
     2: { name: "institution-asset", alt: "Institution Collections" },
     3: { name: "personal-asset", alt: "Private Collections" },
@@ -60,6 +61,8 @@ export class ThumbnailComponent implements OnInit {
         this.collectionType = 2
       } else if (this.constraints.userId) {
         this.collectionType = 3
+      } else {
+        this.collectionType = 1
       }
     }
   }
