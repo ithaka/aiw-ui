@@ -122,7 +122,8 @@ export class AssetSearchService {
         // ],
     //  "sort": "agent_str",
     //   "sortorder": "desc"
-      "query": keyword,
+      // Add fuzzy operator
+      "query": keyword + "~0.8",
       "facet_fields" :
       [
         {
