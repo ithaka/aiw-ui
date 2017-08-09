@@ -13,6 +13,7 @@
                     <i class="icon icon-add"></i>
                     <i class="icon icon-close"></i>
                 </button>
+                <!--Show filters -->
                 <button class="filter" *ngFor="let facet of availableFilters[filterKey]" id="filterCollectionTypeItem{{ facet.name }}"  (click)="toggleFilter(facet.efq, filterKey)" [ngClass]="{'active': filterApplied(facet.efq, filterKey)}" data-sc="search: facet">{{ facet.name }} ({{facet.count}})
                     <i class="icon icon-add"></i>
                     <i class="icon icon-close"></i>
