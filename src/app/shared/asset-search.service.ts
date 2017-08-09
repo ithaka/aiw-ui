@@ -122,8 +122,6 @@ export class AssetSearchService {
         //     "efq": []
         //     }
         // ],
-    //  "sort": "agent_str",
-    //   "sortorder": "desc"
       // Add fuzzy operator
       "query": keyword + "~0.8",
       "facet_fields" :
@@ -148,6 +146,21 @@ export class AssetSearchService {
       ],
       "filter_query" : filterArray
     };
+
+    if (sortIndex) {
+      query["sortorder"] = "desc"
+ 
+      // if(sortIndex == '0'){
+      //   sort = 'Relevance';
+      // } else 
+      if (sortIndex == '1'){
+        query["sort"] = 'name';
+      } else if(sortIndex == '2'){
+        query["sort"] = 'agent';
+      } else if(sortIndex == '3'){
+        query["sort"] = 'date';
+      }
+    }
     
 
     return this.http.post(this._auth.getSearchUrl(), query, options);
