@@ -62,6 +62,17 @@ export class AssetFilters {
 
   private dateError: boolean = false; 
 
+  private filterNameMap: any = {
+    "collectiontypes" : {
+      1 : "Artstor Digital Library",
+      2 : "Instiution Collections",
+      3 : "Private Collections",
+      4 : "Institution Collections",
+      5 : "Open Collections",
+      6 : "Private Collections"
+    }
+  }
+
   // TypeScript public modifiers
   constructor(
     private _filters: AssetFiltersService,

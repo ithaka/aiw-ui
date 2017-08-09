@@ -202,7 +202,7 @@ export class ImageGroupPage implements OnInit, OnDestroy {
    * - View hasn't changed to hide the description
    */
   private showDesc(): boolean {
-    if (this.ig && this.ig.description && !this.reorderMode && this.descExpanded) {
+    if (this.ig && ((this.ig.description && this.ig.description.length > 0) || (this.ig.tags && this.ig.tags.length > 0)) && !this.reorderMode && this.descExpanded) {
       return true;
     } else {
       return false;

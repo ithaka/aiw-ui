@@ -14,6 +14,7 @@ import {
 import {
   AssetFiltersService
 } from '../asset-filters/asset-filters.service';
+import { AuthService } from './';
 
 @Injectable()
 export class AssetSearchService {
@@ -35,7 +36,8 @@ export class AssetSearchService {
 
   constructor(
     private http: Http,
-    private _filters: AssetFiltersService
+    private _filters: AssetFiltersService,
+    private _auth: AuthService
   ) {}
 
   /**
@@ -79,7 +81,8 @@ export class AssetSearchService {
     for (var i = 0; i < filters.length; i++) { // Applied filters
       
       
-      if (filters[i].filterGroup === 'collTypes') { // Collection Types
+      if ( ['collTypes', 'currentPage', 'pageSize', 'sort'].indexOf(filters[i].filterGroup) > -1) { 
+        // Collection Types and page info
         // do nothing
         // colTypeIds = filters[i].filterValue;
       } else {
@@ -121,24 +124,32 @@ export class AssetSearchService {
         // ],
     //  "sort": "agent_str",
     //   "sortorder": "desc"
-      "query": keyword,
+      // Add fuzzy operator
+      "query": keyword + "~0.8",
       "facet_fields" :
       [
         {
+          "name" : "collectiontypes",
+          "mincount" : 1,
+          "limit" : 15
+        },
+        {
           "name" : "artcollectiontitle_str",
           "mincount" : 1,
-          "limit" : 20
+          "limit" : 15
         },
+        // Limited to 16 classifications (based on the fact that Artstor has 16 classifications)
         {
           "name" : "artclassification_str",
           "mincount" : 1,
-          "limit" : 20
+          "limit" : 16
         }
+        
       ],
       "filter_query" : filterArray
     };
     
 
-    return this.http.post('//search-service.apps.test.cirrostratus.org/browse/', query, options);
+    return this.http.post(this._auth.getSearchUrl(), query, options);
   }
 }

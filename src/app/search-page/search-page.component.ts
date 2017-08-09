@@ -56,7 +56,7 @@ export class SearchPage implements OnInit, OnDestroy {
         } 
 
         // Make a search call if there is a search term or any selected filter
-        if (params["term"] || params["classification"] || params["geography"] || params["collTypes"] || params["startDate"] || params["endDate"]) {
+        if (params["term"] || params["classification"] || params["geography"] || params["collectiontypes"]  || params["collTypes"] || params["startDate"] || params["endDate"]) {
           this._title.setTitle( 'Artstor | "'+ params["term"] + '"' )
           this._assets.queryAll(params);
         } else {

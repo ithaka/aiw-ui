@@ -102,12 +102,9 @@ export class Asset {
         this.collectionId = assetObj.collectionId
         this.imgURL = assetObj.largeImgUrl
         this.typeId = assetObj.objectTypeId
-            // .push({
-            //     Date : [assetObj.tombstone[2]]
-            // })
         this.metadataLoaded = true
-        this.imageSourceLoaded = true
-        this.dataLoadedSource.next(true);
+        // Already has image source info attached
+        this.useImageSourceRes(assetObj)
     } else {
         this.loadAssetMetaData();
         this.loadMediaMetaData();

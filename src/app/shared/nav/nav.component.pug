@@ -1,0 +1,26 @@
+header.navbar.navbar-light
+  .container(style="padding:0px;")
+    .row
+      .col-8
+        a.navbar-brand([routerLink]="['/home']")
+          img#logo.hidden-xs-down(src="/assets/img/logo-v1.png" alt="Artstor logo")
+          img#logoMobile.hidden-xs-up(src="/assets/img/logo-square.png" alt="Artstor logo")
+      .col-4
+        .login-panel(*ngIf="showLoginPanel")
+          .vertical-center-wrap 
+            .login-panel__status(*ngIf="user.isLoggedIn")
+              h2.hidden Login Panel
+              #navMessageWelcome Welcome, {{ user.username ? user.username : ''}}
+              #navMessageInstitution(*ngIf="institutionObj.shortName || institutionObj.institutionName") Institution: {{ institutionObj.shortName ? institutionObj.shortName : institutionObj.institutionName }}
+              .login-panel__links
+                a.link--accent([routerLink]=" ['./account'] " routerLinkActive="active" tabindex="1") Settings
+                a.link--accent((click)="logout()" tabindex="1") Log Out
+            .login-panel__status(*ngIf="!user.isLoggedIn")
+              div
+                a.link((click)="navigateAndSaveRoute('/login')" tabindex="1") Log in
+                | &nbsp;or&nbsp;
+                a.link((click)="navigateAndSaveRoute('/register')" tabindex="1") Register
+                | &nbsp;to save images
+              div(*ngIf="institutionObj.shortName || institutionObj.institutionName")
+                | Institution: {{ institutionObj.shortName ? institutionObj.shortName : institutionObj.institutionName }}
+ang-session-expire-modal(*ngIf="showinactiveUserLogoutModal" "(closeModal)"="inactiveUsrLogOut()")

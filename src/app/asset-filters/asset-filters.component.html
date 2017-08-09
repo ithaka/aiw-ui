@@ -5,15 +5,20 @@
         <div *ngFor="let filterKey of keys(availableFilters); let i = index" [class.hidden]="">
             <div *ngIf="availableFilters[filterKey] && isArray(availableFilters[filterKey]) && availableFilters[filterKey].length > 0" class="filter-group">
                 <span class="filter-group__label">
-                    <h3>{{ 'FILTERS.' + filterKey | translate }} <a id="buttonCollectionTypeClear" tabindex="1" class="link--accent small" [ngClass]="{ 'disable': !hasAppliedFilters('collTypes') }" (click)="clearAllFilterGroup('collTypes')">Clear</a></h3>
+                    <h3>{{ 'FILTERS.' + filterKey | translate }} <a id="buttonCollectionTypeClear" tabindex="1" class="link--accent small" [ngClass]="{ 'disable': !hasAppliedFilters(filterKey) }" (click)="clearAllFilterGroup(filterKey)">Clear</a></h3>
                 </span>
                 <!--<div class="filter" [ngClass]="{ 'active': true }">All Collections</div>-->
                 <!--<pre>{{availableFilters[filterKey]}}</pre>-->
-                <button class="filter" *ngFor="let facet of appliedFilters[filterKey]" id="filterCollectionTypeItem{{ facet.name }}"  (click)="toggleFilter(facet.efq, filterKey)" [ngClass]="{'active': filterApplied(facet.efq, filterKey)}" data-sc="search: facet">{{ facet.name }} ({{facet.count}})
+                <button class="filter" *ngFor="let facet of appliedFilters[filterKey]" id="filterCollectionTypeItem{{ facet.name }}"  (click)="toggleFilter(facet.efq, filterKey)" [ngClass]="{'active': filterApplied(facet.efq, filterKey)}" data-sc="search: facet">
+                    <span *ngIf="facet.name && facet.name.length < 2">{{ filterNameMap[filterKey] && filterNameMap[filterKey][facet.name] }} ({{facet.count}})</span>
+                    <span *ngIf="facet.name && facet.name.length > 1">{{ facet.name }} ({{facet.count}})</span>
                     <i class="icon icon-add"></i>
                     <i class="icon icon-close"></i>
                 </button>
-                <button class="filter" *ngFor="let facet of availableFilters[filterKey]" id="filterCollectionTypeItem{{ facet.name }}"  (click)="toggleFilter(facet.efq, filterKey)" [ngClass]="{'active': filterApplied(facet.efq, filterKey)}" data-sc="search: facet">{{ facet.name }} ({{facet.count}})
+                <!--Show filters -->
+                <button class="filter" *ngFor="let facet of availableFilters[filterKey]" id="filterCollectionTypeItem{{ facet.name }}"  (click)="toggleFilter(facet.efq, filterKey)" [ngClass]="{'active': filterApplied(facet.efq, filterKey)}" data-sc="search: facet">
+                    <span *ngIf="facet.name && facet.name.length < 2">{{ filterNameMap[filterKey] && filterNameMap[filterKey][facet.name] }} ({{facet.count}})</span>
+                    <span *ngIf="facet.name && facet.name.length > 1">{{ facet.name }} ({{facet.count}})</span>
                     <i class="icon icon-add"></i>
                     <i class="icon icon-close"></i>
                 </button>

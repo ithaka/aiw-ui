@@ -33,6 +33,9 @@ export class AssetViewerComponent implements OnInit, OnDestroy, AfterViewInit {
     @Input() assets:Asset[];
     @Input() prevAssetResults: any;
     @Input() isFullscreen: boolean;
+    @Input() showCaption: boolean;
+    @Input() quizMode: boolean;
+
     @Output() fullscreenChange = new EventEmitter();
     @Output() nextPage = new EventEmitter();
     @Output() prevPage = new EventEmitter();
@@ -49,7 +52,7 @@ export class AssetViewerComponent implements OnInit, OnDestroy, AfterViewInit {
     private fallbackFailed: boolean = false;
     private tileSource: string;
     private lastZoomValue: number;
-    private showCaption: boolean = true;
+    // private showCaption: boolean = true;
 
     private kalturaUrl: string;
 

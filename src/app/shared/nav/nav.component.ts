@@ -7,7 +7,7 @@ import { AuthService, AssetService, ToolboxService } from '..';
 
 @Component({
   selector: 'nav-bar',
-  templateUrl: './nav.component.html',
+  templateUrl: './nav.component.pug',
   styleUrls: [ './nav.component.scss' ],
 })
 export class Nav implements OnInit, OnDestroy {

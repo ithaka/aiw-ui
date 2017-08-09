@@ -155,7 +155,8 @@ $titleNavBg: #eee;
 
 .fullscreen-container {
     width: 100%;
-    height: 100%;
+    height: calc(100% - 40px);
+    top: 0;
     position: fixed;
 }
 
@@ -223,5 +224,100 @@ $titleNavBg: #eee;
         background-repeat: no-repeat;
         background-position: center center;
         background-size: 100% auto;
+    }
+}
+
+.quiz-caption-cntnr{
+    position: absolute;
+    background: #f1f8f1;
+    left: 0px;
+    top: 100%;
+    z-index: 1;
+    opacity: 1;
+    width: 100%;
+    height: 40px;
+    padding: 10px;
+    transition: transform 0.2s linear;
+    transform: translateY(0px);
+
+    &.cntnr-bg{
+        background: #f1f8f1;
+    }
+
+    .quiz-cntnr{
+        position: absolute;
+        right: 15px;
+        top: 15px;
+        width: 120px;
+        letter-spacing: 0.3px;
+        color: #c8c8c8;
+        cursor: pointer;
+        font-size: 12px;
+
+        .quiz-btn{
+            width: 10px;
+            height: 10px;
+            display: inline-block;
+            border: 1px solid #c8c8c8;
+            background-color: #c8c8c8;
+            border-radius: 10px;
+            margin-right: 8px;
+        }
+
+        &.active{
+            color: #000;
+
+            .quiz-btn{
+                border: 1px solid #000;
+                background-color: #000;
+            }
+        }
+    }
+
+    .caption-btn-cntnr{
+        position: absolute;
+        left: 15px;
+        top: 15px;
+        width: 120px;
+        letter-spacing: 0.3px;
+        color: #c8c8c8;
+        cursor: pointer;
+        font-size: 12px;
+
+        .caption-btn{
+            width: 10px;
+            height: 10px;
+            display: inline-block;
+            border: 1px solid #c8c8c8;
+            background-color: #c8c8c8;
+            border-radius: 10px;
+            margin-right: 8px;
+        }
+
+        &.active{
+            color: #000;
+
+            .caption-btn{
+                border: 1px solid #000;
+                background-color: #000;
+            }
+        }
+    }
+
+    .quiz-browse-cntnr{
+        display: block;
+        width: 120px;
+        margin: auto;
+
+        .icon{
+            cursor: pointer;
+
+            &.icon-left{
+                float: left;
+            }
+            &.icon-right{
+                float: right;
+            }
+        }
     }
 }
