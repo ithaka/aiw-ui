@@ -26,6 +26,9 @@ export class ThumbnailComponent implements OnInit {
   @Input()
   private editMode: boolean;
 
+  private constraints: any = {}
+  private collectionType: number = 1
+
   private collectionTypeMap: any = {
     1: { name: "artstor-asset", alt: "Artstor Digital Library" },
     2: { name: "institution-asset", alt: "Institution Collections" },
@@ -46,6 +49,18 @@ export class ThumbnailComponent implements OnInit {
     if (this.thumbnail['media']) {
       let media = JSON.parse(this.thumbnail['media'])
       this.thumbnail['thumbnailImgUrl'] = media['thumbnailSizeOnePath']
+    }
+    if (this.thumbnail['constraints']) {
+      this.constraints = JSON.parse(this.thumbnail['constraints'])
+
+      // Set collection type for assets from Solr
+      if (this.constraints.open) {
+        this.collectionType = 5
+      } else if (this.constraints.institutionId) {
+        this.collectionType = 2
+      } else if (this.constraints.userId) {
+        this.collectionType = 3
+      }
     }
   }
 
