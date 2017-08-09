@@ -12,7 +12,11 @@
     "INSTITUTION_LOGIN": {
       "HEADING": "Log in through your Institution",
       "LIST_INFO": "This is not a complete list of subscribing institutions. Institutions listed have provided single sign-on or proxy access. If your school is listed, select it from the dropdown and you will be redirected to your institutional login page to gain access to Artstor.",
-      "SELECT_LABEL": "Select your institution's name"
+      "SELECT_LABEL": "Select your institution's name",
+      "ERRORS": {
+        "SELECT_INSTITUTION": "Please select an institution",
+        "SERVICE_ERROR": "We've experience an error and are unable to retrieve the insitutions"
+      }
     },
     "LOGIN_BTN": "Log in",
     "SERVER_ERROR": "Server is not responding. Please try again later.",
@@ -20,7 +24,9 @@
     "WRONG_PASSWORD" : "Invalid email address or password. Try again.",
     "INVALID_EMAIL" : "Please enter a valid email address",
     "PASSWORD_REQUIRED": "Password must be 7-20 characters",
-    "EXPIRED" : "That login is expired. Please login from campus to renew your account."
+    "EXPIRED" : "That login is expired. Please login from campus to renew your account.",
+    "REGISTER_PROMPT": "Not Registered?",
+    "ACCESS_PROMPT": "How do I get access?"
   },
   "REGISTER": {
     "REGISTER_HEADING": "Register for a new Artstor account",

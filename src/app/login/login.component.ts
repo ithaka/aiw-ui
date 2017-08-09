@@ -83,7 +83,7 @@ export class Login {
         }
       })
       .catch((error) => {
-        this.instErrorMsg = "We've experience an error and are unable to retrieve the insitutions";
+        this.instErrorMsg = "LOGIN.INSTITUTION_LOGIN.ERRORS.SERVICE_ERROR";
         console.error(error);
       });
 
@@ -293,7 +293,7 @@ export class Login {
 
     // if the user selected some institution that doesn't exist, kick them out!!
     if (!selectedInst) {
-      this.instErrorMsg = "Please select an institution";
+      this.instErrorMsg = "LOGIN.INSTITUTION_LOGIN.ERRORS.SELECT_INSTITUTION";
       return;
     }
 

@@ -21,11 +21,11 @@
           a#inkLoginResetModal((click)="showPwdModal = true" tabindex="0" class="link") {{ 'LOGIN.REG_LOGIN.FORGOT_PW_PROMPT' | translate }}
           br
           div(*ngIf="showRegister")
-            a.link([routerLink]="['/register']") Not Registered?
+            a.link([routerLink]="['/register']") {{ 'LOGIN.REGISTER_PROMPT' | translate }}
             br
           a.link([attr.href]="'LOGIN.REG_LOGIN.LOGIN_HELP_LINK' | translate" target="_blank") {{ 'LOGIN.REG_LOGIN.LOGIN_HELP_PROMPT' | translate }}
         .block-right
-          a.link((click)="showHelpModal = true" tabindex="0") How do I get access?
+          a.link((click)="showHelpModal = true" tabindex="0") {{ 'LOGIN.ACCESS_PROMPT' | translate }}
     .col-sm-6
       .card.card--v-pad
         .card-header
@@ -43,7 +43,7 @@
               [clearUnselected]="true",
               name="institutionSelector"
             )
-            .login-errorMsg(*ngIf="instErrorMsg") {{ instErrorMsg }}
+            .login-errorMsg(*ngIf="instErrorMsg") {{ instErrorMsg | translate }}
           .form-group
             p.notranslate([innerHtml]="'LOGIN.TERMS' | translate")
             p.small {{ 'LOGIN.INSTITUTION_LOGIN.LIST_INFO' | translate }}
