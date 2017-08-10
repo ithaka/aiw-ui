@@ -54,6 +54,7 @@ export class AssetPage implements OnInit, OnDestroy {
     private _storage
 
     private quizMode: boolean = false;
+    private quizShuffle: boolean = false;
     private showAssetCaption: boolean = true;
     
 
@@ -245,7 +246,8 @@ export class AssetPage implements OnInit, OnDestroy {
     private showPrevAsset(): void{
         if(this.assetNumber > 1){
             if((this.assetIndex > 0)){
-                this._router.navigate(['/asset', this.prevAssetResults.thumbnails[this.assetIndex - 1].objectId]);
+                let prevAssetIndex = this.quizShuffle ? Math.floor(Math.random() * this.prevAssetResults.thumbnails.length) + 0 : this.assetIndex - 1; // Assign random thumbnail index if quiz shuffle is true
+                this._router.navigate(['/asset', this.prevAssetResults.thumbnails[prevAssetIndex].objectId]);
             }
             else if(this.assetIndex == 0){
                 this.loadArrayLastAsset = true;
@@ -257,7 +259,8 @@ export class AssetPage implements OnInit, OnDestroy {
     private showNextAsset(): void{
         if(this.assetNumber < this.totalAssetCount){
             if((this.prevAssetResults.thumbnails) && (this.assetIndex < (this.prevAssetResults.thumbnails.length - 1))){
-                this._router.navigate(['/asset', this.prevAssetResults.thumbnails[this.assetIndex + 1].objectId]);
+                let nextAssetIndex = this.quizShuffle ? Math.floor(Math.random() * this.prevAssetResults.thumbnails.length) + 0 : this.assetIndex + 1; // Assign random thumbnail index if quiz shuffle is true
+                this._router.navigate(['/asset', this.prevAssetResults.thumbnails[nextAssetIndex].objectId]);
             }
             else if((this.prevAssetResults.thumbnails) && (this.assetIndex == (this.prevAssetResults.thumbnails.length - 1))){
                 this.loadArrayFirstAsset = true;
@@ -361,6 +364,7 @@ export class AssetPage implements OnInit, OnDestroy {
         }
         
         this.quizMode = false;
+        this.quizShuffle = false;
         this.showAssetCaption = true;
 
         this.assetViewer.togglePresentationMode();
@@ -400,6 +404,16 @@ export class AssetPage implements OnInit, OnDestroy {
             for(let i = 0; i < this.prevAssetResults.thumbnails.length; i++){
                 this.prevAssetResults.thumbnails[i].selected = false;
             }
+        }
+    }
+
+    private toggleQuizShuffle(): void{
+        if(this.quizShuffle){
+            this.quizShuffle = false;
+        }
+        else{
+            this.quizShuffle = true;
+            this.showNextAsset();
         }
     }
 }
