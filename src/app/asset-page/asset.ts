@@ -104,7 +104,10 @@ export class Asset {
         this.typeId = assetObj.objectTypeId
         this.metadataLoaded = true
         // Already has image source info attached
-        this.useImageSourceRes(assetObj)
+        setTimeout(() => {
+            this.useImageSourceRes(assetObj)
+        },500)
+        
     } else {
         this.loadAssetMetaData();
         this.loadMediaMetaData();
@@ -265,8 +268,15 @@ export class Asset {
     }
 
     // Save the Tile Source for IIIF
-    let imgPath = '/' + data['imageUrl'].substring(0, data['imageUrl'].lastIndexOf('.fpx') + 4)
-    this.tileSource = this._auth.getIIIFUrl() + encodeURIComponent(imgPath) + '/info.json'
+    let imgPath
+    if (data && data.metadata && data.metadata[0] && data.metadata[0]['image_url']) {
+        imgPath = '/' + data.metadata[0]['image_url']
+        this.tileSource = this._auth.getIIIFUrl() + encodeURIComponent(imgPath) + '/info.json'
+    } else {
+        imgPath = '/' + data['imageUrl'].substring(0, data['imageUrl'].lastIndexOf('.fpx') + 4)
+        this.tileSource = this._auth.getIIIFUrl() + encodeURIComponent(imgPath) + '/info.json'
+    }
+    
 
     this.imageSourceLoaded = true;
     this.dataLoadedSource.next(this.metadataLoaded && this.imageSourceLoaded);
