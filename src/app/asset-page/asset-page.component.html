@@ -34,12 +34,12 @@
             <!--</div>-->
 
             <div *ngIf="isFullscreen" [ngClass]="[ showAssetCaption ? '' : 'cntnr-bg' ]" class="col-md-12 quiz-caption-cntnr">
-                <div class="quiz-cntnr" [ngClass]="[ quizMode ? 'active' : '' ]" (click)="toggleQuizMode()" title="Toggle Quiz Mode"><span class="quiz-btn"></span>QUIZ MODE {{ quizMode ? 'ON' : 'OFF' }}</div>
+                <!--<div class="quiz-cntnr" [ngClass]="[ quizMode ? 'active' : '' ]" (click)="toggleQuizMode()" title="Toggle Quiz Mode"><span class="quiz-btn"></span>QUIZ MODE {{ quizMode ? 'ON' : 'OFF' }}</div>-->
                 <div class="quiz-browse-cntnr" *ngIf="quizMode">
                     <i [class.disabled]="assetNumber <= 1" title="Previous in results" (click)="showPrevAsset()" class="icon icon-direction icon-left"></i>
                     <i [class.disabled]="assetNumber >= totalAssetCount" title="Next in results" (click)="showNextAsset()" class="icon icon-direction icon-right"></i>
                 </div>
-                <div class="caption-btn-cntnr" [ngClass]="[ showAssetCaption ? 'active' : '' ]" (click)="showAssetCaption = !showAssetCaption" title="Toggle to show/hide caption"><span class="caption-btn"></span>{{ showAssetCaption ? 'HIDE CAPTION' : 'SHOW CAPTION' }}</div>
+                <!--<div class="caption-btn-cntnr" [ngClass]="[ showAssetCaption ? 'active' : '' ]" (click)="showAssetCaption = !showAssetCaption" title="Toggle to show/hide caption"><span class="caption-btn"></span>{{ showAssetCaption ? 'HIDE CAPTION' : 'SHOW CAPTION' }}</div>-->
             </div>
 
               
