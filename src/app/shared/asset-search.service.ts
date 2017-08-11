@@ -133,18 +133,17 @@ export class AssetSearchService {
         //   "mincount" : 1,
         //   "limit" : 15
         // },
-        {
-          "name" : "artcollectiontitle_str",
-          "mincount" : 1,
-          "limit" : 15
-        },
         // Limited to 16 classifications (based on the fact that Artstor has 16 classifications)
         {
           "name" : "artclassification_str",
           "mincount" : 1,
           "limit" : 16
+        },
+        {
+          "name" : "artcollectiontitle_str",
+          "mincount" : 1,
+          "limit" : 15
         }
-        
       ],
       "filter_query" : filterArray
     };
