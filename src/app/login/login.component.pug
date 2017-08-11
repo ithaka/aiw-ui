@@ -17,22 +17,22 @@
             p.notranslate([innerHtml]="'LOGIN.TERMS' | translate")
             .form-group
               button#btnLoginRemote.btn.btn-primary([class.loading]="loginLoading" type="submit" name="action" data-sc="account: remote user log in") 
-                | {{ 'LOGIN.REG_LOGIN.LOGIN_BTN' | translate }}
+                | {{ 'LOGIN.LOGIN_BTN' | translate }}
           a#inkLoginResetModal((click)="showPwdModal = true" tabindex="0" class="link") {{ 'LOGIN.REG_LOGIN.FORGOT_PW_PROMPT' | translate }}
           br
           div(*ngIf="showRegister")
-            a.link([routerLink]="['/register']") Not Registered?
+            a.link([routerLink]="['/register']") {{ 'LOGIN.REGISTER_PROMPT' | translate }}
             br
           a.link([attr.href]="'LOGIN.REG_LOGIN.LOGIN_HELP_LINK' | translate" target="_blank") {{ 'LOGIN.REG_LOGIN.LOGIN_HELP_PROMPT' | translate }}
         .block-right
-          a.link((click)="showHelpModal = true" tabindex="0") How do I get access?
+          a.link((click)="showHelpModal = true" tabindex="0") {{ 'LOGIN.ACCESS_PROMPT' | translate }}
     .col-sm-6
       .card.card--v-pad
         .card-header
-          h1#institutionHeading {{ 'LOGIN.INSTITUTION_HEADING' | translate }}
+          h1#institutionHeading {{ 'LOGIN.INSTITUTION_LOGIN.HEADING' | translate }}
         .card-body
           .form-group
-            label Select your institution's name
+            label {{ 'LOGIN.INSTITUTION_LOGIN.SELECT_LABEL' | translate }}
             ng2-completer(
               [(ngModel)]="loginInstName",
               [datasource]="dataService",
@@ -43,13 +43,13 @@
               [clearUnselected]="true",
               name="institutionSelector"
             )
-            .login-errorMsg(*ngIf="instErrorMsg") {{ instErrorMsg }}
+            .login-errorMsg(*ngIf="instErrorMsg") {{ instErrorMsg | translate }}
           .form-group
             p.notranslate([innerHtml]="'LOGIN.TERMS' | translate")
-            p.small {{ 'LOGIN.INSTITUTION_LIST_INFO' | translate }}
+            p.small {{ 'LOGIN.INSTITUTION_LOGIN.LIST_INFO' | translate }}
           .form-group
             button#btnLoginProxy.btn.btn-primary((click)="goToInstLogin()" type="submit" name="action" data-sc="account: institutional user log in")
-              | Log in
+              | {{ 'LOGIN.LOGIN_BTN' | translate }}
 #helpModal.modal([ngClass]="{'show': showHelpModal }")
   .modal-dialog
     .modal-content
@@ -59,5 +59,5 @@
           span(aria-hidden="true") &times;
       .modal-body([innerHtml]="'ACCESS_HELP_MODAL.PROMPT' | translate")
       .modal-footer
-        button#btnLoginDismissHelp.btn.btn-primary((click)="showHelpModal = false") Ok
+        button#btnLoginDismissHelp.btn.btn-primary((click)="showHelpModal = false") {{ 'ACCESS_HELP_MODAL.DISMISS' | translate }}
 ang-pwd-reset-modal(*ngIf="showPwdModal", (closeModal)="showPwdModal = false")

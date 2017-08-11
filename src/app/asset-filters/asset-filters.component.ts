@@ -141,7 +141,7 @@ export class AssetFilters {
     let params = {};
 
     // Date filters only work with legacy search
-    if (!this._auth.featureFlags['solrSearch'] && this.availableFilters.dateObj && this.availableFilters.dateObj.modified == true && this.filterDate) {
+    if (this.availableFilters.dateObj && this.availableFilters.dateObj.modified == true && this.filterDate) {
       params['startDate'] = this.availableFilters.dateObj.earliest.date * (this.availableFilters.dateObj.earliest.era == 'BCE' ? -1 : 1);
       params['endDate'] = this.availableFilters.dateObj.latest.date * (this.availableFilters.dateObj.latest.era == 'BCE' ? -1 : 1);
     }

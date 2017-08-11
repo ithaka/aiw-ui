@@ -40,20 +40,20 @@
 
     <div id="imageButtons-{{ asset.id + '-' + index }}" class="button-group asset-viewer__buttons">
         <button [class.hidden]="!isOpenSeaDragonAsset || mediaLoadingFailed" id="zoomIn-{{ asset.id + '-' + index}}" title="Zoom In" class="btn btn--icon">
-        <i class="icon icon-zoom-in"></i>
-    </button><button [class.hidden]="!isOpenSeaDragonAsset || mediaLoadingFailed" id="zoomOut-{{ asset.id + '-' + index }}" title="Zoom Out" class="btn btn--icon">
-        <i class="icon icon-zoom-out"></i>
-    </button><button [class.hidden]="!isOpenSeaDragonAsset || mediaLoadingFailed" id="zoomFit-{{ asset.id + '-' + index }}" title="Zoom Fit" class="btn btn--icon">
-            <i class="icon icon-fit"></i>
-    </button><button  *ngIf="!isFullscreen" id="fullScreen-{{ asset.id + '-' + index }}" class="btn btn--icon" (click)="togglePresentationMode()" title="Full Screen">
-            <i class="icon icon-fullscreen"></i>
-    </button>
-        <!-- <button *ngIf="isFullscreen" class="btn btn--icon" (click)="showCaption = !showCaption" [class.active]="showCaption" title="Toggle Caption">
-            <i class="icon icon-text"></i>
-        </button> -->
-        <button *ngIf="isFullscreen && index !== 0" class="btn btn--icon" (click)="removeComparedAsset(asset.id)" title="Remove from Comparison">
-            <i class="icon icon-close"></i>
-    </button>
+            <i class="icon icon-zoom-in"></i>
+        </button><button [class.hidden]="!isOpenSeaDragonAsset || mediaLoadingFailed" id="zoomOut-{{ asset.id + '-' + index }}" title="Zoom Out" class="btn btn--icon">
+            <i class="icon icon-zoom-out"></i>
+        </button><button [class.hidden]="!isOpenSeaDragonAsset || mediaLoadingFailed" id="zoomFit-{{ asset.id + '-' + index }}" title="Zoom Fit" class="btn btn--icon">
+                <i class="icon icon-fit"></i>
+        </button><button  *ngIf="!isFullscreen" id="fullScreen-{{ asset.id + '-' + index }}" class="btn btn--icon" (click)="togglePresentationMode()" title="Full Screen">
+                <i class="icon icon-fullscreen"></i>
+        </button>
+            <!-- <button *ngIf="isFullscreen" class="btn btn--icon" (click)="showCaption = !showCaption" [class.active]="showCaption" title="Toggle Caption">
+                <i class="icon icon-text"></i>
+            </button> -->
+            <button *ngIf="isFullscreen && index !== 0" class="btn btn--icon" (click)="removeComparedAsset(asset.id)" title="Remove from Comparison">
+                <i class="icon icon-close"></i>
+        </button>
     </div>
 
     <!--<div *ngIf="isFullscreen" class="caption-cntnr" [hidden]="!showCaption">

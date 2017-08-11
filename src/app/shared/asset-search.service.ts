@@ -67,21 +67,22 @@ export class AssetSearchService {
 
     let filters = this._filters.getApplied();
     // To-do: break dateObj out of available filters
-    // let dateFacet = this._filters.getAvailable()['dateObj'];
+    let dateFacet = this._filters.getAvailable()['dateObj'];
+    console.log(dateFacet)
 
-    // if (dateFacet.modified) {
-    //   earliestDate = dateFacet.earliest.date;
-    //   earliestDate = (dateFacet.earliest.era == 'BCE') ? (parseInt(earliestDate) * -1).toString() : earliestDate;
+    if (dateFacet.modified) {
+      earliestDate = dateFacet.earliest.date;
+      earliestDate = (dateFacet.earliest.era == 'BCE') ? (parseInt(earliestDate) * -1).toString() : earliestDate.toString();
 
-    //   latestDate = dateFacet.latest.date;
-    //   latestDate = (dateFacet.latest.era == 'BCE') ? (parseInt(latestDate) * -1).toString() : latestDate;
-    // }
+      latestDate = dateFacet.latest.date;
+      latestDate = (dateFacet.latest.era == 'BCE') ? (parseInt(latestDate) * -1).toString() : latestDate.toString();
+    }
     let filterArray = []
     
     for (var i = 0; i < filters.length; i++) { // Applied filters
       
       
-      if ( ['collTypes', 'currentPage', 'pageSize', 'sort'].indexOf(filters[i].filterGroup) > -1) { 
+      if ( ['collTypes', 'currentPage', 'pageSize', 'sort', 'startDate', 'endDate'].indexOf(filters[i].filterGroup) > -1) { 
         // Collection Types and page info
         // do nothing
         // colTypeIds = filters[i].filterValue;
@@ -113,6 +114,8 @@ export class AssetSearchService {
       "content_types": [
         "art"
       ],
+      "startdate" : earliestDate,
+      "enddate" : latestDate,
     //   "facet_fields": [
     //       "artclassification"
     //   ],
@@ -126,23 +129,22 @@ export class AssetSearchService {
       "query": keyword + "~0.8",
       "facet_fields" :
       [
-        {
-          "name" : "collectiontypes",
-          "mincount" : 1,
-          "limit" : 15
-        },
-        {
-          "name" : "artcollectiontitle_str",
-          "mincount" : 1,
-          "limit" : 15
-        },
+        // {
+        //   "name" : "collectiontypes",
+        //   "mincount" : 1,
+        //   "limit" : 15
+        // },
         // Limited to 16 classifications (based on the fact that Artstor has 16 classifications)
         {
           "name" : "artclassification_str",
           "mincount" : 1,
           "limit" : 16
+        },
+        {
+          "name" : "artcollectiontitle_str",
+          "mincount" : 1,
+          "limit" : 15
         }
-        
       ],
       "filter_query" : filterArray
     };
@@ -154,11 +156,11 @@ export class AssetSearchService {
       //   sort = 'Relevance';
       // } else 
       if (sortIndex == '1'){
-        query["sort"] = 'name';
+        query["sort"] = 'name_str';
       } else if(sortIndex == '2'){
-        query["sort"] = 'agent';
+        query["sort"] = 'agent_str';
       } else if(sortIndex == '3'){
-        query["sort"] = 'date';
+        query["sort"] = 'yearend';
       }
     }
     

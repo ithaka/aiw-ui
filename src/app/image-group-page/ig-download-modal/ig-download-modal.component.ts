@@ -35,10 +35,11 @@ export class PptModalComponent implements OnInit {
   constructor(private _assets: AssetService, private _auth: AuthService, private http: Http) { }
 
   ngOnInit() {
-    this.isLoading = true;
-    this.zipLoading = true;
     console.log(this.ig);
-
+  }
+  
+  private getPPT() {
+    this.isLoading = true;
     // Setup PPT Download
     this.getDownloadLink(this.ig)
       .take(1)
@@ -54,6 +55,10 @@ export class PptModalComponent implements OnInit {
         (error) => { console.error(error); this.isLoading = false; }
       );
     
+  }
+
+  private getZip() {
+    this.zipLoading = true;
     // Setup Zip download
     this.getDownloadLink(this.ig, true)
       .take(1)
