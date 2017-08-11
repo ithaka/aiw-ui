@@ -113,6 +113,8 @@ export class AssetSearchService {
       "content_types": [
         "art"
       ],
+      // "startdate" : "",
+      // "enddate" : "",
     //   "facet_fields": [
     //       "artclassification"
     //   ],
