@@ -126,11 +126,11 @@ export class AssetSearchService {
       "query": keyword + "~0.8",
       "facet_fields" :
       [
-        {
-          "name" : "collectiontypes",
-          "mincount" : 1,
-          "limit" : 15
-        },
+        // {
+        //   "name" : "collectiontypes",
+        //   "mincount" : 1,
+        //   "limit" : 15
+        // },
         {
           "name" : "artcollectiontitle_str",
           "mincount" : 1,
@@ -154,11 +154,11 @@ export class AssetSearchService {
       //   sort = 'Relevance';
       // } else 
       if (sortIndex == '1'){
-        query["sort"] = 'name';
+        query["sort"] = 'name_str';
       } else if(sortIndex == '2'){
-        query["sort"] = 'agent';
+        query["sort"] = 'agent_str';
       } else if(sortIndex == '3'){
-        query["sort"] = 'date';
+        query["sort"] = 'yearend';
       }
     }
     

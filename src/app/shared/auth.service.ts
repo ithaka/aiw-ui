@@ -80,7 +80,7 @@ export class AuthService implements CanActivate {
     this.thumbUrl = '//mdxdv.artstor.org';
     this.IIIFUrl = '//tsprod.artstor.org/rosa-iiif-endpoint-1.0-SNAPSHOT/fpx';
     this.subdomain = 'library';
-    this.solrUrl = '//search-service.apps.test.cirrostratus.org/browse/';
+    this.solrUrl = '//search-service.apps.test.cirrostratus.org/v1.0/search';
     
     // Check domain
     if (document.location.hostname.indexOf('library.artstor.org') > -1 || document.location.hostname.indexOf('beta.artstor.org') > -1 || document.location.hostname.indexOf('lively.artstor.org') > -1 || document.location.hostname.indexOf('proxy.artstor.org') > -1) {
@@ -94,7 +94,7 @@ export class AuthService implements CanActivate {
       this.imageFpxUrl =  '//library.artstor.org/api/secure/imagefpx'; 
       this.lostPassUrl = '//library.artstor.org/library/lostpw';
       this.logUrl = '//ang-ui-logger.apps.prod.cirrostratus.org/api/v1';
-      this.solrUrl = '//search-service.apps.prod.cirrostratus.org/browse/';
+      this.solrUrl = '//search-service.apps.prod.cirrostratus.org/v1.0/search';
     } else if (document.location.hostname.indexOf('localhost') > -1 || document.location.hostname.indexOf('stage.artstor.org') > -1 || document.location.hostname.indexOf('test.stagely.artstor.org') > -1 || document.location.hostname.indexOf('test.cirrostratus.org') > -1) {
       // Test Endpoints
       this.hostname = '//stage.artstor.org';
