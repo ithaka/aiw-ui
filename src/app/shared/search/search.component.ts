@@ -137,10 +137,12 @@ export class SearchComponent implements OnInit, OnDestroy {
       let queryParts = query.split(',');
       if(queryParts.length > 1){
         searchTerm += ' ' + queryParts[0].toUpperCase();
-        searchTerm += ' ' + queryParts[1].split('|')[0];
+        searchTerm += ' ' + queryParts[1];
+        // searchTerm += ' ' + queryParts[1].split('|')[0];
       }
       else if(queryParts.length === 1){
-        searchTerm += queryParts[0].split('|')[0];
+        searchTerm += queryParts[0];
+        // searchTerm += queryParts[0].split('|')[0];
       }
     }
 
