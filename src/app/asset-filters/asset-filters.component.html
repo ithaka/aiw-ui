@@ -69,10 +69,10 @@
         </div>
     </div>
 
-    <div *ngIf="!_auth.featureFlags['solrSearch'] && availableFilters.dateObj" class="filter-group">
+    <div *ngIf="availableFilters.dateObj" class="filter-group">
         <span class="filter-group__label">
-                <h3>Date <a id="buttonDateFilterClear" tabindex="1" class="link--accent small" [ngClass]="{ 'disable': !hasAppliedFilters('date') }" (click)="clearAllFilterGroup('date')">Clear</a></h3>
-            </span>
+            <h3>Date <a id="buttonDateFilterClear" tabindex="1" class="link--accent small" [ngClass]="{ 'disable': !hasAppliedFilters('date') }" (click)="clearAllFilterGroup('date')">Clear</a></h3>
+        </span>
         <div class="date-filter-row">
             <input id="inputDateFilterStart" [(ngModel)]="availableFilters.dateObj.earliest.date" type="number" (keypress)="dateKeyPress($event)" min="0" class="form-control" placeholder="Start Date">
             <!--<div id="buttonDateFilterStartEra" class="toggle-btn" (click)="toggleEra(availableFilters.dateObj.earliest)">{{ availableFilters.dateObj.earliest.era }}</div>-->
