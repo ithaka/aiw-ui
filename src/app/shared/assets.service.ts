@@ -1145,7 +1145,7 @@ export class AssetService {
         let options
         // if (document.referrer && document.referrer.indexOf('kressfoundation.org') > -1){
             // Custom header makes this call function as if IP auth
-            header = new Headers({ fromKress : 'true' });
+            header = new Headers({ withCredentials: 'true', fromKress : 'true' });
         // } else {
         //     header = new Headers({});
         // }

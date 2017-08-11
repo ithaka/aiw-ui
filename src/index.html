@@ -12,6 +12,7 @@
           || initPath.indexOf('.org/library/welcome.html') > -1 
           || initPath.indexOf('.org/library/#') > -1 
           || initPath.indexOf('/asset/') > -1 
+          || initPath.indexOf('/assetprint/') > -1 
           || initPath.indexOf('/group/') > -1 
           || initPath.indexOf('/browse/') > -1 
           || initPath.indexOf('/collection/') > -1 
@@ -20,12 +21,13 @@
         ) {
           if (initPath.indexOf('/library/') > -1) {
             initPath = initPath.substr(initPath.indexOf('/library/'));
-          } else if (initPath.indexOf('.org') > -1) {
-            initPath = initPath.substr(initPath.indexOf('.org') + 4);
           } else if (initPath.indexOf('.edu') > -1) {
-            initPath = initPath.substr(initPath.indexOf('.edu') + 4);
+            initPath = initPath.substr(initPath.lastIndexOf('.edu') + 4);
           } else if (initPath.indexOf('.net') > -1) {
-            initPath = initPath.substr(initPath.indexOf('.net') + 4);
+            initPath = initPath.substr(initPath.lastIndexOf('.net') + 4);
+          } else if (initPath.indexOf('.org') > -1) {
+            // .org needs to be checked last for proxies
+            initPath = initPath.substr(initPath.lastIndexOf('.org') + 4);
           } else {
             initPath = null
           }
