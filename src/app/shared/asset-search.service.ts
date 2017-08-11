@@ -67,15 +67,16 @@ export class AssetSearchService {
 
     let filters = this._filters.getApplied();
     // To-do: break dateObj out of available filters
-    // let dateFacet = this._filters.getAvailable()['dateObj'];
+    let dateFacet = this._filters.getAvailable()['dateObj'];
+    console.log(dateFacet)
 
-    // if (dateFacet.modified) {
-    //   earliestDate = dateFacet.earliest.date;
-    //   earliestDate = (dateFacet.earliest.era == 'BCE') ? (parseInt(earliestDate) * -1).toString() : earliestDate;
+    if (dateFacet.modified) {
+      earliestDate = dateFacet.earliest.date;
+      earliestDate = (dateFacet.earliest.era == 'BCE') ? (parseInt(earliestDate) * -1).toString() : earliestDate.toString();
 
-    //   latestDate = dateFacet.latest.date;
-    //   latestDate = (dateFacet.latest.era == 'BCE') ? (parseInt(latestDate) * -1).toString() : latestDate;
-    // }
+      latestDate = dateFacet.latest.date;
+      latestDate = (dateFacet.latest.era == 'BCE') ? (parseInt(latestDate) * -1).toString() : latestDate.toString();
+    }
     let filterArray = []
     
     for (var i = 0; i < filters.length; i++) { // Applied filters
@@ -113,8 +114,8 @@ export class AssetSearchService {
       "content_types": [
         "art"
       ],
-      // "startdate" : "",
-      // "enddate" : "",
+      "startdate" : earliestDate,
+      "enddate" : latestDate,
     //   "facet_fields": [
     //       "artclassification"
     //   ],
