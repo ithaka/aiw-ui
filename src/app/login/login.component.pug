@@ -18,7 +18,7 @@
             .form-group
               button#btnLoginRemote.btn.btn-primary([class.loading]="loginLoading" type="submit" name="action" data-sc="account: remote user log in") 
                 | {{ 'LOGIN.REG_LOGIN.LOGIN_BTN' | translate }}
-          a#inkLoginResetModal((click)="showPwdModal = true" tabindex="0" class="link") {{ 'LOGIN.REG_LOGIN.FORGOT_PW_PROMPT' | translate }}
+          a#linkLoginResetModal((click)="showPwdModal = true" tabindex="0" class="link") {{ 'LOGIN.REG_LOGIN.FORGOT_PW_PROMPT' | translate }}
           br
           div(*ngIf="showRegister")
             a.link([routerLink]="['/register']") Not Registered?
