@@ -149,9 +149,9 @@ export class AssetViewerComponent implements OnInit, OnDestroy, AfterViewInit {
     private loadOpenSea(): void {
         this.isOpenSeaDragonAsset = true;
         // OpenSeaDragon Initializer
-        let id = 'osd-' + this.asset.id + '-' + this.index;
+        let id =  this.asset.id + '-' + this.index;
         var viewer = new OpenSeadragon({
-            id: id,
+            id: 'osd-' + id,
             // prefix for Icon Images
             prefixUrl: 'assets/img/osd/',
             tileSources: this.tileSource,
