@@ -54,7 +54,7 @@
                     <button class="btn btn-secondary" [class.active]="showCopyUrl"  tabindex="1" (mousedown)="showCopyUrl ? showCopyUrl = false : copyGeneratedImgURL()" (mouseup)="copyUrlInput.select(); document.execCommand('copy', false, null)">
                         {{ 'ASSET_PAGE.BUTTONS.LINK' | translate}}
                         <i id="genImgURLlink" class="icon icon-share-white" ></i>
-                    </button><a class="btn btn-secondary" tabindex="1" *ngIf="assets[0].downloadLink && (user.isLoggedIn || hasExternalAccess)" 
+                    </button><a class="btn btn-secondary" tabindex="1" *ngIf="assets[0].downloadLink && user.isLoggedIn" 
                         download
                         [attr.href]="downloadAuth() && !assets[0].disableDownload ? assets[0].downloadLink : null"
                         (click)="downloadAuth() && !assets[0].disableDownload ? null : showAgreeModal = true; _analytics.directCall('download_image');"
@@ -62,7 +62,7 @@
                         title="{{ assets[0].disableDownload ? 'Image is not available for download.' : 'Image download'}}">
                         {{ 'ASSET_PAGE.BUTTONS.DOWNLOAD' | translate}}
                         <i id="downloadAssetLink" class="icon icon-download" ></i>
-                    </a><button class="btn btn-secondary" tabindex="1" *ngIf="assets[0].downloadLink && !user.isLoggedIn && !hasExternalAccess" (click)="showLoginModal = true">
+                    </a><button class="btn btn-secondary" tabindex="1" *ngIf="assets[0].downloadLink && !user.isLoggedIn" (click)="showLoginModal = true">
                         {{ 'ASSET_PAGE.BUTTONS.DOWNLOAD' | translate}}
                         <i id="downloadAssetLink" class="icon icon-download" ></i>
                     </button>
