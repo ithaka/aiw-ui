@@ -72,7 +72,7 @@
             <i *ngIf="assetCompareCount == 1 && !quizMode" [class.disabled]="assetNumber >= assetGroupCount" title="Next in results" (click)="nextPage.emit()" class="icon icon-direction icon-right"></i>
             <!--<div class="page-tooltip">{{ assetNumber }} OF {{ totalAssetCount }}</div>-->
             <div  class="meta-block small">
-                <div class="creator">{{ asset.creator }}</div>
+                <div [innerHtml]="asset.creator" class="creator"></div>
                 <div class="date">{{ asset.date }}</div>
             </div>
         </div>
