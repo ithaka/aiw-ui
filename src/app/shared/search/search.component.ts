@@ -82,6 +82,9 @@ export class SearchComponent implements OnInit, OnDestroy {
     if (!term || term === "") {
       return;
     }
+
+    // Pipes are reserved by Advanced Search
+    term = term.replace('|', ' ')
     
     this._analytics.directCall('search')
     this.angulartics.eventTrack.next({ action: "simpleSearch", properties: { category: "search", label: this.term }})
