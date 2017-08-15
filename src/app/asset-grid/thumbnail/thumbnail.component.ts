@@ -51,20 +51,10 @@ export class ThumbnailComponent implements OnInit {
       let media = JSON.parse(this.thumbnail['media'])
       this.thumbnail['thumbnailImgUrl'] = media['thumbnailSizeOnePath']
     }
-    if (this.thumbnail['constraints']) {
-      this.constraints = JSON.parse(this.thumbnail['constraints'])
-
-      // Set collection type for assets from Solr
-      if (this.constraints.open) {
-        this.collectionType = 5
-      } else if (this.constraints.institutionId) {
-        this.collectionType = 2
-      } else if (this.constraints.userId) {
-        this.collectionType = 3
-      } else {
-        this.collectionType = 1
-      }
-    }
+    // Set collection type for assets from Solr
+    if (this.thumbnail['collectiontypes']) {
+      this.collectionType = this.thumbnail['collectiontypes'][0]
+    } 
   }
 
   openLink(event: Event, urlParams: any[]) {
