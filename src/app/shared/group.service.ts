@@ -5,6 +5,9 @@ import { BehaviorSubject, Observable, Subject } from 'rxjs/Rx';
 // Project Dependencies
 import { AuthService, ImageGroup } from '.'
 
+// Reference globally imported script
+declare var trackJs: any
+
 @Injectable()
 export class GroupService {
 
@@ -132,6 +135,9 @@ export class GroupService {
             res => {
                 let body = res.json()
                 return body || { }
+            },
+            err => {
+                trackJs.track('Creating Image Group failed')
             }
         )
     }
