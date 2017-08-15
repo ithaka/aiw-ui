@@ -215,11 +215,14 @@ export class NewIgModal implements OnInit {
    * Sets the values of form members based on the injected image group
    */
   private setFormValues(): void {
+    // let igCopy = Object.assign({}, this.ig)
     // set title value
     this.newIgForm.controls['title'].setValue(this.ig.name);
 
-    // set tags values
-    this.newIgForm.controls['tags'].setValue(this.ig.tags);
+    // Make copy of array to break pointers
+    let tagsCopy = this.ig.tags.slice(0)
+    // Set tags values
+    this.newIgForm.controls['tags'].setValue(tagsCopy);
 
     if (this.ig.public) { this.newIgForm.controls['artstorPermissions'].setValue("global") }
     else if (this.institutionView()) { this.newIgForm.controls['artstorPermissions'].setValue("institution") }
