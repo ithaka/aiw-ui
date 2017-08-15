@@ -56,7 +56,7 @@ export class SearchPage implements OnInit, OnDestroy {
         } 
 
         if(params['term']){
-          params['term'] = params['term'].replace('|', '');
+          params['term'] = params['term'].replace('|', ' ');
         }
 
         // Make a search call if there is a search term or any selected filter

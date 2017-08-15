@@ -82,6 +82,10 @@ $titleNavBg: #eee;
 
      & .title {
          max-width: calc(100% - 50px);
+
+         &.shortened{
+             max-width: calc(100% - 300px) !important;
+         }
      }
 }
 
