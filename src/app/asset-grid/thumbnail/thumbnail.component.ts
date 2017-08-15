@@ -50,6 +50,7 @@ export class ThumbnailComponent implements OnInit {
     if (this.thumbnail['media']) {
       let media = JSON.parse(this.thumbnail['media'])
       this.thumbnail['thumbnailImgUrl'] = media['thumbnailSizeOnePath']
+      this.thumbnail['objectTypeId'] = media['adlObjectType']
     }
     // Set collection type for assets from Solr
     if (this.thumbnail['collectiontypes']) {
