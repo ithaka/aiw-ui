@@ -74,7 +74,7 @@ export class AuthService implements CanActivate {
 
     // Default to relative or prod endpoints
     this.hostname = '';
-    this.baseUrl =  '/api/secure'; 
+    this.baseUrl =  '/api'; 
     this.imageFpxUrl =  '/api/secure/imagefpx'; 
     this.lostPassUrl = '/library/lostpw';
     this.thumbUrl = '//mdxdv.artstor.org';
