@@ -99,7 +99,7 @@ export class AuthService implements CanActivate {
       // Test Endpoints
       this.hostname = '//stage.artstor.org';
       this.subdomain = 'stage';
-      this.baseUrl = '//stage.artstor.org/api/secure';
+      this.baseUrl = '//stage.artstor.org/api';
       this.imageFpxUrl =  '//stage.artstor.org/api/secure/imagefpx'; 
       this.lostPassUrl = '//stage.artstor.org/library/lostpw'; 
       this.IIIFUrl = '//tsprod.artstor.org/rosa-iiif-endpoint-1.0-SNAPSHOT/fpx';
