@@ -252,8 +252,12 @@ export class AuthService implements CanActivate {
       return body || { };
   }
   
-  public getUrl(): string {
-    return this.baseUrl;
+  public getUrl(microservice?: boolean): string {
+    let url: string = this.baseUrl
+    if (microservice) {
+      url = url.replace("/secure", "")
+    }
+    return url
   }
 
   public getImageFpxUrl(): string {

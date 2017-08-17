@@ -742,7 +742,7 @@ export class AssetService {
         let options = new RequestOptions({ withCredentials: true });
         let startIndex = ((this.urlParams.currentPage - 1) * this.urlParams.pageSize) + 1;
 
-        let requestString = [this._auth.getUrl(), "cluster", objectId, "thumbnails", startIndex, this.urlParams.pageSize].join("/");
+        let requestString = [this._auth.getUrl(true), "cluster", objectId, "thumbnails", startIndex, this.urlParams.pageSize].join("/");
 
         this.http
             .get(requestString, options)
@@ -1063,7 +1063,7 @@ export class AssetService {
     private getAssociated(objectId: string, colId: string, currentPage: number, pageSize: number) {
         let header = new Headers({ 'Content-Type': 'application/json' }); // ... Set content type to JSON
         let options = new RequestOptions({ headers: header, withCredentials: true }); // Create a request option
-        let requestString: string = [this._auth.getUrl(), "collaboratoryfiltering", objectId, "thumbnails", currentPage, pageSize].join("/") + "?collectionId=" + colId;
+        let requestString: string = [this._auth.getUrl(true), "collaboratoryfiltering", objectId, "thumbnails", currentPage, pageSize].join("/") + "?collectionId=" + colId;
 
         return this.http
             .get(requestString, options)
