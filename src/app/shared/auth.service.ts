@@ -74,7 +74,7 @@ export class AuthService implements CanActivate {
 
     // Default to relative or prod endpoints
     this.hostname = '';
-    this.baseUrl =  '/api/secure'; 
+    this.baseUrl =  '/api'; 
     this.imageFpxUrl =  '/api/secure/imagefpx'; 
     this.lostPassUrl = '/library/lostpw';
     this.thumbUrl = '//mdxdv.artstor.org';
@@ -91,7 +91,7 @@ export class AuthService implements CanActivate {
     else if ( document.location.hostname.indexOf('prod.cirrostratus.org') > -1 ) {
       // Prod/Lively endpoints
       this.hostname = '//library.artstor.org';
-      this.baseUrl =  '//library.artstor.org/api/secure'; 
+      this.baseUrl =  '//library.artstor.org/api'; 
       this.imageFpxUrl =  '//library.artstor.org/api/secure/imagefpx'; 
       this.lostPassUrl = '//library.artstor.org/library/lostpw';
       this.logUrl = '//ang-ui-logger.apps.prod.cirrostratus.org/api/v1';
@@ -100,7 +100,7 @@ export class AuthService implements CanActivate {
       // Test Endpoints
       this.hostname = '//stage.artstor.org';
       this.subdomain = 'stage';
-      this.baseUrl = '//stage.artstor.org/api/secure';
+      this.baseUrl = '//stage.artstor.org/api';
       this.imageFpxUrl =  '//stage.artstor.org/api/secure/imagefpx'; 
       this.lostPassUrl = '//stage.artstor.org/library/lostpw'; 
       this.IIIFUrl = '//tsprod.artstor.org/rosa-iiif-endpoint-1.0-SNAPSHOT/fpx';
