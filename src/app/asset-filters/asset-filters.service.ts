@@ -233,7 +233,7 @@ export class AssetFiltersService {
         if (this.geoTree.length < 1) {
             let options = new RequestOptions({ withCredentials: true });
         
-            this.http.get(this._auth.getUrl() + '/termslist/', options)
+            this.http.get(this._auth.getUrl(true) + '/termslist/', options)
                 .toPromise()
                 .then(res => {
                     this.geoTree = res.json().geoTree;
@@ -355,7 +355,7 @@ export class AssetFiltersService {
     //     let options = new RequestOptions({ withCredentials: true });
         
     //     return this.http
-    //         .get(this._auth.getUrl() + '/termslist/', options)
+    //         .get(this._auth.getUrl(true) + '/termslist/', options)
     //         .map(res => {
     //             this.geoTree = res.json().geoTree;
     //             this.generateGeoFilters();
