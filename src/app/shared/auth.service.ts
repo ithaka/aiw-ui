@@ -86,6 +86,7 @@ export class AuthService implements CanActivate {
     if (document.location.hostname.indexOf('library.artstor.org') > -1 || document.location.hostname.indexOf('beta.artstor.org') > -1 || document.location.hostname.indexOf('lively.artstor.org') > -1 || document.location.hostname.indexOf('proxy.artstor.org') > -1) {
       // Explicit live endpoints
       this.logUrl = '//ang-ui-logger.apps.prod.cirrostratus.org/api/v1';
+      this.solrUrl = '//search-service.apps.prod.cirrostratus.org/v1.0/search';
     }
     else if ( document.location.hostname.indexOf('prod.cirrostratus.org') > -1 ) {
       // Prod/Lively endpoints
