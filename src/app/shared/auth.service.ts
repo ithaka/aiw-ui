@@ -253,10 +253,10 @@ export class AuthService implements CanActivate {
       return body || { };
   }
   
-  public getUrl(microservice?: boolean): string {
+  public getUrl(secure?: boolean): string {
     let url: string = this.baseUrl
-    if (microservice) {
-      url = url.replace("/secure", "")
+    if (secure) {
+      url += "/secure"
     }
     return url
   }
@@ -359,7 +359,7 @@ export class AuthService implements CanActivate {
     // If user object doesn't exist, try to get one!
     return new Observable(observer => {
       this.http
-      .get(this.getUrl() + '/userinfo', options)
+      .get(this.getUrl(true) + '/userinfo', options)
       .map(
         (data)  => {
           try {
@@ -402,7 +402,7 @@ export class AuthService implements CanActivate {
     let options = new RequestOptions({ withCredentials: true });
 
     return this.http
-      .get(this.getUrl() + '/userinfo', options)
+      .get(this.getUrl(true) + '/userinfo', options)
       .map(
         (res)  => {
           try {
@@ -466,7 +466,7 @@ export class AuthService implements CanActivate {
             });
 
         return this.http
-            .post(this.getUrl() + '/login', data, options)
+            .post(this.getUrl(true) + '/login', data, options)
             .toPromise()
             .then(this.extractData);
     }
@@ -515,7 +515,7 @@ export class AuthService implements CanActivate {
    */
   public getIpAuth(): Observable<any> {
     let options = new RequestOptions({ withCredentials: true });
-    return this.http.get(this.getUrl() + "/userinfo", options)
+    return this.http.get(this.getUrl(true) + "/userinfo", options)
         .map((res) => {
             return res.json() || {};
         });
