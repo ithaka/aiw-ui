@@ -1,11 +1,11 @@
 <div [class.fade-in]="reorderMode && !showLoseReorder" class="reorder-shade" (click)="shouldSaveModal($event)"></div>
-<div class="container"  [class.in-front]="reorderMode">
-    <div class="row">
+<div [class.in-front]="reorderMode">
+    <div class="row no-gutters">
         <!--<div class="col-sm-3">
             <h2 class="header-button" (click)="showFilters = !showFilters">Filters <i class="icon icon-direction absolute-right" [ngClass]="{ 'icon-down' : showFilters, 'icon-left' : !showFilters }"></i></h2>
         </div>-->
         <div class="mobile--hide grid-tool-bar" [ngClass]="[ reorderMode ? 'col-12' : 'col-sm-8 col-md-8 col-lg-9']">
-            <div class="row">
+            <div class="row no-gutters">
                 <div *ngIf="!reorderMode" class="col-12">
                     <li *ngIf="!actionOptions.associated && !actionOptions.group && !(actionOptions.category && totalAssets >= 2000) && !(actionOptions.collection && totalAssets >= 2000)" class="dropdown" class="sortlist" ngbDropdown>
                         <button class="btn btn-link" id="sortdropdownMenu" ngbDropdownToggle>Sort: <span class="value">{{ activeSort.label ? activeSort.label : 'Relevance' }}</span></button>
@@ -25,7 +25,15 @@
                             <button [ngClass]="{ 'disable': pagination.pageSize == 72 }" class="dropdown-item" (click)="changePageSize(72)">72</button>
                         </div>
                     </li>
-                    <div class="lrg-icon" (click)="largeThmbView = !largeThmbView" [ngClass]="{ 'active': largeThmbView }">LARGE</div>
+                    <!--View size toggles-->
+                    <div class="icon-bar">
+                        <div (click)="largeThmbView = false"  [ngClass]="{ 'active': !largeThmbView }"  class="icon--toggle">
+                            <i class="icon icon-small-view" ></i>
+                        </div>
+                        <div (click)="largeThmbView = true" [ngClass]="{ 'active': largeThmbView }"  class="icon--toggle">
+                            <i class="icon icon-large-view" ></i>
+                        </div>
+                    </div>
 
                     <div class="number-results" *ngIf="!isLoading">{{ totalAssets }}{{ totalAssets == 2000 ? '+' : '' }} results  <span *ngIf="searchTerm">for <span [innerHtml]="formatSearchTerm(searchTerm)"></span></span></div>
                     <!--<div class="search-in-results" *ngIf="allowSearchInRes"><input type="checkbox" id="searchInResChkBx" [(ngModel)]="searchInResults" (change)="updateSrchInRes()" /> <label for="searchInResChkBx">Search within results</label></div>-->
@@ -70,7 +78,7 @@
                 <div *ngIf="!isLoading && searchError.length > 0" class="alert alert-danger">
                     {{ searchError }}
                 </div>
-                <div class="col-sm-6 col-md-3 col-lg-2" *ngFor="let asset of results">
+                <div class="" [ngClass]="largeThmbView ? 'col-sm-12 col-md-6 col-lg-4' : 'col-sm-6 col-md-3 col-lg-2'" *ngFor="let asset of results">
                     <a class="card card--asset" [attr.data-id]="asset.objectId" [ngClass]="{'selected': ( isSelectedAsset(asset) > -1 ), 'lrgThmb': largeThmbView }" [routerLink]="editMode ? ['./'] : ['/asset', asset.objectId ? asset.objectId : asset.id]" [queryParams]="asset.iapFlag > 0 ? { iap: 'true' } : {}" (click)="selectAsset(asset)">
                         <ang-thumbnail [thumbnail]="asset" [reorderMode]="reorderMode" [editMode]="editMode" [largeThmbView]="largeThmbView"></ang-thumbnail>
                     </a>
