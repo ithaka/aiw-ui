@@ -454,7 +454,7 @@ export class AssetService {
         //     .then(this.extractData)
 
         return this.http
-            .get(this._auth.getUrl() + '/metadata/' + assetId, this.defaultOptions)
+            .get(this._auth.getUrl(true) + '/metadata/' + assetId, this.defaultOptions)
             .toPromise()
             .then(this.extractData);
     }
@@ -522,7 +522,7 @@ export class AssetService {
      */
     public getFileProperties(assetId: string): Promise<any> {
         return this.http
-            .get(this._auth.getUrl() + '/metadata/' + assetId + '?_method=FpHtml', this.defaultOptions)
+            .get(this._auth.getUrl(true) + '/metadata/' + assetId + '?_method=FpHtml', this.defaultOptions)
             .toPromise()
             .then(data => {
                 // This call only returns Html!
@@ -957,7 +957,7 @@ export class AssetService {
         }
 
         return this.http
-            .get(this._auth.getUrl() + '/search/' + type + '/' + startIndex + '/' + this.urlParams.pageSize + '/' + sortIndex + '?' + 'type=' + type + '&kw=' + keyword + '&origKW=' + keyword + '&geoIds=' + geographyIds + '&clsIds=' + classificationIds + '&collTypes=' + colTypeIds + '&id=' + (collIds.length > 0 ? collIds : 'all') + '&name=All%20Collections&bDate=' + earliestDate + '&eDate=' + latestDate + '&dExact=&order=0&isHistory=false&prGeoId=&tn=1', options);
+            .get(this._auth.getUrl(true) + '/search/' + type + '/' + startIndex + '/' + this.urlParams.pageSize + '/' + sortIndex + '?' + 'type=' + type + '&kw=' + keyword + '&origKW=' + keyword + '&geoIds=' + geographyIds + '&clsIds=' + classificationIds + '&collTypes=' + colTypeIds + '&id=' + (collIds.length > 0 ? collIds : 'all') + '&name=All%20Collections&bDate=' + earliestDate + '&eDate=' + latestDate + '&dExact=&order=0&isHistory=false&prGeoId=&tn=1', options);
         
     }
 
@@ -1123,7 +1123,7 @@ export class AssetService {
         let options = new RequestOptions({ withCredentials: true });
         
         return this.http
-            .get(this._auth.getUrl() + '/termslist/', options)
+            .get(this._auth.getUrl(true) + '/termslist/', options)
             .toPromise()
             .then(this.extractData);
     }
