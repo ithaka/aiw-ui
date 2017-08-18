@@ -21,6 +21,9 @@ export class ThumbnailComponent implements OnInit {
   private thumbnail: Thumbnail;
 
   @Input()
+  private largeThmbView: boolean;
+
+  @Input()
   private reorderMode: boolean;
 
   @Input()

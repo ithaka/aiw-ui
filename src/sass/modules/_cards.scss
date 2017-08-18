@@ -78,6 +78,18 @@ img.no-stretch {
 
     max-width: 300px;
 
+    &.lrgThmb{
+        height: 280px;
+
+        .card-img-top {
+            height: 190px;
+
+            img{
+                max-height: 185px;
+            }
+        }
+    }
+
     &.disabled {
         opacity: 0.8;
         pointer-events: none;

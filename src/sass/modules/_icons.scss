@@ -84,6 +84,8 @@
 @include icon('star', 'svg');
 @include icon('zoom-in', 'svg');
 @include icon('zoom-out', 'svg');
+@include icon('large-view', 'svg');
+@include icon('small-view', 'svg');
 @include icon('collab', 'gif');
 @include icon('iap', 'gif');
 @include icon('pdf', 'gif');
@@ -197,3 +199,28 @@ a .icon {
         color: #999 !important;
     }
 }
+
+.icon--toggle {
+    cursor: pointer;
+    opacity: 0.3;
+    padding: 2px;
+    display: inline-block;
+
+    &:hover, &:active {
+        opacity: 0.75;
+        background-color: #f0f0f0;
+    }
+
+    &.active {
+        opacity: 1;
+    }
+}
+
+ .icon-bar {
+     font-size: 18px;
+     margin: 0px 6px;
+     display: inline-block;
+     position: relative;
+     vertical-align: middle;
+    line-height: 18px;
+ }
