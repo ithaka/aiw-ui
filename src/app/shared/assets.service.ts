@@ -1107,14 +1107,8 @@ export class AssetService {
             if (imagePath.indexOf('thumb') < 0) {
                 imagePath = '/thumb' + imagePath;
             }
-            if (this._auth.getEnv() == 'test') {
-                // Stage/Dev environment hack:
-                // Temporary for redirecting recently published SS assets until all assets are ready to use Stage media services
-                let fileName = imagePath.substr(imagePath.lastIndexOf('/') + 1)
-                fileName = fileName.slice(0, fileName.indexOf('.') - 1)
-                if (parseInt(fileName) > 100000000) {
-                    return '//mdxstage.artstor.org' + imagePath;
-                }
+            if (this.isRecentStageSSAsset(imagePath)) {
+                return '//mdxstage.artstor.org' + imagePath;
             }
         } else {
             imagePath = '';
@@ -1122,6 +1116,25 @@ export class AssetService {
         
         // Ceanup
         return this._auth.getThumbUrl() + imagePath;
+    }
+
+    /**
+     * Stage/Dev environment hack:
+     * Temporary for redirecting recently published SS assets until all assets are ready to use Stage media services
+     */
+    public isRecentStageSSAsset(imagePath: string) : boolean {
+        if (this._auth.getEnv() == 'test') {
+            let fileName = imagePath.substr(imagePath.lastIndexOf('/') + 1)
+            fileName = fileName.slice(0, fileName.indexOf('.') - 1)
+            // 100 million indicates a fresh SS record
+            if (parseInt(fileName) > 100000000) {
+                return true
+            } else {
+                return false
+            }
+        } else {
+            return false
+        }
     }
 
     /**

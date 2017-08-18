@@ -273,6 +273,9 @@ export class AssetViewerComponent implements OnInit, OnDestroy, AfterViewInit {
             .then(data => {
                 console.log(data);
                 this.kalturaUrl = data['imageUrl'];
+                if (this._assets.isRecentStageSSAsset(this.asset.imgURL)) {
+                    this.kalturaUrl = this.kalturaUrl.replace('kts.artstor','kts.stage.artstor')
+                }
                 document.getElementById(targetId).setAttribute('src', this.kalturaUrl);
 
                 this.isKalturaAsset = true;

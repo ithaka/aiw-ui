@@ -276,16 +276,8 @@ export class Asset {
         imgPath = '/' + data['imageUrl'].substring(0, data['imageUrl'].lastIndexOf('.fpx') + 4)
     }
 
-    if (this._auth.getEnv() == 'test') {
-        // Stage/Dev environment hack:
-        // Temporary for redirecting recently published SS assets until all assets are ready to use Stage media services
-        let fileName = imgPath.substr(imgPath.lastIndexOf('/') + 1)
-        fileName = fileName.slice(0, fileName.indexOf('.') - 1)
-        if (parseInt(fileName) > 100000000) {
-            this.tileSource = '//tsstage.artstor.org/rosa-iiif-endpoint-1.0-SNAPSHOT/fpx' + encodeURIComponent(imgPath) + '/info.json'
-        } else {
-            this.tileSource = this._auth.getIIIFUrl() + encodeURIComponent(imgPath) + '/info.json'
-        }
+    if (this._assets.isRecentStageSSAsset(imgPath)) {
+        this.tileSource = '//tsstage.artstor.org/rosa-iiif-endpoint-1.0-SNAPSHOT/fpx' + encodeURIComponent(imgPath) + '/info.json'
     } else {
         this.tileSource = this._auth.getIIIFUrl() + encodeURIComponent(imgPath) + '/info.json'
     }
