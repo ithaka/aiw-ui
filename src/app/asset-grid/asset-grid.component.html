@@ -25,6 +25,7 @@
                             <button [ngClass]="{ 'disable': pagination.pageSize == 72 }" class="dropdown-item" (click)="changePageSize(72)">72</button>
                         </div>
                     </li>
+                    <div class="lrg-icon" (click)="largeThmbView = !largeThmbView" [ngClass]="{ 'active': largeThmbView }">LARGE</div>
 
                     <div class="number-results" *ngIf="!isLoading">{{ totalAssets }}{{ totalAssets == 2000 ? '+' : '' }} results  <span *ngIf="searchTerm">for <span [innerHtml]="formatSearchTerm(searchTerm)"></span></span></div>
                     <!--<div class="search-in-results" *ngIf="allowSearchInRes"><input type="checkbox" id="searchInResChkBx" [(ngModel)]="searchInResults" (change)="updateSrchInRes()" /> <label for="searchInResChkBx">Search within results</label></div>-->
@@ -70,8 +71,8 @@
                     {{ searchError }}
                 </div>
                 <div class="col-sm-6 col-md-3 col-lg-2" *ngFor="let asset of results">
-                    <a class="card card--asset" [attr.data-id]="asset.objectId" [ngClass]="{'selected': ( isSelectedAsset(asset) > -1 ) }" [routerLink]="editMode ? ['./'] : ['/asset', asset.objectId ? asset.objectId : asset.id]" [queryParams]="asset.iapFlag > 0 ? { iap: 'true' } : {}" (click)="selectAsset(asset)">
-                        <ang-thumbnail [thumbnail]="asset" [reorderMode]="reorderMode" [editMode]="editMode"></ang-thumbnail>
+                    <a class="card card--asset" [attr.data-id]="asset.objectId" [ngClass]="{'selected': ( isSelectedAsset(asset) > -1 ), 'lrgThmb': largeThmbView }" [routerLink]="editMode ? ['./'] : ['/asset', asset.objectId ? asset.objectId : asset.id]" [queryParams]="asset.iapFlag > 0 ? { iap: 'true' } : {}" (click)="selectAsset(asset)">
+                        <ang-thumbnail [thumbnail]="asset" [reorderMode]="reorderMode" [editMode]="editMode" [largeThmbView]="largeThmbView"></ang-thumbnail>
                     </a>
                 </div> <!-- .col -->
             </div>
@@ -86,8 +87,8 @@
                     {{ searchError }}
                 </div>
                 <div class="col-sm-4 col-md-2 col-lg-1 draggable" *ngFor="let asset of results; let i = index" dnd-sortable [dragEnabled]="reorderMode && !isLoading" [sortableIndex]="i" (onDragEnd)="orderChanged = true">
-                    <div class="card card--asset">
-                        <ang-thumbnail [thumbnail]="asset" [reorderMode]="reorderMode" [editMode]="editMode"></ang-thumbnail>
+                    <div class="card card--asset" [ngClass]="{ 'lrgThmb': largeThmbView }">
+                        <ang-thumbnail [thumbnail]="asset" [reorderMode]="reorderMode" [editMode]="editMode" [largeThmbView]="largeThmbView"></ang-thumbnail>
                     </div>
                 </div> <!-- .col -->
             </div>
