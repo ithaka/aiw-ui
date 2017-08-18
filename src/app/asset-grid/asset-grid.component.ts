@@ -35,6 +35,8 @@ export class AssetGrid implements OnInit, OnDestroy {
   private showLoseReorder: boolean = false;
   private orderChanged: boolean = false;
 
+  private largeThmbView: boolean = false;
+
   private selectedAssets: any[] = [];
   
   // Default show as loading until results have update

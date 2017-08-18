@@ -1,15 +1,24 @@
 @import '../../sass/core/variables';
 
-.sortlist, .pagesizelist, .editMode, .number-results, .search-in-results, .selected-assets{
+.sortlist, .pagesizelist, .editMode, .number-results, .search-in-results, .selected-assets, .lrg-icon{
     list-style: none;
     display: inline-block;
 }
-.number-results, .search-in-results, .selected-assets{
+.number-results, .search-in-results, .selected-assets, .lrg-icon{
     font-family: Verdana;
     line-height: 1.25;
     vertical-align: middle;
     font-size: 12px;
     padding: .5em 10px .5em 0;
+}
+.lrg-icon{
+    color: #ddd;
+    cursor: pointer;
+    font-weight: 600;
+    
+    &.active{
+        color: #000;
+    }
 }
 .active-sort, .page-size{
     display: inline-block;

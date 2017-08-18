@@ -1,6 +1,6 @@
 <div class="card-block card-text">
     <div class="card-img-top">
-        <img [class.disablePointerEvents]="reorderMode" [attr.src]="_assets.makeThumbUrl(thumbnail.thumbnailImgUrl, 1)" [attr.alt]="thumbnail.arttitle && thumbnail.arttitle[0] ? 'Thumbnail of ' + thumbnail.thumbnail1 : 'No title available'">
+        <img [class.disablePointerEvents]="reorderMode" [attr.src]="_assets.makeThumbUrl(thumbnail.thumbnailImgUrl, largeThmbView ? 2 : 1)" [attr.alt]="thumbnail.arttitle && thumbnail.arttitle[0] ? 'Thumbnail of ' + thumbnail.thumbnail1 : 'No title available'">
     </div>
     <div class="card-icon-group" (click)="$event.stopPropagation(); $event.preventDefault();" [ngClass]="{ 'disablePointerEvents': editMode }" >
         <!--Legacy Search icons-->
