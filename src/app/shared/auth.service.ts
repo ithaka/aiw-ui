@@ -210,7 +210,7 @@ export class AuthService implements CanActivate {
    * @returns Observable resolved with object containing: roleArray, deptArray
    */
   public getUserRoles(): Observable<any> {
-    return this.http.get(this.baseUrl + "/user?_method=deptRoles")
+    return this.http.get(this.getUrl(true) + "/user?_method=deptRoles")
       .map((res) => {
         return res.json() || {};
       });
@@ -224,7 +224,7 @@ export class AuthService implements CanActivate {
 
     let header = new Headers({ 'Content-Type': 'application/x-www-form-urlencoded' }); // form encode it
     let options = new RequestOptions({ headers: header, withCredentials: true }); // Create a request option
-    return this.http.post(this.baseUrl + "/register", data , options)
+    return this.http.post(this.getUrl(true) + "/register", data , options)
       .map((data) => {
         return data.json() || {};
       });
@@ -239,7 +239,7 @@ export class AuthService implements CanActivate {
       password: newPass
     });
 
-    return this.http.post(this.baseUrl + "/profile", data, options)
+    return this.http.post(this.getUrl(true) + "/profile", data, options)
       .map((res) => {
         return res.json() || {};
       });
@@ -443,7 +443,7 @@ export class AuthService implements CanActivate {
         this.clearStorage();
 
         return this.http
-            .post(this.getUrl() + '/logout', {}, options)
+            .post(this.getUrl(true) + '/logout', {}, options)
             .toPromise()
             .catch((err) => {
                 // error handling
