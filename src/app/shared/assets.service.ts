@@ -665,22 +665,24 @@ export class AssetService {
 
     public getAllThumbnails(igIds: string[]) : Promise<any> {
         // return new Promise
+        let maxCount = 100
         return new Promise( (resolve, reject) => {
             let allThumbnails = [];
             let options = new RequestOptions({ withCredentials: true });
             
             let loadBatch = (i) => {
-                let idsAsTerm: string =  igIds.slice(i,i+100).join('&object_id=');
+                let countEnd = i+maxCount
+                let idsAsTerm: string =  igIds.slice(i,countEnd).join('&object_id=');
                 this.http.get(this._auth.getHostname() + '/api/v1/items?object_id=' + idsAsTerm, options)
                         .toPromise()
                         .then(
                             (res) => {
                                 let results = res.json();
                                 allThumbnails = allThumbnails.concat(results.items);
-                                if (i + 100 >= igIds.length) {
+                                if (countEnd >= igIds.length) {
                                     resolve(allThumbnails);
                                 } else {
-                                    loadBatch(i + 101)
+                                    loadBatch(countEnd)
                                 }
                         }, (error) => {
                                 reject('Failure');
