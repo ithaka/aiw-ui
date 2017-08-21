@@ -64,8 +64,12 @@ export class BrowseGroupsComponent implements OnInit {
           this.selectedBrowseLevel = params.view
         }
 
-        this.loadIGs(this.appliedTags, 1, this.selectedBrowseLevel, this.route.snapshot.queryParams.term) 
-        
+        // Deprecate once search level is not a query AND route parameter
+        if (params.view !== 'search') {
+          this.loadIGs(this.appliedTags, 1, this.selectedBrowseLevel, '') 
+        } else {
+          this.loadIGs(this.appliedTags, 1, this.selectedBrowseLevel, this.route.snapshot.queryParams.term)
+        }
       })
     )
 
