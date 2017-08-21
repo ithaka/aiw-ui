@@ -191,6 +191,14 @@ export class AssetGrid implements OnInit, OnDestroy {
             this.isLoading = false;
           }
 
+          //Generate Facets
+          if (allResults && allResults.collTypeFacets) {
+              this._filters.generateColTypeFacets( allResults.collTypeFacets );
+              this._filters.generateGeoFilters( allResults.geographyFacets );
+              this._filters.generateDateFacets( allResults.dateFacets );
+              this._filters.setAvailable('classification', allResults.classificationFacets);
+          }
+
         },
         (error) => {
           console.error(error);
