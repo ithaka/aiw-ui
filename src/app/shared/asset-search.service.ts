@@ -131,11 +131,11 @@ export class AssetSearchService {
       // + "~0.8",
       "facet_fields" :
       [
-        // {
-        //   "name" : "collectiontypes",
-        //   "mincount" : 1,
-        //   "limit" : 15
-        // },
+        {
+          "name" : "collectiontypes",
+          "mincount" : 1,
+          "limit" : 15
+        },
         // Limited to 16 classifications (based on the fact that Artstor has 16 classifications)
         {
           "name" : "artclassification_str",
