@@ -550,7 +550,7 @@ export class AssetService {
         }
 
         return this.http
-            .get( this._auth.getUrl(true) + '/imagefpx/' + assetId + '/' + collectionId + '/5', this.defaultOptions)
+            .get( this._auth.getUrl() + '/imagefpx/' + assetId + '/' + collectionId + '/5', this.defaultOptions)
             .map(data => {
                 // This call returns an array-- maybe it supports querying multiple ids?
                 // For now let's just grab the first item in the array
