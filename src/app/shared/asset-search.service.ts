@@ -126,7 +126,9 @@ export class AssetSearchService {
         //     }
         // ],
       // Add fuzzy operator
-      "query": keyword + "~0.8",
+      "query": keyword,
+      // Fuzzy searches are expensive, avoid by request of Archie
+      // + "~0.8",
       "facet_fields" :
       [
         // {

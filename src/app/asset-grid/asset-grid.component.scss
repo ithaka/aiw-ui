@@ -110,12 +110,12 @@ input[type=number] {
     }
 }
 
-.container.in-front {
+.reorder-wrap.in-front {
     z-index: 6000;
     position: relative;
     min-width: 100%;
     background: #fff;
-    padding: 5px;
+    padding: 25px;
 }
 
 .reorder-shade {
