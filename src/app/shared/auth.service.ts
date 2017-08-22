@@ -484,7 +484,7 @@ export class AuthService implements CanActivate {
         let options = new RequestOptions({ headers: header, withCredentials: true }); // Create a request option
 
         return this.http
-            .get(this.getUrl() + '/login?j_username=' + encodeURIComponent(user.username) + '&j_password=' + encodeURIComponent(user.password) )
+            .get(this.getUrl(true) + '/login?j_username=' + encodeURIComponent(user.username) + '&j_password=' + encodeURIComponent(user.password) )
             .toPromise()
             .then(this.extractData);
     }
