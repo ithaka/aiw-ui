@@ -23,7 +23,6 @@ export class AssetPage implements OnInit, OnDestroy {
 
     private user: any
     private hasExternalAccess: boolean = false
-    private hasPrivateGroups: boolean = false
     private document = document
 
     // Array to support multiple viewers on the page
@@ -160,13 +159,6 @@ export class AssetPage implements OnInit, OnDestroy {
           })
         );
 
-        if(this.user && this.user.isLoggedIn){
-            // Check if the logged-in user has private image groups
-            this._group.getAll('private')
-                        .take(1)
-                        .subscribe((res) => { if (res.groups && (res.groups.length > 0)) { this.hasPrivateGroups = true; } }, (err) => { console.error(err); });
-        }
-
         this._analytics.setPageValues('asset', this.assets[0] && this.assets[0].id)
     } // OnInit
 
@@ -231,13 +223,18 @@ export class AssetPage implements OnInit, OnDestroy {
     }
 
     private addAssetToIG(): void{
-        if (this.user.isLoggedIn) {
-            if(this.hasPrivateGroups){
-                this.showAddModal = true;
-            }
-            else{
-                this.showCreateGroupModal = true;
-            }
+
+        if(this.user && this.user.isLoggedIn){
+            // Check if the logged-in user has private image groups
+            this._group.getAll('private')
+                        .take(1)
+                        .subscribe((res) => { 
+                            if (res.groups && (res.groups.length > 0)) { 
+                                this.showAddModal = true;
+                            } else{
+                                this.showCreateGroupModal = true;
+                            }
+                        }, (err) => { console.error(err); });
         } else{
             this.showLoginModal = true;
         }
