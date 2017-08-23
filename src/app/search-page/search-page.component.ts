@@ -66,6 +66,8 @@ export class SearchPage implements OnInit, OnDestroy {
         } else {
           this._title.setTitle( 'Artstor' )
           console.log('No search term');
+          params['term'] = '*';
+          this._assets.queryAll(params);
         }
       })
     ); 
