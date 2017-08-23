@@ -150,7 +150,6 @@ export class AssetService {
         this.paginationValue = paginationValue;
         this.paginationSource.next(paginationValue);
 
-        console.log(resultObj)
         // Update results thumbnail array 
         this.allResultsValue = resultObj;
         this.allResultsSource.next(resultObj);
@@ -845,6 +844,10 @@ export class AssetService {
                         data.facets.forEach( (facet, index) => {
                             this._filters.setAvailable(facet.name, facet.values);
                         })
+
+                        if (data.hierarchies2 && data.hierarchies2['artstor-geography']){
+                            this._filters.generateHierFacets( data.hierarchies2['artstor-geography'].children, 'geography' );
+                        }
                         // Transform data from SOLR queries
                         if (data.results) {
                             data.thumbnails = data.results;
