@@ -58,7 +58,19 @@ export class IgFormUtil {
      *  otherwise, remove the institution access obj (this won't fail if it doesn't exist, but will remove it if it does)
      */
     if (form.artstorPermissions == "institution") {
-      group.access.push(institutionAccessObj)
+      
+      /** Assign institutional access only if the group doesn't have that already */
+      let institutionAccessExists = false;
+      group.access.forEach(
+        (accessObj) => {
+          if((accessObj.entity_type == institutionAccessObj.entity_type) && (accessObj.entity_identifier == institutionAccessObj.entity_identifier) && (accessObj.access_type == institutionAccessObj.access_type)){
+            institutionAccessExists = true;
+          }
+        }
+      )
+      if(!institutionAccessExists){
+        group.access.push(institutionAccessObj)
+      }
     } else {
       group.access = group.access.filter((item) => {
         return item.entity_identifier != institutionAccessObj.entity_identifier
