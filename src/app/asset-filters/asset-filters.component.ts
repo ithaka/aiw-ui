@@ -139,8 +139,13 @@ export class AssetFilters {
 
   private loadRoute() {
     let params = {};
+    let currentParams = this.route.snapshot.params
+    
+    // Maintain feature flags
+    if (currentParams['featureFlag']) {
+      params['featureFlag'] = currentParams['featureFlag']
+    }
 
-    // Date filters only work with legacy search
     if (this.availableFilters.dateObj && this.availableFilters.dateObj.modified == true && this.filterDate) {
       params['startDate'] = this.availableFilters.dateObj.earliest.date * (this.availableFilters.dateObj.earliest.era == 'BCE' ? -1 : 1);
       params['endDate'] = this.availableFilters.dateObj.latest.date * (this.availableFilters.dateObj.latest.era == 'BCE' ? -1 : 1);

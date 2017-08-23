@@ -89,12 +89,18 @@ export class SearchComponent implements OnInit, OnDestroy {
     this._analytics.directCall('search')
     this.angulartics.eventTrack.next({ action: "simpleSearch", properties: { category: "search", label: this.term }})
 
+    let routeParams = this.route.snapshot.params;
+    let params = {
+      currentPage: 1, 
+      pageSize: this.pageSize
+    };
+
+    // Maintain feature flags
+    if (routeParams['featureFlag']) {
+      params['featureFlag'] = routeParams['featureFlag']
+    }
+    
     if(this.searchInResults){ // Search within results
-      let routeParams = this.route.snapshot.params;
-      let params = {
-        currentPage: 1, 
-        pageSize: this.pageSize
-      };
       
       if(routeParams['colId']){
         params['coll'] = [ routeParams['colId'] ];
@@ -119,13 +125,9 @@ export class SearchComponent implements OnInit, OnDestroy {
           params['geography'] = routeParams['geography'].split(',');
         }
       }
-
-      this._router.navigate(['/search', term, params]);
-    }
-    else{
-      this._router.navigate(['/search', term, { currentPage: 1, pageSize: this.pageSize }]);
     }
 
+    this._router.navigate(['/search', term, params]);
   }
 
   /**
