@@ -14,9 +14,9 @@
     </div>
     <div>
         <!--New Asset display-->
-        <span *ngIf="thumbnail.arttitle" class="asset-title" title="{{ thumbnail.arttitle[0] }}" [innerHTML]="thumbnail.arttitle[0]"></span>
-        <span *ngIf="thumbnail.artcreator" class="asset-agent" title="{{ thumbnail.artcreator[0] }}" [innerHTML]="thumbnail.artcreator[0]"></span>
-        <span *ngIf="thumbnail.artdate" class="asset-date" title="{{ thumbnail.artdate[0] }}" [innerHTML]="thumbnail.artdate[0]"></span>
+        <span *ngIf="thumbnail.name" class="asset-title" title="{{ thumbnail.name }}" [innerHTML]="thumbnail.name"></span>
+        <span *ngIf="thumbnail.agent" class="asset-agent" title="{{ thumbnail.agent }}" [innerHTML]="thumbnail.agent"></span>
+        <span *ngIf="thumbnail.date" class="asset-date" title="{{ thumbnail.date }}" [innerHTML]="thumbnail.date"></span>
         <!--<span *ngIf="thumbnail.thumbnail4" title="{{ thumbnail.thumbnail4 }}" [innerHTML]="thumbnail.thumbnail4"></span>-->
 
         <!--Old asset display-->

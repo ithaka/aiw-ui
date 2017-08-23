@@ -120,7 +120,7 @@ export class RegisterComponent implements OnInit {
           // this._log.Warp6({ eventType: "remote_login" });
           this.loadForUser(data);
         } else {
-          if (data.statusMessage === "User already exist") {
+          if (data.statusMessage === "User already exist" || data.statusCode == 2) {
             this.serviceErrors.duplicate = true;
           }
         }

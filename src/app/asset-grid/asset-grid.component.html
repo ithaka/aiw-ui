@@ -1,5 +1,5 @@
 <div [class.fade-in]="reorderMode && !showLoseReorder" class="reorder-shade" (click)="shouldSaveModal($event)"></div>
-<div [class.in-front]="reorderMode">
+<div class="reorder-wrap" [class.in-front]="reorderMode">
     <div class="row no-gutters">
         <!--<div class="col-sm-3">
             <h2 class="header-button" (click)="showFilters = !showFilters">Filters <i class="icon icon-direction absolute-right" [ngClass]="{ 'icon-down' : showFilters, 'icon-left' : !showFilters }"></i></h2>
