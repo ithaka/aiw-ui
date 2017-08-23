@@ -67,6 +67,9 @@ export class SearchModal implements OnInit {
   // Search query trasnformation logic is abstracted to a utility
   private queryUtil: SearchQueryUtil = new SearchQueryUtil()
 
+  // Flag while transitioning to Solr search
+  private hideLegacyFilters: boolean
+
   constructor(  
         private _assets: AssetService, 
         private _search: AssetSearchService,
@@ -121,9 +124,11 @@ export class SearchModal implements OnInit {
     if (this._auth.featureFlags['solrSearch']) {
       // New search filter map
       this.fields = this._search.filterFields
+      this.hideLegacyFilters = true
     } else {
       // Old search filter map
       this.fields = this._assets.filterFields
+      this.hideLegacyFilters = false
     }
   }
 
