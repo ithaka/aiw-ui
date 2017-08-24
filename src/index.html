@@ -5,6 +5,7 @@
   <!--Track initial URL in cases where we need to re-route legacy links-->
   <script type="text/javascript">
     var initPath = window.location.href;
+    var initOrigin = window.location.origin;
     if ( initPath.indexOf('/#/library') < 0 &&
           (initPath.indexOf('/library/ExternalIV.jsp') > -1 
           || initPath.indexOf('/library/secure/ViewImages') > -1 
@@ -21,13 +22,8 @@
         ) {
           if (initPath.indexOf('/library/') > -1) {
             initPath = initPath.substr(initPath.indexOf('/library/'));
-          } else if (initPath.indexOf('.edu') > -1) {
-            initPath = initPath.substr(initPath.lastIndexOf('.edu') + 4);
-          } else if (initPath.indexOf('.net') > -1) {
-            initPath = initPath.substr(initPath.lastIndexOf('.net') + 4);
-          } else if (initPath.indexOf('.org') > -1) {
-            // .org needs to be checked last for proxies
-            initPath = initPath.substr(initPath.lastIndexOf('.org') + 4);
+          } else if (initPath.indexOf(initOrigin) > -1) {
+            initPath = initPath.substr(initPath.lastIndexOf(initOrigin) + initOrigin.length);
           } else {
             initPath = null
           }
