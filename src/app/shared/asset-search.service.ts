@@ -68,7 +68,6 @@ export class AssetSearchService {
     let filters = this._filters.getApplied();
     // To-do: break dateObj out of available filters
     let dateFacet = this._filters.getAvailable()['dateObj'];
-    console.log(dateFacet)
 
     if (dateFacet.modified) {
       earliestDate = dateFacet.earliest.date;
@@ -78,35 +77,6 @@ export class AssetSearchService {
       latestDate = (dateFacet.latest.era == 'BCE') ? (parseInt(latestDate) * -1).toString() : latestDate.toString();
     }
     let filterArray = []
-    
-    for (var i = 0; i < filters.length; i++) { // Applied filters
-      
-      
-      if ( ['collTypes', 'currentPage', 'pageSize', 'sort', 'startDate', 'endDate'].indexOf(filters[i].filterGroup) > -1) { 
-        // Collection Types and page info
-        // do nothing
-        // colTypeIds = filters[i].filterValue;
-      } else {
-        for (let j = 0; j < filters[i].filterValue.length; j++) {
-          filterArray.push(filters[i].filterValue[j])
-        }
-        // if (filters[i].filterValue && filters[i].filterValue.length > 0) {
-        //   filterArray.push(filters[i].filterValue)
-        // }
-      }
-      // if (filters[i].filterGroup === 'classification') { // Classification
-      //   if (classificationIds != '') {
-      //     classificationIds += ',';
-      //   }
-      //   classificationIds += filters[i].filterValue;
-      // }
-      // if (filters[i].filterGroup === 'geography') { // Geography
-      //   if (geographyIds != '') {
-      //     geographyIds += ',';
-      //   }
-      //   geographyIds += filters[i].filterValue;
-      // }
-    }
 
     let query = {
       "limit": urlParams.pageSize,
@@ -129,6 +99,15 @@ export class AssetSearchService {
       "query": keyword,
       // Fuzzy searches are expensive, avoid by request of Archie
       // + "~0.8",
+      "hier_facet_fields2": [
+      {
+        "field": "hierarchies",
+        "hierarchy": "artstor-geography",
+        "look_ahead": 2,
+        "look_behind": -10,
+        "d_look_ahead": 0
+      }
+    ],  
       "facet_fields" :
       [
         {
@@ -148,8 +127,30 @@ export class AssetSearchService {
           "limit" : 15
         }
       ],
-      "filter_query" : filterArray
     };
+    
+    for (var i = 0; i < filters.length; i++) { // Applied filters
+      
+      
+      if ( ['collTypes', 'currentPage', 'pageSize', 'sort', 'startDate', 'endDate'].indexOf(filters[i].filterGroup) > -1) { 
+        // Collection Types and page info
+        // do nothing
+      } else if (filters[i].filterGroup == 'geography') {
+        for (let j = 0; j < filters[i].filterValue.length; j++) {
+          if (!query['hier_facet_fields2'][0]['efq']) {
+            query['hier_facet_fields2'][0]['efq'] = [filters[i].filterValue[j]]
+          } else {
+            query['hier_facet_fields2'][0]['efq'].push(filters[i].filterValue[j])
+          }
+        }
+      } else {
+        for (let j = 0; j < filters[i].filterValue.length; j++) {
+          filterArray.push(filters[i].filterValue[j])
+        }
+      }
+    }
+    
+    query["filter_query"] = filterArray
 
     if (sortIndex) {
       query["sortorder"] = "desc"

@@ -49,6 +49,10 @@ export class SearchPage implements OnInit, OnDestroy {
         if(params && params['featureFlag']){
             console.log(params['featureFlag'])
             this._auth.featureFlags[params['featureFlag']] = true;
+        } else {
+            for (let flag in this._auth.featureFlags) {
+              this._auth.featureFlags[flag] = false
+            }
         }
         // If a page number isn't set, reset to page 1!
         if (!params['currentPage']){
@@ -62,6 +66,8 @@ export class SearchPage implements OnInit, OnDestroy {
         } else {
           this._title.setTitle( 'Artstor' )
           console.log('No search term');
+          params['term'] = '*';
+          this._assets.queryAll(params);
         }
       })
     ); 

@@ -68,12 +68,12 @@
     <div *ngIf="isFullscreen" class="fullscreen-metadata" [class.slideAway]="!showCaption">
         <div class="vertical-center-wrap">
             <i *ngIf="assetCompareCount == 1 && !quizMode" [class.disabled]="assetNumber <= 1" title="Previous in results" (click)="prevPage.emit()" class="icon icon-direction icon-left"></i>
-            <div class="title">{{ asset.title }}</div>
+            <div class="title" [innerHtml]="asset.title"></div>
             <i *ngIf="assetCompareCount == 1 && !quizMode" [class.disabled]="assetNumber >= assetGroupCount" title="Next in results" (click)="nextPage.emit()" class="icon icon-direction icon-right"></i>
             <!--<div class="page-tooltip">{{ assetNumber }} OF {{ totalAssetCount }}</div>-->
             <div  class="meta-block small">
                 <div [innerHtml]="asset.creator" class="creator"></div>
-                <div class="date">{{ asset.date }}</div>
+                <div class="date" [innerHtml]="asset.date"></div>
             </div>
         </div>
     </div>

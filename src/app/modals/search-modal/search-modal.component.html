@@ -11,7 +11,7 @@
             <div class="modal-body">
                 <div class="container-fluid">
                     <div class="row">
-                        <div class="col-lg-6">
+                        <div [ngClass]="[ hideLegacyFilters ? 'col-12' : 'col-lg-6' ]">
                             <h3>{{ 'ADVANCED_SEARCH_MODAL.SEARCH_HEADING' | translate }}</h3>
                             <p class="small">{{ 'ADVANCED_SEARCH_MODAL.SEARCH_DESCRIPTION' | translate }}</p>
                             <div *ngFor="let query of advanceQueries; let i = index;" class="form-group">
@@ -63,7 +63,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-lg-6">
+                        <div *ngIf="!hideLegacyFilters" class="col-lg-6">
                             <h3>{{ 'ADVANCED_SEARCH_MODAL.FILTER_HEADING' | translate }}</h3>
                             <p class="small">{{ 'ADVANCED_SEARCH_MODAL.FILTER_DESCRIPTION' | translate }}</p>
                             <div class="form-group" *ngIf="termsList.geoTree && (termsList.geoTree.length > 0)">

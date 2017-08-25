@@ -79,7 +79,7 @@
                     {{ searchError }}
                 </div>
                 <div class="" [ngClass]="largeThmbView ? 'col-sm-12 col-md-6 col-lg-4' : 'col-sm-6 col-md-3 col-lg-2'" *ngFor="let asset of results">
-                    <a class="card card--asset" [attr.data-id]="asset.objectId" [ngClass]="{'selected': ( isSelectedAsset(asset) > -1 ), 'lrgThmb': largeThmbView }" [routerLink]="editMode ? ['./'] : ['/asset', asset.objectId ? asset.objectId : asset.id]" [queryParams]="asset.iapFlag > 0 ? { iap: 'true' } : {}" (click)="selectAsset(asset)">
+                    <a class="card card--asset" [attr.data-id]="asset.objectId" [ngClass]="{'selected': ( isSelectedAsset(asset) > -1 ), 'lrgThmb': largeThmbView }" [routerLink]="editMode ? ['./'] : ['/asset', asset.objectId ? asset.objectId : asset.artstorid]" [queryParams]="asset.iapFlag > 0 ? { iap: 'true' } : {}" (click)="selectAsset(asset)">
                         <ang-thumbnail [thumbnail]="asset" [reorderMode]="reorderMode" [editMode]="editMode" [largeThmbView]="largeThmbView"></ang-thumbnail>
                     </a>
                 </div> <!-- .col -->

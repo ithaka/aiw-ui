@@ -2,7 +2,7 @@
     
     <!--New Search Filters-->
     <div *ngIf="_auth.featureFlags['solrSearch']">
-        <div *ngFor="let filterKey of keys(availableFilters); let i = index" [class.hidden]="">
+        <div *ngFor="let filterKey of keys(availableFilters); let i = index">
             <div *ngIf="availableFilters[filterKey] && isArray(availableFilters[filterKey]) && availableFilters[filterKey].length > 0" class="filter-group">
                 <span class="filter-group__label">
                     <h3>{{ 'FILTERS.' + filterKey | translate }} <a id="buttonCollectionTypeClear" tabindex="1" class="link--accent small" [ngClass]="{ 'disable': !hasAppliedFilters(filterKey) }" (click)="clearAllFilterGroup(filterKey)">Clear</a></h3>

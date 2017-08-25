@@ -90,11 +90,22 @@ export class AssetFiltersService {
      * Returns a boolean if unable to add filters to available filters
      */
     public setAvailable(name: string, filters: any ) : boolean {
+        // if (name == 'geography') {
+        //     let filterKeys = (Object.keys(filters) && Object.keys(filters).length > 0) ? Object.keys(filters) : []
+        //     let filterArr = []
+        //     for (let i = 0; i < filterKeys.length; i++) {
+        //         filterArr.push({ name: filterKeys[i], efq: filters[filterKeys[i]].efq, count: filters[filterKeys[i]].count })
+        //     }
+        //     this.availableFilters[name] = filterArr
+        //     console.log(filterArr)
+        //     this.availableSource.next(this.availableFilters)
+        //     return true
+        // } else 
         if (name && name.length > 0 && Object.prototype.toString.call(filters) === '[object Array]') {
             this.availableFilters[name] = filters
             this.availableSource.next(this.availableFilters)
             return true
-        } else if (name == 'dateObj')  {
+        }  else if (name == 'dateObj')  {
             // Provide exceptions for non-array filter formats
             this.availableFilters[name] = filters
             this.availableSource.next(this.availableFilters)
@@ -229,6 +240,9 @@ export class AssetFiltersService {
         }
     }
 
+    /**
+     * DEPRECATED: Geo filter generation for old search
+     */
     public generateGeoFilters(resGeoFacetsArray){
         if (this.geoTree.length < 1) {
             let options = new RequestOptions({ withCredentials: true });
@@ -290,6 +304,25 @@ export class AssetFiltersService {
 
 
         this.setAvailable('geography', generatedGeoFacets);
+    }
+
+    /**
+     * Generate hierarchical facets from SOLR hierarchy object
+     */
+    public generateHierFacets(facetsObj: any, label: string){
+        
+        var generatedFacets = [];
+
+        for(let label in facetsObj) {
+            var resFacet = facetsObj[label];
+            if (resFacet.element) {
+                resFacet.element.name = label
+                generatedFacets.push(resFacet.element);
+            }
+            // TO-DO: Process children elements on resFacet
+        }
+
+        this.setAvailable(label, generatedFacets);
     }
 
 

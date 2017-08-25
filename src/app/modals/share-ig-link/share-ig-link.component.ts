@@ -39,10 +39,10 @@ export class ShareIgLinkModal implements OnInit {
     })
 
     let groupPath
-    if (window.location.host.indexOf('proxy') > -1) {
-      groupPath = '/group/'
-    } else {
+    if (window.location.host.indexOf('localhost:') > -1) {
       groupPath = '/#/group/'
+    } else {
+      groupPath = '/group/'
     }
 
     // If the group is not owned by the user, we simply give back the url of the group

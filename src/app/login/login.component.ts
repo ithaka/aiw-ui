@@ -145,7 +145,7 @@ export class Login {
         }
       })
       .catch((error) => {
-        this.errorMsg = "LOGIN.SERVER_ERROR";
+        this.errorMsg = this.getLoginErrorMsg(error.message);
       });
   }
   
@@ -175,13 +175,11 @@ export class Login {
         (data)  => {
           this.loginLoading = false;
           if (data.status === false) {
-            if(data.message === 'loginFailed'){
-              this.errorMsg = 'LOGIN.WRONG_PASSWORD';
+            if(data.message === 'loginFailed' || data.message === 'Invalid credentials'){
               // Check if old bad-case password
               this.isBadCasePassword(user)
-            } else if (data.message === 'loginExpired') {
-              this.errorMsg = 'LOGIN.EXPIRED';
             }
+            this.errorMsg = this.getLoginErrorMsg(data.message)
           } else if (!data.isRememberMe && !data.remoteaccess) {
             // In some situations the service might return an ip auth object even tho login was unsuccessful
             this.errorMsg = 'There was an issue with your account, please contact support.';
@@ -194,39 +192,30 @@ export class Login {
       ).catch((err) => {
         this.loginLoading = false;
         let errObj = err.json ? err.json() : {};
-        if(errObj.message === 'Invalid credentials'){
-          this.errorMsg = 'LOGIN.WRONG_PASSWORD';
-          // Check if old bad-case password
-          this.isBadCasePassword(user)
-        } else if (errObj.message === 'Login Expired' || errObj.message === 'loginExpired') {
-          this.errorMsg = 'LOGIN.EXPIRED';
-        } else {
+        this.errorMsg = this.getLoginErrorMsg(errObj.message)
+        if (!this.getLoginErrorMsg(errObj.message)){
           this.getLoginError(user)
           this.angulartics.eventTrack.next({ action:"remoteLogin", properties: { category: "login", label: "failed" }});
         }
         // Check if old bad-case password
         this.isBadCasePassword(user)
-
-          /**
-         * WORKAROUND for TEST: Earth's login service isn't properly redirecting based on context
-         */
-        this._auth.getUserInfo().take(1)
-          .subscribe( data => {
-            if (data.status === true && data.user && user.username == data.user.username) {
-              this.angulartics.eventTrack.next({ action:"remoteLogin", properties: { category: "login", label: "success" }});
-              this.loadForUser(data);
-            } else {
-                if(data.message === 'loginFailed'){
-                this.errorMsg = 'LOGIN.WRONG_PASSWORD';
-              } else if (data.message === 'loginExpired') {
-                this.errorMsg = 'LOGIN.EXPIRED';
-              }
-            }
-          }, error => {
-            console.error("/userinfo error")
-          });
-
       });
+  }
+
+  getLoginErrorMsg(serverMsg: string) : string {
+    if (serverMsg) {
+       if(serverMsg === 'loginFailed' || serverMsg === 'Invalid credentials'){
+        return 'LOGIN.WRONG_PASSWORD'
+      } else if (serverMsg === 'loginExpired' || serverMsg === 'Login Expired') {
+        return 'LOGIN.EXPIRED'
+      } else if (serverMsg.indexOf('disabled') > -1) {
+        return 'LOGIN.ARCHIVED_ERROR';
+      } else {
+        return 'LOGIN.SERVER_ERROR'
+      }
+    } else {
+      return 'LOGIN.SERVER_ERROR'
+    }
   }
 
   /** **THIS CAN LIKELY BE REMOVED AFTER RELEVANT USERS' PASSWORDS HAVE BEEN CHANGED**
