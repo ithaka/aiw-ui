@@ -1,5 +1,5 @@
 
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { Angulartics2 } from 'angulartics2/dist';
 
@@ -75,6 +75,7 @@ export class SearchModal implements OnInit {
         private _search: AssetSearchService,
         private _filters: AssetFiltersService, 
         private _router: Router,
+        private route: ActivatedRoute,
         private _analytics: AnalyticsService,
         private angulartics: Angulartics2,
         private _auth: AuthService
@@ -237,6 +238,7 @@ export class SearchModal implements OnInit {
 
     let advQuery
     let filterParams
+    let currentParams = this.route.snapshot.params
 
     // Check search feature flag
     if (this._auth.featureFlags['solrSearch']) {
@@ -251,6 +253,11 @@ export class SearchModal implements OnInit {
     this._analytics.directCall('advanced_search');
     this.angulartics.eventTrack.next({ action: "advSearch", properties: { category: "search", label: advQuery } })
     
+    // Maintain feature flags
+    if (currentParams['featureFlag']) {
+      filterParams['featureFlag'] = currentParams['featureFlag']
+    }
+
     // Open search page with new query
     this._router.navigate(['/search', advQuery, filterParams]);
 
