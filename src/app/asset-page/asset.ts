@@ -188,9 +188,12 @@ export class Asset {
 
   private formatMetadata(){
     let metaArray = [];
+    console.log(this.metaDataArray)
+    // loop through all of the metadata we get from the service
     for(let data of this.metaDataArray){
         let fieldExists = false;
 
+        // if the fieldName matches, we store all the data under one object here
         for(let metaData of metaArray){
             if(metaData['fieldName'] === data.fieldName){
                 metaData['fieldValue'].push(data.fieldValue);
@@ -199,11 +202,19 @@ export class Asset {
             }
         }
 
+        // if there was no match to the fieldName above, we create a field and begin collating metadata beneath it
         if(!fieldExists){
             let fieldObj = {
                 'fieldName': data.fieldName,
                 'fieldValue': []
             }
+
+            // see Air-826 - sometimes the data has a link property, which can vary from fieldValue, but
+            //  the institution actually wanted the fieldValue to be the same as the link... so that's what this does
+            if (data.link) {
+                data.fieldValue = data.link
+            }
+
             fieldObj['fieldValue'].push(data.fieldValue);
             metaArray.push(fieldObj);
         }
