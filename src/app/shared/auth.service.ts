@@ -77,7 +77,6 @@ export class AuthService implements CanActivate {
     this.ENV = 'test';
     this.hostname = '';
     this.baseUrl =  '/api'; 
-    this.imageFpxUrl =  '/api/secure/imagefpx'; 
     this.thumbUrl = '//mdxdv.artstor.org';
     this.IIIFUrl = '//tsprod.artstor.org/rosa-iiif-endpoint-1.0-SNAPSHOT/fpx';
     this.subdomain = 'library';
@@ -94,7 +93,6 @@ export class AuthService implements CanActivate {
       // Prod/Lively endpoints
       this.hostname = '//library.artstor.org';
       this.baseUrl =  '//library.artstor.org/api'; 
-      this.imageFpxUrl =  '//library.artstor.org/api/secure/imagefpx'; 
       this.logUrl = '//ang-ui-logger.apps.prod.cirrostratus.org/api/v1';
       this.solrUrl = 'http://library.artstor.org/api/search/v1.0/search'
       this.ENV = 'prod';
@@ -103,7 +101,6 @@ export class AuthService implements CanActivate {
       this.hostname = '//stage.artstor.org';
       this.subdomain = 'stage';
       this.baseUrl = '//stage.artstor.org/api';
-      this.imageFpxUrl =  '//stage.artstor.org/api/secure/imagefpx'; 
       this.logUrl = '//ang-ui-logger.apps.test.cirrostratus.org/api/v1';
       this.solrUrl = 'http://stage.artstor.org/api/search/v1.0/search'
       this.ENV = 'test';
@@ -261,10 +258,6 @@ export class AuthService implements CanActivate {
       url += "/secure"
     }
     return url
-  }
-
-  public getImageFpxUrl(): string {
-    return this.imageFpxUrl;
   }
 
   public getHostname(): string {
