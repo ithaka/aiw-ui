@@ -114,8 +114,8 @@ export class AssetService {
     // Pagination flag for preserving the select mode while paging through the results
     public paginated: boolean = false;
 
-    // bandaid for the re-search functionality
-    private searchErrorCount: number = 0
+    // // bandaid for the re-search functionality
+    // private searchErrorCount: number = 0
 
     constructor(
         private _filters: AssetFiltersService,
@@ -893,14 +893,16 @@ export class AssetService {
                 // Even though it's an error, indicate we loaded these params
                 this.currentLoadedParams = Object.assign(Object.assign({}, this.defaultUrlParams), this.urlParams);
 
-                if (error.status == 0 && this.searchErrorCount < 3) {
-                    this.searchErrorCount++
-                    setTimeout(this.loadSearch(term), 7000)
-                } else {
-                    this.searchErrorCount = 0
-                    console.error(error)
-                    this.allResultsSource.next(null)
-                }
+                // COMMENTING OUT B/C OF CASCADING SEARCH FAILURES CAUSED BY CERTAIN SEARCHES
+                // A REQUEST OF RIADH
+                // if (error.status == 0 && this.searchErrorCount < 3) {
+                //     this.searchErrorCount++
+                //     setTimeout(this.loadSearch(term), 7000)
+                // } else {
+                // this.searchErrorCount = 0
+                console.error(error)
+                this.allResultsSource.next(null)
+                // }
                 
                 // Pass error down to allResults listeners
                 // console.error(error, error.status)
