@@ -31,10 +31,17 @@ filter, .filter {
 	//Hanging Indent
 	padding: 2px;
 	padding-left: $filterTextIndent + 2px;
-	padding-right: 38px;
+	padding-right: 22px;
 	text-indent: -1 * $filterTextIndent;
+	word-break: break-word;
 	
 	max-height: 100%;
+	width: 100%;
+
+	&.child {
+		margin-left: 20px;
+		width: calc(100% - 20px);
+	}
 
 	&__inline-block {
 		display: inline-block;

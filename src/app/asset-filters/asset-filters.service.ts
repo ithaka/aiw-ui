@@ -314,12 +314,21 @@ export class AssetFiltersService {
         var generatedFacets = [];
 
         for(let label in facetsObj) {
-            var resFacet = facetsObj[label];
-            if (resFacet.element) {
-                resFacet.element.name = label
-                generatedFacets.push(resFacet.element);
+            var resFacet = facetsObj[label] && facetsObj[label].element;
+            var childrenObj = facetsObj[label] && facetsObj[label].children;
+            
+            if (resFacet) {
+                resFacet.name = label
+                resFacet.children = []
+                
+                for (let childName in childrenObj) {
+                    var child = childrenObj[childName].element
+                    child.name = childName
+                    resFacet.children.push(child)
+                }
+
+                generatedFacets.push(resFacet);
             }
-            // TO-DO: Process children elements on resFacet
         }
 
         this.setAvailable(label, generatedFacets);
