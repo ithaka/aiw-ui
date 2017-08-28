@@ -4,6 +4,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Http, HttpModule } from '@angular/http';
 import { NavigationEnd, Router, RouteReuseStrategy, RouterModule } from '@angular/router';
 import { removeNgStyles, createNewHosts, createInputTransfer } from '@angularclass/hmr';
+import { Ng2DeviceDetectorModule } from 'ng2-device-detector';
 
 /*
  * Platform and Environment providers/directives/pipes
@@ -185,6 +186,7 @@ type StoreType = {
     LockerModule,
     FileUploadModule,
     RouterModule.forRoot(ROUTES, { useHash: true }),
+    Ng2DeviceDetectorModule.forRoot(),
     Angulartics2Module.forRoot([ Angulartics2GoogleAnalytics ]),
     TranslateModule.forRoot({
         provide: TranslateLoader,

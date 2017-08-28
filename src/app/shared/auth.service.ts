@@ -522,6 +522,19 @@ export class AuthService implements CanActivate {
             return res.json() || {};
         });
   }
+
+
+
+  /**
+   * Gets user's geo IP information
+   * @returns Observable resolved with object containing geo IP information
+   */
+  public getUserIP(): Observable<any> {
+    return this.http.get("https://freegeoip.net/json/")
+      .map((res) => {
+        return res.json() || {};
+      });
+  }
 }
 
 export class User {

@@ -1,6 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
+import { Ng2DeviceService } from 'ng2-device-detector';
 
 import { AppState } from '../app.service';
 import { AssetService, AuthService, } from '../shared';
@@ -21,6 +22,9 @@ declare var initPath: string
 export class Home implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = [];
 
+  private artStorEmailLink: string = '';
+  private userGeoIP: any = {};
+
   // Set our default values
   localState = { value: '' };
   collections = [];
@@ -38,7 +42,8 @@ export class Home implements OnInit, OnDestroy {
       private _assets: AssetService, 
       private _router: Router,
       private _auth: AuthService,
-      private _analytics: AnalyticsService
+      private _analytics: AnalyticsService,
+      private deviceService: Ng2DeviceService
   ) {
     // this makes the window always render scrolled to the top
     this._router.events.subscribe(() => {
@@ -105,6 +110,14 @@ export class Home implements OnInit, OnDestroy {
         });
 
         this._analytics.setPageValues('Home', '')
+
+        // Grab session info for Email Artstor link
+        this._auth.getUserIP().subscribe( (res) => {
+          if(res){
+            this.userGeoIP = res;
+            this.fetchDeviceInfo();
+          }
+        })
   } // OnInit
 
   ngOnDestroy() {
@@ -115,5 +128,38 @@ export class Home implements OnInit, OnDestroy {
     console.log('submitState', value);
     this.appState.set('value', value);
     this.localState.value = '';
+  }
+
+  private fetchDeviceInfo(): void{
+    // Detect if adblocker is enabled or not
+    let adBlockEnabled = false;
+    let testAd = document.createElement('div');
+    testAd.innerHTML = '&nbsp;';
+    testAd.className = 'adsbox';
+    document.body.appendChild(testAd);
+    setTimeout(
+      () => {
+        if (testAd.offsetHeight === 0) {
+          adBlockEnabled = true;
+        }
+        testAd.remove();
+
+        // Fetch device info
+        let deviceInfo = this.deviceService.getDeviceInfo();
+
+        // Construct content Artstor email
+        let deviceInfoHTML = 'Session Info \n ';
+        deviceInfoHTML += 'Operating System: ' + deviceInfo.os + ' - ' + deviceInfo.os_version + ' \n ';
+        deviceInfoHTML += 'Browser: ' + deviceInfo.browser + ' - ' + deviceInfo.browser_version + ' \n ';
+        deviceInfoHTML += 'User Agent: ' + deviceInfo.userAgent + ' \n ';
+        deviceInfoHTML += 'Screen Resolution: ' + window.screen.width + ' * ' + window.screen.height + ' \n ';
+        deviceInfoHTML += 'IP Address: ' + this.userGeoIP.ip + ' \n ';
+        deviceInfoHTML += 'Absolute Path: ' + window.location.href + ' \n ';
+        deviceInfoHTML += 'Adblocker Enabled: ' + adBlockEnabled + ' \n ';
+        deviceInfoHTML += '\n ------------------------------------------------------------------------------ \n';
+        this.artStorEmailLink = 'mailto:userservices@artstor.org?body=' + encodeURIComponent(deviceInfoHTML);
+    
+      }, 100);
+
   }
 }
