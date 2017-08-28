@@ -86,18 +86,23 @@ export class Asset {
     if (assetObj) {
         this.metadataLoaded = true
         this.title = assetObj.tombstone[0]
-        this.metaDataArray = [{
-                fieldName : 'Title',
-                fieldValue : assetObj.tombstone[0]
-            },{
-                fieldName : 'Creator',
-                fieldValue : assetObj.tombstone[1]
-            },
-            {
-                fieldName : 'Date',
-                fieldValue : assetObj.tombstone[2]
-            }
-        ]
+        // Unpack metadata_json from /resolve call
+        if (assetObj.metadata && assetObj.metadata[0] && assetObj.metadata[0]['metadata_json']) {
+            this.metaDataArray = JSON.parse(assetObj.metadata[0]['metadata_json'])
+        } else {
+            this.metaDataArray = [{
+                    fieldName : 'Title',
+                    fieldValue : assetObj.tombstone[0]
+                },{
+                    fieldName : 'Creator',
+                    fieldValue : assetObj.tombstone[1]
+                },
+                {
+                    fieldName : 'Date',
+                    fieldValue : assetObj.tombstone[2]
+                }
+            ]
+        }
         this.formatMetadata()
         this.collectionId = assetObj.collectionId
         this.imgURL = assetObj.largeImgUrl
