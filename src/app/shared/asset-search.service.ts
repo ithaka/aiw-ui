@@ -105,7 +105,7 @@ export class AssetSearchService {
         "hierarchy": "artstor-geography",
         "look_ahead": 2,
         "look_behind": -10,
-        "d_look_ahead": 0
+        "d_look_ahead": 1
       }
     ],  
       "facet_fields" :
