@@ -3691,6 +3691,10 @@ ng2-completer@^1.4.0:
   version "1.4.0"
   resolved "https://registry.yarnpkg.com/ng2-completer/-/ng2-completer-1.4.0.tgz#43caec0dff44c7ad998327d411307b5d54546527"
 
+ng2-device-detector@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/ng2-device-detector/-/ng2-device-detector-1.0.0.tgz#8113e65e723ea389b8ade84e6ddcd1418e19deda"
+
 ng2-dnd@^4.0.0:
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/ng2-dnd/-/ng2-dnd-4.0.0.tgz#0a5a5e5005b3098b3311187a5435671ad6381b9f"
