@@ -366,6 +366,11 @@ export class AuthService implements CanActivate {
                 user.isLoggedIn = true
               } 
               
+              // Shared Shelf users need to be explicitly logged in
+              if (user.ssEnabled) {
+                return false;
+              }
+              
               this.saveUser(user);
               return true;
             } else {
