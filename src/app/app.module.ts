@@ -1,4 +1,4 @@
-import { NgModule, ApplicationRef } from '@angular/core';
+import { ApplicationRef, ErrorHandler, NgModule } from '@angular/core';
 import { BrowserModule, Title } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Http, HttpModule } from '@angular/http';
@@ -11,6 +11,17 @@ import { Ng2DeviceDetectorModule } from 'ng2-device-detector';
  */
 import { ENV_PROVIDERS } from './environment';
 import { ROUTES } from './app.routes';
+
+// Error tracking utility for sentry.io
+import * as Raven from 'raven-js';
+
+Raven.config('https://9ef1f98534914bf6826e202370d1f627@sentry.io/209953').install();
+
+export class RavenErrorHandler implements ErrorHandler {
+  handleError(err:any) : void {
+    Raven.captureException(err);
+  }
+}
 
 // UI modules
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
@@ -90,6 +101,7 @@ import { AnalyticsService } from './analytics.service';
 
 import { LinkifyPipe } from './shared/linkify.pipe';
 
+
 const APP_PROVIDERS = [
   ...APP_RESOLVER_PROVIDERS,
   AnalyticsService,
@@ -104,7 +116,8 @@ const APP_PROVIDERS = [
   TagsService,
   ToolboxService,
   LegacyRouteResolver,
-  Title
+  Title,
+  { provide: ErrorHandler, useClass: RavenErrorHandler }
   // { provide: RouteReuseStrategy, useClass: CustomReuseStrategy } // to be implemented later
 ];
 

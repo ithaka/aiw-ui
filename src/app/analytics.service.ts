@@ -4,18 +4,9 @@ import { Injectable } from '@angular/core';
 declare var _satellite: any;
 // Reference Adobe page layer object
 declare var DDO: any;
-// <!--Adobe Analytics: Page level "Data Layer"-->
-//   <script type="text/javascript" class="ddo">
-// var  DDO = { pageData : {} };
-// DDO.pageData= {
-//     pageInfo:{
-//     pageName:"value",
-//     pageID:"value"
-//     },
-//     user:{
-//     userInstitution: "value"
-//     }
-// };
+// Reference Raven object for Sentry reporting
+declare var Raven: any;
+
     // </script>
 interface DataLayer {
     pageInfo:{
@@ -60,6 +51,9 @@ export class AnalyticsService {
      */
     public setUserInstitution(institution: string) {
         this.pageData.user.userInstitution = institution
+        Raven.setUserContext({
+            institution: institution
+        });
     }
 
     /**
