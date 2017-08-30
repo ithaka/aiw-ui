@@ -114,7 +114,13 @@ export class AssetPage implements OnInit, OnDestroy {
                             this.renderPrimaryAsset(new Asset(data.item[assetIdProperty], this._assets, this._auth, data.item))
                         }, (err) => {
                             console.error(err)
-                            this._router.navigate(['/nocontent'])
+                            if (err.status == 403) {
+                                // User does not have access
+                                this.showAccessDeniedModal = true
+                            } else {
+                                // Asset does not exist
+                                this._router.navigate(['/nocontent'])
+                            }
                         })
                 } else {
                     this.renderPrimaryAsset(new Asset(routeParams["assetId"], this._assets, this._auth))
