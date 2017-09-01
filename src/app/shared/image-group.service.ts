@@ -17,7 +17,6 @@ import { AuthService, ImageGroupDescription } from './../shared';
 @Injectable()
 export class ImageGroupService {
   private proxyUrl = '';
-  // private baseUrl =  this.proxyUrl + 'http://library.artstor.org/library/secure';
   private baseUrl: string;
 
   private header = new Headers({ 'Content-Type': 'application/json' }); // ... Set content type to JSON
