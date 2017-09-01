@@ -1083,7 +1083,6 @@ export class AssetService {
      * eg. http://kts.stage.artstor.org/service/get_player/?entry_id=1:0_s6agwcv9
      */
     public getFpxInfo(objectId: string, objectTypeId: number): Promise<any> {
-        // http://library.artstor.org/library/secure/imagefpx/SS7730295_7730295_8847273/24
         let requestUrl = this._auth.getUrl() + '/imagefpx/' + objectId + '/' + objectTypeId;
         
         return this.http

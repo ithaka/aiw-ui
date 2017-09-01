@@ -486,7 +486,6 @@ export class AuthService implements CanActivate {
     }
 
     getInstitutions() {
-        // http://library.artstor.org/library/institutions/?_method=shibbolethOnly&dojo.preventCache=1479750011351
         let url = this.getHostname() + '/api/institutions?_method=ShibbolethOnly';
         
         return this.http
