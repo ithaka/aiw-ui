@@ -74,36 +74,38 @@ export class AuthService implements CanActivate {
     this._router = _router;
 
     // Default to relative or prod endpoints
-    this.ENV = 'test';
-    this.hostname = '';
-    this.baseUrl =  '/api'; 
-    this.thumbUrl = '//mdxdv.artstor.org';
-    this.IIIFUrl = '//tsprod.artstor.org/rosa-iiif-endpoint-1.0-SNAPSHOT/fpx';
-    this.subdomain = 'library';
+    this.ENV = 'test'
+    this.hostname = ''
+    this.baseUrl =  '/api' 
+    this.thumbUrl = '//mdxdv.artstor.org'
+    this.IIIFUrl = '//tsprod.artstor.org/rosa-iiif-endpoint-1.0-SNAPSHOT/fpx'
+    this.subdomain = 'library'
     this.solrUrl = '/api/search/v1.0/search'
     
     // Check domain
     if (document.location.hostname.indexOf('library.artstor.org') > -1 || document.location.hostname.indexOf('beta.artstor.org') > -1 || document.location.hostname.indexOf('lively.artstor.org') > -1 || document.location.hostname.indexOf('proxy.artstor.org') > -1) {
       // Explicit live endpoints
-      this.logUrl = '//ang-ui-logger.apps.prod.cirrostratus.org/api/v1';
+      this.logUrl = '//ang-ui-logger.apps.prod.cirrostratus.org/api/v1'
       this.solrUrl = 'http://library.artstor.org/api/search/v1.0/search'
-      this.ENV = 'prod';
+      this.ENV = 'prod'
     }
     else if ( document.location.hostname.indexOf('prod.cirrostratus.org') > -1 ) {
       // Prod/Lively endpoints
-      this.hostname = '//library.artstor.org';
-      this.baseUrl =  '//library.artstor.org/api'; 
-      this.logUrl = '//ang-ui-logger.apps.prod.cirrostratus.org/api/v1';
+      this.hostname = '//library.artstor.org'
+      this.baseUrl =  '//library.artstor.org/api' 
+      this.logUrl = '//ang-ui-logger.apps.prod.cirrostratus.org/api/v1'
       this.solrUrl = 'http://library.artstor.org/api/search/v1.0/search'
-      this.ENV = 'prod';
+      this.ENV = 'prod'
     } else if (document.location.hostname.indexOf('localhost') > -1 || document.location.hostname.indexOf('stage.artstor.org') > -1 || document.location.hostname.indexOf('test.stagely.artstor.org') > -1 || document.location.hostname.indexOf('test.cirrostratus.org') > -1) {
       // Test Endpoints
-      this.hostname = '//stage.artstor.org';
-      this.subdomain = 'stage';
-      this.baseUrl = '//stage.artstor.org/api';
-      this.logUrl = '//ang-ui-logger.apps.test.cirrostratus.org/api/v1';
+      this.hostname = '//stage.artstor.org'
+      this.subdomain = 'stage'
+      this.baseUrl = '//stage.artstor.org/api'
+      this.thumbUrl = '//mdxstage.artstor.org'
+      this.logUrl = '//ang-ui-logger.apps.test.cirrostratus.org/api/v1'
       this.solrUrl = 'http://stage.artstor.org/api/search/v1.0/search'
-      this.ENV = 'test';
+      this.IIIFUrl = '//tsstage.artstor.org/rosa-iiif-endpoint-1.0-SNAPSHOT/fpx'
+      this.ENV = 'test'
     }
 
 

@@ -292,11 +292,7 @@ export class Asset {
         imgPath = '/' + data['imageUrl'].substring(0, data['imageUrl'].lastIndexOf('.fpx') + 4)
     }
 
-    if (this._assets.isRecentStageSSAsset(imgPath)) {
-        this.tileSource = '//tsstage.artstor.org/rosa-iiif-endpoint-1.0-SNAPSHOT/fpx' + encodeURIComponent(imgPath) + '/info.json'
-    } else {
-        this.tileSource = this._auth.getIIIFUrl() + encodeURIComponent(imgPath) + '/info.json'
-    }
+    this.tileSource = this._auth.getIIIFUrl() + encodeURIComponent(imgPath) + '/info.json'
 
     this.imageSourceLoaded = true;
     this.dataLoadedSource.next(this.metadataLoaded && this.imageSourceLoaded);
