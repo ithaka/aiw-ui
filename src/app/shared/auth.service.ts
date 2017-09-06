@@ -454,7 +454,7 @@ export class AuthService implements CanActivate {
      * Logs user in
      * @param user User must have username (which is an email address) and password to be passed in the request
      */
-    login(user: User) {
+    login(user: User) : Promise<any> {
         let header = new Headers({ 'Content-Type': 'application/x-www-form-urlencoded' }); // ... Set content type to JSON
         let options = new RequestOptions({ headers: header, withCredentials: true }); // Create a request option
         let data = this.formEncode({ 

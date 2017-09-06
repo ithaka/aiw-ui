@@ -36,6 +36,8 @@ export class Nav implements OnInit, OnDestroy {
       this._router.events.subscribe(e => {
         if (e instanceof NavigationEnd && (e.url != '/login') && (e.url.split('/')[1] != 'printpreview') && (e.url.split('/')[1] != 'assetprint')) {
             this.showLoginPanel = true;
+            // Get institutional information if showing user info
+            this.getInstitutionalInfo()
         } else {
             this.showLoginPanel = false;
         }
@@ -43,6 +45,22 @@ export class Nav implements OnInit, OnDestroy {
       })
     );
 
+    // Show inactive user logout modal once the subject is set by auth.service
+    this.subscriptions.push(
+      this._auth.showUserInactiveModal.subscribe( value => {
+        this.showinactiveUserLogoutModal = value;
+      })
+    );
+  }
+
+  ngOnDestroy() {
+    this.subscriptions.forEach((sub) => { sub.unsubscribe(); });
+  }
+
+  /**
+   * Loads User or IP auth information, and updates the appropriate objects
+   */
+  getInstitutionalInfo() {
     this.subscriptions.push(
       this._auth.getInstitution().subscribe(
         (institutionObj) => {
@@ -54,19 +72,14 @@ export class Nav implements OnInit, OnDestroy {
       )
     );
 
-    // Show inactive user logout modal once the subject is set by auth.service
-    this.subscriptions.push(
-      this._auth.showUserInactiveModal.subscribe( value => {
-        this.showinactiveUserLogoutModal = value;
-      })
-    );
-
+    // Trigger call to get fresh institutional information
     this._assets.getCollections("ssc")
-      .then((data) => {  })
-  }
-
-  ngOnDestroy() {
-    this.subscriptions.forEach((sub) => { sub.unsubscribe(); });
+      .then((data) => {
+        // Got institutional info
+      })
+      .catch((err) => {
+        console.log(err)
+      })
   }
 
   logout(): void {
@@ -77,6 +90,9 @@ export class Nav implements OnInit, OnDestroy {
         } else {
           this._router.navigate(['/home'])
         }
+      })
+      .catch((err) => {
+        console.log(err)
       })
   }
 
