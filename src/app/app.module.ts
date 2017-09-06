@@ -12,10 +12,14 @@ import { Ng2DeviceDetectorModule } from 'ng2-device-detector';
 import { ENV_PROVIDERS } from './environment';
 import { ROUTES } from './app.routes';
 
+const { version: appVersion } = require('../../package.json');
+
 // Error tracking utility for sentry.io
 import * as Raven from 'raven-js';
 
-Raven.config('https://9ef1f98534914bf6826e202370d1f627@sentry.io/209953').install();
+Raven.config('https://9ef1f98534914bf6826e202370d1f627@sentry.io/209953', {
+  release: appVersion
+}).install();
 
 export class RavenErrorHandler implements ErrorHandler {
   handleError(err:any) : void {
