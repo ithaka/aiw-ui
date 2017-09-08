@@ -11,7 +11,7 @@
             <div class="modal-body">
                 <div class="container-fluid">
                     <div class="row">
-                        <div [ngClass]="[ hideLegacyFilters ? 'col-12' : 'col-lg-6' ]">
+                        <div class="col-lg-6">
                             <h3>{{ 'ADVANCED_SEARCH_MODAL.SEARCH_HEADING' | translate }}</h3>
                             <p class="small">{{ 'ADVANCED_SEARCH_MODAL.SEARCH_DESCRIPTION' | translate }}</p>
                             <div *ngFor="let query of advanceQueries; let i = index;" class="form-group">
@@ -62,6 +62,31 @@
                                     </div>
                                 </div>
                             </div>
+                        </div>
+                        <div *ngIf="hideLegacyFilters" class="col-lg-6">
+                            <h3>{{ 'ADVANCED_SEARCH_MODAL.FILTER_HEADING' | translate }}</h3>
+                            <p class="small">{{ 'ADVANCED_SEARCH_MODAL.FILTER_DESCRIPTION' | translate }}</p>
+
+
+                            <div class="form-group" *ngFor="let filterGroup of availableFilters">
+                                <label>{{ filterGroup.name | translate }}</label>
+                                <div class="form-card card">
+                                    <ul class="list-group list-group-flush compact">
+                                        <li *ngFor="let filter of filterGroup.values" class="list-group-item">
+                                            <label class="custom-control custom-checkbox">
+                                                <input (click)="toggleFilter(filter.efq, filterGroup.name)" type="checkbox" class="custom-control-input">
+                                                <span class="custom-control-indicator"></span>
+                                                <span class="custom-control-description">
+                                                    <span *ngIf="facet.name && facet.name.length < 2">{{ filterNameMap['collectiontypes'] && filterNameMap['collectiontypes'][facet.name] }} ({{facet.count}})</span>
+                                                    <span *ngIf="facet.name && facet.name.length > 1">{{ facet.name }} ({{facet.count}})</span>
+                                                </span>
+                                            </label>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+
+
                         </div>
                         <div *ngIf="!hideLegacyFilters" class="col-lg-6">
                             <h3>{{ 'ADVANCED_SEARCH_MODAL.FILTER_HEADING' | translate }}</h3>

@@ -62,6 +62,18 @@ export class AssetFiltersService {
     private _storage;
     private institution: any = {};
 
+
+    private filterNameMap: any = {
+        "collectiontypes" : {
+        1 : "Artstor Digital Library",
+        2 : "Institution Collections",
+        3 : "Private Collections",
+        4 : "Institution Collections",
+        5 : "Open Collections",
+        6 : "Private Collections"
+        }
+    }
+
     constructor(
         private locker: Locker,
         private http: Http,
@@ -69,6 +81,10 @@ export class AssetFiltersService {
     ){
         this._storage = locker.useDriver(Locker.DRIVERS.LOCAL);
         this.institution = this._storage.get('institution');
+    }
+
+    public getFilterNameMap() : any {
+        return this.filterNameMap
     }
     
     // Empties all filter objects without publishing them
@@ -309,7 +325,7 @@ export class AssetFiltersService {
     /**
      * Generate hierarchical facets from SOLR hierarchy object
      */
-    public generateHierFacets(facetsObj: any, label: string){
+    public generateHierFacets(facetsObj: any, label: string) : any[] {
         
         var generatedFacets = [];
 
@@ -332,6 +348,9 @@ export class AssetFiltersService {
         }
 
         this.setAvailable(label, generatedFacets);
+
+        // Optionally useful to have this value returned
+        return generatedFacets
     }
 
 
