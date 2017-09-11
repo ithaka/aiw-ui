@@ -15,5 +15,7 @@ export class DownloadLimitModal implements OnInit {
 
   constructor() { }
 
-  ngOnInit() { console.log(this.ig); }
+  ngOnInit() { 
+    
+  }
 }

@@ -35,7 +35,7 @@ export class PptModalComponent implements OnInit {
   constructor(private _assets: AssetService, private _auth: AuthService, private http: Http) { }
 
   ngOnInit() {
-    console.log(this.ig);
+    
   }
   
   private getPPT() {

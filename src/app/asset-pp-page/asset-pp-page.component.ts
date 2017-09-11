@@ -76,9 +76,6 @@ export class AssetPPPage implements OnInit, OnDestroy {
           }
 
           self.asset = res;
-          
-          console.log(self.asset);
-          console.log(self.metaArray);
         }
     })
     .catch(function(err) {

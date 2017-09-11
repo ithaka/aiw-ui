@@ -130,7 +130,6 @@ export class SearchModal implements OnInit {
           this.availableFilters.push({ name: "geography", values: topObj })
         }
         this.loadingFilters = false
-        console.log(this.availableFilters)
       })
   }
 
