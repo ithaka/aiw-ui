@@ -63,7 +63,7 @@ export class AssetFiltersService {
     private institution: any = {};
 
 
-    private filterNameMap: any = {
+    private readonly filterNameMap: any = {
         "collectiontypes" : {
         1 : "Artstor Digital Library",
         2 : "Institution Collections",
