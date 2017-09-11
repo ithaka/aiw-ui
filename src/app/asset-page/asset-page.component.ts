@@ -142,18 +142,19 @@ export class AssetPage implements OnInit, OnDestroy {
         // sets up subscription to allResults, which is the service providing thumbnails
         this.subscriptions.push(
           this._assets.allResults.subscribe((allResults: any) => {
+              let assetIdProperty = this._auth.featureFlags['solrSearch'] ? 'artstorid' : 'objectId';
               if(allResults.thumbnails){
                   this.prevAssetResults.thumbnails = allResults.thumbnails;
                   if(this.loadArrayFirstAsset){
                       this.loadArrayFirstAsset = false;
                       if((this.prevAssetResults) && (this.prevAssetResults.thumbnails.length > 0)){
-                          this._router.navigate(['/asset', this.prevAssetResults.thumbnails[0].objectId]);
+                          this._router.navigate(['/asset', this.prevAssetResults.thumbnails[0][assetIdProperty]]);
                       }
                   }
                   else if(this.loadArrayLastAsset){
                       this.loadArrayLastAsset = false;
                       if((this.prevAssetResults.thumbnails) && (this.prevAssetResults.thumbnails.length > 0)){
-                          this._router.navigate(['/asset', this.prevAssetResults.thumbnails[this.prevAssetResults.thumbnails.length - 1].objectId]);
+                          this._router.navigate(['/asset', this.prevAssetResults.thumbnails[this.prevAssetResults.thumbnails.length - 1][assetIdProperty]]);
                       }
                   }
                   else{
@@ -220,7 +221,8 @@ export class AssetPage implements OnInit, OnDestroy {
     private currentAssetIndex(): number{
         if (this.assets[0]) {
             for(var i = 0; i < this.prevAssetResults.thumbnails.length; i++){
-                if(this.prevAssetResults.thumbnails[i] && this.prevAssetResults.thumbnails[i].objectId == this.assets[0].id){
+                let assetIdProperty = this._auth.featureFlags['solrSearch'] ? 'artstorid' : 'objectId';
+                if(this.prevAssetResults.thumbnails[i] && this.prevAssetResults.thumbnails[i][assetIdProperty] == this.assets[0].id){
                     return i;
                 }
             }
@@ -250,7 +252,8 @@ export class AssetPage implements OnInit, OnDestroy {
         if(this.assetNumber > 1){
             if((this.assetIndex > 0)){
                 let prevAssetIndex = this.quizShuffle ? Math.floor(Math.random() * this.prevAssetResults.thumbnails.length) + 0 : this.assetIndex - 1; // Assign random thumbnail index if quiz shuffle is true
-                this._router.navigate(['/asset', this.prevAssetResults.thumbnails[prevAssetIndex].objectId]);
+                let assetIdProperty = this._auth.featureFlags['solrSearch'] ? 'artstorid' : 'objectId';
+                this._router.navigate(['/asset', this.prevAssetResults.thumbnails[prevAssetIndex][assetIdProperty]]);
             }
             else if(this.assetIndex == 0){
                 this.loadArrayLastAsset = true;
@@ -263,7 +266,8 @@ export class AssetPage implements OnInit, OnDestroy {
         if(this.assetNumber < this.totalAssetCount){
             if((this.prevAssetResults.thumbnails) && (this.assetIndex < (this.prevAssetResults.thumbnails.length - 1))){
                 let nextAssetIndex = this.quizShuffle ? Math.floor(Math.random() * this.prevAssetResults.thumbnails.length) + 0 : this.assetIndex + 1; // Assign random thumbnail index if quiz shuffle is true
-                this._router.navigate(['/asset', this.prevAssetResults.thumbnails[nextAssetIndex].objectId]);
+                let assetIdProperty = this._auth.featureFlags['solrSearch'] ? 'artstorid' : 'objectId';
+                this._router.navigate(['/asset', this.prevAssetResults.thumbnails[nextAssetIndex][assetIdProperty]]);
             }
             else if((this.prevAssetResults.thumbnails) && (this.assetIndex == (this.prevAssetResults.thumbnails.length - 1))){
                 this.loadArrayFirstAsset = true;
@@ -333,6 +337,7 @@ export class AssetPage implements OnInit, OnDestroy {
 
      // Add or remove assets from Assets array for comparison in full screen
     private toggleAsset(asset: any): void {
+        let assetIdProperty = this._auth.featureFlags['solrSearch'] ? 'artstorid' : 'objectId';
         let add = true;
         this.assets.forEach( (viewAsset, i) => {
             if (asset.id == viewAsset.id) {
@@ -342,7 +347,7 @@ export class AssetPage implements OnInit, OnDestroy {
 
                 // Set 'selected' to 'false' for the asset in asset drawer
                 this.prevAssetResults.thumbnails.forEach( (thumbnail, i) => {
-                    if (asset.id == thumbnail.objectId) {
+                    if (asset.id == thumbnail[assetIdProperty]) {
                         thumbnail.selected = false;
                     }
                 });
@@ -355,7 +360,7 @@ export class AssetPage implements OnInit, OnDestroy {
         }
         if (add == true) {
             asset.selected = true;
-            this.assets.push( new Asset(asset.objectId, this._assets, this._auth) );
+            this.assets.push( new Asset(asset[assetIdProperty], this._assets, this._auth) );
         }
     }
 
