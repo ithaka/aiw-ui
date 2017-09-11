@@ -74,6 +74,7 @@ export class SearchModal implements OnInit {
 
   // Flag while transitioning to Solr search
   private hideLegacyFilters: boolean
+  private loadingFilters: boolean
 
   constructor(  
         private _assets: AssetService, 
@@ -103,6 +104,7 @@ export class SearchModal implements OnInit {
       // New search filter map
       this.fields = this._search.filterFields
       this.hideLegacyFilters = true
+      this.loadingFilters = true
       this.loadFilters()
     } else {
       // Old search filter map
@@ -118,18 +120,16 @@ export class SearchModal implements OnInit {
   private loadFilters() : void {
     this._assetSearch.getFacets().take(1)
       .subscribe(data => {
-        console.log(data)
         // Process through "facets"
         for (let facet in data['facets']) {
           this.availableFilters.push(data['facets'][facet])
         }
         // Process "hierarchies2"
         for (let hierFacet in data['hierarchies2']) {
-          this.availableFilters.push(
-            this._assetFilters.generateHierFacets(data['hierarchies2'][hierFacet], hierFacet)
-          )
+          let topObj = this._assetFilters.generateHierFacets(data['hierarchies2'][hierFacet].children, 'geography')
+          this.availableFilters.push({ name: "geography", values: topObj })
         }
-
+        this.loadingFilters = false
         console.log(this.availableFilters)
       })
   }

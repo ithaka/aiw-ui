@@ -67,6 +67,10 @@
                             <h3>{{ 'ADVANCED_SEARCH_MODAL.FILTER_HEADING' | translate }}</h3>
                             <p class="small">{{ 'ADVANCED_SEARCH_MODAL.FILTER_DESCRIPTION' | translate }}</p>
 
+                            <div *ngIf="loadingFilters" class="row has-icon-overlay">
+                                <i class="icon-lg icon-overlay--top icon-loading-large" style="background-color:transparent;"></i>
+                            </div>
+
                             <div class="form-group" *ngFor="let filterGroup of availableFilters">
                                 <div *ngIf="filterGroup.name">
                                     <label>{{ "FILTERS." + filterGroup.name | translate }}</label>
@@ -81,6 +85,18 @@
                                                         <span *ngIf="filter.name && filter.name.length > 1">{{ filter.name }} ({{filter.count}})</span>
                                                     </span>
                                                 </label>
+                                                <ul *ngIf="filter.children" class="list-group list-group-child">
+                                                    <li class="list-group-item" *ngFor="let child of filter.children">
+                                                        <label class="custom-control custom-checkbox">
+                                                            <input (click)="toggleFilter(child.efq, filterGroup.name)" type="checkbox" class="custom-control-input">
+                                                            <span class="custom-control-indicator"></span>
+                                                            <span class="custom-control-description">   
+                                                                <span *ngIf="child.name && child.name.length < 2">{{ filterNameMap['collectiontypes'] && filterNameMap['collectiontypes'][child.name] }} ({{child.count}})</span>
+                                                                <span *ngIf="child.name && child.name.length > 1">{{ child.name }} ({{child.count}})</span>
+                                                            </span>
+                                                        </label>
+                                                    </li>
+                                                </ul>
                                             </li>
                                         </ul>
                                     </div>

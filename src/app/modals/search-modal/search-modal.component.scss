@@ -114,3 +114,13 @@ input[type=number] {
         cursor: pointer;
     }
 }
+
+.list-group {
+    display: block;
+}
+
+.list-group-child, .form-card .list-group-child {
+    max-height: none !important;
+    overflow: visible;
+    display: block;
+}
