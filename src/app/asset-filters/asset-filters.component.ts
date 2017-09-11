@@ -22,6 +22,7 @@ export class AssetFilters {
   public showAdvancedModal: boolean = false
   private subscriptions: Subscription[] = []
   private filterDate: boolean = false
+  private filterNameMap: any = {}
 
   errors = {}
   results = []
@@ -62,17 +63,6 @@ export class AssetFilters {
 
   private dateError: boolean = false; 
 
-  private filterNameMap: any = {
-    "collectiontypes" : {
-      1 : "Artstor Digital Library",
-      2 : "Institution Collections",
-      3 : "Private Collections",
-      4 : "Institution Collections",
-      5 : "Open Collections",
-      6 : "Private Collections"
-    }
-  }
-
   // TypeScript public modifiers
   constructor(
     private _filters: AssetFiltersService,
@@ -86,6 +76,8 @@ export class AssetFilters {
 
 
   ngOnInit() {
+
+    this.filterNameMap = this._filters.getFilterNameMap()
 
     // Read filters from URL
     this.subscriptions.push(

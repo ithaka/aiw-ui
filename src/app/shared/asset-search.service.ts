@@ -41,6 +41,58 @@ export class AssetSearchService {
   ) {}
 
   /**
+   * Uses wildcard search to retrieve filters
+   */
+  public getFacets() {
+
+    let options = new RequestOptions({
+      withCredentials: true
+    });
+
+    let query = {
+      "limit": 0,
+      "start": 1,
+      "content_types": [
+        "art"
+      ],
+      // "query": "*",
+      "hier_facet_fields2": [
+      {
+        "field": "hierarchies",
+        "hierarchy": "artstor-geography",
+        "look_ahead": 2,
+        "look_behind": -10,
+        "d_look_ahead": 1
+      }
+    ],  
+      "facet_fields" :
+      [
+        {
+          "name" : "collectiontypes",
+          "mincount" : 1,
+          "limit" : 10
+        },
+        // Limited to 16 classifications (based on the fact that Artstor has 16 classifications)
+        {
+          "name" : "artclassification_str",
+          "mincount" : 1,
+          "limit" : 16
+        },
+        {
+          "name" : "artcollectiontitle_str",
+          "mincount" : 1,
+          "limit" : 100
+        }
+      ],
+    };
+    
+    return this.http.post(this._auth.getSearchUrl(), query, options)
+      .map(res => {
+        return res.json ? res.json() : {}
+      })
+  }
+
+  /**
    * Search assets service
    * @param term          String to search for.
    * @param filters       Array of filter objects (with filterGroup and filterValue properties)

@@ -336,6 +336,7 @@
   "FILTERS" : {
     "artcollectiontitle_str" : "Collection",
     "artclassification_str" : "Classification",
+    "artstor-geography" : "Geography",
     "classification" : "Classification",
     "geography" : "Geography",
     "collTypes" : "Collection Type",

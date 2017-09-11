@@ -1,4 +1,3 @@
-
 import { ActivatedRoute, Router } from '@angular/router';
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { Angulartics2 } from 'angulartics2/dist';
@@ -18,7 +17,8 @@ export class SearchModal implements OnInit {
   @Output()
   private closeModal: EventEmitter<any> = new EventEmitter();
   
-  public fields = [];
+  public fields = []
+  private filterNameMap: any = {}
 
   public geographyFields = [
     {name: 'North America'},
@@ -47,7 +47,9 @@ export class SearchModal implements OnInit {
     'endEra' : 'CE'
   }
 
+  // legacy
   private termsList: any = {};
+  // legacy
   private colTree: any = [
     {
       id: 'allART',
@@ -60,15 +62,19 @@ export class SearchModal implements OnInit {
       collections: []
     }
   ];
-  private instName: string = "";
-  private instCollections: any[] = [];
-  private filterSelections: any[] = [];
+  private instName: string = ""
+  private instCollections: any[] = []
+  private filterSelections: any[] = []
+
+  // Filters
+  private availableFilters: any[] = []
 
   // Search query trasnformation logic is abstracted to a utility
   private queryUtil: SearchQueryUtil = new SearchQueryUtil()
 
   // Flag while transitioning to Solr search
   private hideLegacyFilters: boolean
+  private loadingFilters: boolean
 
   constructor(  
         private _assets: AssetService, 
@@ -78,13 +84,60 @@ export class SearchModal implements OnInit {
         private route: ActivatedRoute,
         private _analytics: AnalyticsService,
         private angulartics: Angulartics2,
-        private _auth: AuthService
+        private _auth: AuthService,
+        // Solr Search service
+        private _assetSearch: AssetSearchService,
+        private _assetFilters: AssetFiltersService
       ) { 
     
     // Setup two query fields
     this.advanceQueries.push(Object.assign({}, this.advQueryTemplate));
     this.advanceQueries.push(Object.assign({}, this.advQueryTemplate));
-    
+  }
+
+  ngOnInit() { 
+    this.filterNameMap = this._filters.getFilterNameMap()
+    document.body.style.overflow = 'hidden';
+
+    // Pull in filterFields
+    if (this._auth.featureFlags['solrSearch']) {
+      // New search filter map
+      this.fields = this._search.filterFields
+      this.hideLegacyFilters = true
+      this.loadingFilters = true
+      this.loadFilters()
+    } else {
+      // Old search filter map
+      this.fields = this._assets.filterFields
+      this.hideLegacyFilters = false
+      this.legacyLoadFilters()
+    }
+  }
+
+  /**
+   * Load filters (Geo, Collection, Collection Type)
+   */
+  private loadFilters() : void {
+    this._assetSearch.getFacets().take(1)
+      .subscribe(data => {
+        // Process through "facets"
+        for (let facet in data['facets']) {
+          this.availableFilters.push(data['facets'][facet])
+        }
+        // Process "hierarchies2"
+        for (let hierFacet in data['hierarchies2']) {
+          let topObj = this._assetFilters.generateHierFacets(data['hierarchies2'][hierFacet].children, 'geography')
+          this.availableFilters.push({ name: "geography", values: topObj })
+        }
+        this.loadingFilters = false
+        console.log(this.availableFilters)
+      })
+  }
+
+  /**
+   * Depracated once new search launches
+   */
+  private legacyLoadFilters() : void {
     // Get GeoTree and Classifications
     this._assets.loadTermList( )
           .then((res) => {
@@ -115,22 +168,6 @@ export class SearchModal implements OnInit {
         ).catch(function(err) {
           console.log(err);
         });
-  }
-
-  ngOnInit() { 
-    document.body.style.overflow = 'hidden';
-
-
-    // Pull in filterFields
-    if (this._auth.featureFlags['solrSearch']) {
-      // New search filter map
-      this.fields = this._search.filterFields
-      this.hideLegacyFilters = true
-    } else {
-      // Old search filter map
-      this.fields = this._assets.filterFields
-      this.hideLegacyFilters = false
-    }
   }
 
   private close(): void {
