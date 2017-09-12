@@ -56,19 +56,19 @@
                         <i id="genImgURLlink" class="icon icon-share-white" ></i>
                     </button>
                     <!--Download dropdown options-->
-                    <div ngbDropdown class="d-inline-block" *ngIf="assets[0].downloadLink && user.isLoggedIn">
-                        <button class="btn btn-secondary" id="dropdownBasic1" ngbDropdownToggle>
+                    <div ngbDropdown class="dropdown d-inline-block" *ngIf="assets[0].downloadLink && user.isLoggedIn">
+                        <button ngbDropdownToggle class="btn btn-secondary" id="dropdownBasic1" >
                             {{ 'ASSET_PAGE.BUTTONS.DOWNLOAD' | translate}} <i id="downloadAssetLink" class="icon icon-download" ></i>
                         </button>
-                        <div aria-labelledby="dropdownBasic1">
+                        <div class="dropdown-menu" aria-labelledby="dropdownBasic1">
                              <a class="dropdown-item" download
                                 [attr.href]="downloadAuth() && !assets[0].disableDownload ? assets[0].downloadLink : null"
                                 (click)="downloadAuth() && !assets[0].disableDownload ? null : showAgreeModal = true; _analytics.directCall('download_image');"
                                 [class.disabled]="assets[0].disableDownload"
                                 title="{{ assets[0].disableDownload ? 'Image is not available for download.' : 'Image download'}}">
-                                Full Image</a>
-                            <a class="dropdown-item" href="#">
-                                Current View</a>
+                                Download Full</a>
+                            <a id="downloadViewViaAssetViewer" download class="dropdown-item" (click)="someshit()">
+                                Download View</a>
                         </div>
                     </div>
                     <!--False door button if user is not logged in-->
