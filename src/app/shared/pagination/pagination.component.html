@@ -21,7 +21,7 @@
             <span class="sr-only">Next</span>
         </button>
     </li>
-    <li class="page-item">
+    <li class="page-item" *ngIf="!solrFlag">
         <button class="page-link" (click)="goToPage.emit(pageObj.totalPages)" [disabled]="!pageObj.currentPage || pageObj.currentPage >= pageObj.totalPages" title="Last" aria-label="Last">
             <span aria-hidden="true">&#10095;|</span>
             <span class="sr-only">Last</span>
