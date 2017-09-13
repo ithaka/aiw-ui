@@ -56,6 +56,7 @@ export class AssetViewerComponent implements OnInit, OnDestroy, AfterViewInit {
     // private showCaption: boolean = true;
 
     private kalturaUrl: string;
+    private osdViewer: any;
 
     constructor(private _assets: AssetService, private _auth: AuthService, private http: Http) {
         
@@ -150,7 +151,7 @@ export class AssetViewerComponent implements OnInit, OnDestroy, AfterViewInit {
         this.isOpenSeaDragonAsset = true;
         // OpenSeaDragon Initializer
         let id =  this.asset.id + '-' + this.index;
-        var viewer = new OpenSeadragon({
+        this.osdViewer = new OpenSeadragon({
             id: 'osd-' + id,
             // prefix for Icon Images
             prefixUrl: 'assets/img/osd/',
@@ -171,29 +172,47 @@ export class AssetViewerComponent implements OnInit, OnDestroy, AfterViewInit {
         });
 
         // ---- Use handler in case other error crops up
-        viewer.addOnceHandler('open-failed', () => {
+        this.osdViewer.addOnceHandler('open-failed', () => {
             console.warn("Opening source failed");
             this.mediaLoadingFailed = true;
-            viewer.destroy();
+            this.osdViewer.destroy();
         });
 
-        viewer.addHandler('zoom', (value) => {
+        this.osdViewer.addHandler('pan', (value) => {
+            // Save viewport pan for downloading the view
+            this.asset.viewportDimensions.center = value.center
+        });
+
+        this.osdViewer.addHandler('zoom', (value) => {
             this.lastZoomValue = value.zoom;
+            
+            // Save viewport values for downloading the view
+            this.asset.viewportDimensions.rect = this.osdViewer.viewport.getBounds(true);
+            this.asset.viewportDimensions.containerSize = this.osdViewer.viewport.containerSize
+            this.asset.viewportDimensions.contentSize = this.osdViewer.viewport._contentSize
+            this.asset.viewportDimensions.zoom = value.zoom
         });
 
-        viewer.addOnceHandler('tile-load-failed', () => {
+        this.osdViewer.addOnceHandler('tile-load-failed', () => {
             console.warn("Loading tiles failed");
             this.mediaLoadingFailed = true;
-            viewer.destroy();
+            this.osdViewer.destroy();
         });
 
-        viewer.addOnceHandler('ready', () => {
+        this.osdViewer.addOnceHandler('ready', () => {
             console.info("Tiles are ready");
             this.openSeaDragonReady = true;
         });
 
-        if (viewer && viewer.ButtonGroup) {
-            viewer.ButtonGroup.element.addClass('button-group');
+        // this.osdViewer.addHangler('open', (event) => {
+        //     var img = this.osdViewer.drawer.canvas.toDataURL("image/png");
+        //     console.log(img)
+        //     var downloadlink = document.getElementById("downloadViewViaAssetViewer");
+        //     downloadlink['href'] = img;
+        // })
+
+        if (this.osdViewer && this.osdViewer.ButtonGroup) {
+            this.osdViewer.ButtonGroup.element.addClass('button-group');
         }
     }
 

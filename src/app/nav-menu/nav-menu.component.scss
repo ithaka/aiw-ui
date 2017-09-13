@@ -133,17 +133,6 @@ $navBarPad: 0.5rem;
         flex-direction: column;
     }
 }
-
-.dropdown-menu {
-    border: none;
-    box-shadow: none;
-
-    @media (min-width: $phone) {
-        border: 1px solid rgba(0, 0, 0, 0.15);
-        box-shadow: 0px 2px 3px 0px rgba(0, 0, 0, 0.2);
-    }
-}
-
 .navbar-toggleable-sm {
     @media (min-width: $phone) {
         flex-direction: column;
