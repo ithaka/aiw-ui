@@ -22,7 +22,12 @@ export class Asset {
   // Not reliably available
   collectionId: number
 
-  viewportDimensions: any = {}
+  viewportDimensions: {
+      contentSize?: any,
+      zoom?: number,
+      containerSize?: any,
+      center?: any
+  } = {}
 
   private metadataLoaded = false;
   private imageSourceLoaded = false;
