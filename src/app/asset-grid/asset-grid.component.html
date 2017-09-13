@@ -58,7 +58,7 @@
             <!--<span class="page-size">{{ pagination.pageSize }}</span>-->
         </div>
         <div *ngIf="!reorderMode" class="col-sm-4 col-md-4 col-lg-3 text-right grid-pagination-bar">
-            <pagination [pageObj]="pagination" (goToPage)="goToPage($event)">
+            <pagination [pageObj]="pagination" [solrFlag]="solrSearch" (goToPage)="goToPage($event)">
             </pagination>
         </div>
     </div>
@@ -71,12 +71,15 @@
 
             <!--Display Thumbnails  -->
             <div *ngIf="!reorderMode" id="assetThumbnailsRow" class="row no-gutters">
-                <div *ngIf="!isLoading && (totalAssets == '0') && (!results || results.length < 1) && (searchError.length < 1)" class="alert alert-warning">
+                <div *ngIf="!isLoading && (totalAssets == '0') && (!results || results.length < 1) && (searchError.length < 1) && (searchLimitError.length < 1)" class="alert alert-warning">
                     <b>Unable to find any assets</b><br/>
                     A less specific query might be able to find what you are looking for.
                 </div>
-                <div *ngIf="!isLoading && searchError.length > 0" class="alert alert-danger">
+                <div *ngIf="!isLoading && (searchError.length > 0) && (searchLimitError.length < 1)" class="alert alert-danger">
                     {{ searchError }}
+                </div>
+                <div *ngIf="!isLoading && (searchError.length < 1) && (searchLimitError.length > 0)" class="alert alert-danger">
+                    {{ searchLimitError }}
                 </div>
                 <div class="" [ngClass]="largeThmbView ? 'col-sm-12 col-md-6 col-lg-4' : 'col-sm-6 col-md-3 col-lg-2'" *ngFor="let asset of results">
                     <a class="card card--asset" [attr.data-id]="asset.objectId" [ngClass]="{'selected': ( isSelectedAsset(asset) > -1 ), 'lrgThmb': largeThmbView }" [routerLink]="editMode ? ['./'] : ['/asset', asset.objectId ? asset.objectId : asset.artstorid]" [queryParams]="asset.iapFlag > 0 ? { iap: 'true' } : {}" (click)="selectAsset(asset)">
@@ -87,12 +90,15 @@
 
             <!--Sortable Thumbails-->
             <div *ngIf="reorderMode" id="assetThumbnailsRow" class="row no-gutters" dnd-sortable-container [sortableData]="allResults">
-                <div *ngIf="!isLoading && (totalAssets == '0') && (!results || results.length < 1) && (searchError.length < 1)" class="alert alert-warning">
+                <div *ngIf="!isLoading && (totalAssets == '0') && (!results || results.length < 1) && (searchError.length < 1) && (searchLimitError.length < 1)" class="alert alert-warning">
                     <b>Unable to find any assets</b><br/>
                     A less specific query might be able to find what you are looking for.
                 </div>
-                <div *ngIf="!isLoading && searchError.length > 0" class="alert alert-danger">
+                <div *ngIf="!isLoading && (searchError.length > 0) && (searchLimitError.length < 1)" class="alert alert-danger">
                     {{ searchError }}
+                </div>
+                <div *ngIf="!isLoading && (searchError.length < 1) && (searchLimitError.length > 0)" class="alert alert-danger">
+                    {{ searchLimitError }}
                 </div>
                 <div class="col-sm-4 col-md-2 col-lg-1 draggable" *ngFor="let asset of results; let i = index" dnd-sortable [dragEnabled]="reorderMode && !isLoading" [sortableIndex]="i" (onDragEnd)="orderChanged = true">
                     <div class="card card--asset" [ngClass]="{ 'lrgThmb': largeThmbView }">

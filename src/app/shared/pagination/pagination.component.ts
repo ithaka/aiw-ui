@@ -9,6 +9,7 @@ import { EventEmitter } from '@angular/common/src/facade/async';
 export class PaginationComponent implements OnInit {
   private pageValueOnKeyPress: number;
   @Input() pageObj: any;
+  @Input() solrFlag: boolean;
 
   @Output() goToPage: EventEmitter<any> = new EventEmitter();
 

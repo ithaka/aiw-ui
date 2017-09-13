@@ -42,10 +42,14 @@ export class AssetGrid implements OnInit, OnDestroy {
   // Default show as loading until results have update
   private isLoading: boolean = true;
   private searchError: string = "";
+  private searchLimitError: string = "";
 
   private searchTerm: string = '';
   private totalAssets: string = '';
   private searchInResults: boolean = false;
+
+  // SOLR search flag
+  private solrSearch: boolean = false;
 
   @Input()
   private actionOptions: any = {};
@@ -133,6 +137,13 @@ export class AssetGrid implements OnInit, OnDestroy {
             this.activeSort.label = 'Date';
           }
         }
+
+        if( params['featureFlag'] && (params['featureFlag'] === 'solrSearch') ){
+          this.solrSearch = true;
+        }
+        else{
+          this.solrSearch = false;
+        }
         
         // if(params['igId'] && !params['currentPage']){
         //   this.editMode = false;
@@ -162,12 +173,18 @@ export class AssetGrid implements OnInit, OnDestroy {
       this._assets.allResults.subscribe(
         (allResults) => {
           // Update results array
-          this.searchError = ''
+          this.searchError = '';
+          this.searchLimitError = '';
 
           // Server error handling
           if (allResults === null) {
             this.isLoading = false;
             this.searchError = "There was a server error loading your search. Please try again later.";
+            return;
+          }
+          else if(allResults.errors && allResults.errors[0] && (allResults.errors[0] === 'Too many rows requested')){
+            this.isLoading = false;
+            this.searchLimitError = "Sorry, these results cannot be displayed. In order to keep things quick, Artstor does not show more than 1500 results for any search. If you haven't found what you are looking for, try using advanced search.";
             return;
           }
           
