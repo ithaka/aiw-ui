@@ -187,7 +187,6 @@ export class AssetViewerComponent implements OnInit, OnDestroy, AfterViewInit {
             this.lastZoomValue = value.zoom;
             
             // Save viewport values for downloading the view
-            this.asset.viewportDimensions.rect = this.osdViewer.viewport.getBounds(true);
             this.asset.viewportDimensions.containerSize = this.osdViewer.viewport.containerSize
             this.asset.viewportDimensions.contentSize = this.osdViewer.viewport._contentSize
             this.asset.viewportDimensions.zoom = value.zoom
