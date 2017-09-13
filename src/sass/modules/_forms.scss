@@ -86,6 +86,12 @@ button.dropdown-item {
     }
 }
 
+.dropdown-item {
+    & .icon {
+        vertical-align: middle;
+    }
+}
+
 // Style untouched: Safari fix
 select.ng-untouched,
 option.placeholder {
