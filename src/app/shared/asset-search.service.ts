@@ -121,13 +121,6 @@ export class AssetSearchService {
     // To-do: break dateObj out of available filters
     let dateFacet = this._filters.getAvailable()['dateObj'];
 
-    if (dateFacet.modified) {
-      earliestDate = dateFacet.earliest.date;
-      earliestDate = (dateFacet.earliest.era == 'BCE') ? (parseInt(earliestDate) * -1).toString() : earliestDate.toString();
-
-      latestDate = dateFacet.latest.date;
-      latestDate = (dateFacet.latest.era == 'BCE') ? (parseInt(latestDate) * -1).toString() : latestDate.toString();
-    }
     let filterArray = []
 
     let query = {
@@ -136,8 +129,8 @@ export class AssetSearchService {
       "content_types": [
         "art"
       ],
-      "startdate" : earliestDate,
-      "enddate" : latestDate,
+      // "startdate" : earliestDate,
+      // "enddate" : latestDate,
     //   "facet_fields": [
     //       "artclassification"
     //   ],
@@ -203,6 +196,16 @@ export class AssetSearchService {
     }
     
     query["filter_query"] = filterArray
+
+    if (dateFacet.modified) {
+      earliestDate = dateFacet.earliest.date;
+      earliestDate = (dateFacet.earliest.era == 'BCE') ? (parseInt(earliestDate) * -1).toString() : earliestDate.toString();
+
+      latestDate = dateFacet.latest.date;
+      latestDate = (dateFacet.latest.era == 'BCE') ? (parseInt(latestDate) * -1).toString() : latestDate.toString();
+
+      query["filter_query"].push( "year:[" + earliestDate + " TO " + latestDate + "]")
+    }
 
     if (sortIndex) {
       query["sortorder"] = "desc"
