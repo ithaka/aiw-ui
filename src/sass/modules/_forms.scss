@@ -64,6 +64,17 @@ input.form-control, select.form-control {
     border-radius: 0px;
     z-index: 2000;
     box-shadow: $dropdownShadow;
+    border: none;
+    box-shadow: none;
+
+    .open & {
+        display: block;
+    }
+
+    @media (min-width: $phone) {
+        border: 1px solid rgba(0, 0, 0, 0.15);
+        box-shadow: 0px 2px 3px 0px rgba(0, 0, 0, 0.2);
+    }
 }
 
 button.dropdown-item {
@@ -72,6 +83,12 @@ button.dropdown-item {
     &:disabled, &.disabled {
         pointer-events: none;
         color: #ddd;
+    }
+}
+
+.dropdown-item {
+    & .icon {
+        vertical-align: middle;
     }
 }
 

@@ -22,6 +22,8 @@ export class Asset {
   // Not reliably available
   collectionId: number
 
+  viewportDimensions: any = {}
+
   private metadataLoaded = false;
   private imageSourceLoaded = false;
   private dataLoadedSource = new BehaviorSubject<boolean>(false);
