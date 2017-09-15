@@ -276,7 +276,7 @@ export class AssetGrid implements OnInit, OnDestroy {
    */
   private goToPage(newPage: number) {
     // The requested page should be within the limits (i.e 1 to totalPages)
-    if((newPage >= 1) && (newPage <= this.pagination.totalPages)){
+    if( (newPage >= 1) ){
       this._assets.paginated = true;
       this.isLoading = true;
       this.pagination.currentPage = newPage;
