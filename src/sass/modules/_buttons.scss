@@ -199,6 +199,9 @@ $iconBtnSize: $btnHeight;
  }
 
  .btn-row {
+     // White space fix
+     font-size: 0px;
+
      & .btn {
          margin: 1px;
      }

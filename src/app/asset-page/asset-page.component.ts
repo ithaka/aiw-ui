@@ -453,4 +453,23 @@ export class AssetPage implements OnInit, OnDestroy {
 
         this.generatedViewURL = this.assets[0].tileSource.replace('info.json','') + xOffset +','+yOffset+','+zoomX+','+zoomY+'/'+viewX+','+viewY+'/0/native.jpg'
     }
+
+    /**
+     * Function called if not yet agreed to download image
+     * - sets url used by agree modal
+     */
+    setDownloadImage() : void {
+         this.downloadUrl = this.assets[0].downloadLink; 
+         this.showAgreeModal = true; 
+         this._analytics.directCall('download_image');
+    }
+
+    /**
+     * Function called if not yet agreed to download image view
+     * - sets url used by agree modal
+     */
+    setDownloadView() : void {
+         this.downloadUrl = this.generatedViewURL; 
+         this.showAgreeModal = true;
+    }
 }
