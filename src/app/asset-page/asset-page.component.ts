@@ -48,6 +48,8 @@ export class AssetPage implements OnInit, OnDestroy {
     private showCopyUrl: boolean = false
     private generatedImgURL: string = ''
     private generatedViewURL: string = ''
+    // Used for agree modal input, changes based on selection
+    private downloadUrl: string = ''
     private prevRouteParams: any = []
     private collectionName: string = ''
 

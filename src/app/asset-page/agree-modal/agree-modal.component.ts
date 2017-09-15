@@ -16,7 +16,7 @@ export class AgreeModalComponent implements OnInit {
   @Output()
   downloadAsset = new EventEmitter();
   @Input()
-  asset: Asset;
+  assetUrl: string;
 
   constructor(private _auth: AuthService) { }
 
