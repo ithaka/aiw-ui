@@ -120,11 +120,16 @@ select.form-control {
     }
 }
 
-rl-tag-input, rl-tag-input-item, .ng2-tag-input-field {
+rl-tag-input, rl-tag-input-item, .ng2-tag-input-field, .rl-autocomplete-item {
     font-size: 12px !important;
     line-height: 36px !important;
     font-family: Graphik, Futura, Arial !important;
     color: $inputTextColor;
+}
+
+.rl-autocomplete-item {
+    height: 36px !important;
+    padding: 0px 10px !important;
 }
 
 .ng2-tag-input-field {
