@@ -15,17 +15,17 @@ import { ROUTES } from './app.routes';
 const { version: appVersion } = require('../../package.json');
 
 // Error tracking utility for sentry.io
-import * as Raven from 'raven-js';
+// import * as Raven from 'raven-js';
 
-Raven.config('https://9ef1f98534914bf6826e202370d1f627@sentry.io/209953', {
-  release: appVersion
-}).install();
+// Raven.config('https://9ef1f98534914bf6826e202370d1f627@sentry.io/209953', {
+//   release: appVersion
+// }).install();
 
-export class RavenErrorHandler implements ErrorHandler {
-  handleError(err:any) : void {
-    Raven.captureException(err);
-  }
-}
+// export class RavenErrorHandler implements ErrorHandler {
+//   handleError(err:any) : void {
+//     Raven.captureException(err);
+//   }
+// }
 
 // UI modules
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
@@ -33,7 +33,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import {LockerModule, Locker, LockerConfig} from 'angular2-locker'
 import { Angulartics2Module, Angulartics2GoogleAnalytics } from 'angulartics2';
 import { TranslateModule, TranslateStaticLoader, TranslateLoader } from 'ng2-translate';
-import { RlTagInputModule } from 'angular2-tag-input';
+import { RlTagInputModule } from 'angular2-tag-autocomplete';
 import { Ng2CompleterModule } from 'ng2-completer';
 
 // Directives
@@ -120,8 +120,8 @@ const APP_PROVIDERS = [
   TagsService,
   ToolboxService,
   LegacyRouteResolver,
-  Title,
-  { provide: ErrorHandler, useClass: RavenErrorHandler }
+  Title
+  // { provide: ErrorHandler, useClass: RavenErrorHandler }
   // { provide: RouteReuseStrategy, useClass: CustomReuseStrategy } // to be implemented later
 ];
 
