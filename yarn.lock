@@ -224,9 +224,9 @@ angular2-moment@^1.2.0:
   dependencies:
     moment "^2.16.0"
 
-angular2-tag-input@^1.2.3:
-  version "1.2.3"
-  resolved "https://registry.yarnpkg.com/angular2-tag-input/-/angular2-tag-input-1.2.3.tgz#3fb6be73bd924570b13f3828f3f14c825592eca7"
+angular2-tag-autocomplete@^1.2.4:
+  version "1.2.4"
+  resolved "https://registry.yarnpkg.com/angular2-tag-autocomplete/-/angular2-tag-autocomplete-1.2.4.tgz#c2176ca0bbede15d18eb0d93806b00dd8ee76b56"
 
 angular2-template-loader@^0.5.0:
   version "0.5.0"
