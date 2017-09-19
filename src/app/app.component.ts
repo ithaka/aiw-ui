@@ -21,7 +21,6 @@ import { AppState } from './app.service';
   ],
   template: `
     <a (click)="findMainContent()" (keydown.enter)="findMainContent()" tabindex="1" class="sr-only sr-only-focusable">Skip to main content</a>
-    <ang-sky-banner *ngIf="showSkyBanner" [textValue]="'BETA_SKY_BANNER.MESSAGE' | translate" (closeBanner)="showSkyBanner = false"></ang-sky-banner>
     <nav-bar></nav-bar>
 
     <main tabindex="-1">
