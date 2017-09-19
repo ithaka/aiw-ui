@@ -65,7 +65,6 @@ export class AssetService {
     private searchSubscription: Subscription;
 
      public filterFields = [
-        {name: "In any field", value: "all"},
         {name: "Creator", value: "100" },
         {name: "Title", value: "101" },
         {name: "Location", value: "102" },
