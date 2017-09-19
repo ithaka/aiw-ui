@@ -140,6 +140,11 @@ export class AssetService {
         if (resultObj.count) {
           totalPages = Math.ceil( resultObj.count / this.urlParams.pageSize );
         }
+        
+        // Retain total pages if results limit exceeds
+        if(resultObj.errors && resultObj.errors[0] && (resultObj.errors[0] === 'Too many rows requested')){
+            totalPages = this.paginationValue.totalPages;
+        }
 
         // Update pagination object
         let paginationValue = {
