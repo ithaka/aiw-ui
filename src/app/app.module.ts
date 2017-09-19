@@ -120,7 +120,7 @@ const APP_PROVIDERS = [
   TagsService,
   ToolboxService,
   LegacyRouteResolver,
-  Title
+  Title,
   { provide: ErrorHandler, useClass: RavenErrorHandler }
   // { provide: RouteReuseStrategy, useClass: CustomReuseStrategy } // to be implemented later
 ];
