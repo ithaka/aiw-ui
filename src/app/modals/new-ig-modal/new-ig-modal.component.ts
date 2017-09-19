@@ -52,6 +52,8 @@ export class NewIgModal implements OnInit {
 
   private util: IgFormUtil = new IgFormUtil()
 
+  private tagSuggestions: string[] = []
+
   constructor(
       private _assets: AssetService,
       private _auth: AuthService, 
@@ -104,6 +106,43 @@ export class NewIgModal implements OnInit {
   private refreshIG(): void{
     this.igReloadTriggered.emit()
     this.closeModal.emit()
+  }
+
+  // There must be a more Angular way to handle this debounce
+  private tagSuggestTerm: string = ''
+  private tagLastSearched: string = ''
+  private tagDebouncing: boolean = false
+
+  private getTagSuggestions(event: any) : void  {
+    this.tagSuggestTerm = event.srcElement.value
+    
+    if (!this.tagDebouncing) {
+      this.tagDebouncing = true
+
+      setTimeout(() => {
+        this.tagDebouncing = false
+
+        if (this.tagLastSearched != this.tagSuggestTerm) {
+          this.tagLastSearched = this.tagSuggestTerm
+
+          this._group.getTagSuggestions(this.tagSuggestTerm)
+          .take(1)
+          .subscribe(
+            data => {
+              if (data.success) {
+                this.tagSuggestions = data.tags
+                // Trigger tag input to re-assess autocomplete array
+                // event.srcElement.dispatch(new Event('change'))
+              }
+            },
+            err => {
+              console.error(err)
+            }
+          )
+        }
+      }, 700)
+    }
+    
   }
 
   /**

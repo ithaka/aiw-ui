@@ -281,9 +281,9 @@
       "ALT_TEXT": "The Andy Warhol Foundation for the Visual Arts: Oeuvre"
     },
     "AD": {
-      "LINK": "http://support.artstor.org/?page_id=37",
-      "IMG_SOURCE": "/assets/img/promo-webinar.jpg",
-      "ALT_TEXT": "Welcome to the new Artstor Digital Library! Check out what's new."
+      "LINK": "http://support.artstor.org/?article=quiz-mode-in-fullscreen",
+      "IMG_SOURCE": "/assets/img/promo-quiz.jpg",
+      "ALT_TEXT": "Test yourself in quiz mode."
     },
     "QUESTIONS": {
       "HEADING": "Questions",
