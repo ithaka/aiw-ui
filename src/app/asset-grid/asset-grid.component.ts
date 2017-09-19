@@ -45,6 +45,7 @@ export class AssetGrid implements OnInit, OnDestroy {
   private searchLimitError: string = "";
 
   private searchTerm: string = '';
+  private formattedSearchTerm: string = '';
   private totalAssets: string = '';
   private searchInResults: boolean = false;
 
@@ -172,6 +173,8 @@ export class AssetGrid implements OnInit, OnDestroy {
     this.subscriptions.push(
       this._assets.allResults.subscribe(
         (allResults) => {
+          // Prep display of search term next to results count
+          this.formatSearchTerm(this.searchTerm)
           // Update results array
           this.searchError = '';
           this.searchLimitError = '';
@@ -459,7 +462,7 @@ export class AssetGrid implements OnInit, OnDestroy {
   /**
    * Format the search term to display advance search queries nicely
    */
-  private formatSearchTerm(query: string) : string {
+  private formatSearchTerm(query: string) : void {
     let fQuery = '<b>' + query;
     // Cleanup filter pipes
     // fQuery = fQuery.replace(/\|[0-9]{3}/g, );
@@ -476,7 +479,8 @@ export class AssetGrid implements OnInit, OnDestroy {
     fQuery = fQuery.replace(/(#or,)/g, ' or <b>');
     fQuery = fQuery.replace(/(#and,)/g, ' and <b>');
     fQuery = fQuery.replace(/(#not,)/g, ' not <b>');
-    return fQuery;
+    
+    this.formattedSearchTerm = fQuery;
   }
 
   /**
