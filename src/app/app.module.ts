@@ -15,17 +15,17 @@ import { ROUTES } from './app.routes';
 const { version: appVersion } = require('../../package.json');
 
 // Error tracking utility for sentry.io
-// import * as Raven from 'raven-js';
+import * as Raven from 'raven-js';
 
-// Raven.config('https://9ef1f98534914bf6826e202370d1f627@sentry.io/209953', {
-//   release: appVersion
-// }).install();
+Raven.config('https://9ef1f98534914bf6826e202370d1f627@sentry.io/209953', {
+  release: appVersion
+}).install();
 
-// export class RavenErrorHandler implements ErrorHandler {
-//   handleError(err:any) : void {
-//     Raven.captureException(err);
-//   }
-// }
+export class RavenErrorHandler implements ErrorHandler {
+  handleError(err:any) : void {
+    Raven.captureException(err);
+  }
+}
 
 // UI modules
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
@@ -121,7 +121,7 @@ const APP_PROVIDERS = [
   ToolboxService,
   LegacyRouteResolver,
   Title
-  // { provide: ErrorHandler, useClass: RavenErrorHandler }
+  { provide: ErrorHandler, useClass: RavenErrorHandler }
   // { provide: RouteReuseStrategy, useClass: CustomReuseStrategy } // to be implemented later
 ];
 
