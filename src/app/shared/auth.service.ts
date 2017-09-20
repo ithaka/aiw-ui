@@ -488,7 +488,7 @@ export class AuthService implements CanActivate {
     }
 
     getInstitutions() {
-        let url = this.getHostname() + '/api/institutions?_method=ShibbolethOnly';
+        let url = this.getHostname() + '/api/secure/institutions?_method=ShibbolethOnly';
         
         return this.http
             .get(url)

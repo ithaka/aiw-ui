@@ -65,7 +65,6 @@ export class AssetService {
     private searchSubscription: Subscription;
 
      public filterFields = [
-        {name: "In any field", value: "all"},
         {name: "Creator", value: "100" },
         {name: "Title", value: "101" },
         {name: "Location", value: "102" },
@@ -1012,7 +1011,7 @@ export class AssetService {
         let options = new RequestOptions({ withCredentials: true });
         // Returns all of the collections names
         return this.http
-            .get(this._auth.getUrl() + '/institutions/', options)
+            .get(this._auth.getUrl(true) + '/institutions/', options)
             .toPromise()
             .then(this.extractData)
             .then((data) => {

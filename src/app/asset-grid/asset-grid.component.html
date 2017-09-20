@@ -35,7 +35,7 @@
                         </div>
                     </div>
 
-                    <div class="number-results" *ngIf="!isLoading">{{ totalAssets }}{{ totalAssets == 2000 ? '+' : '' }} results  <span *ngIf="searchTerm">for <span [innerHtml]="formatSearchTerm(searchTerm)"></span></span></div>
+                    <div class="number-results" *ngIf="!isLoading">{{ totalAssets }}{{ totalAssets == 2000 ? '+' : '' }} results  <span *ngIf="searchTerm">for <span [innerHtml]="formattedSearchTerm"></span></span></div>
                     <!--<div class="search-in-results" *ngIf="allowSearchInRes"><input type="checkbox" id="searchInResChkBx" [(ngModel)]="searchInResults" (change)="updateSrchInRes()" /> <label for="searchInResChkBx">Search within results</label></div>-->
                 </div>
                 <div class="col-12 pb-3">
