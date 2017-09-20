@@ -137,6 +137,7 @@ rl-tag-input-item {
 .rl-autocomplete-item {
     height: 36px !important;
     padding: 0px 10px !important;
+    white-space: nowrap !important;
 }
 
 .ng2-tag-input-form {
@@ -175,6 +176,8 @@ rl-tag-input-item {
 rl-tag-input-autocomplete {
     max-height: 300px;
     overflow-y: auto;
+    width: auto;
+    min-width: 200px;
 }
 
 .ng2-tag-input-remove {
