@@ -54,6 +54,7 @@
             <rl-tag-input id="igTagInput" 
               [formControl]="newIgForm.controls['tags']" 
               placeholder="Add a tag..." 
+              [addOnBlur]="true"
               [autocomplete]="true"
               [autocompleteItems]="tagSuggestions"
               [autocompleteMustMatch]="false"
