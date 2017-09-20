@@ -132,6 +132,10 @@ rl-tag-input, rl-tag-input-item, .ng2-tag-input-field, .rl-autocomplete-item {
     padding: 0px 10px !important;
 }
 
+.ng2-tag-input-form {
+    display: inline-block !important;
+}
+
 .ng2-tag-input-field {
     background: transparent;
     text-align: left;
@@ -139,6 +143,9 @@ rl-tag-input, rl-tag-input-item, .ng2-tag-input-field, .rl-autocomplete-item {
     padding-left: 5px !important;
     border: 1px dotted #cdcdcd !important;
     line-height: 12px !important;
+    position: relative !important;
+    overflow: visible !important;
+    display: inline-block !important;
 
     &::-webkit-input-placeholder {
     color: $inputPlaceholderColor !important;
@@ -151,6 +158,31 @@ rl-tag-input, rl-tag-input-item, .ng2-tag-input-field, .rl-autocomplete-item {
     }
     &:-ms-input-placeholder {
     color: $inputPlaceholderColor !important;
+    }
+}
+
+.rl-tag-input-autocomplete-container {
+    display: block !important;
+}
+
+rl-tag-input-autocomplete {
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.ng2-tag-input-remove {
+    &:hover {
+        background: $red !important;
+        color: #fff !important;
+    }
+}
+
+.rl-autocomplete-item {
+    cursor: pointer;
+    pointer-events: all;
+    &:hover {
+        background: #fafafa;
+        color: $blue;
     }
 }
 
