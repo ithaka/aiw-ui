@@ -57,17 +57,17 @@ export class SearchPage implements OnInit, OnDestroy {
         // If a page number isn't set, reset to page 1!
         if (!params['currentPage']){
           params['currentPage'] = 1;
-        } 
+        }
 
         // Make a search call if there is a search term or any selected filter
         if (params["term"] || params["classification"] || params["geography"] || params["collectiontypes"]  || params["collTypes"] || params["startDate"] || params["endDate"]) {
           this._title.setTitle( 'Artstor | "'+ params["term"] + '"' )
-          this._assets.queryAll(params);
+          this._assets.queryAll(params, this._auth.featureFlags['solrSearch']);
         } else {
           this._title.setTitle( 'Artstor' )
           console.log('No search term');
           params['term'] = '*';
-          this._assets.queryAll(params);
+          this._assets.queryAll(params, this._auth.featureFlags['solrSearch']);
         }
       })
     ); 
