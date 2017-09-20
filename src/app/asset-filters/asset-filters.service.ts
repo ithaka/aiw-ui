@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs/Subject';
-import { Observable, BehaviorSubject } from 'rxjs/Rx';
+import { BehaviorSubject, Observable, Subscription } from 'rxjs/Rx';
 import { Locker } from 'angular2-locker';
 import { Http, Response, Headers, RequestOptions } from '@angular/http';
 import 'rxjs/add/operator/toPromise';
@@ -66,13 +66,15 @@ export class AssetFiltersService {
     private filterNameMap: any = {
         "collectiontypes" : {
         1 : "Artstor Digital Library",
-        // 2 : "Institution Collections",
+        2 : "Institutional Collections",
         3 : "Private Collections",
-        // 4 : "Institution Collections",
+        4 : "Institutional Collections",
         5 : "Open Collections",
         6 : "Private Collections"
         }
     }
+
+    private subscriptions: Subscription[] = []
 
     constructor(
         private locker: Locker,
@@ -80,10 +82,21 @@ export class AssetFiltersService {
         private _auth: AuthService
     ){
         this._storage = locker.useDriver(Locker.DRIVERS.LOCAL);
-        this.institution = this._storage.get('institution');
-        this.filterNameMap["collectiontypes"][2] = this.filterNameMap["collectiontypes"][4] = this.institution && this.institution.shortName ? this.institution.shortName + ' Collections' : 'Institution Collections';
-        // console.log(this.institution.shortName);
+
+        this.subscriptions.push(
+            this._auth.getInstitution().subscribe(
+                institution => {
+                    this.filterNameMap["collectiontypes"][2] = this.filterNameMap["collectiontypes"][4] = institution && institution.shortName ? institution.shortName + ' Collections' : 'Institutional Collections';
+                }
+            )
+        )
     }
+
+    ngOnDestroy() {
+        // Kill subscriptions
+        this.subscriptions.forEach((sub) => { sub.unsubscribe(); });
+    }
+
 
     public getFilterNameMap() : any {
         return this.filterNameMap
