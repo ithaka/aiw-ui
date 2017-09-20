@@ -63,12 +63,12 @@ export class AssetFiltersService {
     private institution: any = {};
 
 
-    private readonly filterNameMap: any = {
+    private filterNameMap: any = {
         "collectiontypes" : {
         1 : "Artstor Digital Library",
-        2 : "Institution Collections",
+        // 2 : "Institution Collections",
         3 : "Private Collections",
-        4 : "Institution Collections",
+        // 4 : "Institution Collections",
         5 : "Open Collections",
         6 : "Private Collections"
         }
@@ -81,6 +81,8 @@ export class AssetFiltersService {
     ){
         this._storage = locker.useDriver(Locker.DRIVERS.LOCAL);
         this.institution = this._storage.get('institution');
+        this.filterNameMap["collectiontypes"][2] = this.filterNameMap["collectiontypes"][4] = this.institution && this.institution.shortName ? this.institution.shortName + ' Collections' : 'Institution Collections';
+        // console.log(this.institution.shortName);
     }
 
     public getFilterNameMap() : any {
