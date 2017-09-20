@@ -124,7 +124,14 @@ rl-tag-input, rl-tag-input-item, .ng2-tag-input-field, .rl-autocomplete-item {
     font-size: 12px !important;
     line-height: 36px !important;
     font-family: Graphik, Futura, Arial !important;
-    color: $inputTextColor;
+}
+
+rl-tag-input-item {
+    color: #8300e0 !important;
+    cursor: pointer;
+    transition: color 0s linear;
+    background: #f8f8f8  !important;
+    border-radius: 3px;
 }
 
 .rl-autocomplete-item {
