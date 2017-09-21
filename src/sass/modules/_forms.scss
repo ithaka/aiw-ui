@@ -124,12 +124,20 @@ rl-tag-input, rl-tag-input-item, .ng2-tag-input-field, .rl-autocomplete-item {
     font-size: 12px !important;
     line-height: 36px !important;
     font-family: Graphik, Futura, Arial !important;
-    color: $inputTextColor;
+}
+
+rl-tag-input-item {
+    color: #8300e0 !important;
+    cursor: pointer;
+    transition: color 0s linear;
+    background: #f8f8f8  !important;
+    border-radius: 3px;
 }
 
 .rl-autocomplete-item {
     height: 36px !important;
     padding: 0px 10px !important;
+    white-space: nowrap !important;
 }
 
 .ng2-tag-input-form {
@@ -168,6 +176,8 @@ rl-tag-input, rl-tag-input-item, .ng2-tag-input-field, .rl-autocomplete-item {
 rl-tag-input-autocomplete {
     max-height: 300px;
     overflow-y: auto;
+    width: auto;
+    min-width: 200px;
 }
 
 .ng2-tag-input-remove {
