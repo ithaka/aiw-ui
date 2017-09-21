@@ -4,10 +4,11 @@
     <!--modal content: Is deleted, now what? -->
     <div class="modal-content">
       <div class="modal-header">
-        <h4 translate class="modal-title">Image group unavailable</h4>
+        <h4 translate class="modal-title" [innerHtml]="'NO_IG.HEADING' | translate"></h4>
       </div>
       <div class="modal-body">
-        <p>The image group you are trying to access does not exist or you don't have the access rights to view it.</p>
+        <p *ngIf="!noAccessIg" [innerHtml]="'NO_IG.NO_EXISTS' | translate"></p>
+        <p *ngIf="noAccessIg" [innerHtml]="'NO_IG.NO_ACCESS' | translate"></p>
       </div>
       <div class="modal-footer">
         <a translate class="btn btn-secondary" [routerLink]="['/browse', 'groups']">BROWSE_GROUPS</a>

@@ -54,4 +54,4 @@
 <ang-ig-download-modal *ngIf="showPptModal" (closeModal)="showPptModal = false" [ig]="ig"></ang-ig-download-modal>
 <ang-download-limit-modal *ngIf="showDownloadLimitModal" (closeModal)="showDownloadLimitModal = false" [ig]="ig"></ang-download-limit-modal>
 <ang-login-req-modal *ngIf="showLoginModal" (closeModal)="showLoginModal = false"></ang-login-req-modal>
-<ang-no-ig-modal *ngIf="showNoIgModal" (closeModal)="showNoIgModal = false"></ang-no-ig-modal>
+<ang-no-ig-modal *ngIf="showNoIgModal || showNoAccessIgModal" [noAccessIg]="showNoAccessIgModal" (closeModal)="showNoIgModal = false"></ang-no-ig-modal>
