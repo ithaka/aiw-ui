@@ -66,9 +66,7 @@ export class AssetFiltersService {
     private filterNameMap: any = {
         "collectiontypes" : {
         1 : "Artstor Digital Library",
-        2 : "Institutional Collections",
         3 : "Private Collections",
-        4 : "Institutional Collections",
         5 : "Open Collections",
         6 : "Private Collections"
         }

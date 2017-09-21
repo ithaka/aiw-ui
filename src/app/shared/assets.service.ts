@@ -35,6 +35,11 @@ export class AssetService {
     private noIGSource: BehaviorSubject<boolean> = new BehaviorSubject(this.noIGValue);
     public noIG: Observable<any> = this.noIGSource.asObservable();
 
+    //set up noIG observables
+    private noAccessIGValue: boolean = false;
+    private noAccessIGSource: BehaviorSubject<boolean> = new BehaviorSubject(this.noAccessIGValue);
+    public noAccessIG: Observable<any> = this.noAccessIGSource.asObservable();
+
     //Set up subject observable for clearing select mode
     public clearSelectMode: Subject<boolean> = new Subject();  
 
@@ -591,6 +596,7 @@ export class AssetService {
     private loadIgAssets(igId: string) {
         // Reset No IG observable
         this.noIGSource.next(false);
+        this.noAccessIGSource.next(false);
 
         // Create a request option
         let startIndex = ((this.urlParams.currentPage - 1) * this.urlParams.pageSize) + 1;
@@ -628,9 +634,12 @@ export class AssetService {
                 
             })
             .catch((error) => {
-                console.error(error);
-                if((error.status === 404) || (error.status === 403)){
-                    this.noIGSource.next(true);
+                // console.error(error)
+                if(error.status === 404){
+                    this.noIGSource.next(true)
+                }
+                else if(error.status === 403){
+                    this.noAccessIGSource.next(true)
                 }
             });
     }
@@ -642,6 +651,7 @@ export class AssetService {
     public setResultsFromIg(ig: ImageGroup): void {
         // Reset No IG observable
         this.noIGSource.next(false)
+        this.noAccessIGSource.next(false);
 
         // set up the string for calling search
         ig.count = ig.items.length

@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
 // Project Dependencies
 import { GroupService, AssetService } from './../../shared';
@@ -11,6 +11,7 @@ import { GroupService, AssetService } from './../../shared';
   ]
 })
 export class NoIgModal implements OnInit {
+  @Input() noAccessIg: boolean;
   @Output()
   closeModal: EventEmitter<any> = new EventEmitter();
 

@@ -245,6 +245,11 @@
     "HEADING": "Content Unavailable",
     "PROMPT": "If you are already <a href=\"/#/login\" class=\"link\">logged in</a>, this may be due to content limitations or your institutional access."
   },
+  "NO_IG": {
+    "HEADING": "Image group unavailable",
+    "NO_EXISTS": "The image group you are trying to access does not exist.",
+    "NO_ACCESS": "Please log in, with correct institution, to see this image group."
+  },
   "SHARE_IG_LINK_MODAL": {
     "MAIN_HEADING": "Share link to image group",
     "URL_LABEL": "Copy URL",
