@@ -459,9 +459,11 @@ export class AssetPage implements OnInit, OnDestroy {
      * - sets url used by agree modal
      */
     setDownloadImage() : void {
-         this.downloadUrl = this.assets[0].downloadLink; 
-         this.showAgreeModal = true; 
-         this._analytics.directCall('download_image');
+        this.downloadUrl = this.assets[0].downloadLink; 
+        this.showAgreeModal = true; 
+        // Track download
+        this._analytics.directCall('download_image');
+        this.angulartics.eventTrack.next({ action:"downloadAsset", properties: { category: "asset", label: this.assets[0].id }});
     }
 
     /**
@@ -469,7 +471,9 @@ export class AssetPage implements OnInit, OnDestroy {
      * - sets url used by agree modal
      */
     setDownloadView() : void {
-         this.downloadUrl = this.generatedViewURL; 
-         this.showAgreeModal = true;
+        this.downloadUrl = this.generatedViewURL; 
+        this.showAgreeModal = true;
+        // Track download
+        this.angulartics.eventTrack.next({ action:"downloadView", properties: { category: "asset", label: this.assets[0].id }});
     }
 }

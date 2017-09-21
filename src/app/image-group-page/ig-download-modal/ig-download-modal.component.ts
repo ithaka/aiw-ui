@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Http, Response, Headers, RequestOptions } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
+import { Angulartics2 } from 'angulartics2';
 
 import { AssetService, AuthService, ImageGroup } from './../../shared';
 
@@ -32,7 +33,7 @@ export class PptModalComponent implements OnInit {
   private defaultOptions = new RequestOptions({ withCredentials: true});
   // private defaultOptions = new RequestOptions({ headers: this.header, withCredentials: true});
 
-  constructor(private _assets: AssetService, private _auth: AuthService, private http: Http) { }
+  constructor(private _assets: AssetService, private _auth: AuthService, private _angulartics: Angulartics2, private http: Http) { }
 
   ngOnInit() {
     
@@ -117,6 +118,10 @@ export class PptModalComponent implements OnInit {
       .map(data => {
         return data.json() || {};
       });
+  }
+
+  trackDownload(downloadType: string) : void {
+        this._angulartics.eventTrack.next({ action: "downloadGroup" + downloadType, properties: { category: "group", label: this.ig.id }});
   }
 
 }

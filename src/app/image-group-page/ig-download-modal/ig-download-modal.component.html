@@ -21,7 +21,7 @@
             id="downloadPowerpointLink"
             [attr.href]="downloadLink"
             [attr.download]="downloadTitle" 
-            (click)="closeModal.emit()">
+            (click)="trackDownload('PPT'); closeModal.emit()">
             Download PPT 
             <!--<i id="downloadAssetLink" class="icon icon-slideshow" ></i>-->
         </a>
@@ -34,7 +34,7 @@
             id="downloadZipLink"
             [attr.href]="zipDownloadLink"
             [attr.download]="downloadTitle" 
-            (click)="closeModal.emit()">
+            (click)="trackDownload('ZIP'); closeModal.emit()">
             Download Zip 
             <!--<i id="downloadAssetLink" class="icon icon-download" ></i>-->
         </a>

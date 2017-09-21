@@ -3,6 +3,7 @@ import { Component, EventEmitter, HostListener, Input, OnInit, Output } from '@a
 import { formGroupNameProvider } from '@angular/forms/src/directives/reactive_directives/form_group_name';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs/Rx';
+import { Angulartics2 } from 'angulartics2';
 
 // Project dependencies
 import { AssetService, AuthService, GroupService, ImageGroup } from './../../shared';
@@ -60,6 +61,7 @@ export class NewIgModal implements OnInit {
       private _fb: FormBuilder, 
       private _group: GroupService,
       private _analytics: AnalyticsService,
+      private _angulartics: Angulartics2,
       private router: Router,
       private route?: ActivatedRoute
   ) {
@@ -172,6 +174,7 @@ export class NewIgModal implements OnInit {
     if(this.editIG){
       // Editing group
       this._analytics.directCall('edit_img_group')
+      this._angulartics.eventTrack.next({ action:"editGroup", properties: { category: "group", label: group.id }});
 
       group.id = this.ig.id // need this for the update call
 
@@ -200,9 +203,11 @@ export class NewIgModal implements OnInit {
       if(this.copyIG) {
         // Copying old group
         this._analytics.directCall('save_img_group_as')
+        this._angulartics.eventTrack.next({ action:"copyGroup", properties: { category: "group", label: group.id }});
       } else {
         // Create New Group
         this._analytics.directCall('save_selections_new_img_group')
+        this._angulartics.eventTrack.next({ action:"newGroup", properties: { category: "group" }});
       }
 
       // create the group using the group service
