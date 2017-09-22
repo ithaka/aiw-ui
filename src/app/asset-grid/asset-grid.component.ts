@@ -440,14 +440,15 @@ export class AssetGrid implements OnInit, OnDestroy {
    * @returns index if the asset is already selected, else returns -1
    */
   private isSelectedAsset(asset: any): number{
-    let index: number = -1;
+    let index: number = -1
+    let assetIdProperty = this._auth.featureFlags['solrSearch']? 'artstorid' : 'objectId'
     for(var i = 0; i < this.selectedAssets.length; i++){
-      if(this.selectedAssets[i].objectId === asset.objectId){
-        index = i;
-        break;
+      if(this.selectedAssets[i][assetIdProperty] === asset[assetIdProperty]){
+        index = i
+        break
       }
     }
-    return index;
+    return index
   }
 
   private convertCollectionTypes(collectionId: number) : string {

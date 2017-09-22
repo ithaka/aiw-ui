@@ -15,13 +15,15 @@ export class IgFormUtil {
    * @param currentIg The ImageGroup which is currently being edited/copied (used for preparing the access object)
    * @returns ImageGroup which can be POSTed or PUT to the groups API
    */
-  public prepareGroup(form: IgFormValue, description: string, assets: any[], user: any, currentIg?: ImageGroup): ImageGroup {
+  public prepareGroup(form: IgFormValue, description: string, assets: any[], user: any, currentIg?: ImageGroup, solrSearch?: boolean): ImageGroup {
+    let assetIdProperty = solrSearch ? 'artstorid' : 'objectId'
+
     /** format an array of asset ids out of the asset */
     let itemIds = []
     assets.forEach(
       (item) => {
-        if (item.objectId) {
-          itemIds.push(item.objectId) // sometimes this is an array of real assets
+        if (item[assetIdProperty]) {
+          itemIds.push(item[assetIdProperty]) // sometimes this is an array of real assets
         } 
         else if(item.id) {
           itemIds.push(item.id) // sometimes this is an array of real assets
