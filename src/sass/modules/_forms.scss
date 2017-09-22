@@ -77,12 +77,16 @@ input.form-control, select.form-control {
     }
 }
 
-button.dropdown-item {
+button.dropdown-item, a.dropdown-item {
     cursor: pointer;
 
     &:disabled, &.disabled {
         pointer-events: none;
-        color: #ddd;
+        color: #ccc;
+
+        & i, & .icon {
+            opacity: 0.5;
+        }
     }
 }
 

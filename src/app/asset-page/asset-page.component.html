@@ -68,10 +68,10 @@
                                 title="{{ assets[0].disableDownload ? 'Image is not available for download.' : 'Image download'}}"
                                 target="_blank">
                                 <i class="icon icon-download-black" ></i> Download File</a>
-                            <a *ngIf="assets[0].typeName() === 'image'" id="downloadViewLink" download="view.jpg" 
+                            <a id="downloadViewLink" download="view.jpg" 
                                 (click)="(downloadAuth() && !assets[0].disableDownload) ? null : setDownloadView()"
                                 class="dropdown-item"
-                                [class.disabled]="assets[0].disableDownload"
+                                [class.disabled]="assets[0].disableDownload || assets[0].typeName() !== 'image'"
                                 [attr.href]="(downloadAuth() && !assets[0].disableDownload) ? generatedViewURL : null" 
                                 target="_blank">
                                 <i class="icon icon-download-black" ></i> Download View</a>
