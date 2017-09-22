@@ -429,29 +429,32 @@ export class AssetPage implements OnInit, OnDestroy {
     }
 
     private genDownloadViewLink() : void {
-        // Full source image size (max output possible)
-        let fullWidth = this.assets[0].viewportDimensions.contentSize.x
-        let fullY = this.assets[0].viewportDimensions.contentSize.y
-        // Zoom is a factor of the image's full width
-        let zoom = this.assets[0].viewportDimensions.zoom;
-        // Viewport dimensions (size of cropped image)
-        let viewX = this.assets[0].viewportDimensions.containerSize.x
-        let viewY = this.assets[0].viewportDimensions.containerSize.y
-        // Dimensions of the source size of the cropped image
-        let zoomX = Math.floor(fullWidth/zoom)
-        let zoomY = Math.floor( zoomX * (viewY/viewX)) 
-        // Make sure zoom area is not larger than source, or else error
-        if (zoomX > fullWidth) {
-            zoomX = fullWidth;
-        }
-        if (zoomY > fullY) {
-            zoomY = fullY;
-        }
-        // Positioning of the viewport's crop
-        let xOffset = Math.floor((this.assets[0].viewportDimensions.center.x * fullWidth) - (zoomX/2));
-        let yOffset = Math.floor((this.assets[0].viewportDimensions.center.y * fullWidth) - (zoomY/2));
 
-        this.generatedViewURL = this.assets[0].tileSource.replace('info.json','') + xOffset +','+yOffset+','+zoomX+','+zoomY+'/'+viewX+','+viewY+'/0/native.jpg'
+        if(this.assets[0].typeName() === 'image'){
+            // Full source image size (max output possible)
+            let fullWidth = this.assets[0].viewportDimensions.contentSize.x
+            let fullY = this.assets[0].viewportDimensions.contentSize.y
+            // Zoom is a factor of the image's full width
+            let zoom = this.assets[0].viewportDimensions.zoom;
+            // Viewport dimensions (size of cropped image)
+            let viewX = this.assets[0].viewportDimensions.containerSize.x
+            let viewY = this.assets[0].viewportDimensions.containerSize.y
+            // Dimensions of the source size of the cropped image
+            let zoomX = Math.floor(fullWidth/zoom)
+            let zoomY = Math.floor( zoomX * (viewY/viewX)) 
+            // Make sure zoom area is not larger than source, or else error
+            if (zoomX > fullWidth) {
+                zoomX = fullWidth;
+            }
+            if (zoomY > fullY) {
+                zoomY = fullY;
+            }
+            // Positioning of the viewport's crop
+            let xOffset = Math.floor((this.assets[0].viewportDimensions.center.x * fullWidth) - (zoomX/2));
+            let yOffset = Math.floor((this.assets[0].viewportDimensions.center.y * fullWidth) - (zoomY/2));
+
+            this.generatedViewURL = this.assets[0].tileSource.replace('info.json','') + xOffset +','+yOffset+','+zoomX+','+zoomY+'/'+viewX+','+viewY+'/0/native.jpg'
+        }
     }
 
     /**
