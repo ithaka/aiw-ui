@@ -46,8 +46,8 @@ export class AssetService {
     // Pagination value observable
     private paginationValue: any = {
         totalPages: 1,
-        pageSize: 24,
-        currentPage: 1
+        size: 24,
+        page: 1
     };
     private paginationSource = new BehaviorSubject<any>(this.paginationValue);
     public pagination = this.paginationSource.asObservable();
@@ -90,8 +90,8 @@ export class AssetService {
     private urlParams: any;
     private defaultUrlParams: any = {
             term: "",
-            pageSize: 24,
-            currentPage: 1,
+            size: 24,
+            page: 1,
             startDate: 0,
             endDate: 0,
             igId: "",
@@ -142,7 +142,7 @@ export class AssetService {
         let totalPages = 1;
 
         if (resultObj.count) {
-          totalPages = Math.ceil( resultObj.count / this.urlParams.pageSize );
+          totalPages = Math.ceil( resultObj.count / this.urlParams.size );
         }
         
         // Retain total pages if results limit exceeds
@@ -153,8 +153,8 @@ export class AssetService {
         // Update pagination object
         let paginationValue = {
             totalPages: totalPages,
-            pageSize: this.urlParams.pageSize,
-            currentPage: this.urlParams.currentPage
+            size: this.urlParams.size,
+            page: this.urlParams.page
         };
         this.paginationValue = paginationValue;
         this.paginationSource.next(paginationValue);
@@ -224,11 +224,11 @@ export class AssetService {
     }
 
     public goToPage(page: number, quiet?: boolean) {
-        this.setUrlParam('currentPage', page, quiet);
+        this.setUrlParam('page', page, quiet);
     }
 
     public setPageSize(size: number) {
-        this.setUrlParam('pageSize', size);
+        this.setUrlParam('size', size);
     }
 
     private setUrlParam(key: string, value: any, quiet?: boolean) {
@@ -246,11 +246,11 @@ export class AssetService {
             }
         }
 
-        if(currentParamsObj['pageSize']){
-            currentParamsObj['pageSize'] = currentParamsObj['pageSize'].toString();
+        if(currentParamsObj['size']){
+            currentParamsObj['size'] = currentParamsObj['size'].toString();
         }
-        if(currentParamsObj['currentPage']){
-            currentParamsObj['currentPage'] = currentParamsObj['currentPage'].toString();
+        if(currentParamsObj['page']){
+            currentParamsObj['page'] = currentParamsObj['page'].toString();
         }
 
         if(!quiet){
@@ -301,8 +301,8 @@ export class AssetService {
     public loadPrevAssetPage(): void{
         let currentParamsObj: Params = Object.assign({}, this.currentLoadedParams);
         
-        if(this.currentLoadedParams.currentPage){
-            currentParamsObj['currentPage']--;
+        if(this.currentLoadedParams.page){
+            currentParamsObj['page']--;
         }
 
         this.queryAll(currentParamsObj);
@@ -311,11 +311,11 @@ export class AssetService {
     public loadNextAssetPage(): void{
         let currentParamsObj: Params = Object.assign({}, this.currentLoadedParams);
         
-        if(this.currentLoadedParams.currentPage){
-            currentParamsObj['currentPage']++;
+        if(this.currentLoadedParams.page){
+            currentParamsObj['page']++;
         }
         else{
-            currentParamsObj['currentPage'] = 2;
+            currentParamsObj['page'] = 2;
         }
         this.queryAll(currentParamsObj);
     }
@@ -335,8 +335,8 @@ export class AssetService {
     public queryAll(params: any, refresh?: boolean): void {
         // Make sure number params are parsed
         params =  Object.assign( Object.assign({}, this.defaultUrlParams), params);
-        params.pageSize = parseInt(params.pageSize);
-        params.currentPage =  parseInt(params.currentPage);
+        params.size = parseInt(params.size);
+        params.page =  parseInt(params.page);
 
         // Reset allResults
         if ((this._toolbox.compareObjects(this.currentLoadedParams, params) === true) && !refresh) {
@@ -361,8 +361,8 @@ export class AssetService {
         }
 
         // Read Pagination values
-        this.paginationValue.pageSize = parseInt(this.urlParams.pageSize);
-        this.paginationValue.currentPage =  parseInt(this.urlParams.currentPage);
+        this.paginationValue.size = parseInt(this.urlParams.size);
+        this.paginationValue.page =  parseInt(this.urlParams.page);
         this.paginationSource.next(this.paginationValue);
 
 
@@ -576,8 +576,8 @@ export class AssetService {
      * @param colId Collection Id in which the Object resides
      */
     private loadAssociatedAssets(objectId: string, colId: string) {
-        let startIndex = ((this.urlParams.currentPage - 1) * this.urlParams.pageSize) + 1;
-        this.getAssociated(objectId, colId, startIndex, this.urlParams.pageSize)
+        let startIndex = ((this.urlParams.page - 1) * this.urlParams.size) + 1;
+        this.getAssociated(objectId, colId, startIndex, this.urlParams.size)
             .then((data) => {
                 if (!data) {
                     throw new Error("No data in image group thumbnails response");
@@ -599,9 +599,9 @@ export class AssetService {
         this.noAccessIGSource.next(false);
 
         // Create a request option
-        let startIndex = ((this.urlParams.currentPage - 1) * this.urlParams.pageSize) + 1;
+        let startIndex = ((this.urlParams.page - 1) * this.urlParams.size) + 1;
 
-        let requestString: string = [this._auth.getUrl(), "imagegroup",igId, "thumbnails", startIndex, this.urlParams.pageSize, this.activeSort.index].join("/");
+        let requestString: string = [this._auth.getUrl(), "imagegroup",igId, "thumbnails", startIndex, this.urlParams.size, this.activeSort.index].join("/");
 
         this._groups.get(igId)
             .toPromise()
@@ -612,8 +612,8 @@ export class AssetService {
                 }
                 
                 data.count = data.items.length;
-                let pageStart = (this.urlParams.currentPage - 1)*this.urlParams.pageSize;
-                let pageEnd = this.urlParams.currentPage*this.urlParams.pageSize;
+                let pageStart = (this.urlParams.page - 1)*this.urlParams.size;
+                let pageEnd = this.urlParams.page*this.urlParams.size;
                 let idsAsTerm: string =  data.items.slice(pageStart,pageEnd).join('&object_id=');
 
                 let options = new RequestOptions({ withCredentials: true });
@@ -655,8 +655,8 @@ export class AssetService {
 
         // set up the string for calling search
         ig.count = ig.items.length
-        let pageStart = (this.urlParams.currentPage - 1)*this.urlParams.pageSize
-        let pageEnd = this.urlParams.currentPage*this.urlParams.pageSize
+        let pageStart = (this.urlParams.page - 1)*this.urlParams.size
+        let pageEnd = this.urlParams.page*this.urlParams.size
         let idsAsTerm: string =  ig.items.slice(pageStart,pageEnd).join('&object_id=')
 
         let options = new RequestOptions({ withCredentials: true })
@@ -712,9 +712,9 @@ export class AssetService {
     private loadCollection(colId: string) {
         let options = new RequestOptions({withCredentials: true});
         let imageSize = 0;
-        let startIndex = ((this.urlParams.currentPage - 1) * this.urlParams.pageSize) + 1;
+        let startIndex = ((this.urlParams.page - 1) * this.urlParams.size) + 1;
 
-        let requestString = [this._auth.getUrl(), 'collections', colId, 'thumbnails', startIndex, this.urlParams.pageSize, this.activeSort.index].join('/');
+        let requestString = [this._auth.getUrl(), 'collections', colId, 'thumbnails', startIndex, this.urlParams.size, this.activeSort.index].join('/');
 
         return this.http
             .get(requestString, options)
@@ -734,11 +734,11 @@ export class AssetService {
      */
     private loadCategory(catId: string): Promise<any> {
         let imageSize = 0;
-        let startIndex = ((this.urlParams.currentPage - 1) * this.urlParams.pageSize) + 1;
+        let startIndex = ((this.urlParams.page - 1) * this.urlParams.size) + 1;
         if (catId.startsWith('103')) {
             catId = this.getRegionCollection(parseInt(catId)).toString()
         }
-        let requestString = [this._auth.getUrl(), 'categories', catId, 'thumbnails', startIndex, this.urlParams.pageSize, this.activeSort.index].join('/');
+        let requestString = [this._auth.getUrl(), 'categories', catId, 'thumbnails', startIndex, this.urlParams.size, this.activeSort.index].join('/');
 
         return this.http
             .get(requestString, this.defaultOptions)
@@ -755,9 +755,9 @@ export class AssetService {
     private loadCluster(objectId: string){
         
         let options = new RequestOptions({ withCredentials: true });
-        let startIndex = ((this.urlParams.currentPage - 1) * this.urlParams.pageSize) + 1;
+        let startIndex = ((this.urlParams.page - 1) * this.urlParams.size) + 1;
 
-        let requestString = [this._auth.getUrl(), "cluster", objectId, "thumbnails", startIndex, this.urlParams.pageSize].join("/");
+        let requestString = [this._auth.getUrl(), "cluster", objectId, "thumbnails", startIndex, this.urlParams.size].join("/");
 
         this.http
             .get(requestString, options)
@@ -824,14 +824,14 @@ export class AssetService {
      * @param colId id of collection to fetch
      * @returns thumbnails of assets for a collection, and collection information
      */
-    public getCollectionThumbs(colId: string, pageNo?: number, pageSize?: number) {
+    public getCollectionThumbs(colId: string, pageNo?: number, size?: number) {
         let options = new RequestOptions({withCredentials: true});
         let imageSize = 0;
         
         if (!pageNo) { pageNo = 1; }
-        if (!pageSize) { pageSize = 72; }
+        if (!size) { size = 72; }
 
-        let requestString = [this._auth.getUrl(), 'collections', colId, 'thumbnails', pageNo, pageSize, imageSize].join('/');
+        let requestString = [this._auth.getUrl(), 'collections', colId, 'thumbnails', pageNo, size, imageSize].join('/');
 
         return this.http
             .get(requestString, options)
@@ -935,7 +935,7 @@ export class AssetService {
     private search(term: string, sortIndex) {
         let keyword = encodeURIComponent(term);
         let options = new RequestOptions({ withCredentials: true });
-        let startIndex = ((this.urlParams.currentPage - 1) * this.urlParams.pageSize) + 1;
+        let startIndex = ((this.urlParams.page - 1) * this.urlParams.size) + 1;
         let thumbSize = 1;
         let categoryId = this.urlParams['categoryId'];
         let type = categoryId ? 2 : 6;
@@ -978,7 +978,7 @@ export class AssetService {
         }
 
         return this.http
-            .get(this._auth.getUrl(true) + '/search/' + type + '/' + startIndex + '/' + this.urlParams.pageSize + '/' + sortIndex + '?' + 'type=' + type + '&kw=' + keyword + '&origKW=' + keyword + '&geoIds=' + geographyIds + '&clsIds=' + classificationIds + '&collTypes=' + colTypeIds + '&id=' + (collIds.length > 0 ? collIds : 'all') + '&name=All%20Collections&bDate=' + earliestDate + '&eDate=' + latestDate + '&dExact=&order=0&isHistory=false&prGeoId=&tn=1', options);
+            .get(this._auth.getUrl(true) + '/search/' + type + '/' + startIndex + '/' + this.urlParams.size + '/' + sortIndex + '?' + 'type=' + type + '&kw=' + keyword + '&origKW=' + keyword + '&geoIds=' + geographyIds + '&clsIds=' + classificationIds + '&collTypes=' + colTypeIds + '&id=' + (collIds.length > 0 ? collIds : 'all') + '&name=All%20Collections&bDate=' + earliestDate + '&eDate=' + latestDate + '&dExact=&order=0&isHistory=false&prGeoId=&tn=1', options);
         
     }
 
@@ -1078,12 +1078,12 @@ export class AssetService {
      * @param objectId The id of the object for which you want associated items
      * @param colId The id of the collection from which the asset came
      * @param pageNum Value for pagination
-     * @param pageSize How many thumbnails per page
+     * @param size How many thumbnails per page
      */
-    private getAssociated(objectId: string, colId: string, currentPage: number, pageSize: number) {
+    private getAssociated(objectId: string, colId: string, page: number, size: number) {
         let header = new Headers({ 'Content-Type': 'application/json' }); // ... Set content type to JSON
         let options = new RequestOptions({ headers: header, withCredentials: true }); // Create a request option
-        let requestString: string = [this._auth.getUrl(), "collaboratoryfiltering", objectId, "thumbnails", currentPage, pageSize].join("/") + "?collectionId=" + colId;
+        let requestString: string = [this._auth.getUrl(), "collaboratoryfiltering", objectId, "thumbnails", page, size].join("/") + "?collectionId=" + colId;
 
         return this.http
             .get(requestString, options)

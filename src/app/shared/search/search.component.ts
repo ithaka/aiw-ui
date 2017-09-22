@@ -18,7 +18,7 @@ export class SearchComponent implements OnInit, OnDestroy {
   private showSearchModal: boolean = false;
   private term: string;
 
-  private pageSize: number = 24;
+  private size: number = 24;
   
   // @Input()
   private searchInResults: boolean = false;
@@ -51,7 +51,7 @@ export class SearchComponent implements OnInit, OnDestroy {
     // Subscribe to pagination values
     this.subscriptions.push(
       this._assets.pagination.subscribe((pagination: any) => {
-        this.pageSize = parseInt(pagination.pageSize);
+        this.size = parseInt(pagination.size);
       })
     );
 
@@ -91,8 +91,8 @@ export class SearchComponent implements OnInit, OnDestroy {
 
     let routeParams = this.route.snapshot.params;
     let params = {
-      currentPage: 1, 
-      pageSize: this.pageSize
+      page: 1, 
+      size: this.size
     };
 
     // Maintain feature flags

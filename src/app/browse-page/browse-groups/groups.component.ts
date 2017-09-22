@@ -34,12 +34,12 @@ export class BrowseGroupsComponent implements OnInit {
 
   private pagination: {
     totalPages: number,
-    pageSize: number,
-    currentPage: number
+    size: number,
+    page: number
   } = {
     totalPages: 1,
-    pageSize: 48,
-    currentPage: 1
+    size: 48,
+    page: 1
   }
 
   private updateSearchTerm: EventEmitter<string> = new EventEmitter()
@@ -233,12 +233,12 @@ export class BrowseGroupsComponent implements OnInit {
       browseLevel = level
     }
 
-    this._groups.getAll(browseLevel, this.pagination.pageSize, page, appliedTags, searchTerm)
+    this._groups.getAll(browseLevel, this.pagination.size, page, appliedTags, searchTerm)
         .take(1).subscribe(
           (data)  => {
-            this.pagination.currentPage = page
-            this.pagination.totalPages = Math.ceil(data.total/this.pagination.pageSize) // update pagination, which is injected into pagination component
-            if (this.pagination.currentPage > this.pagination.totalPages && data.total > 0) {
+            this.pagination.page = page
+            this.pagination.totalPages = Math.ceil(data.total/this.pagination.size) // update pagination, which is injected into pagination component
+            if (this.pagination.page > this.pagination.totalPages && data.total > 0) {
               return this.goToPage(this.pagination.totalPages) // go to the last results page if they try to navigate to a page that is more than results
             }
             this._tagFilters.setFilters(data.tags, appliedTags) // give the tag service the new data
@@ -290,7 +290,7 @@ export class BrowseGroupsComponent implements OnInit {
     if (!search) {
       this._tagFilters.setFilters([], [])
       this.tags = []
-      this.pagination.currentPage = 1
+      this.pagination.page = 1
       this.pagination.totalPages = 1
       this.showSearchPrompt = true
     } else {

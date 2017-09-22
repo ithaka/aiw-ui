@@ -45,8 +45,8 @@ export class ImageGroupPPPage implements OnInit, OnDestroy {
         let id = routeParams["igId"];
         let params = Object.assign({}, routeParams);
         // If a page number isn't set, reset to page 1!
-        if (!params['currentPage']){
-          params['currentPage'] = 1;
+        if (!params['page']){
+          params['page'] = 1;
         } 
         if (id) {
           this._assets.queryAll(params);

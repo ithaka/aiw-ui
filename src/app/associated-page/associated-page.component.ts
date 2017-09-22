@@ -50,8 +50,8 @@ export class AssociatedPage implements OnInit, OnDestroy {
         this.colId = routeParams["colId"];
         let params = Object.assign({}, routeParams);
         // If a page number isn't set, reset to page 1!
-        if (!params['currentPage']){
-          params['currentPage'] = 1;
+        if (!params['page']){
+          params['page'] = 1;
         } 
         if (this.objectId && this.colId) {
           this._assets.queryAll(params);

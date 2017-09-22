@@ -67,8 +67,8 @@ export class AssetGrid implements OnInit, OnDestroy {
 
   private pagination: any = {
     totalPages: 1,
-    pageSize: 24,
-    currentPage: 1
+    size: 24,
+    page: 1
   };
   
   dateFacet = {
@@ -146,7 +146,7 @@ export class AssetGrid implements OnInit, OnDestroy {
           this.solrSearch = false;
         }
         
-        // if(params['igId'] && !params['currentPage']){
+        // if(params['igId'] && !params['page']){
         //   this.editMode = false;
         //   this.selectedAssets = [];
         //   this._assets.setSelectedAssets(this.selectedAssets);
@@ -159,13 +159,13 @@ export class AssetGrid implements OnInit, OnDestroy {
     // Subscribe to pagination values
     this.subscriptions.push(
       this._assets.pagination.subscribe((pagination: any) => {
-        this.pagination.currentPage = parseInt(pagination.currentPage);
+        this.pagination.page = parseInt(pagination.page);
         if (this.assetCount) {
-          this.pagination.totalPages = Math.floor(this.assetCount/parseInt(pagination.pageSize)) + 1;
+          this.pagination.totalPages = Math.floor(this.assetCount/parseInt(pagination.size)) + 1;
         } else {
           this.pagination.totalPages = parseInt(pagination.totalPages);
         }
-        this.pagination.pageSize = parseInt(pagination.pageSize);
+        this.pagination.size = parseInt(pagination.size);
       })
     );
 
@@ -282,7 +282,7 @@ export class AssetGrid implements OnInit, OnDestroy {
     if( (newPage >= 1) ){
       this._assets.paginated = true;
       this.isLoading = true;
-      this.pagination.currentPage = newPage;
+      this.pagination.page = newPage;
       this._assets.goToPage(newPage);
     }
   }
@@ -297,13 +297,13 @@ export class AssetGrid implements OnInit, OnDestroy {
   }
 
   /**
-   * Change size of page and go to currentPage=1
-   * @param pageSize Number of assets requested on page
+   * Change size of page and go to page=1
+   * @param size Number of assets requested on page
    */
-  private changePageSize(pageSize: number){
-    if(this.pagination.pageSize != pageSize){
+  private changePageSize(size: number){
+    if(this.pagination.size != size){
       this._assets.goToPage(1, true);
-      this._assets.setPageSize(pageSize);
+      this._assets.setPageSize(size);
     }
   }
 
@@ -312,7 +312,7 @@ export class AssetGrid implements OnInit, OnDestroy {
       this.activeSort.index = index;
       this.activeSort.label = label; 
 
-      // this.pagination.currentPage = 1;
+      // this.pagination.page = 1;
       this._assets.goToPage(1, true);
       this._assets.setSortOpt(index);
     }

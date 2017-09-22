@@ -42,8 +42,8 @@ export class AssetFiltersService {
                 era : 'CE'
             }
         },
-        currentPage : 1,
-        pageSize : 24,
+        page : 1,
+        size : 24,
         sort: "0"
     };
 

@@ -16,18 +16,18 @@ export class PaginationComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    // Initialize 'pageValueOnKeyPress' with the pageObj.currentPage 
-    this.pageValueOnKeyPress = this.pageObj.currentPage;
+    // Initialize 'pageValueOnKeyPress' with the pageObj.page 
+    this.pageValueOnKeyPress = this.pageObj.page;
   }
 
   /**
    * pageNumberKeyPress
-   * on keypress of pagination input field - save currentPage value on keypress
+   * on keypress of pagination input field - save page value on keypress
    * @param event 
    */
 
   private pageNumberKeyPress(event): boolean{
-    this.pageValueOnKeyPress = this.pageObj.currentPage;
+    this.pageValueOnKeyPress = this.pageObj.page;
     return true;
   }
 
@@ -37,9 +37,9 @@ export class PaginationComponent implements OnInit {
    * @param event 
    */
   private pageNumberKeyUp(event): boolean{
-    if(this.pageObj.currentPage){  
-      if( (this.pageObj.currentPage < 1) ){
-        this.pageObj.currentPage = this.pageValueOnKeyPress;
+    if(this.pageObj.page){  
+      if( (this.pageObj.page < 1) ){
+        this.pageObj.page = this.pageValueOnKeyPress;
         event.stopPropagation();
         return false;
       }

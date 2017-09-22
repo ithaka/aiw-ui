@@ -106,7 +106,7 @@ export class AssetSearchService {
     let options = new RequestOptions({
       withCredentials: true
     });
-    let startIndex = ((urlParams.currentPage - 1) * urlParams.pageSize) + 1;
+    let startIndex = ((urlParams.page - 1) * urlParams.size) + 1;
     let thumbSize = 0;
     let type = 6;
     let colTypeIds = '';
@@ -124,8 +124,8 @@ export class AssetSearchService {
     let filterArray = []
 
     let query = {
-      "limit": urlParams.pageSize,
-      "start": (urlParams.currentPage - 1) * urlParams.pageSize,
+      "limit": urlParams.size,
+      "start": (urlParams.page - 1) * urlParams.size,
       "content_types": [
         "art"
       ],
@@ -177,7 +177,7 @@ export class AssetSearchService {
     for (var i = 0; i < filters.length; i++) { // Applied filters
       
       
-      if ( ['collTypes', 'currentPage', 'pageSize', 'sort', 'startDate', 'endDate'].indexOf(filters[i].filterGroup) > -1) { 
+      if ( ['collTypes', 'page', 'size', 'sort', 'startDate', 'endDate'].indexOf(filters[i].filterGroup) > -1) { 
         // Collection Types and page info
         // do nothing
       } else if (filters[i].filterGroup == 'geography') {

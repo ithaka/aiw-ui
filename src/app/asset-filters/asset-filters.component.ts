@@ -35,9 +35,9 @@ export class AssetFilters {
   // geographyFacets = [];
   
   pagination = {
-    currentPage : 1,
+    page : 1,
     totalPages : 1,
-    pageSize : 24
+    size : 24
   };
   activeSort = {
     index : 0,
@@ -144,7 +144,7 @@ export class AssetFilters {
     }
 
     for (let filter of this.appliedFilters) {
-      if(filter.filterGroup == 'currentPage'){
+      if(filter.filterGroup == 'page'){
         params[filter.filterGroup] =  parseInt(filter.filterValue);
       }
       else if((filter.filterGroup != 'startDate') && (filter.filterGroup != 'endDate') && (filter.filterValue && filter.filterValue.length > 0)){
@@ -154,8 +154,8 @@ export class AssetFilters {
 
     this.angulartics.eventTrack.next({ action: "filteredSearch", properties: { category: "search", label: params } })
 
-    if(params['currentPage']){
-      params['currentPage'] = this.pagination.currentPage;
+    if(params['page']){
+      params['page'] = this.pagination.page;
     }
     
     this.router.navigate(['search', this.term, params]);
@@ -165,7 +165,7 @@ export class AssetFilters {
   changeSortOpt(index, label) {
     this.activeSort.index = index;
     this.activeSort.label = label; 
-    this.pagination.currentPage = 1;
+    this.pagination.page = 1;
     this.loadRoute();
   }
 
@@ -208,7 +208,7 @@ export class AssetFilters {
       this._analytics.directCall("advanced_search_filters");
       this._filters.apply(group, value);
     }
-    this.pagination.currentPage = 1;
+    this.pagination.page = 1;
     
     this.loadRoute();
   }
@@ -231,7 +231,7 @@ export class AssetFilters {
       }
     }
     
-    this.pagination.currentPage = 1;
+    this.pagination.page = 1;
 
     this.loadRoute();
   }
@@ -303,7 +303,7 @@ export class AssetFilters {
 
     this.availableFilters.dateObj.modified = true;
     this.filterDate = true;
-    this.pagination.currentPage = 1;
+    this.pagination.page = 1;
     this.loadRoute();
   }
 

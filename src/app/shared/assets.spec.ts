@@ -41,8 +41,8 @@ describe('AssetServiceTest', () => {
   it('initial AssetService should have default pagination values', inject([AssetService], ( _assets: AssetService) => {
         _assets.pagination.take(1).subscribe(
             data => {
-                expect(data.currentPage).toBe(1);
-                expect(data.pageSize).toBe(24);
+                expect(data.page).toBe(1);
+                expect(data.size).toBe(24);
                 expect(data.totalPages).toBe(1);
             }
         );
