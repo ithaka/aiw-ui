@@ -12,10 +12,10 @@ export class AppConfig {
   }
   
   getWLVConfig() {
-    if (document.location.hostname.indexOf('sahara.artstor.org') > -1 || true ) {
+    if (document.location.hostname.indexOf('sahara.artstor.org') > -1 || document.location.hostname.indexOf('sahara.test.artstor.org') > -1) {
       return WLV_SAHARA
     } else {
-      // return null
+      return null
     }
   }
 }
