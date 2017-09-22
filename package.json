@@ -1,6 +1,6 @@
 {
   "name": "avatar",
-  "version": "1.1.31",
+  "version": "1.1.32",
   "description": "Front End for the Artstor Digital Library",
   "author": "Artstor Team Air",
   "license": "",
@@ -88,6 +88,7 @@
     "codelyzer": "^2.0.0-beta.1",
     "core-js": "^2.4.1",
     "cucumber": "^2.0.0-rc.2",
+    "grunt": "^1.0.1",
     "html-loader": "^0.4.4",
     "html-webpack-plugin": "^2.24.1",
     "http-server": "^0.9.0",
