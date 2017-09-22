@@ -87,26 +87,6 @@ export class BrowsePage implements OnInit, OnDestroy {
             link: 'institution'
         }
         this.colMenuArray.splice(1, 0 ,obj);
-
-        // this._assets.getCollections('institution')
-        // .then(
-        //   (data)  => {
-        //     let instName = data.shortName ? data.shortName : 'Institutional';
-        //     var obj = {
-        //         label : instName + ' Collections',
-        //         id: '2',
-        //         link: 'institution'
-        //     }
-        //     this.colMenuArray.splice(1, 0 ,obj);
-        //   },
-        //   (error) => {
-        //     console.log(error);
-        //     return false;
-        //   }
-        // ).catch(function(err) {
-        //   console.log(err);
-        //   return false;
-        // });
     }
   }
 

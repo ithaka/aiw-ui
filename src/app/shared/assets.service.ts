@@ -1017,7 +1017,38 @@ export class AssetService {
      * @param type Can either be 'ssc' or 'institution'
      * @returns Chainable promise containing collection data
      */
-    public getCollections(type: string) {
+    public getCollectionsList(type?: string) {
+        let options = new RequestOptions({ withCredentials: true });
+        // Returns all of the collections names
+        return this.http
+            .get(this._auth.getUrl() + '/collections/', options)
+            .map( res => {
+                if (type) {
+                    let data = res.json ? res.json() : {}
+
+                    if (type == 'institution') {
+                        data.Collections = data.Collections.filter((collection) => {
+                            return collection.collectionType == 2 || collection.collectionType == 4
+                        })
+                    }
+                    if (type == 'ssc') {
+                        data.Collections = data.Collections.filter((collection) => {
+                            return collection.collectionType == 5
+                        })
+                    }
+
+                    return data
+                } else {
+                    return res.json ? res.json() : {}
+                }
+            })
+    }
+
+    /**
+     * Wrapper function for HTTP call to get user institution. Used by nav component
+     * @returns Chainable promise containing collection data
+     */
+    public getUserInstitution() {
         let options = new RequestOptions({ withCredentials: true });
         // Returns all of the collections names
         return this.http
@@ -1027,38 +1058,6 @@ export class AssetService {
             .then((data) => {
                 this._storage.set('institution', data);
                 data && this._auth.setInstitution(data);
-
-                let returnCollections: any[] = [];
-                let addToArr: boolean;
-
-                // this loop is for data cleaning/alteration
-                // there are collections named "Browse by ..." which need to be filtered out
-                // array also needs to be filtered by collection type
-                for (let i = data.Collections.length - 1; i >= 0; i--) {
-                    // assume addToArr is true until logical tests prove false
-                    addToArr = true;
-                    let collection: any = data.Collections[i];
-
-                    // remove collections that start with "Browse"
-                    if (collection.collectionname && collection.collectionname.substring(0, 6).toLowerCase() === "browse") {
-                        addToArr = false;
-                    }
-
-                    // if institution collections requested, remove any SSC collections
-                    //  otherwise, remove institution collections
-                    if (
-                        (type === 'institution' && collection.collectionType !== AssetService.institutionCollectionType)
-                        ||
-                        (type === 'ssc' && collection.collectionType === AssetService.institutionCollectionType)
-                    ) { addToArr = false; }
-
-                    if (addToArr) {
-                        // add default depth for use in folder operations
-                        collection.depth = 0;
-                        returnCollections.unshift(collection);
-                    }
-                }
-                data.Collections = returnCollections;
                 return data;
             });
     }

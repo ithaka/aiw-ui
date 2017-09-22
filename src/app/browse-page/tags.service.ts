@@ -16,9 +16,9 @@ export class TagsService {
    */
   public initTags(switchObj: any): Promise<Tag[]> {
     if (switchObj.type === "commons") {
-      return this.getCollections('ssc');
+      return this.loadCollectionsList('ssc');
     } else if (switchObj.type === "institution") {
-      return this.getCollections('institution');
+      return this.loadCollectionsList('institution');
     } else if (switchObj.type === "library" && switchObj.collectionId) {
       return this.getCategories(null, switchObj.collectionId);
     }
@@ -40,8 +40,9 @@ export class TagsService {
    * Called by initTags
    * @returns a chainable promise, resolved with an array of tags
    */
-  private getCollections(type: string): Promise<Tag[]> {
-    return this._assets.getCollections( type )
+  private loadCollectionsList(type: string): Promise<Tag[]> {
+    return this._assets.getCollectionsList( type )
+      .toPromise()
       .then((data) => {
         if (data && data.Collections) {
           let tags: Tag[] = [];

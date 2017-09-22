@@ -73,7 +73,7 @@ export class Nav implements OnInit, OnDestroy {
     );
 
     // Trigger call to get fresh institutional information
-    this._assets.getCollections("ssc")
+    this._assets.getUserInstitution()
       .then((data) => {
         // Got institutional info
       })

@@ -65,37 +65,34 @@ export class Home implements OnInit, OnDestroy {
 
     this.user = this._auth.getUser();
 
-    this.subscriptions.push(
-      this._auth.getInstitution().subscribe((institutionObj) => {
-        this.institution = institutionObj;
-      })
-    );
-    
+    this.subscriptions
+      .push(
+        this._auth.getInstitution().subscribe((institutionObj) => {
+          this.institution = institutionObj;
+        })
+      )
+
     this.loaders['collections'] = true;
     this.loaders['instCollections'] = true;
-    
-    // Pull Shared Shelf Collections
-    this._assets.getCollections('ssc')
-      .then((res) => {
-        this.collections = res['Collections'];
-        this.loaders['collections'] = false;
-      })
-      .catch((err) => {
-        this.errors['collections'] = "Unable to load collections.";
-        this.loaders['collections'] = false;
-      });
-    
-     // Pull Institution Collections
-    this._assets.getCollections('institution')
-      .then((res) => {
-        this.instCollections = res['Collections'];
-        this.loaders['instCollections'] = false;
-      })
-      .catch((err) => {
-        this.errors['instCollections'] = "Unable to load your institution's collections.";
-        this.loaders['instCollections'] = false;
-      });
 
+    this.subscriptions
+      .push(
+        this._assets.getCollectionsList()
+          .subscribe(
+            data => {
+              // Filter SSC content
+              this.collections = data["Collections"].filter((collection) => {
+                return collection.collectionType == 5 
+              })
+              this.loaders['collections'] = false;
+              // Filter institutional content
+              this.instCollections = data["Collections"].filter((collection) => {
+                return collection.collectionType == 2 || collection.collectionType == 4
+              })
+              this.loaders['instCollections'] = false;
+            }
+          )
+      )
 
       this._assets.getBlogEntries()
         .then((data) => {

@@ -1,3 +1,4 @@
+import { Subscription } from 'rxjs/Rx';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { Angulartics2 } from 'angulartics2/dist';
@@ -65,6 +66,7 @@ export class SearchModal implements OnInit {
   private instName: string = ""
   private instCollections: any[] = []
   private filterSelections: any[] = []
+  private subscriptions: Subscription[] = []
 
   // Filters
   private availableFilters: any[] = []
@@ -146,27 +148,38 @@ export class SearchModal implements OnInit {
           .catch(function(err) {
               console.error('Unable to load Terms List.');
           });
-        
+          
+    this.subscriptions.push(
+      this._auth.getInstitution().subscribe(
+        (institutionObj) => {
+          console.log(institutionObj)
+          if (institutionObj['shortName']) {
+              this.instName = institutionObj['shortName'];
+          }
+        },
+        (err) => {
+          console.log("Nav failed to load Institution information", err)
+        }
+      )
+    );
+
     // Get institutional collections
-    this._assets.getCollections('institution')
-        .then(
+    this.subscriptions.push(
+      this._assets.getCollectionsList('institution')
+        .subscribe(
           (data)  => {
-            if (data['shortName']) {
-              this.instName = data['shortName'];
               this.colTree.push({
                 id: 'allSS',
                 name: 'Institutional Collections',
                 collections: data['Collections']
               });
-            }
-            
           },
           (error) => {
             console.log(error);
           }
-        ).catch(function(err) {
-          console.log(err);
-        });
+        )
+    )
+    
   }
 
   private close(): void {
