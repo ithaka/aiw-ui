@@ -6,6 +6,8 @@ import { Angulartics2GoogleAnalytics } from 'angulartics2';
 import { Title } from '@angular/platform-browser';
 import { Router, NavigationStart } from '@angular/router';
 import { TranslateService } from 'ng2-translate';
+
+import { AppConfig } from "./app.service";
 /*
  * App Component
  * Top Level Component
@@ -30,13 +32,13 @@ import { TranslateService } from 'ng2-translate';
   `
 })
 export class App {
-  angularclassLogo = 'assets/img/angularclass-avatar.png';
-  name = 'Artstor';
-  url = 'https://artstor.org/';
+  url = 'https://artstor.org/'
+  title = 'Artstor'
 
   private showSkyBanner: boolean = true
 
   constructor(
+    public _app: AppConfig, 
     angulartics2GoogleAnalytics: Angulartics2GoogleAnalytics,
     private titleService: Title,
     private router:Router,
@@ -48,12 +50,14 @@ export class App {
       // the lang to use, if the lang isn't available, it will use the current loader to get them
     translate.use('en');
     
+    this.title = this._app.pageTitle
+    
     // Set metatitle to "Artstor" except for asset page where metatitle is {{ Asset Title }}
     router.events.subscribe(event => {
       if(event instanceof NavigationStart) {
         let event_url_array = event.url.split('/');
         if(event_url_array && (event_url_array.length > 1) && (event_url_array[1] !== 'asset')){
-          this.titleService.setTitle('Artstor');
+          this.titleService.setTitle(this.title);
         }
       }
     });

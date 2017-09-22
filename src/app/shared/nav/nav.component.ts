@@ -4,7 +4,7 @@ import { Router, NavigationEnd, ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
 
 import { AuthService, AssetService, ToolboxService } from '..';
-import { AppConfig } from "app/app.service";
+import { AppConfig } from '../../app.service';
 
 @Component({
   selector: 'nav-bar',
@@ -22,21 +22,18 @@ export class Nav implements OnInit, OnDestroy {
   private appConfig: any
 
   // Display variables
-  private logoUrl = "/assets/img/logo-v1-1.png"
+  private logoUrl = ""
 
   // TypeScript public modifiers
   constructor(
-    public _appConfig: AppConfig, 
+    public _app: AppConfig, 
     private _auth: AuthService,
     private _assets: AssetService,
     private _router: Router,
     private route: ActivatedRoute,
     private location: Location
   ) {
-    this.appConfig = this._appConfig.getWLVConfig() 
-    if (this.appConfig) {
-      this.logoUrl = this.appConfig.files.logo
-    }
+      this.logoUrl = this._app.logoUrl
   }
 
   ngOnInit() {
