@@ -6,9 +6,6 @@ import { Angulartics2GoogleAnalytics } from 'angulartics2';
 import { Title } from '@angular/platform-browser';
 import { Router, NavigationStart } from '@angular/router';
 import { TranslateService } from 'ng2-translate';
-
-import { AppState } from './app.service';
-
 /*
  * App Component
  * Top Level Component
@@ -40,7 +37,6 @@ export class App {
   private showSkyBanner: boolean = true
 
   constructor(
-    public appState: AppState,
     angulartics2GoogleAnalytics: Angulartics2GoogleAnalytics,
     private titleService: Title,
     private router:Router,

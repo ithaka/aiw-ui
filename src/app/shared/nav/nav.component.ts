@@ -4,6 +4,7 @@ import { Router, NavigationEnd, ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
 
 import { AuthService, AssetService, ToolboxService } from '..';
+import { AppConfig } from "app/app.service";
 
 @Component({
   selector: 'nav-bar',
@@ -21,6 +22,7 @@ export class Nav implements OnInit, OnDestroy {
 
   // TypeScript public modifiers
   constructor(
+    public _appConfig: AppConfig, 
     private _auth: AuthService,
     private _assets: AssetService,
     private _router: Router,
