@@ -84,8 +84,9 @@
                         <p>By using Artstor Digital Library, I agree to the <a id="linkTermsAndConditions" href="http://www.artstor.org/terms" tabindex="0" class="link">Terms</a></p>
                         <div class="form-group">
                             <button id="btnRegister" class="btn btn-primary" [class.loading]="isLoading" type="submit" name="action" tabindex="0">Register</button>
-                            <div *ngIf="submitted && serviceErrors.duplicate" class="has-danger">
-                                <p id="errDuplicateUser" class="form-control-feedback" translate>REGISTER.ERRORS.EMAIL_DUPLICATE</p>
+                            <div *ngIf="submitted" class="has-danger">
+                                <p *ngIf="serviceErrors.duplicate" id="errDuplicateUser" class="form-control-feedback" [innerHtml]="'REGISTER.ERRORS.EMAIL_DUPLICATE' | translate"></p>
+                                <p *ngIf="serviceErrors.hasJstor" id="errJstorUser" class="form-control-feedback" [innerHtml]="'REGISTER.ERRORS.ALREADY_JSTOR' | translate"></p>
                             </div>
                         </div>
                     </form>

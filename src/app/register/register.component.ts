@@ -21,7 +21,8 @@ export class RegisterComponent implements OnInit {
   private userRoles: any[] = [];
 
   private serviceErrors: {
-    duplicate?: boolean
+    duplicate?: boolean,
+    hasJstor?: boolean
   } = {};
   
   constructor(
@@ -120,12 +121,15 @@ export class RegisterComponent implements OnInit {
           // this._log.Warp6({ eventType: "remote_login" });
           this.loadForUser(data);
         } else {
-          if (data.statusMessage === "User already exist" || data.statusCode == 2) {
-            this.serviceErrors.duplicate = true;
+          if (data.statusMessage.includes("JSTOR account exists")) {
+            // Jstor account exists also returns a status code of 2
+            this.serviceErrors.hasJstor = true
+          } else if (data.statusMessage === "User already exist" || data.statusCode == 2) {
+            this.serviceErrors.duplicate = true
           }
         }
       }, (error) => {
-        console.error(error);
+        console.error(error)
       });
 
     // if the call is unsuccessful, you will get a 200 w/o a user and with a field called 'statusMessage'
