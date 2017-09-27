@@ -17,6 +17,7 @@ You won't regret it.
     * [Installing](#installing)
     * [Running the app](#running-the-app)
 * [Configuration](#configuration)
+* [WLVs Local Setup](#white-label-verticals)
 * [Styles](#styles)
 * [TypeScript](#typescript)
 * [Accessibility](#accessibility)
@@ -206,6 +207,31 @@ npm run build:docker
 NPM and Webpack combine to provide all of our task running needs.
 
 Configuration files live in `config/` for webpack, karma, and protractor.
+
+---
+
+# White Label Verticals
+## Developing WLVs locally.
+
+WLVs, such as SAHARA, use the hostname to determine different configuration options.
+
+For local development on Mac, you'll need to edit your /etc/hosts file, and add:
+```bash
+127.0.0.1 local.artstor.org
+127.0.0.1 local.stage.artstor.org
+127.0.0.1 local.sahara.artstor.org
+127.0.0.1 local.sahara.test.artstor.org
+```
+
+Then clear your dns cache with: 
+```bash
+sudo dscacheutil -flushcache;sudo killall -HUP mDNSResponder
+```
+
+Now you're all setup! Just run:
+```
+yarn run sahara
+```
 
 ---
 

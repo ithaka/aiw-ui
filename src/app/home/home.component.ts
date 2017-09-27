@@ -3,9 +3,9 @@ import { Router } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
 import { Ng2DeviceService } from 'ng2-device-detector';
 
-import { AppState } from '../app.service';
 import { AssetService, AuthService, } from '../shared';
 import { AnalyticsService } from '../analytics.service';
+import { AppConfig } from '../app.service';
 
 declare var initPath: string
 
@@ -38,7 +38,7 @@ export class Home implements OnInit, OnDestroy {
 
   // TypeScript public modifiers
   constructor(
-      public appState: AppState, 
+      public _appConfig: AppConfig, 
       private _assets: AssetService, 
       private _router: Router,
       private _auth: AuthService,
@@ -119,12 +119,6 @@ export class Home implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.subscriptions.forEach((sub) => { sub.unsubscribe(); });
-  }
-
-  submitState(value: string) {
-    console.log('submitState', value);
-    this.appState.set('value', value);
-    this.localState.value = '';
   }
 
   private fetchDeviceInfo(): void{

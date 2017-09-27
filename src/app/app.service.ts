@@ -1,41 +1,32 @@
+/**
+ * AppConfig
+ * - Global service used to maintain configuration variables
+ * - Provides support for WLV options
+ */
 import { Injectable } from '@angular/core';
 
-export type InternalStateType = {
-  [key: string]: any
-};
+// Import all WLV configs
+import { WLV_SAHARA } from './white-label-config.ts'
 
 @Injectable()
-export class AppState {
-  _state: InternalStateType = { };
+export class AppConfig {
+  // Default values
+  public pageTitle = 'Artstor'
+  public logoUrl = '/assets/img/logo-v1-1.png'
 
   constructor() {
-
+    let WLVConfig = this.getWLVConfig()
+    if (WLVConfig) {
+      this.pageTitle = WLVConfig.pageTitle
+      this.logoUrl = WLVConfig.logoUrl
+    }
   }
-
-  // already return a clone of the current state
-  get state() {
-    return this._state = this._clone(this._state);
-  }
-  // never allow mutation
-  set state(value) {
-    throw new Error('do not mutate the `.state` directly');
-  }
-
-
-  get(prop?: any) {
-    // use our state getter for the clone
-    const state = this.state;
-    return state.hasOwnProperty(prop) ? state[prop] : state;
-  }
-
-  set(prop: string, value: any) {
-    // internally mutate our state
-    return this._state[prop] = value;
-  }
-
-
-  private _clone(object: InternalStateType) {
-    // simple object clone
-    return JSON.parse(JSON.stringify( object ));
+  
+  getWLVConfig() {
+    if (document.location.hostname.indexOf('sahara.artstor.org') > -1 || document.location.hostname.indexOf('sahara.test.artstor.org') > -1) {
+      return WLV_SAHARA
+    } else {
+      return null
+    }
   }
 }

@@ -81,9 +81,26 @@ export class AuthService implements CanActivate {
     this.IIIFUrl = '//tsprod.artstor.org/rosa-iiif-endpoint-1.0-SNAPSHOT/fpx'
     this.subdomain = 'library'
     this.solrUrl = '/api/search/v1.0/search'
+
+    let testHostnames = [
+      'localhost',
+      'stage.artstor.org',
+      // test.artstor subdomain is used for WLVs
+      'test.artstor.org',
+      'test.cirrostratus.org'
+    ]
+
+    let prodHostnames = [
+      'library.artstor.org',
+      'beta.artstor.org',
+      'lively.artstor.org',
+      'proxy.artstor.org',
+      // prod.artstor subdomain is used for WLVs
+      'prod.artstor.org',
+    ]
     
     // Check domain
-    if (document.location.hostname.indexOf('library.artstor.org') > -1 || document.location.hostname.indexOf('beta.artstor.org') > -1 || document.location.hostname.indexOf('lively.artstor.org') > -1 || document.location.hostname.indexOf('proxy.artstor.org') > -1) {
+    if (  new RegExp(prodHostnames.join("|")).test(document.location.hostname)  ) {
       // Explicit live endpoints
       this.logUrl = '//ang-ui-logger.apps.prod.cirrostratus.org/api/v1'
       this.solrUrl = 'http://library.artstor.org/api/search/v1.0/search'
@@ -96,7 +113,7 @@ export class AuthService implements CanActivate {
       this.logUrl = '//ang-ui-logger.apps.prod.cirrostratus.org/api/v1'
       this.solrUrl = 'http://library.artstor.org/api/search/v1.0/search'
       this.ENV = 'prod'
-    } else if (document.location.hostname.indexOf('localhost') > -1 || document.location.hostname.indexOf('stage.artstor.org') > -1 || document.location.hostname.indexOf('test.stagely.artstor.org') > -1 || document.location.hostname.indexOf('test.cirrostratus.org') > -1) {
+    } else if ( new RegExp(testHostnames.join("|")).test(document.location.hostname) ) {
       // Test Endpoints
       this.hostname = '//stage.artstor.org'
       this.subdomain = 'stage'

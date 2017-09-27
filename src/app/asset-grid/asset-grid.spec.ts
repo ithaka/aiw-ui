@@ -10,9 +10,6 @@ import {
 } from '@angular/http';
 import { MockBackend } from '@angular/http/testing';
 
-// Load the implementations that should be tested
-import { AppState } from '../app.service';
-
 describe('Search', () => {
   // provide our implementations or mocks to the dependency injector
   beforeEach(() => TestBed.configureTestingModule({
@@ -25,8 +22,7 @@ describe('Search', () => {
           return new Http(backend, defaultOptions);
         },
         deps: [MockBackend, BaseRequestOptions]
-      },
-      AppState
+      }
     ]
   }));
 

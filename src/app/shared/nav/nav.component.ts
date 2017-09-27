@@ -4,6 +4,7 @@ import { Router, NavigationEnd, ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
 
 import { AuthService, AssetService, ToolboxService } from '..';
+import { AppConfig } from '../../app.service';
 
 @Component({
   selector: 'nav-bar',
@@ -18,16 +19,21 @@ export class Nav implements OnInit, OnDestroy {
   private _tool: ToolboxService = new ToolboxService();
   
   private showinactiveUserLogoutModal: boolean = false;
+  private appConfig: any
+
+  // Display variables
+  private logoUrl = ""
 
   // TypeScript public modifiers
   constructor(
+    public _app: AppConfig, 
     private _auth: AuthService,
     private _assets: AssetService,
     private _router: Router,
     private route: ActivatedRoute,
     private location: Location
-  ) { 
-
+  ) {
+      this.logoUrl = this._app.logoUrl
   }
 
   ngOnInit() {
