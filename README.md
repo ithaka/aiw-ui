@@ -215,7 +215,12 @@ Configuration files live in `config/` for webpack, karma, and protractor.
 
 WLVs, such as SAHARA, use the hostname to determine different configuration options.
 
-For local development on Mac, you'll need to edit your /etc/hosts file, and add:
+For local development on Mac, you'll need to edit your /etc/hosts file:
+```bash
+sudo nano /etc/hosts
+```
+
+And add:
 ```bash
 127.0.0.1 local.artstor.org
 127.0.0.1 local.stage.artstor.org
@@ -232,6 +237,9 @@ Now you're all setup! Just run:
 ```
 yarn run sahara
 ```
+
+You should now be able to open the site locally as:
+[local.sahara.test.artstor.org:3000](http://local.sahara.test.artstor.org:3000)
 
 ---
 
