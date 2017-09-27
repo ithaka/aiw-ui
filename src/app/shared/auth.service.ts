@@ -84,6 +84,7 @@ export class AuthService implements CanActivate {
 
     let testHostnames = [
       'localhost',
+      'local.artstor.org',
       'stage.artstor.org',
       // test.artstor subdomain is used for WLVs
       'test.artstor.org',
