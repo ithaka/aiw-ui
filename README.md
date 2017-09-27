@@ -31,7 +31,7 @@ You won't regret it.
 (Originally based on the [Angular 2 webpack starter](https://github.com/AngularClass/angular2-webpack-starter))
 
 **Core Application**
-* [Angular 2](https://angular.io) ([Router](https://angular.io/docs/js/latest/api/router/), [Forms](https://angular.io/docs/js/latest/api/forms/), [Http](https://angular.io/docs/js/latest/api/http/), [Services](https://gist.github.com/gdi2290/634101fec1671ee12b3e#_follow_@AngularClass_on_twitter), [Tests](https://angular.io/docs/js/latest/api/test/), [E2E](https://angular.github.io/protractor/#/faq#what-s-the-difference-between-karma-and-protractor-when-do-i-use-which-))
+* [Angular 2](https://angular.io) ([Router](https://angular.io/docs/js/latest/api/router/), [Forms](https://angular.io/docs/js/latest/api/forms/), [Http](https://angular.io/docs/js/latest/api/http/), [Services](https://gist.github.com/gdi2290/634101fec1671ee12b3e#_follow_@AngularClass_on_twitter), [Tests](https://angular.io/docs/js/latest/api/test/)
 * [TypeScript](http://www.typescriptlang.org/) 
 * [@types](https://www.google.com/url?sa=t&rct=j&q=&esrc=s&source=web&cd=3&cad=rja&uact=8&ved=0ahUKEwjgjdrR7u_NAhUQ7GMKHXgpC4EQFggnMAI&url=https%3A%2F%2Fwww.npmjs.com%2F~types&usg=AFQjCNG2PFhwEo88JKo12mrw_4d0w1oNiA&sig2=N69zbO0yN8ET7v4KVCUOKA) (type manager)
 * [Bootstrap 4](http://v4-alpha.getbootstrap.com/) and  [ngBootstrap](https://ng-bootstrap.github.io/#/home)
@@ -42,18 +42,16 @@ You won't regret it.
 * [Karma](https://karma-runner.github.io/) 
 * [Protractor](https://angular.github.io/protractor/) (for end-to-end tests)
 * [Jasmine](https://github.com/jasmine/jasmine) (unit tests)
-* [Istanbul](https://github.com/gotwarlost/istanbul)
 * [TsLint](http://palantir.github.io/tslint/) 
 * [Codelyzer](https://github.com/mgechev/codelyzer)
-* [Hot Module Replacement](https://webpack.github.io/docs/hot-module-replacement-with-webpack.html) (speedy live-reload)
 * [Nucleus](https://holidaypirates.github.io/nucleus/index.html) (style guide generator)
 
 ---
 
 ## Quick Start
-**Requires Node version >= 6.9 and NPM >= 4**
-Mac: Recommended to install Node/NPM with [Homebrew](http://brew.sh/)
-Windows: Install Node/NPM using their Windows installer from the [Node website](https://nodejs.org/en/#download)
+**Requires latest version of Node and Yarn**
+
+On Mac, we recommended installing Node, NPM, and Yarn with [Homebrew](http://brew.sh/)
 
 Instructions for Mac:
 ```bash
@@ -74,9 +72,6 @@ yarn install
 
 # start the server
 yarn start
-
-# use Hot Module Replacement
-yarn run server:dev:hmr
 
 ```
 Access at [http://0.0.0.0:3000](http://0.0.0.0:3000) or [http://localhost:3000](http://localhost:3000) in your browser. 
@@ -109,6 +104,7 @@ angular2-webpack-starter/
  │   │   ├──app.spec.ts        * a simple test of components in app.ts
  │   │   ├──app.e2e.ts         * a simple end-to-end test for /
  │   │   └──app.ts             * App.ts: a simple version of our App component
+ |   |   └──white-label-config * Options for WLVs, white label sites
  │   │
  │   ├──sass/                  * Sass style folder
  │   │   ├──core/              * Core sass utilities, variables, and reset
@@ -140,11 +136,7 @@ See [Quick Start](#quick-start)
 
 ## Running the app
 After you have installed all dependencies you can now run the app. Run `npm run server` to start a local server using `webpack-dev-server` which will watch, build (in-memory), and reload for you. The port will be displayed to you as `http://0.0.0.0:3000` (or if you prefer IPv6, if you're using `express` server, then it's `http://[::1]:3000/`).
-### hot module replacement
-*Recommended for watching files/building during development*
-```bash
-npm run server:dev:hmr
-```
+
 ### server
 ```bash
 # development
