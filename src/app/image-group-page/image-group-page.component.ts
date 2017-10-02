@@ -1,4 +1,3 @@
-import { Title } from '@angular/platform-browser';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Subscription }   from 'rxjs/Subscription';
@@ -7,6 +6,7 @@ import { Subscription }   from 'rxjs/Subscription';
 import { AssetService, AuthService } from './../shared';
 import { ImageGroup, ImageGroupDescription, IgDownloadInfo, ImageGroupService, GroupService } from './../shared';
 import { AnalyticsService } from '../analytics.service';
+import { TitleService } from '../shared/title.service';
 
 @Component({
   selector: 'ang-image-group',
@@ -55,7 +55,7 @@ export class ImageGroupPage implements OnInit, OnDestroy {
     private _auth: AuthService,
     private route: ActivatedRoute,
     private _analytics: AnalyticsService,
-    private _title: Title
+    private _title: TitleService
   ) {
   }
 
@@ -107,7 +107,7 @@ export class ImageGroupPage implements OnInit, OnDestroy {
           this.ig = results;
 
           // Set page title
-          this._title.setTitle("Artstor | " + this.ig.name)
+          this._title.setSubtitle(this.ig.name)
 
           // if the user has write access, then allow them to update the image group
           this.ig.access.forEach((accessObj) => {

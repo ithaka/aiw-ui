@@ -1,4 +1,3 @@
-import { Title } from '@angular/platform-browser';
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { Subscription }   from 'rxjs/Subscription';
@@ -7,6 +6,7 @@ import { AssetService } from './../shared/assets.service';
 import { AnalyticsService } from '../analytics.service';
 import { TagsService } from './tags.service';
 import { Tag } from './tag/tag.class';
+import { TitleService } from '../shared/title.service';
 
 @Component({
   selector: 'ang-lib',
@@ -20,7 +20,7 @@ export class LibraryComponent implements OnInit {
     private _assets: AssetService,
     private _tags: TagsService,
     private _analytics: AnalyticsService,
-    private _title: Title
+    private _title: TitleService
   ) { }
 
   private loading: boolean = false;
@@ -63,7 +63,7 @@ export class LibraryComponent implements OnInit {
     this.tagsObj[this._assets.getRegionCollection(260).toString()]
     this.tagsObj[this._assets.getRegionCollection(270).toString()]
     // Set page title
-    this._title.setTitle("Artstor | Browse Collections")
+    this._title.setSubtitle("Browse Collections")
 
     if (!this.route.snapshot.params['viewId']) {
       this.selectedBrowseId = this._assets.getRegionCollection().toString();

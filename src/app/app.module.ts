@@ -91,6 +91,7 @@ import {
   ConfirmModal,
   SessionExpireModal
 } from './modals';
+import { TitleService } from './shared/title.service'
 import { GeneralSearchComponent } from './browse-page/browse-groups/general-search.component'
 import { SkyBannerComponent } from './sky-banner/sky-banner.component'
 
@@ -121,6 +122,7 @@ const APP_PROVIDERS = [
   ToolboxService,
   LegacyRouteResolver,
   Title,
+  TitleService,
   { provide: ErrorHandler, useClass: RavenErrorHandler }
   // { provide: RouteReuseStrategy, useClass: CustomReuseStrategy } // to be implemented later
 ];

@@ -1,4 +1,3 @@
-import { Title } from '@angular/platform-browser';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Http, Response, Headers, RequestOptions } from '@angular/http';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -9,6 +8,7 @@ import { Subscription }   from 'rxjs/Subscription';
 import { AnalyticsService } from '../analytics.service';
 import { AssetService } from './../shared/assets.service';
 import { AuthService } from './../shared/auth.service';
+import { TitleService } from '../shared/title.service';
 
 @Component({
   selector: 'ang-collection-page', 
@@ -42,7 +42,7 @@ export class CollectionPage implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private http: Http,
     private _analytics: AnalyticsService,
-    private _title: Title
+    private _title: TitleService
   ) {}
 
   ngOnInit() {
@@ -77,7 +77,7 @@ export class CollectionPage implements OnInit, OnDestroy {
               this.colThumbnail = data.leadImageURL ? data.leadImageURL : data.bigimageurl;
 
               // Set page title
-              this._title.setTitle("Artstor | " + this.colName)
+              this._title.setSubtitle(this.colName)
             })
             .catch((error) => { 
               console.error(error); 

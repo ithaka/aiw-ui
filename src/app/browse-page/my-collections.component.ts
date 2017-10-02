@@ -1,4 +1,3 @@
-import { Title } from '@angular/platform-browser';
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { Subscription }   from 'rxjs/Subscription';
@@ -8,6 +7,7 @@ import { AuthService } from './../shared/auth.service';
 import { AnalyticsService } from '../analytics.service';
 import { TagsService } from './tags.service';
 import { Tag } from './tag/tag.class';
+import { TitleService } from '../shared/title.service';
 
 @Component({
   selector: 'ang-my-collections',
@@ -24,7 +24,7 @@ export class MyCollectionsComponent implements OnInit {
     private route: ActivatedRoute,
     private _assets: AssetService,
     private _analytics: AnalyticsService,
-    private _title: Title
+    private _title: TitleService
   ) { }
 
   private subscriptions: Subscription[] = [];
@@ -48,7 +48,7 @@ export class MyCollectionsComponent implements OnInit {
 
   ngOnInit() {
     // Set page title
-    this._title.setTitle("Artstor | Browse My Collections")
+    this._title.setSubtitle("Browse My Collections")
 
     this.subscriptions.push(
       this.route.params

@@ -1,10 +1,11 @@
-import { Title } from '@angular/platform-browser';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute, Params, UrlSegment } from '@angular/router';
 import { Subscription }   from 'rxjs/Subscription';
+import { Locker } from 'angular2-locker';
+
+import { TitleService } from '../shared/title.service';
 import { AssetService } from '../shared/assets.service';
 import { AuthService } from '../shared/auth.service';
-import { Locker } from 'angular2-locker';
 
 @Component({
   selector: 'ang-browse-page', 
@@ -50,7 +51,7 @@ export class BrowsePage implements OnInit, OnDestroy {
       private _assets: AssetService,
       private route: ActivatedRoute,
       private router: Router,
-      private _title: Title
+      private _title: TitleService
   ) {  
       this._storage = locker.useDriver(Locker.DRIVERS.LOCAL);
       this.institution = this._storage.get('institution'); 
@@ -58,7 +59,7 @@ export class BrowsePage implements OnInit, OnDestroy {
 
   ngOnInit() {
     // Set page title
-    this._title.setTitle("Artstor | Browse")
+    this._title.setSubtitle("Browse")
 
     this.subscriptions.push(
       this.route.firstChild.url

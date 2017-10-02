@@ -1,10 +1,10 @@
-import { Title } from '@angular/platform-browser';
 import { Component, OnInit } from '@angular/core';
 
 import { AssetService } from './../shared/assets.service';
 import { AnalyticsService } from '../analytics.service';
 import { TagsService } from './tags.service';
 import { Tag } from './tag/tag.class';
+import { TitleService } from '../shared/title.service';
 
 @Component({
   selector: 'ang-browse-institution',
@@ -20,12 +20,12 @@ export class BrowseInstitutionComponent implements OnInit {
     private _assets: AssetService,
     private _tags: TagsService,
     private _analytics: AnalyticsService,
-    private _title: Title
+    private _title: TitleService
   ) { }
 
   ngOnInit() {
     // Set page title
-    this._title.setTitle("Artstor | Browse Institutional Collections")
+    this._title.setSubtitle("Browse Institutional Collections")
 
     this._tags.initTags({type: "institution"})
       .then((tags) => {

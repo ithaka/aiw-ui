@@ -1,4 +1,3 @@
-import { Title } from '@angular/platform-browser';
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { Subscription }   from 'rxjs/Subscription';
@@ -10,6 +9,7 @@ import { Asset } from './asset';
 import { AuthService, AssetService, GroupService } from './../shared';
 import { AssetViewerComponent } from './asset-viewer/asset-viewer.component';
 import { AnalyticsService } from '../analytics.service';
+import { TitleService } from '../shared/title.service';
 
 @Component({
     selector: 'ang-asset-page',
@@ -69,7 +69,7 @@ export class AssetPage implements OnInit, OnDestroy {
             private locker: Locker,
             private _analytics: AnalyticsService,
             private angulartics: Angulartics2,
-            private _title: Title 
+            private _title: TitleService 
         ) { 
             this._storage = locker.useDriver(Locker.DRIVERS.LOCAL);
     }

@@ -1,4 +1,3 @@
-import { Title } from '@angular/platform-browser'
 import { Component, OnInit, EventEmitter } from '@angular/core'
 import { Router, ActivatedRoute, Params, NavigationEnd } from '@angular/router'
 import { Subscription }   from 'rxjs/Subscription'
@@ -7,6 +6,7 @@ import { AssetService, AuthService, GroupService } from './../../shared'
 import { AnalyticsService } from './../../analytics.service'
 import { Tag } from './../tag'
 import { TagFiltersService } from './tag-filters.service'
+import { TitleService } from '../../shared/title.service'
 
 @Component({
   selector: 'ang-browse-groups',
@@ -21,7 +21,7 @@ export class BrowseGroupsComponent implements OnInit {
     private _tagFilters: TagFiltersService,
     private _auth: AuthService,
     private _analytics: AnalyticsService,
-    private _title: Title,
+    private _title: TitleService,
     private route: ActivatedRoute
   ) { }
 
@@ -55,7 +55,7 @@ export class BrowseGroupsComponent implements OnInit {
   
   ngOnInit() {
     // set the title
-    this._title.setTitle("Artstor | Browse Groups")
+    this._title.setSubtitle("Browse Groups")
 
     this.subscriptions.push(
       this.route.params.subscribe((params) => {

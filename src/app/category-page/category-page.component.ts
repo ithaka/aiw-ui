@@ -1,4 +1,3 @@
-import { Title } from '@angular/platform-browser';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Http, Response, Headers, RequestOptions } from '@angular/http';
 import { Router, ActivatedRoute, UrlSegment } from '@angular/router';
@@ -8,6 +7,7 @@ import { Subscription }   from 'rxjs/Subscription';
 import { AnalyticsService } from '../analytics.service';
 import { AssetService } from './../shared/assets.service';
 import { AuthService } from './../shared/auth.service';
+import { TitleService } from '../shared/title.service';
 
 @Component({
   selector: 'ang-category-page', 
@@ -42,7 +42,7 @@ export class CategoryPage implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private http: Http,
     private _analytics: AnalyticsService,
-    private _title: Title
+    private _title: TitleService
   ) {}
 
   ngOnInit() {
@@ -62,7 +62,7 @@ export class CategoryPage implements OnInit, OnDestroy {
         this.catName = name;
 
         // Set page title
-        this._title.setTitle("Artstor | " + this.catName)
+        this._title.setSubtitle(this.catName)
 
         let params = Object.assign({}, routeParams);
         // If a page number isn't set, reset to page 1!
