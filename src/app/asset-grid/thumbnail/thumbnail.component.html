@@ -9,6 +9,7 @@
         <i *ngIf="thumbnail.iapFlag > 0" class="icon icon-iap"></i>
         <i class="icon icon-{{collectionTypeMap[thumbnail.collectionType] && collectionTypeMap[thumbnail.collectionType].name}} icon-collection-type" [attr.title]="collectionTypeMap[thumbnail.collectionType] && collectionTypeMap[thumbnail.collectionType].alt"></i>
         <!--New search icons-->
+        <i *ngIf="thumbnail.clusterid" [id]="thumbnail.objectId + '_clustered_images'" class="icon icon-cluster" [routerLink]="['/cluster', thumbnail.clusterid, { objTitle :  thumbnail.name }]" title="View related media"></i>
         <i class="icon icon-{{collectionTypeMap[collectionType].name}} icon-collection-type" [attr.title]="collectionTypeMap[collectionType] && collectionTypeMap[collectionType].alt"></i>
         <i *ngIf="thumbnail.objectTypeId && thumbnail.objectTypeId != 10" class="icon icon-{{thumbnail.objectTypeId | typeIdPipe}}"></i>
     </div>
