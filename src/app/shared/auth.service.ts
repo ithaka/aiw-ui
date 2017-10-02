@@ -125,6 +125,12 @@ export class AuthService implements CanActivate {
       this.IIIFUrl = '//tsstage.artstor.org/rosa-iiif-endpoint-1.0-SNAPSHOT/fpx'
       this.ENV = 'test'
     }
+    
+    // Additional Local dev domains
+    if (document.location.hostname.indexOf('local.sahara') > -1) {
+      this.hostname = '//saharabeta.stage.artstor.org'
+      this.baseUrl = this.hostname + '/api'
+    }
 
 
     // For session timeout on user inactivity
