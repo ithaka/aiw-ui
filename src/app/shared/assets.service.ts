@@ -770,10 +770,10 @@ export class AssetService {
                 } else {
                     throw new Error("There are no thumbnails. Server responsed with status " + res.status);
                 }
-                
             })
-            .catch(function(err) {
-                console.log(err);
+            .catch((err) => {
+                console.log(err)
+                this.allResultsSource.error(err)
             });
     }
 
