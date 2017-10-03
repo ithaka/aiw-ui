@@ -94,7 +94,6 @@ export class AuthService implements CanActivate {
     let prodHostnames = [
       'library.artstor.org',
       'beta.artstor.org',
-      'lively.artstor.org',
       'proxy.artstor.org',
       // prod.artstor subdomain is used for WLVs
       'prod.artstor.org',
