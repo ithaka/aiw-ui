@@ -10,6 +10,7 @@
         <i class="icon icon-{{collectionTypeMap[thumbnail.collectionType] && collectionTypeMap[thumbnail.collectionType].name}} icon-collection-type" [attr.title]="collectionTypeMap[thumbnail.collectionType] && collectionTypeMap[thumbnail.collectionType].alt"></i>
         <!--New search icons-->
         <i *ngIf="thumbnail.clusterid" [id]="thumbnail.objectId + '_clustered_images'" class="icon icon-cluster" [routerLink]="['/cluster', thumbnail.clusterid, { objTitle :  thumbnail.name }]" title="View related media"></i>
+        <i *ngIf="thumbnail.frequentlygroupedwith && thumbnail.frequentlygroupedwith.length > 0" [id]="thumbnail.objectId + '_associated_images'" class="icon icon-collab" [routerLink]="['/associated', thumbnail.frequentlygroupedwith[0], 103]" title="Others are also interested in..."></i>
         <i class="icon icon-{{collectionTypeMap[collectionType].name}} icon-collection-type" [attr.title]="collectionTypeMap[collectionType] && collectionTypeMap[collectionType].alt"></i>
         <i *ngIf="thumbnail.objectTypeId && thumbnail.objectTypeId != 10" class="icon icon-{{thumbnail.objectTypeId | typeIdPipe}}"></i>
     </div>
