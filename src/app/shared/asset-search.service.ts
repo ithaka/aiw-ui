@@ -165,12 +165,13 @@ export class AssetSearchService {
           "name" : "artclassification_str",
           "mincount" : 1,
           "limit" : 16
-        },
-        {
-          "name" : "artcollectiontitle_str",
-          "mincount" : 1,
-          "limit" : 15
         }
+        // ,
+        // {
+        //   "name" : "artcollectiontitle_str",
+        //   "mincount" : 1,
+        //   "limit" : 15
+        // }
       ],
     };
     
