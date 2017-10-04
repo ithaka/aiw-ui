@@ -110,12 +110,7 @@ export class SearchComponent implements OnInit, OnDestroy {
       }
       else if(routeParams['term']){
         let updatedTermValue = '';
-        if(params['featureFlag'] && ( params['featureFlag'] == 'solrSearch' )){ // For SOLR search
-          updatedTermValue = ':"' + routeParams['term'] + '" AND :"' + term + '"';
-        }
-        else{ // For Legacy search
-          updatedTermValue = routeParams['term'] + '#and,' + term;
-        }
+        updatedTermValue = ':"' + routeParams['term'] + '" AND :"' + term + '"';
         term = updatedTermValue;
 
         if(routeParams['classification']){

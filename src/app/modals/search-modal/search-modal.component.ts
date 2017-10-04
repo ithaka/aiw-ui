@@ -101,19 +101,10 @@ export class SearchModal implements OnInit {
     this.filterNameMap = this._filters.getFilterNameMap()
     document.body.style.overflow = 'hidden';
 
-    // Pull in filterFields
-    if (this._auth.featureFlags['solrSearch']) {
-      // New search filter map
-      this.fields = this._search.filterFields
-      this.hideLegacyFilters = true
-      this.loadingFilters = true
-      this.loadFilters()
-    } else {
-      // Old search filter map
-      this.fields = this._assets.filterFields
-      this.hideLegacyFilters = false
-      this.legacyLoadFilters()
-    }
+    this.fields = this._search.filterFields
+    this.hideLegacyFilters = true
+    this.loadingFilters = true
+    this.loadFilters()
   }
 
   /**
@@ -289,14 +280,8 @@ export class SearchModal implements OnInit {
     let filterParams
     let currentParams = this.route.snapshot.params
 
-    // Check search feature flag
-    if (this._auth.featureFlags['solrSearch']) {
-      advQuery = this.queryUtil.generateSearchQuery(this.advanceQueries)
-      filterParams = this.queryUtil.generateFilters(this.filterSelections, this.advanceSearchDate)
-    } else {
-      advQuery = this.queryUtil.generateLegacySearchQuery(this.advanceQueries)
-      filterParams = this.queryUtil.generateLegacyFilters(this.filterSelections, this.advanceSearchDate)
-    }
+    advQuery = this.queryUtil.generateSearchQuery(this.advanceQueries)
+    filterParams = this.queryUtil.generateFilters(this.filterSelections, this.advanceSearchDate)
 
     // Track in Adobe Analytics
     this._analytics.directCall('advanced_search');

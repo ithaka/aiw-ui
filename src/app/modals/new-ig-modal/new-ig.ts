@@ -15,8 +15,8 @@ export class IgFormUtil {
    * @param currentIg The ImageGroup which is currently being edited/copied (used for preparing the access object)
    * @returns ImageGroup which can be POSTed or PUT to the groups API
    */
-  public prepareGroup(form: IgFormValue, description: string, assets: any[], user: any, currentIg?: ImageGroup, solrSearch?: boolean): ImageGroup {
-    let assetIdProperty = solrSearch ? 'artstorid' : 'objectId'
+  public prepareGroup(form: IgFormValue, description: string, assets: any[], user: any, currentIg?: ImageGroup): ImageGroup {
+    let assetIdProperty = 'artstorid'
 
     /** format an array of asset ids out of the asset */
     let itemIds = []

@@ -848,80 +848,30 @@ export class AssetService {
         if (this.searchSubscription && this.searchSubscription.hasOwnProperty('unsubscribe')) {
             this.searchSubscription.unsubscribe();
         }
-        // Subscribe to most recent search
-        if (this._auth.featureFlags['solrSearch']) {
-            // Solr Search
-             this.searchSubscription = this._assetSearch.search(this.urlParams, term, this.activeSort.index)
-                .subscribe(
-                    (res) => {
-                        let data = res.json();
-                        data.facets.forEach( (facet, index) => {
-                            this._filters.setAvailable(facet.name, facet.values);
-                        })
-
-                        if (data.hierarchies2 && data.hierarchies2['artstor-geography']){
-                            this._filters.generateHierFacets( data.hierarchies2['artstor-geography'].children, 'geography' );
-                        }
-                        // Transform data from SOLR queries
-                        if (data.results) {
-                            data.thumbnails = data.results;
-                        }
-                        data.count = data.total
-                        // Set the allResults object
-                        this.updateLocalResults(data);
-                }, (error) => {
-                        console.error(error)
-                        this.allResultsSource.error(error); 
-                });
-        } else {
-            // Earth Library Search
-             this.searchSubscription = this.search(term, this.activeSort.index)
+        
+         // Solr Search
+        this.searchSubscription = this._assetSearch.search(this.urlParams, term, this.activeSort.index)
             .subscribe(
                 (res) => {
                     let data = res.json();
-                    if (data && data.collTypeFacets) {
-                        this._filters.generateColTypeFacets( data.collTypeFacets );
-                        this._filters.generateGeoFilters( data.geographyFacets );
-                        this._filters.generateDateFacets( data.dateFacets );
-                        this._filters.setAvailable('classification', data.classificationFacets);
+                    data.facets.forEach( (facet, index) => {
+                        this._filters.setAvailable(facet.name, facet.values);
+                    })
+
+                    if (data.hierarchies2 && data.hierarchies2['artstor-geography']){
+                        this._filters.generateHierFacets( data.hierarchies2['artstor-geography'].children, 'geography' );
                     }
+                    // Transform data from SOLR queries
+                    if (data.results) {
+                        data.thumbnails = data.results;
+                    }
+                    data.count = data.total
                     // Set the allResults object
                     this.updateLocalResults(data);
             }, (error) => {
-                // as far as I can tell, the ADL services never respond with proper errors
-                // so all errors will be routed through the success channel above
-                // so if there's an error, we can be sure it's not from the services
-                // which is great because Fastly throws errors when searches take longer than 20 seconds
-                // which is common
-                // so here's the flow chart for the fix:
-                // <--------FLOW CHART-------->
-                //  search something -> it takes too long ->
-                //  Fastly throws error and disconnects (w/ 900 status and no Access-Control-Allow-Origin headers,
-                //  so we can't actually tell that we're getting a 900 status, we're mostly guessing) ->
-                //  the search will complete soon and will be cached -> rerun the search and it will work
-                // <-------------------------->
-                // we just recursively call this function until search results load
-                // so, the user never sees an error (woohoo) also, if they refresh it will likely work anyway
-                // ok i'm done
-
-                // Even though it's an error, indicate we loaded these params
-                this.currentLoadedParams = Object.assign(Object.assign({}, this.defaultUrlParams), this.urlParams);
-
-                // COMMENTING OUT B/C OF CASCADING SEARCH FAILURES CAUSED BY CERTAIN SEARCHES
-                // A REQUEST OF RIADH
-                // if (error.status == 0 && this.searchErrorCount < 3) {
-                //     this.searchErrorCount++
-                //     setTimeout(this.loadSearch(term), 7000)
-                // } else {
-                // this.searchErrorCount = 0
-                console.error(error)
-                this.allResultsSource.next(null)
-                // }
-                
-                // Pass error down to allResults listeners
-                // console.error(error, error.status)
+                    console.error(error)
+                    this.allResultsSource.error(error); 
             });
-        }
     }
     
     /**

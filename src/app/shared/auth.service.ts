@@ -55,8 +55,7 @@ export class AuthService implements CanActivate {
    * - Update via url param subscriptions inside of relevant components
    */
   public featureFlags = {
-    pcUpload : false,
-    solrSearch: false
+    pcUpload : false
   }
 
   constructor(

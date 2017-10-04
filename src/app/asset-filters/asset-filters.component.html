@@ -1,82 +1,37 @@
 <div class="col--filter-border col--sliding" [ngClass]="{ 'slide-up' : !showFilters }">
     
     <!--New Search Filters-->
-    <div *ngIf="_auth.featureFlags['solrSearch']">
-        <div *ngFor="let filterKey of keys(availableFilters); let i = index">
-            <div *ngIf="availableFilters[filterKey] && isArray(availableFilters[filterKey]) && availableFilters[filterKey].length > 0" class="filter-group">
-                <span class="filter-group__label">
-                    <h3>{{ 'FILTERS.' + filterKey | translate }} <a id="buttonCollectionTypeClear" tabindex="1" class="link--accent small" [ngClass]="{ 'disable': !hasAppliedFilters(filterKey) }" (click)="clearAllFilterGroup(filterKey)">Clear</a></h3>
-                </span>
-                <!--<div class="filter" [ngClass]="{ 'active': true }">All Collections</div>-->
-                <!--<pre>{{availableFilters[filterKey]}}</pre>-->
-                <button class="filter" *ngFor="let facet of appliedFilters[filterKey]" id="filterCollectionTypeItem{{ facet.name }}"  (click)="toggleFilter(facet.efq, filterKey)" [ngClass]="{'active': filterApplied(facet.efq, filterKey)}" data-sc="search: facet">
+    <div *ngFor="let filterKey of keys(availableFilters); let i = index">
+        <div *ngIf="availableFilters[filterKey] && isArray(availableFilters[filterKey]) && availableFilters[filterKey].length > 0" class="filter-group">
+            <span class="filter-group__label">
+                <h3>{{ 'FILTERS.' + filterKey | translate }} <a id="buttonCollectionTypeClear" tabindex="1" class="link--accent small" [ngClass]="{ 'disable': !hasAppliedFilters(filterKey) }" (click)="clearAllFilterGroup(filterKey)">Clear</a></h3>
+            </span>
+            <!--<div class="filter" [ngClass]="{ 'active': true }">All Collections</div>-->
+            <!--<pre>{{availableFilters[filterKey]}}</pre>-->
+            <button class="filter" *ngFor="let facet of appliedFilters[filterKey]" id="filterCollectionTypeItem{{ facet.name }}"  (click)="toggleFilter(facet.efq, filterKey)" [ngClass]="{'active': filterApplied(facet.efq, filterKey)}" data-sc="search: facet">
+                <span *ngIf="facet.name && facet.name.length < 2">{{ filterNameMap[filterKey] && filterNameMap[filterKey][facet.name] }} ({{facet.count}})</span>
+                <span *ngIf="facet.name && facet.name.length > 1">{{ facet.name }} ({{facet.count}})</span>
+                <i class="icon icon-add"></i>
+                <i class="icon icon-close"></i>
+            </button>
+            <div *ngFor="let facet of availableFilters[filterKey]">
+                <!--Show filters -->
+                <i *ngIf="facet.children && facet.children.length > 0" class="icon icon-direction absolute-left tree-icon" (click)="toggleTree(facet)" [ngClass]="{ 'icon-down' : facet.expanded, 'icon-right' : !facet.expanded }"></i>
+                <button class="filter parent"  id="filterCollectionTypeItem{{ facet.name }}"  (click)="toggleFilter(facet.efq, filterKey)" [ngClass]="{'active': filterApplied(facet.efq, filterKey)}" data-sc="search: facet">
                     <span *ngIf="facet.name && facet.name.length < 2">{{ filterNameMap[filterKey] && filterNameMap[filterKey][facet.name] }} ({{facet.count}})</span>
                     <span *ngIf="facet.name && facet.name.length > 1">{{ facet.name }} ({{facet.count}})</span>
                     <i class="icon icon-add"></i>
                     <i class="icon icon-close"></i>
                 </button>
-                <div *ngFor="let facet of availableFilters[filterKey]">
-                    <!--Show filters -->
-                    <i *ngIf="facet.children && facet.children.length > 0" class="icon icon-direction absolute-left tree-icon" (click)="toggleTree(facet)" [ngClass]="{ 'icon-down' : facet.expanded, 'icon-right' : !facet.expanded }"></i>
-                    <button class="filter parent"  id="filterCollectionTypeItem{{ facet.name }}"  (click)="toggleFilter(facet.efq, filterKey)" [ngClass]="{'active': filterApplied(facet.efq, filterKey)}" data-sc="search: facet">
-                        <span *ngIf="facet.name && facet.name.length < 2">{{ filterNameMap[filterKey] && filterNameMap[filterKey][facet.name] }} ({{facet.count}})</span>
-                        <span *ngIf="facet.name && facet.name.length > 1">{{ facet.name }} ({{facet.count}})</span>
+                <!--Child filters-->
+                <div class="child-cntnr collapse" [ngClass]="{ 'show' : facet.expanded }">
+                    <button class="filter child" *ngFor="let child of facet.children; let childIndex = index" id="filterGeographyItem{{ 'Child' + childIndex }}" (click)="toggleFilter(child.efq, filterKey)" [ngClass]="{'active': filterApplied(child.efq, 'geography')}" data-sc="search: facet">{{ child.name }} ({{child.count}})
                         <i class="icon icon-add"></i>
                         <i class="icon icon-close"></i>
                     </button>
-                    <!--Child filters-->
-                    <div class="child-cntnr collapse" [ngClass]="{ 'show' : facet.expanded }">
-                        <button class="filter child" *ngFor="let child of facet.children; let childIndex = index" id="filterGeographyItem{{ 'Child' + childIndex }}" (click)="toggleFilter(child.efq, filterKey)" [ngClass]="{'active': filterApplied(child.efq, 'geography')}" data-sc="search: facet">{{ child.name }} ({{child.count}})
-                            <i class="icon icon-add"></i>
-                            <i class="icon icon-close"></i>
-                        </button>
-                    </div>
                 </div>
-
             </div>
-        </div>
-    </div>
 
-    <!--Legacy Search Filters-->
-    <div *ngIf="!_auth.featureFlags['solrSearch']" class="filter-group">
-        <span class="filter-group__label">
-            <h3>Collection Type <a id="buttonCollectionTypeClear" tabindex="1" class="link--accent small" [ngClass]="{ 'disable': !hasAppliedFilters('collTypes') }" (click)="clearAllFilterGroup('collTypes')">Clear</a></h3>
-        </span>
-        <!--<div class="filter" [ngClass]="{ 'active': true }">All Collections</div>-->
-        <button class="filter" *ngFor="let facet of availableFilters.collType" id="filterCollectionTypeItem{{ facet.id }}"  (click)="toggleFilter(facet.id, 'collTypes')" [ngClass]="{'active': filterApplied(facet.id, 'collTypes')}" data-sc="search: facet">{{ facet.label }}
-            <i class="icon icon-add"></i>
-            <i class="icon icon-close"></i>
-        </button>
-    </div>
-
-    <div *ngIf="!_auth.featureFlags['solrSearch']" class="filter-group">
-        <span class="filter-group__label">
-                <h3>Classification <a id="filterClassificationClear" tabindex="1" class="link--accent small" [ngClass]="{ 'disable': !hasAppliedFilters('classification') }" (click)="clearAllFilterGroup('classification')">Clear</a></h3>
-            </span>
-        <!--<div class="filter" [ngClass]="{ 'active': true }">All Collections</div>-->
-        <button class="filter" *ngFor="let classificationFacet of availableFilters.classification" id="filterClassificationItem{{ classificationFacet.id }}" (click)="toggleFilter(classificationFacet.id, 'classification')" [ngClass]="{'active': filterApplied(classificationFacet.id, 'classification')}" data-sc="search: facet">{{ classificationFacet.name }}
-            <i class="icon icon-add"></i>
-            <i class="icon icon-close"></i>
-        </button>
-    </div>
-
-    <!--Legacy Geo Filters-->
-    <div *ngIf="!_auth.featureFlags['solrSearch']" class="filter-group">
-        <span class="filter-group__label">
-                <h3>Geography <a tabindex="1" class="link--accent small" [ngClass]="{ 'disable': !hasAppliedFilters('geography') }" (click)="clearAllFilterGroup('geography')">Clear</a></h3>
-            </span>
-        <div *ngFor="let geographyFacet of availableFilters.geography" id="filterGeographyItem{{ geographyFacet.id }}">
-            <i id="filterGeography{{ geographyFacet.id }}Expand" class="icon icon-direction absolute-left tree-icon" (click)="toggleTree(geographyFacet)" [ngClass]="{ 'icon-down' : geographyFacet.expanded, 'icon-right' : !geographyFacet.expanded }"></i>
-            <button class="filter parent" (click)="toggleFilter(geographyFacet.id, 'geography')" [ngClass]="{'active': filterApplied(geographyFacet.id, 'geography')}" data-sc="search: facet"> {{ geographyFacet.name }} 
-                <i class="icon icon-add"></i>
-                <i class="icon icon-close"></i>
-            </button>
-            <div class="child-cntnr collapse" [ngClass]="{ 'show' : geographyFacet.expanded }">
-                <button class="filter child" *ngFor="let child of geographyFacet.children; let childIndex = index" id="filterGeographyItem{{ 'Child' + child.id }}" (click)="toggleFilter(child.id, 'geography')" [ngClass]="{'active': filterApplied(child.id, 'geography')}" data-sc="search: facet">{{ child.name }}
-                    <i class="icon icon-add"></i>
-                    <i class="icon icon-close"></i>
-                </button>
-            </div>
         </div>
     </div>
 

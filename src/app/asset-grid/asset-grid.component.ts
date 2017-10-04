@@ -49,9 +49,6 @@ export class AssetGrid implements OnInit, OnDestroy {
   private totalAssets: string = '';
   private searchInResults: boolean = false;
 
-  // SOLR search flag
-  private solrSearch: boolean = false;
-
   @Input()
   private actionOptions: any = {};
 
@@ -139,13 +136,6 @@ export class AssetGrid implements OnInit, OnDestroy {
           }
         }
 
-        if( params['featureFlag'] && (params['featureFlag'] === 'solrSearch') ){
-          this.solrSearch = true;
-        }
-        else{
-          this.solrSearch = false;
-        }
-        
         // if(params['igId'] && !params['page']){
         //   this.editMode = false;
         //   this.selectedAssets = [];
@@ -441,7 +431,7 @@ export class AssetGrid implements OnInit, OnDestroy {
    */
   private isSelectedAsset(asset: any): number{
     let index: number = -1
-    let assetIdProperty = this._auth.featureFlags['solrSearch']? 'artstorid' : 'objectId'
+    let assetIdProperty =  'artstorid'
     for(var i = 0; i < this.selectedAssets.length; i++){
       if(this.selectedAssets[i][assetIdProperty] === asset[assetIdProperty]){
         index = i
@@ -512,11 +502,7 @@ export class AssetGrid implements OnInit, OnDestroy {
    * Returns asset path for linking
    */
   private getAssetPath(asset): string[] {
-    if (this._auth.featureFlags['solrSearch']) {
       return this.editMode ? ['./'] : ['/asset', asset.artstorid]
-    } else {
-      return this.editMode ? ['./'] : ['/asset', asset.objectId]
-    }
   }
 
 

@@ -10,10 +10,6 @@
     <div class="col-sm-9">
       <h1 class="mobile--show">Results</h1>
       <div class="row no-gutters row--search-bar">
-          <div *ngIf="_auth.featureFlags['solrSearch']" class="alert alert-info">
-            <strong>Beta Search</strong> You have activated the new Sycamore search!<br/>
-            <a class="link" tabindex="1" (click)="_auth.featureFlags['solrSearch'] = false; _router.navigate(['/search'])">Return to current search</a>
-          </div>
           <div class="col-md-7">
               <ang-search [allowSearchInRes]="true"></ang-search>
           </div>
