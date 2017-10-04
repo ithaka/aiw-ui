@@ -19,6 +19,7 @@ import { AppConfig } from "./app.service";
     '../sass/app.scss'
   ],
   template: `
+    <ang-sky-banner *ngIf="showSkyBanner" [textValue]="'SEARCH_ANNOUNCEMENT_BANNER.MESSAGE' | translate" (closeBanner)="showSkyBanner = false"></ang-sky-banner>
     <a (click)="findMainContent()" (keydown.enter)="findMainContent()" tabindex="1" class="sr-only sr-only-focusable">Skip to main content</a>
     <nav-bar></nav-bar>
 
@@ -35,7 +36,7 @@ export class App {
   url = 'https://artstor.org/'
   title = 'Artstor'
 
-  private showSkyBanner: boolean = true
+  private showSkyBanner: boolean = false
 
   constructor(
     public _app: AppConfig, 
@@ -64,7 +65,11 @@ export class App {
   }
 
   ngOnInit() {
-    
+    // Turn on the Search Announcement Banner once the featured flag is removed!
+    // if ( document.location.hostname.indexOf('beta.artstor.org') > -1 || document.location.hostname.indexOf('prod.cirrostratus.org') > -1 || document.location.hostname.indexOf('lively.artstor.org') > -1 ) {
+    //   this.showSkyBanner = true
+    // }
+
   }
 
   private findMainContent(): void {
