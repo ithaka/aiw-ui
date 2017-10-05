@@ -51,7 +51,7 @@ export class App {
       // the lang to use, if the lang isn't available, it will use the current loader to get them
     translate.use('en');
     
-    this.title = this._app.pageTitle
+    this.title = this._app.config.pageTitle
     
     // Set metatitle to "Artstor" except for asset page where metatitle is {{ Asset Title }}
     router.events.subscribe(event => {

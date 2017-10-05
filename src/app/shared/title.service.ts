@@ -21,6 +21,6 @@ constructor(
      * Appends app title to subtitle, and sets it
      */
     public setSubtitle(newSubtitle: string) : void {
-        this._platformTitle.setTitle(this._app.pageTitle + ' | ' + newSubtitle)
+        this._platformTitle.setTitle(this._app.config.pageTitle + ' | ' + newSubtitle)
     }
 }

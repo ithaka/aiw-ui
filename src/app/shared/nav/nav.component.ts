@@ -33,7 +33,7 @@ export class Nav implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private location: Location
   ) {
-      this.logoUrl = this._app.logoUrl
+      this.logoUrl = this._app.config.logoUrl
   }
 
   ngOnInit() {
