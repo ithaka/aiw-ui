@@ -1,18 +1,9 @@
 <div class="container-fluid">
   <div class="footer row">
     <div class="col-12">
-      <!-- <span [innerHtml]="'FOOTER.LINKS.ABOUT' | translate"></span>
-      <span [innerHtml]="'FOOTER.LINKS.GETTING_STARTED' | translate"></span>
-      <span [innerHtml]="'FOOTER.LINKS.TEACHING_IDEAS' | translate"></span>
-      <span [innerHtml]="'FOOTER.LINKS.STAY_INFORMED' | translate"></span>
-      <span [innerHtml]="'FOOTER.LINKS.TERMS' | translate"></span>
-      <span [innerHtml]="'FOOTER.LINKS.PRIVACY' | translate"></span>
-      <span [innerHtml]="'FOOTER.LINKS.COPYRIGHT' | translate"></span>
-      <span [innerHtml]="'FOOTER.LINKS.SUPPORT' | translate"></span> -->
-      <span *ngFor="let link of links" [innerHtml]="link"></span>
+      <span *ngFor="let link of links" [innerHtml]="'FOOTER.LINKS.' + link | translate"></span>
       <div class="translate-flyout" id="google_translate_element"></div>
       
-      <!--<a class="link footer-logout" (click)="logout()">Log Out</a>-->
       <a class="link footer-logout" (click)="logout()" *ngIf="user && user.isLoggedIn">Log Out</a>
       <a class="link footer-logout" [routerLink]="['/login']" *ngIf="!user || !user.isLoggedIn">Log In</a>
     </div>
