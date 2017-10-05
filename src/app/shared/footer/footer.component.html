@@ -1,7 +1,7 @@
 <div class="container-fluid">
   <div class="footer row">
     <div class="col-12">
-      <span *ngFor="let link of links" [innerHtml]="'FOOTER.LINKS.' + link | translate"></span>
+      <span *ngFor="let link of links" [innerHtml]="['FOOTER', 'LINKS', _app.config.wlvName, link].join('.') | translate"></span>
       <div class="translate-flyout" id="google_translate_element"></div>
       
       <a class="link footer-logout" (click)="logout()" *ngIf="user && user.isLoggedIn">Log Out</a>
