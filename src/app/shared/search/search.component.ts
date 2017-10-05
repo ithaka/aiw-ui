@@ -1,11 +1,12 @@
 import { Component, OnInit, OnDestroy, Input, Output } from '@angular/core';
 import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 import { Angulartics2 } from 'angulartics2/dist';
-
 import { Subscription }   from 'rxjs/Subscription';
 
+// Project dependencies
 import { AssetService } from '../../shared';
 import { AnalyticsService } from '../../analytics.service';
+import { AssetFiltersService } from '../../asset-filters/asset-filters.service';
 
 @Component({
   selector: 'ang-search',
@@ -33,7 +34,8 @@ export class SearchComponent implements OnInit, OnDestroy {
     private _assets: AssetService,
     private _router: Router,
     private route: ActivatedRoute,
-    private angulartics: Angulartics2
+    private angulartics: Angulartics2,
+    private _filters: AssetFiltersService
   ) {
 
   }
@@ -82,6 +84,9 @@ export class SearchComponent implements OnInit, OnDestroy {
     if (!term || term === "") {
       return;
     }
+
+    // Clear filters for new search
+    this._filters.clearApplied()
 
     // Pipes are reserved by Advanced Search
     term = term.replace('|', ' ')
