@@ -25,6 +25,10 @@ export const WLV_SAHARA = {
     "institutionLogin" : false,
     "pageTitle" : "SAHARA",
     footerLinks: [
-
+        "ARTSTOR",
+        "SAHARA",
+        "SARARA_CONTRIBUTE",
+        "SAHARA_TERMS",
+        "SAHARA_PRIVACY"
     ]
 }

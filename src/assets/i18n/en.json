@@ -234,7 +234,12 @@
       "TERMS": "<a href=\"http://www.artstor.org/terms\" class=\"link\" target=\"_blank\">Terms</a>",
       "PRIVACY": "<a href=\"http://www.artstor.org/privacy-policy\" class=\"link\" target=\"_blank\">Privacy</a>",
       "COPYRIGHT": "<a href=\"http://www.artstor.org/copyright\" class=\"link\" target=\"_blank\">Copyright Concerns</a>",
-      "SUPPORT": "<a href=\"http://support.artstor.org\" class=\"link\" target=\"_blank\">Support</a>"
+      "SUPPORT": "<a href=\"http://support.artstor.org\" class=\"link\" target=\"_blank\">Support</a>",
+      "ARTSTOR": "<a href=\"http://artstor.org\" class=\"link\" target=\"_blank\">Artstor.org</a>",
+      "SAHARA": "<a href=\"http://sah.org\" class=\"link\" target=\"_blank\">SAH.org</a>",
+      "SARARA_CONTRIBUTE": "<a href=\"http://catalog.sharedshelf.artstor.org\" class=\"link\" target=\"_blank\">Contribute to SAHARA using Shared Shelf</a>",
+      "SAHARA_TERMS": "<a href=\"http://sahara.artstor.org/library/portals/SAHARA/terms-of-use.html\" class=\"link\" target=\"_blank\">Terms</a>",
+      "SAHARA_PRIVACY": "<a href=\"http://sahara.artstor.org/library/portals/SAHARA/privacy-policy.html\" class=\"link\" target=\"_blank\">Privacy</a>"
     }
   },
   "ACCESS_HELP_MODAL": {
