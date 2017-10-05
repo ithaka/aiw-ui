@@ -6,7 +6,6 @@
  * These are assigned as defaults
  */
 export const WLV_ARTSTOR = {
-    wlvName: "ARTSTOR",
     pageTitle: "Artstor",
     logoUrl: "/assets/img/logo-v1-1.png",
     footerLinks: [
@@ -22,7 +21,6 @@ export const WLV_ARTSTOR = {
 }
 
 export const WLV_SAHARA = {
-    wlvName: "SAHARA",
     "logoUrl" : "/assets/img/logo-sahara-v1.png",
     "institutionLogin" : false,
     "pageTitle" : "SAHARA",
