@@ -10,10 +10,10 @@ import { AuthService } from './../shared/auth.service';
 import { TitleService } from '../shared/title.service';
 
 @Component({
-  selector: 'ang-category-page', 
+  selector: 'ang-category-page',
   providers: [],
   styleUrls: [ './category-page.component.scss' ],
-  templateUrl: './category-page.component.html'
+  templateUrl: './category-page.component.pug'
 })
 
 export class CategoryPage implements OnInit, OnDestroy {
@@ -29,7 +29,7 @@ export class CategoryPage implements OnInit, OnDestroy {
 
   // Anomalies
   private isSubCategory: boolean = false;
-  
+
   private subscriptions: Subscription[] = [];
 
   // private searchInResults: boolean = false;
@@ -68,7 +68,7 @@ export class CategoryPage implements OnInit, OnDestroy {
         // If a page number isn't set, reset to page 1!
         if (!params['page']){
           params['page'] = 1;
-        } 
+        }
 
         if (this.catId) {
           // Tell AssetService to load thumbnails (Asset Grid will get them)
@@ -84,18 +84,18 @@ export class CategoryPage implements OnInit, OnDestroy {
               } else {
                 // Some categories don't have descriptions
               }
-              
+
             })
-            .catch((error) => { 
-              console.error(error); 
+            .catch((error) => {
+              console.error(error);
             });
         }
       })
     );// End push to subscription
-    
+
     this.subscriptions.push(
        this.route.url
-        .subscribe((url: UrlSegment[]) => {  
+        .subscribe((url: UrlSegment[]) => {
           this.isSubCategory = url[0].path === 'subcategory';
         })
     );
@@ -127,6 +127,6 @@ export class CategoryPage implements OnInit, OnDestroy {
   }
 
   // private updateSearchInRes(value: boolean): void{
-  //  this.searchInResults = value; 
+  //  this.searchInResults = value;
   // }
 }
