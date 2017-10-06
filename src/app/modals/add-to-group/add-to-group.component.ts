@@ -103,6 +103,11 @@ export class AddToGroupModal implements OnInit, OnDestroy {
         if (putGroup.items.indexOf(asset.artstorid) < 0) {
           putGroup.items.push(asset.artstorid);
         }
+      } else if (asset && asset.objectId) {
+        // Data returned from Solr
+        if (putGroup.items.indexOf(asset.objectId) < 0) {
+          putGroup.items.push(asset.objectId);
+        }
       } else if (asset && asset.id) {
         // Data return from legacy services
         if (putGroup.items.indexOf(asset.id) < 0) {
