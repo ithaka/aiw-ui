@@ -25,6 +25,9 @@ export class IgFormUtil {
         if (item[assetIdProperty]) {
           itemIds.push(item[assetIdProperty]) // sometimes this is an array of real assets
         } 
+        else if(item.objectId) {
+          itemIds.push(item.objectId) // sometimes assets are from legacy collection services
+        }
         else if(item.id) {
           itemIds.push(item.id) // sometimes this is an array of real assets
         } else {
