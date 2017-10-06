@@ -334,15 +334,20 @@ export class AssetGrid implements OnInit, OnDestroy {
    * @param asset object to be selected / deselected
    */
   private selectAsset(asset: any): void{
+    console.log('asset', asset)
     if(this.editMode){
+      console.log('in edit mode')
       let index: number = this.isSelectedAsset(asset);
+      console.log('index', index)
       if(index > -1){
         this.selectedAssets.splice(index, 1);
+        console.log(this.selectedAssets)
         this._assets.setSelectedAssets(this.selectedAssets);
       }
       else{
         this.selectedAssets.push(asset);
         this._assets.setSelectedAssets(this.selectedAssets);
+        console.log(this.selectedAssets)
       }
     }
     else{
@@ -432,7 +437,13 @@ export class AssetGrid implements OnInit, OnDestroy {
   private isSelectedAsset(asset: any): number{
     let index: number = -1
     let assetIdProperty =  'artstorid'
-    for(var i = 0; i < this.selectedAssets.length; i++){
+
+    // some services return assets with objectId instead of artstorid, so check the first one and use that
+    if (this.selectedAssets[0] && !this.selectedAssets[0].hasOwnProperty('artstorid')) {
+      assetIdProperty = 'objectId'
+    }
+    let len = this.selectedAssets.length
+    for(var i = 0; i < len; i++){
       if(this.selectedAssets[i][assetIdProperty] === asset[assetIdProperty]){
         index = i
         break
