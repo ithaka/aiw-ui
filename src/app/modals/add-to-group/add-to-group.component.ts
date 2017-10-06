@@ -98,17 +98,17 @@ export class AddToGroupModal implements OnInit, OnDestroy {
 
     // assets come from different places and sometimes have id and sometimes objectId
     this.selectedAssets.forEach((asset: any) => {
-      if (asset && asset.id) {
-        // Data return from legacy services
-        if (putGroup.items.indexOf(asset.id) < 0) {
-          putGroup.items.push(asset.id);
-        }
-      } else if (asset && asset.artstorid) {
+      if (asset && asset.artstorid) {
         // Data returned from Solr
         if (putGroup.items.indexOf(asset.artstorid) < 0) {
           putGroup.items.push(asset.artstorid);
         }
-      }
+      } else if (asset && asset.id) {
+        // Data return from legacy services
+        if (putGroup.items.indexOf(asset.id) < 0) {
+          putGroup.items.push(asset.id);
+        }
+      } 
     })
 
     // throw an error if the image group is going to be larger than 1000 images
