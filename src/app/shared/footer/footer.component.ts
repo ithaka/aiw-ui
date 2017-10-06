@@ -1,12 +1,13 @@
-import { Component } from '@angular/core';
-import { Location } from '@angular/common';
-import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
-import { Subscription } from 'rxjs/Subscription';
+import { Component } from '@angular/core'
+import { Location } from '@angular/common'
+import { ActivatedRoute, Router, NavigationEnd } from '@angular/router'
+import { Subscription } from 'rxjs/Subscription'
 
-import { AuthService } from '../auth.service';
+import { AppConfig } from '../../app.service'
+import { AuthService } from '../auth.service'
 
 // Project Dependencies
-const { version: appVersion } = require('../../../../package.json');
+const { version: appVersion } = require('../../../../package.json')
 
 declare let google
 
@@ -16,22 +17,25 @@ declare let google
   styleUrls: [ './footer.component.scss' ],
 })
 export class Footer {
-  private subscriptions: Subscription[] = [];
-  private appVersion = '';
-  private currentYear;
-  private user: any = {};
+  private subscriptions: Subscription[] = []
+  private appVersion = ''
+  private currentYear
+  private user: any = {}
+  private links: string[]
   
   // TypeScript public modifiers
   constructor( 
     private location: Location,
+    private _app: AppConfig,
     private _router: Router,
     private _auth: AuthService
   ) { 
     // Get version number
-    this.appVersion = appVersion;
+    this.appVersion = appVersion
+    this.links = this._app.config.footerLinks
 
     // Set current year
-    this.currentYear = new Date().getFullYear();
+    this.currentYear = new Date().getFullYear()
   }
 
   
@@ -40,10 +44,10 @@ export class Footer {
     this.subscriptions.push(
       this._router.events.subscribe(e => {
         if (e instanceof NavigationEnd) {
-            this.user = this._auth.getUser();
+            this.user = this._auth.getUser()
         }
       })
-    );
+    )
 
     // Workaround: Make sure Google translate has loaded
     setTimeout(() => {

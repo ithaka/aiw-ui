@@ -6,20 +6,22 @@
 import { Injectable } from '@angular/core';
 
 // Import all WLV configs
-import { WLV_SAHARA } from './white-label-config.ts'
+import { WLV_ARTSTOR, WLV_SAHARA } from './white-label-config.ts'
 
 @Injectable()
 export class AppConfig {
   // Default values
-  public pageTitle = 'Artstor'
-  public logoUrl = '/assets/img/logo-v1-1.png'
+  // public pageTitle = 'Artstor'
+  // public logoUrl = '/assets/img/logo-v1-1.png'
+  public config
 
   constructor() {
-    let WLVConfig = this.getWLVConfig()
-    if (WLVConfig) {
-      this.pageTitle = WLVConfig.pageTitle
-      this.logoUrl = WLVConfig.logoUrl
-    }
+    // let WLVConfig = this.getWLVConfig()
+    // if (WLVConfig) {
+    //   this.pageTitle = WLVConfig.pageTitle
+    //   this.logoUrl = WLVConfig.logoUrl
+    // }
+    this.config = Object.assign(WLV_ARTSTOR, this.getWLVConfig())
   }
   
   getWLVConfig() {
@@ -29,7 +31,7 @@ export class AppConfig {
         || document.location.hostname.indexOf('saharabeta.stage.artstor.org') > -1 ) {
       return WLV_SAHARA
     } else {
-      return null
+      return WLV_ARTSTOR
     }
   }
 }
