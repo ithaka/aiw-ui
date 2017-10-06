@@ -99,12 +99,14 @@ export class AddToGroupModal implements OnInit, OnDestroy {
     // assets come from different places and sometimes have id and sometimes objectId
     this.selectedAssets.forEach((asset: any) => {
       if (asset && asset.id) {
+        // Data return from legacy services
         if (putGroup.items.indexOf(asset.id) < 0) {
           putGroup.items.push(asset.id);
         }
-      } else if (asset && asset.objectId) {
-        if (putGroup.items.indexOf(asset.objectId) < 0) {
-          putGroup.items.push(asset.objectId);
+      } else if (asset && asset.artstorid) {
+        // Data returned from Solr
+        if (putGroup.items.indexOf(asset.artstorid) < 0) {
+          putGroup.items.push(asset.artstorid);
         }
       }
     })
