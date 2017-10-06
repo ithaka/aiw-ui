@@ -432,7 +432,13 @@ export class AssetGrid implements OnInit, OnDestroy {
   private isSelectedAsset(asset: any): number{
     let index: number = -1
     let assetIdProperty =  'artstorid'
-    for(var i = 0; i < this.selectedAssets.length; i++){
+
+    // some services return assets with objectId instead of artstorid, so check the first one and use that
+    if (this.selectedAssets[0] && !this.selectedAssets[0].hasOwnProperty('artstorid')) {
+      assetIdProperty = 'objectId'
+    }
+    let len = this.selectedAssets.length
+    for(var i = 0; i < len; i++){
       if(this.selectedAssets[i][assetIdProperty] === asset[assetIdProperty]){
         index = i
         break
