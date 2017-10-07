@@ -275,7 +275,7 @@ export class Asset {
         data = data.metadata[0]
     }
 
-    if(data.downloadSize === '0,0'){
+    if(data.downloadSize === '0,0' || data.download_size === '0,0'){
         this.disableDownload = true;
     }
     else{
