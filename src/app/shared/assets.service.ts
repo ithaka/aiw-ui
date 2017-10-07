@@ -553,12 +553,8 @@ export class AssetService {
      * @param assetId string Asset or object ID
      */
     public getImageSource(assetId: string, collectionId?: number) {
-        if (!collectionId) {
-            collectionId = this.getRegionCollection()
-        }
-
         return this.http
-            .get( this._auth.getUrl() + '/imagefpx/' + assetId + '/' + collectionId + '/5', this.defaultOptions)
+            .get( this._auth.getUrl() + '/v1/metadata?object_ids=' + assetId, this.defaultOptions)
             .map(data => {
                 // This call returns an array-- maybe it supports querying multiple ids?
                 // For now let's just grab the first item in the array
@@ -568,6 +564,18 @@ export class AssetService {
                     return(data.json() || {});
                 }
             });
+
+        // return this.http
+        //     .get( this._auth.getUrl() + '/imagefpx/' + assetId + '/' + collectionId + '/5', this.defaultOptions)
+        //     .map(data => {
+        //         // This call returns an array-- maybe it supports querying multiple ids?
+        //         // For now let's just grab the first item in the array
+        //         if (data.json() && data.json().length > 0) {
+        //             return(data.json()[0]);
+        //         } else {
+        //             return(data.json() || {});
+        //         }
+        //     });
     }
 
     /**

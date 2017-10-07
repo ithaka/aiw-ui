@@ -430,7 +430,7 @@ export class AssetPage implements OnInit, OnDestroy {
 
     private genDownloadViewLink() : void {
 
-        if(this.assets[0].typeName() === 'image'){
+        if(this.assets[0].typeName() === 'image' && this.assets[0].viewportDimensions.contentSize){
             // Full source image size (max output possible)
             let fullWidth = this.assets[0].viewportDimensions.contentSize.x
             let fullY = this.assets[0].viewportDimensions.contentSize.y

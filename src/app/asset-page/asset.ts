@@ -271,6 +271,10 @@ export class Asset {
         throw new Error("No data returned from image source call!");
     }
 
+    if (data.metadata && data.metadata[0]) {
+        data = data.metadata[0]
+    }
+
     if(data.downloadSize === '0,0'){
         this.disableDownload = true;
     }
@@ -278,15 +282,16 @@ export class Asset {
         this.disableDownload = false;
     }
     
-    this.typeId = data.objectTypeId;
+    this.typeId = data.object_type_id || data.objectTypeId;
     
-    let downloadSize = data.downloadSize || '1024,1024'
+    let downloadSize = data.download_size || '1024,1024'
+    let imageServer = data.imageServer || 'http://hubviewer.artstor.org/'
     
     /** This determines how to build the downloadLink, which is different for different typeIds */
     if (this.typeId === 20 || this.typeId === 21 || this.typeId === 22 || this.typeId === 23) { //all of the typeIds for documents
         this.downloadLink = [this._auth.getMediaUrl(), this.id, this.typeId].join("/");
-    } else if (data.imageServer && data.imageUrl) { //this is a general fallback, but should work specifically for images and video thumbnails
-        let url = data.imageServer + data.imageUrl + "?cell=" + downloadSize + "&rgnn=0,0,1,1&cvt=JPEG";
+    } else if (imageServer && data.image_url) { //this is a general fallback, but should work specifically for images and video thumbnails
+        let url = imageServer + data.image_url + "?cell=" + downloadSize + "&rgnn=0,0,1,1&cvt=JPEG";
         this.downloadLink = this._auth.getHostname() + "/api/download?imgid=" + this.id + "&url=" + encodeURIComponent(url);
     }
 
@@ -296,7 +301,7 @@ export class Asset {
     if (data && data.metadata && data.metadata[0] && data.metadata[0]['image_url']) {
         imgPath = '/' + data.metadata[0]['image_url']
     } else {
-        imgPath = '/' + data['imageUrl'].substring(0, data['imageUrl'].lastIndexOf('.fpx') + 4)
+        imgPath = '/' + data['image_url'].substring(0, data['image_url'].lastIndexOf('.fpx') + 4)
     }
 
     this.tileSource = this._auth.getIIIFUrl() + encodeURIComponent(imgPath) + '/info.json'
