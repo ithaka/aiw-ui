@@ -10,10 +10,10 @@ import { AnalyticsService } from '../analytics.service';
 
 
 @Component({
-  selector: 'ang-associated-page', 
+  selector: 'ang-associated-page',
   providers: [],
   styles: [ '' ],
-  templateUrl: './associated-page.component.html'
+  templateUrl: './associated-page.component.pug'
 })
 
 export class AssociatedPage implements OnInit, OnDestroy {
@@ -27,10 +27,10 @@ export class AssociatedPage implements OnInit, OnDestroy {
   private assetTitle: string;
 
   constructor(
-        private _router: Router, 
-        private _assets: AssetService, 
-        private route: ActivatedRoute, 
-        private http: Http, 
+        private _router: Router,
+        private _assets: AssetService,
+        private route: ActivatedRoute,
+        private http: Http,
         private _auth: AuthService,
         private _analytics: AnalyticsService
       ) {
@@ -52,7 +52,7 @@ export class AssociatedPage implements OnInit, OnDestroy {
         // If a page number isn't set, reset to page 1!
         if (!params['page']){
           params['page'] = 1;
-        } 
+        }
         if (this.objectId && this.colId) {
           this._assets.queryAll(params);
 
@@ -69,10 +69,10 @@ export class AssociatedPage implements OnInit, OnDestroy {
             })
             .catch((error) => { console.error(error); });
         }
-        
+
       })
     );
-    
+
     this._analytics.setPageValues('associated', this.objectId)
   } // OnInit
 

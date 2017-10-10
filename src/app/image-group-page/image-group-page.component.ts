@@ -11,7 +11,7 @@ import { TitleService } from '../shared/title.service';
 @Component({
   selector: 'ang-image-group',
   styleUrls: [ './image-group-page.component.scss' ],
-  templateUrl: './image-group-page.component.html'
+  templateUrl: './image-group-page.component.pug'
 })
 
 export class ImageGroupPage implements OnInit, OnDestroy {
@@ -89,7 +89,7 @@ export class ImageGroupPage implements OnInit, OnDestroy {
         // If a page number isn't set, reset to page 1!
         if (!params['page']){
           params['page'] = 1;
-        } 
+        }
         if (id) {
           this._assets.queryAll(params);
         }
@@ -170,7 +170,7 @@ export class ImageGroupPage implements OnInit, OnDestroy {
         }
       })
     );
-  
+
     this._analytics.setPageValues('group', this.ig.id)
   } // OnInit
 
@@ -223,5 +223,5 @@ export class ImageGroupPage implements OnInit, OnDestroy {
   private toggleReorder(isReordering: boolean): void {
     this.reorderMode = isReordering;
   }
-  
+
 }

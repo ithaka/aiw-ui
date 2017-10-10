@@ -1,0 +1,10 @@
+nav-menu([allowSelectAll]="true")
+#mainContent.container.main-content(tabindex="-1")
+  .row.no-gutters.row--search-bar
+    .col-md-5
+      ang-search
+
+  h1 Associated Assets
+  h3(*ngIf="assetTitle") {{assetTitle}}
+  br
+  ang-asset-grid([actionOptions]="{associated: true}")
