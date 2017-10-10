@@ -24,7 +24,8 @@ export const WLV_ARTSTOR = {
         'openCol': true,
         'myCol': true,
         'igs': true
-    }
+    },
+    showHomeBlog: true
 }
 
 export const WLV_SAHARA = {
@@ -44,5 +45,6 @@ export const WLV_SAHARA = {
         'openCol': false,
         'myCol': false,
         'igs': true
-    }
+    },
+    showHomeBlog: false
 }
