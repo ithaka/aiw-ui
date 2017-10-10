@@ -71,13 +71,13 @@
             </div>
         </div>
         <div class="col-sm-5">
-            <a #featuredCollection id="featuredCollectionLink" class="card featured-card" [attr.href]=" 'HOME.FEATURED.LINK' | translate "> 
-                <img class="card-img-top no-stretch" [attr.src]="'HOME.FEATURED.IMG_SOURCE' | translate" [attr.alt]="'HOME.FEATURED.ALT_TEXT' | translate" [attr.title]="'HOME.FEATURED.LINK_TITLE' | translate">
+            <a #featuredCollection id="featuredCollectionLink" class="card featured-card" [attr.href]="featuredCollectionConf + '.LINK' | translate">
+                <img class="card-img-top no-stretch" [attr.src]="featuredCollectionConf + '.IMG_SOURCE' | translate" [attr.alt]="featuredCollectionConf + '.ALT_TEXT' | translate" [attr.title]="featuredCollectionConf + '.LINK_TITLE' | translate">
                 <div class="card-body pt-1">
-                    <label style="margin-bottom:0px;">{{ 'HOME.FEATURED.HEADING' | translate }}</label>
-                    <p style="margin-bottom:6px;">{{ 'HOME.FEATURED.SUBHEADING' | translate }}</p>
+                    <label style="margin-bottom:0px;">{{ featuredCollectionConf + '.HEADING' | translate }}</label>
+                    <p style="margin-bottom:6px;">{{ featuredCollectionConf + '.SUBHEADING' | translate }}</p>
                 </div>
-                <div class="featured-caption">{{ 'HOME.FEATURED.DESCRIPTION' | translate }}</div>
+                <div class="featured-caption">{{ featuredCollectionConf + '.DESCRIPTION' | translate }}</div>
             </a>
             <div class="card" *ngIf="showBlog">
                 <div class="card-header">

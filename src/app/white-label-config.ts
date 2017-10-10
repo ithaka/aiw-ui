@@ -25,7 +25,8 @@ export const WLV_ARTSTOR = {
         'myCol': true,
         'igs': true
     },
-    showHomeBlog: true
+    showHomeBlog: true,
+    featuredCollection: "HOME.FEATURED"
 }
 
 export const WLV_SAHARA = {
@@ -46,5 +47,6 @@ export const WLV_SAHARA = {
         'myCol': false,
         'igs': true
     },
-    showHomeBlog: false
+    showHomeBlog: false,
+    featuredCollection: "HOME.SAHARA_FEATURED"
 }

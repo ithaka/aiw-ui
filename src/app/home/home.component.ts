@@ -24,6 +24,7 @@ export class Home implements OnInit, OnDestroy {
 
   private artStorEmailLink: string = '';
   private userGeoIP: any = {};
+  private featuredCollectionConf = "";
 
   // Set our default values
   localState = { value: '' };
@@ -40,8 +41,8 @@ export class Home implements OnInit, OnDestroy {
 
   // TypeScript public modifiers
   constructor(
-      public _appConfig: AppConfig, 
-      private _assets: AssetService, 
+      public _appConfig: AppConfig,
+      private _assets: AssetService,
       private _router: Router,
       private _auth: AuthService,
       private _analytics: AnalyticsService,
@@ -53,9 +54,10 @@ export class Home implements OnInit, OnDestroy {
     });
 
     this.showBlog = this._appConfig.config.showHomeBlog;
+    this.featuredCollectionConf = this._appConfig.config.featuredCollection
   }
 
-  ngOnInit() {    
+  ngOnInit() {
 
     // Provide redirects for initPath detected in index.html from inital load
     if (initPath) {
@@ -86,7 +88,7 @@ export class Home implements OnInit, OnDestroy {
             data => {
               // Filter SSC content
               this.collections = data["Collections"].filter((collection) => {
-                return collection.collectionType == 5 
+                return collection.collectionType == 5
               })
               this.loaders['collections'] = false;
               // Filter institutional content
@@ -153,7 +155,7 @@ export class Home implements OnInit, OnDestroy {
         deviceInfoHTML += 'Adblocker Enabled: ' + adBlockEnabled + ' \n ';
         deviceInfoHTML += '\n ------------------------------------------------------------------------------ \n';
         this.artStorEmailLink = 'mailto:userservices@artstor.org?body=' + encodeURIComponent(deviceInfoHTML);
-    
+
       }, 100);
 
   }
