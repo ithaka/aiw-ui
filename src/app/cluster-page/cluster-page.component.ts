@@ -6,10 +6,10 @@ import { AssetService } from './../shared/assets.service';
 import { AnalyticsService } from '../analytics.service';
 
 @Component({
-  selector: 'ang-cluster-page', 
+  selector: 'ang-cluster-page',
   providers: [],
   styles: [ '' ],
-  templateUrl: './cluster-page.component.html'
+  templateUrl: './cluster-page.component.pug'
 })
 
 export class ClusterPage implements OnInit, OnDestroy {
@@ -23,8 +23,8 @@ export class ClusterPage implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private _assets: AssetService,
     private _analytics: AnalyticsService
-  ) {   
-  } 
+  ) {
+  }
 
   ngOnInit() {
     this.subscriptions.push(
@@ -35,7 +35,7 @@ export class ClusterPage implements OnInit, OnDestroy {
           // If a page number isn't set, reset to page 1!
           if (!params['page']){
             params['page'] = 1;
-          } 
+          }
           if (this.objectId) {
             this._assets.queryAll(params);
           }
