@@ -59,6 +59,7 @@ export class AssetPage implements OnInit, OnDestroy {
     private quizShuffle: boolean = false;
     private showAssetCaption: boolean = true;
     
+    private assetIdProperty: string = 'artstorid'
 
     constructor(
             private _assets: AssetService, 
@@ -145,19 +146,21 @@ export class AssetPage implements OnInit, OnDestroy {
         // sets up subscription to allResults, which is the service providing thumbnails
         this.subscriptions.push(
           this._assets.allResults.subscribe((allResults: any) => {
-              let assetIdProperty = 'artstorid';
               if(allResults.thumbnails){
+                  // Set asset id property to reference
+                this.assetIdProperty = (allResults.thumbnails[0] && allResults.thumbnails[0].objectId) ? 'objectId' : 'artstorid'
+
                   this.prevAssetResults.thumbnails = allResults.thumbnails;
                   if(this.loadArrayFirstAsset){
                       this.loadArrayFirstAsset = false;
                       if((this.prevAssetResults) && (this.prevAssetResults.thumbnails.length > 0)){
-                          this._router.navigate(['/asset', this.prevAssetResults.thumbnails[0][assetIdProperty]]);
+                          this._router.navigate(['/asset', this.prevAssetResults.thumbnails[0][this.assetIdProperty]]);
                       }
                   }
                   else if(this.loadArrayLastAsset){
                       this.loadArrayLastAsset = false;
                       if((this.prevAssetResults.thumbnails) && (this.prevAssetResults.thumbnails.length > 0)){
-                          this._router.navigate(['/asset', this.prevAssetResults.thumbnails[this.prevAssetResults.thumbnails.length - 1][assetIdProperty]]);
+                          this._router.navigate(['/asset', this.prevAssetResults.thumbnails[this.prevAssetResults.thumbnails.length - 1][this.assetIdProperty]]);
                       }
                   }
                   else{
@@ -224,8 +227,7 @@ export class AssetPage implements OnInit, OnDestroy {
     private currentAssetIndex(): number{
         if (this.assets[0]) {
             for(var i = 0; i < this.prevAssetResults.thumbnails.length; i++){
-                let assetIdProperty = 'artstorid';
-                if(this.prevAssetResults.thumbnails[i] && this.prevAssetResults.thumbnails[i][assetIdProperty] == this.assets[0].id){
+                if(this.prevAssetResults.thumbnails[i] && this.prevAssetResults.thumbnails[i][this.assetIdProperty] == this.assets[0].id){
                     return i;
                 }
             }
@@ -255,8 +257,7 @@ export class AssetPage implements OnInit, OnDestroy {
         if(this.assetNumber > 1){
             if((this.assetIndex > 0)){
                 let prevAssetIndex = this.quizShuffle ? Math.floor(Math.random() * this.prevAssetResults.thumbnails.length) + 0 : this.assetIndex - 1; // Assign random thumbnail index if quiz shuffle is true
-                let assetIdProperty = 'artstorid';
-                this._router.navigate(['/asset', this.prevAssetResults.thumbnails[prevAssetIndex][assetIdProperty]]);
+                this._router.navigate(['/asset', this.prevAssetResults.thumbnails[prevAssetIndex][this.assetIdProperty]]);
             }
             else if(this.assetIndex == 0){
                 this.loadArrayLastAsset = true;
@@ -269,8 +270,7 @@ export class AssetPage implements OnInit, OnDestroy {
         if(this.assetNumber < this.totalAssetCount){
             if((this.prevAssetResults.thumbnails) && (this.assetIndex < (this.prevAssetResults.thumbnails.length - 1))){
                 let nextAssetIndex = this.quizShuffle ? Math.floor(Math.random() * this.prevAssetResults.thumbnails.length) + 0 : this.assetIndex + 1; // Assign random thumbnail index if quiz shuffle is true
-                let assetIdProperty = 'artstorid';
-                this._router.navigate(['/asset', this.prevAssetResults.thumbnails[nextAssetIndex][assetIdProperty]]);
+                this._router.navigate(['/asset', this.prevAssetResults.thumbnails[nextAssetIndex][this.assetIdProperty]]);
             }
             else if((this.prevAssetResults.thumbnails) && (this.assetIndex == (this.prevAssetResults.thumbnails.length - 1))){
                 this.loadArrayFirstAsset = true;
@@ -340,17 +340,16 @@ export class AssetPage implements OnInit, OnDestroy {
 
      // Add or remove assets from Assets array for comparison in full screen
     private toggleAsset(asset: any): void {
-        let assetIdProperty = 'artstorid';
         let add = true;
         this.assets.forEach( (viewAsset, i) => {
-            if (asset.id == viewAsset.id) {
+            if (asset[this.assetIdProperty] == viewAsset.id) {
                 asset.selected = false;
                 this.assets.splice(i, 1);
                 add = false;
 
                 // Set 'selected' to 'false' for the asset in asset drawer
                 this.prevAssetResults.thumbnails.forEach( (thumbnail, i) => {
-                    if (asset.id == thumbnail[assetIdProperty]) {
+                    if (asset[this.assetIdProperty] == thumbnail[this.assetIdProperty]) {
                         thumbnail.selected = false;
                     }
                 });
@@ -363,7 +362,7 @@ export class AssetPage implements OnInit, OnDestroy {
         }
         if (add == true) {
             asset.selected = true;
-            this.assets.push( new Asset(asset[assetIdProperty], this._assets, this._auth) );
+            this.assets.push( new Asset(asset[this.assetIdProperty], this._assets, this._auth) );
         }
     }
 
