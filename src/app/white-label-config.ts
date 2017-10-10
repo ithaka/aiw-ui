@@ -17,7 +17,8 @@ export const WLV_ARTSTOR = {
         "PRIVACY",
         "COPYRIGHT",
         "SUPPORT"
-    ]
+    ],
+    limitHomeBrowse: false
 }
 
 export const WLV_SAHARA = {
@@ -30,5 +31,6 @@ export const WLV_SAHARA = {
         "SARARA_CONTRIBUTE",
         "SAHARA_TERMS",
         "SAHARA_PRIVACY"
-    ]
+    ],
+    limitHomeBrowse: true
 }
