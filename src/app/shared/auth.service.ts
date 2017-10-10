@@ -75,7 +75,7 @@ export class AuthService implements CanActivate {
     // Default to relative or prod endpoints
     this.ENV = 'test'
     this.hostname = ''
-    this.baseUrl =  '/api' 
+    this.baseUrl =  '/api'
     this.thumbUrl = '//mdxdv.artstor.org'
     this.IIIFUrl = '//tsprod.artstor.org/rosa-iiif-endpoint-1.0-SNAPSHOT/fpx'
     this.subdomain = 'library'
@@ -97,7 +97,7 @@ export class AuthService implements CanActivate {
       // prod.artstor subdomain is used for WLVs
       'prod.artstor.org',
     ]
-    
+
     // Check domain
     if (  new RegExp(prodHostnames.join("|")).test(document.location.hostname)  ) {
       // Explicit live endpoints
@@ -108,7 +108,7 @@ export class AuthService implements CanActivate {
     else if ( document.location.hostname.indexOf('prod.cirrostratus.org') > -1 ) {
       // Prod/Lively endpoints
       this.hostname = '//library.artstor.org'
-      this.baseUrl =  '//library.artstor.org/api' 
+      this.baseUrl =  '//library.artstor.org/api'
       this.logUrl = '//ang-ui-logger.apps.prod.cirrostratus.org/api/v1'
       this.solrUrl = 'http://library.artstor.org/api/search/v1.0/search'
       this.ENV = 'prod'
@@ -123,11 +123,12 @@ export class AuthService implements CanActivate {
       this.IIIFUrl = '//tsstage.artstor.org/rosa-iiif-endpoint-1.0-SNAPSHOT/fpx'
       this.ENV = 'test'
     }
-    
+
     // Additional Local dev domains
     if (document.location.hostname.indexOf('local.sahara') > -1) {
       this.hostname = '//saharabeta.stage.artstor.org'
       this.baseUrl = this.hostname + '/api'
+      this.solrUrl = this.hostname + '/api/search/v1.0/search'
     }
 
 
@@ -275,7 +276,7 @@ export class AuthService implements CanActivate {
       let body = res.json();
       return body || { };
   }
-  
+
   public getUrl(secure?: boolean): string {
     let url: string = this.baseUrl
     if (secure) {
@@ -305,7 +306,7 @@ export class AuthService implements CanActivate {
   }
 
   /**
-   * Our thumbnails come 
+   * Our thumbnails come
    */
   public getThumbUrl(): string {
     return this.thumbUrl;
@@ -317,7 +318,7 @@ export class AuthService implements CanActivate {
 
   /** Returns url used for downloading some media, such as documents */
   public getMediaUrl(): string {
-    // This is a special case, and should always points to library.artstor or stage 
+    // This is a special case, and should always points to library.artstor or stage
     return this.getHostname() + '/media';
   }
 
@@ -369,9 +370,9 @@ export class AuthService implements CanActivate {
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
     let options = new RequestOptions({ withCredentials: true });
     // If user object already exists, we're done here
-    if (this.getUser() && this.getUser().hasOwnProperty('status')) { 
+    if (this.getUser() && this.getUser().hasOwnProperty('status')) {
       return new Observable(observer => {
-          observer.next(true);  
+          observer.next(true);
       });
     }
 
@@ -388,8 +389,8 @@ export class AuthService implements CanActivate {
               let user = jsonData.user;
               if (jsonData.isRememberMe || jsonData.remoteaccess) {
                 user.isLoggedIn = true
-              } 
-              
+              }
+
               this.saveUser(user);
               return true;
             } else {
@@ -404,12 +405,12 @@ export class AuthService implements CanActivate {
         }
       )
       .subscribe(res => {
-          // CanActivate is not handling the Observable value properly, 
+          // CanActivate is not handling the Observable value properly,
           // ... so we do an extra redirect in here
           if (res === false) {
             this._router.navigate(['/login']);
           }
-          observer.next(res); 
+          observer.next(res);
         }, err => {
           this._router.navigate(['/login']);
           observer.next(false);
@@ -431,9 +432,9 @@ export class AuthService implements CanActivate {
               let user = data.user;
               if (data.isRememberMe || data.remoteaccess) {
                 user.isLoggedIn = true
-              } 
+              }
               this.saveUser(user);
-            } 
+            }
             return data;
           } catch (err) {
             console.error(err);
@@ -479,8 +480,8 @@ export class AuthService implements CanActivate {
     login(user: User) : Promise<any> {
         let header = new Headers({ 'Content-Type': 'application/x-www-form-urlencoded' }); // ... Set content type to JSON
         let options = new RequestOptions({ headers: header, withCredentials: true }); // Create a request option
-        let data = this.formEncode({ 
-                'j_username': user.username.toLowerCase(), 
+        let data = this.formEncode({
+                'j_username': user.username.toLowerCase(),
                 'j_password': user.password
             });
 
@@ -502,7 +503,7 @@ export class AuthService implements CanActivate {
 
     getFallbackInstitutions() {
         let url =  '/assets/institutions-initial.json';
-        
+
         return this.http
             .get(url)
             .toPromise()
@@ -511,7 +512,7 @@ export class AuthService implements CanActivate {
 
     getInstitutions() {
         let url = this.getHostname() + '/api/secure/institutions?_method=ShibbolethOnly';
-        
+
         return this.http
             .get(url)
             .toPromise()
@@ -520,16 +521,16 @@ export class AuthService implements CanActivate {
 
     pwdReset(email: string) {
         let options = new RequestOptions({ withCredentials: true });
-        
+
         return this.http
             .get(this.getUrl() + '/lostpw?email=' + email.toLowerCase() + '&portal=ARTstor', options)
             .toPromise()
             .then(this.extractData);
     }
 
-  /** 
+  /**
    * This is the same call we use in canActivate to determine if the user is IP Auth'd
-   * @returns json which should have 
+   * @returns json which should have
    */
   public getIpAuth(): Observable<any> {
     let options = new RequestOptions({ withCredentials: true });
