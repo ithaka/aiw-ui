@@ -11,10 +11,10 @@ import { AuthService } from './../shared/auth.service';
 import { TitleService } from '../shared/title.service';
 
 @Component({
-  selector: 'ang-collection-page', 
+  selector: 'ang-collection-page',
   providers: [],
   styleUrls: [ './collection-page.component.scss' ],
-  templateUrl: './collection-page.component.html'
+  templateUrl: './collection-page.component.pug'
 })
 
 export class CollectionPage implements OnInit, OnDestroy {
@@ -29,7 +29,7 @@ export class CollectionPage implements OnInit, OnDestroy {
   private assetCount: number;
   private descCollapsed: boolean = true;
   private showaccessDeniedModal: boolean = false;
-  
+
   private subscriptions: Subscription[] = [];
 
   // private searchInResults: boolean = false;
@@ -79,8 +79,8 @@ export class CollectionPage implements OnInit, OnDestroy {
               // Set page title
               this._title.setSubtitle(this.colName)
             })
-            .catch((error) => { 
-              console.error(error); 
+            .catch((error) => {
+              console.error(error);
               if(error.status === 401){
                 this.showaccessDeniedModal = true;
               }
@@ -115,6 +115,6 @@ export class CollectionPage implements OnInit, OnDestroy {
   }
 
   // private updateSearchInRes(value: boolean): void{
-  //  this.searchInResults = value; 
+  //  this.searchInResults = value;
   // }
 }

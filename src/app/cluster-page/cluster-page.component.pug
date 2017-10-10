@@ -1,0 +1,10 @@
+nav-menu([allowSelectAll]="true")
+#mainContent.container.main-content(tabindex="-1")
+  .row.no-gutters.row--search-bar
+    .col-md-5
+      ang-search
+
+  h3#pageType Duplicates and Details
+  h1#pageTitle.h1--title-block(*ngIf="clusterObjTitle") {{clusterObjTitle}}
+  br
+  ang-asset-grid
