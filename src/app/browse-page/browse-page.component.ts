@@ -7,6 +7,8 @@ import { TitleService } from '../shared/title.service';
 import { AssetService } from '../shared/assets.service';
 import { AuthService } from '../shared/auth.service';
 
+import { AppConfig } from '../app.service';
+
 @Component({
   selector: 'ang-browse-page', 
   providers: [
@@ -22,39 +24,27 @@ export class BrowsePage implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = [];
   private institution: any = {};
 
-  colMenuArray = [
-      {
-          label : 'Artstor Digital Library',
-          id: '1',
-          link: 'library'
-      },
-      {
-          label : 'Open Collections',
-          id: '3',
-          link: 'commons'
-      },
-      {
-          label : 'Groups',
-          id: '5',
-          link: 'groups'
-      }
-  ];
+  colMenuArray = [];
   
   private userPCallowed: string;
   private userTypeId: any;
   private selectedColMenuId: string = '1';
+
+  private browseOpts: any = {};
 
   // TypeScript public modifiers
   constructor(
       locker: Locker,
       private _auth: AuthService,
       private _assets: AssetService,
+      private _app: AppConfig,
       private route: ActivatedRoute,
       private router: Router,
       private _title: TitleService
   ) {  
       this._storage = locker.useDriver(Locker.DRIVERS.LOCAL);
-      this.institution = this._storage.get('institution'); 
+      this.institution = this._storage.get('institution');
+      this.browseOpts = this._app.config.browseOptions;
   } 
 
   ngOnInit() {
@@ -68,19 +58,14 @@ export class BrowsePage implements OnInit, OnDestroy {
       })
     );
 
-    this.userPCallowed = this._auth.getUser().userPCAllowed;
-    if(this.userPCallowed == '1'){
-        var obj = {
-            label : 'My Collections',
-            id: '4',
-            link: 'mycollections'
-        }
-        this.colMenuArray.splice(2, 0 ,obj);
+
+    
+    if( this.browseOpts.artstorCol ){
+        this.colMenuArray.push( { label: 'Artstor Digital Library', id: '1', link: 'library' } );
     }
 
     this.userTypeId = this._auth.getUser().typeId;
-    
-    if(this.userTypeId == 1 || this.userTypeId == 2 || this.userTypeId == 3){
+    if( (this.userTypeId == 1 || this.userTypeId == 2 || this.userTypeId == 3) && this.browseOpts.instCol ){
         let instName = this.institution && this.institution.shortName ? this.institution.shortName : 'Institutional';
         var obj = {
             label : instName + ' Collections',
@@ -88,6 +73,24 @@ export class BrowsePage implements OnInit, OnDestroy {
             link: 'institution'
         }
         this.colMenuArray.splice(1, 0 ,obj);
+    }
+
+    if( this.browseOpts.openCol ){
+        this.colMenuArray.push( { label: 'Open Collections', id: '3', link: 'commons' } );
+    }
+
+    this.userPCallowed = this._auth.getUser().userPCAllowed;
+    if((this.userPCallowed == '1') && this.browseOpts.myCol){
+        var obj = {
+            label : 'My Collections',
+            id: '4',
+            link: 'mycollections'
+        }
+        this.colMenuArray.splice(2, 0 ,obj);
+    }
+        
+    if( this.browseOpts.igs ){
+        this.colMenuArray.push( { label: 'Groups', id: '5', link: 'groups' } );
     }
   }
 
