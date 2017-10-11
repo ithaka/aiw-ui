@@ -27,6 +27,7 @@ export const WLV_ARTSTOR = {
     },
     homeBrowseSec: {
         'collection': true,
+        'instCollection': false,
         'classification': true,
         'geography': true,
         'teachingResources': true,
@@ -56,7 +57,8 @@ export const WLV_SAHARA = {
     },
     featuredCollection: "HOME.SAHARA_FEATURED",
     homeBrowseSec: {
-        'collection': true,
+        'collection': false,
+        'instCollection': true,
         'classification': false,
         'geography': false,
         'teachingResources': false,
