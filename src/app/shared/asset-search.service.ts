@@ -209,7 +209,7 @@ export class AssetSearchService {
     }
 
     if (sortIndex) {
-      query["sortorder"] = "desc"
+      query["sortorder"] = "asc"
  
       // if(sortIndex == '0'){
       //   sort = 'Relevance';
