@@ -86,6 +86,9 @@
                         <ang-thumbnail [thumbnail]="asset" [reorderMode]="reorderMode" [editMode]="editMode" [largeThmbView]="largeThmbView"></ang-thumbnail>
                     </a>
                 </div> <!-- .col -->
+                <div *ngIf="!isLoading && isPartialPage && hasMaxAssetLimit" class="alert alert-warning">
+                    {{ "BROWSE.WARNINGS.ADDITIONAL_RESULTS" | translate }}
+                </div>
             </div>
 
             <!--Sortable Thumbails-->
@@ -105,6 +108,9 @@
                         <ang-thumbnail [thumbnail]="asset" [reorderMode]="reorderMode" [editMode]="editMode" [largeThmbView]="largeThmbView"></ang-thumbnail>
                     </div>
                 </div> <!-- .col -->
+                <div *ngIf="!isLoading && isPartialPage && hasMaxAssetLimit" class="alert alert-warning">
+                    {{ "BROWSE.WARNINGS.ADDITIONAL_RESULTS" | translate }}
+                </div>
             </div>
         </div>
     </div>
@@ -118,7 +124,7 @@
     </div>
 </div>
 
-<ang-confirm-modal *ngIf="showLoseReorder" (closeModal)="ditchingReorder($event)" [title]="'Exit Reordering'" 
+<ang-confirm-modal *ngIf="showLoseReorder" (closeModal)="ditchingReorder($event)" [title]="'Exit Reordering'"
     [description]="'You have made changes to your group\'s order. Do you want to save them?'"
     [dismiss]="'Cancel'"
     [secondary]="'Discard Changes'"
