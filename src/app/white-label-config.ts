@@ -25,8 +25,15 @@ export const WLV_ARTSTOR = {
         'myCol': true,
         'igs': true
     },
-    showHomeBlog: true,
-    featuredCollection: "HOME.FEATURED"
+    homeBrowseSec: {
+        'collection': true,
+        'classification': true,
+        'geography': true,
+        'teachingResources': true,
+        'imageGrps': true
+    },
+    featuredCollection: "HOME.FEATURED",
+    showHomeBlog: true
 }
 
 export const WLV_SAHARA = {
@@ -47,6 +54,13 @@ export const WLV_SAHARA = {
         'myCol': false,
         'igs': true
     },
-    showHomeBlog: false,
-    featuredCollection: "HOME.SAHARA_FEATURED"
+    featuredCollection: "HOME.SAHARA_FEATURED",
+    homeBrowseSec: {
+        'collection': true,
+        'classification': false,
+        'geography': false,
+        'teachingResources': false,
+        'imageGrps': false
+    },
+    showHomeBlog: false
 }
