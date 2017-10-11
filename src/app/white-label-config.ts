@@ -32,6 +32,7 @@ export const WLV_ARTSTOR = {
         'teachingResources': true,
         'imageGrps': true
     },
+    featuredCollection: "HOME.FEATURED",
     showHomeBlog: true
 }
 
@@ -53,6 +54,7 @@ export const WLV_SAHARA = {
         'myCol': false,
         'igs': true
     },
+    featuredCollection: "HOME.SAHARA_FEATURED",
     homeBrowseSec: {
         'collection': true,
         'classification': false,
