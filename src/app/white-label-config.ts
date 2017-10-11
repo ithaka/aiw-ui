@@ -62,7 +62,7 @@ export const WLV_SAHARA = {
         'classification': false,
         'geography': false,
         'teachingResources': false,
-        'imageGrps': false
+        'imageGrps': true
     },
     showHomeBlog: false
 }
