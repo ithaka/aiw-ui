@@ -292,6 +292,15 @@
       "LINK_TITLE": "The Andy Warhol Foundation for the Visual Arts: Oeuvre",
       "ALT_TEXT": "The Andy Warhol Foundation for the Visual Arts: Oeuvre"
     },
+    "SAHARA_FEATURED": {
+      "HEADING": "Featured Image",
+      "SUBHEADING": "Pueblo in Taos, New Mexico",
+      "DESCRIPTION": "Photo taken 2008 by SAHARA contributor Dell Upton.",
+      "LINK": "/#/asset/HUSAHARA_1113121791",
+      "IMG_SOURCE": "/assets/img/featured-collection-sahara.jpg",
+      "LINK_TITLE": "Pueblo in Taos, New Mexico",
+      "ALT_TEXT": "Pueblo in Taos, New Mexico"
+    },
     "AD": {
       "LINK": "http://support.artstor.org/?article=quiz-mode-in-fullscreen",
       "IMG_SOURCE": "/assets/img/promo-quiz.jpg",

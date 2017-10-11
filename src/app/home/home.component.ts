@@ -20,24 +20,26 @@ declare var initPath: string
   templateUrl: './home.component.html'
 })
 export class Home implements OnInit, OnDestroy {
-  private subscriptions: Subscription[] = [];
+  private subscriptions: Subscription[] = []
 
-  private artStorEmailLink: string = '';
-  private userGeoIP: any = {};
+  private artStorEmailLink: string = ''
+  private userGeoIP: any = {}
+  private featuredCollectionConf = ""
 
   // Set our default values
-  localState = { value: '' };
-  collections = [];
-  instCollections = [];
-  institution: any = {};
-  errors = {};
-  loaders = {};
-  private user: any;
-  private blogPosts: any[] = [];
-  private blogLoading: boolean = true;
+  localState = { value: '' }
+  collections = []
+  instCollections = []
+  institution: any = {}
+  errors = {}
+  loaders = {}
+  private user: any
+  private blogPosts: any[] = []
+  private blogLoading: boolean = true
 
-  private showBlog: boolean = false;
-  private showPrivateCollections: boolean = false;
+  private showBlog: boolean = false
+  private showPrivateCollections: boolean = false
+  private browseSec: any = {}
 
   // TypeScript public modifiers
   constructor(
@@ -53,8 +55,10 @@ export class Home implements OnInit, OnDestroy {
       window.scrollTo(0, 0);
     });
 
-    this.showBlog = this._appConfig.config.showHomeBlog;
-    this.showPrivateCollections = this._appConfig.config.browseOptions.myCol;
+    this.showBlog = this._appConfig.config.showHomeBlog
+    this.showPrivateCollections = this._appConfig.config.browseOptions.myCol
+    this.featuredCollectionConf = this._appConfig.config.featuredCollection
+    this.browseSec = this._appConfig.config.homeBrowseSec
   }
 
   ngOnInit() {
