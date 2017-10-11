@@ -18,7 +18,14 @@ export const WLV_ARTSTOR = {
         "COPYRIGHT",
         "SUPPORT"
     ],
-    limitHomeBrowse: false
+    browseOptions: {
+        'artstorCol': true,
+        'instCol': true,
+        'openCol': true,
+        'myCol': true,
+        'igs': true
+    },
+    showHomeBlog: true
 }
 
 export const WLV_SAHARA = {
@@ -32,5 +39,12 @@ export const WLV_SAHARA = {
         "SAHARA_TERMS",
         "SAHARA_PRIVACY"
     ],
-    limitHomeBrowse: true
+    browseOptions: {
+        'artstorCol': false,
+        'instCol': true,
+        'openCol': false,
+        'myCol': false,
+        'igs': true
+    },
+    showHomeBlog: false
 }

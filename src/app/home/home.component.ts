@@ -36,7 +36,7 @@ export class Home implements OnInit, OnDestroy {
   private blogPosts: any[] = [];
   private blogLoading: boolean = true;
 
-  private limitBrowseSection: boolean = false;
+  private showBlog: boolean = false;
 
   // TypeScript public modifiers
   constructor(
@@ -51,7 +51,8 @@ export class Home implements OnInit, OnDestroy {
     this._router.events.subscribe(() => {
       window.scrollTo(0, 0);
     });
-    this.limitBrowseSection = this._appConfig.config.limitHomeBrowse;
+
+    this.showBlog = this._appConfig.config.showHomeBlog;
   }
 
   ngOnInit() {    

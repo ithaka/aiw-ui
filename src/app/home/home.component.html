@@ -83,7 +83,7 @@
                 </div>
                 <div class="featured-caption">{{ 'HOME.FEATURED.DESCRIPTION' | translate }}</div>
             </a>
-            <div class="card">
+            <div class="card" *ngIf="showBlog">
                 <div class="card-header">
                     <h2>{{ 'HOME.HEADINGS.FRM_BLOG' | translate}}</h2>
                 </div>
