@@ -9,23 +9,23 @@
                     <h2 class="h1">{{ 'HOME.BROWSE.TITLE' | translate }}</h2>
                 </div>
                 <ul class="list-group list-group-flush list-group-clean">
-                    <a id="linkBrowseCollection" class="list-group-item" [routerLink]="['/browse','library', {viewId: 103}]">
+                    <a *ngIf="browseSec.collection" id="linkBrowseCollection" class="list-group-item" [routerLink]="['/browse','inst', {viewId: 103}]">
                         <h3 class="browse-category">{{ 'HOME.BROWSE.COLL_HEADING' | translate }}</h3>
-                        <p class="small">{{ 'HOME.BROWSE.COLL_LIST' | translate }}</p>
+                        <p class="small" translate>{{ sahara ? 'HOME.BROWSE.COLL_LIST_SAH' : 'HOME.BROWSE.COLL_LIST' }}</p>
                     </a>
-                    <a id="linkBrowseClassification" class="list-group-item" [routerLink]="['/browse','library', {viewId: 250}]">
+                    <a *ngIf="browseSec.classification" id="linkBrowseClassification" class="list-group-item" [routerLink]="['/browse','library', {viewId: 250}]">
                         <h3 class="browse-category">{{ 'HOME.BROWSE.CLASS_HEADING' | translate }}</h3>
                         <p class="small">{{ 'HOME.BROWSE.CLASS_LIST' | translate }}</p>
                     </a>
-                    <a id="linkBrowseGeography" class="list-group-item" [routerLink]="['/browse','library', {viewId: 260}]">
+                    <a *ngIf="browseSec.geography" id="linkBrowseGeography" class="list-group-item" [routerLink]="['/browse','library', {viewId: 260}]">
                         <h3 class="browse-category">{{ 'HOME.BROWSE.GEO_HEADING' | translate }}</h3>
                         <p class="small">{{ 'HOME.BROWSE.GEO_LIST' | translate }}</p>
                     </a>
-                    <a id="linkBrowseTeaching" class="list-group-item" [routerLink]="['/browse','groups', 'public']">
+                    <a *ngIf="browseSec.teachingResources" id="linkBrowseTeaching" class="list-group-item" [routerLink]="['/browse','groups', 'public']">
                         <h3 class="browse-category">{{ 'HOME.BROWSE.TEACHING_HEADING' | translate }}</h3>
                         <p class="small">{{ 'HOME.BROWSE.TEACHING_LIST' | translate }}</p>
                     </a>
-                    <a id="linkBrowseIGs" class="list-group-item" [routerLink]="['/browse','groups', 'institution']">
+                    <a *ngIf="browseSec.imageGrps" id="linkBrowseIGs" class="list-group-item" [routerLink]="['/browse','groups', 'institution']">
                         <h3 class="browse-category">{{ 'HOME.BROWSE.GROUPS_HEADING' | translate }}</h3>
                         <p class="small">{{ 'HOME.BROWSE.GROUPS_LIST' | translate }}</p>
                     </a>

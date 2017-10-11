@@ -25,6 +25,13 @@ export const WLV_ARTSTOR = {
         'myCol': true,
         'igs': true
     },
+    homeBrowseSec: {
+        'collection': true,
+        'classification': true,
+        'geography': true,
+        'teachingResources': true,
+        'imageGrps': true
+    },
     showHomeBlog: true
 }
 
@@ -45,6 +52,13 @@ export const WLV_SAHARA = {
         'openCol': false,
         'myCol': false,
         'igs': true
+    },
+    homeBrowseSec: {
+        'collection': true,
+        'classification': false,
+        'geography': false,
+        'teachingResources': false,
+        'imageGrps': false
     },
     showHomeBlog: false
 }

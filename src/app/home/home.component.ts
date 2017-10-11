@@ -37,6 +37,8 @@ export class Home implements OnInit, OnDestroy {
   private blogLoading: boolean = true;
 
   private showBlog: boolean = false;
+  private browseSec: any = {};
+  private sahara: boolean;
 
   // TypeScript public modifiers
   constructor(
@@ -53,6 +55,8 @@ export class Home implements OnInit, OnDestroy {
     });
 
     this.showBlog = this._appConfig.config.showHomeBlog;
+    this.browseSec = this._appConfig.config.homeBrowseSec;
+    this.sahara = this._appConfig.config.pageTitle === 'SAHARA' ? true : false;
   }
 
   ngOnInit() {    
