@@ -16,7 +16,12 @@
               p.form-text.text-danger(*ngIf="forcePwdRst", [innerHtml]="'LOGIN.REG_LOGIN.FORCE_PW_RESET_MSG' | translate")
             p.notranslate([innerHtml]="'LOGIN.TERMS' | translate")
             .form-group
+              h3 Log into Artstor
               button#btnLoginRemote.btn.btn-primary([class.loading]="loginLoading" type="submit" name="action" data-sc="account: remote user log in") 
+                | {{ 'LOGIN.LOGIN_BTN' | translate }}
+            .form-group
+              h3 Log into Shared Shelf
+              button#btnLoginRemote.btn.btn-primary((click)="ssLogin(user)", [class.loading]="loginLoading" type="button" name="action" data-sc="account: remote user log in") 
                 | {{ 'LOGIN.LOGIN_BTN' | translate }}
           a#linkLoginResetModal((click)="showPwdModal = true" tabindex="0" class="link") {{ 'LOGIN.REG_LOGIN.FORGOT_PW_PROMPT' | translate }}
           br
@@ -26,7 +31,7 @@
           a.link([attr.href]="'LOGIN.REG_LOGIN.LOGIN_HELP_LINK' | translate" target="_blank") {{ 'LOGIN.REG_LOGIN.LOGIN_HELP_PROMPT' | translate }}
         .block-right
           a.link((click)="showHelpModal = true" tabindex="0") {{ 'LOGIN.ACCESS_PROMPT' | translate }}
-    .col-sm-6
+    .col-sm-6(*ngIf="_app.config.showInstitutionalLogin")
       .card.card--v-pad
         .card-header
           h1#institutionHeading {{ 'LOGIN.INSTITUTION_LOGIN.HEADING' | translate }}

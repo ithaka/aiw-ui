@@ -30,5 +30,7 @@ export const WLV_SAHARA = {
         "SARARA_CONTRIBUTE",
         "SAHARA_TERMS",
         "SAHARA_PRIVACY"
-    ]
+    ],
+    showSSLogin: true,
+    showInstitutionalLogin: false
 }

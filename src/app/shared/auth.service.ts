@@ -551,10 +551,32 @@ export class AuthService implements CanActivate {
         return res.json() || {};
       });
   }
+
+  public ssLogin(username: string, password: string): Observable<SSLoginResponse> {
+    return this.http.post(
+      "http://art-aa-service.apps.test.cirrostartus.org/gust/login",
+      { username: username, password: password },
+      { withCredentials: true }
+    ).map((res) => { return res.json() })
+  }
 }
 
 export class User {
   constructor(
     public username: string,
     public password: string) { }
+}
+
+interface SSLoginResponse {
+  email: string
+  firstname: string
+  lastname: string
+  active: boolean
+  profileid: number
+  userid: string
+  institutionid: string
+  ss: {
+      admin_for: number[]
+      enabled_for: number[]
+  }
 }
