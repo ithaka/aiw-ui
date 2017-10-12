@@ -4,10 +4,10 @@ header.navbar.navbar-light
       .col-8
         a.navbar-brand([routerLink]="['/home']")
           img#logo.hidden-xs-down([attr.src]="logoUrl" alt="Artstor logo")
-          img#logoMobile.hidden-xs-up(src="/assets/img/logo-square.png" alt="Artstor logo")
+          img#logoMobile.hidden-sm-up(src="/assets/img/logo-square.png" alt="Artstor logo")
       .col-4
         .login-panel(*ngIf="showLoginPanel")
-          .vertical-center-wrap 
+          .vertical-center-wrap
             .login-panel__status(*ngIf="user.isLoggedIn")
               h2.hidden Login Panel
               #navMessageWelcome Welcome, {{ user.username ? user.username : ''}}
