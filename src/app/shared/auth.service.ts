@@ -131,6 +131,12 @@ export class AuthService implements CanActivate {
       this.solrUrl = this.hostname + '/api/search/v1.0/search'
     }
 
+    // Sahara routing WORKAROUND
+    if (document.location.hostname.indexOf('sahara.prod.artstor.org') > -1) {
+      this.hostname = '//library.artstor.org'
+      this.baseUrl = this.hostname + '/api'
+      this.solrUrl = this.hostname + '/api/search/v1.0/search'
+    }
 
     // For session timeout on user inactivity
     idle.setIdle(this.idleUtil.generateIdleTime()); // Set an idle time of 1 min, before starting to watch for timeout
