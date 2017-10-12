@@ -102,7 +102,7 @@ export class AuthService implements CanActivate {
     if (  new RegExp(prodHostnames.join("|")).test(document.location.hostname)  ) {
       // Explicit live endpoints
       this.logUrl = '//ang-ui-logger.apps.prod.cirrostratus.org/api/v1'
-      this.solrUrl = 'http://library.artstor.org/api/search/v1.0/search'
+      this.solrUrl = '//library.artstor.org/api/search/v1.0/search'
       this.ENV = 'prod'
     }
     else if ( document.location.hostname.indexOf('prod.cirrostratus.org') > -1 ) {
@@ -110,7 +110,7 @@ export class AuthService implements CanActivate {
       this.hostname = '//library.artstor.org'
       this.baseUrl =  '//library.artstor.org/api'
       this.logUrl = '//ang-ui-logger.apps.prod.cirrostratus.org/api/v1'
-      this.solrUrl = 'http://library.artstor.org/api/search/v1.0/search'
+      this.solrUrl = '//library.artstor.org/api/search/v1.0/search'
       this.ENV = 'prod'
     } else if ( new RegExp(testHostnames.join("|")).test(document.location.hostname) ) {
       // Test Endpoints
@@ -119,7 +119,7 @@ export class AuthService implements CanActivate {
       this.baseUrl = '//stage.artstor.org/api'
       this.thumbUrl = '//mdxstage.artstor.org'
       this.logUrl = '//ang-ui-logger.apps.test.cirrostratus.org/api/v1'
-      this.solrUrl = 'http://stage.artstor.org/api/search/v1.0/search'
+      this.solrUrl = '//stage.artstor.org/api/search/v1.0/search'
       this.IIIFUrl = '//tsstage.artstor.org/rosa-iiif-endpoint-1.0-SNAPSHOT/fpx'
       this.ENV = 'test'
     }
