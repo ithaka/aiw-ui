@@ -8,7 +8,7 @@
             </span>
             <!--<div class="filter" [ngClass]="{ 'active': true }">All Collections</div>-->
             <!--<pre>{{availableFilters[filterKey]}}</pre>-->
-            <button class="filter" *ngFor="let facet of appliedFilters[filterKey]" id="filterCollectionTypeItem{{ facet.name }}"  (click)="toggleFilter(facet.efq, filterKey)" [ngClass]="{'active': filterApplied(facet.efq, filterKey)}" data-sc="search: facet">
+            <button class="filter" *ngFor="let facet of appliedFilters[filterKey]" id="filterCollectionTypeItem{{ facet.name }}"  (click)="toggleFilter(facet.name, filterKey)" [ngClass]="{'active': filterApplied(facet.name, filterKey)}" data-sc="search: facet">
                 <span *ngIf="facet.name && facet.name.length < 2">{{ filterNameMap[filterKey] && filterNameMap[filterKey][facet.name] }} ({{facet.count}})</span>
                 <span *ngIf="facet.name && facet.name.length > 1">{{ facet.name }} ({{facet.count}})</span>
                 <i class="icon icon-add"></i>
@@ -17,13 +17,13 @@
             <div *ngFor="let facet of availableFilters[filterKey]">
                 <!--Show filters -->
                 <i *ngIf="facet.children && facet.children.length > 0" class="icon icon-direction absolute-left tree-icon" (click)="toggleTree(facet)" [ngClass]="{ 'icon-down' : facet.expanded, 'icon-right' : !facet.expanded }"></i>
-                <button class="filter parent"  id="filterCollectionTypeItem{{ facet.name }}"  (click)="toggleFilter(facet.efq, filterKey)" [ngClass]="{'active': filterApplied(facet.efq, filterKey)}" data-sc="search: facet">
+                <button class="filter parent"  id="filterCollectionTypeItem{{ facet.name }}"  (click)="toggleFilter(filterKey == 'geography' ? facet.efq : facet.name, filterKey)" [ngClass]="{'active': filterApplied(filterKey == 'geography' ? facet.efq : facet.name, filterKey)}" data-sc="search: facet">
                     <span *ngIf="facet.name && facet.name.length < 2">{{ filterNameMap[filterKey] && filterNameMap[filterKey][facet.name] }} ({{facet.count}})</span>
                     <span *ngIf="facet.name && facet.name.length > 1">{{ facet.name }} ({{facet.count}})</span>
                     <i class="icon icon-add"></i>
                     <i class="icon icon-close"></i>
                 </button>
-                <!--Child filters-->
+                <!--Geo Child filters-->
                 <div class="child-cntnr collapse" [ngClass]="{ 'show' : facet.expanded }">
                     <button class="filter child" *ngFor="let child of facet.children; let childIndex = index" id="filterGeographyItem{{ 'Child' + childIndex }}" (click)="toggleFilter(child.efq, filterKey)" [ngClass]="{'active': filterApplied(child.efq, 'geography')}" data-sc="search: facet">{{ child.name }} ({{child.count}})
                         <i class="icon icon-add"></i>
