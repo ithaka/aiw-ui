@@ -120,7 +120,6 @@ export class AssetSearchService {
     let filters = this._filters.getApplied();
     // To-do: break dateObj out of available filters
     let dateFacet = this._filters.getAvailable()['dateObj'];
-
     let filterArray = []
 
     let query = {
@@ -191,7 +190,12 @@ export class AssetSearchService {
         }
       } else {
         for (let j = 0; j < filters[i].filterValue.length; j++) {
-          filterArray.push(filters[i].filterValue[j])
+          filterArray.push(filters[i].filterGroup + ':\"' + filters[i].filterValue[j] + '\"')
+
+          if (filters[i].filterGroup == 'collectiontypes' && filters[i].filterValue[j] == 2) { 
+            // Institutional filter should eliminate open assets
+            filterArray.push("-collectiontypes:5")
+          }
         }
       }
     }
