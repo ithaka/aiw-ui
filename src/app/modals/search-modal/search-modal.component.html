@@ -78,7 +78,7 @@
                                         <ul class="list-group list-group-flush compact">
                                             <li *ngFor="let filter of filterGroup.values" class="list-group-item">
                                                 <label class="custom-control custom-checkbox">
-                                                    <input (click)="toggleFilter(filterGroup.name == 'geography' ? facet.efq : facet.name, filterGroup.name)" type="checkbox" class="custom-control-input">
+                                                    <input (click)="toggleFilter(filterGroup.name == 'geography' ? filter.efq : filter.name, filterGroup.name)" type="checkbox" class="custom-control-input">
                                                     <span class="custom-control-indicator"></span>
                                                     <span class="custom-control-description">   
                                                         <span *ngIf="filter.name && filter.name.length < 2">{{ filterNameMap['collectiontypes'] && filterNameMap['collectiontypes'][filter.name] }} ({{filter.count}})</span>
