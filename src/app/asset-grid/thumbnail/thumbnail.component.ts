@@ -60,7 +60,7 @@ export class ThumbnailComponent implements OnInit {
       this.collectionType = this.thumbnail['collectiontypes'][0]
     }
 
-    this.thumbnail.iapFlag = this.determineIAP(this.thumbnail['artstorid'])
+    this.thumbnail.iapFlag = this.determineIAP(this.thumbnail['artstorid'] ? this.thumbnail['artstorid'] : this.thumbnail['objectId'])
   }
 
   openLink(event: Event, urlParams: any[]) {
@@ -71,8 +71,16 @@ export class ThumbnailComponent implements OnInit {
     this.router.navigate(urlParams)
   }
 
+  /**
+   * Determine if asset is IAP
+   * @param assetId this should be the asset's id, but if it's undefined, return false
+   */
   determineIAP (assetId: string) {
-    // matches on IAP String, return 1 for true, 0 for false
-    return assetId.match(/IAP/) ? 1 : 0
+    if (!assetId) {
+      return 0
+    } else {
+       // matches on IAP String, return 1 for true, 0 for false
+      return assetId.match(/IAP/) ? 1 : 0
+    }
   }
 }
