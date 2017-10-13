@@ -349,7 +349,7 @@
     }
   },
   "SEARCH_ANNOUNCEMENT_BANNER": {
-    "MESSAGE": "We’ve changed our search functionality! Search results are faster and may appear in a different order. Read more on our <a href=\"http://support.artstor.org/?page_id=37\" target=\"_blank\" class=\"link\">support site</a>."
+    "MESSAGE": "We are changing our search functionality. Read more on our <a href=\"http://support.artstor.org/?page_id=37\" target=\"_blank\" class=\"link\">support site</a>."
   },
   "SEARCH_SKY_BANNER": {
     "MESSAGE": "⚠️ This is a testing instance for the new Search index. Please excuse the broken bits."
