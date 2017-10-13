@@ -48,7 +48,7 @@ export class ThumbnailComponent implements OnInit {
   ) {
    }
 
-  ngOnInit() { 
+  ngOnInit() {
     // Clean search data
     if (this.thumbnail['media']) {
       let media = JSON.parse(this.thumbnail['media'])
@@ -58,7 +58,9 @@ export class ThumbnailComponent implements OnInit {
     // Set collection type for assets from Solr
     if (this.thumbnail['collectiontypes']) {
       this.collectionType = this.thumbnail['collectiontypes'][0]
-    } 
+    }
+
+    this.thumbnail.iapFlag = this.determineIAP(this.thumbnail['artstorid'])
   }
 
   openLink(event: Event, urlParams: any[]) {
@@ -67,5 +69,10 @@ export class ThumbnailComponent implements OnInit {
     event.stopPropagation()
 
     this.router.navigate(urlParams)
+  }
+
+  determineIAP (assetId: string) {
+    // matches on IAP String, return 1 for true, 0 for false
+    return assetId.match(/IAP/) ? 1 : 0
   }
 }
