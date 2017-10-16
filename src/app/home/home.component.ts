@@ -40,6 +40,7 @@ export class Home implements OnInit, OnDestroy {
   private showBlog: boolean = false
   private showPrivateCollections: boolean = false
   private browseSec: any = {}
+  private showHomeSSC: boolean = false
 
   // TypeScript public modifiers
   constructor(
@@ -59,6 +60,7 @@ export class Home implements OnInit, OnDestroy {
     this.showPrivateCollections = this._appConfig.config.browseOptions.myCol
     this.featuredCollectionConf = this._appConfig.config.featuredCollection
     this.browseSec = this._appConfig.config.homeBrowseSec
+    this.showHomeSSC = this._appConfig.config.showHomeSSC
   }
 
   ngOnInit() {
