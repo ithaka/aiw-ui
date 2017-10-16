@@ -489,12 +489,7 @@ export class AssetService {
      */
     public getShareLink(assetId: string) {
         //   Links in the clipboard need a protocol defined
-        if (window.location.host.indexOf('proxy') > -1) {
-            return 'http://' + window.location.host + '/asset/' + assetId;
-        } else {
-            return 'http://' + window.location.host + '/#/asset/' + assetId;
-        }
-
+        return  `${window.location.protocol}//${window.location.host}/asset/${assetId}`
 
         // For Reference: Old service for generating share url:
         // this._assets.genrateImageURL( this.assets[0].id )
