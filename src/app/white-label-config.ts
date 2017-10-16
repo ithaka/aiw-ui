@@ -35,7 +35,8 @@ export const WLV_ARTSTOR = {
     },
     featuredCollection: "HOME.FEATURED",
     showHomeBlog: true,
-    showHomeSSC: true
+    showHomeSSC: true,
+    showHomeAd: true
 }
 
 export const WLV_SAHARA = {
@@ -66,5 +67,6 @@ export const WLV_SAHARA = {
         'imageGrps': true
     },
     showHomeBlog: false,
-    showHomeSSC: false
+    showHomeSSC: false,
+    showHomeAd: false
 }
