@@ -2,6 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
 // Project Dependencies
 import { AssetService } from '../../shared';
+import { Asset } from '../../asset-page/asset';
 
 @Component({
   selector: 'ang-share-link-modal',
@@ -22,9 +23,13 @@ export class ShareLinkModal implements OnInit {
   constructor(private _assets: AssetService) { }
 
   ngOnInit() {
-    console.log(this.asset);
     if (this.asset) {
-      this.shareLink = this._assets.getShareLink(this.asset.objectId);
+      this.shareLink = this._assets.getShareLink(this.asset.objectId ? this.asset.objectId : this.asset.artstorid);
+      // Clean search data
+      if (this.asset['media']) {
+        let media = JSON.parse(this.asset['media'])
+        this.asset['thumbnailImgUrl'] = media['thumbnailSizeOnePath']
+      }
     } 
   }
 
