@@ -41,7 +41,7 @@
                                     </button>
                                 </div>
                             </div>
-                            
+
                             <div class="form-group" *ngIf="advanceQueries.length < 10">
                                 <button title="Add up to 10 field queries" class="btn btn-secondary" (click)="addAdvanceQuery()">Add Query</button>
                             </div>
@@ -80,8 +80,8 @@
                                                 <label class="custom-control custom-checkbox">
                                                     <input (click)="toggleFilter(filterGroup.name == 'geography' ? filter.efq : filter.name, filterGroup.name)" type="checkbox" class="custom-control-input">
                                                     <span class="custom-control-indicator"></span>
-                                                    <span class="custom-control-description">   
-                                                        <span *ngIf="filter.name && filter.name.length < 2">{{ filterNameMap['collectiontypes'] && filterNameMap['collectiontypes'][filter.name] }} ({{filter.count}})</span>
+                                                    <span class="custom-control-description">
+                                                        <span *ngIf="filter.name && filter.name.length < 2">{{ filterNameMap['collectiontypes'] && filterNameMap['collectiontypes'][filter.name] | translate }} ({{filter.count}})</span>
                                                         <span *ngIf="filter.name && filter.name.length > 1">{{ filter.name }} ({{filter.count}})</span>
                                                     </span>
                                                 </label>
@@ -90,8 +90,8 @@
                                                         <label class="custom-control custom-checkbox">
                                                             <input (click)="toggleFilter(filterGroup.name == 'geography' ? child.efq : child.name, filterGroup.name)" type="checkbox" class="custom-control-input">
                                                             <span class="custom-control-indicator"></span>
-                                                            <span class="custom-control-description">   
-                                                                <span *ngIf="child.name && child.name.length < 2">{{ filterNameMap['collectiontypes'] && filterNameMap['collectiontypes'][child.name] }} ({{child.count}})</span>
+                                                            <span class="custom-control-description">
+                                                                <span *ngIf="child.name && child.name.length < 2">{{ filterNameMap['collectiontypes'] && filterNameMap['collectiontypes'][child.name] | translate }} ({{child.count}})</span>
                                                                 <span *ngIf="child.name && child.name.length > 1">{{ child.name }} ({{child.count}})</span>
                                                             </span>
                                                         </label>

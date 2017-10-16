@@ -207,6 +207,16 @@
       "AND": "AND",
       "OR": "OR",
       "NOT": "NOT"
+    },
+    "FACETS": {
+      "MAIN_COLLECTION": "Artstor Digital Library",
+      "NAMED_COLLECTION": "{{name}} Collections",
+      "PRIVATE_COLLECTIONS": "Private Collections",
+      "OPEN_COLLECTIONS": "Open Collections",
+      "SAH_MAIN_COLLECTION": "The SAHARA Collections",
+      "SAH_NAMED_COLLECTION": "SAHARA Editors' Choice Collection",
+      "SAH_PRIVATE_COLLECTIONS": "Private Collections",
+      "SAH_OPEN_COLLECTIONS": "SAHARA Members' Collection"
     }
   },
   "RETURN_HOME" : "Return Home",

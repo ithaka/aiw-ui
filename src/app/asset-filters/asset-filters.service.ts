@@ -4,6 +4,8 @@ import { BehaviorSubject, Observable, Subscription } from 'rxjs/Rx';
 import { Locker } from 'angular2-locker';
 import { Http, Response, Headers, RequestOptions } from '@angular/http';
 import 'rxjs/add/operator/toPromise';
+import { TranslateService } from 'ng2-translate';
+import { AppConfig } from '../app.service';
 
 import { AuthService } from '../shared/auth.service';
 
@@ -14,7 +16,7 @@ export class AssetFiltersService {
     private geoTree = [];
 
     private appliedFilters: any = [];
-    
+
     private defaultAvailable: any = {
         collTypes : [],
         collectiontypes : [],
@@ -58,18 +60,18 @@ export class AssetFiltersService {
     // Observable object streams
     public available$ = this.availableSource.asObservable();
     public applied$ = this.appliedSource.asObservable();
-    
+
     private _storage;
     private institution: any = {};
 
 
     private filterNameMap: any = {
-        "collectiontypes" : {
-        1 : "Artstor Digital Library",
-        3 : "Private Collections",
-        5 : "Open Collections",
-        6 : "Private Collections"
-        }
+      "collectiontypes" : {
+        1 : "ADVANCED_SEARCH_MODAL.FACETS.MAIN_COLLECTION",
+        3 : "ADVANCED_SEARCH_MODAL.FACETS.PRIVATE_COLLECTIONS",
+        5 : "ADVANCED_SEARCH_MODAL.FACETS.OPEN_COLLECTIONS",
+        6 : "ADVANCED_SEARCH_MODAL.FACETS.PRIVATE_COLLECTIONS"
+      }
     }
 
     private subscriptions: Subscription[] = []
@@ -77,17 +79,40 @@ export class AssetFiltersService {
     constructor(
         private locker: Locker,
         private http: Http,
-        private _auth: AuthService
+        private _auth: AuthService,
+        private translate: TranslateService,
+        private _appConfig: AppConfig
     ){
         this._storage = locker.useDriver(Locker.DRIVERS.LOCAL);
 
         this.subscriptions.push(
             this._auth.getInstitution().subscribe(
                 institution => {
-                    this.filterNameMap["collectiontypes"][2] = this.filterNameMap["collectiontypes"][4] = institution && institution.shortName ? institution.shortName + ' Collections' : 'Institutional Collections';
+                  if (_appConfig.config.appID === "SAHARA") {
+                    this.filterNameMap["collectiontypes"][2] =
+                    this.filterNameMap["collectiontypes"][4] = 'ADVANCED_SEARCH_MODAL.FACETS.SAH_NAMED_COLLECTION'
+                  } else {
+                    const INST_NAME = (institution && institution.shortName) ? institution.shortName : 'Institutional'
+                    translate.get('ADVANCED_SEARCH_MODAL.FACETS.NAMED_COLLECTION', {name: INST_NAME})
+                    .subscribe((text: string) => {
+                      this.filterNameMap["collectiontypes"][2] =
+                      this.filterNameMap["collectiontypes"][4] = text
+                    });
+                  }
+
                 }
             )
         )
+
+        // Update Filter name map for app specific names
+        if (_appConfig.config.appID === "SAHARA") {
+          this.filterNameMap.collectiontypes = {
+            1 : "ADVANCED_SEARCH_MODAL.FACETS.SAH_MAIN_COLLECTION",
+            3 : "ADVANCED_SEARCH_MODAL.FACETS.SAH_PRIVATE_COLLECTIONS",
+            5 : "ADVANCED_SEARCH_MODAL.FACETS.SAH_OPEN_COLLECTIONS",
+            6 : "ADVANCED_SEARCH_MODAL.FACETS.SAH_PRIVATE_COLLECTIONS"
+          }
+        }
     }
 
     ngOnDestroy() {
@@ -99,7 +124,7 @@ export class AssetFiltersService {
     public getFilterNameMap() : any {
         return this.filterNameMap
     }
-    
+
     // Empties all filter objects without publishing them
     public clearApplied(isQuiet ?: boolean):void {
         this.appliedFilters = [];
@@ -129,7 +154,7 @@ export class AssetFiltersService {
         //     console.log(filterArr)
         //     this.availableSource.next(this.availableFilters)
         //     return true
-        // } else 
+        // } else
         if (name && name.length > 0 && Object.prototype.toString.call(filters) === '[object Array]') {
             this.availableFilters[name] = filters
             this.availableSource.next(this.availableFilters)
@@ -170,7 +195,7 @@ export class AssetFiltersService {
 
         if (!isQuiet) {
           this.appliedSource.next(this.appliedFilters);
-        } 
+        }
     }
 
     public isApplied(group: string, filter: any) {
@@ -222,7 +247,7 @@ export class AssetFiltersService {
     //     if (this.locker.get('geoTreeObj')) {
     //         return this.locker.get('geoTreeObj');
     //     } else {
-            
+
     //     }
     // }
     // public setFilters(filters) {
@@ -243,11 +268,11 @@ export class AssetFiltersService {
         } else if(!dateFacetsArray) {
             dateFacetsArray = []
         }
-        
+
         if(dateFacetsArray.length > 0){
             var startDate = dateFacetsArray[0].date;
             var endDate = dateFacetsArray[dateFacetsArray.length - 1].date;
-            
+
             this.availableFilters.dateObj.earliest.date = Math.abs(startDate);
             this.availableFilters.dateObj.earliest.era = startDate < 0 ? "BCE" : "CE";
 
@@ -275,7 +300,7 @@ export class AssetFiltersService {
     public generateGeoFilters(resGeoFacetsArray){
         if (this.geoTree.length < 1) {
             let options = new RequestOptions({ withCredentials: true });
-        
+
             this.http.get(this._auth.getUrl(true) + '/termslist/', options)
                 .toPromise()
                 .then(res => {
@@ -284,7 +309,7 @@ export class AssetFiltersService {
                 }, err => {
                     console.error(err);
                 });
-                
+
             return;
         }
         var generatedGeoFacets = [];
@@ -339,17 +364,17 @@ export class AssetFiltersService {
      * Generate hierarchical facets from SOLR hierarchy object
      */
     public generateHierFacets(facetsObj: any, label: string) : any[] {
-        
+
         var generatedFacets = [];
 
         for(let label in facetsObj) {
             var resFacet = facetsObj[label] && facetsObj[label].element;
             var childrenObj = facetsObj[label] && facetsObj[label].children;
-            
+
             if (resFacet) {
                 resFacet.name = label
                 resFacet.children = []
-                
+
                 for (let childName in childrenObj) {
                     var child = childrenObj[childName].element
                     child.name = childName
@@ -370,7 +395,7 @@ export class AssetFiltersService {
     public generateColTypeFacets(idsArray){
         idsArray = this.getUniqueColTypeIds(idsArray);
         var generatedFacetsArray = [];
-        
+
         for(var i = 0; i < idsArray.length; i++){
             var facetObj = {
                 id : idsArray[i],
@@ -388,9 +413,9 @@ export class AssetFiltersService {
             }
             generatedFacetsArray.push(facetObj);
         }
-        
+
         // this.collTypeFacets = generatedFacetsArray;
-        this.setAvailable('collType', generatedFacetsArray); 
+        this.setAvailable('collType', generatedFacetsArray);
     }
 
     private getUniqueColTypeIds(facetArray){
@@ -427,7 +452,7 @@ export class AssetFiltersService {
      */
     // public loadTermList(){
     //     let options = new RequestOptions({ withCredentials: true });
-        
+
     //     return this.http
     //         .get(this._auth.getUrl(true) + '/termslist/', options)
     //         .map(res => {
