@@ -10,12 +10,12 @@ import { AuthService } from '../shared/auth.service';
 import { AppConfig } from '../app.service';
 
 @Component({
-  selector: 'ang-browse-page', 
+  selector: 'ang-browse-page',
   providers: [
       AuthService
   ],
   styleUrls: [ './browse-page.component.scss' ],
-  templateUrl: './browse-page.component.html'
+  templateUrl: './browse-page.component.pug'
 })
 
 export class BrowsePage implements OnInit, OnDestroy {
@@ -25,7 +25,7 @@ export class BrowsePage implements OnInit, OnDestroy {
   private institution: any = {};
 
   colMenuArray = [];
-  
+
   private userPCallowed: string;
   private userTypeId: any;
   private selectedColMenuId: string = '1';
@@ -41,11 +41,11 @@ export class BrowsePage implements OnInit, OnDestroy {
       private route: ActivatedRoute,
       private router: Router,
       private _title: TitleService
-  ) {  
+  ) {
       this._storage = locker.useDriver(Locker.DRIVERS.LOCAL);
       this.institution = this._storage.get('institution');
       this.browseOpts = this._app.config.browseOptions;
-  } 
+  }
 
   ngOnInit() {
     // Set page title
@@ -53,13 +53,13 @@ export class BrowsePage implements OnInit, OnDestroy {
 
     this.subscriptions.push(
       this.route.firstChild.url
-      .subscribe((url: UrlSegment[]) => {  
+      .subscribe((url: UrlSegment[]) => {
         this.selectedColMenuId = url[0].path;
       })
     );
 
 
-    
+
     if( this.browseOpts.artstorCol ){
         this.colMenuArray.push( { label: 'Artstor Digital Library', id: '1', link: 'library' } );
     }
@@ -88,7 +88,7 @@ export class BrowsePage implements OnInit, OnDestroy {
         }
         this.colMenuArray.splice(2, 0 ,obj);
     }
-        
+
     if( this.browseOpts.igs ){
         this.colMenuArray.push( { label: 'Groups', id: '5', link: 'groups' } );
     }

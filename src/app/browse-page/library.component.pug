@@ -1,0 +1,15 @@
+nav.nav.nav-inline.browse-nav
+  a.label Browse By:&ensp;
+  a.nav-link(*ngFor="let browseOpt of browseMenuArray", [ngClass]="{'active': browseOpt.id == selectedBrowseId}", (click)="selectBrowseOpt(browseOpt.id)") {{ browseOpt.label }}
+.row
+  .col-md-8
+    .tree(*ngFor="let browseOpt of browseMenuArray", [class.hidden]="selectedBrowseId != browseOpt.id")
+      ang-tag(*ngFor="let tag of tagsObj[browseOpt.id]", [tag]="tag")
+  .col-md-4
+    .browse-info(*ngIf="descObj[selectedBrowseId]")
+      .img(*ngIf="splashImgURL")
+        img([attr.src]="splashImgURL", alt="Splash image for browse id: {{ selectedBrowseId }}")
+      .title {{ descObj[selectedBrowseId].collectionname }}
+      .browse__description([innerHTML]="descObj[selectedBrowseId].blurburl")
+.row.has-icon-overlay(*ngIf="loading")
+  i.icon-lg.icon-overlay--top.icon-loading-large

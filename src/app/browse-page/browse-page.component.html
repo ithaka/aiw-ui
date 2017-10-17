@@ -1,9 +1,0 @@
-<nav-menu></nav-menu>
-<div id="mainContent" class="container main-content" tabindex="-1">
-    <nav class="nav nav-inline coll-nav">
-        <a class="nav-link" *ngFor="let colOpt of colMenuArray" [routerLink]="[colOpt.link]" routerLinkActive="active" (click)="selectColMenu(colOpt.link)">{{ colOpt.label }}</a>
-    </nav>
-    <!--<div class="row mt-1">-->
-        <router-outlet></router-outlet>
-    <!--</div>-->
-</div>
