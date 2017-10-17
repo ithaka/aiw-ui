@@ -9,7 +9,7 @@ import { TitleService } from '../shared/title.service';
 @Component({
   selector: 'ang-browse-institution',
   providers: [],
-  templateUrl: 'institution.component.html',
+  templateUrl: 'institution.component.pug',
   styleUrls: [ './browse-page.component.scss' ]
 })
 export class BrowseInstitutionComponent implements OnInit {
@@ -38,5 +38,5 @@ export class BrowseInstitutionComponent implements OnInit {
       });
     this._analytics.setPageValues('institutional', '')
   } // OnInit
-  
+
 }

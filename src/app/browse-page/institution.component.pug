@@ -1,0 +1,11 @@
+nav.nav.nav-inline.browse-nav
+.row
+  .col-md-8
+    .tree
+      ang-tag(*ngFor="let tag of tags", [tag]="tag")
+    .alert.alert-info(*ngIf="!loading && tags.length < 1")
+      h3 {{ 'BROWSE.ERRORS.NO_INSTITUTIONAL_COLLECTIONS_HEADING' | translate }}
+      br
+      div([innerHtml]="'BROWSE.ERRORS.NO_INSTITUTIONAL_COLLECTIONS_PROMPT' | translate")
+.row.has-icon-overlay(*ngIf="loading")
+  i.icon-lg.icon-overlay--top.icon-loading-large

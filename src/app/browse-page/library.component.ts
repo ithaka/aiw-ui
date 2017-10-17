@@ -10,7 +10,7 @@ import { TitleService } from '../shared/title.service';
 
 @Component({
   selector: 'ang-lib',
-  templateUrl: 'library.component.html',
+  templateUrl: 'library.component.pug',
   styleUrls: [ './browse-page.component.scss' ]
 })
 export class LibraryComponent implements OnInit {
@@ -73,7 +73,7 @@ export class LibraryComponent implements OnInit {
 
     this.subscriptions.push(
       this.route.params
-      .subscribe((params: Params) => { 
+      .subscribe((params: Params) => {
         if(params && params['viewId']){
             let adjustedId = params['viewId']
             if (adjustedId.length < 4) {
