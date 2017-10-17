@@ -1091,19 +1091,6 @@ export class AssetService {
         return this._auth.getThumbUrl() + imagePath;
     }
 
-    /**
-     * Term List Service
-     * @returns Returns the Terms list Object for Advance Search
-     */
-    public loadTermList(){
-        let options = new RequestOptions({ withCredentials: true });
-
-        return this.http
-            .get(this._auth.getUrl(true) + '/termslist/', options)
-            .toPromise()
-            .then(this.extractData);
-    }
-
     public getBlogEntries(query ?: string) {
         if (!query || query == "*") {
             // An asterisk query on the Wordpress API *LIMITS* results to those with an asterisk!

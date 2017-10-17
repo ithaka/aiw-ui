@@ -270,72 +270,6 @@ export class AssetFiltersService {
     }
 
     /**
-     * DEPRECATED: Geo filter generation for old search
-     */
-    public generateGeoFilters(resGeoFacetsArray){
-        if (this.geoTree.length < 1) {
-            let options = new RequestOptions({ withCredentials: true });
-        
-            this.http.get(this._auth.getUrl(true) + '/termslist/', options)
-                .toPromise()
-                .then(res => {
-                    this.geoTree = res.json().geoTree;
-                    this.generateGeoFilters(resGeoFacetsArray);
-                }, err => {
-                    console.error(err);
-                });
-                
-            return;
-        }
-        var generatedGeoFacets = [];
-        var countriesArray = [];
-        // Extract Regions
-        for(var i = 0; i < resGeoFacetsArray.length; i++){
-        var resGeoFacet = resGeoFacetsArray[i];
-        var match = false;
-
-        for(var j = 0; j < this.geoTree.length; j++){
-            var geoTreeObj = this.geoTree[j];
-            if((geoTreeObj.type == 'region') && (resGeoFacet.id == geoTreeObj.nodeId)){
-            resGeoFacet.expanded = false;
-            resGeoFacet.childrenIds = geoTreeObj.children;
-            resGeoFacet.children = [];
-            match = true;
-            break;
-            }
-        }
-
-        if(match){
-            generatedGeoFacets.push(resGeoFacet);
-        }
-        else{
-            countriesArray.push(resGeoFacet);
-        }
-
-        }
-
-        // console.log(countriesArray);
-
-        // Extract Countries
-        for(var i = 0; i < countriesArray.length; i++){
-        var country = countriesArray[i];
-
-        for(var j = 0; j < generatedGeoFacets.length; j++){
-            var generatedGeoFacet = generatedGeoFacets[j];
-            if(this.existsInRegion(country.id, generatedGeoFacet.childrenIds)){
-            // country.parentId = generatedGeoFacet.id;
-            generatedGeoFacet.children.push(country);
-            break;
-            }
-        }
-
-        }
-
-
-        this.setAvailable('geography', generatedGeoFacets);
-    }
-
-    /**
      * Generate hierarchical facets from SOLR hierarchy object
      */
     public generateHierFacets(facetsObj: any, label: string) : any[] {
@@ -419,20 +353,4 @@ export class AssetFiltersService {
         }
         return result;
     }
-
-
-    /**
-     * Term List Service
-     * @returns Returns the Geo Tree Object used for generating the geofacets tree.
-     */
-    // public loadTermList(){
-    //     let options = new RequestOptions({ withCredentials: true });
-        
-    //     return this.http
-    //         .get(this._auth.getUrl(true) + '/termslist/', options)
-    //         .map(res => {
-    //             this.geoTree = res.json().geoTree;
-    //             this.generateGeoFilters();
-    //         });
-    // }
 }
