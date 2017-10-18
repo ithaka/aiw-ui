@@ -298,8 +298,7 @@ export class AssetService {
     };
 
     private extractData(res: Response) {
-        let body = res.json();
-        return body || { };
+      return res.json() || {}
     }
 
     public loadPrevAssetPage(): void{
@@ -451,7 +450,7 @@ export class AssetService {
      * @param assetId: string Asset or object ID
      */
     public getById(assetId: string) {
-        // Get Asset via SOLR
+      // Get Asset via SOLR
         // let options = new RequestOptions({
         //     withCredentials: true
         // });
@@ -464,11 +463,10 @@ export class AssetService {
         // return this.http.post('//search-service.apps.test.cirrostratus.org/browse/', query, options)
         //     .toPromise()
         //     .then(this.extractData)
-
         return this.http
-            .get(this._auth.getUrl(true) + '/metadata/' + assetId, this.defaultOptions)
-            .toPromise()
-            .then(this.extractData);
+          .get(`${this._auth.getUrl()}/v1/metadata?object_ids=${assetId}`, this.defaultOptions)
+          .toPromise()
+          .then(this.extractData)
     }
 
     /**
