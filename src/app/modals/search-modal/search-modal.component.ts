@@ -145,14 +145,14 @@ export class SearchModal implements OnInit {
    */
   private legacyLoadFilters() : void {
     // Get GeoTree and Classifications
-    this._assets.loadTermList( )
-          .then((res) => {
-              console.log(res);
-              this.termsList = res;
-          })
-          .catch(function(err) {
-              console.error('Unable to load Terms List.');
-          });
+    // this._assets.loadTermList( )
+    //       .then((res) => {
+    //           console.log(res);
+    //           this.termsList = res;
+    //       })
+    //       .catch(function(err) {
+    //           console.error('Unable to load Terms List.');
+    //       });
 
     this.subscriptions.push(
       this._auth.getInstitution().subscribe(
