@@ -102,7 +102,7 @@ export class AuthService implements CanActivate {
     if (  new RegExp(prodHostnames.join("|")).test(document.location.hostname)  ) {
       // Explicit live endpoints
       this.logUrl = '//ang-ui-logger.apps.prod.cirrostratus.org/api/v1'
-      this.solrUrl = '//library.artstor.org/api/search/v1.0/search'
+      this.solrUrl = '/api/search/v1.0/search'
       this.ENV = 'prod'
     }
     else if ( document.location.hostname.indexOf('prod.cirrostratus.org') > -1 ) {
@@ -110,7 +110,7 @@ export class AuthService implements CanActivate {
       this.hostname = '//library.artstor.org'
       this.baseUrl =  '//library.artstor.org/api'
       this.logUrl = '//ang-ui-logger.apps.prod.cirrostratus.org/api/v1'
-      this.solrUrl = '//library.artstor.org/api/search/v1.0/search'
+      this.solrUrl = '/api/search/v1.0/search'
       this.ENV = 'prod'
     } else if ( new RegExp(testHostnames.join("|")).test(document.location.hostname) ) {
       // Test Endpoints
@@ -119,7 +119,7 @@ export class AuthService implements CanActivate {
       this.baseUrl = '//stage.artstor.org/api'
       this.thumbUrl = 'http://mdxstage.artstor.org'
       this.logUrl = '//ang-ui-logger.apps.test.cirrostratus.org/api/v1'
-      this.solrUrl = '//stage.artstor.org/api/search/v1.0/search'
+      this.solrUrl = '/search/v1.0/search'
       this.IIIFUrl = '//tsstage.artstor.org/rosa-iiif-endpoint-1.0-SNAPSHOT/fpx'
       this.ENV = 'test'
     }
@@ -127,13 +127,16 @@ export class AuthService implements CanActivate {
     // Additional Local dev domains
     if (document.location.hostname.indexOf('local.sahara') > -1) {
       this.hostname = '//saharabeta.stage.artstor.org'
-      this.baseUrl = this.hostname + '/api'
-      this.solrUrl = this.hostname + '/api/search/v1.0/search'
     }
 
     // Sahara routing WORKAROUND
     if (document.location.hostname.indexOf('sahara.prod.artstor.org') > -1) {
       this.hostname = '//library.artstor.org'
+    }
+
+    // Local routing should point to full URL
+    // * This should NEVER apply when using a proxy, as it will break authorization
+    if (new RegExp(["cirrostratus.org", "localhost", "local."].join("|")).test(document.location.hostname)) {
       this.baseUrl = this.hostname + '/api'
       this.solrUrl = this.hostname + '/api/search/v1.0/search'
     }
