@@ -396,7 +396,6 @@ export class AuthService implements CanActivate {
             if (jsonData.status === true) {
               // User is authorized - if you want to check ipAuth then you can tell on the individual route by user.isLoggedIn = false
               let user = jsonData.user;
-              user.status = jsonData.status
               if (jsonData.isRememberMe || jsonData.remoteaccess) {
                 user.isLoggedIn = true
               }
