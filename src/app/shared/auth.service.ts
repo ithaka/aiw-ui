@@ -119,7 +119,7 @@ export class AuthService implements CanActivate {
       this.baseUrl = '//stage.artstor.org/api'
       this.thumbUrl = 'http://mdxstage.artstor.org'
       this.logUrl = '//ang-ui-logger.apps.test.cirrostratus.org/api/v1'
-      this.solrUrl = '/search/v1.0/search'
+      this.solrUrl = '/api/search/v1.0/search'
       this.IIIFUrl = '//tsstage.artstor.org/rosa-iiif-endpoint-1.0-SNAPSHOT/fpx'
       this.ENV = 'test'
     }
