@@ -18,6 +18,7 @@
         "SERVICE_ERROR": "We've experience an error and are unable to retrieve the insitutions"
       }
     },
+    "INCORRECT_PORTAL" : "Sorry, that login is not valid for this portal. Please try again with a different account, or try accessing the main <a id=\"linkMainLibrarySite\" href=\"http://library.artstor.org\" class=\"link\" target=\"_blank\">Artstor Digital Library</a>.",
     "LOGIN_BTN": "Log in",
     "SERVER_ERROR": "Server is not responding. Please try again later.",
     "ARCHIVED_ERROR": "That login has been disabled. Please contact your institutional contact.",

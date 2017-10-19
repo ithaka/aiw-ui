@@ -208,6 +208,8 @@ export class Login {
         return 'LOGIN.WRONG_PASSWORD'
       } else if (serverMsg === 'loginExpired' || serverMsg === 'Login Expired') {
         return 'LOGIN.EXPIRED'
+      } else if (serverMsg === 'portalLoginFailed') {
+        return 'LOGIN.INCORRECT_PORTAL'
       } else if (serverMsg.indexOf('disabled') > -1) {
         return 'LOGIN.ARCHIVED_ERROR';
       } else {
