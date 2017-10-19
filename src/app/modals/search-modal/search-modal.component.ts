@@ -290,6 +290,9 @@ export class SearchModal implements OnInit {
       return;
     }
 
+    // Clear existing filters set outside this modal
+    this._filters.clearApplied(true)
+
     let advQuery
     let filterParams
     let currentParams = this.route.snapshot.params
