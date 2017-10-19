@@ -126,7 +126,7 @@ export class AuthService implements CanActivate {
 
     // Additional Local dev domains
     if (document.location.hostname.indexOf('local.sahara') > -1) {
-      this.hostname = '//saharabeta.stage.artstor.org'
+      this.hostname = '//sahara.beta.stage.artstor.org'
     }
 
     // Sahara routing WORKAROUND
