@@ -32,6 +32,8 @@ export class BrowsePage implements OnInit, OnDestroy {
 
   private browseOpts: any = {};
 
+  private pcEnabled: boolean;
+
   // TypeScript public modifiers
   constructor(
       locker: Locker,
@@ -45,6 +47,7 @@ export class BrowsePage implements OnInit, OnDestroy {
       this._storage = locker.useDriver(Locker.DRIVERS.LOCAL);
       this.institution = this._storage.get('institution');
       this.browseOpts = this._app.config.browseOptions;
+      this.pcEnabled = this._storage.get('pcEnabled');
   }
 
   ngOnInit() {
@@ -79,8 +82,7 @@ export class BrowsePage implements OnInit, OnDestroy {
         this.colMenuArray.push( { label: 'Open Collections', id: '3', link: 'commons' } );
     }
 
-    this.userPCallowed = this._auth.getUser().userPCAllowed;
-    if((this.userPCallowed == '1') && this.browseOpts.myCol){
+    if(this.pcEnabled && this.browseOpts.myCol){
         var obj = {
             label : 'My Collections',
             id: '4',

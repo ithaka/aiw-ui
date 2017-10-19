@@ -2,6 +2,7 @@ import { Subscription } from 'rxjs/Rx';
 import { Component, OnInit, OnDestroy, Output, EventEmitter, Input } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Location } from '@angular/common';
+import { Locker } from 'angular2-locker';
 
 // Project Dependencies
 import { AssetService, ImageGroupService, ImageGroup, GroupService, AuthService } from '../shared';
@@ -43,6 +44,8 @@ export class NavMenu implements OnInit, OnDestroy {
 
   @Output() refreshIG: EventEmitter<any> = new EventEmitter();
 
+  private _storage: Locker;
+
   private user: any = {};
   private institutionObj: any = {};
   
@@ -62,9 +65,12 @@ export class NavMenu implements OnInit, OnDestroy {
 
   // Flag for confimation popup for deleting selected asset(s) from the IG
   private showConfirmationModal: boolean = false;
+
+  private pcEnabled: boolean;
   
   // TypeScript public modifiers
   constructor(
+    private locker: Locker,
     private _router: Router,
     private location: Location,
     private _app: AppConfig,
@@ -76,6 +82,8 @@ export class NavMenu implements OnInit, OnDestroy {
     private _analytics: AnalyticsService
   ) {
     this.browseOpts = this._app.config.browseOptions
+    this._storage = locker.useDriver(Locker.DRIVERS.LOCAL)
+    this.pcEnabled = this._storage.get('pcEnabled')
   }
   
   ngOnInit() {

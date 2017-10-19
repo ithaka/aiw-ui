@@ -17,7 +17,7 @@
                             <button *ngIf="browseOpts.artstorCol" translate class="dropdown-item" [routerLink]="['/browse', 'library']">NAV_MENU.COLLECTIONS.ARTSTOR</button>
                             <button *ngIf="browseOpts.instCol" translate class="dropdown-item" [routerLink]="['/browse', 'institution']">NAV_MENU.COLLECTIONS.INSTITUTION</button>
                             <button *ngIf="browseOpts.openCol" translate class="dropdown-item" [routerLink]="['/browse', 'commons']">NAV_MENU.COLLECTIONS.OPEN</button>
-                            <button *ngIf="browseOpts.myCol" translate [class.disabled]="!user.isLoggedIn || !(user && user.userPCAllowed == '1')" class="dropdown-item" [routerLink]="['/browse', 'mycollections']">NAV_MENU.COLLECTIONS.OWNED</button>
+                            <button *ngIf="browseOpts.myCol" translate [class.disabled]="!pcEnabled" class="dropdown-item" [routerLink]="['/browse', 'mycollections']">NAV_MENU.COLLECTIONS.OWNED</button>
                             <button *ngIf="browseOpts.igs" translate class="dropdown-item" [routerLink]="['/browse','groups', 'institution']">NAV_MENU.COLLECTIONS.GROUPS</button>
                         </div>
                     </li>
