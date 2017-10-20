@@ -13,7 +13,7 @@ import { AuthService } from '../shared/auth.service';
   selector: 'ang-asset-grid',
   providers: [],
   styleUrls: [ './asset-grid.component.scss' ],
-  templateUrl: './asset-grid.component.html'
+  templateUrl: './asset-grid.component.pug'
 })
 
 export class AssetGrid implements OnInit, OnDestroy {
