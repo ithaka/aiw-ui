@@ -209,6 +209,10 @@ export class AssetSearchService {
       }
     }
 
+    if(urlParams.colId){
+      filterArray.push("collections:\"" + urlParams.colId + "\"");
+    }
+
     query["filter_query"] = filterArray
 
     if (dateFacet.modified) {

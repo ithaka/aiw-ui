@@ -158,9 +158,35 @@ export class AssetFilters {
       params['page'] = this.pagination.page;
     }
     
-    this.router.navigate(['search', this.term, params]);
-  }
+    if(currentParams.colId){
 
+      let baseParams = {}
+      
+      if(currentParams.name){
+        baseParams['name'] = currentParams.name
+      }
+      if(currentParams.browseType){
+        baseParams['browseType'] = currentParams.browseType
+      }
+      if(currentParams.size){
+        baseParams['size'] = currentParams.size
+      }
+      if(currentParams.page){
+        baseParams['page'] = currentParams.page
+      }
+      if(currentParams.sort){
+        baseParams['sort'] = currentParams.sort
+      }
+
+      let queryParams = Object.assign(baseParams, params)
+  
+      this.router.navigate( [ '/collection', currentParams.colId, queryParams ] )
+    }
+    else{
+      this.router.navigate(['search', this.term, params])
+    }
+    
+  }
 
   changeSortOpt(index, label) {
     this.activeSort.index = index;
