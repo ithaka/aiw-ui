@@ -21,7 +21,7 @@ declare var kWidget: any;
 
 @Component({
     selector: 'ang-asset-viewer',
-    templateUrl: 'asset-viewer.component.html',
+    templateUrl: 'asset-viewer.component.pug',
     styleUrls: ['./asset-viewer.component.scss']
 })
 export class AssetViewerComponent implements OnInit, OnDestroy, AfterViewInit {
@@ -59,7 +59,7 @@ export class AssetViewerComponent implements OnInit, OnDestroy, AfterViewInit {
     private osdViewer: any;
 
     constructor(private _assets: AssetService, private _auth: AuthService, private http: Http) {
-        
+
     }
 
     ngOnInit() {
@@ -106,7 +106,7 @@ export class AssetViewerComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     ngAfterViewInit() {
-      
+
     }
 
     private loadViewer(): void {
@@ -135,7 +135,7 @@ export class AssetViewerComponent implements OnInit, OnDestroy, AfterViewInit {
      * Gets information needed to load IIIF viewers, such as OpenSeaDragon
      */
     private loadIIIF(): void {
-        if (this.asset.tileSource) { 
+        if (this.asset.tileSource) {
             this.tileSource = this.asset.tileSource
             this.loadOpenSea()
         } else {
@@ -185,7 +185,7 @@ export class AssetViewerComponent implements OnInit, OnDestroy, AfterViewInit {
 
         this.osdViewer.addHandler('zoom', (value) => {
             this.lastZoomValue = value.zoom;
-            
+
             // Save viewport values for downloading the view
             this.asset.viewportDimensions.containerSize = this.osdViewer.viewport.containerSize
             this.asset.viewportDimensions.contentSize = this.osdViewer.viewport._contentSize

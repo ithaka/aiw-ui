@@ -13,7 +13,7 @@ import { TitleService } from '../shared/title.service';
 
 @Component({
     selector: 'ang-asset-page',
-    templateUrl: 'asset-page.component.html',
+    templateUrl: 'asset-page.component.pug',
     styleUrls: [ './asset-page.component.scss' ]
 })
 export class AssetPage implements OnInit, OnDestroy {
@@ -58,20 +58,20 @@ export class AssetPage implements OnInit, OnDestroy {
     private quizMode: boolean = false;
     private quizShuffle: boolean = false;
     private showAssetCaption: boolean = true;
-    
+
     private assetIdProperty: string = 'artstorid'
 
     constructor(
-            private _assets: AssetService, 
+            private _assets: AssetService,
             private _group: GroupService,
-            private _auth: AuthService, 
-            private route: ActivatedRoute, 
-            private _router: Router, 
+            private _auth: AuthService,
+            private route: ActivatedRoute,
+            private _router: Router,
             private locker: Locker,
             private _analytics: AnalyticsService,
             private angulartics: Angulartics2,
-            private _title: TitleService 
-        ) { 
+            private _title: TitleService
+        ) {
             this._storage = locker.useDriver(Locker.DRIVERS.LOCAL);
     }
 
@@ -179,7 +179,7 @@ export class AssetPage implements OnInit, OnDestroy {
         this.subscriptions.forEach((sub) => { sub.unsubscribe(); });
     }
 
-    /** 
+    /**
      * Render Asset once its loaded
      */
     renderPrimaryAsset(asset: Asset) {
@@ -197,7 +197,7 @@ export class AssetPage implements OnInit, OnDestroy {
                     // here is where we make the "access denied" modal appear
                     if (!this.hasExternalAccess) {
                         this.showAccessDeniedModal = true
-                    }   
+                    }
                 } else {
                     // don't have a clue why this would happen, so just log it
                     console.error(err)
@@ -241,8 +241,8 @@ export class AssetPage implements OnInit, OnDestroy {
             // Check if the logged-in user has private image groups
             this._group.getAll('private')
                         .take(1)
-                        .subscribe((res) => { 
-                            if (res.groups && (res.groups.length > 0)) { 
+                        .subscribe((res) => {
+                            if (res.groups && (res.groups.length > 0)) {
                                 this.showAddModal = true;
                             } else{
                                 this.showCreateGroupModal = true;
@@ -252,7 +252,7 @@ export class AssetPage implements OnInit, OnDestroy {
             this.showLoginModal = true;
         }
     }
-    
+
     private showPrevAsset(): void{
         if(this.assetNumber > 1){
             if((this.assetIndex > 0)){
@@ -279,7 +279,7 @@ export class AssetPage implements OnInit, OnDestroy {
         }
     }
 
-     /** 
+     /**
      * Clean up the field label for use as an ID (used in testing)
      */
     private cleanId(label: string): string {
@@ -324,9 +324,9 @@ export class AssetPage implements OnInit, OnDestroy {
         if( /iPhone|iPad|iPod/i.test(navigator.userAgent) ) {
             iOSuser = true
         }
-    
-        setTimeout( () => { 
-            input.select(); 
+
+        setTimeout( () => {
+            input.select();
             if(document.queryCommandSupported('copy') && !iOSuser){
                 document.execCommand('copy', false, null)
                 statusMsg = 'Image URL successfully copied to the clipboard!';
@@ -353,7 +353,7 @@ export class AssetPage implements OnInit, OnDestroy {
                         thumbnail.selected = false;
                     }
                 });
-                
+
             }
         })
         if (this.assets.length >= 10) {
@@ -372,7 +372,7 @@ export class AssetPage implements OnInit, OnDestroy {
         for(let i = 0; i < this.prevAssetResults.thumbnails.length; i++){
             this.prevAssetResults.thumbnails[i].selected = false;
         }
-        
+
         this.quizMode = false;
         this.quizShuffle = false;
         this.showAssetCaption = true;
@@ -440,7 +440,7 @@ export class AssetPage implements OnInit, OnDestroy {
             let viewY = this.assets[0].viewportDimensions.containerSize.y
             // Dimensions of the source size of the cropped image
             let zoomX = Math.floor(fullWidth/zoom)
-            let zoomY = Math.floor( zoomX * (viewY/viewX)) 
+            let zoomY = Math.floor( zoomX * (viewY/viewX))
             // Make sure zoom area is not larger than source, or else error
             if (zoomX > fullWidth) {
                 zoomX = fullWidth;
@@ -461,8 +461,8 @@ export class AssetPage implements OnInit, OnDestroy {
      * - sets url used by agree modal
      */
     setDownloadImage() : void {
-        this.downloadUrl = this.assets[0].downloadLink; 
-        this.showAgreeModal = true; 
+        this.downloadUrl = this.assets[0].downloadLink;
+        this.showAgreeModal = true;
         // Track download
         this._analytics.directCall('download_image');
         this.angulartics.eventTrack.next({ action:"downloadAsset", properties: { category: "asset", label: this.assets[0].id }});
@@ -473,7 +473,7 @@ export class AssetPage implements OnInit, OnDestroy {
      * - sets url used by agree modal
      */
     setDownloadView() : void {
-        this.downloadUrl = this.generatedViewURL; 
+        this.downloadUrl = this.generatedViewURL;
         this.showAgreeModal = true;
         // Track download
         this.angulartics.eventTrack.next({ action:"downloadView", properties: { category: "asset", label: this.assets[0].id }});

@@ -1,0 +1,118 @@
+#mainContent.container-fluid.asset-page(*ngIf="assets[0]", [class.fullscreen]="isFullscreen", tabindex="-1")
+  .row
+    // View prev/next asset
+    .title-nav-cntnr.col-md-12([class.hidden]="isFullscreen")
+      span.back-results.hidden-sm-down(*ngIf="prevRouteParams.length > 0", (click)="backToResults()") {{ 'ASSET_PAGE.LINKS.BACK' | translate}}
+      .title-wrap
+        i.icon.icon-direction.icon-left(title="Previous in results", (click)="showPrevAsset()", [class.disabled]="assetNumber <= 1")
+        .title([ngClass]="[ prevRouteParams.length > 0 ? 'shortened' : '' ]", [innerHTML]="assets[0].title ? assets[0].title : ''")
+        i.icon.icon-direction.icon-right(title="Next in results", (click)="showNextAsset()", [class.disabled]="assetNumber >= totalAssetCount")
+      .page-tooltip
+        span#assetPageNumber {{ assetNumber }}  OF
+        = " "
+        span#assetPageCount {{ totalAssetCount }}
+    // Asset Viewer Row
+    .asset-col([ngClass]="[ isFullscreen ? 'fullscreen-container' : 'col-md-8' ]")
+      ang-asset-viewer(*ngFor="let asset of (isFullscreen ? assets : [assets[0]]); let i = index",
+        [asset]="asset",
+        [ngClass]="[ 'asset-viewer-' + assets.length ]",
+        (fullscreenChange)="updateFullscreenVar($event)",
+        [index]="i",
+        [assetCompareCount]="assets.length",
+        [assetNumber]="assetNumber",
+        [assetGroupCount]="totalAssetCount",
+        [assets]="assets",
+        [isFullscreen]="isFullscreen",
+        [showCaption]="showAssetCaption",
+        [quizMode]="quizMode",
+        [prevAssetResults]="prevAssetResults",
+        (removeAsset)="toggleAsset(asset)",
+        (nextPage)="showNextAsset()",
+        (prevPage)="showPrevAsset()")
+      .col-md-12.quiz-caption-cntnr(*ngIf="isFullscreen", [ngClass]="[ showAssetCaption ? '' : 'cntnr-bg' ]")
+        .caption-btn-cntnr([ngClass]="[ showAssetCaption ? 'active' : '' ]", (click)="showAssetCaption = !showAssetCaption", title="{{ showAssetCaption ? 'Hide Asset Meta Information' : 'Show Asset Meta Information' }}")
+          span.caption-btn
+          | {{ showAssetCaption ? 'HIDE CAPTION' : 'SHOW CAPTION' }}
+        .quiz-browse-cntnr(*ngIf="quizMode")
+          i.icon.icon-direction.icon-left([class.disabled]="assetNumber <= 1", title="Previous in results", (click)="showPrevAsset()")
+          i.icon.icon-direction.icon-right([class.disabled]="assetNumber >= totalAssetCount", title="Next in results", (click)="showNextAsset()")
+        .shuffle-cntnr(*ngIf="quizMode", [ngClass]="[ quizShuffle ? 'active' : '' ]", (click)="toggleQuizShuffle()", title="Toggle Asset Suffle")
+          span.shuffle-btn
+          | SHUFFLE {{ quizShuffle ? 'ON' : 'OFF' }}
+        .quiz-cntnr([ngClass]="[ quizMode ? 'active' : '' ]", (click)="toggleQuizMode()", title="{{ quizMode ? 'Deactivate Quiz Mode' : 'Activate Quiz Mode' }}")
+          span.quiz-btn
+          | QUIZ MODE {{ quizMode ? 'ON' : 'OFF' }}
+    // Asset Metadata Row
+    .col-md-4([class.hidden]="isFullscreen")
+      .py-3
+        // If the user has not accepted the agreement, show modal when clicked, otherwise download immediately
+        .btn-row
+          // (mouseup) is a Firefox fix for firing the copy event
+          button.btn.btn-secondary([class.active]="showCopyUrl", tabindex="1", (mousedown)="showCopyUrl ? showCopyUrl = false : copyGeneratedImgURL()", (mouseup)="copyUrlInput.select(); document.execCommand('copy', false, null)")
+            | {{ 'ASSET_PAGE.BUTTONS.LINK' | translate}}
+            = " "
+            i#genImgURLlink.icon.icon-share-white
+          // Download dropdown options
+          .dropdown.d-inline-block(ngbDropdown, *ngIf="assets[0].downloadLink && user.isLoggedIn")
+            button#downloadAssetDropdown.btn.btn-secondary(ngbDropdownToggle, (click)="genDownloadViewLink()")
+              | {{ 'ASSET_PAGE.BUTTONS.DOWNLOAD' | translate}}
+              = " "
+            .dropdown-menu(aria-labelledby="dropdownBasic1")
+              a#downloadAssetLink.dropdown-item(download,
+              [attr.href]="(downloadAuth() && !assets[0].disableDownload) ? assets[0].downloadLink : null",
+              (click)="(downloadAuth() && !assets[0].disableDownload) ? null : setDownloadImage()",
+              [class.disabled]="assets[0].disableDownload",
+              title="{{ assets[0].disableDownload ? 'Image is not available for download.' : 'Image download'}}",
+              target="_blank")
+                i.icon.icon-download-black
+                = " "
+                | Download File
+              a#downloadViewLink.dropdown-item(download="view.jpg",
+              (click)="(downloadAuth() && !assets[0].disableDownload) ? null : setDownloadView()",
+              [class.disabled]="assets[0].disableDownload || assets[0].typeName() !== 'image'",
+              [attr.href]="(downloadAuth() && !assets[0].disableDownload) ? generatedViewURL : null",
+              target="_blank")
+                i.icon.icon-download-black
+                = " "
+                | Download View
+          button.btn.btn-secondary(tabindex="1", *ngIf="assets[0].downloadLink && !user.isLoggedIn", (click)="showLoginModal = true")
+            | {{ 'ASSET_PAGE.BUTTONS.DOWNLOAD' | translate}}
+            i#downloadAssetLink.icon.icon-download
+          a.btn.btn-secondary(*ngIf="assets[0]", tabindex="2", [attr.href]=" '/#/assetprint/' + assets[0].id ", target="_blank")
+            | {{ 'ASSET_PAGE.BUTTONS.PRINT' | translate}}
+          button.btn.btn-primary.btn--square((click)="addAssetToIG()")
+            i.icon.icon-add-white(aria-hidden="true")
+          .form-group.pt-1([class.hidden]="!showCopyUrl")
+            label {{ 'ASSET_PAGE.HEADER_LABELS.SHR_LNK' | translate}}
+            input#generatedImgURL.form-control.form-control__copy(#copyUrlInput="", readonly, [ngModel]="generatedImgURL", (click)="copyUrlInput.select(); document.execCommand('copy', false, null)")
+            .alert.alert-info(*ngIf="copyURLStatusMsg") {{ copyURLStatusMsg }}
+        .row-hdr.pt-3(*ngIf="assets[0].metaDataArray.length > 0") {{ 'ASSET_PAGE.HEADER_LABELS.OBJ_DETAILS' | translate}}
+        // Old metadata loop
+        .meta-block(*ngFor="let metadataObj of assets[0].formattedMetaArray")
+          .label([attr.id]="cleanId(metadataObj.fieldName)") {{ metadataObj.fieldName }}
+          div(*ngFor="let value of metadataObj.fieldValue")
+            .value([innerHTML]="cleanFieldValue(value) | linkify")
+        .row-hdr.pt-1(*ngIf="assets[0].filePropertiesArray.length > 0") {{ 'ASSET_PAGE.HEADER_LABELS.FILE_PROPS' | translate}}
+        // Loop through File Properties Array
+        .meta-block(*ngFor="let filePropObj of assets[0].filePropertiesArray")
+          .label([attr.id]="cleanId(filePropObj.fieldName)") {{ filePropObj.fieldName }}
+            .value([innerHTML]="filePropObj.fieldValue")
+        .text-left.pt-2
+          a#buttonRequestIap.btn.btn-secondary.my-1(*ngIf="route.snapshot.queryParams.iap == 'true'", [attr.href]="'http://www.artstor.org/form/iap-request-form?name=' + assets[0].title + '&collectionName=' + assets[0].collectionName + '&id=' + assets[0].id + '&email=' + user.username", title="Request Image for Academic Publishing", tabindex="2", target="_blank") {{'ASSET_PAGE.BUTTONS.GET_IAP' | translate}}
+          a#buttonReportAssetError.btn.btn-secondary.my-1([attr.href]="'http://www.artstor.org/form/report-error?collectionName=' + assets[0].collectionName + '&id=' + assets[0].id + '&email=' + user.username", title="Report an error", tabindex="2", target="_blank") {{'ASSET_PAGE.BUTTONS.REPORT_ERROR' | translate}}
+    .fullscreen-btns(*ngIf="isFullscreen")
+      button.btn.btn-dark((click)="exitPresentationMode()")
+        | {{ 'ASSET_PAGE.BUTTONS.EXT' | translate}}
+      button.btn.btn-dark(*ngIf="!quizMode", (click)="showAssetDrawer = !showAssetDrawer")
+        | {{ 'ASSET_PAGE.BUTTONS.COMPARE' | translate}}
+    // Asset Drawer
+    .asset-drawer([class.slideOut]="showAssetDrawer && isFullscreen")
+      .col-sm-12
+        div(*ngIf="prevAssetResults.thumbnails.length < 1")
+          .alert.alert-info {{ 'ASSET_PAGE.MESSAGES.NEEDASSETS' | translate}}
+        ang-thumbnail.card.card--asset(*ngFor="let asset of prevAssetResults.thumbnails", [thumbnail]="asset", [ngClass]="{'selected' : asset.selected, 'disabled' : assets[0].id == asset.objectId }", (click)="toggleAsset(asset)")
+ang-agree-modal(*ngIf="showAgreeModal", (closeModal)="showAgreeModal = false", [assetUrl]="downloadUrl")
+ang-login-req-modal(*ngIf="showLoginModal", (closeModal)="showLoginModal = false")
+ang-add-to-group(*ngIf="showAddModal", [selectedAssets]="[ assets[0] ]", [showCreateGroup]="true", [copySelectionStr]=" 'ADD_TO_GROUP_MODAL.FROM_ASSET' ", (createGroup)="showCreateGroupModal = true; showAddModal = false;", (closeModal)="showAddModal = false")
+ang-new-ig-modal(*ngIf="showCreateGroupModal", [selectedAssets]="[ assets[0] ]", [showAddToGroup]="true", (addToGroup)="showAddModal = true; showCreateGroupModal = false;", (closeModal)="showCreateGroupModal = false")
+ang-access-denied-modal(*ngIf="showAccessDeniedModal")
