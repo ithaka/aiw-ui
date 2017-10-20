@@ -130,6 +130,9 @@ export class AuthService implements CanActivate {
     }
 
     // Sahara routing WORKAROUND
+    if (document.location.hostname.indexOf('sahara.beta.stage.artstor.org') > -1) {
+      this.hostname = '//sahara.beta.stage.artstor.org'
+    }
     if (document.location.hostname.indexOf('sahara.prod.artstor.org') > -1) {
       this.hostname = '//library.artstor.org'
     }
