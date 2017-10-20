@@ -179,6 +179,22 @@ export class AuthService implements CanActivate {
     });
 
     this.resetIdleWatcher();
+
+    /**
+     * User Access Heartbeat
+     * - Poll /userinfo every 15min
+     * - Refreshs AccessToken with IAC
+     */
+    const userInfoInterval = 15*1000*60*60
+    setInterval(() => {
+      this.getUserInfo().take(1).toPromise()
+        .then(res => {
+          console.info('Access Token refreshed <3')
+        })
+        .catch(err => {
+          console.error('Access Token refresh failed </3')
+        })
+    }, userInfoInterval)
   }
 
 
