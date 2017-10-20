@@ -9,7 +9,7 @@ import { AuthService } from '../shared';
 
 @Component({
   selector: 'app-account-page',
-  templateUrl: './account-page.component.html',
+  templateUrl: './account-page.component.pug',
   styleUrls: ['./account-page.component.scss']
 })
 export class AccountPage implements OnInit {
@@ -81,7 +81,7 @@ export class AccountPage implements OnInit {
           case 6: this.serviceResponses.wrongPass = true; break;
           default: this.serviceResponses.generalError = true;
         }
-        
+
       }, (err) => {
         this.changePassLoading = false;
         this.serviceResponses.generalError = true;

@@ -6,7 +6,7 @@ import { AssetService } from './../../shared';
 
 @Component({
   selector: 'ang-thumbnail',
-  templateUrl: 'thumbnail.component.html',
+  templateUrl: 'thumbnail.component.pug',
   styles: [`
     .card-icon-group {
         height: 19px;
