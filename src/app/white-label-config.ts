@@ -33,6 +33,9 @@ export const WLV_ARTSTOR = {
         'teachingResources': true,
         'imageGrps': true
     },
+    advSearch: {
+      showCollectionTypeFacet: true
+    },
     featuredCollection: "HOME.FEATURED",
     showHomeBlog: true,
     showHomeSSC: true,
@@ -65,6 +68,9 @@ export const WLV_SAHARA = {
         'geography': false,
         'teachingResources': false,
         'imageGrps': true
+    },
+    advSearch: {
+      showCollectionTypeFacet: false
     },
     showHomeBlog: false,
     showHomeSSC: false,

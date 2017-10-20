@@ -69,6 +69,7 @@ export class SearchModal implements OnInit {
   private filterSelections: any[] = []
   private subscriptions: Subscription[] = []
   private showPrivateCollections = false
+  private showCollectionType: boolean = false;
 
   // Filters
   private availableFilters: any[] = []
@@ -99,6 +100,7 @@ export class SearchModal implements OnInit {
     this.advanceQueries.push(Object.assign({}, this.advQueryTemplate));
     this.advanceQueries.push(Object.assign({}, this.advQueryTemplate));
     this.showPrivateCollections = this._appConfig.config.browseOptions.myCol;
+    this.showCollectionType = _appConfig.config.advSearch.showCollectionTypeFacet
   }
 
   ngOnInit() {
@@ -122,14 +124,17 @@ export class SearchModal implements OnInit {
         for (let facetKey in data['facets']) {
           const facet = data['facets'][facetKey]
 
-          // Prune any facets not available to the user (ex. Private Collections on SAHARA)
-          for (let i = facet.values.length - 1; i >= 0; i--){
-            if (!this.showPrivateCollections && facet.values[i].name.match(/3|6/)) { // NOTE: 3 & 6 are Private Collections names
-              facet.values.splice(i, 1)
-            }
-          }
+          if ((facet.name === 'collectiontypes' && this.showCollectionType) || facet.name !== 'collectiontypes') {
 
-          this.availableFilters.push(facet)
+            // Prune any facets not available to the user (ex. Private Collections on SAHARA)
+            for (let i = facet.values.length - 1; i >= 0; i--){
+              if (!this.showPrivateCollections && facet.values[i].name.match(/3|6/)) { // NOTE: 3 & 6 are Private Collections names
+                facet.values.splice(i, 1)
+              }
+            }
+
+            this.availableFilters.push(facet)
+          }
         }
         // Process "hierarchies2"
         for (let hierFacet in data['hierarchies2']) {
