@@ -8,6 +8,7 @@
           .form-group
             label Email Address
             p.form-control-static {{ user.username }}
+          // Change Password Form
           form#changePasswordForm([formGroup]="passForm", (ngSubmit)="changePass(passForm.value)")
             .form-group([class.has-danger]="submitted && passForm.controls['oldPass'].hasError('required')")
               label(for="inputOldPassword") {{ 'ACCOUNT.CHANGE_PASS.LABELS.OLD_PASS' | translate }}
