@@ -134,7 +134,7 @@ export class AuthService implements CanActivate {
       this.hostname = '//sahara.beta.stage.artstor.org'
     }
     if (document.location.hostname.indexOf('sahara.prod.artstor.org') > -1) {
-      this.hostname = '//library.artstor.org'
+      this.hostname = '//sahara.prod.artstor.org/'
     }
 
     // Local routing should point to full URL
