@@ -1,0 +1,81 @@
+nav-menu
+#mainContent.container.main-content(tabindex="-1")
+  .row
+    .col-sm-2
+    .col-sm-8
+      .card.card--light
+        .card-header
+          h1#registerHeading {{ 'REGISTER.REGISTER_HEADING' | translate }}
+        p#registerDescription {{ 'REGISTER.REGISTER_DESCRIPTION' | translate }}
+        .card-body
+          form#registerForm([formGroup]="registerForm", (ngSubmit)="registerSubmit(registerForm.value)")
+            .form-group
+              label(for="emailInput") Email Address
+              input#emailInput.form-control(type="text", spellcheck="false", [formControl]="registerForm.controls['email']", tabindex="0")
+              .has-danger(*ngIf="submitted && registerForm.controls['email'].hasError('required')")
+                p#errEmailRequired.form-control-feedback {{ 'REGISTER.ERRORS.EMAIL_REQUIRED' | translate }}
+              .has-danger(*ngIf="submitted && registerForm.controls['email'].hasError('emailInvalid') && !registerForm.controls['email'].hasError('required')")
+                p#errEmailInvalid.form-control-feedback {{ 'REGISTER.ERRORS.EMAIL_INVALID' | translate }}
+            .form-group
+              label(for="emailConfirmInput") Confirm Email Address
+              input#emailConfirmInput.form-control(type="text", spellcheck="false", [formControl]="registerForm.controls['emailConfirm']", tabindex="0")
+              .has-danger(*ngIf="submitted && registerForm.hasError('emailMismatch')")
+                p#errEmailMismatch.form-control-feedback {{ 'REGISTER.ERRORS.EMAIL_MISMATCH' | translate }}
+            .form-group
+              label(for="passwordInput") Password (7 character minimum)
+              input#passwordInput.form-control(type="password", spellcheck="false", [formControl]="registerForm.controls['password']", tabindex="0")
+              .has-danger(*ngIf="submitted && registerForm.controls['password'].hasError('required')")
+                p#errPasswordRequired.form-control-feedback {{ 'REGISTER.ERRORS.PASSWORD_REQUIRED' | translate }}
+              .has-danger(*ngIf="submitted && registerForm.controls['password'].hasError('minlength')")
+                p#errPasswordMinlength.form-control-feedback {{ 'REGISTER.ERRORS.PASSWORD_MINLENGTH' | translate }}
+            .form-group
+              label(for="passwordConfirmInput") Confirm Password
+              input#passwordConfirmInput.form-control(type="password", spellcheck="false", [formControl]="registerForm.controls['passwordConfirm']", tabindex="0")
+              .has-danger(*ngIf="submitted && registerForm.hasError('passwordMismatch')")
+                p#errPasswordMismatch.form-control-feedback {{ 'REGISTER.ERRORS.PASSWORD_MISMATCH' | translate }}
+            .form-group
+              label(for="selectUserDept") Role at Institution
+              select#selectUserRole.form-control.custom-select([formControl]="registerForm.controls['role']", tabindex="0")
+                option(*ngFor="let role of userRoles", [ngValue]="role.id") {{ role.desc }}
+              .has-danger(*ngIf="submitted && registerForm.controls['role'].hasError('required')")
+                p#errRoleRequired.form-control-feedback {{ 'REGISTER.ERRORS.INSTITUTION_ROLE_REQUIRED' | translate }}
+            .form-group
+              label(for="selectUserDept") Academic Department
+              select#selectUserDept.form-control.custom-select([formControl]="registerForm.controls['dept']", tabindex="0")
+                option(*ngFor="let dept of userDepts", [ngValue]="dept.id") {{ dept.desc }}
+              .has-danger(*ngIf="submitted && registerForm.controls['dept'].hasError('required')")
+                p#errDeptRequired.form-control-feedback {{ 'REGISTER.ERRORS.ACADEMIC_DEPT_REQUIRED' | translate }}
+            p {{ 'REGISTER.FIELDS_REQUIRED' | translate }}
+            .form-group
+              .form-check
+                label.form-check-label([attr.title]="'REGISTER.AGE_PROMPT_HOVER' | translate")
+                  input#checkAge.form-check-input(type="checkbox", [formControl]="registerForm.controls['age']", tabindex="0")
+                  = " "
+                  | {{ 'REGISTER.AGE_PROMPT' | translate }}
+              .form-check
+                label.form-check-label
+                  input#checkInfo.form-check-input(type="checkbox", [formControl]="registerForm.controls['info']", tabindex="0")
+                  = " "
+                  | {{ 'REGISTER.INFO_PROMPT' | translate }}
+              .form-check
+                label.form-check-label
+                  input#checkSurvey.form-check-input(type="checkbox", [formControl]="registerForm.controls['survey']", tabindex="0")
+                  = " "
+                  | {{ 'REGISTER.SURVEY_PROMPT' | translate }}
+              .has-danger(*ngIf="submitted && registerForm.controls['age'].hasError('required')")
+                p#errAgeRequired.form-control-feedback {{ 'REGISTER.ERRORS.AGE_REQUIRED' | translate}}
+            p([innerHtml]="'REGISTER.PRIVACY_DISCLAIMER' | translate")
+            p By using Artstor Digital Library, I agree to the
+              = " "
+              a#linkTermsAndConditions.link(href="http://www.artstor.org/terms", tabindex="0") Terms
+            .form-group
+              button#btnRegister.btn.btn-primary([class.loading]="isLoading", type="submit", name="action", tabindex="0") Register
+              .has-danger(*ngIf="submitted")
+                p#errDuplicateUser.form-control-feedback(*ngIf="serviceErrors.duplicate", [innerHtml]="'REGISTER.ERRORS.EMAIL_DUPLICATE' | translate")
+                p#errJstorUser.form-control-feedback(*ngIf="serviceErrors.hasJstor", [innerHtml]="'REGISTER.ERRORS.ALREADY_JSTOR' | translate")
+          br
+          | Already registered?
+          =" "
+          a#linkLoginResetModal.link([routerLink]="['/login']", tabindex="1") Log in
+          br
+          a#linkRegisterHelp.link(href="http://support.artstor.org/?article=register-for-an-artstor-account", target="_blank", tabindex="1") Help
