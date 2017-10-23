@@ -3,7 +3,7 @@ import { Subscription } from 'rxjs/Subscription'
 
 @Component({
   selector: 'ang-general-search',
-  templateUrl: 'general-search.component.html'
+  templateUrl: 'general-search.component.pug'
 })
 
 export class GeneralSearchComponent implements OnInit {
