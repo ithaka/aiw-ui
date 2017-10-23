@@ -588,10 +588,14 @@ export class AuthService implements CanActivate {
   }
 
   public ssLogin(username: string, password: string): Observable<SSLoginResponse> {
+
+    let data = this.formEncode({ username: username, password: password })
+    let headers = new Headers({ 'Content-Type': 'application/x-www-form-urlencoded' })
     return this.http.post(
-      "http://art-aa-service.apps.test.cirrostartus.org/gust/login",
-      { username: username, password: password },
-      { withCredentials: true }
+      "http://art-aa-service.apps.test.cirrostratus.org/gust/login",
+      // { username: username, password: password },
+      data,
+      { withCredentials: true, headers: headers }
     ).map((res) => { return res.json() })
   }
 }
