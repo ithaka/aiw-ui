@@ -385,7 +385,8 @@ export class AssetService {
                     this.loadCluster(params.objectId);
                 } else if (params.hasOwnProperty("catId")  && params["catId"] !== "") {
                     //get collection thumbnails
-                    this.loadCategory(params.catId);
+                    // this.loadCategory(params.catId);
+                    this.loadSearch('');
                 }  else if (params.hasOwnProperty("colId") && params["colId"] !== "") {
                     //get collection thumbnails
                     // this.loadCollection(params.colId);

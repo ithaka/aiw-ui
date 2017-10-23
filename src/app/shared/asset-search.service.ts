@@ -209,8 +209,9 @@ export class AssetSearchService {
       }
     }
 
-    if(urlParams.colId){
-      filterArray.push("collections:\"" + urlParams.colId + "\"");
+    if(urlParams.colId || urlParams.catId){
+      let colId = urlParams.colId ? urlParams.colId : '36411';
+      filterArray.push("collections:\"" + colId + "\"");
     }
 
     query["filter_query"] = filterArray

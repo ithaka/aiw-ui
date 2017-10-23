@@ -155,10 +155,10 @@ export class AssetFilters {
     this.angulartics.eventTrack.next({ action: "filteredSearch", properties: { category: "search", label: params } })
 
     if(params['page']){
-      params['page'] = this.pagination.page;
+      params['page'] = this.pagination.page
     }
     
-    if(currentParams.colId){
+    if(currentParams.colId || currentParams.catId){
 
       let baseParams = {}
       
@@ -179,8 +179,10 @@ export class AssetFilters {
       }
 
       let queryParams = Object.assign(baseParams, params)
+      let colId = currentParams.colId ? currentParams.colId : currentParams.catId
+      let route = currentParams.colId ? 'collection' : 'category'
   
-      this.router.navigate( [ '/collection', currentParams.colId, queryParams ] )
+      this.router.navigate( [ '/' + route, colId, queryParams ] )
     }
     else{
       this.router.navigate(['search', this.term, params])
