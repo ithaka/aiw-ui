@@ -1,8 +1,22 @@
-
 // Angular 2
 // rc2 workaround
 import { enableDebugTools, disableDebugTools } from '@angular/platform-browser';
-import { enableProdMode, ApplicationRef } from '@angular/core';
+import { ApplicationRef, enableProdMode, ErrorHandler } from '@angular/core';
+
+
+// Error tracking utility for sentry.io
+import * as Raven from 'raven-js';
+const { version: appVersion } = require('../../package.json');
+
+Raven.config('https://9ef1f98534914bf6826e202370d1f627@sentry.io/209953', {
+  release: appVersion
+}).install();
+export class RavenErrorHandler implements ErrorHandler {
+  handleError(err:any) : void {
+    Raven.captureException(err);
+  }
+}
+
 // Environment Providers
 let PROVIDERS: any[] = [
   // common env directives
@@ -16,9 +30,10 @@ if ('production' === ENV) {
   // Production
   disableDebugTools();
   enableProdMode();
-
+  
   PROVIDERS = [
     ...PROVIDERS,
+    { provide: ErrorHandler, useClass: RavenErrorHandler }
     // custom providers in production
   ];
 
