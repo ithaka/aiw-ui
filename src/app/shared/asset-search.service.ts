@@ -209,8 +209,19 @@ export class AssetSearchService {
       }
     }
 
-    if(urlParams.colId || urlParams.catId){
-      let colId = urlParams.colId ? urlParams.colId : '36411';
+    // if(urlParams.colId || urlParams.catId || urlParams['coll']){
+    if(urlParams.colId || urlParams['coll']){
+      let colId = '';
+      if( urlParams['coll'] ){
+        colId = urlParams['coll'];
+      }
+      else if ( urlParams.colId ){
+        colId = urlParams.colId;
+      }
+      // else if( urlParams.catId ){
+      //   colId = urlParams.catId;
+      // }
+
       filterArray.push("collections:\"" + colId + "\"");
     }
 

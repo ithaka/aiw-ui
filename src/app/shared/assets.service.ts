@@ -385,12 +385,14 @@ export class AssetService {
                     this.loadCluster(params.objectId);
                 } else if (params.hasOwnProperty("catId")  && params["catId"] !== "") {
                     //get collection thumbnails
-                    // this.loadCategory(params.catId);
-                    this.loadSearch('');
+                    this.loadCategory(params.catId);
+                    // let searchTerm = params.term ? params.term : '';
+                    // this.loadSearch(searchTerm);
                 }  else if (params.hasOwnProperty("colId") && params["colId"] !== "") {
                     //get collection thumbnails
                     // this.loadCollection(params.colId);
-                    this.loadSearch('');
+                    let searchTerm = params.term ? params.term : '';
+                    this.loadSearch(searchTerm);
                 } else if (params.hasOwnProperty("term")) {
                     this.loadSearch(params.term);
                 } else {
