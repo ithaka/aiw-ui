@@ -75,7 +75,7 @@ nav-menu
                 p#errJstorUser.form-control-feedback(*ngIf="serviceErrors.hasJstor", [innerHtml]="'REGISTER.ERRORS.ALREADY_JSTOR' | translate")
           br
           | Already registered?
-          =" "
+          = " "
           a#linkLoginResetModal.link([routerLink]="['/login']", tabindex="1") Log in
           br
           a#linkRegisterHelp.link(href="http://support.artstor.org/?article=register-for-an-artstor-account", target="_blank", tabindex="1") Help
