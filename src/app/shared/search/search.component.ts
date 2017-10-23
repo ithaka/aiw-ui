@@ -108,7 +108,10 @@ export class SearchComponent implements OnInit, OnDestroy {
     if(this.searchInResults){ // Search within results
       
       if(routeParams['colId']){
-        params['coll'] = [ routeParams['colId'] ];
+        // params['coll'] = [ routeParams['colId'] ];
+        params['term'] = term;
+        this._router.navigate( [ '/collection', routeParams['colId'], params ] );
+        return;
       }
       else if(routeParams['catId']){
         params['categoryId'] = routeParams['catId'];

@@ -156,12 +156,40 @@ export class AssetFilters {
     this.angulartics.eventTrack.next({ action: "filteredSearch", properties: { category: "search", label: params } })
 
     if(params['page']){
-      params['page'] = this.pagination.page;
+      params['page'] = this.pagination.page
     }
+    
+    if(currentParams.colId || currentParams.catId){
 
-    this.router.navigate(['search', this.term, params]);
+      let baseParams = {}
+      
+      if(currentParams.name){
+        baseParams['name'] = currentParams.name
+      }
+      if(currentParams.browseType){
+        baseParams['browseType'] = currentParams.browseType
+      }
+      if(currentParams.size){
+        baseParams['size'] = currentParams.size
+      }
+      if(currentParams.page){
+        baseParams['page'] = currentParams.page
+      }
+      if(currentParams.sort){
+        baseParams['sort'] = currentParams.sort
+      }
+
+      let queryParams = Object.assign(baseParams, params)
+      let colId = currentParams.colId ? currentParams.colId : currentParams.catId
+      let route = currentParams.colId ? 'collection' : 'category'
+  
+      this.router.navigate( [ '/' + route, colId, queryParams ] )
+    }
+    else{
+      this.router.navigate(['search', this.term, params])
+    }
+    
   }
-
 
   changeSortOpt(index, label) {
     this.activeSort.index = index;
