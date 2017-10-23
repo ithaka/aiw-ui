@@ -14,7 +14,7 @@ export class AssetFiltersService {
     private geoTree = [];
 
     private appliedFilters: any = [];
-    
+
     private defaultAvailable: any = {
         collTypes : [],
         collectiontypes : [],
@@ -58,7 +58,7 @@ export class AssetFiltersService {
     // Observable object streams
     public available$ = this.availableSource.asObservable();
     public applied$ = this.appliedSource.asObservable();
-    
+
     private _storage;
     private institution: any = {};
 
@@ -99,7 +99,7 @@ export class AssetFiltersService {
     public getFilterNameMap() : any {
         return this.filterNameMap
     }
-    
+
     // Empties all filter objects without publishing them
     public clearApplied(isQuiet ?: boolean):void {
         this.appliedFilters = [];
@@ -129,7 +129,7 @@ export class AssetFiltersService {
         //     console.log(filterArr)
         //     this.availableSource.next(this.availableFilters)
         //     return true
-        // } else 
+        // } else
         if (name && name.length > 0 && Object.prototype.toString.call(filters) === '[object Array]') {
             this.availableFilters[name] = filters
             this.availableSource.next(this.availableFilters)
@@ -149,12 +149,21 @@ export class AssetFiltersService {
     }
 
     public apply(group: string, value: string, isQuiet ?: boolean) {
+      let parsedValue:any
+        try { // parse possible array
+          parsedValue = JSON.parse(value)
+        } catch (err) { // not an array
+          parsedValue = value
+        }
+
         let groupExists = false;
         for(let i = 0; i < this.appliedFilters.length; i++){
 
             if(group === this.appliedFilters[i].filterGroup){
-                if (this.appliedFilters[i].filterValue.indexOf(value) < 0) {
-                    this.appliedFilters[i].filterValue.push(value);
+                if (Array.isArray(parsedValue)) {
+                    this.appliedFilters[i].filterValue.concat(parsedValue)
+                } else if (this.appliedFilters[i].filterValue.indexOf(parsedValue) < 0) {
+                    this.appliedFilters[i].filterValue.push(parsedValue);
                 }
                 groupExists = true;
             }
@@ -163,14 +172,14 @@ export class AssetFiltersService {
         if (!groupExists) {
             let filterObj = {
                 filterGroup: group,
-                filterValue: [value]
+                filterValue: Array.isArray(parsedValue) ? parsedValue : [parsedValue]
             };
             this.appliedFilters.push(filterObj);
         }
 
         if (!isQuiet) {
           this.appliedSource.next(this.appliedFilters);
-        } 
+        }
     }
 
     public isApplied(group: string, filter: any) {
@@ -222,7 +231,7 @@ export class AssetFiltersService {
     //     if (this.locker.get('geoTreeObj')) {
     //         return this.locker.get('geoTreeObj');
     //     } else {
-            
+
     //     }
     // }
     // public setFilters(filters) {
@@ -243,11 +252,11 @@ export class AssetFiltersService {
         } else if(!dateFacetsArray) {
             dateFacetsArray = []
         }
-        
+
         if(dateFacetsArray.length > 0){
             var startDate = dateFacetsArray[0].date;
             var endDate = dateFacetsArray[dateFacetsArray.length - 1].date;
-            
+
             this.availableFilters.dateObj.earliest.date = Math.abs(startDate);
             this.availableFilters.dateObj.earliest.era = startDate < 0 ? "BCE" : "CE";
 
@@ -273,17 +282,17 @@ export class AssetFiltersService {
      * Generate hierarchical facets from SOLR hierarchy object
      */
     public generateHierFacets(facetsObj: any, label: string) : any[] {
-        
+
         var generatedFacets = [];
 
         for(let label in facetsObj) {
             var resFacet = facetsObj[label] && facetsObj[label].element;
             var childrenObj = facetsObj[label] && facetsObj[label].children;
-            
+
             if (resFacet) {
                 resFacet.name = label
                 resFacet.children = []
-                
+
                 for (let childName in childrenObj) {
                     var child = childrenObj[childName].element
                     child.name = childName
@@ -304,7 +313,7 @@ export class AssetFiltersService {
     public generateColTypeFacets(idsArray){
         idsArray = this.getUniqueColTypeIds(idsArray);
         var generatedFacetsArray = [];
-        
+
         for(var i = 0; i < idsArray.length; i++){
             var facetObj = {
                 id : idsArray[i],
@@ -322,9 +331,9 @@ export class AssetFiltersService {
             }
             generatedFacetsArray.push(facetObj);
         }
-        
+
         // this.collTypeFacets = generatedFacetsArray;
-        this.setAvailable('collType', generatedFacetsArray); 
+        this.setAvailable('collType', generatedFacetsArray);
     }
 
     private getUniqueColTypeIds(facetArray){
