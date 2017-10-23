@@ -5,7 +5,7 @@ import { Asset } from './../asset';
 
 @Component({
   selector: 'ang-agree-modal',
-  templateUrl: 'agree-modal.component.html',
+  templateUrl: 'agree-modal.component.pug',
   styleUrls: [ './agree-modal.component.scss' ]
 })
 export class AgreeModalComponent implements OnInit {
