@@ -10,7 +10,7 @@ import { TitleService } from '../../shared/title.service'
 
 @Component({
   selector: 'ang-browse-groups',
-  templateUrl: 'groups.component.html',
+  templateUrl: 'groups.component.pug',
   styleUrls: [ './../browse-page.component.scss' ]
 })
 export class BrowseGroupsComponent implements OnInit {
@@ -52,7 +52,7 @@ export class BrowseGroupsComponent implements OnInit {
   private showSearchPrompt: boolean = false
 
   private errorObj: any = {}
-  
+
   ngOnInit() {
     // set the title
     this._title.setSubtitle("Browse Groups")
@@ -66,7 +66,7 @@ export class BrowseGroupsComponent implements OnInit {
 
         // Deprecate once search level is not a query AND route parameter
         if (params.view !== 'search') {
-          this.loadIGs(this.appliedTags, 1, this.selectedBrowseLevel, '') 
+          this.loadIGs(this.appliedTags, 1, this.selectedBrowseLevel, '')
         } else {
           this.loadIGs(this.appliedTags, 1, this.selectedBrowseLevel, this.route.snapshot.queryParams.term)
         }
@@ -93,7 +93,7 @@ export class BrowseGroupsComponent implements OnInit {
         // if (tagAdded) { requestedPage = 1 } // if they're adding a tag, we want to nav them back to page 1
         let requestedLevel = query.level
         this.setSearchLevel(requestedLevel, false) // makes sure that the correct level filter is selected even if the user just navigated here from the url
-        
+
         // if there is not a term, make sure the search term is cleared
         if (!query.term) {
           this.updateSearchTerm.emit('')
@@ -122,7 +122,7 @@ export class BrowseGroupsComponent implements OnInit {
       label: 'Institutional',
       level: 'institution'
     })
-    
+
     this.browseMenuArray.push({
       label: 'Artstor Curated',
       level: 'public'
@@ -141,7 +141,7 @@ export class BrowseGroupsComponent implements OnInit {
     })
 
     this.setSearchLevel(this.route.snapshot.queryParams.level)
-  
+
     this._analytics.setPageValues('groups', '')
   } // OnInit
 
@@ -206,7 +206,7 @@ export class BrowseGroupsComponent implements OnInit {
           }
     return childArr
   }
-  
+
   /**
    * Loads Image Groups data for the current user in the array
    * @param appliedTags The array of tags which the user has selected to filter by
@@ -219,7 +219,7 @@ export class BrowseGroupsComponent implements OnInit {
       this.loading = false
       return
     }
-    
+
     this.errorObj[this.selectedBrowseLevel] = ''
     this.loading = true
     let browseLevel: string

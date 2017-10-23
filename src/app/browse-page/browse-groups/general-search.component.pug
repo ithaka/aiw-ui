@@ -1,0 +1,4 @@
+.form-group
+  .input-group
+    input#inputSearchTerm.form-control.has-icon([(ngModel)]="term", (keyup.enter)="executeSearch.emit(term)", aria-describedby="search-label", type="text", placeholder="Search", data-sc="search: simple keyword")
+    i#iconSearchSubmit.icon.icon-search.form-control__icon((click)="executeSearch.emit(term)")

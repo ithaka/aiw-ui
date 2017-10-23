@@ -6,7 +6,7 @@ import { Tag } from './tag.class';
 
 @Component({
   selector: 'ang-tag',
-  templateUrl: 'tag.component.html',
+  templateUrl: 'tag.component.pug',
   styleUrls: ['./tag.component.scss']
 })
 export class TagComponent {

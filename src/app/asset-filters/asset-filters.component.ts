@@ -98,14 +98,14 @@ export class AssetFilters {
 
         for (let paramName in routeParams) {
             if (this._filters.isFilterGroup(paramName)) {
-              if (routeParams[paramName].indexOf(',')) {
-                let multiFilters = routeParams[paramName].split(',');
-                multiFilters.forEach( value => {
-                  this._filters.apply(paramName, value);
-                });
-              } else {
-                this._filters.apply(paramName, routeParams[paramName]);
+              let parsedParam:any
+
+              try { // attempt to parse an array param
+                parsedParam = JSON.parse(routeParams[paramName])
+              } catch (err) { // param is not an array
+                parsedParam = routeParams[paramName]
               }
+              this._filters.apply(paramName, parsedParam);
             }
         }
       })
@@ -148,7 +148,8 @@ export class AssetFilters {
         params[filter.filterGroup] =  parseInt(filter.filterValue);
       }
       else if((filter.filterGroup != 'startDate') && (filter.filterGroup != 'endDate') && (filter.filterValue && filter.filterValue.length > 0)){
-        params[filter.filterGroup] =  filter.filterValue;
+        // Arrays must be stringified, as angular router doesnt handle them well
+        params[filter.filterGroup] =  Array.isArray(filter.filterValue) ? JSON.stringify(filter.filterValue) : filter.filterValue;
       }
     }
 
