@@ -8,9 +8,9 @@ import { AssetService } from './../shared';
 import { AnalyticsService } from '../analytics.service';
 
 @Component({
-  selector: 'ang-asset-pp-page', 
+  selector: 'ang-asset-pp-page',
   styleUrls: [ './asset-pp-page.component.scss' ],
-  templateUrl: './asset-pp-page.component.html'
+  templateUrl: './asset-pp-page.component.pug'
 })
 
 export class AssetPPPage implements OnInit, OnDestroy {
@@ -42,7 +42,7 @@ export class AssetPPPage implements OnInit, OnDestroy {
         this.loadAsset();
       })
     );
-    
+
     // this._analytics.setPageValues('groupprint', this.assetId);
   } // OnInit
 
