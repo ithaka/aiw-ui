@@ -11,9 +11,9 @@ import { AuthService } from "app/shared";
 declare var _satellite: any
 
 @Component({
-  selector: 'ang-asset-filters', 
+  selector: 'ang-asset-filters',
   styleUrls: [ './asset-filters.component.scss' ],
-  templateUrl: './asset-filters.component.html'
+  templateUrl: './asset-filters.component.pug'
 })
 export class AssetFilters {
   // Set our default values
@@ -33,7 +33,7 @@ export class AssetFilters {
   // classificationFacets = [];
   geoTree = [];
   // geographyFacets = [];
-  
+
   pagination = {
     page : 1,
     totalPages : 1,
@@ -43,7 +43,7 @@ export class AssetFilters {
     index : 0,
     label : 'Relevance'
   };
-  term; 
+  term;
   // TO-DO: Fields should be pulled dynamically!
   public fields = [
     {name: 'Title' },
@@ -51,7 +51,7 @@ export class AssetFilters {
     {name: 'Location' },
     {name: 'Repository' }
   ];
-  
+
   public geographyFields = [ ];
 
   public advQueryTemplate = { term: '' };
@@ -61,12 +61,12 @@ export class AssetFilters {
     { term: ''}
   ];
 
-  private dateError: boolean = false; 
+  private dateError: boolean = false;
 
   // TypeScript public modifiers
   constructor(
     private _filters: AssetFiltersService,
-    private route: ActivatedRoute, 
+    private route: ActivatedRoute,
     private router: Router,
     private _analytics: AnalyticsService,
     private angulartics: Angulartics2,
@@ -109,12 +109,12 @@ export class AssetFilters {
             }
         }
       })
-    ); 
-    
-    // Keep an eye for available filter updates 
+    );
+
+    // Keep an eye for available filter updates
     this.subscriptions.push(
       this._filters.available$.subscribe(
-        filters => { 
+        filters => {
           this.availableFilters = filters;
         }
       )
@@ -122,17 +122,17 @@ export class AssetFilters {
     // Subscribe to all applied filters in case something fires outside this component
     this.subscriptions.push(
       this._filters.applied$
-            .subscribe(filters => { 
+            .subscribe(filters => {
                 this.appliedFilters = filters;
             })
     );
-   
+
   }
 
   private loadRoute() {
     let params = {};
     let currentParams = this.route.snapshot.params
-    
+
     // Maintain feature flags
     if (currentParams['featureFlag']) {
       params['featureFlag'] = currentParams['featureFlag']
@@ -190,7 +190,7 @@ export class AssetFilters {
 
   changeSortOpt(index, label) {
     this.activeSort.index = index;
-    this.activeSort.label = label; 
+    this.activeSort.label = label;
     this.pagination.page = 1;
     this.loadRoute();
   }
@@ -207,7 +207,7 @@ export class AssetFilters {
   isArray(thing) : boolean {
     return Object.prototype.toString.call( thing ) === '[object Array]'
   }
-  
+
   toggleEra(dateObj){
     if(dateObj.era == 'BCE'){
       dateObj.era = 'CE';
@@ -223,7 +223,7 @@ export class AssetFilters {
     }
     else{
       geoFacet.expanded = true;
-    } 
+    }
 
   }
 
@@ -235,7 +235,7 @@ export class AssetFilters {
       this._filters.apply(group, value);
     }
     this.pagination.page = 1;
-    
+
     this.loadRoute();
   }
 
@@ -256,12 +256,12 @@ export class AssetFilters {
         }
       }
     }
-    
+
     this.pagination.page = 1;
 
     this.loadRoute();
   }
-  
+
   // To check if a filter group has any applied filters
   hasAppliedFilters(group): boolean{
     let hasFilters: boolean = false;
@@ -293,7 +293,7 @@ export class AssetFilters {
 
   removeFilter(filterObj){
     this._filters.remove(filterObj.filterGroup, filterObj.filterValue);
-  } 
+  }
 
   getUniqueColTypeIds(facetArray){
     var colTypeIds = [];
@@ -308,7 +308,7 @@ export class AssetFilters {
       }
     }
     return colTypeIds;
-  } 
+  }
 
 
   applyDateFilter(){
@@ -317,7 +317,7 @@ export class AssetFilters {
 
     var edate = parseInt(this.availableFilters.dateObj.latest.date);
     edate = this.availableFilters.dateObj.latest.era == 'BCE' ? (edate * -1) : edate;
-    
+
     // Show error message if Start date is greater than End date
     if(sdate > edate){
       this.dateError = true;
@@ -361,7 +361,7 @@ export class AssetFilters {
 
       return theEvent.returnValue;
   }
-  
+
   ngOnDestroy() {
     this.subscriptions.forEach((sub) => { sub.unsubscribe(); });
   }

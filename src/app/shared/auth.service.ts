@@ -130,13 +130,16 @@ export class AuthService implements CanActivate {
     }
 
     // Sahara routing WORKAROUND
+    if (document.location.hostname.indexOf('sahara.beta.stage.artstor.org') > -1) {
+      this.hostname = '//sahara.beta.stage.artstor.org'
+    }
     if (document.location.hostname.indexOf('sahara.prod.artstor.org') > -1) {
       this.hostname = '//library.artstor.org'
     }
 
     // Local routing should point to full URL
     // * This should NEVER apply when using a proxy, as it will break authorization
-    if (new RegExp(["cirrostratus.org", "localhost", "local."].join("|")).test(document.location.hostname)) {
+    if (new RegExp(["cirrostratus.org", "localhost", "local.", "sahara.beta.stage.artstor.org", "sahara.prod.artstor.org"].join("|")).test(document.location.hostname)) {
       this.baseUrl = this.hostname + '/api'
       this.solrUrl = this.hostname + '/api/search/v1.0/search'
     }
@@ -176,6 +179,22 @@ export class AuthService implements CanActivate {
     });
 
     this.resetIdleWatcher();
+
+    /**
+     * User Access Heartbeat
+     * - Poll /userinfo every 15min
+     * - Refreshs AccessToken with IAC
+     */
+    const userInfoInterval = 15*1000*60*60
+    setInterval(() => {
+      this.getUserInfo().take(1).toPromise()
+        .then(res => {
+          console.info('Access Token refreshed <3')
+        })
+        .catch(err => {
+          console.error('Access Token refresh failed </3')
+        })
+    }, userInfoInterval)
   }
 
 
