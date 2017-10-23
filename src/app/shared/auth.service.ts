@@ -76,7 +76,7 @@ export class AuthService implements CanActivate {
     this.ENV = 'test'
     this.hostname = ''
     this.baseUrl =  '/api'
-    this.thumbUrl = 'http://mdxdv.artstor.org'
+    this.thumbUrl = '//mdxdv.artstor.org'
     this.IIIFUrl = '//tsprod.artstor.org/rosa-iiif-endpoint-1.0-SNAPSHOT/fpx'
     this.subdomain = 'library'
     this.solrUrl = '/api/search/v1.0/search'
@@ -117,7 +117,7 @@ export class AuthService implements CanActivate {
       this.hostname = '//stage.artstor.org'
       this.subdomain = 'stage'
       this.baseUrl = '//stage.artstor.org/api'
-      this.thumbUrl = 'http://mdxstage.artstor.org'
+      this.thumbUrl = '//mdxstage.artstor.org'
       this.logUrl = '//ang-ui-logger.apps.test.cirrostratus.org/api/v1'
       this.solrUrl = '/api/search/v1.0/search'
       this.IIIFUrl = '//tsstage.artstor.org/rosa-iiif-endpoint-1.0-SNAPSHOT/fpx'
@@ -126,17 +126,20 @@ export class AuthService implements CanActivate {
 
     // Additional Local dev domains
     if (document.location.hostname.indexOf('local.sahara') > -1) {
-      this.hostname = '//saharabeta.stage.artstor.org'
+      this.hostname = '//sahara.beta.stage.artstor.org'
     }
 
     // Sahara routing WORKAROUND
+    if (document.location.hostname.indexOf('sahara.beta.stage.artstor.org') > -1) {
+      this.hostname = '//sahara.beta.stage.artstor.org'
+    }
     if (document.location.hostname.indexOf('sahara.prod.artstor.org') > -1) {
-      this.hostname = '//library.artstor.org'
+      this.hostname = '//sahara.prod.artstor.org/'
     }
 
     // Local routing should point to full URL
     // * This should NEVER apply when using a proxy, as it will break authorization
-    if (new RegExp(["cirrostratus.org", "localhost", "local."].join("|")).test(document.location.hostname)) {
+    if (new RegExp(["cirrostratus.org", "localhost", "local.", "sahara.beta.stage.artstor.org", "sahara.prod.artstor.org"].join("|")).test(document.location.hostname)) {
       this.baseUrl = this.hostname + '/api'
       this.solrUrl = this.hostname + '/api/search/v1.0/search'
     }
@@ -176,6 +179,16 @@ export class AuthService implements CanActivate {
     });
 
     this.resetIdleWatcher();
+
+    /**
+     * User Access Heartbeat
+     * - Poll /userinfo every 15min
+     * - Refreshs AccessToken with IAC
+     */
+    const userInfoInterval = 15*1000*60*60
+    setInterval(() => {
+      this.refreshUserSession()
+    }, userInfoInterval)
   }
 
 
@@ -184,7 +197,18 @@ export class AuthService implements CanActivate {
   public resetIdleWatcher(): void {
     this.idle.watch();
     this.idleState = 'Idle watcher started';
-    // console.log(this.idleState);
+    // When a user comes back, we don't want to wait for the time interval to refresh the session
+    this.refreshUserSession()
+  }
+
+  private refreshUserSession(): void {
+    this.getUserInfo().take(1).toPromise()
+      .then(res => {
+        console.info('Access Token refreshed <3')
+      })
+      .catch(err => {
+        console.error('Access Token refresh failed </3')
+      })
   }
 
   private expireSession(): void {

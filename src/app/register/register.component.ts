@@ -9,7 +9,7 @@ import { AnalyticsService } from '../analytics.service';
 
 @Component({
   selector: 'ang-register-page',
-  templateUrl: 'register.component.html'
+  templateUrl: 'register.component.pug'
 })
 export class RegisterComponent implements OnInit {
 
@@ -24,7 +24,7 @@ export class RegisterComponent implements OnInit {
     duplicate?: boolean,
     hasJstor?: boolean
   } = {};
-  
+
   constructor(
     private _auth: AuthService,
     private _router: Router,

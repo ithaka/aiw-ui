@@ -18,6 +18,7 @@
         "SERVICE_ERROR": "We've experience an error and are unable to retrieve the insitutions"
       }
     },
+    "INCORRECT_PORTAL" : "Sorry, that login is not valid for this portal. Please try again with a different account, or try accessing the main <a id=\"linkMainLibrarySite\" href=\"http://library.artstor.org\" class=\"link\" target=\"_blank\">Artstor Digital Library</a>.",
     "LOGIN_BTN": "Log in",
     "SERVER_ERROR": "Server is not responding. Please try again later.",
     "ARCHIVED_ERROR": "That login has been disabled. Please contact your institutional contact.",
@@ -290,7 +291,7 @@
       "HEADING": "Featured Collection",
       "SUBHEADING": "The Andy Warhol Foundation for the Visual Arts: Oeuvre",
       "DESCRIPTION": "Andy Warhol; Brooklyn Bridge; 1983. Images © The Andy Warhol Foundation for the Visual Arts, Inc. and Andy Warhol artwork © The Andy Warhol Foundation for the Visual Arts, Inc.",
-      "LINK": "/#/category/10374058919;name=The%20Andy%20Warhol%20Foundation%20for%20the%20Visual%20Arts%3A%20Oeuvre%20458",
+      "LINK": "/#/category/10374058919;name=The%20Andy%20Warhol%20Foundation%20for%20the%20Visual%20Arts%3A%20Oeuvre%20458;browseType=103",
       "IMG_SOURCE": "/assets/img/featured-collection.jpg",
       "LINK_TITLE": "The Andy Warhol Foundation for the Visual Arts: Oeuvre",
       "ALT_TEXT": "The Andy Warhol Foundation for the Visual Arts: Oeuvre"
@@ -352,7 +353,7 @@
     }
   },
   "SEARCH_ANNOUNCEMENT_BANNER": {
-    "MESSAGE": "We are changing our search functionality. Read more on our <a href=\"http://support.artstor.org/?page_id=37\" target=\"_blank\" class=\"link\">support site</a>."
+    "MESSAGE": "We are making changes and you may experience issues with login and search. <a href=\"http://support.artstor.org/?article=current-technical-issues-alerts\" target=\"_blank\" class=\"link\">Learn more</a>."
   },
   "SEARCH_SKY_BANNER": {
     "MESSAGE": "⚠️ This is a testing instance for the new Search index. Please excuse the broken bits."

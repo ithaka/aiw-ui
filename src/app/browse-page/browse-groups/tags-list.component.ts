@@ -6,7 +6,7 @@ import { TagFiltersService } from './tag-filters.service'
 
 @Component({
   selector: 'ang-tags-list',
-  templateUrl: 'tags-list.component.html'
+  templateUrl: 'tags-list.component.pug'
 })
 
 export class TagsListComponent implements OnInit {

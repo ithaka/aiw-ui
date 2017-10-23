@@ -12,7 +12,10 @@
             .form-group
               label(for="loginPassword") {{ 'LOGIN.REG_LOGIN.PASSWORD_LABEL' | translate }}
               input#inputLoginPassword.form-control([(ngModel)]="user.password" name="password" type="password" placeholder="Password")
-              #errorMsg.form-text.text-danger(*ngIf="errorMsg") {{ errorMsg | translate }}
+              #errorMsg.form-text.text-danger(
+                *ngIf="errorMsg",
+                [innerHtml]="errorMsg | translate"
+              )
               p.form-text.text-danger(*ngIf="forcePwdRst", [innerHtml]="'LOGIN.REG_LOGIN.FORCE_PW_RESET_MSG' | translate")
             p.notranslate([innerHtml]="'LOGIN.TERMS' | translate")
             .form-group
