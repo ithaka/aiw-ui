@@ -187,13 +187,7 @@ export class AuthService implements CanActivate {
      */
     const userInfoInterval = 15*1000*60*60
     setInterval(() => {
-      this.getUserInfo().take(1).toPromise()
-        .then(res => {
-          console.info('Access Token refreshed <3')
-        })
-        .catch(err => {
-          console.error('Access Token refresh failed </3')
-        })
+      this.refreshUserSession()
     }, userInfoInterval)
   }
 
@@ -203,7 +197,18 @@ export class AuthService implements CanActivate {
   public resetIdleWatcher(): void {
     this.idle.watch();
     this.idleState = 'Idle watcher started';
-    // console.log(this.idleState);
+    // When a user comes back, we don't want to wait for the time interval to refresh the session
+    this.refreshUserSession()
+  }
+
+  private refreshUserSession(): void {
+    this.getUserInfo().take(1).toPromise()
+      .then(res => {
+        console.info('Access Token refreshed <3')
+      })
+      .catch(err => {
+        console.error('Access Token refresh failed </3')
+      })
   }
 
   private expireSession(): void {
