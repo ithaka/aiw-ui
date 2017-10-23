@@ -8,6 +8,7 @@
 export const WLV_ARTSTOR = {
     pageTitle: "Artstor",
     logoUrl: "/assets/img/logo-v1-1.png",
+    "contributingInstFilters" : [],
     footerLinks: [
         "ABOUT",
         "GETTING_STARTED",

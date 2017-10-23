@@ -127,10 +127,8 @@ export class AssetSearchService {
      * - WLVs filter by contributing institution id
      */
     let institutionFilters: number[] = this._app.getWLVConfig().contributingInstFilters
-    if (institutionFilters) {
-      for (let i = 0; i < institutionFilters.length; i++) {
-        filterArray.push("contributinginstitutionid:" + institutionFilters[i])
-      }
+    for (let i = 0; i < institutionFilters.length; i++) {
+      filterArray.push("contributinginstitutionid:" + institutionFilters[i])
     }
 
     let pageSize = urlParams.size
