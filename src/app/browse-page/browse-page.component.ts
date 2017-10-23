@@ -7,13 +7,15 @@ import { TitleService } from '../shared/title.service';
 import { AssetService } from '../shared/assets.service';
 import { AuthService } from '../shared/auth.service';
 
+import { AppConfig } from '../app.service';
+
 @Component({
-  selector: 'ang-browse-page', 
+  selector: 'ang-browse-page',
   providers: [
       AuthService
   ],
   styleUrls: [ './browse-page.component.scss' ],
-  templateUrl: './browse-page.component.html'
+  templateUrl: './browse-page.component.pug'
 })
 
 export class BrowsePage implements OnInit, OnDestroy {
@@ -22,40 +24,28 @@ export class BrowsePage implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = [];
   private institution: any = {};
 
-  colMenuArray = [
-      {
-          label : 'Artstor Digital Library',
-          id: '1',
-          link: 'library'
-      },
-      {
-          label : 'Open Collections',
-          id: '3',
-          link: 'commons'
-      },
-      {
-          label : 'Groups',
-          id: '5',
-          link: 'groups'
-      }
-  ];
-  
+  colMenuArray = [];
+
   private userPCallowed: string;
   private userTypeId: any;
   private selectedColMenuId: string = '1';
+
+  private browseOpts: any = {};
 
   // TypeScript public modifiers
   constructor(
       locker: Locker,
       private _auth: AuthService,
       private _assets: AssetService,
+      private _app: AppConfig,
       private route: ActivatedRoute,
       private router: Router,
       private _title: TitleService
-  ) {  
+  ) {
       this._storage = locker.useDriver(Locker.DRIVERS.LOCAL);
-      this.institution = this._storage.get('institution'); 
-  } 
+      this.institution = this._storage.get('institution');
+      this.browseOpts = this._app.config.browseOptions;
+  }
 
   ngOnInit() {
     // Set page title
@@ -63,13 +53,34 @@ export class BrowsePage implements OnInit, OnDestroy {
 
     this.subscriptions.push(
       this.route.firstChild.url
-      .subscribe((url: UrlSegment[]) => {  
+      .subscribe((url: UrlSegment[]) => {
         this.selectedColMenuId = url[0].path;
       })
     );
 
+
+
+    if( this.browseOpts.artstorCol ){
+        this.colMenuArray.push( { label: 'Artstor Digital Library', id: '1', link: 'library' } );
+    }
+
+    this.userTypeId = this._auth.getUser().typeId;
+    if( (this.userTypeId == 1 || this.userTypeId == 2 || this.userTypeId == 3) && this.browseOpts.instCol ){
+        let instName = this.institution && this.institution.shortName ? this.institution.shortName : 'Institutional';
+        var obj = {
+            label : instName + ' Collections',
+            id: '2',
+            link: 'institution'
+        }
+        this.colMenuArray.splice(1, 0 ,obj);
+    }
+
+    if( this.browseOpts.openCol ){
+        this.colMenuArray.push( { label: 'Open Collections', id: '3', link: 'commons' } );
+    }
+
     this.userPCallowed = this._auth.getUser().userPCAllowed;
-    if(this.userPCallowed == '1'){
+    if((this.userPCallowed == '1') && this.browseOpts.myCol){
         var obj = {
             label : 'My Collections',
             id: '4',
@@ -78,16 +89,8 @@ export class BrowsePage implements OnInit, OnDestroy {
         this.colMenuArray.splice(2, 0 ,obj);
     }
 
-    this.userTypeId = this._auth.getUser().typeId;
-    
-    if(this.userTypeId == 1 || this.userTypeId == 2 || this.userTypeId == 3){
-        let instName = this.institution && this.institution.shortName ? this.institution.shortName : 'Institutional';
-        var obj = {
-            label : instName + ' Collections',
-            id: '2',
-            link: 'institution'
-        }
-        this.colMenuArray.splice(1, 0 ,obj);
+    if( this.browseOpts.igs ){
+        this.colMenuArray.push( { label: 'Groups', id: '5', link: 'groups' } );
     }
   }
 

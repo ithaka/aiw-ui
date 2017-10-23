@@ -7,6 +7,7 @@ export class Asset {
   private _auth: AuthService;
 
   id: string;
+  artstorid: string;
   /** typeId determines what media type the asset is */
   typeId: number;
   title: string;
@@ -84,7 +85,7 @@ export class Asset {
     ];
 
   constructor(asset_id: string, _assets ?: AssetService, _auth ?: AuthService, assetObj ?: any) {
-    this.id = asset_id;
+    this.id = this.artstorid = asset_id;
     this._assets = _assets;
     this._auth = _auth;
     this.loadAssetMetaData();

@@ -13,6 +13,7 @@ export class TagComponent {
 
   @Input() public tag: Tag;
   @Input() public link: boolean;
+  @Input() public browseType: boolean;
 
   @Input() private edit: boolean;
   @Output() editTag: EventEmitter<any> = new EventEmitter();
@@ -23,8 +24,8 @@ export class TagComponent {
   private loading: boolean = false;
 
   constructor(
-    private _assets: AssetService, 
-    private _tags: TagsService  
+    private _assets: AssetService,
+    private _tags: TagsService
   ) {
 
   }
@@ -80,6 +81,6 @@ export class TagComponent {
           });
       }
     }
-    
+
   }
 }

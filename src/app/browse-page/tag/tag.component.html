@@ -4,7 +4,7 @@
         <i *ngIf="!loading" [ngClass]="[ tag.isCollapsed ? 'icon-right' : 'icon-down', (!tag.touched || (tag.touched && tag.children.length > 0)) && tag.type.folder ? 'icon-direction' : 'icon-empty']" class="icon absolute-left tree-icon"></i>
         <i *ngIf="loading" class="icon icon-loading absolute-left tree-icon" ></i>
     </div>
-    <a id="tagItem{{ tag.tagId }}Open" [ngClass]="{ 'no-link' : linkRoute.length < 1 || !tag.canOpen }" [routerLink]="[ linkRoute, tag.tagId, { 'name' : cleanTitle(tag.title) } ]">
+    <a id="tagItem{{ tag.tagId }}Open" [ngClass]="{ 'no-link' : linkRoute.length < 1 || !tag.canOpen }" [routerLink]="[ linkRoute, tag.tagId, { 'name' : cleanTitle(tag.title), 'browseType': browseType } ]">
         <!--<img class="info-icon" *ngIf="(tag.description.length > 0) && !tag.type.isFolder" src="/assets/img/info-icon.png" (click)="toggleDescription()" /> -->
         <span class="notranslate">{{tag.title}}</span>
         <!--<i *ngIf="linkRoute.length > 0" id="tagItem{{ tag.tagId }}Open" class="icon icon-open-link icon--tag-button" [routerLink]="[ linkRoute, tag.tagId, { 'name' : cleanTitle(tag.title) } ]"></i>-->
@@ -19,6 +19,6 @@
 <div class="container--slide">
     <!--loop through children and inject the children into new nag components-->
     <div [class.show]="!tag.isCollapsed && tag.children.length > 0" class="slide-wrap">
-    <ang-tag *ngFor="let child of tag.children" [tag]="child"></ang-tag>
+    <ang-tag *ngFor="let child of tag.children" [tag]="child" [browseType]="browseType"></ang-tag>
     </div>
 </div>

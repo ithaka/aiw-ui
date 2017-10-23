@@ -35,7 +35,7 @@
                   <div class="pb-3">
                       <label>Thumbnail hyperlink to the Image</label>
                       <div class="value">
-                          <textarea id="copyHTML" readonly>{{ '<a target="_blank" href="' + shareLink + '"><img src="' + _assets.makeThumbUrl(asset.largeImgUrl, 0) + '"  alt="' + asset.thumbnail1 + '" title="' + asset.thumbnail1 + '" /></a>' }}</textarea>
+                          <textarea id="copyHTML" readonly>{{ '<a target="_blank" href="' + shareLink + '"><img src="' + _assets.makeThumbUrl(asset.thumbnailImgUrl, 0) + '"  alt="' + asset.thumbnail1 + '" title="' + asset.thumbnail1 + '" /></a>' }}</textarea>
                       </div>
                       <!--<div class="value" *ngIf="genImgMode == 'full'">
                           <textarea id="copyHTML" readonly>{{ '<a target="_blank" href="' + baseURL + '/ViewImages?id=' + imgEncryptId + '&userId=' + usrEncryptId + '&zoomparams=&fs=true' + '"><img src="' + _assets.makeThumbUrl(asset.largeImgUrl, 0) + '"  alt="' + asset.thumbnail1 + '" title="' + asset.thumbnail1 + '" /></a>' }}</textarea>

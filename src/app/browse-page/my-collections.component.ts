@@ -14,7 +14,7 @@ import { TitleService } from '../shared/title.service';
   providers: [
       AuthService
   ],
-  templateUrl: 'my-collections.component.html',
+  templateUrl: 'my-collections.component.pug',
   styleUrls: [ './browse-page.component.scss' ]
 })
 export class MyCollectionsComponent implements OnInit {
@@ -52,7 +52,7 @@ export class MyCollectionsComponent implements OnInit {
 
     this.subscriptions.push(
       this.route.params
-      .subscribe((params: Params) => { 
+      .subscribe((params: Params) => {
         if(params && params['viewId']){
             this.selectedBrowseId = params['viewId'];
             // this.loadCategory();
@@ -94,7 +94,7 @@ export class MyCollectionsComponent implements OnInit {
     this.selectedBrowseId = id;
     this.addRouteParam('viewId', id);
   }
-  
+
   getUserPCol(){
     this.loading = true;
     this._assets.pccollection()
@@ -102,7 +102,7 @@ export class MyCollectionsComponent implements OnInit {
           if(res.pcCollection && res.pcCollection.collectionid){
             // we made this tag always expandable
             let colTag = new Tag(res.pcCollection.collectionid, res.pcCollection.collectionname, true, null, { label: "collection", folder: true }, true);
-            this.tags.push(colTag); 
+            this.tags.push(colTag);
           }
           if(res.privateCollection && (res.privateCollection.length > 0)){
             for (let colObj of res.privateCollection){
@@ -148,7 +148,7 @@ export class MyCollectionsComponent implements OnInit {
   showNodeDesc(node){
     var descId = '';
     var nodeId = '';
-      
+
     if(node.descriptionId){
         descId = node.descriptionId;
         nodeId = node.widgetId;

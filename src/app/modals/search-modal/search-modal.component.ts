@@ -8,6 +8,7 @@ import { SearchQueryUtil } from './search-query';
 import { AnalyticsService } from '../../analytics.service';
 import { AssetFiltersService } from './../../asset-filters/asset-filters.service';
 import { AuthService, AssetService, AssetSearchService } from "app/shared";
+import { AppConfig } from '../../app.service';
 
 @Component({
   selector: 'ang-search-modal',
@@ -17,7 +18,7 @@ import { AuthService, AssetService, AssetSearchService } from "app/shared";
 export class SearchModal implements OnInit {
   @Output()
   private closeModal: EventEmitter<any> = new EventEmitter();
-  
+
   public fields = []
   private filterNameMap: any = {}
 
@@ -30,7 +31,7 @@ export class SearchModal implements OnInit {
     {name: 'Sub-Saharan Africa'}
   ];
 
-  public advQueryTemplate = { 
+  public advQueryTemplate = {
       term: '',
       field: {
             'name' : 'in any field',
@@ -67,6 +68,7 @@ export class SearchModal implements OnInit {
   private instCollections: any[] = []
   private filterSelections: any[] = []
   private subscriptions: Subscription[] = []
+  private showPrivateCollections = false
 
   // Filters
   private availableFilters: any[] = []
@@ -78,10 +80,11 @@ export class SearchModal implements OnInit {
   private hideLegacyFilters: boolean
   private loadingFilters: boolean
 
-  constructor(  
-        private _assets: AssetService, 
+  constructor(
+        private _appConfig: AppConfig,
+        private _assets: AssetService,
         private _search: AssetSearchService,
-        private _filters: AssetFiltersService, 
+        private _filters: AssetFiltersService,
         private _router: Router,
         private route: ActivatedRoute,
         private _analytics: AnalyticsService,
@@ -90,14 +93,15 @@ export class SearchModal implements OnInit {
         // Solr Search service
         private _assetSearch: AssetSearchService,
         private _assetFilters: AssetFiltersService
-      ) { 
-    
+      ) {
+
     // Setup two query fields
     this.advanceQueries.push(Object.assign({}, this.advQueryTemplate));
     this.advanceQueries.push(Object.assign({}, this.advQueryTemplate));
+    this.showPrivateCollections = this._appConfig.config.browseOptions.myCol;
   }
 
-  ngOnInit() { 
+  ngOnInit() {
     this.filterNameMap = this._filters.getFilterNameMap()
     document.body.style.overflow = 'hidden';
 
@@ -113,9 +117,19 @@ export class SearchModal implements OnInit {
   private loadFilters() : void {
     this._assetSearch.getFacets().take(1)
       .subscribe(data => {
+
         // Process through "facets"
-        for (let facet in data['facets']) {
-          this.availableFilters.push(data['facets'][facet])
+        for (let facetKey in data['facets']) {
+          const facet = data['facets'][facetKey]
+
+          // Prune any facets not available to the user (ex. Private Collections on SAHARA)
+          for (let i = facet.values.length - 1; i >= 0; i--){
+            if (!this.showPrivateCollections && facet.values[i].name.match(/3|6/)) { // NOTE: 3 & 6 are Private Collections names
+              facet.values.splice(i, 1)
+            }
+          }
+
+          this.availableFilters.push(facet)
         }
         // Process "hierarchies2"
         for (let hierFacet in data['hierarchies2']) {
@@ -131,15 +145,15 @@ export class SearchModal implements OnInit {
    */
   private legacyLoadFilters() : void {
     // Get GeoTree and Classifications
-    this._assets.loadTermList( )
-          .then((res) => {
-              console.log(res);
-              this.termsList = res;
-          })
-          .catch(function(err) {
-              console.error('Unable to load Terms List.');
-          });
-          
+    // this._assets.loadTermList( )
+    //       .then((res) => {
+    //           console.log(res);
+    //           this.termsList = res;
+    //       })
+    //       .catch(function(err) {
+    //           console.error('Unable to load Terms List.');
+    //       });
+
     this.subscriptions.push(
       this._auth.getInstitution().subscribe(
         (institutionObj) => {
@@ -170,14 +184,14 @@ export class SearchModal implements OnInit {
           }
         )
     )
-    
+
   }
 
   private close(): void {
     document.body.style.overflow = 'auto';
     this.closeModal.emit()
   }
-  
+
   /**
    * Add query to array of field queries
    */
@@ -257,7 +271,7 @@ export class SearchModal implements OnInit {
       // Nothing was selected! Tell the user to select something
       this.error.empty = true;
       this.error.date = false;
-    } 
+    }
     else if(startDate > endDate){
       // Start Date is greater than End Date
       this.error.date = true;
@@ -276,6 +290,9 @@ export class SearchModal implements OnInit {
       return;
     }
 
+    // Clear existing filters set outside this modal
+    this._filters.clearApplied(true)
+
     let advQuery
     let filterParams
     let currentParams = this.route.snapshot.params
@@ -286,7 +303,7 @@ export class SearchModal implements OnInit {
     // Track in Adobe Analytics
     this._analytics.directCall('advanced_search');
     this.angulartics.eventTrack.next({ action: "advSearch", properties: { category: "search", label: advQuery } })
-    
+
     // Maintain feature flags
     if (currentParams['featureFlag']) {
       filterParams['featureFlag'] = currentParams['featureFlag']
@@ -305,7 +322,7 @@ export class SearchModal implements OnInit {
       'value' : value
     };
     let objIndex = this.arrayObjectIndexOf(this.filterSelections, filter);
-    
+
     if (objIndex < 0) {
       this.filterSelections.push(filter);
     } else {

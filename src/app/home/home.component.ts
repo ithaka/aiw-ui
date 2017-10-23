@@ -20,26 +20,33 @@ declare var initPath: string
   templateUrl: './home.component.html'
 })
 export class Home implements OnInit, OnDestroy {
-  private subscriptions: Subscription[] = [];
+  private subscriptions: Subscription[] = []
 
-  private artStorEmailLink: string = '';
-  private userGeoIP: any = {};
+  private artStorEmailLink: string = ''
+  private userGeoIP: any = {}
+  private featuredCollectionConf = ""
 
   // Set our default values
-  localState = { value: '' };
-  collections = [];
-  instCollections = [];
-  institution: any = {};
-  errors = {};
-  loaders = {};
-  private user: any;
-  private blogPosts: any[] = [];
-  private blogLoading: boolean = true;
+  localState = { value: '' }
+  collections = []
+  instCollections = []
+  institution: any = {}
+  errors = {}
+  loaders = {}
+  private user: any
+  private blogPosts: any[] = []
+  private blogLoading: boolean = true
+
+  private showBlog: boolean = false
+  private showPrivateCollections: boolean = false
+  private browseSec: any = {}
+  private showHomeSSC: boolean = false
+  private showHomeAd: boolean = false
 
   // TypeScript public modifiers
   constructor(
-      public _appConfig: AppConfig, 
-      private _assets: AssetService, 
+      public _appConfig: AppConfig,
+      private _assets: AssetService,
       private _router: Router,
       private _auth: AuthService,
       private _analytics: AnalyticsService,
@@ -49,9 +56,16 @@ export class Home implements OnInit, OnDestroy {
     this._router.events.subscribe(() => {
       window.scrollTo(0, 0);
     });
+
+    this.showBlog = this._appConfig.config.showHomeBlog
+    this.showPrivateCollections = this._appConfig.config.browseOptions.myCol
+    this.featuredCollectionConf = this._appConfig.config.featuredCollection
+    this.browseSec = this._appConfig.config.homeBrowseSec
+    this.showHomeSSC = this._appConfig.config.showHomeSSC
+    this.showHomeAd = this._appConfig.config.showHomeAd
   }
 
-  ngOnInit() {    
+  ngOnInit() {
 
     // Provide redirects for initPath detected in index.html from inital load
     if (initPath) {
@@ -82,7 +96,7 @@ export class Home implements OnInit, OnDestroy {
             data => {
               // Filter SSC content
               this.collections = data["Collections"].filter((collection) => {
-                return collection.collectionType == 5 
+                return collection.collectionType == 5
               })
               this.loaders['collections'] = false;
               // Filter institutional content
@@ -149,7 +163,7 @@ export class Home implements OnInit, OnDestroy {
         deviceInfoHTML += 'Adblocker Enabled: ' + adBlockEnabled + ' \n ';
         deviceInfoHTML += '\n ------------------------------------------------------------------------------ \n';
         this.artStorEmailLink = 'mailto:userservices@artstor.org?body=' + encodeURIComponent(deviceInfoHTML);
-    
+
       }, 100);
 
   }

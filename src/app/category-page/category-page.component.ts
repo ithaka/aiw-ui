@@ -26,6 +26,7 @@ export class CategoryPage implements OnInit, OnDestroy {
   private catDescription: string;
   private catThumbnail: string;
   private assetCount: number;
+  private allowSearchInRes: boolean = true;
 
   // Anomalies
   private isSubCategory: boolean = false;
@@ -49,6 +50,8 @@ export class CategoryPage implements OnInit, OnDestroy {
     this.subscriptions.push(
       this.route.params.subscribe((routeParams) => {
         this.catId = routeParams['catId'];
+
+        this.allowSearchInRes = routeParams.browseType && !routeParams.browseType.match(/260|250/)
 
         /**
          * Due to legacy services, the asset count is passed in the Category Name

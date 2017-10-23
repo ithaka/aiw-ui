@@ -10,10 +10,10 @@ import { AssetFiltersService } from '../asset-filters/asset-filters.service';
 import { AuthService } from '../shared/auth.service';
 
 @Component({
-  selector: 'ang-asset-grid', 
+  selector: 'ang-asset-grid',
   providers: [],
   styleUrls: [ './asset-grid.component.scss' ],
-  templateUrl: './asset-grid.component.html'
+  templateUrl: './asset-grid.component.pug'
 })
 
 export class AssetGrid implements OnInit, OnDestroy {
@@ -38,7 +38,7 @@ export class AssetGrid implements OnInit, OnDestroy {
   private largeThmbView: boolean = false;
 
   private selectedAssets: any[] = [];
-  
+
   // Default show as loading until results have update
   private isLoading: boolean = true;
   private searchError: string = "";
@@ -48,9 +48,13 @@ export class AssetGrid implements OnInit, OnDestroy {
   private formattedSearchTerm: string = '';
   private totalAssets: string = '';
   private searchInResults: boolean = false;
+  private isPartialPage: boolean = false;
 
   @Input()
   private actionOptions: any = {};
+
+  @Input()
+  private hasMaxAssetLimit: boolean = false
 
   @Input()
   private assetCount: number;
@@ -67,7 +71,7 @@ export class AssetGrid implements OnInit, OnDestroy {
     size: 24,
     page: 1
   };
-  
+
   dateFacet = {
     earliest : {
       date : 1000,
@@ -79,7 +83,7 @@ export class AssetGrid implements OnInit, OnDestroy {
     },
     modified : false
   };
-  
+
   activeSort = {
     index : '0',
     label : 'Relevance'
@@ -87,10 +91,10 @@ export class AssetGrid implements OnInit, OnDestroy {
   sub;
 
   // Object Id parameter, for Clusters
-  private objectId : string = ''; 
+  private objectId : string = '';
   // Collection Id parameter
   private colId : string = '';
-  // Image group 
+  // Image group
   private ig : any = {};
 
   private _storage;
@@ -107,14 +111,14 @@ export class AssetGrid implements OnInit, OnDestroy {
     private locker: Locker
   ) {
       this._storage = locker.useDriver(Locker.DRIVERS.LOCAL);
-  } 
+  }
 
   ngOnInit() {
     // Subscribe to asset search params
     this.subscriptions.push(
       this.route.params
       .subscribe((params: Params) => {
-        
+
         if(params['term']){
           this.searchTerm = params['term'];
         }
@@ -141,7 +145,7 @@ export class AssetGrid implements OnInit, OnDestroy {
         //   this.selectedAssets = [];
         //   this._assets.setSelectedAssets(this.selectedAssets);
         // }
-        
+
         this.isLoading = true;
       })
     );
@@ -150,12 +154,18 @@ export class AssetGrid implements OnInit, OnDestroy {
     this.subscriptions.push(
       this._assets.pagination.subscribe((pagination: any) => {
         this.pagination.page = parseInt(pagination.page);
+
         if (this.assetCount) {
           this.pagination.totalPages = Math.floor(this.assetCount/parseInt(pagination.size)) + 1;
         } else {
           this.pagination.totalPages = parseInt(pagination.totalPages);
         }
         this.pagination.size = parseInt(pagination.size);
+
+        // last page is a partial page
+        const MAX_RESULTS_COUNT: number = 1500
+        this.isPartialPage = (this.pagination.page * this.pagination.size) >= (MAX_RESULTS_COUNT - 1)
+
       })
     );
 
@@ -180,13 +190,13 @@ export class AssetGrid implements OnInit, OnDestroy {
             this.searchLimitError = "Sorry, these results cannot be displayed. In order to keep things quick, Artstor does not show more than 1500 results for any search. If you haven't found what you are looking for, try using advanced search.";
             return;
           }
-          
+
           this.results = allResults.thumbnails;
           if ('items' in allResults) {
             this.itemIds = allResults.items;
             this.ig = allResults;
           }
-          
+
           if (this.results && this.results.length > 0) {
             this.isLoading = false;
           } else {
@@ -204,7 +214,7 @@ export class AssetGrid implements OnInit, OnDestroy {
           //Generate Facets
           if (allResults && allResults.collTypeFacets) {
               this._filters.generateColTypeFacets( allResults.collTypeFacets );
-              this._filters.generateGeoFilters( allResults.geographyFacets );
+              // this._filters.generateGeoFilters( allResults.geographyFacets );
               this._filters.generateDateFacets( allResults.dateFacets );
               this._filters.setAvailable('classification', allResults.classificationFacets);
           }
@@ -300,7 +310,7 @@ export class AssetGrid implements OnInit, OnDestroy {
   private changeSortOpt(index, label) {
     if( this.activeSort.index != index){
       this.activeSort.index = index;
-      this.activeSort.label = label; 
+      this.activeSort.label = label;
 
       // this.pagination.page = 1;
       this._assets.goToPage(1, true);
@@ -309,7 +319,7 @@ export class AssetGrid implements OnInit, OnDestroy {
   }
 
   /**
-   * Allows to input only numbers [1 - 9] 
+   * Allows to input only numbers [1 - 9]
    * @param event Event emitted on keypress inside the current page number field
    */
   private pageNumberKeyPress(event: any): boolean{
@@ -330,7 +340,7 @@ export class AssetGrid implements OnInit, OnDestroy {
   }
 
   /**
-   * Edit Mode : Selects / deselects an asset - Inserts / Removes the asset object to the selectedAssets array 
+   * Edit Mode : Selects / deselects an asset - Inserts / Removes the asset object to the selectedAssets array
    * @param asset object to be selected / deselected
    */
   private selectAsset(asset: any): void{
@@ -357,9 +367,9 @@ export class AssetGrid implements OnInit, OnDestroy {
    * - Set up as a function to tie in clearing selection
    */
   private toggleEditMode(): void {
-    this.editMode = !this.editMode; 
+    this.editMode = !this.editMode;
     if (this.editMode == false) {
-      // Clear asset selection 
+      // Clear asset selection
       this.selectedAssets = [];
       this._assets.setSelectedAssets(this.selectedAssets);
     }
@@ -403,7 +413,7 @@ export class AssetGrid implements OnInit, OnDestroy {
 
   private saveReorder(): void {
     this.isLoading = true;
-    
+
     let newItemsArray = [];
 
     for (let i = 0; i < this.allResults.length; i++) {
@@ -415,7 +425,7 @@ export class AssetGrid implements OnInit, OnDestroy {
     this.ig.items = newItemsArray;
     this._groups.update(this.ig)
       .take(1)
-      .subscribe( 
+      .subscribe(
         data => {
           this.cancelReorder();
         }, error => {
@@ -425,7 +435,7 @@ export class AssetGrid implements OnInit, OnDestroy {
   }
 
   /**
-   * Edit Mode : Is the asset selected or not 
+   * Edit Mode : Is the asset selected or not
    * @param asset object whose selection / deselection is to be determined
    * @returns index if the asset is already selected, else returns -1
    */
@@ -476,7 +486,7 @@ export class AssetGrid implements OnInit, OnDestroy {
     fQuery = fQuery.replace(/(#or,)/g, ' or <b>');
     fQuery = fQuery.replace(/(#and,)/g, ' and <b>');
     fQuery = fQuery.replace(/(#not,)/g, ' not <b>');
-    
+
     this.formattedSearchTerm = fQuery;
   }
 

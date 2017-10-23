@@ -18,6 +18,7 @@
         "SERVICE_ERROR": "We've experience an error and are unable to retrieve the insitutions"
       }
     },
+    "INCORRECT_PORTAL" : "Sorry, that login is not valid for this portal. Please try again with a different account, or try accessing the main <a id=\"linkMainLibrarySite\" href=\"http://library.artstor.org\" class=\"link\" target=\"_blank\">Artstor Digital Library</a>.",
     "LOGIN_BTN": "Log in",
     "SERVER_ERROR": "Server is not responding. Please try again later.",
     "ARCHIVED_ERROR": "That login has been disabled. Please contact your institutional contact.",
@@ -223,6 +224,9 @@
       "NO_PRIVATE_GROUPS_COLLECTIONS_PROMPT": "<p>You haven't made any private groups yet. Learn more about <a href='http://support.artstor.org/?article=create-and-manage-image-groups' class='link'>groups</a>.</p>",
       "NO_INSTITUTIONAL_GROUPS_COLLECTIONS_PROMPT": "<p>You haven't made any institutional groups yet. Learn more about <a href='http://support.artstor.org/?article=create-and-manage-image-groups' class='link'>groups</a>.</p>",
       "SEARCH_PROMPT": "Enter a keyword or select a filter to begin a search"
+    },
+    "WARNINGS": {
+      "ADDITIONAL_RESULTS": "Sorry, additional results cannot be displayed. In order to keep things quick, Artstor does not show more than 1500 results for any search. If you haven't found what you are looking for, try using advanced search."
     }
   },
   "FOOTER": {
@@ -277,6 +281,7 @@
       "CLASS_LIST": "(paintings, performing arts, photographs)",
       "COLL_HEADING": "Collection",
       "COLL_LIST": "(Artstor, Shared Shelf, Shared Shelf Commons, My Collections...)",
+      "COLL_LIST_SHORT": "(Institutional Collections)",
       "TEACHING_HEADING": "Teaching Resources",
       "TEACHING_LIST": "(Curriculum Guides, AP® Resources, Surveys and Case Studies: Art History, Humanities and Social Sciences)",
       "GROUPS_HEADING": "Image Groups",
@@ -286,10 +291,19 @@
       "HEADING": "Featured Collection",
       "SUBHEADING": "The Andy Warhol Foundation for the Visual Arts: Oeuvre",
       "DESCRIPTION": "Andy Warhol; Brooklyn Bridge; 1983. Images © The Andy Warhol Foundation for the Visual Arts, Inc. and Andy Warhol artwork © The Andy Warhol Foundation for the Visual Arts, Inc.",
-      "LINK": "/#/category/10374058919;name=The%20Andy%20Warhol%20Foundation%20for%20the%20Visual%20Arts%3A%20Oeuvre%20458",
+      "LINK": "/#/category/10374058919;name=The%20Andy%20Warhol%20Foundation%20for%20the%20Visual%20Arts%3A%20Oeuvre%20458;browseType=103",
       "IMG_SOURCE": "/assets/img/featured-collection.jpg",
       "LINK_TITLE": "The Andy Warhol Foundation for the Visual Arts: Oeuvre",
       "ALT_TEXT": "The Andy Warhol Foundation for the Visual Arts: Oeuvre"
+    },
+    "SAHARA_FEATURED": {
+      "HEADING": "Featured Image",
+      "SUBHEADING": "Pueblo in Taos, New Mexico",
+      "DESCRIPTION": "Photo taken 2008 by SAHARA contributor Dell Upton.",
+      "LINK": "/#/asset/HUSAHARA_1113121791",
+      "IMG_SOURCE": "/assets/img/featured-collection-sahara.jpg",
+      "LINK_TITLE": "Pueblo in Taos, New Mexico",
+      "ALT_TEXT": "Pueblo in Taos, New Mexico"
     },
     "AD": {
       "LINK": "http://support.artstor.org/?article=quiz-mode-in-fullscreen",
@@ -339,7 +353,7 @@
     }
   },
   "SEARCH_ANNOUNCEMENT_BANNER": {
-    "MESSAGE": "We’ve changed our search functionality! Search results are faster and may appear in a different order. Read more on our <a href=\"http://support.artstor.org/?page_id=37\" target=\"_blank\" class=\"link\">support site</a>."
+    "MESSAGE": "We are making changes and you may experience issues with login and search. <a href=\"http://support.artstor.org/?article=current-technical-issues-alerts\" target=\"_blank\" class=\"link\">Learn more</a>."
   },
   "SEARCH_SKY_BANNER": {
     "MESSAGE": "⚠️ This is a testing instance for the new Search index. Please excuse the broken bits."
@@ -355,24 +369,24 @@
     "data" : "Date"
   },
   "FIELD" : {
-    "artclassification" : "Classification", 
-    "artcollectiontitle" : "Collection", 
+    "artclassification" : "Classification",
+    "artcollectiontitle" : "Collection",
     "Creator" : "Creator",
-    "artcreator" : "Creator", 
-    "artculture" : "Culture", 
-    "artcurrentrepository" : "Repository", 
-    "artcurrentrepositoryidnumber" : "Repository Number", 
-    "artdate" : "Date", 
-    "artidnumber" : "ID Number", 
-    "artlocation" : "Location", 
-    "artmaterial" : "Material", 
-    "artmeasurements" : "Measurements", 
-    "artrelation" : "Relation", 
-    "artrepository" : "Repository", 
-    "artsource" : "Source", 
-    "artstyleperiod" : "Style Period", 
-    "artsubject" : "Subject", 
-    "arttechnique" : "Technique", 
+    "artcreator" : "Creator",
+    "artculture" : "Culture",
+    "artcurrentrepository" : "Repository",
+    "artcurrentrepositoryidnumber" : "Repository Number",
+    "artdate" : "Date",
+    "artidnumber" : "ID Number",
+    "artlocation" : "Location",
+    "artmaterial" : "Material",
+    "artmeasurements" : "Measurements",
+    "artrelation" : "Relation",
+    "artrepository" : "Repository",
+    "artsource" : "Source",
+    "artstyleperiod" : "Style Period",
+    "artsubject" : "Subject",
+    "arttechnique" : "Technique",
     "arttitle" : "Title",
     "title" : "Title",
     "artworktype" : "Work Type"

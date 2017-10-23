@@ -6,7 +6,7 @@ import { AssetService } from './../../shared';
 
 @Component({
   selector: 'ang-thumbnail',
-  templateUrl: 'thumbnail.component.html',
+  templateUrl: 'thumbnail.component.pug',
   styles: [`
     .card-icon-group {
         height: 19px;
@@ -48,7 +48,7 @@ export class ThumbnailComponent implements OnInit {
   ) {
    }
 
-  ngOnInit() { 
+  ngOnInit() {
     // Clean search data
     if (this.thumbnail['media']) {
       let media = JSON.parse(this.thumbnail['media'])
@@ -58,7 +58,9 @@ export class ThumbnailComponent implements OnInit {
     // Set collection type for assets from Solr
     if (this.thumbnail['collectiontypes']) {
       this.collectionType = this.thumbnail['collectiontypes'][0]
-    } 
+    }
+
+    this.thumbnail.iapFlag = this.determineIAP(this.thumbnail['artstorid'] ? this.thumbnail['artstorid'] : this.thumbnail['objectId'])
   }
 
   openLink(event: Event, urlParams: any[]) {
@@ -67,5 +69,18 @@ export class ThumbnailComponent implements OnInit {
     event.stopPropagation()
 
     this.router.navigate(urlParams)
+  }
+
+  /**
+   * Determine if asset is IAP
+   * @param assetId this should be the asset's id, but if it's undefined, return false
+   */
+  determineIAP (assetId: string) {
+    if (!assetId) {
+      return 0
+    } else {
+       // matches on IAP String, return 1 for true, 0 for false
+      return assetId.match(/IAP/) ? 1 : 0
+    }
   }
 }

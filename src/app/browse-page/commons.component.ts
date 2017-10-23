@@ -9,7 +9,7 @@ import { TitleService } from '../shared/title.service';
 @Component({
   selector: 'ang-browse-commons',
   providers: [],
-  templateUrl: 'commons.component.html',
+  templateUrl: 'commons.component.pug',
   styleUrls: [ './browse-page.component.scss' ]
 })
 export class BrowseCommonsComponent implements OnInit {
@@ -38,7 +38,7 @@ export class BrowseCommonsComponent implements OnInit {
         console.error(err);
         this.loading = false;
       });
-  
+
     this._analytics.setPageValues('commons', '')
   } // OnInit
 }

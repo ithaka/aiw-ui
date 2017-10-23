@@ -7,6 +7,8 @@ import { Location } from '@angular/common';
 import { AssetService, ImageGroupService, ImageGroup, GroupService, AuthService } from '../shared';
 import { AnalyticsService } from '../analytics.service';
 
+import { AppConfig } from '../app.service';
+
 @Component({
   selector: 'nav-menu',
   templateUrl: './nav-menu.component.html',
@@ -56,6 +58,8 @@ export class NavMenu implements OnInit, OnDestroy {
   private editIG: boolean = false;
   private params: any = {};
 
+  private browseOpts: any = {};
+
   // Flag for confimation popup for deleting selected asset(s) from the IG
   private showConfirmationModal: boolean = false;
   
@@ -63,6 +67,7 @@ export class NavMenu implements OnInit, OnDestroy {
   constructor(
     private _router: Router,
     private location: Location,
+    private _app: AppConfig,
     private _assets: AssetService,
     private _ig: ImageGroupService,
     private _group: GroupService,
@@ -70,6 +75,7 @@ export class NavMenu implements OnInit, OnDestroy {
     private _auth: AuthService,
     private _analytics: AnalyticsService
   ) {
+    this.browseOpts = this._app.config.browseOptions
   }
   
   ngOnInit() {

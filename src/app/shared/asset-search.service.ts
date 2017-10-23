@@ -64,7 +64,7 @@ export class AssetSearchService {
         "look_behind": -10,
         "d_look_ahead": 1
       }
-    ],  
+    ],
       "facet_fields" :
       [
         {
@@ -85,7 +85,7 @@ export class AssetSearchService {
         // }
       ],
     };
-    
+
     return this.http.post(this._auth.getSearchUrl(), query, options)
       .map(res => {
         return res.json ? res.json() : {}
@@ -120,12 +120,20 @@ export class AssetSearchService {
     let filters = this._filters.getApplied();
     // To-do: break dateObj out of available filters
     let dateFacet = this._filters.getAvailable()['dateObj'];
-
     let filterArray = []
 
+    let pageSize = urlParams.size
+    const START_INDEX: number = (urlParams.page - 1) * pageSize,
+      MAX_RESULTS_COUNT: number = 1500
+
+    // final page may not contain exactly 24, 48, or 72 results, so get the exact ammount for the final page
+    if ((START_INDEX + pageSize) > MAX_RESULTS_COUNT) {
+      pageSize = MAX_RESULTS_COUNT - START_INDEX - 1 // minus 1 because pagination for search starts at 0
+    }
+
     let query = {
-      "limit": urlParams.size,
-      "start": (urlParams.page - 1) * urlParams.size,
+      "limit": pageSize,
+      "start": START_INDEX,
       "content_types": [
         "art"
       ],
@@ -152,7 +160,7 @@ export class AssetSearchService {
         "look_behind": -10,
         "d_look_ahead": 1
       }
-    ],  
+    ],
       "facet_fields" :
       [
         {
@@ -174,11 +182,11 @@ export class AssetSearchService {
         // }
       ],
     };
-    
+
     for (var i = 0; i < filters.length; i++) { // Applied filters
-      
-      
-      if ( ['collTypes', 'page', 'size', 'sort', 'startDate', 'endDate'].indexOf(filters[i].filterGroup) > -1) { 
+
+
+      if ( ['collTypes', 'page', 'size', 'sort', 'startDate', 'endDate'].indexOf(filters[i].filterGroup) > -1) {
         // Collection Types and page info
         // do nothing
       } else if (filters[i].filterGroup == 'geography') {
@@ -191,11 +199,16 @@ export class AssetSearchService {
         }
       } else {
         for (let j = 0; j < filters[i].filterValue.length; j++) {
-          filterArray.push(filters[i].filterValue[j])
+          filterArray.push(filters[i].filterGroup + ':\"' + filters[i].filterValue[j] + '\"')
+
+          if (filters[i].filterGroup == 'collectiontypes' && filters[i].filterValue[j] == 2) { 
+            // Institutional filter should eliminate open assets
+            filterArray.push("-collectiontypes:5")
+          }
         }
       }
     }
-    
+
     query["filter_query"] = filterArray
 
     if (dateFacet.modified) {
@@ -209,11 +222,11 @@ export class AssetSearchService {
     }
 
     if (sortIndex) {
-      query["sortorder"] = "desc"
- 
+      query["sortorder"] = "asc"
+
       // if(sortIndex == '0'){
       //   sort = 'Relevance';
-      // } else 
+      // } else
       if (sortIndex == '1'){
         query["sort"] = 'name_str';
       } else if(sortIndex == '2'){
@@ -222,7 +235,7 @@ export class AssetSearchService {
         query["sort"] = 'yearend';
       }
     }
-    
+
 
     return this.http.post(this._auth.getSearchUrl(), query, options);
   }

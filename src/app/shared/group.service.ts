@@ -159,10 +159,22 @@ export class GroupService {
      * Remove Group
      */
     public delete(groupId: string): Observable<any> {
+        let reqUrl = this.groupUrl + '/' + groupId
         let headers = new Headers({ 'Accept' : 'application/json' })
         let options = new RequestOptions({ headers: headers })
 
-        return this.http.delete(this.groupUrl + '/' + groupId, this.options)
+        return this.http.delete(reqUrl, this.options)
+            .catch(err => 
+                this.http.post(
+                    // Backup POST call for DELETE failures over Proxies
+                    reqUrl,
+                    {},
+                    new RequestOptions({ 
+                        headers: new Headers({ 'Accept' : 'application/json', 'X-HTTP-Method-Override' : 'DELETE' }),
+                        withCredentials: true 
+                    })
+                )
+            )
             .map(res => <any> res.json())
     }
 
@@ -172,6 +184,7 @@ export class GroupService {
     public update(group: any): Observable<any> {
         let id = group.id
         let putGroup = Object.assign({}, group)
+        let reqUrl = this.groupUrl + '/' + id
 
         if(putGroup.igDownloadInfo){
             delete putGroup.igDownloadInfo
@@ -186,9 +199,20 @@ export class GroupService {
         if (!putGroup.tags || putGroup.tags[0] == null) { putGroup.tags = [] }
 
         return this.http.put(
-            this.groupUrl + '/' + id,
+            reqUrl,
             putGroup,
             this.options
+        )
+        .catch(err => 
+            this.http.post(
+                // Backup POST call for PUT failures over Proxies
+                reqUrl,
+                putGroup,
+                 new RequestOptions({ 
+                     headers: new Headers({ 'Accept' : 'application/json', 'X-HTTP-Method-Override' : 'PUT' }),
+                     withCredentials: true 
+                })
+            )
         )
         .map((res) => { return res.json() || {} })
     }
@@ -225,12 +249,28 @@ export class GroupService {
      * @returns Observable resolved with { success: boolean, message: string }
      */
     public updateIgPublic(igId: string, makePublic: boolean) {
+        let reqUrl = [this.groupUrl,igId, "admin", "public"].join("/")
+        let body = { public: makePublic }
+
         return this.http.put(
-            [this.groupUrl,igId, "admin", "public"].join("/"),
-            { public: makePublic },
+            reqUrl,
+            body,
             this.options
         )
-            .map((res) => { return res.json() || {} })
+        .catch(err => 
+            this.http.post(
+                // Backup POST call for PUT failures over Proxies
+                reqUrl,
+                body,
+                new RequestOptions({ 
+                     headers: new Headers({ 'Accept' : 'application/json', 'X-HTTP-Method-Override' : 'PUT' }),
+                     withCredentials: true 
+                })
+            )
+        )
+        .map((res) => { 
+            return res.json() || {} 
+        })
     }
 
     /**

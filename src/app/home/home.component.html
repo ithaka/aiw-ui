@@ -9,23 +9,33 @@
                     <h2 class="h1">{{ 'HOME.BROWSE.TITLE' | translate }}</h2>
                 </div>
                 <ul class="list-group list-group-flush list-group-clean">
-                    <a id="linkBrowseCollection" class="list-group-item" [routerLink]="['/browse','library', {viewId: 103}]">
+                    <!--ADL Collections Link-->
+                    <a *ngIf="browseSec.collection" id="linkBrowseCollection" class="list-group-item" [routerLink]="['/browse','library']">
                         <h3 class="browse-category">{{ 'HOME.BROWSE.COLL_HEADING' | translate }}</h3>
-                        <p class="small">{{ 'HOME.BROWSE.COLL_LIST' | translate }}</p>
+                        <p class="small">{{  'HOME.BROWSE.COLL_LIST' | translate }}</p>
                     </a>
-                    <a id="linkBrowseClassification" class="list-group-item" [routerLink]="['/browse','library', {viewId: 250}]">
+                    <!--Institutional Collections Link-->
+                    <a *ngIf="browseSec.instCollection" id="linkBrowseInstCollection" class="list-group-item" [routerLink]="['/browse','institution']">
+                        <h3 class="browse-category">{{ 'HOME.BROWSE.COLL_HEADING' | translate }}</h3>
+                        <p class="small">{{ 'HOME.BROWSE.COLL_LIST_SHORT' | translate }}</p>
+                    </a>
+                    <!--Classification Link-->
+                    <a *ngIf="browseSec.classification" id="linkBrowseClassification" class="list-group-item" [routerLink]="['/browse','library', {viewId: 250}]">
                         <h3 class="browse-category">{{ 'HOME.BROWSE.CLASS_HEADING' | translate }}</h3>
                         <p class="small">{{ 'HOME.BROWSE.CLASS_LIST' | translate }}</p>
                     </a>
-                    <a id="linkBrowseGeography" class="list-group-item" [routerLink]="['/browse','library', {viewId: 260}]">
+                    <!--Geography Link-->
+                    <a *ngIf="browseSec.geography" id="linkBrowseGeography" class="list-group-item" [routerLink]="['/browse','library', {viewId: 260}]">
                         <h3 class="browse-category">{{ 'HOME.BROWSE.GEO_HEADING' | translate }}</h3>
                         <p class="small">{{ 'HOME.BROWSE.GEO_LIST' | translate }}</p>
                     </a>
-                    <a id="linkBrowseTeaching" class="list-group-item" [routerLink]="['/browse','groups', 'public']">
+                    <!--Teaching Resources Link-->
+                    <a *ngIf="browseSec.teachingResources" id="linkBrowseTeaching" class="list-group-item" [routerLink]="['/browse','groups', 'public']">
                         <h3 class="browse-category">{{ 'HOME.BROWSE.TEACHING_HEADING' | translate }}</h3>
                         <p class="small">{{ 'HOME.BROWSE.TEACHING_LIST' | translate }}</p>
                     </a>
-                    <a id="linkBrowseIGs" class="list-group-item" [routerLink]="['/browse','groups', 'institution']">
+                    <!--Image Groups Link-->
+                    <a *ngIf="browseSec.imageGrps" id="linkBrowseIGs" class="list-group-item" [routerLink]="['/browse','groups', 'institution']">
                         <h3 class="browse-category">{{ 'HOME.BROWSE.GROUPS_HEADING' | translate }}</h3>
                         <p class="small">{{ 'HOME.BROWSE.GROUPS_LIST' | translate }}</p>
                     </a>
@@ -51,7 +61,7 @@
                 </div>
             </div>
             <!--Shared Shelf Commons Collections-->
-            <div class="card pb-3">
+            <div *ngIf="showHomeSSC" class="card pb-3">
                 <div class="card-header">
                     <h2>{{ 'HOME.HEADINGS.SSC' | translate }}</h2>
                 </div>
@@ -71,15 +81,15 @@
             </div>
         </div>
         <div class="col-sm-5">
-            <a #featuredCollection id="featuredCollectionLink" class="card featured-card" [attr.href]=" 'HOME.FEATURED.LINK' | translate "> 
-                <img class="card-img-top no-stretch" [attr.src]="'HOME.FEATURED.IMG_SOURCE' | translate" [attr.alt]="'HOME.FEATURED.ALT_TEXT' | translate" [attr.title]="'HOME.FEATURED.LINK_TITLE' | translate">
+            <a #featuredCollection id="featuredCollectionLink" class="card featured-card" [attr.href]="featuredCollectionConf + '.LINK' | translate">
+                <img class="card-img-top no-stretch" [attr.src]="featuredCollectionConf + '.IMG_SOURCE' | translate" [attr.alt]="featuredCollectionConf + '.ALT_TEXT' | translate" [attr.title]="featuredCollectionConf + '.LINK_TITLE' | translate">
                 <div class="card-body pt-1">
-                    <label style="margin-bottom:0px;">{{ 'HOME.FEATURED.HEADING' | translate }}</label>
-                    <p style="margin-bottom:6px;">{{ 'HOME.FEATURED.SUBHEADING' | translate }}</p>
+                    <label style="margin-bottom:0px;">{{ featuredCollectionConf + '.HEADING' | translate }}</label>
+                    <p style="margin-bottom:6px;">{{ featuredCollectionConf + '.SUBHEADING' | translate }}</p>
                 </div>
-                <div class="featured-caption">{{ 'HOME.FEATURED.DESCRIPTION' | translate }}</div>
+                <div class="featured-caption">{{ featuredCollectionConf + '.DESCRIPTION' | translate }}</div>
             </a>
-            <div class="card">
+            <div class="card" *ngIf="showBlog">
                 <div class="card-header">
                     <h2>{{ 'HOME.HEADINGS.FRM_BLOG' | translate}}</h2>
                 </div>
@@ -93,10 +103,10 @@
             </div>
         </div>
         <div class="col-sm-3">
-            <a id="imageAdSpaceLink" class="card hidden-xs-down" [attr.href]=" 'HOME.AD.LINK' | translate " target="_blank">
+            <a *ngIf="showHomeAd" id="imageAdSpaceLink" class="card hidden-xs-down" [attr.href]=" 'HOME.AD.LINK' | translate " target="_blank">
                 <img class="card-img no-stretch" [attr.src]="'HOME.AD.IMG_SOURCE' | translate" [attr.alt]="'HOME.AD.ALT_TEXT' | translate">
             </a>
-            <div class="card pt-4">
+            <div class="card" [class.pt-4]="showHomeAd">
                 <div class="card-header">
                     <h3>{{ 'HOME.QUESTIONS.HEADING' | translate }}</h3>
                 </div>

@@ -75,7 +75,7 @@ export class AuthService implements CanActivate {
     // Default to relative or prod endpoints
     this.ENV = 'test'
     this.hostname = ''
-    this.baseUrl =  '/api' 
+    this.baseUrl =  '/api'
     this.thumbUrl = '//mdxdv.artstor.org'
     this.IIIFUrl = '//tsprod.artstor.org/rosa-iiif-endpoint-1.0-SNAPSHOT/fpx'
     this.subdomain = 'library'
@@ -97,20 +97,20 @@ export class AuthService implements CanActivate {
       // prod.artstor subdomain is used for WLVs
       'prod.artstor.org',
     ]
-    
+
     // Check domain
     if (  new RegExp(prodHostnames.join("|")).test(document.location.hostname)  ) {
       // Explicit live endpoints
       this.logUrl = '//ang-ui-logger.apps.prod.cirrostratus.org/api/v1'
-      this.solrUrl = 'http://library.artstor.org/api/search/v1.0/search'
+      this.solrUrl = '/api/search/v1.0/search'
       this.ENV = 'prod'
     }
     else if ( document.location.hostname.indexOf('prod.cirrostratus.org') > -1 ) {
       // Prod/Lively endpoints
       this.hostname = '//library.artstor.org'
-      this.baseUrl =  '//library.artstor.org/api' 
+      this.baseUrl =  '//library.artstor.org/api'
       this.logUrl = '//ang-ui-logger.apps.prod.cirrostratus.org/api/v1'
-      this.solrUrl = 'http://library.artstor.org/api/search/v1.0/search'
+      this.solrUrl = '/api/search/v1.0/search'
       this.ENV = 'prod'
     } else if ( new RegExp(testHostnames.join("|")).test(document.location.hostname) ) {
       // Test Endpoints
@@ -119,17 +119,30 @@ export class AuthService implements CanActivate {
       this.baseUrl = '//stage.artstor.org/api'
       this.thumbUrl = '//mdxstage.artstor.org'
       this.logUrl = '//ang-ui-logger.apps.test.cirrostratus.org/api/v1'
-      this.solrUrl = 'http://stage.artstor.org/api/search/v1.0/search'
+      this.solrUrl = '/api/search/v1.0/search'
       this.IIIFUrl = '//tsstage.artstor.org/rosa-iiif-endpoint-1.0-SNAPSHOT/fpx'
       this.ENV = 'test'
     }
-    
+
     // Additional Local dev domains
     if (document.location.hostname.indexOf('local.sahara') > -1) {
-      this.hostname = '//saharabeta.stage.artstor.org'
-      this.baseUrl = this.hostname + '/api'
+      this.hostname = '//sahara.beta.stage.artstor.org'
     }
 
+    // Sahara routing WORKAROUND
+    if (document.location.hostname.indexOf('sahara.beta.stage.artstor.org') > -1) {
+      this.hostname = '//sahara.beta.stage.artstor.org'
+    }
+    if (document.location.hostname.indexOf('sahara.prod.artstor.org') > -1) {
+      this.hostname = '//library.artstor.org'
+    }
+
+    // Local routing should point to full URL
+    // * This should NEVER apply when using a proxy, as it will break authorization
+    if (new RegExp(["cirrostratus.org", "localhost", "local.", "sahara.beta.stage.artstor.org", "sahara.prod.artstor.org"].join("|")).test(document.location.hostname)) {
+      this.baseUrl = this.hostname + '/api'
+      this.solrUrl = this.hostname + '/api/search/v1.0/search'
+    }
 
     // For session timeout on user inactivity
     idle.setIdle(this.idleUtil.generateIdleTime()); // Set an idle time of 1 min, before starting to watch for timeout
@@ -166,6 +179,16 @@ export class AuthService implements CanActivate {
     });
 
     this.resetIdleWatcher();
+
+    /**
+     * User Access Heartbeat
+     * - Poll /userinfo every 15min
+     * - Refreshs AccessToken with IAC
+     */
+    const userInfoInterval = 15*1000*60*60
+    setInterval(() => {
+      this.refreshUserSession()
+    }, userInfoInterval)
   }
 
 
@@ -174,7 +197,18 @@ export class AuthService implements CanActivate {
   public resetIdleWatcher(): void {
     this.idle.watch();
     this.idleState = 'Idle watcher started';
-    // console.log(this.idleState);
+    // When a user comes back, we don't want to wait for the time interval to refresh the session
+    this.refreshUserSession()
+  }
+
+  private refreshUserSession(): void {
+    this.getUserInfo().take(1).toPromise()
+      .then(res => {
+        console.info('Access Token refreshed <3')
+      })
+      .catch(err => {
+        console.error('Access Token refresh failed </3')
+      })
   }
 
   private expireSession(): void {
@@ -275,7 +309,7 @@ export class AuthService implements CanActivate {
       let body = res.json();
       return body || { };
   }
-  
+
   public getUrl(secure?: boolean): string {
     let url: string = this.baseUrl
     if (secure) {
@@ -305,7 +339,7 @@ export class AuthService implements CanActivate {
   }
 
   /**
-   * Our thumbnails come 
+   * Our thumbnails come
    */
   public getThumbUrl(): string {
     return this.thumbUrl;
@@ -317,7 +351,7 @@ export class AuthService implements CanActivate {
 
   /** Returns url used for downloading some media, such as documents */
   public getMediaUrl(): string {
-    // This is a special case, and should always points to library.artstor or stage 
+    // This is a special case, and should always points to library.artstor or stage
     return this.getHostname() + '/media';
   }
 
@@ -369,9 +403,9 @@ export class AuthService implements CanActivate {
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
     let options = new RequestOptions({ withCredentials: true });
     // If user object already exists, we're done here
-    if (this.getUser() && this.getUser().hasOwnProperty('status')) { 
+    if (this.getUser() && this.getUser().hasOwnProperty('status')) {
       return new Observable(observer => {
-          observer.next(true);  
+          observer.next(true);
       });
     }
 
@@ -386,10 +420,11 @@ export class AuthService implements CanActivate {
             if (jsonData.status === true) {
               // User is authorized - if you want to check ipAuth then you can tell on the individual route by user.isLoggedIn = false
               let user = jsonData.user;
+              user.status = jsonData.status
               if (jsonData.isRememberMe || jsonData.remoteaccess) {
                 user.isLoggedIn = true
-              } 
-              
+              }
+
               this.saveUser(user);
               return true;
             } else {
@@ -404,12 +439,12 @@ export class AuthService implements CanActivate {
         }
       )
       .subscribe(res => {
-          // CanActivate is not handling the Observable value properly, 
+          // CanActivate is not handling the Observable value properly,
           // ... so we do an extra redirect in here
           if (res === false) {
             this._router.navigate(['/login']);
           }
-          observer.next(res); 
+          observer.next(res);
         }, err => {
           this._router.navigate(['/login']);
           observer.next(false);
@@ -431,9 +466,9 @@ export class AuthService implements CanActivate {
               let user = data.user;
               if (data.isRememberMe || data.remoteaccess) {
                 user.isLoggedIn = true
-              } 
+              }
               this.saveUser(user);
-            } 
+            }
             return data;
           } catch (err) {
             console.error(err);
@@ -479,8 +514,8 @@ export class AuthService implements CanActivate {
     login(user: User) : Promise<any> {
         let header = new Headers({ 'Content-Type': 'application/x-www-form-urlencoded' }); // ... Set content type to JSON
         let options = new RequestOptions({ headers: header, withCredentials: true }); // Create a request option
-        let data = this.formEncode({ 
-                'j_username': user.username.toLowerCase(), 
+        let data = this.formEncode({
+                'j_username': user.username.toLowerCase(),
                 'j_password': user.password
             });
 
@@ -502,7 +537,7 @@ export class AuthService implements CanActivate {
 
     getFallbackInstitutions() {
         let url =  '/assets/institutions-initial.json';
-        
+
         return this.http
             .get(url)
             .toPromise()
@@ -510,8 +545,8 @@ export class AuthService implements CanActivate {
     }
 
     getInstitutions() {
-        let url = this.getHostname() + '/api/secure/institutions?_method=ShibbolethOnly';
-        
+        let url = this.getHostname() + '/api/institutions?_method=ShibbolethOnly';
+
         return this.http
             .get(url)
             .toPromise()
@@ -520,16 +555,16 @@ export class AuthService implements CanActivate {
 
     pwdReset(email: string) {
         let options = new RequestOptions({ withCredentials: true });
-        
+
         return this.http
             .get(this.getUrl() + '/lostpw?email=' + email.toLowerCase() + '&portal=ARTstor', options)
             .toPromise()
             .then(this.extractData);
     }
 
-  /** 
+  /**
    * This is the same call we use in canActivate to determine if the user is IP Auth'd
-   * @returns json which should have 
+   * @returns json which should have
    */
   public getIpAuth(): Observable<any> {
     let options = new RequestOptions({ withCredentials: true });

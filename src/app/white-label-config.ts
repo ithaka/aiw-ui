@@ -17,7 +17,26 @@ export const WLV_ARTSTOR = {
         "PRIVACY",
         "COPYRIGHT",
         "SUPPORT"
-    ]
+    ],
+    browseOptions: {
+        'artstorCol': true,
+        'instCol': true,
+        'openCol': true,
+        'myCol': true,
+        'igs': true
+    },
+    homeBrowseSec: {
+        'collection': true,
+        'instCollection': false,
+        'classification': true,
+        'geography': true,
+        'teachingResources': true,
+        'imageGrps': true
+    },
+    featuredCollection: "HOME.FEATURED",
+    showHomeBlog: true,
+    showHomeSSC: true,
+    showHomeAd: true
 }
 
 export const WLV_SAHARA = {
@@ -32,5 +51,24 @@ export const WLV_SAHARA = {
         "SAHARA_PRIVACY"
     ],
     showSSLogin: true,
-    showInstitutionalLogin: false
+    showInstitutionalLogin: false,
+    browseOptions: {
+        'artstorCol': false,
+        'instCol': true,
+        'openCol': false,
+        'myCol': false,
+        'igs': true
+    },
+    featuredCollection: "HOME.SAHARA_FEATURED",
+    homeBrowseSec: {
+        'collection': false,
+        'instCollection': true,
+        'classification': false,
+        'geography': false,
+        'teachingResources': false,
+        'imageGrps': true
+    },
+    showHomeBlog: false,
+    showHomeSSC: false,
+    showHomeAd: false
 }
