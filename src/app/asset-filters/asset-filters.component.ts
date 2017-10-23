@@ -145,7 +145,10 @@ export class AssetFilters {
 
     for (let filter of this.appliedFilters) {
       if(filter.filterGroup == 'page'){
-        params[filter.filterGroup] =  parseInt(filter.filterValue);
+        params[filter.filterGroup] =  parseInt(filter.filterValue[0]);
+      }
+      else if(filter.filterGroup == 'size'){
+        params[filter.filterGroup] =  parseInt(filter.filterValue[0]);
       }
       else if((filter.filterGroup != 'startDate') && (filter.filterGroup != 'endDate') && (filter.filterValue && filter.filterValue.length > 0)){
         // Arrays must be stringified, as angular router doesnt handle them well
