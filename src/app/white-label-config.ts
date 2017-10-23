@@ -43,6 +43,7 @@ export const WLV_SAHARA = {
     "logoUrl" : "/assets/img/logo-sahara-v1.png",
     "institutionLogin" : false,
     "pageTitle" : "SAHARA",
+    "contributingInstFilters" : [22240],
     footerLinks: [
         "ARTSTOR",
         "SAHARA",
