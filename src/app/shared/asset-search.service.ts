@@ -1,5 +1,4 @@
 /**
- * BETA
  * New Search Service
  */
 import {
@@ -15,6 +14,7 @@ import {
   AssetFiltersService
 } from '../asset-filters/asset-filters.service';
 import { AuthService } from './';
+import { AppConfig } from '../app.service';
 
 @Injectable()
 export class AssetSearchService {
@@ -37,7 +37,8 @@ export class AssetSearchService {
   constructor(
     private http: Http,
     private _filters: AssetFiltersService,
-    private _auth: AuthService
+    private _auth: AuthService,
+    private _app: AppConfig
   ) {}
 
   /**
@@ -101,7 +102,6 @@ export class AssetSearchService {
    * @returns       Returns an object with the properties: thumbnails, count, altKey, classificationFacets, geographyFacets, minDate, maxDate, collTypeFacets, dateFacets
    */
   public search(urlParams: any, term: string, sortIndex) {
-    console.log("Running Solr Search...")
     let keyword = term;
     let options = new RequestOptions({
       withCredentials: true
@@ -121,6 +121,15 @@ export class AssetSearchService {
     // To-do: break dateObj out of available filters
     let dateFacet = this._filters.getAvailable()['dateObj'];
     let filterArray = []
+
+    /**
+     * Check for WLVs Institution filter
+     * - WLVs filter by contributing institution id
+     */
+    let institutionFilters: number[] = this._app.getWLVConfig().contributingInstFilters
+    for (let i = 0; i < institutionFilters.length; i++) {
+      filterArray.push("contributinginstitutionid:" + institutionFilters[i])
+    }
 
     let pageSize = urlParams.size
     const START_INDEX: number = (urlParams.page - 1) * pageSize,
