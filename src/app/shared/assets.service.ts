@@ -1016,7 +1016,7 @@ export class AssetService {
         let options = new RequestOptions({ withCredentials: true });
         // Returns all of the collections names
         return this.http
-            .get(this._auth.getUrl() + '/institutions/', options)
+            .get(this._auth.getUrl() + '/v2/institution', options)
             .toPromise()
             .then(this.extractData)
             .then((data) => {
