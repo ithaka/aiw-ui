@@ -18,6 +18,9 @@ import { TitleService } from '../shared/title.service';
   styleUrls: [ './browse-page.component.scss' ]
 })
 export class MyCollectionsComponent implements OnInit {
+    
+  private pcEnabled: boolean;
+
   constructor(
     private _auth: AuthService,
     private router: Router,
@@ -25,11 +28,12 @@ export class MyCollectionsComponent implements OnInit {
     private _assets: AssetService,
     private _analytics: AnalyticsService,
     private _title: TitleService
-  ) { }
+  ) { 
+    this.pcEnabled = this._auth.getpcEnabled();
+   }
 
   private subscriptions: Subscription[] = [];
 
-  private userPCallowed: string;
   private categories = [];
   private tags : Tag[] = [];
   private expandedCategories: any = {};
@@ -74,8 +78,7 @@ export class MyCollectionsComponent implements OnInit {
       })
     );
 
-    this.userPCallowed = this._auth.getUser().userPCAllowed;
-    if(this.userPCallowed == '1'){ // If user has personal collections get data for user's personal collections
+    if(this.pcEnabled){ // If user has personal collections get data for user's personal collections
       this.getUserPCol();
     }
     this._analytics.setPageValues('mycollection', '')

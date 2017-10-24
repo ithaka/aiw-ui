@@ -4,7 +4,7 @@ import { Location } from '@angular/common';
 import { Angulartics2 } from 'angulartics2';
 import { CompleterService, CompleterData } from 'ng2-completer';
 
-import { AuthService, User } from './../shared';
+import { AuthService, User, AssetService } from './../shared';
 import { AnalyticsService } from '../analytics.service';
 
 declare var initPath: string
@@ -21,6 +21,7 @@ declare var initPath: string
   // template: `<h1>Test title</h1>`
 })
 export class Login {
+
   // Set our default values
   public user = new User('','');
   public errorMsg: string = '';
@@ -44,13 +45,13 @@ export class Login {
   // TypeScript public modifiers
   constructor(
     private _auth: AuthService,
+    private _assets: AssetService,
     private _completer: CompleterService,
     private router: Router,
     private location: Location,
     private angulartics: Angulartics2,
     private _analytics: AnalyticsService
-  ) { 
-  }
+  ) { }
 
   ngOnInit() {
     // Provide redirects for initPath detected in index.html from inital load
@@ -116,6 +117,21 @@ export class Login {
       } 
       this._auth.saveUser(data.user);
       this.errorMsg = '';
+      
+      // Save user personal collections count in local storage
+      this._assets.pccollection()
+      .then((res) => {
+        let pcEnabled: boolean = false;
+        if( (res.privateCollection && (res.privateCollection.length > 0)) || (res.pcCollection && res.pcCollection.collectionid) ){
+          pcEnabled = true;
+        }
+        this._auth.setpcEnabled(pcEnabled);
+
+      })
+      .catch(function(err) {
+          console.error('Unable to load user PC');
+      }); 
+
       if (this._auth.getFromStorage("stashedRoute")) {
         // We do not want to navigate to the page we are already on
         if (this._auth.getFromStorage("stashedRoute").indexOf('login') > -1) {
@@ -127,6 +143,7 @@ export class Login {
       } else {
         this.router.navigate(['/home']);
       }
+
     }
   }
 
