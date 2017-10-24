@@ -51,7 +51,7 @@ export class CategoryPage implements OnInit, OnDestroy {
       this.route.params.subscribe((routeParams) => {
         this.catId = routeParams['catId'];
 
-        this.allowSearchInRes = routeParams.browseType && !routeParams.browseType.match(/260|250/)
+        this.allowSearchInRes = routeParams.browseType && !routeParams.browseType.match(/260|250|103/)
 
         /**
          * Due to legacy services, the asset count is passed in the Category Name

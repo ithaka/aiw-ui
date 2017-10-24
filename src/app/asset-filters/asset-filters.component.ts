@@ -145,7 +145,10 @@ export class AssetFilters {
 
     for (let filter of this.appliedFilters) {
       if(filter.filterGroup == 'page'){
-        params[filter.filterGroup] =  parseInt(filter.filterValue);
+        params[filter.filterGroup] =  parseInt(filter.filterValue[0]);
+      }
+      else if(filter.filterGroup == 'size'){
+        params[filter.filterGroup] =  parseInt(filter.filterValue[0]);
       }
       else if((filter.filterGroup != 'startDate') && (filter.filterGroup != 'endDate') && (filter.filterValue && filter.filterValue.length > 0)){
         // Arrays must be stringified, as angular router doesnt handle them well
@@ -156,12 +159,40 @@ export class AssetFilters {
     this.angulartics.eventTrack.next({ action: "filteredSearch", properties: { category: "search", label: params } })
 
     if(params['page']){
-      params['page'] = this.pagination.page;
+      params['page'] = this.pagination.page
     }
+    
+    if(currentParams.colId || currentParams.catId){
 
-    this.router.navigate(['search', this.term, params]);
+      let baseParams = {}
+      
+      if(currentParams.name){
+        baseParams['name'] = currentParams.name
+      }
+      if(currentParams.browseType){
+        baseParams['browseType'] = currentParams.browseType
+      }
+      if(currentParams.size){
+        baseParams['size'] = currentParams.size
+      }
+      if(currentParams.page){
+        baseParams['page'] = currentParams.page
+      }
+      if(currentParams.sort){
+        baseParams['sort'] = currentParams.sort
+      }
+
+      let queryParams = Object.assign(baseParams, params)
+      let colId = currentParams.colId ? currentParams.colId : currentParams.catId
+      let route = currentParams.colId ? 'collection' : 'category'
+  
+      this.router.navigate( [ '/' + route, colId, queryParams ] )
+    }
+    else{
+      this.router.navigate(['search', this.term, params])
+    }
+    
   }
-
 
   changeSortOpt(index, label) {
     this.activeSort.index = index;

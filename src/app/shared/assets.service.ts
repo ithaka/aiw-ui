@@ -386,9 +386,13 @@ export class AssetService {
                 } else if (params.hasOwnProperty("catId")  && params["catId"] !== "") {
                     //get collection thumbnails
                     this.loadCategory(params.catId);
+                    // let searchTerm = params.term ? params.term : '';
+                    // this.loadSearch(searchTerm);
                 }  else if (params.hasOwnProperty("colId") && params["colId"] !== "") {
                     //get collection thumbnails
-                    this.loadCollection(params.colId);
+                    // this.loadCollection(params.colId);
+                    let searchTerm = params.term ? params.term : '';
+                    this.loadSearch(searchTerm);
                 } else if (params.hasOwnProperty("term")) {
                     this.loadSearch(params.term);
                 } else {
@@ -867,6 +871,9 @@ export class AssetService {
 
                     if (data.hierarchies2 && data.hierarchies2['artstor-geography']){
                         this._filters.generateHierFacets( data.hierarchies2['artstor-geography'].children, 'geography' );
+                    }
+                    else{
+                        this._filters.generateHierFacets( [], 'geography' );
                     }
                     // Transform data from SOLR queries
                     if (data.results) {

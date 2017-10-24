@@ -188,6 +188,8 @@ export class AssetFiltersService {
             if((group === filterObj.filterGroup)){
                 if (filterObj.filterValue.indexOf(filter) > -1) {
                     return true;
+                } else if (filterObj.filterValue == filter) {
+                    return true;
                 }
             }
         }
@@ -213,6 +215,9 @@ export class AssetFiltersService {
                 let valueIndex = filterObj.filterValue.indexOf(filter);
                 if (valueIndex > -1) {
                     filterObj.filterValue.splice(valueIndex, 1);
+                    filterRemoved = true;
+                } else if (filterObj.filterValue == filter) {
+                    filterObj.filterValue = []
                     filterRemoved = true;
                 }
             }
