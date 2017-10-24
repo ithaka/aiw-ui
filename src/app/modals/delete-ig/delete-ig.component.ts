@@ -7,7 +7,7 @@ import { AnalyticsService } from './../../analytics.service';
 
 @Component({
   selector: 'ang-delete-ig-modal',
-  templateUrl: 'delete-ig.component.html',
+  templateUrl: 'delete-ig.component.pug',
   providers: [
     GroupService
   ]
@@ -28,7 +28,7 @@ export class DeleteIgModal implements OnInit {
   private groupDeleted: boolean = false;
 
   constructor(
-        private _group: GroupService, 
+        private _group: GroupService,
         private _assets: AssetService,
         private _router: Router,
         private _analytics: AnalyticsService
@@ -42,7 +42,7 @@ export class DeleteIgModal implements OnInit {
 
   deleteImageGroup(): void{
     this._analytics.directCall('delete_img_group')
-    
+
     this._group.delete(this.igId).subscribe(res =>{
       if(res){
         // Clear Group Assets locally
