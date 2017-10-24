@@ -3,7 +3,6 @@ import { Router } from '@angular/router';
 import { Location } from '@angular/common';
 import { Angulartics2 } from 'angulartics2';
 import { CompleterService, CompleterData } from 'ng2-completer';
-import { Locker } from 'angular2-locker';
 
 import { AuthService, User, AssetService } from './../shared';
 import { AnalyticsService } from '../analytics.service';
@@ -22,8 +21,6 @@ declare var initPath: string
   // template: `<h1>Test title</h1>`
 })
 export class Login {
-
-  private _storage: Locker;
 
   // Set our default values
   public user = new User('','');
@@ -47,7 +44,6 @@ export class Login {
   
   // TypeScript public modifiers
   constructor(
-    private locker: Locker,
     private _auth: AuthService,
     private _assets: AssetService,
     private _completer: CompleterService,
@@ -55,9 +51,7 @@ export class Login {
     private location: Location,
     private angulartics: Angulartics2,
     private _analytics: AnalyticsService
-  ) { 
-    this._storage = locker.useDriver(Locker.DRIVERS.LOCAL);
-  }
+  ) { }
 
   ngOnInit() {
     // Provide redirects for initPath detected in index.html from inital load
@@ -131,7 +125,7 @@ export class Login {
         if( (res.privateCollection && (res.privateCollection.length > 0)) || (res.pcCollection && res.pcCollection.collectionid) ){
           pcEnabled = true;
         }
-        this._storage.set('pcEnabled', pcEnabled);
+        this._auth.setpcEnabled(pcEnabled);
 
       })
       .catch(function(err) {

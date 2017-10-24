@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { Subscription }   from 'rxjs/Subscription';
-import { Locker } from 'angular2-locker';
 
 import { AssetService } from './../shared/assets.service';
 import { AuthService } from './../shared/auth.service';
@@ -20,11 +19,9 @@ import { TitleService } from '../shared/title.service';
 })
 export class MyCollectionsComponent implements OnInit {
     
-  private _storage: Locker;
   private pcEnabled: boolean;
 
   constructor(
-    private locker: Locker,
     private _auth: AuthService,
     private router: Router,
     private route: ActivatedRoute,
@@ -32,13 +29,11 @@ export class MyCollectionsComponent implements OnInit {
     private _analytics: AnalyticsService,
     private _title: TitleService
   ) { 
-    this._storage = locker.useDriver(Locker.DRIVERS.LOCAL);
-    this.pcEnabled = this._storage.get('pcEnabled');
+    this.pcEnabled = this._auth.getpcEnabled();
    }
 
   private subscriptions: Subscription[] = [];
 
-  private userPCallowed: string;
   private categories = [];
   private tags : Tag[] = [];
   private expandedCategories: any = {};
@@ -83,7 +78,6 @@ export class MyCollectionsComponent implements OnInit {
       })
     );
 
-    this.userPCallowed = this._auth.getUser().userPCAllowed;
     if(this.pcEnabled){ // If user has personal collections get data for user's personal collections
       this.getUserPCol();
     }

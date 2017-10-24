@@ -47,7 +47,7 @@ export class BrowsePage implements OnInit, OnDestroy {
       this._storage = locker.useDriver(Locker.DRIVERS.LOCAL);
       this.institution = this._storage.get('institution');
       this.browseOpts = this._app.config.browseOptions;
-      this.pcEnabled = this._storage.get('pcEnabled');
+      this.pcEnabled = this._auth.getpcEnabled();
   }
 
   ngOnInit() {
