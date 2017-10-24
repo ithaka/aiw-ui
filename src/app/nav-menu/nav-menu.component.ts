@@ -43,25 +43,26 @@ export class NavMenu implements OnInit, OnDestroy {
 
   @Output() refreshIG: EventEmitter<any> = new EventEmitter();
 
-  private user: any = {};
-  private institutionObj: any = {};
+  private user: any = {}
+  private institutionObj: any = {}
 
-  private mobileCollapsed: boolean = true;
-  private selectedAssets: any[] = [];
-  private subscriptions: Subscription[] = [];
+  private mobileCollapsed: boolean = true
+  private selectedAssets: any[] = []
+  private subscriptions: Subscription[] = []
 
-  private showImageGroupModal: boolean = false;
-  private showAddToGroupModal: boolean = false;
-  private showShareIgModal: boolean = false;
+  private showImageGroupModal: boolean = false
+  private showAddToGroupModal: boolean = false
+  private showShareIgModal: boolean = false
+  private pcEnabled: boolean = false
 
-  private copyIG: boolean = false;
-  private editIG: boolean = false;
-  private params: any = {};
+  private copyIG: boolean = false
+  private editIG: boolean = false
+  private params: any = {}
 
-  private browseOpts: any = {};
+  private browseOpts: any = {}
 
   // Flag for confimation popup for deleting selected asset(s) from the IG
-  private showConfirmationModal: boolean = false;
+  private showConfirmationModal: boolean = false
 
   // TypeScript public modifiers
   constructor(
@@ -76,6 +77,7 @@ export class NavMenu implements OnInit, OnDestroy {
     private _analytics: AnalyticsService
   ) {
     this.browseOpts = this._app.config.browseOptions
+    this.pcEnabled = this._auth.getpcEnabled()
   }
 
   ngOnInit() {

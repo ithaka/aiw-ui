@@ -372,6 +372,20 @@ export class AuthService implements CanActivate {
   public getUser() : any {
       return this._storage.get('user') ? this._storage.get('user') : {};
   }
+  
+  /**
+   * Gets pcEnabled from local storage
+   */
+  public getpcEnabled(): boolean {
+      return this._storage.get('pcEnabled') ? this._storage.get('pcEnabled') : false;
+  }
+
+  /**
+   * Sets pcEnabled in local storage
+   */
+  public setpcEnabled(pcEnabled: boolean): void {
+    this._storage.set('pcEnabled', pcEnabled);
+  }
 
   /** Stores an object in local storage for you - your welcome */
   public store(key: string, value: any): void {
