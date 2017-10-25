@@ -19,6 +19,8 @@ import { AppConfig } from '../app.service';
 @Injectable()
 export class AssetSearchService {
 
+  showCollectionType: boolean = false
+
    public filterFields = [
         {name: "In any field", value: "*"},
         {name: "Creator", value: "artcreator" },
@@ -39,7 +41,9 @@ export class AssetSearchService {
     private _filters: AssetFiltersService,
     private _auth: AuthService,
     private _app: AppConfig
-  ) {}
+  ) {
+    this.showCollectionType = this._app.config.advSearch.showCollectionTypeFacet
+  }
 
   /**
    * Uses wildcard search to retrieve filters
@@ -68,11 +72,6 @@ export class AssetSearchService {
     ],
       "facet_fields" :
       [
-        {
-          "name" : "collectiontypes",
-          "mincount" : 1,
-          "limit" : 10
-        },
         // Limited to 16 classifications (based on the fact that Artstor has 16 classifications)
         {
           "name" : "artclassification_str",
@@ -86,6 +85,15 @@ export class AssetSearchService {
         // }
       ],
     };
+
+    // if not sahara push this facet
+    if (this.showCollectionType) {
+      query.facet_fields.push({
+        "name" : "collectiontypes",
+        "mincount" : 1,
+        "limit" : 10
+      })
+    }
 
     return this.http.post(this._auth.getSearchUrl(), query, options)
       .map(res => {
@@ -172,11 +180,6 @@ export class AssetSearchService {
     ],
       "facet_fields" :
       [
-        {
-          "name" : "collectiontypes",
-          "mincount" : 1,
-          "limit" : 15
-        },
         // Limited to 16 classifications (based on the fact that Artstor has 16 classifications)
         {
           "name" : "artclassification_str",
@@ -191,6 +194,14 @@ export class AssetSearchService {
         // }
       ],
     };
+
+    if (this.showCollectionType) {
+      query.facet_fields.push({
+        "name" : "collectiontypes",
+        "mincount" : 1,
+        "limit" : 15
+      })
+    }
 
     for (var i = 0; i < filters.length; i++) { // Applied filters
 
@@ -210,7 +221,7 @@ export class AssetSearchService {
         for (let j = 0; j < filters[i].filterValue.length; j++) {
           filterArray.push(filters[i].filterGroup + ':\"' + filters[i].filterValue[j] + '\"')
 
-          if (filters[i].filterGroup == 'collectiontypes' && filters[i].filterValue[j] == 2) { 
+          if (filters[i].filterGroup == 'collectiontypes' && filters[i].filterValue[j] == 2) {
             // Institutional filter should eliminate open assets
             filterArray.push("-collectiontypes:5")
           }
