@@ -129,7 +129,7 @@ export class CategoryPage implements OnInit, OnDestroy {
           .then(this._auth.extractData);
   }
 
-    /**
+  /**
   * Get title for a Category
   * @param catId The Category ID
   */

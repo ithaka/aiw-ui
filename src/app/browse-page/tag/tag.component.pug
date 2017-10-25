@@ -3,7 +3,7 @@ div(id="tagItem{{ tag.tagId }}", title="{{ tag.title }}", [ngClass]="[ link ? 't
   .expand-button(*ngIf="!link", (click)="tag.isCollapsed = !tag.isCollapsed; getChildren(); tag.touched = true;")
     i.icon.absolute-left.tree-icon(*ngIf="!loading", [ngClass]="[ tag.isCollapsed ? 'icon-right' : 'icon-down', (!tag.touched || (tag.touched && tag.children.length > 0)) && tag.type.folder ? 'icon-direction' : 'icon-empty']")
     i.icon.icon-loading.absolute-left.tree-icon(*ngIf="loading")
-  a(id="tagItem{{ tag.tagId }}Open", [ngClass]="{ 'no-link' : linkRoute.length < 1 || !tag.canOpen }", [routerLink]="[ linkRoute, tag.tagId, { 'name' : cleanTitle(tag.title), 'browseType': browseType } ]")
+  a(id="tagItem{{ tag.tagId }}Open", [ngClass]="{ 'no-link' : linkRoute.length < 1 || !tag.canOpen }", [routerLink]="[ linkRoute, tag.tagId ]")
     span.notranslate {{tag.title}}
   span.edit(*ngIf="edit", (click)="editTag.emit()") Edit
   .info-cntnr([ngbCollapse]="tag.isCollapsed", *ngIf="tag.description")
