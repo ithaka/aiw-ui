@@ -12,7 +12,7 @@ import { AppConfig } from '../../app.service';
 
 @Component({
   selector: 'ang-search-modal',
-  templateUrl: 'search-modal.component.html',
+  templateUrl: 'search-modal.component.pug',
   styleUrls: [ 'search-modal.component.scss' ]
 })
 export class SearchModal implements OnInit {
