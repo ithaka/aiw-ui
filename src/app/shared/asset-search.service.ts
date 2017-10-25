@@ -146,6 +146,10 @@ export class AssetSearchService {
     // final page may not contain exactly 24, 48, or 72 results, so get the exact ammount for the final page
     if ((START_INDEX + pageSize) > MAX_RESULTS_COUNT) {
       pageSize = MAX_RESULTS_COUNT - START_INDEX - 1 // minus 1 because pagination for search starts at 0
+      // Don't let pageSize drop below 0, Solr will actually return assets!
+      if (pageSize < 0) {
+        pageSize = urlParams.size
+      }
     }
 
     let query = {
