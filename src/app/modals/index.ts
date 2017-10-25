@@ -13,3 +13,4 @@ export * from './confirm-modal/confirm-modal.component';
 export * from './session-expire/session-expire.component';
 export * from './upload-images/upload-images.component';
 export * from './edit-personal-collection/edit-personal-collection.component';
+export * from './register-jstor-modal/register-jstor-modal.component';

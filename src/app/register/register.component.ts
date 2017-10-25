@@ -25,6 +25,8 @@ export class RegisterComponent implements OnInit {
     hasJstor?: boolean
   } = {};
 
+  private showJstorModal: boolean = false
+
   constructor(
     private _auth: AuthService,
     private _router: Router,
@@ -153,5 +155,13 @@ export class RegisterComponent implements OnInit {
         this._router.navigate(['/home']);
       }
     }
+  }
+
+  /**
+   * Closes JSTOR modal
+   */
+  private closeJstorModal(command) {
+    // Hide modal
+    this.showJstorModal = false;
   }
 }

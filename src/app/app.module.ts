@@ -59,22 +59,23 @@ import { ImageGroupPage, PptModalComponent } from './image-group-page';
 import { Login } from './login';
 import { NoContent } from './no-content';
 import { RegisterComponent } from './register/register.component';
-import { 
-  LoginReqModal, 
-  SearchModal, 
-  NewIgModal, 
-  ShareLinkModal, 
+import {
+  LoginReqModal,
+  SearchModal,
+  NewIgModal,
+  ShareLinkModal,
   DownloadLimitModal,
-  UploadImagesModal, 
+  UploadImagesModal,
   EditPersonalCollectionModal,
-  AddToGroupModal, 
-  DeleteIgModal, 
-  NoIgModal, 
-  AccessDeniedModal, 
+  AddToGroupModal,
+  DeleteIgModal,
+  NoIgModal,
+  AccessDeniedModal,
   PwdResetModal,
-  ShareIgLinkModal, 
+  ShareIgLinkModal,
   ConfirmModal,
-  SessionExpireModal
+  SessionExpireModal,
+  RegisterJstorModal
 } from './modals';
 import { TitleService } from './shared/title.service'
 import { GeneralSearchComponent } from './browse-page/browse-groups/general-search.component'
@@ -161,6 +162,7 @@ const APP_PROVIDERS = [
     PptModalComponent,
     PwdResetModal,
     RegisterComponent,
+    RegisterJstorModal,
     SearchComponent,
     SearchModal,
     SearchPage,
@@ -201,7 +203,7 @@ const APP_PROVIDERS = [
 })
 export class AppModule {
   constructor(public appRef: ApplicationRef, private router: Router, private _satellite: AnalyticsService) {
-   
+
     // Track page changes with Adobe Analytics
     router.events.subscribe((val: NavigationEnd) => {
       // If this is a different page, report it!
