@@ -315,7 +315,9 @@
       "EMAIL_INSTITUTION": "Email your institutional contact",
       "EMAIL_ARTSTOR": "Email Artstor",
       "WEBINAR": "Sign up for an Artstor webinar",
-      "SURVEY": "Take a survey: Tell us what you think!"
+      "SURVEY": "Take a survey: Tell us what you think!",
+      "SAHARA_QUESTIONS": "For collection, contribution &amp; data questions, please email SAHARA.",
+      "ARTSTOR_QUESTIONS": "For functionality, technology &amp; tool questions, please email Artstor."
     },
     "LINKS":{
       "ADVNC_SRCH": "Advanced Search",

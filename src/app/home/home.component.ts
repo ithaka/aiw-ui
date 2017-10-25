@@ -42,6 +42,7 @@ export class Home implements OnInit, OnDestroy {
   private browseSec: any = {}
   private showHomeSSC: boolean = false
   private showHomeAd: boolean = false
+  private siteID: string = ""
 
   // TypeScript public modifiers
   constructor(
@@ -63,6 +64,7 @@ export class Home implements OnInit, OnDestroy {
     this.browseSec = this._appConfig.config.homeBrowseSec
     this.showHomeSSC = this._appConfig.config.showHomeSSC
     this.showHomeAd = this._appConfig.config.showHomeAd
+    this.siteID = this._appConfig.config.siteID
   }
 
   ngOnInit() {
