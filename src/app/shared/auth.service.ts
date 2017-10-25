@@ -228,7 +228,9 @@ export class AuthService implements CanActivate {
       let header = new Headers({ 'Content-Type': 'application/x-www-form-urlencoded' }); // ... Set content type to JSON
       let options = new RequestOptions({ headers: header, withCredentials: true });
 
+      // Clear local user object, and other settings
       this.clearStorage();
+
       return this.http
           .post(this.getUrl() + '/logout', {}, options)
           .toPromise()
@@ -478,6 +480,7 @@ export class AuthService implements CanActivate {
         (res)  => {
           try {
             let data = res.json() || {};
+            // User has access!
             if (data.status === true) {
               // User is authorized - if you want to check ipAuth then you can tell on the individual route by user.isLoggedIn = false
               let user = data.user;
@@ -485,6 +488,11 @@ export class AuthService implements CanActivate {
                 user.isLoggedIn = true
               }
               this.saveUser(user);
+            }
+            // User does not have access!
+            if (data.status === false) {
+              // Clear local object, if still around
+              this.clearStorage()
             }
             return data;
           } catch (err) {
