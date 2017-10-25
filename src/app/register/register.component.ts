@@ -42,8 +42,8 @@ export class RegisterComponent implements OnInit {
       role: [null, Validators.required],
       dept: [null, Validators.required],
       age: [true, Validators.requiredTrue],
-      info: true,
-      survey: true
+      info: false,
+      survey: false
     }, { validator: Validators.compose([ this.passwordsEqual, this.emailsEqual ])});
   }
 

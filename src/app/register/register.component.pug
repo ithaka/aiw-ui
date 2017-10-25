@@ -64,7 +64,6 @@ nav-menu
                   | {{ 'REGISTER.SURVEY_PROMPT' | translate }}
               .has-danger(*ngIf="submitted && registerForm.controls['age'].hasError('required')")
                 p#errAgeRequired.form-control-feedback {{ 'REGISTER.ERRORS.AGE_REQUIRED' | translate}}
-            p([innerHtml]="'REGISTER.PRIVACY_DISCLAIMER' | translate")
             p By using Artstor Digital Library, I agree to the
               = " "
               a#linkTermsAndConditions.link(href="http://www.artstor.org/terms", tabindex="0") Terms
@@ -74,6 +73,14 @@ nav-menu
                 p#errDuplicateUser.form-control-feedback(*ngIf="serviceErrors.duplicate", [innerHtml]="'REGISTER.ERRORS.EMAIL_DUPLICATE' | translate")
                 p#errJstorUser.form-control-feedback(*ngIf="serviceErrors.hasJstor", [innerHtml]="'REGISTER.ERRORS.ALREADY_JSTOR' | translate")
           br
+          p
+            a.link(href="http://www.artstor.org/privacy-policy", tabindex="0") Privacy Policy
+            = " "
+            | |
+            = " "
+            a.link(href="http://www.artstor.org/form/contact-us", tabindex="0") Contact Us
+            br
+            | {{ 'REGISTER.PRIVACY_DISCLAIMER' | translate }}
           | Already registered?
           = " "
           a#linkLoginResetModal.link([routerLink]="['/login']", tabindex="1") Log in
