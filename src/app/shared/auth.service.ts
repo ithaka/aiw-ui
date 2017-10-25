@@ -186,6 +186,9 @@ export class AuthService implements CanActivate {
      * - Refreshs AccessToken with IAC
      */
     const userInfoInterval = 15*1000*60*60
+    // Run on Init
+    this.refreshUserSession()
+    // Run every X mins
     setInterval(() => {
       this.refreshUserSession()
     }, userInfoInterval)
