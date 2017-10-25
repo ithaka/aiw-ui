@@ -6,6 +6,7 @@ import { Angulartics2 } from 'angulartics2';
 
 import { AuthService } from './../shared';
 import { AnalyticsService } from '../analytics.service';
+import { USER_ROLES, USER_DEPTS } from './user-roles.ts';
 
 @Component({
   selector: 'ang-register-page',
@@ -53,12 +54,17 @@ export class RegisterComponent implements OnInit {
     }
 
     // Gets the roles and departments for the select controls
-    this._auth.getUserRoles()
-      .take(1)
-      .subscribe((data) => {
-        this.userDepts = data.deptArray;
-        this.userRoles = data.roleArray;
-      });
+    // this._auth.getUserRoles()
+    //   .take(1)
+    //   .subscribe((data) => {
+    //     this.userDepts = data.deptArray;
+    //     this.userRoles = data.roleArray;
+    //   });
+    //
+    // Issues with unauthorized access to the service, and the fact that the data NEVER changes, led us to hardcode these values:
+    this.userDepts = USER_DEPTS
+    this.userRoles = USER_ROLES
+
     this._analytics.setPageValues('register', '')
   } // OnInit
 
