@@ -41,7 +41,8 @@ export const WLV_ARTSTOR = {
     featuredCollection: "HOME.FEATURED",
     showHomeBlog: true,
     showHomeSSC: true,
-    showHomeAd: true
+    showHomeAd: true,
+    showArtstorCurated: true
 }
 
 export const WLV_SAHARA = {
@@ -78,5 +79,6 @@ export const WLV_SAHARA = {
     },
     showHomeBlog: false,
     showHomeSSC: false,
-    showHomeAd: false
+    showHomeAd: false,
+    showArtstorCurated: false
 }

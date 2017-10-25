@@ -7,6 +7,7 @@ import { AnalyticsService } from './../../analytics.service'
 import { Tag } from './../tag'
 import { TagFiltersService } from './tag-filters.service'
 import { TitleService } from '../../shared/title.service'
+import { AppConfig } from '../../app.service';
 
 @Component({
   selector: 'ang-browse-groups',
@@ -14,6 +15,8 @@ import { TitleService } from '../../shared/title.service'
   styleUrls: [ './../browse-page.component.scss' ]
 })
 export class BrowseGroupsComponent implements OnInit {
+  showArtstorCurated: boolean = true
+
   constructor(
     private _router: Router,
     private _assets: AssetService,
@@ -22,8 +25,11 @@ export class BrowseGroupsComponent implements OnInit {
     private _auth: AuthService,
     private _analytics: AnalyticsService,
     private _title: TitleService,
-    private route: ActivatedRoute
-  ) { }
+    private route: ActivatedRoute,
+    private _appConfig: AppConfig
+  ) {
+    this.showArtstorCurated = _appConfig.config.showArtstorCurated
+  }
 
   private subscriptions: Subscription[] = []
 
@@ -123,10 +129,12 @@ export class BrowseGroupsComponent implements OnInit {
       level: 'institution'
     })
 
-    this.browseMenuArray.push({
-      label: 'Artstor Curated',
-      level: 'public'
-    })
+    if (this.showArtstorCurated) {
+      this.browseMenuArray.push({
+        label: 'Artstor Curated',
+        level: 'public'
+      })
+    }
 
     if (this._auth.getUser() && this._auth.getUser().isLoggedIn) {
       this.browseMenuArray.push({
