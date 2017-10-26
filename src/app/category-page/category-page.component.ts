@@ -53,20 +53,6 @@ export class CategoryPage implements OnInit, OnDestroy {
 
         this.allowSearchInRes = routeParams.browseType && !routeParams.browseType.match(/260|250|103/)
 
-        /**
-         * Due to legacy services, the asset count is passed in the Category Name
-         * And nowhere else! What fun... Let's pull it out of there.
-         */
-        let name = routeParams['name'];
-        if (name && name.match(/\d+$/)){
-          this.assetCount = name.match(/\d+$/)[0];
-          name = name.replace(/\d+$/,'');
-        }
-        this.catName = name;
-
-        // Set page title
-        this._title.setSubtitle(this.catName)
-
         let params = Object.assign({}, routeParams);
         // If a page number isn't set, reset to page 1!
         if (!params['page']){
@@ -92,6 +78,24 @@ export class CategoryPage implements OnInit, OnDestroy {
             .catch((error) => {
               console.error(error);
             });
+
+          // Get Category data
+          this.getCategoryData(this.catId)
+          .then((data) => {
+
+            if (data) {
+              this.catName = data.categoryName;
+              this.assetCount = data.objCount;
+              // Set page title
+              this._title.setSubtitle(this.catName);
+            } else {
+              // no data
+            }
+
+          })
+          .catch((error) => {
+            console.error(error);
+          });
         }
       })
     );// End push to subscription
@@ -124,6 +128,24 @@ export class CategoryPage implements OnInit, OnDestroy {
           .toPromise()
           .then(this._auth.extractData);
   }
+
+  /**
+  * Get title for a Category
+  * @param catId The Category ID
+  */
+  private getCategoryData(catId: string) {
+    let options = new RequestOptions({ withCredentials: true });
+
+    // Can be removed once region specific ids are no longer used
+    if (catId.indexOf('103') == 1) {
+      catId = catId.slice(1)
+    }
+
+    return this.http
+        .get(this._auth.getUrl() + '/categories/' + catId, options)
+        .toPromise()
+        .then(this._auth.extractData);
+}
 
   ngOnDestroy() {
     this.subscriptions.forEach((sub) => { sub.unsubscribe(); });
