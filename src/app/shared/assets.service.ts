@@ -891,64 +891,6 @@ export class AssetService {
     }
 
     /**
-     * Search assets service
-     * @param term          String to search for.
-     * @param filters       Array of filter objects (with filterGroup and filterValue properties)
-     * @param sortIndex     An integer representing a type of sort.
-     * @param dateFacet     Object with the dateFacet values
-     * @returns       Returns an object with the properties: thumbnails, count, altKey, classificationFacets, geographyFacets, minDate, maxDate, collTypeFacets, dateFacets
-     */
-    private search(term: string, sortIndex) {
-        let keyword = encodeURIComponent(term);
-        let options = new RequestOptions({ withCredentials: true });
-        let startIndex = ((this.urlParams.page - 1) * this.urlParams.size) + 1;
-        let thumbSize = 1;
-        let categoryId = this.urlParams['categoryId'];
-        let type = categoryId ? 2 : 6;
-        let colTypeIds = '';
-        let collIds = categoryId ? encodeURIComponent(categoryId) : encodeURIComponent(this.urlParams['coll']);
-        let classificationIds = '';
-        let geographyIds = '';
-
-        let earliestDate = '';
-        let latestDate = '';
-
-        let filters = this._filters.getApplied();
-        // To-do: break dateObj out of available filters
-        let dateFacet = this._filters.getAvailable()['dateObj'];
-
-        if(dateFacet && dateFacet.modified){
-            earliestDate = dateFacet.earliest.date;
-            earliestDate = ( dateFacet.earliest.era == 'BCE' ) ? ( parseInt(earliestDate) * -1 ).toString() : earliestDate;
-
-            latestDate = dateFacet.latest.date;
-            latestDate = ( dateFacet.latest.era == 'BCE' ) ? ( parseInt(latestDate) * -1 ).toString() : latestDate;
-        }
-
-        for(var i = 0; i < filters.length; i++){ // Applied filters
-            if(filters[i].filterGroup === 'collTypes'){ // Collection Types
-                colTypeIds = filters[i].filterValue;
-            }
-            if(filters[i].filterGroup === 'classification'){ // Classification
-                if(classificationIds != ''){
-                    classificationIds += ',';
-                }
-                classificationIds += filters[i].filterValue;
-            }
-            if(filters[i].filterGroup === 'geography'){ // Geography
-                if(geographyIds != ''){
-                    geographyIds += ',';
-                }
-                geographyIds += filters[i].filterValue;
-            }
-        }
-
-        return this.http
-            .get(this._auth.getUrl(true) + '/search/' + type + '/' + startIndex + '/' + this.urlParams.size + '/' + sortIndex + '?' + 'type=' + type + '&kw=' + keyword + '&origKW=' + keyword + '&geoIds=' + geographyIds + '&clsIds=' + classificationIds + '&collTypes=' + colTypeIds + '&id=' + (collIds.length > 0 ? collIds : 'all') + '&name=All%20Collections&bDate=' + earliestDate + '&eDate=' + latestDate + '&dExact=&order=0&isHistory=false&prGeoId=&tn=1', options);
-
-    }
-
-    /**
      * Wrapper function for HTTP call to get Image Groups. Used by browse component
      * @returns Chainable promise containing Image Groups data
      */
