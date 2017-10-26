@@ -15,7 +15,7 @@
           .pb-3
             label Image URL
             .value
-              textarea#copyURL readonly {{ shareLink }}
+              textarea#copyURL(readonly) {{ shareLink }}
             .copy-clipboard((click)="copyTexttoClipBoard('copyURL')")
               | Copy to Clipboard
             .copy-status-msg {{ copyURLStatusMsg }}
