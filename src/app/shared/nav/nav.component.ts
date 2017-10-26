@@ -41,13 +41,15 @@ export class Nav implements OnInit, OnDestroy {
     this.subscriptions.push(
       this._router.events.subscribe(e => {
         if (e instanceof NavigationEnd && (e.url != '/login') && (e.url.split('/')[1] != 'printpreview') && (e.url.split('/')[1] != 'assetprint')) {
-            this.showLoginPanel = true;
-            // Get institutional information if showing user info
-            this.getInstitutionalInfo()
+            this.showLoginPanel = true
+            // Get institutional information if showing user info and Institution object empty
+            if (JSON.stringify(this.institutionObj) === JSON.stringify({})){
+              this.getInstitutionalInfo()
+            }
         } else {
-            this.showLoginPanel = false;
+            this.showLoginPanel = false
         }
-        this.user = this._auth.getUser();
+        this.user = this._auth.getUser()
       })
     );
 
@@ -56,6 +58,18 @@ export class Nav implements OnInit, OnDestroy {
       this._auth.showUserInactiveModal.subscribe( value => {
         this.showinactiveUserLogoutModal = value;
       })
+    );
+
+    // Subscribe to Institution object updates
+    this.subscriptions.push(
+      this._auth.getInstitution().subscribe(
+        (institutionObj) => {
+          this.institutionObj = institutionObj;
+        },
+        (err) => {
+          console.log("Nav failed to load Institution information", err)
+        }
+      )
     );
   }
 
@@ -67,17 +81,6 @@ export class Nav implements OnInit, OnDestroy {
    * Loads User or IP auth information, and updates the appropriate objects
    */
   getInstitutionalInfo() {
-    this.subscriptions.push(
-      this._auth.getInstitution().subscribe(
-        (institutionObj) => {
-          this.institutionObj = institutionObj;
-        },
-        (err) => {
-          console.log("Nav failed to load Institution information", err)
-        }
-      )
-    );
-
     // Trigger call to get fresh institutional information
     this._assets.getUserInstitution()
       .then((data) => {
