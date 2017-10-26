@@ -232,7 +232,7 @@ export class AuthService implements CanActivate {
       this.clearStorage();
 
       return this.http
-          .post(this.getUrl() + '/logout', {}, options)
+          .post(this.getUrl(true) + '/logout', {}, options)
           .toPromise()
           .catch(function(err) {
               // error handling
