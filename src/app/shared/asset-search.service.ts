@@ -86,6 +86,8 @@ export class AssetSearchService {
       ],
     };
 
+    let filterArray = []
+
     // if not sahara push this facet
     if (this.showCollectionType) {
       query.facet_fields.push({
@@ -94,6 +96,17 @@ export class AssetSearchService {
         "limit" : 10
       })
     }
+
+    /**
+     * Check for WLVs Institution filter
+     * - WLVs filter by contributing institution id
+     */
+    let institutionFilters: number[] = this._app.getWLVConfig().contributingInstFilters
+    for (let i = 0; i < institutionFilters.length; i++) {
+      filterArray.push("contributinginstitutionid:" + institutionFilters[i])
+    }
+
+    query["filter_query"] = filterArray
 
     return this.http.post(this._auth.getSearchUrl(), query, options)
       .map(res => {
