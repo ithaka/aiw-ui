@@ -44,6 +44,7 @@ import { AssetGrid, ThumbnailComponent } from './asset-grid';
 import { Home } from './home';
 import { SearchPage } from './search-page';
 import { CollectionPage } from './collection-page';
+import { PCollectionPage } from './pcollection-page';
 import { CategoryPage } from './category-page';
 import { ImageGroupPPPage } from './image-group-pp-page';
 import { AssetPPPage } from './asset-pp-page';
@@ -137,6 +138,7 @@ const APP_PROVIDERS = [
     ClickOutsideDirective,
     ClusterPage,
     CollectionPage,
+    PCollectionPage,
     ConfirmModal,
     DeleteIgModal,
     SessionExpireModal,

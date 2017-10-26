@@ -4,6 +4,7 @@ import { Routes, RouterModule } from '@angular/router'
 import { Home } from './home'
 import { SearchPage } from './search-page'
 import { CollectionPage } from './collection-page'
+import { PCollectionPage } from './pcollection-page';
 import { CategoryPage } from './category-page'
 import { ImageGroupPPPage } from './image-group-pp-page'
 import { AssetPPPage } from './asset-pp-page'
@@ -34,6 +35,8 @@ export const ROUTES: Routes = [
   { path: 'search', component: SearchPage, pathMatch: 'full', canActivate:[AuthService] },
   { path: 'collection/:colId', component: CollectionPage, canActivate:[AuthService] },
   { path: 'collection', component: CollectionPage, canActivate:[AuthService] },
+  { path: 'pcollection/:colId', component: PCollectionPage, canActivate:[AuthService] },
+  { path: 'pcollection', component: PCollectionPage, canActivate:[AuthService] },
   { path: 'printpreview/:igId', component: ImageGroupPPPage, canActivate:[AuthService] },
   { path: 'assetprint/:assetId', component: AssetPPPage },
   { path: 'category/:catId', component: CategoryPage, canActivate:[AuthService] },

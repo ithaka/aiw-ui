@@ -1,0 +1,60 @@
+
+@import '../../../node_modules/bootstrap/scss/mixins/_gradients.scss';
+
+.thumbnail-shelf {
+    border-bottom: 1px solid #bebebe;
+    text-align: center;
+    // margin: 20px;
+    margin-bottom: 20px;
+    padding-top: 20px;
+
+    background: #f7f7f7;
+    // @include linear-gradient(to bottom, #ffffff, #f7f7f7);
+    @include gradient-y(#ffffff, #f7f7f7, 0%, 100%);
+}
+
+img.collection-thumb {
+    max-height: 100px;
+    width: auto;
+}
+
+.page__description {
+    overflow: hidden;
+    // transition: max-height 1s linear;
+
+    &.limit {
+        max-height: 80px;
+        display: -webkit-box;
+        text-overflow: ellipsis;
+        -webkit-line-clamp: 4;
+        -webkit-box-orient: vertical;
+    }
+}
+
+.expander {
+    text-align: left;
+    position: relative;
+    z-index: 1000;
+    line-height: 28px;
+    margin-top: -4.3em;
+    padding-top: 20px;
+    
+    &.collapsed {
+        background-image: linear-gradient(to bottom, transparent 0%, white 50%);
+    }
+}
+
+// For generate image URL Modal
+#accessDeniedModal{ 
+    .modal-body{
+        font-family: 'Graphik Web', sans-serif;
+
+        .hdr{
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 10px;
+        }
+    }
+    .close-icon{
+        cursor: pointer;
+    }
+}
