@@ -9,7 +9,8 @@ import { AnalyticsService } from '../analytics.service';
 
 @Component({
   selector: 'ang-register-page',
-  templateUrl: 'register.component.pug'
+  templateUrl: 'register.component.pug',
+  styleUrls: ['./register.component.scss']
 })
 export class RegisterComponent implements OnInit {
 
