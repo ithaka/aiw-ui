@@ -10,7 +10,8 @@ import { USER_ROLES, USER_DEPTS } from './user-roles.ts';
 
 @Component({
   selector: 'ang-register-page',
-  templateUrl: 'register.component.pug'
+  templateUrl: 'register.component.pug',
+  styleUrls: ['./register.component.scss']
 })
 export class RegisterComponent implements OnInit {
 
@@ -25,6 +26,8 @@ export class RegisterComponent implements OnInit {
     duplicate?: boolean,
     hasJstor?: boolean
   } = {};
+
+  private showJstorModal: boolean = false
 
   constructor(
     private _auth: AuthService,
@@ -159,5 +162,13 @@ export class RegisterComponent implements OnInit {
         this._router.navigate(['/home']);
       }
     }
+  }
+
+  /**
+   * Closes JSTOR modal
+   */
+  private closeJstorModal(command) {
+    // Hide modal
+    this.showJstorModal = false;
   }
 }

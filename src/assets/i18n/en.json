@@ -33,6 +33,8 @@
   "REGISTER": {
     "REGISTER_HEADING": "Register for a new Artstor account",
     "REGISTER_DESCRIPTION": "Registering for an account lets you download images, save them to groups, create presentations, and share them with other Artstor users.",
+    "REGISTER_JSTOR_MESSAGE": "You can now use your JSTOR account to register for Artstor.",
+    "EMAIL_HELP_TXT": "Use your JSTOR account",
     "ERRORS": {
       "EMAIL_REQUIRED": "Please enter your email address",
       "EMAIL_INVALID": "Invalid email format",
@@ -53,6 +55,12 @@
     "SURVEY_PROMPT": "Yes, send me surveys",
     "PRIVACY_DISCLAIMER": "You may unsubscribe at any time by clicking on the provided link on any marketing message.",
     "FIELDS_REQUIRED": "Please note that all form fields are required."
+  },
+  "REGISTER_JSTOR_MODAL": {
+    "TITLE": "Use your JSTOR account",
+    "MESSAGE_1": "Please enter your JSTOR email and password to register.",
+    "MESSAGE_2": "Artstor access will be added to your JSTOR account.",
+    "FORGOT": "(Forgot your password?)"
   },
   "ACCOUNT": {
     "CHANGE_PASS": {
