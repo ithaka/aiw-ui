@@ -48,7 +48,7 @@ export class PCollectionPage implements OnInit, OnDestroy {
   ngOnInit() {
     this.subscriptions.push(
       this.route.params.subscribe((routeParams) => {
-        this.colId = routeParams["colId"];
+        this.colId = routeParams["pcolId"];
         // Old links pass a name into the ID, just use that as a search term instead
         if (!/^[0-9]+$/.test(this.colId)) {
           this.http.get('/assets/collection-links.json')

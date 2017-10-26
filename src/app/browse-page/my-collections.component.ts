@@ -104,13 +104,13 @@ export class MyCollectionsComponent implements OnInit {
       .then((res) => {
           if(res.pcCollection && res.pcCollection.collectionid){
             // we made this tag always expandable
-            let colTag = new Tag(res.pcCollection.collectionid, res.pcCollection.collectionname, true, null, { label: "collection", folder: true }, true);
+            let colTag = new Tag(res.pcCollection.collectionid, res.pcCollection.collectionname, true, null, { label: "pcollection", folder: true }, true);
             this.tags.push(colTag);
           }
           if(res.privateCollection && (res.privateCollection.length > 0)){
             for (let colObj of res.privateCollection){
                 // we made this tag always expandable
-                let privTag = new Tag(colObj.collectionid, colObj.collectionname, true, null, { label: "collection", folder: true }, true);
+                let privTag = new Tag(colObj.collectionid, colObj.collectionname, true, null, { label: "pcollection", folder: true }, true);
                 this.tags.push(privTag);
             }
           }

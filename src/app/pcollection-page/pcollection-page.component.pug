@@ -1,15 +1,15 @@
 nav-menu([allowSelectAll]="true")
 #mainContent.container.main-content(tabindex="-1")
   .row
-    .col-sm-3
-      .mobile--hide
-        h1 Filtered Search
-        ang-asset-filters
-    .col-sm-9
+    //- .col-sm-3
+    //-   .mobile--hide
+    //-     h1 Filtered Search
+    //-     ang-asset-filters
+    .col-12
       h1.mobile--show Results
       .row.no-gutters.row--search-bar
         .col-md-7
-          ang-search([allowSearchInRes]="true")
+          ang-search([allowSearchInRes]="false")
       .row
         .col-sm-12
           h3#pageType Browse Personal Collection

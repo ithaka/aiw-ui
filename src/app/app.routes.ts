@@ -35,7 +35,7 @@ export const ROUTES: Routes = [
   { path: 'search', component: SearchPage, pathMatch: 'full', canActivate:[AuthService] },
   { path: 'collection/:colId', component: CollectionPage, canActivate:[AuthService] },
   { path: 'collection', component: CollectionPage, canActivate:[AuthService] },
-  { path: 'pcollection/:colId', component: PCollectionPage, canActivate:[AuthService] },
+  { path: 'pcollection/:pcolId', component: PCollectionPage, canActivate:[AuthService] },
   { path: 'pcollection', component: PCollectionPage, canActivate:[AuthService] },
   { path: 'printpreview/:igId', component: ImageGroupPPPage, canActivate:[AuthService] },
   { path: 'assetprint/:assetId', component: AssetPPPage },
