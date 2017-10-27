@@ -45,6 +45,9 @@ export class AuthService implements CanActivate {
   private institutionObjSource: BehaviorSubject<any> = new BehaviorSubject(this.institutionObjValue);
   private currentInstitutionObj: Observable<any> = this.institutionObjSource.asObservable();
 
+  private userSource: BehaviorSubject<any> = new BehaviorSubject({});
+  public currentUser: Observable<any> = this.userSource.asObservable();
+
   private idleState: string = 'Not started.';
   private idleUtil: IdleWatcherUtil = new IdleWatcherUtil(); // Idle watcher, session timeout values are abstracted to a utility
   public showUserInactiveModal: Subject<boolean> = new Subject(); //Set up subject observable for showing inactive user modal
@@ -134,7 +137,7 @@ export class AuthService implements CanActivate {
       this.hostname = '//sahara.beta.stage.artstor.org'
     }
     if (document.location.hostname.indexOf('sahara.prod.artstor.org') > -1) {
-      this.hostname = '//library.artstor.org'
+      this.hostname = '//sahara.prod.artstor.org/'
     }
 
     // Local routing should point to full URL
@@ -180,12 +183,18 @@ export class AuthService implements CanActivate {
 
     this.resetIdleWatcher();
 
+    // Initialize user object from localstorage
+    this.userSource.next(this.getUser())
+
     /**
      * User Access Heartbeat
      * - Poll /userinfo every 15min
      * - Refreshs AccessToken with IAC
      */
     const userInfoInterval = 15*1000*60*60
+    // Run on Init
+    this.refreshUserSession()
+    // Run every X mins
     setInterval(() => {
       this.refreshUserSession()
     }, userInfoInterval)
@@ -225,9 +234,11 @@ export class AuthService implements CanActivate {
       let header = new Headers({ 'Content-Type': 'application/x-www-form-urlencoded' }); // ... Set content type to JSON
       let options = new RequestOptions({ headers: header, withCredentials: true });
 
+      // Clear local user object, and other settings
       this.clearStorage();
+
       return this.http
-          .post(this.getUrl() + '/logout', {}, options)
+          .post(this.getUrl(true) + '/logout', {}, options)
           .toPromise()
           .catch(function(err) {
               // error handling
@@ -249,6 +260,24 @@ export class AuthService implements CanActivate {
           encodedString += key + '=' + encodeURIComponent(obj[key]);
       }
       return encodedString.replace(/%20/g, '+');
+  }
+
+  /**
+   * Wrapper function for HTTP call to get user institution. Used by nav component
+   * @returns Chainable promise containing collection data
+   */
+  public refreshUserInstitution() {
+      let options = new RequestOptions({ withCredentials: true })
+      // Returns all of the collections names
+      return this.http
+          .get(this.getUrl() + '/v2/institution', options)
+          .toPromise()
+          .then(this.extractData)
+          .then((data) => {
+              this._storage.set('institution', data);
+              data && this.setInstitution(data);
+              return data;
+          });
   }
 
   public getInstitution(): Observable<any> {
@@ -362,8 +391,12 @@ export class AuthService implements CanActivate {
   public saveUser(user: any) {
     //should have session timeout, username, baseProfileId, typeId
     this._storage.set('user', user);
+    // Update observable
+    this.userSource.next(user)
     // Set analytics object
     this._analytics.setUserInstitution(user.institutionId ? user.institutionId : '')
+    // Refresh institution object
+    this.refreshUserInstitution()
   }
 
   /**
@@ -371,6 +404,20 @@ export class AuthService implements CanActivate {
    */
   public getUser() : any {
       return this._storage.get('user') ? this._storage.get('user') : {};
+  }
+  
+  /**
+   * Gets pcEnabled from local storage
+   */
+  public getpcEnabled(): boolean {
+      return this._storage.get('pcEnabled') ? this._storage.get('pcEnabled') : false;
+  }
+
+  /**
+   * Sets pcEnabled in local storage
+   */
+  public setpcEnabled(pcEnabled: boolean): void {
+    this._storage.set('pcEnabled', pcEnabled);
   }
 
   /** Stores an object in local storage for you - your welcome */
@@ -425,7 +472,7 @@ export class AuthService implements CanActivate {
                 user.isLoggedIn = true
               }
 
-              this.saveUser(user);
+              this.saveUser(user)
               return true;
             } else {
               // store the route so that we know where to put them after login!
@@ -461,6 +508,8 @@ export class AuthService implements CanActivate {
         (res)  => {
           try {
             let data = res.json() || {};
+            console.log(data)
+            // User has access!
             if (data.status === true) {
               // User is authorized - if you want to check ipAuth then you can tell on the individual route by user.isLoggedIn = false
               let user = data.user;
@@ -468,6 +517,12 @@ export class AuthService implements CanActivate {
                 user.isLoggedIn = true
               }
               this.saveUser(user);
+            }
+            // User does not have access!
+            if (data.status === false) {
+              // Clear user, and trigger router canActivate
+              this.saveUser({})
+              this._router.navigate(['/login'])
             }
             return data;
           } catch (err) {

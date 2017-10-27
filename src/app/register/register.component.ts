@@ -6,10 +6,12 @@ import { Angulartics2 } from 'angulartics2';
 
 import { AuthService } from './../shared';
 import { AnalyticsService } from '../analytics.service';
+import { USER_ROLES, USER_DEPTS } from './user-roles.ts';
 
 @Component({
   selector: 'ang-register-page',
-  templateUrl: 'register.component.html'
+  templateUrl: 'register.component.pug',
+  styleUrls: ['./register.component.scss']
 })
 export class RegisterComponent implements OnInit {
 
@@ -24,7 +26,9 @@ export class RegisterComponent implements OnInit {
     duplicate?: boolean,
     hasJstor?: boolean
   } = {};
-  
+
+  private showJstorModal: boolean = false
+
   constructor(
     private _auth: AuthService,
     private _router: Router,
@@ -41,9 +45,9 @@ export class RegisterComponent implements OnInit {
       passwordConfirm: [null, Validators.required],
       role: [null, Validators.required],
       dept: [null, Validators.required],
-      age: [true, Validators.requiredTrue],
-      info: true,
-      survey: true
+      age: [false, Validators.requiredTrue],
+      info: false,
+      survey: false
     }, { validator: Validators.compose([ this.passwordsEqual, this.emailsEqual ])});
   }
 
@@ -53,12 +57,17 @@ export class RegisterComponent implements OnInit {
     }
 
     // Gets the roles and departments for the select controls
-    this._auth.getUserRoles()
-      .take(1)
-      .subscribe((data) => {
-        this.userDepts = data.deptArray;
-        this.userRoles = data.roleArray;
-      });
+    // this._auth.getUserRoles()
+    //   .take(1)
+    //   .subscribe((data) => {
+    //     this.userDepts = data.deptArray;
+    //     this.userRoles = data.roleArray;
+    //   });
+    //
+    // Issues with unauthorized access to the service, and the fact that the data NEVER changes, led us to hardcode these values:
+    this.userDepts = USER_DEPTS
+    this.userRoles = USER_ROLES
+
     this._analytics.setPageValues('register', '')
   } // OnInit
 
@@ -153,5 +162,13 @@ export class RegisterComponent implements OnInit {
         this._router.navigate(['/home']);
       }
     }
+  }
+
+  /**
+   * Closes JSTOR modal
+   */
+  private closeJstorModal(command) {
+    // Hide modal
+    this.showJstorModal = false;
   }
 }

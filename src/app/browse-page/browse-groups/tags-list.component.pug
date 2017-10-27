@@ -1,0 +1,8 @@
+h3 Tags
+  = " "
+  a.contextual-help(title="How do I use tags?", href="http://support.artstor.org/?article=tags", target="_blank") ?
+  a#groupTagsClear.link--accent.small(tabindex="", style="float:right;", (click)="_tagFilters.clearFilters();") Clear All
+.filter.filter--tag(*ngFor="let tag of _tagFilters.filters", (click)="tag.selected = !tag.selected", [class.active]="tag.selected")
+  span.notranslate {{ tag.key }} ({{ tag.doc_count }})
+  i.icon.icon-add
+  i.icon.icon-close

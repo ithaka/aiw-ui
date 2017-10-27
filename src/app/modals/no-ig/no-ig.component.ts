@@ -5,7 +5,7 @@ import { GroupService, AssetService } from './../../shared';
 
 @Component({
   selector: 'ang-no-ig-modal',
-  templateUrl: 'no-ig.component.html',
+  templateUrl: 'no-ig.component.pug',
   providers: [
     GroupService
   ]
@@ -18,7 +18,7 @@ export class NoIgModal implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    
+
   }
 
 }

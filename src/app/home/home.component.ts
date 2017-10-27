@@ -17,7 +17,7 @@ declare var initPath: string
   // Our list of styles in our component. We may add more to compose many styles together
   styleUrls: [ './home.component.scss' ],
   // Every Angular template is first compiled by the browser before Angular runs it's compiler
-  templateUrl: './home.component.html'
+  templateUrl: './home.component.pug'
 })
 export class Home implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = []
@@ -42,6 +42,7 @@ export class Home implements OnInit, OnDestroy {
   private browseSec: any = {}
   private showHomeSSC: boolean = false
   private showHomeAd: boolean = false
+  private siteID: string = ""
 
   // TypeScript public modifiers
   constructor(
@@ -63,6 +64,7 @@ export class Home implements OnInit, OnDestroy {
     this.browseSec = this._appConfig.config.homeBrowseSec
     this.showHomeSSC = this._appConfig.config.showHomeSSC
     this.showHomeAd = this._appConfig.config.showHomeAd
+    this.siteID = this._appConfig.config.siteID
   }
 
   ngOnInit() {

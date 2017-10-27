@@ -1,0 +1,11 @@
+#printable-cntnr.container-fluid(*ngIf="asset.objectId")
+  .asset-img
+    img([class.disablePointerEvents]="reorderMode", [attr.src]="_assets.makeThumbUrl(asset.imageUrl, 2)", [attr.alt]="asset.title ? 'Thumbnail of ' + asset.title : 'No title available'")
+  .disclaimer This image and the text corresponding to this image may only be used for noncommercial educational and scholarly purposes.
+  .meta-cntnr
+    h2 Image Information
+    .table
+      .meta-row.row(*ngFor="let dataObj of metaArray; let isLast = last", [ngClass]="{'last-row': isLast }")
+        .col-md-4.lbl {{ dataObj.fieldName }}
+        .col-md-8
+          div(*ngFor="let value of dataObj.fieldValue", [innerHTML]="value")

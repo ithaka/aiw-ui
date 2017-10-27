@@ -21,7 +21,7 @@
               button.dropdown-item([ngClass]="{ 'disable': pagination.size == 24 }", (click)="changePageSize(24)") 24
               button.dropdown-item([ngClass]="{ 'disable': pagination.size == 48 }", (click)="changePageSize(48)") 48
               button.dropdown-item([ngClass]="{ 'disable': pagination.size == 72 }", (click)="changePageSize(72)") 72
-          // View size toggles
+          //- View size toggles
           .icon-bar
             .icon--toggle((click)="largeThmbView = false", [ngClass]="{ 'active': !largeThmbView }")
               i.icon.icon-small-view
@@ -33,63 +33,59 @@
               = " "
               span([innerHtml]="formattedSearchTerm")
         .col-12.pb-3
-          // Download
+          //- Download
           li.btn.btn-link([class.disabled]="reorderMode", (click)="_ig.triggerIgDownload()", *ngIf="actionOptions.group")
             i.icon.icon-download-white
             | Download
-          // Select
+          //- Select
           li.btn.btn-link([class.disabled]="reorderMode", (click)="toggleEditMode()", [ngClass]="{'active': editMode}")
             i.icon.icon-select-white
             | Select
-          // Reorder
+          //- Reorder
           li.btn.btn-link((click)="toggleReorderMode()", [ngClass]="{'active': reorderMode}", *ngIf="actionOptions.group && actionOptions.isowner")
             i.icon.icon-reorder-white
             | Reorder
-          // Save Order
+          //- Save Order
           li.btn.btn-link(*ngIf="reorderMode", [class.disabled]="!orderChanged", (click)="saveReorder()")
             i.icon.icon-reorder-white
             | Save Order
-          // Cancel Reorder
+          //- Cancel Reorder
           li.btn.btn-link(*ngIf="reorderMode", (click)="cancelReorder()")
             i.icon.icon-close-white--round
             | Cancel Reorder
-          // Number of selected assets in edit mode
+          //- Number of selected assets in edit mode
           .selected-assets(*ngIf="editMode") {{ selectedAssets.length }} selected asset{{ selectedAssets.length > 1 ? 's' : '' }}
     .col-sm-4.col-md-4.col-lg-3.text-right.grid-pagination-bar(*ngIf="!reorderMode")
       pagination([pageObj]="pagination", (goToPage)="goToPage($event)")
-  // Thumbnail Grid
+  //- Thumbnail Grid
   .row.row--no-overflow.pb-5([ngClass]="{'edit': editMode}")
     .col-md-12.col--thumbnails.col--expanding.has-icon-overlay([ngClass]="{ 'col--expand-12' : !showFilters }")
       i.icon-lg.icon-overlay.icon-loading-large([hidden]="!isLoading")
-      // Display Thumbnails
+      //- Display Thumbnails
       #assetThumbnailsRow.row.no-gutters(*ngIf="!reorderMode")
-        .alert.alert-warning(*ngIf="!isLoading && (totalAssets == '0') && (!results || results.length < 1) && (searchError.length < 1) && (searchLimitError.length < 1)")
+        .alert.alert-warning(*ngIf="!isLoading && (totalAssets == '0') && (!results || results.length < 1) && (searchError.length < 1) && !searchLimitError")
           b Unable to find any assets
           br
           | A less specific query might be able to find what you are looking for.
-        .alert.alert-danger(*ngIf="!isLoading && (searchError.length > 0) && (searchLimitError.length < 1)")
+        .alert.alert-danger(*ngIf="!isLoading && (searchError.length > 0) && !searchLimitError")
           | {{ searchError }}
-        .alert.alert-danger(*ngIf="!isLoading && (searchError.length < 1) && (searchLimitError.length > 0)")
-          | {{ searchLimitError }}
         div([ngClass]="largeThmbView ? 'col-sm-12 col-md-6 col-lg-4' : 'col-sm-6 col-md-3 col-lg-2'", *ngFor="let asset of results")
           a.card.card--asset([attr.data-id]="asset.objectId", [ngClass]="{'selected': ( isSelectedAsset(asset) > -1 ), 'lrgThmb': largeThmbView }", [routerLink]="editMode ? ['./'] : ['/asset', asset.objectId ? asset.objectId : asset.artstorid]", [queryParams]="asset.iapFlag > 0 ? { iap: 'true' } : {}", (click)="selectAsset(asset)")
             ang-thumbnail([thumbnail]="asset", [reorderMode]="reorderMode", [editMode]="editMode", [largeThmbView]="largeThmbView")
-        .alert.alert-warning(*ngIf="!isLoading && isPartialPage && hasMaxAssetLimit")
+        .alert.alert-warning(*ngIf="!isLoading && (searchError.length < 1) && ((isPartialPage && hasMaxAssetLimit) || searchLimitError)")
           | {{ "BROWSE.WARNINGS.ADDITIONAL_RESULTS" | translate }}
-      // Sortable Thumbails
+      //- Sortable Thumbails
       #assetThumbnailsRow.row.no-gutters(*ngIf="reorderMode", dnd-sortable-container, [sortableData]="allResults")
-        .alert.alert-warning(*ngIf="!isLoading && (totalAssets == '0') && (!results || results.length < 1) && (searchError.length < 1) && (searchLimitError.length < 1)")
+        .alert.alert-warning(*ngIf="!isLoading && (totalAssets == '0') && (!results || results.length < 1) && (searchError.length < 1) && !searchLimitError")
           b Unable to find any assets
           br
           | A less specific query might be able to find what you are looking for.
-        .alert.alert-danger(*ngIf="!isLoading && (searchError.length > 0) && (searchLimitError.length < 1)")
+        .alert.alert-danger(*ngIf="!isLoading && (searchError.length > 0) && !searchLimitError")
           | {{ searchError }}
-        .alert.alert-danger(*ngIf="!isLoading && (searchError.length < 1) && (searchLimitError.length > 0)")
-          | {{ searchLimitError }}
         .col-sm-4.col-md-2.col-lg-1.draggable(*ngFor="let asset of results; let i = index", dnd-sortable, [dragEnabled]="reorderMode && !isLoading", [sortableIndex]="i", (onDragEnd)="orderChanged = true")
           .card.card--asset([ngClass]="{ 'lrgThmb': largeThmbView }")
             ang-thumbnail([thumbnail]="asset", [reorderMode]="reorderMode", [editMode]="editMode", [largeThmbView]="largeThmbView")
-        .alert.alert-warning(*ngIf="!isLoading && isPartialPage && hasMaxAssetLimit")
+        .alert.alert-warning(*ngIf="!isLoading && (searchError.length < 1) && ((isPartialPage && hasMaxAssetLimit) || searchLimitError)")
           | {{ "BROWSE.WARNINGS.ADDITIONAL_RESULTS" | translate }}
   .row
     .mobile--hide.grid-tool-bar([ngClass]="[ reorderMode ? 'col-12' : 'col-sm-8 col-md-8 col-lg-9']")

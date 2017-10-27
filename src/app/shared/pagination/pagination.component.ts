@@ -3,7 +3,7 @@ import { EventEmitter } from '@angular/common/src/facade/async';
 
 @Component({
   selector: 'pagination',
-  templateUrl: './pagination.component.html',
+  templateUrl: './pagination.component.pug',
   styleUrls: ['./pagination.component.scss']
 })
 export class PaginationComponent implements OnInit {

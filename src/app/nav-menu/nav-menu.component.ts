@@ -11,7 +11,7 @@ import { AppConfig } from '../app.service';
 
 @Component({
   selector: 'nav-menu',
-  templateUrl: './nav-menu.component.html',
+  templateUrl: './nav-menu.component.pug',
   styleUrls: [ './nav-menu.component.scss' ],
 })
 export class NavMenu implements OnInit, OnDestroy {
@@ -43,26 +43,27 @@ export class NavMenu implements OnInit, OnDestroy {
 
   @Output() refreshIG: EventEmitter<any> = new EventEmitter();
 
-  private user: any = {};
-  private institutionObj: any = {};
-  
-  private mobileCollapsed: boolean = true;
-  private selectedAssets: any[] = [];
-  private subscriptions: Subscription[] = [];
-  
-  private showImageGroupModal: boolean = false;
-  private showAddToGroupModal: boolean = false;
-  private showShareIgModal: boolean = false;
+  private user: any = {}
+  private institutionObj: any = {}
 
-  private copyIG: boolean = false;
-  private editIG: boolean = false;
-  private params: any = {};
+  private mobileCollapsed: boolean = true
+  private selectedAssets: any[] = []
+  private subscriptions: Subscription[] = []
 
-  private browseOpts: any = {};
+  private showImageGroupModal: boolean = false
+  private showAddToGroupModal: boolean = false
+  private showShareIgModal: boolean = false
+  private pcEnabled: boolean = false
+
+  private copyIG: boolean = false
+  private editIG: boolean = false
+  private params: any = {}
+
+  private browseOpts: any = {}
 
   // Flag for confimation popup for deleting selected asset(s) from the IG
-  private showConfirmationModal: boolean = false;
-  
+  private showConfirmationModal: boolean = false
+
   // TypeScript public modifiers
   constructor(
     private _router: Router,
@@ -76,12 +77,13 @@ export class NavMenu implements OnInit, OnDestroy {
     private _analytics: AnalyticsService
   ) {
     this.browseOpts = this._app.config.browseOptions
+    this.pcEnabled = this._auth.getpcEnabled()
   }
-  
+
   ngOnInit() {
     this.user = this._auth.getUser()
     this.subscriptions.push(
-      this._assets.selection.subscribe( 
+      this._assets.selection.subscribe(
         selectedAssets => {
           this.selectedAssets = selectedAssets
         },
@@ -110,7 +112,7 @@ export class NavMenu implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.subscriptions.forEach((sub) => { sub.unsubscribe() })
   }
-  
+
   private printImageGroupPage(): void {
     if (this.actionOptions.group) {
       let params = this.route.snapshot.params

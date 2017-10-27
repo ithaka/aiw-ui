@@ -7,7 +7,7 @@ import { AssetService, AuthService, ImageGroup } from './../../shared';
 
 @Component({
   selector: 'ang-ig-download-modal',
-  templateUrl: 'ig-download-modal.component.html',
+  templateUrl: 'ig-download-modal.component.pug',
   styles: [`
     .modal {
       display: block;
@@ -29,24 +29,24 @@ export class PptModalComponent implements OnInit {
   private allowedDownloads: number = 0;
   private imgCount: number = 0;
 
-  private header = new Headers({ 'Content-Type': 'application/x-www-form-urlencoded' }); 
+  private header = new Headers({ 'Content-Type': 'application/x-www-form-urlencoded' });
   private defaultOptions = new RequestOptions({ withCredentials: true});
   // private defaultOptions = new RequestOptions({ headers: this.header, withCredentials: true});
 
   constructor(private _assets: AssetService, private _auth: AuthService, private _angulartics: Angulartics2, private http: Http) { }
 
   ngOnInit() {
-    
+
   }
-  
+
   private getPPT() {
     this.isLoading = true;
     // Setup PPT Download
     this.getDownloadLink(this.ig)
       .take(1)
       .subscribe(
-        (data) => { 
-          this.isLoading = false; 
+        (data) => {
+          this.isLoading = false;
           // Goal: A downlink that looks like:
           // http://mdxdv.artstor.org/thumb/imgstor/...
           if (data.path) {
@@ -55,7 +55,7 @@ export class PptModalComponent implements OnInit {
         },
         (error) => { console.error(error); this.isLoading = false; }
       );
-    
+
   }
 
   private getZip() {
@@ -64,7 +64,7 @@ export class PptModalComponent implements OnInit {
     this.getDownloadLink(this.ig, true)
       .take(1)
       .subscribe(
-        (data) => { 
+        (data) => {
           this.zipLoading = false;
           // Goal: A downlink that looks like:
           // http://mdxdv.artstor.org/thumb/imgstor/...
@@ -78,11 +78,11 @@ export class PptModalComponent implements OnInit {
 
   /** Gets the link at which the resource can be downloaded. Will be set to the "accept" button's download property */
   private getDownloadLink(group: ImageGroup, zip ?: boolean): Observable<any> {
-    let header = new Headers({ 'content-type': 'application/x-www-form-urlencoded' }); 
+    let header = new Headers({ 'content-type': 'application/x-www-form-urlencoded' });
     let options = new RequestOptions({ headers: header, withCredentials: true});
     let imgStr: string = "";
     let useLegacyMetadata: boolean = true
-    let url = this._auth.getHostname() + '/api/group/export' 
+    let url = this._auth.getHostname() + '/api/group/export'
     let format: string
     let data: any
 

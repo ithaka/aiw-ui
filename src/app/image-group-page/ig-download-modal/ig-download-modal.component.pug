@@ -1,0 +1,37 @@
+.modal.fade-in
+  .modal-dialog(role="document")
+    .modal-content
+      .modal-header
+        h4.modal-title Export/Download Guidelines
+        button.close(type="button", (click)="closeModal.emit()", aria-label="Close")
+          span(aria-hidden="true") &times;
+      .modal-body
+        p All logged in users may export/download up to
+          b  2000
+          |  images in a
+          b  120
+          |  day period. Multimedia files are not exported.
+        p Also note that, by accepting this download, you are agreeing to the
+          = " "
+          a.link(href="http://www.artstor.org/terms", name="Terms and conditions of use", target="_blank") terms and conditions of use.
+        p Would you like to proceed?
+      .modal-footer
+        button.btn.btn-secondary(type="button", (click)="closeModal.emit()") Cancel
+        a#generatePowerpointLink.btn.btn-primary(*ngIf="!downloadLink  && !isLoading", tabindex="1", (click)="getPPT()") Request PPT
+        a#downloadPowerpointLink.btn.btn-primary(*ngIf="!isLoading && downloadLink",
+          [attr.href]="downloadLink",
+          [attr.download]="downloadTitle",
+          (click)="trackDownload('PPT'); closeModal.emit()")
+          | Download PPT
+        button.btn.btn-primary(*ngIf="isLoading", disabled)
+          | Generating PPT
+          i.icon.icon-loading
+        a#generateZipLink.btn.btn-primary(*ngIf="!zipDownloadLink && !zipLoading", tabindex="1", (click)="getZip()") Request Zip
+        a#downloadZipLink.btn.btn-primary(*ngIf="!zipLoading && zipDownloadLink",
+          [attr.href]="zipDownloadLink",
+          [attr.download]="downloadTitle",
+          (click)="trackDownload('ZIP'); closeModal.emit()")
+          | Download Zip
+        button.btn.btn-primary(*ngIf="zipLoading", disabled)
+          | Generating Zip
+          i.icon.icon-loading

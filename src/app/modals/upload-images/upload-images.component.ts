@@ -7,7 +7,7 @@ import { AssetService } from './../../shared';
 @Component({
   selector: 'ang-upload-images',
   styleUrls: [ 'upload-images.component.scss' ],
-  templateUrl: 'upload-images.component.html'
+  templateUrl: 'upload-images.component.pug'
 })
 export class UploadImagesModal implements OnInit, OnDestroy {
   @Output() closeModal: EventEmitter<any> = new EventEmitter();
@@ -22,9 +22,9 @@ export class UploadImagesModal implements OnInit, OnDestroy {
   constructor(
     private _assets: AssetService
   ) {
-    
+
   }
-  
+
 
   ngOnInit() {
 
@@ -35,7 +35,7 @@ export class UploadImagesModal implements OnInit, OnDestroy {
     // };
 
     this.uploader.onWhenAddingFileFailed = (item:FileLikeObject, filter:any, options:any) => {
-      // this.uploader.clearQueue(); 
+      // this.uploader.clearQueue();
       this.typeValid = false;
       setTimeout(() => {
         this.typeValid = true;
@@ -46,7 +46,7 @@ export class UploadImagesModal implements OnInit, OnDestroy {
   ngOnDestroy() {
       this.subscriptions.forEach((sub) => { sub.unsubscribe(); });
   }
- 
+
   private fileOverBase(e: any): void {
     this.hasBaseDropZoneOver = e;
   }

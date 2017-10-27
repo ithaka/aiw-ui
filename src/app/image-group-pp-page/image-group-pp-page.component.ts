@@ -8,9 +8,9 @@ import { AssetService, AuthService, ImageGroupDescription, ImageGroupService } f
 import { AnalyticsService } from '../analytics.service';
 
 @Component({
-  selector: 'ang-image-group-pp-page', 
+  selector: 'ang-image-group-pp-page',
   styleUrls: [ './image-group-pp-page.component.scss' ],
-  templateUrl: './image-group-pp-page.component.html'
+  templateUrl: './image-group-pp-page.component.pug'
 })
 
 export class ImageGroupPPPage implements OnInit, OnDestroy {
@@ -47,7 +47,7 @@ export class ImageGroupPPPage implements OnInit, OnDestroy {
         // If a page number isn't set, reset to page 1!
         if (!params['page']){
           params['page'] = 1;
-        } 
+        }
         if (id) {
           this._assets.queryAll(params);
         }
@@ -59,7 +59,7 @@ export class ImageGroupPPPage implements OnInit, OnDestroy {
         console.log(results);
         if(results.id){
             this.igDesc = results.description;
-            
+
             this._assets.getAllThumbnails(results.items)
               .then( allThumbnails => {
                 this.assets = allThumbnails;
@@ -69,7 +69,7 @@ export class ImageGroupPPPage implements OnInit, OnDestroy {
               });
 
             // this.assets = this.assets.concat(results.thumbnails);
-                  
+
             // for(var i = 0; i < this.assets.length; i++){
             //     this.assets[i].metaData = this.assets[i].jsonListSt;
             // }
@@ -83,9 +83,9 @@ export class ImageGroupPPPage implements OnInit, OnDestroy {
   // Load Image Group Descrition
   loadIgDesc(igId: string): void{
       this._igService.getGroupDescription(igId).take(1)
-            .subscribe((data: ImageGroupDescription) => { 
+            .subscribe((data: ImageGroupDescription) => {
                 if(data){
-                    this.igDesc = data.igNotes; 
+                    this.igDesc = data.igNotes;
                 }
             });
   }
