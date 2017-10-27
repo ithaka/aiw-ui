@@ -961,6 +961,10 @@ export class AssetService {
         // Returns all of the collections names
         return this.http
             .get(this._auth.getUrl() + '/v2/institution', options)
+            .retryWhen(err => {
+                // Sometimes /institution will call before /userinfo gets a chance to reset the AccessToken
+                return err.delay(500)
+            })
             .toPromise()
             .then(this.extractData)
             .then((data) => {
