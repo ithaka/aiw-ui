@@ -952,24 +952,6 @@ export class AssetService {
             })
     }
 
-    /**
-     * Wrapper function for HTTP call to get user institution. Used by nav component
-     * @returns Chainable promise containing collection data
-     */
-    public getUserInstitution() {
-        let options = new RequestOptions({ withCredentials: true })
-        // Returns all of the collections names
-        return this.http
-            .get(this._auth.getUrl() + '/v2/institution', options)
-            .toPromise()
-            .then(this.extractData)
-            .then((data) => {
-                this._storage.set('institution', data);
-                data && this._auth.setInstitution(data);
-                return data;
-            });
-    }
-
     public getFolders() {
         let options = new RequestOptions({ withCredentials: true });
 
