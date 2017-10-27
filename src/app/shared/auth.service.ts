@@ -45,8 +45,7 @@ export class AuthService implements CanActivate {
   private institutionObjSource: BehaviorSubject<any> = new BehaviorSubject(this.institutionObjValue);
   private currentInstitutionObj: Observable<any> = this.institutionObjSource.asObservable();
 
-  private userValue: any = {};
-  private userSource: BehaviorSubject<any> = new BehaviorSubject(this.userValue);
+  private userSource: BehaviorSubject<any> = new BehaviorSubject({});
   public currentUser: Observable<any> = this.userSource.asObservable();
 
   private idleState: string = 'Not started.';
