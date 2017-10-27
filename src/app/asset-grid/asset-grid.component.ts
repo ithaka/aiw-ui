@@ -204,8 +204,9 @@ export class AssetGrid implements OnInit, OnDestroy {
             this.isLoading = true;
           }
           if('count' in allResults){
-            this.totalAssets = allResults.count;
-            this.isLoading = false;
+            this.totalAssets = allResults.count
+            this.pagination.totalPages = Math.floor(parseInt(this.totalAssets)/this.pagination.size) + 1
+            this.isLoading = false
           } else if(this.assetCount && this.results && this.results.length > 0){
             this.totalAssets = this.assetCount.toString();
             this.isLoading = false;
@@ -520,10 +521,4 @@ export class AssetGrid implements OnInit, OnDestroy {
   private getAssetPath(asset): string[] {
       return this.editMode ? ['./'] : ['/asset', asset.artstorid]
   }
-
-
-  // private updateSrchInRes(){
-  //   // console.log(this.searchInResults);
-  //   this.updateSearchInRes.emit(this.searchInResults);
-  // }
 }
