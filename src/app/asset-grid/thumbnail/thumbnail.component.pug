@@ -6,7 +6,6 @@
     i.icon.icon-collab(*ngIf="thumbnail.cfObjectId && thumbnail.cfObjectId.length > 0", [id]="thumbnail.objectId + '_associated_images'", (click)="openLink($event, ['/associated', thumbnail.cfObjectId, thumbnail.collectionId])" title="Others are also interested in...")
     i.icon.icon-cluster(*ngIf="thumbnail.clustered == 1", [id]="thumbnail.objectId + '_clustered_images'", (click)="openLink($event, ['/cluster', thumbnail.objectId, { objTitle :  thumbnail.thumbnail1 }])", title="View related media")
     i.icon.icon-iap(*ngIf="thumbnail.iapFlag > 0")
-    i(class="icon icon-{{ getCollectionType().name }} icon-collection-type", [attr.title]="getCollectionType().alt")
     //- New search icons
     i.icon.icon-cluster(*ngIf="thumbnail.partofcluster", [id]="thumbnail.objectId + '_clustered_images'", (click)="openLink($event, ['/cluster', thumbnail.clusterid, { objTitle :  thumbnail.name }])", title="View related media")
     i.icon.icon-collab(*ngIf="thumbnail.frequentlygroupedwith && thumbnail.frequentlygroupedwith.length > 0", [id]="thumbnail.objectId + '_associated_images'", (click)="openLink($event, ['/associated', thumbnail.frequentlygroupedwith[0], 103])", title="Others are also interested in...")
