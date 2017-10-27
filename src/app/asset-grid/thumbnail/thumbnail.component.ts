@@ -18,16 +18,16 @@ import { AssetService } from './../../shared';
 })
 export class ThumbnailComponent implements OnInit {
   @Input()
-  private thumbnail: Thumbnail;
+  private thumbnail: Thumbnail
 
   @Input()
-  private largeThmbView: boolean;
+  private largeThmbView: boolean
 
   @Input()
-  private reorderMode: boolean;
+  private reorderMode: boolean
 
   @Input()
-  private editMode: boolean;
+  private editMode: boolean
 
   private constraints: any = {}
   private collectionType: number = 0
@@ -82,5 +82,14 @@ export class ThumbnailComponent implements OnInit {
        // matches on IAP String, return 1 for true, 0 for false
       return assetId.match(/IAP/) ? 1 : 0
     }
+  }
+
+  /**
+   * Returns collection name and alt text based on Collection Type number
+   * - Does so in safe manner, avoiding template errors
+   */
+  getCollectionType(): any {
+    let mapResult = this.collectionTypeMap[this.thumbnail.collectionType]
+    return mapResult ? mapResult : { name: '', alt: ''}
   }
 }

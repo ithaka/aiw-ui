@@ -2,26 +2,26 @@
   .card-img-top
     img([class.disablePointerEvents]="reorderMode", [attr.src]="_assets.makeThumbUrl(thumbnail.thumbnailImgUrl, largeThmbView ? 2 : 1)", [attr.alt]="thumbnail.arttitle && thumbnail.arttitle[0] ? 'Thumbnail of ' + thumbnail.thumbnail1 : 'No title available'")
   .card-icon-group((click)="$event.stopPropagation(); $event.preventDefault();", [ngClass]="{ 'disablePointerEvents': editMode }")
-    // Legacy Service icons
+    //- Legacy Service icons
     i.icon.icon-collab(*ngIf="thumbnail.cfObjectId && thumbnail.cfObjectId.length > 0", [id]="thumbnail.objectId + '_associated_images'", (click)="openLink($event, ['/associated', thumbnail.cfObjectId, thumbnail.collectionId])" title="Others are also interested in...")
     i.icon.icon-cluster(*ngIf="thumbnail.clustered == 1", [id]="thumbnail.objectId + '_clustered_images'", (click)="openLink($event, ['/cluster', thumbnail.objectId, { objTitle :  thumbnail.thumbnail1 }])", title="View related media")
     i.icon.icon-iap(*ngIf="thumbnail.iapFlag > 0")
-    i(class="icon icon-{{collectionTypeMap[thumbnail.collectionType] && collectionTypeMap[thumbnail.collectionType].name}} icon-collection-type", [attr.title]="collectionTypeMap[thumbnail.collectionType] && collectionTypeMap[thumbnail.collectionType].alt")
-    // New search icons
+    i(class="icon icon-{{ getCollectionType().name }} icon-collection-type", [attr.title]="getCollectionType().alt")
+    //- New search icons
     i.icon.icon-cluster(*ngIf="thumbnail.partofcluster", [id]="thumbnail.objectId + '_clustered_images'", (click)="openLink($event, ['/cluster', thumbnail.clusterid, { objTitle :  thumbnail.name }])", title="View related media")
     i.icon.icon-collab(*ngIf="thumbnail.frequentlygroupedwith && thumbnail.frequentlygroupedwith.length > 0", [id]="thumbnail.objectId + '_associated_images'", (click)="openLink($event, ['/associated', thumbnail.frequentlygroupedwith[0], 103])", title="Others are also interested in...")
-    i(class="icon icon-{{collectionTypeMap[collectionType].name}} icon-collection-type", [attr.title]="collectionTypeMap[collectionType] && collectionTypeMap[collectionType].alt")
+    i(class="icon icon-{{getCollectionType().name}} icon-collection-type", [attr.title]="getCollectionType().alt")
     i(*ngIf="thumbnail.objectTypeId && thumbnail.objectTypeId != 10", class="icon icon-{{thumbnail.objectTypeId | typeIdPipe}}")
   div
-    // New Asset display
+    //- New Asset display
     span.asset-title(*ngIf="thumbnail.name", title="{{ thumbnail.name }}", [innerHTML]="thumbnail.name")
     span.asset-agent(*ngIf="thumbnail.agent", title="{{ thumbnail.agent }}", [innerHTML]="thumbnail.agent")
     span.asset-date(*ngIf="thumbnail.date", title="{{ thumbnail.date }}", [innerHTML]="thumbnail.date")
-    // Old asset display
+    //- Old asset display
     span.asset-title(*ngIf="thumbnail.thumbnail1", title="{{ thumbnail.thumbnail1 }}", [innerHTML]="thumbnail.thumbnail1")
     span.asset-agent.notranslate(*ngIf="thumbnail.thumbnail2", title="{{ thumbnail.thumbnail2 }}", [innerHTML]="thumbnail.thumbnail2")
     span.asset-date(*ngIf="thumbnail.thumbnail3", title="{{ thumbnail.thumbnail3 }}", [innerHTML]="thumbnail.thumbnail3")
     span(*ngIf="thumbnail.thumbnail4", title="{{ thumbnail.thumbnail4 }}", [innerHTML]="thumbnail.thumbnail4")
-    // Schema moving forward
+    //- Schema moving forward
     ng-container(*ngFor="let data of thumbnail.tombstone")
       span(*ngIf="data", [innerHtml]="data")
