@@ -42,7 +42,7 @@ export class AssetGrid implements OnInit, OnDestroy {
   // Default show as loading until results have update
   private isLoading: boolean = true;
   private searchError: string = "";
-  private searchLimitError: string = "";
+  private searchLimitError: boolean = false;
 
   private searchTerm: string = '';
   private formattedSearchTerm: string = '';
@@ -177,7 +177,7 @@ export class AssetGrid implements OnInit, OnDestroy {
           this.formatSearchTerm(this.searchTerm)
           // Update results array
           this.searchError = '';
-          this.searchLimitError = '';
+          this.searchLimitError = false;
 
           // Server error handling
           if (allResults === null) {
@@ -187,7 +187,7 @@ export class AssetGrid implements OnInit, OnDestroy {
           }
           else if(allResults.errors && allResults.errors[0] && (allResults.errors[0] === 'Too many rows requested')){
             this.isLoading = false;
-            this.searchLimitError = "Sorry, these results cannot be displayed. In order to keep things quick, Artstor does not show more than 1500 results for any search. If you haven't found what you are looking for, try using advanced search.";
+            this.searchLimitError = true;
             return;
           }
 

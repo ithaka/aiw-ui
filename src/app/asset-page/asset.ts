@@ -201,7 +201,6 @@ export class Asset {
 
   private formatMetadata(){
     let metaArray = [];
-    console.log(this.metaDataArray)
     // loop through all of the metadata we get from the service
     for(let data of this.metaDataArray){
         let fieldExists = false;

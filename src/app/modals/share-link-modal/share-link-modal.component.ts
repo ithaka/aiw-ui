@@ -6,7 +6,7 @@ import { Asset } from '../../asset-page/asset';
 
 @Component({
   selector: 'ang-share-link-modal',
-  templateUrl: './share-link-modal.component.html',
+  templateUrl: './share-link-modal.component.pug',
   styleUrls: ['./share-link-modal.component.scss']
 })
 export class ShareLinkModal implements OnInit {
@@ -15,11 +15,11 @@ export class ShareLinkModal implements OnInit {
   @Output() private closeModal: EventEmitter<any> = new EventEmitter();
   private shareLink: string = '';
   private genImgMode: string = 'half';
-  
+
   private imgURLCopied: boolean = false;
   private copyURLStatusMsg: string = '';
   private copyHTMLStatusMsg: string = '';
-  
+
   constructor(private _assets: AssetService) { }
 
   ngOnInit() {
@@ -30,7 +30,7 @@ export class ShareLinkModal implements OnInit {
         let media = JSON.parse(this.asset['media'])
         this.asset['thumbnailImgUrl'] = media['thumbnailSizeOnePath']
       }
-    } 
+    }
   }
 
   /**
@@ -61,7 +61,7 @@ export class ShareLinkModal implements OnInit {
     try {
       var successful = document.execCommand('copy');
       var msg = '';
-      
+
       if(successful){
         msg = 'Successfully Copied!';
       }

@@ -3,7 +3,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'ang-confirm-modal',
-  templateUrl: 'confirm-modal.component.html'
+  templateUrl: 'confirm-modal.component.pug'
 })
 export class ConfirmModal implements OnInit {
   @Output()
@@ -24,6 +24,6 @@ export class ConfirmModal implements OnInit {
       ) { }
 
   ngOnInit() {
-    
+
   }
 }

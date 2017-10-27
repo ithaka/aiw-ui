@@ -1,0 +1,11 @@
+.modal.fade-in.show
+  .modal-dialog(role="document")
+    .modal-content
+      .modal-header
+        h4.modal-title {{ 'IMAGE_GROUP_PAGE.DOWNLOAD_LIMIT_MODAL.TITLE' | translate }}
+        button.close(type="button", (click)="closeModal.emit()", aria-label="Close")
+          span(aria-hidden="true") &times;
+      .modal-body
+        p {{ 'IMAGE_GROUP_PAGE.DOWNLOAD_LIMIT_MODAL.MAIN_BODY' | translate }}
+      .modal-footer
+        button.btn.btn-primary(type="button", (click)="closeModal.emit()") {{ 'IMAGE_GROUP_PAGE.DOWNLOAD_LIMIT_MODAL.CLOSE_BUTTON' | translate }}

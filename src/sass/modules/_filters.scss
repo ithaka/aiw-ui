@@ -82,6 +82,7 @@ filter, .filter {
 	&.active {
 		color: $activeFilterColor;
 		background: $filterHoverBg;
+		margin-bottom: 1px;
 	}
 
 	&:hover, &:active, &:focus{

@@ -8,7 +8,7 @@ import { AnalyticsService } from '../../analytics.service';
 
 @Component({
   selector: 'ang-add-to-group',
-  templateUrl: 'add-to-group.component.html'
+  templateUrl: 'add-to-group.component.pug'
 })
 export class AddToGroupModal implements OnInit, OnDestroy {
   @Output() closeModal: EventEmitter<any> = new EventEmitter();
@@ -39,7 +39,7 @@ export class AddToGroupModal implements OnInit, OnDestroy {
     private _analytics: AnalyticsService,
     private completerService: CompleterService
   ) {
-    
+
   }
 
   ngOnInit() {
@@ -59,12 +59,12 @@ export class AddToGroupModal implements OnInit, OnDestroy {
 
     // Load list of Groups, and update autocomplete as Groups load
     this._group.getEveryGroup('private')
-      .subscribe((groups) => { 
-        if (groups) { 
+      .subscribe((groups) => {
+        if (groups) {
           this.groups = groups;
           // Data service for the autocomplete component (ng2 completer)
           this.dataService = this.completerService.local(this.groups, 'name', 'name');
-        } 
+        }
       }, (err) => { console.error(err); });
   }
 
@@ -92,7 +92,7 @@ export class AddToGroupModal implements OnInit, OnDestroy {
       this.selectedGroupError = "ADD_TO_GROUP_MODAL.NO_GROUP"
       return
     }
-    
+
     // Create object for new modified group
     let putGroup: ImageGroup = Object.assign({}, this.selectedIg)
 
@@ -113,7 +113,7 @@ export class AddToGroupModal implements OnInit, OnDestroy {
         if (putGroup.items.indexOf(asset.id) < 0) {
           putGroup.items.push(asset.id);
         }
-      } 
+      }
     })
 
     // throw an error if the image group is going to be larger than 1000 images
@@ -128,7 +128,7 @@ export class AddToGroupModal implements OnInit, OnDestroy {
     this._group.get(this.selectedIg.id)
       .toPromise()
       .then((data) => { return this.extractData(data) })
-      .then((data) => { 
+      .then((data) => {
         data.items = putGroup.items
 
         this._group.update(data)
@@ -143,7 +143,7 @@ export class AddToGroupModal implements OnInit, OnDestroy {
           console.error(error);
       });
 
-    
+
   }
 
   private extractData(res: any) {

@@ -10,10 +10,10 @@ import { AssetGrid } from './../asset-grid/asset-grid.component';
 import { TitleService } from '../shared/title.service';
 
 @Component({
-  selector: 'ang-search-page', 
+  selector: 'ang-search-page',
   providers: [],
   styleUrls: ['./search-page.component.scss'],
-  templateUrl: './search-page.component.html',
+  templateUrl: './search-page.component.pug',
 })
 
 export class SearchPage implements OnInit, OnDestroy {
@@ -24,9 +24,9 @@ export class SearchPage implements OnInit, OnDestroy {
   // private searchInResults: boolean = false;
 
   constructor(
-        private _assets: AssetService, 
-        private route: ActivatedRoute, 
-        private _filters: AssetFiltersService, 
+        private _assets: AssetService,
+        private route: ActivatedRoute,
+        private _filters: AssetFiltersService,
         private _router: Router,
         private _analytics: AnalyticsService,
         private _title: TitleService,
@@ -68,7 +68,7 @@ export class SearchPage implements OnInit, OnDestroy {
           this._assets.queryAll(params);
         }
       })
-    ); 
+    );
     this._analytics.setPageValues('search', '')
   } // OnInit
 
@@ -77,6 +77,6 @@ export class SearchPage implements OnInit, OnDestroy {
   }
 
   // private updateSearchInRes(value: boolean): void{
-  //  this.searchInResults = value; 
+  //  this.searchInResults = value;
   // }
 }

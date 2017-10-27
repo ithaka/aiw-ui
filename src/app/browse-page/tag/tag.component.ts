@@ -6,7 +6,7 @@ import { Tag } from './tag.class';
 
 @Component({
   selector: 'ang-tag',
-  templateUrl: 'tag.component.html',
+  templateUrl: 'tag.component.pug',
   styleUrls: ['./tag.component.scss']
 })
 export class TagComponent {
@@ -34,6 +34,9 @@ export class TagComponent {
     if (this.tag.type) {
       if (this.tag.type.label === 'collection') {
         this.linkRoute = '/collection';
+      }
+      if (this.tag.type.label === 'pcollection') {
+        this.linkRoute = '/pcollection';
       }
       if (this.tag.type.label === 'group' && this.tag.type.folder !== true) {
         this.linkRoute = '/group';

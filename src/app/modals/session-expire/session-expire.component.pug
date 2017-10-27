@@ -1,0 +1,11 @@
+#inactiveUserLogoutModal.modal.fade-in.show
+  .modal-dialog.modal-lg
+    .modal-content
+      .modal-body
+        .container-fluid
+          .row.hdr
+            h1 Logged out
+          .row.pt-3.main-content
+            | We logged you out after being idle for 90 minutes. Please login again.
+      .modal-footer
+        button.btn.btn-primary((click)="closeModal.emit()") Okay
