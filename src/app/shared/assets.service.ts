@@ -957,14 +957,10 @@ export class AssetService {
      * @returns Chainable promise containing collection data
      */
     public getUserInstitution() {
-        let options = new RequestOptions({ withCredentials: true });
+        let options = new RequestOptions({ withCredentials: true })
         // Returns all of the collections names
         return this.http
             .get(this._auth.getUrl() + '/v2/institution', options)
-            .retryWhen(err => {
-                // Sometimes /institution will call before /userinfo gets a chance to reset the AccessToken
-                return err.delay(500)
-            })
             .toPromise()
             .then(this.extractData)
             .then((data) => {
