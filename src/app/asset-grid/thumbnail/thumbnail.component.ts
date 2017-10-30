@@ -89,7 +89,7 @@ export class ThumbnailComponent implements OnInit {
    * - Does so in safe manner, avoiding template errors
    */
   getCollectionType(): any {
-    let mapResult = this.collectionTypeMap[this.thumbnail.collectionType]
+    let mapResult = this.collectionTypeMap[this.collectionType ? this.collectionType : this.thumbnail.collectionType]
     return mapResult ? mapResult : { name: '', alt: ''}
   }
 }

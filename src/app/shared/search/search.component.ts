@@ -118,7 +118,7 @@ export class SearchComponent implements OnInit, OnDestroy {
       }
       else if(routeParams['term']){
         let updatedTermValue = '';
-        updatedTermValue = ':"' + routeParams['term'] + '" AND :"' + term + '"';
+        updatedTermValue = routeParams['term'] + ' AND ' + term;
         term = updatedTermValue;
 
         if(routeParams['classification']){
