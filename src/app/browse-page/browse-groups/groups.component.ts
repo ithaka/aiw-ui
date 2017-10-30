@@ -63,25 +63,18 @@ export class BrowseGroupsComponent implements OnInit {
     // set the title
     this._title.setSubtitle("Browse Groups")
 
+    /** Every time the url updates, we process the new tags and reload image groups if the tags query param changes */
     this.subscriptions.push(
-      this.route.params.subscribe((params) => {
+      this._router.events.filter(event=>event instanceof NavigationEnd)
+      .subscribe(event => {
+        let query = this.route.snapshot.queryParams;
+        let params = this.route.snapshot.params;
+
         if (params.view !== (this.selectedBrowseLevel)) {
           this.appliedTags = []
           this.selectedBrowseLevel = params.view
         }
 
-        // Deprecate once search level is not a query AND route parameter
-        if (params.view !== 'search') {
-          this.loadIGs(this.appliedTags, 1, this.selectedBrowseLevel, '')
-        } else {
-          this.loadIGs(this.appliedTags, 1, this.selectedBrowseLevel, this.route.snapshot.queryParams.term)
-        }
-      })
-    )
-
-    /** Every time the url updates, we process the new tags and reload image groups if the tags query param changes */
-    this.subscriptions.push(
-      this.route.queryParams.subscribe((query) => {
         let tagAdded: boolean = false
         // this is only expected to run when searching
         if (query.tags) {
@@ -97,16 +90,18 @@ export class BrowseGroupsComponent implements OnInit {
           this.addQueryParams({page: 1}, false, query)
         } // STOP THEM if they're trying to enter a negative number
         // if (tagAdded) { requestedPage = 1 } // if they're adding a tag, we want to nav them back to page 1
-        let requestedLevel = query.level
+        let requestedLevel = this.selectedBrowseLevel !== 'search' ? this.selectedBrowseLevel : query.level;
         this.setSearchLevel(requestedLevel, false) // makes sure that the correct level filter is selected even if the user just navigated here from the url
 
+        let requestedTerm = this.selectedBrowseLevel !== 'search' ? '' : query.term;
         // if there is not a term, make sure the search term is cleared
         if (!query.term) {
           this.updateSearchTerm.emit('')
+        } else {
+          this.updateSearchTerm.emit(query.term)
         }
 
-
-        this.loadIGs(this.appliedTags, requestedPage, requestedLevel, query.term)
+        this.loadIGs(this.appliedTags, requestedPage, requestedLevel, requestedTerm)
       })
     )
 

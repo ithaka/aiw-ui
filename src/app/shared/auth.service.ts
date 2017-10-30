@@ -13,6 +13,7 @@ import { Angulartics2 } from 'angulartics2';
 
 // Project dependencies
 import { AnalyticsService } from '../analytics.service';
+import { AppConfig } from '../app.service';
 
 // For session timeout management
 
@@ -69,6 +70,7 @@ export class AuthService implements CanActivate {
     private location: Location,
     private angulartics: Angulartics2,
     private _analytics: AnalyticsService,
+    private _app: AppConfig,
     private idle: Idle,
     private keepalive: Keepalive
   ) {
@@ -154,7 +156,6 @@ export class AuthService implements CanActivate {
 
     idle.onIdleEnd.subscribe(() => {
       this.idleState = 'No longer idle.';
-      // console.log(this.idleState);
     });
     idle.onTimeout.subscribe(() => {
       let user = this.getUser();
@@ -163,7 +164,6 @@ export class AuthService implements CanActivate {
         this.expireSession();
         this.showUserInactiveModal.next(true);
         this.idleState = 'Timed out!';
-        // console.log(this.idleState);
       }
       else{
         this.resetIdleWatcher()
@@ -171,7 +171,6 @@ export class AuthService implements CanActivate {
     });
     idle.onIdleStart.subscribe(() => {
       this.idleState = 'You\'ve gone idle!';
-      // console.log(this.idleState);
 
       let currentDateTime = new Date().toUTCString();
       this._storage.set('userGoneIdleAt', currentDateTime);
@@ -450,7 +449,7 @@ export class AuthService implements CanActivate {
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
     let options = new RequestOptions({ withCredentials: true });
     // If user object already exists, we're done here
-    if (this.getUser() && this.getUser().hasOwnProperty('status')) {
+    if (this.canUserAccess(this.getUser())) {
       return new Observable(observer => {
           observer.next(true);
       });
@@ -472,8 +471,12 @@ export class AuthService implements CanActivate {
                 user.isLoggedIn = true
               }
 
-              this.saveUser(user)
-              return true;
+              if (this.canUserAccess(user)) {
+                this.saveUser(user)
+                return true
+              } else {
+                return false
+              }
             } else {
               // store the route so that we know where to put them after login!
               this.store("stashedRoute", this.location.path(false));
@@ -508,15 +511,20 @@ export class AuthService implements CanActivate {
         (res)  => {
           try {
             let data = res.json() || {};
-            console.log(data)
             // User has access!
             if (data.status === true) {
               // User is authorized - if you want to check ipAuth then you can tell on the individual route by user.isLoggedIn = false
               let user = data.user;
+              user.status = data.status
               if (data.isRememberMe || data.remoteaccess) {
                 user.isLoggedIn = true
               }
-              this.saveUser(user);
+              if (this.canUserAccess(user)) {
+                this.saveUser(user);
+              } else {
+                this.saveUser({})
+                this._router.navigate(['/login'])
+              }
             }
             // User does not have access!
             if (data.status === false) {
@@ -530,6 +538,10 @@ export class AuthService implements CanActivate {
           }
         }
       )
+  }
+
+  private canUserAccess(user: any): boolean {
+    return user && user.hasOwnProperty('status') && (this._app.getWLVConfig().disableIPAuth === true ? user.isLoggedIn : true)
   }
 
   /** Getter for downloadAuthorized parameter of local storage */

@@ -50,6 +50,9 @@ export class AssetGrid implements OnInit, OnDestroy {
   private searchInResults: boolean = false;
   private isPartialPage: boolean = false;
 
+  // Flag to check if the results have any restricted images.
+  private rstd_imgs: boolean = false;
+
   @Input()
   private actionOptions: any = {};
 
@@ -192,10 +195,20 @@ export class AssetGrid implements OnInit, OnDestroy {
           }
 
           this.results = allResults.thumbnails;
+          let rstd_imgs = false;
+
           if ('items' in allResults) {
             this.itemIds = allResults.items;
             this.ig = allResults;
+            
+            for(let asset of this.ig.thumbnails){ // Check if the image group has any restricted asset.
+              if(asset.status !== 'available'){
+                rstd_imgs = true
+                break;
+              }
+            }
           }
+          this.rstd_imgs = rstd_imgs;
 
           if (this.results && this.results.length > 0) {
             this.isLoading = false;
@@ -204,8 +217,9 @@ export class AssetGrid implements OnInit, OnDestroy {
             this.isLoading = true;
           }
           if('count' in allResults){
-            this.totalAssets = allResults.count;
-            this.isLoading = false;
+            this.totalAssets = allResults.count
+            this.pagination.totalPages = Math.floor(parseInt(this.totalAssets)/this.pagination.size) + 1
+            this.isLoading = false
           } else if(this.assetCount && this.results && this.results.length > 0){
             this.totalAssets = this.assetCount.toString();
             this.isLoading = false;
@@ -520,10 +534,4 @@ export class AssetGrid implements OnInit, OnDestroy {
   private getAssetPath(asset): string[] {
       return this.editMode ? ['./'] : ['/asset', asset.artstorid]
   }
-
-
-  // private updateSrchInRes(){
-  //   // console.log(this.searchInResults);
-  //   this.updateSearchInRes.emit(this.searchInResults);
-  // }
 }
