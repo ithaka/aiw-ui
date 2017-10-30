@@ -237,11 +237,6 @@ export class AssetSearchService {
       } else {
         for (let j = 0; j < filters[i].filterValue.length; j++) {
           filterArray.push(filters[i].filterGroup + ':\"' + filters[i].filterValue[j] + '\"')
-
-          if (filters[i].filterGroup == 'collectiontypes' && filters[i].filterValue[j] == 2) {
-            // Institutional filter should eliminate open assets
-            filterArray.push("-collectiontypes:5")
-          }
         }
       }
     }
