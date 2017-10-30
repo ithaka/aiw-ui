@@ -224,4 +224,11 @@ export class ImageGroupPage implements OnInit, OnDestroy {
     this.reorderMode = isReordering;
   }
 
+  /**
+   * Encode Tag: Encode the tag before using it for search
+   */
+  private encodeTag(tag) {
+    return encodeURIComponent(tag);
+  }
+
 }
