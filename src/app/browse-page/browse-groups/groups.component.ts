@@ -97,6 +97,8 @@ export class BrowseGroupsComponent implements OnInit {
         // if there is not a term, make sure the search term is cleared
         if (!query.term) {
           this.updateSearchTerm.emit('')
+        } else {
+          this.updateSearchTerm.emit(query.term)
         }
 
         this.loadIGs(this.appliedTags, requestedPage, requestedLevel, requestedTerm)
