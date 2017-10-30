@@ -2,7 +2,7 @@ import { ApplicationRef, ErrorHandler, NgModule } from '@angular/core';
 import { BrowserModule, Title } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Http, HttpModule } from '@angular/http';
-import { NavigationEnd, Router, RouteReuseStrategy, RouterModule } from '@angular/router';
+import { NavigationEnd, Router, RouteReuseStrategy, RouterModule, UrlSerializer } from '@angular/router';
 import { removeNgStyles, createNewHosts, createInputTransfer } from '@angularclass/hmr';
 import { Ng2DeviceDetectorModule } from 'ng2-device-detector';
 
@@ -92,6 +92,7 @@ import { LegacyRouteResolver } from './legacy.service';
 import { AnalyticsService } from './analytics.service';
 
 import { LinkifyPipe } from './shared/linkify.pipe';
+import { CustomUrlSerializer } from './shared/custom-url-serializer';
 
 
 const APP_PROVIDERS = [
@@ -200,7 +201,8 @@ const APP_PROVIDERS = [
   ],
   providers: [ // expose our Services and Providers into Angular's dependency injection
     ENV_PROVIDERS,
-    APP_PROVIDERS
+    APP_PROVIDERS,
+    { provide: UrlSerializer, useClass: CustomUrlSerializer }
   ]
 })
 export class AppModule {
