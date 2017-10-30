@@ -29,7 +29,7 @@ export class MyCollectionsComponent implements OnInit {
     private _analytics: AnalyticsService,
     private _title: TitleService
   ) { 
-    this.pcEnabled = this._auth.getpcEnabled();
+      
    }
 
   private subscriptions: Subscription[] = [];
@@ -76,7 +76,17 @@ export class MyCollectionsComponent implements OnInit {
         }
 
       })
-    );
+    )
+
+    // Subscribe to User object updates
+    this.subscriptions.push(
+      this._auth.currentUser.subscribe(
+        (userObj) => {
+          this.pcEnabled = userObj.pcEnabled
+        },
+        (err) => { console.error(err) }
+      )
+    )
 
     if(this.pcEnabled){ // If user has personal collections get data for user's personal collections
       this.getUserPCol();
