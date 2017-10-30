@@ -110,7 +110,8 @@ const APP_PROVIDERS = [
   ToolboxService,
   LegacyRouteResolver,
   Title,
-  TitleService
+  TitleService,
+  { provide: UrlSerializer, useClass: CustomUrlSerializer }
   // { provide: RouteReuseStrategy, useClass: CustomReuseStrategy } // to be implemented later
 ];
 
@@ -201,8 +202,7 @@ const APP_PROVIDERS = [
   ],
   providers: [ // expose our Services and Providers into Angular's dependency injection
     ENV_PROVIDERS,
-    APP_PROVIDERS,
-    { provide: UrlSerializer, useClass: CustomUrlSerializer }
+    APP_PROVIDERS
   ]
 })
 export class AppModule {
