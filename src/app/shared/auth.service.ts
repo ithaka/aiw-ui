@@ -647,8 +647,7 @@ export class AuthService implements CanActivate {
     let data = this.formEncode({ username: username, password: password })
     let headers = new Headers({ 'Content-Type': 'application/x-www-form-urlencoded' })
     return this.http.post(
-      "http://art-aa-service.apps.test.cirrostratus.org/gust/login",
-      // { username: username, password: password },
+      [this.hostname, "gust", "login"].join("/"),
       data,
       { withCredentials: true, headers: headers }
     ).map((res) => { return res.json() })
