@@ -61,19 +61,19 @@
   .row.row--no-overflow.pb-5([ngClass]="{'edit': editMode}")
     .col-md-12.col--thumbnails.col--expanding.has-icon-overlay([ngClass]="{ 'col--expand-12' : !showFilters }")
       i.icon-lg.icon-overlay.icon-loading-large([hidden]="!isLoading")
-      
-      //- Restricted assets warning message
-      .alert.alert-warning(*ngIf="rstd_imgs")
-        | {{ "BROWSE.WARNINGS.RSTD_IMGS" | translate }}
-        
-      //- Display Thumbnails
-      #assetThumbnailsRow.row.no-gutters(*ngIf="!reorderMode")
+      //- Error Row
+      div
+        //- Restricted assets warning message
+        .alert.alert-warning(*ngIf="rstd_imgs")
+          | {{ "BROWSE.WARNINGS.RSTD_IMGS" | translate }}
         .alert.alert-warning(*ngIf="!isLoading && (totalAssets == '0') && (!results || results.length < 1) && (searchError.length < 1) && !searchLimitError")
           b Unable to find any assets
           br
           | A less specific query might be able to find what you are looking for.
         .alert.alert-danger(*ngIf="!isLoading && (searchError.length > 0) && !searchLimitError")
-          | {{ searchError }}
+          | {{ searchError }} 
+      //- Display Thumbnails
+      #assetThumbnailsRow.row.no-gutters(*ngIf="!reorderMode")
         div([ngClass]="largeThmbView ? 'col-sm-12 col-md-6 col-lg-4' : 'col-sm-6 col-md-3 col-lg-2'", *ngFor="let asset of results")
           a.card.card--asset([attr.data-id]="asset.objectId", [ngClass]="{'selected': ( isSelectedAsset(asset) > -1 ), 'lrgThmb': largeThmbView }", [routerLink]="editMode ? ['./'] : ['/asset', asset.objectId ? asset.objectId : asset.artstorid]", [queryParams]="asset.iapFlag > 0 ? { iap: 'true' } : {}", (click)="selectAsset(asset)")
             ang-thumbnail([thumbnail]="asset", [reorderMode]="reorderMode", [editMode]="editMode", [largeThmbView]="largeThmbView")
@@ -81,12 +81,6 @@
           | {{ "BROWSE.WARNINGS.ADDITIONAL_RESULTS" | translate }}
       //- Sortable Thumbails
       #assetThumbnailsRow.row.no-gutters(*ngIf="reorderMode", dnd-sortable-container, [sortableData]="allResults")
-        .alert.alert-warning(*ngIf="!isLoading && (totalAssets == '0') && (!results || results.length < 1) && (searchError.length < 1) && !searchLimitError")
-          b Unable to find any assets
-          br
-          | A less specific query might be able to find what you are looking for.
-        .alert.alert-danger(*ngIf="!isLoading && (searchError.length > 0) && !searchLimitError")
-          | {{ searchError }}
         .col-sm-4.col-md-2.col-lg-1.draggable(*ngFor="let asset of results; let i = index", dnd-sortable, [dragEnabled]="reorderMode && !isLoading", [sortableIndex]="i", (onDragEnd)="orderChanged = true")
           .card.card--asset([ngClass]="{ 'lrgThmb': largeThmbView }")
             ang-thumbnail([thumbnail]="asset", [reorderMode]="reorderMode", [editMode]="editMode", [largeThmbView]="largeThmbView")
