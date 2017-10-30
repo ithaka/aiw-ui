@@ -53,7 +53,7 @@
             = " "
             i#genImgURLlink.icon.icon-share-white
           // Download dropdown options
-          .dropdown.d-inline-block(ngbDropdown, *ngIf="assets[0].downloadLink && user.isLoggedIn")
+          .dropdown.d-inline-block(ngbDropdown, *ngIf="assets[0].downloadLink && (user.isLoggedIn || hasExternalAccess)")
             button#downloadAssetDropdown.btn.btn-secondary(ngbDropdownToggle, (click)="genDownloadViewLink()")
               | {{ 'ASSET_PAGE.BUTTONS.DOWNLOAD' | translate}}
               = " "
@@ -76,7 +76,7 @@
                 = " "
                 | Download View
           // False door button if user is not logged in
-          button.btn.btn-secondary(tabindex="1", *ngIf="assets[0].downloadLink && !user.isLoggedIn", (click)="showLoginModal = true")
+          button.btn.btn-secondary(tabindex="1", *ngIf="assets[0].downloadLink && !(user.isLoggedIn || hasExternalAccess)", (click)="showLoginModal = true")
             | {{ 'ASSET_PAGE.BUTTONS.DOWNLOAD' | translate}}
             i#downloadAssetLink.icon.icon-download
           a.btn.btn-secondary(*ngIf="assets[0]", tabindex="2", [attr.href]=" '/#/assetprint/' + assets[0].id ", target="_blank")
