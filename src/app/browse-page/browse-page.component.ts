@@ -20,19 +20,19 @@ import { AppConfig } from '../app.service';
 
 export class BrowsePage implements OnInit, OnDestroy {
 
-  private _storage: Locker;
-  private subscriptions: Subscription[] = [];
-  private institution: any = {};
+  private _storage: Locker
+  private subscriptions: Subscription[] = []
+  private institution: any = {}
 
-  colMenuArray = [];
+  colMenuArray = []
 
-  private userPCallowed: string;
-  private userTypeId: any;
-  private selectedColMenuId: string = '1';
+  private userPCallowed: string
+  private userTypeId: any
+  private selectedColMenuId: string = '1'
 
-  private browseOpts: any = {};
+  private browseOpts: any = {}
 
-  private pcEnabled: boolean;
+  private pcEnabled: boolean
 
   // TypeScript public modifiers
   constructor(
@@ -44,10 +44,10 @@ export class BrowsePage implements OnInit, OnDestroy {
       private router: Router,
       private _title: TitleService
   ) {
-      this._storage = locker.useDriver(Locker.DRIVERS.LOCAL);
-      this.institution = this._storage.get('institution');
-      this.browseOpts = this._app.config.browseOptions;
-      this.pcEnabled = this._auth.getpcEnabled();
+      this._storage = locker.useDriver(Locker.DRIVERS.LOCAL)
+      this.institution = this._storage.get('institution')
+      this.browseOpts = this._app.config.browseOptions
+      this.pcEnabled = this._auth.getpcEnabled()
   }
 
   ngOnInit() {
