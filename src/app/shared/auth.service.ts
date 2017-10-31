@@ -388,7 +388,11 @@ export class AuthService implements CanActivate {
    * @param user The user should be an object to store in sessionstorage
    */
   public saveUser(user: any) {
-    //should have session timeout, username, baseProfileId, typeId
+    // Preserve added pcEnabled, determined by _assets.pccollection() call
+    if (user.isLoggedIn && this.getUser().pcEnabled) {
+      user.pcEnabled = true
+    }
+    // Should have session timeout, username, baseProfileId, typeId
     this._storage.set('user', user);
     // Update observable
     this.userSource.next(user)
@@ -404,19 +408,14 @@ export class AuthService implements CanActivate {
   public getUser() : any {
       return this._storage.get('user') ? this._storage.get('user') : {};
   }
-  
-  /**
-   * Gets pcEnabled from local storage
-   */
-  public getpcEnabled(): boolean {
-      return this._storage.get('pcEnabled') ? this._storage.get('pcEnabled') : false;
-  }
 
   /**
    * Sets pcEnabled in local storage
    */
   public setpcEnabled(pcEnabled: boolean): void {
-    this._storage.set('pcEnabled', pcEnabled);
+    let user = this.getUser()
+    user.pcEnabled = pcEnabled
+    this.saveUser(user)
   }
 
   /** Stores an object in local storage for you - your welcome */
