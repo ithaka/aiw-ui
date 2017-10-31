@@ -13,7 +13,7 @@ export class AppConfig {
   // Default values
   // public pageTitle = 'Artstor'
   // public logoUrl = '/assets/img/logo-v1-1.png'
-  public config
+  public _config
 
   constructor() {
     // let WLVConfig = this.getWLVConfig()
@@ -21,7 +21,11 @@ export class AppConfig {
     //   this.pageTitle = WLVConfig.pageTitle
     //   this.logoUrl = WLVConfig.logoUrl
     // }
-    this.config = Object.assign(WLV_ARTSTOR, this.getWLVConfig())
+    this._config = Object.assign(WLV_ARTSTOR, this.getWLVConfig())
+  }
+
+  get config(): any {
+    return this._config
   }
   
   getWLVConfig() {
