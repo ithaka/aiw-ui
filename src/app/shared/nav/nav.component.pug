@@ -11,7 +11,7 @@ header.navbar.navbar-light
             .login-panel__status(*ngIf="user.isLoggedIn")
               h2.hidden Login Panel
               #navMessageWelcome Welcome, {{ user.username ? user.username : ''}}
-              #navMessageInstitution(*ngIf="institutionObj.shortName || institutionObj.institutionName") Institution: {{ institutionObj.shortName ? institutionObj.shortName : institutionObj.institutionName }}
+              #navMessageInstitution.login-panel__institution(*ngIf="institutionObj.shortName || institutionObj.institutionName") Institution: {{ institutionObj.shortName ? institutionObj.shortName : institutionObj.institutionName }}
               .login-panel__links
                 a.link--accent([routerLink]=" ['./account'] " routerLinkActive="active" tabindex="1") Settings
                 a.link--accent((click)="logout()" tabindex="1") Log Out

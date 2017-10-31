@@ -25,7 +25,7 @@ nav-menu([allowSelectAll]="true", [actionOptions]="{group: true}", (refreshIG)="
       .ig-tags.meta-block.pt-4(*ngIf!="ig.tags && ig.tags.length > 0")
         .label Tags
         div
-          a.tag(*ngFor="let tag of ig.tags", [routerLink]="['/browse', 'groups', 'search']", [queryParams]="{ 'level': 'all', 'tags' : tag, 'page' : '1' }") {{ tag }}
+          a.tag(*ngFor="let tag of ig.tags", [routerLink]="['/browse', 'groups', 'search']", [queryParams]="{ 'level': 'all', 'tags' : encodeTag(tag), 'page' : '1' }") {{ tag }}
       .meta-block(*ngIf!="ig.description && ig.description.length > 0")
         .label Description
       .desc-no-expand.meta-block(*ngIf="!ig.description || ig.description.length <= 0")
