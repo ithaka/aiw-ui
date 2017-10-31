@@ -4,6 +4,7 @@ import { Observable } from 'rxjs/Observable';
 import { Angulartics2 } from 'angulartics2';
 
 import { AssetService, AuthService, ImageGroup } from './../../shared';
+import { AnalyticsService } from '../../analytics.service'
 
 @Component({
   selector: 'ang-ig-download-modal',
@@ -33,13 +34,20 @@ export class PptModalComponent implements OnInit {
   private defaultOptions = new RequestOptions({ withCredentials: true});
   // private defaultOptions = new RequestOptions({ headers: this.header, withCredentials: true});
 
-  constructor(private _assets: AssetService, private _auth: AuthService, private _angulartics: Angulartics2, private http: Http) { }
+  constructor(
+    private _assets: AssetService,
+    private _auth: AuthService,
+    private _angulartics: Angulartics2,
+    private http: Http,
+    private _analytics: AnalyticsService
+  ) { }
 
   ngOnInit() {
 
   }
 
   private getPPT() {
+    this._analytics.directCall("requestPPT");
     this.isLoading = true;
     // Setup PPT Download
     this.getDownloadLink(this.ig)
@@ -59,6 +67,7 @@ export class PptModalComponent implements OnInit {
   }
 
   private getZip() {
+    this._analytics.directCall("requestZip");
     this.zipLoading = true;
     // Setup Zip download
     this.getDownloadLink(this.ig, true)
