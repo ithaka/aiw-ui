@@ -28,7 +28,7 @@ export class AppConfig {
     return this._config
   }
   
-  getWLVConfig() {
+  private getWLVConfig() {
     if (document.location.hostname.indexOf('sahara.artstor.org') > -1 
         || document.location.hostname.indexOf('sahara.local.artstor.org') > -1 
         || document.location.hostname.indexOf('sahara.prod.artstor.org') > -1 
