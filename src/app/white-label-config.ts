@@ -42,7 +42,8 @@ export const WLV_ARTSTOR = {
     showHomeBlog: true,
     showHomeSSC: true,
     showHomeAd: true,
-    showArtstorCurated: true
+    showArtstorCurated: true,
+    showInstitutionalLogin: true
 }
 
 export const WLV_SAHARA = {
