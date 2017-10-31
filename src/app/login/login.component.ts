@@ -1,11 +1,12 @@
-import { Component } from '@angular/core';
-import { Router } from '@angular/router';
-import { Location } from '@angular/common';
-import { Angulartics2 } from 'angulartics2';
-import { CompleterService, CompleterData } from 'ng2-completer';
+import { Component } from '@angular/core'
+import { Router } from '@angular/router'
+import { Location } from '@angular/common'
+import { Angulartics2 } from 'angulartics2'
+import { CompleterService, LocalData } from 'ng2-completer'
 
-import { AuthService, User, AssetService } from './../shared';
-import { AnalyticsService } from '../analytics.service';
+import { AppConfig } from '../app.service'
+import { AuthService, User, AssetService } from './../shared'
+import { AnalyticsService } from '../analytics.service'
 
 declare var initPath: string
 
@@ -22,25 +23,27 @@ declare var initPath: string
 })
 export class Login {
 
-  // Set our default values
-  public user = new User('','');
-  public errorMsg: string = '';
-  public instErrorMsg: string = '';
-  public showPwdModal = false;
-  public showHelpModal = false;
-  public pwdReset = false;
-  public expirePwd = false;
-  public pwdRstEmail = '';
-  public errorMsgPwdRst = '';
-  public forcePwdRst = false
-  public successMsgPwdRst = '';
-  public loginInstitutions = []; /** Stores the institutions returned by the server */
-  private loginInstName: string = '' /** Bound to the autocomplete field */
-  public showRegister: boolean = false;
-  
-  private loginLoading = false;
+  private copyBase: string = ''
 
-  private dataService: CompleterData
+  // Set our default values
+  public user = new User('','')
+  public errorMsg: string = ''
+  public instErrorMsg: string = ''
+  public showPwdModal = false
+  public showHelpModal = false
+  public pwdReset = false
+  public expirePwd = false
+  public pwdRstEmail = ''
+  public errorMsgPwdRst = ''
+  public forcePwdRst = false
+  public successMsgPwdRst = ''
+  public loginInstitutions = [] /** Stores the institutions returned by the server */
+  private loginInstName: string = '' /** Bound to the autocomplete field */
+  public showRegister: boolean = false
+  
+  private loginLoading = false
+
+  private dataService: LocalData
   
   // TypeScript public modifiers
   constructor(
@@ -50,10 +53,16 @@ export class Login {
     private router: Router,
     private location: Location,
     private angulartics: Angulartics2,
-    private _analytics: AnalyticsService
-  ) { }
+    private _analytics: AnalyticsService,
+    private _app: AppConfig
+  ) {
+  }
 
   ngOnInit() {
+    if (this._app.config.copyModifier) {
+      this.copyBase = this._app.config.copyModifier + "."
+    }
+
     // Provide redirects for initPath detected in index.html from inital load
     if ( initPath && (initPath.indexOf('ViewImages') > -1 || initPath.indexOf('ExternalIV') > -1 ) ) {
       this.router.navigateByUrl(initPath)
@@ -69,11 +78,11 @@ export class Login {
       .take(1)
       .subscribe((res) => {
         if (res.remoteaccess === false && res.user) {
-          this.showRegister = true;
+          this.showRegister = true
         }
       }, (err) => {
-        console.error(err);
-      });
+        console.error(err)
+      })
 
     // Until institutions call works without the auth cookie, we need to make sure we have a list available
     this._auth.getFallbackInstitutions()
@@ -317,5 +326,23 @@ export class Login {
       window.open('https://' + ssoSubdomain + '.artstor.org/sso/shibssoinit?idpEntityID=' + encodeURIComponent(url) + '&o=' + encodeURIComponent(origin));
     }
   }
+
+  // this is for eventual ss login
+  // private ssLogin(user: User) {
+  //   this._auth.ssLogin(user.username, user.password)
+  //     .take(1)
+  //     .subscribe((res) => {
+  //       let isTest = this._auth.getEnv() == 'test'
+  //       let redirectUrl = '//catalog.sharedshelf'
+  //       redirectUrl += isTest ? '.stage' : ''
+  //       redirectUrl += '.artstor.org'
+
+  //       console.log(redirectUrl)
+  //       window.location.href = redirectUrl
+  //     }, (err) => {
+  //       console.error(err)
+  //       this.errorMsg = 'Incorrect username or password for Shared Shelf login.'
+  //     })
+  // }
   
 }

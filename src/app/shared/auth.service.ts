@@ -540,7 +540,7 @@ export class AuthService implements CanActivate {
   }
 
   private canUserAccess(user: any): boolean {
-    return user && user.hasOwnProperty('status') && (this._app.getWLVConfig().disableIPAuth === true ? user.isLoggedIn : true)
+    return user && user.hasOwnProperty('status') && (this._app.config.disableIPAuth === true ? user.isLoggedIn : true)
   }
 
   /** Getter for downloadAuthorized parameter of local storage */
@@ -652,10 +652,35 @@ export class AuthService implements CanActivate {
         return res.json() || {};
       });
   }
+
+  public ssLogin(username: string, password: string): Observable<SSLoginResponse> {
+
+    let data = this.formEncode({ username: username, password: password })
+    let headers = new Headers({ 'Content-Type': 'application/x-www-form-urlencoded' })
+    return this.http.post(
+      [this.hostname, "gust", "login"].join("/"),
+      data,
+      { withCredentials: true, headers: headers }
+    ).map((res) => { return res.json() })
+  }
 }
 
 export class User {
   constructor(
     public username: string,
     public password: string) { }
+}
+
+interface SSLoginResponse {
+  email: string
+  firstname: string
+  lastname: string
+  active: boolean
+  profileid: number
+  userid: string
+  institutionid: string
+  ss: {
+      admin_for: number[]
+      enabled_for: number[]
+  }
 }
