@@ -540,7 +540,7 @@ export class AuthService implements CanActivate {
   }
 
   private canUserAccess(user: any): boolean {
-    return user && user.hasOwnProperty('status') && (this._app.getWLVConfig().disableIPAuth === true ? user.isLoggedIn : true)
+    return user && user.hasOwnProperty('status') && (this._app.config.disableIPAuth === true ? user.isLoggedIn : true)
   }
 
   /** Getter for downloadAuthorized parameter of local storage */
