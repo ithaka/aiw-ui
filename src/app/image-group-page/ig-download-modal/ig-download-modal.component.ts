@@ -47,7 +47,6 @@ export class PptModalComponent implements OnInit {
   }
 
   private getPPT() {
-    this._analytics.directCall("requestPPT");
     this.isLoading = true;
     // Setup PPT Download
     this.getDownloadLink(this.ig)
@@ -63,11 +62,9 @@ export class PptModalComponent implements OnInit {
         },
         (error) => { console.error(error); this.isLoading = false; }
       );
-
   }
 
   private getZip() {
-    this._analytics.directCall("requestZip");
     this.zipLoading = true;
     // Setup Zip download
     this.getDownloadLink(this.ig, true)
@@ -130,7 +127,8 @@ export class PptModalComponent implements OnInit {
   }
 
   trackDownload(downloadType: string) : void {
-        this._angulartics.eventTrack.next({ action: "downloadGroup" + downloadType, properties: { category: "group", label: this.ig.id }});
+    this._analytics.directCall('request' + downloadType);
+    this._angulartics.eventTrack.next({ action: "downloadGroup" + downloadType, properties: { category: "group", label: this.ig.id }});
   }
 
 }
