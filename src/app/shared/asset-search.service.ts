@@ -101,7 +101,7 @@ export class AssetSearchService {
      * Check for WLVs Institution filter
      * - WLVs filter by contributing institution id
      */
-    let institutionFilters: number[] = this._app.getWLVConfig().contributingInstFilters
+    let institutionFilters: number[] = this._app.config.contributingInstFilters
     for (let i = 0; i < institutionFilters.length; i++) {
       filterArray.push("contributinginstitutionid:" + institutionFilters[i])
     }
@@ -147,7 +147,7 @@ export class AssetSearchService {
      * Check for WLVs Institution filter
      * - WLVs filter by contributing institution id
      */
-    let institutionFilters: number[] = this._app.getWLVConfig().contributingInstFilters
+    let institutionFilters: number[] = this._app.config.contributingInstFilters
     for (let i = 0; i < institutionFilters.length; i++) {
       filterArray.push("contributinginstitutionid:" + institutionFilters[i])
     }
