@@ -5,6 +5,7 @@ nav.nav.nav-inline.browse-nav
   .col-md-8
     .tree(*ngFor="let browseOpt of browseMenuArray", [class.hidden]="selectedBrowseId != browseOpt.id")
       ang-tag(*ngFor="let tag of tagsObj[browseOpt.id]", [tag]="tag", [browseType]="selectedBrowseId")
+      .alert.alert-danger(*ngIf="errorMessage" innerHTML="{{errorMessage | translate}}")
   .col-md-4
     .browse-info(*ngIf="descObj[selectedBrowseId]")
       .img(*ngIf="splashImgURL")
