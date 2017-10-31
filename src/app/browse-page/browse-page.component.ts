@@ -47,7 +47,6 @@ export class BrowsePage implements OnInit, OnDestroy {
       this._storage = locker.useDriver(Locker.DRIVERS.LOCAL);
       this.institution = this._storage.get('institution');
       this.browseOpts = this._app.config.browseOptions;
-      this.pcEnabled = this._auth.getpcEnabled();
   }
 
   ngOnInit() {
@@ -61,7 +60,15 @@ export class BrowsePage implements OnInit, OnDestroy {
       })
     );
 
-
+    // Subscribe to User object updates
+    this.subscriptions.push(
+      this._auth.currentUser.subscribe(
+        (userObj) => {
+          this.pcEnabled = userObj.pcEnabled
+        },
+        (err) => { console.error(err) }
+      )
+    )
 
     if( this.browseOpts.artstorCol ){
         this.colMenuArray.push( { label: 'Artstor Digital Library', id: '1', link: 'library' } );
