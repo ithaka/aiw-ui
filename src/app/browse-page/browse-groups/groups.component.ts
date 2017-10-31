@@ -131,6 +131,10 @@ export class BrowseGroupsComponent implements OnInit {
         label: 'Artstor Curated',
         level: 'public'
       })
+      this.browseMenuArray.push({
+        label: 'Search',
+        level: 'search'
+      })
     }
 
     if (this._auth.getUser() && this._auth.getUser().isLoggedIn) {
@@ -139,11 +143,6 @@ export class BrowseGroupsComponent implements OnInit {
         level: 'shared'
       })
     }
-
-    this.browseMenuArray.push({
-      label: 'Search',
-      level: 'search'
-    })
 
     this.setSearchLevel(this.route.snapshot.queryParams.level)
 
