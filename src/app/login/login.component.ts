@@ -23,6 +23,8 @@ declare var initPath: string
 })
 export class Login {
 
+  private copyBase: string = ''
+
   // Set our default values
   public user = new User('','')
   public errorMsg: string = ''
@@ -57,6 +59,10 @@ export class Login {
   }
 
   ngOnInit() {
+    if (this._app.config.copyModifier) {
+      this.copyBase = this._app.config.copyModifier + "."
+    }
+
     // Provide redirects for initPath detected in index.html from inital load
     if ( initPath && (initPath.indexOf('ViewImages') > -1 || initPath.indexOf('ExternalIV') > -1 ) ) {
       this.router.navigateByUrl(initPath)

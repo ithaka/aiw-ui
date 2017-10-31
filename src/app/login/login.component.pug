@@ -3,7 +3,7 @@
     .col-sm-6
       .card.card--light
         .card-header
-          h1#loginHeading {{ 'LOGIN.REG_LOGIN.HEADING' | translate }}
+          h1#loginHeading {{ copyBase + 'LOGIN.REG_LOGIN.HEADING' | translate }}
         .card-body
           form((ngSubmit)="login(user)")
             .form-group
@@ -17,15 +17,14 @@
                 [innerHtml]="errorMsg | translate"
               )
               p.form-text.text-danger(*ngIf="forcePwdRst", [innerHtml]="'LOGIN.REG_LOGIN.FORCE_PW_RESET_MSG' | translate")
-            p.notranslate([innerHtml]="'LOGIN.TERMS' | translate")
+            p.notranslate([innerHtml]=" copyBase + 'LOGIN.TERMS' | translate")
             .form-group
-              h3 Log into Artstor
               button#btnLoginRemote.btn.btn-primary([class.loading]="loginLoading" type="submit" name="action" data-sc="account: remote user log in") 
                 | {{ 'LOGIN.LOGIN_BTN' | translate }}
-            .form-group
-              h3 Log into Shared Shelf
-              button#btnLoginRemote.btn.btn-primary((click)="ssLogin(user)", [class.loading]="loginLoading" type="button" name="action" data-sc="account: remote user log in") 
-                | {{ 'LOGIN.LOGIN_BTN' | translate }}
+            //- .form-group
+            //-   h3 Log into Shared Shelf
+            //-   button#btnLoginRemote.btn.btn-primary((click)="ssLogin(user)", [class.loading]="loginLoading" type="button" name="action" data-sc="account: remote user log in") 
+            //-     | {{ 'LOGIN.LOGIN_BTN' | translate }}
           a#linkLoginResetModal((click)="showPwdModal = true" tabindex="0" class="link") {{ 'LOGIN.REG_LOGIN.FORGOT_PW_PROMPT' | translate }}
           br
           div(*ngIf="showRegister")

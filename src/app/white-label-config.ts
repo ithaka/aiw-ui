@@ -69,6 +69,7 @@ export const WLV_SAHARA = {
         'igs': true
     },
     featuredCollection: "HOME.SAHARA_FEATURED",
+    copyModifier: "SAHARA",
     homeBrowseSec: {
         'collection': false,
         'instCollection': true,
