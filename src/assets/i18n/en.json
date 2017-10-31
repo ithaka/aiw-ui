@@ -408,6 +408,9 @@
       "TERMS": "By using SAHARA, I agree to the <a id=\"linkTermsAndConditions\" href=\"http://sahara.artstor.org/library/portals/SAHARA/terms-of-use.html\" class=\"link\" target=\"_blank\">Terms</a>",
       "REG_LOGIN": {
         "HEADING": "Log in to view the SAHARA collection"
+      },
+      "SAHARA_LOGIN": {
+        "HEADING": "Add your images to the SAHARA collection"
       }
     }
   }

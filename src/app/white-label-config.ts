@@ -47,6 +47,7 @@ export const WLV_ARTSTOR = {
 
 export const WLV_SAHARA = {
     logoUrl : "/assets/img/logo-sahara-v1.png",
+    saharaLogin: true,
     institutionLogin : false,
     disableIPAuth : true,
     pageTitle : "SAHARA",

@@ -57,6 +57,13 @@
           .form-group
             button#btnLoginProxy.btn.btn-primary((click)="goToInstLogin()" type="submit" name="action" data-sc="account: institutional user log in")
               | {{ 'LOGIN.LOGIN_BTN' | translate }}
+    .col-sm-6(*ngIf="_app.config.saharaLogin")
+      .card.card--v-pad
+        .card-header
+          h1#saharaLoginHeading {{ copyBase + 'LOGIN.SAHARA_LOGIN.HEADING' | translate }}
+        .card-body
+          .form-group
+            | #[a#linkLoginSaharaSS.link(tabindex="0", href="http://catalog.sharedshelf.artstor.org/login.html", target="_blank") Log in] to Shared Shelf
 #helpModal.modal([ngClass]="{'show': showHelpModal }")
   .modal-dialog
     .modal-content
