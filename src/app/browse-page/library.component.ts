@@ -28,6 +28,7 @@ export class LibraryComponent implements OnInit {
   private selectedBrowseId: string = '';
   private browseMenuArray: any[];
   private splashImgURL: string = '';
+  private errorMessage: string = ''
 
   private tagsObj: any = {
     103 : [],
@@ -143,8 +144,12 @@ export class LibraryComponent implements OnInit {
         .then((res) => {
             this.descObj[browseId] = res;
         })
-        .catch(function(err) {
-            console.log('Unable to load category results.');
+        .catch((err) => {
+          this.loading = false;
+          if (err.status === 401) {
+            this.errorMessage = 'ACCESS_DENIED'
+          }
+          console.log('Unable to load category results.');
         });
     }
   }

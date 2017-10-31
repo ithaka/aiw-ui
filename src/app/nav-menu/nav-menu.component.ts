@@ -77,11 +77,20 @@ export class NavMenu implements OnInit, OnDestroy {
     private _analytics: AnalyticsService
   ) {
     this.browseOpts = this._app.config.browseOptions
-    this.pcEnabled = this._auth.getpcEnabled()
   }
 
   ngOnInit() {
-    this.user = this._auth.getUser()
+    // Subscribe to User object updates
+    this.subscriptions.push(
+      this._auth.currentUser.subscribe(
+        (userObj) => {
+          this.user = userObj
+          this.pcEnabled = this.user.pcEnabled
+        },
+        (err) => { console.error(err) }
+      )
+    );
+    
     this.subscriptions.push(
       this._assets.selection.subscribe(
         selectedAssets => {
