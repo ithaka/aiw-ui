@@ -97,10 +97,11 @@
 @include icon('audio', 'gif');
 @include icon('3d', 'gif');
 @include icon('qtvr', 'gif');
-@include icon('personal-asset', 'png');
-@include icon('ssc-asset', 'png');
-@include icon('institution-asset', 'png');
-@include icon('artstor-asset', 'png');
+@include icon('personal-asset', 'svg');
+@include icon('ssc-asset', 'svg');
+@include icon('institution-asset', 'svg');
+@include icon('artstor-asset', 'svg');
+@include icon('artstor-asset-open', 'svg');
 @include icon('info', 'png');
 @include icon--hover('icon-slideshow', 'gif');
 
