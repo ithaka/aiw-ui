@@ -15,22 +15,7 @@ import { AppConfig } from '../../app.service';
   styleUrls: [ './../browse-page.component.scss' ]
 })
 export class BrowseGroupsComponent implements OnInit {
-  showArtstorCurated: boolean = true
-
-  constructor(
-    private _router: Router,
-    private _assets: AssetService,
-    private _groups: GroupService,
-    private _tagFilters: TagFiltersService,
-    private _auth: AuthService,
-    private _analytics: AnalyticsService,
-    private _title: TitleService,
-    private route: ActivatedRoute,
-    private _appConfig: AppConfig
-  ) {
-    this.showArtstorCurated = _appConfig.config.showArtstorCurated
-  }
-
+  private showArtstorCurated: boolean = true
   private subscriptions: Subscription[] = []
 
   private userTypeId: any
@@ -58,6 +43,19 @@ export class BrowseGroupsComponent implements OnInit {
   private showSearchPrompt: boolean = false
 
   private errorObj: any = {}
+  constructor(
+    private _router: Router,
+    private _assets: AssetService,
+    private _groups: GroupService,
+    private _tagFilters: TagFiltersService,
+    private _auth: AuthService,
+    private _analytics: AnalyticsService,
+    private _title: TitleService,
+    private route: ActivatedRoute,
+    private _appConfig: AppConfig
+  ) {
+    this.showArtstorCurated = _appConfig.config.showArtstorCurated
+  }
 
   ngOnInit() {
     // set the title
@@ -70,6 +68,10 @@ export class BrowseGroupsComponent implements OnInit {
         let query = this.route.snapshot.queryParams;
         let params = this.route.snapshot.params;
 
+        if (!this.showArtstorCurated && params.view == 'public') {
+          this._router.navigate(['browse','groups','institution'])
+        }
+        
         if (params.view !== (this.selectedBrowseLevel)) {
           this.appliedTags = []
           this.selectedBrowseLevel = params.view
@@ -129,6 +131,10 @@ export class BrowseGroupsComponent implements OnInit {
         label: 'Artstor Curated',
         level: 'public'
       })
+      this.browseMenuArray.push({
+        label: 'Search',
+        level: 'search'
+      })
     }
 
     if (this._auth.getUser() && this._auth.getUser().isLoggedIn) {
@@ -137,11 +143,6 @@ export class BrowseGroupsComponent implements OnInit {
         level: 'shared'
       })
     }
-
-    this.browseMenuArray.push({
-      label: 'Search',
-      level: 'search'
-    })
 
     this.setSearchLevel(this.route.snapshot.queryParams.level)
 
