@@ -17,6 +17,7 @@ nav-menu([allowSelectAll]="true", [actionOptions]="{group: true}", (refreshIG)="
       ang-asset-grid([actionOptions]="actionOptions", (reordering)="toggleReorder($event)")
       .alert.alert-warning(*ngIf!="ig.items && ig.items.length > 0 && !ig.thumbnails")
         b Error Loading
+        = " "
         | Unable to load the thumbnails for this group.
 
     div(*ngIf="showDesc()", [ngClass]="[ showDesc() ? 'col-md-3' : 'col-md-0'  ]")
