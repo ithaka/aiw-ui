@@ -38,11 +38,13 @@ export class BrowseGroupsComponent implements OnInit {
   private tagFilters = []
   private appliedTags: string[] = []
 
-  private selectedBrowseLevel: string = 'public'
+  private selectedBrowseLevel: string
   private browseMenuArray: { label: string, level: string, selected ?: boolean }[] = []
   private showSearchPrompt: boolean = false
-
   private errorObj: any = {}
+  // Var for setting aside Groups "getAll" requests so they can be unsubscribed
+  private groupsGetAllSub: Subscription
+
   constructor(
     private _router: Router,
     private _assets: AssetService,
@@ -55,6 +57,12 @@ export class BrowseGroupsComponent implements OnInit {
     private _appConfig: AppConfig
   ) {
     this.showArtstorCurated = _appConfig.config.showArtstorCurated
+
+    if (this.showArtstorCurated) {
+      this.selectedBrowseLevel = 'public'
+    } else {
+      this.selectedBrowseLevel = 'institution'
+    }
   }
 
   ngOnInit() {
@@ -70,6 +78,7 @@ export class BrowseGroupsComponent implements OnInit {
 
         if (!this.showArtstorCurated && params.view == 'public') {
           this._router.navigate(['browse','groups','institution'])
+          return
         }
         
         if (params.view !== (this.selectedBrowseLevel)) {
@@ -235,9 +244,12 @@ export class BrowseGroupsComponent implements OnInit {
       browseLevel = this.getSearchLevel() || this.selectedBrowseLevel || 'public'
     } else {
       browseLevel = level
-    }
+    } 
+  
+    // Some Groups calls take a while, please stop listening to an old request if a new one is made
+    this.groupsGetAllSub && this.groupsGetAllSub.unsubscribe()
 
-    this._groups.getAll(browseLevel, this.pagination.size, page, appliedTags, searchTerm)
+    this.groupsGetAllSub = this._groups.getAll(browseLevel, this.pagination.size, page, appliedTags, searchTerm)
         .take(1).subscribe(
           (data)  => {
             this.pagination.page = page
