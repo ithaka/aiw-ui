@@ -6,7 +6,7 @@
 
   $tagLinkBg: #efefef;
 
-  .tag-item { 
+  .tag-item {
     color: #000;
     font-size: 13px;
     line-height: 16px;
@@ -30,18 +30,16 @@
                 background: darken($tagLinkBg, 10%);
             }
         }
-    }   
+    }
 
     & a {
         display: inline-block;
         padding: 2px;
         background: transparent; //$tagLinkBg;
         border-radius: 2px;
-        max-height: 19px;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
+        max-height: 38px;
         max-width: 90%;
+        margin-bottom: 4px;
 
         &:hover, &:active, &:focus {
             text-decoration: none;
@@ -83,9 +81,9 @@
     padding: 2px 5px 5px 5px;
     display: inline-block;
     font-size: 1.1em;
-    vertical-align: top; 
+    vertical-align: top;
     cursor: pointer;
-    
+
     & i {
         opacity: 0.5;
     }
