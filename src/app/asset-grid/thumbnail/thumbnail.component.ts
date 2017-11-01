@@ -38,7 +38,7 @@ export class ThumbnailComponent implements OnInit {
     2: { name: "institution-asset", alt: "Institution Collections" },
     3: { name: "personal-asset", alt: "Private Collections" },
     4: { name: "institution-asset", alt: "Institution Collections" },
-    5: { name: "ssc-asset", alt: "Shared Shelf Commons" },
+    5: { name: "artstor-open-asset", alt: "Open Artstor" },
     6: { name: "personal-asset", alt: "Private Collections" }
   }
 
