@@ -79,7 +79,9 @@
           button.btn.btn-secondary(tabindex="1", *ngIf="assets[0].downloadLink && !(user.isLoggedIn || hasExternalAccess)", (click)="showLoginModal = true")
             | {{ 'ASSET_PAGE.BUTTONS.DOWNLOAD' | translate}}
             i#downloadAssetLink.icon.icon-download
-          a.btn.btn-secondary(*ngIf="assets[0]", tabindex="2", [attr.href]=" '/#/assetprint/' + assets[0].id ", target="_blank")
+          a.btn.btn-secondary(*ngIf="assets[0]", tabindex="2", (click)="showGenerateCitation = true")
+            | {{ 'ASSET_PAGE.BUTTONS.GENERATE_CITATION' | translate}}
+          a.btn.btn-secondary(*ngIf="assets[0]", tabindex="3", [attr.href]=" '/#/assetprint/' + assets[0].id ", target="_blank")
             | {{ 'ASSET_PAGE.BUTTONS.PRINT' | translate}}
           button.btn.btn-primary.btn--square((click)="addAssetToIG()")
             i.icon.icon-add-white(aria-hidden="true")
@@ -117,3 +119,4 @@ ang-login-req-modal(*ngIf="showLoginModal", (closeModal)="showLoginModal = false
 ang-add-to-group(*ngIf="showAddModal", [selectedAssets]="[ assets[0] ]", [showCreateGroup]="true", [copySelectionStr]=" 'ADD_TO_GROUP_MODAL.FROM_ASSET' ", (createGroup)="showCreateGroupModal = true; showAddModal = false;", (closeModal)="showAddModal = false")
 ang-new-ig-modal(*ngIf="showCreateGroupModal", [selectedAssets]="[ assets[0] ]", [showAddToGroup]="true", (addToGroup)="showAddModal = true; showCreateGroupModal = false;", (closeModal)="showCreateGroupModal = false")
 ang-access-denied-modal(*ngIf="showAccessDeniedModal")
+ang-generate-citation(*ngIf="showGenerateCitation", [asset]="assets[0]", (closeModal)="showGenerateCitation = false")
