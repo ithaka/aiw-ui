@@ -1,4 +1,4 @@
-ul.pagination(style="float:right;")
+ul.pagination([class.right]="right")
   li.page-item
     button.page-link((click)="goToPage.emit(1)", [disabled]="!pageObj.page || pageObj.page <= 1", title="First", aria-label="First")
       span(aria-hidden="true") |&#10094;

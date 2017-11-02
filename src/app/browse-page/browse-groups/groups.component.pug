@@ -14,7 +14,7 @@ nav.nav.nav-inline.browse-nav
   .col-md-8
     ang-general-search(*ngIf="route.snapshot.params.view == 'search'", [updateSearchTerm]="updateSearchTerm", (executeSearch)="addQueryParams({ term: $event }, false)")
     h3.pb-1.px-2 Groups
-      pagination([pageObj]="pagination", (goToPage)="goToPage($event)")
+      pagination([pageObj]="pagination", (goToPage)="goToPage($event)", [right]="true")
     .group-list.has-icon-overlay.px-2
       .alert.alert-warning(*ngIf="errorObj[selectedBrowseLevel]", [innerHtml]="errorObj[selectedBrowseLevel]")
       .alert.alert-info(*ngIf="showSearchPrompt && route.snapshot.params.view == 'search'") {{ 'BROWSE.ERRORS.SEARCH_PROMPT' | translate }}

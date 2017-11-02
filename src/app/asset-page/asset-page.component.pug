@@ -111,7 +111,9 @@
       .col-sm-12
         div(*ngIf="prevAssetResults.thumbnails.length < 1")
           .alert.alert-info {{ 'ASSET_PAGE.MESSAGES.NEEDASSETS' | translate}}
+        pagination([pageObj]="pagination", (goToPage)="goToPage($event)")
         ang-thumbnail.card.card--asset(*ngFor="let asset of prevAssetResults.thumbnails", [thumbnail]="asset", [ngClass]="{'selected' : asset.selected, 'disabled' : assets[0].id == asset.objectId }", (click)="toggleAsset(asset)")
+        pagination([pageObj]="pagination", (goToPage)="goToPage($event)")
 ang-agree-modal(*ngIf="showAgreeModal", (closeModal)="showAgreeModal = false", [assetUrl]="downloadUrl")
 ang-login-req-modal(*ngIf="showLoginModal", (closeModal)="showLoginModal = false")
 ang-add-to-group(*ngIf="showAddModal", [selectedAssets]="[ assets[0] ]", [showCreateGroup]="true", [copySelectionStr]=" 'ADD_TO_GROUP_MODAL.FROM_ASSET' ", (createGroup)="showCreateGroupModal = true; showAddModal = false;", (closeModal)="showAddModal = false")
