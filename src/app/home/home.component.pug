@@ -36,7 +36,7 @@ nav-menu
       // Institution Shared Shelf Collections
       .card(*ngIf="institution && instCollections.length > 0")
         .card-header
-          h2 {{ 'HOME.HEADINGS.INSTITUTION_COLLECTIONS' | translate:{ institutionName: institution.displayName ? institution.displayName : 'Institutional' } }}
+          h2 {{ 'HOME.HEADINGS.INSTITUTION_COLLECTIONS' | translate:{ institutionName: institution.shortName ? institution.shortName : 'Institutional' } }}
         .list--home-collections([class.loading]="loaders['instCollections']")
           .list-group.list-group-flush
             a.list-group-item.list-group-item-action(*ngFor="let collection of instCollections", [routerLink]="[ '/collection', collection.collectionid ]")
