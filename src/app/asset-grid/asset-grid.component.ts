@@ -157,18 +157,17 @@ export class AssetGrid implements OnInit, OnDestroy {
     this.subscriptions.push(
       this._assets.pagination.subscribe((pagination: any) => {
         this.pagination.page = parseInt(pagination.page);
+        this.pagination.size = parseInt(pagination.size);
 
         if (this.assetCount) {
-          this.pagination.totalPages = Math.floor(this.assetCount/parseInt(pagination.size)) + 1;
+          this.pagination.totalPages = Math.floor((this.assetCount + this.pagination.size - 1) / this.pagination.size);
         } else {
           this.pagination.totalPages = parseInt(pagination.totalPages);
         }
-        this.pagination.size = parseInt(pagination.size);
 
         // last page is a partial page
         const MAX_RESULTS_COUNT: number = 1500
         this.isPartialPage = (this.pagination.page * this.pagination.size) >= (MAX_RESULTS_COUNT - 1)
-
       })
     );
 
@@ -200,7 +199,7 @@ export class AssetGrid implements OnInit, OnDestroy {
           if ('items' in allResults) {
             this.itemIds = allResults.items;
             this.ig = allResults;
-            
+
             for(let asset of this.ig.thumbnails){ // Check if the image group has any restricted asset.
               if(asset.status !== 'available'){
                 rstd_imgs = true
@@ -218,7 +217,7 @@ export class AssetGrid implements OnInit, OnDestroy {
           }
           if('count' in allResults){
             this.totalAssets = allResults.count
-            this.pagination.totalPages = Math.floor(parseInt(this.totalAssets)/this.pagination.size) + 1
+            this.pagination.totalPages = Math.floor((parseInt(this.totalAssets) + this.pagination.size - 1) / this.pagination.size)
             this.isLoading = false
           } else if(this.assetCount && this.results && this.results.length > 0){
             this.totalAssets = this.assetCount.toString();

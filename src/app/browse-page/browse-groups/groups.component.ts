@@ -15,22 +15,7 @@ import { AppConfig } from '../../app.service';
   styleUrls: [ './../browse-page.component.scss' ]
 })
 export class BrowseGroupsComponent implements OnInit {
-  showArtstorCurated: boolean = true
-
-  constructor(
-    private _router: Router,
-    private _assets: AssetService,
-    private _groups: GroupService,
-    private _tagFilters: TagFiltersService,
-    private _auth: AuthService,
-    private _analytics: AnalyticsService,
-    private _title: TitleService,
-    private route: ActivatedRoute,
-    private _appConfig: AppConfig
-  ) {
-    this.showArtstorCurated = _appConfig.config.showArtstorCurated
-  }
-
+  private showArtstorCurated: boolean = true
   private subscriptions: Subscription[] = []
 
   private userTypeId: any
@@ -53,11 +38,32 @@ export class BrowseGroupsComponent implements OnInit {
   private tagFilters = []
   private appliedTags: string[] = []
 
-  private selectedBrowseLevel: string = 'public'
+  private selectedBrowseLevel: string
   private browseMenuArray: { label: string, level: string, selected ?: boolean }[] = []
   private showSearchPrompt: boolean = false
-
   private errorObj: any = {}
+  // Var for setting aside Groups "getAll" requests so they can be unsubscribed
+  private groupsGetAllSub: Subscription
+
+  constructor(
+    private _router: Router,
+    private _assets: AssetService,
+    private _groups: GroupService,
+    private _tagFilters: TagFiltersService,
+    private _auth: AuthService,
+    private _analytics: AnalyticsService,
+    private _title: TitleService,
+    private route: ActivatedRoute,
+    private _appConfig: AppConfig
+  ) {
+    this.showArtstorCurated = _appConfig.config.showArtstorCurated
+
+    if (this.showArtstorCurated) {
+      this.selectedBrowseLevel = 'public'
+    } else {
+      this.selectedBrowseLevel = 'institution'
+    }
+  }
 
   ngOnInit() {
     // set the title
@@ -70,6 +76,11 @@ export class BrowseGroupsComponent implements OnInit {
         let query = this.route.snapshot.queryParams;
         let params = this.route.snapshot.params;
 
+        if (!this.showArtstorCurated && params.view == 'public') {
+          this._router.navigate(['browse','groups','institution'])
+          return
+        }
+        
         if (params.view !== (this.selectedBrowseLevel)) {
           this.appliedTags = []
           this.selectedBrowseLevel = params.view
@@ -129,6 +140,10 @@ export class BrowseGroupsComponent implements OnInit {
         label: 'Artstor Curated',
         level: 'public'
       })
+      this.browseMenuArray.push({
+        label: 'Search',
+        level: 'search'
+      })
     }
 
     if (this._auth.getUser() && this._auth.getUser().isLoggedIn) {
@@ -137,11 +152,6 @@ export class BrowseGroupsComponent implements OnInit {
         level: 'shared'
       })
     }
-
-    this.browseMenuArray.push({
-      label: 'Search',
-      level: 'search'
-    })
 
     this.setSearchLevel(this.route.snapshot.queryParams.level)
 
@@ -234,9 +244,12 @@ export class BrowseGroupsComponent implements OnInit {
       browseLevel = this.getSearchLevel() || this.selectedBrowseLevel || 'public'
     } else {
       browseLevel = level
-    }
+    } 
+  
+    // Some Groups calls take a while, please stop listening to an old request if a new one is made
+    this.groupsGetAllSub && this.groupsGetAllSub.unsubscribe()
 
-    this._groups.getAll(browseLevel, this.pagination.size, page, appliedTags, searchTerm)
+    this.groupsGetAllSub = this._groups.getAll(browseLevel, this.pagination.size, page, appliedTags, searchTerm)
         .take(1).subscribe(
           (data)  => {
             this.pagination.page = page

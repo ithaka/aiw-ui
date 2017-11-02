@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, HostListener } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { Subscription }   from 'rxjs/Subscription';
 import { Locker } from 'angular2-locker';
@@ -478,5 +478,25 @@ export class AssetPage implements OnInit, OnDestroy {
         this.showAgreeModal = true;
         // Track download
         this.angulartics.eventTrack.next({ action:"downloadView", properties: { category: "asset", label: this.assets[0].id }});
+    }
+
+    /**
+     * Function called when keyboard key is pressed
+     * allows user to go to previous/next asset in group or search
+     */
+    @HostListener('document:keydown', ['$event'])
+    handleKeyboardEvent(event: KeyboardEvent) {
+      let key = event.keyCode;
+      // Make sure not comparing images
+      if(this.assets.length === 1) {
+        // Left -> Previous
+        if(key === 37 && this.assetNumber > 1) {
+          this.showPrevAsset();
+        }
+        // Right -> Next
+        else if(key === 39 && this.assetNumber < this.totalAssetCount) {
+          this.showNextAsset();
+        }
+      }
     }
 }
