@@ -61,6 +61,12 @@ export class AssetPage implements OnInit, OnDestroy {
 
     private assetIdProperty: string = 'artstorid'
 
+    private pagination: any = {
+      totalPages: 1,
+      size: 24,
+      page: 1
+    };
+
     constructor(
             private _assets: AssetService,
             private _group: GroupService,
@@ -169,6 +175,20 @@ export class AssetPage implements OnInit, OnDestroy {
                     this.assetNumber = this._assets.currentLoadedParams.page ? this.assetIndex + 1 + ((this._assets.currentLoadedParams.page - 1) * this._assets.currentLoadedParams.size) : this.assetIndex + 1;
                   }
               }
+          })
+        );
+
+        // Subscribe to pagination values
+        this.subscriptions.push(
+          this._assets.pagination.subscribe((pagination: any) => {
+            this.pagination.page = parseInt(pagination.page);
+            this.pagination.size = parseInt(pagination.size);
+
+            if (this.totalAssetCount) {
+              this.pagination.totalPages = Math.floor((this.totalAssetCount + this.pagination.size - 1) / this.pagination.size);
+            } else {
+              this.pagination.totalPages = parseInt(pagination.totalPages);
+            }
           })
         );
 
@@ -454,6 +474,19 @@ export class AssetPage implements OnInit, OnDestroy {
 
             this.generatedViewURL = this.assets[0].tileSource.replace('info.json','') + xOffset +','+yOffset+','+zoomX+','+zoomY+'/'+viewX+','+viewY+'/0/native.jpg'
         }
+    }
+
+    /**
+     * Load next set of thumbnails for compare mode
+     * @param newPage number of desired page
+     */
+    private goToPage(newPage: number) {
+      // The requested page should be within the limits (i.e 1 to totalPages)
+      if( (newPage >= 1) ){
+        this._assets.paginated = true;
+        this.pagination.page = newPage;
+        this._assets.loadAssetPage(this.pagination.page);
+      }
     }
 
     /**
