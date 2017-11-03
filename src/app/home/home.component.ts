@@ -106,6 +106,11 @@ export class Home implements OnInit, OnDestroy {
                 return collection.collectionType == 2 || collection.collectionType == 4
               })
               this.loaders['instCollections'] = false;
+            },
+            err => {
+              if (err && err.status != 401 && err.status != 403) {
+                console.error(err)
+              }
             }
           )
       )

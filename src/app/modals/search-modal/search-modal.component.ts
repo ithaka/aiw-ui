@@ -184,12 +184,13 @@ export class SearchModal implements OnInit {
                 collections: data['Collections']
               });
           },
-          (error) => {
-            console.log(error);
+          (err) => {
+            if (err && err.status != 401 && err.status != 403) {
+              console.error(err)
+            }
           }
         )
     )
-
   }
 
   private close(): void {
