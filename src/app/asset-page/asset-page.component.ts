@@ -189,6 +189,10 @@ export class AssetPage implements OnInit, OnDestroy {
             } else {
               this.pagination.totalPages = parseInt(pagination.totalPages);
             }
+            // Page size can't be altered in the asset drawer, and we don't want to exceed 1500 assets
+            if (this.pagination.totalPages > 63) {
+                this.pagination.totalPages = 63
+            }
           })
         );
 
@@ -232,6 +236,10 @@ export class AssetPage implements OnInit, OnDestroy {
      * Maintains the isFullscreen variable, as set by child AssetViewers
      */
     updateFullscreenVar(isFullscreen: boolean): void {
+        if (!isFullscreen) {
+            this.showAssetDrawer = false
+            this.pagination.page = 1
+        }
         this.isFullscreen = isFullscreen;
     }
 
