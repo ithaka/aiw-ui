@@ -69,11 +69,18 @@ export class ImageGroupPage implements OnInit, OnDestroy {
           // go redeem the token here
           this._group.redeemToken(params['token'])
             .take(1)
-            .subscribe((res) => {
-              if (res.success && res.group) {
-                this._assets.setResultsFromIg(res.group)
+            .subscribe(
+              (res) => {
+                if (res.success && res.group) {
+                  this._assets.setResultsFromIg(res.group)
+                }
+              },
+              (err) => {
+                if (err && err.status != 401 && err.status != 403) {
+                  console.error(err)
+                }
               }
-            })
+            )
         }
       })
     )
