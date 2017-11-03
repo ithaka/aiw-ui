@@ -324,6 +324,18 @@ export class AssetService {
         this.queryAll(currentParamsObj);
     }
 
+    public loadAssetPage(page: number): void{
+      let currentParamsObj: Params = Object.assign({}, this.currentLoadedParams);
+
+      if(this.currentLoadedParams.page){
+          currentParamsObj['page'] = page;
+      }
+      else{
+          currentParamsObj['page'] = page;
+      }
+      this.queryAll(currentParamsObj);
+    }
+
     /**
      * Clear Assets for asset grid
      */
