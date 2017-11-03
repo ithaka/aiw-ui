@@ -41,8 +41,6 @@ export const ROUTES: Routes = [
   { path: 'assetprint/:assetId', component: AssetPPPage },
   { path: 'category/:catId', component: CategoryPage, canActivate:[AuthService] },
   { path: 'category', component: CategoryPage, canActivate:[AuthService] },
-  { path: 'subcategory/:catId', component: CategoryPage, canActivate:[AuthService] },
-  { path: 'subcategory', component: CategoryPage, canActivate:[AuthService] },
   { path: 'group/:igId', component: ImageGroupPage, canActivate:[AuthService] },
   { path: 'group', component: ImageGroupPage, canActivate:[AuthService] },
   { path: 'cluster/:objectId', component: ClusterPage, canActivate:[AuthService] },
