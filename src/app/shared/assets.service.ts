@@ -15,6 +15,7 @@ import { GroupService } from './group.service';
 import { AssetFiltersService } from './../asset-filters/asset-filters.service';
 import { ToolboxService } from './toolbox.service';
 import { AssetSearchService } from './asset-search.service';
+import { AppConfig } from '../app.service';
 
 import { ImageGroup, Thumbnail } from '.';
 
@@ -106,6 +107,28 @@ export class AssetService {
         index: 0
      };
 
+    private baseSolrQuery = {
+      "limit": 0,
+      "start": 1,
+      "content_types": [
+        "art"
+      ],
+      "hier_facet_fields2": [],
+      "facet_fields" : []
+    };
+    private baseFacetField = {
+      "name" : "", // ex: collectiontypes
+      "mincount" : 1,
+      "limit" : 100
+    }
+    private baseHierarchy = {
+      "field": "hierarchies",
+      "hierarchy": "", // ex: artstor-geography
+      "look_ahead": 2,
+      "look_behind": -10,
+      "d_look_ahead": 1
+    }
+
     /** Keeps track of all filters available in url */
     // private knownFilters: any = {};
     public _storage;
@@ -132,7 +155,8 @@ export class AssetService {
         private _auth: AuthService,
         private _groups: GroupService,
         private _toolbox: ToolboxService,
-        private _assetSearch: AssetSearchService
+        private _assetSearch: AssetSearchService,
+        private _app: AppConfig
     ) {
         this._storage = locker.useDriver(Locker.DRIVERS.LOCAL);
     }
@@ -754,7 +778,7 @@ export class AssetService {
     }
 
     /**
-     *  Loads thumbnails for a Category/Subcategory to this.AllResults
+     *  Loads thumbnails for a Category to this.AllResults
      *  @param catId Category ID
      */
     private loadCategory(catId: string): Promise<any> {
@@ -821,13 +845,54 @@ export class AssetService {
             .then(this.extractData);
     }
 
-    subcategories(id) {
-        let options = new RequestOptions({ withCredentials: true });
+    public categoryByFacet(facetName: string) {
+      let options = new RequestOptions({
+        withCredentials: true
+      });
 
-        return this.http
-            .get(this._auth.getHostname() + '/api/categories/' + id + '/subcategories', options)
-            .toPromise()
-            .then(this.extractData);
+      let query = Object.assign({}, this.baseSolrQuery)
+      let isHierarchy = facetName === "artstor-geography"
+
+      if (isHierarchy) {
+        let hierarchy = Object.assign({}, this.baseHierarchy)
+        hierarchy.hierarchy = facetName
+        query.hier_facet_fields2 = [hierarchy]
+      } else {
+        let facetField = Object.assign({}, this.baseFacetField)
+        facetField.name = facetName
+        query.facet_fields = [facetField]
+      }
+
+
+      let filterArray = []
+
+      /**
+       * Check for WLVs Institution filter
+       * - WLVs filter by contributing institution id
+       */
+      let institutionFilters: number[] = this._app.config.contributingInstFilters
+      for (let i = 0; i < institutionFilters.length; i++) {
+        filterArray.push("contributinginstitutionid:" + institutionFilters[i])
+      }
+
+      query["filter_query"] = filterArray
+
+      return this.http.post(this._auth.getSearchUrl(), query, options)
+        .toPromise()
+        .then(res => {
+          let resData = res.json ? res.json() : {}
+
+          let hierData = Object.values(resData.hierarchies2)
+          if (hierData.length) { // if we have hierarchical data
+            resData = hierData[0]
+
+          } else { // must be a facet
+            resData = resData.facets[0].values
+          }
+
+          return resData
+        })
+
     }
 
     nodeDesc(descId, widgetId){
