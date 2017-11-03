@@ -276,7 +276,12 @@ export class AuthService implements CanActivate {
               this._storage.set('institution', data);
               data && this.setInstitution(data);
               return data;
-          });
+          })
+          .catch((err) => {
+            if (err && err.status != 401 && err.status != 403) {
+              console.error(err)
+            }
+          })
   }
 
   public getInstitution(): Observable<any> {
