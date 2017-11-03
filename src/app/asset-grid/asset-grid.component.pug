@@ -56,7 +56,7 @@
           //- Number of selected assets in edit mode
           .selected-assets(*ngIf="editMode") {{ selectedAssets.length }} selected asset{{ selectedAssets.length > 1 ? 's' : '' }}
     .col-sm-4.col-md-4.col-lg-3.text-right.grid-pagination-bar(*ngIf="!reorderMode")
-      pagination([pageObj]="pagination", (goToPage)="goToPage($event)")
+      pagination([pageObj]="pagination", (goToPage)="goToPage($event)", [right]="true")
   //- Thumbnail Grid
   .row.row--no-overflow.pb-5([ngClass]="{'edit': editMode}")
     .col-md-12.col--thumbnails.col--expanding.has-icon-overlay([ngClass]="{ 'col--expand-12' : !showFilters }")
@@ -71,7 +71,7 @@
           br
           | A less specific query might be able to find what you are looking for.
         .alert.alert-danger(*ngIf="!isLoading && (searchError.length > 0) && !searchLimitError")
-          | {{ searchError }} 
+          | {{ searchError }}
       //- Display Thumbnails
       #assetThumbnailsRow.row.no-gutters(*ngIf="!reorderMode")
         div([ngClass]="largeThmbView ? 'col-sm-12 col-md-6 col-lg-4' : 'col-sm-6 col-md-3 col-lg-2'", *ngFor="let asset of results")
@@ -89,5 +89,5 @@
   .row
     .mobile--hide.grid-tool-bar([ngClass]="[ reorderMode ? 'col-12' : 'col-sm-8 col-md-8 col-lg-9']")
     .col-sm-4.col-md-4.col-lg-3.text-right.grid-pagination-bar(*ngIf="!reorderMode")
-      pagination([pageObj]="pagination", (goToPage)="goToPage($event)")
+      pagination([pageObj]="pagination", (goToPage)="goToPage($event)", [right]="true")
 ang-confirm-modal(*ngIf="showLoseReorder", (closeModal)="ditchingReorder($event)", title="Exit Reordering", description="You have made changes to your group\'s order. Do you want to save them?", dismiss="Cancel", secondary="Discard Changes", primary="Save Changes")

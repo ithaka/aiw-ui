@@ -10,6 +10,7 @@ export class PaginationComponent implements OnInit {
   private pageValueOnKeyPress: number;
   @Input() pageObj: any;
   @Input() solrFlag: boolean;
+  @Input() right: boolean;
 
   @Output() goToPage: EventEmitter<any> = new EventEmitter();
 
