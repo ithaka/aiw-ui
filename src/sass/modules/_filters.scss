@@ -173,25 +173,29 @@ filter, .filter {
 	}
 }
 
-.filter-list li,
-.filter-list li.filter {
-  background-color: transparent;
+.filter-list {
+	padding-left: 0px;
+	
+	& li,
+	& li.filter {
+		background-color: transparent;
 
-  a {
-	color: #000;
-    background-color: #efefef;
-	padding: 2px 3px;
-	border-radius: 2px;
+		a {
+			color: #000;
+			background-color: #efefef;
+			padding: 2px 3px;
+			border-radius: 2px;
 
-    &:hover {
-      background-color: #d6d6d6;
-    }
-  }
+			&:hover {
+			background-color: #d6d6d6;
+			}
+		}
 
-  ul,
-  .filter-list {
-    padding-left: 5px;
-  }
+		ul,
+		.filter-list {
+			padding-left: 5px;
+		}
+	}
 }
 
 button.filter--tag {
