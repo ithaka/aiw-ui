@@ -3,7 +3,7 @@ nav.nav.nav-inline.browse-nav
   a.nav-link(*ngFor="let browseOpt of browseMenuArray", [ngClass]="{'active': browseOpt.id == selectedBrowseId}", (click)="selectBrowseOpt(browseOpt.id)") {{ browseOpt.label }}
 .row
   .col-md-8
-    ul.tree-list
+    ul.filter-list
       li.filter(*ngFor="let facet of categoryFacets")
         a.tag-link([href]="'#/search/*;' + facetQueryMap[facetType] + '=' + encodeURIComponent(facet.name)") {{facet.name}} ({{facet.count}})
       li.filter(*ngFor="let key of JSObject.keys(hierarchicalFacets).sort()")
