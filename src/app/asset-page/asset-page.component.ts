@@ -406,6 +406,7 @@ export class AssetPage implements OnInit, OnDestroy {
         this.showAssetCaption = true;
 
         this.assetViewer.togglePresentationMode();
+        this.showAssetDrawer = false;
     }
 
     private backToResults(): void{
@@ -495,6 +496,10 @@ export class AssetPage implements OnInit, OnDestroy {
         this.pagination.page = newPage;
         this._assets.loadAssetPage(this.pagination.page);
       }
+    }
+
+    private toggleAssetDrawer() {
+      this.showAssetDrawer = !this.showAssetDrawer;
     }
 
     /**
