@@ -397,9 +397,9 @@ export class AssetService {
                     this.loadCluster(params.objectId);
                 } else if (params.hasOwnProperty("catId")  && params["catId"] !== "") {
                     //get collection thumbnails
-                    this.loadCategory(params.catId);
-                    // let searchTerm = params.term ? params.term : '';
-                    // this.loadSearch(searchTerm);
+                    // this.loadCategory(params.catId);
+                    let searchTerm = params.term ? params.term : '';
+                    this.loadSearch(searchTerm);
                 }  else if (params.hasOwnProperty("pcolId") && params["pcolId"] !== "") {
                     //get personal collection thumbnails
                     this.loadCollection(params.pcolId);
