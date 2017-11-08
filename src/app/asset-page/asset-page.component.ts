@@ -43,6 +43,7 @@ export class AssetPage implements OnInit, OnDestroy {
     private showAddModal: boolean = false
     private showCreateGroupModal: boolean = false
     private showAccessDeniedModal: boolean = false
+    private showGenerateCitation: boolean = false
 
     private copyURLStatusMsg: string = ''
     private showCopyUrl: boolean = false

@@ -86,6 +86,7 @@
     },
     "BUTTONS": {
       "DOWNLOAD": "Download",
+      "GENERATE_CITATION": "Generate Citation",
       "PRINT": "Print",
       "LINK": "Link",
       "EXT": "Exit",
@@ -275,6 +276,14 @@
     "URL_LABEL": "Copy URL",
     "COPY_SUCCESS": "Link copied to clipboard",
     "SERVICE_ERROR": "We've encountered an error in getting a share token. Please refresh or try again later."
+  },
+  "GENERATE_CITATION_MODAL": {
+    "MAIN_HEADING": "Generate citation for asset",
+    "COPY_APA": "APA",
+    "COPY_MLA": "MLA",
+    "COPY_CHICAGO": "Chicago",
+    "COPY_SUCCESS": "Citation copied to clipboard",
+    "COPY_CLIPBOARD": "Copy to Clipboard"
   },
   "HOME": {
     "HEADINGS": {
