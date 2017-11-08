@@ -276,10 +276,6 @@ export class AssetViewerComponent implements OnInit, OnDestroy, AfterViewInit {
         this.fullscreenChange.emit(isFullscreen);
     }
 
-    removeComparedAsset(assetId): void {
-        this.removeAsset.emit(this.index);
-    }
-
     /**
      * Setup the embedded Kaltura player
      */
