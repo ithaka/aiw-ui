@@ -5,6 +5,7 @@ import { Http, HttpModule } from '@angular/http';
 import { NavigationEnd, Router, RouteReuseStrategy, RouterModule, UrlSerializer } from '@angular/router';
 import { removeNgStyles, createNewHosts, createInputTransfer } from '@angularclass/hmr';
 import { Ng2DeviceDetectorModule } from 'ng2-device-detector';
+import { DatePipe } from '@angular/common'
 
 /*
  * Platform and Environment providers/directives/pipes
@@ -74,6 +75,7 @@ import {
   AccessDeniedModal,
   PwdResetModal,
   ShareIgLinkModal,
+  GenerateCitation,
   ConfirmModal,
   SessionExpireModal,
   RegisterJstorModal
@@ -97,6 +99,7 @@ import { CustomUrlSerializer } from './shared/custom-url-serializer';
 
 const APP_PROVIDERS = [
   ...APP_RESOLVER_PROVIDERS,
+  DatePipe,
   AnalyticsService,
   AppConfig,
   AssetService,
@@ -171,6 +174,7 @@ const APP_PROVIDERS = [
     SearchModal,
     SearchPage,
     ShareIgLinkModal,
+    GenerateCitation,
     ShareLinkModal,
     SkyBannerComponent,
     TagComponent,
