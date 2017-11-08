@@ -263,7 +263,16 @@
   },
   "ACCESS_DENIED_MODAL": {
     "HEADING": "Content Unavailable",
-    "PROMPT": "If you are already <a href=\"/#/login\" class=\"link\">logged in</a>, this may be due to content limitations or your institutional access."
+    "PROMPT": "If you are already <a href=\"/#/login\" class=\"link\">logged in</a>, this may be due to content limitations or your institutional access.",
+    "IP_AUTH" : {
+      "PROMPT" : "This content is not available due to content limitations or your institutional access. Please try using an account."
+    },
+    "USER_AUTH" : {
+      "PROMPT" : "This content is not available due to content limitations or your institutional access."
+    }, 
+    "NO_AUTH" : {
+      "PROMPT" : "This content is not available due to content limitations or restricted access. Please try using an account or accessing this page on campus."
+    }
   },
   "ACCESS_DENIED": "<b>Sorry, Content Unavailable:</b> If you are already <a href=\"/#/login\" class=\"link\">logged in</a>, this may be due to content limitations or your institutional access.",
   "NO_IG": {
