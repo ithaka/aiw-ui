@@ -29,7 +29,7 @@ export const ROUTES: Routes = [
   { path: 'login', component: Login },
   { path: 'home',  component: Home, canActivate:[AuthService] },
   { path: 'search/', redirectTo: '/search/*', pathMatch: 'full', canActivate:[AuthService] },
-  { path: 'asset/:assetId', component: AssetPage, pathMatch: 'full', canActivate:[AuthService] },
+  { path: 'asset/:assetId', component: AssetPage, pathMatch: 'full' },
   { path: 'asset/external/:encryptedId', component: AssetPage, pathMatch: 'full' },
   { path: 'search/:term', component: SearchPage, canActivate:[AuthService] },
   { path: 'search', component: SearchPage, pathMatch: 'full', canActivate:[AuthService] },
