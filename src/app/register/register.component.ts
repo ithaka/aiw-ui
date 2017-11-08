@@ -24,7 +24,8 @@ export class RegisterComponent implements OnInit {
 
   private serviceErrors: {
     duplicate?: boolean,
-    hasJstor?: boolean
+    hasJstor?: boolean,
+    server?: boolean
   } = {};
 
   private showJstorModal: boolean = false
@@ -138,7 +139,11 @@ export class RegisterComponent implements OnInit {
           }
         }
       }, (error) => {
-        console.error(error)
+        console.error(error);
+        this.isLoading = false;
+        if (error.status === 500) {
+          this.serviceErrors.server = true
+        }
       });
 
     // if the call is unsuccessful, you will get a 200 w/o a user and with a field called 'statusMessage'
