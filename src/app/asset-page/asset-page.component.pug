@@ -115,7 +115,7 @@
           .alert.alert-info {{ 'ASSET_PAGE.MESSAGES.NEEDASSETS' | translate}}
         .text-center
           pagination([pageObj]="pagination", (goToPage)="goToPage($event)", style="display:inline-block")
-        ang-thumbnail.card.card--asset(*ngFor="let asset of prevAssetResults.thumbnails", [thumbnail]="asset", [ngClass]="{'selected' : asset.selected, 'disabled' : assets[0].id == asset.objectId }", (click)="toggleAsset(asset)")
+        ang-thumbnail.card.card--asset(*ngFor="let asset of prevAssetResults.thumbnails", [thumbnail]="asset", [ngClass]="{'selected' : asset.selected, 'disabled' : assets[0].id == (asset.hasOwnProperty('objectId') ? asset.objectId : asset.artstorid) }", (click)="toggleAsset(asset)")
         .text-center
           pagination([pageObj]="pagination", (goToPage)="goToPage($event)", style="display:inline-block")
 ang-agree-modal(*ngIf="showAgreeModal", (closeModal)="showAgreeModal = false", [assetUrl]="downloadUrl")
