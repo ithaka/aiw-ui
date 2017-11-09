@@ -159,14 +159,15 @@ export class AssetGrid implements OnInit, OnDestroy {
         this.pagination.page = parseInt(pagination.page);
         this.pagination.size = parseInt(pagination.size);
 
+        const MAX_RESULTS_COUNT: number = 1500
         if (this.assetCount) {
-          this.pagination.totalPages = Math.floor((this.assetCount + this.pagination.size - 1) / this.pagination.size);
+          let total = this.hasMaxAssetLimit && this.assetCount > MAX_RESULTS_COUNT ? MAX_RESULTS_COUNT : this.assetCount
+          this.pagination.totalPages = Math.floor((total + this.pagination.size - 1) / this.pagination.size);
         } else {
           this.pagination.totalPages = parseInt(pagination.totalPages);
         }
 
         // last page is a partial page
-        const MAX_RESULTS_COUNT: number = 1500
         this.isPartialPage = (this.pagination.page * this.pagination.size) >= (MAX_RESULTS_COUNT - 1)
       })
     );
@@ -215,9 +216,12 @@ export class AssetGrid implements OnInit, OnDestroy {
             // We push an empty array on new search to clear assets
             this.isLoading = true;
           }
+
+          const MAX_RESULTS_COUNT: number = 1500
           if('count' in allResults){
             this.totalAssets = allResults.count
-            this.pagination.totalPages = Math.floor((parseInt(this.totalAssets) + this.pagination.size - 1) / this.pagination.size)
+            let total = this.hasMaxAssetLimit && parseInt(this.totalAssets) > MAX_RESULTS_COUNT ? MAX_RESULTS_COUNT : parseInt(this.totalAssets)
+            this.pagination.totalPages = Math.floor((total + this.pagination.size - 1) / this.pagination.size)
             this.isLoading = false
           } else if(this.assetCount && this.results && this.results.length > 0){
             this.totalAssets = this.assetCount.toString();
