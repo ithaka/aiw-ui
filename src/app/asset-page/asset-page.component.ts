@@ -376,16 +376,17 @@ export class AssetPage implements OnInit, OnDestroy {
 
      // Add or remove assets from Assets array for comparison in full screen
     private toggleAsset(asset: any): void {
+        let assetIdProperty = asset.hasOwnProperty('artstorid') ? 'artstorid' : 'objectId';
         let add = true;
         this.assets.forEach( (viewAsset, i) => {
-            if (asset[this.assetIdProperty] == viewAsset.id) {
+            if (asset[assetIdProperty] == viewAsset.id) {
                 asset.selected = false;
                 this.assets.splice(i, 1);
                 add = false;
 
                 // Set 'selected' to 'false' for the asset in asset drawer
                 this.prevAssetResults.thumbnails.forEach( (thumbnail, i) => {
-                    if (asset[this.assetIdProperty] == thumbnail[this.assetIdProperty]) {
+                    if (asset[assetIdProperty] == thumbnail[this.assetIdProperty]) {
                         thumbnail.selected = false;
                     }
                 });
