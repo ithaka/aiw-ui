@@ -606,15 +606,6 @@ export class AuthService implements CanActivate {
             .then(this.extractData);
     }
 
-    getFallbackInstitutions() {
-        let url =  '/assets/institutions-initial.json';
-
-        return this.http
-            .get(url)
-            .toPromise()
-            .then(this.extractData);
-    }
-
     getInstitutions() {
         let url = this.getHostname() + '/api/institutions?_method=shibbolethOnly';
 
