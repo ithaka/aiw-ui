@@ -163,13 +163,14 @@ export class AssetViewerComponent implements OnInit, OnDestroy, AfterViewInit {
             },
             controlsFadeLength: 500,
             //   debugMode: true,
-            autoHideControls: false,
             zoomInButton: 'zoomIn-' + id,
             zoomOutButton: 'zoomOut-' + id,
             homeButton: 'zoomFit-' + id,
             sequenceMode: true,
             initialPage: 0,
-            nextButton: 'nextButton'
+            nextButton: 'nextButton',
+            showNavigator: true,
+            navigatorPosition: 'BOTTOM_LEFT'
         });
 
         // ---- Use handler in case other error crops up
@@ -214,6 +215,7 @@ export class AssetViewerComponent implements OnInit, OnDestroy, AfterViewInit {
         if (this.osdViewer && this.osdViewer.ButtonGroup) {
             this.osdViewer.ButtonGroup.element.addClass('button-group');
         }
+        this.osdViewer.navigator.element.style.marginBottom = "50px";
     }
 
     private requestFullScreen(el): void {
