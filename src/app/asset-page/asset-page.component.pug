@@ -12,10 +12,10 @@
         = " "
         span#assetPageCount {{ totalAssetCount }}
     // Asset Viewer Row
-    .asset-col([ngClass]="[ isFullscreen ? 'fullscreen-container' : 'col-md-8' ]")
+    .asset-col([ngClass]="[ isFullscreen ? 'fullscreen-container' : 'col-md-8', showAssetDrawer && isFullscreen ? 'drawer' : '' ]")
       ang-asset-viewer(*ngFor="let asset of (isFullscreen ? assets : [assets[0]]); let i = index",
         [asset]="asset",
-        [ngClass]="[ showAssetDrawer ? 'asset-viewer-with-drawer-' + assets.length : 'asset-viewer-' + assets.length ]",
+        [ngClass]="[ 'asset-viewer-' + assets.length ]",
         (fullscreenChange)="updateFullscreenVar($event)",
         [index]="i",
         [assetCompareCount]="assets.length",
@@ -30,7 +30,7 @@
         (nextPage)="showNextAsset()",
         (prevPage)="showPrevAsset()",
         (assetDrawer)="toggleAssetDrawer()")
-      .col-md-12.quiz-caption-cntnr(*ngIf="isFullscreen", [ngClass]="[ showAssetCaption ? '' : 'cntnr-bg', showAssetDrawer ? 'quiz-retract' : '' ]")
+      .col-md-12.quiz-caption-cntnr(*ngIf="isFullscreen", [ngClass]="[ showAssetCaption ? '' : 'cntnr-bg' ]")
         .caption-btn-cntnr([ngClass]="[ showAssetCaption ? 'active' : '' ]", (click)="showAssetCaption = !showAssetCaption", title="{{ showAssetCaption ? 'Hide Asset Meta Information' : 'Show Asset Meta Information' }}")
           span.caption-btn
           | {{ showAssetCaption ? 'HIDE CAPTION' : 'SHOW CAPTION' }}
@@ -105,7 +105,7 @@
     button.close.fullscreen-close(*ngIf="isFullscreen", type="button", (click)="exitPresentationMode()", aria-label="Close")
       span(aria-hidden="true", style="color: white") &times;
     // Asset Drawer
-    .asset-drawer([ngClass]="[ isFullscreen ? 'slideOut' : '', showAssetDrawer ? 'show-drawer' : '' ]")
+    .asset-drawer([class.slideOut]="showAssetDrawer && isFullscreen")
       button.close.fullscreen-close(*ngIf="isFullscreen", type="button", (click)="showAssetDrawer = false", aria-label="Close")
         span(aria-hidden="true") &times;
       .col-sm-12
