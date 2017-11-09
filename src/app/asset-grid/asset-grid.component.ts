@@ -141,6 +141,12 @@ export class AssetGrid implements OnInit, OnDestroy {
           else if(this.activeSort.index == '3'){
             this.activeSort.label = 'Date';
           }
+          else if(this.activeSort.index == '4'){
+            this.activeSort.label = 'Recently Added';
+          }
+        }
+        else{
+          this.activeSort.label = 'Relevance';
         }
 
         // if(params['igId'] && !params['page']){
