@@ -12,7 +12,7 @@
         = " "
         span#assetPageCount {{ totalAssetCount }}
     // Asset Viewer Row
-    .asset-col([ngClass]="[ isFullscreen ? 'fullscreen-container' : 'col-md-8' ]")
+    .asset-col([ngClass]="[ isFullscreen ? 'fullscreen-container' : 'col-md-8', showAssetDrawer && isFullscreen ? 'drawer' : '' ]")
       ang-asset-viewer(*ngFor="let asset of (isFullscreen ? assets : [assets[0]]); let i = index",
         [asset]="asset",
         [ngClass]="[ 'asset-viewer-' + assets.length ]",
@@ -28,7 +28,8 @@
         [prevAssetResults]="prevAssetResults",
         (removeAsset)="toggleAsset(asset)",
         (nextPage)="showNextAsset()",
-        (prevPage)="showPrevAsset()")
+        (prevPage)="showPrevAsset()",
+        (assetDrawer)="toggleAssetDrawer()")
       .col-md-12.quiz-caption-cntnr(*ngIf="isFullscreen", [ngClass]="[ showAssetCaption ? '' : 'cntnr-bg' ]")
         .caption-btn-cntnr([ngClass]="[ showAssetCaption ? 'active' : '' ]", (click)="showAssetCaption = !showAssetCaption", title="{{ showAssetCaption ? 'Hide Asset Meta Information' : 'Show Asset Meta Information' }}")
           span.caption-btn
@@ -103,18 +104,29 @@
         .text-left.pt-2
           a#buttonRequestIap.btn.btn-secondary.my-1(*ngIf="route.snapshot.queryParams.iap == 'true'", [attr.href]="'http://www.artstor.org/form/iap-request-form?name=' + assets[0].title + '&collectionName=' + assets[0].collectionName + '&id=' + assets[0].id + '&email=' + user.username", title="Request Image for Academic Publishing", tabindex="2", target="_blank") {{'ASSET_PAGE.BUTTONS.GET_IAP' | translate}}
           a#buttonReportAssetError.btn.btn-secondary.my-1([attr.href]="'http://www.artstor.org/form/report-error?collectionName=' + assets[0].collectionName + '&id=' + assets[0].id + '&email=' + user.username", title="Report an error", tabindex="2", target="_blank") {{'ASSET_PAGE.BUTTONS.REPORT_ERROR' | translate}}
-    .fullscreen-btns(*ngIf="isFullscreen")
-      button.btn.btn-dark((click)="exitPresentationMode()")
-        | {{ 'ASSET_PAGE.BUTTONS.EXT' | translate}}
-      button.btn.btn-dark(*ngIf="!quizMode", (click)="showAssetDrawer = !showAssetDrawer")
-        | {{ 'ASSET_PAGE.BUTTONS.COMPARE' | translate}}
+    button.close.fullscreen-close(
+        *ngIf="isFullscreen", 
+        type="button", 
+        (click)="exitPresentationMode()", 
+        aria-label="Close",
+        title="Exit Fullscreen"
+      )
+      .icon.icon-close-white
     // Asset Drawer
     .asset-drawer([class.slideOut]="showAssetDrawer && isFullscreen")
+      button.close.fullscreen-close(
+          *ngIf="isFullscreen", 
+          type="button", 
+          (click)="showAssetDrawer = false", 
+          aria-label="Close"
+        )
+        .icon.icon-close
       .col-sm-12
-        div(*ngIf="prevAssetResults.thumbnails.length < 1")
-          .alert.alert-info {{ 'ASSET_PAGE.MESSAGES.NEEDASSETS' | translate}}
+        h3.pb-2 Compare
         .text-center
           pagination([pageObj]="pagination", (goToPage)="goToPage($event)", style="display:inline-block")
+        div.pt-1.pb-3(*ngIf="prevAssetResults.thumbnails.length < 1")
+          .alert.alert-info {{ 'ASSET_PAGE.MESSAGES.NEEDASSETS' | translate}}
         ang-thumbnail.card.card--asset(*ngFor="let asset of prevAssetResults.thumbnails", [thumbnail]="asset", [ngClass]="{'selected' : asset.selected, 'disabled' : assets[0].id == asset.objectId }", (click)="toggleAsset(asset)")
         .text-center
           pagination([pageObj]="pagination", (goToPage)="goToPage($event)", style="display:inline-block")

@@ -41,6 +41,7 @@ export class AssetViewerComponent implements OnInit, OnDestroy, AfterViewInit {
     @Output() nextPage = new EventEmitter();
     @Output() prevPage = new EventEmitter();
     @Output() removeAsset = new EventEmitter();
+    @Output() assetDrawer = new EventEmitter();
 
     private isLoading: boolean = true;
     // private isFullscreen: boolean = false;
