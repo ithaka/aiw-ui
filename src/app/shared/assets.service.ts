@@ -396,9 +396,8 @@ export class AssetService {
                     //get clustered images thumbnails
                     this.loadCluster(params.objectId);
                 } else if (params.hasOwnProperty("catId")  && params["catId"] !== "") {
-                    //get collection thumbnails
-                    // this.loadCategory(params.catId);
-                    let searchTerm = params.term ? params.term : '';
+                    // To load category assets pass the 'catId' as 'query/searchTerm' parameter
+                    let searchTerm = 'categoryid:' + params["catId"];
                     this.loadSearch(searchTerm);
                 }  else if (params.hasOwnProperty("pcolId") && params["pcolId"] !== "") {
                     //get personal collection thumbnails

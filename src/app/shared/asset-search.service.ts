@@ -241,22 +241,11 @@ export class AssetSearchService {
       }
     }
 
-    if(urlParams.colId || urlParams.catId || urlParams['coll']){
-    // if(urlParams.colId || urlParams['coll']){
-      let colId = '';
-      if( urlParams['coll'] ){
-        colId = urlParams['coll'];
-      }
-      else if ( urlParams.colId ){
-        colId = urlParams.colId;
-      }
-      else if( urlParams.catId ){
-        colId = urlParams.catId;
-      }
-
+    // To load collection assets push the 'colId' in 'filter_query' parameter
+    if(urlParams.colId || urlParams['coll']){
+      let colId = urlParams.colId ? urlParams.colId : urlParams['coll'];
       filterArray.push("collections:\"" + colId + "\"");
     }
-
     query["filter_query"] = filterArray
 
     if (dateFacet.modified) {
