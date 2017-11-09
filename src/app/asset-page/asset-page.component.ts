@@ -67,6 +67,7 @@ export class AssetPage implements OnInit, OnDestroy {
       size: 24,
       page: 1
     };
+    private originPage: number = 0;
 
     constructor(
             private _assets: AssetService,
@@ -184,6 +185,9 @@ export class AssetPage implements OnInit, OnDestroy {
           this._assets.pagination.subscribe((pagination: any) => {
             this.pagination.page = parseInt(pagination.page);
             this.pagination.size = parseInt(pagination.size);
+            if (this.originPage < 1) {
+              this.originPage = this.pagination.page;
+            }
 
             if (this.totalAssetCount) {
               this.pagination.totalPages = Math.floor((this.totalAssetCount + this.pagination.size - 1) / this.pagination.size);
@@ -239,7 +243,10 @@ export class AssetPage implements OnInit, OnDestroy {
     updateFullscreenVar(isFullscreen: boolean): void {
         if (!isFullscreen) {
             this.showAssetDrawer = false
-            this.pagination.page = 1
+            if (this.originPage > 0 && this.pagination.page !== this.originPage) {
+              this.pagination.page = this.originPage;
+              this._assets.loadAssetPage(this.pagination.page);
+            }
         }
         this.isFullscreen = isFullscreen;
     }
@@ -408,6 +415,7 @@ export class AssetPage implements OnInit, OnDestroy {
         this.showAssetCaption = true;
 
         this.assetViewer.togglePresentationMode();
+        this.showAssetDrawer = false;
     }
 
     private backToResults(): void{
@@ -497,6 +505,10 @@ export class AssetPage implements OnInit, OnDestroy {
         this.pagination.page = newPage;
         this._assets.loadAssetPage(this.pagination.page);
       }
+    }
+
+    private toggleAssetDrawer() {
+      this.showAssetDrawer = !this.showAssetDrawer;
     }
 
     /**
