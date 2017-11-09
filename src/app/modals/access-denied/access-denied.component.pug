@@ -4,6 +4,7 @@
       .modal-header
         h5 {{ 'ACCESS_DENIED_MODAL.HEADING' | translate }}
       .modal-body
-        p.pt-3.main-content([innerHtml]="'ACCESS_DENIED_MODAL.PROMPT' | translate")
+        p.pt-3.main-content([innerHtml]="promptCopy | translate")
       .modal-footer
-        button.btn.btn-primary([routerLink]="['/home']") Return to Home
+        button.btn.btn-secondary([routerLink]="['/home']") Return to Home
+        button.btn.btn-primary(*ngIf="!isLoggedIn", [routerLink]="['/login']") Login
