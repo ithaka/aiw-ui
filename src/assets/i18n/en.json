@@ -335,9 +335,9 @@
       "ALT_TEXT": "Pueblo in Taos, New Mexico"
     },
     "AD": {
-      "LINK": "http://support.artstor.org/?article=quiz-mode-in-fullscreen",
-      "IMG_SOURCE": "/assets/img/promo-quiz.jpg",
-      "ALT_TEXT": "Test yourself in quiz mode."
+      "LINK": "https://support.artstor.org/?article=export-citations",
+      "IMG_SOURCE": "/assets/img/promo-citations.jpg",
+      "ALT_TEXT": "Try our new citation tool."
     },
     "QUESTIONS": {
       "HEADING": "Questions",
