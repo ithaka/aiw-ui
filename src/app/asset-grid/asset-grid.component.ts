@@ -145,7 +145,8 @@ export class AssetGrid implements OnInit, OnDestroy {
             this.activeSort.label = 'Recently Added';
           }
         }
-        else{
+        else{ // If no sort params - Sort by Relevance
+          this.activeSort.index = '0';
           this.activeSort.label = 'Relevance';
         }
 
