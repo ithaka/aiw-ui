@@ -107,10 +107,14 @@ $titleNavBg: #eee;
 .fullscreen-close {
   position: absolute;
   top: 0;
-  right: 0;
-  font-size: 50px;
+  right: 0px;
+  font-size: 36px;
   font-weight: initial;
-  opacity: 1;
+  opacity: 0.7;
+
+  &:hover, &:active {
+      opacity: 1;
+  }
 }
 
 .asset-page.fullscreen {
@@ -135,8 +139,9 @@ $titleNavBg: #eee;
     height: 100%;
     background: rgba(255,255,255,0.98);
     overflow-y: scroll;
-    padding: 80px 0px;
-    margin-top: 75px;
+    padding: 30px 0px 80px;
+    // Let the asset drawer cover the exit fullscreen button
+    margin-top: 0px;
 
     transition: 300ms ease all;
     box-shadow: 0px 1px 5px 0px rgba(0,0,0,0.3);
