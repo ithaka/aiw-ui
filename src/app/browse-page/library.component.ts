@@ -1,8 +1,10 @@
+import { AssetFiltersService } from '../asset-filters/asset-filters.service';
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { Subscription }   from 'rxjs/Subscription';
 
 import { AssetService } from './../shared/assets.service';
+import { AssetSearchService } from './../shared/asset-search.service'
 import { AnalyticsService } from '../analytics.service';
 import { TagsService } from './tags.service';
 import { Tag } from './tag/tag.class';
@@ -18,17 +20,25 @@ export class LibraryComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private _assets: AssetService,
+    private _search: AssetSearchService,
     private _tags: TagsService,
     private _analytics: AnalyticsService,
-    private _title: TitleService
+    private _title: TitleService,
+    private _filters: AssetFiltersService
   ) { }
 
   private loading: boolean = false;
   private subscriptions: Subscription[] = [];
   private selectedBrowseId: string = '';
   private browseMenuArray: any[];
+  private categoryFacets: any[]
+  private hierarchicalFacets: object = {}
+  private facetType: string = ""
   private splashImgURL: string = '';
   private errorMessage: string = ''
+  private JSObject: Object = Object;
+  private JSArray: Object = Array;
+  private encodeURIComponent = encodeURIComponent
 
   private tagsObj: any = {
     103 : [],
@@ -38,7 +48,24 @@ export class LibraryComponent implements OnInit {
   };
   private descObj: any  = {};
 
+  private categoryFacetMap = {
+    '103': 'artcollectiontitle_str',
+    '250': 'artclassification_str',
+    '260': 'artstor-geography',
+    // '270': '/browse/groups/public?tags=Teaching%2520Resources&page=1',
+    'undefined': 'artcollectiontitle_str' // default
+  }
+
+  private facetQueryMap = {
+    'artcollectiontitle_str': 'artcollectiontitle_str',
+    'artclassification_str': 'artclassification_str',
+    'artstor-geography': 'geography'
+  }
+
   ngOnInit() {
+    // clear applied filters because the facet links will run against search
+    this._filters.clearApplied()
+
     // Set browse array
     this.browseMenuArray = [
       {
@@ -55,7 +82,8 @@ export class LibraryComponent implements OnInit {
       },
       {
         label : 'Teaching Resources',
-        id: this._assets.getRegionCollection(270).toString()
+        id: this._assets.getRegionCollection(270).toString(),
+        link: ['/browse/groups/public', {tags:'Teaching Resources', page: 1}]
       }
     ];
     // Update based on IDs
@@ -75,6 +103,8 @@ export class LibraryComponent implements OnInit {
     this.subscriptions.push(
       this.route.params
       .subscribe((params: Params) => {
+        this.loading = true;
+
         if(params && params['viewId']){
             let adjustedId = params['viewId']
             if (adjustedId.length < 4) {
@@ -86,11 +116,42 @@ export class LibraryComponent implements OnInit {
             this.selectedBrowseId = adjustedId;
             this.updateSplashImgURL();
         }
+
+        // load category facets
+        this.facetType = this.categoryFacetMap[this.selectedBrowseId]
+
+        // empty out containers
+        this.clearFacets()
+
+        this._assets.categoryByFacet(this.facetType)
+        .then(resData => {
+          // ensure they are emptied in case of multiple fast clicking
+          this.clearFacets()
+
+          if (resData.children) { // if is hierarchical
+            this.hierarchicalFacets = resData.children
+          } else {
+            // sort on name
+            this.categoryFacets = resData.sort((elemA, elemB) => {
+              if (elemA.name > elemB.name) return 1
+              else if (elemA.name < elemB.name) return -1
+              else return 0
+            })
+          }
+
+          this.loading = false;
+        })
+
         this.loadDescription(this.selectedBrowseId);
       })
     );
     this._analytics.setPageValues('library', '')
   } // OnInit
+
+  private clearFacets(): void {
+    this.hierarchicalFacets = {}
+    this.categoryFacets = []
+  }
 
   private updateSplashImgURL(): void{
     if(this.selectedBrowseId === '103'){
@@ -130,9 +191,16 @@ export class LibraryComponent implements OnInit {
    * @param id Id of desired menu from colMenuArray enum
    */
   private selectBrowseOpt ( id: string ){
-    this.getTags(id);
-    this.selectedBrowseId = id;
-    this.addRouteParam('viewId', id);
+    let menuItem = this.browseMenuArray.find(elem => elem.id === id)
+
+    // navigate if link prop available
+    if (menuItem && menuItem.link) {
+      this.router.navigate(menuItem.link)
+    } else {
+      this.getTags(id);
+      this.selectedBrowseId = id;
+      this.addRouteParam('viewId', id);
+    }
   }
 
   /**
