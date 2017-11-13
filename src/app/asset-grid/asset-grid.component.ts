@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, Renderer } from '@angular/core';
 import { ActivatedRoute, NavigationStart, Params, Router } from '@angular/router';
 
 import { BehaviorSubject } from 'rxjs/Rx';
@@ -111,7 +111,8 @@ export class AssetGrid implements OnInit, OnDestroy {
     private _auth:AuthService,
     private _router: Router,
     private route: ActivatedRoute,
-    private locker: Locker
+    private locker: Locker,
+    private _renderer: Renderer
   ) {
       this._storage = locker.useDriver(Locker.DRIVERS.LOCAL);
   }
@@ -378,6 +379,7 @@ export class AssetGrid implements OnInit, OnDestroy {
         this.selectedAssets.push(asset);
         this._assets.setSelectedAssets(this.selectedAssets);
       }
+      this.selectedAssets.length ? this.editMode = true : this.editMode = false;
     }
     else{
       this._storage.set('totalAssets', this.totalAssets ? this.totalAssets : '1');
@@ -545,8 +547,18 @@ export class AssetGrid implements OnInit, OnDestroy {
       return this.editMode ? ['./'] : ['/asset', asset.artstorid]
   }
 
-  private checkBox(): void {
-    this.selectedAssets.length ? this.editMode = true : this.editMode = false;
+  /**
+   * Show checkbox on focus
+   */
+  private showBox(event): void {
+    this._renderer.setElementClass(event.target.parentElement, 'show-box', true);
+  }
+
+  /**
+   * Hide checkbox on blur
+   */
+  private hideBox(event): void {
+    this._renderer.setElementClass(event.target.parentElement, 'show-box', false);
   }
 
 }
