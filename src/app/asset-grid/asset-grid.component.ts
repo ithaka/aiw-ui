@@ -544,4 +544,9 @@ export class AssetGrid implements OnInit, OnDestroy {
   private getAssetPath(asset): string[] {
       return this.editMode ? ['./'] : ['/asset', asset.artstorid]
   }
+
+  private checkBox(): void {
+    this.selectedAssets.length ? this.editMode = true : this.editMode = false;
+  }
+
 }

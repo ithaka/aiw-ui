@@ -15,7 +15,7 @@
     color: #ddd;
     cursor: pointer;
     font-weight: 600;
-    
+
     &.active{
         color: #000;
     }
@@ -25,10 +25,10 @@
 }
 .filter-hdr a{
     color: #b64403;
-}  
+}
 
 .grid-tool-bar{
-    padding-right: 0px; 
+    padding-right: 0px;
 }
 .grid-pagination-bar{
     padding: 0px;
@@ -53,10 +53,10 @@
 .no-border{
     border: none !important;
 }
-input[type=number]::-webkit-inner-spin-button, 
-input[type=number]::-webkit-outer-spin-button { 
-  -webkit-appearance: none; 
-  margin: 0; 
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }
 input[type=number] {
   -moz-appearance: textfield;
@@ -80,7 +80,7 @@ input[type=number] {
 }
 
 .btn-link{
-    
+
     &.active {
         border-radius: 3px;
         background: #ccefcf;
@@ -138,4 +138,27 @@ input[type=number] {
 
 .col--thumbnails {
     padding: 0px;
+}
+
+.selection {
+    .check {
+        position: absolute;
+        right: 0;
+        z-index: 9999;
+        zoom: 1.5;
+        -moz-transform: scale(1.5);
+        -moz-transform-origin: 100% 0;
+    }
+    .check-mobile {
+        position: absolute;
+        right: 0;
+        z-index: 1;
+        height: 50px;
+        width: 50px;
+    }
+    &:hover, &:focus {
+      .check {
+          display: block !important;
+      }
+    }
 }
