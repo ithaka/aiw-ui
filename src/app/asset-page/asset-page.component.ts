@@ -264,6 +264,7 @@ export class AssetPage implements OnInit, OnDestroy {
         if (this.assets[0]) {
             for(var i = 0; i < this.prevAssetResults.thumbnails.length; i++){
                 if(this.prevAssetResults.thumbnails[i] && this.prevAssetResults.thumbnails[i][this.assetIdProperty] == this.assets[0].id){
+                    this.prevAssetResults.thumbnails[i].selected = true;
                     return i;
                 }
             }
