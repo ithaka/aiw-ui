@@ -143,15 +143,16 @@ input[type=number] {
 .selection {
     .check {
         position: absolute;
-        right: 0;
-        z-index: 9999;
+        right: -1px;
+        z-index: 1;
         zoom: 1.5;
         -moz-transform: scale(1.5);
         -moz-transform-origin: 100% 0;
+        cursor: pointer;
     }
     .check-mobile {
         position: absolute;
-        right: 0;
+        right: -1px;
         z-index: 1;
         height: 50px;
         width: 50px;
@@ -161,4 +162,10 @@ input[type=number] {
           display: block !important;
       }
     }
+}
+
+.show-box {
+  .check {
+    display: block !important;
+  }
 }
