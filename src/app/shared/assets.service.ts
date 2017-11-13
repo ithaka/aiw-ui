@@ -241,7 +241,7 @@ export class AssetService {
      * Should eventually be deprecated through improving services
      */
     public setAssetCount(count: number) {
-        this.paginationValue.totalPages = Math.floor(count / this.paginationValue.size) + 1
+        this.paginationValue.totalPages = Math.ceil(count/this.paginationValue.size)
         this.paginationSource.next(this.paginationValue)
     }
 
