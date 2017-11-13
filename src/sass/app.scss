@@ -136,6 +136,11 @@ span.active {
     }
 }
 
+// Hide minimap/navigator in fullscreen
+.fullscreen .navigator {
+  display: none !important;
+}
+
 .navigator .openseadragon-container {
   min-height: 50px;
 }

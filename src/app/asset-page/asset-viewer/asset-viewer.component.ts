@@ -170,7 +170,8 @@ export class AssetViewerComponent implements OnInit, OnDestroy, AfterViewInit {
             initialPage: 0,
             nextButton: 'nextButton',
             showNavigator: true,
-            navigatorPosition: 'BOTTOM_LEFT'
+            navigatorPosition: 'BOTTOM_LEFT',
+            navigatorSizeRatio: 0.15
         });
 
         // ---- Use handler in case other error crops up
