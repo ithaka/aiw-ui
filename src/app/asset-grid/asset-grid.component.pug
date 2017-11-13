@@ -12,6 +12,7 @@
               button.dropdown-item([ngClass]="{ 'disable': activeSort.index == '1' }", (click)="changeSortOpt('1', 'Title')") Title
               button.dropdown-item([ngClass]="{ 'disable': activeSort.index == '2' }", (click)="changeSortOpt('2', 'Creator')") Creator
               button.dropdown-item([ngClass]="{ 'disable': activeSort.index == '3' }", (click)="changeSortOpt('3', 'Date')") Date
+              button.dropdown-item([ngClass]="{ 'disable': activeSort.index == '4' }", (click)="changeSortOpt('4', 'Recently Added')") Recently Added
               button.dropdown-item([ngClass]="{ 'disable': activeSort.index == '0' }", (click)="changeSortOpt('0', 'Relevance')") Relevance
           li.pagesizelist.dropdown(ngbDropdown)
             button#pagesizedropdownMenu.btn.btn-link(ngbDropdownToggle) Images/page:

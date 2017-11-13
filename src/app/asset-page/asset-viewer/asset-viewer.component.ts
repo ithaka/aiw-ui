@@ -41,6 +41,7 @@ export class AssetViewerComponent implements OnInit, OnDestroy, AfterViewInit {
     @Output() nextPage = new EventEmitter();
     @Output() prevPage = new EventEmitter();
     @Output() removeAsset = new EventEmitter();
+    @Output() assetDrawer = new EventEmitter();
 
     private isLoading: boolean = true;
     // private isFullscreen: boolean = false;
@@ -162,13 +163,15 @@ export class AssetViewerComponent implements OnInit, OnDestroy, AfterViewInit {
             },
             controlsFadeLength: 500,
             //   debugMode: true,
-            autoHideControls: false,
             zoomInButton: 'zoomIn-' + id,
             zoomOutButton: 'zoomOut-' + id,
             homeButton: 'zoomFit-' + id,
             sequenceMode: true,
             initialPage: 0,
-            nextButton: 'nextButton'
+            nextButton: 'nextButton',
+            showNavigator: true,
+            navigatorPosition: 'BOTTOM_LEFT',
+            navigatorSizeRatio: 0.15
         });
 
         // ---- Use handler in case other error crops up
@@ -213,6 +216,7 @@ export class AssetViewerComponent implements OnInit, OnDestroy, AfterViewInit {
         if (this.osdViewer && this.osdViewer.ButtonGroup) {
             this.osdViewer.ButtonGroup.element.addClass('button-group');
         }
+        this.osdViewer.navigator.element.style.marginBottom = "50px";
     }
 
     private requestFullScreen(el): void {
@@ -274,10 +278,6 @@ export class AssetViewerComponent implements OnInit, OnDestroy, AfterViewInit {
     private setFullscreen(isFullscreen: boolean): void {
         this.isFullscreen = isFullscreen;
         this.fullscreenChange.emit(isFullscreen);
-    }
-
-    removeComparedAsset(assetId): void {
-        this.removeAsset.emit(this.index);
     }
 
     /**
