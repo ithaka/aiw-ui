@@ -24,8 +24,9 @@
       i.icon.icon-fit
     button.btn.btn--icon(*ngIf="!isFullscreen", id="fullScreen-{{ asset.id + '-' + index }}", (click)="togglePresentationMode()", title="Full Screen")
       i.icon.icon-fullscreen
-    button.btn.btn--icon(*ngIf="isFullscreen", id="compare-{{ asset.id + '-' + index }}", (click)="assetDrawer.emit()", title="Compare")
-      i.icon.icon-compare
+    //- UX Decision: Remove compare button from individual assets for now
+    //- button.btn.btn--icon(*ngIf="isFullscreen", id="compare-{{ asset.id + '-' + index }}", (click)="assetDrawer.emit()", title="Compare")
+    //-   i.icon.icon-compare
     button.btn.btn--icon(*ngIf="isFullscreen && index !== 0", (click)="removeAsset.emit(asset)", title="Remove from Comparison")
       i.icon.icon-close
   .fullscreen-metadata(*ngIf="isFullscreen", [class.slideAway]="!showCaption")

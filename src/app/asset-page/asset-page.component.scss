@@ -102,19 +102,49 @@ $titleNavBg: #eee;
     &:hover, &:active {
         opacity: 1;
     }
+
+    &.fade-out {
+        opacity: 0;
+        pointer-events: none;
+    }
+
+    & .btn {
+        padding: 0 12px;
+    }
 }
 
-.fullscreen-close {
-  position: absolute;
-  top: 0;
-  right: 0px;
-  font-size: 36px;
-  font-weight: initial;
-  opacity: 0.7;
+.asset-drawer__header {
+    line-height: 41px;
+    cursor: pointer;
+    vertical-align: middle;
+    line-height: 41px;
+    padding: 36px 0px 12px;
+    // Offset to fix position "sticky" clicking behavior
+    top: -24px;
+    position: sticky;
+    display: block;
+    background: #fafafa;
+    margin: 12px 0;
+    z-index: 3000;
+    width: 100%;
+    left: 0;
+}
 
-  &:hover, &:active {
-      opacity: 1;
-  }
+.asset-drawer__close {
+    background: transparent;
+    border: none;
+    font-size: 36px !important;
+    font-weight: initial;
+    opacity: 0.7;
+    cursor: pointer;
+
+    & i {
+        cursor: pointer;
+    }
+
+    &:hover, &:active {
+        opacity: 1;
+    }
 }
 
 .asset-page.fullscreen {
@@ -131,7 +161,7 @@ $titleNavBg: #eee;
 
 .asset-drawer {
     position: absolute;
-    z-index: 1500;
+    z-index: 2500;
     top: 0;
     right: -230px;
     bottom: 0;
