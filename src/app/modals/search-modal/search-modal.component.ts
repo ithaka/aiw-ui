@@ -142,7 +142,29 @@ export class SearchModal implements OnInit {
           this.availableFilters.push({ name: "geography", values: topObj })
         }
         this.loadingFilters = false
+
+        this._assets.getCollectionsList( 'institution' )
+          .toPromise()
+          .then((data) => {
+            if (data && data.Collections && data.Collections.length > 0) {
+              for(let filterGroup of this.availableFilters){
+                if( filterGroup.name === 'collectiontypes' ){
+                  for(let value of filterGroup.values){
+                    if( value.name === '2'){
+                      value.children = data.Collections
+                    }
+                  }
+                }
+              }
+              console.log(this.availableFilters)
+            } else {
+              throw new Error("no Collections returned in data");
+            }
+    
+          })
       })
+
+      
   }
 
   /**
