@@ -64,7 +64,12 @@
                             span(*ngIf="filter.name && filter.name.length > 1") {{ filter.name }} ({{filter.count}})
                         ul.list-group.list-group-child(*ngIf="filter.children")
                           li.list-group-item(*ngFor="let child of filter.children")
-                            label.custom-control.custom-checkbox
+                            label.custom-control.custom-checkbox(*ngIf="child.collectionid")
+                              input.custom-control-input((click)="toggleFilter(child.collectionid, 'collections')", type="checkbox")
+                              span.custom-control-indicator
+                              span.custom-control-description
+                                span(*ngIf="child.collectionname") {{ child.collectionname }}
+                            label.custom-control.custom-checkbox(*ngIf="!child.collectionid")
                               input.custom-control-input((click)="toggleFilter(filterGroup.name == 'geography' ? child.efq : child.name, filterGroup.name)", type="checkbox")
                               span.custom-control-indicator
                               span.custom-control-description

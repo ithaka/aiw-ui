@@ -242,7 +242,7 @@ export class AssetSearchService {
     }
 
     // if(urlParams.colId || urlParams.catId || urlParams['coll']){
-    if(urlParams.colId || urlParams['coll']){
+    if(urlParams.collections || urlParams.colId || urlParams['coll']){
       let colId = '';
       if( urlParams['coll'] ){
         colId = urlParams['coll'];
@@ -250,9 +250,9 @@ export class AssetSearchService {
       else if ( urlParams.colId ){
         colId = urlParams.colId;
       }
-      // else if( urlParams.catId ){
-      //   colId = urlParams.catId;
-      // }
+      else if( urlParams.collections ){
+        colId = urlParams.collections;
+      }
 
       filterArray.push("collections:\"" + colId + "\"");
     }
@@ -270,21 +270,17 @@ export class AssetSearchService {
     }
 
     if (sortIndex) {
-      // Set the sort order to descending for sort by 'Recently Added' else ascending
-      if (sortIndex == '4'){
-        query["sortorder"] = "desc"
-      } else if(sortIndex == '2'){
-        query["sortorder"] = "asc"
-      }
+      query["sortorder"] = "asc"
 
+      // if(sortIndex == '0'){
+      //   sort = 'Relevance';
+      // } else
       if (sortIndex == '1'){
-        query["sort"] = 'name_str'
+        query["sort"] = 'name_str';
       } else if(sortIndex == '2'){
-        query["sort"] = 'agent_str'
+        query["sort"] = 'agent_str';
       } else if(sortIndex == '3'){
-        query["sort"] = 'yearend'
-      } else if(sortIndex == '4'){
-        query["sort"] = 'updatedon_str'
+        query["sort"] = 'yearend';
       }
     }
 
