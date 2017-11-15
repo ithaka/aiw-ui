@@ -276,17 +276,21 @@ export class AssetSearchService {
     }
 
     if (sortIndex) {
-      query["sortorder"] = "asc"
+      // Set the sort order to descending for sort by 'Recently Added' else ascending
+      if (sortIndex == '4'){
+        query["sortorder"] = "desc"
+      } else{
+        query["sortorder"] = "asc"
+      }
 
-      // if(sortIndex == '0'){
-      //   sort = 'Relevance';
-      // } else
       if (sortIndex == '1'){
-        query["sort"] = 'name_str';
+        query["sort"] = 'name_str'
       } else if(sortIndex == '2'){
-        query["sort"] = 'agent_str';
+        query["sort"] = 'agent_str'
       } else if(sortIndex == '3'){
-        query["sort"] = 'yearend';
+        query["sort"] = 'yearend'
+      } else if(sortIndex == '4'){
+        query["sort"] = 'updatedon_str'
       }
     }
 
