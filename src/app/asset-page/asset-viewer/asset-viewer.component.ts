@@ -175,8 +175,8 @@ export class AssetViewerComponent implements OnInit, OnDestroy, AfterViewInit {
         });
 
         // ---- Use handler in case other error crops up
-        this.osdViewer.addOnceHandler('open-failed', () => {
-            console.warn("Opening source failed");
+        this.osdViewer.addOnceHandler('open-failed', (e) => {
+            console.error("OSD Opening source failed:",e)
             this.mediaLoadingFailed = true;
             this.osdViewer.destroy();
         });
@@ -195,8 +195,8 @@ export class AssetViewerComponent implements OnInit, OnDestroy, AfterViewInit {
             this.asset.viewportDimensions.zoom = value.zoom
         });
 
-        this.osdViewer.addOnceHandler('tile-load-failed', () => {
-            console.warn("Loading tiles failed");
+        this.osdViewer.addOnceHandler('tile-load-failed', (e) => {
+            console.warn("OSD Loading tiles failed:", e)
             this.mediaLoadingFailed = true;
             this.osdViewer.destroy();
         });

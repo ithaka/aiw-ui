@@ -235,6 +235,16 @@ export class AssetService {
         this.setUrlParam('size', size);
     }
 
+    /**
+     * ! Use with Caution !
+     * This is a workaround function when we receive the asset count from a separate service
+     * Should eventually be deprecated through improving services
+     */
+    public setAssetCount(count: number) {
+        this.paginationValue.totalPages = Math.ceil(count/this.paginationValue.size)
+        this.paginationSource.next(this.paginationValue)
+    }
+
     private setUrlParam(key: string, value: any, quiet?: boolean) {
         this.urlParams[key] = value;
         let currentParamsObj: Params = {};
