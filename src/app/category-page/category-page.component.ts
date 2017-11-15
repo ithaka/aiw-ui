@@ -82,7 +82,6 @@ export class CategoryPage implements OnInit, OnDestroy {
           // Get Category data
           this.getCategoryData(this.catId)
           .then((data) => {
-            console.log("found", data.objCount)
             if (data) {
               this.catName = data.categoryName;
               this.assetCount = data.objCount;
