@@ -46,7 +46,6 @@ export class AssetGrid implements OnInit, OnDestroy {
 
   private searchTerm: string = '';
   private formattedSearchTerm: string = '';
-  private totalAssets: string = '';
   private searchInResults: boolean = false;
   private isPartialPage: boolean = false;
 
@@ -59,8 +58,17 @@ export class AssetGrid implements OnInit, OnDestroy {
   @Input()
   private hasMaxAssetLimit: boolean = false
 
-  @Input()
-  private assetCount: number;
+  // Value
+  private totalAssets: number = 0;
+  @Input() 
+  set assetCount(count: number) {
+    if (typeof(count) != 'undefined') {
+      this.totalAssets = count
+    }
+  }
+  get assetCount() : number {
+    return this.totalAssets
+  }
 
   // @Input()
   // private allowSearchInRes:boolean;
@@ -227,11 +235,11 @@ export class AssetGrid implements OnInit, OnDestroy {
           const MAX_RESULTS_COUNT: number = 1500
           if('count' in allResults){
             this.totalAssets = allResults.count
-            let total = this.hasMaxAssetLimit && parseInt(this.totalAssets) > MAX_RESULTS_COUNT ? MAX_RESULTS_COUNT : parseInt(this.totalAssets)
+            let total = this.hasMaxAssetLimit && this.totalAssets > MAX_RESULTS_COUNT ? MAX_RESULTS_COUNT : this.totalAssets
             this.pagination.totalPages = Math.floor((total + this.pagination.size - 1) / this.pagination.size)
             this.isLoading = false
           } else if(this.assetCount && this.results && this.results.length > 0){
-            this.totalAssets = this.assetCount.toString();
+            this.totalAssets = this.assetCount
             this.isLoading = false;
           }
 
@@ -380,7 +388,7 @@ export class AssetGrid implements OnInit, OnDestroy {
       }
     }
     else{
-      this._storage.set('totalAssets', this.totalAssets ? this.totalAssets : '1');
+      this._storage.set('totalAssets', this.totalAssets ? this.totalAssets : 1);
       this._storage.set('prevRouteParams', this.route.snapshot.url);
       // Let template routerLink navigate at this point
     }
