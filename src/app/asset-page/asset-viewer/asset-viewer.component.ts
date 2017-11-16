@@ -60,11 +60,18 @@ export class AssetViewerComponent implements OnInit, OnDestroy, AfterViewInit {
     private kalturaUrl: string
     private osdViewer: any
 
-    constructor(private _assets: AssetService, private _auth: AuthService, private http: Http) {
+    constructor(
+        private _assets: AssetService,
+        private _auth: AuthService,
+        private _analytics: Angulartics2,
+        private http: Http
+    ) {
 
     }
 
     ngOnInit() {
+        this._analytics.eventTrack.next({ action:"viewAsset", properties: { category: "asset", label: this.asset.id }})
+
         if (this.asset.isDataLoaded) {
             // Wait for the asset to have its metadata
             this.subscriptions.push(
