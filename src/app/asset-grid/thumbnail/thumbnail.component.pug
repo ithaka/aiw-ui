@@ -9,7 +9,7 @@
     //- New search icons
     i.icon.icon-cluster(*ngIf="thumbnail.partofcluster", [id]="thumbnail.objectId + '_clustered_images'", (click)="openLink($event, ['/cluster', thumbnail.clusterid, { objTitle :  thumbnail.name }])", title="View related media")
     i.icon.icon-collab(*ngIf="thumbnail.frequentlygroupedwith && thumbnail.frequentlygroupedwith.length > 0", [id]="thumbnail.objectId + '_associated_images'", (click)="openLink($event, ['/associated', thumbnail.frequentlygroupedwith[0], 103])", title="Others are also interested in...")
-    i(class="icon icon-{{getCollectionType().name}} icon-collection-type", [attr.title]="getCollectionType().alt")
+    i.icon.icon-collection-type(class="icon-{{getCollectionType().name}}", [attr.title]="getCollectionType().alt")
     i(*ngIf="thumbnail.objectTypeId && thumbnail.objectTypeId != 10", class="icon icon-{{thumbnail.objectTypeId | typeIdPipe}}")
   div
     //- New Asset display
