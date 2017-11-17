@@ -531,8 +531,17 @@ export class AssetPage implements OnInit, OnDestroy {
     setDownloadView() : void {
         this.downloadUrl = this.generatedViewURL;
         this.showAgreeModal = true;
-        // Track download
+        // Track download view
+        this._analytics.directCall('download_view');
         this.angulartics.eventTrack.next({ action:"downloadView", properties: { category: "asset", label: this.assets[0].id }});
+    }
+
+    trackDownloadImage() : void {
+      this._analytics.directCall('download_image');
+    }
+
+    trackDownloadView() : void {
+      this._analytics.directCall('download_view');
     }
 
     /**
