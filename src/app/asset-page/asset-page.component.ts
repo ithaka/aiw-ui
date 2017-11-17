@@ -331,9 +331,14 @@ export class AssetPage implements OnInit, OnDestroy {
      * Some html tags are ruining things:
      * - <wbr> word break opportunities break our link detection
      */
-    private cleanFieldValue(value: string): string {
+    private cleanFieldValue(value: string, field: string): string {
         if (typeof(value) == 'string') {
-            return value.replace(/\<wbr\>/g, '').replace(/\<wbr\/\>/g, '')
+            let resValue = value.replace(/\<wbr\>/g, '').replace(/\<wbr\/\>/g, '')
+            // Make collection field a hyperlink to the collection page itself
+            if(field === 'Collection'){
+                resValue = '<a href="/#/search/collectionname:' + resValue + '">' + resValue + '</a>'
+            }
+            return resValue
         } else {
             return ''
         }
