@@ -344,17 +344,122 @@ export class SearchModal implements OnInit {
     this.close();
   }
 
-  private toggleFilter(value: string, group: string): void {
+  private toggleFilter(filterObj: any, filterGroup: string): void {
+    let filterValue = '';
+    if (filterGroup === 'geography'){
+      filterValue = filterObj.efq;
+    } else if (filterGroup === 'collections'){
+      filterValue = filterObj.collectionid;
+    } else{
+      filterValue = filterObj.name;
+    }
+
     let filter = {
-      'group': group,
-      'value' : value
+      'group': filterGroup,
+      'value' : filterValue
     };
     let objIndex = this.arrayObjectIndexOf(this.filterSelections, filter);
 
-    if (objIndex < 0) {
-      this.filterSelections.push(filter);
-    } else {
-      this.filterSelections.splice(objIndex, 1);
+    filterObj.checked = filterObj.checked ? false: true; // Manages the check state of the associated checkboxes
+
+    if(filterGroup === 'collections'){ // If instituional collections (child) nodes clicked
+      let instColTypeFilterObj = this.availableFilters[1].values[2] ;
+
+      // Check if all of the child inst. collections are checked
+      let allColsChecked = true;
+      for(let child of instColTypeFilterObj.children){
+        if( !child.checked ){
+          allColsChecked = false;
+          break;
+        }
+      }
+      
+      if( allColsChecked ){
+        // If all child inst. collections are checked then push only the inst. col type id 
+        instColTypeFilterObj.checked = true;
+        let parentfilter = {
+          'group': 'collectiontypes',
+          'value' : '2'
+        };
+        let parentObjIndex = this.arrayObjectIndexOf(this.filterSelections, parentfilter);
+        if(parentObjIndex < 0){
+          this.filterSelections.push(parentfilter);
+        }
+        // Remove any inst. col id that was previously pushed
+        for(let child of instColTypeFilterObj.children){
+          let obj = {
+            'group': 'collections',
+            'value' : child.collectionid
+          };
+          let index = this.arrayObjectIndexOf(this.filterSelections, obj);
+          if(index >= 0){ 
+            this.filterSelections.splice(index, 1);
+          }
+        }
+      }
+      else{
+        // If not all the child inst. collections are checked then push the indv. col id for the checked inst. col filters
+        instColTypeFilterObj.checked = false;
+        let parentfilter = {
+          'group': 'collectiontypes',
+          'value' : '2'
+        };
+        let parentObjIndex = this.arrayObjectIndexOf(this.filterSelections, parentfilter);
+        if(parentObjIndex >= 0){
+          this.filterSelections.splice(parentObjIndex, 1);
+        }
+
+        // Update the 'filterSelections' array based on child node 'checked' flag
+        for(let child of instColTypeFilterObj.children){
+          let obj = {
+            'group': 'collections',
+            'value' : child.collectionid
+          };
+          let index = this.arrayObjectIndexOf(this.filterSelections, obj);
+
+          if(child.checked && (index < 0)){ 
+            this.filterSelections.push(obj);
+          }
+          else if(!child.checked && (index >= 0)){ 
+            this.filterSelections.splice(index, 1);
+          }
+        }
+
+      }
+      
+    } else{ // If parent nodes clicked or geography child nodes clicked
+      if (objIndex < 0) {
+        this.filterSelections.push(filter);
+        if( (filterGroup == 'collectiontypes') && (filterValue === '2') ){ // Check all the child nodes if institutional collection type is checked
+          // Just push the inst. collection type id, no need to push indv. col ids
+          for(let child of filterObj.children){
+            child.checked = true;
+            let obj = {
+              'group': 'collections',
+              'value' : child.collectionid
+            };
+            let index = this.arrayObjectIndexOf(this.filterSelections, obj);
+            if(index >= 0){ 
+              this.filterSelections.splice(index, 1);
+            }
+          }
+        }
+      } else { 
+        this.filterSelections.splice(objIndex, 1);
+        if( (filterGroup == 'collectiontypes') && (filterValue === '2') ){ // Uncheck all the child nodes if institutional collection type is unchecked
+          for(let child of filterObj.children){
+            child.checked = false;
+            let obj = {
+              'group': 'collections',
+              'value' : child.collectionid
+            };
+            let index = this.arrayObjectIndexOf(this.filterSelections, obj);
+            if(index >= 0){ 
+              this.filterSelections.splice(index, 1);
+            }
+          }
+        }
+      }
     }
     this.validateForm();
   }
