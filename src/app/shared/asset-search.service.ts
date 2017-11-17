@@ -236,7 +236,7 @@ export class AssetSearchService {
         }
       } else {
         for (let j = 0; j < filters[i].filterValue.length; j++) {
-          let filterValueArray = filters[i].filterValue[j].trim().split(',')
+          let filterValueArray = filters[i].filterValue[j].toString().trim().split(',')
           for(let filter of filterValueArray){ // Push each filter value seperately in the filterArray (for multiple filter selection within the same filterGroup)
             filterArray.push(filters[i].filterGroup + ':\"' + filter + '\"')
           }          
@@ -257,7 +257,7 @@ export class AssetSearchService {
     }
 
     if(urlParams.collections){
-      let colsArray = urlParams.collections.trim().split(',');
+      let colsArray = urlParams.collections.toString().trim().split(',');
       for(let col of colsArray){ // Push each collection id seperately in the filterArray
         filterArray.push("collections:\"" + col + "\"");
       }

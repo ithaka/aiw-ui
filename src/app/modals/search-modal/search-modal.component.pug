@@ -57,7 +57,7 @@
                     ul.list-group.list-group-flush.compact
                       li.list-group-item(*ngFor="let filter of filterGroup.values")
                         label.custom-control.custom-checkbox
-                          input.custom-control-input((click)="toggleFilter(filterGroup.name == 'geography' ? filter.efq : filter.name, filterGroup.name)", type="checkbox")
+                          input.custom-control-input((click)="toggleFilter(filter, filterGroup.name)", type="checkbox", [checked]="filter.checked" )
                           span.custom-control-indicator
                           span.custom-control-description
                             span(*ngIf="filter.name && filter.name.length < 2") {{ filterNameMap['collectiontypes'] && filterNameMap['collectiontypes'][filter.name] }} ({{filter.count}})
@@ -65,12 +65,12 @@
                         ul.list-group.list-group-child(*ngIf="filter.children")
                           li.list-group-item(*ngFor="let child of filter.children")
                             label.custom-control.custom-checkbox(*ngIf="child.collectionid")
-                              input.custom-control-input((click)="toggleFilter(child.collectionid, 'collections')", type="checkbox")
+                              input.custom-control-input((click)="toggleFilter(child, 'collections')", type="checkbox", [checked]="child.checked")
                               span.custom-control-indicator
                               span.custom-control-description
                                 span(*ngIf="child.collectionname") {{ child.collectionname }}
                             label.custom-control.custom-checkbox(*ngIf="!child.collectionid")
-                              input.custom-control-input((click)="toggleFilter(filterGroup.name == 'geography' ? child.efq : child.name, filterGroup.name)", type="checkbox")
+                              input.custom-control-input((click)="toggleFilter(child, filterGroup.name)", type="checkbox", [checked]="child.checked")
                               span.custom-control-indicator
                               span.custom-control-description
                                 span(*ngIf="child.name && child.name.length < 2") {{ filterNameMap['collectiontypes'] && filterNameMap['collectiontypes'][child.name] }} ({{child.count}})
