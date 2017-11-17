@@ -177,8 +177,8 @@ export class AssetViewerComponent implements OnInit, OnDestroy, AfterViewInit {
         // ---- Use handler in case other error crops up
         this.osdViewer.addOnceHandler('open-failed', (e) => {
             console.error("OSD Opening source failed:",e)
-            this.mediaLoadingFailed = true;
-            this.osdViewer.destroy();
+            // this.mediaLoadingFailed = true;
+            // this.osdViewer.destroy();
         });
 
         this.osdViewer.addHandler('pan', (value) => {
