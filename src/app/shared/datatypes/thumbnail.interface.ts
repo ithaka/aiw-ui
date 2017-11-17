@@ -17,3 +17,10 @@ export interface Thumbnail {
   thumbnail3: any;
   thumbnail4: any;
 }
+
+// export interface SearchThumbnail {
+//   artstorid: string
+//   collections: string[]
+//   collectiontypenameid: string[]
+//   collectiontypes: number[]
+// }
