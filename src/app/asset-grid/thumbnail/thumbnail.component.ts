@@ -39,7 +39,8 @@ export class ThumbnailComponent implements OnInit {
     3: { name: "personal-asset", alt: "Private Collections" },
     4: { name: "institution-asset", alt: "Institution Collections" },
     5: { name: "artstor-open-asset", alt: "Open Artstor" },
-    6: { name: "personal-asset", alt: "Private Collections" }
+    6: { name: "personal-asset", alt: "Private Collections" },
+    200: { name: "ssc-asset", alt: "Open Collection" } // an non-existant collection type used to indicate it's an open, non-artstor asset
   }
 
   constructor(
@@ -58,6 +59,12 @@ export class ThumbnailComponent implements OnInit {
     // Set collection type for assets from Solr
     if (this.thumbnail['collectiontypes']) {
       this.collectionType = this.thumbnail['collectiontypes'][0]
+    }
+
+    // all open collections come with collectiontypes[0] == 5, but we want to show a different icon for an
+    //  Open Artstor asset vs an open institutional asset
+    if (this.collectionType === 5 && this.thumbnail['contributinginstitutionid'] !== 1000) {
+      this.collectionType = 200
     }
 
     this.thumbnail.iapFlag = this.determineIAP(this.thumbnail['artstorid'] ? this.thumbnail['artstorid'] : this.thumbnail['objectId'])

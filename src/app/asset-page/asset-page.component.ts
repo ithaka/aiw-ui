@@ -67,6 +67,7 @@ export class AssetPage implements OnInit, OnDestroy {
       size: 24,
       page: 1
     };
+    private originPage: number = 0;
 
     constructor(
             private _assets: AssetService,
@@ -184,6 +185,9 @@ export class AssetPage implements OnInit, OnDestroy {
           this._assets.pagination.subscribe((pagination: any) => {
             this.pagination.page = parseInt(pagination.page);
             this.pagination.size = parseInt(pagination.size);
+            if (this.originPage < 1) {
+              this.originPage = this.pagination.page;
+            }
 
             if (this.totalAssetCount) {
               this.pagination.totalPages = Math.floor((this.totalAssetCount + this.pagination.size - 1) / this.pagination.size);
@@ -239,7 +243,10 @@ export class AssetPage implements OnInit, OnDestroy {
     updateFullscreenVar(isFullscreen: boolean): void {
         if (!isFullscreen) {
             this.showAssetDrawer = false
-            this.pagination.page = 1
+            if (this.originPage > 0 && this.pagination.page !== this.originPage) {
+              this.pagination.page = this.originPage;
+              this._assets.loadAssetPage(this.pagination.page);
+            }
         }
         this.isFullscreen = isFullscreen;
     }
@@ -257,6 +264,7 @@ export class AssetPage implements OnInit, OnDestroy {
         if (this.assets[0]) {
             for(var i = 0; i < this.prevAssetResults.thumbnails.length; i++){
                 if(this.prevAssetResults.thumbnails[i] && this.prevAssetResults.thumbnails[i][this.assetIdProperty] == this.assets[0].id){
+                    this.prevAssetResults.thumbnails[i].selected = true;
                     return i;
                 }
             }
@@ -369,16 +377,17 @@ export class AssetPage implements OnInit, OnDestroy {
 
      // Add or remove assets from Assets array for comparison in full screen
     private toggleAsset(asset: any): void {
+        let assetIdProperty = asset.hasOwnProperty('artstorid') ? 'artstorid' : 'objectId';
         let add = true;
         this.assets.forEach( (viewAsset, i) => {
-            if (asset[this.assetIdProperty] == viewAsset.id) {
+            if (asset[assetIdProperty] == viewAsset.id) {
                 asset.selected = false;
                 this.assets.splice(i, 1);
                 add = false;
 
                 // Set 'selected' to 'false' for the asset in asset drawer
                 this.prevAssetResults.thumbnails.forEach( (thumbnail, i) => {
-                    if (asset[this.assetIdProperty] == thumbnail[this.assetIdProperty]) {
+                    if (asset[assetIdProperty] == thumbnail[this.assetIdProperty]) {
                         thumbnail.selected = false;
                     }
                 });
@@ -407,6 +416,7 @@ export class AssetPage implements OnInit, OnDestroy {
         this.showAssetCaption = true;
 
         this.assetViewer.togglePresentationMode();
+        this.showAssetDrawer = false;
     }
 
     private backToResults(): void{
@@ -498,6 +508,10 @@ export class AssetPage implements OnInit, OnDestroy {
       }
     }
 
+    private toggleAssetDrawer() {
+      this.showAssetDrawer = !this.showAssetDrawer;
+    }
+
     /**
      * Function called if not yet agreed to download image
      * - sets url used by agree modal
@@ -517,8 +531,17 @@ export class AssetPage implements OnInit, OnDestroy {
     setDownloadView() : void {
         this.downloadUrl = this.generatedViewURL;
         this.showAgreeModal = true;
-        // Track download
+        // Track download view
+        this._analytics.directCall('download_view');
         this.angulartics.eventTrack.next({ action:"downloadView", properties: { category: "asset", label: this.assets[0].id }});
+    }
+
+    trackDownloadImage() : void {
+      this._analytics.directCall('download_image');
+    }
+
+    trackDownloadView() : void {
+      this._analytics.directCall('download_view');
     }
 
     /**

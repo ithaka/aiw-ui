@@ -102,6 +102,49 @@ $titleNavBg: #eee;
     &:hover, &:active {
         opacity: 1;
     }
+
+    &.fade-out {
+        opacity: 0;
+        pointer-events: none;
+    }
+
+    & .btn {
+        padding: 0 12px;
+    }
+}
+
+.asset-drawer__header {
+    line-height: 41px;
+    cursor: pointer;
+    vertical-align: middle;
+    line-height: 41px;
+    padding: 36px 0px 12px;
+    // Offset to fix position "sticky" clicking behavior
+    top: -24px;
+    position: sticky;
+    display: block;
+    background: #fafafa;
+    margin: 12px 0;
+    z-index: 3000;
+    width: 100%;
+    left: 0;
+}
+
+.asset-drawer__close {
+    background: transparent;
+    border: none;
+    font-size: 36px !important;
+    font-weight: initial;
+    opacity: 0.7;
+    cursor: pointer;
+
+    & i {
+        cursor: pointer;
+    }
+
+    &:hover, &:active {
+        opacity: 1;
+    }
 }
 
 .asset-page.fullscreen {
@@ -117,23 +160,28 @@ $titleNavBg: #eee;
 }
 
 .asset-drawer {
-    position: fixed;
-    z-index: 1500;
-    top:0;
-    right: 0;
+    position: absolute;
+    z-index: 2500;
+    top: 0;
+    right: -230px;
     bottom: 0;
-    height: 100%;
     width: 230px;
+    height: 100%;
     background: rgba(255,255,255,0.98);
     overflow-y: scroll;
-    padding: 80px 0px;
+    padding: 30px 0px 80px;
+    // Let the asset drawer cover the exit fullscreen button
+    margin-top: 0px;
 
-    transform: translateX(102%);
-    transition: transform 0.2s linear;
+    transition: 300ms ease all;
     box-shadow: 0px 1px 5px 0px rgba(0,0,0,0.3);
 
     &.slideOut {
-        transform: translateX(0%);
+      -webkit-transform: translateX(-230px);
+      transform: translateX(-230px);
+
+      transform: translate3d(-230px, 0, 0);
+      -webkit-transform: translate3d(-230px, 0, 0);
     }
     & .card {
         background: transparent;
@@ -162,6 +210,10 @@ $titleNavBg: #eee;
     height: calc(100% - 40px);
     top: 0;
     position: fixed;
+    transition: 1ms ease-in all;
+    &.drawer {
+      width: calc(100% - 230px);
+    }
 }
 
 .fullscreen {

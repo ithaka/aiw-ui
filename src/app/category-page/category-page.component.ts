@@ -79,10 +79,11 @@ export class CategoryPage implements OnInit, OnDestroy {
           // Get Category data
           this.getCategoryData(this.catId)
           .then((data) => {
-
             if (data) {
               this.catName = data.categoryName;
               this.assetCount = data.objCount;
+              // Tell components relying on Pagination observable
+              this._assets.setAssetCount(this.assetCount)
               // Set page title
               this._title.setSubtitle(this.catName);
             } else {

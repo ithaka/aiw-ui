@@ -36,7 +36,7 @@ export class Asset {
   public isDataLoaded = this.dataLoadedSource.asObservable();
 
   public disableDownload: boolean = false;
-  
+
   /** Used for holding asset metadata array from the service response */
   metaDataArray: any = [];
   /** Used for holding asset file properties array from the service response */
@@ -51,7 +51,7 @@ export class Asset {
       6: 'publication',
       7: 'synonyms',
       8: 'people',
-      9: 'repository', 
+      9: 'repository',
       10: 'image',
       11: 'qtvr',
       12: 'audio',
@@ -62,25 +62,25 @@ export class Asset {
       24: 'kaltura'
   };
 
-  metadataFields = [ 
-        "arttitle", 
-        "artclassification", 
-        "artcollectiontitle", 
-        "artcreator", 
-        "artculture", 
-        "artcurrentrepository", 
-        "artcurrentrepositoryidnumber", 
-        "artdate", 
-        "artidnumber", 
-        "artlocation", 
-        "artmaterial", 
-        "artmeasurements", 
-        "artrelation", 
-        "artrepository", 
-        "artsource", 
-        "artstyleperiod", 
-        "artsubject", 
-        "arttechnique", 
+  metadataFields = [
+        "arttitle",
+        "artclassification",
+        "artcollectiontitle",
+        "artcreator",
+        "artculture",
+        "artcurrentrepository",
+        "artcurrentrepositoryidnumber",
+        "artdate",
+        "artidnumber",
+        "artlocation",
+        "artmaterial",
+        "artmeasurements",
+        "artrelation",
+        "artrepository",
+        "artsource",
+        "artstyleperiod",
+        "artsubject",
+        "arttechnique",
         "artworktype"
     ];
 
@@ -88,9 +88,8 @@ export class Asset {
     this.id = this.artstorid = asset_id;
     this._assets = _assets;
     this._auth = _auth;
-    this.loadAssetMetaData();
 //   constructor(asset_id: string, _assets ?: AssetService, _auth ?: AuthService, assetObj ?: any) {
-    
+
     if (assetObj) {
         this.metadataLoaded = true
         this.title = assetObj.tombstone[0]
@@ -120,10 +119,9 @@ export class Asset {
         setTimeout(() => {
             this.useImageSourceRes(assetObj)
         },500)
-        
+
     } else {
         this.loadAssetMetaData();
-        this.loadMediaMetaData();
     }
   }
 
@@ -139,7 +137,7 @@ export class Asset {
 
       this._assets.getById( this.id )
           .then((res) => {
-              let asset 
+              let asset
               if (res['results']) {
                 // As returned from Solr
                 asset = res['results'][0]
@@ -165,7 +163,7 @@ export class Asset {
                     this.imgURL = media['thumbnailSizeOnePath']
                     this.typeId = media['adlObjectType']
                   }
-                  
+
                   this.setCreatorDate();
                   this.collectionName = this.getCollectionName()
 
@@ -174,7 +172,7 @@ export class Asset {
               }
 
               // Old Search
-              if(asset.objectId){
+              else if(asset.objectId){
                   this.loadMediaMetaData();
                   this.metaDataArray = asset.metaData;
                   this.formatMetadata();
@@ -281,12 +279,12 @@ export class Asset {
     else{
         this.disableDownload = false;
     }
-    
+
     this.typeId = data.object_type_id || data.objectTypeId;
-    
+
     let downloadSize = data.download_size || '1024,1024'
     let imageServer = data.imageServer || 'http://hubviewer.artstor.org/'
-    
+
     /** This determines how to build the downloadLink, which is different for different typeIds */
     if (this.typeId === 20 || this.typeId === 21 || this.typeId === 22 || this.typeId === 23) { //all of the typeIds for documents
         this.downloadLink = [this._auth.getMediaUrl(), this.id, this.typeId].join("/");
@@ -297,7 +295,7 @@ export class Asset {
 
     // Save the Tile Source for IIIF
     let imgPath
-    
+
     if (data && data.metadata && data.metadata[0] && data.metadata[0]['image_url']) {
         imgPath = '/' + data.metadata[0]['image_url']
     } else {
@@ -310,7 +308,7 @@ export class Asset {
     this.dataLoadedSource.next(this.metadataLoaded && this.imageSourceLoaded);
   }
 
-  /** 
+  /**
    * Pulls additional media metadata
    * - Constructs a download link
    * - Constructs the IIIF tile source URL

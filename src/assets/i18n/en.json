@@ -47,7 +47,8 @@
       "AGE_REQUIRED": "Please confirm you are 13 or older",
       "INSTITUTION_ROLE_REQUIRED": "Please select a role",
       "ACADEMIC_DEPT_REQUIRED": "Please select a department",
-      "LOGIN_SERVER": "Server is not responding. Please try again later."
+      "LOGIN_SERVER": "Server is not responding. Please try again later.",
+      "SERVER_ERROR": "The server encountered an error processing the request. Please try again."
     },
     "AGE_PROMPT": "I confirm that I am 13 or older",
     "AGE_PROMPT_HOVER": "If you are under 13, please provide your legal guardian's email address to register",
@@ -263,7 +264,16 @@
   },
   "ACCESS_DENIED_MODAL": {
     "HEADING": "Content Unavailable",
-    "PROMPT": "If you are already <a href=\"/#/login\" class=\"link\">logged in</a>, this may be due to content limitations or your institutional access."
+    "PROMPT": "If you are already <a href=\"/#/login\" class=\"link\">logged in</a>, this may be due to content limitations or your institutional access.",
+    "IP_AUTH" : {
+      "PROMPT" : "This content is not available due to content limitations or your institutional access. Please try using an account."
+    },
+    "USER_AUTH" : {
+      "PROMPT" : "This content is not available due to content limitations or your institutional access."
+    }, 
+    "NO_AUTH" : {
+      "PROMPT" : "This content is not available due to content limitations or restricted access. Please try using an account or accessing this page on campus."
+    }
   },
   "ACCESS_DENIED": "<b>Sorry, Content Unavailable:</b> If you are already <a href=\"/#/login\" class=\"link\">logged in</a>, this may be due to content limitations or your institutional access.",
   "NO_IG": {
@@ -325,9 +335,9 @@
       "ALT_TEXT": "Pueblo in Taos, New Mexico"
     },
     "AD": {
-      "LINK": "http://support.artstor.org/?article=quiz-mode-in-fullscreen",
-      "IMG_SOURCE": "/assets/img/promo-quiz.jpg",
-      "ALT_TEXT": "Test yourself in quiz mode."
+      "LINK": "https://support.artstor.org/?article=export-citations",
+      "IMG_SOURCE": "/assets/img/promo-citations.jpg",
+      "ALT_TEXT": "Try our new citation tool."
     },
     "QUESTIONS": {
       "HEADING": "Questions",
