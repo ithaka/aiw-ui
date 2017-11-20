@@ -81,6 +81,27 @@ $iconBtnSize: $btnHeight;
      color: #fff;
  }
 
+ .btn-light {
+     background: rgba(255, 255, 255, 0.98);
+     color: #333;
+
+     &:hover, &:active {
+         background: $btnLinkHoverBg;
+     }
+
+     &:hover, &:active, &:focus, &:visited {
+         color: #000;
+     }
+ }
+
+ .btn:not(.btn--icon) > .icon {
+    margin: 0px 0.5em;
+    width: 1.2em;
+    height: 1.2em;
+    vertical-align: middle;
+    transform: translateY(-0.1em);
+ }
+
  .btn.btn-link, a.btn.btn-link { 
      text-transform: none !important;
      padding: 0px 6px 0px 0px;

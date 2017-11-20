@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, Renderer } from '@angular/core';
 import { ActivatedRoute, NavigationStart, Params, Router } from '@angular/router';
 
 import { BehaviorSubject } from 'rxjs/Rx';
@@ -46,7 +46,6 @@ export class AssetGrid implements OnInit, OnDestroy {
 
   private searchTerm: string = '';
   private formattedSearchTerm: string = '';
-  private totalAssets: string = '';
   private searchInResults: boolean = false;
   private isPartialPage: boolean = false;
 
@@ -59,8 +58,17 @@ export class AssetGrid implements OnInit, OnDestroy {
   @Input()
   private hasMaxAssetLimit: boolean = false
 
-  @Input()
-  private assetCount: number;
+  // Value
+  private totalAssets: number = 0;
+  @Input() 
+  set assetCount(count: number) {
+    if (typeof(count) != 'undefined') {
+      this.totalAssets = count
+    }
+  }
+  get assetCount() : number {
+    return this.totalAssets
+  }
 
   // @Input()
   // private allowSearchInRes:boolean;
@@ -111,7 +119,8 @@ export class AssetGrid implements OnInit, OnDestroy {
     private _auth:AuthService,
     private _router: Router,
     private route: ActivatedRoute,
-    private locker: Locker
+    private locker: Locker,
+    private _renderer: Renderer
   ) {
       this._storage = locker.useDriver(Locker.DRIVERS.LOCAL);
   }
@@ -141,6 +150,13 @@ export class AssetGrid implements OnInit, OnDestroy {
           else if(this.activeSort.index == '3'){
             this.activeSort.label = 'Date';
           }
+          else if(this.activeSort.index == '4'){
+            this.activeSort.label = 'Recently Added';
+          }
+        }
+        else{ // If no sort params - Sort by Relevance
+          this.activeSort.index = '0';
+          this.activeSort.label = 'Relevance';
         }
 
         // if(params['igId'] && !params['page']){
@@ -159,14 +175,15 @@ export class AssetGrid implements OnInit, OnDestroy {
         this.pagination.page = parseInt(pagination.page);
         this.pagination.size = parseInt(pagination.size);
 
+        const MAX_RESULTS_COUNT: number = 1500
         if (this.assetCount) {
-          this.pagination.totalPages = Math.floor((this.assetCount + this.pagination.size - 1) / this.pagination.size);
+          let total = this.hasMaxAssetLimit && this.assetCount > MAX_RESULTS_COUNT ? MAX_RESULTS_COUNT : this.assetCount
+          this.pagination.totalPages = Math.floor((total + this.pagination.size - 1) / this.pagination.size);
         } else {
           this.pagination.totalPages = parseInt(pagination.totalPages);
         }
 
         // last page is a partial page
-        const MAX_RESULTS_COUNT: number = 1500
         this.isPartialPage = (this.pagination.page * this.pagination.size) >= (MAX_RESULTS_COUNT - 1)
       })
     );
@@ -215,12 +232,15 @@ export class AssetGrid implements OnInit, OnDestroy {
             // We push an empty array on new search to clear assets
             this.isLoading = true;
           }
+
+          const MAX_RESULTS_COUNT: number = 1500
           if('count' in allResults){
             this.totalAssets = allResults.count
-            this.pagination.totalPages = Math.floor((parseInt(this.totalAssets) + this.pagination.size - 1) / this.pagination.size)
+            let total = this.hasMaxAssetLimit && this.totalAssets > MAX_RESULTS_COUNT ? MAX_RESULTS_COUNT : this.totalAssets
+            this.pagination.totalPages = Math.floor((total + this.pagination.size - 1) / this.pagination.size)
             this.isLoading = false
           } else if(this.assetCount && this.results && this.results.length > 0){
-            this.totalAssets = this.assetCount.toString();
+            this.totalAssets = this.assetCount
             this.isLoading = false;
           }
 
@@ -367,9 +387,10 @@ export class AssetGrid implements OnInit, OnDestroy {
         this.selectedAssets.push(asset);
         this._assets.setSelectedAssets(this.selectedAssets);
       }
+      this.selectedAssets.length ? this.editMode = true : this.editMode = false;
     }
     else{
-      this._storage.set('totalAssets', this.totalAssets ? this.totalAssets : '1');
+      this._storage.set('totalAssets', this.totalAssets ? this.totalAssets : 1);
       this._storage.set('prevRouteParams', this.route.snapshot.url);
       // Let template routerLink navigate at this point
     }
@@ -533,4 +554,19 @@ export class AssetGrid implements OnInit, OnDestroy {
   private getAssetPath(asset): string[] {
       return this.editMode ? ['./'] : ['/asset', asset.artstorid]
   }
+
+  /**
+   * Show checkbox on focus
+   */
+  private showBox(event): void {
+    this._renderer.setElementClass(event.target.parentElement, 'show-box', true);
+  }
+
+  /**
+   * Hide checkbox on blur
+   */
+  private hideBox(event): void {
+    this._renderer.setElementClass(event.target.parentElement, 'show-box', false);
+  }
+
 }

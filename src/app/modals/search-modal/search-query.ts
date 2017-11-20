@@ -78,7 +78,7 @@ export class SearchQueryUtil {
         advQuery += " " + query.operator.toUpperCase() + " "
       }
 
-      advQuery += `${query.field.value}:(${query.term})`
+      advQuery += query.field.value ? `${query.field.value}:(${query.term})` : `${query.term}`
     })
 
     if (advQuery.length < 1) {
