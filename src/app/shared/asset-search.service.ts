@@ -236,12 +236,14 @@ export class AssetSearchService {
         }
       } else {
         for (let j = 0; j < filters[i].filterValue.length; j++) {
-          filterArray.push(filters[i].filterGroup + ':\"' + filters[i].filterValue[j] + '\"')
+          let filterValueArray = filters[i].filterValue[j].toString().trim().split(',')
+          for(let filter of filterValueArray){ // Push each filter value seperately in the filterArray (for multiple filter selection within the same filterGroup)
+            filterArray.push(filters[i].filterGroup + ':\"' + filter + '\"')
+          }          
         }
       }
     }
 
-    // if(urlParams.colId || urlParams.catId || urlParams['coll']){
     if(urlParams.colId || urlParams['coll']){
       let colId = '';
       if( urlParams['coll'] ){
@@ -250,11 +252,15 @@ export class AssetSearchService {
       else if ( urlParams.colId ){
         colId = urlParams.colId;
       }
-      // else if( urlParams.catId ){
-      //   colId = urlParams.catId;
-      // }
 
       filterArray.push("collections:\"" + colId + "\"");
+    }
+
+    if(urlParams.collections){
+      let colsArray = urlParams.collections.toString().trim().split(',');
+      for(let col of colsArray){ // Push each collection id seperately in the filterArray
+        filterArray.push("collections:\"" + col + "\"");
+      }
     }
 
     query["filter_query"] = filterArray
@@ -273,7 +279,7 @@ export class AssetSearchService {
       // Set the sort order to descending for sort by 'Recently Added' else ascending
       if (sortIndex == '4'){
         query["sortorder"] = "desc"
-      } else if(sortIndex == '2'){
+      } else{
         query["sortorder"] = "asc"
       }
 
