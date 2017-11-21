@@ -72,7 +72,7 @@ export class SearchModal implements OnInit {
   private showCollectionType: boolean = false;
 
   // Filters
-  private availableFilters: any[] = []
+  private availableFilters: FacetGroup[] = []
 
   // Search query trasnformation logic is abstracted to a utility
   private queryUtil: SearchQueryUtil = new SearchQueryUtil()
@@ -120,48 +120,83 @@ export class SearchModal implements OnInit {
     this._assetSearch.getFacets().take(1)
       .subscribe(data => {
 
-        // Process through "facets"
+        // Process through "facets" & construct the availableFilters array, based on the defined interfaces, from facets response
         for (let facetKey in data['facets']) {
           const facet = data['facets'][facetKey]
 
           if ((facet.name === 'collectiontypes' && this.showCollectionType) || facet.name !== 'collectiontypes') {
-
+            // Construct Facet Group
+            let facetGroup: FacetGroup = {} as FacetGroup
+            facetGroup.name = facet.name
+            facetGroup.values = []
+            
             // Prune any facets not available to the user (ex. Private Collections on SAHARA)
             for (let i = facet.values.length - 1; i >= 0; i--){
               if (!this.showPrivateCollections && facet.values[i].name.match(/3|6/)) { // NOTE: 3 & 6 are Private Collections names
                 facet.values.splice(i, 1)
               }
+              else{
+                // Push filter objects to Facet Group 'values' Array
+                let facetObject: FacetObject = {} as FacetObject
+                facetObject.checked = false
+                facetObject.name = facet.name === 'collectiontypes' ? this.filterNameMap['collectiontypes'][facet.values[i].name] : facet.values[i].name
+                facetObject.name += ' (' + facet.values[i].count + ')'
+                facetObject.value = facet.values[i].name
+                facetObject.children = []
+                facetGroup.values.push( facetObject )
+              }
             }
-
-            this.availableFilters.push(facet)
+            facetGroup.values.reverse()
+            this.availableFilters.push(facetGroup)
           }
         }
-        // Process "hierarchies2"
+
+        // Process "hierarchies2" & create Geo Facet Group & push it to available filters
         for (let hierFacet in data['hierarchies2']) {
           let topObj = this._assetFilters.generateHierFacets(data['hierarchies2'][hierFacet].children, 'geography')
-          this.availableFilters.push({ name: "geography", values: topObj })
-        }
-        this.loadingFilters = false
 
+          let geoFacetGroup: FacetGroup = {} as FacetGroup
+          geoFacetGroup.name = 'geography'
+          geoFacetGroup.values = []
+          
+          for(let geoObj of topObj){
+            let geoFacetObj: FacetObject = {} as FacetObject
+            geoFacetObj.checked = false
+            geoFacetObj.name = geoObj.name + ' (' + geoObj.count + ')'
+            geoFacetObj.value = geoObj.efq
+            geoFacetObj.children = []
+            
+            for(let child of geoObj.children){
+              let geoChildFacetObj: FacetObject = {} as FacetObject
+              geoChildFacetObj.checked = false
+              geoChildFacetObj.name = child.name + ' (' + child.count + ')'
+              geoChildFacetObj.value = child.efq
+              geoFacetObj.children.push( geoChildFacetObj )
+            }
+            geoFacetGroup.values.push( geoFacetObj )
+          }
+          this.availableFilters.push( geoFacetGroup )
+        }
+
+        // Fetch institutional collections and add them as children of institutional collectiontype filter
         this._assets.getCollectionsList( 'institution' )
           .toPromise()
           .then((data) => {
             if (data && data.Collections && data.Collections.length > 0) {
-              for(let filterGroup of this.availableFilters){
-                if( filterGroup.name === 'collectiontypes' ){
-                  for(let value of filterGroup.values){
-                    if( value.name === '2'){
-                      value.children = data.Collections
-                    }
-                  }
-                }
+              for(let collection of data.Collections){
+                let colFacetObj: FacetObject = {} as FacetObject
+                colFacetObj.checked = false
+                colFacetObj.name = collection.collectionname
+                colFacetObj.value = collection.collectionid
+                this.availableFilters[1].values[2].children.push( colFacetObj )
               }
-              console.log(this.availableFilters)
             } else {
-              throw new Error("no Collections returned in data");
+              throw new Error("no Collections returned in data")
             }
     
           })
+
+        this.loadingFilters = false
       })
 
       
@@ -344,124 +379,53 @@ export class SearchModal implements OnInit {
     this.close();
   }
 
-  private toggleFilter(filterObj: any, filterGroup: string): void {
-    let filterValue = '';
-    if (filterGroup === 'geography'){
-      filterValue = filterObj.efq;
-    } else if (filterGroup === 'collections'){
-      filterValue = filterObj.collectionid;
-    } else{
-      filterValue = filterObj.name;
-    }
+  private toggleFilter( filterObj: FacetObject, parentFilterObj?: FacetObject): void{
+    // Toggle filter checked state
+    filterObj.checked = !filterObj.checked
 
-    let filter = {
-      'group': filterGroup,
-      'value' : filterValue
-    };
-    let objIndex = this.arrayObjectIndexOf(this.filterSelections, filter);
-
-    filterObj.checked = filterObj.checked ? false: true; // Manages the check state of the associated checkboxes
-
-    if(filterGroup === 'collections'){ // If instituional collections (child) nodes clicked
-      let instColTypeFilterObj = this.availableFilters[1].values[2] ;
-
-      // Check if all of the child inst. collections are checked
-      let allColsChecked = true;
-      for(let child of instColTypeFilterObj.children){
+    if( parentFilterObj ) { // If a child node is clicked, check the parent node if all children are checked else do otherwise
+      let parentChecked: boolean = true
+      for( let child of parentFilterObj.children ){
         if( !child.checked ){
-          allColsChecked = false;
-          break;
+          parentChecked = false
+          break
         }
       }
-      
-      if( allColsChecked ){
-        // If all child inst. collections are checked then push only the inst. col type id 
-        instColTypeFilterObj.checked = true;
-        let parentfilter = {
-          'group': 'collectiontypes',
-          'value' : '2'
-        };
-        let parentObjIndex = this.arrayObjectIndexOf(this.filterSelections, parentfilter);
-        if(parentObjIndex < 0){
-          this.filterSelections.push(parentfilter);
-        }
-        // Remove any inst. col id that was previously pushed
-        for(let child of instColTypeFilterObj.children){
-          let obj = {
-            'group': 'collections',
-            'value' : child.collectionid
-          };
-          let index = this.arrayObjectIndexOf(this.filterSelections, obj);
-          if(index >= 0){ 
-            this.filterSelections.splice(index, 1);
-          }
-        }
+      parentFilterObj.checked = parentChecked
+    } else if( filterObj.children ) { // If a parent node is clicked and it has children make sure they are all checked/unchecked accordingly
+      for( let child of filterObj.children ){
+        child.checked = filterObj.checked
       }
-      else{
-        // If not all the child inst. collections are checked then push the indv. col id for the checked inst. col filters
-        instColTypeFilterObj.checked = false;
-        let parentfilter = {
-          'group': 'collectiontypes',
-          'value' : '2'
-        };
-        let parentObjIndex = this.arrayObjectIndexOf(this.filterSelections, parentfilter);
-        if(parentObjIndex >= 0){
-          this.filterSelections.splice(parentObjIndex, 1);
-        }
+    }
+    this.generateSelectedFilters()    
+  }
 
-        // Update the 'filterSelections' array based on child node 'checked' flag
-        for(let child of instColTypeFilterObj.children){
-          let obj = {
-            'group': 'collections',
-            'value' : child.collectionid
-          };
-          let index = this.arrayObjectIndexOf(this.filterSelections, obj);
-
-          if(child.checked && (index < 0)){ 
-            this.filterSelections.push(obj);
-          }
-          else if(!child.checked && (index >= 0)){ 
-            this.filterSelections.splice(index, 1);
-          }
+  private generateSelectedFilters(): void {
+    let selectedFiltersArray: Array<SelectedFilter> = []
+    // Traverse the availableFilters and check which ones are checked and push them to selectedFilters Array
+    for( let filterGroup of this.availableFilters ) {
+      for( let filter of filterGroup.values ){
+        // If the parent node is checked just push the selected filter object for the parent itself, no need to check the children
+        if( filter.checked ){
+          let selectedFilterObject: SelectedFilter = {} as SelectedFilter
+          selectedFilterObject.group = filterGroup.name
+          selectedFilterObject.value = filter.value
+          selectedFiltersArray.push( selectedFilterObject )
         }
-
-      }
-      
-    } else{ // If parent nodes clicked or geography child nodes clicked
-      if (objIndex < 0) {
-        this.filterSelections.push(filter);
-        if( (filterGroup == 'collectiontypes') && (filterValue === '2') ){ // Check all the child nodes if institutional collection type is checked
-          // Just push the inst. collection type id, no need to push indv. col ids
-          for(let child of filterObj.children){
-            child.checked = true;
-            let obj = {
-              'group': 'collections',
-              'value' : child.collectionid
-            };
-            let index = this.arrayObjectIndexOf(this.filterSelections, obj);
-            if(index >= 0){ 
-              this.filterSelections.splice(index, 1);
-            }
-          }
-        }
-      } else { 
-        this.filterSelections.splice(objIndex, 1);
-        if( (filterGroup == 'collectiontypes') && (filterValue === '2') ){ // Uncheck all the child nodes if institutional collection type is unchecked
-          for(let child of filterObj.children){
-            child.checked = false;
-            let obj = {
-              'group': 'collections',
-              'value' : child.collectionid
-            };
-            let index = this.arrayObjectIndexOf(this.filterSelections, obj);
-            if(index >= 0){ 
-              this.filterSelections.splice(index, 1);
+        else if ( filter.children ){ // If the parent is not checked then check the children and push thier selected filter objects individually
+          for( let child of filter.children ){
+            if( child.checked ){
+              let selectedFilterObject: SelectedFilter = {} as SelectedFilter
+              selectedFilterObject.group = filterGroup.name === 'collectiontypes' ? 'collections' : filterGroup.name
+              selectedFilterObject.value = child.value
+              selectedFiltersArray.push( selectedFilterObject )
             }
           }
         }
       }
     }
-    this.validateForm();
+    this.filterSelections = selectedFiltersArray
+    this.validateForm()
   }
 
   // Gives the index of an object in an array
@@ -478,4 +442,19 @@ export class SearchModal implements OnInit {
   private openHelp(): void {
     window.open('http://support.artstor.org/?article=advanced-search','Advanced Search Support','width=800,height=600');
   }
+}
+
+interface FacetObject {
+  name: string,
+  value: string,
+  checked: boolean
+  children?: Array<FacetObject>
+}
+interface FacetGroup {
+  name: string,
+  values: Array<FacetObject>
+}
+interface SelectedFilter {
+  group: string,
+  value: string
 }
