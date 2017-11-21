@@ -52,6 +52,6 @@ ang-share-link-modal(*ngIf="showShareLinkModal", [asset]="selectedAssets[0]", (c
 ang-add-to-group(*ngIf="showAddToGroupModal", (closeModal)="showAddToGroupModal = false")
 ang-share-ig-link(*ngIf="showShareIgModal", [ig]="ig", (closeModal)="showShareIgModal = false")
 ang-confirm-modal(*ngIf="showConfirmationModal", (closeModal)="closeConfirmationModal($event)", [title]="'Delete Selected Asset(s)'",
-  [description]="'Are you sure you want to delete ' + _assets.getSelectedAssets().length + ' selected image(s) from the group? <br><b>Image group name: ' +  this.params.name + '</b>'",
+  [description]="'Are you sure you want to delete ' + _assets.getSelectedAssets().length + ' selected image(s) from the group? <br><b>Image group name: ' +  ig.name + '</b>'",
   [dismiss]="'Cancel'",
   [primary]="'Yes'")
