@@ -201,7 +201,7 @@ export class AssetPage implements OnInit, OnDestroy {
           })
         );
 
-        this._analytics.setPageValues('asset', this.assets[0] && this.assets[0].id)
+        this._analytics.setPageValues('asset', this.assets[0].id)
     } // OnInit
 
     ngOnDestroy() {
