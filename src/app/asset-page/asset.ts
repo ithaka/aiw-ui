@@ -192,7 +192,10 @@ export class Asset {
               }
           },
           (err) => {
-              console.error('Unable to load asset metadata.');
+            if (err.status == 403) {
+                this.dataLoadedSource.error(err)
+            }
+            console.error(err)
           });
   }
 
