@@ -55,6 +55,8 @@ export class AssetViewerComponent implements OnInit, OnDestroy, AfterViewInit {
     private fallbackFailed: boolean = false
     private tileSource: string
     private lastZoomValue: number
+    // Thumbanil Size is decremented if load fails (see thumbnailError)
+    private thumbnailSize: number = 2
     // private showCaption: boolean = true
 
     private kalturaUrl: string
@@ -352,6 +354,15 @@ export class AssetViewerComponent implements OnInit, OnDestroy, AfterViewInit {
      */
     private disableContextMenu(event): boolean{
         return false;
+    }
+
+    /**
+     * When thumbnail fails to load, try to load a different size
+     * - Decrements the thumbnail size
+     * - Workaround for missing sizes of particular thumbnails
+     */
+    private thumbnailError(event) : void {
+        this.thumbnailSize--
     }
 
 }
