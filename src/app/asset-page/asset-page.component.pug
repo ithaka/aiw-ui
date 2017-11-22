@@ -93,7 +93,7 @@
         .meta-block(*ngFor="let metadataObj of assets[0].formattedMetaArray")
           .label([attr.id]="cleanId(metadataObj.fieldName)") {{ metadataObj.fieldName }}
           div(*ngFor="let value of metadataObj.fieldValue")
-            .value([innerHTML]="cleanFieldValue(value) | linkify")
+            .value([innerHTML]="formatFieldValue(value, metadataObj.fieldName) | linkify")
         .row-hdr.pt-1(*ngIf="assets[0].filePropertiesArray.length > 0") {{ 'ASSET_PAGE.HEADER_LABELS.FILE_PROPS' | translate}}
         //- Loop through File Properties Array
         .meta-block(*ngFor="let filePropObj of assets[0].filePropertiesArray")
