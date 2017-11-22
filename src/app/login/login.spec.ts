@@ -14,7 +14,7 @@ import { Angulartics2 } from 'angulartics2';
 // our file imports
 import { Login } from './login.component';
 import { AuthService } from './../shared/auth.service';
-import { LoginService, User } from './login.service';
+//import { LoginService, User } from './login.service';
 
 describe("testy test", () => {
   it("it should test", () => {
@@ -43,7 +43,7 @@ describe("Login component inline template", () => {
       providers: [
         { provide: Router, useValue: {} },
         { provide: AuthService, useValue: {} },
-        { provide: LoginService },
+        //{ provide: LoginService },
         { provide: Http, useValue: {} },
         { provide: Locker, useValue: {} },
         { provide: Location, useValue: {} },
