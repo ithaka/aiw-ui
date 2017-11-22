@@ -1,14 +1,17 @@
-import { Component, OnInit, EventEmitter, Output } from '@angular/core';
+import { Component, OnInit, EventEmitter, Input, Output } from '@angular/core'
 
 // Project Dependencies
-import { AuthService } from '../../shared';
+import { AuthService } from '../../shared'
 
 @Component({
   selector: 'ang-access-denied-modal',
   templateUrl: 'access-denied.component.pug'
 })
 export class AccessDeniedModal implements OnInit {
-  @Output() closeModal: EventEmitter<any> = new EventEmitter();
+  @Input() private fullScreenMode: boolean
+  @Output() skipAsset: EventEmitter<any> = new EventEmitter()
+
+  @Output() closeModal: EventEmitter<any> = new EventEmitter()
 
   private isLoggedIn: boolean
   private promptCopy: string = ""
