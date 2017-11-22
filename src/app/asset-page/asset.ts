@@ -196,6 +196,7 @@ export class Asset {
             if (err.status == 403) {
                 // User does not have access
                 this._assets.unAuthorizedAsset.next( true )
+                this.dataLoadedSource.error( err )
             }
          });
   }

@@ -254,7 +254,7 @@ export class AssetPage implements OnInit, OnDestroy {
                 }
             }
         )
-        this.angulartics.eventTrack.next({ action:"viewAsset", properties: { category: "asset", label: asset.id }});
+
         this.generateImgURL();
     }
 

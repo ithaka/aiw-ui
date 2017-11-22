@@ -143,7 +143,7 @@ module.exports = function(options) {
          * See: https://github.com/webpack/json-loader
          */
         { test: /\.json$/, loader: 'json-loader', exclude: [helpers.root('src/index.html')] },
-        
+
         /*
          * Compile sass files
          * Returns file content as string
@@ -166,8 +166,15 @@ module.exports = function(options) {
          *
          * See: https://github.com/webpack/raw-loader
          */
-        { test: /\.html$/, loader: 'raw-loader', exclude: [helpers.root('src/index.html')] }
+        { test: /\.html$/, loader: 'raw-loader', exclude: [helpers.root('src/index.html')] },
 
+        /**
+         * support for pug or jade templates
+         */
+        {
+          test: /\.(pug|jade)$/,
+          loader: ['raw-loader', 'pug-html-loader']
+        }
       ],
 
       /**
