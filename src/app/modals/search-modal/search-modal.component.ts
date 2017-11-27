@@ -1,7 +1,7 @@
 import { Subscription } from 'rxjs/Rx';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
-import { Angulartics2 } from 'angulartics2/dist';
+import { Angulartics2 } from 'angulartics2';
 
 // Project dependencies
 import { SearchQueryUtil } from './search-query';
@@ -129,7 +129,7 @@ export class SearchModal implements OnInit {
             let facetGroup: FacetGroup = {} as FacetGroup
             facetGroup.name = facet.name
             facetGroup.values = []
-            
+
             // Prune any facets not available to the user (ex. Private Collections on SAHARA)
             for (let i = facet.values.length - 1; i >= 0; i--){
               if (!this.showPrivateCollections && facet.values[i].name.match(/3|6/)) { // NOTE: 3 & 6 are Private Collections names
@@ -158,14 +158,14 @@ export class SearchModal implements OnInit {
           let geoFacetGroup: FacetGroup = {} as FacetGroup
           geoFacetGroup.name = 'geography'
           geoFacetGroup.values = []
-          
+
           for(let geoObj of topObj){
             let geoFacetObj: FacetObject = {} as FacetObject
             geoFacetObj.checked = false
             geoFacetObj.name = geoObj.name + ' (' + geoObj.count + ')'
             geoFacetObj.value = geoObj.efq
             geoFacetObj.children = []
-            
+
             for(let child of geoObj.children){
               let geoChildFacetObj: FacetObject = {} as FacetObject
               geoChildFacetObj.checked = false
@@ -193,13 +193,13 @@ export class SearchModal implements OnInit {
             } else {
               throw new Error("no Collections returned in data")
             }
-    
+
           })
 
         this.loadingFilters = false
       })
 
-      
+
   }
 
   /**
@@ -397,7 +397,7 @@ export class SearchModal implements OnInit {
         child.checked = filterObj.checked
       }
     }
-    this.generateSelectedFilters()    
+    this.generateSelectedFilters()
   }
 
   private generateSelectedFilters(): void {

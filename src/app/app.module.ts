@@ -17,14 +17,14 @@ import { ROUTES } from './app.routes';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 // import { CoolStorageModule } from 'angular2-cool-storage';
 import {LockerModule, Locker, LockerConfig} from 'angular2-locker'
-import { Angulartics2Module, Angulartics2GoogleAnalytics } from 'angulartics2';
+import { Angulartics2Module } from 'angulartics2';
+import { Angulartics2GoogleAnalytics } from 'angulartics2/ga';
 import { TranslateModule, TranslateStaticLoader, TranslateLoader } from 'ng2-translate';
 import { RlTagInputModule } from 'angular2-tag-autocomplete';
 import { Ng2CompleterModule } from 'ng2-completer';
 
 // Directives
 import { ClickOutsideDirective } from 'angular2-click-outside/clickOutside.directive.ts';
-import { MediumEditorDirective } from 'angular2-medium-editor/medium-editor.directive.ts';
 
 // ng2-idle
 import { NgIdleKeepaliveModule } from '@ng-idle/keepalive'; // this includes the core NgIdleModule but includes keepalive providers for easy wireup
@@ -158,7 +158,6 @@ const APP_PROVIDERS = [
     LibraryComponent,
     Login,
     LoginReqModal,
-    MediumEditorDirective,
     MyCollectionsComponent,
     Nav,
     NavMenu,
