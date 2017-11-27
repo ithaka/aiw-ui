@@ -2,7 +2,7 @@
  * Angular 2 decorators and services
  */
 import { Component, ViewEncapsulation } from '@angular/core';
-import { Angulartics2GoogleAnalytics } from 'angulartics2';
+import { Angulartics2GoogleAnalytics } from 'angulartics2/ga';
 import { Title } from '@angular/platform-browser';
 import { Router, NavigationStart } from '@angular/router';
 import { TranslateService } from 'ng2-translate';
@@ -39,7 +39,7 @@ export class App {
   private showSkyBanner: boolean = false
 
   constructor(
-    public _app: AppConfig, 
+    public _app: AppConfig,
     angulartics2GoogleAnalytics: Angulartics2GoogleAnalytics,
     private titleService: Title,
     private router:Router,
@@ -50,9 +50,9 @@ export class App {
     translate.setDefaultLang('en');
       // the lang to use, if the lang isn't available, it will use the current loader to get them
     translate.use('en');
-    
+
     this.title = this._app.config.pageTitle
-    
+
     // Set metatitle to "Artstor" except for asset page where metatitle is {{ Asset Title }}
     router.events.subscribe(event => {
       if(event instanceof NavigationStart) {
