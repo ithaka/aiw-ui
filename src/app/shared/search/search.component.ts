@@ -70,12 +70,6 @@ export class SearchComponent implements OnInit, OnDestroy {
         }
       })
     )
-
-    let s = document.createElement('script');
-    s.setAttribute('src', '//ethn.io/68656.js');
-    s.setAttribute('type', 'text/javascript');
-    s.setAttribute('async', 'true');
-    document.body.appendChild(s);
   }
 
   ngOnDestroy() {
