@@ -649,11 +649,11 @@ export class AssetService {
                 data.count = data.items.length;
                 let pageStart = (this.urlParams.page - 1)*this.urlParams.size;
                 let pageEnd = this.urlParams.page*this.urlParams.size;
-                let idsAsTerm: string =  data.items.slice(pageStart,pageEnd).join('&object_id=');
+                let idsAsTerm: string =  data.items.slice(pageStart,pageEnd).join('&object_ids=');
 
                 let options = new RequestOptions({ withCredentials: true });
 
-                this.http.get(this._auth.getHostname() + '/api/v1/items?object_id=' + idsAsTerm, options)
+                this.http.get(this._auth.getHostname() + '/api/v1/group/'+ igId +'/items?object_ids=' + idsAsTerm, options)
                     .subscribe(
                         (res) => {
                             let results = res.json();
