@@ -136,12 +136,6 @@ export class Home implements OnInit, OnDestroy {
             this.fetchDeviceInfo();
           }
         })
-
-    let s = document.createElement('script');
-    s.setAttribute('src', '//ethn.io/68656.js');
-    s.setAttribute('type', 'text/javascript');
-    s.setAttribute('async', 'true');
-    document.body.appendChild(s);
   } // OnInit
 
   ngOnDestroy() {
