@@ -649,11 +649,13 @@ export class AssetService {
                 data.count = data.items.length;
                 let pageStart = (this.urlParams.page - 1)*this.urlParams.size;
                 let pageEnd = this.urlParams.page*this.urlParams.size;
-                let idsAsTerm: string =  data.items.slice(pageStart,pageEnd).join('&object_ids=');
+                // Maintain param string in a single place to avoid debugging thumbnails lost to a bad param 
+                const ID_PARAM = "object_ids="
+                let idsAsTerm: string =  data.items.slice(pageStart,pageEnd).join('&'+ ID_PARAM);
 
                 let options = new RequestOptions({ withCredentials: true });
 
-                this.http.get(this._auth.getHostname() + '/api/v1/group/'+ igId +'/items?object_ids=' + idsAsTerm, options)
+                this.http.get(this._auth.getHostname() + '/api/v1/group/'+ igId +'/items?'+ ID_PARAM + idsAsTerm, options)
                     .subscribe(
                         (res) => {
                             let results = res.json();
