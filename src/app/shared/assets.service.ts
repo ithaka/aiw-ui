@@ -43,6 +43,9 @@ export class AssetService {
     //Set up subject observable for clearing select mode
     public clearSelectMode: Subject<boolean> = new Subject();
 
+    //Set up subject observable for skipping the unauthorized asset on asset page, while browsing though assets
+    public unAuthorizedAsset: Subject<boolean> = new Subject();
+
     // Pagination value observable
     private paginationValue: any = {
         totalPages: 1,

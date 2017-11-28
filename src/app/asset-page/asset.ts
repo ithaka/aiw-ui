@@ -190,13 +190,15 @@ export class Asset {
                   this.metadataLoaded = true;
                   this.dataLoadedSource.next(this.metadataLoaded && this.imageSourceLoaded);
               }
-          },
+          }, 
           (err) => {
-            if (err.status == 403) {
-                this.dataLoadedSource.error(err)
-            }
             console.error(err)
-          });
+            if (err.status == 403) {
+                // User does not have access
+                this._assets.unAuthorizedAsset.next( true )
+                this.dataLoadedSource.error( err )
+            }
+         });
   }
 
 
