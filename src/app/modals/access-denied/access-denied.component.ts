@@ -8,7 +8,7 @@ import { AuthService } from '../../shared'
   templateUrl: 'access-denied.component.pug'
 })
 export class AccessDeniedModal implements OnInit {
-  @Input() private fullScreenMode: boolean
+  @Input() private showSkipAsset: boolean
   @Output() skipAsset: EventEmitter<any> = new EventEmitter()
 
   @Output() closeModal: EventEmitter<any> = new EventEmitter()

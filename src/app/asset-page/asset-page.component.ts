@@ -229,6 +229,18 @@ export class AssetPage implements OnInit, OnDestroy {
         this.showAccessDeniedModal = false
     }
 
+    // Determines if the asset can be skipped to the prev / next asset in the array, if the current asset is unauthorized
+    private isAssetSkipable(): boolean{
+        let skipable: boolean = false
+        if( (this.browseAssetDirection === 'prev') && (this.assetNumber > 1) ){
+            skipable = true
+        }
+        else if( (this.browseAssetDirection === 'next') && (this.assetNumber < this.totalAssetCount) ){
+            skipable = true
+        }
+        return skipable
+    }
+
     /**
      * Render Asset once its loaded
      */
