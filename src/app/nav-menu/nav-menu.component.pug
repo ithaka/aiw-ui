@@ -1,6 +1,7 @@
 .cover([class.show]="!mobileCollapsed")
 .container.nav-container
   nav.navbar.navbar-expand-sm.navbar-light.bg-faded
+    div
     button.navbar-toggler((click)="this.mobileCollapsed = !this.mobileCollapsed", [class.collapsed]="mobileCollapsed", type="button", aria-controls="navbarSupportedContent", aria-expanded="false", aria-label="Toggle navigation")
       span.navbar-toggler-icon
     #navMenu.navbar-collapse.collapse([class.show]="!mobileCollapsed")
