@@ -25,6 +25,7 @@ import { Ng2CompleterModule } from 'ng2-completer';
 
 // Directives
 import { ClickOutsideDirective } from 'angular2-click-outside/clickOutside.directive.ts';
+import { MediumEditorDirective } from 'angular2-medium-editor/medium-editor.directive.ts';
 
 // ng2-idle
 import { NgIdleKeepaliveModule } from '@ng-idle/keepalive'; // this includes the core NgIdleModule but includes keepalive providers for easy wireup
@@ -180,7 +181,8 @@ const APP_PROVIDERS = [
     TagsListComponent,
     ThumbnailComponent,
     TypeIdPipe,
-    LinkifyPipe
+    LinkifyPipe,
+    //MediumEditorDirective
   ],
   imports: [ // import Angular's modules
     BrowserModule,
