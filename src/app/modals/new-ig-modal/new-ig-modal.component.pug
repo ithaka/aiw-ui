@@ -24,14 +24,14 @@
           label(for="artstorPermissionsGroup") {{ 'NEW_GROUP_MODAL.PERMISSION_FIELD_LABEL' | translate }}
           .form-group.text-center
             #artstorPermissionsGroup.btn-group(ngbRadioGroup, name="permissions type", [formControl]="newIgForm.controls['artstorPermissions']")
-              label.btn.btn-secondary(*ngIf="isArtstorUser")
-                input#artstorPermissionsRadioGlobal(type="radio", name="options", autocomplete="off", value="global")
+              label.btn.btn-secondary(ngbButtonLabel, *ngIf="isArtstorUser")
+                input#artstorPermissionsRadioGlobal(ngbButton, type="radio", name="options", autocomplete="off", value="global")
                 | {{ 'NEW_GROUP_MODAL.PERMISSIONS.GLOBAL' | translate }}
-              label.btn.btn-secondary
-                input#artstorPermissionsRadioInstitution(type="radio", name="options", autocomplete="off", value="institution")
+              label.btn.btn-secondary(ngbButtonLabel)
+                input#artstorPermissionsRadioInstitution(ngbButton, type="radio", name="options", autocomplete="off", value="institution")
                 | {{ 'NEW_GROUP_MODAL.PERMISSIONS.INSTITUTIONAL' | translate }}
-              label.btn.btn-secondary
-                input#artstorPermissionsRadioPrivate(type="radio", name="options", autocomplete="off", value="private")
+              label.btn.btn-secondary(ngbButtonLabel)
+                input#artstorPermissionsRadioPrivate(ngbButton, type="radio", name="options", autocomplete="off", value="private")
                 | {{ 'NEW_GROUP_MODAL.PERMISSIONS.PRIVATE' | translate }}
           .form-group([class.has-danger]="serviceResponse.failure")
             label(for="igTagInput") {{ 'NEW_GROUP_MODAL.TAGS_FIELD_LABEL' | translate }}
