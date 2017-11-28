@@ -14,7 +14,7 @@
       | {{ 'audio_error' }}
   // Large thumbnail fallback
   #fallbackViewer(*ngIf="mediaLoadingFailed")
-    img.item.item--thumbnail(alt="{{ asset.title }}", [attr.src]="_assets.makeThumbUrl(asset.imgURL, 2)")
+    img.item.item--thumbnail(alt="{{ asset.title }}", [attr.src]="_assets.makeThumbUrl(asset.imgURL, thumbnailSize)", (error)="thumbnailError($event)")
   .button-group.asset-viewer__buttons(id="imageButtons-{{ asset.id + '-' + index }}")
     button.btn.btn--icon([class.hidden]="!isOpenSeaDragonAsset || mediaLoadingFailed", id="zoomIn-{{ asset.id + '-' + index}}", title="Zoom In")
       i.icon.icon-zoom-in
