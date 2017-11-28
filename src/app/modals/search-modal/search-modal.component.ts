@@ -182,7 +182,7 @@ export class SearchModal implements OnInit {
         this._assets.getCollectionsList( 'institution' )
           .toPromise()
           .then((data) => {
-            if (data && data.Collections && data.Collections.length > 0) {
+            if (data && data.Collections) {
               for(let collection of data.Collections){
                 let colFacetObj: FacetObject = {} as FacetObject
                 colFacetObj.checked = false
@@ -193,12 +193,10 @@ export class SearchModal implements OnInit {
             } else {
               throw new Error("no Collections returned in data")
             }
-
           })
 
         this.loadingFilters = false
       })
-
 
   }
 
