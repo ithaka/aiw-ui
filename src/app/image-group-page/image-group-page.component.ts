@@ -61,6 +61,7 @@ export class ImageGroupPage implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.user = this._auth.getUser();
+    let id = null;
 
     this.subscriptions.push(
       this.route.queryParams.subscribe((params) => {
@@ -91,7 +92,7 @@ export class ImageGroupPage implements OnInit, OnDestroy {
      */
     this.subscriptions.push(
       this.route.params.subscribe((routeParams) => {
-        let id = routeParams["igId"];
+        id = routeParams["igId"];
         let params = Object.assign({}, routeParams);
         // If a page number isn't set, reset to page 1!
         if (!params['page']){
@@ -140,7 +141,7 @@ export class ImageGroupPage implements OnInit, OnDestroy {
             alreadyDwnldImgCnt: 0,
             curAllowedDwnldCnt: 2000,
             igImgCount: this.ig.items.length,
-            igId: this.ig.id,
+            igId: id,
             pptExportAllowed: this.ig.items.length <= 2000
           }
 
@@ -172,13 +173,13 @@ export class ImageGroupPage implements OnInit, OnDestroy {
     this.subscriptions.push(
       this._ig.igDownloadTrigger.subscribe((event) => { // right now event will be undefined, it is just a dumb trigger
         // make sure we have the info we need
-        if (this.ig.id) {
+        if (id) {
           this.showDownloadModal();
         }
       })
     );
 
-    this._analytics.setPageValues('group', this.ig.id)
+    this._analytics.setPageValues('group', id)
   } // OnInit
 
   ngOnDestroy() {
