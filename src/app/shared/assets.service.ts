@@ -43,6 +43,9 @@ export class AssetService {
     //Set up subject observable for clearing select mode
     public clearSelectMode: Subject<boolean> = new Subject();
 
+    //Set up subject observable for skipping the unauthorized asset on asset page, while browsing though assets
+    public unAuthorizedAsset: Subject<boolean> = new Subject();
+
     // Pagination value observable
     private paginationValue: any = {
         totalPages: 1,
@@ -649,11 +652,13 @@ export class AssetService {
                 data.count = data.items.length;
                 let pageStart = (this.urlParams.page - 1)*this.urlParams.size;
                 let pageEnd = this.urlParams.page*this.urlParams.size;
-                let idsAsTerm: string =  data.items.slice(pageStart,pageEnd).join('&object_id=');
+                // Maintain param string in a single place to avoid debugging thumbnails lost to a bad param 
+                const ID_PARAM = "object_ids="
+                let idsAsTerm: string =  data.items.slice(pageStart,pageEnd).join('&'+ ID_PARAM);
 
                 let options = new RequestOptions({ withCredentials: true });
 
-                this.http.get(this._auth.getHostname() + '/api/v1/items?object_id=' + idsAsTerm, options)
+                this.http.get(this._auth.getHostname() + '/api/v1/group/'+ igId +'/items?'+ ID_PARAM + idsAsTerm, options)
                     .subscribe(
                         (res) => {
                             let results = res.json();

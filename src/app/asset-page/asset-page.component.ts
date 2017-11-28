@@ -61,6 +61,9 @@ export class AssetPage implements OnInit, OnDestroy {
     private showAssetCaption: boolean = true;
 
     private assetIdProperty: string = 'artstorid'
+    
+    // To keep a track of browse direction ('prev' / 'next') while browsing through assets, to load next asset if the current asset is un-authorized
+    private browseAssetDirection: string = '' 
 
     private pagination: any = {
       totalPages: 1,
@@ -201,11 +204,41 @@ export class AssetPage implements OnInit, OnDestroy {
           })
         );
 
+        this._assets.unAuthorizedAsset.subscribe( (value) => {
+            if(value){
+                this.showAccessDeniedModal = true
+            }
+        })
+
         this._analytics.setPageValues('asset', this.assets[0].id)
     } // OnInit
 
     ngOnDestroy() {
         this.subscriptions.forEach((sub) => { sub.unsubscribe(); });
+    }
+
+    private handleSkipAsset(): void{
+        if( this.browseAssetDirection === 'prev' ) {
+            this.showPrevAsset()
+        }
+        else if ( this.browseAssetDirection === 'next' ){
+            this.showNextAsset()
+        }
+
+        // Close the modal after handling skip asset
+        this.showAccessDeniedModal = false
+    }
+
+    // Determines if the asset can be skipped to the prev / next asset in the array, if the current asset is unauthorized
+    private isAssetSkipable(): boolean{
+        let skipable: boolean = false
+        if( (this.browseAssetDirection === 'prev') && (this.assetNumber > 1) ){
+            skipable = true
+        }
+        else if( (this.browseAssetDirection === 'next') && (this.assetNumber < this.totalAssetCount) ){
+            skipable = true
+        }
+        return skipable
     }
 
     /**
@@ -292,6 +325,9 @@ export class AssetPage implements OnInit, OnDestroy {
 
     private showPrevAsset(): void{
         if(this.assetNumber > 1){
+            // Update browse direction
+            this.browseAssetDirection = 'prev'
+
             if((this.assetIndex > 0)){
                 let prevAssetIndex = this.quizShuffle ? Math.floor(Math.random() * this.prevAssetResults.thumbnails.length) + 0 : this.assetIndex - 1; // Assign random thumbnail index if quiz shuffle is true
                 this._router.navigate(['/asset', this.prevAssetResults.thumbnails[prevAssetIndex][this.assetIdProperty]]);
@@ -305,6 +341,9 @@ export class AssetPage implements OnInit, OnDestroy {
 
     private showNextAsset(): void{
         if(this.assetNumber < this.totalAssetCount){
+            // Update browse direction
+            this.browseAssetDirection = 'next'
+
             if((this.prevAssetResults.thumbnails) && (this.assetIndex < (this.prevAssetResults.thumbnails.length - 1))){
                 let nextAssetIndex = this.quizShuffle ? Math.floor(Math.random() * this.prevAssetResults.thumbnails.length) + 0 : this.assetIndex + 1; // Assign random thumbnail index if quiz shuffle is true
                 this._router.navigate(['/asset', this.prevAssetResults.thumbnails[nextAssetIndex][this.assetIdProperty]]);
