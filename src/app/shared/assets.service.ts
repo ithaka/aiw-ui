@@ -481,23 +481,14 @@ export class AssetService {
      * Gets metadata for a single asset by ID
      * @param assetId: string Asset or object ID
      */
-    public getById(assetId: string) {
-        // Get Asset via SOLR
-        // let options = new RequestOptions({
-        //     withCredentials: true
-        // });
-        // let query = {
-        //     "content_types": [
-        //         "art"
-        //     ],
-        //     "query": 'id:' + assetId
-        // };
-        // return this.http.post('//search-service.apps.test.cirrostratus.org/browse/', query, options)
-        //     .toPromise()
-        //     .then(this.extractData)
-
+    public getById(assetId: string, groupId ?: string) {
+        let url = this._auth.getUrl(true) + '/metadata/' + assetId
+        if (groupId) {
+            // Groups service modifies certain access rights for shared assets
+            url = this._auth.getUrl() + '/v1/group/' + groupId + '/secure/metadata/' + assetId
+        }
         return this.http
-            .get(this._auth.getUrl(true) + '/metadata/' + assetId, this.defaultOptions)
+            .get(url, this.defaultOptions)
             .toPromise()
             .then(this.extractData);
     }
@@ -582,9 +573,14 @@ export class AssetService {
      * Get IIIF tilesource for an Asset
      * @param assetId string Asset or object ID
      */
-    public getImageSource(assetId: string, collectionId?: number) {
+    public getImageSource(assetId: string, groupId?: number) {
+        let url = this._auth.getUrl() + '/v1/metadata?object_ids=' + assetId
+        if (groupId){
+            // Groups service modifies certain access rights for shared assets
+            url = this._auth.getUrl() + '/v1/group/'+ groupId +'/metadata?object_ids=' + assetId
+        } 
         return this.http
-            .get( this._auth.getUrl() + '/v1/metadata?object_ids=' + assetId, this.defaultOptions)
+            .get( url, this.defaultOptions)
             .map(data => {
                 // This call returns an array-- maybe it supports querying multiple ids?
                 // For now let's just grab the first item in the array
@@ -594,18 +590,6 @@ export class AssetService {
                     return(data.json() || {});
                 }
             });
-
-        // return this.http
-        //     .get( this._auth.getUrl() + '/imagefpx/' + assetId + '/' + collectionId + '/5', this.defaultOptions)
-        //     .map(data => {
-        //         // This call returns an array-- maybe it supports querying multiple ids?
-        //         // For now let's just grab the first item in the array
-        //         if (data.json() && data.json().length > 0) {
-        //             return(data.json()[0]);
-        //         } else {
-        //             return(data.json() || {});
-        //         }
-        //     });
     }
 
     /**

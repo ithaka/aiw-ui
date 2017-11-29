@@ -552,7 +552,11 @@ export class AssetGrid implements OnInit, OnDestroy {
    * Returns asset path for linking
    */
   private getAssetPath(asset): string[] {
-      return this.editMode ? ['./'] : ['/asset', asset.artstorid]
+    let params = ['/asset', asset.objectId ? asset.objectId : asset.artstorid]
+    if (this.ig && this.ig.id) {
+      params.push({ 'groupId' : this.ig.id })
+    }
+    return this.editMode ? ['./'] : params
   }
 
   /**
