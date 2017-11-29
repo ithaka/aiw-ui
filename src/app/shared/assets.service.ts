@@ -573,7 +573,7 @@ export class AssetService {
      * Get IIIF tilesource for an Asset
      * @param assetId string Asset or object ID
      */
-    public getImageSource(assetId: string, groupId?: number) {
+    public getImageSource(assetId: string, groupId?: string) {
         let url = this._auth.getUrl() + '/v1/metadata?object_ids=' + assetId
         if (groupId){
             // Groups service modifies certain access rights for shared assets

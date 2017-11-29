@@ -322,21 +322,13 @@ export class Asset {
    * - Finds the asset Type id
   */
   private loadMediaMetaData(): void {
-      this._assets.getImageSource( this.id, this.collectionId )
+      this._assets.getImageSource( this.id, this.groupId )
         .subscribe((data) => {
             this.useImageSourceRes(data)
         }, (error) => {
             // if it's an access denied error, throw that to the subscribers
             if (error.status === 403) {
                 this.dataLoadedSource.error(error)
-            } else {
-                // Non-Artstor collection assets don't require a Region ID
-                this._assets.getImageSource( this.id, 103 )
-                    .subscribe((data) => {
-                        this.useImageSourceRes(data)
-                    }, (error) => {
-                        console.error(error);
-                    });
             }
         });
   }
