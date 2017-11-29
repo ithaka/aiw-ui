@@ -288,7 +288,7 @@ export class Asset {
     this.typeId = data.object_type_id || data.objectTypeId;
 
     let downloadSize = data.download_size || '1024,1024'
-    let imageServer = data.imageServer || 'http://hubviewer.artstor.org/'
+    let imageServer = data.imageServer || 'http://imgserver.artstor.net/'
 
     /** This determines how to build the downloadLink, which is different for different typeIds */
     if (this.typeId === 20 || this.typeId === 21 || this.typeId === 22 || this.typeId === 23) { //all of the typeIds for documents
