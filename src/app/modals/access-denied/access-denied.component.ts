@@ -10,6 +10,7 @@ import { AuthService } from '../../shared'
 export class AccessDeniedModal implements OnInit {
   @Input() private showSkipAsset: boolean
   @Output() skipAsset: EventEmitter<any> = new EventEmitter()
+  @Output() exitFullScreen: EventEmitter<any> = new EventEmitter()
 
   @Output() closeModal: EventEmitter<any> = new EventEmitter()
 
