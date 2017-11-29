@@ -39,6 +39,8 @@
               [formControl]="newIgForm.controls['tags']",
               placeholder="Add a tag...",
               [addOnBlur]="true",
+              [addOnEnter]="true",
+              [autocompleteSelectFirstItem]="false",
               [autocomplete]="true",
               [autocompleteItems]="tagSuggestions",
               [autocompleteMustMatch]="false",
