@@ -1,4 +1,3 @@
-import { identifierToken } from '@angular/compiler/src/identifiers'
 import {
     AfterViewInit,
     ChangeDetectionStrategy,
@@ -12,7 +11,7 @@ import {
 import { Http } from '@angular/http'
 import { Subscription } from 'rxjs/Subscription'
 import * as OpenSeadragon from 'openseadragon'
-import { Angulartics2 } from 'angulartics2/dist'
+import { Angulartics2 } from 'angulartics2'
 
 import { Asset } from '../asset'
 import { AssetService, AuthService } from '../../shared'

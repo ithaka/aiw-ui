@@ -8,7 +8,7 @@
             button#sortdropdownMenu.btn.btn-link(ngbDropdownToggle) Sort:
               = " "
               span.value {{ activeSort.label ? activeSort.label : 'Relevance' }}
-            .dropdown-menu(aria-labelledby="sortdropdownMenu")
+            .dropdown-menu(ngbDropdownMenu, aria-labelledby="sortdropdownMenu")
               button.dropdown-item([ngClass]="{ 'disable': activeSort.index == '1' }", (click)="changeSortOpt('1', 'Title')") Title
               button.dropdown-item([ngClass]="{ 'disable': activeSort.index == '2' }", (click)="changeSortOpt('2', 'Creator')") Creator
               button.dropdown-item([ngClass]="{ 'disable': activeSort.index == '3' }", (click)="changeSortOpt('3', 'Date')") Date
@@ -18,7 +18,7 @@
             button#pagesizedropdownMenu.btn.btn-link(ngbDropdownToggle) Images/page:
               = " "
               span.value {{ pagination.size ? pagination.size : '24' }}
-            .dropdown-menu(aria-labelledby="pagesizedropdownMenu")
+            .dropdown-menu(ngbDropdownMenu, aria-labelledby="pagesizedropdownMenu")
               button.dropdown-item([ngClass]="{ 'disable': pagination.size == 24 }", (click)="changePageSize(24)") 24
               button.dropdown-item([ngClass]="{ 'disable': pagination.size == 48 }", (click)="changePageSize(48)") 48
               button.dropdown-item([ngClass]="{ 'disable': pagination.size == 72 }", (click)="changePageSize(72)") 72

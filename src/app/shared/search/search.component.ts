@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy, Input, Output } from '@angular/core';
 import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
-import { Angulartics2 } from 'angulartics2/dist';
+import { Angulartics2 } from 'angulartics2';
 import { Subscription }   from 'rxjs/Subscription';
 
 // Project dependencies

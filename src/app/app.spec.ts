@@ -10,7 +10,7 @@ import { App } from './app.component';
 import { AppModule } from './app.module';
 
 import { Component, ViewEncapsulation } from '@angular/core';
-import { Angulartics2GoogleAnalytics } from 'angulartics2';
+import { Angulartics2GoogleAnalytics } from 'angulartics2/ga';
 import { Title } from '@angular/platform-browser';
 import { Router, NavigationStart } from '@angular/router';
 
