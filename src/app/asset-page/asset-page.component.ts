@@ -28,6 +28,7 @@ export class AssetPage implements OnInit, OnDestroy {
     // Array to support multiple viewers on the page
     private assets: Asset[] = []
     private assetIndex: number = 1
+    private assetGroupId: string
     private assetNumber: number = 1
     private totalAssetCount: number = 1
     private subscriptions: Subscription[] = []
@@ -110,7 +111,7 @@ export class AssetPage implements OnInit, OnDestroy {
             this.route.params.subscribe((routeParams) => {
                 this.assets = []
                 let assetIdProperty = this._auth.featureFlags[routeParams['featureFlag']]? 'artstorid' : 'objectId'
-
+                this.assetGroupId = routeParams['groupId']
                 // Find feature flags
                 if(routeParams && routeParams['featureFlag']){
                     this._auth.featureFlags[routeParams['featureFlag']] = true;
@@ -126,7 +127,7 @@ export class AssetPage implements OnInit, OnDestroy {
                             }
                             data.item.imageUrl = data.imageUrl
                             data.item.imageServer = data.imageServer
-                            this.renderPrimaryAsset(new Asset(data.item[assetIdProperty], this._assets, this._auth, data.item))
+                            this.renderPrimaryAsset(new Asset(data.item[assetIdProperty], this._assets, this._auth, data.item, this.assetGroupId))
                         }, (err) => {
                             console.error(err)
                             if (err.status == 403) {
@@ -138,7 +139,7 @@ export class AssetPage implements OnInit, OnDestroy {
                             }
                         })
                 } else {
-                    this.renderPrimaryAsset(new Asset(routeParams["assetId"], this._assets, this._auth))
+                    this.renderPrimaryAsset(new Asset(routeParams["assetId"], this._assets, this._auth, null, this.assetGroupId))
 
                     if(this.prevAssetResults.thumbnails.length > 0){
                         // this.totalAssetCount = this.prevAssetResults.count ? this.prevAssetResults.count : this.prevAssetResults.thumbnails.length;

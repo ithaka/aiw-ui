@@ -8,6 +8,7 @@ export class Asset {
 
   id: string;
   artstorid: string;
+  groupId: string;
   /** typeId determines what media type the asset is */
   typeId: number;
   title: string;
@@ -84,10 +85,11 @@ export class Asset {
         "artworktype"
     ];
 
-  constructor(asset_id: string, _assets ?: AssetService, _auth ?: AuthService, assetObj ?: any) {
-    this.id = this.artstorid = asset_id;
-    this._assets = _assets;
-    this._auth = _auth;
+  constructor(asset_id: string, _assets ?: AssetService, _auth ?: AuthService, assetObj ?: any, groupId ?: string) {
+    this.id = this.artstorid = asset_id
+    this.groupId = groupId
+    this._assets = _assets
+    this._auth = _auth
 //   constructor(asset_id: string, _assets ?: AssetService, _auth ?: AuthService, assetObj ?: any) {
 
     if (assetObj) {
@@ -135,7 +137,7 @@ export class Asset {
   /** Get asset metadata via service call */
   private loadAssetMetaData(): void {
 
-      this._assets.getById( this.id )
+      this._assets.getById(this.id, this.groupId)
           .then((res) => {
               let asset
               if (res['results']) {
