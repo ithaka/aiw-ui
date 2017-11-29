@@ -70,6 +70,8 @@ $navBarPad: 0.5rem;
 }
 
 .navbar-collapse {
+    margin-top: 40px;
+    position: absolute;
     left: 0;
     width: 100%;
     z-index: 1000;
@@ -156,12 +158,4 @@ $navBarPad: 0.5rem;
         float: none;
         width: 100%;
     }
-}
-
-.navbar-toggler {
-  margin: 0.5rem 1rem;
-}
-
-.navbar {
-  padding: 0;
 }
