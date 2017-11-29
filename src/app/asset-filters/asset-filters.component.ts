@@ -1,7 +1,7 @@
 import { Component } from '@angular/core'
 import { Router, ActivatedRoute } from '@angular/router'
 import { Subscription } from 'rxjs/Subscription'
-import { Angulartics2 } from 'angulartics2/dist'
+import { Angulartics2 } from 'angulartics2'
 
 import { AssetService } from '../shared/assets.service'
 import { AssetFiltersService } from '../asset-filters/asset-filters.service'
@@ -161,11 +161,11 @@ export class AssetFilters {
     if(params['page']){
       params['page'] = this.pagination.page
     }
-    
+
     if(currentParams.colId || currentParams.catId){
 
       let baseParams = {}
-      
+
       if(currentParams.name){
         baseParams['name'] = currentParams.name
       }
@@ -185,13 +185,13 @@ export class AssetFilters {
       let queryParams = Object.assign(baseParams, params)
       let colId = currentParams.colId ? currentParams.colId : currentParams.catId
       let route = currentParams.colId ? 'collection' : 'category'
-  
+
       this.router.navigate( [ '/' + route, colId, queryParams ] )
     }
     else{
       this.router.navigate(['search', this.term, params])
     }
-    
+
   }
 
   changeSortOpt(index, label) {

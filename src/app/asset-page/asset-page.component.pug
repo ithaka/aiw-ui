@@ -57,7 +57,7 @@
             button#downloadAssetDropdown.btn.btn-secondary(ngbDropdownToggle, (click)="genDownloadViewLink()", tabindex="2")
               | {{ 'ASSET_PAGE.BUTTONS.DOWNLOAD' | translate}}
               = " "
-            .dropdown-menu(aria-labelledby="dropdownBasic1")
+            .dropdown-menu(ngbDropdownMenu, aria-labelledby="dropdownBasic1")
               a#downloadAssetLink.dropdown-item(download,
                 [attr.href]="(downloadAuth() && !assets[0].disableDownload) ? assets[0].downloadLink : null",
                 (click)="(downloadAuth() && !assets[0].disableDownload) ? trackDownloadImage() : setDownloadImage()",

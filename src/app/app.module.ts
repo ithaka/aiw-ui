@@ -17,7 +17,8 @@ import { ROUTES } from './app.routes';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 // import { CoolStorageModule } from 'angular2-cool-storage';
 import {LockerModule, Locker, LockerConfig} from 'angular2-locker'
-import { Angulartics2Module, Angulartics2GoogleAnalytics } from 'angulartics2';
+import { Angulartics2Module } from 'angulartics2';
+import { Angulartics2GoogleAnalytics } from 'angulartics2/ga';
 import { TranslateModule, TranslateStaticLoader, TranslateLoader } from 'ng2-translate';
 import { RlTagInputModule } from 'angular2-tag-autocomplete';
 import { Ng2CompleterModule } from 'ng2-completer';
@@ -158,7 +159,6 @@ const APP_PROVIDERS = [
     LibraryComponent,
     Login,
     LoginReqModal,
-    MediumEditorDirective,
     MyCollectionsComponent,
     Nav,
     NavMenu,
@@ -181,7 +181,8 @@ const APP_PROVIDERS = [
     TagsListComponent,
     ThumbnailComponent,
     TypeIdPipe,
-    LinkifyPipe
+    LinkifyPipe,
+    //MediumEditorDirective
   ],
   imports: [ // import Angular's modules
     BrowserModule,
