@@ -50,6 +50,7 @@ export class ImageGroupPPPage implements OnInit, OnDestroy {
         }
         if (id) {
           this._assets.queryAll(params);
+          this.igId = id;
         }
       })
     );
