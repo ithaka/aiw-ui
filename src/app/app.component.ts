@@ -5,7 +5,7 @@ import { Component, ViewEncapsulation } from '@angular/core';
 import { Angulartics2GoogleAnalytics } from 'angulartics2/ga';
 import { Title } from '@angular/platform-browser';
 import { Router, NavigationStart } from '@angular/router';
-import { TranslateService } from 'ng2-translate';
+import { TranslateService } from '@ngx-translate/core';
 
 import { AppConfig } from "./app.service";
 /*
