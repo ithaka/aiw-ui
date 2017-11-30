@@ -45,9 +45,9 @@
   <meta http-equiv="expires" content="0">
   <meta http-equiv="pragma" content="no-cache">
 
-  <title><%= webpackConfig.metadata.title %></title>
+  <title><%= htmlWebpackPlugin.options.metadata.title %></title>
 
-  <meta name="description" content="<%= webpackConfig.metadata.title %>">
+  <meta name="description" content="<%= htmlWebpackPlugin.options.metadata.title %>">
 
   <% if (webpackConfig.htmlElements.headTags) { %>
   <!-- Configured Head Tags  -->
@@ -55,7 +55,7 @@
   <% } %>
 
   <!-- base url -->
-  <base href="<%= webpackConfig.metadata.baseUrl %>">
+  <base href="<%= htmlWebpackPlugin.options.metadata.baseUrl %>">
 
   <!-- Mediathread Metadata -->
   <meta name="asset.id" content="" />
@@ -127,7 +127,7 @@
     </div>
   </app>
 
-  <% if (webpackConfig.metadata.isDevServer && webpackConfig.metadata.HMR !== true) { %>
+  <% if (htmlWebpackPlugin.options.metadata.isDevServer && htmlWebpackPlugin.options.metadata.HMR !== true) { %>
   <!-- Webpack Dev Server reload -->
   <script src="/webpack-dev-server.js"></script>
   <% } %>

@@ -16,6 +16,7 @@ const IgnorePlugin = require('webpack/lib/IgnorePlugin');
 const DedupePlugin = require('webpack/lib/optimize/DedupePlugin');
 const UglifyJsPlugin = require('webpack/lib/optimize/UglifyJsPlugin');
 const WebpackMd5Hash = require('webpack-md5-hash');
+const LoaderPlugin = require('webpack/lib/LoaderOptionsPlugin');
 
 /**
  * Webpack Constants
@@ -32,13 +33,6 @@ const METADATA = webpackMerge(commonConfig({env: ENV}).metadata, {
 
 module.exports = function(env) {
   return webpackMerge(commonConfig({env: ENV}), {
-
-    /**
-     * Switch loaders to debug mode.
-     *
-     * See: http://webpack.github.io/docs/configuration.html#debug
-     */
-    debug: false,
 
     /**
      * Developer tool to enhance debugging
@@ -197,19 +191,25 @@ module.exports = function(env) {
       //   threshold: 2 * 1024
       // })
 
-    ],
+      /**
+       * Static analysis linter for TypeScript advanced options configuration
+       * Description: An extensible linter for the TypeScript language.
+       *
+       * See: https://github.com/wbuchwalter/tslint-loader
+       */
 
-    /**
-     * Static analysis linter for TypeScript advanced options configuration
-     * Description: An extensible linter for the TypeScript language.
-     *
-     * See: https://github.com/wbuchwalter/tslint-loader
-     */
-    tslint: {
-      emitErrors: true,
-      failOnHint: true,
-      resourcePath: 'src'
-    },
+      new LoaderPlugin({
+        options: {
+          tslint: {
+            emitErrors: true,
+            failOnHint: true,
+            resourcePath: 'src'
+          }
+        },
+        debug: false
+      })
+
+    ],
 
     /**
      * Html loader advanced options
@@ -236,12 +236,13 @@ module.exports = function(env) {
      * See: https://webpack.github.io/docs/configuration.html#node
      */
     node: {
-      global: 'window',
-      crypto: 'empty',
-      process: false,
-      module: false,
-      clearImmediate: false,
-      setImmediate: false
+      console: false,
+      global: true,
+      process: true,
+      __filename: "mock",
+      __dirname: "mock",
+      Buffer: true,
+      setImmediate: true
     }
 
   });
