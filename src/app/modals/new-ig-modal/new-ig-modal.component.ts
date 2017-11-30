@@ -116,7 +116,7 @@ export class NewIgModal implements OnInit {
   private tagDebouncing: boolean = false
 
   private getTagSuggestions(event: any) : void  {
-    this.tagSuggestTerm = event.srcElement.value
+    this.tagSuggestTerm = event.target.value
 
     if (!this.tagDebouncing) {
       this.tagDebouncing = true
