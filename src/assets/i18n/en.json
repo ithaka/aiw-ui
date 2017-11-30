@@ -297,7 +297,7 @@
   },
   "HOME": {
     "HEADINGS": {
-      "SSC": "Shared Shelf Commons",
+      "SSC": "Public Collections",
       "BRWSE": "Browse",
       "FRM_BLOG": "From Our Blog",
       "INSTITUTION_COLLECTIONS": "{{institutionName}} Collections"
@@ -309,7 +309,7 @@
       "CLASS_HEADING": "Classification",
       "CLASS_LIST": "(paintings, performing arts, photographs)",
       "COLL_HEADING": "Collection",
-      "COLL_LIST": "(Artstor, Shared Shelf, Shared Shelf Commons, My Collections...)",
+      "COLL_LIST": "(Artstor, Institutional, Public, My Collections...)",
       "COLL_LIST_SHORT": "(Institutional Collections)",
       "TEACHING_HEADING": "Teaching Resources",
       "TEACHING_LIST": "(Curriculum Guides, AP® Resources, Surveys and Case Studies: Art History, Humanities and Social Sciences)",
@@ -360,7 +360,7 @@
       "TITLE": "Browse",
       "ARTSTOR": "Artstor Collections",
       "INSTITUTION": "Institutional Collections",
-      "OPEN": "Open Collections",
+      "OPEN": "Public Collections",
       "OWNED": "My Collections",
       "GROUPS": "Image Groups"
     },
