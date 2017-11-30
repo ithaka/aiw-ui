@@ -1,7 +1,8 @@
 import { ApplicationRef, ErrorHandler, NgModule } from '@angular/core';
 import { BrowserModule, Title } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { Http, HttpModule } from '@angular/http';
+import { Http } from '@angular/http';
+import { HttpClientModule } from '@angular/common/http';
 import { NavigationEnd, Router, RouteReuseStrategy, RouterModule, UrlSerializer } from '@angular/router';
 import { removeNgStyles, createNewHosts, createInputTransfer } from '@angularclass/hmr';
 import { Ng2DeviceDetectorModule } from 'ng2-device-detector';
@@ -188,7 +189,7 @@ const APP_PROVIDERS = [
     BrowserModule,
     FormsModule,
     ReactiveFormsModule,
-    HttpModule,
+    HttpClientModule,
     RlTagInputModule,
     Ng2CompleterModule,
     LockerModule,
