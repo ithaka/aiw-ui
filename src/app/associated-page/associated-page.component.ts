@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Http, Response, Headers, RequestOptions } from '@angular/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Subscription }   from 'rxjs/Subscription';
 import 'rxjs/add/operator/toPromise';
@@ -30,7 +30,7 @@ export class AssociatedPage implements OnInit, OnDestroy {
         private _router: Router,
         private _assets: AssetService,
         private route: ActivatedRoute,
-        private http: Http,
+        private http: HttpClient,
         private _auth: AuthService,
         private _analytics: AnalyticsService
       ) {
@@ -41,8 +41,8 @@ export class AssociatedPage implements OnInit, OnDestroy {
    * Sets up subscription to objectId matrix param, which gets assetTitle from service
    */
   ngOnInit() {
-    let header = new Headers({ 'Content-Type': 'application/json' }); // ... Set content type to JSON
-    let options = new RequestOptions({ headers: header, withCredentials: true }); // Create a request option
+    let header = new HttpHeaders().set('Content-Type', 'application/json'); // ... Set content type to JSON
+    let options = { headers: header, withCredentials: true }; // Create a request option
 
     this.subscriptions.push(
       this.route.params.subscribe((routeParams) => {
@@ -60,12 +60,11 @@ export class AssociatedPage implements OnInit, OnDestroy {
           this.http
             .get([this._auth.getUrl(), "metadata", this.objectId].join("/"), options)
             .toPromise()
-            .then((data) => { return this._auth.extractData(data); })
             .then((data) => {
-              if (!data) {
+              if (!Object.keys(data).length) {
                 throw new Error("No data in image group description response");
               }
-              this.assetTitle = data.title;
+              this.assetTitle = data['title'];
             })
             .catch((error) => { console.error(error); });
         }

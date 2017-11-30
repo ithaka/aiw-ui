@@ -8,7 +8,7 @@ import {
     OnInit,
     Output
 } from '@angular/core'
-import { Http } from '@angular/http'
+import { HttpClient } from '@angular/common/http';
 import { Subscription } from 'rxjs/Subscription'
 import * as OpenSeadragon from 'openseadragon'
 import { Angulartics2 } from 'angulartics2'
@@ -65,7 +65,7 @@ export class AssetViewerComponent implements OnInit, OnDestroy, AfterViewInit {
         private _assets: AssetService,
         private _auth: AuthService,
         private _analytics: Angulartics2,
-        private http: Http
+        private http: HttpClient
     ) {
 
     }
