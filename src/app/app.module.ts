@@ -182,7 +182,7 @@ const APP_PROVIDERS = [
     ThumbnailComponent,
     TypeIdPipe,
     LinkifyPipe,
-    //MediumEditorDirective
+    MediumEditorDirective
   ],
   imports: [ // import Angular's modules
     BrowserModule,
