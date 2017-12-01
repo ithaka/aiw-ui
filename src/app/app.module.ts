@@ -187,7 +187,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     ThumbnailComponent,
     TypeIdPipe,
     LinkifyPipe,
-    //MediumEditorDirective
+    MediumEditorDirective
   ],
   imports: [ // import Angular's modules
     BrowserModule,
