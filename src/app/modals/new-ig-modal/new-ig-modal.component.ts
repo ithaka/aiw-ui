@@ -131,8 +131,8 @@ export class NewIgModal implements OnInit {
           .take(1)
           .subscribe(
             data => {
-              if (data.success) {
-                this.tagSuggestions = data.tags
+              if (data['success']) {
+                this.tagSuggestions = data['tags']
                 // Trigger tag input to re-assess autocomplete array
                 // event.srcElement.dispatch(new Event('change'))
               }

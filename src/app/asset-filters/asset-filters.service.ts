@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs/Subject';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs/Rx';
 import { Locker } from 'angular2-locker';
-import { Http, Response, Headers, RequestOptions } from '@angular/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import 'rxjs/add/operator/toPromise';
 
 import { AuthService } from '../shared/auth.service';
@@ -76,7 +76,7 @@ export class AssetFiltersService {
 
     constructor(
         private locker: Locker,
-        private http: Http,
+        private http: HttpClient,
         private _auth: AuthService
     ){
         this._storage = locker.useDriver(Locker.DRIVERS.LOCAL);

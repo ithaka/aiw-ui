@@ -40,11 +40,11 @@ export class Login {
   public loginInstitutions = [] /** Stores the institutions returned by the server */
   private loginInstName: string = '' /** Bound to the autocomplete field */
   public showRegister: boolean = false
-  
+
   private loginLoading = false
 
   private dataService: LocalData
-  
+
   // TypeScript public modifiers
   constructor(
     private _auth: AuthService,
@@ -87,9 +87,9 @@ export class Login {
     // The true institutions call. Don't throw an error, since the above call will provide a backup
     this._auth.getInstitutions()
       .then((data) => {
-        if (data.items) {
-          this.loginInstitutions = data.items;
-          this.dataService = this._completer.local(data.items, 'name', 'name')
+        if (data['items']) {
+          this.loginInstitutions = data['items'];
+          this.dataService = this._completer.local(data['items'], 'name', 'name')
         }
       })
       .catch((error) => {
@@ -98,7 +98,7 @@ export class Login {
 
     this._analytics.setPageValues('login', '')
   } // OnInit
-  
+
   loadForUser(data: any) {
     if (data && data.user) {
       data.user.hasOwnProperty("username") && this.angulartics.setUsername.next(data.user.username);
@@ -110,15 +110,15 @@ export class Login {
 
       if (data.isRememberMe || data.remoteaccess) {
         data.user.isLoggedIn = true
-      } 
+      }
       this._auth.saveUser(data.user);
       this.errorMsg = '';
-      
+
       // Save user personal collections count in local storage
       this._assets.pccollection()
       .then((res) => {
         let pcEnabled: boolean = false;
-        if( (res.privateCollection && (res.privateCollection.length > 0)) || (res.pcCollection && res.pcCollection.collectionid) ){
+        if( (res['privateCollection'] && (res['privateCollection'].length > 0)) || (res['pcCollection'] && res['pcCollection'].collectionid) ){
           pcEnabled = true;
         }
         this._auth.setpcEnabled(pcEnabled);
@@ -126,7 +126,7 @@ export class Login {
       })
       .catch(function(err) {
           console.error('Unable to load user PC');
-      }); 
+      });
 
       if (this._auth.getFromStorage("stashedRoute")) {
         // We do not want to navigate to the page we are already on
@@ -146,11 +146,11 @@ export class Login {
   getLoginError(user) {
     this._auth.getLoginError(user)
       .then((data) => {
-        if(data.message === 'loginExpired'){
+        if(data['message'] === 'loginExpired'){
           this.expirePwd = true;
           this.showPwdModal = true;
         }
-        else if(data.message === 'loginFailed'){
+        else if(data['message'] === 'loginFailed'){
           this.errorMsg = 'LOGIN.WRONG_PASSWORD';
         } else {
           //handles any server errors
@@ -161,7 +161,7 @@ export class Login {
         this.errorMsg = this.getLoginErrorMsg(error.message);
       });
   }
-  
+
   login(user: User) {
     user.username = user.username.toLowerCase().trim()
     this.loginLoading = true;
@@ -174,7 +174,7 @@ export class Login {
       this.loginLoading = false;
       return;
     }
-    
+
     if(!this.validatePwd(user.password)){
       this.errorMsg = 'LOGIN.PASSWORD_REQUIRED';
       this.loginLoading = false;
@@ -200,7 +200,7 @@ export class Login {
             this.angulartics.eventTrack.next({ action:"remoteLogin", properties: { category: "login", label: "success" }});
             this.loadForUser(data);
           }
-         
+
         }
       ).catch((err) => {
         this.loginLoading = false;
@@ -245,7 +245,7 @@ export class Login {
     // Try password all lowercase
     user.password = user.password.toLowerCase()
     this._auth.login(user).then((data) => {
-      if (data.status === true) { 
+      if (data.status === true) {
         this.forcePwdRst = true
         this.errorMsg = ''
       }
@@ -260,13 +260,13 @@ export class Login {
           if (data.status === true && data.user && user.username == data.user.username) {
             this.forcePwdRst = true
             this.errorMsg = ''
-          } 
+          }
         }, error => {
-          
+
         });
     })
   }
-  
+
   validateEmail(email: string){
     let re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     return re.test(email);
@@ -281,7 +281,7 @@ export class Login {
     }
   }
 
-  /** 
+  /**
    * Fired when the user logs in through their institution
    */
   goToInstLogin(): void {
@@ -331,5 +331,5 @@ export class Login {
   //       this.errorMsg = 'Incorrect username or password for Shared Shelf login.'
   //     })
   // }
-  
+
 }

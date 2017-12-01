@@ -101,6 +101,14 @@
   version "2.0.0-beta.8"
   resolved "https://registry.yarnpkg.com/@ng-idle/keepalive/-/keepalive-2.0.0-beta.8.tgz#b3a70f45db907a336221d35b930f45c36713c8e2"
 
+"@ngx-translate/core@^9.0.1":
+  version "9.0.1"
+  resolved "https://registry.yarnpkg.com/@ngx-translate/core/-/core-9.0.1.tgz#000f2d863c4c94c818e1416ef43cca2c5c0c5848"
+
+"@ngx-translate/http-loader@^2.0.0":
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/@ngx-translate/http-loader/-/http-loader-2.0.0.tgz#9c16d07cd070c67ada270a2e940281eb826b3f43"
+
 "@types/fs-extra@0.0.33":
   version "0.0.33"
   resolved "https://registry.yarnpkg.com/@types/fs-extra/-/fs-extra-0.0.33.tgz#a8719c417b080c012d3497b28e228ac09745fdf2"
@@ -4294,10 +4302,6 @@ ng2-dnd@^4.0.0:
 ng2-file-upload@^1.2.1:
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/ng2-file-upload/-/ng2-file-upload-1.2.1.tgz#5563c5dfd6f43fbfbe815c206e343464a0a6a197"
-
-ng2-translate@^5.0.0:
-  version "5.0.0"
-  resolved "https://registry.yarnpkg.com/ng2-translate/-/ng2-translate-5.0.0.tgz#0adbb510eb5007a2d6ded5f5d26888c14760aca5"
 
 no-case@^2.2.0:
   version "2.3.1"

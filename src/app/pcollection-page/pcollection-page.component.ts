@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Http, Response, Headers, RequestOptions } from '@angular/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Subscription }   from 'rxjs/Subscription';
 
@@ -19,8 +19,8 @@ import { TitleService } from '../shared/title.service';
 
 export class PCollectionPage implements OnInit, OnDestroy {
 
-  private header = new Headers({ 'Content-Type': 'application/json' }); // ... Set content type to JSON
-  private options = new RequestOptions({ headers: this.header, withCredentials: true }); // Create a request option
+  private header = new HttpHeaders().set('Content-Type', 'application/json'); // ... Set content type to JSON
+  private options = { headers: this.header, withCredentials: true }; // Create a request option
 
   private colId: string = '';
   private colName: string = '';
@@ -40,7 +40,7 @@ export class PCollectionPage implements OnInit, OnDestroy {
     private _auth: AuthService,
     private _router: Router,
     private route: ActivatedRoute,
-    private http: Http,
+    private http: HttpClient,
     private _analytics: AnalyticsService,
     private _title: TitleService
   ) {}
@@ -53,7 +53,7 @@ export class PCollectionPage implements OnInit, OnDestroy {
         if (!/^[0-9]+$/.test(this.colId)) {
           this.http.get('/assets/collection-links.json')
             .subscribe(data => {
-              let linkObj = data.json()
+              let linkObj = data
               let link = linkObj[this.colId]
               if (link) {
                 this._router.navigateByUrl(link)
@@ -67,14 +67,14 @@ export class PCollectionPage implements OnInit, OnDestroy {
             .then((data) => {
               this._assets.queryAll(routeParams, true);
 
-              if (!data) {
+              if (!Object.keys(data).length) {
                 throw new Error("No data!");
               }
 
-              this.assetCount = data.objCount;
-              this.colName = data.collectionname;
-              this.colDescription = data.blurburl;
-              this.colThumbnail = data.leadImageURL ? data.leadImageURL : data.bigimageurl;
+              this.assetCount = data['objCount'];
+              this.colName = data['collectionname'];
+              this.colDescription = data['blurburl'];
+              this.colThumbnail = data['leadImageURL'] ? data['leadImageURL'] : data['bigimageurl'];
 
               // Set page title
               this._title.setSubtitle(this.colName)
@@ -100,12 +100,11 @@ export class PCollectionPage implements OnInit, OnDestroy {
   * @param colId The collection ID
   */
   private getCollectionInfo(colId: string) {
-      let options = new RequestOptions({ withCredentials: true });
+      let options = { withCredentials: true };
 
       return this.http
           .get(this._auth.getUrl() + '/collections/' + colId, options)
           .toPromise()
-          .then(this._auth.extractData);
   }
 
 

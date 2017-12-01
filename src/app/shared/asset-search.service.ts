@@ -1,13 +1,8 @@
 /**
  * New Search Service
  */
-import {
-  Http,
-  RequestOptions
-} from '@angular/http';
-import {
-  Injectable
-} from '@angular/core';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Injectable } from '@angular/core';
 
 // Project Dependencies
 import {
@@ -37,7 +32,7 @@ export class AssetSearchService {
     ];
 
   constructor(
-    private http: Http,
+    private http: HttpClient,
     private _filters: AssetFiltersService,
     private _auth: AuthService,
     private _app: AppConfig
@@ -50,9 +45,9 @@ export class AssetSearchService {
    */
   public getFacets() {
 
-    let options = new RequestOptions({
+    let options = {
       withCredentials: true
-    });
+    };
 
     let query = {
       "limit": 0,
@@ -109,9 +104,6 @@ export class AssetSearchService {
     query["filter_query"] = filterArray
 
     return this.http.post(this._auth.getSearchUrl(), query, options)
-      .map(res => {
-        return res.json ? res.json() : {}
-      })
   }
 
   /**
@@ -124,9 +116,9 @@ export class AssetSearchService {
    */
   public search(urlParams: any, term: string, sortIndex) {
     let keyword = term;
-    let options = new RequestOptions({
+    let options = {
       withCredentials: true
-    });
+    };
     let startIndex = ((urlParams.page - 1) * urlParams.size) + 1;
     let thumbSize = 0;
     let type = 6;
@@ -239,7 +231,7 @@ export class AssetSearchService {
           let filterValueArray = filters[i].filterValue[j].toString().trim().split(',')
           for(let filter of filterValueArray){ // Push each filter value seperately in the filterArray (for multiple filter selection within the same filterGroup)
             filterArray.push(filters[i].filterGroup + ':\"' + filter + '\"')
-          }          
+          }
         }
       }
     }
