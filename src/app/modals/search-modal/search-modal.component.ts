@@ -182,8 +182,8 @@ export class SearchModal implements OnInit {
         this._assets.getCollectionsList( 'institution' )
           .toPromise()
           .then((data) => {
-            if (data && data.Collections) {
-              for(let collection of data.Collections){
+            if (data && data['Collections']) {
+              for(let collection of data['Collections']){
                 let colFacetObj: FacetObject = {} as FacetObject
                 colFacetObj.checked = false
                 colFacetObj.name = collection.collectionname

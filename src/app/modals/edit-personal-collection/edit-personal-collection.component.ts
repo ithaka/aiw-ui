@@ -52,7 +52,7 @@ export class EditPersonalCollectionModal implements OnInit, OnDestroy {
   private loadPCThumbnails(): void{
     this._assets.getCollectionThumbs(this.colId)
       .then((res) => {
-          this.pcColThumbs = res.thumbnails;
+          this.pcColThumbs = res['thumbnails'];
           for(let thmb of this.pcColThumbs){
             thmb.metaData = JSON.parse(thmb.jsonListSt);
             this.formatMetadata(thmb);

@@ -44,9 +44,9 @@ export class TagsService {
     return this._assets.getCollectionsList( type )
       .toPromise()
       .then((data) => {
-        if (data && data.Collections) {
+        if (data && data['Collections']) {
           let tags: Tag[] = [];
-          data.Collections.forEach((collection, index) => {
+          data['Collections'].forEach((collection, index) => {
             let openable = collection.collectionType === 5 || collection.collectionType === 2;
             tags.push(new Tag(collection.collectionid, collection.collectionname, true, null, { label: "collection", folder: true }, openable));
           });
@@ -73,7 +73,7 @@ export class TagsService {
     if (collectionId || tag.type.label === "collection") {
       return this._assets.category(collectionId)
         .then((data) => {
-          for(let category of data.Categories) {
+          for(let category of data['Categories']) {
             let categoryTag = new Tag(category.widgetId, category.title, true, tag, { label: "category", folder: category.isFolder }, category['enableDblClick'] );
             childArr.push(categoryTag);
           }
@@ -85,7 +85,8 @@ export class TagsService {
 
       return this._assets.subGroups(tagId)
         .then((data) => {
-          for(let group of data) {
+          let arr: any = data;
+          for(let group of arr) {
             let groupTag = new Tag(group.widgetId.replace('fldr_',''), group.title, true, tag, { label: "group", folder: group.isFolder }, true);
             // Is folder property cleaning: comes through as string
             group.isFolder = (group.isFolder === 'true') ?  true : false;
@@ -100,7 +101,8 @@ export class TagsService {
     } else {
       return this._assets.subcategories(tag.tagId)
         .then((data) => {
-          for(let category of data) {
+          let arr: any = data;
+          for(let category of arr) {
             let categoryTag;
             if (category.grpId) {
               categoryTag = new Tag(category.grpId, category.title, true, tag, { label: "group", folder: false }, category['enableDblClick']);

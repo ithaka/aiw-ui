@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Location } from '@angular/common';
 import { Locker } from 'angular2-locker';
-import { Http, Response, Headers, RequestOptions } from '@angular/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import {
   CanActivate,
   Router,
@@ -66,7 +66,7 @@ export class AuthService implements CanActivate {
     private _router:Router,
     // private _login: LoginService,
     locker:Locker,
-    private http: Http,
+    private http: HttpClient,
     private location: Location,
     private angulartics: Angulartics2,
     private _analytics: AnalyticsService,
@@ -230,8 +230,8 @@ export class AuthService implements CanActivate {
    * Logs out and redirects the user to the login component
    */
   private logoutUser() {
-      let header = new Headers({ 'Content-Type': 'application/x-www-form-urlencoded' }); // ... Set content type to JSON
-      let options = new RequestOptions({ headers: header, withCredentials: true });
+      let header = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded'); // ... Set content type to JSON
+      let options = { headers: header, withCredentials: true };
 
       // Clear local user object, and other settings
       this.clearStorage();
@@ -266,12 +266,11 @@ export class AuthService implements CanActivate {
    * @returns Chainable promise containing collection data
    */
   public refreshUserInstitution() {
-      let options = new RequestOptions({ withCredentials: true })
+      let options = { withCredentials: true }
       // Returns all of the collections names
       return this.http
           .get(this.getUrl() + '/v2/institution', options)
           .toPromise()
-          .then(this.extractData)
           .then((data) => {
               this._storage.set('institution', data);
               data && this.setInstitution(data);
@@ -301,9 +300,6 @@ export class AuthService implements CanActivate {
    */
   public getUserRoles(): Observable<any> {
     return this.http.get(this.getUrl(true) + "/user?_method=deptRoles")
-      .map((res) => {
-        return res.json() || {};
-      });
   }
 
   /** Calls service to register a user
@@ -312,17 +308,14 @@ export class AuthService implements CanActivate {
   public registerUser(registration: any): Observable<any> {
     let data = this.formEncode(registration);
 
-    let header = new Headers({ 'Content-Type': 'application/x-www-form-urlencoded' }); // form encode it
-    let options = new RequestOptions({ headers: header, withCredentials: true }); // Create a request option
-    return this.http.post(this.getUrl(true) + "/register", data , options)
-      .map((data) => {
-        return data.json() || {};
-      });
+    let header = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded'); // form encode it
+    let options = { headers: header, withCredentials: true }; // Create a request option
+    return this.http.post(this.getUrl(true) + "/register", data , options);
   }
 
   public changePassword(oldPass: string, newPass: string): Observable<any> {
-    let header = new Headers({ 'Content-Type': 'application/x-www-form-urlencoded' }); // form encode it
-    let options = new RequestOptions({ headers: header, withCredentials: true }); // Create a request option
+    let header = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded'); // form encode it
+    let options = { headers: header, withCredentials: true }; // Create a request option
     let data = this.formEncode({
       _method: "updatePassword",
       oldPassword: oldPass,
@@ -330,17 +323,6 @@ export class AuthService implements CanActivate {
     });
 
     return this.http.post(this.getUrl(true) + "/profile", data, options)
-      .map((res) => {
-        return res.json() || {};
-      });
-  }
-
-  /**
-   * Takes a response object and turn the data into a json object
-   */
-  public extractData(res: Response): any {
-      let body = res.json();
-      return body || { };
   }
 
   public getUrl(secure?: boolean): string {
@@ -451,7 +433,7 @@ export class AuthService implements CanActivate {
    * Required by implementing CanActivate, and is called on routes which are protected by canActivate: [AuthService]
    */
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
-    let options = new RequestOptions({ withCredentials: true });
+    let options = { withCredentials: true };
     // If user object already exists, we're done here
     if (this.canUserAccess(this.getUser())) {
       return new Observable(observer => {
@@ -466,12 +448,12 @@ export class AuthService implements CanActivate {
       .map(
         (data)  => {
           try {
-            let jsonData = data.json() || {};
-            if (jsonData.status === true) {
+            let jsonData = data;
+            if (jsonData['status'] === true) {
               // User is authorized - if you want to check ipAuth then you can tell on the individual route by user.isLoggedIn = false
-              let user = jsonData.user;
-              user.status = jsonData.status
-              if (jsonData.isRememberMe || jsonData.remoteaccess) {
+              let user = jsonData['user'];
+              user.status = jsonData['status']
+              if (jsonData['isRememberMe'] || jsonData['remoteaccess']) {
                 user.isLoggedIn = true
               }
 
@@ -507,20 +489,20 @@ export class AuthService implements CanActivate {
   }
 
   public getUserInfo(): Observable<any> {
-    let options = new RequestOptions({ withCredentials: true });
+    let options = { withCredentials: true };
 
     return this.http
       .get(this.getUrl(true) + '/userinfo', options)
       .map(
         (res)  => {
           try {
-            let data = res.json() || {};
+            let data = res;
             // User has access!
-            if (data.status === true) {
+            if (data['status'] === true) {
               // User is authorized - if you want to check ipAuth then you can tell on the individual route by user.isLoggedIn = false
-              let user = data.user;
-              user.status = data.status
-              if (data.isRememberMe || data.remoteaccess) {
+              let user = data['user'];
+              user.status = data['status']
+              if (data['isRememberMe'] || data['remoteaccess']) {
                 user.isLoggedIn = true
               }
               if (this.canUserAccess(user)) {
@@ -531,7 +513,7 @@ export class AuthService implements CanActivate {
               }
             }
             // User does not have access!
-            if (data.status === false) {
+            if (data['status'] === false) {
               // Clear user, and trigger router canActivate
               this.saveUser({})
               this._router.navigate(['/login'])
@@ -562,8 +544,8 @@ export class AuthService implements CanActivate {
      * Logs out and redirects the user to the login component
      */
     logout() {
-        let header = new Headers({ 'Content-Type': 'application/x-www-form-urlencoded' }); // ... Set content type to JSON
-        let options = new RequestOptions({ headers: header, withCredentials: true });
+        let header = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded'); // ... Set content type to JSON
+        let options = { headers: header, withCredentials: true };
 
         this.clearStorage();
 
@@ -583,8 +565,8 @@ export class AuthService implements CanActivate {
      * @param user User must have username (which is an email address) and password to be passed in the request
      */
     login(user: User) : Promise<any> {
-        let header = new Headers({ 'Content-Type': 'application/x-www-form-urlencoded' }); // ... Set content type to JSON
-        let options = new RequestOptions({ headers: header, withCredentials: true }); // Create a request option
+        let header = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded'); // ... Set content type to JSON
+        let options = { headers: header, withCredentials: true }; // Create a request option
         let data = this.formEncode({
                 'j_username': user.username.toLowerCase(),
                 'j_password': user.password
@@ -592,18 +574,16 @@ export class AuthService implements CanActivate {
 
         return this.http
             .post(this.getUrl(true) + '/login', data, options)
-            .toPromise()
-            .then(this.extractData);
+            .toPromise();
     }
 
     getLoginError(user: User) {
-        let header = new Headers({ 'Content-Type': 'application/x-www-form-urlencoded' }); // ... Set content type to JSON
-        let options = new RequestOptions({ headers: header, withCredentials: true }); // Create a request option
+        let header = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded'); // ... Set content type to JSON
+        let options = { headers: header, withCredentials: true }; // Create a request option
 
         return this.http
             .get(this.getUrl(true) + '/login?j_username=' + encodeURIComponent(user.username) + '&j_password=' + encodeURIComponent(user.password) )
-            .toPromise()
-            .then(this.extractData);
+            .toPromise();
     }
 
     getInstitutions() {
@@ -611,17 +591,15 @@ export class AuthService implements CanActivate {
 
         return this.http
             .get(url)
-            .toPromise()
-            .then(this.extractData);
+            .toPromise();
     }
 
     pwdReset(email: string) {
-        let options = new RequestOptions({ withCredentials: true });
+        let options = { withCredentials: true };
 
         return this.http
             .get(this.getUrl() + '/lostpw?email=' + email.toLowerCase() + '&portal=ARTstor', options)
-            .toPromise()
-            .then(this.extractData);
+            .toPromise();
     }
 
   /**
@@ -629,11 +607,8 @@ export class AuthService implements CanActivate {
    * @returns json which should have
    */
   public getIpAuth(): Observable<any> {
-    let options = new RequestOptions({ withCredentials: true });
+    let options = { withCredentials: true };
     return this.http.get(this.getUrl(true) + "/userinfo", options)
-        .map((res) => {
-            return res.json() || {};
-        });
   }
 
 
@@ -644,20 +619,17 @@ export class AuthService implements CanActivate {
    */
   public getUserIP(): Observable<any> {
     return this.http.get("https://freegeoip.net/json/")
-      .map((res) => {
-        return res.json() || {};
-      });
   }
 
   public ssLogin(username: string, password: string): Observable<SSLoginResponse> {
 
     let data = this.formEncode({ username: username, password: password })
-    let headers = new Headers({ 'Content-Type': 'application/x-www-form-urlencoded' })
-    return this.http.post(
+    let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded')
+    return this.http.post<SSLoginResponse>(
       [this.hostname, "gust", "login"].join("/"),
       data,
       { withCredentials: true, headers: headers }
-    ).map((res) => { return res.json() })
+    )
   }
 }
 
