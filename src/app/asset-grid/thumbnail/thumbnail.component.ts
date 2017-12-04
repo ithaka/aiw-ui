@@ -1,8 +1,7 @@
 import { Router } from '@angular/router';
 import { Component, OnInit, Input } from '@angular/core';
 
-import { Thumbnail } from './../../shared'
-import { AssetService } from './../../shared';
+import { Thumbnail, AssetService, CollectionTypeHandler } from './../../shared'
 
 @Component({
   selector: 'ang-thumbnail',
@@ -31,17 +30,7 @@ export class ThumbnailComponent implements OnInit {
 
   private constraints: any = {}
   private collectionType: number = 0
-
-  private collectionTypeMap: any = {
-    0: { name: '', alt: '' },
-    1: { name: "artstor-asset", alt: "Artstor Digital Library" },
-    2: { name: "institution-asset", alt: "Institution Collections" },
-    3: { name: "personal-asset", alt: "Private Collections" },
-    4: { name: "institution-asset", alt: "Institution Collections" },
-    5: { name: "artstor-open-asset", alt: "Open Artstor" },
-    6: { name: "personal-asset", alt: "Private Collections" },
-    200: { name: "ssc-asset", alt: "Open Collection" } // an non-existant collection type used to indicate it's an open, non-artstor asset
-  }
+  private collectionTypeHandler: CollectionTypeHandler = new CollectionTypeHandler()
 
   constructor(
     private _assets: AssetService,
@@ -91,12 +80,8 @@ export class ThumbnailComponent implements OnInit {
     }
   }
 
-  /**
-   * Returns collection name and alt text based on Collection Type number
-   * - Does so in safe manner, avoiding template errors
-   */
-  getCollectionType(): any {
-    let mapResult = this.collectionTypeMap[this.collectionType ? this.collectionType : this.thumbnail.collectionType]
-    return mapResult ? mapResult : { name: '', alt: ''}
+  // wrapper function for getting the collection type
+  getCollectionType(): { name: string, alt: string } {
+    return this.collectionTypeHandler.getCollectionType(this.collectionType ? this.collectionType : this.thumbnail.collectionType)
   }
 }

@@ -1,15 +1,15 @@
-import { Component, OnInit, OnDestroy, ViewChild, HostListener } from '@angular/core';
-import { ActivatedRoute, Params, Router } from '@angular/router';
-import { Subscription }   from 'rxjs/Subscription';
-import { Locker } from 'angular2-locker';
-import { Angulartics2 } from 'angulartics2';
+import { Component, OnInit, OnDestroy, ViewChild, HostListener } from '@angular/core'
+import { ActivatedRoute, Params, Router } from '@angular/router'
+import { Subscription }   from 'rxjs/Subscription'
+import { Locker } from 'angular2-locker'
+import { Angulartics2 } from 'angulartics2'
 
 // Project Dependencies
-import { Asset } from './asset';
-import { AuthService, AssetService, GroupService } from './../shared';
-import { AssetViewerComponent } from './asset-viewer/asset-viewer.component';
-import { AnalyticsService } from '../analytics.service';
-import { TitleService } from '../shared/title.service';
+import { Asset } from './asset'
+import { AuthService, AssetService, GroupService, CollectionTypeHandler } from './../shared'
+import { AssetViewerComponent } from './asset-viewer/asset-viewer.component'
+import { AnalyticsService } from '../analytics.service'
+import { TitleService } from '../shared/title.service'
 
 @Component({
     selector: 'ang-asset-page',
@@ -62,6 +62,8 @@ export class AssetPage implements OnInit, OnDestroy {
     private showAssetCaption: boolean = true;
 
     private assetIdProperty: string = 'artstorid'
+
+    private collectionTypeHandler: CollectionTypeHandler = new CollectionTypeHandler()
     
     // To keep a track of browse direction ('prev' / 'next') while browsing through assets, to load next asset if the current asset is un-authorized
     private browseAssetDirection: string = '' 
@@ -212,6 +214,7 @@ export class AssetPage implements OnInit, OnDestroy {
         })
 
         this._analytics.setPageValues('asset', this.assets[0].id)
+        console.log(this.assets)
     } // OnInit
 
     ngOnDestroy() {
