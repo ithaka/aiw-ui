@@ -127,7 +127,6 @@ export class AddToGroupModal implements OnInit, OnDestroy {
     // go get the group from the server
     this._group.get(this.selectedIg.id)
       .toPromise()
-      .then((data) => { return this.extractData(data) })
       .then((data) => {
         data.items = putGroup.items
 
