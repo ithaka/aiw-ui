@@ -516,7 +516,8 @@ export class AuthService implements CanActivate {
             if (data['status'] === false) {
               // Clear user, and trigger router canActivate
               this.saveUser({})
-              this._router.navigate(['/login'])
+              // We should handle this by triggering "session expired" modal in CERTAIN cases
+              // this._router.navigate(['/login'])
             }
             return data;
           } catch (err) {
