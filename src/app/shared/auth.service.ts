@@ -433,7 +433,8 @@ export class AuthService implements CanActivate {
    * Required by implementing CanActivate, and is called on routes which are protected by canActivate: [AuthService]
    */
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
-    let options = { withCredentials: true };
+    let header = new HttpHeaders().set('Cache-Control', 'no-cache')
+    let options = { headers: header, withCredentials: true };
     // If user object already exists, we're done here
     if (this.canUserAccess(this.getUser())) {
       return new Observable(observer => {
@@ -489,7 +490,8 @@ export class AuthService implements CanActivate {
   }
 
   public getUserInfo(): Observable<any> {
-    let options = { withCredentials: true };
+    let header = new HttpHeaders().set('Cache-Control', 'no-cache')
+    let options = { headers: header, withCredentials: true };
 
     return this.http
       .get(this.getUrl(true) + '/userinfo', options)
@@ -566,7 +568,7 @@ export class AuthService implements CanActivate {
      * @param user User must have username (which is an email address) and password to be passed in the request
      */
     login(user: User) : Promise<any> {
-        let header = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded'); // ... Set content type to JSON
+        let header = new HttpHeaders().set('Cache-Control', 'no-cache').set('Content-Type', 'application/x-www-form-urlencoded'); // ... Set content type to JSON
         let options = { headers: header, withCredentials: true }; // Create a request option
         let data = this.formEncode({
                 'j_username': user.username.toLowerCase(),
@@ -608,7 +610,8 @@ export class AuthService implements CanActivate {
    * @returns json which should have
    */
   public getIpAuth(): Observable<any> {
-    let options = { withCredentials: true };
+    let header = new HttpHeaders().set('Cache-Control', 'no-cache')
+    let options = { headers: header, withCredentials: true };
     return this.http.get(this.getUrl(true) + "/userinfo", options)
   }
 
