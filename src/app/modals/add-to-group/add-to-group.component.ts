@@ -67,7 +67,7 @@ export class AddToGroupModal implements OnInit, OnDestroy {
         }
       }, (err) => { console.error(err); });
 
-      
+       
   }
 
   ngOnDestroy() {
