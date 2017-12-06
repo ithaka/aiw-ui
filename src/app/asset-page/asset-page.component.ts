@@ -6,7 +6,7 @@ import { Angulartics2 } from 'angulartics2'
 
 // Project Dependencies
 import { Asset } from './asset'
-import { AuthService, AssetService, GroupService, CollectionTypeHandler } from './../shared'
+import { AuthService, AssetService, AssetSearchService, GroupService, CollectionTypeHandler } from './../shared'
 import { AssetViewerComponent } from './asset-viewer/asset-viewer.component'
 import { AnalyticsService } from '../analytics.service'
 import { TitleService } from '../shared/title.service'
@@ -62,6 +62,8 @@ export class AssetPage implements OnInit, OnDestroy {
     private showAssetCaption: boolean = true;
 
     private assetIdProperty: string = 'artstorid'
+    /** Controls the display of the collection type icon */
+    private collectionType: {name: string, alt: string}
 
     private collectionTypeHandler: CollectionTypeHandler = new CollectionTypeHandler()
     
@@ -76,17 +78,18 @@ export class AssetPage implements OnInit, OnDestroy {
     private originPage: number = 0;
 
     constructor(
-            private _assets: AssetService,
-            private _group: GroupService,
-            private _auth: AuthService,
-            private route: ActivatedRoute,
-            private _router: Router,
-            private locker: Locker,
-            private _analytics: AnalyticsService,
-            private angulartics: Angulartics2,
-            private _title: TitleService
-        ) {
-            this._storage = locker.useDriver(Locker.DRIVERS.LOCAL);
+        private _assets: AssetService,
+        private _search: AssetSearchService,
+        private _group: GroupService,
+        private _auth: AuthService,
+        private route: ActivatedRoute,
+        private _router: Router,
+        private locker: Locker,
+        private _analytics: AnalyticsService,
+        private angulartics: Angulartics2,
+        private _title: TitleService
+    ) {
+        this._storage = locker.useDriver(Locker.DRIVERS.LOCAL);
     }
 
     ngOnInit() {
@@ -214,7 +217,6 @@ export class AssetPage implements OnInit, OnDestroy {
         })
 
         this._analytics.setPageValues('asset', this.assets[0].id)
-        console.log(this.assets)
     } // OnInit
 
     ngOnDestroy() {
@@ -270,6 +272,8 @@ export class AssetPage implements OnInit, OnDestroy {
                 }
             }
         )
+
+        this.setCollectionType(this.assets[0][this.assetIdProperty])
 
         this.generateImgURL();
     }
@@ -605,5 +609,17 @@ export class AssetPage implements OnInit, OnDestroy {
           this.showNextAsset();
         }
       }
+    }
+
+    private setCollectionType(assetId: string): void {
+        this._search.search({}, assetId, null)
+            .take(1)
+            .subscribe((res) => {
+                if (res && res['results'] && res['results'].length > 0) {
+                    this.collectionType = this.collectionTypeHandler.getCollectionType(res['results'][0].collectiontypes[0])
+                }
+            }, (err) => {
+                console.error(err)
+            })
     }
 }

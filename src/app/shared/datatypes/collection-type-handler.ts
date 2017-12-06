@@ -7,7 +7,7 @@ export class CollectionTypeHandler {
     4: { name: "institution-asset", alt: "Institution Collections" },
     5: { name: "artstor-open-asset", alt: "Open Artstor" },
     6: { name: "personal-asset", alt: "Private Collections" },
-    200: { name: "ssc-asset", alt: "Open Collection" } // an non-existant collection type used to indicate it's an open, non-artstor asset
+    200: { name: "ssc-asset", alt: "Public Collection" } // an non-existant collection type used to indicate it's an open, non-artstor asset
   }
 
  /**
