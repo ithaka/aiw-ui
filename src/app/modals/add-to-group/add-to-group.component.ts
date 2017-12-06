@@ -66,6 +66,8 @@ export class AddToGroupModal implements OnInit, OnDestroy {
           this.dataService = this.completerService.local(this.groups, 'name', 'name');
         }
       }, (err) => { console.error(err); });
+
+      
   }
 
   ngOnDestroy() {
