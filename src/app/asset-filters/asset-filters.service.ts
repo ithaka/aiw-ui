@@ -67,7 +67,7 @@ export class AssetFiltersService {
         "collectiontypes" : {
         1 : "Artstor Digital Library",
         3 : "Private Collections",
-        5 : "Open Collections",
+        5 : "Public Collections",
         6 : "Private Collections"
         }
     }
