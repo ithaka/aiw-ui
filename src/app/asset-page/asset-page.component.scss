@@ -413,3 +413,10 @@ $titleNavBg: #eee;
 .meta-block {
     overflow-wrap: break-word;
 }
+
+.collection-type-display {
+    & .icon {
+        background-position: center bottom;
+    }
+    color: $dark-gray;
+}

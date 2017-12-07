@@ -21,6 +21,7 @@ export class Asset {
   tileSource: any;
   record: any;
   collectionName: string = ''
+  collectionType: number
   // Not reliably available
   collectionId: number
 

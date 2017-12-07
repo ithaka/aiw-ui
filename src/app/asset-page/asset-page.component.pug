@@ -89,6 +89,9 @@
             input#generatedImgURL.form-control.form-control__copy(#copyUrlInput="", readonly, [ngModel]="generatedImgURL", (click)="copyUrlInput.select(); document.execCommand('copy', false, null)")
             .alert.alert-info(*ngIf="copyURLStatusMsg") {{ copyURLStatusMsg }}
         .row-hdr.pt-3(*ngIf="assets[0].metaDataArray.length > 0") {{ 'ASSET_PAGE.HEADER_LABELS.OBJ_DETAILS' | translate}}
+        .meta-block.collection-type-display(*ngIf="collectionType")
+          i.icon(class="icon-{{collectionType.name}}", [attr.title]="collectionType.alt")
+          | &nbsp; {{ collectionType.alt }}
         //- Old metadata loop
         .meta-block(*ngFor="let metadataObj of assets[0].formattedMetaArray")
           .label([attr.id]="cleanId(metadataObj.fieldName)") {{ metadataObj.fieldName }}
