@@ -54,6 +54,16 @@ export class AuthService implements CanActivate {
   public showUserInactiveModal: Subject<boolean> = new Subject(); //Set up subject observable for showing inactive user modal
 
   /**
+   * We need to make SURE /userinfo is not cached
+   * - Successful login returns a 302 to /userinfo, which IE 11 is more than happy to cache :(
+   * - We make every /userinfo call unique to ensure a response is never reused
+   * - 'no-store' > 'no-cache' in denying caching
+   */
+  private userInfoHeader: HttpHeaders = new HttpHeaders().set('Cache-Control', 'no-store, no-cache')
+  private genUserInfoUrl() : string {
+    return this.getUrl(true) + '/userinfo?no-cache=' + new Date().valueOf()
+  }
+  /**
    * Global Feature Flag object
    * - Keep updated when flags are added or removed, for reference
    * - Update via url param subscriptions inside of relevant components
@@ -433,7 +443,7 @@ export class AuthService implements CanActivate {
    * Required by implementing CanActivate, and is called on routes which are protected by canActivate: [AuthService]
    */
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
-    let options = { withCredentials: true };
+    let options = { headers: this.userInfoHeader, withCredentials: true };
     // If user object already exists, we're done here
     if (this.canUserAccess(this.getUser())) {
       return new Observable(observer => {
@@ -444,7 +454,7 @@ export class AuthService implements CanActivate {
     // If user object doesn't exist, try to get one!
     return new Observable(observer => {
       this.http
-      .get(this.getUrl(true) + '/userinfo', options)
+      .get(this.genUserInfoUrl(), options)
       .map(
         (data)  => {
           try {
@@ -489,10 +499,10 @@ export class AuthService implements CanActivate {
   }
 
   public getUserInfo(): Observable<any> {
-    let options = { withCredentials: true };
+    let options = { headers: this.userInfoHeader, withCredentials: true };
 
     return this.http
-      .get(this.getUrl(true) + '/userinfo', options)
+      .get(this.genUserInfoUrl(), options)
       .map(
         (res)  => {
           try {
@@ -516,7 +526,8 @@ export class AuthService implements CanActivate {
             if (data['status'] === false) {
               // Clear user, and trigger router canActivate
               this.saveUser({})
-              this._router.navigate(['/login'])
+              // We should handle this by triggering "session expired" modal in CERTAIN cases
+              // this._router.navigate(['/login'])
             }
             return data;
           } catch (err) {
@@ -565,7 +576,7 @@ export class AuthService implements CanActivate {
      * @param user User must have username (which is an email address) and password to be passed in the request
      */
     login(user: User) : Promise<any> {
-        let header = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded'); // ... Set content type to JSON
+        let header = new HttpHeaders().set('Cache-Control', 'no-store, no-cache').set('Content-Type', 'application/x-www-form-urlencoded'); // ... Set content type to JSON
         let options = { headers: header, withCredentials: true }; // Create a request option
         let data = this.formEncode({
                 'j_username': user.username.toLowerCase(),
@@ -607,8 +618,8 @@ export class AuthService implements CanActivate {
    * @returns json which should have
    */
   public getIpAuth(): Observable<any> {
-    let options = { withCredentials: true };
-    return this.http.get(this.getUrl(true) + "/userinfo", options)
+    let options = { headers: this.userInfoHeader, withCredentials: true };
+    return this.http.get(this.genUserInfoUrl(), options)
   }
 
 

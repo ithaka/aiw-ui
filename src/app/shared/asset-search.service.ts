@@ -228,10 +228,8 @@ export class AssetSearchService {
         }
       } else {
         for (let j = 0; j < filters[i].filterValue.length; j++) {
-          let filterValueArray = filters[i].filterValue[j].toString().trim().split(',')
-          for(let filter of filterValueArray){ // Push each filter value seperately in the filterArray (for multiple filter selection within the same filterGroup)
-            filterArray.push(filters[i].filterGroup + ':\"' + filter + '\"')
-          }
+          let filterValue = filters[i].filterValue[j]
+          filterArray.push(filters[i].filterGroup + ':\"' + filterValue + '\"')
         }
       }
     }

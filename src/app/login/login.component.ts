@@ -204,7 +204,7 @@ export class Login {
         }
       ).catch((err) => {
         this.loginLoading = false;
-        let errObj = err.json ? err.json() : {};
+        let errObj = err.error
         this.errorMsg = this.getLoginErrorMsg(errObj.message)
         if (!this.getLoginErrorMsg(errObj.message)){
           this.getLoginError(user)

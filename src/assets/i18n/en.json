@@ -318,12 +318,12 @@
     },
     "FEATURED": {
       "HEADING": "Featured Collection",
-      "SUBHEADING": "The Andy Warhol Foundation for the Visual Arts: Oeuvre",
-      "DESCRIPTION": "Andy Warhol; Brooklyn Bridge; 1983. Images © The Andy Warhol Foundation for the Visual Arts, Inc. and Andy Warhol artwork © The Andy Warhol Foundation for the Visual Arts, Inc.",
-      "LINK": "/#/category/10374058919;name=The%20Andy%20Warhol%20Foundation%20for%20the%20Visual%20Arts%3A%20Oeuvre%20458;browseType=103",
-      "IMG_SOURCE": "/assets/img/featured-collection.jpg",
-      "LINK_TITLE": "The Andy Warhol Foundation for the Visual Arts: Oeuvre",
-      "ALT_TEXT": "The Andy Warhol Foundation for the Visual Arts: Oeuvre"
+      "SUBHEADING": "Minor White Archive (Princeton University Art Museum)",
+      "DESCRIPTION": "Minor White. San Francisco. August 19, 1949. Gelatin silver print. The Minor White Archive, Princeton University Art Museum, bequest of Minor White. © Trustees of Princeton University",
+      "LINK": "/#/category/10374058928;browseType=103",
+      "IMG_SOURCE": "/assets/img/featured-collection2.jpg",
+      "LINK_TITLE": "Minor White Archive (Princeton University Art Museum)",
+      "ALT_TEXT": "Minor White Archive (Princeton University Art Museum)"
     },
     "SAHARA_FEATURED": {
       "HEADING": "Featured Image",
