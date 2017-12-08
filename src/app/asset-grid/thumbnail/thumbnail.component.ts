@@ -50,12 +50,6 @@ export class ThumbnailComponent implements OnInit {
       this.collectionType = this.thumbnail['collectiontypes'][0]
     }
 
-    // all open collections come with collectiontypes[0] == 5, but we want to show a different icon for an
-    //  Open Artstor asset vs an open institutional asset
-    if (this.collectionType === 5 && this.thumbnail['contributinginstitutionid'] !== 1000) {
-      this.collectionType = 200
-    }
-
     this.thumbnail.iapFlag = this.determineIAP(this.thumbnail['artstorid'] ? this.thumbnail['artstorid'] : this.thumbnail['objectId'])
   }
 
@@ -82,6 +76,6 @@ export class ThumbnailComponent implements OnInit {
 
   // wrapper function for getting the collection type
   getCollectionType(): { name: string, alt: string } {
-    return this.collectionTypeHandler.getCollectionType(this.collectionType ? this.collectionType : this.thumbnail.collectionType)
+    return this.collectionTypeHandler.getCollectionType(this.collectionType ? this.collectionType : this.thumbnail.collectionType, this.thumbnail['contributinginstitutionid'])
   }
 }

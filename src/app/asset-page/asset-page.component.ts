@@ -27,7 +27,7 @@ export class AssetPage implements OnInit, OnDestroy {
 
     // Array to support multiple viewers on the page
     private assets: Asset[] = []
-    private assetIndex: number = 1
+    private assetIndex: number = 0
     private assetGroupId: string
     private assetNumber: number = 1
     private totalAssetCount: number = 1
@@ -63,7 +63,7 @@ export class AssetPage implements OnInit, OnDestroy {
 
     private assetIdProperty: string = 'artstorid'
     /** Controls the display of the collection type icon */
-    private collectionType: {name: string, alt: string}
+    private collectionType: {name: string, alt: string} = {name: '', alt: ''}
 
     private collectionTypeHandler: CollectionTypeHandler = new CollectionTypeHandler()
     
@@ -611,12 +611,25 @@ export class AssetPage implements OnInit, OnDestroy {
       }
     }
 
+    /**
+     * Used to set the collection type, which controls display of the collection type icon
+     * @param assetId the asset's id assigned by artstor
+     */
     private setCollectionType(assetId: string): void {
         this._search.search({}, assetId, null)
             .take(1)
             .subscribe((res) => {
                 if (res && res['results'] && res['results'].length > 0) {
-                    this.collectionType = this.collectionTypeHandler.getCollectionType(res['results'][0].collectiontypes[0])
+                    let currentAssetId: string = this.assets[0].artstorid || this.assets[0]['objectId'] // couldn't trust the 'this.assetIdProperty' variable
+
+                    // search through the resulting items and find the one with the matching id
+                    let asset = res['results'].find((item) => {
+                        return item.artstorid == currentAssetId
+                    })
+                    if (!asset) { return }
+
+                    let contributinginstitutionid: number = asset['contributinginstitutionid']
+                    this.collectionType = this.collectionTypeHandler.getCollectionType(asset['collectiontypes'][0], contributinginstitutionid)
                 }
             }, (err) => {
                 console.error(err)
