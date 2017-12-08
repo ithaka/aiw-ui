@@ -272,8 +272,10 @@ export class AssetPage implements OnInit, OnDestroy {
                 }
             }
         )
+        
+        let currentAssetId: string = this.assets[0].artstorid || this.assets[0]['objectId'] // couldn't trust the 'this.assetIdProperty' variable
 
-        this.setCollectionType(this.assets[0][this.assetIdProperty])
+        this.setCollectionType(currentAssetId)
 
         this.generateImgURL();
     }
