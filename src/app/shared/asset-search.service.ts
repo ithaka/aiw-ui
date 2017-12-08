@@ -108,14 +108,13 @@ export class AssetSearchService {
 
   /**
    * Search assets service
-   * @param term          String to search for.
+   * @param keyword          String to search for.
    * @param filters       Array of filter objects (with filterGroup and filterValue properties)
    * @param sortIndex     An integer representing a type of sort.
    * @param dateFacet     Object with the dateFacet values
    * @returns       Returns an object with the properties: thumbnails, count, altKey, classificationFacets, geographyFacets, minDate, maxDate, collTypeFacets, dateFacets
    */
-  public search(urlParams: any, term: string, sortIndex) {
-    let keyword = term;
+  public search(urlParams: any, keyword: string, sortIndex) {
     let options = {
       withCredentials: true
     };
