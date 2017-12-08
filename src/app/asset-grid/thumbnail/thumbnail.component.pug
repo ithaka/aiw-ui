@@ -1,6 +1,6 @@
 .card-block.card-text
   .card-img-top
-    img([class.disablePointerEvents]="reorderMode", [attr.src]="_assets.makeThumbUrl(thumbnail.thumbnailImgUrl, largeThmbView ? 2 : 1)", [attr.alt]="thumbnail.arttitle && thumbnail.arttitle[0] ? 'Thumbnail of ' + thumbnail.thumbnail1 : 'No title available'")
+    img(*ngIf="thumbnail.status != 'not-available'", [class.disablePointerEvents]="reorderMode", [attr.src]="_assets.makeThumbUrl(thumbnail.thumbnailImgUrl, largeThmbView ? 2 : 1)", [attr.alt]="thumbnail.arttitle && thumbnail.arttitle[0] ? 'Thumbnail of ' + thumbnail.thumbnail1 : 'No title available'")
   .card-icon-group((click)="$event.stopPropagation(); $event.preventDefault();", [ngClass]="{ 'disablePointerEvents': editMode }")
     //- Legacy Service icons
     i.icon.icon-collab(*ngIf="thumbnail.cfObjectId && thumbnail.cfObjectId.length > 0", [id]="thumbnail.objectId + '_associated_images'", (click)="openLink($event, ['/associated', thumbnail.cfObjectId, thumbnail.collectionId])" title="Others are also interested in...")
