@@ -565,14 +565,14 @@ export class AssetService {
      * Get IIIF tilesource for an Asset
      * @param assetId string Asset or object ID
      */
-    public getImageSource(assetId: string, groupId?: string) {
+    public getImageSource(assetId: string, groupId?: string): Observable<MetadataRes> {
         let url = this._auth.getUrl() + '/v1/metadata?object_ids=' + assetId
         if (groupId){
             // Groups service modifies certain access rights for shared assets
             url = this._auth.getUrl() + '/v1/group/'+ groupId +'/metadata?object_ids=' + assetId
         }
         return this.http
-            .get( url, this.defaultOptions)
+            .get<MetadataRes>( url, this.defaultOptions)
     }
 
     /**
@@ -1040,4 +1040,26 @@ export class AssetService {
             else { throw new Error("No success or item found on response object") }
         })
   }
+}
+
+export interface MetadataRes {
+    success: boolean
+    total: number
+    metadata: {
+        SSID: string
+        collection_id: string
+        collection_name: string
+        download_size: string
+        fileProperties: any[]
+        height: number
+        width: number
+        image_url: string
+        metadata_json: any[]
+        object_id: string
+        object_type_id: number
+        resolution_x: number
+        resolution_y: number
+        thumbnail_url: string
+        title: string
+    }[]
 }
