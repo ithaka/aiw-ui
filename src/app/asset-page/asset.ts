@@ -24,6 +24,8 @@ export class Asset {
   collectionType: number
   // Not reliably available
   collectionId: number
+  SSID: string
+  fileName: string
 
   viewportDimensions: {
       contentSize?: any,
@@ -286,6 +288,14 @@ export class Asset {
     }
     else{
         this.disableDownload = false;
+    }
+
+    // set SSID and fileName
+    this.SSID = data.SSID
+    if (data.fileProperties) {
+        this.fileName = data.fileProperties.find((obj) => {
+            return !!obj.fileName
+        }).fileName
     }
 
     this.typeId = data.object_type_id || data.objectTypeId;
