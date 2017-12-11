@@ -97,11 +97,11 @@
           .label([attr.id]="cleanId(metadataObj.fieldName)") {{ metadataObj.fieldName }}
           div(*ngFor="let value of metadataObj.fieldValue")
             .value([innerHTML]="cleanFieldValue(value) | linkify")
-        .row-hdr.pt-1(*ngIf="assets[0].filePropertiesArray.length > 0") {{ 'ASSET_PAGE.HEADER_LABELS.FILE_PROPS' | translate}}
+        .row-hdr.pt-3(*ngIf="assets[0].filePropertiesArray.length > 0") {{ 'ASSET_PAGE.HEADER_LABELS.FILE_PROPS' | translate}}
         //- Loop through File Properties Array
-        .meta-block(*ngFor="let filePropObj of assets[0].filePropertiesArray")
-          .label([attr.id]="cleanId(filePropObj.fieldName)") {{ filePropObj.fieldName }}
-            .value([innerHTML]="filePropObj.fieldValue")
+        //- .meta-block(*ngFor="let filePropObj of assets[0].filePropertiesArray")
+        //-   .label([attr.id]="cleanId(filePropObj.fieldName)") {{ filePropObj.fieldName }}
+        //-     .value([innerHTML]="filePropObj.fieldValue")
         .meta-block(*ngIf="assets[0].fileName")
           .label#fileName {{ 'ASSET_PAGE.METADATA_LABELS.FILE_NAME' | translate }}
             .value([innerHtml]="assets[0].fileName")
