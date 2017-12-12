@@ -436,5 +436,6 @@
         "HEADING": "Add your images to the SAHARA collection"
       }
     }
-  }
+  },
+  "GENERIC_ERROR" : "There was an error while loading. Please verify your network connection and try again. If you continue to have a problem, please <a href='mailto:userservices@artstor.org' class='link'>contact support</a>."
 }
