@@ -229,13 +229,13 @@ export class AssetSearchService {
         for (let j = 0; j < filters[i].filterValue.length; j++) {
           let filterValue = filters[i].filterValue[j]
           /**
-           * Incase of Inst. colType filter, use the contributing inst. ID to filter
+           * In case of Inst. colType filter, also use the contributing inst. ID to filter
            */
           if( (filters[i].filterGroup === 'collectiontypes') && (filterValue === 2 || filterValue === 4) ){
             filterArray.push('contributinginstitutionid:\"' + this._auth.getUser().institutionId.toString() + '\"')
-          } else {
-            filterArray.push(filters[i].filterGroup + ':\"' + filterValue + '\"')
           }
+          // Push filter queries into the array
+          filterArray.push(filters[i].filterGroup + ':\"' + filterValue + '\"')
         }
       }
     }
