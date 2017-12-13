@@ -18,10 +18,11 @@
         "SERVICE_ERROR": "We've experience an error and are unable to retrieve the insitutions"
       }
     },
+    "INCORRECT_PORTAL" : "Sorry, that login is not valid for this portal. Please try again with a different account, or try accessing the main <a id=\"linkMainLibrarySite\" href=\"http://library.artstor.org\" class=\"link\" target=\"_blank\">Artstor Digital Library</a>.",
     "LOGIN_BTN": "Log in",
     "SERVER_ERROR": "Server is not responding. Please try again later.",
     "ARCHIVED_ERROR": "That login has been disabled. Please contact your institutional contact.",
-    "TERMS": "By using Artstor Digital Library, I agree to the <a id=\"linkTermsAndConditions\" href=\"http://www.artstor.org/terms\" class=\"link\" target=\"_blank\">Terms</a>",
+    "TERMS": "By using Artstor Digital Library, I agree to the <a id=\"linkTermsAndConditions\" data-automation-component=\"artstor-login-terms\" href=\"http://www.artstor.org/terms\" class=\"link\" target=\"_blank\">Terms</a>",
     "WRONG_PASSWORD" : "Invalid email address or password. Try again.",
     "INVALID_EMAIL" : "Please enter a valid email address",
     "PASSWORD_REQUIRED": "Password must be 7-20 characters",
@@ -32,6 +33,8 @@
   "REGISTER": {
     "REGISTER_HEADING": "Register for a new Artstor account",
     "REGISTER_DESCRIPTION": "Registering for an account lets you download images, save them to groups, create presentations, and share them with other Artstor users.",
+    "REGISTER_JSTOR_MESSAGE": "You can now use your JSTOR account to register for Artstor.",
+    "EMAIL_HELP_TXT": "Use your JSTOR account",
     "ERRORS": {
       "EMAIL_REQUIRED": "Please enter your email address",
       "EMAIL_INVALID": "Invalid email format",
@@ -44,14 +47,21 @@
       "AGE_REQUIRED": "Please confirm you are 13 or older",
       "INSTITUTION_ROLE_REQUIRED": "Please select a role",
       "ACADEMIC_DEPT_REQUIRED": "Please select a department",
-      "LOGIN_SERVER": "Server is not responding. Please try again later."
+      "LOGIN_SERVER": "Server is not responding. Please try again later.",
+      "SERVER_ERROR": "The server encountered an error processing the request. Please try again."
     },
     "AGE_PROMPT": "I confirm that I am 13 or older",
     "AGE_PROMPT_HOVER": "If you are under 13, please provide your legal guardian's email address to register",
     "INFO_PROMPT": "Yes, send me information about new Artstor content and tools",
     "SURVEY_PROMPT": "Yes, send me surveys",
-    "PRIVACY_DISCLAIMER": "Artstor will not share your personal information except in limited instances as set forth in its <a class=\"link\" href=\"http://www.artstor.org/privacy-policy\">privacy policy</a>.",
+    "PRIVACY_DISCLAIMER": "You may unsubscribe at any time by clicking on the provided link on any marketing message.",
     "FIELDS_REQUIRED": "Please note that all form fields are required."
+  },
+  "REGISTER_JSTOR_MODAL": {
+    "TITLE": "Use your JSTOR account",
+    "MESSAGE_1": "Please enter your JSTOR email and password to register.",
+    "MESSAGE_2": "Artstor access will be added to your JSTOR account.",
+    "FORGOT": "(Forgot your password?)"
   },
   "ACCOUNT": {
     "CHANGE_PASS": {
@@ -77,6 +87,7 @@
     },
     "BUTTONS": {
       "DOWNLOAD": "Download",
+      "GENERATE_CITATION": "Generate Citation",
       "PRINT": "Print",
       "LINK": "Link",
       "EXT": "Exit",
@@ -89,6 +100,10 @@
     },
     "MESSAGES": {
       "NEEDASSETS": "To compare assets, you will need to access an asset through a set of results first. Then those results will show here."
+    },
+    "METADATA_LABELS": {
+      "SSID": "SSID",
+      "FILE_NAME": "File Name"
     }
   },
   "IMAGE_GROUP_PAGE": {
@@ -225,7 +240,8 @@
       "SEARCH_PROMPT": "Enter a keyword or select a filter to begin a search"
     },
     "WARNINGS": {
-      "ADDITIONAL_RESULTS": "Sorry, additional results cannot be displayed. In order to keep things quick, Artstor does not show more than 1500 results for any search. If you haven't found what you are looking for, try using advanced search."
+      "ADDITIONAL_RESULTS": "Sorry, additional results cannot be displayed. In order to keep things quick, Artstor does not show more than 1500 results for any search. If you haven't found what you are looking for, try using advanced search.",
+      "RSTD_IMGS": "This group contains restricted images or images that have been deleted by the creator."
     }
   },
   "FOOTER": {
@@ -252,8 +268,18 @@
   },
   "ACCESS_DENIED_MODAL": {
     "HEADING": "Content Unavailable",
-    "PROMPT": "If you are already <a href=\"/#/login\" class=\"link\">logged in</a>, this may be due to content limitations or your institutional access."
+    "PROMPT": "If you are already <a href=\"/#/login\" class=\"link\">logged in</a>, this may be due to content limitations or your institutional access.",
+    "IP_AUTH" : {
+      "PROMPT" : "This content is not available due to content limitations or your institutional access. Please try using an account."
+    },
+    "USER_AUTH" : {
+      "PROMPT" : "This content is not available due to content limitations or your institutional access."
+    }, 
+    "NO_AUTH" : {
+      "PROMPT" : "This content is not available due to content limitations or restricted access. Please try using an account or accessing this page on campus."
+    }
   },
+  "ACCESS_DENIED": "<b>Sorry, Content Unavailable:</b> If you are already <a href=\"/#/login\" class=\"link\">logged in</a>, this may be due to content limitations or your institutional access.",
   "NO_IG": {
     "HEADING": "Image group unavailable",
     "NO_EXISTS": "The image group you are trying to access does not exist.",
@@ -265,9 +291,17 @@
     "COPY_SUCCESS": "Link copied to clipboard",
     "SERVICE_ERROR": "We've encountered an error in getting a share token. Please refresh or try again later."
   },
+  "GENERATE_CITATION_MODAL": {
+    "MAIN_HEADING": "Generate citation for asset",
+    "COPY_APA": "APA",
+    "COPY_MLA": "MLA",
+    "COPY_CHICAGO": "Chicago",
+    "COPY_SUCCESS": "Citation copied to clipboard",
+    "COPY_CLIPBOARD": "Copy to Clipboard"
+  },
   "HOME": {
     "HEADINGS": {
-      "SSC": "Shared Shelf Commons",
+      "SSC": "Public Collections",
       "BRWSE": "Browse",
       "FRM_BLOG": "From Our Blog",
       "INSTITUTION_COLLECTIONS": "{{institutionName}} Collections"
@@ -279,7 +313,7 @@
       "CLASS_HEADING": "Classification",
       "CLASS_LIST": "(paintings, performing arts, photographs)",
       "COLL_HEADING": "Collection",
-      "COLL_LIST": "(Artstor, Shared Shelf, Shared Shelf Commons, My Collections...)",
+      "COLL_LIST": "(Artstor, Institutional, Public, My Collections...)",
       "COLL_LIST_SHORT": "(Institutional Collections)",
       "TEACHING_HEADING": "Teaching Resources",
       "TEACHING_LIST": "(Curriculum Guides, AP® Resources, Surveys and Case Studies: Art History, Humanities and Social Sciences)",
@@ -288,12 +322,12 @@
     },
     "FEATURED": {
       "HEADING": "Featured Collection",
-      "SUBHEADING": "The Andy Warhol Foundation for the Visual Arts: Oeuvre",
-      "DESCRIPTION": "Andy Warhol; Brooklyn Bridge; 1983. Images © The Andy Warhol Foundation for the Visual Arts, Inc. and Andy Warhol artwork © The Andy Warhol Foundation for the Visual Arts, Inc.",
-      "LINK": "/#/category/10374058919;name=The%20Andy%20Warhol%20Foundation%20for%20the%20Visual%20Arts%3A%20Oeuvre%20458",
-      "IMG_SOURCE": "/assets/img/featured-collection.jpg",
-      "LINK_TITLE": "The Andy Warhol Foundation for the Visual Arts: Oeuvre",
-      "ALT_TEXT": "The Andy Warhol Foundation for the Visual Arts: Oeuvre"
+      "SUBHEADING": "Minor White Archive (Princeton University Art Museum)",
+      "DESCRIPTION": "Minor White. San Francisco. August 19, 1949. Gelatin silver print. The Minor White Archive, Princeton University Art Museum, bequest of Minor White. © Trustees of Princeton University",
+      "LINK": "/#/category/10374058928;browseType=103",
+      "IMG_SOURCE": "/assets/img/featured-collection2.jpg",
+      "LINK_TITLE": "Minor White Archive (Princeton University Art Museum)",
+      "ALT_TEXT": "Minor White Archive (Princeton University Art Museum)"
     },
     "SAHARA_FEATURED": {
       "HEADING": "Featured Image",
@@ -305,16 +339,18 @@
       "ALT_TEXT": "Pueblo in Taos, New Mexico"
     },
     "AD": {
-      "LINK": "http://support.artstor.org/?article=quiz-mode-in-fullscreen",
-      "IMG_SOURCE": "/assets/img/promo-quiz.jpg",
-      "ALT_TEXT": "Test yourself in quiz mode."
+      "LINK": "https://support.artstor.org/?article=export-citations",
+      "IMG_SOURCE": "/assets/img/promo-citations.jpg",
+      "ALT_TEXT": "Try our new citation tool."
     },
     "QUESTIONS": {
       "HEADING": "Questions",
       "EMAIL_INSTITUTION": "Email your institutional contact",
       "EMAIL_ARTSTOR": "Email Artstor",
       "WEBINAR": "Sign up for an Artstor webinar",
-      "SURVEY": "Take a survey: Tell us what you think!"
+      "SURVEY": "Take a survey: Tell us what you think!",
+      "SAHARA_QUESTIONS": "Not finding something? We're in the process of moving content to the new site. Thanks for your patience! For other collection, contribution &amp; data questions, please email SAHARA.",
+      "ARTSTOR_QUESTIONS": "For functionality, technology &amp; tool questions, please email Artstor."
     },
     "LINKS":{
       "ADVNC_SRCH": "Advanced Search",
@@ -328,7 +364,7 @@
       "TITLE": "Browse",
       "ARTSTOR": "Artstor Collections",
       "INSTITUTION": "Institutional Collections",
-      "OPEN": "Open Collections",
+      "OPEN": "Public Collections",
       "OWNED": "My Collections",
       "GROUPS": "Image Groups"
     },
@@ -352,7 +388,7 @@
     }
   },
   "SEARCH_ANNOUNCEMENT_BANNER": {
-    "MESSAGE": "We are changing our search functionality. Read more on our <a href=\"http://support.artstor.org/?page_id=37\" target=\"_blank\" class=\"link\">support site</a>."
+    "MESSAGE": "We are making changes and you may experience issues with login and search. <a href=\"http://support.artstor.org/?article=current-technical-issues-alerts\" target=\"_blank\" class=\"link\">Learn more</a>."
   },
   "SEARCH_SKY_BANNER": {
     "MESSAGE": "⚠️ This is a testing instance for the new Search index. Please excuse the broken bits."
@@ -389,5 +425,16 @@
     "arttitle" : "Title",
     "title" : "Title",
     "artworktype" : "Work Type"
+  },
+  "SAHARA": {
+    "LOGIN": {
+      "TERMS": "By using SAHARA, I agree to the <a id=\"linkTermsAndConditions\" href=\"http://sahara.artstor.org/library/portals/SAHARA/terms-of-use.html\" class=\"link\" target=\"_blank\">Terms</a>",
+      "REG_LOGIN": {
+        "HEADING": "Log in to view the SAHARA collection"
+      },
+      "SAHARA_LOGIN": {
+        "HEADING": "Add your images to the SAHARA collection"
+      }
+    }
   }
 }

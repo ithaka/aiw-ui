@@ -1,0 +1,11 @@
+.modal.fade-in.show
+  .modal-dialog(role="document")
+    .modal-content
+      .modal-header
+        h4.modal-title {{ 'REGISTER_JSTOR_MODAL.TITLE' | translate }}
+        button.close(type="button", (click)="closeModal.emit()", aria-label="Close")
+          span(aria-hidden="true") &times;
+      .modal-body
+        p {{ 'REGISTER_JSTOR_MODAL.MESSAGE_1' | translate }}
+        p {{ 'REGISTER_JSTOR_MODAL.MESSAGE_2' | translate }}
+        a.link(href="https://www.jstor.org/action/resetPassword", tabindex="0", target="_blank") {{ 'REGISTER_JSTOR_MODAL.FORGOT' | translate }}

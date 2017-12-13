@@ -1,10 +1,11 @@
 import { ApplicationRef, ErrorHandler, NgModule } from '@angular/core';
 import { BrowserModule, Title } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { Http, HttpModule } from '@angular/http';
-import { NavigationEnd, Router, RouteReuseStrategy, RouterModule } from '@angular/router';
+import { HttpClientModule, HttpClient } from '@angular/common/http';
+import { NavigationEnd, Router, RouteReuseStrategy, RouterModule, UrlSerializer } from '@angular/router';
 import { removeNgStyles, createNewHosts, createInputTransfer } from '@angularclass/hmr';
 import { Ng2DeviceDetectorModule } from 'ng2-device-detector';
+import { DatePipe } from '@angular/common'
 
 /*
  * Platform and Environment providers/directives/pipes
@@ -12,27 +13,14 @@ import { Ng2DeviceDetectorModule } from 'ng2-device-detector';
 import { ENV_PROVIDERS } from './environment';
 import { ROUTES } from './app.routes';
 
-const { version: appVersion } = require('../../package.json');
-
-// Error tracking utility for sentry.io
-import * as Raven from 'raven-js';
-
-Raven.config('https://9ef1f98534914bf6826e202370d1f627@sentry.io/209953', {
-  release: appVersion
-}).install();
-
-export class RavenErrorHandler implements ErrorHandler {
-  handleError(err:any) : void {
-    Raven.captureException(err);
-  }
-}
-
 // UI modules
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 // import { CoolStorageModule } from 'angular2-cool-storage';
 import {LockerModule, Locker, LockerConfig} from 'angular2-locker'
-import { Angulartics2Module, Angulartics2GoogleAnalytics } from 'angulartics2';
-import { TranslateModule, TranslateStaticLoader, TranslateLoader } from 'ng2-translate';
+import { Angulartics2Module } from 'angulartics2';
+import { Angulartics2GoogleAnalytics } from 'angulartics2/ga';
+import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { RlTagInputModule } from 'angular2-tag-autocomplete';
 import { Ng2CompleterModule } from 'ng2-completer';
 
@@ -59,6 +47,7 @@ import { AssetGrid, ThumbnailComponent } from './asset-grid';
 import { Home } from './home';
 import { SearchPage } from './search-page';
 import { CollectionPage } from './collection-page';
+import { PCollectionPage } from './pcollection-page';
 import { CategoryPage } from './category-page';
 import { ImageGroupPPPage } from './image-group-pp-page';
 import { AssetPPPage } from './asset-pp-page';
@@ -74,22 +63,24 @@ import { ImageGroupPage, PptModalComponent } from './image-group-page';
 import { Login } from './login';
 import { NoContent } from './no-content';
 import { RegisterComponent } from './register/register.component';
-import { 
-  LoginReqModal, 
-  SearchModal, 
-  NewIgModal, 
-  ShareLinkModal, 
+import {
+  LoginReqModal,
+  SearchModal,
+  NewIgModal,
+  ShareLinkModal,
   DownloadLimitModal,
-  UploadImagesModal, 
+  UploadImagesModal,
   EditPersonalCollectionModal,
-  AddToGroupModal, 
-  DeleteIgModal, 
-  NoIgModal, 
-  AccessDeniedModal, 
+  AddToGroupModal,
+  DeleteIgModal,
+  NoIgModal,
+  AccessDeniedModal,
   PwdResetModal,
-  ShareIgLinkModal, 
+  ShareIgLinkModal,
+  GenerateCitation,
   ConfirmModal,
-  SessionExpireModal
+  SessionExpireModal,
+  RegisterJstorModal
 } from './modals';
 import { TitleService } from './shared/title.service'
 import { GeneralSearchComponent } from './browse-page/browse-groups/general-search.component'
@@ -105,10 +96,12 @@ import { LegacyRouteResolver } from './legacy.service';
 import { AnalyticsService } from './analytics.service';
 
 import { LinkifyPipe } from './shared/linkify.pipe';
+import { CustomUrlSerializer } from './shared/custom-url-serializer';
 
 
 const APP_PROVIDERS = [
   ...APP_RESOLVER_PROVIDERS,
+  DatePipe,
   AnalyticsService,
   AppConfig,
   AssetService,
@@ -123,9 +116,13 @@ const APP_PROVIDERS = [
   LegacyRouteResolver,
   Title,
   TitleService,
-  { provide: ErrorHandler, useClass: RavenErrorHandler }
+  { provide: UrlSerializer, useClass: CustomUrlSerializer }
   // { provide: RouteReuseStrategy, useClass: CustomReuseStrategy } // to be implemented later
 ];
+
+export function HttpLoaderFactory(http: HttpClient) {
+  return new TranslateHttpLoader(http);
+}
 
 /**
  * `AppModule` is the main entry point into Angular2's bootstraping process
@@ -153,6 +150,7 @@ const APP_PROVIDERS = [
     ClickOutsideDirective,
     ClusterPage,
     CollectionPage,
+    PCollectionPage,
     ConfirmModal,
     DeleteIgModal,
     SessionExpireModal,
@@ -166,7 +164,6 @@ const APP_PROVIDERS = [
     LibraryComponent,
     Login,
     LoginReqModal,
-    MediumEditorDirective,
     MyCollectionsComponent,
     Nav,
     NavMenu,
@@ -177,23 +174,26 @@ const APP_PROVIDERS = [
     PptModalComponent,
     PwdResetModal,
     RegisterComponent,
+    RegisterJstorModal,
     SearchComponent,
     SearchModal,
     SearchPage,
     ShareIgLinkModal,
+    GenerateCitation,
     ShareLinkModal,
     SkyBannerComponent,
     TagComponent,
     TagsListComponent,
     ThumbnailComponent,
     TypeIdPipe,
-    LinkifyPipe
+    LinkifyPipe,
+    MediumEditorDirective
   ],
   imports: [ // import Angular's modules
     BrowserModule,
     FormsModule,
     ReactiveFormsModule,
-    HttpModule,
+    HttpClientModule,
     RlTagInputModule,
     Ng2CompleterModule,
     LockerModule,
@@ -202,9 +202,11 @@ const APP_PROVIDERS = [
     Ng2DeviceDetectorModule.forRoot(),
     Angulartics2Module.forRoot([ Angulartics2GoogleAnalytics ]),
     TranslateModule.forRoot({
-        provide: TranslateLoader,
-        useFactory: (http: Http) => new TranslateStaticLoader(http, '/assets/i18n', '.json'),
-        deps: [Http]
+      loader: {
+          provide: TranslateLoader,
+          useFactory: HttpLoaderFactory,
+          deps: [HttpClient]
+      }
     }),
     NgbModule.forRoot(), // Ng Bootstrap Import
     NgIdleKeepaliveModule.forRoot(),
@@ -217,7 +219,7 @@ const APP_PROVIDERS = [
 })
 export class AppModule {
   constructor(public appRef: ApplicationRef, private router: Router, private _satellite: AnalyticsService) {
-   
+
     // Track page changes with Adobe Analytics
     router.events.subscribe((val: NavigationEnd) => {
       // If this is a different page, report it!

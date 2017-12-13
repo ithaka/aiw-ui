@@ -1,23 +1,20 @@
 /**
- * BETA
  * New Search Service
  */
-import {
-  Http,
-  RequestOptions
-} from '@angular/http';
-import {
-  Injectable
-} from '@angular/core';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Injectable } from '@angular/core';
 
 // Project Dependencies
 import {
   AssetFiltersService
 } from '../asset-filters/asset-filters.service';
 import { AuthService } from './';
+import { AppConfig } from '../app.service';
 
 @Injectable()
 export class AssetSearchService {
+
+  showCollectionType: boolean = false
 
    public filterFields = [
         {name: "In any field", value: "*"},
@@ -35,19 +32,22 @@ export class AssetSearchService {
     ];
 
   constructor(
-    private http: Http,
+    private http: HttpClient,
     private _filters: AssetFiltersService,
-    private _auth: AuthService
-  ) {}
+    private _auth: AuthService,
+    private _app: AppConfig
+  ) {
+    this.showCollectionType = this._app.config.advSearch.showCollectionTypeFacet
+  }
 
   /**
    * Uses wildcard search to retrieve filters
    */
   public getFacets() {
 
-    let options = new RequestOptions({
+    let options = {
       withCredentials: true
-    });
+    };
 
     let query = {
       "limit": 0,
@@ -67,11 +67,6 @@ export class AssetSearchService {
     ],
       "facet_fields" :
       [
-        {
-          "name" : "collectiontypes",
-          "mincount" : 1,
-          "limit" : 10
-        },
         // Limited to 16 classifications (based on the fact that Artstor has 16 classifications)
         {
           "name" : "artclassification_str",
@@ -86,26 +81,43 @@ export class AssetSearchService {
       ],
     };
 
-    return this.http.post(this._auth.getSearchUrl(), query, options)
-      .map(res => {
-        return res.json ? res.json() : {}
+    let filterArray = []
+
+    // if not sahara push this facet
+    if (this.showCollectionType) {
+      query.facet_fields.push({
+        "name" : "collectiontypes",
+        "mincount" : 1,
+        "limit" : 10
       })
+    }
+
+    /**
+     * Check for WLVs Institution filter
+     * - WLVs filter by contributing institution id
+     */
+    let institutionFilters: number[] = this._app.config.contributingInstFilters
+    for (let i = 0; i < institutionFilters.length; i++) {
+      filterArray.push("contributinginstitutionid:" + institutionFilters[i])
+    }
+
+    query["filter_query"] = filterArray
+
+    return this.http.post(this._auth.getSearchUrl(), query, options)
   }
 
   /**
    * Search assets service
-   * @param term          String to search for.
+   * @param keyword          String to search for.
    * @param filters       Array of filter objects (with filterGroup and filterValue properties)
    * @param sortIndex     An integer representing a type of sort.
    * @param dateFacet     Object with the dateFacet values
    * @returns       Returns an object with the properties: thumbnails, count, altKey, classificationFacets, geographyFacets, minDate, maxDate, collTypeFacets, dateFacets
    */
-  public search(urlParams: any, term: string, sortIndex) {
-    console.log("Running Solr Search...")
-    let keyword = term;
-    let options = new RequestOptions({
+  public search(urlParams: any, keyword: string, sortIndex) {
+    let options = {
       withCredentials: true
-    });
+    };
     let startIndex = ((urlParams.page - 1) * urlParams.size) + 1;
     let thumbSize = 0;
     let type = 6;
@@ -122,6 +134,15 @@ export class AssetSearchService {
     let dateFacet = this._filters.getAvailable()['dateObj'];
     let filterArray = []
 
+    /**
+     * Check for WLVs Institution filter
+     * - WLVs filter by contributing institution id
+     */
+    let institutionFilters: number[] = this._app.config.contributingInstFilters
+    for (let i = 0; i < institutionFilters.length; i++) {
+      filterArray.push("contributinginstitutionid:" + institutionFilters[i])
+    }
+
     let pageSize = urlParams.size
     const START_INDEX: number = (urlParams.page - 1) * pageSize,
       MAX_RESULTS_COUNT: number = 1500
@@ -129,6 +150,10 @@ export class AssetSearchService {
     // final page may not contain exactly 24, 48, or 72 results, so get the exact ammount for the final page
     if ((START_INDEX + pageSize) > MAX_RESULTS_COUNT) {
       pageSize = MAX_RESULTS_COUNT - START_INDEX - 1 // minus 1 because pagination for search starts at 0
+      // Don't let pageSize drop below 0, Solr will actually return assets!
+      if (pageSize < 0) {
+        pageSize = urlParams.size
+      }
     }
 
     let query = {
@@ -163,11 +188,6 @@ export class AssetSearchService {
     ],
       "facet_fields" :
       [
-        {
-          "name" : "collectiontypes",
-          "mincount" : 1,
-          "limit" : 15
-        },
         // Limited to 16 classifications (based on the fact that Artstor has 16 classifications)
         {
           "name" : "artclassification_str",
@@ -182,6 +202,14 @@ export class AssetSearchService {
         // }
       ],
     };
+
+    if (this.showCollectionType) {
+      query.facet_fields.push({
+        "name" : "collectiontypes",
+        "mincount" : 1,
+        "limit" : 15
+      })
+    }
 
     for (var i = 0; i < filters.length; i++) { // Applied filters
 
@@ -199,13 +227,35 @@ export class AssetSearchService {
         }
       } else {
         for (let j = 0; j < filters[i].filterValue.length; j++) {
-          filterArray.push(filters[i].filterGroup + ':\"' + filters[i].filterValue[j] + '\"')
-
-          if (filters[i].filterGroup == 'collectiontypes' && filters[i].filterValue[j] == 2) { 
-            // Institutional filter should eliminate open assets
-            filterArray.push("-collectiontypes:5")
+          let filterValue = filters[i].filterValue[j]
+          /**
+           * In case of Inst. colType filter, also use the contributing inst. ID to filter
+           */
+          if( (filters[i].filterGroup === 'collectiontypes') && (filterValue === 2 || filterValue === 4) ){
+            filterArray.push('contributinginstitutionid:\"' + this._auth.getUser().institutionId.toString() + '\"')
           }
+          // Push filter queries into the array
+          filterArray.push(filters[i].filterGroup + ':\"' + filterValue + '\"')
         }
+      }
+    }
+
+    if(urlParams.colId || urlParams['coll']){
+      let colId = '';
+      if( urlParams['coll'] ){
+        colId = urlParams['coll'];
+      }
+      else if ( urlParams.colId ){
+        colId = urlParams.colId;
+      }
+
+      filterArray.push("collections:\"" + colId + "\"");
+    }
+
+    if(urlParams.collections){
+      let colsArray = urlParams.collections.toString().trim().split(',');
+      for(let col of colsArray){ // Push each collection id seperately in the filterArray
+        filterArray.push("collections:\"" + col + "\"");
       }
     }
 
@@ -222,17 +272,21 @@ export class AssetSearchService {
     }
 
     if (sortIndex) {
-      query["sortorder"] = "asc"
+      // Set the sort order to descending for sort by 'Recently Added' else ascending
+      if (sortIndex == '4'){
+        query["sortorder"] = "desc"
+      } else{
+        query["sortorder"] = "asc"
+      }
 
-      // if(sortIndex == '0'){
-      //   sort = 'Relevance';
-      // } else
       if (sortIndex == '1'){
-        query["sort"] = 'name_str';
+        query["sort"] = 'name_str'
       } else if(sortIndex == '2'){
-        query["sort"] = 'agent_str';
+        query["sort"] = 'agent_str'
       } else if(sortIndex == '3'){
-        query["sort"] = 'yearend';
+        query["sort"] = 'yearend'
+      } else if(sortIndex == '4'){
+        query["sort"] = 'updatedon_str'
       }
     }
 

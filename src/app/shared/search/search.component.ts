@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy, Input, Output } from '@angular/core';
 import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
-import { Angulartics2 } from 'angulartics2/dist';
+import { Angulartics2 } from 'angulartics2';
 import { Subscription }   from 'rxjs/Subscription';
 
 // Project dependencies
@@ -10,7 +10,7 @@ import { AssetFiltersService } from '../../asset-filters/asset-filters.service';
 
 @Component({
   selector: 'ang-search',
-  templateUrl: 'search.component.html',
+  templateUrl: 'search.component.pug',
   styleUrls: [ './search.component.scss' ]
 })
 export class SearchComponent implements OnInit, OnDestroy {
@@ -20,7 +20,7 @@ export class SearchComponent implements OnInit, OnDestroy {
   private term: string;
 
   private size: number = 24;
-  
+
   // @Input()
   private searchInResults: boolean = false;
 
@@ -90,13 +90,13 @@ export class SearchComponent implements OnInit, OnDestroy {
 
     // Pipes are reserved by Advanced Search
     term = term.replace('|', ' ')
-    
+
     this._analytics.directCall('search')
     this.angulartics.eventTrack.next({ action: "simpleSearch", properties: { category: "search", label: this.term }})
 
     let routeParams = this.route.snapshot.params;
     let params = {
-      page: 1, 
+      page: 1,
       size: this.size
     };
 
@@ -104,18 +104,21 @@ export class SearchComponent implements OnInit, OnDestroy {
     if (routeParams['featureFlag']) {
       params['featureFlag'] = routeParams['featureFlag']
     }
-    
+
     if(this.searchInResults){ // Search within results
-      
+
       if(routeParams['colId']){
-        params['coll'] = [ routeParams['colId'] ];
+        // params['coll'] = [ routeParams['colId'] ];
+        params['term'] = term;
+        this._router.navigate( [ '/collection', routeParams['colId'], params ] );
+        return;
       }
       else if(routeParams['catId']){
         params['categoryId'] = routeParams['catId'];
       }
       else if(routeParams['term']){
         let updatedTermValue = '';
-        updatedTermValue = ':"' + routeParams['term'] + '" AND :"' + term + '"';
+        updatedTermValue = routeParams['term'] + ' AND ' + term;
         term = updatedTermValue;
 
         if(routeParams['classification']){

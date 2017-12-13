@@ -4,7 +4,7 @@ import { ImageGroup } from './../../shared';
 
 @Component({
   selector: 'ang-download-limit-modal',
-  templateUrl: 'download-limit.component.html'
+  templateUrl: 'download-limit.component.pug'
 })
 export class DownloadLimitModal implements OnInit {
   @Output()
@@ -15,7 +15,7 @@ export class DownloadLimitModal implements OnInit {
 
   constructor() { }
 
-  ngOnInit() { 
-    
+  ngOnInit() {
+
   }
 }

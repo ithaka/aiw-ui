@@ -1,0 +1,26 @@
+.modal.fade-in.show
+  .modal-dialog(role="document")
+    // modal content: Ask to delete
+    .modal-content(*ngIf="!groupDeleted")
+      .modal-header
+        h4.modal-title {{ 'IMAGE_GROUP_PAGE.DELETE_IG.TITLE' | translate }}
+      .modal-body
+        p Are you sure you want to delete
+          b  "{{ igName }}"
+          | ?
+          br
+          | This can not be reverted.
+      .modal-footer
+        button.btn.btn-secondary(type="button", (click)="closeModal.emit()") {{ 'IMAGE_GROUP_PAGE.DELETE_IG.CANCEL_BUTTON' | translate }}
+        button.btn.btn-primary(type="button", (click)="deleteImageGroup()") {{ 'IMAGE_GROUP_PAGE.DELETE_IG.DELETE_BUTTON' | translate }}
+    // modal content: Is deleted, now what?
+    .modal-content(*ngIf="groupDeleted")
+      .modal-header
+        h4.modal-title {{ 'IMAGE_GROUP_PAGE.DELETE_IG.TITLE_DELETED' | translate }}
+      .modal-body
+        p
+          b "{{ igName }}"
+          |  was successfully deleted.
+      .modal-footer
+        a.btn.btn-secondary([routerLink]="['/browse', 'groups']") {{ 'BROWSE_GROUPS' | translate }}
+        a.btn.btn-primary([routerLink]="['/home']") {{ 'RETURN_HOME' | translate }}

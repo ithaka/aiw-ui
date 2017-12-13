@@ -1,0 +1,31 @@
+#genImgURL.modal.fade.show
+  .modal-dialog.modal-lg
+    .modal-content
+      .modal-header
+        h1 Share Image
+        button.close(type="button", (click)="closeModal.emit()", data-dismiss="modal", aria-label="Close")
+          span(aria-hidden="true") &times;
+      .modal-body(*ngIf="asset")
+        .media
+          .media-body
+            .asset-title([innerHTML]="asset.thumbnail1")
+            .imgURL-gen-info Copy the image URL or the HTML code to share this image with others at your institution.
+          img.d-flex.align-self-center.ml-3([attr.src]="_assets.makeThumbUrl(asset.largeImgUrl, 0)", alt="asset.thumbnail1")
+        .pt-3
+          .pb-3
+            label Image URL
+            .value
+              textarea#copyURL(readonly) {{ shareLink }}
+            .copy-clipboard((click)="copyTexttoClipBoard('copyURL')")
+              | Copy to Clipboard
+            .copy-status-msg {{ copyURLStatusMsg }}
+          .pb-3
+            label Thumbnail hyperlink to the Image
+            .value
+              textarea#copyHTML(readonly) {{ '<a target="_blank" href="' + shareLink + '"><img src="' + _assets.makeThumbUrl(asset.thumbnailImgUrl, 0) + '"  alt="' + asset.thumbnail1 + '" title="' + asset.thumbnail1 + '" /></a>' }}
+            .copy-clipboard((click)="copyTexttoClipBoard('copyHTML')")
+              | Copy to Clipboard
+            .copy-status-msg {{ copyHTMLStatusMsg }}
+      .modal-footer
+        a.btn.btn-link.with-pad((click)="showHelp()") Help
+        button.btn.btn-primary((click)="closeModal.emit()") Close

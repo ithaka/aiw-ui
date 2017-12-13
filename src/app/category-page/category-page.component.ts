@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Http, Response, Headers, RequestOptions } from '@angular/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Router, ActivatedRoute, UrlSegment } from '@angular/router';
 import { Subscription }   from 'rxjs/Subscription';
 
@@ -18,14 +18,15 @@ import { TitleService } from '../shared/title.service';
 
 export class CategoryPage implements OnInit, OnDestroy {
 
-  private header = new Headers({ 'Content-Type': 'application/json' }); // ... Set content type to JSON
-  private options = new RequestOptions({ headers: this.header, withCredentials: true }); // Create a request option
+  private header = new HttpHeaders().set('Content-Type', 'application/json'); // ... Set content type to JSON
+  private options = { headers: this.header, withCredentials: true }; // Create a request option
 
   private catId: string;
   private catName: string;
   private catDescription: string;
   private catThumbnail: string;
   private assetCount: number;
+  private allowSearchInRes: boolean = true;
 
   // Anomalies
   private isSubCategory: boolean = false;
@@ -40,7 +41,7 @@ export class CategoryPage implements OnInit, OnDestroy {
     private _auth: AuthService,
     private _router: Router,
     private route: ActivatedRoute,
-    private http: Http,
+    private http: HttpClient,
     private _analytics: AnalyticsService,
     private _title: TitleService
   ) {}
@@ -50,19 +51,7 @@ export class CategoryPage implements OnInit, OnDestroy {
       this.route.params.subscribe((routeParams) => {
         this.catId = routeParams['catId'];
 
-        /**
-         * Due to legacy services, the asset count is passed in the Category Name
-         * And nowhere else! What fun... Let's pull it out of there.
-         */
-        let name = routeParams['name'];
-        if (name && name.match(/\d+$/)){
-          this.assetCount = name.match(/\d+$/)[0];
-          name = name.replace(/\d+$/,'');
-        }
-        this.catName = name;
-
-        // Set page title
-        this._title.setSubtitle(this.catName)
+        this.allowSearchInRes = routeParams.browseType && !routeParams.browseType.match(/260|250|103/)
 
         let params = Object.assign({}, routeParams);
         // If a page number isn't set, reset to page 1!
@@ -79,8 +68,8 @@ export class CategoryPage implements OnInit, OnDestroy {
             .then((data) => {
 
               if (data) {
-                this.catDescription = data.blurbUrl;
-                this.catThumbnail = data.imageUrl;
+                this.catDescription = data['blurbUrl'];
+                this.catThumbnail = data['imageUrl'];
               } else {
                 // Some categories don't have descriptions
               }
@@ -89,6 +78,25 @@ export class CategoryPage implements OnInit, OnDestroy {
             .catch((error) => {
               console.error(error);
             });
+
+          // Get Category data
+          this.getCategoryData(this.catId)
+          .then((data) => {
+            if (data) {
+              this.catName = data['categoryName'];
+              this.assetCount = data['objCount'];
+              // Tell components relying on Pagination observable
+              this._assets.setAssetCount(this.assetCount)
+              // Set page title
+              this._title.setSubtitle(this.catName);
+            } else {
+              // no data
+            }
+
+          })
+          .catch((error) => {
+            console.error(error);
+          });
         }
       })
     );// End push to subscription
@@ -109,18 +117,34 @@ export class CategoryPage implements OnInit, OnDestroy {
   * @param catId The Category ID
   */
   private getCategoryInfo(catId: string) {
-      let options = new RequestOptions({ withCredentials: true });
+      let options = { withCredentials: true };
 
       // Can be removed once region specific ids are no longer used
-      if (catId.indexOf('103') == 1) {
-        catId = catId.slice(1)
-      }
+      // if (catId.indexOf('103') == 1) {
+      //   catId = catId.slice(1)
+      // }
 
       return this.http
           .get(this._auth.getUrl() + '/categorydesc/' + catId, options)
-          .toPromise()
-          .then(this._auth.extractData);
+          .toPromise();
   }
+
+  /**
+  * Get title for a Category
+  * @param catId The Category ID
+  */
+  private getCategoryData(catId: string) {
+    let options = { withCredentials: true };
+
+    // Can be removed once region specific ids are no longer used
+    // if (catId.indexOf('103') == 1) {
+    //   catId = catId.slice(1)
+    // }
+
+    return this.http
+        .get(this._auth.getUrl() + '/categories/' + catId, options)
+        .toPromise();
+}
 
   ngOnDestroy() {
     this.subscriptions.forEach((sub) => { sub.unsubscribe(); });

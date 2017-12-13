@@ -1,11 +1,13 @@
-import { Component } from '@angular/core';
-import { Router } from '@angular/router';
-import { Location } from '@angular/common';
-import { Angulartics2 } from 'angulartics2';
-import { CompleterService, CompleterData } from 'ng2-completer';
+import { Component } from '@angular/core'
+import { Router } from '@angular/router'
+import { Location } from '@angular/common'
+import { Angulartics2 } from 'angulartics2'
+import { CompleterService, LocalData } from 'ng2-completer'
+import { BehaviorSubject, Observable, Subscription } from 'rxjs/Rx';
 
-import { AuthService, User } from './../shared';
-import { AnalyticsService } from '../analytics.service';
+import { AppConfig } from '../app.service'
+import { AuthService, User, AssetService } from './../shared'
+import { AnalyticsService } from '../analytics.service'
 
 declare var initPath: string
 
@@ -21,38 +23,55 @@ declare var initPath: string
   // template: `<h1>Test title</h1>`
 })
 export class Login {
-  // Set our default values
-  public user = new User('','');
-  public errorMsg: string = '';
-  public instErrorMsg: string = '';
-  public showPwdModal = false;
-  public showHelpModal = false;
-  public pwdReset = false;
-  public expirePwd = false;
-  public pwdRstEmail = '';
-  public errorMsgPwdRst = '';
-  public forcePwdRst = false
-  public successMsgPwdRst = '';
-  public loginInstitutions = []; /** Stores the institutions returned by the server */
-  private loginInstName: string = '' /** Bound to the autocomplete field */
-  public showRegister: boolean = false;
-  
-  private loginLoading = false;
 
-  private dataService: CompleterData
-  
+  private copyBase: string = ''
+
+  // Set our default values
+  public user = new User('','')
+  public errorMsg: string = ''
+  public instErrorMsg: string = ''
+  public showPwdModal = false
+  public showHelpModal = false
+  public pwdReset = false
+  public expirePwd = false
+  public pwdRstEmail = ''
+  public errorMsgPwdRst = ''
+  public forcePwdRst = false
+  public successMsgPwdRst = ''
+  public loginInstitutions = [] /** Stores the institutions returned by the server */
+  private loginInstName: string = '' /** Bound to the autocomplete field */
+  public showRegister: boolean = false
+
+  private loginLoading = false
+
+  private dataService: LocalData
+
+  /** 
+   * Observable for autocomplete list of institutions
+   * - We apply additional sorting 
+   */
+  private instListSubject: BehaviorSubject<any[]> = new BehaviorSubject([])
+  private instListObs: Observable<any[]> = this.instListSubject.asObservable()
+
+
   // TypeScript public modifiers
   constructor(
     private _auth: AuthService,
+    private _assets: AssetService,
     private _completer: CompleterService,
     private router: Router,
     private location: Location,
     private angulartics: Angulartics2,
-    private _analytics: AnalyticsService
-  ) { 
+    private _analytics: AnalyticsService,
+    private _app: AppConfig
+  ) {
   }
 
   ngOnInit() {
+    if (this._app.config.copyModifier) {
+      this.copyBase = this._app.config.copyModifier + "."
+    }
+
     // Provide redirects for initPath detected in index.html from inital load
     if ( initPath && (initPath.indexOf('ViewImages') > -1 || initPath.indexOf('ExternalIV') > -1 ) ) {
       this.router.navigateByUrl(initPath)
@@ -68,31 +87,18 @@ export class Login {
       .take(1)
       .subscribe((res) => {
         if (res.remoteaccess === false && res.user) {
-          this.showRegister = true;
+          this.showRegister = true
         }
       }, (err) => {
-        console.error(err);
-      });
-
-    // Until institutions call works without the auth cookie, we need to make sure we have a list available
-    this._auth.getFallbackInstitutions()
-      .then((data) => {
-        if (data.items) {
-          this.loginInstitutions = data.items;
-          this.dataService = this._completer.local(data.items, 'name', 'name')
-        }
+        console.error(err)
       })
-      .catch((error) => {
-        this.instErrorMsg = "LOGIN.INSTITUTION_LOGIN.ERRORS.SERVICE_ERROR";
-        console.error(error);
-      });
 
     // The true institutions call. Don't throw an error, since the above call will provide a backup
     this._auth.getInstitutions()
       .then((data) => {
-        if (data.items) {
-          this.loginInstitutions = data.items;
-          this.dataService = this._completer.local(data.items, 'name', 'name')
+        if (data['items']) {
+          this.loginInstitutions = data['items'];
+          this.dataService = this._completer.local(this.instListObs, 'name', 'name');          
         }
       })
       .catch((error) => {
@@ -101,7 +107,23 @@ export class Login {
 
     this._analytics.setPageValues('login', '')
   } // OnInit
-  
+
+
+
+  private sortInstitution(event) : void {
+    // sort array by string input
+    let term = this.loginInstName
+    let termReg = new RegExp(term, 'i')
+    
+    let filtered = this.loginInstitutions.filter( inst => {
+      return inst && inst.name.search(termReg) > -1
+    })
+    filtered = filtered.sort((a, b) => {
+        return a.name.search(termReg) - b.name.search(termReg)
+    });
+    this.instListSubject.next(filtered)
+  }
+
   loadForUser(data: any) {
     if (data && data.user) {
       data.user.hasOwnProperty("username") && this.angulartics.setUsername.next(data.user.username);
@@ -113,9 +135,24 @@ export class Login {
 
       if (data.isRememberMe || data.remoteaccess) {
         data.user.isLoggedIn = true
-      } 
+      }
       this._auth.saveUser(data.user);
       this.errorMsg = '';
+
+      // Save user personal collections count in local storage
+      this._assets.pccollection()
+      .then((res) => {
+        let pcEnabled: boolean = false;
+        if( (res['privateCollection'] && (res['privateCollection'].length > 0)) || (res['pcCollection'] && res['pcCollection'].collectionid) ){
+          pcEnabled = true;
+        }
+        this._auth.setpcEnabled(pcEnabled);
+
+      })
+      .catch(function(err) {
+          console.error('Unable to load user PC');
+      });
+
       if (this._auth.getFromStorage("stashedRoute")) {
         // We do not want to navigate to the page we are already on
         if (this._auth.getFromStorage("stashedRoute").indexOf('login') > -1) {
@@ -127,17 +164,18 @@ export class Login {
       } else {
         this.router.navigate(['/home']);
       }
+
     }
   }
 
   getLoginError(user) {
     this._auth.getLoginError(user)
       .then((data) => {
-        if(data.message === 'loginExpired'){
+        if(data['message'] === 'loginExpired'){
           this.expirePwd = true;
           this.showPwdModal = true;
         }
-        else if(data.message === 'loginFailed'){
+        else if(data['message'] === 'loginFailed'){
           this.errorMsg = 'LOGIN.WRONG_PASSWORD';
         } else {
           //handles any server errors
@@ -148,7 +186,7 @@ export class Login {
         this.errorMsg = this.getLoginErrorMsg(error.message);
       });
   }
-  
+
   login(user: User) {
     user.username = user.username.toLowerCase().trim()
     this.loginLoading = true;
@@ -161,7 +199,7 @@ export class Login {
       this.loginLoading = false;
       return;
     }
-    
+
     if(!this.validatePwd(user.password)){
       this.errorMsg = 'LOGIN.PASSWORD_REQUIRED';
       this.loginLoading = false;
@@ -187,11 +225,11 @@ export class Login {
             this.angulartics.eventTrack.next({ action:"remoteLogin", properties: { category: "login", label: "success" }});
             this.loadForUser(data);
           }
-         
+
         }
       ).catch((err) => {
         this.loginLoading = false;
-        let errObj = err.json ? err.json() : {};
+        let errObj = err.error
         this.errorMsg = this.getLoginErrorMsg(errObj.message)
         if (!this.getLoginErrorMsg(errObj.message)){
           this.getLoginError(user)
@@ -208,6 +246,8 @@ export class Login {
         return 'LOGIN.WRONG_PASSWORD'
       } else if (serverMsg === 'loginExpired' || serverMsg === 'Login Expired') {
         return 'LOGIN.EXPIRED'
+      } else if (serverMsg === 'portalLoginFailed') {
+        return 'LOGIN.INCORRECT_PORTAL'
       } else if (serverMsg.indexOf('disabled') > -1) {
         return 'LOGIN.ARCHIVED_ERROR';
       } else {
@@ -230,7 +270,7 @@ export class Login {
     // Try password all lowercase
     user.password = user.password.toLowerCase()
     this._auth.login(user).then((data) => {
-      if (data.status === true) { 
+      if (data.status === true) {
         this.forcePwdRst = true
         this.errorMsg = ''
       }
@@ -245,13 +285,13 @@ export class Login {
           if (data.status === true && data.user && user.username == data.user.username) {
             this.forcePwdRst = true
             this.errorMsg = ''
-          } 
+          }
         }, error => {
-          
+
         });
     })
   }
-  
+
   validateEmail(email: string){
     let re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     return re.test(email);
@@ -266,7 +306,7 @@ export class Login {
     }
   }
 
-  /** 
+  /**
    * Fired when the user logs in through their institution
    */
   goToInstLogin(): void {
@@ -298,5 +338,23 @@ export class Login {
       window.open('https://' + ssoSubdomain + '.artstor.org/sso/shibssoinit?idpEntityID=' + encodeURIComponent(url) + '&o=' + encodeURIComponent(origin));
     }
   }
-  
+
+  // this is for eventual ss login
+  // private ssLogin(user: User) {
+  //   this._auth.ssLogin(user.username, user.password)
+  //     .take(1)
+  //     .subscribe((res) => {
+  //       let isTest = this._auth.getEnv() == 'test'
+  //       let redirectUrl = '//catalog.sharedshelf'
+  //       redirectUrl += isTest ? '.stage' : ''
+  //       redirectUrl += '.artstor.org'
+
+  //       console.log(redirectUrl)
+  //       window.location.href = redirectUrl
+  //     }, (err) => {
+  //       console.error(err)
+  //       this.errorMsg = 'Incorrect username or password for Shared Shelf login.'
+  //     })
+  // }
+
 }

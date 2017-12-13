@@ -1,0 +1,39 @@
+.asset-viewer([class.fullscreen]="isFullscreen", (contextmenu)="disableContextMenu($event)")
+  // IIIF Image Viewer
+  div([class.hidden]="!isOpenSeaDragonAsset || mediaLoadingFailed")
+    #loader-wrapper.more-results.overlay-wrap--center(*ngIf="!openSeaDragonReady")
+      i.icon-asterisk.icon-spin.icon-large
+    .item.osd-wrap([attr.id]="'osd-' + asset.id + '-' + index", [attr.zoomValue]="lastZoomValue")
+  // Video Player
+  .video-player([class.hidden]="!isKalturaAsset || mediaLoadingFailed")
+    iframe(id="{{ 'kalturaIframe-' + index }}", frameborder="0")
+  // Audio Player
+  div(*ngIf="asset.typeName() == 'audio'")
+    audio.item.video-player(id="audio-{{ asset.id + '-' + index }}", controls, style="display:none;")
+      source([attr.src]="asset.downloadLink", type="audio/MPEG")
+      | {{ 'audio_error' }}
+  // Large thumbnail fallback
+  #fallbackViewer(*ngIf="mediaLoadingFailed")
+    img.item.item--thumbnail(alt="{{ asset.title }}", [attr.src]="_assets.makeThumbUrl(asset.imgURL, thumbnailSize)", (error)="thumbnailError($event)")
+  .button-group.asset-viewer__buttons(id="imageButtons-{{ asset.id + '-' + index }}")
+    button.btn.btn--icon([class.hidden]="!isOpenSeaDragonAsset || mediaLoadingFailed", id="zoomIn-{{ asset.id + '-' + index}}", title="Zoom In")
+      i.icon.icon-zoom-in
+    button.btn.btn--icon([class.hidden]="!isOpenSeaDragonAsset || mediaLoadingFailed", id="zoomOut-{{ asset.id + '-' + index }}", title="Zoom Out")
+      i.icon.icon-zoom-out
+    button.btn.btn--icon([class.hidden]="!isOpenSeaDragonAsset || mediaLoadingFailed", id="zoomFit-{{ asset.id + '-' + index }}", title="Zoom Fit")
+      i.icon.icon-fit
+    button.btn.btn--icon(*ngIf="!isFullscreen", id="fullScreen-{{ asset.id + '-' + index }}", (click)="togglePresentationMode()", title="Full Screen")
+      i.icon.icon-fullscreen
+    //- UX Decision: Remove compare button from individual assets for now
+    //- button.btn.btn--icon(*ngIf="isFullscreen", id="compare-{{ asset.id + '-' + index }}", (click)="assetDrawer.emit()", title="Compare")
+    //-   i.icon.icon-compare
+    button.btn.btn--icon(*ngIf="isFullscreen && index !== 0", (click)="removeAsset.emit(asset)", title="Remove from Comparison")
+      i.icon.icon-close
+  .fullscreen-metadata(*ngIf="isFullscreen", [class.slideAway]="!showCaption")
+    .vertical-center-wrap
+      i.icon.icon-direction.icon-left(*ngIf="assetCompareCount == 1 && !quizMode", [class.disabled]="assetNumber <= 1", title="Previous in results", (click)="prevPage.emit()")
+      .title([innerHtml]="asset.title")
+      i.icon.icon-direction.icon-right(*ngIf="assetCompareCount == 1 && !quizMode", [class.disabled]="assetNumber >= assetGroupCount", title="Next in results", (click)="nextPage.emit()")
+      .meta-block.small
+        .creator([innerHtml]="asset.creator")
+        .date([innerHtml]="asset.date")

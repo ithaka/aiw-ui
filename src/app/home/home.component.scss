@@ -22,6 +22,9 @@
             margin: 0px;
         }
     }
+    li.list-group-item {
+      display: block;
+    }
 }
 
 .featured-caption {
@@ -46,4 +49,8 @@
     font-size: 18px;
     line-height: 1.5em;
     font-weight: bold;
+}
+
+.card-body {
+  padding: 0px;
 }

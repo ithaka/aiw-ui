@@ -31,7 +31,7 @@
 // .pag-controls{
 //     text-align: right;
 //     @media (max-width: $phone) {
-//         text-align: center;    
+//         text-align: center;
 //     }
 // }
 // .pag-controls input{
@@ -73,7 +73,7 @@ button.page-link {
     &:hover {
         background: #f8f8f8;
     }
-    
+
     &:disabled {
         pointer-events: none;
         color: #cdcdcd !important;
@@ -93,3 +93,6 @@ button.page-link {
     border-bottom: 1px solid transparent;
 }
 
+.right {
+  float: right;
+}

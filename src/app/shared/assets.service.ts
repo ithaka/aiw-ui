@@ -3,7 +3,7 @@
  */
 import { Injectable, OnDestroy, OnInit, EventEmitter } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
-import { Http, Response, Headers, RequestOptions } from '@angular/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, BehaviorSubject, Subject } from 'rxjs/Rx';
 import { Locker } from 'angular2-locker';
 import 'rxjs/add/operator/toPromise';
@@ -42,6 +42,9 @@ export class AssetService {
 
     //Set up subject observable for clearing select mode
     public clearSelectMode: Subject<boolean> = new Subject();
+
+    //Set up subject observable for skipping the unauthorized asset on asset page, while browsing though assets
+    public unAuthorizedAsset: Subject<boolean> = new Subject();
 
     // Pagination value observable
     private paginationValue: any = {
@@ -112,8 +115,8 @@ export class AssetService {
 
     /** Default Headers for this service */
     // ... Set content type to JSON
-    private header = new Headers({ 'Content-Type': 'application/json' });
-    private defaultOptions = new RequestOptions({ headers: this.header, withCredentials: true });
+    private header = new HttpHeaders().set('Content-Type', 'application/json');
+    private defaultOptions = { headers: this.header, withCredentials: true };
 
     // Pagination flag for preserving the select mode while paging through the results
     public paginated: boolean = false;
@@ -127,7 +130,7 @@ export class AssetService {
         private _filters: AssetFiltersService,
         private _router: Router,
         private route: ActivatedRoute,
-        private http: Http,
+        private http: HttpClient,
         locker: Locker,
         private _auth: AuthService,
         private _groups: GroupService,
@@ -235,6 +238,16 @@ export class AssetService {
         this.setUrlParam('size', size);
     }
 
+    /**
+     * ! Use with Caution !
+     * This is a workaround function when we receive the asset count from a separate service
+     * Should eventually be deprecated through improving services
+     */
+    public setAssetCount(count: number) {
+        this.paginationValue.totalPages = Math.ceil(count/this.paginationValue.size)
+        this.paginationSource.next(this.paginationValue)
+    }
+
     private setUrlParam(key: string, value: any, quiet?: boolean) {
         this.urlParams[key] = value;
         let currentParamsObj: Params = {};
@@ -297,10 +310,13 @@ export class AssetService {
         return encodedString.replace(/%20/g, '+');
     };
 
+<<<<<<< HEAD
     private extractData(res: Response) {
       return res.json() || {}
     }
 
+=======
+>>>>>>> origin/master
     public loadPrevAssetPage(): void{
         let currentParamsObj: Params = Object.assign({}, this.currentLoadedParams);
 
@@ -321,6 +337,18 @@ export class AssetService {
             currentParamsObj['page'] = 2;
         }
         this.queryAll(currentParamsObj);
+    }
+
+    public loadAssetPage(page: number): void{
+      let currentParamsObj: Params = Object.assign({}, this.currentLoadedParams);
+
+      if(this.currentLoadedParams.page){
+          currentParamsObj['page'] = page;
+      }
+      else{
+          currentParamsObj['page'] = page;
+      }
+      this.queryAll(currentParamsObj);
     }
 
     /**
@@ -385,9 +413,15 @@ export class AssetService {
                 } else if (params.hasOwnProperty("catId")  && params["catId"] !== "") {
                     //get collection thumbnails
                     this.loadCategory(params.catId);
+                    // let searchTerm = params.term ? params.term : '';
+                    // this.loadSearch(searchTerm);
+                }  else if (params.hasOwnProperty("pcolId") && params["pcolId"] !== "") {
+                    //get personal collection thumbnails
+                    this.loadCollection(params.pcolId);
                 }  else if (params.hasOwnProperty("colId") && params["colId"] !== "") {
-                    //get collection thumbnails
-                    this.loadCollection(params.colId);
+                    // get collection thumbnails
+                    let searchTerm = params.term ? params.term : '';
+                    this.loadSearch(searchTerm);
                 } else if (params.hasOwnProperty("term")) {
                     this.loadSearch(params.term);
                 } else {
@@ -449,6 +483,7 @@ export class AssetService {
      * Gets metadata for a single asset by ID
      * @param assetId: string Asset or object ID
      */
+<<<<<<< HEAD
     public getById(assetId: string) {
       // Get Asset via SOLR
         // let options = new RequestOptions({
@@ -467,6 +502,17 @@ export class AssetService {
           .get(`${this._auth.getUrl()}/v1/metadata?object_ids=${assetId}`, this.defaultOptions)
           .toPromise()
           .then(this.extractData)
+=======
+    public getById(assetId: string, groupId ?: string) {
+        let url = this._auth.getUrl(true) + '/metadata/' + assetId
+        if (groupId) {
+            // Groups service modifies certain access rights for shared assets
+            url = this._auth.getUrl() + '/v1/group/' + groupId + '/secure/metadata/' + assetId
+        }
+        return this.http
+            .get(url, this.defaultOptions)
+            .toPromise()
+>>>>>>> origin/master
     }
 
     /**
@@ -479,7 +525,6 @@ export class AssetService {
         return this.http
             .get(this._auth.getUrl() + '/encrypt/'+ assetId + '?_method=encrypt', this.defaultOptions)
             .toPromise()
-            .then(this.extractData);
     }
 
     /**
@@ -518,7 +563,6 @@ export class AssetService {
         return this.http
             .get(this._auth.getUrl() + '/encrypt/?_method=encryptuserId', this.defaultOptions)
             .toPromise()
-            .then(this.extractData);
     }
 
     /**
@@ -549,30 +593,14 @@ export class AssetService {
      * Get IIIF tilesource for an Asset
      * @param assetId string Asset or object ID
      */
-    public getImageSource(assetId: string, collectionId?: number) {
+    public getImageSource(assetId: string, groupId?: string): Observable<MetadataRes> {
+        let url = this._auth.getUrl() + '/v1/metadata?object_ids=' + assetId
+        if (groupId){
+            // Groups service modifies certain access rights for shared assets
+            url = this._auth.getUrl() + '/v1/group/'+ groupId +'/metadata?object_ids=' + assetId
+        }
         return this.http
-            .get( this._auth.getUrl() + '/v1/metadata?object_ids=' + assetId, this.defaultOptions)
-            .map(data => {
-                // This call returns an array-- maybe it supports querying multiple ids?
-                // For now let's just grab the first item in the array
-                if (data.json() && data.json().length > 0) {
-                    return(data.json()[0]);
-                } else {
-                    return(data.json() || {});
-                }
-            });
-
-        // return this.http
-        //     .get( this._auth.getUrl() + '/imagefpx/' + assetId + '/' + collectionId + '/5', this.defaultOptions)
-        //     .map(data => {
-        //         // This call returns an array-- maybe it supports querying multiple ids?
-        //         // For now let's just grab the first item in the array
-        //         if (data.json() && data.json().length > 0) {
-        //             return(data.json()[0]);
-        //         } else {
-        //             return(data.json() || {});
-        //         }
-        //     });
+            .get<MetadataRes>( url, this.defaultOptions)
     }
 
     /**
@@ -584,7 +612,7 @@ export class AssetService {
         let startIndex = ((this.urlParams.page - 1) * this.urlParams.size) + 1;
         this.getAssociated(objectId, colId, startIndex, this.urlParams.size)
             .then((data) => {
-                if (!data) {
+                if (!Object.keys(data).length) {
                     throw new Error("No data in image group thumbnails response");
                 }
                 this.updateLocalResults(data);
@@ -610,24 +638,25 @@ export class AssetService {
 
         this._groups.get(igId)
             .toPromise()
-            .then((data) => { return this.extractData(data); })
             .then((data) => {
-                if (!data) {
+                if (!Object.keys(data).length) {
                     throw new Error("No data in image group thumbnails response");
                 }
 
                 data.count = data.items.length;
                 let pageStart = (this.urlParams.page - 1)*this.urlParams.size;
                 let pageEnd = this.urlParams.page*this.urlParams.size;
-                let idsAsTerm: string =  data.items.slice(pageStart,pageEnd).join('&object_id=');
+                // Maintain param string in a single place to avoid debugging thumbnails lost to a bad param
+                const ID_PARAM = "object_ids="
+                let idsAsTerm: string =  data.items.slice(pageStart,pageEnd).join('&'+ ID_PARAM);
 
-                let options = new RequestOptions({ withCredentials: true });
+                let options = { withCredentials: true };
 
-                this.http.get(this._auth.getHostname() + '/api/v1/items?object_id=' + idsAsTerm, options)
+                this.http.get(this._auth.getHostname() + '/api/v1/group/'+ igId +'/items?'+ ID_PARAM + idsAsTerm, options)
                     .subscribe(
                         (res) => {
-                            let results = res.json();
-                            data.thumbnails = results.items;
+                            let results = res;
+                            data.thumbnails = results['items'];
                             // Set the allResults object
                             this.updateLocalResults(data);
                     }, (error) => {
@@ -664,13 +693,13 @@ export class AssetService {
         let pageEnd = this.urlParams.page*this.urlParams.size
         let idsAsTerm: string =  ig.items.slice(pageStart,pageEnd).join('&object_id=')
 
-        let options = new RequestOptions({ withCredentials: true })
+        let options = { withCredentials: true }
 
         this.http.get(this._auth.getHostname() + '/api/v1/items?object_id=' + idsAsTerm, options)
             .subscribe(
                 (res) => {
-                    let results = res.json()
-                    ig.thumbnails = results.items
+                    let results = res
+                    ig.thumbnails = results['items']
                     // Set the allResults object
                     this.updateLocalResults(ig)
             }, (error) => {
@@ -686,7 +715,7 @@ export class AssetService {
         let maxCount = 100
         return new Promise( (resolve, reject) => {
             let allThumbnails = [];
-            let options = new RequestOptions({ withCredentials: true });
+            let options = { withCredentials: true };
 
             let loadBatch = (i) => {
                 let countEnd = i+maxCount
@@ -695,8 +724,8 @@ export class AssetService {
                         .toPromise()
                         .then(
                             (res) => {
-                                let results = res.json();
-                                allThumbnails = allThumbnails.concat(results.items);
+                                let results = res;
+                                allThumbnails = allThumbnails.concat(results['items']);
                                 if (countEnd >= igIds.length) {
                                     resolve(allThumbnails);
                                 } else {
@@ -715,7 +744,7 @@ export class AssetService {
      * @param colId Collection Id for which to fetch results
      */
     private loadCollection(colId: string) {
-        let options = new RequestOptions({withCredentials: true});
+        let options = {withCredentials: true};
         let imageSize = 0;
         let startIndex = ((this.urlParams.page - 1) * this.urlParams.size) + 1;
 
@@ -724,7 +753,6 @@ export class AssetService {
         return this.http
             .get(requestString, options)
             .toPromise()
-            .then(this.extractData)
             .then((data) => {
                 this.updateLocalResults(data);
             })
@@ -748,7 +776,6 @@ export class AssetService {
         return this.http
             .get(requestString, this.defaultOptions)
             .toPromise()
-            .then(this.extractData)
             .then((data) => {
                 this.updateLocalResults(data);
             })
@@ -759,7 +786,7 @@ export class AssetService {
 
     private loadCluster(objectId: string){
 
-        let options = new RequestOptions({ withCredentials: true });
+        let options = { withCredentials: true };
         let startIndex = ((this.urlParams.page - 1) * this.urlParams.size) + 1;
 
         let requestString = [this._auth.getUrl(), "cluster", objectId, "thumbnails", startIndex, this.urlParams.size].join("/");
@@ -767,13 +794,12 @@ export class AssetService {
         this.http
             .get(requestString, options)
             .toPromise()
-            .then(this.extractData)
             .then((res) => {
-                if (res.thumbnails) {
+                if (res['thumbnails']) {
                     // Set the allResults object
                     this.updateLocalResults(res);
                 } else {
-                    throw new Error("There are no thumbnails. Server responsed with status " + res.status);
+                    throw new Error("There are no thumbnails. Server responsed with status " + res['status']);
                 }
             })
             .catch((err) => {
@@ -784,34 +810,31 @@ export class AssetService {
 
     // Used by Browse page
     public pccollection(){
-        let options = new RequestOptions({ withCredentials: true });
+        let options = { withCredentials: true };
 
         return this.http
             .get(this._auth.getHostname() + '/api/pccollection', options)
             .toPromise()
-            .then(this.extractData);
     }
 
     public category(catId: string) {
-        let options = new RequestOptions({ withCredentials: true });
+        let options = { withCredentials: true };
 
         return this.http
             .get(this._auth.getHostname() + '/api/collections/' + catId + '/categoryroot', options)
             .toPromise()
-            .then(this.extractData);
     }
 
     subcategories(id) {
-        let options = new RequestOptions({ withCredentials: true });
+        let options = { withCredentials: true };
 
         return this.http
             .get(this._auth.getHostname() + '/api/categories/' + id + '/subcategories', options)
             .toPromise()
-            .then(this.extractData);
     }
 
     nodeDesc(descId, widgetId){
-        let options = new RequestOptions({ withCredentials: true });
+        let options = { withCredentials: true };
 
         // Can be removed once region specific ids are no longer used
         if (descId.indexOf('103') == 1) {
@@ -821,7 +844,6 @@ export class AssetService {
         return this.http
             .get(this._auth.getHostname() + '/api/categorydesc/' + descId + '/' + widgetId, options)
             .toPromise()
-            .then(this.extractData);
     }
 
     /**
@@ -830,7 +852,7 @@ export class AssetService {
      * @returns thumbnails of assets for a collection, and collection information
      */
     public getCollectionThumbs(colId: string, pageNo?: number, size?: number) {
-        let options = new RequestOptions({withCredentials: true});
+        let options = {withCredentials: true};
         let imageSize = 0;
 
         if (!pageNo) { pageNo = 1; }
@@ -841,7 +863,6 @@ export class AssetService {
         return this.http
             .get(requestString, options)
             .toPromise()
-            .then(this.extractData);
     }
 
     /**
@@ -858,19 +879,22 @@ export class AssetService {
         this.searchSubscription = this._assetSearch.search(this.urlParams, term, this.activeSort.index)
             .subscribe(
                 (res) => {
-                    let data = res.json();
-                    data.facets.forEach( (facet, index) => {
+                    let data = res;
+                    data['facets'].forEach( (facet, index) => {
                         this._filters.setAvailable(facet.name, facet.values);
                     })
 
-                    if (data.hierarchies2 && data.hierarchies2['artstor-geography']){
-                        this._filters.generateHierFacets( data.hierarchies2['artstor-geography'].children, 'geography' );
+                    if (data['hierarchies2'] && data['hierarchies2']['artstor-geography']){
+                        this._filters.generateHierFacets( data['hierarchies2']['artstor-geography'].children, 'geography' );
+                    }
+                    else{
+                        this._filters.generateHierFacets( [], 'geography' );
                     }
                     // Transform data from SOLR queries
-                    if (data.results) {
-                        data.thumbnails = data.results;
+                    if (data['results']) {
+                        data['thumbnails'] = data['results'];
                     }
-                    data.count = data.total
+                    data['count'] = data['total']
                     // Set the allResults object
                     this.updateLocalResults(data);
             }, (error) => {
@@ -880,74 +904,15 @@ export class AssetService {
     }
 
     /**
-     * Search assets service
-     * @param term          String to search for.
-     * @param filters       Array of filter objects (with filterGroup and filterValue properties)
-     * @param sortIndex     An integer representing a type of sort.
-     * @param dateFacet     Object with the dateFacet values
-     * @returns       Returns an object with the properties: thumbnails, count, altKey, classificationFacets, geographyFacets, minDate, maxDate, collTypeFacets, dateFacets
-     */
-    private search(term: string, sortIndex) {
-        let keyword = encodeURIComponent(term);
-        let options = new RequestOptions({ withCredentials: true });
-        let startIndex = ((this.urlParams.page - 1) * this.urlParams.size) + 1;
-        let thumbSize = 1;
-        let categoryId = this.urlParams['categoryId'];
-        let type = categoryId ? 2 : 6;
-        let colTypeIds = '';
-        let collIds = categoryId ? encodeURIComponent(categoryId) : encodeURIComponent(this.urlParams['coll']);
-        let classificationIds = '';
-        let geographyIds = '';
-
-        let earliestDate = '';
-        let latestDate = '';
-
-        let filters = this._filters.getApplied();
-        // To-do: break dateObj out of available filters
-        let dateFacet = this._filters.getAvailable()['dateObj'];
-
-        if(dateFacet && dateFacet.modified){
-            earliestDate = dateFacet.earliest.date;
-            earliestDate = ( dateFacet.earliest.era == 'BCE' ) ? ( parseInt(earliestDate) * -1 ).toString() : earliestDate;
-
-            latestDate = dateFacet.latest.date;
-            latestDate = ( dateFacet.latest.era == 'BCE' ) ? ( parseInt(latestDate) * -1 ).toString() : latestDate;
-        }
-
-        for(var i = 0; i < filters.length; i++){ // Applied filters
-            if(filters[i].filterGroup === 'collTypes'){ // Collection Types
-                colTypeIds = filters[i].filterValue;
-            }
-            if(filters[i].filterGroup === 'classification'){ // Classification
-                if(classificationIds != ''){
-                    classificationIds += ',';
-                }
-                classificationIds += filters[i].filterValue;
-            }
-            if(filters[i].filterGroup === 'geography'){ // Geography
-                if(geographyIds != ''){
-                    geographyIds += ',';
-                }
-                geographyIds += filters[i].filterValue;
-            }
-        }
-
-        return this.http
-            .get(this._auth.getUrl(true) + '/search/' + type + '/' + startIndex + '/' + this.urlParams.size + '/' + sortIndex + '?' + 'type=' + type + '&kw=' + keyword + '&origKW=' + keyword + '&geoIds=' + geographyIds + '&clsIds=' + classificationIds + '&collTypes=' + colTypeIds + '&id=' + (collIds.length > 0 ? collIds : 'all') + '&name=All%20Collections&bDate=' + earliestDate + '&eDate=' + latestDate + '&dExact=&order=0&isHistory=false&prGeoId=&tn=1', options);
-
-    }
-
-    /**
      * Wrapper function for HTTP call to get Image Groups. Used by browse component
      * @returns Chainable promise containing Image Groups data
      */
     public getIgs(){
-        let options = new RequestOptions({ withCredentials: true });
+        let options = { withCredentials: true };
 
         return this.http
             .get(this._auth.getUrl() + '/folders/110', options)
             .toPromise()
-            .then(this.extractData)
             .then((data) => {
                 return data;
             });
@@ -959,12 +924,11 @@ export class AssetService {
      * @returns Chainable promise containing subImageGroups data
      */
     public subGroups(id: string){
-        let options = new RequestOptions({ withCredentials: true });
+        let options = { withCredentials: true };
 
         return this.http
             .get(this._auth.getUrl() + '/folders/' + id + '/imagegroups?studWkFldrs=true&parentWritable=true', options)
             .toPromise()
-            .then(this.extractData);
     }
 
     /**
@@ -973,59 +937,40 @@ export class AssetService {
      * @returns Chainable promise containing collection data
      */
     public getCollectionsList(type?: string) {
-        let options = new RequestOptions({ withCredentials: true });
+        let options = { withCredentials: true };
         // Returns all of the collections names
         return this.http
             .get(this._auth.getUrl() + '/collections/', options)
             .map( res => {
                 if (type) {
-                    let data = res.json ? res.json() : {}
+                    let data = res
 
                     if (type == 'institution') {
-                        data.Collections = data.Collections.filter((collection) => {
+                        data['Collections'] = data['Collections'].filter((collection) => {
                             return collection.collectionType == 2 || collection.collectionType == 4
                         })
                     }
                     if (type == 'ssc') {
-                        data.Collections = data.Collections.filter((collection) => {
+                        data['Collections'] = data['Collections'].filter((collection) => {
                             return collection.collectionType == 5
                         })
                     }
 
                     return data
                 } else {
-                    return res.json ? res.json() : {}
+                    return res
                 }
             })
     }
 
-    /**
-     * Wrapper function for HTTP call to get user institution. Used by nav component
-     * @returns Chainable promise containing collection data
-     */
-    public getUserInstitution() {
-        let options = new RequestOptions({ withCredentials: true });
-        // Returns all of the collections names
-        return this.http
-            .get(this._auth.getUrl(true) + '/institutions/', options)
-            .toPromise()
-            .then(this.extractData)
-            .then((data) => {
-                this._storage.set('institution', data);
-                data && this._auth.setInstitution(data);
-                return data;
-            });
-    }
-
     public getFolders() {
-        let options = new RequestOptions({ withCredentials: true });
+        let options = { withCredentials: true };
 
         let requestString = [this._auth.getUrl(), "folders"].join("/");
 
         return this.http
             .get(requestString)
             .toPromise()
-            .then(this.extractData);
     }
 
     /**
@@ -1036,14 +981,13 @@ export class AssetService {
      * @param size How many thumbnails per page
      */
     private getAssociated(objectId: string, colId: string, page: number, size: number) {
-        let header = new Headers({ 'Content-Type': 'application/json' }); // ... Set content type to JSON
-        let options = new RequestOptions({ headers: header, withCredentials: true }); // Create a request option
+        let header = new HttpHeaders().set('Content-Type', 'application/json'); // ... Set content type to JSON
+        let options = { headers: header, withCredentials: true }; // Create a request option
         let requestString: string = [this._auth.getUrl(), "collaboratoryfiltering", objectId, "thumbnails", page, size].join("/") + "?collectionId=" + colId;
 
         return this.http
             .get(requestString, options)
             .toPromise()
-            .then((data) => { return this.extractData(data); });
     }
 
     /**
@@ -1056,9 +1000,6 @@ export class AssetService {
         return this.http
             .get(requestUrl, this.defaultOptions)
             .toPromise()
-            .then((data) => {
-                return data.json() || {};
-            });
     }
 
     /**
@@ -1100,7 +1041,6 @@ export class AssetService {
         return this.http
             .get("https://public-api.wordpress.com/rest/v1.1/sites/artstor.wordpress.com/posts/?number=24&search=" + query)
             .toPromise()
-            .then(this.extractData);
     }
 
     /**
@@ -1112,20 +1052,42 @@ export class AssetService {
         let options
         // if (document.referrer && document.referrer.indexOf('kressfoundation.org') > -1){
             // Custom header makes this call function as if IP auth
-            header = new Headers({ withCredentials: 'true', fromKress : 'true' });
+            header = new HttpHeaders({ withCredentials: 'true', fromKress : 'true' });
         // } else {
         //     header = new Headers({});
         // }
 
-        options = new RequestOptions({ headers: header }); // Create a request option
+        options = { headers: header }; // Create a request option
 
         return this.http.get(this._auth.getHostname() + "/api/v1/items/resolve?encrypted_id=" + token, options)
         .map((res) => {
-            let jsonRes = res.json() || {}
-            if (jsonRes && jsonRes.success && jsonRes.item) {
+            let jsonRes = res
+            if (jsonRes && jsonRes['success'] && jsonRes['item']) {
                 return jsonRes
             }
             else { throw new Error("No success or item found on response object") }
         })
   }
+}
+
+export interface MetadataRes {
+    success: boolean
+    total: number
+    metadata: {
+        SSID: string
+        collection_id: string
+        collection_name: string
+        download_size: string
+        fileProperties: any[]
+        height: number
+        width: number
+        image_url: string
+        metadata_json: any[]
+        object_id: string
+        object_type_id: number
+        resolution_x: number
+        resolution_y: number
+        thumbnail_url: string
+        title: string
+    }[]
 }

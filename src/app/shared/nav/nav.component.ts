@@ -41,14 +41,23 @@ export class Nav implements OnInit, OnDestroy {
     this.subscriptions.push(
       this._router.events.subscribe(e => {
         if (e instanceof NavigationEnd && (e.url != '/login') && (e.url.split('/')[1] != 'printpreview') && (e.url.split('/')[1] != 'assetprint')) {
-            this.showLoginPanel = true;
-            // Get institutional information if showing user info
-            this.getInstitutionalInfo()
+            this.showLoginPanel = true
         } else {
-            this.showLoginPanel = false;
+            this.showLoginPanel = false
         }
-        this.user = this._auth.getUser();
       })
+    );
+
+    // Subscribe to User object updates
+    this.subscriptions.push(
+      this._auth.currentUser.subscribe(
+        (userObj) => {
+          this.user = userObj;
+        },
+        (err) => {
+          console.log("Nav failed to load Institution information", err)
+        }
+      )
     );
 
     // Show inactive user logout modal once the subject is set by auth.service
@@ -57,16 +66,8 @@ export class Nav implements OnInit, OnDestroy {
         this.showinactiveUserLogoutModal = value;
       })
     );
-  }
 
-  ngOnDestroy() {
-    this.subscriptions.forEach((sub) => { sub.unsubscribe(); });
-  }
-
-  /**
-   * Loads User or IP auth information, and updates the appropriate objects
-   */
-  getInstitutionalInfo() {
+    // Subscribe to Institution object updates
     this.subscriptions.push(
       this._auth.getInstitution().subscribe(
         (institutionObj) => {
@@ -77,15 +78,10 @@ export class Nav implements OnInit, OnDestroy {
         }
       )
     );
+  }
 
-    // Trigger call to get fresh institutional information
-    this._assets.getUserInstitution()
-      .then((data) => {
-        // Got institutional info
-      })
-      .catch((err) => {
-        console.log(err)
-      })
+  ngOnDestroy() {
+    this.subscriptions.forEach((sub) => { sub.unsubscribe(); });
   }
 
   logout(): void {

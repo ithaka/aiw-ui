@@ -7,7 +7,9 @@
  */
 export const WLV_ARTSTOR = {
     pageTitle: "Artstor",
+    siteID: "ARTSTOR",
     logoUrl: "/assets/img/logo-v1-1.png",
+    contributingInstFilters : [],
     footerLinks: [
         "ABOUT",
         "GETTING_STARTED",
@@ -33,16 +35,25 @@ export const WLV_ARTSTOR = {
         'teachingResources': true,
         'imageGrps': true
     },
+    advSearch: {
+      showCollectionTypeFacet: true
+    },
     featuredCollection: "HOME.FEATURED",
     showHomeBlog: true,
     showHomeSSC: true,
-    showHomeAd: true
+    showHomeAd: true,
+    showArtstorCurated: true,
+    showInstitutionalLogin: true
 }
 
 export const WLV_SAHARA = {
-    "logoUrl" : "/assets/img/logo-sahara-v1.png",
-    "institutionLogin" : false,
-    "pageTitle" : "SAHARA",
+    logoUrl : "/assets/img/logo-sahara-v1.png",
+    saharaLogin: true,
+    institutionLogin : false,
+    disableIPAuth : true,
+    pageTitle : "SAHARA",
+    siteID: "SAHARA",
+    contributingInstFilters : [22240],
     footerLinks: [
         "ARTSTOR",
         "SAHARA",
@@ -50,6 +61,8 @@ export const WLV_SAHARA = {
         "SAHARA_TERMS",
         "SAHARA_PRIVACY"
     ],
+    showSSLogin: true,
+    showInstitutionalLogin: false,
     browseOptions: {
         'artstorCol': false,
         'instCol': true,
@@ -58,6 +71,7 @@ export const WLV_SAHARA = {
         'igs': true
     },
     featuredCollection: "HOME.SAHARA_FEATURED",
+    copyModifier: "SAHARA",
     homeBrowseSec: {
         'collection': false,
         'instCollection': true,
@@ -66,7 +80,11 @@ export const WLV_SAHARA = {
         'teachingResources': false,
         'imageGrps': true
     },
+    advSearch: {
+      showCollectionTypeFacet: false
+    },
     showHomeBlog: false,
     showHomeSSC: false,
-    showHomeAd: false
+    showHomeAd: false,
+    showArtstorCurated: false
 }

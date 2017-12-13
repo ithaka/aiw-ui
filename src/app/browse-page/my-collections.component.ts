@@ -18,6 +18,9 @@ import { TitleService } from '../shared/title.service';
   styleUrls: [ './browse-page.component.scss' ]
 })
 export class MyCollectionsComponent implements OnInit {
+
+  private pcEnabled: boolean;
+
   constructor(
     private _auth: AuthService,
     private router: Router,
@@ -25,11 +28,12 @@ export class MyCollectionsComponent implements OnInit {
     private _assets: AssetService,
     private _analytics: AnalyticsService,
     private _title: TitleService
-  ) { }
+  ) {
+
+   }
 
   private subscriptions: Subscription[] = [];
 
-  private userPCallowed: string;
   private categories = [];
   private tags : Tag[] = [];
   private expandedCategories: any = {};
@@ -72,10 +76,19 @@ export class MyCollectionsComponent implements OnInit {
         }
 
       })
-    );
+    )
 
-    this.userPCallowed = this._auth.getUser().userPCAllowed;
-    if(this.userPCallowed == '1'){ // If user has personal collections get data for user's personal collections
+    // Subscribe to User object updates
+    this.subscriptions.push(
+      this._auth.currentUser.subscribe(
+        (userObj) => {
+          this.pcEnabled = userObj.pcEnabled
+        },
+        (err) => { console.error(err) }
+      )
+    )
+
+    if(this.pcEnabled){ // If user has personal collections get data for user's personal collections
       this.getUserPCol();
     }
     this._analytics.setPageValues('mycollection', '')
@@ -99,15 +112,15 @@ export class MyCollectionsComponent implements OnInit {
     this.loading = true;
     this._assets.pccollection()
       .then((res) => {
-          if(res.pcCollection && res.pcCollection.collectionid){
+          if(res['pcCollection'] && res['pcCollection'].collectionid){
             // we made this tag always expandable
-            let colTag = new Tag(res.pcCollection.collectionid, res.pcCollection.collectionname, true, null, { label: "collection", folder: true }, true);
+            let colTag = new Tag(res['pcCollection'].collectionid, res['pcCollection'].collectionname, true, null, { label: "pcollection", folder: true }, true);
             this.tags.push(colTag);
           }
-          if(res.privateCollection && (res.privateCollection.length > 0)){
-            for (let colObj of res.privateCollection){
+          if(res['privateCollection'] && (res['privateCollection'].length > 0)){
+            for (let colObj of res['privateCollection']){
                 // we made this tag always expandable
-                let privTag = new Tag(colObj.collectionid, colObj.collectionname, true, null, { label: "collection", folder: true }, true);
+                let privTag = new Tag(colObj.collectionid, colObj.collectionname, true, null, { label: "pcollection", folder: true }, true);
                 this.tags.push(privTag);
             }
           }
@@ -160,9 +173,9 @@ export class MyCollectionsComponent implements OnInit {
 
     this._assets.nodeDesc( descId, nodeId )
     .then((res) => {
-        if(res.blurbUrl){
-            node.info_desc = res.blurbUrl;
-            node.info_img = res.imageUrl;
+        if(res['blurbUrl']){
+            node.info_desc = res['blurbUrl'];
+            node.info_img = res['imageUrl'];
         }
     })
     .catch(function(err) {

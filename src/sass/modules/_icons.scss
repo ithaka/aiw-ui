@@ -55,7 +55,7 @@
         background-repeat: no-repeat;
         background-position: center center;
         background-size: 100% auto;
-        
+
         &:hover, &:focus, &:active {
             background-image: url('/assets/img/icon-' + $name + '--hover.' + $imageType);
         }
@@ -97,11 +97,15 @@
 @include icon('audio', 'gif');
 @include icon('3d', 'gif');
 @include icon('qtvr', 'gif');
-@include icon('personal-asset', 'png');
-@include icon('ssc-asset', 'png');
-@include icon('institution-asset', 'png');
-@include icon('artstor-asset', 'png');
+@include icon('personal-asset', 'svg');
+@include icon('ssc-asset', 'svg');
+@include icon('institution-asset', 'svg');
+@include icon('artstor-asset', 'svg');
+@include icon('artstor-open-asset', 'svg');
+@include icon('info', 'png');
+@include icon('compare', 'svg');
 @include icon--hover('icon-slideshow', 'gif');
+@include icon('add-white', 'svg');
 
 // Icons with adjustments
 @include icon('close', 'svg');
@@ -122,10 +126,6 @@
     border-radius: 50%;
     background-size: 60% 60%;
 }
-.icon-add-white {
-    @extend .icon-close-white;
-    transform: rotate(45deg);
-}
 @include icon('text', 'svg');
 .icon-text {
     background-size: 70% 70%;
@@ -141,9 +141,9 @@
 
     &:hover, &:focus {
         opacity: 1;
-    }    
+    }
 }
- 
+
 .icon-direction {
     background-image: url('/assets/img/icon-down.svg');
     background-repeat: no-repeat;
@@ -159,10 +159,10 @@
 
     &.icon-up {
         transform: rotate(180deg);
-    } 
+    }
     &.icon-right {
         transform: rotate(-90deg);
-    } 
+    }
     &.icon-left {
         transform: rotate(90deg);
     }

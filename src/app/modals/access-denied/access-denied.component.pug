@@ -1,0 +1,11 @@
+#idaccessDeniedModal.modal.show
+  .modal-dialog
+    .modal-content
+      .modal-header
+        h5 {{ 'ACCESS_DENIED_MODAL.HEADING' | translate }}
+      .modal-body
+        p.pt-3.main-content([innerHtml]="promptCopy | translate")
+      .modal-footer
+        button.btn.btn-secondary((click)="exitFullScreen.emit()", [routerLink]="['/home']") Return to Home
+        button.btn.btn-primary(*ngIf="isLoggedIn && showSkipAsset", (click)="skipAsset.emit()") Skip Asset
+        button.btn.btn-primary(*ngIf="!isLoggedIn && !showSkipAsset", [routerLink]="['/login']") Login

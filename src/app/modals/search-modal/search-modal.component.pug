@@ -1,0 +1,77 @@
+#advancedModal.modal.fade-in
+  // Login Help Modal
+  .modal-dialog.modal-lg
+    .modal-content
+      .modal-header
+        h1 {{ 'ADVANCED_SEARCH_MODAL.TITLE' | translate }}
+        button.close(type="button", (click)="close()", data-dismiss="modal", aria-label="Close")
+          span(aria-hidden="true") &times;
+      .modal-body
+        .container-fluid
+          .row
+            .col-lg-6
+              h3 {{ 'ADVANCED_SEARCH_MODAL.SEARCH_HEADING' | translate }}
+              p(class="small") {{ 'ADVANCED_SEARCH_MODAL.SEARCH_DESCRIPTION' | translate }}
+              .form-group(*ngFor="let query of advanceQueries; let i = index;")
+                .input-group(id="advanceQueryGroup{{i + 1}}")
+                  .input-group-btn(ngbDropdown, *ngIf="i !== 0")
+                    button.btn.btn-secondary.dropdown-toggle(id="advanceQueryOperator{{i + 1}}", ngbDropdownToggle, type="button")
+                      | {{ query.operator }}
+                      = " "
+                    .dropdown-menu(ngbDropdownMenu, aria-labelledby="dropdown")
+                      a.dropdown-item((click)="query.operator = 'AND'") {{ 'ADVANCED_SEARCH_MODAL.BOOLEAN_OPTIONS.AND' | translate }}
+                      a.dropdown-item((click)="query.operator = 'OR'") {{ 'ADVANCED_SEARCH_MODAL.BOOLEAN_OPTIONS.OR' | translate }}
+                      a.dropdown-item((click)="query.operator = 'NOT'") {{ 'ADVANCED_SEARCH_MODAL.BOOLEAN_OPTIONS.NOT' | translate }}
+                  input.form-control(id="inputAdvanceQuery{{i + 1}}", [(ngModel)]="query.term", (change)="validateForm()", type="text")
+                  .input-group-btn(ngbDropdown)
+                    button.btn.btn-secondary.dropdown-toggle(id="advanceQueryField{{i + 1}}", ngbDropdownToggle, type="button")
+                      | {{ query.field.name }}
+                      = " "
+                    .dropdown-menu(ngbDropdownMenu, aria-labelledby="fieldDropdown")
+                      a.dropdown-item(*ngFor="let field of fields", (click)="query.field = field") {{ field.name }}
+                  button.close(type="button", (click)="clearAdvanceQuery(i)")
+                    span(style="font-family:Aria, Arial, Helvetica;") &times;
+              .form-group(*ngIf="advanceQueries.length < 10")
+                button.btn.btn-secondary(title="Add up to 10 field queries", (click)="addAdvanceQuery()") Add Query
+              .form-group.pt-3
+                h3 {{ 'ADVANCED_SEARCH_MODAL.DATE_HEADING' | translate }}
+                p.small {{ 'ADVANCED_SEARCH_MODAL.DATE_DESCRIPTION' | translate }}
+                .form-card.card.dt-grp
+                  .date-filter-row
+                    input#inputDateFilterStart.form-control([(ngModel)]="advanceSearchDate['startDate']", (change)="validateForm()", type="number", (keypress)="dateKeyPress($event)", min="0", placeholder="Start Date")
+                    div#buttonDateFilterStartBCE.side-toggle-btn((click)="advanceSearchDate['startEra'] = 'BCE'", [ngClass]="{'active': advanceSearchDate['startEra'] == 'BCE' }") BCE
+                    div#buttonDateFilterStartCE.side-toggle-btn((click)="advanceSearchDate['startEra'] = 'CE'", [ngClass]="{'active': advanceSearchDate['startEra'] == 'CE' }") CE
+                  .date-filter-row
+                    input#inputDateFilterEnd.form-control([(ngModel)]="advanceSearchDate['endDate']", (change)="validateForm()", type="number", (keypress)="dateKeyPress($event)", min="0", placeholder="End Date")
+                    div#buttonDateFilterEndBCE.side-toggle-btn((click)="advanceSearchDate['endEra'] = 'BCE'", [ngClass]="{'active': advanceSearchDate['endEra'] == 'BCE' }") BCE
+                    div#buttonDateFilterEndCE.side-toggle-btn((click)="advanceSearchDate['endEra'] = 'CE'", [ngClass]="{'active': advanceSearchDate['endEra'] == 'CE' }") CE
+            .col-lg-6
+              h3 {{ 'ADVANCED_SEARCH_MODAL.FILTER_HEADING' | translate }}
+              p.small {{ 'ADVANCED_SEARCH_MODAL.FILTER_DESCRIPTION' | translate }}
+              .row.has-icon-overlay(*ngIf="loadingFilters")
+                i.icon-lg.icon-overlay--top.icon-loading-large(style="background-color:transparent;")
+
+              .form-group(*ngFor="let filterGroup of availableFilters")
+                div(*ngIf="filterGroup.name")
+                  label {{ "FILTERS." + filterGroup.name | translate }}
+                  .form-card.card
+                    ul.list-group.list-group-flush.compact
+                      li.list-group-item(*ngFor="let filter of filterGroup.values")
+                        label.custom-control.custom-checkbox
+                          input.custom-control-input((click)="toggleFilter(filter)", type="checkbox", [checked]="filter.checked")
+                          span.custom-control-indicator
+                          span.custom-control-description
+                            span {{ filter.name }}
+                        ul.list-group.list-group-child(*ngIf="filter.children")
+                          li.list-group-item(*ngFor="let child of filter.children")
+                            label.custom-control.custom-checkbox
+                              input.custom-control-input( (click)="toggleFilter(child, filter)", type="checkbox", [checked]="child.checked")
+                              span.custom-control-indicator
+                              span.custom-control-description
+                                span {{ child.name }}
+      .modal-footer
+        .alert.alert-warning(*ngIf="error.empty", [innerHtml]="'ADVANCED_SEARCH_MODAL.ERRORS.EMPTY_SEARCH' | translate")
+        .alert.alert-warning(*ngIf="error.date", [innerHtml]="'ADVANCED_SEARCH_MODAL.ERRORS.DUMB_DATE' | translate")
+        a.btn.btn-link.with-pad(tabindex="1", (click)="openHelp()") {{ 'ADVANCED_SEARCH_MODAL.BUTTONS.HELP' | translate }}
+        button.btn.btn-secondary((click)="resetFilters()") {{ 'ADVANCED_SEARCH_MODAL.BUTTONS.CLEAR' | translate }}
+        button.btn.btn-primary((click)="applyAllFilters()", data-sc="search: advanced query") {{ 'ADVANCED_SEARCH_MODAL.BUTTONS.SEARCH' | translate }}

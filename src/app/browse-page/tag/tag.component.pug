@@ -1,0 +1,16 @@
+//- Sets up the tag passed into the component
+div(id="tagItem{{ tag.tagId }}", title="{{ tag.title }}", [ngClass]="[ link ? 'tag-link' : '', 'tag-item', tag.canOpen ? 'clickable' : '', 'tag-item__indent-' + tag.getLevel(), linkRoute.length < 1 ? 'no-link' : '']")
+  .expand-button(*ngIf="!link", (click)="tag.isCollapsed = !tag.isCollapsed; getChildren(); tag.touched = true;")
+    i.icon.absolute-left.tree-icon(*ngIf="!loading", [ngClass]="[ tag.isCollapsed ? 'icon-right' : 'icon-down', (!tag.touched || (tag.touched && tag.children.length > 0)) && tag.type.folder ? 'icon-direction' : 'icon-empty']")
+    i.icon.icon-loading.absolute-left.tree-icon(*ngIf="loading")
+  a(id="tagItem{{ tag.tagId }}Open", [ngClass]="{ 'no-link' : linkRoute.length < 1 || !tag.canOpen }", [routerLink]="[ linkRoute, tag.tagId, { 'browseType': browseType } ]")
+    span.notranslate {{tag.title}}
+  span.edit(*ngIf="edit", (click)="editTag.emit()") Edit
+  .info-cntnr([ngbCollapse]="tag.isCollapsed", *ngIf="tag.description")
+    img(*ngIf="tag.thumbnail.length > 0", [src]="_assets.makeThumbUrl(tag.thumbnail)")
+    .desc([innerHTML]="tag.description")
+//- Sets up for tag's children, and applies ngbCollapse (hides child element) based on whether or not parent is collapsed
+.container--slide
+  //- loop through children and inject the children into new nag components
+  .slide-wrap([class.show]="!tag.isCollapsed && tag.children.length > 0")
+    ang-tag(*ngFor="let child of tag.children", [tag]="child", [browseType]="browseType")
