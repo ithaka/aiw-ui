@@ -75,7 +75,11 @@
           | {{ searchError }}
       //- Display Thumbnails
       #assetThumbnailsRow.row.no-gutters(*ngIf="!reorderMode")
-        div.selection([ngClass]="largeThmbView ? 'col-sm-12 col-md-6 col-lg-4' : 'col-sm-6 col-md-3 col-lg-2'", *ngFor="let asset of results")
+        div.selection(
+            [ngClass]="largeThmbView ? 'col-sm-12 col-md-6 col-lg-4' : 'col-sm-6 col-md-3 col-lg-2'", 
+            *ngFor="let asset of results", 
+            [class.hidden]="asset.status == 'not-available'"
+          )
           .mobile--hide
             input.check(type="checkbox", [checked]="isSelectedAsset(asset) > -1", [ngStyle]="{ 'display': isSelectedAsset(asset) > -1 ? 'block' : 'none' }", (change)="editMode = true; selectAsset(asset);")
           .mobile--show
