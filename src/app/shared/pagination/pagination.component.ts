@@ -1,15 +1,15 @@
-import { Component, Input, OnInit, Output } from '@angular/core';
-import { EventEmitter } from '@angular/common/src/facade/async';
+import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'pagination',
-  templateUrl: './pagination.component.html',
+  templateUrl: './pagination.component.pug',
   styleUrls: ['./pagination.component.scss']
 })
 export class PaginationComponent implements OnInit {
   private pageValueOnKeyPress: number;
   @Input() pageObj: any;
   @Input() solrFlag: boolean;
+  @Input() right: boolean;
 
   @Output() goToPage: EventEmitter<any> = new EventEmitter();
 

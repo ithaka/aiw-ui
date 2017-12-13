@@ -12,7 +12,7 @@ import { IgFormValue, IgFormUtil } from './new-ig';
 
 @Component({
   selector: 'ang-new-ig-modal',
-  templateUrl: 'new-ig-modal.component.html'
+  templateUrl: 'new-ig-modal.component.pug'
 })
 export class NewIgModal implements OnInit {
   @Output() closeModal: EventEmitter<any> = new EventEmitter();
@@ -57,8 +57,8 @@ export class NewIgModal implements OnInit {
 
   constructor(
       private _assets: AssetService,
-      private _auth: AuthService, 
-      private _fb: FormBuilder, 
+      private _auth: AuthService,
+      private _fb: FormBuilder,
       private _group: GroupService,
       private _analytics: AnalyticsService,
       private _angulartics: Angulartics2,
@@ -76,7 +76,7 @@ export class NewIgModal implements OnInit {
     /** Set isArtstorUser to true if the user's institution is 1000. This will let them make global image groups */
     this.isArtstorUser = this._auth.getUser().institutionId == 1000;
 
-    /** 
+    /**
      * Set the field values, depending on the image group that is input
      *  only set the field values if you are copying or editing - otherwise, you're trying to make a new image group
      */
@@ -116,8 +116,8 @@ export class NewIgModal implements OnInit {
   private tagDebouncing: boolean = false
 
   private getTagSuggestions(event: any) : void  {
-    this.tagSuggestTerm = event.srcElement.value
-    
+    this.tagSuggestTerm = event.target.value
+
     if (!this.tagDebouncing) {
       this.tagDebouncing = true
 
@@ -131,8 +131,8 @@ export class NewIgModal implements OnInit {
           .take(1)
           .subscribe(
             data => {
-              if (data.success) {
-                this.tagSuggestions = data.tags
+              if (data['success']) {
+                this.tagSuggestions = data['tags']
                 // Trigger tag input to re-assess autocomplete array
                 // event.srcElement.dispatch(new Event('change'))
               }
@@ -144,7 +144,7 @@ export class NewIgModal implements OnInit {
         }
       }, 700)
     }
-    
+
   }
 
   /**
@@ -165,7 +165,7 @@ export class NewIgModal implements OnInit {
     let igDescValue = this.extractDescription()
 
     /**
-     * Create the group object that will be submitted to the server 
+     * Create the group object that will be submitted to the server
      *  only funky thing here is that sometimes we get the list of asset ids from the image group, and sometimes from selected assets
      *  that depends on whether you're copying an image group or making a new one
      */
@@ -196,7 +196,7 @@ export class NewIgModal implements OnInit {
       if (this.isArtstorUser) {
         this.changeGlobalSetting(group, formValue.artstorPermissions == "global")
       }
-      
+
     }
     else {
       // analytics events

@@ -4,7 +4,7 @@ import { ImageGroup, GroupService, AuthService } from './../../shared'
 
 @Component({
   selector: 'ang-share-ig-link',
-  templateUrl: 'share-ig-link.component.html',
+  templateUrl: 'share-ig-link.component.pug',
   styleUrls: ['./share-ig-link.component.scss']
 })
 export class ShareIgLinkModal implements OnInit {
@@ -47,8 +47,8 @@ export class ShareIgLinkModal implements OnInit {
 
     // If the group is not owned by the user, we simply give back the url of the group
     // Only a group owner can generate a token share link
-    if (!userOwned) { 
-      this.shareLink = ['http://', document.location.host, groupPath, ig.id].join("") 
+    if (!userOwned) {
+      this.shareLink = ['http://', document.location.host, groupPath, ig.id].join("")
     } else {
       // if the image group is private, we call a service to generate a token, then attach that to the route so the user can share it
       this.serviceStatus.isLoading = true

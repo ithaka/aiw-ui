@@ -1,19 +1,19 @@
-import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
-import { ActivatedRoute, Params, Router } from '@angular/router';
-import { Subscription }   from 'rxjs/Subscription';
-import { Locker } from 'angular2-locker';
-import { Angulartics2 } from 'angulartics2/dist';
+import { Component, OnInit, OnDestroy, ViewChild, HostListener } from '@angular/core'
+import { ActivatedRoute, Params, Router } from '@angular/router'
+import { Subscription }   from 'rxjs/Subscription'
+import { Locker } from 'angular2-locker'
+import { Angulartics2 } from 'angulartics2'
 
 // Project Dependencies
-import { Asset } from './asset';
-import { AuthService, AssetService, GroupService } from './../shared';
-import { AssetViewerComponent } from './asset-viewer/asset-viewer.component';
-import { AnalyticsService } from '../analytics.service';
-import { TitleService } from '../shared/title.service';
+import { Asset } from './asset'
+import { AuthService, AssetService, AssetSearchService, GroupService, CollectionTypeHandler } from './../shared'
+import { AssetViewerComponent } from './asset-viewer/asset-viewer.component'
+import { AnalyticsService } from '../analytics.service'
+import { TitleService } from '../shared/title.service'
 
 @Component({
     selector: 'ang-asset-page',
-    templateUrl: 'asset-page.component.html',
+    templateUrl: 'asset-page.component.pug',
     styleUrls: [ './asset-page.component.scss' ]
 })
 export class AssetPage implements OnInit, OnDestroy {
@@ -27,7 +27,8 @@ export class AssetPage implements OnInit, OnDestroy {
 
     // Array to support multiple viewers on the page
     private assets: Asset[] = []
-    private assetIndex: number = 1
+    private assetIndex: number = 0
+    private assetGroupId: string
     private assetNumber: number = 1
     private totalAssetCount: number = 1
     private subscriptions: Subscription[] = []
@@ -43,6 +44,7 @@ export class AssetPage implements OnInit, OnDestroy {
     private showAddModal: boolean = false
     private showCreateGroupModal: boolean = false
     private showAccessDeniedModal: boolean = false
+    private showGenerateCitation: boolean = false
 
     private copyURLStatusMsg: string = ''
     private showCopyUrl: boolean = false
@@ -58,21 +60,36 @@ export class AssetPage implements OnInit, OnDestroy {
     private quizMode: boolean = false;
     private quizShuffle: boolean = false;
     private showAssetCaption: boolean = true;
-    
+
     private assetIdProperty: string = 'artstorid'
+    /** Controls the display of the collection type icon */
+    private collectionType: {name: string, alt: string} = {name: '', alt: ''}
+
+    private collectionTypeHandler: CollectionTypeHandler = new CollectionTypeHandler()
+    
+    // To keep a track of browse direction ('prev' / 'next') while browsing through assets, to load next asset if the current asset is un-authorized
+    private browseAssetDirection: string = '' 
+
+    private pagination: any = {
+      totalPages: 1,
+      size: 24,
+      page: 1
+    };
+    private originPage: number = 0;
 
     constructor(
-            private _assets: AssetService, 
-            private _group: GroupService,
-            private _auth: AuthService, 
-            private route: ActivatedRoute, 
-            private _router: Router, 
-            private locker: Locker,
-            private _analytics: AnalyticsService,
-            private angulartics: Angulartics2,
-            private _title: TitleService 
-        ) { 
-            this._storage = locker.useDriver(Locker.DRIVERS.LOCAL);
+        private _assets: AssetService,
+        private _search: AssetSearchService,
+        private _group: GroupService,
+        private _auth: AuthService,
+        private route: ActivatedRoute,
+        private _router: Router,
+        private locker: Locker,
+        private _analytics: AnalyticsService,
+        private angulartics: Angulartics2,
+        private _title: TitleService
+    ) {
+        this._storage = locker.useDriver(Locker.DRIVERS.LOCAL);
     }
 
     ngOnInit() {
@@ -99,7 +116,7 @@ export class AssetPage implements OnInit, OnDestroy {
             this.route.params.subscribe((routeParams) => {
                 this.assets = []
                 let assetIdProperty = this._auth.featureFlags[routeParams['featureFlag']]? 'artstorid' : 'objectId'
-
+                this.assetGroupId = routeParams['groupId']
                 // Find feature flags
                 if(routeParams && routeParams['featureFlag']){
                     this._auth.featureFlags[routeParams['featureFlag']] = true;
@@ -115,7 +132,7 @@ export class AssetPage implements OnInit, OnDestroy {
                             }
                             data.item.imageUrl = data.imageUrl
                             data.item.imageServer = data.imageServer
-                            this.renderPrimaryAsset(new Asset(data.item[assetIdProperty], this._assets, this._auth, data.item))
+                            this.renderPrimaryAsset(new Asset(data.item[assetIdProperty], this._assets, this._auth, data.item, this.assetGroupId))
                         }, (err) => {
                             console.error(err)
                             if (err.status == 403) {
@@ -127,7 +144,7 @@ export class AssetPage implements OnInit, OnDestroy {
                             }
                         })
                 } else {
-                    this.renderPrimaryAsset(new Asset(routeParams["assetId"], this._assets, this._auth))
+                    this.renderPrimaryAsset(new Asset(routeParams["assetId"], this._assets, this._auth, null, this.assetGroupId))
 
                     if(this.prevAssetResults.thumbnails.length > 0){
                         // this.totalAssetCount = this.prevAssetResults.count ? this.prevAssetResults.count : this.prevAssetResults.thumbnails.length;
@@ -172,6 +189,33 @@ export class AssetPage implements OnInit, OnDestroy {
           })
         );
 
+        // Subscribe to pagination values
+        this.subscriptions.push(
+          this._assets.pagination.subscribe((pagination: any) => {
+            this.pagination.page = parseInt(pagination.page);
+            this.pagination.size = parseInt(pagination.size);
+            if (this.originPage < 1) {
+              this.originPage = this.pagination.page;
+            }
+
+            if (this.totalAssetCount) {
+              this.pagination.totalPages = Math.floor((this.totalAssetCount + this.pagination.size - 1) / this.pagination.size);
+            } else {
+              this.pagination.totalPages = parseInt(pagination.totalPages);
+            }
+            // Page size can't be altered in the asset drawer, and we don't want to exceed 1500 assets
+            if (this.pagination.totalPages > 63) {
+                this.pagination.totalPages = 63
+            }
+          })
+        );
+
+        this._assets.unAuthorizedAsset.subscribe( (value) => {
+            if(value){
+                this.showAccessDeniedModal = true
+            }
+        })
+
         this._analytics.setPageValues('asset', this.assets[0] && this.assets[0].id)
     } // OnInit
 
@@ -179,7 +223,31 @@ export class AssetPage implements OnInit, OnDestroy {
         this.subscriptions.forEach((sub) => { sub.unsubscribe(); });
     }
 
-    /** 
+    private handleSkipAsset(): void{
+        if( this.browseAssetDirection === 'prev' ) {
+            this.showPrevAsset()
+        }
+        else if ( this.browseAssetDirection === 'next' ){
+            this.showNextAsset()
+        }
+
+        // Close the modal after handling skip asset
+        this.showAccessDeniedModal = false
+    }
+
+    // Determines if the asset can be skipped to the prev / next asset in the array, if the current asset is unauthorized
+    private isAssetSkipable(): boolean{
+        let skipable: boolean = false
+        if( (this.browseAssetDirection === 'prev') && (this.assetNumber > 1) ){
+            skipable = true
+        }
+        else if( (this.browseAssetDirection === 'next') && (this.assetNumber < this.totalAssetCount) ){
+            skipable = true
+        }
+        return skipable
+    }
+
+    /**
      * Render Asset once its loaded
      */
     renderPrimaryAsset(asset: Asset) {
@@ -197,14 +265,18 @@ export class AssetPage implements OnInit, OnDestroy {
                     // here is where we make the "access denied" modal appear
                     if (!this.hasExternalAccess) {
                         this.showAccessDeniedModal = true
-                    }   
+                    }
                 } else {
                     // don't have a clue why this would happen, so just log it
                     console.error(err)
                 }
             }
         )
-        this.angulartics.eventTrack.next({ action:"viewAsset", properties: { category: "asset", label: asset.id }});
+        
+        let currentAssetId: string = this.assets[0].artstorid || this.assets[0]['objectId'] // couldn't trust the 'this.assetIdProperty' variable
+
+        this.setCollectionType(currentAssetId)
+
         this.generateImgURL();
     }
 
@@ -212,6 +284,13 @@ export class AssetPage implements OnInit, OnDestroy {
      * Maintains the isFullscreen variable, as set by child AssetViewers
      */
     updateFullscreenVar(isFullscreen: boolean): void {
+        if (!isFullscreen) {
+            this.showAssetDrawer = false
+            if (this.originPage > 0 && this.pagination.page !== this.originPage) {
+              this.pagination.page = this.originPage;
+              this._assets.loadAssetPage(this.pagination.page);
+            }
+        }
         this.isFullscreen = isFullscreen;
     }
 
@@ -228,6 +307,7 @@ export class AssetPage implements OnInit, OnDestroy {
         if (this.assets[0]) {
             for(var i = 0; i < this.prevAssetResults.thumbnails.length; i++){
                 if(this.prevAssetResults.thumbnails[i] && this.prevAssetResults.thumbnails[i][this.assetIdProperty] == this.assets[0].id){
+                    this.prevAssetResults.thumbnails[i].selected = true;
                     return i;
                 }
             }
@@ -241,8 +321,8 @@ export class AssetPage implements OnInit, OnDestroy {
             // Check if the logged-in user has private image groups
             this._group.getAll('private')
                         .take(1)
-                        .subscribe((res) => { 
-                            if (res.groups && (res.groups.length > 0)) { 
+                        .subscribe((res) => {
+                            if (res.groups && (res.groups.length > 0)) {
                                 this.showAddModal = true;
                             } else{
                                 this.showCreateGroupModal = true;
@@ -252,9 +332,12 @@ export class AssetPage implements OnInit, OnDestroy {
             this.showLoginModal = true;
         }
     }
-    
+
     private showPrevAsset(): void{
         if(this.assetNumber > 1){
+            // Update browse direction
+            this.browseAssetDirection = 'prev'
+
             if((this.assetIndex > 0)){
                 let prevAssetIndex = this.quizShuffle ? Math.floor(Math.random() * this.prevAssetResults.thumbnails.length) + 0 : this.assetIndex - 1; // Assign random thumbnail index if quiz shuffle is true
                 this._router.navigate(['/asset', this.prevAssetResults.thumbnails[prevAssetIndex][this.assetIdProperty]]);
@@ -268,6 +351,9 @@ export class AssetPage implements OnInit, OnDestroy {
 
     private showNextAsset(): void{
         if(this.assetNumber < this.totalAssetCount){
+            // Update browse direction
+            this.browseAssetDirection = 'next'
+
             if((this.prevAssetResults.thumbnails) && (this.assetIndex < (this.prevAssetResults.thumbnails.length - 1))){
                 let nextAssetIndex = this.quizShuffle ? Math.floor(Math.random() * this.prevAssetResults.thumbnails.length) + 0 : this.assetIndex + 1; // Assign random thumbnail index if quiz shuffle is true
                 this._router.navigate(['/asset', this.prevAssetResults.thumbnails[nextAssetIndex][this.assetIdProperty]]);
@@ -279,7 +365,7 @@ export class AssetPage implements OnInit, OnDestroy {
         }
     }
 
-     /** 
+     /**
      * Clean up the field label for use as an ID (used in testing)
      */
     private cleanId(label: string): string {
@@ -324,9 +410,9 @@ export class AssetPage implements OnInit, OnDestroy {
         if( /iPhone|iPad|iPod/i.test(navigator.userAgent) ) {
             iOSuser = true
         }
-    
-        setTimeout( () => { 
-            input.select(); 
+
+        setTimeout( () => {
+            input.select();
             if(document.queryCommandSupported('copy') && !iOSuser){
                 document.execCommand('copy', false, null)
                 statusMsg = 'Image URL successfully copied to the clipboard!';
@@ -340,20 +426,21 @@ export class AssetPage implements OnInit, OnDestroy {
 
      // Add or remove assets from Assets array for comparison in full screen
     private toggleAsset(asset: any): void {
+        let assetIdProperty = asset.hasOwnProperty('artstorid') ? 'artstorid' : 'objectId';
         let add = true;
         this.assets.forEach( (viewAsset, i) => {
-            if (asset[this.assetIdProperty] == viewAsset.id) {
+            if (asset[assetIdProperty] == viewAsset.id) {
                 asset.selected = false;
                 this.assets.splice(i, 1);
                 add = false;
 
                 // Set 'selected' to 'false' for the asset in asset drawer
                 this.prevAssetResults.thumbnails.forEach( (thumbnail, i) => {
-                    if (asset[this.assetIdProperty] == thumbnail[this.assetIdProperty]) {
+                    if (asset[assetIdProperty] == thumbnail[this.assetIdProperty]) {
                         thumbnail.selected = false;
                     }
                 });
-                
+
             }
         })
         if (this.assets.length >= 10) {
@@ -372,12 +459,13 @@ export class AssetPage implements OnInit, OnDestroy {
         for(let i = 0; i < this.prevAssetResults.thumbnails.length; i++){
             this.prevAssetResults.thumbnails[i].selected = false;
         }
-        
+
         this.quizMode = false;
         this.quizShuffle = false;
         this.showAssetCaption = true;
 
         this.assetViewer.togglePresentationMode();
+        this.showAssetDrawer = false;
     }
 
     private backToResults(): void{
@@ -440,7 +528,7 @@ export class AssetPage implements OnInit, OnDestroy {
             let viewY = this.assets[0].viewportDimensions.containerSize.y
             // Dimensions of the source size of the cropped image
             let zoomX = Math.floor(fullWidth/zoom)
-            let zoomY = Math.floor( zoomX * (viewY/viewX)) 
+            let zoomY = Math.floor( zoomX * (viewY/viewX))
             // Make sure zoom area is not larger than source, or else error
             if (zoomX > fullWidth) {
                 zoomX = fullWidth;
@@ -457,12 +545,29 @@ export class AssetPage implements OnInit, OnDestroy {
     }
 
     /**
+     * Load next set of thumbnails for compare mode
+     * @param newPage number of desired page
+     */
+    private goToPage(newPage: number) {
+      // The requested page should be within the limits (i.e 1 to totalPages)
+      if( (newPage >= 1) ){
+        this._assets.paginated = true;
+        this.pagination.page = newPage;
+        this._assets.loadAssetPage(this.pagination.page);
+      }
+    }
+
+    private toggleAssetDrawer() {
+      this.showAssetDrawer = !this.showAssetDrawer;
+    }
+
+    /**
      * Function called if not yet agreed to download image
      * - sets url used by agree modal
      */
     setDownloadImage() : void {
-        this.downloadUrl = this.assets[0].downloadLink; 
-        this.showAgreeModal = true; 
+        this.downloadUrl = this.assets[0].downloadLink;
+        this.showAgreeModal = true;
         // Track download
         this._analytics.directCall('download_image');
         this.angulartics.eventTrack.next({ action:"downloadAsset", properties: { category: "asset", label: this.assets[0].id }});
@@ -473,9 +578,63 @@ export class AssetPage implements OnInit, OnDestroy {
      * - sets url used by agree modal
      */
     setDownloadView() : void {
-        this.downloadUrl = this.generatedViewURL; 
+        this.downloadUrl = this.generatedViewURL;
         this.showAgreeModal = true;
-        // Track download
+        // Track download view
+        this._analytics.directCall('download_view');
         this.angulartics.eventTrack.next({ action:"downloadView", properties: { category: "asset", label: this.assets[0].id }});
+    }
+
+    trackDownloadImage() : void {
+      this._analytics.directCall('download_image');
+    }
+
+    trackDownloadView() : void {
+      this._analytics.directCall('download_view');
+    }
+
+    /**
+     * Function called when keyboard key is pressed
+     * allows user to go to previous/next asset in group or search
+     */
+    @HostListener('document:keydown', ['$event'])
+    handleKeyboardEvent(event: KeyboardEvent) {
+      let key = event.keyCode;
+      // Make sure not comparing images
+      if(this.assets.length === 1) {
+        // Left -> Previous
+        if(key === 37 && this.assetNumber > 1) {
+          this.showPrevAsset();
+        }
+        // Right -> Next
+        else if(key === 39 && this.assetNumber < this.totalAssetCount) {
+          this.showNextAsset();
+        }
+      }
+    }
+
+    /**
+     * Used to set the collection type, which controls display of the collection type icon
+     * @param assetId the asset's id assigned by artstor
+     */
+    private setCollectionType(assetId: string): void {
+        this._search.search({}, assetId, null)
+            .take(1)
+            .subscribe((res) => {
+                if (res && res['results'] && res['results'].length > 0) {
+                    let currentAssetId: string = this.assets[0].artstorid || this.assets[0]['objectId'] // couldn't trust the 'this.assetIdProperty' variable
+
+                    // search through the resulting items and find the one with the matching id
+                    let asset = res['results'].find((item) => {
+                        return item.artstorid == currentAssetId
+                    })
+                    if (!asset) { return }
+
+                    let contributinginstitutionid: number = asset['contributinginstitutionid']
+                    this.collectionType = this.collectionTypeHandler.getCollectionType(asset['collectiontypes'][0], contributinginstitutionid)
+                }
+            }, (err) => {
+                console.error(err)
+            })
     }
 }

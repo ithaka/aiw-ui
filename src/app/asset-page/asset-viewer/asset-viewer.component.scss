@@ -65,10 +65,10 @@ $metadataBg: #f1f8f1;
 }
 
 .osd-wrap {
-    position: relative; 
+    position: relative;
     height: $viewerOldBrowserMinHeight;
-    height: $viewerMinHeight; 
-    width: 100%; 
+    height: $viewerMinHeight;
+    width: 100%;
     min-height: $viewerMinHeight;
 
     @media(max-width: $phone) {
@@ -81,7 +81,7 @@ $metadataBg: #f1f8f1;
     min-height: 100%;
     width: 100%;
     z-index: 1;
-    padding: 0px; 
+    padding: 0px;
 
     & .item  {
         position: absolute !important;
@@ -170,7 +170,7 @@ $metadataBg: #f1f8f1;
     }
     &:hover .page-tooltip{
         opacity: 1;
-    } 
+    }
 
     & .caption-link{
         display: inline-block;

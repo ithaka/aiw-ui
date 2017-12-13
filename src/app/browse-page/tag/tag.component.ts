@@ -6,13 +6,14 @@ import { Tag } from './tag.class';
 
 @Component({
   selector: 'ang-tag',
-  templateUrl: 'tag.component.html',
+  templateUrl: 'tag.component.pug',
   styleUrls: ['./tag.component.scss']
 })
 export class TagComponent {
 
   @Input() public tag: Tag;
   @Input() public link: boolean;
+  @Input() public browseType: boolean;
 
   @Input() private edit: boolean;
   @Output() editTag: EventEmitter<any> = new EventEmitter();
@@ -23,8 +24,8 @@ export class TagComponent {
   private loading: boolean = false;
 
   constructor(
-    private _assets: AssetService, 
-    private _tags: TagsService  
+    private _assets: AssetService,
+    private _tags: TagsService
   ) {
 
   }
@@ -33,6 +34,9 @@ export class TagComponent {
     if (this.tag.type) {
       if (this.tag.type.label === 'collection') {
         this.linkRoute = '/collection';
+      }
+      if (this.tag.type.label === 'pcollection') {
+        this.linkRoute = '/pcollection';
       }
       if (this.tag.type.label === 'group' && this.tag.type.folder !== true) {
         this.linkRoute = '/group';
@@ -80,6 +84,6 @@ export class TagComponent {
           });
       }
     }
-    
+
   }
 }

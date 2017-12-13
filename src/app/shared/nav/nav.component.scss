@@ -80,6 +80,12 @@ $loginPanelMobileHeight: 0px;
     text-align: center;
 }
 
+.login-panel__institution {
+    white-space: nowrap;
+    overflow-x: hidden;
+    text-overflow: ellipsis;
+}
+
 .login-panel__links {
     text-align: center;
     font-size: 12px;
@@ -87,4 +93,10 @@ $loginPanelMobileHeight: 0px;
     & a {
         margin: 6px 5px;
     }
+}
+
+.fit {
+  width: 100%;
+  width: -moz-available;
+  width: -webkit-fill-available;
 }

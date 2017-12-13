@@ -7,7 +7,7 @@ import { AuthService, ToolboxService } from './../../shared';
 
 @Component({
   selector: 'ang-login-req-modal',
-  templateUrl: 'login-req-modal.component.html',
+  templateUrl: 'login-req-modal.component.pug',
   styles: [`
     .modal {
       display: block;

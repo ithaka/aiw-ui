@@ -21,16 +21,16 @@ interface DataLayer {
 export class AnalyticsService {
     public pageData: DataLayer;
 
-    constructor() { 
+    constructor() {
         this.pageData = DDO.pageData;
     }
-    
+
     public directCall(eventName: string) {
         try {
             _satellite && _satellite.track && _satellite.track(eventName);
         } catch(error) {
             console.error(error)
-        }   
+        }
     }
 
     public setPageName(name: string) {
@@ -44,7 +44,7 @@ export class AnalyticsService {
         this.pageData.pageInfo.pageID = id
     }
 
-    /** 
+    /**
      * Set logged in user's institution
      */
     public setUserInstitution(institution: string) {

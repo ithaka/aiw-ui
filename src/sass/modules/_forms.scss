@@ -6,7 +6,7 @@
 $inputTextColor: #000;
 $inputPlaceholderColor: #b3b3b1;
 
-$inputBorderFocusColor: #918f92; 
+$inputBorderFocusColor: #918f92;
 
 $dropdownShadow: 0px 2px 3px 0px rgba(0,0,0,0.2);
 
@@ -37,7 +37,7 @@ input.form-control, select.form-control {
     &, &:focus {
         color: $inputTextColor;
     }
-    
+
     &:focus {
         border-color: $inputBorderFocusColor;
     }
@@ -229,4 +229,16 @@ rl-tag-input > form > input {
 rl-tag-input-item {
     border-radius: 5px !important;
     height: 34px !important;
+}
+
+.has-danger {
+  color: #e21c28;
+}
+
+.has-success {
+  color: #afc128;
+}
+
+.has-warning {
+  color: #f2be19;
 }

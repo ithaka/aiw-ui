@@ -1,7 +1,7 @@
 import { Component } from '@angular/core'
 import { Router, ActivatedRoute } from '@angular/router'
 import { Subscription } from 'rxjs/Subscription'
-import { Angulartics2 } from 'angulartics2/dist'
+import { Angulartics2 } from 'angulartics2'
 
 import { AssetService } from '../shared/assets.service'
 import { AssetFiltersService } from '../asset-filters/asset-filters.service'
@@ -11,9 +11,9 @@ import { AuthService } from "app/shared";
 declare var _satellite: any
 
 @Component({
-  selector: 'ang-asset-filters', 
+  selector: 'ang-asset-filters',
   styleUrls: [ './asset-filters.component.scss' ],
-  templateUrl: './asset-filters.component.html'
+  templateUrl: './asset-filters.component.pug'
 })
 export class AssetFilters {
   // Set our default values
@@ -33,7 +33,7 @@ export class AssetFilters {
   // classificationFacets = [];
   geoTree = [];
   // geographyFacets = [];
-  
+
   pagination = {
     page : 1,
     totalPages : 1,
@@ -43,7 +43,7 @@ export class AssetFilters {
     index : 0,
     label : 'Relevance'
   };
-  term; 
+  term;
   // TO-DO: Fields should be pulled dynamically!
   public fields = [
     {name: 'Title' },
@@ -51,7 +51,7 @@ export class AssetFilters {
     {name: 'Location' },
     {name: 'Repository' }
   ];
-  
+
   public geographyFields = [ ];
 
   public advQueryTemplate = { term: '' };
@@ -61,12 +61,12 @@ export class AssetFilters {
     { term: ''}
   ];
 
-  private dateError: boolean = false; 
+  private dateError: boolean = false;
 
   // TypeScript public modifiers
   constructor(
     private _filters: AssetFiltersService,
-    private route: ActivatedRoute, 
+    private route: ActivatedRoute,
     private router: Router,
     private _analytics: AnalyticsService,
     private angulartics: Angulartics2,
@@ -98,23 +98,32 @@ export class AssetFilters {
 
         for (let paramName in routeParams) {
             if (this._filters.isFilterGroup(paramName)) {
-              if (routeParams[paramName].indexOf(',')) {
-                let multiFilters = routeParams[paramName].split(',');
-                multiFilters.forEach( value => {
-                  this._filters.apply(paramName, value);
-                });
-              } else {
-                this._filters.apply(paramName, routeParams[paramName]);
+              let parsedParam:any
+
+              try { // attempt to parse an array param
+                parsedParam = JSON.parse(routeParams[paramName])
+              } catch (err) { // param is not an array
+                parsedParam = routeParams[paramName]
               }
+              this._filters.apply(paramName, parsedParam);
             }
         }
       })
-    ); 
-    
-    // Keep an eye for available filter updates 
+    );
+
+    // Keep an eye for available filter updates
     this.subscriptions.push(
       this._filters.available$.subscribe(
-        filters => { 
+        filters => {
+          // Clean up filter data for display (i.e. insitutional asset counts are inaccurate)
+          if (filters['collectiontypes']) {
+            for (let i = 0; i < filters['collectiontypes'].length; i++) {
+              let colType = filters['collectiontypes'][i]
+              if (colType.name == '2' || colType.name == '4') {
+                delete colType.count
+              }
+            }
+          }
           this.availableFilters = filters;
         }
       )
@@ -122,17 +131,17 @@ export class AssetFilters {
     // Subscribe to all applied filters in case something fires outside this component
     this.subscriptions.push(
       this._filters.applied$
-            .subscribe(filters => { 
+            .subscribe(filters => {
                 this.appliedFilters = filters;
             })
     );
-   
+
   }
 
   private loadRoute() {
     let params = {};
     let currentParams = this.route.snapshot.params
-    
+
     // Maintain feature flags
     if (currentParams['featureFlag']) {
       params['featureFlag'] = currentParams['featureFlag']
@@ -145,26 +154,58 @@ export class AssetFilters {
 
     for (let filter of this.appliedFilters) {
       if(filter.filterGroup == 'page'){
-        params[filter.filterGroup] =  parseInt(filter.filterValue);
+        params[filter.filterGroup] =  parseInt(filter.filterValue[0]);
+      }
+      else if(filter.filterGroup == 'size'){
+        params[filter.filterGroup] =  parseInt(filter.filterValue[0]);
       }
       else if((filter.filterGroup != 'startDate') && (filter.filterGroup != 'endDate') && (filter.filterValue && filter.filterValue.length > 0)){
-        params[filter.filterGroup] =  filter.filterValue;
+        // Arrays must be stringified, as angular router doesnt handle them well
+        params[filter.filterGroup] =  Array.isArray(filter.filterValue) ? JSON.stringify(filter.filterValue) : filter.filterValue;
       }
     }
 
     this.angulartics.eventTrack.next({ action: "filteredSearch", properties: { category: "search", label: params } })
 
     if(params['page']){
-      params['page'] = this.pagination.page;
+      params['page'] = this.pagination.page
     }
-    
-    this.router.navigate(['search', this.term, params]);
-  }
 
+    if(currentParams.colId || currentParams.catId){
+
+      let baseParams = {}
+
+      if(currentParams.name){
+        baseParams['name'] = currentParams.name
+      }
+      if(currentParams.browseType){
+        baseParams['browseType'] = currentParams.browseType
+      }
+      if(currentParams.size){
+        baseParams['size'] = currentParams.size
+      }
+      if(currentParams.page){
+        baseParams['page'] = currentParams.page
+      }
+      if(currentParams.sort){
+        baseParams['sort'] = currentParams.sort
+      }
+
+      let queryParams = Object.assign(baseParams, params)
+      let colId = currentParams.colId ? currentParams.colId : currentParams.catId
+      let route = currentParams.colId ? 'collection' : 'category'
+
+      this.router.navigate( [ '/' + route, colId, queryParams ] )
+    }
+    else{
+      this.router.navigate(['search', this.term, params])
+    }
+
+  }
 
   changeSortOpt(index, label) {
     this.activeSort.index = index;
-    this.activeSort.label = label; 
+    this.activeSort.label = label;
     this.pagination.page = 1;
     this.loadRoute();
   }
@@ -181,7 +222,7 @@ export class AssetFilters {
   isArray(thing) : boolean {
     return Object.prototype.toString.call( thing ) === '[object Array]'
   }
-  
+
   toggleEra(dateObj){
     if(dateObj.era == 'BCE'){
       dateObj.era = 'CE';
@@ -197,7 +238,7 @@ export class AssetFilters {
     }
     else{
       geoFacet.expanded = true;
-    } 
+    }
 
   }
 
@@ -209,7 +250,7 @@ export class AssetFilters {
       this._filters.apply(group, value);
     }
     this.pagination.page = 1;
-    
+
     this.loadRoute();
   }
 
@@ -230,12 +271,12 @@ export class AssetFilters {
         }
       }
     }
-    
+
     this.pagination.page = 1;
 
     this.loadRoute();
   }
-  
+
   // To check if a filter group has any applied filters
   hasAppliedFilters(group): boolean{
     let hasFilters: boolean = false;
@@ -267,7 +308,7 @@ export class AssetFilters {
 
   removeFilter(filterObj){
     this._filters.remove(filterObj.filterGroup, filterObj.filterValue);
-  } 
+  }
 
   getUniqueColTypeIds(facetArray){
     var colTypeIds = [];
@@ -282,7 +323,7 @@ export class AssetFilters {
       }
     }
     return colTypeIds;
-  } 
+  }
 
 
   applyDateFilter(){
@@ -291,7 +332,7 @@ export class AssetFilters {
 
     var edate = parseInt(this.availableFilters.dateObj.latest.date);
     edate = this.availableFilters.dateObj.latest.era == 'BCE' ? (edate * -1) : edate;
-    
+
     // Show error message if Start date is greater than End date
     if(sdate > edate){
       this.dateError = true;
@@ -335,7 +376,7 @@ export class AssetFilters {
 
       return theEvent.returnValue;
   }
-  
+
   ngOnDestroy() {
     this.subscriptions.forEach((sub) => { sub.unsubscribe(); });
   }

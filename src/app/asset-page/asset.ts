@@ -8,6 +8,7 @@ export class Asset {
 
   id: string;
   artstorid: string;
+  groupId: string;
   /** typeId determines what media type the asset is */
   typeId: number;
   title: string;
@@ -20,8 +21,11 @@ export class Asset {
   tileSource: any;
   record: any;
   collectionName: string = ''
+  collectionType: number
   // Not reliably available
   collectionId: number
+  SSID: string
+  fileName: string
 
   viewportDimensions: {
       contentSize?: any,
@@ -84,13 +88,13 @@ export class Asset {
         "artworktype"
     ];
 
-  constructor(asset_id: string, _assets ?: AssetService, _auth ?: AuthService, assetObj ?: any) {
-    this.id = this.artstorid = asset_id;
-    this._assets = _assets;
-    this._auth = _auth;
-    this.loadAssetMetaData();
+  constructor(asset_id: string, _assets ?: AssetService, _auth ?: AuthService, assetObj ?: any, groupId ?: string) {
+    this.id = this.artstorid = asset_id
+    this.groupId = groupId
+    this._assets = _assets
+    this._auth = _auth
 //   constructor(asset_id: string, _assets ?: AssetService, _auth ?: AuthService, assetObj ?: any) {
-    // this.metaDataArray = JSON.parse(asset['metadata_json'].replace(/\t|\n|\s\s\s\s\s\s\s\s\s/g, ''));
+
     if (assetObj) {
         this.metadataLoaded = true
         this.title = assetObj.tombstone[0]
@@ -123,7 +127,6 @@ export class Asset {
 
     } else {
         this.loadAssetMetaData();
-        this.loadMediaMetaData();
     }
   }
 
@@ -137,11 +140,12 @@ export class Asset {
   /** Get asset metadata via service call */
   private loadAssetMetaData(): void {
 
-      this._assets.getById( this.id )
+      this._assets.getById(this.id, this.groupId)
           .then((res) => {
               let asset
-              if (res['metadata']) {
-                asset = res['metadata'][0]
+              if (res['results']) {
+                // As returned from Solr
+                asset = res['results'][0]
               } else {
                 asset = res
               }
@@ -154,21 +158,43 @@ export class Asset {
               this.filePropertiesArray = asset.fileProperties || [];
               this.title = this.metaDataArray.find(elem => elem.fieldName.match(/^\s*Title/)).fieldValue || 'Untitled'
 
-              this.imgURL = asset.image_url
-              this.fileExt = asset.image_url ? asset.image_url.substr(asset.image_url.lastIndexOf('.') + 1) : ''
+                  if (asset['media']) {
+                    let media = JSON.parse(asset['media'])
+                    this.imgURL = media['thumbnailSizeOnePath']
+                    this.typeId = media['adlObjectType']
+                  }
+
+                  this.setCreatorDate();
+                  this.collectionName = this.getCollectionName()
 
               this.downloadName = this.title.replace(/\./g,'-') + '.' + this.fileExt
 
-              this.setCreatorDate();
-              this.collectionName = this.getCollectionName()
+              // Old Search
+              else if(asset.objectId){
+                  this.loadMediaMetaData();
+                  this.metaDataArray = asset.metaData;
+                  this.formatMetadata();
 
               this.metadataLoaded = true;
               this.dataLoadedSource.next(this.metadataLoaded && this.imageSourceLoaded);
 
-          },
+                  this.downloadName = this.title.replace(/\./g,'-') + '.' + this.fileExt
+
+                  this.setCreatorDate();
+                  this.collectionName = this.getCollectionName()
+
+                  this.metadataLoaded = true;
+                  this.dataLoadedSource.next(this.metadataLoaded && this.imageSourceLoaded);
+              }
+          }, 
           (err) => {
-              console.error('Unable to load asset metadata.');
-          });
+            console.error(err)
+            if (err.status == 403) {
+                // User does not have access
+                this._assets.unAuthorizedAsset.next( true )
+                this.dataLoadedSource.error( err )
+            }
+         });
   }
 
 
@@ -255,10 +281,18 @@ export class Asset {
         this.disableDownload = false;
     }
 
+    // set SSID and fileName
+    this.SSID = data.SSID
+    if (data.fileProperties) {
+        this.fileName = data.fileProperties.find((obj) => {
+            return !!obj.fileName
+        }).fileName
+    }
+
     this.typeId = data.object_type_id || data.objectTypeId;
 
     let downloadSize = data.download_size || '1024,1024'
-    let imageServer = data.imageServer || 'http://hubviewer.artstor.org/'
+    let imageServer = data.imageServer || 'http://imgserver.artstor.net/'
 
     /** This determines how to build the downloadLink, which is different for different typeIds */
     if (this.typeId === 20 || this.typeId === 21 || this.typeId === 22 || this.typeId === 23) { //all of the typeIds for documents
@@ -290,21 +324,13 @@ export class Asset {
    * - Finds the asset Type id
   */
   private loadMediaMetaData(): void {
-      this._assets.getImageSource( this.id, this.collectionId )
+      this._assets.getImageSource( this.id, this.groupId )
         .subscribe((data) => {
             this.useImageSourceRes(data)
         }, (error) => {
             // if it's an access denied error, throw that to the subscribers
             if (error.status === 403) {
                 this.dataLoadedSource.error(error)
-            } else {
-                // Non-Artstor collection assets don't require a Region ID
-                this._assets.getImageSource( this.id, 103 )
-                    .subscribe((data) => {
-                        this.useImageSourceRes(data)
-                    }, (error) => {
-                        console.error(error);
-                    });
             }
         });
   }

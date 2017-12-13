@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { Subscription } from 'rxjs/Rx';
+import { BehaviorSubject, Observable, Subscription } from 'rxjs/Rx';
 import { CompleterService, CompleterData } from 'ng2-completer';
 
 import { AssetService, GroupService, ImageGroup } from './../../shared';
@@ -8,7 +8,7 @@ import { AnalyticsService } from '../../analytics.service';
 
 @Component({
   selector: 'ang-add-to-group',
-  templateUrl: 'add-to-group.component.html'
+  templateUrl: 'add-to-group.component.pug'
 })
 export class AddToGroupModal implements OnInit, OnDestroy {
   @Output() closeModal: EventEmitter<any> = new EventEmitter();
@@ -39,8 +39,15 @@ export class AddToGroupModal implements OnInit, OnDestroy {
     private _analytics: AnalyticsService,
     private completerService: CompleterService
   ) {
-    
+
   }
+
+  /** 
+   * Observable for autocomplete list of groups
+   * - We apply additional sorting 
+   */
+  private groupListSubject: BehaviorSubject<any[]> = new BehaviorSubject([])
+  private groupListObs: Observable<any[]> = this.groupListSubject.asObservable()
 
   ngOnInit() {
     if (this.selectedAssets.length < 1) { // if no assets were added when component was initialized, the component gets the current selection list
@@ -59,17 +66,33 @@ export class AddToGroupModal implements OnInit, OnDestroy {
 
     // Load list of Groups, and update autocomplete as Groups load
     this._group.getEveryGroup('private')
-      .subscribe((groups) => { 
-        if (groups) { 
+      .subscribe((groups) => {
+        if (groups) {
           this.groups = groups;
           // Data service for the autocomplete component (ng2 completer)
-          this.dataService = this.completerService.local(this.groups, 'name', 'name');
-        } 
+          this.dataService = this.completerService.local(this.groupListObs, 'name', 'name');
+        }
       }, (err) => { console.error(err); });
+
+       
   }
 
   ngOnDestroy() {
       this.subscriptions.forEach((sub) => { sub.unsubscribe(); });
+  }
+
+  private sortGroup(event) : void {
+    // sort array by string input
+    let term = this.selectedGroupName
+    let termReg = new RegExp(term, 'i')
+    
+    let filtered = this.groups.filter( group => {
+      return group && group.name.search(termReg) > -1
+    })
+    filtered = filtered.sort((a, b) => {
+        return a.name.search(termReg) - b.name.search(termReg)
+    });
+    this.groupListSubject.next(filtered)
   }
 
   /**
@@ -92,7 +115,7 @@ export class AddToGroupModal implements OnInit, OnDestroy {
       this.selectedGroupError = "ADD_TO_GROUP_MODAL.NO_GROUP"
       return
     }
-    
+
     // Create object for new modified group
     let putGroup: ImageGroup = Object.assign({}, this.selectedIg)
 
@@ -113,7 +136,7 @@ export class AddToGroupModal implements OnInit, OnDestroy {
         if (putGroup.items.indexOf(asset.id) < 0) {
           putGroup.items.push(asset.id);
         }
-      } 
+      }
     })
 
     // throw an error if the image group is going to be larger than 1000 images
@@ -127,8 +150,7 @@ export class AddToGroupModal implements OnInit, OnDestroy {
     // go get the group from the server
     this._group.get(this.selectedIg.id)
       .toPromise()
-      .then((data) => { return this.extractData(data) })
-      .then((data) => { 
+      .then((data) => {
         data.items = putGroup.items
 
         this._group.update(data)
@@ -143,7 +165,7 @@ export class AddToGroupModal implements OnInit, OnDestroy {
           console.error(error);
       });
 
-    
+
   }
 
   private extractData(res: any) {

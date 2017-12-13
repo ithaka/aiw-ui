@@ -5,7 +5,7 @@ import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms'
 
 @Component({
   selector: 'ang-pwd-reset-modal',
-  templateUrl: 'pwd-reset.component.html'
+  templateUrl: 'pwd-reset.component.pug'
 })
 export class PwdResetModal implements OnInit {
   @Output() closeModal: EventEmitter<any> = new EventEmitter();

@@ -1,12 +1,11 @@
 import { Router } from '@angular/router';
 import { Component, OnInit, Input } from '@angular/core';
 
-import { Thumbnail } from './../../shared'
-import { AssetService } from './../../shared';
+import { Thumbnail, AssetService, CollectionTypeHandler } from './../../shared'
 
 @Component({
   selector: 'ang-thumbnail',
-  templateUrl: 'thumbnail.component.html',
+  templateUrl: 'thumbnail.component.pug',
   styles: [`
     .card-icon-group {
         height: 19px;
@@ -18,29 +17,20 @@ import { AssetService } from './../../shared';
 })
 export class ThumbnailComponent implements OnInit {
   @Input()
-  private thumbnail: Thumbnail;
+  private thumbnail: Thumbnail
 
   @Input()
-  private largeThmbView: boolean;
+  private largeThmbView: boolean
 
   @Input()
-  private reorderMode: boolean;
+  private reorderMode: boolean
 
   @Input()
-  private editMode: boolean;
+  private editMode: boolean
 
   private constraints: any = {}
   private collectionType: number = 0
-
-  private collectionTypeMap: any = {
-    0: { name: '', alt: '' },
-    1: { name: "artstor-asset", alt: "Artstor Digital Library" },
-    2: { name: "institution-asset", alt: "Institution Collections" },
-    3: { name: "personal-asset", alt: "Private Collections" },
-    4: { name: "institution-asset", alt: "Institution Collections" },
-    5: { name: "ssc-asset", alt: "Shared Shelf Commons" },
-    6: { name: "personal-asset", alt: "Private Collections" }
-  }
+  private collectionTypeHandler: CollectionTypeHandler = new CollectionTypeHandler()
 
   constructor(
     private _assets: AssetService,
@@ -82,5 +72,10 @@ export class ThumbnailComponent implements OnInit {
        // matches on IAP String, return 1 for true, 0 for false
       return assetId.match(/IAP/) ? 1 : 0
     }
+  }
+
+  // wrapper function for getting the collection type
+  getCollectionType(): { name: string, alt: string } {
+    return this.collectionTypeHandler.getCollectionType(this.collectionType ? this.collectionType : this.thumbnail.collectionType, this.thumbnail['contributinginstitutionid'])
   }
 }

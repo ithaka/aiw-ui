@@ -13,7 +13,7 @@ declare let google
 
 @Component({
   selector: 'footer',
-  templateUrl: './footer.component.html',
+  templateUrl: './footer.component.pug',
   styleUrls: [ './footer.component.scss' ],
 })
 export class Footer {
@@ -22,14 +22,14 @@ export class Footer {
   private currentYear
   private user: any = {}
   private links: string[]
-  
+
   // TypeScript public modifiers
-  constructor( 
+  constructor(
     private location: Location,
     private _app: AppConfig,
     private _router: Router,
     private _auth: AuthService
-  ) { 
+  ) {
     // Get version number
     this.appVersion = appVersion
     this.links = this._app.config.footerLinks
@@ -38,9 +38,9 @@ export class Footer {
     this.currentYear = new Date().getFullYear()
   }
 
-  
+
   ngOnInit() {
-    
+
     this.subscriptions.push(
       this._router.events.subscribe(e => {
         if (e instanceof NavigationEnd) {
@@ -62,7 +62,7 @@ export class Footer {
         )
       }
     }, 1000)
-    
+
   }
 
   private logout(): void {

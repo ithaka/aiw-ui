@@ -1,8 +1,8 @@
 import { BehaviorSubject, Observable } from 'rxjs/Rx'
 import { SearchQueryUtil } from './search-query';
 
-fdescribe('SearchQueryUtil', () => {
-    let queryUtil: SearchQueryUtil 
+describe('SearchQueryUtil', () => {
+    let queryUtil: SearchQueryUtil
 
     beforeEach(() => {
         queryUtil = new SearchQueryUtil()

@@ -7,7 +7,7 @@ import { AssetService } from './../../shared';
 @Component({
   selector: 'ang-edit-personal-collection',
   styleUrls: [ 'edit-personal-collection.component.scss' ],
-  templateUrl: 'edit-personal-collection.component.html'
+  templateUrl: 'edit-personal-collection.component.pug'
 })
 export class EditPersonalCollectionModal implements OnInit, OnDestroy {
   @Output() closeModal: EventEmitter<any> = new EventEmitter();
@@ -34,9 +34,9 @@ export class EditPersonalCollectionModal implements OnInit, OnDestroy {
       material: [null],
       description: [null],
       subject: [null]
-    })      
+    })
   }
-  
+
 
   ngOnInit() {
     // console.log(this.colId);
@@ -52,7 +52,7 @@ export class EditPersonalCollectionModal implements OnInit, OnDestroy {
   private loadPCThumbnails(): void{
     this._assets.getCollectionThumbs(this.colId)
       .then((res) => {
-          this.pcColThumbs = res.thumbnails;
+          this.pcColThumbs = res['thumbnails'];
           for(let thmb of this.pcColThumbs){
             thmb.metaData = JSON.parse(thmb.jsonListSt);
             this.formatMetadata(thmb);
@@ -81,7 +81,7 @@ export class EditPersonalCollectionModal implements OnInit, OnDestroy {
 
   private editAssetMeta(asset: any): void{
     this.selectedAsset = asset;
-    
+
     this.editAssetMetaForm.controls['creator'].setValue(this.selectedAsset['formattedMetaArray']['creator']);
     this.editAssetMetaForm.controls['title'].setValue(this.selectedAsset['formattedMetaArray']['title']);
     this.editAssetMetaForm.controls['work_type'].setValue(this.selectedAsset['formattedMetaArray']['work_type']);

@@ -20,17 +20,19 @@ import { AppConfig } from '../app.service';
 
 export class BrowsePage implements OnInit, OnDestroy {
 
-  private _storage: Locker;
-  private subscriptions: Subscription[] = [];
-  private institution: any = {};
+  private _storage: Locker
+  private subscriptions: Subscription[] = []
+  private institution: any = {}
 
-  colMenuArray = [];
+  colMenuArray = []
 
-  private userPCallowed: string;
-  private userTypeId: any;
-  private selectedColMenuId: string = '1';
+  private userPCallowed: string
+  private userTypeId: any
+  private selectedColMenuId: string = '1'
 
-  private browseOpts: any = {};
+  private browseOpts: any = {}
+
+  private pcEnabled: boolean
 
   // TypeScript public modifiers
   constructor(
@@ -58,7 +60,15 @@ export class BrowsePage implements OnInit, OnDestroy {
       })
     );
 
-
+    // Subscribe to User object updates
+    this.subscriptions.push(
+      this._auth.currentUser.subscribe(
+        (userObj) => {
+          this.pcEnabled = userObj.pcEnabled
+        },
+        (err) => { console.error(err) }
+      )
+    )
 
     if( this.browseOpts.artstorCol ){
         this.colMenuArray.push( { label: 'Artstor Digital Library', id: '1', link: 'library' } );
@@ -76,11 +86,10 @@ export class BrowsePage implements OnInit, OnDestroy {
     }
 
     if( this.browseOpts.openCol ){
-        this.colMenuArray.push( { label: 'Open Collections', id: '3', link: 'commons' } );
+        this.colMenuArray.push( { label: 'Public Collections', id: '3', link: 'commons' } );
     }
 
-    this.userPCallowed = this._auth.getUser().userPCAllowed;
-    if((this.userPCallowed == '1') && this.browseOpts.myCol){
+    if(this.pcEnabled && this.browseOpts.myCol){
         var obj = {
             label : 'My Collections',
             id: '4',

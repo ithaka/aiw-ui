@@ -45,8 +45,6 @@
     padding: 15px !important;
 
     &  button.close {
-        height: 30px;
-        width:30px;
         cursor: pointer;
 
         &:hover, &:active, &:focus{
@@ -76,7 +74,7 @@
 .modal-header {
 	padding: 2px 16px;
     background: #fff;
-    border: none; 
+    border: none;
 }
 
 .modal-body {

@@ -1,7 +1,7 @@
 import { Subscription } from 'rxjs/Rx';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
-import { Angulartics2 } from 'angulartics2/dist';
+import { Angulartics2 } from 'angulartics2';
 
 // Project dependencies
 import { SearchQueryUtil } from './search-query';
@@ -12,7 +12,7 @@ import { AppConfig } from '../../app.service';
 
 @Component({
   selector: 'ang-search-modal',
-  templateUrl: 'search-modal.component.html',
+  templateUrl: 'search-modal.component.pug',
   styleUrls: [ 'search-modal.component.scss' ]
 })
 export class SearchModal implements OnInit {
@@ -69,9 +69,10 @@ export class SearchModal implements OnInit {
   private filterSelections: any[] = []
   private subscriptions: Subscription[] = []
   private showPrivateCollections = false
+  private showCollectionType: boolean = false;
 
   // Filters
-  private availableFilters: any[] = []
+  private availableFilters: FacetGroup[] = []
 
   // Search query trasnformation logic is abstracted to a utility
   private queryUtil: SearchQueryUtil = new SearchQueryUtil()
@@ -99,6 +100,7 @@ export class SearchModal implements OnInit {
     this.advanceQueries.push(Object.assign({}, this.advQueryTemplate));
     this.advanceQueries.push(Object.assign({}, this.advQueryTemplate));
     this.showPrivateCollections = this._appConfig.config.browseOptions.myCol;
+    this.showCollectionType = _appConfig.config.advSearch.showCollectionTypeFacet
   }
 
   ngOnInit() {
@@ -118,26 +120,84 @@ export class SearchModal implements OnInit {
     this._assetSearch.getFacets().take(1)
       .subscribe(data => {
 
-        // Process through "facets"
+        // Process through "facets" & construct the availableFilters array, based on the defined interfaces, from facets response
         for (let facetKey in data['facets']) {
           const facet = data['facets'][facetKey]
 
-          // Prune any facets not available to the user (ex. Private Collections on SAHARA)
-          for (let i = facet.values.length - 1; i >= 0; i--){
-            if (!this.showPrivateCollections && facet.values[i].name.match(/3|6/)) { // NOTE: 3 & 6 are Private Collections names
-              facet.values.splice(i, 1)
-            }
-          }
+          if ((facet.name === 'collectiontypes' && this.showCollectionType) || facet.name !== 'collectiontypes') {
+            // Construct Facet Group
+            let facetGroup: FacetGroup = {} as FacetGroup
+            facetGroup.name = facet.name
+            facetGroup.values = []
 
-          this.availableFilters.push(facet)
+            // Prune any facets not available to the user (ex. Private Collections on SAHARA)
+            for (let i = facet.values.length - 1; i >= 0; i--){
+              if (!this.showPrivateCollections && facet.values[i].name.match(/3|6/)) { // NOTE: 3 & 6 are Private Collections names
+                facet.values.splice(i, 1)
+              }
+              else{
+                // Push filter objects to Facet Group 'values' Array
+                let facetObject: FacetObject = {} as FacetObject
+                facetObject.checked = false
+                facetObject.name = facet.name === 'collectiontypes' ? this.filterNameMap['collectiontypes'][facet.values[i].name] : facet.values[i].name
+                facetObject.name += ' (' + facet.values[i].count + ')'
+                facetObject.value = facet.values[i].name
+                facetObject.children = []
+                facetGroup.values.push( facetObject )
+              }
+            }
+            facetGroup.values.reverse()
+            this.availableFilters.push(facetGroup)
+          }
         }
-        // Process "hierarchies2"
+
+        // Process "hierarchies2" & create Geo Facet Group & push it to available filters
         for (let hierFacet in data['hierarchies2']) {
           let topObj = this._assetFilters.generateHierFacets(data['hierarchies2'][hierFacet].children, 'geography')
-          this.availableFilters.push({ name: "geography", values: topObj })
+
+          let geoFacetGroup: FacetGroup = {} as FacetGroup
+          geoFacetGroup.name = 'geography'
+          geoFacetGroup.values = []
+
+          for(let geoObj of topObj){
+            let geoFacetObj: FacetObject = {} as FacetObject
+            geoFacetObj.checked = false
+            geoFacetObj.name = geoObj.name + ' (' + geoObj.count + ')'
+            geoFacetObj.value = geoObj.efq
+            geoFacetObj.children = []
+
+            for(let child of geoObj.children){
+              let geoChildFacetObj: FacetObject = {} as FacetObject
+              geoChildFacetObj.checked = false
+              geoChildFacetObj.name = child.name + ' (' + child.count + ')'
+              geoChildFacetObj.value = child.efq
+              geoFacetObj.children.push( geoChildFacetObj )
+            }
+            geoFacetGroup.values.push( geoFacetObj )
+          }
+          this.availableFilters.push( geoFacetGroup )
         }
+
+        // Fetch institutional collections and add them as children of institutional collectiontype filter
+        this._assets.getCollectionsList( 'institution' )
+          .toPromise()
+          .then((data) => {
+            if (data && data['Collections']) {
+              for(let collection of data['Collections']){
+                let colFacetObj: FacetObject = {} as FacetObject
+                colFacetObj.checked = false
+                colFacetObj.name = collection.collectionname
+                colFacetObj.value = collection.collectionid
+                this.availableFilters[1].values[2].children.push( colFacetObj )
+              }
+            } else {
+              throw new Error("no Collections returned in data")
+            }
+          })
+
         this.loadingFilters = false
       })
+
   }
 
   /**
@@ -145,14 +205,14 @@ export class SearchModal implements OnInit {
    */
   private legacyLoadFilters() : void {
     // Get GeoTree and Classifications
-    this._assets.loadTermList( )
-          .then((res) => {
-              console.log(res);
-              this.termsList = res;
-          })
-          .catch(function(err) {
-              console.error('Unable to load Terms List.');
-          });
+    // this._assets.loadTermList( )
+    //       .then((res) => {
+    //           console.log(res);
+    //           this.termsList = res;
+    //       })
+    //       .catch(function(err) {
+    //           console.error('Unable to load Terms List.');
+    //       });
 
     this.subscriptions.push(
       this._auth.getInstitution().subscribe(
@@ -179,12 +239,13 @@ export class SearchModal implements OnInit {
                 collections: data['Collections']
               });
           },
-          (error) => {
-            console.log(error);
+          (err) => {
+            if (err && err.status != 401 && err.status != 403) {
+              console.error(err)
+            }
           }
         )
     )
-
   }
 
   private close(): void {
@@ -290,6 +351,9 @@ export class SearchModal implements OnInit {
       return;
     }
 
+    // Clear existing filters set outside this modal
+    this._filters.clearApplied(true)
+
     let advQuery
     let filterParams
     let currentParams = this.route.snapshot.params
@@ -313,19 +377,53 @@ export class SearchModal implements OnInit {
     this.close();
   }
 
-  private toggleFilter(value: string, group: string): void {
-    let filter = {
-      'group': group,
-      'value' : value
-    };
-    let objIndex = this.arrayObjectIndexOf(this.filterSelections, filter);
+  private toggleFilter( filterObj: FacetObject, parentFilterObj?: FacetObject): void{
+    // Toggle filter checked state
+    filterObj.checked = !filterObj.checked
 
-    if (objIndex < 0) {
-      this.filterSelections.push(filter);
-    } else {
-      this.filterSelections.splice(objIndex, 1);
+    if( parentFilterObj ) { // If a child node is clicked, check the parent node if all children are checked else do otherwise
+      let parentChecked: boolean = true
+      for( let child of parentFilterObj.children ){
+        if( !child.checked ){
+          parentChecked = false
+          break
+        }
+      }
+      parentFilterObj.checked = parentChecked
+    } else if( filterObj.children ) { // If a parent node is clicked and it has children make sure they are all checked/unchecked accordingly
+      for( let child of filterObj.children ){
+        child.checked = filterObj.checked
+      }
     }
-    this.validateForm();
+    this.generateSelectedFilters()
+  }
+
+  private generateSelectedFilters(): void {
+    let selectedFiltersArray: Array<SelectedFilter> = []
+    // Traverse the availableFilters and check which ones are checked and push them to selectedFilters Array
+    for( let filterGroup of this.availableFilters ) {
+      for( let filter of filterGroup.values ){
+        // If the parent node is checked just push the selected filter object for the parent itself, no need to check the children
+        if( filter.checked ){
+          let selectedFilterObject: SelectedFilter = {} as SelectedFilter
+          selectedFilterObject.group = filterGroup.name
+          selectedFilterObject.value = filter.value
+          selectedFiltersArray.push( selectedFilterObject )
+        }
+        else if ( filter.children ){ // If the parent is not checked then check the children and push thier selected filter objects individually
+          for( let child of filter.children ){
+            if( child.checked ){
+              let selectedFilterObject: SelectedFilter = {} as SelectedFilter
+              selectedFilterObject.group = filterGroup.name === 'collectiontypes' ? 'collections' : filterGroup.name
+              selectedFilterObject.value = child.value
+              selectedFiltersArray.push( selectedFilterObject )
+            }
+          }
+        }
+      }
+    }
+    this.filterSelections = selectedFiltersArray
+    this.validateForm()
   }
 
   // Gives the index of an object in an array
@@ -342,4 +440,19 @@ export class SearchModal implements OnInit {
   private openHelp(): void {
     window.open('http://support.artstor.org/?article=advanced-search','Advanced Search Support','width=800,height=600');
   }
+}
+
+interface FacetObject {
+  name: string,
+  value: string,
+  checked: boolean
+  children?: Array<FacetObject>
+}
+interface FacetGroup {
+  name: string,
+  values: Array<FacetObject>
+}
+interface SelectedFilter {
+  group: string,
+  value: string
 }
