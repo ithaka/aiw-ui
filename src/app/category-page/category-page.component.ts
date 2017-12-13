@@ -120,9 +120,9 @@ export class CategoryPage implements OnInit, OnDestroy {
       let options = { withCredentials: true };
 
       // Can be removed once region specific ids are no longer used
-      if (catId.indexOf('103') == 1) {
-        catId = catId.slice(1)
-      }
+      // if (catId.indexOf('103') == 1) {
+      //   catId = catId.slice(1)
+      // }
 
       return this.http
           .get(this._auth.getUrl() + '/categorydesc/' + catId, options)
@@ -137,9 +137,9 @@ export class CategoryPage implements OnInit, OnDestroy {
     let options = { withCredentials: true };
 
     // Can be removed once region specific ids are no longer used
-    if (catId.indexOf('103') == 1) {
-      catId = catId.slice(1)
-    }
+    // if (catId.indexOf('103') == 1) {
+    //   catId = catId.slice(1)
+    // }
 
     return this.http
         .get(this._auth.getUrl() + '/categories/' + catId, options)
