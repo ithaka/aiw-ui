@@ -310,10 +310,6 @@ export class AssetService {
         return encodedString.replace(/%20/g, '+');
     };
 
-    private extractData(res: Response) {
-      return res.json() || {}
-    }
-
     public loadPrevAssetPage(): void{
         let currentParamsObj: Params = Object.assign({}, this.currentLoadedParams);
 
@@ -480,24 +476,15 @@ export class AssetService {
      * Gets metadata for a single asset by ID
      * @param assetId: string Asset or object ID
      */
-    public getById(assetId: string) {
-      // Get Asset via SOLR
-        // let options = new RequestOptions({
-        //     withCredentials: true
-        // });
-        // let query = {
-        //     "content_types": [
-        //         "art"
-        //     ],
-        //     "query": 'id:' + assetId
-        // };
-        // return this.http.post('//search-service.apps.test.cirrostratus.org/browse/', query, options)
-        //     .toPromise()
-        //     .then(this.extractData)
+    public getById(assetId: string, groupId ?: string) {
+        let url = this._auth.getUrl(true) + '/metadata/' + assetId
+        if (groupId) {
+            // Groups service modifies certain access rights for shared assets
+            url = this._auth.getUrl() + '/v1/group/' + groupId + '/secure/metadata/' + assetId
+        }
         return this.http
-          .get(`${this._auth.getUrl()}/v1/metadata?object_ids=${assetId}`, this.defaultOptions)
-          .toPromise()
-          .then(this.extractData)
+            .get(url, this.defaultOptions)
+            .toPromise()
     }
 
     /**
