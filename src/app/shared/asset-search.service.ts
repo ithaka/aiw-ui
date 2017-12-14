@@ -68,10 +68,11 @@ export class AssetSearchService {
       "facet_fields" :
       [
         // Limited to 16 classifications (based on the fact that Artstor has 16 classifications)
+        // + 1 to allow for empty string values crowding out the top 16 
         {
           "name" : "artclassification_str",
           "mincount" : 1,
-          "limit" : 16
+          "limit" : 17
         }
         // {
         //   "name" : "artcollectiontitle_str",
