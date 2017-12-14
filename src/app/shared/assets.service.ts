@@ -310,13 +310,10 @@ export class AssetService {
         return encodedString.replace(/%20/g, '+');
     };
 
-<<<<<<< HEAD
     private extractData(res: Response) {
       return res.json() || {}
     }
 
-=======
->>>>>>> origin/master
     public loadPrevAssetPage(): void{
         let currentParamsObj: Params = Object.assign({}, this.currentLoadedParams);
 
@@ -483,7 +480,6 @@ export class AssetService {
      * Gets metadata for a single asset by ID
      * @param assetId: string Asset or object ID
      */
-<<<<<<< HEAD
     public getById(assetId: string) {
       // Get Asset via SOLR
         // let options = new RequestOptions({
@@ -502,17 +498,6 @@ export class AssetService {
           .get(`${this._auth.getUrl()}/v1/metadata?object_ids=${assetId}`, this.defaultOptions)
           .toPromise()
           .then(this.extractData)
-=======
-    public getById(assetId: string, groupId ?: string) {
-        let url = this._auth.getUrl(true) + '/metadata/' + assetId
-        if (groupId) {
-            // Groups service modifies certain access rights for shared assets
-            url = this._auth.getUrl() + '/v1/group/' + groupId + '/secure/metadata/' + assetId
-        }
-        return this.http
-            .get(url, this.defaultOptions)
-            .toPromise()
->>>>>>> origin/master
     }
 
     /**
