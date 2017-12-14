@@ -432,5 +432,13 @@
         "HEADING": "Add your images to the SAHARA collection"
       }
     }
+  },
+  "SESSION_EXPIRE_MODAL": {
+    "HEADING": "Session Expired",
+    "MESSAGE": "Your session has expired and you were logged out",
+    "BUTTONS": {
+      "STAY_LOGGED_OUT": "Stay Logged Out",
+      "LOG_IN": "Log In"
+    }
   }
 }
