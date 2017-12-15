@@ -3,6 +3,7 @@ import { Router } from '@angular/router'
 import { Location } from '@angular/common'
 import { Angulartics2 } from 'angulartics2'
 import { CompleterService, LocalData } from 'ng2-completer'
+import { BehaviorSubject, Observable, Subscription } from 'rxjs/Rx';
 
 import { AppConfig } from '../app.service'
 import { AuthService, User, AssetService } from './../shared'
@@ -44,6 +45,14 @@ export class Login {
   private loginLoading = false
 
   private dataService: LocalData
+
+  /** 
+   * Observable for autocomplete list of institutions
+   * - We apply additional sorting 
+   */
+  private instListSubject: BehaviorSubject<any[]> = new BehaviorSubject([])
+  private instListObs: Observable<any[]> = this.instListSubject.asObservable()
+
 
   // TypeScript public modifiers
   constructor(
@@ -89,7 +98,7 @@ export class Login {
       .then((data) => {
         if (data['items']) {
           this.loginInstitutions = data['items'];
-          this.dataService = this._completer.local(data['items'], 'name', 'name')
+          this.dataService = this._completer.local(this.instListObs, 'name', 'name');          
         }
       })
       .catch((error) => {
@@ -98,6 +107,22 @@ export class Login {
 
     this._analytics.setPageValues('login', '')
   } // OnInit
+
+
+
+  private sortInstitution(event) : void {
+    // sort array by string input
+    let term = this.loginInstName
+    let termReg = new RegExp(term, 'i')
+    
+    let filtered = this.loginInstitutions.filter( inst => {
+      return inst && inst.name.search(termReg) > -1
+    })
+    filtered = filtered.sort((a, b) => {
+        return a.name.search(termReg) - b.name.search(termReg)
+    });
+    this.instListSubject.next(filtered)
+  }
 
   loadForUser(data: any) {
     if (data && data.user) {
