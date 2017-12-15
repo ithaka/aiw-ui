@@ -1,15 +1,16 @@
 /**
  * New Search Service
  */
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http'
+import { Injectable } from '@angular/core'
 
 // Project Dependencies
 import {
   AssetFiltersService
-} from '../asset-filters/asset-filters.service';
-import { AuthService } from './';
-import { AppConfig } from '../app.service';
+} from '../asset-filters/asset-filters.service'
+import { AuthService } from './'
+import { AppConfig } from '../app.service'
+import { Observable } from 'rxjs/Observable'
 
 @Injectable()
 export class AssetSearchService {
@@ -44,10 +45,6 @@ export class AssetSearchService {
    * Uses wildcard search to retrieve filters
    */
   public getFacets() {
-
-    let options = {
-      withCredentials: true
-    };
 
     let query = {
       "limit": 0,
@@ -104,7 +101,7 @@ export class AssetSearchService {
 
     query["filter_query"] = filterArray
 
-    return this.http.post(this._auth.getSearchUrl(), query, options)
+    return this.http.post(this._auth.getSearchUrl(), query, { withCredentials: true })
   }
 
   /**
@@ -115,10 +112,7 @@ export class AssetSearchService {
    * @param dateFacet     Object with the dateFacet values
    * @returns       Returns an object with the properties: thumbnails, count, altKey, classificationFacets, geographyFacets, minDate, maxDate, collTypeFacets, dateFacets
    */
-  public search(urlParams: any, keyword: string, sortIndex) {
-    let options = {
-      withCredentials: true
-    };
+  public search(urlParams: any, keyword: string, sortIndex): Observable<SearchResponse> {
     let startIndex = ((urlParams.page - 1) * urlParams.size) + 1;
     let thumbSize = 0;
     let type = 6;
@@ -144,7 +138,7 @@ export class AssetSearchService {
       filterArray.push("contributinginstitutionid:" + institutionFilters[i])
     }
 
-    let pageSize = urlParams.size
+    let pageSize: number = urlParams.size
     const START_INDEX: number = (urlParams.page - 1) * pageSize,
       MAX_RESULTS_COUNT: number = 1500
 
@@ -157,7 +151,7 @@ export class AssetSearchService {
       }
     }
 
-    let query = {
+    let query: any = { // haven't added the SearchRequest type yet because I don't know how to deal with the TS error I'm getting - can't even see the whole thing
       "limit": pageSize,
       "start": START_INDEX,
       "content_types": [
@@ -261,7 +255,7 @@ export class AssetSearchService {
       }
     }
 
-    query["filter_query"] = filterArray
+    query.filter_query = filterArray
 
     if (dateFacet.modified) {
       earliestDate = dateFacet.earliest.date;
@@ -293,6 +287,85 @@ export class AssetSearchService {
     }
 
 
-    return this.http.post(this._auth.getSearchUrl(), query, options);
+    return this.http.post<SearchResponse>(
+      this._auth.getSearchUrl(),
+      query,
+      { withCredentials: true }
+    )
   }
+}
+
+export interface SearchResponse {
+  facets: {
+    name: string
+    values: {
+      count: number
+      efq: string
+      fq: string
+      name: string
+    }[]
+  }[]
+  bad_request: boolean
+  requestId: string
+  results: {
+    agent: string // creator of the piece
+    artstorid: string // the correct id to reference when searching for artstor assets
+    clusterid: string // id of the cluser the asset exists in, if any
+    collections: string[] // array of collections this asset exists under
+    collectiontypenameid: string[]
+    collectiontypes: number[] // all of the collection types this asset fits
+    contributinginstitutionid: number // which institution added the asset
+    date: string // a string entered by the user, not an actually useful date other than display
+    doi: string // ex: "10.2307/artstor.16515779"
+    frequentlygroupedwith: string[] // array of other asset ids this image is grouped with
+    iap: boolean // do we support Images for Academic Publishing for the asset
+    // id: string // the id used by the SOLR cluster, which is not reliable, therefore it's left commented out
+    media: string // this one is weird because it's a json object encoded as a string
+    name: string // the asset's name
+    partofcluster: boolean
+    tokens: string[]
+    type: string // going to be "art" for all artstor assets
+    updatedon: Date // date the asset was last updated in Forum
+    workid: string // id of the work record in Forum that the asset belongs to
+    year: number // the year the asset is marked as being created
+    yearbegin: number // beginning of date range the asset is thought to have been created in
+    yearend: number // end of date range the asset is thought to have been created in
+  }[]
+  total: number // total number of assets returned
+  hierarchies2: HierarchicalFilter
+}
+
+interface HierarchicalFilter {
+  [key: string]: {
+    children: HierarchicalFilter
+    element: {
+      count: number
+      depth: string
+      efq: string
+      label: string[]
+      selected: boolean
+    }
+  }
+}
+
+interface SearchRequest {
+  limit: number
+  start: number
+  content_types: string[]
+  query: string
+  facet_fields: {
+    name: string
+    mincount: number
+    limit: number
+  }[]
+  hier_facet_fields2: {
+    field: string
+    hierarchy: string
+    look_ahead: number
+    look_behind: number
+    d_look_ahead: number
+  }[]
+  filter_query: string[]
+  sortorder: string
+  sort: string
 }

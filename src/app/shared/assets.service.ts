@@ -14,7 +14,7 @@ import { AuthService } from './auth.service';
 import { GroupService } from './group.service';
 import { AssetFiltersService } from './../asset-filters/asset-filters.service';
 import { ToolboxService } from './toolbox.service';
-import { AssetSearchService } from './asset-search.service';
+import { AssetSearchService, SearchResponse } from './asset-search.service';
 
 import { ImageGroup, Thumbnail } from '.';
 
@@ -844,34 +844,36 @@ export class AssetService {
     private loadSearch(term: string): void {
         // Don't wait for previous subscription anymore
         if (this.searchSubscription && this.searchSubscription.hasOwnProperty('unsubscribe')) {
-            this.searchSubscription.unsubscribe();
+            this.searchSubscription.unsubscribe()
         }
 
          // Solr Search
         this.searchSubscription = this._assetSearch.search(this.urlParams, term, this.activeSort.index)
             .subscribe(
                 (res) => {
-                    let data = res;
-                    data['facets'].forEach( (facet, index) => {
-                        this._filters.setAvailable(facet.name, facet.values);
+                    let data = res
+                    data.facets.forEach( (facet, index) => {
+                        this._filters.setAvailable(facet.name, facet.values)
                     })
 
-                    if (data['hierarchies2'] && data['hierarchies2']['artstor-geography']){
-                        this._filters.generateHierFacets( data['hierarchies2']['artstor-geography'].children, 'geography' );
+                    if (data.hierarchies2 && data.hierarchies2['artstor-geography']){
+                        this._filters.generateHierFacets( data.hierarchies2['artstor-geography'].children, 'geography' )
                     }
                     else{
-                        this._filters.generateHierFacets( [], 'geography' );
+                        this._filters.generateHierFacets( [], 'geography' )
                     }
+
+                    // count and thumbnails are relics from the previous search logic and should be removed eventaully
                     // Transform data from SOLR queries
-                    if (data['results']) {
-                        data['thumbnails'] = data['results'];
+                    if (data.results) {
+                        data['thumbnails'] = data.results
                     }
-                    data['count'] = data['total']
+                    data['count'] = data.total
                     // Set the allResults object
-                    this.updateLocalResults(data);
+                    this.updateLocalResults(data)
             }, (error) => {
                     console.error(error)
-                    this.allResultsSource.error(error);
+                    this.allResultsSource.error(error)
             });
     }
 
