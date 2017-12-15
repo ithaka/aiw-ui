@@ -49,36 +49,33 @@ export class AssetPPPage implements OnInit, OnDestroy {
   // Load Image Group Assets
   loadAsset(): void{
     let self = this;
-    this._assets.getById( this.assetId )
-    .then((res) => {
-
-        if(res['objectId']){
-          for(let data of res['metaData']){
-            let fieldExists = false;
-
-            for(let metaData of self.metaArray){
-              if(metaData['fieldName'] === data.fieldName){
-                metaData['fieldValue'].push(data.fieldValue);
-                fieldExists = true;
-                break;
-              }
+    this._assets.getMetadata( this.assetId )
+    .subscribe((res) => {
+        let assetData = res && res.metadata && res.metadata[0] ? res.metadata[0]['metadata_json'] : []
+        for(let data of assetData){
+          let fieldExists = false;
+          
+          for(let metaData of self.metaArray){
+            if(metaData['fieldName'] === data.fieldName){
+              metaData['fieldValue'].push(data.fieldValue);
+              fieldExists = true;
+              break;
             }
-
-            if(!fieldExists){
-              let fieldObj = {
-                'fieldName': data.fieldName,
-                'fieldValue': []
-              }
-              fieldObj['fieldValue'].push(data.fieldValue);
-              self.metaArray.push(fieldObj);
-            }
-
           }
 
-          self.asset = res;
+          if(!fieldExists){
+            let fieldObj = {
+              'fieldName': data.fieldName,
+              'fieldValue': []
+            }
+            fieldObj['fieldValue'].push(data.fieldValue);
+            self.metaArray.push(fieldObj);
+          }
+
         }
-    })
-    .catch(function(err) {
+        
+        self.asset = res.metadata[0];
+    },(err) => {
         console.error('Unable to load asset metadata.');
     });
   }
