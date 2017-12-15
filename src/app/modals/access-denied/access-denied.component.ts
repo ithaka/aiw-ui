@@ -37,7 +37,7 @@ export class AccessDeniedModal implements OnInit {
           }
         },
         (err) => {
-          console.log("Nav failed to load Institution information", err)
+          console.error("Failed to load Institution information", err)
         }
       )
   }
