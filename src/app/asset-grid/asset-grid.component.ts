@@ -9,8 +9,9 @@ import {
   AuthService,
   AssetSearchService,
   AssetService,
-  ImageGroupService,
   GroupService,
+  ImageGroupService,
+  LogService,
   Thumbnail
 } from '../shared'
 import { AssetFiltersService } from '../asset-filters/asset-filters.service'
@@ -118,14 +119,16 @@ export class AssetGrid implements OnInit, OnDestroy {
   // TypeScript public modifiers
   constructor(
     private _assets: AssetService,
-    private _ig: ImageGroupService,
-    private _groups: GroupService,
+    private _auth: AuthService,
     private _filters: AssetFiltersService,
-    private _auth:AuthService,
+    private _groups: GroupService,
+    private _ig: ImageGroupService,
+    private _log: LogService,
+    private _renderer: Renderer,
     private _router: Router,
-    private route: ActivatedRoute,
+    private _search: AssetSearchService,
     private locker: Locker,
-    private _renderer: Renderer
+    private route: ActivatedRoute
   ) {
       this._storage = locker.useDriver(Locker.DRIVERS.LOCAL);
   }
@@ -398,7 +401,15 @@ export class AssetGrid implements OnInit, OnDestroy {
       this._storage.set('totalAssets', this.totalAssets ? this.totalAssets : 1)
       this._storage.set('prevRouteParams', this.route.snapshot.url)
 
-      // log the event connecting the search to the asset clicked
+      // only log the event if the asset came from search, and therefore has an artstorid
+      if (asset['artstorid']) {
+        // log the event connecting the search to the asset clicked
+        this._log.log({
+          eventType: 'artstor_item_view',
+          referring_requestid: this._search.latestSearchRequestId,
+          item_id: asset['artstorid']
+        })
+      }
 
       // Let template routerLink navigate at this point
     }
