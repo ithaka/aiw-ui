@@ -192,6 +192,7 @@ export class AssetGrid implements OnInit, OnDestroy {
     this.subscriptions.push(
       this._assets.allResults.subscribe(
         (allResults) => {
+          console.log(allResults)
           // Prep display of search term next to results count
           this.formatSearchTerm(this.searchTerm)
           // Update results array
@@ -234,8 +235,8 @@ export class AssetGrid implements OnInit, OnDestroy {
           }
 
           const MAX_RESULTS_COUNT: number = 1500
-          if('count' in allResults){
-            this.totalAssets = allResults.count
+          if('total' in allResults){
+            this.totalAssets = allResults.total
             let total = this.hasMaxAssetLimit && this.totalAssets > MAX_RESULTS_COUNT ? MAX_RESULTS_COUNT : this.totalAssets
             this.pagination.totalPages = Math.floor((total + this.pagination.size - 1) / this.pagination.size)
             this.isLoading = false
@@ -376,22 +377,25 @@ export class AssetGrid implements OnInit, OnDestroy {
    * Edit Mode : Selects / deselects an asset - Inserts / Removes the asset object to the selectedAssets array
    * @param asset object to be selected / deselected
    */
-  private selectAsset(asset: any): void{
+  private selectAsset(asset: Thumbnail): void{
     if(this.editMode){
-      let index: number = this.isSelectedAsset(asset);
+      let index: number = this.isSelectedAsset(asset)
       if(index > -1){
-        this.selectedAssets.splice(index, 1);
-        this._assets.setSelectedAssets(this.selectedAssets);
+        this.selectedAssets.splice(index, 1)
+        this._assets.setSelectedAssets(this.selectedAssets)
       }
       else{
-        this.selectedAssets.push(asset);
-        this._assets.setSelectedAssets(this.selectedAssets);
+        this.selectedAssets.push(asset)
+        this._assets.setSelectedAssets(this.selectedAssets)
       }
-      this.selectedAssets.length ? this.editMode = true : this.editMode = false;
+      this.selectedAssets.length ? this.editMode = true : this.editMode = false
     }
     else{
-      this._storage.set('totalAssets', this.totalAssets ? this.totalAssets : 1);
-      this._storage.set('prevRouteParams', this.route.snapshot.url);
+      this._storage.set('totalAssets', this.totalAssets ? this.totalAssets : 1)
+      this._storage.set('prevRouteParams', this.route.snapshot.url)
+
+      // log the event connecting the search to the asset clicked
+
       // Let template routerLink navigate at this point
     }
   }
