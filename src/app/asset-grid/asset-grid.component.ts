@@ -1,17 +1,22 @@
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, Renderer } from '@angular/core';
-import { ActivatedRoute, NavigationStart, Params, Router } from '@angular/router';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, Renderer } from '@angular/core'
+import { ActivatedRoute, NavigationStart, Params, Router } from '@angular/router'
 
-import { BehaviorSubject } from 'rxjs/Rx';
-import { Subscription }   from 'rxjs/Subscription';
-import { Locker } from 'angular2-locker';
+import { BehaviorSubject } from 'rxjs/Rx'
+import { Subscription }   from 'rxjs/Subscription'
+import { Locker } from 'angular2-locker'
 
-import { AssetService, ImageGroupService, GroupService, Thumbnail } from '../shared';
-import { AssetFiltersService } from '../asset-filters/asset-filters.service';
-import { AuthService } from '../shared/auth.service';
+import {
+  AuthService,
+  AssetSearchService,
+  AssetService,
+  ImageGroupService,
+  GroupService,
+  Thumbnail
+} from '../shared'
+import { AssetFiltersService } from '../asset-filters/asset-filters.service'
 
 @Component({
   selector: 'ang-asset-grid',
-  providers: [],
   styleUrls: [ './asset-grid.component.scss' ],
   templateUrl: './asset-grid.component.pug'
 })
@@ -192,7 +197,6 @@ export class AssetGrid implements OnInit, OnDestroy {
     this.subscriptions.push(
       this._assets.allResults.subscribe(
         (allResults) => {
-          console.log(allResults)
           // Prep display of search term next to results count
           this.formatSearchTerm(this.searchTerm)
           // Update results array
