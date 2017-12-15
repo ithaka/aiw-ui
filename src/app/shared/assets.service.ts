@@ -473,21 +473,6 @@ export class AssetService {
     }
 
     /**
-     * Gets metadata for a single asset by ID
-     * @param assetId: string Asset or object ID
-     */
-    public getById(assetId: string, groupId ?: string) {
-        let url = this._auth.getUrl(true) + '/metadata/' + assetId
-        if (groupId) {
-            // Groups service modifies certain access rights for shared assets
-            url = this._auth.getUrl() + '/v1/group/' + groupId + '/secure/metadata/' + assetId
-        }
-        return this.http
-            .get(url, this.defaultOptions)
-            .toPromise()
-    }
-
-    /**
      * DEPRECATED
      * Generates Image URL
      * @param assetId: string Asset or object ID
@@ -562,10 +547,10 @@ export class AssetService {
     }
 
     /**
-     * Get IIIF tilesource for an Asset
+     * Get metadata for an Asset
      * @param assetId string Asset or object ID
      */
-    public getImageSource(assetId: string, groupId?: string): Observable<MetadataRes> {
+    public getMetadata(assetId: string, groupId?: string): Observable<MetadataRes> {
         let url = this._auth.getUrl() + '/v1/metadata?object_ids=' + assetId
         if (groupId){
             // Groups service modifies certain access rights for shared assets
