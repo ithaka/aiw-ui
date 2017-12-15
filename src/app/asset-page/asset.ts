@@ -210,17 +210,17 @@ export class Asset {
     } else {
         data = data.metadata[0]
     }
+    // Set array of asset metadata fields to Asset, and format
+    if (data['metadata_json']) {
+        this.metaDataArray =  data['metadata_json']
+        this.formatMetadata();
+    }
     // Set Title
     this.title = this.metaDataArray.find(elem => elem.fieldName.match(/^\s*Title/)).fieldValue || 'Untitled'
     // Set Creator, Date, and Description
     this.setCreatorDate();
     // Set File Properties to Asset
     this.filePropertiesArray = data.fileProperties || [];
-    // Set array of asset metadata fields to Asset, and format
-    if (data['metadata_json']) {
-        this.metaDataArray =  data['metadata_json']
-        this.formatMetadata();
-    }
     // Set media data to Asset
     if (data['media']) {
         let media = JSON.parse(data['media'])
@@ -269,7 +269,7 @@ export class Asset {
    * - Finds the asset Type id
   */
   private loadMediaMetaData(): void {
-      this._assets.getImageSource( this.id, this.groupId )
+      this._assets.getMetadata( this.id, this.groupId )
         .subscribe((data) => {
             this.setAssetProperties(data)
         }, (err) => {
