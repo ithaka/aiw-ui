@@ -223,11 +223,8 @@ export class Asset {
     // Set File Properties to Asset
     this.filePropertiesArray = data.fileProperties || [];
     // Set media data to Asset
-    if (data['media']) {
-        let media = JSON.parse(data['media'])
-        this.imgURL = media['thumbnailSizeOnePath']
-        this.typeId = media['adlObjectType']
-    }
+    this.imgURL = data['thumbnail_url']
+    this.typeId = data['object_type_id']
     // Set Collection Name
     this.collectionName = this.getCollectionName()
     // Set Download information
