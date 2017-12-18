@@ -437,7 +437,7 @@
       }
     }
   },
-  "GENERIC_ERROR" : "There was an error while loading. Please verify your network connection and try again. If you continue to have a problem, please <a href='mailto:userservices@artstor.org' class='link'>contact support</a>."
+  "GENERIC_ERROR" : "There was an error while loading. Please verify your network connection and try again. If you continue to have a problem, please <a href='mailto:userservices@artstor.org' class='link'>contact support</a>.",
   "SESSION_EXPIRE_MODAL": {
     "HEADING": "Session Expired",
     "MESSAGE": "Your session has expired and you were logged out",
