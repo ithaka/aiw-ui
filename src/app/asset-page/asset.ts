@@ -216,7 +216,8 @@ export class Asset {
         this.formatMetadata();
     }
     // Set Title
-    this.title = this.metaDataArray.find(elem => elem.fieldName.match(/^\s*Title/)).fieldValue || 'Untitled'
+    // - Optional: We can come through the metadata array to find the title: let title = this.metaDataArray.find(elem => elem.fieldName.match(/^\s*Title/))
+    this.title = data.title && data.title !== "" ? data.title : 'Untitled'
     // Set Creator, Date, and Description
     this.setCreatorDate();
     // Set File Properties to Asset
