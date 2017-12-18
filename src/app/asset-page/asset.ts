@@ -96,7 +96,7 @@ export class Asset {
         this.title = assetObj.tombstone[0]
         // Unpack metadata_json from /resolve call
         if (assetObj.metadata && assetObj.metadata[0] && assetObj.metadata[0]['metadata_json']) {
-            this.metaDataArray = JSON.parse(assetObj.metadata[0]['metadata_json'])
+            this.metaDataArray = assetObj.metadata[0]['metadata_json']
         } else {
             this.metaDataArray = [{
                     fieldName : 'Title',
@@ -111,10 +111,12 @@ export class Asset {
                 }
             ]
         }
+        if (assetObj.metadata) {
+            this.collectionId = assetObj.metadata.collection_id
+            this.imgURL = assetObj.metadata.thumbnail_url
+            this.typeId = assetObj.metadata.object_type_id
+        }
         this.formatMetadata()
-        this.collectionId = assetObj.collectionId
-        this.imgURL = assetObj.largeImgUrl
-        this.typeId = assetObj.objectTypeId
         // Already has image source info attached
         setTimeout(() => {
             this.setAssetProperties(assetObj)
