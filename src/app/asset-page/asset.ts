@@ -274,7 +274,10 @@ export class Asset {
             this.setAssetProperties(data)
         }, (err) => {
             // If it's an access denied error, throw that to the subscribers
-            this._assets.unAuthorizedAsset.next( true )
+            if (err.status === 403) {
+                this._assets.unAuthorizedAsset.next( true )
+            }
+
             this.dataLoadedSource.error( err )
         });
   }
