@@ -96,7 +96,7 @@ export class Asset {
         this.title = assetObj.tombstone[0]
         // Unpack metadata_json from /resolve call
         if (assetObj.metadata && assetObj.metadata[0] && assetObj.metadata[0]['metadata_json']) {
-            this.metaDataArray = JSON.parse(assetObj.metadata[0]['metadata_json'])
+            this.metaDataArray = assetObj.metadata[0]['metadata_json']
         } else {
             this.metaDataArray = [{
                     fieldName : 'Title',
@@ -111,10 +111,12 @@ export class Asset {
                 }
             ]
         }
+        if (assetObj.metadata) {
+            this.collectionId = assetObj.metadata.collection_id
+            this.imgURL = assetObj.metadata.thumbnail_url
+            this.typeId = assetObj.metadata.object_type_id
+        }
         this.formatMetadata()
-        this.collectionId = assetObj.collectionId
-        this.imgURL = assetObj.largeImgUrl
-        this.typeId = assetObj.objectTypeId
         // Already has image source info attached
         setTimeout(() => {
             this.setAssetProperties(assetObj)
@@ -216,17 +218,15 @@ export class Asset {
         this.formatMetadata();
     }
     // Set Title
-    this.title = this.metaDataArray.find(elem => elem.fieldName.match(/^\s*Title/)).fieldValue || 'Untitled'
+    // - Optional: We can come through the metadata array to find the title: let title = this.metaDataArray.find(elem => elem.fieldName.match(/^\s*Title/))
+    this.title = data.title && data.title !== "" ? data.title : 'Untitled'
     // Set Creator, Date, and Description
     this.setCreatorDate();
     // Set File Properties to Asset
     this.filePropertiesArray = data.fileProperties || [];
     // Set media data to Asset
-    if (data['media']) {
-        let media = JSON.parse(data['media'])
-        this.imgURL = media['thumbnailSizeOnePath']
-        this.typeId = media['adlObjectType']
-    }
+    this.imgURL = data['thumbnail_url']
+    this.typeId = data['object_type_id']
     // Set Collection Name
     this.collectionName = this.getCollectionName()
     // Set Download information

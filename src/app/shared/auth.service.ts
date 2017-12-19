@@ -72,6 +72,9 @@ export class AuthService implements CanActivate {
     pcUpload : false
   }
 
+  // A 401 on the /institution call will cause a loop, which we can prevent by only attempting once for a given user
+  private institutionRefreshedForUser: string
+
   constructor(
     private _router:Router,
     // private _login: LoginService,
@@ -396,7 +399,8 @@ export class AuthService implements CanActivate {
     // Set analytics object
     this._analytics.setUserInstitution(user.institutionId ? user.institutionId : '')
     // only do these things if the user is ip auth'd or logged in
-    if (user.status) {
+    if (user.status && this.institutionRefreshedForUser != user.username) {
+      this.institutionRefreshedForUser = user.username
       // Refresh institution object
       this.refreshUserInstitution()
     }
