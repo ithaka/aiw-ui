@@ -127,7 +127,8 @@ const APP_PROVIDERS = [
   LegacyRouteResolver,
   Title,
   TitleService,
-  { provide: UrlSerializer, useClass: CustomUrlSerializer }
+  { provide: UrlSerializer, useClass: CustomUrlSerializer },
+  { provide: HTTP_INTERCEPTORS, useClass: UnauthorizedInterceptor, multi: true }
   // { provide: RouteReuseStrategy, useClass: CustomReuseStrategy } // to be implemented later
 ];
 
