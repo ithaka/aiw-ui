@@ -47,7 +47,11 @@ export class AssetService {
     public unAuthorizedAsset: Subject<boolean> = new Subject();
 
     // Pagination value observable
-    private paginationValue: any = {
+    private paginationValue: {
+        totalPages: number,
+        size: number,
+        page: number
+    } = {
         totalPages: 1,
         size: 24,
         page: 1
@@ -72,7 +76,7 @@ export class AssetService {
 
     private searchSubscription: Subscription;
 
-     public filterFields = [
+     public filterFields: { name: string, value: string }[] = [
         {name: "Creator", value: "100" },
         {name: "Title", value: "101" },
         {name: "Location", value: "102" },
@@ -418,7 +422,7 @@ export class AssetService {
                 } else if (params.hasOwnProperty("term")) {
                     this.loadSearch(params.term);
                 } else {
-                    console.log("Don't know what to query!");
+                    console.error("Don't know what to query!");
                 }
             });
     }
