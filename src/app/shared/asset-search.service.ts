@@ -232,8 +232,13 @@ export class AssetSearchService {
           if( (filters[i].filterGroup === 'collectiontypes') && (filterValue === 2 || filterValue === 4) ){
             filterArray.push('contributinginstitutionid:\"' + this._auth.getUser().institutionId.toString() + '\"')
           }
-          // Push filter queries into the array
-          filterArray.push(filters[i].filterGroup + ':\"' + filterValue + '\"')
+          else {
+            // Push filter queries into the array
+            let filterValueArray = filterValue.trim().split('|')
+            for( let filterVal of filterValueArray){
+              filterArray.push(filters[i].filterGroup + ':\"' + filterVal + '\"')
+            }
+          }
         }
       }
     }

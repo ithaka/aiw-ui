@@ -34,8 +34,6 @@ export class Asset {
       center?: any
   } = {}
 
-  private metadataLoaded = false;
-  private imageSourceLoaded = false;
   private dataLoadedSource = new BehaviorSubject<boolean>(false);
   public isDataLoaded = this.dataLoadedSource.asObservable();
 
@@ -93,14 +91,12 @@ export class Asset {
     this.groupId = groupId
     this._assets = _assets
     this._auth = _auth
-//   constructor(asset_id: string, _assets ?: AssetService, _auth ?: AuthService, assetObj ?: any) {
 
     if (assetObj) {
-        this.metadataLoaded = true
         this.title = assetObj.tombstone[0]
         // Unpack metadata_json from /resolve call
         if (assetObj.metadata && assetObj.metadata[0] && assetObj.metadata[0]['metadata_json']) {
-            this.metaDataArray = JSON.parse(assetObj.metadata[0]['metadata_json'])
+            this.metaDataArray = assetObj.metadata[0]['metadata_json']
         } else {
             this.metaDataArray = [{
                     fieldName : 'Title',
@@ -115,18 +111,18 @@ export class Asset {
                 }
             ]
         }
+        if (assetObj.metadata) {
+            this.collectionId = assetObj.metadata.collection_id
+            this.imgURL = assetObj.metadata.thumbnail_url
+            this.typeId = assetObj.metadata.object_type_id
+        }
         this.formatMetadata()
-        this.collectionId = assetObj.collectionId
-        this.imgURL = assetObj.largeImgUrl
-        this.typeId = assetObj.objectTypeId
-        this.metadataLoaded = true
         // Already has image source info attached
         setTimeout(() => {
-            this.useImageSourceRes(assetObj)
+            this.setAssetProperties(assetObj)
         },500)
-
     } else {
-        this.loadAssetMetaData();
+        this.loadMediaMetaData();
     }
   }
 
@@ -136,76 +132,6 @@ export class Asset {
   public typeName(): string {
       return this.objectTypeNames[this.typeId];
   }
-
-  /** Get asset metadata via service call */
-  private loadAssetMetaData(): void {
-
-      this._assets.getById(this.id, this.groupId)
-          .then((res) => {
-              let asset
-              if (res['results']) {
-                // As returned from Solr
-                asset = res['results'][0]
-              } else {
-                // As returned from legacy search
-                asset = res
-              }
-
-              // New Search
-              if(asset.artstorid) {
-                this.loadMediaMetaData()
-
-                  for (let i =0; i < this.metadataFields.length; i++) {
-                      if (asset[this.metadataFields[i]][0]) {
-                        this.metaDataArray.push( { fieldName: this.metadataFields[i], fieldValue: asset[this.metadataFields[i]][0] } )
-                      }
-                  }
-                //   this.filePropertiesArray = asset.fileProperties;
-                  this.title = asset.arttitle[0] ? asset.arttitle[0] : 'Untitled';
-
-                  if (asset['media']) {
-                    let media = JSON.parse(asset['media'])
-                    this.imgURL = media['thumbnailSizeOnePath']
-                    this.typeId = media['adlObjectType']
-                  }
-
-                  this.setCreatorDate();
-                  this.collectionName = this.getCollectionName()
-
-                  this.metadataLoaded = true;
-                  this.dataLoadedSource.next(this.metadataLoaded && this.imageSourceLoaded);
-              }
-
-              // Old Search
-              else if(asset.objectId){
-                  this.loadMediaMetaData();
-                  this.metaDataArray = asset.metaData;
-                  this.formatMetadata();
-
-                  this.filePropertiesArray = asset.fileProperties;
-                  this.title = asset.title ? asset.title : 'Untitled';
-                  this.imgURL = asset.imageUrl;
-                  this.fileExt = asset.imageUrl ? asset.imageUrl.substr(asset.imageUrl.lastIndexOf('.') + 1) : ''
-
-                  this.downloadName = this.title.replace(/\./g,'-') + '.' + this.fileExt
-
-                  this.setCreatorDate();
-                  this.collectionName = this.getCollectionName()
-
-                  this.metadataLoaded = true;
-                  this.dataLoadedSource.next(this.metadataLoaded && this.imageSourceLoaded);
-              }
-          }, 
-          (err) => {
-            console.error(err)
-            if (err.status == 403) {
-                // User does not have access
-                this._assets.unAuthorizedAsset.next( true )
-                this.dataLoadedSource.error( err )
-            }
-         });
-  }
-
 
   private formatMetadata(){
     let metaArray = [];
@@ -228,7 +154,6 @@ export class Asset {
                 'fieldName': data.fieldName,
                 'fieldValue': []
             }
-
             // see Air-826 - sometimes the data has a link property, which can vary from fieldValue, but
             //  the institution actually wanted the fieldValue to be the same as the link... so that's what this does
             if (data.link) {
@@ -274,22 +199,40 @@ export class Asset {
       }
   }
 
-  private useImageSourceRes(data: any): void {
-    if (!data) {
-        throw new Error("No data returned from image source call!");
-    }
-
-    if (data.metadata && data.metadata[0]) {
+  /**
+   * Sets up the Asset object with needed properties
+   * - Behaves like a delayed constructor
+   * - Reports status via 'this.dataLoadedSource' observable
+   */
+  private setAssetProperties(data: any): void {
+    // Make sure we've received data that we expect from /metadata
+    if (!data || !data.metadata || !data.metadata[0]) {
+        this.dataLoadedSource.error({'message':'Unable to load metadata.'})
+        return
+    } else {
         data = data.metadata[0]
     }
-
-    if(data.downloadSize === '0,0' || data.download_size === '0,0'){
-        this.disableDownload = true;
+    // Set array of asset metadata fields to Asset, and format
+    if (data['metadata_json']) {
+        this.metaDataArray =  data['metadata_json']
+        this.formatMetadata();
     }
-    else{
-        this.disableDownload = false;
-    }
-
+    // Set Title
+    // - Optional: We can come through the metadata array to find the title: let title = this.metaDataArray.find(elem => elem.fieldName.match(/^\s*Title/))
+    this.title = data.title && data.title !== "" ? data.title : 'Untitled'
+    // Set Creator, Date, and Description
+    this.setCreatorDate();
+    // Set File Properties to Asset
+    this.filePropertiesArray = data.fileProperties || [];
+    // Set media data to Asset
+    this.imgURL = data['thumbnail_url']
+    this.typeId = data['object_type_id']
+    // Set Collection Name
+    this.collectionName = this.getCollectionName()
+    // Set Download information
+    this.downloadName = this.title.replace(/\./g,'-') + '.' + this.fileExt
+    let downloadSize = data.downloadSize || data.download_size || '1024,1024'
+    this.disableDownload =  downloadSize === '0,0'
     // set SSID and fileName
     this.SSID = data.SSID
     if (data.fileProperties) {
@@ -297,33 +240,26 @@ export class Asset {
             return !!obj.fileName
         }).fileName
     }
-
+    // Set Object Type ID
     this.typeId = data.object_type_id || data.objectTypeId;
-
-    let downloadSize = data.download_size || '1024,1024'
+    // Build Download Link
+    // - Download link is differs based on typeIds
     let imageServer = data.imageServer || 'http://imgserver.artstor.net/'
-
-    /** This determines how to build the downloadLink, which is different for different typeIds */
     if (this.typeId === 20 || this.typeId === 21 || this.typeId === 22 || this.typeId === 23) { //all of the typeIds for documents
         this.downloadLink = [this._auth.getMediaUrl(), this.id, this.typeId].join("/");
     } else if (imageServer && data.image_url) { //this is a general fallback, but should work specifically for images and video thumbnails
         let url = imageServer + data.image_url + "?cell=" + downloadSize + "&rgnn=0,0,1,1&cvt=JPEG";
         this.downloadLink = this._auth.getHostname() + "/api/download?imgid=" + this.id + "&url=" + encodeURIComponent(url);
     }
-
     // Save the Tile Source for IIIF
     let imgPath
-
     if (data && data.metadata && data.metadata[0] && data.metadata[0]['image_url']) {
         imgPath = '/' + data.metadata[0]['image_url']
     } else {
         imgPath = '/' + data['image_url'].substring(0, data['image_url'].lastIndexOf('.fpx') + 4)
     }
-
     this.tileSource = this._auth.getIIIFUrl() + encodeURIComponent(imgPath) + '/info.json'
-
-    this.imageSourceLoaded = true;
-    this.dataLoadedSource.next(this.metadataLoaded && this.imageSourceLoaded);
+    this.dataLoadedSource.next(true);
   }
 
   /**
@@ -333,14 +269,16 @@ export class Asset {
    * - Finds the asset Type id
   */
   private loadMediaMetaData(): void {
-      this._assets.getImageSource( this.id, this.groupId )
+      this._assets.getMetadata( this.id, this.groupId )
         .subscribe((data) => {
-            this.useImageSourceRes(data)
-        }, (error) => {
-            // if it's an access denied error, throw that to the subscribers
-            if (error.status === 403) {
-                this.dataLoadedSource.error(error)
+            this.setAssetProperties(data)
+        }, (err) => {
+            // If it's an access denied error, throw that to the subscribers
+            if (err.status === 403) {
+                this._assets.unAuthorizedAsset.next( true )
             }
+
+            this.dataLoadedSource.error( err )
         });
   }
 }
