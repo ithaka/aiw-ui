@@ -72,6 +72,9 @@ export class AuthService implements CanActivate {
     pcUpload : false
   }
 
+  // A 401 on the /institution call will cause a loop, which we can prevent by only attempting once for a given user
+  private institutionRefreshedForUser: string
+
   constructor(
     private _router:Router,
     // private _login: LoginService,
@@ -219,8 +222,8 @@ export class AuthService implements CanActivate {
     this.refreshUserSession()
   }
 
-  private refreshUserSession(): void {
-    this.getUserInfo().take(1).toPromise()
+  public refreshUserSession(triggerSessionExpModal?: boolean): void {
+    this.getUserInfo(triggerSessionExpModal).take(1).toPromise()
       .then(res => {
         console.info('Access Token refreshed <3')
       })
@@ -395,8 +398,12 @@ export class AuthService implements CanActivate {
     this.userSource.next(user)
     // Set analytics object
     this._analytics.setUserInstitution(user.institutionId ? user.institutionId : '')
-    // Refresh institution object
-    this.refreshUserInstitution()
+    // only do these things if the user is ip auth'd or logged in
+    if (user.status && this.institutionRefreshedForUser != user.username) {
+      this.institutionRefreshedForUser = user.username
+      // Refresh institution object
+      this.refreshUserInstitution()
+    }
   }
 
   /**
@@ -443,12 +450,12 @@ export class AuthService implements CanActivate {
    * Required by implementing CanActivate, and is called on routes which are protected by canActivate: [AuthService]
    */
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
-    let options = { headers: this.userInfoHeader, withCredentials: true };
+    let options = { headers: this.userInfoHeader, withCredentials: true }
     // If user object already exists, we're done here
     if (this.canUserAccess(this.getUser())) {
       return new Observable(observer => {
-          observer.next(true);
-      });
+          observer.next(true)
+      })
     }
 
     // If user object doesn't exist, try to get one!
@@ -458,10 +465,10 @@ export class AuthService implements CanActivate {
       .map(
         (data)  => {
           try {
-            let jsonData = data;
+            let jsonData = data
             if (jsonData['status'] === true) {
               // User is authorized - if you want to check ipAuth then you can tell on the individual route by user.isLoggedIn = false
-              let user = jsonData['user'];
+              let user = jsonData['user']
               user.status = jsonData['status']
               if (jsonData['isRememberMe'] || jsonData['remoteaccess']) {
                 user.isLoggedIn = true
@@ -475,12 +482,12 @@ export class AuthService implements CanActivate {
               }
             } else {
               // store the route so that we know where to put them after login!
-              this.store("stashedRoute", this.location.path(false));
-              return false;
+              this.store("stashedRoute", this.location.path(false))
+              return false
             }
           } catch (err) {
-            console.error(err);
-            return false;
+            console.error(err)
+            return false
           }
         }
       )
@@ -488,17 +495,17 @@ export class AuthService implements CanActivate {
           // CanActivate is not handling the Observable value properly,
           // ... so we do an extra redirect in here
           if (res === false) {
-            this._router.navigate(['/login']);
+            this._router.navigate(['/login'])
           }
-          observer.next(res);
+          observer.next(res)
         }, err => {
-          this._router.navigate(['/login']);
-          observer.next(false);
-      });
-    });
+          this._router.navigate(['/login'])
+          observer.next(false)
+      })
+    })
   }
 
-  public getUserInfo(): Observable<any> {
+  public getUserInfo(triggerSessionExpModal?: boolean): Observable<any> {
     let options = { headers: this.userInfoHeader, withCredentials: true };
 
     return this.http
@@ -506,17 +513,17 @@ export class AuthService implements CanActivate {
       .map(
         (res)  => {
           try {
-            let data = res;
+            let data = res
             // User has access!
             if (data['status'] === true) {
               // User is authorized - if you want to check ipAuth then you can tell on the individual route by user.isLoggedIn = false
-              let user = data['user'];
+              let user = data['user']
               user.status = data['status']
               if (data['isRememberMe'] || data['remoteaccess']) {
                 user.isLoggedIn = true
               }
               if (this.canUserAccess(user)) {
-                this.saveUser(user);
+                this.saveUser(user)
               } else {
                 this.saveUser({})
                 this._router.navigate(['/login'])
@@ -526,12 +533,11 @@ export class AuthService implements CanActivate {
             if (data['status'] === false) {
               // Clear user, and trigger router canActivate
               this.saveUser({})
-              // We should handle this by triggering "session expired" modal in CERTAIN cases
-              // this._router.navigate(['/login'])
+              triggerSessionExpModal && this.showUserInactiveModal.next(true)
             }
-            return data;
+            return data
           } catch (err) {
-            console.error(err);
+            console.error(err)
           }
         }
       )

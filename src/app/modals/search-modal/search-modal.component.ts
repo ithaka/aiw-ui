@@ -361,6 +361,14 @@ export class SearchModal implements OnInit {
     advQuery = this.queryUtil.generateSearchQuery(this.advanceQueries)
     filterParams = this.queryUtil.generateFilters(this.filterSelections, this.advanceSearchDate)
 
+    for (let key in filterParams) {
+      let filterValue = ''
+      for( let filter of filterParams[key]){
+        filterValue += filterValue ? '|' + filter : filter
+      }
+      filterParams[key] = filterValue
+    }
+
     // Track in Adobe Analytics
     this._analytics.directCall('advanced_search');
     this.angulartics.eventTrack.next({ action: "advSearch", properties: { category: "search", label: advQuery } })
