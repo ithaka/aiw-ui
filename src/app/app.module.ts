@@ -82,13 +82,21 @@ import {
   SessionExpireModal,
   RegisterJstorModal
 } from './modals';
-import { TitleService } from './shared/title.service'
 import { GeneralSearchComponent } from './browse-page/browse-groups/general-search.component'
 import { SkyBannerComponent } from './sky-banner/sky-banner.component'
 
 
 // Application wide providers
-import { AuthService, AssetService, GroupService, TypeIdPipe, ToolboxService, ImageGroupService } from './shared'
+import {
+  AuthService,
+  AssetService,
+  GroupService,
+  ImageGroupService,
+  LogService,
+  TitleService,
+  ToolboxService,
+  TypeIdPipe,
+} from './shared'
 import { AssetFiltersService } from './asset-filters/asset-filters.service'
 import { TagsService } from './browse-page/tags.service'
 import { CustomReuseStrategy } from './reuse-strategy'
@@ -110,6 +118,7 @@ const APP_PROVIDERS = [
   AssetSearchService,
   GroupService,
   AuthService,
+  LogService,
   ImageGroupService,
   AssetFiltersService,
   TagFiltersService,
