@@ -17,7 +17,7 @@ export class AssetSearchService {
 
   showCollectionType: boolean = false
 
-   public filterFields = [
+   public filterFields: { name: string, value: string }[] = [
     {name: "In any field", value: "*"},
     {name: "Creator", value: "artcreator" },
     {name: "Title", value: "arttitle" },
@@ -114,12 +114,12 @@ export class AssetSearchService {
    * @param dateFacet     Object with the dateFacet values
    * @returns       Returns an object with the properties: thumbnails, count, altKey, classificationFacets, geographyFacets, minDate, maxDate, collTypeFacets, dateFacets
    */
-  public search(urlParams: any, keyword: string, sortIndex): Observable<SearchResponse> {
-    let startIndex = ((urlParams.page - 1) * urlParams.size) + 1;
+  public search(options: SearchOptions, keyword: string, sortIndex): Observable<SearchResponse> {
+    let startIndex = ((options.page - 1) * options.size) + 1;
     let thumbSize = 0;
     let type = 6;
     let colTypeIds = '';
-    let collIds = encodeURIComponent(urlParams['coll']);
+    let collIds = encodeURIComponent(options['coll']);
     let classificationIds = '';
     let geographyIds = '';
 
@@ -140,8 +140,8 @@ export class AssetSearchService {
       filterArray.push("contributinginstitutionid:" + institutionFilters[i])
     }
 
-    let pageSize: number = urlParams.size
-    const START_INDEX: number = (urlParams.page - 1) * pageSize,
+    let pageSize: number = options.size
+    const START_INDEX: number = (options.page - 1) * pageSize,
       MAX_RESULTS_COUNT: number = 1500
 
     // final page may not contain exactly 24, 48, or 72 results, so get the exact ammount for the final page
@@ -149,7 +149,7 @@ export class AssetSearchService {
       pageSize = MAX_RESULTS_COUNT - START_INDEX - 1 // minus 1 because pagination for search starts at 0
       // Don't let pageSize drop below 0, Solr will actually return assets!
       if (pageSize < 0) {
-        pageSize = urlParams.size
+        pageSize = options.size
       }
     }
 
@@ -243,20 +243,20 @@ export class AssetSearchService {
       }
     }
 
-    if(urlParams.colId || urlParams['coll']){
+    if(options.colId || options['coll']){
       let colId = '';
-      if( urlParams['coll'] ){
-        colId = urlParams['coll'];
+      if( options['coll'] ){
+        colId = options['coll'];
       }
-      else if ( urlParams.colId ){
-        colId = urlParams.colId;
+      else if ( options.colId ){
+        colId = options.colId;
       }
 
       filterArray.push("collections:\"" + colId + "\"");
     }
 
-    if(urlParams.collections){
-      let colsArray = urlParams.collections.toString().trim().split(',');
+    if(options.collections){
+      let colsArray = options.collections.toString().trim().split(',');
       for(let col of colsArray){ // Push each collection id seperately in the filterArray
         filterArray.push("collections:\"" + col + "\"");
       }
@@ -304,6 +304,35 @@ export class AssetSearchService {
       return res
     })
   }
+
+  /**
+   * 
+   * @param assetId The id of the desired asset
+   */
+  public getAssetById(assetId: string): Observable<SearchAsset> {
+    let assetQuery: SearchRequest = {
+      query: assetId,
+      content_types: ["art"]
+    }
+
+    return this.http.post<SearchResponse>(
+      this._auth.getSearchUrl(),
+      assetQuery,
+      { withCredentials: true }
+    )
+    .map((res) => {
+      // search through results and make sure the id's match
+      let desiredAsset: SearchAsset = res.results.find((asset) => {
+        return asset.artstorid === assetId
+      })
+
+      if (desiredAsset) {
+        return desiredAsset
+      } else {
+        throw new Error('No results found for the requested id')
+      }
+    })
+  }
 }
 
 export interface SearchResponse {
@@ -318,32 +347,34 @@ export interface SearchResponse {
   }[]
   bad_request: boolean
   requestId: string
-  results: {
-    agent: string // creator of the piece
-    artstorid: string // the correct id to reference when searching for artstor assets
-    clusterid: string // id of the cluser the asset exists in, if any
-    collections: string[] // array of collections this asset exists under
-    collectiontypenameid: string[]
-    collectiontypes: number[] // all of the collection types this asset fits
-    contributinginstitutionid: number // which institution added the asset
-    date: string // a string entered by the user, not an actually useful date other than display
-    doi: string // ex: "10.2307/artstor.16515779"
-    frequentlygroupedwith: string[] // array of other asset ids this image is grouped with
-    iap: boolean // do we support Images for Academic Publishing for the asset
-    // id: string // the id used by the SOLR cluster, which is not reliable, therefore it's left commented out
-    media: string // this one is weird because it's a json object encoded as a string
-    name: string // the asset's name
-    partofcluster: boolean
-    tokens: string[]
-    type: string // going to be "art" for all artstor assets
-    updatedon: Date // date the asset was last updated in Forum
-    workid: string // id of the work record in Forum that the asset belongs to
-    year: number // the year the asset is marked as being created
-    yearbegin: number // beginning of date range the asset is thought to have been created in
-    yearend: number // end of date range the asset is thought to have been created in
-  }[]
+  results: SearchAsset[]
   total: number // total number of assets returned
   hierarchies2: HierarchicalFilter
+}
+
+interface SearchAsset {
+  agent: string // creator of the piece
+  artstorid: string // the correct id to reference when searching for artstor assets
+  clusterid: string // id of the cluser the asset exists in, if any
+  collections: string[] // array of collections this asset exists under
+  collectiontypenameid: string[]
+  collectiontypes: number[] // all of the collection types this asset fits
+  contributinginstitutionid: number // which institution added the asset
+  date: string // a string entered by the user, not an actually useful date other than display
+  doi: string // ex: "10.2307/artstor.16515779"
+  frequentlygroupedwith: string[] // array of other asset ids this image is grouped with
+  iap: boolean // do we support Images for Academic Publishing for the asset
+  // id: string // the id used by the SOLR cluster, which is not reliable, therefore it's left commented out
+  media: string // this one is weird because it's a json object encoded as a string
+  name: string // the asset's name
+  partofcluster: boolean
+  tokens: string[]
+  type: string // going to be "art" for all artstor assets
+  updatedon: Date // date the asset was last updated in Forum
+  workid: string // id of the work record in Forum that the asset belongs to
+  year: number // the year the asset is marked as being created
+  yearbegin: number // beginning of date range the asset is thought to have been created in
+  yearend: number // end of date range the asset is thought to have been created in
 }
 
 interface HierarchicalFilter {
@@ -360,23 +391,30 @@ interface HierarchicalFilter {
 }
 
 interface SearchRequest {
-  limit: number
-  start: number
+  limit?: number
+  start?: number
   content_types: string[]
   query: string
-  facet_fields: {
+  facet_fields?: {
     name: string
     mincount: number
     limit: number
   }[]
-  hier_facet_fields2: {
+  hier_facet_fields2?: {
     field: string
     hierarchy: string
     look_ahead: number
     look_behind: number
     d_look_ahead: number
   }[]
-  filter_query: string[]
-  sortorder: string
-  sort: string
+  filter_query?: string[]
+  sortorder?: string
+  sort?: string
+}
+
+interface SearchOptions {
+  page?: number
+  size?: number
+  colId?: string
+  collections?: string
 }
