@@ -363,10 +363,13 @@ export class SearchModal implements OnInit {
 
     for (let key in filterParams) {
       let filterValue = ''
-      for( let filter of filterParams[key]){
-        filterValue += filterValue ? '|' + filter : filter
+      if( filterParams[key] instanceof Array ){
+        let filterValue = ''
+        for( let filter of filterParams[key]){
+          filterValue += filterValue ? '|' + filter : filter
+        }
+        filterParams[key] = filterValue
       }
-      filterParams[key] = filterValue
     }
 
     // Track in Adobe Analytics
