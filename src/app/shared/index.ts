@@ -9,4 +9,5 @@ export * from './footer';
 export * from './datatypes';
 export * from './search/search.component';
 export * from './image-group.service';
+export * from './script.service';
 export * from './pagination/pagination.component';
