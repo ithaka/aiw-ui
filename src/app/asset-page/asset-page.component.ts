@@ -70,7 +70,11 @@ export class AssetPage implements OnInit, OnDestroy {
     // To keep a track of browse direction ('prev' / 'next') while browsing through assets, to load next asset if the current asset is un-authorized
     private browseAssetDirection: string = '' 
 
-    private pagination: any = {
+    private pagination: {
+        totalPages: number,
+        size: number,
+        page: number
+    } = {
       totalPages: 1,
       size: 24,
       page: 1
@@ -266,7 +270,7 @@ export class AssetPage implements OnInit, OnDestroy {
                     if (!this.hasExternalAccess) {
                         this.showAccessDeniedModal = true
                     }
-                } else {
+                } else if (err.status !== 401) {
                     // don't have a clue why this would happen, so just log it
                     console.error(err)
                 }
@@ -615,24 +619,15 @@ export class AssetPage implements OnInit, OnDestroy {
 
     /**
      * Used to set the collection type, which controls display of the collection type icon
+     *  Eventually we should get the entire asset like this, instead of through the metadata call
      * @param assetId the asset's id assigned by artstor
      */
     private setCollectionType(assetId: string): void {
-        this._search.search({}, assetId, null)
+        this._search.getAssetById(assetId)
             .take(1)
-            .subscribe((res) => {
-                if (res && res['results'] && res['results'].length > 0) {
-                    let currentAssetId: string = this.assets[0].artstorid || this.assets[0]['objectId'] // couldn't trust the 'this.assetIdProperty' variable
-
-                    // search through the resulting items and find the one with the matching id
-                    let asset = res['results'].find((item) => {
-                        return item.artstorid == currentAssetId
-                    })
-                    if (!asset) { return }
-
-                    let contributinginstitutionid: number = asset['contributinginstitutionid']
-                    this.collectionType = this.collectionTypeHandler.getCollectionType(asset['collectiontypes'][0], contributinginstitutionid)
-                }
+            .subscribe((asset) => {
+                let contributinginstitutionid: number = asset.contributinginstitutionid
+                this.collectionType = this.collectionTypeHandler.getCollectionType(asset.collectiontypes[0], contributinginstitutionid)
             }, (err) => {
                 console.error(err)
             })
