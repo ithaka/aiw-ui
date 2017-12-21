@@ -19,7 +19,7 @@ import { AppConfig } from "./app.service";
     '../sass/app.scss'
   ],
   template: `
-    <ang-sky-banner *ngIf="showSkyBanner" [textValue]="'SEARCH_ANNOUNCEMENT_BANNER.MESSAGE' | translate" (closeBanner)="showSkyBanner = false"></ang-sky-banner>
+    <ang-sky-banner *ngIf="showSkyBanner" [textValue]="'MEDIA_ISSUES_BANNER.MESSAGE' | translate" (closeBanner)="showSkyBanner = false"></ang-sky-banner>
     <a (click)="findMainContent()" (keydown.enter)="findMainContent()" tabindex="1" class="sr-only sr-only-focusable">Skip to main content</a>
     <nav-bar></nav-bar>
 
@@ -36,7 +36,7 @@ export class App {
   url = 'https://artstor.org/'
   title = 'Artstor'
 
-  private showSkyBanner: boolean = false
+  private showSkyBanner: boolean = true
 
   constructor(
     public _app: AppConfig,
