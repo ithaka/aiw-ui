@@ -1,17 +1,23 @@
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, Renderer } from '@angular/core';
-import { ActivatedRoute, NavigationStart, Params, Router } from '@angular/router';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, Renderer } from '@angular/core'
+import { ActivatedRoute, NavigationStart, Params, Router } from '@angular/router'
 
-import { BehaviorSubject } from 'rxjs/Rx';
-import { Subscription }   from 'rxjs/Subscription';
-import { Locker } from 'angular2-locker';
+import { BehaviorSubject } from 'rxjs/Rx'
+import { Subscription }   from 'rxjs/Subscription'
+import { Locker } from 'angular2-locker'
 
-import { AssetService, ImageGroupService, GroupService, Thumbnail } from '../shared';
-import { AssetFiltersService } from '../asset-filters/asset-filters.service';
-import { AuthService } from '../shared/auth.service';
+import {
+  AuthService,
+  AssetSearchService,
+  AssetService,
+  GroupService,
+  ImageGroupService,
+  LogService,
+  Thumbnail
+} from '../shared'
+import { AssetFiltersService } from '../asset-filters/asset-filters.service'
 
 @Component({
   selector: 'ang-asset-grid',
-  providers: [],
   styleUrls: [ './asset-grid.component.scss' ],
   templateUrl: './asset-grid.component.pug'
 })
@@ -113,14 +119,16 @@ export class AssetGrid implements OnInit, OnDestroy {
   // TypeScript public modifiers
   constructor(
     private _assets: AssetService,
-    private _ig: ImageGroupService,
-    private _groups: GroupService,
+    private _auth: AuthService,
     private _filters: AssetFiltersService,
-    private _auth:AuthService,
+    private _groups: GroupService,
+    private _ig: ImageGroupService,
+    private _log: LogService,
+    private _renderer: Renderer,
     private _router: Router,
-    private route: ActivatedRoute,
+    private _search: AssetSearchService,
     private locker: Locker,
-    private _renderer: Renderer
+    private route: ActivatedRoute
   ) {
       this._storage = locker.useDriver(Locker.DRIVERS.LOCAL);
   }
@@ -234,8 +242,8 @@ export class AssetGrid implements OnInit, OnDestroy {
           }
 
           const MAX_RESULTS_COUNT: number = 1500
-          if('count' in allResults){
-            this.totalAssets = allResults.count
+          if('total' in allResults){
+            this.totalAssets = allResults.total
             let total = this.hasMaxAssetLimit && this.totalAssets > MAX_RESULTS_COUNT ? MAX_RESULTS_COUNT : this.totalAssets
             this.pagination.totalPages = Math.floor((total + this.pagination.size - 1) / this.pagination.size)
             this.isLoading = false
@@ -376,22 +384,33 @@ export class AssetGrid implements OnInit, OnDestroy {
    * Edit Mode : Selects / deselects an asset - Inserts / Removes the asset object to the selectedAssets array
    * @param asset object to be selected / deselected
    */
-  private selectAsset(asset: any): void{
+  private selectAsset(asset: Thumbnail): void{
     if(this.editMode){
-      let index: number = this.isSelectedAsset(asset);
+      let index: number = this.isSelectedAsset(asset)
       if(index > -1){
-        this.selectedAssets.splice(index, 1);
-        this._assets.setSelectedAssets(this.selectedAssets);
+        this.selectedAssets.splice(index, 1)
+        this._assets.setSelectedAssets(this.selectedAssets)
       }
       else{
-        this.selectedAssets.push(asset);
-        this._assets.setSelectedAssets(this.selectedAssets);
+        this.selectedAssets.push(asset)
+        this._assets.setSelectedAssets(this.selectedAssets)
       }
-      this.selectedAssets.length ? this.editMode = true : this.editMode = false;
+      this.selectedAssets.length ? this.editMode = true : this.editMode = false
     }
     else{
-      this._storage.set('totalAssets', this.totalAssets ? this.totalAssets : 1);
-      this._storage.set('prevRouteParams', this.route.snapshot.url);
+      this._storage.set('totalAssets', this.totalAssets ? this.totalAssets : 1)
+      this._storage.set('prevRouteParams', this.route.snapshot.url)
+
+      // only log the event if the asset came from search, and therefore has an artstorid
+      if (asset['artstorid']) {
+        // log the event connecting the search to the asset clicked
+        this._log.log({
+          eventType: 'artstor_item_view',
+          referring_requestid: this._search.latestSearchRequestId,
+          item_id: asset['artstorid']
+        })
+      }
+
       // Let template routerLink navigate at this point
     }
   }

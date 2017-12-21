@@ -257,8 +257,8 @@
       "ARTSTOR": "<a href=\"http://artstor.org\" class=\"link\" target=\"_blank\">Artstor.org</a>",
       "SAHARA": "<a href=\"http://sah.org\" class=\"link\" target=\"_blank\">SAH.org</a>",
       "SARARA_CONTRIBUTE": "<a href=\"http://catalog.sharedshelf.artstor.org\" class=\"link\" target=\"_blank\">Contribute to SAHARA using Shared Shelf</a>",
-      "SAHARA_TERMS": "<a href=\"http://sahara.artstor.org/library/portals/SAHARA/terms-of-use.html\" class=\"link\" target=\"_blank\">Terms</a>",
-      "SAHARA_PRIVACY": "<a href=\"http://sahara.artstor.org/library/portals/SAHARA/privacy-policy.html\" class=\"link\" target=\"_blank\">Privacy</a>"
+      "SAHARA_TERMS": "<a href=\"http://artstor.org/sahara-terms\" class=\"link\" target=\"_blank\">Terms</a>",
+      "SAHARA_PRIVACY": "<a href=\"http://artstor.org/privacy-policy-sahara\" class=\"link\" target=\"_blank\">Privacy</a>"
     }
   },
   "ACCESS_HELP_MODAL": {
