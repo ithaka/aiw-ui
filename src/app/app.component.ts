@@ -38,6 +38,7 @@ export class App {
   title = 'Artstor'
 
   private showSkyBanner: boolean = false
+  private zendesk_loaded: boolean = false
 
   constructor(
     public _app: AppConfig,
@@ -68,14 +69,18 @@ export class App {
         if( event.url === '/login' ) {
           this._script.loadScript('zendesk')
             .then( data => {
-              if(data['status'] === 'already_loaded'){ // if the widget script has already been loaded then just show the widget
+              if(data['status'] === 'loaded'){
+                this.zendesk_loaded = true
+              } else if(data['status'] === 'already_loaded'){ // if the widget script has already been loaded then just show the widget
                 document.querySelector('.zopim')['style']['display'] = 'block';
               }
             })
             .catch( error => console.error(error) )
         } else {
-          document.querySelectorAll('.zopim')[0]['style']['display'] = 'none';
-          document.querySelectorAll('.zopim')[1]['style']['display'] = 'none';
+          if(this.zendesk_loaded) {
+            document.querySelectorAll('.zopim')[0]['style']['display'] = 'none';
+            document.querySelectorAll('.zopim')[1]['style']['display'] = 'none';
+          }
         }
       }
     });
