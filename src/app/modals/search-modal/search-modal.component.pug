@@ -57,7 +57,7 @@
                   .form-card.card
                     ul.list-group.list-group-flush.compact
                       li.list-group-item(*ngFor="let filter of filterGroup.values")
-                        label.custom-control.custom-checkbox
+                        label.custom-control.custom-checkbox(*ngIf="filter.name && filter.name.length > 0")
                           input.custom-control-input((click)="toggleFilter(filter)", type="checkbox", [checked]="filter.checked")
                           span.custom-control-indicator
                           span.custom-control-description
