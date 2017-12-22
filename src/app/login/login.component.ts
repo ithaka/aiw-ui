@@ -188,6 +188,7 @@ export class Login {
   }
 
   login(user: User) {
+    console.log('login called!')
     user.username = user.username.toLowerCase().trim()
     this.loginLoading = true;
     // Clear error messaging
