@@ -132,16 +132,17 @@ export class SearchModal implements OnInit {
 
             // Prune any facets not available to the user (ex. Private Collections on SAHARA)
             for (let i = facet.values.length - 1; i >= 0; i--){
-              if (!this.showPrivateCollections && facet.values[i].name.match(/3|6/)) { // NOTE: 3 & 6 are Private Collections names
+              let facetName = facet.values[i].name
+              if (!this.showPrivateCollections && facetName.match(/3|6/)) { // NOTE: 3 & 6 are Private Collections names
                 facet.values.splice(i, 1)
               }
-              else{
+              else if (facetName && facetName.length > 0){ // Some filters return empty strings, avoid those
                 // Push filter objects to Facet Group 'values' Array
                 let facetObject: FacetObject = {} as FacetObject
                 facetObject.checked = false
-                facetObject.name = facet.name === 'collectiontypes' ? this.filterNameMap['collectiontypes'][facet.values[i].name] : facet.values[i].name
-                facetObject.name += ' (' + facet.values[i].count + ')'
-                facetObject.value = facet.values[i].name
+                facetObject.name = facet.name === 'collectiontypes' ? this.filterNameMap['collectiontypes'][facetName] : facetName
+                facetObject.count = facet.values[i].count
+                facetObject.value = facetName
                 facetObject.children = []
                 facetGroup.values.push( facetObject )
               }
@@ -162,14 +163,16 @@ export class SearchModal implements OnInit {
           for(let geoObj of topObj){
             let geoFacetObj: FacetObject = {} as FacetObject
             geoFacetObj.checked = false
-            geoFacetObj.name = geoObj.name + ' (' + geoObj.count + ')'
+            geoFacetObj.name = geoObj.name
+            geoFacetObj.count = geoObj.count
             geoFacetObj.value = geoObj.efq
             geoFacetObj.children = []
 
             for(let child of geoObj.children){
               let geoChildFacetObj: FacetObject = {} as FacetObject
               geoChildFacetObj.checked = false
-              geoChildFacetObj.name = child.name + ' (' + child.count + ')'
+              geoChildFacetObj.name = child.name
+              geoChildFacetObj.count = child.count
               geoChildFacetObj.value = child.efq
               geoFacetObj.children.push( geoChildFacetObj )
             }
@@ -456,7 +459,8 @@ export class SearchModal implements OnInit {
 interface FacetObject {
   name: string,
   value: string,
-  checked: boolean
+  checked: boolean,
+  count: number,
   children?: Array<FacetObject>
 }
 interface FacetGroup {
