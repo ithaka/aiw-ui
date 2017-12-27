@@ -209,34 +209,34 @@ export class AssetSearchService {
       })
     }
 
-    for (var i = 0; i < filters.length; i++) { // Applied filters
+    // Loop through applied filters
+    for (var i = 0; i < filters.length; i++) {
+      let currentFilter = filters[i]
 
+      // for these values, do nothing
+      if ( ['collTypes', 'page', 'size', 'sort', 'startDate', 'endDate'].indexOf(currentFilter.filterGroup) > -1) {
 
-      if ( ['collTypes', 'page', 'size', 'sort', 'startDate', 'endDate'].indexOf(filters[i].filterGroup) > -1) {
-        // Collection Types and page info
-        // do nothing
-      } else if (filters[i].filterGroup == 'geography') {
-        for (let j = 0; j < filters[i].filterValue.length; j++) {
+      } else if (currentFilter.filterGroup == 'geography') {
+        for (let j = 0; j < currentFilter.filterValue.length; j++) {
           if (!query['hier_facet_fields2'][0]['efq']) {
-            query['hier_facet_fields2'][0]['efq'] = [filters[i].filterValue[j]]
+            query['hier_facet_fields2'][0]['efq'] = [currentFilter.filterValue[j]]
           } else {
-            query['hier_facet_fields2'][0]['efq'].push(filters[i].filterValue[j])
+            query['hier_facet_fields2'][0]['efq'].push(currentFilter.filterValue[j])
           }
         }
       } else {
-        for (let j = 0; j < filters[i].filterValue.length; j++) {
-          let filterValue = filters[i].filterValue[j]
+        for (let j = 0; j < currentFilter.filterValue.length; j++) {
+          let filterValue = currentFilter.filterValue[j]
           /**
            * In case of Inst. colType filter, also use the contributing inst. ID to filter
            */
-          if( (filters[i].filterGroup === 'collectiontypes') && (filterValue === 2 || filterValue === 4) ){
+          if( (currentFilter.filterGroup === 'collectiontypes') && (filterValue === 2 || filterValue === 4) ){
             filterArray.push('contributinginstitutionid:\"' + this._auth.getUser().institutionId.toString() + '\"')
-          }
-          else {
+          } else {
             // Push filter queries into the array
-            let filterValueArray = filterValue.trim().split('|')
+            let filterValueArray = filterValue.toString().trim().split('|')
             for( let filterVal of filterValueArray){
-              filterArray.push(filters[i].filterGroup + ':\"' + filterVal + '\"')
+              filterArray.push(currentFilter.filterGroup + ':\"' + filterVal + '\"')
             }
           }
         }
