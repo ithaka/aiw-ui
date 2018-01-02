@@ -243,6 +243,13 @@ export class AssetSearchService {
       }
     }
 
+    /**
+     * In case on clusters, search on clusterid
+     */
+    if(options['objectId']){
+      filterArray.push("clusterid:\"" + options['objectId'] + "\"")
+    }
+
     if(options.colId || options['coll']){
       let colId = '';
       if( options['coll'] ){
