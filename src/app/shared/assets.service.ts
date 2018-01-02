@@ -406,7 +406,9 @@ export class AssetService {
                     this.loadIgAssets(params.igId);
                 } else if (params.hasOwnProperty("objectId") && params["objectId"] !== "") {
                     //get clustered images thumbnails
-                    this.loadCluster(params.objectId);
+                    let searchTerm = params.term ? params.term : '';
+                    this.loadSearch(searchTerm);
+
                 } else if (params.hasOwnProperty("catId")  && params["catId"] !== "") {
                     //get collection thumbnails
                     this.loadCategory(params.catId);
