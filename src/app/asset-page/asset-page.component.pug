@@ -57,7 +57,7 @@
             button#downloadAssetDropdown.btn.btn-secondary(ngbDropdownToggle, (click)="genDownloadViewLink()", tabindex="2")
               | {{ 'ASSET_PAGE.BUTTONS.DOWNLOAD' | translate}}
               = " "
-            .dropdown-menu(aria-labelledby="dropdownBasic1")
+            .dropdown-menu(ngbDropdownMenu, aria-labelledby="dropdownBasic1")
               a#downloadAssetLink.dropdown-item(download,
                 [attr.href]="(downloadAuth() && !assets[0].disableDownload) ? assets[0].downloadLink : null",
                 (click)="(downloadAuth() && !assets[0].disableDownload) ? trackDownloadImage() : setDownloadImage()",
@@ -89,16 +89,25 @@
             input#generatedImgURL.form-control.form-control__copy(#copyUrlInput="", readonly, [ngModel]="generatedImgURL", (click)="copyUrlInput.select(); document.execCommand('copy', false, null)")
             .alert.alert-info(*ngIf="copyURLStatusMsg") {{ copyURLStatusMsg }}
         .row-hdr.pt-3(*ngIf="assets[0].metaDataArray.length > 0") {{ 'ASSET_PAGE.HEADER_LABELS.OBJ_DETAILS' | translate}}
+        .meta-block.collection-type-display(*ngIf="collectionType")
+          i.icon(class="icon-{{collectionType.name}}", [attr.title]="collectionType.alt")
+          | &nbsp; {{ collectionType.alt }}
         //- Old metadata loop
         .meta-block(*ngFor="let metadataObj of assets[0].formattedMetaArray")
           .label([attr.id]="cleanId(metadataObj.fieldName)") {{ metadataObj.fieldName }}
           div(*ngFor="let value of metadataObj.fieldValue")
             .value([innerHTML]="cleanFieldValue(value) | linkify")
-        .row-hdr.pt-1(*ngIf="assets[0].filePropertiesArray.length > 0") {{ 'ASSET_PAGE.HEADER_LABELS.FILE_PROPS' | translate}}
+        .row-hdr.pt-3(*ngIf="assets[0].filePropertiesArray.length > 0") {{ 'ASSET_PAGE.HEADER_LABELS.FILE_PROPS' | translate}}
         //- Loop through File Properties Array
-        .meta-block(*ngFor="let filePropObj of assets[0].filePropertiesArray")
-          .label([attr.id]="cleanId(filePropObj.fieldName)") {{ filePropObj.fieldName }}
-            .value([innerHTML]="filePropObj.fieldValue")
+        //- .meta-block(*ngFor="let filePropObj of assets[0].filePropertiesArray")
+        //-   .label([attr.id]="cleanId(filePropObj.fieldName)") {{ filePropObj.fieldName }}
+        //-     .value([innerHTML]="filePropObj.fieldValue")
+        .meta-block(*ngIf="assets[0].fileName")
+          .label#fileName {{ 'ASSET_PAGE.METADATA_LABELS.FILE_NAME' | translate }}
+            .value([innerHtml]="assets[0].fileName")
+        .meta-block(*ngIf="assets[0].SSID")
+          .label#ssid {{ 'ASSET_PAGE.METADATA_LABELS.SSID' | translate }}
+            .value([innerHtml]="assets[0].SSID")
         .text-left.pt-2
           a#buttonRequestIap.btn.btn-secondary.my-1(*ngIf="route.snapshot.queryParams.iap == 'true'", [attr.href]="'http://www.artstor.org/form/iap-request-form?name=' + assets[0].title + '&collectionName=' + assets[0].collectionName + '&id=' + assets[0].id + '&email=' + user.username", title="Request Image for Academic Publishing", tabindex="7", target="_blank") {{'ASSET_PAGE.BUTTONS.GET_IAP' | translate}}
           a#buttonReportAssetError.btn.btn-secondary.my-1([attr.href]="'http://www.artstor.org/form/report-error?collectionName=' + assets[0].collectionName + '&id=' + assets[0].id + '&email=' + user.username", title="Report an error", tabindex="7", target="_blank") {{'ASSET_PAGE.BUTTONS.REPORT_ERROR' | translate}}
@@ -137,5 +146,5 @@ ang-agree-modal(*ngIf="showAgreeModal", (closeModal)="showAgreeModal = false", [
 ang-login-req-modal(*ngIf="showLoginModal", (closeModal)="showLoginModal = false")
 ang-add-to-group(*ngIf="showAddModal", [selectedAssets]="[ assets[0] ]", [showCreateGroup]="true", [copySelectionStr]=" 'ADD_TO_GROUP_MODAL.FROM_ASSET' ", (createGroup)="showCreateGroupModal = true; showAddModal = false;", (closeModal)="showAddModal = false")
 ang-new-ig-modal(*ngIf="showCreateGroupModal", [selectedAssets]="[ assets[0] ]", [showAddToGroup]="true", (addToGroup)="showAddModal = true; showCreateGroupModal = false;", (closeModal)="showCreateGroupModal = false")
-ang-access-denied-modal(*ngIf="showAccessDeniedModal")
+ang-access-denied-modal(*ngIf="showAccessDeniedModal", [showSkipAsset]="isFullscreen && isAssetSkipable()", (skipAsset)="handleSkipAsset()", (exitFullScreen)="assetViewer.exitFullScreen(); assetViewer.setFullscreen(false)")
 ang-generate-citation(*ngIf="showGenerateCitation", [asset]="assets[0]", (closeModal)="showGenerateCitation = false")

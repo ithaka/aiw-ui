@@ -11,6 +11,8 @@ const commonConfig = require('./webpack.common.js'); // the settings that are co
  */
 const DefinePlugin = require('webpack/lib/DefinePlugin');
 const NamedModulesPlugin = require('webpack/lib/NamedModulesPlugin');
+const LoaderPlugin = require('webpack/lib/LoaderOptionsPlugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 /**
  * Webpack Constants
@@ -19,7 +21,8 @@ const ENV = process.env.ENV = process.env.NODE_ENV = 'development';
 const HOST = process.env.HOST || 'localhost';
 const PORT = process.env.PORT || 3000;
 const HMR = helpers.hasProcessFlag('hot');
-const METADATA = webpackMerge(commonConfig({env: ENV}).metadata, {
+const COMMON = commonConfig({env: ENV}).plugins.filter(plugin => plugin.options && plugin.options.metadata)[0].options.metadata;
+const METADATA = webpackMerge(COMMON, {
   host: HOST,
   port: PORT,
   ENV: ENV,
@@ -33,20 +36,6 @@ const METADATA = webpackMerge(commonConfig({env: ENV}).metadata, {
  */
 module.exports = function(options) {
   return webpackMerge(commonConfig({env: ENV}), {
-
-    /**
-     * Merged metadata from webpack.common.js for index.html
-     *
-     * See: (custom attribute)
-     */
-    metadata: METADATA,
-
-    /**
-     * Switch loaders to debug mode.
-     *
-     * See: http://webpack.github.io/docs/configuration.html#debug
-     */
-    debug: true,
 
     /**
      * Developer tool to enhance debugging
@@ -127,19 +116,30 @@ module.exports = function(options) {
          */
         new NamedModulesPlugin(),
 
-    ],
+      /**
+       * Static analysis linter for TypeScript advanced options configuration
+       * Description: An extensible linter for the TypeScript language.
+       *
+       * See: https://github.com/wbuchwalter/tslint-loader
+       */
 
-    /**
-     * Static analysis linter for TypeScript advanced options configuration
-     * Description: An extensible linter for the TypeScript language.
-     *
-     * See: https://github.com/wbuchwalter/tslint-loader
-     */
-    tslint: {
-      emitErrors: false,
-      failOnHint: false,
-      resourcePath: 'src'
-    },
+      new LoaderPlugin({
+        options: {
+          tslint: {
+            emitErrors: false,
+            failOnHint: false,
+            resourcePath: 'src'
+          }
+        },
+        debug: true
+      }),
+
+      new HtmlWebpackPlugin({
+        template: helpers.root("src/index.html"),
+        metadata: METADATA
+      })
+
+    ],
 
     /**
      * Webpack Development Server configuration
@@ -157,8 +157,7 @@ module.exports = function(options) {
         aggregateTimeout: 300,
         poll: 1000
       },
-      noInfo: true,
-      outputPath: helpers.root('dist')
+      noInfo: true
     },
 
     /*
@@ -168,12 +167,13 @@ module.exports = function(options) {
      * See: https://webpack.github.io/docs/configuration.html#node
      */
     node: {
-      global: 'window',
-      crypto: 'empty',
+      console: false,
+      global: true,
       process: true,
-      module: false,
-      clearImmediate: false,
-      setImmediate: false
+      __filename: "mock",
+      __dirname: "mock",
+      Buffer: true,
+      setImmediate: true
     }
 
   });

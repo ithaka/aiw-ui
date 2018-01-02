@@ -6,5 +6,6 @@
       .modal-body
         p.pt-3.main-content([innerHtml]="promptCopy | translate")
       .modal-footer
-        button.btn.btn-secondary([routerLink]="['/home']") Return to Home
-        button.btn.btn-primary(*ngIf="!isLoggedIn", [routerLink]="['/login']") Login
+        button.btn.btn-secondary((click)="exitFullScreen.emit()", [routerLink]="['/home']") Return to Home
+        button.btn.btn-primary(*ngIf="isLoggedIn && showSkipAsset", (click)="skipAsset.emit()") Skip Asset
+        button.btn.btn-primary(*ngIf="!isLoggedIn && !showSkipAsset", [routerLink]="['/login']") Login

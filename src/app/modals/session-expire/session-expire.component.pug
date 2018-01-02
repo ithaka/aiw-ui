@@ -4,8 +4,9 @@
       .modal-body
         .container-fluid
           .row.hdr
-            h1 Logged out
+            h1 {{ 'SESSION_EXPIRE_MODAL.HEADING' | translate }}
           .row.pt-3.main-content
-            | We logged you out after being idle for 90 minutes. Please login again.
+            | {{ 'SESSION_EXPIRE_MODAL.MESSAGE' | translate }}
       .modal-footer
-        button.btn.btn-primary((click)="closeModal.emit()") Okay
+        button.btn.btn-primary((click)="goToLogin()") {{ 'SESSION_EXPIRE_MODAL.BUTTONS.LOG_IN' | translate }}
+        button.btn.btn-secondary((click)="goToHome()") {{ 'SESSION_EXPIRE_MODAL.BUTTONS.STAY_LOGGED_OUT' | translate }}

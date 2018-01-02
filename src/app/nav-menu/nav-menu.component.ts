@@ -90,7 +90,7 @@ export class NavMenu implements OnInit, OnDestroy {
         (err) => { console.error(err) }
       )
     );
-    
+
     this.subscriptions.push(
       this._assets.selection.subscribe(
         selectedAssets => {
@@ -216,5 +216,21 @@ export class NavMenu implements OnInit, OnDestroy {
           this._router.navigate(['/home'])
         }
       })
+  }
+
+  /**
+   * Opens dropdown
+   */
+  private openDrop(event, dropdown): void {
+    event.stopPropagation();
+    dropdown.open();
+  }
+
+  /**
+   * Closes dropdown
+   */
+  private closeDrop(event, dropdown): void {
+    event.stopPropagation();
+    dropdown.close();
   }
 }

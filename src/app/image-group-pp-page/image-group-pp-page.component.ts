@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Http, Response, Headers, RequestOptions } from '@angular/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Router, ActivatedRoute, UrlSegment } from '@angular/router';
 import { Subscription }   from 'rxjs/Subscription';
 
@@ -15,8 +15,8 @@ import { AnalyticsService } from '../analytics.service';
 
 export class ImageGroupPPPage implements OnInit, OnDestroy {
 
-  private header = new Headers({ 'Content-Type': 'application/json' }); // ... Set content type to JSON
-  private options = new RequestOptions({ headers: this.header, withCredentials: true }); // Create a request option
+  private header = new HttpHeaders().set('Content-Type', 'application/json'); // ... Set content type to JSON
+  private options = { headers: this.header, withCredentials: true }; // Create a request option
 
   private igId: string;
   private igName: string;
@@ -32,7 +32,7 @@ export class ImageGroupPPPage implements OnInit, OnDestroy {
     private _igService: ImageGroupService,
     private _router: Router,
     private route: ActivatedRoute,
-    private http: Http,
+    private http: HttpClient,
     private _analytics: AnalyticsService
   ) {}
 
@@ -50,6 +50,7 @@ export class ImageGroupPPPage implements OnInit, OnDestroy {
         }
         if (id) {
           this._assets.queryAll(params);
+          this.igId = id;
         }
       })
     );

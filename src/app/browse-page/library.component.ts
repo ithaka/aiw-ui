@@ -214,8 +214,10 @@ export class LibraryComponent implements OnInit {
         })
         .catch((err) => {
           this.loading = false;
-          if (err.status === 401) {
+          if (err.status === 401 || err.status === 403) {
             this.errorMessage = 'ACCESS_DENIED'
+          } else {
+            this.errorMessage = 'GENERIC_ERROR'
           }
           console.log('Unable to load category results.');
         });
