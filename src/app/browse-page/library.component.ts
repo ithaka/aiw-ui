@@ -49,7 +49,7 @@ export class LibraryComponent implements OnInit {
   private descObj: any  = {};
 
   private categoryFacetMap = {
-    '103': 'artcollectiontitle_str',
+    '103': 'collectiontypenameid',
     '250': 'artclassification_str',
     '260': 'artstor-geography',
     // '270': '/browse/groups/public?tags=Teaching%2520Resources&page=1',

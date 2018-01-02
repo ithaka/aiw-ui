@@ -16,7 +16,7 @@ nav.nav.nav-inline.browse-nav
   .col-md-4
     .browse-info(*ngIf="descObj[selectedBrowseId]")
       .img(*ngIf="splashImgURL")
-        img([attr.src]="splashImgURL", alt="Splash image for browse id: {{ selectedBrowseId }}")
+        img([attr.src]="splashImgURL", alt="Splash image for browse id: {{ selectedBrowseId }}", style="max-width:100%;")
       .title {{ descObj[selectedBrowseId].collectionname }}
       .browse__description([innerHTML]="descObj[selectedBrowseId].blurburl")
 .row.has-icon-overlay(*ngIf="loading")
