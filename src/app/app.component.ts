@@ -65,23 +65,23 @@ export class App {
         }
       }
       else if(event instanceof NavigationEnd) {
-        // On navigation end, load the zendesk chat widget if user lands on login page else hide the widget
-        if( event.url === '/login' ) {
-          this._script.loadScript('zendesk')
-            .then( data => {
-              if(data['status'] === 'loaded'){
-                this.zendesk_loaded = true
-              } else if(data['status'] === 'already_loaded'){ // if the widget script has already been loaded then just show the widget
-                document.querySelector('.zopim')['style']['display'] = 'block';
-              }
-            })
-            .catch( error => console.error(error) )
-        } else {
-          if(this.zendesk_loaded) {
-            document.querySelectorAll('.zopim')[0]['style']['display'] = 'none';
-            document.querySelectorAll('.zopim')[1]['style']['display'] = 'none';
-          }
-        }
+        // // On navigation end, load the zendesk chat widget if user lands on login page else hide the widget
+        // if( event.url === '/login' ) {
+        //   this._script.loadScript('zendesk')
+        //     .then( data => {
+        //       if(data['status'] === 'loaded'){
+        //         this.zendesk_loaded = true
+        //       } else if(data['status'] === 'already_loaded'){ // if the widget script has already been loaded then just show the widget
+        //         document.querySelector('.zopim')['style']['display'] = 'block';
+        //       }
+        //     })
+        //     .catch( error => console.error(error) )
+        // } else {
+        //   if(this.zendesk_loaded) {
+        //     document.querySelectorAll('.zopim')[0]['style']['display'] = 'none';
+        //     document.querySelectorAll('.zopim')[1]['style']['display'] = 'none';
+        //   }
+        // }
       }
     });
   }
