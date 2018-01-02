@@ -1,4 +1,3 @@
-import { identifierToken } from '@angular/compiler/src/identifiers';
 import {
     AfterViewInit,
     ChangeDetectionStrategy,
@@ -8,16 +7,17 @@ import {
     OnDestroy,
     OnInit,
     Output
-} from '@angular/core';
-import { Http } from '@angular/http';
-import { Subscription } from 'rxjs/Subscription';
-import * as OpenSeadragon from 'openseadragon';
+} from '@angular/core'
+import { HttpClient } from '@angular/common/http';
+import { Subscription } from 'rxjs/Subscription'
+import * as OpenSeadragon from 'openseadragon'
+import { Angulartics2 } from 'angulartics2'
 
-import { Asset } from '../asset';
-import { AssetService, AuthService } from '../../shared';
+import { Asset } from '../asset'
+import { AssetService, AuthService } from '../../shared'
 
-declare var ActiveXObject: (type: string) => void;
-declare var kWidget: any;
+declare var ActiveXObject: (type: string) => void
+declare var kWidget: any
 
 @Component({
     selector: 'ang-asset-viewer',
@@ -26,44 +26,53 @@ declare var kWidget: any;
 })
 export class AssetViewerComponent implements OnInit, OnDestroy, AfterViewInit {
 
-    @Input() asset: Asset;
-    @Input() index: number;
-    @Input() assetCompareCount: number;
-    @Input() assetGroupCount: number;
-    @Input() assetNumber: number;
-    @Input() assets:Asset[];
-    @Input() prevAssetResults: any;
-    @Input() isFullscreen: boolean;
-    @Input() showCaption: boolean;
-    @Input() quizMode: boolean;
+    @Input() asset: Asset
+    @Input() index: number
+    @Input() assetCompareCount: number
+    @Input() assetGroupCount: number
+    @Input() assetNumber: number
+    @Input() assets:Asset[]
+    @Input() prevAssetResults: any
+    @Input() isFullscreen: boolean
+    @Input() showCaption: boolean
+    @Input() quizMode: boolean
 
-    @Output() fullscreenChange = new EventEmitter();
-    @Output() nextPage = new EventEmitter();
-    @Output() prevPage = new EventEmitter();
-    @Output() removeAsset = new EventEmitter();
-    @Output() assetDrawer = new EventEmitter();
+    @Output() fullscreenChange = new EventEmitter()
+    @Output() nextPage = new EventEmitter()
+    @Output() prevPage = new EventEmitter()
+    @Output() removeAsset = new EventEmitter()
+    @Output() assetDrawer = new EventEmitter()
 
-    private isLoading: boolean = true;
-    // private isFullscreen: boolean = false;
-    private openSeaDragonReady: boolean = false;
-    private isOpenSeaDragonAsset: boolean = false;
-    private isKalturaAsset: boolean = false;
-    private mediaLoadingFailed: boolean = false;
-    private removableAsset: boolean = false;
-    private subscriptions: Subscription[] = [];
-    private fallbackFailed: boolean = false;
-    private tileSource: string;
-    private lastZoomValue: number;
-    // private showCaption: boolean = true;
+    private isLoading: boolean = true
+    // private isFullscreen: boolean = false
+    private openSeaDragonReady: boolean = false
+    private isOpenSeaDragonAsset: boolean = false
+    private isKalturaAsset: boolean = false
+    private mediaLoadingFailed: boolean = false
+    private removableAsset: boolean = false
+    private subscriptions: Subscription[] = []
+    private fallbackFailed: boolean = false
+    private tileSource: string
+    private lastZoomValue: number
+    // Thumbanil Size is decremented if load fails (see thumbnailError)
+    private thumbnailSize: number = 2
+    // private showCaption: boolean = true
 
-    private kalturaUrl: string;
-    private osdViewer: any;
+    private kalturaUrl: string
+    private osdViewer: any
 
-    constructor(private _assets: AssetService, private _auth: AuthService, private http: Http) {
+    constructor(
+        private _assets: AssetService,
+        private _auth: AuthService,
+        private _analytics: Angulartics2,
+        private http: HttpClient
+    ) {
 
     }
 
     ngOnInit() {
+        this._analytics.eventTrack.next({ action:"viewAsset", properties: { category: "asset", label: this.asset.id }})
+
         if (this.asset.isDataLoaded) {
             // Wait for the asset to have its metadata
             this.subscriptions.push(
@@ -344,6 +353,15 @@ export class AssetViewerComponent implements OnInit, OnDestroy, AfterViewInit {
      */
     private disableContextMenu(event): boolean{
         return false;
+    }
+
+    /**
+     * When thumbnail fails to load, try to load a different size
+     * - Decrements the thumbnail size
+     * - Workaround for missing sizes of particular thumbnails
+     */
+    private thumbnailError(event) : void {
+        this.thumbnailSize--
     }
 
 }

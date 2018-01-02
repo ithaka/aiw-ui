@@ -14,7 +14,8 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 // const ForkCheckerPlugin = require('awesome-typescript-loader').ForkCheckerPlugin;
 const HtmlElementsPlugin = require('./html-elements-plugin');
 const AssetsPlugin = require('assets-webpack-plugin');
-const ContextReplacementPlugin = require('webpack/lib/ContextReplacementPlugin'); 
+const ContextReplacementPlugin = require('webpack/lib/ContextReplacementPlugin');
+const LoaderPlugin = require('webpack/lib/LoaderOptionsPlugin');
 
 /*
  * Webpack Constants
@@ -34,13 +35,6 @@ const METADATA = {
 module.exports = function(options) {
   isProd = options.env === 'production';
   return {
-
-    /*
-     * Static metadata for index.html
-     *
-     * See: (custom attribute)
-     */
-    metadata: METADATA,
 
     /*
      * Cache generated modules and chunks to improve performance for multiple incremental builds.
@@ -77,7 +71,7 @@ module.exports = function(options) {
        *
        * See: http://webpack.github.io/docs/configuration.html#resolve-extensions
        */
-      extensions: ['', '.ts', '.js', '.json'],
+      extensions: ['.ts', '.js', '.json'],
 
       // An array of directory names to be resolved to the current directory
       modules: [helpers.root('src'), 'node_modules'],
@@ -92,25 +86,6 @@ module.exports = function(options) {
     module: {
 
       /*
-       * An array of applied pre and post loaders.
-       *
-       * See: http://webpack.github.io/docs/configuration.html#module-preloaders-module-postloaders
-       */
-      preLoaders: [
-        {
-          test: /\.ts$/,
-          loader: 'string-replace-loader',
-          query: {
-            search: '(System|SystemJS)(.*[\\n\\r]\\s*\\.|\\.)import\\((.+)\\)',
-            replace: '$1.import($3).then(mod => (mod.__esModule && mod.default) ? mod.default : mod)',
-            flags: 'g'
-          },
-          include: [helpers.root('src')]
-        },
-
-      ],
-
-      /*
        * An array of automatically applied loaders.
        *
        * IMPORTANT: The loaders here are resolved relative to the resource which they are applied to.
@@ -119,6 +94,18 @@ module.exports = function(options) {
        * See: http://webpack.github.io/docs/configuration.html#module-loaders
        */
       loaders: [
+
+        {
+          test: /\.ts$/,
+          loader: 'string-replace-loader',
+          query: {
+            search: '(System|SystemJS)(.*[\\n\\r]\\s*\\.|\\.)import\\((.+)\\)',
+            replace: '$1.import($3).then(mod => (mod.__esModule && mod.default) ? mod.default : mod)',
+            flags: 'g'
+          },
+          include: [helpers.root('src')],
+          enforce: 'pre'
+        },
 
         /*
          * Typescript loader support for .ts and Angular 2 async routes via .async.ts
@@ -190,10 +177,8 @@ module.exports = function(options) {
         {
           test: /\.(jpg|png|gif)$/,
           loader: 'file'
-        }
-      ],
+        },
 
-      postLoaders: [
         {
           test: /\.js$/,
           loader: 'string-replace-loader',
@@ -201,7 +186,8 @@ module.exports = function(options) {
             search: 'var sourceMappingUrl = extractSourceMappingUrl\\(cssText\\);',
             replace: 'var sourceMappingUrl = "";',
             flags: 'g'
-          }
+          },
+          enforce: 'post'
         }
       ]
     },
@@ -241,7 +227,7 @@ module.exports = function(options) {
       /**
        * Plugin: ContextReplacementPlugin
        * Description: Provides context to Angular's use of System.import
-       * 
+       *
        * See: https://webpack.github.io/docs/list-of-plugins.html#contextreplacementplugin
        * See: https://github.com/angular/angular/issues/11580
        */
@@ -268,10 +254,10 @@ module.exports = function(options) {
           'robots.txt'
         ]
       }),
-      new CopyWebpackPlugin([{ 
+      new CopyWebpackPlugin([{
         from: 'src/assets/robots.txt'
-      }, { 
-        from: 'src/assets/humans.txt' 
+      }, {
+        from: 'src/assets/humans.txt'
       }]),
 
       /*
@@ -283,8 +269,9 @@ module.exports = function(options) {
        * See: https://github.com/ampedandwired/html-webpack-plugin
        */
       new HtmlWebpackPlugin({
-        template: 'src/index.html',
-        chunksSortMode: 'dependency'
+        template: helpers.root("src/index.html"),
+        chunksSortMode: 'dependency',
+        metadata: METADATA
       }),
 
       /*
@@ -311,8 +298,7 @@ module.exports = function(options) {
        */
       new HtmlElementsPlugin({
         headTags: require('./head-config.common')
-      }),
-
+      })
     ],
 
     /*
@@ -322,12 +308,13 @@ module.exports = function(options) {
      * See: https://webpack.github.io/docs/configuration.html#node
      */
     node: {
-      global: 'window',
-      crypto: 'empty',
+      console: false,
+      global: true,
       process: true,
-      module: false,
-      clearImmediate: false,
-      setImmediate: false
+      __filename: "mock",
+      __dirname: "mock",
+      Buffer: true,
+      setImmediate: true
     }
 
   };

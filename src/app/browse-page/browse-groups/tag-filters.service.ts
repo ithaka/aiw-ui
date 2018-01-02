@@ -25,7 +25,7 @@ export class TagFiltersService {
     return this._filters
   }
 
-  /** 
+  /**
    * Creates the tag filter string to put in the url
    * @returns string containing tag filters
    */
@@ -41,11 +41,11 @@ export class TagFiltersService {
     return selectedArr
   }
 
-  public processFilterString(tags: string) : string[] {
-    let tagArr = tags.split(",")
-    tagArr.forEach((item, index) => {
-      tagArr[index] = decodeURIComponent(item)
-    })
+  public processFilterString(tags: string[]) : string[] {
+    if (!Array.isArray(tags)) {
+      tags = [tags];
+    }
+    let tagArr = tags.map(item => decodeURIComponent(item));
     return tagArr
   }
 

@@ -1,15 +1,15 @@
-import { Component, OnInit, OnDestroy, ViewChild, HostListener } from '@angular/core';
-import { ActivatedRoute, Params, Router } from '@angular/router';
-import { Subscription }   from 'rxjs/Subscription';
-import { Locker } from 'angular2-locker';
-import { Angulartics2 } from 'angulartics2/dist';
+import { Component, OnInit, OnDestroy, ViewChild, HostListener } from '@angular/core'
+import { ActivatedRoute, Params, Router } from '@angular/router'
+import { Subscription }   from 'rxjs/Subscription'
+import { Locker } from 'angular2-locker'
+import { Angulartics2 } from 'angulartics2'
 
 // Project Dependencies
-import { Asset } from './asset';
-import { AuthService, AssetService, GroupService } from './../shared';
-import { AssetViewerComponent } from './asset-viewer/asset-viewer.component';
-import { AnalyticsService } from '../analytics.service';
-import { TitleService } from '../shared/title.service';
+import { Asset } from './asset'
+import { AuthService, AssetService, AssetSearchService, GroupService, CollectionTypeHandler } from './../shared'
+import { AssetViewerComponent } from './asset-viewer/asset-viewer.component'
+import { AnalyticsService } from '../analytics.service'
+import { TitleService } from '../shared/title.service'
 
 @Component({
     selector: 'ang-asset-page',
@@ -27,7 +27,8 @@ export class AssetPage implements OnInit, OnDestroy {
 
     // Array to support multiple viewers on the page
     private assets: Asset[] = []
-    private assetIndex: number = 1
+    private assetIndex: number = 0
+    private assetGroupId: string
     private assetNumber: number = 1
     private totalAssetCount: number = 1
     private subscriptions: Subscription[] = []
@@ -61,8 +62,19 @@ export class AssetPage implements OnInit, OnDestroy {
     private showAssetCaption: boolean = true;
 
     private assetIdProperty: string = 'artstorid'
+    /** Controls the display of the collection type icon */
+    private collectionType: {name: string, alt: string} = {name: '', alt: ''}
 
-    private pagination: any = {
+    private collectionTypeHandler: CollectionTypeHandler = new CollectionTypeHandler()
+    
+    // To keep a track of browse direction ('prev' / 'next') while browsing through assets, to load next asset if the current asset is un-authorized
+    private browseAssetDirection: string = '' 
+
+    private pagination: {
+        totalPages: number,
+        size: number,
+        page: number
+    } = {
       totalPages: 1,
       size: 24,
       page: 1
@@ -70,17 +82,18 @@ export class AssetPage implements OnInit, OnDestroy {
     private originPage: number = 0;
 
     constructor(
-            private _assets: AssetService,
-            private _group: GroupService,
-            private _auth: AuthService,
-            private route: ActivatedRoute,
-            private _router: Router,
-            private locker: Locker,
-            private _analytics: AnalyticsService,
-            private angulartics: Angulartics2,
-            private _title: TitleService
-        ) {
-            this._storage = locker.useDriver(Locker.DRIVERS.LOCAL);
+        private _assets: AssetService,
+        private _search: AssetSearchService,
+        private _group: GroupService,
+        private _auth: AuthService,
+        private route: ActivatedRoute,
+        private _router: Router,
+        private locker: Locker,
+        private _analytics: AnalyticsService,
+        private angulartics: Angulartics2,
+        private _title: TitleService
+    ) {
+        this._storage = locker.useDriver(Locker.DRIVERS.LOCAL);
     }
 
     ngOnInit() {
@@ -107,7 +120,7 @@ export class AssetPage implements OnInit, OnDestroy {
             this.route.params.subscribe((routeParams) => {
                 this.assets = []
                 let assetIdProperty = this._auth.featureFlags[routeParams['featureFlag']]? 'artstorid' : 'objectId'
-
+                this.assetGroupId = routeParams['groupId']
                 // Find feature flags
                 if(routeParams && routeParams['featureFlag']){
                     this._auth.featureFlags[routeParams['featureFlag']] = true;
@@ -123,7 +136,7 @@ export class AssetPage implements OnInit, OnDestroy {
                             }
                             data.item.imageUrl = data.imageUrl
                             data.item.imageServer = data.imageServer
-                            this.renderPrimaryAsset(new Asset(data.item[assetIdProperty], this._assets, this._auth, data.item))
+                            this.renderPrimaryAsset(new Asset(data.item[assetIdProperty], this._assets, this._auth, data.item, this.assetGroupId))
                         }, (err) => {
                             console.error(err)
                             if (err.status == 403) {
@@ -135,7 +148,7 @@ export class AssetPage implements OnInit, OnDestroy {
                             }
                         })
                 } else {
-                    this.renderPrimaryAsset(new Asset(routeParams["assetId"], this._assets, this._auth))
+                    this.renderPrimaryAsset(new Asset(routeParams["assetId"], this._assets, this._auth, null, this.assetGroupId))
 
                     if(this.prevAssetResults.thumbnails.length > 0){
                         // this.totalAssetCount = this.prevAssetResults.count ? this.prevAssetResults.count : this.prevAssetResults.thumbnails.length;
@@ -201,11 +214,41 @@ export class AssetPage implements OnInit, OnDestroy {
           })
         );
 
+        this._assets.unAuthorizedAsset.subscribe( (value) => {
+            if(value){
+                this.showAccessDeniedModal = true
+            }
+        })
+
         this._analytics.setPageValues('asset', this.assets[0] && this.assets[0].id)
     } // OnInit
 
     ngOnDestroy() {
         this.subscriptions.forEach((sub) => { sub.unsubscribe(); });
+    }
+
+    private handleSkipAsset(): void{
+        if( this.browseAssetDirection === 'prev' ) {
+            this.showPrevAsset()
+        }
+        else if ( this.browseAssetDirection === 'next' ){
+            this.showNextAsset()
+        }
+
+        // Close the modal after handling skip asset
+        this.showAccessDeniedModal = false
+    }
+
+    // Determines if the asset can be skipped to the prev / next asset in the array, if the current asset is unauthorized
+    private isAssetSkipable(): boolean{
+        let skipable: boolean = false
+        if( (this.browseAssetDirection === 'prev') && (this.assetNumber > 1) ){
+            skipable = true
+        }
+        else if( (this.browseAssetDirection === 'next') && (this.assetNumber < this.totalAssetCount) ){
+            skipable = true
+        }
+        return skipable
     }
 
     /**
@@ -227,13 +270,17 @@ export class AssetPage implements OnInit, OnDestroy {
                     if (!this.hasExternalAccess) {
                         this.showAccessDeniedModal = true
                     }
-                } else {
+                } else if (err.status !== 401) {
                     // don't have a clue why this would happen, so just log it
                     console.error(err)
                 }
             }
         )
-        this.angulartics.eventTrack.next({ action:"viewAsset", properties: { category: "asset", label: asset.id }});
+        
+        let currentAssetId: string = this.assets[0].artstorid || this.assets[0]['objectId'] // couldn't trust the 'this.assetIdProperty' variable
+
+        this.setCollectionType(currentAssetId)
+
         this.generateImgURL();
     }
 
@@ -292,6 +339,9 @@ export class AssetPage implements OnInit, OnDestroy {
 
     private showPrevAsset(): void{
         if(this.assetNumber > 1){
+            // Update browse direction
+            this.browseAssetDirection = 'prev'
+
             if((this.assetIndex > 0)){
                 let prevAssetIndex = this.quizShuffle ? Math.floor(Math.random() * this.prevAssetResults.thumbnails.length) + 0 : this.assetIndex - 1; // Assign random thumbnail index if quiz shuffle is true
                 this._router.navigate(['/asset', this.prevAssetResults.thumbnails[prevAssetIndex][this.assetIdProperty]]);
@@ -305,6 +355,9 @@ export class AssetPage implements OnInit, OnDestroy {
 
     private showNextAsset(): void{
         if(this.assetNumber < this.totalAssetCount){
+            // Update browse direction
+            this.browseAssetDirection = 'next'
+
             if((this.prevAssetResults.thumbnails) && (this.assetIndex < (this.prevAssetResults.thumbnails.length - 1))){
                 let nextAssetIndex = this.quizShuffle ? Math.floor(Math.random() * this.prevAssetResults.thumbnails.length) + 0 : this.assetIndex + 1; // Assign random thumbnail index if quiz shuffle is true
                 this._router.navigate(['/asset', this.prevAssetResults.thumbnails[nextAssetIndex][this.assetIdProperty]]);
@@ -562,5 +615,21 @@ export class AssetPage implements OnInit, OnDestroy {
           this.showNextAsset();
         }
       }
+    }
+
+    /**
+     * Used to set the collection type, which controls display of the collection type icon
+     *  Eventually we should get the entire asset like this, instead of through the metadata call
+     * @param assetId the asset's id assigned by artstor
+     */
+    private setCollectionType(assetId: string): void {
+        this._search.getAssetById(assetId)
+            .take(1)
+            .subscribe((asset) => {
+                let contributinginstitutionid: number = asset.contributinginstitutionid
+                this.collectionType = this.collectionTypeHandler.getCollectionType(asset.collectiontypes[0], contributinginstitutionid)
+            }, (err) => {
+                console.error(err)
+            })
     }
 }

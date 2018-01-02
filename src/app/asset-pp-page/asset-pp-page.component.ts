@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Http, Response, Headers, RequestOptions } from '@angular/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Router, ActivatedRoute, UrlSegment } from '@angular/router';
 import { Subscription }   from 'rxjs/Subscription';
 
@@ -15,8 +15,8 @@ import { AnalyticsService } from '../analytics.service';
 
 export class AssetPPPage implements OnInit, OnDestroy {
 
-  private header = new Headers({ 'Content-Type': 'application/json' }); // ... Set content type to JSON
-  private options = new RequestOptions({ headers: this.header, withCredentials: true }); // Create a request option
+  private header = new HttpHeaders().set('Content-Type', 'application/json'); // ... Set content type to JSON
+  private options = { headers: this.header, withCredentials: true }; // Create a request option
 
   private assetId: string;
   private asset: any = {};
@@ -29,7 +29,7 @@ export class AssetPPPage implements OnInit, OnDestroy {
     private _assets: AssetService,
     private _router: Router,
     private route: ActivatedRoute,
-    private http: Http,
+    private http: HttpClient,
     private _analytics: AnalyticsService
   ) {}
 
@@ -49,36 +49,33 @@ export class AssetPPPage implements OnInit, OnDestroy {
   // Load Image Group Assets
   loadAsset(): void{
     let self = this;
-    this._assets.getById( this.assetId )
-    .then((res) => {
-
-        if(res.objectId){
-          for(let data of res.metaData){
-            let fieldExists = false;
-
-            for(let metaData of self.metaArray){
-              if(metaData['fieldName'] === data.fieldName){
-                metaData['fieldValue'].push(data.fieldValue);
-                fieldExists = true;
-                break;
-              }
+    this._assets.getMetadata( this.assetId )
+    .subscribe((res) => {
+        let assetData = res && res.metadata && res.metadata[0] ? res.metadata[0]['metadata_json'] : []
+        for(let data of assetData){
+          let fieldExists = false;
+          
+          for(let metaData of self.metaArray){
+            if(metaData['fieldName'] === data.fieldName){
+              metaData['fieldValue'].push(data.fieldValue);
+              fieldExists = true;
+              break;
             }
-
-            if(!fieldExists){
-              let fieldObj = {
-                'fieldName': data.fieldName,
-                'fieldValue': []
-              }
-              fieldObj['fieldValue'].push(data.fieldValue);
-              self.metaArray.push(fieldObj);
-            }
-
           }
 
-          self.asset = res;
+          if(!fieldExists){
+            let fieldObj = {
+              'fieldName': data.fieldName,
+              'fieldValue': []
+            }
+            fieldObj['fieldValue'].push(data.fieldValue);
+            self.metaArray.push(fieldObj);
+          }
+
         }
-    })
-    .catch(function(err) {
+        
+        self.asset = res.metadata[0];
+    },(err) => {
         console.error('Unable to load asset metadata.');
     });
   }

@@ -11,10 +11,10 @@ echo "Using package $PACKAGE_NAME and version ${VERSION}"
 cd $SRC_DIR
 
 # Grab a newer node.js
-wget https://nodejs.org/dist/v6.9.1/node-v6.9.1-linux-x64.tar.xz
-xz -dc node-v6.9.1-linux-x64.tar.xz | tar xf - -C /usr/local/
+wget https://nodejs.org/dist/v8.3.0/node-v8.3.0-linux-x64.tar.xz
+xz -dc node-v8.3.0-linux-x64.tar.xz | tar xf - -C /usr/local/
 
-export PATH=/usr/local/node-v6.9.1-linux-x64/bin:$PATH
+export PATH=/usr/local/node-v8.3.0-linux-x64/bin:$PATH
 
 # Get Yarn and use it for NPM dependencies
 npm install --global yarn

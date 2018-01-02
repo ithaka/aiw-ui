@@ -70,8 +70,7 @@ $navBarPad: 0.5rem;
 }
 
 .navbar-collapse {
-    margin-top: 40px;
-    position: absolute;
+    position: relative;
     left: 0;
     width: 100%;
     z-index: 1000;
@@ -121,13 +120,6 @@ $navBarPad: 0.5rem;
         line-height: 29px; //calc( #{ $navBarHeight } - #{ 4 * $navBarPad });
     }
 
-    // handles hovering on non-mobile
-    &:hover > .dropdown-menu {
-        @media (min-width: $phone) {
-            display: block;
-        }
-    }
-
     &.open > .dropdown-menu {
         display: flex;
         flex-direction: column;
@@ -159,11 +151,18 @@ $navBarPad: 0.5rem;
     }
 }
 
-
 .navbar-toggleable-sm .navbar-nav .dropdown-menu {
     @media (max-width: $phone) {
         position: relative;
         float: none;
         width: 100%;
     }
+}
+
+.navbar-toggler {
+  margin: 0.5rem 1rem;
+}
+
+.navbar {
+  padding: 0;
 }
