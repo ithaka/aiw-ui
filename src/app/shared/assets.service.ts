@@ -15,8 +15,8 @@ import { GroupService } from './group.service';
 import { AssetFiltersService } from './../asset-filters/asset-filters.service';
 import { ToolboxService } from './toolbox.service';
 import { AssetSearchService, SearchResponse } from './asset-search.service';
-
 import { ImageGroup, Thumbnail } from '.';
+import { AppConfig } from "app/app.service";
 
 @Injectable()
 export class AssetService {
@@ -120,7 +120,8 @@ export class AssetService {
         "art"
       ],
       "hier_facet_fields2": [],
-      "facet_fields" : []
+      "facet_fields" : [],
+      "filter_query" : []
     };
     private baseFacetField = {
       "name" : "", // ex: collectiontypes
@@ -809,12 +810,53 @@ export class AssetService {
             .toPromise()
     }
 
-    subcategories(id) {
-        let options = { withCredentials: true };
+    public categoryByFacet(facetName: string, collectionType ?: number) {
+      let options = { withCredentials: true };
 
-        return this.http
-            .get(this._auth.getHostname() + '/api/categories/' + id + '/subcategories', options)
-            .toPromise()
+      let query = Object.assign({}, this.baseSolrQuery)
+      let isHierarchy = facetName === "artstor-geography"
+
+      if (isHierarchy) {
+        let hierarchy = Object.assign({}, this.baseHierarchy)
+        hierarchy.hierarchy = facetName
+        query.hier_facet_fields2 = [hierarchy]
+      } else {
+        let facetField = Object.assign({}, this.baseFacetField)
+        facetField.name = facetName
+        facetField.limit = 500
+        // Ignore junk data, collections with only one asset aren't collections we care about
+        facetField.mincount = 5
+        query.facet_fields = [facetField]
+      }
+
+      let filterArray = []
+
+      if (collectionType) {
+          filterArray.push("collectiontypes:"+ collectionType)
+      }
+
+      /**
+       * Check for WLVs Institution filter
+       * - WLVs filter by contributing institution id
+       */
+      let institutionFilters: number[] = this._app.config.contributingInstFilters
+      for (let i = 0; i < institutionFilters.length; i++) {
+        filterArray.push("contributinginstitutionid:" + institutionFilters[i])
+      }
+
+      query["filter_query"] = filterArray
+
+      return this.http.post(this._auth.getSearchUrl(), query, options)
+        .toPromise()
+        .then(res => {
+          let hierData = Object.values(res['hierarchies2'])
+          if (hierData.length) { // if we have hierarchical data
+            res = hierData[0]
+          } else { // must be a facet
+            res = res['facets'][0].values
+          }
+          return res
+        })
     }
 
     nodeDesc(descId, widgetId){

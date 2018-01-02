@@ -123,8 +123,8 @@ export class LibraryComponent implements OnInit {
         // empty out containers
         this.clearFacets()
 
-        this._assets.categoryByFacet(this.facetType)
-        .then(resData => {
+        this._assets.categoryByFacet(this.facetType, 1)
+        .then( (resData: any) => {
           // ensure they are emptied in case of multiple fast clicking
           this.clearFacets()
 
