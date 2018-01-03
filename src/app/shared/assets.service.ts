@@ -810,6 +810,14 @@ export class AssetService {
             .toPromise()
     }
 
+    public categoryNames() : Promise<any> {
+        let options = { withCredentials: true }
+        
+        return this.http
+            .get(this._auth.getHostname() + '/api/collections/103/categorynames', options)
+            .toPromise()
+    }
+
     public categoryByFacet(facetName: string, collectionType ?: number) {
       let options = { withCredentials: true };
 

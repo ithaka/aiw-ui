@@ -146,6 +146,14 @@ export class LibraryComponent implements OnInit {
       })
     );
     this._analytics.setPageValues('library', '')
+
+    this._assets.categoryNames()
+      .then((data) => {
+        console.log(data)
+      })
+      .catch((err) => {
+        console.error(err)
+      })
   } // OnInit
 
   private clearFacets(): void {
