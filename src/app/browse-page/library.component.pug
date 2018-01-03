@@ -11,6 +11,8 @@ nav.nav.nav-inline.browse-nav
         ul
           li.filter(*ngFor="let childKey of JSObject.keys(hierarchicalFacets[key].children).sort()")
             a.tag-link([href]="'#/search/*;' + facetQueryMap[facetType] + '=' + hierarchicalFacets[key].children[childKey].element.efq") {{childKey}} ({{hierarchicalFacets[key].children[childKey].element.count}})
+    //- ul.filter-list
+    //-   li.filter(*ngFor)
 
     .alert.alert-danger(*ngIf="errorMessage" innerHTML="{{errorMessage | translate}}")
   .col-md-4
