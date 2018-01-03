@@ -86,7 +86,7 @@ export class BrowsePage implements OnInit, OnDestroy {
     }
 
     if( this.browseOpts.openCol ){
-        this.colMenuArray.push( { label: 'Open Collections', id: '3', link: 'commons' } );
+        this.colMenuArray.push( { label: 'Public Collections', id: '3', link: 'commons' } );
     }
 
     if(this.pcEnabled && this.browseOpts.myCol){

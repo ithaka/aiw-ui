@@ -1,8 +1,7 @@
 import { Router } from '@angular/router';
 import { Component, OnInit, Input } from '@angular/core';
 
-import { Thumbnail } from './../../shared'
-import { AssetService } from './../../shared';
+import { Thumbnail, AssetService, CollectionTypeHandler } from './../../shared'
 
 @Component({
   selector: 'ang-thumbnail',
@@ -31,17 +30,7 @@ export class ThumbnailComponent implements OnInit {
 
   private constraints: any = {}
   private collectionType: number = 0
-
-  private collectionTypeMap: any = {
-    0: { name: '', alt: '' },
-    1: { name: "artstor-asset", alt: "Artstor Digital Library" },
-    2: { name: "institution-asset", alt: "Institution Collections" },
-    3: { name: "personal-asset", alt: "Private Collections" },
-    4: { name: "institution-asset", alt: "Institution Collections" },
-    5: { name: "artstor-open-asset", alt: "Open Artstor" },
-    6: { name: "personal-asset", alt: "Private Collections" },
-    200: { name: "ssc-asset", alt: "Open Collection" } // an non-existant collection type used to indicate it's an open, non-artstor asset
-  }
+  private collectionTypeHandler: CollectionTypeHandler = new CollectionTypeHandler()
 
   constructor(
     private _assets: AssetService,
@@ -58,13 +47,14 @@ export class ThumbnailComponent implements OnInit {
     }
     // Set collection type for assets from Solr
     if (this.thumbnail['collectiontypes']) {
-      this.collectionType = this.thumbnail['collectiontypes'][0]
-    }
-
-    // all open collections come with collectiontypes[0] == 5, but we want to show a different icon for an
-    //  Open Artstor asset vs an open institutional asset
-    if (this.collectionType === 5 && this.thumbnail['contributinginstitutionid'] !== 1000) {
-      this.collectionType = 200
+      // Incase, if the asset has both public (5) and inst. (2) colType, then display the public colType indicator
+      if( (this.thumbnail['collectiontypes'].indexOf(2) > -1) && (this.thumbnail['collectiontypes'].indexOf(5) > -1) ){
+        this.collectionType = 5
+      }
+      else{
+        this.collectionType = this.thumbnail['collectiontypes'][0]
+      }
+      
     }
 
     this.thumbnail.iapFlag = this.determineIAP(this.thumbnail['artstorid'] ? this.thumbnail['artstorid'] : this.thumbnail['objectId'])
@@ -91,12 +81,8 @@ export class ThumbnailComponent implements OnInit {
     }
   }
 
-  /**
-   * Returns collection name and alt text based on Collection Type number
-   * - Does so in safe manner, avoiding template errors
-   */
-  getCollectionType(): any {
-    let mapResult = this.collectionTypeMap[this.collectionType ? this.collectionType : this.thumbnail.collectionType]
-    return mapResult ? mapResult : { name: '', alt: ''}
+  // wrapper function for getting the collection type
+  getCollectionType(): { name: string, alt: string } {
+    return this.collectionTypeHandler.getCollectionType(this.collectionType ? this.collectionType : this.thumbnail.collectionType, this.thumbnail['contributinginstitutionid'])
   }
 }

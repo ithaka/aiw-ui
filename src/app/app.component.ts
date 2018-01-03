@@ -4,10 +4,11 @@
 import { Component, ViewEncapsulation } from '@angular/core';
 import { Angulartics2GoogleAnalytics } from 'angulartics2/ga';
 import { Title } from '@angular/platform-browser';
-import { Router, NavigationStart } from '@angular/router';
-import { TranslateService } from 'ng2-translate';
+import { Router, NavigationStart, NavigationEnd } from '@angular/router';
+import { TranslateService } from '@ngx-translate/core';
 
 import { AppConfig } from "./app.service";
+import { ScriptService } from './shared';
 /*
  * App Component
  * Top Level Component
@@ -19,7 +20,7 @@ import { AppConfig } from "./app.service";
     '../sass/app.scss'
   ],
   template: `
-    <ang-sky-banner *ngIf="showSkyBanner" [textValue]="'SEARCH_ANNOUNCEMENT_BANNER.MESSAGE' | translate" (closeBanner)="showSkyBanner = false"></ang-sky-banner>
+    <ang-sky-banner *ngIf="showSkyBanner" [textValue]="'MEDIA_ISSUES_BANNER.MESSAGE' | translate" (closeBanner)="showSkyBanner = false"></ang-sky-banner>
     <a (click)="findMainContent()" (keydown.enter)="findMainContent()" tabindex="1" class="sr-only sr-only-focusable">Skip to main content</a>
     <nav-bar></nav-bar>
 
@@ -37,11 +38,13 @@ export class App {
   title = 'Artstor'
 
   private showSkyBanner: boolean = false
+  private zendesk_loaded: boolean = false
 
   constructor(
     public _app: AppConfig,
     angulartics2GoogleAnalytics: Angulartics2GoogleAnalytics,
     private titleService: Title,
+    private _script: ScriptService,
     private router:Router,
     private translate: TranslateService
   ) {
@@ -60,6 +63,25 @@ export class App {
         if(event_url_array && (event_url_array.length > 1) && (event_url_array[1] !== 'asset')){
           this.titleService.setTitle(this.title);
         }
+      }
+      else if(event instanceof NavigationEnd) {
+        // // On navigation end, load the zendesk chat widget if user lands on login page else hide the widget
+        // if( event.url === '/login' ) {
+        //   this._script.loadScript('zendesk')
+        //     .then( data => {
+        //       if(data['status'] === 'loaded'){
+        //         this.zendesk_loaded = true
+        //       } else if(data['status'] === 'already_loaded'){ // if the widget script has already been loaded then just show the widget
+        //         document.querySelector('.zopim')['style']['display'] = 'block';
+        //       }
+        //     })
+        //     .catch( error => console.error(error) )
+        // } else {
+        //   if(this.zendesk_loaded) {
+        //     document.querySelectorAll('.zopim')[0]['style']['display'] = 'none';
+        //     document.querySelectorAll('.zopim')[1]['style']['display'] = 'none';
+        //   }
+        // }
       }
     });
   }

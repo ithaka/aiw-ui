@@ -1,7 +1,7 @@
 import { ApplicationRef, ErrorHandler, NgModule } from '@angular/core';
 import { BrowserModule, Title } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { Http, HttpModule } from '@angular/http';
+import { HttpClientModule, HttpClient } from '@angular/common/http';
 import { NavigationEnd, Router, RouteReuseStrategy, RouterModule, UrlSerializer } from '@angular/router';
 import { removeNgStyles, createNewHosts, createInputTransfer } from '@angularclass/hmr';
 import { Ng2DeviceDetectorModule } from 'ng2-device-detector';
@@ -19,7 +19,8 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import {LockerModule, Locker, LockerConfig} from 'angular2-locker'
 import { Angulartics2Module } from 'angulartics2';
 import { Angulartics2GoogleAnalytics } from 'angulartics2/ga';
-import { TranslateModule, TranslateStaticLoader, TranslateLoader } from 'ng2-translate';
+import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { RlTagInputModule } from 'angular2-tag-autocomplete';
 import { Ng2CompleterModule } from 'ng2-completer';
 
@@ -81,21 +82,32 @@ import {
   SessionExpireModal,
   RegisterJstorModal
 } from './modals';
-import { TitleService } from './shared/title.service'
 import { GeneralSearchComponent } from './browse-page/browse-groups/general-search.component'
 import { SkyBannerComponent } from './sky-banner/sky-banner.component'
 
 
 // Application wide providers
-import { AuthService, AssetService, GroupService, TypeIdPipe, ToolboxService, ImageGroupService } from './shared';
-import { AssetFiltersService } from './asset-filters/asset-filters.service';
-import { TagsService } from './browse-page/tags.service';
-import { CustomReuseStrategy } from './reuse-strategy';
-import { LegacyRouteResolver } from './legacy.service';
-import { AnalyticsService } from './analytics.service';
+import {
+  AuthService,
+  AssetService,
+  GroupService,
+  ImageGroupService,
+  LogService,
+  TitleService,
+  ToolboxService,
+  TypeIdPipe,
+  ScriptService
+} from './shared'
+import { AssetFiltersService } from './asset-filters/asset-filters.service'
+import { TagsService } from './browse-page/tags.service'
+import { CustomReuseStrategy } from './reuse-strategy'
+import { LegacyRouteResolver } from './legacy.service'
+import { AnalyticsService } from './analytics.service'
+import { HTTP_INTERCEPTORS } from '@angular/common/http'
+import { UnauthorizedInterceptor } from './interceptors'
 
-import { LinkifyPipe } from './shared/linkify.pipe';
-import { CustomUrlSerializer } from './shared/custom-url-serializer';
+import { LinkifyPipe } from './shared/linkify.pipe'
+import { CustomUrlSerializer } from './shared/custom-url-serializer'
 
 
 const APP_PROVIDERS = [
@@ -107,7 +119,9 @@ const APP_PROVIDERS = [
   AssetSearchService,
   GroupService,
   AuthService,
+  LogService,
   ImageGroupService,
+  ScriptService,
   AssetFiltersService,
   TagFiltersService,
   TagsService,
@@ -115,9 +129,14 @@ const APP_PROVIDERS = [
   LegacyRouteResolver,
   Title,
   TitleService,
-  { provide: UrlSerializer, useClass: CustomUrlSerializer }
+  { provide: UrlSerializer, useClass: CustomUrlSerializer },
+  { provide: HTTP_INTERCEPTORS, useClass: UnauthorizedInterceptor, multi: true }
   // { provide: RouteReuseStrategy, useClass: CustomReuseStrategy } // to be implemented later
 ];
+
+export function HttpLoaderFactory(http: HttpClient) {
+  return new TranslateHttpLoader(http);
+}
 
 /**
  * `AppModule` is the main entry point into Angular2's bootstraping process
@@ -182,13 +201,13 @@ const APP_PROVIDERS = [
     ThumbnailComponent,
     TypeIdPipe,
     LinkifyPipe,
-    //MediumEditorDirective
+    MediumEditorDirective
   ],
   imports: [ // import Angular's modules
     BrowserModule,
     FormsModule,
     ReactiveFormsModule,
-    HttpModule,
+    HttpClientModule,
     RlTagInputModule,
     Ng2CompleterModule,
     LockerModule,
@@ -197,9 +216,11 @@ const APP_PROVIDERS = [
     Ng2DeviceDetectorModule.forRoot(),
     Angulartics2Module.forRoot([ Angulartics2GoogleAnalytics ]),
     TranslateModule.forRoot({
-        provide: TranslateLoader,
-        useFactory: (http: Http) => new TranslateStaticLoader(http, '/assets/i18n', '.json'),
-        deps: [Http]
+      loader: {
+          provide: TranslateLoader,
+          useFactory: HttpLoaderFactory,
+          deps: [HttpClient]
+      }
     }),
     NgbModule.forRoot(), // Ng Bootstrap Import
     NgIdleKeepaliveModule.forRoot(),

@@ -117,8 +117,8 @@ export class Home implements OnInit, OnDestroy {
 
       this._assets.getBlogEntries()
         .then((data) => {
-          if (data.posts) {
-            this.blogPosts = data.posts;
+          if (data['posts']) {
+            this.blogPosts = data['posts'];
           }
           this.blogLoading = false;
         },)

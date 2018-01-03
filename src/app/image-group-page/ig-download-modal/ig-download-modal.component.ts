@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { Http, Response, Headers, RequestOptions } from '@angular/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
 import { Angulartics2 } from 'angulartics2';
 
@@ -30,15 +30,15 @@ export class PptModalComponent implements OnInit {
   private allowedDownloads: number = 0;
   private imgCount: number = 0;
 
-  private header = new Headers({ 'Content-Type': 'application/x-www-form-urlencoded' });
-  private defaultOptions = new RequestOptions({ withCredentials: true});
+  private header = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+  private defaultOptions = { withCredentials: true};
   // private defaultOptions = new RequestOptions({ headers: this.header, withCredentials: true});
 
   constructor(
     private _assets: AssetService,
     private _auth: AuthService,
     private _angulartics: Angulartics2,
-    private http: Http,
+    private http: HttpClient,
     private _analytics: AnalyticsService
   ) { }
 
@@ -84,8 +84,8 @@ export class PptModalComponent implements OnInit {
 
   /** Gets the link at which the resource can be downloaded. Will be set to the "accept" button's download property */
   private getDownloadLink(group: ImageGroup, zip ?: boolean): Observable<any> {
-    let header = new Headers({ 'content-type': 'application/x-www-form-urlencoded' });
-    let options = new RequestOptions({ headers: header, withCredentials: true});
+    let header = new HttpHeaders().set('content-type', 'application/x-www-form-urlencoded');
+    let options = { headers: header, withCredentials: true};
     let imgStr: string = "";
     let useLegacyMetadata: boolean = true
     let url = this._auth.getHostname() + '/api/group/export'
@@ -113,17 +113,11 @@ export class PptModalComponent implements OnInit {
     // Make authorization call to increment download count
     this.http
       .get(url + '/auth/' + group.id + '/true', options)
-      .map(data => {
-        return data.json() || {};
-      })
       .toPromise()
 
     // Return request that provides file URL
     return this.http
       .post(url + '/' + format + '/' + group.id + '/' + useLegacyMetadata, this._auth.formEncode(data), options)
-      .map(data => {
-        return data.json() || {};
-      });
   }
 
   trackDownload(downloadType: string) : void {
