@@ -747,30 +747,6 @@ export class AssetService {
             });
     }
 
-    private loadCluster(objectId: string){
-
-        let options = { withCredentials: true };
-        let startIndex = ((this.urlParams.page - 1) * this.urlParams.size) + 1;
-
-        let requestString = [this._auth.getUrl(), "cluster", objectId, "thumbnails", startIndex, this.urlParams.size].join("/");
-
-        this.http
-            .get(requestString, options)
-            .toPromise()
-            .then((res) => {
-                if (res['thumbnails']) {
-                    // Set the allResults object
-                    this.updateLocalResults(res);
-                } else {
-                    throw new Error("There are no thumbnails. Server responsed with status " + res['status']);
-                }
-            })
-            .catch((err) => {
-                console.log(err)
-                this.allResultsSource.error(err)
-            });
-    }
-
     // Used by Browse page
     public pccollection(){
         let options = { withCredentials: true };
