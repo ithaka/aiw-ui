@@ -122,6 +122,7 @@ export class AssetSearchService {
     let collIds = encodeURIComponent(options['coll']);
     let classificationIds = '';
     let geographyIds = '';
+    let institutionalTypeFilter: boolean = false
 
     let earliestDate = '';
     let latestDate = '';
@@ -231,6 +232,7 @@ export class AssetSearchService {
            * In case of Inst. colType filter, also use the contributing inst. ID to filter
            */
           if( (currentFilter.filterGroup === 'collectiontypes') && (filterValue === 2 || filterValue === 4) ){
+            institutionalTypeFilter = true
             filterArray.push('contributinginstitutionid:\"' + this._auth.getUser().institutionId.toString() + '\"')
           } else {
             // Push filter queries into the array
@@ -241,6 +243,13 @@ export class AssetSearchService {
           }
         }
       }
+    }
+
+    /**
+     * In case on clusters, search on clusterid
+     */
+    if(options['objectId']){
+      filterArray.push("clusterid:\"" + options['objectId'] + "\"")
     }
 
     if(options.colId || options['coll']){
@@ -300,6 +309,18 @@ export class AssetSearchService {
       { withCredentials: true }
     )
     .map((res) => {
+      if (institutionalTypeFilter && res.facets) {
+        for (let i = 0; i < res.facets.length; i++) {
+          if (res.facets[i].name == 'collectiontypes') {
+            res.facets[i].values.push({
+              name: "2", 
+              fq: "collectiontypes:(\"2\")",
+              count: null,
+              efq: null
+            })
+          }
+        }
+      }
       this.latestSearchRequestId = res.requestId
       return res
     })
