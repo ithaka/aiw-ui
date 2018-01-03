@@ -626,8 +626,14 @@ export class AssetPage implements OnInit, OnDestroy {
         this._search.getAssetById(assetId)
             .take(1)
             .subscribe((asset) => {
-                let contributinginstitutionid: number = asset.contributinginstitutionid
-                this.collectionType = this.collectionTypeHandler.getCollectionType(asset.collectiontypes[0], contributinginstitutionid)
+                let contributinginstitutionid: number = asset.contributinginstitutionid                
+                
+                // Incase, if the asset has both public (5) and inst. (2) colType, then display the public colType indicator
+                let colTypeVal = (asset.collectiontypes.indexOf(2) > -1) && (asset.collectiontypes.indexOf(5) > -1) ? 5 : asset.collectiontypes[0]
+                
+                this.collectionType = this.collectionTypeHandler.getCollectionType(colTypeVal, contributinginstitutionid)
+                
+
             }, (err) => {
                 console.error(err)
             })
