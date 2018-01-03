@@ -14,7 +14,7 @@
       | {{ 'audio_error' }}
   // Qtvr Krpano viewer
   .krpano-viewer.osd-wrap([class.hidden]="!isKrpanoAsset || mediaLoadingFailed")
-    div(id="pano")
+    .pano(id="pano-{{ index }}")
   // Large thumbnail fallback
   #fallbackViewer(*ngIf="mediaLoadingFailed")
     img.item.item--thumbnail(alt="{{ asset.title }}", [attr.src]="_assets.makeThumbUrl(asset.imgURL, thumbnailSize)", (error)="thumbnailError($event)")

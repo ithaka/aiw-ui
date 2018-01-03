@@ -322,8 +322,13 @@ export class AssetViewerComponent implements OnInit, OnDestroy, AfterViewInit {
      * Load krpano viewer for Qtvr assets
      */
     private loadKrpanoViewer(): void{
-        this.isKrpanoAsset = true
-        embedpano({ xml: "http://stor.stage.artstor.org/stor/3b8b0b66-99e9-4be2-a4f6-8044e9be2e58/viewer/xml",  target: "pano" })
+        if( this.asset.viewerData && this.asset.viewerData.panorama_xml ){
+            this.isKrpanoAsset = true
+            embedpano({ xml: this.asset.viewerData.panorama_xml ,  target: "pano-" + this.index })
+        }
+        else{ // If the media resolver info is not available then fallback to image viewer
+            this.loadIIIF()
+        }
     }
 
     // Keep: We will want to dynamically load the Kaltura player
