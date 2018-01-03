@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core'
 import { Router, Resolve, RouterStateSnapshot, ActivatedRouteSnapshot } from '@angular/router'
-import { Http, Response, Headers, RequestOptions } from '@angular/http'
+import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable'
 
 import { AuthService } from './shared'
@@ -13,12 +13,12 @@ export class LegacyRouteResolver implements Resolve<boolean> {
   constructor(
     private _router: Router,
     private _auth: AuthService,
-    private http: Http
+    private http: HttpClient
   ) {
 
   }
 
-  /** 
+  /**
    * By implimenting Resolve, we have to have this function. The router is responsible for calling it on specified routes.
    * This is the top-level function for parsing out legacy urls (a router of sorts)
    */
@@ -32,7 +32,7 @@ export class LegacyRouteResolver implements Resolve<boolean> {
 
     // Keep this log around: we have a lot of exceptions
     console.log("Attempting to resolve legacy url:\n", url)
-    
+
     if (!isNaN(Number(url.substr(1,2)))) {
       // Anchors in some old links cause some of the path to be lost
       url = '/library/welcome.html#' + url.substr(1)
@@ -51,7 +51,7 @@ export class LegacyRouteResolver implements Resolve<boolean> {
 
     let urlArr = url.split("/")
     urlArr.splice(0,2)
-    
+
     if (urlArr[0].substr(0, 10).toLowerCase() === "externaliv") {
       let encryptedId = urlArr[0].split("=")[1]
       this._router.navigate(['/asset', 'external', encryptedId])
@@ -64,13 +64,13 @@ export class LegacyRouteResolver implements Resolve<boolean> {
 
     } else {
       let routeNum = urlArr[0].substr(0, 2)
-      
+
       urlArr.forEach((value, index) => {
         urlArr[index] = decodeURIComponent(value)
       })
 
       let pipeArr = urlArr[0].split("|")
-      
+
       // At some point, someone made pretty urls as: '/library/collection/patel'
       if (pipeArr[0] == 'collection' && urlArr[1]) {
         this._router.navigate(["/collection", urlArr[1]])
@@ -139,7 +139,7 @@ export class LegacyRouteResolver implements Resolve<boolean> {
     //  "rehydration" of said urls. You might find the following chart handy, if you ever have to deal with this. It is a
     //  list of common url encodings that they have dehydrated.
 
-    // Handy chart of url encodings		
+    // Handy chart of url encodings
     // Character	Hydrated	Dehydrated
     // [space]	  %20	      20
     // =	        %3D	      3D
@@ -200,7 +200,7 @@ export class LegacyRouteResolver implements Resolve<boolean> {
   // }
 
   /**
-   * Check out the comment above. This function basically accomplishes that in a more robust way, 
+   * Check out the comment above. This function basically accomplishes that in a more robust way,
    * since everything is run through the same place
    * @param re A regular expression which should return the dehydrated string match in position 1 of the array
    * @param target The string of parameters from the old search

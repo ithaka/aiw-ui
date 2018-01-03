@@ -115,6 +115,15 @@ export class AssetFilters {
     this.subscriptions.push(
       this._filters.available$.subscribe(
         filters => {
+          // Clean up filter data for display (i.e. insitutional asset counts are inaccurate)
+          if (filters['collectiontypes']) {
+            for (let i = 0; i < filters['collectiontypes'].length; i++) {
+              let colType = filters['collectiontypes'][i]
+              if (colType.name == '2' || colType.name == '4') {
+                delete colType.count
+              }
+            }
+          }
           this.availableFilters = filters;
         }
       )
