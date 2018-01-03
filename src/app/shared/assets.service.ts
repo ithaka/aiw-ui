@@ -430,7 +430,9 @@ export class AssetService {
                     this.loadIgAssets(params.igId);
                 } else if (params.hasOwnProperty("objectId") && params["objectId"] !== "") {
                     //get clustered images thumbnails
-                    this.loadCluster(params.objectId);
+                    let searchTerm = params.term ? params.term : '';
+                    this.loadSearch(searchTerm);
+
                 } else if (params.hasOwnProperty("catId")  && params["catId"] !== "") {
                     //get collection thumbnails
                     this.loadCategory(params.catId);
@@ -766,30 +768,6 @@ export class AssetService {
             })
             .catch(error => {
                 console.log(error);
-            });
-    }
-
-    private loadCluster(objectId: string){
-
-        let options = { withCredentials: true };
-        let startIndex = ((this.urlParams.page - 1) * this.urlParams.size) + 1;
-
-        let requestString = [this._auth.getUrl(), "cluster", objectId, "thumbnails", startIndex, this.urlParams.size].join("/");
-
-        this.http
-            .get(requestString, options)
-            .toPromise()
-            .then((res) => {
-                if (res['thumbnails']) {
-                    // Set the allResults object
-                    this.updateLocalResults(res);
-                } else {
-                    throw new Error("There are no thumbnails. Server responsed with status " + res['status']);
-                }
-            })
-            .catch((err) => {
-                console.log(err)
-                this.allResultsSource.error(err)
             });
     }
 
