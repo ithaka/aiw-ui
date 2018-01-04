@@ -30,6 +30,7 @@ export class ThumbnailComponent implements OnInit {
 
   private constraints: any = {}
   private collectionType: number = 0
+  private colTypes: Array<number> = [] 
   private collectionTypeHandler: CollectionTypeHandler = new CollectionTypeHandler()
 
   constructor(
@@ -47,14 +48,7 @@ export class ThumbnailComponent implements OnInit {
     }
     // Set collection type for assets from Solr
     if (this.thumbnail['collectiontypes']) {
-      // Incase, if the asset has both public (5) and inst. (2) colType, then display the public colType indicator
-      if( (this.thumbnail['collectiontypes'].indexOf(2) > -1) && (this.thumbnail['collectiontypes'].indexOf(5) > -1) ){
-        this.collectionType = 5
-      }
-      else{
-        this.collectionType = this.thumbnail['collectiontypes'][0]
-      }
-      
+      this.colTypes = this.thumbnail['collectiontypes']
     }
 
     this.thumbnail.iapFlag = this.determineIAP(this.thumbnail['artstorid'] ? this.thumbnail['artstorid'] : this.thumbnail['objectId'])
@@ -83,6 +77,6 @@ export class ThumbnailComponent implements OnInit {
 
   // wrapper function for getting the collection type
   getCollectionType(): { name: string, alt: string } {
-    return this.collectionTypeHandler.getCollectionType(this.collectionType ? this.collectionType : this.thumbnail.collectionType, this.thumbnail['contributinginstitutionid'])
+    return this.collectionTypeHandler.getCollectionType(this.colTypes, this.thumbnail['contributinginstitutionid'])
   }
 }
