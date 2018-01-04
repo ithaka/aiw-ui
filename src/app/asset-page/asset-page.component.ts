@@ -504,7 +504,8 @@ export class AssetPage implements OnInit, OnDestroy {
             this.showAssetCaption = false;
 
             this._log.log({
-                eventType: 'artstor_enter_quiz_mode'
+                eventType: 'artstor_enter_quiz_mode',
+                viewerInstitutionId: this.user.institutionId
             })
 
             this.assets.splice(1);
