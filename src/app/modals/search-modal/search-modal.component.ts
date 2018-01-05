@@ -92,7 +92,6 @@ export class SearchModal implements OnInit {
         private angulartics: Angulartics2,
         private _auth: AuthService,
         // Solr Search service
-        private _assetSearch: AssetSearchService,
         private _assetFilters: AssetFiltersService
       ) {
 
@@ -117,7 +116,7 @@ export class SearchModal implements OnInit {
    * Load filters (Geo, Collection, Collection Type)
    */
   private loadFilters() : void {
-    this._assetSearch.getFacets().take(1)
+    this._search.getFacets().take(1)
       .subscribe(data => {
 
         // Process through "facets" & construct the availableFilters array, based on the defined interfaces, from facets response
@@ -135,8 +134,7 @@ export class SearchModal implements OnInit {
               let facetName = facet.values[i].name
               if (!this.showPrivateCollections && facetName.match(/3|6/)) { // NOTE: 3 & 6 are Private Collections names
                 facet.values.splice(i, 1)
-              }
-              else if (facetName && facetName.length > 0){ // Some filters return empty strings, avoid those
+              } else if (facetName && facetName.length > 0){ // Some filters return empty strings, avoid those
                 // Push filter objects to Facet Group 'values' Array
                 let facetObject: FacetObject = {} as FacetObject
                 facetObject.checked = false
@@ -144,6 +142,10 @@ export class SearchModal implements OnInit {
                 facetObject.count = facet.values[i].count
                 facetObject.value = facetName
                 facetObject.children = []
+
+                // institutional collection counts are wrong, so assign them a count of 0 to indicate it shouldn't be displayed
+                facetObject.value == "2" && (facetObject.count = 0)
+
                 facetGroup.values.push( facetObject )
               }
             }
