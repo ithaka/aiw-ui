@@ -18,6 +18,7 @@ export class CollectionTypeHandler {
   *  if the asset was uploaded by Artstor
   */
  public getCollectionType(typeIds: Array<number>, contributinginstitutionid: number): { name: string, alt: string } {
+  if (!typeIds) { typeIds = [] }
   // Incase, if the asset has both public (5) and inst. (2) colType, then display the public colType indicator
   let typeId = (typeIds.indexOf(2) > -1) && (typeIds.indexOf(5) > -1) ? 5 : typeIds[0]
 
