@@ -626,8 +626,8 @@ export class AssetPage implements OnInit, OnDestroy {
         this._search.getAssetById(assetId)
             .take(1)
             .subscribe((asset) => {
-                let contributinginstitutionid: number = asset.contributinginstitutionid
-                this.collectionType = this.collectionTypeHandler.getCollectionType(asset.collectiontypes[0], contributinginstitutionid)
+                let contributinginstitutionid: number = asset.contributinginstitutionid 
+                this.collectionType = this.collectionTypeHandler.getCollectionType(asset.collectiontypes, contributinginstitutionid)
             }, (err) => {
                 console.error(err)
             })
