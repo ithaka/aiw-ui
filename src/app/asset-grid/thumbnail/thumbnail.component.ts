@@ -29,8 +29,6 @@ export class ThumbnailComponent implements OnInit {
   private editMode: boolean
 
   private constraints: any = {}
-  private collectionType: number = 0
-  private colTypes: Array<number> = [] 
   private collectionTypeHandler: CollectionTypeHandler = new CollectionTypeHandler()
 
   constructor(
@@ -45,10 +43,6 @@ export class ThumbnailComponent implements OnInit {
       let media = JSON.parse(this.thumbnail['media'])
       this.thumbnail['thumbnailImgUrl'] = media['thumbnailSizeOnePath']
       this.thumbnail['objectTypeId'] = media['adlObjectType']
-    }
-    // Set collection type for assets from Solr
-    if (this.thumbnail['collectiontypes']) {
-      this.colTypes = this.thumbnail['collectiontypes']
     }
 
     this.thumbnail.iapFlag = this.determineIAP(this.thumbnail['artstorid'] ? this.thumbnail['artstorid'] : this.thumbnail['objectId'])
@@ -77,6 +71,6 @@ export class ThumbnailComponent implements OnInit {
 
   // wrapper function for getting the collection type
   getCollectionType(): { name: string, alt: string } {
-    return this.collectionTypeHandler.getCollectionType(this.colTypes, this.thumbnail['contributinginstitutionid'])
+    return this.collectionTypeHandler.getCollectionType(this.thumbnail['collectiontypes'], this.thumbnail['contributinginstitutionid'])
   }
 }
