@@ -312,12 +312,15 @@ export class AssetSearchService {
       if (institutionalTypeFilter && res.facets) {
         for (let i = 0; i < res.facets.length; i++) {
           if (res.facets[i].name == 'collectiontypes') {
-            res.facets[i].values.push({
-              name: "2", 
-              fq: "collectiontypes:(\"2\")",
-              count: null,
-              efq: null
-            })
+            // Push the fake Institutional collection type facet only if its not already returned in the response
+            if (res.facets[i].values.filter(e => e.name === "2").length === 0) {
+              res.facets[i].values.push({
+                name: "2", 
+                fq: "collectiontypes:(\"2\")",
+                count: null,
+                efq: null
+              })
+            }
           }
         }
       }
