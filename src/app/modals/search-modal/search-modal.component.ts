@@ -125,9 +125,10 @@ export class SearchModal implements OnInit {
 
           if ((facet.name === 'collectiontypes' && this.showCollectionType) || facet.name !== 'collectiontypes') {
             // Construct Facet Group
-            let facetGroup: FacetGroup = {} as FacetGroup
-            facetGroup.name = facet.name
-            facetGroup.values = []
+            let facetGroup: FacetGroup = {
+              name: facet.name,
+              values: []
+            }
 
             // Prune any facets not available to the user (ex. Private Collections on SAHARA)
             for (let i = facet.values.length - 1; i >= 0; i--){
@@ -136,12 +137,13 @@ export class SearchModal implements OnInit {
                 facet.values.splice(i, 1)
               } else if (facetName && facetName.length > 0){ // Some filters return empty strings, avoid those
                 // Push filter objects to Facet Group 'values' Array
-                let facetObject: FacetObject = {} as FacetObject
-                facetObject.checked = false
-                facetObject.name = facet.name === 'collectiontypes' ? this.filterNameMap['collectiontypes'][facetName] : facetName
-                facetObject.count = facet.values[i].count
-                facetObject.value = facetName
-                facetObject.children = []
+                let facetObject: FacetObject = {
+                  checked: false,
+                  name: facet.name === 'collectiontypes' ? this.filterNameMap['collectiontypes'][facetName] : facetName,
+                  count: facet.values[i].count,
+                  value: facetName,
+                  children: []
+                }
 
                 // institutional collection counts are wrong, so assign them a count of 0 to indicate it shouldn't be displayed
                 facetObject.value == "2" && (facetObject.count = 0)
@@ -158,24 +160,28 @@ export class SearchModal implements OnInit {
         for (let hierFacet in data['hierarchies2']) {
           let topObj = this._assetFilters.generateHierFacets(data['hierarchies2'][hierFacet].children, 'geography')
 
-          let geoFacetGroup: FacetGroup = {} as FacetGroup
-          geoFacetGroup.name = 'geography'
-          geoFacetGroup.values = []
+          let geoFacetGroup: FacetGroup = {
+            name: 'geography',
+            values: []
+          }
 
           for(let geoObj of topObj){
-            let geoFacetObj: FacetObject = {} as FacetObject
-            geoFacetObj.checked = false
-            geoFacetObj.name = geoObj.name
-            geoFacetObj.count = geoObj.count
-            geoFacetObj.value = geoObj.efq
-            geoFacetObj.children = []
+            let geoFacetObj: FacetObject = {
+              checked: false,
+              name: geoObj.name,
+              count: geoObj.count,
+              value: geoObj.efq,
+              children: []
+            }
 
             for(let child of geoObj.children){
-              let geoChildFacetObj: FacetObject = {} as FacetObject
-              geoChildFacetObj.checked = false
-              geoChildFacetObj.name = child.name
-              geoChildFacetObj.count = child.count
-              geoChildFacetObj.value = child.efq
+              let geoChildFacetObj: FacetObject = {
+                checked: false,
+                name: child.name,
+                count: child.count,
+                value: child.efq
+              }
+
               geoFacetObj.children.push( geoChildFacetObj )
             }
             geoFacetGroup.values.push( geoFacetObj )
