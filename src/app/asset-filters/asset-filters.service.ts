@@ -183,6 +183,7 @@ export class AssetFiltersService {
     }
 
     public isApplied(group: string, filter: any) {
+        filter = (group === 'collectiontypes') ? parseInt( filter ) : filter;
         for(var i = 0; i < this.appliedFilters.length; i++){
             var filterObj = this.appliedFilters[i];
             if((group === filterObj.filterGroup)){
@@ -209,6 +210,7 @@ export class AssetFiltersService {
 
     public remove(group, filter, isQuiet ?: boolean) {
         let filterRemoved = false;
+        filter = (group === 'collectiontypes') ? parseInt( filter ) : filter;
         for(var i = 0; i < this.appliedFilters.length; i++){
             var filterObj = this.appliedFilters[i];
             if((group === filterObj.filterGroup)){
