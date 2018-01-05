@@ -38,7 +38,6 @@ export class App {
   title = 'Artstor'
 
   private showSkyBanner: boolean = false
-  private zendesk_loaded: boolean = false
 
   constructor(
     public _app: AppConfig,
@@ -70,14 +69,14 @@ export class App {
           this._script.loadScript('zendesk')
             .then( data => {
               if(data['status'] === 'loaded'){
-                this.zendesk_loaded = true
               } else if(data['status'] === 'already_loaded'){ // if the widget script has already been loaded then just show the widget
                 document.querySelector('.zopim')['style']['display'] = 'block';
               }
             })
             .catch( error => console.error(error) )
         } else {
-          if(this.zendesk_loaded) {
+          // If Zendesk chat is loaded, hide it
+          if(document.querySelector('.zopim')) {
             document.querySelectorAll('.zopim')[0]['style']['display'] = 'none';
             document.querySelectorAll('.zopim')[1]['style']['display'] = 'none';
           }
