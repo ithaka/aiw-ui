@@ -234,12 +234,12 @@ export class AssetSearchService {
           if( (currentFilter.filterGroup === 'collectiontypes') && (filterValue === 2 || filterValue === 4) ){
             institutionalTypeFilter = true
             filterArray.push('contributinginstitutionid:\"' + this._auth.getUser().institutionId.toString() + '\"')
-          } else {
-            // Push filter queries into the array
-            let filterValueArray = filterValue.toString().trim().split('|')
-            for( let filterVal of filterValueArray){
-              filterArray.push(currentFilter.filterGroup + ':\"' + filterVal + '\"')
-            }
+          }
+          
+          // Push filter queries into the array
+          let filterValueArray = filterValue.toString().trim().split('|')
+          for( let filterVal of filterValueArray){
+            filterArray.push(currentFilter.filterGroup + ':\"' + filterVal + '\"')
           }
         }
       }
