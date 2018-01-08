@@ -213,7 +213,8 @@ export class Asset {
   private setAssetProperties(data: any): void {
     // Make sure we've received data that we expect from /metadata
     if (!data || !data.metadata || !data.metadata[0]) {
-        this.dataLoadedSource.error({'message':'Unable to load metadata.'})
+        // We can assume the user was unauthorized if no metadata came back but an error wasn't thrown
+        this.dataLoadedSource.error({'message':'Unable to load metadata.', 'status':403 })
         return
     } else {
         data = data.metadata[0]
