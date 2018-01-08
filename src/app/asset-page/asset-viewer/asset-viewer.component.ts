@@ -18,6 +18,7 @@ import { AssetService, AuthService } from '../../shared'
 
 declare var ActiveXObject: (type: string) => void
 declare var kWidget: any
+declare var embedpano: any
 
 @Component({
     selector: 'ang-asset-viewer',
@@ -47,6 +48,7 @@ export class AssetViewerComponent implements OnInit, OnDestroy, AfterViewInit {
     // private isFullscreen: boolean = false
     private openSeaDragonReady: boolean = false
     private isOpenSeaDragonAsset: boolean = false
+    private isKrpanoAsset: boolean = false
     private isKalturaAsset: boolean = false
     private mediaLoadingFailed: boolean = false
     private removableAsset: boolean = false
@@ -136,6 +138,9 @@ export class AssetViewerComponent implements OnInit, OnDestroy, AfterViewInit {
             case 'kaltura':
                 // Kaltura media
                 this.loadKaltura();
+                break;
+            case 'qtvr':
+                this.loadKrpanoViewer();
                 break;
         }
     }
@@ -312,6 +317,19 @@ export class AssetViewerComponent implements OnInit, OnDestroy, AfterViewInit {
                 console.log(err);
             });
     };
+
+    /**
+     * Load krpano viewer for Qtvr assets
+     */
+    private loadKrpanoViewer(): void{
+        if( this.asset.viewerData && this.asset.viewerData.panorama_xml ){
+            this.isKrpanoAsset = true
+            embedpano({ xml: this.asset.viewerData.panorama_xml ,  target: "pano-" + this.index })
+        }
+        else{ // If the media resolver info is not available then fallback to image viewer
+            this.loadIIIF()
+        }
+    }
 
     // Keep: We will want to dynamically load the Kaltura player
     // private getAndLoadKalturaId(data): void {

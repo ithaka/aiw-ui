@@ -12,6 +12,9 @@
     audio.item.video-player(id="audio-{{ asset.id + '-' + index }}", controls, style="display:none;")
       source([attr.src]="asset.downloadLink", type="audio/MPEG")
       | {{ 'audio_error' }}
+  // Qtvr Krpano viewer
+  .krpano-viewer.osd-wrap([class.hidden]="!isKrpanoAsset || mediaLoadingFailed")
+    .pano(id="pano-{{ index }}")
   // Large thumbnail fallback
   #fallbackViewer(*ngIf="mediaLoadingFailed")
     img.item.item--thumbnail(alt="{{ asset.title }}", [attr.src]="_assets.makeThumbUrl(asset.imgURL, thumbnailSize)", (error)="thumbnailError($event)")
