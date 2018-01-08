@@ -83,7 +83,11 @@ export class AssetGrid implements OnInit, OnDestroy {
 
   // @Output() updateSearchInRes: EventEmitter<boolean> = new EventEmitter();
 
-  private pagination: any = {
+  private pagination: {
+    totalPages: number,
+    size: number,
+    page: number
+  } = {
     totalPages: 1,
     size: 24,
     page: 1
@@ -131,6 +135,10 @@ export class AssetGrid implements OnInit, OnDestroy {
     private route: ActivatedRoute
   ) {
       this._storage = locker.useDriver(Locker.DRIVERS.LOCAL);
+      let prefs = this._auth.getFromStorage('prefs')
+      if (prefs && prefs.pageSize) {
+        this.pagination.size = prefs.pageSize
+      }
   }
 
   ngOnInit() {
