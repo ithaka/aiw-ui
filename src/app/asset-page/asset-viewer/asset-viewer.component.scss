@@ -63,6 +63,14 @@ $metadataBg: #f1f8f1;
         min-height: $viewerMinHeight;
     }
 }
+.krpano-viewer {
+    padding: 20px;
+    
+    .pano{
+        width: 100%;
+        height: 100%;
+    }
+}
 
 .osd-wrap {
     position: relative;
