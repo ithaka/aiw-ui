@@ -324,7 +324,24 @@ export class AssetViewerComponent implements OnInit, OnDestroy, AfterViewInit {
     private loadKrpanoViewer(): void{
         if( this.asset.viewerData && this.asset.viewerData.panorama_xml ){
             this.isKrpanoAsset = true
-            embedpano({ xml: this.asset.viewerData.panorama_xml ,  target: "pano-" + this.index })
+            embedpano({ 
+                xml: this.asset.viewerData.panorama_xml ,  
+                target: "pano-" + this.index, 
+                onready: (viewer) => {
+                    // See if there was an unreported error during final load
+                    setTimeout(() => {
+                        let content = viewer.innerHTML ? viewer.innerHTML : ''
+                        // Workaround for detecting load failure
+                        if (content.search('FATAL ERROR') >= 0 && content.search('loading failed') >= 0) {
+                            this.mediaLoadingFailed = true
+                        }
+                    }, 500)
+                },
+                onerror: (err) => {
+                    // This handler does not fire for "Fatal Error" when loading XML
+                    console.log(err)
+                },
+            })
         }
         else{ // If the media resolver info is not available then fallback to image viewer
             this.loadIIIF()
