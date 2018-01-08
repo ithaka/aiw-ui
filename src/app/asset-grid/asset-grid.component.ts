@@ -343,8 +343,9 @@ export class AssetGrid implements OnInit, OnDestroy {
    */
   private changePageSize(size: number){
     if(this.pagination.size != size){
-      this._assets.goToPage(1, true);
-      this._assets.setPageSize(size);
+      this._assets.goToPage(1, true)
+      this._assets.setPageSize(size)
+      this._auth.store('prefs', { pageSize: size })
     }
   }
 
