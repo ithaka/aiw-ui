@@ -22,7 +22,7 @@ export class AssetSearchService {
     {name: "Creator", value: "artcreator" },
     {name: "Title", value: "arttitle" },
     {name: "Location", value: "artlocation" },
-    {name: "Repository", value: "artrepository" },
+    {name: "Repository", value: "artcurrentrepository" },
     {name: "Subject", value: "artsubject" },
     {name: "Material", value: "artmaterial" },
     {name: "Style or Period", value: "artstyleperiod" },
