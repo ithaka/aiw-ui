@@ -606,7 +606,7 @@ export class AssetService {
                     throw new Error("No data in image group thumbnails response");
                 }
 
-                data.count = data.items.length;
+                data.total = data.items.length;
                 let pageStart = (this.urlParams.page - 1)*this.urlParams.size;
                 let pageEnd = this.urlParams.page*this.urlParams.size;
                 // Maintain param string in a single place to avoid debugging thumbnails lost to a bad param
