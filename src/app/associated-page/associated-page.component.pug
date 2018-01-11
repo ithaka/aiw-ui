@@ -7,4 +7,4 @@ nav-menu([allowSelectAll]="true")
   h1 Associated Assets
   h3(*ngIf="assetTitle") {{assetTitle}}
   br
-  ang-asset-grid([actionOptions]="{associated: true}")
+  ang-asset-grid([actionOptions]="{associated: true}", [hasMaxAssetLimit]="true")
