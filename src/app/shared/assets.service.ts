@@ -570,16 +570,18 @@ export class AssetService {
      * @param colId Collection Id in which the Object resides
      */
     private loadAssociatedAssets(objectId: string, colId: string) {
-        let startIndex = ((this.urlParams.page - 1) * this.urlParams.size) + 1;
+        let startIndex = ((this.urlParams.page - 1) * this.urlParams.size) + 1
         this.getAssociated(objectId, colId, startIndex, this.urlParams.size)
             .then((data) => {
                 if (!Object.keys(data).length) {
-                    throw new Error("No data in image group thumbnails response");
+                    throw new Error("No data in image group thumbnails response")
                 }
-                this.updateLocalResults(data);
+                // The thumnail grid expects the total number of results in 'total' property of the response
+                data['total'] = data['count']
+                this.updateLocalResults(data)
             })
             .catch((error) => {
-                console.log(error);
+                console.log(error)
             });
     }
 
