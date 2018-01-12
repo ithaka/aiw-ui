@@ -62,7 +62,7 @@ export class NavMenu implements OnInit, OnDestroy {
   private browseOpts: any = {}
 
   // Default IG 'Browse By:' Option controlled via the WLV file 
-  private defaultGrpBrwseBy: string = ''
+  private defaultGrpBrwseBy: string = 'institution'
 
   // Flag for confimation popup for deleting selected asset(s) from the IG
   private showConfirmationModal: boolean = false
