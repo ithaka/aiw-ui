@@ -283,7 +283,7 @@ export class AuthService implements CanActivate {
           .toPromise()
           .then((data) => {
             this._storage.set('institution', data);
-            data && this.setInstitution(data);
+            this.setInstitution(data);
             return data;
           })
           .catch((err) => {
@@ -396,8 +396,8 @@ export class AuthService implements CanActivate {
     // Set analytics object
     this._analytics.setUserInstitution(user.institutionId ? user.institutionId : '')
     // only do these things if the user is ip auth'd or logged in
-    if (user.status && this._storage.get('user').username != user.username) {
-      console.log(this._storage.get('user').username, user.username, this._storage.get('user').username == user.username)
+    let institution = this.institutionObjSource.getValue()
+    if (user.status && (this._storage.get('user').username != user.username || !institution.institutionid)) {
       // Refresh institution object
       this.refreshUserInstitution()
     }
