@@ -136,6 +136,7 @@ export class AssetGrid implements OnInit, OnDestroy {
   ) {
       this._storage = locker.useDriver(Locker.DRIVERS.LOCAL);
       let prefs = this._auth.getFromStorage('prefs')
+      console.log(prefs)
       if (prefs && prefs.pageSize) {
         this.pagination.size = prefs.pageSize
         this.largeThmbView = prefs.largeThumbnails
@@ -354,7 +355,9 @@ export class AssetGrid implements OnInit, OnDestroy {
     if(this.pagination.size != size){
       this._assets.goToPage(1, true)
       this._assets.setPageSize(size)
-      this._auth.store('prefs', { pageSize: size })
+      // this._auth.store('prefs', { pageSize: size })
+      let updatedPrefs = Object.assign(this._storage.get('prefs') || {}, { pageSize: size })
+      this._storage.set('prefs', updatedPrefs)
     }
   }
 
@@ -363,7 +366,6 @@ export class AssetGrid implements OnInit, OnDestroy {
       this.activeSort.index = index;
       this.activeSort.label = label;
 
-      // this.pagination.page = 1;
       this._assets.goToPage(1, true);
       this._assets.setSortOpt(index);
     }
