@@ -24,9 +24,9 @@
               button.dropdown-item([ngClass]="{ 'disable': pagination.size == 72 }", (click)="changePageSize(72)") 72
           //- View size toggles
           .icon-bar
-            .icon--toggle((click)="largeThmbView = false", [ngClass]="{ 'active': !largeThmbView }")
+            .icon--toggle((click)="setThumbnailSize(false)", [ngClass]="{ 'active': !largeThmbView }")
               i.icon.icon-small-view
-            .icon--toggle((click)="largeThmbView = true", [ngClass]="{ 'active': largeThmbView }")
+            .icon--toggle((click)="setThumbnailSize(true)", [ngClass]="{ 'active': largeThmbView }")
               i.icon.icon-large-view
           .number-results(*ngIf="!isLoading") {{ totalAssets }}{{ totalAssets == 2000 ? '+' : '' }} results
             = " "
