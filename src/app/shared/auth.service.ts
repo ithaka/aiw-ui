@@ -72,9 +72,6 @@ export class AuthService implements CanActivate {
     pcUpload : false
   }
 
-  // A 401 on the /institution call will cause a loop, which we can prevent by only attempting once for a given user
-  private institutionRefreshedForUser: string
-
   constructor(
     private _router:Router,
     // private _login: LoginService,
@@ -278,16 +275,16 @@ export class AuthService implements CanActivate {
    * Wrapper function for HTTP call to get user institution. Used by nav component
    * @returns Chainable promise containing collection data
    */
-  public refreshUserInstitution() {
+  private refreshUserInstitution() {
       let options = { withCredentials: true }
       // Returns all of the collections names
       return this.http
           .get(this.getUrl() + '/v2/institution', options)
           .toPromise()
           .then((data) => {
-              this._storage.set('institution', data);
-              data && this.setInstitution(data);
-              return data;
+            this._storage.set('institution', data);
+            this.setInstitution(data);
+            return data;
           })
           .catch((err) => {
             if (err && err.status != 401 && err.status != 403) {
@@ -399,8 +396,8 @@ export class AuthService implements CanActivate {
     // Set analytics object
     this._analytics.setUserInstitution(user.institutionId ? user.institutionId : '')
     // only do these things if the user is ip auth'd or logged in
-    if (user.status && this.institutionRefreshedForUser != user.username) {
-      this.institutionRefreshedForUser = user.username
+    let institution = this.institutionObjSource.getValue()
+    if (user.status && (this._storage.get('user').username != user.username || !institution.institutionid)) {
       // Refresh institution object
       this.refreshUserInstitution()
     }

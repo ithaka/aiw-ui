@@ -71,6 +71,7 @@ export class ThumbnailComponent implements OnInit {
 
   // wrapper function for getting the collection type
   getCollectionType(): { name: string, alt: string } {
-    return this.collectionTypeHandler.getCollectionType(this.thumbnail['collectiontypes'], this.thumbnail['contributinginstitutionid'])
+    // Some endpoints give us the collectionType info in 'collectionType: number', where as others give the same info in 'collectiontypes: Array<number>'
+    return this.collectionTypeHandler.getCollectionType( this.thumbnail['collectionType'] ? [ this.thumbnail['collectionType'] ] : this.thumbnail['collectiontypes'], this.thumbnail['contributinginstitutionid'])
   }
 }
