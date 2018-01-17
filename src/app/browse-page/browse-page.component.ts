@@ -12,9 +12,6 @@ import { AppConfig } from '../app.service';
 
 @Component({
   selector: 'ang-browse-page',
-  providers: [
-      AuthService
-  ],
   styleUrls: [ './browse-page.component.scss' ],
   templateUrl: './browse-page.component.pug'
 })
