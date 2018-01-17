@@ -138,6 +138,7 @@ export class AssetGrid implements OnInit, OnDestroy {
       let prefs = this._auth.getFromStorage('prefs')
       if (prefs && prefs.pageSize) {
         this.pagination.size = prefs.pageSize
+        this.largeThmbView = prefs.largeThumbnails
       }
   }
 
@@ -574,6 +575,16 @@ export class AssetGrid implements OnInit, OnDestroy {
     } else {
       // Return to Reorder
     }
+  }
+
+  /**
+   * Sets thumbnail size and makes sure it's saved in prefs
+   * @param large boolean indicating whether or not assets are set to large
+   */
+  private setThumbnailSize(large: boolean): void {
+    this.largeThmbView = large
+    let updatedPrefs = Object.assign(this._storage.get('prefs') || {}, { largeThumbnails: large })
+    this._storage.set('prefs', updatedPrefs)
   }
 
   /**
