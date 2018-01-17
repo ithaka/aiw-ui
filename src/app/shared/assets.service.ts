@@ -406,9 +406,7 @@ export class AssetService {
                     this.loadIgAssets(params.igId);
                 } else if (params.hasOwnProperty("objectId") && params["objectId"] !== "") {
                     //get clustered images thumbnails
-                    let searchTerm = params.term ? params.term : '';
-                    this.loadSearch(searchTerm);
-
+                    this.loadCluster(params.objectId);
                 } else if (params.hasOwnProperty("catId")  && params["catId"] !== "") {
                     //get collection thumbnails
                     this.loadCategory(params.catId);
@@ -572,16 +570,18 @@ export class AssetService {
      * @param colId Collection Id in which the Object resides
      */
     private loadAssociatedAssets(objectId: string, colId: string) {
-        let startIndex = ((this.urlParams.page - 1) * this.urlParams.size) + 1;
+        let startIndex = ((this.urlParams.page - 1) * this.urlParams.size) + 1
         this.getAssociated(objectId, colId, startIndex, this.urlParams.size)
             .then((data) => {
                 if (!Object.keys(data).length) {
-                    throw new Error("No data in image group thumbnails response");
+                    throw new Error("No data in image group thumbnails response")
                 }
-                this.updateLocalResults(data);
+                // The thumnail grid expects the total number of results in 'total' property of the response
+                data['total'] = data['count']
+                this.updateLocalResults(data)
             })
             .catch((error) => {
-                console.log(error);
+                console.log(error)
             });
     }
 
@@ -606,7 +606,7 @@ export class AssetService {
                     throw new Error("No data in image group thumbnails response");
                 }
 
-                data.count = data.items.length;
+                data.total = data.items.length;
                 let pageStart = (this.urlParams.page - 1)*this.urlParams.size;
                 let pageEnd = this.urlParams.page*this.urlParams.size;
                 // Maintain param string in a single place to avoid debugging thumbnails lost to a bad param
@@ -744,6 +744,30 @@ export class AssetService {
             })
             .catch(error => {
                 console.log(error);
+            });
+    }
+
+    private loadCluster(objectId: string){
+
+        let options = { withCredentials: true };
+        let startIndex = ((this.urlParams.page - 1) * this.urlParams.size) + 1;
+
+        let requestString = [this._auth.getUrl(), "cluster", objectId, "thumbnails", startIndex, this.urlParams.size].join("/");
+
+        this.http
+            .get(requestString, options)
+            .toPromise()
+            .then((res) => {
+                if (res['thumbnails']) {
+                    // Set the allResults object
+                    this.updateLocalResults(res);
+                } else {
+                    throw new Error("There are no thumbnails. Server responsed with status " + res['status']);
+                }
+            })
+            .catch((err) => {
+                console.log(err)
+                this.allResultsSource.error(err)
             });
     }
 

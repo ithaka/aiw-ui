@@ -22,7 +22,7 @@ export class AssetSearchService {
     {name: "Creator", value: "artcreator" },
     {name: "Title", value: "arttitle" },
     {name: "Location", value: "artlocation" },
-    {name: "Repository", value: "artrepository" },
+    {name: "Repository", value: "artcurrentrepository" },
     {name: "Subject", value: "artsubject" },
     {name: "Material", value: "artmaterial" },
     {name: "Style or Period", value: "artstyleperiod" },
@@ -234,22 +234,15 @@ export class AssetSearchService {
           if( (currentFilter.filterGroup === 'collectiontypes') && (filterValue === 2 || filterValue === 4) ){
             institutionalTypeFilter = true
             filterArray.push('contributinginstitutionid:\"' + this._auth.getUser().institutionId.toString() + '\"')
-          } else {
-            // Push filter queries into the array
-            let filterValueArray = filterValue.toString().trim().split('|')
-            for( let filterVal of filterValueArray){
-              filterArray.push(currentFilter.filterGroup + ':\"' + filterVal + '\"')
-            }
+          }
+          
+          // Push filter queries into the array
+          let filterValueArray = filterValue.toString().trim().split('|')
+          for( let filterVal of filterValueArray){
+            filterArray.push(currentFilter.filterGroup + ':\"' + filterVal + '\"')
           }
         }
       }
-    }
-
-    /**
-     * In case on clusters, search on clusterid
-     */
-    if(options['objectId']){
-      filterArray.push("clusterid:\"" + options['objectId'] + "\"")
     }
 
     if(options.colId || options['coll']){
