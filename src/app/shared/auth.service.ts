@@ -84,6 +84,7 @@ export class AuthService implements CanActivate {
     private idle: Idle,
     private keepalive: Keepalive
   ) {
+    console.log('CONSTRUCTING AUTH SERVICE')
     this._storage = locker.useDriver(Locker.DRIVERS.LOCAL);
     this._router = _router;
 
@@ -219,12 +220,20 @@ export class AuthService implements CanActivate {
     this.refreshUserSession()
   }
 
+  private refreshUserSessionInProgress: boolean = false
   public refreshUserSession(triggerSessionExpModal?: boolean): void {
+    // cancel out if we're currently getting the user session
+    if (this.refreshUserSessionInProgress) { return }
+
+    // set to true so we don't have multiple /userinfo calls going on at once
+    this.refreshUserSessionInProgress = true
     this.getUserInfo(triggerSessionExpModal).take(1).toPromise()
       .then(res => {
+        this.refreshUserSessionInProgress = false
         console.info('Access Token refreshed <3')
       })
       .catch(err => {
+        this.refreshUserSessionInProgress = false
         console.error('Access Token refresh failed </3')
       })
   }
@@ -270,27 +279,29 @@ export class AuthService implements CanActivate {
       }
       return encodedString.replace(/%20/g, '+');
   }
-
+  
   /**
    * Wrapper function for HTTP call to get user institution. Used by nav component
    * @returns Chainable promise containing collection data
    */
   private refreshUserInstitution() {
-      let options = { withCredentials: true }
-      // Returns all of the collections names
-      return this.http
-          .get(this.getUrl() + '/v2/institution', options)
-          .toPromise()
-          .then((data) => {
-            this._storage.set('institution', data);
-            this.setInstitution(data);
-            return data;
-          })
-          .catch((err) => {
-            if (err && err.status != 401 && err.status != 403) {
-              console.error(err)
-            }
-          })
+    let options = { withCredentials: true }
+    // Returns all of the collections names
+    return this.http
+      .get(this.getUrl() + '/v2/institution', options)
+      .toPromise()
+      .then((data) => {
+        this._storage.set('institution', data)
+        this.setInstitution(data)
+        // this.institutionRefreshInProgress = false
+        return data
+      })
+      .catch((err) => {
+        // this.institutionRefreshInProgress = false
+        if (err && err.status != 401 && err.status != 403) {
+          console.error(err)
+        }
+      })
   }
 
   public getInstitution(): Observable<any> {
@@ -391,16 +402,18 @@ export class AuthService implements CanActivate {
     }
     // Should have session timeout, username, baseProfileId, typeId
     this._storage.set('user', user);
+    // only do these things if the user is ip auth'd or logged in and the user has changed
+    let institution = this.institutionObjSource.getValue()
+    if (user.status && (this.userSource.getValue().username != user.username || !institution.institutionid)) {
+      // Refresh institution object
+      this.refreshUserInstitution()
+    }
     // Update observable
     this.userSource.next(user)
     // Set analytics object
     this._analytics.setUserInstitution(user.institutionId ? user.institutionId : '')
-    // only do these things if the user is ip auth'd or logged in
-    let institution = this.institutionObjSource.getValue()
-    if (user.status && (this._storage.get('user').username != user.username || !institution.institutionid)) {
-      // Refresh institution object
-      this.refreshUserInstitution()
-    }
+    
+    // if (user.status && (this._storage.get('user').username != user.username || !institution.institutionid)) {
   }
 
   /**
