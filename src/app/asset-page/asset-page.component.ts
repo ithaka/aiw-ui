@@ -118,7 +118,7 @@ export class AssetPage implements OnInit, OnDestroy {
 
         this.subscriptions.push(
             this.route.params.subscribe((routeParams) => {
-                this.assets = []
+                // this.assets = []
                 let assetIdProperty = this._auth.featureFlags[routeParams['featureFlag']]? 'artstorid' : 'objectId'
                 this.assetGroupId = routeParams['groupId']
                 // Find feature flags
@@ -444,6 +444,11 @@ export class AssetPage implements OnInit, OnDestroy {
                         thumbnail.selected = false;
                     }
                 });
+                
+                //Once the primary asset (assets[0]) is removed change the URL (navigate) to the new primary asset
+                if (i === 0){
+                    this._router.navigate( ['/asset',  this.assets[0][assetIdProperty]] );
+                }
 
             }
         })
