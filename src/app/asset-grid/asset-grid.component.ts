@@ -83,7 +83,11 @@ export class AssetGrid implements OnInit, OnDestroy {
 
   // @Output() updateSearchInRes: EventEmitter<boolean> = new EventEmitter();
 
-  private pagination: any = {
+  private pagination: {
+    totalPages: number,
+    size: number,
+    page: number
+  } = {
     totalPages: 1,
     size: 24,
     page: 1
@@ -131,6 +135,12 @@ export class AssetGrid implements OnInit, OnDestroy {
     private route: ActivatedRoute
   ) {
       this._storage = locker.useDriver(Locker.DRIVERS.LOCAL);
+      let prefs = this._auth.getFromStorage('prefs')
+      console.log(prefs)
+      if (prefs && prefs.pageSize) {
+        this.pagination.size = prefs.pageSize
+        this.largeThmbView = prefs.largeThumbnails
+      }
   }
 
   ngOnInit() {
@@ -343,8 +353,11 @@ export class AssetGrid implements OnInit, OnDestroy {
    */
   private changePageSize(size: number){
     if(this.pagination.size != size){
-      this._assets.goToPage(1, true);
-      this._assets.setPageSize(size);
+      this._assets.goToPage(1, true)
+      this._assets.setPageSize(size)
+      // this._auth.store('prefs', { pageSize: size })
+      let updatedPrefs = Object.assign(this._storage.get('prefs') || {}, { pageSize: size })
+      this._storage.set('prefs', updatedPrefs)
     }
   }
 
@@ -353,7 +366,6 @@ export class AssetGrid implements OnInit, OnDestroy {
       this.activeSort.index = index;
       this.activeSort.label = label;
 
-      // this.pagination.page = 1;
       this._assets.goToPage(1, true);
       this._assets.setSortOpt(index);
     }
@@ -565,6 +577,16 @@ export class AssetGrid implements OnInit, OnDestroy {
     } else {
       // Return to Reorder
     }
+  }
+
+  /**
+   * Sets thumbnail size and makes sure it's saved in prefs
+   * @param large boolean indicating whether or not assets are set to large
+   */
+  private setThumbnailSize(large: boolean): void {
+    this.largeThmbView = large
+    let updatedPrefs = Object.assign(this._storage.get('prefs') || {}, { largeThumbnails: large })
+    this._storage.set('prefs', updatedPrefs)
   }
 
   /**
