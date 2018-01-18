@@ -8,6 +8,7 @@ import { AssetService } from '../../shared';
 import { AnalyticsService } from '../../analytics.service';
 import { AssetFiltersService } from '../../asset-filters/asset-filters.service';
 import { Params } from '@angular/router/src/shared';
+import { PACKAGE_ROOT_URL } from '@angular/core/src/application_tokens';
 
 @Component({
   selector: 'ang-search',
@@ -136,7 +137,13 @@ export class SearchComponent implements OnInit, OnDestroy {
       }
     }
 
-    this._router.navigate(['/search', term, params]);
+    this._router.navigate(['/search', term, params])
+      .then((navigated) => {
+        if (!navigated) {
+          // trigger re-search here
+          this._assets.queryAll(this.route.snapshot.params, true)
+        }
+      })
   }
 
   /**
