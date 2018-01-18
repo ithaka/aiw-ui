@@ -12,7 +12,8 @@ import {
   GroupService,
   ImageGroupService,
   LogService,
-  Thumbnail
+  Thumbnail,
+  ToolboxService
 } from '../shared'
 import { AssetFiltersService } from '../asset-filters/asset-filters.service'
 
@@ -131,14 +132,20 @@ export class AssetGrid implements OnInit, OnDestroy {
     private _renderer: Renderer,
     private _router: Router,
     private _search: AssetSearchService,
+    private _toolbox: ToolboxService,
     private locker: Locker,
     private route: ActivatedRoute
   ) {
       this._storage = locker.useDriver(Locker.DRIVERS.LOCAL);
       let prefs = this._auth.getFromStorage('prefs')
-      console.log(prefs)
-      if (prefs && prefs.pageSize) {
+      if (prefs && prefs.pageSize && prefs.pageSize != 24) {
         this.pagination.size = prefs.pageSize
+        this._router.navigate(
+          ['.', this._toolbox.addToParams({ size: prefs.pageSize }, this.route.snapshot.params )],
+          { relativeTo: this.route }
+        )
+      }
+      if (prefs && prefs.largeThumbnails) {
         this.largeThmbView = prefs.largeThumbnails
       }
   }
