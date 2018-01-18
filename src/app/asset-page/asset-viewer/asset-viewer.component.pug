@@ -12,6 +12,9 @@
     audio.item.video-player(id="audio-{{ asset.id + '-' + index }}", controls, style="display:none;")
       source([attr.src]="asset.downloadLink", type="audio/MPEG")
       | {{ 'audio_error' }}
+  // Qtvr Krpano viewer
+  .krpano-viewer.osd-wrap([class.hidden]="!isKrpanoAsset || mediaLoadingFailed")
+    .pano(id="pano-{{ index }}")
   // Large thumbnail fallback
   #fallbackViewer(*ngIf="mediaLoadingFailed")
     img.item.item--thumbnail(alt="{{ asset.title }}", [attr.src]="_assets.makeThumbUrl(asset.imgURL, thumbnailSize)", (error)="thumbnailError($event)")
@@ -27,7 +30,7 @@
     //- UX Decision: Remove compare button from individual assets for now
     //- button.btn.btn--icon(*ngIf="isFullscreen", id="compare-{{ asset.id + '-' + index }}", (click)="assetDrawer.emit()", title="Compare")
     //-   i.icon.icon-compare
-    button.btn.btn--icon(*ngIf="isFullscreen && index !== 0", (click)="removeAsset.emit(asset)", title="Remove from Comparison")
+    button.btn.btn--icon(*ngIf="isFullscreen && assetCompareCount > 1", (click)="removeAsset.emit(asset)", title="Remove from Comparison")
       i.icon.icon-close
   .fullscreen-metadata(*ngIf="isFullscreen", [class.slideAway]="!showCaption")
     .vertical-center-wrap

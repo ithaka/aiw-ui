@@ -46,6 +46,12 @@ export class Asset {
   /** Used for holding formatted asset metadata from the service response */
   formattedMetaArray: any = [];
 
+  /** Used for holding media resolver info from the service response */
+  viewerData?: {
+    base_asset_url?: string,
+    panorama_xml?: string
+  }
+
   private objectTypeNames: any = {
       1: 'specimen',
       2: 'visual',
@@ -207,7 +213,8 @@ export class Asset {
   private setAssetProperties(data: any): void {
     // Make sure we've received data that we expect from /metadata
     if (!data || !data.metadata || !data.metadata[0]) {
-        this.dataLoadedSource.error({'message':'Unable to load metadata.'})
+        // We can assume the user was unauthorized if no metadata came back but an error wasn't thrown
+        this.dataLoadedSource.error({'message':'Unable to load metadata.', 'status':403 })
         return
     } else {
         data = data.metadata[0]
@@ -251,6 +258,12 @@ export class Asset {
         let url = imageServer + data.image_url + "?cell=" + downloadSize + "&rgnn=0,0,1,1&cvt=JPEG";
         this.downloadLink = this._auth.getHostname() + "/api/download?imgid=" + this.id + "&url=" + encodeURIComponent(url);
     }
+
+    // Set the media resolver info for QTVR assets
+    if( data.viewer_data ){
+        this.viewerData = data.viewer_data
+    }
+
     // Save the Tile Source for IIIF
     let imgPath
     if (data && data.metadata && data.metadata[0] && data.metadata[0]['image_url']) {
