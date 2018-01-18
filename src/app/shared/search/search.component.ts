@@ -7,6 +7,7 @@ import { Subscription }   from 'rxjs/Subscription';
 import { AssetService } from '../../shared';
 import { AnalyticsService } from '../../analytics.service';
 import { AssetFiltersService } from '../../asset-filters/asset-filters.service';
+import { Params } from '@angular/router/src/shared';
 
 @Component({
   selector: 'ang-search',
@@ -43,29 +44,28 @@ export class SearchComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.subscriptions.push(
       this.route.params.subscribe((params) => {
-        if (params['term']) {
-          this.formatSearchTerm(params['term']);
-          // this.term = params['term'];
+        if (params.term) {
+          this.formatSearchTerm(params.term)
         }
       })
-    );
+    )
 
     // Subscribe to pagination values
     this.subscriptions.push(
-      this._assets.pagination.subscribe((pagination: any) => {
-        this.size = parseInt(pagination.size);
+      this._assets.pagination.subscribe((pagination) => {
+        this.size = parseInt(pagination.size)
       })
     );
 
     this.subscriptions.push(
       this._router.events.subscribe( (event) => {
         if(event instanceof NavigationEnd) {
-          let routeName = event.url.split('/')[1];
+          let routeName = event.url.split('/')[1]
           if((routeName === 'category') || (routeName === 'collection')){
             this.nestedSrchLbl = routeName;
           }
           else{
-            this.nestedSrchLbl = 'results';
+            this.nestedSrchLbl = 'results'
           }
         }
       })
@@ -73,7 +73,7 @@ export class SearchComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.subscriptions.forEach((sub) => { sub.unsubscribe(); });
+    this.subscriptions.forEach((sub) => { sub.unsubscribe() })
   }
 
   /**
@@ -82,7 +82,7 @@ export class SearchComponent implements OnInit, OnDestroy {
    */
   private updateSearchTerm(term: string) {
     if (!term || term === "") {
-      return;
+      return
     }
 
     // Clear filters for new search
@@ -95,43 +95,43 @@ export class SearchComponent implements OnInit, OnDestroy {
     this.angulartics.eventTrack.next({ action: "simpleSearch", properties: { category: "search", label: this.term }})
 
     let routeParams = this.route.snapshot.params;
-    let params = {
+    let params: Params = {
       page: 1,
       size: this.size
-    };
+    }
 
     // Maintain feature flags
-    if (routeParams['featureFlag']) {
-      params['featureFlag'] = routeParams['featureFlag']
+    if (routeParams.featureFlag) {
+      params.featureFlag = routeParams.featureFlag
     }
 
     if(this.searchInResults){ // Search within results
 
-      if(routeParams['colId']){
+      if(routeParams.colId){
         // params['coll'] = [ routeParams['colId'] ];
-        params['term'] = term;
+        params.term = term;
         this._router.navigate( [ '/collection', routeParams['colId'], params ] );
         return;
       }
-      else if(routeParams['catId']){
-        params['categoryId'] = routeParams['catId'];
+      else if(routeParams.catId){
+        params.categoryId = routeParams.catId;
       }
-      else if(routeParams['term']){
+      else if(routeParams.term){
         let updatedTermValue = '';
-        updatedTermValue = routeParams['term'] + ' AND ' + term;
+        updatedTermValue = routeParams.term + ' AND ' + term;
         term = updatedTermValue;
 
-        if(routeParams['classification']){
-          params['classification'] = routeParams['classification'].split(',');
+        if(routeParams.classification){
+          params.classification = routeParams.classification.split(',');
         }
-        if(routeParams['coll']){
-          params['coll'] = routeParams['coll'].split(',');
+        if(routeParams.coll){
+          params.coll = routeParams.coll.split(',');
         }
-        if(routeParams['collTypes']){
-          params['collTypes'] = routeParams['collTypes'].split(',');
+        if(routeParams.collTypes){
+          params.collTypes = routeParams.collTypes.split(',');
         }
-        if(routeParams['geography']){
-          params['geography'] = routeParams['geography'].split(',');
+        if(routeParams.geography){
+          params.geography = routeParams.geography.split(',');
         }
       }
     }
