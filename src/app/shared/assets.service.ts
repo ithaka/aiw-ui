@@ -221,7 +221,7 @@ export class AssetService {
         this.allResultsValue['thumbnails'] = this.allResultsValue['thumbnails'].filter((thumbnail: Thumbnail) => {
             return ids.indexOf(thumbnail.objectId) < 0
         });
-        this.allResultsValue['count'] = this.allResultsValue['thumbnails'].length;
+        this.allResultsValue['total'] = this.allResultsValue['thumbnails'].length;
         this.allResultsSource.next(this.allResultsValue);
     }
 
