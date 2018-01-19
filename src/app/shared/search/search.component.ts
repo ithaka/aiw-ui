@@ -137,6 +137,7 @@ export class SearchComponent implements OnInit, OnDestroy {
       }
     }
 
+    // Allow user to reload search (eg., hitting enter on search field)
     this._router.navigate(['/search', term, params])
       .then((navigated) => {
         if (!navigated) {
