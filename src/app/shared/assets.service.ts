@@ -214,14 +214,15 @@ export class AssetService {
     }
 
     /**
-     * Removes all object ids in allResults which match one of the ids in ids
+     * Removes all object ids in allResults which match one of the ids in ids and update total number of results
      * @param ids The array of object ids to remove from allResults
+     * @param totalResults Total number of results after removing the selected asset(s)
      */
-    public removeFromResults(ids: string[]): void {
+    public removeFromResults(ids: string[], totalResults: number ): void {
         this.allResultsValue['thumbnails'] = this.allResultsValue['thumbnails'].filter((thumbnail: Thumbnail) => {
             return ids.indexOf(thumbnail.objectId) < 0
         });
-        this.allResultsValue['total'] = this.allResultsValue['thumbnails'].length;
+        this.allResultsValue['total'] = totalResults;
         this.allResultsSource.next(this.allResultsValue);
     }
 
