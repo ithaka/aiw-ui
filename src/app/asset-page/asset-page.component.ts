@@ -506,6 +506,7 @@ export class AssetPage implements OnInit, OnDestroy {
         else{ // Enter Quiz mode
             this.quizMode = true;
             this.showAssetCaption = false;
+            this.toggleAssetDrawer(false)
 
             this.assets.splice(1);
             for(let i = 0; i < this.prevAssetResults.thumbnails.length; i++){
@@ -566,8 +567,12 @@ export class AssetPage implements OnInit, OnDestroy {
       }
     }
 
-    private toggleAssetDrawer() {
-      this.showAssetDrawer = !this.showAssetDrawer;
+    /**
+     * Provides "setter" for toggling asset drawer visual
+     * @param show true if you want to show the asset drawer
+     */
+    private toggleAssetDrawer(show: boolean) {
+      this.showAssetDrawer = show
     }
 
     /**
