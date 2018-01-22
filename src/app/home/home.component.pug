@@ -30,7 +30,7 @@ nav-menu
             h3.browse-category {{ 'HOME.BROWSE.TEACHING_HEADING' | translate }}
             p.small {{ 'HOME.BROWSE.TEACHING_LIST' | translate }}
           // Image Groups Link
-          a#linkBrowseIGs.list-group-item(*ngIf="browseSec.imageGrps", [routerLink]="['/browse','groups', 'institution']")
+          a#linkBrowseIGs.list-group-item(*ngIf="browseSec.imageGrps", [routerLink]="['/browse','groups', defaultGrpBrwseBy]")
             h3.browse-category {{ 'HOME.BROWSE.GROUPS_HEADING' | translate }}
             p.small {{ 'HOME.BROWSE.GROUPS_LIST' | translate }}
       // Institution Shared Shelf Collections
