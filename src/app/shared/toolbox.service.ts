@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot } from '@angular/router';
+import { Params } from '@angular/router/src/shared';
 
 @Injectable()
 export class ToolboxService {
@@ -57,5 +58,22 @@ export class ToolboxService {
 
         // returns true only after false HAS NOT BEEN returned through all loops
         return true;
+    }
+
+    /**
+     * Allows direct modification of the url's query parameters and creates a navigation event
+     * @param params the parameters to add to the url (if duplicate parameters already in url, this will overwrite them)
+     * @param reset allows resetting of queryParams to empty object plus whatever params you pass, instead of keeping old params
+     */
+    public addToParams(params: Params, currentParams: any, reset?: boolean): Params {
+        let baseParams: Params
+        if (reset) {
+            baseParams = {}
+        } else {
+            baseParams = Object.assign({}, currentParams)
+        }
+        let newParams: Params = Object.assign(baseParams, params)
+
+        return newParams
     }
 }
