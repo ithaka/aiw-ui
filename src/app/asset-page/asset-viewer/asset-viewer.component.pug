@@ -30,7 +30,7 @@
     //- UX Decision: Remove compare button from individual assets for now
     //- button.btn.btn--icon(*ngIf="isFullscreen", id="compare-{{ asset.id + '-' + index }}", (click)="assetDrawer.emit()", title="Compare")
     //-   i.icon.icon-compare
-    button.btn.btn--icon(*ngIf="isFullscreen && index !== 0", (click)="removeAsset.emit(asset)", title="Remove from Comparison")
+    button.btn.btn--icon(*ngIf="isFullscreen && assetCompareCount > 1", (click)="removeAsset.emit(asset)", title="Remove from Comparison")
       i.icon.icon-close
   .fullscreen-metadata(*ngIf="isFullscreen", [class.slideAway]="!showCaption")
     .vertical-center-wrap
