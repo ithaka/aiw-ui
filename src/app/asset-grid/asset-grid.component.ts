@@ -262,7 +262,7 @@ export class AssetGrid implements OnInit, OnDestroy {
           if('total' in allResults){
             this.totalAssets = allResults.total
             let total = this.hasMaxAssetLimit && this.totalAssets > MAX_RESULTS_COUNT ? MAX_RESULTS_COUNT : this.totalAssets
-            this.pagination.totalPages = Math.floor((total + this.pagination.size - 1) / this.pagination.size)
+            this.pagination.totalPages = ( total === 0 ) ? 1 : Math.floor((total + this.pagination.size - 1) / this.pagination.size)
             this.isLoading = false
           } else if(this.assetCount && this.results && this.results.length > 0){
             this.totalAssets = this.assetCount
