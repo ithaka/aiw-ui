@@ -29,7 +29,7 @@
         (removeAsset)="toggleAsset(asset)",
         (nextPage)="showNextAsset()",
         (prevPage)="showPrevAsset()",
-        (assetDrawer)="toggleAssetDrawer()")
+        (assetDrawer)="toggleAssetDrawer(!showAssetDrawer)")
       .col-md-12.quiz-caption-cntnr(*ngIf="isFullscreen", [ngClass]="[ showAssetCaption ? '' : 'cntnr-bg' ]")
         .caption-btn-cntnr([ngClass]="[ showAssetCaption ? 'active' : '' ]", (click)="showAssetCaption = !showAssetCaption", title="{{ showAssetCaption ? 'Hide Asset Meta Information' : 'Show Asset Meta Information' }}")
           span.caption-btn
@@ -126,7 +126,7 @@
     //- Asset Drawer
     .asset-drawer(*ngIf="isFullscreen", [class.slideOut]="showAssetDrawer && isFullscreen")
       .col-sm-12
-        h3.asset-drawer__header((click)="showAssetDrawer = false")
+        h3.asset-drawer__header((click)="toggleAssetDrawer(!showAssetDrawer)")
           button.asset-drawer__close.pr-1(
             *ngIf="isFullscreen",
             type="button",
