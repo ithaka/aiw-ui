@@ -61,7 +61,7 @@ export class Asset {
       8: 'people',
       9: 'repository',
       10: 'image',
-      11: 'qtvr',
+      11: 'panorama',
       12: 'audio',
       13: '3d',
       21: 'powerpoint',
