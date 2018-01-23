@@ -37,7 +37,7 @@ export class App {
   url = 'https://artstor.org/'
   title = 'Artstor'
 
-  private showSkyBanner: boolean = true
+  private showSkyBanner: boolean = false
 
   constructor(
     public _app: AppConfig,
