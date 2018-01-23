@@ -259,6 +259,7 @@ export class AssetPage implements OnInit, OnDestroy {
         asset.isDataLoaded.subscribe(
             (isLoaded) => {
                 if (isLoaded) {
+                    this.angulartics.eventTrack.next({ action: "view-" + asset.typeName(), properties: { category: "asset", label: this.assets[0].id }})
                     this._title.setTitle( asset.title );
                     document.querySelector('meta[name="DC.type"]').setAttribute('content', 'Artwork');
                     document.querySelector('meta[name="DC.title"]').setAttribute('content', asset.title);
