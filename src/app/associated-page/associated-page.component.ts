@@ -55,20 +55,7 @@ export class AssociatedPage implements OnInit, OnDestroy {
         }
         if (this.objectId && this.colId) {
           this._assets.queryAll(params);
-
-          // get the associated images title
-          this.http
-            .get([this._auth.getUrl(), "metadata", this.objectId].join("/"), options)
-            .toPromise()
-            .then((data) => {
-              if (!Object.keys(data).length) {
-                throw new Error("No data in image group description response");
-              }
-              this.assetTitle = data['title'];
-            })
-            .catch((error) => { console.error(error); });
         }
-
       })
     );
 
