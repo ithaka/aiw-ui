@@ -592,43 +592,50 @@ export class AssetService {
      */
     private loadIgAssets(igId: string) {
         // Reset No IG observable
-        this.noIGSource.next(false);
-        this.noAccessIGSource.next(false);
+        this.noIGSource.next(false)
+        this.noAccessIGSource.next(false)
 
         // Create a request option
-        let startIndex = ((this.urlParams.page - 1) * this.urlParams.size) + 1;
+        let startIndex = ((this.urlParams.page - 1) * this.urlParams.size) + 1
 
-        let requestString: string = [this._auth.getUrl(), "imagegroup",igId, "thumbnails", startIndex, this.urlParams.size, this.activeSort.index].join("/");
+        let requestString: string = [this._auth.getUrl(), "imagegroup",igId, "thumbnails", startIndex, this.urlParams.size, this.activeSort.index].join("/")
 
         this._groups.get(igId)
             .toPromise()
             .then((data) => {
                 if (!Object.keys(data).length) {
-                    throw new Error("No data in image group thumbnails response");
+                    throw new Error("No data in image group thumbnails response")
                 }
 
-                data.total = data.items.length;
-                let pageStart = (this.urlParams.page - 1)*this.urlParams.size;
-                let pageEnd = this.urlParams.page*this.urlParams.size;
-                // Maintain param string in a single place to avoid debugging thumbnails lost to a bad param
-                const ID_PARAM = "object_ids="
-                let idsAsTerm: string =  data.items.slice(pageStart,pageEnd).join('&'+ ID_PARAM);
+                data.total = data.items.length
 
-                let options = { withCredentials: true };
+                // Fetch the asset(s) via items call only if the IG has atleast one asset
+                if(data.total > 0){
+                    let pageStart = (this.urlParams.page - 1)*this.urlParams.size
+                    let pageEnd = this.urlParams.page*this.urlParams.size
+                    // Maintain param string in a single place to avoid debugging thumbnails lost to a bad param
+                    const ID_PARAM = "object_ids="
+                    let idsAsTerm: string =  data.items.slice(pageStart,pageEnd).join('&'+ ID_PARAM)
 
-                this.http.get(this._auth.getHostname() + '/api/v1/group/'+ igId +'/items?'+ ID_PARAM + idsAsTerm, options)
-                    .subscribe(
-                        (res) => {
-                            let results = res;
-                            data.thumbnails = results['items'];
-                            // Set the allResults object
-                            this.updateLocalResults(data);
-                    }, (error) => {
-                        // Pass portion of the data we have
-                        this.updateLocalResults(data);
-                        // Pass error down to allResults listeners
-                        this.allResultsSource.error(error); // .throw(error);
-                    });
+                    let options = { withCredentials: true }
+
+                    this.http.get(this._auth.getHostname() + '/api/v1/group/'+ igId +'/items?'+ ID_PARAM + idsAsTerm, options)
+                        .subscribe(
+                            (res) => {
+                                let results = res
+                                data.thumbnails = results['items']
+                                // Set the allResults object
+                                this.updateLocalResults(data)
+                        }, (error) => {
+                            // Pass portion of the data we have
+                            this.updateLocalResults(data)
+                            // Pass error down to allResults listeners
+                            this.allResultsSource.error(error) // .throw(error);
+                        });
+                } else {
+                    data.thumbnails = []
+                    this.updateLocalResults(data)
+                }
 
             })
             .catch((error) => {

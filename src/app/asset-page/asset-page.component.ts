@@ -523,7 +523,7 @@ export class AssetPage implements OnInit, OnDestroy {
         else{ // Enter Quiz mode
             this.quizMode = true;
             this.showAssetCaption = false;
-            this.toggleAssetDrawer(false);
+            this.toggleAssetDrawer(false)
 
             this.assets.splice(1);
             for(let i = 0; i < this.prevAssetResults.thumbnails.length; i++){
