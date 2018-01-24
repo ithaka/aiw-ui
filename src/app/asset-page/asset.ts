@@ -137,7 +137,6 @@ export class Asset {
    * Get name for Object Type
    */
   public typeName(): string {
-      console.log(this.typeId)
       return this.objectTypeNames[this.typeId];
   }
 
