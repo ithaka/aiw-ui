@@ -58,27 +58,41 @@ export class App {
     // Set metatitle to "Artstor" except for asset page where metatitle is {{ Asset Title }}
     router.events.subscribe(event => {
       if(event instanceof NavigationStart) {
-        let event_url_array = event.url.split('/');
+        let event_url_array = event.url.split('/')
         if(event_url_array && (event_url_array.length > 1) && (event_url_array[1] !== 'asset')){
-          this.titleService.setTitle(this.title);
+          this.titleService.setTitle(this.title)
         }
       }
       else if(event instanceof NavigationEnd) {
+        let event_url_array = event.url.split('/')
+        let zendeskElements = document.querySelectorAll('.zopim')
+
         // On navigation end, load the zendesk chat widget if user lands on login page else hide the widget
-        if( event.url === '/login' ) {
+        if( event_url_array[1] === 'login' ) {
           this._script.loadScript('zendesk')
             .then( data => {
               if(data['status'] === 'loaded'){
               } else if(data['status'] === 'already_loaded'){ // if the widget script has already been loaded then just show the widget
-                document.querySelector('.zopim')['style']['display'] = 'block';
+                zendeskElements[0]['style']['display'] = 'block'
               }
             })
             .catch( error => console.error(error) )
         } else {
+
+          if( event_url_array[1] === 'group' ){
+            this._script.loadScript('ethnio-ig-survey')
+              .then( data => {
+                if(data['status'] === 'loaded'){
+                } else if(data['status'] === 'already_loaded'){ 
+                }
+              })
+              .catch( error => console.error(error) )
+          } 
+
           // If Zendesk chat is loaded, hide it
-          if(document.querySelector('.zopim')) {
-            document.querySelectorAll('.zopim')[0]['style']['display'] = 'none';
-            document.querySelectorAll('.zopim')[1]['style']['display'] = 'none';
+          if(zendeskElements && zendeskElements.length > 1) {
+            zendeskElements[0]['style']['display'] = 'none'
+            zendeskElements[1]['style']['display'] = 'none'
           }
         }
       }
