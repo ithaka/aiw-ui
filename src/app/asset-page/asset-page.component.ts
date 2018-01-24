@@ -450,7 +450,7 @@ export class AssetPage implements OnInit, OnDestroy {
         }
         // remove from assets
         this.assets.forEach( (viewAsset, i) => {
-            if (asset[assetIdProperty] == viewAsset) {
+            if (asset[assetIdProperty] == viewAsset.id) {
                 asset.selected = false;
                 this.assets.splice(i, 1);
                 add = false;
