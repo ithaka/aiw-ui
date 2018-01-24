@@ -17,7 +17,7 @@
         [testEnv]="_auth.getEnv() == 'test'",
         [assetId]="assetId",
         (assetMetadata)="handleLoadedMetadata($event, i)",
-        [ngClass]="[ 'asset-viewer-' + assets.length ]",
+        [ngClass]="[ 'asset-viewer-' + assetIds.length ]",
         (fullscreenChange)="updateFullscreenVar($event)",
         [index]="i",
         [assetCompareCount]="assets.length",
