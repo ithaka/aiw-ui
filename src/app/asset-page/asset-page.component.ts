@@ -450,7 +450,7 @@ export class AssetPage implements OnInit, OnDestroy {
         }
         // remove from assets
         this.assets.forEach( (viewAsset, i) => {
-            if (asset[assetIdProperty] == viewAsset.id) {
+            if (asset[assetIdProperty] == viewAsset) {
                 asset.selected = false;
                 this.assets.splice(i, 1);
                 add = false;
@@ -523,7 +523,7 @@ export class AssetPage implements OnInit, OnDestroy {
         else{ // Enter Quiz mode
             this.quizMode = true;
             this.showAssetCaption = false;
-            this.toggleAssetDrawer(false)
+            this.toggleAssetDrawer(false);
 
             this.assets.splice(1);
             for(let i = 0; i < this.prevAssetResults.thumbnails.length; i++){
@@ -585,6 +585,7 @@ export class AssetPage implements OnInit, OnDestroy {
     }
 
     /** this.showAssetDrawer = !this.showAssetDrawer;
+    /**
      * Provides "setter" for toggling asset drawer visual
      * @param show true if you want to show the asset drawer
      */
