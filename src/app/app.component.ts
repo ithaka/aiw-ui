@@ -78,17 +78,6 @@ export class App {
             })
             .catch( error => console.error(error) )
         } else {
-
-          if( event_url_array[1] === 'group' ){
-            this._script.loadScript('ethnio-ig-survey')
-              .then( data => {
-                if(data['status'] === 'loaded'){
-                } else if(data['status'] === 'already_loaded'){ 
-                }
-              })
-              .catch( error => console.error(error) )
-          } 
-
           // If Zendesk chat is loaded, hide it
           if(zendeskElements && zendeskElements.length > 1) {
             zendeskElements[0]['style']['display'] = 'none'
