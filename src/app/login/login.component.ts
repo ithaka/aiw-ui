@@ -340,22 +340,4 @@ export class Login {
     }
   }
 
-  // this is for eventual ss login
-  // private ssLogin(user: User) {
-  //   this._auth.ssLogin(user.username, user.password)
-  //     .take(1)
-  //     .subscribe((res) => {
-  //       let isTest = this._auth.getEnv() == 'test'
-  //       let redirectUrl = '//catalog.sharedshelf'
-  //       redirectUrl += isTest ? '.stage' : ''
-  //       redirectUrl += '.artstor.org'
-
-  //       console.log(redirectUrl)
-  //       window.location.href = redirectUrl
-  //     }, (err) => {
-  //       console.error(err)
-  //       this.errorMsg = 'Incorrect username or password for Shared Shelf login.'
-  //     })
-  // }
-
 }
