@@ -1,5 +1,4 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Subscription }   from 'rxjs/Subscription';
 import 'rxjs/add/operator/toPromise';
@@ -30,7 +29,6 @@ export class AssociatedPage implements OnInit, OnDestroy {
         private _router: Router,
         private _assets: AssetService,
         private route: ActivatedRoute,
-        private http: HttpClient,
         private _auth: AuthService,
         private _analytics: AnalyticsService
       ) {
@@ -41,9 +39,6 @@ export class AssociatedPage implements OnInit, OnDestroy {
    * Sets up subscription to objectId matrix param, which gets assetTitle from service
    */
   ngOnInit() {
-    let header = new HttpHeaders().set('Content-Type', 'application/json'); // ... Set content type to JSON
-    let options = { headers: header, withCredentials: true }; // Create a request option
-
     this.subscriptions.push(
       this.route.params.subscribe((routeParams) => {
         this.objectId = routeParams["objectId"];
@@ -55,6 +50,15 @@ export class AssociatedPage implements OnInit, OnDestroy {
         }
         if (this.objectId && this.colId) {
           this._assets.queryAll(params);
+          this._assets.getMetadata(this.objectId)
+            .take(1)
+            .subscribe((res) => {
+              if (res.metadata && res.metadata.length > 0 && res.metadata[0].title) {
+                this.assetTitle = res.metadata[0].title
+              }
+            }, (err) => {
+              console.error(err)
+            })
         }
       })
     );
