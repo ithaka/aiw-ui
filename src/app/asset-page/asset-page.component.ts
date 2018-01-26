@@ -18,8 +18,7 @@ import { TitleService } from '../shared/title.service'
 })
 export class AssetPage implements OnInit, OnDestroy {
 
-    @ViewChild(ArtstorViewer)
-    private assetViewer: any
+    @ViewChild(ArtstorViewer) assetViewer: any
 
     private user: any
     private hasExternalAccess: boolean = false
