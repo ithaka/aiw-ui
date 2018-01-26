@@ -18,19 +18,19 @@ export class AssetSearchService {
   showCollectionType: boolean = false
 
    public filterFields: { name: string, value: string, title?: string }[] = [
-    { name: "In any field", value: "*" },
-    { name: "Creator", value: "artcreator" },
-    { name: "Title", value: "arttitle" },
-    { name: "Location", value: "artlocation" },
-    { name: "Repository", value: "artcurrentrepository" },
-    { name: "Subject", value: "artsubject" },
-    { name: "Material", value: "artmaterial" },
-    { name: "Style or Period", value: "artstyleperiod" },
-    { name: "Work Type", value: "artworktype" },
-    { name: "Culture", value: "artculture" },
-    { name: "Technique", value: "arttechnique" },
-    { name: "Number", value: "artidnumber" },
-    { name: "SSID", value: "ssid", title: "ID provided by Forum" }
+    { name: "In any field", value: "*", title: "Search all fields for any assets" },
+    { name: "Creator", value: "artcreator", title: "Search assets by Creator" },
+    { name: "Title", value: "arttitle", title: "Search assets by Title" },
+    { name: "Location", value: "artlocation", title: "Search assets by Location" },
+    { name: "Repository", value: "artcurrentrepository", title: "Search assets by Repository" },
+    { name: "Subject", value: "artsubject", title: "Search assets by Subject" },
+    { name: "Material", value: "artmaterial", title: "Search assets by Material" },
+    { name: "Style or Period", value: "artstyleperiod", title: "Search assets by Style or Period" },
+    { name: "Work Type", value: "artworktype", title: "Search assets by Work Type" },
+    { name: "Culture", value: "artculture", title: "Search assets by Culture" },
+    { name: "Technique", value: "arttechnique", title: "Search assets by Technique" },
+    { name: "Number", value: "artidnumber", title: "Search assets by Number" },
+    { name: "SSID", value: "ssid", title: "Search for asset by ID provided by Forum" }
   ]
 
   public latestSearchRequestId: string
