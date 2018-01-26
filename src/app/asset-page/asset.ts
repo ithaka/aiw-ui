@@ -1,3 +1,4 @@
+import { HttpErrorResponse } from '@angular/common/http/public_api';
 import { BehaviorSubject, Observable } from 'rxjs/Rx';
 
 import { AssetService, AuthService } from './../shared';
@@ -33,6 +34,9 @@ export class Asset {
       containerSize?: any,
       center?: any
   } = {}
+
+  // If an asset failes to load, it comes in with an error property
+  error: HttpErrorResponse
 
   private dataLoadedSource = new BehaviorSubject<boolean>(false);
   public isDataLoaded = this.dataLoadedSource.asObservable();
