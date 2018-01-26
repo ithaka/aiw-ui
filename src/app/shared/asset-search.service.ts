@@ -17,19 +17,20 @@ export class AssetSearchService {
 
   showCollectionType: boolean = false
 
-   public filterFields: { name: string, value: string }[] = [
-    {name: "In any field", value: "*"},
-    {name: "Creator", value: "artcreator" },
-    {name: "Title", value: "arttitle" },
-    {name: "Location", value: "artlocation" },
-    {name: "Repository", value: "artcurrentrepository" },
-    {name: "Subject", value: "artsubject" },
-    {name: "Material", value: "artmaterial" },
-    {name: "Style or Period", value: "artstyleperiod" },
-    {name: "Work Type", value: "artworktype" },
-    {name: "Culture", value: "artculture" },
-    {name: "Technique", value: "arttechnique" },
-    {name: "Number", value: "artidnumber" }
+   public filterFields: { name: string, value: string, title?: string }[] = [
+    { name: "In any field", value: "*" },
+    { name: "Creator", value: "artcreator" },
+    { name: "Title", value: "arttitle" },
+    { name: "Location", value: "artlocation" },
+    { name: "Repository", value: "artcurrentrepository" },
+    { name: "Subject", value: "artsubject" },
+    { name: "Material", value: "artmaterial" },
+    { name: "Style or Period", value: "artstyleperiod" },
+    { name: "Work Type", value: "artworktype" },
+    { name: "Culture", value: "artculture" },
+    { name: "Technique", value: "arttechnique" },
+    { name: "Number", value: "artidnumber" },
+    { name: "SSID", value: "ssid", title: "ID provided by Forum" }
   ]
 
   public latestSearchRequestId: string
