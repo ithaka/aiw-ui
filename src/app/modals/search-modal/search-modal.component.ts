@@ -110,6 +110,27 @@ export class SearchModal implements OnInit {
     this.hideLegacyFilters = true
     this.loadingFilters = true
     this.loadFilters()
+    this.loadAppliedFilters()
+  }
+
+  private loadAppliedFilters(): void{
+    let routeParams = this.route.snapshot.params
+
+    for(let key in routeParams){
+      if( key === 'term' ){
+        let terms = routeParams[key].split(' ')
+        let operator = ''
+        for(let term of terms){
+          if( term === 'AND' || term === 'OR'){
+            operator = term
+            continue
+          }
+          let termSubArray = term.split(':')
+          let value = termSubArray.length > 1 ? termSubArray[1].slice(1, -1) : termSubArray[0]
+          let field = termSubArray.length > 1 ? termSubArray[0] : ''
+        }
+      }
+    }
   }
 
   /**
