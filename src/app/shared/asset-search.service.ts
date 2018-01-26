@@ -18,19 +18,19 @@ export class AssetSearchService {
   showCollectionType: boolean = false
 
    public filterFields: { name: string, value: string, description?: string }[] = [
-    { name: "In any field", value: "*", description: "Search all fields for any assets" },
-    { name: "Creator", value: "artcreator", description: "Search assets by Creator" },
-    { name: "Title", value: "arttitle", description: "Search assets by Title" },
-    { name: "Location", value: "artlocation", description: "Search assets by Location" },
-    { name: "Repository", value: "artcurrentrepository", description: "Search assets by Repository" },
-    { name: "Subject", value: "artsubject", description: "Search assets by Subject" },
-    { name: "Material", value: "artmaterial", description: "Search assets by Material" },
-    { name: "Style or Period", value: "artstyleperiod", description: "Search assets by Style or Period" },
-    { name: "Work Type", value: "artworktype", description: "Search assets by Work Type" },
-    { name: "Culture", value: "artculture", description: "Search assets by Culture" },
-    { name: "Technique", value: "arttechnique", description: "Search assets by Technique" },
-    { name: "Number", value: "artidnumber", description: "Search assets by Number" },
-    { name: "SSID", value: "ssid", description: "Search for asset by ID provided by Forum" }
+    { name: "In any field", value: "*", description: "ADVANCED_SEARCH_MODAL.FIELDS.ANY" },
+    { name: "Creator", value: "artcreator", description: "ADVANCED_SEARCH_MODAL.FIELDS.CREATOR" },
+    { name: "Title", value: "arttitle", description: "ADVANCED_SEARCH_MODAL.FIELDS.TITLE" },
+    { name: "Location", value: "artlocation", description: "ADVANCED_SEARCH_MODAL.FIELDS.LOCATION" },
+    { name: "Repository", value: "artcurrentrepository", description: "ADVANCED_SEARCH_MODAL.FIELDS.REPOSITORY" },
+    { name: "Subject", value: "artsubject", description: "ADVANCED_SEARCH_MODAL.FIELDS.SUBJECT" },
+    { name: "Material", value: "artmaterial", description: "ADVANCED_SEARCH_MODAL.FIELDS.MATERIAL" },
+    { name: "Style or Period", value: "artstyleperiod", description: "ADVANCED_SEARCH_MODAL.FIELDS.STYLE_PERIOD" },
+    { name: "Work Type", value: "artworktype", description: "ADVANCED_SEARCH_MODAL.FIELDS.WORK_TYPE" },
+    { name: "Culture", value: "artculture", description: "ADVANCED_SEARCH_MODAL.FIELDS.CULTURE" },
+    { name: "Technique", value: "arttechnique", description: "ADVANCED_SEARCH_MODAL.FIELDS.TECHNIQUE" },
+    { name: "Number", value: "artidnumber", description: "ADVANCED_SEARCH_MODAL.FIELDS.NUMBER" },
+    { name: "SSID", value: "ssid", description: "ADVANCED_SEARCH_MODAL.FIELDS.SSID" }
   ]
 
   public latestSearchRequestId: string
