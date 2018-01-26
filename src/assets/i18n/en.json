@@ -222,6 +222,21 @@
       "AND": "AND",
       "OR": "OR",
       "NOT": "NOT"
+    },
+    "FIELDS": {
+      "ANY": "Search all fields for any assets",
+      "CREATOR": "Search assets by Creator",
+      "TITLE": "Search assets by Title",
+      "LOCATION": "Search assets by Location",
+      "REPOSITORY": "Search assets by Repository",
+      "SUBJECT": "Search assets by Subject",
+      "MATERIAL": "Search assets by Material",
+      "STYLE_PERIOD": "Search assets by Style or Period",
+      "WORK_TYPE": "Search assets by Work Type",
+      "CULTURE": "Search assets by Culture",
+      "TECHNIQUE": "Search assets by Technique",
+      "NUMBER": "Search assets by Number",
+      "SSID": "Search for asset by ID provided by Forum"
     }
   },
   "RETURN_HOME" : "Return Home",
