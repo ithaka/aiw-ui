@@ -519,7 +519,6 @@ export class AuthService implements CanActivate {
     let options = { headers: this.userInfoHeader, withCredentials: true };
 
     let currentUser = this.userSource.getValue()
-    console.log(currentUser)
     let currentUsername = currentUser.username
 
     return this.http
