@@ -18,7 +18,7 @@ export class AssetSearchService {
   showCollectionType: boolean = false
 
    public filterFields: { name: string, value: string }[] = [
-    {name: "In any field", value: "*"},
+    {name: "In any field", value: ""},
     {name: "Creator", value: "artcreator" },
     {name: "Title", value: "arttitle" },
     {name: "Location", value: "artlocation" },
