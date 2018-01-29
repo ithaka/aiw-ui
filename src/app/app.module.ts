@@ -7,6 +7,9 @@ import { removeNgStyles, createNewHosts, createInputTransfer } from '@angularcla
 import { Ng2DeviceDetectorModule } from 'ng2-device-detector';
 import { DatePipe } from '@angular/common'
 
+// Ithaka/Artstor Dependencies
+import { ArtstorViewer, ArtstorViewerModule } from 'artstor-viewer';
+
 /*
  * Platform and Environment providers/directives/pipes
  */
@@ -56,7 +59,6 @@ import { BrowsePage, LibraryComponent, BrowseCommonsComponent,
   MyCollectionsComponent, BrowseInstitutionComponent, BrowseGroupsComponent, TagComponent,
   TagsListComponent, TagFiltersService } from './browse-page';
 import { AssetPage, AgreeModalComponent } from './asset-page';
-import { AssetViewerComponent } from './asset-page/asset-viewer';
 import { AccountPage } from './account-page';
 import { AssociatedPage } from './associated-page';
 import { ImageGroupPage, PptModalComponent } from './image-group-page';
@@ -154,7 +156,6 @@ export function HttpLoaderFactory(http: HttpClient) {
     AssetFilters,
     AssetGrid,
     AssetPage,
-    AssetViewerComponent,
     AssociatedPage,
     BrowseCommonsComponent,
     BrowseGroupsComponent,
@@ -212,6 +213,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     Ng2CompleterModule,
     LockerModule,
     FileUploadModule,
+    ArtstorViewerModule,
     RouterModule.forRoot(ROUTES, { useHash: true }),
     Ng2DeviceDetectorModule.forRoot(),
     Angulartics2Module.forRoot([ Angulartics2GoogleAnalytics ]),
