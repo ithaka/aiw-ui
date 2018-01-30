@@ -3,11 +3,11 @@ import { ActivatedRoute, Params, Router } from '@angular/router'
 import { Subscription }   from 'rxjs/Subscription'
 import { Locker } from 'angular2-locker'
 import { Angulartics2 } from 'angulartics2'
+import { ArtstorViewer } from 'artstor-viewer'
 
 // Project Dependencies
 import { Asset } from './asset'
 import { AuthService, AssetService, AssetSearchService, GroupService, CollectionTypeHandler } from './../shared'
-import { AssetViewerComponent } from './asset-viewer/asset-viewer.component'
 import { AnalyticsService } from '../analytics.service'
 import { TitleService } from '../shared/title.service'
 
@@ -18,8 +18,7 @@ import { TitleService } from '../shared/title.service'
 })
 export class AssetPage implements OnInit, OnDestroy {
 
-    @ViewChild(AssetViewerComponent)
-    private assetViewer: AssetViewerComponent
+    @ViewChild(ArtstorViewer) assetViewer: any
 
     private user: any
     private hasExternalAccess: boolean = false
@@ -27,6 +26,7 @@ export class AssetPage implements OnInit, OnDestroy {
 
     // Array to support multiple viewers on the page
     private assets: Asset[] = []
+    private assetIds: string[] = []
     private assetIndex: number = 0
     private assetGroupId: string
     private assetNumber: number = 1
@@ -136,7 +136,8 @@ export class AssetPage implements OnInit, OnDestroy {
                             }
                             data.item.imageUrl = data.imageUrl
                             data.item.imageServer = data.imageServer
-                            this.renderPrimaryAsset(new Asset(data.item[assetIdProperty], this._assets, this._auth, data.item, this.assetGroupId))
+                            // this.renderPrimaryAsset(new Asset(data.item[assetIdProperty], this._assets, this._auth, data.item, this.assetGroupId))
+                            this.assetIds[0] = data.item[assetIdProperty]
                         }, (err) => {
                             console.error(err)
                             if (err.status == 403) {
@@ -148,7 +149,8 @@ export class AssetPage implements OnInit, OnDestroy {
                             }
                         })
                 } else {
-                    this.renderPrimaryAsset(new Asset(routeParams["assetId"], this._assets, this._auth, null, this.assetGroupId))
+                    // this.renderPrimaryAsset(new Asset(routeParams["assetId"], this._assets, this._auth, null, this.assetGroupId))
+                    this.assetIds[0] = routeParams["assetId"]
 
                     if(this.prevAssetResults.thumbnails.length > 0){
                         // this.totalAssetCount = this.prevAssetResults.count ? this.prevAssetResults.count : this.prevAssetResults.thumbnails.length;
@@ -156,7 +158,6 @@ export class AssetPage implements OnInit, OnDestroy {
                         this.assetNumber = this._assets.currentLoadedParams.page ? this.assetIndex + 1 + ((this._assets.currentLoadedParams.page - 1) * this._assets.currentLoadedParams.size) : this.assetIndex + 1;
                     }
                 }
-
             })
         );
 
@@ -251,38 +252,44 @@ export class AssetPage implements OnInit, OnDestroy {
         return skipable
     }
 
+
+    handleLoadedMetadata(asset: Asset, assetIndex: number) {
+        if (asset && asset['error']) {
+            let err = asset['error']
+            console.log(err)
+            if (err.status === 403) {
+                // here is where we make the "access denied" modal appear
+                if (!this.hasExternalAccess) {
+                    this.showAccessDeniedModal = true
+                }
+            } else if (err.status === 401) {
+                // Call is external to this app's http service
+                this._auth.refreshUserSession(true)
+                if (!this.hasExternalAccess) {
+                    this.showAccessDeniedModal = true
+                }
+            } else {
+                // don't have a clue why this would happen, so just log it
+                console.error(err)
+            }
+        } else {
+            this.assets[assetIndex] = asset
+            if (assetIndex == 0) {
+                this._title.setTitle( asset.title );
+                document.querySelector('meta[name="DC.type"]').setAttribute('content', 'Artwork');
+                document.querySelector('meta[name="DC.title"]').setAttribute('content', asset.title);
+                document.querySelector('meta[name="asset.id"]').setAttribute('content', asset.id);
+                let currentAssetId: string = this.assets[0].artstorid || this.assets[0]['objectId'] // couldn't trust the 'this.assetIdProperty' variable
+                this.setCollectionType(currentAssetId)
+                this.generateImgURL();
+            }
+        }
+    }
     /**
      * Render Asset once its loaded
      */
     renderPrimaryAsset(asset: Asset) {
-        this.assets[0] = asset
-        asset.isDataLoaded.subscribe(
-            (isLoaded) => {
-                if (isLoaded) {
-                    this.angulartics.eventTrack.next({ action: "view-" + asset.typeName(), properties: { category: "asset", label: this.assets[0].id }})
-                    this._title.setTitle( asset.title );
-                    document.querySelector('meta[name="DC.type"]').setAttribute('content', 'Artwork');
-                    document.querySelector('meta[name="DC.title"]').setAttribute('content', asset.title);
-                    document.querySelector('meta[name="asset.id"]').setAttribute('content', asset.id);
-                }
-            }, (err) => {
-                if (err.status === 403) {
-                    // here is where we make the "access denied" modal appear
-                    if (!this.hasExternalAccess) {
-                        this.showAccessDeniedModal = true
-                    }
-                } else if (err.status !== 401) {
-                    // don't have a clue why this would happen, so just log it
-                    console.error(err)
-                }
-            }
-        )
-        
-        let currentAssetId: string = this.assets[0].artstorid || this.assets[0]['objectId'] // couldn't trust the 'this.assetIdProperty' variable
-
-        this.setCollectionType(currentAssetId)
-
-        this.generateImgURL();
+       
     }
 
     /**
@@ -309,9 +316,9 @@ export class AssetPage implements OnInit, OnDestroy {
 
     // Calculate the index of current asset from the previous assets result set
     private currentAssetIndex(): number{
-        if (this.assets[0]) {
+        if (this.assetIds[0]) {
             for(var i = 0; i < this.prevAssetResults.thumbnails.length; i++){
-                if(this.prevAssetResults.thumbnails[i] && this.prevAssetResults.thumbnails[i][this.assetIdProperty] == this.assets[0].id){
+                if(this.prevAssetResults.thumbnails[i] && this.prevAssetResults.thumbnails[i][this.assetIdProperty] == this.assetIds[0]){
                     this.prevAssetResults.thumbnails[i].selected = true;
                     return i;
                 }
@@ -432,9 +439,17 @@ export class AssetPage implements OnInit, OnDestroy {
      // Add or remove assets from Assets array for comparison in full screen
     private toggleAsset(asset: any): void {
         let assetIdProperty = asset.hasOwnProperty('artstorid') ? 'artstorid' : 'objectId';
+        let assetId = asset[assetIdProperty]
         let add = true;
+        // remove from assetIds
+        let assetIdIndex = this.assetIds.indexOf(assetId)
+        if(assetIdIndex > -1) {
+            this.assetIds.splice(assetIdIndex, 1)
+            add = false
+        }
+        // remove from assets
         this.assets.forEach( (viewAsset, i) => {
-            if (asset[assetIdProperty] == viewAsset.id) {
+            if (asset[assetIdProperty] == viewAsset) {
                 asset.selected = false;
                 this.assets.splice(i, 1);
                 add = false;
@@ -448,7 +463,7 @@ export class AssetPage implements OnInit, OnDestroy {
                 
                 //Once the primary asset (assets[0]) is removed change the URL (navigate) to the new primary asset
                 if (i === 0){
-                    this._router.navigate( ['/asset',  this.assets[0][assetIdProperty]] );
+                    this._router.navigate( ['/asset',  this.assetIds[0]] );
                 }
 
             }
@@ -459,7 +474,7 @@ export class AssetPage implements OnInit, OnDestroy {
         }
         if (add == true) {
             asset.selected = true;
-            this.assets.push( new Asset(asset[this.assetIdProperty], this._assets, this._auth) );
+            this.assetIds.push(asset[this.assetIdProperty]);
         }
     }
 
@@ -507,9 +522,10 @@ export class AssetPage implements OnInit, OnDestroy {
         else{ // Enter Quiz mode
             this.quizMode = true;
             this.showAssetCaption = false;
-            this.toggleAssetDrawer(false)
+            this.toggleAssetDrawer(false);
 
             this.assets.splice(1);
+            this.assetIds.splice(1);
             for(let i = 0; i < this.prevAssetResults.thumbnails.length; i++){
                 this.prevAssetResults.thumbnails[i].selected = false;
             }
@@ -568,12 +584,13 @@ export class AssetPage implements OnInit, OnDestroy {
       }
     }
 
+    /** this.showAssetDrawer = !this.showAssetDrawer;
     /**
      * Provides "setter" for toggling asset drawer visual
      * @param show true if you want to show the asset drawer
      */
     private toggleAssetDrawer(show: boolean) {
-      this.showAssetDrawer = show
+        this.showAssetDrawer = show
     }
 
     /**
