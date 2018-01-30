@@ -17,19 +17,20 @@ export class AssetSearchService {
 
   showCollectionType: boolean = false
 
-   public filterFields: { name: string, value: string }[] = [
-    {name: "In any field", value: ""},
-    {name: "Creator", value: "artcreator" },
-    {name: "Title", value: "arttitle" },
-    {name: "Location", value: "artlocation" },
-    {name: "Repository", value: "artcurrentrepository" },
-    {name: "Subject", value: "artsubject" },
-    {name: "Material", value: "artmaterial" },
-    {name: "Style or Period", value: "artstyleperiod" },
-    {name: "Work Type", value: "artworktype" },
-    {name: "Culture", value: "artculture" },
-    {name: "Technique", value: "arttechnique" },
-    {name: "Number", value: "artidnumber" }
+   public filterFields: { name: string, value: string, description?: string }[] = [
+    { name: "In any field", value: "", description: "ADVANCED_SEARCH_MODAL.FIELDS.ANY" },
+    { name: "Creator", value: "artcreator", description: "ADVANCED_SEARCH_MODAL.FIELDS.CREATOR" },
+    { name: "Title", value: "arttitle", description: "ADVANCED_SEARCH_MODAL.FIELDS.TITLE" },
+    { name: "Location", value: "artlocation", description: "ADVANCED_SEARCH_MODAL.FIELDS.LOCATION" },
+    { name: "Repository", value: "artcurrentrepository", description: "ADVANCED_SEARCH_MODAL.FIELDS.REPOSITORY" },
+    { name: "Subject", value: "artsubject", description: "ADVANCED_SEARCH_MODAL.FIELDS.SUBJECT" },
+    { name: "Material", value: "artmaterial", description: "ADVANCED_SEARCH_MODAL.FIELDS.MATERIAL" },
+    { name: "Style or Period", value: "artstyleperiod", description: "ADVANCED_SEARCH_MODAL.FIELDS.STYLE_PERIOD" },
+    { name: "Work Type", value: "artworktype", description: "ADVANCED_SEARCH_MODAL.FIELDS.WORK_TYPE" },
+    { name: "Culture", value: "artculture", description: "ADVANCED_SEARCH_MODAL.FIELDS.CULTURE" },
+    { name: "Technique", value: "arttechnique", description: "ADVANCED_SEARCH_MODAL.FIELDS.TECHNIQUE" },
+    { name: "Number", value: "artidnumber", description: "ADVANCED_SEARCH_MODAL.FIELDS.NUMBER" },
+    { name: "SSID", value: "ssid", description: "ADVANCED_SEARCH_MODAL.FIELDS.SSID" }
   ]
 
   public latestSearchRequestId: string
