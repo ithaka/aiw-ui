@@ -525,6 +525,7 @@ export class AssetPage implements OnInit, OnDestroy {
             this.toggleAssetDrawer(false);
 
             this.assets.splice(1);
+            this.assetIds.splice(1);
             for(let i = 0; i < this.prevAssetResults.thumbnails.length; i++){
                 this.prevAssetResults.thumbnails[i].selected = false;
             }
