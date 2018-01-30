@@ -47,6 +47,12 @@
   dependencies:
     tslib "^1.7.1"
 
+"@angular/http@^5.2.0":
+  version "5.2.1"
+  resolved "https://registry.yarnpkg.com/@angular/http/-/http-5.2.1.tgz#dd847fb8aa0972b1906df5376307354b818ef4be"
+  dependencies:
+    tslib "^1.7.1"
+
 "@angular/platform-browser-dynamic@^5.0.0":
   version "5.0.3"
   resolved "https://registry.yarnpkg.com/@angular/platform-browser-dynamic/-/platform-browser-dynamic-5.0.3.tgz#be6dcf03a04fa51c6a0484b40e5f1a7d7e54cc87"
@@ -433,6 +439,13 @@ arraybuffer.slice@0.0.6:
 arrify@^1.0.0:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/arrify/-/arrify-1.0.1.tgz#898508da2226f380df904728456849c1501a4b0d"
+
+artstor-viewer@^1.0.23:
+  version "1.0.23"
+  resolved "https://registry.yarnpkg.com/artstor-viewer/-/artstor-viewer-1.0.23.tgz#6b3e034fdd1c5f0202d4925688eb037d89b4e4f6"
+  dependencies:
+    "@angular/http" "^5.2.0"
+    openseadragon "^2.3.1"
 
 asap@~2.0.3:
   version "2.0.5"
@@ -4501,6 +4514,10 @@ openseadragon@^2.2.1:
   version "2.2.1"
   resolved "https://registry.yarnpkg.com/openseadragon/-/openseadragon-2.2.1.tgz#5f8ef0fdb7e0aa79e0fb0d927701466cf816bb2f"
 
+openseadragon@^2.3.1:
+  version "2.3.1"
+  resolved "https://registry.yarnpkg.com/openseadragon/-/openseadragon-2.3.1.tgz#efdcfee19d8b3c46d00d7f7dda787c7057f68364"
+
 opn@^5.1.0:
   version "5.1.0"
   resolved "https://registry.yarnpkg.com/opn/-/opn-5.1.0.tgz#72ce2306a17dbea58ff1041853352b4a8fc77519"
@@ -4741,7 +4758,7 @@ phantomjs-prebuilt@^2.1.7:
     which "~1.2.10"
 
 phantomjs@^2.1.7:
-  version "2.1.7+deprecated"
+  version "2.1.7"
   resolved "https://registry.yarnpkg.com/phantomjs/-/phantomjs-2.1.7.tgz#c6910f67935c37285b6114329fc2f27d5f3e3134"
   dependencies:
     extract-zip "~1.5.0"
