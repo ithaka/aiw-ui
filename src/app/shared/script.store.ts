@@ -3,5 +3,5 @@ interface Scripts {
     src: string;
 }  
 export const ScriptStore: Scripts[] = [
-    {name: 'zendesk', src: '../../assets/js/zendesk.js'}
+    { name: 'zendesk', src: '../../assets/js/zendesk.js' }
 ];

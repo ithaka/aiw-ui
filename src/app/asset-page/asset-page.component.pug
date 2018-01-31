@@ -1,9 +1,9 @@
-#mainContent.container-fluid.asset-page(*ngIf="assets[0]", [class.fullscreen]="isFullscreen", tabindex="-1")
+#mainContent.container-fluid.asset-page(*ngIf="assetIds[0]", [class.fullscreen]="isFullscreen", tabindex="-1")
   .row
     //- View prev/next asset
     .title-nav-cntnr.col-md-12([class.hidden]="isFullscreen")
       span.back-results.hidden-sm-down(*ngIf="prevRouteParams.length > 0", (click)="backToResults()") {{ 'ASSET_PAGE.LINKS.BACK' | translate}}
-      .title-wrap
+      .title-wrap(*ngIf="assets[0]")
         i.icon.icon-direction.icon-left(title="Previous in results", (click)="showPrevAsset()", [class.disabled]="assetNumber <= 1")
         .title([ngClass]="[ prevRouteParams.length > 0 ? 'shortened' : '' ]", [innerHTML]="assets[0].title ? assets[0].title : ''")
         i.icon.icon-direction.icon-right(title="Next in results", (click)="showNextAsset()", [class.disabled]="assetNumber >= totalAssetCount")
@@ -13,9 +13,11 @@
         span#assetPageCount {{ totalAssetCount }}
     //- Asset Viewer Row
     .asset-col([ngClass]="[ isFullscreen ? 'fullscreen-container' : 'col-md-8', showAssetDrawer && isFullscreen ? 'drawer' : '' ]")
-      ang-asset-viewer(*ngFor="let asset of (isFullscreen ? assets : [assets[0]]); let i = index",
-        [asset]="asset",
-        [ngClass]="[ 'asset-viewer-' + assets.length ]",
+      artstor-viewer(*ngFor="let assetId of (isFullscreen ? assetIds : [assetIds[0]]); let i = index",
+        [testEnv]="_auth.getEnv() == 'test'",
+        [assetId]="assetId",
+        (assetMetadata)="handleLoadedMetadata($event, i)",
+        [ngClass]="[ 'asset-viewer-' + assetIds.length ]",
         (fullscreenChange)="updateFullscreenVar($event)",
         [index]="i",
         [assetCompareCount]="assets.length",
@@ -26,10 +28,10 @@
         [showCaption]="showAssetCaption",
         [quizMode]="quizMode",
         [prevAssetResults]="prevAssetResults",
-        (removeAsset)="toggleAsset(asset)",
+        (removeAsset)="toggleAsset($event)",
         (nextPage)="showNextAsset()",
         (prevPage)="showPrevAsset()",
-        (assetDrawer)="toggleAssetDrawer()")
+        (assetDrawer)="toggleAssetDrawer(!showAssetDrawer)")
       .col-md-12.quiz-caption-cntnr(*ngIf="isFullscreen", [ngClass]="[ showAssetCaption ? '' : 'cntnr-bg' ]")
         .caption-btn-cntnr([ngClass]="[ showAssetCaption ? 'active' : '' ]", (click)="showAssetCaption = !showAssetCaption", title="{{ showAssetCaption ? 'Hide Asset Meta Information' : 'Show Asset Meta Information' }}")
           span.caption-btn
@@ -43,8 +45,8 @@
         .quiz-cntnr([ngClass]="[ quizMode ? 'active' : '' ]", (click)="toggleQuizMode()", title="{{ quizMode ? 'Deactivate Quiz Mode' : 'Activate Quiz Mode' }}")
           span.quiz-btn
           | QUIZ MODE {{ quizMode ? 'ON' : 'OFF' }}
-    //- Asset Metadata Row
-    .col-md-4([class.hidden]="isFullscreen")
+    //- Asset Metadata Column
+    .col-md-4(*ngIf="assets[0]",[class.hidden]="isFullscreen")
       .py-3
         //- If the user has not accepted the agreement, show modal when clicked, otherwise download immediately
         .btn-row
@@ -126,7 +128,7 @@
     //- Asset Drawer
     .asset-drawer(*ngIf="isFullscreen", [class.slideOut]="showAssetDrawer && isFullscreen")
       .col-sm-12
-        h3.asset-drawer__header((click)="showAssetDrawer = false")
+        h3.asset-drawer__header((click)="toggleAssetDrawer(!showAssetDrawer)")
           button.asset-drawer__close.pr-1(
             *ngIf="isFullscreen",
             type="button",
@@ -139,7 +141,7 @@
           pagination([pageObj]="pagination", (goToPage)="goToPage($event)", style="display:inline-block")
         div.pt-1.pb-3(*ngIf="prevAssetResults.thumbnails.length < 1")
           .alert.alert-info {{ 'ASSET_PAGE.MESSAGES.NEEDASSETS' | translate}}
-        ang-thumbnail.card.card--asset(*ngFor="let asset of prevAssetResults.thumbnails", [thumbnail]="asset", [ngClass]="{'selected' : asset.selected, 'disabled' : assets[0].id == asset[assetIdProperty] }", (click)="toggleAsset(asset)")
+        ang-thumbnail.card.card--asset(*ngFor="let asset of prevAssetResults.thumbnails", [thumbnail]="asset", [ngClass]="{'selected' : asset.selected || (assets[0].id == asset[assetIdProperty]), 'disabled': (asset.selected && assets.length === 1) }", (click)="toggleAsset(asset)")
         .text-center.pt-2
           pagination([pageObj]="pagination", (goToPage)="goToPage($event)", style="display:inline-block")
 ang-agree-modal(*ngIf="showAgreeModal", (closeModal)="showAgreeModal = false", [assetUrl]="downloadUrl")

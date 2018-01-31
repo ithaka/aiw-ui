@@ -164,6 +164,7 @@ export class GroupService {
         delete putGroup.id
         delete putGroup['public']
         delete putGroup['count']
+        delete putGroup['total']
         delete putGroup['thumbnails']
         delete putGroup['igDownloadInfo']
 
