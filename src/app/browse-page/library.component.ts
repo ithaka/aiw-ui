@@ -49,17 +49,17 @@ export class LibraryComponent implements OnInit {
   private descObj: any  = {};
 
   private categoryFacetMap = {
-    '103': 'collectiontypenameid',
+    '103': 'categoryid',
     '250': 'artclassification_str',
     '260': 'artstor-geography',
     // '270': '/browse/groups/public?tags=Teaching%2520Resources&page=1',
     'undefined': 'artcollectiontitle_str' // default
   }
-
   private facetQueryMap = {
     'artcollectiontitle_str': 'artcollectiontitle_str',
     'artclassification_str': 'artclassification_str',
-    'artstor-geography': 'geography'
+    'artstor-geography': 'geography',
+    'categoryid': 'category'
   }
 
   ngOnInit() {
@@ -137,6 +137,26 @@ export class LibraryComponent implements OnInit {
               else if (elemA.name < elemB.name) return -1
               else return 0
             })
+
+            // this._assets.categoryNames()
+            //   .then((data) => {
+            //     console.log(data)
+            //     let categoryIndex = data.reduce( ( result, item ) => { 
+            //         result[item.categoryId] = item.categoryName; 
+            //         return result; 
+            //     }, {});
+            //     console.log(categoryIndex)
+            //     var titledTags = tags.map( tag => {
+            //       tag.title = categoryIndex[tag.tagId] 
+            //       return tag
+            //     });
+            //     this.tagsObj[browseId] = titledTags;
+            //     console.log(titledTags)
+            //     this.loading = false;
+            //   })
+            //   .catch((err) => {
+            //     console.error(err)
+            //   })
           }
 
           this.loading = false;
@@ -146,14 +166,6 @@ export class LibraryComponent implements OnInit {
       })
     );
     this._analytics.setPageValues('library', '')
-
-    this._assets.categoryNames()
-      .then((data) => {
-        console.log(data)
-      })
-      .catch((err) => {
-        console.error(err)
-      })
   } // OnInit
 
   private clearFacets(): void {
@@ -177,17 +189,41 @@ export class LibraryComponent implements OnInit {
   }
 
   private getTags(browseId): void {
-    if (!this.tagsObj[browseId] || this.tagsObj[browseId].length < 1) {
-      this.loading = true;
-      this._tags.initTags({ type: "library", collectionId: browseId})
-      .then((tags) => {
-        this.tagsObj[browseId] = tags;
-        this.loading = false;
-      })
-      .catch((err) => {
-        console.error(err);
-      });
-    }
+    // if (!this.tagsObj[browseId] || this.tagsObj[browseId].length < 1) {
+    //   this.loading = true;
+    //   this._tags.initTags({ type: "library", collectionId: browseId})
+    //   .then((tags) => {
+    //     if (browseId == '103') {
+    //       // Get category names
+    //       this._assets.categoryNames()
+    //         .then((data) => {
+    //           console.log(data)
+    //           let categoryIndex = data.reduce( ( result, item ) => { 
+    //               result[item.categoryId] = item.categoryName; 
+    //               return result; 
+    //           }, {});
+    //           console.log(categoryIndex)
+    //           var titledTags = tags.map( tag => {
+    //             tag.title = categoryIndex[tag.tagId] 
+    //             return tag
+    //           });
+    //           this.tagsObj[browseId] = titledTags;
+    //           console.log(titledTags)
+    //           this.loading = false;
+    //         })
+    //         .catch((err) => {
+    //           console.error(err)
+    //         })
+    //     } else {
+    //       this.tagsObj[browseId] = tags;
+    //       this.loading = false;
+    //     }
+        
+    //   })
+    //   .catch((err) => {
+    //     console.error(err);
+    //   });
+    // }
   }
 
   ngOnDestroy() {

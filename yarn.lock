@@ -295,9 +295,9 @@ angular2-moment@^1.2.0:
   dependencies:
     moment "^2.16.0"
 
-angular2-tag-autocomplete@^1.2.7:
-  version "1.2.7"
-  resolved "https://registry.yarnpkg.com/angular2-tag-autocomplete/-/angular2-tag-autocomplete-1.2.7.tgz#c1831b1814a41178e6297d40349116ae94deab5f"
+angular2-tag-autocomplete@^1.2.10:
+  version "1.2.10"
+  resolved "https://registry.yarnpkg.com/angular2-tag-autocomplete/-/angular2-tag-autocomplete-1.2.10.tgz#0e01b599fb474dd806f0958da1535379ed0825dc"
 
 angular2-template-loader@^0.5.0:
   version "0.5.0"
