@@ -119,62 +119,75 @@ export class SearchModal implements OnInit {
     let routeParams = this.route.snapshot.params
 
     for(let key in routeParams){
-      if( key === 'term' ){ // Update the advanceQueries Array as per the term param
-        this.updateAdvanceQueries( routeParams )
-      } else if( key === 'startDate' ){ // Update advanceSearchDate Object as per the startDate
-        this.advanceSearchDate.startDate = Math.abs(routeParams[key])
-        this.advanceSearchDate.startEra = parseInt(routeParams[key]) < 0 ? 'BCE' : 'CE'
-      } else if( key === 'endDate' ){ // Update advanceSearchDate Object as per the endDate
-        this.advanceSearchDate.endDate = Math.abs(routeParams[key])
-        this.advanceSearchDate.endEra = parseInt(routeParams[key]) < 0 ? 'BCE' : 'CE'
-      } 
-
-      //For tri-state checkboxes set the checked flag for filter object based on param value and in the end run generateSelectedFilters to updated selected filters object
-      else if( key === 'artclassification_str' ){
-        let classificatioFilters = routeParams[key].split('|')
-        for(let filter of classificatioFilters){
-          let clsFilterGroup =  this.availableFilters.find( filterGroup => filterGroup.name === key )
-          let updtFilterObj = clsFilterGroup.values.find( filterObj => filterObj.value === filter )
-          updtFilterObj.checked = true
+      let switchCaseValue: string = ( key === 'collectiontypes' || key === 'geography' ) ? 'colTypeGeo' : key
+      switch( switchCaseValue ){
+        case 'term': { // Update the advanceQueries Array as per the term param
+          this.updateAdvanceQueries( routeParams )
+          break
+        }
+       
+        case 'startDate': { // Update advanceSearchDate Object as per the startDate
+          this.advanceSearchDate.startDate = Math.abs(routeParams[key])
+          this.advanceSearchDate.startEra = parseInt(routeParams[key]) < 0 ? 'BCE' : 'CE'
+          break
+        }
+       
+        case 'endDate': { // Update advanceSearchDate Object as per the endDate
+          this.advanceSearchDate.endDate = Math.abs(routeParams[key])
+          this.advanceSearchDate.endEra = parseInt(routeParams[key]) < 0 ? 'BCE' : 'CE'
+          break
         }
         
-      } else if( key === 'collectiontypes' || key === 'geography' ){
-        let filters = routeParams[key].split('|')
-        for(let filter of filters){
-          let filterGroup =  this.availableFilters.find( filterGroup => filterGroup.name === key )
-          let updtFilterObj = filterGroup.values.find( filterObj => filterObj.value === filter )
-          if( updtFilterObj ){ // If match is found at the parent node level
+        //For tri-state checkboxes set the checked flag for filter object based on param value and in the end run generateSelectedFilters to updated selected filters object
+        case 'artclassification_str': {
+          let classificatioFilters = routeParams[key].split('|')
+          for(let filter of classificatioFilters){
+            let clsFilterGroup =  this.availableFilters.find( filterGroup => filterGroup.name === key )
+            let updtFilterObj = clsFilterGroup.values.find( filterObj => filterObj.value === filter )
             updtFilterObj.checked = true
-            if( updtFilterObj.children && updtFilterObj.children.length > 0 ){
-              for(let child of updtFilterObj.children){
-                child.checked = true
+          }
+        }
+
+        case 'colTypeGeo': {
+          let filters = routeParams[key].split('|')
+          for(let filter of filters){
+            let filterGroup =  this.availableFilters.find( filterGroup => filterGroup.name === key )
+            let updtFilterObj = filterGroup.values.find( filterObj => filterObj.value === filter )
+            if( updtFilterObj ){ // If match is found at the parent node level
+              updtFilterObj.checked = true
+              if( updtFilterObj.children && updtFilterObj.children.length > 0 ){
+                for(let child of updtFilterObj.children){
+                  child.checked = true
+                }
               }
-            }
-          } else{ // If we don't find a match at parent node level then search for a match in children nodes
-            for(let value of filterGroup.values){
-              if(value.children && value.children.length > 0){
-                let updtFilterObj = value.children.find( filterObj => filterObj.value === filter )
-                if(updtFilterObj){
-                  updtFilterObj.checked = true
-                  break
+            } else{ // If we don't find a match at parent node level then search for a match in children nodes
+              for(let value of filterGroup.values){
+                if(value.children && value.children.length > 0){
+                  let updtFilterObj = value.children.find( filterObj => filterObj.value === filter )
+                  if(updtFilterObj){
+                    updtFilterObj.checked = true
+                    break
+                  }
                 }
               }
             }
           }
         }
-        
-      } else if ( key === 'collections' ){
-        let colIds = routeParams[key].split('|')
-        for(let colId of colIds){ // Indv. collection filters are only available udner Inst. Col Type filter. Find the collection filter object and mark it checked
-          let filterGroup =  this.availableFilters.find( filterGroup => filterGroup.name === 'collectiontypes' )
-          let instColFilters = filterGroup.values.find( colTypefilter => colTypefilter.value === '2' )
-          let updtFilterObj = instColFilters.children.find( filterObj => filterObj.value === colId )
-          if( updtFilterObj ){
-            updtFilterObj.checked = true
+
+        case 'collections': {
+          let colIds = routeParams[key].split('|')
+          for(let colId of colIds){ // Indv. collection filters are only available udner Inst. Col Type filter. Find the collection filter object and mark it checked
+            let filterGroup =  this.availableFilters.find( filterGroup => filterGroup.name === 'collectiontypes' )
+            let instColFilters = filterGroup.values.find( colTypefilter => colTypefilter.value === '2' )
+            let updtFilterObj = instColFilters.children.find( filterObj => filterObj.value === colId )
+            if( updtFilterObj ){
+              updtFilterObj.checked = true
+            }
           }
         }
       }
     }
+
     // Finally generate selected filters from available filters marked as checked
     this.generateSelectedFilters()
   }
