@@ -5,7 +5,10 @@ nav.nav.nav-inline.browse-nav
   .col-md-8
     ul.filter-list
       li.filter(*ngFor="let facet of categoryFacets")
-        a.tag-link([href]="'#/search/*;' + facetQueryMap[facetType] + '=' + encodeURIComponent(facet.name)") {{facet.name}} ({{facet.count}})
+        a.tag-link(*ngIf="facetQueryMap[facetType] == 'category'", [href]="'#/category/'+facet.name")
+          | {{ facet.title }} ({{facet.count}})
+        a.tag-link(*ngIf="facetQueryMap[facetType] != 'category'",[href]="'#/search/*;' + facetQueryMap[facetType] + '=' + encodeURIComponent(facet.name)") 
+          | {{facet.name}} ({{facet.count}})
       li.filter(*ngFor="let key of JSObject.keys(hierarchicalFacets).sort()")
         a.tag-link([href]="'#/search/*;' + facetQueryMap[facetType] + '=' + hierarchicalFacets[key].element.efq") {{key}} ({{hierarchicalFacets[key].element.count}})
         ul
