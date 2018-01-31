@@ -222,6 +222,21 @@
       "AND": "AND",
       "OR": "OR",
       "NOT": "NOT"
+    },
+    "FIELDS": {
+      "ANY": "Search all fields for any assets",
+      "CREATOR": "Search assets by Creator",
+      "TITLE": "Search assets by Title",
+      "LOCATION": "Search assets by Location",
+      "REPOSITORY": "Search assets by Repository",
+      "SUBJECT": "Search assets by Subject",
+      "MATERIAL": "Search assets by Material",
+      "STYLE_PERIOD": "Search assets by Style or Period",
+      "WORK_TYPE": "Search assets by Work Type",
+      "CULTURE": "Search assets by Culture",
+      "TECHNIQUE": "Search assets by Technique",
+      "NUMBER": "Search assets by Number",
+      "SSID": "Search for asset by ID provided by Forum"
     }
   },
   "RETURN_HOME" : "Return Home",
@@ -256,7 +271,7 @@
       "SUPPORT": "<a href=\"http://support.artstor.org\" class=\"link\" target=\"_blank\">Support</a>",
       "ARTSTOR": "<a href=\"http://artstor.org\" class=\"link\" target=\"_blank\">Artstor.org</a>",
       "SAHARA": "<a href=\"http://sah.org\" class=\"link\" target=\"_blank\">SAH.org</a>",
-      "SARARA_CONTRIBUTE": "<a href=\"http://catalog.sharedshelf.artstor.org\" class=\"link\" target=\"_blank\">Contribute to SAHARA using Shared Shelf</a>",
+      "SARARA_CONTRIBUTE": "<a href=\"http://catalog.sharedshelf.artstor.org\" class=\"link\" target=\"_blank\">Contribute to SAHARA using Forum</a>",
       "SAHARA_TERMS": "<a href=\"http://artstor.org/sahara-terms\" class=\"link\" target=\"_blank\">Terms</a>",
       "SAHARA_PRIVACY": "<a href=\"http://artstor.org/privacy-policy-sahara\" class=\"link\" target=\"_blank\">Privacy</a>"
     }
@@ -339,9 +354,9 @@
       "ALT_TEXT": "Pueblo in Taos, New Mexico"
     },
     "AD": {
-      "LINK": "https://support.artstor.org/?article=export-citations",
-      "IMG_SOURCE": "/assets/img/promo-citations.jpg",
-      "ALT_TEXT": "Try our new citation tool."
+      "LINK": "https://attendee.gotowebinar.com/register/3157097393307622657?source=ad",
+      "IMG_SOURCE": "/assets/img/promo-webinar2.jpg",
+      "ALT_TEXT": "Sign up for a webinar."
     },
     "QUESTIONS": {
       "HEADING": "Questions",
@@ -392,6 +407,9 @@
   },
   "MEDIA_ISSUES_BANNER": {
     "MESSAGE": "We are currently experiencing issues with images and downloads due to a power outage. <a href=\"http://support.artstor.org/?article=current-technical-issues-alerts\" target=\"_blank\" class=\"link\">Learn more</a>."
+  },
+  "DOWNTIME_BANNER": {
+    "MESSAGE": "Artstor will be temporarily unavailable on Tuesday, January 23 beginning at 6am EST (<a href=\"http://everytimezone.com\" target=\"_blank\" class=\"link\">see this in your timezone</a>) for approximately 15 minutes.  During this time, you may be unable to log in and access content. Thank you for your patience during this brief outage. "
   },
   "SEARCH_SKY_BANNER": {
     "MESSAGE": "⚠️ This is a testing instance for the new Search index. Please excuse the broken bits."

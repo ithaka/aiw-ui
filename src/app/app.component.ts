@@ -20,7 +20,7 @@ import { ScriptService } from './shared';
     '../sass/app.scss'
   ],
   template: `
-    <ang-sky-banner *ngIf="showSkyBanner" [textValue]="'MEDIA_ISSUES_BANNER.MESSAGE' | translate" (closeBanner)="showSkyBanner = false"></ang-sky-banner>
+    <ang-sky-banner *ngIf="showSkyBanner" [textValue]="'DOWNTIME_BANNER.MESSAGE' | translate" (closeBanner)="showSkyBanner = false"></ang-sky-banner>
     <a (click)="findMainContent()" (keydown.enter)="findMainContent()" tabindex="1" class="sr-only sr-only-focusable">Skip to main content</a>
     <nav-bar></nav-bar>
 
@@ -38,7 +38,6 @@ export class App {
   title = 'Artstor'
 
   private showSkyBanner: boolean = false
-  private zendesk_loaded: boolean = false
 
   constructor(
     public _app: AppConfig,
@@ -59,29 +58,32 @@ export class App {
     // Set metatitle to "Artstor" except for asset page where metatitle is {{ Asset Title }}
     router.events.subscribe(event => {
       if(event instanceof NavigationStart) {
-        let event_url_array = event.url.split('/');
+        let event_url_array = event.url.split('/')
         if(event_url_array && (event_url_array.length > 1) && (event_url_array[1] !== 'asset')){
-          this.titleService.setTitle(this.title);
+          this.titleService.setTitle(this.title)
         }
       }
       else if(event instanceof NavigationEnd) {
-        // // On navigation end, load the zendesk chat widget if user lands on login page else hide the widget
-        // if( event.url === '/login' ) {
-        //   this._script.loadScript('zendesk')
-        //     .then( data => {
-        //       if(data['status'] === 'loaded'){
-        //         this.zendesk_loaded = true
-        //       } else if(data['status'] === 'already_loaded'){ // if the widget script has already been loaded then just show the widget
-        //         document.querySelector('.zopim')['style']['display'] = 'block';
-        //       }
-        //     })
-        //     .catch( error => console.error(error) )
-        // } else {
-        //   if(this.zendesk_loaded) {
-        //     document.querySelectorAll('.zopim')[0]['style']['display'] = 'none';
-        //     document.querySelectorAll('.zopim')[1]['style']['display'] = 'none';
-        //   }
-        // }
+        let event_url_array = event.url.split('/')
+        let zendeskElements = document.querySelectorAll('.zopim')
+
+        // On navigation end, load the zendesk chat widget if user lands on login page else hide the widget
+        if( event_url_array[1] === 'login' ) {
+          this._script.loadScript('zendesk')
+            .then( data => {
+              if(data['status'] === 'loaded'){
+              } else if(data['status'] === 'already_loaded'){ // if the widget script has already been loaded then just show the widget
+                zendeskElements[0]['style']['display'] = 'block'
+              }
+            })
+            .catch( error => console.error(error) )
+        } else {
+          // If Zendesk chat is loaded, hide it
+          if(zendeskElements && zendeskElements.length > 1) {
+            zendeskElements[0]['style']['display'] = 'none'
+            zendeskElements[1]['style']['display'] = 'none'
+          }
+        }
       }
     });
   }

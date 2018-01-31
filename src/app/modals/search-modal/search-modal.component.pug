@@ -28,7 +28,7 @@
                       | {{ query.field.name }}
                       = " "
                     .dropdown-menu(ngbDropdownMenu, aria-labelledby="fieldDropdown")
-                      a.dropdown-item(*ngFor="let field of fields", (click)="query.field = field") {{ field.name }}
+                      a.dropdown-item(*ngFor="let field of fields", (click)="query.field = field", [attr.title]="field.description | translate") {{ field.name }}
                   button.close(type="button", (click)="clearAdvanceQuery(i)")
                     span(style="font-family:Aria, Arial, Helvetica;") &times;
               .form-group(*ngIf="advanceQueries.length < 10")
