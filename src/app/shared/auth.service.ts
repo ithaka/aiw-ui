@@ -518,6 +518,9 @@ export class AuthService implements CanActivate {
   public getUserInfo(triggerSessionExpModal?: boolean): Observable<any> {
     let options = { headers: this.userInfoHeader, withCredentials: true };
 
+    let currentUser = this.userSource.getValue()
+    let currentUsername = currentUser.username
+
     return this.http
       .get(this.genUserInfoUrl(), options)
       .map(
@@ -539,8 +542,12 @@ export class AuthService implements CanActivate {
                 this._router.navigate(['/login'])
               }
             }
-            // User does not have access!
-            if (data['status'] === false) {
+            
+            if (
+              data['status'] === false // User does not have access!
+              ||
+              data['user'].username != currentUsername
+            ) {
               // Clear user, and trigger router canActivate
               this.saveUser({})
               triggerSessionExpModal && this.showUserInactiveModal.next(true)

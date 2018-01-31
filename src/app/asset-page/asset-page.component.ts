@@ -316,9 +316,9 @@ export class AssetPage implements OnInit, OnDestroy {
 
     // Calculate the index of current asset from the previous assets result set
     private currentAssetIndex(): number{
-        if (this.assets[0]) {
+        if (this.assetIds[0]) {
             for(var i = 0; i < this.prevAssetResults.thumbnails.length; i++){
-                if(this.prevAssetResults.thumbnails[i] && this.prevAssetResults.thumbnails[i][this.assetIdProperty] == this.assets[0].id){
+                if(this.prevAssetResults.thumbnails[i] && this.prevAssetResults.thumbnails[i][this.assetIdProperty] == this.assetIds[0]){
                     this.prevAssetResults.thumbnails[i].selected = true;
                     return i;
                 }
@@ -525,6 +525,7 @@ export class AssetPage implements OnInit, OnDestroy {
             this.toggleAssetDrawer(false);
 
             this.assets.splice(1);
+            this.assetIds.splice(1);
             for(let i = 0; i < this.prevAssetResults.thumbnails.length; i++){
                 this.prevAssetResults.thumbnails[i].selected = false;
             }
