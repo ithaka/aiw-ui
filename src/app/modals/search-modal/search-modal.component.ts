@@ -118,6 +118,9 @@ export class SearchModal implements OnInit {
   private loadAppliedFiltersFromURL(): void{
     let routeParams = this.route.snapshot.params
 
+    // Used to determine if generateSelectedFilters will be called or not, should only be called if we have a tri-state checkbox checked
+    let updateSelectedFilters: boolean = false
+
     for(let key in routeParams){
       let switchCaseValue: string = ( key === 'collectiontypes' || key === 'geography' ) ? 'colTypeGeo' : key
       switch( switchCaseValue ){
@@ -146,6 +149,7 @@ export class SearchModal implements OnInit {
             let updtFilterObj = clsFilterGroup.values.find( filterObj => filterObj.value === filter )
             updtFilterObj.checked = true
           }
+          updateSelectedFilters = true
         }
 
         case 'colTypeGeo': {
@@ -172,6 +176,7 @@ export class SearchModal implements OnInit {
               }
             }
           }
+          updateSelectedFilters = true
         }
 
         case 'collections': {
@@ -184,12 +189,15 @@ export class SearchModal implements OnInit {
               updtFilterObj.checked = true
             }
           }
+          updateSelectedFilters = true
         }
       }
     }
 
-    // Finally generate selected filters from available filters marked as checked
-    this.generateSelectedFilters()
+    // Finally generate selected filters from available filters marked as checked if any
+    if( updateSelectedFilters ) {
+      this.generateSelectedFilters()
+    }
   }
 
   private updateAdvanceQueries( params: any ): void{
