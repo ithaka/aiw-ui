@@ -352,7 +352,11 @@ export class AssetPage implements OnInit, OnDestroy {
 
             if((this.assetIndex > 0)){
                 let prevAssetIndex = this.quizShuffle ? Math.floor(Math.random() * this.prevAssetResults.thumbnails.length) + 0 : this.assetIndex - 1; // Assign random thumbnail index if quiz shuffle is true
-                this._router.navigate(['/asset', this.prevAssetResults.thumbnails[prevAssetIndex][this.assetIdProperty]]);
+                let queryParams = {}
+                if (this.assetGroupId) {
+                    queryParams["groupId"] = this.assetGroupId
+                }
+                this._router.navigate(['/asset', this.prevAssetResults.thumbnails[prevAssetIndex][this.assetIdProperty], queryParams]);
             }
             else if(this.assetIndex == 0){
                 this.loadArrayLastAsset = true;
@@ -368,7 +372,11 @@ export class AssetPage implements OnInit, OnDestroy {
 
             if((this.prevAssetResults.thumbnails) && (this.assetIndex < (this.prevAssetResults.thumbnails.length - 1))){
                 let nextAssetIndex = this.quizShuffle ? Math.floor(Math.random() * this.prevAssetResults.thumbnails.length) + 0 : this.assetIndex + 1; // Assign random thumbnail index if quiz shuffle is true
-                this._router.navigate(['/asset', this.prevAssetResults.thumbnails[nextAssetIndex][this.assetIdProperty]]);
+                let queryParams = {}
+                if (this.assetGroupId) {
+                    queryParams["groupId"] = this.assetGroupId
+                }
+                this._router.navigate(['/asset', this.prevAssetResults.thumbnails[nextAssetIndex][this.assetIdProperty], queryParams]);
             }
             else if((this.prevAssetResults.thumbnails) && (this.assetIndex == (this.prevAssetResults.thumbnails.length - 1))){
                 this.loadArrayFirstAsset = true;
