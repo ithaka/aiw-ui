@@ -113,6 +113,119 @@ export class SearchModal implements OnInit {
   }
 
   /**
+   * Update advanceQueries, advanceSearchDate and selected filters based on applied filters from URL
+   */
+  private loadAppliedFiltersFromURL(): void{
+    let routeParams = this.route.snapshot.params
+
+    // Used to determine if generateSelectedFilters will be called or not, should only be called if we have a tri-state checkbox checked
+    let updateSelectedFilters: boolean = false
+
+    for(let key in routeParams){
+      let switchCaseValue: string = ( key === 'collectiontypes' || key === 'geography' ) ? 'colTypeGeo' : key
+      switch( switchCaseValue ){
+        case 'term': { // Update the advanceQueries Array as per the term param
+          this.updateAdvanceQueries( routeParams )
+          break
+        }
+       
+        case 'startDate': { // Update advanceSearchDate Object as per the startDate
+          this.advanceSearchDate.startDate = Math.abs(routeParams[key])
+          this.advanceSearchDate.startEra = parseInt(routeParams[key]) < 0 ? 'BCE' : 'CE'
+          break
+        }
+       
+        case 'endDate': { // Update advanceSearchDate Object as per the endDate
+          this.advanceSearchDate.endDate = Math.abs(routeParams[key])
+          this.advanceSearchDate.endEra = parseInt(routeParams[key]) < 0 ? 'BCE' : 'CE'
+          break
+        }
+        
+        //For tri-state checkboxes set the checked flag for filter object based on param value and in the end run generateSelectedFilters to updated selected filters object
+        case 'artclassification_str': {
+          let classificatioFilters = routeParams[key].split('|')
+          for(let filter of classificatioFilters){
+            let clsFilterGroup =  this.availableFilters.find( filterGroup => filterGroup.name === key )
+            let updtFilterObj = clsFilterGroup.values.find( filterObj => filterObj.value === filter )
+            updtFilterObj.checked = true
+          }
+          updateSelectedFilters = true
+        }
+
+        case 'colTypeGeo': {
+          let filters = routeParams[key].split('|')
+          for(let filter of filters){
+            let filterGroup =  this.availableFilters.find( filterGroup => filterGroup.name === key )
+            let updtFilterObj = filterGroup.values.find( filterObj => filterObj.value === filter )
+            if( updtFilterObj ){ // If match is found at the parent node level
+              updtFilterObj.checked = true
+              if( updtFilterObj.children && updtFilterObj.children.length > 0 ){
+                for(let child of updtFilterObj.children){
+                  child.checked = true
+                }
+              }
+            } else{ // If we don't find a match at parent node level then search for a match in children nodes
+              for(let value of filterGroup.values){
+                if(value.children && value.children.length > 0){
+                  let updtFilterObj = value.children.find( filterObj => filterObj.value === filter )
+                  if(updtFilterObj){
+                    updtFilterObj.checked = true
+                    break
+                  }
+                }
+              }
+            }
+          }
+          updateSelectedFilters = true
+        }
+
+        case 'collections': {
+          let colIds = routeParams[key].split('|')
+          for(let colId of colIds){ // Indv. collection filters are only available udner Inst. Col Type filter. Find the collection filter object and mark it checked
+            let filterGroup =  this.availableFilters.find( filterGroup => filterGroup.name === 'collectiontypes' )
+            let instColFilters = filterGroup.values.find( colTypefilter => colTypefilter.value === '2' )
+            let updtFilterObj = instColFilters.children.find( filterObj => filterObj.value === colId )
+            if( updtFilterObj ){
+              updtFilterObj.checked = true
+            }
+          }
+          updateSelectedFilters = true
+        }
+      }
+    }
+
+    // Finally generate selected filters from available filters marked as checked if any
+    if( updateSelectedFilters ) {
+      this.generateSelectedFilters()
+    }
+  }
+
+  private updateAdvanceQueries( params: any ): void{
+    let terms = params['term'].split(' ')
+    if( terms.length > 0 ){
+      this.advanceQueries = []
+      let operator = 'AND'
+      for(let term of terms){
+        if( term === 'AND' || term === 'OR' || term === 'NOT' ){
+          operator = term
+          continue
+        }
+        let termSubArray = term.split(':')
+        let value = termSubArray.length > 1 ? termSubArray[1].slice(1, -1) : termSubArray[0]
+        let field = termSubArray.length > 1 ? termSubArray[0] : ''
+
+        let advQueryObj = {
+          term: value,
+          field: this._search.filterFields.filter( fieldObj => fieldObj.value === field )[0],
+          operator: operator
+        }
+        this.advanceQueries.push(advQueryObj)
+      }
+      this.addAdvanceQuery()
+    }
+  }
+
+  /**
    * Load filters (Geo, Collection, Collection Type)
    */
   private loadFilters() : void {
@@ -204,9 +317,10 @@ export class SearchModal implements OnInit {
             } else {
               throw new Error("no Collections returned in data")
             }
+            this.loadAppliedFiltersFromURL()
           })
 
-        this.loadingFilters = false
+          this.loadingFilters = false
       })
 
   }
