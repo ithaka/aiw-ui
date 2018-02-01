@@ -11,9 +11,6 @@ import { TitleService } from '../shared/title.service';
 
 @Component({
   selector: 'ang-my-collections',
-  providers: [
-      AuthService
-  ],
   templateUrl: 'my-collections.component.pug',
   styleUrls: [ './browse-page.component.scss' ]
 })
