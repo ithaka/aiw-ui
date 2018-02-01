@@ -1,5 +1,5 @@
 import { Router } from '@angular/router';
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, OnChanges, Input, SimpleChanges } from '@angular/core';
 
 import { Thumbnail, AssetService, CollectionTypeHandler } from './../../shared'
 
@@ -15,7 +15,7 @@ import { Thumbnail, AssetService, CollectionTypeHandler } from './../../shared'
     }
   `]
 })
-export class ThumbnailComponent implements OnInit {
+export class ThumbnailComponent implements OnInit, OnChanges {
   @Input()
   private thumbnail: Thumbnail
 
@@ -30,6 +30,9 @@ export class ThumbnailComponent implements OnInit {
 
   private constraints: any = {}
   private collectionTypeHandler: CollectionTypeHandler = new CollectionTypeHandler()
+
+  // Variable that determines the thumbnail image size based on largeThmbView and available size for the asset. Defaults to 1 (Small thumbnail view)
+  private thumbnailSize: number = 1
 
   constructor(
     private _assets: AssetService,
@@ -46,6 +49,13 @@ export class ThumbnailComponent implements OnInit {
     }
 
     this.thumbnail.iapFlag = this.determineIAP(this.thumbnail['artstorid'] ? this.thumbnail['artstorid'] : this.thumbnail['objectId'])
+  }
+
+  // Fires when the component input(s) (i.e largeThmbView) changes - Updates the thumbnailSize based on largeThmbView current value
+  ngOnChanges(changes: SimpleChanges) {
+    if(changes.largeThmbView){
+      this.thumbnailSize = changes.largeThmbView.currentValue ? 2 : 1
+    }
   }
 
   openLink(event: Event, urlParams: any[]) {
@@ -73,5 +83,12 @@ export class ThumbnailComponent implements OnInit {
   getCollectionType(): { name: string, alt: string } {
     // Some endpoints give us the collectionType info in 'collectionType: number', where as others give the same info in 'collectiontypes: Array<number>'
     return this.collectionTypeHandler.getCollectionType( this.thumbnail['collectionType'] ? [ this.thumbnail['collectionType'] ] : this.thumbnail['collectiontypes'], this.thumbnail['contributinginstitutionid'])
+  }
+
+  // If large thumbnail image fails to load, fallback to smaller thumbnail image
+  thumbnailError(): void{
+    if(this.thumbnailSize > 1){
+      this.thumbnailSize--
+    }
   }
 }
