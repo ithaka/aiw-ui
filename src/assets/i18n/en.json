@@ -22,7 +22,7 @@
     "LOGIN_BTN": "Log in",
     "SERVER_ERROR": "Server is not responding. Please try again later.",
     "ARCHIVED_ERROR": "That login has been disabled. Please contact your institutional contact.",
-    "TERMS": "By using Artstor Digital Library, I agree to the <a id=\"linkTermsAndConditions\" href=\"http://www.artstor.org/terms\" class=\"link\" target=\"_blank\">Terms</a>",
+    "TERMS": "By using Artstor Digital Library, I agree to the <a id=\"linkTermsAndConditions\" data-automation-component=\"artstor-login-terms\" href=\"http://www.artstor.org/terms\" class=\"link\" target=\"_blank\">Terms</a>",
     "WRONG_PASSWORD" : "Invalid email address or password. Try again.",
     "INVALID_EMAIL" : "Please enter a valid email address",
     "PASSWORD_REQUIRED": "Password must be 7-20 characters",
@@ -100,6 +100,10 @@
     },
     "MESSAGES": {
       "NEEDASSETS": "To compare assets, you will need to access an asset through a set of results first. Then those results will show here."
+    },
+    "METADATA_LABELS": {
+      "SSID": "SSID",
+      "FILE_NAME": "File Name"
     }
   },
   "IMAGE_GROUP_PAGE": {
@@ -218,6 +222,21 @@
       "AND": "AND",
       "OR": "OR",
       "NOT": "NOT"
+    },
+    "FIELDS": {
+      "ANY": "Search all fields for any assets",
+      "CREATOR": "Search assets by Creator",
+      "TITLE": "Search assets by Title",
+      "LOCATION": "Search assets by Location",
+      "REPOSITORY": "Search assets by Repository",
+      "SUBJECT": "Search assets by Subject",
+      "MATERIAL": "Search assets by Material",
+      "STYLE_PERIOD": "Search assets by Style or Period",
+      "WORK_TYPE": "Search assets by Work Type",
+      "CULTURE": "Search assets by Culture",
+      "TECHNIQUE": "Search assets by Technique",
+      "NUMBER": "Search assets by Number",
+      "SSID": "Search for asset by ID provided by Forum"
     }
   },
   "RETURN_HOME" : "Return Home",
@@ -252,9 +271,9 @@
       "SUPPORT": "<a href=\"http://support.artstor.org\" class=\"link\" target=\"_blank\">Support</a>",
       "ARTSTOR": "<a href=\"http://artstor.org\" class=\"link\" target=\"_blank\">Artstor.org</a>",
       "SAHARA": "<a href=\"http://sah.org\" class=\"link\" target=\"_blank\">SAH.org</a>",
-      "SARARA_CONTRIBUTE": "<a href=\"http://catalog.sharedshelf.artstor.org\" class=\"link\" target=\"_blank\">Contribute to SAHARA using Shared Shelf</a>",
-      "SAHARA_TERMS": "<a href=\"http://sahara.artstor.org/library/portals/SAHARA/terms-of-use.html\" class=\"link\" target=\"_blank\">Terms</a>",
-      "SAHARA_PRIVACY": "<a href=\"http://sahara.artstor.org/library/portals/SAHARA/privacy-policy.html\" class=\"link\" target=\"_blank\">Privacy</a>"
+      "SARARA_CONTRIBUTE": "<a href=\"http://catalog.sharedshelf.artstor.org\" class=\"link\" target=\"_blank\">Contribute to SAHARA using Forum</a>",
+      "SAHARA_TERMS": "<a href=\"http://artstor.org/sahara-terms\" class=\"link\" target=\"_blank\">Terms</a>",
+      "SAHARA_PRIVACY": "<a href=\"http://artstor.org/privacy-policy-sahara\" class=\"link\" target=\"_blank\">Privacy</a>"
     }
   },
   "ACCESS_HELP_MODAL": {
@@ -297,7 +316,7 @@
   },
   "HOME": {
     "HEADINGS": {
-      "SSC": "Shared Shelf Commons",
+      "SSC": "Public Collections",
       "BRWSE": "Browse",
       "FRM_BLOG": "From Our Blog",
       "INSTITUTION_COLLECTIONS": "{{institutionName}} Collections"
@@ -309,7 +328,7 @@
       "CLASS_HEADING": "Classification",
       "CLASS_LIST": "(paintings, performing arts, photographs)",
       "COLL_HEADING": "Collection",
-      "COLL_LIST": "(Artstor, Shared Shelf, Shared Shelf Commons, My Collections...)",
+      "COLL_LIST": "(Artstor, Institutional, Public, My Collections...)",
       "COLL_LIST_SHORT": "(Institutional Collections)",
       "TEACHING_HEADING": "Teaching Resources",
       "TEACHING_LIST": "(Curriculum Guides, AP® Resources, Surveys and Case Studies: Art History, Humanities and Social Sciences)",
@@ -318,12 +337,12 @@
     },
     "FEATURED": {
       "HEADING": "Featured Collection",
-      "SUBHEADING": "The Andy Warhol Foundation for the Visual Arts: Oeuvre",
-      "DESCRIPTION": "Andy Warhol; Brooklyn Bridge; 1983. Images © The Andy Warhol Foundation for the Visual Arts, Inc. and Andy Warhol artwork © The Andy Warhol Foundation for the Visual Arts, Inc.",
-      "LINK": "/#/category/10374058919;name=The%20Andy%20Warhol%20Foundation%20for%20the%20Visual%20Arts%3A%20Oeuvre%20458;browseType=103",
-      "IMG_SOURCE": "/assets/img/featured-collection.jpg",
-      "LINK_TITLE": "The Andy Warhol Foundation for the Visual Arts: Oeuvre",
-      "ALT_TEXT": "The Andy Warhol Foundation for the Visual Arts: Oeuvre"
+      "SUBHEADING": "Minor White Archive (Princeton University Art Museum)",
+      "DESCRIPTION": "Minor White. San Francisco. August 19, 1949. Gelatin silver print. The Minor White Archive, Princeton University Art Museum, bequest of Minor White. © Trustees of Princeton University",
+      "LINK": "/#/category/10374058928;browseType=103",
+      "IMG_SOURCE": "/assets/img/featured-collection2.jpg",
+      "LINK_TITLE": "Minor White Archive (Princeton University Art Museum)",
+      "ALT_TEXT": "Minor White Archive (Princeton University Art Museum)"
     },
     "SAHARA_FEATURED": {
       "HEADING": "Featured Image",
@@ -335,9 +354,9 @@
       "ALT_TEXT": "Pueblo in Taos, New Mexico"
     },
     "AD": {
-      "LINK": "http://support.artstor.org/?article=quiz-mode-in-fullscreen",
-      "IMG_SOURCE": "/assets/img/promo-quiz.jpg",
-      "ALT_TEXT": "Test yourself in quiz mode."
+      "LINK": "https://attendee.gotowebinar.com/register/3157097393307622657?source=ad",
+      "IMG_SOURCE": "/assets/img/promo-webinar2.jpg",
+      "ALT_TEXT": "Sign up for a webinar."
     },
     "QUESTIONS": {
       "HEADING": "Questions",
@@ -360,7 +379,7 @@
       "TITLE": "Browse",
       "ARTSTOR": "Artstor Collections",
       "INSTITUTION": "Institutional Collections",
-      "OPEN": "Open Collections",
+      "OPEN": "Public Collections",
       "OWNED": "My Collections",
       "GROUPS": "Image Groups"
     },
@@ -385,6 +404,12 @@
   },
   "SEARCH_ANNOUNCEMENT_BANNER": {
     "MESSAGE": "We are making changes and you may experience issues with login and search. <a href=\"http://support.artstor.org/?article=current-technical-issues-alerts\" target=\"_blank\" class=\"link\">Learn more</a>."
+  },
+  "MEDIA_ISSUES_BANNER": {
+    "MESSAGE": "We are currently experiencing issues with images and downloads due to a power outage. <a href=\"http://support.artstor.org/?article=current-technical-issues-alerts\" target=\"_blank\" class=\"link\">Learn more</a>."
+  },
+  "DOWNTIME_BANNER": {
+    "MESSAGE": "Artstor will be temporarily unavailable on Tuesday, January 23 beginning at 6am EST (<a href=\"http://everytimezone.com\" target=\"_blank\" class=\"link\">see this in your timezone</a>) for approximately 15 minutes.  During this time, you may be unable to log in and access content. Thank you for your patience during this brief outage. "
   },
   "SEARCH_SKY_BANNER": {
     "MESSAGE": "⚠️ This is a testing instance for the new Search index. Please excuse the broken bits."
@@ -431,6 +456,15 @@
       "SAHARA_LOGIN": {
         "HEADING": "Add your images to the SAHARA collection"
       }
+    }
+  },
+  "GENERIC_ERROR" : "There was an error while loading. Please verify your network connection and try again. If you continue to have a problem, please <a href='mailto:userservices@artstor.org' class='link'>contact support</a>.",
+  "SESSION_EXPIRE_MODAL": {
+    "HEADING": "Session Expired",
+    "MESSAGE": "Your session has expired and you were logged out",
+    "BUTTONS": {
+      "STAY_LOGGED_OUT": "Stay Logged Out",
+      "LOG_IN": "Log In"
     }
   }
 }

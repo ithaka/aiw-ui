@@ -18,7 +18,7 @@
                     button.btn.btn-secondary.dropdown-toggle(id="advanceQueryOperator{{i + 1}}", ngbDropdownToggle, type="button")
                       | {{ query.operator }}
                       = " "
-                    .dropdown-menu(aria-labelledby="dropdown")
+                    .dropdown-menu(ngbDropdownMenu, aria-labelledby="dropdown")
                       a.dropdown-item((click)="query.operator = 'AND'") {{ 'ADVANCED_SEARCH_MODAL.BOOLEAN_OPTIONS.AND' | translate }}
                       a.dropdown-item((click)="query.operator = 'OR'") {{ 'ADVANCED_SEARCH_MODAL.BOOLEAN_OPTIONS.OR' | translate }}
                       a.dropdown-item((click)="query.operator = 'NOT'") {{ 'ADVANCED_SEARCH_MODAL.BOOLEAN_OPTIONS.NOT' | translate }}
@@ -27,8 +27,8 @@
                     button.btn.btn-secondary.dropdown-toggle(id="advanceQueryField{{i + 1}}", ngbDropdownToggle, type="button")
                       | {{ query.field.name }}
                       = " "
-                    .dropdown-menu(aria-labelledby="fieldDropdown")
-                      a.dropdown-item(*ngFor="let field of fields", (click)="query.field = field") {{ field.name }}
+                    .dropdown-menu(ngbDropdownMenu, aria-labelledby="fieldDropdown")
+                      a.dropdown-item(*ngFor="let field of fields", (click)="query.field = field", [attr.title]="field.description | translate") {{ field.name }}
                   button.close(type="button", (click)="clearAdvanceQuery(i)")
                     span(style="font-family:Aria, Arial, Helvetica;") &times;
               .form-group(*ngIf="advanceQueries.length < 10")
@@ -50,6 +50,7 @@
               p.small {{ 'ADVANCED_SEARCH_MODAL.FILTER_DESCRIPTION' | translate }}
               .row.has-icon-overlay(*ngIf="loadingFilters")
                 i.icon-lg.icon-overlay--top.icon-loading-large(style="background-color:transparent;")
+
               .form-group(*ngFor="let filterGroup of availableFilters")
                 div(*ngIf="filterGroup.name")
                   label {{ "FILTERS." + filterGroup.name | translate }}
@@ -57,19 +58,17 @@
                     ul.list-group.list-group-flush.compact
                       li.list-group-item(*ngFor="let filter of filterGroup.values")
                         label.custom-control.custom-checkbox
-                          input.custom-control-input((click)="toggleFilter(filterGroup.name == 'geography' ? filter.efq : filter.name, filterGroup.name)", type="checkbox")
+                          input.custom-control-input((click)="toggleFilter(filter)", type="checkbox", [checked]="filter.checked")
                           span.custom-control-indicator
                           span.custom-control-description
-                            span(*ngIf="filter.name && filter.name.length < 2") {{ filterNameMap['collectiontypes'] && filterNameMap['collectiontypes'][filter.name] }} ({{filter.count}})
-                            span(*ngIf="filter.name && filter.name.length > 1") {{ filter.name }} ({{filter.count}})
+                            span {{ filter.name }} {{ filter.count ? '(' + filter.count +')' : '' }}
                         ul.list-group.list-group-child(*ngIf="filter.children")
                           li.list-group-item(*ngFor="let child of filter.children")
                             label.custom-control.custom-checkbox
-                              input.custom-control-input((click)="toggleFilter(filterGroup.name == 'geography' ? child.efq : child.name, filterGroup.name)", type="checkbox")
+                              input.custom-control-input( (click)="toggleFilter(child, filter)", type="checkbox", [checked]="child.checked")
                               span.custom-control-indicator
                               span.custom-control-description
-                                span(*ngIf="child.name && child.name.length < 2") {{ filterNameMap['collectiontypes'] && filterNameMap['collectiontypes'][child.name] }} ({{child.count}})
-                                span(*ngIf="child.name && child.name.length > 1") {{ child.name }} ({{child.count}})
+                                span {{ child.name }} {{ child.count ? '(' + child.count +')' : '' }}
       .modal-footer
         .alert.alert-warning(*ngIf="error.empty", [innerHtml]="'ADVANCED_SEARCH_MODAL.ERRORS.EMPTY_SEARCH' | translate")
         .alert.alert-warning(*ngIf="error.date", [innerHtml]="'ADVANCED_SEARCH_MODAL.ERRORS.DUMB_DATE' | translate")

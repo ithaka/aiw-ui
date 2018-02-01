@@ -55,7 +55,7 @@ export class Nav implements OnInit, OnDestroy {
           this.user = userObj;
         },
         (err) => {
-          console.log("Nav failed to load Institution information", err)
+          console.error("Nav failed to load Institution information", err)
         }
       )
     );
@@ -74,7 +74,7 @@ export class Nav implements OnInit, OnDestroy {
           this.institutionObj = institutionObj;
         },
         (err) => {
-          console.log("Nav failed to load Institution information", err)
+          console.error("Nav failed to load Institution information", err)
         }
       )
     );
@@ -94,7 +94,7 @@ export class Nav implements OnInit, OnDestroy {
         }
       })
       .catch((err) => {
-        console.log(err)
+        console.error(err)
       })
   }
 

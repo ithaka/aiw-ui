@@ -1,7 +1,7 @@
 import { Subscription } from 'rxjs/Rx';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
-import { Angulartics2 } from 'angulartics2/dist';
+import { Angulartics2 } from 'angulartics2';
 
 // Project dependencies
 import { SearchQueryUtil } from './search-query';
@@ -72,7 +72,7 @@ export class SearchModal implements OnInit {
   private showCollectionType: boolean = false;
 
   // Filters
-  private availableFilters: any[] = []
+  private availableFilters: FacetGroup[] = []
 
   // Search query trasnformation logic is abstracted to a utility
   private queryUtil: SearchQueryUtil = new SearchQueryUtil()
@@ -92,7 +92,6 @@ export class SearchModal implements OnInit {
         private angulartics: Angulartics2,
         private _auth: AuthService,
         // Solr Search service
-        private _assetSearch: AssetSearchService,
         private _assetFilters: AssetFiltersService
       ) {
 
@@ -114,35 +113,216 @@ export class SearchModal implements OnInit {
   }
 
   /**
+   * Update advanceQueries, advanceSearchDate and selected filters based on applied filters from URL
+   */
+  private loadAppliedFiltersFromURL(): void{
+    let routeParams = this.route.snapshot.params
+
+    // Used to determine if generateSelectedFilters will be called or not, should only be called if we have a tri-state checkbox checked
+    let updateSelectedFilters: boolean = false
+
+    for(let key in routeParams){
+      let switchCaseValue: string = ( key === 'collectiontypes' || key === 'geography' ) ? 'colTypeGeo' : key
+      switch( switchCaseValue ){
+        case 'term': { // Update the advanceQueries Array as per the term param
+          this.updateAdvanceQueries( routeParams )
+          break
+        }
+       
+        case 'startDate': { // Update advanceSearchDate Object as per the startDate
+          this.advanceSearchDate.startDate = Math.abs(routeParams[key])
+          this.advanceSearchDate.startEra = parseInt(routeParams[key]) < 0 ? 'BCE' : 'CE'
+          break
+        }
+       
+        case 'endDate': { // Update advanceSearchDate Object as per the endDate
+          this.advanceSearchDate.endDate = Math.abs(routeParams[key])
+          this.advanceSearchDate.endEra = parseInt(routeParams[key]) < 0 ? 'BCE' : 'CE'
+          break
+        }
+        
+        //For tri-state checkboxes set the checked flag for filter object based on param value and in the end run generateSelectedFilters to updated selected filters object
+        case 'artclassification_str': {
+          let classificatioFilters = routeParams[key].split('|')
+          for(let filter of classificatioFilters){
+            let clsFilterGroup =  this.availableFilters.find( filterGroup => filterGroup.name === key )
+            let updtFilterObj = clsFilterGroup.values.find( filterObj => filterObj.value === filter )
+            updtFilterObj.checked = true
+          }
+          updateSelectedFilters = true
+        }
+
+        case 'colTypeGeo': {
+          let filters = routeParams[key].split('|')
+          for(let filter of filters){
+            let filterGroup =  this.availableFilters.find( filterGroup => filterGroup.name === key )
+            let updtFilterObj = filterGroup.values.find( filterObj => filterObj.value === filter )
+            if( updtFilterObj ){ // If match is found at the parent node level
+              updtFilterObj.checked = true
+              if( updtFilterObj.children && updtFilterObj.children.length > 0 ){
+                for(let child of updtFilterObj.children){
+                  child.checked = true
+                }
+              }
+            } else{ // If we don't find a match at parent node level then search for a match in children nodes
+              for(let value of filterGroup.values){
+                if(value.children && value.children.length > 0){
+                  let updtFilterObj = value.children.find( filterObj => filterObj.value === filter )
+                  if(updtFilterObj){
+                    updtFilterObj.checked = true
+                    break
+                  }
+                }
+              }
+            }
+          }
+          updateSelectedFilters = true
+        }
+
+        case 'collections': {
+          let colIds = routeParams[key].split('|')
+          for(let colId of colIds){ // Indv. collection filters are only available udner Inst. Col Type filter. Find the collection filter object and mark it checked
+            let filterGroup =  this.availableFilters.find( filterGroup => filterGroup.name === 'collectiontypes' )
+            let instColFilters = filterGroup.values.find( colTypefilter => colTypefilter.value === '2' )
+            let updtFilterObj = instColFilters.children.find( filterObj => filterObj.value === colId )
+            if( updtFilterObj ){
+              updtFilterObj.checked = true
+            }
+          }
+          updateSelectedFilters = true
+        }
+      }
+    }
+
+    // Finally generate selected filters from available filters marked as checked if any
+    if( updateSelectedFilters ) {
+      this.generateSelectedFilters()
+    }
+  }
+
+  private updateAdvanceQueries( params: any ): void{
+    let terms = params['term'].split(' ')
+    if( terms.length > 0 ){
+      this.advanceQueries = []
+      let operator = 'AND'
+      for(let term of terms){
+        if( term === 'AND' || term === 'OR' || term === 'NOT' ){
+          operator = term
+          continue
+        }
+        let termSubArray = term.split(':')
+        let value = termSubArray.length > 1 ? termSubArray[1].slice(1, -1) : termSubArray[0]
+        let field = termSubArray.length > 1 ? termSubArray[0] : ''
+
+        let advQueryObj = {
+          term: value,
+          field: this._search.filterFields.filter( fieldObj => fieldObj.value === field )[0],
+          operator: operator
+        }
+        this.advanceQueries.push(advQueryObj)
+      }
+      this.addAdvanceQuery()
+    }
+  }
+
+  /**
    * Load filters (Geo, Collection, Collection Type)
    */
   private loadFilters() : void {
-    this._assetSearch.getFacets().take(1)
+    this._search.getFacets().take(1)
       .subscribe(data => {
 
-        // Process through "facets"
+        // Process through "facets" & construct the availableFilters array, based on the defined interfaces, from facets response
         for (let facetKey in data['facets']) {
           const facet = data['facets'][facetKey]
 
           if ((facet.name === 'collectiontypes' && this.showCollectionType) || facet.name !== 'collectiontypes') {
+            // Construct Facet Group
+            let facetGroup: FacetGroup = {
+              name: facet.name,
+              values: []
+            }
 
             // Prune any facets not available to the user (ex. Private Collections on SAHARA)
             for (let i = facet.values.length - 1; i >= 0; i--){
-              if (!this.showPrivateCollections && facet.values[i].name.match(/3|6/)) { // NOTE: 3 & 6 are Private Collections names
+              let facetName = facet.values[i].name
+              if (!this.showPrivateCollections && facetName.match(/3|6/)) { // NOTE: 3 & 6 are Private Collections names
                 facet.values.splice(i, 1)
+              } else if (facetName && facetName.length > 0){ // Some filters return empty strings, avoid those
+                // Push filter objects to Facet Group 'values' Array
+                let facetObject: FacetObject = {
+                  checked: false,
+                  name: facet.name === 'collectiontypes' ? this.filterNameMap['collectiontypes'][facetName] : facetName,
+                  count: facet.values[i].count,
+                  value: facetName,
+                  children: []
+                }
+
+                // institutional collection counts are wrong, so assign them a count of 0 to indicate it shouldn't be displayed
+                facetObject.value == "2" && (facetObject.count = 0)
+
+                facetGroup.values.push( facetObject )
               }
             }
-
-            this.availableFilters.push(facet)
+            facetGroup.values.reverse()
+            this.availableFilters.push(facetGroup)
           }
         }
-        // Process "hierarchies2"
+
+        // Process "hierarchies2" & create Geo Facet Group & push it to available filters
         for (let hierFacet in data['hierarchies2']) {
           let topObj = this._assetFilters.generateHierFacets(data['hierarchies2'][hierFacet].children, 'geography')
-          this.availableFilters.push({ name: "geography", values: topObj })
+
+          let geoFacetGroup: FacetGroup = {
+            name: 'geography',
+            values: []
+          }
+
+          for(let geoObj of topObj){
+            let geoFacetObj: FacetObject = {
+              checked: false,
+              name: geoObj.name,
+              count: geoObj.count,
+              value: geoObj.efq,
+              children: []
+            }
+
+            for(let child of geoObj.children){
+              let geoChildFacetObj: FacetObject = {
+                checked: false,
+                name: child.name,
+                count: child.count,
+                value: child.efq
+              }
+
+              geoFacetObj.children.push( geoChildFacetObj )
+            }
+            geoFacetGroup.values.push( geoFacetObj )
+          }
+          this.availableFilters.push( geoFacetGroup )
         }
-        this.loadingFilters = false
+
+        // Fetch institutional collections and add them as children of institutional collectiontype filter
+        this._assets.getCollectionsList( 'institution' )
+          .toPromise()
+          .then((data) => {
+            if (data && data['Collections']) {
+              for(let collection of data['Collections']){
+                let colFacetObj: FacetObject = {} as FacetObject
+                colFacetObj.checked = false
+                colFacetObj.name = collection.collectionname
+                colFacetObj.value = collection.collectionid
+                this.availableFilters[1].values[2].children.push( colFacetObj )
+              }
+            } else {
+              throw new Error("no Collections returned in data")
+            }
+            this.loadAppliedFiltersFromURL()
+          })
+
+          this.loadingFilters = false
       })
+
   }
 
   /**
@@ -306,6 +486,17 @@ export class SearchModal implements OnInit {
     advQuery = this.queryUtil.generateSearchQuery(this.advanceQueries)
     filterParams = this.queryUtil.generateFilters(this.filterSelections, this.advanceSearchDate)
 
+    for (let key in filterParams) {
+      let filterValue = ''
+      if( filterParams[key] instanceof Array ){
+        let filterValue = ''
+        for( let filter of filterParams[key]){
+          filterValue += filterValue ? '|' + filter : filter
+        }
+        filterParams[key] = filterValue
+      }
+    }
+
     // Track in Adobe Analytics
     this._analytics.directCall('advanced_search');
     this.angulartics.eventTrack.next({ action: "advSearch", properties: { category: "search", label: advQuery } })
@@ -322,19 +513,53 @@ export class SearchModal implements OnInit {
     this.close();
   }
 
-  private toggleFilter(value: string, group: string): void {
-    let filter = {
-      'group': group,
-      'value' : value
-    };
-    let objIndex = this.arrayObjectIndexOf(this.filterSelections, filter);
+  private toggleFilter( filterObj: FacetObject, parentFilterObj?: FacetObject): void{
+    // Toggle filter checked state
+    filterObj.checked = !filterObj.checked
 
-    if (objIndex < 0) {
-      this.filterSelections.push(filter);
-    } else {
-      this.filterSelections.splice(objIndex, 1);
+    if( parentFilterObj ) { // If a child node is clicked, check the parent node if all children are checked else do otherwise
+      let parentChecked: boolean = true
+      for( let child of parentFilterObj.children ){
+        if( !child.checked ){
+          parentChecked = false
+          break
+        }
+      }
+      parentFilterObj.checked = parentChecked
+    } else if( filterObj.children ) { // If a parent node is clicked and it has children make sure they are all checked/unchecked accordingly
+      for( let child of filterObj.children ){
+        child.checked = filterObj.checked
+      }
     }
-    this.validateForm();
+    this.generateSelectedFilters()
+  }
+
+  private generateSelectedFilters(): void {
+    let selectedFiltersArray: Array<SelectedFilter> = []
+    // Traverse the availableFilters and check which ones are checked and push them to selectedFilters Array
+    for( let filterGroup of this.availableFilters ) {
+      for( let filter of filterGroup.values ){
+        // If the parent node is checked just push the selected filter object for the parent itself, no need to check the children
+        if( filter.checked ){
+          let selectedFilterObject: SelectedFilter = {} as SelectedFilter
+          selectedFilterObject.group = filterGroup.name
+          selectedFilterObject.value = filter.value
+          selectedFiltersArray.push( selectedFilterObject )
+        }
+        else if ( filter.children ){ // If the parent is not checked then check the children and push thier selected filter objects individually
+          for( let child of filter.children ){
+            if( child.checked ){
+              let selectedFilterObject: SelectedFilter = {} as SelectedFilter
+              selectedFilterObject.group = filterGroup.name === 'collectiontypes' ? 'collections' : filterGroup.name
+              selectedFilterObject.value = child.value
+              selectedFiltersArray.push( selectedFilterObject )
+            }
+          }
+        }
+      }
+    }
+    this.filterSelections = selectedFiltersArray
+    this.validateForm()
   }
 
   // Gives the index of an object in an array
@@ -351,4 +576,20 @@ export class SearchModal implements OnInit {
   private openHelp(): void {
     window.open('http://support.artstor.org/?article=advanced-search','Advanced Search Support','width=800,height=600');
   }
+}
+
+interface FacetObject {
+  name: string,
+  value: string,
+  checked: boolean,
+  count: number,
+  children?: Array<FacetObject>
+}
+interface FacetGroup {
+  name: string,
+  values: Array<FacetObject>
+}
+interface SelectedFilter {
+  group: string,
+  value: string
 }

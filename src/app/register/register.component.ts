@@ -131,10 +131,10 @@ export class RegisterComponent implements OnInit {
           // this._log.Warp6({ eventType: "remote_login" });
           this.loadForUser(data);
         } else {
-          if (data.statusMessage.includes("JSTOR account exists")) {
+          if (data.statusMessage.includes("JSTOR account exists") && data.statusCode === 2) {
             // Jstor account exists also returns a status code of 2
             this.serviceErrors.hasJstor = true
-          } else if (data.statusMessage === "User already exist" || data.statusCode == 2) {
+          } else if (data.statusMessage === "User already exists." && data.statusCode === 1) {
             this.serviceErrors.duplicate = true
           }
         }

@@ -8,24 +8,25 @@
             button#sortdropdownMenu.btn.btn-link(ngbDropdownToggle) Sort:
               = " "
               span.value {{ activeSort.label ? activeSort.label : 'Relevance' }}
-            .dropdown-menu(aria-labelledby="sortdropdownMenu")
+            .dropdown-menu(ngbDropdownMenu, aria-labelledby="sortdropdownMenu")
               button.dropdown-item([ngClass]="{ 'disable': activeSort.index == '1' }", (click)="changeSortOpt('1', 'Title')") Title
               button.dropdown-item([ngClass]="{ 'disable': activeSort.index == '2' }", (click)="changeSortOpt('2', 'Creator')") Creator
               button.dropdown-item([ngClass]="{ 'disable': activeSort.index == '3' }", (click)="changeSortOpt('3', 'Date')") Date
+              button.dropdown-item([ngClass]="{ 'disable': activeSort.index == '4' }", (click)="changeSortOpt('4', 'Recently Added')") Recently Added
               button.dropdown-item([ngClass]="{ 'disable': activeSort.index == '0' }", (click)="changeSortOpt('0', 'Relevance')") Relevance
           li.pagesizelist.dropdown(ngbDropdown)
             button#pagesizedropdownMenu.btn.btn-link(ngbDropdownToggle) Images/page:
               = " "
               span.value {{ pagination.size ? pagination.size : '24' }}
-            .dropdown-menu(aria-labelledby="pagesizedropdownMenu")
+            .dropdown-menu(ngbDropdownMenu, aria-labelledby="pagesizedropdownMenu")
               button.dropdown-item([ngClass]="{ 'disable': pagination.size == 24 }", (click)="changePageSize(24)") 24
               button.dropdown-item([ngClass]="{ 'disable': pagination.size == 48 }", (click)="changePageSize(48)") 48
               button.dropdown-item([ngClass]="{ 'disable': pagination.size == 72 }", (click)="changePageSize(72)") 72
           //- View size toggles
           .icon-bar
-            .icon--toggle((click)="largeThmbView = false", [ngClass]="{ 'active': !largeThmbView }")
+            .icon--toggle((click)="setThumbnailSize(false)", [ngClass]="{ 'active': !largeThmbView }")
               i.icon.icon-small-view
-            .icon--toggle((click)="largeThmbView = true", [ngClass]="{ 'active': largeThmbView }")
+            .icon--toggle((click)="setThumbnailSize(true)", [ngClass]="{ 'active': largeThmbView }")
               i.icon.icon-large-view
           .number-results(*ngIf="!isLoading") {{ totalAssets }}{{ totalAssets == 2000 ? '+' : '' }} results
             = " "
@@ -74,8 +75,16 @@
           | {{ searchError }}
       //- Display Thumbnails
       #assetThumbnailsRow.row.no-gutters(*ngIf="!reorderMode")
-        div([ngClass]="largeThmbView ? 'col-sm-12 col-md-6 col-lg-4' : 'col-sm-6 col-md-3 col-lg-2'", *ngFor="let asset of results")
-          a.card.card--asset([attr.data-id]="asset.objectId", [ngClass]="{'selected': ( isSelectedAsset(asset) > -1 ), 'lrgThmb': largeThmbView }", [routerLink]="editMode ? ['./'] : ['/asset', asset.objectId ? asset.objectId : asset.artstorid]", [queryParams]="asset.iapFlag > 0 ? { iap: 'true' } : {}", (click)="selectAsset(asset)")
+        div.selection(
+            [ngClass]="largeThmbView ? 'col-sm-12 col-md-6 col-lg-4' : 'col-sm-6 col-md-3 col-lg-2'", 
+            *ngFor="let asset of results", 
+            [class.hidden]="asset.status == 'not-available'"
+          )
+          .mobile--hide
+            input.check(type="checkbox", [checked]="isSelectedAsset(asset) > -1", [ngStyle]="{ 'display': isSelectedAsset(asset) > -1 ? 'block' : 'none' }", (change)="editMode = true; selectAsset(asset);")
+          .mobile--show
+            input.check-mobile(type="checkbox", [checked]="isSelectedAsset(asset) > -1", (change)="editMode = true; selectAsset(asset);")
+          a.card.card--asset([attr.data-id]="asset.objectId", [ngClass]="{'selected': ( isSelectedAsset(asset) > -1 ), 'lrgThmb': largeThmbView }", [routerLink]="getAssetPath(asset)", [queryParams]="(asset.iapFlag > 0 || asset.iap) ? { iap: 'true' } : {}", (click)="selectAsset(asset)", (focus)="showBox($event)", (blur)="hideBox($event)")
             ang-thumbnail([thumbnail]="asset", [reorderMode]="reorderMode", [editMode]="editMode", [largeThmbView]="largeThmbView")
         .alert.alert-warning(*ngIf="!isLoading && (searchError.length < 1) && ((isPartialPage && hasMaxAssetLimit) || searchLimitError)")
           | {{ "BROWSE.WARNINGS.ADDITIONAL_RESULTS" | translate }}

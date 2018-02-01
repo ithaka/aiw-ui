@@ -11,14 +11,11 @@ import { TitleService } from '../shared/title.service';
 
 @Component({
   selector: 'ang-my-collections',
-  providers: [
-      AuthService
-  ],
   templateUrl: 'my-collections.component.pug',
   styleUrls: [ './browse-page.component.scss' ]
 })
 export class MyCollectionsComponent implements OnInit {
-    
+
   private pcEnabled: boolean;
 
   constructor(
@@ -28,8 +25,8 @@ export class MyCollectionsComponent implements OnInit {
     private _assets: AssetService,
     private _analytics: AnalyticsService,
     private _title: TitleService
-  ) { 
-      
+  ) {
+
    }
 
   private subscriptions: Subscription[] = [];
@@ -112,13 +109,13 @@ export class MyCollectionsComponent implements OnInit {
     this.loading = true;
     this._assets.pccollection()
       .then((res) => {
-          if(res.pcCollection && res.pcCollection.collectionid){
+          if(res['pcCollection'] && res['pcCollection'].collectionid){
             // we made this tag always expandable
-            let colTag = new Tag(res.pcCollection.collectionid, res.pcCollection.collectionname, true, null, { label: "pcollection", folder: true }, true);
+            let colTag = new Tag(res['pcCollection'].collectionid, res['pcCollection'].collectionname, true, null, { label: "pcollection", folder: true }, true);
             this.tags.push(colTag);
           }
-          if(res.privateCollection && (res.privateCollection.length > 0)){
-            for (let colObj of res.privateCollection){
+          if(res['privateCollection'] && (res['privateCollection'].length > 0)){
+            for (let colObj of res['privateCollection']){
                 // we made this tag always expandable
                 let privTag = new Tag(colObj.collectionid, colObj.collectionname, true, null, { label: "pcollection", folder: true }, true);
                 this.tags.push(privTag);
@@ -173,9 +170,9 @@ export class MyCollectionsComponent implements OnInit {
 
     this._assets.nodeDesc( descId, nodeId )
     .then((res) => {
-        if(res.blurbUrl){
-            node.info_desc = res.blurbUrl;
-            node.info_img = res.imageUrl;
+        if(res['blurbUrl']){
+            node.info_desc = res['blurbUrl'];
+            node.info_img = res['imageUrl'];
         }
     })
     .catch(function(err) {

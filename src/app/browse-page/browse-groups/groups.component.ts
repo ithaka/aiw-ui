@@ -63,58 +63,13 @@ export class BrowseGroupsComponent implements OnInit {
     } else {
       this.selectedBrowseLevel = 'institution'
     }
+
+    this.processUrl();
   }
 
   ngOnInit() {
     // set the title
     this._title.setSubtitle("Browse Groups")
-
-    /** Every time the url updates, we process the new tags and reload image groups if the tags query param changes */
-    this.subscriptions.push(
-      this._router.events.filter(event=>event instanceof NavigationEnd)
-      .subscribe(event => {
-        let query = this.route.snapshot.queryParams;
-        let params = this.route.snapshot.params;
-
-        if (!this.showArtstorCurated && params.view == 'public') {
-          this._router.navigate(['browse','groups','institution'])
-          return
-        }
-        
-        if (params.view !== (this.selectedBrowseLevel)) {
-          this.appliedTags = []
-          this.selectedBrowseLevel = params.view
-        }
-
-        let tagAdded: boolean = false
-        // this is only expected to run when searching
-        if (query.tags) {
-          let newTags: string[] = this._tagFilters.processFilterString(query.tags)
-          tagAdded = this.appliedTags.join('') != newTags.join('') // if the two strings aren't equal, a tag must have changed
-          this.appliedTags = newTags
-        } else {
-          this.appliedTags = []
-        }
-
-        let requestedPage = Number(query.page) || 1
-        if (requestedPage < 1 || tagAdded) {
-          this.addQueryParams({page: 1}, false, query)
-        } // STOP THEM if they're trying to enter a negative number
-        // if (tagAdded) { requestedPage = 1 } // if they're adding a tag, we want to nav them back to page 1
-        let requestedLevel = this.selectedBrowseLevel !== 'search' ? this.selectedBrowseLevel : query.level;
-        this.setSearchLevel(requestedLevel, false) // makes sure that the correct level filter is selected even if the user just navigated here from the url
-
-        let requestedTerm = this.selectedBrowseLevel !== 'search' ? '' : query.term;
-        // if there is not a term, make sure the search term is cleared
-        if (!query.term) {
-          this.updateSearchTerm.emit('')
-        } else {
-          this.updateSearchTerm.emit(query.term)
-        }
-
-        this.loadIGs(this.appliedTags, requestedPage, requestedLevel, requestedTerm)
-      })
-    )
 
     // this is only for the search page and won't show in the top-level menu
     this.browseMenuArray.push({
@@ -153,13 +108,60 @@ export class BrowseGroupsComponent implements OnInit {
       })
     }
 
-    this.setSearchLevel(this.route.snapshot.queryParams.level)
-
     this._analytics.setPageValues('groups', '')
   } // OnInit
 
   ngOnDestroy() {
     this.subscriptions.forEach((sub) => { sub.unsubscribe() })
+  }
+
+  /** Every time the url updates, we process the new tags and reload image groups if the tags query param changes */
+  private processUrl() {
+    this.subscriptions.push(
+      this._router.events.filter(event=>event instanceof NavigationEnd)
+      .subscribe(event => {
+        let query = this.route.snapshot.queryParams;
+        let params = this.route.snapshot.params;
+
+        if (!this.showArtstorCurated && params.view == 'public') {
+          this._router.navigate(['browse','groups','institution'])
+          return
+        }
+
+        if (params.view !== (this.selectedBrowseLevel)) {
+          this.appliedTags = []
+          this.selectedBrowseLevel = params.view
+        }
+
+        let tagAdded: boolean = false
+        // this is only expected to run when searching
+        if (query.tags) {
+          let newTags: string[] = this._tagFilters.processFilterString(query.tags)
+          tagAdded = this.appliedTags.join('') != newTags.join('') // if the two strings aren't equal, a tag must have changed
+          this.appliedTags = newTags
+        } else {
+          this.appliedTags = []
+        }
+
+        let requestedPage = Number(query.page) || 1
+        if (requestedPage < 1 || tagAdded) {
+          this.addQueryParams({page: 1}, false, query)
+        } // STOP THEM if they're trying to enter a negative number
+        // if (tagAdded) { requestedPage = 1 } // if they're adding a tag, we want to nav them back to page 1
+        let requestedLevel = this.selectedBrowseLevel !== 'search' ? this.selectedBrowseLevel : query.level;
+        this.setSearchLevel(requestedLevel, false) // makes sure that the correct level filter is selected even if the user just navigated here from the url
+
+        let requestedTerm = this.selectedBrowseLevel !== 'search' ? '' : query.term;
+        // if there is not a term, make sure the search term is cleared
+        if (!query.term) {
+          this.updateSearchTerm.emit('')
+        } else {
+          this.updateSearchTerm.emit(query.term)
+        }
+
+        this.loadIGs(this.appliedTags, requestedPage, requestedLevel, requestedTerm)
+      })
+    )
   }
 
   /**
@@ -244,8 +246,8 @@ export class BrowseGroupsComponent implements OnInit {
       browseLevel = this.getSearchLevel() || this.selectedBrowseLevel || 'public'
     } else {
       browseLevel = level
-    } 
-  
+    }
+
     // Some Groups calls take a while, please stop listening to an old request if a new one is made
     this.groupsGetAllSub && this.groupsGetAllSub.unsubscribe()
 

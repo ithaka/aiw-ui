@@ -1,23 +1,24 @@
 .cover([class.show]="!mobileCollapsed")
 .container.nav-container
-  nav.navbar.navbar-toggleable-sm.navbar-light.bg-faded
-    button.navbar-toggler.navbar-toggler-right((click)="this.mobileCollapsed = !this.mobileCollapsed", [class.collapsed]="mobileCollapsed", type="button", aria-controls="navbarSupportedContent", aria-expanded="false", aria-label="Toggle navigation")
+  nav.navbar.navbar-expand-sm.navbar-light.bg-faded
+    div
+    button.navbar-toggler((click)="this.mobileCollapsed = !this.mobileCollapsed", [class.collapsed]="mobileCollapsed", type="button", aria-controls="navbarSupportedContent", aria-expanded="false", aria-label="Toggle navigation")
       span.navbar-toggler-icon
     #navMenu.navbar-collapse.collapse([class.show]="!mobileCollapsed")
       ul.nav.navbar-nav
         li.nav-item
           a.btn.btn-link([routerLink]="['/home']", routerLinkActive="active") {{ 'NAV_MENU.HOME' | translate }}
-        li.nav-item(ngbDropdown)
+        li.nav-item(ngbDropdown, (mouseenter)="openDrop($event, drop1)", (mouseleave)="closeDrop($event, drop1)", #drop1="ngbDropdown")
           button#dropdownMenu1.btn.btn-link(ngbDropdownToggle) {{ 'NAV_MENU.COLLECTIONS.TITLE' | translate }}
-          .dropdown-menu(aria-labelledby="dropdownMenu1")
+          .dropdown-menu(ngbDropdownMenu, aria-labelledby="dropdownMenu1")
             button.dropdown-item(*ngIf="browseOpts.artstorCol", [routerLink]="['/browse', 'library']") {{ 'NAV_MENU.COLLECTIONS.ARTSTOR' | translate }}
             button.dropdown-item(*ngIf="browseOpts.instCol", [routerLink]="['/browse', 'institution']") {{ 'NAV_MENU.COLLECTIONS.INSTITUTION' | translate }}
             button.dropdown-item(*ngIf="browseOpts.openCol", [routerLink]="['/browse', 'commons']") {{ 'NAV_MENU.COLLECTIONS.OPEN' | translate }}
             button.dropdown-item(*ngIf="browseOpts.myCol", [class.disabled]="!pcEnabled", [routerLink]="['/browse', 'mycollections']") {{ 'NAV_MENU.COLLECTIONS.OWNED' | translate }}
-            button.dropdown-item(*ngIf="browseOpts.igs", [routerLink]="['/browse','groups', 'institution']") {{ 'NAV_MENU.COLLECTIONS.GROUPS' | translate }}
-        li.nav-item(ngbDropdown)
+            button.dropdown-item(*ngIf="browseOpts.igs", [routerLink]="['/browse','groups', defaultGrpBrwseBy]") {{ 'NAV_MENU.COLLECTIONS.GROUPS' | translate }}
+        li.nav-item(ngbDropdown, (mouseenter)="openDrop($event, drop2)", (mouseleave)="closeDrop($event, drop2)", #drop2="ngbDropdown")
           button#organizeMenu.btn.btn-link(ngbDropdownToggle) {{ 'NAV_MENU.ORGANIZE.TITLE' | translate }}
-          .dropdown-menu(aria-labelledby="organizeMenu")
+          .dropdown-menu(ngbDropdownMenu, aria-labelledby="organizeMenu")
             // Active on Image Group Page
             button.dropdown-item((click)="_analytics.directCall('select_all'); selectAllInAssetGrid()", [class.disabled]="!allowSelectAll || !user.isLoggedIn") {{ 'NAV_MENU.ORGANIZE.SELECT_ALL' | translate }}
             button#btnSaveToNewGroup.dropdown-item([class.disabled]="selectedAssets.length < 1 || !user.isLoggedIn", (click)="copyIG = false; editIG = false; showImageGroupModal = true;") {{ 'NAV_MENU.ORGANIZE.NEW_GROUP' | translate }}
@@ -29,9 +30,9 @@
             button#btnEditGroup.dropdown-item([disabled]="!actionOptions.group || !allowIgUpdate", (click)="editIG = true; copyIG = false; showImageGroupModal = true;") {{ 'NAV_MENU.ORGANIZE.EDIT' | translate }}
             button#btnSaveGroupAs.dropdown-item([disabled]="!actionOptions.group  || !user.isLoggedIn", (click)="copyIG = true; editIG = false; showImageGroupModal = true;") {{ 'NAV_MENU.ORGANIZE.SAVE' | translate }}
             button#btnDeleteGroup.dropdown-item([disabled]="!actionOptions.group || !allowIgUpdate", (click)="deleteIgModal = true") {{ 'NAV_MENU.ORGANIZE.DELETE_GROUP' | translate }}
-        li.nav-item(ngbDropdown)
+        li.nav-item(ngbDropdown, (mouseenter)="openDrop($event, drop3)", (mouseleave)="closeDrop($event, drop3)", #drop3="ngbDropdown")
           button#shareMenu.btn.btn-link(ngbDropdownToggle) {{ 'NAV_MENU.SHARE.TITLE' | translate }}
-          .dropdown-menu(aria-labelledby="shareMenu")
+          .dropdown-menu(ngbDropdownMenu, aria-labelledby="shareMenu")
             button.dropdown-item([class.disabled]="selectedAssets.length !== 1", (click)="_analytics.directCall('generate_img_link'); showShareLinkModal = true") {{ 'NAV_MENU.SHARE.GENERATE_IMAGE_LINK' | translate }}
             // Active on Image Group Page
             button.dropdown-item([disabled]="!actionOptions.group || !genImgGrpLink", (click)="_analytics.directCall('generate_img_group_link'); showShareIgModal = true") {{ 'NAV_MENU.SHARE.GENERATE_GROUP_LINK' | translate }}
@@ -52,6 +53,6 @@ ang-share-link-modal(*ngIf="showShareLinkModal", [asset]="selectedAssets[0]", (c
 ang-add-to-group(*ngIf="showAddToGroupModal", (closeModal)="showAddToGroupModal = false")
 ang-share-ig-link(*ngIf="showShareIgModal", [ig]="ig", (closeModal)="showShareIgModal = false")
 ang-confirm-modal(*ngIf="showConfirmationModal", (closeModal)="closeConfirmationModal($event)", [title]="'Delete Selected Asset(s)'",
-  [description]="'Are you sure you want to delete ' + _assets.getSelectedAssets().length + ' selected image(s) from the group? <br><b>Image group name: ' +  this.params.name + '</b>'",
+  [description]="'Are you sure you want to delete ' + _assets.getSelectedAssets().length + ' selected image(s) from the group? <br><b>Image group name: ' +  ig.name + '</b>'",
   [dismiss]="'Cancel'",
   [primary]="'Yes'")

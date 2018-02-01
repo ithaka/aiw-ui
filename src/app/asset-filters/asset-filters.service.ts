@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs/Subject';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs/Rx';
 import { Locker } from 'angular2-locker';
-import { Http, Response, Headers, RequestOptions } from '@angular/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import 'rxjs/add/operator/toPromise';
 
 import { AuthService } from '../shared/auth.service';
@@ -67,7 +67,7 @@ export class AssetFiltersService {
         "collectiontypes" : {
         1 : "Artstor Digital Library",
         3 : "Private Collections",
-        5 : "Open Collections",
+        5 : "Public Collections",
         6 : "Private Collections"
         }
     }
@@ -76,7 +76,7 @@ export class AssetFiltersService {
 
     constructor(
         private locker: Locker,
-        private http: Http,
+        private http: HttpClient,
         private _auth: AuthService
     ){
         this._storage = locker.useDriver(Locker.DRIVERS.LOCAL);
@@ -183,6 +183,7 @@ export class AssetFiltersService {
     }
 
     public isApplied(group: string, filter: any) {
+        filter = (group === 'collectiontypes') ? parseInt( filter ) : filter;
         for(var i = 0; i < this.appliedFilters.length; i++){
             var filterObj = this.appliedFilters[i];
             if((group === filterObj.filterGroup)){
@@ -209,6 +210,7 @@ export class AssetFiltersService {
 
     public remove(group, filter, isQuiet ?: boolean) {
         let filterRemoved = false;
+        filter = (group === 'collectiontypes') ? parseInt( filter ) : filter;
         for(var i = 0; i < this.appliedFilters.length; i++){
             var filterObj = this.appliedFilters[i];
             if((group === filterObj.filterGroup)){

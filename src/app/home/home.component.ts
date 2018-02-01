@@ -44,6 +44,9 @@ export class Home implements OnInit, OnDestroy {
   private showHomeAd: boolean = false
   private siteID: string = ""
 
+  // Default IG 'Browse By:' Option controlled via the WLV file 
+  private defaultGrpBrwseBy: string = 'institution'
+
   // TypeScript public modifiers
   constructor(
       public _appConfig: AppConfig,
@@ -65,6 +68,7 @@ export class Home implements OnInit, OnDestroy {
     this.showHomeSSC = this._appConfig.config.showHomeSSC
     this.showHomeAd = this._appConfig.config.showHomeAd
     this.siteID = this._appConfig.config.siteID
+    this.defaultGrpBrwseBy = this._appConfig.config.defaultGrpBrwseBy
   }
 
   ngOnInit() {
@@ -117,8 +121,8 @@ export class Home implements OnInit, OnDestroy {
 
       this._assets.getBlogEntries()
         .then((data) => {
-          if (data.posts) {
-            this.blogPosts = data.posts;
+          if (data['posts']) {
+            this.blogPosts = data['posts'];
           }
           this.blogLoading = false;
         },)
