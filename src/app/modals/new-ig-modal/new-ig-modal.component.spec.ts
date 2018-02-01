@@ -4,7 +4,7 @@ import { BehaviorSubject, Observable } from 'rxjs/Rx'
 
 import { ImageGroup } from '../../shared/datatypes'
 
-fdescribe('IgFormUtil', () => {
+describe('IgFormUtil', () => {
     // let newIgModal: NewIgModal
     // let mockFormBuilder: any
     // let mockAuth: any
@@ -46,7 +46,7 @@ fdescribe('IgFormUtil', () => {
 
 
             let group = util.prepareGroup(form, description, mockAssets, mockUser)
-            
+
             expect(group.id).toBeFalsy() // negative test
 
             // basic assertions pertaining to each field that is required for group creation

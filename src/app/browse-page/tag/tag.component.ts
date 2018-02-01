@@ -44,9 +44,6 @@ export class TagComponent {
       if (this.tag.type.label === 'category') {
         this.linkRoute = '/category';
       }
-      if (this.tag.type.label === "subcategory") {
-        this.linkRoute = '/subcategory';
-      }
     }
   }
 

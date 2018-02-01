@@ -2,12 +2,13 @@
  * Angular 2 decorators and services
  */
 import { Component, ViewEncapsulation } from '@angular/core';
-import { Angulartics2GoogleAnalytics } from 'angulartics2';
+import { Angulartics2GoogleAnalytics } from 'angulartics2/ga';
 import { Title } from '@angular/platform-browser';
-import { Router, NavigationStart } from '@angular/router';
-import { TranslateService } from 'ng2-translate';
+import { Router, NavigationStart, NavigationEnd } from '@angular/router';
+import { TranslateService } from '@ngx-translate/core';
 
 import { AppConfig } from "./app.service";
+import { ScriptService } from './shared';
 /*
  * App Component
  * Top Level Component
@@ -19,7 +20,7 @@ import { AppConfig } from "./app.service";
     '../sass/app.scss'
   ],
   template: `
-    <ang-sky-banner *ngIf="showSkyBanner" [textValue]="'SEARCH_ANNOUNCEMENT_BANNER.MESSAGE' | translate" (closeBanner)="showSkyBanner = false"></ang-sky-banner>
+    <ang-sky-banner *ngIf="showSkyBanner" [textValue]="'DOWNTIME_BANNER.MESSAGE' | translate" (closeBanner)="showSkyBanner = false"></ang-sky-banner>
     <a (click)="findMainContent()" (keydown.enter)="findMainContent()" tabindex="1" class="sr-only sr-only-focusable">Skip to main content</a>
     <nav-bar></nav-bar>
 
@@ -39,9 +40,10 @@ export class App {
   private showSkyBanner: boolean = false
 
   constructor(
-    public _app: AppConfig, 
+    public _app: AppConfig,
     angulartics2GoogleAnalytics: Angulartics2GoogleAnalytics,
     private titleService: Title,
+    private _script: ScriptService,
     private router:Router,
     private translate: TranslateService
   ) {
@@ -50,15 +52,37 @@ export class App {
     translate.setDefaultLang('en');
       // the lang to use, if the lang isn't available, it will use the current loader to get them
     translate.use('en');
-    
+
     this.title = this._app.config.pageTitle
-    
+
     // Set metatitle to "Artstor" except for asset page where metatitle is {{ Asset Title }}
     router.events.subscribe(event => {
       if(event instanceof NavigationStart) {
-        let event_url_array = event.url.split('/');
+        let event_url_array = event.url.split('/')
         if(event_url_array && (event_url_array.length > 1) && (event_url_array[1] !== 'asset')){
-          this.titleService.setTitle(this.title);
+          this.titleService.setTitle(this.title)
+        }
+      }
+      else if(event instanceof NavigationEnd) {
+        let event_url_array = event.url.split('/')
+        let zendeskElements = document.querySelectorAll('.zopim')
+
+        // On navigation end, load the zendesk chat widget if user lands on login page else hide the widget
+        if( event_url_array[1] === 'login' ) {
+          this._script.loadScript('zendesk')
+            .then( data => {
+              if(data['status'] === 'loaded'){
+              } else if(data['status'] === 'already_loaded'){ // if the widget script has already been loaded then just show the widget
+                zendeskElements[0]['style']['display'] = 'block'
+              }
+            })
+            .catch( error => console.error(error) )
+        } else {
+          // If Zendesk chat is loaded, hide it
+          if(zendeskElements && zendeskElements.length > 1) {
+            zendeskElements[0]['style']['display'] = 'none'
+            zendeskElements[1]['style']['display'] = 'none'
+          }
         }
       }
     });

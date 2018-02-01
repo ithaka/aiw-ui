@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core'
-import { Http, Response, Headers, RequestOptions } from '@angular/http'
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { BehaviorSubject, Observable, Subject } from 'rxjs/Rx';
 
 // Project Dependencies
@@ -9,14 +9,14 @@ import { AuthService, ImageGroup } from '.'
 export class GroupService {
 
     private groupUrl: string = ''
-    private options: RequestOptions
+    private options: {}
 
     constructor(
-        private http: Http,
+        private http: HttpClient,
         private _auth: AuthService
     ) {
         this.groupUrl = this._auth.getHostname() + '/api/v1/group'
-        this.options = new RequestOptions({ withCredentials: true })
+        this.options = { withCredentials: true }
     }
 
     /**
@@ -35,7 +35,7 @@ export class GroupService {
         }
 
         let tagParam = ""
-        tags.forEach( tag => { 
+        tags.forEach( tag => {
             tagParam += '&tags=' + encodeURIComponent(tag)
         })
 
@@ -44,11 +44,6 @@ export class GroupService {
 
         return this.http.get(
             [this.groupUrl, "?size=", size, '&level=', level, '&from=', ( (pageNo - 1) * size),  tagParam, queryParam].join(''), this.options
-        ).map(
-            res => {
-                let body = res.json()
-                return body || { }
-            }
         )
     }
 
@@ -67,21 +62,16 @@ export class GroupService {
         // Get first page to find out how many Groups are available
         this.http.get(
             this.groupUrl + "?size=" + size + '&level=' + level + '&from=0', this.options
-        ).map(
-            res => {
-                let body = res.json()
-                return body || { }
-            }
         ).toPromise()
         .then( data => {
             // Load first page
-            groups = groups.concat(data.groups)
+            groups = groups.concat(data['groups'])
             everyGroupSubject.next(groups)
             // Set total number of pages
-            totalPages = (data.total/size) + 1
+            totalPages = (data['total']/size) + 1
             // Increment pageNo since we just loaded the first page
             pageNo++
-            
+
             for(pageNo; pageNo <= totalPages; pageNo++) {
                 // Use locally scoped pageNo since Timeout fires after loop
                 let thisPageNo = pageNo
@@ -89,14 +79,9 @@ export class GroupService {
                 setTimeout(() => {
                     this.http.get(
                         this.groupUrl + "?size=" + size + '&level=' + level + '&from=' + ( (thisPageNo - 1) * size), this.options
-                    ).map(
-                        res => {
-                            let body = res.json()
-                            return body || { }
-                        }
                     ).toPromise()
                     .then(data => {
-                        groups = groups.concat(data.groups)
+                        groups = groups.concat(data['groups'])
                         everyGroupSubject.next(groups)
                     }, error => {
                         everyGroupSubject.error(error)
@@ -119,7 +104,7 @@ export class GroupService {
             this.groupUrl + '/' + groupId, this.options
         )
     }
-        
+
     /**
      * Create Group
      */
@@ -128,14 +113,6 @@ export class GroupService {
             this.groupUrl,
             group,
             this.options
-        ).map(
-            res => {
-                let body = res.json()
-                return body || { }
-            },
-            err => {
-                console.error('Creating Image Group failed')
-            }
         )
     }
 
@@ -147,11 +124,6 @@ export class GroupService {
             this.groupUrl + '/' + igId + '/copy',
             copygroup,
             this.options
-        ).map(
-            res => {
-                let body = res.json()
-                return body || { }
-            }
         )
     }
 
@@ -160,22 +132,21 @@ export class GroupService {
      */
     public delete(groupId: string): Observable<any> {
         let reqUrl = this.groupUrl + '/' + groupId
-        let headers = new Headers({ 'Accept' : 'application/json' })
-        let options = new RequestOptions({ headers: headers })
+        let headers = new HttpHeaders().set('Accept', 'application/json')
+        let options = { headers: headers }
 
         return this.http.delete(reqUrl, this.options)
-            .catch(err => 
+            .catch(err =>
                 this.http.post(
                     // Backup POST call for DELETE failures over Proxies
                     reqUrl,
                     {},
-                    new RequestOptions({ 
-                        headers: new Headers({ 'Accept' : 'application/json', 'X-HTTP-Method-Override' : 'DELETE' }),
-                        withCredentials: true 
-                    })
+                    {
+                      headers: new HttpHeaders({'Accept' : 'application/json', 'X-HTTP-Method-Override' : 'DELETE'}),
+                      withCredentials: true
+                    }
                 )
             )
-            .map(res => <any> res.json())
     }
 
     /**
@@ -193,9 +164,10 @@ export class GroupService {
         delete putGroup.id
         delete putGroup['public']
         delete putGroup['count']
+        delete putGroup['total']
         delete putGroup['thumbnails']
         delete putGroup['igDownloadInfo']
-        
+
         if (!putGroup.tags || putGroup.tags[0] == null) { putGroup.tags = [] }
 
         return this.http.put(
@@ -203,21 +175,20 @@ export class GroupService {
             putGroup,
             this.options
         )
-        .catch(err => 
+        .catch(err =>
             this.http.post(
                 // Backup POST call for PUT failures over Proxies
                 reqUrl,
                 putGroup,
-                 new RequestOptions({ 
-                     headers: new Headers({ 'Accept' : 'application/json', 'X-HTTP-Method-Override' : 'PUT' }),
-                     withCredentials: true 
-                })
+                {
+                  headers: new HttpHeaders({ 'Accept' : 'application/json', 'X-HTTP-Method-Override' : 'PUT' }),
+                  withCredentials: true
+                }
             )
         )
-        .map((res) => { return res.json() || {} })
     }
 
-    /** 
+    /**
      * Makes call to generate a private group share token
      */
     public generateToken(id: string, options: { access_type: number, expiration_time?: Date }): Observable<any> {
@@ -226,7 +197,6 @@ export class GroupService {
             {}, // this call does not have any options for a body
             this.options
         )
-        .map((res) => { return res.json() || {} })
     }
 
     /**
@@ -235,12 +205,11 @@ export class GroupService {
      * @returns Observable with { success: boolean, group: ImageGroup }, although I'm not sure how to specify that in the typescript
      */
     public redeemToken(token: string): Observable<{ success: boolean, group: ImageGroup }> {
-        return this.http.post(
+        return this.http.post<{ success: boolean, group: ImageGroup }>(
             [this.groupUrl, "redeem", token].join("/"),
             {},
             this.options
-        )
-        .map((res) => { return res.json() || {} })
+        );
     }
 
     /**
@@ -257,20 +226,17 @@ export class GroupService {
             body,
             this.options
         )
-        .catch(err => 
+        .catch(err =>
             this.http.post(
                 // Backup POST call for PUT failures over Proxies
                 reqUrl,
                 body,
-                new RequestOptions({ 
-                     headers: new Headers({ 'Accept' : 'application/json', 'X-HTTP-Method-Override' : 'PUT' }),
-                     withCredentials: true 
-                })
+                {
+                  headers: new HttpHeaders({ 'Accept' : 'application/json', 'X-HTTP-Method-Override' : 'PUT' }),
+                  withCredentials: true
+                }
             )
         )
-        .map((res) => { 
-            return res.json() || {} 
-        })
     }
 
     /**
@@ -278,6 +244,5 @@ export class GroupService {
      */
     public getTagSuggestions(term: string) {
         return this.http.get( this.groupUrl + "/tags/suggest?q=" + term + "&size=20", this.options)
-            .map((res) => { return res.json() || {} })
     }
 }

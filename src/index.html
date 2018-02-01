@@ -7,17 +7,17 @@
     var initPath = window.location.href;
     var initOrigin = window.location.origin;
     if ( initPath.indexOf('/#/library') < 0 &&
-          (initPath.indexOf('/library/ExternalIV.jsp') > -1 
-          || initPath.indexOf('/library/secure/ViewImages') > -1 
-          || initPath.indexOf('.org/library/collection') > -1 
-          || initPath.indexOf('.org/library/welcome.html') > -1 
-          || initPath.indexOf('.org/library/#') > -1 
-          || initPath.indexOf('/asset/') > -1 
-          || initPath.indexOf('/assetprint/') > -1 
-          || initPath.indexOf('/group/') > -1 
-          || initPath.indexOf('/browse/') > -1 
-          || initPath.indexOf('/collection/') > -1 
-          || initPath.indexOf('/category/') > -1 
+          (initPath.indexOf('/library/ExternalIV.jsp') > -1
+          || initPath.indexOf('/library/secure/ViewImages') > -1
+          || initPath.indexOf('.org/library/collection') > -1
+          || initPath.indexOf('.org/library/welcome.html') > -1
+          || initPath.indexOf('.org/library/#') > -1
+          || initPath.indexOf('/asset/') > -1
+          || initPath.indexOf('/assetprint/') > -1
+          || initPath.indexOf('/group/') > -1
+          || initPath.indexOf('/browse/') > -1
+          || initPath.indexOf('/collection/') > -1
+          || initPath.indexOf('/category/') > -1
           )
         ) {
           if (initPath.indexOf('/library/') > -1) {
@@ -41,13 +41,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no">
 
   <!--Force not caching index.html to make sure user gets updated version-->
-  <meta http-equiv="cache-control" content="no-cache, must-revalidate, post-check=0, pre-check=0">
+  <meta http-equiv="cache-control" content="no-store, no-cache, must-revalidate, post-check=0, pre-check=0">
   <meta http-equiv="expires" content="0">
   <meta http-equiv="pragma" content="no-cache">
 
-  <title><%= webpackConfig.metadata.title %></title>
+  <title><%= htmlWebpackPlugin.options.metadata.title %></title>
 
-  <meta name="description" content="<%= webpackConfig.metadata.title %>">
+  <meta name="description" content="<%= htmlWebpackPlugin.options.metadata.title %>">
 
   <% if (webpackConfig.htmlElements.headTags) { %>
   <!-- Configured Head Tags  -->
@@ -55,7 +55,7 @@
   <% } %>
 
   <!-- base url -->
-  <base href="<%= webpackConfig.metadata.baseUrl %>">
+  <base href="<%= htmlWebpackPlugin.options.metadata.baseUrl %>">
 
   <!-- Mediathread Metadata -->
   <meta name="asset.id" content="" />
@@ -97,6 +97,9 @@
         };
   </script>
 
+  <!-- Load krpano JS file for Qtvr viewer -->
+  <script src="/assets/js/krpano.js"></script>
+
   <style>
     /** Inititial loading styles **/
     .page-overlay {
@@ -126,8 +129,8 @@
       <i class="icon-loading"></i>
     </div>
   </app>
-  
-  <% if (webpackConfig.metadata.isDevServer && webpackConfig.metadata.HMR !== true) { %>
+
+  <% if (htmlWebpackPlugin.options.metadata.isDevServer && htmlWebpackPlugin.options.metadata.HMR !== true) { %>
   <!-- Webpack Dev Server reload -->
   <script src="/webpack-dev-server.js"></script>
   <% } %>

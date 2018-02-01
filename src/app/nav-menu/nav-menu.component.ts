@@ -61,6 +61,9 @@ export class NavMenu implements OnInit, OnDestroy {
 
   private browseOpts: any = {}
 
+  // Default IG 'Browse By:' Option controlled via the WLV file 
+  private defaultGrpBrwseBy: string = 'institution'
+
   // Flag for confimation popup for deleting selected asset(s) from the IG
   private showConfirmationModal: boolean = false
 
@@ -77,6 +80,7 @@ export class NavMenu implements OnInit, OnDestroy {
     private _analytics: AnalyticsService
   ) {
     this.browseOpts = this._app.config.browseOptions
+    this.defaultGrpBrwseBy = this._app.config.defaultGrpBrwseBy
   }
 
   ngOnInit() {
@@ -90,7 +94,7 @@ export class NavMenu implements OnInit, OnDestroy {
         (err) => { console.error(err) }
       )
     );
-    
+
     this.subscriptions.push(
       this._assets.selection.subscribe(
         selectedAssets => {
@@ -183,7 +187,7 @@ export class NavMenu implements OnInit, OnDestroy {
         this._assets.getSelectedAssets().forEach((asset) => {
           removeIds.push(asset.objectId)
         })
-        this._assets.removeFromResults(removeIds) // make the call to asset service which will update the asset grid with modified assets
+        this._assets.removeFromResults(removeIds, this.ig.items.length) // make the call to asset service which will update the asset grid with modified assets and also pass the total # of items for pagination values
         this._assets.selectModeToggle.emit()
       })
   }
@@ -216,5 +220,21 @@ export class NavMenu implements OnInit, OnDestroy {
           this._router.navigate(['/home'])
         }
       })
+  }
+
+  /**
+   * Opens dropdown
+   */
+  private openDrop(event, dropdown): void {
+    event.stopPropagation();
+    dropdown.open();
+  }
+
+  /**
+   * Closes dropdown
+   */
+  private closeDrop(event, dropdown): void {
+    event.stopPropagation();
+    dropdown.close();
   }
 }

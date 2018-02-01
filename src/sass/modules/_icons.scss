@@ -96,14 +96,16 @@
 @include icon('video', 'gif');
 @include icon('audio', 'gif');
 @include icon('3d', 'gif');
-@include icon('qtvr', 'gif');
+@include icon('panorama', 'svg');
 @include icon('personal-asset', 'svg');
 @include icon('ssc-asset', 'svg');
 @include icon('institution-asset', 'svg');
 @include icon('artstor-asset', 'svg');
 @include icon('artstor-open-asset', 'svg');
 @include icon('info', 'png');
+@include icon('compare', 'svg');
 @include icon--hover('icon-slideshow', 'gif');
+@include icon('add-white', 'svg');
 
 // Icons with adjustments
 @include icon('close', 'svg');
@@ -123,10 +125,6 @@
     background-color: #000;
     border-radius: 50%;
     background-size: 60% 60%;
-}
-.icon-add-white {
-    @extend .icon-close-white;
-    transform: rotate(45deg);
 }
 @include icon('text', 'svg');
 .icon-text {

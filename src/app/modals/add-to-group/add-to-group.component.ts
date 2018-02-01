@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { Subscription } from 'rxjs/Rx';
+import { BehaviorSubject, Observable, Subscription } from 'rxjs/Rx';
 import { CompleterService, CompleterData } from 'ng2-completer';
 
 import { AssetService, GroupService, ImageGroup } from './../../shared';
@@ -42,6 +42,13 @@ export class AddToGroupModal implements OnInit, OnDestroy {
 
   }
 
+  /** 
+   * Observable for autocomplete list of groups
+   * - We apply additional sorting 
+   */
+  private groupListSubject: BehaviorSubject<any[]> = new BehaviorSubject([])
+  private groupListObs: Observable<any[]> = this.groupListSubject.asObservable()
+
   ngOnInit() {
     if (this.selectedAssets.length < 1) { // if no assets were added when component was initialized, the component gets the current selection list
       // Subscribe to asset selection
@@ -63,13 +70,29 @@ export class AddToGroupModal implements OnInit, OnDestroy {
         if (groups) {
           this.groups = groups;
           // Data service for the autocomplete component (ng2 completer)
-          this.dataService = this.completerService.local(this.groups, 'name', 'name');
+          this.dataService = this.completerService.local(this.groupListObs, 'name', 'name');
         }
       }, (err) => { console.error(err); });
+
+       
   }
 
   ngOnDestroy() {
       this.subscriptions.forEach((sub) => { sub.unsubscribe(); });
+  }
+
+  private sortGroup(event) : void {
+    // sort array by string input
+    let term = this.selectedGroupName
+    let termReg = new RegExp(term, 'i')
+    
+    let filtered = this.groups.filter( group => {
+      return group && group.name.search(termReg) > -1
+    })
+    filtered = filtered.sort((a, b) => {
+        return a.name.search(termReg) - b.name.search(termReg)
+    });
+    this.groupListSubject.next(filtered)
   }
 
   /**
@@ -127,7 +150,6 @@ export class AddToGroupModal implements OnInit, OnDestroy {
     // go get the group from the server
     this._group.get(this.selectedIg.id)
       .toPromise()
-      .then((data) => { return this.extractData(data) })
       .then((data) => {
         data.items = putGroup.items
 

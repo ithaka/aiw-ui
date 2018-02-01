@@ -6,14 +6,12 @@ import { Locker } from 'angular2-locker';
 import { TitleService } from '../shared/title.service';
 import { AssetService } from '../shared/assets.service';
 import { AuthService } from '../shared/auth.service';
+import { AssetFiltersService } from '../asset-filters/asset-filters.service';
 
 import { AppConfig } from '../app.service';
 
 @Component({
   selector: 'ang-browse-page',
-  providers: [
-      AuthService
-  ],
   styleUrls: [ './browse-page.component.scss' ],
   templateUrl: './browse-page.component.pug'
 })
@@ -42,7 +40,8 @@ export class BrowsePage implements OnInit, OnDestroy {
       private _app: AppConfig,
       private route: ActivatedRoute,
       private router: Router,
-      private _title: TitleService
+      private _title: TitleService,
+      private _filters: AssetFiltersService
   ) {
       this._storage = locker.useDriver(Locker.DRIVERS.LOCAL);
       this.institution = this._storage.get('institution');
@@ -52,6 +51,9 @@ export class BrowsePage implements OnInit, OnDestroy {
   ngOnInit() {
     // Set page title
     this._title.setSubtitle("Browse")
+
+    // Clear previously applied filters on search
+    this._filters.clearApplied()
 
     this.subscriptions.push(
       this.route.firstChild.url
@@ -86,7 +88,7 @@ export class BrowsePage implements OnInit, OnDestroy {
     }
 
     if( this.browseOpts.openCol ){
-        this.colMenuArray.push( { label: 'Open Collections', id: '3', link: 'commons' } );
+        this.colMenuArray.push( { label: 'Public Collections', id: '3', link: 'commons' } );
     }
 
     if(this.pcEnabled && this.browseOpts.myCol){

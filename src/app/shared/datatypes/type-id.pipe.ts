@@ -14,7 +14,7 @@ export class TypeIdPipe implements PipeTransform {
     8: 'people',
     9: 'repository', 
     10: 'image',
-    11: 'qtvr', // used in styles
+    11: 'panorama', // used in styles
     12: 'audio',
     13: '3d', // used in styles
     20: 'pdf', // used in styles

@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Http, Response, Headers, RequestOptions } from '@angular/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Router, ActivatedRoute, UrlSegment } from '@angular/router';
 import { Subscription }   from 'rxjs/Subscription';
 
@@ -18,8 +18,8 @@ import { TitleService } from '../shared/title.service';
 
 export class CategoryPage implements OnInit, OnDestroy {
 
-  private header = new Headers({ 'Content-Type': 'application/json' }); // ... Set content type to JSON
-  private options = new RequestOptions({ headers: this.header, withCredentials: true }); // Create a request option
+  private header = new HttpHeaders().set('Content-Type', 'application/json'); // ... Set content type to JSON
+  private options = { headers: this.header, withCredentials: true }; // Create a request option
 
   private catId: string;
   private catName: string;
@@ -27,9 +27,6 @@ export class CategoryPage implements OnInit, OnDestroy {
   private catThumbnail: string;
   private assetCount: number;
   private allowSearchInRes: boolean = true;
-
-  // Anomalies
-  private isSubCategory: boolean = false;
 
   private subscriptions: Subscription[] = [];
 
@@ -41,7 +38,7 @@ export class CategoryPage implements OnInit, OnDestroy {
     private _auth: AuthService,
     private _router: Router,
     private route: ActivatedRoute,
-    private http: Http,
+    private http: HttpClient,
     private _analytics: AnalyticsService,
     private _title: TitleService
   ) {}
@@ -68,8 +65,8 @@ export class CategoryPage implements OnInit, OnDestroy {
             .then((data) => {
 
               if (data) {
-                this.catDescription = data.blurbUrl;
-                this.catThumbnail = data.imageUrl;
+                this.catDescription = data['blurbUrl'];
+                this.catThumbnail = data['imageUrl'];
               } else {
                 // Some categories don't have descriptions
               }
@@ -82,10 +79,11 @@ export class CategoryPage implements OnInit, OnDestroy {
           // Get Category data
           this.getCategoryData(this.catId)
           .then((data) => {
-
             if (data) {
-              this.catName = data.categoryName;
-              this.assetCount = data.objCount;
+              this.catName = data['categoryName'];
+              this.assetCount = data['objCount'];
+              // Tell components relying on Pagination observable
+              this._assets.setAssetCount(this.assetCount)
               // Set page title
               this._title.setSubtitle(this.catName);
             } else {
@@ -100,13 +98,6 @@ export class CategoryPage implements OnInit, OnDestroy {
       })
     );// End push to subscription
 
-    this.subscriptions.push(
-       this.route.url
-        .subscribe((url: UrlSegment[]) => {
-          this.isSubCategory = url[0].path === 'subcategory';
-        })
-    );
-
     this._analytics.setPageValues('category', this.catId)
   } // OnInit
 
@@ -116,17 +107,16 @@ export class CategoryPage implements OnInit, OnDestroy {
   * @param catId The Category ID
   */
   private getCategoryInfo(catId: string) {
-      let options = new RequestOptions({ withCredentials: true });
+      let options = { withCredentials: true };
 
       // Can be removed once region specific ids are no longer used
-      if (catId.indexOf('103') == 1) {
-        catId = catId.slice(1)
-      }
+      // if (catId.indexOf('103') == 1) {
+      //   catId = catId.slice(1)
+      // }
 
       return this.http
           .get(this._auth.getUrl() + '/categorydesc/' + catId, options)
-          .toPromise()
-          .then(this._auth.extractData);
+          .toPromise();
   }
 
   /**
@@ -134,17 +124,16 @@ export class CategoryPage implements OnInit, OnDestroy {
   * @param catId The Category ID
   */
   private getCategoryData(catId: string) {
-    let options = new RequestOptions({ withCredentials: true });
+    let options = { withCredentials: true };
 
     // Can be removed once region specific ids are no longer used
-    if (catId.indexOf('103') == 1) {
-      catId = catId.slice(1)
-    }
+    // if (catId.indexOf('103') == 1) {
+    //   catId = catId.slice(1)
+    // }
 
     return this.http
         .get(this._auth.getUrl() + '/categories/' + catId, options)
-        .toPromise()
-        .then(this._auth.extractData);
+        .toPromise();
 }
 
   ngOnDestroy() {
