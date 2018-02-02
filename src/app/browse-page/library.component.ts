@@ -46,7 +46,11 @@ export class LibraryComponent implements OnInit {
     260 : [],
     270 : []
   };
-  private descObj: any  = {};
+  private descObj: any  = {
+    "103" : "BROWSE.LIBRARY_COLLECTION",
+    "250" : "BROWSE.CLASSIFICATION",
+    "260" : "BROWSE.GEOGRAPHY"
+  };
 
   private categoryFacetMap = {
     '103': 'categoryid',
