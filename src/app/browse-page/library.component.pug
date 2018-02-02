@@ -20,9 +20,9 @@ nav.nav.nav-inline.browse-nav
     .alert.alert-danger(*ngIf="errorMessage" innerHTML="{{errorMessage | translate}}")
   .col-md-4
     .browse-info(*ngIf="descObj[selectedBrowseId]")
-      .img(*ngIf="splashImgURL")
-        img([attr.src]="splashImgURL", alt="Splash image for browse id: {{ selectedBrowseId }}", style="max-width:100%;")
-      .title {{ descObj[selectedBrowseId].collectionname }}
-      .browse__description([innerHTML]="descObj[selectedBrowseId].blurburl")
+      .img(*ngIf="descObj[selectedBrowseId] + '.LEAD_IMAGE' | translate")
+        img([attr.src]="descObj[selectedBrowseId] + '.LEAD_IMAGE' | translate", alt="Splash image for browse id: {{ selectedBrowseId }}", style="max-width:100%;")
+      .title {{ descObj[selectedBrowseId] + ".HEADING" | translate }}
+      .browse__description([innerHTML]="descObj[selectedBrowseId] + '.DESCRIPTION' | translate")
 .row.has-icon-overlay(*ngIf="loading")
   i.icon-lg.icon-overlay--top.icon-loading-large
