@@ -74,33 +74,27 @@ export class LibraryComponent implements OnInit {
     this.browseMenuArray = [
       {
         label : 'Collection',
-        id: this._assets.getRegionCollection().toString()
+        id: '103'
       },
       {
         label : 'Classification',
-        id: this._assets.getRegionCollection(250).toString()
+        id: '250'
       },
       {
         label : 'Geography',
-        id: this._assets.getRegionCollection(260).toString()
+        id: '260'
       },
       {
         label : 'Teaching Resources',
-        id: this._assets.getRegionCollection(270).toString(),
+        id: '270',
         link: ['/browse/groups/public', {tags:'Teaching Resources', page: 1}]
       }
     ];
-    // Update based on IDs
-    this.tagsObj[this._assets.getRegionCollection().toString()]
-    this.tagsObj[this._assets.getRegionCollection(250).toString()]
-    this.tagsObj[this._assets.getRegionCollection(260).toString()]
-    this.tagsObj[this._assets.getRegionCollection(270).toString()]
     // Set page title
     this._title.setSubtitle("Browse Collections")
 
     if (!this.route.snapshot.params['viewId']) {
-      this.selectedBrowseId = this._assets.getRegionCollection().toString();
-      this.updateSplashImgURL();
+      this.selectedBrowseId = '103'
     }
 
     this.subscriptions.push(
@@ -109,15 +103,8 @@ export class LibraryComponent implements OnInit {
         this.loading = true;
 
         if(params && params['viewId']){
-            let adjustedId = params['viewId']
-            if (adjustedId.length < 4) {
-              adjustedId = this._assets.getRegionCollection(params['viewId']).toString()
-            }
-            if (this.selectedBrowseId !== adjustedId){
-              this.getTags(adjustedId);
-            }
-            this.selectedBrowseId = adjustedId;
-            this.updateSplashImgURL();
+            this.selectedBrowseId = params['viewId'].toString()
+            // this.updateSplashImgURL();
         }
         // load category facets
         this.facetType = this.categoryFacetMap[this.selectedBrowseId]
@@ -131,7 +118,7 @@ export class LibraryComponent implements OnInit {
           
           // Categoryid facets require an additional call for labels/titles
           if (this.facetType == 'categoryid') {
-             this._assets.categoryNames()
+            this._assets.categoryNames()
               .then((data) => {
                 // Create an index by ID for naming the facets
                 let categoryIndex = data.reduce( ( result, item ) => { 
@@ -180,59 +167,6 @@ export class LibraryComponent implements OnInit {
     this.categoryFacets = []
   }
 
-  private updateSplashImgURL(): void{
-    if(this.selectedBrowseId === '103'){
-      this.splashImgURL = '/assets/img/collection-splash.png';
-    }
-    else if(this.selectedBrowseId === '250'){
-      this.splashImgURL = '/assets/img/classification-splash.png';
-    }
-    else if(this.selectedBrowseId === '260'){
-      this.splashImgURL = '/assets/img/geography-splash.png';
-    }
-    else{
-      this.splashImgURL = '';
-    }
-  }
-
-  private getTags(browseId): void {
-    // if (!this.tagsObj[browseId] || this.tagsObj[browseId].length < 1) {
-    //   this.loading = true;
-    //   this._tags.initTags({ type: "library", collectionId: browseId})
-    //   .then((tags) => {
-    //     if (browseId == '103') {
-    //       // Get category names
-    //       this._assets.categoryNames()
-    //         .then((data) => {
-    //           console.log(data)
-    //           let categoryIndex = data.reduce( ( result, item ) => { 
-    //               result[item.categoryId] = item.categoryName; 
-    //               return result; 
-    //           }, {});
-    //           console.log(categoryIndex)
-    //           var titledTags = tags.map( tag => {
-    //             tag.title = categoryIndex[tag.tagId] 
-    //             return tag
-    //           });
-    //           this.tagsObj[browseId] = titledTags;
-    //           console.log(titledTags)
-    //           this.loading = false;
-    //         })
-    //         .catch((err) => {
-    //           console.error(err)
-    //         })
-    //     } else {
-    //       this.tagsObj[browseId] = tags;
-    //       this.loading = false;
-    //     }
-        
-    //   })
-    //   .catch((err) => {
-    //     console.error(err);
-    //   });
-    // }
-  }
-
   ngOnDestroy() {
     this.subscriptions.forEach((sub) => { sub.unsubscribe(); });
   }
@@ -248,7 +182,6 @@ export class LibraryComponent implements OnInit {
     if (menuItem && menuItem.link) {
       this.router.navigate(menuItem.link)
     } else {
-      this.getTags(id);
       this.selectedBrowseId = id;
       this.addRouteParam('viewId', id);
     }
