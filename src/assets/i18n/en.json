@@ -235,7 +235,7 @@
       "WORK_TYPE": "Search assets by Work Type",
       "CULTURE": "Search assets by Culture",
       "TECHNIQUE": "Search assets by Technique",
-      "NUMBER": "Search assets by Number",
+      "ID NUMBER": "Search assets by ID Number",
       "SSID": "Search for asset by ID provided by Forum"
     }
   },
