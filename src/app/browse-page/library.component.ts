@@ -96,7 +96,6 @@ export class LibraryComponent implements OnInit {
 
     if (!this.route.snapshot.params['viewId']) {
       this.selectedBrowseId = this._assets.getRegionCollection().toString();
-      this.getTags(this.selectedBrowseId);
       this.updateSplashImgURL();
     }
 
@@ -116,53 +115,57 @@ export class LibraryComponent implements OnInit {
             this.selectedBrowseId = adjustedId;
             this.updateSplashImgURL();
         }
-
         // load category facets
         this.facetType = this.categoryFacetMap[this.selectedBrowseId]
-
-        // empty out containers
+        // Clear facet objects/arrays
         this.clearFacets()
-
+        // Get facets from Solr/search
         this._assets.categoryByFacet(this.facetType, 1)
-        .then( (resData: any) => {
+        .then( (facetData: any) => {
           // ensure they are emptied in case of multiple fast clicking
           this.clearFacets()
-
-          if (resData.children) { // if is hierarchical
-            this.hierarchicalFacets = resData.children
+          
+          // Categoryid facets require an additional call for labels/titles
+          if (this.facetType == 'categoryid') {
+             this._assets.categoryNames()
+              .then((data) => {
+                // Create an index by ID for naming the facets
+                let categoryIndex = data.reduce( ( result, item ) => { 
+                    result[item.categoryId] = item.categoryName; 
+                    return result; 
+                }, {});
+                // Append titles to the facets (we can't replace "name", as its the ID, which we need)
+                this.categoryFacets = facetData
+                  .map( facet => {
+                    facet.title = categoryIndex[facet.name] 
+                    return facet
+                  })
+                  // Then also sort the facets, A-Z
+                  .sort((elemA, elemB) => {
+                    if (elemA.title > elemB.title) return 1
+                    else if (elemA.title < elemB.title) return -1
+                    else return 0
+                  })
+                this.loading = false;
+              })
+              .catch((err) => {
+                console.error(err)
+              })
+          } else if (facetData.children) {
+            // Hierarchical facets are stored in a separate object
+            this.hierarchicalFacets = facetData.children
+            this.loading = false;
           } else {
-            // sort on name
-            this.categoryFacets = resData.sort((elemA, elemB) => {
+            // Generically handle all other facets, which use "name" property to filter and display
+            // - Sort by name, A-Z, then set to categoryFacets array
+            this.categoryFacets = facetData.sort((elemA, elemB) => {
               if (elemA.name > elemB.name) return 1
               else if (elemA.name < elemB.name) return -1
               else return 0
             })
-
-            // this._assets.categoryNames()
-            //   .then((data) => {
-            //     console.log(data)
-            //     let categoryIndex = data.reduce( ( result, item ) => { 
-            //         result[item.categoryId] = item.categoryName; 
-            //         return result; 
-            //     }, {});
-            //     console.log(categoryIndex)
-            //     var titledTags = tags.map( tag => {
-            //       tag.title = categoryIndex[tag.tagId] 
-            //       return tag
-            //     });
-            //     this.tagsObj[browseId] = titledTags;
-            //     console.log(titledTags)
-            //     this.loading = false;
-            //   })
-            //   .catch((err) => {
-            //     console.error(err)
-            //   })
+            this.loading = false;
           }
-
-          this.loading = false;
         })
-
-        this.loadDescription(this.selectedBrowseId);
       })
     );
     this._analytics.setPageValues('library', '')
@@ -244,27 +247,6 @@ export class LibraryComponent implements OnInit {
       this.getTags(id);
       this.selectedBrowseId = id;
       this.addRouteParam('viewId', id);
-    }
-  }
-
-  /**
-   * Sets browser response for description
-   */
-  private loadDescription(browseId): void{
-    if (!this.descObj[browseId]) {
-      this._assets.category( browseId )
-        .then((res) => {
-            this.descObj[browseId] = res;
-        })
-        .catch((err) => {
-          this.loading = false;
-          if (err.status === 401 || err.status === 403) {
-            this.errorMessage = 'ACCESS_DENIED'
-          } else {
-            this.errorMessage = 'GENERIC_ERROR'
-          }
-          console.log('Unable to load category results.');
-        });
     }
   }
 

@@ -810,15 +810,7 @@ export class AssetService {
             .get(this._auth.getHostname() + '/api/pccollection', options)
             .toPromise()
     }
-
-    public category(catId: string) {
-        let options = { withCredentials: true };
-
-        return this.http
-            .get(this._auth.getHostname() + '/api/collections/' + catId + '/categoryroot', options)
-            .toPromise()
-    }
-
+    
     public categoryNames() : Promise<any> {
         let options = { withCredentials: true }
         

@@ -68,18 +68,8 @@ export class TagsService {
     if (tag && tag.type && tag.type.label === "collection") {
       collectionId = tag.tagId;
     }
-
-    // logic determines which call to make, to categories or subcategories
-    if (collectionId || tag.type.label === "collection") {
-      return this._assets.category(collectionId)
-        .then((data) => {
-          for(let category of data['Categories']) {
-            let categoryTag = new Tag(category.widgetId, category.title, true, tag, { label: "category", folder: category.isFolder }, category['enableDblClick'] );
-            childArr.push(categoryTag);
-          }
-          return childArr;
-        });
-    } else if (tag.type.label === "group") {
+    
+    if (tag.type.label === "group") {
       // Image Group folders come through with ugly widgetIds
       let tagId = tag.tagId.replace('fldr_','');
 
