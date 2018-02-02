@@ -564,16 +564,6 @@ export class AssetService {
             });
     }
 
-    public getRegionCollection(rootId ?: number): number {
-        let collectionId = rootId ? rootId : 103
-        let user = this._auth.getUser()
-
-        if (user.regionId !== 1) {
-            collectionId = parseInt( (3+user.regionId) + collectionId.toString() )
-        }
-        return collectionId
-    }
-
     /**
      * Get metadata for an Asset
      * @param assetId string Asset or object ID
@@ -755,29 +745,6 @@ export class AssetService {
             });
     }
 
-    /**
-     *  Loads thumbnails for a Category to this.AllResults
-     *  @param catId Category ID
-     */
-    private loadCategory(catId: string): Promise<any> {
-        let imageSize = 0;
-        let startIndex = ((this.urlParams.page - 1) * this.urlParams.size) + 1;
-        if (catId.startsWith('103')) {
-            catId = this.getRegionCollection(parseInt(catId)).toString()
-        }
-        let requestString = [this._auth.getUrl(), 'categories', catId, 'thumbnails', startIndex, this.urlParams.size, this.activeSort.index].join('/');
-
-        return this.http
-            .get(requestString, this.defaultOptions)
-            .toPromise()
-            .then((data) => {
-                this.updateLocalResults(data);
-            })
-            .catch(error => {
-                console.log(error);
-            });
-    }
-
     private loadCluster(objectId: string){
 
         let options = { withCredentials: true };
@@ -820,6 +787,7 @@ export class AssetService {
     }
 
     public categoryByFacet(facetName: string, collectionType ?: number) {
+        console.log('category facet', facetName, collectionType)
       let options = { withCredentials: true };
 
       let query = Object.assign({}, this.baseSolrQuery)
