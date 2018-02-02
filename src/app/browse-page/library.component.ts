@@ -112,7 +112,7 @@ export class LibraryComponent implements OnInit {
         this.clearFacets()
         // Get facets from Solr/search
         this._assets.categoryByFacet(this.facetType, 1)
-        .then( (facetData: any) => {
+        .then( (facetData) => {
           // ensure they are emptied in case of multiple fast clicking
           this.clearFacets()
           
@@ -142,9 +142,9 @@ export class LibraryComponent implements OnInit {
               .catch((err) => {
                 console.error(err)
               })
-          } else if (facetData.children) {
+          } else if (facetData[0].children) {
             // Hierarchical facets are stored in a separate object
-            this.hierarchicalFacets = facetData.children
+            this.hierarchicalFacets = facetData[0].children
             this.loading = false;
           } else {
             // Generically handle all other facets, which use "name" property to filter and display

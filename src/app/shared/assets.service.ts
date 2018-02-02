@@ -1,3 +1,4 @@
+import { categoryName } from './datatypes/category.interface';
 /**
  * Assets service
  */
@@ -17,6 +18,7 @@ import { ToolboxService } from './toolbox.service';
 import { AssetSearchService, SearchResponse } from './asset-search.service';
 import { ImageGroup, Thumbnail } from '.';
 import { AppConfig } from "app/app.service";
+import { SolrFacet } from "app/shared/datatypes";
 
 @Injectable()
 export class AssetService {
@@ -778,7 +780,7 @@ export class AssetService {
             .toPromise()
     }
     
-    public categoryNames() : Promise<any> {
+    public categoryNames() : Promise<categoryName[]> {
         let options = { withCredentials: true }
         
         return this.http
@@ -786,8 +788,7 @@ export class AssetService {
             .toPromise()
     }
 
-    public categoryByFacet(facetName: string, collectionType ?: number) {
-        console.log('category facet', facetName, collectionType)
+    public categoryByFacet(facetName: string, collectionType ?: number) : Promise<SolrFacet[]> {
       let options = { withCredentials: true };
 
       let query = Object.assign({}, this.baseSolrQuery)
@@ -828,7 +829,7 @@ export class AssetService {
         .then(res => {
           let hierData = Object.values(res['hierarchies2'])
           if (hierData.length) { // if we have hierarchical data
-            res = hierData[0]
+            res = hierData
           } else { // must be a facet
             res = res['facets'][0].values
           }
