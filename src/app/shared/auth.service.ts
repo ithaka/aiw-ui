@@ -397,7 +397,9 @@ export class AuthService implements CanActivate {
    */
   public saveUser(user: any) {
     // Preserve added pcEnabled, determined by _assets.pccollection() call
-    if (user.isLoggedIn && this.getUser().pcEnabled) {
+    //  since pcEnabled needs its own call, we're preserving it in local storage
+    let pcEnabled: boolean = this._storage.get('pcEnabled')
+    if (user.isLoggedIn && pcEnabled == true) {
       user.pcEnabled = true
     }
     // Should have session timeout, username, baseProfileId, typeId
@@ -427,9 +429,7 @@ export class AuthService implements CanActivate {
    * Sets pcEnabled in local storage
    */
   public setpcEnabled(pcEnabled: boolean): void {
-    let user = this.getUser()
-    user.pcEnabled = pcEnabled
-    this.saveUser(user)
+    this._storage.set('pcEnabled', pcEnabled)
   }
 
   /** Stores an object in local storage for you - your welcome */
