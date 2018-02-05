@@ -18,7 +18,6 @@ import { ToolboxService } from './toolbox.service';
 import { AssetSearchService, SearchResponse } from './asset-search.service';
 import { ImageGroup, Thumbnail } from '.';
 import { AppConfig } from "app/app.service";
-import { SolrFacet } from "app/shared/datatypes";
 
 @Injectable()
 export class AssetService {
@@ -779,6 +778,13 @@ export class AssetService {
         return this.http
             .get(this._auth.getHostname() + '/api/collections/103/categorynames', options)
             .toPromise()
+            .then(res => {
+                if (res && res[0]) {
+                    return <categoryName[]>res
+                } else {
+                    return <categoryName[]>[]
+                }
+            })
     }
 
     public categoryByFacet(facetName: string, collectionType ?: number) : Promise<SolrFacet[]> {
@@ -832,7 +838,7 @@ export class AssetService {
           } else { // must be a facet
             res = res['facets'][0].values
           }
-          return res
+          return <SolrFacet[]>res
         })
     }
 
@@ -850,7 +856,7 @@ export class AssetService {
     }
 
     /**
-     * Get Collection
+     * DEPRECATED - Get Collection
      * @param colId id of collection to fetch
      * @returns thumbnails of assets for a collection, and collection information
      */
@@ -1073,6 +1079,21 @@ export class AssetService {
             else { throw new Error("No success or item found on response object") }
         })
   }
+}
+
+export interface categoryName {
+    categoryId: string,
+    categoryName: string
+}
+export interface SolrFacet {
+    name: string,
+    count: number,
+    efq: string,
+    fq: string,
+    // Additional property for Hierarchical facets
+    children?: SolrFacet[]
+    // Value added by the UI
+    title?: string
 }
 
 export interface MetadataRes {
