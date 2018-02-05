@@ -28,9 +28,6 @@ export class CategoryPage implements OnInit, OnDestroy {
   private assetCount: number;
   private allowSearchInRes: boolean = true;
 
-  // Anomalies
-  private isSubCategory: boolean = false;
-
   private subscriptions: Subscription[] = [];
 
   // private searchInResults: boolean = false;
@@ -100,13 +97,6 @@ export class CategoryPage implements OnInit, OnDestroy {
         }
       })
     );// End push to subscription
-
-    this.subscriptions.push(
-       this.route.url
-        .subscribe((url: UrlSegment[]) => {
-          this.isSubCategory = url[0].path === 'subcategory';
-        })
-    );
 
     this._analytics.setPageValues('category', this.catId)
   } // OnInit
