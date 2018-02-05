@@ -130,13 +130,6 @@ export class AssetService {
       "mincount" : 1,
       "limit" : 100
     }
-    private baseHierarchy = {
-      "field": "hierarchies",
-      "hierarchy": "", // ex: artstor-geography
-      "look_ahead": 2,
-      "look_behind": -10,
-      "d_look_ahead": 1
-    }
 
     /** Keeps track of all filters available in url */
     // private knownFilters: any = {};
@@ -793,9 +786,15 @@ export class AssetService {
 
       let query = Object.assign({}, this.baseSolrQuery)
       let isHierarchy = facetName === "artstor-geography"
-
       if (isHierarchy) {
-        let hierarchy = Object.assign({}, this.baseHierarchy)
+        let hierarchy = Object.assign({}, {
+            // Base hierarchy query
+            "field": "hierarchies",
+            "hierarchy": "", // ex: artstor-geography
+            "look_ahead": 2,
+            "look_behind": -10,
+            "d_look_ahead": 1
+        })
         hierarchy.hierarchy = facetName
         query.hier_facet_fields2 = [hierarchy]
       } else {
