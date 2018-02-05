@@ -114,22 +114,6 @@ export class AssetService {
         index: 0
      };
 
-    private baseSolrQuery = {
-      "limit": 0,
-      "start": 1,
-      "content_types": [
-        "art"
-      ],
-      "hier_facet_fields2": [],
-      "facet_fields" : [],
-      "filter_query" : []
-    };
-    private baseFacetField = {
-      "name" : "", // ex: collectiontypes
-      "mincount" : 1,
-      "limit" : 100
-    }
-
     /** Keeps track of all filters available in url */
     // private knownFilters: any = {};
     public _storage;
@@ -790,21 +774,36 @@ export class AssetService {
     public categoryByFacet(facetName: string, collectionType ?: number) : Promise<SolrFacet[]> {
       let options = { withCredentials: true };
 
-      let query = Object.assign({}, this.baseSolrQuery)
+      let query = {
+            // Base solr query
+            "limit": 0,
+            "start": 1,
+            "content_types": [
+                "art"
+            ],
+            "hier_facet_fields2": [],
+            "facet_fields" : [],
+            "filter_query" : []
+        };
       let isHierarchy = facetName === "artstor-geography"
       if (isHierarchy) {
-        let hierarchy = Object.assign({}, {
+        let hierarchy = {
             // Base hierarchy query
             "field": "hierarchies",
             "hierarchy": "", // ex: artstor-geography
             "look_ahead": 2,
             "look_behind": -10,
             "d_look_ahead": 1
-        })
+        }
         hierarchy.hierarchy = facetName
         query.hier_facet_fields2 = [hierarchy]
       } else {
-        let facetField = Object.assign({}, this.baseFacetField)
+        let facetField = {
+            // base facet field
+            "name" : "", // ex: collectiontypes
+            "mincount" : 1,
+            "limit" : 100
+        }
         facetField.name = facetName
         facetField.limit = 500
         // Ignore junk data, collections with only one asset aren't collections we care about
