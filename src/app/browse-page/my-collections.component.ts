@@ -79,7 +79,7 @@ export class MyCollectionsComponent implements OnInit {
     this.subscriptions.push(
       this._auth.currentUser.subscribe(
         (userObj) => {
-          this.pcEnabled = userObj.pcEnabled
+            this.pcEnabled = userObj.pcEnabled
         },
         (err) => { console.error(err) }
       )
