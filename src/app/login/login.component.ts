@@ -276,19 +276,6 @@ export class Login {
       }
     }, (error) => {
       console.error(error)
-
-      /**
-       * WORKAROUND for TEST: Earth's login service isn't properly redirecting based on context
-       */
-      this._auth.getUserInfo().take(1)
-        .subscribe( data => {
-          if (data.status === true && data.user && user.username == data.user.username) {
-            this.forcePwdRst = true
-            this.errorMsg = ''
-          }
-        }, error => {
-
-        });
     })
   }
 
