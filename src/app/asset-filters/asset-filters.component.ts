@@ -198,7 +198,7 @@ export class AssetFilters {
       this.router.navigate( [ '/' + route, colId, queryParams ] )
     }
     else{
-      this.router.navigate(['search', this.term, params])
+      this.router.navigate(['search', this.term ? this.term : "*", params])
     }
 
   }
