@@ -399,7 +399,7 @@ export class AuthService implements CanActivate {
     // short-circuit this function so it can't be used to replace an existing user with a non-existing one
     //  clearing the user should only be done using the logout function
     let currentUser = this._storage.get('user')
-    if (currentUser && currentUser.username) { return }
+    if (currentUser && currentUser.username && !user.username) { return }
 
     // Preserve added pcEnabled, determined by _assets.pccollection() call
     //  since pcEnabled needs its own call, we're preserving it in local storage
