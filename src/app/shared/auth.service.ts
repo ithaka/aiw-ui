@@ -530,37 +530,27 @@ export class AuthService implements CanActivate {
       .get(this.genUserInfoUrl(), options)
       .map(
         (res)  => {
-          try {
-            let data = res
-            // User has access!
-            if (data['status'] === true) {
-              // User is authorized - if you want to check ipAuth then you can tell on the individual route by user.isLoggedIn = false
-              let user = data['user']
-              user.status = data['status']
-              if (data['isRememberMe'] || data['remoteaccess']) {
-                user.isLoggedIn = true
-              }
-              if (this.canUserAccess(user)) {
-                this.saveUser(user)
-              } else {
-                this.saveUser({})
-                this._router.navigate(['/login'])
-              }
+          let data = res
+          // User has access!
+          if (data['status'] === true && data['user'].username == currentUsername) {
+            // User is authorized - if you want to check ipAuth then you can tell on the individual route by user.isLoggedIn = false
+            let user = data['user']
+            user.status = data['status']
+            if (data['isRememberMe'] || data['remoteaccess']) {
+              user.isLoggedIn = true
             }
-            
-            if (
-              data['status'] === false // User does not have access!
-              ||
-              data['user'].username != currentUsername
-            ) {
-              // Clear user, and trigger router canActivate
-              this.saveUser({})
-              triggerSessionExpModal && this.showUserInactiveModal.next(true)
+            if (this.canUserAccess(user)) {
+              this.saveUser(user)
+            } else {
+              this._router.navigate(['/login'])
+              this.logoutUser()
             }
-            return data
-          } catch (err) {
-            console.error(err)
+          } else {
+            // Clear user, and trigger router canActivate
+            this.logoutUser()
+            triggerSessionExpModal && this.showUserInactiveModal.next(true)
           }
+          return data
         }
       )
   }
