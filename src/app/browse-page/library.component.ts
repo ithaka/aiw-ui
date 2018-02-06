@@ -198,4 +198,12 @@ export class LibraryComponent implements OnInit {
 
     this.router.navigate([currentParamsObj], { relativeTo: this.route });
   }
+
+  private getLinkParam(facetType, facetName) {
+    let param = {}
+    if (this.facetQueryMap[facetType]) {
+      param[this.facetQueryMap[facetType]] = facetName
+    }
+    return param
+  }
 }
