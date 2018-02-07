@@ -62,8 +62,9 @@ export class AssetGrid implements OnInit, OnDestroy {
   @Input()
   private actionOptions: any = {};
 
+  // With most pages using Solr, we want to default assuming a max of 1500
   @Input()
-  private hasMaxAssetLimit: boolean = false
+  private hasMaxAssetLimit: boolean = true
 
   // Value
   private totalAssets: number = 0;
