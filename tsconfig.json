@@ -14,7 +14,7 @@
     },
     "lib": [
       "dom",
-      "es6"
+      "es2017"
     ],
     "types": [
       "hammerjs",

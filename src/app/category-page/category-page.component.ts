@@ -25,11 +25,7 @@ export class CategoryPage implements OnInit, OnDestroy {
   private catName: string;
   private catDescription: string;
   private catThumbnail: string;
-  private assetCount: number;
   private allowSearchInRes: boolean = true;
-
-  // Anomalies
-  private isSubCategory: boolean = false;
 
   private subscriptions: Subscription[] = [];
 
@@ -84,9 +80,6 @@ export class CategoryPage implements OnInit, OnDestroy {
           .then((data) => {
             if (data) {
               this.catName = data['categoryName'];
-              this.assetCount = data['objCount'];
-              // Tell components relying on Pagination observable
-              this._assets.setAssetCount(this.assetCount)
               // Set page title
               this._title.setSubtitle(this.catName);
             } else {
@@ -100,13 +93,6 @@ export class CategoryPage implements OnInit, OnDestroy {
         }
       })
     );// End push to subscription
-
-    this.subscriptions.push(
-       this.route.url
-        .subscribe((url: UrlSegment[]) => {
-          this.isSubCategory = url[0].path === 'subcategory';
-        })
-    );
 
     this._analytics.setPageValues('category', this.catId)
   } // OnInit

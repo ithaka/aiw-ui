@@ -1,3 +1,4 @@
+import { categoryName } from './datatypes/category.interface';
 /**
  * Assets service
  */
@@ -15,8 +16,8 @@ import { GroupService } from './group.service';
 import { AssetFiltersService } from './../asset-filters/asset-filters.service';
 import { ToolboxService } from './toolbox.service';
 import { AssetSearchService, SearchResponse } from './asset-search.service';
-
 import { ImageGroup, Thumbnail } from '.';
+import { AppConfig } from "app/app.service";
 
 @Injectable()
 export class AssetService {
@@ -139,7 +140,8 @@ export class AssetService {
         private _auth: AuthService,
         private _groups: GroupService,
         private _toolbox: ToolboxService,
-        private _assetSearch: AssetSearchService
+        private _assetSearch: AssetSearchService,
+        private _app: AppConfig
     ) {
         this._storage = locker.useDriver(Locker.DRIVERS.LOCAL);
     }
@@ -409,10 +411,9 @@ export class AssetService {
                     //get clustered images thumbnails
                     this.loadCluster(params.objectId);
                 } else if (params.hasOwnProperty("catId")  && params["catId"] !== "") {
-                    //get collection thumbnails
-                    this.loadCategory(params.catId);
-                    // let searchTerm = params.term ? params.term : '';
-                    // this.loadSearch(searchTerm);
+                    // To load category assets pass the 'catId' as 'query/searchTerm' parameter
+                    let searchTerm = 'categoryid:' + params["catId"];
+                    this.loadSearch(searchTerm);
                 }  else if (params.hasOwnProperty("pcolId") && params["pcolId"] !== "") {
                     //get personal collection thumbnails
                     this.loadCollection(params.pcolId);
@@ -539,16 +540,6 @@ export class AssetService {
                 // This call only returns Html!
                 return data['_body'].toString();
             });
-    }
-
-    public getRegionCollection(rootId ?: number): number {
-        let collectionId = rootId ? rootId : 103
-        let user = this._auth.getUser()
-
-        if (user.regionId !== 1) {
-            collectionId = parseInt( (3+user.regionId) + collectionId.toString() )
-        }
-        return collectionId
     }
 
     /**
@@ -732,29 +723,6 @@ export class AssetService {
             });
     }
 
-    /**
-     *  Loads thumbnails for a Category/Subcategory to this.AllResults
-     *  @param catId Category ID
-     */
-    private loadCategory(catId: string): Promise<any> {
-        let imageSize = 0;
-        let startIndex = ((this.urlParams.page - 1) * this.urlParams.size) + 1;
-        if (catId.startsWith('103')) {
-            catId = this.getRegionCollection(parseInt(catId)).toString()
-        }
-        let requestString = [this._auth.getUrl(), 'categories', catId, 'thumbnails', startIndex, this.urlParams.size, this.activeSort.index].join('/');
-
-        return this.http
-            .get(requestString, this.defaultOptions)
-            .toPromise()
-            .then((data) => {
-                this.updateLocalResults(data);
-            })
-            .catch(error => {
-                console.log(error);
-            });
-    }
-
     private loadCluster(objectId: string){
 
         let options = { withCredentials: true };
@@ -787,21 +755,90 @@ export class AssetService {
             .get(this._auth.getHostname() + '/api/pccollection', options)
             .toPromise()
     }
-
-    public category(catId: string) {
-        let options = { withCredentials: true };
-
+    
+    public categoryNames() : Promise<categoryName[]> {
+        let options = { withCredentials: true }
+        
         return this.http
-            .get(this._auth.getHostname() + '/api/collections/' + catId + '/categoryroot', options)
+            .get(this._auth.getHostname() + '/api/collections/103/categorynames', options)
             .toPromise()
+            .then(res => {
+                if (res && res[0]) {
+                    return <categoryName[]>res
+                } else {
+                    return <categoryName[]>[]
+                }
+            })
     }
 
-    subcategories(id) {
-        let options = { withCredentials: true };
+    public categoryByFacet(facetName: string, collectionType ?: number) : Promise<SolrFacet[]> {
+      let options = { withCredentials: true };
 
-        return this.http
-            .get(this._auth.getHostname() + '/api/categories/' + id + '/subcategories', options)
-            .toPromise()
+      let query = {
+            // Base solr query
+            "limit": 0,
+            "start": 1,
+            "content_types": [
+                "art"
+            ],
+            "hier_facet_fields2": [],
+            "facet_fields" : [],
+            "filter_query" : []
+        };
+      let isHierarchy = facetName === "artstor-geography"
+      if (isHierarchy) {
+        let hierarchy = {
+            // Base hierarchy query
+            "field": "hierarchies",
+            "hierarchy": "", // ex: artstor-geography
+            "look_ahead": 2,
+            "look_behind": -10,
+            "d_look_ahead": 1
+        }
+        hierarchy.hierarchy = facetName
+        query.hier_facet_fields2 = [hierarchy]
+      } else {
+        let facetField = {
+            // base facet field
+            "name" : "", // ex: collectiontypes
+            "mincount" : 1,
+            "limit" : 100
+        }
+        facetField.name = facetName
+        facetField.limit = 500
+        // Ignore junk data, collections with only one asset aren't collections we care about
+        facetField.mincount = 5
+        query.facet_fields = [facetField]
+      }
+
+      let filterArray = []
+
+      if (collectionType) {
+          filterArray.push("collectiontypes:"+ collectionType)
+      }
+
+      /**
+       * Check for WLVs Institution filter
+       * - WLVs filter by contributing institution id
+       */
+      let institutionFilters: number[] = this._app.config.contributingInstFilters
+      for (let i = 0; i < institutionFilters.length; i++) {
+        filterArray.push("contributinginstitutionid:" + institutionFilters[i])
+      }
+
+      query["filter_query"] = filterArray
+
+      return this.http.post(this._auth.getSearchUrl(), query, options)
+        .toPromise()
+        .then(res => {
+          let hierData = Object.values(res['hierarchies2'])
+          if (hierData.length) { // if we have hierarchical data
+            res = hierData
+          } else { // must be a facet
+            res = res['facets'][0].values
+          }
+          return <SolrFacet[]>res
+        })
     }
 
     nodeDesc(descId, widgetId){
@@ -818,7 +855,7 @@ export class AssetService {
     }
 
     /**
-     * Get Collection
+     * DEPRECATED - Get Collection
      * @param colId id of collection to fetch
      * @returns thumbnails of assets for a collection, and collection information
      */
@@ -1041,6 +1078,21 @@ export class AssetService {
             else { throw new Error("No success or item found on response object") }
         })
   }
+}
+
+export interface categoryName {
+    categoryId: string,
+    categoryName: string
+}
+export interface SolrFacet {
+    name: string,
+    count: number,
+    efq: string,
+    fq: string,
+    // Additional property for Hierarchical facets
+    children?: SolrFacet[]
+    // Value added by the UI
+    title?: string
 }
 
 export interface MetadataRes {
