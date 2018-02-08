@@ -441,6 +441,10 @@ export class AuthService implements CanActivate {
    */
   public setpcEnabled(pcEnabled: boolean): void {
     this._storage.set('pcEnabled', pcEnabled)
+    // Attach to user object
+    let user = this.getUser()
+    user.pcEnabled = pcEnabled
+    this.saveUser(user)
   }
 
   /** Stores an object in local storage for you - your welcome */
