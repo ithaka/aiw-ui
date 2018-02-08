@@ -193,8 +193,9 @@ export class AuthService implements CanActivate {
 
     this.resetIdleWatcher();
 
-    // Initialize user object from localstorage
+    // Initialize user and institution objects from localstorage
     this.userSource.next(this.getUser())
+    this.institutionObjSource.next(this._storage.get('institution') ? this._storage.get('institution') : {})
 
     /**
      * User Access Heartbeat
@@ -253,7 +254,10 @@ export class AuthService implements CanActivate {
       let options = { headers: header, withCredentials: true };
 
       // Clear local user object, and other settings
-      this.clearStorage();
+      this.clearStorage()
+      // Clear observables
+      this.userSource.next({})
+      this.institutionObjSource.next({})
 
       return this.http
           .post(this.getUrl(true) + '/logout', {}, options)
@@ -291,7 +295,6 @@ export class AuthService implements CanActivate {
       .get(this.getUrl() + '/v2/institution', options)
       .toPromise()
       .then((data) => {
-        this._storage.set('institution', data)
         this.setInstitution(data)
         // this.institutionRefreshInProgress = false
         return data
@@ -309,6 +312,9 @@ export class AuthService implements CanActivate {
   }
 
   public setInstitution(institutionObj: any): void {
+    // Save to local storage
+    this._storage.set('institution', institutionObj)
+    // Update Observable
     this.institutionObjValue = institutionObj;
     this.institutionObjSource.next(this.institutionObjValue);
     // Update Analytics object
@@ -410,8 +416,8 @@ export class AuthService implements CanActivate {
     // Should have session timeout, username, baseProfileId, typeId
     this._storage.set('user', user);
     // only do these things if the user is ip auth'd or logged in and the user has changed
-    let institution = this.institutionObjSource.getValue()
-    if (user.status && (this.userSource.getValue().username != user.username || !institution.institutionid)) {
+    let institution = this.institutionObjSource.getValue();
+    if (user.status && (!institution.institutionId || user.institutionId != institution.institutionId)) {
       // Refresh institution object
       this.refreshUserInstitution()
     }
@@ -479,29 +485,14 @@ export class AuthService implements CanActivate {
       .get(this.genUserInfoUrl(), options)
       .map(
         (data)  => {
-          try {
-            let jsonData = data
-            if (jsonData['status'] === true) {
-              // User is authorized - if you want to check ipAuth then you can tell on the individual route by user.isLoggedIn = false
-              let user = jsonData['user']
-              user.status = jsonData['status']
-              if (jsonData['isRememberMe'] || jsonData['remoteaccess']) {
-                user.isLoggedIn = true
-              }
-
-              if (this.canUserAccess(user)) {
-                this.saveUser(user)
-                return true
-              } else {
-                return false
-              }
-            } else {
-              // store the route so that we know where to put them after login!
-              this.store("stashedRoute", this.location.path(false))
-              return false
-            }
-          } catch (err) {
-            console.error(err)
+          let user = this.decorateValidUser(data)
+          if (user) {
+            this.saveUser(user)
+            return true
+          } else {
+            this.logoutUser()
+            // Store the route so that we know where to put them after login!
+            this.store("stashedRoute", this.location.path(false))
             return false
           }
         }
@@ -527,36 +518,51 @@ export class AuthService implements CanActivate {
   public getUserInfo(triggerSessionExpModal?: boolean): Observable<any> {
     let options = { headers: this.userInfoHeader, withCredentials: true };
 
-    let currentUser = this.userSource.getValue()
-    let currentUsername = currentUser.username
-
     return this.http
       .get(this.genUserInfoUrl(), options)
       .map(
         (res)  => {
           let data = res
-          // User has access!
-          if (data['status'] === true && data['user'].username == currentUsername) {
-            // User is authorized - if you want to check ipAuth then you can tell on the individual route by user.isLoggedIn = false
-            let user = data['user']
-            user.status = data['status']
-            if (data['isRememberMe'] || data['remoteaccess']) {
-              user.isLoggedIn = true
-            }
-            if (this.canUserAccess(user)) {
-              this.saveUser(user)
+          let user = this.decorateValidUser(data)
+          if (user) {
+            this.saveUser(user)
+          } else {
+            this.logoutUser()
+            if (triggerSessionExpModal) {
+              this.showUserInactiveModal.next(true)
             } else {
               this._router.navigate(['/login'])
-              this.logoutUser()
             }
-          } else {
-            // Clear user, and trigger router canActivate
-            this.logoutUser()
-            triggerSessionExpModal && this.showUserInactiveModal.next(true)
           }
           return data
         }
       )
+  }
+
+  /**
+   * Decorates and Validates user from the user response
+   * - Used to verify that we want the user object
+   * - Used to decorate the user object for saving
+   */
+  private decorateValidUser(data: any) : any {
+    let currentUser = this.getUser()
+    let currentUsername = currentUser.username
+
+    if (data['status'] === true && (!currentUsername || data['user'].username == currentUsername)) {
+            // User is authorized - if you want to check ipAuth then you can tell on the individual route by user.isLoggedIn = false
+      let user = data['user']
+      user.status = data['status']
+      if (data['isRememberMe'] || data['remoteaccess']) {
+        user.isLoggedIn = true
+      }
+      if (this.canUserAccess(user)) {
+        return user
+      } else {
+        return null
+      }
+    } else {
+      return null
+    }
   }
 
   private canUserAccess(user: any): boolean {
