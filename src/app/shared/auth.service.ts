@@ -396,8 +396,15 @@ export class AuthService implements CanActivate {
    * @param user The user should be an object to store in sessionstorage
    */
   public saveUser(user: any) {
+    // short-circuit this function so it can't be used to replace an existing user with a non-existing one
+    //  clearing the user should only be done using the logout function
+    let currentUser = this._storage.get('user')
+    if (currentUser && currentUser.username && !user.username) { return }
+
     // Preserve added pcEnabled, determined by _assets.pccollection() call
-    if (user.isLoggedIn && this.getUser().pcEnabled) {
+    //  since pcEnabled needs its own call, we're preserving it in local storage
+    let pcEnabled: boolean = this._storage.get('pcEnabled')
+    if (user.isLoggedIn && pcEnabled == true) {
       user.pcEnabled = true
     }
     // Should have session timeout, username, baseProfileId, typeId
@@ -427,9 +434,7 @@ export class AuthService implements CanActivate {
    * Sets pcEnabled in local storage
    */
   public setpcEnabled(pcEnabled: boolean): void {
-    let user = this.getUser()
-    user.pcEnabled = pcEnabled
-    this.saveUser(user)
+    this._storage.set('pcEnabled', pcEnabled)
   }
 
   /** Stores an object in local storage for you - your welcome */
@@ -515,6 +520,10 @@ export class AuthService implements CanActivate {
     })
   }
 
+  /**
+   * Asks the back-end for the user's info and a fresh set of cookies
+   * @param triggerSessionExpModal Sometimes this is called after unsuccessful logins, and we don't want failovers to always trigger the modal, so it's an option
+   */
   public getUserInfo(triggerSessionExpModal?: boolean): Observable<any> {
     let options = { headers: this.userInfoHeader, withCredentials: true };
 
@@ -525,37 +534,27 @@ export class AuthService implements CanActivate {
       .get(this.genUserInfoUrl(), options)
       .map(
         (res)  => {
-          try {
-            let data = res
-            // User has access!
-            if (data['status'] === true) {
-              // User is authorized - if you want to check ipAuth then you can tell on the individual route by user.isLoggedIn = false
-              let user = data['user']
-              user.status = data['status']
-              if (data['isRememberMe'] || data['remoteaccess']) {
-                user.isLoggedIn = true
-              }
-              if (this.canUserAccess(user)) {
-                this.saveUser(user)
-              } else {
-                this.saveUser({})
-                this._router.navigate(['/login'])
-              }
+          let data = res
+          // User has access!
+          if (data['status'] === true && data['user'].username == currentUsername) {
+            // User is authorized - if you want to check ipAuth then you can tell on the individual route by user.isLoggedIn = false
+            let user = data['user']
+            user.status = data['status']
+            if (data['isRememberMe'] || data['remoteaccess']) {
+              user.isLoggedIn = true
             }
-            
-            if (
-              data['status'] === false // User does not have access!
-              ||
-              data['user'].username != currentUsername
-            ) {
-              // Clear user, and trigger router canActivate
-              this.saveUser({})
-              triggerSessionExpModal && this.showUserInactiveModal.next(true)
+            if (this.canUserAccess(user)) {
+              this.saveUser(user)
+            } else {
+              this._router.navigate(['/login'])
+              this.logoutUser()
             }
-            return data
-          } catch (err) {
-            console.error(err)
+          } else {
+            // Clear user, and trigger router canActivate
+            this.logoutUser()
+            triggerSessionExpModal && this.showUserInactiveModal.next(true)
           }
+          return data
         }
       )
   }

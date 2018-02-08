@@ -8,7 +8,7 @@ export class Tag {
   isCollapsed: boolean = false;
   canOpen: boolean = false;
   parentTag: Tag;
-  /** object with assignable properties to be stored by the tag 
+  /** object with assignable properties to be stored by the tag
    *  common properties:
    *  isFolder : true/false
    *  label : 'group' or 'collection'
@@ -26,7 +26,7 @@ export class Tag {
   /** has getters and setters - allows implementation to determine when touched is set */
   touched: boolean = false;
 
-  //type can be: 'collection', 'category', or 'subcategory'
+  //type can be: 'collection' or 'category'
   constructor(tagId: string, title: string, isCollapsed?: boolean, parentTag?: Tag, type?: any, canOpen ?: boolean) {
     this.tagId = tagId;
     this.title = title;
@@ -41,7 +41,7 @@ export class Tag {
     } else {
       this.type = {label: 'category'};
     }
-    
+
     this.levelsDeep = this.setLevel();
   }
 
