@@ -50,6 +50,7 @@ export class AssetPage implements OnInit, OnDestroy {
     private showCopyUrl: boolean = false
     private generatedImgURL: string = ''
     private generatedViewURL: string = ''
+    private generatedFullURL: string = ''
     // Used for agree modal input, changes based on selection
     private downloadUrl: string = ''
     private prevRouteParams: any = []
@@ -284,12 +285,8 @@ export class AssetPage implements OnInit, OnDestroy {
                 this.generateImgURL();
             }
         }
-    }
-    /**
-     * Render Asset once its loaded
-     */
-    renderPrimaryAsset(asset: Asset) {
-       
+        // Set download link
+        this.setDownloadFull()
     }
 
     /**
@@ -604,15 +601,23 @@ export class AssetPage implements OnInit, OnDestroy {
     }
 
     /**
+     * Set full image download url
+     */
+    setDownloadFull() : void {
+        let url = this.assets[0].downloadLink;
+        if (this.assetGroupId) {
+            url = url + "&groupId=" + this.assetGroupId
+        }
+        this.generatedFullURL = url
+    }
+
+    /**
      * Function called if not yet agreed to download image
      * - sets url used by agree modal
      */
     setDownloadImage() : void {
-        this.downloadUrl = this.assets[0].downloadLink;
+        this.downloadUrl = this.generatedFullURL;
         this.showAgreeModal = true;
-        // Track download
-        this._analytics.directCall('download_image');
-        this.angulartics.eventTrack.next({ action:"downloadAsset", properties: { category: "asset", label: this.assets[0].id }});
     }
 
     /**
@@ -622,17 +627,18 @@ export class AssetPage implements OnInit, OnDestroy {
     setDownloadView() : void {
         this.downloadUrl = this.generatedViewURL;
         this.showAgreeModal = true;
-        // Track download view
-        this._analytics.directCall('download_view');
-        this.angulartics.eventTrack.next({ action:"downloadView", properties: { category: "asset", label: this.assets[0].id }});
     }
 
     trackDownloadImage() : void {
-      this._analytics.directCall('download_image');
+        // Track download
+        this._analytics.directCall('download_image');
+        this.angulartics.eventTrack.next({ action:"downloadAsset", properties: { category: "asset", label: this.assets[0].id }});
     }
 
     trackDownloadView() : void {
-      this._analytics.directCall('download_view');
+        // Track download view
+        this._analytics.directCall('download_view');
+        this.angulartics.eventTrack.next({ action:"downloadView", properties: { category: "asset", label: this.assets[0].id }});
     }
 
     /**
