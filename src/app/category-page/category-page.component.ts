@@ -25,7 +25,6 @@ export class CategoryPage implements OnInit, OnDestroy {
   private catName: string;
   private catDescription: string;
   private catThumbnail: string;
-  private allowSearchInRes: boolean = true;
 
   private subscriptions: Subscription[] = [];
 
@@ -46,9 +45,6 @@ export class CategoryPage implements OnInit, OnDestroy {
     this.subscriptions.push(
       this.route.params.subscribe((routeParams) => {
         this.catId = routeParams['catId'];
-
-        this.allowSearchInRes = routeParams.browseType && !routeParams.browseType.match(/260|250|103/)
-
         let params = Object.assign({}, routeParams);
         // If a page number isn't set, reset to page 1!
         if (!params['page']){
