@@ -299,11 +299,13 @@ export class AssetPage implements OnInit, OnDestroy {
         if (!isFullscreen) {
             this.showAssetDrawer = false
             if (this.originPage > 0 && this.pagination.page !== this.originPage) {
-              this.pagination.page = this.originPage;
-              this._assets.loadAssetPage(this.pagination.page);
+              this.pagination.page = this.originPage
+              this._assets.loadAssetPage(this.pagination.page)
             }
+            this.assets.splice(1)
+            this.assetIds.splice(1)
         }
-        this.isFullscreen = isFullscreen;
+        this.isFullscreen = isFullscreen
     }
 
     /**
@@ -488,7 +490,7 @@ export class AssetPage implements OnInit, OnDestroy {
 
     // Exit Presentation / Fullscreen mode and reset assets comparison array
     private exitPresentationMode(): void{
-        this.assets.splice(1);
+        
         for(let i = 0; i < this.prevAssetResults.thumbnails.length; i++){
             this.prevAssetResults.thumbnails[i].selected = false;
         }
