@@ -69,7 +69,16 @@ export class TagsService {
       collectionId = tag.tagId;
     }
     
-    if (tag.type.label === "group") {
+    if (collectionId || tag.type.label === "collection") {
+      return this._assets.category(collectionId)
+        .then((data) => {
+          for(let category of data['Categories']) {
+            let categoryTag = new Tag(category.widgetId, category.title, true, tag, { label: "category", folder: category.isFolder }, category['enableDblClick'] );
+            childArr.push(categoryTag);
+          }
+          return childArr;
+        });
+    } else if (tag.type.label === "group") {
       // Image Group folders come through with ugly widgetIds
       let tagId = tag.tagId.replace('fldr_','');
 
@@ -85,6 +94,22 @@ export class TagsService {
               groupTag.setDescription(group.igDesc);
             }
             childArr.push(groupTag);
+          }
+          return childArr;
+        });
+    } else {
+      return this._assets.subcategories(tag.tagId)
+        .then((data) => {
+          let arr: any = data;
+          for(let category of arr) {
+            let categoryTag;
+            if (category.grpId) {
+              categoryTag = new Tag(category.grpId, category.title, true, tag, { label: "group", folder: false }, category['enableDblClick']);
+            } else {
+              categoryTag = new Tag(category.widgetId, category.title, true, tag, { label: "subcategory", folder: category.isFolder }, category['enableDblClick']);
+            }
+
+            childArr.push(categoryTag);
           }
           return childArr;
         });
