@@ -4,7 +4,7 @@
     .mobile--hide.grid-tool-bar([ngClass]="[ reorderMode ? 'col-12' : 'col-sm-8 col-md-8 col-lg-9']")
       .row.no-gutters
         .col-12(*ngIf="!reorderMode")
-          li.sortlist.dropdown(*ngIf="!actionOptions.associated && !actionOptions.group && !(actionOptions.category && totalAssets >= 2000) && !(actionOptions.collection && totalAssets >= 2000)", ngbDropdown)
+          li.sortlist.dropdown(*ngIf="!actionOptions.associated && !actionOptions.group", ngbDropdown)
             button#sortdropdownMenu.btn.btn-link(ngbDropdownToggle) Sort:
               = " "
               span.value {{ activeSort.label ? activeSort.label : 'Relevance' }}
