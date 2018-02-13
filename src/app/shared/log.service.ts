@@ -10,7 +10,7 @@ export class LogService {
     private _auth: AuthService
   ) { }
 
-  public log(message: any): void { // message is only typed as any because we want to log anything that is sent
+  public log(message: LogMessage): void { // message is only typed as any because we want to log anything that is sent
     this._http.post<LogResponse>(
       [this._auth.getUrl(), 'v1', 'log'].join('/'),
       message,
@@ -26,5 +26,12 @@ export class LogService {
 }
 
 interface LogResponse {
+  // I didn't take the time to detail this because we don't use it
+}
 
+interface LogMessage {
+  eventType: string
+  item_id?: string
+  referring_requestid?: string
+  additional_fields?: any
 }
