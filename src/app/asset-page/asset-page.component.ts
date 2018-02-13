@@ -491,6 +491,16 @@ export class AssetPage implements OnInit, OnDestroy {
             asset.selected = true;
             this.assetIds.push(asset[this.assetIdProperty]);
         }
+
+        // log compared assets
+        this._log.log({
+            eventType: "aiw_image_compare",
+            item_id: assetId,
+            additional_fields: {
+                compared_assets: this.assetIds,
+                action: add ? 'add' : 'remove'
+            }
+        })
     }
 
     // Exit Presentation / Fullscreen mode and reset assets comparison array
