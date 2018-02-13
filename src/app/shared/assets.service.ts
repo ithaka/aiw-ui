@@ -769,24 +769,7 @@ export class AssetService {
                     return <categoryName[]>[]
                 }
             })
-    }
-
-    public category(catId: string) {
-        let options = { withCredentials: true };
-
-        return this.http
-            .get(this._auth.getHostname() + '/api/collections/' + catId + '/categoryroot', options)
-            .toPromise()
-    }
-
-    public subcategories(id) {
-        let options = { withCredentials: true };
-
-        return this.http
-            .get(this._auth.getHostname() + '/api/categories/' + id + '/subcategories', options)
-            .toPromise()
-    }
-    
+    }    
 
     public categoryByFacet(facetName: string, collectionType ?: number) : Promise<SolrFacet[]> {
       let options = { withCredentials: true };
