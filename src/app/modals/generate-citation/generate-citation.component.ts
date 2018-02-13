@@ -2,6 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core'
 import { DatePipe } from '@angular/common'
 
 import { Asset } from '../../asset-page/asset'
+import { LogService } from '../../shared'
 
 @Component({
   selector: 'ang-generate-citation',
@@ -23,11 +24,16 @@ export class GenerateCitation implements OnInit {
   private citationCopied: boolean = false
 
   constructor( 
-    private _date: DatePipe
+    private _date: DatePipe,
+    private _log: LogService
   ) { }
 
   ngOnInit() {
     this.generateCitations(this.asset)
+    this._log.log({
+      eventType: 'artstor_aiw_citation',
+      item_id: this.asset.artstorid
+    })
   }
   
   /**
