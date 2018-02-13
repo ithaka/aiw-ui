@@ -410,11 +410,7 @@ export class AssetService {
                 } else if (params.hasOwnProperty("objectId") && params["objectId"] !== "") {
                     //get clustered images thumbnails
                     this.loadCluster(params.objectId);
-                } else if (params.hasOwnProperty("catId")  && params["catId"] !== "") {
-                    // To load category assets pass the 'catId' as 'query/searchTerm' parameter
-                    let searchTerm = 'categoryid:' + params["catId"];
-                    this.loadSearch(searchTerm);
-                }  else if (params.hasOwnProperty("pcolId") && params["pcolId"] !== "") {
+                } else if (params.hasOwnProperty("pcolId") && params["pcolId"] !== "") {
                     //get personal collection thumbnails
                     this.loadCollection(params.pcolId);
                 }  else if (params.hasOwnProperty("colId") && params["colId"] !== "") {
@@ -422,7 +418,12 @@ export class AssetService {
                     let searchTerm = params.term ? params.term : '';
                     this.loadSearch(searchTerm);
                 } else if (params.hasOwnProperty("term")) {
-                    this.loadSearch(params.term);
+                    let searchTerm = params.term ? params.term : '';
+                    // Search within Categories
+                    if (params.hasOwnProperty("catId")  && params["catId"] !== "") {
+                        searchTerm = searchTerm + ' categoryid:' + params["catId"];
+                    }
+                    this.loadSearch(searchTerm);
                 } else {
                     console.error("Don't know what to query!");
                 }
