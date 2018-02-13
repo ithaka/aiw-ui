@@ -25,18 +25,6 @@ export class TagsService {
   }
 
   /**
-   * This is the call that the tag.component uses to get child tags
-   * @param tag tag.type.label should contain the value which lets TagsService know which function to call
-   * @returns a chanable promise, resolved with an array of tags
-   */
-  public getChildTags(tag: Tag): Promise<Tag[]> {
-    if (tag.type && tag.type.label) {
-      let label = tag.type.label;
-      return this.getCategories(tag);
-    }
-  }
-
-  /**
    * Called by initTags
    * @returns a chainable promise, resolved with an array of tags
    */

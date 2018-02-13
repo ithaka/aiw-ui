@@ -60,27 +60,4 @@ export class TagComponent {
   private cleanTitle(title: string): string {
     return title.replace(/[\(\)]/g,'');
   }
-
-  /**
-   * Sends tag to tagService in order to retrieve and assign child tags
-   */
-  private getChildren(): void {
-    // only want to make the http call once, and then the info will be stored on the tag
-    if (!this.tag.touched) {
-      //make sure the tag has a type and a type.label, which getTags uses as a switch
-      if (this.tag.type && this.tag.type.label) {
-        this.loading = true;
-        this._tags.getChildTags(this.tag)
-          .then((tags) => {
-            this.loading = false;
-            this.tag.setChildren(tags);
-          })
-          .catch((err) => {
-            this.loading = false;
-            console.error(err);
-          });
-      }
-    }
-
-  }
 }
