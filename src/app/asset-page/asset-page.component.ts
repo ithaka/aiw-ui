@@ -545,12 +545,12 @@ export class AssetPage implements OnInit, OnDestroy {
                 this.prevAssetResults.thumbnails[i].selected = false;
             }
         }
-        // this._log.log({
-        //     eventType: "artstor_quiz_toggle",
-        //     additional_fields: {
-        //         value: this.quizMode ? 'on' : 'off'
-        //     }
-        // })
+        this._log.log({
+            eventType: "artstor_quiz_toggle",
+            additional_fields: {
+                value: this.quizMode ? 'on' : 'off'
+            }
+        })
     }
 
     private toggleQuizShuffle(): void{
