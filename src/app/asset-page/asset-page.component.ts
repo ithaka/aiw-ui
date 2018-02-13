@@ -7,7 +7,14 @@ import { ArtstorViewer } from 'artstor-viewer'
 
 // Project Dependencies
 import { Asset } from './asset'
-import { AuthService, AssetService, AssetSearchService, GroupService, CollectionTypeHandler } from './../shared'
+import {
+    AuthService,
+    AssetService,
+    AssetSearchService,
+    GroupService,
+    CollectionTypeHandler,
+    LogService
+} from './../shared'
 import { AnalyticsService } from '../analytics.service'
 import { TitleService } from '../shared/title.service'
 
@@ -87,6 +94,7 @@ export class AssetPage implements OnInit, OnDestroy {
         private _search: AssetSearchService,
         private _group: GroupService,
         private _auth: AuthService,
+        private _log: LogService,
         private route: ActivatedRoute,
         private _router: Router,
         private locker: Locker,
@@ -537,6 +545,12 @@ export class AssetPage implements OnInit, OnDestroy {
                 this.prevAssetResults.thumbnails[i].selected = false;
             }
         }
+        this._log.log({
+            eventType: "artstor_quiz_toggle",
+            additional_fields: {
+                value: this.quizMode ? 'on' : 'off'
+            }
+        })
     }
 
     private toggleQuizShuffle(): void{
