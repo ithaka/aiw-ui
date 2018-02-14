@@ -109,6 +109,7 @@ import { HTTP_INTERCEPTORS } from '@angular/common/http'
 import { UnauthorizedInterceptor } from './interceptors'
 
 import { LinkifyPipe } from './shared/linkify.pipe'
+import { KeysPipe } from './shared/keys.pipe'
 import { CustomUrlSerializer } from './shared/custom-url-serializer'
 
 
@@ -202,6 +203,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     ThumbnailComponent,
     TypeIdPipe,
     LinkifyPipe,
+    KeysPipe,
     MediumEditorDirective
   ],
   imports: [ // import Angular's modules
