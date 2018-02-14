@@ -32,7 +32,7 @@ export class GenerateCitation implements OnInit {
     this.generateCitations(this.asset)
     this._log.log({
       eventType: 'artstor_aiw_citation',
-      item_id: this.asset.artstorid
+      item_id: this.asset.id
     })
   }
   
@@ -110,13 +110,16 @@ export class GenerateCitation implements OnInit {
    */
   private getMetaValue(field: string): string{
     let value: string = ''
-    for(let obj of this.asset.formattedMetaArray){
-      if(obj.fieldName === field){
-        for(let val of obj.fieldValue){
-          value += value ? ', ' + val : val
+    for(let property in this.asset.formattedMetadata){
+      if(this.asset.formattedMetadata.hasOwnProperty(property)) {
+        let values = this.asset.formattedMetadata[property]
+        if(property === field){
+          for(let val of values){
+            value += value ? ', ' + val : val
+          }
+          break;
         }
-        break;
-      }
+      } 
     }
     return value
   }

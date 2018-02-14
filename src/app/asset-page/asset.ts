@@ -4,299 +4,273 @@ import { BehaviorSubject, Observable } from 'rxjs/Rx';
 import { AssetService, AuthService } from './../shared';
 
 export class Asset {
-  private _assets: AssetService;
-  private _auth: AuthService;
+  id: string
+    groupId: string
+    typeId: number // determines what media type the asset is
+    typeName: string // the name correlating to the typeId
+    title: string
+    thumbnail_url: string
+    thumbnail_size: number = 3
+    kalturaUrl: string
+    downloadLink: string
+    downloadName: string
+    tileSource: string
+    // Not reliably available
+    collectionId: number
+    SSID: string
+    fileName: string
 
-  id: string;
-  artstorid: string;
-  groupId: string;
-  /** typeId determines what media type the asset is */
-  typeId: number;
-  title: string;
-  creator: string;
-  date: string;
-  imgURL: string;
-  fileExt: string;
-  downloadLink: string;
-  downloadName: string
-  tileSource: any;
-  record: any;
-  collectionName: string = ''
-  collectionType: number
-  // Not reliably available
-  collectionId: number
-  SSID: string
-  fileName: string
+    viewportDimensions: {
+        contentSize?: any,
+        zoom?: number,
+        containerSize?: any,
+        center?: any
+    } = {}
 
-  viewportDimensions: {
-      contentSize?: any,
-      zoom?: number,
-      containerSize?: any,
-      center?: any
-  } = {}
+//   private dataLoadedSource = new BehaviorSubject<boolean>(false)
+//   public isDataLoaded = this.dataLoadedSource.asObservable()
 
-  // If an asset failes to load, it comes in with an error property
-  error: HttpErrorResponse
+    public disableDownload: boolean = false
 
-  private dataLoadedSource = new BehaviorSubject<boolean>(false);
-  public isDataLoaded = this.dataLoadedSource.asObservable();
+    /** Used for holding asset file properties array from the service response */
+    filePropertiesArray: FileProperty[] = []
+    /** Used for holding formatted asset metadata from the service response */
+    formattedMetadata: FormattedMetadata = {}
 
-  public disableDownload: boolean = false;
-
-  /** Used for holding asset metadata array from the service response */
-  metaDataArray: any = [];
-  /** Used for holding asset file properties array from the service response */
-  filePropertiesArray: any = [];
-  /** Used for holding formatted asset metadata from the service response */
-  formattedMetaArray: any = [];
-
-  /** Used for holding media resolver info from the service response */
-  viewerData?: {
-    base_asset_url?: string,
-    panorama_xml?: string
-  }
-
-  private objectTypeNames: any = {
-      1: 'specimen',
-      2: 'visual',
-      3: 'use',
-      6: 'publication',
-      7: 'synonyms',
-      8: 'people',
-      9: 'repository',
-      10: 'image',
-      11: 'panorama',
-      12: 'audio',
-      13: '3d',
-      20: 'pdf',
-      21: 'powerpoint',
-      22: 'document',
-      23: 'excel',
-      24: 'kaltura'
-  };
-
-  metadataFields = [
-        "arttitle",
-        "artclassification",
-        "artcollectiontitle",
-        "artcreator",
-        "artculture",
-        "artcurrentrepository",
-        "artcurrentrepositoryidnumber",
-        "artdate",
-        "artidnumber",
-        "artlocation",
-        "artmaterial",
-        "artmeasurements",
-        "artrelation",
-        "artrepository",
-        "artsource",
-        "artstyleperiod",
-        "artsubject",
-        "arttechnique",
-        "artworktype"
-    ];
-
-  constructor(asset_id: string, _assets ?: AssetService, _auth ?: AuthService, assetObj ?: any, groupId ?: string) {
-    this.id = this.artstorid = asset_id
-    this.groupId = groupId
-    this._assets = _assets
-    this._auth = _auth
-
-    if (assetObj) {
-        this.title = assetObj.tombstone[0]
-        // Unpack metadata_json from /resolve call
-        if (assetObj.metadata && assetObj.metadata[0] && assetObj.metadata[0]['metadata_json']) {
-            this.metaDataArray = assetObj.metadata[0]['metadata_json']
-        } else {
-            this.metaDataArray = [{
-                    fieldName : 'Title',
-                    fieldValue : assetObj.tombstone[0]
-                },{
-                    fieldName : 'Creator',
-                    fieldValue : assetObj.tombstone[1]
-                },
-                {
-                    fieldName : 'Date',
-                    fieldValue : assetObj.tombstone[2]
-                }
-            ]
-        }
-        if (assetObj.metadata) {
-            this.collectionId = assetObj.metadata.collection_id
-            this.imgURL = assetObj.metadata.thumbnail_url
-            this.typeId = assetObj.metadata.object_type_id
-        }
-        this.formatMetadata()
-        // Already has image source info attached
-        setTimeout(() => {
-            this.setAssetProperties(assetObj)
-        },500)
-    } else {
-        this.loadMediaMetaData();
+    /** Used for holding media resolver info from the service response */
+    viewerData?: {
+        base_asset_url?: string,
+        panorama_xml?: string
     }
-  }
 
-  /**
-   * Get name for Object Type
-   */
-  public typeName(): string {
-      return this.objectTypeNames[this.typeId];
-  }
-
-  private formatMetadata(){
-    let metaArray = [];
-    // loop through all of the metadata we get from the service
-    for(let data of this.metaDataArray){
-        let fieldExists = false;
-
-        // if the fieldName matches, we store all the data under one object here
-        for(let metaData of metaArray){
-            if(metaData['fieldName'] === data.fieldName){
-                metaData['fieldValue'].push(data.fieldValue);
-                fieldExists = true;
-                break;
-            }
+    constructor(assetData: AssetData) {
+        if (!assetData) {
+            throw new Error('No data passed to construct asset')
         }
+        this.initAssetProperties(assetData)
+    }
 
-        // if there was no match to the fieldName above, we create a field and begin collating metadata beneath it
-        if(!fieldExists){
-            let fieldObj = {
-                'fieldName': data.fieldName,
-                'fieldValue': []
-            }
-            // see Air-826 - sometimes the data has a link property, which can vary from fieldValue, but
-            //  the institution actually wanted the fieldValue to be the same as the link... so that's what this does
+    private formatMetadata(metadata: MetadataField[]): FormattedMetadata {
+        let formattedData: FormattedMetadata = {}
+        for (let data of metadata) {
+            // this is stupid, but if there's a link then it needs to be assigned to the fieldValue
             if (data.link) {
                 data.fieldValue = data.link
             }
 
-            fieldObj['fieldValue'].push(data.fieldValue);
-            metaArray.push(fieldObj);
+            // if the field exists, add to it
+            if (formattedData[data.fieldName]) {
+                formattedData[data.fieldName].push(data.fieldValue)
+            } else { // otherwise make a new field
+                formattedData[data.fieldName] = [data.fieldValue]
+            }
         }
-
+        return formattedData
     }
 
-    this.formattedMetaArray = metaArray;
-  }
-
-  /**
-   * Searches through the metaDataArray for the asset's collection name
-   * @returns The name of the asset's collection or undefined
-   */
-  private getCollectionName(): string {
-    let len = this.metaDataArray.length
-    for (let i = 0; i < len; i++) {
-        if (this.metaDataArray[i].fieldName == "Collection") {
-            return this.metaDataArray[i].fieldValue
+    private buildDownloadLink(data: AssetData): string {
+        let downloadLink: string
+        switch (data.object_type_id) {
+            case 20:
+            case 21:
+            case 22:
+            case 23:
+                downloadLink = [data.baseUrl + 'media', data.object_type_id, data.object_type_id].join("/")
+                break
+            default:
+                if (data.image_url) { //this is a general fallback, but should work specifically for images and video thumbnails
+                    let imageServer = 'http://imgserver.artstor.net/' // TODO: check if this should be different for test
+                    let url = imageServer + data.image_url + "?cell=" + data.download_size + "&rgnn=0,0,1,1&cvt=JPEG"
+                    downloadLink = data.baseUrl + "api/download?imgid=" + this.id + "&url=" + encodeURIComponent(url)
+                } else {
+                    // nothing happens here because some assets are not allowed to be downloaded
+                }
         }
+        return downloadLink
     }
-  }
 
-  /** Set Creator and Date for the asset from the metadata Array; to be used for tombstone data on fullscreen mode */
-  private setCreatorDate(): void {
-      for(var i = 0; i < this.metaDataArray.length; i++){
-          if(this.metaDataArray[i].fieldName == 'Creator'){
-              this.creator = this.metaDataArray[i].fieldValue;
-              document.querySelector('meta[name="DC.creator"]').setAttribute('content', this.creator);
-          }
-          else if(this.metaDataArray[i].fieldName == 'Date'){
-              this.date = this.metaDataArray[i].fieldValue;
-              document.querySelector('meta[name="DCTERMS.issued"]').setAttribute('content', this.date);
-          }
-          else if(this.metaDataArray[i].fieldName == 'Description'){
-              document.querySelector('meta[name="DC.description"]').setAttribute('content', this.metaDataArray[i].fieldValue);
-          }
-      }
-  }
+    /**
+     * Sets the correct typeName based on a map
+     * @param typeId the asset's object_type_id
+     */
+    private initTypeName(typeId: number): string {
+        let objectTypeNames: { [key: number]: string } = {
+            1: 'specimen',
+            2: 'visual',
+            3: 'use',
+            6: 'publication',
+            7: 'synonyms',
+            8: 'people',
+            9: 'repository',
+            10: 'image',
+            11: 'panorama',
+            12: 'audio',
+            13: '3d',
+            21: 'powerpoint',
+            22: 'document',
+            23: 'excel',
+            24: 'kaltura'
+        }
+        return objectTypeNames[typeId]
+    }
 
-  /**
-   * Sets up the Asset object with needed properties
-   * - Behaves like a delayed constructor
-   * - Reports status via 'this.dataLoadedSource' observable
-   */
-  private setAssetProperties(data: any): void {
-    // Make sure we've received data that we expect from /metadata
-    if (!data || !data.metadata || !data.metadata[0]) {
-        // We can assume the user was unauthorized if no metadata came back but an error wasn't thrown
-        this.dataLoadedSource.error({'message':'Unable to load metadata.', 'status':403 })
-        return
-    } else {
-        data = data.metadata[0]
+    get creator(): string {
+        return this.formattedMetadata.Creator[0] || ''
     }
-    // Set array of asset metadata fields to Asset, and format
-    if (data['metadata_json']) {
-        this.metaDataArray =  data['metadata_json']
-        this.formatMetadata();
+    get date(): string {
+        return this.formattedMetadata.Date[0] || ''
     }
-    // Set Title
-    // - Optional: We can come through the metadata array to find the title: let title = this.metaDataArray.find(elem => elem.fieldName.match(/^\s*Title/))
-    this.title = data.title && data.title !== "" ? data.title : 'Untitled'
-    // Set Creator, Date, and Description
-    this.setCreatorDate();
-    // Set File Properties to Asset
-    this.filePropertiesArray = data.fileProperties || [];
-    // Set media data to Asset
-    this.imgURL = data['thumbnail_url']
-    this.typeId = data['object_type_id']
-    // Set Collection Name
-    this.collectionName = this.getCollectionName()
-    // Set Download information
-    this.downloadName = this.title.replace(/\./g,'-') + '.' + this.fileExt
-    let downloadSize = data.downloadSize || data.download_size || '1024,1024'
-    this.disableDownload =  downloadSize === '0,0'
-    // set SSID and fileName
-    this.SSID = data.SSID
-    if (data.fileProperties) {
+    get description(): string {
+        return this.formattedMetadata.Description[0] || ''
+    }
+    get collectionName(): string {
+        return this.formattedMetadata.Collection[0] || ''
+    }
+
+    /**
+     * Sets up the Asset object with needed properties
+     * - Behaves like a delayed constructor
+     * - Reports status via 'this.dataLoadedSource' observable
+     */
+    private initAssetProperties(data: AssetData): void {
+        // Set array of asset metadata fields to Asset, and format
+        if (data.metadata_json) {
+            this.formattedMetadata = this.formatMetadata(data.metadata_json)
+        }
+        this.id = data.object_id
+        this.typeId = data.object_type_id
+        this.title = data.title
+        this.filePropertiesArray = data.fileProperties
+        // we control the default size of the thumbnail url
+        this.thumbnail_url = this.replaceThumbnailSize(data.thumbnail_url, this.thumbnail_size)
+        this.typeId = data.object_type_id
+        this.typeName = this.initTypeName(data.object_type_id)
+        this.disableDownload =  data.download_size === '0,0'
+        this.SSID = data.SSID
         this.fileName = data.fileProperties.find((obj) => {
             return !!obj.fileName
         }).fileName
-    }
-    // Set Object Type ID
-    this.typeId = data.object_type_id || data.objectTypeId;
-    // Build Download Link
-    // - Download link is differs based on typeIds
-    let imageServer = data.imageServer || 'http://imgserver.artstor.net/'
-    if (this.typeId === 20 || this.typeId === 21 || this.typeId === 22 || this.typeId === 23) { //all of the typeIds for documents
-        this.downloadLink = [this._auth.getMediaUrl(), this.id, this.typeId].join("/");
-    } else if (imageServer && data.image_url) { //this is a general fallback, but should work specifically for images and video thumbnails
-        let url = imageServer + data.image_url + "?cell=" + downloadSize + "&rgnn=0,0,1,1&cvt=JPEG";
-        this.downloadLink = this._auth.getHostname() + "/api/download?imgid=" + this.id + "&url=" + encodeURIComponent(url);
+        // Set Download information
+        let fileExt = this.fileName.substr(this.fileName.lastIndexOf('.'), this.fileName.length - 1)
+        this.downloadName = this.title.replace(/\./g,'-') + '.' + fileExt
+        this.downloadLink = this.buildDownloadLink(data)
+        data.viewer_data && (this.viewerData = data.viewer_data)
+
+        // Save the Tile Source for IIIF
+        //  sometimes it doesn't come back with .fpx, so we need to add it
+        let imgPath
+        if (data.image_url.lastIndexOf('.fpx') > -1) {
+            imgPath = '/' + data.image_url.substring(0, data.image_url.lastIndexOf('.fpx') + 4)
+        } else {
+            imgPath = '/' + data.image_url
+        }
+        this.tileSource = data.tileSourceHostname + '/rosa-iiif-endpoint-1.0-SNAPSHOT/fpx' + encodeURIComponent(imgPath) + '/info.json'
+
+        // set up kaltura info if it exists
+        if (data.fpxInfo) {
+            this.kalturaUrl = data.fpxInfo.imageUrl
+        }
     }
 
-    // Set the media resolver info for QTVR assets
-    if( data.viewer_data ){
-        this.viewerData = data.viewer_data
+    /**
+     * Sometimes the thumbnail url will not exist and we need to fall back to a different thumbnail size
+     */
+    public fallbackThumbnailUrl(): void {
+        if (this.thumbnail_size > 0) {
+            this.thumbnail_size --
+            this.thumbnail_url = this.replaceThumbnailSize(this.thumbnail_url, this.thumbnail_size)
+        }
     }
 
-    // Save the Tile Source for IIIF
-    let imgPath
-    if (data && data.metadata && data.metadata[0] && data.metadata[0]['image_url']) {
-        imgPath = '/' + data.metadata[0]['image_url']
-    } else {
-        imgPath = '/' + data['image_url'].substring(0, data['image_url'].lastIndexOf('.fpx') + 4)
+    private replaceThumbnailSize(url: string, size: number): string {
+        return url.replace(/(size)[0-9]/g, 'size' + size)
     }
-    this.tileSource = this._auth.getIIIFUrl() + encodeURIComponent(imgPath) + '/info.json'
-    this.dataLoadedSource.next(true);
+}
+
+
+export interface MetadataResponse {
+  metadata: AssetDataResponse[]
+  success: boolean
+  total: 1 // the total number of items returned
+}
+
+export interface AssetData {
+  groupId?: string
+  SSID?: string
+  category_id: string
+  category_name: string
+  collection_id: string
+  collection_name: string
+  collection_type: number
+  download_size: string
+  fileProperties: FileProperty[] // array of objects with a key/value pair
+  height: number
+  image_url: string
+  metadata_json: MetadataField[]
+  object_id: string
+  object_type_id: number
+  resolution_x: number
+  resolution_y: number
+  thumbnail_url: string
+  tileSourceHostname: string
+  title: string
+  viewer_data?: {
+      base_asset_url?: string,
+      panorama_xml?: string
   }
+  width: number
+  baseUrl: string
+  fpxInfo?: ImageFPXResponse
+}
 
-  /**
-   * Pulls additional media metadata
-   * - Constructs a download link
-   * - Constructs the IIIF tile source URL
-   * - Finds the asset Type id
-  */
-  private loadMediaMetaData(): void {
-      this._assets.getMetadata( this.id, this.groupId )
-        .subscribe((data) => {
-            this.setAssetProperties(data)
-        }, (err) => {
-            // If it's an access denied error, throw that to the subscribers
-            if (err.status === 403) {
-                this._assets.unAuthorizedAsset.next( true )
-            }
-
-            this.dataLoadedSource.error( err )
-        });
+interface AssetDataResponse {
+  SSID?: string
+  category_id: string
+  category_name: string
+  collection_id: string
+  collection_name: string
+  collection_type: number
+  downloadSize?: string
+  download_size?: string
+  fileProperties: { [key: string]: string }[] // array of objects with a key/value pair
+  height: number
+  image_url: string
+  metadata_json: MetadataField[]
+  object_id: string
+  object_type_id: number
+  resolution_x: number
+  resolution_y: number
+  thumbnail_url: string
+  title: string
+  viewer_data: {
+    base_asset_url?: string,
+    panorama_xml?: string
   }
+  width: number
+}
+
+export interface MetadataField {
+  count: number // the number of fields with this name
+  fieldName: string
+  fieldValue: string
+  index: number
+  link?: string
+}
+
+export interface ImageFPXResponse {
+  height: number
+  id: {
+    fileName: string
+    resolution: number
+  }
+  imageId: string
+  imageUrl: string
+  resolutionX: number
+  resolutionY: number
+  width: number
+}
+
+export interface FileProperty { [key: string]: string }
+interface FormattedMetadata {
+    [fieldName: string]: string[]
 }
