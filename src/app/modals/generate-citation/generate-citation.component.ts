@@ -110,15 +110,13 @@ export class GenerateCitation implements OnInit {
    */
   private getMetaValue(field: string): string{
     let value: string = ''
-    for(let property in this.asset.formattedMetadata){
-      if(this.asset.formattedMetadata.hasOwnProperty(property)) {
-        let values = this.asset.formattedMetadata[property]
-        if(property === field){
-          for(let val of values){
-            value += value ? ', ' + val : val
-          }
-          break;
+    for(let property of Object.keys(this.asset.formattedMetadata)){
+      let values = this.asset.formattedMetadata[property]
+      if(property === field){
+        for(let val of values){
+          value += value ? ', ' + val : val
         }
+        break;
       } 
     }
     return value
