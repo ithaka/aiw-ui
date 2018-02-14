@@ -288,7 +288,7 @@ export class AssetPage implements OnInit, OnDestroy {
                 document.querySelector('meta[name="DC.type"]').setAttribute('content', 'Artwork');
                 document.querySelector('meta[name="DC.title"]').setAttribute('content', asset.title);
                 document.querySelector('meta[name="asset.id"]').setAttribute('content', asset.id);
-                let currentAssetId: string = this.assets[0].artstorid || this.assets[0]['objectId'] // couldn't trust the 'this.assetIdProperty' variable
+                let currentAssetId: string = this.assets[0].id || this.assets[0]['objectId'] // couldn't trust the 'this.assetIdProperty' variable
                 this.setCollectionType(currentAssetId)
                 this.generateImgURL();
             }
@@ -575,7 +575,7 @@ export class AssetPage implements OnInit, OnDestroy {
 
     private genDownloadViewLink() : void {
 
-        if(this.assets[0].typeName() === 'image' && this.assets[0].viewportDimensions.contentSize){
+        if(this.assets[0].typeName === 'image' && this.assets[0].viewportDimensions.contentSize){
             // Full source image size (max output possible)
             let fullWidth = this.assets[0].viewportDimensions.contentSize.x
             let fullY = this.assets[0].viewportDimensions.contentSize.y
