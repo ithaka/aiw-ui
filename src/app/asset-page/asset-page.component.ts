@@ -535,6 +535,9 @@ export class AssetPage implements OnInit, OnDestroy {
             this.showAssetCaption = true;
         }
         else{ // Enter Quiz mode
+            this._log.log({
+                eventType: "artstor_quiz_toggle"
+            })
             this.quizMode = true;
             this.showAssetCaption = false;
             this.toggleAssetDrawer(false);
@@ -545,12 +548,6 @@ export class AssetPage implements OnInit, OnDestroy {
                 this.prevAssetResults.thumbnails[i].selected = false;
             }
         }
-        this._log.log({
-            eventType: "artstor_quiz_toggle",
-            additional_fields: {
-                value: this.quizMode ? 'on' : 'off'
-            }
-        })
     }
 
     private toggleQuizShuffle(): void{
