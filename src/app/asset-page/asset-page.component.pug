@@ -74,7 +74,7 @@
               a#downloadViewLink.dropdown-item(download="view.jpg",
                 [attr.href]="(downloadAuth() && !assets[0].disableDownload) ? generatedViewURL : null",
                 (click)="(downloadAuth() && !assets[0].disableDownload) ? trackDownloadView() : setDownloadView()",
-                [class.disabled]="assets[0].disableDownload || assets[0].typeName() !== 'image'",
+                [class.disabled]="assets[0].disableDownload || assets[0].typeName !== 'image'",
                 target="_blank")
                 i.icon.icon-download-black
                 | Download View
@@ -93,14 +93,14 @@
             label {{ 'ASSET_PAGE.HEADER_LABELS.SHR_LNK' | translate}}
             input#generatedImgURL.form-control.form-control__copy(#copyUrlInput="", readonly, [ngModel]="generatedImgURL", (click)="copyUrlInput.select(); document.execCommand('copy', false, null)")
             .alert.alert-info(*ngIf="copyURLStatusMsg") {{ copyURLStatusMsg }}
-        .row-hdr.pt-3(*ngIf="assets[0].metaDataArray.length > 0") {{ 'ASSET_PAGE.HEADER_LABELS.OBJ_DETAILS' | translate}}
+        .row-hdr.pt-3(*ngIf="(assets[0].formattedMetadata | keys).length > 0") {{ 'ASSET_PAGE.HEADER_LABELS.OBJ_DETAILS' | translate}}
         .meta-block.collection-type-display(*ngIf="collectionType")
           i.icon(class="icon-{{collectionType.name}}", [attr.title]="collectionType.alt")
           | &nbsp; {{ collectionType.alt }}
         //- Old metadata loop
-        .meta-block(*ngFor="let metadataObj of assets[0].formattedMetaArray")
-          .label([attr.id]="cleanId(metadataObj.fieldName)") {{ metadataObj.fieldName }}
-          div(*ngFor="let value of metadataObj.fieldValue")
+        .meta-block(*ngFor="let fieldName of assets[0].formattedMetadata | keys")
+          .label([attr.id]="cleanId(fieldName)") {{ fieldName }}
+          div(*ngFor="let value of assets[0].formattedMetadata[fieldName]")
             .value([innerHTML]="cleanFieldValue(value) | linkify")
         .row-hdr.pt-3(*ngIf="assets[0].filePropertiesArray.length > 0") {{ 'ASSET_PAGE.HEADER_LABELS.FILE_PROPS' | translate}}
         //- Loop through File Properties Array
