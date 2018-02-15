@@ -652,7 +652,6 @@ export class AssetPage implements OnInit, OnDestroy {
     }
 
     trackDownloadView() : void {
-        console.log('tracking download view!')
         // Track download view
         this._log.log({
             eventType: "artstor_image_download_view",
