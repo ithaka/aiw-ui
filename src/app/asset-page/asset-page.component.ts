@@ -323,15 +323,20 @@ export class AssetPage implements OnInit, OnDestroy {
 
     // Calculate the index of current asset from the previous assets result set
     private currentAssetIndex(): number{
+        let assetIndex: number = 1
         if (this.assetIds[0]) {
             for(var i = 0; i < this.prevAssetResults.thumbnails.length; i++){
-                if(this.prevAssetResults.thumbnails[i] && this.prevAssetResults.thumbnails[i][this.assetIdProperty] == this.assetIds[0]){
-                    this.prevAssetResults.thumbnails[i].selected = true;
-                    return i;
+                // Select the thumbnail if its arstor_id is in assetIds
+                if( this.assetIds.indexOf( this.prevAssetResults.thumbnails[i][this.assetIdProperty] ) > -1 ){
+                    this.prevAssetResults.thumbnails[i].selected = true
+                    assetIndex = i
+                }
+                else{
+                    this.prevAssetResults.thumbnails[i].selected = false
                 }
             }
         }
-        return 1;
+        return assetIndex
     }
 
     private addAssetToIG(): void{
@@ -464,7 +469,7 @@ export class AssetPage implements OnInit, OnDestroy {
         }
         // remove from assets
         this.assets.forEach( (viewAsset, i) => {
-            if (asset[assetIdProperty] == viewAsset) {
+            if (asset[assetIdProperty] == viewAsset[assetIdProperty]) {
                 asset.selected = false;
                 this.assets.splice(i, 1);
                 add = false;
