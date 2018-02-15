@@ -7,7 +7,14 @@ import { ArtstorViewer } from 'artstor-viewer'
 
 // Project Dependencies
 import { Asset } from './asset'
-import { AuthService, AssetService, AssetSearchService, GroupService, CollectionTypeHandler } from './../shared'
+import {
+    AuthService,
+    AssetService,
+    AssetSearchService,
+    GroupService,
+    CollectionTypeHandler,
+    LogService
+} from './../shared'
 import { AnalyticsService } from '../analytics.service'
 import { TitleService } from '../shared/title.service'
 
@@ -87,6 +94,7 @@ export class AssetPage implements OnInit, OnDestroy {
         private _search: AssetSearchService,
         private _group: GroupService,
         private _auth: AuthService,
+        private _log: LogService,
         private route: ActivatedRoute,
         private _router: Router,
         private locker: Locker,
@@ -280,7 +288,7 @@ export class AssetPage implements OnInit, OnDestroy {
                 document.querySelector('meta[name="DC.type"]').setAttribute('content', 'Artwork');
                 document.querySelector('meta[name="DC.title"]').setAttribute('content', asset.title);
                 document.querySelector('meta[name="asset.id"]').setAttribute('content', asset.id);
-                let currentAssetId: string = this.assets[0].artstorid || this.assets[0]['objectId'] // couldn't trust the 'this.assetIdProperty' variable
+                let currentAssetId: string = this.assets[0].id || this.assets[0]['objectId'] // couldn't trust the 'this.assetIdProperty' variable
                 this.setCollectionType(currentAssetId)
                 this.generateImgURL();
             }
@@ -488,6 +496,16 @@ export class AssetPage implements OnInit, OnDestroy {
             asset.selected = true;
             this.assetIds.push(asset[this.assetIdProperty]);
         }
+
+        // log compared assets
+        this._log.log({
+            eventType: "artstor_aiw_image_compare",
+            item_id: assetId,
+            additional_fields: {
+                compared_assets: this.assetIds,
+                action: add ? 'add' : 'remove'
+            }
+        })
     }
 
     // Exit Presentation / Fullscreen mode and reset assets comparison array
@@ -542,6 +560,12 @@ export class AssetPage implements OnInit, OnDestroy {
                 this.prevAssetResults.thumbnails[i].selected = false;
             }
         }
+        // this._log.log({
+        //     eventType: "artstor_quiz_toggle",
+        //     additional_fields: {
+        //         value: this.quizMode ? 'on' : 'off'
+        //     }
+        // })
     }
 
     private toggleQuizShuffle(): void{
@@ -556,7 +580,7 @@ export class AssetPage implements OnInit, OnDestroy {
 
     private genDownloadViewLink() : void {
 
-        if(this.assets[0].typeName() === 'image' && this.assets[0].viewportDimensions.contentSize){
+        if(this.assets[0].typeName === 'image' && this.assets[0].viewportDimensions.contentSize){
             // Full source image size (max output possible)
             let fullWidth = this.assets[0].viewportDimensions.contentSize.x
             let fullY = this.assets[0].viewportDimensions.contentSize.y
@@ -611,7 +635,9 @@ export class AssetPage implements OnInit, OnDestroy {
     setDownloadFull() : void {
         let url = this.assets[0].downloadLink;
         if (this.assetGroupId) {
-            url = url + "&groupId=" + this.assetGroupId
+            // Group id needs to be passed to allow download for images accessed via groups
+            // - Binder prefers lowercase service url params
+            url = url + "&groupid=" + this.assetGroupId
         }
         this.generatedFullURL = url
     }
