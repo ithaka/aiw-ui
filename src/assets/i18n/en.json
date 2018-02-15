@@ -93,7 +93,8 @@
       "EXT": "Exit",
       "COMPARE": "Compare",
       "GET_IAP": "Request IAP",
-      "REPORT_ERROR": "Report Error"
+      "REPORT_ERROR": "Report Error",
+      "ADD_TO_GROUP" : "Add to Group"
     },
     "LINKS":{
       "BACK": "Back to Results"
