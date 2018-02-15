@@ -660,6 +660,10 @@ export class AssetPage implements OnInit, OnDestroy {
 
     trackDownloadView() : void {
         // Track download view
+        this._log.log({
+            eventType: "artstor_image_download_view",
+            item_id: this.assets[0].id
+        })
         this._analytics.directCall('download_view');
         this.angulartics.eventTrack.next({ action:"downloadView", properties: { category: "asset", label: this.assets[0].id }});
     }
