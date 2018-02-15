@@ -14,7 +14,7 @@
     //- Asset Viewer Row
     .asset-col([ngClass]="[ isFullscreen ? 'fullscreen-container' : 'col-md-8', showAssetDrawer && isFullscreen ? 'drawer' : '' ]")
       artstor-viewer(*ngFor="let assetId of (isFullscreen ? assetIds : [assetIds[0]]); let i = index",
-        [altHostname]="_auth.getHostname() + '/'",
+        [testEnv]="_auth.getEnv() === 'test'",
         [assetId]="assetId",
         [groupId]="assetGroupId",
         (assetMetadata)="handleLoadedMetadata($event, i)",
