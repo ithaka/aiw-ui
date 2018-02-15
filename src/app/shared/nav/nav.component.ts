@@ -72,7 +72,6 @@ export class Nav implements OnInit, OnDestroy {
       this._auth.getInstitution().subscribe(
         (institutionObj) => {
           this.institutionObj = institutionObj;
-          console.log(this.institutionObj)
         },
         (err) => {
           console.error("Nav failed to load Institution information", err)
