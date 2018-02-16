@@ -265,7 +265,6 @@ export class AssetPage implements OnInit, OnDestroy {
     handleLoadedMetadata(asset: Asset, assetIndex: number) {
         if (asset && asset['error']) {
             let err = asset['error']
-            console.log(err)
             if (err.status === 403) {
                 // here is where we make the "access denied" modal appear
                 if (!this.hasExternalAccess) {
@@ -280,6 +279,10 @@ export class AssetPage implements OnInit, OnDestroy {
             } else {
                 // don't have a clue why this would happen, so just log it
                 console.error(err)
+                // WORKAROUND: We are getting 500s for denied access to institional assets
+                if (!this.hasExternalAccess && err.message == "Unable to load metadata!") {
+                    this.showAccessDeniedModal = true
+                }
             }
         } else {
             this.assets[assetIndex] = asset
