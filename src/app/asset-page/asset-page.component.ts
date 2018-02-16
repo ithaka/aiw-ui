@@ -458,17 +458,22 @@ export class AssetPage implements OnInit, OnDestroy {
 
      // Add or remove assets from Assets array for comparison in full screen
     private toggleAsset(asset: any): void {
-        let assetId = asset.id
+        // ADD or REMOVE to assets and assetIds arrays
         let add = true;
+        // Groups/items services use "objectid"
+        // Solr search uses "artstorid" — but also has an "id" we should ignore!
+        if (!asset.id || asset["artstorid"]) {
+            asset.id = asset["artstorid"] || asset["objectId"]
+        }
         // remove from assetIds
-        let assetIdIndex = this.assetIds.indexOf(assetId)
+        let assetIdIndex = this.assetIds.indexOf(asset.id)
         if(assetIdIndex > -1) {
             this.assetIds.splice(assetIdIndex, 1)
             add = false
         }
         // remove from assets
         this.assets.forEach( (viewAsset, i) => {
-            if (asset.id == viewAsset.id) {
+            if ( [viewAsset.id, viewAsset["artstorid"], viewAsset["objectId"]].indexOf(asset.id) > -1) {
                 asset.selected = false;
                 this.assets.splice(i, 1);
                 add = false;
@@ -498,7 +503,7 @@ export class AssetPage implements OnInit, OnDestroy {
         // log compared assets
         this._log.log({
             eventType: "artstor_aiw_image_compare",
-            item_id: assetId,
+            item_id: asset.id,
             additional_fields: {
                 compared_assets: this.assetIds,
                 action: add ? 'add' : 'remove'
