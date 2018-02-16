@@ -13,7 +13,7 @@ header.navbar.navbar-light
             .login-panel__status(*ngIf="user.isLoggedIn")
               h2.hidden Login Panel
               #navMessageWelcome Welcome, {{ user.username ? user.username : ''}}
-              #navMessageInstitution.login-panel__institution(*ngIf="institutionObj.shortName || institutionObj.institutionName") Institution: {{ institutionObj.shortName ? institutionObj.shortName : institutionObj.institutionName }}
+              #navMessageInstitution.login-panel__institution(*ngIf="institutionObj.displayName || institutionObj.institutionName") Institution: {{ institutionObj.displayName ? institutionObj.displayName : institutionObj.institutionName }}
               .login-panel__links
                 a.link--accent([routerLink]=" ['./account'] " routerLinkActive="active" tabindex="1") Settings
                 a.link--accent((click)="logout()" tabindex="1") Log Out
@@ -23,6 +23,6 @@ header.navbar.navbar-light
                 | &nbsp;or&nbsp;
                 a.link((click)="navigateAndSaveRoute('/register')" tabindex="1") Register
                 | &nbsp;to save images
-              div(*ngIf="institutionObj.shortName || institutionObj.institutionName")
-                | Institution: {{ institutionObj.shortName ? institutionObj.shortName : institutionObj.institutionName }}
+              div(*ngIf="institutionObj.displayName || institutionObj.institutionName")
+                | Institution: {{ institutionObj.displayName ? institutionObj.displayName : institutionObj.institutionName }}
 ang-session-expire-modal(*ngIf="showinactiveUserLogoutModal" "(closeModal)"="inactiveUsrLogOut()")

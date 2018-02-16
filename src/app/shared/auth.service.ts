@@ -195,7 +195,8 @@ export class AuthService implements CanActivate {
 
     // Initialize user and institution objects from localstorage
     this.userSource.next(this.getUser())
-    this.institutionObjSource.next(this._storage.get('institution') ? this._storage.get('institution') : {})
+    let institution = this._storage.get('institution')
+    if (institution) { this.institutionObjSource.next(institution) }
 
     /**
      * User Access Heartbeat
