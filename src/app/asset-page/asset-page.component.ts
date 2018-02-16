@@ -265,7 +265,6 @@ export class AssetPage implements OnInit, OnDestroy {
     handleLoadedMetadata(asset: Asset, assetIndex: number) {
         if (asset && asset['error']) {
             let err = asset['error']
-            console.log(err)
             if (err.status === 403) {
                 // here is where we make the "access denied" modal appear
                 if (!this.hasExternalAccess) {
@@ -280,6 +279,10 @@ export class AssetPage implements OnInit, OnDestroy {
             } else {
                 // don't have a clue why this would happen, so just log it
                 console.error(err)
+                // WORKAROUND: We are getting 500s for denied access to institional assets
+                if (!this.hasExternalAccess && err.message == "Unable to load metadata!") {
+                    this.showAccessDeniedModal = true
+                }
             }
         } else {
             this.assets[assetIndex] = asset
@@ -458,25 +461,28 @@ export class AssetPage implements OnInit, OnDestroy {
 
      // Add or remove assets from Assets array for comparison in full screen
     private toggleAsset(asset: any): void {
-        let assetIdProperty = asset.hasOwnProperty('artstorid') ? 'artstorid' : 'objectId';
-        let assetId = asset[assetIdProperty]
+        // ADD or REMOVE to assets and assetIds arrays
         let add = true;
+        // Groups/items services use "objectid"
+        // Solr search uses "artstorid" — but also has an "id" we should ignore!
+        if (!asset.id || asset["artstorid"]) {
+            asset.id = asset["artstorid"] || asset["objectId"]
+        }
         // remove from assetIds
-        let assetIdIndex = this.assetIds.indexOf(assetId)
+        let assetIdIndex = this.assetIds.indexOf(asset.id)
         if(assetIdIndex > -1) {
             this.assetIds.splice(assetIdIndex, 1)
             add = false
         }
         // remove from assets
         this.assets.forEach( (viewAsset, i) => {
-            if (asset[assetIdProperty] == viewAsset[assetIdProperty]) {
+            if ( [viewAsset.id, viewAsset["artstorid"], viewAsset["objectId"]].indexOf(asset.id) > -1) {
                 asset.selected = false;
                 this.assets.splice(i, 1);
                 add = false;
-
                 // Set 'selected' to 'false' for the asset in asset drawer
                 this.prevAssetResults.thumbnails.forEach( (thumbnail, i) => {
-                    if (asset[assetIdProperty] == thumbnail[this.assetIdProperty]) {
+                    if (asset.id == thumbnail.id) {
                         thumbnail.selected = false;
                     }
                 });
@@ -500,7 +506,7 @@ export class AssetPage implements OnInit, OnDestroy {
         // log compared assets
         this._log.log({
             eventType: "artstor_aiw_image_compare",
-            item_id: assetId,
+            item_id: asset.id,
             additional_fields: {
                 compared_assets: this.assetIds,
                 action: add ? 'add' : 'remove'
@@ -630,7 +636,7 @@ export class AssetPage implements OnInit, OnDestroy {
      * Set full image download url
      */
     setDownloadFull() : void {
-        let url = this.assets[0].downloadLink;
+        let url = this.assets[0] ? this.assets[0].downloadLink : "";
         if (this.assetGroupId) {
             // Group id needs to be passed to allow download for images accessed via groups
             // - Binder prefers lowercase service url params
