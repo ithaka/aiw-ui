@@ -499,7 +499,7 @@ export class AssetPage implements OnInit, OnDestroy {
 
         // log compared assets
         this._log.log({
-            eventType: "artstor_aiw_image_compare",
+            eventType: "artstor_image_compare",
             item_id: assetId,
             additional_fields: {
                 compared_assets: this.assetIds,
