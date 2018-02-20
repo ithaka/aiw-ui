@@ -15,8 +15,8 @@ export class Asset {
     downloadLink: string
     downloadName: string
     tileSource: string
-    // Not reliably available
     collectionId: number
+    categoryId: number
     SSID: string
     fileName: string
 
