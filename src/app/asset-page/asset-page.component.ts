@@ -263,6 +263,10 @@ export class AssetPage implements OnInit, OnDestroy {
 
 
     handleLoadedMetadata(asset: Asset, assetIndex: number) {
+
+        asset['category_id'] = '1034602260'
+        asset['collection_id'] = '103'
+
         if (asset && asset['error']) {
             let err = asset['error']
             if (err.status === 403) {
