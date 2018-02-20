@@ -270,12 +270,6 @@ export class AssetPage implements OnInit, OnDestroy {
                 if (!this.hasExternalAccess) {
                     this.showAccessDeniedModal = true
                 }
-            } else if (err.status === 401) {
-                // Call is external to this app's http service
-                this._auth.refreshUserSession(true)
-                if (!this.hasExternalAccess) {
-                    this.showAccessDeniedModal = true
-                }
             } else {
                 // don't have a clue why this would happen, so just log it
                 console.error(err)
