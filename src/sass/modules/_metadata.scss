@@ -25,7 +25,7 @@
     letter-spacing: 0px;
     padding: 2px 0px;
 
-    a{
+    &.col-link, a{
         text-decoration: underline !important;
         color: #0039c6 !important;
     }
