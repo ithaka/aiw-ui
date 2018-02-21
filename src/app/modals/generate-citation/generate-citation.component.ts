@@ -31,7 +31,7 @@ export class GenerateCitation implements OnInit {
   ngOnInit() {
     this.generateCitations(this.asset)
     this._log.log({
-      eventType: 'artstor_aiw_citation',
+      eventType: 'artstor_citation',
       item_id: this.asset.id
     })
   }
