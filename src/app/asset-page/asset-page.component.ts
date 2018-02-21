@@ -28,7 +28,7 @@ export class AssetPage implements OnInit, OnDestroy {
     @ViewChild(ArtstorViewer) assetViewer: any
 
     private user: any
-    private hasExternalAccess: boolean = false
+    private encryptedAccess: boolean = false
     private document = document
 
     // Array to support multiple viewers on the page
@@ -136,33 +136,12 @@ export class AssetPage implements OnInit, OnDestroy {
                 }
 
                 if (routeParams['encryptedId']) {
-                    this.hasExternalAccess = true
-                    this._assets.decryptToken(routeParams['encryptedId'])
-                        .take(1)
-                        .subscribe((data) => {
-                            if (data.metadata) {
-                                data.item.metadata = data.metadata
-                            }
-                            data.item.imageUrl = data.imageUrl
-                            data.item.imageServer = data.imageServer
-                            // this.renderPrimaryAsset(new Asset(data.item[assetIdProperty], this._assets, this._auth, data.item, this.assetGroupId))
-                            this.assetIds[0] = data.item[assetIdProperty]
-                        }, (err) => {
-                            console.error(err)
-                            if (err.status == 403) {
-                                // User does not have access
-                                this.showAccessDeniedModal = true
-                            } else {
-                                // Asset does not exist
-                                this._router.navigate(['/nocontent'])
-                            }
-                        })
+                    this.encryptedAccess = true
+                    this.assetIds[0] = routeParams["encryptedId"]
                 } else {
-                    // this.renderPrimaryAsset(new Asset(routeParams["assetId"], this._assets, this._auth, null, this.assetGroupId))
                     this.assetIds[0] = routeParams["assetId"]
 
                     if(this.prevAssetResults.thumbnails.length > 0){
-                        // this.totalAssetCount = this.prevAssetResults.count ? this.prevAssetResults.count : this.prevAssetResults.thumbnails.length;
                         this.assetIndex = this.currentAssetIndex();
                         this.assetNumber = this._assets.currentLoadedParams.page ? this.assetIndex + 1 + ((this._assets.currentLoadedParams.page - 1) * this._assets.currentLoadedParams.size) : this.assetIndex + 1;
                     }
@@ -271,20 +250,20 @@ export class AssetPage implements OnInit, OnDestroy {
             let err = asset['error']
             if (err.status === 403) {
                 // here is where we make the "access denied" modal appear
-                if (!this.hasExternalAccess) {
+                if (!this.encryptedAccess) {
                     this.showAccessDeniedModal = true
                 }
             } else if (err.status === 401) {
                 // Call is external to this app's http service
                 this._auth.refreshUserSession(true)
-                if (!this.hasExternalAccess) {
+                if (!this.encryptedAccess) {
                     this.showAccessDeniedModal = true
                 }
             } else {
                 // don't have a clue why this would happen, so just log it
                 console.error(err)
                 // WORKAROUND: We are getting 500s for denied access to institional assets
-                if (!this.hasExternalAccess && err.message == "Unable to load metadata!") {
+                if (!this.encryptedAccess && err.message == "Unable to load metadata!") {
                     this.showAccessDeniedModal = true
                 }
             }
@@ -509,7 +488,7 @@ export class AssetPage implements OnInit, OnDestroy {
 
         // log compared assets
         this._log.log({
-            eventType: "artstor_aiw_image_compare",
+            eventType: "artstor_image_compare",
             item_id: asset.id,
             additional_fields: {
                 compared_assets: this.assetIds,
