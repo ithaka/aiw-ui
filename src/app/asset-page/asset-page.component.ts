@@ -269,7 +269,10 @@ export class AssetPage implements OnInit, OnDestroy {
                 document.querySelector('meta[name="DC.title"]').setAttribute('content', asset.title);
                 document.querySelector('meta[name="asset.id"]').setAttribute('content', asset.id);
                 let currentAssetId: string = this.assets[0].id || this.assets[0]['objectId'] // couldn't trust the 'this.assetIdProperty' variable
-                this.setCollectionType(currentAssetId)
+                // Search returns a 401 if /userinfo has not yet set cookies
+                if (Object.keys(this._auth.getUser()).length !== 0) {
+                    this.setCollectionType(currentAssetId)
+                }
                 this.generateImgURL();
             }
         }
