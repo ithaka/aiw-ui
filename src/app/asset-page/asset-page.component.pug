@@ -16,6 +16,7 @@
       artstor-viewer(*ngFor="let assetId of (isFullscreen ? assetIds : [assetIds[0]]); let i = index",
         [testEnv]="_auth.getEnv() === 'test'",
         [assetId]="assetId",
+        [encrypted]="encryptedAccess",
         [groupId]="assetGroupId",
         (assetMetadata)="handleLoadedMetadata($event, i)",
         [ngClass]="[ 'asset-viewer-' + assetIds.length ]",
