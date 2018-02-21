@@ -192,7 +192,8 @@ export class AuthService implements CanActivate {
       // console.log(this.idleState);
     });
 
-    this.resetIdleWatcher();
+    // Init idle watcher
+    this.resetIdleWatcher()
 
     // Initialize user and institution objects from localstorage
     this.userSource.next(this.getUser())
@@ -212,8 +213,6 @@ export class AuthService implements CanActivate {
       this.refreshUserSession()
     }, userInfoInterval)
   }
-
-
 
   // Reset the idle watcher
   public resetIdleWatcher(): void {
@@ -388,11 +387,7 @@ export class AuthService implements CanActivate {
   public getThumbUrl(): string {
     return this.thumbUrl;
   }
-
-  // public getPublicUrl(): string {
-  //   return this.proxyUrl + 'http://library.artstor.org/library';
-  // }
-
+  
   /** Returns url used for downloading some media, such as documents */
   public getMediaUrl(): string {
     // This is a special case, and should always points to library.artstor or stage
@@ -527,17 +522,16 @@ export class AuthService implements CanActivate {
     return this.http
       .get(this.genUserInfoUrl(), options)
       .map(
-        (res)  => {
-          let data = res
+        (data)  => {
           let user = this.decorateValidUser(data)
           if (user) {
+            // Update user object
             this.saveUser(user)
           } else {
+            // Clear user session (local objects and cookies)
             this.logoutUser()
             if (triggerSessionExpModal) {
               this.showUserInactiveModal.next(true)
-            } else {
-              this._router.navigate(['/login'])
             }
           }
           return data
