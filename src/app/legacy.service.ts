@@ -171,7 +171,7 @@ export class LegacyRouteResolver implements Resolve<boolean> {
 
     // collection handler
     let col = this.execRegExp(/id3D(.*?(?=26))/, params)
-    if (col) { searchParams.coll = col.join(",") }
+    if (col && (col.indexOf('all') === -1)) { searchParams.coll = col.join(",") }
 
     // beginning date handler
     // bDate isn't ever a list, so we need to make sure it's a single parameter that comes back
