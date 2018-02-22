@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angu
 import { Subscription } from 'rxjs/Rx';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 
-import { AssetService } from './../../shared';
+import { AssetService, PersonalCollectionService } from './../../shared';
 
 @Component({
   selector: 'ang-edit-personal-collection',
@@ -23,7 +23,8 @@ export class EditPersonalCollectionModal implements OnInit, OnDestroy {
 
   constructor(
     private _fb: FormBuilder,
-    private _assets: AssetService
+    private _assets: AssetService,
+    private _pCollections: PersonalCollectionService
   ) {
     this.editAssetMetaForm = _fb.group({
       creator: [null],
