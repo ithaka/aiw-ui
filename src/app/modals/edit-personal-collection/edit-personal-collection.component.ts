@@ -24,7 +24,7 @@ export class EditPersonalCollectionModal implements OnInit, OnDestroy {
   constructor(
     private _fb: FormBuilder,
     private _assets: AssetService,
-    private _pCollections: PersonalCollectionService
+    private _pc: PersonalCollectionService
   ) {
     this.editAssetMetaForm = _fb.group({
       creator: [null],
