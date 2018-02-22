@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core'
 
-import { ImageGroup, GroupService, AuthService } from './../../shared'
+import { ImageGroup, GroupService, AuthService, LogService } from './../../shared'
 
 @Component({
   selector: 'ang-share-ig-link',
@@ -22,10 +22,18 @@ export class ShareIgLinkModal implements OnInit {
     tokenError?: boolean
   } = {}
 
-  constructor( private _group: GroupService, private _auth: AuthService ) { }
+  constructor(
+    private _group: GroupService,
+    private _auth: AuthService,
+    private _log: LogService
+  ) { }
 
   ngOnInit() {
     this.createIgLink(this.ig)
+    this._log.log({
+      eventType: 'artstor_group_link',
+      item_id: this.ig.id
+    })
   }
 
   createIgLink(ig: ImageGroup): void {
