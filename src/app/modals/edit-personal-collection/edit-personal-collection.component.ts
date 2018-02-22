@@ -105,4 +105,16 @@ export class EditPersonalCollectionModal implements OnInit, OnDestroy {
     console.log(formData);
   }
 
+  private deleteSelectedAsset(SSID: string): void {
+    console.log('deleting ' + SSID)
+    console.log(this.selectedAsset)
+    this._pc.deletePersonalAssets([this.selectedAsset.objectId])
+      .take(1)
+      .subscribe((res) => {
+        console.log(res)
+      }, (err) => {
+        console.error(err)
+      })
+  }
+
 }

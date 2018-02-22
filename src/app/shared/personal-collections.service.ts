@@ -12,17 +12,21 @@ export class PersonalCollectionService {
     private _http: HttpClient
   ) { }
 
-  public deletePersonalAssets(ssIds: string[]): Observable<DeletePersonalAssetResponse> {
+  public deletePersonalAssets(SSIDs: string[]): Observable<DeletePersonalAssetResponse> {
     let headers: HttpHeaders = new HttpHeaders()
       .set('Content-Type', 'application/json')
+    
 
-    let params: HttpParams = new HttpParams()
-    params.append('ssids', ssIds.join(', '))
+    let ssidStrings: string[] = []
+    SSIDs.forEach((id, index) => {
+      ssidStrings.push('ssids[' + index + ']=' + encodeURIComponent(id))
+    })
+
+    let queryString: string = ssidStrings.join('&')
 
     return this._http.delete<DeletePersonalAssetResponse>(
-      [this._auth.getUrl(), 'api', 'v1', 'pcollection', 'image'].join('/'),
+      [this._auth.getUrl(), 'v1', 'pcollection', 'image'].join('/') + "?" + queryString,
       {
-        params: params,
         headers: headers,
         withCredentials: true
       }
