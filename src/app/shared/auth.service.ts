@@ -113,6 +113,7 @@ export class AuthService implements CanActivate {
       'proxy.artstor.org',
       // prod.artstor subdomain is used for WLVs
       'prod.artstor.org',
+      'sahara.artstor.org'
     ]
 
     // Check domain
