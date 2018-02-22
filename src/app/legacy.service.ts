@@ -33,6 +33,11 @@ export class LegacyRouteResolver implements Resolve<boolean> {
     // Keep this log around: we have a lot of exceptions
     console.log("Attempting to resolve legacy url:\n", url)
 
+    /**
+     * Example URLs being handled:
+     * /library/#3|search|1|Globe20Theater|Multiple20Collection20Search|||type3D3126kw3DGlobe20Theater26id3Dall26name3DAll20Collections26origKW3D (public site)
+     */
+
     if (!isNaN(Number(url.substr(1,2)))) {
       // Anchors in some old links cause some of the path to be lost
       url = '/library/welcome.html#' + url.substr(1)
@@ -44,14 +49,20 @@ export class LegacyRouteResolver implements Resolve<boolean> {
     } else {
       return true
     }
-
     if (url.indexOf('%7C') > -1) {
       url = decodeURI(url)
     }
 
     let urlArr = url.split("/")
-    urlArr.splice(0,2)
-
+    // Paths that trail "/library" with "/" can drop the first two strings
+    if (url.split('/').length > 2) {
+      urlArr.splice(0,2)
+    }
+    // A leading forward slash will cause an empty string on split
+    if (urlArr[0].length < 1) {
+      urlArr.splice(0,1)
+    }
+    
     if (urlArr[0].substr(0, 10).toLowerCase() === "externaliv") {
       let encryptedId = urlArr[0].split("=")[1]
       this._router.navigate(['/asset', 'external', encryptedId])
@@ -84,14 +95,12 @@ export class LegacyRouteResolver implements Resolve<boolean> {
       if (pipeArr[0].indexOf('#') > 0) {
         routeNum = pipeArr[0].substr(pipeArr[0].indexOf('#'), 2)
       }
-
       switch (routeNum) {
         case "#2": // handles all of the #2 routes
           this._router.navigate(["/browse", "library", { viewId: pipeArr[1] }])
           break
         case "#3": // handles all of the #3 routes
           // #3 routes are usually an array split by the pipe symbol, and the key is the second value in that array (index 1)
-
           if (pipeArr && pipeArr.length > 0) {
             switch (pipeArr[1]) {
               case "categories":
@@ -271,9 +280,10 @@ export class LegacyRouteResolver implements Resolve<boolean> {
   private hydrateKeywordExpression(keywordStr: string) {
     // the "search within" fields are specified with dehydrated ids so we have to water them
     let fieldRe = /7C([0-9]*)/g
-
-    // we'll cycle through all of the matches for ids and give them a drink
+    
+    // we'll cycle through all of the matches for ids and give them a drink 💧
     let result
+    
     while ((result = fieldRe.exec(keywordStr)) !== null) {
       if (result[1] && result[1].length > 0) {
         keywordStr = keywordStr.replace(result[1], this.hydrateUrlString(result[1]))
@@ -286,6 +296,7 @@ export class LegacyRouteResolver implements Resolve<boolean> {
       keywordStr.replace(/7C/g, "%7C")
         .replace(/23/g, "%23")
         .replace(/2C/g, "%2C")
+        .replace(/20/g, "%20")
     )
 
     return decoded
