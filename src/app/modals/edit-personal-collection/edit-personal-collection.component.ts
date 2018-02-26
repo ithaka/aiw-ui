@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angu
 import { Subscription } from 'rxjs/Rx';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 
-import { AssetService, PersonalCollectionService } from './../../shared';
+import { AssetService, PersonalCollectionService, AssetSearchService } from './../../shared';
 
 @Component({
   selector: 'ang-edit-personal-collection',
@@ -23,6 +23,7 @@ export class EditPersonalCollectionModal implements OnInit, OnDestroy {
 
   constructor(
     private _fb: FormBuilder,
+    private _search: AssetSearchService,
     private _assets: AssetService,
     private _pc: PersonalCollectionService
   ) {
@@ -44,6 +45,13 @@ export class EditPersonalCollectionModal implements OnInit, OnDestroy {
     if(this.colId){
       this.loadPCThumbnails();
     }
+    this._search.search({ colId: "37436" }, "", 4)
+        .take(1)
+        .subscribe((res) => {
+            console.log('received response', res.results)
+        }, (err) => {
+            console.error(err)
+        })
   }
 
   ngOnDestroy() {

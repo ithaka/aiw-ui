@@ -297,7 +297,7 @@ export class AssetSearchService {
     }
 
 
-    return this.http.post<SearchResponse>(
+    return this.http.post<SearchResponseData>(
       this._auth.getSearchUrl(),
       query,
       { withCredentials: true }
@@ -318,8 +318,21 @@ export class AssetSearchService {
           }
         }
       }
+
+      // media comes as a json string, so we'll parse it into an object for each result
+      let cleanedResults: SearchAsset[] = res.results.map((item) => {
+        let newMedia: MediaObject = JSON.parse(item.media)
+        return Object.assign({}, item, { media: newMedia })
+      })
+      console.log('cleaned assets', cleanedResults)
+      
+      // create the cleaned response to pass to caller
+      let searchResponse: SearchResponse = Object.assign({}, res, { results: cleanedResults })
+
+      console.log('cleaned response', searchResponse)
+
       this.latestSearchRequestId = res.requestId
-      return res
+      return searchResponse
     })
   }
 
@@ -353,6 +366,7 @@ export class AssetSearchService {
   }
 }
 
+// the cleaned response object which is returned by the service
 export interface SearchResponse {
   facets: {
     name: string
@@ -370,7 +384,26 @@ export interface SearchResponse {
   hierarchies2: HierarchicalFilter
 }
 
-interface SearchAsset {
+// the response directly from search
+export interface SearchResponseData {
+  facets: {
+    name: string
+    values: {
+      count: number
+      efq: string
+      fq: string
+      name: string
+    }[]
+  }[]
+  bad_request: boolean
+  requestId: string
+  results: SearchAssetData[]
+  total: number // total number of assets returned
+  hierarchies2: HierarchicalFilter
+}
+
+// the data returned from search in the results array
+interface SearchAssetData {
   agent: string // creator of the piece
   artstorid: string // the correct id to reference when searching for artstor assets
   clusterid: string // id of the cluser the asset exists in, if any
@@ -395,6 +428,31 @@ interface SearchAsset {
   yearend: number // end of date range the asset is thought to have been created in
 }
 
+interface SearchAsset {
+  agent: string // creator of the piece
+  artstorid: string // the correct id to reference when searching for artstor assets
+  clusterid: string // id of the cluser the asset exists in, if any
+  collections: string[] // array of collections this asset exists under
+  collectiontypenameid: string[]
+  collectiontypes: number[] // all of the collection types this asset fits
+  contributinginstitutionid: number // which institution added the asset
+  date: string // a string entered by the user, not an actually useful date other than display
+  doi: string // ex: "10.2307/artstor.16515779"
+  frequentlygroupedwith: string[] // array of other asset ids this image is grouped with
+  iap: boolean // do we support Images for Academic Publishing for the asset
+  // id: string // the id used by the SOLR cluster, which is not reliable, therefore it's left commented out
+  media: MediaObject // dictionary of media properties
+  name: string // the asset's name
+  partofcluster: boolean
+  tokens: string[]
+  type: string // going to be "art" for all artstor assets
+  updatedon: Date // date the asset was last updated in Forum
+  workid: string // id of the work record in Forum that the asset belongs to
+  year: number // the year the asset is marked as being created
+  yearbegin: number // beginning of date range the asset is thought to have been created in
+  yearend: number // end of date range the asset is thought to have been created in
+}
+
 interface HierarchicalFilter {
   [key: string]: {
     children: HierarchicalFilter
@@ -406,6 +464,23 @@ interface HierarchicalFilter {
       selected: boolean
     }
   }
+}
+
+interface MediaObject {
+  format: string
+  thumbnailSizeOnePath: string
+  width: number
+  sizeInBytes: number
+  downloadSize: number
+  type: string
+  icc_profile_location: string
+  thumbnailSizeZeroPath: string
+  filename: string
+  lps: string
+  iiif: string
+  storId: string
+  adlObjectType: number
+  height: number
 }
 
 interface SearchRequest {
