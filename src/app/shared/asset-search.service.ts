@@ -297,7 +297,7 @@ export class AssetSearchService {
     }
 
 
-    return this.http.post<SearchResponseData>(
+    return this.http.post<RawSearchResponse>(
       this._auth.getSearchUrl(),
       query,
       { withCredentials: true }
@@ -322,15 +322,23 @@ export class AssetSearchService {
       // media comes as a json string, so we'll parse it into an object for each result
       let cleanedResults: SearchAsset[] = res.results.map((item) => {
         let cleanedSSID: string = item.doi.substr(item.doi.lastIndexOf(".") + 1) // split the ssid off the doi
-        let cleanedMedia: MediaObject = JSON.parse(item.media)
-        return Object.assign(
+        let cleanedMedia: MediaObject
+        if (item.media && typeof item.media == 'string') { cleanedMedia = JSON.parse(item.media) }
+        let cleanedAsset: SearchAsset = Object.assign(
           {}, // assigning it to a new object
           item, // base is the raw item returned from search
           { // this object contains all of the new properties which exist on a cleaned asset
             media: cleanedMedia, // assign a media object instead of a string
-            ssid: cleanedSSID // assign the ssid, which is taken off the doi
+            ssid: cleanedSSID, // assign the ssid, which is taken off the doi
+            thumbnailUrls: [] // this is only the array init - we add the urls later
           }
         )
+        // make the thumbnail urls and add them to the array
+        for (let i = 0; i < 5; i++) {
+          cleanedAsset.thumbnailUrls.push(this.makeThumbUrl(cleanedAsset.media.thumbnailSizeOnePath, i))
+        }
+
+        return cleanedAsset
       })
       
       // create the cleaned response to pass to caller
@@ -369,6 +377,34 @@ export class AssetSearchService {
       }
     })
   }
+
+  /**
+   * Generate Thumbnail URL
+   */
+  private makeThumbUrl(imagePath: string, size: number): string {
+    if (imagePath) {
+      if (size) {
+        imagePath = imagePath.replace(/(size)[0-4]/g, 'size' + size);
+      }
+      // Ensure relative
+      if (imagePath.indexOf('artstor.org') > -1) {
+        imagePath = imagePath.substring(imagePath.indexOf('artstor.org') + 12);
+      }
+
+      if (imagePath[0] != '/') {
+        imagePath = '/' + imagePath;
+      }
+
+      if (imagePath.indexOf('thumb') < 0) {
+        imagePath = '/thumb' + imagePath;
+      }
+    } else {
+      imagePath = '';
+    }
+
+    // Ceanup
+    return this._auth.getThumbUrl() + imagePath;
+  }
 }
 
 // the cleaned response object which is returned by the service
@@ -390,7 +426,7 @@ export interface SearchResponse {
 }
 
 // the response directly from search
-export interface SearchResponseData {
+export interface RawSearchResponse {
   facets: {
     name: string
     values: {
@@ -402,13 +438,13 @@ export interface SearchResponseData {
   }[]
   bad_request: boolean
   requestId: string
-  results: SearchAssetData[]
+  results: RawSearchAsset[]
   total: number // total number of assets returned
   hierarchies2: HierarchicalFilter
 }
 
 // the data returned from search in the results array
-interface SearchAssetData {
+interface RawSearchAsset {
   agent: string // creator of the piece
   artstorid: string // the correct id to reference when searching for artstor assets
   clusterid: string // id of the cluser the asset exists in, if any
@@ -452,6 +488,7 @@ export interface SearchAsset {
   partofcluster: boolean
   tokens: string[]
   type: string // going to be "art" for all artstor assets
+  thumbnailUrls: string[] // the index here is the size of the thumbnail
   updatedon: Date // date the asset was last updated in Forum
   workid: string // id of the work record in Forum that the asset belongs to
   year: number // the year the asset is marked as being created

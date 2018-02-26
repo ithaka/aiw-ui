@@ -12,12 +12,18 @@
             .lbl {{ 'EDIT_PC_MODAL.EDIT_COL' | translate }}
               .thumb-preview-cntnr
                 .row.no-gutters
-                  .col-md-4.thumb([ngClass]="{ 'selected': selectedAsset && (selectedAsset.objectId === thumb.objectId) }", *ngFor="let thumb of pcColThumbs")
-                    img([attr.src]="_assets.makeThumbUrl(thumb.thumbnailImgUrl, 1)", [attr.alt]="thumb.thumbnail1 ? 'Thumbnail of ' + thumb.thumbnail1 : 'No title available'")
+                  //- .col-md-4.thumb([ngClass]="{ 'selected': selectedAsset && (selectedAsset.objectId === thumb.objectId) }", *ngFor="let thumb of pcColThumbs")
+                  //-   img([attr.src]="'nothing here rn'", [attr.alt]="thumb.thumbnail1 ? 'Thumbnail of ' + thumb.thumbnail1 : 'No title available'")
+                  //-   .thumb-overlay
+                  //-     .close-icon(*ngIf="selectedAsset && (selectedAsset.objectId === thumb.objectId)", (click)="clearSelectedAsset()") &times;
+                  //-     .edit-icon((click)="editAssetMeta( thumb )")
+                  //-       i.icon.icon-reorder-white([ngClass]="{ 'active': selectedAsset && (selectedAsset.objectId === thumb.objectId) }")
+                  .col-md-4.thumb([ngClass]="{ 'selected': selectedAsset && (selectedAsset.artstorid === asset.artstorid) }", *ngFor="let asset of collectionAssets")
+                    img([attr.src]="'nothing here rn'", [attr.alt]="asset.name ? 'Thumbnail of ' + asset.name : 'No title available'")
                     .thumb-overlay
-                      .close-icon(*ngIf="selectedAsset && (selectedAsset.objectId === thumb.objectId)", (click)="clearSelectedAsset()") &times;
-                      .edit-icon((click)="editAssetMeta( thumb )")
-                        i.icon.icon-reorder-white([ngClass]="{ 'active': selectedAsset && (selectedAsset.objectId === thumb.objectId) }")
+                      .close-icon(*ngIf="selectedAsset && (selectedAsset.artstorid === asset.artstorid)", (click)="clearSelectedAsset()") &times;
+                      .edit-icon((click)="editAssetMeta( asset )")
+                        i.icon.icon-reorder-white([ngClass]="{ 'active': selectedAsset && (selectedAsset.artstorid === thumb.artstorid) }")
               .info-lbl {{ 'EDIT_PC_MODAL.META_ADD_INFO' | translate }}
           .edit-cntnr.col-md-6(*ngIf="editMode")
             label.asset-hdr {{ selectedAsset.thumbnail1 }}
