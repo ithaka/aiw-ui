@@ -12,6 +12,16 @@ export class PersonalCollectionService {
     private _http: HttpClient
   ) { }
 
+  public getPersonalCollection(collectionId: string): Observable<GetPersonalCollectionResponse> {
+    let headers: HttpHeaders = new HttpHeaders()
+      .set('Content-Type', 'application/json')
+
+    return this._http.get<GetPersonalCollectionResponse>(
+      [this._auth.getUrl(), 'v1', 'collection'].join('/'),
+      { headers: headers, withCredentials: true }
+    )
+  }
+
   public deletePersonalAssets(SSIDs: string[]): Observable<DeletePersonalAssetResponse> {
     let headers: HttpHeaders = new HttpHeaders()
       .set('Content-Type', 'application/json')
@@ -35,5 +45,9 @@ export class PersonalCollectionService {
 }
 
 interface DeletePersonalAssetResponse {
+  
+}
+
+interface GetPersonalCollectionResponse {
   
 }
