@@ -329,18 +329,20 @@ export class Login {
         url = url.replace("//www.artstor.org", "//library.artstor.org")
       }
       // Handle passing stashed url to proxies
-      if (url.match("!!!TARGET_FULL_PATH!!!")) {
+      let urlToken = /!+TARGET_FULL_PATH!+/g;
+      let pathToken = /!+TARGET_NO_SERVER!+/g;
+      if (url.match(urlToken)) {
         /**
          * EZProxy forwarding
          * Auth provides !!!TARGET_FULL_PATH!!! as a string to replace for forwarding
          */
-        url = url.replace("!!!TARGET_FULL_PATH!!!", this._auth.getHostname() + stashedRoute )
+        url = url.replace(urlToken, this._auth.getHostname() + stashedRoute )
       } else {
         /**
          * WAM Proxy forwarding
          * Auth provides !!!TARGET_NO_SERVER!!! as a token/string to replace for forwarding
          */
-        url = url.replace("!!!TARGET_NO_SERVER!!!", stashedRoute )
+        url = url.replace(pathToken, stashedRoute )
       }
       // If proxy, simply open url:
       window.open(url);
