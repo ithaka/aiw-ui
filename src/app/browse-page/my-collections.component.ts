@@ -50,14 +50,6 @@ export class MyCollectionsComponent implements OnInit {
     // Set page title
     this._title.setSubtitle("Browse My Collections")
 
-    // this._search.search({ colId: "37436" }, "", 4)
-    //     .take(1)
-    //     .subscribe((res) => {
-    //         console.log(res)
-    //     }, (err) => {
-    //         console.error(err)
-    //     })
-
     this.subscriptions.push(
       this.route.params
       .subscribe((params: Params) => {
