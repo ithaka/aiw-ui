@@ -1,3 +1,4 @@
+import { Locker } from 'angular2-locker';
 import { Component, OnInit, Output, EventEmitter } from '@angular/core'
 import { Router } from '@angular/router'
 
@@ -10,15 +11,19 @@ export class SessionExpireModal implements OnInit {
   closeModal: EventEmitter<any> = new EventEmitter();
 
   constructor(
-    private _router: Router
+    private _router: Router,
+    private _storage: Locker
   ) { }
 
   ngOnInit() {
   }
 
-  goToLogin(): void {
-    this.closeModal.emit()
-    this._router.navigate(['/login'])
+  /**
+   * Set aside our current/intended path so the user can return
+   */
+  stashThenRoute(routeValue: string) {
+    this._storage.set("stashedRoute", window.location.pathname)
+    this._router.navigate([routeValue]); 
   }
 
   goToHome(): void {

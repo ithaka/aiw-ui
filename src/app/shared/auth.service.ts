@@ -85,7 +85,6 @@ export class AuthService implements CanActivate {
     private idle: Idle,
     private keepalive: Keepalive
   ) {
-    console.log('CONSTRUCTING AUTH SERVICE')
     this._storage = locker.useDriver(Locker.DRIVERS.LOCAL);
     this._router = _router;
 
