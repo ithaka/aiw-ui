@@ -324,12 +324,9 @@ export class AssetSearchService {
         let newMedia: MediaObject = JSON.parse(item.media)
         return Object.assign({}, item, { media: newMedia })
       })
-      console.log('cleaned assets', cleanedResults)
       
       // create the cleaned response to pass to caller
       let searchResponse: SearchResponse = Object.assign({}, res, { results: cleanedResults })
-
-      console.log('cleaned response', searchResponse)
 
       this.latestSearchRequestId = res.requestId
       return searchResponse
@@ -428,7 +425,7 @@ interface SearchAssetData {
   yearend: number // end of date range the asset is thought to have been created in
 }
 
-interface SearchAsset {
+export interface SearchAsset {
   agent: string // creator of the piece
   artstorid: string // the correct id to reference when searching for artstor assets
   clusterid: string // id of the cluser the asset exists in, if any
