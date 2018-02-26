@@ -16,7 +16,7 @@ export class EditPersonalCollectionModal implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = []
 
   private pcColThumbs: Array<any> = []
-  private collectionResults: SearchAsset[]
+  private collectionAssets: SearchAsset[]
   private editMode: boolean = false
   private selectedAsset: any
 
@@ -50,6 +50,7 @@ export class EditPersonalCollectionModal implements OnInit, OnDestroy {
         .take(1)
         .subscribe((res) => {
             console.log('received response', res.results)
+            this.collectionAssets = res.results
         }, (err) => {
             console.error(err)
         })
