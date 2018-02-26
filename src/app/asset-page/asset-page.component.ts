@@ -255,6 +255,7 @@ export class AssetPage implements OnInit, OnDestroy {
                     this.showAccessDeniedModal = true
                 } else {
                     console.error("Failed to load externally shared asset", err)
+                    this.showServerErrorModal = true
                 }
             } else {
                 // Something must have gone quite wrong, presumably a server error

@@ -26,8 +26,6 @@ export class AccessDeniedModal implements OnInit {
   ) { }
 
   ngOnInit() {
-    console.log("INIT ACCESS DENIED")
-    console.log(window.location)
       this._auth.currentUser.take(1).subscribe(
         (user) => {
           this.isLoggedIn = user.isLoggedIn
@@ -52,8 +50,7 @@ export class AccessDeniedModal implements OnInit {
    * Set aside our current/intended path so the user can return
    */
   stashThenRoute(routeValue: string) {
-    console.log(window.location.pathname)
-    this._storage.set("stashedRoute", window.location.pathname)
+    this._storage.set("stashedRoute", "/" + window.location.hash)
     this._router.navigate([routeValue]); 
   }
 }
