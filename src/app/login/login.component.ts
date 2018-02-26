@@ -1,3 +1,4 @@
+import { Locker } from 'angular2-locker';
 import { Component } from '@angular/core'
 import { Router } from '@angular/router'
 import { Location } from '@angular/common'
@@ -63,11 +64,13 @@ export class Login {
     private location: Location,
     private angulartics: Angulartics2,
     private _analytics: AnalyticsService,
-    private _app: AppConfig
+    private _app: AppConfig,
+    private _storage: Locker
   ) {
   }
 
   ngOnInit() {
+    console.log("Stashed:", this._storage.get("stashedRoute"))
     if (this._app.config.copyModifier) {
       this.copyBase = this._app.config.copyModifier + "."
     }
