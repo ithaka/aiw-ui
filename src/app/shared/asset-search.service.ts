@@ -321,8 +321,16 @@ export class AssetSearchService {
 
       // media comes as a json string, so we'll parse it into an object for each result
       let cleanedResults: SearchAsset[] = res.results.map((item) => {
-        let newMedia: MediaObject = JSON.parse(item.media)
-        return Object.assign({}, item, { media: newMedia })
+        let cleanedSSID: string = item.doi.substr(item.doi.lastIndexOf(".") + 1) // split the ssid off the doi
+        let cleanedMedia: MediaObject = JSON.parse(item.media)
+        return Object.assign(
+          {}, // assigning it to a new object
+          item, // base is the raw item returned from search
+          { // this object contains all of the new properties which exist on a cleaned asset
+            media: cleanedMedia, // assign a media object instead of a string
+            ssid: cleanedSSID // assign the ssid, which is taken off the doi
+          }
+        )
       })
       
       // create the cleaned response to pass to caller
@@ -435,6 +443,7 @@ export interface SearchAsset {
   contributinginstitutionid: number // which institution added the asset
   date: string // a string entered by the user, not an actually useful date other than display
   doi: string // ex: "10.2307/artstor.16515779"
+  ssid: string
   frequentlygroupedwith: string[] // array of other asset ids this image is grouped with
   iap: boolean // do we support Images for Academic Publishing for the asset
   // id: string // the id used by the SOLR cluster, which is not reliable, therefore it's left commented out
