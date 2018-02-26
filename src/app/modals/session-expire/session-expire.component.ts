@@ -22,7 +22,7 @@ export class SessionExpireModal implements OnInit {
    * Set aside our current/intended path so the user can return
    */
   stashThenRoute(routeValue: string) {
-    this._storage.set("stashedRoute", window.location.pathname)
+    this._storage.set("stashedRoute", "/" + window.location.hash)
     this._router.navigate([routeValue]); 
   }
 

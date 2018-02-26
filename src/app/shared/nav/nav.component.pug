@@ -25,4 +25,4 @@ header.navbar.navbar-light
                 | &nbsp;to save images
               div(*ngIf="institutionObj.displayName || institutionObj.institutionName")
                 | Institution: {{ institutionObj.displayName ? institutionObj.displayName : institutionObj.institutionName }}
-ang-session-expire-modal(*ngIf="showinactiveUserLogoutModal" "(closeModal)"="inactiveUsrLogOut()")
+ang-session-expire-modal(*ngIf="showinactiveUserLogoutModal && showLoginPanel" "(closeModal)"="inactiveUsrLogOut()")
