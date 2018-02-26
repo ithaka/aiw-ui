@@ -18,7 +18,7 @@ export class EditPersonalCollectionModal implements OnInit, OnDestroy {
   private pcColThumbs: Array<any> = []
   private collectionAssets: SearchAsset[]
   private editMode: boolean = false
-  private selectedAsset: any
+  private selectedAsset: SearchAsset
 
   private editAssetMetaForm: FormGroup
 
@@ -93,8 +93,8 @@ export class EditPersonalCollectionModal implements OnInit, OnDestroy {
   private editAssetMeta(asset: any): void{
     this.selectedAsset = asset
 
-    this.editAssetMetaForm.controls['creator'].setValue(this.selectedAsset['formattedMetaArray']['creator'])
-    this.editAssetMetaForm.controls['title'].setValue(this.selectedAsset['formattedMetaArray']['title'])
+    this.editAssetMetaForm.controls['creator'].setValue(this.selectedAsset.agent)
+    this.editAssetMetaForm.controls['title'].setValue(this.selectedAsset.name)
     this.editAssetMetaForm.controls['work_type'].setValue(this.selectedAsset['formattedMetaArray']['work_type'])
     this.editAssetMetaForm.controls['date'].setValue(this.selectedAsset['formattedMetaArray']['date'])
     this.editAssetMetaForm.controls['location'].setValue(this.selectedAsset['formattedMetaArray']['location'])
@@ -103,11 +103,10 @@ export class EditPersonalCollectionModal implements OnInit, OnDestroy {
     this.editAssetMetaForm.controls['subject'].setValue(this.selectedAsset['formattedMetaArray']['subject'])
 
     this.editMode = true
-    console.log(this.selectedAsset)
   }
 
   private clearSelectedAsset(): void{
-    this.selectedAsset = {}
+    this.selectedAsset = <SearchAsset>{}
     this.editMode = false
   }
 
@@ -118,7 +117,7 @@ export class EditPersonalCollectionModal implements OnInit, OnDestroy {
   private deleteSelectedAsset(SSID: string): void {
     console.log('deleting ' + SSID)
     console.log(this.selectedAsset)
-    this._pc.deletePersonalAssets([this.selectedAsset.objectId])
+    this._pc.deletePersonalAssets([this.selectedAsset.ssid])
       .take(1)
       .subscribe((res) => {
         console.log(res)
