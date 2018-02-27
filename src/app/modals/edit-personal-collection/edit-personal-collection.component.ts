@@ -3,6 +3,7 @@ import { Subscription } from 'rxjs/Rx'
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms'
 
 import { AssetService, PersonalCollectionService, AssetSearchService, SearchAsset, AuthService } from './../../shared'
+import { Asset } from '../../asset-page/asset'
 
 @Component({
   selector: 'ang-edit-personal-collection',
@@ -18,7 +19,8 @@ export class EditPersonalCollectionModal implements OnInit, OnDestroy {
   private pcColThumbs: Array<any> = []
   private collectionAssets: SearchAsset[]
   private editMode: boolean = false
-  private selectedAsset: SearchAsset
+  private selectedAsset: SearchAsset // this is the asset which the user selects from the list of assets
+  private selectedAssetData: Asset // the asset emitted from the viewer
 
   private editAssetMetaForm: FormGroup
 
@@ -57,13 +59,23 @@ export class EditPersonalCollectionModal implements OnInit, OnDestroy {
     this.subscriptions.forEach((sub) => { sub.unsubscribe() })
   }
 
-  private handleLoadedMetadata(metadata: any): void {
-    if (metadata.error) {
-      console.error(metadata.error)
+  private handleLoadedMetadata(metadata: Asset): void {
+    if (metadata['error']) {
+      return console.error(metadata['error'])
       // handle us that error
     }
 
+    console.log(metadata)
+    this.selectedAssetData = metadata
 
+    this.editAssetMetaForm.controls['creator'].setValue(this.selectedAssetData.creator)
+    this.editAssetMetaForm.controls['title'].setValue(this.selectedAssetData.title)
+    this.editAssetMetaForm.controls['work_type'].setValue(this.selectedAssetData.formattedMetadata.work_type)
+    this.editAssetMetaForm.controls['date'].setValue(this.selectedAssetData.formattedMetadata.date)
+    this.editAssetMetaForm.controls['location'].setValue(this.selectedAssetData.formattedMetadata.location)
+    this.editAssetMetaForm.controls['material'].setValue(this.selectedAssetData.formattedMetadata.material)
+    this.editAssetMetaForm.controls['description'].setValue(this.selectedAssetData.formattedMetadata.description)
+    this.editAssetMetaForm.controls['subject'].setValue(this.selectedAssetData.formattedMetadata.subject)
   }
 
   // private loadPCThumbnails(): void{
@@ -98,17 +110,6 @@ export class EditPersonalCollectionModal implements OnInit, OnDestroy {
 
   private editAssetMeta(asset: SearchAsset): void{
     this.selectedAsset = asset
-
-    // this.editAssetMetaForm.controls['creator'].setValue(this.selectedAsset.agent)
-    // this.editAssetMetaForm.controls['title'].setValue(this.selectedAsset.name)
-    // this.editAssetMetaForm.controls['work_type'].setValue(this.selectedAsset['formattedMetaArray']['work_type'])
-    // this.editAssetMetaForm.controls['date'].setValue(this.selectedAsset['formattedMetaArray']['date'])
-    // this.editAssetMetaForm.controls['location'].setValue(this.selectedAsset['formattedMetaArray']['location'])
-    // this.editAssetMetaForm.controls['material'].setValue(this.selectedAsset['formattedMetaArray']['material'])
-    // this.editAssetMetaForm.controls['description'].setValue(this.selectedAsset['formattedMetaArray']['description'])
-    // this.editAssetMetaForm.controls['subject'].setValue(this.selectedAsset['formattedMetaArray']['subject'])
-
-    console.log(this.selectedAsset.artstorid)
 
     this.editMode = true
   }
