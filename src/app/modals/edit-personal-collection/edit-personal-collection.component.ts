@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angu
 import { Subscription } from 'rxjs/Rx'
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms'
 
-import { AssetService, PersonalCollectionService, AssetSearchService, SearchAsset } from './../../shared'
+import { AssetService, PersonalCollectionService, AssetSearchService, SearchAsset, AuthService } from './../../shared'
 
 @Component({
   selector: 'ang-edit-personal-collection',
@@ -24,6 +24,7 @@ export class EditPersonalCollectionModal implements OnInit, OnDestroy {
 
   constructor(
     private _fb: FormBuilder,
+    private _auth: AuthService,
     private _search: AssetSearchService,
     private _assets: AssetService,
     private _pc: PersonalCollectionService
@@ -42,70 +43,77 @@ export class EditPersonalCollectionModal implements OnInit, OnDestroy {
 
 
   ngOnInit() {
-    // console.log(this.colId)
-    if(this.colId){
-      this.loadPCThumbnails()
-    }
     this._search.search({ colId: "37436" }, "", 4)
-        .take(1)
-        .subscribe((res) => {
-            console.log('received response', res.results)
-            this.collectionAssets = res.results
-        }, (err) => {
-            console.error(err)
-        })
+      .take(1)
+      .subscribe((res) => {
+        console.log('received response', res.results)
+        this.collectionAssets = res.results
+      }, (err) => {
+        console.error(err)
+      })
   }
 
   ngOnDestroy() {
-      this.subscriptions.forEach((sub) => { sub.unsubscribe() })
+    this.subscriptions.forEach((sub) => { sub.unsubscribe() })
   }
 
-  private loadPCThumbnails(): void{
-    this._assets.getCollectionThumbs(this.colId)
-      .then((res) => {
-          this.pcColThumbs = res['thumbnails']
-          for(let thmb of this.pcColThumbs){
-            thmb.metaData = JSON.parse(thmb.jsonListSt)
-            this.formatMetadata(thmb)
-          }
-      })
-      .catch(function(err) {
-          console.log('Unable to load Personal Collection thumbnails.')
-      })
-  }
-
-
-  private formatMetadata(thmbObj){
-    let metaArray = {}
-    for(let data of thmbObj.metaData){
-      if( metaArray[ data.fieldName ] ){
-        metaArray[ data.fieldName.toLowerCase() ] += '|' + data.fieldValue
-      }
-      else{
-        metaArray[ data.fieldName.toLowerCase() ] = data.fieldValue
-      }
-
+  private handleLoadedMetadata(metadata: any): void {
+    if (metadata.error) {
+      console.error(metadata.error)
+      // handle us that error
     }
 
-    thmbObj.formattedMetaArray = metaArray
+
   }
 
-  private editAssetMeta(asset: any): void{
+  // private loadPCThumbnails(): void{
+  //   this._assets.getCollectionThumbs(this.colId)
+  //     .then((res) => {
+  //         this.pcColThumbs = res['thumbnails']
+  //         for(let thmb of this.pcColThumbs){
+  //           thmb.metaData = JSON.parse(thmb.jsonListSt)
+  //           this.formatMetadata(thmb)
+  //         }
+  //     })
+  //     .catch(function(err) {
+  //         console.log('Unable to load Personal Collection thumbnails.')
+  //     })
+  // }
+
+
+  // private formatMetadata(thmbObj){
+  //   let metaArray = {}
+  //   for(let data of thmbObj.metaData){
+  //     if( metaArray[ data.fieldName ] ){
+  //       metaArray[ data.fieldName.toLowerCase() ] += '|' + data.fieldValue
+  //     }
+  //     else{
+  //       metaArray[ data.fieldName.toLowerCase() ] = data.fieldValue
+  //     }
+
+  //   }
+
+  //   thmbObj.formattedMetaArray = metaArray
+  // }
+
+  private editAssetMeta(asset: SearchAsset): void{
     this.selectedAsset = asset
 
-    this.editAssetMetaForm.controls['creator'].setValue(this.selectedAsset.agent)
-    this.editAssetMetaForm.controls['title'].setValue(this.selectedAsset.name)
-    this.editAssetMetaForm.controls['work_type'].setValue(this.selectedAsset['formattedMetaArray']['work_type'])
-    this.editAssetMetaForm.controls['date'].setValue(this.selectedAsset['formattedMetaArray']['date'])
-    this.editAssetMetaForm.controls['location'].setValue(this.selectedAsset['formattedMetaArray']['location'])
-    this.editAssetMetaForm.controls['material'].setValue(this.selectedAsset['formattedMetaArray']['material'])
-    this.editAssetMetaForm.controls['description'].setValue(this.selectedAsset['formattedMetaArray']['description'])
-    this.editAssetMetaForm.controls['subject'].setValue(this.selectedAsset['formattedMetaArray']['subject'])
+    // this.editAssetMetaForm.controls['creator'].setValue(this.selectedAsset.agent)
+    // this.editAssetMetaForm.controls['title'].setValue(this.selectedAsset.name)
+    // this.editAssetMetaForm.controls['work_type'].setValue(this.selectedAsset['formattedMetaArray']['work_type'])
+    // this.editAssetMetaForm.controls['date'].setValue(this.selectedAsset['formattedMetaArray']['date'])
+    // this.editAssetMetaForm.controls['location'].setValue(this.selectedAsset['formattedMetaArray']['location'])
+    // this.editAssetMetaForm.controls['material'].setValue(this.selectedAsset['formattedMetaArray']['material'])
+    // this.editAssetMetaForm.controls['description'].setValue(this.selectedAsset['formattedMetaArray']['description'])
+    // this.editAssetMetaForm.controls['subject'].setValue(this.selectedAsset['formattedMetaArray']['subject'])
+
+    console.log(this.selectedAsset.artstorid)
 
     this.editMode = true
   }
 
-  private clearSelectedAsset(): void{
+  private clearSelectedAsset(): void {
     this.selectedAsset = <SearchAsset>{}
     this.editMode = false
   }
