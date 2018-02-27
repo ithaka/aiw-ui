@@ -25,17 +25,9 @@ export class PersonalCollectionService {
   public deletePersonalAssets(SSIDs: string[]): Observable<DeletePersonalAssetResponse> {
     let headers: HttpHeaders = new HttpHeaders()
       .set('Content-Type', 'application/json')
-    
-
-    let ssidStrings: string[] = []
-    SSIDs.forEach((id, index) => {
-      ssidStrings.push('ssids[' + index + ']=' + encodeURIComponent(id))
-    })
-
-    let queryString: string = ssidStrings.join('&')
 
     return this._http.delete<DeletePersonalAssetResponse>(
-      [this._auth.getUrl(), 'v1', 'pcollection', 'image'].join('/') + "?" + queryString,
+      [this._auth.getUrl(), 'v1', 'pcollection', 'image'].join('/') + "?ssids=" + SSIDs.join(","),
       {
         headers: headers,
         withCredentials: true
