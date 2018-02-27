@@ -19,7 +19,7 @@
                   //-     .edit-icon((click)="editAssetMeta( thumb )")
                   //-       i.icon.icon-reorder-white([ngClass]="{ 'active': selectedAsset && (selectedAsset.objectId === thumb.objectId) }")
                   .col-md-4.thumb([ngClass]="{ 'selected': selectedAsset && (selectedAsset.artstorid === asset.artstorid) }", *ngFor="let asset of collectionAssets")
-                    img([attr.src]="selectedAsset && selectedAsset.thumbnailUrls[0]", [attr.alt]="asset.name ? 'Thumbnail of ' + asset.name : 'No title available'")
+                    img([attr.src]="asset.thumbnailUrls[0]", [attr.alt]="asset.name ? 'Thumbnail of ' + asset.name : 'No title available'")
                     .thumb-overlay
                       .close-icon(*ngIf="selectedAsset && (selectedAsset.artstorid === asset.artstorid)", (click)="clearSelectedAsset()") &times;
                       .edit-icon((click)="editAssetMeta( asset )")
@@ -32,31 +32,31 @@
               [assetId]="selectedAsset.artstorid",
               (assetMetadata)="handleLoadedMetadata($event)"
             )
-            //- form#editAssetMetaForm([formGroup]="editAssetMetaForm", (ngSubmit)="editMetaFormSubmit(editAssetMetaForm.value)")
-            //-   .form-group
-            //-     label(for="assetCreatorInput") {{ 'EDIT_PC_MODAL.FORM.CREATOR' | translate }}
-            //-     input#assetCreatorInput.form-control(type="text", [formControl]="editAssetMetaForm.controls['creator']", tabindex="0")
-            //-   .form-group
-            //-     label(for="assetTitleInput") {{ 'EDIT_PC_MODAL.FORM.TITLE' | translate }}
-            //-     input#assetTitleInput.form-control(type="text", [formControl]="editAssetMetaForm.controls['title']", tabindex="1")
-            //-   .form-group
-            //-     label(for="assetWrkTypInput") {{ 'EDIT_PC_MODAL.FORM.WRK_TYP' | translate }}
-            //-     input#assetWrkTypInput.form-control(type="text", [formControl]="editAssetMetaForm.controls['work_type']", tabindex="2")
-            //-   .form-group
-            //-     label(for="assetDateInput") {{ 'EDIT_PC_MODAL.FORM.DATE' | translate }}
-            //-     input#assetDateInput.form-control(type="text", [formControl]="editAssetMetaForm.controls['date']", tabindex="3")
-            //-   .form-group
-            //-     label(for="assetLocInput") {{ 'EDIT_PC_MODAL.FORM.LOCATION' | translate }}
-            //-     input#assetLocInput.form-control([formControl]="editAssetMetaForm.controls['location']", tabindex="4")
-            //-   .form-group
-            //-     label(for="assetMatInput") {{ 'EDIT_PC_MODAL.FORM.MATERIAL' | translate }}
-            //-     input#assetMatInput.form-control(type="text", [formControl]="editAssetMetaForm.controls['material']", tabindex="5")
-            //-   .form-group
-            //-     label(for="assetDescInput") {{ 'EDIT_PC_MODAL.FORM.DESCRIPTION' | translate }}
-            //-     input#assetDescInput.form-control(type="text", [formControl]="editAssetMetaForm.controls['description']", tabindex="6")
-            //-   .form-group
-            //-     label(for="assetSubjectInput") {{ 'EDIT_PC_MODAL.FORM.SUBJECT' | translate }}
-            //-     input#assetSubjectInput.form-control(type="text", [formControl]="editAssetMetaForm.controls['subject']", tabindex="7")
+            form#editAssetMetaForm(*ngIf="selectedAssetData", [formGroup]="editAssetMetaForm", (ngSubmit)="editMetaFormSubmit(editAssetMetaForm.value)")
+              .form-group
+                label(for="assetCreatorInput") {{ 'EDIT_PC_MODAL.FORM.CREATOR' | translate }}
+                input#assetCreatorInput.form-control(type="text", [formControl]="editAssetMetaForm.controls['creator']", tabindex="0")
+              .form-group
+                label(for="assetTitleInput") {{ 'EDIT_PC_MODAL.FORM.TITLE' | translate }}
+                input#assetTitleInput.form-control(type="text", [formControl]="editAssetMetaForm.controls['title']", tabindex="1")
+              .form-group
+                label(for="assetWrkTypInput") {{ 'EDIT_PC_MODAL.FORM.WRK_TYP' | translate }}
+                input#assetWrkTypInput.form-control(type="text", [formControl]="editAssetMetaForm.controls['work_type']", tabindex="2")
+              .form-group
+                label(for="assetDateInput") {{ 'EDIT_PC_MODAL.FORM.DATE' | translate }}
+                input#assetDateInput.form-control(type="text", [formControl]="editAssetMetaForm.controls['date']", tabindex="3")
+              .form-group
+                label(for="assetLocInput") {{ 'EDIT_PC_MODAL.FORM.LOCATION' | translate }}
+                input#assetLocInput.form-control([formControl]="editAssetMetaForm.controls['location']", tabindex="4")
+              .form-group
+                label(for="assetMatInput") {{ 'EDIT_PC_MODAL.FORM.MATERIAL' | translate }}
+                input#assetMatInput.form-control(type="text", [formControl]="editAssetMetaForm.controls['material']", tabindex="5")
+              .form-group
+                label(for="assetDescInput") {{ 'EDIT_PC_MODAL.FORM.DESCRIPTION' | translate }}
+                input#assetDescInput.form-control(type="text", [formControl]="editAssetMetaForm.controls['description']", tabindex="6")
+              .form-group
+                label(for="assetSubjectInput") {{ 'EDIT_PC_MODAL.FORM.SUBJECT' | translate }}
+                input#assetSubjectInput.form-control(type="text", [formControl]="editAssetMetaForm.controls['subject']", tabindex="7")
         .modal-footer
           .form-group
             button.btn.btn-danger(*ngIf="selectedAsset && selectedAsset.ssid", (click)="deleteSelectedAsset(selectedAsset.ssid)", type="button") {{ 'EDIT_PC_MODAL.BUTTONS.DELETE' | translate }}
