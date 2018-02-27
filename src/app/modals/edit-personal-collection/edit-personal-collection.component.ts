@@ -65,7 +65,6 @@ export class EditPersonalCollectionModal implements OnInit, OnDestroy {
       // handle us that error
     }
 
-    console.log(metadata)
     this.selectedAssetData = metadata
 
     this.editAssetMetaForm.controls['creator'].setValue(this.selectedAssetData.creator)
@@ -77,36 +76,6 @@ export class EditPersonalCollectionModal implements OnInit, OnDestroy {
     this.editAssetMetaForm.controls['description'].setValue(this.selectedAssetData.formattedMetadata.description)
     this.editAssetMetaForm.controls['subject'].setValue(this.selectedAssetData.formattedMetadata.subject)
   }
-
-  // private loadPCThumbnails(): void{
-  //   this._assets.getCollectionThumbs(this.colId)
-  //     .then((res) => {
-  //         this.pcColThumbs = res['thumbnails']
-  //         for(let thmb of this.pcColThumbs){
-  //           thmb.metaData = JSON.parse(thmb.jsonListSt)
-  //           this.formatMetadata(thmb)
-  //         }
-  //     })
-  //     .catch(function(err) {
-  //         console.log('Unable to load Personal Collection thumbnails.')
-  //     })
-  // }
-
-
-  // private formatMetadata(thmbObj){
-  //   let metaArray = {}
-  //   for(let data of thmbObj.metaData){
-  //     if( metaArray[ data.fieldName ] ){
-  //       metaArray[ data.fieldName.toLowerCase() ] += '|' + data.fieldValue
-  //     }
-  //     else{
-  //       metaArray[ data.fieldName.toLowerCase() ] = data.fieldValue
-  //     }
-
-  //   }
-
-  //   thmbObj.formattedMetaArray = metaArray
-  // }
 
   private editAssetMeta(asset: SearchAsset): void{
     this.selectedAsset = asset
@@ -124,8 +93,6 @@ export class EditPersonalCollectionModal implements OnInit, OnDestroy {
   }
 
   private deleteSelectedAsset(SSID: string): void {
-    console.log('deleting ' + SSID)
-    console.log(this.selectedAsset)
     this._pc.deletePersonalAssets([this.selectedAsset.ssid])
       .take(1)
       .subscribe((res) => {
