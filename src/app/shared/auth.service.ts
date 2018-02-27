@@ -638,7 +638,7 @@ export class AuthService implements CanActivate {
         let options = { withCredentials: true };
 
         return this.http
-            .get(this.getUrl() + '/lostpw?email=' + email.toLowerCase() + '&portal=ARTstor', options)
+            .get(this.getUrl() + '/lostpw?email=' + email.toLowerCase() + '&portal=' + this._app.config.pwResetPortal, options)
             .toPromise();
     }
 
