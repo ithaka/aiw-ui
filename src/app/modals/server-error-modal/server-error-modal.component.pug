@@ -1,0 +1,9 @@
+#idaccessDeniedModal.modal.show
+  .modal-dialog
+    .modal-content
+      .modal-header
+        h5 {{ 'SERVER_ERROR_MODAL.HEADING' | translate }}
+      .modal-body
+        p.pt-3.main-content([innerHtml]="'SERVER_ERROR_MODAL.PROMPT' | translate")
+      .modal-footer
+        button.btn.btn-secondary((click)="exitFullScreen.emit()", [routerLink]="['/home']") Return to Home
