@@ -51,6 +51,7 @@ export class AssetPage implements OnInit, OnDestroy {
     private showAddModal: boolean = false
     private showCreateGroupModal: boolean = false
     private showAccessDeniedModal: boolean = false
+    private showServerErrorModal: boolean = false
     private showGenerateCitation: boolean = false
 
     private copyURLStatusMsg: string = ''
@@ -248,18 +249,20 @@ export class AssetPage implements OnInit, OnDestroy {
     handleLoadedMetadata(asset: Asset, assetIndex: number) {
         if (asset && asset['error']) {
             let err = asset['error']
-            if (err.status === 403) {
+            if (err.status === 403 || err.message == "Unable to load metadata!") {
                 // here is where we make the "access denied" modal appear
                 if (!this.encryptedAccess) {
                     this.showAccessDeniedModal = true
+                } else {
+                    console.error("Failed to load externally shared asset", err)
+                    this.showServerErrorModal = true
                 }
+            } else if (err.status === 401) {
+                // Should be handled by the 401 interceptor
             } else {
-                // don't have a clue why this would happen, so just log it
+                // Something must have gone quite wrong, presumably a server error
                 console.error(err)
-                // WORKAROUND: We are getting 500s for denied access to institional assets
-                if (!this.encryptedAccess && err.message == "Unable to load metadata!") {
-                    this.showAccessDeniedModal = true
-                }
+                this.showServerErrorModal = true
             }
         } else {
             this.assets[assetIndex] = asset

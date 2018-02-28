@@ -85,7 +85,6 @@ export class AuthService implements CanActivate {
     private idle: Idle,
     private keepalive: Keepalive
   ) {
-    console.log('CONSTRUCTING AUTH SERVICE')
     this._storage = locker.useDriver(Locker.DRIVERS.LOCAL);
     this._router = _router;
 
@@ -226,7 +225,7 @@ export class AuthService implements CanActivate {
   private refreshUserSessionInProgress: boolean = false
   public refreshUserSession(triggerSessionExpModal?: boolean): void {
     // cancel out if we're currently getting the user session
-    if (this.refreshUserSessionInProgress) { return }
+    if (this.refreshUserSessionInProgress && !triggerSessionExpModal) { return }
 
     // set to true so we don't have multiple /userinfo calls going on at once
     this.refreshUserSessionInProgress = true
