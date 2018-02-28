@@ -70,10 +70,10 @@ export class EditPersonalCollectionModal implements OnInit, OnDestroy {
     this.editAssetMetaForm.controls['creator'].setValue(this.selectedAssetData.creator)
     this.editAssetMetaForm.controls['title'].setValue(this.selectedAssetData.title)
     this.editAssetMetaForm.controls['work_type'].setValue(this.selectedAssetData.formattedMetadata.work_type)
-    this.editAssetMetaForm.controls['date'].setValue(this.selectedAssetData.formattedMetadata.date)
+    this.editAssetMetaForm.controls['date'].setValue(this.selectedAssetData.date)
     this.editAssetMetaForm.controls['location'].setValue(this.selectedAssetData.formattedMetadata.location)
     this.editAssetMetaForm.controls['material'].setValue(this.selectedAssetData.formattedMetadata.material)
-    this.editAssetMetaForm.controls['description'].setValue(this.selectedAssetData.formattedMetadata.description)
+    this.editAssetMetaForm.controls['description'].setValue(this.selectedAssetData.description)
     this.editAssetMetaForm.controls['subject'].setValue(this.selectedAssetData.formattedMetadata.subject)
   }
 
