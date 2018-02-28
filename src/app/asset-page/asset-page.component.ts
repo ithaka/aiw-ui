@@ -4,6 +4,8 @@ import { Subscription }   from 'rxjs/Subscription'
 import { Locker } from 'angular2-locker'
 import { Angulartics2 } from 'angulartics2'
 import { ArtstorViewer } from 'artstor-viewer'
+import { formGroupNameProvider } from '@angular/forms/src/directives/reactive_directives/form_group_name'
+import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms'
 
 // Project Dependencies
 import { Asset } from './asset'
@@ -13,7 +15,9 @@ import {
     AssetSearchService,
     GroupService,
     CollectionTypeHandler,
-    LogService
+    LogService,
+    PersonalCollectionService,
+    AssetDetailsFormValue
 } from './../shared'
 import { AnalyticsService } from '../analytics.service'
 import { TitleService } from '../shared/title.service'
@@ -55,6 +59,7 @@ export class AssetPage implements OnInit, OnDestroy {
 
     private copyURLStatusMsg: string = ''
     private showCopyUrl: boolean = false
+    private showEditDetails: boolean = false
     private generatedImgURL: string = ''
     private generatedViewURL: string = ''
     private generatedFullURL: string = ''
@@ -92,12 +97,18 @@ export class AssetPage implements OnInit, OnDestroy {
     };
     private originPage: number = 0;
 
+    private editDetailsForm: FormGroup
+    private editDetailsFormSubmitted: boolean = false // Set to true once the edit details form is submitted
+    private isProcessing: boolean = false
+
     constructor(
         private _assets: AssetService,
         private _search: AssetSearchService,
         private _group: GroupService,
         private _auth: AuthService,
+        private _pcservice: PersonalCollectionService,
         private _log: LogService,
+        private _fb: FormBuilder,
         private route: ActivatedRoute,
         private _router: Router,
         private locker: Locker,
@@ -105,7 +116,18 @@ export class AssetPage implements OnInit, OnDestroy {
         private angulartics: Angulartics2,
         private _title: TitleService
     ) {
-        this._storage = locker.useDriver(Locker.DRIVERS.LOCAL);
+        this._storage = locker.useDriver(Locker.DRIVERS.LOCAL)
+        
+        this.editDetailsForm = _fb.group({
+            creator: [null],
+            title: [null, Validators.required],
+            work_type: [null],
+            date: [null],
+            location: [null],
+            material: [null],
+            description: [null],
+            subject: [null]
+          })
     }
 
     ngOnInit() {
@@ -263,13 +285,17 @@ export class AssetPage implements OnInit, OnDestroy {
             }
         } else {
             this.assets[assetIndex] = asset
+            console.log('assets:', this.assets)
             if (assetIndex == 0) {
                 this._title.setTitle( asset.title );
                 document.querySelector('meta[name="DC.type"]').setAttribute('content', 'Artwork');
                 document.querySelector('meta[name="DC.title"]').setAttribute('content', asset.title);
                 document.querySelector('meta[name="asset.id"]').setAttribute('content', asset.id);
                 let currentAssetId: string = this.assets[0].id || this.assets[0]['objectId'] // couldn't trust the 'this.assetIdProperty' variable
-                this.setCollectionType(currentAssetId)
+                // Search returns a 401 if /userinfo has not yet set cookies
+                if (Object.keys(this._auth.getUser()).length !== 0) {
+                    this.setCollectionType(currentAssetId)
+                }
                 this.generateImgURL();
             }
         }
@@ -687,8 +713,41 @@ export class AssetPage implements OnInit, OnDestroy {
             .subscribe((asset) => {
                 let contributinginstitutionid: number = asset.contributinginstitutionid 
                 this.collectionType = this.collectionTypeHandler.getCollectionType(asset.collectiontypes, contributinginstitutionid)
+                console.log('collection type: ', this.collectionType)
             }, (err) => {
                 console.error(err)
             })
     }
+
+    /**
+     * Called on edit (Asset) details form submission
+     */
+    private editDetailsFormSubmit(formValue: AssetDetailsFormValue): void {
+
+        this.editDetailsFormSubmitted = true
+        if (!this.editDetailsForm.valid) {
+            return
+        }
+        this.isProcessing = true
+
+        /**
+         * Create the asset metadata object that will be submitted to the endpoint
+         */
+        let assetDetailsObject = this._pcservice.prepareAssetDetailsObject(formValue, this.assets[0]['SSID'])
+        console.log(assetDetailsObject)
+
+        // update asset metadata
+        this._pcservice.updatepcImageMetadata(assetDetailsObject)
+            .subscribe(
+                data => {
+                    this.isProcessing = false
+                    console.log( data )
+                },
+                error => {
+                    console.error(error)
+                    this.isProcessing = false
+                }
+            );
+    }
+    
 }
