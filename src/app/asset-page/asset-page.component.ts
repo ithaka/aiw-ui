@@ -249,7 +249,7 @@ export class AssetPage implements OnInit, OnDestroy {
     handleLoadedMetadata(asset: Asset, assetIndex: number) {
         if (asset && asset['error']) {
             let err = asset['error']
-            if (err.status === 403 || err.status === 401 || err.message == "Unable to load metadata!") {
+            if (err.status === 403 || err.message == "Unable to load metadata!") {
                 // here is where we make the "access denied" modal appear
                 if (!this.encryptedAccess) {
                     this.showAccessDeniedModal = true
@@ -257,6 +257,8 @@ export class AssetPage implements OnInit, OnDestroy {
                     console.error("Failed to load externally shared asset", err)
                     this.showServerErrorModal = true
                 }
+            } else if (err.status === 401) {
+                // Should be handled by the 401 interceptor
             } else {
                 // Something must have gone quite wrong, presumably a server error
                 console.error(err)
