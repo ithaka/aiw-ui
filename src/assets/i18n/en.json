@@ -89,12 +89,26 @@
       "DOWNLOAD": "Download",
       "GENERATE_CITATION": "Generate Citation",
       "PRINT": "Print",
+      "EDIT_DETAILS": "Edit Details",
       "LINK": "Link",
       "EXT": "Exit",
       "COMPARE": "Compare",
       "GET_IAP": "Request IAP",
       "REPORT_ERROR": "Report Error",
       "ADD_TO_GROUP" : "Add to Group"
+    },
+    "EDIT_DETAILS_FORM": {
+      "CREATOR": "Creator",
+      "TITLE": "Title",
+      "WORK_TYPE": "Work Type",
+      "DATE": "Date",
+      "LOCATION": "Location",
+      "MATERIAL": "Material",
+      "DESCRIPTION": "Description",
+      "SUBJECT": "Subject",
+      "TITLE_REQUIRED_MSG": "A title is required",
+      "SAVE_BTN": "Save",
+      "DELETE_BTN": "Delete Record"
     },
     "LINKS":{
       "BACK": "Back to Results"
