@@ -1,3 +1,4 @@
+import { Locker } from 'angular2-locker';
 import { Component } from '@angular/core'
 import { Router } from '@angular/router'
 import { Location } from '@angular/common'
@@ -39,11 +40,11 @@ export class Login {
   public forcePwdRst = false
   public successMsgPwdRst = ''
   public loginInstitutions = [] /** Stores the institutions returned by the server */
-  private loginInstName: string = '' /** Bound to the autocomplete field */
   public showRegister: boolean = false
 
+  private loginInstName: string = '' /** Bound to the autocomplete field */
+  private stashedRoute: string
   private loginLoading = false
-
   private dataService: LocalData
 
   /** 
@@ -63,11 +64,16 @@ export class Login {
     private location: Location,
     private angulartics: Angulartics2,
     private _analytics: AnalyticsService,
-    private _app: AppConfig
+    private _app: AppConfig,
+    private _storage: Locker
   ) {
   }
 
   ngOnInit() {
+    // Check for a stashed route to pass to proxy links
+    this.stashedRoute = this._storage.get("stashedRoute")
+    console.log("STASH", this.stashedRoute)
+
     if (this._app.config.copyModifier) {
       this.copyBase = this._app.config.copyModifier + "."
     }
@@ -299,6 +305,7 @@ export class Login {
   goToInstLogin(): void {
     let len: number = this.loginInstitutions.length
     let selectedInst: any
+    let url: string
     // search through the institutions store locally and see if the name the user selected matches one
     for (let i = 0; i < len; i++) {
       if (this.loginInstitutions[i].name == this.loginInstName) {
@@ -306,6 +313,7 @@ export class Login {
         break
       }
     }
+    url = selectedInst.entityID ? selectedInst.entityID : '';
 
     // if the user selected some institution that doesn't exist, kick them out!!
     if (!selectedInst) {
@@ -314,12 +322,34 @@ export class Login {
     }
 
     if (selectedInst.type === 'proxy') {
+      // Hashes within a parameter are interpretted incorrectly, and we don't need 'em
+      let stashedRoute = this.stashedRoute.replace("#", "")
+      // WORKAROUND: Auth is still cleaning data to replace www.artstor.org with library.artstor.org
+      if (url.match("//www.artstor.org")) {
+        url = url.replace("//www.artstor.org", "//library.artstor.org")
+      }
+      // Handle passing stashed url to proxies
+      let urlToken = /!+TARGET_FULL_PATH!+/g;
+      let pathToken = /!+TARGET_NO_SERVER!+/g;
+      if (url.match(urlToken)) {
+        /**
+         * EZProxy forwarding
+         * Auth provides !!!TARGET_FULL_PATH!!! as a string to replace for forwarding
+         */
+        url = url.replace(urlToken, this._auth.getHostname() + stashedRoute )
+      } else {
+        /**
+         * WAM Proxy forwarding
+         * Auth provides !!!TARGET_NO_SERVER!!! as a token/string to replace for forwarding
+         */
+        url = url.replace(pathToken, stashedRoute )
+      }
       // If proxy, simply open url:
-      window.open(selectedInst.entityID);
+      window.open(url);
     } else {
       // Else if Shibboleth, add parameters:
       // eg. for AUSS https://sso.artstor.org/sso/shibssoinit?idpEntityID=https://idp.artstor.org/idp/shibboleth&target=https%3A%2F%2Fsso.artstor.org%2Fsso%2Fshibbolethapplication%3Fo%3D0049a162-7dbe-4fcf-adac-d257e8db95e5
-      let url = selectedInst.entityID ? selectedInst.entityID : '';
+  
       let origin = window.location.origin + '/#/home';
       let ssoSubdomain = this._auth.getSubdomain() == 'library' ? 'sso' : 'sso.' + this._auth.getSubdomain()
       window.open('https://' + ssoSubdomain + '.artstor.org/sso/shibssoinit?idpEntityID=' + encodeURIComponent(url) + '&o=' + encodeURIComponent(origin));

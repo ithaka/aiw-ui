@@ -8,5 +8,5 @@
           .row.pt-3.main-content
             | {{ 'SESSION_EXPIRE_MODAL.MESSAGE' | translate }}
       .modal-footer
-        button.btn.btn-primary((click)="goToLogin()") {{ 'SESSION_EXPIRE_MODAL.BUTTONS.LOG_IN' | translate }}
+        button.btn.btn-primary((click)="stashThenRoute('/login')") {{ 'SESSION_EXPIRE_MODAL.BUTTONS.LOG_IN' | translate }}
         button.btn.btn-secondary((click)="goToHome()") {{ 'SESSION_EXPIRE_MODAL.BUTTONS.STAY_LOGGED_OUT' | translate }}

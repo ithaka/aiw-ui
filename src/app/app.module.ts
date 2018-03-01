@@ -66,23 +66,24 @@ import { Login } from './login';
 import { NoContent } from './no-content';
 import { RegisterComponent } from './register/register.component';
 import {
-  LoginReqModal,
-  SearchModal,
-  NewIgModal,
-  ShareLinkModal,
-  DownloadLimitModal,
-  UploadImagesModal,
-  EditPersonalCollectionModal,
-  AddToGroupModal,
-  DeleteIgModal,
-  NoIgModal,
   AccessDeniedModal,
-  PwdResetModal,
-  ShareIgLinkModal,
-  GenerateCitation,
+  AddToGroupModal,
   ConfirmModal,
+  DeleteIgModal,
+  DownloadLimitModal,
+  EditPersonalCollectionModal,
+  GenerateCitation,
+  LoginReqModal,
+  NewIgModal,
+  NoIgModal,
+  PwdResetModal,
+  RegisterJstorModal,
+  SearchModal,
+  ServerErrorModal,
   SessionExpireModal,
-  RegisterJstorModal
+  ShareIgLinkModal,
+  ShareLinkModal,
+  UploadImagesModal
 } from './modals';
 import { GeneralSearchComponent } from './browse-page/browse-groups/general-search.component'
 import { SkyBannerComponent } from './sky-banner/sky-banner.component'
@@ -196,6 +197,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     SearchComponent,
     SearchModal,
     SearchPage,
+    ServerErrorModal,
     ShareIgLinkModal,
     GenerateCitation,
     ShareLinkModal,
