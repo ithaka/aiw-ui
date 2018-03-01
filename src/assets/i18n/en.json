@@ -330,6 +330,10 @@
       "PROMPT" : "This content is not available due to content limitations or restricted access. Please try using an account or accessing this page on campus."
     }
   },
+  "SERVER_ERROR_MODAL" : {
+    "HEADING" : "Server Error",
+    "PROMPT": "Sorry, an error occurred loading the content you requested.<br/><br/>Please try again or come back later. If the problem persists, please <a class='link' href='mailto:support@artstor.org'>contact support</a>."
+  },
   "ACCESS_DENIED": "<b>Sorry, Content Unavailable:</b> If you are already <a href=\"/#/login\" class=\"link\">logged in</a>, this may be due to content limitations or your institutional access.",
   "NO_IG": {
     "HEADING": "Image group unavailable",

@@ -44,7 +44,8 @@ export const WLV_ARTSTOR = {
     showHomeSSC: true,
     showHomeAd: true,
     showArtstorCurated: true,
-    showInstitutionalLogin: true
+    showInstitutionalLogin: true,
+    pwResetPortal: "ARTstor"
 }
 
 export const WLV_SAHARA = {
@@ -88,5 +89,6 @@ export const WLV_SAHARA = {
     showHomeBlog: false,
     showHomeSSC: false,
     showHomeAd: false,
-    showArtstorCurated: false
+    showArtstorCurated: false,
+    pwResetPortal: "sahara"
 }

@@ -13,7 +13,7 @@ export class AppConfig {
   // Default values
   // public pageTitle = 'Artstor'
   // public logoUrl = '/assets/img/logo-v1-1.png'
-  public _config
+  private _config
 
   constructor() {
     // let WLVConfig = this.getWLVConfig()

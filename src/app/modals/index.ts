@@ -7,6 +7,7 @@ export * from './add-to-group/add-to-group.component';
 export * from './delete-ig/delete-ig.component';
 export * from './no-ig/no-ig.component';
 export * from './access-denied/access-denied.component';
+export * from './server-error-modal/server-error-modal.component';
 export * from './pwd-reset/pwd-reset.component';
 export * from './share-ig-link/share-ig-link.component';
 export * from './generate-citation/generate-citation.component';
