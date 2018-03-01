@@ -832,7 +832,10 @@ export class AssetService {
       return this.http.post(this._auth.getSearchUrl(), query, options)
         .toPromise()
         .then(res => {
-          let hierData = Object.values(res['hierarchies2'])
+          // Object.values is not supported by IE 11
+          let hierData = Object.keys(res['hierarchies2']).map(function(e) {
+            return res['hierarchies2'][e]
+          })
           if (hierData.length) { // if we have hierarchical data
             res = hierData
           } else { // must be a facet
