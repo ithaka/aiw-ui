@@ -48,8 +48,8 @@
     tslib "^1.7.1"
 
 "@angular/http@^5.2.0":
-  version "5.2.1"
-  resolved "https://registry.yarnpkg.com/@angular/http/-/http-5.2.1.tgz#dd847fb8aa0972b1906df5376307354b818ef4be"
+  version "5.2.7"
+  resolved "https://registry.yarnpkg.com/@angular/http/-/http-5.2.7.tgz#a163f6958f12d2665419123861b0d613c1c82afb"
   dependencies:
     tslib "^1.7.1"
 
@@ -441,8 +441,8 @@ arrify@^1.0.0:
   resolved "https://registry.yarnpkg.com/arrify/-/arrify-1.0.1.tgz#898508da2226f380df904728456849c1501a4b0d"
 
 artstor-viewer@^1.0.34:
-  version "1.0.34"
-  resolved "https://registry.yarnpkg.com/artstor-viewer/-/artstor-viewer-1.0.34.tgz#e88e51b1e09fcd6dbee26e7f5d4ec5bd668628ad"
+  version "1.0.36"
+  resolved "https://registry.yarnpkg.com/artstor-viewer/-/artstor-viewer-1.0.36.tgz#734eeb706cd8fc6269e3b77b3535801f981a2c33"
   dependencies:
     "@angular/http" "^5.2.0"
     openseadragon "^2.3.1"
@@ -6464,8 +6464,8 @@ tsickle@^0.24.0:
     source-map-support "^0.4.2"
 
 tslib@^1.7.1:
-  version "1.8.0"
-  resolved "https://registry.yarnpkg.com/tslib/-/tslib-1.8.0.tgz#dc604ebad64bcbf696d613da6c954aa0e7ea1eb6"
+  version "1.9.0"
+  resolved "https://registry.yarnpkg.com/tslib/-/tslib-1.9.0.tgz#e37a86fda8cbbaf23a057f473c9f4dc64e5fc2e8"
 
 tslint-loader@^3.3.0:
   version "3.3.0"
