@@ -110,6 +110,12 @@
       "SAVE_BTN": "Save",
       "DELETE_BTN": "Delete Record"
     },
+    "EXIT_EDIT_CONFIRM_MODAL": {
+      "TITLE": "Exit Edit Details",
+      "DESC": "Are you sure you want to exit without saving changes? This cannot be reverted.",
+      "CONTINUE": "Continue",
+      "CANCEL": "Cancel"
+    },
     "LINKS":{
       "BACK": "Back to Results"
     },

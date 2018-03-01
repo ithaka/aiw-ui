@@ -100,6 +100,7 @@ export class AssetPage implements OnInit, OnDestroy {
     private editDetailsForm: FormGroup
     private editDetailsFormSubmitted: boolean = false // Set to true once the edit details form is submitted
     private isProcessing: boolean = false
+    private showExitEdit: boolean = false
 
     constructor(
         private _assets: AssetService,
@@ -285,7 +286,6 @@ export class AssetPage implements OnInit, OnDestroy {
             }
         } else {
             this.assets[assetIndex] = asset
-            console.log('assets:', this.assets)
             if (assetIndex == 0) {
                 this._title.setTitle( asset.title );
                 document.querySelector('meta[name="DC.type"]').setAttribute('content', 'Artwork');
@@ -713,7 +713,6 @@ export class AssetPage implements OnInit, OnDestroy {
             .subscribe((asset) => {
                 let contributinginstitutionid: number = asset.contributinginstitutionid 
                 this.collectionType = this.collectionTypeHandler.getCollectionType(asset.collectiontypes, contributinginstitutionid)
-                console.log('collection type: ', this.collectionType)
             }, (err) => {
                 console.error(err)
             })
@@ -734,20 +733,82 @@ export class AssetPage implements OnInit, OnDestroy {
          * Create the asset metadata object that will be submitted to the endpoint
          */
         let assetDetailsObject = this._pcservice.prepareAssetDetailsObject(formValue, this.assets[0]['SSID'])
-        console.log(assetDetailsObject)
 
         // update asset metadata
         this._pcservice.updatepcImageMetadata(assetDetailsObject)
             .subscribe(
                 data => {
-                    this.isProcessing = false
-                    console.log( data )
+                    if( data.success ) {
+                        this.isProcessing = false
+                        this.closeEditDetails('Continue')
+                    }
                 },
                 error => {
                     console.error(error)
                     this.isProcessing = false
                 }
             );
+    }
+
+    /**
+     * Preloads the edit details form with the asset mmetadata values and show the form
+     */
+    private loadEditDetailsForm(): void{
+
+        // preload form values
+        let metaData = this.assets[0].formattedMetadata
+        for(let label in metaData){
+            let value = metaData[label][0]
+            switch (label) {
+                case 'Creator':  {
+                    this.editDetailsForm.controls['creator'].setValue( value ) 
+                    break
+                }
+                case 'Title':  {
+                    this.editDetailsForm.controls['title'].setValue( value )
+                    break
+                }
+                case 'Work Type':  {
+                    this.editDetailsForm.controls['work_type'].setValue( value )
+                    break
+                }
+                case 'Date':  {
+                    this.editDetailsForm.controls['date'].setValue( value )
+                    break
+                }
+                case 'Location':  {
+                    this.editDetailsForm.controls['location'].setValue( value )
+                    break
+                }
+                case 'Material':  {
+                    this.editDetailsForm.controls['material'].setValue( value )
+                    break
+                }
+                case 'Description':  {
+                    this.editDetailsForm.controls['description'].setValue( value )
+                    break
+                }
+                case 'Subject':  {
+                    this.editDetailsForm.controls['subject'].setValue( value )
+                    break
+                }
+                default: {
+                    break
+                }
+            }
+        }
+
+        // Show edit details form
+        this.showEditDetails = true
+    }
+
+    private closeEditDetails(type: string): void{
+        // Hide and reset the edit details form
+        if( type === 'Continue'){
+            this.showEditDetails = false
+            this.editDetailsForm.reset()
+        }
+        this.showExitEdit = false
     }
     
 }

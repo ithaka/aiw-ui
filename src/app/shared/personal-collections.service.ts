@@ -66,7 +66,7 @@ export class PersonalCollectionService {
   public updatepcImageMetadata(assetDetails: AssetDetailsRequestObject): Observable<any> {
     return this._http.post(
         this.pcImgMetaUpdateURL,
-        assetDetails,
+        [ assetDetails ],
         this.options
     )
   }

@@ -53,7 +53,7 @@
         //- If the user has not accepted the agreement, show modal when clicked, otherwise download immediately
         .btn-row
           //- (mouseup) is a Firefox fix for firing the copy event
-          button.btn.btn-secondary([class.active]="showEditDetails", tabindex="1", (click)="showEditDetails = !showEditDetails")
+          button.btn.btn-secondary([class.active]="showEditDetails", tabindex="1", (click)="loadEditDetailsForm()")
             | {{ 'ASSET_PAGE.BUTTONS.EDIT_DETAILS' | translate}}
           button.btn.btn-secondary([class.active]="showCopyUrl", tabindex="2", (mousedown)="showCopyUrl ? showCopyUrl = false : copyGeneratedImgURL()", (mouseup)="copyUrlInput.select(); document.execCommand('copy', false, null)")
             | {{ 'ASSET_PAGE.BUTTONS.LINK' | translate}}
@@ -124,7 +124,7 @@
             a#buttonReportAssetError.btn.btn-secondary.my-1([attr.href]="'http://www.artstor.org/form/report-error?collectionName=' + assets[0].collectionName + '&id=' + assets[0].id + '&email=' + user.username", title="Report an error", tabindex="9", target="_blank") {{'ASSET_PAGE.BUTTONS.REPORT_ERROR' | translate}}
         
         .mt-2(*ngIf="showEditDetails")
-          button.close.mb-3((click)="showEditDetails = false", type="button", aria-label="Close")
+          button.close.mb-3((click)="showExitEdit = true", type="button", aria-label="Close")
             span(aria-hidden="true") &times;
 
           form#editDetailsForm.pt-4.mr-4([formGroup]="editDetailsForm", (ngSubmit)="editDetailsFormSubmit(editDetailsForm.value)")
@@ -197,3 +197,4 @@ ang-add-to-group(*ngIf="showAddModal", [selectedAssets]="[ assets[0] ]", [showCr
 ang-new-ig-modal(*ngIf="showCreateGroupModal", [selectedAssets]="[ assets[0] ]", [showAddToGroup]="true", (addToGroup)="showAddModal = true; showCreateGroupModal = false;", (closeModal)="showCreateGroupModal = false")
 ang-access-denied-modal(*ngIf="showAccessDeniedModal", [showSkipAsset]="isFullscreen && isAssetSkipable()", (skipAsset)="handleSkipAsset()", (exitFullScreen)="assetViewer.exitFullScreen(); assetViewer.setFullscreen(false)")
 ang-generate-citation(*ngIf="showGenerateCitation", [asset]="assets[0]", (closeModal)="showGenerateCitation = false")
+ang-confirm-modal(*ngIf="showExitEdit", (closeModal)="closeEditDetails($event)", title="{{ 'ASSET_PAGE.EXIT_EDIT_CONFIRM_MODAL.TITLE' | translate }}", description="{{ 'ASSET_PAGE.EXIT_EDIT_CONFIRM_MODAL.DESC' | translate }}", dismiss="{{ 'ASSET_PAGE.EXIT_EDIT_CONFIRM_MODAL.CANCEL' | translate }}", primary="{{ 'ASSET_PAGE.EXIT_EDIT_CONFIRM_MODAL.CONTINUE' | translate }}")
