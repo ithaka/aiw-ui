@@ -221,11 +221,16 @@ export class AssetService {
      * @param totalResults Total number of results after removing the selected asset(s)
      */
     public removeFromResults(ids: string[], totalResults: number ): void {
+        // Remove deleted thumbnails
         this.allResultsValue['thumbnails'] = this.allResultsValue['thumbnails'].filter((thumbnail: Thumbnail) => {
             return ids.indexOf(thumbnail.objectId) < 0
-        });
-        this.allResultsValue['total'] = totalResults;
-        this.allResultsSource.next(this.allResultsValue);
+        })
+        // Remove deleted ids
+        this.allResultsValue['items'] = this.allResultsValue['items'].filter((item: string) => {
+            return ids.indexOf(item) < 0
+        })
+        this.allResultsValue['total'] = totalResults
+        this.allResultsSource.next(this.allResultsValue)
     }
 
     public getCurrentInstitution(): any {
