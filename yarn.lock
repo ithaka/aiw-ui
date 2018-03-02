@@ -440,9 +440,9 @@ arrify@^1.0.0:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/arrify/-/arrify-1.0.1.tgz#898508da2226f380df904728456849c1501a4b0d"
 
-artstor-viewer@^1.0.34:
-  version "1.0.36"
-  resolved "https://registry.yarnpkg.com/artstor-viewer/-/artstor-viewer-1.0.36.tgz#734eeb706cd8fc6269e3b77b3535801f981a2c33"
+artstor-viewer@^1.0.38:
+  version "1.0.38"
+  resolved "https://registry.yarnpkg.com/artstor-viewer/-/artstor-viewer-1.0.38.tgz#f229b44b346b7f44c89384402d351cf24c4189d9"
   dependencies:
     "@angular/http" "^5.2.0"
     openseadragon "^2.3.1"
@@ -4758,7 +4758,7 @@ phantomjs-prebuilt@^2.1.7:
     which "~1.2.10"
 
 phantomjs@^2.1.7:
-  version "2.1.7"
+  version "2.1.7+deprecated"
   resolved "https://registry.yarnpkg.com/phantomjs/-/phantomjs-2.1.7.tgz#c6910f67935c37285b6114329fc2f27d5f3e3134"
   dependencies:
     extract-zip "~1.5.0"
