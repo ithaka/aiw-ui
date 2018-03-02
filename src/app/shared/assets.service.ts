@@ -741,6 +741,8 @@ export class AssetService {
             .toPromise()
             .then((res) => {
                 if (res['thumbnails']) {
+                    //The asset grid component expects the total number of assets in 'total'
+                    res['total'] = res['count']
                     // Set the allResults object
                     this.updateLocalResults(res);
                 } else {
