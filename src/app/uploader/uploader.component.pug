@@ -14,6 +14,9 @@
       .file-name
         div(*ngFor="let fileObj of uploader.queue") {{ fileObj.file.name }}
         //- Will come back to this to fix error messaging later
-        .error-msg(*ngIf="false") Invalid file format
+        //- .error-msg(*ngIf="false") Invalid file format
+      .file-name(*ngIf="invalidFiles && invalidFiles.length > 0")
+        .error-msg(*ngFor="let file of invalidFiles") "{{ file.name }}" is not a valid file type
+
   .info-lbl {{ 'UPLOAD_IMAGES_MODAL.FORMAT_LBL' | translate }}
   a.btn.btn-link.help(href="http://support.artstor.org/?article-category=09-using-your-own-images", target="_blank") {{ 'UPLOAD_IMAGES_MODAL.HELP' | translate }}

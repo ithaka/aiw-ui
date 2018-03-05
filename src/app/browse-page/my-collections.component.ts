@@ -35,7 +35,7 @@ export class MyCollectionsComponent implements OnInit {
   private tags : Tag[] = [];
   private expandedCategories: any = {};
   private selectedBrowseId: string = '';
-  private showUploadImgsModal: boolean = true;
+  private showUploadImgsModal: boolean = false;
   private showEditPCModal: boolean = false;
 //   private uploadPC: boolean = false;
 
