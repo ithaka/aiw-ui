@@ -79,7 +79,7 @@ module.exports = function(options) {
 
     optimization: {
       splitChunks : {
-        // name: ['polyfills', 'vendor'].reverse(),
+        name: ['polyfills', 'vendor'],
         name: true,
         minSize: Infinity
       }
