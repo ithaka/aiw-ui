@@ -13,8 +13,6 @@ const ProvidePlugin = require('webpack/lib/ProvidePlugin');
 const DefinePlugin = require('webpack/lib/DefinePlugin');
 const NormalModuleReplacementPlugin = require('webpack/lib/NormalModuleReplacementPlugin');
 const IgnorePlugin = require('webpack/lib/IgnorePlugin');
-const DedupePlugin = require('webpack/lib/optimize/DedupePlugin');
-const UglifyJsPlugin = require('webpack/lib/optimize/UglifyJsPlugin');
 const WebpackMd5Hash = require('webpack-md5-hash');
 const LoaderPlugin = require('webpack/lib/LoaderOptionsPlugin');
 
@@ -42,6 +40,7 @@ module.exports = function(env) {
      * See: https://github.com/webpack/docs/wiki/build-performance#sourcemaps
      */
     devtool: 'source-map',
+    mode: 'production',
 
     /**
      * Options affecting the output of the compilation.
@@ -136,27 +135,27 @@ module.exports = function(env) {
        * See: https://webpack.github.io/docs/list-of-plugins.html#uglifyjsplugin
        */
       // NOTE: To debug prod builds uncomment //debug lines and comment //prod lines
-      new UglifyJsPlugin({
-        // beautify: true, //debug
-        // mangle: false, //debug
-        // dead_code: false, //debug
-        // unused: false, //debug
-        // deadCode: false, //debug
-        // compress: {
-        //   screw_ie8: true,
-        //   keep_fnames: true,
-        //   drop_debugger: false,
-        //   dead_code: false,
-        //   unused: false
-        // }, // debug
-        // comments: true, //debug
+      // new UglifyJsPlugin({
+      //   // beautify: true, //debug
+      //   // mangle: false, //debug
+      //   // dead_code: false, //debug
+      //   // unused: false, //debug
+      //   // deadCode: false, //debug
+      //   // compress: {
+      //   //   screw_ie8: true,
+      //   //   keep_fnames: true,
+      //   //   drop_debugger: false,
+      //   //   dead_code: false,
+      //   //   unused: false
+      //   // }, // debug
+      //   // comments: true, //debug
 
 
-        beautify: false, //prod
-        mangle: { screw_ie8 : true, keep_fnames: true }, //prod
-        compress: { screw_ie8: true }, //prod
-        comments: false //prod
-      }),
+      //   beautify: false, //prod
+      //   mangle: { screw_ie8 : true, keep_fnames: true }, //prod
+      //   compress: { screw_ie8: true }, //prod
+      //   comments: false //prod
+      // }),
 
       /**
        * Plugin: NormalModuleReplacementPlugin
