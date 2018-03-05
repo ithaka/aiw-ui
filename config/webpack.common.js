@@ -148,6 +148,14 @@ module.exports = function(options) {
           loaders: ['raw-loader', 'sass-loader' ]
         },
 
+        /**
+         * support for pug or jade templates
+         */
+        {
+          test: /\.(pug|jade)$/,
+          loader: ['html-loader', 'pug-html-loader']
+        },
+
         /* Raw loader support for *.html
          * Returns file content as string
          *
@@ -157,14 +165,6 @@ module.exports = function(options) {
           test: /\.html$/,
           loader: 'raw-loader',
           exclude: [helpers.root('src/index.html')]
-        },
-
-        /**
-         * support for pug or jade templates
-         */
-        {
-          test: /\.(pug|jade)$/,
-          loader: ['raw-loader', 'pug-html-loader']
         },
 
         /* File loader for supporting images, for example, in CSS files.

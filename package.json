@@ -109,7 +109,7 @@
         "ng2-dnd": "^4.0.0",
         "ng2-file-upload": "^1.2.1",
         "openseadragon": "^2.2.1",
-        "pug": "^2.0.0-rc.2",
+        "pug": "^2.0.0-rc.4",
         "pug-html-loader": "^1.1.5",
         "raven-js": "^3.20.1",
         "rxjs": "^5.5.2",
