@@ -100,7 +100,6 @@ module.exports = function(options) {
        * See: http://webpack.github.io/docs/configuration.html#module-loaders
        */
       rules: [
-
         {
           test: /\.ts$/,
           loader: 'string-replace-loader',
@@ -128,16 +127,6 @@ module.exports = function(options) {
             'angular2-template-loader'
           ],
           exclude: [/\.(spec|e2e)\.ts$/]
-        },
-
-        /*
-         * Json loader support for *.json files.
-         *
-         * See: https://github.com/webpack/json-loader
-         */
-        {
-          test: /\.json$/,
-          loader: 'json-loader'
         },
 
         /*
