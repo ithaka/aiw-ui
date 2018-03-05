@@ -323,7 +323,7 @@ export class Login {
 
     if (selectedInst.type === 'proxy') {
       // Hashes within a parameter are interpretted incorrectly, and we don't need 'em
-      let stashedRoute = this.stashedRoute.replace("#", "")
+      let stashedRoute = this.stashedRoute ? this.stashedRoute.replace("#", "") : "/"
       // WORKAROUND: Auth is still cleaning data to replace www.artstor.org with library.artstor.org
       if (url.match("//www.artstor.org")) {
         url = url.replace("//www.artstor.org", "//library.artstor.org")
