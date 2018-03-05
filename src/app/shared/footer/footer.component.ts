@@ -7,7 +7,7 @@ import { AppConfig } from '../../app.service'
 import { AuthService } from '../auth.service'
 
 // Project Dependencies
-const { version: appVersion } = JSON.parse(require('../../../../package.json'));
+const { version: appVersion } = require('../../../../package.json')
 
 declare let google
 
