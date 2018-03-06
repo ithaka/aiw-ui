@@ -11,7 +11,7 @@
   .my-drop-zone { 
       border: dotted 3px lightgray;
       height: auto;
-      padding-top: 20px;
+      padding: 10px;
       text-align: center;
       background-color: #fff; 
 
@@ -45,6 +45,7 @@
           font-size: 13px;
           letter-spacing: 0.5px;
           line-height: 18px;
+          text-align: left;
 
           display: block;
           min-height: 40px;
@@ -75,4 +76,8 @@
       }
   }
 
+}
+
+.error-wrap {
+  background-color: #9b9a9b;
 }

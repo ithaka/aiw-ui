@@ -127,7 +127,7 @@
   "UPLOAD_IMAGES_MODAL": {
     "TITLE": "Upload Images",
     "FORMAT_LBL": "JPEG File Format Required",
-    "DROP_TXT": "Drop Files Here",
+    "DROP_TXT": "Drop or select JPEG files",
     "UPLOAD_LBL": "Upload new media",
     "SELECT_BUTTON_TXT": "SELECT FILES",
     "HELP": "Help"
