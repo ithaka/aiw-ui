@@ -16,6 +16,7 @@ const WebpackMd5Hash = require('webpack-md5-hash');
 const LoaderPlugin = require('webpack/lib/LoaderOptionsPlugin');
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 const CompressionPlugin = require("compression-webpack-plugin");
+const ClosureCompilerPlugin = require('webpack-closure-compiler');
 
 /**
  * Webpack Constants
@@ -119,6 +120,15 @@ module.exports = function(env) {
       //   //  }
       //   }
       // }),
+      new ClosureCompilerPlugin({
+          compiler: {
+            // jar: 'path/to/your/custom/compiler.jar', //optional
+            language_in: 'ECMASCRIPT6',
+            language_out: 'ECMASCRIPT5',
+            compilation_level: 'SIMPLE'
+          },
+          concurrency: 3,
+      }),
 
 
       /**
