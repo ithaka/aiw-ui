@@ -66,7 +66,6 @@ export class Login {
   ngOnInit() {
     // Check for a stashed route to pass to proxy links
     this.stashedRoute = this._storage.get("stashedRoute")
-    console.log("STASH", this.stashedRoute)
 
     if (this._app.config.copyModifier) {
       this.copyBase = this._app.config.copyModifier + "."
@@ -317,7 +316,7 @@ export class Login {
 
     if (selectedInst.type === 'proxy') {
       // Hashes within a parameter are interpretted incorrectly, and we don't need 'em
-      let stashedRoute = this.stashedRoute ? this.stashedRoute.replace("#", "") : "/"
+      let stashedRoute = this.stashedRoute ? this.stashedRoute.replace("#/", "") : "/"
       // WORKAROUND: Auth is still cleaning data to replace www.artstor.org with library.artstor.org
       if (url.match("//www.artstor.org")) {
         url = url.replace("//www.artstor.org", "//library.artstor.org")
@@ -336,6 +335,8 @@ export class Login {
          * WAM Proxy forwarding
          * Auth provides !!!TARGET_NO_SERVER!!! as a token/string to replace for forwarding
          */
+        // pathTokens are appended after a trailing forward slash
+        if (stashedRoute[0] === "/") { stashedRoute = stashedRoute.substr(1) }
         url = url.replace(pathToken, stashedRoute )
       }
       // If proxy, simply open url:
