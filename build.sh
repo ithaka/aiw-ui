@@ -26,6 +26,7 @@ yarn global add webpack webpack-dev-server karma karma-cli protractor typescript
 yarn install
 
 # Build the project! (uses Webpack)
+# - sleep acts as a failsafe for broken dependencies stalling builds
 sleep 600 & SPID=${!}; (yarn run build:prod; kill ${SPID}; exit 1) & CPID=${!}; fg 1; kill ${CPID}
 
 # Collect our built files
