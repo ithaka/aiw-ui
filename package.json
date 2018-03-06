@@ -7,7 +7,7 @@
     "scripts": {
         "build:dev": "webpack --config config/webpack.dev.js --profile",
         "build:docker": "npm run build:prod && docker build -t angular2-webpack-start:latest .",
-        "build:prod": "webpack --config config/webpack.prod.js  --profile --bail",
+        "build:prod": "webpack --config config/webpack.prod.js",
         "build": "npm run build:dev",
         "bump": "npm run bump:patch",
         "bump:patch": "yarn version --new-version patch",
