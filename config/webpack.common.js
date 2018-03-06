@@ -1,5 +1,5 @@
 /**
- * @author: @AngularClass
+ * @author: Cody
  */
 
 const webpack = require('webpack');
@@ -8,10 +8,8 @@ const helpers = require('./helpers');
 /*
  * Webpack Plugins
  */
-// problem with copy-webpack-plugin
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-// const ForkCheckerPlugin = require('awesome-typescript-loader').ForkCheckerPlugin;
 const AssetsPlugin = require('assets-webpack-plugin');
 const ContextReplacementPlugin = require('webpack/lib/ContextReplacementPlugin');
 const LoaderPlugin = require('webpack/lib/LoaderOptionsPlugin');
@@ -51,11 +49,9 @@ module.exports = function(options) {
      * See: http://webpack.github.io/docs/configuration.html#entry
      */
     entry: {
-
       'polyfills': './src/polyfills.browser.ts',
       'vendor':    './src/vendor.browser.ts',
       'main':      './src/main.browser.ts'
-
     },
 
     /*
@@ -71,7 +67,6 @@ module.exports = function(options) {
        * See: http://webpack.github.io/docs/configuration.html#resolve-extensions
        */
       extensions: ['.ts', '.js', '.json'],
-
       // An array of directory names to be resolved to the current directory
       modules: [helpers.root('src'), 'node_modules'],
 
@@ -79,7 +74,7 @@ module.exports = function(options) {
 
     optimization: {
       splitChunks : {
-        name: ['polyfills', 'vendor'],
+        // name: ['polyfills', 'vendor'],
         name: true,
         minSize: Infinity
       }

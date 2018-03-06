@@ -12,11 +12,10 @@ const commonConfig = require('./webpack.common.js'); // the settings that are co
  */
 const ProvidePlugin = require('webpack/lib/ProvidePlugin');
 const DefinePlugin = require('webpack/lib/DefinePlugin');
-const NormalModuleReplacementPlugin = require('webpack/lib/NormalModuleReplacementPlugin');
-const IgnorePlugin = require('webpack/lib/IgnorePlugin');
 const WebpackMd5Hash = require('webpack-md5-hash');
 const LoaderPlugin = require('webpack/lib/LoaderOptionsPlugin');
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
+const CompressionPlugin = require("compression-webpack-plugin");
 
 /**
  * Webpack Constants
@@ -102,18 +101,35 @@ module.exports = function(env) {
        */
       new WebpackMd5Hash(),
 
+      // new webpack.LoaderOptionsPlugin({
+      //   minimize: true
+      // }),
+
       /**
        * Plugin: UglifyJSPlugin
        * See: https://webpack.js.org/plugins/uglifyjs-webpack-plugin
        */
-      new UglifyJSPlugin({
-        uglifyOptions: {
-          mangle: {
-            keep_fnames: true
-          },
-          sourceMap: true
-        }
-      }),
+      // new UglifyJSPlugin({
+      //   uglifyOptions: {
+      //   //   ecma: 5,
+      //   //   mangle: false,
+      //   //   sourceMap: true,
+      //   //   compress: {
+      //   //   warnings: true
+      //   //  }
+      //   }
+      // }),
+
+
+      /**
+       * Plugin: CompressionWebpackPlugin
+       * Prepare compressed versions of assets to serve them with Content-Encoding
+       * See: https://github.com/webpack-contrib/compression-webpack-plugin
+       */
+      // new CompressionPlugin({
+      //   regExp: /\.css$|\.html$|\.js$|\.map$/,
+      //   threshold: 2 * 1024
+      // }),
       /**
        * Plugin: DefinePlugin
        * Description: Define free variables.

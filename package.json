@@ -92,15 +92,8 @@
         "angulartics2": "^4.2.0",
         "artstor-viewer": "1.0.38",
         "assets-webpack-plugin": "^3.5.1",
-        "awesome-typescript-loader": "^3.5.0",
-        "bootstrap": "4.0.0-beta.2",
         "codelyzer": "^2.0.0-beta.1",
         "core-js": "^2.4.1",
-        "cucumber": "^2.0.0-rc.2",
-        "grunt": "^1.0.1",
-        "html-loader": "^0.5.5",
-        "html-webpack-plugin": "^3.0.4",
-        "http-server": "^0.9.0",
         "ie-shim": "^0.1.0",
         "linkifyjs": "^2.1.4",
         "medium-editor": "^5.23.0",
@@ -126,12 +119,20 @@
         "@types/uglify-js": "^2.0.27",
         "@types/webpack": "^1.12.36",
         "angular2-template-loader": "^0.6.2",
+        "awesome-typescript-loader": "^3.5.0",
+        "bootstrap": "4.0.0-beta.2",
+        "compression-webpack-plugin": "^1.1.10",
         "copy-webpack-plugin": "^4.5.0",
         "css-loader": "^0.28.10",
+        "cucumber": "^2.0.0-rc.2",
         "exports-loader": "^0.7.0",
         "expose-loader": "^0.7.4",
         "file-loader": "^1.1.11",
+        "grunt": "^1.0.1",
         "gh-pages": "^0.11.0",
+        "html-loader": "^0.5.5",
+        "html-webpack-plugin": "^3.0.4",
+        "http-server": "^0.9.0",
         "imports-loader": "^0.8.0",
         "istanbul-instrumenter-loader": "^3.0.0",
         "json-loader": "^0.5.7",
@@ -161,7 +162,7 @@
         "tslint": "^4.4.2",
         "tslint-loader": "^3.6.0",
         "typedoc": "^0.5.1",
-        "typescript": "2.4.2",
+        "typescript": "2.7.2",
         "uglifyjs-webpack-plugin": "^1.2.2",
         "webpack": "4.1.0",
         "webpack-cli": "^2.0.10",
@@ -172,10 +173,10 @@
     },
     "repository": {
         "type": "git",
-        "url": "https://github.com/angularclass/angular2-webpack-starter.git"
+        "url": "https://github.com/ithaka/aiw-ui.git"
     },
     "bugs": {
-        "url": "https://github.com/angularclass/angular2-webpack-starter/issues"
+        "url": "https://jira.jstor.org/projects/AIR/summary"
     },
     "engines": {
         "node": ">= 6.0.0",
