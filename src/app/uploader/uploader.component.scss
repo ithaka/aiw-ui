@@ -48,12 +48,14 @@
           text-align: left;
 
           display: block;
-          min-height: 40px;
+        //   min-height: 40px;
           max-height: 200px;
           overflow: auto;
 
           .error-msg{
               color: #ea4335;
+              padding: 3px;
+              border-bottom: 2px solid #fff;
           }
       }
   }
@@ -79,5 +81,5 @@
 }
 
 .error-wrap {
-  background-color: #9b9a9b;
+  background-color: #eee;
 }
