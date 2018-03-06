@@ -13,15 +13,9 @@ import { AnalyticsService } from '../analytics.service'
 declare var initPath: string
 
 @Component({
-  // The selector is what angular internally uses
-  // for `document.querySelectorAll(selector)` in our index.html
-  // where, in this case, selector is the string 'home'
   selector: 'login',
-  // Our list of styles in our component. We may add more to compose many styles together
   styleUrls: [ './login.component.scss' ],
-  // Every Angular template is first compiled by the browser before Angular runs it's compiler
   templateUrl: './login.component.pug'
-  // template: `<h1>Test title</h1>`
 })
 export class Login {
 
