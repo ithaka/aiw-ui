@@ -32,15 +32,7 @@ export class UploaderComponent implements OnInit {
 
   ngOnInit() {
     this.uploader.onWhenAddingFileFailed = (item, filter, options) => {
-      // this.uploader.clearQueue()
-
-      // console.log(item, filter, options)
       this.invalidFiles.push(item)
-      // console.log(this.invalidFiles)
-      // this.typeValid = false;
-      setTimeout(() => {
-        // this.typeValid = true;
-      }, 2000);
     }
   }
 
@@ -57,10 +49,6 @@ export class UploaderComponent implements OnInit {
    * @param files 
    */
   private fileDropped(files: RawFile[]): void {
-    // this.droppedFiles.concat(files)
-    setTimeout(()=> {
-      console.log(this.uploader.queue)
-    }, 1000)
   }
 }
 
