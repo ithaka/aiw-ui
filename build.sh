@@ -26,7 +26,8 @@ yarn global add webpack webpack-dev-server karma karma-cli protractor typescript
 yarn install
 
 # Build the project! (uses Webpack)
-yarn run build:prod
+sleep 10 & SPID=${!}; (yarn run build:prod; kill ${SPID}; exit 1) & CPID=${!}; fg 1; kill ${CPID}
+
 
 # Collect our built files
 rsync -a ${SRC_DIR}/dist/* ${BUILD_DIR}/

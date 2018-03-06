@@ -42,7 +42,8 @@ module.exports = function(env) {
      * See: https://github.com/webpack/docs/wiki/build-performance#sourcemaps
      */
     // devtool: 'source-map',
-    mode: 'production',
+    profile: true,
+    bail: true,
 
     /**
      * Options affecting the output of the compilation.
@@ -50,7 +51,6 @@ module.exports = function(env) {
      * See: http://webpack.github.io/docs/configuration.html#output
      */
     output: {
-
       /**
        * The output directory as absolute path (required).
        *
@@ -91,7 +91,7 @@ module.exports = function(env) {
      */
     plugins: [
       /**
-       * Prod builds should properly cancel the build process
+       * Prod builds should not emit assets if there is an error
        */
       new webpack.NoEmitOnErrorsPlugin(),
       /**
@@ -120,12 +120,18 @@ module.exports = function(env) {
       //   //  }
       //   }
       // }),
+
+      /**
+       * Plugin: ClosureCompilerPlugin
+       * see: https://github.com/roman01la/webpack-closure-compiler
+       */
       new ClosureCompilerPlugin({
           compiler: {
             // jar: 'path/to/your/custom/compiler.jar', //optional
             language_in: 'ECMASCRIPT6',
             language_out: 'ECMASCRIPT5',
             compilation_level: 'SIMPLE'
+            // create_source_map: true
           },
           concurrency: 3,
       }),
