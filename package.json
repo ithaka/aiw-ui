@@ -119,7 +119,7 @@
         "@types/uglify-js": "^2.0.27",
         "@types/webpack": "^1.12.36",
         "angular2-template-loader": "^0.6.2",
-        "awesome-typescript-loader": "^3.5.0",
+        "awesome-typescript-loader": "5.0.0",
         "bootstrap": "4.0.0-beta.2",
         "compression-webpack-plugin": "^1.1.10",
         "copy-webpack-plugin": "^4.5.0",
