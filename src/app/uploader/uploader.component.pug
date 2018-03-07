@@ -12,7 +12,12 @@
       button.btn.btn-primary.file-select-btn(type="button", (click)="file.click()") {{ 'UPLOAD_IMAGES_MODAL.SELECT_BUTTON_TXT' | translate }}
       input(type="file", accept=".jpg,.jpeg", multiple, ng2FileSelect, [uploader]="uploader", #file="")
       .file-name
-        div(*ngFor="let fileObj of uploader.queue") {{ fileObj.file.name }}
+        div(*ngFor="let queueObj of uploader.queue")
+          .queue-item(*ngIf="queueObj.isUploading") {{ queueObj.file.name }}
+            i.icon.icon-loading
+        
+        .queue-item somename.jpg
+          i.icon.icon-loading
         //- Will come back to this to fix error messaging later
         //- .error-msg(*ngIf="false") Invalid file format
       .file-name.error-wrap(*ngIf="invalidFiles && invalidFiles.length > 0")

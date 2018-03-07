@@ -83,3 +83,13 @@
 .error-wrap {
   background-color: #eee;
 }
+
+.queue-item {
+    padding-left: 20px;
+    position: relative;
+
+    i {
+        left: 0;
+        top: 2px;
+    }
+}
