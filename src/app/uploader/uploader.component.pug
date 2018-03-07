@@ -11,17 +11,10 @@
       h3 {{ 'UPLOAD_IMAGES_MODAL.DROP_TXT' | translate }}
       button.btn.btn-primary.file-select-btn(type="button", (click)="file.click()") {{ 'UPLOAD_IMAGES_MODAL.SELECT_BUTTON_TXT' | translate }}
       input(type="file", accept=".jpg,.jpeg", multiple, ng2FileSelect, [uploader]="uploader", #file="")
-      .file-name
+      .file-name.pb-1
         div(*ngFor="let queueObj of uploader.queue")
           .queue-item(*ngIf="queueObj.isUploading") {{ queueObj.file.name }}
             i.icon.icon-loading
-        
-        .queue-item somename.jpg
-          i.icon.icon-loading
-        //- Will come back to this to fix error messaging later
-        //- .error-msg(*ngIf="false") Invalid file format
       .file-name.error-wrap(*ngIf="invalidFiles && invalidFiles.length > 0")
         .error-msg(*ngFor="let file of invalidFiles") "{{ file.name }}" is not a valid JPEG
-
-  //- .info-lbl {{ 'UPLOAD_IMAGES_MODAL.FORMAT_LBL' | translate }}
   a.btn.btn-link.help(href="http://support.artstor.org/?article-category=09-using-your-own-images", target="_blank") {{ 'UPLOAD_IMAGES_MODAL.HELP' | translate }}
