@@ -16,8 +16,6 @@
       background-color: #fff; 
 
       .inner-wrapper{
-          vertical-align: middle;
-          display: inline-table;
           width: 100%;
       }
 
@@ -30,8 +28,8 @@
       }
 
       .file-select-btn{
-          display: block;
-          margin: 30px auto;
+          display: inline-block;
+          margin: 0 0 0 20px;
           cursor: pointer;
       }
 
@@ -92,4 +90,9 @@
         left: 0;
         top: 2px;
     }
+}
+
+.header-upload {
+    display: inline-block;
+    color: gray;
 }

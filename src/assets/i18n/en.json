@@ -129,7 +129,7 @@
     "FORMAT_LBL": "JPEG File Format Required",
     "DROP_TXT": "Drop or select JPEG files",
     "UPLOAD_LBL": "Upload new media",
-    "SELECT_BUTTON_TXT": "SELECT FILES",
+    "SELECT_BUTTON_TXT": "Browse",
     "HELP": "Help"
   },
   "EDIT_PC_MODAL": {

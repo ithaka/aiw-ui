@@ -1,4 +1,4 @@
-.upload-cntnr
+.upload-cntnr.mb-2
   .lbl {{ 'UPLOAD_IMAGES_MODAL.UPLOAD_LBL' | translate }}
   .well.my-drop-zone(
     ng2FileDrop,
@@ -8,12 +8,12 @@
     [uploader]="uploader"
   )
     .inner-wrapper
-      h3 {{ 'UPLOAD_IMAGES_MODAL.DROP_TXT' | translate }}
+      h3.header-upload {{ 'UPLOAD_IMAGES_MODAL.DROP_TXT' | translate }}
       button.btn.btn-primary.file-select-btn(type="button", (click)="file.click()") {{ 'UPLOAD_IMAGES_MODAL.SELECT_BUTTON_TXT' | translate }}
       input(type="file", accept=".jpg,.jpeg", multiple, ng2FileSelect, [uploader]="uploader", #file="")
-      .file-name.pb-1
+      .file-name
         div(*ngFor="let queueObj of uploader.queue")
-          .queue-item(*ngIf="queueObj.isUploading") {{ queueObj.file.name }}
+          .queue-item.pb-1(*ngIf="queueObj.isReady") {{ queueObj.file.name }}
             i.icon.icon-loading
       .file-name.error-wrap(*ngIf="invalidFiles && invalidFiles.length > 0")
         .error-msg(*ngFor="let file of invalidFiles") "{{ file.name }}" is not a valid JPEG

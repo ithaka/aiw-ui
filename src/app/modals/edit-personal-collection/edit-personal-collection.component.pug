@@ -7,9 +7,9 @@
         button.close((click)="closeModal.emit()", type="button", data-dismiss="modal", aria-label="Close")
           span(aria-hidden="true") &times;
       .modal-body
-        ang-uploader
         .row.no-gutters
           .thmb-cntnr([ngClass]="{ 'col-md-6': editMode, 'col-md-12': !editMode }")
+            ang-uploader
             .lbl {{ 'EDIT_PC_MODAL.EDIT_COL' | translate }}
               .thumb-preview-cntnr
                 .row.no-gutters
