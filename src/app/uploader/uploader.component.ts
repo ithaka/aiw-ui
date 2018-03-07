@@ -49,6 +49,7 @@ export class UploaderComponent implements OnInit {
    * @param files 
    */
   private fileDropped(files: RawFile[]): void {
+    console.log(this.uploader.queue)
   }
 }
 
