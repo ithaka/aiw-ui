@@ -221,11 +221,16 @@ export class AssetService {
      * @param totalResults Total number of results after removing the selected asset(s)
      */
     public removeFromResults(ids: string[], totalResults: number ): void {
+        // Remove deleted thumbnails
         this.allResultsValue['thumbnails'] = this.allResultsValue['thumbnails'].filter((thumbnail: Thumbnail) => {
             return ids.indexOf(thumbnail.objectId) < 0
-        });
-        this.allResultsValue['total'] = totalResults;
-        this.allResultsSource.next(this.allResultsValue);
+        })
+        // Remove deleted ids
+        this.allResultsValue['items'] = this.allResultsValue['items'].filter((item: string) => {
+            return ids.indexOf(item) < 0
+        })
+        this.allResultsValue['total'] = totalResults
+        this.allResultsSource.next(this.allResultsValue)
     }
 
     public getCurrentInstitution(): any {
@@ -736,6 +741,8 @@ export class AssetService {
             .toPromise()
             .then((res) => {
                 if (res['thumbnails']) {
+                    //The asset grid component expects the total number of assets in 'total'
+                    res['total'] = res['count']
                     // Set the allResults object
                     this.updateLocalResults(res);
                 } else {
@@ -832,7 +839,10 @@ export class AssetService {
       return this.http.post(this._auth.getSearchUrl(), query, options)
         .toPromise()
         .then(res => {
-          let hierData = Object.values(res['hierarchies2'])
+          // Object.values is not supported by IE 11
+          let hierData = Object.keys(res['hierarchies2']).map(function(e) {
+            return res['hierarchies2'][e]
+          })
           if (hierData.length) { // if we have hierarchical data
             res = hierData
           } else { // must be a facet

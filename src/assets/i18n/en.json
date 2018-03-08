@@ -45,6 +45,7 @@
       "PASSWORD_MINLENGTH": "Password must be 7-20 characters",
       "PASSWORD_MISMATCH": "Password confirmation does not match",
       "AGE_REQUIRED": "Please confirm you are 13 or older",
+      "TERMS_REQUIRED": "Please agree to the Artstor Digital Library Terms",
       "INSTITUTION_ROLE_REQUIRED": "Please select a role",
       "ACADEMIC_DEPT_REQUIRED": "Please select a department",
       "LOGIN_SERVER": "Server is not responding. Please try again later.",
@@ -52,10 +53,11 @@
     },
     "AGE_PROMPT": "I confirm that I am 13 or older",
     "AGE_PROMPT_HOVER": "If you are under 13, please provide your legal guardian's email address to register",
-    "INFO_PROMPT": "Yes, send me information about new Artstor content and tools",
-    "SURVEY_PROMPT": "Yes, send me surveys",
+    "INFO_PROMPT": "Yes, send me information about new Artstor content and tools (Optional)",
+    "SURVEY_PROMPT": "Yes, send me surveys (Optional)",
+    "TERMS": "I agree to the Artstor Digital Library <a id=\"linkTermsConditions\" data-automation-component=\"artstor-register-terms\" href=\"http://www.artstor.org/terms\" class=\"link bold\" target=\"_blank\">Terms</a>",
     "PRIVACY_DISCLAIMER": "You may unsubscribe at any time by clicking on the provided link on any marketing message.",
-    "FIELDS_REQUIRED": "Please note that all form fields are required."
+    "FIELDS_REQUIRED": "Please note that all fields are required unless noted."
   },
   "REGISTER_JSTOR_MODAL": {
     "TITLE": "Use your JSTOR account",
@@ -394,9 +396,9 @@
       "ALT_TEXT": "Pueblo in Taos, New Mexico"
     },
     "AD": {
-      "LINK": "https://artstor.wordpress.com/2018/02/01/artstor-at-the-college-art-association-annual-conference",
-      "IMG_SOURCE": "/assets/img/promo-caa.jpg",
-      "ALT_TEXT": "Meet the Education and Outreach team at CAA."
+      "LINK": "http://goo.gl/KAZksy",
+      "IMG_SOURCE": "/assets/img/promo-panoramas.jpg",
+      "ALT_TEXT": "New Virtual Reality Panoramas."
     },
     "QUESTIONS": {
       "HEADING": "Questions",
