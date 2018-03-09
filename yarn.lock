@@ -507,9 +507,9 @@ arrify@^1.0.0, arrify@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/arrify/-/arrify-1.0.1.tgz#898508da2226f380df904728456849c1501a4b0d"
 
-artstor-viewer@1.0.39:
-  version "1.0.39"
-  resolved "https://registry.yarnpkg.com/artstor-viewer/-/artstor-viewer-1.0.39.tgz#aebe0e4894250a05343f6361ac5edfaa5f79b5ec"
+artstor-viewer@1.0.40:
+  version "1.0.40"
+  resolved "https://registry.yarnpkg.com/artstor-viewer/-/artstor-viewer-1.0.40.tgz#ec76bd54585eb6ebfc7f2096a6adbdb175c2fec6"
   dependencies:
     "@angular/http" "^5.2.0"
     openseadragon "^2.3.1"
