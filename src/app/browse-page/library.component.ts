@@ -10,12 +10,16 @@ import { TagsService } from './tags.service';
 import { Tag } from './tag/tag.class';
 import { TitleService } from '../shared/title.service';
 
+import { Locker } from 'angular2-locker'
+
 @Component({
   selector: 'ang-lib',
   templateUrl: 'library.component.pug',
   styleUrls: [ './browse-page.component.scss' ]
 })
 export class LibraryComponent implements OnInit {
+  private _storage
+
   constructor(
     private router: Router,
     private route: ActivatedRoute,
@@ -24,8 +28,11 @@ export class LibraryComponent implements OnInit {
     private _tags: TagsService,
     private _analytics: AnalyticsService,
     private _title: TitleService,
-    private _filters: AssetFiltersService
-  ) { }
+    private _filters: AssetFiltersService,
+    private locker: Locker
+  ) { 
+    this._storage = locker.useDriver(Locker.DRIVERS.LOCAL)
+  }
 
   private loading: boolean = false;
   private subscriptions: Subscription[] = [];
@@ -108,55 +115,83 @@ export class LibraryComponent implements OnInit {
         }
         // load category facets
         this.facetType = this.categoryFacetMap[this.selectedBrowseId]
+        
         // Clear facet objects/arrays
         this.clearFacets()
-        // Get facets from Solr/search
-        this._assets.categoryByFacet(this.facetType, 1)
-        .then( (facetData) => {
-          // ensure they are emptied in case of multiple fast clicking
-          this.clearFacets()
-          
-          // Categoryid facets require an additional call for labels/titles
-          if (this.facetType == 'categoryid') {
-            this._assets.categoryNames()
-              .then((data) => {
-                // Create an index by ID for naming the facets
-                let categoryIndex = data.reduce( ( result, item ) => { 
-                    result[item.categoryId] = item.categoryName; 
-                    return result; 
-                }, {});
-                // Append titles to the facets (we can't replace "name", as its the ID, which we need)
-                this.categoryFacets = facetData
-                  .map( facet => {
-                    facet.title = categoryIndex[facet.name] 
-                    return facet
-                  })
-                  // Then also sort the facets, A-Z
-                  .sort((elemA, elemB) => {
-                    if (elemA.title > elemB.title) return 1
-                    else if (elemA.title < elemB.title) return -1
-                    else return 0
-                  })
-                this.loading = false;
-              })
-              .catch((err) => {
-                console.error(err)
-              })
-          } else if (facetData[0].children) {
-            // Hierarchical facets are stored in a separate object
-            this.hierarchicalFacets = facetData[0].children
-            this.loading = false;
-          } else {
-            // Generically handle all other facets, which use "name" property to filter and display
-            // - Sort by name, A-Z, then set to categoryFacets array
-            this.categoryFacets = facetData.sort((elemA, elemB) => {
-              if (elemA.name > elemB.name) return 1
-              else if (elemA.name < elemB.name) return -1
-              else return 0
-            })
-            this.loading = false;
+
+        // Fetch browse collection object from local storage & check if the required collection list has already been set
+        let storageBrwseColObj = this._storage.get('browseColObject')
+        if( storageBrwseColObj && storageBrwseColObj[this.facetType]){
+          if(storageBrwseColObj[this.facetType].geo){
+            this.hierarchicalFacets = storageBrwseColObj[this.facetType]
+          } else{
+            this.categoryFacets = storageBrwseColObj[this.facetType]
           }
-        })
+          this.loading = false
+        } else{
+
+          if(storageBrwseColObj === null){
+            storageBrwseColObj = {}
+          }
+          // Get facets from Solr/search
+          this._assets.categoryByFacet(this.facetType, 1)
+          .then( (facetData) => {
+            // ensure they are emptied in case of multiple fast clicking
+            this.clearFacets()
+            
+            // Categoryid facets require an additional call for labels/titles
+            if (this.facetType == 'categoryid') {
+
+                this._assets.categoryNames()
+                  .then((data) => {
+                    // Create an index by ID for naming the facets
+                    let categoryIndex = data.reduce( ( result, item ) => { 
+                        result[item.categoryId] = item.categoryName; 
+                        return result; 
+                    }, {});
+                    // Append titles to the facets (we can't replace "name", as its the ID, which we need)
+                    this.categoryFacets = facetData
+                      .map( facet => {
+                        facet.title = categoryIndex[facet.name] 
+                        return facet
+                      })
+                      // Then also sort the facets, A-Z
+                      .sort((elemA, elemB) => {
+                        if (elemA.title > elemB.title) return 1
+                        else if (elemA.title < elemB.title) return -1
+                        else return 0
+                      })
+                    this.loading = false
+
+                    storageBrwseColObj[this.facetType] = this.categoryFacets
+                    this._storage.set('browseColObject', storageBrwseColObj)
+                  })
+                  .catch((err) => {
+                    console.error(err)
+                  })
+              // }
+            } else if (facetData[0].children) {
+              // Hierarchical facets are stored in a separate object
+              this.hierarchicalFacets = facetData[0].children
+              this.loading = false
+
+              storageBrwseColObj[this.facetType] = this.hierarchicalFacets
+              this._storage.set('browseColObject', storageBrwseColObj)
+            } else {
+              // Generically handle all other facets, which use "name" property to filter and display
+              // - Sort by name, A-Z, then set to categoryFacets array
+              this.categoryFacets = facetData.sort((elemA, elemB) => {
+                if (elemA.name > elemB.name) return 1
+                else if (elemA.name < elemB.name) return -1
+                else return 0
+              })
+              this.loading = false
+
+              storageBrwseColObj[this.facetType] = this.categoryFacets
+              this._storage.set('browseColObject', storageBrwseColObj)
+            }
+          })
+        }
       })
     );
     this._analytics.setPageValues('library', '')
