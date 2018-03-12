@@ -1,6 +1,12 @@
 .upload-cntnr.mb-2
   .lbl {{ 'UPLOAD_IMAGES_MODAL.UPLOAD_LBL' | translate }}
-  .well.my-drop-zone
+  .well.my-drop-zone(
+    ng2FileDrop,
+    [ngClass]="{ 'nv-file-over': fileOverDropZone, 'error': false }",
+    (fileOver)="fileOverBase($event)",
+    (onFileDrop)="fileDropped($event)",
+    [uploader]="uploader"
+  )
     .inner-wrapper
       h3.header-upload {{ 'UPLOAD_IMAGES_MODAL.DROP_TXT' | translate }}
       button.btn.btn-primary.file-select-btn(type="button", (click)="file.click()") {{ 'UPLOAD_IMAGES_MODAL.SELECT_BUTTON_TXT' | translate }}
