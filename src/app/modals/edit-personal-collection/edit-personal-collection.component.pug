@@ -13,16 +13,27 @@
             .lbl {{ 'EDIT_PC_MODAL.EDIT_COL' | translate }}
               .thumb-preview-cntnr
                 .row.no-gutters
-                  .col-md-4.thumb([ngClass]="{ 'selected': selectedAsset && (selectedAsset.objectId === thumb.objectId) }", *ngFor="let thumb of pcColThumbs")
-                    img([attr.src]="_assets.makeThumbUrl(thumb.thumbnailImgUrl, 1)", [attr.alt]="thumb.thumbnail1 ? 'Thumbnail of ' + thumb.thumbnail1 : 'No title available'")
+                  //- .col-md-4.thumb([ngClass]="{ 'selected': selectedAsset && (selectedAsset.objectId === thumb.objectId) }", *ngFor="let thumb of pcColThumbs")
+                  //-   img([attr.src]="'nothing here rn'", [attr.alt]="thumb.thumbnail1 ? 'Thumbnail of ' + thumb.thumbnail1 : 'No title available'")
+                  //-   .thumb-overlay
+                  //-     .close-icon(*ngIf="selectedAsset && (selectedAsset.objectId === thumb.objectId)", (click)="clearSelectedAsset()") &times;
+                  //-     .edit-icon((click)="editAssetMeta( thumb )")
+                  //-       i.icon.icon-reorder-white([ngClass]="{ 'active': selectedAsset && (selectedAsset.objectId === thumb.objectId) }")
+                  .col-md-4.thumb([ngClass]="{ 'selected': selectedAsset && (selectedAsset.artstorid === asset.artstorid) }", *ngFor="let asset of collectionAssets")
+                    img([attr.src]="asset.thumbnailUrls[0]", [attr.alt]="asset.name ? 'Thumbnail of ' + asset.name : 'No title available'")
                     .thumb-overlay
-                      .close-icon(*ngIf="selectedAsset && (selectedAsset.objectId === thumb.objectId)", (click)="clearSelectedAsset()") &times;
-                      .edit-icon((click)="editAssetMeta( thumb )")
-                        i.icon.icon-reorder-white([ngClass]="{ 'active': selectedAsset && (selectedAsset.objectId === thumb.objectId) }")
+                      .close-icon(*ngIf="selectedAsset && (selectedAsset.artstorid === asset.artstorid)", (click)="clearSelectedAsset()") &times;
+                      .edit-icon((click)="editAssetMeta( asset )")
+                        i.icon.icon-reorder-white([ngClass]="{ 'active': selectedAsset && (selectedAsset.artstorid === asset.artstorid) }")
               .info-lbl {{ 'EDIT_PC_MODAL.META_ADD_INFO' | translate }}
-          .edit-cntnr.col-md-6(*ngIf="editMode")
-            label.asset-hdr {{ selectedAsset.thumbnail1 }}
-            form#editAssetMetaForm([formGroup]="editAssetMetaForm", (ngSubmit)="editMetaFormSubmit(editAssetMetaForm.value)")
+          .edit-cntnr.col-md-6(*ngIf="selectedAsset && editMode")
+            //- label.asset-hdr {{ selectedAsset.thumbnailUrls[1] }}
+            artstor-viewer(
+              [testEnv]="_auth.getEnv() === 'test'",
+              [assetId]="selectedAsset.artstorid",
+              (assetMetadata)="handleLoadedMetadata($event)"
+            )
+            form#editAssetMetaForm(*ngIf="selectedAssetData", [formGroup]="editAssetMetaForm", (ngSubmit)="editMetaFormSubmit(editAssetMetaForm.value)")
               .form-group
                 label(for="assetCreatorInput") {{ 'EDIT_PC_MODAL.FORM.CREATOR' | translate }}
                 input#assetCreatorInput.form-control(type="text", [formControl]="editAssetMetaForm.controls['creator']", tabindex="0")
@@ -49,5 +60,6 @@
                 input#assetSubjectInput.form-control(type="text", [formControl]="editAssetMetaForm.controls['subject']", tabindex="7")
         .modal-footer
           .form-group
-            button.btn.btn-secondary(*ngIf="selectedAsset && selectedAsset.objectId", (click)="clearSelectedAsset()", type="button") {{ 'EDIT_PC_MODAL.CLOSE' | translate }}
-            button.btn.btn-primary(type="button") {{ 'EDIT_PC_MODAL.SAVE' | translate }}
+            button.btn.btn-danger(*ngIf="selectedAsset && selectedAsset.ssid", (click)="deleteSelectedAsset(selectedAsset.ssid)", type="button") {{ 'EDIT_PC_MODAL.BUTTONS.DELETE' | translate }}
+            button.btn.btn-secondary(*ngIf="selectedAsset && selectedAsset.ssid", (click)="clearSelectedAsset()", type="button") {{ 'EDIT_PC_MODAL.BUTTONS.CLOSE' | translate }}
+            button.btn.btn-primary(type="button") {{ 'EDIT_PC_MODAL.BUTTONS.SAVE' | translate }}
