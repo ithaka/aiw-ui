@@ -137,8 +137,11 @@
     "EDIT_COL": "Edit Collection",
     "META_ADD_INFO": "Metadata can be added by clicking on the thumbnail image, or from the Personal Collection Administration dialog and image page.",
     "HELP": "Help",
-    "CLOSE": "Close",
-    "SAVE": "Save",
+    "BUTTONS": {
+      "CLOSE": "Close",
+      "SAVE": "Save",
+      "DELETE": "Delete"
+    },
     "FORM": {
       "TITLE": "Title",
       "CREATOR": "Creator",

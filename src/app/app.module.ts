@@ -100,7 +100,8 @@ import {
   TitleService,
   ToolboxService,
   TypeIdPipe,
-  ScriptService
+  ScriptService,
+  PersonalCollectionService
 } from './shared'
 import { AssetFiltersService } from './asset-filters/asset-filters.service'
 import { TagsService } from './browse-page/tags.service'
@@ -124,6 +125,7 @@ const APP_PROVIDERS = [
   AssetSearchService,
   GroupService,
   AuthService,
+  PersonalCollectionService,
   LogService,
   ImageGroupService,
   ScriptService,
