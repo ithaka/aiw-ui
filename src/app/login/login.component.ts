@@ -329,7 +329,7 @@ export class Login {
          * EZProxy forwarding
          * Auth provides !!!TARGET_FULL_PATH!!! as a string to replace for forwarding
          */
-        url = url.replace(urlToken, this._auth.getHostname() + stashedRoute )
+        url = url.replace(urlToken, document.location.host + stashedRoute )
       } else {
         /**
          * WAM Proxy forwarding
