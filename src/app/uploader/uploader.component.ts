@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core'
+import { Component, OnInit, EventEmitter, Output } from '@angular/core'
 
-import { FileUploader, FileSelectDirective, FileLikeObject } from 'ng2-file-upload'
+import { FileUploader, FileSelectDirective, FileLikeObject, FileItem } from 'ng2-file-upload'
 import { AuthService } from '../shared'
 
 // const UPLOAD_URL: string = 'https://evening-anchorage-3159.herokuapp.com/api/' //TODO: NEEDS CHANGING - JUST AND EXPERIMENT
@@ -12,12 +12,14 @@ import { AuthService } from '../shared'
 })
 
 export class UploaderComponent implements OnInit {
+  @Output() fileUploaded: EventEmitter<FileItem> = new EventEmitter()
+
   private uploader: FileUploader
   private UPLOAD_URL: string
 
   // controls display of drop zone while there is a file over it
   private fileOverDropZone: boolean = false
-
+  // keep an array of files which were of invalid type
   private invalidFiles: FileLikeObject[] = []
 
   constructor(private _auth: AuthService) {
@@ -34,6 +36,30 @@ export class UploaderComponent implements OnInit {
     this.uploader.onWhenAddingFileFailed = (item, filter, options) => {
       this.invalidFiles.push(item)
     }
+
+    this.uploader.onCompleteItem = (item, response, status, headers) => {
+      console.log('oncomplete', item)
+      if (item.isSuccess) {
+        // this.uploader.removeFromQueue(item)
+
+        let resJson = response && JSON.parse(response)
+        resJson && this.fileUploaded.emit(resJson)
+      }
+    }
+  }
+
+  // handle event
+  // handleFileSelect(e: any): void {
+  //   if (!e || !e.target) {
+  //     return
+  //   }
+
+  //   console.log('change handler', e,  e.target.files)
+  // }
+
+  // handle element
+  handleFileSelect(value: any): void {
+    console.log('handler', value, value.target.files[0])
   }
 
   /**
