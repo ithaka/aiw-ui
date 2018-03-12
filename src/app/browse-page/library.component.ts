@@ -107,7 +107,7 @@ export class LibraryComponent implements OnInit {
     this.subscriptions.push(
       this.route.params
       .subscribe((params: Params) => {
-        this.loading = true;
+        this.loading = true
 
         if(params && params['viewId']){
             this.selectedBrowseId = params['viewId'].toString()
@@ -122,7 +122,7 @@ export class LibraryComponent implements OnInit {
         // Fetch browse collection object from local storage & check if the required collection list has already been set
         let storageBrwseColObj = this._storage.get('browseColObject')
         if( storageBrwseColObj && storageBrwseColObj[this.facetType]){
-          if(storageBrwseColObj[this.facetType].geo){
+          if(this.facetType === 'artstor-geography'){
             this.hierarchicalFacets = storageBrwseColObj[this.facetType]
           } else{
             this.categoryFacets = storageBrwseColObj[this.facetType]
