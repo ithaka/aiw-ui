@@ -2,7 +2,8 @@ import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angu
 import { Subscription } from 'rxjs/Rx'
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms'
 
-import { AssetService, PersonalCollectionService, AssetSearchService, SearchAsset, AuthService } from './../../shared'
+
+import { AssetService, PersonalCollectionService, AssetSearchService, SearchAsset, AuthService, PostPersonalCollectionResponse } from './../../shared'
 import { Asset } from '../../asset-page/asset'
 
 @Component({
@@ -17,7 +18,7 @@ export class EditPersonalCollectionModal implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = []
 
   private pcColThumbs: Array<any> = []
-  private collectionAssets: SearchAsset[]
+  private collectionAssets: Array<SearchAsset>
   private editMode: boolean = false
   private selectedAsset: SearchAsset // this is the asset which the user selects from the list of assets
   private selectedAssetData: Asset // the asset emitted from the viewer
@@ -102,4 +103,19 @@ export class EditPersonalCollectionModal implements OnInit, OnDestroy {
       })
   }
 
+  private handleNewAssetUpload(item: PostPersonalCollectionResponse): void {
+    console.log('got that file done', item)
+    let newAsset: any = {
+      name: item.filename,
+      thumbnailUrls: [item.src],
+      artstorid: item.ssid // i know this is super stupid - on the display we're counting on artstorid though and we don't have one for these assets
+    }
+
+    // // hacks together a SearchAsset from the ExpandedFileItem information
+    // this.collectionAssets.push()
+    
+    // this.collectionAssets.push(item)
+    this.collectionAssets.unshift(newAsset)
+  }
+  
 }

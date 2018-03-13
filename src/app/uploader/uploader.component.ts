@@ -58,8 +58,12 @@ export class UploaderComponent implements OnInit {
   // }
 
   // handle element
-  handleFileSelect(value: any): void {
-    console.log('handler', value, value.target.files[0])
+  onSelect(value: any): void {
+    console.log('select handler', value)
+  }
+
+  onDrop(value: any): void {
+    console.log('drop handler', value)
   }
 
   /**
