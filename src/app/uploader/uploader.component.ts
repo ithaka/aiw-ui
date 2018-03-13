@@ -16,6 +16,7 @@ export class UploaderComponent implements OnInit {
 
   private uploader: FileUploader
   private UPLOAD_URL: string
+  private previewImg: string
 
   // controls display of drop zone while there is a file over it
   private fileOverDropZone: boolean = false
@@ -78,7 +79,16 @@ export class UploaderComponent implements OnInit {
    * Triggered by the onFileDrop event from ng2-file-upload
    * @param files 
    */
-  private fileDropped(files: RawFile[]): void {
+  private fileDropped(files): void { 
+    var reader  = new FileReader();
+    reader.addEventListener("load",() => {
+      console.log(reader)
+      this.previewImg = reader.result;
+    });
+
+    if (files[0]) {
+      reader.readAsDataURL(files[0]);
+    }
     console.log(this.uploader.queue)
   }
 }
