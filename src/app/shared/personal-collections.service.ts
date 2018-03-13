@@ -43,3 +43,27 @@ interface DeletePersonalAssetResponse {
 interface GetPersonalCollectionResponse {
   
 }
+
+export interface PostPersonalCollectionResponse {
+  // asset_group_id: [] // don't know
+  created_by: number
+  created_on: string
+  deleted: boolean
+  fd_68638_b: boolean
+  filename: string
+  image_restricted: boolean
+  institution_id: string
+  media_count: number
+  // media_identifier: null // don't know again
+  metadata: { width: number, height: number, imagetype: string, size: number }
+  primary_image: boolean
+  project_id: number
+  // publishing_status:{} // not sure what this is
+  representation_id: string
+  sequence_number: number
+  ssid: number
+  updated_by: number
+  updated_on: string
+  visibility: number
+  src?: string // we assign this on the front end
+}
