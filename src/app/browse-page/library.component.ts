@@ -114,18 +114,19 @@ export class LibraryComponent implements OnInit {
             // this.updateSplashImgURL();
         }
         // load category facets
-        this.facetType = this.categoryFacetMap[this.selectedBrowseId]
+        // > Use locally scope variable to avoid data crossover
+        let facetType = this.facetType = this.categoryFacetMap[this.selectedBrowseId]
         
         // Clear facet objects/arrays
         this.clearFacets()
 
         // Fetch browse collection object from local storage & check if the required collection list has already been set
         let storageBrwseColObj = this._storage.get('browseColObject')
-        if( storageBrwseColObj && storageBrwseColObj[this.facetType]){
-          if(this.facetType === 'artstor-geography'){
-            this.hierarchicalFacets = storageBrwseColObj[this.facetType]
+        if( storageBrwseColObj && storageBrwseColObj[facetType]){
+          if(facetType === 'artstor-geography'){
+            this.hierarchicalFacets = storageBrwseColObj[facetType]
           } else{
-            this.categoryFacets = storageBrwseColObj[this.facetType]
+            this.categoryFacets = storageBrwseColObj[facetType]
           }
           this.loading = false
         } else{
@@ -134,13 +135,13 @@ export class LibraryComponent implements OnInit {
             storageBrwseColObj = {}
           }
           // Get facets from Solr/search
-          this._assets.categoryByFacet(this.facetType, 1)
+          this._assets.categoryByFacet(facetType, 1)
           .then( (facetData) => {
             // ensure they are emptied in case of multiple fast clicking
             this.clearFacets()
             
             // Categoryid facets require an additional call for labels/titles
-            if (this.facetType == 'categoryid') {
+            if (facetType == 'categoryid') {
 
                 this._assets.categoryNames()
                   .then((data) => {
@@ -163,7 +164,7 @@ export class LibraryComponent implements OnInit {
                       })
                     this.loading = false
 
-                    storageBrwseColObj[this.facetType] = this.categoryFacets
+                    storageBrwseColObj[facetType] = this.categoryFacets
                     this._storage.set('browseColObject', storageBrwseColObj)
                   })
                   .catch((err) => {
@@ -175,7 +176,7 @@ export class LibraryComponent implements OnInit {
               this.hierarchicalFacets = facetData[0].children
               this.loading = false
 
-              storageBrwseColObj[this.facetType] = this.hierarchicalFacets
+              storageBrwseColObj[facetType] = this.hierarchicalFacets
               this._storage.set('browseColObject', storageBrwseColObj)
             } else {
               // Generically handle all other facets, which use "name" property to filter and display
@@ -187,7 +188,7 @@ export class LibraryComponent implements OnInit {
               })
               this.loading = false
 
-              storageBrwseColObj[this.facetType] = this.categoryFacets
+              storageBrwseColObj[facetType] = this.categoryFacets
               this._storage.set('browseColObject', storageBrwseColObj)
             }
           })
