@@ -102,6 +102,7 @@ export class AssetPage implements OnInit, OnDestroy {
     private editDetailsFormSubmitted: boolean = false // Set to true once the edit details form is submitted
     private isProcessing: boolean = false
     private showExitEdit: boolean = false
+    private pcFeatureFlag: boolean = false
 
     constructor(
         private _assets: AssetService,
@@ -161,6 +162,14 @@ export class AssetPage implements OnInit, OnDestroy {
                 if(routeParams && routeParams['featureFlag']){
                     this._auth.featureFlags[routeParams['featureFlag']] = true
                     this.collectionLinksFlag = this._auth.featureFlags['collection_links']
+
+                    if (this._auth.featureFlags['uploadPC']) {
+                        this.pcFeatureFlag = true
+                    } else{
+                        this.pcFeatureFlag = false
+                    }
+                } else{
+                    this.pcFeatureFlag = false
                 }
 
                 if (routeParams['encryptedId']) {
