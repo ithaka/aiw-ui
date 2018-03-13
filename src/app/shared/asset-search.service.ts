@@ -254,8 +254,7 @@ export class AssetSearchService {
       else if(options.colId){
         colId = options.colId
       }
-      else if(options.pcolId){
-        // colId = options.pcolId
+      else if(options.pcolId){ // For personal collection assets
         colId = '37436'
       }
 
