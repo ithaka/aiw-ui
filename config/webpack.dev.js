@@ -153,10 +153,10 @@ module.exports = function(options) {
       port: METADATA.port,
       host: METADATA.host,
       historyApiFallback: true,
-      watchOptions: {
-        aggregateTimeout: 300,
-        poll: 1000
-      },
+      // watchOptions: {
+      //   aggregateTimeout: 300,
+      //   poll: 1000
+      // },
       noInfo: true
     },
 
