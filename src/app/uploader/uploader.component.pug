@@ -4,6 +4,7 @@ input(
   multiple,
   (change)="onSelect($event)"
 )
+img([attr.src]="previewImg")
 .upload-cntnr.mb-2
   .lbl {{ 'UPLOAD_IMAGES_MODAL.UPLOAD_LBL' | translate }}
   .well.my-drop-zone(
