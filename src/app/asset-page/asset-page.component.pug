@@ -75,11 +75,12 @@
                 tabindex="13")
                 i.icon.icon-download-black
                 | Download File
-              a#downloadViewLink.dropdown-item(download="view.jpg",
+              a#downloadViewLink.dropdown-item(download,
                 [attr.href]="(downloadAuth() && !assets[0].disableDownload) ? generatedViewURL : null",
                 (click)="(downloadAuth() && !assets[0].disableDownload) ? trackDownloadView() : setDownloadView()",
                 [class.disabled]="assets[0].disableDownload || assets[0].typeName !== 'image'",
-                target="_blank")
+                target="_blank",
+                tabindex="2")
                 i.icon.icon-download-black
                 | Download View
           //- False door button if user is not logged in
