@@ -103,6 +103,9 @@ export class AssetPage implements OnInit, OnDestroy {
     private isProcessing: boolean = false
     private showExitEdit: boolean = false
     private pcFeatureFlag: boolean = false
+    
+    private updatedPCAssets: any[] = []
+    private publishing: boolean = false
 
     constructor(
         private _assets: AssetService,
@@ -183,6 +186,8 @@ export class AssetPage implements OnInit, OnDestroy {
                         this.assetNumber = this._assets.currentLoadedParams.page ? this.assetIndex + 1 + ((this._assets.currentLoadedParams.page - 1) * this._assets.currentLoadedParams.size) : this.assetIndex + 1;
                     }
                 }
+
+                this.updatedPCAssets = this._storage.get('updatedPCAssets')
             })
         );
 
@@ -299,16 +304,31 @@ export class AssetPage implements OnInit, OnDestroy {
         } else {
             this.assets[assetIndex] = asset
             if (assetIndex == 0) {
-                this._title.setTitle( asset.title );
-                document.querySelector('meta[name="DC.type"]').setAttribute('content', 'Artwork');
-                document.querySelector('meta[name="DC.title"]').setAttribute('content', asset.title);
-                document.querySelector('meta[name="asset.id"]').setAttribute('content', asset.id);
+                this._title.setTitle( asset.title )
+                document.querySelector('meta[name="DC.type"]').setAttribute('content', 'Artwork')
+                document.querySelector('meta[name="DC.title"]').setAttribute('content', asset.title)
+                document.querySelector('meta[name="asset.id"]').setAttribute('content', asset.id)
                 let currentAssetId: string = this.assets[0].id || this.assets[0]['objectId'] // couldn't trust the 'this.assetIdProperty' variable
                 // Search returns a 401 if /userinfo has not yet set cookies
                 if (Object.keys(this._auth.getUser()).length !== 0) {
                     this.setCollectionType(currentAssetId)
                 }
-                this.generateImgURL();
+                this.generateImgURL()
+
+                // Check if the asset is undergoing publishing by 
+                this.publishing = false
+                for(let i = 0; i < this.updatedPCAssets.length; i++){
+                    let updatedPCAsset = this.updatedPCAssets[i]
+                    if(updatedPCAsset.asset_id === asset.id){
+                        if(updatedPCAsset.updated_on === asset.updated_on){ // Asset is still publishing
+                            this.publishing = true
+                        } else{ // Asset has been published
+                            this.updatedPCAssets.splice(i, 1)
+                            this._storage.set('updatedPCAssets', this.updatedPCAssets)
+                        }
+                        break
+                    }
+                }
             }
         }
         // Set download link
@@ -752,7 +772,20 @@ export class AssetPage implements OnInit, OnDestroy {
                 data => {
                     if( data.success ) {
                         this.isProcessing = false
+
+                        this.updatedPCAssets.push({
+                            'asset_id': this.assets[0].id,
+                            'updated_on': this.assets[0].updated_on
+                        })
+                        this._storage.set('updatedPCAssets', this.updatedPCAssets)
+
                         this.closeEditDetails('Continue')
+
+                        // Reload asset metadata
+                        // this._router.navigate(['/asset', ''])
+                        // setTimeout(() => {
+                        //     this._router.navigate(['/asset', this.assets[0].id])
+                        // }, 250)
                     }
                 },
                 error => {

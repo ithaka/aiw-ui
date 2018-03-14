@@ -50,10 +50,12 @@
     //- Asset Metadata Column
     .col-md-4(*ngIf="assets[0]",[class.hidden]="isFullscreen")
       .py-3
+        .alert.alert-info(*ngIf="publishing")
+          div {{ 'ASSET_PAGE.MESSAGES.PUBLISHING' | translate}}
         //- If the user has not accepted the agreement, show modal when clicked, otherwise download immediately
         .btn-row
           //- (mouseup) is a Firefox fix for firing the copy event
-          button.btn.btn-secondary(*ngIf="pcFeatureFlag && (assets[0].collectionId === '37436')", [class.active]="showEditDetails", tabindex="1", (click)="loadEditDetailsForm()")
+          button.btn.btn-secondary(*ngIf="pcFeatureFlag && (assets[0].collectionId === '37436') && !publishing", [class.active]="showEditDetails", tabindex="1", (click)="loadEditDetailsForm()")
             | {{ 'ASSET_PAGE.BUTTONS.EDIT_DETAILS' | translate}}
           button.btn.btn-secondary([class.active]="showCopyUrl", tabindex="12", (mousedown)="showCopyUrl ? showCopyUrl = false : copyGeneratedImgURL()", (mouseup)="copyUrlInput.select(); document.execCommand('copy', false, null)")
             | {{ 'ASSET_PAGE.BUTTONS.LINK' | translate}}
