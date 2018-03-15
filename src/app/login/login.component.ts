@@ -120,6 +120,9 @@ export class Login {
       .take(1)
       .subscribe((res) => {
         console.log(res)
+        if (res.username && res.username.length > 0 && res.password && res.password.length > 0) {
+          this.login(new User(res.username, res.password))
+        }
       }, (err) => {
         console.error(err)
       })

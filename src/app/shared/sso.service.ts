@@ -12,7 +12,7 @@ export class SSOService {
   ) { }
 
   public getSSOCredentials(): Observable<GetSSOCredentialsResponse> {
-    return this._http.get(
+    return this._http.get<GetSSOCredentialsResponse>(
       SSO_URL,
       { withCredentials: true }
     )
@@ -21,7 +21,7 @@ export class SSOService {
   public postSSOCredentials(username: string, password: string): Observable<PostSSOCredentialsResponse> {
     let reqUrl: string = SSO_URL + "?username=" + encodeURIComponent(username) + "&password=" + encodeURIComponent(password)
     
-    return this._http.post(
+    return this._http.post<PostSSOCredentialsResponse>(
       reqUrl,
       {},
       { withCredentials: true }
@@ -30,7 +30,8 @@ export class SSOService {
 }
 
 interface GetSSOCredentialsResponse {
-
+  username: string
+  password: string
 }
 
 interface PostSSOCredentialsResponse {
