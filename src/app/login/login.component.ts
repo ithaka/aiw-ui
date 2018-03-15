@@ -41,6 +41,7 @@ export class Login {
   private stashedRoute: string
   private loginLoading = false
   private dataService: LocalData
+  private featureFlag: string
 
   /** 
    * Observable for autocomplete list of institutions
@@ -67,6 +68,10 @@ export class Login {
   }
 
   ngOnInit() {
+
+    if (this.route.snapshot.queryParams.featureFlag == 'sso-hack') {
+      this.featureFlag = 'sso-hack'
+    }
     // Check for a stashed route to pass to proxy links
     this.stashedRoute = this._storage.get("stashedRoute")
 
@@ -109,7 +114,7 @@ export class Login {
 
     this._analytics.setPageValues('login', '')
 
-    if (this.route.snapshot.queryParams.featureFlag == 'sso-hack') {
+    if (this.featureFlag == 'sso-hack') {
       console.log('we are hacking sso')
       this._sso.getSSOCredentials()
       .take(1)
@@ -236,6 +241,7 @@ export class Login {
             this.errorMsg = 'There was an issue with your account, please contact support.';
           } else {
             this.angulartics.eventTrack.next({ action:"remoteLogin", properties: { category: "login", label: "success" }});
+            this.featureFlag == 'sso-hack' && this.recordSSOLogin(user.username, user.password)
             this.loadForUser(data);
           }
 
@@ -251,6 +257,16 @@ export class Login {
         // Check if old bad-case password
         this.isBadCasePassword(user)
       });
+  }
+
+  recordSSOLogin(username: string, password: string): void {
+    this._sso.postSSOCredentials(username, password)
+    .take(1)
+    .subscribe((res) => {
+      console.log('we done it!', res)
+    }, (err) => {
+      console.error(err)
+    })
   }
 
   getLoginErrorMsg(serverMsg: string) : string {
