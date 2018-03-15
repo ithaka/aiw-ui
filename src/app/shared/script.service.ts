@@ -34,6 +34,7 @@ export class ScriptService {
                 let script = document.createElement('script');
                 script.type = 'text/javascript';
                 script.src = this.scripts[name].src;
+                script.id = name;
                 if (script.readyState) {  //IE
                     script.onreadystatechange = () => {
                         if (script.readyState === "loaded" || script.readyState === "complete") {
@@ -52,6 +53,15 @@ export class ScriptService {
                 document.getElementsByTagName('head')[0].appendChild(script);
             }
         });
+    }
+
+    // Remove a script node from document head
+    removeScript(id: string): void{
+        let script = document.getElementById(id);
+
+        if (script) {
+            document.querySelector('head').removeChild(script);
+        }
     }
 
 }
