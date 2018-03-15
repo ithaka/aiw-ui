@@ -1,6 +1,6 @@
 import { Locker } from 'angular2-locker';
 import { Component } from '@angular/core'
-import { Router } from '@angular/router'
+import { Router, ActivatedRoute } from '@angular/router'
 import { Location } from '@angular/common'
 import { Angulartics2 } from 'angulartics2'
 import { CompleterService, LocalData } from 'ng2-completer'
@@ -9,6 +9,7 @@ import { BehaviorSubject, Observable, Subscription } from 'rxjs/Rx';
 import { AppConfig } from '../app.service'
 import { AuthService, User, AssetService } from './../shared'
 import { AnalyticsService } from '../analytics.service'
+import { SSOService } from './../shared/sso.service'
 
 declare var initPath: string
 
@@ -54,6 +55,8 @@ export class Login {
     private _auth: AuthService,
     private _assets: AssetService,
     private _completer: CompleterService,
+    private _sso: SSOService,
+    private route: ActivatedRoute,
     private router: Router,
     private location: Location,
     private angulartics: Angulartics2,
@@ -105,6 +108,17 @@ export class Login {
       });
 
     this._analytics.setPageValues('login', '')
+
+    if (this.route.snapshot.queryParams.featureFlag == 'sso-hack') {
+      console.log('we are hacking sso')
+      this._sso.getSSOCredentials()
+      .take(1)
+      .subscribe((res) => {
+        console.log(res)
+      }, (err) => {
+        console.error(err)
+      })
+    }
   } // OnInit
 
 
