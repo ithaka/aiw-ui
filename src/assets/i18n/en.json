@@ -359,12 +359,12 @@
     },
     "FEATURED": {
       "HEADING": "Featured Collection",
-      "SUBHEADING": "Minor White Archive (Princeton University Art Museum)",
-      "DESCRIPTION": "Minor White. San Francisco. August 19, 1949. Gelatin silver print. The Minor White Archive, Princeton University Art Museum, bequest of Minor White. © Trustees of Princeton University",
-      "LINK": "/#/category/10374058928;browseType=103",
-      "IMG_SOURCE": "/assets/img/featured-collection2.jpg",
-      "LINK_TITLE": "Minor White Archive (Princeton University Art Museum)",
-      "ALT_TEXT": "Minor White Archive (Princeton University Art Museum)"
+      "SUBHEADING": "Schlesinger Library of the History of Women in America (Harvard University)",
+      "DESCRIPTION": "Unknown; Memorial plaque to Susan B. Anthony, Mary S. Anthony, and the first woman’s suffrage convention; (circa 1910-1938). This image has been made available by the Schlesinger Library, Radcliffe Institute, Harvard University",
+      "LINK": "/#/category/1034302695",
+      "IMG_SOURCE": "/assets/img/featured-collection-anthony.jpg",
+      "LINK_TITLE": "Schlesinger Library of the History of Women in America (Harvard University)",
+      "ALT_TEXT": "Schlesinger Library of the History of Women in America (Harvard University)"
     },
     "SAHARA_FEATURED": {
       "HEADING": "Featured Image",
