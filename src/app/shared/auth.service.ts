@@ -89,7 +89,7 @@ export class AuthService implements CanActivate {
     this._router = _router;
 
     // Default to relative or prod endpoints
-    this.ENV = 'test'
+    this.ENV = 'prod'
     this.hostname = ''
     this.baseUrl =  '/api'
     this.thumbUrl = '//mdxdv.artstor.org'
@@ -144,11 +144,13 @@ export class AuthService implements CanActivate {
     // Additional Local dev domains
     if (document.location.hostname.indexOf('local.sahara') > -1) {
       this.hostname = '//sahara.beta.stage.artstor.org'
+      this.ENV = 'test'
     }
 
     // Sahara routing WORKAROUND
     if (document.location.hostname.indexOf('sahara.beta.stage.artstor.org') > -1) {
       this.hostname = '//sahara.beta.stage.artstor.org'
+      this.ENV = 'test'
     }
     if (document.location.hostname.indexOf('sahara.prod.artstor.org') > -1) {
       this.hostname = '//sahara.prod.artstor.org/'
