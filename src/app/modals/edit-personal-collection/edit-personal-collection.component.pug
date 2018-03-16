@@ -8,17 +8,24 @@
           span(aria-hidden="true") &times;
       .modal-body
         .row.no-gutters
+          .form-group.has-danger(
+            *ngIf="messages.imgUploadFailure || messages.metadataUpdateFailure || messages.imgDeleteFailure"
+          )
+            .form-control-feedback(ngIf="messages.imgUploadFailure") {{ EDIT_PC_MODAL.MESSAGES.IMG_UPLOAD_FAILURE | translate }}
+            .form-control-feedback(ngIf="messages.metadataUpdateFailure") {{ EDIT_PC_MODAL.MESSAGES.METADATA_UPDATE_FAILURE | translate }}
+            .form-control-feedback(ngIf="messages.imgDeleteFailure") {{ EDIT_PC_MODAL.MESSAGES.IMG_DELETE_FAILURE | translate }}
+          .form-group.has-success(
+            *ngIf="messages.imgUploadSuccess || messages.metadataUpdateSuccess || messages.imgDeleteSuccess"
+          )
+            .form-control-feedback(ngIf="messages.imgUploadSuccess") {{ EDIT_PC_MODAL.MESSAGES.IMG_UPLOAD_SUCCESS | translate }}
+            .form-control-feedback(ngIf="messages.metadataUpdateSuccess") {{ EDIT_PC_MODAL.MESSAGES.METADATA_UPDATE_SUCCESS | translate }}
+            .form-control-feedback(ngIf="messages.imgDeleteSuccess") {{ EDIT_PC_MODAL.MESSAGES.IMG_DELETE_SUCCESS | translate }}
+        .row.no-gutters
           .thmb-cntnr([ngClass]="{ 'col-md-6': editMode, 'col-md-12': !editMode }")
             ang-uploader((fileUploaded)="handleNewAssetUpload($event)")
             .lbl {{ 'EDIT_PC_MODAL.EDIT_COL' | translate }}
               .thumb-preview-cntnr
                 .row.no-gutters
-                  //- .col-md-4.thumb([ngClass]="{ 'selected': selectedAsset && (selectedAsset.objectId === thumb.objectId) }", *ngFor="let thumb of pcColThumbs")
-                  //-   img([attr.src]="'nothing here rn'", [attr.alt]="thumb.thumbnail1 ? 'Thumbnail of ' + thumb.thumbnail1 : 'No title available'")
-                  //-   .thumb-overlay
-                  //-     .close-icon(*ngIf="selectedAsset && (selectedAsset.objectId === thumb.objectId)", (click)="clearSelectedAsset()") &times;
-                  //-     .edit-icon((click)="editAssetMeta( thumb )")
-                  //-       i.icon.icon-reorder-white([ngClass]="{ 'active': selectedAsset && (selectedAsset.objectId === thumb.objectId) }")
                   .col-md-4.thumb([ngClass]="{ 'selected': selectedAsset && (selectedAsset.ssid === asset.ssid) }", *ngFor="let asset of collectionAssets")
                     img([attr.src]="asset.thumbnailUrls[0]", [attr.alt]="asset.name ? 'Thumbnail of ' + asset.name : 'No title available'")
                     .thumb-overlay
