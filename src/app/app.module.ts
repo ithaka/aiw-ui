@@ -102,6 +102,7 @@ import {
   ScriptService,
   PersonalCollectionService
 } from './shared'
+import { SSOService } from './shared/sso.service'
 import { AssetFiltersService } from './asset-filters/asset-filters.service'
 import { TagsService } from './browse-page/tags.service'
 import { CustomReuseStrategy } from './reuse-strategy'
@@ -125,6 +126,7 @@ const APP_PROVIDERS = [
   GroupService,
   AuthService,
   PersonalCollectionService,
+  SSOService,
   LogService,
   ImageGroupService,
   ScriptService,
