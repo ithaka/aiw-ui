@@ -27,12 +27,18 @@
                         i.icon.icon-reorder-white([ngClass]="{ 'active': selectedAsset && (selectedAsset.ssid === asset.ssid) }")
               .info-lbl {{ 'EDIT_PC_MODAL.META_ADD_INFO' | translate }}
           .edit-cntnr.col-md-6(*ngIf="selectedAsset && editMode")
-            //- label.asset-hdr {{ selectedAsset.thumbnailUrls[1] }}
+            //- get the asset from the image viewer, display the thumbnail and get the metadata all at once
             artstor-viewer(
+              *ngIf="selectedAsset && selectedAsset.artstorid",
               [testEnv]="_auth.getEnv() === 'test'",
               [assetId]="selectedAsset.artstorid",
               (assetMetadata)="handleLoadedMetadata($event)",
               [thumbnailMode]="true"
+            )
+            //- if the image was just uploaded, we won't have metadata, so just use the blob data
+            img.w-100(
+              *ngIf="selectedAsset && !selectedAsset.artstorid",
+              [attr.src]="selectedAsset.thumbnailUrls[0]"
             )
             form#editAssetMetaForm(*ngIf="selectedAssetData", [formGroup]="editAssetMetaForm", (ngSubmit)="editMetaFormSubmit(editAssetMetaForm.value)")
               .form-group
