@@ -40,7 +40,7 @@
               *ngIf="selectedAsset && !selectedAsset.artstorid",
               [attr.src]="selectedAsset.thumbnailUrls[0]"
             )
-            form#editAssetMetaForm(*ngIf="selectedAssetData", [formGroup]="editAssetMetaForm", (ngSubmit)="editMetaFormSubmit(editAssetMetaForm.value)")
+            form#editAssetMetaForm([formGroup]="editAssetMetaForm", (ngSubmit)="editMetaFormSubmit(editAssetMetaForm.value)")
               .form-group
                 label(for="assetCreatorInput") {{ 'EDIT_PC_MODAL.FORM.CREATOR' | translate }}
                 input#assetCreatorInput.form-control(type="text", [formControl]="editAssetMetaForm.controls['creator']", tabindex="0")
