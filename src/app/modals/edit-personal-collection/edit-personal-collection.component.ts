@@ -25,6 +25,15 @@ export class EditPersonalCollectionModal implements OnInit, OnDestroy {
 
   private editAssetMetaForm: FormGroup
 
+  private messages: {
+    imgUploadSuccess?: boolean,
+    imgUploadFailure?: boolean,
+    metadataUpdateSuccess?: boolean,
+    metadataUpdateFailure?: boolean,
+    imgDeleteSuccess?: boolean,
+    imgDeleteFailure?: boolean
+  } = {}
+
   constructor(
     private _fb: FormBuilder,
     private _auth: AuthService,
@@ -89,21 +98,29 @@ export class EditPersonalCollectionModal implements OnInit, OnDestroy {
     this.editMode = false
   }
 
-  private editMetaFormSubmit( formData: any ): void{
+  private editMetaFormSubmit( formData: any ): void {
+    this.messages = {}
+    // TODO: add trigger for success and failure messages
     console.log(formData)
   }
 
   private deleteAsset(ssid: string): void {
+    this.messages = {}
+
     this._pc.deletePersonalAssets([ssid])
       .take(1)
       .subscribe((res) => {
-        console.log(res)
+        this.messages.imgDeleteSuccess = true
+        // TODO: remove asset, close metadata edit window
       }, (err) => {
         console.error(err)
+        this.messages.imgDeleteFailure = true
       })
   }
 
   private handleNewAssetUpload(item: PostPersonalCollectionResponse): void {
+    this.messages = {}
+
     console.log('got that file done', item)
     let newAsset: any = {
       name: item.filename,
