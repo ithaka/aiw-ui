@@ -1,7 +1,7 @@
 import { Component, OnInit, EventEmitter, Output } from '@angular/core'
 
 import { FileUploader, FileSelectDirective, FileLikeObject, FileItem } from 'ng2-file-upload'
-import { AuthService } from '../shared'
+import { AuthService, PostPersonalCollectionResponse } from '../shared'
 
 // const UPLOAD_URL: string = 'https://evening-anchorage-3159.herokuapp.com/api/' //TODO: NEEDS CHANGING - JUST AND EXPERIMENT
 
@@ -12,7 +12,7 @@ import { AuthService } from '../shared'
 })
 
 export class UploaderComponent implements OnInit {
-  @Output() fileUploaded: EventEmitter<FileItem> = new EventEmitter()
+  @Output() fileUploaded: EventEmitter<PostPersonalCollectionResponse> = new EventEmitter()
 
   private uploader: FileUploader
   private UPLOAD_URL: string
@@ -44,29 +44,11 @@ export class UploaderComponent implements OnInit {
         // this.uploader.removeFromQueue(item)
 
         let resJson = response && JSON.parse(response)
+        resJson.src = item._file['local-src']
         resJson && this.fileUploaded.emit(resJson)
       }
     }
   }
-
-  // handle event
-  // handleFileSelect(e: any): void {
-  //   if (!e || !e.target) {
-  //     return
-  //   }
-
-  //   console.log('change handler', e,  e.target.files)
-  // }
-
-  // handle element
-  onSelect(value: any): void {
-    console.log('select handler', value)
-  }
-
-  onDrop(value: any): void {
-    console.log('drop handler', value)
-  }
-
   /**
    * Triggered by the fileOver event from ng2-file-upload
    * @param fileOver boolean indicates whether or not a file is over the drop area
@@ -79,17 +61,18 @@ export class UploaderComponent implements OnInit {
    * Triggered by the onFileDrop event from ng2-file-upload
    * @param files 
    */
-  private fileDropped(files): void { 
-    var reader  = new FileReader();
+  private filesDropped(files: File[]): void { 
+    console.log('file[0]', files[0])
+    var reader  = new FileReader()
     reader.addEventListener("load",() => {
-      console.log(reader)
-      this.previewImg = reader.result;
-    });
+      this.previewImg = reader.result
+      files[0]['local-src'] = reader.result // assigning this property to pass-through to the _file object on onCompleteItem
+    })
 
     if (files[0]) {
-      reader.readAsDataURL(files[0]);
+      reader.readAsDataURL(files[0])
     }
-    console.log(this.uploader.queue)
+    console.log('queue', this.uploader.queue)
   }
 }
 

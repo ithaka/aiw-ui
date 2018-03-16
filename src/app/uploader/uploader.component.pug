@@ -1,49 +1,24 @@
-input(
-  type="file",
-  accept=".jpg,.jpeg",
-  multiple,
-  (change)="onSelect($event)"
-)
-img([attr.src]="previewImg")
 .upload-cntnr.mb-2
   .lbl {{ 'UPLOAD_IMAGES_MODAL.UPLOAD_LBL' | translate }}
   .well.my-drop-zone(
     ng2FileDrop,
     [ngClass]="{ 'nv-file-over': fileOverDropZone, 'error': false }",
     (fileOver)="fileOverBase($event)",
-    (onFileDrop)="fileDropped($event)",
-    [uploader]="uploader",
-    (drop)="onDrop($event)"
+    (onFileDrop)="filesDropped($event)",
+    [uploader]="uploader"
   )
     .inner-wrapper
       h3.header-upload {{ 'UPLOAD_IMAGES_MODAL.DROP_TXT' | translate }}
       button.btn.btn-primary.file-select-btn(type="button", (click)="file.click()") {{ 'UPLOAD_IMAGES_MODAL.SELECT_BUTTON_TXT' | translate }}
-      //- //- pass change event
-      //- input(
-      //-   type="file",
-      //-   accept=".jpg,.jpeg",
-      //-   multiple,
-      //-   ng2FileSelect,
-      //-   [uploader]="uploader",
-      //-   #file="",
-      //-   (change)="onSelect($event)"
-      //- )
-      //- pass element
+      //- pass change event
       input(
         type="file",
         accept=".jpg,.jpeg",
         multiple,
         ng2FileSelect,
         [uploader]="uploader",
-        #file="",
-        (change)="onSelect($event)"
+        #file=""
       )
-
-      //- //- no directive
-      //- input(
-      //-   type="file",
-      //-   (change)="onSelect($event)"
-      //- )
       .file-name
         div(*ngFor="let queueObj of uploader.queue")
           .queue-item.pb-1(*ngIf="queueObj.isReady") {{ queueObj.file.name }}

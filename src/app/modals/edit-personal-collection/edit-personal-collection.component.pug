@@ -31,7 +31,8 @@
             artstor-viewer(
               [testEnv]="_auth.getEnv() === 'test'",
               [assetId]="selectedAsset.artstorid",
-              (assetMetadata)="handleLoadedMetadata($event)"
+              (assetMetadata)="handleLoadedMetadata($event)",
+              [thumbnailMode]="true"
             )
             form#editAssetMetaForm(*ngIf="selectedAssetData", [formGroup]="editAssetMetaForm", (ngSubmit)="editMetaFormSubmit(editAssetMetaForm.value)")
               .form-group
