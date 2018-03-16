@@ -22,16 +22,13 @@ export class PersonalCollectionService {
     )
   }
 
-  public deletePersonalAssets(SSIDs: string[]): Observable<DeletePersonalAssetResponse> {
+  public deletePersonalAssets(ssids: string[]): Observable<DeletePersonalAssetResponse> {
     let headers: HttpHeaders = new HttpHeaders()
       .set('Content-Type', 'application/json')
 
     return this._http.delete<DeletePersonalAssetResponse>(
-      [this._auth.getUrl(), 'v1', 'pcollection', 'image'].join('/') + "?ssids=" + SSIDs.join(","),
-      {
-        headers: headers,
-        withCredentials: true
-      }
+      [this._auth.getUrl(), 'v1', 'pcollection', 'image'].join('/') + "?ssids=" + ssids.join(","),
+      { headers: headers, withCredentials: true }
     )
   }
 }
