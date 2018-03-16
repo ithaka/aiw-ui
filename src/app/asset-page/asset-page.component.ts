@@ -21,6 +21,7 @@ import {
 } from './../shared'
 import { AnalyticsService } from '../analytics.service'
 import { TitleService } from '../shared/title.service'
+import { ScriptService } from '../shared/script.service'
 
 @Component({
     selector: 'ang-asset-page',
@@ -120,7 +121,8 @@ export class AssetPage implements OnInit, OnDestroy {
         private locker: Locker,
         private _analytics: AnalyticsService,
         private angulartics: Angulartics2,
-        private _title: TitleService
+        private _title: TitleService,
+        private scriptService: ScriptService,
     ) {
         this._storage = locker.useDriver(Locker.DRIVERS.LOCAL)
         
@@ -252,10 +254,17 @@ export class AssetPage implements OnInit, OnDestroy {
         })
 
         this._analytics.setPageValues('asset', this.assets[0] && this.assets[0].id)
+
+        // Append Crazy Egg A/B Testing script to head
+        this.scriptService.load('crazyegg')
+
     } // OnInit
 
     ngOnDestroy() {
         this.subscriptions.forEach((sub) => { sub.unsubscribe(); });
+
+        // Remove Crazy Egg Script from head on destroy because we're only tracking on asset pages
+        this.scriptService.removeScript('crazyegg');
     }
 
     private handleSkipAsset(): void{
