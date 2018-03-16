@@ -93,8 +93,8 @@ export class EditPersonalCollectionModal implements OnInit, OnDestroy {
     console.log(formData)
   }
 
-  private deleteSelectedAsset(SSID: string): void {
-    this._pc.deletePersonalAssets([this.selectedAsset.ssid])
+  private deleteAsset(ssid: string): void {
+    this._pc.deletePersonalAssets([ssid])
       .take(1)
       .subscribe((res) => {
         console.log(res)
@@ -108,7 +108,7 @@ export class EditPersonalCollectionModal implements OnInit, OnDestroy {
     let newAsset: any = {
       name: item.filename,
       thumbnailUrls: [item.src],
-      artstorid: item.ssid // i know this is super stupid - on the display we're counting on artstorid though and we don't have one for these assets
+      ssid: item.ssid
     }
 
     // // hacks together a SearchAsset from the ExpandedFileItem information
