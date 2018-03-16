@@ -95,6 +95,7 @@ export class EditPersonalCollectionModal implements OnInit, OnDestroy {
 
   private clearSelectedAsset(): void {
     this.selectedAsset = <SearchAsset>{}
+    this.selectedAssetData = <Asset>{}
     this.editMode = false
   }
 
@@ -104,6 +105,13 @@ export class EditPersonalCollectionModal implements OnInit, OnDestroy {
     console.log(formData)
   }
 
+  /**
+   * Removes the selected asset from the array of thumbnails
+   */
+  private removeSelectedAsset(): void {
+    this.collectionAssets.splice(this.collectionAssets.indexOf(this.selectedAsset), 1)
+  }
+
   private deleteAsset(ssid: string): void {
     this.messages = {}
 
@@ -111,7 +119,8 @@ export class EditPersonalCollectionModal implements OnInit, OnDestroy {
       .take(1)
       .subscribe((res) => {
         this.messages.imgDeleteSuccess = true
-        // TODO: remove asset, close metadata edit window
+        this.removeSelectedAsset()
+        this.clearSelectedAsset()
       }, (err) => {
         console.error(err)
         this.messages.imgDeleteFailure = true
