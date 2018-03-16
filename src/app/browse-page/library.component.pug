@@ -16,6 +16,8 @@ nav.nav.nav-inline.browse-nav
             a.tag-link([routerLink]="['/search/*', getLinkParam(facetType,hierarchicalFacets[key].children[childKey].element.efq)]") {{childKey}} ({{hierarchicalFacets[key].children[childKey].element.count}})
     //- ul.filter-list
     //-   li.filter(*ngFor)
+    .row.has-icon-overlay(*ngIf="loading")
+      i.icon-lg.icon-overlay--top.icon-loading-large
 
     .alert.alert-danger(*ngIf="errorMessage" innerHTML="{{errorMessage | translate}}")
   .col-md-4
@@ -24,5 +26,5 @@ nav.nav.nav-inline.browse-nav
         img([attr.src]="descObj[selectedBrowseId] + '.LEAD_IMAGE' | translate", alt="Splash image for browse id: {{ selectedBrowseId }}", style="max-width:100%;")
       .title {{ descObj[selectedBrowseId] + ".HEADING" | translate }}
       .browse__description([innerHTML]="descObj[selectedBrowseId] + '.DESCRIPTION' | translate")
-.row.has-icon-overlay(*ngIf="loading")
-  i.icon-lg.icon-overlay--top.icon-loading-large
+//- .row.has-icon-overlay(*ngIf="loading")
+//-   i.icon-lg.icon-overlay--top.icon-loading-large
