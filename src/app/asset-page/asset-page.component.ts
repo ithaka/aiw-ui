@@ -94,11 +94,6 @@ export class AssetPage implements OnInit, OnDestroy {
     };
     private originPage: number = 0;
 
-    private relatedResultsQuery: string = ''
-    private jstorResults: any[] = []
-    private selectedJstorResult: any = {}
-    private relatedResFlag: boolean = false
-
     constructor(
         private _assets: AssetService,
         private _search: AssetSearchService,
@@ -145,9 +140,6 @@ export class AssetPage implements OnInit, OnDestroy {
                 if(routeParams && routeParams['featureFlag']){
                     this._auth.featureFlags[routeParams['featureFlag']] = true
                     this.collectionLinksFlag = this._auth.featureFlags['collection_links']
-                    this.relatedResFlag = this._auth.featureFlags['related-res-hack'] ? true : false
-                } else{
-                    this.relatedResFlag = false
                 }
 
                 if (routeParams['encryptedId']) {
@@ -294,11 +286,6 @@ export class AssetPage implements OnInit, OnDestroy {
                     this.setCollectionType(currentAssetId)
                 }
                 this.generateImgURL();
-
-                // Load related results from jstor
-                if(this.relatedResFlag){
-                    this.getJstorRelatedResults(asset)
-                }
             }
         }
         // Set download link
@@ -718,60 +705,5 @@ export class AssetPage implements OnInit, OnDestroy {
             }, (err) => {
                 console.error(err)
             })
-    }
-
-    /**
-     * Used to get related results from jstor index based on asset title/subject/work_type
-     * @param asset Asset to be used for constructing jstor search query
-     */
-    private getJstorRelatedResults(asset: Asset): void {
-        let term = ''
-        if(asset.formattedMetadata && asset.formattedMetadata['Title']){
-            term += asset.formattedMetadata['Title'][0]
-        }
-
-        if(asset.formattedMetadata && asset.formattedMetadata['Subject']){
-            term += ' AND ' + asset.formattedMetadata['Subject']
-        } else if (asset.formattedMetadata && asset.formattedMetadata['Work Type']){
-            term += ' AND ' + asset.formattedMetadata['Work Type']
-        }
-
-        this.relatedResultsQuery = term
-
-        this._search.searchJstor(term)
-            .subscribe ( 
-                res => {
-                    if(res.results){
-                        let resultArray = res.results
-                        resultArray = resultArray.length > 4 ? resultArray.slice(0, 4) : resultArray
-                        for(let resultObj of resultArray){
-                            let label = ''
-                            if(resultObj.title && resultObj.title[0]){
-                                label = resultObj.title[0]
-                            }
-                            if(resultObj.citation_line){
-                                label += label ? ', ' : ''
-                                label += resultObj.citation_line
-                            }
-                            resultObj.label = label
-                        }
-                        this.jstorResults = resultArray
-                    }
-                }
-            )
-    }
-
-    /**
-     * Sets data in the selectedJstorResult Object from the hovered-on jstor result
-     * @param resultObject Hovered-on jstor result object
-     */
-    private setToolTipData(resultObject: any): void{
-        let toolTipData: any = {}
-        toolTipData.title = resultObject.title && resultObject.title[0] ? resultObject.title[0] : ''
-        toolTipData.authors = resultObject.author
-        toolTipData.publishers = resultObject.publisher
-        toolTipData.doi = resultObject.doi
-
-        this.selectedJstorResult = toolTipData
     }
 }
