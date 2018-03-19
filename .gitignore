@@ -61,3 +61,7 @@ npm-debug.log
 # IDE #
 .idea/
 *.swp
+
+# Caches #
+.awcache
+.awcache/**/*
