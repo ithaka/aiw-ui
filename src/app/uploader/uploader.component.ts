@@ -16,7 +16,6 @@ export class UploaderComponent implements OnInit {
 
   private uploader: FileUploader
   private UPLOAD_URL: string
-  private previewImg: string
 
   // controls display of drop zone while there is a file over it
   private fileOverDropZone: boolean = false
@@ -39,7 +38,6 @@ export class UploaderComponent implements OnInit {
     }
 
     this.uploader.onCompleteItem = (item, response, status, headers) => {
-      console.log('oncomplete', item)
       if (item.isSuccess) {
         // this.uploader.removeFromQueue(item)
 
@@ -61,18 +59,27 @@ export class UploaderComponent implements OnInit {
    * Triggered by the onFileDrop event from ng2-file-upload
    * @param files 
    */
-  private filesDropped(files: File[]): void { 
-    console.log('file[0]', files[0])
-    var reader  = new FileReader()
-    reader.addEventListener("load",() => {
-      this.previewImg = reader.result
-      files[0]['local-src'] = reader.result // assigning this property to pass-through to the _file object on onCompleteItem
-    })
+  private filesDropped(files: File[]): void {
+    // var reader  = new FileReader()
+    // reader.addEventListener("load",() => {
+    //   this.previewImg = reader.result
+    //   files[0]['local-src'] = reader.result // assigning this property to pass-through to the _file object on onCompleteItem
+    // })
 
     if (files[0]) {
-      reader.readAsDataURL(files[0])
+      // reader.readAsDataURL(files[0])
+      this.getFileSource(files[0])
     }
-    console.log('queue', this.uploader.queue)
+  }
+
+  private getFileSource(file: File): void {
+    var reader  = new FileReader()
+    reader.addEventListener("load",() => {
+      file['local-src'] = reader.result // assigning this property to pass-through to the _file object on onCompleteItem
+      console.log('local load', file)
+    })
+
+    reader.readAsDataURL(file)
   }
 }
 
