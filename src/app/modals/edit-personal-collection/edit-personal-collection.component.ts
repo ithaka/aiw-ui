@@ -34,6 +34,9 @@ export class EditPersonalCollectionModal implements OnInit, OnDestroy {
     imgDeleteFailure?: boolean
   } = {}
 
+  private deleteLoading: boolean = false // state before delete call has returned
+  private metadataUpdateLoading: boolean = false
+
   constructor(
     private _fb: FormBuilder,
     private _auth: AuthService,
@@ -99,9 +102,13 @@ export class EditPersonalCollectionModal implements OnInit, OnDestroy {
   }
 
   private editMetaFormSubmit( formData: any ): void {
+    if (this.metadataUpdateLoading) { return }
+
     this.uiMessages = {}
+    this.metadataUpdateLoading = true
     // TODO: add trigger for success and failure messages
     console.log(formData)
+    this.metadataUpdateLoading = false
   }
 
   /**
@@ -111,18 +118,26 @@ export class EditPersonalCollectionModal implements OnInit, OnDestroy {
     this.collectionAssets.splice(this.collectionAssets.indexOf(this.selectedAsset), 1)
   }
 
+  /**
+   * Uses personal collection service to make http call and delete asset
+   * @param ssid the ssid of the asset to delete
+   */
   private deleteAssetById(ssid: string): void {
-    console.log('ATTEMPTING TO DELETE AN ASSET')
-    // this.uiMessages = { imgDeleteSuccess: true }
+    if (this.deleteLoading) { return }
+
+    this.uiMessages = { }
+    this.deleteLoading = true
     
-    // this.uiMessages.imgDeleteSuccess = true
     this._pc.deletePersonalAssets([ssid])
+    .map((res) => {
+      this.deleteLoading = false
+      return res
+    })
     .take(1)
     .subscribe((res) => {
-      console.log(res)
-      // this.uiMessages.imgDeleteSuccess = true
-      // this.removeSelectedAsset()
-      // this.clearSelectedAsset()
+      this.uiMessages.imgDeleteSuccess = true
+      this.removeSelectedAsset()
+      this.clearSelectedAsset()
     }, (err) => {
       console.error(err)
       this.uiMessages.imgDeleteFailure = true
