@@ -80,7 +80,7 @@ export class PersonalCollectionService {
       .set('Content-Type', 'application/json')
 
     return this._http.delete<DeletePersonalAssetResponse>(
-      [this._auth.getUrl(), 'v1', 'collection', 'image'].join('/') + "?ssids=" + ssids.join(","),
+      [this._auth.getUrl(), 'v1', 'pcollection', 'image'].join('/') + "?ssids=" + ssids.join(","),
       { headers: headers, withCredentials: true }
     )
   }
