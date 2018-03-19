@@ -68,6 +68,19 @@ export class UploaderComponent implements OnInit {
   }
 
   /**
+   * Triggered by onFileSelect event from ng2-file-upload
+   * @param files 
+   */
+  private filesSelected(files: File[]): void {
+    console.log('file selected', files)
+    if (files && files.length > 0) {
+      for(let i = 0; i < files.length; i++) {
+        this.getFileSource(files[i])
+      }
+    }
+  }
+
+  /**
    * Takes a file and loads its source, then assigns that back to a custom property on the file to be read later
    * @param file the file for which we'd like to get the blob loaded from local files
    */
