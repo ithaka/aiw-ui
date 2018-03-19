@@ -10,13 +10,13 @@
     .inner-wrapper
       h3.header-upload {{ 'UPLOAD_IMAGES_MODAL.DROP_TXT' | translate }}
       button.btn.btn-primary.file-select-btn(type="button", (click)="file.click()") {{ 'UPLOAD_IMAGES_MODAL.SELECT_BUTTON_TXT' | translate }}
-      //- pass change event
       input(
         type="file",
         accept=".jpg,.jpeg",
         multiple,
         ng2FileSelect,
         [uploader]="uploader",
+        (onFileSelected)="filesSelected($event)",
         #file=""
       )
       .file-name
