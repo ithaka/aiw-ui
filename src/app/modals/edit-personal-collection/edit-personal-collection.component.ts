@@ -25,7 +25,7 @@ export class EditPersonalCollectionModal implements OnInit, OnDestroy {
 
   private editAssetMetaForm: FormGroup
 
-  private messages: {
+  private uiMessages: {
     imgUploadSuccess?: boolean,
     imgUploadFailure?: boolean,
     metadataUpdateSuccess?: boolean,
@@ -56,13 +56,12 @@ export class EditPersonalCollectionModal implements OnInit, OnDestroy {
 
   ngOnInit() {
     this._search.search({ colId: "37436" }, "", 4)
-      .take(1)
-      .subscribe((res) => {
-        console.log('received response', res.results)
-        this.collectionAssets = res.results
-      }, (err) => {
-        console.error(err)
-      })
+    .take(1)
+    .subscribe((res) => {
+      this.collectionAssets = res.results
+    }, (err) => {
+      console.error(err)
+    })
   }
 
   ngOnDestroy() {
@@ -100,7 +99,7 @@ export class EditPersonalCollectionModal implements OnInit, OnDestroy {
   }
 
   private editMetaFormSubmit( formData: any ): void {
-    this.messages = {}
+    this.uiMessages = {}
     // TODO: add trigger for success and failure messages
     console.log(formData)
   }
@@ -112,23 +111,46 @@ export class EditPersonalCollectionModal implements OnInit, OnDestroy {
     this.collectionAssets.splice(this.collectionAssets.indexOf(this.selectedAsset), 1)
   }
 
-  private deleteAsset(ssid: string): void {
-    this.messages = {}
-
+  private deleteAssetById(ssid: string): void {
+    console.log('ATTEMPTING TO DELETE AN ASSET')
+    // this.uiMessages = { imgDeleteSuccess: true }
+    
+    // this.uiMessages.imgDeleteSuccess = true
     this._pc.deletePersonalAssets([ssid])
-      .take(1)
-      .subscribe((res) => {
-        this.messages.imgDeleteSuccess = true
-        this.removeSelectedAsset()
-        this.clearSelectedAsset()
-      }, (err) => {
-        console.error(err)
-        this.messages.imgDeleteFailure = true
-      })
+    .take(1)
+    .subscribe((res) => {
+      console.log(res)
+      // this.uiMessages.imgDeleteSuccess = true
+      // this.removeSelectedAsset()
+      // this.clearSelectedAsset()
+    }, (err) => {
+      console.error(err)
+      this.uiMessages.imgDeleteFailure = true
+    })
   }
 
+  // private deleteAssetById(ssid: string): void {
+  //   console.log('deleting', ssid)
+  //   this.messages = {}
+
+  //   this.messages.imgDeleteSuccess = true
+  //   // this.removeSelectedAsset()
+  //   // this.clearSelectedAsset()
+
+  //   // this._pc.deletePersonalAssets([ssid])
+  //   //   .take(1)
+  //   //   .subscribe((res) => {
+  //   //     this.messages.imgDeleteSuccess = true
+  //   //     this.removeSelectedAsset()
+  //   //     this.clearSelectedAsset()
+  //   //   }, (err) => {
+  //   //     console.error(err)
+  //   //     this.messages.imgDeleteFailure = true
+  //   //   })
+  // }
+
   private handleNewAssetUpload(item: PostPersonalCollectionResponse): void {
-    this.messages = {}
+    this.uiMessages = {}
 
     console.log('got that file done', item)
     let newAsset: any = {

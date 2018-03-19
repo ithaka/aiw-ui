@@ -9,17 +9,17 @@
       .modal-body
         .row.no-gutters
           .form-group.has-danger(
-            *ngIf="messages.imgUploadFailure || messages.metadataUpdateFailure || messages.imgDeleteFailure"
+            *ngIf="uiMessages.imgUploadFailure || uiMessages.metadataUpdateFailure || uiMessages.imgDeleteFailure"
           )
-            .form-control-feedback(ngIf="messages.imgUploadFailure") {{ EDIT_PC_MODAL.MESSAGES.IMG_UPLOAD_FAILURE | translate }}
-            .form-control-feedback(ngIf="messages.metadataUpdateFailure") {{ EDIT_PC_MODAL.MESSAGES.METADATA_UPDATE_FAILURE | translate }}
-            .form-control-feedback(ngIf="messages.imgDeleteFailure") {{ EDIT_PC_MODAL.MESSAGES.IMG_DELETE_FAILURE | translate }}
+            .form-control-feedback(ngIf="uiMessages.imgUploadFailure") {{ 'EDIT_PC_MODAL.MESSAGES.IMG_UPLOAD_FAILURE' | translate }}
+            .form-control-feedback(ngIf="uiMessages.metadataUpdateFailure") {{ 'EDIT_PC_MODAL.MESSAGES.METADATA_UPDATE_FAILURE' | translate }}
+            .form-control-feedback(ngIf="uiMessages.imgDeleteFailure") {{ 'EDIT_PC_MODAL.MESSAGES.IMG_DELETE_FAILURE' | translate }}
           .form-group.has-success(
-            *ngIf="messages.imgUploadSuccess || messages.metadataUpdateSuccess || messages.imgDeleteSuccess"
+            *ngIf="uiMessages.imgUploadSuccess || uiMessages.metadataUpdateSuccess || uiMessages.imgDeleteSuccess"
           )
-            .form-control-feedback(ngIf="messages.imgUploadSuccess") {{ EDIT_PC_MODAL.MESSAGES.IMG_UPLOAD_SUCCESS | translate }}
-            .form-control-feedback(ngIf="messages.metadataUpdateSuccess") {{ EDIT_PC_MODAL.MESSAGES.METADATA_UPDATE_SUCCESS | translate }}
-            .form-control-feedback(ngIf="messages.imgDeleteSuccess") {{ EDIT_PC_MODAL.MESSAGES.IMG_DELETE_SUCCESS | translate }}
+            .form-control-feedback(ngIf="uiMessages.imgUploadSuccess") {{ 'EDIT_PC_MODAL.MESSAGES.IMG_UPLOAD_SUCCESS' | translate }}
+            .form-control-feedback(ngIf="uiMessages.metadataUpdateSuccess") {{ 'EDIT_PC_MODAL.MESSAGES.METADATA_UPDATE_SUCCESS' | translate }}
+            .form-control-feedback(ngIf="uiMessages.imgDeleteSuccess") {{ 'EDIT_PC_MODAL.MESSAGES.IMG_DELETE_SUCCESS' | translate }}
         .row.no-gutters
           .thmb-cntnr([ngClass]="{ 'col-md-6': editMode, 'col-md-12': !editMode }")
             ang-uploader((fileUploaded)="handleNewAssetUpload($event)")
@@ -74,6 +74,6 @@
                 input#assetSubjectInput.form-control(type="text", [formControl]="editAssetMetaForm.controls['subject']", tabindex="7")
         .modal-footer
           .form-group
-            button.btn.btn-danger(*ngIf="selectedAsset && selectedAsset.ssid", (click)="deleteAsset(selectedAsset.ssid)", type="button") {{ 'EDIT_PC_MODAL.BUTTONS.DELETE' | translate }}
+            button.btn.btn-danger(*ngIf="selectedAsset && selectedAsset.ssid", (click)="deleteAssetById('fake_id')", type="button") {{ 'EDIT_PC_MODAL.BUTTONS.DELETE' | translate }}
             button.btn.btn-secondary(*ngIf="selectedAsset && selectedAsset.ssid", (click)="clearSelectedAsset()", type="button") {{ 'EDIT_PC_MODAL.BUTTONS.CLOSE' | translate }}
             button.btn.btn-primary(type="button") {{ 'EDIT_PC_MODAL.BUTTONS.SAVE' | translate }}
