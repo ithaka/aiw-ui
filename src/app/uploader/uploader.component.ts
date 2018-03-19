@@ -66,17 +66,30 @@ export class UploaderComponent implements OnInit {
     //   files[0]['local-src'] = reader.result // assigning this property to pass-through to the _file object on onCompleteItem
     // })
 
-    if (files[0]) {
-      // reader.readAsDataURL(files[0])
-      this.getFileSource(files[0])
+    if (files && files.length > 0) {
+      for(let i = 0; i < files.length; i++) {
+        this.getFileSource(files[i])
+      }
+      // files.forEach((file) => {
+      //   this.getFileSource(file)
+      // })
     }
+
+
+    // if (files[0]) {
+    //   // reader.readAsDataURL(files[0])
+    //   this.getFileSource(files[0])
+    // }
   }
 
+  /**
+   * Takes a file and loads its source, then assigns that back to a custom property on the file to be read later
+   * @param file the file for which we'd like to get the blob loaded from local files
+   */
   private getFileSource(file: File): void {
     var reader  = new FileReader()
     reader.addEventListener("load",() => {
       file['local-src'] = reader.result // assigning this property to pass-through to the _file object on onCompleteItem
-      console.log('local load', file)
     })
 
     reader.readAsDataURL(file)
