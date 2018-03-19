@@ -60,26 +60,11 @@ export class UploaderComponent implements OnInit {
    * @param files 
    */
   private filesDropped(files: File[]): void {
-    // var reader  = new FileReader()
-    // reader.addEventListener("load",() => {
-    //   this.previewImg = reader.result
-    //   files[0]['local-src'] = reader.result // assigning this property to pass-through to the _file object on onCompleteItem
-    // })
-
     if (files && files.length > 0) {
       for(let i = 0; i < files.length; i++) {
         this.getFileSource(files[i])
       }
-      // files.forEach((file) => {
-      //   this.getFileSource(file)
-      // })
     }
-
-
-    // if (files[0]) {
-    //   // reader.readAsDataURL(files[0])
-    //   this.getFileSource(files[0])
-    // }
   }
 
   /**
