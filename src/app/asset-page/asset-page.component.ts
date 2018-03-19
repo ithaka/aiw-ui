@@ -770,13 +770,8 @@ export class AssetPage implements OnInit, OnDestroy {
         }
         this.isProcessing = true
 
-        /**
-         * Create the asset metadata object that will be submitted to the endpoint
-         */
-        let assetDetailsObject = this._pcservice.prepareAssetDetailsObject(formValue, this.assets[0]['SSID'])
-
         // update asset metadata
-        this._pcservice.updatepcImageMetadata(assetDetailsObject)
+        this._pcservice.updatepcImageMetadata(formValue, this.assets[0]['SSID'])
             .subscribe(
                 data => {
                     if( data.success ) {
