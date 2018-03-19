@@ -4,7 +4,6 @@
     ng2FileDrop,
     [ngClass]="{ 'nv-file-over': fileOverDropZone, 'error': false }",
     (fileOver)="fileOverBase($event)",
-    (onFileDrop)="filesDropped($event)",
     [uploader]="uploader"
   )
     .inner-wrapper
@@ -16,7 +15,6 @@
         multiple,
         ng2FileSelect,
         [uploader]="uploader",
-        (onFileSelected)="filesSelected($event)",
         #file=""
       )
       .file-name
