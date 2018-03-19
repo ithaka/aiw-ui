@@ -35,7 +35,7 @@ export class PersonalCollectionService {
    * @param ssid The SSID of the asset to be updated
    * @returns AssetDetailsRequestObject which can be POSTed to the API endpoint
    */
-  public prepareAssetDetailsObject(form: AssetDetailsFormValue, ssid: string): AssetDetailsRequestObject {
+  private prepareAssetDetailsObject(form: AssetDetailsFormValue, ssid: string): AssetDetailsRequestObject {
     let assetDetails: AssetDetailsRequestObject = {
       ssid: parseInt(ssid),
       metadata: []
@@ -57,8 +57,10 @@ export class PersonalCollectionService {
   /**
    * Update personal collection image metadata
    */
-  public updatepcImageMetadata(assetDetails: AssetDetailsRequestObject): Observable<any> {
-    return this._http.post(
+  public updatepcImageMetadata(form: AssetDetailsFormValue, ssid: string): Observable<updatepcImageMetadataResponse> {
+    let assetDetails = this.prepareAssetDetailsObject(form, ssid)
+  // public updatepcImageMetadata(assetDetails: AssetDetailsRequestObject): Observable<any> {
+    return this._http.post<updatepcImageMetadataResponse>(
         this.pcImgMetaUpdateURL,
         [ assetDetails ],
         this.options
@@ -138,4 +140,8 @@ export interface AssetDetailsRequestObject {
 export interface AssetDetailField {
   field_id: string,
   value: string
+}
+
+export interface updatepcImageMetadataResponse {
+  success: boolean
 }
