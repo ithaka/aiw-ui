@@ -167,17 +167,13 @@ export class EditPersonalCollectionModal implements OnInit, OnDestroy {
   private handleNewAssetUpload(item: PostPersonalCollectionResponse): void {
     this.uiMessages = {}
 
-    console.log('got that file done', item)
     let newAsset: any = {
       name: item.filename,
       thumbnailUrls: [item.src],
-      ssid: item.ssid
+      ssid: item.ssid,
+      new: true
     }
 
-    // // hacks together a SearchAsset from the ExpandedFileItem information
-    // this.collectionAssets.push()
-    
-    // this.collectionAssets.push(item)
     this.collectionAssets.unshift(newAsset)
   }
   

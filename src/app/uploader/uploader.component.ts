@@ -46,6 +46,13 @@ export class UploaderComponent implements OnInit {
         resJson && this.fileUploaded.emit(resJson)
       }
     }
+
+    /**
+     * Grabs the file source for each file added
+     */
+    this.uploader.onAfterAddingFile = (file) => {
+      this.getFileSource(file['some']) // this component is stupid and adds the file under the 'some' property but doesn't include it in the interface
+    }
   }
   /**
    * Triggered by the fileOver event from ng2-file-upload
@@ -53,31 +60,6 @@ export class UploaderComponent implements OnInit {
    */
   private fileOverBase(fileOver: boolean): void {
     this.fileOverDropZone = fileOver;
-  }
-
-  /**
-   * Triggered by the onFileDrop event from ng2-file-upload
-   * @param files 
-   */
-  private filesDropped(files: File[]): void {
-    if (files && files.length > 0) {
-      for(let i = 0; i < files.length; i++) {
-        this.getFileSource(files[i])
-      }
-    }
-  }
-
-  /**
-   * Triggered by onFileSelect event from ng2-file-upload
-   * @param files 
-   */
-  private filesSelected(files: File[]): void {
-    console.log('file selected', files)
-    if (files && files.length > 0) {
-      for(let i = 0; i < files.length; i++) {
-        this.getFileSource(files[i])
-      }
-    }
   }
 
   /**
