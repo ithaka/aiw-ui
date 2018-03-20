@@ -1,6 +1,10 @@
 import { Component, OnInit, OnDestroy, ViewChild, HostListener } from '@angular/core'
 import { ActivatedRoute, Params, Router } from '@angular/router'
+import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Subscription }   from 'rxjs/Subscription'
+import { Observable} from 'rxjs/Rx';
+
 import { Locker } from 'angular2-locker'
 import { Angulartics2 } from 'angulartics2'
 import { ArtstorViewer } from 'artstor-viewer'
@@ -66,7 +70,7 @@ export class AssetPage implements OnInit, OnDestroy {
     private generatedViewURL: string = ''
     private generatedFullURL: string = ''
     // Used for agree modal input, changes based on selection
-    private downloadUrl: string = ''
+    private downloadUrl: any
     private prevRouteParams: any = []
     private collectionName: string = ''
 
@@ -123,6 +127,8 @@ export class AssetPage implements OnInit, OnDestroy {
         private angulartics: Angulartics2,
         private _title: TitleService,
         private scriptService: ScriptService,
+        private _sanitizer: DomSanitizer,
+        private _httpClient: HttpClient
     ) {
         this._storage = locker.useDriver(Locker.DRIVERS.LOCAL)
         
@@ -625,32 +631,47 @@ export class AssetPage implements OnInit, OnDestroy {
         }
     }
 
+    /**
+    private downloadViewBlob(url: string): Observable<Blob> {
+        return this._httpClient.get(url, { responseType: 'blob'})
+    }
+    **/
+
     private genDownloadViewLink() : void {
 
-        if(this.assets[0].typeName === 'image' && this.assets[0].viewportDimensions.contentSize){
+        let asset = this.assets[0]
+
+        if(asset.typeName === 'image' && asset.viewportDimensions.contentSize){
             // Full source image size (max output possible)
-            let fullWidth = this.assets[0].viewportDimensions.contentSize.x
-            let fullY = this.assets[0].viewportDimensions.contentSize.y
+            let fullWidth = asset.viewportDimensions.contentSize.x
+            let fullY = asset.viewportDimensions.contentSize.y
             // Zoom is a factor of the image's full width
-            let zoom = this.assets[0].viewportDimensions.zoom;
+            let zoom = asset.viewportDimensions.zoom;
             // Viewport dimensions (size of cropped image)
-            let viewX = this.assets[0].viewportDimensions.containerSize.x
-            let viewY = this.assets[0].viewportDimensions.containerSize.y
+            let viewX = asset.viewportDimensions.containerSize.x
+            let viewY = asset.viewportDimensions.containerSize.y
             // Dimensions of the source size of the cropped image
             let zoomX = Math.floor(fullWidth/zoom)
             let zoomY = Math.floor( zoomX * (viewY/viewX))
             // Make sure zoom area is not larger than source, or else error
             if (zoomX > fullWidth) {
-                zoomX = fullWidth;
+                zoomX = fullWidth
             }
             if (zoomY > fullY) {
-                zoomY = fullY;
+                zoomY = fullY
             }
             // Positioning of the viewport's crop
-            let xOffset = Math.floor((this.assets[0].viewportDimensions.center.x * fullWidth) - (zoomX/2));
-            let yOffset = Math.floor((this.assets[0].viewportDimensions.center.y * fullWidth) - (zoomY/2));
+            let xOffset = Math.floor((asset.viewportDimensions.center.x * fullWidth) - (zoomX/2))
+            let yOffset = Math.floor((asset.viewportDimensions.center.y * fullWidth) - (zoomY/2))
 
-            this.generatedViewURL = this.assets[0].tileSource.replace('info.json','') + xOffset +','+yOffset+','+zoomX+','+zoomY+'/'+viewX+','+viewY+'/0/native.jpg'
+            let downloadLink: string = 'data:image/jpeg;' + this.assets[0].tileSource.replace('info.json','') + xOffset +','+yOffset+','+zoomX+','+zoomY+'/'+viewX+','+viewY+'/0/native.jpg'
+            
+            // Our Blob
+            // let blob = this.downloadViewBlob(downloadLink).subscribe()
+            // let assetFileObject = URL.createObjectURL(blob)
+
+            this.generatedViewURL = this.bypassSecurityTrustUrl(downloadLink)
+            //this.generatedViewURL = this.assets[0].tileSource.replace('info.json','') + xOffset +','+yOffset+','+zoomX+','+zoomY+'/'+viewX+','+viewY+'/0/native.jpg'
         }
     }
 
