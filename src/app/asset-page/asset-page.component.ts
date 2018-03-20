@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy, ViewChild, HostListener } from '@angular/core'
 import { ActivatedRoute, Params, Router } from '@angular/router'
-import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
+import { DomSanitizer, SafeUrl, SafeResourceUrl } from '@angular/platform-browser';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Subscription }   from 'rxjs/Subscription'
 import { Observable} from 'rxjs/Rx';
@@ -39,6 +39,8 @@ export class AssetPage implements OnInit, OnDestroy {
     private user: any
     private encryptedAccess: boolean = false
     private document = document
+    private window = window
+    private toObjectURL = this.window.URL.createObjectURL
 
     // Array to support multiple viewers on the page
     private assets: Asset[] = []
@@ -67,7 +69,7 @@ export class AssetPage implements OnInit, OnDestroy {
     private showCopyUrl: boolean = false
     private showEditDetails: boolean = false
     private generatedImgURL: string = ''
-    private generatedViewURL: string = ''
+    private generatedViewURL: SafeResourceUrl
     private generatedFullURL: string = ''
     // Used for agree modal input, changes based on selection
     private downloadUrl: any
@@ -128,7 +130,7 @@ export class AssetPage implements OnInit, OnDestroy {
         private _title: TitleService,
         private scriptService: ScriptService,
         private _sanitizer: DomSanitizer,
-        private _httpClient: HttpClient
+        private _httpClient: HttpClient,
     ) {
         this._storage = locker.useDriver(Locker.DRIVERS.LOCAL)
         
@@ -631,11 +633,12 @@ export class AssetPage implements OnInit, OnDestroy {
         }
     }
 
-    /**
+    
     private downloadViewBlob(url: string): Observable<Blob> {
-        return this._httpClient.get(url, { responseType: 'blob'})
+        return this._httpClient.get(url, { 
+            responseType: 'blob'
+        })
     }
-    **/
 
     private genDownloadViewLink() : void {
 
@@ -664,14 +667,18 @@ export class AssetPage implements OnInit, OnDestroy {
             let xOffset = Math.floor((asset.viewportDimensions.center.x * fullWidth) - (zoomX/2))
             let yOffset = Math.floor((asset.viewportDimensions.center.y * fullWidth) - (zoomY/2))
 
-            let downloadLink: string = 'data:image/jpeg;' + this.assets[0].tileSource.replace('info.json','') + xOffset +','+yOffset+','+zoomX+','+zoomY+'/'+viewX+','+viewY+'/0/native.jpg'
+            // Generate the view url from tilemap service
+            let downloadLink: string = this.assets[0].tileSource.replace('info.json','') + xOffset +','+yOffset+','+zoomX+','+zoomY+'/'+viewX+','+viewY+'/0/native.jpg'
+
             
             // Our Blob
-            // let blob = this.downloadViewBlob(downloadLink).subscribe()
-            // let assetFileObject = URL.createObjectURL(blob)
+            //let blob = this.downloadViewBlob(downloadLink).subscribe()
 
-            this.generatedViewURL = this.bypassSecurityTrustUrl(downloadLink)
-            //this.generatedViewURL = this.assets[0].tileSource.replace('info.json','') + xOffset +','+yOffset+','+zoomX+','+zoomY+'/'+viewX+','+viewY+'/0/native.jpg'
+            // Data URL
+            let href = 'data:image/jpeg;' + downloadLink
+            
+            this.generatedViewURL = this._sanitizer.bypassSecurityTrustResourceUrl(href)
+            
         }
     }
 
