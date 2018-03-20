@@ -91,6 +91,7 @@
       "DOWNLOAD": "Download",
       "GENERATE_CITATION": "Generate Citation",
       "PRINT": "Print",
+      "EDIT_DETAILS": "Edit Details",
       "LINK": "Link",
       "EXT": "Exit",
       "COMPARE": "Compare",
@@ -98,11 +99,31 @@
       "REPORT_ERROR": "Report Error",
       "ADD_TO_GROUP" : "Add to Group"
     },
+    "EDIT_DETAILS_FORM": {
+      "CREATOR": "Creator",
+      "TITLE": "Title",
+      "WORK_TYPE": "Work Type",
+      "DATE": "Date",
+      "LOCATION": "Location",
+      "MATERIAL": "Material",
+      "DESCRIPTION": "Description",
+      "SUBJECT": "Subject",
+      "TITLE_REQUIRED_MSG": "A title is required",
+      "SAVE_BTN": "Save",
+      "DELETE_BTN": "Delete Record"
+    },
+    "EXIT_EDIT_CONFIRM_MODAL": {
+      "TITLE": "Exit Edit Details",
+      "DESC": "Are you sure you want to exit without saving changes? This cannot be reverted.",
+      "CONTINUE": "Continue",
+      "CANCEL": "Cancel"
+    },
     "LINKS":{
       "BACK": "Back to Results"
     },
     "MESSAGES": {
-      "NEEDASSETS": "To compare assets, you will need to access an asset through a set of results first. Then those results will show here."
+      "NEEDASSETS": "To compare assets, you will need to access an asset through a set of results first. Then those results will show here.",
+      "PUBLISHING": "This asset is currently being published"
     },
     "METADATA_LABELS": {
       "SSID": "SSID",
@@ -364,16 +385,16 @@
       "COLL_LIST": "(Artstor, Institutional, Public, My Collections...)",
       "COLL_LIST_SHORT": "(Institutional Collections)",
       "TEACHING_HEADING": "Teaching Resources",
-      "TEACHING_LIST": "(Curriculum Guides, AP® Resources, Surveys and Case Studies: Art History, Humanities and Social Sciences)",
+      "TEACHING_LIST": "<a href=\"/#/browse/groups/public?tags=Curriculum%2520Guides&page=1\" class=\"link\">Curriculum Guides</a>, <a href=\"/#/browse/groups/public?page=1&tags=Case%2520Studies\" class=\"link\">Case Studies</a>, <a href=\"/#/browse/groups/search?level=public&tags=Art%2520%2526%2520Architecture%2520Overviews&page=1\" class=\"link\">Arts & Architecture Overviews</a>, <a href=\"/#/browse/groups/search?level=public&page=1&tags=Social%2520Studies%2520and%2520Humanities%2520Overviews\" class=\"link\">Social Sciences & Humanities Overviews</a>, <a href=\"http://artstor.libguides.com/APArtHistory\" target=\"_blank\" class=\"link\">AP Art History</a>, <a href=\"/#/browse/groups/public?page=1&tags=AP%25C2%25AE%2520United%2520States%2520%2520History\">AP US History</a>, <a href=\"/#/browse/groups/public?page=1&tags=AP%25C2%25AE%2520European%2520History\">AP European History</a>, and <a href=\"/#/browse/groups/public\" class=\"link\">more...</a>",
       "GROUPS_HEADING": "Image Groups",
       "GROUPS_LIST": "(My groups and groups shared by others at my institution)"
     },
     "FEATURED": {
       "HEADING": "Featured Collection",
       "SUBHEADING": "Schlesinger Library of the History of Women in America (Harvard University)",
-      "DESCRIPTION": "Unknown; Memorial plaque to Susan B. Anthony, Mary S. Anthony, and the first woman’s suffrage convention; (circa 1910-1938). This image has been made available by the Schlesinger Library, Radcliffe Institute, Harvard University",
+      "DESCRIPTION": "Unknown. Young women holding a sign which reads, 'Self Supporting Women.' Several other women grouped near the banner are holding balls. May 1914. Image and data courtesy Arthur and Elizabeth Schlesinger Library on the History of Women in America (Radcliffe Institute for Advanced Study, Harvard University).",
       "LINK": "/#/category/1034302695",
-      "IMG_SOURCE": "/assets/img/featured-collection-anthony.jpg",
+      "IMG_SOURCE": "/assets/img/featured-collection-women.jpg",
       "LINK_TITLE": "Schlesinger Library of the History of Women in America (Harvard University)",
       "ALT_TEXT": "Schlesinger Library of the History of Women in America (Harvard University)"
     },
@@ -435,12 +456,17 @@
       "DOWNLOAD_GROUP": "Download Image Group"
     }
   },
-  "BANNER_MESSAGE": {
-    "SEARCH_ANNOUNCEMENT_BANNER": "We are making changes and you may experience issues with login and search. <a href=\"http://support.artstor.org/?article=current-technical-issues-alerts\" target=\"_blank\" class=\"link\">Learn more</a>.",
-    "MEDIA_ISSUES_BANNER": "We are currently experiencing issues with images and downloads due to a power outage. <a href=\"http://support.artstor.org/?article=current-technical-issues-alerts\" target=\"_blank\" class=\"link\">Learn more</a>.",
-    "DOWNTIME_BANNER": "Artstor will be temporarily unavailable on Tuesday, January 23 beginning at 6am EST (<a href=\"http://everytimezone.com\" target=\"_blank\" class=\"link\">see this in your timezone</a>) for approximately 15 minutes.  During this time, you may be unable to log in and access content. Thank you for your patience during this brief outage. ",
-    "INTERMITTENT_ISSUES_BANNER": "The Artstor Digital Library is displaying intermittent issues. We apologize for the disruption and are working to resolve the issue. If you have any questions, please contact <a href='mailto:support@artstor.org' class='link'>Artstor support</a>.",
-    "SEARCH_SKY_BANNER": "⚠️ This is a testing instance for the new Search index. Please excuse the broken bits."
+  "SEARCH_ANNOUNCEMENT_BANNER": {
+    "MESSAGE": "We are making changes and you may experience issues with login and search. <a href=\"http://support.artstor.org/?article=current-technical-issues-alerts\" target=\"_blank\" class=\"link\">Learn more</a>."
+  },
+  "MEDIA_ISSUES_BANNER": {
+    "MESSAGE": "We are currently experiencing issues with images and downloads due to a power outage. <a href=\"http://support.artstor.org/?article=current-technical-issues-alerts\" target=\"_blank\" class=\"link\">Learn more</a>."
+  },
+  "DOWNTIME_BANNER": {
+    "MESSAGE": "Artstor will be temporarily unavailable on Tuesday, January 23 beginning at 6am EST (<a href=\"http://everytimezone.com\" target=\"_blank\" class=\"link\">see this in your timezone</a>) for approximately 15 minutes.  During this time, you may be unable to log in and access content. Thank you for your patience during this brief outage. "
+  },
+  "SEARCH_SKY_BANNER": {
+    "MESSAGE": "⚠️ This is a testing instance for the new Search index. Please excuse the broken bits."
   },
   "FILTERS" : {
     "artcollectiontitle_str" : "Collection",
