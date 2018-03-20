@@ -18,7 +18,7 @@ export class PersonalCollectionService {
     this.options = { withCredentials: true }
   }
 
-  public metadataIds: { label: string, id: string }[] = [
+  private metadataIds: { label: string, id: string }[] = [
     {label: "creator", id: "fd_68602_s",  },
     {label: "title", id: "fd_68607_s" },
     {label: "work_type", id: "fd_68609_s" },
@@ -144,4 +144,9 @@ export interface AssetDetailField {
 
 export interface updatepcImageMetadataResponse {
   success: boolean
+  results: {
+    ssid: string
+    status: number
+    success: boolean
+  }[]
 }
