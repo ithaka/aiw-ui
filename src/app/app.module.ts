@@ -40,31 +40,31 @@ import {DndModule} from 'ng2-dnd';
 import { FileUploadModule } from "ng2-file-upload";
 
 // App is our top level component
-import { App } from './app.component';
-import { APP_RESOLVER_PROVIDERS } from './app.resolver';
-import { AppConfig } from './app.service';
-import { Nav, Footer, SearchComponent, PaginationComponent, AssetSearchService } from './shared';
-import { NavMenu } from './nav-menu';
-import { AssetFilters } from './asset-filters';
-import { AssetGrid, ThumbnailComponent } from './asset-grid';
-import { Home } from './home';
-import { SearchPage } from './search-page';
-import { CollectionPage } from './collection-page';
-import { PCollectionPage } from './pcollection-page';
-import { CategoryPage } from './category-page';
-import { ImageGroupPPPage } from './image-group-pp-page';
-import { AssetPPPage } from './asset-pp-page';
-import { ClusterPage } from './cluster-page';
+import { App } from './app.component'
+import { APP_RESOLVER_PROVIDERS } from './app.resolver'
+import { AppConfig } from './app.service'
+import { Nav, Footer, SearchComponent, PaginationComponent, AssetSearchService } from './shared'
+import { NavMenu } from './nav-menu'
+import { AssetFilters } from './asset-filters'
+import { AssetGrid, ThumbnailComponent } from './asset-grid'
+import { Home } from './home'
+import { SearchPage } from './search-page'
+import { CollectionPage } from './collection-page'
+import { PCollectionPage } from './pcollection-page'
+import { CategoryPage } from './category-page'
+import { ImageGroupPPPage } from './image-group-pp-page'
+import { AssetPPPage } from './asset-pp-page'
+import { ClusterPage } from './cluster-page'
 import { BrowsePage, LibraryComponent, BrowseCommonsComponent,
   MyCollectionsComponent, BrowseInstitutionComponent, BrowseGroupsComponent, TagComponent,
-  TagsListComponent, TagFiltersService } from './browse-page';
-import { AssetPage, AgreeModalComponent } from './asset-page';
-import { AccountPage } from './account-page';
-import { AssociatedPage } from './associated-page';
-import { ImageGroupPage, PptModalComponent } from './image-group-page';
-import { Login } from './login';
-import { NoContent } from './no-content';
-import { RegisterComponent } from './register/register.component';
+  TagsListComponent, TagFiltersService } from './browse-page'
+import { AssetPage, AgreeModalComponent } from './asset-page'
+import { AccountPage } from './account-page'
+import { AssociatedPage } from './associated-page'
+import { ImageGroupPage, PptModalComponent } from './image-group-page'
+import { Login } from './login'
+import { NoContent } from './no-content'
+import { RegisterComponent } from './register/register.component'
 import {
   AccessDeniedModal,
   AddToGroupModal,
@@ -84,7 +84,8 @@ import {
   ShareIgLinkModal,
   ShareLinkModal,
   UploadImagesModal
-} from './modals';
+} from './modals'
+import { UploaderComponent } from './uploader/uploader.component'
 import { GeneralSearchComponent } from './browse-page/browse-groups/general-search.component'
 import { SkyBannerComponent } from './sky-banner/sky-banner.component'
 
@@ -99,7 +100,8 @@ import {
   TitleService,
   ToolboxService,
   TypeIdPipe,
-  ScriptService
+  ScriptService,
+  PersonalCollectionService
 } from './shared'
 import { SSOService } from './shared/sso.service'
 import { AssetFiltersService } from './asset-filters/asset-filters.service'
@@ -124,6 +126,7 @@ const APP_PROVIDERS = [
   AssetSearchService,
   GroupService,
   AuthService,
+  PersonalCollectionService,
   SSOService,
   LogService,
   ImageGroupService,
@@ -161,6 +164,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     AssetGrid,
     AssetPage,
     AssociatedPage,
+    AssetPPPage,
     BrowseCommonsComponent,
     BrowseGroupsComponent,
     BrowseInstitutionComponent,
@@ -179,10 +183,12 @@ export function HttpLoaderFactory(http: HttpClient) {
     Home,
     ImageGroupPage,
     ImageGroupPPPage,
-    AssetPPPage,
+    KeysPipe,
     LibraryComponent,
+    LinkifyPipe,
     Login,
     LoginReqModal,
+    MediumEditorDirective,
     MyCollectionsComponent,
     Nav,
     NavMenu,
@@ -206,9 +212,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     TagsListComponent,
     ThumbnailComponent,
     TypeIdPipe,
-    LinkifyPipe,
-    KeysPipe,
-    MediumEditorDirective
+    UploaderComponent
   ],
   imports: [ // import Angular's modules
     BrowserModule,
