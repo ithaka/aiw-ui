@@ -416,8 +416,9 @@ export class AssetService {
                     //get clustered images thumbnails
                     this.loadCluster(params.objectId);
                 } else if (params.hasOwnProperty("pcolId") && params["pcolId"] !== "") {
-                    //get personal collection thumbnails
-                    this.loadCollection(params.pcolId);
+                    //get personal collection thumbnails via SOLR
+                    let searchTerm = params.term ? params.term : ''
+                    this.loadSearch(searchTerm)
                 }  else if (params.hasOwnProperty("colId") && params["colId"] !== "") {
                     // get collection thumbnails
                     let searchTerm = params.term ? params.term : '';
@@ -705,28 +706,6 @@ export class AssetService {
             }
             loadBatch(0);
         });
-    }
-
-    /**
-     * Loads thumbnails from a collectionType
-     * @param colId Collection Id for which to fetch results
-     */
-    private loadCollection(colId: string) {
-        let options = {withCredentials: true};
-        let imageSize = 0;
-        let startIndex = ((this.urlParams.page - 1) * this.urlParams.size) + 1;
-
-        let requestString = [this._auth.getUrl(), 'collections', colId, 'thumbnails', startIndex, this.urlParams.size, this.activeSort.index].join('/');
-
-        return this.http
-            .get(requestString, options)
-            .toPromise()
-            .then((data) => {
-                this.updateLocalResults(data);
-            })
-            .catch(error => {
-                console.log(error);
-            });
     }
 
     private loadCluster(objectId: string){

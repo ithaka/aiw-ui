@@ -4,8 +4,6 @@ import { Subscription }   from 'rxjs/Subscription'
 import { Locker } from 'angular2-locker'
 import { Angulartics2 } from 'angulartics2'
 import { ArtstorViewer } from 'artstor-viewer'
-import { formGroupNameProvider } from '@angular/forms/src/directives/reactive_directives/form_group_name'
-import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms'
 
 // Project Dependencies
 import { Asset } from './asset'
@@ -15,9 +13,7 @@ import {
     AssetSearchService,
     GroupService,
     CollectionTypeHandler,
-    LogService,
-    PersonalCollectionService,
-    AssetDetailsFormValue
+    LogService
 } from './../shared'
 import { AnalyticsService } from '../analytics.service'
 import { TitleService } from '../shared/title.service'
@@ -61,7 +57,6 @@ export class AssetPage implements OnInit, OnDestroy {
 
     private copyURLStatusMsg: string = ''
     private showCopyUrl: boolean = false
-    private showEditDetails: boolean = false
     private generatedImgURL: string = ''
     private generatedViewURL: string = ''
     private generatedFullURL: string = ''
@@ -99,23 +94,17 @@ export class AssetPage implements OnInit, OnDestroy {
     };
     private originPage: number = 0;
 
-    private editDetailsForm: FormGroup
-    private editDetailsFormSubmitted: boolean = false // Set to true once the edit details form is submitted
-    private isProcessing: boolean = false
-    private showExitEdit: boolean = false
-    private pcFeatureFlag: boolean = false
-    
-    private updatedPCAssets: any[] = []
-    private publishing: boolean = false
+    private relatedResultsQuery: string = ''
+    private jstorResults: any[] = []
+    private selectedJstorResult: any = {}
+    private relatedResFlag: boolean = false
 
     constructor(
         private _assets: AssetService,
         private _search: AssetSearchService,
         private _group: GroupService,
         private _auth: AuthService,
-        private _pcservice: PersonalCollectionService,
         private _log: LogService,
-        private _fb: FormBuilder,
         private route: ActivatedRoute,
         private _router: Router,
         private locker: Locker,
@@ -124,18 +113,7 @@ export class AssetPage implements OnInit, OnDestroy {
         private _title: TitleService,
         private scriptService: ScriptService,
     ) {
-        this._storage = locker.useDriver(Locker.DRIVERS.LOCAL)
-        
-        this.editDetailsForm = _fb.group({
-            creator: [null],
-            title: [null, Validators.required],
-            work_type: [null],
-            date: [null],
-            location: [null],
-            material: [null],
-            description: [null],
-            subject: [null]
-          })
+        this._storage = locker.useDriver(Locker.DRIVERS.LOCAL);
     }
 
     ngOnInit() {
@@ -167,14 +145,9 @@ export class AssetPage implements OnInit, OnDestroy {
                 if(routeParams && routeParams['featureFlag']){
                     this._auth.featureFlags[routeParams['featureFlag']] = true
                     this.collectionLinksFlag = this._auth.featureFlags['collection_links']
-
-                    if (this._auth.featureFlags['uploadPC']) {
-                        this.pcFeatureFlag = true
-                    } else{
-                        this.pcFeatureFlag = false
-                    }
+                    this.relatedResFlag = this._auth.featureFlags['related-res-hack'] ? true : false
                 } else{
-                    this.pcFeatureFlag = false
+                    this.relatedResFlag = false
                 }
 
                 if (routeParams['encryptedId']) {
@@ -188,8 +161,6 @@ export class AssetPage implements OnInit, OnDestroy {
                         this.assetNumber = this._assets.currentLoadedParams.page ? this.assetIndex + 1 + ((this._assets.currentLoadedParams.page - 1) * this._assets.currentLoadedParams.size) : this.assetIndex + 1;
                     }
                 }
-
-                this.updatedPCAssets = this._storage.get('updatedPCAssets')
             })
         );
 
@@ -313,30 +284,20 @@ export class AssetPage implements OnInit, OnDestroy {
         } else {
             this.assets[assetIndex] = asset
             if (assetIndex == 0) {
-                this._title.setTitle( asset.title )
-                document.querySelector('meta[name="DC.type"]').setAttribute('content', 'Artwork')
-                document.querySelector('meta[name="DC.title"]').setAttribute('content', asset.title)
-                document.querySelector('meta[name="asset.id"]').setAttribute('content', asset.id)
+                this._title.setTitle( asset.title );
+                document.querySelector('meta[name="DC.type"]').setAttribute('content', 'Artwork');
+                document.querySelector('meta[name="DC.title"]').setAttribute('content', asset.title);
+                document.querySelector('meta[name="asset.id"]').setAttribute('content', asset.id);
                 let currentAssetId: string = this.assets[0].id || this.assets[0]['objectId'] // couldn't trust the 'this.assetIdProperty' variable
                 // Search returns a 401 if /userinfo has not yet set cookies
                 if (Object.keys(this._auth.getUser()).length !== 0) {
                     this.setCollectionType(currentAssetId)
                 }
-                this.generateImgURL()
+                this.generateImgURL();
 
-                // Check if the asset is undergoing publishing by 
-                this.publishing = false
-                for(let i = 0; i < this.updatedPCAssets.length; i++){
-                    let updatedPCAsset = this.updatedPCAssets[i]
-                    if(updatedPCAsset.asset_id === asset.id){
-                        if(updatedPCAsset.updated_on === asset.updated_on){ // Asset is still publishing
-                            this.publishing = true
-                        } else{ // Asset has been published
-                            this.updatedPCAssets.splice(i, 1)
-                            this._storage.set('updatedPCAssets', this.updatedPCAssets)
-                        }
-                        break
-                    }
+                // Load related results from jstor
+                if(this.relatedResFlag){
+                    this.getJstorRelatedResults(asset)
                 }
             }
         }
@@ -760,7 +721,8 @@ export class AssetPage implements OnInit, OnDestroy {
     }
 
     /**
-     * Called on edit (Asset) details form submission
+     * Used to get related results from jstor index based on asset title/subject/work_type
+     * @param asset Asset to be used for constructing jstor search query
      */
     private editDetailsFormSubmit(formValue: AssetDetailsFormValue): void {
 
@@ -791,73 +753,21 @@ export class AssetPage implements OnInit, OnDestroy {
                         //     this._router.navigate(['/asset', this.assets[0].id])
                         // }, 250)
                     }
-                },
-                error => {
-                    console.error(error)
-                    this.isProcessing = false
                 }
-            );
+            )
     }
 
     /**
-     * Preloads the edit details form with the asset mmetadata values and show the form
+     * Sets data in the selectedJstorResult Object from the hovered-on jstor result
+     * @param resultObject Hovered-on jstor result object
      */
-    private loadEditDetailsForm(): void{
+    private setToolTipData(resultObject: any): void{
+        let toolTipData: any = {}
+        toolTipData.title = resultObject.title && resultObject.title[0] ? resultObject.title[0] : ''
+        toolTipData.authors = resultObject.author
+        toolTipData.publishers = resultObject.publisher
+        toolTipData.doi = resultObject.doi
 
-        // preload form values
-        let metaData = this.assets[0].formattedMetadata
-        for(let label in metaData){
-            let value = metaData[label][0]
-            switch (label) {
-                case 'Creator':  {
-                    this.editDetailsForm.controls['creator'].setValue( value ) 
-                    break
-                }
-                case 'Title':  {
-                    this.editDetailsForm.controls['title'].setValue( value )
-                    break
-                }
-                case 'Work Type':  {
-                    this.editDetailsForm.controls['work_type'].setValue( value )
-                    break
-                }
-                case 'Date':  {
-                    this.editDetailsForm.controls['date'].setValue( value )
-                    break
-                }
-                case 'Location':  {
-                    this.editDetailsForm.controls['location'].setValue( value )
-                    break
-                }
-                case 'Material':  {
-                    this.editDetailsForm.controls['material'].setValue( value )
-                    break
-                }
-                case 'Description':  {
-                    this.editDetailsForm.controls['description'].setValue( value )
-                    break
-                }
-                case 'Subject':  {
-                    this.editDetailsForm.controls['subject'].setValue( value )
-                    break
-                }
-                default: {
-                    break
-                }
-            }
-        }
-
-        // Show edit details form
-        this.showEditDetails = true
+        this.selectedJstorResult = toolTipData
     }
-
-    private closeEditDetails(type: string): void{
-        // Hide and reset the edit details form
-        if( type === 'Continue'){
-            this.showEditDetails = false
-            this.editDetailsForm.reset()
-        }
-        this.showExitEdit = false
-    }
-    
 }
