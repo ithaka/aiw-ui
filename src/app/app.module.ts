@@ -99,8 +99,7 @@ import {
   TitleService,
   ToolboxService,
   TypeIdPipe,
-  ScriptService,
-  PersonalCollectionService
+  ScriptService
 } from './shared'
 import { SSOService } from './shared/sso.service'
 import { AssetFiltersService } from './asset-filters/asset-filters.service'
@@ -125,7 +124,6 @@ const APP_PROVIDERS = [
   AssetSearchService,
   GroupService,
   AuthService,
-  PersonalCollectionService,
   SSOService,
   LogService,
   ImageGroupService,
