@@ -43,24 +43,7 @@ module.exports = function(options) {
      * See: http://webpack.github.io/docs/configuration.html#devtool
      * See: https://github.com/webpack/docs/wiki/build-performance#sourcemaps
      */
-    devtool: 'eval', // Eval was specifically chosen over 'cheap-module-source-map' for better browser inspection support
-    cache: true,
-    parallelism: 10,
-    performance: false,
-    mode: "development",
-
-    /**
-     * Dev environment should have optimizations turned OFF
-     */
-    optimization: {
-      removeAvailableModules: false,
-      removeEmptyChunks: false,
-      mergeDuplicateChunks: false,
-      flagIncludedChunks: false,
-      splitChunks: false,
-      runtimeChunk: false,
-      minimize: false
-    },
+    devtool: 'cheap-module-source-map',
 
     /**
      * Options affecting the output of the compilation.
@@ -68,11 +51,7 @@ module.exports = function(options) {
      * See: http://webpack.github.io/docs/configuration.html#output
      */
     output: {
-      /**
-       * Enabled in development mode. Elsewise disabled.
-       * These extra comment are useful for debugging, especially with the eval devtool.
-       */
-      pathinfo: true,
+
       /**
        * The output directory as absolute path (required).
        *

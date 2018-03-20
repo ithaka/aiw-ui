@@ -1,6 +1,6 @@
 nav-menu
 #mainContent.container.main-content(tabindex="-1")
-  //- for accessibility so that page has title
+  // for accessibility so that page has title
   h1.hidden Artstor Home Page
   .row
     .col-sm-4
@@ -9,31 +9,31 @@ nav-menu
         .card-header
           h2.h1 {{ 'HOME.BROWSE.TITLE' | translate }}
         ul.list-group.list-group-flush.list-group-clean
-          //- ADL Collections Link
+          // ADL Collections Link
           a#linkBrowseCollection.list-group-item(*ngIf="browseSec.collection", [routerLink]="['/browse','library']")
             h3.browse-category {{ 'HOME.BROWSE.COLL_HEADING' | translate }}
-            p.small([innerHtml]="'HOME.BROWSE.COLL_LIST' | translate")
-          //- Institutional Collections Link
+            p.small {{  'HOME.BROWSE.COLL_LIST' | translate }}
+          // Institutional Collections Link
           a#linkBrowseInstCollection.list-group-item(*ngIf="browseSec.instCollection", [routerLink]="['/browse','institution']")
             h3.browse-category {{ 'HOME.BROWSE.COLL_HEADING' | translate }}
-            p.small([innerHtml]="'HOME.BROWSE.COLL_LIST_SHORT' | translate")
-          //- Classification Link
+            p.small {{ 'HOME.BROWSE.COLL_LIST_SHORT' | translate }}
+          // Classification Link
           a#linkBrowseClassification.list-group-item(*ngIf="browseSec.classification", [routerLink]="['/browse','library', {viewId: 250}]")
             h3.browse-category {{ 'HOME.BROWSE.CLASS_HEADING' | translate }}
-            p.small([innerHtml]="'HOME.BROWSE.CLASS_LIST' | translate")
-          //- Geography Link
+            p.small {{ 'HOME.BROWSE.CLASS_LIST' | translate }}
+          // Geography Link
           a#linkBrowseGeography.list-group-item(*ngIf="browseSec.geography", [routerLink]="['/browse','library', {viewId: 260}]")
             h3.browse-category {{ 'HOME.BROWSE.GEO_HEADING' | translate }}
-            p.small([innerHtml]="'HOME.BROWSE.GEO_LIST' | translate")
-          //- Teaching Resources Link
+            p.small {{ 'HOME.BROWSE.GEO_LIST' | translate }}
+          // Teaching Resources Link
           a#linkBrowseTeaching.list-group-item(*ngIf="browseSec.teachingResources", [routerLink]="['/browse','groups', 'public']")
             h3.browse-category {{ 'HOME.BROWSE.TEACHING_HEADING' | translate }}
-            p.small([innerHtml]="'HOME.BROWSE.TEACHING_LIST' | translate")
-          //- Image Groups Link
+            p.small {{ 'HOME.BROWSE.TEACHING_LIST' | translate }}
+          // Image Groups Link
           a#linkBrowseIGs.list-group-item(*ngIf="browseSec.imageGrps", [routerLink]="['/browse','groups', defaultGrpBrwseBy]")
             h3.browse-category {{ 'HOME.BROWSE.GROUPS_HEADING' | translate }}
-            p.small([innerHtml]="'HOME.BROWSE.GROUPS_LIST' | translate")
-      //- Institution Shared Shelf Collections
+            p.small {{ 'HOME.BROWSE.GROUPS_LIST' | translate }}
+      // Institution Shared Shelf Collections
       .card(*ngIf="institution && instCollections.length > 0")
         .card-header
           h2 {{ 'HOME.HEADINGS.INSTITUTION_COLLECTIONS' | translate:{ institutionName: institution.shortName ? institution.shortName : 'Institutional' } }}
@@ -45,7 +45,7 @@ nav-menu
           #errorCollectionsLoading.alert.alert-warning(role="alert")
             strong Error
               | {{ errors.instCollections }}
-      //- Shared Shelf Commons Collections
+      // Shared Shelf Commons Collections
       .card.pb-3(*ngIf="showHomeSSC")
         .card-header
           h2 {{ 'HOME.HEADINGS.SSC' | translate }}

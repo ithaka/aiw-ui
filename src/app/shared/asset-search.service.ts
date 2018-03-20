@@ -246,13 +246,16 @@ export class AssetSearchService {
       }
     }
 
-    if(options.colId || options['coll']){
-      let colId = '';
-      if( options['coll'] ){
-        colId = options['coll'];
+    if(options.colId || options['coll'] || options.pcolId){
+      let colId = ''
+      if(options['coll']){
+        colId = options['coll']
       }
-      else if ( options.colId ){
-        colId = options.colId;
+      else if(options.colId){
+        colId = options.colId
+      }
+      else if(options.pcolId){ // For personal collection assets
+        colId = '37436'
       }
 
       filterArray.push("collections:\"" + colId + "\"");
@@ -347,6 +350,46 @@ export class AssetSearchService {
       this.latestSearchRequestId = res.requestId
       return searchResponse
     })
+  }
+
+  /**
+   * Search jstor index for secondary resources
+   * @param searchTerm   String containing asset title with no quote AND if/then statement for subject and work type (prioritizing subject as first, if present, and then work type, if subject isn't present, but work type is)
+   * @returns       Returns a response object from jstor search containing results
+   */
+  public searchJstor(searchTerm: string): Observable<any> {
+    
+    let query = { 
+      "content_types": [],
+      "additional_fields": ["rectype","raw_type","htopic_st"],
+      "hier_facet_fields": [
+        {
+          "maxdepth": 10,
+          "mincount": 1,
+          "name": "htopic_st",
+          "alias": "thesaurus1",
+          "limit": 500
+        }
+      ],
+      "limit": 25,
+      "result_includes": [],
+      "hier_facet_fields2": [],
+      "ms_facet_fields": [],
+      "query": searchTerm,
+      "facet_fields": [
+        {
+          "name": "disc",
+          "mincount": 1,
+          "limit": 10
+        }
+      ]
+    }
+
+    return this.http.post<SearchResponse>(
+      'http://search-service.apps.test.cirrostratus.org/browse/',
+      query,
+      { withCredentials: true }
+    )
   }
 
   /**
@@ -553,4 +596,5 @@ interface SearchOptions {
   size?: number
   colId?: string
   collections?: string
+  pcolId?: string
 }
