@@ -2,12 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { Subscription }   from 'rxjs/Subscription';
 
-import { AssetService } from './../shared/assets.service';
-import { AuthService } from './../shared/auth.service';
 import { AnalyticsService } from '../analytics.service';
 import { TagsService } from './tags.service';
 import { Tag } from './tag/tag.class';
-import { TitleService } from '../shared/title.service';
+import { TitleService, AssetSearchService, AuthService, AssetService } from '../shared';
 
 @Component({
   selector: 'ang-my-collections',
@@ -22,6 +20,7 @@ export class MyCollectionsComponent implements OnInit {
     private _auth: AuthService,
     private router: Router,
     private route: ActivatedRoute,
+    private _search: AssetSearchService,
     private _assets: AssetService,
     private _analytics: AnalyticsService,
     private _title: TitleService
@@ -35,7 +34,7 @@ export class MyCollectionsComponent implements OnInit {
   private tags : Tag[] = [];
   private expandedCategories: any = {};
   private selectedBrowseId: string = '';
-  private showUploadImgsModal: boolean = false;
+//   private showUploadImgsModal: boolean = false;
   private showEditPCModal: boolean = false;
 //   private uploadPC: boolean = false;
 
