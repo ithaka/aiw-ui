@@ -3,7 +3,15 @@ import { Subscription } from 'rxjs/Rx'
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms'
 
 
-import { AssetService, PersonalCollectionService, AssetSearchService, SearchAsset, AuthService, PostPersonalCollectionResponse } from './../../shared'
+import {
+  AssetService, 
+  PersonalCollectionService,
+  AssetSearchService, 
+  SearchAsset, 
+  AuthService, 
+  PostPersonalCollectionResponse,
+  AssetDetailsFormValue
+} from './../../shared'
 import { Asset } from '../../asset-page/asset'
 
 @Component({
@@ -101,11 +109,28 @@ export class EditPersonalCollectionModal implements OnInit, OnDestroy {
     this.editMode = false
   }
 
-  private editMetaFormSubmit( formData: any ): void {
+  private editMetaFormSubmit( formData: AssetDetailsFormValue ): void {
     if (this.metadataUpdateLoading) { return }
 
     this.uiMessages = {}
     this.metadataUpdateLoading = true
+    this._pc.updatepcImageMetadata(formData, this.selectedAsset.ssid)
+    .map((res) => {
+      this.metadataUpdateLoading = false
+      return res
+    })
+    .take(1)
+    .subscribe((res) => {
+      let updateItem = res.results.find((result) => {
+        return result.ssid == this.selectedAsset.ssid
+      })
+      console.log(updateItem)
+      updateItem.success ? this.uiMessages.metadataUpdateSuccess = true : this.uiMessages.metadataUpdateFailure = true
+      
+    }, (err) => {
+      this.uiMessages.metadataUpdateFailure = true
+      console.error(err)
+    })
     // TODO: add trigger for success and failure messages
     console.log(formData)
     this.metadataUpdateLoading = false
