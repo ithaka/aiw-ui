@@ -19,6 +19,7 @@ export class Asset {
     categoryId: number
     SSID: string
     fileName: string
+    updated_on?: string
 
     viewportDimensions: {
         contentSize?: any,
@@ -271,6 +272,7 @@ export interface ImageFPXResponse {
 }
 
 export interface FileProperty { [key: string]: string }
+
 interface FormattedMetadata {
     [fieldName: string]: string[]
 }

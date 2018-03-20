@@ -246,16 +246,13 @@ export class AssetSearchService {
       }
     }
 
-    if(options.colId || options['coll'] || options.pcolId){
-      let colId = ''
-      if(options['coll']){
-        colId = options['coll']
+    if(options.colId || options['coll']){
+      let colId = '';
+      if( options['coll'] ){
+        colId = options['coll'];
       }
-      else if(options.colId){
-        colId = options.colId
-      }
-      else if(options.pcolId){ // For personal collection assets
-        colId = '37436'
+      else if ( options.colId ){
+        colId = options.colId;
       }
 
       filterArray.push("collections:\"" + colId + "\"");
@@ -300,7 +297,7 @@ export class AssetSearchService {
     }
 
 
-    return this.http.post<SearchResponse>(
+    return this.http.post<RawSearchResponse>(
       this._auth.getSearchUrl(),
       query,
       { withCredentials: true }
@@ -321,49 +318,35 @@ export class AssetSearchService {
           }
         }
       }
+
+      // media comes as a json string, so we'll parse it into an object for each result
+      let cleanedResults: SearchAsset[] = res.results.map((item) => {
+        let cleanedSSID: string = item.doi.substr(item.doi.lastIndexOf(".") + 1) // split the ssid off the doi
+        let cleanedMedia: MediaObject
+        if (item.media && typeof item.media == 'string') { cleanedMedia = JSON.parse(item.media) }
+        let cleanedAsset: SearchAsset = Object.assign(
+          {}, // assigning it to a new object
+          item, // base is the raw item returned from search
+          { // this object contains all of the new properties which exist on a cleaned asset
+            media: cleanedMedia, // assign a media object instead of a string
+            ssid: cleanedSSID, // assign the ssid, which is taken off the doi
+            thumbnailUrls: [] // this is only the array init - we add the urls later
+          }
+        )
+        // make the thumbnail urls and add them to the array
+        for (let i = 0; i < 5; i++) {
+          cleanedAsset.thumbnailUrls.push(this.makeThumbUrl(cleanedAsset.media.thumbnailSizeOnePath, i))
+        }
+
+        return cleanedAsset
+      })
+      
+      // create the cleaned response to pass to caller
+      let searchResponse: SearchResponse = Object.assign({}, res, { results: cleanedResults })
+
       this.latestSearchRequestId = res.requestId
-      return res
+      return searchResponse
     })
-  }
-
-  /**
-   * Search jstor index for secondary resources
-   * @param searchTerm   String containing asset title with no quote AND if/then statement for subject and work type (prioritizing subject as first, if present, and then work type, if subject isn't present, but work type is)
-   * @returns       Returns a response object from jstor search containing results
-   */
-  public searchJstor(searchTerm: string): Observable<any> {
-    
-    let query = { 
-      "content_types": [],
-      "additional_fields": ["rectype","raw_type","htopic_st"],
-      "hier_facet_fields": [
-        {
-          "maxdepth": 10,
-          "mincount": 1,
-          "name": "htopic_st",
-          "alias": "thesaurus1",
-          "limit": 500
-        }
-      ],
-      "limit": 25,
-      "result_includes": [],
-      "hier_facet_fields2": [],
-      "ms_facet_fields": [],
-      "query": searchTerm,
-      "facet_fields": [
-        {
-          "name": "disc",
-          "mincount": 1,
-          "limit": 10
-        }
-      ]
-    }
-
-    return this.http.post<SearchResponse>(
-      'http://search-service.apps.test.cirrostratus.org/browse/',
-      query,
-      { withCredentials: true }
-    )
   }
 
   /**
@@ -394,8 +377,37 @@ export class AssetSearchService {
       }
     })
   }
+
+  /**
+   * Generate Thumbnail URL
+   */
+  private makeThumbUrl(imagePath: string, size: number): string {
+    if (imagePath) {
+      if (size) {
+        imagePath = imagePath.replace(/(size)[0-4]/g, 'size' + size);
+      }
+      // Ensure relative
+      if (imagePath.indexOf('artstor.org') > -1) {
+        imagePath = imagePath.substring(imagePath.indexOf('artstor.org') + 12);
+      }
+
+      if (imagePath[0] != '/') {
+        imagePath = '/' + imagePath;
+      }
+
+      if (imagePath.indexOf('thumb') < 0) {
+        imagePath = '/thumb' + imagePath;
+      }
+    } else {
+      imagePath = '';
+    }
+
+    // Ceanup
+    return this._auth.getThumbUrl() + imagePath;
+  }
 }
 
+// the cleaned response object which is returned by the service
 export interface SearchResponse {
   facets: {
     name: string
@@ -413,7 +425,26 @@ export interface SearchResponse {
   hierarchies2: HierarchicalFilter
 }
 
-interface SearchAsset {
+// the response directly from search
+export interface RawSearchResponse {
+  facets: {
+    name: string
+    values: {
+      count: number
+      efq: string
+      fq: string
+      name: string
+    }[]
+  }[]
+  bad_request: boolean
+  requestId: string
+  results: RawSearchAsset[]
+  total: number // total number of assets returned
+  hierarchies2: HierarchicalFilter
+}
+
+// the data returned from search in the results array
+interface RawSearchAsset {
   agent: string // creator of the piece
   artstorid: string // the correct id to reference when searching for artstor assets
   clusterid: string // id of the cluser the asset exists in, if any
@@ -438,6 +469,33 @@ interface SearchAsset {
   yearend: number // end of date range the asset is thought to have been created in
 }
 
+export interface SearchAsset {
+  agent: string // creator of the piece
+  artstorid: string // the correct id to reference when searching for artstor assets
+  clusterid: string // id of the cluser the asset exists in, if any
+  collections: string[] // array of collections this asset exists under
+  collectiontypenameid: string[]
+  collectiontypes: number[] // all of the collection types this asset fits
+  contributinginstitutionid: number // which institution added the asset
+  date: string // a string entered by the user, not an actually useful date other than display
+  doi: string // ex: "10.2307/artstor.16515779"
+  ssid: string
+  frequentlygroupedwith: string[] // array of other asset ids this image is grouped with
+  iap: boolean // do we support Images for Academic Publishing for the asset
+  // id: string // the id used by the SOLR cluster, which is not reliable, therefore it's left commented out
+  media: MediaObject // dictionary of media properties
+  name: string // the asset's name
+  partofcluster: boolean
+  tokens: string[]
+  type: string // going to be "art" for all artstor assets
+  thumbnailUrls: string[] // the index here is the size of the thumbnail
+  updatedon: Date // date the asset was last updated in Forum
+  workid: string // id of the work record in Forum that the asset belongs to
+  year: number // the year the asset is marked as being created
+  yearbegin: number // beginning of date range the asset is thought to have been created in
+  yearend: number // end of date range the asset is thought to have been created in
+}
+
 interface HierarchicalFilter {
   [key: string]: {
     children: HierarchicalFilter
@@ -449,6 +507,23 @@ interface HierarchicalFilter {
       selected: boolean
     }
   }
+}
+
+interface MediaObject {
+  format: string
+  thumbnailSizeOnePath: string
+  width: number
+  sizeInBytes: number
+  downloadSize: number
+  type: string
+  icc_profile_location: string
+  thumbnailSizeZeroPath: string
+  filename: string
+  lps: string
+  iiif: string
+  storId: string
+  adlObjectType: number
+  height: number
 }
 
 interface SearchRequest {
@@ -478,5 +553,4 @@ interface SearchOptions {
   size?: number
   colId?: string
   collections?: string
-  pcolId?: string
 }
