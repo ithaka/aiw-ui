@@ -272,6 +272,7 @@ export interface ImageFPXResponse {
 }
 
 export interface FileProperty { [key: string]: string }
+
 interface FormattedMetadata {
     [fieldName: string]: string[]
 }

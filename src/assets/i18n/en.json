@@ -148,9 +148,9 @@
   "UPLOAD_IMAGES_MODAL": {
     "TITLE": "Upload Images",
     "FORMAT_LBL": "JPEG File Format Required",
-    "DROP_TXT": "Drop Files Here",
+    "DROP_TXT": "Drop or select JPEG files",
     "UPLOAD_LBL": "Upload new media",
-    "SELECT_BUTTON_TXT": "SELECT FILES",
+    "SELECT_BUTTON_TXT": "Browse",
     "HELP": "Help"
   },
   "EDIT_PC_MODAL": {
@@ -158,8 +158,19 @@
     "EDIT_COL": "Edit Collection",
     "META_ADD_INFO": "Metadata can be added by clicking on the thumbnail image, or from the Personal Collection Administration dialog and image page.",
     "HELP": "Help",
-    "CLOSE": "Close",
-    "SAVE": "Save",
+    "BUTTONS": {
+      "CLOSE": "Close",
+      "SAVE": "Save",
+      "DELETE": "Delete"
+    },
+    "MESSAGES": {
+      "IMG_UPLOAD_SUCCESS": "Image successfully uploaded",
+      "IMG_UPLOAD_FAILURE": "Image upload failed. Please try again.",
+      "IMG_DELETE_SUCCESS": "Image successfully deleted",
+      "IMG_DELETE_FAILURE": "Image failed to delete. Please try again.",
+      "METADATA_UPDATE_SUCCESS": "Metadata successfully updated",
+      "METADATA_UPDATE_FAILURE": "Metadata failed to update. Please try again."
+    },
     "FORM": {
       "TITLE": "Title",
       "CREATOR": "Creator",
@@ -381,9 +392,9 @@
     "FEATURED": {
       "HEADING": "Featured Collection",
       "SUBHEADING": "Schlesinger Library of the History of Women in America (Harvard University)",
-      "DESCRIPTION": "Unknown; Memorial plaque to Susan B. Anthony, Mary S. Anthony, and the first woman’s suffrage convention; (circa 1910-1938). This image has been made available by the Schlesinger Library, Radcliffe Institute, Harvard University",
+      "DESCRIPTION": "Unknown. Young women holding a sign which reads, 'Self Supporting Women.' Several other women grouped near the banner are holding balls. May 1914. Image and data courtesy Arthur and Elizabeth Schlesinger Library on the History of Women in America (Radcliffe Institute for Advanced Study, Harvard University).",
       "LINK": "/#/category/1034302695",
-      "IMG_SOURCE": "/assets/img/featured-collection-anthony.jpg",
+      "IMG_SOURCE": "/assets/img/featured-collection-women.jpg",
       "LINK_TITLE": "Schlesinger Library of the History of Women in America (Harvard University)",
       "ALT_TEXT": "Schlesinger Library of the History of Women in America (Harvard University)"
     },

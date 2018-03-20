@@ -1,3 +1,5 @@
+@import './../../../sass/core/variables';
+
 .modal-dialog{
 
     &.edit-mode{
@@ -30,7 +32,12 @@
             padding: 5px;
             
             .thumb{
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
                 position: relative;
+                padding: 3px;
+                // margin: 3px;
 
                 img{
                     display: block;
@@ -109,4 +116,8 @@
             padding-bottom: 10px;
         }
     }
+}
+
+.new-thumb {
+    border: 1px solid $green;
 }

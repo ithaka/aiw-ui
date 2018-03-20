@@ -1,0 +1,26 @@
+.upload-cntnr.mb-2
+  .lbl {{ 'UPLOAD_IMAGES_MODAL.UPLOAD_LBL' | translate }}
+  .well.my-drop-zone(
+    ng2FileDrop,
+    [ngClass]="{ 'nv-file-over': fileOverDropZone, 'error': false }",
+    (fileOver)="fileOverBase($event)",
+    [uploader]="uploader"
+  )
+    .inner-wrapper
+      h3.header-upload {{ 'UPLOAD_IMAGES_MODAL.DROP_TXT' | translate }}
+      button.btn.btn-primary.file-select-btn(type="button", (click)="file.click()") {{ 'UPLOAD_IMAGES_MODAL.SELECT_BUTTON_TXT' | translate }}
+      input(
+        type="file",
+        accept=".jpg,.jpeg",
+        multiple,
+        ng2FileSelect,
+        [uploader]="uploader",
+        #file=""
+      )
+      .file-name
+        div(*ngFor="let queueObj of uploader.queue")
+          .queue-item.pb-1(*ngIf="queueObj.isReady") {{ queueObj.file.name }}
+            i.icon.icon-loading
+      .file-name.error-wrap(*ngIf="invalidFiles && invalidFiles.length > 0")
+        .error-msg(*ngFor="let file of invalidFiles") "{{ file.name }}" is not a valid JPEG
+  a.btn.btn-link.help(href="http://support.artstor.org/?article-category=09-using-your-own-images", target="_blank") {{ 'UPLOAD_IMAGES_MODAL.HELP' | translate }}
