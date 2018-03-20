@@ -19,7 +19,6 @@ export class Asset {
     categoryId: number
     SSID: string
     fileName: string
-    updated_on?: string
 
     viewportDimensions: {
         contentSize?: any,
