@@ -77,7 +77,7 @@
                 tabindex="13")
                 i.icon.icon-download-black
                 | Download File
-              a#downloadViewLink.dropdown-item(download="native.jpg",
+              a#downloadViewLink.dropdown-item(download="download.jpg",
                 type="image/jpeg",
                 [attr.href]="(downloadAuth() && !assets[0].disableDownload) ? generatedViewURL : null",
                 (click)="(downloadAuth() && !assets[0].disableDownload) ? trackDownloadView() : setDownloadView()",

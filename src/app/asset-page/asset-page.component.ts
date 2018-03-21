@@ -39,8 +39,7 @@ export class AssetPage implements OnInit, OnDestroy {
     private user: any
     private encryptedAccess: boolean = false
     private document = document
-    private window = window
-    private toObjectURL = this.window.URL.createObjectURL
+    private URL = URL
 
     // Array to support multiple viewers on the page
     private assets: Asset[] = []
@@ -69,7 +68,7 @@ export class AssetPage implements OnInit, OnDestroy {
     private showCopyUrl: boolean = false
     private showEditDetails: boolean = false
     private generatedImgURL: string = ''
-    private generatedViewURL: SafeResourceUrl
+    private generatedViewURL: SafeUrl
     private generatedFullURL: string = ''
     // Used for agree modal input, changes based on selection
     private downloadUrl: any
@@ -87,6 +86,9 @@ export class AssetPage implements OnInit, OnDestroy {
     private collectionType: {name: string, alt: string} = {name: '', alt: ''}
 
     private collectionTypeHandler: CollectionTypeHandler = new CollectionTypeHandler()
+
+    // private arrayBuffer = Uint8Array
+    // private winUrl = window.URL || window.webkitURL;
     
     // To keep a track of browse direction ('prev' / 'next') while browsing through assets, to load next asset if the current asset is un-authorized
     private browseAssetDirection: string = '' 
@@ -633,13 +635,6 @@ export class AssetPage implements OnInit, OnDestroy {
         }
     }
 
-    
-    private downloadViewBlob(url: string): Observable<Blob> {
-        return this._httpClient.get(url, { 
-            responseType: 'blob'
-        })
-    }
-
     private genDownloadViewLink() : void {
 
         let asset = this.assets[0]
@@ -668,17 +663,19 @@ export class AssetPage implements OnInit, OnDestroy {
             let yOffset = Math.floor((asset.viewportDimensions.center.y * fullWidth) - (zoomY/2))
 
             // Generate the view url from tilemap service
-            let downloadLink: string = this.assets[0].tileSource.replace('info.json','') + xOffset +','+yOffset+','+zoomX+','+zoomY+'/'+viewX+','+viewY+'/0/native.jpg'
+            let downloadLink: string = asset.tileSource.replace('info.json','') + xOffset +','+yOffset+','+zoomX+','+zoomY+'/'+viewX+','+viewY+'/0/native.jpg'
 
-            
-            // Our Blob
-            //let blob = this.downloadViewBlob(downloadLink).subscribe()
+            // Download our blob
+            let blob = this._search.downloadViewBlob(downloadLink)
+            .take(1)
+            .subscribe((blob) => {
 
-            // Data URL
-            let href = 'data:image/jpeg;' + downloadLink
-            
-            this.generatedViewURL = this._sanitizer.bypassSecurityTrustResourceUrl(href)
-            
+                let blobURL = this.URL.createObjectURL(blob)
+                this.generatedViewURL = this._sanitizer.bypassSecurityTrustUrl(blobURL)
+
+            }, (err) => {
+                console.error('Error returning generated download view', err)
+            })
         }
     }
 
@@ -733,6 +730,8 @@ export class AssetPage implements OnInit, OnDestroy {
     setDownloadView() : void {
         this.downloadUrl = this.generatedViewURL;
         this.showAgreeModal = true;
+
+
     }
 
     trackDownloadImage() : void {
