@@ -34,7 +34,7 @@
         (nextPage)="showNextAsset()",
         (prevPage)="showPrevAsset()",
         (assetDrawer)="toggleAssetDrawer(!showAssetDrawer)")
-      
+      //- Related results from JSTOR
       .pl-3(*ngIf="jstorResults.length > 0 && relatedResFlag")
         .row-hdr.pt-3 Related Results from JSTOR
         .jstor-result(*ngFor="let result of jstorResults")
