@@ -1,6 +1,6 @@
 import { Locker } from 'angular2-locker';
 import { Component } from '@angular/core'
-import { Router } from '@angular/router'
+import { Router, ActivatedRoute } from '@angular/router'
 import { Location } from '@angular/common'
 import { Angulartics2 } from 'angulartics2'
 import { CompleterService, LocalData } from 'ng2-completer'
@@ -9,6 +9,7 @@ import { BehaviorSubject, Observable, Subscription } from 'rxjs/Rx';
 import { AppConfig } from '../app.service'
 import { AuthService, User, AssetService } from './../shared'
 import { AnalyticsService } from '../analytics.service'
+import { SSOService } from './../shared/sso.service'
 
 declare var initPath: string
 
@@ -40,6 +41,7 @@ export class Login {
   private stashedRoute: string
   private loginLoading = false
   private dataService: LocalData
+  private featureFlag: string
 
   /** 
    * Observable for autocomplete list of institutions
@@ -54,6 +56,8 @@ export class Login {
     private _auth: AuthService,
     private _assets: AssetService,
     private _completer: CompleterService,
+    private _sso: SSOService,
+    private route: ActivatedRoute,
     private router: Router,
     private location: Location,
     private angulartics: Angulartics2,
@@ -64,6 +68,10 @@ export class Login {
   }
 
   ngOnInit() {
+
+    if (this.route.snapshot.queryParams.featureFlag == 'sso-hack') {
+      this.featureFlag = 'sso-hack'
+    }
     // Check for a stashed route to pass to proxy links
     this.stashedRoute = this._storage.get("stashedRoute")
 
@@ -105,6 +113,20 @@ export class Login {
       });
 
     this._analytics.setPageValues('login', '')
+
+    if (this.featureFlag == 'sso-hack') {
+      console.log('we are hacking sso')
+      this._sso.getSSOCredentials()
+      .take(1)
+      .subscribe((res) => {
+        console.log(res)
+        if (res.username && res.username.length > 0 && res.password && res.password.length > 0) {
+          this.login(new User(res.username, res.password))
+        }
+      }, (err) => {
+        console.error(err)
+      })
+    }
   } // OnInit
 
 
@@ -222,6 +244,7 @@ export class Login {
             this.errorMsg = 'There was an issue with your account, please contact support.';
           } else {
             this.angulartics.eventTrack.next({ action:"remoteLogin", properties: { category: "login", label: "success" }});
+            this.featureFlag == 'sso-hack' && this.recordSSOLogin(user.username, user.password)
             this.loadForUser(data);
           }
 
@@ -237,6 +260,16 @@ export class Login {
         // Check if old bad-case password
         this.isBadCasePassword(user)
       });
+  }
+
+  recordSSOLogin(username: string, password: string): void {
+    this._sso.postSSOCredentials(username, password)
+    .take(1)
+    .subscribe((res) => {
+      console.log('we done it!', res)
+    }, (err) => {
+      console.error(err)
+    })
   }
 
   getLoginErrorMsg(serverMsg: string) : string {
