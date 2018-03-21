@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core'
-import { HttpClient } from '@angular/common/http'
-import { Observable } from 'rxjs/Rx';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http'
+import { Observable } from 'rxjs/Rx'
 
 import { AuthService } from '.'
 
@@ -18,13 +18,7 @@ export class PersonalCollectionService {
     this.options = { withCredentials: true }
   }
 
-  // public deletePersonalAsset() {
-
-  // }
-  
-
-
-  public metadataIds: { label: string, id: string }[] = [
+  private metadataIds: { label: string, id: string }[] = [
     {label: "creator", id: "fd_68602_s",  },
     {label: "title", id: "fd_68607_s" },
     {label: "work_type", id: "fd_68609_s" },
@@ -41,7 +35,7 @@ export class PersonalCollectionService {
    * @param ssid The SSID of the asset to be updated
    * @returns AssetDetailsRequestObject which can be POSTed to the API endpoint
    */
-  public prepareAssetDetailsObject(form: AssetDetailsFormValue, ssid: string): AssetDetailsRequestObject {
+  private prepareAssetDetailsObject(form: AssetDetailsFormValue, ssid: string): AssetDetailsRequestObject {
     let assetDetails: AssetDetailsRequestObject = {
       ssid: parseInt(ssid),
       metadata: []
@@ -63,14 +57,68 @@ export class PersonalCollectionService {
   /**
    * Update personal collection image metadata
    */
-  public updatepcImageMetadata(assetDetails: AssetDetailsRequestObject): Observable<any> {
-    return this._http.post(
+  public updatepcImageMetadata(form: AssetDetailsFormValue, ssid: string): Observable<updatepcImageMetadataResponse> {
+    let assetDetails = this.prepareAssetDetailsObject(form, ssid)
+  // public updatepcImageMetadata(assetDetails: AssetDetailsRequestObject): Observable<any> {
+    return this._http.post<updatepcImageMetadataResponse>(
         this.pcImgMetaUpdateURL,
         [ assetDetails ],
         this.options
     )
   }
 
+  public getPersonalCollection(collectionId: string): Observable<GetPersonalCollectionResponse> {
+    let headers: HttpHeaders = new HttpHeaders()
+      .set('Content-Type', 'application/json')
+
+    return this._http.get<GetPersonalCollectionResponse>(
+      [this._auth.getUrl(), 'v1', 'collection'].join('/'),
+      { headers: headers, withCredentials: true }
+    )
+  }
+
+  public deletePersonalAssets(ssids: string[]): Observable<DeletePersonalAssetResponse> {
+    let headers: HttpHeaders = new HttpHeaders()
+      .set('Content-Type', 'application/json')
+
+    return this._http.delete<DeletePersonalAssetResponse>(
+      [this._auth.getUrl(), 'v1', 'pcollection', 'image'].join('/') + "?ssids=" + ssids.join(","),
+      { headers: headers, withCredentials: true }
+    )
+  }
+}
+
+interface DeletePersonalAssetResponse {
+  
+}
+
+interface GetPersonalCollectionResponse {
+  
+}
+
+export interface PostPersonalCollectionResponse {
+  // asset_group_id: [] // don't know
+  created_by: number
+  created_on: string
+  deleted: boolean
+  fd_68638_b: boolean
+  filename: string
+  image_restricted: boolean
+  institution_id: string
+  media_count: number
+  // media_identifier: null // don't know again
+  metadata: { width: number, height: number, imagetype: string, size: number }
+  primary_image: boolean
+  project_id: number
+  // publishing_status:{} // not sure what this is
+  representation_id: string
+  sequence_number: number
+  ssid: number
+  updated_by: number
+  updated_on: string
+  visibility: number
+  src?: string // we assign this on the front end
+  // }
 }
 
 export interface AssetDetailsFormValue {
@@ -92,4 +140,13 @@ export interface AssetDetailsRequestObject {
 export interface AssetDetailField {
   field_id: string,
   value: string
+}
+
+export interface updatepcImageMetadataResponse {
+  success: boolean
+  results: {
+    ssid: string
+    status: number
+    success: boolean
+  }[]
 }
