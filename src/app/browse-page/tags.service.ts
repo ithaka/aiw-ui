@@ -29,6 +29,10 @@ export class TagsService {
    * @returns a chainable promise, resolved with an array of tags
    */
   private loadCollectionsList(type: string): Promise<Tag[]> {
+    this._assets.categoryByFacet('collectionname', 3)
+      .then( (facetData) => {
+        console.log('facetData: ', facetData)
+      })
     return this._assets.getCollectionsList( type )
       .toPromise()
       .then((data) => {
