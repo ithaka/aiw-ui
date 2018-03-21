@@ -836,6 +836,8 @@ export class AssetService {
 
       query["filter_query"] = filterArray
 
+      console.log('query', query)
+
       return this.http.post(this._auth.getSearchUrl(), query, options)
         .toPromise()
         .then(res => {
