@@ -190,6 +190,7 @@ export class AssetPage implements OnInit, OnDestroy {
                 }
 
                 this.updatedPCAssets = this._storage.get('updatedPCAssets')
+                this.updatedPCAssets = this.updatedPCAssets ? this.updatedPCAssets : []
             })
         );
 
@@ -786,10 +787,10 @@ export class AssetPage implements OnInit, OnDestroy {
                         this.closeEditDetails('Continue')
 
                         // Reload asset metadata
-                        // this._router.navigate(['/asset', ''])
-                        // setTimeout(() => {
-                        //     this._router.navigate(['/asset', this.assets[0].id])
-                        // }, 250)
+                        this._router.navigate(['/asset', ''])
+                        setTimeout(() => {
+                            this._router.navigate(['/asset', this.assets[0].id])
+                        }, 250)
                     }
                 },
                 error => {
