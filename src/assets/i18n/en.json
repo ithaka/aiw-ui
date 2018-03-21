@@ -148,9 +148,9 @@
   "UPLOAD_IMAGES_MODAL": {
     "TITLE": "Upload Images",
     "FORMAT_LBL": "JPEG File Format Required",
-    "DROP_TXT": "Drop Files Here",
+    "DROP_TXT": "Drop or select JPEG files",
     "UPLOAD_LBL": "Upload new media",
-    "SELECT_BUTTON_TXT": "SELECT FILES",
+    "SELECT_BUTTON_TXT": "Browse",
     "HELP": "Help"
   },
   "EDIT_PC_MODAL": {
@@ -158,8 +158,19 @@
     "EDIT_COL": "Edit Collection",
     "META_ADD_INFO": "Metadata can be added by clicking on the thumbnail image, or from the Personal Collection Administration dialog and image page.",
     "HELP": "Help",
-    "CLOSE": "Close",
-    "SAVE": "Save",
+    "BUTTONS": {
+      "CLOSE": "Close",
+      "SAVE": "Save",
+      "DELETE": "Delete"
+    },
+    "MESSAGES": {
+      "IMG_UPLOAD_SUCCESS": "Image successfully uploaded",
+      "IMG_UPLOAD_FAILURE": "Image upload failed. Please try again.",
+      "IMG_DELETE_SUCCESS": "Image successfully deleted",
+      "IMG_DELETE_FAILURE": "Image failed to delete. Please try again.",
+      "METADATA_UPDATE_SUCCESS": "Metadata successfully updated",
+      "METADATA_UPDATE_FAILURE": "Metadata failed to update. Please try again."
+    },
     "FORM": {
       "TITLE": "Title",
       "CREATOR": "Creator",
