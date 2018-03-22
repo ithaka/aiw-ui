@@ -99,6 +99,11 @@ export class AssetPage implements OnInit, OnDestroy {
     };
     private originPage: number = 0;
 
+    private relatedResultsQuery: string = ''
+    private jstorResults: any[] = []
+    private selectedJstorResult: any = {}
+    private relatedResFlag: boolean = false
+
     private editDetailsForm: FormGroup
     private editDetailsFormSubmitted: boolean = false // Set to true once the edit details form is submitted
     private isProcessing: boolean = false
@@ -167,6 +172,7 @@ export class AssetPage implements OnInit, OnDestroy {
                 if(routeParams && routeParams['featureFlag']){
                     this._auth.featureFlags[routeParams['featureFlag']] = true
                     this.collectionLinksFlag = this._auth.featureFlags['collection_links']
+                    this.relatedResFlag = this._auth.featureFlags['related-res-hack'] ? true : false
 
                     if (this._auth.featureFlags['uploadPC']) {
                         this.pcFeatureFlag = true
@@ -175,6 +181,7 @@ export class AssetPage implements OnInit, OnDestroy {
                     }
                 } else{
                     this.pcFeatureFlag = false
+                    this.relatedResFlag = false
                 }
 
                 if (routeParams['encryptedId']) {
@@ -190,6 +197,7 @@ export class AssetPage implements OnInit, OnDestroy {
                 }
 
                 this.updatedPCAssets = this._storage.get('updatedPCAssets')
+                this.updatedPCAssets = this.updatedPCAssets ? this.updatedPCAssets : []
             })
         );
 
@@ -323,6 +331,11 @@ export class AssetPage implements OnInit, OnDestroy {
                     this.setCollectionType(currentAssetId)
                 }
                 this.generateImgURL()
+
+                // Load related results from jstor
+                if(this.relatedResFlag){
+                    this.getJstorRelatedResults(asset)
+                }
 
                 // Check if the asset is undergoing publishing by 
                 this.publishing = false
@@ -760,6 +773,61 @@ export class AssetPage implements OnInit, OnDestroy {
     }
 
     /**
+     * Used to get related results from jstor index based on asset title/subject/work_type
+     * @param asset Asset to be used for constructing jstor search query
+     */
+    private getJstorRelatedResults(asset: Asset): void {
+        let term = ''
+        if(asset.formattedMetadata && asset.formattedMetadata['Title']){
+            term += asset.formattedMetadata['Title'][0]
+        }
+
+        if(asset.formattedMetadata && asset.formattedMetadata['Subject']){
+            term += ' AND ' + asset.formattedMetadata['Subject']
+        } else if (asset.formattedMetadata && asset.formattedMetadata['Work Type']){
+            term += ' AND ' + asset.formattedMetadata['Work Type']
+        }
+
+        this.relatedResultsQuery = term
+
+        this._search.searchJstor(term)
+            .subscribe ( 
+                res => {
+                    if(res.results){
+                        let resultArray = res.results
+                        resultArray = resultArray.length > 4 ? resultArray.slice(0, 4) : resultArray
+                        for(let resultObj of resultArray){
+                            let label = ''
+                            if(resultObj.title && resultObj.title[0]){
+                                label = resultObj.title[0]
+                            }
+                            if(resultObj.citation_line){
+                                label += label ? ', ' : ''
+                                label += resultObj.citation_line
+                            }
+                            resultObj.label = label
+                        }
+                        this.jstorResults = resultArray
+                    }
+                }
+            )
+    }
+
+    /**
+     * Sets data in the selectedJstorResult Object from the hovered-on jstor result
+     * @param resultObject Hovered-on jstor result object
+     */
+    private setToolTipData(resultObject: any): void{
+        let toolTipData: any = {}
+        toolTipData.title = resultObject.title && resultObject.title[0] ? resultObject.title[0] : ''
+        toolTipData.authors = resultObject.author
+        toolTipData.publishers = resultObject.publisher
+        toolTipData.doi = resultObject.doi
+
+        this.selectedJstorResult = toolTipData
+    }
+
+    /**
      * Called on edit (Asset) details form submission
      */
     private editDetailsFormSubmit(formValue: AssetDetailsFormValue): void {
@@ -786,10 +854,10 @@ export class AssetPage implements OnInit, OnDestroy {
                         this.closeEditDetails('Continue')
 
                         // Reload asset metadata
-                        // this._router.navigate(['/asset', ''])
-                        // setTimeout(() => {
-                        //     this._router.navigate(['/asset', this.assets[0].id])
-                        // }, 250)
+                        this._router.navigate(['/asset', ''])
+                        setTimeout(() => {
+                            this._router.navigate(['/asset', this.assets[0].id])
+                        }, 250)
                     }
                 },
                 error => {

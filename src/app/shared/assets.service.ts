@@ -1,6 +1,6 @@
-import { categoryName } from './datatypes/category.interface';
 /**
- * Assets service
+ * Assets service [DEPRECATED, do not add new functions/properties]
+ * - Search calls should be moved to asset-search.service as we implement Solr
  */
 import { Injectable, OnDestroy, OnInit, EventEmitter } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
@@ -9,6 +9,7 @@ import { Observable, BehaviorSubject, Subject } from 'rxjs/Rx';
 import { Locker } from 'angular2-locker';
 import 'rxjs/add/operator/toPromise';
 import { Subscription }   from 'rxjs/Subscription';
+import { categoryName } from './datatypes/category.interface';
 
 // Project Dependencies
 import { AuthService } from './auth.service';
@@ -231,10 +232,6 @@ export class AssetService {
         })
         this.allResultsValue['total'] = totalResults
         this.allResultsSource.next(this.allResultsValue)
-    }
-
-    public getCurrentInstitution(): any {
-        return this._storage.get('institution');
     }
 
     public setSortOpt(sortIndex: string): void{
@@ -925,21 +922,6 @@ export class AssetService {
     }
 
     /**
-     * Wrapper function for HTTP call to get Image Groups. Used by browse component
-     * @returns Chainable promise containing Image Groups data
-     */
-    public getIgs(){
-        let options = { withCredentials: true };
-
-        return this.http
-            .get(this._auth.getUrl() + '/folders/110', options)
-            .toPromise()
-            .then((data) => {
-                return data;
-            });
-    }
-
-    /**
      * Wrapper function for HTTP call to get subImageGroups. Used by browse/groups component
      * @param subImageGroup id
      * @returns Chainable promise containing subImageGroups data
@@ -1009,46 +991,6 @@ export class AssetService {
         return this.http
             .get(requestString, options)
             .toPromise()
-    }
-
-    /**
-     * Expected to return an object with a imageUrl at all costs
-     * eg. http://kts.stage.artstor.org/service/get_player/?entry_id=1:0_s6agwcv9
-     */
-    public getFpxInfo(objectId: string, objectTypeId: number): Promise<any> {
-        let requestUrl = this._auth.getUrl() + '/imagefpx/' + objectId + '/' + objectTypeId;
-
-        return this.http
-            .get(requestUrl, this.defaultOptions)
-            .toPromise()
-    }
-
-    /**
-     * Generate Thumbnail URL
-     */
-    public makeThumbUrl(imagePath: string, size ?: number): string {
-        if (imagePath) {
-            if (size) {
-                imagePath = imagePath.replace(/(size)[0-4]/g, 'size' + size);
-            }
-            // Ensure relative
-            if (imagePath.indexOf('artstor.org') > -1) {
-                imagePath = imagePath.substring(imagePath.indexOf('artstor.org') + 12);
-            }
-
-            if (imagePath[0] != '/') {
-                imagePath = '/' + imagePath;
-            }
-
-            if (imagePath.indexOf('thumb') < 0) {
-                imagePath = '/thumb' + imagePath;
-            }
-        } else {
-            imagePath = '';
-        }
-
-        // Ceanup
-        return this._auth.getThumbUrl() + imagePath;
     }
 
     public getBlogEntries(query ?: string) {
