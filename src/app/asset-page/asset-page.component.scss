@@ -420,3 +420,28 @@ $titleNavBg: #eee;
     }
     color: $dark-gray;
 }
+
+.jstor-result{
+    cursor: pointer;
+    padding-bottom: 5px;
+    display: block;
+    
+    a{
+        padding: 5px 5px 5px 0px;
+        &:hover{
+            background: #f9f9f9;
+        }
+    }
+
+    .type{
+        color: #989898;
+        font-size: 1rem;
+        font-weight: 600;
+        text-transform: capitalize;
+        display: inline;
+    }
+
+    .label{
+        display: inline;
+    }
+}
