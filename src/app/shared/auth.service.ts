@@ -253,6 +253,10 @@ export class AuthService implements CanActivate {
    * Logs out and redirects the user to the login component
    */
   private logoutUser() {
+
+      // Stop, unwatch Idle session
+      this.idle.unwatch()
+
       let header = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded'); // ... Set content type to JSON
       let options = { headers: header, withCredentials: true };
 
