@@ -68,10 +68,12 @@ export class AssetPage implements OnInit, OnDestroy {
     private showCopyUrl: boolean = false
     private showEditDetails: boolean = false
     private generatedImgURL: string = ''
-    private generatedViewURL: SafeUrl
+    private generatedViewURL: SafeUrl | string = ''
     private generatedFullURL: string = ''
     // Used for agree modal input, changes based on selection
     private downloadUrl: any
+    // Used for generated view blob url
+    private blobURL: string = '' 
     private prevRouteParams: any = []
     private collectionName: string = ''
 
@@ -639,6 +641,14 @@ export class AssetPage implements OnInit, OnDestroy {
 
         let asset = this.assets[0]
 
+        // Revoke the browser reference to a previously generated view download blob URL
+        console.log(this.blobURL.length)
+        if (this.blobURL.length) {
+            this.URL.revokeObjectURL(this.blobURL)
+            this.blobURL = ''
+            this.generatedViewURL = ''
+        }
+
         if(asset.typeName === 'image' && asset.viewportDimensions.contentSize){
             // Full source image size (max output possible)
             let fullWidth = asset.viewportDimensions.contentSize.x
@@ -670,8 +680,8 @@ export class AssetPage implements OnInit, OnDestroy {
             .take(1)
             .subscribe((blob) => {
 
-                let blobURL = this.URL.createObjectURL(blob)
-                this.generatedViewURL = this._sanitizer.bypassSecurityTrustUrl(blobURL)
+                this.blobURL = this.URL.createObjectURL(blob)
+                this.generatedViewURL = this._sanitizer.bypassSecurityTrustUrl(this.blobURL)
 
             }, (err) => {
                 console.error('Error returning generated download view', err)
