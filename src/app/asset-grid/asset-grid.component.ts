@@ -236,12 +236,7 @@ export class AssetGrid implements OnInit, OnDestroy {
             return;
           }
 
-          // Include only available assets to the results array
-          if(allResults.thumbnails){
-            this.results = allResults.thumbnails.filter((thumbnail) => {
-              return thumbnail.status === 'available'
-            })
-          }
+          this.results = allResults.thumbnails;
 
           let rstd_imgs = false;
 
@@ -469,10 +464,7 @@ export class AssetGrid implements OnInit, OnDestroy {
       this._assets.getAllThumbnails(this.itemIds)
         .then( allThumbnails => {
           this.isLoading = false;
-          // Include only available assets to the all results array
-          this.allResults = allThumbnails.filter((thumbnail) => {
-            return thumbnail.status === 'available'
-          })
+          this.allResults = allThumbnails;
           this.results = this.allResults;
         })
         .catch( error => {
