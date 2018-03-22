@@ -88,9 +88,6 @@ export class AssetPage implements OnInit, OnDestroy {
     private collectionType: {name: string, alt: string} = {name: '', alt: ''}
 
     private collectionTypeHandler: CollectionTypeHandler = new CollectionTypeHandler()
-
-    // private arrayBuffer = Uint8Array
-    // private winUrl = window.URL || window.webkitURL;
     
     // To keep a track of browse direction ('prev' / 'next') while browsing through assets, to load next asset if the current asset is un-authorized
     private browseAssetDirection: string = '' 
