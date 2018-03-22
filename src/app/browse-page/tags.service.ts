@@ -37,18 +37,18 @@ export class TagsService {
     }
 
     if(colTypeValue){
+      // Use SOLR to load collection list by faceting on collectiontypenameid and filtering on colTypeValue
       return this._assets.categoryByFacet('collectiontypenameid', colTypeValue)
         .then( (facetData) => {
           if(facetData){
             facetData = facetData.filter((facet) => {
               return parseInt(facet.name.split('|')[0]) === colTypeValue
             })
-            let tags: Tag[] = [];
+            let tags: Tag[] = []
             facetData.forEach((facet, index) => {
               let facetSplitArray = facet.name.split('|')
-              tags.push(new Tag(facetSplitArray[2], facetSplitArray[1], true, null, { label: "collection", folder: true }, true));
-            });
-            console.log( 'tags', tags )
+              tags.push(new Tag(facetSplitArray[2], facetSplitArray[1], true, null, { label: "collection", folder: true }, true))
+            })
             return tags
           }
         })
@@ -58,17 +58,17 @@ export class TagsService {
         .toPromise()
         .then((data) => {
           if (data && data['Collections']) {
-            let tags: Tag[] = [];
+            let tags: Tag[] = []
             data['Collections'].forEach((collection, index) => {
-              let openable = collection.collectionType === 5 || collection.collectionType === 2;
-              tags.push(new Tag(collection.collectionid, collection.collectionname, true, null, { label: "collection", folder: true }, openable));
+              let openable = collection.collectionType === 5 || collection.collectionType === 2
+              tags.push(new Tag(collection.collectionid, collection.collectionname, true, null, { label: "collection", folder: true }, openable))
             });
-            return tags;
+            return tags
           } else {
-            throw new Error("no Collections returned in data");
+            throw new Error("no Collections returned in data")
           }
 
-        });
+        })
     }
   }
 
