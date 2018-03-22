@@ -642,7 +642,6 @@ export class AssetPage implements OnInit, OnDestroy {
         let asset = this.assets[0]
 
         // Revoke the browser reference to a previously generated view download blob URL
-        console.log(this.blobURL.length)
         if (this.blobURL.length) {
             this.URL.revokeObjectURL(this.blobURL)
             this.blobURL = ''
