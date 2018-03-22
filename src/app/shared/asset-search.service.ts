@@ -421,7 +421,7 @@ export class AssetSearchService {
   /**
    * Generate Thumbnail URL
    */
-  private makeThumbUrl(imagePath: string, size: number): string {
+  public makeThumbUrl(imagePath: string, size: number): string {
     if (imagePath) {
       if (size) {
         imagePath = imagePath.replace(/(size)[0-4]/g, 'size' + size);
