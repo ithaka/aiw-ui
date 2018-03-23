@@ -155,7 +155,7 @@
   },
   "EDIT_PC_MODAL": {
     "TITLE": "Personal Collection",
-    "EDIT_COL": "Edit Collection",
+    "RECENT_TITLE": "Recently Uploaded",
     "META_ADD_INFO": "Metadata can be added by clicking on the thumbnail image, or from the Personal Collection Administration dialog and image page.",
     "HELP": "Help",
     "BUTTONS": {
