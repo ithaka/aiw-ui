@@ -45,6 +45,19 @@ export class AssetSearchService {
   }
 
   /**
+  * Download an Asset View blob file from tilemap service
+  * @param url - Generated tilemap view url
+  */
+  public downloadViewBlob(url: string): Observable<any> {
+    return this.http.get(url, { 
+        responseType: 'blob'
+    })
+    .map(blob => {
+        return blob
+    })
+  }
+
+  /**
    * Uses wildcard search to retrieve filters
    */
   public getFacets() {
@@ -421,7 +434,7 @@ export class AssetSearchService {
   /**
    * Generate Thumbnail URL
    */
-  private makeThumbUrl(imagePath: string, size: number): string {
+  public makeThumbUrl(imagePath: string, size: number): string {
     if (imagePath) {
       if (size) {
         imagePath = imagePath.replace(/(size)[0-4]/g, 'size' + size);
