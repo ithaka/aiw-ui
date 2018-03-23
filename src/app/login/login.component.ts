@@ -246,6 +246,7 @@ export class Login {
             this.angulartics.eventTrack.next({ action:"remoteLogin", properties: { category: "login", label: "success" }});
             this.featureFlag == 'sso-hack' && this.recordSSOLogin(user.username, user.password)
             this.loadForUser(data);
+            this._auth.resetIdleWatcher() // Start Idle on login
           }
 
         }
