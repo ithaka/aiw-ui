@@ -237,6 +237,7 @@ export class AssetGrid implements OnInit, OnDestroy {
           }
 
           this.results = allResults.thumbnails;
+
           let rstd_imgs = false;
 
           if ('items' in allResults) {
