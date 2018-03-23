@@ -1,10 +1,7 @@
 import { Component, OnInit, OnDestroy, ViewChild, HostListener } from '@angular/core'
 import { ActivatedRoute, Params, Router } from '@angular/router'
-import { DomSanitizer, SafeUrl, SafeResourceUrl } from '@angular/platform-browser';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { Subscription }   from 'rxjs/Subscription'
-import { Observable} from 'rxjs/Rx';
-
 import { Locker } from 'angular2-locker'
 import { Angulartics2 } from 'angulartics2'
 import { ArtstorViewer } from 'artstor-viewer'
@@ -136,7 +133,6 @@ export class AssetPage implements OnInit, OnDestroy {
         private _title: TitleService,
         private scriptService: ScriptService,
         private _sanitizer: DomSanitizer,
-        private _httpClient: HttpClient,
     ) {
         this._storage = locker.useDriver(Locker.DRIVERS.LOCAL)
         
