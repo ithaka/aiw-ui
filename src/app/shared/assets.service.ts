@@ -402,6 +402,7 @@ export class AssetService {
         // Tell the filters service we have some updates
         this.setFiltersFromURLParams(params)
             .then(() => {
+                let searchTerm = params.term ? params.term : ''
                 // Pick function to load this query!
                 if (params.hasOwnProperty("objectId") && params["objectId"] !== "" && params.hasOwnProperty("colId") && params["colId"] !== "") {
                     //gets associated images thumbnails
@@ -413,14 +414,12 @@ export class AssetService {
                     //get clustered images thumbnails
                     this.loadCluster(params.objectId);
                 } else if (params.hasOwnProperty("pcolId") && params["pcolId"] !== "") {
-                    //get personal collection thumbnails
-                    this.loadCollection(params.pcolId);
+                    //get personal collection thumbnails via SOLR
+                    this.loadSearch(searchTerm)
                 }  else if (params.hasOwnProperty("colId") && params["colId"] !== "") {
-                    // get collection thumbnails
-                    let searchTerm = params.term ? params.term : '';
+                    // get collection thumbnails;
                     this.loadSearch(searchTerm);
-                } else if (params.hasOwnProperty("term")) {
-                    let searchTerm = params.term ? params.term : '';
+                } else if (params.hasOwnProperty("term")) {;
                     // Search within Categories
                     if (params.hasOwnProperty("catId")  && params["catId"] !== "") {
                         searchTerm = searchTerm + ' categoryid:' + params["catId"];
@@ -702,28 +701,6 @@ export class AssetService {
             }
             loadBatch(0);
         });
-    }
-
-    /**
-     * Loads thumbnails from a collectionType
-     * @param colId Collection Id for which to fetch results
-     */
-    private loadCollection(colId: string) {
-        let options = {withCredentials: true};
-        let imageSize = 0;
-        let startIndex = ((this.urlParams.page - 1) * this.urlParams.size) + 1;
-
-        let requestString = [this._auth.getUrl(), 'collections', colId, 'thumbnails', startIndex, this.urlParams.size, this.activeSort.index].join('/');
-
-        return this.http
-            .get(requestString, options)
-            .toPromise()
-            .then((data) => {
-                this.updateLocalResults(data);
-            })
-            .catch(error => {
-                console.log(error);
-            });
     }
 
     private loadCluster(objectId: string){
