@@ -219,7 +219,6 @@ export class AuthService implements CanActivate {
   // Reset the idle watcher
   public resetIdleWatcher(): void {
     this.idle.watch();
-    this.idleState = 'Idle watcher started';
     // When a user comes back, we don't want to wait for the time interval to refresh the session
     this.refreshUserSession()
   }
@@ -253,6 +252,9 @@ export class AuthService implements CanActivate {
    * Logs out and redirects the user to the login component
    */
   private logoutUser() {
+      // Stop, unwatch Idle session. Note: resetIdleWatcher() calls watch, and is called from login component
+      this.idle.unwatch()
+
       let header = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded'); // ... Set content type to JSON
       let options = { headers: header, withCredentials: true };
 
