@@ -242,7 +242,7 @@ export class AuthService implements CanActivate {
   }
 
   private expireSession(): void {
-    this.logoutUser()
+    this.logout()
       .then(() => {
         this._router.navigate(['/login']);
       })
@@ -251,7 +251,7 @@ export class AuthService implements CanActivate {
   /**
    * Logs out and redirects the user to the login component
    */
-  private logoutUser() {
+  public logout() {
       // Stop, unwatch Idle session. Note: resetIdleWatcher() calls watch, and is called from login component
       this.idle.unwatch()
 
@@ -495,7 +495,7 @@ export class AuthService implements CanActivate {
             this.saveUser(user)
             return true
           } else {
-            this.logoutUser()
+            this.logout()
             // Store the route so that we know where to put them after login!
             this.store("stashedRoute", this.location.path(false))
             return false
@@ -533,7 +533,7 @@ export class AuthService implements CanActivate {
             this.saveUser(user)
           } else {
             // Clear user session (local objects and cookies)
-            this.logoutUser()
+            this.logout()
             if (triggerSessionExpModal) {
               this.showUserInactiveModal.next(true)
             }
@@ -582,26 +582,6 @@ export class AuthService implements CanActivate {
   public authorizeDownload(): void {
     this._storage.set('downloadAuthorized', true);
   }
-
-    /**
-     * Logs out and redirects the user to the login component
-     */
-    logout() {
-        let header = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded'); // ... Set content type to JSON
-        let options = { headers: header, withCredentials: true };
-
-        this.clearStorage();
-
-        return this.http
-            .post(this.getUrl(true) + '/logout', {}, options)
-            .toPromise()
-            .catch((err) => {
-                // error handling
-                console.error(err)
-            });
-    }
-
-    /** BELOW IS THE STUFF THAT USED TO BE IN THE LOGIN SERVICE */
 
     /**
      * Logs user in
