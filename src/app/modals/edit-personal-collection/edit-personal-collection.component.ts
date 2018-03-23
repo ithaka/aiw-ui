@@ -9,7 +9,7 @@ import {
   AssetSearchService, 
   SearchAsset, 
   AuthService, 
-  PostPersonalCollectionResponse,
+  PersonalCollectionUploadAsset,
   AssetDetailsFormValue
 } from './../../shared'
 import { Asset } from '../../asset-page/asset'
@@ -19,16 +19,14 @@ import { Asset } from '../../asset-page/asset'
   styleUrls: [ 'edit-personal-collection.component.scss' ],
   templateUrl: 'edit-personal-collection.component.pug'
 })
-export class EditPersonalCollectionModal implements OnInit, OnDestroy {
+export class EditPersonalCollectionModal implements OnInit {
   @Output() closeModal: EventEmitter<any> = new EventEmitter()
   @Input() private colId: string
 
-  private subscriptions: Subscription[] = []
-
   private pcColThumbs: Array<any> = []
-  private collectionAssets: Array<SearchAsset>
+  private collectionAssets: Array<PersonalCollectionUploadAsset> = []
   private editMode: boolean = false
-  private selectedAsset: SearchAsset // this is the asset which the user selects from the list of assets
+  private selectedAsset: PersonalCollectionUploadAsset // this is the asset which the user selects from the list of assets
   private selectedAssetData: Asset // the asset emitted from the viewer
 
   private editAssetMetaForm: FormGroup
@@ -66,17 +64,13 @@ export class EditPersonalCollectionModal implements OnInit, OnDestroy {
 
 
   ngOnInit() {
-    this._search.search({ colId: "37436" }, "", 4)
-    .take(1)
-    .subscribe((res) => {
-      this.collectionAssets = res.results
-    }, (err) => {
-      console.error(err)
-    })
-  }
-
-  ngOnDestroy() {
-    this.subscriptions.forEach((sub) => { sub.unsubscribe() })
+    // this._search.search({ colId: "37436" }, "", 4)
+    // .take(1)
+    // .subscribe((res) => {
+    //   this.collectionAssets = res.results
+    // }, (err) => {
+    //   console.error(err)
+    // })
   }
 
   private handleLoadedMetadata(metadata: Asset): void {
@@ -97,14 +91,14 @@ export class EditPersonalCollectionModal implements OnInit, OnDestroy {
     this.editAssetMetaForm.controls['subject'].setValue(this.selectedAssetData.formattedMetadata.subject)
   }
 
-  private editAssetMeta(asset: SearchAsset): void{
+  private editAssetMeta(asset: PersonalCollectionUploadAsset): void{
     this.selectedAsset = asset
 
     this.editMode = true
   }
 
   private clearSelectedAsset(): void {
-    this.selectedAsset = <SearchAsset>{}
+    this.selectedAsset = <PersonalCollectionUploadAsset>{}
     this.selectedAssetData = <Asset>{}
     this.editMode = false
   }
@@ -114,7 +108,7 @@ export class EditPersonalCollectionModal implements OnInit, OnDestroy {
 
     this.uiMessages = {}
     this.metadataUpdateLoading = true
-    this._pc.updatepcImageMetadata(formData, this.selectedAsset.ssid)
+    this._pc.updatepcImageMetadata(formData, this.selectedAsset.ssid.toString())
     .map((res) => {
       this.metadataUpdateLoading = false
       return res
@@ -122,18 +116,14 @@ export class EditPersonalCollectionModal implements OnInit, OnDestroy {
     .take(1)
     .subscribe((res) => {
       let updateItem = res.results.find((result) => {
-        return result.ssid == this.selectedAsset.ssid
+        return result.ssid == this.selectedAsset.ssid.toString()
       })
-      console.log(updateItem)
       updateItem.success ? this.uiMessages.metadataUpdateSuccess = true : this.uiMessages.metadataUpdateFailure = true
       
     }, (err) => {
       this.uiMessages.metadataUpdateFailure = true
       console.error(err)
     })
-    // TODO: add trigger for success and failure messages
-    console.log(formData)
-    this.metadataUpdateLoading = false
   }
 
   /**
@@ -189,17 +179,11 @@ export class EditPersonalCollectionModal implements OnInit, OnDestroy {
   //   //   })
   // }
 
-  private handleNewAssetUpload(item: PostPersonalCollectionResponse): void {
+  private handleNewAssetUpload(item: PersonalCollectionUploadAsset): void {
+    console.log(item)
     this.uiMessages = {}
 
-    let newAsset: any = {
-      name: item.filename,
-      thumbnailUrls: [item.src],
-      ssid: item.ssid,
-      new: true
-    }
-
-    this.collectionAssets.unshift(newAsset)
+    this.collectionAssets.unshift(item)
   }
   
 }
