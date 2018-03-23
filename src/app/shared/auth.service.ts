@@ -253,7 +253,7 @@ export class AuthService implements CanActivate {
    */
   public logout() {
       // Stop, unwatch Idle session. Note: resetIdleWatcher() calls watch, and is called from login component
-      this.idle.unwatch()
+      this.idle.stop()
 
       let header = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded'); // ... Set content type to JSON
       let options = { headers: header, withCredentials: true };
@@ -492,6 +492,9 @@ export class AuthService implements CanActivate {
         (data)  => {
           let user = this.decorateValidUser(data)
           if (user) {
+            // Clear expired session modal
+            this.showUserInactiveModal.next(false)
+            // Update user object
             this.saveUser(user)
             return true
           } else {
@@ -529,13 +532,15 @@ export class AuthService implements CanActivate {
         (data)  => {
           let user = this.decorateValidUser(data)
           if (user) {
+            // Clear expired session modal
+            this.showUserInactiveModal.next(false)
             // Update user object
             this.saveUser(user)
           } else {
             // Clear user session (local objects and cookies)
             this.logout()
-            if (triggerSessionExpModal) {
-              this.showUserInactiveModal.next(true)
+            if (triggerSessionExpModal === true) {
+              this.showUserInactiveModal.next(triggerSessionExpModal)
             }
           }
           return data
@@ -553,7 +558,7 @@ export class AuthService implements CanActivate {
     let currentUsername = currentUser.username
 
     if (data['status'] === true && (!currentUsername || data['user'].username == currentUsername)) {
-            // User is authorized - if you want to check ipAuth then you can tell on the individual route by user.isLoggedIn = false
+      // User is authorized - if you want to check ipAuth then you can tell on the individual route by user.isLoggedIn = false
       let user = data['user']
       user.status = data['status']
       if (data['isRememberMe'] || data['remoteaccess']) {
