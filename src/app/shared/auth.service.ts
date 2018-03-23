@@ -173,7 +173,7 @@ export class AuthService implements CanActivate {
     });
     idle.onTimeout.subscribe(() => {
       let user = this.getUser();
-      // console.log(user);
+      console.log(user);
       if(user && user.isLoggedIn){
         this.expireSession();
         this.showUserInactiveModal.next(true);
@@ -191,7 +191,7 @@ export class AuthService implements CanActivate {
     });
     idle.onTimeoutWarning.subscribe((countdown) => {
       this.idleState = 'You will time out in ' + countdown + ' seconds!'
-      // console.log(this.idleState);
+      console.log(this.idleState);
     });
 
     // Init idle watcher
@@ -244,9 +244,9 @@ export class AuthService implements CanActivate {
 
   private expireSession(): void {
     this.logoutUser()
-      .then(() => {
-        this._router.navigate(['/login']);
-      })
+      //.then(() => {
+      //  this._router.navigate(['/login']);
+      //})
   }
 
   /**
@@ -254,8 +254,10 @@ export class AuthService implements CanActivate {
    */
   private logoutUser() {
 
-      // Stop, unwatch Idle session
+      // Stop, unwatch Idle session. resetIdleWatcher() calls watch, and is called from login component
       this.idle.unwatch()
+      console.log('called idle unwatch')
+      console.log(this.idleState)
 
       let header = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded'); // ... Set content type to JSON
       let options = { headers: header, withCredentials: true };
