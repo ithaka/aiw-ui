@@ -125,7 +125,7 @@ export interface PersonalCollectionUploadAsset extends PostPersonalCollectionRes
 
 export interface AssetDetailsFormValue {
   creator?: string,
-  title: string,
+  title?: string,
   work_type?: string,
   date?: string,
   location?: string,

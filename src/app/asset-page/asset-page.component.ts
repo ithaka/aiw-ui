@@ -26,6 +26,7 @@ import {
 import { AnalyticsService } from '../analytics.service'
 import { TitleService } from '../shared/title.service'
 import { ScriptService } from '../shared/script.service'
+import { LocalPCService } from '../_local-pc-asset.service'
 
 @Component({
     selector: 'ang-asset-page',
@@ -126,6 +127,7 @@ export class AssetPage implements OnInit, OnDestroy {
         private _group: GroupService,
         private _auth: AuthService,
         private _pcservice: PersonalCollectionService,
+        private _localPC: LocalPCService,
         private _log: LogService,
         private _fb: FormBuilder,
         private route: ActivatedRoute,
@@ -877,6 +879,10 @@ export class AssetPage implements OnInit, OnDestroy {
                 data => {
                     if( data.success ) {
                         this.isProcessing = false
+                        this._localPC.setAsset({
+                            ssid: parseInt(this.assets[0].SSID),
+                            asset_metadata: formValue
+                        })
 
                         this.updatedPCAssets.push({
                             'asset_id': this.assets[0].id,

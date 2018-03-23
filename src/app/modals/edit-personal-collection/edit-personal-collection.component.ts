@@ -13,6 +13,7 @@ import {
   AssetDetailsFormValue
 } from './../../shared'
 import { Asset } from '../../asset-page/asset'
+import { LocalPCService, LocalPCAsset } from '../../_local-pc-asset.service'
 
 @Component({
   selector: 'ang-edit-personal-collection',
@@ -27,7 +28,7 @@ export class EditPersonalCollectionModal implements OnInit {
   private collectionAssets: Array<PersonalCollectionUploadAsset> = []
   private editMode: boolean = false
   private selectedAsset: PersonalCollectionUploadAsset // this is the asset which the user selects from the list of assets
-  private selectedAssetData: Asset // the asset emitted from the viewer
+  private selectedAssetData: AssetDetailsFormValue = {} // the asset emitted from the viewer
 
   private editAssetMetaForm: FormGroup
 
@@ -48,7 +49,8 @@ export class EditPersonalCollectionModal implements OnInit {
     private _auth: AuthService,
     private _search: AssetSearchService,
     private _assets: AssetService,
-    private _pc: PersonalCollectionService
+    private _pc: PersonalCollectionService,
+    private _localPC: LocalPCService
   ) {
     this.editAssetMetaForm = _fb.group({
       creator: [null],
@@ -73,33 +75,33 @@ export class EditPersonalCollectionModal implements OnInit {
     // })
   }
 
-  private handleLoadedMetadata(metadata: Asset): void {
-    if (metadata['error']) {
-      return console.error(metadata['error'])
-      // handle us that error
+  private setMetadataValues(asset: LocalPCAsset): void {
+    if (asset) {
+      this.selectedAssetData = asset.asset_metadata
+    } else {
+      this.selectedAssetData = {}
     }
-
-    this.selectedAssetData = metadata
 
     this.editAssetMetaForm.controls['creator'].setValue(this.selectedAssetData.creator)
     this.editAssetMetaForm.controls['title'].setValue(this.selectedAssetData.title)
-    this.editAssetMetaForm.controls['work_type'].setValue(this.selectedAssetData.formattedMetadata.work_type)
+    this.editAssetMetaForm.controls['work_type'].setValue(this.selectedAssetData.work_type)
     this.editAssetMetaForm.controls['date'].setValue(this.selectedAssetData.date)
-    this.editAssetMetaForm.controls['location'].setValue(this.selectedAssetData.formattedMetadata.location)
-    this.editAssetMetaForm.controls['material'].setValue(this.selectedAssetData.formattedMetadata.material)
+    this.editAssetMetaForm.controls['location'].setValue(this.selectedAssetData.location)
+    this.editAssetMetaForm.controls['material'].setValue(this.selectedAssetData.material)
     this.editAssetMetaForm.controls['description'].setValue(this.selectedAssetData.description)
-    this.editAssetMetaForm.controls['subject'].setValue(this.selectedAssetData.formattedMetadata.subject)
+    this.editAssetMetaForm.controls['subject'].setValue(this.selectedAssetData.subject)
   }
 
   private editAssetMeta(asset: PersonalCollectionUploadAsset): void{
     this.selectedAsset = asset
+    this.setMetadataValues(this._localPC.getAsset(this.selectedAsset.ssid)) // update the form values to match the new asset metadata
 
     this.editMode = true
   }
 
   private clearSelectedAsset(): void {
     this.selectedAsset = <PersonalCollectionUploadAsset>{}
-    this.selectedAssetData = <Asset>{}
+    this.selectedAssetData = {}
     this.editMode = false
   }
 
@@ -108,7 +110,7 @@ export class EditPersonalCollectionModal implements OnInit {
 
     this.uiMessages = {}
     this.metadataUpdateLoading = true
-    this._pc.updatepcImageMetadata(formData, this.selectedAsset.ssid.toString())
+    this._pc.updatepcImageMetadata(formData, String(this.selectedAsset.ssid))
     .map((res) => {
       this.metadataUpdateLoading = false
       return res
@@ -116,10 +118,20 @@ export class EditPersonalCollectionModal implements OnInit {
     .take(1)
     .subscribe((res) => {
       let updateItem = res.results.find((result) => {
-        return result.ssid == this.selectedAsset.ssid.toString()
+        return result.ssid == String(this.selectedAsset.ssid)
       })
-      updateItem.success ? this.uiMessages.metadataUpdateSuccess = true : this.uiMessages.metadataUpdateFailure = true
-      
+
+      if (updateItem.success) {
+        this.uiMessages.metadataUpdateSuccess = true
+        // store this asset in local storage to be loaded later
+        this._localPC.setAsset({
+          ssid: this.selectedAsset.ssid, // typescript doesn't know that javascript can convert numbers to strings :(
+          asset_metadata: formData
+        })
+      } else {
+        this.uiMessages.metadataUpdateFailure = true
+      }
+
     }, (err) => {
       this.uiMessages.metadataUpdateFailure = true
       console.error(err)
