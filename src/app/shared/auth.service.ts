@@ -219,7 +219,6 @@ export class AuthService implements CanActivate {
   // Reset the idle watcher
   public resetIdleWatcher(): void {
     this.idle.watch();
-    this.idleState = 'Idle watcher started';
     // When a user comes back, we don't want to wait for the time interval to refresh the session
     this.refreshUserSession()
   }
@@ -243,7 +242,7 @@ export class AuthService implements CanActivate {
   }
 
   private expireSession(): void {
-    this.logoutUser()
+    this.logout()
       .then(() => {
         this._router.navigate(['/login']);
       })
@@ -252,7 +251,10 @@ export class AuthService implements CanActivate {
   /**
    * Logs out and redirects the user to the login component
    */
-  private logoutUser() {
+  public logout() {
+      // Stop, unwatch Idle session. Note: resetIdleWatcher() calls watch, and is called from login component
+      this.idle.stop()
+
       let header = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded'); // ... Set content type to JSON
       let options = { headers: header, withCredentials: true };
 
@@ -490,10 +492,13 @@ export class AuthService implements CanActivate {
         (data)  => {
           let user = this.decorateValidUser(data)
           if (user) {
+            // Clear expired session modal
+            this.showUserInactiveModal.next(false)
+            // Update user object
             this.saveUser(user)
             return true
           } else {
-            this.logoutUser()
+            this.logout()
             // Store the route so that we know where to put them after login!
             this.store("stashedRoute", this.location.path(false))
             return false
@@ -527,13 +532,15 @@ export class AuthService implements CanActivate {
         (data)  => {
           let user = this.decorateValidUser(data)
           if (user) {
+            // Clear expired session modal
+            this.showUserInactiveModal.next(false)
             // Update user object
             this.saveUser(user)
           } else {
             // Clear user session (local objects and cookies)
-            this.logoutUser()
-            if (triggerSessionExpModal) {
-              this.showUserInactiveModal.next(true)
+            this.logout()
+            if (triggerSessionExpModal === true) {
+              this.showUserInactiveModal.next(triggerSessionExpModal)
             }
           }
           return data
@@ -551,7 +558,7 @@ export class AuthService implements CanActivate {
     let currentUsername = currentUser.username
 
     if (data['status'] === true && (!currentUsername || data['user'].username == currentUsername)) {
-            // User is authorized - if you want to check ipAuth then you can tell on the individual route by user.isLoggedIn = false
+      // User is authorized - if you want to check ipAuth then you can tell on the individual route by user.isLoggedIn = false
       let user = data['user']
       user.status = data['status']
       if (data['isRememberMe'] || data['remoteaccess']) {
@@ -580,26 +587,6 @@ export class AuthService implements CanActivate {
   public authorizeDownload(): void {
     this._storage.set('downloadAuthorized', true);
   }
-
-    /**
-     * Logs out and redirects the user to the login component
-     */
-    logout() {
-        let header = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded'); // ... Set content type to JSON
-        let options = { headers: header, withCredentials: true };
-
-        this.clearStorage();
-
-        return this.http
-            .post(this.getUrl(true) + '/logout', {}, options)
-            .toPromise()
-            .catch((err) => {
-                // error handling
-                console.error(err)
-            });
-    }
-
-    /** BELOW IS THE STUFF THAT USED TO BE IN THE LOGIN SERVICE */
 
     /**
      * Logs user in
