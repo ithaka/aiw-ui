@@ -6,7 +6,11 @@ export class LocalPCService {
 
   private _pcAssets: LocalPCAsset[] = []
 
-  constructor(private _auth: AuthService) { }
+  constructor(private _auth: AuthService) {
+    if (!this.pcAssets) {
+      this.pcAssets = []
+    }
+  }
 
   /**
    * Updates local javascript object _pcAssets, used internally, and updates the json object in localstorage
@@ -42,9 +46,13 @@ export class LocalPCService {
    * @param ssid ssid for asset to return
    */
   public getAsset(ssid: number): LocalPCAsset {
-    return this.pcAssets.find((item) => {
-      return item.ssid == ssid
-    })
+    if (this.pcAssets) {
+      return this.pcAssets.find((item) => {
+        return item.ssid == ssid
+      })
+    } else {
+      return 
+    }
   }
 
   /**
