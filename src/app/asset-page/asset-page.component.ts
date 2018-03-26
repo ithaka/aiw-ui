@@ -69,6 +69,7 @@ export class AssetPage implements OnInit, OnDestroy {
     private generatedFullURL: string = ''
     // Used for agree modal input, changes based on selection
     private downloadUrl: any
+    private downloadName: string
     // Used for generated view blob url
     private blobURL: string = '' 
     private prevRouteParams: any = []
@@ -643,8 +644,10 @@ export class AssetPage implements OnInit, OnDestroy {
         }
     }
 
-    private genDownloadViewLink() : void {
-
+    /** Calls downloadViewBlob in AssetSearch service to retrieve blob file,
+        and then sets generatedViewUrl to this local reference. **/
+        
+    private genDownloadViewLink() :  void {
         let asset = this.assets[0]
 
         // Revoke the browser reference to a previously generated view download blob URL
@@ -736,6 +739,7 @@ export class AssetPage implements OnInit, OnDestroy {
     setDownloadImage() : void {
         this.downloadUrl = this.generatedFullURL;
         this.showAgreeModal = true;
+        this.downloadName = 'download'
     }
 
     /**
@@ -744,9 +748,8 @@ export class AssetPage implements OnInit, OnDestroy {
      */
     setDownloadView() : void {
         this.downloadUrl = this.generatedViewURL;
-        this.showAgreeModal = true;
-
-
+        this.showAgreeModal = true
+        this.downloadName = 'download.jpg'
     }
 
     trackDownloadImage() : void {

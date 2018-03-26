@@ -9,6 +9,7 @@ import { Asset } from './../asset';
   styleUrls: [ './agree-modal.component.scss' ]
 })
 export class AgreeModalComponent implements OnInit {
+
   /** Causes modal to be hidden */
   @Output()
   closeModal = new EventEmitter();
@@ -17,6 +18,9 @@ export class AgreeModalComponent implements OnInit {
   downloadAsset = new EventEmitter();
   @Input()
   assetUrl: string;
+  /** The value of the download attribute for Download View **/
+  @Input()
+  downloadName : string;
 
   constructor(private _auth: AuthService) { }
 
@@ -26,7 +30,7 @@ export class AgreeModalComponent implements OnInit {
    * Authorizes download and closes modal
    */
   private agree(): void {
-    this._auth.authorizeDownload();
-    this.closeModal.emit();
+    this._auth.authorizeDownload()
+    this.closeModal.emit()
   }
 }
