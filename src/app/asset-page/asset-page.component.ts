@@ -23,7 +23,7 @@ import {
 import { AnalyticsService } from '../analytics.service'
 import { TitleService } from '../shared/title.service'
 import { ScriptService } from '../shared/script.service'
-import { LocalPCService } from '../_local-pc-asset.service'
+import { LocalPCService, LocalPCAsset } from '../_local-pc-asset.service'
 
 @Component({
     selector: 'ang-asset-page',
@@ -905,7 +905,16 @@ export class AssetPage implements OnInit, OnDestroy {
     /**
      * Preloads the edit details form with the asset mmetadata values and show the form
      */
-    private loadEditDetailsForm(): void{
+    private loadEditDetailsForm(): void {
+        // see if we have a local copy of the data
+        let localData: LocalPCAsset = this._localPC.getAsset(parseInt(this.assets[0].SSID))
+        // if we have a copy of the metadata locally, use that
+        if (localData) {
+            for(let key in localData) {
+                this.editDetailsForm.controls[key].setValue( localData[key] )
+            }
+            return // cancel out of the rest of the function
+        }
 
         // preload form values
         let metaData = this.assets[0].formattedMetadata
