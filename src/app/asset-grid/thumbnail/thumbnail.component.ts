@@ -1,7 +1,7 @@
 import { Router } from '@angular/router';
 import { Component, OnInit, OnChanges, Input, SimpleChanges } from '@angular/core';
 
-import { Thumbnail, AssetService, CollectionTypeHandler } from './../../shared'
+import { Thumbnail, AssetService, CollectionTypeHandler, AssetSearchService } from './../../shared'
 
 @Component({
   selector: 'ang-thumbnail',
@@ -36,6 +36,7 @@ export class ThumbnailComponent implements OnInit, OnChanges {
 
   constructor(
     private _assets: AssetService,
+    private _search: AssetSearchService,
     private router: Router
   ) {
    }

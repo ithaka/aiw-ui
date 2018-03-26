@@ -48,7 +48,13 @@ export class PCollectionPage implements OnInit, OnDestroy {
   ngOnInit() {
     this.subscriptions.push(
       this.route.params.subscribe((routeParams) => {
-        this.colId = routeParams["pcolId"];
+        // Make copy of params object so we can modify it
+        let params = Object.assign({}, routeParams)
+        if (!params['sort']) {
+          // Default to sorting by Recently Added
+          params['sort'] = 4
+        }
+        this.colId = params["pcolId"];
         // Old links pass a name into the ID, just use that as a search term instead
         if (!/^[0-9]+$/.test(this.colId)) {
           this.http.get('/assets/collection-links.json')
@@ -65,7 +71,7 @@ export class PCollectionPage implements OnInit, OnDestroy {
           this._assets.clearAssets();
           this.getCollectionInfo(this.colId)
             .then((data) => {
-              this._assets.queryAll(routeParams, true);
+              this._assets.queryAll(params, true);
 
               if (!Object.keys(data).length) {
                 throw new Error("No data!");
