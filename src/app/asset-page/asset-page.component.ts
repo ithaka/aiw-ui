@@ -1,5 +1,6 @@
 import { Component, OnInit, OnDestroy, ViewChild, HostListener } from '@angular/core'
 import { ActivatedRoute, Params, Router } from '@angular/router'
+import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { Subscription }   from 'rxjs/Subscription'
 import { Locker } from 'angular2-locker'
 import { Angulartics2 } from 'angulartics2'
@@ -35,6 +36,7 @@ export class AssetPage implements OnInit, OnDestroy {
     private user: any
     private encryptedAccess: boolean = false
     private document = document
+    private URL = URL
 
     // Array to support multiple viewers on the page
     private assets: Asset[] = []
@@ -63,10 +65,12 @@ export class AssetPage implements OnInit, OnDestroy {
     private showCopyUrl: boolean = false
     private showEditDetails: boolean = false
     private generatedImgURL: string = ''
-    private generatedViewURL: string = ''
+    private generatedViewURL: SafeUrl | string = ''
     private generatedFullURL: string = ''
     // Used for agree modal input, changes based on selection
-    private downloadUrl: string = ''
+    private downloadUrl: any
+    // Used for generated view blob url
+    private blobURL: string = '' 
     private prevRouteParams: any = []
     private collectionName: string = ''
 
@@ -99,6 +103,11 @@ export class AssetPage implements OnInit, OnDestroy {
     };
     private originPage: number = 0;
 
+    private relatedResultsQuery: string = ''
+    private jstorResults: any[] = []
+    private selectedJstorResult: any = {}
+    private relatedResFlag: boolean = false
+
     private editDetailsForm: FormGroup
     private editDetailsFormSubmitted: boolean = false // Set to true once the edit details form is submitted
     private isProcessing: boolean = false
@@ -123,6 +132,7 @@ export class AssetPage implements OnInit, OnDestroy {
         private angulartics: Angulartics2,
         private _title: TitleService,
         private scriptService: ScriptService,
+        private _sanitizer: DomSanitizer,
     ) {
         this._storage = locker.useDriver(Locker.DRIVERS.LOCAL)
         
@@ -167,6 +177,7 @@ export class AssetPage implements OnInit, OnDestroy {
                 if(routeParams && routeParams['featureFlag']){
                     this._auth.featureFlags[routeParams['featureFlag']] = true
                     this.collectionLinksFlag = this._auth.featureFlags['collection_links']
+                    this.relatedResFlag = this._auth.featureFlags['related-res-hack'] ? true : false
 
                     if (this._auth.featureFlags['uploadPC']) {
                         this.pcFeatureFlag = true
@@ -175,6 +186,7 @@ export class AssetPage implements OnInit, OnDestroy {
                     }
                 } else{
                     this.pcFeatureFlag = false
+                    this.relatedResFlag = false
                 }
 
                 if (routeParams['encryptedId']) {
@@ -190,6 +202,7 @@ export class AssetPage implements OnInit, OnDestroy {
                 }
 
                 this.updatedPCAssets = this._storage.get('updatedPCAssets')
+                this.updatedPCAssets = this.updatedPCAssets ? this.updatedPCAssets : []
             })
         );
 
@@ -323,6 +336,11 @@ export class AssetPage implements OnInit, OnDestroy {
                     this.setCollectionType(currentAssetId)
                 }
                 this.generateImgURL()
+
+                // Load related results from jstor
+                if(this.relatedResFlag){
+                    this.getJstorRelatedResults(asset)
+                }
 
                 // Check if the asset is undergoing publishing by 
                 this.publishing = false
@@ -627,30 +645,52 @@ export class AssetPage implements OnInit, OnDestroy {
 
     private genDownloadViewLink() : void {
 
-        if(this.assets[0].typeName === 'image' && this.assets[0].viewportDimensions.contentSize){
+        let asset = this.assets[0]
+
+        // Revoke the browser reference to a previously generated view download blob URL
+        if (this.blobURL.length) {
+            this.URL.revokeObjectURL(this.blobURL)
+            this.blobURL = ''
+            this.generatedViewURL = ''
+        }
+
+        if(asset.typeName === 'image' && asset.viewportDimensions.contentSize){
             // Full source image size (max output possible)
-            let fullWidth = this.assets[0].viewportDimensions.contentSize.x
-            let fullY = this.assets[0].viewportDimensions.contentSize.y
+            let fullWidth = asset.viewportDimensions.contentSize.x
+            let fullY = asset.viewportDimensions.contentSize.y
             // Zoom is a factor of the image's full width
-            let zoom = this.assets[0].viewportDimensions.zoom;
+            let zoom = asset.viewportDimensions.zoom;
             // Viewport dimensions (size of cropped image)
-            let viewX = this.assets[0].viewportDimensions.containerSize.x
-            let viewY = this.assets[0].viewportDimensions.containerSize.y
+            let viewX = asset.viewportDimensions.containerSize.x
+            let viewY = asset.viewportDimensions.containerSize.y
             // Dimensions of the source size of the cropped image
             let zoomX = Math.floor(fullWidth/zoom)
             let zoomY = Math.floor( zoomX * (viewY/viewX))
             // Make sure zoom area is not larger than source, or else error
             if (zoomX > fullWidth) {
-                zoomX = fullWidth;
+                zoomX = fullWidth
             }
             if (zoomY > fullY) {
-                zoomY = fullY;
+                zoomY = fullY
             }
             // Positioning of the viewport's crop
-            let xOffset = Math.floor((this.assets[0].viewportDimensions.center.x * fullWidth) - (zoomX/2));
-            let yOffset = Math.floor((this.assets[0].viewportDimensions.center.y * fullWidth) - (zoomY/2));
+            let xOffset = Math.floor((asset.viewportDimensions.center.x * fullWidth) - (zoomX/2))
+            let yOffset = Math.floor((asset.viewportDimensions.center.y * fullWidth) - (zoomY/2))
 
-            this.generatedViewURL = this.assets[0].tileSource.replace('info.json','') + xOffset +','+yOffset+','+zoomX+','+zoomY+'/'+viewX+','+viewY+'/0/native.jpg'
+            // Generate the view url from tilemap service
+            let downloadLink: string = asset.tileSource.replace('info.json','') + xOffset +','+yOffset+','+zoomX+','+zoomY+'/'+viewX+','+viewY+'/0/native.jpg'
+
+            // Download our blob
+            let blob = this._search.downloadViewBlob(downloadLink)
+            .take(1)
+            .subscribe((blob) => {
+
+                this.blobURL = this.URL.createObjectURL(blob)
+                this.generatedViewURL = this._sanitizer.bypassSecurityTrustUrl(this.blobURL)
+
+            }, (err) => {
+                console.error('Error returning generated download view', err)
+            })
         }
     }
 
@@ -705,6 +745,8 @@ export class AssetPage implements OnInit, OnDestroy {
     setDownloadView() : void {
         this.downloadUrl = this.generatedViewURL;
         this.showAgreeModal = true;
+
+
     }
 
     trackDownloadImage() : void {
@@ -760,6 +802,61 @@ export class AssetPage implements OnInit, OnDestroy {
     }
 
     /**
+     * Used to get related results from jstor index based on asset title/subject/work_type
+     * @param asset Asset to be used for constructing jstor search query
+     */
+    private getJstorRelatedResults(asset: Asset): void {
+        let term = ''
+        if(asset.formattedMetadata && asset.formattedMetadata['Title']){
+            term += asset.formattedMetadata['Title'][0]
+        }
+
+        if(asset.formattedMetadata && asset.formattedMetadata['Subject']){
+            term += ' AND ' + asset.formattedMetadata['Subject']
+        } else if (asset.formattedMetadata && asset.formattedMetadata['Work Type']){
+            term += ' AND ' + asset.formattedMetadata['Work Type']
+        }
+
+        this.relatedResultsQuery = term
+
+        this._search.searchJstor(term)
+            .subscribe ( 
+                res => {
+                    if(res.results){
+                        let resultArray = res.results
+                        resultArray = resultArray.length > 4 ? resultArray.slice(0, 4) : resultArray
+                        for(let resultObj of resultArray){
+                            let label = ''
+                            if(resultObj.title && resultObj.title[0]){
+                                label = resultObj.title[0]
+                            }
+                            if(resultObj.citation_line){
+                                label += label ? ', ' : ''
+                                label += resultObj.citation_line
+                            }
+                            resultObj.label = label
+                        }
+                        this.jstorResults = resultArray
+                    }
+                }
+            )
+    }
+
+    /**
+     * Sets data in the selectedJstorResult Object from the hovered-on jstor result
+     * @param resultObject Hovered-on jstor result object
+     */
+    private setToolTipData(resultObject: any): void{
+        let toolTipData: any = {}
+        toolTipData.title = resultObject.title && resultObject.title[0] ? resultObject.title[0] : ''
+        toolTipData.authors = resultObject.author
+        toolTipData.publishers = resultObject.publisher
+        toolTipData.doi = resultObject.doi
+
+        this.selectedJstorResult = toolTipData
+    }
+
+    /**
      * Called on edit (Asset) details form submission
      */
     private editDetailsFormSubmit(formValue: AssetDetailsFormValue): void {
@@ -786,10 +883,10 @@ export class AssetPage implements OnInit, OnDestroy {
                         this.closeEditDetails('Continue')
 
                         // Reload asset metadata
-                        // this._router.navigate(['/asset', ''])
-                        // setTimeout(() => {
-                        //     this._router.navigate(['/asset', this.assets[0].id])
-                        // }, 250)
+                        this._router.navigate(['/asset', ''])
+                        setTimeout(() => {
+                            this._router.navigate(['/asset', this.assets[0].id])
+                        }, 250)
                     }
                 },
                 error => {
