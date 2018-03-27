@@ -13,7 +13,9 @@ export interface Thumbnail {
   iapFlag?: number
   media: {
     adlObjectType: string
+    thumbnailSizeOnePath: string
   }
+  thumbnailImgUrl: string
   thumbnail1: any
   thumbnail2: any
   thumbnail3: any
