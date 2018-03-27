@@ -860,6 +860,8 @@ export class AssetPage implements OnInit, OnDestroy {
                             asset_metadata: formValue
                         })
 
+                        this.closeEditDetails('Continue')
+
                         // Reload asset metadata
                         this._router.navigate(['/asset', ''])
                         setTimeout(() => {
@@ -938,7 +940,7 @@ export class AssetPage implements OnInit, OnDestroy {
 
     private closeEditDetails(type: string): void{
         // Hide and reset the edit details form
-        if(type && type !== 'Continue'){
+        if(type && type === 'Continue'){
             this.showEditDetails = false
             this.editDetailsForm.reset()
         }
