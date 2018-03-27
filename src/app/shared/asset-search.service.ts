@@ -267,7 +267,7 @@ export class AssetSearchService {
       else if(options.colId){
         colId = options.colId
       }
-      else if(options.pcolId){
+      else if(options.pcolId){ // For PC assets filter by Collection id : 37436
         colId = '37436'
       }
 
