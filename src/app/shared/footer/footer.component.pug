@@ -1,12 +1,56 @@
 .container-fluid
   .footer.row
-    .col-12
-      span(*ngFor="let link of links", [innerHtml]="'FOOTER.LINKS.' + link | translate")
-      = " "
-      #google_translate_element.translate-flyout
-      a.link.footer-logout((click)="logout()", *ngIf="user && user.isLoggedIn") Log Out
-      a.link.footer-logout([routerLink]="['/login']", *ngIf="!user || !user.isLoggedIn") Log In
-    .col-12.center
-      a(href="http://artstor.org", target="_blank") &copy; {{ currentYear }} Artstor, Inc.
-      br
-      span(style="color: #cdcdcd;") v{{ appVersion }}
+    .container
+      .row
+        .col-md-6.col--explore
+          .h1 Explore Artstor
+          //- ADL Collections Link
+          a.link#linkBrowseCollection.footer__explore-link(*ngIf="browseSec.collection", [routerLink]="['/browse','library']")
+            h2.browse-category {{ 'HOME.BROWSE.COLL_HEADING' | translate }}
+            p.small([innerHtml]="'HOME.BROWSE.COLL_LIST' | translate")
+          //- Institutional Collections Link
+          a.link#linkBrowseInstCollection.footer__explore-link(*ngIf="browseSec.instCollection", [routerLink]="['/browse','institution']")
+            h2.browse-category {{ 'HOME.BROWSE.COLL_HEADING' | translate }}
+            p.small([innerHtml]="'HOME.BROWSE.COLL_LIST_SHORT' | translate")
+          //- Classification Link
+          a.link#linkBrowseClassification.footer__explore-link(*ngIf="browseSec.classification", [routerLink]="['/browse','library', {viewId: 250}]")
+            h2.browse-category {{ 'HOME.BROWSE.CLASS_HEADING' | translate }}
+            p.small([innerHtml]="'HOME.BROWSE.CLASS_LIST' | translate")
+          //- Geography Link
+          a.link#linkBrowseGeography.footer__explore-link(*ngIf="browseSec.geography", [routerLink]="['/browse','library', {viewId: 260}]")
+            h2.browse-category {{ 'HOME.BROWSE.GEO_HEADING' | translate }}
+            p.small([innerHtml]="'HOME.BROWSE.GEO_LIST' | translate")
+          //- Teaching Resources Link
+          a.link#linkBrowseTeaching.footer__explore-link(*ngIf="browseSec.teachingResources", [routerLink]="['/browse','groups', 'public']")
+            h2.browse-category {{ 'HOME.BROWSE.TEACHING_HEADING' | translate }}
+          //- Teaching resource description includes links, and should not be a child of the header
+          p.small([innerHtml]="'HOME.BROWSE.TEACHING_LIST' | translate")
+          //- Image Groups Link
+          a.link#linkBrowseIGs.footer__explore-link(*ngIf="browseSec.imageGrps", [routerLink]="['/browse','groups', defaultGrpBrwseBy]")
+            h2.browse-category {{ 'HOME.BROWSE.GROUPS_HEADING' | translate }}
+            p.small([innerHtml]="'HOME.BROWSE.GROUPS_LIST' | translate")
+        //- mobile divider
+        .col-sm-12.d-md-none
+          hr
+        .col-md-3.col-6
+          ul.list-unstyled
+            li(*ngFor="let link of links", [innerHtml]="'FOOTER.LINKS.' + link | translate")
+            = " "
+            li
+              a.link.footer-logout((click)="logout()", *ngIf="user && user.isLoggedIn") Log Out
+            li
+              a.link.footer-logout([routerLink]="['/login']", *ngIf="!user || !user.isLoggedIn") Log In
+          .mt-1 
+            #google_translate_element.translate-flyout
+        .col-md-3.col-6
+          div.social-icons
+            a.icon.icon-facebook(target="_blank" href="https://www.facebook.com/ARTstor" title="Keep up with Artstor on Facebook")
+            a.icon.icon-twitter(target="_blank" href="http://twitter.com/#!/artstor" title="Follow us on Twitter")
+            a.icon.icon-youtube(target="_blank" href="http://www.youtube.com/user/artstor" title="Watch Artstor on YouTube")
+            a.icon.icon-wordpress(target="_blank" href="http://artstor.wordpress.com/" title="View the Artstor Blog")
+            a.icon.icon-newsletter(target="_blank" href="http://artstor.org/content/join-our-mailings" title="Subscribe to our Newsletter")
+            a.icon.icon-contact(target="_blank" href="http://www.artstor.org/form/contact-us" title="Contact Us")
+          p.small([innerHtml]="'FOOTER.DISCLAIMER' | translate")
+          p.small &copy; {{ currentYear }} Artstor, Inc.
+          p.small {{ 'FOOTER.RIGHTS' | translate }}
+          p.small v{{ appVersion }}
