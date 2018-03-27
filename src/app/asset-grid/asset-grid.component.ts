@@ -218,7 +218,6 @@ export class AssetGrid implements OnInit, OnDestroy {
     this.subscriptions.push(
       this._assets.allResults.subscribe(
         (allResults) => {
-          console.log('allResults', allResults)
           // Prep display of search term next to results count
           this.formatSearchTerm(this.searchTerm)
           // Update results array

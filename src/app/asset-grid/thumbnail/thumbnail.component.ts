@@ -42,12 +42,8 @@ export class ThumbnailComponent implements OnInit, OnChanges {
    }
 
   ngOnInit() {
-    console.log(this.thumbnail)
-
     if (this.thumbnail['media']) {
-      // let media = JSON.parse(this.thumbnail['media'])
-      this.thumbnail['thumbnailImgUrl'] = this.thumbnail['media']['thumbnailSizeOnePath']
-      this.thumbnail['objectTypeId'] = this.thumbnail['adlObjectType']
+      this.thumbnail.thumbnailImgUrl = this.thumbnail.media.thumbnailSizeOnePath
     }
 
     this.thumbnail.iapFlag = this.determineIAP(this.thumbnail['artstorid'] ? this.thumbnail['artstorid'] : this.thumbnail['objectId'])
