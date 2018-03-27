@@ -465,7 +465,7 @@
     "MESSAGE": "We are currently experiencing issues with images and downloads due to a power outage. <a href=\"http://support.artstor.org/?article=current-technical-issues-alerts\" target=\"_blank\" class=\"link\">Learn more</a>."
   },
   "DOWNTIME_BANNER": {
-    "MESSAGE": "Artstor will be temporarily unavailable on Tuesday, January 23 beginning at 6am EST (<a href=\"http://everytimezone.com\" target=\"_blank\" class=\"link\">see this in your timezone</a>) for approximately 15 minutes.  During this time, you may be unable to log in and access content. Thank you for your patience during this brief outage. "
+    "MESSAGE": "We are aware that search and some browse views are unavailable at this time, and we are working to restore them."
   },
   "SEARCH_SKY_BANNER": {
     "MESSAGE": "⚠️ This is a testing instance for the new Search index. Please excuse the broken bits."
