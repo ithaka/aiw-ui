@@ -797,6 +797,9 @@ export class AssetService {
 
       if (collectionType) {
           filterArray.push("collectiontypes:"+ collectionType)
+          if(collectionType === 2){ // If we are filtering for institutional collections
+            filterArray.push('contributinginstitutionid:\"' + this._auth.getUser().institutionId.toString() + '\"')
+          }
       }
 
       /**
