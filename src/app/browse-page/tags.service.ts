@@ -31,8 +31,10 @@ export class TagsService {
   private loadCollectionsList(type: string): Promise<Tag[]> {
     let colTypeValue: number
     if(type === 'institution'){
+      // Institutional Collections = Type #2
       colTypeValue = 2
     } else if(type === 'ssc'){
+      // Public Collections = Type #5
       colTypeValue = 5
     }
 
@@ -53,7 +55,7 @@ export class TagsService {
           }
         })
     } else{
-    
+      // Deprecated collection list call as fallback
       return this._assets.getCollectionsList( type )
         .toPromise()
         .then((data) => {
