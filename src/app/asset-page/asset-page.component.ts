@@ -23,6 +23,7 @@ import {
 import { AnalyticsService } from '../analytics.service'
 import { TitleService } from '../shared/title.service'
 import { ScriptService } from '../shared/script.service'
+import { LocalPCService, LocalPCAsset } from '../_local-pc-asset.service'
 
 @Component({
     selector: 'ang-asset-page',
@@ -114,9 +115,6 @@ export class AssetPage implements OnInit, OnDestroy {
     private isProcessing: boolean = false
     private showExitEdit: boolean = false
     private pcFeatureFlag: boolean = false
-    
-    private updatedPCAssets: any[] = []
-    private publishing: boolean = false
 
     constructor(
         private _assets: AssetService,
@@ -124,6 +122,7 @@ export class AssetPage implements OnInit, OnDestroy {
         private _group: GroupService,
         private _auth: AuthService,
         private _pcservice: PersonalCollectionService,
+        private _localPC: LocalPCService,
         private _log: LogService,
         private _fb: FormBuilder,
         private route: ActivatedRoute,
@@ -201,9 +200,6 @@ export class AssetPage implements OnInit, OnDestroy {
                         this.assetNumber = this._assets.currentLoadedParams.page ? this.assetIndex + 1 + ((this._assets.currentLoadedParams.page - 1) * this._assets.currentLoadedParams.size) : this.assetIndex + 1;
                     }
                 }
-
-                this.updatedPCAssets = this._storage.get('updatedPCAssets')
-                this.updatedPCAssets = this.updatedPCAssets ? this.updatedPCAssets : []
             })
         );
 
@@ -341,21 +337,6 @@ export class AssetPage implements OnInit, OnDestroy {
                 // Load related results from jstor
                 if(this.relatedResFlag){
                     this.getJstorRelatedResults(asset)
-                }
-
-                // Check if the asset is undergoing publishing by 
-                this.publishing = false
-                for(let i = 0; i < this.updatedPCAssets.length; i++){
-                    let updatedPCAsset = this.updatedPCAssets[i]
-                    if(updatedPCAsset.asset_id === asset.id){
-                        if(updatedPCAsset.updated_on === asset.updated_on){ // Asset is still publishing
-                            this.publishing = true
-                        } else{ // Asset has been published
-                            this.updatedPCAssets.splice(i, 1)
-                            this._storage.set('updatedPCAssets', this.updatedPCAssets)
-                        }
-                        break
-                    }
                 }
             }
         }
@@ -877,11 +858,10 @@ export class AssetPage implements OnInit, OnDestroy {
                     if( data.success ) {
                         this.isProcessing = false
 
-                        this.updatedPCAssets.push({
-                            'asset_id': this.assets[0].id,
-                            'updated_on': this.assets[0].updated_on
+                        this._localPC.setAsset({
+                            ssid: parseInt(this.assets[0].SSID),
+                            asset_metadata: formValue
                         })
-                        this._storage.set('updatedPCAssets', this.updatedPCAssets)
 
                         this.closeEditDetails('Continue')
 
@@ -902,7 +882,17 @@ export class AssetPage implements OnInit, OnDestroy {
     /**
      * Preloads the edit details form with the asset mmetadata values and show the form
      */
-    private loadEditDetailsForm(): void{
+    private loadEditDetailsForm(): void {
+        // see if we have a local copy of the data
+        let localData: LocalPCAsset = this._localPC.getAsset(parseInt(this.assets[0].SSID))
+        // if we have a copy of the metadata locally, use that
+        if (localData) {
+            for(let key in localData.asset_metadata) {
+                this.editDetailsForm.controls[key].setValue( localData.asset_metadata[key] )
+            }
+            this.showEditDetails = true
+            return // cancel out of the rest of the function
+        }
 
         // preload form values
         let metaData = this.assets[0].formattedMetadata
@@ -953,7 +943,7 @@ export class AssetPage implements OnInit, OnDestroy {
 
     private closeEditDetails(type: string): void{
         // Hide and reset the edit details form
-        if( type === 'Continue'){
+        if(type && type === 'Continue'){
             this.showEditDetails = false
             this.editDetailsForm.reset()
         }

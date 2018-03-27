@@ -9,27 +9,26 @@ import {
   AssetSearchService, 
   SearchAsset, 
   AuthService, 
-  PostPersonalCollectionResponse,
+  PersonalCollectionUploadAsset,
   AssetDetailsFormValue
 } from './../../shared'
 import { Asset } from '../../asset-page/asset'
+import { LocalPCService, LocalPCAsset } from '../../_local-pc-asset.service'
 
 @Component({
   selector: 'ang-edit-personal-collection',
   styleUrls: [ 'edit-personal-collection.component.scss' ],
   templateUrl: 'edit-personal-collection.component.pug'
 })
-export class EditPersonalCollectionModal implements OnInit, OnDestroy {
+export class EditPersonalCollectionModal implements OnInit {
   @Output() closeModal: EventEmitter<any> = new EventEmitter()
   @Input() private colId: string
 
-  private subscriptions: Subscription[] = []
-
   private pcColThumbs: Array<any> = []
-  private collectionAssets: Array<SearchAsset>
+  private collectionAssets: Array<PersonalCollectionUploadAsset> = []
   private editMode: boolean = false
-  private selectedAsset: SearchAsset // this is the asset which the user selects from the list of assets
-  private selectedAssetData: Asset // the asset emitted from the viewer
+  private selectedAsset: PersonalCollectionUploadAsset // this is the asset which the user selects from the list of assets
+  private selectedAssetData: AssetDetailsFormValue = {} // the asset emitted from the viewer
 
   private editAssetMetaForm: FormGroup
 
@@ -50,7 +49,8 @@ export class EditPersonalCollectionModal implements OnInit, OnDestroy {
     private _auth: AuthService,
     private _search: AssetSearchService,
     private _assets: AssetService,
-    private _pc: PersonalCollectionService
+    private _pc: PersonalCollectionService,
+    private _localPC: LocalPCService
   ) {
     this.editAssetMetaForm = _fb.group({
       creator: [null],
@@ -66,46 +66,35 @@ export class EditPersonalCollectionModal implements OnInit, OnDestroy {
 
 
   ngOnInit() {
-    this._search.search({ colId: "37436" }, "", 4)
-    .take(1)
-    .subscribe((res) => {
-      this.collectionAssets = res.results
-    }, (err) => {
-      console.error(err)
-    })
   }
 
-  ngOnDestroy() {
-    this.subscriptions.forEach((sub) => { sub.unsubscribe() })
-  }
-
-  private handleLoadedMetadata(metadata: Asset): void {
-    if (metadata['error']) {
-      return console.error(metadata['error'])
-      // handle us that error
+  private setMetadataValues(asset: LocalPCAsset): void {
+    if (asset) {
+      this.selectedAssetData = asset.asset_metadata
+    } else {
+      this.selectedAssetData = <AssetDetailsFormValue>{}
     }
-
-    this.selectedAssetData = metadata
 
     this.editAssetMetaForm.controls['creator'].setValue(this.selectedAssetData.creator)
     this.editAssetMetaForm.controls['title'].setValue(this.selectedAssetData.title)
-    this.editAssetMetaForm.controls['work_type'].setValue(this.selectedAssetData.formattedMetadata.work_type)
+    this.editAssetMetaForm.controls['work_type'].setValue(this.selectedAssetData.work_type)
     this.editAssetMetaForm.controls['date'].setValue(this.selectedAssetData.date)
-    this.editAssetMetaForm.controls['location'].setValue(this.selectedAssetData.formattedMetadata.location)
-    this.editAssetMetaForm.controls['material'].setValue(this.selectedAssetData.formattedMetadata.material)
+    this.editAssetMetaForm.controls['location'].setValue(this.selectedAssetData.location)
+    this.editAssetMetaForm.controls['material'].setValue(this.selectedAssetData.material)
     this.editAssetMetaForm.controls['description'].setValue(this.selectedAssetData.description)
-    this.editAssetMetaForm.controls['subject'].setValue(this.selectedAssetData.formattedMetadata.subject)
+    this.editAssetMetaForm.controls['subject'].setValue(this.selectedAssetData.subject)
   }
 
-  private editAssetMeta(asset: SearchAsset): void{
+  private editAssetMeta(asset: PersonalCollectionUploadAsset): void{
     this.selectedAsset = asset
+    this.setMetadataValues(this._localPC.getAsset(this.selectedAsset.ssid)) // update the form values to match the new asset metadata
 
     this.editMode = true
   }
 
   private clearSelectedAsset(): void {
-    this.selectedAsset = <SearchAsset>{}
-    this.selectedAssetData = <Asset>{}
+    this.selectedAsset = <PersonalCollectionUploadAsset>{}
+    this.selectedAssetData = <AssetDetailsFormValue>{}
     this.editMode = false
   }
 
@@ -114,7 +103,7 @@ export class EditPersonalCollectionModal implements OnInit, OnDestroy {
 
     this.uiMessages = {}
     this.metadataUpdateLoading = true
-    this._pc.updatepcImageMetadata(formData, this.selectedAsset.ssid)
+    this._pc.updatepcImageMetadata(formData, String(this.selectedAsset.ssid))
     .map((res) => {
       this.metadataUpdateLoading = false
       return res
@@ -122,18 +111,24 @@ export class EditPersonalCollectionModal implements OnInit, OnDestroy {
     .take(1)
     .subscribe((res) => {
       let updateItem = res.results.find((result) => {
-        return result.ssid == this.selectedAsset.ssid
+        return result.ssid == String(this.selectedAsset.ssid)
       })
-      console.log(updateItem)
-      updateItem.success ? this.uiMessages.metadataUpdateSuccess = true : this.uiMessages.metadataUpdateFailure = true
-      
+
+      if (updateItem.success) {
+        this.uiMessages.metadataUpdateSuccess = true
+        // store this asset in local storage to be loaded later
+        this._localPC.setAsset({
+          ssid: this.selectedAsset.ssid, // typescript doesn't know that javascript can convert numbers to strings :(
+          asset_metadata: formData
+        })
+      } else {
+        this.uiMessages.metadataUpdateFailure = true
+      }
+
     }, (err) => {
       this.uiMessages.metadataUpdateFailure = true
       console.error(err)
     })
-    // TODO: add trigger for success and failure messages
-    console.log(formData)
-    this.metadataUpdateLoading = false
   }
 
   /**
@@ -189,17 +184,10 @@ export class EditPersonalCollectionModal implements OnInit, OnDestroy {
   //   //   })
   // }
 
-  private handleNewAssetUpload(item: PostPersonalCollectionResponse): void {
+  private handleNewAssetUpload(item: PersonalCollectionUploadAsset): void {
     this.uiMessages = {}
 
-    let newAsset: any = {
-      name: item.filename,
-      thumbnailUrls: [item.src],
-      ssid: item.ssid,
-      new: true
-    }
-
-    this.collectionAssets.unshift(newAsset)
+    this.collectionAssets.unshift(item)
   }
   
 }
