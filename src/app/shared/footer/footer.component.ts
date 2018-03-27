@@ -22,7 +22,7 @@ export class Footer {
   private currentYear
   private user: any = {}
   private links: string[]
-  private browseSec: any = {}
+  private browseSec: { [key: string]: boolean } = {}
 
   // TypeScript public modifiers
   constructor(
