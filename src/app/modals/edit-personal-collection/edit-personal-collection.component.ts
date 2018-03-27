@@ -66,20 +66,13 @@ export class EditPersonalCollectionModal implements OnInit {
 
 
   ngOnInit() {
-    // this._search.search({ colId: "37436" }, "", 4)
-    // .take(1)
-    // .subscribe((res) => {
-    //   this.collectionAssets = res.results
-    // }, (err) => {
-    //   console.error(err)
-    // })
   }
 
   private setMetadataValues(asset: LocalPCAsset): void {
     if (asset) {
       this.selectedAssetData = asset.asset_metadata
     } else {
-      this.selectedAssetData = {}
+      this.selectedAssetData = <AssetDetailsFormValue>{}
     }
 
     this.editAssetMetaForm.controls['creator'].setValue(this.selectedAssetData.creator)
@@ -101,7 +94,7 @@ export class EditPersonalCollectionModal implements OnInit {
 
   private clearSelectedAsset(): void {
     this.selectedAsset = <PersonalCollectionUploadAsset>{}
-    this.selectedAssetData = {}
+    this.selectedAssetData = <AssetDetailsFormValue>{}
     this.editMode = false
   }
 
@@ -192,7 +185,6 @@ export class EditPersonalCollectionModal implements OnInit {
   // }
 
   private handleNewAssetUpload(item: PersonalCollectionUploadAsset): void {
-    console.log(item)
     this.uiMessages = {}
 
     this.collectionAssets.unshift(item)
