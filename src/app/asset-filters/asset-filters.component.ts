@@ -23,6 +23,8 @@ export class AssetFilters {
   private subscriptions: Subscription[] = []
   private filterDate: boolean = false
   private filterNameMap: any = {}
+  
+  private searchWithin: boolean = false
 
   errors = {}
   results = []
@@ -136,6 +138,13 @@ export class AssetFilters {
             })
     );
 
+    // Subscribe to searchWithin boolean value set from the search component
+    this.subscriptions.push(
+      this._filters.searchWithin.subscribe( value => {
+        this.searchWithin = value
+      })
+    );
+
   }
 
   private loadRoute() {
@@ -189,6 +198,9 @@ export class AssetFilters {
       }
       if(currentParams.sort){
         baseParams['sort'] = currentParams.sort
+      }
+      if(this.searchWithin && currentParams.term){ // If searchWithin is checked, then include the term param as well
+        baseParams['term'] = currentParams.term
       }
 
       let queryParams = Object.assign(baseParams, params)

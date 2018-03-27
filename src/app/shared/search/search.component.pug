@@ -4,7 +4,7 @@
       input#inputSearchTerm.form-control.has-icon([(ngModel)]="term", (keyup.enter)="updateSearchTerm(term)", aria-describedby="search-label", type="text", placeholder="Search", data-sc="search: simple keyword")
       i#iconSearchSubmit.icon.icon-search.form-control__icon((click)="updateSearchTerm(term)")
     .search-in-results.col-md-5.hidden-sm-down(*ngIf="allowSearchInRes")
-      input#searchInResChkBx(type="checkbox", [(ngModel)]="searchInResults")
+      input#searchInResChkBx(type="checkbox", [(ngModel)]="searchInResults",  (ngModelChange)="onSearchWithinChange($event)")
       = " "
       label(for="searchInResChkBx") Search within {{ nestedSrchLbl }}
 a.link.small.open-modal((click)="showSearchModal = true", tabindex="0") {{ 'HOME.LINKS.ADVNC_SRCH' | translate}}
