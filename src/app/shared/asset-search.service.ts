@@ -52,9 +52,6 @@ export class AssetSearchService {
     return this.http.get(url, { 
         responseType: 'blob'
     })
-    .map(blob => {
-        return blob
-    })
   }
 
   /**
