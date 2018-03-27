@@ -29,21 +29,49 @@ export class TagsService {
    * @returns a chainable promise, resolved with an array of tags
    */
   private loadCollectionsList(type: string): Promise<Tag[]> {
-    return this._assets.getCollectionsList( type )
-      .toPromise()
-      .then((data) => {
-        if (data && data['Collections']) {
-          let tags: Tag[] = [];
-          data['Collections'].forEach((collection, index) => {
-            let openable = collection.collectionType === 5 || collection.collectionType === 2;
-            tags.push(new Tag(collection.collectionid, collection.collectionname, true, null, { label: "collection", folder: true }, openable));
-          });
-          return tags;
-        } else {
-          throw new Error("no Collections returned in data");
-        }
+    let colTypeValue: number
+    if(type === 'institution'){
+      // Institutional Collections = Type #2
+      colTypeValue = 2
+    } else if(type === 'ssc'){
+      // Public Collections = Type #5
+      colTypeValue = 5
+    }
 
-      });
+    if(colTypeValue){
+      // Use SOLR to load collection list by faceting on collectiontypenameid and filtering on colTypeValue
+      return this._assets.categoryByFacet('collectiontypenameid', colTypeValue)
+        .then( (facetData) => {
+          if(facetData){
+            facetData = facetData.filter((facet) => {
+              return parseInt(facet.name.split('|')[0]) === colTypeValue
+            })
+            let tags: Tag[] = []
+            facetData.forEach((facet, index) => {
+              let facetSplitArray = facet.name.split('|')
+              tags.push(new Tag(facetSplitArray[2], facetSplitArray[1], true, null, { label: "collection", folder: true }, true))
+            })
+            return tags
+          }
+        })
+    } else{
+      // Deprecated collection list call as fallback
+      return this._assets.getCollectionsList( type )
+        .toPromise()
+        .then((data) => {
+          if (data && data['Collections']) {
+            let tags: Tag[] = []
+            data['Collections'].forEach((collection, index) => {
+              let openable = collection.collectionType === 5 || collection.collectionType === 2
+              tags.push(new Tag(collection.collectionid, collection.collectionname, true, null, { label: "collection", folder: true }, openable))
+            });
+            return tags
+          } else {
+            throw new Error("no Collections returned in data")
+          }
+
+        })
+    }
   }
 
   /**
