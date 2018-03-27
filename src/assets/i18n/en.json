@@ -122,8 +122,7 @@
       "BACK": "Back to Results"
     },
     "MESSAGES": {
-      "NEEDASSETS": "To compare assets, you will need to access an asset through a set of results first. Then those results will show here.",
-      "PUBLISHING": "This asset is currently being published"
+      "NEEDASSETS": "To compare assets, you will need to access an asset through a set of results first. Then those results will show here."
     },
     "METADATA_LABELS": {
       "SSID": "SSID",
@@ -155,7 +154,7 @@
   },
   "EDIT_PC_MODAL": {
     "TITLE": "Personal Collection",
-    "EDIT_COL": "Edit Collection",
+    "RECENT_TITLE": "Recently Uploaded",
     "META_ADD_INFO": "Metadata can be added by clicking on the thumbnail image, or from the Personal Collection Administration dialog and image page.",
     "HELP": "Help",
     "BUTTONS": {
