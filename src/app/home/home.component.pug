@@ -26,7 +26,7 @@ nav-menu
             h3.browse-category {{ 'HOME.BROWSE.GEO_HEADING' | translate }}
             p.small([innerHtml]="'HOME.BROWSE.GEO_LIST' | translate")
           //- Teaching Resources Link
-          a#linkBrowseTeaching.list-group-item(*ngIf="browseSec.teachingResources", [routerLink]="['/browse','groups', 'public']", style="padding-bottom:0px;")
+          a#linkBrowseTeaching.list-group-item.pb-0(*ngIf="browseSec.teachingResources", [routerLink]="['/browse','groups', 'public']")
             h3.browse-category {{ 'HOME.BROWSE.TEACHING_HEADING' | translate }}
           //- Teaching resource description includes links, and should not be a child of the header
           p.small([innerHtml]="'HOME.BROWSE.TEACHING_LIST' | translate")
