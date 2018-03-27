@@ -259,13 +259,16 @@ export class AssetSearchService {
       }
     }
 
-    if(options.colId || options['coll']){
-      let colId = '';
-      if( options['coll'] ){
-        colId = options['coll'];
+    if(options.colId || options['coll'] || options.pcolId){
+      let colId = ''
+      if(options['coll']){
+        colId = options['coll']
       }
-      else if ( options.colId ){
-        colId = options.colId;
+      else if(options.colId){
+        colId = options.colId
+      }
+      else if(options.pcolId){
+        colId = '37436'
       }
 
       filterArray.push("collections:\"" + colId + "\"");
@@ -606,4 +609,5 @@ interface SearchOptions {
   size?: number
   colId?: string
   collections?: string
+  pcolId?: string
 }
