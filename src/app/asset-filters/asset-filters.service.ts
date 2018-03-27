@@ -59,6 +59,9 @@ export class AssetFiltersService {
     public available$ = this.availableSource.asObservable();
     public applied$ = this.appliedSource.asObservable();
 
+    //Set up subject observable for 'search within'
+    public searchWithin: Subject<boolean> = new Subject();
+
     private _storage;
     private institution: any = {};
 
