@@ -791,15 +791,18 @@ export class AssetPage implements OnInit, OnDestroy {
             })
     }
 
+    /**
+     * Controls display indicating asset deletion, makes http call to delete asset and navigates back to My Collection page
+     */
     private deleteAsset(): void {
-        // this.uiMessages = { }
+        this.uiMessages = { }
 
         this.deleteLoading = true
         this._pcservice.deletePersonalAssets([this.assets[0].SSID])
         .take(1)
         .subscribe((res) => {
             this.deleteLoading = false
-            this._router.navigate(['/pcollection', '37240'], { queryParams: { deleteSuccess: true }})
+            this._router.navigate(['/pcollection', '37240'], { queryParams: { deleteSuccess: this.assets[0].title }})
         }, (err) => {
             this.deleteLoading = false
             this.uiMessages.deleteFailure = true
@@ -974,10 +977,10 @@ export class AssetPage implements OnInit, OnDestroy {
     }
 
     private closeDeletePC(action: string): void {
-        console.log(action)
         if (action && action == 'Confirm') {
-            // this.deleteAsset()
-            console.log('will delete the asset now')
+            this.deleteAsset()
+        } else {
+            this.showDeletePCModal = false
         }
     }
     

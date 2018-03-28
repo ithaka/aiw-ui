@@ -313,6 +313,11 @@
       "RSTD_IMGS": "This group contains restricted images or images that have been deleted by the creator."
     }
   },
+  "PERSONAL_COLLECTION_PAGE": {
+    "BANNER": {
+      "DELETE_SUCCESS": "{{title}} was successfully deleted from your personal collection."
+    }
+  },
   "FOOTER": {
     "LINKS": {
       "ABOUT": "<a href=\"http://www.artstor.org/content/artstor-digital-library-features-benefits\" class=\"link\" target=\"_blank\">About</a>",
