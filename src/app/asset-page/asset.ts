@@ -17,6 +17,8 @@ export class Asset {
     tileSource: string
     collectionId: number
     categoryId: number
+    collectionType: number
+    contributinginstitutionid: number
     SSID: string
     fileName: string
     updated_on?: string
