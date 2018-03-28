@@ -100,7 +100,7 @@ export class CollectionPage implements OnInit, OnDestroy {
   * @param colId The collection ID
   */
   private getCollectionInfo(colId: string) {
-      let options = { withCredentials: true };
+      let options = { withCredentials: false };
 
       return this.http
           .get(this._auth.getUrl() + '/collections/' + colId, options)
