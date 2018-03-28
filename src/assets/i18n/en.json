@@ -110,7 +110,12 @@
       "SUBJECT": "Subject",
       "TITLE_REQUIRED_MSG": "A title is required",
       "SAVE_BTN": "Save",
-      "DELETE_BTN": "Delete Record"
+      "DELETE_BTN": "Delete Record",
+      "DELETE_ERROR": "There was an error in deleting the asset. Please try again."
+    },
+    "DELETE_PC_MODAL": {
+      "TITLE": "Delete Asset Confirmation",
+      "DESCRIPTION": "Are you sure you would like to delete this asset? This action cannot be reverted."
     },
     "EXIT_EDIT_CONFIRM_MODAL": {
       "TITLE": "Exit Edit Details",

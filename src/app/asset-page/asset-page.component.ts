@@ -112,9 +112,15 @@ export class AssetPage implements OnInit, OnDestroy {
 
     private editDetailsForm: FormGroup
     private editDetailsFormSubmitted: boolean = false // Set to true once the edit details form is submitted
-    private isProcessing: boolean = false
+    private isProcessing: boolean = false // controls loading class on delete button
+    private deleteLoading: boolean = false
     private showExitEdit: boolean = false
     private pcFeatureFlag: boolean = false
+    private showDeletePCModal: boolean = false
+
+    private uiMessages: {
+        deleteFailure?: boolean
+    } = {}
 
     constructor(
         private _assets: AssetService,
@@ -785,6 +791,21 @@ export class AssetPage implements OnInit, OnDestroy {
             })
     }
 
+    private deleteAsset(): void {
+        // this.uiMessages = { }
+
+        this.deleteLoading = true
+        this._pcservice.deletePersonalAssets([this.assets[0].SSID])
+        .take(1)
+        .subscribe((res) => {
+            this.deleteLoading = false
+            this._router.navigate(['/pcollection', '37240'], { queryParams: { deleteSuccess: true }})
+        }, (err) => {
+            this.deleteLoading = false
+            this.uiMessages.deleteFailure = true
+        })
+    }
+
     /**
      * Used to get related results from jstor index based on asset title/subject/work_type
      * @param asset Asset to be used for constructing jstor search query
@@ -883,6 +904,7 @@ export class AssetPage implements OnInit, OnDestroy {
      * Preloads the edit details form with the asset mmetadata values and show the form
      */
     private loadEditDetailsForm(): void {
+        this.uiMessages = {}
         // see if we have a local copy of the data
         let localData: LocalPCAsset = this._localPC.getAsset(parseInt(this.assets[0].SSID))
         // if we have a copy of the metadata locally, use that
@@ -941,13 +963,22 @@ export class AssetPage implements OnInit, OnDestroy {
         this.showEditDetails = true
     }
 
-    private closeEditDetails(type: string): void{
+    private closeEditDetails(action: string): void{
+        this.uiMessages = {}
         // Hide and reset the edit details form
-        if(type && type === 'Continue'){
+        if(action && action === 'Continue'){
             this.showEditDetails = false
             this.editDetailsForm.reset()
         }
         this.showExitEdit = false
+    }
+
+    private closeDeletePC(action: string): void {
+        console.log(action)
+        if (action && action == 'Confirm') {
+            // this.deleteAsset()
+            console.log('will delete the asset now')
+        }
     }
     
 }
