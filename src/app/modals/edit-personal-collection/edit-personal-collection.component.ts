@@ -171,26 +171,6 @@ export class EditPersonalCollectionModal implements OnInit {
     })
   }
 
-  // private deleteAssetById(ssid: string): void {
-  //   console.log('deleting', ssid)
-  //   this.messages = {}
-
-  //   this.messages.imgDeleteSuccess = true
-  //   // this.removeSelectedAsset()
-  //   // this.clearSelectedAsset()
-
-  //   // this._pc.deletePersonalAssets([ssid])
-  //   //   .take(1)
-  //   //   .subscribe((res) => {
-  //   //     this.messages.imgDeleteSuccess = true
-  //   //     this.removeSelectedAsset()
-  //   //     this.clearSelectedAsset()
-  //   //   }, (err) => {
-  //   //     console.error(err)
-  //   //     this.messages.imgDeleteFailure = true
-  //   //   })
-  // }
-
   private handleNewAssetUpload(item: PersonalCollectionUploadAsset): void {
     this.uiMessages = {}
 
