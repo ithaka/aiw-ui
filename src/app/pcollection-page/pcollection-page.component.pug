@@ -1,4 +1,5 @@
 nav-menu([allowSelectAll]="true")
+ang-sky-banner(*ngIf="showDeleteSuccessBanner", textValue="{{ 'PERSONAL_COLLECTION_PAGE.BANNER.DELETE_SUCCESS' | translate:deleteBannerParams }}", (closeBanner)="showDeleteSuccessBanner = false")
 #mainContent.container.main-content(tabindex="-1")
   .row
     //- .col-sm-3

@@ -22,18 +22,17 @@ export class PCollectionPage implements OnInit, OnDestroy {
   private header = new HttpHeaders().set('Content-Type', 'application/json'); // ... Set content type to JSON
   private options = { headers: this.header, withCredentials: true }; // Create a request option
 
-  private colId: string = '';
-  private colName: string = '';
-  private colDescription: string = '';
-  private colThumbnail: string = '';
-  private assetCount: number;
-  private descCollapsed: boolean = true;
-  private showaccessDeniedModal: boolean = false;
+  private colId: string = ''
+  private colName: string = ''
+  private colDescription: string = ''
+  private colThumbnail: string = ''
+  private assetCount: number
+  private descCollapsed: boolean = true
+  private showaccessDeniedModal: boolean = false
+  private showDeleteSuccessBanner: boolean = false
+  private deleteBannerParams: { title?: string } = {}
 
-  private subscriptions: Subscription[] = [];
-
-  // private searchInResults: boolean = false;
-
+  private subscriptions: Subscription[] = []
 
   constructor(
     private _assets: AssetService,
@@ -94,6 +93,13 @@ export class PCollectionPage implements OnInit, OnDestroy {
         }
       })
     );// End push to subscription
+
+    this.subscriptions.push(this.route.queryParams.subscribe((params) => {
+      console.log(params, !!params.deleteSuccess)
+      this.showDeleteSuccessBanner = !!params.deleteSuccess
+      console.log(this.showDeleteSuccessBanner)
+      this.deleteBannerParams.title = params.deleteSuccess
+    }))
     this._analytics.setPageValues('collection', this.colId)
   } // OnInit
 
