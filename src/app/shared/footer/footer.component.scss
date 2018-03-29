@@ -3,23 +3,75 @@
 $footerBg: #f9f9f9;
 
 .footer {
-    padding: 15px;
-    text-align: center;
+    padding: 30px 15px 60px 15px;
     font-size: 11px;
     line-height: 24px;
     background: $footerBg;
     // border-top: 1px solid rgba(0, 0, 0, 0.15);
 
-    & a {
-        border-bottom: none;
-        margin: 0 5px;
-        text-decoration: none;
+    // & a {
+    //     border-bottom: none;
+    //     margin: 0 5px;
+    //     text-decoration: none;
 
-        &.footer-logout{
-            display: inline-block;
-            @media (min-width: 576px) {
-                display: none;
-            }
+    //     &.footer-logout{
+    //         display: inline-block;
+    //         @media (min-width: 576px) {
+    //             display: none;
+    //         }
+    //     }
+    // }
+}
+
+.links li {
+    display: inline-block;
+}
+
+.footer__explore-link {
+    display: block;
+    padding: 0px;
+    margin-left: 0px;
+    text-decoration: none;
+
+    & a.link {
+        padding: 0px;
+    }
+
+    &:hover {
+        & h2 {
+            color: #0039c6;
+        }
+    }
+}
+
+h1, .h1 {
+    color: #000;
+    font-weight: 600;
+    margin-bottom: 1em;
+}
+
+h2 {
+    color: #000;
+}
+
+p.small {
+    max-width: 300px;
+}
+
+.col--explore {
+    padding-left: 0px;
+}
+
+.social-icons {
+    font-size: 25px;
+    margin-bottom: 1em;
+
+    & .icon {
+        margin: 0px;
+        opacity: 0.8;
+
+        &:hover, &:focus {
+            opacity: 1;
         }
     }
 }

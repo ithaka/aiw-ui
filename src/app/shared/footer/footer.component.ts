@@ -22,6 +22,7 @@ export class Footer {
   private currentYear
   private user: any = {}
   private links: string[]
+  private browseSec: { [key: string]: boolean } = {}
 
   // TypeScript public modifiers
   constructor(
@@ -33,6 +34,7 @@ export class Footer {
     // Get version number
     this.appVersion = appVersion
     this.links = this._app.config.footerLinks
+    this.browseSec = this._app.config.homeBrowseSec
 
     // Set current year
     this.currentYear = new Date().getFullYear()
@@ -45,6 +47,7 @@ export class Footer {
       this._router.events.subscribe(e => {
         if (e instanceof NavigationEnd) {
             this.user = this._auth.getUser()
+            console.log(this.user)
         }
       })
     )

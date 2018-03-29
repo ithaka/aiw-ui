@@ -23,6 +23,7 @@ import {
 import { AnalyticsService } from '../analytics.service'
 import { TitleService } from '../shared/title.service'
 import { ScriptService } from '../shared/script.service'
+import { LocalPCService, LocalPCAsset } from '../_local-pc-asset.service'
 
 @Component({
     selector: 'ang-asset-page',
@@ -69,6 +70,7 @@ export class AssetPage implements OnInit, OnDestroy {
     private generatedFullURL: string = ''
     // Used for agree modal input, changes based on selection
     private downloadUrl: any
+    private downloadName: string
     // Used for generated view blob url
     private blobURL: string = '' 
     private prevRouteParams: any = []
@@ -110,12 +112,15 @@ export class AssetPage implements OnInit, OnDestroy {
 
     private editDetailsForm: FormGroup
     private editDetailsFormSubmitted: boolean = false // Set to true once the edit details form is submitted
-    private isProcessing: boolean = false
+    private isProcessing: boolean = false // controls loading class on delete button
+    private deleteLoading: boolean = false
     private showExitEdit: boolean = false
     private pcFeatureFlag: boolean = false
-    
-    private updatedPCAssets: any[] = []
-    private publishing: boolean = false
+    private showDeletePCModal: boolean = false
+
+    private uiMessages: {
+        deleteFailure?: boolean
+    } = {}
 
     constructor(
         private _assets: AssetService,
@@ -123,6 +128,7 @@ export class AssetPage implements OnInit, OnDestroy {
         private _group: GroupService,
         private _auth: AuthService,
         private _pcservice: PersonalCollectionService,
+        private _localPC: LocalPCService,
         private _log: LogService,
         private _fb: FormBuilder,
         private route: ActivatedRoute,
@@ -200,9 +206,6 @@ export class AssetPage implements OnInit, OnDestroy {
                         this.assetNumber = this._assets.currentLoadedParams.page ? this.assetIndex + 1 + ((this._assets.currentLoadedParams.page - 1) * this._assets.currentLoadedParams.size) : this.assetIndex + 1;
                     }
                 }
-
-                this.updatedPCAssets = this._storage.get('updatedPCAssets')
-                this.updatedPCAssets = this.updatedPCAssets ? this.updatedPCAssets : []
             })
         );
 
@@ -340,21 +343,6 @@ export class AssetPage implements OnInit, OnDestroy {
                 // Load related results from jstor
                 if(this.relatedResFlag){
                     this.getJstorRelatedResults(asset)
-                }
-
-                // Check if the asset is undergoing publishing by 
-                this.publishing = false
-                for(let i = 0; i < this.updatedPCAssets.length; i++){
-                    let updatedPCAsset = this.updatedPCAssets[i]
-                    if(updatedPCAsset.asset_id === asset.id){
-                        if(updatedPCAsset.updated_on === asset.updated_on){ // Asset is still publishing
-                            this.publishing = true
-                        } else{ // Asset has been published
-                            this.updatedPCAssets.splice(i, 1)
-                            this._storage.set('updatedPCAssets', this.updatedPCAssets)
-                        }
-                        break
-                    }
                 }
             }
         }
@@ -643,8 +631,10 @@ export class AssetPage implements OnInit, OnDestroy {
         }
     }
 
-    private genDownloadViewLink() : void {
-
+    /** Calls downloadViewBlob in AssetSearch service to retrieve blob file,
+        and then sets generatedViewUrl to this local reference. **/
+        
+    private genDownloadViewLink() :  void {
         let asset = this.assets[0]
 
         // Revoke the browser reference to a previously generated view download blob URL
@@ -736,6 +726,7 @@ export class AssetPage implements OnInit, OnDestroy {
     setDownloadImage() : void {
         this.downloadUrl = this.generatedFullURL;
         this.showAgreeModal = true;
+        this.downloadName = 'download'
     }
 
     /**
@@ -744,9 +735,8 @@ export class AssetPage implements OnInit, OnDestroy {
      */
     setDownloadView() : void {
         this.downloadUrl = this.generatedViewURL;
-        this.showAgreeModal = true;
-
-
+        this.showAgreeModal = true
+        this.downloadName = 'download.jpg'
     }
 
     trackDownloadImage() : void {
@@ -799,6 +789,24 @@ export class AssetPage implements OnInit, OnDestroy {
             }, (err) => {
                 console.error(err)
             })
+    }
+
+    /**
+     * Controls display indicating asset deletion, makes http call to delete asset and navigates back to My Collection page
+     */
+    private deleteAsset(): void {
+        this.uiMessages = { }
+
+        this.deleteLoading = true
+        this._pcservice.deletePersonalAssets([this.assets[0].SSID])
+        .take(1)
+        .subscribe((res) => {
+            this.deleteLoading = false
+            this._router.navigate(['/pcollection', '37240'], { queryParams: { deleteSuccess: this.assets[0].title }})
+        }, (err) => {
+            this.deleteLoading = false
+            this.uiMessages.deleteFailure = true
+        })
     }
 
     /**
@@ -874,11 +882,10 @@ export class AssetPage implements OnInit, OnDestroy {
                     if( data.success ) {
                         this.isProcessing = false
 
-                        this.updatedPCAssets.push({
-                            'asset_id': this.assets[0].id,
-                            'updated_on': this.assets[0].updated_on
+                        this._localPC.setAsset({
+                            ssid: parseInt(this.assets[0].SSID),
+                            asset_metadata: formValue
                         })
-                        this._storage.set('updatedPCAssets', this.updatedPCAssets)
 
                         this.closeEditDetails('Continue')
 
@@ -899,7 +906,18 @@ export class AssetPage implements OnInit, OnDestroy {
     /**
      * Preloads the edit details form with the asset mmetadata values and show the form
      */
-    private loadEditDetailsForm(): void{
+    private loadEditDetailsForm(): void {
+        this.uiMessages = {}
+        // see if we have a local copy of the data
+        let localData: LocalPCAsset = this._localPC.getAsset(parseInt(this.assets[0].SSID))
+        // if we have a copy of the metadata locally, use that
+        if (localData) {
+            for(let key in localData.asset_metadata) {
+                this.editDetailsForm.controls[key].setValue( localData.asset_metadata[key] )
+            }
+            this.showEditDetails = true
+            return // cancel out of the rest of the function
+        }
 
         // preload form values
         let metaData = this.assets[0].formattedMetadata
@@ -948,13 +966,22 @@ export class AssetPage implements OnInit, OnDestroy {
         this.showEditDetails = true
     }
 
-    private closeEditDetails(type: string): void{
+    private closeEditDetails(action: string): void{
+        this.uiMessages = {}
         // Hide and reset the edit details form
-        if( type === 'Continue'){
+        if(action && action === 'Continue'){
             this.showEditDetails = false
             this.editDetailsForm.reset()
         }
         this.showExitEdit = false
+    }
+
+    private closeDeletePC(action: string): void {
+        if (action && action == 'Confirm') {
+            this.deleteAsset()
+        } else {
+            this.showDeletePCModal = false
+        }
     }
     
 }
