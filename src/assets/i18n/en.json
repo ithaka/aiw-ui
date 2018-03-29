@@ -177,7 +177,7 @@
     },
     "FORM": {
       "TITLE": "Title",
-      "TITLE_INVALID": "Title is required",
+      "TITLE_INVALID": "A title is required",
       "CREATOR": "Creator",
       "WRK_TYP": "Work Type",
       "DATE": "Date",
