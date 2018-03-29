@@ -38,7 +38,6 @@ export class MyCollectionsComponent implements OnInit {
   private showEditPCModal: boolean = false;
 //   private uploadPC: boolean = false;
 
-  private pcFeatureFlag: boolean = false;
   private editTagId: string = '';
 
   // Reference activeTag for description on side
@@ -59,16 +58,7 @@ export class MyCollectionsComponent implements OnInit {
         }
 
         if(params && params['featureFlag']){
-            this._auth.featureFlags[params['featureFlag']] = true;
-            if (this._auth.featureFlags['uploadPC']) {
-                this.pcFeatureFlag = true;
-            }
-            else{
-                this.pcFeatureFlag = false;
-            }
-        }
-        else{
-            this.pcFeatureFlag = false;
+            this._auth.featureFlags[params['featureFlag']] = true
         }
 
       })
