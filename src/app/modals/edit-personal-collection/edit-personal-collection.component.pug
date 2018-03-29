@@ -49,9 +49,10 @@
               .form-group
                 label(for="assetCreatorInput") {{ 'EDIT_PC_MODAL.FORM.CREATOR' | translate }}
                 input#assetCreatorInput.form-control(type="text", [formControl]="editAssetMetaForm.controls['creator']", tabindex="1")
-              .form-group
+              .form-group([class.has-danger]="submitted && !editAssetMetaForm.controls['title'].valid")
                 label(for="assetTitleInput") {{ 'EDIT_PC_MODAL.FORM.TITLE' | translate }}
                 input#assetTitleInput.form-control(type="text", [formControl]="editAssetMetaForm.controls['title']", tabindex="1")
+                .form-control-feedback(*ngIf="submitted") {{ 'EDIT_PC_MODAL.FORM.TITLE_INVALID' | translate }}
               .form-group
                 label(for="assetWrkTypInput") {{ 'EDIT_PC_MODAL.FORM.WRK_TYP' | translate }}
                 input#assetWrkTypInput.form-control(type="text", [formControl]="editAssetMetaForm.controls['work_type']", tabindex="1")
