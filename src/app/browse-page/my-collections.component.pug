@@ -3,11 +3,12 @@ nav.nav.nav-inline.browse-nav
   .col-md-6
     .tree
       ang-tag(*ngFor="let tag of tags", [tag]="tag", [edit]="true", (editTag)="showEditModal(tag)")
-      .add-pc-cntnr(*ngIf="(tags.length === 0) && pcEnabled", (click)="showEditPCModal = true")
+      .add-pc-cntnr(*ngIf="isLoggedIn && (tags.length === 0)", (click)="showEditPCModal = true")
         .icon-cntnr
-          i.icon.absolute-left.icon-add
-            a My Personal Collections
-      .alert.alert-info(*ngIf="!pcEnabled")
+          i.icon.icon-add
+        a {{ 'BROWSE.MY_COLLECTION.UPLOAD_IMGS' | translate }}
+        
+      .alert.alert-info(*ngIf="!isLoggedIn")
         h3 {{ 'BROWSE.ERRORS.LOGIN_PC_HEADING' | translate }}
         br
         div([innerHtml]="'BROWSE.ERRORS.LOGIN_PC_COLLECTIONS_PROMPT' | translate")
@@ -16,9 +17,7 @@ nav.nav.nav-inline.browse-nav
       .img
         img(src="/assets/img/collection-splash.png", alt="Splash image for My Collections")
       .desc
-        p Only you can see this collection. To share these images with others at your institution, add them to an image group. Learn more about Personal Collections.&nbsp;
-          a(href="http://support.artstor.org/?article-category=09-using-your-own-images", target="_blank") http://support.artstor.org/?article-category=09-using-your-own-images
-          |.
+        p([innerHtml]="'BROWSE.MY_COLLECTION.PC_DESC' | translate")
 .row.has-icon-overlay(*ngIf="loading")
   i.icon-lg.icon-overlay--top.icon-loading-large
 //- ang-upload-images(*ngIf="showUploadImgsModal", (closeModal)="showUploadImgsModal = false")

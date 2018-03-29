@@ -160,20 +160,6 @@ export class Login {
       this._auth.saveUser(data.user);
       this.errorMsg = '';
 
-      // Save user personal collections count in local storage
-      this._assets.pccollection()
-      .then((res) => {
-        let pcEnabled: boolean = false;
-        if( (res['privateCollection'] && (res['privateCollection'].length > 0)) || (res['pcCollection'] && res['pcCollection'].collectionid) ){
-          pcEnabled = true;
-        }
-        this._auth.setpcEnabled(pcEnabled);
-
-      })
-      .catch(function(err) {
-          console.error('Unable to load user PC');
-      });
-
       if (this._auth.getFromStorage("stashedRoute")) {
         // We do not want to navigate to the page we are already on
         if (this._auth.getFromStorage("stashedRoute").indexOf('login') > -1) {
