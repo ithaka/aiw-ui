@@ -178,8 +178,10 @@
               .form-group
                 label(for="subjectInput") {{ 'ASSET_PAGE.EDIT_DETAILS_FORM.SUBJECT' | translate }}
                 input#subjectInput.form-control(type="text", [formControl]="editDetailsForm.controls['subject']", placeholder="", spellcheck="false", tabindex="1")
+              .form-group.has-danger(*ngIf="uiMessages.deleteFailure")
+                .form-group-feedback {{ 'ASSET_PAGE.EDIT_DETAILS_FORM.DELETE_ERROR' | translate }}
               .form-group
-                button.btn.btn-secondary(type="button", tabindex="1") {{ 'ASSET_PAGE.EDIT_DETAILS_FORM.DELETE_BTN' | translate }}
+                button.btn.btn-secondary((click)="showDeletePCModal = true", type="button", tabindex="1", [class.loading]="deleteLoading") {{ 'ASSET_PAGE.EDIT_DETAILS_FORM.DELETE_BTN' | translate }}
                 = " "
                 button.btn.btn-primary(type="submit", [class.loading]="isProcessing", tabindex="1") {{ 'ASSET_PAGE.EDIT_DETAILS_FORM.SAVE_BTN' | translate }}
               
@@ -222,3 +224,4 @@ ang-access-denied-modal(*ngIf="showAccessDeniedModal", [showSkipAsset]="isFullsc
 ang-server-error-modal(*ngIf="showServerErrorModal", (exitFullScreen)="assetViewer.exitFullScreen(); assetViewer.setFullscreen(false)")
 ang-generate-citation(*ngIf="showGenerateCitation", [asset]="assets[0]", (closeModal)="showGenerateCitation = false")
 ang-confirm-modal(*ngIf="showExitEdit", (closeModal)="closeEditDetails($event)", title="{{ 'ASSET_PAGE.EXIT_EDIT_CONFIRM_MODAL.TITLE' | translate }}", description="{{ 'ASSET_PAGE.EXIT_EDIT_CONFIRM_MODAL.DESC' | translate }}", dismiss="{{ 'ASSET_PAGE.EXIT_EDIT_CONFIRM_MODAL.CANCEL' | translate }}", primary="{{ 'ASSET_PAGE.EXIT_EDIT_CONFIRM_MODAL.CONTINUE' | translate }}")
+ang-confirm-modal(*ngIf="showDeletePCModal", (closeModal)="closeDeletePC($event)", title="{{ 'ASSET_PAGE.DELETE_PC_MODAL.TITLE' | translate }}", description="{{ 'ASSET_PAGE.DELETE_PC_MODAL.DESCRIPTION' | translate }}", primary="Confirm")
