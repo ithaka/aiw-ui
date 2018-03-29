@@ -86,6 +86,8 @@ export class EditPersonalCollectionModal implements OnInit {
   }
 
   private editAssetMeta(asset: PersonalCollectionUploadAsset): void{
+    this.uiMessages = {}
+
     this.selectedAsset = asset
     this.setMetadataValues(this._localPC.getAsset(this.selectedAsset.ssid)) // update the form values to match the new asset metadata
 
