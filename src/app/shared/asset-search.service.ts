@@ -52,9 +52,6 @@ export class AssetSearchService {
     return this.http.get(url, { 
         responseType: 'blob'
     })
-    .map(blob => {
-        return blob
-    })
   }
 
   /**
@@ -259,13 +256,16 @@ export class AssetSearchService {
       }
     }
 
-    if(options.colId || options['coll']){
-      let colId = '';
-      if( options['coll'] ){
-        colId = options['coll'];
+    if(options.colId || options['coll'] || options.pcolId){
+      let colId = ''
+      if(options['coll']){
+        colId = options['coll']
       }
-      else if ( options.colId ){
-        colId = options.colId;
+      else if(options.colId){
+        colId = options.colId
+      }
+      else if(options.pcolId){ // For PC assets filter by Collection id : 37436
+        colId = '37436'
       }
 
       filterArray.push("collections:\"" + colId + "\"");
@@ -606,4 +606,5 @@ interface SearchOptions {
   size?: number
   colId?: string
   collections?: string
+  pcolId?: string
 }
