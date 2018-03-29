@@ -20,8 +20,8 @@ export class ConfirmModal implements OnInit {
   @Input() secondary: string;
 
   constructor(
-      private _router: Router
-      ) { }
+    private _router: Router
+  ) { }
 
   ngOnInit() {
 
