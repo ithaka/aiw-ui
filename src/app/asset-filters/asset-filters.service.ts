@@ -59,8 +59,8 @@ export class AssetFiltersService {
     public available$ = this.availableSource.asObservable();
     public applied$ = this.appliedSource.asObservable();
 
-    //Set up subject observable for 'search within'
-    public searchWithin: Subject<boolean> = new Subject();
+    //'Search within' boolean flag (with getter and setter defined below)
+    private _searchWithin: boolean = false
 
     private _storage;
     private institution: any = {};
@@ -96,6 +96,19 @@ export class AssetFiltersService {
     ngOnDestroy() {
         // Kill subscriptions
         this.subscriptions.forEach((sub) => { sub.unsubscribe(); });
+    }
+    
+    /**
+     * Used to set the value for _searchWithin boolean flag
+     */
+    public set searchWithin(value: boolean){
+        this._searchWithin = value
+    }
+    /**
+     * Used to fetch the value for _searchWithin boolean flag
+     */
+    public get searchWithin(): boolean{
+        return this._searchWithin
     }
 
 
