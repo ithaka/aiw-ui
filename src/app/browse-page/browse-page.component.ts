@@ -30,8 +30,6 @@ export class BrowsePage implements OnInit, OnDestroy {
 
   private browseOpts: any = {}
 
-  private pcEnabled: boolean
-
   // TypeScript public modifiers
   constructor(
       locker: Locker,
@@ -61,16 +59,6 @@ export class BrowsePage implements OnInit, OnDestroy {
         this.selectedColMenuId = url[0].path;
       })
     );
-
-    // Subscribe to User object updates
-    this.subscriptions.push(
-      this._auth.currentUser.subscribe(
-        (userObj) => {
-          this.pcEnabled = userObj.pcEnabled
-        },
-        (err) => { console.error(err) }
-      )
-    )
 
     if( this.browseOpts.artstorCol ){
         this.colMenuArray.push( { label: 'Artstor Digital Library', id: '1', link: 'library' } );
