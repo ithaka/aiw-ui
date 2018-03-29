@@ -178,6 +178,6 @@ export class SearchComponent implements OnInit, OnDestroy {
    * @param value New value of the checkbox
    */
   private onSearchWithinChange(value: boolean): void{
-    this._filters.searchWithin.next(value)
+    this._filters.searchWithin = value
   }
 }
