@@ -91,7 +91,7 @@ export class BrowsePage implements OnInit, OnDestroy {
         this.colMenuArray.push( { label: 'Public Collections', id: '3', link: 'commons' } );
     }
 
-    if(this.pcEnabled && this.browseOpts.myCol){
+    if(this.browseOpts.myCol){
         var obj = {
             label : 'My Collections',
             id: '4',
