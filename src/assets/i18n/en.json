@@ -296,8 +296,10 @@
       "LEAD_IMAGE" : "http://library.artstor.org/assets/img/geography-splash.png"
     },
     "ERRORS": {
+      "LOGIN_PC_HEADING": "Login Required",
       "NO_INSTITUTIONAL_COLLECTIONS_HEADING": "No Institutional Collections found",
       "NO_INSTITUTIONAL_COLLECTIONS_PROMPT": "<p>There are no institutional collections available for your institution. You can add institutional collections using Shared Shelf.</p><p>Learn more about <a href=\"http://artstor.org/sharedshelf\" class=\"link\">Shared Shelf</a>.</p>",
+      "LOGIN_PC_COLLECTIONS_PROMPT": "<p>Please login to access your Personal Collection.</p><p>Learn more about <a href=\"http://artstor.org/sharedshelf\" class=\"link\">Shared Shelf</a>.</p>",
       "NO_GROUPS_COLLECTIONS_HEADING": "No Groups Found",
       "NO_PRIVATE_GROUPS_COLLECTIONS_PROMPT": "<p>You haven't made any private groups yet. Learn more about <a href='http://support.artstor.org/?article=create-and-manage-image-groups' class='link'>groups</a>.</p>",
       "NO_INSTITUTIONAL_GROUPS_COLLECTIONS_PROMPT": "<p>You haven't made any institutional groups yet. Learn more about <a href='http://support.artstor.org/?article=create-and-manage-image-groups' class='link'>groups</a>.</p>",
@@ -447,7 +449,8 @@
       "DESELECT": "Deselect All",
       "EDIT": "Edit Image Group Info",
       "SAVE": "Save Image Group as...",
-      "DELETE_GROUP": "Delete Image Group"
+      "DELETE_GROUP": "Delete Image Group",
+      "ADD_IMGS_PC": "Add Images to Personal Collection"
     },
     "SHARE": {
       "TITLE": "Share",
