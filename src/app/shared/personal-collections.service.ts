@@ -117,13 +117,15 @@ export interface PostPersonalCollectionResponse {
   updated_by: number
   updated_on: string
   visibility: number
+}
+
+export interface PersonalCollectionUploadAsset extends PostPersonalCollectionResponse {
   src?: string // we assign this on the front end
-  // }
 }
 
 export interface AssetDetailsFormValue {
   creator?: string,
-  title: string,
+  title?: string,
   work_type?: string,
   date?: string,
   location?: string,

@@ -47,6 +47,7 @@
 
                 .thumb-overlay{
                     position: absolute;
+                    cursor: pointer;
                     top: 0;
                     left: 0;
                     width: 100%;
@@ -118,6 +119,6 @@
     }
 }
 
-.new-thumb {
-    border: 1px solid $green;
-}
+// .new-thumb {
+//     border: 1px solid $green;
+// }

@@ -110,7 +110,12 @@
       "SUBJECT": "Subject",
       "TITLE_REQUIRED_MSG": "A title is required",
       "SAVE_BTN": "Save",
-      "DELETE_BTN": "Delete Record"
+      "DELETE_BTN": "Delete Record",
+      "DELETE_ERROR": "There was an error in deleting the asset. Please try again."
+    },
+    "DELETE_PC_MODAL": {
+      "TITLE": "Delete Asset Confirmation",
+      "DESCRIPTION": "Are you sure you would like to delete this asset? This action cannot be reverted."
     },
     "EXIT_EDIT_CONFIRM_MODAL": {
       "TITLE": "Exit Edit Details",
@@ -122,8 +127,7 @@
       "BACK": "Back to Results"
     },
     "MESSAGES": {
-      "NEEDASSETS": "To compare assets, you will need to access an asset through a set of results first. Then those results will show here.",
-      "PUBLISHING": "This asset is currently being published"
+      "NEEDASSETS": "To compare assets, you will need to access an asset through a set of results first. Then those results will show here."
     },
     "METADATA_LABELS": {
       "SSID": "SSID",
@@ -155,7 +159,7 @@
   },
   "EDIT_PC_MODAL": {
     "TITLE": "Personal Collection",
-    "EDIT_COL": "Edit Collection",
+    "RECENT_TITLE": "Recently Uploaded",
     "META_ADD_INFO": "Metadata can be added by clicking on the thumbnail image, or from the Personal Collection Administration dialog and image page.",
     "HELP": "Help",
     "BUTTONS": {
@@ -309,6 +313,11 @@
       "RSTD_IMGS": "This group contains restricted images or images that have been deleted by the creator."
     }
   },
+  "PERSONAL_COLLECTION_PAGE": {
+    "BANNER": {
+      "DELETE_SUCCESS": "{{title}} was successfully deleted from your personal collection."
+    }
+  },
   "FOOTER": {
     "LINKS": {
       "ABOUT": "<a href=\"http://www.artstor.org/content/artstor-digital-library-features-benefits\" class=\"link\" target=\"_blank\">About</a>",
@@ -324,7 +333,9 @@
       "SARARA_CONTRIBUTE": "<a href=\"http://catalog.sharedshelf.artstor.org\" class=\"link\" target=\"_blank\">Contribute to SAHARA using Forum</a>",
       "SAHARA_TERMS": "<a href=\"http://artstor.org/sahara-terms\" class=\"link\" target=\"_blank\">Terms</a>",
       "SAHARA_PRIVACY": "<a href=\"http://artstor.org/privacy-policy-sahara\" class=\"link\" target=\"_blank\">Privacy</a>"
-    }
+    },
+    "DISCLAIMER" : "Artstor is in a strategic alliance with ITHAKA, a not-for-profit organization helping the academic community use digital technologies to preserve the scholarly record and to advance research and teaching in sustainable ways.",
+    "RIGHTS" : "All Rights Reserved. JSTOR® and ITHAKA® are registered trademarks of ITHAKA.  Artstor® is a registered trademark of Artstor Inc."
   },
   "ACCESS_HELP_MODAL": {
     "HEADING": "How do I get access?",
@@ -385,7 +396,7 @@
       "COLL_LIST": "(Artstor, Institutional, Public, My Collections...)",
       "COLL_LIST_SHORT": "(Institutional Collections)",
       "TEACHING_HEADING": "Teaching Resources",
-      "TEACHING_LIST": "<a href=\"/#/browse/groups/public?tags=Curriculum%2520Guides&page=1\" class=\"link\">Curriculum Guides</a>, <a href=\"/#/browse/groups/public?page=1&tags=Case%2520Studies\" class=\"link\">Case Studies</a>, <a href=\"/#/browse/groups/search?level=public&tags=Art%2520%2526%2520Architecture%2520Overviews&page=1\" class=\"link\">Arts & Architecture Overviews</a>, <a href=\"/#/browse/groups/search?level=public&page=1&tags=Social%2520Studies%2520and%2520Humanities%2520Overviews\" class=\"link\">Social Sciences & Humanities Overviews</a>, <a href=\"http://artstor.libguides.com/APArtHistory\" target=\"_blank\" class=\"link\">AP Art History</a>, <a href=\"/#/browse/groups/public?page=1&tags=AP%25C2%25AE%2520United%2520States%2520%2520History\">AP US History</a>, <a href=\"/#/browse/groups/public?page=1&tags=AP%25C2%25AE%2520European%2520History\">AP European History</a>, and <a href=\"/#/browse/groups/public\" class=\"link\">more...</a>",
+      "TEACHING_LIST": "<a href=\"/#/browse/groups/public?tags=Curriculum%2520Guides&page=1\" class=\"link\">Curriculum Guides</a>, <a href=\"/#/browse/groups/public?page=1&tags=Case%2520Studies\" class=\"link\">Case Studies</a>, <a href=\"/#/browse/groups/search?level=public&tags=Art%2520%2526%2520Architecture%2520Overviews&page=1\" class=\"link\">Arts & Architecture Overviews</a>, <a href=\"/#/browse/groups/search?level=public&page=1&tags=Social%2520Studies%2520and%2520Humanities%2520Overviews\" class=\"link\">Social Sciences & Humanities Overviews</a>, <a href=\"http://artstor.libguides.com/APArtHistory\" target=\"_blank\" class=\"link\">AP Art History</a>, <a href=\"/#/browse/groups/public?page=1&tags=AP%25C2%25AE%2520United%2520States%2520%2520History\" class=\"link\">AP US History</a>, <a href=\"/#/browse/groups/public?page=1&tags=AP%25C2%25AE%2520European%2520History\" class=\"link\">AP European History</a>, and <a href=\"/#/browse/groups/public\" class=\"link\">more...</a>",
       "GROUPS_HEADING": "Image Groups",
       "GROUPS_LIST": "(My groups and groups shared by others at my institution)"
     },
@@ -463,7 +474,7 @@
     "MESSAGE": "We are currently experiencing issues with images and downloads due to a power outage. <a href=\"http://support.artstor.org/?article=current-technical-issues-alerts\" target=\"_blank\" class=\"link\">Learn more</a>."
   },
   "DOWNTIME_BANNER": {
-    "MESSAGE": "Artstor will be temporarily unavailable on Tuesday, January 23 beginning at 6am EST (<a href=\"http://everytimezone.com\" target=\"_blank\" class=\"link\">see this in your timezone</a>) for approximately 15 minutes.  During this time, you may be unable to log in and access content. Thank you for your patience during this brief outage. "
+    "MESSAGE": "We're sorry, we're experiencing problems affecting search and browse across the site.  We apologize for the inconvenience, and appreciate your patience. If you have any questions, please <a href=\"mailto:support@artstor.org\" target=\"_blank\" class=\"link\">contact Artstor Support</a> or check <a href=\"https://twitter.com/ArtstorHelp\" target=\"_blank\" class=\"link\">Twitter</a> for additional updates."
   },
   "SEARCH_SKY_BANNER": {
     "MESSAGE": "⚠️ This is a testing instance for the new Search index. Please excuse the broken bits."

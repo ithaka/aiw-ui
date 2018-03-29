@@ -103,6 +103,7 @@ import {
   ScriptService,
   PersonalCollectionService
 } from './shared'
+import { LocalPCService } from './_local-pc-asset.service'
 import { SSOService } from './shared/sso.service'
 import { AssetFiltersService } from './asset-filters/asset-filters.service'
 import { TagsService } from './browse-page/tags.service'
@@ -128,6 +129,7 @@ const APP_PROVIDERS = [
   AuthService,
   PersonalCollectionService,
   SSOService,
+  LocalPCService,
   LogService,
   ImageGroupService,
   ScriptService,
