@@ -341,7 +341,7 @@ export class AssetPage implements OnInit, OnDestroy {
                 let currentAssetId: string = this.assets[0].id || this.assets[0]['objectId'] // couldn't trust the 'this.assetIdProperty' variable
                 // Search returns a 401 if /userinfo has not yet set cookies
                 if (Object.keys(this._auth.getUser()).length !== 0) {
-                    this.setCollectionType(currentAssetId)
+                    this.collectionType = this.collectionTypeHandler.getCollectionType([asset.collectionType], asset.contributinginstitutionid)
                 }
                 this.generateImgURL()
 
@@ -781,6 +781,7 @@ export class AssetPage implements OnInit, OnDestroy {
     }
 
     /**
+<<<<<<< HEAD
      * Used to set the collection type, which controls display of the collection type icon
      *  Eventually we should get the entire asset like this, instead of through the metadata call
      * @param assetId the asset's id assigned by artstor
@@ -802,6 +803,8 @@ export class AssetPage implements OnInit, OnDestroy {
     }
 
     /**
+=======
+>>>>>>> d31c87ad92be4a55f0c739791a513b8867bd2cc8
      * Controls display indicating asset deletion, makes http call to delete asset and navigates back to My Collection page
      */
     private deleteAsset(): void {
