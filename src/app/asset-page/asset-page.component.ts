@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ViewChild, HostListener } from '@angular/core'
+import { Component, OnInit, OnDestroy, ViewChild, HostListener, Input } from '@angular/core'
 import { ActivatedRoute, Params, Router } from '@angular/router'
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { Subscription }   from 'rxjs/Subscription'
@@ -92,7 +92,12 @@ export class AssetPage implements OnInit, OnDestroy {
     private browseAssetDirection: string = '' 
 
     // Feature flag for managing 'Collection fields hyperlinked to collection page" on asset metadata
-    private collectionLinksFlag: boolean = false
+    private collectionLinksFlag: boolean = true
+
+    // This assets associated collection URL. 
+    // May be collection/<institution collection id> or /collection/<public collection id>
+    @Input()
+    collectionLinkId: string;
 
     private pagination: {
         totalPages: number,
@@ -776,6 +781,30 @@ export class AssetPage implements OnInit, OnDestroy {
     }
 
     /**
+<<<<<<< HEAD
+     * Used to set the collection type, which controls display of the collection type icon
+     *  Eventually we should get the entire asset like this, instead of through the metadata call
+     * @param assetId the asset's id assigned by artstor
+     */
+    private setCollectionType(assetId: string): void {
+        this._search.getAssetById(assetId)
+            .take(1)
+            .subscribe((asset) => {
+                let contributinginstitutionid: number = asset.contributinginstitutionid
+                this.collectionType = this.collectionTypeHandler.getCollectionType(asset.collectiontypes, contributinginstitutionid)
+
+                // Set collection link id value
+                // The asset metadata 'collections' array will contain the collection id we want at the 1st index, whether public or private
+                this.collectionLinkId = asset['collections'][0];
+
+            }, (err) => {
+                console.error(err)
+            })
+    }
+
+    /**
+=======
+>>>>>>> d31c87ad92be4a55f0c739791a513b8867bd2cc8
      * Controls display indicating asset deletion, makes http call to delete asset and navigates back to My Collection page
      */
     private deleteAsset(): void {

@@ -103,7 +103,7 @@ export class CollectionPage implements OnInit, OnDestroy {
       let options = { withCredentials: true };
 
       return this.http
-          .get(this._auth.getUrl() + '/collections/' + colId, options)
+          .get(this._auth.getUrl(true) + '/collections/' + colId, options)
           .toPromise();
   }
 
