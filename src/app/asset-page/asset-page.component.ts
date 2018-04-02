@@ -968,4 +968,22 @@ export class AssetPage implements OnInit, OnDestroy {
         }
     }
     
+    /**
+     * Get link to Error Form
+     * - Generate url with Query params for reporting asset error
+     * @param asset Asset for which the user is reporting an error
+     * @returns string Error form url with query params
+     */
+    getErrorFormUrl(asset: Asset) : string {
+        let baseUrl = 'http://www.artstor.org/form/report-error' 
+        let collection = asset.collectionName
+        let id = asset.id
+        let email = this.user.username
+        let title = asset.title
+        let creator = asset.creator
+        let repo = asset.formattedMetadata['Repository'] && asset.formattedMetadata['Repository'][0]
+        let fileName = asset.fileName 
+        let ssid = asset.SSID
+        return baseUrl+'?collectionName='+collection+'&id='+id+'&email='+email+'&title='+title+'&creator='+creator+'&fileName='+fileName+'&ssid='+ssid+'&repository='+repo
+    }
 }
