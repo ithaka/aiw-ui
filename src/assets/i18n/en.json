@@ -165,7 +165,8 @@
     "BUTTONS": {
       "CLOSE": "Close",
       "SAVE": "Save",
-      "DELETE": "Delete"
+      "DELETE": "Delete",
+      "DONE": "Done"
     },
     "MESSAGES": {
       "IMG_UPLOAD_SUCCESS": "Image successfully uploaded",

@@ -21,13 +21,16 @@
         .row.no-gutters
           .thmb-cntnr([ngClass]="{ 'col-md-6': editMode, 'col-md-12': !editMode }")
             ang-uploader((fileUploaded)="handleNewAssetUpload($event)")
-            .lbl(*ngIf="collectionAssets && collectionAssets.length > 0") {{ 'EDIT_PC_MODAL.RECENT_TITLE' | translate }}
+            .lbl.mt-4(*ngIf="collectionAssets && collectionAssets.length > 0") {{ 'EDIT_PC_MODAL.RECENT_TITLE' | translate }}
               .thumb-preview-cntnr
                 .row.no-gutters
                   .col-md-4.thumb([ngClass]="{ 'selected': selectedAsset && (selectedAsset.ssid === asset.ssid)}", *ngFor="let asset of collectionAssets")
                     img([attr.src]="asset.src", [attr.alt]="asset.name ? 'Thumbnail of ' + asset.name : 'No title available'")
                     .thumb-overlay((click)="editAssetMeta( asset )")
               .info-lbl {{ 'EDIT_PC_MODAL.META_ADD_INFO' | translate }}
+              .modal-footer
+                .form-group
+                  button.btn.btn-primary((click)="closeModal.emit()", type="button") {{ 'EDIT_PC_MODAL.BUTTONS.DONE' | translate }}
           .edit-cntnr.col-md-6(*ngIf="selectedAsset && editMode")
             //- if the image was just uploaded, we won't have metadata, so just use the blob data
             img.w-100.mb-2(
@@ -68,8 +71,8 @@
                 *ngIf="uiMessages.metadataUpdateSuccess"
               )
                 .form-control-feedback(*ngIf="uiMessages.metadataUpdateSuccess") {{ 'EDIT_PC_MODAL.MESSAGES.METADATA_UPDATE_SUCCESS' | translate }}
-        .modal-footer
-          .form-group(*ngIf="selectedAsset && selectedAsset.ssid")
-            button.btn.btn-danger.mr-2((click)="deleteAssetById(selectedAsset.ssid)", type="button", [class.loading]="deleteLoading") {{ 'EDIT_PC_MODAL.BUTTONS.DELETE' | translate }}
-            button.btn.btn-secondary.mr-2((click)="clearSelectedAsset()", type="button") {{ 'EDIT_PC_MODAL.BUTTONS.CLOSE' | translate }}
-            button.btn.btn-primary(type="submit", (click)="editMetaFormSubmit(editAssetMetaForm.value)") {{ 'EDIT_PC_MODAL.BUTTONS.SAVE' | translate }}
+            .modal-footer
+              .form-group
+                button.btn.btn-danger.mr-2((click)="deleteAssetById(selectedAsset.ssid)", type="button", [class.loading]="deleteLoading") {{ 'EDIT_PC_MODAL.BUTTONS.DELETE' | translate }}
+                button.btn.btn-secondary.mr-2((click)="clearSelectedAsset()", type="button") {{ 'EDIT_PC_MODAL.BUTTONS.CLOSE' | translate }}
+                button.btn.btn-primary(type="submit", (click)="editMetaFormSubmit(editAssetMetaForm.value)") {{ 'EDIT_PC_MODAL.BUTTONS.SAVE' | translate }}
