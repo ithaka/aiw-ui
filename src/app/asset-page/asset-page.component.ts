@@ -981,7 +981,7 @@ export class AssetPage implements OnInit, OnDestroy {
         let email = this.user.username
         let title = asset.title
         let creator = asset.creator
-        let repo = asset.formattedMetadata['Repository'] && asset.formattedMetadata['Repository'][0]
+        let repo = (asset.formattedMetadata['Repository'] && asset.formattedMetadata['Repository'][0]) || ''
         let fileName = asset.fileName 
         let ssid = asset.SSID
         return baseUrl+'?collectionName='+collection+'&id='+id+'&email='+email+'&title='+title+'&creator='+creator+'&fileName='+fileName+'&ssid='+ssid+'&repository='+repo
