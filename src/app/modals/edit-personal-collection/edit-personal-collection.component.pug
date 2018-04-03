@@ -29,6 +29,7 @@
                     .thumb-overlay((click)="editAssetMeta( asset )")
               .info-lbl {{ 'EDIT_PC_MODAL.META_ADD_INFO' | translate }}
               .modal-footer(*ngIf="!editMode")
+                .alert.alert-info {{ 'EDIT_PC_MODAL.UPLOAD_TIME_DISCLAIMER' | translate }}
                 .form-group
                   button.btn.btn-primary((click)="closeModal.emit()", type="button") {{ 'EDIT_PC_MODAL.BUTTONS.DONE' | translate }}
           .edit-cntnr.col-md-6(*ngIf="selectedAsset && editMode")
