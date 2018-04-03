@@ -161,11 +161,13 @@
     "TITLE": "Personal Collection",
     "RECENT_TITLE": "Recently Uploaded",
     "META_ADD_INFO": "Click the thumbnail to add metadata. You can also add details from the image page later.",
+    "UPLOAD_TIME_DISCLAIMER": "There may be a delay of up to 30 minutes before recently uploaded images will ready to view and share.",
     "HELP": "Help",
     "BUTTONS": {
       "CLOSE": "Close",
       "SAVE": "Save",
-      "DELETE": "Delete"
+      "DELETE": "Delete",
+      "DONE": "Done"
     },
     "MESSAGES": {
       "IMG_UPLOAD_SUCCESS": "Image successfully uploaded",
