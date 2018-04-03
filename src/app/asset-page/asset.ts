@@ -18,6 +18,7 @@ export class Asset {
     collectionId: number
     categoryId: number
     collectionType: number
+    collections: any[]
     contributinginstitutionid: number
     SSID: string
     fileName: string
@@ -159,6 +160,8 @@ export class Asset {
         this.downloadLink = this.buildDownloadLink(data)
         data.viewer_data && (this.viewerData = data.viewer_data)
 
+        this.collections = data.collections
+
         // Save the Tile Source for IIIF
         //  sometimes it doesn't come back with .fpx, so we need to add it
         let imgPath
@@ -205,6 +208,7 @@ export interface AssetData {
   collection_id: string
   collection_name: string
   collection_type: number
+  collections: any[]
   download_size: string
   fileProperties: FileProperty[] // array of objects with a key/value pair
   height: number
@@ -233,6 +237,7 @@ interface AssetDataResponse {
   collection_id: string
   collection_name: string
   collection_type: number
+  collections: any[]
   downloadSize?: string
   download_size?: string
   fileProperties: { [key: string]: string }[] // array of objects with a key/value pair
