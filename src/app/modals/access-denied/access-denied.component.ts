@@ -1,6 +1,6 @@
-import { Router } from '@angular/router';
-import { Locker } from 'angular2-locker';
+import { Router } from '@angular/router'
 import { Component, OnInit, EventEmitter, Input, Output } from '@angular/core'
+import { Location } from '@angular/common'
 
 // Project Dependencies
 import { AuthService } from '../../shared'
@@ -21,8 +21,8 @@ export class AccessDeniedModal implements OnInit {
 
   constructor(
     private _auth: AuthService,
-    private _storage: Locker,
-    private _router: Router
+    private _router: Router,
+    private location: Location
   ) { }
 
   ngOnInit() {
@@ -50,7 +50,7 @@ export class AccessDeniedModal implements OnInit {
    * Set aside our current/intended path so the user can return
    */
   stashThenRoute(routeValue: string) {
-    this._storage.set("stashedRoute", "/" + window.location.hash)
+    this._auth.store("stashedRoute", this.location.path(false))
     this._router.navigate([routeValue]); 
   }
 }
