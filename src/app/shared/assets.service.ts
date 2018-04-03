@@ -1037,6 +1037,7 @@ export interface MetadataRes {
         collection_name: string
         download_size: string
         fileProperties: any[]
+        collections: any[]
         height: number
         width: number
         image_url: string
