@@ -95,7 +95,7 @@ export class AssetPage implements OnInit, OnDestroy {
     private collectionLinksFlag: boolean = true
 
     // List of collections from metadata 'collections' array
-    private collections: any[] = []
+    private collections: any[]
     private collectionLinkId = ''
 
     private pagination: {
@@ -275,6 +275,9 @@ export class AssetPage implements OnInit, OnDestroy {
 
         this._analytics.setPageValues('asset', this.assets[0] && this.assets[0].id)
 
+        
+        
+
         // Append Crazy Egg A/B Testing script to head
         this.scriptService.load('crazyegg')
 
@@ -349,12 +352,11 @@ export class AssetPage implements OnInit, OnDestroy {
                     this.getJstorRelatedResults(asset)
                 }
             }
+            // Assign collections array for this asset. Provided in metadata
+            this.collections = asset.collections
         }
         // Set download link
         this.setDownloadFull()
-
-        // Get list of collections for this asset. Used by setCollectionLink to assign the correct collection link
-        this.getCollectionsList(asset.id)
     }
 
     /**
@@ -992,16 +994,6 @@ export class AssetPage implements OnInit, OnDestroy {
         let fileName = asset.fileName 
         let ssid = asset.SSID
         return baseUrl+'?collectionName='+collection+'&id='+id+'&email='+email+'&title='+title+'&creator='+creator+'&fileName='+fileName+'&ssid='+ssid+'&repository='+repo
-    }
-
-    private getCollectionsList(assetId: string) :void {
-        this._assets.getMetadata(assetId)
-        .take(1)
-        .subscribe((res) => {
-            if (res && res.metadata && res.metadata[0].collections) {
-                this.collections = res.metadata[0].collections
-            }
-        })
     }
 
     /**
