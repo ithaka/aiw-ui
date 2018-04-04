@@ -998,6 +998,8 @@ export class AssetPage implements OnInit, OnDestroy {
      * If both, we set the link to the public collection.
      */
     setCollectionLink():  string {
+        let linkId = ''
+        
         // Asset has a single collection value
         if (this.collections.length === 1) {
             linkId = this.collections[0].id
