@@ -96,7 +96,6 @@ export class AssetPage implements OnInit, OnDestroy {
 
     // List of collections from metadata 'collections' array
     private collections: any[]
-    private collectionLinkId = ''
 
     private pagination: {
         totalPages: number,
@@ -1001,20 +1000,20 @@ export class AssetPage implements OnInit, OnDestroy {
     setCollectionLink():  string {
         // Asset has a single collection value
         if (this.collections.length === 1) {
-            this.collectionLinkId = this.collections[0].id
+            linkId = this.collections[0].id
         }
         else {
             for (let col of this.collections) {
                 if (col.type === 5) {
-                    this.collectionLinkId = col.id
-                    return this.collectionLinkId // If collection is public return here
+                    linkId = col.id
+                    return linkId // If collection is public return here
                 }
                 else {
-                    this.collectionLinkId = col.id
+                    linkId = col.id
                 }
             }
         }
-        return this.collectionLinkId
+        return linkId
     }
 
 }
