@@ -160,8 +160,6 @@ export class Asset {
         this.downloadLink = this.buildDownloadLink(data)
         data.viewer_data && (this.viewerData = data.viewer_data)
 
-        this.collections = data.collections
-
         // Save the Tile Source for IIIF
         //  sometimes it doesn't come back with .fpx, so we need to add it
         let imgPath
