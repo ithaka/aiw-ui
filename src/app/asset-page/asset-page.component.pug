@@ -128,7 +128,7 @@
           .meta-block(*ngFor="let fieldName of assets[0].formattedMetadata | keys")
             .label([attr.id]="cleanId(fieldName)") {{ fieldName }}
             div(*ngFor="let value of assets[0].formattedMetadata[fieldName]")
-              a.value.col-link(*ngIf="(fieldName === 'Collection') && collectionLinksFlag", [routerLink]="[ assets[0].collectionId === '103' ? '/category' : '/collection', assets[0].collectionId === '103' ? assets[0].categoryId : assets[0].collectionId ]", [innerHTML]="cleanFieldValue(value)")
+              a.value.col-link(*ngIf="(fieldName === 'Collection') && collectionLinksFlag", [routerLink]="[ assets[0].collectionId === '103' ? '/category' : '/collection', assets[0].collectionId === '103' ? assets[0].categoryId : setCollectionLink()]", [innerHTML]="cleanFieldValue(value)")
               .value(*ngIf="(fieldName !== 'Collection' )|| !collectionLinksFlag", [innerHTML]="cleanFieldValue(value) | linkify")
           .row-hdr.pt-3(*ngIf="assets[0].filePropertiesArray.length > 0") {{ 'ASSET_PAGE.HEADER_LABELS.FILE_PROPS' | translate}}
           //- Loop through File Properties Array

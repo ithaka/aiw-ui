@@ -92,7 +92,11 @@ export class AssetPage implements OnInit, OnDestroy {
     private browseAssetDirection: string = '' 
 
     // Feature flag for managing 'Collection fields hyperlinked to collection page" on asset metadata
-    private collectionLinksFlag: boolean = false
+    private collectionLinksFlag: boolean = true
+
+    // List of collections from metadata 'collections' array
+    private collections: any[] = []
+    private collectionLinkId = ''
 
     private pagination: {
         totalPages: number,
@@ -348,6 +352,9 @@ export class AssetPage implements OnInit, OnDestroy {
         }
         // Set download link
         this.setDownloadFull()
+
+        // Get list of collections for this asset. Used by setCollectionLink to assign the correct collection link
+        this.getCollectionsList(asset.id)
     }
 
     /**
@@ -986,4 +993,39 @@ export class AssetPage implements OnInit, OnDestroy {
         let ssid = asset.SSID
         return baseUrl+'?collectionName='+collection+'&id='+id+'&email='+email+'&title='+title+'&creator='+creator+'&fileName='+fileName+'&ssid='+ssid+'&repository='+repo
     }
+
+    private getCollectionsList(assetId: string) :void {
+        this._assets.getMetadata(assetId)
+        .take(1)
+        .subscribe((res) => {
+            if (res && res.metadata && res.metadata[0].collections) {
+                this.collections = res.metadata[0].collections
+            }
+        })
+    }
+
+    /**
+     * Sets collection id for the Collection href
+     * A collection may have a private and also public collection id.
+     * If both, we set the link to the public collection.
+     */
+    setCollectionLink():  string {
+        // Asset has a single collection value
+        if (this.collections.length === 1) {
+            this.collectionLinkId = this.collections[0].id
+        }
+        else {
+            for (let col of this.collections) {
+                if (col.type === 5) {
+                    this.collectionLinkId = col.id
+                    return this.collectionLinkId // If collection is public return here
+                }
+                else {
+                    this.collectionLinkId = col.id
+                }
+            }
+        }
+        return this.collectionLinkId
+    }
+
 }
