@@ -275,9 +275,6 @@ export class AssetPage implements OnInit, OnDestroy {
 
         this._analytics.setPageValues('asset', this.assets[0] && this.assets[0].id)
 
-        
-        
-
         // Append Crazy Egg A/B Testing script to head
         this.scriptService.load('crazyegg')
 
