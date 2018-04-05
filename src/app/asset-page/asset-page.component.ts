@@ -215,7 +215,7 @@ export class AssetPage implements OnInit, OnDestroy {
 
         // sets up subscription to allResults, which is the service providing thumbnails
         this.subscriptions.push(
-          this._assets.allResults.subscribe((allResults: any) => {
+          this._assets.allResults.subscribe((allResults) => {
               if(allResults.thumbnails){
                   // Set asset id property to reference
                 this.assetIdProperty = (allResults.thumbnails[0] && allResults.thumbnails[0].objectId) ? 'objectId' : 'artstorid'
@@ -244,7 +244,7 @@ export class AssetPage implements OnInit, OnDestroy {
 
         // Subscribe to pagination values
         this.subscriptions.push(
-          this._assets.pagination.subscribe((pagination: any) => {
+          this._assets.pagination.subscribe((pagination) => {
             this.pagination.page = parseInt(pagination.page);
             this.pagination.size = parseInt(pagination.size);
             if (this.originPage < 1) {
@@ -948,6 +948,34 @@ export class AssetPage implements OnInit, OnDestroy {
 
         // Show edit details form
         this.showEditDetails = true
+    }
+
+    private updateMetadataFromLocal(localData: LocalPCAsset): void {
+        if (!localData) { return } // if we don't have metadata for that asset, we won't run any of the update code
+
+        for(let key in localData.asset_metadata) {
+            let metadataLabel: string = this.mapLocalFieldToLabel(key)
+            // all objects in formattedMetadata are arrays, but these should all be length 0
+            this.assets[0].formattedMetadata[metadataLabel] = [localData.asset_metadata[key]]
+        }
+    }
+
+    /**
+     * Maps field name from LocalPCAsset object to the label from formattedMetadata on the asset
+     * @param field the field from the LocalPCAsset object for which you want ot set the metadata label value
+     */
+    private mapLocalFieldToLabel(field: string): string {
+        let fieldLabelMap = {
+            'creator': 'Creator',
+            'title': 'Title',
+            'work_type': 'Work Type',
+            'date': 'Date',
+            'location': 'Location',
+            'material': 'Material',
+            'description': 'Description',
+            'subject': 'Subject'
+        }
+        return fieldLabelMap[field]
     }
 
     private closeEditDetails(action: string): void{
