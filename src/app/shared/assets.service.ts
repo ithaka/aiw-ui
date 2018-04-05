@@ -1035,7 +1035,6 @@ export interface MetadataRes {
         SSID: string
         collection_id: string
         collection_name: string
-        collections: any[]
         download_size: string
         fileProperties: any[]
         height: number
