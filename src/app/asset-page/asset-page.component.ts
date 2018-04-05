@@ -314,6 +314,7 @@ export class AssetPage implements OnInit, OnDestroy {
 
 
     handleLoadedMetadata(asset: Asset, assetIndex: number) {
+        console.log(asset)
         if (asset && asset['error']) {
             let err = asset['error']
             if (err.status === 403 || err.message == "Unable to load metadata!") {
