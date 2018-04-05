@@ -190,6 +190,9 @@ export class AssetFilters {
       if(currentParams.sort){
         baseParams['sort'] = currentParams.sort
       }
+      if(this._filters.searchWithin && currentParams.term){ // If searchWithin is checked, then include the term param as well
+        baseParams['term'] = currentParams.term
+      }
 
       let queryParams = Object.assign(baseParams, params)
       let colId = currentParams.colId ? currentParams.colId : currentParams.catId
