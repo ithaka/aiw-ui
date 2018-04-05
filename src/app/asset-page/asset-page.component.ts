@@ -179,6 +179,7 @@ export class AssetPage implements OnInit, OnDestroy {
 
         this.subscriptions.push(
             this.route.params.subscribe((routeParams) => {
+                console.log('got routeParams update')
                 // this.assets = []
                 let assetIdProperty = this._auth.featureFlags[routeParams['featureFlag']]? 'artstorid' : 'objectId'
                 this.assetGroupId = routeParams['groupId']
@@ -219,6 +220,7 @@ export class AssetPage implements OnInit, OnDestroy {
         // sets up subscription to allResults, which is the service providing thumbnails
         this.subscriptions.push(
           this._assets.allResults.subscribe((allResults) => {
+              console.log('got allResults update')
               if(allResults.thumbnails){
                   // Set asset id property to reference
                 this.assetIdProperty = (allResults.thumbnails[0] && allResults.thumbnails[0].objectId) ? 'objectId' : 'artstorid'
@@ -350,6 +352,7 @@ export class AssetPage implements OnInit, OnDestroy {
             }
             // Assign collections array for this asset. Provided in metadata
             this.collections = asset.collections
+            this.updateMetadataFromLocal(this._localPC.getAsset(parseInt(this.assets[0].SSID)))
         }
         // Set download link
         this.setDownloadFull()
@@ -960,8 +963,9 @@ export class AssetPage implements OnInit, OnDestroy {
 
         for(let key in localData.asset_metadata) {
             let metadataLabel: string = this.mapLocalFieldToLabel(key)
+            let fieldValue: string = localData.asset_metadata[key]
             // all objects in formattedMetadata are arrays, but these should all be length 0
-            this.assets[0].formattedMetadata[metadataLabel] = [localData.asset_metadata[key]]
+            fieldValue && (this.assets[0].formattedMetadata[metadataLabel] = [fieldValue])
         }
     }
 
@@ -1027,6 +1031,8 @@ export class AssetPage implements OnInit, OnDestroy {
      */
     setCollectionLink():  string {
         let linkId = ''
+
+        if (!this.collections) { return }
         
         // Asset has a single collection value
         if (this.collections.length === 1) {
