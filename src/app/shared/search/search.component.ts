@@ -172,4 +172,12 @@ export class SearchComponent implements OnInit, OnDestroy {
 
     this.term = searchTerm;
   }
+
+  /**
+   * 'ngModelChange' event handler for 'search within' checkbox
+   * @param value New value of the checkbox
+   */
+  private onSearchWithinChange(value: boolean): void{
+    this._filters.searchWithin = value
+  }
 }

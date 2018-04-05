@@ -128,7 +128,7 @@
           .meta-block(*ngFor="let fieldName of assets[0].formattedMetadata | keys")
             .label([attr.id]="cleanId(fieldName)") {{ fieldName }}
             div(*ngFor="let value of assets[0].formattedMetadata[fieldName]")
-              a.value.col-link(*ngIf="(fieldName === 'Collection') && collectionLinksFlag", [routerLink]="[ assets[0].collectionId === '103' ? '/category' : '/collection', assets[0].collectionId === '103' ? assets[0].categoryId : assets[0].collectionId ]", [innerHTML]="cleanFieldValue(value)")
+              a.value.col-link(*ngIf="(fieldName === 'Collection') && collectionLinksFlag", [routerLink]="[ assets[0].collectionId === '103' ? '/category' : '/collection', assets[0].collectionId === '103' ? assets[0].categoryId : setCollectionLink()]", [innerHTML]="cleanFieldValue(value)")
               .value(*ngIf="(fieldName !== 'Collection' )|| !collectionLinksFlag", [innerHTML]="cleanFieldValue(value) | linkify")
           .row-hdr.pt-3(*ngIf="assets[0].filePropertiesArray.length > 0") {{ 'ASSET_PAGE.HEADER_LABELS.FILE_PROPS' | translate}}
           //- Loop through File Properties Array
@@ -143,7 +143,7 @@
               .value([innerHtml]="assets[0].SSID")
           .text-left.pt-2
             a#buttonRequestIap.btn.btn-secondary.my-1(*ngIf="route.snapshot.queryParams.iap == 'true'", [attr.href]="'http://www.artstor.org/form/iap-request-form?name=' + assets[0].title + '&collectionName=' + assets[0].collectionName + '&id=' + assets[0].id + '&email=' + user.username", title="Request Image for Academic Publishing", tabindex="8", target="_blank") {{'ASSET_PAGE.BUTTONS.GET_IAP' | translate}}
-            a#buttonReportAssetError.btn.btn-secondary.my-1([attr.href]="'http://www.artstor.org/form/report-error?collectionName=' + assets[0].collectionName + '&id=' + assets[0].id + '&email=' + user.username", title="Report an error", tabindex="9", target="_blank") {{'ASSET_PAGE.BUTTONS.REPORT_ERROR' | translate}}
+            a#buttonReportAssetError.btn.btn-secondary.my-1([attr.href]="getErrorFormUrl(assets[0])", title="Report an error", tabindex="9", target="_blank") {{'ASSET_PAGE.BUTTONS.REPORT_ERROR' | translate}}
         
         //- .mt-2(*ngIf="showEditDetails")
         .mt-2([class.d-none]="!showEditDetails")
