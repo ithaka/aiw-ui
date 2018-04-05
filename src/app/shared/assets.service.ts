@@ -784,12 +784,11 @@ export class AssetService {
             // base facet field
             "name" : "", // ex: collectiontypes
             "mincount" : 1,
-            "limit" : 100
+            "limit" : 600
         }
         facetField.name = facetName
-        facetField.limit = 500
-        // Ignore junk data, collections with only one asset aren't collections we care about
-        facetField.mincount = 5
+        facetField.limit = 600
+        facetField.mincount = 1
         query.facet_fields = [facetField]
       }
 
