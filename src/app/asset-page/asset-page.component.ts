@@ -92,7 +92,10 @@ export class AssetPage implements OnInit, OnDestroy {
     private browseAssetDirection: string = '' 
 
     // Feature flag for managing 'Collection fields hyperlinked to collection page" on asset metadata
-    private collectionLinksFlag: boolean = false
+    private collectionLinksFlag: boolean = true
+
+    // List of collections from metadata 'collections' array
+    private collections: any[]
 
     private pagination: {
         totalPages: number,
@@ -345,6 +348,8 @@ export class AssetPage implements OnInit, OnDestroy {
                     this.getJstorRelatedResults(asset)
                 }
             }
+            // Assign collections array for this asset. Provided in metadata
+            this.collections = asset.collections
         }
         // Set download link
         this.setDownloadFull()
@@ -996,4 +1001,49 @@ export class AssetPage implements OnInit, OnDestroy {
         }
     }
     
+    /**
+     * Get link to Error Form
+     * - Generate url with Query params for reporting asset error
+     * @param asset Asset for which the user is reporting an error
+     * @returns string Error form url with query params
+     */
+    getErrorFormUrl(asset: Asset) : string {
+        let baseUrl = 'http://www.artstor.org/form/report-error' 
+        let collection = asset.collectionName
+        let id = asset.id
+        let email = this.user.username
+        let title = asset.title
+        let creator = asset.creator
+        let repo = (asset.formattedMetadata['Repository'] && asset.formattedMetadata['Repository'][0]) || ''
+        let fileName = asset.fileName 
+        let ssid = asset.SSID
+        return baseUrl+'?collectionName='+collection+'&id='+id+'&email='+email+'&title='+title+'&creator='+creator+'&fileName='+fileName+'&ssid='+ssid+'&repository='+repo
+    }
+
+    /**
+     * Sets collection id for the Collection href
+     * A collection may have a private and also public collection id.
+     * If both, we set the link to the public collection.
+     */
+    setCollectionLink():  string {
+        let linkId = ''
+        
+        // Asset has a single collection value
+        if (this.collections.length === 1) {
+            linkId = this.collections[0].id
+        }
+        else {
+            for (let col of this.collections) {
+                if (col.type === 5) {
+                    linkId = col.id
+                    return linkId // If collection is public return here
+                }
+                else {
+                    linkId = col.id
+                }
+            }
+        }
+        return linkId
+    }
+
 }
