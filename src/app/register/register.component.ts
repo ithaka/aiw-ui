@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { formGroupNameProvider } from '@angular/forms/src/directives/reactive_directives/form_group_name';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { Angulartics2 } from 'angulartics2';
@@ -30,9 +30,15 @@ export class RegisterComponent implements OnInit {
 
   private showJstorModal: boolean = false
 
+  private shibParameters: {
+    email: string,
+    samlTokenId: string
+  }
+
   constructor(
     private _auth: AuthService,
     private _router: Router,
+    private route: ActivatedRoute,
     private angulartics: Angulartics2,
     _fb: FormBuilder,
     private _analytics: AnalyticsService
@@ -57,6 +63,18 @@ export class RegisterComponent implements OnInit {
     if (this._auth.getUser() && this._auth.getUser().isLoggedIn) {
       this._router.navigate(['/home']);
     }
+
+
+    let email: string = this.route.snapshot.queryParams.email
+    let samlTokenId: string = this.route.snapshot.queryParams.samlTokenId
+    
+
+    if (email && samlTokenId) {
+      email && this.registerForm.controls.email.setValue(email) // set the email
+      this.shibParameters = { email: email, samlTokenId: samlTokenId }
+    }
+
+    console.log('shib', this.shibParameters)
 
     // Gets the roles and departments for the select controls
     // this._auth.getUserRoles()
@@ -115,6 +133,7 @@ export class RegisterComponent implements OnInit {
       dept: formValue.dept,
       info: formValue.info,
       survey: formValue.survey,
+      samlTokenId: this.route.snapshot.queryParams.samlTokenId,
       portal: "library"
     }
 
