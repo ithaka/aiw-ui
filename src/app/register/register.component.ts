@@ -74,16 +74,6 @@ export class RegisterComponent implements OnInit {
       this.shibParameters = { email: email, samlTokenId: samlTokenId }
     }
 
-    console.log('shib', this.shibParameters)
-
-    // Gets the roles and departments for the select controls
-    // this._auth.getUserRoles()
-    //   .take(1)
-    //   .subscribe((data) => {
-    //     this.userDepts = data.deptArray;
-    //     this.userRoles = data.roleArray;
-    //   });
-    //
     // Issues with unauthorized access to the service, and the fact that the data NEVER changes, led us to hardcode these values:
     this.userDepts = USER_DEPTS
     this.userRoles = USER_ROLES
@@ -133,8 +123,11 @@ export class RegisterComponent implements OnInit {
       dept: formValue.dept,
       info: formValue.info,
       survey: formValue.survey,
-      samlTokenId: this.route.snapshot.queryParams.samlTokenId,
       portal: "library"
+    }
+
+    if (this.shibParameters) {
+      userInfo.samlTokenId = this.shibParameters.samlTokenId
     }
 
     this._auth.registerUser(userInfo)
