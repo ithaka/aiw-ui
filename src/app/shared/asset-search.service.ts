@@ -265,7 +265,7 @@ export class AssetSearchService {
         colId = options.colId
       }
       else if(options.pcolId){ // For PC assets filter by Collection id : 37436
-        colId = '37436'
+        colId = options.pcolId // '37436'
       }
 
       filterArray.push("collections:\"" + colId + "\"");
