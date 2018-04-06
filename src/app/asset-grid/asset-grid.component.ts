@@ -236,22 +236,13 @@ export class AssetGrid implements OnInit, OnDestroy {
             return;
           }
 
-          this.results = allResults.thumbnails;
-
-          let rstd_imgs = false;
+          this.results = allResults.thumbnails
 
           if ('items' in allResults) {
-            this.itemIds = allResults.items;
-            this.ig = allResults;
-
-            for(let asset of this.ig.thumbnails){ // Check if the image group has any restricted asset.
-              if(asset.status !== 'available'){
-                rstd_imgs = true
-                break;
-              }
-            }
+            this.itemIds = allResults.items
+            this.ig = allResults
           }
-          this.rstd_imgs = rstd_imgs;
+          this.rstd_imgs = allResults.rstd_imgs ? true : false
 
           if (this.results && this.results.length > 0) {
             this.isLoading = false;
