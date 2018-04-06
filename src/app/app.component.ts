@@ -90,7 +90,7 @@ export class App {
 
   ngOnInit() {
     // Toggle Banner here to show alerts and updates!
-    this.showSkyBanner = true
+    // this.showSkyBanner = true
 
   }
 
