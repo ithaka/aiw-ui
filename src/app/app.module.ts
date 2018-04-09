@@ -66,6 +66,7 @@ import { Login } from './login'
 import { NoContent } from './no-content'
 import { LinkPage } from './link-page'
 import { RegisterComponent } from './register/register.component'
+import { LoginFormComponent } from './login-form'
 import {
   AccessDeniedModal,
   AddToGroupModal,
@@ -130,6 +131,7 @@ const APP_PROVIDERS = [
   PersonalCollectionService,
   SSOService,
   LocalPCService,
+  LoginFormComponent,
   LogService,
   ImageGroupService,
   ScriptService,
