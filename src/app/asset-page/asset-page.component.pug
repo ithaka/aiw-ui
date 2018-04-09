@@ -6,7 +6,7 @@
       .title-wrap(*ngIf="assets[0]")
         i.icon.icon-direction.icon-left(title="Previous in results", (click)="showPrevAsset()", [class.disabled]="assetNumber <= 1")
         .title([ngClass]="[ prevRouteParams.length > 0 ? 'shortened' : '' ]", [innerHTML]="assets[0].title ? assets[0].title : ''")
-        i.icon.icon-direction.icon-right(title="Next in results", (click)="showNextAsset()", [class.disabled]="assetNumber >= totalAssetCount")
+        i.icon.icon-direction.icon-right(title="Next in results", (click)="showNextAsset()", [class.disabled]="assetNumber >= totalAssetCount - restrictedAssetsCount")
       .page-tooltip
         span#assetPageNumber {{ assetNumber }}  OF
         = " "
