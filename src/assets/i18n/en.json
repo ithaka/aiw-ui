@@ -303,6 +303,10 @@
       "DESCRIPTION" : "Images in the Digital Library have been assigned geography terms according to two different criteria: location of the work (for site-specific works such as architecture, mural painting, public monuments, etc.), and nationality of the creator. When these two criteria overlap (for example, an American architect's preparatory drawing for a building built in another country), both country terms are assigned.<br/><br/>Users may browse these terms in conjunction with their classification sub-groupings, as well as keyword and Advanced Search, accessible from the Library home page.",
       "LEAD_IMAGE" : "http://library.artstor.org/assets/img/geography-splash.png"
     },
+    "MY_COLLECTION" : {
+      "HEADING" : "My Personal Collection",
+      "DESCRIPTION" : "Only you can see this collection. To share these images with others at your institution, add them to an image group.<br/><a href=\"http://support.artstor.org/?article-category=09-using-your-own-images\" target=\"_blank\">Learn more about Personal Collections</a>."
+    },
     "ERRORS": {
       "NO_INSTITUTIONAL_COLLECTIONS_HEADING": "No Institutional Collections found",
       "NO_INSTITUTIONAL_COLLECTIONS_PROMPT": "<p>There are no institutional collections available for your institution. You can add institutional collections using Shared Shelf.</p><p>Learn more about <a href=\"http://artstor.org/sharedshelf\" class=\"link\">Shared Shelf</a>.</p>",

@@ -68,28 +68,34 @@ export class PCollectionPage implements OnInit, OnDestroy {
             })
         } else if (this.colId) {
           this._assets.clearAssets();
-          this.getCollectionInfo(this.colId)
-            .then((data) => {
-              this._assets.queryAll(params, true);
+          if (this.colId == '37436') {
+            this.colName = "My Personal Collection"
+            this.colDescription = "BROWSE.MY_COLLECTION.DESCRIPTION"
+            this._assets.queryAll(params, true);
+          } else {
+            this.getCollectionInfo(this.colId)
+              .then((data) => {
+                this._assets.queryAll(params, true);
 
-              if (!Object.keys(data).length) {
-                throw new Error("No data!");
-              }
+                if (!Object.keys(data).length) {
+                  throw new Error("No data!");
+                }
 
-              this.assetCount = data['objCount'];
-              this.colName = data['collectionname'];
-              this.colDescription = data['blurburl'];
-              this.colThumbnail = data['leadImageURL'] ? data['leadImageURL'] : data['bigimageurl'];
+                this.assetCount = data['objCount'];
+                this.colName = data['collectionname'];
+                this.colDescription = data['blurburl'];
+                this.colThumbnail = data['leadImageURL'] ? data['leadImageURL'] : data['bigimageurl'];
 
-              // Set page title
-              this._title.setSubtitle(this.colName)
-            })
-            .catch((error) => {
-              console.error(error);
-              if(error.status === 401){
-                this.showaccessDeniedModal = true;
-              }
-            });
+                // Set page title
+                this._title.setSubtitle(this.colName)
+              })
+              .catch((error) => {
+                console.error(error);
+                if(error.status === 401){
+                  this.showaccessDeniedModal = true;
+                }
+              });
+          }
         }
       })
     );// End push to subscription
