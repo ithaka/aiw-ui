@@ -15,6 +15,7 @@ export class Asset {
     downloadLink: string
     downloadName: string
     tileSource: string
+    collections: any[]
     collectionId: number
     categoryId: number
     collectionType: number
