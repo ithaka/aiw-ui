@@ -1035,7 +1035,7 @@ export class AssetPage implements OnInit, OnDestroy {
     setCollectionLink(asset: Asset):  any[] {
         let link = []
         
-        // 103 Collection Id routes to /category/<collectionId>
+        // 103 Collection Id routes to /category/<categoryId>
         if (asset.collectionId === '103') {
             return ['/category', asset.categoryId]
         }
