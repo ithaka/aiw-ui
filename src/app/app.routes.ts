@@ -43,7 +43,7 @@ export const ROUTES: Routes = [
   { path: 'category', component: CategoryPage, canActivate:[AuthService] },
   { path: 'group/:igId', component: ImageGroupPage, canActivate:[AuthService] },
   { path: 'group', component: ImageGroupPage, canActivate:[AuthService] },
-  { path: 'cluster/:objectId', component: ClusterPage, canActivate:[AuthService] },
+  { path: 'cluster/:clusterId', component: ClusterPage, canActivate:[AuthService] },
   { path: 'cluster', component: ClusterPage, canActivate:[AuthService] },
   { path: 'browse', component: BrowsePage, canActivate:[AuthService], children: BrowseRoutes },
   { path: 'associated/:objectId/:colId', component: AssociatedPage, canActivate:[AuthService] },
