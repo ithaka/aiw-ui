@@ -1029,30 +1029,32 @@ export class AssetPage implements OnInit, OnDestroy {
 
     /**
      * Sets collection id for the Collection href
-     * A collection may have a private and also public collection id.
-     * If both, we set the link to the public collection.
+     * A collection may be private, institutional, or public.
+     * If both institional(2) and public(5), we set the link to the public collection id.
      */
-    setCollectionLink():  string {
-        let linkId = ''
-
-        if (!this.collections) { return }
+    setCollectionLink(asset: Asset):  any[] {
+        let link = []
         
-        // Asset has a single collection value
-        if (this.collections.length === 1) {
-            linkId = this.collections[0].id
+        // 103 Collection Id routes to /category/<collectionId>
+        if (asset.collectionId === 103) {
+            return ['/category', asset.collectionId]
         }
         else {
             for (let col of this.collections) {
-                if (col.type === 5) {
-                    linkId = col.id
-                    return linkId // If collection is public return here
+                // Private/Personal Collection
+                if (col.type === '6') {
+                    return ['/pcollection', col.id]
+                }
+                // Public Collection
+                else if (col.type === '5') {
+                    return ['/collection', col.id]
                 }
                 else {
-                    linkId = col.id
+                    link = ['/collection', col.id]
                 }
             }
         }
-        return linkId
+        return link
     }
 
 }
