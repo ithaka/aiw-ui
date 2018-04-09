@@ -47,6 +47,10 @@ export class MyCollectionsComponent implements OnInit {
   private loading: boolean = false;
 
   ngOnInit() {
+
+    // Enable PC featureFlag if the logged-in user is a beta tester
+    this.pcFeatureFlag = this._auth.isBetaUser()
+    
     // Set page title
     this._title.setSubtitle("Browse My Collections")
 
@@ -63,12 +67,6 @@ export class MyCollectionsComponent implements OnInit {
             if (this._auth.featureFlags['uploadPC']) {
                 this.pcFeatureFlag = true;
             }
-            else{
-                this.pcFeatureFlag = false;
-            }
-        }
-        else{
-            this.pcFeatureFlag = false;
         }
 
       })
