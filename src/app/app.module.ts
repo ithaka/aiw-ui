@@ -83,8 +83,7 @@ import {
   ServerErrorModal,
   SessionExpireModal,
   ShareIgLinkModal,
-  ShareLinkModal,
-  UploadImagesModal
+  ShareLinkModal
 } from './modals'
 import { UploaderComponent } from './uploader/uploader.component'
 import { GeneralSearchComponent } from './browse-page/browse-groups/general-search.component'
@@ -215,8 +214,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     TagsListComponent,
     ThumbnailComponent,
     TypeIdPipe,
-    UploaderComponent,
-    UploadImagesModal
+    UploaderComponent
   ],
   imports: [ // import Angular's modules
     BrowserModule,
