@@ -74,8 +74,6 @@ export class AssetPage implements OnInit, OnDestroy {
     // Used for generated view blob url
     private blobURL: string = '' 
     private prevRouteParams: any = []
-    private collectionName: string = ''
-
     private _storage
 
     private quizMode: boolean = false;
@@ -83,6 +81,12 @@ export class AssetPage implements OnInit, OnDestroy {
     private showAssetCaption: boolean = true;
 
     private assetIdProperty: string = 'artstorid'
+    /** 
+     *  Collection Variables 
+     *  - Specific to the first asset, this.assets[0]
+    **/
+    private collections: any[] = []
+    private collectionName: string = ''
     /** Controls the display of the collection type icon */
     private collectionType: {name: string, alt: string} = {name: '', alt: ''}
 
@@ -215,7 +219,7 @@ export class AssetPage implements OnInit, OnDestroy {
 
         // sets up subscription to allResults, which is the service providing thumbnails
         this.subscriptions.push(
-          this._assets.allResults.subscribe((allResults: any) => {
+          this._assets.allResults.subscribe((allResults) => {
               if(allResults.thumbnails){
                   // Set asset id property to reference
                 this.assetIdProperty = (allResults.thumbnails[0] && allResults.thumbnails[0].objectId) ? 'objectId' : 'artstorid'
@@ -244,7 +248,7 @@ export class AssetPage implements OnInit, OnDestroy {
 
         // Subscribe to pagination values
         this.subscriptions.push(
-          this._assets.pagination.subscribe((pagination: any) => {
+          this._assets.pagination.subscribe((pagination) => {
             this.pagination.page = parseInt(pagination.page);
             this.pagination.size = parseInt(pagination.size);
             if (this.originPage < 1) {
@@ -345,6 +349,9 @@ export class AssetPage implements OnInit, OnDestroy {
                     this.getJstorRelatedResults(asset)
                 }
             }
+            // Assign collections array for this asset. Provided in metadata
+            this.collections = asset.collections
+            this.updateMetadataFromLocal(this._localPC.getAsset(parseInt(this.assets[0].SSID)))
         }
         // Set download link
         this.setDownloadFull()
@@ -950,6 +957,35 @@ export class AssetPage implements OnInit, OnDestroy {
         this.showEditDetails = true
     }
 
+    private updateMetadataFromLocal(localData: LocalPCAsset): void {
+        if (!localData) { return } // if we don't have metadata for that asset, we won't run any of the update code
+
+        for(let key in localData.asset_metadata) {
+            let metadataLabel: string = this.mapLocalFieldToLabel(key)
+            let fieldValue: string = localData.asset_metadata[key]
+            // all objects in formattedMetadata are arrays, but these should all be length 0
+            fieldValue && (this.assets[0].formattedMetadata[metadataLabel] = [fieldValue])
+        }
+    }
+
+    /**
+     * Maps field name from LocalPCAsset object to the label from formattedMetadata on the asset
+     * @param field the field from the LocalPCAsset object for which you want ot set the metadata label value
+     */
+    private mapLocalFieldToLabel(field: string): string {
+        let fieldLabelMap = {
+            'creator': 'Creator',
+            'title': 'Title',
+            'work_type': 'Work Type',
+            'date': 'Date',
+            'location': 'Location',
+            'material': 'Material',
+            'description': 'Description',
+            'subject': 'Subject'
+        }
+        return fieldLabelMap[field]
+    }
+
     private closeEditDetails(action: string): void{
         this.uiMessages = {}
         // Hide and reset the edit details form
@@ -986,4 +1022,33 @@ export class AssetPage implements OnInit, OnDestroy {
         let ssid = asset.SSID
         return baseUrl+'?collectionName='+collection+'&id='+id+'&email='+email+'&title='+title+'&creator='+creator+'&fileName='+fileName+'&ssid='+ssid+'&repository='+repo
     }
+
+    /**
+     * Sets collection id for the Collection href
+     * A collection may have a private and also public collection id.
+     * If both, we set the link to the public collection.
+     */
+    setCollectionLink():  string {
+        let linkId = ''
+
+        if (!this.collections) { return }
+        
+        // Asset has a single collection value
+        if (this.collections.length === 1) {
+            linkId = this.collections[0].id
+        }
+        else {
+            for (let col of this.collections) {
+                if (col.type === 5) {
+                    linkId = col.id
+                    return linkId // If collection is public return here
+                }
+                else {
+                    linkId = col.id
+                }
+            }
+        }
+        return linkId
+    }
+
 }
