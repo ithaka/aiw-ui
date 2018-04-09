@@ -16,7 +16,7 @@ export class ClusterPage implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = [];
   // Cluster Asset Title
   private clusterObjTitle: string;
-  private objectId: string;
+  private clusterId: string;
 
   // TypeScript public modifiers
   constructor(
@@ -30,13 +30,13 @@ export class ClusterPage implements OnInit, OnDestroy {
     this.subscriptions.push(
       this.route.params
         .subscribe((routeParams: Params) => {
-          this.objectId = routeParams["objectId"];
+          this.clusterId = routeParams["clusterId"];
           let params = Object.assign({}, routeParams);
           // If a page number isn't set, reset to page 1!
           if (!params['page']){
             params['page'] = 1;
           }
-          if (this.objectId) {
+          if (this.clusterId) {
             this._assets.queryAll(params);
           }
           if(routeParams['objTitle']) {
@@ -44,7 +44,7 @@ export class ClusterPage implements OnInit, OnDestroy {
           }
         })
     );
-    this._analytics.setPageValues('cluster', this.objectId)
+    this._analytics.setPageValues('cluster', this.clusterId)
   } // OnInit
 
   ngOnDestroy() {

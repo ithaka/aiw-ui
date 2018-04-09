@@ -15,10 +15,10 @@ export class Asset {
     downloadLink: string
     downloadName: string
     tileSource: string
+    collections: any[]
     collectionId: number
     categoryId: number
     collectionType: number
-    collections: any[]
     contributinginstitutionid: number
     SSID: string
     fileName: string
@@ -206,7 +206,6 @@ export interface AssetData {
   collection_id: string
   collection_name: string
   collection_type: number
-  collections: any[]
   download_size: string
   fileProperties: FileProperty[] // array of objects with a key/value pair
   height: number
@@ -235,7 +234,6 @@ interface AssetDataResponse {
   collection_id: string
   collection_name: string
   collection_type: number
-  collections: any[]
   downloadSize?: string
   download_size?: string
   fileProperties: { [key: string]: string }[] // array of objects with a key/value pair

@@ -74,8 +74,6 @@ export class AssetPage implements OnInit, OnDestroy {
     // Used for generated view blob url
     private blobURL: string = '' 
     private prevRouteParams: any = []
-    private collectionName: string = ''
-
     private _storage
 
     private quizMode: boolean = false;
@@ -83,6 +81,12 @@ export class AssetPage implements OnInit, OnDestroy {
     private showAssetCaption: boolean = true;
 
     private assetIdProperty: string = 'artstorid'
+    /** 
+     *  Collection Variables 
+     *  - Specific to the first asset, this.assets[0]
+    **/
+    private collections: any[] = []
+    private collectionName: string = ''
     /** Controls the display of the collection type icon */
     private collectionType: {name: string, alt: string} = {name: '', alt: ''}
 
@@ -92,10 +96,7 @@ export class AssetPage implements OnInit, OnDestroy {
     private browseAssetDirection: string = '' 
 
     // Feature flag for managing 'Collection fields hyperlinked to collection page" on asset metadata
-    private collectionLinksFlag: boolean = true
-
-    // List of collections from metadata 'collections' array
-    private collections: any[]
+    private collectionLinksFlag: boolean = false
 
     private pagination: {
         totalPages: number,
