@@ -52,6 +52,9 @@ export class AssetPage implements OnInit, OnDestroy {
     private loadArrayLastAsset: boolean = false
     private isFullscreen: boolean = false
     private showAssetDrawer: boolean = false
+    
+    // Keep track of the restricted assets count from previous result set, to accurately navigate through available assets
+    private restrictedAssetsCount: number = 0
 
     /** controls whether or not the modals are visible */
     private showAgreeModal: boolean = false
@@ -224,7 +227,8 @@ export class AssetPage implements OnInit, OnDestroy {
                   // Set asset id property to reference
                 this.assetIdProperty = (allResults.thumbnails[0] && allResults.thumbnails[0].objectId) ? 'objectId' : 'artstorid'
 
-                  this.prevAssetResults.thumbnails = allResults.thumbnails;
+                  this.prevAssetResults.thumbnails = allResults.thumbnails
+                  this.restrictedAssetsCount = allResults.rstd_imgs_count && (allResults.rstd_imgs_count > 0) ? allResults.rstd_imgs_count : 0
                   if(this.loadArrayFirstAsset){
                       this.loadArrayFirstAsset = false;
                       if((this.prevAssetResults) && (this.prevAssetResults.thumbnails.length > 0)){

@@ -6,7 +6,7 @@
       .title-wrap(*ngIf="assets[0]")
         i.icon.icon-direction.icon-left(title="Previous in results", (click)="showPrevAsset()", [class.disabled]="assetNumber <= 1")
         .title([ngClass]="[ prevRouteParams.length > 0 ? 'shortened' : '' ]", [innerHTML]="assets[0].title ? assets[0].title : ''")
-        i.icon.icon-direction.icon-right(title="Next in results", (click)="showNextAsset()", [class.disabled]="assetNumber >= totalAssetCount")
+        i.icon.icon-direction.icon-right(title="Next in results", (click)="showNextAsset()", [class.disabled]="assetNumber >= totalAssetCount - restrictedAssetsCount")
       .page-tooltip
         span#assetPageNumber {{ assetNumber }}  OF
         = " "
@@ -24,7 +24,7 @@
         [index]="i",
         [assetCompareCount]="assets.length",
         [assetNumber]="assetNumber",
-        [assetGroupCount]="totalAssetCount",
+        [assetGroupCount]="totalAssetCount - restrictedAssetsCount",
         [assets]="assets",
         [isFullscreen]="isFullscreen",
         [showCaption]="showAssetCaption",
@@ -59,7 +59,7 @@
           | {{ showAssetCaption ? 'HIDE CAPTION' : 'SHOW CAPTION' }}
         .quiz-browse-cntnr(*ngIf="quizMode")
           i.icon.icon-direction.icon-left([class.disabled]="assetNumber <= 1", title="Previous in results", (click)="showPrevAsset()")
-          i.icon.icon-direction.icon-right([class.disabled]="assetNumber >= totalAssetCount", title="Next in results", (click)="showNextAsset()")
+          i.icon.icon-direction.icon-right([class.disabled]="assetNumber >= totalAssetCount - restrictedAssetsCount", title="Next in results", (click)="showNextAsset()")
         .shuffle-cntnr(*ngIf="quizMode", [ngClass]="[ quizShuffle ? 'active' : '' ]", (click)="toggleQuizShuffle()", title="Toggle Asset Suffle")
           span.shuffle-btn
           | SHUFFLE {{ quizShuffle ? 'ON' : 'OFF' }}
