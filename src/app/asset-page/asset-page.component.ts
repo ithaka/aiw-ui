@@ -180,7 +180,6 @@ export class AssetPage implements OnInit, OnDestroy {
 
         this.subscriptions.push(
             this.route.params.subscribe((routeParams) => {
-                console.log('got routeParams update')
                 // this.assets = []
                 let assetIdProperty = this._auth.featureFlags[routeParams['featureFlag']]? 'artstorid' : 'objectId'
                 this.assetGroupId = routeParams['groupId']
@@ -221,7 +220,6 @@ export class AssetPage implements OnInit, OnDestroy {
         // sets up subscription to allResults, which is the service providing thumbnails
         this.subscriptions.push(
           this._assets.allResults.subscribe((allResults) => {
-              console.log('got allResults update')
               if(allResults.thumbnails){
                   // Set asset id property to reference
                 this.assetIdProperty = (allResults.thumbnails[0] && allResults.thumbnails[0].objectId) ? 'objectId' : 'artstorid'
@@ -315,7 +313,6 @@ export class AssetPage implements OnInit, OnDestroy {
 
 
     handleLoadedMetadata(asset: Asset, assetIndex: number) {
-        console.log(asset)
         if (asset && asset['error']) {
             let err = asset['error']
             if (err.status === 403 || err.message == "Unable to load metadata!") {
