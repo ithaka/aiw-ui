@@ -242,7 +242,7 @@ export class AssetGrid implements OnInit, OnDestroy {
             this.itemIds = allResults.items
             this.ig = allResults
           }
-          this.rstd_imgs = allResults.rstd_imgs ? true : false
+          this.rstd_imgs = allResults.rstd_imgs_count && (allResults.rstd_imgs_count > 0) ? true : false
 
           if (this.results && this.results.length > 0) {
             this.isLoading = false;
