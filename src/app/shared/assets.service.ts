@@ -173,6 +173,19 @@ export class AssetService {
         this.paginationValue = paginationValue;
         this.paginationSource.next(paginationValue);
 
+        /**
+         * Include only availble assets to the resultsObj thumbnails array, Also keep the count for the restricted assets
+         */
+        if(resultObj.thumbnails){
+            let thumbnailsOrignalLength: number = resultObj.thumbnails.length
+            resultObj.thumbnails = resultObj.thumbnails.filter( thumbnail => {
+                let assetAvailable: boolean = thumbnail.status === 'not-available' ? false : true
+                return assetAvailable
+            })
+            if(thumbnailsOrignalLength > resultObj.thumbnails.length){
+                resultObj['rstd_imgs_count'] = thumbnailsOrignalLength - resultObj.thumbnails.length
+            }
+        }
         // Update results thumbnail array
         this.allResultsValue = resultObj;
         this.allResultsSource.next(resultObj);
