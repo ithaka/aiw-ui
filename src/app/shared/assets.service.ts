@@ -418,12 +418,18 @@ export class AssetService {
                 if (params.hasOwnProperty("objectId") && params["objectId"] !== "" && params.hasOwnProperty("colId") && params["colId"] !== "") {
                     //gets associated images thumbnails
                     this.loadAssociatedAssets(params.objectId, params.colId);
+                    /**
+                     * Future solr implementation
+                     * searchTerm = "frequentlygroupedwith:(" + params["objectId"] + ")"
+                     * this.loadSearch(searchTerm)
+                     */
                 } else if (params.hasOwnProperty("igId") && params["igId"] !== "") {
-                    //get image group thumbnails
+                    // Load IG via Groups service
                     this.loadIgAssets(params.igId);
-                } else if (params.hasOwnProperty("objectId") && params["objectId"] !== "") {
-                    //get clustered images thumbnails
-                    this.loadCluster(params.objectId);
+                } else if (params.hasOwnProperty("clusterId") && params["clusterId"] !== "") {
+                    // Filter by clusterid
+                    searchTerm = "clusterid:(" + params["clusterId"] + ")"
+                    this.loadSearch(searchTerm)
                 } else if (params.hasOwnProperty("pcolId") && params["pcolId"] !== "") {
                     //get personal collection thumbnails via SOLR
                     this.loadSearch(searchTerm)
@@ -714,32 +720,6 @@ export class AssetService {
         });
     }
 
-    private loadCluster(objectId: string){
-
-        let options = { withCredentials: true };
-        let startIndex = ((this.urlParams.page - 1) * this.urlParams.size) + 1;
-
-        let requestString = [this._auth.getUrl(), "cluster", objectId, "thumbnails", startIndex, this.urlParams.size].join("/");
-
-        this.http
-            .get(requestString, options)
-            .toPromise()
-            .then((res) => {
-                if (res['thumbnails']) {
-                    //The asset grid component expects the total number of assets in 'total'
-                    res['total'] = res['count']
-                    // Set the allResults object
-                    this.updateLocalResults(res);
-                } else {
-                    throw new Error("There are no thumbnails. Server responsed with status " + res['status']);
-                }
-            })
-            .catch((err) => {
-                console.log(err)
-                this.allResultsSource.error(err)
-            });
-    }
-
     // Used by Browse page
     public pccollection(){
         let options = { withCredentials: true };
@@ -795,12 +775,11 @@ export class AssetService {
             // base facet field
             "name" : "", // ex: collectiontypes
             "mincount" : 1,
-            "limit" : 100
+            "limit" : 600
         }
         facetField.name = facetName
-        facetField.limit = 500
-        // Ignore junk data, collections with only one asset aren't collections we care about
-        facetField.mincount = 5
+        facetField.limit = 600
+        facetField.mincount = 1
         query.facet_fields = [facetField]
       }
 
