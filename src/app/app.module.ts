@@ -64,6 +64,7 @@ import { AssociatedPage } from './associated-page'
 import { ImageGroupPage, PptModalComponent } from './image-group-page'
 import { Login } from './login'
 import { NoContent } from './no-content'
+import { LinkPage } from './link-page'
 import { RegisterComponent } from './register/register.component'
 import {
   AccessDeniedModal,
@@ -157,8 +158,6 @@ export function HttpLoaderFactory(http: HttpClient) {
   declarations: [
     AccessDeniedModal,
     AccountPage,
-    UploadImagesModal,
-    EditPersonalCollectionModal,
     AddToGroupModal,
     AgreeModalComponent,
     App,
@@ -175,11 +174,10 @@ export function HttpLoaderFactory(http: HttpClient) {
     ClickOutsideDirective,
     ClusterPage,
     CollectionPage,
-    PCollectionPage,
     ConfirmModal,
     DeleteIgModal,
-    SessionExpireModal,
     DownloadLimitModal,
+    EditPersonalCollectionModal,
     Footer,
     GeneralSearchComponent,
     Home,
@@ -188,6 +186,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     KeysPipe,
     LibraryComponent,
     LinkifyPipe,
+    LinkPage,
     Login,
     LoginReqModal,
     MediumEditorDirective,
@@ -198,6 +197,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     NoContent,
     NoIgModal,
     PaginationComponent,
+    PCollectionPage,
     PptModalComponent,
     PwdResetModal,
     RegisterComponent,
@@ -206,6 +206,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     SearchModal,
     SearchPage,
     ServerErrorModal,
+    SessionExpireModal,
     ShareIgLinkModal,
     GenerateCitation,
     ShareLinkModal,
@@ -214,7 +215,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     TagsListComponent,
     ThumbnailComponent,
     TypeIdPipe,
-    UploaderComponent
+    UploaderComponent,
+    UploadImagesModal
   ],
   imports: [ // import Angular's modules
     BrowserModule,
