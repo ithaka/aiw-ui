@@ -17,7 +17,7 @@ ang-sky-banner(*ngIf="showDeleteSuccessBanner", textValue="{{ 'PERSONAL_COLLECTI
       .row.pb-4
         .col-sm-9
           h1#pageTitle.h1--title-block {{ colName }}
-          p#pageDescription.page__description(#colDesc="", [innerHtml]="colDescription", [class.limit]="descCollapsed")
+          p#pageDescription.page__description(#colDesc="", [innerHtml]="colDescription | translate", [class.limit]="descCollapsed")
           .expander.link--action.small([class.hidden]="colDesc.clientHeight < 75", [class.collapsed]="descCollapsed", (click)="descCollapsed = !descCollapsed", [innerHtml]="descCollapsed ? 'More' : 'Less'", role="button") More
         .col-sm-3(*ngIf="colThumbnail.length > 0")
           .thumbnail-shelf

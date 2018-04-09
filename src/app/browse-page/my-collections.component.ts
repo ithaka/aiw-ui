@@ -109,8 +109,8 @@ export class MyCollectionsComponent implements OnInit {
     this._assets.pccollection()
       .then((res) => {
           if(res['pcCollection'] && res['pcCollection'].collectionid){
-            // we made this tag always expandable
-            let colTag = new Tag(res['pcCollection'].collectionid, res['pcCollection'].collectionname, true, null, { label: "pcollection", folder: true }, true);
+            // For Personal Collection assets filter by Global Personal Collection id : 37436
+            let colTag = new Tag("37436", res['pcCollection'].collectionname, true, null, { label: "pcollection", folder: true }, true);
             this.tags.push(colTag);
           }
           if(res['privateCollection'] && (res['privateCollection'].length > 0)){
