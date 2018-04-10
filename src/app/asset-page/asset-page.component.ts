@@ -1037,17 +1037,17 @@ export class AssetPage implements OnInit, OnDestroy {
         
         // 103 Collection Id routes to /category/<categoryId>
         if (String(asset.collectionId) === '103') {
-            return ['/category', String(asset.categoryId)]
+            link = ['/category', String(asset.categoryId)]
         }
         else {
             for (let col of this.collections) {
                 // Private/Personal Collection
                 if (col.type === '6') {
-                    return ['/pcollection', col.id]
+                    link = ['/pcollection', col.id]
                 }
                 // Public Collection
                 else if (col.type === '5') {
-                    return ['/collection', col.id]
+                    link = ['/collection', col.id]
                 }
                 else {
                     link = ['/collection', col.id]
