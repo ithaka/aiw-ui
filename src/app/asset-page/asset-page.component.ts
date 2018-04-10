@@ -145,7 +145,7 @@ export class AssetPage implements OnInit, OnDestroy {
         private angulartics: Angulartics2,
         private _title: TitleService,
         private scriptService: ScriptService,
-        private _sanitizer: DomSanitizer,
+        private _sanitizer: DomSanitizer
     ) {
         this._storage = locker.useDriver(Locker.DRIVERS.LOCAL)
         
@@ -163,6 +163,8 @@ export class AssetPage implements OnInit, OnDestroy {
 
     ngOnInit() {
         this.user = this._auth.getUser();
+        // Enable PC featureFlag if the logged-in user is a beta tester
+        this.pcFeatureFlag = this._auth.isBetaUser()
 
         // For "Go Back to Results"
         let prevRouteParams = this._storage.get('prevRouteParams');
@@ -194,11 +196,8 @@ export class AssetPage implements OnInit, OnDestroy {
 
                     if (this._auth.featureFlags['uploadPC']) {
                         this.pcFeatureFlag = true
-                    } else{
-                        this.pcFeatureFlag = false
                     }
                 } else{
-                    this.pcFeatureFlag = false
                     this.relatedResFlag = false
                 }
 
