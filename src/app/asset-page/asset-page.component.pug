@@ -10,7 +10,7 @@
       .page-tooltip
         span#assetPageNumber {{ assetNumber }}  OF
         = " "
-        span#assetPageCount {{ totalAssetCount }}
+        span#assetPageCount {{ totalAssetCount - restrictedAssetsCount }}
     //- Asset Viewer Row
     .asset-col([ngClass]="[ isFullscreen ? 'fullscreen-container' : 'col-md-8', showAssetDrawer && isFullscreen ? 'drawer' : '' ]")
       artstor-viewer(*ngFor="let assetId of (isFullscreen ? assetIds : [assetIds[0]]); let i = index",
