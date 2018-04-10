@@ -107,6 +107,8 @@ export class PCollectionPage implements OnInit, OnDestroy {
       this.deleteBannerParams.title = params.deleteSuccess
     }))
     this._analytics.setPageValues('collection', this.colId)
+
+    this.pollPCAssetsStatus()
   } // OnInit
 
   ngOnDestroy() {
@@ -131,6 +133,15 @@ export class PCollectionPage implements OnInit, OnDestroy {
      this._router.navigate(['/home']);
   }
 
+  private pollPCAssetsStatus(): void{
+    this._assets.getPCImageStatus('1002210800')
+      .then((data) => {
+        console.log('data', data)
+      })
+      .catch((error) => {
+        console.error(error)
+      })
+  }
   // private updateSearchInRes(value: boolean): void{
   //  this.searchInResults = value;
   // }
