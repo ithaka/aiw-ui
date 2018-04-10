@@ -29,6 +29,9 @@ import 'core-js/es6/reflect';
 import 'core-js/es7/reflect';
 import 'zone.js/dist/zone';
 
+// Blob polyfill https://angular.io/guide/browser-support
+import 'blob-polyfill';
+
 // Typescript emit helpers polyfill
 import 'ts-helpers';
 
