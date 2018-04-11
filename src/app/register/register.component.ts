@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { formGroupNameProvider } from '@angular/forms/src/directives/reactive_directives/form_group_name';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { Angulartics2 } from 'angulartics2';
@@ -30,9 +30,15 @@ export class RegisterComponent implements OnInit {
 
   private showJstorModal: boolean = false
 
+  private shibParameters: {
+    email: string,
+    samlTokenId: string
+  }
+
   constructor(
     private _auth: AuthService,
     private _router: Router,
+    private route: ActivatedRoute,
     private angulartics: Angulartics2,
     _fb: FormBuilder,
     private _analytics: AnalyticsService
@@ -58,14 +64,16 @@ export class RegisterComponent implements OnInit {
       this._router.navigate(['/home']);
     }
 
-    // Gets the roles and departments for the select controls
-    // this._auth.getUserRoles()
-    //   .take(1)
-    //   .subscribe((data) => {
-    //     this.userDepts = data.deptArray;
-    //     this.userRoles = data.roleArray;
-    //   });
-    //
+
+    let email: string = this.route.snapshot.queryParams.email
+    let samlTokenId: string = this.route.snapshot.queryParams.samlTokenId
+    
+
+    if (email && samlTokenId) {
+      email && this.registerForm.controls.email.setValue(email) // set the email
+      this.shibParameters = { email: email, samlTokenId: samlTokenId }
+    }
+
     // Issues with unauthorized access to the service, and the fact that the data NEVER changes, led us to hardcode these values:
     this.userDepts = USER_DEPTS
     this.userRoles = USER_ROLES
@@ -116,6 +124,10 @@ export class RegisterComponent implements OnInit {
       info: formValue.info,
       survey: formValue.survey,
       portal: "library"
+    }
+
+    if (this.shibParameters) {
+      userInfo.samlTokenId = this.shibParameters.samlTokenId
     }
 
     this._auth.registerUser(userInfo)

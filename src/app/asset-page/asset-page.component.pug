@@ -10,7 +10,7 @@
       .page-tooltip
         span#assetPageNumber {{ assetNumber }}  OF
         = " "
-        span#assetPageCount {{ totalAssetCount }}
+        span#assetPageCount {{ totalAssetCount - restrictedAssetsCount }}
     //- Asset Viewer Row
     .asset-col([ngClass]="[ isFullscreen ? 'fullscreen-container' : 'col-md-8', showAssetDrawer && isFullscreen ? 'drawer' : '' ]")
       artstor-viewer(*ngFor="let assetId of (isFullscreen ? assetIds : [assetIds[0]]); let i = index",
@@ -129,8 +129,8 @@
             ng-container(*ngIf="fieldName != 'Rights'")
               .label([attr.id]="cleanId(fieldName)") {{ fieldName }}
               div(*ngFor="let value of assets[0].formattedMetadata[fieldName]")
-                a.value.col-link(*ngIf="(fieldName === 'Collection') && collectionLinksFlag", [routerLink]="setCollectionLink(assets[0])", [innerHTML]="cleanFieldValue(value)")
-                .value(*ngIf="(fieldName !== 'Collection' )|| !collectionLinksFlag", [innerHTML]="cleanFieldValue(value) | linkify")
+                a.value.col-link(*ngIf="(fieldName === 'Collection')", [routerLink]="setCollectionLink(assets[0])", [innerHTML]="cleanFieldValue(value)")
+                .value(*ngIf="(fieldName !== 'Collection')", [innerHTML]="cleanFieldValue(value) | linkify")
           .meta-block
             .label#Rights Rights
             .value([innerHtml]="cleanFieldValue(assets[0].formattedMetadata.Rights[0]) | linkify")
