@@ -534,5 +534,8 @@
       "STAY_LOGGED_OUT": "Stay Logged Out",
       "LOG_IN": "Log In"
     }
+  },
+  "SHIB_LINK_PAGE": {
+    "NO_ACCOUNT_FOUND_MESSAGE": "No account was found for your institutional login. Register for a new account to link with your institution."
   }
 }
