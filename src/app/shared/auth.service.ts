@@ -15,6 +15,9 @@ import { Angulartics2 } from 'angulartics2';
 import { AnalyticsService } from '../analytics.service';
 import { AppConfig } from '../app.service';
 
+// Import beta tester emails
+import { BETA_USR_EMAILS } from '../beta-users-email.ts'
+
 // For session timeout management
 
 // import { LoginService } from '../login/login.service';
@@ -52,6 +55,8 @@ export class AuthService implements CanActivate {
   private idleState: string = 'Not started.';
   private idleUtil: IdleWatcherUtil = new IdleWatcherUtil(); // Idle watcher, session timeout values are abstracted to a utility
   public showUserInactiveModal: Subject<boolean> = new Subject(); //Set up subject observable for showing inactive user modal
+
+  private betausers: Array<string>
 
   /**
    * We need to make SURE /userinfo is not cached
@@ -214,6 +219,11 @@ export class AuthService implements CanActivate {
     setInterval(() => {
       this.refreshUserSession()
     }, userInfoInterval)
+    
+    // Set beta users email
+    // Disabled until Publishing Errors are complete (AIR-1481)
+    // this.betausers = Object.assign(BETA_USR_EMAILS)
+    this.betausers = []
   }
 
   // Reset the idle watcher
@@ -658,6 +668,19 @@ export class AuthService implements CanActivate {
       data,
       { withCredentials: true, headers: headers }
     )
+  }
+
+
+  /**
+   * Check if the logged-in username matches the beta tester emails
+   */
+  public isBetaUser(): boolean{
+    let isBeta: boolean = false
+    let loggedInUser: any = this.getUser()
+    if(loggedInUser && loggedInUser.username){
+      isBeta = this.betausers.indexOf(loggedInUser.username) > -1
+    }
+    return isBeta
   }
 }
 
