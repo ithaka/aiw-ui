@@ -10,7 +10,6 @@ import { BehaviorSubject, Observable, Subscription } from 'rxjs/Rx'
 import { AppConfig } from '../app.service'
 import { AuthService, User, AssetService } from './../shared'
 import { AnalyticsService } from '../analytics.service'
-import { SSOService } from './../shared/sso.service'
 
 @Component({
   selector: 'ang-login-form',
@@ -37,9 +36,7 @@ export class LoginFormComponent implements OnInit {
   public showRegister: boolean = false
 
   private loginInstName: string = '' /** Bound to the autocomplete field */
-  private stashedRoute: string
   private loginLoading = false
-  private dataService: LocalData
 
   /** 
    * Observable for autocomplete list of institutions
@@ -65,9 +62,6 @@ export class LoginFormComponent implements OnInit {
   }
 
   ngOnInit() {
-    // Check for a stashed route to pass to proxy links
-    this.stashedRoute = this._storage.get("stashedRoute")
-
     if (this._app.config.copyModifier) {
       this.copyBase = this._app.config.copyModifier + "."
     }
@@ -82,37 +76,7 @@ export class LoginFormComponent implements OnInit {
       }, (err) => {
         console.error(err)
       })
-
-    // // The true institutions call. Don't throw an error, since the above call will provide a backup
-    // this._auth.getInstitutions()
-    //   .then((data) => {
-    //     if (data['items']) {
-    //       this.loginInstitutions = data['items'];
-    //       this.dataService = this._completer.local(this.instListObs, 'name', 'name');          
-    //     }
-    //   })
-    //   .catch((error) => {
-    //     console.error(error);
-    //   });
-
-    // this._analytics.setPageValues('login', '')
   } // OnInit
-
-
-
-  // private sortInstitution(event) : void {
-  //   // sort array by string input
-  //   let term = this.loginInstName
-  //   let termReg = new RegExp(term, 'i')
-    
-  //   let filtered = this.loginInstitutions.filter( inst => {
-  //     return inst && inst.name.search(termReg) > -1
-  //   })
-  //   filtered = filtered.sort((a, b) => {
-  //       return a.name.search(termReg) - b.name.search(termReg)
-  //   });
-  //   this.instListSubject.next(filtered)
-  // }
 
   loadForUser(data: any) {
     if (data && data.user) {
