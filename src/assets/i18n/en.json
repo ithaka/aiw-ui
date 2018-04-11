@@ -536,6 +536,6 @@
     }
   },
   "SHIB_LINK_PAGE": {
-    "NO_ACCOUNT_FOUND_MESSAGE": "No account was found for your institutional login. Register for a new account to link with your institution."
+    "NO_ACCOUNT_FOUND_MESSAGE": "Log in with your existing Artstor username and password in order to link your account."
   }
 }
