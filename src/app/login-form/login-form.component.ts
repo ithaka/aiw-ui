@@ -1,4 +1,16 @@
-import { Component, OnInit } from '@angular/core';
+import { OnInit } from '@angular/core'
+import { Locker } from 'angular2-locker'
+import { Component } from '@angular/core'
+import { Router, ActivatedRoute } from '@angular/router'
+import { Location } from '@angular/common'
+import { Angulartics2 } from 'angulartics2'
+import { CompleterService, LocalData } from 'ng2-completer'
+import { BehaviorSubject, Observable, Subscription } from 'rxjs/Rx'
+
+import { AppConfig } from '../app.service'
+import { AuthService, User, AssetService } from './../shared'
+import { AnalyticsService } from '../analytics.service'
+import { SSOService } from './../shared/sso.service'
 
 @Component({
   selector: 'ang-login-form',
@@ -28,7 +40,6 @@ export class LoginFormComponent implements OnInit {
   private stashedRoute: string
   private loginLoading = false
   private dataService: LocalData
-  private featureFlag: string
 
   /** 
    * Observable for autocomplete list of institutions
@@ -43,7 +54,6 @@ export class LoginFormComponent implements OnInit {
     private _auth: AuthService,
     private _assets: AssetService,
     private _completer: CompleterService,
-    private _sso: SSOService,
     private route: ActivatedRoute,
     private router: Router,
     private location: Location,
@@ -55,25 +65,11 @@ export class LoginFormComponent implements OnInit {
   }
 
   ngOnInit() {
-
-    if (this.route.snapshot.queryParams.featureFlag == 'sso-hack') {
-      this.featureFlag = 'sso-hack'
-    }
     // Check for a stashed route to pass to proxy links
     this.stashedRoute = this._storage.get("stashedRoute")
 
     if (this._app.config.copyModifier) {
       this.copyBase = this._app.config.copyModifier + "."
-    }
-
-    // Provide redirects for initPath detected in index.html from inital load
-    if ( initPath && (initPath.indexOf('ViewImages') > -1 || initPath.indexOf('ExternalIV') > -1 ) ) {
-      this.router.navigateByUrl(initPath)
-        .then( result => {
-          // Clear variable to prevent further redirects
-          initPath = null
-          console.log('Redirect to initial path attempt: ' + result)
-        })
     }
 
     // this handles showing the register link for only ip auth'd users
@@ -87,50 +83,36 @@ export class LoginFormComponent implements OnInit {
         console.error(err)
       })
 
-    // The true institutions call. Don't throw an error, since the above call will provide a backup
-    this._auth.getInstitutions()
-      .then((data) => {
-        if (data['items']) {
-          this.loginInstitutions = data['items'];
-          this.dataService = this._completer.local(this.instListObs, 'name', 'name');          
-        }
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+    // // The true institutions call. Don't throw an error, since the above call will provide a backup
+    // this._auth.getInstitutions()
+    //   .then((data) => {
+    //     if (data['items']) {
+    //       this.loginInstitutions = data['items'];
+    //       this.dataService = this._completer.local(this.instListObs, 'name', 'name');          
+    //     }
+    //   })
+    //   .catch((error) => {
+    //     console.error(error);
+    //   });
 
-    this._analytics.setPageValues('login', '')
-
-    if (this.featureFlag == 'sso-hack') {
-      console.log('we are hacking sso')
-      this._sso.getSSOCredentials()
-      .take(1)
-      .subscribe((res) => {
-        console.log(res)
-        if (res.username && res.username.length > 0 && res.password && res.password.length > 0) {
-          this.login(new User(res.username, res.password))
-        }
-      }, (err) => {
-        console.error(err)
-      })
-    }
+    // this._analytics.setPageValues('login', '')
   } // OnInit
 
 
 
-  private sortInstitution(event) : void {
-    // sort array by string input
-    let term = this.loginInstName
-    let termReg = new RegExp(term, 'i')
+  // private sortInstitution(event) : void {
+  //   // sort array by string input
+  //   let term = this.loginInstName
+  //   let termReg = new RegExp(term, 'i')
     
-    let filtered = this.loginInstitutions.filter( inst => {
-      return inst && inst.name.search(termReg) > -1
-    })
-    filtered = filtered.sort((a, b) => {
-        return a.name.search(termReg) - b.name.search(termReg)
-    });
-    this.instListSubject.next(filtered)
-  }
+  //   let filtered = this.loginInstitutions.filter( inst => {
+  //     return inst && inst.name.search(termReg) > -1
+  //   })
+  //   filtered = filtered.sort((a, b) => {
+  //       return a.name.search(termReg) - b.name.search(termReg)
+  //   });
+  //   this.instListSubject.next(filtered)
+  // }
 
   loadForUser(data: any) {
     if (data && data.user) {
@@ -231,7 +213,6 @@ export class LoginFormComponent implements OnInit {
             this.errorMsg = 'There was an issue with your account, please contact support.';
           } else {
             this.angulartics.eventTrack.next({ action:"remoteLogin", properties: { category: "login", label: "success" }});
-            this.featureFlag == 'sso-hack' && this.recordSSOLogin(user.username, user.password)
             this.loadForUser(data);
             this._auth.resetIdleWatcher() // Start Idle on login
           }
@@ -248,16 +229,6 @@ export class LoginFormComponent implements OnInit {
         // Check if old bad-case password
         this.isBadCasePassword(user)
       });
-  }
-
-  recordSSOLogin(username: string, password: string): void {
-    this._sso.postSSOCredentials(username, password)
-    .take(1)
-    .subscribe((res) => {
-      console.log('we done it!', res)
-    }, (err) => {
-      console.error(err)
-    })
   }
 
   getLoginErrorMsg(serverMsg: string) : string {
@@ -312,64 +283,4 @@ export class LoginFormComponent implements OnInit {
       return false;
     }
   }
-
-  /**
-   * Fired when the user logs in through their institution
-   */
-  goToInstLogin(): void {
-    let len: number = this.loginInstitutions.length
-    let selectedInst: any
-    let url: string
-    // search through the institutions store locally and see if the name the user selected matches one
-    for (let i = 0; i < len; i++) {
-      if (this.loginInstitutions[i].name == this.loginInstName) {
-        selectedInst = this.loginInstitutions[i]
-        break
-      }
-    }
-    url = selectedInst.entityID ? selectedInst.entityID : '';
-
-    // if the user selected some institution that doesn't exist, kick them out!!
-    if (!selectedInst) {
-      this.instErrorMsg = "LOGIN.INSTITUTION_LOGIN.ERRORS.SELECT_INSTITUTION";
-      return;
-    }
-
-    if (selectedInst.type === 'proxy') {
-      // Hashes within a parameter are interpretted incorrectly, and we don't need 'em
-      let stashedRoute = this.stashedRoute ? this.stashedRoute.replace("#/", "") : "/"
-      // WORKAROUND: Auth is still cleaning data to replace www.artstor.org with library.artstor.org
-      if (url.match("//www.artstor.org")) {
-        url = url.replace("//www.artstor.org", "//library.artstor.org")
-      }
-      // Handle passing stashed url to proxies
-      let urlToken = /!+TARGET_FULL_PATH!+/g;
-      let pathToken = /!+TARGET_NO_SERVER!+/g;
-      if (url.match(urlToken)) {
-        /**
-         * EZProxy forwarding
-         * Auth provides !!!TARGET_FULL_PATH!!! as a string to replace for forwarding
-         */
-        url = url.replace(urlToken, document.location.host + stashedRoute )
-      } else {
-        /**
-         * WAM Proxy forwarding
-         * Auth provides !!!TARGET_NO_SERVER!!! as a token/string to replace for forwarding
-         */
-        // pathTokens are appended after a trailing forward slash
-        if (stashedRoute[0] === "/") { stashedRoute = stashedRoute.substr(1) }
-        url = url.replace(pathToken, stashedRoute )
-      }
-      // If proxy, simply open url:
-      window.open(url);
-    } else {
-      // Else if Shibboleth, add parameters:
-      // eg. for AUSS https://sso.artstor.org/sso/shibssoinit?idpEntityID=https://idp.artstor.org/idp/shibboleth&target=https%3A%2F%2Fsso.artstor.org%2Fsso%2Fshibbolethapplication%3Fo%3D0049a162-7dbe-4fcf-adac-d257e8db95e5
-  
-      let origin = window.location.origin + '/#/home';
-      let ssoSubdomain = this._auth.getSubdomain() == 'library' ? 'sso' : 'sso.' + this._auth.getSubdomain()
-      window.open('https://' + ssoSubdomain + '.artstor.org/sso/shibssoinit?idpEntityID=' + encodeURIComponent(url) + '&o=' + encodeURIComponent(origin));
-    }
-  }
-
 }
