@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core'
+import { Router, ActivatedRoute } from '@angular/router'
 
 @Component({
   selector: 'ang-link-page',
@@ -6,7 +7,15 @@ import { Component, OnInit } from '@angular/core';
 })
 
 export class LinkPage implements OnInit {
-  constructor() { }
+  constructor(
+    private route: ActivatedRoute,
+    private _router: Router
+  ) { }
 
-  ngOnInit() { }
+  ngOnInit() {
+    // nav back to regular login if there is no samlTokenId
+    if (!this.route.snapshot.queryParams.samlTokenId) {
+      this._router.navigate(['/login'])
+    }
+  }
 }
