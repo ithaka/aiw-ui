@@ -34,6 +34,13 @@ export class PCollectionPage implements OnInit, OnDestroy {
 
   private subscriptions: Subscription[] = []
 
+  private publishingAssets: any = {
+    ssids: [],
+    showPublishingMsgs: true // Flag that hides the publishing msgs untill a new PC asset is uploaded
+  }
+  private pub_que_count: number = 0
+  private pub_failure_count: number = 0
+
   constructor(
     private _assets: AssetService,
     private _auth: AuthService,
@@ -45,6 +52,8 @@ export class PCollectionPage implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
+    this.pollNewPCAssetsStatus()
+
     this.subscriptions.push(
       this.route.params.subscribe((routeParams) => {
         // Make copy of params object so we can modify it
@@ -107,6 +116,7 @@ export class PCollectionPage implements OnInit, OnDestroy {
       this.deleteBannerParams.title = params.deleteSuccess
     }))
     this._analytics.setPageValues('collection', this.colId)
+
   } // OnInit
 
   ngOnDestroy() {
@@ -129,6 +139,77 @@ export class PCollectionPage implements OnInit, OnDestroy {
   private resourceAccessDenied(): void{
     this.showaccessDeniedModal = false;
      this._router.navigate(['/home']);
+  }
+
+  private pollNewPCAssetsStatus(): void{
+    let publishingAssets = this._auth.getFromStorage('publishingAssets')
+    if(publishingAssets){
+      this.publishingAssets = publishingAssets
+    }
+    
+
+    let statusArray: Array<any> = []
+    for(let ssid of this.publishingAssets['ssids']){
+      this._assets.getPCImageStatus(ssid)
+        .subscribe(
+          (res) => {
+            let assetStatus = '' // i.e. available, publishing_que, publishing_failure
+            if(res.status){
+              assetStatus = 'available'
+            } else if(res.error && res.error.message === 'Published & Indexed OK'){
+              assetStatus = 'publishing_que'
+            } else if(res.error && ( res.error.message === 'Failed to publish, trying again' || res.error.message === 'Failed to index, trying again' )){
+              assetStatus = 'publishing_failure'
+            }
+            let statusObj = {
+              ssid: ssid,
+              status: assetStatus
+            }
+            statusArray.push(statusObj)
+            if(statusArray.length === this.publishingAssets['ssids'].length){ // Was last asset in the array
+              this.updateNewPCAssetStatus(statusArray)
+            }
+        }, (error) => {
+          console.error(error)
+        })
+    }
+  }
+
+  private updateNewPCAssetStatus(statusArray: Array<any>): void{
+    // Filter assets from publishingAssets that are available now
+    statusArray = statusArray.filter((statusObj) => {
+      return statusObj.status !== 'available'
+    })
+
+    let ssids: Array<string> = []
+    let pub_que_count: number = 0
+    let pub_failure_count: number = 0 
+    for(let statusObj of statusArray){
+      ssids.push(statusObj.ssid)
+      if(statusObj.status === 'publishing_que'){
+        pub_que_count++
+      } else if(statusObj.status === 'publishing_failure'){
+        pub_failure_count++
+      }
+    }
+    let publishingAssets: any = {
+      ssids: ssids,
+      showPublishingMsgs: this.publishingAssets['showPublishingMsgs']
+    }
+    this._auth.store('publishingAssets', publishingAssets)
+    this.pub_que_count = pub_que_count
+    this.pub_failure_count = pub_failure_count
+
+    if(ssids.length > 0){ // If all the uploaded assets are still not available then poll for update in 2 mins
+      setTimeout( () => {
+        this.pollNewPCAssetsStatus()
+      }, 120000)
+    }
+  }
+
+  private closePublishingMsgs(): void{
+    this.publishingAssets['showPublishingMsgs'] = false
+    this._auth.store('publishingAssets', this.publishingAssets)
   }
 
   // private updateSearchInRes(value: boolean): void{
