@@ -36,7 +36,6 @@ export class Login {
 
   private loginInstName: string = '' /** Bound to the autocomplete field */
   private stashedRoute: string
-  private loginLoading = false
   private dataService: LocalData
 
   /** 
