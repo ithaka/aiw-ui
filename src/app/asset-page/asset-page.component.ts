@@ -96,10 +96,7 @@ export class AssetPage implements OnInit, OnDestroy {
     private collectionTypeHandler: CollectionTypeHandler = new CollectionTypeHandler()
     
     // To keep a track of browse direction ('prev' / 'next') while browsing through assets, to load next asset if the current asset is un-authorized
-    private browseAssetDirection: string = '' 
-
-    // Feature flag for managing 'Collection fields hyperlinked to collection page" on asset metadata
-    private collectionLinksFlag: boolean = false
+    private browseAssetDirection: string = ''
 
     private pagination: {
         totalPages: number,
@@ -191,7 +188,6 @@ export class AssetPage implements OnInit, OnDestroy {
                 // Find feature flags
                 if(routeParams && routeParams['featureFlag']){
                     this._auth.featureFlags[routeParams['featureFlag']] = true
-                    this.collectionLinksFlag = this._auth.featureFlags['collection_links']
                     this.relatedResFlag = this._auth.featureFlags['related-res-hack'] ? true : false
 
                     if (this._auth.featureFlags['uploadPC']) {
