@@ -153,7 +153,7 @@ export class LibraryComponent implements OnInit {
                     // Append titles to the facets (we can't replace "name", as its the ID, which we need)
                     this.categoryFacets = facetData
                       .map( facet => {
-                        facet.title = categoryIndex[facet.name] 
+                        facet.title = categoryIndex[facet.name] ? categoryIndex[facet.name] : ""
                         return facet
                       })
                       // Then also sort the facets, A-Z
