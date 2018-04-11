@@ -980,12 +980,10 @@ export class AssetService {
      * Get metadata about a collection
      * @param colId The collection ID
      */
-    public getPCImageStatus(ssid: string) {
+    public getPCImageStatus(ssid: string): Observable<any> {
         let options = { withCredentials: true };
-
         return this.http
             .get(this._auth.getUrl() + '/v1/pcollection/image-status/' + ssid, options)
-            .toPromise()
     }
 
     /**
