@@ -38,6 +38,7 @@ export class AssetPage implements OnInit, OnDestroy {
     private encryptedAccess: boolean = false
     private document = document
     private URL = URL
+    private navigator = navigator
 
     // Array to support multiple viewers on the page
     private assets: Asset[] = []
@@ -52,6 +53,9 @@ export class AssetPage implements OnInit, OnDestroy {
     private loadArrayLastAsset: boolean = false
     private isFullscreen: boolean = false
     private showAssetDrawer: boolean = false
+
+    // MS IE/Edge for Download View
+    private isMSAgent: boolean = false
     
     // Keep track of the restricted assets count from previous result set, to accurately navigate through available assets
     private restrictedAssetsCount: number = 0
@@ -273,6 +277,9 @@ export class AssetPage implements OnInit, OnDestroy {
         })
 
         this._analytics.setPageValues('asset', this.assets[0] && this.assets[0].id)
+
+        // MS Browser Agent ?
+        this.isMSAgent = this.navigator.msSaveOrOpenBlob !== undefined
 
         // Append Crazy Egg A/B Testing script to head
         this.scriptService.load('crazyegg')
@@ -680,10 +687,14 @@ export class AssetPage implements OnInit, OnDestroy {
             let blob = this._search.downloadViewBlob(downloadLink)
             .take(1)
             .subscribe((blob) => {
-
-                this.blobURL = this.URL.createObjectURL(blob)
-                this.generatedViewURL = this._sanitizer.bypassSecurityTrustUrl(this.blobURL)
-
+                
+                if (this.isMSAgent) {
+                    this.navigator.msSaveBlob(blob, 'download')
+                }
+                else {
+                    this.blobURL = this.URL.createObjectURL(blob)
+                    this.generatedViewURL = this._sanitizer.bypassSecurityTrustUrl(this.blobURL)
+                }
             }, (err) => {
                 console.error('Error returning generated download view', err)
             })
