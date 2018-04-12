@@ -644,6 +644,38 @@ export class AssetPage implements OnInit, OnDestroy {
         }
     }
 
+
+    // *************************
+    private runDownload(dlink): any {
+
+        // Download our blob
+        let blob = this._search.downloadViewBlob(dlink)
+        .take(1)
+        .subscribe((blob) => {
+
+            console.log(blob)
+            console.log(blob.size)
+
+            if (!blob.size)
+                return false
+            else {
+                if (this.isMSAgent) {
+                    this.navigator.msSaveBlob(blob, 'download')
+                }
+                else {
+                    this.blobURL = this.URL.createObjectURL(blob)
+                    this.generatedViewURL = this._sanitizer.bypassSecurityTrustUrl(this.blobURL)
+                }
+                return true
+            }
+            }, (err) => {
+                console.error('Error returning generated download view', err)
+                return false
+                // Service is failing
+            })
+        
+    }
+
     /** Calls downloadViewBlob in AssetSearch service to retrieve blob file,
         and then sets generatedViewUrl to this local reference. **/
         
@@ -682,22 +714,17 @@ export class AssetPage implements OnInit, OnDestroy {
 
             // Generate the view url from tilemap service
             let downloadLink: string = asset.tileSource.replace('info.json','') + xOffset +','+yOffset+','+zoomX+','+zoomY+'/'+viewX+','+viewY+'/0/native.jpg'
+            
+            let result = this.runDownload(downloadLink)
+            let retry = 0
 
-            // Download our blob
-            let blob = this._search.downloadViewBlob(downloadLink)
-            .take(1)
-            .subscribe((blob) => {
-                
-                if (this.isMSAgent) {
-                    this.navigator.msSaveBlob(blob, 'download')
-                }
-                else {
-                    this.blobURL = this.URL.createObjectURL(blob)
-                    this.generatedViewURL = this._sanitizer.bypassSecurityTrustUrl(this.blobURL)
-                }
-            }, (err) => {
-                console.error('Error returning generated download view', err)
-            })
+            if (!result && retry < 2) {
+              this.runDownload(downloadLink)
+            }
+            else {
+                result = this.runDownload(downloadLink)
+                retry += 1
+            }
         }
     }
 
