@@ -35,7 +35,7 @@ export class TagComponent {
       if (this.tag.type.label === 'collection') {
         this.linkRoute = '/collection';
       }
-      if (this.tag.type.label === 'pcollection') {
+      if (this.tag.type.label === 'pcollection' || this.tag.type.label === 'privateCollection') {
         this.linkRoute = '/pcollection';
       }
       if (this.tag.type.label === 'group' && this.tag.type.folder !== true) {
