@@ -113,8 +113,7 @@ export class MyCollectionsComponent implements OnInit {
           }
           if(res['privateCollection'] && (res['privateCollection'].length > 0)){
             for (let colObj of res['privateCollection']){
-                // we made this tag always expandable
-                let privTag = new Tag(colObj.collectionid, colObj.collectionname, true, null, { label: "pcollection", folder: true }, true);
+                let privTag = new Tag(colObj.collectionid, colObj.collectionname, true, null, { label: "privateCollection", folder: true }, true);
                 this.tags.push(privTag);
             }
           }
