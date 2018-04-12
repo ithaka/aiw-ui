@@ -173,6 +173,19 @@ export class AssetService {
         this.paginationValue = paginationValue;
         this.paginationSource.next(paginationValue);
 
+        /**
+         * Include only availble assets to the resultsObj thumbnails array, Also keep the count for the restricted assets
+         */
+        if(resultObj.thumbnails){
+            let thumbnailsOrignalLength: number = resultObj.thumbnails.length
+            resultObj.thumbnails = resultObj.thumbnails.filter( thumbnail => {
+                let assetAvailable: boolean = thumbnail.status === 'not-available' ? false : true
+                return assetAvailable
+            })
+            if(thumbnailsOrignalLength > resultObj.thumbnails.length){
+                resultObj['rstd_imgs_count'] = thumbnailsOrignalLength - resultObj.thumbnails.length
+            }
+        }
         // Update results thumbnail array
         this.allResultsValue = resultObj;
         this.allResultsSource.next(resultObj);
@@ -764,12 +777,9 @@ export class AssetService {
             // base facet field
             "name" : "", // ex: collectiontypes
             "mincount" : 1,
-            "limit" : 100
+            "limit" : 700 // Prod list of Public Collections exceeds 600
         }
         facetField.name = facetName
-        facetField.limit = 500
-        // Ignore junk data, collections with only one asset aren't collections we care about
-        facetField.mincount = 5
         query.facet_fields = [facetField]
       }
 
@@ -964,6 +974,16 @@ export class AssetService {
         return this.http
             .get("https://public-api.wordpress.com/rest/v1.1/sites/artstor.wordpress.com/posts/?number=24&search=" + query)
             .toPromise()
+    }
+
+    /**
+     * Get metadata about a collection
+     * @param colId The collection ID
+     */
+    public getPCImageStatus(ssid: string): Observable<any> {
+        let options = { withCredentials: true };
+        return this.http
+            .get(this._auth.getUrl() + '/v1/pcollection/image-status/' + ssid, options)
     }
 
     /**

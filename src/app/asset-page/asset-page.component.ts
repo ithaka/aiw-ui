@@ -52,6 +52,9 @@ export class AssetPage implements OnInit, OnDestroy {
     private loadArrayLastAsset: boolean = false
     private isFullscreen: boolean = false
     private showAssetDrawer: boolean = false
+    
+    // Keep track of the restricted assets count from previous result set, to accurately navigate through available assets
+    private restrictedAssetsCount: number = 0
 
     /** controls whether or not the modals are visible */
     private showAgreeModal: boolean = false
@@ -74,8 +77,6 @@ export class AssetPage implements OnInit, OnDestroy {
     // Used for generated view blob url
     private blobURL: string = '' 
     private prevRouteParams: any = []
-    private collectionName: string = ''
-
     private _storage
 
     private quizMode: boolean = false;
@@ -83,16 +84,19 @@ export class AssetPage implements OnInit, OnDestroy {
     private showAssetCaption: boolean = true;
 
     private assetIdProperty: string = 'artstorid'
+    /** 
+     *  Collection Variables 
+     *  - Specific to the first asset, this.assets[0]
+    **/
+    private collections: any[] = []
+    private collectionName: string = ''
     /** Controls the display of the collection type icon */
     private collectionType: {name: string, alt: string} = {name: '', alt: ''}
 
     private collectionTypeHandler: CollectionTypeHandler = new CollectionTypeHandler()
     
     // To keep a track of browse direction ('prev' / 'next') while browsing through assets, to load next asset if the current asset is un-authorized
-    private browseAssetDirection: string = '' 
-
-    // Feature flag for managing 'Collection fields hyperlinked to collection page" on asset metadata
-    private collectionLinksFlag: boolean = false
+    private browseAssetDirection: string = ''
 
     private pagination: {
         totalPages: number,
@@ -138,7 +142,7 @@ export class AssetPage implements OnInit, OnDestroy {
         private angulartics: Angulartics2,
         private _title: TitleService,
         private scriptService: ScriptService,
-        private _sanitizer: DomSanitizer,
+        private _sanitizer: DomSanitizer
     ) {
         this._storage = locker.useDriver(Locker.DRIVERS.LOCAL)
         
@@ -156,6 +160,8 @@ export class AssetPage implements OnInit, OnDestroy {
 
     ngOnInit() {
         this.user = this._auth.getUser();
+        // Enable PC featureFlag if the logged-in user is a beta tester
+        this.pcFeatureFlag = this._auth.isBetaUser()
 
         // For "Go Back to Results"
         let prevRouteParams = this._storage.get('prevRouteParams');
@@ -182,16 +188,12 @@ export class AssetPage implements OnInit, OnDestroy {
                 // Find feature flags
                 if(routeParams && routeParams['featureFlag']){
                     this._auth.featureFlags[routeParams['featureFlag']] = true
-                    this.collectionLinksFlag = this._auth.featureFlags['collection_links']
                     this.relatedResFlag = this._auth.featureFlags['related-res-hack'] ? true : false
 
                     if (this._auth.featureFlags['uploadPC']) {
                         this.pcFeatureFlag = true
-                    } else{
-                        this.pcFeatureFlag = false
                     }
                 } else{
-                    this.pcFeatureFlag = false
                     this.relatedResFlag = false
                 }
 
@@ -215,12 +217,13 @@ export class AssetPage implements OnInit, OnDestroy {
 
         // sets up subscription to allResults, which is the service providing thumbnails
         this.subscriptions.push(
-          this._assets.allResults.subscribe((allResults: any) => {
+          this._assets.allResults.subscribe((allResults) => {
               if(allResults.thumbnails){
                   // Set asset id property to reference
                 this.assetIdProperty = (allResults.thumbnails[0] && allResults.thumbnails[0].objectId) ? 'objectId' : 'artstorid'
 
-                  this.prevAssetResults.thumbnails = allResults.thumbnails;
+                  this.prevAssetResults.thumbnails = allResults.thumbnails
+                  this.restrictedAssetsCount = allResults.rstd_imgs_count && (allResults.rstd_imgs_count > 0) ? allResults.rstd_imgs_count : 0
                   if(this.loadArrayFirstAsset){
                       this.loadArrayFirstAsset = false;
                       if((this.prevAssetResults) && (this.prevAssetResults.thumbnails.length > 0)){
@@ -244,7 +247,7 @@ export class AssetPage implements OnInit, OnDestroy {
 
         // Subscribe to pagination values
         this.subscriptions.push(
-          this._assets.pagination.subscribe((pagination: any) => {
+          this._assets.pagination.subscribe((pagination) => {
             this.pagination.page = parseInt(pagination.page);
             this.pagination.size = parseInt(pagination.size);
             if (this.originPage < 1) {
@@ -345,6 +348,9 @@ export class AssetPage implements OnInit, OnDestroy {
                     this.getJstorRelatedResults(asset)
                 }
             }
+            // Assign collections array for this asset. Provided in metadata
+            this.collections = asset.collections
+            this.updateMetadataFromLocal(this._localPC.getAsset(parseInt(this.assets[0].SSID)))
         }
         // Set download link
         this.setDownloadFull()
@@ -950,6 +956,35 @@ export class AssetPage implements OnInit, OnDestroy {
         this.showEditDetails = true
     }
 
+    private updateMetadataFromLocal(localData: LocalPCAsset): void {
+        if (!localData) { return } // if we don't have metadata for that asset, we won't run any of the update code
+
+        for(let key in localData.asset_metadata) {
+            let metadataLabel: string = this.mapLocalFieldToLabel(key)
+            let fieldValue: string = localData.asset_metadata[key]
+            // all objects in formattedMetadata are arrays, but these should all be length 0
+            fieldValue && (this.assets[0].formattedMetadata[metadataLabel] = [fieldValue])
+        }
+    }
+
+    /**
+     * Maps field name from LocalPCAsset object to the label from formattedMetadata on the asset
+     * @param field the field from the LocalPCAsset object for which you want ot set the metadata label value
+     */
+    private mapLocalFieldToLabel(field: string): string {
+        let fieldLabelMap = {
+            'creator': 'Creator',
+            'title': 'Title',
+            'work_type': 'Work Type',
+            'date': 'Date',
+            'location': 'Location',
+            'material': 'Material',
+            'description': 'Description',
+            'subject': 'Subject'
+        }
+        return fieldLabelMap[field]
+    }
+
     private closeEditDetails(action: string): void{
         this.uiMessages = {}
         // Hide and reset the edit details form
@@ -986,4 +1021,35 @@ export class AssetPage implements OnInit, OnDestroy {
         let ssid = asset.SSID
         return baseUrl+'?collectionName='+collection+'&id='+id+'&email='+email+'&title='+title+'&creator='+creator+'&fileName='+fileName+'&ssid='+ssid+'&repository='+repo
     }
+
+    /**
+     * Sets collection id for the Collection href
+     * A collection may be private, institutional, or public.
+     * If both institional(2) and public(5), we set the link to the public collection id.
+     */
+    setCollectionLink(asset: Asset):  any[] {
+        let link = []
+        
+        // 103 Collection Id routes to /category/<categoryId>
+        if (String(asset.collectionId) === '103') {
+            return ['/category', String(asset.categoryId)]
+        }
+        else {
+            for (let col of this.collections) {
+                // Private/Personal Collection
+                if (col.type === '6') {
+                    return ['/pcollection', col.id]
+                }
+                // Public Collection
+                else if (col.type === '5') {
+                    return ['/collection', col.id]
+                }
+                else {
+                    link = ['/collection', col.id]
+                }
+            }
+        }
+        return link
+    }
+
 }

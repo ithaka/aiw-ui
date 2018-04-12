@@ -264,8 +264,9 @@ export class AssetSearchService {
       else if(options.colId){
         colId = options.colId
       }
-      else if(options.pcolId){ // For PC assets filter by Collection id : 37436
-        colId = '37436'
+      else if(options.pcolId){
+        // Loading Personal OR Private Collection 
+        colId = options.pcolId
       }
 
       filterArray.push("collections:\"" + colId + "\"");
