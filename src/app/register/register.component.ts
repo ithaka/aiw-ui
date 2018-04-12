@@ -181,6 +181,20 @@ export class RegisterComponent implements OnInit {
   }
 
   /**
+   * Navigates to correct page for login depending on whether or not shiboleth params exist
+   */
+  private navigateToLogin(): void {
+    if (this.shibParameters) {
+      this._router.navigate(
+        ['/link'],
+        { queryParams: this.shibParameters }
+      )
+    } else {
+      this._router.navigate(['/login'])
+    }
+  }
+
+  /**
    * Closes JSTOR modal
    */
   private closeJstorModal(command) {
