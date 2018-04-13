@@ -455,8 +455,7 @@ export class AssetGrid implements OnInit, OnDestroy {
       this._assets.getAllThumbnails(this.itemIds)
         .then( allThumbnails => {
           this.isLoading = false;
-          this.allResults = allThumbnails;
-          this.results = this.allResults;
+          this.results = this.allResults = allThumbnails;
         })
         .catch( error => {
           this.isLoading = false;
@@ -480,6 +479,9 @@ export class AssetGrid implements OnInit, OnDestroy {
     this.isLoading = true;
 
     let newItemsArray = [];
+
+    // IE 11 need to be told "allResults" changed, therefore "results" has changed
+    this.results = this.allResults
 
     for (let i = 0; i < this.allResults.length; i++) {
       if ('objectId' in this.allResults[i]) {
