@@ -777,11 +777,9 @@ export class AssetService {
             // base facet field
             "name" : "", // ex: collectiontypes
             "mincount" : 1,
-            "limit" : 600
+            "limit" : 700 // Prod list of Public Collections exceeds 600
         }
         facetField.name = facetName
-        facetField.limit = 600
-        facetField.mincount = 1
         query.facet_fields = [facetField]
       }
 
@@ -976,6 +974,16 @@ export class AssetService {
         return this.http
             .get("https://public-api.wordpress.com/rest/v1.1/sites/artstor.wordpress.com/posts/?number=24&search=" + query)
             .toPromise()
+    }
+
+    /**
+     * Get metadata about a collection
+     * @param colId The collection ID
+     */
+    public getPCImageStatus(ssid: string): Observable<any> {
+        let options = { withCredentials: true };
+        return this.http
+            .get(this._auth.getUrl() + '/v1/pcollection/image-status/' + ssid, options)
     }
 
     /**

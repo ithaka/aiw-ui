@@ -175,6 +175,20 @@ export class EditPersonalCollectionModal implements OnInit {
     this.uiMessages = {}
 
     this.collectionAssets.unshift(item)
+
+    // Track the SSIDs (in local storage) for recently uploaded assets untill they get available in SOLR
+    if(item.ssid){
+      let publishingAssets = this._auth.getFromStorage('publishingAssets')
+      if(!publishingAssets){
+        publishingAssets = {
+          ssids: [],
+          showPublishingMsgs: true
+        }
+      }
+      publishingAssets.ssids.push(item.ssid)
+      publishingAssets.showPublishingMsgs = true
+      this._auth.store('publishingAssets', publishingAssets)
+    }
   }
   
 }
