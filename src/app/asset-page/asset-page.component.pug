@@ -133,7 +133,7 @@
                 .value(*ngIf="(fieldName !== 'Collection')", [innerHTML]="cleanFieldValue(value) | linkify")
           .meta-block
             .label#Rights Rights
-            .value([innerHtml]="cleanFieldValue(assets[0].formattedMetadata.Rights[0]) | linkify")
+            .value([innerHtml]="cleanFieldValue(assets[0].formattedMetadata.Rights && assets[0].formattedMetadata.Rights[0]) | linkify")
           .row-hdr.pt-3(*ngIf="assets[0].filePropertiesArray.length > 0") {{ 'ASSET_PAGE.HEADER_LABELS.FILE_PROPS' | translate}}
           //- Loop through File Properties Array
           //- .meta-block(*ngFor="let filePropObj of assets[0].filePropertiesArray")
@@ -149,8 +149,8 @@
             a#buttonRequestIap.btn.btn-secondary.my-1(*ngIf="route.snapshot.queryParams.iap == 'true'", [attr.href]="'http://www.artstor.org/form/iap-request-form?name=' + assets[0].title + '&collectionName=' + assets[0].collectionName + '&id=' + assets[0].id + '&email=' + user.username", title="Request Image for Academic Publishing", tabindex="8", target="_blank") {{'ASSET_PAGE.BUTTONS.GET_IAP' | translate}}
             a#buttonReportAssetError.btn.btn-secondary.my-1([attr.href]="getErrorFormUrl(assets[0])", title="Report an error", tabindex="9", target="_blank") {{'ASSET_PAGE.BUTTONS.REPORT_ERROR' | translate}}
         
-        //- .mt-2(*ngIf="showEditDetails")
-        .mt-2([class.d-none]="!showEditDetails")
+        //- Form hidden by default
+        .mt-2.d-none([class.d-block]="showEditDetails")
           button.close.mb-3((click)="showExitEdit = true", type="button", aria-label="Close")
             span(aria-hidden="true") &times;
 
