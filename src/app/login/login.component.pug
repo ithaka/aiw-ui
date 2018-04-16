@@ -1,7 +1,19 @@
 #mainContent.container.main-content(tabindex="0")
   .row
     .col-sm-6
-      ang-login-form
+      .card.card--light
+        .card-header
+          h1#loginHeading {{ copyBase + 'LOGIN.REG_LOGIN.HEADING' | translate }}
+        .card-body
+          ang-login-form
+          a#linkLoginResetModal((click)="showPwdModal = true" tabindex="0" class="link" data-automation-component="artstor-pw-reset-link") {{ 'LOGIN.REG_LOGIN.FORGOT_PW_PROMPT' | translate }}
+          br
+          div(*ngIf="showRegister")
+            a.link([routerLink]="['/register']") {{ 'LOGIN.REGISTER_PROMPT' | translate }}
+            br
+          a.link([attr.href]="'LOGIN.REG_LOGIN.LOGIN_HELP_LINK' | translate" target="_blank" data-automation-component="artstor-login-help-link") {{ 'LOGIN.REG_LOGIN.LOGIN_HELP_PROMPT' | translate }}
+        .block-right
+          a.link((click)="showHelpModal = true" tabindex="0" data-automation-component="artstor-access-help-link") {{ 'LOGIN.ACCESS_PROMPT' | translate }}
     .col-sm-6(*ngIf="_app.config.showInstitutionalLogin")
       .card.card--v-pad
         .card-header
@@ -35,3 +47,13 @@
           .form-group
             | #[a#linkLoginSaharaSS.link(tabindex="0", href="http://catalog.sharedshelf.artstor.org/login.html", target="_blank", data-automation-component="ss-login-link") Log in] to Forum
 ang-pwd-reset-modal(*ngIf="showPwdModal", (closeModal)="showPwdModal = false")
+#helpModal.modal([ngClass]="{'show': showHelpModal }")
+  .modal-dialog
+    .modal-content
+      .modal-header
+        h5 {{ 'ACCESS_HELP_MODAL.HEADING' | translate }}
+        button.close((click)="showHelpModal = false" type="button")
+          span(aria-hidden="true") &times;
+      .modal-body([innerHtml]="'ACCESS_HELP_MODAL.PROMPT' | translate")
+      .modal-footer
+        button#btnLoginDismissHelp.btn.btn-primary((click)="showHelpModal = false") {{ 'ACCESS_HELP_MODAL.DISMISS' | translate }}
