@@ -127,20 +127,22 @@ export class AuthService implements CanActivate {
       this.ENV = 'prod'
     }
     else if ( document.location.hostname.indexOf('prod.cirrostratus.org') > -1 ) {
+      console.info("Using Prod Endpoints (Absolute)")
       // Prod/Lively endpoints
       this.hostname = '//library.artstor.org'
       this.baseUrl =  '//library.artstor.org/api'
       this.logUrl = '//ang-ui-logger.apps.prod.cirrostratus.org/api/v1'
-      this.solrUrl = '/api/search/v1.0/search'
+      this.solrUrl = this.hostname + '/api/search/v1.0/search'
       this.ENV = 'prod'
     } else if ( new RegExp(testHostnames.join("|")).test(document.location.hostname) ) {
+      console.info("Using Test Endpoints")
       // Test Endpoints
       this.hostname = '//stage.artstor.org'
       this.subdomain = 'stage'
       this.baseUrl = '//stage.artstor.org/api'
       this.thumbUrl = '//mdxstage.artstor.org'
       this.logUrl = '//ang-ui-logger.apps.test.cirrostratus.org/api/v1'
-      this.solrUrl = '/api/search/v1.0/search'
+      this.solrUrl = '/api/search/v1.1/search'
       this.IIIFUrl = '//tsstage.artstor.org/rosa-iiif-endpoint-1.0-SNAPSHOT/fpx'
       this.ENV = 'test'
     }
@@ -211,11 +213,12 @@ export class AuthService implements CanActivate {
      * - Poll /userinfo every 15min
      * - Refreshs AccessToken with IAC
      */
-    const userInfoInterval = 15*1000*60*60
+    const userInfoInterval = 30000 //15*1000*60*60
     // Run on Init
     this.refreshUserSession()
     // Run every X mins
     setInterval(() => {
+      console.log("interval refresh")
       this.refreshUserSession()
     }, userInfoInterval)
     
