@@ -142,7 +142,7 @@ export class AuthService implements CanActivate {
       this.baseUrl = '//stage.artstor.org/api'
       this.thumbUrl = '//mdxstage.artstor.org'
       this.logUrl = '//ang-ui-logger.apps.test.cirrostratus.org/api/v1'
-      this.solrUrl = '/api/search/v1.1/search'
+      this.solrUrl = '/api/search/v1.0/search'
       this.IIIFUrl = '//tsstage.artstor.org/rosa-iiif-endpoint-1.0-SNAPSHOT/fpx'
       this.ENV = 'test'
     }
@@ -213,12 +213,11 @@ export class AuthService implements CanActivate {
      * - Poll /userinfo every 15min
      * - Refreshs AccessToken with IAC
      */
-    const userInfoInterval = 30000 //15*1000*60*60
+    const userInfoInterval = 15*1000*60*60
     // Run on Init
     this.refreshUserSession()
     // Run every X mins
     setInterval(() => {
-      console.log("interval refresh")
       this.refreshUserSession()
     }, userInfoInterval)
     
