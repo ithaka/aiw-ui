@@ -177,7 +177,7 @@ export class AuthService implements CanActivate {
     idle.onIdleEnd.subscribe(() => {
       this.idleState = 'No longer idle.';
       // We want to ensure a user is refreshed as soon as they return to the tab
-      this.refreshUserSession()
+      this.refreshUserSession(true)
     });
     idle.onTimeout.subscribe(() => {
       let user = this.getUser();
