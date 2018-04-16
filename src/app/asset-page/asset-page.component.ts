@@ -800,7 +800,7 @@ export class AssetPage implements OnInit, OnDestroy {
         .take(1)
         .subscribe((res) => {
             this.deleteLoading = false
-            this._router.navigate(['/pcollection', '37240'], { queryParams: { deleteSuccess: this.assets[0].title }})
+            this._router.navigate(['/pcollection', '37436'], { queryParams: { deleteSuccess: this.assets[0].title }})
         }, (err) => {
             this.deleteLoading = false
             this.uiMessages.deleteFailure = true
