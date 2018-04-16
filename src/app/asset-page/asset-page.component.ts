@@ -231,13 +231,21 @@ export class AssetPage implements OnInit, OnDestroy {
                   if(this.loadArrayFirstAsset){
                       this.loadArrayFirstAsset = false;
                       if((this.prevAssetResults) && (this.prevAssetResults.thumbnails.length > 0)){
-                          this._router.navigate(['/asset', this.prevAssetResults.thumbnails[0][this.assetIdProperty]]);
+                        let queryParams = {}
+                        if (this.assetGroupId) {
+                            queryParams["groupId"] = this.assetGroupId
+                        }
+                        this._router.navigate(['/asset', this.prevAssetResults.thumbnails[0][this.assetIdProperty], queryParams]);
                       }
                   }
                   else if(this.loadArrayLastAsset){
                       this.loadArrayLastAsset = false;
                       if((this.prevAssetResults.thumbnails) && (this.prevAssetResults.thumbnails.length > 0)){
-                          this._router.navigate(['/asset', this.prevAssetResults.thumbnails[this.prevAssetResults.thumbnails.length - 1][this.assetIdProperty]]);
+                        let queryParams = {}
+                        if (this.assetGroupId) {
+                            queryParams["groupId"] = this.assetGroupId
+                        }
+                        this._router.navigate(['/asset', this.prevAssetResults.thumbnails[this.prevAssetResults.thumbnails.length - 1][this.assetIdProperty], queryParams]);
                       }
                   }
                   else{
