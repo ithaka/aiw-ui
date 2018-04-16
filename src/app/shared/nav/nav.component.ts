@@ -40,11 +40,24 @@ export class Nav implements OnInit, OnDestroy {
 
     this.subscriptions.push(
       this._router.events.subscribe(e => {
-        if (e instanceof NavigationEnd && (e.url != '/login') && (e.url.split('/')[1] != 'printpreview') && (e.url.split('/')[1] != 'assetprint')) {
-            this.showLoginPanel = true
-        } else {
-            this.showLoginPanel = false
+        if (e instanceof NavigationEnd) {
+          let baseRoute: string = e.url.split('/')[1].split('?')[0]
+          switch(baseRoute) {
+            case 'assetprint':
+            case 'link':
+            case 'login':
+            case 'printpreview':
+              this.showLoginPanel = false
+              break
+            default:
+              this.showLoginPanel = true
+          }
         }
+        // if (e instanceof NavigationEnd && (e.url != '/login') && (e.url.split('/')[1] != 'printpreview') && (e.url.split('/')[1] != 'assetprint')) {
+        //     this.showLoginPanel = true
+        // } else {
+        //     this.showLoginPanel = false
+        // }
       })
     );
 
