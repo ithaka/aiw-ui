@@ -7,15 +7,29 @@ import { Router, ActivatedRoute } from '@angular/router'
 })
 
 export class LinkPage implements OnInit {
+
+  private shibParams: {
+    email: string,
+    samlTokenId: string
+  }
+
   constructor(
     private route: ActivatedRoute,
     private _router: Router
   ) { }
+
+  private copyBase: string = 'SHIB_'
 
   ngOnInit() {
     // nav back to regular login if there is no samlTokenId
     if (!this.route.snapshot.queryParams.samlTokenId) {
       this._router.navigate(['/login'])
     }
+
+    this.shibParams.samlTokenId = this.route.snapshot.queryParams.samlTokenId
+  }
+
+  navigateToRegister(): void {
+    this._router.navigate(['/register'], { queryParams: this.shibParams })
   }
 }
