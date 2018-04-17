@@ -653,19 +653,21 @@ export class AssetPage implements OnInit, OnDestroy {
     }
 
 
-    // *************************
-    private runDownload(dlink): any {
+    /** 
+     * 
+     * @param dlink String from generateDownloadView
+     */
+    private runDownloadView(dlink: string) : boolean {
+        let result: boolean = false
 
-        // Download our blob
+        // Download generated jpg as local blob file
         let blob = this._search.downloadViewBlob(dlink)
         .take(1)
         .subscribe((blob) => {
-
-            console.log(blob)
-            console.log(blob.size)
-
-            if (!blob.size)
-                return false
+            if (!blob || blob.size < 5000) {
+                result = false
+                console.log(blob)
+            }
             else {
                 if (this.isMSAgent) {
                     this.navigator.msSaveBlob(blob, 'download')
@@ -674,13 +676,15 @@ export class AssetPage implements OnInit, OnDestroy {
                     this.blobURL = this.URL.createObjectURL(blob)
                     this.generatedViewURL = this._sanitizer.bypassSecurityTrustUrl(this.blobURL)
                 }
-                return true
+                console.log(blob)
+                result = true
             }
             }, (err) => {
                 console.error('Error returning generated download view', err)
-                return false
-                // Service is failing
-            })
+                result = false
+        })
+
+        return result
         
     }
 
@@ -697,7 +701,7 @@ export class AssetPage implements OnInit, OnDestroy {
             this.generatedViewURL = ''
         }
 
-        if(asset.typeName === 'image' && asset.viewportDimensions.contentSize){
+        if(asset.typeName === 'image' && asset.viewportDimensions.contentSize) {
             // Full source image size (max output possible)
             let fullWidth = asset.viewportDimensions.contentSize.x
             let fullY = asset.viewportDimensions.contentSize.y
@@ -723,15 +727,23 @@ export class AssetPage implements OnInit, OnDestroy {
             // Generate the view url from tilemap service
             let downloadLink: string = asset.tileSource.replace('info.json','') + xOffset +','+yOffset+','+zoomX+','+zoomY+'/'+viewX+','+viewY+'/0/native.jpg'
             
-            let result = this.runDownload(downloadLink)
-            let retry = 0
+            // Call runDownloadView and check for success, try 3 times
+            let retry: number = 0
+            let result = this.runDownloadView(downloadLink)
 
-            if (!result && retry < 2) {
-              this.runDownload(downloadLink)
-            }
-            else {
-                result = this.runDownload(downloadLink)
+            console.log('Download View Result: ' + result)
+
+            while (!result && retry < 2) {
+
+                console.log('Retrying Download View: ' + retry)
+
                 retry += 1
+                result = this.runDownloadView(downloadLink)
+            }
+
+            if (!result) {
+                // Show modal?
+                console.log('download view failed after 3 attempts')
             }
         }
     }
