@@ -654,38 +654,42 @@ export class AssetPage implements OnInit, OnDestroy {
 
 
     /** 
-     * 
+     * runDownloadView handles the DownloadView results from AssetSearch.downloadViewBlob
      * @param dlink String from generateDownloadView
+     * @param retryCount Number, tracks recursive calls of this function for download tries
      */
-    private runDownloadView(dlink: string) : boolean {
+    private runDownloadView(dlink: string, retryCount: number) : boolean {
         let result: boolean = false
 
-        // Download generated jpg as local blob file
-        let blob = this._search.downloadViewBlob(dlink)
-        .take(1)
-        .subscribe((blob) => {
-            if (!blob || blob.size < 5000) {
-                result = false
-                console.log(blob)
-            }
-            else {
-                if (this.isMSAgent) {
-                    this.navigator.msSaveBlob(blob, 'download')
+        if (retryCount < 2) {
+            // Download generated jpg as local blob file
+            let blob = this._search.downloadViewBlob(dlink)
+            .take(1)
+            .subscribe((blob) => {
+                // Call recursively two more times if Promise blob.size < 5kb
+                if (blob.size < 5000) {
+                    result = false
+                    retryCount += 1
+                    this.runDownloadView(dlink, retryCount)
                 }
                 else {
-                    this.blobURL = this.URL.createObjectURL(blob)
-                    this.generatedViewURL = this._sanitizer.bypassSecurityTrustUrl(this.blobURL)
+                    if (this.isMSAgent) {
+                        this.navigator.msSaveBlob(blob, 'download')
+                    }
+                    else {
+                        this.blobURL = this.URL.createObjectURL(blob)
+                        this.generatedViewURL = this._sanitizer.bypassSecurityTrustUrl(this.blobURL)
+                    }
+                    console.log(blob)
+                    result = true
                 }
-                console.log(blob)
-                result = true
-            }
-            }, (err) => {
-                console.error('Error returning generated download view', err)
-                result = false
-        })
+                }, (err) => {
+                    console.error('Error returning generated download view', err)
+                    result = false
+                })
+        }
 
         return result
-        
     }
 
     /** Calls downloadViewBlob in AssetSearch service to retrieve blob file,
@@ -727,24 +731,8 @@ export class AssetPage implements OnInit, OnDestroy {
             // Generate the view url from tilemap service
             let downloadLink: string = asset.tileSource.replace('info.json','') + xOffset +','+yOffset+','+zoomX+','+zoomY+'/'+viewX+','+viewY+'/0/native.jpg'
             
-            // Call runDownloadView and check for success, try 3 times
-            let retry: number = 0
-            let result = this.runDownloadView(downloadLink)
-
-            console.log('Download View Result: ' + result)
-
-            while (!result && retry < 2) {
-
-                console.log('Retrying Download View: ' + retry)
-
-                retry += 1
-                result = this.runDownloadView(downloadLink)
-            }
-
-            if (!result) {
-                // Show modal?
-                console.log('download view failed after 3 attempts')
-            }
+            // Call runDownloadView and check for success, tries 3 times
+            let result = this.runDownloadView(downloadLink, 0) // TODO: handle UI messaging if !result
         }
     }
 
