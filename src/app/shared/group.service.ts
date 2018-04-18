@@ -16,7 +16,13 @@ export class GroupService {
         private _auth: AuthService
     ) {
         this.groupUrl = this._auth.getHostname() + '/api/v1/group'
-        this.options = { withCredentials: true }
+
+        /**
+         * Group Request Headers
+         * - Prevents caching the call, specifically supporting IE 11
+         */
+        let groupHeader: HttpHeaders = new HttpHeaders().set('Cache-Control', 'must-revalidate, private, no-cache').set('Expires', '-1')
+        this.options = { headers: groupHeader, withCredentials: true }
     }
 
     /**
