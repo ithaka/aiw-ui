@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, Renderer } from '@angular/core'
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, Renderer, ChangeDetectorRef } from '@angular/core'
 import { ActivatedRoute, NavigationStart, Params, Router } from '@angular/router'
 
 import { BehaviorSubject } from 'rxjs/Rx'
@@ -135,7 +135,8 @@ export class AssetGrid implements OnInit, OnDestroy {
     private _search: AssetSearchService,
     private _toolbox: ToolboxService,
     private locker: Locker,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private _changeDetector: ChangeDetectorRef
   ) {
       this._storage = locker.useDriver(Locker.DRIVERS.LOCAL);
       let prefs = this._auth.getFromStorage('prefs')
@@ -482,6 +483,7 @@ export class AssetGrid implements OnInit, OnDestroy {
 
     // IE 11 need to be told "allResults" changed, therefore "results" has changed
     this.results = this.allResults
+    this._changeDetector.detectChanges()
 
     for (let i = 0; i < this.allResults.length; i++) {
       if ('objectId' in this.allResults[i]) {
