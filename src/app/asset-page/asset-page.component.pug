@@ -29,11 +29,14 @@
         [isFullscreen]="isFullscreen",
         [showCaption]="showAssetCaption",
         [quizMode]="quizMode",
+        [quizShuffle]="quizShuffle",
         [prevAssetResults]="prevAssetResults",
         (removeAsset)="toggleAsset($event)",
         (nextPage)="showNextAsset()",
         (prevPage)="showPrevAsset()",
-        (assetDrawer)="toggleAssetDrawer(!showAssetDrawer)")
+        (assetDrawer)="toggleAssetDrawer(!showAssetDrawer)",
+        (toggleQuizShuffleCallBack)="toggleQuizShuffle()",
+        (toggleQuizModeCallBack)="toggleQuizMode()")
       //- Related results from JSTOR
       .pl-3(*ngIf="jstorResults.length > 0 && relatedResFlag")
         .row-hdr.pt-3 Related Results from JSTOR
@@ -53,19 +56,20 @@
           br
           div(*ngIf="selectedJstorResult.doi") Stable URL: {{ 'http://www.jstor.org/stable/' + selectedJstorResult.doi }}
 
-      .col-md-12.quiz-caption-cntnr(*ngIf="isFullscreen", [ngClass]="[ showAssetCaption ? '' : 'cntnr-bg' ]")
-        .caption-btn-cntnr([ngClass]="[ showAssetCaption ? 'active' : '' ]", (click)="showAssetCaption = !showAssetCaption", title="{{ showAssetCaption ? 'Hide Asset Meta Information' : 'Show Asset Meta Information' }}")
-          span.caption-btn
-          | {{ showAssetCaption ? 'HIDE CAPTION' : 'SHOW CAPTION' }}
-        .quiz-browse-cntnr(*ngIf="quizMode")
-          i.icon.icon-direction.icon-left([class.disabled]="assetNumber <= 1", title="Previous in results", (click)="showPrevAsset()")
-          i.icon.icon-direction.icon-right([class.disabled]="assetNumber >= totalAssetCount - restrictedAssetsCount", title="Next in results", (click)="showNextAsset()")
-        .shuffle-cntnr(*ngIf="quizMode", [ngClass]="[ quizShuffle ? 'active' : '' ]", (click)="toggleQuizShuffle()", title="Toggle Asset Suffle")
-          span.shuffle-btn
-          | SHUFFLE {{ quizShuffle ? 'ON' : 'OFF' }}
-        .quiz-cntnr([ngClass]="[ quizMode ? 'active' : '' ]", (click)="toggleQuizMode()", title="{{ quizMode ? 'Deactivate Quiz Mode' : 'Activate Quiz Mode' }}")
-          span.quiz-btn
-          | QUIZ MODE {{ quizMode ? 'ON' : 'OFF' }}
+      //- .col-md-12.quiz-caption-cntnr(*ngIf="isFullscreen", [ngClass]="[ showAssetCaption ? '' : 'cntnr-bg' ]")
+      //-   .caption-btn-cntnr([ngClass]="[ showAssetCaption ? 'active' : '' ]", (click)="showAssetCaption = !showAssetCaption", title="{{ showAssetCaption ? 'Hide Asset Meta Information' : 'Show Asset Meta Information' }}")
+      //-     span.caption-btn
+      //-     | {{ showAssetCaption ? 'HIDE CAPTION' : 'SHOW CAPTION' }}
+      //-   .quiz-browse-cntnr(*ngIf="quizMode")
+      //-     i.icon.icon-direction.icon-left([class.disabled]="assetNumber <= 1", title="Previous in results", (click)="showPrevAsset()")
+      //-     i.icon.icon-direction.icon-right([class.disabled]="assetNumber >= totalAssetCount - restrictedAssetsCount", title="Next in results", (click)="showNextAsset()")
+      //-   .shuffle-cntnr(*ngIf="quizMode", [ngClass]="[ quizShuffle ? 'active' : '' ]", (click)="toggleQuizShuffle()", title="Toggle Asset Suffle")
+      //-     span.shuffle-btn
+      //-     | SHUFFLE {{ quizShuffle ? 'ON' : 'OFF' }}
+      //-   .quiz-cntnr([ngClass]="[ quizMode ? 'active' : '' ]", (click)="toggleQuizMode()", title="{{ quizMode ? 'Deactivate Quiz Mode' : 'Activate Quiz Mode' }}")
+      //-     span.quiz-btn
+      //-     | QUIZ MODE {{ quizMode ? 'ON' : 'OFF' }}
+      
     //- Asset Metadata Column
     .col-md-4(*ngIf="assets[0]",[class.hidden]="isFullscreen")
       .py-3
