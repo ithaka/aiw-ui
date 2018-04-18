@@ -1,0 +1,12 @@
+#mainContent.container(tabindex="0")
+  .row
+    .col-1.col-md-3
+    .col-10.col-md-6
+      .card.card--light
+        .card-header
+          h1#loginHeading {{ 'LINK_PAGE.LOGIN_HEADING' | translate }}
+        .card-body
+          ang-login-form
+          a#linkLoginResetModal.link((click)="showPwdModal = true", tabindex="0", data-automation-component="artstor-pw-reset-link") {{ 'LOGIN.REG_LOGIN.FORGOT_PW_PROMPT' | translate }}
+          h1#registerHeading.my-2 {{ 'LINK_PAGE.REGISTER_HEADING' | translate }}
+          a#linkRegisterAccount.link((click)="navigateToRegister()", tabindex="0") {{ 'LINK_PAGE.REGISTER_LINK' | translate }}

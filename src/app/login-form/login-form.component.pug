@@ -1,0 +1,42 @@
+//- .card.card--light
+//-   .card-header
+//-     h1#loginHeading {{ copyBase + 'LOGIN.REG_LOGIN.HEADING' | translate }}
+//-   .card-body
+form((ngSubmit)="login(user)")
+  .form-group
+    label(for="loginEmail") {{ 'LOGIN.REG_LOGIN.EMAIL_LABEL' | translate }}
+    input#inputLoginEmail.form-control([(ngModel)]="user.username" name="username" type="text" placeholder="Username")
+  .form-group
+    label(for="loginPassword") {{ 'LOGIN.REG_LOGIN.PASSWORD_LABEL' | translate }}
+    input#inputLoginPassword.form-control([(ngModel)]="user.password" name="password" type="password" placeholder="Password")
+    #errorMsg.form-text.text-danger(
+      *ngIf="errorMsg",
+      [innerHtml]="errorMsg | translate"
+    )
+    p.form-text.text-danger(*ngIf="forcePwdRst", [innerHtml]="'LOGIN.REG_LOGIN.FORCE_PW_RESET_MSG' | translate")
+  p.notranslate([innerHtml]=" copyBase + 'LOGIN.TERMS' | translate ")
+  .form-group
+    button#btnLoginRemote.btn.btn-primary([class.loading]="loginLoading" type="submit" name="action" data-sc="account: remote user log in" data-automation-component="artstor-login-button") 
+      | {{ 'LOGIN.LOGIN_BTN' | translate }}
+  //- .form-group
+  //-   h3 Log into Shared Shelf
+  //-   button#btnLoginRemote.btn.btn-primary((click)="ssLogin(user)", [class.loading]="loginLoading" type="button" name="action" data-sc="account: remote user log in") 
+  //-     | {{ 'LOGIN.LOGIN_BTN' | translate }}
+    a#linkLoginResetModal((click)="showPwdModal = true" tabindex="0" class="link" data-automation-component="artstor-pw-reset-link") {{ 'LOGIN.REG_LOGIN.FORGOT_PW_PROMPT' | translate }}
+    br
+    div(*ngIf="showRegister")
+      a.link([routerLink]="['/register']") {{ 'LOGIN.REGISTER_PROMPT' | translate }}
+      br
+    a.link([attr.href]="'LOGIN.REG_LOGIN.LOGIN_HELP_LINK' | translate" target="_blank" data-automation-component="artstor-login-help-link") {{ 'LOGIN.REG_LOGIN.LOGIN_HELP_PROMPT' | translate }}
+//-   .block-right
+//-     a.link((click)="showHelpModal = true" tabindex="0" data-automation-component="artstor-access-help-link") {{ 'LOGIN.ACCESS_PROMPT' | translate }}
+//- #helpModal.modal([ngClass]="{'show': showHelpModal }")
+//-   .modal-dialog
+//-     .modal-content
+//-       .modal-header
+//-         h5 {{ 'ACCESS_HELP_MODAL.HEADING' | translate }}
+//-         button.close((click)="showHelpModal = false" type="button")
+//-           span(aria-hidden="true") &times;
+//-       .modal-body([innerHtml]="'ACCESS_HELP_MODAL.PROMPT' | translate")
+//-       .modal-footer
+//-         button#btnLoginDismissHelp.btn.btn-primary((click)="showHelpModal = false") {{ 'ACCESS_HELP_MODAL.DISMISS' | translate }}

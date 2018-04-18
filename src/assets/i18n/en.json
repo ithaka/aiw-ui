@@ -30,6 +30,12 @@
     "REGISTER_PROMPT": "Not Registered?",
     "ACCESS_PROMPT": "How do I get access?"
   },
+  "LINK_PAGE": {
+    "LOGIN_HEADING": "Log in with your existing Artstor account",
+    "LOGIN_BUTTON": "Link Account",
+    "REGISTER_HEADING": "Register a new account",
+    "REGISTER_LINK": "Register"
+  },
   "REGISTER": {
     "REGISTER_HEADING": "Register for a new Artstor account",
     "REGISTER_DESCRIPTION": "Registering for an account lets you download images, save them to groups, create presentations, and share them with other Artstor users.",
