@@ -71,7 +71,6 @@ export class TagsService {
               tags.push(new Tag(facet.id, facet.name, true, null, { label: "collection", folder: true }, true))
             })
 
-            // console.log('sorted facetsArray - ', facetsArray)
             return tags
           }
         })
