@@ -38,6 +38,7 @@ export class AssetPage implements OnInit, OnDestroy {
     private encryptedAccess: boolean = false
     private document = document
     private URL = URL
+    private navigator = navigator
 
     // Array to support multiple viewers on the page
     private assets: Asset[] = []
@@ -52,6 +53,9 @@ export class AssetPage implements OnInit, OnDestroy {
     private loadArrayLastAsset: boolean = false
     private isFullscreen: boolean = false
     private showAssetDrawer: boolean = false
+
+    // MS IE/Edge for Download View
+    private isMSAgent: boolean = false
     
     // Keep track of the restricted assets count from previous result set, to accurately navigate through available assets
     private restrictedAssetsCount: number = 0
@@ -227,13 +231,21 @@ export class AssetPage implements OnInit, OnDestroy {
                   if(this.loadArrayFirstAsset){
                       this.loadArrayFirstAsset = false;
                       if((this.prevAssetResults) && (this.prevAssetResults.thumbnails.length > 0)){
-                          this._router.navigate(['/asset', this.prevAssetResults.thumbnails[0][this.assetIdProperty]]);
+                        let queryParams = {}
+                        if (this.assetGroupId) {
+                            queryParams["groupId"] = this.assetGroupId
+                        }
+                        this._router.navigate(['/asset', this.prevAssetResults.thumbnails[0][this.assetIdProperty], queryParams]);
                       }
                   }
                   else if(this.loadArrayLastAsset){
                       this.loadArrayLastAsset = false;
                       if((this.prevAssetResults.thumbnails) && (this.prevAssetResults.thumbnails.length > 0)){
-                          this._router.navigate(['/asset', this.prevAssetResults.thumbnails[this.prevAssetResults.thumbnails.length - 1][this.assetIdProperty]]);
+                        let queryParams = {}
+                        if (this.assetGroupId) {
+                            queryParams["groupId"] = this.assetGroupId
+                        }
+                        this._router.navigate(['/asset', this.prevAssetResults.thumbnails[this.prevAssetResults.thumbnails.length - 1][this.assetIdProperty], queryParams]);
                       }
                   }
                   else{
@@ -273,6 +285,9 @@ export class AssetPage implements OnInit, OnDestroy {
         })
 
         this._analytics.setPageValues('asset', this.assets[0] && this.assets[0].id)
+
+        // MS Browser Agent ?
+        this.isMSAgent = this.navigator.msSaveOrOpenBlob !== undefined
 
         // Append Crazy Egg A/B Testing script to head
         this.scriptService.load('crazyegg')
@@ -637,6 +652,46 @@ export class AssetPage implements OnInit, OnDestroy {
         }
     }
 
+
+    /** 
+     * runDownloadView handles the DownloadView results from AssetSearch.downloadViewBlob
+     * @param dlink String from generateDownloadView
+     * @param retryCount Number, tracks recursive calls of this function for download tries
+     */
+    private runDownloadView(dlink: string, retryCount: number) : boolean {
+        let result: boolean = false
+
+        if (retryCount < 2) {
+            // Download generated jpg as local blob file
+            let blob = this._search.downloadViewBlob(dlink)
+            .take(1)
+            .subscribe((blob) => {
+                // Call recursively two more times if Promise blob.size < 5kb
+                if (blob.size < 5000) {
+                    result = false
+                    retryCount += 1
+                    this.runDownloadView(dlink, retryCount)
+                }
+                else {
+                    if (this.isMSAgent) {
+                        this.navigator.msSaveBlob(blob, 'download')
+                    }
+                    else {
+                        this.blobURL = this.URL.createObjectURL(blob)
+                        this.generatedViewURL = this._sanitizer.bypassSecurityTrustUrl(this.blobURL)
+                    }
+                    console.log(blob)
+                    result = true
+                }
+                }, (err) => {
+                    console.error('Error returning generated download view', err)
+                    result = false
+                })
+        }
+
+        return result
+    }
+
     /** Calls downloadViewBlob in AssetSearch service to retrieve blob file,
         and then sets generatedViewUrl to this local reference. **/
         
@@ -650,7 +705,7 @@ export class AssetPage implements OnInit, OnDestroy {
             this.generatedViewURL = ''
         }
 
-        if(asset.typeName === 'image' && asset.viewportDimensions.contentSize){
+        if(asset.typeName === 'image' && asset.viewportDimensions.contentSize) {
             // Full source image size (max output possible)
             let fullWidth = asset.viewportDimensions.contentSize.x
             let fullY = asset.viewportDimensions.contentSize.y
@@ -675,18 +730,9 @@ export class AssetPage implements OnInit, OnDestroy {
 
             // Generate the view url from tilemap service
             let downloadLink: string = asset.tileSource.replace('info.json','') + xOffset +','+yOffset+','+zoomX+','+zoomY+'/'+viewX+','+viewY+'/0/native.jpg'
-
-            // Download our blob
-            let blob = this._search.downloadViewBlob(downloadLink)
-            .take(1)
-            .subscribe((blob) => {
-
-                this.blobURL = this.URL.createObjectURL(blob)
-                this.generatedViewURL = this._sanitizer.bypassSecurityTrustUrl(this.blobURL)
-
-            }, (err) => {
-                console.error('Error returning generated download view', err)
-            })
+            
+            // Call runDownloadView and check for success, tries 3 times
+            let result = this.runDownloadView(downloadLink, 0) // TODO: handle UI messaging if !result
         }
     }
 
@@ -792,7 +838,7 @@ export class AssetPage implements OnInit, OnDestroy {
         .take(1)
         .subscribe((res) => {
             this.deleteLoading = false
-            this._router.navigate(['/pcollection', '37240'], { queryParams: { deleteSuccess: this.assets[0].title }})
+            this._router.navigate(['/pcollection', '37436'], { queryParams: { deleteSuccess: this.assets[0].title }})
         }, (err) => {
             this.deleteLoading = false
             this.uiMessages.deleteFailure = true
