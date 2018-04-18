@@ -481,10 +481,6 @@ export class AssetGrid implements OnInit, OnDestroy {
 
     let newItemsArray = [];
 
-    // IE 11 need to be told "allResults" changed, therefore "results" has changed
-    this.results = this.allResults
-    this._changeDetector.detectChanges()
-
     for (let i = 0; i < this.allResults.length; i++) {
       if ('objectId' in this.allResults[i]) {
         newItemsArray.push(this.allResults[i]['objectId'])
