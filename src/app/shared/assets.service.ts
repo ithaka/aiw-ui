@@ -433,6 +433,11 @@ export class AssetService {
                     searchTerm = "clusterid:(" + params["clusterId"] + ")"
                     this.loadSearch(searchTerm)
                 } else if (params.hasOwnProperty("pcolId") && params["pcolId"] !== "") {
+                    // Filter by owner if filtering by Global Personal Collection
+                    if (params["pcolId"] === "37436") {
+                        let user = this._auth.getUser()
+                        searchTerm = searchTerm + " personalcollectionowner:(" + user["baseProfileId"]  + ")"
+                    }
                     //get personal collection thumbnails via SOLR
                     this.loadSearch(searchTerm)
                 }  else if (params.hasOwnProperty("colId") && params["colId"] !== "") {
