@@ -1,4 +1,4 @@
-import { OnInit } from '@angular/core'
+import { OnInit, Input } from '@angular/core'
 import { Locker } from 'angular2-locker'
 import { Component } from '@angular/core'
 import { Router, ActivatedRoute } from '@angular/router'
@@ -17,6 +17,8 @@ import { AnalyticsService } from '../analytics.service'
 })
 
 export class LoginFormComponent implements OnInit {
+
+  @Input() samlTokenId: string
 
   private copyBase: string = ''
 
@@ -159,6 +161,8 @@ export class LoginFormComponent implements OnInit {
       this.loginLoading = false;
       return;
     }
+
+    this.samlTokenId && (user.samlTokenId = this.samlTokenId)
 
     this.angulartics.eventTrack.next({ action:"remoteLogin", properties: { category: "login", label: "attempt" }});
 
