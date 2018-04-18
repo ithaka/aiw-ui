@@ -43,14 +43,35 @@ export class TagsService {
       return this._assets.categoryByFacet('collectiontypenameid', colTypeValue)
         .then( (facetData) => {
           if(facetData){
+            // Filter for the required collectionType
             facetData = facetData.filter((facet) => {
               return parseInt(facet.name.split('|')[0]) === colTypeValue
             })
+
             let tags: Tag[] = []
+            
+            // Extract required facets data
+            let facetsArray: any[] = []
             facetData.forEach((facet, index) => {
               let facetSplitArray = facet.name.split('|')
-              tags.push(new Tag(facetSplitArray[2], facetSplitArray[1], true, null, { label: "collection", folder: true }, true))
+              facetsArray.push({ name: facetSplitArray[1], id: facetSplitArray[1] })
             })
+
+            // Sorts facets alphabetically on name
+            facetsArray = facetsArray.sort(
+              (facet1, facet2) => {
+                let name1 = facet1.name.toUpperCase();
+                let name2 = facet2.name.toUpperCase();
+                return (name1 < name2) ? -1 : (name1 > name2) ? 1 : 0;
+              }
+            )
+
+            // Create tags
+            facetsArray.forEach((facet, index) => {
+              tags.push(new Tag(facet.id, facet.name, true, null, { label: "collection", folder: true }, true))
+            })
+
+            // console.log('sorted facetsArray - ', facetsArray)
             return tags
           }
         })
