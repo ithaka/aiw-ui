@@ -119,6 +119,8 @@ export class AuthService implements CanActivate {
       'sahara.artstor.org'
     ]
 
+    let ipRegExp: RegExp = /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/
+
     // Check domain
     if (  new RegExp(prodHostnames.join("|")).test(document.location.hostname)  ) {
       // Explicit live endpoints
@@ -133,7 +135,11 @@ export class AuthService implements CanActivate {
       this.logUrl = '//ang-ui-logger.apps.prod.cirrostratus.org/api/v1'
       this.solrUrl = '/api/search/v1.0/search'
       this.ENV = 'prod'
-    } else if ( new RegExp(testHostnames.join("|")).test(document.location.hostname) ) {
+    } else if (
+      new RegExp(testHostnames.join("|")).test(document.location.hostname)
+      ||
+      ipRegExp.test(document.location.hostname)
+    ) {
       // Test Endpoints
       this.hostname = '//stage.artstor.org'
       this.subdomain = 'stage'
