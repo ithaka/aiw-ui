@@ -29,7 +29,7 @@ export class AssetService {
     //set up thumbnail observables
     private allResultsValue: any[] = [];
     // BehaviorSubjects push last value on subscribe
-    private allResultsSource: BehaviorSubject<any[]> = new BehaviorSubject(this.allResultsValue);
+    private allResultsSource: BehaviorSubject<any> = new BehaviorSubject(this.allResultsValue);
     public allResults: Observable<any> = this.allResultsSource.asObservable();
 
     //set up noIG observables
@@ -647,7 +647,7 @@ export class AssetService {
                             // Pass portion of the data we have
                             this.updateLocalResults(data)
                             // Pass error down to allResults listeners
-                            this.allResultsSource.error(error) // .throw(error);
+                            this.allResultsSource.next({"error":error}) // .throw(error);
                         });
                 } else {
                     data.thumbnails = []
@@ -694,7 +694,7 @@ export class AssetService {
                 // Pass portion of the data we have
                 this.updateLocalResults(ig)
                 // Pass error down to allResults listeners
-                this.allResultsSource.error(error) // .throw(error)
+                this.allResultsSource.next({"error":error}) // .throw(error)
             })
     }
 
@@ -892,7 +892,7 @@ export class AssetService {
                     this.updateLocalResults(data)
             }, (error) => {
                     console.error(error)
-                    this.allResultsSource.error(error)
+                    this.allResultsSource.next({"error":error})
             });
     }
 
