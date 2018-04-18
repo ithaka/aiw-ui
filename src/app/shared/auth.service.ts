@@ -684,9 +684,11 @@ export class AuthService implements CanActivate {
 }
 
 export class User {
+  public samlTokenId: string
   constructor(
     public username: string,
-    public password: string) { }
+    public password: string,
+  ) {}
 }
 
 interface SSLoginResponse {
