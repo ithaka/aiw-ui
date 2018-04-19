@@ -257,7 +257,8 @@ export class AuthService implements CanActivate {
   private expireSession(): void {
     this.logout()
       .then(() => {
-        this._router.navigate(['/login']);
+        // We want the user to see the "Session Expired" modal triggered by this.refreshUserSession() & this.getUserInfo()
+        // Do not route user away
       })
   }
 
