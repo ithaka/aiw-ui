@@ -54,7 +54,7 @@ export class TagsService {
             let facetsArray: any[] = []
             facetData.forEach((facet, index) => {
               let facetSplitArray = facet.name.split('|')
-              facetsArray.push({ name: facetSplitArray[1], id: facetSplitArray[1] })
+              facetsArray.push({ name: facetSplitArray[1], id: facetSplitArray[2] })
             })
 
             // Sorts facets alphabetically on name
