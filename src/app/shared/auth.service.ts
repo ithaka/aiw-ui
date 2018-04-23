@@ -224,9 +224,7 @@ export class AuthService implements CanActivate {
     }, userInfoInterval)
     
     // Set beta users email
-    // Disabled until Publishing Errors are complete (AIR-1481)
-    // this.betausers = Object.assign(BETA_USR_EMAILS)
-    this.betausers = []
+    this.betausers = Object.assign(BETA_USR_EMAILS)
   }
 
   // Reset the idle watcher

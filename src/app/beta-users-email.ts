@@ -23,5 +23,8 @@ export const BETA_USR_EMAILS: Array<string> = [
     
     // Internal from Mary
     'megan.ohearn@ithaka.org',
-    'solomon.grundy@artstor.org'
+    'solomon.grundy@artstor.org', 
+
+    'babrenny@ncsu.edu',
+    'kendrawerst@gmail.com'
 ]
