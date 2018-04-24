@@ -662,7 +662,7 @@ export class AssetPage implements OnInit, OnDestroy {
     private runDownloadView(dlink: string, retryCount: number): boolean {
         let result: boolean = false
 
-        if (retryCount < 2) {
+        if (retryCount <= 2) {
             // Download generated jpg as local blob file
             let blob = this._search.downloadViewBlob(dlink)
                 .take(1)
