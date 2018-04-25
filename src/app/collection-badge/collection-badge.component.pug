@@ -1,1 +1,11 @@
-.collection-badge.my-1([attr.title]="collectionType.alt") {{ collectionType.badgeText }}
+.collection-badge.my-1(
+  [ngbTooltip]="tipContent",
+  ngbTooltip,
+  placement="right",
+  [attr.title]="collectionType.alt",
+  aria-haspopup="true"
+) {{ collectionType.badgeText }}
+<ng-template #tipContent>
+  div {{ collectionType.alt }}
+</ng-template>
+  //- ang-tooltip(data-tooltip)
