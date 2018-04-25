@@ -85,6 +85,7 @@ import {
   ShareLinkModal,
   UploadImagesModal
 } from './modals'
+import { CollectionBadgeComponent } from './collection-badge'
 import { UploaderComponent } from './uploader/uploader.component'
 import { GeneralSearchComponent } from './browse-page/browse-groups/general-search.component'
 import { SkyBannerComponent } from './sky-banner/sky-banner.component'
@@ -174,6 +175,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     CategoryPage,
     ClickOutsideDirective,
     ClusterPage,
+    CollectionBadgeComponent,
     CollectionPage,
     PCollectionPage,
     ConfirmModal,
