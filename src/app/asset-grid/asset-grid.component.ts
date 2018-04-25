@@ -214,26 +214,36 @@ export class AssetGrid implements OnInit, OnDestroy {
       })
     );
 
-    // sets up subscription to allResults, which is the service providing thumbnails
+    /**
+     * Subscription to allResults
+     * - Provides thumbnails
+     * - allResults maintains array of results which persists outside of this component
+     */
     this.subscriptions.push(
       this._assets.allResults.subscribe(
         (allResults) => {
           // Prep display of search term next to results count
           this.formatSearchTerm(this.searchTerm)
           // Update results array
-          this.searchError = '';
-          this.searchLimitError = false;
+          this.searchError = ''
+          this.searchLimitError = false
 
           // Server error handling
           if (allResults === null) {
-            this.isLoading = false;
-            this.searchError = "There was a server error loading your search. Please try again later.";
-            return;
+            this.isLoading = false
+            this.searchError = "There was a server error loading your search. Please try again later."
+            return
           }
           else if(allResults.errors && allResults.errors[0] && (allResults.errors[0] === 'Too many rows requested')){
-            this.isLoading = false;
-            this.searchLimitError = true;
-            return;
+            this.isLoading = false
+            this.searchLimitError = true
+            return
+          }
+          else if (allResults.error) {
+            console.error(allResults.error)
+            this.isLoading = false
+            this.searchError = "There was a server error loading your search. Please try again later."
+            return
           }
 
           this.results = allResults.thumbnails
@@ -271,10 +281,9 @@ export class AssetGrid implements OnInit, OnDestroy {
           }
 
         },
+        // allResults is not expected to throw errors (instead passing them in stream, to maintain the subscriptions)
         (error) => {
-          console.error(error);
-          this.isLoading = false;
-          this.searchError = "There was a server error loading your search. Please try again later.";
+          console.error(error)
         }
       )
     );
@@ -455,8 +464,7 @@ export class AssetGrid implements OnInit, OnDestroy {
       this._assets.getAllThumbnails(this.itemIds)
         .then( allThumbnails => {
           this.isLoading = false;
-          this.allResults = allThumbnails;
-          this.results = this.allResults;
+          this.results = this.allResults = allThumbnails;
         })
         .catch( error => {
           this.isLoading = false;
@@ -480,6 +488,9 @@ export class AssetGrid implements OnInit, OnDestroy {
     this.isLoading = true;
 
     let newItemsArray = [];
+
+    // IE 11 need to be told "allResults" changed, therefore "results" has changed
+    this.results = this.allResults
 
     for (let i = 0; i < this.allResults.length; i++) {
       if ('objectId' in this.allResults[i]) {
