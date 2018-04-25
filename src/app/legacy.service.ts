@@ -41,7 +41,7 @@ export class LegacyRouteResolver implements Resolve<boolean> {
     if (!isNaN(Number(url.substr(1,2)))) {
       // Anchors in some old links cause some of the path to be lost
       url = '/library/welcome.html#' + url.substr(1)
-    } else if (url.indexOf('welcome.html') > -1) {
+    } else if(url.endsWith("welcome.html")) { // If the legacy URL ends with 'welcome.html'
       this._router.navigate(['/home'])
       return true
     } else if (url.indexOf('/library') == 0) {
