@@ -6,7 +6,7 @@
         .card-header
           h1#loginHeading {{ 'LINK_PAGE.LOGIN_HEADING' | translate }}
         .card-body
-          ang-login-form
+          ang-login-form([copyModifier]="'SHIBBOLETH'")
           a#linkLoginResetModal.link((click)="showPwdModal = true", tabindex="0", data-automation-component="artstor-pw-reset-link") {{ 'LOGIN.REG_LOGIN.FORGOT_PW_PROMPT' | translate }}
           h1#registerHeading.my-2 {{ 'LINK_PAGE.REGISTER_HEADING' | translate }}
           a#linkRegisterAccount.link((click)="navigateToRegister()", tabindex="0") {{ 'LINK_PAGE.REGISTER_LINK' | translate }}
