@@ -64,7 +64,9 @@ import { AssociatedPage } from './associated-page'
 import { ImageGroupPage, PptModalComponent } from './image-group-page'
 import { Login } from './login'
 import { NoContent } from './no-content'
+import { LinkPage } from './link-page'
 import { RegisterComponent } from './register/register.component'
+import { LoginFormComponent } from './login-form'
 import {
   AccessDeniedModal,
   AddToGroupModal,
@@ -175,11 +177,10 @@ export function HttpLoaderFactory(http: HttpClient) {
     ClusterPage,
     CollectionBadgeComponent,
     CollectionPage,
-    PCollectionPage,
     ConfirmModal,
     DeleteIgModal,
-    SessionExpireModal,
     DownloadLimitModal,
+    EditPersonalCollectionModal,
     Footer,
     GeneralSearchComponent,
     Home,
@@ -188,7 +189,9 @@ export function HttpLoaderFactory(http: HttpClient) {
     KeysPipe,
     LibraryComponent,
     LinkifyPipe,
+    LinkPage,
     Login,
+    LoginFormComponent,
     LoginReqModal,
     MediumEditorDirective,
     MyCollectionsComponent,
@@ -198,6 +201,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     NoContent,
     NoIgModal,
     PaginationComponent,
+    PCollectionPage,
     PptModalComponent,
     PwdResetModal,
     RegisterComponent,
@@ -206,6 +210,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     SearchModal,
     SearchPage,
     ServerErrorModal,
+    SessionExpireModal,
     ShareIgLinkModal,
     GenerateCitation,
     ShareLinkModal,
