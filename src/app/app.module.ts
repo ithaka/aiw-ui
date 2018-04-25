@@ -82,8 +82,7 @@ import {
   ServerErrorModal,
   SessionExpireModal,
   ShareIgLinkModal,
-  ShareLinkModal,
-  UploadImagesModal
+  ShareLinkModal
 } from './modals'
 import { CollectionBadgeComponent } from './collection-badge'
 import { UploaderComponent } from './uploader/uploader.component'
@@ -158,7 +157,6 @@ export function HttpLoaderFactory(http: HttpClient) {
   declarations: [
     AccessDeniedModal,
     AccountPage,
-    UploadImagesModal,
     EditPersonalCollectionModal,
     AddToGroupModal,
     AgreeModalComponent,
