@@ -222,7 +222,7 @@
         ang-thumbnail.card.card--asset(*ngFor="let asset of prevAssetResults.thumbnails", [thumbnail]="asset", [ngClass]="{'selected' : asset.selected || (assets[0].id == asset[assetIdProperty]), 'disabled': (asset.selected && assets.length === 1) }", (click)="toggleAsset(asset)")
         .text-center.pt-2
           pagination([pageObj]="pagination", (goToPage)="goToPage($event)", style="display:inline-block")
-ang-agree-modal(*ngIf="showAgreeModal", (closeModal)="showAgreeModal = false", [assetUrl]="downloadUrl", [downloadName]="downloadName")
+ang-agree-modal(*ngIf="showAgreeModal", (closeModal)="showAgreeModal = false", [assetUrl]="downloadUrl", [downloadName]="downloadName", [isMSAgent]="isMSAgent", [setDownloadView]="setDownloadView")
 ang-login-req-modal(*ngIf="showLoginModal", (closeModal)="showLoginModal = false")
 ang-add-to-group(*ngIf="showAddModal", [selectedAssets]="[ assets[0] ]", [showCreateGroup]="true", [copySelectionStr]=" 'ADD_TO_GROUP_MODAL.FROM_ASSET' ", (createGroup)="showCreateGroupModal = true; showAddModal = false;", (closeModal)="showAddModal = false")
 ang-new-ig-modal(*ngIf="showCreateGroupModal", [selectedAssets]="[ assets[0] ]", [showAddToGroup]="true", (addToGroup)="showAddModal = true; showCreateGroupModal = false;", (closeModal)="showCreateGroupModal = false")
