@@ -81,7 +81,7 @@
           //- Download dropdown options
           | {{downloadUrl}}
           .dropdown.d-inline-block(ngbDropdown, *ngIf="assets[0].downloadLink && (user.isLoggedIn || hasExternalAccess)")
-            button#downloadAssetDropdown.btn.btn-secondary(ngbDropdownToggle [class.loading]="downloadLoading", (click)="genDownloadViewLink()", tabindex="3")
+            button#downloadAssetDropdown.btn.btn-secondary(ngbDropdownToggle [class.loading]="downloadLoading", (click)="(isMSAgent ? null : genDownloadViewLink())", tabindex="3")
               | {{ 'ASSET_PAGE.BUTTONS.DOWNLOAD' | translate}}
               = " "
             .dropdown-menu(ngbDropdownMenu, aria-labelledby="dropdownBasic1")
@@ -131,9 +131,11 @@
               div(*ngFor="let value of assets[0].formattedMetadata[fieldName]")
                 a.value.col-link(*ngIf="(fieldName === 'Collection')", [routerLink]="setCollectionLink(assets[0])", [innerHTML]="cleanFieldValue(value)")
                 .value(*ngIf="(fieldName !== 'Collection')", [innerHTML]="cleanFieldValue(value) | linkify")
-          .meta-block
+          .meta-block(*ngIf="assets[0].formattedMetadata.Rights && assets[0].formattedMetadata.Rights.length > 0")
             .label#Rights Rights
-            .value([innerHtml]="cleanFieldValue(assets[0].formattedMetadata.Rights && assets[0].formattedMetadata.Rights[0]) | linkify")
+            div(*ngFor="let right of assets[0].formattedMetadata.Rights")
+              .value([innerHTML]="cleanFieldValue(right) | linkify")
+
           .row-hdr.pt-3(*ngIf="assets[0].filePropertiesArray.length > 0") {{ 'ASSET_PAGE.HEADER_LABELS.FILE_PROPS' | translate}}
           //- Loop through File Properties Array
           //- .meta-block(*ngFor="let filePropObj of assets[0].filePropertiesArray")
