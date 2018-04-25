@@ -4,7 +4,7 @@ nav.nav.nav-inline.browse-nav
 .row
   .col-md-8
     ul.filter-list
-      li.filter(*ngFor="let facet of categoryFacets", [class.hidden]="!facet.title && !facet.name")
+      li.filter(*ngFor="let facet of categoryFacets", [class.hidden]="facet.title === '' || !facet.name")
         a.tag-link(*ngIf="facetQueryMap[facetType] == 'category'", [routerLink]="['/category', facet.name ]")
           | {{ facet.title }} ({{facet.count}})
         a.tag-link(*ngIf="facetQueryMap[facetType] != 'category'", [routerLink]="['/search/*', getLinkParam(facetType, facet.name)]") 
