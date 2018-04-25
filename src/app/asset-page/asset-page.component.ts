@@ -796,11 +796,6 @@ export class AssetPage implements OnInit, OnDestroy {
         this.downloadUrl = this.generatedViewURL;
         this.showAgreeModal = true
         this.downloadName = 'download.jpg'
-
-        // If MS Browser, call genDownloadViewLink here
-        if (this.isMSAgent) {
-            this.genDownloadViewLink()
-        }
     }
 
     trackDownloadImage(): void {
