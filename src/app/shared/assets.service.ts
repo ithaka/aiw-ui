@@ -29,7 +29,7 @@ export class AssetService {
     //set up thumbnail observables
     private allResultsValue: any[] = [];
     // BehaviorSubjects push last value on subscribe
-    private allResultsSource: BehaviorSubject<any[]> = new BehaviorSubject(this.allResultsValue);
+    private allResultsSource: BehaviorSubject<any> = new BehaviorSubject(this.allResultsValue);
     public allResults: Observable<any> = this.allResultsSource.asObservable();
 
     //set up noIG observables
@@ -433,6 +433,11 @@ export class AssetService {
                     searchTerm = "clusterid:(" + params["clusterId"] + ")"
                     this.loadSearch(searchTerm)
                 } else if (params.hasOwnProperty("pcolId") && params["pcolId"] !== "") {
+                    // Filter by owner if filtering by Global Personal Collection
+                    if (params["pcolId"] === "37436") {
+                        let user = this._auth.getUser()
+                        searchTerm = searchTerm + " personalcollectionowner:(" + user["baseProfileId"]  + ")"
+                    }
                     //get personal collection thumbnails via SOLR
                     this.loadSearch(searchTerm)
                 }  else if (params.hasOwnProperty("colId") && params["colId"] !== "") {
@@ -642,7 +647,7 @@ export class AssetService {
                             // Pass portion of the data we have
                             this.updateLocalResults(data)
                             // Pass error down to allResults listeners
-                            this.allResultsSource.error(error) // .throw(error);
+                            this.allResultsSource.next({"error":error}) // .throw(error);
                         });
                 } else {
                     data.thumbnails = []
@@ -689,7 +694,7 @@ export class AssetService {
                 // Pass portion of the data we have
                 this.updateLocalResults(ig)
                 // Pass error down to allResults listeners
-                this.allResultsSource.error(error) // .throw(error)
+                this.allResultsSource.next({"error":error}) // .throw(error)
             })
     }
 
@@ -887,7 +892,7 @@ export class AssetService {
                     this.updateLocalResults(data)
             }, (error) => {
                     console.error(error)
-                    this.allResultsSource.error(error)
+                    this.allResultsSource.next({"error":error})
             });
     }
 

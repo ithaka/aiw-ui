@@ -127,13 +127,15 @@ export class AuthService implements CanActivate {
       this.ENV = 'prod'
     }
     else if ( document.location.hostname.indexOf('prod.cirrostratus.org') > -1 ) {
+      console.info("Using Prod Endpoints (Absolute)")
       // Prod/Lively endpoints
       this.hostname = '//library.artstor.org'
       this.baseUrl =  '//library.artstor.org/api'
       this.logUrl = '//ang-ui-logger.apps.prod.cirrostratus.org/api/v1'
-      this.solrUrl = '/api/search/v1.0/search'
+      this.solrUrl = this.hostname + '/api/search/v1.0/search'
       this.ENV = 'prod'
     } else if ( new RegExp(testHostnames.join("|")).test(document.location.hostname) ) {
+      console.info("Using Test Endpoints")
       // Test Endpoints
       this.hostname = '//stage.artstor.org'
       this.subdomain = 'stage'
@@ -174,6 +176,8 @@ export class AuthService implements CanActivate {
 
     idle.onIdleEnd.subscribe(() => {
       this.idleState = 'No longer idle.';
+      // We want to ensure a user is refreshed as soon as they return to the tab
+      this.refreshUserSession(true)
     });
     idle.onTimeout.subscribe(() => {
       let user = this.getUser();
@@ -220,9 +224,7 @@ export class AuthService implements CanActivate {
     }, userInfoInterval)
     
     // Set beta users email
-    // Disabled until Publishing Errors are complete (AIR-1481)
-    // this.betausers = Object.assign(BETA_USR_EMAILS)
-    this.betausers = []
+    this.betausers = Object.assign(BETA_USR_EMAILS)
   }
 
   // Reset the idle watcher
@@ -253,7 +255,8 @@ export class AuthService implements CanActivate {
   private expireSession(): void {
     this.logout()
       .then(() => {
-        this._router.navigate(['/login']);
+        // We want the user to see the "Session Expired" modal triggered by this.refreshUserSession() & this.getUserInfo()
+        // Do not route user away
       })
   }
 
