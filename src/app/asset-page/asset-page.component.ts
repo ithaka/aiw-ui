@@ -688,6 +688,7 @@ export class AssetPage implements OnInit, OnDestroy {
                 }, (err) => {
                     console.error('Error returning generated download view', err)
                     result = false
+                    this.downloadLoading = false
                     this.showServerErrorModal = true
                 })
         }
