@@ -667,16 +667,17 @@ export class AssetPage implements OnInit, OnDestroy {
             let blob = this._search.downloadViewBlob(dlink)
                 .take(1)
                 .subscribe((blob) => {
-                    // Call recursively two more times if Promise blob.size < 7kb
-                    if (blob.size < 7000) {
+                    // Call recursively two more times if Promise blob.size < 10kb
+                    if (blob.size < 10000) {
                         result = false
                         retryCount += 1
                         this.runDownloadView(dlink, retryCount)
                     }
                     else {
                         if (this.isMSAgent) {
-                            this.navigator.msSaveBlob(blob, 'download')
                             this.generatedViewURL = dlink
+                            this.navigator.msSaveBlob(blob, 'download')
+                            
                         }
                         else {
                             this.blobURL = this.URL.createObjectURL(blob)
@@ -796,6 +797,11 @@ export class AssetPage implements OnInit, OnDestroy {
         this.downloadUrl = this.generatedViewURL;
         this.showAgreeModal = true
         this.downloadName = 'download.jpg'
+
+        // If MS Browser, call genDownloadViewLink here
+        if (this.isMSAgent) {
+            this.genDownloadViewLink()
+        }
     }
 
     trackDownloadImage(): void {
