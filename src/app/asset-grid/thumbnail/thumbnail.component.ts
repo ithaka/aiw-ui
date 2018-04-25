@@ -13,6 +13,9 @@ import { Thumbnail, AssetService, CollectionTypeHandler, AssetSearchService } fr
     .disablePointerEvents{
         pointer-events: none;
     }
+    .icon {
+      margin-top: 3px;
+    }
   `]
 })
 export class ThumbnailComponent implements OnInit, OnChanges {
