@@ -84,7 +84,6 @@ import {
   ShareIgLinkModal,
   ShareLinkModal
 } from './modals'
-import { TooltipComponent } from './tooltip'
 import { CollectionBadgeComponent } from './collection-badge'
 import { UploaderComponent } from './uploader/uploader.component'
 import { GeneralSearchComponent } from './browse-page/browse-groups/general-search.component'
@@ -214,7 +213,6 @@ export function HttpLoaderFactory(http: HttpClient) {
     TagComponent,
     TagsListComponent,
     ThumbnailComponent,
-    TooltipComponent,
     TypeIdPipe,
     UploaderComponent
   ],
