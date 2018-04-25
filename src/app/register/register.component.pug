@@ -93,7 +93,7 @@ nav-menu
             | {{ 'REGISTER.PRIVACY_DISCLAIMER' | translate }}
           | Already registered?
           = " "
-          a#linkLoginResetModal.link([routerLink]="['/login']", tabindex="1") Log in
+          a#linkLoginResetModal.link((click)="navigateToLogin()", tabindex="1") Log in
           br
           a#linkRegisterHelp.link(href="http://support.artstor.org/?article=register-for-an-artstor-account", target="_blank", tabindex="1") Help
 ang-register-jstor-modal(*ngIf="showJstorModal", (closeModal)="closeJstorModal($event)")

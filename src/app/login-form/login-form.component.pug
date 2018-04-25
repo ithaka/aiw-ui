@@ -1,0 +1,16 @@
+form((ngSubmit)="login(user)")
+  .form-group
+    label(for="loginEmail") {{ 'LOGIN.REG_LOGIN.EMAIL_LABEL' | translate }}
+    input#inputLoginEmail.form-control([(ngModel)]="user.username" name="username" type="text" placeholder="Username")
+  .form-group
+    label(for="loginPassword") {{ 'LOGIN.REG_LOGIN.PASSWORD_LABEL' | translate }}
+    input#inputLoginPassword.form-control([(ngModel)]="user.password" name="password" type="password" placeholder="Password")
+    #errorMsg.form-text.text-danger(
+      *ngIf="errorMsg",
+      [innerHtml]="errorMsg | translate"
+    )
+    p.form-text.text-danger(*ngIf="forcePwdRst", [innerHtml]="'LOGIN.REG_LOGIN.FORCE_PW_RESET_MSG' | translate")
+  p.notranslate([innerHtml]=" copyBase + 'LOGIN.TERMS' | translate ")
+  .form-group
+    button#btnLoginRemote.btn.btn-primary([class.loading]="loginLoading" type="submit" name="action" data-sc="account: remote user log in" data-automation-component="artstor-login-button") 
+      | {{ 'LOGIN_FORM.LOGIN_BUTTON.' + copyModifier | translate }}
