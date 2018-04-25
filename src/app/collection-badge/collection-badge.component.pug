@@ -1,7 +1,7 @@
 .collection-badge.my-1(
   [ngbTooltip]="tipContent",
   ngbTooltip,
-  triggers="hover:focus",
+  triggers="focusin:focusout mouseenter:mouseleave",
   placement="right",
   [attr.title]="collectionType.alt",
   aria-haspopup="true",
