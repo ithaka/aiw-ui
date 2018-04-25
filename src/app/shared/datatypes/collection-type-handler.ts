@@ -1,13 +1,15 @@
 export class CollectionTypeHandler { 
-  public collectionTypeMap: any = {
-    0: { name: '', alt: '' },
-    1: { name: "artstor-asset", alt: "Artstor Digital Library" },
-    2: { name: "institution-asset", alt: "Institution Collections" },
-    3: { name: "personal-asset", alt: "Private Collections" },
-    4: { name: "institution-asset", alt: "Institution Collections" },
-    5: { name: "artstor-open-asset", alt: "Open Artstor" },
-    6: { name: "personal-asset", alt: "Private Collections" },
-    200: { name: "ssc-asset", alt: "Public Collection" } // an non-existant collection type used to indicate it's an open, non-artstor asset
+  public collectionTypeMap: {
+    [key: string]: CollectionTypeInfo
+  } = {
+    0: { name: '', alt: '', badgeText: '' },
+    1: { name: "artstor-asset", alt: "Artstor Digital Library", badgeText: 'Artstor' },
+    2: { name: "institution-asset", alt: "Institution Collections", badgeText: 'Institutional' },
+    3: { name: "personal-asset", alt: "Private Collections", badgeText: 'Personal' },
+    4: { name: "institution-asset", alt: "Institution Collections", badgeText: 'Institutional' },
+    5: { name: "artstor-open-asset", alt: "Open Artstor", badgeText: 'Open Artstor' },
+    6: { name: "personal-asset", alt: "Private Collections", badgeText: 'Personal' },
+    200: { name: "ssc-asset", alt: "Public Collection", badgeText: 'Public' } // an non-existant collection type used to indicate it's an open, non-artstor asset
   }
 
  /**
@@ -17,7 +19,7 @@ export class CollectionTypeHandler {
   * @param contributinginstitutionid the id of the institution that uploaded the asset, used to modify the collection type
   *  if the asset was uploaded by Artstor
   */
- public getCollectionType(typeIds: Array<number>, contributinginstitutionid: number): { name: string, alt: string } {
+ public getCollectionType(typeIds: Array<number>, contributinginstitutionid: number): CollectionTypeInfo {
   if (!typeIds) { typeIds = [] }
   // Incase, if the asset has both public (5) and inst. (2) colType, then display the public colType indicator
   let typeId = (typeIds.indexOf(2) > -1) && (typeIds.indexOf(5) > -1) ? 5 : typeIds[0]
@@ -29,6 +31,12 @@ export class CollectionTypeHandler {
   }
 
    let mapResult = this.collectionTypeMap[typeId]
-   return mapResult ? mapResult : { name: '', alt: ''}
+   return mapResult ? mapResult : this.collectionTypeMap[0]
  }
+}
+
+export interface CollectionTypeInfo {
+  name: string
+  alt: string
+  badgeText: string
 }
