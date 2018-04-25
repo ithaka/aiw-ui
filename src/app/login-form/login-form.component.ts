@@ -36,6 +36,8 @@ export class LoginFormComponent implements OnInit {
   public successMsgPwdRst = ''
   public loginInstitutions = [] /** Stores the institutions returned by the server */
   public showRegister: boolean = false
+  
+  @Input() private copyModifier: string = 'DEFAULT'
 
   private loginInstName: string = '' /** Bound to the autocomplete field */
   private loginLoading = false
