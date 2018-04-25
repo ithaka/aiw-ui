@@ -5,26 +5,7 @@
         .card-header
           h1#loginHeading {{ copyBase + 'LOGIN.REG_LOGIN.HEADING' | translate }}
         .card-body
-          form((ngSubmit)="login(user)")
-            .form-group
-              label(for="loginEmail") {{ 'LOGIN.REG_LOGIN.EMAIL_LABEL' | translate }}
-              input#inputLoginEmail.form-control([(ngModel)]="user.username" name="username" type="text" placeholder="Username")
-            .form-group
-              label(for="loginPassword") {{ 'LOGIN.REG_LOGIN.PASSWORD_LABEL' | translate }}
-              input#inputLoginPassword.form-control([(ngModel)]="user.password" name="password" type="password" placeholder="Password")
-              #errorMsg.form-text.text-danger(
-                *ngIf="errorMsg",
-                [innerHtml]="errorMsg | translate"
-              )
-              p.form-text.text-danger(*ngIf="forcePwdRst", [innerHtml]="'LOGIN.REG_LOGIN.FORCE_PW_RESET_MSG' | translate")
-            p.notranslate([innerHtml]=" copyBase + 'LOGIN.TERMS' | translate ")
-            .form-group
-              button#btnLoginRemote.btn.btn-primary([class.loading]="loginLoading" type="submit" name="action" data-sc="account: remote user log in" data-automation-component="artstor-login-button") 
-                | {{ 'LOGIN.LOGIN_BTN' | translate }}
-            //- .form-group
-            //-   h3 Log into Shared Shelf
-            //-   button#btnLoginRemote.btn.btn-primary((click)="ssLogin(user)", [class.loading]="loginLoading" type="button" name="action" data-sc="account: remote user log in") 
-            //-     | {{ 'LOGIN.LOGIN_BTN' | translate }}
+          ang-login-form
           a#linkLoginResetModal((click)="showPwdModal = true" tabindex="0" class="link" data-automation-component="artstor-pw-reset-link") {{ 'LOGIN.REG_LOGIN.FORGOT_PW_PROMPT' | translate }}
           br
           div(*ngIf="showRegister")
@@ -65,6 +46,7 @@
         .card-body
           .form-group
             | #[a#linkLoginSaharaSS.link(tabindex="0", href="http://catalog.sharedshelf.artstor.org/login.html", target="_blank", data-automation-component="ss-login-link") Log in] to Forum
+ang-pwd-reset-modal(*ngIf="showPwdModal", (closeModal)="showPwdModal = false")
 #helpModal.modal([ngClass]="{'show': showHelpModal }")
   .modal-dialog
     .modal-content
@@ -75,4 +57,3 @@
       .modal-body([innerHtml]="'ACCESS_HELP_MODAL.PROMPT' | translate")
       .modal-footer
         button#btnLoginDismissHelp.btn.btn-primary((click)="showHelpModal = false") {{ 'ACCESS_HELP_MODAL.DISMISS' | translate }}
-ang-pwd-reset-modal(*ngIf="showPwdModal", (closeModal)="showPwdModal = false")
