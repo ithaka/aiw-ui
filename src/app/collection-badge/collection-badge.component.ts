@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 
 @Component({
   selector: 'ang-collection-badge',
@@ -6,7 +6,16 @@ import { Component, OnInit } from '@angular/core';
 })
 
 export class CollectionBadgeComponent implements OnInit {
+  @Input() collectionType: {
+    name: string,
+    alt: string
+  }
+
   constructor() { }
 
-  ngOnInit() { }
+  ngOnInit() {
+    if (!this.collectionType) {
+      console.error('no collectionType assigned to collection badge!')
+    }
+  }
 }
