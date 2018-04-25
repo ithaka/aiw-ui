@@ -2,7 +2,8 @@ import { Component, OnInit, Input } from '@angular/core';
 
 @Component({
   selector: 'ang-collection-badge',
-  templateUrl: 'collection-badge.component.pug'
+  templateUrl: 'collection-badge.component.pug',
+  styleUrls: ['./collection-badge.component.scss']
 })
 
 export class CollectionBadgeComponent implements OnInit {
