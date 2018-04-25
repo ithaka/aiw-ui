@@ -21,6 +21,7 @@ import { DataResolver } from './app.resolver'
 import { BrowseRoutes } from './browse-page/browse-page.routes'
 import { AccountPage } from './account-page/account-page.component'
 import { LegacyRouteResolver } from './legacy.service'
+import { LinkPage } from './link-page'
 
 
 export const ROUTES: Routes = [
@@ -49,6 +50,7 @@ export const ROUTES: Routes = [
   { path: 'associated/:objectId/:colId', component: AssociatedPage, canActivate:[AuthService] },
   { path: 'associated', component: AssociatedPage, canActivate:[AuthService] },
   { path: 'register', component: RegisterComponent, canActivate: [AuthService] },
+  { path: 'link', component: LinkPage },
   { path: 'library', children: [
     { path: '**', component: NoContent, resolve: [LegacyRouteResolver] }
   ] },
