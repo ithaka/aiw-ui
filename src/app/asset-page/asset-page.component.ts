@@ -667,7 +667,7 @@ export class AssetPage implements OnInit, OnDestroy {
             let blob = this._search.downloadViewBlob(dlink)
                 .take(1)
                 .subscribe((blob) => {
-                    // Call recursively two more times if Promise blob.size < 5kb
+                    // Call recursively two more times if Promise blob.size < 7kb
                     if (blob.size < 7000) {
                         result = false
                         retryCount += 1
@@ -681,7 +681,6 @@ export class AssetPage implements OnInit, OnDestroy {
                             this.blobURL = this.URL.createObjectURL(blob)
                             this.generatedViewURL = this._sanitizer.bypassSecurityTrustUrl(this.blobURL)
                         }
-                        console.log(blob)
                         this.downloadLoading = false
                         result = true
                     }
@@ -735,8 +734,10 @@ export class AssetPage implements OnInit, OnDestroy {
             // Generate the view url from tilemap service
             let downloadLink: string = asset.tileSource.replace('info.json', '') + xOffset + ',' + yOffset + ',' + zoomX + ',' + zoomY + '/' + viewX + ',' + viewY + '/0/native.jpg'
 
-            // Call runDownloadView and check for success, tries 3 times
-            let result = this.runDownloadView(downloadLink, 0) // TODO: handle UI messaging if !result
+            // Call runDownloadView and check for success, tries 3 times.
+            if (!this.isMSAgent) { // MS Browsers 
+                this.runDownloadView(downloadLink, 0)
+            }
         }
     }
 
@@ -793,6 +794,11 @@ export class AssetPage implements OnInit, OnDestroy {
         this.downloadUrl = this.generatedViewURL;
         this.showAgreeModal = true
         this.downloadName = 'download.jpg'
+
+        // If MS Browser, call genDownloadViewLink here
+        if (this.isMSAgent) {
+            this.genDownloadViewLink()
+        }
     }
 
     trackDownloadImage(): void {
