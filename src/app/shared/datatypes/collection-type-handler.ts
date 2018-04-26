@@ -3,13 +3,13 @@ export class CollectionTypeHandler {
     [key: string]: CollectionTypeInfo
   } = {
     0: { name: '', alt: '', badgeText: '' },
-    1: { name: "artstor-asset", alt: "Artstor Digital Library", badgeText: 'Artstor' },
-    2: { name: "institution-asset", alt: "Institution Collections", badgeText: 'Institutional' },
-    3: { name: "personal-asset", alt: "Private Collections", badgeText: 'Personal' },
-    4: { name: "institution-asset", alt: "Institution Collections", badgeText: 'Institutional' },
-    5: { name: "artstor-open-asset", alt: "Open Artstor", badgeText: 'Open Artstor' },
-    6: { name: "personal-asset", alt: "Private Collections", badgeText: 'Personal' },
-    200: { name: "ssc-asset", alt: "Public Collection", badgeText: 'Public' } // an non-existant collection type used to indicate it's an open, non-artstor asset
+    1: { name: "artstor-asset", alt: "The Artstor Digital Library is accessible to all participating institutions", badgeText: 'Artstor' },
+    2: { name: "institution-asset", alt: "Available to your institutional only", badgeText: 'Institutional' },
+    3: { name: "personal-asset", alt: "Available only to the owner unless shared in a group", badgeText: 'Personal' },
+    4: { name: "institution-asset", alt: "Available to your institutional only", badgeText: 'Institutional' },
+    5: { name: "artstor-open-asset", alt: "Available to everyone", badgeText: 'Open Artstor' },
+    6: { name: "personal-asset", alt: "Available only to the owner unless shared in a group", badgeText: 'Personal' },
+    200: { name: "ssc-asset", alt: "Available to everyone", badgeText: 'Public' } // an non-existant collection type used to indicate it's an open, non-artstor asset
   }
 
  /**
