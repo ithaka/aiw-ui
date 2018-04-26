@@ -676,6 +676,7 @@ export class AssetPage implements OnInit, OnDestroy {
                     else {
                         if (this.isMSAgent) {
                             this.generatedViewURL = null
+                            console.log('MSAgent Blob: ', blob)
                             this.navigator.msSaveBlob(blob, 'download')
                             
                         }
@@ -798,6 +799,7 @@ export class AssetPage implements OnInit, OnDestroy {
 
         // If MS Browser, call genDownloadViewLink here
         if (this.isMSAgent) {
+            console.log('MSAgent gen download view')
             this.genDownloadViewLink()
         }
     }
