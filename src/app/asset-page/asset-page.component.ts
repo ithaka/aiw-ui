@@ -667,15 +667,15 @@ export class AssetPage implements OnInit, OnDestroy {
             let blob = this._search.downloadViewBlob(dlink)
                 .take(1)
                 .subscribe((blob) => {
-                    // Call recursively two more times if Promise blob.size < 10kb
-                    if (blob.size < 10000) {
+                    // Call recursively two more times if Promise blob.size < 7.5kb
+                    if (blob.size < 7500) {
                         result = false
                         retryCount += 1
                         this.runDownloadView(dlink, retryCount)
                     }
                     else {
                         if (this.isMSAgent) {
-                            this.generatedViewURL = dlink
+                            this.generatedViewURL = '#'
                             this.navigator.msSaveBlob(blob, 'download')
                             
                         }
