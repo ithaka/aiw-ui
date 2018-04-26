@@ -97,7 +97,7 @@
               a#downloadViewLink.dropdown-item(download="download.jpg",
                 type="image/jpeg",
                 [attr.href]="(downloadAuth() && !assets[0].disableDownload) ? generatedViewURL : '#'",
-                (click)="(downloadAuth() && !assets[0].disableDownload) ? trackDownloadView() : setDownloadView();",
+                (click)="(downloadAuth() && !assets[0].disableDownload) ? trackDownloadView() : setDownloadView()",
                 [class.disabled]="assets[0].disableDownload || assets[0].typeName !== 'image'",
                 target="_self",
                 tabindex="3")
