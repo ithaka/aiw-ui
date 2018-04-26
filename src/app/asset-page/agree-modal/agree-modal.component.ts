@@ -17,7 +17,7 @@ export class AgreeModalComponent implements OnInit {
   @Output()
   downloadAsset = new EventEmitter();
   @Input()
-  assetUrl: string;
+  assetUrl: string
   /** The value of the download attribute for Download View **/
   @Input()
   downloadName: string
@@ -28,7 +28,7 @@ export class AgreeModalComponent implements OnInit {
   @Input()
   setDownloadView: () => void
 
-  constructor(private _sauth: AuthService) { }
+  constructor(private _auth: AuthService) { }
 
   ngOnInit() { }
 
