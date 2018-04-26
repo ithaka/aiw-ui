@@ -675,7 +675,7 @@ export class AssetPage implements OnInit, OnDestroy {
                     }
                     else {
                         if (this.isMSAgent) {
-                            this.generatedViewURL = '#'
+                            this.generatedViewURL = null
                             this.navigator.msSaveBlob(blob, 'download')
                             
                         }
@@ -793,7 +793,7 @@ export class AssetPage implements OnInit, OnDestroy {
      */
     setDownloadView(): void {
        
-        this.downloadUrl = this.isMSAgent ? '#' : this.generatedViewURL
+        this.downloadUrl = this.generatedViewURL
         this.showAgreeModal = true
         this.downloadName = 'download.jpg'
 
