@@ -20,7 +20,7 @@ export class AgreeModalComponent implements OnInit {
   assetUrl: string;
   /** The value of the download attribute for Download View **/
   @Input()
-  downloadName : string;
+  downloadName: string
   /** Is this MS IE or Edge? */
   @Input()
   isMSAgent: boolean
@@ -28,7 +28,7 @@ export class AgreeModalComponent implements OnInit {
   @Input()
   setDownloadView: () => void
 
-  constructor(private _auth: AuthService) { }
+  constructor(private _sauth: AuthService) { }
 
   ngOnInit() { }
 
