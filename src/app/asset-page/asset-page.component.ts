@@ -792,7 +792,6 @@ export class AssetPage implements OnInit, OnDestroy {
      * - sets url used by agree modal
      */
     setDownloadView(): void {
-       
         this.downloadUrl = this.generatedViewURL
         this.showAgreeModal = true
         this.downloadName = 'download.jpg'
