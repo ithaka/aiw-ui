@@ -737,10 +737,8 @@ export class AssetPage implements OnInit, OnDestroy {
             // Generate the view url from tilemap service
             let downloadLink: string = asset.tileSource.replace('info.json', '') + xOffset + ',' + yOffset + ',' + zoomX + ',' + zoomY + '/' + viewX + ',' + viewY + '/0/native.jpg'
 
-            // Call runDownloadView and check for success, tries 3 times.
-            if (!this.isMSAgent) { // MS Browsers 
-                this.runDownloadView(downloadLink, 0)
-            }
+            // Call runDownloadView and check for success, tries 3 times. 
+            this.runDownloadView(downloadLink, 0)
         }
     }
 
@@ -794,7 +792,8 @@ export class AssetPage implements OnInit, OnDestroy {
      * - sets url used by agree modal
      */
     setDownloadView(): void {
-        this.downloadUrl = this.generatedViewURL;
+       
+        this.downloadUrl = this.isMSAgent ? '#' : this.generatedViewURL
         this.showAgreeModal = true
         this.downloadName = 'download.jpg'
 
