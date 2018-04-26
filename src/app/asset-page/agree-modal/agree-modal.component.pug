@@ -14,4 +14,4 @@
           a.link(href="http://support.artstor.org/?article=embedded-metadata", name="Embedded metadata viewing help", target="_blank") click here.
       .modal-footer
         button.btn.btn-secondary(type="button", (click)="closeModal.emit()") I reject
-        a.btn.btn-primary((click)="agree();setDownloadView()", [href]="assetUrl", [download]="downloadName", target="_self") I accept
+        a.btn.btn-primary((click)="agree()", [href]="assetUrl", [download]="downloadName", target="_self") I accept
