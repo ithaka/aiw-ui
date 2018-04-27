@@ -1,7 +1,7 @@
 import { Router } from '@angular/router';
 import { Component, OnInit, OnChanges, Input, SimpleChanges } from '@angular/core';
 
-import { Thumbnail, AssetService, CollectionTypeHandler, AssetSearchService } from './../../shared'
+import { Thumbnail, AssetService, CollectionTypeHandler, AssetSearchService, CollectionTypeInfo } from './../../shared'
 
 @Component({
   selector: 'ang-thumbnail',
@@ -12,6 +12,9 @@ import { Thumbnail, AssetService, CollectionTypeHandler, AssetSearchService } fr
     }
     .disablePointerEvents{
         pointer-events: none;
+    }
+    .icon {
+      margin-top: 3px;
     }
   `]
 })
@@ -78,7 +81,7 @@ export class ThumbnailComponent implements OnInit, OnChanges {
   }
 
   // wrapper function for getting the collection type
-  getCollectionType(): { name: string, alt: string } {
+  getCollectionType(): CollectionTypeInfo {
     // Some endpoints give us the collectionType info in 'collectionType: number', where as others give the same info in 'collectiontypes: Array<number>'
     return this.collectionTypeHandler.getCollectionType( this.thumbnail['collectionType'] ? [ this.thumbnail['collectionType'] ] : this.thumbnail['collectiontypes'], this.thumbnail['contributinginstitutionid'])
   }
