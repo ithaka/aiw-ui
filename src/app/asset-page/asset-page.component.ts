@@ -675,9 +675,9 @@ export class AssetPage implements OnInit, OnDestroy {
                     }
                     else {
                         if (this.isMSAgent) {
-                            this.generatedViewURL = null
+                            this.generatedViewURL = '#'
                             console.log('MSAgent Blob: ', blob)
-                            this.navigator.msSaveBlob(blob, 'download')
+                            this.navigator.msSaveBlob(blob, 'download.jpg')
                             
                         }
                         else {
