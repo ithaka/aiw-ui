@@ -663,20 +663,23 @@ export class AssetPage implements OnInit, OnDestroy {
     private runDownloadView(dlink: string, retryCount: number): boolean {
         let result: boolean = false
 
-        if (retryCount < 2) {
+        if (retryCount <= 2) {
             // Download generated jpg as local blob file
             let blob = this._search.downloadViewBlob(dlink)
                 .take(1)
                 .subscribe((blob) => {
-                    // Call recursively two more times if Promise blob.size < 7kb
-                    if (blob.size < 7000) {
+                    // Call recursively two more times if Promise blob.size < 7.5kb
+                    if (blob.size < 7500) {
                         result = false
                         retryCount += 1
                         this.runDownloadView(dlink, retryCount)
                     }
                     else {
                         if (this.isMSAgent) {
+                            this.generatedViewURL = null
+                            console.log('MSAgent Blob: ', blob)
                             this.navigator.msSaveBlob(blob, 'download')
+                            
                         }
                         else {
                             this.blobURL = this.URL.createObjectURL(blob)
@@ -688,6 +691,7 @@ export class AssetPage implements OnInit, OnDestroy {
                 }, (err) => {
                     console.error('Error returning generated download view', err)
                     result = false
+                    this.downloadLoading = false
                     this.showServerErrorModal = true
                 })
         }
@@ -735,10 +739,8 @@ export class AssetPage implements OnInit, OnDestroy {
             // Generate the view url from tilemap service
             let downloadLink: string = asset.tileSource.replace('info.json', '') + xOffset + ',' + yOffset + ',' + zoomX + ',' + zoomY + '/' + viewX + ',' + viewY + '/0/native.jpg'
 
-            // Call runDownloadView and check for success, tries 3 times.
-            if (!this.isMSAgent) { // MS Browsers 
-                this.runDownloadView(downloadLink, 0)
-            }
+            // Call runDownloadView and check for success, tries 3 times. 
+            this.runDownloadView(downloadLink, 0)
         }
     }
 
@@ -792,12 +794,13 @@ export class AssetPage implements OnInit, OnDestroy {
      * - sets url used by agree modal
      */
     setDownloadView(): void {
-        this.downloadUrl = this.generatedViewURL;
+        this.downloadUrl = this.generatedViewURL
         this.showAgreeModal = true
         this.downloadName = 'download.jpg'
 
         // If MS Browser, call genDownloadViewLink here
         if (this.isMSAgent) {
+            console.log('MSAgent gen download view')
             this.genDownloadViewLink()
         }
     }
