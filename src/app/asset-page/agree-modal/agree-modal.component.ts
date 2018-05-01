@@ -17,10 +17,16 @@ export class AgreeModalComponent implements OnInit {
   @Output()
   downloadAsset = new EventEmitter();
   @Input()
-  assetUrl: string;
+  assetUrl: string
   /** The value of the download attribute for Download View **/
   @Input()
-  downloadName : string;
+  downloadName: string
+  /** Is this MS IE or Edge? */
+  @Input()
+  isMSAgent: boolean
+  /** Asset.setDownloadView */
+  @Input()
+  setDownloadView: () => void
 
   constructor(private _auth: AuthService) { }
 
@@ -31,6 +37,11 @@ export class AgreeModalComponent implements OnInit {
    */
   private agree(): void {
     this._auth.authorizeDownload()
+
+    if (this.isMSAgent) {
+      this.setDownloadView()
+    }
     this.closeModal.emit()
   }
+
 }
