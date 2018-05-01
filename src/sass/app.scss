@@ -285,3 +285,8 @@ nav-menu {
 body body{
   height: unset;
 }
+
+// Bootstrap tooltip override
+.tooltip-inner {
+  width: 140px;
+}
