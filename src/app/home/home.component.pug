@@ -2,11 +2,17 @@ nav-menu
 #mainContent.container.main-content(tabindex="-1")
   //- for accessibility so that page has title
   h1.hidden Artstor Home Page
+  
+  .row.my-4
+    .col-sm-4
+      h3.browse-category {{ 'Art and Visual Resources' | translate }}
+      p.small([innerHtml]="'HOME.CONTENT_ACCESS.USER' | translate")
+    .col-sm-5.search-highlight
+      ang-search
   .row
     .col-sm-4
-      ang-search
-      #mainContent.card.pt-2
-        .card-header
+      #mainContent.card
+        .card-header.pt-0
           h2.h1 {{ 'HOME.BROWSE.TITLE' | translate }}
         ul.list-group.list-group-flush.list-group-clean
           //- ADL Collections Link
