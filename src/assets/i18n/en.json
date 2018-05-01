@@ -408,6 +408,10 @@
       "FRM_BLOG": "From Our Blog",
       "INSTITUTION_COLLECTIONS": "{{institutionName}} Collections"
     },
+    "CONTENT_ACCESS": {
+      "USER": "From the Artstor Digital Library, Institutional Collections, and Public Collections",
+      "PUBLIC": "From Public Collections"
+    },
     "BROWSE": {
       "TITLE": "Browse",
       "GEO_HEADING": "Geography",
