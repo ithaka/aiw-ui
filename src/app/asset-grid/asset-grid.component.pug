@@ -59,7 +59,7 @@
     .col-sm-4.col-md-4.col-lg-3.text-right.grid-pagination-bar(*ngIf="!reorderMode")
       pagination([pageObj]="pagination", (goToPage)="goToPage($event)", [right]="true")
   //- Thumbnail Grid
-  .row.row--no-overflow.pb-5([ngClass]="{'edit': editMode}")
+  .row.pb-5([ngClass]="{'edit': editMode}")
     .col-md-12.col--thumbnails.col--expanding.has-icon-overlay([ngClass]="{ 'col--expand-12' : !showFilters }")
       i.icon-lg.icon-overlay.icon-loading-large([hidden]="!isLoading")
       //- Error Row
