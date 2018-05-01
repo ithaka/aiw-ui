@@ -18,7 +18,8 @@ import {
     CollectionTypeHandler,
     LogService,
     PersonalCollectionService,
-    AssetDetailsFormValue
+    AssetDetailsFormValue,
+    CollectionTypeInfo
 } from './../shared'
 import { AnalyticsService } from '../analytics.service'
 import { TitleService } from '../shared/title.service'
@@ -95,7 +96,7 @@ export class AssetPage implements OnInit, OnDestroy {
     private collections: any[] = []
     private collectionName: string = ''
     /** Controls the display of the collection type icon */
-    private collectionType: { name: string, alt: string } = { name: '', alt: '' }
+    private collectionType: CollectionTypeInfo = { name: '', alt: '', badgeText: '' }
 
     private collectionTypeHandler: CollectionTypeHandler = new CollectionTypeHandler()
 
@@ -675,6 +676,7 @@ export class AssetPage implements OnInit, OnDestroy {
                     }
                     else {
                         if (this.isMSAgent) {
+                            this.downloadLoading = false
                             this.generatedViewURL = '#'
                             console.log('MSAgent Blob: ', blob)
                             this.navigator.msSaveBlob(blob, 'download.jpg')
