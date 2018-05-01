@@ -70,7 +70,7 @@ img.no-stretch {
 .card.card--asset, .card--asset {
     margin-bottom: 0px;
     height: 210px;
-    overflow: hidden;
+    overflow: visible;
     text-overflow: ellipsis;
     padding: 3px 0px;
     margin: 0px auto;
