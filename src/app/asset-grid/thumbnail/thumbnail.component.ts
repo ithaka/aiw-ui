@@ -10,6 +10,9 @@ import { Thumbnail, AssetService, CollectionTypeHandler, AssetSearchService, Col
     .card-icon-group {
         height: 19px;
     }
+    .metadata-wrap {
+      min-height: 42px;
+    }
     .disablePointerEvents{
         pointer-events: none;
     }
