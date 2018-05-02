@@ -794,7 +794,8 @@ export class AssetService {
           filterArray.push("collectiontypes:"+ collectionType)
           if(collectionType === 2){ // If we are filtering for institutional collections, filter on both the contributinginstitutionid & projectid (for Archivision project collections)
             let projectid = this._auth.getEnv() === 'prod' ? '4241' : '4363'
-            filterArray.push('contributinginstitutionid:\"' + this._auth.getUser().institutionId.toString() + '\" OR projectid:\"' + projectid + '\"')
+            let projectid2 = this._auth.getEnv() === 'prod' ? '4327' : '4411'
+            filterArray.push('contributinginstitutionid:\"' + this._auth.getUser().institutionId.toString() + '\" OR projectid:\"' + projectid + '\" OR projectid:\"' + projectid2 + '\"')
           }
       }
 
