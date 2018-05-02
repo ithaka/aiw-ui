@@ -6,7 +6,8 @@ nav-menu
   .row.my-4
     .col-sm-4
       h3.browse-category {{ 'Art and Visual Resources' | translate }}
-      p.small([innerHtml]="'HOME.CONTENT_ACCESS.USER' | translate")
+      p.small(*ngIf="siteID=='SAHARA'", [innerHtml]="'HOME.CONTENT_ACCESS.SAHARA' | translate")
+      p.small(*ngIf="siteID!='SAHARA'", [innerHtml]="'HOME.CONTENT_ACCESS.USER' | translate")
     .col-sm-5.search-highlight
       ang-search
   .row
