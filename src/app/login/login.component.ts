@@ -85,6 +85,10 @@ export class Login {
       .then((data) => {
         if (data['items']) {
           this.loginInstitutions = data['items'];
+          this.loginInstitutions.push({
+            entityID: "https://testshibbolethsp.jstor.org/Shibboleth.sso/Login?entityID=https%3A%2F%2Fidp.artstor.org%2Fidp%2Fshibboleth&target=%2Fsecure%2Fshib%3Fdest%3Dhttps%253A%252F%252Flibrary.artstor.org%252F%2523%252F",
+            name: "AUSS/Ithaka"
+          });
           this.dataService = this._completer.local(this.instListObs, 'name', 'name');          
         }
       })
