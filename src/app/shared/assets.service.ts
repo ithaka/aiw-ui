@@ -792,7 +792,13 @@ export class AssetService {
 
       if (collectionType) {
           filterArray.push("collectiontypes:"+ collectionType)
-          if(collectionType === 2){ // If we are filtering for institutional collections, filter on both the contributinginstitutionid & projectid (for Archivision project collections)
+          if(collectionType === 2){
+            /**
+             * Static Collection workaround
+             * - CUNY and UC schools have shared collections that are managed by Artstor (known as static collections)
+             * - These collections have an Artstor contributinginsitutionid, and instead need to be queried by projectid
+             * - projectids differ between Test and Prod
+             */
             let projectid = this._auth.getEnv() === 'prod' ? '4241' : '4363'
             let projectid2 = this._auth.getEnv() === 'prod' ? '4327' : '4411'
             filterArray.push('contributinginstitutionid:\"' + this._auth.getUser().institutionId.toString() + '\" OR projectid:\"' + projectid + '\" OR projectid:\"' + projectid2 + '\"')
