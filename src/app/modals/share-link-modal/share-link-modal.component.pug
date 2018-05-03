@@ -10,7 +10,7 @@
           .media-body
             .asset-title([innerHTML]="asset.thumbnail1")
             .imgURL-gen-info Copy the image URL or the HTML code to share this image with others at your institution.
-          img.d-flex.align-self-center.ml-3([attr.src]="_search.makeThumbUrl(asset.largeImgUrl, 0)", [attr.alt]="asset.thumbnail1")
+          img.d-flex.align-self-center.ml-3([attr.src]="_search.makeThumbUrl(asset.thumbnailImgUrl, 0)", [attr.alt]="asset.thumbnail1")
         .pt-3
           .pb-3
             label Image URL
