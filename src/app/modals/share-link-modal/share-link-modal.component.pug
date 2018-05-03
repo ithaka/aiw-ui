@@ -8,9 +8,9 @@
       .modal-body(*ngIf="asset")
         .media
           .media-body
-            .asset-title([innerHTML]="asset.thumbnail1")
+            .asset-title([innerHTML]="asset.name")
             .imgURL-gen-info Copy the image URL or the HTML code to share this image with others at your institution.
-          img.d-flex.align-self-center.ml-3([attr.src]="_search.makeThumbUrl(asset.thumbnailImgUrl, 0)", [attr.alt]="asset.thumbnail1")
+          img.d-flex.align-self-center.ml-3([attr.src]="_search.makeThumbUrl(asset.thumbnailImgUrl, 0)", [attr.alt]="asset.name")
         .pt-3
           .pb-3
             label Image URL
@@ -22,7 +22,7 @@
           .pb-3
             label Thumbnail hyperlink to the Image
             .value
-              textarea#copyHTML(readonly) {{ '<a target="_blank" href="' + shareLink + '"><img src="' + _search.makeThumbUrl(asset.thumbnailImgUrl, 0) + '"  alt="' + asset.thumbnail1 + '" title="' + asset.thumbnail1 + '" /></a>' }}
+              textarea#copyHTML(readonly) {{ '<a target="_blank" href="' + shareLink + '"><img src="' + _search.makeThumbUrl(asset.thumbnailImgUrl, 0) + '"  alt="' + asset.name + '" title="' + asset.name + '" /></a>' }}
             .copy-clipboard((click)="copyTexttoClipBoard('copyHTML')")
               | Copy to Clipboard
             .copy-status-msg {{ copyHTMLStatusMsg }}
