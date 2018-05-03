@@ -178,5 +178,9 @@
     },
     "bugs": {
         "url": "https://jira.jstor.org/projects/AIR/summary"
+    },
+    "engines": {
+        "node": ">= 6.0.0",
+        "npm": ">= 4"
     }
 }
