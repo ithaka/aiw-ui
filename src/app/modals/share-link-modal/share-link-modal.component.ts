@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
 // Project Dependencies
-import { AssetService } from '../../shared';
+import { AssetService, AssetSearchService } from '../../shared';
 import { Asset } from '../../asset-page/asset';
 
 @Component({
@@ -20,7 +20,7 @@ export class ShareLinkModal implements OnInit {
   private copyURLStatusMsg: string = '';
   private copyHTMLStatusMsg: string = '';
 
-  constructor(private _assets: AssetService) { }
+  constructor(private _assets: AssetService, private _search: AssetSearchService) { }
 
   ngOnInit() {
     if (this.asset) {
