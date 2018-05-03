@@ -68,7 +68,6 @@
         "@angular/animations": "^5.0.0",
         "@angular/common": "^5.0.0",
         "@angular/compiler": "^5.0.0",
-        "@angular/compiler-cli": "^5.0.0",
         "@angular/core": "^5.0.0",
         "@angular/forms": "^5.0.0",
         "@angular/http": "^5.0.0",
@@ -180,7 +179,7 @@
         "url": "https://jira.jstor.org/projects/AIR/summary"
     },
     "engines": {
-        "node": ">= 6.0.0",
+        "node": ">= 8.11.1",
         "npm": ">= 4"
     }
 }
