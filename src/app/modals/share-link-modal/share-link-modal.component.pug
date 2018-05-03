@@ -10,7 +10,7 @@
           .media-body
             .asset-title([innerHTML]="asset.thumbnail1")
             .imgURL-gen-info Copy the image URL or the HTML code to share this image with others at your institution.
-          img.d-flex.align-self-center.ml-3([attr.src]="_assets.makeThumbUrl(asset.largeImgUrl, 0)", alt="asset.thumbnail1")
+          img.d-flex.align-self-center.ml-3([attr.src]="_search.makeThumbUrl(asset.largeImgUrl, 0)", [attr.alt]="asset.thumbnail1")
         .pt-3
           .pb-3
             label Image URL
@@ -22,7 +22,7 @@
           .pb-3
             label Thumbnail hyperlink to the Image
             .value
-              textarea#copyHTML(readonly) {{ '<a target="_blank" href="' + shareLink + '"><img src="' + _assets.makeThumbUrl(asset.thumbnailImgUrl, 0) + '"  alt="' + asset.thumbnail1 + '" title="' + asset.thumbnail1 + '" /></a>' }}
+              textarea#copyHTML(readonly) {{ '<a target="_blank" href="' + shareLink + '"><img src="' + _search.makeThumbUrl(asset.thumbnailImgUrl, 0) + '"  alt="' + asset.thumbnail1 + '" title="' + asset.thumbnail1 + '" /></a>' }}
             .copy-clipboard((click)="copyTexttoClipBoard('copyHTML')")
               | Copy to Clipboard
             .copy-status-msg {{ copyHTMLStatusMsg }}
