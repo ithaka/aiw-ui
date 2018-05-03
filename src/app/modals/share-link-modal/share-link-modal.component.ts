@@ -25,10 +25,9 @@ export class ShareLinkModal implements OnInit {
   ngOnInit() {
     if (this.asset) {
       this.shareLink = this._assets.getShareLink(this.asset.objectId ? this.asset.objectId : this.asset.artstorid);
-      // Clean search data
-      if (this.asset['media']) {
-        let media = JSON.parse(this.asset['media'])
-        this.asset['thumbnailImgUrl'] = media['thumbnailSizeOnePath']
+      // Clean Group item data
+      if (this.asset['tombstone']) {
+        this.asset['name'] = this.asset['tombstone'][0]
       }
     }
   }
