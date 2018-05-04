@@ -794,14 +794,14 @@ export class AssetService {
           filterArray.push("collectiontypes:"+ collectionType)
           if(collectionType === 2){
             /**
-             * Static Collection workaround
+             * Institutional Collection filter needs to cover:
+             * - Collections which an institution has created but has also made public
+             * - Collections which have been shared specifically with an institution, and do not have the "contributinginstitutionid" of the current user
+             * FYI Static and Shared Collections 
              * - CUNY and UC schools have shared collections that are managed by Artstor (known as static collections)
-             * - These collections have an Artstor contributinginsitutionid, and instead need to be queried by projectid
-             * - projectids differ between Test and Prod
+             * - Some schools have shared collections which have a contributinginsitutionid which differs from their own
              */
-            let projectid = this._auth.getEnv() === 'prod' ? '4241' : '4363'
-            let projectid2 = this._auth.getEnv() === 'prod' ? '4327' : '4411'
-            filterArray.push('contributinginstitutionid:\"' + this._auth.getUser().institutionId.toString() + '\" OR projectid:\"' + projectid + '\" OR projectid:\"' + projectid2 + '\"')
+            filterArray.push('contributinginstitutionid:\"' + this._auth.getUser().institutionId.toString() + '\" OR collectiontypes:(2) NOT collectiontypes:(5)')
           }
       }
 
