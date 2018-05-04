@@ -46,7 +46,7 @@ import { AppConfig } from './app.service'
 import { Nav, Footer, SearchComponent, PaginationComponent, AssetSearchService } from './shared'
 import { NavMenu } from './nav-menu'
 import { AssetFilters } from './asset-filters'
-import { AssetGrid, ThumbnailComponent } from './asset-grid'
+import { AssetGrid, ThumbnailComponent, PromptComponent } from './asset-grid'
 import { Home } from './home'
 import { SearchPage } from './search-page'
 import { CollectionPage } from './collection-page'
@@ -218,6 +218,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     TagComponent,
     TagsListComponent,
     ThumbnailComponent,
+    PromptComponent,
     TypeIdPipe,
     UploaderComponent
   ],

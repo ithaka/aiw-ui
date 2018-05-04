@@ -1,5 +1,7 @@
 .reorder-shade([class.fade-in]="reorderMode && !showLoseReorder", (click)="shouldSaveModal($event)")
 .reorder-wrap([class.in-front]="reorderMode")
+  .row.pb-1
+    ang-prompt
   .row.no-gutters
     .mobile--hide.grid-tool-bar([ngClass]="[ reorderMode ? 'col-12' : 'col-sm-8 col-md-8 col-lg-9']")
       .row.no-gutters
