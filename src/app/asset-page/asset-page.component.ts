@@ -715,13 +715,13 @@ export class AssetPage implements OnInit, OnDestroy {
 
         if (asset.typeName === 'image' && asset.viewportDimensions.contentSize) {
             // Full source image size (max output possible)
-            let fullWidth = asset.viewportDimensions.contentSize.x
-            let fullY = asset.viewportDimensions.contentSize.y
+            let fullWidth = Math.floor(asset.viewportDimensions.contentSize.x)
+            let fullY = Math.floor(asset.viewportDimensions.contentSize.y)
             // Zoom is a factor of the image's full width
-            let zoom = asset.viewportDimensions.zoom;
+            let zoom = Math.floor(asset.viewportDimensions.zoom)
             // Viewport dimensions (size of cropped image)
-            let viewX = asset.viewportDimensions.containerSize.x
-            let viewY = asset.viewportDimensions.containerSize.y
+            let viewX = Math.floor(asset.viewportDimensions.containerSize.x)
+            let viewY = Math.floor(asset.viewportDimensions.containerSize.y)
             // Dimensions of the source size of the cropped image
             let zoomX = Math.floor(fullWidth / zoom)
             let zoomY = Math.floor(zoomX * (viewY / viewX))
