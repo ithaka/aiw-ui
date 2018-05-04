@@ -85,15 +85,20 @@ export class Login {
       .then((data) => {
         if (data['items']) {
           this.loginInstitutions = data['items'];
+          // Hardcoded test url for new Shibboleth provider
           if (this._auth.getEnv() === 'test') {
+            let theUrl = "https://testshibbolethsp.jstor.org/Shibboleth.sso/Login?entityID=https%3A%2F%2Fidp.artstor.org%2Fidp%2Fshibboleth&target=%2Fsecure%2Fshib%3Fdest%3Dhttp%253A%252F%252Fstage.artstor.org%252F%2523%252F%2526site%253Dartstor";
             this.loginInstitutions.push({
-              entityID: "https://testshibbolethsp.jstor.org/Shibboleth.sso/Login?entityID=https%3A%2F%2Fidp.artstor.org%2Fidp%2Fshibboleth&target=%2Fsecure%2Fshib%3Fdest%3Dhttp%253A%252F%252Fstage.artstor.org%252F%2523%252F%2526site%253Dartstor",
+              artstorShibbolethLoginUrl: theUrl,
+              entityID: theUrl,
               name: "AUSS/Ithaka"
             });
           }
           else {
+            let theUrl = "https://shibbolethsp.jstor.org/Shibboleth.sso/Login?entityID=https%3A%2F%2Fidp.artstor.org%2Fidp%2Fshibboleth&target=%2Fsecure%2Fshib%3Fdest%3Dhttp%253A%252F%252Flibrary.artstor.org%252F%2523%252F%2526site%253Dartstor";
             this.loginInstitutions.push({
-              entityID: "https://shibbolethsp.jstor.org/Shibboleth.sso/Login?entityID=https%3A%2F%2Fidp.artstor.org%2Fidp%2Fshibboleth&target=%2Fsecure%2Fshib%3Fdest%3Dhttp%253A%252F%252Flibrary.artstor.org%252F%2523%252F%2526site%253Dartstor",
+              artstorShibbolethLoginUrl: theUrl,
+              entityID: theUrl,
               name: "AUSS/Ithaka"
             });
           }
@@ -175,7 +180,13 @@ export class Login {
     } else {
       // Else if Shibboleth, add parameters:
       // eg. for AUSS https://sso.artstor.org/sso/shibssoinit?idpEntityID=https://idp.artstor.org/idp/shibboleth&target=https%3A%2F%2Fsso.artstor.org%2Fsso%2Fshibbolethapplication%3Fo%3D0049a162-7dbe-4fcf-adac-d257e8db95e5
-  
+      
+      // For institution that has the key "artstorShibbolethLoginUrl", just open the Url
+      if (selectedInst.artstorShibbolethLoginUrl) {
+        window.open(selectedInst.artstorShibbolethLoginUrl);
+        return;
+      }
+
       let origin = window.location.origin + '/#/home';
       let ssoSubdomain = this._auth.getSubdomain() == 'library' ? 'sso' : 'sso.' + this._auth.getSubdomain()
       window.open('https://' + ssoSubdomain + '.artstor.org/sso/shibssoinit?idpEntityID=' + encodeURIComponent(url) + '&o=' + encodeURIComponent(origin));
