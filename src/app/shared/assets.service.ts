@@ -791,7 +791,6 @@ export class AssetService {
       let filterArray = []
 
       if (collectionType) {
-          filterArray.push("collectiontypes:"+ collectionType)
           if(collectionType === 2){
             /**
              * Institutional Collection filter needs to cover:
@@ -801,7 +800,9 @@ export class AssetService {
              * - CUNY and UC schools have shared collections that are managed by Artstor (known as static collections)
              * - Some schools have shared collections which have a contributinginsitutionid which differs from their own
              */
-            filterArray.push('contributinginstitutionid:\"' + this._auth.getUser().institutionId.toString() + '\" OR collectiontypes:(2) NOT collectiontypes:(5)')
+            filterArray.push('(collectiontypes:2 AND contributinginstitutionid:(' + this._auth.getUser().institutionId.toString() + ')) OR (collectiontypes:(2) AND -(collectiontypes:(5)))')
+          } else {
+            filterArray.push("collectiontypes:"+ collectionType)
           }
       }
 
