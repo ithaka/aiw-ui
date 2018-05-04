@@ -137,7 +137,6 @@ export class Login {
     let url: string
     // search through the institutions store locally and see if the name the user selected matches one
     for (let i = 0; i < len; i++) {
-      console.log(this.loginInstitutions[i].artstorShibbolethLoginUrl)
       if (this.loginInstitutions[i].name == this.loginInstName) {
         selectedInst = this.loginInstitutions[i]
         break
