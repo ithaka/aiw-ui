@@ -1,0 +1,15 @@
+
+//.search-wrap
+  .form-group.row
+    .input-group([ngClass]="{'col-md-7': allowSearchInRes}")
+      input#inputSearchTerm.form-control.has-icon([(ngModel)]="term", (keyup.enter)="updateSearchTerm(term)", aria-describedby="search-label", type="text", placeholder="Search", data-sc="search: simple keyword")
+      i#iconSearchSubmit.icon.icon-search.form-control__icon((click)="updateSearchTerm(term)")
+    .search-in-results.col-md-5.hidden-sm-down(*ngIf="allowSearchInRes")
+      input#searchInResChkBx(type="checkbox", [(ngModel)]="searchInResults",  (ngModelChange)="onSearchWithinChange($event)")
+      = " "
+      label(for="searchInResChkBx") Search within {{ nestedSrchLbl }}
+.prompt-box.border
+  b More Images to Research and Discover
+  div.asset-title Search across more than 2 million images in the Artstor Digital Library.
+//.col-sm-4.serach-highlight
+  p image
