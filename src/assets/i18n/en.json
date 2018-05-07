@@ -501,7 +501,7 @@
     "MESSAGE": "We are currently experiencing issues with images and downloads due to a power outage. <a href=\"http://support.artstor.org/?article=current-technical-issues-alerts\" target=\"_blank\" class=\"link\">Learn more</a>."
   },
   "DOWNTIME_BANNER": {
-    "MESSAGE": "We're sorry, we're experiencing problems affecting search and browse across the site.  We apologize for the inconvenience, and appreciate your patience. If you have any questions, please <a href=\"mailto:support@artstor.org\" target=\"_blank\" class=\"link\">contact Artstor Support</a> or check <a href=\"https://twitter.com/ArtstorHelp\" target=\"_blank\" class=\"link\">Twitter</a> for additional updates."
+    "MESSAGE": "We're sorry, we're experiencing problems affecting login.  We apologize for the inconvenience, and appreciate your patience. If you have any questions, please <a href=\"mailto:support@artstor.org\" target=\"_blank\" class=\"link\">contact Artstor Support</a> or check <a href=\"https://twitter.com/ArtstorHelp\" target=\"_blank\" class=\"link\">Twitter</a> for additional updates."
   },
   "SEARCH_SKY_BANNER": {
     "MESSAGE": "⚠️ This is a testing instance for the new Search index. Please excuse the broken bits."
