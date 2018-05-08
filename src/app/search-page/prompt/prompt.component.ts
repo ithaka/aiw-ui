@@ -1,7 +1,5 @@
 import { Component, OnInit, Input, OnChanges } from '@angular/core';
 
-//import { Thumbnail, AssetService, CollectionTypeHandler, AssetSearchService, CollectionTypeInfo } from './../../shared'
-
 @Component({
   selector: 'ang-prompt',
   templateUrl: 'prompt.component.pug',
