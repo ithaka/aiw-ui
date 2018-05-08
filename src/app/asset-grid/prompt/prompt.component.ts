@@ -16,7 +16,7 @@ import { Component, OnInit, Input, OnChanges } from '@angular/core';
 
   #promptImg1 {
     position: relative;
-    right: 8rem;
+    right: 2rem;
     height: 5rem;
     margin-bottom: -6rem;
     margin-top: -5rem;
@@ -24,17 +24,19 @@ import { Component, OnInit, Input, OnChanges } from '@angular/core';
 
   #promptImg2 {
     position: relative;
-    right: 5rem;
+    right: 3rem;
     height: 8rem;
-    margin-top: -13rem;
+    margin-top: -11rem;
     margin-bottom: -9rem;
+    z-index: 2;
+    box-shadow: 0px 1px 10px 4px #fdfbfbba;
   }
 
   #promptImg3 {
     position: relative;
-    right: 0rem;
+    right: 3rem;
     height: 7rem;
-    margin-top: -15rem;
+    margin-top: -11rem;
     margin-bottom: -10rem;
   }
   `]
