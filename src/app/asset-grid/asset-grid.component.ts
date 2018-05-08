@@ -24,9 +24,12 @@ import { AssetFiltersService } from '../asset-filters/asset-filters.service'
 })
 
 export class AssetGrid implements OnInit, OnDestroy {
+  // Add user to decide whether to show the banner
+  private user: any = this._auth.getUser(); 
+
   // Set our default values
   private subscriptions: Subscription[] = [];
-
+   
   public searchLoading: boolean;
   public showFilters: boolean = true;
   public showAdvancedModal: boolean = false;
@@ -152,6 +155,18 @@ export class AssetGrid implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    // Subscribe User object updates
+    this.subscriptions.push(
+      this._auth.currentUser.subscribe(
+        (userObj) => {
+          this.user = userObj;
+        },
+        (err) => {
+          console.error("Nav failed to load Institution information", err)
+        }
+      )
+    );
+
     // Subscribe to asset search params
     this.subscriptions.push(
       this.route.params
