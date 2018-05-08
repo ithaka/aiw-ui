@@ -17,6 +17,9 @@ import { TitleService } from '../shared/title.service';
 })
 
 export class SearchPage implements OnInit, OnDestroy {
+  // Add user to decide whether to show the banner
+  private user: any = this._auth.getUser(); 
+
   private subscriptions: Subscription[] = [];
 
   @ViewChild(AssetGrid)
@@ -39,6 +42,19 @@ export class SearchPage implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    // Subscribe User object updates
+    this.subscriptions.push(
+      this._auth.currentUser.subscribe(
+        (userObj) => {
+          this.user = userObj;
+        },
+        (err) => {
+          console.error("Nav failed to load Institution information", err)
+        }
+      )
+    );
+
+
     // Subscribe to term in params
     this.subscriptions.push(
       this.route.params.subscribe( (routeParams) => {

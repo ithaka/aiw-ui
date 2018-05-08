@@ -1,7 +1,5 @@
 .reorder-shade([class.fade-in]="reorderMode && !showLoseReorder", (click)="shouldSaveModal($event)")
 .reorder-wrap([class.in-front]="reorderMode")
-  .row
-    ang-prompt(*ngIf="user.status == true", style='width:100%; margin:15px;', [searchTerm]= "searchTerm")
   .row.no-gutters
     .mobile--hide.grid-tool-bar([ngClass]="[ reorderMode ? 'col-12' : 'col-sm-8 col-md-8 col-lg-9']")
       .row.no-gutters
@@ -24,18 +22,11 @@
               button.dropdown-item([ngClass]="{ 'disable': pagination.size == 24 }", (click)="changePageSize(24)") 24
               button.dropdown-item([ngClass]="{ 'disable': pagination.size == 48 }", (click)="changePageSize(48)") 48
               button.dropdown-item([ngClass]="{ 'disable': pagination.size == 72 }", (click)="changePageSize(72)") 72
-          //- View size toggles
           .icon-bar
             .icon--toggle((click)="setThumbnailSize(false)", [ngClass]="{ 'active': !largeThmbView }")
               i.icon.icon-small-view
             .icon--toggle((click)="setThumbnailSize(true)", [ngClass]="{ 'active': largeThmbView }")
               i.icon.icon-large-view
-          .number-results(*ngIf="!isLoading") {{ totalAssets }}{{ totalAssets == 2000 ? '+' : '' }} results
-            = " "
-            span(*ngIf="searchTerm") for
-              = " "
-              span([innerHtml]="formattedSearchTerm")
-        .col-12.pb-3
           //- Download
           li.btn.btn-link([class.disabled]="reorderMode", (click)="_ig.triggerIgDownload()", *ngIf="actionOptions.group")
             i.icon.icon-download-white
@@ -58,6 +49,15 @@
             | Cancel Reorder
           //- Number of selected assets in edit mode
           .selected-assets(*ngIf="editMode") {{ selectedAssets.length }} selected asset{{ selectedAssets.length > 1 ? 's' : '' }}
+        .col-12.pb-3
+          //- View size toggles
+          .number-results(*ngIf="!isLoading") {{ totalAssets }}{{ totalAssets == 2000 ? '+' : '' }} results
+            = " "
+            span(*ngIf="searchTerm") for
+              = " "
+              span([innerHtml]="formattedSearchTerm")
+              span(*ngIf="user.status==true", [innerHtml]="' from Public Collections.'") 
+          
     .col-sm-4.col-md-4.col-lg-3.text-right.grid-pagination-bar(*ngIf="!reorderMode")
       pagination([pageObj]="pagination", (goToPage)="goToPage($event)", [right]="true")
   //- Thumbnail Grid
