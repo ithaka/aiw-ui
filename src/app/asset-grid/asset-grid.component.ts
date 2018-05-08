@@ -561,7 +561,7 @@ export class AssetGrid implements OnInit, OnDestroy {
    * Format the search term to display advance search queries nicely
    */
   private formatSearchTerm(query: string) : void {
-    let fQuery = '<b>' + query;
+    let fQuery = "“" + query + "”";
     // Cleanup filter pipes
     // fQuery = fQuery.replace(/\|[0-9]{3}/g, );
 
