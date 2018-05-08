@@ -38,10 +38,11 @@ export class AgreeModalComponent implements OnInit {
   private agree(): void {
     this._auth.authorizeDownload()
 
+    this.closeModal.emit()
+
     if (this.isMSAgent) {
       this.setDownloadView()
     }
-    this.closeModal.emit()
   }
 
 }
