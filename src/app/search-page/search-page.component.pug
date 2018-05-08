@@ -1,13 +1,17 @@
 nav-menu([allowSelectAll]="true")
 #mainContent.container.main-content(tabindex="-1")
   .row
-    .col-sm-3
+    .col-sm-3(style="margin-top: 1rem;")
       .mobile--hide
-        h1 Filtered Search
+        h3.browse-category {{ 'Art and Visual Resources' | translate }}
+        p.small(*ngIf="user.isLoggedIn && user.status == false", [innerHtml]="'HOME.CONTENT_ACCESS.PUBLIC' | translate")
+        p.small(*ngIf="user.status == true", [innerHtml]="'HOME.CONTENT_ACCESS.USER' | translate")
         ang-asset-filters
     .col-sm-9
       h1.mobile--show Results
       .row.no-gutters.row--search-bar
-        .col-md-7
-          ang-search([allowSearchInRes]="true")
+        .col-md-9.search-page-highlight
+          ang-search([allowSearchInRes]="true", [UserNotLoggedIn]="true")
+      .row(style="margin-top: -1rem;")
+        ang-prompt(*ngIf="user.status == true", style='width:100%; margin:15px;', [searchTerm]= "searchTerm")
       ang-asset-grid([hasMaxAssetLimit]="true")

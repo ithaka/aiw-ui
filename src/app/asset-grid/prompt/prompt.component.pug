@@ -2,15 +2,15 @@
   .row
     .col-sm-9
       b More Images to Research and Discover
-      //div.asset-title(*ngIf="window.location.href.indexOf(‘search’) > 1") Search across more than 2 million images in the Artstor Digital Library.
-      //div.asset-title(*ngIf="window.location.href.indexOf(‘search’) < 1") {{ displayWords }}
-      div.asset-title {{ displayWords }}
+      div.asset-title Search across more than 2 million images in the Artstor Digital Library.
+      //div.asset-title {{ displayWords }}
       a(href='/#/login', style="color:blue; text-decoration:underline; font-size: 0.9rem;") Log in through your institution to begin
     .col-sm-3
-      .row
-        .col-sm-4
-          img#promptImg1(src="/assets/img/prompt-img1.jpg")
-        .col-sm-4
-          img#promptImg2(src="/assets/img/prompt-img2.jpg")
-        .col-sm-4
-          img#promptImg3(src="/assets/img/prompt-img3.jpg")
+      .mobile--hide
+        .row
+          .col-sm-4
+            img#promptImg1(src="/assets/img/prompt-img1.jpg")
+          .col-sm-4
+            img#promptImg2(src="/assets/img/prompt-img2.jpg")
+          .col-sm-4
+            img#promptImg3(src="/assets/img/prompt-img3.jpg")
