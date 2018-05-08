@@ -1,15 +1,16 @@
-
-//.search-wrap
-  .form-group.row
-    .input-group([ngClass]="{'col-md-7': allowSearchInRes}")
-      input#inputSearchTerm.form-control.has-icon([(ngModel)]="term", (keyup.enter)="updateSearchTerm(term)", aria-describedby="search-label", type="text", placeholder="Search", data-sc="search: simple keyword")
-      i#iconSearchSubmit.icon.icon-search.form-control__icon((click)="updateSearchTerm(term)")
-    .search-in-results.col-md-5.hidden-sm-down(*ngIf="allowSearchInRes")
-      input#searchInResChkBx(type="checkbox", [(ngModel)]="searchInResults",  (ngModelChange)="onSearchWithinChange($event)")
-      = " "
-      label(for="searchInResChkBx") Search within {{ nestedSrchLbl }}
-.prompt-box.border
-  b More Images to Research and Discover
-  div.asset-title Search across more than 2 million images in the Artstor Digital Library.
-//.col-sm-4.serach-highlight
-  p image
+.prompt-box
+  .row
+    .col-sm-9
+      b More Images to Research and Discover
+      //div.asset-title(*ngIf="window.location.href.indexOf(‘search’) > 1") Search across more than 2 million images in the Artstor Digital Library.
+      //div.asset-title(*ngIf="window.location.href.indexOf(‘search’) < 1") {{ displayWords }}
+      div.asset-title {{ displayWords }}
+      a(href='/#/login', style="color:blue; text-decoration:underline; font-size: 0.9rem;") Log in through your institution to begin
+    .col-sm-3
+      .row
+        .col-sm-4
+          img#promptImg1(src="/assets/img/prompt-img1.jpg")
+        .col-sm-4
+          img#promptImg2(src="/assets/img/prompt-img2.jpg")
+        .col-sm-4
+          img#promptImg3(src="/assets/img/prompt-img3.jpg")
