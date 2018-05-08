@@ -4,8 +4,9 @@ nav-menu([allowSelectAll]="true")
     .col-sm-3(style="margin-top: 1rem;")
       .mobile--hide
         h3.browse-category {{ 'Art and Visual Resources' | translate }}
-        p.small(*ngIf="user.isLoggedIn && user.status == false", [innerHtml]="'HOME.CONTENT_ACCESS.PUBLIC' | translate")
-        p.small(*ngIf="user.status == true", [innerHtml]="'HOME.CONTENT_ACCESS.USER' | translate")
+        p.small(*ngIf="siteID!='SAHARA' && user.status == false || unaffiliatedFlag", [innerHtml]="'HOME.CONTENT_ACCESS.PUBLIC' | translate")
+        p.small(*ngIf="siteID!='SAHARA' && user.status == true && !unaffiliatedFlag", [innerHtml]="'HOME.CONTENT_ACCESS.USER' | translate")
+        p.small(*ngIf="siteID=='SAHARA'", [innerHtml]="'HOME.CONTENT_ACCESS.SAHARA' | translate")
         ang-asset-filters
     .col-sm-9
       h1.mobile--show Results
@@ -13,5 +14,5 @@ nav-menu([allowSelectAll]="true")
         .col-md-9.search-page-highlight
           ang-search([allowSearchInRes]="true", [UserNotLoggedIn]="true")
       .row(style="margin-top: -1rem;")
-        ang-prompt(*ngIf="user.status == true", style='width:100%; margin:15px;', [searchTerm]= "searchTerm")
+        ang-prompt(*ngIf="user.status == false || unaffiliatedFlag", style='width:100%; margin:15px;', [searchTerm]= "searchTerm")
       ang-asset-grid([hasMaxAssetLimit]="true")

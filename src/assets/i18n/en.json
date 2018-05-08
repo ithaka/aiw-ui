@@ -410,8 +410,11 @@
     },
     "CONTENT_ACCESS": {
       "USER": "From the Artstor Digital Library, Institutional Collections, and Public Collections",
+      "SEARCH_PAGE_USER": " from the Artstor Digital Library, Institutional Collections, and Public Collections.",
       "PUBLIC": "From Public Collections",
-      "SAHARA": "From the Institutional Collections"
+      "SEARCH_PAGE_PUBLIC": " from Public Collections.",
+      "SAHARA": "From the Institutional Collections",
+      "SEARCH_PAGE_SAHARA": " from the Institutional Collections."
     },
     "BROWSE": {
       "TITLE": "Browse",

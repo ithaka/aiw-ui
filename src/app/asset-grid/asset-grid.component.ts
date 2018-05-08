@@ -4,6 +4,7 @@ import { ActivatedRoute, NavigationStart, Params, Router } from '@angular/router
 import { BehaviorSubject } from 'rxjs/Rx'
 import { Subscription }   from 'rxjs/Subscription'
 import { Locker } from 'angular2-locker'
+import { AppConfig } from '../app.service'
 
 import {
   AuthService,
@@ -25,7 +26,10 @@ import { AssetFiltersService } from '../asset-filters/asset-filters.service'
 
 export class AssetGrid implements OnInit, OnDestroy {
   // Add user to decide whether to show the banner
-  private user: any = this._auth.getUser(); 
+  private user: any = this._auth.getUser();
+
+  private unaffiliatedFlag: boolean;
+  private siteID: string = ""
 
   // Set our default values
   private subscriptions: Subscription[] = [];
@@ -127,6 +131,7 @@ export class AssetGrid implements OnInit, OnDestroy {
 
   // TypeScript public modifiers
   constructor(
+    public _appConfig: AppConfig,
     private _assets: AssetService,
     private _auth: AuthService,
     private _filters: AssetFiltersService,
@@ -140,6 +145,7 @@ export class AssetGrid implements OnInit, OnDestroy {
     private locker: Locker,
     private route: ActivatedRoute
   ) {
+      this.siteID = this._appConfig.config.siteID;
       this._storage = locker.useDriver(Locker.DRIVERS.LOCAL);
       let prefs = this._auth.getFromStorage('prefs')
       if (prefs && prefs.pageSize && prefs.pageSize != 24) {
@@ -171,6 +177,13 @@ export class AssetGrid implements OnInit, OnDestroy {
     this.subscriptions.push(
       this.route.params
       .subscribe((params: Params) => {
+        // Find feature flags
+        if(params && params['featureFlag']){
+          this._auth.featureFlags[params['featureFlag']] = true;
+          if (params['featureFlag']=="unaffiliated"){
+              this.unaffiliatedFlag = true;
+          }
+      }
 
         if(params['term']){
           this.searchTerm = params['term'];

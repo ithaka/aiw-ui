@@ -8,6 +8,7 @@ import { AssetFiltersService } from '../asset-filters/asset-filters.service';
 import { AnalyticsService } from '../analytics.service';
 import { AssetGrid } from './../asset-grid/asset-grid.component';
 import { TitleService } from '../shared/title.service';
+import { AppConfig } from '../app.service';
 
 @Component({
   selector: 'ang-search-page',
@@ -20,6 +21,9 @@ export class SearchPage implements OnInit, OnDestroy {
   // Add user to decide whether to show the banner
   private user: any = this._auth.getUser(); 
 
+  private unaffiliatedFlag: boolean;
+  private siteID: string = ""
+
   private subscriptions: Subscription[] = [];
 
   @ViewChild(AssetGrid)
@@ -27,6 +31,7 @@ export class SearchPage implements OnInit, OnDestroy {
   // private searchInResults: boolean = false;
 
   constructor(
+        public _appConfig: AppConfig,
         private _assets: AssetService,
         private route: ActivatedRoute,
         private _filters: AssetFiltersService,
@@ -35,6 +40,7 @@ export class SearchPage implements OnInit, OnDestroy {
         private _title: TitleService,
         private _auth: AuthService
       ) {
+    this.siteID = this._appConfig.config.siteID;
     // this makes the window always render scrolled to the top
     this._router.events.subscribe(() => {
       window.scrollTo(0, 0);
@@ -63,6 +69,10 @@ export class SearchPage implements OnInit, OnDestroy {
         if(params && params['featureFlag']){
             console.log(params['featureFlag'])
             this._auth.featureFlags[params['featureFlag']] = true;
+            // Check for unaffiliated user flag
+            if (params['featureFlag']=="unaffiliated"){
+              this.unaffiliatedFlag = true;
+            }
         } else {
             for (let flag in this._auth.featureFlags) {
               this._auth.featureFlags[flag] = false
