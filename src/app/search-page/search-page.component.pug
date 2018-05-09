@@ -12,7 +12,8 @@ nav-menu([allowSelectAll]="true")
       h1.mobile--show Results
       .row.no-gutters.row--search-bar
         .col-md-9.search-page-highlight
-          ang-search([allowSearchInRes]="true", [UserNotLoggedIn]="true")
+          ang-search(*ngIf="user.status == false || unaffiliatedFlag", [allowSearchInRes]="true", [UserNotLoggedIn]="true")
+          ang-search(*ngIf="siteID=='SAHARA' || (user.status == true && !unaffiliatedFlag)", [allowSearchInRes]="true", [UserNotLoggedIn]="false")
       .row(style="margin-top: -1rem;")
         ang-prompt(*ngIf="user.status == false || unaffiliatedFlag", style='width:100%; margin:15px;', [searchTerm]= "searchTerm")
       ang-asset-grid([hasMaxAssetLimit]="true")

@@ -8,14 +8,5 @@
       input#searchInResChkBx(type="checkbox", [(ngModel)]="searchInResults",  (ngModelChange)="onSearchWithinChange($event)")
       = " "
       label(for="searchInResChkBx") Search within {{ nestedSrchLbl }}
-  //- .form-group.row(*ngIf="UserNotLoggedIn", style="width: 50rem;")
-  //-   .input-group([ngClass]="{'col-md-7': allowSearchInRes}")
-  //-     input#inputSearchTerm.form-control.has-icon(*ngIf="!UserNotLoggedIn", [(ngModel)]="term", (keyup.enter)="updateSearchTerm(term)", aria-describedby="search-label", type="text", placeholder="Search", data-sc="search: simple keyword")
-  //-     input#inputSearchTerm.form-control.has-icon(*ngIf="UserNotLoggedIn", [(ngModel)]="term", (keyup.enter)="updateSearchTerm(term)", aria-describedby="search-label", type="text", placeholder="Search Public Collections", data-sc="search: simple keyword")
-  //-     i#iconSearchSubmit.icon.icon-search.form-control__icon((click)="updateSearchTerm(term)")
-  //-   .search-in-results.col-md-5.hidden-sm-down(*ngIf="allowSearchInRes")
-  //-     input#searchInResChkBx(type="checkbox", [(ngModel)]="searchInResults",  (ngModelChange)="onSearchWithinChange($event)")
-  //-     = " "
-  //-     label(for="searchInResChkBx") Search within {{ nestedSrchLbl }}
 a.link.small.open-modal((click)="showSearchModal = true", tabindex="0") {{ 'HOME.LINKS.ADVNC_SRCH' | translate}}
 ang-search-modal(*ngIf="showSearchModal", (closeModal)="showSearchModal = false")
