@@ -1091,7 +1091,6 @@ export class AssetPage implements OnInit, OnDestroy {
 
         // 103 Collection Id routes to /category/<categoryId>
         if (String(asset.collectionId) === '103') {
-            asset.publicDownload = true
             return ['/category', String(asset.categoryId)]
         }
         else {
