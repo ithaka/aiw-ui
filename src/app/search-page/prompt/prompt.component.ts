@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, OnChanges } from '@angular/core';
+import { Component, OnInit, OnChanges } from '@angular/core';
 
 @Component({
   selector: 'ang-prompt',
@@ -40,26 +40,26 @@ import { Component, OnInit, Input, OnChanges } from '@angular/core';
   `]
 })
 export class PromptComponent implements OnInit, OnChanges {
-  @Input()
-  private searchTerm: string;
+  // @Input()
+  // private searchTerm: string;
 
-  private displayWords: string;
+  // private displayWords: string;
 
   ngOnInit() {
-    if (window.location.href.indexOf('search') < 1 || this.searchTerm == "*") {
-      this.displayWords = "Search across more than 2 million images in the Artstor Digital Library."
-    }
-    else {
-      this.displayWords = "Search for “" + this.searchTerm + "” across over 2 million assets in Artstor Digital Library."
-    }
+    // if (window.location.href.indexOf('search') < 1 || this.searchTerm == "*") {
+    //   this.displayWords = "Search across more than 2 million images in the Artstor Digital Library."
+    // }
+    // else {
+    //   this.displayWords = "Search for “" + this.searchTerm + "” across over 2 million assets in Artstor Digital Library."
+    // }
   } 
 
   ngOnChanges() {
-    if (window.location.href.indexOf('search') < 1 || this.searchTerm == "*") {
-      this.displayWords = "Search across more than 2 million images in the Artstor Digital Library."
-    }
-    else {
-      this.displayWords = "Search for “" + this.searchTerm + "” across over 2 million assets in Artstor Digital Library."
-    }
+    // if (window.location.href.indexOf('search') < 1 || this.searchTerm == "*") {
+    //   this.displayWords = "Search across more than 2 million images in the Artstor Digital Library."
+    // }
+    // else {
+    //   this.displayWords = "Search for “" + this.searchTerm + "” across over 2 million assets in Artstor Digital Library."
+    // }
   }
 }
