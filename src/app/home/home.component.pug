@@ -12,12 +12,12 @@ nav-menu
       ang-search
   .row
     .col-sm-9
-      a#featuredCollectionLink.card.featured-card(#featuredCollection="", [attr.href]="featuredCollectionConf + '.LINK' | translate")
-        img.card-img-top.no-stretch([attr.src]="featuredCollectionConf + '.IMG_SOURCE' | translate", [attr.alt]="featuredCollectionConf + '.ALT_TEXT' | translate", [attr.title]="featuredCollectionConf + '.LINK_TITLE' | translate")
+      a#featuredCollectionLink.card.featured-card(#featuredCollection="", [attr.href]="featuredCollectionConf + '.0.LINK' | translate")
+        img.card-img-top.no-stretch([attr.src]="featuredCollectionConf + '.0.IMG_SOURCE' | translate", [attr.alt]="featuredCollectionConf + '.0.ALT_TEXT' | translate", [attr.title]="featuredCollectionConf + '.0.LINK_TITLE' | translate")
         .card-body.pt-1
-          label(style="margin-bottom:0px;", [innerHtml]="featuredCollectionConf + '.HEADING' | translate")
-          p(style="margin-bottom:6px;", [innerHtml]="featuredCollectionConf + '.SUBHEADING' | translate")
-        div.featured-caption([innerHtml]="featuredCollectionConf + '.DESCRIPTION' | translate")
+          label(style="margin-bottom:0px;", [innerHtml]="featuredCollectionConf + '.0.HEADING' | translate")
+          p(style="margin-bottom:6px;", [innerHtml]="featuredCollectionConf + '.0.SUBHEADING' | translate")
+        div.featured-caption([innerHtml]="featuredCollectionConf + '.0.DESCRIPTION' | translate")
       .card(*ngIf="showBlog")
         .card-header
           h2([innerHtml]="'HOME.HEADINGS.FRM_BLOG' | translate")

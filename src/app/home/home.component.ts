@@ -140,6 +140,13 @@ export class Home implements OnInit, OnDestroy {
             this.fetchDeviceInfo();
           }
         })
+
+        console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!')
+        console.log(this.user)
+
+
+
+
   } // OnInit
 
   ngOnDestroy() {
