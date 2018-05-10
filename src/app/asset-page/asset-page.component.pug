@@ -96,7 +96,7 @@
                 | Download File
               a#downloadViewLink.dropdown-item(download="download.jpg",
                 type="image/jpeg",
-                [attr.href]="(downloadAuth() && !assets[0].disableDownload) ? generatedViewURL : null",
+                [attr.href]="(downloadAuth() && !assets[0].disableDownload) ? generatedViewURL : (isMSAgent ? '#' : null)",
                 (click)="(downloadAuth() && !assets[0].disableDownload) ? trackDownloadView() : setDownloadView()",
                 [class.disabled]="assets[0].disableDownload || assets[0].typeName !== 'image'",
                 target="_self",
