@@ -71,12 +71,12 @@ nav-menu
       a#featuredCollectionLink.card.featured-card(#featuredCollection="", [attr.href]="featuredCollectionConf + '.LINK' | translate")
         img.card-img-top.no-stretch([attr.src]="featuredCollectionConf + '.IMG_SOURCE' | translate", [attr.alt]="featuredCollectionConf + '.ALT_TEXT' | translate", [attr.title]="featuredCollectionConf + '.LINK_TITLE' | translate")
         .card-body.pt-1
-          label(style="margin-bottom:0px;") {{ featuredCollectionConf + '.HEADING' | translate }}
-          p(style="margin-bottom:6px;") {{ featuredCollectionConf + '.SUBHEADING' | translate }}
-        div.featured-caption {{ featuredCollectionConf + '.DESCRIPTION' | translate }}
+          label(style="margin-bottom:0px;", [innerHtml]="featuredCollectionConf + '.HEADING' | translate")
+          p(style="margin-bottom:6px;", [innerHtml]="featuredCollectionConf + '.SUBHEADING' | translate")
+        div.featured-caption([innerHtml]="featuredCollectionConf + '.DESCRIPTION' | translate")
       .card(*ngIf="showBlog")
         .card-header
-          h2 {{ 'HOME.HEADINGS.FRM_BLOG' | translate}}
+          h2([innerHtml]="'HOME.HEADINGS.FRM_BLOG' | translate")
         .loading(*ngIf="blogLoading")
         div(*ngIf="!blogLoading")
           a.blog-post(*ngFor="let post of blogPosts | slice:0:3", [href]="post['URL']", target="_blank")

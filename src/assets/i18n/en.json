@@ -354,7 +354,7 @@
       "SAHARA": "<a href=\"http://sah.org\" class=\"link\" target=\"_blank\">SAH.org</a>",
       "SARARA_CONTRIBUTE": "<a href=\"http://catalog.sharedshelf.artstor.org\" class=\"link\" target=\"_blank\">Contribute to SAHARA using Forum</a>",
       "SAHARA_TERMS": "<a href=\"http://artstor.org/sahara-terms\" class=\"link\" target=\"_blank\">Terms</a>",
-      "SAHARA_PRIVACY": "<a href=\"http://artstor.org/privacy-policy-sahara\" class=\"link\" target=\"_blank\">Privacy</a>"
+      "SAHARA_PRIVACY": "<a href=\"http://artstor.org/privacy-policy\" class=\"link\" target=\"_blank\">Privacy</a>"
     },
     "DISCLAIMER" : "Artstor is in a strategic alliance with ITHAKA, a not-for-profit organization helping the academic community use digital technologies to preserve the scholarly record and to advance research and teaching in sustainable ways.",
     "RIGHTS" : "All Rights Reserved. JSTOR® and ITHAKA® are registered trademarks of ITHAKA.  Artstor® is a registered trademark of Artstor Inc."
@@ -432,12 +432,12 @@
     },
     "FEATURED": {
       "HEADING": "Featured Collection",
-      "SUBHEADING": "Schlesinger Library of the History of Women in America (Harvard University)",
-      "DESCRIPTION": "Unknown. Young women holding a sign which reads, 'Self Supporting Women.' Several other women grouped near the banner are holding balls. May 1914. Image and data courtesy Arthur and Elizabeth Schlesinger Library on the History of Women in America (Radcliffe Institute for Advanced Study, Harvard University).",
-      "LINK": "/#/category/1034302695",
-      "IMG_SOURCE": "/assets/img/featured-collection-women.jpg",
-      "LINK_TITLE": "Schlesinger Library of the History of Women in America (Harvard University)",
-      "ALT_TEXT": "Schlesinger Library of the History of Women in America (Harvard University)"
+      "SUBHEADING": "The Phillips Collection",
+      "DESCRIPTION": "Jacob Lawrence. The Migration of the Negro Panel no. 1. 1940—1941. The Phillips Collection. © 2005 Estate of Gwendolyn Knight Lawrence / Artists Rights Society (ARS).",
+      "LINK": "/#/category/1034446930",
+      "IMG_SOURCE": "/assets/img/featured-collection-lawrence.jpg",
+      "LINK_TITLE": "The Phillips Collection",
+      "ALT_TEXT": "The Phillips Collection"
     },
     "SAHARA_FEATURED": {
       "HEADING": "Featured Image",
@@ -504,7 +504,7 @@
     "MESSAGE": "We are currently experiencing issues with images and downloads due to a power outage. <a href=\"http://support.artstor.org/?article=current-technical-issues-alerts\" target=\"_blank\" class=\"link\">Learn more</a>."
   },
   "DOWNTIME_BANNER": {
-    "MESSAGE": "We're sorry, we're experiencing problems affecting search and browse across the site.  We apologize for the inconvenience, and appreciate your patience. If you have any questions, please <a href=\"mailto:support@artstor.org\" target=\"_blank\" class=\"link\">contact Artstor Support</a> or check <a href=\"https://twitter.com/ArtstorHelp\" target=\"_blank\" class=\"link\">Twitter</a> for additional updates."
+    "MESSAGE": "We're sorry, we're experiencing problems affecting login.  We apologize for the inconvenience, and appreciate your patience. If you have any questions, please <a href=\"mailto:support@artstor.org\" target=\"_blank\" class=\"link\">contact Artstor Support</a> or check <a href=\"https://twitter.com/ArtstorHelp\" target=\"_blank\" class=\"link\">Twitter</a> for additional updates."
   },
   "SEARCH_SKY_BANNER": {
     "MESSAGE": "⚠️ This is a testing instance for the new Search index. Please excuse the broken bits."
