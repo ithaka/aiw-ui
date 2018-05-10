@@ -51,7 +51,8 @@
           .selected-assets(*ngIf="editMode") {{ selectedAssets.length }} selected asset{{ selectedAssets.length > 1 ? 's' : '' }}
         .col-12.pb-3
           //- View size toggles
-          .number-results(*ngIf="!isLoading") {{ totalAssets }}{{ totalAssets == 2000 ? '+' : '' }} results
+          .number-results(*ngIf="!isLoading") 
+            span.font-weight-bold {{ totalAssets }}{{ totalAssets == 2000 ? '+' : '' }} results
             = " "
             span(*ngIf="searchTerm") for
               = " "
