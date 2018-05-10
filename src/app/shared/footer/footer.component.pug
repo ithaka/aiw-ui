@@ -44,6 +44,8 @@
           span(*ngIf="!user.isLoggedIn")
             h2.browse-category {{ 'HOME.BROWSE.MORE_CONT_HEADING' | translate }}
             p.small([innerHtml]="'HOME.BROWSE.MORE_CONT_LIST' | translate")
+          //- Prompt to log in for unaffiliated users
+          a.link(*ngIf="!user.isLoggedIn", href='/#/login') Log in to see more
         //- mobile divider
         .col-sm-12.d-md-none
           hr
@@ -51,10 +53,10 @@
           ul.list-unstyled
             li(*ngFor="let link of links", [innerHtml]="'FOOTER.LINKS.' + link | translate")
             = " "
-            li
-              a.link.footer-logout((click)="logout()", *ngIf="user && user.isLoggedIn") Log Out
-            li
-              a.link.footer-logout([routerLink]="['/login']", *ngIf="!user || !user.isLoggedIn") Log In
+            //- li
+            //-   a.link.footer-logout((click)="logout()", *ngIf="user && user.isLoggedIn") Log Out
+            //- li
+            //-   a.link.footer-logout([routerLink]="['/login']", *ngIf="!user || !user.isLoggedIn") Log In
           .mt-1 
             #google_translate_element.translate-flyout
         .col-md-3.col-6
@@ -67,5 +69,5 @@
             a.icon.icon-contact(target="_blank" href="http://www.artstor.org/form/contact-us" title="Contact Us")
           p.small([innerHtml]="'FOOTER.DISCLAIMER' | translate")
           p.small &copy; {{ currentYear }} Artstor, Inc.
-          p.small {{ 'FOOTER.RIGHTS' | translate }}
+          // p.small {{ 'FOOTER.RIGHTS' | translate }}
           p.small v{{ appVersion }}
