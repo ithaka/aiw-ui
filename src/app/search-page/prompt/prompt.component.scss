@@ -2,7 +2,7 @@
 
 
 .prompt-box {
-    box-shadow: 0px 1px 7px 1px #80808052;
+    box-shadow: 0px 1px 7px 1px rgba(128,128,128,0.32);
     padding: 0.8rem;
     border-radius: 3px;
     font-size: 0.9rem;
@@ -31,7 +31,7 @@
         margin-top: -11rem;
         margin-bottom: -9rem;
         z-index: 2;
-        box-shadow: 0px 1px 10px 4px #fdfbfbba;
+        box-shadow: 0px 1px 10px 4px rgba(253,251,251,0.73);
     }
 
     #promptImg3 {
