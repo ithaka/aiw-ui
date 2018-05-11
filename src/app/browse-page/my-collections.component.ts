@@ -36,9 +36,7 @@ export class MyCollectionsComponent implements OnInit {
   private selectedBrowseId: string = '';
 //   private showUploadImgsModal: boolean = false;
   private showEditPCModal: boolean = false;
-//   private uploadPC: boolean = false;
 
-  private pcFeatureFlag: boolean = false;
   private editTagId: string = '';
 
   // Reference activeTag for description on side
@@ -47,9 +45,6 @@ export class MyCollectionsComponent implements OnInit {
   private loading: boolean = false;
 
   ngOnInit() {
-
-    // Enable PC featureFlag if the logged-in user is a beta tester
-    this.pcFeatureFlag = this._auth.isBetaUser()
     
     // Set page title
     this._title.setSubtitle("Browse My Collections")
@@ -64,9 +59,6 @@ export class MyCollectionsComponent implements OnInit {
 
         if(params && params['featureFlag']){
             this._auth.featureFlags[params['featureFlag']] = true;
-            if (this._auth.featureFlags['uploadPC']) {
-                this.pcFeatureFlag = true;
-            }
         }
 
       })
@@ -117,13 +109,6 @@ export class MyCollectionsComponent implements OnInit {
                 this.tags.push(privTag);
             }
           }
-
-        //   if(this.tags.length === 0){
-        //       this.uploadPC = true;
-        //   }
-        //   else{
-        //       this.uploadPC = false;
-        //   }
 
           this.loading = false;
 

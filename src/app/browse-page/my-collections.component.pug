@@ -2,9 +2,9 @@ nav.nav.nav-inline.browse-nav
 .row
   .col-md-6
     .tree
-      ang-tag(*ngFor="let tag of tags", [tag]="tag", [edit]="pcFeatureFlag && tag.type && tag.type.label === 'pcollection'", (editTag)="showEditModal(tag)")
+      ang-tag(*ngFor="let tag of tags", [tag]="tag", [edit]="tag.type && tag.type.label === 'pcollection'", (editTag)="showEditModal(tag)")
       //- Fallback "My Personal Collection" link
-      .add-pc-cntnr(*ngIf="(tags.length === 0) && pcFeatureFlag", (click)="showEditPCModal = true")
+      .add-pc-cntnr(*ngIf="tags.length === 0", (click)="showEditPCModal = true")
         .icon-cntnr
           i.icon.absolute-left.icon-add
             a My Personal Collections
