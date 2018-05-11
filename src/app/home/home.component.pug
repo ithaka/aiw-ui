@@ -29,20 +29,14 @@ nav-menu
         img.no-stretch([attr.src]="featuredCollectionConf + '.COLLECTIONS.1.IMG_SOURCE' | translate", [attr.alt]="featuredCollectionConf + '.COLLECTIONS.1.ALT_TEXT' | translate", [attr.title]="featuredCollectionConf + '.COLLECTIONS.1.LINK_TITLE' | translate")
       .card  
         img.no-stretch([attr.src]="featuredCollectionConf + '.COLLECTIONS.2.IMG_SOURCE' | translate", [attr.alt]="featuredCollectionConf + '.COLLECTIONS.2.ALT_TEXT' | translate", [attr.title]="featuredCollectionConf + '.COLLECTIONS.2.LINK_TITLE' | translate")
+      .card
+        featured
 
       a.link(*ngIf="user.isLoggedIn" href="/browse/institution" style="margin-bottom:0px;", [innerHtml]="featuredCollectionConf + '.HEADINGS.VIEW_ALL_LINK' | translate")
       a.link(*ngIf="!user.isLoggedIn" href="/browse/commons" style="margin-bottom:0px;", [innerHtml]="featuredCollectionConf + '.HEADINGS.VIEW_PUBLIC_LINK' | translate")
 
     .row
       .col-sm-3
-        //- .webinar-ad
-        //-   h2 Webinar
-        //-   p Artstor essentials 
-        //-     br 
-        //-     | 30-minute mastery
-
-        //-   p January 30, 2018 3:00PM
-        //-   p Sign up today!
         a#imageAdSpaceLink.card.hidden-xs-down(*ngIf="showHomeAd", [attr.href]=" 'HOME.AD.LINK' | translate ", target="_blank")
             img.card-img.no-stretch([attr.src]="'HOME.AD.IMG_SOURCE' | translate", [attr.alt]="'HOME.AD.ALT_TEXT' | translate")
         .card([class.pt-4]="showHomeAd")
