@@ -13,25 +13,39 @@ nav-menu
   .row
     .col-sm-8
       a#featuredCollectionLink.card.featured-card(#featuredCollection="", [attr.href]="featuredCollectionConf + '.0.LINK' | translate")
-        img.card-img-top.no-stretch([attr.src]="featuredCollectionConf + '.0.IMG_SOURCE' | translate", [attr.alt]="featuredCollectionConf + '.0.ALT_TEXT' | translate", [attr.title]="featuredCollectionConf + '.0.LINK_TITLE' | translate")
+        img.card-img-top.no-stretch([attr.src]="featuredCollectionConf + '.COLLECTIONS.0.IMG_SOURCE' | translate", [attr.alt]="featuredCollectionConf + '.COLLECTIONS.0.ALT_TEXT' | translate", [attr.title]="featuredCollectionConf + '.COLLECTIONS.0.LINK_TITLE' | translate")
+
         .card-body.pt-2
-          label(style="margin-bottom:0px;", [innerHtml]="featuredCollectionConf + '.0.HEADING' | translate")
-          p(style="margin-bottom:6px;", [innerHtml]="featuredCollectionConf + '.0.SUBHEADING' | translate")
-        div.featured-caption([innerHtml]="featuredCollectionConf + '.0.DESCRIPTION' | translate")
+          label(*ngIf="user.isLoggedIn" style="margin-bottom:0px;", [innerHtml]="featuredCollectionConf + '.HEADINGS.INST' | translate")
+          label(*ngIf="!user.isLoggedIn" style="margin-bottom:0px;", [innerHtml]="featuredCollectionConf + '.HEADINGS.PUBLIC' | translate")
+
+        //-   p(style="margin-bottom:6px;", [innerHtml]="featuredCollectionConf + '..0.SUBHEADING' | translate")
+        //- div.featured-caption([innerHtml]="featuredCollectionConf + '..0.DESCRIPTION' | translate")
     .col-sm-4
-      img.card-img-top.no-stretch([attr.src]="featuredCollectionConf + '.1.IMG_SOURCE' | translate", [attr.alt]="featuredCollectionConf + '.1.ALT_TEXT' | translate", [attr.title]="featuredCollectionConf + '.1.LINK_TITLE' | translate")
-      img.card-img-top.no-stretch([attr.src]="featuredCollectionConf + '.2.IMG_SOURCE' | translate", [attr.alt]="featuredCollectionConf + '.2.ALT_TEXT' | translate", [attr.title]="featuredCollectionConf + '.2.LINK_TITLE' | translate")
+      .card
+        img.no-stretch([attr.src]="featuredCollectionConf + '.COLLECTIONS.0.IMG_SOURCE' | translate", [attr.alt]="featuredCollectionConf + '.COLLECTIONS.0.ALT_TEXT' | translate", [attr.title]="featuredCollectionConf + '.COLLECTIONS.0.LINK_TITLE' | translate")
+      .card        
+        img.no-stretch([attr.src]="featuredCollectionConf + '.COLLECTIONS.1.IMG_SOURCE' | translate", [attr.alt]="featuredCollectionConf + '.COLLECTIONS.1.ALT_TEXT' | translate", [attr.title]="featuredCollectionConf + '.COLLECTIONS.1.LINK_TITLE' | translate")
+      .card  
+        img.no-stretch([attr.src]="featuredCollectionConf + '.COLLECTIONS.2.IMG_SOURCE' | translate", [attr.alt]="featuredCollectionConf + '.COLLECTIONS.2.ALT_TEXT' | translate", [attr.title]="featuredCollectionConf + '.COLLECTIONS.2.LINK_TITLE' | translate")
+
+      a.link(*ngIf="user.isLoggedIn" href="/browse/institution" style="margin-bottom:0px;", [innerHtml]="featuredCollectionConf + '.HEADINGS.VIEW_ALL_LINK' | translate")
+      a.link(*ngIf="!user.isLoggedIn" href="/browse/commons" style="margin-bottom:0px;", [innerHtml]="featuredCollectionConf + '.HEADINGS.VIEW_PUBLIC_LINK' | translate")
 
     .row
       .col-sm-3
-        .webinar-ad
-          h2 Webinar
-          p Artstor essentials 
-            br 
-            | 30-minute mastery
+        //- .webinar-ad
+        //-   h2 Webinar
+        //-   p Artstor essentials 
+        //-     br 
+        //-     | 30-minute mastery
 
-          p January 30, 2018 3:00PM
-          p Sign up today!
+        //-   p January 30, 2018 3:00PM
+        //-   p Sign up today!
+        a#imageAdSpaceLink.card.hidden-xs-down(*ngIf="showHomeAd", [attr.href]=" 'HOME.AD.LINK' | translate ", target="_blank")
+            img.card-img.no-stretch([attr.src]="'HOME.AD.IMG_SOURCE' | translate", [attr.alt]="'HOME.AD.ALT_TEXT' | translate")
+        .card([class.pt-4]="showHomeAd")
+
       .col-sm-6
         .card(*ngIf="showBlog")
           .card-header
