@@ -475,13 +475,13 @@
   "NAV_MENU": {
     "HOME": "Home",
     "COLLECTIONS": {
-      "TITLE": "Collections",
+      "TITLE": "Browse",
       "ARTSTOR": "Artstor Collections",
       "INSTITUTION": "Institutional Collections",
       "OPEN": "Public Collections",
-      "OWNED": "My Collections"
+      "OWNED": "My Collections",
+      "GROUPS": "Image Groups"
     },
-    "GROUPS": "Groups",
     "ORGANIZE": {
       "TITLE": "Organize",
       "SELECT_ALL": "Select All on Page",
