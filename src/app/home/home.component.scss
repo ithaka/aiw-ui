@@ -54,3 +54,16 @@
 .card-body {
   padding: 0px;
 }
+
+.webinar-ad {
+    background-color: #008fcc;
+    color: #eee;
+    padding: 25px;
+
+    & h2 {
+        font-size: 2rem;
+        color: #fff;
+        margin-bottom: 20px;
+    }
+
+}
