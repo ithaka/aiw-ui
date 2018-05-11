@@ -15,7 +15,7 @@ declare var initPath: string
   // where, in this case, selector is the string 'home'
   selector: 'home',  // <home></home>
   // Our list of styles in our component. We may add more to compose many styles together
-  styleUrls: [ './home.component.scss' ],
+  styleUrls: ['./home.component.scss'],
   // Every Angular template is first compiled by the browser before Angular runs it's compiler
   templateUrl: './home.component.pug'
 })
@@ -44,17 +44,22 @@ export class Home implements OnInit, OnDestroy {
   private showHomeAd: boolean = false
   private siteID: string = ""
 
+  // Featured Collections
+  private showInstFeatured: boolean = false
+  private showPublicFeatured: boolean = false
+  private primaryFeaturedIndex: number = 0
+
   // Default IG 'Browse By:' Option controlled via the WLV file 
   private defaultGrpBrwseBy: string = 'institution'
 
   // TypeScript public modifiers
   constructor(
-      public _appConfig: AppConfig,
-      private _assets: AssetService,
-      private _router: Router,
-      private _auth: AuthService,
-      private _analytics: AnalyticsService,
-      private deviceService: Ng2DeviceService
+    public _appConfig: AppConfig,
+    private _assets: AssetService,
+    private _router: Router,
+    private _auth: AuthService,
+    private _analytics: AnalyticsService,
+    private deviceService: Ng2DeviceService
   ) {
     // this makes the window always render scrolled to the top
     this._router.events.subscribe(() => {
@@ -76,7 +81,7 @@ export class Home implements OnInit, OnDestroy {
     // Provide redirects for initPath detected in index.html from inital load
     if (initPath) {
       this._router.navigateByUrl(initPath)
-        .then( result => {
+        .then(result => {
           // Clear variable to prevent further redirects
           initPath = null
           console.log('Redirect to initial path attempt: ' + result)
@@ -119,35 +124,38 @@ export class Home implements OnInit, OnDestroy {
           )
       )
 
-      this._assets.getBlogEntries()
-        .then((data) => {
-          if (data['posts']) {
-            this.blogPosts = data['posts'];
-          }
-          this.blogLoading = false;
-        },)
-        .catch((error) => {
-          console.log(error);
-          this.blogLoading = false;
-        });
+    this._assets.getBlogEntries()
+      .then((data) => {
+        if (data['posts']) {
+          this.blogPosts = data['posts'];
+        }
+        this.blogLoading = false;
+      }, )
+      .catch((error) => {
+        console.log(error);
+        this.blogLoading = false;
+      });
 
-        this._analytics.setPageValues('Home', '')
+    this._analytics.setPageValues('Home', '')
 
-        // Grab session info for Email Artstor link
-        this._auth.getUserIP().subscribe( (res) => {
-          if(res){
-            this.userGeoIP = res;
-            this.fetchDeviceInfo();
-          }
-        })
-
+    // Grab session info for Email Artstor link
+    this._auth.getUserIP().subscribe((res) => {
+      if (res) {
+        this.userGeoIP = res;
+        this.fetchDeviceInfo();
+      }
+    })
   } // OnInit
 
   ngOnDestroy() {
     this.subscriptions.forEach((sub) => { sub.unsubscribe(); });
   }
 
-  private fetchDeviceInfo(): void{
+  private switchFeaturedIndex(index: number): void {
+    this.primaryFeaturedIndex = index
+  }
+
+  private fetchDeviceInfo(): void {
     // Detect if adblocker is enabled or not
     let adBlockEnabled = false;
     let testAd = document.createElement('div');
