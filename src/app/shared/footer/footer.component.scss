@@ -1,6 +1,7 @@
 /*Footer styles only*/
 
 $footerBg: #f9f9f9;
+$linkColor : #444;
 
 .footer {
     padding: 30px 15px 60px 15px;
@@ -21,7 +22,9 @@ $footerBg: #f9f9f9;
     //         }
     //     }
     // }
+
 }
+
 
 .links li {
     display: inline-block;
