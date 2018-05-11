@@ -48,7 +48,7 @@ import { NavMenu } from './nav-menu'
 import { AssetFilters } from './asset-filters'
 import { AssetGrid, ThumbnailComponent } from './asset-grid'
 import { Home } from './home'
-import { SearchPage } from './search-page'
+import { SearchPage, PromptComponent } from './search-page'
 import { CollectionPage } from './collection-page'
 import { PCollectionPage } from './pcollection-page'
 import { CategoryPage } from './category-page'
@@ -218,6 +218,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     TagComponent,
     TagsListComponent,
     ThumbnailComponent,
+    PromptComponent,
     TypeIdPipe,
     UploaderComponent
   ],
