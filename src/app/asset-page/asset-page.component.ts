@@ -124,7 +124,6 @@ export class AssetPage implements OnInit, OnDestroy {
     private isProcessing: boolean = false // controls loading class on delete button
     private deleteLoading: boolean = false
     private showExitEdit: boolean = false
-    private pcFeatureFlag: boolean = false
     private showDeletePCModal: boolean = false
     private downloadLoading: boolean = false
 
@@ -166,8 +165,6 @@ export class AssetPage implements OnInit, OnDestroy {
 
     ngOnInit() {
         this.user = this._auth.getUser();
-        // Enable PC featureFlag if the logged-in user is a beta tester
-        this.pcFeatureFlag = this._auth.isBetaUser()
 
         // For "Go Back to Results"
         let prevRouteParams = this._storage.get('prevRouteParams');
@@ -195,10 +192,6 @@ export class AssetPage implements OnInit, OnDestroy {
                 if (routeParams && routeParams['featureFlag']) {
                     this._auth.featureFlags[routeParams['featureFlag']] = true
                     this.relatedResFlag = this._auth.featureFlags['related-res-hack'] ? true : false
-
-                    if (this._auth.featureFlags['uploadPC']) {
-                        this.pcFeatureFlag = true
-                    }
                 } else {
                     this.relatedResFlag = false
                 }
