@@ -1,7 +1,7 @@
 nav-menu([allowSelectAll]="true")
-#mainContent.container.main-content(tabindex="-1")
+.container.main-content
   .row.no-gutters.row--search-bar
-    .col-md-5
+    #mainContent.col-md-5(tabindex="-1")
       ang-search
 
   h1 Associated Assets

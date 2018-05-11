@@ -1,11 +1,11 @@
-#mainContent.container.main-content(tabindex="0")
+.container.main-content
   .row
     .col-sm-6
       .card.card--light
         .card-header
           h1#loginHeading {{ copyBase + 'LOGIN.REG_LOGIN.HEADING' | translate }}
         .card-body
-          ang-login-form
+          ang-login-form#mainContent(tabindex="-1")
           a#linkLoginResetModal((click)="showPwdModal = true" tabindex="0" class="link" data-automation-component="artstor-pw-reset-link") {{ 'LOGIN.REG_LOGIN.FORGOT_PW_PROMPT' | translate }}
           br
           div(*ngIf="showRegister")

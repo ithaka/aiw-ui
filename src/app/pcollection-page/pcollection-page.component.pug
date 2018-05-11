@@ -1,6 +1,6 @@
 nav-menu([allowSelectAll]="true")
 ang-sky-banner(*ngIf="showDeleteSuccessBanner", textValue="{{ 'PERSONAL_COLLECTION_PAGE.BANNER.DELETE_SUCCESS' | translate:deleteBannerParams }}", (closeBanner)="showDeleteSuccessBanner = false")
-#mainContent.container.main-content(tabindex="-1")
+.container.main-content
   .row
     //- .col-sm-3
     //-   .mobile--hide
@@ -9,7 +9,7 @@ ang-sky-banner(*ngIf="showDeleteSuccessBanner", textValue="{{ 'PERSONAL_COLLECTI
     .col-12
       h1.mobile--show Results
       .row.no-gutters.row--search-bar
-        .col-md-7
+        #mainContent.col-md-7(tabindex="-1")
           ang-search([allowSearchInRes]="false")
       .row
         .col-sm-12
