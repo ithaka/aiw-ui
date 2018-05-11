@@ -23,6 +23,7 @@ export class Asset {
     SSID: string
     fileName: string
     updated_on?: string
+    publicDownload: boolean
 
     viewportDimensions: {
         contentSize?: any,
