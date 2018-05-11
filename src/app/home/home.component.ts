@@ -6,6 +6,7 @@ import { Ng2DeviceService } from 'ng2-device-detector';
 import { AssetService, AuthService, } from '../shared';
 import { AnalyticsService } from '../analytics.service';
 import { AppConfig } from '../app.service';
+import { Featured } from './featured'
 
 declare var initPath: string
 
