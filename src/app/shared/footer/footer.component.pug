@@ -5,30 +5,47 @@
         .col-md-6.col--explore
           .h1 Explore Artstor
           //- ADL Collections Link
-          a.link#footerLinkBrowseCollection.footer__explore-link(*ngIf="browseSec.collection", [routerLink]="['/browse','library']")
-            h2.browse-category {{ 'HOME.BROWSE.COLL_HEADING' | translate }}
-            p.small([innerHtml]="'HOME.BROWSE.COLL_LIST' | translate")
+          span(*ngIf="user.isLoggedIn")
+            a.link#footerLinkBrowseCollection.footer__explore-link(*ngIf="browseSec.collection", [routerLink]="['/browse','library']")
+              h2.browse-category {{ 'HOME.BROWSE.COLL_HEADING' | translate }}
+              p.small([innerHtml]="'HOME.BROWSE.COLL_LIST' | translate")
           //- Institutional Collections Link
-          a.link#footerLinkBrowseInstCollection.footer__explore-link(*ngIf="browseSec.instCollection", [routerLink]="['/browse','institution']")
-            h2.browse-category {{ 'HOME.BROWSE.COLL_HEADING' | translate }}
-            p.small([innerHtml]="'HOME.BROWSE.COLL_LIST_SHORT' | translate")
+          span(*ngIf="user.isLoggedIn")
+            a.link#footerLinkBrowseInstCollection.footer__explore-link(*ngIf="browseSec.instCollection", [routerLink]="['/browse','institution']")
+              h2.browse-category {{ 'HOME.BROWSE.COLL_HEADING' | translate }}
+              p.small([innerHtml]="'HOME.BROWSE.COLL_LIST_SHORT' | translate")
           //- Classification Link
-          a.link#footerLinkBrowseClassification.footer__explore-link(*ngIf="browseSec.classification", [routerLink]="['/browse','library', {viewId: 250}]")
-            h2.browse-category {{ 'HOME.BROWSE.CLASS_HEADING' | translate }}
-            p.small([innerHtml]="'HOME.BROWSE.CLASS_LIST' | translate")
+          span(*ngIf="user.isLoggedIn")
+            a.link#footerLinkBrowseClassification.footer__explore-link(*ngIf="browseSec.classification", [routerLink]="['/browse','library', {viewId: 250}]")
+              h2.browse-category {{ 'HOME.BROWSE.CLASS_HEADING' | translate }}
+              p.small([innerHtml]="'HOME.BROWSE.CLASS_LIST' | translate")
           //- Geography Link
-          a.link#footerLinkBrowseGeography.footer__explore-link(*ngIf="browseSec.geography", [routerLink]="['/browse','library', {viewId: 260}]")
-            h2.browse-category {{ 'HOME.BROWSE.GEO_HEADING' | translate }}
-            p.small([innerHtml]="'HOME.BROWSE.GEO_LIST' | translate")
+          span(*ngIf="user.isLoggedIn")
+            a.link#footerLinkBrowseGeography.footer__explore-link(*ngIf="browseSec.geography", [routerLink]="['/browse','library', {viewId: 260}]")
+              h2.browse-category {{ 'HOME.BROWSE.GEO_HEADING' | translate }}
+              p.small([innerHtml]="'HOME.BROWSE.GEO_LIST' | translate")
           //- Teaching Resources Link
-          a.link#footerLinkBrowseTeaching.footer__explore-link(*ngIf="browseSec.teachingResources", [routerLink]="['/browse','groups', 'public']")
-            h2.browse-category {{ 'HOME.BROWSE.TEACHING_HEADING' | translate }}
+          span(*ngIf="user.isLoggedIn")
+            a.link#footerLinkBrowseTeaching.footer__explore-link(*ngIf="browseSec.teachingResources", [routerLink]="['/browse','groups', 'public']")
+              h2.browse-category {{ 'HOME.BROWSE.TEACHING_HEADING' | translate }}
           //- Teaching resource description includes links, and should not be a child of the header
-          p.small([innerHtml]="'HOME.BROWSE.TEACHING_LIST' | translate")
+          span(*ngIf="user.isLoggedIn")
+            p.small([innerHtml]="'HOME.BROWSE.TEACHING_LIST' | translate")
           //- Image Groups Link
-          a.link#footerLinkBrowseIGs.footer__explore-link(*ngIf="browseSec.imageGrps", [routerLink]="['/browse','groups', 'institution']")
-            h2.browse-category {{ 'HOME.BROWSE.GROUPS_HEADING' | translate }}
-            p.small([innerHtml]="'HOME.BROWSE.GROUPS_LIST' | translate")
+          span(*ngIf="user.isLoggedIn")
+            a.link#footerLinkBrowseIGs.footer__explore-link(*ngIf="browseSec.imageGrps", [routerLink]="['/browse','groups', 'institution']")
+              h2.browse-category {{ 'HOME.BROWSE.GROUPS_HEADING' | translate }}
+              p.small([innerHtml]="'HOME.BROWSE.GROUPS_LIST' | translate")
+          //- Public Collections for Unaffiliated users
+          span(*ngIf="!user.isLoggedIn")
+            h2.browse-category {{ 'HOME.BROWSE.PUB_COLL_HEADING' | translate }}
+            p.small([innerHtml]="'HOME.BROWSE.PUB_COLL_LIST' | translate")
+          //- More Content for Unaffiliated users
+          span(*ngIf="!user.isLoggedIn")
+            h2.browse-category {{ 'HOME.BROWSE.MORE_CONT_HEADING' | translate }}
+            p.small([innerHtml]="'HOME.BROWSE.MORE_CONT_LIST' | translate")
+          //- Prompt to log in for unaffiliated users
+          a.link(*ngIf="!user.isLoggedIn", href='/#/login') Log in to see more
         //- mobile divider
         .col-sm-12.d-md-none
           hr
@@ -36,10 +53,10 @@
           ul.list-unstyled
             li(*ngFor="let link of links", [innerHtml]="'FOOTER.LINKS.' + link | translate")
             = " "
-            li
-              a.link.footer-logout((click)="logout()", *ngIf="user && user.isLoggedIn") Log Out
-            li
-              a.link.footer-logout([routerLink]="['/login']", *ngIf="!user || !user.isLoggedIn") Log In
+            //- li
+            //-   a.link.footer-logout((click)="logout()", *ngIf="user && user.isLoggedIn") Log Out
+            //- li
+            //-   a.link.footer-logout([routerLink]="['/login']", *ngIf="!user || !user.isLoggedIn") Log In
           .mt-1 
             #google_translate_element.translate-flyout
         .col-md-3.col-6
