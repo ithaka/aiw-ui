@@ -6,7 +6,7 @@
       span.navbar-toggler-icon
     #navMenu.navbar-collapse.collapse([class.show]="!mobileCollapsed")
       ul.nav.navbar-nav
-        li.nav-item
+        //li.nav-item
           a.btn.btn-link([routerLink]="['/home']", routerLinkActive="active") {{ 'NAV_MENU.HOME' | translate }}
         li.nav-item(ngbDropdown, (mouseenter)="openDrop($event, drop1)", (mouseleave)="closeDrop($event, drop1)", #drop1="ngbDropdown")
           button#dropdownMenu1.btn.btn-link(ngbDropdownToggle) {{ 'NAV_MENU.COLLECTIONS.TITLE' | translate }}
@@ -15,8 +15,10 @@
             button.dropdown-item(*ngIf="browseOpts.instCol", [routerLink]="['/browse', 'institution']") {{ 'NAV_MENU.COLLECTIONS.INSTITUTION' | translate }}
             button.dropdown-item(*ngIf="browseOpts.openCol", [routerLink]="['/browse', 'commons']") {{ 'NAV_MENU.COLLECTIONS.OPEN' | translate }}
             button.dropdown-item(*ngIf="browseOpts.myCol", [class.disabled]="!pcEnabled", [routerLink]="['/browse', 'mycollections']") {{ 'NAV_MENU.COLLECTIONS.OWNED' | translate }}
-            button.dropdown-item(*ngIf="browseOpts.igs", [routerLink]="['/browse','groups', defaultGrpBrwseBy]") {{ 'NAV_MENU.COLLECTIONS.GROUPS' | translate }}
-        li.nav-item(ngbDropdown, (mouseenter)="openDrop($event, drop2)", (mouseleave)="closeDrop($event, drop2)", #drop2="ngbDropdown")
+            // button.dropdown-item(*ngIf="browseOpts.igs", [routerLink]="['/browse','groups', defaultGrpBrwseBy]") {{ 'NAV_MENU.COLLECTIONS.GROUPS' | translate }}
+        li.nav-item(*ngIf="user.isLoggedIn")
+          a.btn.btn-link([routerLink]="['/browse','groups', defaultGrpBrwseBy]", routerLinkActive="active") {{ 'NAV_MENU.GROUPS' | translate }}
+        li.nav-item(*ngIf="user.isLoggedIn", ngbDropdown, (mouseenter)="openDrop($event, drop2)", (mouseleave)="closeDrop($event, drop2)", #drop2="ngbDropdown")
           button#organizeMenu.btn.btn-link(ngbDropdownToggle) {{ 'NAV_MENU.ORGANIZE.TITLE' | translate }}
           .dropdown-menu(ngbDropdownMenu, aria-labelledby="organizeMenu")
             // Active on Image Group Page
