@@ -1101,6 +1101,7 @@ export class AssetPage implements OnInit, OnDestroy {
                 }
                 // Public Collection
                 else if (col.type === '5') {
+                    asset.publicDownload = true
                     return ['/collection', col.id]
                 }
                 else {
