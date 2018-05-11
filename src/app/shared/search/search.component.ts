@@ -31,6 +31,9 @@ export class SearchComponent implements OnInit, OnDestroy {
   @Input()
   private allowSearchInRes:boolean;
 
+  @Input()
+  private UserNotLoggedIn: boolean;
+
   constructor(
     private _analytics: AnalyticsService,
     private _assets: AssetService,
