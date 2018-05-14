@@ -9,6 +9,10 @@
         //- div.featured-caption([innerHtml]="featuredCollectionConf + '..0.DESCRIPTION' | translate")
   .col-sm-4.featured-col
     .card
+      div(*ngIf="primaryFeaturedIndex === 0")
+        p(style="margin-bottom:6px;", [innerHtml]="featuredCollectionConf + '.COLLECTIONS.0.SUBHEADING' | translate")
+        div.featured-caption([innerHtml]="featuredCollectionConf + '.COLLECTIONS.0.DESCRIPTION' | translate")
+
       img.featured-side-tile(*ngIf="showInstFeatured", [attr.src]="featuredCollectionConf + '.COLLECTIONS.0.IMG_SOURCE' | translate", [attr.alt]="featuredCollectionConf + '.COLLECTIONS.0.ALT_TEXT' | translate", [attr.title]="featuredCollectionConf + '.COLLECTIONS.0.LINK_TITLE' | translate")
       img.featured-side-tile(*ngIf="showPublicFeatured", [attr.src]="featuredCollectionConf + '.PUBLIC_COLLECTIONS.0.IMG_SOURCE' | translate", [attr.alt]="featuredCollectionConf + '.COLLECTIONS.0.ALT_TEXT' | translate", [attr.title]="featuredCollectionConf + '.COLLECTIONS.0.LINK_TITLE' | translate")
       img.featured-side-tile(*ngIf="showSaharaFeatured", [attr.src]="featuredCollectionConf + '.SAHARA_COLLECTIONS.0.IMG_SOURCE' | translate", [attr.alt]="featuredCollectionConf + '.COLLECTIONS.0.ALT_TEXT' | translate", [attr.title]="featuredCollectionConf + '.COLLECTIONS.0.LINK_TITLE' | translate")
