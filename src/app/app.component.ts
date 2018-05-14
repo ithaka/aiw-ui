@@ -21,7 +21,9 @@ import { ScriptService } from './shared';
   ],
   template: `
     <ang-sky-banner *ngIf="showSkyBanner" [textValue]="'DOWNTIME_BANNER.MESSAGE' | translate" (closeBanner)="showSkyBanner = false"></ang-sky-banner>
-    <a (click)="findMainContent()" (keydown.enter)="findMainContent()" tabindex="1" class="sr-only sr-only-focusable">Skip to main content</a>
+    <div id="skip" tabindex="-1">
+      <a (click)="findMainContent()" (keydown.enter)="findMainContent()" tabindex="1" class="sr-only sr-only-focusable">Skip to main content</a>
+    </div>
     <nav-bar></nav-bar>
 
     <main tabindex="-1">
@@ -56,17 +58,16 @@ export class App {
     this.title = this._app.config.pageTitle
 
     // Set metatitle to "Artstor" except for asset page where metatitle is {{ Asset Title }}
-    router.events.subscribe(event => {
+    router.events.subscribe(event => {   
       if(event instanceof NavigationStart) {
+        let mainEl = <HTMLElement>(document.getElementById("skip"))
+        mainEl.focus()
         let event_url_array = event.url.split('/')
         if(event_url_array && (event_url_array.length > 1) && (event_url_array[1] !== 'asset')){
           this.titleService.setTitle(this.title)
         }
       }
       else if(event instanceof NavigationEnd) {
-        //let mainEl = <HTMLElement>(document.body)
-        //console.log(mainEl)
-        //mainEl.focus()
         let event_url_array = event.url.split('/')
         let zendeskElements = document.querySelectorAll('.zopim')
 
@@ -95,6 +96,8 @@ export class App {
     // Toggle Banner here to show alerts and updates!
     // this.showSkyBanner = true
   }
+
+
 
   private findMainContent(): void {
     let htmlelement:HTMLElement = document.getElementById("mainContent");
