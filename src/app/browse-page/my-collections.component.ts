@@ -36,7 +36,6 @@ export class MyCollectionsComponent implements OnInit {
   private selectedBrowseId: string = '';
 //   private showUploadImgsModal: boolean = false;
   private showEditPCModal: boolean = false;
-//   private uploadPC: boolean = false;
 
   private editTagId: string = '';
 
@@ -59,7 +58,7 @@ export class MyCollectionsComponent implements OnInit {
         }
 
         if(params && params['featureFlag']){
-            this._auth.featureFlags[params['featureFlag']] = true
+            this._auth.featureFlags[params['featureFlag']] = true;
         }
 
       })
