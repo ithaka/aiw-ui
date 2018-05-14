@@ -80,14 +80,14 @@
             
           //- Download dropdown options
           | {{downloadUrl}}
-          .dropdown.d-inline-block(ngbDropdown, *ngIf="assets[0].downloadLink && (user.isLoggedIn || hasExternalAccess)")
+          .dropdown.d-inline-block(ngbDropdown, *ngIf="assets[0].downloadLink && (user.isLoggedIn || hasExternalAccess || assets[0].publicDownload)")
             button#downloadAssetDropdown.btn.btn-secondary(ngbDropdownToggle [class.loading]="downloadLoading", (click)="(isMSAgent ? null : genDownloadViewLink())", tabindex="3")
               | {{ 'ASSET_PAGE.BUTTONS.DOWNLOAD' | translate}}
               = " "
             .dropdown-menu(ngbDropdownMenu, aria-labelledby="dropdownBasic1")
               a#downloadAssetLink.dropdown-item(download,
-                [attr.href]="(downloadAuth() && !assets[0].disableDownload) ? generatedFullURL : null",
-                (click)="(downloadAuth() && !assets[0].disableDownload) ? trackDownloadImage() : setDownloadImage()",
+                [attr.href]="((assets[0].publicDownload || downloadAuth()) && !assets[0].disableDownload) ? generatedFullURL : null",
+                (click)="((assets[0].publicDownload || downloadAuth()) && !assets[0].disableDownload) ? trackDownloadImage() : setDownloadImage()",
                 [class.disabled]="assets[0].disableDownload",
                 title="{{ assets[0].disableDownload ? 'Image is not available for download.' : 'Image download'}}",
                 target="_blank",
@@ -96,8 +96,8 @@
                 | Download File
               a#downloadViewLink.dropdown-item(download="download.jpg",
                 type="image/jpeg",
-                [attr.href]="(downloadAuth() && !assets[0].disableDownload) ? generatedViewURL : (isMSAgent ? '#' : null)",
-                (click)="(downloadAuth() && !assets[0].disableDownload) ? trackDownloadView() : setDownloadView()",
+                [attr.href]="((assets[0].publicDownload || downloadAuth()) && !assets[0].disableDownload) ? generatedViewURL : (isMSAgent ? '#' : null)",
+                (click)="((assets[0].publicDownload || downloadAuth()) && !assets[0].disableDownload) ? trackDownloadView() : setDownloadView()",
                 [class.disabled]="assets[0].disableDownload || assets[0].typeName !== 'image'",
                 target="_self",
                 tabindex="3")

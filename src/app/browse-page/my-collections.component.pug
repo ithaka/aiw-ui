@@ -4,10 +4,15 @@ nav.nav.nav-inline.browse-nav
     .tree
       ang-tag(*ngFor="let tag of tags", [tag]="tag", [edit]="tag.type && tag.type.label === 'pcollection'", (editTag)="showEditModal(tag)")
       //- Fallback "My Personal Collection" link
-      .add-pc-cntnr(*ngIf="tags.length === 0", (click)="showEditPCModal = true")
+      .add-pc-cntnr(*ngIf="isLoggedIn && (tags.length === 0)", (click)="showEditPCModal = true")
         .icon-cntnr
-          i.icon.absolute-left.icon-add
-            a My Personal Collections
+          i.icon.icon-add
+        a {{ 'BROWSE.MY_COLLECTION.UPLOAD_IMGS' | translate }}
+        
+      .alert.alert-info(*ngIf="!isLoggedIn")
+        h3 {{ 'BROWSE.ERRORS.LOGIN_PC_HEADING' | translate }}
+        br
+        div([innerHtml]="'BROWSE.ERRORS.LOGIN_PC_COLLECTIONS_PROMPT' | translate")
   .col-md-6
     .mycol-info
       .img

@@ -104,7 +104,6 @@ export class LoginFormComponent implements OnInit {
         if( (res['privateCollection'] && (res['privateCollection'].length > 0)) || (res['pcCollection'] && res['pcCollection'].collectionid) ){
           pcEnabled = true;
         }
-        this._auth.setpcEnabled(pcEnabled);
 
       })
       .catch(function(err) {
