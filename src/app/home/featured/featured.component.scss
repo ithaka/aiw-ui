@@ -1,0 +1,18 @@
+#featured-container {
+    border-bottom: solid 1px #ddd;
+    margin-bottom: 20px;
+
+    .featured-side-tile {
+        max-width: 65%;
+    }
+
+    .featured-col {
+        max-height: 60vh;
+    }
+
+    #view-all-link {
+        text-align: right;
+    }
+
+}
+

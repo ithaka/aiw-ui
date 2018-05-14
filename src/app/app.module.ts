@@ -47,7 +47,7 @@ import { Nav, Footer, SearchComponent, PaginationComponent, AssetSearchService }
 import { NavMenu } from './nav-menu'
 import { AssetFilters } from './asset-filters'
 import { AssetGrid, ThumbnailComponent } from './asset-grid'
-import { Home } from './home'
+import { Home, FeaturedComponent } from './home'
 import { SearchPage } from './search-page'
 import { CollectionPage } from './collection-page'
 import { PCollectionPage } from './pcollection-page'
@@ -181,6 +181,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     DeleteIgModal,
     DownloadLimitModal,
     EditPersonalCollectionModal,
+    FeaturedComponent,
     Footer,
     GeneralSearchComponent,
     Home,
