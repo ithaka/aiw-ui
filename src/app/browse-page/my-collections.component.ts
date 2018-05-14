@@ -14,7 +14,7 @@ import { TitleService, AssetSearchService, AuthService, AssetService } from '../
 })
 export class MyCollectionsComponent implements OnInit {
 
-  private pcEnabled: boolean;
+  private isLoggedIn: boolean
 
   constructor(
     private _auth: AuthService,
@@ -68,14 +68,14 @@ export class MyCollectionsComponent implements OnInit {
     this.subscriptions.push(
       this._auth.currentUser.subscribe(
         (userObj) => {
-            this.pcEnabled = userObj.pcEnabled
+            this.isLoggedIn = userObj.isLoggedIn
         },
         (err) => { console.error(err) }
       )
     )
 
-    if(this.pcEnabled){ // If user has personal collections get data for user's personal collections
-      this.getUserPCol();
+    if(this.isLoggedIn){ // If user is logged-in get data for user's personal collections
+      this.getUserPCol()
     }
     this._analytics.setPageValues('mycollection', '')
   } // OnInit
