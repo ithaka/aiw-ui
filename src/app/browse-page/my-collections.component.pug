@@ -2,13 +2,9 @@ nav.nav.nav-inline.browse-nav
 .row
   .col-md-6
     .tree
+      // Show tags for Personal and Private collections
       ang-tag(*ngFor="let tag of tags", [tag]="tag", [edit]="tag.type && tag.type.label === 'pcollection'", (editTag)="showEditModal(tag)")
-      //- Fallback "My Personal Collection" link
-      .add-pc-cntnr(*ngIf="isLoggedIn && (tags.length === 0)", (click)="showEditPCModal = true")
-        .icon-cntnr
-          i.icon.icon-add
-        a {{ 'BROWSE.MY_COLLECTION.UPLOAD_IMGS' | translate }}
-        
+
       .alert.alert-info(*ngIf="!isLoggedIn")
         h3 {{ 'BROWSE.ERRORS.LOGIN_PC_HEADING' | translate }}
         br
