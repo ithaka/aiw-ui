@@ -74,7 +74,8 @@ export class AuthService implements CanActivate {
    * - Update via url param subscriptions inside of relevant components
    */
   public featureFlags = {
-    pcUpload : false
+    pcUpload : false,
+    unaffiliated: false
   }
 
   constructor(
