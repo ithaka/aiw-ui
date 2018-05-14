@@ -1,0 +1,24 @@
+.row#featured-container
+  .col-sm-8.featured-col
+    a#featuredCollectionLink.card.featured-card(#featuredCollection="", [attr.href]="featuredCollectionConf + '.COLLECTIONS.0.LINK' | translate")
+      img.card-img-top.no-stretch(*ngIf="showInstFeatured", [attr.src]="featuredCollectionConf + '.COLLECTIONS.0.IMG_SOURCE' | translate", [attr.alt]="featuredCollectionConf + '.COLLECTIONS.0.ALT_TEXT' | translate", [attr.title]="featuredCollectionConf + '.COLLECTIONS.0.LINK_TITLE' | translate")
+      img.card-img-top.no-stretch(*ngIf="showPublicFeatured", [attr.src]="featuredCollectionConf + '.SAHARA_COLLECTIONS.0.IMG_SOURCE' | translate", [attr.alt]="featuredCollectionConf + '.COLLECTIONS.0.ALT_TEXT' | translate", [attr.title]="featuredCollectionConf + '.COLLECTIONS.0.LINK_TITLE' | translate")
+    .card-body.pt-2
+      label(*ngIf="user.isLoggedIn" style="margin-bottom:0px;", [innerHtml]="featuredCollectionConf + '.HEADINGS.INST' | translate")
+      label(*ngIf="!user.isLoggedIn" style="margin-bottom:0px;", [innerHtml]="featuredCollectionConf + '.HEADINGS.PUBLIC' | translate")
+
+        //-   p(style="margin-bottom:6px;", [innerHtml]="featuredCollectionConf + '..0.SUBHEADING' | translate")
+        //- div.featured-caption([innerHtml]="featuredCollectionConf + '..0.DESCRIPTION' | translate")
+  .col-sm-4.featured-col
+    .card
+      img.featured-side-tile(*ngIf="showInstFeatured", [attr.src]="featuredCollectionConf + '.COLLECTIONS.0.IMG_SOURCE' | translate", [attr.alt]="featuredCollectionConf + '.COLLECTIONS.0.ALT_TEXT' | translate", [attr.title]="featuredCollectionConf + '.COLLECTIONS.0.LINK_TITLE' | translate")
+      img.featured-side-tile(*ngIf="showPublicFeatured", [attr.src]="featuredCollectionConf + '.SAHARA_COLLECTIONS.0.IMG_SOURCE' | translate", [attr.alt]="featuredCollectionConf + '.COLLECTIONS.0.ALT_TEXT' | translate", [attr.title]="featuredCollectionConf + '.COLLECTIONS.0.LINK_TITLE' | translate")
+    .card        
+      img.featured-side-tile(*ngIf="showInstFeatured", [attr.src]="featuredCollectionConf + '.COLLECTIONS.1.IMG_SOURCE' | translate", [attr.alt]="featuredCollectionConf + '.COLLECTIONS.1.ALT_TEXT' | translate", [attr.title]="featuredCollectionConf + '.COLLECTIONS.1.LINK_TITLE' | translate")
+      img.featured-side-tile(*ngIf="showPublicFeatured", [attr.src]="featuredCollectionConf + '.SAHARA_COLLECTIONS.1.IMG_SOURCE' | translate", [attr.alt]="featuredCollectionConf + '.COLLECTIONS.1.ALT_TEXT' | translate", [attr.title]="featuredCollectionConf + '.COLLECTIONS.1.LINK_TITLE' | translate")
+    .card  
+      img.featured-side-tile(*ngIf="showInstFeatured", [attr.src]="featuredCollectionConf + '.COLLECTIONS.2.IMG_SOURCE' | translate", [attr.alt]="featuredCollectionConf + '.COLLECTIONS.2.ALT_TEXT' | translate", [attr.title]="featuredCollectionConf + '.COLLECTIONS.2.LINK_TITLE' | translate")
+      img.featured-side-tile(*ngIf="showPublicFeatured", [attr.src]="featuredCollectionConf + '.SAHARA_COLLECTIONS.2.IMG_SOURCE' | translate", [attr.alt]="featuredCollectionConf + '.COLLECTIONS.2.ALT_TEXT' | translate", [attr.title]="featuredCollectionConf + '.COLLECTIONS.2.LINK_TITLE' | translate")
+
+    a.link#view-all-link(*ngIf="user.isLoggedIn" href="/browse/institution" style="margin-bottom:0px;", [innerHtml]="featuredCollectionConf + '.HEADINGS.VIEW_ALL_LINK' | translate")
+    a.link#view-all-link(*ngIf="!user.isLoggedIn" href="/browse/commons" style="margin-bottom:0px;", [innerHtml]="featuredCollectionConf + '.HEADINGS.VIEW_PUBLIC_LINK' | translate")

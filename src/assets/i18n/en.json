@@ -435,22 +435,62 @@
       "MORE_CONT_LIST": "To browse the Artstor Digital Library collections, institutional collections, create image groups, and more, you will login as part of your institution."
     },
     "FEATURED": {
-      "HEADING": "Featured Collection",
-      "SUBHEADING": "The Phillips Collection",
-      "DESCRIPTION": "Jacob Lawrence. The Migration of the Negro Panel no. 1. 1940—1941. The Phillips Collection. © 2005 Estate of Gwendolyn Knight Lawrence / Artists Rights Society (ARS).",
-      "LINK": "/#/category/1034446930",
-      "IMG_SOURCE": "/assets/img/featured-collection-lawrence.jpg",
-      "LINK_TITLE": "The Phillips Collection",
-      "ALT_TEXT": "The Phillips Collection"
-    },
-    "SAHARA_FEATURED": {
-      "HEADING": "Featured Image",
-      "SUBHEADING": "Pueblo in Taos, New Mexico",
-      "DESCRIPTION": "Photo taken 2008 by SAHARA contributor Dell Upton.",
-      "LINK": "/#/asset/HUSAHARA_1113121791",
-      "IMG_SOURCE": "/assets/img/featured-collection-sahara.jpg",
-      "LINK_TITLE": "Pueblo in Taos, New Mexico",
-      "ALT_TEXT": "Pueblo in Taos, New Mexico"
+      "HEADINGS": {
+        "PUBLIC": "Featured Public Collections",
+        "INST": "Featured Collections",
+        "VIEW_ALL_LINK": "View All Collections",
+        "VIEW_PUBLIC_LINK": "View All Public Collections"
+      },
+      "COLLECTIONS": [{
+          "SUBHEADING": "The Phillips Collection",
+          "DESCRIPTION": "Jacob Lawrence. The Migration of the Negro Panel no. 1. 1940—1941. The Phillips Collection. © 2005 Estate of Gwendolyn Knight Lawrence / Artists Rights Society (ARS).",
+          "LINK": "/#/category/1034446930",
+          "IMG_SOURCE": "/assets/img/featured-collection-lawrence.jpg",
+          "LINK_TITLE": "The Phillips Collection",
+          "ALT_TEXT": "The Phillips Collection"
+        },
+        {
+          "SUBHEADING": "The Phillips Collection",
+          "DESCRIPTION": "Jacob Lawrence. The Migration of the Negro Panel no. 1. 1940—1941. The Phillips Collection. © 2005 Estate of Gwendolyn Knight Lawrence / Artists Rights Society (ARS).",
+          "LINK": "/#/category/1034446930",
+          "IMG_SOURCE": "/assets/img/featured-collection-lawrence.jpg",
+          "LINK_TITLE": "The Phillips Collection",
+          "ALT_TEXT": "The Phillips Collection"
+        },
+        {
+          "SUBHEADING": "The Phillips Collection",
+          "DESCRIPTION": "Jacob Lawrence. The Migration of the Negro Panel no. 1. 1940—1941. The Phillips Collection. © 2005 Estate of Gwendolyn Knight Lawrence / Artists Rights Society (ARS).",
+          "LINK": "/#/category/1034446930",
+          "IMG_SOURCE": "/assets/img/featured-collection-lawrence.jpg",
+          "LINK_TITLE": "The Phillips Collection",
+          "ALT_TEXT": "The Phillips Collection"
+        }
+      ],
+      "SAHARA_COLLECTIONS": [{
+          "SUBHEADING": "Pueblo in Taos, New Mexico",
+          "DESCRIPTION": "Photo taken 2008 by SAHARA contributor Dell Upton.",
+          "LINK": "/#/asset/HUSAHARA_1113121791",
+          "IMG_SOURCE": "/assets/img/featured-collection-sahara.jpg",
+          "LINK_TITLE": "Pueblo in Taos, New Mexico",
+          "ALT_TEXT": "Pueblo in Taos, New Mexico"
+        },
+        {
+          "SUBHEADING": "Pueblo in Taos, New Mexico",
+          "DESCRIPTION": "Photo taken 2008 by SAHARA contributor Dell Upton.",
+          "LINK": "/#/asset/HUSAHARA_1113121791",
+          "IMG_SOURCE": "/assets/img/featured-collection-sahara.jpg",
+          "LINK_TITLE": "Pueblo in Taos, New Mexico",
+          "ALT_TEXT": "Pueblo in Taos, New Mexico"
+        },
+        {
+          "SUBHEADING": "Pueblo in Taos, New Mexico",
+          "DESCRIPTION": "Photo taken 2008 by SAHARA contributor Dell Upton.",
+          "LINK": "/#/asset/HUSAHARA_1113121791",
+          "IMG_SOURCE": "/assets/img/featured-collection-sahara.jpg",
+          "LINK_TITLE": "Pueblo in Taos, New Mexico",
+          "ALT_TEXT": "Pueblo in Taos, New Mexico"
+        }
+      ]
     },
     "AD": {
       "LINK": "http://goo.gl/KAZksy",
