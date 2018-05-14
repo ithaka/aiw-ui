@@ -72,7 +72,7 @@
         //- If the user has not accepted the agreement, show modal when clicked, otherwise download immediately
         .btn-row
           //- (mouseup) is a Firefox fix for firing the copy event
-          button.btn.btn-secondary(*ngIf="pcFeatureFlag && (assets[0].personalCollectionOwner === user['baseProfileId'])", [class.active]="showEditDetails", tabindex="1", (click)="loadEditDetailsForm()")
+          button.btn.btn-secondary(*ngIf="assets[0].personalCollectionOwner === user['baseProfileId']", [class.active]="showEditDetails", tabindex="1", (click)="loadEditDetailsForm()")
             | {{ 'ASSET_PAGE.BUTTONS.EDIT_DETAILS' | translate}}
           button.btn.btn-secondary([class.active]="showCopyUrl", tabindex="2", (mousedown)="showCopyUrl ? showCopyUrl = false : copyGeneratedImgURL()", (mouseup)="copyUrlInput.select(); document.execCommand('copy', false, null)")
             | {{ 'ASSET_PAGE.BUTTONS.LINK' | translate}}
