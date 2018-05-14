@@ -2,11 +2,18 @@ nav-menu
 #mainContent.container.main-content(tabindex="-1")
   //- for accessibility so that page has title
   h1.hidden Artstor Home Page
+  
+  .row.my-4
+    .col-sm-4
+      h3.browse-category {{ 'Art and Visual Resources' | translate }}
+      p.small(*ngIf="siteID=='SAHARA'", [innerHtml]="'HOME.CONTENT_ACCESS.SAHARA' | translate")
+      p.small(*ngIf="siteID!='SAHARA'", [innerHtml]="'HOME.CONTENT_ACCESS.USER' | translate")
+    .col-sm-5.search-highlight
+      ang-search
   .row
     .col-sm-4
-      ang-search
-      #mainContent.card.pt-2
-        .card-header
+      #mainContent.card
+        .card-header.pt-0
           h2.h1 {{ 'HOME.BROWSE.TITLE' | translate }}
         ul.list-group.list-group-flush.list-group-clean
           //- ADL Collections Link
@@ -64,12 +71,12 @@ nav-menu
       a#featuredCollectionLink.card.featured-card(#featuredCollection="", [attr.href]="featuredCollectionConf + '.LINK' | translate")
         img.card-img-top.no-stretch([attr.src]="featuredCollectionConf + '.IMG_SOURCE' | translate", [attr.alt]="featuredCollectionConf + '.ALT_TEXT' | translate", [attr.title]="featuredCollectionConf + '.LINK_TITLE' | translate")
         .card-body.pt-1
-          label(style="margin-bottom:0px;") {{ featuredCollectionConf + '.HEADING' | translate }}
-          p(style="margin-bottom:6px;") {{ featuredCollectionConf + '.SUBHEADING' | translate }}
-        div.featured-caption {{ featuredCollectionConf + '.DESCRIPTION' | translate }}
+          label(style="margin-bottom:0px;", [innerHtml]="featuredCollectionConf + '.HEADING' | translate")
+          p(style="margin-bottom:6px;", [innerHtml]="featuredCollectionConf + '.SUBHEADING' | translate")
+        div.featured-caption([innerHtml]="featuredCollectionConf + '.DESCRIPTION' | translate")
       .card(*ngIf="showBlog")
         .card-header
-          h2 {{ 'HOME.HEADINGS.FRM_BLOG' | translate}}
+          h2([innerHtml]="'HOME.HEADINGS.FRM_BLOG' | translate")
         .loading(*ngIf="blogLoading")
         div(*ngIf="!blogLoading")
           a.blog-post(*ngFor="let post of blogPosts | slice:0:3", [href]="post['URL']", target="_blank")

@@ -29,7 +29,7 @@ export class AssetService {
     //set up thumbnail observables
     private allResultsValue: any[] = [];
     // BehaviorSubjects push last value on subscribe
-    private allResultsSource: BehaviorSubject<any[]> = new BehaviorSubject(this.allResultsValue);
+    private allResultsSource: BehaviorSubject<any> = new BehaviorSubject(this.allResultsValue);
     public allResults: Observable<any> = this.allResultsSource.asObservable();
 
     //set up noIG observables
@@ -433,6 +433,11 @@ export class AssetService {
                     searchTerm = "clusterid:(" + params["clusterId"] + ")"
                     this.loadSearch(searchTerm)
                 } else if (params.hasOwnProperty("pcolId") && params["pcolId"] !== "") {
+                    // Filter by owner if filtering by Global Personal Collection
+                    if (params["pcolId"] === "37436") {
+                        let user = this._auth.getUser()
+                        searchTerm = searchTerm + " personalcollectionowner:(" + user["baseProfileId"]  + ")"
+                    }
                     //get personal collection thumbnails via SOLR
                     this.loadSearch(searchTerm)
                 }  else if (params.hasOwnProperty("colId") && params["colId"] !== "") {
@@ -642,7 +647,7 @@ export class AssetService {
                             // Pass portion of the data we have
                             this.updateLocalResults(data)
                             // Pass error down to allResults listeners
-                            this.allResultsSource.error(error) // .throw(error);
+                            this.allResultsSource.next({"error":error}) // .throw(error);
                         });
                 } else {
                     data.thumbnails = []
@@ -689,7 +694,7 @@ export class AssetService {
                 // Pass portion of the data we have
                 this.updateLocalResults(ig)
                 // Pass error down to allResults listeners
-                this.allResultsSource.error(error) // .throw(error)
+                this.allResultsSource.next({"error":error}) // .throw(error)
             })
     }
 
@@ -786,9 +791,18 @@ export class AssetService {
       let filterArray = []
 
       if (collectionType) {
-          filterArray.push("collectiontypes:"+ collectionType)
-          if(collectionType === 2){ // If we are filtering for institutional collections
-            filterArray.push('contributinginstitutionid:\"' + this._auth.getUser().institutionId.toString() + '\"')
+          if(collectionType === 2){
+            /**
+             * Institutional Collection filter needs to cover:
+             * - Collections which an institution has created but has also made public
+             * - Collections which have been shared specifically with an institution, and do not have the "contributinginstitutionid" of the current user
+             * FYI Static and Shared Collections 
+             * - CUNY and UC schools have shared collections that are managed by Artstor (known as static collections)
+             * - Some schools have shared collections which have a contributinginsitutionid which differs from their own
+             */
+            filterArray.push('(collectiontypes:2 AND contributinginstitutionid:(' + this._auth.getUser().institutionId.toString() + ')) OR (collectiontypes:(2) AND -(collectiontypes:(5)))')
+          } else {
+            filterArray.push("collectiontypes:"+ collectionType)
           }
       }
 
@@ -887,7 +901,7 @@ export class AssetService {
                     this.updateLocalResults(data)
             }, (error) => {
                     console.error(error)
-                    this.allResultsSource.error(error)
+                    this.allResultsSource.next({"error":error})
             });
     }
 

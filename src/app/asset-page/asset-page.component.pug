@@ -72,7 +72,7 @@
         //- If the user has not accepted the agreement, show modal when clicked, otherwise download immediately
         .btn-row
           //- (mouseup) is a Firefox fix for firing the copy event
-          button.btn.btn-secondary(*ngIf="pcFeatureFlag && (assets[0].collectionId === '37436')", [class.active]="showEditDetails", tabindex="1", (click)="loadEditDetailsForm()")
+          button.btn.btn-secondary(*ngIf="pcFeatureFlag && (assets[0].personalCollectionOwner === user['baseProfileId'])", [class.active]="showEditDetails", tabindex="1", (click)="loadEditDetailsForm()")
             | {{ 'ASSET_PAGE.BUTTONS.EDIT_DETAILS' | translate}}
           button.btn.btn-secondary([class.active]="showCopyUrl", tabindex="2", (mousedown)="showCopyUrl ? showCopyUrl = false : copyGeneratedImgURL()", (mouseup)="copyUrlInput.select(); document.execCommand('copy', false, null)")
             | {{ 'ASSET_PAGE.BUTTONS.LINK' | translate}}
@@ -80,14 +80,14 @@
             
           //- Download dropdown options
           | {{downloadUrl}}
-          .dropdown.d-inline-block(ngbDropdown, *ngIf="assets[0].downloadLink && (user.isLoggedIn || hasExternalAccess)")
-            button#downloadAssetDropdown.btn.btn-secondary(ngbDropdownToggle, (click)="genDownloadViewLink()", tabindex="3")
+          .dropdown.d-inline-block(ngbDropdown, *ngIf="assets[0].downloadLink && (user.isLoggedIn || hasExternalAccess || assets[0].publicDownload)")
+            button#downloadAssetDropdown.btn.btn-secondary(ngbDropdownToggle [class.loading]="downloadLoading", (click)="(isMSAgent ? null : genDownloadViewLink())", tabindex="3")
               | {{ 'ASSET_PAGE.BUTTONS.DOWNLOAD' | translate}}
               = " "
             .dropdown-menu(ngbDropdownMenu, aria-labelledby="dropdownBasic1")
               a#downloadAssetLink.dropdown-item(download,
-                [attr.href]="(downloadAuth() && !assets[0].disableDownload) ? generatedFullURL : null",
-                (click)="(downloadAuth() && !assets[0].disableDownload) ? trackDownloadImage() : setDownloadImage()",
+                [attr.href]="((assets[0].publicDownload || downloadAuth()) && !assets[0].disableDownload) ? generatedFullURL : null",
+                (click)="((assets[0].publicDownload || downloadAuth()) && !assets[0].disableDownload) ? trackDownloadImage() : setDownloadImage()",
                 [class.disabled]="assets[0].disableDownload",
                 title="{{ assets[0].disableDownload ? 'Image is not available for download.' : 'Image download'}}",
                 target="_blank",
@@ -96,8 +96,8 @@
                 | Download File
               a#downloadViewLink.dropdown-item(download="download.jpg",
                 type="image/jpeg",
-                [attr.href]="(downloadAuth() && !assets[0].disableDownload) ? generatedViewURL : null",
-                (click)="(downloadAuth() && !assets[0].disableDownload) ? trackDownloadView() : setDownloadView()",
+                [attr.href]="((assets[0].publicDownload || downloadAuth()) && !assets[0].disableDownload) ? generatedViewURL : (isMSAgent ? '#' : null)",
+                (click)="((assets[0].publicDownload || downloadAuth()) && !assets[0].disableDownload) ? trackDownloadView() : setDownloadView()",
                 [class.disabled]="assets[0].disableDownload || assets[0].typeName !== 'image'",
                 target="_self",
                 tabindex="3")
@@ -122,8 +122,7 @@
         div([class.d-none]="showEditDetails")
           .row-hdr.pt-3(*ngIf="(assets[0].formattedMetadata | keys).length > 0") {{ 'ASSET_PAGE.HEADER_LABELS.OBJ_DETAILS' | translate}}
           .meta-block.collection-type-display(*ngIf="collectionType")
-            i.icon(class="icon-{{collectionType.name}}", [attr.title]="collectionType.alt")
-            | &nbsp; {{ collectionType.alt }}
+            ang-collection-badge([collectionType]="collectionType")
           //- Old metadata loop
           .meta-block(*ngFor="let fieldName of assets[0].formattedMetadata | keys")
             ng-container(*ngIf="fieldName != 'Rights'")
@@ -131,9 +130,11 @@
               div(*ngFor="let value of assets[0].formattedMetadata[fieldName]")
                 a.value.col-link(*ngIf="(fieldName === 'Collection')", [routerLink]="setCollectionLink(assets[0])", [innerHTML]="cleanFieldValue(value)")
                 .value(*ngIf="(fieldName !== 'Collection')", [innerHTML]="cleanFieldValue(value) | linkify")
-          .meta-block
+          .meta-block(*ngIf="assets[0].formattedMetadata.Rights && assets[0].formattedMetadata.Rights.length > 0")
             .label#Rights Rights
-            .value([innerHtml]="cleanFieldValue(assets[0].formattedMetadata.Rights && assets[0].formattedMetadata.Rights[0]) | linkify")
+            div(*ngFor="let right of assets[0].formattedMetadata.Rights")
+              .value([innerHTML]="cleanFieldValue(right) | linkify")
+
           .row-hdr.pt-3(*ngIf="assets[0].filePropertiesArray.length > 0") {{ 'ASSET_PAGE.HEADER_LABELS.FILE_PROPS' | translate}}
           //- Loop through File Properties Array
           //- .meta-block(*ngFor="let filePropObj of assets[0].filePropertiesArray")
@@ -220,7 +221,7 @@
         ang-thumbnail.card.card--asset(*ngFor="let asset of prevAssetResults.thumbnails", [thumbnail]="asset", [ngClass]="{'selected' : asset.selected || (assets[0].id == asset[assetIdProperty]), 'disabled': (asset.selected && assets.length === 1) }", (click)="toggleAsset(asset)")
         .text-center.pt-2
           pagination([pageObj]="pagination", (goToPage)="goToPage($event)", style="display:inline-block")
-ang-agree-modal(*ngIf="showAgreeModal", (closeModal)="showAgreeModal = false", [assetUrl]="downloadUrl", [downloadName]="downloadName")
+ang-agree-modal(*ngIf="showAgreeModal", (closeModal)="showAgreeModal = false", [assetUrl]="(isMSAgent ? '#' : downloadUrl)", [downloadName]="downloadName", [isMSAgent]="isMSAgent", [setDownloadView]="setDownloadView")
 ang-login-req-modal(*ngIf="showLoginModal", (closeModal)="showLoginModal = false")
 ang-add-to-group(*ngIf="showAddModal", [selectedAssets]="[ assets[0] ]", [showCreateGroup]="true", [copySelectionStr]=" 'ADD_TO_GROUP_MODAL.FROM_ASSET' ", (createGroup)="showCreateGroupModal = true; showAddModal = false;", (closeModal)="showAddModal = false")
 ang-new-ig-modal(*ngIf="showCreateGroupModal", [selectedAssets]="[ assets[0] ]", [showAddToGroup]="true", (addToGroup)="showAddModal = true; showCreateGroupModal = false;", (closeModal)="showCreateGroupModal = false")
