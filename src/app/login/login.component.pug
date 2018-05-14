@@ -57,7 +57,3 @@ ang-pwd-reset-modal(*ngIf="showPwdModal", (closeModal)="showPwdModal = false")
       .modal-body([innerHtml]="'ACCESS_HELP_MODAL.PROMPT' | translate")
       .modal-footer
         button#btnLoginDismissHelp.btn.btn-primary((click)="showHelpModal = false") {{ 'ACCESS_HELP_MODAL.DISMISS' | translate }}
-//#mainContent.container.main-content(tabindex="-1")
-  .row
-    button#btnLoginProxy.btn.btn-primary((click)="goToInstLogin()" type="submit" name="action" data-sc="account: institutional user log in" data-automation-component="artstor-institution-login-button")
-      | {{ 'LOGIN.LOGIN_BTN' | translate }}
