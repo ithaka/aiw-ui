@@ -29,7 +29,7 @@ export class AssetService {
     //set up thumbnail observables
     private allResultsValue: any[] = [];
     // BehaviorSubjects push last value on subscribe
-    private allResultsSource: BehaviorSubject<any[]> = new BehaviorSubject(this.allResultsValue);
+    private allResultsSource: BehaviorSubject<any> = new BehaviorSubject(this.allResultsValue);
     public allResults: Observable<any> = this.allResultsSource.asObservable();
 
     //set up noIG observables
@@ -173,6 +173,19 @@ export class AssetService {
         this.paginationValue = paginationValue;
         this.paginationSource.next(paginationValue);
 
+        /**
+         * Include only availble assets to the resultsObj thumbnails array, Also keep the count for the restricted assets
+         */
+        if(resultObj.thumbnails){
+            let thumbnailsOrignalLength: number = resultObj.thumbnails.length
+            resultObj.thumbnails = resultObj.thumbnails.filter( thumbnail => {
+                let assetAvailable: boolean = thumbnail.status === 'not-available' ? false : true
+                return assetAvailable
+            })
+            if(thumbnailsOrignalLength > resultObj.thumbnails.length){
+                resultObj['rstd_imgs_count'] = thumbnailsOrignalLength - resultObj.thumbnails.length
+            }
+        }
         // Update results thumbnail array
         this.allResultsValue = resultObj;
         this.allResultsSource.next(resultObj);
@@ -407,13 +420,24 @@ export class AssetService {
                 if (params.hasOwnProperty("objectId") && params["objectId"] !== "" && params.hasOwnProperty("colId") && params["colId"] !== "") {
                     //gets associated images thumbnails
                     this.loadAssociatedAssets(params.objectId, params.colId);
+                    /**
+                     * Future solr implementation
+                     * searchTerm = "frequentlygroupedwith:(" + params["objectId"] + ")"
+                     * this.loadSearch(searchTerm)
+                     */
                 } else if (params.hasOwnProperty("igId") && params["igId"] !== "") {
-                    //get image group thumbnails
+                    // Load IG via Groups service
                     this.loadIgAssets(params.igId);
-                } else if (params.hasOwnProperty("objectId") && params["objectId"] !== "") {
-                    //get clustered images thumbnails
-                    this.loadCluster(params.objectId);
+                } else if (params.hasOwnProperty("clusterId") && params["clusterId"] !== "") {
+                    // Filter by clusterid
+                    searchTerm = "clusterid:(" + params["clusterId"] + ")"
+                    this.loadSearch(searchTerm)
                 } else if (params.hasOwnProperty("pcolId") && params["pcolId"] !== "") {
+                    // Filter by owner if filtering by Global Personal Collection
+                    if (params["pcolId"] === "37436") {
+                        let user = this._auth.getUser()
+                        searchTerm = searchTerm + " personalcollectionowner:(" + user["baseProfileId"]  + ")"
+                    }
                     //get personal collection thumbnails via SOLR
                     this.loadSearch(searchTerm)
                 }  else if (params.hasOwnProperty("colId") && params["colId"] !== "") {
@@ -623,7 +647,7 @@ export class AssetService {
                             // Pass portion of the data we have
                             this.updateLocalResults(data)
                             // Pass error down to allResults listeners
-                            this.allResultsSource.error(error) // .throw(error);
+                            this.allResultsSource.next({"error":error}) // .throw(error);
                         });
                 } else {
                     data.thumbnails = []
@@ -670,7 +694,7 @@ export class AssetService {
                 // Pass portion of the data we have
                 this.updateLocalResults(ig)
                 // Pass error down to allResults listeners
-                this.allResultsSource.error(error) // .throw(error)
+                this.allResultsSource.next({"error":error}) // .throw(error)
             })
     }
 
@@ -701,32 +725,6 @@ export class AssetService {
             }
             loadBatch(0);
         });
-    }
-
-    private loadCluster(objectId: string){
-
-        let options = { withCredentials: true };
-        let startIndex = ((this.urlParams.page - 1) * this.urlParams.size) + 1;
-
-        let requestString = [this._auth.getUrl(), "cluster", objectId, "thumbnails", startIndex, this.urlParams.size].join("/");
-
-        this.http
-            .get(requestString, options)
-            .toPromise()
-            .then((res) => {
-                if (res['thumbnails']) {
-                    //The asset grid component expects the total number of assets in 'total'
-                    res['total'] = res['count']
-                    // Set the allResults object
-                    this.updateLocalResults(res);
-                } else {
-                    throw new Error("There are no thumbnails. Server responsed with status " + res['status']);
-                }
-            })
-            .catch((err) => {
-                console.log(err)
-                this.allResultsSource.error(err)
-            });
     }
 
     // Used by Browse page
@@ -784,21 +782,27 @@ export class AssetService {
             // base facet field
             "name" : "", // ex: collectiontypes
             "mincount" : 1,
-            "limit" : 100
+            "limit" : 700 // Prod list of Public Collections exceeds 600
         }
         facetField.name = facetName
-        facetField.limit = 500
-        // Ignore junk data, collections with only one asset aren't collections we care about
-        facetField.mincount = 5
         query.facet_fields = [facetField]
       }
 
       let filterArray = []
 
       if (collectionType) {
-          filterArray.push("collectiontypes:"+ collectionType)
-          if(collectionType === 2){ // If we are filtering for institutional collections
-            filterArray.push('contributinginstitutionid:\"' + this._auth.getUser().institutionId.toString() + '\"')
+          if(collectionType === 2){
+            /**
+             * Institutional Collection filter needs to cover:
+             * - Collections which an institution has created but has also made public
+             * - Collections which have been shared specifically with an institution, and do not have the "contributinginstitutionid" of the current user
+             * FYI Static and Shared Collections 
+             * - CUNY and UC schools have shared collections that are managed by Artstor (known as static collections)
+             * - Some schools have shared collections which have a contributinginsitutionid which differs from their own
+             */
+            filterArray.push('(collectiontypes:2 AND contributinginstitutionid:(' + this._auth.getUser().institutionId.toString() + ')) OR (collectiontypes:(2) AND -(collectiontypes:(5)))')
+          } else {
+            filterArray.push("collectiontypes:"+ collectionType)
           }
       }
 
@@ -897,7 +901,7 @@ export class AssetService {
                     this.updateLocalResults(data)
             }, (error) => {
                     console.error(error)
-                    this.allResultsSource.error(error)
+                    this.allResultsSource.next({"error":error})
             });
     }
 
@@ -984,6 +988,16 @@ export class AssetService {
         return this.http
             .get("https://public-api.wordpress.com/rest/v1.1/sites/artstor.wordpress.com/posts/?number=24&search=" + query)
             .toPromise()
+    }
+
+    /**
+     * Get metadata about a collection
+     * @param colId The collection ID
+     */
+    public getPCImageStatus(ssid: string): Observable<any> {
+        let options = { withCredentials: true };
+        return this.http
+            .get(this._auth.getUrl() + '/v1/pcollection/image-status/' + ssid, options)
     }
 
     /**

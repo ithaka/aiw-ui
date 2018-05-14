@@ -21,6 +21,7 @@ import { DataResolver } from './app.resolver'
 import { BrowseRoutes } from './browse-page/browse-page.routes'
 import { AccountPage } from './account-page/account-page.component'
 import { LegacyRouteResolver } from './legacy.service'
+import { LinkPage } from './link-page'
 
 
 export const ROUTES: Routes = [
@@ -43,12 +44,13 @@ export const ROUTES: Routes = [
   { path: 'category', component: CategoryPage, canActivate:[AuthService] },
   { path: 'group/:igId', component: ImageGroupPage, canActivate:[AuthService] },
   { path: 'group', component: ImageGroupPage, canActivate:[AuthService] },
-  { path: 'cluster/:objectId', component: ClusterPage, canActivate:[AuthService] },
+  { path: 'cluster/:clusterId', component: ClusterPage, canActivate:[AuthService] },
   { path: 'cluster', component: ClusterPage, canActivate:[AuthService] },
   { path: 'browse', component: BrowsePage, canActivate:[AuthService], children: BrowseRoutes },
   { path: 'associated/:objectId/:colId', component: AssociatedPage, canActivate:[AuthService] },
   { path: 'associated', component: AssociatedPage, canActivate:[AuthService] },
   { path: 'register', component: RegisterComponent, canActivate: [AuthService] },
+  { path: 'link', component: LinkPage },
   { path: 'library', children: [
     { path: '**', component: NoContent, resolve: [LegacyRouteResolver] }
   ] },

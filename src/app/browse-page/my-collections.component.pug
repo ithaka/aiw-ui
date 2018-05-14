@@ -2,7 +2,8 @@ nav.nav.nav-inline.browse-nav
 .row
   .col-md-6
     .tree
-      ang-tag(*ngFor="let tag of tags", [tag]="tag", [edit]="true", (editTag)="showEditModal(tag)")
+      ang-tag(*ngFor="let tag of tags", [tag]="tag", [edit]="tag.type && tag.type.label === 'pcollection'", (editTag)="showEditModal(tag)")
+      //- Fallback "My Personal Collection" link
       .add-pc-cntnr(*ngIf="isLoggedIn && (tags.length === 0)", (click)="showEditPCModal = true")
         .icon-cntnr
           i.icon.icon-add
@@ -17,7 +18,7 @@ nav.nav.nav-inline.browse-nav
       .img
         img(src="/assets/img/collection-splash.png", alt="Splash image for My Collections")
       .desc
-        p([innerHtml]="'BROWSE.MY_COLLECTION.PC_DESC' | translate")
+        p([innerHtml]="'BROWSE.MY_COLLECTION.DESCRIPTION' | translate")
 .row.has-icon-overlay(*ngIf="loading")
   i.icon-lg.icon-overlay--top.icon-loading-large
 //- ang-upload-images(*ngIf="showUploadImgsModal", (closeModal)="showUploadImgsModal = false")

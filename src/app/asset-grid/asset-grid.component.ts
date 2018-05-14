@@ -4,6 +4,7 @@ import { ActivatedRoute, NavigationStart, Params, Router } from '@angular/router
 import { BehaviorSubject } from 'rxjs/Rx'
 import { Subscription }   from 'rxjs/Subscription'
 import { Locker } from 'angular2-locker'
+import { AppConfig } from '../app.service'
 
 import {
   AuthService,
@@ -24,9 +25,15 @@ import { AssetFiltersService } from '../asset-filters/asset-filters.service'
 })
 
 export class AssetGrid implements OnInit, OnDestroy {
+  // Add user to decide whether to show the banner
+  private user: any = this._auth.getUser();
+
+  private unaffiliatedFlag: boolean;
+  private siteID: string = ""
+
   // Set our default values
   private subscriptions: Subscription[] = [];
-
+   
   public searchLoading: boolean;
   public showFilters: boolean = true;
   public showAdvancedModal: boolean = false;
@@ -124,6 +131,7 @@ export class AssetGrid implements OnInit, OnDestroy {
 
   // TypeScript public modifiers
   constructor(
+    public _appConfig: AppConfig,
     private _assets: AssetService,
     private _auth: AuthService,
     private _filters: AssetFiltersService,
@@ -137,6 +145,7 @@ export class AssetGrid implements OnInit, OnDestroy {
     private locker: Locker,
     private route: ActivatedRoute
   ) {
+      this.siteID = this._appConfig.config.siteID;
       this._storage = locker.useDriver(Locker.DRIVERS.LOCAL);
       let prefs = this._auth.getFromStorage('prefs')
       if (prefs && prefs.pageSize && prefs.pageSize != 24) {
@@ -152,10 +161,29 @@ export class AssetGrid implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    // Subscribe User object updates
+    this.subscriptions.push(
+      this._auth.currentUser.subscribe(
+        (userObj) => {
+          this.user = userObj;
+        },
+        (err) => {
+          console.error("Nav failed to load Institution information", err)
+        }
+      )
+    );
+
     // Subscribe to asset search params
     this.subscriptions.push(
       this.route.params
       .subscribe((params: Params) => {
+        // Find feature flags
+        if(params && params['featureFlag']){
+          this._auth.featureFlags[params['featureFlag']] = true;
+          if (params['featureFlag']=="unaffiliated"){
+              this.unaffiliatedFlag = true;
+          }
+      }
 
         if(params['term']){
           this.searchTerm = params['term'];
@@ -214,44 +242,45 @@ export class AssetGrid implements OnInit, OnDestroy {
       })
     );
 
-    // sets up subscription to allResults, which is the service providing thumbnails
+    /**
+     * Subscription to allResults
+     * - Provides thumbnails
+     * - allResults maintains array of results which persists outside of this component
+     */
     this.subscriptions.push(
       this._assets.allResults.subscribe(
         (allResults) => {
           // Prep display of search term next to results count
           this.formatSearchTerm(this.searchTerm)
           // Update results array
-          this.searchError = '';
-          this.searchLimitError = false;
+          this.searchError = ''
+          this.searchLimitError = false
 
           // Server error handling
           if (allResults === null) {
-            this.isLoading = false;
-            this.searchError = "There was a server error loading your search. Please try again later.";
-            return;
+            this.isLoading = false
+            this.searchError = "There was a server error loading your search. Please try again later."
+            return
           }
           else if(allResults.errors && allResults.errors[0] && (allResults.errors[0] === 'Too many rows requested')){
-            this.isLoading = false;
-            this.searchLimitError = true;
-            return;
+            this.isLoading = false
+            this.searchLimitError = true
+            return
+          }
+          else if (allResults.error) {
+            console.error(allResults.error)
+            this.isLoading = false
+            this.searchError = "There was a server error loading your search. Please try again later."
+            return
           }
 
-          this.results = allResults.thumbnails;
-
-          let rstd_imgs = false;
+          this.results = allResults.thumbnails
 
           if ('items' in allResults) {
-            this.itemIds = allResults.items;
-            this.ig = allResults;
-
-            for(let asset of this.ig.thumbnails){ // Check if the image group has any restricted asset.
-              if(asset.status !== 'available'){
-                rstd_imgs = true
-                break;
-              }
-            }
+            this.itemIds = allResults.items
+            this.ig = allResults
           }
-          this.rstd_imgs = rstd_imgs;
+          this.rstd_imgs = allResults.rstd_imgs_count && (allResults.rstd_imgs_count > 0) ? true : false
 
           if (this.results && this.results.length > 0) {
             this.isLoading = false;
@@ -280,10 +309,9 @@ export class AssetGrid implements OnInit, OnDestroy {
           }
 
         },
+        // allResults is not expected to throw errors (instead passing them in stream, to maintain the subscriptions)
         (error) => {
-          console.error(error);
-          this.isLoading = false;
-          this.searchError = "There was a server error loading your search. Please try again later.";
+          console.error(error)
         }
       )
     );
@@ -464,8 +492,7 @@ export class AssetGrid implements OnInit, OnDestroy {
       this._assets.getAllThumbnails(this.itemIds)
         .then( allThumbnails => {
           this.isLoading = false;
-          this.allResults = allThumbnails;
-          this.results = this.allResults;
+          this.results = this.allResults = allThumbnails;
         })
         .catch( error => {
           this.isLoading = false;
@@ -489,6 +516,9 @@ export class AssetGrid implements OnInit, OnDestroy {
     this.isLoading = true;
 
     let newItemsArray = [];
+
+    // IE 11 need to be told "allResults" changed, therefore "results" has changed
+    this.results = this.allResults
 
     for (let i = 0; i < this.allResults.length; i++) {
       if ('objectId' in this.allResults[i]) {
@@ -544,7 +574,7 @@ export class AssetGrid implements OnInit, OnDestroy {
    * Format the search term to display advance search queries nicely
    */
   private formatSearchTerm(query: string) : void {
-    let fQuery = '<b>' + query;
+    let fQuery = "\"" + query + "\"";
     // Cleanup filter pipes
     // fQuery = fQuery.replace(/\|[0-9]{3}/g, );
 
