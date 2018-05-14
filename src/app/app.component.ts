@@ -58,7 +58,7 @@ export class App {
     this.title = this._app.config.pageTitle
 
     // Set metatitle to "Artstor" except for asset page where metatitle is {{ Asset Title }}
-    router.events.subscribe(event => {   
+    router.events.subscribe(event => {
       if(event instanceof NavigationStart) {
         let mainEl = <HTMLElement>(document.getElementById("skip"))
         mainEl.focus()
@@ -88,7 +88,7 @@ export class App {
             zendeskElements[1]['style']['display'] = 'none'
           }
         }
-      }  
+      }
     });
   }
 
@@ -96,8 +96,6 @@ export class App {
     // Toggle Banner here to show alerts and updates!
     // this.showSkyBanner = true
   }
-
-
 
   private findMainContent(): void {
     let htmlelement:HTMLElement = document.getElementById("mainContent");
