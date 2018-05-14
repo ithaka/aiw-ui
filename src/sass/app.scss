@@ -280,3 +280,13 @@ nav-menu {
     //   display: none;
     // }
 }
+
+// Style for cookie banner
+body body{
+  height: unset;
+}
+
+// Bootstrap tooltip override
+.tooltip-inner {
+  width: 140px;
+}

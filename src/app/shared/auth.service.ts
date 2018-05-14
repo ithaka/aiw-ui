@@ -15,6 +15,9 @@ import { Angulartics2 } from 'angulartics2';
 import { AnalyticsService } from '../analytics.service';
 import { AppConfig } from '../app.service';
 
+// Import beta tester emails
+import { BETA_USR_EMAILS } from '../beta-users-email.ts'
+
 // For session timeout management
 
 // import { LoginService } from '../login/login.service';
@@ -53,6 +56,8 @@ export class AuthService implements CanActivate {
   private idleUtil: IdleWatcherUtil = new IdleWatcherUtil(); // Idle watcher, session timeout values are abstracted to a utility
   public showUserInactiveModal: Subject<boolean> = new Subject(); //Set up subject observable for showing inactive user modal
 
+  private betausers: Array<string>
+
   /**
    * We need to make SURE /userinfo is not cached
    * - Successful login returns a 302 to /userinfo, which IE 11 is more than happy to cache :(
@@ -69,8 +74,7 @@ export class AuthService implements CanActivate {
    * - Update via url param subscriptions inside of relevant components
    */
   public featureFlags = {
-    pcUpload : false,
-    collection_links: false
+    pcUpload : false
   }
 
   constructor(
@@ -123,13 +127,15 @@ export class AuthService implements CanActivate {
       this.ENV = 'prod'
     }
     else if ( document.location.hostname.indexOf('prod.cirrostratus.org') > -1 ) {
+      console.info("Using Prod Endpoints (Absolute)")
       // Prod/Lively endpoints
       this.hostname = '//library.artstor.org'
       this.baseUrl =  '//library.artstor.org/api'
       this.logUrl = '//ang-ui-logger.apps.prod.cirrostratus.org/api/v1'
-      this.solrUrl = '/api/search/v1.0/search'
+      this.solrUrl = this.hostname + '/api/search/v1.0/search'
       this.ENV = 'prod'
     } else if ( new RegExp(testHostnames.join("|")).test(document.location.hostname) ) {
+      console.info("Using Test Endpoints")
       // Test Endpoints
       this.hostname = '//stage.artstor.org'
       this.subdomain = 'stage'
@@ -170,6 +176,8 @@ export class AuthService implements CanActivate {
 
     idle.onIdleEnd.subscribe(() => {
       this.idleState = 'No longer idle.';
+      // We want to ensure a user is refreshed as soon as they return to the tab
+      this.refreshUserSession(true)
     });
     idle.onTimeout.subscribe(() => {
       let user = this.getUser();
@@ -214,6 +222,9 @@ export class AuthService implements CanActivate {
     setInterval(() => {
       this.refreshUserSession()
     }, userInfoInterval)
+    
+    // Set beta users email
+    this.betausers = Object.assign(BETA_USR_EMAILS)
   }
 
   // Reset the idle watcher
@@ -244,7 +255,8 @@ export class AuthService implements CanActivate {
   private expireSession(): void {
     this.logout()
       .then(() => {
-        this._router.navigate(['/login']);
+        // We want the user to see the "Session Expired" modal triggered by this.refreshUserSession() & this.getUserInfo()
+        // Do not route user away
       })
   }
 
@@ -642,12 +654,27 @@ export class AuthService implements CanActivate {
       { withCredentials: true, headers: headers }
     )
   }
+
+
+  /**
+   * Check if the logged-in username matches the beta tester emails
+   */
+  public isBetaUser(): boolean{
+    let isBeta: boolean = false
+    let loggedInUser: any = this.getUser()
+    if(loggedInUser && loggedInUser.username){
+      isBeta = this.betausers.indexOf(loggedInUser.username) > -1
+    }
+    return isBeta
+  }
 }
 
 export class User {
+  public samlTokenId: string
   constructor(
     public username: string,
-    public password: string) { }
+    public password: string,
+  ) {}
 }
 
 interface SSLoginResponse {
