@@ -1,0 +1,12 @@
+.collection-badge.my-1(
+  [ngbTooltip]="tipContent",
+  ngbTooltip,
+  triggers="focusin:focusout mouseenter:mouseleave",
+  placement="right",
+  aria-haspopup="true",
+  tabindex="0"
+) {{ collectionType.badgeText }}
+<ng-template #tipContent>
+  div {{ collectionType.alt }}
+</ng-template>
+  //- ang-tooltip(data-tooltip)

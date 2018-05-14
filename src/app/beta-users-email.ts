@@ -15,7 +15,7 @@ export const BETA_USR_EMAILS: Array<string> = [
     'm.spriggs@marianopolis.edu',
     'Karen_Bouchard@Brown.edu',
     'korda@ualberta.ca',
-    'lela.greybill@utah.edu',
+    'lela.graybill@utah.edu',
     'lfarrell@kcai.edu',
     'srook@gmu.edu',
     'lensor@jhu.edu',
@@ -23,5 +23,8 @@ export const BETA_USR_EMAILS: Array<string> = [
     
     // Internal from Mary
     'megan.ohearn@ithaka.org',
-    'solomon.grundy@artstor.org'
+    'solomon.grundy@artstor.org', 
+
+    'babrenny@ncsu.edu',
+    'kendrawerst@gmail.com'
 ]
