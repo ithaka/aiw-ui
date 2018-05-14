@@ -25,7 +25,7 @@ export class Home implements OnInit, OnDestroy {
 
   private artStorEmailLink: string = ''
   private userGeoIP: any = {}
-  private featuredCollectionConf = ""
+  // private featuredCollectionConf = ''
 
   // Set our default values
   localState = { value: '' }
@@ -44,11 +44,6 @@ export class Home implements OnInit, OnDestroy {
   private showHomeSSC: boolean = false
   private showHomeAd: boolean = false
   private siteID: string = ""
-
-  // Featured Collections
-  private showInstFeatured: boolean = false
-  private showPublicFeatured: boolean = false
-  private primaryFeaturedIndex: number = 0
 
   // Default IG 'Browse By:' Option controlled via the WLV file 
   private defaultGrpBrwseBy: string = 'institution'
@@ -69,12 +64,12 @@ export class Home implements OnInit, OnDestroy {
 
     this.showBlog = this._appConfig.config.showHomeBlog
     this.showPrivateCollections = this._appConfig.config.browseOptions.myCol
-    this.featuredCollectionConf = this._appConfig.config.featuredCollection
     this.browseSec = this._appConfig.config.homeBrowseSec
     this.showHomeSSC = this._appConfig.config.showHomeSSC
     this.showHomeAd = this._appConfig.config.showHomeAd
     this.siteID = this._appConfig.config.siteID
     this.defaultGrpBrwseBy = this._appConfig.config.defaultGrpBrwseBy
+    // this.featuredCollectionConf = this._appConfig.config.featuredCollection
   }
 
   ngOnInit() {
@@ -150,10 +145,6 @@ export class Home implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.subscriptions.forEach((sub) => { sub.unsubscribe(); });
-  }
-
-  private switchFeaturedIndex(index: number): void {
-    this.primaryFeaturedIndex = index
   }
 
   private fetchDeviceInfo(): void {
