@@ -48,7 +48,7 @@ import { NavMenu } from './nav-menu'
 import { AssetFilters } from './asset-filters'
 import { AssetGrid, ThumbnailComponent } from './asset-grid'
 import { Home } from './home'
-import { SearchPage } from './search-page'
+import { SearchPage, PromptComponent } from './search-page'
 import { CollectionPage } from './collection-page'
 import { PCollectionPage } from './pcollection-page'
 import { CategoryPage } from './category-page'
@@ -64,7 +64,9 @@ import { AssociatedPage } from './associated-page'
 import { ImageGroupPage, PptModalComponent } from './image-group-page'
 import { Login } from './login'
 import { NoContent } from './no-content'
+import { LinkPage } from './link-page'
 import { RegisterComponent } from './register/register.component'
+import { LoginFormComponent } from './login-form'
 import {
   AccessDeniedModal,
   AddToGroupModal,
@@ -82,9 +84,9 @@ import {
   ServerErrorModal,
   SessionExpireModal,
   ShareIgLinkModal,
-  ShareLinkModal,
-  UploadImagesModal
+  ShareLinkModal
 } from './modals'
+import { CollectionBadgeComponent } from './collection-badge'
 import { UploaderComponent } from './uploader/uploader.component'
 import { GeneralSearchComponent } from './browse-page/browse-groups/general-search.component'
 import { SkyBannerComponent } from './sky-banner/sky-banner.component'
@@ -157,7 +159,6 @@ export function HttpLoaderFactory(http: HttpClient) {
   declarations: [
     AccessDeniedModal,
     AccountPage,
-    UploadImagesModal,
     EditPersonalCollectionModal,
     AddToGroupModal,
     AgreeModalComponent,
@@ -174,12 +175,12 @@ export function HttpLoaderFactory(http: HttpClient) {
     CategoryPage,
     ClickOutsideDirective,
     ClusterPage,
+    CollectionBadgeComponent,
     CollectionPage,
-    PCollectionPage,
     ConfirmModal,
     DeleteIgModal,
-    SessionExpireModal,
     DownloadLimitModal,
+    EditPersonalCollectionModal,
     Footer,
     GeneralSearchComponent,
     Home,
@@ -188,7 +189,9 @@ export function HttpLoaderFactory(http: HttpClient) {
     KeysPipe,
     LibraryComponent,
     LinkifyPipe,
+    LinkPage,
     Login,
+    LoginFormComponent,
     LoginReqModal,
     MediumEditorDirective,
     MyCollectionsComponent,
@@ -198,6 +201,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     NoContent,
     NoIgModal,
     PaginationComponent,
+    PCollectionPage,
     PptModalComponent,
     PwdResetModal,
     RegisterComponent,
@@ -206,6 +210,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     SearchModal,
     SearchPage,
     ServerErrorModal,
+    SessionExpireModal,
     ShareIgLinkModal,
     GenerateCitation,
     ShareLinkModal,
@@ -213,6 +218,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     TagComponent,
     TagsListComponent,
     ThumbnailComponent,
+    PromptComponent,
     TypeIdPipe,
     UploaderComponent
   ],
