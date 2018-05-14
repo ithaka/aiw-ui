@@ -1,6 +1,6 @@
 {
     "name": "avatar",
-    "version": "1.7.21",
+    "version": "1.7.22",
     "description": "Front End for the Artstor Digital Library",
     "author": "Artstor Team Air",
     "license": "",
@@ -89,7 +89,7 @@
         "angular2-moment": "^1.2.0",
         "angular2-tag-autocomplete": "^1.2.10",
         "angulartics2": "^4.2.0",
-        "artstor-viewer": "1.1.2",
+        "artstor-viewer": "1.1.3",
         "assets-webpack-plugin": "^3.5.1",
         "blob-polyfill": "^2.0.20171115",
         "codelyzer": "^2.0.0-beta.1",
