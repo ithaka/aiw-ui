@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, Renderer, ChangeDetectorRef } from '@angular/core'
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, Renderer } from '@angular/core'
 import { ActivatedRoute, NavigationStart, Params, Router } from '@angular/router'
 
 import { BehaviorSubject } from 'rxjs/Rx'
@@ -143,8 +143,7 @@ export class AssetGrid implements OnInit, OnDestroy {
     private _search: AssetSearchService,
     private _toolbox: ToolboxService,
     private locker: Locker,
-    private route: ActivatedRoute,
-    private _changeDetector: ChangeDetectorRef
+    private route: ActivatedRoute
   ) {
       this.siteID = this._appConfig.config.siteID;
       this._storage = locker.useDriver(Locker.DRIVERS.LOCAL);
