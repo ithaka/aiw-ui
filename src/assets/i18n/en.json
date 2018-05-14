@@ -466,6 +466,31 @@
           "ALT_TEXT": "The Phillips Collection"
         }
       ],
+      "PUBLIC_COLLECTIONS": [
+        {
+          "SUBHEADING": "Pueblo in Taos, New Mexico",
+          "DESCRIPTION": "Photo taken 2008 by SAHARA contributor Dell Upton.",
+          "LINK": "/#/asset/HUSAHARA_1113121791",
+          "IMG_SOURCE": "/assets/img/featured-collection-sahara.jpg",
+          "LINK_TITLE": "Pueblo in Taos, New Mexico",
+          "ALT_TEXT": "Pueblo in Taos, New Mexico"
+        },
+        {
+          "SUBHEADING": "Pueblo in Taos, New Mexico",
+          "DESCRIPTION": "Photo taken 2008 by SAHARA contributor Dell Upton.",
+          "LINK": "/#/asset/HUSAHARA_1113121791",
+          "IMG_SOURCE": "/assets/img/featured-collection-sahara.jpg",
+          "LINK_TITLE": "Pueblo in Taos, New Mexico",
+          "ALT_TEXT": "Pueblo in Taos, New Mexico"
+        },
+        {
+          "SUBHEADING": "Pueblo in Taos, New Mexico",
+          "DESCRIPTION": "Photo taken 2008 by SAHARA contributor Dell Upton.",
+          "LINK": "/#/asset/HUSAHARA_1113121791",
+          "IMG_SOURCE": "/assets/img/featured-collection-sahara.jpg",
+          "LINK_TITLE": "Pueblo in Taos, New Mexico",
+          "ALT_TEXT": "Pueblo in Taos, New Mexico"
+        }],
       "SAHARA_COLLECTIONS": [{
           "SUBHEADING": "Pueblo in Taos, New Mexico",
           "DESCRIPTION": "Photo taken 2008 by SAHARA contributor Dell Upton.",
