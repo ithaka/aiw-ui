@@ -5,7 +5,7 @@
         .card-header
           h1#loginHeading {{ copyBase + 'LOGIN.REG_LOGIN.HEADING' | translate }}
         .card-body
-          ang-login-form(tabindex="-1")
+          ang-login-form#mainContent
           a#linkLoginResetModal((click)="showPwdModal = true" tabindex="0" class="link" data-automation-component="artstor-pw-reset-link") {{ 'LOGIN.REG_LOGIN.FORGOT_PW_PROMPT' | translate }}
           br
           div(*ngIf="showRegister")
@@ -57,3 +57,7 @@ ang-pwd-reset-modal(*ngIf="showPwdModal", (closeModal)="showPwdModal = false")
       .modal-body([innerHtml]="'ACCESS_HELP_MODAL.PROMPT' | translate")
       .modal-footer
         button#btnLoginDismissHelp.btn.btn-primary((click)="showHelpModal = false") {{ 'ACCESS_HELP_MODAL.DISMISS' | translate }}
+//#mainContent.container.main-content(tabindex="-1")
+  .row
+    button#btnLoginProxy.btn.btn-primary((click)="goToInstLogin()" type="submit" name="action" data-sc="account: institutional user log in" data-automation-component="artstor-institution-login-button")
+      | {{ 'LOGIN.LOGIN_BTN' | translate }}

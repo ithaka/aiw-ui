@@ -64,6 +64,9 @@ export class App {
         }
       }
       else if(event instanceof NavigationEnd) {
+        //let mainEl = <HTMLElement>(document.body)
+        //console.log(mainEl)
+        //mainEl.focus()
         let event_url_array = event.url.split('/')
         let zendeskElements = document.querySelectorAll('.zopim')
 
@@ -84,17 +87,32 @@ export class App {
             zendeskElements[1]['style']['display'] = 'none'
           }
         }
-      }
+      }  
     });
   }
 
   ngOnInit() {
     // Toggle Banner here to show alerts and updates!
     // this.showSkyBanner = true
-
   }
 
   private findMainContent(): void {
-    document.getElementById("mainContent").focus()
+    let htmlelement:HTMLElement = document.getElementById("mainContent");
+    let element:Element;
+    console.log(htmlelement);
+    // On log in page, go to log in box
+    if(htmlelement.querySelector("form div input")){
+      element = htmlelement.querySelector("form div input");
+    }
+    // On any page that has search bar, go to search box
+    else if(htmlelement.querySelector("div input")){  
+      element = htmlelement.querySelector("div input"); 
+    }
+    // On asset page, go to the container that contains the item details
+    else {
+      element = htmlelement;
+    }
+    console.log(element);
+    (<HTMLElement>element).focus(); 
   }
 }
