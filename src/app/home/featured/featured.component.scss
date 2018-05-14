@@ -1,18 +1,19 @@
 #featured-container {
     border-bottom: solid 1px #ddd;
     margin-bottom: 20px;
+    padding-bottom: 20px;
 
     .featured-side-tile {
-        max-width: 65%;
+        max-width: 70%;
+        margin: auto;
     }
 
     .featured-col {
-        max-height: 60vh;
+        max-height: 70vh;
     }
 
-    #view-all-link {
-        text-align: right;
+    #featured-bottom {
+        margin-bottom: 20px;
     }
 
 }
-
