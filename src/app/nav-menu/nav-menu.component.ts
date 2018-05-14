@@ -53,7 +53,6 @@ export class NavMenu implements OnInit, OnDestroy {
   private showImageGroupModal: boolean = false
   private showAddToGroupModal: boolean = false
   private showShareIgModal: boolean = false
-  private pcEnabled: boolean = false
 
   private copyIG: boolean = false
   private editIG: boolean = false
@@ -89,7 +88,6 @@ export class NavMenu implements OnInit, OnDestroy {
       this._auth.currentUser.subscribe(
         (userObj) => {
           this.user = userObj
-          this.pcEnabled = this.user.pcEnabled
         },
         (err) => { console.error(err) }
       )
