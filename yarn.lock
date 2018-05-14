@@ -532,9 +532,9 @@ arrify@^1.0.0, arrify@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/arrify/-/arrify-1.0.1.tgz#898508da2226f380df904728456849c1501a4b0d"
 
-artstor-viewer@^1.1.0:
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/artstor-viewer/-/artstor-viewer-1.1.0.tgz#b21de744d3e60131a8579546462053d55c3d9e6b"
+artstor-viewer@1.1.2:
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/artstor-viewer/-/artstor-viewer-1.1.2.tgz#2c860ec3068a4aea1d213e603e79f4c7cf9dd27e"
   dependencies:
     "@angular/http" "^5.2.0"
     npm "^5.7.1"
