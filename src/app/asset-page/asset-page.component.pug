@@ -74,7 +74,7 @@
           //- (mouseup) is a Firefox fix for firing the copy event
           button.btn.btn-secondary(*ngIf="assets[0].personalCollectionOwner === user['baseProfileId']", [class.active]="showEditDetails", tabindex="1", (click)="loadEditDetailsForm()")
             | {{ 'ASSET_PAGE.BUTTONS.EDIT_DETAILS' | translate}}
-          button.btn.btn-secondary(*ngIf="!assets[0].personalCollectionOwner === user['baseProfileId']", [class.active]="showCopyUrl", tabindex="2", (mousedown)="showCopyUrl ? showCopyUrl = false : copyGeneratedImgURL()", (mouseup)="copyUrlInput.select(); document.execCommand('copy', false, null)")
+          button.btn.btn-secondary(*ngIf="assets[0].personalCollectionOwner != user['baseProfileId']", [class.active]="showCopyUrl", tabindex="2", (mousedown)="showCopyUrl ? showCopyUrl = false : copyGeneratedImgURL()", (mouseup)="copyUrlInput.select(); document.execCommand('copy', false, null)")
             | {{ 'ASSET_PAGE.BUTTONS.LINK' | translate}}
             i#genImgURLlink.icon.icon-share-white
             
