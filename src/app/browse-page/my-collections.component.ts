@@ -45,6 +45,9 @@ export class MyCollectionsComponent implements OnInit {
   private loading: boolean = false;
 
   ngOnInit() {
+    // Add tag for My Personal Collection
+    let colTag = new Tag("37436", "My Personal Collection", true, null, { label: "pcollection", folder: true }, true);
+    this.tags.push(colTag);
     
     // Set page title
     this._title.setSubtitle("Browse My Collections")
@@ -94,15 +97,14 @@ export class MyCollectionsComponent implements OnInit {
     this.addRouteParam('viewId', id);
   }
 
+  /**
+   * Load Private Collection
+   * - No longer used for loading user's single Personal Collection
+   */
   getUserPCol(){
     this.loading = true;
     this._assets.pccollection()
       .then((res) => {
-          if(res['pcCollection'] && res['pcCollection'].collectionid){
-            // For Personal Collection assets filter by Global Personal Collection id : 37436
-            let colTag = new Tag("37436", res['pcCollection'].collectionname, true, null, { label: "pcollection", folder: true }, true);
-            this.tags.push(colTag);
-          }
           if(res['privateCollection'] && (res['privateCollection'].length > 0)){
             for (let colObj of res['privateCollection']){
                 let privTag = new Tag(colObj.collectionid, colObj.collectionname, true, null, { label: "privateCollection", folder: true }, true);
