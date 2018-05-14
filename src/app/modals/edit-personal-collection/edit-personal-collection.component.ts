@@ -40,6 +40,7 @@ export class EditPersonalCollectionModal implements OnInit {
     imgDeleteSuccess?: boolean,
     imgDeleteFailure?: boolean
   } = {}
+  private submitted: boolean = false // keeps track of whether or not the form was submitted
 
   private deleteLoading: boolean = false // state before delete call has returned
   private metadataUpdateLoading: boolean = false
@@ -86,6 +87,9 @@ export class EditPersonalCollectionModal implements OnInit {
   }
 
   private editAssetMeta(asset: PersonalCollectionUploadAsset): void{
+    this.uiMessages = {}
+    this.submitted = false // reset this value for a new metadata form
+
     this.selectedAsset = asset
     this.setMetadataValues(this._localPC.getAsset(this.selectedAsset.ssid)) // update the form values to match the new asset metadata
 
@@ -99,7 +103,10 @@ export class EditPersonalCollectionModal implements OnInit {
   }
 
   private editMetaFormSubmit( formData: AssetDetailsFormValue ): void {
+    this.submitted = true
+    
     if (this.metadataUpdateLoading) { return }
+    if (!this.editAssetMetaForm.valid) { return }
 
     this.uiMessages = {}
     this.metadataUpdateLoading = true
@@ -164,30 +171,24 @@ export class EditPersonalCollectionModal implements OnInit {
     })
   }
 
-  // private deleteAssetById(ssid: string): void {
-  //   console.log('deleting', ssid)
-  //   this.messages = {}
-
-  //   this.messages.imgDeleteSuccess = true
-  //   // this.removeSelectedAsset()
-  //   // this.clearSelectedAsset()
-
-  //   // this._pc.deletePersonalAssets([ssid])
-  //   //   .take(1)
-  //   //   .subscribe((res) => {
-  //   //     this.messages.imgDeleteSuccess = true
-  //   //     this.removeSelectedAsset()
-  //   //     this.clearSelectedAsset()
-  //   //   }, (err) => {
-  //   //     console.error(err)
-  //   //     this.messages.imgDeleteFailure = true
-  //   //   })
-  // }
-
   private handleNewAssetUpload(item: PersonalCollectionUploadAsset): void {
     this.uiMessages = {}
 
     this.collectionAssets.unshift(item)
+
+    // Track the SSIDs (in local storage) for recently uploaded assets untill they get available in SOLR
+    if(item.ssid){
+      let publishingAssets = this._auth.getFromStorage('publishingAssets')
+      if(!publishingAssets){
+        publishingAssets = {
+          ssids: [],
+          showPublishingMsgs: true
+        }
+      }
+      publishingAssets.ssids.push(item.ssid)
+      publishingAssets.showPublishingMsgs = true
+      this._auth.store('publishingAssets', publishingAssets)
+    }
   }
   
 }

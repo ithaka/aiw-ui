@@ -4,7 +4,7 @@ import { Router, ActivatedRoute, UrlSegment } from '@angular/router';
 import { Subscription }   from 'rxjs/Subscription';
 
 // Internal Dependencies
-import { AssetService } from './../shared';
+import { AssetService, AssetSearchService } from './../shared';
 import { AnalyticsService } from '../analytics.service';
 
 @Component({
@@ -27,6 +27,7 @@ export class AssetPPPage implements OnInit, OnDestroy {
 
   constructor(
     private _assets: AssetService,
+    private _search: AssetSearchService,
     private _router: Router,
     private route: ActivatedRoute,
     private http: HttpClient,

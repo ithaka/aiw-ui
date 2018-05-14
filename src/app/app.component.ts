@@ -89,10 +89,8 @@ export class App {
   }
 
   ngOnInit() {
-    // Turn on the Search Announcement Banner once the featured flag is removed!
-    // if ( document.location.hostname.indexOf('beta.artstor.org') > -1 || document.location.hostname.indexOf('prod.cirrostratus.org') > -1 || document.location.hostname.indexOf('lively.artstor.org') > -1 ) {
-    //   this.showSkyBanner = true
-    // }
+    // Toggle Banner here to show alerts and updates!
+    // this.showSkyBanner = true
 
   }
 

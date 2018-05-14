@@ -1,22 +1,7 @@
 .card-block.card-text
   .card-img-top
     img(*ngIf="thumbnail.status != 'not-available'", [class.disablePointerEvents]="reorderMode", [attr.src]="_search.makeThumbUrl(thumbnail.thumbnailImgUrl, thumbnailSize)", (error)="thumbnailError()", [attr.alt]="thumbnail.arttitle && thumbnail.arttitle[0] ? 'Thumbnail of ' + thumbnail.thumbnail1 : 'No title available'")
-  .card-icon-group((click)="$event.stopPropagation(); $event.preventDefault();", [ngClass]="{ 'disablePointerEvents': editMode }")
-    //- Legacy Service icons
-    i.icon.icon-collab(*ngIf="thumbnail.cfObjectId && thumbnail.cfObjectId.length > 0", [id]="thumbnail.objectId + '_associated_images'", (click)="openLink($event, ['/associated', thumbnail.cfObjectId, thumbnail.collectionId])" title="Others are also interested in...")
-    i.icon.icon-cluster(*ngIf="thumbnail.clustered == 1", [id]="thumbnail.objectId + '_clustered_images'", (click)="openLink($event, ['/cluster', thumbnail.objectId, { objTitle :  thumbnail.thumbnail1 }])", title="View related media")
-    i.icon.icon-iap(*ngIf="thumbnail.iapFlag > 0 || thumbnail.iap")
-    //- New search icons
-    i.icon.icon-cluster(
-      *ngIf="thumbnail.partofcluster", 
-      [id]="thumbnail.objectId + '_clustered_images'", 
-      (click)="openLink($event, ['/cluster', thumbnail.clusterid ? thumbnail.clusterid : thumbnail.artstorid, { objTitle :  thumbnail.name }])", 
-      title="View related media"
-    )
-    i.icon.icon-collab(*ngIf="thumbnail.frequentlygroupedwith && thumbnail.frequentlygroupedwith.length > 0", [id]="thumbnail.objectId + '_associated_images'", (click)="openLink($event, ['/associated', thumbnail.frequentlygroupedwith[0], 103])", title="Others are also interested in...")
-    i.icon.icon-collection-type(class="icon-{{getCollectionType().name}}", [attr.title]="getCollectionType().alt")
-    i(*ngIf="thumbnail.media && thumbnail.media.adlObjectType && thumbnail.media.adlObjectType != 10", class="icon icon-{{thumbnail.media.adlObjectType | typeIdPipe}}")
-  div
+  .metadata-wrap
     //- New Asset display
     span.asset-title(*ngIf="thumbnail.name", title="{{ thumbnail.name }}", [innerHTML]="thumbnail.name")
     span.asset-agent(*ngIf="thumbnail.agent", title="{{ thumbnail.agent }}", [innerHTML]="thumbnail.agent")
@@ -29,3 +14,19 @@
     //- Schema moving forward
     ng-container(*ngFor="let data of thumbnail.tombstone")
       span(*ngIf="data", [innerHtml]="data")
+  .card-icon-group((click)="$event.stopPropagation(); $event.preventDefault();", [ngClass]="{ 'disablePointerEvents': editMode }")
+    //- Legacy Service icons
+    i.icon.icon-collab.float-right(*ngIf="thumbnail.cfObjectId && thumbnail.cfObjectId.length > 0", [id]="thumbnail.objectId + '_associated_images'", (click)="openLink($event, ['/associated', thumbnail.cfObjectId, thumbnail.collectionId])" title="Others are also interested in...")
+    i.icon.icon-cluster.float-right(*ngIf="thumbnail.clustered == 1", [id]="thumbnail.objectId + '_clustered_images'", (click)="openLink($event, ['/cluster', thumbnail.objectId, { objTitle :  thumbnail.thumbnail1 }])", title="View related media")
+    i.icon.icon-iap.float-right(*ngIf="thumbnail.iapFlag > 0 || thumbnail.iap")
+    //- New search icons
+    i.icon.icon-cluster.float-right(
+      *ngIf="thumbnail.partofcluster", 
+      [id]="thumbnail.objectId + '_clustered_images'", 
+      (click)="openLink($event, ['/cluster', thumbnail.clusterid ? thumbnail.clusterid : thumbnail.artstorid, { objTitle :  thumbnail.name }])", 
+      title="View related media"
+    )
+    i.icon.icon-collab.float-right(*ngIf="thumbnail.frequentlygroupedwith && thumbnail.frequentlygroupedwith.length > 0", [id]="thumbnail.objectId + '_associated_images'", (click)="openLink($event, ['/associated', thumbnail.frequentlygroupedwith[0], 103])", title="Others are also interested in...")
+    //- i.icon.icon-collection-type(class="icon-{{getCollectionType().name}}", [attr.title]="getCollectionType().alt")
+    ang-collection-badge([collectionType]="getCollectionType()")
+    i.float-right(*ngIf="thumbnail.media && thumbnail.media.adlObjectType && thumbnail.media.adlObjectType != 10", class="icon icon-{{thumbnail.media.adlObjectType | typeIdPipe}}")

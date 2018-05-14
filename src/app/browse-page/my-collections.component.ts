@@ -46,6 +46,7 @@ export class MyCollectionsComponent implements OnInit {
   private loading: boolean = false;
 
   ngOnInit() {
+    
     // Set page title
     this._title.setSubtitle("Browse My Collections")
 
@@ -99,14 +100,13 @@ export class MyCollectionsComponent implements OnInit {
     this._assets.pccollection()
       .then((res) => {
           if(res['pcCollection'] && res['pcCollection'].collectionid){
-            // we made this tag always expandable
-            let colTag = new Tag(res['pcCollection'].collectionid, res['pcCollection'].collectionname, true, null, { label: "pcollection", folder: true }, true);
+            // For Personal Collection assets filter by Global Personal Collection id : 37436
+            let colTag = new Tag("37436", res['pcCollection'].collectionname, true, null, { label: "pcollection", folder: true }, true);
             this.tags.push(colTag);
           }
           if(res['privateCollection'] && (res['privateCollection'].length > 0)){
             for (let colObj of res['privateCollection']){
-                // we made this tag always expandable
-                let privTag = new Tag(colObj.collectionid, colObj.collectionname, true, null, { label: "pcollection", folder: true }, true);
+                let privTag = new Tag(colObj.collectionid, colObj.collectionname, true, null, { label: "privateCollection", folder: true }, true);
                 this.tags.push(privTag);
             }
           }

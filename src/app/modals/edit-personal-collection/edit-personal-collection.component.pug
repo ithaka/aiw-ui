@@ -21,25 +21,14 @@
         .row.no-gutters
           .thmb-cntnr([ngClass]="{ 'col-md-6': editMode, 'col-md-12': !editMode }")
             ang-uploader((fileUploaded)="handleNewAssetUpload($event)")
-            .lbl(*ngIf="collectionAssets && collectionAssets.length > 0") {{ 'EDIT_PC_MODAL.RECENT_TITLE' | translate }}
+            .lbl.mt-4(*ngIf="collectionAssets && collectionAssets.length > 0") {{ 'EDIT_PC_MODAL.RECENT_TITLE' | translate }}
               .thumb-preview-cntnr
                 .row.no-gutters
                   .col-md-4.thumb([ngClass]="{ 'selected': selectedAsset && (selectedAsset.ssid === asset.ssid)}", *ngFor="let asset of collectionAssets")
                     img([attr.src]="asset.src", [attr.alt]="asset.name ? 'Thumbnail of ' + asset.name : 'No title available'")
                     .thumb-overlay((click)="editAssetMeta( asset )")
-                    //-   .close-icon(*ngIf="selectedAsset && (selectedAsset.ssid === asset.ssid)", (click)="clearSelectedAsset()") &times;
-                      //- .edit-icon((click)="editAssetMeta( asset )")
-                      //-   i.icon.icon-reorder-white([ngClass]="{ 'active': selectedAsset && (selectedAsset.ssid === asset.ssid) }")
               .info-lbl {{ 'EDIT_PC_MODAL.META_ADD_INFO' | translate }}
           .edit-cntnr.col-md-6(*ngIf="selectedAsset && editMode")
-            //- //- get the asset from the image viewer, display the thumbnail and get the metadata all at once
-            //- artstor-viewer(
-            //-   *ngIf="selectedAsset && selectedAsset.artstorid",
-            //-   [testEnv]="_auth.getEnv() === 'test'",
-            //-   [assetId]="selectedAsset.artstorid",
-            //-   (assetMetadata)="handleLoadedMetadata($event)",
-            //-   [thumbnailMode]="true"
-            //- )
             //- if the image was just uploaded, we won't have metadata, so just use the blob data
             img.w-100.mb-2(
               *ngIf="selectedAsset && !selectedAsset.artstorid",
@@ -49,9 +38,10 @@
               .form-group
                 label(for="assetCreatorInput") {{ 'EDIT_PC_MODAL.FORM.CREATOR' | translate }}
                 input#assetCreatorInput.form-control(type="text", [formControl]="editAssetMetaForm.controls['creator']", tabindex="1")
-              .form-group
+              .form-group([class.has-danger]="submitted && !editAssetMetaForm.controls['title'].valid")
                 label(for="assetTitleInput") {{ 'EDIT_PC_MODAL.FORM.TITLE' | translate }}
                 input#assetTitleInput.form-control(type="text", [formControl]="editAssetMetaForm.controls['title']", tabindex="1")
+                .form-control-feedback(*ngIf="submitted && editAssetMetaForm.controls['title'].hasError('required')") {{ 'EDIT_PC_MODAL.FORM.TITLE_INVALID' | translate }}
               .form-group
                 label(for="assetWrkTypInput") {{ 'EDIT_PC_MODAL.FORM.WRK_TYP' | translate }}
                 input#assetWrkTypInput.form-control(type="text", [formControl]="editAssetMetaForm.controls['work_type']", tabindex="1")
@@ -78,8 +68,12 @@
                 *ngIf="uiMessages.metadataUpdateSuccess"
               )
                 .form-control-feedback(*ngIf="uiMessages.metadataUpdateSuccess") {{ 'EDIT_PC_MODAL.MESSAGES.METADATA_UPDATE_SUCCESS' | translate }}
-        .modal-footer
-          .form-group(*ngIf="selectedAsset && selectedAsset.ssid")
-            button.btn.btn-danger((click)="deleteAssetById(selectedAsset.ssid)", type="button", [class.loading]="deleteLoading") {{ 'EDIT_PC_MODAL.BUTTONS.DELETE' | translate }}
-            button.btn.btn-secondary((click)="clearSelectedAsset()", type="button") {{ 'EDIT_PC_MODAL.BUTTONS.CLOSE' | translate }}
-            button.btn.btn-primary(type="submit", (click)="editMetaFormSubmit(editAssetMetaForm.value)") {{ 'EDIT_PC_MODAL.BUTTONS.SAVE' | translate }}
+      .modal-footer
+        .form-group(*ngIf="editMode")
+          button.btn.btn-danger.mr-2((click)="deleteAssetById(selectedAsset.ssid)", type="button", [class.loading]="deleteLoading") {{ 'EDIT_PC_MODAL.BUTTONS.DELETE' | translate }}
+          button.btn.btn-secondary.mr-2((click)="clearSelectedAsset()", type="button") {{ 'EDIT_PC_MODAL.BUTTONS.CLOSE' | translate }}
+          button.btn.btn-primary(type="submit", (click)="editMetaFormSubmit(editAssetMetaForm.value)", [class.loading]="metadataUpdateLoading") {{ 'EDIT_PC_MODAL.BUTTONS.SAVE' | translate }}
+        ng-container(*ngIf="!editMode && collectionAssets && collectionAssets.length > 0")
+          .alert.alert-info {{ 'EDIT_PC_MODAL.UPLOAD_TIME_DISCLAIMER' | translate }}
+          .form-group
+            button.btn.btn-primary((click)="closeModal.emit()", type="button") {{ 'EDIT_PC_MODAL.BUTTONS.DONE' | translate }}
