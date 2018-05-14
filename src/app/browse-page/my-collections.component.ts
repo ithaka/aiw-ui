@@ -14,7 +14,7 @@ import { TitleService, AssetSearchService, AuthService, AssetService } from '../
 })
 export class MyCollectionsComponent implements OnInit {
 
-  private pcEnabled: boolean;
+  private isLoggedIn: boolean
 
   constructor(
     private _auth: AuthService,
@@ -38,7 +38,6 @@ export class MyCollectionsComponent implements OnInit {
   private showEditPCModal: boolean = false;
 //   private uploadPC: boolean = false;
 
-  private pcFeatureFlag: boolean = false;
   private editTagId: string = '';
 
   // Reference activeTag for description on side
@@ -47,9 +46,6 @@ export class MyCollectionsComponent implements OnInit {
   private loading: boolean = false;
 
   ngOnInit() {
-
-    // Enable PC featureFlag if the logged-in user is a beta tester
-    this.pcFeatureFlag = this._auth.isBetaUser()
     
     // Set page title
     this._title.setSubtitle("Browse My Collections")
@@ -63,10 +59,7 @@ export class MyCollectionsComponent implements OnInit {
         }
 
         if(params && params['featureFlag']){
-            this._auth.featureFlags[params['featureFlag']] = true;
-            if (this._auth.featureFlags['uploadPC']) {
-                this.pcFeatureFlag = true;
-            }
+            this._auth.featureFlags[params['featureFlag']] = true
         }
 
       })
@@ -76,14 +69,14 @@ export class MyCollectionsComponent implements OnInit {
     this.subscriptions.push(
       this._auth.currentUser.subscribe(
         (userObj) => {
-            this.pcEnabled = userObj.pcEnabled
+            this.isLoggedIn = userObj.isLoggedIn
         },
         (err) => { console.error(err) }
       )
     )
 
-    if(this.pcEnabled){ // If user has personal collections get data for user's personal collections
-      this.getUserPCol();
+    if(this.isLoggedIn){ // If user is logged-in get data for user's personal collections
+      this.getUserPCol()
     }
     this._analytics.setPageValues('mycollection', '')
   } // OnInit
@@ -117,13 +110,6 @@ export class MyCollectionsComponent implements OnInit {
                 this.tags.push(privTag);
             }
           }
-
-        //   if(this.tags.length === 0){
-        //       this.uploadPC = true;
-        //   }
-        //   else{
-        //       this.uploadPC = false;
-        //   }
 
           this.loading = false;
 
