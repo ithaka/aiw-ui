@@ -32,7 +32,7 @@
             button#btnDeleteGroup.dropdown-item([disabled]="!actionOptions.group || !allowIgUpdate", (click)="deleteIgModal = true") {{ 'NAV_MENU.ORGANIZE.DELETE_GROUP' | translate }}
             .dropdown-divider
             // Add Images to Personal Collection for AIW users
-            button#addImgsPC.dropdown-item(*ngIf="browseOpts.myCol", [routerLink]="['/browse', 'mycollections']") {{ 'NAV_MENU.ORGANIZE.ADD_IMGS_PC' | translate }}
+            button#addImgsPC.dropdown-item([disabled]="!user.isLoggedIn", [routerLink]="['/browse', 'mycollections', {upload:true}]") {{ 'NAV_MENU.ORGANIZE.ADD_IMGS_PC' | translate }}
         li.nav-item(ngbDropdown, (mouseenter)="openDrop($event, drop3)", (mouseleave)="closeDrop($event, drop3)", #drop3="ngbDropdown")
           button#shareMenu.btn.btn-link(ngbDropdownToggle) {{ 'NAV_MENU.SHARE.TITLE' | translate }}
           .dropdown-menu(ngbDropdownMenu, aria-labelledby="shareMenu")

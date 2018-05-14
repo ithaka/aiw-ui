@@ -55,14 +55,21 @@ export class MyCollectionsComponent implements OnInit {
     this.subscriptions.push(
       this.route.params
       .subscribe((params: Params) => {
-        if(params && params['viewId']){
-            this.selectedBrowseId = params['viewId'];
-            // this.loadCategory();
-        }
+          if (params) {
+            if(params['viewId']){
+                this.selectedBrowseId = params['viewId'];
+                // this.loadCategory();
+            }
+    
+            if(params['featureFlag']){
+                this._auth.featureFlags[params['featureFlag']] = true;
+            }
 
-        if(params && params['featureFlag']){
-            this._auth.featureFlags[params['featureFlag']] = true;
-        }
+            if (params['upload']) {
+                this.showEditPCModal = params['upload']   
+            }
+          }
+        
 
       })
     )
