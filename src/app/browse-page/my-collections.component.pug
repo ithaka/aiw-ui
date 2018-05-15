@@ -2,12 +2,14 @@ nav.nav.nav-inline.browse-nav
 .row
   .col-md-6
     .tree
-      ang-tag(*ngFor="let tag of tags", [tag]="tag", [edit]="pcFeatureFlag && tag.type && tag.type.label === 'pcollection'", (editTag)="showEditModal(tag)")
-      //- Fallback "My Personal Collection" link
-      .add-pc-cntnr(*ngIf="(tags.length === 0) && pcFeatureFlag", (click)="showEditPCModal = true")
-        .icon-cntnr
-          i.icon.absolute-left.icon-add
-            a My Personal Collections
+      // Show tags for Personal and Private collections (when logged in)
+      ng-container(*ngIf="isLoggedIn")
+        ang-tag(*ngFor="let tag of tags", [tag]="tag", [edit]="tag.type && tag.type.label === 'pcollection'", (editTag)="showEditModal(tag)")
+
+      .alert.alert-info(*ngIf="!isLoggedIn")
+        h3 {{ 'BROWSE.ERRORS.LOGIN_PC_HEADING' | translate }}
+        br
+        div([innerHtml]="'BROWSE.ERRORS.LOGIN_PC_COLLECTIONS_PROMPT' | translate")
   .col-md-6
     .mycol-info
       .img

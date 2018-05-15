@@ -14,7 +14,7 @@ import { TitleService, AssetSearchService, AuthService, AssetService } from '../
 })
 export class MyCollectionsComponent implements OnInit {
 
-  private pcEnabled: boolean;
+  private isLoggedIn: boolean
 
   constructor(
     private _auth: AuthService,
@@ -36,9 +36,7 @@ export class MyCollectionsComponent implements OnInit {
   private selectedBrowseId: string = '';
 //   private showUploadImgsModal: boolean = false;
   private showEditPCModal: boolean = false;
-//   private uploadPC: boolean = false;
 
-  private pcFeatureFlag: boolean = false;
   private editTagId: string = '';
 
   // Reference activeTag for description on side
@@ -47,9 +45,9 @@ export class MyCollectionsComponent implements OnInit {
   private loading: boolean = false;
 
   ngOnInit() {
-
-    // Enable PC featureFlag if the logged-in user is a beta tester
-    this.pcFeatureFlag = this._auth.isBetaUser()
+    // Add tag for My Personal Collection
+    let colTag = new Tag("37436", "My Personal Collection", true, null, { label: "pcollection", folder: true }, true);
+    this.tags.push(colTag);
     
     // Set page title
     this._title.setSubtitle("Browse My Collections")
@@ -57,17 +55,21 @@ export class MyCollectionsComponent implements OnInit {
     this.subscriptions.push(
       this.route.params
       .subscribe((params: Params) => {
-        if(params && params['viewId']){
-            this.selectedBrowseId = params['viewId'];
-            // this.loadCategory();
-        }
-
-        if(params && params['featureFlag']){
-            this._auth.featureFlags[params['featureFlag']] = true;
-            if (this._auth.featureFlags['uploadPC']) {
-                this.pcFeatureFlag = true;
+          if (params) {
+            if(params['viewId']){
+                this.selectedBrowseId = params['viewId'];
+                // this.loadCategory();
             }
-        }
+    
+            if(params['featureFlag']){
+                this._auth.featureFlags[params['featureFlag']] = true;
+            }
+
+            if (params['upload']) {
+                this.showEditPCModal = params['upload']   
+            }
+          }
+        
 
       })
     )
@@ -76,14 +78,14 @@ export class MyCollectionsComponent implements OnInit {
     this.subscriptions.push(
       this._auth.currentUser.subscribe(
         (userObj) => {
-            this.pcEnabled = userObj.pcEnabled
+            this.isLoggedIn = userObj.isLoggedIn
         },
         (err) => { console.error(err) }
       )
     )
 
-    if(this.pcEnabled){ // If user has personal collections get data for user's personal collections
-      this.getUserPCol();
+    if(this.isLoggedIn){ // If user is logged-in get data for user's personal collections
+      this.getUserPCol()
     }
     this._analytics.setPageValues('mycollection', '')
   } // OnInit
@@ -102,28 +104,20 @@ export class MyCollectionsComponent implements OnInit {
     this.addRouteParam('viewId', id);
   }
 
+  /**
+   * Load Private Collection
+   * - No longer used for loading user's single Personal Collection
+   */
   getUserPCol(){
     this.loading = true;
     this._assets.pccollection()
       .then((res) => {
-          if(res['pcCollection'] && res['pcCollection'].collectionid){
-            // For Personal Collection assets filter by Global Personal Collection id : 37436
-            let colTag = new Tag("37436", res['pcCollection'].collectionname, true, null, { label: "pcollection", folder: true }, true);
-            this.tags.push(colTag);
-          }
           if(res['privateCollection'] && (res['privateCollection'].length > 0)){
             for (let colObj of res['privateCollection']){
                 let privTag = new Tag(colObj.collectionid, colObj.collectionname, true, null, { label: "privateCollection", folder: true }, true);
                 this.tags.push(privTag);
             }
           }
-
-        //   if(this.tags.length === 0){
-        //       this.uploadPC = true;
-        //   }
-        //   else{
-        //       this.uploadPC = false;
-        //   }
 
           this.loading = false;
 
