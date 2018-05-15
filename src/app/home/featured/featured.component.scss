@@ -1,6 +1,7 @@
 #featured-container {
     border-bottom: solid 1px #ddd;
     margin-bottom: 20px;
+    padding-bottom: 20px;
 
     .featured-side-tile {
         max-width: 70%;
@@ -11,9 +12,8 @@
         max-height: 65vh;
     }
 
-    #view-all-link {
-        text-align: right;
+    #featured-bottom {
+        margin-bottom: 20px;
     }
 
 }
-
