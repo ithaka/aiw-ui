@@ -30,3 +30,4 @@
     //- i.icon.icon-collection-type(class="icon-{{getCollectionType().name}}", [attr.title]="getCollectionType().alt")
     ang-collection-badge([collectionType]="getCollectionType()")
     i.float-right(*ngIf="thumbnail.media && thumbnail.media.adlObjectType && thumbnail.media.adlObjectType != 10", class="icon icon-{{thumbnail.media.adlObjectType | typeIdPipe}}")
+    i.float-right(*ngIf="!thumbnail.media && thumbnail.objectTypeId && thumbnail.objectTypeId != 10", class="icon icon-{{thumbnail.objectTypeId | typeIdPipe}}")
