@@ -107,6 +107,7 @@ export class RegisterComponent implements OnInit {
 
   /** Gets called when the registration form is submitted */
   private registerSubmit(formValue: any) {
+    let registerCall: Function = (value) => { return this._auth.registerUser(value) }
     this.serviceErrors = {};
     this.submitted = true;
 
@@ -127,9 +128,10 @@ export class RegisterComponent implements OnInit {
 
     if (this.shibParameters) {
       userInfo.samlTokenId = this.shibParameters.samlTokenId
+      registerCall = (value) => { return this._auth.registerSamlUser(value) }
     }
 
-    this._auth.registerUser(userInfo)
+    registerCall(userInfo)
       .take(1)
       .subscribe((data) => {
         this.isLoading = false;
@@ -184,10 +186,7 @@ export class RegisterComponent implements OnInit {
    */
   private navigateToLogin(): void {
     if (this.shibParameters) {
-      this._router.navigate(
-        ['/link'],
-        { params: this.shibParameters }
-      )
+      this._router.navigate(['/link', this.shibParameters])
     } else {
       this._router.navigate(['/login'])
     }
