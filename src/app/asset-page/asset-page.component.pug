@@ -119,7 +119,7 @@
             input#generatedImgURL.form-control.form-control__copy(#copyUrlInput="", readonly, [ngModel]="generatedImgURL", (click)="copyUrlInput.select(); document.execCommand('copy', false, null)")
             .alert.alert-info(*ngIf="copyURLStatusMsg") {{ copyURLStatusMsg }}
         //- div(*ngIf="!showEditDetails")
-        div#mainContent([class.d-none]="showEditDetails", tabindex="-1")
+        div#mainContent([class.d-none]="showEditDetails")
           .row-hdr.pt-3(*ngIf="(assets[0].formattedMetadata | keys).length > 0") {{ 'ASSET_PAGE.HEADER_LABELS.OBJ_DETAILS' | translate}}
           .meta-block.collection-type-display(*ngIf="collectionType")
             ang-collection-badge([collectionType]="collectionType")
