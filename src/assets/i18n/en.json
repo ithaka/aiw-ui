@@ -175,7 +175,7 @@
     "TITLE": "Personal Collection",
     "RECENT_TITLE": "Recently Uploaded",
     "META_ADD_INFO": "Click the thumbnail to add metadata. You can also add details from the image page later.",
-    "UPLOAD_TIME_DISCLAIMER": "There may be a delay of up to 30 minutes before recently uploaded images will be ready to view and share.",
+    "UPLOAD_TIME_DISCLAIMER": "There may be a delay of up to 30 minutes before recently uploaded images will be ready to view and share. <a href=\"https://support.artstor.org/?article=upload-images-to-personal-collections#Upload_messaging_PC\" class=\"link\">More about publishing</a>",
     "HELP": "Help",
     "BUTTONS": {
       "CLOSE": "Close",
