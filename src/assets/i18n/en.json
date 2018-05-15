@@ -458,12 +458,37 @@
           "ALT_TEXT": "The Phillips Collection"
         },
         {
-          "SUBHEADING": "The Phillips Collection",
-          "DESCRIPTION": "Jacob Lawrence. The Migration of the Negro Panel no. 1. 1940—1941. The Phillips Collection. © 2005 Estate of Gwendolyn Knight Lawrence / Artists Rights Society (ARS).",
-          "LINK": "/#/category/1034446930",
-          "IMG_SOURCE": "/assets/img/featured-collection-lawrence.jpg",
-          "LINK_TITLE": "The Phillips Collection",
-          "ALT_TEXT": "The Phillips Collection"
+          "SUBHEADING": "Pueblo in Taos, New Mexico",
+          "DESCRIPTION": "Photo taken 2008 by SAHARA contributor Dell Upton.",
+          "LINK": "/#/asset/HUSAHARA_1113121791",
+          "IMG_SOURCE": "/assets/img/featured-collection-sahara.jpg",
+          "LINK_TITLE": "Pueblo in Taos, New Mexico",
+          "ALT_TEXT": "Pueblo in Taos, New Mexico"
+        }
+      ],
+      "PUBLIC_COLLECTIONS": [{
+          "SUBHEADING": "Pueblo in Taos, New Mexico",
+          "DESCRIPTION": "Photo taken 2008 by SAHARA contributor Dell Upton.",
+          "LINK": "/#/asset/HUSAHARA_1113121791",
+          "IMG_SOURCE": "/assets/img/featured-collection-sahara.jpg",
+          "LINK_TITLE": "Pueblo in Taos, New Mexico",
+          "ALT_TEXT": "Pueblo in Taos, New Mexico"
+        },
+        {
+          "SUBHEADING": "Pueblo in Taos, New Mexico",
+          "DESCRIPTION": "Photo taken 2008 by SAHARA contributor Dell Upton.",
+          "LINK": "/#/asset/HUSAHARA_1113121791",
+          "IMG_SOURCE": "/assets/img/featured-collection-sahara.jpg",
+          "LINK_TITLE": "Pueblo in Taos, New Mexico",
+          "ALT_TEXT": "Pueblo in Taos, New Mexico"
+        },
+        {
+          "SUBHEADING": "Pueblo in Taos, New Mexico",
+          "DESCRIPTION": "Photo taken 2008 by SAHARA contributor Dell Upton.",
+          "LINK": "/#/asset/HUSAHARA_1113121791",
+          "IMG_SOURCE": "/assets/img/featured-collection-sahara.jpg",
+          "LINK_TITLE": "Pueblo in Taos, New Mexico",
+          "ALT_TEXT": "Pueblo in Taos, New Mexico"
         }
       ],
       "SAHARA_COLLECTIONS": [{

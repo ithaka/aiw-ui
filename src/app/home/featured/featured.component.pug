@@ -1,24 +1,21 @@
 .row#featured-container
   .col-sm-8.featured-col
-    a#featuredCollectionLink.card.featured-card(#featuredCollection="", [attr.href]="featuredCollectionConf + '.COLLECTIONS.0.LINK' | translate")
-      img.card-img-top.no-stretch(*ngIf="showInstFeatured", [attr.src]="featuredCollectionConf + '.COLLECTIONS.0.IMG_SOURCE' | translate", [attr.alt]="featuredCollectionConf + '.COLLECTIONS.0.ALT_TEXT' | translate", [attr.title]="featuredCollectionConf + '.COLLECTIONS.0.LINK_TITLE' | translate")
-      img.card-img-top.no-stretch(*ngIf="showPublicFeatured", [attr.src]="featuredCollectionConf + '.SAHARA_COLLECTIONS.0.IMG_SOURCE' | translate", [attr.alt]="featuredCollectionConf + '.COLLECTIONS.0.ALT_TEXT' | translate", [attr.title]="featuredCollectionConf + '.COLLECTIONS.0.LINK_TITLE' | translate")
-    .card-body.pt-2
-      label(*ngIf="user.isLoggedIn" style="margin-bottom:0px;", [innerHtml]="featuredCollectionConf + '.HEADINGS.INST' | translate")
-      label(*ngIf="!user.isLoggedIn" style="margin-bottom:0px;", [innerHtml]="featuredCollectionConf + '.HEADINGS.PUBLIC' | translate")
+    a#featuredCollectionLink.card.featured-card([attr.href]="featured[0].link | translate")
+      img.card-img-top.no-stretch([attr.src]="featured[0].img_src | translate", [attr.alt]="featured[0].alt | translate", [attr.title]="featured[0].title | translate")
 
-        //-   p(style="margin-bottom:6px;", [innerHtml]="featuredCollectionConf + '..0.SUBHEADING' | translate")
-        //- div.featured-caption([innerHtml]="featuredCollectionConf + '..0.DESCRIPTION' | translate")
   .col-sm-4.featured-col
-    .card
-      img.featured-side-tile(*ngIf="showInstFeatured", [attr.src]="featuredCollectionConf + '.COLLECTIONS.0.IMG_SOURCE' | translate", [attr.alt]="featuredCollectionConf + '.COLLECTIONS.0.ALT_TEXT' | translate", [attr.title]="featuredCollectionConf + '.COLLECTIONS.0.LINK_TITLE' | translate")
-      img.featured-side-tile(*ngIf="showPublicFeatured", [attr.src]="featuredCollectionConf + '.SAHARA_COLLECTIONS.0.IMG_SOURCE' | translate", [attr.alt]="featuredCollectionConf + '.COLLECTIONS.0.ALT_TEXT' | translate", [attr.title]="featuredCollectionConf + '.COLLECTIONS.0.LINK_TITLE' | translate")
-    .card        
-      img.featured-side-tile(*ngIf="showInstFeatured", [attr.src]="featuredCollectionConf + '.COLLECTIONS.1.IMG_SOURCE' | translate", [attr.alt]="featuredCollectionConf + '.COLLECTIONS.1.ALT_TEXT' | translate", [attr.title]="featuredCollectionConf + '.COLLECTIONS.1.LINK_TITLE' | translate")
-      img.featured-side-tile(*ngIf="showPublicFeatured", [attr.src]="featuredCollectionConf + '.SAHARA_COLLECTIONS.1.IMG_SOURCE' | translate", [attr.alt]="featuredCollectionConf + '.COLLECTIONS.1.ALT_TEXT' | translate", [attr.title]="featuredCollectionConf + '.COLLECTIONS.1.LINK_TITLE' | translate")
-    .card  
-      img.featured-side-tile(*ngIf="showInstFeatured", [attr.src]="featuredCollectionConf + '.COLLECTIONS.2.IMG_SOURCE' | translate", [attr.alt]="featuredCollectionConf + '.COLLECTIONS.2.ALT_TEXT' | translate", [attr.title]="featuredCollectionConf + '.COLLECTIONS.2.LINK_TITLE' | translate")
-      img.featured-side-tile(*ngIf="showPublicFeatured", [attr.src]="featuredCollectionConf + '.SAHARA_COLLECTIONS.2.IMG_SOURCE' | translate", [attr.alt]="featuredCollectionConf + '.COLLECTIONS.2.ALT_TEXT' | translate", [attr.title]="featuredCollectionConf + '.COLLECTIONS.2.LINK_TITLE' | translate")
+    .card(*ngFor="let collection of featured; let i = index")
+      p(*ngIf="primaryFeaturedIndex === i", [innerHtml]="collection.subheading | translate")
+      p.featured-caption(*ngIf="primaryFeaturedIndex === i", [innerHtml]="collection.description | translate")
 
-    a.link#view-all-link(*ngIf="user.isLoggedIn" href="/browse/institution" style="margin-bottom:0px;", [innerHtml]="featuredCollectionConf + '.HEADINGS.VIEW_ALL_LINK' | translate")
-    a.link#view-all-link(*ngIf="!user.isLoggedIn" href="/browse/commons" style="margin-bottom:0px;", [innerHtml]="featuredCollectionConf + '.HEADINGS.VIEW_PUBLIC_LINK' | translate")
+      img.featured-side-tile(*ngIf="primaryFeaturedIndex !== i", [attr.src]="collection.img_src | translate",
+       [attr.alt]="collection.alt_text | translate", [attr.title]="collection.link | translate", click="switchFeaturedIndex(i)")
+
+.row#featured-bottom
+  .col-6
+    label(*ngIf="user.isLoggedIn", [innerHtml]="headings + '.INST' | translate")
+    label(*ngIf="!user.isLoggedIn", [innerHtml]="headings + '.PUBLIC' | translate")
+  .col-6
+    p.text-right
+      a.link.text-right(*ngIf="user.isLoggedIn" href="/browse/institution", [innerHtml]="headings + '.VIEW_ALL_LINK' | translate")
+      a.link.text-right(*ngIf="!user.isLoggedIn" href="/browse/commons", [innerHtml]="headings + '.VIEW_PUBLIC_LINK' | translate")
