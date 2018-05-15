@@ -64,9 +64,8 @@ export class RegisterComponent implements OnInit {
       this._router.navigate(['/home']);
     }
 
-
-    let email: string = this.route.snapshot.queryParams.email
-    let samlTokenId: string = this.route.snapshot.queryParams.samlTokenId
+    let email: string = this.route.snapshot.params.email
+    let samlTokenId: string = this.route.snapshot.params.samlTokenId
     
 
     if (email && samlTokenId) {
@@ -187,7 +186,7 @@ export class RegisterComponent implements OnInit {
     if (this.shibParameters) {
       this._router.navigate(
         ['/link'],
-        { queryParams: this.shibParameters }
+        { params: this.shibParameters }
       )
     } else {
       this._router.navigate(['/login'])
