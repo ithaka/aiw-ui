@@ -22,14 +22,14 @@ export class LinkPage implements OnInit {
 
   ngOnInit() {
     // nav back to regular login if there is no samlTokenId
-    if (!this.route.snapshot.queryParams.samlTokenId) {
+    if (!this.route.snapshot.params.samlTokenId) {
       this._router.navigate(['/login'])
     }
 
-    this.shibParams = { samlTokenId: this.route.snapshot.queryParams.samlTokenId, email: this.route.snapshot.queryParams.email }
+    this.shibParams = { samlTokenId: this.route.snapshot.params.samlTokenId, email: this.route.snapshot.params.email }
   }
 
   navigateToRegister(): void {
-    this._router.navigate(['/register'], { queryParams: this.shibParams })
+    this._router.navigate(['/register', this.shibParams])
   }
 }
