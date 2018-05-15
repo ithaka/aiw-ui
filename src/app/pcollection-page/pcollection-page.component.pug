@@ -24,12 +24,14 @@ ang-sky-banner(*ngIf="showDeleteSuccessBanner", textValue="{{ 'PERSONAL_COLLECTI
             img.collection-thumb(src="http://viewer2.artstor.org/{{ colThumbnail }}")
       .row.alert.alert-info.alert-dismissible(*ngIf="pub_que_count > 0 && publishingAssets.showPublishingMsgs")
         b Processing&nbsp;
-        | {{pub_que_count}} image(s) in the queue. Thank you for your patience.
+        | {{pub_que_count}} image(s) in the queue. Thank you for your patience.&nbsp;
+        span([innerHTML]=" 'PERSONAL_COLLECTION_PAGE.MORE_ABOUT_PUBLISHING' | translate ")
         button.close(type="button", (click)="closePublishingMsgs()", aria-label="Close")
           span(aria-hidden="true") &times;
       .row.alert.alert-warning.alert-dismissible(*ngIf="pub_failure_count > 0 && publishingAssets.showPublishingMsgs")
         b Processing Delay&nbsp;
-        | We're sorry, there was a processing error. {{pub_failure_count}} {{pub_failure_count == 1 ? 'image was' : 'images were'}} re-added to the publishing queue.
+        | We're sorry, there was a processing error. {{pub_failure_count}} {{pub_failure_count == 1 ? 'image was' : 'images were'}} re-added to the publishing queue.&nbsp;
+        span([innerHTML]=" 'PERSONAL_COLLECTION_PAGE.MORE_ABOUT_PUBLISHING' | translate ")
         button.close(type="button", (click)="closePublishingMsgs()", aria-label="Close")
           span(aria-hidden="true") &times;
       ang-asset-grid([actionOptions]="{collection: true}", [assetCount]="assetCount", [hasMaxAssetLimit]="true")
