@@ -60,8 +60,10 @@ export class App {
     // Set metatitle to "Artstor" except for asset page where metatitle is {{ Asset Title }}
     router.events.subscribe(event => {
       if(event instanceof NavigationStart) {
+        // focus on the wrapper of the "skip to main content link" everytime new page is loaded
         let mainEl = <HTMLElement>(document.getElementById("skip"))
         mainEl.focus()
+        
         let event_url_array = event.url.split('/')
         if(event_url_array && (event_url_array.length > 1) && (event_url_array[1] !== 'asset')){
           this.titleService.setTitle(this.title)
@@ -100,7 +102,6 @@ export class App {
   private findMainContent(): void {
     let htmlelement:HTMLElement = document.getElementById("mainContent");
     let element:Element;
-    console.log(htmlelement);
     // On log in page, go to log in box
     if(htmlelement.querySelector("form div input")){
       element = htmlelement.querySelector("form div input");
@@ -113,7 +114,6 @@ export class App {
     else {
       element = htmlelement;
     }
-    console.log(element);
     (<HTMLElement>element).focus(); 
   }
 }
