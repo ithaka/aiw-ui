@@ -19,7 +19,7 @@ nav-menu
   .row
     .col-sm-3
       a#imageAdSpaceLink.card.hidden-xs-down(*ngIf="showHomeAd", [attr.href]=" 'HOME.AD.LINK' | translate ", target="_blank")
-          img.card-img.no-stretch([attr.src]="'HOME.AD.IMG_SOURCE' | translate", [attr.alt]="'HOME.AD.ALT_TEXT' | translate")
+          img#home-ad.card-img.no-stretch([attr.src]="'HOME.AD.IMG_SOURCE' | translate", [attr.alt]="'HOME.AD.ALT_TEXT' | translate")
       .card([class.pt-4]="showHomeAd")
 
     .col-sm-6
@@ -45,7 +45,6 @@ nav-menu
             strong Error
               | {{ errors.instCollections }}
       
-
       .card-header
       h3 {{ 'HOME.QUESTIONS.HEADING' | translate }}
       ul.list-group.list-group-flush.list-group-clean(*ngIf="siteID=='ARTSTOR'")

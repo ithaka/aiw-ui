@@ -47,7 +47,6 @@ export class FeaturedComponent implements OnInit {
 
       this.featured.push(<FeaturedCollection>collection)
     }
-
   }
 
   private switchFeaturedIndex(index: number): void {
