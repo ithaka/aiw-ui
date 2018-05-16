@@ -78,10 +78,12 @@ nav-menu
                 p#errTermsRequired.form-control-feedback {{ 'REGISTER.ERRORS.TERMS_REQUIRED' | translate}}
             .form-group
               button#btnRegister.btn.btn-primary([class.loading]="isLoading", type="submit", name="action", tabindex="0") Register
+            .form-group
               .has-danger(*ngIf="submitted")
                 p#errDuplicateUser.form-control-feedback(*ngIf="serviceErrors.duplicate", [innerHtml]="'REGISTER.ERRORS.EMAIL_DUPLICATE' | translate")
                 p#errJstorUser.form-control-feedback(*ngIf="serviceErrors.hasJstor", [innerHtml]="'REGISTER.ERRORS.ALREADY_JSTOR' | translate")
                 p#errServerUser.form-control-feedback(*ngIf="serviceErrors.server", [innerHtml]="'REGISTER.ERRORS.SERVER_ERROR' | translate")
+                p#errShibboleth.form-control-feedback(*ngIf="serviceErrors.shibboleth", [innerHtml]="'REGISTER.ERRORS.SHIBBOLETH_ERROR' | translate")
           br
           p
             a.link(href="http://www.artstor.org/privacy-policy", tabindex="0") Privacy Policy

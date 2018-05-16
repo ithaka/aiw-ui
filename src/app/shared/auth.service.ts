@@ -362,11 +362,14 @@ export class AuthService implements CanActivate {
    * @param registration in addition to regular registration form, requires "samlTokenId" property
    */
   public registerSamlUser(registration: any): Observable<any> {
-    let data = this.formEncode(registration)
-    let header = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded')
+    // Clear method used for regular registration
+    registration["_method"] = null
+    // // Encode da
+    // let dataStr = this.formEncode(registration)
+    let header = new HttpHeaders().set('Content-Type', 'application/json')
     let options = { headers: header, withCredentials: true }
     
-    return this.http.post(this.getUrl() + "/saml/user/create", data , options)
+    return this.http.post(this.getHostname() + "/saml/user/create", registration , options)
   }
 
   public changePassword(oldPass: string, newPass: string): Observable<any> {
