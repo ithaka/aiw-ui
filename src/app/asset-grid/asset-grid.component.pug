@@ -3,42 +3,43 @@
   .row.no-gutters
     .mobile--hide.grid-tool-bar([ngClass]="[ reorderMode ? 'col-12' : 'col-sm-8 col-md-8 col-lg-9']")
       .row.no-gutters
-        .col-12(*ngIf="!reorderMode")
-          li.sortlist.dropdown(*ngIf="!actionOptions.associated && !actionOptions.group", ngbDropdown)
-            button#sortdropdownMenu.btn.btn-link(ngbDropdownToggle) Sort:
-              = " "
-              span.value {{ activeSort.label ? activeSort.label : 'Relevance' }}
-            .dropdown-menu(ngbDropdownMenu, aria-labelledby="sortdropdownMenu")
-              button.dropdown-item([ngClass]="{ 'disable': activeSort.index == '1' }", (click)="changeSortOpt('1', 'Title')") Title
-              button.dropdown-item([ngClass]="{ 'disable': activeSort.index == '2' }", (click)="changeSortOpt('2', 'Creator')") Creator
-              button.dropdown-item([ngClass]="{ 'disable': activeSort.index == '3' }", (click)="changeSortOpt('3', 'Date')") Date
-              button.dropdown-item([ngClass]="{ 'disable': activeSort.index == '4' }", (click)="changeSortOpt('4', 'Recently Added')") Recently Added
-              button.dropdown-item([ngClass]="{ 'disable': activeSort.index == '0' }", (click)="changeSortOpt('0', 'Relevance')") Relevance
-          li.pagesizelist.dropdown(ngbDropdown)
-            button#pagesizedropdownMenu.btn.btn-link(ngbDropdownToggle) Images/page:
-              = " "
-              span.value {{ pagination.size ? pagination.size : '24' }}
-            .dropdown-menu(ngbDropdownMenu, aria-labelledby="pagesizedropdownMenu")
-              button.dropdown-item([ngClass]="{ 'disable': pagination.size == 24 }", (click)="changePageSize(24)") 24
-              button.dropdown-item([ngClass]="{ 'disable': pagination.size == 48 }", (click)="changePageSize(48)") 48
-              button.dropdown-item([ngClass]="{ 'disable': pagination.size == 72 }", (click)="changePageSize(72)") 72
-          .icon-bar
-            .icon--toggle((click)="setThumbnailSize(false)", [ngClass]="{ 'active': !largeThmbView }")
-              i.icon.icon-small-view
-            .icon--toggle((click)="setThumbnailSize(true)", [ngClass]="{ 'active': largeThmbView }")
-              i.icon.icon-large-view
-          //- Download
-          li.btn.btn-link([class.disabled]="reorderMode", (click)="_ig.triggerIgDownload()", *ngIf="actionOptions.group")
-            i.icon.icon-download-white
-            | Download
-          //- Select
-          li.btn.btn-link([class.disabled]="reorderMode", (click)="toggleEditMode()", [ngClass]="{'active': editMode}")
-            i.icon.icon-select-white
-            | Select
-          //- Reorder
-          li.btn.btn-link((click)="toggleReorderMode()", [ngClass]="{'active': reorderMode}", *ngIf="actionOptions.group && actionOptions.isowner")
-            i.icon.icon-reorder-white
-            | Reorder
+        .col-12
+          ng-container(*ngIf="!reorderMode")
+            li.sortlist.dropdown(*ngIf="!actionOptions.associated && !actionOptions.group", ngbDropdown)
+              button#sortdropdownMenu.btn.btn-link(ngbDropdownToggle) Sort:
+                = " "
+                span.value {{ activeSort.label ? activeSort.label : 'Relevance' }}
+              .dropdown-menu(ngbDropdownMenu, aria-labelledby="sortdropdownMenu")
+                button.dropdown-item([ngClass]="{ 'disable': activeSort.index == '1' }", (click)="changeSortOpt('1', 'Title')") Title
+                button.dropdown-item([ngClass]="{ 'disable': activeSort.index == '2' }", (click)="changeSortOpt('2', 'Creator')") Creator
+                button.dropdown-item([ngClass]="{ 'disable': activeSort.index == '3' }", (click)="changeSortOpt('3', 'Date')") Date
+                button.dropdown-item([ngClass]="{ 'disable': activeSort.index == '4' }", (click)="changeSortOpt('4', 'Recently Added')") Recently Added
+                button.dropdown-item([ngClass]="{ 'disable': activeSort.index == '0' }", (click)="changeSortOpt('0', 'Relevance')") Relevance
+            li.pagesizelist.dropdown(ngbDropdown)
+              button#pagesizedropdownMenu.btn.btn-link(ngbDropdownToggle) Images/page:
+                = " "
+                span.value {{ pagination.size ? pagination.size : '24' }}
+              .dropdown-menu(ngbDropdownMenu, aria-labelledby="pagesizedropdownMenu")
+                button.dropdown-item([ngClass]="{ 'disable': pagination.size == 24 }", (click)="changePageSize(24)") 24
+                button.dropdown-item([ngClass]="{ 'disable': pagination.size == 48 }", (click)="changePageSize(48)") 48
+                button.dropdown-item([ngClass]="{ 'disable': pagination.size == 72 }", (click)="changePageSize(72)") 72
+            .icon-bar
+              .icon--toggle((click)="setThumbnailSize(false)", [ngClass]="{ 'active': !largeThmbView }")
+                i.icon.icon-small-view
+              .icon--toggle((click)="setThumbnailSize(true)", [ngClass]="{ 'active': largeThmbView }")
+                i.icon.icon-large-view
+            //- Download
+            li.btn.btn-link([class.disabled]="reorderMode", (click)="_ig.triggerIgDownload()", *ngIf="actionOptions.group")
+              i.icon.icon-download-white
+              | Download
+            //- Select
+            li.btn.btn-link([class.disabled]="reorderMode", (click)="toggleEditMode()", [ngClass]="{'active': editMode}")
+              i.icon.icon-select-white
+              | Select
+            //- Reorder
+            li.btn.btn-link((click)="toggleReorderMode()", [ngClass]="{'active': reorderMode}", *ngIf="actionOptions.group && actionOptions.isowner")
+              i.icon.icon-reorder-white
+              | Reorder
           //- Save Order
           li.btn.btn-link(*ngIf="reorderMode", [class.disabled]="!orderChanged", (click)="saveReorder()")
             i.icon.icon-reorder-white
