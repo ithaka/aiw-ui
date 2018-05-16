@@ -86,8 +86,8 @@
               = " "
             .dropdown-menu(ngbDropdownMenu, aria-labelledby="dropdownBasic1")
               a#downloadAssetLink.dropdown-item(download,
-                [attr.href]="((assets[0].publicDownload || downloadAuth()) && !assets[0].disableDownload) ? generatedFullURL : null",
-                (click)="((assets[0].publicDownload || downloadAuth()) && !assets[0].disableDownload) ? trackDownloadImage() : setDownloadImage()",
+                [attr.href]="((assets[0].publicDownload || !assets[0].disableDownload) && downloadAuth()) ? generatedFullURL : null",
+                (click)="((assets[0].publicDownload || !assets[0].disableDownload) && downloadAuth()) ? trackDownloadImage() : setDownloadImage()",
                 [class.disabled]="assets[0].disableDownload",
                 title="{{ assets[0].disableDownload ? 'Image is not available for download.' : 'Image download'}}",
                 target="_blank",
@@ -96,15 +96,15 @@
                 | Download File
               a#downloadViewLink.dropdown-item(download="download.jpg",
                 type="image/jpeg",
-                [attr.href]="((assets[0].publicDownload || downloadAuth()) && !assets[0].disableDownload) ? generatedViewURL : (isMSAgent ? '#' : null)",
-                (click)="((assets[0].publicDownload || downloadAuth()) && !assets[0].disableDownload) ? trackDownloadView() : setDownloadView()",
+                [attr.href]="((assets[0].publicDownload || !assets[0].disableDownload) && downloadAuth()) ? generatedViewURL : (isMSAgent ? '#' : null)",
+                (click)="((assets[0].publicDownload || !assets[0].disableDownload) && downloadAuth()) ? trackDownloadView() : setDownloadView()",
                 [class.disabled]="assets[0].disableDownload || assets[0].typeName !== 'image'",
                 target="_self",
                 tabindex="3")
                 i.icon.icon-download-black
                 | Download View
           //- False door button if user is not logged in
-          button.btn.btn-secondary(tabindex="4", *ngIf="assets[0].downloadLink && !(user.isLoggedIn || hasExternalAccess)", (click)="showLoginModal = true")
+          button.btn.btn-secondary(tabindex="4", *ngIf="assets[0].downloadLink && !(user.isLoggedIn || hasExternalAccess) && !assets[0].publicDownload", (click)="showLoginModal = true")
             | {{ 'ASSET_PAGE.BUTTONS.DOWNLOAD' | translate}}
             i#downloadAssetLink.icon.icon-download
           a.btn.btn-secondary(*ngIf="assets[0]", tabindex="5", (click)="showGenerateCitation = true")
