@@ -1,5 +1,5 @@
 nav-menu([allowSelectAll]="true")
-#mainContent.container.main-content(tabindex="-1")
+.container.main-content
   .row
     .col-sm-3(style="margin-top: 1rem;")
       .mobile--hide
@@ -11,7 +11,7 @@ nav-menu([allowSelectAll]="true")
     .col-sm-9
       h1.mobile--show Results
       .row.no-gutters.row--search-bar
-        .col-md-9.search-page-highlight
+        #mainContent.col-md-9.search-page-highlight
           ang-search(*ngIf="user.status == false || unaffiliatedFlag", [allowSearchInRes]="true", [UserNotLoggedIn]="true")
           ang-search(*ngIf="siteID=='SAHARA' || (user.status == true && !unaffiliatedFlag)", [allowSearchInRes]="true", [UserNotLoggedIn]="false")
       .row(style="margin-top: -1rem;")
