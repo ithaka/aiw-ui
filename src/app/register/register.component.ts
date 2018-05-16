@@ -25,7 +25,8 @@ export class RegisterComponent implements OnInit {
   private serviceErrors: {
     duplicate?: boolean,
     hasJstor?: boolean,
-    server?: boolean
+    server?: boolean,
+    shibboleth?: boolean
   } = {};
 
   private showJstorModal: boolean = false
@@ -150,11 +151,15 @@ export class RegisterComponent implements OnInit {
             this.serviceErrors.duplicate = true
           }
         }
-      }, (error) => {
-        console.error(error);
+      }, (res) => {
+        console.error(res);
+
         this.isLoading = false;
-        if (error.status === 500) {
+        if (res.status === 500) {
           this.serviceErrors.server = true
+        }
+        if (res.error && res.error.code === 2020) {
+          this.serviceErrors.shibboleth = true
         }
       });
 
