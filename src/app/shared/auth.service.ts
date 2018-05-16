@@ -420,13 +420,7 @@ export class AuthService implements CanActivate {
     //  clearing the user should only be done using the logout function
     let currentUser = this._storage.get('user')
     if (currentUser && currentUser.username && !user.username) { return }
-
-    // Preserve added pcEnabled, determined by _assets.pccollection() call
-    //  since pcEnabled needs its own call, we're preserving it in local storage
-    let pcEnabled: boolean = this._storage.get('pcEnabled')
-    if (user.isLoggedIn && pcEnabled == true) {
-      user.pcEnabled = true
-    }
+    
     // Should have session timeout, username, baseProfileId, typeId
     this._storage.set('user', user);
     // only do these things if the user is ip auth'd or logged in and the user has changed
@@ -448,17 +442,6 @@ export class AuthService implements CanActivate {
    */
   public getUser() : any {
       return this._storage.get('user') ? this._storage.get('user') : {};
-  }
-
-  /**
-   * Sets pcEnabled in local storage
-   */
-  public setpcEnabled(pcEnabled: boolean): void {
-    this._storage.set('pcEnabled', pcEnabled)
-    // Attach to user object
-    let user = this.getUser()
-    user.pcEnabled = pcEnabled
-    this.saveUser(user)
   }
 
   /** Stores an object in local storage for you - your welcome */

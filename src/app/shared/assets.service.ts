@@ -573,7 +573,7 @@ export class AssetService {
      * @param assetId string Asset or object ID
      */
     public getMetadata(assetId: string, groupId?: string): Observable<MetadataRes> {
-        let url = this._auth.getUrl() + '/v1/metadata?object_ids=' + assetId
+        let url = this._auth.getUrl() + '/v1/metadata?legacy=false&object_ids=' + assetId
         if (groupId){
             // Groups service modifies certain access rights for shared assets
             url = this._auth.getUrl() + '/v1/group/'+ groupId +'/metadata?object_ids=' + assetId

@@ -44,6 +44,7 @@ export class NavMenu implements OnInit, OnDestroy {
   @Output() refreshIG: EventEmitter<any> = new EventEmitter();
 
   private user: any = {}
+  private siteID: string = ""
   private institutionObj: any = {}
 
   private mobileCollapsed: boolean = true
@@ -53,8 +54,6 @@ export class NavMenu implements OnInit, OnDestroy {
   private showImageGroupModal: boolean = false
   private showAddToGroupModal: boolean = false
   private showShareIgModal: boolean = false
-  private pcEnabled: boolean = false
-
   private copyIG: boolean = false
   private editIG: boolean = false
   private params: any = {}
@@ -69,6 +68,7 @@ export class NavMenu implements OnInit, OnDestroy {
 
   // TypeScript public modifiers
   constructor(
+    public _appConfig: AppConfig,
     private _router: Router,
     private location: Location,
     private _app: AppConfig,
@@ -81,6 +81,7 @@ export class NavMenu implements OnInit, OnDestroy {
   ) {
     this.browseOpts = this._app.config.browseOptions
     this.defaultGrpBrwseBy = this._app.config.defaultGrpBrwseBy
+    this.siteID = this._appConfig.config.siteID
   }
 
   ngOnInit() {
@@ -89,7 +90,6 @@ export class NavMenu implements OnInit, OnDestroy {
       this._auth.currentUser.subscribe(
         (userObj) => {
           this.user = userObj
-          this.pcEnabled = this.user.pcEnabled
         },
         (err) => { console.error(err) }
       )

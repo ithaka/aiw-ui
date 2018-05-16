@@ -30,8 +30,6 @@ export class BrowsePage implements OnInit, OnDestroy {
 
   private browseOpts: any = {}
 
-  private pcEnabled: boolean
-
   // TypeScript public modifiers
   constructor(
       locker: Locker,
@@ -62,16 +60,6 @@ export class BrowsePage implements OnInit, OnDestroy {
       })
     );
 
-    // Subscribe to User object updates
-    this.subscriptions.push(
-      this._auth.currentUser.subscribe(
-        (userObj) => {
-          this.pcEnabled = userObj.pcEnabled
-        },
-        (err) => { console.error(err) }
-      )
-    )
-
     if( this.browseOpts.artstorCol ){
         this.colMenuArray.push( { label: 'Artstor Digital Library', id: '1', link: 'library' } );
     }
@@ -91,7 +79,7 @@ export class BrowsePage implements OnInit, OnDestroy {
         this.colMenuArray.push( { label: 'Public Collections', id: '3', link: 'commons' } );
     }
 
-    if(this.pcEnabled && this.browseOpts.myCol){
+    if(this.browseOpts.myCol){
         var obj = {
             label : 'My Collections',
             id: '4',
