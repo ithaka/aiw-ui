@@ -175,7 +175,7 @@
     "TITLE": "Personal Collection",
     "RECENT_TITLE": "Recently Uploaded",
     "META_ADD_INFO": "Click the thumbnail to add metadata. You can also add details from the image page later.",
-    "UPLOAD_TIME_DISCLAIMER": "There may be a delay of up to 30 minutes before recently uploaded images will be ready to view and share.",
+    "UPLOAD_TIME_DISCLAIMER": "There may be a delay of up to 30 minutes before recently uploaded images will be ready to view and share. <a href=\"https://support.artstor.org/?article=upload-images-to-personal-collections#Upload_messaging_PC\" class=\"link\" target=\"_blank\">More about publishing</a>",
     "HELP": "Help",
     "BUTTONS": {
       "CLOSE": "Close",
@@ -317,13 +317,17 @@
       "DESCRIPTION" : "Images in the Digital Library have been assigned geography terms according to two different criteria: location of the work (for site-specific works such as architecture, mural painting, public monuments, etc.), and nationality of the creator. When these two criteria overlap (for example, an American architect's preparatory drawing for a building built in another country), both country terms are assigned.<br/><br/>Users may browse these terms in conjunction with their classification sub-groupings, as well as keyword and Advanced Search, accessible from the Library home page.",
       "LEAD_IMAGE" : "http://library.artstor.org/assets/img/geography-splash.png"
     },
-    "MY_COLLECTION" : {
+    "MY_COLLECTION": {
+      "UPLOAD_IMGS": "Upload Images",
+      "PC_DESC": "Only you can see this collection. To share these images with others at your institution, add them to an image group. Learn more about Personal Collections.&nbsp; <a href=\"http://support.artstor.org/?article-category=09-using-your-own-images\", target=\"_blank\">http://support.artstor.org/?article-category=09-using-your-own-images</a>",
       "HEADING" : "My Personal Collection",
       "DESCRIPTION" : "Only you can see this collection. To share these images with others at your institution, add them to an image group.<br/><a href=\"http://support.artstor.org/?article-category=09-using-your-own-images\" target=\"_blank\">Learn more about Personal Collections</a>."
     },
     "ERRORS": {
+      "LOGIN_PC_HEADING": "Login Required",
       "NO_INSTITUTIONAL_COLLECTIONS_HEADING": "No Institutional Collections found",
-      "NO_INSTITUTIONAL_COLLECTIONS_PROMPT": "<p>There are no institutional collections available for your institution. You can add institutional collections using Shared Shelf.</p><p>Learn more about <a href=\"http://artstor.org/sharedshelf\" class=\"link\">Shared Shelf</a>.</p>",
+      "NO_INSTITUTIONAL_COLLECTIONS_PROMPT": "<p>There are no institutional collections available for your institution. You can add institutional collections using JSTOR Forum.</p><p>Learn more about <a href=\"http://artstor.org/jstorforum\" class=\"link\">JSTOR Forum</a>.</p>",
+      "LOGIN_PC_COLLECTIONS_PROMPT": "<p>Please login to access your Personal Collection.</p><p>Learn more about <a href=\"https://support.artstor.org/?article-category=09-using-your-own-images\" class=\"link\">Personal Collections</a>.</p>",
       "NO_GROUPS_COLLECTIONS_HEADING": "No Groups Found",
       "NO_PRIVATE_GROUPS_COLLECTIONS_PROMPT": "<p>You haven't made any private groups yet. Learn more about <a href='http://support.artstor.org/?article=create-and-manage-image-groups' class='link'>groups</a>.</p>",
       "NO_INSTITUTIONAL_GROUPS_COLLECTIONS_PROMPT": "<p>You haven't made any institutional groups yet. Learn more about <a href='http://support.artstor.org/?article=create-and-manage-image-groups' class='link'>groups</a>.</p>",
@@ -337,7 +341,8 @@
   "PERSONAL_COLLECTION_PAGE": {
     "BANNER": {
       "DELETE_SUCCESS": "{{title}} was successfully deleted from your personal collection."
-    }
+    },
+    "MORE_ABOUT_PUBLISHING": "<a href=\"https://support.artstor.org/?article=upload-images-to-personal-collections#Upload_messaging_PC\" class=\"link\" target=\"_blank\">More about publishing</a>"
   },
   "FOOTER": {
     "LINKS": {
@@ -581,7 +586,8 @@
       "DESELECT": "Deselect All",
       "EDIT": "Edit Image Group Info",
       "SAVE": "Save Image Group as...",
-      "DELETE_GROUP": "Delete Image Group"
+      "DELETE_GROUP": "Delete Image Group",
+      "ADD_IMGS_PC": "Add Images to Personal Collection"
     },
     "SHARE": {
       "TITLE": "Share",
