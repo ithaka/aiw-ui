@@ -1,5 +1,5 @@
 form((ngSubmit)="login(user)")
-  .form-group
+  #mainContent.form-group
     label(for="loginEmail") {{ 'LOGIN.REG_LOGIN.EMAIL_LABEL' | translate }}
     input#inputLoginEmail.form-control([(ngModel)]="user.username" name="username" type="text" placeholder="Username")
   .form-group
