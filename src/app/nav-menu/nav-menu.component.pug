@@ -32,6 +32,9 @@
             button#btnEditGroup.dropdown-item([disabled]="!actionOptions.group || !allowIgUpdate", (click)="editIG = true; copyIG = false; showImageGroupModal = true;") {{ 'NAV_MENU.ORGANIZE.EDIT' | translate }}
             button#btnSaveGroupAs.dropdown-item([disabled]="!actionOptions.group  || !user.isLoggedIn", (click)="copyIG = true; editIG = false; showImageGroupModal = true;") {{ 'NAV_MENU.ORGANIZE.SAVE' | translate }}
             button#btnDeleteGroup.dropdown-item([disabled]="!actionOptions.group || !allowIgUpdate", (click)="deleteIgModal = true") {{ 'NAV_MENU.ORGANIZE.DELETE_GROUP' | translate }}
+            .dropdown-divider(*ngIf="siteID!='SAHARA'")
+            // Add Images to Personal Collection for AIW users
+            button#addImgsPC.dropdown-item(*ngIf="siteID!='SAHARA'", [disabled]="!user.isLoggedIn", [routerLink]="['/browse', 'mycollections', {upload:true}]") {{ 'NAV_MENU.ORGANIZE.ADD_IMGS_PC' | translate }}
         li.nav-item(ngbDropdown, (mouseenter)="openDrop($event, drop3)", (mouseleave)="closeDrop($event, drop3)", #drop3="ngbDropdown")
           button#shareMenu.btn.btn-link(ngbDropdownToggle) {{ 'NAV_MENU.SHARE.TITLE' | translate }}
           .dropdown-menu(ngbDropdownMenu, aria-labelledby="shareMenu")
