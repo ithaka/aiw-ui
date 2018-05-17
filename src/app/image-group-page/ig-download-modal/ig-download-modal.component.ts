@@ -97,6 +97,11 @@ export class PptModalComponent implements OnInit {
       format = 'zip'
     }
 
+    /**
+     * We're using this as an auth check - instead of simply using all of the group.items strings and calling for downloads,
+     *  which was allowing restricted assets to be downloaded, we first ask for each assets' thumbnail, which will ensure
+     *  that only assets which the user has access to are returned
+     */
     return this._assets.getAllThumbnails(group.items)
     .then((thumbnails) => {
       let imgDownloadStrings: string[] = []
