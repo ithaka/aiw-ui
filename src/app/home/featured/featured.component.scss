@@ -3,18 +3,22 @@
     margin-bottom: 20px;
     padding-bottom: 20px;
 
-    .featured-side-tile {
-       /* max-width: 70%; */
-        margin: auto;
-        transition: transform 1s;
-    }
-
-    .featured-col {
-        max-height: 65vh;
-    }
-
     #featured-side {
-        padding: 15px;
+        padding: 5px;
+
+        & .card {
+            height: 33.3%;
+            padding: 2px;
+
+            & .featured-side-img {
+                margin: auto;
+            }
+
+            & .featured-title {
+                padding-top: 7px;
+            }
+        }
+
     }
 
     #featured-bottom {
