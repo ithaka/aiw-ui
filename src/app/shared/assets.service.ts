@@ -579,7 +579,7 @@ export class AssetService {
             url = this._auth.getUrl() + '/v1/group/'+ groupId +'/metadata?object_ids=' + assetId
         }
         return this.http
-            .get<MetadataRes>( url, this.defaultOptions)
+            .get<MetadataRes>(url, this.defaultOptions)
     }
 
     /**
@@ -1046,8 +1046,6 @@ export interface MetadataRes {
     total: number
     metadata: {
         SSID: string
-        collection_id: string
-        collection_name: string
         download_size: string
         fileProperties: any[]
         height: number
