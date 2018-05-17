@@ -5,10 +5,10 @@
 
   .col-sm-3.featured-col#featured-side
     .card(*ngFor="let collection of featured; let i = index")
-      p(*ngIf="primaryFeaturedIndex === i", [innerHtml]="collection.subheading | translate")
+      b.featured-title(*ngIf="primaryFeaturedIndex === i", [innerHtml]="collection.subheading | translate")
       p.featured-caption(*ngIf="primaryFeaturedIndex === i", [innerHtml]="collection.description | translate")
 
-      img.no-stretch.featured-side-tile(*ngIf="primaryFeaturedIndex !== i", (click)="switchFeaturedIndex(i)", [attr.src]="collection.img_src | translate",
+      img.no-stretch.featured-side-img(*ngIf="primaryFeaturedIndex !== i", (click)="switchFeaturedIndex(i)", [attr.src]="collection.img_src | translate",
        [attr.alt]="collection.alt_text | translate", [attr.title]="collection.link | translate")
 
 .row#featured-bottom
