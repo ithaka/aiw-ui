@@ -696,6 +696,12 @@ export class AssetPage implements OnInit, OnDestroy {
         and then sets generatedViewUrl to this local reference. **/
 
     private genDownloadViewLink(): void {
+        
+        // Do nothing if this is not an image
+        if (!this.assets[0].typeName || !this.assets[0].typeName.length) {
+            return
+        }
+
         let asset = this.assets[0]
         this.downloadLoading = true // sets to false on success of runDownloadView
 
@@ -777,8 +783,8 @@ export class AssetPage implements OnInit, OnDestroy {
      * - sets url used by agree modal
      */
     setDownloadImage(): void {
-        this.downloadUrl = this.generatedFullURL;
-        this.showAgreeModal = true;
+        this.downloadUrl = this.generatedFullURL
+        this.showAgreeModal = true
         this.downloadName = 'download'
     }
 
