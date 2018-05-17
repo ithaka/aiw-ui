@@ -698,7 +698,7 @@ export class AssetService {
             })
     }
 
-    public getAllThumbnails(igIds: string[]) : Promise<any> {
+    public getAllThumbnails(assetIds: string[]) : Promise<any> {
         // return new Promise
         let maxCount = 100
         return new Promise( (resolve, reject) => {
@@ -707,21 +707,20 @@ export class AssetService {
 
             let loadBatch = (i) => {
                 let countEnd = i+maxCount
-                let idsAsTerm: string =  igIds.slice(i,countEnd).join('&object_id=');
+                let idsAsTerm: string =  assetIds.slice(i,countEnd).join('&object_id=');
                 this.http.get(this._auth.getHostname() + '/api/v1/items?object_id=' + idsAsTerm, options)
-                        .toPromise()
-                        .then(
-                            (res) => {
-                                let results = res;
-                                allThumbnails = allThumbnails.concat(results['items']);
-                                if (countEnd >= igIds.length) {
-                                    resolve(allThumbnails);
-                                } else {
-                                    loadBatch(countEnd)
-                                }
-                        }, (error) => {
-                                reject('Failure');
-                        });
+                    .toPromise()
+                    .then((res) => {
+                        let results = res;
+                        allThumbnails = allThumbnails.concat(results['items']);
+                        if (countEnd >= assetIds.length) {
+                            resolve(allThumbnails);
+                        } else {
+                            loadBatch(countEnd)
+                        }
+                    }, (error) => {
+                        reject('Failure');
+                    });
             }
             loadBatch(0);
         });
