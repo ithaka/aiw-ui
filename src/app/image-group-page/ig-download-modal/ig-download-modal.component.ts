@@ -84,9 +84,8 @@ export class PptModalComponent implements OnInit {
 
   /** Gets the link at which the resource can be downloaded. Will be set to the "accept" button's download property */
   private getDownloadLink(group: ImageGroup, zip ?: boolean): Observable<any> {
-    let header = new HttpHeaders().set('content-type', 'application/x-www-form-urlencoded');
-    let options = { headers: header, withCredentials: true};
-    let imgStr: string = "";
+    let header = new HttpHeaders().set('content-type', 'application/x-www-form-urlencoded')
+    let options = { headers: header, withCredentials: true }
     let useLegacyMetadata: boolean = true
     let url = this._auth.getHostname() + '/api/group/export'
     let format: string
@@ -98,16 +97,16 @@ export class PptModalComponent implements OnInit {
       format = 'zip'
     }
 
-    group.items.forEach((item, index, items) => {
-        imgStr += [(index + 1), item, "1024x1024"].join(":")
-        if (index !== items.length - 1) {
-            imgStr += ","
-        }
+    let imgDownloadStrings: string[] = []
+
+    group.thumbnails.forEach((thumbnail, index) => {
+      let imgStr: string = [(index + 1), thumbnail.objectId, "1024x1024"].join(":")
+      imgDownloadStrings.push(imgStr)
     })
 
     data = {
         igName: group.name,
-        images: imgStr
+        images: imgDownloadStrings.join(',')
     }
 
     // Make authorization call to increment download count
@@ -121,8 +120,8 @@ export class PptModalComponent implements OnInit {
   }
 
   trackDownload(downloadType: string) : void {
-    this._analytics.directCall('request' + downloadType);
-    this._angulartics.eventTrack.next({ action: "downloadGroup" + downloadType, properties: { category: "group", label: this.ig.id }});
+    this._analytics.directCall('request' + downloadType)
+    this._angulartics.eventTrack.next({ action: "downloadGroup" + downloadType, properties: { category: "group", label: this.ig.id }})
   }
 
 }
