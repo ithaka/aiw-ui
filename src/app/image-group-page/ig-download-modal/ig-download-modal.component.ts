@@ -47,43 +47,43 @@ export class PptModalComponent implements OnInit {
   }
 
   private getPPT() {
-    this.isLoading = true;
+    this.isLoading = true
     // Setup PPT Download
     this.getDownloadLink(this.ig)
-      .take(1)
-      .subscribe(
-        (data) => {
-          this.isLoading = false;
-          // Goal: A downlink that looks like:
-          // http://mdxdv.artstor.org/thumb/imgstor/...
-          if (data.path) {
-            this.downloadLink = this._auth.getThumbUrl() + data.path.replace('/nas/','/thumb/');
-          }
-        },
-        (error) => { console.error(error); this.isLoading = false; }
-      );
+    .then((data) => {
+      this.isLoading = false
+      // Goal: A downlink that looks like:
+      // http://mdxdv.artstor.org/thumb/imgstor/...
+      if (data.path) {
+        this.downloadLink = this._auth.getThumbUrl() + data.path.replace('/nas/','/thumb/')
+      }
+    })
+    .catch((err) => {
+      console.error(err)
+       this.isLoading = false
+    })
   }
 
   private getZip() {
     this.zipLoading = true;
     // Setup Zip download
     this.getDownloadLink(this.ig, true)
-      .take(1)
-      .subscribe(
-        (data) => {
-          this.zipLoading = false;
-          // Goal: A downlink that looks like:
-          // http://mdxdv.artstor.org/thumb/imgstor/...
-          if (data.path) {
-            this.zipDownloadLink = this._auth.getThumbUrl() + data.path.replace('/nas/','/thumb/');
-          }
-        },
-        (error) => { console.error(error); this.zipLoading = false; }
-      );
+    .then((data) => {
+      this.zipLoading = false;
+      // Goal: A downlink that looks like:
+      // http://mdxdv.artstor.org/thumb/imgstor/...
+      if (data.path) {
+        this.zipDownloadLink = this._auth.getThumbUrl() + data.path.replace('/nas/','/thumb/');
+      }
+    })
+    .catch((err) => {
+      console.error(err)
+      this.zipLoading = false
+    })
   }
 
   /** Gets the link at which the resource can be downloaded. Will be set to the "accept" button's download property */
-  private getDownloadLink(group: ImageGroup, zip ?: boolean): Observable<any> {
+  private getDownloadLink(group: ImageGroup, zip ?: boolean): Promise<any> {
     let header = new HttpHeaders().set('content-type', 'application/x-www-form-urlencoded')
     let options = { headers: header, withCredentials: true }
     let useLegacyMetadata: boolean = true
@@ -97,26 +97,36 @@ export class PptModalComponent implements OnInit {
       format = 'zip'
     }
 
-    let imgDownloadStrings: string[] = []
+    return this._assets.getAllThumbnails(group.items)
+    .then((thumbnails) => {
+      let imgDownloadStrings: string[] = []
 
-    group.thumbnails.forEach((thumbnail, index) => {
-      let imgStr: string = [(index + 1), thumbnail.objectId, "1024x1024"].join(":")
-      imgDownloadStrings.push(imgStr)
+      thumbnails.forEach((thumbnail, index) => {
+        let imgStr: string = [(index + 1), thumbnail.objectId, "1024x1024"].join(":")
+        imgDownloadStrings.push(imgStr)
+      })
+  
+      data = {
+          igName: group.name,
+          images: imgDownloadStrings.join(',')
+      }
+
+      return data
     })
-
-    data = {
-        igName: group.name,
-        images: imgDownloadStrings.join(',')
-    }
-
-    // Make authorization call to increment download count
-    this.http
+    .then((data) => {
+      // Return request that provides file URL
+      return this.http
+        .post(url + '/' + format + '/' + group.id + '/' + useLegacyMetadata, this._auth.formEncode(data), options)
+        .toPromise()
+    })
+    .then((res) => {
+      // Make authorization call to increment download count after successful response is received
+      this.http
       .get(url + '/auth/' + group.id + '/true', options)
       .toPromise()
 
-    // Return request that provides file URL
-    return this.http
-      .post(url + '/' + format + '/' + group.id + '/' + useLegacyMetadata, this._auth.formEncode(data), options)
+      return res
+    })
   }
 
   trackDownload(downloadType: string) : void {
