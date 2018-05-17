@@ -1,15 +1,15 @@
 .row#featured-container
-  .col-sm-8.featured-col
-    a#featuredCollectionLink.card.featured-card([attr.href]="featured[0].link | translate")
-      img.card-img-top.no-stretch([attr.src]="featured[0].img_src | translate", [attr.alt]="featured[0].alt | translate", [attr.title]="featured[0].title | translate")
+  .col-sm-9.featured-col
+    a#featuredCollectionLink.card.featured-card([attr.href]="featured[primaryFeaturedIndex].link | translate")
+      img.card-img-top.no-stretch([attr.src]="featured[primaryFeaturedIndex].img_src | translate", [attr.alt]="featured[primaryFeaturedIndex].alt | translate", [attr.title]="featured[primaryFeaturedIndex].link_title | translate")
 
-  .col-sm-4.featured-col
+  .col-sm-3.featured-col#featured-side
     .card(*ngFor="let collection of featured; let i = index")
       p(*ngIf="primaryFeaturedIndex === i", [innerHtml]="collection.subheading | translate")
       p.featured-caption(*ngIf="primaryFeaturedIndex === i", [innerHtml]="collection.description | translate")
 
-      img.featured-side-tile(*ngIf="primaryFeaturedIndex !== i", [attr.src]="collection.img_src | translate",
-       [attr.alt]="collection.alt_text | translate", [attr.title]="collection.link | translate", click="switchFeaturedIndex(i)")
+      img.no-stretch.featured-side-tile(*ngIf="primaryFeaturedIndex !== i", (click)="switchFeaturedIndex(i)", [attr.src]="collection.img_src | translate",
+       [attr.alt]="collection.alt_text | translate", [attr.title]="collection.link | translate")
 
 .row#featured-bottom
   .col-6
