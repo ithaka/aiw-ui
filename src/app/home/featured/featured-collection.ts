@@ -2,6 +2,7 @@
 
 interface FeaturedCollection {
     subheading: string;
+    caption: string;
     description: string;
     img_src: string;
     link: string;
