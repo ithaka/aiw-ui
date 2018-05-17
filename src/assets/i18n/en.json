@@ -447,33 +447,37 @@
         "VIEW_PUBLIC_LINK": "View All Public Collections"
       },
       "COLLECTIONS": [{
-          "SUBHEADING": "The Phillips Collection",
-          "DESCRIPTION": "Jacob Lawrence. The Migration of the Negro Panel no. 1. 1940—1941. The Phillips Collection. © 2005 Estate of Gwendolyn Knight Lawrence / Artists Rights Society (ARS).",
-          "LINK": "/#/category/1034446930",
-          "IMG_SOURCE": "/assets/img/featured-collection-lawrence.jpg",
-          "LINK_TITLE": "The Phillips Collection",
-          "ALT_TEXT": "The Phillips Collection"
+          "SUBHEADING": "Art Institute of Chicago",
+          "DESCRIPTION": "Georges Seurat. A Sunday on La Grande Jatte. 1884-1886. Oil on canvas. Image and original data provided by The Art Institute of Chicago.",
+          "CAPTION": "Georges Seurat. A Sunday on La Grande Jatte. 1884-1886. Oil on canvas. Image and original data provided by The Art Institute of Chicago.",
+          "LINK": "/#/category/1031896041 ",
+          "IMG_SOURCE": "/assets/img/featured-collections/AIC_Sunday.jpg",
+          "LINK_TITLE": "Art Institute of Chicago",
+          "ALT_TEXT": "Art Institute of Chicago"
         },
         {
-          "SUBHEADING": "The Phillips Collection",
-          "DESCRIPTION": "Jacob Lawrence. The Migration of the Negro Panel no. 1. 1940—1941. The Phillips Collection. © 2005 Estate of Gwendolyn Knight Lawrence / Artists Rights Society (ARS).",
-          "LINK": "/#/category/1034446930",
-          "IMG_SOURCE": "/assets/img/featured-collection-lawrence.jpg",
-          "LINK_TITLE": "The Phillips Collection",
-          "ALT_TEXT": "The Phillips Collection"
+          "SUBHEADING": "Muhlenberg College: Navy V-12 and V-5 World War II Photograph Collection",
+          "DESCRIPTION": "Navy V-12 students on parade. 1943. Photograph. Muhlenberg College: Navy V-12 and V-5 World War II Photograph Collection",
+          "CAPTION": "Navy V-12 students on parade. 1943. Photograph. Muhlenberg College: Navy V-12 and V-5 World War II Photograph Collection",
+          "LINK": "/#/collection/87731255 ",
+          "IMG_SOURCE": "/assets/img/featured-collections/Muhlenberg_Navy.jpg",
+          "LINK_TITLE": "Muhlenberg College: Navy V-12 and V-5 World War II Photograph Collection",
+          "ALT_TEXT": "Muhlenberg College: Navy V-12 and V-5 World War II Photograph Collection"
         },
         {
-          "SUBHEADING": "Pueblo in Taos, New Mexico",
-          "DESCRIPTION": "Photo taken 2008 by SAHARA contributor Dell Upton.",
-          "LINK": "/#/asset/HUSAHARA_1113121791",
-          "IMG_SOURCE": "/assets/img/featured-collection-sahara.jpg",
-          "LINK_TITLE": "Pueblo in Taos, New Mexico",
-          "ALT_TEXT": "Pueblo in Taos, New Mexico"
+          "SUBHEADING": "The Metropolitan Museum of Art: Brooklyn Museum Costumes",
+          "DESCRIPTION": "Caption: Parasol. 1886. Silk, wood, metal. Image and original data from the Brooklyn Museum.",
+          "CAPTION": "Parasol. 1886. Silk, wood, metal. Image and original data from the Brooklyn Museum.",
+          "LINK": "/#/category/1034948173 ",
+          "IMG_SOURCE": "/assets/img/featured-collections/BrooklynMuseum_parasol.jpg",
+          "LINK_TITLE": "The Metropolitan Museum of Art: Brooklyn Museum Costumes",
+          "ALT_TEXT": "The Metropolitan Museum of Art: Brooklyn Museum Costumes"
         }
       ],
       "PUBLIC_COLLECTIONS": [{
           "SUBHEADING": "Pueblo in Taos, New Mexico",
           "DESCRIPTION": "Photo taken 2008 by SAHARA contributor Dell Upton.",
+          "CAPTION": "",
           "LINK": "/#/asset/HUSAHARA_1113121791",
           "IMG_SOURCE": "/assets/img/featured-collection-sahara.jpg",
           "LINK_TITLE": "Pueblo in Taos, New Mexico",
@@ -482,6 +486,7 @@
         {
           "SUBHEADING": "Pueblo in Taos, New Mexico",
           "DESCRIPTION": "Photo taken 2008 by SAHARA contributor Dell Upton.",
+          "CAPTION": "",
           "LINK": "/#/asset/HUSAHARA_1113121791",
           "IMG_SOURCE": "/assets/img/featured-collection-sahara.jpg",
           "LINK_TITLE": "Pueblo in Taos, New Mexico",
@@ -490,60 +495,41 @@
         {
           "SUBHEADING": "Pueblo in Taos, New Mexico",
           "DESCRIPTION": "Photo taken 2008 by SAHARA contributor Dell Upton.",
+          "CAPTION": "",
           "LINK": "/#/asset/HUSAHARA_1113121791",
           "IMG_SOURCE": "/assets/img/featured-collection-sahara.jpg",
           "LINK_TITLE": "Pueblo in Taos, New Mexico",
           "ALT_TEXT": "Pueblo in Taos, New Mexico"
         }
-      ],
-      "PUBLIC_COLLECTIONS": [
-        {
-          "SUBHEADING": "Pueblo in Taos, New Mexico",
-          "DESCRIPTION": "Photo taken 2008 by SAHARA contributor Dell Upton.",
-          "LINK": "/#/asset/HUSAHARA_1113121791",
-          "IMG_SOURCE": "/assets/img/featured-collection-sahara.jpg",
-          "LINK_TITLE": "Pueblo in Taos, New Mexico",
-          "ALT_TEXT": "Pueblo in Taos, New Mexico"
-        },
-        {
-          "SUBHEADING": "Pueblo in Taos, New Mexico",
-          "DESCRIPTION": "Photo taken 2008 by SAHARA contributor Dell Upton.",
-          "LINK": "/#/asset/HUSAHARA_1113121791",
-          "IMG_SOURCE": "/assets/img/featured-collection-sahara.jpg",
-          "LINK_TITLE": "Pueblo in Taos, New Mexico",
-          "ALT_TEXT": "Pueblo in Taos, New Mexico"
-        },
-        {
-          "SUBHEADING": "Pueblo in Taos, New Mexico",
-          "DESCRIPTION": "Photo taken 2008 by SAHARA contributor Dell Upton.",
-          "LINK": "/#/asset/HUSAHARA_1113121791",
-          "IMG_SOURCE": "/assets/img/featured-collection-sahara.jpg",
-          "LINK_TITLE": "Pueblo in Taos, New Mexico",
-          "ALT_TEXT": "Pueblo in Taos, New Mexico"
-        }],
+      ]
+    },
+    "SAHARA_FEATURED": {
       "SAHARA_COLLECTIONS": [{
-          "SUBHEADING": "Pueblo in Taos, New Mexico",
-          "DESCRIPTION": "Photo taken 2008 by SAHARA contributor Dell Upton.",
-          "LINK": "/#/asset/HUSAHARA_1113121791",
-          "IMG_SOURCE": "/assets/img/featured-collection-sahara.jpg",
-          "LINK_TITLE": "Pueblo in Taos, New Mexico",
-          "ALT_TEXT": "Pueblo in Taos, New Mexico"
+          "SUBHEADING": "Harania Village",
+          "DESCRIPTION": "The Arts Center and Habib Gorgy Sculpture Museum, Harania Village, Giza, Egypt.  Architect: Ramses Wissa Wassef, 1955.  Photographer: Raghad Mofeed.",
+          "CAPTION": "The Arts Center and Habib Gorgy Sculpture Museum, Harania Village, Giza, Egypt.  Architect: Ramses Wissa Wassef, 1955.  Photographer: Raghad Mofeed.",
+          "LINK": "#/asset/HSAHARA__1113_25492396",
+          "IMG_SOURCE": "/assets/img/featured-collections/sahara/HSAHARA__1113_25492396.jpg",
+          "LINK_TITLE": "Harania Village",
+          "ALT_TEXT": "Harania Village"
         },
         {
-          "SUBHEADING": "Pueblo in Taos, New Mexico",
-          "DESCRIPTION": "Photo taken 2008 by SAHARA contributor Dell Upton.",
-          "LINK": "/#/asset/HUSAHARA_1113121791",
-          "IMG_SOURCE": "/assets/img/featured-collection-sahara.jpg",
-          "LINK_TITLE": "Pueblo in Taos, New Mexico",
-          "ALT_TEXT": "Pueblo in Taos, New Mexico"
+          "SUBHEADING": "Tomb of Elahbel",
+          "DESCRIPTION": "Palmyra, Tower Tomb of Elahbel (103 CE). This tomb was destroyed by IS in 2015.  Photo by Dell Upton, 2010.",
+          "CAPTION": "Palmyra, Tower Tomb of Elahbel (103 CE). This tomb was destroyed by IS in 2015.  Photo by Dell Upton, 2010.",
+          "LINK": "/#/asset/HSAHARA_1113128564",
+          "IMG_SOURCE": "/assets/img/featured-collections/sahara/HSAHARA_1113128564.jpg",
+          "LINK_TITLE": "Tomb of Elahbel",
+          "ALT_TEXT": "Tomb of Elahbel"
         },
         {
-          "SUBHEADING": "Pueblo in Taos, New Mexico",
-          "DESCRIPTION": "Photo taken 2008 by SAHARA contributor Dell Upton.",
-          "LINK": "/#/asset/HUSAHARA_1113121791",
-          "IMG_SOURCE": "/assets/img/featured-collection-sahara.jpg",
-          "LINK_TITLE": "Pueblo in Taos, New Mexico",
-          "ALT_TEXT": "Pueblo in Taos, New Mexico"
+          "SUBHEADING": "Sporting Arena of José Martí",
+          "DESCRIPTION": "Octavio Buigas, José Martí Sporting Arena, Havana, Cuba, 1960. John C. Blew, photographer.",
+          "CAPTION": "Octavio Buigas, José Martí Sporting Arena, Havana, Cuba, 1960. John C. Blew, photographer.",
+          "LINK": "/#/asset/HSAHARA_1113140821",
+          "IMG_SOURCE": "/assets/img/featured-collections/sahara/HSAHARA_1113140821.jpg",
+          "LINK_TITLE": "Sporting Arena of José Martí",
+          "ALT_TEXT": "Sporting Arena of José Martí"
         }
       ]
     },

@@ -22,6 +22,7 @@ export class FeaturedComponent implements OnInit {
   private featured: FeaturedCollection[] = [] // Array of collection objects
 
   // Array index for which collection is the 'primary image'
+  @Input()
   private primaryFeaturedIndex: number = 0
 
   constructor(public _appConfig: AppConfig, private _auth: AuthService) {
@@ -38,6 +39,7 @@ export class FeaturedComponent implements OnInit {
 
       let collection = {
         subheading:  this.base + i + '.SUBHEADING',
+        caption:     this.base + i + '.CAPTION',
         description: this.base + i + '.DESCRIPTION',
         img_src:     this.base + i + '.IMG_SOURCE',
         link:        this.base + i + '.LINK',
@@ -86,6 +88,7 @@ export class FeaturedComponent implements OnInit {
     }
 
     this.base = this.conf + '.' + this.featuredType + "."
+    console.log('!!!!!', this.base)
     this.initCollections()
 
     // Start slideshow
