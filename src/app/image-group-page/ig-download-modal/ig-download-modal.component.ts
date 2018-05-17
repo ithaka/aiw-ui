@@ -108,7 +108,7 @@ export class PptModalComponent implements OnInit {
 
       thumbnails.forEach((thumbnail, index) => {
         let imgStr: string = [(index + 1), thumbnail.objectId, "1024x1024"].join(":")
-        imgDownloadStrings.push(imgStr)
+        thumbnail.status == 'available' && imgDownloadStrings.push(imgStr)
       })
   
       data = {
