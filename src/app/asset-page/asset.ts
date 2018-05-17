@@ -21,8 +21,9 @@ export class Asset {
         name: string
     }[]
     collectionId: number
-    categoryId: number
     collectionType: number
+    collectionName: string
+    categoryId: number
     contributinginstitutionid: number
     SSID: string
     fileName: string
@@ -57,6 +58,11 @@ export class Asset {
             throw new Error('No data passed to construct asset')
         }
         this.initAssetProperties(assetData)
+    }
+
+    private setDisplayCollection() {
+        let collection
+
     }
 
     private formatMetadata(metadata: MetadataField[]): FormattedMetadata {
@@ -132,9 +138,9 @@ export class Asset {
     get description(): string {
         return this.formattedMetadata.Description[0] || ''
     }
-    get collectionName(): string {
-        return this.formattedMetadata.Collection[0] || ''
-    }
+    // get collectionName(): string {
+    //     return this.formattedMetadata.Collection[0] || ''
+    // }
 
     /**
      * Sets up the Asset object with needed properties

@@ -1,5 +1,5 @@
 export class CollectionTypeHandler { 
-  public collectionTypeMap: {
+  public static collectionTypeMap: {
     [key: string]: CollectionTypeInfo
   } = {
     0: { name: '', alt: '', badgeText: '' },
@@ -19,7 +19,7 @@ export class CollectionTypeHandler {
   * @param contributinginstitutionid the id of the institution that uploaded the asset, used to modify the collection type
   *  if the asset was uploaded by Artstor
   */
- public getCollectionType(typeIds: Array<number>, contributinginstitutionid: number): CollectionTypeInfo {
+ public static getCollectionType(typeIds: Array<number>, contributinginstitutionid: number): CollectionTypeInfo {
   if (!typeIds) { typeIds = [] }
   // Incase, if the asset has both public (5) and inst. (2) colType, then display the public colType indicator
   let typeId = (typeIds.indexOf(2) > -1) && (typeIds.indexOf(5) > -1) ? 5 : typeIds[0]
