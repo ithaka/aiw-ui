@@ -53,6 +53,21 @@ export class FeaturedComponent implements OnInit {
     this.primaryFeaturedIndex = index
   }
 
+  private setFeaturedIndex(): void{
+    if (this.primaryFeaturedIndex === 2) {
+      this.primaryFeaturedIndex = 0
+    }
+    else {
+      this.primaryFeaturedIndex += 1
+    }
+    
+    console.log('called', this.primaryFeaturedIndex)
+  }
+
+  private runSlideshow() {
+      setTimeout(this.setFeaturedIndex, 7000)
+  }
+
   ngOnInit() {
 
     this.siteId = this._appConfig.config.siteID
@@ -72,6 +87,9 @@ export class FeaturedComponent implements OnInit {
 
     this.base = this.conf + '.' + this.featuredType + "."
     this.initCollections()
+
+    // Start slideshow
+    this.runSlideshow()
   }
 
 }

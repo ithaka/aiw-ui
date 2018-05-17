@@ -4,12 +4,17 @@
     padding-bottom: 20px;
 
     .featured-side-tile {
-        max-width: 70%;
+       /* max-width: 70%; */
         margin: auto;
+        transition: transform 1s;
     }
 
     .featured-col {
         max-height: 65vh;
+    }
+
+    #featured-side {
+        padding: 15px;
     }
 
     #featured-bottom {
