@@ -1,7 +1,7 @@
 .row#featured-container
   .col-sm-9.featured-col
     a#featuredCollectionLink.card.featured-card([attr.href]="featured[primaryFeaturedIndex].link | translate")
-      img.featured-side-image.card-img-top.no-stretch([attr.src]="featured[primaryFeaturedIndex].img_src | translate", [attr.alt]="featured[primaryFeaturedIndex].alt | translate", [attr.title]="featured[primaryFeaturedIndex].link_title | translate")
+      img#primary-featured-img.card-img-top.no-stretch([attr.src]="featured[primaryFeaturedIndex].img_src | translate", [attr.alt]="featured[primaryFeaturedIndex].alt | translate", [attr.title]="featured[primaryFeaturedIndex].link_title | translate")
 
   .col-sm-3.featured-col#featured-side
     .card(*ngFor="let collection of featured; let i = index")

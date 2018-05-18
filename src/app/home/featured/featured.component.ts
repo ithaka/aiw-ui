@@ -50,28 +50,23 @@ export class FeaturedComponent implements OnInit {
       this.featured.push(<FeaturedCollection>collection)
     }
   }
-
+  
   private switchFeaturedIndex(index: number): void {
     this.primaryFeaturedIndex = index
   }
 
-  private setFeaturedIndex(): void{
-    if (this.primaryFeaturedIndex === 2) {
-      this.primaryFeaturedIndex = 0
-    }
-    else {
-      this.primaryFeaturedIndex += 1
-    }
-    
-    console.log('called', this.primaryFeaturedIndex)
-  }
+  private runSlideshow(primary_index: number) { // needs primaryFeaturedIndex locally
+    this.primaryFeaturedIndex = primary_index
 
-  private runSlideshow() {
-      setTimeout(this.setFeaturedIndex, 7000)
+      setInterval(() => {
+        if (this.primaryFeaturedIndex === 2) {
+          this.primaryFeaturedIndex = 0
+        else
+          this.primaryFeaturedIndex += 1
+      }, 7000)
   }
 
   ngOnInit() {
-
     this.siteId = this._appConfig.config.siteID
     this.user = this._auth.getUser();
     this.headings = this.conf + '.' + 'HEADINGS'
@@ -88,11 +83,10 @@ export class FeaturedComponent implements OnInit {
     }
 
     this.base = this.conf + '.' + this.featuredType + "."
-    console.log('!!!!!', this.base)
     this.initCollections()
 
     // Start slideshow
-    this.runSlideshow()
+    this.runSlideshow(this.primaryFeaturedIndex)
   }
 
 }
