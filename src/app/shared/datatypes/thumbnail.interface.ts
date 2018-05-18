@@ -11,6 +11,7 @@ export interface Thumbnail {
   largeImageUrl: string
   publicAccess: boolean
   iapFlag?: number
+  status: string
   media: {
     adlObjectType: string
     thumbnailSizeOnePath: string
