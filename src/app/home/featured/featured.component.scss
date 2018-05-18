@@ -3,26 +3,38 @@
     margin-bottom: 20px;
     padding-bottom: 20px;
 
+    .featured-card {
+       animation: fader 0.8s;
+    }
+
     #featured-side {
         padding: 5px;
 
         & .card {
             height: 33.3%;
             padding: 2px;
-
+            
             & .featured-side-img {
                 margin: auto;
+                animation: fader 0.8s;
             }
 
             & .featured-title {
                 padding-top: 7px;
             }
         }
-
     }
 
     #featured-bottom {
         margin-bottom: 20px;
     }
 
+    @keyframes fader {
+        0% {
+            opacity: 0.1;
+        }
+        100% {
+            opacity: 1;
+        }
+    }
 }
