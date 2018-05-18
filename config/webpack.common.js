@@ -247,6 +247,8 @@ module.exports = function(options) {
       }),
       new CopyWebpackPlugin([{
         from: 'src/assets/robots.txt'
+      },{
+        from: 'src/assets/sitemap.txt'
       }, {
         from: 'src/assets/humans.txt'
       }]),
