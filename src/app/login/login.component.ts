@@ -64,7 +64,9 @@ export class Login {
   ngOnInit() {
 
     // Check for a stashed route to pass to proxy links
-    this.stashedRoute = this._storage.get("stashedRoute")
+    // Change from this._storage.get() to this._auth.getFromStorage() to remember the original url, not tested yet
+    // this.stashedRoute = this._storage.get("stashedRoute")
+    this.stashedRoute = this._auth.getFromStorage("stashedRoute")
 
     if (this._app.config.copyModifier) {
       this.copyBase = this._app.config.copyModifier + "."
