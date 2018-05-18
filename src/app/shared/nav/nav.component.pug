@@ -20,9 +20,9 @@ header.navbar.navbar-light
             .login-panel__status(*ngIf="!user.isLoggedIn")
               div
                 a.link((click)="navigateAndSaveRoute('/login')" tabindex="1") Log in
-                | &nbsp;or&nbsp;
-                a.link((click)="navigateAndSaveRoute('/register')" tabindex="1") Register
-                | &nbsp;to save images
+                span(*ngIf="!user.unaffliatedUser") &nbsp;or&nbsp;
+                a.link(*ngIf="!user.unaffliatedUser", (click)="navigateAndSaveRoute('/register')", tabindex="1") Register
+                span &nbsp;to save images
               div(*ngIf="institutionObj.displayName || institutionObj.institutionName")
                 | Institution: {{ institutionObj.displayName ? institutionObj.displayName : institutionObj.institutionName }}
 ang-session-expire-modal(*ngIf="showinactiveUserLogoutModal && showLoginPanel" "(closeModal)"="inactiveUsrLogOut()")
