@@ -71,6 +71,11 @@ export class LegacyRouteResolver implements Resolve<boolean> {
       let idRe: RegExp = /id=(.*)/
       let encryptedId = idRe.exec(urlArr[1])[1]
 
+      // When there is "source=ppt" in the url, cut it off to make PPT links work
+      if (encryptedId.indexOf('source=ppt') > 0) {
+        encryptedId = encryptedId.substring(0, encryptedId.indexOf('source=ppt') - 1)
+      }
+
       this._router.navigate(['/asset', 'external', encryptedId])
 
     } else {
