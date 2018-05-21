@@ -22,7 +22,6 @@ export class FeaturedComponent implements OnInit {
   private featured: FeaturedCollection[] = [] // Array of collection objects
 
   // Array index for which collection is the 'primary image'
-  @Input()
   private primaryFeaturedIndex: number = 0
 
   constructor(public _appConfig: AppConfig, private _auth: AuthService) {
@@ -51,15 +50,21 @@ export class FeaturedComponent implements OnInit {
     }
   }
   
+  // Switch the primary main slideshow image via collection index (0, 1, or 2)
   private switchFeaturedIndex(index: number): void {
     this.primaryFeaturedIndex = index
   }
 
-  private runSlideshow(primary_index: number) { // needs primaryFeaturedIndex locally
+  /**
+   * runSlideShow - Start the homepage slideshow
+   * @param primary_index pass in primaryFeaturedIndex,
+   * so it is locally scoped within setInterval.
+   */
+  private runSlideshow(primary_index: number) { 
     this.primaryFeaturedIndex = primary_index
-
+      
       setInterval(() => {
-        if (this.primaryFeaturedIndex === 2) {
+        if (this.primaryFeaturedIndex === 2)
           this.primaryFeaturedIndex = 0
         else
           this.primaryFeaturedIndex += 1

@@ -1,10 +1,19 @@
+@import '../../../sass/core/variables';
+
+@keyframes fader {
+    0% {
+        opacity: 0.1;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
 #featured-container {
-    border-bottom: solid 1px #ddd;
-    margin-bottom: 20px;
-    padding-bottom: 20px;
+    margin-bottom: 10px;
 
     #primary-featured-image {
-       animation: fader 3.8s;
+       animation: fader 1.5s;
     }
 
     #featured-side {
@@ -16,25 +25,47 @@
             
             & .featured-side-img {
                 margin: auto;
-                animation: fader 0.8s;
+                animation: fader 1.5s;
             }
 
             & .featured-title {
                 padding-top: 7px;
+                margin-bottom: 5px;
             }
         }
     }
 
-    #featured-bottom {
-        margin-bottom: 20px;
+    /** Featured container only displayed on non-mobile */
+    @media (max-width: $phone) {
+        display: none;
+    }
+}
+
+/** Featured Collection slideshow on mobile is ngBoostrap carousel */
+#featured-mobile-container {
+
+    /* Eliminate default input focus outline. */
+    & :focus {
+        outline: none !important;
     }
 
-    @keyframes fader {
-        0% {
-            opacity: 0.1;
-        }
-        100% {
-            opacity: 1;
+    img {
+        animation: fader 1.5s;
+    }
+
+    @media (min-width: $phone) {
+        display: none;
+    }
+}
+
+#featured-bottom {
+    margin-bottom: 20px;
+    border-bottom: solid 1px #ddd;
+    /** Don't display photo caption in bottom row on mobile */
+
+    & .photo-caption {
+        @media (max-width: $phone) {
+            display: none;
         }
     }
 }
