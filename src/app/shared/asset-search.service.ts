@@ -30,7 +30,8 @@ export class AssetSearchService {
     { name: "Culture", value: "artculture", description: "ADVANCED_SEARCH_MODAL.FIELDS.CULTURE" },
     { name: "Technique", value: "arttechnique", description: "ADVANCED_SEARCH_MODAL.FIELDS.TECHNIQUE" },
     { name: "Number", value: "artidnumber", description: "ADVANCED_SEARCH_MODAL.FIELDS.NUMBER" },
-    { name: "SSID", value: "ssid", description: "ADVANCED_SEARCH_MODAL.FIELDS.SSID" }
+    { name: "SSID", value: "ssid", description: "ADVANCED_SEARCH_MODAL.FIELDS.SSID" },
+    { name: "Repository ID", value: "artcurrentrepositoryidnumber", description: "ADVANCED_SEARCH_MODAL.FIELDS.REPO_ID"}
   ]
 
   public latestSearchRequestId: string
