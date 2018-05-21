@@ -474,32 +474,33 @@
           "ALT_TEXT": "The Metropolitan Museum of Art: Brooklyn Museum Costumes"
         }
       ],
-      "PUBLIC_COLLECTIONS": [{
-          "SUBHEADING": "Pueblo in Taos, New Mexico",
-          "DESCRIPTION": "Photo taken 2008 by SAHARA contributor Dell Upton.",
-          "CAPTION": "",
-          "LINK": "/#/asset/HUSAHARA_1113121791",
-          "IMG_SOURCE": "/assets/img/featured-collection-sahara.jpg",
-          "LINK_TITLE": "Pueblo in Taos, New Mexico",
-          "ALT_TEXT": "Pueblo in Taos, New Mexico"
+      "PUBLIC_COLLECTIONS": [
+        {
+          "SUBHEADING": "Art Institute of Chicago",
+          "DESCRIPTION": "Georges Seurat. A Sunday on La Grande Jatte. 1884-1886. Oil on canvas. Image and original data provided by The Art Institute of Chicago.",
+          "CAPTION": "Georges Seurat. A Sunday on La Grande Jatte. 1884-1886. Oil on canvas. Image and original data provided by The Art Institute of Chicago.",
+          "LINK": "/#/category/1031896041 ",
+          "IMG_SOURCE": "/assets/img/featured-collections/AIC_Sunday.jpg",
+          "LINK_TITLE": "Art Institute of Chicago",
+          "ALT_TEXT": "Art Institute of Chicago"
         },
         {
-          "SUBHEADING": "Pueblo in Taos, New Mexico",
-          "DESCRIPTION": "Photo taken 2008 by SAHARA contributor Dell Upton.",
-          "CAPTION": "",
-          "LINK": "/#/asset/HUSAHARA_1113121791",
-          "IMG_SOURCE": "/assets/img/featured-collection-sahara.jpg",
-          "LINK_TITLE": "Pueblo in Taos, New Mexico",
-          "ALT_TEXT": "Pueblo in Taos, New Mexico"
+          "SUBHEADING": "Muhlenberg College: Navy V-12 and V-5 World War II Photograph Collection",
+          "DESCRIPTION": "Navy V-12 students on parade. 1943. Photograph. Muhlenberg College: Navy V-12 and V-5 World War II Photograph Collection",
+          "CAPTION": "Navy V-12 students on parade. 1943. Photograph. Muhlenberg College: Navy V-12 and V-5 World War II Photograph Collection",
+          "LINK": "/#/collection/87731255 ",
+          "IMG_SOURCE": "/assets/img/featured-collections/Muhlenberg_Navy.jpg",
+          "LINK_TITLE": "Muhlenberg College: Navy V-12 and V-5 World War II Photograph Collection",
+          "ALT_TEXT": "Muhlenberg College: Navy V-12 and V-5 World War II Photograph Collection"
         },
         {
-          "SUBHEADING": "Pueblo in Taos, New Mexico",
-          "DESCRIPTION": "Photo taken 2008 by SAHARA contributor Dell Upton.",
-          "CAPTION": "",
-          "LINK": "/#/asset/HUSAHARA_1113121791",
-          "IMG_SOURCE": "/assets/img/featured-collection-sahara.jpg",
-          "LINK_TITLE": "Pueblo in Taos, New Mexico",
-          "ALT_TEXT": "Pueblo in Taos, New Mexico"
+          "SUBHEADING": "The Metropolitan Museum of Art: Brooklyn Museum Costumes",
+          "DESCRIPTION": "Caption: Parasol. 1886. Silk, wood, metal. Image and original data from the Brooklyn Museum.",
+          "CAPTION": "Parasol. 1886. Silk, wood, metal. Image and original data from the Brooklyn Museum.",
+          "LINK": "/#/category/1034948173 ",
+          "IMG_SOURCE": "/assets/img/featured-collections/BrooklynMuseum_parasol.jpg",
+          "LINK_TITLE": "The Metropolitan Museum of Art: Brooklyn Museum Costumes",
+          "ALT_TEXT": "The Metropolitan Museum of Art: Brooklyn Museum Costumes"
         }
       ]
     },

@@ -1,21 +1,33 @@
 .row#featured-container
+  //- Primary Image
   .col-sm-9.featured-col
     a#featuredCollectionLink.card.featured-card([attr.href]="featured[primaryFeaturedIndex].link | translate")
       img#primary-featured-img.card-img-top.no-stretch([attr.src]="featured[primaryFeaturedIndex].img_src | translate", [attr.alt]="featured[primaryFeaturedIndex].alt | translate", [attr.title]="featured[primaryFeaturedIndex].link_title | translate")
-
+  //- Secondary Images
   .col-sm-3.featured-col#featured-side
     .card(*ngFor="let collection of featured; let i = index")
+      //- Title and description of the current primary image
       b.featured-title(*ngIf="primaryFeaturedIndex === i", [innerHtml]="collection.subheading | translate")
-      p.featured-caption(*ngIf="primaryFeaturedIndex === i", [innerHtml]="collection.description | translate")
-
+      p.featured-caption.small(*ngIf="primaryFeaturedIndex === i", [innerHtml]="collection.description | translate")
       img.no-stretch.featured-side-img(*ngIf="primaryFeaturedIndex !== i", (click)="switchFeaturedIndex(i)", [attr.src]="collection.img_src | translate",
        [attr.alt]="collection.alt_text | translate", [attr.title]="collection.link | translate")
 
+//- ngBoostrap carousel on mobile
+.row#featured-mobile-container
+  ngb-carousel
+    ng-template(*ngFor="let collection of featured", ngbSlide)
+      a#featuredCollectionLink.card.featured-card([attr.href]="featured[primaryFeaturedIndex].link | translate")
+        img.d-block.w-100([attr.src]="collection.img_src | translate", [attr.alt]="collection.alt | translate", [attr.title]="collection.link_title | translate")
+      p.small([innerHTML]="featured[primaryFeaturedIndex].caption | translate")
+
+//- Bottom row of slideshow - dynamic links if logged in
 .row#featured-bottom
-  .col-6
+  .col-3
     label(*ngIf="user.isLoggedIn", [innerHtml]="headings + '.INST' | translate")
     label(*ngIf="!user.isLoggedIn", [innerHtml]="headings + '.PUBLIC' | translate")
   .col-6
+    p.photo-caption.small([innerHTML]="featured[primaryFeaturedIndex].caption | translate")
+  .col-3
     p.text-right
       a.link.text-right(*ngIf="user.isLoggedIn" href="/browse/institution", [innerHtml]="headings + '.VIEW_ALL_LINK' | translate")
       a.link.text-right(*ngIf="!user.isLoggedIn" href="/browse/commons", [innerHtml]="headings + '.VIEW_PUBLIC_LINK' | translate")
