@@ -292,7 +292,8 @@
       "CULTURE": "Search assets by Culture",
       "TECHNIQUE": "Search assets by Technique",
       "ID NUMBER": "Search assets by ID Number",
-      "SSID": "Search for asset by ID provided by Forum"
+      "SSID": "Search for asset by ID provided by Forum",
+      "REPO_ID": "Search assets by Repository ID"
     }
   },
   "RETURN_HOME" : "Return Home",
