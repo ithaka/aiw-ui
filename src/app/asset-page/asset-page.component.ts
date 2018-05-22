@@ -96,9 +96,7 @@ export class AssetPage implements OnInit, OnDestroy {
     private collections: any[] = []
     private collectionName: string = ''
     /** Controls the display of the collection type icon */
-    private collectionType: CollectionTypeInfo = { name: '', alt: '', badgeText: '' }
-
-    private collectionTypeHandler: CollectionTypeHandler = new CollectionTypeHandler()
+    private collectionType: CollectionTypeInfo = { name: '', alt: '', badgeText: '', type: 0 }
 
     // To keep a track of browse direction ('prev' / 'next') while browsing through assets, to load next asset if the current asset is un-authorized
     private browseAssetDirection: string = ''
@@ -349,7 +347,7 @@ export class AssetPage implements OnInit, OnDestroy {
                 let currentAssetId: string = this.assets[0].id || this.assets[0]['objectId'] // couldn't trust the 'this.assetIdProperty' variable
                 // Search returns a 401 if /userinfo has not yet set cookies
                 if (Object.keys(this._auth.getUser()).length !== 0) {
-                    this.collectionType = this.collectionTypeHandler.getCollectionType([asset.collectionType], asset.contributinginstitutionid)
+                    this.collectionType = CollectionTypeHandler.getCollectionType([asset.collectionType], asset.contributinginstitutionid)
                 }
                 this.generateImgURL()
 
