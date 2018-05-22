@@ -11,7 +11,7 @@
   //- Secondary Images
   .col-sm-3.featured-col#featured-side
     .card(*ngFor="let collection of featured; let i = index")
-      .card__placard(*ngIf="primaryFeaturedIndex === i")
+      a.card__placard(*ngIf="primaryFeaturedIndex === i", [attr.href]="featured[i].link | translate")
         //- Title and description of the current primary image
         .featured-title([innerHtml]="collection.subheading | translate")
         p.featured-caption.small([innerHtml]="collection.description | translate")
