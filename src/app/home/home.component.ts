@@ -6,6 +6,7 @@ import { Ng2DeviceService } from 'ng2-device-detector';
 import { AssetService, AuthService, } from '../shared';
 import { AnalyticsService } from '../analytics.service';
 import { AppConfig } from '../app.service';
+import { Featured } from './featured'
 
 declare var initPath: string
 
@@ -15,7 +16,7 @@ declare var initPath: string
   // where, in this case, selector is the string 'home'
   selector: 'home',  // <home></home>
   // Our list of styles in our component. We may add more to compose many styles together
-  styleUrls: [ './home.component.scss' ],
+  styleUrls: ['./home.component.scss'],
   // Every Angular template is first compiled by the browser before Angular runs it's compiler
   templateUrl: './home.component.pug'
 })
@@ -24,7 +25,7 @@ export class Home implements OnInit, OnDestroy {
 
   private artStorEmailLink: string = ''
   private userGeoIP: any = {}
-  private featuredCollectionConf = ""
+  // private featuredCollectionConf = ''
 
   // Set our default values
   localState = { value: '' }
@@ -49,12 +50,12 @@ export class Home implements OnInit, OnDestroy {
 
   // TypeScript public modifiers
   constructor(
-      public _appConfig: AppConfig,
-      private _assets: AssetService,
-      private _router: Router,
-      private _auth: AuthService,
-      private _analytics: AnalyticsService,
-      private deviceService: Ng2DeviceService
+    public _appConfig: AppConfig,
+    private _assets: AssetService,
+    private _router: Router,
+    private _auth: AuthService,
+    private _analytics: AnalyticsService,
+    private deviceService: Ng2DeviceService
   ) {
     // this makes the window always render scrolled to the top
     this._router.events.subscribe(() => {
@@ -63,12 +64,12 @@ export class Home implements OnInit, OnDestroy {
 
     this.showBlog = this._appConfig.config.showHomeBlog
     this.showPrivateCollections = this._appConfig.config.browseOptions.myCol
-    this.featuredCollectionConf = this._appConfig.config.featuredCollection
     this.browseSec = this._appConfig.config.homeBrowseSec
     this.showHomeSSC = this._appConfig.config.showHomeSSC
     this.showHomeAd = this._appConfig.config.showHomeAd
     this.siteID = this._appConfig.config.siteID
     this.defaultGrpBrwseBy = this._appConfig.config.defaultGrpBrwseBy
+    // this.featuredCollectionConf = this._appConfig.config.featuredCollection
   }
 
   ngOnInit() {
@@ -76,7 +77,7 @@ export class Home implements OnInit, OnDestroy {
     // Provide redirects for initPath detected in index.html from inital load
     if (initPath) {
       this._router.navigateByUrl(initPath)
-        .then( result => {
+        .then(result => {
           // Clear variable to prevent further redirects
           initPath = null
           console.log('Redirect to initial path attempt: ' + result)
@@ -119,34 +120,34 @@ export class Home implements OnInit, OnDestroy {
           )
       )
 
-      this._assets.getBlogEntries()
-        .then((data) => {
-          if (data['posts']) {
-            this.blogPosts = data['posts'];
-          }
-          this.blogLoading = false;
-        },)
-        .catch((error) => {
-          console.log(error);
-          this.blogLoading = false;
-        });
+    this._assets.getBlogEntries()
+      .then((data) => {
+        if (data['posts']) {
+          this.blogPosts = data['posts'];
+        }
+        this.blogLoading = false;
+      }, )
+      .catch((error) => {
+        console.log(error);
+        this.blogLoading = false;
+      });
 
-        this._analytics.setPageValues('Home', '')
+    this._analytics.setPageValues('Home', '')
 
-        // Grab session info for Email Artstor link
-        this._auth.getUserIP().subscribe( (res) => {
-          if(res){
-            this.userGeoIP = res;
-            this.fetchDeviceInfo();
-          }
-        })
+    // Grab session info for Email Artstor link
+    this._auth.getUserIP().subscribe((res) => {
+      if (res) {
+        this.userGeoIP = res;
+        this.fetchDeviceInfo();
+      }
+    })
   } // OnInit
 
   ngOnDestroy() {
     this.subscriptions.forEach((sub) => { sub.unsubscribe(); });
   }
 
-  private fetchDeviceInfo(): void{
+  private fetchDeviceInfo(): void {
     // Detect if adblocker is enabled or not
     let adBlockEnabled = false;
     let testAd = document.createElement('div');
