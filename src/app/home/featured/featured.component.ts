@@ -23,6 +23,7 @@ export class FeaturedComponent implements OnInit {
 
   // Array index for which collection is the 'primary image'
   private primaryFeaturedIndex: number = 0
+  private skipAutoSlide: boolean = false
 
   constructor(public _appConfig: AppConfig, private _auth: AuthService) {
     this.conf = this._appConfig.config.featuredCollection // 'HOME.FEATURED' in en.json
@@ -53,6 +54,7 @@ export class FeaturedComponent implements OnInit {
   // Switch the primary main slideshow image via collection index (0, 1, or 2)
   private switchFeaturedIndex(index: number): void {
     this.primaryFeaturedIndex = index
+    this.skipAutoSlide = true
   }
 
   /**
@@ -64,10 +66,14 @@ export class FeaturedComponent implements OnInit {
     this.primaryFeaturedIndex = primary_index
       
       setInterval(() => {
-        if (this.primaryFeaturedIndex === 2)
-          this.primaryFeaturedIndex = 0
-        else
-          this.primaryFeaturedIndex += 1
+        if (!this.skipAutoSlide) {
+          if (this.primaryFeaturedIndex === 2)
+            this.primaryFeaturedIndex = 0
+          else
+            this.primaryFeaturedIndex += 1
+        } else {
+          this.skipAutoSlide = false
+        }
       }, 7000)
   }
 
