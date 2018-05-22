@@ -21,9 +21,9 @@ header.navbar.navbar-light
               b Accessing Public Content
               div
                 a.link((click)="navigateAndSaveRoute('/login')" tabindex="1") Log in
-                | &nbsp;or&nbsp;
-                a.link((click)="navigateAndSaveRoute('/register')" tabindex="1") Register
-                | &nbsp;for future access
+                span(*ngIf="!user.unaffliatedUser") &nbsp;or&nbsp;
+                a.link(*ngIf="!user.unaffliatedUser", (click)="navigateAndSaveRoute('/register')", tabindex="1") Register
+                span &nbsp;for further access
               div(*ngIf="institutionObj.displayName || institutionObj.institutionName")
                 | Institution: {{ institutionObj.displayName ? institutionObj.displayName : institutionObj.institutionName }}
 ang-session-expire-modal(*ngIf="showinactiveUserLogoutModal && showLoginPanel" "(closeModal)"="inactiveUsrLogOut()")
