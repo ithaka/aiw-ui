@@ -1,5 +1,5 @@
 import { Locker } from 'angular2-locker';
-import { Component } from '@angular/core'
+import { Component, OnInit, OnDestroy } from '@angular/core'
 import { Router, ActivatedRoute } from '@angular/router'
 import { Location } from '@angular/common'
 import { Angulartics2 } from 'angulartics2'
@@ -17,7 +17,7 @@ declare var initPath: string
   styleUrls: [ './login.component.scss' ],
   templateUrl: './login.component.pug'
 })
-export class Login {
+export class Login implements OnInit, OnDestroy {
 
   private copyBase: string = ''
 
@@ -47,6 +47,8 @@ export class Login {
   private instListSubject: BehaviorSubject<any[]> = new BehaviorSubject([])
   private instListObs: Observable<any[]> = this.instListSubject.asObservable()
 
+  private subscriptions: Subscription[] = []
+
 
   // TypeScript public modifiers
   constructor(
@@ -64,6 +66,18 @@ export class Login {
   }
 
   ngOnInit() {
+    /*
+     * Subscribe to route params
+     * Set featureFlag in Auth service if the route param contains featureFlag
+     * The featureFlag values in Auth service would be persistant until the page is refreshed
+    */
+    this.subscriptions.push(
+      this.route.params.subscribe((params) => {
+        if(params && params['featureFlag']){
+          this._auth.featureFlags[params['featureFlag']] = true
+        }
+      })
+    )
 
     // Check for a stashed route to pass to proxy links
     this.stashedRoute = this._storage.get("stashedRoute")
@@ -125,7 +139,9 @@ export class Login {
     this._analytics.setPageValues('login', '')
   } // OnInit
 
-
+  ngOnDestroy() {
+    this.subscriptions.forEach((sub) => { sub.unsubscribe() })
+  }
 
   private sortInstitution(event) : void {
     // sort array by string input
