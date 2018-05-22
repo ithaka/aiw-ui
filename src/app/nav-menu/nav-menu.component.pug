@@ -11,14 +11,14 @@
         li.nav-item(ngbDropdown, (mouseenter)="openDrop($event, drop1)", (mouseleave)="closeDrop($event, drop1)", #drop1="ngbDropdown")
           button#dropdownMenu1.btn.btn-link(ngbDropdownToggle) {{ 'NAV_MENU.COLLECTIONS.TITLE' | translate }}
           .dropdown-menu(ngbDropdownMenu, aria-labelledby="dropdownMenu1")
-            button.dropdown-item(*ngIf="user.isLoggedIn && browseOpts.artstorCol", [routerLink]="['/browse', 'library']") {{ 'NAV_MENU.COLLECTIONS.ARTSTOR' | translate }}
-            button.dropdown-item(*ngIf="user.isLoggedIn && browseOpts.instCol", [routerLink]="['/browse', 'institution']") {{ 'NAV_MENU.COLLECTIONS.INSTITUTION' | translate }}
+            button.dropdown-item(*ngIf="user.status && browseOpts.artstorCol", [routerLink]="['/browse', 'library']") {{ 'NAV_MENU.COLLECTIONS.ARTSTOR' | translate }}
+            button.dropdown-item(*ngIf="user.status && browseOpts.instCol", [routerLink]="['/browse', 'institution']") {{ 'NAV_MENU.COLLECTIONS.INSTITUTION' | translate }}
             button.dropdown-item(*ngIf="browseOpts.openCol", [routerLink]="['/browse', 'commons']") {{ 'NAV_MENU.COLLECTIONS.OPEN' | translate }}
             button.dropdown-item(*ngIf="browseOpts.myCol", [class.disabled]="!pcEnabled", [routerLink]="['/browse', 'mycollections']") {{ 'NAV_MENU.COLLECTIONS.OWNED' | translate }}
-            button.dropdown-item(*ngIf="user.isLoggedIn && browseOpts.igs", [routerLink]="['/browse','groups', defaultGrpBrwseBy]") {{ 'NAV_MENU.COLLECTIONS.GROUPS' | translate }}
-        //li.nav-item(*ngIf="user.isLoggedIn")
+            button.dropdown-item(*ngIf="user.status && browseOpts.igs", [routerLink]="['/browse','groups', defaultGrpBrwseBy]") {{ 'NAV_MENU.COLLECTIONS.GROUPS' | translate }}
+        //li.nav-item(*ngIf="user.status")
           a.btn.btn-link([routerLink]="['/browse','groups', defaultGrpBrwseBy]", routerLinkActive="active") {{ 'NAV_MENU.GROUPS' | translate }}
-        li.nav-item(*ngIf="user.isLoggedIn", ngbDropdown, (mouseenter)="openDrop($event, drop2)", (mouseleave)="closeDrop($event, drop2)", #drop2="ngbDropdown")
+        li.nav-item(*ngIf="user.status", ngbDropdown, (mouseenter)="openDrop($event, drop2)", (mouseleave)="closeDrop($event, drop2)", #drop2="ngbDropdown")
           button#organizeMenu.btn.btn-link(ngbDropdownToggle) {{ 'NAV_MENU.ORGANIZE.TITLE' | translate }}
           .dropdown-menu(ngbDropdownMenu, aria-labelledby="organizeMenu")
             // Active on Image Group Page
