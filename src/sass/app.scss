@@ -290,3 +290,16 @@ body body{
 .tooltip-inner {
   width: 140px;
 }
+
+// Featured collections - mobile carousel
+#featured-mobile-container {
+  .carousel-indicators {
+      top: 225px;
+
+      & li {
+          border-radius: 12px;
+          width: 12px;
+          height: 12px;
+      }
+    }
+}
