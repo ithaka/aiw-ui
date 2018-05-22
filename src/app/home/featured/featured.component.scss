@@ -18,6 +18,15 @@
         & .card {
             height: 33.3%;
             padding: 3px;
+            margin-left: 5px;
+
+            &:first-child {
+                padding-top: 0px;
+            }
+
+            &:last-child {
+                padding-bottom: 0px;
+            }
             
             & .featured-side-img {
                 margin: auto;
@@ -74,33 +83,25 @@
 }
 
 #featured-primary {
-    // Use the column to crop the featured image
-    overflow: hidden;
-
     & .featured-card {
         width: 100%;
         height: auto;
     }
 
     @media(min-width: $phone) {
-        // Do not override padding left! Let Bootstrap space the column
-        padding-right: 3px;
-        padding-top: 3px;
-        padding-bottom: 3px;
-        // Little hack to guarantee our right side spacing is consistent
-        box-sizing: border-box;
-        -moz-box-sizing: border-box;
-        -webkit-box-sizing: border-box;
-        border-right: 3px solid #fff;
-        // ... and align our bottom edge
-        border-bottom: 3px solid #fff;
+        padding: 0px;
     }
 }
 
 .featured-card {
     transition: opacity ease 1.5s;
     opacity: 0;
-    position: absolute;
+
+    // Use the first card for relative sizing, and display the others on top
+    & + & {
+        position: absolute;
+        top: 0px;
+    }
 
     &.fade-in {
         opacity: 1;
@@ -132,8 +133,8 @@
 #featured-bottom {
     margin-bottom: 20px;
     border-bottom: solid 1px #ddd;
-    /** Don't display photo caption in bottom row on mobile */
 
+    /** Don't display photo caption in bottom row on mobile */
     & .photo-caption {
         @media (max-width: $phone) {
             display: none;
