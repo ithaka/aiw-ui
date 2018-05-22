@@ -38,6 +38,8 @@ export class Login {
   private stashedRoute: string
   private dataService: LocalData
 
+  public showRegister: boolean = false
+
   /** 
    * Observable for autocomplete list of institutions
    * - We apply additional sorting 
@@ -81,7 +83,7 @@ export class Login {
     }
 
     // The true institutions call. Don't throw an error, since the above call will provide a backup
-    this._auth.getInstitutions()
+  this._auth.getInstitutions()
       .then((data) => {
         if (data['items']) {
           this.loginInstitutions = data['items'];
@@ -108,6 +110,17 @@ export class Login {
       .catch((error) => {
         console.error(error);
       });
+
+    // this handles showing the register link for only ip auth'd users
+    this._auth.getIpAuth()
+      .take(1)
+      .subscribe((res) => {
+        if (res.remoteaccess === false && res.user) {
+          this.showRegister = true
+        }
+      }, (err) => {
+        console.error(err)
+      })
 
     this._analytics.setPageValues('login', '')
   } // OnInit
