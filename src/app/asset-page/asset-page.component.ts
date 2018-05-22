@@ -96,9 +96,7 @@ export class AssetPage implements OnInit, OnDestroy {
     private collections: any[] = []
     private collectionName: string = ''
     /** Controls the display of the collection type icon */
-    private collectionType: CollectionTypeInfo = { name: '', alt: '', badgeText: '' }
-
-    private collectionTypeHandler: CollectionTypeHandler = new CollectionTypeHandler()
+    private collectionType: CollectionTypeInfo = { name: '', alt: '', badgeText: '', type: 0 }
 
     // To keep a track of browse direction ('prev' / 'next') while browsing through assets, to load next asset if the current asset is un-authorized
     private browseAssetDirection: string = ''
@@ -124,7 +122,6 @@ export class AssetPage implements OnInit, OnDestroy {
     private isProcessing: boolean = false // controls loading class on delete button
     private deleteLoading: boolean = false
     private showExitEdit: boolean = false
-    private pcFeatureFlag: boolean = false
     private showDeletePCModal: boolean = false
     private downloadLoading: boolean = false
 
@@ -166,8 +163,6 @@ export class AssetPage implements OnInit, OnDestroy {
 
     ngOnInit() {
         this.user = this._auth.getUser();
-        // Enable PC featureFlag if the logged-in user is a beta tester
-        this.pcFeatureFlag = this._auth.isBetaUser()
 
         // For "Go Back to Results"
         let prevRouteParams = this._storage.get('prevRouteParams');
@@ -195,10 +190,6 @@ export class AssetPage implements OnInit, OnDestroy {
                 if (routeParams && routeParams['featureFlag']) {
                     this._auth.featureFlags[routeParams['featureFlag']] = true
                     this.relatedResFlag = this._auth.featureFlags['related-res-hack'] ? true : false
-
-                    if (this._auth.featureFlags['uploadPC']) {
-                        this.pcFeatureFlag = true
-                    }
                 } else {
                     this.relatedResFlag = false
                 }
@@ -356,7 +347,7 @@ export class AssetPage implements OnInit, OnDestroy {
                 let currentAssetId: string = this.assets[0].id || this.assets[0]['objectId'] // couldn't trust the 'this.assetIdProperty' variable
                 // Search returns a 401 if /userinfo has not yet set cookies
                 if (Object.keys(this._auth.getUser()).length !== 0) {
-                    this.collectionType = this.collectionTypeHandler.getCollectionType([asset.collectionType], asset.contributinginstitutionid)
+                    this.collectionType = CollectionTypeHandler.getCollectionType([asset.collectionType], asset.contributinginstitutionid)
                 }
                 this.generateImgURL()
 
@@ -703,6 +694,12 @@ export class AssetPage implements OnInit, OnDestroy {
         and then sets generatedViewUrl to this local reference. **/
 
     private genDownloadViewLink(): void {
+        
+        // Do nothing if this is not an image
+        if (!this.assets[0].typeName || !this.assets[0].typeName.length) {
+            return
+        }
+
         let asset = this.assets[0]
         this.downloadLoading = true // sets to false on success of runDownloadView
 
@@ -784,8 +781,8 @@ export class AssetPage implements OnInit, OnDestroy {
      * - sets url used by agree modal
      */
     setDownloadImage(): void {
-        this.downloadUrl = this.generatedFullURL;
-        this.showAgreeModal = true;
+        this.downloadUrl = this.generatedFullURL
+        this.showAgreeModal = true
         this.downloadName = 'download'
     }
 
@@ -1101,6 +1098,7 @@ export class AssetPage implements OnInit, OnDestroy {
                 }
                 // Public Collection
                 else if (col.type === '5') {
+                    asset.publicDownload = true
                     return ['/collection', col.id]
                 }
                 else {

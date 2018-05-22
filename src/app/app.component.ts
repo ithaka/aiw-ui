@@ -21,7 +21,9 @@ import { ScriptService } from './shared';
   ],
   template: `
     <ang-sky-banner *ngIf="showSkyBanner" [textValue]="'DOWNTIME_BANNER.MESSAGE' | translate" (closeBanner)="showSkyBanner = false"></ang-sky-banner>
-    <a (click)="findMainContent()" (keydown.enter)="findMainContent()" tabindex="1" class="sr-only sr-only-focusable">Skip to main content</a>
+    <div id="skip" tabindex="-1" aria-activedescendant="button">
+      <button id="button" (click)="findMainContent()" (keydown.enter)="findMainContent()" tabindex="0" class="sr-only sr-only-focusable"> Skip to main content </button>
+    </div>
     <nav-bar></nav-bar>
 
     <main tabindex="-1">
@@ -58,6 +60,10 @@ export class App {
     // Set metatitle to "Artstor" except for asset page where metatitle is {{ Asset Title }}
     router.events.subscribe(event => {
       if(event instanceof NavigationStart) {
+        // focus on the wrapper of the "skip to main content link" everytime new page is loaded
+        let mainEl = <HTMLElement>(document.getElementById("skip"))
+        mainEl.focus()
+        
         let event_url_array = event.url.split('/')
         if(event_url_array && (event_url_array.length > 1) && (event_url_array[1] !== 'asset')){
           this.titleService.setTitle(this.title)
@@ -91,10 +97,23 @@ export class App {
   ngOnInit() {
     // Toggle Banner here to show alerts and updates!
     // this.showSkyBanner = true
-
   }
 
   private findMainContent(): void {
-    document.getElementById("mainContent").focus()
+    let htmlelement:HTMLElement = document.getElementById("mainContent");
+    let element:Element;
+    // On log in page, go to log in box
+    if(htmlelement.querySelector("form div input")){
+      element = htmlelement.querySelector("form div input");
+    }
+    // On any page that has search bar, go to search box
+    else if(htmlelement.querySelector("div input")){  
+      element = htmlelement.querySelector("div input"); 
+    }
+    // On asset page, go to the container that contains the item details
+    else {
+      element = htmlelement;
+    }
+    (<HTMLElement>element).focus(); 
   }
 }
