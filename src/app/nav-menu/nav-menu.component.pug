@@ -16,7 +16,7 @@
             button.dropdown-item(*ngIf="browseOpts.openCol", [routerLink]="['/browse', 'commons']") {{ 'NAV_MENU.COLLECTIONS.OPEN' | translate }}
             button.dropdown-item(*ngIf="browseOpts.myCol", [routerLink]="['/browse', 'mycollections']") {{ 'NAV_MENU.COLLECTIONS.OWNED' | translate }}
             button.dropdown-item(*ngIf="browseOpts.igs && !user.unaffliatedUser", [routerLink]="['/browse','groups', defaultGrpBrwseBy]") {{ 'NAV_MENU.COLLECTIONS.GROUPS' | translate }}
-        li.nav-item(ngbDropdown, (mouseenter)="openDrop($event, drop2)", (mouseleave)="closeDrop($event, drop2)", #drop2="ngbDropdown")
+        li.nav-item(*ngIf="!user.unaffliatedUser", ngbDropdown, (mouseenter)="openDrop($event, drop2)", (mouseleave)="closeDrop($event, drop2)", #drop2="ngbDropdown")
           button#organizeMenu.btn.btn-link(ngbDropdownToggle) {{ 'NAV_MENU.ORGANIZE.TITLE' | translate }}
           .dropdown-menu(ngbDropdownMenu, aria-labelledby="organizeMenu")
             // Active on Image Group Page
