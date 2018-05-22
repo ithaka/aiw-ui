@@ -77,6 +77,11 @@
     // Use the column to crop the featured image
     overflow: hidden;
 
+    & .featured-card {
+        width: 100%;
+        height: auto;
+    }
+
     @media(min-width: $phone) {
         // Do not override padding left! Let Bootstrap space the column
         padding-right: 3px;
