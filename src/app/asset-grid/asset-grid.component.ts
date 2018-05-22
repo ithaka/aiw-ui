@@ -504,21 +504,25 @@ export class AssetGrid implements OnInit, OnDestroy {
   }
 
   private cancelReorder(): void {
-    this.reorderMode = false;
-    this.reordering.emit(this.reorderMode);
-    this.goToPage(1);
+    // IE 11 specificially has a caching problem when reloading the group contents
+    let isIE11 = !!window["MSInputMethodContext"] && !!document["documentMode"]
+    this.reorderMode = false
+    this.reordering.emit(this.reorderMode)
+    this.goToPage(1)
     // Force refresh
-    this._assets.clearAssets();
-    this._assets.queryAll(this.route.snapshot.params, true);
+    if (isIE11) {
+      // IE 11 needs a full reload
+      window.location.reload()
+    } else {
+      this._assets.clearAssets()
+      this._assets.queryAll(this.route.snapshot.params, true)
+    }
   }
 
   private saveReorder(): void {
     this.isLoading = true;
 
     let newItemsArray = [];
-
-    // IE 11 need to be told "allResults" changed, therefore "results" has changed
-    this.results = this.allResults
 
     for (let i = 0; i < this.allResults.length; i++) {
       if ('objectId' in this.allResults[i]) {
