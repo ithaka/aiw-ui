@@ -685,6 +685,10 @@ export class AuthService implements CanActivate {
     }
     return isBeta
   }
+
+  public isPublicOnly(): boolean{
+    return this.featureFlags.unaffiliated || (this.getUser() && this.getUser().status)
+  }
 }
 
 export class User {
