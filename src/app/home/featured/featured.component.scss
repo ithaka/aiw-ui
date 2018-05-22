@@ -25,12 +25,6 @@
                 // Show user card can be clicked
                 cursor: pointer;
             }
-
-            & .featured-title {
-                margin-bottom: 7px;
-                font-size: 14px;
-                font-weight: bold;
-            }
         }
     }
 
@@ -52,6 +46,29 @@
     &:hover, &:focus {
         & .featured-title {
             color: $blue;
+        }
+    }
+
+    & .featured-title {
+        margin-bottom: 7px;
+        font-size: 14px;
+        font-weight: bold;
+    }
+
+    @media(max-width: $desktop) {
+        & .featured-title {
+            font-size: 12px;
+            line-height: 13px;
+        }
+        & .featured-caption {
+            font-size: 10px;
+            line-height: 11px;
+        }
+    }
+
+    @media(max-width: $tablet) {
+        & .featured-caption {
+            display: none;
         }
     }
 }
@@ -83,6 +100,11 @@
     &.fade-in {
         opacity: 1;
     }
+
+    @media (max-width: $phone) {
+        opacity: 1;
+        position: relative;
+    }
 }
 
 /** Featured Collection slideshow on mobile is ngBoostrap carousel */
@@ -111,5 +133,11 @@
         @media (max-width: $phone) {
             display: none;
         }
+    }
+}
+
+.hidden-sm-down {
+    @media(max-width: $phone) {
+        display:none;
     }
 }
