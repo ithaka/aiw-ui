@@ -35,7 +35,6 @@ export class LoginFormComponent implements OnInit {
   public forcePwdRst = false
   public successMsgPwdRst = ''
   public loginInstitutions = [] /** Stores the institutions returned by the server */
-  public showRegister: boolean = false
   
   @Input() private copyModifier: string = 'DEFAULT'
 
@@ -69,17 +68,6 @@ export class LoginFormComponent implements OnInit {
     if (this._app.config.copyModifier) {
       this.copyBase = this._app.config.copyModifier + "."
     }
-
-    // this handles showing the register link for only ip auth'd users
-    this._auth.getIpAuth()
-      .take(1)
-      .subscribe((res) => {
-        if (res.remoteaccess === false && res.user) {
-          this.showRegister = true
-        }
-      }, (err) => {
-        console.error(err)
-      })
   } // OnInit
 
   loadForUser(data: any) {
