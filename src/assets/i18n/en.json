@@ -175,7 +175,7 @@
     "TITLE": "Personal Collection",
     "RECENT_TITLE": "Recently Uploaded",
     "META_ADD_INFO": "Click the thumbnail to add metadata. You can also add details from the image page later.",
-    "UPLOAD_TIME_DISCLAIMER": "There may be a delay of up to 30 minutes before recently uploaded images will be ready to view and share.",
+    "UPLOAD_TIME_DISCLAIMER": "There may be a delay of up to 30 minutes before recently uploaded images will be ready to view and share. <a href=\"https://support.artstor.org/?article=upload-images-to-personal-collections#Upload_messaging_PC\" class=\"link\" target=\"_blank\">More about publishing</a>",
     "HELP": "Help",
     "BUTTONS": {
       "CLOSE": "Close",
@@ -292,7 +292,8 @@
       "CULTURE": "Search assets by Culture",
       "TECHNIQUE": "Search assets by Technique",
       "ID NUMBER": "Search assets by ID Number",
-      "SSID": "Search for asset by ID provided by Forum"
+      "SSID": "Search for asset by ID provided by Forum",
+      "REPO_ID": "Search assets by Repository ID"
     }
   },
   "RETURN_HOME" : "Return Home",
@@ -317,13 +318,17 @@
       "DESCRIPTION" : "Images in the Digital Library have been assigned geography terms according to two different criteria: location of the work (for site-specific works such as architecture, mural painting, public monuments, etc.), and nationality of the creator. When these two criteria overlap (for example, an American architect's preparatory drawing for a building built in another country), both country terms are assigned.<br/><br/>Users may browse these terms in conjunction with their classification sub-groupings, as well as keyword and Advanced Search, accessible from the Library home page.",
       "LEAD_IMAGE" : "http://library.artstor.org/assets/img/geography-splash.png"
     },
-    "MY_COLLECTION" : {
+    "MY_COLLECTION": {
+      "UPLOAD_IMGS": "Upload Images",
+      "PC_DESC": "Only you can see this collection. To share these images with others at your institution, add them to an image group. Learn more about Personal Collections.&nbsp; <a href=\"http://support.artstor.org/?article-category=09-using-your-own-images\", target=\"_blank\">http://support.artstor.org/?article-category=09-using-your-own-images</a>",
       "HEADING" : "My Personal Collection",
       "DESCRIPTION" : "Only you can see this collection. To share these images with others at your institution, add them to an image group.<br/><a href=\"http://support.artstor.org/?article-category=09-using-your-own-images\" target=\"_blank\">Learn more about Personal Collections</a>."
     },
     "ERRORS": {
+      "LOGIN_PC_HEADING": "Login Required",
       "NO_INSTITUTIONAL_COLLECTIONS_HEADING": "No Institutional Collections found",
-      "NO_INSTITUTIONAL_COLLECTIONS_PROMPT": "<p>There are no institutional collections available for your institution. You can add institutional collections using Shared Shelf.</p><p>Learn more about <a href=\"http://artstor.org/sharedshelf\" class=\"link\">Shared Shelf</a>.</p>",
+      "NO_INSTITUTIONAL_COLLECTIONS_PROMPT": "<p>There are no institutional collections available for your institution. You can add institutional collections using JSTOR Forum.</p><p>Learn more about <a href=\"http://artstor.org/jstorforum\" class=\"link\">JSTOR Forum</a>.</p>",
+      "LOGIN_PC_COLLECTIONS_PROMPT": "<p>Please login to access your Personal Collection.</p><p>Learn more about <a href=\"https://support.artstor.org/?article-category=09-using-your-own-images\" class=\"link\">Personal Collections</a>.</p>",
       "NO_GROUPS_COLLECTIONS_HEADING": "No Groups Found",
       "NO_PRIVATE_GROUPS_COLLECTIONS_PROMPT": "<p>You haven't made any private groups yet. Learn more about <a href='http://support.artstor.org/?article=create-and-manage-image-groups' class='link'>groups</a>.</p>",
       "NO_INSTITUTIONAL_GROUPS_COLLECTIONS_PROMPT": "<p>You haven't made any institutional groups yet. Learn more about <a href='http://support.artstor.org/?article=create-and-manage-image-groups' class='link'>groups</a>.</p>",
@@ -337,7 +342,8 @@
   "PERSONAL_COLLECTION_PAGE": {
     "BANNER": {
       "DELETE_SUCCESS": "{{title}} was successfully deleted from your personal collection."
-    }
+    },
+    "MORE_ABOUT_PUBLISHING": "<a href=\"https://support.artstor.org/?article=upload-images-to-personal-collections#Upload_messaging_PC\" class=\"link\" target=\"_blank\">More about publishing</a>"
   },
   "FOOTER": {
     "LINKS": {
@@ -435,22 +441,100 @@
       "MORE_CONT_LIST": "To browse the Artstor Digital Library collections, institutional collections, create image groups, and more, you will login as part of your institution."
     },
     "FEATURED": {
-      "HEADING": "Featured Collection",
-      "SUBHEADING": "The Phillips Collection",
-      "DESCRIPTION": "Jacob Lawrence. The Migration of the Negro Panel no. 1. 1940—1941. The Phillips Collection. © 2005 Estate of Gwendolyn Knight Lawrence / Artists Rights Society (ARS).",
-      "LINK": "/#/category/1034446930",
-      "IMG_SOURCE": "/assets/img/featured-collection-lawrence.jpg",
-      "LINK_TITLE": "The Phillips Collection",
-      "ALT_TEXT": "The Phillips Collection"
+      "HEADINGS": {
+        "PUBLIC": "Featured Public Collections",
+        "INST": "Featured Collections",
+        "VIEW_ALL_LINK": "View All Collections",
+        "VIEW_PUBLIC_LINK": "View All Public Collections"
+      },
+      "COLLECTIONS": [{
+          "SUBHEADING": "Art Institute of Chicago",
+          "DESCRIPTION": "The greatest hits and more",
+          "CAPTION": "Georges Seurat. A Sunday on La Grande Jatte. 1884-1886. Oil on canvas. Image and original data provided by The Art Institute of Chicago.",
+          "LINK": "/#/category/1031896041 ",
+          "IMG_SOURCE": "/assets/img/featured-collections/AIC_Sunday.jpg",
+          "LINK_TITLE": "Art Institute of Chicago",
+          "ALT_TEXT": "Art Institute of Chicago"
+        },
+        {
+          "SUBHEADING": "Muhlenberg College: Navy V-12 and V-5 World War II Photograph Collection",
+          "DESCRIPTION": "Students becoming sailors",
+          "CAPTION": "Navy V-12 students on parade. 1943. Photograph. Muhlenberg College: Navy V-12 and V-5 World War II Photograph Collection",
+          "LINK": "/#/collection/87731255 ",
+          "IMG_SOURCE": "/assets/img/featured-collections/Muhlenberg_Navy.jpg",
+          "LINK_TITLE": "Muhlenberg College: Navy V-12 and V-5 World War II Photograph Collection",
+          "ALT_TEXT": "Muhlenberg College: Navy V-12 and V-5 World War II Photograph Collection"
+        },
+        {
+          "SUBHEADING": "The Metropolitan Museum of Art: Brooklyn Museum Costumes",
+          "DESCRIPTION": "The finest fashion and accessories",
+          "CAPTION": "Parasol. 1886. Silk, wood, metal. Image and original data from the Brooklyn Museum.",
+          "LINK": "/#/category/1034948173 ",
+          "IMG_SOURCE": "/assets/img/featured-collections/BrooklynMuseum_parasol.jpg",
+          "LINK_TITLE": "The Metropolitan Museum of Art: Brooklyn Museum Costumes",
+          "ALT_TEXT": "The Metropolitan Museum of Art: Brooklyn Museum Costumes"
+        }
+      ],
+      "PUBLIC_COLLECTIONS": [
+        {
+          "SUBHEADING": "Art Institute of Chicago",
+          "DESCRIPTION": "The greatest hits and more",
+          "CAPTION": "Georges Seurat. A Sunday on La Grande Jatte. 1884-1886. Oil on canvas. Image and original data provided by The Art Institute of Chicago.",
+          "LINK": "/#/category/1031896041 ",
+          "IMG_SOURCE": "/assets/img/featured-collections/AIC_Sunday.jpg",
+          "LINK_TITLE": "Art Institute of Chicago",
+          "ALT_TEXT": "Art Institute of Chicago"
+        },
+        {
+          "SUBHEADING": "Muhlenberg College: Navy V-12 and V-5 World War II Photograph Collection",
+          "DESCRIPTION": "Students becoming sailors",
+          "CAPTION": "Navy V-12 students on parade. 1943. Photograph. Muhlenberg College: Navy V-12 and V-5 World War II Photograph Collection",
+          "LINK": "/#/collection/87731255 ",
+          "IMG_SOURCE": "/assets/img/featured-collections/Muhlenberg_Navy.jpg",
+          "LINK_TITLE": "Muhlenberg College: Navy V-12 and V-5 World War II Photograph Collection",
+          "ALT_TEXT": "Muhlenberg College: Navy V-12 and V-5 World War II Photograph Collection"
+        },
+        {
+          "SUBHEADING": "The Metropolitan Museum of Art: Brooklyn Museum Costumes",
+          "DESCRIPTION": "The finest fashion and accessories",
+          "CAPTION": "Parasol. 1886. Silk, wood, metal. Image and original data from the Brooklyn Museum.",
+          "LINK": "/#/category/1034948173 ",
+          "IMG_SOURCE": "/assets/img/featured-collections/BrooklynMuseum_parasol.jpg",
+          "LINK_TITLE": "The Metropolitan Museum of Art: Brooklyn Museum Costumes",
+          "ALT_TEXT": "The Metropolitan Museum of Art: Brooklyn Museum Costumes"
+        }
+      ]
     },
     "SAHARA_FEATURED": {
-      "HEADING": "Featured Image",
-      "SUBHEADING": "Pueblo in Taos, New Mexico",
-      "DESCRIPTION": "Photo taken 2008 by SAHARA contributor Dell Upton.",
-      "LINK": "/#/asset/HUSAHARA_1113121791",
-      "IMG_SOURCE": "/assets/img/featured-collection-sahara.jpg",
-      "LINK_TITLE": "Pueblo in Taos, New Mexico",
-      "ALT_TEXT": "Pueblo in Taos, New Mexico"
+      "SAHARA_COLLECTIONS": [
+        {
+          "SUBHEADING": "Harania Village",
+          "DESCRIPTION": "Arts Center & Habib Gorgy Sculpture Museum",
+          "CAPTION": "The Arts Center and Habib Gorgy Sculpture Museum, Harania Village, Giza, Egypt.  Architect: Ramses Wissa Wassef, 1955.  Photographer: Raghad Mofeed.",
+          "LINK": "#/asset/HSAHARA__1113_25492396",
+          "IMG_SOURCE": "/assets/img/featured-collections/sahara/HSAHARA__1113_25492396.jpg",
+          "LINK_TITLE": "Harania Village",
+          "ALT_TEXT": "Harania Village"
+        },
+        {
+          "SUBHEADING": "Biblioteca Vasconcelos",
+          "DESCRIPTION": "Main lobby and stacks",
+          "CAPTION": "Alberto Kalach and Estudio Tax, Biblioteca Vasconcelos, Mexico City, Mexico, 2006. Photo by Amber Wiley, 2016.",
+          "LINK": "/#/asset/HSAHARA__1113_31055547",
+          "IMG_SOURCE": "/assets/img/featured-collections/sahara/HSAHARA_1113_31055547.jpg",
+          "LINK_TITLE": "Biblioteca Vasconcelos",
+          "ALT_TEXT": "Biblioteca Vasconcelos"
+        },
+        {
+          "SUBHEADING": "Hoover Building",
+          "DESCRIPTION": "Building No. 7 (Factory Canteen Building) & Hoover Building",
+          "CAPTION": "Hoover Building, London, UK.  Designed by Wallis, Gilbert and Partners, 1933 (the canteen building at left was added in 1938). Built to manufacture vacuum cleaners, the factory also built airplane parts during WWII. Purchased by supermarket chain Tesco in 1989. Photo by Richard Longstreth.",
+          "LINK": "/#/asset/HSAHARA__1113_26231600",
+          "IMG_SOURCE": "/assets/img/featured-collections/sahara/HSAHARA_1113_26231600.jpg",
+          "LINK_TITLE": "Hoover Building",
+          "ALT_TEXT": "Hoover Building"
+        }
+      ]
     },
     "AD": {
       "LINK": "http://goo.gl/KAZksy",
@@ -491,7 +575,8 @@
       "DESELECT": "Deselect All",
       "EDIT": "Edit Image Group Info",
       "SAVE": "Save Image Group as...",
-      "DELETE_GROUP": "Delete Image Group"
+      "DELETE_GROUP": "Delete Image Group",
+      "ADD_IMGS_PC": "Add Images to Personal Collection"
     },
     "SHARE": {
       "TITLE": "Share",
