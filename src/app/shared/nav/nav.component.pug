@@ -13,16 +13,17 @@ header.navbar.navbar-light
             .login-panel__status(*ngIf="user.isLoggedIn")
               h2.hidden Login Panel
               #navMessageWelcome Welcome, {{ user.username ? user.username : ''}}
-              #navMessageInstitution.login-panel__institution(*ngIf="institutionObj.displayName || institutionObj.institutionName") Institution: {{ institutionObj.displayName ? institutionObj.displayName : institutionObj.institutionName }}
+              #navMessageInstitution.login-panel__institution(*ngIf="institutionObj.displayName || institutionObj.institutionName") Access provided by {{ institutionObj.displayName ? institutionObj.displayName : institutionObj.institutionName }}
               .login-panel__links
                 a.link--accent([routerLink]=" ['./account'] " routerLinkActive="active" tabindex="1") Settings
                 a.link--accent((click)="logout()" tabindex="1") Log Out
             .login-panel__status(*ngIf="!user.isLoggedIn")
+              b Accessing Public Content
               div
                 a.link((click)="navigateAndSaveRoute('/login')" tabindex="1") Log in
                 span(*ngIf="!user.unaffliatedUser") &nbsp;or&nbsp;
                 a.link(*ngIf="!user.unaffliatedUser", (click)="navigateAndSaveRoute('/register')", tabindex="1") Register
-                span &nbsp;to save images
+                span &nbsp;for further access
               div(*ngIf="institutionObj.displayName || institutionObj.institutionName")
                 | Institution: {{ institutionObj.displayName ? institutionObj.displayName : institutionObj.institutionName }}
 ang-session-expire-modal(*ngIf="showinactiveUserLogoutModal && showLoginPanel" "(closeModal)"="inactiveUsrLogOut()")
