@@ -22,9 +22,9 @@
 .row#featured-mobile-container
   ngb-carousel
     ng-template(*ngFor="let collection of featured", ngbSlide)
-      a#featuredCollectionLink.card.featured-card([attr.href]="featured[primaryFeaturedIndex].link | translate")
+      a#featuredCollectionLink.card.featured-card([attr.href]="collection.link | translate")
         img.d-block.w-100([attr.src]="collection.img_src | translate", [attr.alt]="collection.alt | translate", [attr.title]="collection.link_title | translate")
-      p.small.p-1([innerHTML]="featured[primaryFeaturedIndex].caption | translate")
+      p.small.p-1([innerHTML]="collection.caption | translate")
 
 //- Bottom row of slideshow - dynamic links if logged in
 .row#featured-bottom
