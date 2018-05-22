@@ -1,7 +1,7 @@
 import { HttpErrorResponse } from '@angular/common/http/public_api';
 import { BehaviorSubject, Observable } from 'rxjs/Rx';
 
-import { AssetService, AuthService } from './../shared';
+import { AssetService, AuthService, CollectionTypeHandler } from './../shared';
 
 export class Asset {
   id: string
@@ -15,10 +15,11 @@ export class Asset {
     downloadLink: string
     downloadName: string
     tileSource: string
-    collections: any[]
+    collections: CollectionData[]
     collectionId: number
-    categoryId: number
     collectionType: number
+    collectionName: string
+    categoryId: number
     contributinginstitutionid: number
     SSID: string
     fileName: string
@@ -128,9 +129,6 @@ export class Asset {
     get description(): string {
         return this.formattedMetadata.Description[0] || ''
     }
-    get collectionName(): string {
-        return this.formattedMetadata.Collection[0] || ''
-    }
 
     /**
      * Sets up the Asset object with needed properties
@@ -152,6 +150,8 @@ export class Asset {
         this.typeName = this.initTypeName(data.object_type_id)
         this.disableDownload =  data.download_size === '0,0'
         this.SSID = data.SSID
+        this.collections = data.collections
+        this.setDisplayCollection(this.collections)
         this.fileName = data.fileProperties.find((obj) => {
             return !!obj.fileName
         }).fileName
@@ -175,6 +175,20 @@ export class Asset {
         if (data.fpxInfo) {
             this.kalturaUrl = data.fpxInfo.imageUrl
         }
+    }
+
+    private setDisplayCollection(collections: CollectionData[]) {
+        let collectionTypes: number[] = []
+        this.collections.forEach((collection) => {
+            collectionTypes.push(collection.type)
+        })
+
+        this.collectionType = CollectionTypeHandler.getCollectionType(collectionTypes, this.contributinginstitutionid).type
+        let displayCollection = collections.find((collection) => {
+            return collection.type == this.collectionType
+        })
+        this.collectionName = displayCollection.name
+        this.collectionId = displayCollection.id
     }
 
     /**
@@ -204,9 +218,7 @@ export interface AssetData {
   SSID?: string
   category_id: string
   category_name: string
-  collection_id: string
-  collection_name: string
-  collection_type: number
+  collections: CollectionData[]
   download_size: string
   fileProperties: FileProperty[] // array of objects with a key/value pair
   height: number
@@ -232,9 +244,7 @@ interface AssetDataResponse {
   SSID?: string
   category_id: string
   category_name: string
-  collection_id: string
-  collection_name: string
-  collection_type: number
+  collections: CollectionData[]
   downloadSize?: string
   download_size?: string
   fileProperties: { [key: string]: string }[] // array of objects with a key/value pair
@@ -252,6 +262,12 @@ interface AssetDataResponse {
     panorama_xml?: string
   }
   width: number
+}
+
+export interface CollectionData {
+    id: number
+    name: string
+    type: number
 }
 
 export interface MetadataField {

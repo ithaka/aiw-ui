@@ -473,6 +473,7 @@ export class AuthService implements CanActivate {
    */
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
     let options = { headers: this.userInfoHeader, withCredentials: true }
+
     // If user object already exists, we're done here
     if (this.canUserAccess(this.getUser())) {
       return new Observable(observer => {
@@ -565,6 +566,14 @@ export class AuthService implements CanActivate {
       } else {
         return null
       }
+    } else if(!data['status'] && this.featureFlags['unaffiliated']) {
+      // Return generic user object for unaffliated users
+      let user = {
+        'unaffliatedUser' : true,
+        'status' : data['status'],
+        'isLoggedIn' : false
+      }
+      return user
     } else {
       return null
     }

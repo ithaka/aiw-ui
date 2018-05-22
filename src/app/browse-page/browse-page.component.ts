@@ -30,6 +30,8 @@ export class BrowsePage implements OnInit, OnDestroy {
 
   private browseOpts: any = {}
 
+  private user: any = {}
+
   // TypeScript public modifiers
   constructor(
       locker: Locker,
@@ -47,6 +49,14 @@ export class BrowsePage implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    // Subscribe to User object updates
+    this.subscriptions.push(
+        this._auth.currentUser.subscribe(
+            (userObj) => { this.user = userObj },
+            (err) => { console.error(err) }
+        )
+    );
+
     // Set page title
     this._title.setSubtitle("Browse")
 
@@ -60,12 +70,12 @@ export class BrowsePage implements OnInit, OnDestroy {
       })
     );
 
-    if( this.browseOpts.artstorCol ){
+    if( this.browseOpts.artstorCol && !this.user.unaffliatedUser){
         this.colMenuArray.push( { label: 'Artstor Digital Library', id: '1', link: 'library' } );
     }
 
     this.userTypeId = this._auth.getUser().typeId;
-    if( (this.userTypeId == 1 || this.userTypeId == 2 || this.userTypeId == 3) && this.browseOpts.instCol ){
+    if( (this.userTypeId == 1 || this.userTypeId == 2 || this.userTypeId == 3) && this.browseOpts.instCol && !this.user.unaffliatedUser ){
         let instName = this.institution && this.institution.shortName ? this.institution.shortName : 'Institutional';
         var obj = {
             label : instName + ' Collections',
@@ -88,7 +98,7 @@ export class BrowsePage implements OnInit, OnDestroy {
         this.colMenuArray.splice(2, 0 ,obj);
     }
 
-    if( this.browseOpts.igs ){
+    if( this.browseOpts.igs && !this.user.unaffliatedUser ){
         this.colMenuArray.push( { label: 'Groups', id: '5', link: 'groups' } );
     }
   }
