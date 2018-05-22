@@ -41,7 +41,7 @@ export class Nav implements OnInit, OnDestroy {
     this.subscriptions.push(
       this._router.events.subscribe(e => {
         if (e instanceof NavigationEnd) {
-          let baseRoute: string = e.url.split('/')[1].split('?')[0]
+          let baseRoute: string = e.url.split('/')[1].split('?')[0].split(';')[0]
           switch(baseRoute) {
             case 'assetprint':
             case 'link':
