@@ -24,16 +24,16 @@
     ng-template(*ngFor="let collection of featured", ngbSlide)
       a#featuredCollectionLink.card.featured-card([attr.href]="featured[primaryFeaturedIndex].link | translate")
         img.d-block.w-100([attr.src]="collection.img_src | translate", [attr.alt]="collection.alt | translate", [attr.title]="collection.link_title | translate")
-      p.small([innerHTML]="featured[primaryFeaturedIndex].caption | translate")
+      p.small.p-1([innerHTML]="featured[primaryFeaturedIndex].caption | translate")
 
 //- Bottom row of slideshow - dynamic links if logged in
 .row#featured-bottom
-  .col-3
+  .col
     label(*ngIf="user.isLoggedIn", [innerHtml]="headings + '.INST' | translate")
     label(*ngIf="!user.isLoggedIn", [innerHtml]="headings + '.PUBLIC' | translate")
-  .col-6
+  .col-6.hidden-sm-down
     p.photo-caption.small([innerHTML]="featured[primaryFeaturedIndex].caption | translate")
-  .col-3
+  .col
     p.text-right
       a.link.text-right(*ngIf="user.isLoggedIn" href="/browse/institution", [innerHtml]="headings + '.VIEW_ALL_LINK' | translate")
       a.link.text-right(*ngIf="!user.isLoggedIn" href="/browse/commons", [innerHtml]="headings + '.VIEW_PUBLIC_LINK' | translate")
