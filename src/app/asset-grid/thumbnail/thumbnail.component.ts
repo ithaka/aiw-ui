@@ -35,7 +35,6 @@ export class ThumbnailComponent implements OnInit, OnChanges {
   private editMode: boolean
 
   private constraints: any = {}
-  private collectionTypeHandler: CollectionTypeHandler = new CollectionTypeHandler()
 
   // Variable that determines the thumbnail image size based on largeThmbView and available size for the asset. Defaults to 1 (Small thumbnail view)
   private thumbnailSize: number = 1
@@ -86,7 +85,7 @@ export class ThumbnailComponent implements OnInit, OnChanges {
   // wrapper function for getting the collection type
   getCollectionType(): CollectionTypeInfo {
     // Some endpoints give us the collectionType info in 'collectionType: number', where as others give the same info in 'collectiontypes: Array<number>'
-    return this.collectionTypeHandler.getCollectionType( this.thumbnail['collectionType'] ? [ this.thumbnail['collectionType'] ] : this.thumbnail['collectiontypes'], this.thumbnail['contributinginstitutionid'])
+    return CollectionTypeHandler.getCollectionType( this.thumbnail['collectionType'] ? [ this.thumbnail['collectionType'] ] : this.thumbnail['collectiontypes'], this.thumbnail['contributinginstitutionid'])
   }
 
   // If large thumbnail image fails to load, fallback to smaller thumbnail image
