@@ -47,46 +47,45 @@ export class PptModalComponent implements OnInit {
   }
 
   private getPPT() {
-    this.isLoading = true;
+    this.isLoading = true
     // Setup PPT Download
     this.getDownloadLink(this.ig)
-      .take(1)
-      .subscribe(
-        (data) => {
-          this.isLoading = false;
-          // Goal: A downlink that looks like:
-          // http://mdxdv.artstor.org/thumb/imgstor/...
-          if (data.path) {
-            this.downloadLink = this._auth.getThumbUrl() + data.path.replace('/nas/','/thumb/');
-          }
-        },
-        (error) => { console.error(error); this.isLoading = false; }
-      );
+    .then((data) => {
+      this.isLoading = false
+      // Goal: A downlink that looks like:
+      // http://mdxdv.artstor.org/thumb/imgstor/...
+      if (data.path) {
+        this.downloadLink = this._auth.getThumbUrl() + data.path.replace('/nas/','/thumb/')
+      }
+    })
+    .catch((err) => {
+      console.error(err)
+       this.isLoading = false
+    })
   }
 
   private getZip() {
     this.zipLoading = true;
     // Setup Zip download
     this.getDownloadLink(this.ig, true)
-      .take(1)
-      .subscribe(
-        (data) => {
-          this.zipLoading = false;
-          // Goal: A downlink that looks like:
-          // http://mdxdv.artstor.org/thumb/imgstor/...
-          if (data.path) {
-            this.zipDownloadLink = this._auth.getThumbUrl() + data.path.replace('/nas/','/thumb/');
-          }
-        },
-        (error) => { console.error(error); this.zipLoading = false; }
-      );
+    .then((data) => {
+      this.zipLoading = false;
+      // Goal: A downlink that looks like:
+      // http://mdxdv.artstor.org/thumb/imgstor/...
+      if (data.path) {
+        this.zipDownloadLink = this._auth.getThumbUrl() + data.path.replace('/nas/','/thumb/');
+      }
+    })
+    .catch((err) => {
+      console.error(err)
+      this.zipLoading = false
+    })
   }
 
   /** Gets the link at which the resource can be downloaded. Will be set to the "accept" button's download property */
-  private getDownloadLink(group: ImageGroup, zip ?: boolean): Observable<any> {
-    let header = new HttpHeaders().set('content-type', 'application/x-www-form-urlencoded');
-    let options = { headers: header, withCredentials: true};
-    let imgStr: string = "";
+  private getDownloadLink(group: ImageGroup, zip ?: boolean): Promise<any> {
+    let header = new HttpHeaders().set('content-type', 'application/x-www-form-urlencoded')
+    let options = { headers: header, withCredentials: true }
     let useLegacyMetadata: boolean = true
     let url = this._auth.getHostname() + '/api/group/export'
     let format: string
@@ -98,31 +97,46 @@ export class PptModalComponent implements OnInit {
       format = 'zip'
     }
 
-    group.items.forEach((item, index, items) => {
-        imgStr += [(index + 1), item, "1024x1024"].join(":")
-        if (index !== items.length - 1) {
-            imgStr += ","
-        }
+    /**
+     * We're using this as an auth check - instead of simply using all of the group.items strings and calling for downloads,
+     *  which was allowing restricted assets to be downloaded, we first ask for each assets' thumbnail, which will ensure
+     *  that only assets which the user has access to are returned
+     */
+    return this._assets.getAllThumbnails(group.items, group.id)
+    .then((thumbnails) => {
+      let imgDownloadStrings: string[] = []
+
+      thumbnails.forEach((thumbnail, index) => {
+        let imgStr: string = [(index + 1), thumbnail.objectId, "1024x1024"].join(":")
+        thumbnail.status == 'available' && imgDownloadStrings.push(imgStr)
+      })
+  
+      data = {
+          igName: group.name,
+          images: imgDownloadStrings.join(',')
+      }
+
+      return data
     })
-
-    data = {
-        igName: group.name,
-        images: imgStr
-    }
-
-    // Make authorization call to increment download count
-    this.http
+    .then((data) => {
+      // Return request that provides file URL
+      return this.http
+        .post(url + '/' + format + '/' + group.id + '/' + useLegacyMetadata, this._auth.formEncode(data), options)
+        .toPromise()
+    })
+    .then((res) => {
+      // Make authorization call to increment download count after successful response is received
+      this.http
       .get(url + '/auth/' + group.id + '/true', options)
       .toPromise()
 
-    // Return request that provides file URL
-    return this.http
-      .post(url + '/' + format + '/' + group.id + '/' + useLegacyMetadata, this._auth.formEncode(data), options)
+      return res
+    })
   }
 
   trackDownload(downloadType: string) : void {
-    this._analytics.directCall('request' + downloadType);
-    this._angulartics.eventTrack.next({ action: "downloadGroup" + downloadType, properties: { category: "group", label: this.ig.id }});
+    this._analytics.directCall('request' + downloadType)
+    this._angulartics.eventTrack.next({ action: "downloadGroup" + downloadType, properties: { category: "group", label: this.ig.id }})
   }
 
 }
