@@ -47,6 +47,13 @@
 .card__placard {
     line-height: 15px;
     padding: 6px;
+    cursor: pointer;
+
+    &:hover, &:focus {
+        & .featured-title {
+            color: $blue;
+        }
+    }
 }
 
 #featured-primary {
