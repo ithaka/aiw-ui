@@ -16,12 +16,12 @@ nav-menu
   ang-featured
 
   .row
-    .col-sm-3
-      a#imagePromoSpaceLink.card.hidden-xs-down(*ngIf="showHomePromo", [attr.href]=" 'HOME.AD.LINK' | translate ", target="_blank")
+    .col-sm-3(*ngIf="showHomePromo")
+      a#imagePromoSpaceLink.card.hidden-xs-down([attr.href]=" 'HOME.AD.LINK' | translate ", target="_blank")
         img#home-ad.card-img.no-stretch([attr.src]="'HOME.AD.IMG_SOURCE' | translate", [attr.alt]="'HOME.AD.ALT_TEXT' | translate")
       .card([class.pt-4]="showHomePromo")
-    .col-sm-6
-      .card(*ngIf="showBlog")
+    .col-sm-6(*ngIf="showBlog")
+      .card
         .card-header
           h1([innerHtml]="'HOME.HEADINGS.FRM_BLOG' | translate")
         .loading(*ngIf="blogLoading")
@@ -29,9 +29,9 @@ nav-menu
           a.blog-post(*ngFor="let post of blogPosts | slice:0:3", [href]="post['URL']", target="_blank")
             h3.blog-post__title([innerHtml]="post.title")
             p.blog-post__preview([innerHtml]="post.excerpt")
-    .col-sm-3
+    div([ngClass]="showBlog ? 'col-sm-3' : 'row'")
       //- Institution Shared Shelf Collections
-      .card(*ngIf="institution && instCollections.length > 0")
+      .card(*ngIf="institution && instCollections.length > 0", [class.col-sm-6]="!showBlog")
         .card-header
           h1 {{ 'HOME.HEADINGS.INSTITUTION_COLLECTIONS' | translate:{ institutionName: institution.shortName ? institution.shortName : 'Institutional' } }}
         .list--home-collections([class.loading]="loaders['instCollections']")
@@ -42,19 +42,19 @@ nav-menu
           #errorCollectionsLoading.alert.alert-warning(role="alert")
             strong Error
               | {{ errors.instCollections }}
-      
-      .card-header
-      h3 {{ 'HOME.QUESTIONS.HEADING' | translate }}
-      ul.list-group.list-group-flush.list-group-clean(*ngIf="siteID=='ARTSTOR'")
-        a#linkEmailInstitutionContact.list-group-item.small([href]="institution.institutionContact && institution.institutionContact[0] && institution.institutionContact[0].email ? 'mailto:' + institution.institutionContact[0].email : 'mailto:userservices@artstor.org'") {{ 'HOME.QUESTIONS.EMAIL_INSTITUTION' | translate }}
-        a#linkEmailArtstor.list-group-item.small([href]="artStorEmailLink") {{ 'HOME.QUESTIONS.EMAIL_ARTSTOR' | translate }}
-        a#linkArtstorWebinar.list-group-item.small(href="http://www.artstor.org/webinars?view=ADL", target="_blank") {{ 'HOME.QUESTIONS.WEBINAR' | translate }}
-        a#linkArtstorSurvey.list-group-item.small(href="https://www.surveymonkey.com/r/TW9SKC6", target="_blank") {{ 'HOME.QUESTIONS.SURVEY' | translate }}
-        li#itemArtstorAccess.list-group-item.small(*ngIf="institution.displayName") {{ 'HOME.ACCESS_PROVIDED_BY' | translate }}
-          br
-          b {{ institution.displayName }}
-      ul.list-group.list-group-flush.list-group-clean(*ngIf="siteID=='SAHARA'")
-        li.list-group-item.small
-          a.link--action(href="mailto:sahara@sah.org", [innerHtml]="'HOME.QUESTIONS.SAHARA_QUESTIONS' | translate")
-        li.list-group-item.small
-          a.link--action(href="mailto:support@artstor.org", [innerHtml]="'HOME.QUESTIONS.ARTSTOR_QUESTIONS' | translate") 
+      .card([class.col-sm-3]="!showBlog")
+        .card-header
+        h3 {{ 'HOME.QUESTIONS.HEADING' | translate }}
+        ul.list-group.list-group-flush.list-group-clean(*ngIf="siteID=='ARTSTOR'")
+          a#linkEmailInstitutionContact.list-group-item.small([href]="institution.institutionContact && institution.institutionContact[0] && institution.institutionContact[0].email ? 'mailto:' + institution.institutionContact[0].email : 'mailto:userservices@artstor.org'") {{ 'HOME.QUESTIONS.EMAIL_INSTITUTION' | translate }}
+          a#linkEmailArtstor.list-group-item.small([href]="artStorEmailLink") {{ 'HOME.QUESTIONS.EMAIL_ARTSTOR' | translate }}
+          a#linkArtstorWebinar.list-group-item.small(href="http://www.artstor.org/webinars?view=ADL", target="_blank") {{ 'HOME.QUESTIONS.WEBINAR' | translate }}
+          a#linkArtstorSurvey.list-group-item.small(href="https://www.surveymonkey.com/r/TW9SKC6", target="_blank") {{ 'HOME.QUESTIONS.SURVEY' | translate }}
+          li#itemArtstorAccess.list-group-item.small(*ngIf="institution.displayName") {{ 'HOME.ACCESS_PROVIDED_BY' | translate }}
+            br
+            b {{ institution.displayName }}
+        ul.list-group.list-group-flush.list-group-clean(*ngIf="siteID=='SAHARA'")
+          li.list-group-item.small
+            a.link--action(href="mailto:sahara@sah.org", [innerHtml]="'HOME.QUESTIONS.SAHARA_QUESTIONS' | translate")
+          li.list-group-item.small
+            a.link--action(href="mailto:support@artstor.org", [innerHtml]="'HOME.QUESTIONS.ARTSTOR_QUESTIONS' | translate") 
