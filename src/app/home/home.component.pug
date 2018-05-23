@@ -18,7 +18,7 @@ nav-menu
   .row
     .col-sm-3(*ngIf="showHomePromo")
       a#imagePromoSpaceLink.card.hidden-xs-down([attr.href]=" 'HOME.AD.LINK' | translate ", target="_blank")
-        img#home-ad.card-img.no-stretch([attr.src]="'HOME.AD.IMG_SOURCE' | translate", [attr.alt]="'HOME.AD.ALT_TEXT' | translate")
+        img#home-promo.card-img.no-stretch([attr.src]="'HOME.AD.IMG_SOURCE' | translate", [attr.alt]="'HOME.AD.ALT_TEXT' | translate")
       .card([class.pt-4]="showHomePromo")
     .col-sm-6(*ngIf="showBlog")
       .card
