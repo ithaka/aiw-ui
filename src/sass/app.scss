@@ -291,6 +291,15 @@ body body{
   width: 140px;
 }
 
+// IE10+ specific style rules
+@media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+    #featured-side {
+      img {
+        display: none;
+      }
+    }
+}
+
 // Featured collections - mobile carousel
 #featured-mobile-container {
   .carousel-indicators {
