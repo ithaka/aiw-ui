@@ -5,6 +5,10 @@ import { Component, OnInit } from '@angular/core';
     templateUrl: 'card-sort.component.pug'
 })
 
+/**
+ * This component is for the Optimal Workshop Card Sorting (third party service)
+ * and is initially being added to image group pages.
+ */
 export class CardSortModal implements OnInit {
     private userOptedOut: boolean; // TODO: let's add this
 
