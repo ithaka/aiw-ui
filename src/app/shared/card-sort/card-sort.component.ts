@@ -6,6 +6,8 @@ import { Component, OnInit } from '@angular/core';
 })
 
 export class CardSortModal implements OnInit {
+    private userOptedOut: boolean; // TODO: let's add this
+
     ngOnInit() {
         var owOnload=function(){
         if(-1==document.cookie.indexOf('owInvite')){
