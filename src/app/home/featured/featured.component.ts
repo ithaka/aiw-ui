@@ -74,7 +74,7 @@ export class FeaturedComponent implements OnInit {
         } else {
           this.skipAutoSlide = false
         }
-      }, 7000)
+      }, 9000)
   }
 
   ngOnInit() {
