@@ -22,7 +22,7 @@ header.navbar.navbar-light
               #navMessageInstitution.login-panel__institution(*ngIf="!_auth.isPublicOnly() && (institutionObj.displayName || institutionObj.institutionName)") Access provided by {{ institutionObj.displayName ? institutionObj.displayName : institutionObj.institutionName }}
               div
                 a.link((click)="navigateAndSaveRoute('/login')" tabindex="1") Log in
-                ng-container(*ngIf="_auth.isPublicOnly() || !user.isLoggedIn")
+                ng-container(*ngIf="user.status && !user.isLoggedIn")
                   span &nbsp;or&nbsp;
                   a.link((click)="navigateAndSaveRoute('/register')", tabindex="1") Register
                 span(*ngIf="!user.status") &nbsp;for further access
