@@ -173,13 +173,14 @@ export class Login implements OnInit, OnDestroy {
         break
       }
     }
-    url = selectedInst.entityID ? selectedInst.entityID : '';
-
+    
     // if the user selected some institution that doesn't exist, kick them out!!
     if (!selectedInst) {
       this.instErrorMsg = "LOGIN.INSTITUTION_LOGIN.ERRORS.SELECT_INSTITUTION";
       return;
     }
+
+    url = selectedInst.entityID ? selectedInst.entityID : '';
 
     if (selectedInst.type === 'proxy') {
       // Hashes within a parameter are interpretted incorrectly, and we don't need 'em
