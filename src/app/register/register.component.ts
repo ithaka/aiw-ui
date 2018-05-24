@@ -25,7 +25,8 @@ export class RegisterComponent implements OnInit {
   private serviceErrors: {
     duplicate?: boolean,
     hasJstor?: boolean,
-    server?: boolean
+    server?: boolean,
+    shibboleth?: boolean
   } = {};
 
   private showJstorModal: boolean = false
@@ -64,9 +65,8 @@ export class RegisterComponent implements OnInit {
       this._router.navigate(['/home']);
     }
 
-
-    let email: string = this.route.snapshot.queryParams.email
-    let samlTokenId: string = this.route.snapshot.queryParams.samlTokenId
+    let email: string = this.route.snapshot.params.email
+    let samlTokenId: string = this.route.snapshot.params.samlTokenId
     
 
     if (email && samlTokenId) {
@@ -108,6 +108,7 @@ export class RegisterComponent implements OnInit {
 
   /** Gets called when the registration form is submitted */
   private registerSubmit(formValue: any) {
+    let registerCall: Function = (value) => { return this._auth.registerUser(value) }
     this.serviceErrors = {};
     this.submitted = true;
 
@@ -128,9 +129,10 @@ export class RegisterComponent implements OnInit {
 
     if (this.shibParameters) {
       userInfo.samlTokenId = this.shibParameters.samlTokenId
+      registerCall = (value) => { return this._auth.registerSamlUser(value) }
     }
 
-    this._auth.registerUser(userInfo)
+    registerCall(userInfo)
       .take(1)
       .subscribe((data) => {
         this.isLoading = false;
@@ -149,11 +151,15 @@ export class RegisterComponent implements OnInit {
             this.serviceErrors.duplicate = true
           }
         }
-      }, (error) => {
-        console.error(error);
+      }, (res) => {
+        console.error(res);
+
         this.isLoading = false;
-        if (error.status === 500) {
+        if (res.status === 500) {
           this.serviceErrors.server = true
+        }
+        if (res.error && res.error.code === 2020) {
+          this.serviceErrors.shibboleth = true
         }
       });
 
@@ -185,10 +191,7 @@ export class RegisterComponent implements OnInit {
    */
   private navigateToLogin(): void {
     if (this.shibParameters) {
-      this._router.navigate(
-        ['/link'],
-        { queryParams: this.shibParameters }
-      )
+      this._router.navigate(['/link', this.shibParameters])
     } else {
       this._router.navigate(['/login'])
     }

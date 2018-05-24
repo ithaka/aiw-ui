@@ -31,7 +31,7 @@ nav-menu
             p.blog-post__preview([innerHtml]="post.excerpt")
     div([ngClass]="showBlog ? 'col-sm-3' : 'row'")
       //- Institution Shared Shelf Collections
-      .card(*ngIf="institution && instCollections.length > 0", [class.col-sm-6]="!showBlog")
+      .card(*ngIf="institution && instCollections.length > 0", [class.col-sm-4]="!showBlog")
         .card-header
           h1 {{ 'HOME.HEADINGS.INSTITUTION_COLLECTIONS' | translate:{ institutionName: institution.shortName ? institution.shortName : 'Institutional' } }}
         .list--home-collections([class.loading]="loaders['instCollections']")
