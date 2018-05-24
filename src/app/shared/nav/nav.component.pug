@@ -2,7 +2,7 @@ header.navbar.navbar-light
   .container(style="padding:0px;")
     .row.fit
       .col-8
-        a.navbar-brand([routerLink]="['/home']")
+        a.navbar-brand([routerLink]="['/home']" tabindex="1")
           .mobile--hide
             img#logo.hidden-xs-down([attr.src]="logoUrl" alt="Artstor logo")
           .mobile--show
@@ -15,16 +15,16 @@ header.navbar.navbar-light
               #navMessageWelcome Welcome, {{ user.username ? user.username : ''}}
               #navMessageInstitution.login-panel__institution(*ngIf="institutionObj.displayName || institutionObj.institutionName") Access provided by {{ institutionObj.displayName ? institutionObj.displayName : institutionObj.institutionName }}
               .login-panel__links
-                a.link--accent([routerLink]=" ['./account'] " routerLinkActive="active" tabindex="1") Settings
-                a.link--accent((click)="logout()" tabindex="1") Log Out
+                a.link--accent([routerLink]=" ['./account'] " routerLinkActive="active" tabindex="2") Settings
+                a.link--accent((click)="logout()" tabindex="2") Log Out
             .login-panel__status(*ngIf="!user.isLoggedIn")
               b(*ngIf="_auth.isPublicOnly()") Accessing Public Content
               #navMessageInstitution.login-panel__institution(*ngIf="!_auth.isPublicOnly() && (institutionObj.displayName || institutionObj.institutionName)") Access provided by {{ institutionObj.displayName ? institutionObj.displayName : institutionObj.institutionName }}
               div
-                a.link((click)="navigateAndSaveRoute('/login')" tabindex="1") Log in
+                a.link((click)="navigateAndSaveRoute('/login')" tabindex="2") Log in
                 ng-container(*ngIf="_auth.isPublicOnly() || !user.isLoggedIn")
                   span &nbsp;or&nbsp;
-                  a.link((click)="navigateAndSaveRoute('/register')", tabindex="1") Register
+                  a.link((click)="navigateAndSaveRoute('/register')", tabindex="2") Register
                 span(*ngIf="!user.status") &nbsp;for further access
                 span(*ngIf="user.status && !user.isLoggedIn") &nbsp;to save images
 ang-session-expire-modal(*ngIf="showinactiveUserLogoutModal && showLoginPanel" "(closeModal)"="inactiveUsrLogOut()")
