@@ -23,6 +23,16 @@ $assetCardBorderSize: 1px;
     }
 }
 
+.card--clear {
+    padding: $cardPadding;
+    background: transparent;
+
+    & hr {
+        border-color: #fff;
+        margin: $cardPadding/2 -1*$cardPadding;
+    }
+}
+
 
 
 .card--v-pad {

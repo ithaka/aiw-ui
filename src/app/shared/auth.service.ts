@@ -358,6 +358,33 @@ export class AuthService implements CanActivate {
     return this.http.post(this.getUrl(true) + "/register", data , options);
   }
 
+  /**
+   * Shibboleth/Saml registration
+   * @param registration in addition to regular registration form, requires "samlTokenId" property
+   */
+  public registerSamlUser(registration: any): Observable<any> {
+    // Clear method used for regular registration
+    registration["_method"] = null
+    // // Encode da
+    // let dataStr = this.formEncode(registration)
+    let header = new HttpHeaders().set('Content-Type', 'application/json')
+    let options = { headers: header, withCredentials: true }
+    
+    return this.http.post(this.getHostname() + "/saml/user/create", registration , options)
+  }
+
+  /**
+   * Shibboleth/Saml linking
+   * @param user Artstor login credentials requires "username", "password", and "samlTokenId"
+   */
+  public linkSamlUser(credentials: any): Promise<any> {
+    let header = new HttpHeaders().set('Content-Type', 'application/json')
+    let options = { headers: header, withCredentials: true }
+
+    return this.http.post(this.getHostname() + "/saml/user/link", credentials , options)
+      .toPromise()
+  }
+
   public changePassword(oldPass: string, newPass: string): Observable<any> {
     let header = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded'); // form encode it
     let options = { headers: header, withCredentials: true }; // Create a request option

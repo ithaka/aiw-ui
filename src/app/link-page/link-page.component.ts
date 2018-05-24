@@ -10,7 +10,9 @@ export class LinkPage implements OnInit {
 
   private shibParams: {
     email: string,
-    samlTokenId: string
+    samlTokenId: string,
+    type: string,
+    error: string
   }
 
   constructor(
@@ -22,14 +24,19 @@ export class LinkPage implements OnInit {
 
   ngOnInit() {
     // nav back to regular login if there is no samlTokenId
-    if (!this.route.snapshot.queryParams.samlTokenId) {
+    if (!this.route.snapshot.params.samlTokenId) {
       this._router.navigate(['/login'])
     }
 
-    this.shibParams = { samlTokenId: this.route.snapshot.queryParams.samlTokenId, email: this.route.snapshot.queryParams.email }
+    this.shibParams = { 
+      samlTokenId: this.route.snapshot.params.samlTokenId, 
+      email: this.route.snapshot.params.email,
+      type: this.route.snapshot.params.type,
+      error: this.route.snapshot.params.error
+    }
   }
 
   navigateToRegister(): void {
-    this._router.navigate(['/register'], { queryParams: this.shibParams })
+    this._router.navigate(['/register', this.shibParams])
   }
 }
