@@ -74,16 +74,28 @@ export class BrowsePage implements OnInit, OnDestroy {
         this.colMenuArray.push( { label: 'Artstor Digital Library', id: '1', link: 'library' } );
     }
 
-    this.userTypeId = this._auth.getUser().typeId;
-    if( (this.userTypeId == 1 || this.userTypeId == 2 || this.userTypeId == 3) && this.browseOpts.instCol && !this.user.unaffliatedUser ){
-        let instName = this.institution && this.institution.shortName ? this.institution.shortName : 'Institutional';
-        var obj = {
-            label : instName + ' Collections',
-            id: '2',
-            link: 'institution'
-        }
-        this.colMenuArray.splice(1, 0 ,obj);
-    }
+    // Subscribe to Institution object updates and change MenuArray on the run
+    this.subscriptions.push(
+        this._auth.getInstitution().subscribe(
+            (institutionObj) => {
+                this.institution = institutionObj;
+                this.userTypeId = this._auth.getUser().typeId;
+                if( (this.userTypeId == 1 || this.userTypeId == 2 || this.userTypeId == 3) && this.browseOpts.instCol && !this.user.unaffliatedUser ){
+                    let instName = this.institution && this.institution.shortName ? this.institution.shortName : 'Institutional';
+                    var obj = {
+                        label : instName + ' Collections',
+                        id: '2',
+                        link: 'institution'
+                    }
+                }
+                // Replace the item of the array instead of push
+                this.colMenuArray.splice(1, 1 ,obj);
+            },
+            (err) => {
+                console.error("Nav failed to load Institution information", err)
+            }
+        )
+    );
 
     if( this.browseOpts.openCol ){
         this.colMenuArray.push( { label: 'Public Collections', id: '3', link: 'commons' } );
