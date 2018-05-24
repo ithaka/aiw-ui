@@ -12,7 +12,6 @@ nav-menu([allowSelectAll]="true", [actionOptions]="{group: true}", (refreshIG)="
           .row-hdr.row-hdr--btn(*ngIf!="(ig.tags && ig.tags.length > 0) || ig.description", (click)="descExpanded = !descExpanded") Group Details
             i.icon.icon-direction.tree-icon.desc-expnd-clps-icon([ngClass]="{ 'icon-down' : descExpanded, 'icon-left' : !descExpanded }", style="float:right")
           .row-hdr(*ngIf!="(!ig.tags || ig.tags.length < 1) && !ig.description") No Group Details
-
     div([ngClass]="[ showDesc() ? 'col-md-9' : 'col-md-12' ]")
       ang-asset-grid([actionOptions]="actionOptions", (reordering)="toggleReorder($event)")
       .alert.alert-warning(*ngIf!="ig.items && ig.items.length > 0 && !ig.thumbnails")
@@ -37,3 +36,4 @@ ang-ig-download-modal(*ngIf="showPptModal", (closeModal)="showPptModal = false",
 ang-download-limit-modal(*ngIf="showDownloadLimitModal", (closeModal)="showDownloadLimitModal = false", [ig]="ig")
 ang-login-req-modal(*ngIf="showLoginModal", (closeModal)="showLoginModal = false")
 ang-no-ig-modal(*ngIf="showNoIgModal || showNoAccessIgModal", [noAccessIg]="showNoAccessIgModal", (closeModal)="showNoIgModal = false")
+ang-card-sort

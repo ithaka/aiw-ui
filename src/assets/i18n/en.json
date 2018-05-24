@@ -28,7 +28,8 @@
     "PASSWORD_REQUIRED": "Password must be 7-20 characters",
     "EXPIRED" : "That login is expired. Please login from campus to renew your account.",
     "REGISTER_PROMPT": "Not Registered?",
-    "ACCESS_PROMPT": "How do I get access?"
+    "ACCESS_PROMPT": "How do I get access?",
+    "LINK_ERROR" : "There was an error linking your institutional account. The session may have expired, please try again."
   },
   "LOGIN_FORM": {
     "PASSWORD_LABEL": "Password",
@@ -39,10 +40,10 @@
     }
   },
   "LINK_PAGE": {
-    "LOGIN_HEADING": "Log in with your existing Artstor account",
+    "LOGIN_HEADING": "Link your existing Artstor account",
     "LOGIN_BUTTON": "Link Account",
-    "REGISTER_HEADING": "Register a new account",
-    "REGISTER_LINK": "Register"
+    "REGISTER_HEADING": "Link a new Artstor account",
+    "REGISTER_LINK": "Register a new account"
   },
   "REGISTER": {
     "REGISTER_HEADING": "Register for a new Artstor account",
@@ -63,7 +64,8 @@
       "INSTITUTION_ROLE_REQUIRED": "Please select a role",
       "ACADEMIC_DEPT_REQUIRED": "Please select a department",
       "LOGIN_SERVER": "Server is not responding. Please try again later.",
-      "SERVER_ERROR": "The server encountered an error processing the request. Please try again."
+      "SERVER_ERROR": "The server encountered an error processing the request. Please try again.",
+      "SHIBBOLETH_ERROR": "There was an error linking your institutional account. The session may have expired, please try again."
     },
     "AGE_PROMPT": "I confirm that I am 13 or older",
     "AGE_PROMPT_HOVER": "If you are under 13, please provide your legal guardian's email address to register",
@@ -416,7 +418,7 @@
     },
     "CONTENT_ACCESS": {
       "USER": "From the Artstor Digital Library, Institutional Collections, and Public Collections",
-      "SEARCH_PAGE_USER": " from the Artstor Digital Library, Institutional Collections, and Public Collections.",
+      "SEARCH_PAGE_USER": " from all collections.",
       "PUBLIC": "From Public Collections",
       "SEARCH_PAGE_PUBLIC": " from Public Collections.",
       "SAHARA": "From the Institutional Collections",
@@ -438,7 +440,7 @@
       "PUB_COLL_HEADING": "Public Collections",
       "PUB_COLL_LIST": "Open content provided by multiple institutions",
       "MORE_CONT_HEADING": "More Content",
-      "MORE_CONT_LIST": "To browse the Artstor Digital Library collections, institutional collections, create image groups, and more, you will login as part of your institution."
+      "MORE_CONT_LIST": "To browse the Artstor Digital Library collections, institutional collections, create image groups, and more, you will need to login as part of your institution."
     },
     "FEATURED": {
       "HEADINGS": {
