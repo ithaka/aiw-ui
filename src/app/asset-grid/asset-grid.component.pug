@@ -58,7 +58,7 @@
             span(*ngIf="searchTerm") for
               = " "
               span([innerHtml]="formattedSearchTerm")
-              span(*ngIf="siteID!='SAHARA' && user.status == false || unaffiliatedFlag", [innerHtml]="'HOME.CONTENT_ACCESS.SEARCH_PAGE_PUBLIC' | translate")
+              span(*ngIf="siteID!='SAHARA' && (user.status == false || unaffiliatedFlag)", [innerHtml]="'HOME.CONTENT_ACCESS.SEARCH_PAGE_PUBLIC' | translate")
               span(*ngIf="siteID!='SAHARA' && user.status == true && !unaffiliatedFlag", [innerHtml]="'HOME.CONTENT_ACCESS.SEARCH_PAGE_USER' | translate")
               span(*ngIf="siteID=='SAHARA'", [innerHtml]="'HOME.CONTENT_ACCESS.SEARCH_PAGE_SAHARA' | translate")
           
