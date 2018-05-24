@@ -102,7 +102,7 @@ export class RegisterComponent implements OnInit {
    * @returns error which should be assigned to the email input
    */
   private emailValidator(control: FormControl): any {
-    let emailRe: RegExp = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+    let emailRe: RegExp = /^\w+([\+\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
     return emailRe.test(control.value) ? null : { 'emailInvalid': true };
   }
 
@@ -157,6 +157,7 @@ export class RegisterComponent implements OnInit {
         this.isLoading = false;
         if (res.status === 500) {
           this.serviceErrors.server = true
+          console.error("Registration Server Error", userInfo, res)
         }
         if (res.error && res.error.code === 2020) {
           this.serviceErrors.shibboleth = true
