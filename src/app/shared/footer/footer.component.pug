@@ -38,12 +38,14 @@
               p.small([innerHtml]="'HOME.BROWSE.GROUPS_LIST' | translate")
           //- Public Collections for Unaffiliated users
           span(*ngIf="_auth.isPublicOnly()")
-            h2.browse-category {{ 'HOME.BROWSE.PUB_COLL_HEADING' | translate }}
-            p.small([innerHtml]="'HOME.BROWSE.PUB_COLL_LIST' | translate")
+            a.link#footerLinkBrowseIGs.footer__explore-link([routerLink]="['/browse','commons']")
+              h2.browse-category {{ 'HOME.BROWSE.PUB_COLL_HEADING' | translate }}
+              p.small([innerHtml]="'HOME.BROWSE.PUB_COLL_LIST' | translate")
           //- More Content for Unaffiliated users
           span(*ngIf="_auth.isPublicOnly()")
-            h2.browse-category {{ 'HOME.BROWSE.MORE_CONT_HEADING' | translate }}
-            p.small([innerHtml]="'HOME.BROWSE.MORE_CONT_LIST' | translate")
+            a.link#footerLinkBrowseIGs.footer__explore-link([routerLink]="['/login']")
+              h2.browse-category {{ 'HOME.BROWSE.MORE_CONT_HEADING' | translate }}
+              p.small([innerHtml]="'HOME.BROWSE.MORE_CONT_LIST' | translate")
           //- Prompt to log in for unaffiliated users
           a.link(*ngIf="_auth.isPublicOnly()", href='/#/login') Log in to see more
         //- mobile divider
