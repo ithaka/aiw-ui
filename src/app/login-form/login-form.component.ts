@@ -133,6 +133,8 @@ export class LoginFormComponent implements OnInit {
   }
 
   login(user: User) {
+    let loginCall: Function = (user) => { return this._auth.login(user) }
+
     user.username = user.username.toLowerCase().trim()
     this.loginLoading = true;
     // Clear error messaging
@@ -151,11 +153,14 @@ export class LoginFormComponent implements OnInit {
       return;
     }
 
-    this.samlTokenId && (user.samlTokenId = this.samlTokenId)
+    if (this.samlTokenId) {
+      user.samlTokenId = this.samlTokenId
+      loginCall = (user) => { return this._auth.linkSamlUser(user)}
+    }
 
     this.angulartics.eventTrack.next({ action:"remoteLogin", properties: { category: "login", label: "attempt" }});
 
-    this._auth.login(user)
+    loginCall(user)
       .then(
         (data)  => {
           this.loginLoading = false;
@@ -182,6 +187,10 @@ export class LoginFormComponent implements OnInit {
         if (!this.getLoginErrorMsg(errObj.message)){
           this.getLoginError(user)
           this.angulartics.eventTrack.next({ action:"remoteLogin", properties: { category: "login", label: "failed" }});
+        }
+        // Shibboleth linking error
+        if (errObj && errObj.code === 2020) {
+          this.errorMsg = 'LOGIN.LINK_ERROR'
         }
         // Check if old bad-case password
         this.isBadCasePassword(user)
