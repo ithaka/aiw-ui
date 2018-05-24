@@ -1,0 +1,149 @@
+@import '../../../sass/core/variables';
+
+@keyframes fader {
+    0% {
+        opacity: 0.1;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+#featured-container {
+    margin-bottom: 10px;
+
+    #featured-side {
+        padding: 0px;
+
+        & .card {
+            height: 33.3%;
+            padding: 3px;
+            margin-left: 5px;
+
+            &:first-child {
+                padding-top: 0px;
+            }
+
+            &:last-child {
+                padding-bottom: 0px;
+            }
+            
+            & .featured-side-img {
+                margin: auto;
+                animation: fader 1.5s;
+                // Show user card can be clicked
+                cursor: pointer;
+            }
+        }
+    }
+
+    /** Featured container only displayed on non-mobile */
+    @media (max-width: $phone) {
+        display: none;
+    }
+}
+
+.featured-col {
+    transition: height ease 500;
+}
+
+.card__placard {
+    line-height: 15px;
+    padding: 6px;
+    cursor: pointer;
+
+    &:hover, &:focus {
+        & .featured-title {
+            color: $blue;
+        }
+    }
+
+    & .featured-title {
+        margin-bottom: 7px;
+        font-size: 14px;
+        font-weight: bold;
+    }
+
+    @media(max-width: $desktop) {
+        & .featured-title {
+            font-size: 12px;
+            line-height: 13px;
+        }
+        & .featured-caption {
+            font-size: 10px;
+            line-height: 11px;
+        }
+    }
+
+    @media(max-width: $tablet) {
+        & .featured-caption {
+            display: none;
+        }
+    }
+}
+
+#featured-primary {
+    & .featured-card {
+        width: 100%;
+        height: auto;
+    }
+
+    @media(min-width: $phone) {
+        padding: 0px;
+    }
+}
+
+.featured-card {
+    transition: opacity ease 1.5s;
+    opacity: 0;
+
+    // Use the first card for relative sizing, and display the others on top
+    & + & {
+        position: absolute;
+        top: 0px;
+    }
+
+    &.fade-in {
+        opacity: 1;
+    }
+
+    @media (max-width: $phone) {
+        opacity: 1;
+        position: relative;
+    }
+}
+
+/** Featured Collection slideshow on mobile is ngBoostrap carousel */
+#featured-mobile-container {
+
+    /* Eliminate default input focus outline. */
+    & :focus {
+        outline: none !important;
+    }
+
+    img {
+        animation: fader 1.5s;
+    }
+
+    @media (min-width: $phone) {
+        display: none;
+    }
+}
+
+#featured-bottom {
+    margin-bottom: 20px;
+    border-bottom: solid 1px #ddd;
+
+    /** Don't display photo caption in bottom row on mobile */
+    & .photo-caption {
+        @media (max-width: $phone) {
+            display: none;
+        }
+    }
+}
+
+.hidden-sm-down {
+    @media(max-width: $phone) {
+        display:none;
+    }
+}
