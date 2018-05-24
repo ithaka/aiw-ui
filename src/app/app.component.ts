@@ -49,11 +49,13 @@ export class App {
     private router:Router,
     private translate: TranslateService
   ) {
+    // append query param to dodge caching
+    let langStr = 'en.json?no-cache=' + new Date().valueOf()
     // I'm hoping this sets these for the entire app
     // this language will be used as a fallback when a translation isn't found in the current language
-    translate.setDefaultLang('en');
-      // the lang to use, if the lang isn't available, it will use the current loader to get them
-    translate.use('en');
+    translate.setDefaultLang(langStr);
+    // the lang to use, if the lang isn't available, it will use the current loader to get them
+    translate.use(langStr);
 
     this.title = this._app.config.pageTitle
 
