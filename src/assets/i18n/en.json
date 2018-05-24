@@ -28,7 +28,8 @@
     "PASSWORD_REQUIRED": "Password must be 7-20 characters",
     "EXPIRED" : "That login is expired. Please login from campus to renew your account.",
     "REGISTER_PROMPT": "Not Registered?",
-    "ACCESS_PROMPT": "How do I get access?"
+    "ACCESS_PROMPT": "How do I get access?",
+    "LINK_ERROR" : "There was an error linking your institutional account. The session may have expired, please try again."
   },
   "LOGIN_FORM": {
     "PASSWORD_LABEL": "Password",
