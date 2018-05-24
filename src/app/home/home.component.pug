@@ -10,7 +10,7 @@ nav-menu
       p.small(*ngIf="siteID!='SAHARA' && !_auth.isPublicOnly()", [innerHtml]="'HOME.CONTENT_ACCESS.USER' | translate")
       p.small(*ngIf="siteID!='SAHARA' && _auth.isPublicOnly()", [innerHtml]="'HOME.CONTENT_ACCESS.PUBLIC' | translate")
     .col-sm-5.search-highlight
-      ang-search([UserNotLoggedIn]="_auth.isPublicOnly()")
+      ang-search#mainContent([UserNotLoggedIn]="_auth.isPublicOnly()")
       
   //- Featured Collections
   ang-featured
