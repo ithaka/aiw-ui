@@ -188,6 +188,10 @@ export class LoginFormComponent implements OnInit {
           this.getLoginError(user)
           this.angulartics.eventTrack.next({ action:"remoteLogin", properties: { category: "login", label: "failed" }});
         }
+        // Shibboleth linking error
+        if (errObj && errObj.code === 2020) {
+          this.errorMsg = 'LOGIN.LINK_ERROR'
+        }
         // Check if old bad-case password
         this.isBadCasePassword(user)
       });
