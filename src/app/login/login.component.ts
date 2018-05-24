@@ -38,6 +38,8 @@ export class Login implements OnInit, OnDestroy {
   private stashedRoute: string
   private dataService: LocalData
 
+  public showRegister: boolean = false
+
   /** 
    * Observable for autocomplete list of institutions
    * - We apply additional sorting 
@@ -78,7 +80,9 @@ export class Login implements OnInit, OnDestroy {
     )
 
     // Check for a stashed route to pass to proxy links
-    this.stashedRoute = this._storage.get("stashedRoute")
+    // Change from this._storage.get() to this._auth.getFromStorage() to remember the original url, not tested yet
+    // this.stashedRoute = this._storage.get("stashedRoute")
+    this.stashedRoute = this._auth.getFromStorage("stashedRoute")
 
     if (this._app.config.copyModifier) {
       this.copyBase = this._app.config.copyModifier + "."
@@ -95,7 +99,7 @@ export class Login implements OnInit, OnDestroy {
     }
 
     // The true institutions call. Don't throw an error, since the above call will provide a backup
-    this._auth.getInstitutions()
+  this._auth.getInstitutions()
       .then((data) => {
         if (data['items']) {
           this.loginInstitutions = data['items'];
@@ -123,6 +127,17 @@ export class Login implements OnInit, OnDestroy {
         console.error(error);
       });
 
+    // this handles showing the register link for only ip auth'd users
+    this._auth.getIpAuth()
+      .take(1)
+      .subscribe((res) => {
+        if (res.remoteaccess === false && res.user) {
+          this.showRegister = true
+        }
+      }, (err) => {
+        console.error(err)
+      })
+
     this._analytics.setPageValues('login', '')
   } // OnInit
 
@@ -142,6 +157,11 @@ export class Login implements OnInit, OnDestroy {
         return a.name.search(termReg) - b.name.search(termReg)
     });
     this.instListSubject.next(filtered)
+
+    // We need to clear any error messages here if there is one
+    if (this.instErrorMsg.length)
+        this.instErrorMsg = ''
+        
   }
 
   /**
@@ -158,13 +178,17 @@ export class Login implements OnInit, OnDestroy {
         break
       }
     }
-    url = selectedInst.entityID ? selectedInst.entityID : '';
-
+    
     // if the user selected some institution that doesn't exist, kick them out!!
     if (!selectedInst) {
       this.instErrorMsg = "LOGIN.INSTITUTION_LOGIN.ERRORS.SELECT_INSTITUTION";
       return;
     }
+    else {
+      this.instErrorMsg = ''
+    }
+
+    url = selectedInst.entityID ? selectedInst.entityID : '';
 
     if (selectedInst.type === 'proxy') {
       // Hashes within a parameter are interpretted incorrectly, and we don't need 'em
