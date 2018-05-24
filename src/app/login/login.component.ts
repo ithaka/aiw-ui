@@ -157,6 +157,11 @@ export class Login implements OnInit, OnDestroy {
         return a.name.search(termReg) - b.name.search(termReg)
     });
     this.instListSubject.next(filtered)
+
+    // We need to clear any error messages here if there is one
+    if (this.instErrorMsg.length)
+        this.instErrorMsg = ''
+        
   }
 
   /**
@@ -173,13 +178,17 @@ export class Login implements OnInit, OnDestroy {
         break
       }
     }
-    url = selectedInst.entityID ? selectedInst.entityID : '';
-
+    
     // if the user selected some institution that doesn't exist, kick them out!!
     if (!selectedInst) {
       this.instErrorMsg = "LOGIN.INSTITUTION_LOGIN.ERRORS.SELECT_INSTITUTION";
       return;
     }
+    else {
+      this.instErrorMsg = ''
+    }
+
+    url = selectedInst.entityID ? selectedInst.entityID : '';
 
     if (selectedInst.type === 'proxy') {
       // Hashes within a parameter are interpretted incorrectly, and we don't need 'em

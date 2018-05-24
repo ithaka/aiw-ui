@@ -24,6 +24,7 @@
             ng2-completer(
               [(ngModel)]="loginInstName",
               (keyup)="sortInstitution($event)",
+              (click)="(instErrorMsg ? sortInstitution($event): 'null')",
               [datasource]="dataService",
               [minSearchLength]="0",
               [openOnFocus]="true",

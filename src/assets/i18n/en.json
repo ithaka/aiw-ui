@@ -507,12 +507,16 @@
       ]
     },
     "SAHARA_FEATURED": {
+      "HEADINGS": {
+        "INST": "Featured Images",
+        "VIEW_ALL_LINK": "View All Collections"
+      },
       "SAHARA_COLLECTIONS": [
         {
           "SUBHEADING": "Harania Village",
           "DESCRIPTION": "Arts Center & Habib Gorgy Sculpture Museum",
           "CAPTION": "The Arts Center and Habib Gorgy Sculpture Museum, Harania Village, Giza, Egypt.  Architect: Ramses Wissa Wassef, 1955.  Photographer: Raghad Mofeed.",
-          "LINK": "#/asset/HSAHARA__1113_25492396",
+          "LINK": "/#/asset/HSAHARA__1113_25492396",
           "IMG_SOURCE": "/assets/img/featured-collections/sahara/HSAHARA__1113_25492396.jpg",
           "LINK_TITLE": "Harania Village",
           "ALT_TEXT": "Harania Village"
@@ -522,7 +526,7 @@
           "DESCRIPTION": "Main lobby and stacks",
           "CAPTION": "Alberto Kalach and Estudio Tax, Biblioteca Vasconcelos, Mexico City, Mexico, 2006. Photo by Amber Wiley, 2016.",
           "LINK": "/#/asset/HSAHARA__1113_31055547",
-          "IMG_SOURCE": "/assets/img/featured-collections/sahara/HSAHARA_1113_31055547.jpg",
+          "IMG_SOURCE": "/assets/img/featured-collections/sahara/HSAHARA__1113_31055547.jpg",
           "LINK_TITLE": "Biblioteca Vasconcelos",
           "ALT_TEXT": "Biblioteca Vasconcelos"
         },
@@ -531,7 +535,7 @@
           "DESCRIPTION": "Building No. 7 (Factory Canteen Building) & Hoover Building",
           "CAPTION": "Hoover Building, London, UK.  Designed by Wallis, Gilbert and Partners, 1933 (the canteen building at left was added in 1938). Built to manufacture vacuum cleaners, the factory also built airplane parts during WWII. Purchased by supermarket chain Tesco in 1989. Photo by Richard Longstreth.",
           "LINK": "/#/asset/HSAHARA__1113_26231600",
-          "IMG_SOURCE": "/assets/img/featured-collections/sahara/HSAHARA_1113_26231600.jpg",
+          "IMG_SOURCE": "/assets/img/featured-collections/sahara/HSAHARA__1113_26231600.jpg",
           "LINK_TITLE": "Hoover Building",
           "ALT_TEXT": "Hoover Building"
         }

@@ -290,3 +290,25 @@ body body{
 .tooltip-inner {
   width: 140px;
 }
+
+// IE10+ specific style rules
+@media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+    #featured-side {
+      img {
+        display: none;
+      }
+    }
+}
+
+// Featured collections - mobile carousel
+#featured-mobile-container {
+  .carousel-indicators {
+      top: 225px;
+
+      & li {
+          border-radius: 12px;
+          width: 12px;
+          height: 12px;
+      }
+    }
+}
