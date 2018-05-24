@@ -488,7 +488,7 @@ export class AuthService implements CanActivate {
       .map(
         (data)  => {
           let user = this.decorateValidUser(data)
-          if (user) {
+          if (user && user.status) {
             // Clear expired session modal
             this.showUserInactiveModal.next(false)
             // Update user object
