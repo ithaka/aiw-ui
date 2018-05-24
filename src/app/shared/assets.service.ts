@@ -698,7 +698,13 @@ export class AssetService {
             })
     }
 
-    public getAllThumbnails(assetIds: string[]) : Promise<any> {
+    /**
+     * Gets all of the thumbnails requested, assuming the user has access, and returns them in a promise resolved with an array
+     * @param assetIds the ids for which you need the thumbnails
+     * @param igId passed if you are viewing an image group, which may contain pc assets and therefore access is checked against user's access to group
+     */
+    public getAllThumbnails(assetIds: string[], igId?: string) : Promise<Thumbnail[]> {
+
         // return new Promise
         let maxCount = 100
         return new Promise( (resolve, reject) => {
@@ -707,8 +713,17 @@ export class AssetService {
 
             let loadBatch = (i) => {
                 let countEnd = i+maxCount
-                let idsAsTerm: string =  assetIds.slice(i,countEnd).join('&object_id=');
-                this.http.get(this._auth.getHostname() + '/api/v1/items?object_id=' + idsAsTerm, options)
+                let objectIdTerm: string = igId ? '&object_ids=' : '&object_id=' // the group version of the call takes object_ids instead of object_id
+
+                let idsAsTerm: string = objectIdTerm + assetIds.slice(i,countEnd).join(objectIdTerm) // concat the query params
+                let url: string = this._auth.getHostname() + '/api/v1'
+                if (igId) {
+                    url += '/group/' + igId + '/items?' + idsAsTerm
+                } else {
+                    url += '/items?' + idsAsTerm
+                }
+
+                this.http.get(url, options)
                     .toPromise()
                     .then((res) => {
                         let results = res;
