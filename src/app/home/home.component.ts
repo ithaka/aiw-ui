@@ -42,7 +42,7 @@ export class Home implements OnInit, OnDestroy {
   private showPrivateCollections: boolean = false
   private browseSec: any = {}
   private showHomeSSC: boolean = false
-  private showHomeAd: boolean = false
+  private showHomePromo: boolean = false
   private siteID: string = ""
 
   // Default IG 'Browse By:' Option controlled via the WLV file 
@@ -66,7 +66,7 @@ export class Home implements OnInit, OnDestroy {
     this.showPrivateCollections = this._appConfig.config.browseOptions.myCol
     this.browseSec = this._appConfig.config.homeBrowseSec
     this.showHomeSSC = this._appConfig.config.showHomeSSC
-    this.showHomeAd = this._appConfig.config.showHomeAd
+    this.showHomePromo = this._appConfig.config.showHomeAd
     this.siteID = this._appConfig.config.siteID
     this.defaultGrpBrwseBy = this._appConfig.config.defaultGrpBrwseBy
     // this.featuredCollectionConf = this._appConfig.config.featuredCollection

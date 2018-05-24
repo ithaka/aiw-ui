@@ -18,12 +18,13 @@ header.navbar.navbar-light
                 a.link--accent([routerLink]=" ['./account'] " routerLinkActive="active" tabindex="1") Settings
                 a.link--accent((click)="logout()" tabindex="1") Log Out
             .login-panel__status(*ngIf="!user.isLoggedIn")
-              b Accessing Public Content
+              b(*ngIf="_auth.isPublicOnly()") Accessing Public Content
+              #navMessageInstitution.login-panel__institution(*ngIf="!_auth.isPublicOnly() && (institutionObj.displayName || institutionObj.institutionName)") Access provided by {{ institutionObj.displayName ? institutionObj.displayName : institutionObj.institutionName }}
               div
                 a.link((click)="navigateAndSaveRoute('/login')" tabindex="1") Log in
-                span(*ngIf="!user.unaffliatedUser") &nbsp;or&nbsp;
-                a.link(*ngIf="!user.unaffliatedUser", (click)="navigateAndSaveRoute('/register')", tabindex="1") Register
-                span &nbsp;for further access
-              div(*ngIf="institutionObj.displayName || institutionObj.institutionName")
-                | Institution: {{ institutionObj.displayName ? institutionObj.displayName : institutionObj.institutionName }}
+                ng-container(*ngIf="user.status && !user.isLoggedIn")
+                  span &nbsp;or&nbsp;
+                  a.link((click)="navigateAndSaveRoute('/register')", tabindex="1") Register
+                span(*ngIf="!user.status") &nbsp;for further access
+                span(*ngIf="user.status && !user.isLoggedIn") &nbsp;to save images
 ang-session-expire-modal(*ngIf="showinactiveUserLogoutModal && showLoginPanel" "(closeModal)"="inactiveUsrLogOut()")

@@ -1,4 +1,4 @@
-.row#featured-container
+.row#featured-container.mx-0
   //- Primary Image
   .col-sm-9.featured-col#featured-primary
     ng-container(*ngFor="let i of [0,1,2]")
@@ -15,7 +15,7 @@
         //- Title and description of the current primary image
         .featured-title([innerHtml]="collection.subheading | translate")
         p.featured-caption.small([innerHtml]="collection.description | translate")
-      img.no-stretch.featured-side-img(*ngIf="primaryFeaturedIndex !== i", (click)="switchFeaturedIndex(i)", [attr.src]="collection.img_src | translate",
+      img.no-stretch.featured-side-img(*ngIf="primaryFeaturedIndex !== i", (mouseenter)="switchFeaturedIndex(i)", (click)="switchFeaturedIndex(i)", [attr.src]="collection.img_src | translate",
        [attr.alt]="collection.alt_text | translate", [attr.title]="collection.link | translate")
 
 //- ngBoostrap carousel on mobile
@@ -29,11 +29,12 @@
 //- Bottom row of slideshow - dynamic links if logged in
 .row#featured-bottom
   .col
-    label(*ngIf="user.isLoggedIn", [innerHtml]="headings + '.INST' | translate")
-    label(*ngIf="!user.isLoggedIn", [innerHtml]="headings + '.PUBLIC' | translate")
+    label(*ngIf="!_auth.isPublicOnly()", [innerHtml]="headings + '.INST' | translate")
+    label(*ngIf="_auth.isPublicOnly()", [innerHtml]="headings + '.PUBLIC' | translate")
   .col-6.hidden-sm-down
     p.photo-caption.small([innerHTML]="featured[primaryFeaturedIndex].caption | translate")
   .col
     p.text-right
-      a.link.text-right(*ngIf="user.isLoggedIn" href="/browse/institution", [innerHtml]="headings + '.VIEW_ALL_LINK' | translate")
-      a.link.text-right(*ngIf="!user.isLoggedIn" href="/browse/commons", [innerHtml]="headings + '.VIEW_PUBLIC_LINK' | translate")
+      a.link.text-right(*ngIf="!_auth.isPublicOnly() && siteId != 'SAHARA'" href="/browse/library", [innerHtml]="headings + '.VIEW_ALL_LINK' | translate")
+      a.link.text-right(*ngIf="!_auth.isPublicOnly() && siteId === 'SAHARA'" href="/browse/institution", [innerHtml]="headings + '.VIEW_ALL_LINK' | translate")
+      a.link.text-right(*ngIf="_auth.isPublicOnly()" href="/browse/commons", [innerHtml]="headings + '.VIEW_PUBLIC_LINK' | translate")
