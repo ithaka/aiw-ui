@@ -68,8 +68,7 @@ export class RegisterComponent implements OnInit {
     let email: string = this.route.snapshot.params.email
     let samlTokenId: string = this.route.snapshot.params.samlTokenId
     
-
-    if (email && samlTokenId) {
+    if (samlTokenId) {
       email && this.registerForm.controls.email.setValue(email) // set the email
       this.shibParameters = { email: email, samlTokenId: samlTokenId }
     }
