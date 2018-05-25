@@ -531,6 +531,15 @@ export class AssetGrid implements OnInit, OnDestroy {
     };
 
     this.ig.items = newItemsArray;
+
+    /*
+     * Delete 'rstd_imgs_count' from the ig object
+     * 'rstd_imgs_count' in the post body breaks the group service update 
+     */
+    if(this.ig.rstd_imgs_count){
+      delete this.ig.rstd_imgs_count
+    }
+
     this._groups.update(this.ig)
       .take(1)
       .subscribe(
