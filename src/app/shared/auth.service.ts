@@ -488,7 +488,7 @@ export class AuthService implements CanActivate {
       .map(
         (data)  => {
           let user = this.decorateValidUser(data)
-          var onSahara: boolean = this.getHostname().toString().includes('sahara')
+          let onSahara: boolean = this.getHostname().toString().includes('sahara')
           if (user && (!onSahara || user.status)) {
             // Clear expired session modal
             this.showUserInactiveModal.next(false)
