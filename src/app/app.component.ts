@@ -76,7 +76,7 @@ export class App {
         let zendeskElements = document.querySelectorAll('.zopim')
 
         // On navigation end, load the zendesk chat widget if user lands on login page else hide the widget
-        if( event_url_array[1] === 'login' ) {
+        if(this.showChatWidget(event.url)) {
           this._script.loadScript('zendesk')
             .then( data => {
               if(data['status'] === 'loaded'){
@@ -99,6 +99,18 @@ export class App {
   ngOnInit() {
     // Toggle Banner here to show alerts and updates!
     // this.showSkyBanner = true
+  }
+
+  // Show the chat widget on: 'login', 'browse/library', or 'browse/groups/public'
+  private showChatWidget(eventUrl: string): boolean {
+      if (eventUrl.indexOf('browse/library') > -1 ||
+          eventUrl.indexOf('browse/groups/public') > -1 ||
+          eventUrl.indexOf('login') > -1) {
+           return true
+        }
+      else {
+        return false
+      }
   }
 
   private findMainContent(): void {
