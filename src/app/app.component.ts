@@ -76,7 +76,7 @@ export class App {
         let zendeskElements = document.querySelectorAll('.zopim')
 
         // On navigation end, load the zendesk chat widget if user lands on login page else hide the widget
-        if( event_url_array[1] === 'login' ) {
+        // if( event_url_array[1] === 'login' ) {
           this._script.loadScript('zendesk')
             .then( data => {
               if(data['status'] === 'loaded'){
@@ -85,13 +85,13 @@ export class App {
               }
             })
             .catch( error => console.error(error) )
-        } else {
-          // If Zendesk chat is loaded, hide it
-          if(zendeskElements && zendeskElements.length > 1) {
-            zendeskElements[0]['style']['display'] = 'none'
-            zendeskElements[1]['style']['display'] = 'none'
-          }
-        }
+        // } else {
+        //   // If Zendesk chat is loaded, hide it
+        //   if(zendeskElements && zendeskElements.length > 1) {
+        //     zendeskElements[0]['style']['display'] = 'none'
+        //     zendeskElements[1]['style']['display'] = 'none'
+        //   }
+        // }
       }
     });
   }
