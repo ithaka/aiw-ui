@@ -102,7 +102,7 @@ export class App {
   }
 
   // Show the chat widget on: 'login', 'browse/library', or 'browse/groups/public'
-  private showChatWidget(eventUrl: string) {
+  private showChatWidget(eventUrl: string): boolean {
       if (eventUrl.indexOf('browse/library') > -1 ||
           eventUrl.indexOf('browse/groups/public') > -1 ||
           eventUrl.indexOf('login') > -1) {
