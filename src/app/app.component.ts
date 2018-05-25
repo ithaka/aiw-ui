@@ -76,7 +76,7 @@ export class App {
         let zendeskElements = document.querySelectorAll('.zopim')
 
         // On navigation end, load the zendesk chat widget if user lands on login page else hide the widget
-        if(this.showChatWidget(event.url)) {
+        if(this.showChatWidget(window.location.href)) {
           this._script.loadScript('zendesk')
             .then( data => {
               if(data['status'] === 'loaded'){
