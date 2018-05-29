@@ -531,6 +531,7 @@ export class AssetGrid implements OnInit, OnDestroy {
     };
 
     this.ig.items = newItemsArray;
+
     this._groups.update(this.ig)
       .take(1)
       .subscribe(

@@ -87,9 +87,9 @@ export class BrowsePage implements OnInit, OnDestroy {
                         id: '2',
                         link: 'institution'
                     }
+                    // Replace the item of the array instead of push
+                    this.colMenuArray.splice(1, 1 ,obj);
                 }
-                // Replace the item of the array instead of push
-                this.colMenuArray.splice(1, 1 ,obj);
             },
             (err) => {
                 console.error("Nav failed to load Institution information", err)
@@ -113,6 +113,7 @@ export class BrowsePage implements OnInit, OnDestroy {
     if( this.browseOpts.igs && !this.user.unaffliatedUser ){
         this.colMenuArray.push( { label: 'Groups', id: '5', link: 'groups' } );
     }
+    
   }
 
   ngOnDestroy() {
