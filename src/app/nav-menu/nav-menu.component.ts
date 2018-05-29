@@ -179,14 +179,6 @@ export class NavMenu implements OnInit, OnDestroy {
       return !assetFound // if the asset was not found, we want to keep it
     });
 
-    /*
-     * Delete 'rstd_imgs_count' from putGroup object
-     * 'rstd_imgs_count' in the request body breaks the group service update 
-     */
-    if(this.ig.rstd_imgs_count){
-      delete this.ig.rstd_imgs_count
-    }
-
     this._group.update(putGroup)
       .take(1)
       .subscribe((res) => {
