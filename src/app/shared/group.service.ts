@@ -154,21 +154,20 @@ export class GroupService {
      */
     public update(group: any): Observable<any> {
         let id = group.id
-        let putGroup = Object.assign({}, group)
+        let putGroup = {}
         let reqUrl = this.groupUrl + '/' + id
+        let updateProperties: string[] = [
+            'description', 'tags', 'sequence_number', 'update_date', 'name', 'public', 'creation_date', 'id', 'access', 'items'
+        ]
 
-        if(putGroup.igDownloadInfo){
-            delete putGroup.igDownloadInfo
+        // Contruct putGroup object, based on expected properties on backend groups update call  
+        for(let key in group){
+            if (updateProperties.indexOf(key) > -1) {
+                putGroup[key] = group[key]
+            }
         }
 
-        delete putGroup.id
-        delete putGroup['public']
-        delete putGroup['count']
-        delete putGroup['total']
-        delete putGroup['thumbnails']
-        delete putGroup['igDownloadInfo']
-
-        if (!putGroup.tags || putGroup.tags[0] == null) { putGroup.tags = [] }
+        if (!putGroup['tags'] || putGroup['tags'][0] == null) { putGroup['tags'] = [] }
 
         return this.http.put(
             reqUrl,
