@@ -157,7 +157,7 @@ export class GroupService {
         let putGroup = {}
         let reqUrl = this.groupUrl + '/' + id
         let updateProperties: string[] = [
-            'description', 'tags', 'sequence_number', 'update_date', 'name', 'public', 'creation_date', 'id', 'access', 'items'
+            'description', 'tags', 'sequence_number', 'update_date', 'name', 'creation_date', 'access', 'items'
         ]
 
         // Contruct putGroup object, based on expected properties on backend groups update call  
