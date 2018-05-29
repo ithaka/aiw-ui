@@ -156,13 +156,20 @@ export class GroupService {
         let id = group.id
         let putGroup = {}
         let reqUrl = this.groupUrl + '/' + id
+        let updateProperties: string[] = [
+            'description', 'tags', 'sequence_number', 'update_date', 'name', 'public', 'creation_date', 'id', 'access', 'items'
+        ]
 
         // Contruct putGroup object, based on expected properties on backend groups update call  
         for(let key in group){
-            if( key === 'description' || key === 'tags' || key === 'sequence_number' || key === 'update_date' || 
-                key === 'name' || key === 'public' || key === 'creation_date' || key === 'id' || key === 'access' || key === 'items' ) {
-                    putGroup[key] = group[key]
-                }
+            if (updateProperties.indexOf(key) > -1) {
+                putGroup[key] = group[key]
+            }
+
+            // if( key === 'description' || key === 'tags' || key === 'sequence_number' || key === 'update_date' || 
+            //     key === 'name' || key === 'public' || key === 'creation_date' || key === 'id' || key === 'access' || key === 'items' ) {
+            //         putGroup[key] = group[key]
+            //     }
         }
 
         if (!putGroup['tags'] || putGroup['tags'][0] == null) { putGroup['tags'] = [] }
