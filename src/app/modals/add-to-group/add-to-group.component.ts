@@ -121,20 +121,26 @@ export class AddToGroupModal implements OnInit, OnDestroy {
 
     // assets come from different places and sometimes have id and sometimes objectId
     this.selectedAssets.forEach((asset: any) => {
-      if (asset && asset.artstorid) {
-        // Data returned from Solr
-        if (putGroup.items.indexOf(asset.artstorid) < 0) {
-          putGroup.items.push(asset.artstorid);
-        }
-      } else if (asset && asset.objectId) {
-        // Data returned from Solr
-        if (putGroup.items.indexOf(asset.objectId) < 0) {
-          putGroup.items.push(asset.objectId);
-        }
-      } else if (asset && asset.id) {
-        // Data return from legacy services
-        if (putGroup.items.indexOf(asset.id) < 0) {
-          putGroup.items.push(asset.id);
+      let assetId: string
+      if (!asset) {
+        console.error("Attempted selecting undefined asset")
+      } else {
+        // Find asset id
+        if (asset.artstorid) {
+          // Data returned from Solr uses "artstorid"
+          assetId = asset.artstorid
+        } else if (asset.objectId) {
+          // Data returned from Items service
+          assetId = asset.objectId
+        } else if (asset.id) {
+          // Asset has "id" when constructed via the Artstor Viewer (see type: Asset)
+          assetId = asset.id
+        } else {
+          console.error("Asset id not found when adding to group", asset)
+        } 
+        // Add id to group if it's not already in the group
+        if (assetId && putGroup.items.indexOf(assetId) < 0) {
+          putGroup.items.push(assetId);
         }
       }
     })
