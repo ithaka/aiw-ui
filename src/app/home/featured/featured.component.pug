@@ -2,11 +2,11 @@
   //- Primary Image
   .col-sm-9.featured-col#featured-primary
     ng-container(*ngFor="let i of [0,1,2]")
-      a#featuredCollectionLink.card.featured-card([class.fade-in]="primaryFeaturedIndex == i", [attr.href]="featured[primaryFeaturedIndex].link | translate")
+      a#featuredCollectionLink.card.featured-card([class.fade-in]="primaryFeaturedIndex == i", [attr.href]="featured[i].link | translate")
         img#primary-featured-img.card-img-top.no-stretch(
-          [attr.src]="featured[primaryFeaturedIndex].img_src | translate", 
-          [attr.alt]="featured[primaryFeaturedIndex].alt | translate", 
-          [attr.title]="featured[primaryFeaturedIndex].link_title | translate"
+          [attr.src]="featured[i].img_src | translate", 
+          [attr.alt]="featured[i].alt | translate", 
+          [attr.title]="featured[i].link_title | translate"
         )
   //- Secondary Images
   .col-sm-3.featured-col#featured-side
