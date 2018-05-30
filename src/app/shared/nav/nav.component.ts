@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Location } from '@angular/common';
 import { Router, NavigationEnd, ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
+import * as Raven from 'raven-js';
 
 import { AuthService, AssetService, ToolboxService } from '..';
 import { AppConfig } from '../../app.service';
@@ -66,6 +67,15 @@ export class Nav implements OnInit, OnDestroy {
       this._auth.currentUser.subscribe(
         (userObj) => {
           this.user = userObj;
+
+          // Add user context to sentry.io errors 
+          if(this.user.username){
+            Raven.setUsesrContext({
+                email: this.user.username
+            })
+          } else{
+            Raven.setUserContext()
+          }
         },
         (err) => {
           console.error("Nav failed to load Institution information", err)
