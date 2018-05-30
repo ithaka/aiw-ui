@@ -9,9 +9,8 @@ export class CollectionTypeHandler {
     2: { name: "institution-asset", alt: "Available to your institution only", badgeText: 'Institutional', type: 2 },
     3: { name: "personal-asset", alt: "Available only to the owner unless shared in a group", badgeText: 'Personal', type: 3 },
     4: { name: "institution-asset", alt: "Available to your institution only", badgeText: 'Institutional', type: 4 },
-    5: { name: "artstor-open-asset", alt: "Available to everyone", badgeText: 'Open Artstor', type: 5 },
-    6: { name: "personal-asset", alt: "Available only to the owner unless shared in a group", badgeText: 'Personal', type: 6 },
-    200: { name: "ssc-asset", alt: "Available to everyone", badgeText: 'Public', type: 200 } // an non-existant collection type used to indicate it's an open, non-artstor asset
+    5: { name: "ssc-asset", alt: "Available to everyone", badgeText: 'Public', type: 5 },
+    6: { name: "personal-asset", alt: "Available only to the owner unless shared in a group", badgeText: 'Personal', type: 6 }
   }
 
   /**
@@ -23,8 +22,7 @@ export class CollectionTypeHandler {
     4,
     2,
     1,
-    5,
-    200
+    5
   ]
 
  /**
