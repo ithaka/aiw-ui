@@ -70,7 +70,7 @@ export class Nav implements OnInit, OnDestroy {
 
           // Add user context to sentry.io errors 
           if(this.user.username){
-            Raven.setUsesrContext({
+            Raven.setUserContext({
                 email: this.user.username
             })
           } else{
