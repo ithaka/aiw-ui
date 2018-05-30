@@ -3,7 +3,7 @@
     "version": "1.8.15",
     "description": "Front End for the Artstor Digital Library",
     "author": "Artstor Team Air",
-    "license": "",
+    "license": "MIT",
     "scripts": {
         "build:dev": "webpack --config config/webpack.dev.js --profile",
         "build:docker": "npm run build:prod && docker build -t angular2-webpack-start:latest .",
