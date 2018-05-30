@@ -479,31 +479,31 @@
       ],
       "PUBLIC_COLLECTIONS": [
         {
-          "SUBHEADING": "Art Institute of Chicago",
-          "DESCRIPTION": "The greatest hits and more",
-          "CAPTION": "Georges Seurat. A Sunday on La Grande Jatte. 1884-1886. Oil on canvas. Image and original data provided by The Art Institute of Chicago.",
-          "LINK": "/#/category/1031896041 ",
-          "IMG_SOURCE": "/assets/img/featured-collections/AIC_Sunday.jpg",
-          "LINK_TITLE": "Art Institute of Chicago",
-          "ALT_TEXT": "Art Institute of Chicago"
+          "SUBHEADING": "Tuskegee University: Chapel Audio Collection",
+          "DESCRIPTION": "Audio from speeches given by important Civil Rights leaders and events",
+          "CAPTION": "Tuskegee University President Luther H. Foster singing with students. Image courtesy of Tuskegee University Archive: Chapel Collection.",
+          "LINK": "/#/collection/87730897",
+          "IMG_SOURCE": "/assets/img/featured-collections/Tuskegee_singing.jpg",
+          "LINK_TITLE": "Tuskegee University: Chapel Audio Collection",
+          "ALT_TEXT": "Tuskegee University: Chapel Audio Collection"
         },
         {
-          "SUBHEADING": "Muhlenberg College: Navy V-12 and V-5 World War II Photograph Collection",
-          "DESCRIPTION": "Students becoming sailors",
-          "CAPTION": "Navy V-12 students on parade. 1943. Photograph. Muhlenberg College: Navy V-12 and V-5 World War II Photograph Collection",
-          "LINK": "/#/collection/87731255 ",
-          "IMG_SOURCE": "/assets/img/featured-collections/Muhlenberg_Navy.jpg",
-          "LINK_TITLE": "Muhlenberg College: Navy V-12 and V-5 World War II Photograph Collection",
-          "ALT_TEXT": "Muhlenberg College: Navy V-12 and V-5 World War II Photograph Collection"
+          "SUBHEADING": "OCAD U Zine Collection",
+          "DESCRIPTION": "Self-published and handmade objects",
+          "CAPTION": "Punch Drunk, Tim Gaedke. Image courtesy of the OCAD University Zine Collection. ",
+          "LINK": "/#/collection/87731595 ",
+          "IMG_SOURCE": "/assets/img/featured-collections/punchdrunk_ocad.jpg",
+          "LINK_TITLE": "OCAD U Zine Collection",
+          "ALT_TEXT": "OCAD U Zine Collection"
         },
         {
-          "SUBHEADING": "The Metropolitan Museum of Art: Brooklyn Museum Costumes",
-          "DESCRIPTION": "The finest fashion and accessories",
-          "CAPTION": "Parasol. 1886. Silk, wood, metal. Image and original data from the Brooklyn Museum.",
-          "LINK": "/#/category/1034948173 ",
-          "IMG_SOURCE": "/assets/img/featured-collections/BrooklynMuseum_parasol.jpg",
-          "LINK_TITLE": "The Metropolitan Museum of Art: Brooklyn Museum Costumes",
-          "ALT_TEXT": "The Metropolitan Museum of Art: Brooklyn Museum Costumes"
+          "SUBHEADING": "Martin Methodist Marine Biology Collection: Key Largo",
+          "DESCRIPTION": "Marine images taken in and around Key Largo",
+          "CAPTION": "Smooth trunkfish (Lactophrys triqueter). Image courtesy of Martin Methodist Marine Biology Collection.",
+          "LINK": "/#/collection/87730675",
+          "IMG_SOURCE": "/assets/img/featured-collections/martin_trunkfish.jpg",
+          "LINK_TITLE": "Martin Methodist Marine Biology Collection: Key Largo",
+          "ALT_TEXT": "Martin Methodist Marine Biology Collection: Key Largo"
         }
       ]
     },
