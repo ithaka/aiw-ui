@@ -16,7 +16,7 @@
         .featured-title([innerHtml]="collection.subheading | translate")
         p.featured-caption.small([innerHtml]="collection.description | translate")
       img.no-stretch.featured-side-img(*ngIf="primaryFeaturedIndex !== i", (mouseenter)="switchFeaturedIndex(i)", (click)="switchFeaturedIndex(i)", [attr.src]="collection.img_src | translate",
-       [attr.alt]="collection.alt_text | translate", [attr.title]="collection.link | translate")
+       [attr.alt]="collection.alt | translate", [attr.title]="collection.link_title | translate")
 
 //- ngBoostrap carousel on mobile
 .row#featured-mobile-container
