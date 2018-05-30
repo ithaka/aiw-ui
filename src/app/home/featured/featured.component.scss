@@ -102,6 +102,7 @@
 .featured-card {
     transition: opacity ease 1.5s;
     opacity: 0;
+    pointer-events: none;
 
     // Use the first card for relative sizing, and display the others on top
     & + & {
@@ -111,6 +112,7 @@
 
     &.fade-in {
         opacity: 1;
+        pointer-events: all;
     }
 
     @media (max-width: $phone) {
