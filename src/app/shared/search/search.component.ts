@@ -9,6 +9,7 @@ import { AnalyticsService } from '../../analytics.service';
 import { AssetFiltersService } from '../../asset-filters/asset-filters.service';
 import { Params } from '@angular/router/src/shared';
 import { PACKAGE_ROOT_URL } from '@angular/core/src/application_tokens';
+import { LogService } from '../log.service';
 
 @Component({
   selector: 'ang-search',
@@ -40,7 +41,8 @@ export class SearchComponent implements OnInit, OnDestroy {
     private _router: Router,
     private route: ActivatedRoute,
     private angulartics: Angulartics2,
-    private _filters: AssetFiltersService
+    private _filters: AssetFiltersService,
+    private _captainsLog: LogService
   ) {
 
   }
@@ -97,6 +99,13 @@ export class SearchComponent implements OnInit, OnDestroy {
 
     this._analytics.directCall('search')
     this.angulartics.eventTrack.next({ action: "simpleSearch", properties: { category: "search", label: this.term }})
+
+    this._captainsLog.log({
+      eventType: "artstor_search",
+      additional_fields: { 
+        "searchTerm:": this.term
+      }
+    })
 
     let routeParams = this.route.snapshot.params;
     let params: Params = {
