@@ -347,7 +347,12 @@ export class AssetPage implements OnInit, OnDestroy {
                 let currentAssetId: string = this.assets[0].id || this.assets[0]['objectId'] // couldn't trust the 'this.assetIdProperty' variable
                 // Search returns a 401 if /userinfo has not yet set cookies
                 if (Object.keys(this._auth.getUser()).length !== 0) {
-                    this.collectionType = CollectionTypeHandler.getCollectionType([asset.collectionType], asset.contributinginstitutionid)
+                    // pass collectiontypeIds from asset.collections to getCollectionType function as an array of number
+                    let collectiontypeIds: number[] = []
+                    asset.collections.forEach((collection) => {
+                        collectiontypeIds.push(Number(collection.type))
+                    })
+                    this.collectionType = CollectionTypeHandler.getCollectionType(collectiontypeIds, asset.contributinginstitutionid)
                 }
                 this.generateImgURL()
 
