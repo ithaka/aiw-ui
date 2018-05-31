@@ -23,14 +23,17 @@ export class Footer {
   private user: any = {}
   private links: string[]
   private browseSec: { [key: string]: boolean } = {}
+  private siteID: string = ""
 
   // TypeScript public modifiers
   constructor(
+    public _appConfig: AppConfig,
     private location: Location,
     private _app: AppConfig,
     private _router: Router,
     private _auth: AuthService
   ) {
+    this.siteID = this._appConfig.config.siteID;
     // Get version number
     this.appVersion = appVersion
     this.links = this._app.config.footerLinks
