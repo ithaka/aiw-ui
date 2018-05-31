@@ -2,7 +2,6 @@ import { Component, OnInit, OnDestroy, Input, Output } from '@angular/core';
 import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 import { Angulartics2 } from 'angulartics2';
 import { Subscription }   from 'rxjs/Subscription';
-import { LogService } from '../log.service';
 
 // Project dependencies
 import { AssetService } from '../../shared';
@@ -10,6 +9,7 @@ import { AnalyticsService } from '../../analytics.service';
 import { AssetFiltersService } from '../../asset-filters/asset-filters.service';
 import { Params } from '@angular/router/src/shared';
 import { PACKAGE_ROOT_URL } from '@angular/core/src/application_tokens';
+import { LogService } from '../log.service';
 
 @Component({
   selector: 'ang-search',
@@ -100,17 +100,11 @@ export class SearchComponent implements OnInit, OnDestroy {
     this._analytics.directCall('search')
     this.angulartics.eventTrack.next({ action: "simpleSearch", properties: { category: "search", label: this.term }})
 
-    /** Post search info to Captain's Log
-    interface LogMessage {
-      eventType: string
-      item_id?: string
-      referring_requestid?: string
-      additional_fields?: any
-    } **/
-
     this._captainsLog.log({
       eventType: "artstor_search",
-      additional_fields: { searchTerm: this.term }
+      additional_fields: { 
+        "searchTerm:": this.term
+      }
     })
 
     let routeParams = this.route.snapshot.params;
