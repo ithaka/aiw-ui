@@ -3,7 +3,8 @@
     .container
       .row
         .col-md-6.col--explore
-          .h1 Explore Artstor
+          .h1(*ngIf="siteID!='SAHARA'") Explore Artstor
+          .h1(*ngIf="siteID=='SAHARA'") Explore SAHARA
           //- ADL Collections Link
           span(*ngIf="!_auth.isPublicOnly()")
             a.link#footerLinkBrowseCollection.footer__explore-link(*ngIf="browseSec.collection", [routerLink]="['/browse','library']")
@@ -30,12 +31,13 @@
               h2.browse-category {{ 'HOME.BROWSE.TEACHING_HEADING' | translate }}
           //- Teaching resource description includes links, and should not be a child of the header
           span(*ngIf="!_auth.isPublicOnly()")
-            p.small([innerHtml]="'HOME.BROWSE.TEACHING_LIST' | translate")
+            p.small(*ngIf="siteID!='SAHARA'", [innerHtml]="'HOME.BROWSE.TEACHING_LIST' | translate")
           //- Image Groups Link
           span(*ngIf="!_auth.isPublicOnly()")
             a.link#footerLinkBrowseIGs.footer__explore-link(*ngIf="browseSec.imageGrps", [routerLink]="['/browse','groups', 'institution']")
               h2.browse-category {{ 'HOME.BROWSE.GROUPS_HEADING' | translate }}
-              p.small([innerHtml]="'HOME.BROWSE.GROUPS_LIST' | translate")
+              p.small(*ngIf="siteID!='SAHARA'", [innerHtml]="'HOME.BROWSE.GROUPS_LIST' | translate")
+              p.small(*ngIf="siteID=='SAHARA'", [innerHtml]="'HOME.BROWSE.GROUPS_LIST_SAHARA' | translate")
           //- Public Collections for Unaffiliated users
           span(*ngIf="_auth.isPublicOnly()")
             a.link#footerLinkBrowseIGs.footer__explore-link([routerLink]="['/browse','commons']")
