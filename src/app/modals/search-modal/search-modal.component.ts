@@ -7,7 +7,7 @@ import { Angulartics2 } from 'angulartics2';
 import { SearchQueryUtil } from './search-query';
 import { AnalyticsService } from '../../analytics.service';
 import { AssetFiltersService } from './../../asset-filters/asset-filters.service';
-import { AuthService, AssetService, AssetSearchService } from "app/shared";
+import { AuthService, AssetService, AssetSearchService, LogService } from "app/shared";
 import { AppConfig } from '../../app.service';
 
 @Component({
@@ -92,7 +92,8 @@ export class SearchModal implements OnInit {
         private angulartics: Angulartics2,
         private _auth: AuthService,
         // Solr Search service
-        private _assetFilters: AssetFiltersService
+        private _assetFilters: AssetFiltersService,
+        private _captainsLog: LogService
       ) {
 
     // Setup two query fields
@@ -500,6 +501,15 @@ export class SearchModal implements OnInit {
     // Track in Adobe Analytics
     this._analytics.directCall('advanced_search');
     this.angulartics.eventTrack.next({ action: "advSearch", properties: { category: "search", label: advQuery } })
+
+    // Post search info to Captain's Log
+    this._captainsLog.log({
+      eventType: "artstor_search",
+      additional_fields: { 
+        "AdvancedSearchQuery": advQuery,
+        "AdvancedSearchFilters": filterParams
+      }
+    })
 
     // Maintain feature flags
     if (currentParams['featureFlag']) {
