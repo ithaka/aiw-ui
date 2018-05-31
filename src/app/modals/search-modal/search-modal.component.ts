@@ -506,7 +506,7 @@ export class SearchModal implements OnInit {
     this._captainsLog.log({
       eventType: "artstor_search",
       additional_fields: { 
-        "AdvancedSearchQuery": advQuery,
+        "AdvancedSearchTerm": advQuery,
         "AdvancedSearchFilters": filterParams
       }
     })
