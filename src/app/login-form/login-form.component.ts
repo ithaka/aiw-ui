@@ -40,6 +40,8 @@ export class LoginFormComponent implements OnInit {
 
   private loginInstName: string = '' /** Bound to the autocomplete field */
   private loginLoading = false
+  // loginCall is scoped globally for isBadCasePassword() as well as login()
+  private loginCall: Function
 
   /** 
    * Observable for autocomplete list of institutions
@@ -133,7 +135,7 @@ export class LoginFormComponent implements OnInit {
   }
 
   login(user: User) {
-    let loginCall: Function = (user) => { return this._auth.login(user) }
+    this.loginCall = (user) => { return this._auth.login(user) }
 
     user.username = user.username.toLowerCase().trim()
     this.loginLoading = true;
@@ -155,12 +157,12 @@ export class LoginFormComponent implements OnInit {
 
     if (this.samlTokenId) {
       user.samlTokenId = this.samlTokenId
-      loginCall = (user) => { return this._auth.linkSamlUser(user)}
+      this.loginCall = (user) => { return this._auth.linkSamlUser(user)}
     }
 
     this.angulartics.eventTrack.next({ action:"remoteLogin", properties: { category: "login", label: "attempt" }});
 
-    loginCall(user)
+    this.loginCall(user)
       .then(
         (data)  => {
           this.loginLoading = false;
@@ -226,7 +228,7 @@ export class LoginFormComponent implements OnInit {
     }
     // Try password all lowercase
     user.password = user.password.toLowerCase()
-    this._auth.login(user).then((data) => {
+    this.loginCall(user).then((data) => {
       if (data.status === true) {
         this.forcePwdRst = true
         this.errorMsg = ''
