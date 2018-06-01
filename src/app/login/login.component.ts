@@ -218,7 +218,7 @@ export class Login implements OnInit, OnDestroy {
          */
         // pathTokens are appended after a trailing forward slash
         if (stashedRoute[0] === "/") { stashedRoute = stashedRoute.substr(1) }
-        url = url.replace(pathToken, stashedRoute )
+        url = url.replace(pathToken, stashedRoute)
       } else if (url.match(baseUrlParam)) {
         /**
          * Legacy proxy configurations that point "library.artstor.org" without any tokens
