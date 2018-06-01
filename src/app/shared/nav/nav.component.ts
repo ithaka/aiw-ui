@@ -80,7 +80,6 @@ export class Nav implements OnInit, OnDestroy {
       this._auth.currentUser.subscribe(
         (userObj) => {
           this.user = userObj;
-          console.log('this is user - ', this.user)
 
           // Add user context to sentry.io errors 
           if(this.user.username){
