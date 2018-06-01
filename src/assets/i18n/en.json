@@ -75,6 +75,12 @@
     "PRIVACY_DISCLAIMER": "You may unsubscribe at any time by clicking on the provided link on any marketing message.",
     "FIELDS_REQUIRED": "Please note that all fields are required unless noted."
   },
+  "SHIBBOLETH_ERRORS": {
+    "2010": "Saml Account already exists",
+    "2020": "Invalid SAML token ID.",
+    "2050": "Could not find institution account for entity ID:",
+    "2080": "The Account already exists for username"
+  },
   "REGISTER_JSTOR_MODAL": {
     "TITLE": "Use your JSTOR account",
     "MESSAGE_1": "Please enter your JSTOR email and password to register.",
