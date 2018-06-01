@@ -197,10 +197,6 @@ export class Login implements OnInit, OnDestroy {
       if (url.match("//www.artstor.org")) {
         url = url.replace("//www.artstor.org", "//library.artstor.org")
       }
-      // WORKAROUND: Auth is still cleaning data with legacy "basicSearch" pathes
-      if (url.match("/action/showBasicSearch")) {
-          
-      }
       // Handle passing stashed url to proxies
       let urlToken = /!+TARGET_FULL_PATH!+/g;
       let pathToken = /!+TARGET_NO_SERVER!+/g;
@@ -210,7 +206,7 @@ export class Login implements OnInit, OnDestroy {
          * Auth provides !!!TARGET_FULL_PATH!!! as a string to replace for forwarding
          */
         url = url.replace(urlToken, document.location.host + stashedRoute )
-      } else if (url.match(pathToken)) {
+      } else {
         /**
          * WAM Proxy forwarding
          * Auth provides !!!TARGET_NO_SERVER!!! as a token/string to replace for forwarding
