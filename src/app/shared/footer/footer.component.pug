@@ -3,7 +3,7 @@
     .container
       .row
         .col-md-6.col--explore
-          .h1(*ngIf="siteID!='SAHARA'") Explore Artstor
+          .h1(*ngIf="siteID=='ARTSTOR'") Explore Artstor
           .h1(*ngIf="siteID=='SAHARA'") Explore SAHARA
           //- ADL Collections Link
           span(*ngIf="!_auth.isPublicOnly()")
