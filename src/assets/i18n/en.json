@@ -76,10 +76,10 @@
     "FIELDS_REQUIRED": "Please note that all fields are required unless noted."
   },
   "SHIBBOLETH_ERRORS": {
-    "2010": "Saml Account already exists",
-    "2020": "Invalid SAML token ID.",
-    "2050": "Could not find institution account for entity ID:",
-    "2080": "The Account already exists for username"
+    "2010": "This account is already linked to an Artstor account.",
+    "2020": "Invalid login. Please try again.",
+    "2050": "Your institution was not found.",
+    "2080": "You already have an account. Please link to your existing account."
   },
   "REGISTER_JSTOR_MODAL": {
     "TITLE": "Use your JSTOR account",
