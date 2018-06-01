@@ -598,6 +598,9 @@ export class AuthService implements CanActivate {
         return null
       }
     } else if(!data['status'] && this.featureFlags['unaffiliated']) {
+      // For downloads with this feature flag
+      this.authorizeDownload();
+
       // Return generic user object for unaffliated users
       let user = {
         'unaffliatedUser' : true,
