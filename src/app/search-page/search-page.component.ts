@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router'
 import { Subscription }   from 'rxjs/Subscription';
 
 import { AssetService } from './../shared/assets.service';
-import { AuthService } from '../shared';
+import { AuthService, LogService } from '../shared';
 import { AssetFiltersService } from '../asset-filters/asset-filters.service';
 import { AnalyticsService } from '../analytics.service';
 import { AssetGrid } from './../asset-grid/asset-grid.component';
@@ -38,7 +38,8 @@ export class SearchPage implements OnInit, OnDestroy {
         private _router: Router,
         private _analytics: AnalyticsService,
         private _title: TitleService,
-        private _auth: AuthService
+        private _auth: AuthService,
+        private _captainsLog: LogService
       ) {
     this.siteID = this._appConfig.config.siteID;
     // this makes the window always render scrolled to the top
@@ -85,6 +86,19 @@ export class SearchPage implements OnInit, OnDestroy {
 
         // Make a search call if there is a search term or any selected filter
         if (params["term"] || params["classification"] || params["geography"] || params["collectiontypes"]  || params["collTypes"] || params["startDate"] || params["endDate"]) {
+          // Build *reporting* search filters object
+          let logFilters = Object.assign({}, params)
+          // Remove search term value
+          delete logFilters["term"]
+          // Post search info to Captain's Log
+          this._captainsLog.log({
+            eventType: "artstor_search",
+            additional_fields: { 
+              "searchTerm": params["term"],
+              "searchFilters": logFilters
+            }
+          })
+
           this._title.setSubtitle( '"'+ params["term"] + '"' )
           this._assets.queryAll(params);
         } else {
