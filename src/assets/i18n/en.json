@@ -77,7 +77,10 @@
   "SHIBBOLETH_ERRORS": {
     "2010": "This account is already linked to an Artstor account.",
     "2020": "There was an error linking your institutional account. The session may have expired, please try again.",
+    "2040": "his account is associated with another institution. Please create a new account.",
     "2050": "Your institution was not found.",
+    "2060": "Invalid email address or password. Try again.",
+    "2070": "This account is already linked to an Artstor account.",
     "2080": "You already have an account. Please link to your existing account."
   },
   "REGISTER_JSTOR_MODAL": {
