@@ -64,8 +64,7 @@
       "INSTITUTION_ROLE_REQUIRED": "Please select a role",
       "ACADEMIC_DEPT_REQUIRED": "Please select a department",
       "LOGIN_SERVER": "Server is not responding. Please try again later.",
-      "SERVER_ERROR": "The server encountered an error processing the request. Please try again.",
-      "SHIBBOLETH_ERROR": "There was an error linking your institutional account. The session may have expired, please try again."
+      "SERVER_ERROR": "The server encountered an error processing the request. Please try again."
     },
     "AGE_PROMPT": "I confirm that I am 13 or older",
     "AGE_PROMPT_HOVER": "If you are under 13, please provide your legal guardian's email address to register",
@@ -74,6 +73,12 @@
     "TERMS": "I agree to the Artstor Digital Library <a id=\"linkTermsConditions\" data-automation-component=\"artstor-register-terms\" href=\"http://www.artstor.org/terms\" class=\"link bold\" target=\"_blank\">Terms</a>",
     "PRIVACY_DISCLAIMER": "You may unsubscribe at any time by clicking on the provided link on any marketing message.",
     "FIELDS_REQUIRED": "Please note that all fields are required unless noted."
+  },
+  "SHIBBOLETH_ERRORS": {
+    "2010": "This account is already linked to an Artstor account.",
+    "2020": "There was an error linking your institutional account. The session may have expired, please try again.",
+    "2050": "Your institution was not found.",
+    "2080": "You already have an account. Please link to your existing account."
   },
   "REGISTER_JSTOR_MODAL": {
     "TITLE": "Use your JSTOR account",
