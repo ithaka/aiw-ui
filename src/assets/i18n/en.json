@@ -64,8 +64,7 @@
       "INSTITUTION_ROLE_REQUIRED": "Please select a role",
       "ACADEMIC_DEPT_REQUIRED": "Please select a department",
       "LOGIN_SERVER": "Server is not responding. Please try again later.",
-      "SERVER_ERROR": "The server encountered an error processing the request. Please try again.",
-      "SHIBBOLETH_ERROR": "There was an error linking your institutional account. The session may have expired, please try again."
+      "SERVER_ERROR": "The server encountered an error processing the request. Please try again."
     },
     "AGE_PROMPT": "I confirm that I am 13 or older",
     "AGE_PROMPT_HOVER": "If you are under 13, please provide your legal guardian's email address to register",
@@ -74,6 +73,15 @@
     "TERMS": "I agree to the Artstor Digital Library <a id=\"linkTermsConditions\" data-automation-component=\"artstor-register-terms\" href=\"http://www.artstor.org/terms\" class=\"link bold\" target=\"_blank\">Terms</a>",
     "PRIVACY_DISCLAIMER": "You may unsubscribe at any time by clicking on the provided link on any marketing message.",
     "FIELDS_REQUIRED": "Please note that all fields are required unless noted."
+  },
+  "SHIBBOLETH_ERRORS": {
+    "2010": "This account is already linked to an Artstor account.",
+    "2020": "There was an error linking your institutional account. The session may have expired, please try again.",
+    "2040": "This account is associated with another institution. Please create a new account.",
+    "2050": "Your institution was not found.",
+    "2060": "Invalid email address or password. Try again.",
+    "2070": "This account is already linked to an Artstor account.",
+    "2080": "You already have an account. Please link to your existing account."
   },
   "REGISTER_JSTOR_MODAL": {
     "TITLE": "Use your JSTOR account",
@@ -432,11 +440,12 @@
       "CLASS_LIST": "Browse by categories such as paintings, performing arts, sculpture, or textiles",
       "COLL_HEADING": "Collection",
       "COLL_LIST": "Artstor, Institutional, Public, and Personal",
-      "COLL_LIST_SHORT": "(Institutional Collections)",
+      "COLL_LIST_SHORT": "Institutional Collections",
       "TEACHING_HEADING": "Teaching Resources",
       "TEACHING_LIST": "<a href=\"/#/browse/groups/public?tags=Curriculum%2520Guides&page=1\" class=\"link\">Curriculum Guides</a>, <a href=\"/#/browse/groups/public?page=1&tags=Case%2520Studies\" class=\"link\">Case Studies</a>, <a href=\"/#/browse/groups/search?level=public&tags=Art%2520%2526%2520Architecture%2520Overviews&page=1\" class=\"link\">Arts & Architecture Overviews</a>, <a href=\"/#/browse/groups/search?level=public&page=1&tags=Social%2520Studies%2520and%2520Humanities%2520Overviews\" class=\"link\">Social Sciences & Humanities Overviews</a>, <a href=\"http://artstor.libguides.com/APArtHistory\" target=\"_blank\" class=\"link\">AP Art History</a>, <a href=\"/#/browse/groups/public?page=1&tags=AP%25C2%25AE%2520United%2520States%2520%2520History\" class=\"link\">AP US History</a>, <a href=\"/#/browse/groups/public?page=1&tags=AP%25C2%25AE%2520European%2520History\" class=\"link\">AP European History</a>, and <a href=\"/#/browse/groups/public\" class=\"link\">more...</a>",
       "GROUPS_HEADING": "Image Groups",
       "GROUPS_LIST": "Groups of images created by Artstor, other users at your institution, and you",
+      "GROUPS_LIST_SAHARA": "Groups created by you and others at your institution",
       "PUB_COLL_HEADING": "Public Collections",
       "PUB_COLL_LIST": "Open content provided by multiple institutions",
       "MORE_CONT_HEADING": "More Content",
