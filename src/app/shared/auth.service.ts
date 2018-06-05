@@ -53,7 +53,6 @@ export class AuthService implements CanActivate {
   public currentUser: Observable<any> = this.userSource.asObservable();
 
   private idleState: string = 'Not started.';
-  private idleUtil: IdleWatcherUtil = new IdleWatcherUtil(); // Idle watcher, session timeout values are abstracted to a utility
   public showUserInactiveModal: Subject<boolean> = new Subject(); //Set up subject observable for showing inactive user modal
 
   private betausers: Array<string>
@@ -171,8 +170,8 @@ export class AuthService implements CanActivate {
     }
 
     // For session timeout on user inactivity
-    idle.setIdle(this.idleUtil.generateIdleTime()); // Set an idle time of 1 min, before starting to watch for timeout
-    idle.setTimeout(this.idleUtil.generateSessionLength()); // Log user out after 90 mins of inactivity
+    idle.setIdle(IdleWatcherUtil.generateIdleTime()); // Set an idle time of 1 min, before starting to watch for timeout
+    idle.setTimeout(IdleWatcherUtil.generateSessionLength()); // Log user out after 90 mins of inactivity
     idle.setInterrupts(DEFAULT_INTERRUPTSOURCES);
 
     idle.onIdleEnd.subscribe(() => {
@@ -232,7 +231,7 @@ export class AuthService implements CanActivate {
   public resetIdleWatcher(): void {
     this.idle.watch();
     // When a user comes back, we don't want to wait for the time interval to refresh the session
-    this.refreshUserSession()
+    this.refreshUserSession(true)
   }
 
   private refreshUserSessionInProgress: boolean = false
