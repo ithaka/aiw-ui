@@ -7,7 +7,7 @@
     
     .row.my-4
       .col-sm-4
-        h3.browse-category {{ 'Art and Visual Resources' | translate }}
+        h3.browse-category {{ 'HOME.HEADINGS.FEATURED' | translate }}
         p.small(*ngIf="siteID=='SAHARA'", [innerHtml]="'HOME.CONTENT_ACCESS.SAHARA' | translate")
         p.small(*ngIf="siteID!='SAHARA' && !_auth.isPublicOnly()", [innerHtml]="'HOME.CONTENT_ACCESS.USER' | translate")
         p.small(*ngIf="siteID!='SAHARA' && _auth.isPublicOnly()", [innerHtml]="'HOME.CONTENT_ACCESS.PUBLIC' | translate")
