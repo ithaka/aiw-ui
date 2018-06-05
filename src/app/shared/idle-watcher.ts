@@ -4,10 +4,10 @@ export class IdleWatcherUtil {
   /**
    * Generates session length
    */
-  public generateSessionLength() : number {
+  public static generateSessionLength() : number {
 
-    let sessionLengthInMins: number = 90;
-    let sessionLengthInSecs: number = sessionLengthInMins * 60;
+    let sessionLengthInMins: number = 90
+    let sessionLengthInSecs: number = sessionLengthInMins * 60
 
     return sessionLengthInSecs;
   }
@@ -15,10 +15,10 @@ export class IdleWatcherUtil {
   /**
    * Generates idle time
    */
-  public generateIdleTime() : number {
+  public static generateIdleTime() : number {
 
-    let idleTimeLengthInMins: number = 1;
-    let idleTimeLengthInSecs: number = idleTimeLengthInMins * 60;
+    let idleTimeLengthInMins: number = 1
+    let idleTimeLengthInSecs: number = idleTimeLengthInMins * 60
 
     return idleTimeLengthInSecs;
   }
