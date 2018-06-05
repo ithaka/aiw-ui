@@ -1,0 +1,11 @@
+{ 
+  "title":"Nucleus",
+  "target":"./styleguide",
+  "css": "styles/all.css",
+  "namespace":"page",
+  "template":"./nucleus/styleguide-theme",
+  "verbose":3,
+  "counterCSS":null,
+  "staticLipsum":false,
+  "placeholderService":false
+}
