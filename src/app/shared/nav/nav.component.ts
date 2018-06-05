@@ -25,6 +25,8 @@ export class Nav implements OnInit, OnDestroy {
   // Display variables
   private logoUrl = ""
 
+  private ipAuthed: boolean = false
+
   // TypeScript public modifiers
   constructor(
     public _app: AppConfig, 
@@ -61,6 +63,17 @@ export class Nav implements OnInit, OnDestroy {
         // }
       })
     );
+
+    // this handles showing the register link for only ip auth'd users
+    this._auth.getIpAuth()
+      .take(1)
+      .subscribe((res) => {
+        if (res.remoteaccess === false && res.user) {
+          this.ipAuthed = true
+        }
+      }, (err) => {
+        console.error(err)
+      })
 
     // Subscribe to User object updates
     this.subscriptions.push(
