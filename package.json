@@ -48,7 +48,7 @@
         "server:prod": "http-server dist --cors",
         "server": "npm run server:dev",
         "start": "npm run server:dev",
-        "styleguide": "./node_modules/.bin/node-sass src/sass/app.scss styleguide/styles/all.css && nucleus --config styleguide/config.nucleus.json && npm run open:styleguide",
+        "styleguide": "./node_modules/.bin/node-sass src/sass/app.scss styleguide/styles/all.css && nucleus --config nucleus/config.nucleus.json && npm run open:styleguide",
         "open:styleguide": "open ./styleguide/index.html",
         "test": "karma start",
         "tslint": "tslint",

@@ -1,0 +1,62 @@
+//-
+ * header.pug -- Render the style guide header
+ *
+ * Copyright (C) 2016 Michael Seibt
+ *
+ * With contributions from: -
+ *
+ * This software may be modified and distributed under the terms
+ * of the MIT license. See the LICENSE file for details.
+
+block nav
+  -var selected = 'nuclides'; //default
+
+-var menu = {'Nuclides': 'nuclides.html', 'Atoms': 'atoms.html', 'Molecules': 'molecules.html', 'Structures' : 'structures.html' };
+
+//div(style="all:initial;display:block;box-sizing: border-box;font-family: Lato, sans-serif;font-size: 14px;margin: 0;padding: 0 40px;position: relative;padding-top: 15px;")
+  a(href="index.html").SG-logo
+    span.SG-logo__icon.SG-ico.SG-ico--logo
+    span.SG-logo__name #{meta.title}
+//div(style="background-color: #eee;background-clip: padding-box;")
+  ul(style="flex-direction: row;box-shadow: none !important;padding-bottom: 0;z-index: 2000;display: flex;padding-left: 0;margin-bottom: 0;list-style: none;flex-wrap: wrap;margin-top: 0;box-sizing: border-box;-webkit-margin-before: 1em;-webkit-margin-after: 1em;-webkit-margin-start: 0px;-webkit-margin-end: 0px;-webkit-padding-start: 40px;")
+    each link, title in menu
+      li(style="float:left;margin: 6px 6px 6px 15px;")
+        if selected === title
+          a(href=link, style="font-size: 14px; line-height: 29px; text-transform: none !important;padding: 0px 6px 0px 0px;color: #000;background: none;letter-spacing: 0.5px;border-bottom: none;cursor: pointer;height: 30px;font-family: Verdana, Arial, sans-serif;font-weight: 700;font-style: normal;font-stretch: normal;text-decoration: none;display: inline-block;text-align: center;white-space: nowrap;vertical-align: middle;border-radius: 0px;transition: background-color 0.15s ease-in-out,border-color 0.15s ease-in-out,box-shadow 0.15s ease-in-out;-webkit-text-decoration-skip: objects;list-style: none;")= title
+        else
+          a(href=link, style="font-size: 14px; line-height: 29px; text-transform: none !important;padding: 0px 6px 0px 0px;color: #000;background: none;letter-spacing: 0.5px;border-bottom: none;cursor: pointer;height: 30px;font-family: Verdana, Arial, sans-serif;font-weight: 700;font-style: normal;font-stretch: normal;text-decoration: none;display: inline-block;text-align: center;white-space: nowrap;vertical-align: middle;border-radius: 0px;transition: background-color 0.15s ease-in-out,border-color 0.15s ease-in-out,box-shadow 0.15s ease-in-out;-webkit-text-decoration-skip: objects;list-style: none;")= title
+//ul.SG-nav-icons
+  li
+    a.SG-nav-icons__item(title="Search for components",href='javascript:void(0)',data-d-search-box-trigger)
+      i.SG-ico.SG-ico--seach
+  li
+    a.SG-nav-icons__item(href="https://holidaypirates.github.com/nucleus", title="Help and Documentation", target="_blank")
+      i.SG-ico.SG-ico--question
+
+
+.container(style="padding-top:5px;")
+  .row.fit
+    a.navbar-brand(href="index.html").SG-logo
+      span.SG-logo__icon.SG-ico.SG-ico--logo
+      span.SG-logo__name #{meta.title}
+.cover
+.container.nav-container
+  .row
+    .col-sm-10
+      nav.navbar.navbar-expand-sm.navbar-light.bg-faded(style="max-width: calc(100% - 1.5rem);")
+        #navMenu.navbar-collapse.collapse(style="margin:0px;")
+          ul.nav.navbar-nav
+            each link, title in menu
+              li.nav-item
+                if selected === title
+                  a.btn.btn-link(href=link, routerLinkActive="active")= title
+                else
+                  a.btn.btn-link(href=link, routerLinkActive="active")= title
+    .col-sm-2
+      ul.SG-nav-icons
+        li
+          a.SG-nav-icons__item(title="Search for components",href='javascript:void(0)',data-d-search-box-trigger)
+            i.SG-ico.SG-ico--seach
+        li
+          a.SG-nav-icons__item(href="https://holidaypirates.github.com/nucleus", title="Help and Documentation", target="_blank")
+            i.SG-ico.SG-ico--question
