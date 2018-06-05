@@ -1,0 +1,190 @@
+@import '../core/variables';
+
+// $navBg: rgb(225,232,225);
+$navBarHeight: 80px;
+$mobileNavHeight: 60px;
+
+$loginPanelBg: #f9f9f9; //#f5f9f5; //#d4cd98
+
+// Navigation Items
+$dropdownShadow: 0px 2px 3px 0px rgba(0,0,0,0.2);
+$navBarLightBg: #eee;
+$navBarHeight: 50px;
+$navBarPad: 0.5rem;
+
+.SG-page {
+    .navbar-light {
+        background: $navBarLightBg;
+    
+        &:before, &:after {
+            background: $navBarLightBg;
+            content: ' ';
+            display: block;
+            position: absolute;
+            top: 0;
+            min-width: 500px;
+            height: 100%;
+        }
+    
+        &:before {
+            right: 100%;
+        }
+    
+        &:after {
+            left: 100%;
+        }
+    }
+    
+    .nav {
+        z-index: 2000;
+        background-color: $navBarLightBg;
+        background-clip: padding-box;
+    }
+    
+    .navbar {
+        // border:none;
+        // display: block;
+        height: $navBarHeight;
+        margin-bottom: $basePadding;
+    
+        @media (min-width: $phone) {
+            height: 60px;
+        }
+    
+        & li.dropdown {
+            line-height: 20px;
+        }
+    
+        .navbar-nav{
+            @media (min-width: 576px) {
+                flex-direction: row;
+            }
+        }
+    }
+    
+    .nav-container {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+    
+        padding-left: 0px;
+        padding-right: 0px;
+        z-index: 2000;
+        @media (min-width: $phone) {
+            position: relative;
+        }
+    }
+    
+    .navbar-collapse {
+        position: relative;
+        left: 0;
+        width: 100%;
+        z-index: 1000;
+    
+        // max-height: 0px;
+        transition: transform 0.3s linear;
+        transform:translate3d(-105%, 0, 0);
+    
+        &.collapse {
+            display: block;
+        }
+    
+        &.show {
+            transform:translate3d(0,0,0);
+        }
+    
+        & > ul {
+            padding-bottom: 20px;
+            box-shadow: 0px 2px 3px 0px rgba(0, 0, 0, 0.2);
+            @media (min-width: $phone) {
+                box-shadow: none !important;
+                padding-bottom: 0;
+            }
+        }
+    
+        @media (min-width: $phone) {
+            margin-top: 2px;
+            transform:translate3d(0, 0, 0);
+        }
+    }
+    
+    .nav-item {
+        margin: 6px 6px 6px 15px;
+    
+        @media (min-width: $tablet) {
+            margin: 6px 12px 6px 0px;
+        }
+    
+        & > .btn, a {
+            font-size: 14px;
+            line-height: 29px; //calc( #{ $navBarHeight } - #{ 4 * $navBarPad });
+        }
+    
+        &.open > .dropdown-menu {
+            display: flex;
+            flex-direction: column;
+        }
+    }
+    
+    .cover {
+        background-color: rgba(114, 114, 114, 0);
+        transition: opacity .3s linear;
+        opacity: 0;
+        display: block;
+        position: fixed;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        z-index: 800;
+        pointer-events: none;
+    
+        &.show {
+            background-color: rgba(114, 114, 114, 0.5);
+            opacity: 1;
+            pointer-events: all;
+        }
+    }
+    
+    .navbar-toggleable-sm .navbar-nav .dropdown-menu {
+        @media (max-width: $phone) {
+            position: relative;
+            float: none;
+            width: 100%;
+        }
+    }
+    
+    .navbar {
+      padding: 0;
+    }
+    
+    .navbar-brand {
+        border: none !important;
+        padding: 0px;
+    }
+    
+    .navbar-light {
+        // background: $navBg;
+        /*width: 100%;
+        height: 108px;*/
+        display: block;
+        border-radius: 0px;
+        padding-top: 0px;
+        padding-bottom: 0px;
+    
+        & .navbar-collapse {
+            line-height: $mobileNavHeight - 20px;
+            @media (min-width: 768px) {
+                margin: ($navBarHeight - 20px)/2 0;
+            }
+        }
+    }
+    
+    .navbar-form {
+        margin-top: 13px;
+        margin-bottom: 13px;
+    }
+}
+
+
