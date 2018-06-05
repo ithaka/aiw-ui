@@ -500,13 +500,13 @@ export class AuthService implements CanActivate {
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
     let options = { headers: this.userInfoHeader, withCredentials: true }
 
-    if (this.canUserAccess(this.getUser()) || route.params.samlTokenId) { // If user object already exists, we're done here
-      return new Observable(observer => {
-        observer.next(true)
-      })
-    } else if (this.isPublicOnly() && state.url === '/register') { // For unaffiliated users, trying to access /register route
+    if (this.isPublicOnly() && state.url === '/register') { // For unaffiliated users, trying to access /register route
       return new Observable(observer => {
         observer.next(false)
+      })
+    } else if (this.canUserAccess(this.getUser()) || route.params.samlTokenId) { // If user object already exists, we're done here
+      return new Observable(observer => {
+        observer.next(true)
       })
     } 
 
@@ -597,6 +597,9 @@ export class AuthService implements CanActivate {
         return null
       }
     } else if(!data['status'] && this.featureFlags['unaffiliated']) {
+      // For downloads with this feature flag
+      this.authorizeDownload();
+
       // Return generic user object for unaffliated users
       let user = {
         'unaffliatedUser' : true,
