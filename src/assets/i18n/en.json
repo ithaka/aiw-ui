@@ -422,7 +422,8 @@
       "SSC": "Public Collections",
       "BRWSE": "Browse",
       "FRM_BLOG": "From Our Blog",
-      "INSTITUTION_COLLECTIONS": "{{institutionName}} Collections"
+      "INSTITUTION_COLLECTIONS": "{{institutionName}} Collections",
+      "FEATURED": "Art and Multimedia"
     },
     "CONTENT_ACCESS": {
       "USER": "From the Artstor Digital Library, Institutional Collections, and Public Collections",
