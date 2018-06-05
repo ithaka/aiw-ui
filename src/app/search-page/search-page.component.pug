@@ -3,7 +3,7 @@ nav-menu([allowSelectAll]="true")
   .row
     .col-sm-3(style="margin-top: 1rem;")
       .mobile--hide
-        h3.browse-category {{ 'Art and Visual Resources' | translate }}
+        h3.browse-category {{ 'HOME.HEADINGS.FEATURED' | translate }}
         p.small(*ngIf="siteID!='SAHARA' && _auth.isPublicOnly()", [innerHtml]="'HOME.CONTENT_ACCESS.PUBLIC' | translate")
         p.small(*ngIf="siteID!='SAHARA' && !_auth.isPublicOnly()", [innerHtml]="'HOME.CONTENT_ACCESS.USER' | translate")
         p.small(*ngIf="siteID=='SAHARA'", [innerHtml]="'HOME.CONTENT_ACCESS.SAHARA' | translate")
