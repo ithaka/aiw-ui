@@ -197,23 +197,38 @@ export class Login implements OnInit, OnDestroy {
       if (url.match("//www.artstor.org")) {
         url = url.replace("//www.artstor.org", "//library.artstor.org")
       }
+      // WORKAROUND: Auth is still cleaning data with legacy "basicSearch" pathes
+      if (url.match("/action/showBasicSearch")) {
+        url = url.replace("/action/showBasicSearch", "")
+      }
       // Handle passing stashed url to proxies
       let urlToken = /!+TARGET_FULL_PATH!+/g;
       let pathToken = /!+TARGET_NO_SERVER!+/g;
+      let baseUrlParam = /(:\/\/library.artstor.org)$|(:\/\/library.artstor.org\/)$/;
       if (url.match(urlToken)) {
         /**
          * EZProxy forwarding
          * Auth provides !!!TARGET_FULL_PATH!!! as a string to replace for forwarding
          */
         url = url.replace(urlToken, document.location.host + stashedRoute )
-      } else {
+      } else if (url.match(pathToken)) {
         /**
          * WAM Proxy forwarding
          * Auth provides !!!TARGET_NO_SERVER!!! as a token/string to replace for forwarding
          */
         // pathTokens are appended after a trailing forward slash
         if (stashedRoute[0] === "/") { stashedRoute = stashedRoute.substr(1) }
-        url = url.replace(pathToken, stashedRoute )
+        url = url.replace(pathToken, stashedRoute)
+      } else if (url.match(baseUrlParam)) {
+        /**
+         * Legacy proxy configurations that point "library.artstor.org" without any tokens
+         */
+        // Verify URL ends with a slash
+        if(url[url.length - 1] != "/") { url = url + "/" }
+        // Verify stashed route does NOT start with a slash
+        if (stashedRoute[0] == "/") { stashedRoute = stashedRoute.substr(1) }
+        // Append stashed route to query param
+        url = url + stashedRoute
       }
       // If proxy, simply open url:
       window.open(url);
