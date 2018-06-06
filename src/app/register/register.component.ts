@@ -18,7 +18,7 @@ export class RegisterComponent implements OnInit {
   private registerForm: FormGroup;
   private submitted: boolean = false;
   private isLoading: boolean = false;
-  private user: any;
+  // private user: any;
 
   private userDepts: any[] = [];
   private userRoles: any[] = [];
@@ -62,13 +62,13 @@ export class RegisterComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.user = this._auth.getUser()
+    // this.user = this._auth.getUser()
 
-    if (this.user) {
-      if (this.user.isLoggedIn || this.user.unaffiliated) {
-        this._router.navigate(['/home']);
-      }
-    }
+    // if (this.user) {
+    //   if (this.user.isLoggedIn || this.user.unaffliatedUser) {
+    //     this._router.navigate(['/home']);
+    //   }
+    // }
 
     let email: string = this.route.snapshot.params.email
     let samlTokenId: string = this.route.snapshot.params.samlTokenId
