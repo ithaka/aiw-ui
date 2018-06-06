@@ -1065,6 +1065,20 @@ export class AssetPage implements OnInit, OnDestroy {
     }
 
     /**
+     * Add Captain's log event: Print image
+     * @param asset to get the asset id and institution id to be logged
+     */
+    private logPrint(asset: Asset): void {
+        this._log.log({
+            eventType: "artstor_print_image",
+            item_id: asset.id,
+            additional_fields: {
+                institutionID: asset.contributinginstitutionid
+            }
+        })
+    }
+
+    /**
      * Get link to Error Form
      * - Generate url with Query params for reporting asset error
      * @param asset Asset for which the user is reporting an error
