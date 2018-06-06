@@ -109,7 +109,7 @@
             i#downloadAssetLink.icon.icon-download
           a.btn.btn-secondary(*ngIf="assets[0]", tabindex="5", (click)="showGenerateCitation = true")
             | {{ 'ASSET_PAGE.BUTTONS.GENERATE_CITATION' | translate}}
-          a.btn.btn-secondary(*ngIf="assets[0]", tabindex="6", [attr.href]=" '/#/assetprint/' + assets[0].id ", target="_blank")
+          a.btn.btn-secondary(*ngIf="assets[0]", tabindex="6", [attr.href]=" '/#/assetprint/' + assets[0].id ", target="_blank", (click)="logPrint(assets[0])")
             | {{ 'ASSET_PAGE.BUTTONS.PRINT' | translate}}
           button.btn.btn-primary((click)="addAssetToIG()", tabindex="7")
             | {{ 'ASSET_PAGE.BUTTONS.ADD_TO_GROUP' | translate }}
