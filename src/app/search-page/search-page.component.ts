@@ -1,6 +1,7 @@
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router'
 import { Subscription }   from 'rxjs/Subscription';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 import { AssetService } from './../shared/assets.service';
 import { AuthService, LogService } from '../shared';
@@ -19,7 +20,10 @@ import { AppConfig } from '../app.service';
 
 export class SearchPage implements OnInit, OnDestroy {
   // Add user to decide whether to show the banner
-  private user: any = this._auth.getUser(); 
+  private user: any = this._auth.getUser();
+
+  // Contributors is the list of map of institution id and institution name used for show Contributor filter
+  private contributors: any[] = [];
 
   private unaffiliatedFlag: boolean;
   private siteID: string = ""
@@ -39,7 +43,8 @@ export class SearchPage implements OnInit, OnDestroy {
         private _analytics: AnalyticsService,
         private _title: TitleService,
         private _auth: AuthService,
-        private _captainsLog: LogService
+        private _captainsLog: LogService,
+        private http: HttpClient
       ) {
     this.siteID = this._appConfig.config.siteID;
     // this makes the window always render scrolled to the top
@@ -49,6 +54,11 @@ export class SearchPage implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    // Get the map of institution id to institution name for the implementation of Contributor filter
+    this.http.get('http://stage.artstor.org/api/institutions?_method=allssinstitutions').subscribe(data => {
+      this.contributors = data['ssInstitutions']
+    })
+
     // Subscribe User object updates
     this.subscriptions.push(
       this._auth.currentUser.subscribe(

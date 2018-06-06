@@ -622,6 +622,7 @@
     "geography" : "Geography",
     "collTypes" : "Collection Type",
     "collectiontypes" : "Collection Type",
+    "contributinginstitutionid" : "Contributor",
     "data" : "Date"
   },
   "FIELD" : {

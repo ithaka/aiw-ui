@@ -204,13 +204,18 @@ export class AssetSearchService {
           "name" : "artclassification_str",
           "mincount" : 1,
           "limit" : 17
-        }
+        },
         // ,
         // {
         //   "name" : "artcollectiontitle_str",
         //   "mincount" : 1,
         //   "limit" : 15
         // }
+        {
+          "name" : "contributinginstitutionid",
+          "mincount" : 1,
+          "limit" : 15
+        }
       ],
     };
 

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core'
+import { Component, Input } from '@angular/core'
 import { Router, ActivatedRoute } from '@angular/router'
 import { Subscription } from 'rxjs/Subscription'
 import { Angulartics2 } from 'angulartics2'
@@ -7,6 +7,7 @@ import { AssetService } from '../shared/assets.service'
 import { AssetFiltersService } from '../asset-filters/asset-filters.service'
 import { AnalyticsService } from '../analytics.service'
 import { AuthService } from "app/shared";
+//const Contributors = require('./Contributor-filter')
 
 declare var _satellite: any
 
@@ -16,6 +17,9 @@ declare var _satellite: any
   templateUrl: './asset-filters.component.pug'
 })
 export class AssetFilters {
+  @Input()
+  private contributors: any[] = [];
+
   // Set our default values
   public searchLoading: boolean
   public showFilters: boolean = true
@@ -70,7 +74,8 @@ export class AssetFilters {
     private router: Router,
     private _analytics: AnalyticsService,
     private angulartics: Angulartics2,
-    private _auth: AuthService
+    private _auth: AuthService,
+    //private _contributor: ContributorFilter
   ) {
   }
 
@@ -115,12 +120,24 @@ export class AssetFilters {
     this.subscriptions.push(
       this._filters.available$.subscribe(
         filters => {
+          console.log("this is the filter:", filters)
           // Clean up filter data for display (i.e. insitutional asset counts are inaccurate)
           if (filters['collectiontypes']) {
             for (let i = 0; i < filters['collectiontypes'].length; i++) {
               let colType = filters['collectiontypes'][i]
               if (colType.name == '2' || colType.name == '4') {
                 delete colType.count
+              }
+            }
+          }
+          if (filters['contributinginstitutionid']) {
+            let InstMap = this.contributors
+            console.log("this is the list:", InstMap)
+            for (let i = 0; i < filters['contributinginstitutionid'].length; i++) {
+              for (let j = 0; j < InstMap.length; j++) {
+                if (filters['contributinginstitutionid'][i].name === InstMap[j].institutionId) {
+                  filters['contributinginstitutionid'][i].showingName = InstMap[j].institutionName;
+                }
               }
             }
           }
