@@ -591,6 +591,10 @@ export class AuthService implements CanActivate {
       if (data['isRememberMe'] || data['remoteaccess']) {
         user.isLoggedIn = true
       }
+
+      // Save ipAuthed flag to user object
+      user.ipAuthed = !user.isLoggedIn && user.status ? true : false
+
       if (this.canUserAccess(user)) {
         return user
       } else {

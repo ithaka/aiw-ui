@@ -86,7 +86,7 @@ export class FeaturedComponent implements OnInit {
     if (this.user.isLoggedIn && this.siteId === 'SAHARA') {
       this.featuredType = 'SAHARA_COLLECTIONS'
     }
-    else if (this.user.isLoggedIn) {
+    else if (this.user.isLoggedIn || this.user.ipAuthed) { // Show ADL featured collections if the user is Logged-in or IP Authed
       this.featuredType = 'COLLECTIONS'
     }
     else {
