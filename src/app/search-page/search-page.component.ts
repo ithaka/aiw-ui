@@ -23,7 +23,6 @@ export class SearchPage implements OnInit, OnDestroy {
   private user: any = this._auth.getUser();
 
   // Contributors is the list of map of institution id and institution name used for show Contributor filter
-  private contributors: any[] = [];
 
   private unaffiliatedFlag: boolean;
   private siteID: string = ""
@@ -54,10 +53,6 @@ export class SearchPage implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    // Get the map of institution id to institution name for the implementation of Contributor filter
-    this.http.get('http://stage.artstor.org/api/institutions?_method=allssinstitutions').subscribe(data => {
-      this.contributors = data['ssInstitutions']
-    })
 
     // Subscribe User object updates
     this.subscriptions.push(

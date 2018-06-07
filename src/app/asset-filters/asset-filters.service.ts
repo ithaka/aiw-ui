@@ -62,10 +62,10 @@ export class AssetFiltersService {
 
     //'Search within' boolean flag
     public searchWithin: boolean = false
+    public contributors: any[] = [];
 
     private _storage;
     private institution: any = {};
-
 
     private filterNameMap: any = {
         "collectiontypes" : {
@@ -83,6 +83,11 @@ export class AssetFiltersService {
         private http: HttpClient,
         private _auth: AuthService
     ){
+        // Get the map of institution id to institution name for the implementation of Contributor filter
+        this.http.get('http://stage.artstor.org/api/institutions?_method=allssinstitutions').subscribe(data => {
+        this.contributors = data['ssInstitutions']
+        })
+
         this._storage = locker.useDriver(Locker.DRIVERS.LOCAL);
 
         this.subscriptions.push(

@@ -17,8 +17,6 @@ declare var _satellite: any
   templateUrl: './asset-filters.component.pug'
 })
 export class AssetFilters {
-  @Input()
-  private contributors: any[] = [];
 
   // Set our default values
   public searchLoading: boolean
@@ -74,8 +72,7 @@ export class AssetFilters {
     private router: Router,
     private _analytics: AnalyticsService,
     private angulartics: Angulartics2,
-    private _auth: AuthService,
-    //private _contributor: ContributorFilter
+    private _auth: AuthService
   ) {
   }
 
@@ -120,7 +117,6 @@ export class AssetFilters {
     this.subscriptions.push(
       this._filters.available$.subscribe(
         filters => {
-          console.log("this is the filter:", filters)
           // Clean up filter data for display (i.e. insitutional asset counts are inaccurate)
           if (filters['collectiontypes']) {
             for (let i = 0; i < filters['collectiontypes'].length; i++) {
@@ -131,8 +127,7 @@ export class AssetFilters {
             }
           }
           if (filters['contributinginstitutionid']) {
-            let InstMap = this.contributors
-            console.log("this is the list:", InstMap)
+            let InstMap = this._filters.contributors
             for (let i = 0; i < filters['contributinginstitutionid'].length; i++) {
               for (let j = 0; j < InstMap.length; j++) {
                 if (filters['contributinginstitutionid'][i].name === InstMap[j].institutionId) {
