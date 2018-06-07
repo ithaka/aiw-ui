@@ -1,12 +1,13 @@
-# Artstor Avatar (Team Air)
-The latest version of the Artstor Digital Library interface, aiming to make browsing the Artstor collections a modern and refreshing experience.
+# Artstor Image Workspace
+The latest version of the Artstor Image Workspace interface, aiming to make browsing the Artstor collections a modern and refreshing experience.
 
 If you are a new developer to the project, please read through the entire README. 
 You won't regret it.
 
-*Project References:*
-[Avatar Jira Project](https://jira.jstor.org/projects/AIR/summary)
+## Ithaka Open Source Initiative
+This repository is open sourced by Ithaka as part of our initiative to increase transparency and contribute to the community. This particular repository is a working repository not intended as software available for consumption.
 
+[Learn more](http://artstor.org/open-source) about our open source initiative
 
 # Table of Contents
 * [Project Stack](#project-stack)
@@ -23,6 +24,9 @@ You won't regret it.
 * [Accessibility](#accessibility)
 * [@Types](#types)
 * [Frequently asked questions](#frequently-asked-questions)
+
+*Project References:*
+[Avatar Jira Project](https://jira.jstor.org/projects/AIR/summary)
 
 ---
 
