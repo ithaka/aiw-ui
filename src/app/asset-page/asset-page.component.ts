@@ -169,7 +169,7 @@ export class AssetPage implements OnInit, OnDestroy {
         if (prevRouteParams && (prevRouteParams.length > 0)) {
             this.prevRouteParams = prevRouteParams;
         }
-        this._storage.remove('prevRouteParams');
+        //this._storage.remove('prevRouteParams');
 
         // TotalAssets - for browsing between the assets
         let totalAssets = this._storage.get('totalAssets');
@@ -179,7 +179,7 @@ export class AssetPage implements OnInit, OnDestroy {
         else {
             this.totalAssetCount = 1;
         }
-        this._storage.remove('totalAssets');
+        //this._storage.remove('totalAssets');
 
         this.subscriptions.push(
             this.route.params.subscribe((routeParams) => {
