@@ -162,6 +162,7 @@ export class AssetPage implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
+        console.log("this is the asset:", this.assets)
         this.user = this._auth.getUser();
 
         // For "Go Back to Results"
