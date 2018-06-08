@@ -51,7 +51,6 @@
             a#linkEmailInstitutionContact.list-group-item.small([href]="institution.institutionContact && institution.institutionContact[0] && institution.institutionContact[0].email ? 'mailto:' + institution.institutionContact[0].email : 'mailto:userservices@artstor.org'") {{ 'HOME.QUESTIONS.EMAIL_INSTITUTION' | translate }}
             a#linkEmailArtstor.list-group-item.small([href]="artStorEmailLink") {{ 'HOME.QUESTIONS.EMAIL_ARTSTOR' | translate }}
             a#linkArtstorWebinar.list-group-item.small(href="http://www.artstor.org/webinars?view=ADL", target="_blank") {{ 'HOME.QUESTIONS.WEBINAR' | translate }}
-            a#linkArtstorSurvey.list-group-item.small(href="https://www.surveymonkey.com/r/TW9SKC6", target="_blank") {{ 'HOME.QUESTIONS.SURVEY' | translate }}
             li#itemArtstorAccess.list-group-item.small(*ngIf="institution.displayName") {{ 'HOME.ACCESS_PROVIDED_BY' | translate }}
               br
               b {{ institution.displayName }}

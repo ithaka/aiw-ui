@@ -359,7 +359,7 @@
     "LINKS": {
       "ABOUT": "<a href=\"http://www.artstor.org/content/artstor-digital-library-features-benefits\" class=\"link\" target=\"_blank\">About</a>",
       "GETTING_STARTED": "<a href=\"http://support.artstor.org/?page_id=52\" class=\"link\" target=\"_blank\">Getting Started</a>",
-      "TEACHING_IDEAS": "<a href=\"http://www.artstor.org/content/teaching-resources-overview\" class=\"link\" target=\"_blank\">Teaching and Study Ideas</a>",
+      "TEACHING_IDEAS": "<a href=\"http://www.artstor.org/content/teaching-resources-overview\" class=\"link\" target=\"_blank\">Teaching and Studying Resources</a>",
       "STAY_INFORMED": "<a href=\"http://www.artstor.org/content/join-our-mailing-list\" class=\"link\" target=\"_blank\">Stay Informed</a>",
       "TERMS": "<a href=\"http://www.artstor.org/terms\" class=\"link\" target=\"_blank\">Terms</a>",
       "PRIVACY": "<a href=\"http://www.artstor.org/privacy-policy\" class=\"link\" target=\"_blank\">Privacy</a>",
@@ -438,7 +438,7 @@
       "GEO_HEADING": "Geography",
       "GEO_LIST": "Filter by continent or country",
       "CLASS_HEADING": "Classification",
-      "CLASS_LIST": "Browse by categories such as paintings, performing arts, sculpture, or textiles",
+      "CLASS_LIST": "Browse by categories such as paintings, performing arts, sculpture, or decorative arts",
       "COLL_HEADING": "Collection",
       "COLL_LIST": "Artstor, Institutional, Public, and Personal",
       "COLL_LIST_SHORT": "Institutional Collections",
@@ -449,8 +449,8 @@
       "GROUPS_LIST_SAHARA": "Groups created by you and others at your institution",
       "PUB_COLL_HEADING": "Public Collections",
       "PUB_COLL_LIST": "Open content provided by multiple institutions",
-      "MORE_CONT_HEADING": "More Content",
-      "MORE_CONT_LIST": "To browse the Artstor Digital Library collections, institutional collections, create image groups, and more, you will need to login as part of your institution."
+      "MORE_CONT_HEADING": "Core Collections",
+      "MORE_CONT_LIST": "Access 2.5 million images from museums, photo archives, scholars, and artists, create image groups, upload your own files, and more."
     },
     "FEATURED": {
       "HEADINGS": {
@@ -562,7 +562,6 @@
       "EMAIL_INSTITUTION": "Email your institutional contact",
       "EMAIL_ARTSTOR": "Email Artstor",
       "WEBINAR": "Sign up for an Artstor webinar",
-      "SURVEY": "Take a survey: Tell us what you think!",
       "SAHARA_QUESTIONS": "Not finding something? We're in the process of moving content to the new site. Thanks for your patience! For other collection, contribution &amp; data questions, please email SAHARA.",
       "ARTSTOR_QUESTIONS": "For functionality, technology &amp; tool questions, please email Artstor."
     },
