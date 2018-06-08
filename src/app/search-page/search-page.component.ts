@@ -30,6 +30,8 @@ export class SearchPage implements OnInit, OnDestroy {
   private assetGrid: AssetGrid;
   // private searchInResults: boolean = false;
 
+  private unaffiliatedUser: boolean = false
+
   constructor(
         public _appConfig: AppConfig,
         private _assets: AssetService,
@@ -66,6 +68,7 @@ export class SearchPage implements OnInit, OnDestroy {
     this.subscriptions.push(
       this.route.params.subscribe( (routeParams) => {
         let params = Object.assign({}, routeParams);
+
         // Find feature flags (needs to be checked before running queryAll)
         if(params && params['featureFlag']){
             console.log(params['featureFlag'])
@@ -80,6 +83,9 @@ export class SearchPage implements OnInit, OnDestroy {
         if (!params['page']){
           params['page'] = 1;
         }
+        
+        // If the user.unaffliatedUser doesn't match the component's "unaffiliatedUser" flag then refresh search results
+        let refreshSearch = this.unaffiliatedUser && this.user.unaffliatedUser ? false : true
 
         // Make a search call if there is a search term or any selected filter
         if (params["term"] || params["classification"] || params["geography"] || params["collectiontypes"]  || params["collTypes"] || params["startDate"] || params["endDate"]) {
@@ -97,13 +103,15 @@ export class SearchPage implements OnInit, OnDestroy {
           })
 
           this._title.setSubtitle( '"'+ params["term"] + '"' )
-          this._assets.queryAll(params);
+          this._assets.queryAll(params, refreshSearch);
         } else {
           this._title.setTitle( 'Artstor' )
           console.log('No search term');
           params['term'] = '*';
-          this._assets.queryAll(params);
+          this._assets.queryAll(params, refreshSearch);
         }
+
+        this.unaffiliatedUser = this.user.unaffliatedUser ? true : false
       })
     );
     this._analytics.setPageValues('search', '')
