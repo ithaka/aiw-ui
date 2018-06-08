@@ -487,6 +487,10 @@ export class AssetPage implements OnInit, OnDestroy {
      */
     private cleanFieldValue(value: string): string {
         if (typeof (value) == 'string') {
+            if(value.indexOf('<br/>')>-1) {
+                //this.assets[0].formattedMetadata.Collection.push(value.substring(value.indexOf('<br/>')))
+                //value = value.substring(0,value.indexOf('<br/>'))
+            }
             return value.replace(/\<wbr\>/g, '').replace(/\<wbr\/\>/g, '')
         } else {
             return ''
