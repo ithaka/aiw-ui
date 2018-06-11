@@ -129,7 +129,7 @@
               .label([attr.id]="cleanId(fieldName)") {{ fieldName }}
               div(*ngFor="let value of assets[0].formattedMetadata[fieldName]; let i=index")
                 a.value.col-link(*ngIf="(fieldName === 'Collection' && i===0)", [routerLink]="setCollectionLink(assets[0])", [innerHTML]="cleanFieldValue(value) | linkify")
-                a.value(*ngIf="(fieldName !== 'Collection' || i!==0)", [innerHTML]="cleanFieldValue(value) | linkify")
+                .value(*ngIf="(fieldName !== 'Collection' || i!==0)", [innerHTML]="cleanFieldValue(value) | linkify")
           .meta-block(*ngIf="assets[0].formattedMetadata.Rights && assets[0].formattedMetadata.Rights.length > 0")
             .label#Rights Rights
             div(*ngFor="let right of assets[0].formattedMetadata.Rights")

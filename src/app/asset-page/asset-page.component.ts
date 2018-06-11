@@ -354,6 +354,17 @@ export class AssetPage implements OnInit, OnDestroy {
                     })
                     this.collectionType = CollectionTypeHandler.getCollectionType(collectiontypeIds, asset.contributinginstitutionid)
                 }
+
+                // Split existing collection urls in the metadata so that urls can be linked separately
+                if(this.assets[assetIndex].formattedMetadata['Collection'].join().indexOf('<br/>') > -1) {
+                    let collections = this.assets[0].formattedMetadata['Collection']
+                    let splitValues = []
+                    for (let i = 0; i < collections.length; i++){
+                        splitValues= splitValues.concat( collections[i].split('<br/>') )
+                    }
+                    this.assets[0].formattedMetadata['Collection'] = splitValues
+                }
+
                 this.generateImgURL()
 
                 // Load related results from jstor
@@ -486,6 +497,7 @@ export class AssetPage implements OnInit, OnDestroy {
      */
     private cleanFieldValue(value: string): string {
         if (typeof (value) == 'string') {
+
             return value.replace(/\<wbr\>/g, '').replace(/\<wbr\/\>/g, '')
         } else {
             return ''
