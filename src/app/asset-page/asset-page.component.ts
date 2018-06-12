@@ -89,8 +89,8 @@ export class AssetPage implements OnInit, OnDestroy {
     private showAssetCaption: boolean = true;
 
     private assetIdProperty: string = 'artstorid'
-    /** 
-     *  Collection Variables 
+    /**
+     *  Collection Variables
      *  - Specific to the first asset, this.assets[0]
     **/
     private collections: any[] = []
@@ -354,6 +354,17 @@ export class AssetPage implements OnInit, OnDestroy {
                     })
                     this.collectionType = CollectionTypeHandler.getCollectionType(collectiontypeIds, asset.contributinginstitutionid)
                 }
+
+                // Split existing collection urls in the metadata so that urls can be linked separately
+                if(this.assets[assetIndex].formattedMetadata['Collection'].join().indexOf('<br/>') > -1) {
+                    let collections = this.assets[0].formattedMetadata['Collection']
+                    let splitValues = []
+                    for (let i = 0; i < collections.length; i++){
+                        splitValues= splitValues.concat( collections[i].split('<br/>') )
+                    }
+                    this.assets[0].formattedMetadata['Collection'] = splitValues
+                }
+
                 this.generateImgURL()
 
                 // Load related results from jstor
@@ -486,6 +497,7 @@ export class AssetPage implements OnInit, OnDestroy {
      */
     private cleanFieldValue(value: string): string {
         if (typeof (value) == 'string') {
+
             return value.replace(/\<wbr\>/g, '').replace(/\<wbr\/\>/g, '')
         } else {
             return ''
@@ -651,7 +663,7 @@ export class AssetPage implements OnInit, OnDestroy {
     }
 
 
-    /** 
+    /**
      * runDownloadView handles the DownloadView results from AssetSearch.downloadViewBlob
      * @param dlink String from generateDownloadView
      * @param retryCount Number, tracks recursive calls of this function for download tries
@@ -675,7 +687,7 @@ export class AssetPage implements OnInit, OnDestroy {
                             this.downloadLoading = false
                             console.log('MSAgent Blob: ', blob)
                             this.navigator.msSaveBlob(blob, 'download.jpg')
-                            
+
                         }
                         else {
                             this.blobURL = this.URL.createObjectURL(blob)
@@ -699,7 +711,7 @@ export class AssetPage implements OnInit, OnDestroy {
         and then sets generatedViewUrl to this local reference. **/
 
     private genDownloadViewLink(): void {
-        
+
         // Do nothing if this is not an image
         if (!this.assets[0].typeName || !this.assets[0].typeName.length) {
             return
@@ -741,7 +753,7 @@ export class AssetPage implements OnInit, OnDestroy {
             // Generate the view url from tilemap service
             let downloadLink: string = asset.tileSource.replace('info.json', '') + xOffset + ',' + yOffset + ',' + zoomX + ',' + zoomY + '/' + viewX + ',' + viewY + '/0/native.jpg'
 
-            // Call runDownloadView and check for success, tries 3 times. 
+            // Call runDownloadView and check for success, tries 3 times.
             this.runDownloadView(downloadLink, 0)
         }
     }
