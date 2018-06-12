@@ -128,6 +128,7 @@ export class AssetGrid implements OnInit, OnDestroy {
   private ig : any = {};
 
   private _storage;
+  private _session;
 
   // TypeScript public modifiers
   constructor(
@@ -147,6 +148,7 @@ export class AssetGrid implements OnInit, OnDestroy {
   ) {
       this.siteID = this._appConfig.config.siteID;
       this._storage = locker.useDriver(Locker.DRIVERS.LOCAL);
+      this._session = locker.useDriver(Locker.DRIVERS.SESSION);
       let prefs = this._auth.getFromStorage('prefs')
       if (prefs && prefs.pageSize && prefs.pageSize != 24) {
         this.pagination.size = prefs.pageSize
@@ -433,7 +435,7 @@ export class AssetGrid implements OnInit, OnDestroy {
    * Edit Mode : Selects / deselects an asset - Inserts / Removes the asset object to the selectedAssets array
    * @param asset object to be selected / deselected
    */
-  private selectAsset(asset: Thumbnail): void{
+  private selectAsset(asset): void{
     if(this.editMode){
       let index: number = this.isSelectedAsset(asset)
       if(index > -1){
@@ -447,8 +449,13 @@ export class AssetGrid implements OnInit, OnDestroy {
       this.selectedAssets.length ? this.editMode = true : this.editMode = false
     }
     else{
-      this._storage.set('totalAssets', this.totalAssets ? this.totalAssets : 1)
-      this._storage.set('prevRouteParams', this.route.snapshot.url)
+      this._session.set('totalAssets', this.totalAssets ? this.totalAssets : 1)
+
+      // Tie prevRouteParams array with requestId before sending to asset page
+      let id: string = this._search.latestSearchRequestId ? this._search.latestSearchRequestId.toString() : 'undefined'
+      let prevRouteParams = {}
+      prevRouteParams[id]=this.route.snapshot.url
+      this._session.set('prevRouteParams', prevRouteParams)
 
       // only log the event if the asset came from search, and therefore has an artstorid
       if (asset['artstorid']) {
@@ -460,7 +467,21 @@ export class AssetGrid implements OnInit, OnDestroy {
         })
       }
 
-      // Let template routerLink navigate at this point
+      // Navigate to asset page here instead of using routerLink in the template to enable route parameter
+      let params = asset.objectId ? asset.objectId : asset.artstorid
+      let queryParams = {}
+      if (asset.iapFlag > 0 || asset.iap) {
+        queryParams["iap"] = 'true'
+      }
+      if (this._search.latestSearchRequestId)
+        queryParams['requestId'] = this._search.latestSearchRequestId
+      if (this.ig && this.ig.id) {
+        queryParams['groupId'] = this.ig.id
+      }
+      if (this.editMode)
+        this._router.navigate(['./', , queryParams])
+      else
+        this._router.navigate(['/asset', params, queryParams]);
     }
   }
 
