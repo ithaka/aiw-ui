@@ -28,7 +28,8 @@ export class RegisterComponent implements OnInit {
     duplicate?: boolean,
     hasJstor?: boolean,
     server?: boolean,
-    shibboleth?: string
+    shibboleth?: string,
+    shibbolethInst?: boolean
   } = {};
 
   private showJstorModal: boolean = false
@@ -66,6 +67,7 @@ export class RegisterComponent implements OnInit {
 
     let email: string = this.route.snapshot.params.email
     let samlTokenId: string = this.route.snapshot.params.samlTokenId
+    this.serviceErrors['shibbolethInst'] = this.route.snapshot.params.error == "INST404"
 
     if (samlTokenId) {
       email && this.registerForm.controls.email.setValue(email) // set the email
