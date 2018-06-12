@@ -1,11 +1,14 @@
 nav-menu
 #mainContent.container.main-content(tabindex="-1")
   .row
-    .col-sm-2
-    .col-sm-8
+    .col-sm-1
+    .col-sm-10
+      .text-right.mb-2(*ngIf="isShibbFlow")
+        .btn.btn-secondary((click)="navigateToLogin()") {{ 'LINK_PAGE.LOGIN_OPTION' | translate }}
       .card.card--light
         .card-header
-          h1#registerHeading {{ 'REGISTER.REGISTER_HEADING' | translate }}
+          h1#registerHeading(*ngIf="!isShibbFlow") {{ 'REGISTER.REGISTER_HEADING' | translate }}
+          h1#registerHeading(*ngIf="isShibbFlow") {{ 'LINK_PAGE.REGISTER_HEADING' | translate }}
         p#registerDescription {{ 'REGISTER.REGISTER_DESCRIPTION' | translate }}
         p#registerJstorMessage
           b {{ 'REGISTER.REGISTER_JSTOR_MESSAGE' | translate }}

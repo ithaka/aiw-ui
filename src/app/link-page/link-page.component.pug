@@ -1,16 +1,13 @@
 #mainContent.container(tabindex="0")
   .row
-    .col-1.col-md-3
-    .col-10.col-md-6
+    .col-1.col-md-2
+    .col-10.col-md-8
+      .text-right.mb-2
+        .btn.btn-secondary((click)="navigateToRegister()", tabindex="0") {{ 'LINK_PAGE.REGISTER_OPTION' | translate }}
       .card.card--light
         .card-header
           h1#loginHeading {{ 'LINK_PAGE.LOGIN_HEADING' | translate }}
         .card-body
           ang-login-form([samlTokenId]="shibParams.samlTokenId", [copyModifier]="'SHIBBOLETH'")
           a#linkLoginResetModal.link((click)="showPwdModal = true", tabindex="0", class="link", data-automation-component="artstor-pw-reset-link") {{ 'LOGIN.REG_LOGIN.FORGOT_PW_PROMPT' | translate }}
-      .card.card--clear
-        .card-header
-          h1#registerHeading.my-2 {{ 'LINK_PAGE.REGISTER_HEADING' | translate }}
-        .card-body
-          a#linkRegisterAccount.link((click)="navigateToRegister()", tabindex="0") {{ 'LINK_PAGE.REGISTER_LINK' | translate }}
 ang-pwd-reset-modal(*ngIf="showPwdModal", (closeModal)="showPwdModal = false")
