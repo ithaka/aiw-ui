@@ -3,6 +3,9 @@ nav-menu
   .row
     .col-sm-1
     .col-sm-10
+      .alert.alert-warning(*ngIf="serviceErrors['shibbolethInst']") 
+        b Error Linking&nbsp;
+        | {{ 'SHIBBOLETH_ERRORS.INST404' | translate }}
       .text-right.mb-2(*ngIf="isShibbFlow")
         .btn.btn-secondary((click)="navigateToLogin()") {{ 'LINK_PAGE.LOGIN_OPTION' | translate }}
       .card.card--light

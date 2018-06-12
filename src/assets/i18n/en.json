@@ -77,6 +77,7 @@
     "FIELDS_REQUIRED": "Please note that all fields are required unless noted."
   },
   "SHIBBOLETH_ERRORS": {
+    "INST404": "There was an error linking your institution. Please contact your institution admin to report this error, and to learn more about off-campus access",
     "2010": "This account is already linked to an Artstor account.",
     "2020": "There was an error linking your institutional account. The session may have expired, please try again.",
     "2040": "This account is associated with another institution. Please create a new account.",
