@@ -1,5 +1,4 @@
 import { Pipe, PipeTransform } from '@angular/core';
-// import { linkifyStr } from 'linkifyjs/string';
 
 var linkifyHtml = require('linkifyjs/html');
 
