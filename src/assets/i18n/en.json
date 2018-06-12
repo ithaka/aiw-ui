@@ -42,8 +42,10 @@
   "LINK_PAGE": {
     "LOGIN_HEADING": "Link your existing Artstor account",
     "LOGIN_BUTTON": "Link Account",
+    "LOGIN_OPTION": "Link Existing Account",
     "REGISTER_HEADING": "Link a new Artstor account",
-    "REGISTER_LINK": "Register a new account"
+    "REGISTER_LINK": "Register a new account",
+    "REGISTER_OPTION" : "Link a New Account"
   },
   "REGISTER": {
     "REGISTER_HEADING": "Register for a new Artstor account",
