@@ -71,10 +71,13 @@
       .py-3
         //- If the user has not accepted the agreement, show modal when clicked, otherwise download immediately
         .btn-row
-          //- (mouseup) is a Firefox fix for firing the copy event
+          //- Edit
+          //- * (mouseup) is a Firefox fix for firing the copy event
           button.btn.btn-secondary(*ngIf="user.isLoggedIn && assets[0].personalCollectionOwner === user['baseProfileId']", [class.active]="showEditDetails", tabindex="1", (click)="loadEditDetailsForm()")
             | {{ 'ASSET_PAGE.BUTTONS.EDIT_DETAILS' | translate}}
-          button.btn.btn-secondary(*ngIf="assets[0].personalCollectionOwner != user['baseProfileId']", [class.active]="showCopyUrl", tabindex="2", (mousedown)="showCopyUrl ? showCopyUrl = false : copyGeneratedImgURL()", (mouseup)="copyUrlInput.select(); document.execCommand('copy', false, null)")
+          //- Link
+          //- * Do not show for Personal Collection assets
+          button.btn.btn-secondary(*ngIf="!assets[0].personalCollectionOwner", [class.active]="showCopyUrl", tabindex="2", (mousedown)="showCopyUrl ? showCopyUrl = false : copyGeneratedImgURL()", (mouseup)="copyUrlInput.select(); document.execCommand('copy', false, null)")
             | {{ 'ASSET_PAGE.BUTTONS.LINK' | translate}}
             i#genImgURLlink.icon.icon-share-white
 
