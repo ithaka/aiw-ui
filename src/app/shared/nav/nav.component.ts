@@ -49,6 +49,7 @@ export class Nav implements OnInit, OnDestroy {
             case 'assetprint':
             case 'link':
             case 'login':
+            case 'register':
             case 'printpreview':
               this.showLoginPanel = false
               break
