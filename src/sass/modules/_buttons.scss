@@ -3,7 +3,7 @@
  * Variations for buttons, links, and clickable icons
  */
 
-$primaryBtnBg: $orange;
+$primaryBtnBg: #C9510D;
 $primaryBtnColor: #fff;
 $secondaryBtnBg: rgb(200,200,200);
 $secondaryBtnColor: #fff;
@@ -49,6 +49,7 @@ $iconBtnSize: $btnHeight;
  *  <button type="button" class="btn btn-link">Link</button>
  */
  .btn-primary, a.btn-primary {
+     width: 12rem;
      background: $primaryBtnBg;
      border-color: $primaryBtnBg;
 
@@ -224,6 +225,6 @@ $iconBtnSize: $btnHeight;
      font-size: 0px;
 
      & .btn {
-         margin: 1px;
+         margin: 4px;
      }
  }
