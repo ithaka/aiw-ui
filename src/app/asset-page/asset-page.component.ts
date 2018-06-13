@@ -74,6 +74,7 @@ export class AssetPage implements OnInit, OnDestroy {
     private showCopyUrl: boolean = false
     private showEditDetails: boolean = false
     private generatedImgURL: string = ''
+    private showImgURL: string = ''
     private generatedViewURL: SafeUrl | string = ''
     private generatedFullURL: string = ''
     // Used for agree modal input, changes based on selection
@@ -506,6 +507,7 @@ export class AssetPage implements OnInit, OnDestroy {
 
     private generateImgURL(): void {
         this.generatedImgURL = this._assets.getShareLink(this.assets[0].id);
+        this.showImgURL = 'http://...' + this.generatedImgURL.substring(this.generatedImgURL.indexOf('/asset')+6)
     }
 
     /**
@@ -519,6 +521,8 @@ export class AssetPage implements OnInit, OnDestroy {
         this._analytics.directCall('generate_img_link');
 
         this.showCopyUrl = true;
+        let temp = this.showImgURL
+        this.showImgURL = this.generatedImgURL
         input.focus()
         input.select()
 

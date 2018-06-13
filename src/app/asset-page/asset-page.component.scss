@@ -445,3 +445,41 @@ $titleNavBg: #eee;
         display: inline;
     }
 }
+
+#copy-link {
+    margin: 0;   
+}
+
+#generatedImgURL {
+    display: inline-block;
+    width: 18.1rem;
+    height: 2.11rem;
+    margin-top: 4px;
+    margin-left: 3px;
+    margin-right: 0px;
+}
+
+#assetpage-btn, #downloadAssetDropdown {
+    &.btn-secondary, a.btn-secondary {
+      width: 12rem;
+      background: white;
+      border: solid 1px #C9510D;
+      color: #C9510D;
+
+      &:hover, &:focus, &:active, &.active {
+          background-color: #C9510D;
+          color: white;
+      }
+
+      &.disabled, &:disabled {
+          background: lighten(#C9510D, 12%);
+      }
+
+      &.dropdown-toggle {
+          &:hover, &:focus, &:active, &.active {
+              background-color: #C9510D;
+              color: white;
+          }
+      }
+  }
+}
