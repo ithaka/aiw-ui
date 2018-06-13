@@ -124,7 +124,7 @@ export class AssetFilters {
               }
             }
             // If auth.isPublicOnly 'unaffiliated' user, filter out all but type 5 collection type
-            if (!this._auth.isPublicOnly())
+            if (this._auth.isPublicOnly())
               filters['collectiontypes'] = filters['collectiontypes'].filter(collectionType => collectionType.name === "5")
           }
 
