@@ -15,6 +15,7 @@ import { AppConfig } from '../../app.service';
 export class Nav implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = [];
   public showLoginPanel = false;
+  public allowExpiredModal = false;
   private user: any = {};
   private institutionObj: any = {};
   private _tool: ToolboxService = new ToolboxService();
@@ -43,6 +44,11 @@ export class Nav implements OnInit, OnDestroy {
 
     this.subscriptions.push(
       this._router.events.subscribe(e => {
+        /**
+         * Show/Hide logic for login info
+         * - Hides "login panel" in top right for certain pages
+         * - Hides session expiration modal for certain pages
+         */
         if (e instanceof NavigationEnd) {
           let baseRoute: string = e.url.split('/')[1].split('?')[0].split(';')[0]
           switch(baseRoute) {
@@ -52,16 +58,17 @@ export class Nav implements OnInit, OnDestroy {
             case 'register':
             case 'printpreview':
               this.showLoginPanel = false
+              this.allowExpiredModal = false
               break
             default:
               this.showLoginPanel = true
+              this.allowExpiredModal = true
+          }
+          // Allow external asset links
+          if (e.url.includes('asset/external')) {
+            this.allowExpiredModal = false
           }
         }
-        // if (e instanceof NavigationEnd && (e.url != '/login') && (e.url.split('/')[1] != 'printpreview') && (e.url.split('/')[1] != 'assetprint')) {
-        //     this.showLoginPanel = true
-        // } else {
-        //     this.showLoginPanel = false
-        // }
       })
     );
 
