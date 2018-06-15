@@ -447,12 +447,22 @@ $titleNavBg: #eee;
 }
 
 #copy-link {
-    margin: 0;   
+    margin-left: 0.15rem;
+    max-width: 25rem;
+    width: 100%;
+    #assetpage-btn {
+        margin-left:0px;
+        width:6rem;
+    }
+}
+
+#asset-btn {
+    margin: 0; 
 }
 
 #generatedImgURL {
     display: inline-block;
-    width: 18.1rem;
+    width: 75%;
     height: 2.11rem;
     margin-top: 4px;
     margin-left: 3px;
@@ -460,6 +470,18 @@ $titleNavBg: #eee;
 }
 
 #assetpage-btn, #downloadAssetDropdown {
+
+    &.btn-primary {
+        width: 12rem;
+        background: #C9510D;
+        border-color: #C9510D;
+   
+        &:hover, &:focus, &:active {
+           background: darken(#C9510D, 10%);
+           border-color: darken(#C9510D, 10%);
+        }
+    }
+
     &.btn-secondary, a.btn-secondary {
       width: 12rem;
       background: white;
@@ -482,4 +504,10 @@ $titleNavBg: #eee;
           }
       }
   }
+}
+
+.btn-secondary {
+    &.active .icon-download-asset-orange, &:hover .icon-download-asset-orange, &:focus .icon-download-asset-orange {
+        background-image: url("/assets/img/icon-download-asset-white.svg");
+    }
 }
