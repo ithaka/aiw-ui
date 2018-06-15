@@ -22,18 +22,7 @@ export class LoginReqModal implements OnInit {
 
   constructor(private _router: Router, private _auth: AuthService, private route: ActivatedRoute, private _tool: ToolboxService, private location: Location) { }
 
-  ngOnInit() {
-    // this handles showing the register link for only ip auth'd users
-    this._auth.getIpAuth()
-    .take(1)
-    .subscribe((res) => {
-      if (res.remoteaccess === false && res.user) {
-        this.ipAuthed = true
-      }
-    }, (err) => {
-      console.error(err)
-    })
-  }
+  ngOnInit() { }
 
   goToLogin() {
     // could utilize RouteReuseStrategy here
