@@ -14,15 +14,12 @@ import { AuthService, ToolboxService } from './../../shared';
     }
   `]
 })
-export class LoginReqModal implements OnInit {
-  private ipAuthed: boolean = false
+export class LoginReqModal {
   /** Meant only to trigger display of modal */
   @Output()
   private closeModal: EventEmitter<any> = new EventEmitter();
 
   constructor(private _router: Router, private _auth: AuthService, private route: ActivatedRoute, private _tool: ToolboxService, private location: Location) { }
-
-  ngOnInit() { }
 
   goToLogin() {
     // could utilize RouteReuseStrategy here
