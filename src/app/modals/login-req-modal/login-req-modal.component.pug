@@ -6,7 +6,8 @@
         button.close(type="button", (click)="closeModal.emit()", aria-label="Close")
           span(aria-hidden="true") &times;
       .modal-body
-        p([innerHtml]="'LOGIN_REQUIRED_MODAL.PROMPT' | translate")
+        p(*ngIf="ipAuthed", [innerHtml]="'LOGIN_REQUIRED_MODAL.PROMPT' | translate")
+        p(*ngIf="!ipAuthed", [innerHtml]="'LOGIN_REQUIRED_MODAL.PROMPT_NO_REGISTER' | translate")
       .modal-footer
         button.btn.btn-secondary(type="button", (click)="closeModal.emit()") Cancel
         button.btn.btn-primary((click)="goToLogin()") Go To Login
