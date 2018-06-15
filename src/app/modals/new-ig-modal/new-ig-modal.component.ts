@@ -74,6 +74,10 @@ export class NewIgModal implements OnInit {
   }
 
   ngOnInit() {
+    // Set focus to the modal to make the links in the modal first thing to tab for accessibility
+    let htmlelement:HTMLElement = document.getElementById("modal");
+    htmlelement.focus()
+
     /** Set isArtstorUser to true if the user's institution is 1000. This will let them make global image groups */
     this.isArtstorUser = this._auth.getUser().institutionId == 1000;
 

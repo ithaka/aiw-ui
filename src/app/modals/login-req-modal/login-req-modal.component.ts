@@ -22,6 +22,9 @@ export class LoginReqModal implements OnInit {
   constructor(private _router: Router, private _auth: AuthService, private route: ActivatedRoute, private _tool: ToolboxService, private location: Location) { }
 
   ngOnInit() {
+    // Set focus to the modal to make the links in the modal first thing to tab for accessibility
+    let htmlelement:HTMLElement = document.getElementById("modal");
+    htmlelement.focus();
   }
 
   goToLogin() {
