@@ -313,7 +313,8 @@
   "BROWSE_GROUPS" : "Browse Groups",
   "LOGIN_REQUIRED_MODAL": {
     "HEADING": "User account required",
-    "PROMPT": "Please log in or <a href=\"/#/register\" class=\"link\">Register</a> to save images."
+    "PROMPT": "Please log in or <a href=\"/#/register\" class=\"link\">Register</a> to save images.",
+    "PROMPT_NO_REGISTER": "Please log in to save images."
   },
   "BROWSE": {
     "LIBRARY_COLLECTION" : {
