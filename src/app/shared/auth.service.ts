@@ -1,30 +1,31 @@
-import { Injectable } from '@angular/core';
-import { Location } from '@angular/common';
-import { Locker } from 'angular2-locker';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Injectable } from '@angular/core'
+import { Location } from '@angular/common'
+import { Locker } from 'angular2-locker'
+import { HttpClient, HttpHeaders } from '@angular/common/http'
 import {
   CanActivate,
   Router,
   ActivatedRouteSnapshot,
   RouterStateSnapshot
-} from '@angular/router';
-import { Observable, BehaviorSubject, Subject } from 'rxjs/Rx';
-import { Angulartics2 } from 'angulartics2';
+} from '@angular/router'
+import { Observable, BehaviorSubject, Subject } from 'rxjs/Rx'
+import { Angulartics2 } from 'angulartics2'
 
 // Project dependencies
-import { AnalyticsService } from '../analytics.service';
-import { AppConfig } from '../app.service';
+import { AnalyticsService } from '../analytics.service'
+import { AppConfig } from '../app.service'
 
 // Import beta tester emails
 import { BETA_USR_EMAILS } from '../beta-users-email.ts'
 
 // For session timeout management
 
-// import { LoginService } from '../login/login.service';
+// import { LoginService } from '../login/login.service'
 
-import { IdleWatcherUtil } from './idle-watcher';
-import {Idle, DEFAULT_INTERRUPTSOURCES} from '@ng-idle/core';
-import {Keepalive} from '@ng-idle/keepalive';
+import { IdleWatcherUtil } from './idle-watcher'
+import {Idle, DEFAULT_INTERRUPTSOURCES} from '@ng-idle/core'
+import {Keepalive} from '@ng-idle/keepalive'
+import { FlagService } from '.'
 
 /**
  * Controls authorization through IP address and locally stored user object
@@ -67,15 +68,15 @@ export class AuthService implements CanActivate {
   private genUserInfoUrl() : string {
     return this.getUrl(true) + '/userinfo?no-cache=' + new Date().valueOf()
   }
-  /**
-   * Global Feature Flag object
-   * - Keep updated when flags are added or removed, for reference
-   * - Update via url param subscriptions inside of relevant components
-   */
-  public featureFlags = {
-    pcUpload : false,
-    unaffiliated: false
-  }
+  // /**
+  //  * Global Feature Flag object
+  //  * - Keep updated when flags are added or removed, for reference
+  //  * - Update via url param subscriptions inside of relevant components
+  //  */
+  // public featureFlags = {
+  //   pcUpload : false,
+  //   unaffiliated: false
+  // }
 
   constructor(
     private _router:Router,
@@ -86,6 +87,7 @@ export class AuthService implements CanActivate {
     private angulartics: Angulartics2,
     private _analytics: AnalyticsService,
     private _app: AppConfig,
+    private _flags: FlagService,
     private idle: Idle,
     private keepalive: Keepalive
   ) {
@@ -600,7 +602,8 @@ export class AuthService implements CanActivate {
       } else {
         return null
       }
-    } else if(!data['status'] && this.featureFlags['unaffiliated']) {
+    // } else if(!data['status'] && this.featureFlags['unaffiliated']) {
+    } else if(!data['status'] && this._flags.unaffiliated) {
       // Return generic user object for unaffiliated users
       let user = {
         'unaffliatedUser' : true,
@@ -713,7 +716,8 @@ export class AuthService implements CanActivate {
   }
 
   public isPublicOnly(): boolean{
-    return this.featureFlags.unaffiliated && !(this.getUser() && this.getUser().status)
+    // return this.featureFlags.unaffiliated && !(this.getUser() && this.getUser().status)
+    return this._flags.unaffiliated && !(this.getUser() && this.getUser().status)
   }
 }
 
