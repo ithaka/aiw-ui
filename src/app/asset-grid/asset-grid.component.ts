@@ -14,7 +14,8 @@ import {
   ImageGroupService,
   LogService,
   Thumbnail,
-  ToolboxService
+  ToolboxService,
+  FlagService
 } from '../shared'
 import { AssetFiltersService } from '../asset-filters/asset-filters.service'
 
@@ -136,6 +137,7 @@ export class AssetGrid implements OnInit, OnDestroy {
     private _assets: AssetService,
     private _auth: AuthService,
     private _filters: AssetFiltersService,
+    private _flags: FlagService,
     private _groups: GroupService,
     private _ig: ImageGroupService,
     private _log: LogService,
@@ -181,7 +183,7 @@ export class AssetGrid implements OnInit, OnDestroy {
       .subscribe((params: Params) => {
         // Find feature flags
         if(params && params['featureFlag']){
-          this._auth.featureFlags[params['featureFlag']] = true;
+          this._flags[params['featureFlag']] = true
           if (params['featureFlag']=="unaffiliated"){
               this.unaffiliatedFlag = true;
           }

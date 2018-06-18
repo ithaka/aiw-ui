@@ -6,7 +6,7 @@ import { Angulartics2 } from 'angulartics2'
 import { AssetService } from '../shared/assets.service'
 import { AssetFiltersService } from '../asset-filters/asset-filters.service'
 import { AnalyticsService } from '../analytics.service'
-import { AuthService } from "app/shared";
+import { AuthService, FlagService } from "app/shared";
 
 declare var _satellite: any
 
@@ -70,7 +70,8 @@ export class AssetFilters {
     private router: Router,
     private _analytics: AnalyticsService,
     private angulartics: Angulartics2,
-    private _auth: AuthService
+    private _auth: AuthService,
+    private _flags: FlagService
   ) {
   }
 
@@ -93,7 +94,7 @@ export class AssetFilters {
 
         // Find feature flags
         if(routeParams && routeParams['featureFlag']){
-            this._auth.featureFlags[routeParams['featureFlag']] = true;
+            this._flags[routeParams['featureFlag']] = true
         }
 
         for (let paramName in routeParams) {

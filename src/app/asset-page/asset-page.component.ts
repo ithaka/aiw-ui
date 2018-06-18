@@ -20,7 +20,8 @@ import {
     LogService,
     PersonalCollectionService,
     AssetDetailsFormValue,
-    CollectionTypeInfo
+    CollectionTypeInfo,
+    FlagService
 } from './../shared'
 import { AnalyticsService } from '../analytics.service'
 import { TitleService } from '../shared/title.service'
@@ -134,21 +135,22 @@ export class AssetPage implements OnInit, OnDestroy {
 
     constructor(
         private _assets: AssetService,
-        private _search: AssetSearchService,
-        private _group: GroupService,
         private _auth: AuthService,
+        private _search: AssetSearchService,
+        private _flags: FlagService,
+        private _group: GroupService,
         private _pcservice: PersonalCollectionService,
         private _localPC: LocalPCService,
         private _log: LogService,
-        private _fb: FormBuilder,
         private route: ActivatedRoute,
         private _router: Router,
-        private locker: Locker,
         private _analytics: AnalyticsService,
         private angulartics: Angulartics2,
         private _title: TitleService,
         private scriptService: ScriptService,
-        private _sanitizer: DomSanitizer
+        private _sanitizer: DomSanitizer,
+        _fb: FormBuilder,
+        locker: Locker
     ) {
         this._session = locker.useDriver(Locker.DRIVERS.SESSION)
 
@@ -206,14 +208,12 @@ export class AssetPage implements OnInit, OnDestroy {
         );
 
         this.subscriptions.push(
-            this.route.params.subscribe((routeParams) => {
-                // this.assets = []
-                let assetIdProperty = this._auth.featureFlags[routeParams['featureFlag']] ? 'artstorid' : 'objectId'
+            this.route.params.subscribe((routeParams) => {                
                 this.assetGroupId = routeParams['groupId']
                 // Find feature flags
                 if (routeParams && routeParams['featureFlag']) {
-                    this._auth.featureFlags[routeParams['featureFlag']] = true
-                    this.relatedResFlag = this._auth.featureFlags['related-res-hack'] ? true : false
+                    this._flags[routeParams['featureFlag']] = true
+                    this.relatedResFlag = this._flags['related-res-hack'] ? true : false
                 } else {
                     this.relatedResFlag = false
                 }
