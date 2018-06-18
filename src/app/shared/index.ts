@@ -1,4 +1,5 @@
 //barrel file for exporting directives from shared to app.module
+export * from './flag.service'
 export * from './auth.service'
 export * from './assets.service'
 export * from './asset-search.service'
@@ -15,4 +16,3 @@ export * from './title.service'
 export * from './script.service'
 export * from './personal-collections.service'
 export * from './card-sort/card-sort.component'
-export * from './flag.service'

@@ -100,6 +100,7 @@ export class App {
     .take(1)
     .subscribe((res) => {
       // don't need to handle successful response here - this just initiates the flags
+      console.log(res)
     }, (err) => {
       console.error(err)
     })
