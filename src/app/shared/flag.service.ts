@@ -1,6 +1,5 @@
-import { Injectable, Injector } from '@angular/core'
+import { Injectable } from '@angular/core'
 import { HttpClient } from '@angular/common/http'
-import { AuthService } from './auth.service'
 import { Observable } from 'rxjs'
 
 @Injectable()
@@ -13,13 +12,12 @@ export class FlagService {
   public unaffiliated: boolean = false
 
   constructor(
-    private _http: HttpClient,
-    private _injector: Injector
+    private _http: HttpClient
   ) {
   }
 
   public getFlagsFromService(): Observable<FlagServiceResponse> {
-    const flagUrl: string = [this._injector.get(AuthService).getUrl(), 'flags'].join('/')
+    const flagUrl: string = '//stage.artstor.org/api/v1/flags/aiw-ui.json'
     
     return this._http.get<FlagServiceResponse>(
       flagUrl,
@@ -34,23 +32,12 @@ export class FlagService {
       this.unaffiliated = flags.unaffiliatedAccess
 
       // if the user's country code is allowed, set unaffiliated flag to true
-      let userCountryCode: string = res.headers.get('x-artstor-country-code')
-      flags.unaffiliatedAccessRollout.forEach((countryCode) => {
-        if (flags.unaffiliatedAccessRollout.indexOf(userCountryCode) > -1) {
-          this.unaffiliated = true
-        }
-      })
+      let userCountryCode: string = res.headers.get('x-artstor-country-code').substr(0, 2)
+      if (flags.unaffiliatedAccessRollout.indexOf(userCountryCode) > -1) {
+        this.unaffiliated = true
+      }
 
       return flags
-    })
-  }
-
-  private setFlagsFromResponse(flags: FlagServiceResponse): void {
-    // boolean assignments
-    this.unaffiliated = flags.unaffiliatedAccess
-
-    flags.unaffiliatedAccessRollout.forEach((countryCode) => {
-
     })
   }
 }
