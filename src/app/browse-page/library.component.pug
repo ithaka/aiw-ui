@@ -4,6 +4,9 @@ nav.nav.nav-inline.browse-nav
 .row
   .col-md-8
     ul.filter-list
+      .input-group(*ngIf="facetQueryMap[facetType] == 'category'")
+        input#browsePageFilter.form-control.has-icon(placeholder="Search collections", tabindex="0", [(ngModel)]="searchTerm", (keyup)="addRouteParam('searchTerm',searchTerm)")
+        i#iconSearchSubmit.icon.icon-close.form-control__icon((click)="clearSearchTerm(term)")
       li.filter(*ngFor="let facet of categoryFacets", [class.hidden]="facet.title === '' || !facet.name")
         a.tag-link(*ngIf="facetQueryMap[facetType] == 'category'", [routerLink]="['/category', facet.name ]")
           | {{ facet.title }} ({{facet.count}})
