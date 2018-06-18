@@ -8,7 +8,7 @@ import { Router, NavigationStart, NavigationEnd } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 
 import { AppConfig } from "./app.service";
-import { ScriptService } from './shared';
+import { ScriptService, FlagService } from './shared';
 /*
  * App Component
  * Top Level Component
@@ -46,6 +46,7 @@ export class App {
     angulartics2GoogleAnalytics: Angulartics2GoogleAnalytics,
     private titleService: Title,
     private _script: ScriptService,
+    private _flags: FlagService,
     private router:Router,
     private translate: TranslateService
   ) {
@@ -93,7 +94,15 @@ export class App {
           }
         }
       }
-    });
+    })
+
+    this._flags.getFlagsFromService()
+    .take(1)
+    .subscribe((res) => {
+      // don't need to handle successful response here - this just initiates the flags
+    }, (err) => {
+      console.error(err)
+    })
   }
 
   ngOnInit() {
