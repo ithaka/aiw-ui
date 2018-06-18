@@ -27,4 +27,4 @@ header.navbar.navbar-light
                   a.link((click)="navigateAndSaveRoute('/register')", tabindex="2") Register
                 span(*ngIf="_auth.isPublicOnly()") &nbsp;to access the core collections.
                 span(*ngIf="user.status && !user.isLoggedIn") &nbsp;to save images
-ang-session-expire-modal(*ngIf="showinactiveUserLogoutModal && showLoginPanel" "(closeModal)"="inactiveUsrLogOut()")
+ang-session-expire-modal(*ngIf="showinactiveUserLogoutModal && allowExpiredModal" "(closeModal)"="inactiveUsrLogOut()")
