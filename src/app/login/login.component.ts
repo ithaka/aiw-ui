@@ -1,13 +1,13 @@
-import { Locker } from 'angular2-locker';
+import { Locker } from 'angular2-locker'
 import { Component, OnInit, OnDestroy } from '@angular/core'
 import { Router, ActivatedRoute } from '@angular/router'
 import { Location } from '@angular/common'
 import { Angulartics2 } from 'angulartics2'
 import { CompleterService, LocalData } from 'ng2-completer'
-import { BehaviorSubject, Observable, Subscription } from 'rxjs/Rx';
+import { BehaviorSubject, Observable, Subscription } from 'rxjs/Rx'
 
 import { AppConfig } from '../app.service'
-import { AuthService, User, AssetService } from './../shared'
+import { AuthService, User, AssetService, FlagService } from './../shared'
 import { AnalyticsService } from '../analytics.service'
 
 declare var initPath: string
@@ -61,6 +61,7 @@ export class Login implements OnInit, OnDestroy {
     private angulartics: Angulartics2,
     private _analytics: AnalyticsService,
     private _app: AppConfig,
+    private _flags: FlagService,
     private _storage: Locker
   ) {
   }
@@ -74,7 +75,7 @@ export class Login implements OnInit, OnDestroy {
     this.subscriptions.push(
       this.route.params.subscribe((params) => {
         if(params && params['featureFlag']){
-          this._auth.featureFlags[params['featureFlag']] = true
+          this._flags[params['featureFlag']] = true
         }
       })
     )

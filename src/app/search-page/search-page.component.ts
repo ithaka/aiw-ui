@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router'
 import { Subscription }   from 'rxjs/Subscription';
 
 import { AssetService } from './../shared/assets.service';
-import { AuthService, LogService } from '../shared';
+import { AuthService, LogService, FlagService } from '../shared';
 import { AssetFiltersService } from '../asset-filters/asset-filters.service';
 import { AnalyticsService } from '../analytics.service';
 import { AssetGrid } from './../asset-grid/asset-grid.component';
@@ -37,6 +37,7 @@ export class SearchPage implements OnInit, OnDestroy {
         private _assets: AssetService,
         private route: ActivatedRoute,
         private _filters: AssetFiltersService,
+        private _flags: FlagService,
         private _router: Router,
         private _analytics: AnalyticsService,
         private _title: TitleService,
@@ -71,8 +72,7 @@ export class SearchPage implements OnInit, OnDestroy {
 
         // Find feature flags (needs to be checked before running queryAll)
         if(params && params['featureFlag']){
-            console.log(params['featureFlag'])
-            this._auth.featureFlags[params['featureFlag']] = true;
+            this._flags[params['featureFlag']] = true;
             // Check for unaffiliated user flag
             if (params['featureFlag']=="unaffiliated"){
               this.unaffiliatedFlag = true;
