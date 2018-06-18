@@ -473,29 +473,10 @@ $titleNavBg: #eee;
 
     &.btn-primary {
         width: 12rem;
-        background: #C9510D;
-        border-color: #C9510D;
-   
-        &:hover, &:focus, &:active {
-           background: darken(#C9510D, 10%);
-           border-color: darken(#C9510D, 10%);
-        }
     }
 
     &.btn-secondary, a.btn-secondary {
       width: 12rem;
-      background: white;
-      border: solid 1px #C9510D;
-      color: #C9510D;
-
-      &:hover, &:focus, &:active, &.active {
-          background-color: #C9510D;
-          color: white;
-      }
-
-      &.disabled, &:disabled {
-          background: lighten(#C9510D, 12%);
-      }
 
       &.dropdown-toggle {
           &:hover, &:focus, &:active, &.active {
