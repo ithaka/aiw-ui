@@ -9,7 +9,6 @@ import {
   RouterStateSnapshot
 } from '@angular/router'
 import { Observable, BehaviorSubject, Subject } from 'rxjs/Rx'
-import { Angulartics2 } from 'angulartics2'
 
 // Project dependencies
 import { AnalyticsService } from '../analytics.service'
@@ -24,7 +23,6 @@ import { BETA_USR_EMAILS } from '../beta-users-email.ts'
 
 import { IdleWatcherUtil } from './idle-watcher'
 import {Idle, DEFAULT_INTERRUPTSOURCES} from '@ng-idle/core'
-import {Keepalive} from '@ng-idle/keepalive'
 import { FlagService } from '.'
 
 /**
@@ -75,12 +73,10 @@ export class AuthService implements CanActivate {
     locker:Locker,
     private http: HttpClient,
     private location: Location,
-    private angulartics: Angulartics2,
     private _analytics: AnalyticsService,
     private _app: AppConfig,
     private _flags: FlagService,
-    private idle: Idle,
-    private keepalive: Keepalive
+    private idle: Idle
   ) {
     this._storage = locker.useDriver(Locker.DRIVERS.LOCAL);
     this._router = _router;
