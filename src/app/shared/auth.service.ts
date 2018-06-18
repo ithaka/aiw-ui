@@ -68,15 +68,6 @@ export class AuthService implements CanActivate {
   private genUserInfoUrl() : string {
     return this.getUrl(true) + '/userinfo?no-cache=' + new Date().valueOf()
   }
-  // /**
-  //  * Global Feature Flag object
-  //  * - Keep updated when flags are added or removed, for reference
-  //  * - Update via url param subscriptions inside of relevant components
-  //  */
-  // public featureFlags = {
-  //   pcUpload : false,
-  //   unaffiliated: false
-  // }
 
   constructor(
     private _router:Router,
@@ -602,7 +593,6 @@ export class AuthService implements CanActivate {
       } else {
         return null
       }
-    // } else if(!data['status'] && this.featureFlags['unaffiliated']) {
     } else if(!data['status'] && this._flags.unaffiliated) {
       // Return generic user object for unaffiliated users
       let user = {
@@ -716,7 +706,6 @@ export class AuthService implements CanActivate {
   }
 
   public isPublicOnly(): boolean{
-    // return this.featureFlags.unaffiliated && !(this.getUser() && this.getUser().status)
     return this._flags.unaffiliated && !(this.getUser() && this.getUser().status)
   }
 }
