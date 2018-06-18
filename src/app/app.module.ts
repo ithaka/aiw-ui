@@ -96,6 +96,7 @@ import { SkyBannerComponent } from './sky-banner/sky-banner.component'
 import {
   AuthService,
   AssetService,
+  FlagService,
   GroupService,
   ImageGroupService,
   LogService,
@@ -127,8 +128,9 @@ const APP_PROVIDERS = [
   AppConfig,
   AssetService,
   AssetSearchService,
-  GroupService,
   AuthService,
+  FlagService,
+  GroupService,
   PersonalCollectionService,
   SSOService,
   LocalPCService,
