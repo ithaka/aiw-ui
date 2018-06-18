@@ -5,7 +5,7 @@ import { Subscription }   from 'rxjs/Subscription';
 import { AnalyticsService } from '../analytics.service';
 import { TagsService } from './tags.service';
 import { Tag } from './tag/tag.class';
-import { TitleService, AssetSearchService, AuthService, AssetService } from '../shared';
+import { TitleService, AssetSearchService, AuthService, AssetService, FlagService } from '../shared';
 
 @Component({
   selector: 'ang-my-collections',
@@ -18,6 +18,7 @@ export class MyCollectionsComponent implements OnInit {
 
   constructor(
     private _auth: AuthService,
+    private _flags: FlagService,
     private router: Router,
     private route: ActivatedRoute,
     private _search: AssetSearchService,
@@ -62,7 +63,7 @@ export class MyCollectionsComponent implements OnInit {
             }
     
             if(params['featureFlag']){
-                this._auth.featureFlags[params['featureFlag']] = true;
+                this._flags[params['featureFlag']] = true;
             }
 
             if (params['upload']) {
