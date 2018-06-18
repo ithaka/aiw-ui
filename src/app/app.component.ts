@@ -65,6 +65,9 @@ export class App {
         // focus on the wrapper of the "skip to main content link" everytime new page is loaded
         let mainEl = <HTMLElement>(document.getElementById("skip"))
         mainEl.focus()
+        // For the filter to work on browse/library page, focus on the input to make user can type in search term continuously
+        if (document.getElementById("browsePageFilter"))
+          document.getElementById("browsePageFilter").focus()
         
         let event_url_array = event.url.split('/')
         if(event_url_array && (event_url_array.length > 1) && (event_url_array[1] !== 'asset')){
