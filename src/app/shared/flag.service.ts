@@ -33,6 +33,7 @@ export class FlagService {
       // boolean assignments
       this.unaffiliated = flags.unaffiliatedAccess
 
+      // if the user's country code is allowed, set unaffiliated flag to true
       let userCountryCode: string = res.headers.get('x-artstor-country-code')
       flags.unaffiliatedAccessRollout.forEach((countryCode) => {
         if (flags.unaffiliatedAccessRollout.indexOf(userCountryCode) > -1) {
