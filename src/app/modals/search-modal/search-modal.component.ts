@@ -248,7 +248,11 @@ export class SearchModal implements OnInit {
               let facetName = facet.values[i].name
               if (!this.showPrivateCollections && facetName.match(/3|6/)) { // NOTE: 3 & 6 are Private Collections names
                 facet.values.splice(i, 1)
-              } else if (facetName && facetName.length > 0){ // Some filters return empty strings, avoid those
+              }
+              if (this._auth.isPublicOnly() && facet.name == 'collectiontypes' && !(facetName.match(/5/))) { // For public user, only show public collection in collectiontype filter, 5 is Public Collection name
+                facet.values.splice(i, 1)
+              } 
+              else if (facetName && facetName.length > 0){ // Some filters return empty strings, avoid those
                 // Push filter objects to Facet Group 'values' Array
                 let facetObject: FacetObject = {
                   checked: false,
@@ -312,7 +316,8 @@ export class SearchModal implements OnInit {
                 colFacetObj.checked = false
                 colFacetObj.name = collection.collectionname
                 colFacetObj.value = collection.collectionid
-                this.availableFilters[1].values[2].children.push( colFacetObj )
+                if (this.availableFilters[1].values[2])
+                  this.availableFilters[1].values[2].children.push( colFacetObj )
               }
             } else {
               throw new Error("no Collections returned in data")
