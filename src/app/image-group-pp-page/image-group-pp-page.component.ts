@@ -5,7 +5,6 @@ import { Subscription }   from 'rxjs/Subscription';
 
 // Internal Dependencies
 import { AssetService, AuthService, ImageGroupDescription, ImageGroupService } from './../shared';
-import { AnalyticsService } from '../analytics.service';
 
 @Component({
   selector: 'ang-image-group-pp-page',
@@ -33,7 +32,6 @@ export class ImageGroupPPPage implements OnInit, OnDestroy {
     private _router: Router,
     private route: ActivatedRoute,
     private http: HttpClient,
-    private _analytics: AnalyticsService
   ) {}
 
   ngOnInit() {
@@ -78,7 +76,7 @@ export class ImageGroupPPPage implements OnInit, OnDestroy {
         }
       })
     );
-    this._analytics.setPageValues('groupprint', this.igId)
+
   } // OnInit
 
   // Load Image Group Descrition

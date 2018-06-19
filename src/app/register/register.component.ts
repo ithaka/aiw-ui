@@ -5,7 +5,6 @@ import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms'
 import { Angulartics2 } from 'angulartics2';
 
 import { AuthService } from './../shared';
-import { AnalyticsService } from '../analytics.service';
 import { USER_ROLES, USER_DEPTS } from './user-roles.ts';
 
 @Component({
@@ -45,7 +44,6 @@ export class RegisterComponent implements OnInit {
     private route: ActivatedRoute,
     private angulartics: Angulartics2,
     _fb: FormBuilder,
-    private _analytics: AnalyticsService
   ) {
     this.registerForm = _fb.group({
       // The first value of this array is the initial value for the control, the second is the
@@ -79,7 +77,6 @@ export class RegisterComponent implements OnInit {
     this.userDepts = USER_DEPTS
     this.userRoles = USER_ROLES
 
-    this._analytics.setPageValues('register', '')
   } // OnInit
 
   //https://angular.io/docs/ts/latest/api/forms/index/FormGroup-class.html

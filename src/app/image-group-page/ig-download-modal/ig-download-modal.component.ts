@@ -4,7 +4,6 @@ import { Observable } from 'rxjs/Observable';
 import { Angulartics2 } from 'angulartics2';
 
 import { AssetService, AuthService, ImageGroup } from './../../shared';
-import { AnalyticsService } from '../../analytics.service'
 
 @Component({
   selector: 'ang-ig-download-modal',
@@ -39,8 +38,7 @@ export class PptModalComponent implements OnInit {
     private _auth: AuthService,
     private _angulartics: Angulartics2,
     private http: HttpClient,
-    private _analytics: AnalyticsService
-  ) { }
+  ) {}
 
   ngOnInit() {
 
@@ -110,7 +108,7 @@ export class PptModalComponent implements OnInit {
         let imgStr: string = [(index + 1), thumbnail.objectId, "1024x1024"].join(":")
         thumbnail.status == 'available' && imgDownloadStrings.push(imgStr)
       })
-  
+
       data = {
           igName: group.name,
           images: imgDownloadStrings.join(',')
@@ -135,7 +133,6 @@ export class PptModalComponent implements OnInit {
   }
 
   trackDownload(downloadType: string) : void {
-    this._analytics.directCall('request' + downloadType)
     this._angulartics.eventTrack.next({ action: "downloadGroup" + downloadType, properties: { category: "group", label: this.ig.id }})
   }
 

@@ -4,7 +4,6 @@ import { BehaviorSubject, Observable, Subscription } from 'rxjs/Rx';
 import { CompleterService, CompleterData } from 'ng2-completer';
 
 import { AssetService, GroupService, ImageGroup } from './../../shared';
-import { AnalyticsService } from '../../analytics.service';
 
 @Component({
   selector: 'ang-add-to-group',
@@ -36,15 +35,12 @@ export class AddToGroupModal implements OnInit, OnDestroy {
   constructor(
     private _assets: AssetService,
     private _group: GroupService,
-    private _analytics: AnalyticsService,
     private completerService: CompleterService
-  ) {
+  ) {}
 
-  }
-
-  /** 
+  /**
    * Observable for autocomplete list of groups
-   * - We apply additional sorting 
+   * - We apply additional sorting
    */
   private groupListSubject: BehaviorSubject<any[]> = new BehaviorSubject([])
   private groupListObs: Observable<any[]> = this.groupListSubject.asObservable()
@@ -74,7 +70,7 @@ export class AddToGroupModal implements OnInit, OnDestroy {
         }
       }, (err) => { console.error(err); });
 
-       
+
   }
 
   ngOnDestroy() {
@@ -85,7 +81,7 @@ export class AddToGroupModal implements OnInit, OnDestroy {
     // sort array by string input
     let term = this.selectedGroupName
     let termReg = new RegExp(term, 'i')
-    
+
     let filtered = this.groups.filter( group => {
       return group && group.name.search(termReg) > -1
     })
@@ -137,7 +133,7 @@ export class AddToGroupModal implements OnInit, OnDestroy {
           assetId = asset.id
         } else {
           console.error("Asset id not found when adding to group", asset)
-        } 
+        }
         // Add id to group if it's not already in the group
         if (assetId && putGroup.items.indexOf(assetId) < 0) {
           putGroup.items.push(assetId);
@@ -150,8 +146,6 @@ export class AddToGroupModal implements OnInit, OnDestroy {
     if (putGroup.items && putGroup.items.length > 1000) {
       return this.serviceResponse.tooManyAssets = true
     }
-
-    this._analytics.directCall('save_selections_existing_img_group')
 
     // go get the group from the server
     this._group.get(this.selectedIg.id)
