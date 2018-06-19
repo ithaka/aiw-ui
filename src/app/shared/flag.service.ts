@@ -20,7 +20,8 @@ export class FlagService {
     const flagUrl: string = '//stage.artstor.org/api/v1/flags/aiw-ui.json'
     
     return this._http.get<FlagServiceResponse>(
-      flagUrl,
+      // Cache busting param added to ensure fresh headers and flags
+      flagUrl + '?no-cache=' + new Date().valueOf(),
       {
         observe: 'response'
       }
