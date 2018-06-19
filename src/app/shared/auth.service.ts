@@ -658,16 +658,6 @@ export class AuthService implements CanActivate {
     return this.http.get(this.genUserInfoUrl(), options)
   }
 
-
-
-  /**
-   * Gets user's geo IP information
-   * @returns Observable resolved with object containing geo IP information
-   */
-  public getUserIP(): Observable<any> {
-    return this.http.get("https://freegeoip.net/json/")
-  }
-
   public ssLogin(username: string, password: string): Observable<SSLoginResponse> {
 
     let data = this.formEncode({ username: username, password: password })
