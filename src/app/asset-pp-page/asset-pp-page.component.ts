@@ -5,7 +5,6 @@ import { Subscription }   from 'rxjs/Subscription';
 
 // Internal Dependencies
 import { AssetService, AssetSearchService } from './../shared';
-import { AnalyticsService } from '../analytics.service';
 
 @Component({
   selector: 'ang-asset-pp-page',
@@ -31,7 +30,6 @@ export class AssetPPPage implements OnInit, OnDestroy {
     private _router: Router,
     private route: ActivatedRoute,
     private http: HttpClient,
-    private _analytics: AnalyticsService
   ) {}
 
   ngOnInit() {
@@ -43,9 +41,7 @@ export class AssetPPPage implements OnInit, OnDestroy {
         this.loadAsset();
       })
     );
-
-    // this._analytics.setPageValues('groupprint', this.assetId);
-  } // OnInit
+  }
 
   // Load Image Group Assets
   loadAsset(): void{
@@ -55,7 +51,7 @@ export class AssetPPPage implements OnInit, OnDestroy {
         let assetData = res && res.metadata && res.metadata[0] ? res.metadata[0]['metadata_json'] : []
         for(let data of assetData){
           let fieldExists = false;
-          
+
           for(let metaData of self.metaArray){
             if(metaData['fieldName'] === data.fieldName){
               metaData['fieldValue'].push(data.fieldValue);
@@ -74,7 +70,7 @@ export class AssetPPPage implements OnInit, OnDestroy {
           }
 
         }
-        
+
         self.asset = res.metadata[0];
     },(err) => {
         console.error('Unable to load asset metadata.');

@@ -3,8 +3,6 @@ import { Router, ActivatedRoute, Params } from '@angular/router';
 import { Subscription }   from 'rxjs/Subscription';
 
 import { AssetService } from './../shared/assets.service';
-import { AnalyticsService } from '../analytics.service';
-
 @Component({
   selector: 'ang-cluster-page',
   providers: [],
@@ -22,9 +20,7 @@ export class ClusterPage implements OnInit, OnDestroy {
   constructor(
     private route: ActivatedRoute,
     private _assets: AssetService,
-    private _analytics: AnalyticsService
-  ) {
-  }
+  ) {}
 
   ngOnInit() {
     this.subscriptions.push(
@@ -44,7 +40,7 @@ export class ClusterPage implements OnInit, OnDestroy {
           }
         })
     );
-    this._analytics.setPageValues('cluster', this.clusterId)
+
   } // OnInit
 
   ngOnDestroy() {

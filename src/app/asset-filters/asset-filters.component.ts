@@ -5,7 +5,6 @@ import { Angulartics2 } from 'angulartics2'
 
 import { AssetService } from '../shared/assets.service'
 import { AssetFiltersService } from '../asset-filters/asset-filters.service'
-import { AnalyticsService } from '../analytics.service'
 import { AuthService, FlagService } from "app/shared";
 
 declare var _satellite: any
@@ -68,7 +67,6 @@ export class AssetFilters {
     private _filters: AssetFiltersService,
     private route: ActivatedRoute,
     private router: Router,
-    private _analytics: AnalyticsService,
     private angulartics: Angulartics2,
     private _auth: AuthService,
     private _flags: FlagService
@@ -254,7 +252,6 @@ export class AssetFilters {
     if(this._filters.isApplied(group, value)){ // Remove Filter
       this._filters.remove(group, value);
     } else { // Add Filter
-      this._analytics.directCall("advanced_search_filters");
       this._filters.apply(group, value);
     }
     this.pagination.page = 1;
@@ -286,7 +283,7 @@ export class AssetFilters {
   }
 
   // To check if a filter group has any applied filters
-  hasAppliedFilters(group): boolean{
+  hasAppliedFilters(group): boolean {
     let hasFilters: boolean = false;
 
     if(group == 'date'){

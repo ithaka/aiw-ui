@@ -4,7 +4,6 @@ import { Subscription } from 'rxjs/Subscription';
 import { Ng2DeviceService } from 'ng2-device-detector';
 
 import { AssetService, AuthService, } from '../shared';
-import { AnalyticsService } from '../analytics.service';
 import { AppConfig } from '../app.service';
 import { Featured } from './featured'
 
@@ -45,7 +44,7 @@ export class Home implements OnInit, OnDestroy {
   private showHomePromo: boolean = false
   private siteID: string = ""
 
-  // Default IG 'Browse By:' Option controlled via the WLV file 
+  // Default IG 'Browse By:' Option controlled via the WLV file
   private defaultGrpBrwseBy: string = 'institution'
 
   // TypeScript public modifiers
@@ -54,7 +53,6 @@ export class Home implements OnInit, OnDestroy {
     private _assets: AssetService,
     private _router: Router,
     private _auth: AuthService,
-    private _analytics: AnalyticsService,
     private deviceService: Ng2DeviceService
   ) {
     // this makes the window always render scrolled to the top
@@ -132,15 +130,9 @@ export class Home implements OnInit, OnDestroy {
         this.blogLoading = false;
       });
 
-    this._analytics.setPageValues('Home', '')
+    // Set session info for Email Artstor link
+    this.fetchDeviceInfo();
 
-    // Grab session info for Email Artstor link
-    this._auth.getUserIP().subscribe((res) => {
-      if (res) {
-        this.userGeoIP = res;
-        this.fetchDeviceInfo();
-      }
-    })
   } // OnInit
 
   ngOnDestroy() {
@@ -170,7 +162,6 @@ export class Home implements OnInit, OnDestroy {
         deviceInfoHTML += 'Browser: ' + deviceInfo.browser + ' - ' + deviceInfo.browser_version + ' \n ';
         deviceInfoHTML += 'User Agent: ' + deviceInfo.userAgent + ' \n ';
         deviceInfoHTML += 'Screen Resolution: ' + window.screen.width + ' * ' + window.screen.height + ' \n ';
-        deviceInfoHTML += 'IP Address: ' + this.userGeoIP.ip + ' \n ';
         deviceInfoHTML += 'Absolute Path: ' + window.location.href + ' \n ';
         deviceInfoHTML += 'Adblocker Enabled: ' + adBlockEnabled + ' \n ';
         deviceInfoHTML += '\n ------------------------------------------------------------------------------ \n';
