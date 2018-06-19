@@ -35,6 +35,6 @@
     p.photo-caption.small([innerHTML]="featured[primaryFeaturedIndex].caption | translate")
   .col
     p.text-right
-      a.link.text-right(*ngIf="!_auth.isPublicOnly() && siteId != 'SAHARA'" href="/browse/library", [innerHtml]="headings + '.VIEW_ALL_LINK' | translate")
-      a.link.text-right(*ngIf="!_auth.isPublicOnly() && siteId === 'SAHARA'" href="/browse/institution", [innerHtml]="headings + '.VIEW_ALL_LINK' | translate")
-      a.link.text-right(*ngIf="_auth.isPublicOnly()" href="/browse/commons", [innerHtml]="headings + '.VIEW_PUBLIC_LINK' | translate")
+      a.link.text-right(*ngIf="!_auth.isPublicOnly() && siteId != 'SAHARA'", [routerLink]="['/browse', 'library']", [innerHtml]="headings + '.VIEW_ALL_LINK' | translate")
+      a.link.text-right(*ngIf="!_auth.isPublicOnly() && siteId === 'SAHARA'", [routerLink]="['/browse', 'institution']", [innerHtml]="headings + '.VIEW_ALL_LINK' | translate")
+      a.link.text-right(*ngIf="_auth.isPublicOnly()", [routerLink]="['/browse', 'commons']", [innerHtml]="headings + '.VIEW_PUBLIC_LINK' | translate")
