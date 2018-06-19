@@ -130,13 +130,9 @@ export class Home implements OnInit, OnDestroy {
         this.blogLoading = false;
       });
 
-    // Grab session info for Email Artstor link
-    this._auth.getUserIP().subscribe((res) => {
-      if (res) {
-        this.userGeoIP = res;
-        this.fetchDeviceInfo();
-      }
-    })
+    // Set session info for Email Artstor link
+    this.fetchDeviceInfo();
+
   } // OnInit
 
   ngOnDestroy() {
@@ -166,7 +162,6 @@ export class Home implements OnInit, OnDestroy {
         deviceInfoHTML += 'Browser: ' + deviceInfo.browser + ' - ' + deviceInfo.browser_version + ' \n ';
         deviceInfoHTML += 'User Agent: ' + deviceInfo.userAgent + ' \n ';
         deviceInfoHTML += 'Screen Resolution: ' + window.screen.width + ' * ' + window.screen.height + ' \n ';
-        deviceInfoHTML += 'IP Address: ' + this.userGeoIP.ip + ' \n ';
         deviceInfoHTML += 'Absolute Path: ' + window.location.href + ' \n ';
         deviceInfoHTML += 'Adblocker Enabled: ' + adBlockEnabled + ' \n ';
         deviceInfoHTML += '\n ------------------------------------------------------------------------------ \n';
