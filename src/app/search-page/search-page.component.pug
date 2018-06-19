@@ -14,6 +14,4 @@ nav-menu([allowSelectAll]="true")
         #mainContent.col-md-9.search-page-highlight
           ang-search(*ngIf="_auth.isPublicOnly()", [allowSearchInRes]="true", [UserNotLoggedIn]="true")
           ang-search(*ngIf="siteID=='SAHARA' || !_auth.isPublicOnly()", [allowSearchInRes]="true", [UserNotLoggedIn]="false")
-      .row(style="margin-top: -1rem;")
-        ang-prompt(*ngIf="_auth.isPublicOnly()", style='width:100%; margin:15px;')
       ang-asset-grid([hasMaxAssetLimit]="true")
