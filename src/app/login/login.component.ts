@@ -8,7 +8,6 @@ import { BehaviorSubject, Observable, Subscription } from 'rxjs/Rx'
 
 import { AppConfig } from '../app.service'
 import { AuthService, User, AssetService, FlagService } from './../shared'
-import { AnalyticsService } from '../analytics.service'
 
 declare var initPath: string
 
@@ -40,9 +39,9 @@ export class Login implements OnInit, OnDestroy {
 
   public showRegister: boolean = false
 
-  /** 
+  /**
    * Observable for autocomplete list of institutions
-   * - We apply additional sorting 
+   * - We apply additional sorting
    */
   private instListSubject: BehaviorSubject<any[]> = new BehaviorSubject([])
   private instListObs: Observable<any[]> = this.instListSubject.asObservable()
@@ -59,7 +58,6 @@ export class Login implements OnInit, OnDestroy {
     private router: Router,
     private location: Location,
     private angulartics: Angulartics2,
-    private _analytics: AnalyticsService,
     private _app: AppConfig,
     private _flags: FlagService,
     private _storage: Locker
@@ -121,7 +119,7 @@ export class Login implements OnInit, OnDestroy {
               name: "AUSS/Ithaka"
             });
           }
-          this.dataService = this._completer.local(this.instListObs, 'name', 'name');          
+          this.dataService = this._completer.local(this.instListObs, 'name', 'name');
         }
       })
       .catch((error) => {
@@ -139,7 +137,6 @@ export class Login implements OnInit, OnDestroy {
         console.error(err)
       })
 
-    this._analytics.setPageValues('login', '')
   } // OnInit
 
   ngOnDestroy() {
@@ -150,7 +147,7 @@ export class Login implements OnInit, OnDestroy {
     // sort array by string input
     let term = this.loginInstName
     let termReg = new RegExp(term, 'i')
-    
+
     let filtered = this.loginInstitutions.filter( inst => {
       return inst && inst.name.search(termReg) > -1
     })
@@ -162,7 +159,7 @@ export class Login implements OnInit, OnDestroy {
     // We need to clear any error messages here if there is one
     if (this.instErrorMsg.length)
         this.instErrorMsg = ''
-        
+
   }
 
   /**
@@ -179,7 +176,7 @@ export class Login implements OnInit, OnDestroy {
         break
       }
     }
-    
+
     // if the user selected some institution that doesn't exist, kick them out!!
     if (!selectedInst) {
       this.instErrorMsg = "LOGIN.INSTITUTION_LOGIN.ERRORS.SELECT_INSTITUTION";
@@ -236,7 +233,7 @@ export class Login implements OnInit, OnDestroy {
     } else {
       // Else if Shibboleth, add parameters:
       // eg. for AUSS https://sso.artstor.org/sso/shibssoinit?idpEntityID=https://idp.artstor.org/idp/shibboleth&target=https%3A%2F%2Fsso.artstor.org%2Fsso%2Fshibbolethapplication%3Fo%3D0049a162-7dbe-4fcf-adac-d257e8db95e5
-      
+
       // For institution that has the key "artstorShibbolethLoginUrl", just open the Url
       if (selectedInst.artstorShibbolethLoginUrl) {
         window.open(selectedInst.artstorShibbolethLoginUrl);

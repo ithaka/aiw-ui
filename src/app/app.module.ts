@@ -112,7 +112,6 @@ import { AssetFiltersService } from './asset-filters/asset-filters.service'
 import { TagsService } from './browse-page/tags.service'
 import { CustomReuseStrategy } from './reuse-strategy'
 import { LegacyRouteResolver } from './legacy.service'
-import { AnalyticsService } from './analytics.service'
 import { HTTP_INTERCEPTORS } from '@angular/common/http'
 import { UnauthorizedInterceptor } from './interceptors'
 
@@ -124,7 +123,6 @@ import { CustomUrlSerializer } from './shared/custom-url-serializer'
 const APP_PROVIDERS = [
   ...APP_RESOLVER_PROVIDERS,
   DatePipe,
-  AnalyticsService,
   AppConfig,
   AssetService,
   AssetSearchService,
@@ -256,15 +254,5 @@ export function HttpLoaderFactory(http: HttpClient) {
   ]
 })
 export class AppModule {
-  constructor(public appRef: ApplicationRef, private router: Router, private _satellite: AnalyticsService) {
-
-    // Track page changes with Adobe Analytics
-    router.events.subscribe((val: NavigationEnd) => {
-      // If this is a different page, report it!
-      if (val.urlAfterRedirects != val.url) {
-        _satellite.directCall('page_name')
-      }
-    })
-  }
+  constructor(public appRef: ApplicationRef, private router: Router) {}
 }
-

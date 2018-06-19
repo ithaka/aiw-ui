@@ -23,7 +23,6 @@ import {
     CollectionTypeInfo,
     FlagService
 } from './../shared'
-import { AnalyticsService } from '../analytics.service'
 import { TitleService } from '../shared/title.service'
 import { ScriptService } from '../shared/script.service'
 import { LocalPCService, LocalPCAsset } from '../_local-pc-asset.service'
@@ -144,7 +143,6 @@ export class AssetPage implements OnInit, OnDestroy {
         private _log: LogService,
         private route: ActivatedRoute,
         private _router: Router,
-        private _analytics: AnalyticsService,
         private angulartics: Angulartics2,
         private _title: TitleService,
         private scriptService: ScriptService,
@@ -168,7 +166,7 @@ export class AssetPage implements OnInit, OnDestroy {
 
     ngOnInit() {
         this.user = this._auth.getUser();
-        
+
         // sets up subscription to allResults, which is the service providing thumbnails
         this.subscriptions.push(
             this._assets.allResults.subscribe((allResults) => {
@@ -208,7 +206,7 @@ export class AssetPage implements OnInit, OnDestroy {
         );
 
         this.subscriptions.push(
-            this.route.params.subscribe((routeParams) => {                
+            this.route.params.subscribe((routeParams) => {
                 this.assetGroupId = routeParams['groupId']
                 // Find feature flags
                 if (routeParams && routeParams['featureFlag']) {
@@ -242,7 +240,7 @@ export class AssetPage implements OnInit, OnDestroy {
                     if (prevRoutesMap && prevRouteParams && (prevRouteParams.length > 0)) {
                         this.prevRouteParams = prevRouteParams
                     }
-            
+
                     // TotalAssets - for browsing between the assets
                     let totalAssets = this._session.get('totalAssets');
                     if (totalAssets) {
@@ -257,7 +255,7 @@ export class AssetPage implements OnInit, OnDestroy {
                     this.prevRouteParams = []
                     this.totalAssetCount = 1
                     this.assetNumber = 1
-                }  
+                }
             })
         );
 
@@ -290,8 +288,6 @@ export class AssetPage implements OnInit, OnDestroy {
                 this.showAccessDeniedModal = true
             }
         })
-
-        this._analytics.setPageValues('asset', this.assets[0] && this.assets[0].id)
 
         // MS Browser Agent ?
         this.isMSAgent = this.navigator.msSaveOrOpenBlob !== undefined
@@ -467,7 +463,7 @@ export class AssetPage implements OnInit, OnDestroy {
                 }
 
                 // Maintain the requestId route parameter for previous page
-                queryParams['requestId'] = this.requestId 
+                queryParams['requestId'] = this.requestId
 
                 this._router.navigate(['/asset', this.prevAssetResults.thumbnails[prevAssetIndex][this.assetIdProperty], queryParams]);
             }
@@ -537,8 +533,6 @@ export class AssetPage implements OnInit, OnDestroy {
         let statusMsg = '';
         let input: any = document.getElementById('generatedImgURL');
         let iOSuser: boolean = false;
-
-        this._analytics.directCall('generate_img_link');
 
         this.showCopyUrl = true;
         input.focus()
@@ -842,7 +836,6 @@ export class AssetPage implements OnInit, OnDestroy {
 
     trackDownloadImage(): void {
         // Track download
-        this._analytics.directCall('download_image');
         this.angulartics.eventTrack.next({ action: "downloadAsset", properties: { category: "asset", label: this.assets[0].id } });
     }
 
@@ -852,7 +845,6 @@ export class AssetPage implements OnInit, OnDestroy {
             eventType: "artstor_image_download_view",
             item_id: this.assets[0].id
         })
-        this._analytics.directCall('download_view');
         this.angulartics.eventTrack.next({ action: "downloadView", properties: { category: "asset", label: this.assets[0].id } });
     }
 

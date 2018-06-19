@@ -5,7 +5,6 @@ import { Subscription }   from 'rxjs/Subscription';
 
 // Internal Dependencies
 // import { CollectionService } from './collection.service';
-import { AnalyticsService } from '../analytics.service';
 import { AssetService } from './../shared/assets.service';
 import { AuthService } from './../shared/auth.service';
 import { TitleService } from '../shared/title.service';
@@ -47,7 +46,6 @@ export class PCollectionPage implements OnInit, OnDestroy {
     private _router: Router,
     private route: ActivatedRoute,
     private http: HttpClient,
-    private _analytics: AnalyticsService,
     private _title: TitleService
   ) {}
 
@@ -90,7 +88,7 @@ export class PCollectionPage implements OnInit, OnDestroy {
               if (!Object.keys(data).length) {
                 throw new Error("No data!");
               }
-              
+
               // If Global Personal Collection, rename as "My Personal Collection"
               this.colName = this.colId == '37436' ? "My Personal Collection" : data['collectionname'];
               this.colDescription = data['blurburl'];
@@ -115,7 +113,6 @@ export class PCollectionPage implements OnInit, OnDestroy {
       console.log(this.showDeleteSuccessBanner)
       this.deleteBannerParams.title = params.deleteSuccess
     }))
-    this._analytics.setPageValues('collection', this.colId)
 
   } // OnInit
 
@@ -146,7 +143,7 @@ export class PCollectionPage implements OnInit, OnDestroy {
     if(publishingAssets){
       this.publishingAssets = publishingAssets
     }
-    
+
 
     let statusArray: Array<any> = []
     for(let ssid of this.publishingAssets['ssids']){
@@ -183,7 +180,7 @@ export class PCollectionPage implements OnInit, OnDestroy {
 
     let ssids: Array<string> = []
     let pub_que_count: number = 0
-    let pub_failure_count: number = 0 
+    let pub_failure_count: number = 0
     for(let statusObj of statusArray){
       ssids.push(statusObj.ssid)
       if(statusObj.status === 'publishing_que'){

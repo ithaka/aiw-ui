@@ -11,16 +11,12 @@ import {
 import { Observable, BehaviorSubject, Subject } from 'rxjs/Rx'
 
 // Project dependencies
-import { AnalyticsService } from '../analytics.service'
 import { AppConfig } from '../app.service'
 
 // Import beta tester emails
 import { BETA_USR_EMAILS } from '../beta-users-email.ts'
 
 // For session timeout management
-
-// import { LoginService } from '../login/login.service'
-
 import { IdleWatcherUtil } from './idle-watcher'
 import {Idle, DEFAULT_INTERRUPTSOURCES} from '@ng-idle/core'
 import { FlagService } from '.'
@@ -73,7 +69,6 @@ export class AuthService implements CanActivate {
     locker:Locker,
     private http: HttpClient,
     private location: Location,
-    private _analytics: AnalyticsService,
     private _app: AppConfig,
     private _flags: FlagService,
     private idle: Idle
@@ -211,7 +206,7 @@ export class AuthService implements CanActivate {
     setInterval(() => {
       this.refreshUserSession()
     }, userInfoInterval)
-    
+
     // Set beta users email
     this.betausers = Object.assign(BETA_USR_EMAILS)
   }
@@ -289,7 +284,7 @@ export class AuthService implements CanActivate {
       }
       return encodedString.replace(/%20/g, '+');
   }
-  
+
   /**
    * Wrapper function for HTTP call to get user institution. Used by nav component
    * @returns Chainable promise containing collection data
@@ -323,8 +318,6 @@ export class AuthService implements CanActivate {
     // Update Observable
     this.institutionObjValue = institutionObj;
     this.institutionObjSource.next(this.institutionObjValue);
-    // Update Analytics object
-    this._analytics.setUserInstitution(institutionObj.institutionId ? institutionObj.institutionId : '')
   }
 
   /**
@@ -357,7 +350,7 @@ export class AuthService implements CanActivate {
     // let dataStr = this.formEncode(registration)
     let header = new HttpHeaders().set('Content-Type', 'application/json')
     let options = { headers: header, withCredentials: true }
-    
+
     return this.http.post(this.getHostname() + "/saml/user/create", registration , options)
   }
 
@@ -419,7 +412,7 @@ export class AuthService implements CanActivate {
   public getThumbUrl(): string {
     return this.thumbUrl;
   }
-  
+
   /** Returns url used for downloading some media, such as documents */
   public getMediaUrl(): string {
     // This is a special case, and should always points to library.artstor or stage
@@ -435,7 +428,7 @@ export class AuthService implements CanActivate {
     //  clearing the user should only be done using the logout function
     let currentUser = this._storage.get('user')
     if (currentUser && currentUser.username && !user.username) { return }
-    
+
     // Should have session timeout, username, baseProfileId, typeId
     this._storage.set('user', user);
     // only do these things if the user is ip auth'd or logged in and the user has changed
@@ -446,9 +439,7 @@ export class AuthService implements CanActivate {
     }
     // Update observable
     this.userSource.next(user)
-    // Set analytics object
-    this._analytics.setUserInstitution(user.institutionId ? user.institutionId : '')
-    
+
     // if (user.status && (this._storage.get('user').username != user.username || !institution.institutionid)) {
   }
 
@@ -497,7 +488,7 @@ export class AuthService implements CanActivate {
       return new Observable(observer => {
         observer.next(true)
       })
-    } 
+    }
 
     // If user object doesn't exist, try to get one!
     return new Observable(observer => {
@@ -665,16 +656,6 @@ export class AuthService implements CanActivate {
   public getIpAuth(): Observable<any> {
     let options = { headers: this.userInfoHeader, withCredentials: true };
     return this.http.get(this.genUserInfoUrl(), options)
-  }
-
-
-
-  /**
-   * Gets user's geo IP information
-   * @returns Observable resolved with object containing geo IP information
-   */
-  public getUserIP(): Observable<any> {
-    return this.http.get("https://freegeoip.net/json/")
   }
 
   public ssLogin(username: string, password: string): Observable<SSLoginResponse> {
