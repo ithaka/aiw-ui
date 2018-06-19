@@ -5,7 +5,6 @@ import { Subscription }   from 'rxjs/Subscription';
 
 // Project dependencies
 import { AssetService } from '../../shared';
-import { AnalyticsService } from '../../analytics.service';
 import { AssetFiltersService } from '../../asset-filters/asset-filters.service';
 import { Params } from '@angular/router/src/shared';
 import { PACKAGE_ROOT_URL } from '@angular/core/src/application_tokens';
@@ -35,7 +34,6 @@ export class SearchComponent implements OnInit, OnDestroy {
   private UserNotLoggedIn: boolean;
 
   constructor(
-    private _analytics: AnalyticsService,
     private _assets: AssetService,
     private _router: Router,
     private route: ActivatedRoute,
@@ -95,7 +93,6 @@ export class SearchComponent implements OnInit, OnDestroy {
     // Pipes are reserved by Advanced Search
     term = term.replace('|', ' ')
 
-    this._analytics.directCall('search')
     this.angulartics.eventTrack.next({ action: "simpleSearch", properties: { category: "search", label: this.term }})
 
     let routeParams = this.route.snapshot.params;

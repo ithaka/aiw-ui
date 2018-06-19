@@ -5,8 +5,6 @@ import { Location } from '@angular/common';
 
 // Project Dependencies
 import { AssetService, ImageGroupService, ImageGroup, GroupService, AuthService } from '../shared';
-import { AnalyticsService } from '../analytics.service';
-
 import { AppConfig } from '../app.service';
 
 @Component({
@@ -60,7 +58,7 @@ export class NavMenu implements OnInit, OnDestroy {
 
   private browseOpts: any = {}
 
-  // Default IG 'Browse By:' Option controlled via the WLV file 
+  // Default IG 'Browse By:' Option controlled via the WLV file
   private defaultGrpBrwseBy: string = 'institution'
 
   // Flag for confimation popup for deleting selected asset(s) from the IG
@@ -77,7 +75,6 @@ export class NavMenu implements OnInit, OnDestroy {
     private _group: GroupService,
     private route: ActivatedRoute,
     private _auth: AuthService,
-    private _analytics: AnalyticsService
   ) {
     this.browseOpts = this._app.config.browseOptions
     this.defaultGrpBrwseBy = this._app.config.defaultGrpBrwseBy

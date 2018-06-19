@@ -9,7 +9,6 @@ import { BehaviorSubject, Observable, Subscription } from 'rxjs/Rx'
 
 import { AppConfig } from '../app.service'
 import { AuthService, User, AssetService } from './../shared'
-import { AnalyticsService } from '../analytics.service'
 
 @Component({
   selector: 'ang-login-form',
@@ -35,7 +34,7 @@ export class LoginFormComponent implements OnInit {
   public forcePwdRst = false
   public successMsgPwdRst = ''
   public loginInstitutions = [] /** Stores the institutions returned by the server */
-  
+
   @Input() private copyModifier: string = 'DEFAULT'
 
   private loginInstName: string = '' /** Bound to the autocomplete field */
@@ -43,9 +42,9 @@ export class LoginFormComponent implements OnInit {
   // loginCall is scoped globally for isBadCasePassword() as well as login()
   private loginCall: Function
 
-  /** 
+  /**
    * Observable for autocomplete list of institutions
-   * - We apply additional sorting 
+   * - We apply additional sorting
    */
   private instListSubject: BehaviorSubject<any[]> = new BehaviorSubject([])
   private instListObs: Observable<any[]> = this.instListSubject.asObservable()
@@ -60,7 +59,6 @@ export class LoginFormComponent implements OnInit {
     private router: Router,
     private location: Location,
     private angulartics: Angulartics2,
-    private _analytics: AnalyticsService,
     private _app: AppConfig,
     private _storage: Locker
   ) {
@@ -99,7 +97,7 @@ export class LoginFormComponent implements OnInit {
       .catch(function(err) {
           console.error('Unable to load user PC');
       });
-      
+
       if (this._auth.getFromStorage("stashedRoute")) {
         // We do not want to navigate to the page we are already on
         if (this._auth.getFromStorage("stashedRoute").indexOf('login') > -1) {
