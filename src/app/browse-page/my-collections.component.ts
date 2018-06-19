@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { Subscription }   from 'rxjs/Subscription';
 
-import { AnalyticsService } from '../analytics.service';
 import { TagsService } from './tags.service';
 import { Tag } from './tag/tag.class';
 import { TitleService, AssetSearchService, AuthService, AssetService, FlagService } from '../shared';
@@ -14,8 +13,6 @@ import { TitleService, AssetSearchService, AuthService, AssetService, FlagServic
 })
 export class MyCollectionsComponent implements OnInit {
 
-  private isLoggedIn: boolean
-
   constructor(
     private _auth: AuthService,
     private _flags: FlagService,
@@ -23,14 +20,11 @@ export class MyCollectionsComponent implements OnInit {
     private route: ActivatedRoute,
     private _search: AssetSearchService,
     private _assets: AssetService,
-    private _analytics: AnalyticsService,
     private _title: TitleService
-  ) {
+  ) {}
 
-   }
-
+  private isLoggedIn: boolean
   private subscriptions: Subscription[] = [];
-
   private categories = [];
   private tags : Tag[] = [];
   private expandedCategories: any = {};
@@ -49,7 +43,7 @@ export class MyCollectionsComponent implements OnInit {
     // Add tag for My Personal Collection
     let colTag = new Tag("37436", "My Personal Collection", true, null, { label: "pcollection", folder: true }, true);
     this.tags.push(colTag);
-    
+
     // Set page title
     this._title.setSubtitle("Browse My Collections")
 
@@ -61,17 +55,15 @@ export class MyCollectionsComponent implements OnInit {
                 this.selectedBrowseId = params['viewId'];
                 // this.loadCategory();
             }
-    
+
             if(params['featureFlag']){
                 this._flags[params['featureFlag']] = true;
             }
 
             if (params['upload']) {
-                this.showEditPCModal = params['upload']   
+                this.showEditPCModal = params['upload']
             }
           }
-        
-
       })
     )
 
@@ -85,10 +77,9 @@ export class MyCollectionsComponent implements OnInit {
       )
     )
 
-    if(this.isLoggedIn){ // If user is logged-in get data for user's personal collections
+    if (this.isLoggedIn) { // If user is logged-in get data for user's personal collections
       this.getUserPCol()
     }
-    this._analytics.setPageValues('mycollection', '')
   } // OnInit
 
   ngOnDestroy() {

@@ -7,7 +7,6 @@ import { Angulartics2 } from 'angulartics2';
 
 // Project dependencies
 import { AssetService, AuthService, GroupService, ImageGroup, LogService } from './../../shared';
-import { AnalyticsService } from './../../analytics.service';
 import { IgFormValue, IgFormUtil } from './new-ig';
 
 @Component({
@@ -60,7 +59,6 @@ export class NewIgModal implements OnInit {
       private _auth: AuthService,
       private _fb: FormBuilder,
       private _group: GroupService,
-      private _analytics: AnalyticsService,
       private _log: LogService,
       private _angulartics: Angulartics2,
       private router: Router,
@@ -174,7 +172,6 @@ export class NewIgModal implements OnInit {
 
     if(this.editIG){
       // Editing group
-      this._analytics.directCall('edit_img_group')
       this._angulartics.eventTrack.next({ action:"editGroup", properties: { category: "group", label: group.id }});
 
       group.id = this.ig.id // need this for the update call
@@ -203,19 +200,17 @@ export class NewIgModal implements OnInit {
       // analytics events
       if(this.copyIG) {
         // Copying old group
-        this._analytics.directCall('save_img_group_as')
         this._angulartics.eventTrack.next({ action:"copyGroup", properties: { category: "group", label: group.id }});
 
         // Log copy group event into Captain's Log
         this._log.log({
           eventType: "artstor_copy_group",
-          additional_fields: { 
+          additional_fields: {
             "source_group_id": this.ig.id
           }
         })
       } else {
         // Create New Group
-        this._analytics.directCall('save_selections_new_img_group')
         this._angulartics.eventTrack.next({ action:"newGroup", properties: { category: "group" }});
 
         // Log create group event into Captain's Log
