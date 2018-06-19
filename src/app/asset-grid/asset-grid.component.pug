@@ -104,6 +104,8 @@
         .alert.alert-warning(*ngIf="!isLoading && (searchError.length < 1) && ((isPartialPage && hasMaxAssetLimit) || searchLimitError)")
           | {{ "BROWSE.WARNINGS.ADDITIONAL_RESULTS" | translate }}
   .row
+    ang-prompt(*ngIf="_auth.isPublicOnly()", style='width:100%; margin-top:36px; margin-bottom:20px;')
+  .row
     .mobile--hide.grid-tool-bar([ngClass]="[ reorderMode ? 'col-12' : 'col-sm-8 col-md-8 col-lg-9']")
     .col-sm-4.col-md-4.col-lg-3.text-right.grid-pagination-bar(*ngIf="!reorderMode")
       pagination([pageObj]="pagination", (goToPage)="goToPage($event)", [right]="true")
