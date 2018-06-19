@@ -4,7 +4,6 @@ import { Subscription } from 'rxjs/Subscription';
 import { Ng2DeviceService } from 'ng2-device-detector';
 
 import { AssetService, AuthService, } from '../shared';
-import { AnalyticsService } from '../analytics.service';
 import { AppConfig } from '../app.service';
 import { Featured } from './featured'
 
@@ -45,7 +44,7 @@ export class Home implements OnInit, OnDestroy {
   private showHomePromo: boolean = false
   private siteID: string = ""
 
-  // Default IG 'Browse By:' Option controlled via the WLV file 
+  // Default IG 'Browse By:' Option controlled via the WLV file
   private defaultGrpBrwseBy: string = 'institution'
 
   // TypeScript public modifiers
@@ -54,7 +53,6 @@ export class Home implements OnInit, OnDestroy {
     private _assets: AssetService,
     private _router: Router,
     private _auth: AuthService,
-    private _analytics: AnalyticsService,
     private deviceService: Ng2DeviceService
   ) {
     // this makes the window always render scrolled to the top
@@ -131,8 +129,6 @@ export class Home implements OnInit, OnDestroy {
         console.log(error);
         this.blogLoading = false;
       });
-
-    this._analytics.setPageValues('Home', '')
 
     // Grab session info for Email Artstor link
     this._auth.getUserIP().subscribe((res) => {

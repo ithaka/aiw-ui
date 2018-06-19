@@ -5,7 +5,6 @@ import { Subscription }   from 'rxjs/Subscription';
 
 import { AssetService } from './../shared/assets.service';
 import { AssetSearchService } from './../shared/asset-search.service'
-import { AnalyticsService } from '../analytics.service';
 import { TagsService } from './tags.service';
 import { Tag } from './tag/tag.class';
 import { TitleService } from '../shared/title.service';
@@ -26,11 +25,10 @@ export class LibraryComponent implements OnInit {
     private _assets: AssetService,
     private _search: AssetSearchService,
     private _tags: TagsService,
-    private _analytics: AnalyticsService,
     private _title: TitleService,
     private _filters: AssetFiltersService,
     private locker: Locker
-  ) { 
+  ) {
     this._storage = locker.useDriver(Locker.DRIVERS.LOCAL)
   }
 
@@ -116,7 +114,7 @@ export class LibraryComponent implements OnInit {
         // load category facets
         // > Use locally scope variable to avoid data crossover
         let facetType = this.facetType = this.categoryFacetMap[this.selectedBrowseId]
-        
+
         // Clear facet objects/arrays
         this.clearFacets()
 
@@ -139,16 +137,16 @@ export class LibraryComponent implements OnInit {
           .then( (facetData) => {
             // ensure they are emptied in case of multiple fast clicking
             this.clearFacets()
-            
+
             // Categoryid facets require an additional call for labels/titles
             if (facetType == 'categoryid') {
 
                 this._assets.categoryNames()
                   .then((data) => {
                     // Create an index by ID for naming the facets
-                    let categoryIndex = data.reduce( ( result, item ) => { 
-                        result[item.categoryId] = item.categoryName; 
-                        return result; 
+                    let categoryIndex = data.reduce( ( result, item ) => {
+                        result[item.categoryId] = item.categoryName;
+                        return result;
                     }, {});
                     // Append titles to the facets (we can't replace "name", as its the ID, which we need)
                     this.categoryFacets = facetData
@@ -195,7 +193,6 @@ export class LibraryComponent implements OnInit {
         }
       })
     );
-    this._analytics.setPageValues('library', '')
   } // OnInit
 
   private clearFacets(): void {

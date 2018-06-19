@@ -5,8 +5,6 @@ import 'rxjs/add/operator/toPromise';
 
 import { AuthService } from './../shared/auth.service';
 import { AssetService } from './../shared/assets.service';
-import { AnalyticsService } from '../analytics.service';
-
 
 @Component({
   selector: 'ang-associated-page',
@@ -26,14 +24,11 @@ export class AssociatedPage implements OnInit, OnDestroy {
   private assetTitle: string;
 
   constructor(
-        private _router: Router,
-        private _assets: AssetService,
-        private route: ActivatedRoute,
-        private _auth: AuthService,
-        private _analytics: AnalyticsService
-      ) {
-
-  }
+      private _router: Router,
+      private _assets: AssetService,
+      private route: ActivatedRoute,
+      private _auth: AuthService,
+    ) {}
 
   /**
    * Sets up subscription to objectId matrix param, which gets assetTitle from service
@@ -62,8 +57,6 @@ export class AssociatedPage implements OnInit, OnDestroy {
         }
       })
     );
-
-    this._analytics.setPageValues('associated', this.objectId)
   } // OnInit
 
   ngOnDestroy() {
