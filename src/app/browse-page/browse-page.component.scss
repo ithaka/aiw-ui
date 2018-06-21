@@ -200,6 +200,13 @@
     width: 85%;
 }
 
+#browsePageFilter {
+    &.alert {
+        width: 85%;
+    }
+}
+
+
 #iconSearchSubmit {
     &.form-control__icon {
         opacity: 0.4;
