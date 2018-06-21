@@ -20,6 +20,8 @@ export class CategoryPage implements OnInit, OnDestroy {
   private header = new HttpHeaders().set('Content-Type', 'application/json'); // ... Set content type to JSON
   private options = { headers: this.header, withCredentials: true }; // Create a request option
 
+  private user: any = this._auth.getUser();
+
   private catId: string;
   private catName: string;
   private catDescription: string;
@@ -28,7 +30,7 @@ export class CategoryPage implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = [];
 
   // private searchInResults: boolean = false;
-
+  private unaffiliatedUser: boolean = false
 
   constructor(
     private _assets: AssetService,
@@ -40,6 +42,18 @@ export class CategoryPage implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
+    // Subscribe User object updates
+    this.subscriptions.push(
+      this._auth.currentUser.subscribe(
+        (userObj) => {
+          this.user = userObj;
+        },
+        (err) => {
+          console.error("Failed to load user information", err)
+        }
+      )
+    );
+
     this.subscriptions.push(
       this.route.params.subscribe((routeParams) => {
         this.catId = routeParams['catId'];
@@ -50,8 +64,11 @@ export class CategoryPage implements OnInit, OnDestroy {
         }
 
         if (this.catId) {
+          // If the user.unaffliatedUser doesn't match the component's "unaffiliatedUser" flag then refresh search results
+          let refreshSearch = this.unaffiliatedUser && this.user.unaffliatedUser ? false : true
+
           // Tell AssetService to load thumbnails (Asset Grid will get them)
-          this._assets.queryAll(params);
+          this._assets.queryAll(params, refreshSearch);
 
           // Get Category metadata
           this.getCategoryInfo(this.catId)
@@ -85,6 +102,8 @@ export class CategoryPage implements OnInit, OnDestroy {
             console.error(error);
           });
         }
+
+        this.unaffiliatedUser = this.user.unaffliatedUser ? true : false
       })
     );// End push to subscription
 
