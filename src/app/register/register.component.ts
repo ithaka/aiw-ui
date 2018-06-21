@@ -5,7 +5,6 @@ import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms'
 import { Angulartics2 } from 'angulartics2';
 
 import { AuthService } from './../shared';
-import { AnalyticsService } from '../analytics.service';
 import { USER_ROLES, USER_DEPTS } from './user-roles.ts';
 
 @Component({
@@ -15,9 +14,11 @@ import { USER_ROLES, USER_DEPTS } from './user-roles.ts';
 })
 export class RegisterComponent implements OnInit {
 
-  private registerForm: FormGroup;
-  private submitted: boolean = false;
-  private isLoading: boolean = false;
+  private registerForm: FormGroup
+  private submitted: boolean = false
+  private isLoading: boolean = false
+  // Indicates user is registering for Shibboleth
+  private isShibbFlow: boolean = false
 
   private userDepts: any[] = [];
   private userRoles: any[] = [];
@@ -26,7 +27,8 @@ export class RegisterComponent implements OnInit {
     duplicate?: boolean,
     hasJstor?: boolean,
     server?: boolean,
-    shibboleth?: string
+    shibboleth?: string,
+    shibbolethInst?: boolean
   } = {};
 
   private showJstorModal: boolean = false
@@ -42,7 +44,6 @@ export class RegisterComponent implements OnInit {
     private route: ActivatedRoute,
     private angulartics: Angulartics2,
     _fb: FormBuilder,
-    private _analytics: AnalyticsService
   ) {
     this.registerForm = _fb.group({
       // The first value of this array is the initial value for the control, the second is the
@@ -64,17 +65,18 @@ export class RegisterComponent implements OnInit {
 
     let email: string = this.route.snapshot.params.email
     let samlTokenId: string = this.route.snapshot.params.samlTokenId
+    this.serviceErrors['shibbolethInst'] = this.route.snapshot.params.error == "INST404"
 
     if (samlTokenId) {
       email && this.registerForm.controls.email.setValue(email) // set the email
       this.shibParameters = { email: email, samlTokenId: samlTokenId }
+      this.isShibbFlow = true
     }
 
     // Issues with unauthorized access to the service, and the fact that the data NEVER changes, led us to hardcode these values:
     this.userDepts = USER_DEPTS
     this.userRoles = USER_ROLES
 
-    this._analytics.setPageValues('register', '')
   } // OnInit
 
   //https://angular.io/docs/ts/latest/api/forms/index/FormGroup-class.html

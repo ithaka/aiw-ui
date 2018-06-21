@@ -3,7 +3,6 @@ import { Router, ActivatedRoute, Params, NavigationEnd } from '@angular/router'
 import { Subscription }   from 'rxjs/Subscription'
 
 import { AssetService, AuthService, GroupService } from './../../shared'
-import { AnalyticsService } from './../../analytics.service'
 import { Tag } from './../tag'
 import { TagFiltersService } from './tag-filters.service'
 import { TitleService } from '../../shared/title.service'
@@ -51,7 +50,6 @@ export class BrowseGroupsComponent implements OnInit {
     private _groups: GroupService,
     private _tagFilters: TagFiltersService,
     private _auth: AuthService,
-    private _analytics: AnalyticsService,
     private _title: TitleService,
     private route: ActivatedRoute,
     private _appConfig: AppConfig
@@ -107,8 +105,6 @@ export class BrowseGroupsComponent implements OnInit {
         level: 'shared'
       })
     }
-
-    this._analytics.setPageValues('groups', '')
   } // OnInit
 
   ngOnDestroy() {

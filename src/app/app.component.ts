@@ -8,7 +8,7 @@ import { Router, NavigationStart, NavigationEnd } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 
 import { AppConfig } from "./app.service";
-import { ScriptService } from './shared';
+import { ScriptService, FlagService } from './shared';
 /*
  * App Component
  * Top Level Component
@@ -46,6 +46,7 @@ export class App {
     angulartics2GoogleAnalytics: Angulartics2GoogleAnalytics,
     private titleService: Title,
     private _script: ScriptService,
+    private _flags: FlagService,
     private router:Router,
     private translate: TranslateService
   ) {
@@ -65,6 +66,9 @@ export class App {
         // focus on the wrapper of the "skip to main content link" everytime new page is loaded
         let mainEl = <HTMLElement>(document.getElementById("skip"))
         mainEl.focus()
+        // For the filter to work on browse/library page, focus on the input to make user can type in search term continuously
+        if (document.getElementById("browsePageFilter"))
+          document.getElementById("browsePageFilter").focus()
         
         let event_url_array = event.url.split('/')
         if(event_url_array && (event_url_array.length > 1) && (event_url_array[1] !== 'asset')){
@@ -93,7 +97,16 @@ export class App {
           }
         }
       }
-    });
+    })
+
+    this._flags.getFlagsFromService()
+    .take(1)
+    .subscribe((res) => {
+      // don't need to handle successful response here - this just initiates the flags
+      console.log(res)
+    }, (err) => {
+      console.error(err)
+    })
   }
 
   ngOnInit() {

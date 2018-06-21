@@ -14,7 +14,7 @@
             button.dropdown-item(*ngIf="!_auth.isPublicOnly() && browseOpts.artstorCol", [routerLink]="['/browse', 'library']") {{ 'NAV_MENU.COLLECTIONS.ARTSTOR' | translate }}
             button.dropdown-item(*ngIf="!_auth.isPublicOnly() && browseOpts.instCol", [routerLink]="['/browse', 'institution']") {{ 'NAV_MENU.COLLECTIONS.INSTITUTION' | translate }}
             button.dropdown-item(*ngIf="browseOpts.openCol", [routerLink]="['/browse', 'commons']") {{ 'NAV_MENU.COLLECTIONS.OPEN' | translate }}
-            button.dropdown-item(*ngIf="browseOpts.myCol", [class.disabled]="!user.isLoggedIn", [routerLink]="['/browse', 'mycollections']") {{ 'NAV_MENU.COLLECTIONS.OWNED' | translate }}
+            button.dropdown-item(*ngIf="!_auth.isPublicOnly() && browseOpts.myCol", [class.disabled]="!user.isLoggedIn", [routerLink]="['/browse', 'mycollections']") {{ 'NAV_MENU.COLLECTIONS.OWNED' | translate }}
             button.dropdown-item(*ngIf="!_auth.isPublicOnly() && browseOpts.igs", [routerLink]="['/browse','groups', defaultGrpBrwseBy]") {{ 'NAV_MENU.COLLECTIONS.GROUPS' | translate }}
         //li.nav-item(*ngIf="!_auth.isPublicOnly()")
           a.btn.btn-link([routerLink]="['/browse','groups', defaultGrpBrwseBy]", routerLinkActive="active") {{ 'NAV_MENU.GROUPS' | translate }}
@@ -22,11 +22,11 @@
           button#organizeMenu.btn.btn-link(ngbDropdownToggle) {{ 'NAV_MENU.ORGANIZE.TITLE' | translate }}
           .dropdown-menu(ngbDropdownMenu, aria-labelledby="organizeMenu")
             // Active on Image Group Page
-            button.dropdown-item((click)="_analytics.directCall('select_all'); selectAllInAssetGrid()", [class.disabled]="!allowSelectAll || !user.isLoggedIn") {{ 'NAV_MENU.ORGANIZE.SELECT_ALL' | translate }}
+            button.dropdown-item((click)="selectAllInAssetGrid()", [class.disabled]="!allowSelectAll || !user.isLoggedIn") {{ 'NAV_MENU.ORGANIZE.SELECT_ALL' | translate }}
             button#btnSaveToNewGroup.dropdown-item([class.disabled]="selectedAssets.length < 1 || !user.isLoggedIn", (click)="copyIG = false; editIG = false; showImageGroupModal = true;") {{ 'NAV_MENU.ORGANIZE.NEW_GROUP' | translate }}
             button#btnSaveToExistingGroup.dropdown-item([class.disabled]="selectedAssets.length < 1 || !user.isLoggedIn", (click)="showAddToGroupModal = true;") {{ 'NAV_MENU.ORGANIZE.EXISTING_GROUP' | translate }}
             button#btnDeleteFromGroup.dropdown-item(*ngIf="params['igId']", [class.disabled]="selectedAssets.length < 1 || !allowIgUpdate", (click)="showConfirmationModal = true") {{ 'NAV_MENU.ORGANIZE.DELETE_SELECTIONS' | translate }}
-            button#btnDeselectImages.dropdown-item([class.disabled]="selectedAssets.length < 1 || !user.isLoggedIn", (click)="_analytics.directCall('deselect_all'); _assets.setSelectedAssets([])") {{ 'NAV_MENU.ORGANIZE.DESELECT' | translate }}
+            button#btnDeselectImages.dropdown-item([class.disabled]="selectedAssets.length < 1 || !user.isLoggedIn", (click)="_assets.setSelectedAssets([])") {{ 'NAV_MENU.ORGANIZE.DESELECT' | translate }}
             .dropdown-divider
             // Active on Image Group Page
             button#btnEditGroup.dropdown-item([disabled]="!actionOptions.group || !allowIgUpdate", (click)="editIG = true; copyIG = false; showImageGroupModal = true;") {{ 'NAV_MENU.ORGANIZE.EDIT' | translate }}
@@ -38,11 +38,11 @@
         li.nav-item(ngbDropdown, (mouseenter)="openDrop($event, drop3)", (mouseleave)="closeDrop($event, drop3)", #drop3="ngbDropdown")
           button#shareMenu.btn.btn-link(ngbDropdownToggle) {{ 'NAV_MENU.SHARE.TITLE' | translate }}
           .dropdown-menu(ngbDropdownMenu, aria-labelledby="shareMenu")
-            button.dropdown-item([class.disabled]="selectedAssets.length !== 1", (click)="_analytics.directCall('generate_img_link'); showShareLinkModal = true") {{ 'NAV_MENU.SHARE.GENERATE_IMAGE_LINK' | translate }}
+            button.dropdown-item([class.disabled]="selectedAssets.length !== 1", (click)="showShareLinkModal = true") {{ 'NAV_MENU.SHARE.GENERATE_IMAGE_LINK' | translate }}
             // Active on Image Group Page
-            button.dropdown-item([disabled]="!actionOptions.group || !genImgGrpLink", (click)="_analytics.directCall('generate_img_group_link'); showShareIgModal = true") {{ 'NAV_MENU.SHARE.GENERATE_GROUP_LINK' | translate }}
+            button.dropdown-item([disabled]="!actionOptions.group || !genImgGrpLink", (click)="showShareIgModal = true") {{ 'NAV_MENU.SHARE.GENERATE_GROUP_LINK' | translate }}
             // Active on Image Group Page
-            button.dropdown-item([disabled]="!actionOptions.group", (click)="_analytics.directCall('print_img_group'); printImageGroupPage()") {{ 'NAV_MENU.SHARE.PRINT_GROUP' | translate }}
+            button.dropdown-item([disabled]="!actionOptions.group", (click)="printImageGroupPage()") {{ 'NAV_MENU.SHARE.PRINT_GROUP' | translate }}
             // Active on Image Group Page
             button.dropdown-item(*ngIf="params['igId']", (click)="_ig.triggerIgDownload()") {{ 'NAV_MENU.SHARE.DOWNLOAD_GROUP' | translate }}
         li.nav-item
