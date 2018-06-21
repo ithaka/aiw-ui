@@ -5,7 +5,6 @@ import { Angulartics2 } from 'angulartics2';
 
 // Project dependencies
 import { SearchQueryUtil } from './search-query';
-import { AnalyticsService } from '../../analytics.service';
 import { AssetFiltersService } from './../../asset-filters/asset-filters.service';
 import { AuthService, AssetService, AssetSearchService } from "app/shared";
 import { AppConfig } from '../../app.service';
@@ -88,7 +87,6 @@ export class SearchModal implements OnInit {
         private _filters: AssetFiltersService,
         private _router: Router,
         private route: ActivatedRoute,
-        private _analytics: AnalyticsService,
         private angulartics: Angulartics2,
         private _auth: AuthService,
         // Solr Search service
@@ -128,19 +126,19 @@ export class SearchModal implements OnInit {
           this.updateAdvanceQueries( routeParams )
           break
         }
-       
+
         case 'startDate': { // Update advanceSearchDate Object as per the startDate
           this.advanceSearchDate.startDate = Math.abs(routeParams[key])
           this.advanceSearchDate.startEra = parseInt(routeParams[key]) < 0 ? 'BCE' : 'CE'
           break
         }
-       
+
         case 'endDate': { // Update advanceSearchDate Object as per the endDate
           this.advanceSearchDate.endDate = Math.abs(routeParams[key])
           this.advanceSearchDate.endEra = parseInt(routeParams[key]) < 0 ? 'BCE' : 'CE'
           break
         }
-        
+
         //For tri-state checkboxes set the checked flag for filter object based on param value and in the end run generateSelectedFilters to updated selected filters object
         case 'artclassification_str': {
           let classificatioFilters = routeParams[key].split('|')
@@ -248,7 +246,11 @@ export class SearchModal implements OnInit {
               let facetName = facet.values[i].name
               if (!this.showPrivateCollections && facetName.match(/3|6/)) { // NOTE: 3 & 6 are Private Collections names
                 facet.values.splice(i, 1)
-              } else if (facetName && facetName.length > 0){ // Some filters return empty strings, avoid those
+              }
+              if (this._auth.isPublicOnly() && facet.name == 'collectiontypes' && !(facetName.match(/5/))) { // For public user, only show public collection in collectiontype filter, 5 is Public Collection name
+                facet.values.splice(i, 1)
+              } 
+              else if (facetName && facetName.length > 0){ // Some filters return empty strings, avoid those
                 // Push filter objects to Facet Group 'values' Array
                 let facetObject: FacetObject = {
                   checked: false,
@@ -312,7 +314,8 @@ export class SearchModal implements OnInit {
                 colFacetObj.checked = false
                 colFacetObj.name = collection.collectionname
                 colFacetObj.value = collection.collectionid
-                this.availableFilters[1].values[2].children.push( colFacetObj )
+                if (this.availableFilters[1].values[2])
+                  this.availableFilters[1].values[2].children.push( colFacetObj )
               }
             } else {
               throw new Error("no Collections returned in data")
@@ -497,8 +500,7 @@ export class SearchModal implements OnInit {
       }
     }
 
-    // Track in Adobe Analytics
-    this._analytics.directCall('advanced_search');
+    // Track in angulartics
     this.angulartics.eventTrack.next({ action: "advSearch", properties: { category: "search", label: advQuery } })
 
     // Maintain feature flags

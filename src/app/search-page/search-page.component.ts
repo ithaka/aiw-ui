@@ -3,9 +3,8 @@ import { ActivatedRoute, Router } from '@angular/router'
 import { Subscription }   from 'rxjs/Subscription';
 
 import { AssetService } from './../shared/assets.service';
-import { AuthService, LogService } from '../shared';
+import { AuthService, LogService, FlagService } from '../shared';
 import { AssetFiltersService } from '../asset-filters/asset-filters.service';
-import { AnalyticsService } from '../analytics.service';
 import { AssetGrid } from './../asset-grid/asset-grid.component';
 import { TitleService } from '../shared/title.service';
 import { AppConfig } from '../app.service';
@@ -19,7 +18,7 @@ import { AppConfig } from '../app.service';
 
 export class SearchPage implements OnInit, OnDestroy {
   // Add user to decide whether to show the banner
-  private user: any = this._auth.getUser(); 
+  private user: any = this._auth.getUser();
 
   private unaffiliatedFlag: boolean;
   private siteID: string = ""
@@ -37,8 +36,8 @@ export class SearchPage implements OnInit, OnDestroy {
         private _assets: AssetService,
         private route: ActivatedRoute,
         private _filters: AssetFiltersService,
+        private _flags: FlagService,
         private _router: Router,
-        private _analytics: AnalyticsService,
         private _title: TitleService,
         private _auth: AuthService,
         private _captainsLog: LogService
@@ -71,8 +70,7 @@ export class SearchPage implements OnInit, OnDestroy {
 
         // Find feature flags (needs to be checked before running queryAll)
         if(params && params['featureFlag']){
-            console.log(params['featureFlag'])
-            this._auth.featureFlags[params['featureFlag']] = true;
+            this._flags[params['featureFlag']] = true;
             // Check for unaffiliated user flag
             if (params['featureFlag']=="unaffiliated"){
               this.unaffiliatedFlag = true;
@@ -83,7 +81,7 @@ export class SearchPage implements OnInit, OnDestroy {
         if (!params['page']){
           params['page'] = 1;
         }
-        
+
         // If the user.unaffliatedUser doesn't match the component's "unaffiliatedUser" flag then refresh search results
         let refreshSearch = this.unaffiliatedUser && this.user.unaffliatedUser ? false : true
 
@@ -96,7 +94,7 @@ export class SearchPage implements OnInit, OnDestroy {
           // Post search info to Captain's Log
           this._captainsLog.log({
             eventType: "artstor_search",
-            additional_fields: { 
+            additional_fields: {
               "searchTerm": params["term"],
               "searchFilters": logFilters
             }
@@ -114,7 +112,6 @@ export class SearchPage implements OnInit, OnDestroy {
         this.unaffiliatedUser = this.user.unaffliatedUser ? true : false
       })
     );
-    this._analytics.setPageValues('search', '')
   } // OnInit
 
   ngOnDestroy() {

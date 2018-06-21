@@ -1,3 +1,4 @@
+import { KeysPipe } from './../shared/keys.pipe';
 import { Component, OnInit, OnDestroy, ViewChild, HostListener } from '@angular/core'
 import { ActivatedRoute, Params, Router } from '@angular/router'
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
@@ -19,9 +20,9 @@ import {
     LogService,
     PersonalCollectionService,
     AssetDetailsFormValue,
-    CollectionTypeInfo
+    CollectionTypeInfo,
+    FlagService
 } from './../shared'
-import { AnalyticsService } from '../analytics.service'
 import { TitleService } from '../shared/title.service'
 import { ScriptService } from '../shared/script.service'
 import { LocalPCService, LocalPCAsset } from '../_local-pc-asset.service'
@@ -82,7 +83,7 @@ export class AssetPage implements OnInit, OnDestroy {
     // Used for generated view blob url
     private blobURL: string = ''
     private prevRouteParams: any = []
-    private _storage
+    private _session
 
     private quizMode: boolean = false;
     private quizShuffle: boolean = false;
@@ -125,29 +126,31 @@ export class AssetPage implements OnInit, OnDestroy {
     private showDeletePCModal: boolean = false
     private downloadLoading: boolean = false
 
+    private requestId: string = ''
+
     private uiMessages: {
         deleteFailure?: boolean
     } = {}
 
     constructor(
         private _assets: AssetService,
-        private _search: AssetSearchService,
-        private _group: GroupService,
         private _auth: AuthService,
+        private _search: AssetSearchService,
+        private _flags: FlagService,
+        private _group: GroupService,
         private _pcservice: PersonalCollectionService,
         private _localPC: LocalPCService,
         private _log: LogService,
-        private _fb: FormBuilder,
         private route: ActivatedRoute,
         private _router: Router,
-        private locker: Locker,
-        private _analytics: AnalyticsService,
         private angulartics: Angulartics2,
         private _title: TitleService,
         private scriptService: ScriptService,
-        private _sanitizer: DomSanitizer
+        private _sanitizer: DomSanitizer,
+        _fb: FormBuilder,
+        locker: Locker
     ) {
-        this._storage = locker.useDriver(Locker.DRIVERS.LOCAL)
+        this._session = locker.useDriver(Locker.DRIVERS.SESSION)
 
         this.editDetailsForm = _fb.group({
             creator: [null],
@@ -163,54 +166,6 @@ export class AssetPage implements OnInit, OnDestroy {
 
     ngOnInit() {
         this.user = this._auth.getUser();
-
-        // For "Go Back to Results"
-        let prevRouteParams = this._storage.get('prevRouteParams');
-        if (prevRouteParams && (prevRouteParams.length > 0)) {
-            this.prevRouteParams = prevRouteParams;
-        }
-        this._storage.remove('prevRouteParams');
-
-        // TotalAssets - for browsing between the assets
-        let totalAssets = this._storage.get('totalAssets');
-        if (totalAssets) {
-            this.totalAssetCount = totalAssets;
-        }
-        else {
-            this.totalAssetCount = 1;
-        }
-        this._storage.remove('totalAssets');
-
-        this.subscriptions.push(
-            this.route.params.subscribe((routeParams) => {
-                // this.assets = []
-                let assetIdProperty = this._auth.featureFlags[routeParams['featureFlag']] ? 'artstorid' : 'objectId'
-                this.assetGroupId = routeParams['groupId']
-                // Find feature flags
-                if (routeParams && routeParams['featureFlag']) {
-                    this._auth.featureFlags[routeParams['featureFlag']] = true
-                    this.relatedResFlag = this._auth.featureFlags['related-res-hack'] ? true : false
-                } else {
-                    this.relatedResFlag = false
-                }
-
-                if (routeParams['encryptedId']) {
-                    this.encryptedAccess = true
-                    this.assetIds[0] = routeParams["encryptedId"]
-                } else {
-                    this.assetIds[0] = routeParams["assetId"]
-
-                    if (this.prevAssetResults.thumbnails.length > 0) {
-                        this.assetIndex = this.currentAssetIndex();
-                        this.assetNumber = this._assets.currentLoadedParams.page ? this.assetIndex + 1 + ((this._assets.currentLoadedParams.page - 1) * this._assets.currentLoadedParams.size) : this.assetIndex + 1;
-                    }
-                }
-            })
-        );
-
-        // Get latest set of results with at least one asset
-        // this.prevAssetResults = this._assets.getRecentResults();
-
 
         // sets up subscription to allResults, which is the service providing thumbnails
         this.subscriptions.push(
@@ -250,6 +205,63 @@ export class AssetPage implements OnInit, OnDestroy {
             })
         );
 
+        this.subscriptions.push(
+            this.route.params.subscribe((routeParams) => {
+                this.assetGroupId = routeParams['groupId']
+                // Find feature flags
+                if (routeParams && routeParams['featureFlag']) {
+                    this._flags[routeParams['featureFlag']] = true
+                    this.relatedResFlag = this._flags['related-res-hack'] ? true : false
+                } else {
+                    this.relatedResFlag = false
+                }
+
+                if (routeParams['encryptedId']) {
+                    this.encryptedAccess = true
+                    this.assetIds[0] = routeParams["encryptedId"]
+                } else {
+                    this.assetIds[0] = routeParams["assetId"]
+
+                    if (this.prevAssetResults.thumbnails.length > 0) {
+                        this.assetIndex = this.currentAssetIndex();
+                        this.assetNumber = this._assets.currentLoadedParams.page ? this.assetIndex + 1 + ((this._assets.currentLoadedParams.page - 1) * this._assets.currentLoadedParams.size) : this.assetIndex + 1;
+                    }
+                }
+
+                // For "Go Back to Results" and pagination, for asset that is not from image group look for requestId to set prevRouteParams
+                if (routeParams['requestId'] || routeParams['groupId']) {
+                    // For "Go Back to Results"
+                    // Get map of previous search params
+                    let prevRoutesMap = this._session.get('prevRouteParams')
+                    this.requestId = routeParams['requestId']
+                    // Reference previous search params for the current request id
+                    let prevRouteParams = prevRoutesMap[this.requestId]
+                    // Set previous route params if available, showing "Back to Results" link
+                    if (prevRoutesMap && prevRouteParams && (prevRouteParams.length > 0)) {
+                        this.prevRouteParams = prevRouteParams
+                    }
+
+                    // TotalAssets - for browsing between the assets
+                    let totalAssets = this._session.get('totalAssets');
+                    if (totalAssets) {
+                        this.totalAssetCount = totalAssets;
+                    }
+                    else {
+                        this.totalAssetCount = 1
+                    }
+                }
+                // If I go to the asset by replacing the url without opening a new tab, do not show the "Go Back to Results" link and pagination link
+                else {
+                    this.prevRouteParams = []
+                    this.totalAssetCount = 1
+                    this.assetNumber = 1
+                }
+            })
+        );
+
+        // Get latest set of results with at least one asset
+        // this.prevAssetResults = this._assets.getRecentResults();
+
         // Subscribe to pagination values
         this.subscriptions.push(
             this._assets.pagination.subscribe((pagination) => {
@@ -276,8 +288,6 @@ export class AssetPage implements OnInit, OnDestroy {
                 this.showAccessDeniedModal = true
             }
         })
-
-        this._analytics.setPageValues('asset', this.assets[0] && this.assets[0].id)
 
         // MS Browser Agent ?
         this.isMSAgent = this.navigator.msSaveOrOpenBlob !== undefined
@@ -451,6 +461,10 @@ export class AssetPage implements OnInit, OnDestroy {
                 if (this.assetGroupId) {
                     queryParams["groupId"] = this.assetGroupId
                 }
+
+                // Maintain the requestId route parameter for previous page
+                queryParams['requestId'] = this.requestId
+
                 this._router.navigate(['/asset', this.prevAssetResults.thumbnails[prevAssetIndex][this.assetIdProperty], queryParams]);
             }
             else if (this.assetIndex == 0) {
@@ -471,6 +485,10 @@ export class AssetPage implements OnInit, OnDestroy {
                 if (this.assetGroupId) {
                     queryParams["groupId"] = this.assetGroupId
                 }
+
+                // Maintain the requestId route parameter for next page
+                queryParams['requestId'] = this.requestId
+
                 this._router.navigate(['/asset', this.prevAssetResults.thumbnails[nextAssetIndex][this.assetIdProperty], queryParams]);
             }
             else if ((this.prevAssetResults.thumbnails) && (this.assetIndex == (this.prevAssetResults.thumbnails.length - 1))) {
@@ -515,8 +533,6 @@ export class AssetPage implements OnInit, OnDestroy {
         let statusMsg = '';
         let input: any = document.getElementById('generatedImgURL');
         let iOSuser: boolean = false;
-
-        this._analytics.directCall('generate_img_link');
 
         this.showCopyUrl = true;
         input.focus()
@@ -820,7 +836,6 @@ export class AssetPage implements OnInit, OnDestroy {
 
     trackDownloadImage(): void {
         // Track download
-        this._analytics.directCall('download_image');
         this.angulartics.eventTrack.next({ action: "downloadAsset", properties: { category: "asset", label: this.assets[0].id } });
     }
 
@@ -830,7 +845,6 @@ export class AssetPage implements OnInit, OnDestroy {
             eventType: "artstor_image_download_view",
             item_id: this.assets[0].id
         })
-        this._analytics.directCall('download_view');
         this.angulartics.eventTrack.next({ action: "downloadView", properties: { category: "asset", label: this.assets[0].id } });
     }
 

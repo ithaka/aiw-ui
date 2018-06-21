@@ -90,7 +90,7 @@
             input.check(type="checkbox", [checked]="isSelectedAsset(asset) > -1", [ngStyle]="{ 'display': isSelectedAsset(asset) > -1 ? 'block' : 'none' }", (change)="editMode = true; selectAsset(asset);")
           .mobile--show
             input.check-mobile(type="checkbox", [checked]="isSelectedAsset(asset) > -1", (change)="editMode = true; selectAsset(asset);")
-          a.card.card--asset([attr.data-id]="asset.objectId", [ngClass]="{'selected': ( isSelectedAsset(asset) > -1 ), 'lrgThmb': largeThmbView }", [routerLink]="getAssetPath(asset)", [queryParams]="(asset.iapFlag > 0 || asset.iap) ? { iap: 'true' } : {}", (click)="selectAsset(asset)", (focus)="showBox($event)", (blur)="hideBox($event)")
+          a.card.card--asset([attr.data-id]="asset.objectId", [ngClass]="{'selected': ( isSelectedAsset(asset) > -1 ), 'lrgThmb': largeThmbView }", (click)="selectAsset(asset)", (focus)="showBox($event)", (blur)="hideBox($event)")
             ang-thumbnail([thumbnail]="asset", [reorderMode]="reorderMode", [editMode]="editMode", [largeThmbView]="largeThmbView")
         .alert.alert-warning(*ngIf="!isLoading && (searchError.length < 1) && ((isPartialPage && hasMaxAssetLimit) || searchLimitError)")
           | {{ "BROWSE.WARNINGS.ADDITIONAL_RESULTS" | translate }}
@@ -103,6 +103,8 @@
               ang-thumbnail([thumbnail]="asset", [reorderMode]="reorderMode", [editMode]="editMode", [largeThmbView]="largeThmbView")
         .alert.alert-warning(*ngIf="!isLoading && (searchError.length < 1) && ((isPartialPage && hasMaxAssetLimit) || searchLimitError)")
           | {{ "BROWSE.WARNINGS.ADDITIONAL_RESULTS" | translate }}
+  .row
+    ang-prompt(*ngIf="_auth.isPublicOnly() && searchTerm", style='width:100%; margin-top:36px; margin-bottom:20px;')
   .row
     .mobile--hide.grid-tool-bar([ngClass]="[ reorderMode ? 'col-12' : 'col-sm-8 col-md-8 col-lg-9']")
     .col-sm-4.col-md-4.col-lg-3.text-right.grid-pagination-bar(*ngIf="!reorderMode")

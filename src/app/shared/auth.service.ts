@@ -1,30 +1,25 @@
-import { Injectable } from '@angular/core';
-import { Location } from '@angular/common';
-import { Locker } from 'angular2-locker';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Injectable } from '@angular/core'
+import { Location } from '@angular/common'
+import { Locker } from 'angular2-locker'
+import { HttpClient, HttpHeaders } from '@angular/common/http'
 import {
   CanActivate,
   Router,
   ActivatedRouteSnapshot,
   RouterStateSnapshot
-} from '@angular/router';
-import { Observable, BehaviorSubject, Subject } from 'rxjs/Rx';
-import { Angulartics2 } from 'angulartics2';
+} from '@angular/router'
+import { Observable, BehaviorSubject, Subject } from 'rxjs/Rx'
 
 // Project dependencies
-import { AnalyticsService } from '../analytics.service';
-import { AppConfig } from '../app.service';
+import { AppConfig } from '../app.service'
 
 // Import beta tester emails
 import { BETA_USR_EMAILS } from '../beta-users-email.ts'
 
 // For session timeout management
-
-// import { LoginService } from '../login/login.service';
-
-import { IdleWatcherUtil } from './idle-watcher';
-import {Idle, DEFAULT_INTERRUPTSOURCES} from '@ng-idle/core';
-import {Keepalive} from '@ng-idle/keepalive';
+import { IdleWatcherUtil } from './idle-watcher'
+import {Idle, DEFAULT_INTERRUPTSOURCES} from '@ng-idle/core'
+import { FlagService } from '.'
 
 /**
  * Controls authorization through IP address and locally stored user object
@@ -67,15 +62,6 @@ export class AuthService implements CanActivate {
   private genUserInfoUrl() : string {
     return this.getUrl(true) + '/userinfo?no-cache=' + new Date().valueOf()
   }
-  /**
-   * Global Feature Flag object
-   * - Keep updated when flags are added or removed, for reference
-   * - Update via url param subscriptions inside of relevant components
-   */
-  public featureFlags = {
-    pcUpload : false,
-    unaffiliated: false
-  }
 
   constructor(
     private _router:Router,
@@ -83,11 +69,9 @@ export class AuthService implements CanActivate {
     locker:Locker,
     private http: HttpClient,
     private location: Location,
-    private angulartics: Angulartics2,
-    private _analytics: AnalyticsService,
     private _app: AppConfig,
-    private idle: Idle,
-    private keepalive: Keepalive
+    private _flags: FlagService,
+    private idle: Idle
   ) {
     this._storage = locker.useDriver(Locker.DRIVERS.LOCAL);
     this._router = _router;
@@ -222,7 +206,7 @@ export class AuthService implements CanActivate {
     setInterval(() => {
       this.refreshUserSession()
     }, userInfoInterval)
-    
+
     // Set beta users email
     this.betausers = Object.assign(BETA_USR_EMAILS)
   }
@@ -300,7 +284,7 @@ export class AuthService implements CanActivate {
       }
       return encodedString.replace(/%20/g, '+');
   }
-  
+
   /**
    * Wrapper function for HTTP call to get user institution. Used by nav component
    * @returns Chainable promise containing collection data
@@ -334,8 +318,6 @@ export class AuthService implements CanActivate {
     // Update Observable
     this.institutionObjValue = institutionObj;
     this.institutionObjSource.next(this.institutionObjValue);
-    // Update Analytics object
-    this._analytics.setUserInstitution(institutionObj.institutionId ? institutionObj.institutionId : '')
   }
 
   /**
@@ -368,7 +350,7 @@ export class AuthService implements CanActivate {
     // let dataStr = this.formEncode(registration)
     let header = new HttpHeaders().set('Content-Type', 'application/json')
     let options = { headers: header, withCredentials: true }
-    
+
     return this.http.post(this.getHostname() + "/saml/user/create", registration , options)
   }
 
@@ -430,7 +412,7 @@ export class AuthService implements CanActivate {
   public getThumbUrl(): string {
     return this.thumbUrl;
   }
-  
+
   /** Returns url used for downloading some media, such as documents */
   public getMediaUrl(): string {
     // This is a special case, and should always points to library.artstor or stage
@@ -446,7 +428,7 @@ export class AuthService implements CanActivate {
     //  clearing the user should only be done using the logout function
     let currentUser = this._storage.get('user')
     if (currentUser && currentUser.username && !user.username) { return }
-    
+
     // Should have session timeout, username, baseProfileId, typeId
     this._storage.set('user', user);
     // only do these things if the user is ip auth'd or logged in and the user has changed
@@ -457,9 +439,7 @@ export class AuthService implements CanActivate {
     }
     // Update observable
     this.userSource.next(user)
-    // Set analytics object
-    this._analytics.setUserInstitution(user.institutionId ? user.institutionId : '')
-    
+
     // if (user.status && (this._storage.get('user').username != user.username || !institution.institutionid)) {
   }
 
@@ -508,7 +488,7 @@ export class AuthService implements CanActivate {
       return new Observable(observer => {
         observer.next(true)
       })
-    } 
+    }
 
     // If user object doesn't exist, try to get one!
     return new Observable(observer => {
@@ -600,7 +580,7 @@ export class AuthService implements CanActivate {
       } else {
         return null
       }
-    } else if(!data['status'] && this.featureFlags['unaffiliated']) {
+    } else if(!data['status'] && this._flags.unaffiliated) {
       // Return generic user object for unaffiliated users
       let user = {
         'unaffliatedUser' : true,
@@ -678,16 +658,6 @@ export class AuthService implements CanActivate {
     return this.http.get(this.genUserInfoUrl(), options)
   }
 
-
-
-  /**
-   * Gets user's geo IP information
-   * @returns Observable resolved with object containing geo IP information
-   */
-  public getUserIP(): Observable<any> {
-    return this.http.get("https://freegeoip.net/json/")
-  }
-
   public ssLogin(username: string, password: string): Observable<SSLoginResponse> {
 
     let data = this.formEncode({ username: username, password: password })
@@ -713,7 +683,7 @@ export class AuthService implements CanActivate {
   }
 
   public isPublicOnly(): boolean{
-    return this.featureFlags.unaffiliated && !(this.getUser() && this.getUser().status)
+    return this._flags.unaffiliated && !(this.getUser() && this.getUser().status)
   }
 }
 
