@@ -30,7 +30,11 @@ export class AgreeModalComponent implements OnInit {
 
   constructor(private _auth: AuthService) { }
 
-  ngOnInit() { }
+  ngOnInit() {
+    // Set focus to the modal to make the links in the modal first thing to tab for accessibility
+    let htmlelement:HTMLElement = document.getElementById("modal");
+    htmlelement.focus();
+  }
 
   /**
    * Authorizes download and closes modal
