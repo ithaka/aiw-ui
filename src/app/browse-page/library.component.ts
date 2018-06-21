@@ -5,7 +5,6 @@ import { Subscription }   from 'rxjs/Subscription';
 
 import { AssetService } from './../shared/assets.service';
 import { AssetSearchService } from './../shared/asset-search.service'
-import { AnalyticsService } from '../analytics.service';
 import { TagsService } from './tags.service';
 import { Tag } from './tag/tag.class';
 import { TitleService } from '../shared/title.service';
@@ -26,11 +25,10 @@ export class LibraryComponent implements OnInit {
     private _assets: AssetService,
     private _search: AssetSearchService,
     private _tags: TagsService,
-    private _analytics: AnalyticsService,
     private _title: TitleService,
     private _filters: AssetFiltersService,
     private locker: Locker
-  ) { 
+  ) {
     this._storage = locker.useDriver(Locker.DRIVERS.LOCAL)
   }
 
@@ -46,6 +44,7 @@ export class LibraryComponent implements OnInit {
   private JSObject: Object = Object;
   private JSArray: Object = Array;
   private encodeURIComponent = encodeURIComponent
+  private searchTerm: string = ''
 
   private tagsObj: any = {
     103 : [],
@@ -113,10 +112,14 @@ export class LibraryComponent implements OnInit {
             this.selectedBrowseId = params['viewId'].toString()
             // this.updateSplashImgURL();
         }
+
+        if(params && params['searchTerm']){
+          this.searchTerm = params['searchTerm']
+        }
         // load category facets
         // > Use locally scope variable to avoid data crossover
         let facetType = this.facetType = this.categoryFacetMap[this.selectedBrowseId]
-        
+
         // Clear facet objects/arrays
         this.clearFacets()
 
@@ -126,7 +129,20 @@ export class LibraryComponent implements OnInit {
           if(facetType === 'artstor-geography'){
             this.hierarchicalFacets = storageBrwseColObj[facetType]
           } else{
-            this.categoryFacets = storageBrwseColObj[facetType]
+            let categoryFacets: any[] = storageBrwseColObj[facetType]
+
+            // To make the filter work on ADL collection, assign value to this.categoryFacets only if it contains search term
+            if(this.facetQueryMap[facetType] === 'category' && this.searchTerm){
+              for (let facet of categoryFacets) {
+                if (facet.title &&  facet.title.toLowerCase().indexOf(this.searchTerm.toLowerCase()) > -1) {
+                  this.categoryFacets.push(facet)
+                }
+              }
+            }
+            else{
+              this.categoryFacets = categoryFacets
+            }
+              
           }
           this.loading = false
         } else{
@@ -139,19 +155,19 @@ export class LibraryComponent implements OnInit {
           .then( (facetData) => {
             // ensure they are emptied in case of multiple fast clicking
             this.clearFacets()
-            
+
             // Categoryid facets require an additional call for labels/titles
             if (facetType == 'categoryid') {
 
                 this._assets.categoryNames()
                   .then((data) => {
                     // Create an index by ID for naming the facets
-                    let categoryIndex = data.reduce( ( result, item ) => { 
-                        result[item.categoryId] = item.categoryName; 
-                        return result; 
+                    let categoryIndex = data.reduce( ( result, item ) => {
+                        result[item.categoryId] = item.categoryName;
+                        return result;
                     }, {});
                     // Append titles to the facets (we can't replace "name", as its the ID, which we need)
-                    this.categoryFacets = facetData
+                    let categoryFacets: any[] = facetData
                       .map( facet => {
                         facet.title = categoryIndex[facet.name] ? categoryIndex[facet.name] : ""
                         return facet
@@ -163,6 +179,18 @@ export class LibraryComponent implements OnInit {
                         else return 0
                       })
                     this.loading = false
+
+                    // To make the filter work on ADL collection, assign value to this.categoryFacets only if it contains search term
+                    if(this.facetQueryMap[facetType] === 'category' && this.searchTerm){
+                      for (let facet of categoryFacets) {
+                        if (facet.title &&  facet.title.toLowerCase().indexOf(this.searchTerm.toLowerCase()) > -1) {
+                          this.categoryFacets.push(facet)
+                        }
+                      }
+                    }
+                    else{
+                      this.categoryFacets = categoryFacets
+                    }
 
                     storageBrwseColObj[facetType] = this.categoryFacets
                     this._storage.set('browseColObject', storageBrwseColObj)
@@ -181,11 +209,24 @@ export class LibraryComponent implements OnInit {
             } else {
               // Generically handle all other facets, which use "name" property to filter and display
               // - Sort by name, A-Z, then set to categoryFacets array
-              this.categoryFacets = facetData.sort((elemA, elemB) => {
+              let categoryFacets: any[] = facetData.sort((elemA, elemB) => {
                 if (elemA.name > elemB.name) return 1
                 else if (elemA.name < elemB.name) return -1
                 else return 0
               })
+
+              // To make the filter work on ADL collection, assign value to this.categoryFacets only if it contains search term
+              if(this.facetQueryMap[facetType] === 'category' && this.searchTerm){
+                for (let facet of categoryFacets) {
+                  if (facet.title &&  facet.title.toLowerCase().indexOf(this.searchTerm.toLowerCase()) > -1) {
+                    this.categoryFacets.push(facet)
+                  }
+                }
+              }
+              else{
+                this.categoryFacets = categoryFacets
+              }
+
               this.loading = false
 
               storageBrwseColObj[facetType] = this.categoryFacets
@@ -195,7 +236,6 @@ export class LibraryComponent implements OnInit {
         }
       })
     );
-    this._analytics.setPageValues('library', '')
   } // OnInit
 
   private clearFacets(): void {
@@ -241,5 +281,10 @@ export class LibraryComponent implements OnInit {
       param[this.facetQueryMap[facetType]] = facetName
     }
     return param
+  }
+
+  private clearSearchTerm() {
+    this.searchTerm = ''
+    this.addRouteParam('searchTerm', this.searchTerm)
   }
 }

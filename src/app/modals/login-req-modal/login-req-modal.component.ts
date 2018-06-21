@@ -14,7 +14,7 @@ import { AuthService, ToolboxService } from './../../shared';
     }
   `]
 })
-export class LoginReqModal implements OnInit {
+export class LoginReqModal {
   /** Meant only to trigger display of modal */
   @Output()
   private closeModal: EventEmitter<any> = new EventEmitter();

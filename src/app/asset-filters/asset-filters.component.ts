@@ -5,8 +5,7 @@ import { Angulartics2 } from 'angulartics2'
 
 import { AssetService } from '../shared/assets.service'
 import { AssetFiltersService } from '../asset-filters/asset-filters.service'
-import { AnalyticsService } from '../analytics.service'
-import { AuthService } from "app/shared";
+import { AuthService, FlagService } from "app/shared";
 
 declare var _satellite: any
 
@@ -68,9 +67,9 @@ export class AssetFilters {
     private _filters: AssetFiltersService,
     private route: ActivatedRoute,
     private router: Router,
-    private _analytics: AnalyticsService,
     private angulartics: Angulartics2,
-    private _auth: AuthService
+    private _auth: AuthService,
+    private _flags: FlagService
   ) {
   }
 
@@ -93,7 +92,7 @@ export class AssetFilters {
 
         // Find feature flags
         if(routeParams && routeParams['featureFlag']){
-            this._auth.featureFlags[routeParams['featureFlag']] = true;
+            this._flags[routeParams['featureFlag']] = true
         }
 
         for (let paramName in routeParams) {
@@ -123,7 +122,11 @@ export class AssetFilters {
                 delete colType.count
               }
             }
+            // If auth.isPublicOnly 'unaffiliated' user, filter out all but type 5 collection type
+            if (this._auth.isPublicOnly())
+              filters['collectiontypes'] = filters['collectiontypes'].filter(collectionType => collectionType.name === "5")
           }
+
           this.availableFilters = filters;
         }
       )
@@ -249,7 +252,6 @@ export class AssetFilters {
     if(this._filters.isApplied(group, value)){ // Remove Filter
       this._filters.remove(group, value);
     } else { // Add Filter
-      this._analytics.directCall("advanced_search_filters");
       this._filters.apply(group, value);
     }
     this.pagination.page = 1;
@@ -281,7 +283,7 @@ export class AssetFilters {
   }
 
   // To check if a filter group has any applied filters
-  hasAppliedFilters(group): boolean{
+  hasAppliedFilters(group): boolean {
     let hasFilters: boolean = false;
 
     if(group == 'date'){
