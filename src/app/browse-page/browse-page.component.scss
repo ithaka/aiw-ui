@@ -207,8 +207,13 @@
 }
 
 
-#iconSearchSubmit {
+#iconSearchSubmit, #iconSearchClear {
     &.form-control__icon {
         opacity: 0.4;
+        cursor: pointer;
+
+        &:hover, &:focus {
+            opacity: 0.9;
+        }
     }
 }
