@@ -46,7 +46,8 @@
             // Active on Image Group Page
             button.dropdown-item(*ngIf="params['igId']", (click)="_ig.triggerIgDownload()") {{ 'NAV_MENU.SHARE.DOWNLOAD_GROUP' | translate }}
         li.nav-item
-          a#viewMenu.btn.btn-link(href="//support.artstor.org", target="_blank") Support
+          a#viewMenu.btn.btn-link(*ngIf="user.unaffliatedUser", href="//support.artstor.org/?article-category=05-public-access-to-artstor", target="_blank") Support
+          a#viewMenu.btn.btn-link(*ngIf="!user.unaffliatedUser", href="//support.artstor.org", target="_blank") Support
         li.nav-item(*ngIf="!mobileCollapsed")
           a.link--accent((click)="logout()", *ngIf="user.isLoggedIn") Log Out
           a.link--accent([routerLink]="['/login']", *ngIf="!user.isLoggedIn") Log In
