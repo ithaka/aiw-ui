@@ -481,14 +481,10 @@ export class AuthService implements CanActivate {
     let options = { headers: this.userInfoHeader, withCredentials: true }
 
     if (this.isPublicOnly() && state.url.includes('/register')) { // For unaffiliated users, trying to access /register route
-      
-      console.log('in pre-check 1')
       return new Observable(observer => {
         observer.next(false)
       })
     } else if (this.canUserAccess(this.getUser()) || route.params.samlTokenId) { // If user object already exists, we're done here
-      
-      console.log('in pre-check 2')
       return new Observable(observer => {
         observer.next(true)
       })
@@ -505,12 +501,10 @@ export class AuthService implements CanActivate {
           if (user && (!onSahara || user.status)) {
             // Clear expired session modal
             this.showUserInactiveModal.next(false)
-            console.log('in map 1')
             // Update user object
             this.saveUser(user)
             return true
           } else {
-            console.log('in map 2')
             this.logout()
             // Store the route so that we know where to put them after login!
             this.store("stashedRoute", this.location.path(false))
@@ -520,16 +514,13 @@ export class AuthService implements CanActivate {
       )
       .take(1)
       .subscribe(res => {
-        console.log('in subscribe 1')
         // CanActivate is not handling the Observable value properly,
         // ... so we do an extra redirect in here
         if (res === false) {
-          console.log('in subscribe 2')
           this._router.navigate(['/login'])
         }
         observer.next(res)
       }, err => {
-        console.log('in error 1')
         this._router.navigate(['/login'])
         observer.next(false)
       })
