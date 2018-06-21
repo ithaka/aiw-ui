@@ -116,10 +116,10 @@
     },
     "BUTTONS": {
       "DOWNLOAD": "Download",
-      "GENERATE_CITATION": "Generate Citation",
-      "PRINT": "Print",
+      "GENERATE_CITATION": "Cite this Item",
+      "PRINT": "Print Review",
       "EDIT_DETAILS": "Edit Details",
-      "LINK": "Link",
+      "LINK": "Copy",
       "EXT": "Exit",
       "COMPARE": "Compare",
       "GET_IAP": "Request IAP",

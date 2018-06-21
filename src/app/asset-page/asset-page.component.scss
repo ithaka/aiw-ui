@@ -445,3 +445,50 @@ $titleNavBg: #eee;
         display: inline;
     }
 }
+
+#copy-link {
+    margin-left: 0.15rem;
+    max-width: 25rem;
+    width: 100%;
+    #assetpage-btn {
+        margin-left:0px;
+        width:6rem;
+    }
+}
+
+#asset-btn {
+    margin: 0; 
+}
+
+#generatedImgURL {
+    display: inline-block;
+    width: 75%;
+    height: 2.11rem;
+    margin-top: 4px;
+    margin-left: 3px;
+    margin-right: 0px;
+}
+
+#assetpage-btn, #downloadAssetDropdown {
+
+    &.btn-primary {
+        width: 12rem;
+    }
+
+    &.btn-secondary, a.btn-secondary {
+      width: 12rem;
+
+      &.dropdown-toggle {
+          &:hover, &:focus, &:active, &.active {
+              background-color: #C9510D;
+              color: white;
+          }
+      }
+  }
+}
+
+.btn-secondary {
+    &.active .icon-download-asset-orange, &:hover .icon-download-asset-orange, &:focus .icon-download-asset-orange {
+        background-image: url("/assets/img/icon-download-asset-white.svg");
+    }
+}

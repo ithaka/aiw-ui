@@ -48,33 +48,32 @@ $iconBtnSize: $btnHeight;
  *  <button type="button" class="btn btn-danger">Danger</button>
  *  <button type="button" class="btn btn-link">Link</button>
  */
+
  .btn-primary, a.btn-primary {
-     background: $primaryBtnBg;
-     border-color: $primaryBtnBg;
+    background: #C9510D;
+    border-color: #C9510D;
 
-     &:hover, &:focus, &:active {
-        background: darken($primaryBtnBg, 10%);
-        border-color: darken($primaryBtnBg, 10%);
-     }
- }
+    &:hover, &:focus, &:active {
+       background: darken(#C9510D, 10%);
+       border-color: darken(#C9510D, 10%);
+    }
+}
  
+
  .btn-secondary, a.btn-secondary {
-    background: $secondaryBtnBg;
-    //  border-color: $secondaryBtnBg;
-    border: none;
-    color: $secondaryBtnColor; 
+    background: white;
+    border: solid 1px #C9510D;
+    color: #C9510D;
 
-     &:hover, &:focus, &:active, &.active {
-        background: darken($secondaryBtnBg, 10%);
-        // border-color: darken($secondaryBtnBg, 10%);
-        background-color: #000000;
-        color: $secondaryBtnColor;
-     }
+    &:hover, &:focus, &:active, &.active {
+        background-color: #C9510D;
+        color: white;
+    }
 
-     &.disabled, &:disabled {
-         background: lighten($secondaryBtnBg, 12%);
-     }
- }
+    &.disabled, &:disabled {
+        background: lighten(#C9510D, 12%);
+    }
+}
 
  .btn-dark {
      background: #2d2d2d;
@@ -224,6 +223,6 @@ $iconBtnSize: $btnHeight;
      font-size: 0px;
 
      & .btn {
-         margin: 1px;
+         margin: 4px;
      }
  }
