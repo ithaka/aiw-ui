@@ -32,7 +32,9 @@ $iconBtnSize: $btnHeight;
 
      &.disabled, &:disabled {
          pointer-events: none;
-         opacity: 0.25;
+         opacity: 0.4;
+         -webkit-filter: grayscale(100%); /* Safari 6.0 - 9.0 */
+        filter: grayscale(100%);
      }
 }
 
@@ -70,8 +72,10 @@ $iconBtnSize: $btnHeight;
         color: white;
     }
 
+    // Override Bootstrap default
     &.disabled, &:disabled {
-        background: lighten(#C9510D, 12%);
+        background: white;
+        border-color:#C9510D;
     }
 }
 
