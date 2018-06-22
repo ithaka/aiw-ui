@@ -1,0 +1,38 @@
+.card-view
+  .row
+    .col-sm-2
+      img#top(*ngIf="thumbnails[0]", [attr.src]="_search.makeThumbUrl(thumbnails[0].thumbnailImgUrl, 0)", alt="Splash image for My Collections")
+      img#middle(*ngIf="thumbnails[1]", [attr.src]="_search.makeThumbUrl(thumbnails[1].thumbnailImgUrl, 0)", alt="Splash image for My Collections")
+      img#last(*ngIf="thumbnails[2]", [attr.src]="_search.makeThumbUrl(thumbnails[2].thumbnailImgUrl, 0)", alt="Splash image for My Collections")
+    .col-sm-10
+      .row
+        .col-sm-8
+          div(id="tagItem{{ tag.tagId }}", title="{{ tag.title }}", [ngClass]="[ link ? 'tag-link' : '', 'tag-item', tag.canOpen ? 'clickable' : '', 'tag-item__indent-' + tag.getLevel(), linkRoute.length < 1 ? 'no-link' : '']")
+            a(id="tagItem{{ tag.tagId }}Open", [ngClass]="{ 'no-link' : linkRoute.length < 1 || !tag.canOpen }", [routerLink]="[ linkRoute, tag.tagId, { 'browseType': browseType } ]")
+              span.font-weight-bold.notranslate {{tag.title}}
+          //- .value([innerHtml]="igDescript")
+          p This is the description that I don't have.
+        .col-sm-4
+          .row#information-row
+            .col-sm-6
+              p.font-weight-bold Last Modified:
+            .col-sm-6
+              p {{group.update_date | date:'MM-dd-yyyy'}}
+          .row#information-row
+            .col-sm-6
+              p.font-weight-bold Creator:
+            .col-sm-6
+              p -
+          .row#information-row
+            .col-sm-6
+              p.font-weight-bold Type:
+            .col-sm-6
+              p(*ngIf="group.public") Public
+              p(*ngIf="!group.public") Private
+      .row#tag-row
+        .col-sm-12
+          ul.list-inline
+            li.list-inline-item(*ngFor="let tag of group.tags")
+              a.tag-link.font-weight-bold((click)="selectTag(tag)") {{tag}}
+              //span(style="background-color:white;") &nbsp;
+

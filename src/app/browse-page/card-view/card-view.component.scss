@@ -1,0 +1,218 @@
+@import '../../../sass/core/variables';
+
+
+.card-view {
+    box-shadow: 0px 0px 0px 5px #00000014;
+    padding: 0.8rem;
+    border-radius: 3px;
+    margin-top: 25px;
+    margin-bottom: 25px;
+
+    p {
+        font-size: 12px;
+        margin: 0;
+    }
+
+    img {
+        box-shadow: -1px 1px 1px 1px #00000030;
+    }
+
+    #top {
+        width: 65px;
+        height: 90px;
+        position: absolute;
+        left: 42px;
+        top: -2px;
+        z-index: 3;
+    }
+
+    #middle {
+        width: 65px;
+        height: 90px;
+        position: absolute;
+        left: 35px;
+        top: 5px;
+        z-index: 2;
+    }
+
+    #last {
+        width: 65px;
+        height: 90px;
+        position: absolute;
+        left: 28px;
+        top: 12px;
+        z-index: 1;
+    }
+}
+
+.list-inline {
+    padding-left: 0px;
+    
+    & li,
+    & li.list-inline-item {
+        background-color: transparent;
+
+        a {
+            color: #000;
+            background-color: #efefef;
+            padding: 2px 3px;
+            border-radius: 2px;
+
+            &:hover {
+            background-color: #d6d6d6;
+            }
+        }
+
+        ul,
+        .list-inline-item {
+            padding-left: 5px;
+        }
+    }
+}
+
+$tagLinkBg: #efefef;
+
+  .tag-item {
+    color: #000;
+    font-size: 13px;
+    line-height: 16px;
+    cursor: default;
+    padding: 0px;
+
+    & .no-link {
+        cursor: default;
+        pointer-events: none;
+        text-decoration: none;
+        background: transparent;
+    }
+
+    &.clickable {
+        & a {
+            cursor: pointer;
+            background: $tagLinkBg;
+
+            &:hover, &:active, &:focus {
+                text-decoration: none;
+                background: darken($tagLinkBg, 10%);
+            }
+        }
+    }
+
+    & a {
+        display: inline-block;
+        padding: 2px;
+        background: transparent; //$tagLinkBg;
+        border-radius: 2px;
+        max-height: 38px;
+        max-width: 90%;
+        margin-bottom: 4px;
+
+        &:hover, &:active, &:focus {
+            text-decoration: none;
+            background: transparent;
+        }
+    }
+
+    &.tag-link a {
+        color: #000;
+        font-size: 1rem;
+        background: transparent;
+        text-decoration: underline;
+        cursor: pointer;
+
+        &:hover, &:active, &:focus {
+            background: transparent;
+            text-decoration: underline;
+            color: $blue;
+        }
+    }
+
+  }
+
+
+@for $i from 1 through 20 {
+    .tag-item__indent-#{$i} {
+        padding-left: 45px * $i;
+    }
+}
+
+.icon--tag-button {
+    cursor: pointer;
+    opacity: 0.5;
+
+    &:hover {
+        opacity: 1;
+    }
+}
+
+.expand-button {
+    padding: 2px 5px 5px 5px;
+    display: inline-block;
+    font-size: 1.1em;
+    vertical-align: top;
+    cursor: pointer;
+
+    & i {
+        opacity: 0.5;
+    }
+
+    &:hover, &:focus, &:active {
+        & i {
+            opacity: 1;
+        }
+    }
+}
+
+.info-icon{
+    width: 20px;
+    cursor: pointer;
+    vertical-align: middle;
+    margin-top: -4px;
+
+}
+
+.info-cntnr {
+    min-height: 120px;
+    padding: 10px;
+    background: #fafafa;
+    margin: 5px;
+    overflow: hidden;
+    width: 100%;
+    position: relative;
+
+    & img {
+        max-height: 100px;
+        max-width: 100px;
+        width: auto;
+        height: auto;
+        float:left;
+        margin: 10px 20px 20px;
+    }
+}
+
+.edit{
+    cursor: pointer;
+    background: rgba(100, 99, 100, 0.25);
+    color: #fff;
+    display: inline-block;
+    padding: 2px;
+    border-radius: 2px;
+    overflow: hidden;
+    margin: 0px 5px;
+    letter-spacing: 0.5px;
+
+    &:hover{
+        background: rgba(100, 99, 100, 0.55);
+    }
+}
+
+#tag-row {
+    margin-top: 2rem;
+    margin-bottom: -1rem;
+}
+
+#information-row {
+    div {
+        padding: 0;
+    }
+}

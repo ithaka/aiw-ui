@@ -56,7 +56,7 @@ import { ImageGroupPPPage } from './image-group-pp-page'
 import { AssetPPPage } from './asset-pp-page'
 import { ClusterPage } from './cluster-page'
 import { BrowsePage, LibraryComponent, BrowseCommonsComponent,
-  MyCollectionsComponent, BrowseInstitutionComponent, BrowseGroupsComponent, TagComponent,
+  MyCollectionsComponent, BrowseInstitutionComponent, BrowseGroupsComponent, TagComponent, CardViewComponent,
   TagsListComponent, TagFiltersService } from './browse-page'
 import { AssetPage, AgreeModalComponent } from './asset-page'
 import { AccountPage } from './account-page'
@@ -187,6 +187,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     FeaturedComponent,
     Footer,
     GeneralSearchComponent,
+    CardViewComponent,
     Home,
     ImageGroupPage,
     ImageGroupPPPage,
