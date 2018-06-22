@@ -2,7 +2,7 @@ import { Thumbnail } from './../../shared/datatypes/thumbnail.interface';
 import { Component, OnInit, Input } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { TagFiltersService } from './tag-filters.service'
-import { Tag } from './tag.class';
+import { Tag } from '../tag/tag.class';
 import { Subscription }   from 'rxjs/Subscription';
 import { AssetService, AuthService } from '../../shared';
 import { ImageGroupPPPage } from '../../image-group-pp-page'
