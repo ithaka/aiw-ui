@@ -20,6 +20,7 @@ export class BrowseGroupsComponent implements OnInit {
   private userTypeId: any
   private currentBrowseRes: any = {}
   private tags: Tag[] = []
+  private groups: any[] = []
   private loading: boolean = true
 
   private pagination: {
@@ -210,9 +211,10 @@ export class BrowseGroupsComponent implements OnInit {
   private createGroupTags(folderArray): Tag[] {
     let childArr: Tag[] = []
     let parentTag = null
+    this.groups = folderArray
 
     for(let group of folderArray) {
-            let groupTag = new Tag(group.id, [group.name, ' (', group.items.length, ')'].join(""), true, null, { label: "group", folder: false }, true)
+            let groupTag = new Tag(group.id, group.name, true, null, { label: "group", folder: false }, true)
             childArr.push(groupTag)
           }
     return childArr
