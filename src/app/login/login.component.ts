@@ -67,8 +67,8 @@ export class Login implements OnInit, OnDestroy {
   ngOnInit() {
     /*
      * Subscribe to route params
-     * Set featureFlag in Auth service if the route param contains featureFlag
-     * The featureFlag values in Auth service would be persistant until the page is refreshed
+     * - Set featureFlag in Auth service if the route param contains featureFlag
+     * - The featureFlag values in Auth service would be persistent until the page is refreshed
     */
     this.subscriptions.push(
       this.route.params.subscribe((params) => {
