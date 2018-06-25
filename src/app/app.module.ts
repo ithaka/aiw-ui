@@ -43,7 +43,7 @@ import { FileUploadModule } from "ng2-file-upload";
 import { App } from './app.component'
 import { APP_RESOLVER_PROVIDERS } from './app.resolver'
 import { AppConfig } from './app.service'
-import { Nav, Footer, SearchComponent, PaginationComponent, AssetSearchService, CardSortModal } from './shared'
+import { Nav, Footer, SearchComponent, PaginationComponent, AssetSearchService } from './shared'
 import { NavMenu } from './nav-menu'
 import { AssetFilters } from './asset-filters'
 import { AssetGrid, ThumbnailComponent } from './asset-grid'
@@ -172,7 +172,6 @@ export function HttpLoaderFactory(http: HttpClient) {
     BrowseGroupsComponent,
     BrowseInstitutionComponent,
     BrowsePage,
-    CardSortModal,
     CategoryPage,
     ClickOutsideDirective,
     ClusterPage,
