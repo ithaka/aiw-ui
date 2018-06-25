@@ -558,9 +558,9 @@
       ]
     },
     "AD": {
-      "LINK": "http://goo.gl/KAZksy",
-      "IMG_SOURCE": "/assets/img/promo-panoramas.jpg",
-      "ALT_TEXT": "New Virtual Reality Panoramas."
+      "LINK": "https://support.artstor.org/?article=about-public-access-to-artstor",
+      "IMG_SOURCE": "/assets/img/promo_pubcoll.jpg",
+      "ALT_TEXT": "Public Collections in Artstor."
     },
     "QUESTIONS": {
       "HEADING": "Questions",
