@@ -78,6 +78,10 @@ export class RegisterComponent implements OnInit {
     this.userDepts = USER_DEPTS
     this.userRoles = USER_ROLES
 
+    // If logged in OR not proxied/IP-authed OR not Shibboleth workflow, redirect to Home
+    if (!this.isShibbFlow && (this._auth.isPublicOnly() || this._auth.getUser().isLoggedIn)) {
+      this._router.navigate(['/home'])
+    }
   } // OnInit
 
   //https://angular.io/docs/ts/latest/api/forms/index/FormGroup-class.html
