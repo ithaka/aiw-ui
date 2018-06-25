@@ -581,10 +581,9 @@ export class AuthService implements CanActivate {
       } else {
         return null
       }
-    } else if(!data['status'] && this._flags.unaffiliated) {
+    } else if(!data['status']) {
       // Return generic user object for unaffiliated users
       let user = {
-        'unaffliatedUser' : true,
         'status' : data['status'],
         'isLoggedIn' : false
       }

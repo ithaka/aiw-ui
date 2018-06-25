@@ -64,8 +64,8 @@ export class CategoryPage implements OnInit, OnDestroy {
         }
 
         if (this.catId) {
-          // If the user.unaffliatedUser doesn't match the component's "unaffiliatedUser" flag then refresh search results
-          let refreshSearch = this.unaffiliatedUser && this.user.unaffliatedUser ? false : true
+          // If the _auth.isPublicOnly()  doesn't match the component's "unaffiliatedUser" flag then refresh search results
+          let refreshSearch = this.unaffiliatedUser && this._auth.isPublicOnly() ? false : true
 
           // Tell AssetService to load thumbnails (Asset Grid will get them)
           this._assets.queryAll(params, refreshSearch);
@@ -103,7 +103,7 @@ export class CategoryPage implements OnInit, OnDestroy {
           });
         }
 
-        this.unaffiliatedUser = this.user.unaffliatedUser ? true : false
+        this.unaffiliatedUser = this._auth.isPublicOnly() ? true : false
       })
     );// End push to subscription
 
