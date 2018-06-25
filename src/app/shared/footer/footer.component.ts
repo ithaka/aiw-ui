@@ -50,7 +50,7 @@ export class Footer {
       this._router.events.subscribe(e => {
         if (e instanceof NavigationEnd) {
             this.user = this._auth.getUser()
-            if (this.user.unaffliatedUser) {
+            if (this._auth.isPublicOnly()) {
               let index: number = this.links.indexOf('SUPPORT')
               this.links[index] = "SUPPORT_UNAFFILIATED"
             }
