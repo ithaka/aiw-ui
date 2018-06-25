@@ -484,7 +484,7 @@ export class AuthService implements CanActivate {
       return new Observable(observer => {
         observer.next(false)
       })
-    } else if (this.canUserAccess(this.getUser()) || route.params.samlTokenId) { // If user object already exists, we're done here
+    } else if (this.canUserAccess(this.getUser()) || route.params.samlTokenId || route.params.type == "shibboleth") { // If user object already exists, we're done here
       return new Observable(observer => {
         observer.next(true)
       })
