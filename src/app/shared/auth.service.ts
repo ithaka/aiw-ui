@@ -683,7 +683,7 @@ export class AuthService implements CanActivate {
   }
 
   public isPublicOnly(): boolean{
-    return this._flags.unaffiliated && !(this.getUser() && this.getUser().status)
+    return !(this.getUser() && this.getUser().status)
   }
 }
 
