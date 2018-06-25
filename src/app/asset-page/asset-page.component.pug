@@ -75,7 +75,7 @@
           //- * (mouseup) is a Firefox fix for firing the copy event
           button.btn.btn-secondary(*ngIf="user.isLoggedIn && assets[0].personalCollectionOwner === user['baseProfileId']", [class.active]="showEditDetails", tabindex="1", (click)="loadEditDetailsForm()")
             | {{ 'ASSET_PAGE.BUTTONS.EDIT_DETAILS' | translate}}
-          
+
           button#assetpage-btn.btn.btn-primary((click)="addAssetToIG()", (keydown.enter)="addAssetToIG()", tabindex="2")
             | {{ 'ASSET_PAGE.BUTTONS.ADD_TO_GROUP' | translate }}
             //- i.icon.icon-add-white(aria-hidden="true")
@@ -123,7 +123,7 @@
             button#assetpage-btn.btn.btn-secondary(*ngIf="!assets[0].personalCollectionOwner", [class.active]="showCopyUrl", tabindex="7", (mousedown)="showCopyUrl ? showCopyUrl = false : copyGeneratedImgURL()", (mouseup)="copyUrlInput.select(); document.execCommand('copy', false, null);", (keydown.enter)="showCopyUrl ? showCopyUrl = false : copyGeneratedImgURL()", (keyup.enter)="copyUrlInput.select(); document.execCommand('copy', false, null);")
               | {{ 'ASSET_PAGE.BUTTONS.LINK' | translate}}
               //- i#genImgURLlink.icon.icon-share-white
-            
+
           .form-group.pt-1([class.hidden]="!showCopyUrl")
             //- label {{ 'ASSET_PAGE.HEADER_LABELS.SHR_LNK' | translate}}
             .alert.alert-info(*ngIf="copyURLStatusMsg") {{ copyURLStatusMsg }}
@@ -156,7 +156,7 @@
             .label#ssid {{ 'ASSET_PAGE.METADATA_LABELS.SSID' | translate }}
               .value([innerHtml]="assets[0].SSID")
           .text-left.pt-2
-            a#buttonRequestIap.btn.btn-secondary.my-1(*ngIf="route.snapshot.queryParams.iap == 'true'", [attr.href]="'http://www.artstor.org/form/iap-request-form?name=' + assets[0].title + '&collectionName=' + assets[0].collectionName + '&id=' + assets[0].id + '&email=' + user.username", title="Request Image for Academic Publishing", tabindex="8", target="_blank") {{'ASSET_PAGE.BUTTONS.GET_IAP' | translate}}
+            a#buttonRequestIap.btn.btn-secondary.my-1(*ngIf="route.snapshot.params.iap == 'true'", [attr.href]="'http://www.artstor.org/form/iap-request-form?name=' + assets[0].title + '&collectionName=' + assets[0].collectionName + '&id=' + assets[0].id + '&email=' + user.username", title="Request Image for Academic Publishing", tabindex="8", target="_blank") {{'ASSET_PAGE.BUTTONS.GET_IAP' | translate}}
             a#buttonReportAssetError.btn.btn-secondary.my-1([attr.href]="getErrorFormUrl(assets[0])", title="Report an error", tabindex="9", target="_blank") {{'ASSET_PAGE.BUTTONS.REPORT_ERROR' | translate}}
 
         //- Form hidden by default
