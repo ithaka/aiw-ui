@@ -607,7 +607,7 @@
     }
   },
   "SEARCH_ANNOUNCEMENT_BANNER": {
-    "MESSAGE": "We are making changes and you may experience issues with login and search. <a href=\"http://support.artstor.org/?article=current-technical-issues-alerts\" target=\"_blank\" class=\"link\">Learn more</a>."
+    "MESSAGE": "Now you can explore more than 1 million images from Artstor’s partner institutions without logging in. <a href=\"https://support.artstor.org/?article=about-public-access-to-artstor\" target=\"_blank\" class=\"link\">Learn more</a>."
   },
   "MEDIA_ISSUES_BANNER": {
     "MESSAGE": "We are currently experiencing issues with images and downloads due to a power outage. <a href=\"http://support.artstor.org/?article=current-technical-issues-alerts\" target=\"_blank\" class=\"link\">Learn more</a>."
