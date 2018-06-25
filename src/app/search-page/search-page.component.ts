@@ -20,7 +20,6 @@ export class SearchPage implements OnInit, OnDestroy {
   // Add user to decide whether to show the banner
   private user: any = this._auth.getUser();
 
-  private unaffiliatedFlag: boolean;
   private siteID: string = ""
 
   private subscriptions: Subscription[] = [];
@@ -71,10 +70,6 @@ export class SearchPage implements OnInit, OnDestroy {
         // Find feature flags (needs to be checked before running queryAll)
         if(params && params['featureFlag']){
             this._flags[params['featureFlag']] = true;
-            // Check for unaffiliated user flag
-            if (params['featureFlag']=="unaffiliated"){
-              this.unaffiliatedFlag = true;
-            }
         }
 
         // If a page number isn't set, reset to page 1!
@@ -82,8 +77,8 @@ export class SearchPage implements OnInit, OnDestroy {
           params['page'] = 1;
         }
 
-        // If the user.unaffliatedUser doesn't match the component's "unaffiliatedUser" flag then refresh search results
-        let refreshSearch = this.unaffiliatedUser && this.user.unaffliatedUser ? false : true
+        // If the _auth.isPublicOnly() doesn't match the component's "unaffiliatedUser" flag then refresh search results
+        let refreshSearch = this.unaffiliatedUser && this._auth.isPublicOnly() ? false : true
 
         // Make a search call if there is a search term or any selected filter
         if (params["term"] || params["classification"] || params["geography"] || params["collectiontypes"]  || params["collTypes"] || params["startDate"] || params["endDate"]) {
@@ -109,7 +104,7 @@ export class SearchPage implements OnInit, OnDestroy {
           this._assets.queryAll(params, refreshSearch);
         }
 
-        this.unaffiliatedUser = this.user.unaffliatedUser ? true : false
+        this.unaffiliatedUser = this._auth.isPublicOnly() ? true : false
       })
     );
   } // OnInit
