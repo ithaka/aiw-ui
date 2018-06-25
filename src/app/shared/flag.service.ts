@@ -29,14 +29,17 @@ export class FlagService {
     .map((res) => {
       let flags = res.body
 
-      // boolean assignments
-      this.unaffiliated = flags.unaffiliatedAccess
-
-      // if the user's country code is allowed, set unaffiliated flag to true
-      let userCountryCode: string = res.headers.get('x-artstor-country-code').substr(0, 2)
-      if (flags.unaffiliatedAccessRollout.indexOf(userCountryCode) > -1) {
-        this.unaffiliated = true
-      }
+      /**
+       * EXAMPLE USE OF COUNTRY CODE ROLLOUT
+       * // Boolean assignments
+       * this.unaffiliated = flags.unaffiliatedAccess
+       *
+       * // If the user's country code is allowed, set unaffiliated flag to true
+       * let userCountryCode: string = res.headers.get('x-artstor-country-code').substr(0, 2)
+       * if (flags.unaffiliatedAccessRollout.indexOf(userCountryCode) > -1) {
+       *  this.unaffiliated = true
+       * }
+       */
 
       return flags
     })
