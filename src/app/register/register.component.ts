@@ -33,9 +33,9 @@ export class RegisterComponent implements OnInit {
 
   private showJstorModal: boolean = false
 
-  private shibParameters: {
-    email: string,
-    samlTokenId: string
+  private shibParameters = {
+    email: null,
+    samlTokenId: null
   }
 
   constructor(
