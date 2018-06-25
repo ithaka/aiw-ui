@@ -20,7 +20,6 @@ export class SearchPage implements OnInit, OnDestroy {
   // Add user to decide whether to show the banner
   private user: any = this._auth.getUser();
 
-  private unaffiliatedFlag: boolean;
   private siteID: string = ""
 
   private subscriptions: Subscription[] = [];
@@ -71,10 +70,6 @@ export class SearchPage implements OnInit, OnDestroy {
         // Find feature flags (needs to be checked before running queryAll)
         if(params && params['featureFlag']){
             this._flags[params['featureFlag']] = true;
-            // Check for unaffiliated user flag
-            if (params['featureFlag']=="unaffiliated"){
-              this.unaffiliatedFlag = true;
-            }
         }
 
         // If a page number isn't set, reset to page 1!
