@@ -1,5 +1,6 @@
 @import '../../../sass/core/variables';
 
+$tagLinkBg: #efefef;
 
 .card-view {
     box-shadow: 0px 0px 0px 5px #00000014;
@@ -8,43 +9,59 @@
     margin-top: 25px;
     margin-bottom: 25px;
     min-height: 140px;
+    position: relative;
 
     p {
         font-size: 12px;
         margin: 0;
     }
 
-    img {
+    .group-thumb {
         box-shadow: -1px 1px 1px 1px #00000030;
+        position: absolute;
+        width: 65px;
+        max-height: 85px;
+        height: auto;
     }
 
-    #top {
-        width: 65px;
-        height: 90px;
-        position: absolute;
-        left: 42px;
-        top: -2px;
+    .group-thumb-1-3 {
+        top: 0%;
+        left: 34%;
         z-index: 3;
     }
 
-    #middle {
-        width: 65px;
-        height: 90px;
-        position: absolute;
-        left: 35px;
-        top: 5px;
+    .group-thumb-2-3 {
+        top: 10%;
+        left: 27%;
         z-index: 2;
     }
 
-    #last {
-        width: 65px;
-        height: 90px;
-        position: absolute;
-        left: 28px;
-        top: 12px;
+    .group-thumb-3-3 {
+        top: 20%;
+        left: 20%;
         z-index: 1;
     }
+
+    .group-thumb-1-2 {
+        top: 5%;
+        left: 30.5%;
+        z-index: 3;
+    }
+
+    .group-thumb-2-2 {
+        top: 15%;
+        left: 23.5%;
+        z-index: 1;
+    }
+
+    .group-thumb-1-1 {
+        width: 70px;
+        top: 10%;
+        left: 24%;
+        z-index: 2;
+    }
 }
+
 
 .list-inline {
     padding-left: 0px;
@@ -70,8 +87,6 @@
         }
     }
 }
-
-$tagLinkBg: #efefef;
 
   .tag-item {
     color: #000;
@@ -130,83 +145,6 @@ $tagLinkBg: #efefef;
 
   }
 
-
-@for $i from 1 through 20 {
-    .tag-item__indent-#{$i} {
-        padding-left: 45px * $i;
-    }
-}
-
-.icon--tag-button {
-    cursor: pointer;
-    opacity: 0.5;
-
-    &:hover {
-        opacity: 1;
-    }
-}
-
-.expand-button {
-    padding: 2px 5px 5px 5px;
-    display: inline-block;
-    font-size: 1.1em;
-    vertical-align: top;
-    cursor: pointer;
-
-    & i {
-        opacity: 0.5;
-    }
-
-    &:hover, &:focus, &:active {
-        & i {
-            opacity: 1;
-        }
-    }
-}
-
-.info-icon{
-    width: 20px;
-    cursor: pointer;
-    vertical-align: middle;
-    margin-top: -4px;
-
-}
-
-.info-cntnr {
-    min-height: 120px;
-    padding: 10px;
-    background: #fafafa;
-    margin: 5px;
-    overflow: hidden;
-    width: 100%;
-    position: relative;
-
-    & img {
-        max-height: 100px;
-        max-width: 100px;
-        width: auto;
-        height: auto;
-        float:left;
-        margin: 10px 20px 20px;
-    }
-}
-
-.edit{
-    cursor: pointer;
-    background: rgba(100, 99, 100, 0.25);
-    color: #fff;
-    display: inline-block;
-    padding: 2px;
-    border-radius: 2px;
-    overflow: hidden;
-    margin: 0px 5px;
-    letter-spacing: 0.5px;
-
-    &:hover{
-        background: rgba(100, 99, 100, 0.55);
-    }
-}
-
 #tag-row {
     margin-top: 2rem;
     margin-bottom: -1rem;
@@ -216,4 +154,20 @@ $tagLinkBg: #efefef;
     div {
         padding: 0;
     }
+}
+
+#item-row {
+    position: absolute;
+    bottom: 0.6rem;
+    left: 35%;
+    font-size: 12px;
+}
+
+#absolute-bottom {
+    position: absolute;
+    bottom: 0;
+}
+
+#no-padding-left {
+    padding-left: 0;
 }
