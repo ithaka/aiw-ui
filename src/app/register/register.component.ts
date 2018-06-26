@@ -130,7 +130,7 @@ export class RegisterComponent implements OnInit {
       portal: "library"
     }
 
-    if (this.shibParameters) {
+    if (this.shibParameters && this.shibParameters.samlTokenId && this.shibParameters.samlTokenId.length > 0) {
       userInfo.samlTokenId = this.shibParameters.samlTokenId
       registerCall = (value) => { return this._auth.registerSamlUser(value) }
     }
