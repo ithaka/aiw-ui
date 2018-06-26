@@ -479,12 +479,19 @@ export class AuthService implements CanActivate {
    */
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
     let options = { headers: this.userInfoHeader, withCredentials: true }
-
-    if (this.isPublicOnly() && state.url.includes('/register')) { // For unaffiliated users, trying to access /register route
+    
+    if ((route.params.samlTokenId || route.params.type == "shibboleth") && state.url.includes('/register')) {
+      // Shibboleth workflow is unique, should allow access to the register page
+      return new Observable(observer => {
+        observer.next(true)
+      })
+    } else if (this.isPublicOnly() && state.url.includes('/register')) { 
+      // For unaffiliated users, trying to access /register route
       return new Observable(observer => {
         observer.next(false)
       })
-    } else if (this.canUserAccess(this.getUser()) || route.params.samlTokenId || route.params.type == "shibboleth") { // If user object already exists, we're done here
+    } else if (this.canUserAccess(this.getUser())) { 
+      // If user object already exists, we're done here
       return new Observable(observer => {
         observer.next(true)
       })
