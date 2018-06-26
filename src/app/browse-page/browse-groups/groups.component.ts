@@ -23,6 +23,7 @@ export class BrowseGroupsComponent implements OnInit {
   private tags: Tag[] = []
   private groups: any[] = []
   private loading: boolean = true
+  private showCardView: boolean = false
 
   private pagination: {
     totalPages: number,
@@ -110,6 +111,17 @@ export class BrowseGroupsComponent implements OnInit {
     }
 
     this._analytics.setPageValues('groups', '')
+
+    // Subscribe to asset search params
+    this.subscriptions.push(
+      this.route.params
+      .subscribe((params: Params) => {
+        // Find feature flags
+        if(params && params['featureFlag'] && params['featureFlag'] === 'cardview'){
+              this.showCardView = true;
+        }
+      })
+    )
   } // OnInit
 
   ngOnDestroy() {

@@ -18,8 +18,10 @@ nav.nav.nav-inline.browse-nav
     .group-list.has-icon-overlay.px-2
       .alert.alert-warning(*ngIf="errorObj[selectedBrowseLevel]", [innerHtml]="errorObj[selectedBrowseLevel]")
       .alert.alert-info(*ngIf="showSearchPrompt && route.snapshot.params.view == 'search'") {{ 'BROWSE.ERRORS.SEARCH_PROMPT' | translate }}
-      ang-card-view(*ngFor="let tag of tags; let i=index;", [tag]="tag", [group]="groups[i]", [browseLevel]="selectedBrowseLevel", link="true")
-      //ang-tag(*ngFor="let tag of tags", [tag]="tag", link="true")  
+      ng-container(*ngIf="showCardView")
+        ang-card-view(*ngFor="let tag of tags; let i=index;", [tag]="tag", [group]="groups[i]", [browseLevel]="selectedBrowseLevel", link="true")
+      ng-container(*ngIf="!showCardView")
+        ang-tag(*ngFor="let tag of tags", [tag]="tag", link="true")  
 .row.has-icon-overlay(*ngIf="loading")
   i.icon-lg.icon-overlay--top.icon-loading-large
 // Don't show this if there is a filters list, if it's loading, or if the user hasn't searched for anything yet
