@@ -1,5 +1,5 @@
 .banner.banner-sky.vertical-center
   h2.hidden Notification Banner
-  p([innerHtml]="textValue")
+  p([innerHtml]="textValue | translate")
   button.close(type="button", (click)="closeBanner.emit()", aria-label="Close")
     span(aria-hidden="true") &times;

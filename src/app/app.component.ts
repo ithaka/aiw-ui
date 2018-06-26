@@ -20,7 +20,7 @@ import { ScriptService, FlagService } from './shared';
     '../sass/app.scss'
   ],
   template: `
-    <ang-sky-banner *ngIf="showSkyBanner" [textValue]="'DOWNTIME_BANNER.MESSAGE' | translate" (closeBanner)="showSkyBanner = false"></ang-sky-banner>
+    <ang-sky-banner *ngIf="showSkyBanner" [textValue]="skyBannerCopy" (closeBanner)="showSkyBanner = false"></ang-sky-banner>
     <div id="skip" tabindex="-1" aria-activedescendant="button">
       <button id="button" (click)="findMainContent()" (keydown.enter)="findMainContent()" tabindex="1" class="sr-only sr-only-focusable"> Skip to main content </button>
     </div>
@@ -39,7 +39,8 @@ export class App {
   url = 'https://artstor.org/'
   title = 'Artstor'
 
-  private showSkyBanner: boolean = false
+  public showSkyBanner: boolean = false
+  public skyBannerCopy: string = ""
 
   constructor(
     public _app: AppConfig,
@@ -101,9 +102,12 @@ export class App {
 
     this._flags.getFlagsFromService()
     .take(1)
-    .subscribe((res) => {
+    .subscribe((flags) => {
       // don't need to handle successful response here - this just initiates the flags
-      console.log(res)
+      console.log(flags)
+      // Set skybanner
+      this.showSkyBanner = flags.bannerShow
+      this.skyBannerCopy = flags.bannerCopy
     }, (err) => {
       console.error(err)
     })

@@ -10,6 +10,8 @@ export class FlagService {
    */
   public pcUpload: boolean = false
   public unaffiliated: boolean = false
+  public bannerShow: boolean = false
+  public bannerCopy: string = ""
 
   constructor(
     private _http: HttpClient
@@ -40,6 +42,8 @@ export class FlagService {
        *  this.unaffiliated = true
        * }
        */
+      this.bannerShow = flags.bannerShow
+      this.bannerCopy = flags.bannerCopy
 
       return flags
     })
@@ -49,4 +53,6 @@ export class FlagService {
 interface FlagServiceResponse {
   unaffiliatedAccess: boolean
   unaffiliatedAccessRollout: string[]
+  bannerShow: boolean
+  bannerCopy: string
 }
