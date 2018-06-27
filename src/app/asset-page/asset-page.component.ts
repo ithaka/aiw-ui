@@ -183,6 +183,8 @@ export class AssetPage implements OnInit, OnDestroy {
                             if (this.assetGroupId) {
                                 queryParams["groupId"] = this.assetGroupId
                             }
+                            // Maintain the requestId route parameter for next page
+                            queryParams['requestId'] = this.requestId
                             this._router.navigate(['/asset', this.prevAssetResults.thumbnails[0][this.assetIdProperty], queryParams]);
                         }
                     }
@@ -193,6 +195,8 @@ export class AssetPage implements OnInit, OnDestroy {
                             if (this.assetGroupId) {
                                 queryParams["groupId"] = this.assetGroupId
                             }
+                            // Maintain the requestId route parameter for previous page
+                            queryParams['requestId'] = this.requestId
                             this._router.navigate(['/asset', this.prevAssetResults.thumbnails[this.prevAssetResults.thumbnails.length - 1][this.assetIdProperty], queryParams]);
                         }
                     }
