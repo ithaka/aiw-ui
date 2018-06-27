@@ -219,7 +219,10 @@ export class NewIgModal implements OnInit {
 
         // Log create group event into Captain's Log
         this._log.log({
-          eventType: "artstor_create_group"
+          eventType: "artstor_create_group",
+          additional_fields: {
+            "source_group_id": this.ig.id
+          }
         })
       }
 
