@@ -375,7 +375,7 @@ export class AssetPage implements OnInit, OnDestroy {
                     this.assets[0].formattedMetadata['Collection'] = splitValues
                 }
 
-                this.generateImgURL()
+                
 
                 // Load related results from jstor
                 if (this.relatedResFlag) {
@@ -388,6 +388,8 @@ export class AssetPage implements OnInit, OnDestroy {
         }
         // Set download link
         this.setDownloadFull()
+        // Set image share link
+        this.generateImgURL()
     }
 
     /**
