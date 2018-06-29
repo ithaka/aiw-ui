@@ -66,7 +66,7 @@ export class ShareIgLinkModal implements OnInit {
         .subscribe((res) => {
           this.serviceStatus.isLoading = false
           if (res.success && res.token) {
-            this.shareLink = [protocol, document.location.host, groupPath, ig.id, "?token=", res.token].join("")
+            this.shareLink = [protocol, document.location.host, groupPath, ig.id, "?token=", encodeURIComponent(res.token)].join("")
           } else {
             this.serviceStatus.tokenError = true
           }
