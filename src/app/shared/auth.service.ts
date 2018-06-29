@@ -51,6 +51,7 @@ export class AuthService implements CanActivate {
   public showUserInactiveModal: Subject<boolean> = new Subject(); //Set up subject observable for showing inactive user modal
 
   private betausers: Array<string>
+  private onSahara: boolean;
 
   /**
    * We need to make SURE /userinfo is not cached
@@ -129,6 +130,7 @@ export class AuthService implements CanActivate {
       this.solrUrl = '/api/search/v1.0/search'
       this.IIIFUrl = '//tsstage.artstor.org/rosa-iiif-endpoint-1.0-SNAPSHOT/fpx'
       this.ENV = 'test'
+      this.onSahara = this._app.config.siteId === 'SAHARA'
     }
 
     // Additional Local dev domains
@@ -504,8 +506,8 @@ export class AuthService implements CanActivate {
       .map(
         (data)  => {
           let user = this.decorateValidUser(data)
-          let onSahara: boolean = this._app.config.siteId === 'SAHARA'
-          if (user && (!onSahara || user.status)) {
+
+          if (user && (!this.onSahara || user.status)) {
             // Clear expired session modal
             this.showUserInactiveModal.next(false)
             // Update user object
