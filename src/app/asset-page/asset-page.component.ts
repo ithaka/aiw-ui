@@ -390,6 +390,7 @@ export class AssetPage implements OnInit, OnDestroy {
         this.setDownloadFull()
         // Set image share link
         this.generateImgURL()
+        console.log("Loaded Asset", this.assets[0])
     }
 
     /**
@@ -526,6 +527,7 @@ export class AssetPage implements OnInit, OnDestroy {
 
     private generateImgURL(): void {
         this.generatedImgURL = this._assets.getShareLink(this.assets[0].id);
+        console.log("Generated image URL", this.generatedImgURL)
     }
 
     /**
