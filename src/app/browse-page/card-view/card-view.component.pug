@@ -14,11 +14,11 @@
           div(id="tagItem{{ tag.tagId }}", title="{{ tag.title }}", [ngClass]="[ link ? 'tag-link' : '', 'tag-item', tag.canOpen ? 'clickable' : '', 'tag-item__indent-' + tag.getLevel(), linkRoute.length < 1 ? 'no-link' : '']")
             a(id="tagItem{{ tag.tagId }}Open", [ngClass]="{ 'no-link' : linkRoute.length < 1 || !tag.canOpen }", [routerLink]="[ linkRoute, tag.tagId, { 'browseType': browseType } ]")
               span.font-weight-bold.notranslate {{ tag.title }}
-          //- .value([innerHtml]="igDescript")
-          p.mobile--hide This is the description that I don't have.
+          .value.mobile--hide#description([innerHtml]="description")
+          //p.mobile--hide This is the description that I don't have.
           .row.mobile--show#information-row
               span.font-weight-bold Creator:&nbsp;
-              span -
+              span {{ group.owner_name }}
         .col-sm-4.mobile--hide#no-padding-left
           .row#information-row
             .col-sm-6
@@ -30,7 +30,7 @@
             .col-sm-6
               p.font-weight-bold Creator:
             .col-sm-6
-              p#absolute-bottom -
+              p.link((click)="search_owner()") {{ group.owner_name }}
           .row#information-row
             .col-sm-6
               p.font-weight-bold Type:

@@ -165,14 +165,14 @@ export class BrowseGroupsComponent implements OnInit {
         this.setSearchLevel(requestedLevel, false) // makes sure that the correct level filter is selected even if the user just navigated here from the url
 
         let requestedTerm = this.selectedBrowseLevel !== 'search' ? '' : query.term;
+        let requestedId = this.selectedBrowseLevel !== 'search' && !query.id ? '' : query.id;
         // if there is not a term, make sure the search term is cleared
         if (!query.term) {
           this.updateSearchTerm.emit('')
         } else {
           this.updateSearchTerm.emit(query.term)
         }
-
-        this.loadIGs(this.appliedTags, requestedPage, requestedLevel, requestedTerm)
+        this.loadIGs(this.appliedTags, requestedPage, requestedLevel, requestedTerm, requestedId)
       })
     )
   }
@@ -242,9 +242,9 @@ export class BrowseGroupsComponent implements OnInit {
    * @param page The desired page number to navigate to
    * @param level The query param for the groups call that indicates what share permissions the user has
    */
-  private loadIGs(appliedTags: string[], page: number, level?: string, searchTerm ?: string): void {
+  private loadIGs(appliedTags: string[], page: number, level?: string, searchTerm ?: string, searchid ?: string): void {
     // short out the function if the user has just navigated to the search page without query params
-    if (!this.shouldSearch(appliedTags, level, searchTerm) && this.route.snapshot.params.view == 'search') {
+    if (!this.shouldSearch(appliedTags, level, searchTerm, searchid) && this.route.snapshot.params.view == 'search') {
       this.loading = false
       return
     }
@@ -264,8 +264,7 @@ export class BrowseGroupsComponent implements OnInit {
 
     // Some Groups calls take a while, please stop listening to an old request if a new one is made
     this.groupsGetAllSub && this.groupsGetAllSub.unsubscribe()
-
-    this.groupsGetAllSub = this._groups.getAll(browseLevel, this.pagination.size, page, appliedTags, searchTerm)
+    this.groupsGetAllSub = this._groups.getAll(browseLevel, this.pagination.size, page, appliedTags, searchTerm, searchid)
         .take(1).subscribe(
           (data)  => {
             this.pagination.page = page
@@ -305,7 +304,7 @@ export class BrowseGroupsComponent implements OnInit {
    *  If they get straight to the search page, we don't want to fill it with groups before they've searched anything.
    * @returns boolean indicating whether or not the search for image groups should continue
    */
-  private shouldSearch(appliedTags: string[], level: string, term: string): boolean {
+  private shouldSearch(appliedTags: string[], level: string, term: string, id: string): boolean {
     // this first part determines whether or not the search should execute
     let search = false
     if (appliedTags && appliedTags.length > 0) {
@@ -314,7 +313,7 @@ export class BrowseGroupsComponent implements OnInit {
     if (level && level !== 'search') {
       search = true
     }
-    if (term) {
+    if (term || id) {
       search = true
     }
 
