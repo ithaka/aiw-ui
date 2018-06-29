@@ -53,6 +53,7 @@ export const WLV_SAHARA = {
     logoUrl : "/assets/img/logo-sahara-v1.png",
     saharaLogin: true,
     institutionLogin : false,
+    isOpenAccess: false,
     disableIPAuth : true,
     pageTitle : "SAHARA",
     siteID: "SAHARA",
@@ -63,7 +64,7 @@ export const WLV_SAHARA = {
         "SARARA_CONTRIBUTE",
         "SAHARA_TERMS",
         "SAHARA_PRIVACY",
-        "COOKIE_POLICY"    
+        "COOKIE_POLICY"
     ],
     showSSLogin: true,
     showInstitutionalLogin: false,
