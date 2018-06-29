@@ -20,6 +20,7 @@ export class CardViewComponent implements OnInit {
   private tags: any[] = [];
   private thumbnails: any[] = [];
   private type: string = "-";
+  private description: string = '';
 
   constructor(
     private _search: AssetSearchService,
@@ -29,6 +30,9 @@ export class CardViewComponent implements OnInit {
   ){}
 
   ngOnInit() {
+    this.description = this.group.description ? this.group.description.replace(/(<([^>]+)>)/ig,"") : ''
+    this.description = this.description.length>150 ? this.description.slice(0,150) + '...' : this.description
+
     if (this.browseLevel === 'private') {
       this.type = 'Private';
     }
@@ -78,6 +82,13 @@ export class CardViewComponent implements OnInit {
     queryParams = Object.assign({}, {'tags': tag})
 
     this._router.navigate(['/browse','groups', this.browseLevel], { queryParams: queryParams })
+  }
+
+  private search_owner(): void {
+    let queryParams: any = Object.assign({}, this.route.snapshot.queryParams)
+    delete queryParams['term']
+    queryParams = Object.assign({}, {'term': this.group.owner_name, 'id': this.group.owner_id})
+    this._router.navigate(['/browse','groups', 'search'], { queryParams: queryParams })
   }
 
 }
