@@ -479,18 +479,18 @@ export class AuthService implements CanActivate {
    */
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
     let options = { headers: this.userInfoHeader, withCredentials: true }
-    
+
     if ((route.params.samlTokenId || route.params.type == "shibboleth") && state.url.includes('/register')) {
       // Shibboleth workflow is unique, should allow access to the register page
       return new Observable(observer => {
         observer.next(true)
       })
-    } else if (this.isPublicOnly() && state.url.includes('/register')) { 
+    } else if (this.isPublicOnly() && state.url.includes('/register')) {
       // For unaffiliated users, trying to access /register route
       return new Observable(observer => {
         observer.next(false)
       })
-    } else if (this.canUserAccess(this.getUser())) { 
+    } else if (this.canUserAccess(this.getUser())) {
       // If user object already exists, we're done here
       return new Observable(observer => {
         observer.next(true)
@@ -504,7 +504,7 @@ export class AuthService implements CanActivate {
       .map(
         (data)  => {
           let user = this.decorateValidUser(data)
-          let onSahara: boolean = this.getHostname().toString().includes('sahara')
+          let onSahara: boolean = this._app.config.siteId === 'SAHARA'
           if (user && (!onSahara || user.status)) {
             // Clear expired session modal
             this.showUserInactiveModal.next(false)
