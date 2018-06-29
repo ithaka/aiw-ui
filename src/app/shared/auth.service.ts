@@ -130,7 +130,7 @@ export class AuthService implements CanActivate {
       this.solrUrl = '/api/search/v1.0/search'
       this.IIIFUrl = '//tsstage.artstor.org/rosa-iiif-endpoint-1.0-SNAPSHOT/fpx'
       this.ENV = 'test'
-      this.onSahara = this._app.config.siteId === 'SAHARA'
+      this.onSahara = this._app.config.siteID === 'SAHARA'
     }
 
     // Additional Local dev domains
@@ -514,7 +514,7 @@ export class AuthService implements CanActivate {
             this.saveUser(user)
             return true
           } else {
-            // We don't have a user here, and siteId is SAHARA, goto /login
+            // We don't have a user here, and siteID is SAHARA, goto /login
             if (this.onSahara) {
               this._router.navigate(['/login'])
             }
