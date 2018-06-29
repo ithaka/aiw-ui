@@ -226,6 +226,10 @@ export class AssetPage implements OnInit, OnDestroy {
                         this.assetIndex = this.currentAssetIndex();
                         this.assetNumber = this._assets.currentLoadedParams.page ? this.assetIndex + 1 + ((this._assets.currentLoadedParams.page - 1) * this._assets.currentLoadedParams.size) : this.assetIndex + 1;
                     }
+
+
+                    // Set image share link
+                    this.generateImgURL(this.assetIds[0])
                 }
 
                 // For "Go Back to Results" and pagination, for asset that is not from image group look for requestId to set prevRouteParams
@@ -330,7 +334,6 @@ export class AssetPage implements OnInit, OnDestroy {
 
 
     handleLoadedMetadata(asset: Asset, assetIndex: number) {
-        console.log("handleLoadedMetadata", asset)
         if (asset && asset['error']) {
             let err = asset['error']
             if (err.status === 403 || err.message == "Unable to load metadata!") {
@@ -389,9 +392,6 @@ export class AssetPage implements OnInit, OnDestroy {
         }
         // Set download link
         this.setDownloadFull()
-        // Set image share link
-        this.generateImgURL()
-        console.log("Loaded Asset", this.assets[0])
     }
 
     /**
@@ -526,9 +526,8 @@ export class AssetPage implements OnInit, OnDestroy {
         }
     }
 
-    private generateImgURL(): void {
-        this.generatedImgURL = this._assets.getShareLink(this.assets[0].id);
-        console.log("Generated image URL", this.generatedImgURL)
+    private generateImgURL(assetId: string): void {
+        this.generatedImgURL = this._assets.getShareLink(assetId);
     }
 
     /**
