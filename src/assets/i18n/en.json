@@ -465,31 +465,31 @@
         "VIEW_PUBLIC_LINK": "View All Public Collections"
       },
       "COLLECTIONS": [{
-          "SUBHEADING": "Art Institute of Chicago",
-          "DESCRIPTION": "The greatest hits and more",
-          "CAPTION": "Georges Seurat. A Sunday on La Grande Jatte. 1884-1886. Oil on canvas. Image and original data provided by The Art Institute of Chicago.",
-          "LINK": "/#/category/1031896041 ",
-          "IMG_SOURCE": "/assets/img/featured-collections/AIC_Sunday.jpg",
-          "LINK_TITLE": "Art Institute of Chicago",
-          "ALT_TEXT": "Art Institute of Chicago"
+          "SUBHEADING": "Reynolda House Museum",
+          "DESCRIPTION": "Grant Wood and eclectic Americana",
+          "CAPTION": "Grant Wood. Spring Turning. 1936. Image and data provided by the Reynolda House Museum of American Art.",
+          "LINK": "/#/category/10374058926 ",
+          "IMG_SOURCE": "/assets/img/featured-collections/rhm_spring.jpg",
+          "LINK_TITLE": "Reynolda House Museum",
+          "ALT_TEXT": "Reynolda House Museum"
         },
         {
-          "SUBHEADING": "Muhlenberg College: Navy V-12 and V-5 World War II Photograph Collection",
-          "DESCRIPTION": "Students becoming sailors",
-          "CAPTION": "Navy V-12 students on parade. 1943. Photograph. Muhlenberg College: Navy V-12 and V-5 World War II Photograph Collection",
-          "LINK": "/#/collection/87731255 ",
-          "IMG_SOURCE": "/assets/img/featured-collections/Muhlenberg_Navy.jpg",
-          "LINK_TITLE": "Muhlenberg College: Navy V-12 and V-5 World War II Photograph Collection",
-          "ALT_TEXT": "Muhlenberg College: Navy V-12 and V-5 World War II Photograph Collection"
+          "SUBHEADING": "The National Gallery of Art",
+          "DESCRIPTION": "Hidden treasures and iconic works",
+          "CAPTION": "Florentine ? A Crow. Late 16th c. Bronze. Image and data provided by the National Gallery of Art.",
+          "LINK": "/#/category/1034953422 ",
+          "IMG_SOURCE": "/assets/img/featured-collections/nga_crow.jpg",
+          "LINK_TITLE": "The National Gallery of Art",
+          "ALT_TEXT": "The National Gallery of Art"
         },
         {
-          "SUBHEADING": "The Metropolitan Museum of Art: Brooklyn Museum Costumes",
-          "DESCRIPTION": "The finest fashion and accessories",
-          "CAPTION": "Parasol. 1886. Silk, wood, metal. Image and original data from the Brooklyn Museum.",
-          "LINK": "/#/category/1034948173 ",
-          "IMG_SOURCE": "/assets/img/featured-collections/BrooklynMuseum_parasol.jpg",
-          "LINK_TITLE": "The Metropolitan Museum of Art: Brooklyn Museum Costumes",
-          "ALT_TEXT": "The Metropolitan Museum of Art: Brooklyn Museum Costumes"
+          "SUBHEADING": "Brooklyn College: Farm Labor Project",
+          "DESCRIPTION": "Student farmers lend a hand to the war effort",
+          "CAPTION": "Viewing the Cows. Photograph. 1944. Brooklyn College Archives and Special Collections.",
+          "LINK": "/#/collection/87730215 ",
+          "IMG_SOURCE": "/assets/img/featured-collections/brooklyn_cows.jpg",
+          "LINK_TITLE": "Brooklyn College: Farm Labor Project",
+          "ALT_TEXT": "Brooklyn College: Farm Labor Project"
         }
       ],
       "PUBLIC_COLLECTIONS": [
