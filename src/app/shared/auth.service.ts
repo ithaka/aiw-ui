@@ -514,10 +514,16 @@ export class AuthService implements CanActivate {
             this.saveUser(user)
             return true
           } else {
-            this.logout()
-            // Store the route so that we know where to put them after login!
-            this.store("stashedRoute", this.location.path(false))
-            return false
+            // We don't have a user here, and siteId is SAHARA, goto /login
+            if (this.onSahara) {
+              this._router.navigate(['/login'])
+            }
+            else {
+              this.logout()
+              // Store the route so that we know where to put them after login!
+              this.store("stashedRoute", this.location.path(false))
+              return false
+            }
           }
         }
       )
