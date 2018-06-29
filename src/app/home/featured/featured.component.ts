@@ -50,7 +50,7 @@ export class FeaturedComponent implements OnInit {
       this.featured.push(<FeaturedCollection>collection)
     }
   }
-  
+
   // Switch the primary main slideshow image via collection index (0, 1, or 2)
   private switchFeaturedIndex(index: number): void {
     this.primaryFeaturedIndex = index
@@ -62,9 +62,9 @@ export class FeaturedComponent implements OnInit {
    * @param primary_index pass in primaryFeaturedIndex,
    * so it is locally scoped within setInterval.
    */
-  private runSlideshow(primary_index: number) { 
+  private runSlideshow(primary_index: number) {
     this.primaryFeaturedIndex = primary_index
-      
+
       setInterval(() => {
         if (!this.skipAutoSlide) {
           if (this.primaryFeaturedIndex === 2)
@@ -83,7 +83,7 @@ export class FeaturedComponent implements OnInit {
     this.headings = this.conf + '.' + 'HEADINGS'
 
     // Show Public Featured Collections, or Inst Featured Collections
-    if (this.user.isLoggedIn && this.siteId === 'SAHARA') {
+    if (this.siteId === 'SAHARA') {
       this.featuredType = 'SAHARA_COLLECTIONS'
     }
     else if (this.user.isLoggedIn || this.user.ipAuthed) { // Show ADL featured collections if the user is Logged-in or IP Authed
