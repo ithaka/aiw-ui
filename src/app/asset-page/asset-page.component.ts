@@ -179,20 +179,38 @@ export class AssetPage implements OnInit, OnDestroy {
                     if (this.loadArrayFirstAsset) {
                         this.loadArrayFirstAsset = false;
                         if ((this.prevAssetResults) && (this.prevAssetResults.thumbnails.length > 0)) {
+                            /***
+                             * If current asset is not present in prevAssetResults page,
+                             * load next asset page and evaluate current asset index
+                             */
+                            this.assetIndex = this.currentAssetIndex();
+                            this.assetNumber = this._assets.currentLoadedParams.page ? this.assetIndex + 1 + ((this._assets.currentLoadedParams.page - 1) * this._assets.currentLoadedParams.size) : this.assetIndex + 1;
+
                             let queryParams = {}
                             if (this.assetGroupId) {
                                 queryParams["groupId"] = this.assetGroupId
                             }
+                            // Maintain the requestId route parameter for next page
+                            queryParams['requestId'] = this.requestId
                             this._router.navigate(['/asset', this.prevAssetResults.thumbnails[0][this.assetIdProperty], queryParams]);
                         }
                     }
                     else if (this.loadArrayLastAsset) {
                         this.loadArrayLastAsset = false;
                         if ((this.prevAssetResults.thumbnails) && (this.prevAssetResults.thumbnails.length > 0)) {
+                            /***
+                             * If current asset is not present in prevAssetResults page,
+                             * load previous asset page and evaluate current asset index
+                             */
+                            this.assetIndex = this.currentAssetIndex();
+                            this.assetNumber = this._assets.currentLoadedParams.page ? this.assetIndex + 1 + ((this._assets.currentLoadedParams.page - 1) * this._assets.currentLoadedParams.size) : this.assetIndex + 1;
+
                             let queryParams = {}
                             if (this.assetGroupId) {
                                 queryParams["groupId"] = this.assetGroupId
                             }
+                            // Maintain the requestId route parameter for previous page
+                            queryParams['requestId'] = this.requestId
                             this._router.navigate(['/asset', this.prevAssetResults.thumbnails[this.prevAssetResults.thumbnails.length - 1][this.assetIdProperty], queryParams]);
                         }
                     }
@@ -223,8 +241,17 @@ export class AssetPage implements OnInit, OnDestroy {
                     this.assetIds[0] = routeParams["assetId"]
 
                     if (this.prevAssetResults.thumbnails.length > 0) {
-                        this.assetIndex = this.currentAssetIndex();
-                        this.assetNumber = this._assets.currentLoadedParams.page ? this.assetIndex + 1 + ((this._assets.currentLoadedParams.page - 1) * this._assets.currentLoadedParams.size) : this.assetIndex + 1;
+                        let currentAssetIndex = this.currentAssetIndex();
+                        if(currentAssetIndex === -1){
+                            if( this.assetIndex % 24 === 0 ) { // Browser back button pressed
+                                this._assets.loadPrevAssetPage();
+                            } else { // Browser next button pressed
+                                this._assets.loadNextAssetPage();
+                            }
+                        } else {
+                            this.assetIndex = currentAssetIndex;
+                            this.assetNumber = this._assets.currentLoadedParams.page ? this.assetIndex + 1 + ((this._assets.currentLoadedParams.page - 1) * this._assets.currentLoadedParams.size) : this.assetIndex + 1;
+                        }
                     }
 
 
@@ -421,18 +448,21 @@ export class AssetPage implements OnInit, OnDestroy {
     // Calculate the index of current asset from the previous assets result set
     private currentAssetIndex(): number {
         let assetIndex: number = 1
+        let assetFound = false
         if (this.assetIds[0]) {
             for (var i = 0; i < this.prevAssetResults.thumbnails.length; i++) {
                 // Select the thumbnail if its arstor_id is in assetIds
                 if (this.assetIds.indexOf(this.prevAssetResults.thumbnails[i][this.assetIdProperty]) > -1) {
                     this.prevAssetResults.thumbnails[i].selected = true
                     assetIndex = i
+                    assetFound = true
                 }
                 else {
                     this.prevAssetResults.thumbnails[i].selected = false
                 }
             }
         }
+        assetIndex = assetFound ? assetIndex : -1
         return assetIndex
     }
 
