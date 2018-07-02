@@ -22,6 +22,7 @@ export class BrowseGroupsComponent implements OnInit {
   private currentBrowseRes: any = {}
   private tags: Tag[] = []
   private groups: any[] = []
+  private searchTerm: string = ''
   private loading: boolean = true
   private showCardView: boolean = false
 
@@ -119,6 +120,14 @@ export class BrowseGroupsComponent implements OnInit {
         // Find feature flags
         if(params && params['featureFlag'] && params['featureFlag'] === 'cardview'){
               this.showCardView = true;
+        }
+      })
+    )
+
+    this.subscriptions.push(
+      this.route.queryParams.subscribe((params) => {
+        if ( params && params['term'] ) {
+          this.searchTerm = params['term']
         }
       })
     )
@@ -344,6 +353,9 @@ export class BrowseGroupsComponent implements OnInit {
       baseParams = Object.assign({}, currentParams)
     } else {
       baseParams = Object.assign({}, this.route.snapshot.queryParams)
+    }
+    if(baseParams['id']){
+      delete baseParams['id']
     }
     let queryParams = Object.assign(baseParams, params)
 
