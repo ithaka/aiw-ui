@@ -324,7 +324,7 @@ angular2-locker@^0.5.0:
   version "0.5.0"
   resolved "https://registry.yarnpkg.com/angular2-locker/-/angular2-locker-0.5.0.tgz#5f60837d310d20c39ffa997d54ef7654367f2c62"
 
-angular2-medium-editor@^1.1.0:
+angular2-medium-editor@1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/angular2-medium-editor/-/angular2-medium-editor-1.1.0.tgz#2cdc607d9237d0fd0949260ad09c22b4c8960840"
 
@@ -532,9 +532,9 @@ arrify@^1.0.0, arrify@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/arrify/-/arrify-1.0.1.tgz#898508da2226f380df904728456849c1501a4b0d"
 
-artstor-viewer@1.1.3:
-  version "1.1.3"
-  resolved "https://registry.yarnpkg.com/artstor-viewer/-/artstor-viewer-1.1.3.tgz#079b8c402db72b8a8ad66c15b63a7d16df4f7e9f"
+artstor-viewer@1.1.4:
+  version "1.1.4"
+  resolved "https://registry.yarnpkg.com/artstor-viewer/-/artstor-viewer-1.1.4.tgz#80d9817b5e5ee01463200b92ea4ea81bdf0e090f"
   dependencies:
     "@angular/http" "^5.2.0"
     npm "^5.7.1"
