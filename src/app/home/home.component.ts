@@ -24,7 +24,6 @@ export class Home implements OnInit, OnDestroy {
 
   private artStorEmailLink: string = ''
   private userGeoIP: any = {}
-  // private featuredCollectionConf = ''
 
   // Set our default values
   localState = { value: '' }
@@ -67,7 +66,6 @@ export class Home implements OnInit, OnDestroy {
     this.showHomePromo = this._appConfig.config.showHomeAd
     this.siteID = this._appConfig.config.siteID
     this.defaultGrpBrwseBy = this._appConfig.config.defaultGrpBrwseBy
-    // this.featuredCollectionConf = this._appConfig.config.featuredCollection
   }
 
   ngOnInit() {
