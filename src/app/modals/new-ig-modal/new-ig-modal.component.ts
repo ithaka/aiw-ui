@@ -216,14 +216,7 @@ export class NewIgModal implements OnInit {
       } else {
         // Create New Group
         this._angulartics.eventTrack.next({ action:"newGroup", properties: { category: "group" }});
-
-        // Log create group event into Captain's Log
-        this._log.log({
-          eventType: "artstor_create_group",
-          additional_fields: {
-            "source_group_id": this.ig.id
-          }
-        })
+   
       }
 
       // create the group using the group service
@@ -239,6 +232,14 @@ export class NewIgModal implements OnInit {
             if (this.isArtstorUser) {
               this.changeGlobalSetting(this.newGroup, formValue.artstorPermissions == "global")
             }
+            
+            // Log create group event into Captain's Log
+            this._log.log({
+              eventType: "artstor_create_group",
+              additional_fields: {
+                "source_group_id": this.newGroup.id
+              }
+            })
           },
           error => {
             console.error(error);
