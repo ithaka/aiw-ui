@@ -39,7 +39,6 @@ export class GroupService {
             tagParam += '&tags=' + encodeURIComponent(tag)
         })
 
-        console.log("this is the query:", query)
         let queryParam: string = ''
         query && (queryParam = '&q=' + query)
         owner_id && (queryParam = '&owner_id=' + owner_id)
