@@ -253,6 +253,10 @@ export class AssetPage implements OnInit, OnDestroy {
                             this.assetNumber = this._assets.currentLoadedParams.page ? this.assetIndex + 1 + ((this._assets.currentLoadedParams.page - 1) * this._assets.currentLoadedParams.size) : this.assetIndex + 1;
                         }
                     }
+
+
+                    // Set image share link
+                    this.generateImgURL(this.assetIds[0])
                 }
 
                 // For "Go Back to Results" and pagination, for asset that is not from image group look for requestId to set prevRouteParams
@@ -402,7 +406,7 @@ export class AssetPage implements OnInit, OnDestroy {
                     this.assets[0].formattedMetadata['Collection'] = splitValues
                 }
 
-                this.generateImgURL()
+                
 
                 // Load related results from jstor
                 if (this.relatedResFlag) {
@@ -552,8 +556,8 @@ export class AssetPage implements OnInit, OnDestroy {
         }
     }
 
-    private generateImgURL(): void {
-        this.generatedImgURL = this._assets.getShareLink(this.assets[0].id);
+    private generateImgURL(assetId: string): void {
+        this.generatedImgURL = this._assets.getShareLink(assetId);
     }
 
     /**
