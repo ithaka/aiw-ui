@@ -72,7 +72,7 @@ export class CollectionPage implements OnInit, OnDestroy {
               this.assetCount = data['objCount'];
               this.colName = data['collectionname'];
               this.colDescription = data['blurburl'];
-              this.colThumbnail = data['leadImageURL'] ? data['leadImageURL'] : data['bigimageurl'];
+              this.colThumbnail = data['bigimageurl'];
 
               // Set page title
               this._title.setSubtitle(this.colName)
