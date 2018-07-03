@@ -9,7 +9,7 @@ This repository is open sourced by Ithaka as part of our initiative to increase 
 
 [Learn more](http://artstor.org/open-source) about our open source initiative
 
-Copyright 2018 Ithaka Harbors, Inc.
+**Copyright 2018 Ithaka Harbors, Inc.**
 
 # Table of Contents
 * [Project Stack](#project-stack)
