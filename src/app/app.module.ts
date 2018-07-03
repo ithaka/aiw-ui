@@ -107,10 +107,8 @@ import {
   PersonalCollectionService
 } from './shared'
 import { LocalPCService } from './_local-pc-asset.service'
-import { SSOService } from './shared/sso.service'
 import { AssetFiltersService } from './asset-filters/asset-filters.service'
 import { TagsService } from './browse-page/tags.service'
-import { CustomReuseStrategy } from './reuse-strategy'
 import { LegacyRouteResolver } from './legacy.service'
 import { HTTP_INTERCEPTORS } from '@angular/common/http'
 import { UnauthorizedInterceptor } from './interceptors'
@@ -130,7 +128,6 @@ const APP_PROVIDERS = [
   FlagService,
   GroupService,
   PersonalCollectionService,
-  SSOService,
   LocalPCService,
   LogService,
   ImageGroupService,

@@ -13,9 +13,6 @@ import { Observable, BehaviorSubject, Subject } from 'rxjs/Rx'
 // Project dependencies
 import { AppConfig } from '../app.service'
 
-// Import beta tester emails
-import { BETA_USR_EMAILS } from '../beta-users-email.ts'
-
 // For session timeout management
 import { IdleWatcherUtil } from './idle-watcher'
 import {Idle, DEFAULT_INTERRUPTSOURCES} from '@ng-idle/core'
@@ -50,7 +47,6 @@ export class AuthService implements CanActivate {
   private idleState: string = 'Not started.';
   public showUserInactiveModal: Subject<boolean> = new Subject(); //Set up subject observable for showing inactive user modal
 
-  private betausers: Array<string>
   private onSahara: boolean;
 
   /**
@@ -208,9 +204,6 @@ export class AuthService implements CanActivate {
     setInterval(() => {
       this.refreshUserSession()
     }, userInfoInterval)
-
-    // Set beta users email
-    this.betausers = Object.assign(BETA_USR_EMAILS)
   }
 
   // Reset the idle watcher
@@ -682,19 +675,6 @@ export class AuthService implements CanActivate {
       data,
       { withCredentials: true, headers: headers }
     )
-  }
-
-
-  /**
-   * Check if the logged-in username matches the beta tester emails
-   */
-  public isBetaUser(): boolean{
-    let isBeta: boolean = false
-    let loggedInUser: any = this.getUser()
-    if(loggedInUser && loggedInUser.username){
-      isBeta = this.betausers.indexOf(loggedInUser.username) > -1
-    }
-    return isBeta
   }
 
   public isPublicOnly(): boolean{
