@@ -34,7 +34,12 @@ export class CardViewComponent implements OnInit {
     this.description = this.description.length>150 ? this.description.slice(0,150) + '...' : this.description
 
     if (this.browseLevel === 'private') {
-      this.type = 'Private';
+      if (this.group.group_type === 200) {
+        this.type = 'Shared'
+      }
+      else {
+        this.type = 'Private';
+      }
     }
     else if (this.browseLevel === 'institution') {
       this.type = 'Institutional';
