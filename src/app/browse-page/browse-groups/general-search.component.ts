@@ -9,6 +9,7 @@ import { Subscription } from 'rxjs/Subscription'
 export class GeneralSearchComponent implements OnInit {
   @Output() executeSearch: EventEmitter<string> = new EventEmitter()
   @Input() updateSearchTerm: EventEmitter<string> = new EventEmitter() // allows an outside component to set the search term
+  @Input() init: string = ''
 
   private subscriptions: Subscription[] = []
 
@@ -18,6 +19,8 @@ export class GeneralSearchComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
+    if(this.init)
+      this.term = this.init
     if (this.updateSearchTerm) {
       this.subscriptions.push(
         this.updateSearchTerm.subscribe((term) => {
