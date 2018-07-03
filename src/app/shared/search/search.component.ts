@@ -8,6 +8,7 @@ import { AssetService } from '../../shared';
 import { AssetFiltersService } from '../../asset-filters/asset-filters.service';
 import { Params } from '@angular/router/src/shared';
 import { PACKAGE_ROOT_URL } from '@angular/core/src/application_tokens';
+import { AuthService } from '../auth.service';
 
 @Component({
   selector: 'ang-search',
@@ -38,7 +39,8 @@ export class SearchComponent implements OnInit, OnDestroy {
     private _router: Router,
     private route: ActivatedRoute,
     private angulartics: Angulartics2,
-    private _filters: AssetFiltersService
+    private _filters: AssetFiltersService,
+    private _auth: AuthService
   ) {
 
   }
@@ -93,7 +95,7 @@ export class SearchComponent implements OnInit, OnDestroy {
     // Pipes are reserved by Advanced Search
     term = term.replace('|', ' ')
 
-    this.angulartics.eventTrack.next({ action: "simpleSearch", properties: { category: "search", label: this.term }})
+    this.angulartics.eventTrack.next({ action: "simpleSearch", properties: { category: this._auth.getGACategory(), label: this.term }})
 
     let routeParams = this.route.snapshot.params;
     let params: Params = {
