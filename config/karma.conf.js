@@ -15,7 +15,12 @@ module.exports = function(config) {
      *
      * available frameworks: https://npmjs.org/browse/keyword/karma-adapter
      */
-    frameworks: ['jasmine'],
+    frameworks: ['jasmine', 'pact'],
+
+    plugins:[
+      'karma-*',
+      '@pact-foundation/karma-pact'
+    ],
 
     // list of files to exclude
     exclude: [ ],
@@ -59,6 +64,9 @@ module.exports = function(config) {
 
     // web server port
     port: 9876,
+
+    // PACT Proxies
+    proxies: {'/api/v1/group':'http://localhost:1234/api/v1/group'},  
 
     // enable / disable colors in the output (reporters and logs)
     colors: true,

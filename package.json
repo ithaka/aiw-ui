@@ -76,8 +76,6 @@
         "@angular/platform-server": "^5.2.1",
         "@angular/router": "^5.2.1",
         "@angularclass/conventions-loader": "^1.0.13",
-        "@angularclass/hmr": "^1.2.2",
-        "@angularclass/hmr-loader": "^3.0.2",
         "@ng-bootstrap/ng-bootstrap": "^1.0.0-beta.5",
         "@ng-idle/core": "^2.0.0-beta.13",
         "@ng-idle/keepalive": "^2.0.0-beta.13",
@@ -111,6 +109,8 @@
         "zone.js": "^0.6.26"
     },
     "devDependencies": {
+        "@pact-foundation/karma-pact": "^2.1.5",
+        "@pact-foundation/pact-node": "^6.19.2",
         "@types/hammerjs": "^2.0.33",
         "@types/jasmine": "^2.5.38",
         "@types/node": "^6.0.49",
