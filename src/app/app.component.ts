@@ -6,7 +6,6 @@ import { Angulartics2GoogleAnalytics } from 'angulartics2/ga';
 import { Title } from '@angular/platform-browser';
 import { Router, NavigationStart, NavigationEnd } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
-import { HttpHeaders } from '@angular/common/http';
 
 import { AppConfig } from "./app.service";
 import { ScriptService, FlagService } from './shared';
@@ -78,7 +77,9 @@ export class App {
           let key = routeParam.split('=')[0]
           let value = routeParam.split('=')[1]
           if(key === 'featureflag' && value === 'solrmetadata') {
-            let header = new HttpHeaders().set('featureflag', 'solrmetadata');
+            let d = new Date();
+            d.setTime(d.getTime() + 24*60*60*1000); // set the expire date to be one day later
+            document.cookie = "featureflag=solrmetadata; expires=" + d.toUTCString() + ";";
           }
         }
 
