@@ -749,10 +749,10 @@ export class AssetService {
             .get(this._auth.getHostname() + '/api/pccollection', options)
             .toPromise()
     }
-    
+
     public categoryNames() : Promise<categoryName[]> {
         let options = { withCredentials: true }
-        
+
         return this.http
             .get(this._auth.getHostname() + '/api/v1/collections/103/categorynames', options)
             .toPromise()
@@ -763,7 +763,7 @@ export class AssetService {
                     return <categoryName[]>[]
                 }
             })
-    }    
+    }
 
     public categoryByFacet(facetName: string, collectionType ?: number) : Promise<SolrFacet[]> {
       let options = { withCredentials: true };
@@ -796,7 +796,7 @@ export class AssetService {
             // base facet field
             "name" : "", // ex: collectiontypes
             "mincount" : 1,
-            "limit" : 700 // Prod list of Public Collections exceeds 600
+            "limit" : 1000 // Prod limit of Public Collections
         }
         facetField.name = facetName
         query.facet_fields = [facetField]
@@ -810,7 +810,7 @@ export class AssetService {
              * Institutional Collection filter needs to cover:
              * - Collections which an institution has created but has also made public
              * - Collections which have been shared specifically with an institution, and do not have the "contributinginstitutionid" of the current user
-             * FYI Static and Shared Collections 
+             * FYI Static and Shared Collections
              * - CUNY and UC schools have shared collections that are managed by Artstor (known as static collections)
              * - Some schools have shared collections which have a contributinginsitutionid which differs from their own
              */
