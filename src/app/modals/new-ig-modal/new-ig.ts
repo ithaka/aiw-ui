@@ -82,6 +82,11 @@ export class IgFormUtil {
       })
     }
 
+    // Make sure to trim/remove the leading and trailing space from each tag
+    for(let tag of group.tags){
+      tag = tag.trim()
+    }
+
     return group
   }
 }
