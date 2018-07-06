@@ -680,6 +680,24 @@ export class AuthService implements CanActivate {
   public isPublicOnly(): boolean{
     return !(this.getUser() && this.getUser().status)
   }
+
+
+  /**
+   * Return "category" to report to Google Analytics
+   * - We use category to track the type of user the event is tied to
+   */
+  public getGACategory(): string {
+    let category = "unaffiliatedUser"
+    let user = this.getUser()
+    console.log(user)
+    if (user.isLoggedIn) {
+      category = "loggedInUser"
+    } else if (user.institutionId && user.institutionId.toString().length > 0) {
+      category = "institutionalUser"
+    }
+
+    return category
+  }
 }
 
 export class User {
