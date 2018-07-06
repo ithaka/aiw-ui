@@ -77,9 +77,7 @@ export class App {
           let key = routeParam.split('=')[0]
           let value = routeParam.split('=')[1]
           if(key === 'featureflag' && value === 'solrmetadata') {
-            let d = new Date();
-            d.setTime(d.getTime() + 24*60*60*1000); // set the expire date to be one day later
-            document.cookie = "featureflag=solrmetadata; expires=" + d.toUTCString() + ";";
+            document.cookie = "featureflag=solrmetadata;";
           }
         }
 
