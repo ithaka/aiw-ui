@@ -305,7 +305,8 @@ export class AssetSearchService {
       } else if(sortIndex == '2') {
         query["sort"] = 'agent_str'
       } else if(sortIndex == '3') {
-        query["filter_query"].push('-yearend:[* TO *] AND -year:[* TO *] AND -year:(0) AND -year:(9999)')
+        query["filter_query"].push("-year:['' TO *] AND -year:((0) OR (9999))")
+        query["filter_query"].push("-yearend:['' TO *] AND -year:((0) OR (9999))")
         query["sort"] = 'yearend'//:[* TO *] AND -yearend:(0) AND -yearend:(9999) AND -yearend:(null)'
       } else if(sortIndex == '4') {
         query["sort"] = 'updatedon_str'
