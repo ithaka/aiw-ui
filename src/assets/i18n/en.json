@@ -320,17 +320,20 @@
     "LIBRARY_COLLECTION" : {
       "HEADING" : "Artstor Collections",
       "DESCRIPTION" : "The Artstor Digital Library is an extensive and representative visual resource of images for teaching and research in the arts, humanities and social sciences. We build partnerships with museums, libraries, photographers, and photographic archives whose images are widely used in teaching and learning contexts. In addition, we work with scholars and special collections in libraries to develop depth and richness in areas that are especially important to the community.<br/><br/>In order to increase our relevance and use to the academic community, the collections are expanded and updated with the assistance of our individual and institutional partners. Thus, the Digital Library is increasingly characterized by high-quality images and authoritative cataloging information.",
-      "LEAD_IMAGE" : "http://library.artstor.org/assets/img/collection-splash.png"
+      "LEAD_IMAGE" : "http://library.artstor.org/assets/img/collection-splash.png",
+      "CAPTION" : "René Magritte. Les valeurs personnelles (Personal Values), 1952. Oil on canvas. Image and original data provided by San Francisco Museum of Modern Art. © Charly Herscovici, Brussels / Artists Rights Society (ARS), New York"
     },
     "CLASSIFICATION" : {
       "HEADING" : "Browse by Classification",
       "DESCRIPTION" : "Users may navigate the breadth and depth of the Artstor Digital Library using the sixteen classification terms at left. Artstor strives to assign each image in the Digital Library one term at minimum. When particular images are characterized by two terms or more, they will appear in multiple classification groups.<br/><br/>Users may browse these terms in conjunction with their geographic sub-groupings and perform searches using the Advanced Search feature, accessible from the Library home page.",
-      "LEAD_IMAGE" : "http://library.artstor.org/assets/img/classification-splash.png"
+      "LEAD_IMAGE" : "http://library.artstor.org/assets/img/classification-splash.png",
+      "CAPTION" : "Vicomte de Barde Leroy. Selection of Shells, late 18th or early 19th century. Watercolor, gouache. Image and original data provided by Réunion des Musées Nationaux / Art Resource, N.Y."
     },
     "GEOGRAPHY" : {
       "HEADING" : "Browse by Geography",
       "DESCRIPTION" : "Images in the Digital Library have been assigned geography terms according to two different criteria: location of the work (for site-specific works such as architecture, mural painting, public monuments, etc.), and nationality of the creator. When these two criteria overlap (for example, an American architect's preparatory drawing for a building built in another country), both country terms are assigned.<br/><br/>Users may browse these terms in conjunction with their classification sub-groupings, as well as keyword and Advanced Search, accessible from the Library home page.",
-      "LEAD_IMAGE" : "http://library.artstor.org/assets/img/geography-splash.png"
+      "LEAD_IMAGE" : "http://library.artstor.org/assets/img/geography-splash.png",
+      "CAPTION" : "Karel Allard. Map of the World, c. 1710. Engraving. Image and original data provided by The Minneapolis Institute of Arts"
     },
     "MY_COLLECTION": {
       "UPLOAD_IMGS": "Upload Images",

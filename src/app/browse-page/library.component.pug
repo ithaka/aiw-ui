@@ -29,7 +29,8 @@ nav.nav.nav-inline.browse-nav
   .col-md-4
     .browse-info(*ngIf="descObj[selectedBrowseId]")
       .img(*ngIf="descObj[selectedBrowseId] + '.LEAD_IMAGE' | translate")
-        img([attr.src]="descObj[selectedBrowseId] + '.LEAD_IMAGE' | translate", alt="Splash image for browse id: {{ selectedBrowseId }}", style="max-width:100%;")
+        img([attr.src]="descObj[selectedBrowseId] + '.LEAD_IMAGE' | translate", [attr.alt]="descObj[selectedBrowseId] + '.CAPTION' | translate", style="max-width:100%;")
+        .browse__description([innerHTML]="descObj[selectedBrowseId] + '.CAPTION' | translate")
       .title {{ descObj[selectedBrowseId] + ".HEADING" | translate }}
       .browse__description([innerHTML]="descObj[selectedBrowseId] + '.DESCRIPTION' | translate")
 //- .row.has-icon-overlay(*ngIf="loading")
