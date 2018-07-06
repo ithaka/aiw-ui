@@ -796,7 +796,7 @@ export class AssetService {
             // base facet field
             "name" : "", // ex: collectiontypes
             "mincount" : 1,
-            "limit" : 1000 // Prod list of Public Collections exceeds 700, so limiting it to 1000
+            "limit" : 700 // Prod list of Public Collections exceeds 600
         }
         facetField.name = facetName
         query.facet_fields = [facetField]
