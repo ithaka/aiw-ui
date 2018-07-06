@@ -90,7 +90,7 @@ html, body{
 .tooltip-inner {
   max-width: 350px !important;
   padding: .5rem !important;
-  
+
   h3{
     color: #fff
   }
@@ -191,6 +191,11 @@ span.active {
         text-align: left;
         font-weight: 700;
         margin: $basePadding/2 0;
+    }
+
+    & .browse__img {
+      padding-bottom: 7px;
+      max-width: 100%;
     }
 
     & .browse__description, & .browse__description * {
