@@ -144,7 +144,7 @@ export class RegisterComponent implements OnInit {
           // A user that just registered is obviously logged in as a user
           user.isLoggedIn = true;
           this._auth.saveUser(data.user);
-          this.angulartics.eventTrack.next({ action:"remoteLogin", properties: { category: "login", label: "success" }});
+          this.angulartics.eventTrack.next({ action:"remoteLogin", properties: { category: this._auth.getGACategory(), label: "success" }});
           this.loadForUser(data);
         } else {
           if (data.statusMessage.includes("JSTOR account exists") && data.statusCode === 2) {

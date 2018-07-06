@@ -123,7 +123,7 @@ export class CategoryPage implements OnInit, OnDestroy {
       // }
 
       return this.http
-          .get(this._auth.getUrl() + '/categorydesc/' + catId, options)
+          .get(this._auth.getUrl() + '/v1/categorydesc/' + catId, options)
           .toPromise();
   }
 

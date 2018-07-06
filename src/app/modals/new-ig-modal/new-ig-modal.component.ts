@@ -176,7 +176,7 @@ export class NewIgModal implements OnInit {
 
     if(this.editIG){
       // Editing group
-      this._angulartics.eventTrack.next({ action:"editGroup", properties: { category: "group", label: group.id }});
+      this._angulartics.eventTrack.next({ action:"editGroup", properties: { category: this._auth.getGACategory(), label: group.id }});
 
       group.id = this.ig.id // need this for the update call
 
@@ -204,7 +204,7 @@ export class NewIgModal implements OnInit {
       // analytics events
       if(this.copyIG) {
         // Copying old group
-        this._angulartics.eventTrack.next({ action:"copyGroup", properties: { category: "group", label: group.id }});
+        this._angulartics.eventTrack.next({ action:"copyGroup", properties: { category: this._auth.getGACategory(), label: group.id }});
 
         // Log copy group event into Captain's Log
         this._log.log({
@@ -215,8 +215,7 @@ export class NewIgModal implements OnInit {
         })
       } else {
         // Create New Group
-        this._angulartics.eventTrack.next({ action:"newGroup", properties: { category: "group" }});
-   
+        this._angulartics.eventTrack.next({ action:"newGroup", properties: { category: this._auth.getGACategory() }});
       }
 
       // create the group using the group service

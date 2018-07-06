@@ -133,7 +133,7 @@ export class PptModalComponent implements OnInit {
   }
 
   trackDownload(downloadType: string) : void {
-    this._angulartics.eventTrack.next({ action: "downloadGroup" + downloadType, properties: { category: "group", label: this.ig.id }})
+    this._angulartics.eventTrack.next({ action: "downloadGroup" + downloadType, properties: { category: this._auth.getGACategory(), label: this.ig.id }})
   }
 
 }
