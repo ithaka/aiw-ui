@@ -232,25 +232,13 @@ export class NewIgModal implements OnInit {
               this.changeGlobalSetting(this.newGroup, formValue.artstorPermissions == "global")
             }
             
-            if(this.copyIG) {
-              // Log copy group event into Captain's Log
-              this._log.log({
-                eventType: "artstor_copy_group",
-                additional_fields: {
-                  "source_group_id": this.ig.id,
-                  "group_id": this.newGroup.id
-                }
-              })
-            }
-            else {
-              // Log create group event into Captain's Log
-              this._log.log({
-                eventType: "artstor_create_group",
-                additional_fields: {
-                  "group_id": this.newGroup.id
-                }
-              })
-            }  
+            // Log create group event into Captain's Log
+            this._log.log({
+              eventType: "artstor_create_group",
+              additional_fields: {
+                "source_group_id": this.newGroup.id
+              }
+            })
           },
           error => {
             console.error(error);
