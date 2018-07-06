@@ -86,28 +86,9 @@ module.exports = function (options) {
          *
          * See: https://github.com/s-panferov/awesome-typescript-loader
          */
-        // {
-        //   test: /\.ts$/,
-        //   loader: 'awesome-typescript-loader',
-        //   query: {
-        //     // use inline sourcemaps for "karma-remap-coverage" reporter
-        //     sourceMap: false,
-        //     inlineSourceMap: true,
-        //     compilerOptions: {
-
-        //       // Remove TypeScript helpers to be injected
-        //       // below by DefinePlugin
-        //       removeComments: true
-
-        //     }
-        //   },
-        //   exclude: [/\.e2e\.ts$/]
-        // },
-
         {
           test: /\.ts$/,
           loaders: [
-            // '@angularclass/hmr-loader?pretty=' + !isProd + '&prod=' + isProd,
             'awesome-typescript-loader',
             'angular2-template-loader'
           ],
