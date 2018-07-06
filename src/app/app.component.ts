@@ -81,9 +81,6 @@ export class App {
             d.setTime(d.getTime() + 24*60*60*1000); // set the expire date to be one day later
             document.cookie = "featureflag=solrmetadata; expires=" + d.toUTCString() + ";";
           }
-          else {
-            document.cookie = "featureflag=; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
-          }
         }
 
         let event_url_array = event.url.split('/')
