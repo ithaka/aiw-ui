@@ -168,7 +168,7 @@ export class AssetFilters {
       }
     }
 
-    this.angulartics.eventTrack.next({ action: "filteredSearch", properties: { category: "search", label: params } })
+    this.angulartics.eventTrack.next({ action: "filteredSearch", properties: { category: this._auth.getGACategory(), label: params } })
 
     if(params['page']){
       params['page'] = this.pagination.page
