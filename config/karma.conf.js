@@ -19,10 +19,17 @@ module.exports = function(config) {
 
     // Plugins starting with "karma-" are already auto imported
     plugins: [
-      'karma-*',
+      'karma-chrome-launcher',
+      'karma-coverage',
+      'karma-jasmine',
+      'karma-mocha-reporter',
+      'karma-phantomjs-launcher',
+      'karma-remap-coverage',
+      'karma-sourcemap-loader',
+      'karma-webpack',
       '@pact-foundation/karma-pact'
     ],
-
+    
     // list of files to exclude
     exclude: [ ],
 
@@ -59,7 +66,7 @@ module.exports = function(config) {
     pact: [{cors: true, spec: 2, port: 1234, dir: 'pacts/'}], 
     // 4) here we can define proxies to redirect requests from our pact tests to the mock server
     proxies: { 
-      '/api/tasks': 'http://localhost:1234/api/tasks'
+      '/api/v1/group': 'http://localhost:1234/api/v1/group'
     },
 
     /*

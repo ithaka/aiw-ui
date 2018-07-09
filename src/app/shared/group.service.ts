@@ -3,7 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { BehaviorSubject, Observable, Subject } from 'rxjs/Rx';
 
 // Project Dependencies
-import { AuthService, ImageGroup } from '.'
+// import { AuthService, any } from '.'
 
 @Injectable()
 export class GroupService {
@@ -13,9 +13,9 @@ export class GroupService {
 
     constructor(
         private http: HttpClient,
-        private _auth: AuthService
+        // private _auth: AuthService
     ) {
-        this.groupUrl = this._auth.getHostname() + '/api/v1/group'
+        this.groupUrl = '/api/v1/group'
         this.options = { withCredentials: true }
     }
 
@@ -202,10 +202,10 @@ export class GroupService {
     /**
      * Redeems an image group share token and returns an image group
      * @param token The image group share token
-     * @returns Observable with { success: boolean, group: ImageGroup }, although I'm not sure how to specify that in the typescript
+     * @returns Observable with { success: boolean, group: any }, although I'm not sure how to specify that in the typescript
      */
-    public redeemToken(token: string): Observable<{ success: boolean, group: ImageGroup }> {
-        return this.http.post<{ success: boolean, group: ImageGroup }>(
+    public redeemToken(token: string): Observable<{ success: boolean, group: any }> {
+        return this.http.post<{ success: boolean, group: any }>(
             [this.groupUrl, "redeem", token].join("/"),
             {},
             this.options
