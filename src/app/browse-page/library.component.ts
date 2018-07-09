@@ -125,7 +125,8 @@ export class LibraryComponent implements OnInit {
 
         // Fetch browse collection object from local storage & check if the required collection list has already been set
         let storageBrwseColObj = this._storage.get('browseColObject')
-        if( storageBrwseColObj && storageBrwseColObj[facetType]){
+        let hasCategoryTitles = storageBrwseColObj['categoryid'] && storageBrwseColObj['categoryid'][0].title.length > 0
+        if( storageBrwseColObj && storageBrwseColObj[facetType] && hasCategoryTitles ){
           if(facetType === 'artstor-geography'){
             this.hierarchicalFacets = storageBrwseColObj[facetType]
           } else{
@@ -142,7 +143,6 @@ export class LibraryComponent implements OnInit {
             else{
               this.categoryFacets = categoryFacets
             }
-              
           }
           this.loading = false
         } else{
@@ -163,7 +163,7 @@ export class LibraryComponent implements OnInit {
                   .then((data) => {
                     // Create an index by ID for naming the facets
                     let categoryIndex = data.reduce( ( result, item ) => {
-                        result[item.categoryId] = item.categoryName;
+                        result[item.categoryid] = item.categoryname;
                         return result;
                     }, {});
                     // Append titles to the facets (we can't replace "name", as its the ID, which we need)
