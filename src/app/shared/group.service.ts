@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core'
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { BehaviorSubject, Observable, Subject } from 'rxjs/Rx';
+import { GroupList } from './datatypes';
 
 // Project Dependencies
 // import { AuthService, any } from '.'
@@ -23,7 +24,7 @@ export class GroupService {
      * Get All Groups
      * @param level Indicates access level of group: 'institution', 'private', 'public', 'all' or 'shared'
      */
-    public getAll(level: string, size?: number, pageNo ?: number, tags ?: string[], query ?: string, owner_id ?: string ): Observable<any> {
+    public getAll(level: string, size?: number, pageNo ?: number, tags ?: string[], query ?: string, owner_id ?: string ): Observable<GroupList> {
         if (!tags) {
             tags = []
         }

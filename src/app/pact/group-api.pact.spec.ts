@@ -2,7 +2,7 @@
 import { HttpClientModule } from '@angular/common/http';
 import { TestBed, getTestBed } from '@angular/core/testing';
 import { PactWeb, Matchers } from '@pact-foundation/pact-web';
-import { GroupService, AuthService } from '../shared';
+import { GroupService, AuthService, GroupList } from '../shared';
 
 describe("Pact consumer test", () => {
 
@@ -19,17 +19,11 @@ describe("Pact consumer test", () => {
       "tags":[{"key":"MLK","doc_count":1},{"key":"PC Test","doc_count":1}]
     }
 
-    // const expectedGroupId: string = "a1fc32cc-8859-49f7-a560-5da0c5928500"
-    // const expectedGroup: any = {"description":"","tags":[],"sequence_number":0,"update_date":"2017-07-07T17:00:40Z","name":"Some Assets","public":false,"creation_date":"2017-07-07T17:00:40Z","id":"a1fc32cc-8859-49f7-a560-5da0c5928500","access":[{"entity_type":200,"entity_identifier":"24615","access_type":100}],"items":["AAFOLKAIG_10313142481","AAFOLKAIG_10313142791","AAFOLKAIG_10313143138","AAGOIG_10314000081"]}
-    
     beforeAll(function(done) {
-//      client = example.createClient('http://localhost:1234')
       provider = new PactWeb({ consumer: 'aiw-ui', provider: 'binder-group', port: 1234, host: 'localhost' })
-
-      // required for slower Travis CI environment
+      // Required for slower environments
       setTimeout(function () { done() }, 2000)
-
-      // Required if run with `singleRun: false`
+      // Required if run with `singleRun: false` (see karma config)
       provider.removeInteractions()
     })
 
@@ -51,6 +45,9 @@ describe("Pact consumer test", () => {
       service = getTestBed().get(GroupService)
     });
 
+    /**
+     * Mock and test group listing endpoint
+     */
     describe("getAllGroups", () => {
       beforeAll((done) =>  {
         provider.addInteraction({
@@ -94,10 +91,3 @@ describe("Pact consumer test", () => {
       })
     })
   })
-
-  export interface GroupList {
-    success: boolean,
-    total: number,
-    groups: any[],
-    tags: any[]
-  }
