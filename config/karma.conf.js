@@ -15,7 +15,13 @@ module.exports = function(config) {
      *
      * available frameworks: https://npmjs.org/browse/keyword/karma-adapter
      */
-    frameworks: ['jasmine'],
+    frameworks: ['jasmine', 'pact'],
+
+    // Plugins starting with "karma-" are already auto imported
+    plugins: [
+      'karma-*',
+      '@pact-foundation/karma-pact'
+    ],
 
     // list of files to exclude
     exclude: [ ],
@@ -48,6 +54,13 @@ module.exports = function(config) {
 
     // Webpack please don't spam the console when running in karma!
     webpackMiddleware: { stats: 'errors-only'},
+
+     // 3) configure one or multiple pact-mock-services here
+    pact: [{cors: true, spec: 2, port: 1234, dir: 'pacts/'}], 
+    // 4) here we can define proxies to redirect requests from our pact tests to the mock server
+    proxies: { 
+      '/api/tasks': 'http://localhost:1234/api/tasks'
+    },
 
     /*
      * test results reporter to use

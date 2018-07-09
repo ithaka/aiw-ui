@@ -112,6 +112,9 @@
         "zone.js": "^0.6.26"
     },
     "devDependencies": {
+        "@pact-foundation/karma-pact": "^2.1.5",
+        "@pact-foundation/pact": "^5.9.1",
+        "@pact-foundation/pact-web": "^5.9.1",
         "@types/hammerjs": "^2.0.33",
         "@types/jasmine": "^2.5.38",
         "@types/node": "^6.0.49",
