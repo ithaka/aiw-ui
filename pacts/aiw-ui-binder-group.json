@@ -1,9 +1,9 @@
 {
   "consumer": {
-    "name": "aiw-client"
+    "name": "aiw-ui"
   },
   "provider": {
-    "name": "group-service"
+    "name": "binder-group"
   },
   "interactions": [
     {

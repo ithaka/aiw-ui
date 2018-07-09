@@ -24,7 +24,7 @@ describe("Pact consumer test", () => {
     
     beforeAll(function(done) {
 //      client = example.createClient('http://localhost:1234')
-      provider = new PactWeb({ consumer: 'aiw-client', provider: 'group-service', port: 1234, host: 'localhost' })
+      provider = new PactWeb({ consumer: 'aiw-ui', provider: 'binder-group', port: 1234, host: 'localhost' })
 
       // required for slower Travis CI environment
       setTimeout(function () { done() }, 2000)

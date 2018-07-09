@@ -34,6 +34,7 @@
         "github-deploy": "npm run github-deploy:dev",
         "lint": "npm run tslint \"src/**/*.ts\"",
         "local": "yarn run server:local",
+        "pact:publish": "node config/pact.publish.js",
         "postversion": "git push && git push --tags",
         "prebuild:dev": "npm run clean:dist",
         "prebuild:prod": "npm run clean:dist",
