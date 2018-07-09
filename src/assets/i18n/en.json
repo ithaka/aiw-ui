@@ -415,7 +415,19 @@
     "MAIN_HEADING": "Share link to image group",
     "URL_LABEL": "Copy URL",
     "COPY_SUCCESS": "Link copied to clipboard",
-    "SERVICE_ERROR": "We've encountered an error in getting a share token. Please refresh or try again later."
+    "SERVICE_ERROR": "We've encountered an error in getting a share token. Please refresh or try again later.",
+    "TEXTAREA_ARIA_LABEL": "Textarea containing the share URL for the image group"
+  },
+  "SHARE_IMG_LINK_MODAL": {
+    "MAIN_HEADING": "Share Image",
+    "DESC": "Copy the image URL or the HTML code to share this image with others at your institution.",
+    "IMG_URL_LBL": "Image URL",
+    "THMB_LNK_IMG_LBL": "Thumbnail hyperlink to the Image",
+    "HELP": "Help",
+    "CLOSE": "Close",
+    "COPY_TO_CLIPBOARD": "Copy to Clipboard",
+    "TEXTAREA_URL_ARIA_LABEL": "Textarea containing the image URL for the selected asset",
+    "TEXTAREA_HTML_ARIA_LABEL": "Textarea containing the HTML code for thumbnail hyperlink to the image"
   },
   "GENERATE_CITATION_MODAL": {
     "MAIN_HEADING": "Generate citation for asset",
