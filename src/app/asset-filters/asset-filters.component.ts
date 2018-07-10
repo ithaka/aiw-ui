@@ -162,6 +162,9 @@ export class AssetFilters {
       else if(filter.filterGroup == 'size'){
         params[filter.filterGroup] =  parseInt(filter.filterValue[0]);
       }
+      else if(filter.filterGroup == 'sort'){
+        params[filter.filterGroup] =  parseInt(filter.filterValue[0]);
+      }
       else if((filter.filterGroup != 'startDate') && (filter.filterGroup != 'endDate') && (filter.filterValue && filter.filterValue.length > 0)){
         // Arrays must be stringified, as angular router doesnt handle them well
         params[filter.filterGroup] =  Array.isArray(filter.filterValue) ? JSON.stringify(filter.filterValue) : filter.filterValue;
