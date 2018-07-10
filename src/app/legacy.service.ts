@@ -68,10 +68,26 @@ export class LegacyRouteResolver implements Resolve<boolean> {
       this._router.navigate(['/asset', 'external', encryptedId])
 
     } else if (urlArr[0] === "secure") {
-      let idRe: RegExp = /id=(.*)/
-      let encryptedId = idRe.exec(urlArr[1])[1]
+      /**
+       * This breaks the query param string into an object which can be passed to the angular router
+       */
+      let path: string = urlArr[1]
+      let queryString: string = path.substr(path.indexOf('?') + 1)
+      let rawParams: string[] = queryString.split('&')
+      let queryParams: { [key: string]: string } = {}
+      rawParams.forEach((param) => {
+        let paramArr: string[] = param.split('=')
+        if (paramArr && paramArr.length > 1) {
+          let key: string = paramArr[0]
+          let value: string = paramArr[1]
+          queryParams[key] = value
+        }
+      })
 
-      this._router.navigate(['/asset', 'external', encryptedId])
+      let encryptedId: string = queryParams.id
+      delete queryParams.id
+
+      this._router.navigate(['/asset', 'external', encryptedId], {queryParams: queryParams})
 
     } else {
       let routeNum = urlArr[0].substr(0, 2)
@@ -301,15 +317,6 @@ export class LegacyRouteResolver implements Resolve<boolean> {
 
     return decoded
   }
-
-  // private decryptToken(token: string): Observable<any> {
-  //   return this.http.get(this._auth.getHostname() + "/api/v1/items/resolve?encrypted_id=" + token)
-  //     .map((res) => {
-  //       let jsonRes = res.json() || {}
-  //       if (jsonRes && jsonRes.success && jsonRes.item) { return jsonRes.item }
-  //       else { throw new Error("No success or item found on response object") }
-  //     })
-  // }
 }
 
 /**
