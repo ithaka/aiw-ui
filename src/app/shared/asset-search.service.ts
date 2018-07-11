@@ -50,7 +50,7 @@ export class AssetSearchService {
   * @param url - Generated tilemap view url
   */
   public downloadViewBlob(url: string): Observable<any> {
-    return this.http.get(url, { 
+    return this.http.get(url, {
         responseType: 'blob'
     })
   }
@@ -79,7 +79,7 @@ export class AssetSearchService {
       "facet_fields" :
       [
         // Limited to 16 classifications (based on the fact that Artstor has 16 classifications)
-        // + 1 to allow for empty string values crowding out the top 16 
+        // + 1 to allow for empty string values crowding out the top 16
         {
           "name" : "artclassification_str",
           "mincount" : 1,
@@ -199,7 +199,7 @@ export class AssetSearchService {
       "facet_fields" :
       [
         // Limited to 16 classifications (based on the fact that Artstor has 16 classifications)
-        // + 1 to allow for empty string values crowding out the top 16 
+        // + 1 to allow for empty string values crowding out the top 16
         {
           "name" : "artclassification_str",
           "mincount" : 1,
@@ -247,7 +247,7 @@ export class AssetSearchService {
             institutionalTypeFilter = true
             filterArray.push('contributinginstitutionid:\"' + this._auth.getUser().institutionId.toString() + '\"')
           }
-          
+
           // Push filter queries into the array
           let filterValueArray = filterValue.toString().trim().split('|')
           for( let filterVal of filterValueArray){
@@ -266,7 +266,7 @@ export class AssetSearchService {
         colId = options.colId
       }
       else if(options.pcolId){
-        // Loading Personal OR Private Collection 
+        // Loading Personal OR Private Collection
         colId = options.pcolId
       }
 
@@ -300,13 +300,14 @@ export class AssetSearchService {
         query["sortorder"] = "asc"
       }
 
-      if (sortIndex == '1'){
+      if (sortIndex == '1') {
         query["sort"] = 'name_str'
-      } else if(sortIndex == '2'){
+      } else if(sortIndex == '2') {
         query["sort"] = 'agent_str'
-      } else if(sortIndex == '3'){
+      } else if(sortIndex == '3') {
+        query["filter_query"].push('year:[* TO *]', '-year:((0) OR (9999))', 'yearend:[* TO *]', '-yearend:((0) OR (9999))')
         query["sort"] = 'yearend'
-      } else if(sortIndex == '4'){
+      } else if(sortIndex == '4') {
         query["sort"] = 'updatedon_str'
       }
     }
@@ -324,7 +325,7 @@ export class AssetSearchService {
             // Push the fake Institutional collection type facet only if its not already returned in the response
             if (res.facets[i].values.filter(e => e.name === "2").length === 0) {
               res.facets[i].values.push({
-                name: "2", 
+                name: "2",
                 fq: "collectiontypes:(\"2\")",
                 count: null,
                 efq: null
@@ -355,7 +356,7 @@ export class AssetSearchService {
 
         return cleanedAsset
       })
-      
+
       // create the cleaned response to pass to caller
       let searchResponse: SearchResponse = Object.assign({}, res, { results: cleanedResults })
 
@@ -370,8 +371,8 @@ export class AssetSearchService {
    * @returns       Returns a response object from jstor search containing results
    */
   public searchJstor(searchTerm: string): Observable<any> {
-    
-    let query = { 
+
+    let query = {
       "content_types": [],
       "additional_fields": ["rectype","raw_type","htopic_st"],
       "hier_facet_fields": [
@@ -405,7 +406,7 @@ export class AssetSearchService {
   }
 
   /**
-   * 
+   *
    * @param assetId The id of the desired asset
    */
   public getAssetById(assetId: string): Observable<SearchAsset> {
