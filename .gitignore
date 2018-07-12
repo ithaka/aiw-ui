@@ -69,3 +69,6 @@ npm-debug.log
 # files that were removed from our repo #
 src/app/beta-users-email.ts
 src/app/shared/sso.service.ts
+
+# SSL certificate Files #
+/ssl
