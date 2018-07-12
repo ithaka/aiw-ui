@@ -45,3 +45,15 @@ export interface IgDownloadInfo {
   qtvrCnt?: number;
   zooms?: boolean;
 }
+
+/**
+ * Group Service requests and responses
+ */
+
+  // Group list response interface
+  export interface GroupList {
+    success: boolean,
+    total: number,
+    groups: any[],
+    tags: any[]
+  }

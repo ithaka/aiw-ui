@@ -18,7 +18,7 @@ class MockTestService {
   }
 }
 
-fdescribe('Thumbnail', () => {
+describe('Thumbnail', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [ ThumbnailComponent, TypeIdPipe ], // declare the test component

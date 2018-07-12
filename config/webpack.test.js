@@ -21,7 +21,7 @@ const ENV = process.env.ENV = process.env.NODE_ENV = 'test';
  *
  * See: http://webpack.github.io/docs/configuration.html#cli
  */
-module.exports = function(options) {
+module.exports = function (options) {
   return {
 
     /**
@@ -44,12 +44,12 @@ module.exports = function(options) {
        *
        * See: http://webpack.github.io/docs/configuration.html#resolve-extensions
        */
-      extensions: ['.ts', '.js'],
+      extensions: ['.ts', '.js', '.json'],
 
       /**
        * Make sure root is src
        */
-      root: helpers.root('src'),
+      modules: [helpers.root('src'), 'node_modules'],
 
     },
 
@@ -68,7 +68,7 @@ module.exports = function(options) {
        *
        * See: http://webpack.github.io/docs/configuration.html#module-loaders
        */
-      loaders: [
+      rules: [
 
         {
           test: /\.js$/,
@@ -119,7 +119,7 @@ module.exports = function(options) {
          *
          * See: https://github.com/webpack/json-loader
          */
-        { test: /\.json$/, loader: 'json-loader', exclude: [helpers.root('src/index.html')] },
+        // { test: /\.json$/, loader: 'json-loader', exclude: [helpers.root('src/index.html')] },
 
         /*
          * Compile sass files
@@ -127,7 +127,7 @@ module.exports = function(options) {
          */
         {
           test: /\.scss$/,
-          loaders: ['raw-loader', 'sass-loader' ]
+          loaders: ['raw-loader', 'sass-loader']
         },
         /**
          * Raw loader support for *.css files
