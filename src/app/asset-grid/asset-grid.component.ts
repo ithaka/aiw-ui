@@ -66,6 +66,9 @@ export class AssetGrid implements OnInit, OnDestroy {
   // Flag to check if the results have any restricted images.
   private rstd_imgs: boolean = false;
 
+  private excludedAssetsCount: number = 0;
+  private sortByDateTotal: number = 0;
+
   @Input()
   private actionOptions: any = {};
 
@@ -119,6 +122,21 @@ export class AssetGrid implements OnInit, OnDestroy {
     label : 'Relevance'
   };
   sub;
+
+  private UrlParams: any = {
+    term: "",
+    size: 24,
+    page: 1,
+    startDate: 0,
+    endDate: 0,
+    igId: "",
+    objectId: "",
+    colId: "",
+    catId: "",
+    collTypes: "",
+    sort: "0",
+    coll: ""
+  };
 
   // Object Id parameter, for Clusters
   private objectId : string = '';
@@ -183,10 +201,26 @@ export class AssetGrid implements OnInit, OnDestroy {
         // Find feature flags
         if(params && params['featureFlag']){
           this._flags[params['featureFlag']] = true
-      }
+        }
 
         if(params['term']){
           this.searchTerm = params['term'];
+          this.UrlParams.term = this.searchTerm;
+        }
+        if(params['startDate']){
+          this.UrlParams.startDate = params['startDate'];
+        }
+        if(params['endDate']){
+          this.UrlParams.endDate = params['endDate'];
+        }
+        if(params['artclassification_str']){
+          this.UrlParams.artclassification_str = params['artclassification_str'];
+        }
+        if(params['geography']){
+          this.UrlParams.geography = params['geography'];
+        }
+        if(params['collectiontypes']){
+          this.UrlParams.collectiontypes = params['collectiontypes'];
         }
 
         if(params['sort']){
@@ -250,6 +284,15 @@ export class AssetGrid implements OnInit, OnDestroy {
     this.subscriptions.push(
       this._assets.allResults.subscribe(
         (allResults) => {
+          if(this.activeSort.index && this.activeSort.index == '3'){
+            this.sortByDateTotal =  allResults.total
+            this._search.search(this.UrlParams, this.searchTerm, '0').forEach((res) => {
+              this.excludedAssetsCount = res.total - this.sortByDateTotal
+            })
+          }
+          else {
+            this.excludedAssetsCount = 0
+          }
           // Prep display of search term next to results count
           this.formatSearchTerm(this.searchTerm)
           // Update results array

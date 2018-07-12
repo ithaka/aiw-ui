@@ -199,10 +199,10 @@ export class AuthService implements CanActivate {
      */
     const userInfoInterval = 15*1000*60*60
     // Run on Init
-    this.refreshUserSession()
+    this.refreshUserSession(true)
     // Run every X mins
     setInterval(() => {
-      this.refreshUserSession()
+      this.refreshUserSession(true)
     }, userInfoInterval)
   }
 
@@ -555,9 +555,13 @@ export class AuthService implements CanActivate {
           } else {
             // Clear user session (local objects and cookies)
             this.logout()
-            if (triggerSessionExpModal === true) {
-              this.showUserInactiveModal.next(triggerSessionExpModal)
-            }
+          }
+          // If user session was downgraded/expired, notify
+          if (triggerSessionExpModal && user.loggedInSessionLost) {
+              // Current saved user object needs to be cleared if session was lost
+              this.logout()
+              // Tell user their session was lost
+              this.showUserInactiveModal.next(true)
           }
           return data
         }
@@ -571,9 +575,11 @@ export class AuthService implements CanActivate {
    */
   private decorateValidUser(data: any) : any {
     let currentUser = this.getUser()
+    let newUser = data['user'] ? data['user'] : {}
     let currentUsername = currentUser.username
-
-    if (data['status'] === true && (!currentUsername || data['user'].username == currentUsername)) {
+    let loggedInSessionLost = currentUser.isLoggedIn ? (!newUser.username || currentUsername !== newUser.username) : false;
+    
+    if (data['status'] === true) {      
       // User is authorized - if you want to check ipAuth then you can tell on the individual route by user.isLoggedIn = false
       let user = data['user']
       user.status = data['status']
@@ -583,20 +589,24 @@ export class AuthService implements CanActivate {
 
       // Save ipAuthed flag to user object
       user.ipAuthed = !user.isLoggedIn && user.status ? true : false
+      // If user downgraded from logged in user to ip auth or other, add flag
+      user.loggedInSessionLost = loggedInSessionLost
 
       if (this.canUserAccess(user)) {
         return user
       } else {
         return null
       }
-    } else if(!data['status']) {
+    } else if(data['status'] === false) {
       // Return generic user object for unaffiliated users
       let user = {
-        'status' : data['status'],
-        'isLoggedIn' : false
+        'status': false,
+        'isLoggedIn': false,
+        'loggedInSessionLost': loggedInSessionLost
       }
       return user
     } else {
+      console.error("Did not receive a valid user object", data)
       return null
     }
   }
@@ -689,7 +699,7 @@ export class AuthService implements CanActivate {
   public getGACategory(): string {
     let category = "unaffiliatedUser"
     let user = this.getUser()
-    console.log(user)
+    
     if (user.isLoggedIn) {
       category = "loggedInUser"
     } else if (user.institutionId && user.institutionId.toString().length > 0) {
