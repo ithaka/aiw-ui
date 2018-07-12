@@ -15,13 +15,14 @@ module.exports = function(config) {
      *
      * available frameworks: https://npmjs.org/browse/keyword/karma-adapter
      */
-    frameworks: ['jasmine', 'pact'],
+    frameworks: ['jasmine', 'jasmine-spec-tags', 'pact'],
 
     // Plugins starting with "karma-" are already auto imported
     plugins: [
       'karma-chrome-launcher',
       'karma-coverage',
       'karma-jasmine',
+      'karma-jasmine-spec-tags',
       'karma-mocha-reporter',
       'karma-phantomjs-launcher',
       'karma-remap-coverage',

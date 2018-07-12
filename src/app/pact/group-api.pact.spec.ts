@@ -4,10 +4,10 @@ import { TestBed, getTestBed } from '@angular/core/testing';
 import { PactWeb, Matchers } from '@pact-foundation/pact-web';
 import { GroupService, AuthService, GroupList } from '../shared';
 
-describe("Pact consumer test", () => {
+describe("Group Calls #pact", () => {
 
     let provider;
-    let service;
+    let _groups;
 
     const expectedGroupList: GroupList = {
       "success":true,
@@ -42,7 +42,7 @@ describe("Pact consumer test", () => {
         ] 
       });
 
-      service = getTestBed().get(GroupService)
+      _groups = getTestBed().get(GroupService)
     });
 
     /**
@@ -69,7 +69,7 @@ describe("Pact consumer test", () => {
 
       it("should return a Group List object", function(done) {
         //Run the tests
-        service.getAll('public')
+        _groups.getAll('public')
           .subscribe(res => {
             expect(res).toEqual(expectedGroupList)
             done()

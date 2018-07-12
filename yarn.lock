@@ -5755,6 +5755,10 @@ karma-coverage@^1.1.1:
     minimatch "^3.0.0"
     source-map "^0.5.1"
 
+karma-jasmine-spec-tags@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/karma-jasmine-spec-tags/-/karma-jasmine-spec-tags-1.0.1.tgz#333ed6259292306f350decf77f9b8dc5c3954212"
+
 karma-jasmine@^1.1.2:
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/karma-jasmine/-/karma-jasmine-1.1.2.tgz#394f2b25ffb4a644b9ada6f22d443e2fd08886c3"
