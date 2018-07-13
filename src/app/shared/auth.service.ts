@@ -25,6 +25,7 @@ import { FlagService } from '.'
 @Injectable()
 export class AuthService implements CanActivate {
   private _storage: Locker;
+  private _session: Locker;
   private ENV: string;
   private baseUrl;
   private imageFpxUrl;
@@ -43,6 +44,8 @@ export class AuthService implements CanActivate {
 
   private userSource: BehaviorSubject<any> = new BehaviorSubject({});
   public currentUser: Observable<any> = this.userSource.asObservable();
+  // Track whether or not user object has been refreshed since app opened
+  public userSessionFresh: boolean = false
 
   private idleState: string = 'Not started.';
   public showUserInactiveModal: Subject<boolean> = new Subject(); //Set up subject observable for showing inactive user modal
@@ -70,8 +73,8 @@ export class AuthService implements CanActivate {
     private _flags: FlagService,
     private idle: Idle
   ) {
-    this._storage = locker.useDriver(Locker.DRIVERS.LOCAL);
-    this._router = _router;
+    this._storage = locker.useDriver(Locker.DRIVERS.LOCAL)
+    this._router = _router
 
     // Default to relative or prod endpoints
     this.ENV = 'prod'
@@ -419,12 +422,7 @@ export class AuthService implements CanActivate {
    * @param user The user should be an object to store in sessionstorage
    */
   public saveUser(user: any) {
-    // short-circuit this function so it can't be used to replace an existing user with a non-existing one
-    //  clearing the user should only be done using the logout function
-    let currentUser = this._storage.get('user')
-    if (currentUser && currentUser.username && !user.username) { return }
-
-    // Should have session timeout, username, baseProfileId, typeId
+    // Preserve user via localstorage
     this._storage.set('user', user);
     // only do these things if the user is ip auth'd or logged in and the user has changed
     let institution = this.institutionObjSource.getValue();
@@ -499,6 +497,8 @@ export class AuthService implements CanActivate {
       .map(
         (data)  => {
           let user = this.decorateValidUser(data)
+          // Track whether or not user object has been refreshed since app opened
+          this.userSessionFresh = true
 
           if (user && (!this.onSahara || user.status)) {
             // Clear expired session modal
@@ -547,7 +547,11 @@ export class AuthService implements CanActivate {
       .map(
         (data)  => {
           let user = this.decorateValidUser(data)
+          // Track whether or not user object has been refreshed since app opened
+          this.userSessionFresh = true
+          
           if (user) {
+            console.log("User saved!")
             // Clear expired session modal
             this.showUserInactiveModal.next(false)
             // Update user object
@@ -666,15 +670,6 @@ export class AuthService implements CanActivate {
             .get(this.getUrl() + '/lostpw?email=' + email.toLowerCase() + '&portal=' + this._app.config.pwResetPortal, options)
             .toPromise();
     }
-
-  /**
-   * This is the same call we use in canActivate to determine if the user is IP Auth'd
-   * @returns json which should have
-   */
-  public getIpAuth(): Observable<any> {
-    let options = { headers: this.userInfoHeader, withCredentials: true };
-    return this.http.get(this.genUserInfoUrl(), options)
-  }
 
   public ssLogin(username: string, password: string): Observable<SSLoginResponse> {
 

@@ -117,7 +117,7 @@ export class Login implements OnInit, OnDestroy {
       });
 
     // this handles showing the register link for only ip auth'd users
-    this._auth.getIpAuth()
+    this._auth.getUserInfo()
       .take(1)
       .subscribe((res) => {
         if (res.remoteaccess === false && res.user) {
