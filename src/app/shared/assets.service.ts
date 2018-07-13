@@ -1041,8 +1041,8 @@ export class AssetService {
 }
 
 export interface categoryName {
-    categoryid: string,
-    categoryname: string
+    categoryId: string,
+    categoryName: string
 }
 export interface SolrFacet {
     name: string,
