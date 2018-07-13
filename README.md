@@ -241,6 +241,39 @@ You should now be able to open the site locally as:
 
 ---
 
+# Local development on Https
+
+Go to ssl directory under project root and execute the following steps.
+
+Generate private key:
+```bash
+openssl genrsa -out private.key 4096
+```
+
+Generate a Certificate Signing Request:
+```bash
+openssl req -new -sha256 -out private.csr -key private.key -config ssl.conf
+```
+
+Generate the certificate:
+```bash
+openssl x509 -req -days 3650 -in private.csr -signkey private.key -out private.crt -extensions req_ext -extfile ssl.conf
+```
+
+Add the certificate to keychain and always trust it:
+```bash
+sudo security add-trusted-cert -d -r trustRoot -k /Library/Keychains/System.keychain private.crt
+```
+
+Create a pem file:
+```bash
+openssl x509 -in private.crt -out private.pem -outform PEM
+```
+
+Finally, from the project root run  `yarn dev:https`  to start local development on https
+
+---
+
 # Styles
 All of our styles are written in Sass, and should be placed in one of three places based on our file structure:
 

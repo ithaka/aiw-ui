@@ -19,6 +19,7 @@
         "clean:start": "npm start",
         "clean": "npm cache clean --force && npm run rimraf -- node_modules doc coverage dist",
         "dev": "npm run server:dev",
+        "dev:https": "npm run server:dev -- --open --https --cert ssl/private.pem --key ssl/private.key",
         "sahara": "yarn run server:sahara",
         "deploy:test": "npm run bump:patch && git push test master",
         "deploy:test:patch": "npm run bump:patch && git push test master",
