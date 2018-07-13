@@ -72,13 +72,12 @@ export class BrowseGroupsComponent implements OnInit {
     // set the title
     this._title.setSubtitle("Browse Groups")
 
-    // this is only for the search page and won't show in the top-level menu
+    /** Here, we push in all of the options for different browse levels the user has access to */
     this.browseMenuArray.push({
       label: 'All',
       level: 'all'
     })
 
-    /** Here, we push in all of the options for different browse levels the user has access to */
     if (this._auth.getUser() && this._auth.getUser().isLoggedIn) {
       this.browseMenuArray.push({
         label: 'Private',
@@ -96,10 +95,6 @@ export class BrowseGroupsComponent implements OnInit {
         label: 'Artstor Curated',
         level: 'public'
       })
-      this.browseMenuArray.push({
-        label: 'Search',
-        level: 'search'
-      })
     }
 
     if (this._auth.getUser() && this._auth.getUser().isLoggedIn) {
@@ -112,10 +107,10 @@ export class BrowseGroupsComponent implements OnInit {
     // Subscribe to asset search params
     this.subscriptions.push(
       this.route.params
-      .subscribe((params: Params) => {
+      .subscribe((params) => {
         // Find feature flags
-        if(params && params['featureFlag'] && params['featureFlag'] === 'cardview'){
-              this.showCardView = true;
+        if(params && params.featureFlag && params.featureFlag === 'cardview'){
+          this.showCardView = true
         }
       })
     )
