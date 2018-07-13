@@ -204,18 +204,10 @@ export class NewIgModal implements OnInit {
       // analytics events
       if(this.copyIG) {
         // Copying old group
-        this._angulartics.eventTrack.next({ action:"copyGroup", properties: { category: this._auth.getGACategory(), label: group.id }});
-
-        // Log copy group event into Captain's Log
-        this._log.log({
-          eventType: "artstor_copy_group",
-          additional_fields: {
-            "source_group_id": this.ig.id
-          }
-        })
+        this._angulartics.eventTrack.next({ action:"copyGroup", properties: { category: this._auth.getGACategory(), label: group.id }})
       } else {
         // Create New Group
-        this._angulartics.eventTrack.next({ action:"newGroup", properties: { category: this._auth.getGACategory() }});
+        this._angulartics.eventTrack.next({ action:"newGroup", properties: { category: this._auth.getGACategory() }})
       }
 
       // create the group using the group service
@@ -232,7 +224,7 @@ export class NewIgModal implements OnInit {
               this.changeGlobalSetting(this.newGroup, formValue.artstorPermissions == "global")
             }
             
-            if(this.copyIG) {
+            if(this.copyIG && this.ig && this.ig.id) {
               // Log copy group event into Captain's Log
               this._log.log({
                 eventType: "artstor_copy_group",
