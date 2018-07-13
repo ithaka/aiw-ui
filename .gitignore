@@ -71,4 +71,5 @@ src/app/beta-users-email.ts
 src/app/shared/sso.service.ts
 
 # SSL certificate Files #
-/ssl
+/ssl/*
+!/ssl/ssl.conf
