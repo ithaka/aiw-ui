@@ -4,7 +4,7 @@ import { BehaviorSubject, Observable, Subject } from 'rxjs/Rx';
 import { GroupList } from './datatypes';
 
 // Project Dependencies
-// import { AuthService, any } from '.'
+import { AuthService } from '.';
 
 @Injectable()
 export class GroupService {
@@ -14,9 +14,9 @@ export class GroupService {
 
     constructor(
         private http: HttpClient,
-        // private _auth: AuthService
+        private _auth: AuthService
     ) {
-        this.groupUrl = '/api/v1/group'
+      this.groupUrl = this._auth.getHostname() + '/api/v1/group'
         this.options = { withCredentials: true }
     }
 
@@ -162,7 +162,7 @@ export class GroupService {
             'description', 'tags', 'sequence_number', 'update_date', 'name', 'creation_date', 'access', 'items'
         ]
 
-        // Contruct putGroup object, based on expected properties on backend groups update call  
+        // Contruct putGroup object, based on expected properties on backend groups update call
         for(let key in group){
             if (updateProperties.indexOf(key) > -1) {
                 putGroup[key] = group[key]
