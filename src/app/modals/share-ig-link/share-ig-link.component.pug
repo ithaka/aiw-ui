@@ -11,7 +11,7 @@
           .pb-3.form-group([class.has-success]="igCopied", [class.has-danger]="serviceStatus.tokenError")
             label(for="copyURL") {{ 'SHARE_IG_LINK_MODAL.URL_LABEL' | translate }}
             .value
-              textarea#copyURL(#copyURL="", readonly) {{ shareLink }}
+              textarea#copyURL(#copyURL="", readonly, [attr.aria-label]="'SHARE_IG_LINK_MODAL.TEXTAREA_ARIA_LABEL' | translate") {{ shareLink }}
             .copy-clipboard((click)=" copyURL.select(); document.execCommand('copy', false, null); igCopied = true; ") Copy to Clipboard
             .form-control-feedback(*ngIf="igCopied") {{ 'SHARE_IG_LINK_MODAL.COPY_SUCCESS' | translate }}
             .form-control-feedback(*ngIf="serviceStatus.tokenError") {{ 'SHARE_IG_LINK_MODAL.SERVICE_ERROR' | translate }}

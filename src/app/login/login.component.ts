@@ -87,16 +87,6 @@ export class Login implements OnInit, OnDestroy {
       this.copyBase = this._app.config.copyModifier + "."
     }
 
-    // Provide redirects for initPath detected in index.html from inital load
-    if ( initPath && (initPath.indexOf('ViewImages') > -1 || initPath.indexOf('ExternalIV') > -1 ) ) {
-      this.router.navigateByUrl(initPath)
-        .then( result => {
-          // Clear variable to prevent further redirects
-          initPath = null
-          console.log('Redirect to initial path attempt: ' + result)
-        })
-    }
-
     // The true institutions call. Don't throw an error, since the above call will provide a backup
   this._auth.getInstitutions()
       .then((data) => {

@@ -72,7 +72,7 @@ export class CollectionPage implements OnInit, OnDestroy {
               this.assetCount = data['objCount'];
               this.colName = data['collectionname'];
               this.colDescription = data['blurburl'];
-              this.colThumbnail = data['leadImageURL'] ? data['leadImageURL'] : data['bigimageurl'];
+              this.colThumbnail = data['bigimageurl'];
 
               // Set page title
               this._title.setSubtitle(this.colName)
@@ -101,7 +101,7 @@ export class CollectionPage implements OnInit, OnDestroy {
       let options = { withCredentials: true };
 
       return this.http
-          .get(this._auth.getUrl() + '/collections/' + colId, options)
+          .get(this._auth.getUrl() + '/v1/collections/' + colId, options)
           .toPromise();
   }
 

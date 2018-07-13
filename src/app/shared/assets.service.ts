@@ -4,7 +4,7 @@
  */
 import { Injectable, OnDestroy, OnInit, EventEmitter } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable, BehaviorSubject, Subject } from 'rxjs/Rx';
 import { Locker } from 'angular2-locker';
 import 'rxjs/add/operator/toPromise';
@@ -749,12 +749,12 @@ export class AssetService {
             .get(this._auth.getHostname() + '/api/pccollection', options)
             .toPromise()
     }
-    
+
     public categoryNames() : Promise<categoryName[]> {
         let options = { withCredentials: true }
-        
+
         return this.http
-            .get(this._auth.getHostname() + '/api/collections/103/categorynames', options)
+            .get(this._auth.getHostname() + '/api/v1/collections/103/categorynames', options)
             .toPromise()
             .then(res => {
                 if (res && res[0]) {
@@ -763,7 +763,7 @@ export class AssetService {
                     return <categoryName[]>[]
                 }
             })
-    }    
+    }
 
     public categoryByFacet(facetName: string, collectionType ?: number) : Promise<SolrFacet[]> {
       let options = { withCredentials: true };
@@ -796,7 +796,7 @@ export class AssetService {
             // base facet field
             "name" : "", // ex: collectiontypes
             "mincount" : 1,
-            "limit" : 700 // Prod list of Public Collections exceeds 600
+            "limit" : 1000 // Prod limit of Public Collections
         }
         facetField.name = facetName
         query.facet_fields = [facetField]
@@ -810,7 +810,7 @@ export class AssetService {
              * Institutional Collection filter needs to cover:
              * - Collections which an institution has created but has also made public
              * - Collections which have been shared specifically with an institution, and do not have the "contributinginstitutionid" of the current user
-             * FYI Static and Shared Collections 
+             * FYI Static and Shared Collections
              * - CUNY and UC schools have shared collections that are managed by Artstor (known as static collections)
              * - Some schools have shared collections which have a contributinginsitutionid which differs from their own
              */
@@ -941,7 +941,7 @@ export class AssetService {
         let options = { withCredentials: true };
         // Returns all of the collections names
         return this.http
-            .get(this._auth.getUrl() + '/collections/', options)
+            .get(this._auth.getUrl() + '/v1/collections/', options)
             .map( res => {
                 if (type) {
                     let data = res
@@ -1014,36 +1014,35 @@ export class AssetService {
             .get(this._auth.getUrl() + '/v1/pcollection/image-status/' + ssid, options)
     }
 
-    /**
-     * Call to API which returns an asset, given an encrypted_id
-     * @param token The encrypted token that you want to know the asset id for
-     */
-    public decryptToken(token: string): Observable<any> {
-        let header
-        let options
-        // if (document.referrer && document.referrer.indexOf('kressfoundation.org') > -1){
-            // Custom header makes this call function as if IP auth
-            header = new HttpHeaders({ withCredentials: 'true', fromKress : 'true' });
-        // } else {
-        //     header = new Headers({});
-        // }
+//     /**
+//      * Call to API which returns an asset, given an encrypted_id
+//      * @param token The encrypted token that you want to know the asset id for
+//      */
+//     public decryptToken(token: string, source?: string): Observable<any> {
+//         let header
+//         let options
+//         let query: HttpParams = new HttpParams()
+//         query.set('encrypted_id', token)
+//         source && query.set('source', source)
+        
+//         header = new HttpHeaders({ withCredentials: 'true', fromKress : 'true' })
 
-        options = { headers: header }; // Create a request option
+//         options = { headers: header, params: query } // Create a request option
 
-        return this.http.get(this._auth.getHostname() + "/api/v1/items/resolve?encrypted_id=" + token, options)
-        .map((res) => {
-            let jsonRes = res
-            if (jsonRes && jsonRes['success'] && jsonRes['item']) {
-                return jsonRes
-            }
-            else { throw new Error("No success or item found on response object") }
-        })
-  }
+//         return this.http.get(this._auth.getHostname() + "/api/v1/items/resolve?encrypted_id=" + token, options)
+//         .map((res) => {
+//             let jsonRes = res
+//             if (jsonRes && jsonRes['success'] && jsonRes['item']) {
+//                 return jsonRes
+//             }
+//             else { throw new Error("No success or item found on response object") }
+//         })
+//   }
 }
 
 export interface categoryName {
-    categoryId: string,
-    categoryName: string
+    categoryid: string,
+    categoryname: string
 }
 export interface SolrFacet {
     name: string,

@@ -870,7 +870,7 @@ export class AssetPage implements OnInit, OnDestroy {
 
     trackDownloadImage(): void {
         // Track download
-        this.angulartics.eventTrack.next({ action: "downloadAsset", properties: { category: "asset", label: this.assets[0].id } });
+        this.angulartics.eventTrack.next({ action: "downloadAsset", properties: { category: this._auth.getGACategory(), label: this.assets[0].id } });
     }
 
     trackDownloadView(): void {
@@ -879,7 +879,7 @@ export class AssetPage implements OnInit, OnDestroy {
             eventType: "artstor_image_download_view",
             item_id: this.assets[0].id
         })
-        this.angulartics.eventTrack.next({ action: "downloadView", properties: { category: "asset", label: this.assets[0].id } });
+        this.angulartics.eventTrack.next({ action: "downloadView", properties: { category: this._auth.getGACategory(), label: this.assets[0].id } });
     }
 
     /**

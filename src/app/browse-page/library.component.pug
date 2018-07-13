@@ -13,7 +13,7 @@ nav.nav.nav-inline.browse-nav
       li.filter(*ngFor="let facet of categoryFacets", [class.hidden]="facet.title === '' || !facet.name")
         a.tag-link(*ngIf="facetQueryMap[facetType] == 'category'", [routerLink]="['/category', facet.name ]")
           | {{ facet.title }} ({{facet.count}})
-        a.tag-link(*ngIf="facetQueryMap[facetType] != 'category'", [routerLink]="['/search/*', getLinkParam(facetType, facet.name)]") 
+        a.tag-link(*ngIf="facetQueryMap[facetType] != 'category'", [routerLink]="['/search/*', getLinkParam(facetType, facet.name)]")
           | {{facet.name}} ({{facet.count}})
       li.filter(*ngFor="let key of JSObject.keys(hierarchicalFacets).sort()")
         a.tag-link([routerLink]="['/search/*', getLinkParam(facetType, hierarchicalFacets[key].element.efq)]") {{key}} ({{hierarchicalFacets[key].element.count}})
@@ -29,7 +29,8 @@ nav.nav.nav-inline.browse-nav
   .col-md-4
     .browse-info(*ngIf="descObj[selectedBrowseId]")
       .img(*ngIf="descObj[selectedBrowseId] + '.LEAD_IMAGE' | translate")
-        img([attr.src]="descObj[selectedBrowseId] + '.LEAD_IMAGE' | translate", alt="Splash image for browse id: {{ selectedBrowseId }}", style="max-width:100%;")
+        img.browse__img([attr.src]="descObj[selectedBrowseId] + '.LEAD_IMAGE' | translate", [attr.alt]="descObj[selectedBrowseId] + '.CAPTION' | translate")
+        .small([innerHTML]="descObj[selectedBrowseId] + '.CAPTION' | translate")
       .title {{ descObj[selectedBrowseId] + ".HEADING" | translate }}
       .browse__description([innerHTML]="descObj[selectedBrowseId] + '.DESCRIPTION' | translate")
 //- .row.has-icon-overlay(*ngIf="loading")

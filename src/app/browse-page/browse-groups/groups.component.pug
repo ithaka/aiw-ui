@@ -3,7 +3,7 @@ nav.nav.nav-inline.browse-nav
   a.nav-link(*ngFor="let browseOpt of browseMenuArray", [ngClass]="{'active': browseOpt.level == route.snapshot.params.view}", [routerLink]="['/browse', 'groups', browseOpt.level]", (click)="browseOpt.level === 'search' ? firstSearch = true : firstSearch = false")
     div(*ngIf="browseOpt.level !== 'all'") {{ browseOpt.label }}
 .row
-  .col-md-4.hidden-sm-down
+  .col-md-3.hidden-sm-down
     #searchFilterList.mb-3(*ngIf="route.snapshot.params.view == 'search'")
       h3 Group Type Filter
         a#searchFilterClear.link--accent.small(tabindex="0", style="float:right;", (click)="setSearchLevel('none', true)") Clear
@@ -11,14 +11,17 @@ nav.nav.nav-inline.browse-nav
         button.filter.filter--tag(*ngIf="filter.level !== 'search'", (click)="setSearchLevel(filter.level, true)", [class.active]="filter.selected", [attr.title]="'Filter by ' + filter.label + ' image groups'")
           | {{ filter.label }}
     ang-tags-list([browseLevel]="selectedBrowseLevel")
-  .col-md-8
-    ang-general-search(*ngIf="route.snapshot.params.view == 'search'", [updateSearchTerm]="updateSearchTerm", (executeSearch)="addQueryParams({ term: $event }, false)")
-    h3.pb-1.px-2 Groups
+  .col-md-9
+    ang-general-search(*ngIf="route.snapshot.params.view == 'search'", [updateSearchTerm]="updateSearchTerm", [init]="searchTerm", (executeSearch)="addQueryParams({ term: $event }, false)")
+    h3.pb-1.px-2 Groups     
       pagination([pageObj]="pagination", (goToPage)="goToPage($event)", [right]="true")
     .group-list.has-icon-overlay.px-2
       .alert.alert-warning(*ngIf="errorObj[selectedBrowseLevel]", [innerHtml]="errorObj[selectedBrowseLevel]")
       .alert.alert-info(*ngIf="showSearchPrompt && route.snapshot.params.view == 'search'") {{ 'BROWSE.ERRORS.SEARCH_PROMPT' | translate }}
-      ang-tag(*ngFor="let tag of tags", [tag]="tag", link="true")
+      ng-container(*ngIf="showCardView")
+        ang-card-view(*ngFor="let tag of tags; let i=index;", [tag]="tag", [group]="groups[i]", [browseLevel]="selectedBrowseLevel", link="true")
+      ng-container(*ngIf="!showCardView")
+        ang-tag(*ngFor="let tag of tags", [tag]="tag", link="true")  
 .row.has-icon-overlay(*ngIf="loading")
   i.icon-lg.icon-overlay--top.icon-loading-large
 // Don't show this if there is a filters list, if it's loading, or if the user hasn't searched for anything yet

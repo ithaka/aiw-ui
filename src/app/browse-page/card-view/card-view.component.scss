@@ -1,0 +1,186 @@
+@import '../../../sass/core/variables';
+
+$tagLinkBg: #efefef;
+
+.card-view {
+    box-shadow: 0px 0px 0px 5px #00000014;
+    padding: 0.8rem;
+    border-radius: 3px;
+    margin-top: 25px;
+    margin-bottom: 25px;
+    min-height: 140px;
+    position: relative;
+
+    p {
+        font-size: 12px;
+        margin: 0;
+    }
+
+    .group-thumb {
+        box-shadow: -1px 1px 1px 1px #00000030;
+        position: absolute;
+        width: 65px;
+        max-height: 85px;
+        height: auto;
+    }
+
+    .group-thumb-1-3 {
+        top: 0%;
+        left: 34%;
+        z-index: 3;
+    }
+
+    .group-thumb-2-3 {
+        top: 10%;
+        left: 27%;
+        z-index: 2;
+    }
+
+    .group-thumb-3-3 {
+        top: 20%;
+        left: 20%;
+        z-index: 1;
+    }
+
+    .group-thumb-1-2 {
+        top: 5%;
+        left: 30.5%;
+        z-index: 3;
+    }
+
+    .group-thumb-2-2 {
+        top: 15%;
+        left: 23.5%;
+        z-index: 1;
+    }
+
+    .group-thumb-1-1 {
+        width: 70px;
+        top: 10%;
+        left: 24%;
+        z-index: 2;
+    }
+}
+
+
+.list-inline {
+    padding-left: 0px;
+    
+    & li,
+    & li.list-inline-item {
+        background-color: transparent;
+
+        a {
+            color: #000;
+            background-color: #efefef;
+            padding: 2px 3px;
+            border-radius: 2px;
+
+            &:hover {
+            background-color: #d6d6d6;
+            }
+        }
+
+        ul,
+        .list-inline-item {
+            padding-left: 5px;
+        }
+    }
+}
+
+  .tag-item {
+    color: #000;
+    font-size: 13px;
+    line-height: 16px;
+    cursor: default;
+    padding: 0px;
+
+    & .no-link {
+        cursor: default;
+        pointer-events: none;
+        text-decoration: none;
+        background: transparent;
+    }
+
+    &.clickable {
+        & a {
+            cursor: pointer;
+            background: $tagLinkBg;
+
+            &:hover, &:active, &:focus {
+                text-decoration: none;
+                background: darken($tagLinkBg, 10%);
+            }
+        }
+    }
+
+    & a {
+        display: inline-block;
+        padding: 2px;
+        background: transparent; //$tagLinkBg;
+        border-radius: 2px;
+        max-height: 38px;
+        max-width: 90%;
+        margin-bottom: 4px;
+
+        &:hover, &:active, &:focus {
+            text-decoration: none;
+            background: transparent;
+        }
+    }
+
+    &.tag-link a {
+        color: #000;
+        font-size: 1rem;
+        background: transparent;
+        text-decoration: underline;
+        cursor: pointer;
+
+        &:hover, &:active, &:focus {
+            background: transparent;
+            text-decoration: underline;
+            color: $blue;
+        }
+    }
+
+  }
+
+#tag-row {
+    margin-top: 2rem;
+    margin-bottom: -1rem;
+}
+
+#information-row {
+    div {
+        padding: 0;
+    }
+}
+
+#item-row {
+    position: absolute;
+    bottom: 0.6rem;
+    left: 35%;
+    font-size: 12px;
+}
+
+#absolute-bottom {
+    position: absolute;
+    bottom: 0;
+}
+
+#no-padding-left {
+    padding-left: 0;
+}
+
+#description {
+    width: 95%;
+    word-wrap: break-word;
+}
+
+#owner-name {
+    word-wrap: break-word;
+}
+
+.link {
+    word-wrap: break-word;
+}
