@@ -19,7 +19,7 @@ export class CardViewComponent implements OnInit {
   public linkRoute: string = "";
   private tags: any[] = [];
   private thumbnails: any[] = [];
-  private type: string = "-";
+  private groupType: string = "-";
   private description: string = '';
 
   constructor(
@@ -37,34 +37,34 @@ export class CardViewComponent implements OnInit {
 
     // For institutional page, show everything as institutional
     if (this.browseLevel === 'institution') {
-      this.type = 'Institutional';
+      this.groupType = 'Institutional';
     }
     // For public page, show everything as public
     else if (this.browseLevel === 'public') {
-      this.type = 'Artstor Curated';
+      this.groupType = 'Artstor Curated';
     }
     // For shared with me page, show everything as shared with me
     else if (this.browseLevel === 'shared') {
-      this.type = 'Shared with Me';
+      this.groupType = 'Shared with Me';
     }
     // For private and search page
-    else{
+    else {
       if (this.group.group_type && this.group.group_type === 100) {
-        this.type = 'Private';
+        this.groupType = 'Private';
       }
       else if (this.group.group_type && this.group.group_type === 200) {
         if (this.group.owner_id === this._auth.getUser().baseProfileId.toString()) {
-          this.type = 'Shared';
+          this.groupType = 'Shared';
         }
         else {
-          this.type = 'Institutional';
+          this.groupType = 'Institutional';
         }
       }
       else if(this.group.public === true) {
-        this.type = 'Artstor Curated';
+        this.groupType = 'Artstor Curated';
       }
       else {
-        this.type = 'Shared with Me';
+        this.groupType = 'Shared with Me';
       }
     }
 
@@ -108,10 +108,10 @@ export class CardViewComponent implements OnInit {
   }
 
   /** Implement the search of owner by owner_id */
-  private searchOwner(): void {
+  private searchOwner(imageGroup: any): void {
     let queryParams: any = Object.assign({}, this.route.snapshot.queryParams)
     delete queryParams['term']
-    queryParams = Object.assign({}, {'term': this.group.owner_name, 'id': this.group.owner_id})
+    queryParams = Object.assign({}, {'term': imageGroup.owner_name, 'id': imageGroup.owner_id})
     this._router.navigate(['/browse','groups', 'search'], { queryParams: queryParams })
   }
 
