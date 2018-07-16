@@ -7,13 +7,14 @@ export class TagFiltersService {
 
   private _filters: TagFilter[] = []
   private _updateFilters: EventEmitter<any>
+  public showRemainTags: boolean = false
 
   public filterKeys: Subject<string[]> = new Subject()
 
   constructor(
     // don't put other services in here
     // data should be set from outside, and this service stores and curates it
-  ) {
+  ) { 
     this._updateFilters = new EventEmitter()
     // whenever a tag is updated, redistribute the tag filters string which is curated here
     this._updateFilters.subscribe((filter) => {
