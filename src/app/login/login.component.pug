@@ -23,8 +23,8 @@
             label {{ 'LOGIN.INSTITUTION_LOGIN.SELECT_LABEL' | translate }}
             ng2-completer(
               [(ngModel)]="loginInstName",
-              (keyup)="sortInstitution($event)",
-              (click)="(instErrorMsg ? sortInstitution($event): 'null')",
+              (keyup)="sortInstitution(loginInstName)",
+              (click)="(instErrorMsg ? sortInstitution(loginInstName): 'null')",
               [datasource]="dataService",
               [minSearchLength]="0",
               [openOnFocus]="true",
