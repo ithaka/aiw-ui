@@ -128,7 +128,7 @@ export class PCollectionPage implements OnInit, OnDestroy {
       let options = { withCredentials: true };
 
       return this.http
-          .get(this._auth.getUrl() + '/v1/collections/' + colId, options)
+          .get(this._auth.getUrl() + '/collections/' + colId, options)
           .toPromise()
   }
 

@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core'
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { BehaviorSubject, Observable, Subject } from 'rxjs/Rx';
+import { GroupList } from './datatypes';
 
 // Project Dependencies
-import { AuthService, ImageGroup } from '.'
+import { AuthService } from '.';
 
 @Injectable()
 export class GroupService {
@@ -15,7 +16,7 @@ export class GroupService {
         private http: HttpClient,
         private _auth: AuthService
     ) {
-        this.groupUrl = this._auth.getHostname() + '/api/v1/group'
+      this.groupUrl = this._auth.getUrl() + '/v1/group'
         this.options = { withCredentials: true }
     }
 
@@ -23,7 +24,7 @@ export class GroupService {
      * Get All Groups
      * @param level Indicates access level of group: 'institution', 'private', 'public', 'all' or 'shared'
      */
-    public getAll(level: string, size?: number, pageNo ?: number, tags ?: string[], query ?: string, owner_id ?: string ): Observable<any> {
+    public getAll(level: string, size?: number, pageNo ?: number, tags ?: string[], query ?: string, owner_id ?: string ): Observable<GroupList> {
         if (!tags) {
             tags = []
         }
@@ -43,7 +44,7 @@ export class GroupService {
         query && (queryParam = '&q=' + query)
         owner_id && (queryParam = '&owner_id=' + owner_id)
 
-        return this.http.get(
+        return this.http.get<GroupList>(
             [this.groupUrl, "?size=", size, '&level=', level, '&from=', ( (pageNo - 1) * size),  tagParam, queryParam].join(''), this.options
         )
     }
@@ -161,7 +162,7 @@ export class GroupService {
             'description', 'tags', 'sequence_number', 'update_date', 'name', 'creation_date', 'access', 'items'
         ]
 
-        // Contruct putGroup object, based on expected properties on backend groups update call  
+        // Contruct putGroup object, based on expected properties on backend groups update call
         for(let key in group){
             if (updateProperties.indexOf(key) > -1) {
                 putGroup[key] = group[key]
@@ -202,10 +203,10 @@ export class GroupService {
     /**
      * Redeems an image group share token and returns an image group
      * @param token The image group share token
-     * @returns Observable with { success: boolean, group: ImageGroup }, although I'm not sure how to specify that in the typescript
+     * @returns Observable with { success: boolean, group: any }, although I'm not sure how to specify that in the typescript
      */
-    public redeemToken(token: string): Observable<{ success: boolean, group: ImageGroup }> {
-        return this.http.post<{ success: boolean, group: ImageGroup }>(
+    public redeemToken(token: string): Observable<{ success: boolean, group: any }> {
+        return this.http.post<{ success: boolean, group: any }>(
             [this.groupUrl, "redeem", token].join("/"),
             {},
             this.options
