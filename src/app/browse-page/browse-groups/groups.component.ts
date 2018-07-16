@@ -75,7 +75,8 @@ export class BrowseGroupsComponent implements OnInit {
     /** Here, we push in all of the options for different browse levels the user has access to */
     this.browseMenuArray.push({
       label: 'All',
-      level: 'all'
+      level: 'all',
+      selected: true // initialize with all groups selected
     })
 
     if (this._auth.getUser() && this._auth.getUser().isLoggedIn) {
