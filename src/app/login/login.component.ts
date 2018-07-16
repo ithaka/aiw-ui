@@ -137,7 +137,11 @@ export class Login implements OnInit, OnDestroy {
    * Filtering and sorting function for institution login list
    * @param event keyup value event
    */
-  public sortInstitution(term) : void {
+  public sortInstitution(event, term) : void {
+    // Do not evaluate if key up event is arrow key
+    if ([37, 38, 39, 40].indexOf(event.keyCode) > -1) {
+      return
+    }
     let termReg = new RegExp(term, 'i')
 
     let filtered = this.loginInstitutions.filter( inst => {
