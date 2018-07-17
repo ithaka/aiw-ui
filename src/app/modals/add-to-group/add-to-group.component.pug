@@ -12,7 +12,7 @@
           .form-group([class.has-success]="serviceResponse.success", [class.has-danger]="serviceResponse.failure")
             label(for="selectImageGroup") {{ copySelectionStr + '.SELECT_PROMPT' | translate }}
             ng2-completer.notranslate([(ngModel)]="selectedGroupName", name="imageGroup",
-              (keyup)="sortGroup($event)",
+              (keyup)="sortGroup($event, selectedGroupName)",
               [datasource]="dataService",
               [minSearchLength]="0",
               [openOnFocus]="true",
