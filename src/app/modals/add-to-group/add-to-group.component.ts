@@ -81,9 +81,17 @@ export class AddToGroupModal implements OnInit, OnDestroy {
       this.subscriptions.forEach((sub) => { sub.unsubscribe(); });
   }
 
-  private sortGroup(event) : void {
+  /**
+   * Sort/filter function for ng2-completer
+   * @param event key or click event
+   * @param term string being typed by user
+   */
+  public sortGroup(event, term) : void {
+     // Do not evaluate if key up event is arrow key
+     if ([37, 38, 39, 40].indexOf(event.keyCode) > -1) {
+      return
+    }
     // sort array by string input
-    let term = this.selectedGroupName
     let termReg = new RegExp(term, 'i')
 
     let filtered = this.groups.filter( group => {
