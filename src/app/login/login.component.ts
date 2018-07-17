@@ -117,7 +117,7 @@ export class Login implements OnInit, OnDestroy {
       });
 
     // this handles showing the register link for only ip auth'd users
-    this._auth.getIpAuth()
+    this._auth.getUserInfo()
       .take(1)
       .subscribe((res) => {
         if (res.remoteaccess === false && res.user) {
@@ -133,9 +133,15 @@ export class Login implements OnInit, OnDestroy {
     this.subscriptions.forEach((sub) => { sub.unsubscribe() })
   }
 
-  private sortInstitution(event) : void {
-    // sort array by string input
-    let term = this.loginInstName
+  /**
+   * Filtering and sorting function for institution login list
+   * @param event keyup value event
+   */
+  public sortInstitution(event, term) : void {
+    // Do not evaluate if key up event is arrow key
+    if ([37, 38, 39, 40].indexOf(event.keyCode) > -1) {
+      return
+    }
     let termReg = new RegExp(term, 'i')
 
     let filtered = this.loginInstitutions.filter( inst => {
@@ -149,7 +155,6 @@ export class Login implements OnInit, OnDestroy {
     // We need to clear any error messages here if there is one
     if (this.instErrorMsg.length)
         this.instErrorMsg = ''
-
   }
 
   /**
