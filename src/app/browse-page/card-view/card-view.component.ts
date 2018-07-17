@@ -16,10 +16,10 @@ export class CardViewComponent implements OnInit {
   @Input() public browseLevel:string;
   @Input() public link: boolean;
 
-  public linkRoute: string = "";
+  public linkRoute: string = '';
   private tags: any[] = [];
   private thumbnails: any[] = [];
-  private groupType: string = "-";
+  private groupType: string = '-';
   private description: string = '';
 
   constructor(
@@ -49,7 +49,10 @@ export class CardViewComponent implements OnInit {
     }
     // For private and search page
     else {
-      if (this.group.group_type && this.group.group_type === 100) {
+      if (this.group.public === true) {
+        this.groupType = 'Artstor Curated';
+      }
+      else if (this.group.group_type && this.group.group_type === 100) {
         this.groupType = 'Private';
       }
       else if (this.group.group_type && this.group.group_type === 200) {
@@ -59,9 +62,6 @@ export class CardViewComponent implements OnInit {
         else {
           this.groupType = 'Institutional';
         }
-      }
-      else if(this.group.public === true) {
-        this.groupType = 'Artstor Curated';
       }
       else {
         this.groupType = 'Shared with Me';
