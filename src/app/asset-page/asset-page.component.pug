@@ -134,13 +134,13 @@
           .meta-block.collection-type-display(*ngIf="collectionType")
             ang-collection-badge([collectionType]="collectionType")
           //- Old metadata loop
-          .meta-block(*ngFor="let fieldName of assets[0].formattedMetadata | keys")
+          .meta-block(*ngFor="let fieldName of assets[0].formattedMetadata | keys", [attr.aria-labelledby]="cleanId(fieldName)")
             ng-container(*ngIf="fieldName != 'Rights'")
               .label([attr.id]="cleanId(fieldName)") {{ fieldName }}
               div(*ngFor="let value of assets[0].formattedMetadata[fieldName]; let i=index")
                 a.value.col-link(*ngIf="(fieldName === 'Collection' && i===0)", [routerLink]="setCollectionLink(assets[0])", [innerHTML]="cleanFieldValue(value) | linkify")
                 .value(*ngIf="(fieldName !== 'Collection' || i!==0)", [innerHTML]="cleanFieldValue(value) | linkify")
-          .meta-block(*ngIf="assets[0].formattedMetadata.Rights && assets[0].formattedMetadata.Rights.length > 0")
+          .meta-block(*ngIf="assets[0].formattedMetadata.Rights && assets[0].formattedMetadata.Rights.length > 0", [attr.aria-labelledby]="'Rights'")
             .label#Rights Rights
             div(*ngFor="let right of assets[0].formattedMetadata.Rights")
               .value([innerHTML]="cleanFieldValue(right) | linkify")
@@ -150,10 +150,10 @@
           //- .meta-block(*ngFor="let filePropObj of assets[0].filePropertiesArray")
           //-   .label([attr.id]="cleanId(filePropObj.fieldName)") {{ filePropObj.fieldName }}
           //-     .value([innerHTML]="filePropObj.fieldValue")
-          .meta-block(*ngIf="assets[0].fileName")
+          .meta-block(*ngIf="assets[0].fileName", aria-labelledby="fileName")
             .label#fileName {{ 'ASSET_PAGE.METADATA_LABELS.FILE_NAME' | translate }}
               .value([innerHtml]="assets[0].fileName")
-          .meta-block(*ngIf="assets[0].SSID")
+          .meta-block(*ngIf="assets[0].SSID", aria-labelledby="ssid")
             .label#ssid {{ 'ASSET_PAGE.METADATA_LABELS.SSID' | translate }}
               .value([innerHtml]="assets[0].SSID")
           .text-left.pt-2
