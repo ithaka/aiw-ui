@@ -50,7 +50,7 @@ export class AuthService implements CanActivate {
   private idleState: string = 'Not started.';
   public showUserInactiveModal: Subject<boolean> = new Subject(); //Set up subject observable for showing inactive user modal
 
-  private onSahara: boolean;
+  private isOpenAccess: boolean;
 
   /**
    * We need to make SURE /userinfo is not cached
@@ -129,7 +129,7 @@ export class AuthService implements CanActivate {
       this.solrUrl = '/api/search/v1.0/search'
       this.IIIFUrl = '//tsstage.artstor.org/rosa-iiif-endpoint-1.0-SNAPSHOT/fpx'
       this.ENV = 'test'
-      this.onSahara = this._app.config.siteID === 'SAHARA'
+      this.isOpenAccess = this._app.config.isOpenAccess
     }
 
     // Additional Local dev domains
@@ -499,16 +499,16 @@ export class AuthService implements CanActivate {
           let user = this.decorateValidUser(data)
           // Track whether or not user object has been refreshed since app opened
           this.userSessionFresh = true
-
-          if (user && (!this.onSahara || user.status)) {
+          
+          if (user && (this.isOpenAccess || user.status)) {
             // Clear expired session modal
             this.showUserInactiveModal.next(false)
             // Update user object
             this.saveUser(user)
             return true
           } else {
-            // We don't have a user here, and siteID is SAHARA, goto /login
-            if (this.onSahara) {
+            // We don't have a user here, and WLV is not open access, go to /login
+            if (!this.isOpenAccess) {
               this._router.navigate(['/login'])
             }
             else {
@@ -550,8 +550,7 @@ export class AuthService implements CanActivate {
           // Track whether or not user object has been refreshed since app opened
           this.userSessionFresh = true
           
-          if (user) {
-            console.log("User saved!")
+          if (user && (this.isOpenAccess || user.status)) {
             // Clear expired session modal
             this.showUserInactiveModal.next(false)
             // Update user object
