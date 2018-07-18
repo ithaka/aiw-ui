@@ -8,10 +8,10 @@ import { AssetFiltersService } from '../asset-filters/asset-filters.service';
 import {
   AssetSearchService,
   SearchResponse,
-  RawSearchAsset,
+  //RawSearchAsset,
   RawSearchResponse,
-  HierarchicalFilter,
-} from 'asset-search.service'
+  // HierarchicalFilter,
+} from './asset-search.service'
 
 //import { AuthService } from './'
 //import { AppConfig } from '../app.service'
@@ -20,35 +20,35 @@ import {
 /* Helper for generating search query input values */
 // createSearchQuery() {}
 
-class genFilters {
-  public newFilter: HierarchicalFilter {
-
-  }
-}
-
-let mockHierarchicalFilter = new HierarchicalFilter(
-  [key: "filter key"]: {
-//     children: HierarchicalFilter
-//     element: {
-//       count: number
-//       depth: string
-//       efq: string
-//       label: string[]
-//       selected: boolean
-//     }
-)
-
-// interface HierarchicalFilter {
-//   [key: string]: {
-//     children: HierarchicalFilter
-//     element: {
-//       count: number
-//       depth: string
-//       efq: string
-//       label: string[]
-//       selected: boolean
-//     }
+// class genFilters {
+//   public newFilter() {
+//     return new HierarchicalFilter(
+//       "filter key",
+//       {},
+//       {
+//         count: 1,
+//         depth: "depth value",
+//         efq: "efq value",
+//         label: ["label 1", "label 2"],
+//         selected: false
+//       }
+//     )
 //   }
+// }
+
+// let mockHierarchicalFilter = genFilters.newFilter
+
+// // interface HierarchicalFilter {
+// //   [key: string]: {
+// //     children: HierarchicalFilter
+// //     element: {
+// //       count: number
+// //       depth: string
+// //       efq: string
+// //       label: string[]
+// //       selected: boolean
+// //     }
+// //   }
 
 let mockSearchInput = {
   facets: {
@@ -62,13 +62,13 @@ let mockSearchInput = {
   },
   bad_request: false,
   requestId: '12345',
-  results: RawSearchAsset[]
+  //results: RawSearchAsset,
   total: 10, // total number of assets returned
-  hierarchies2: HierarchicalFilter
+  //hierarchies2: HierarchicalFilter
 }
 
-let mockSearchResponse = new RawSearchResponse(
-  facets: {
+// let mockSearchResponse = new RawSearchResponse(
+//   facets: {
 //     name: string
 //     values: {
 //       count: number
@@ -83,20 +83,23 @@ let mockSearchResponse = new RawSearchResponse(
 //   total: number // total number of assets returned
 //   hierarchies2: HierarchicalFilter
 // }
-)
+// )
 
 describe('Search Service', () => {
 
-
   // provide our implementations or mocks to the dependency injector
   beforeEach(() => TestBed.configureTestingModule({
-    providers: [
-      AssetSearchService,
-      SearchResponse,
-      RawSearchAsset,
-      RawSearchResponse,
-    ]
+    providers: [ { provide: AssetSearchService }]
+  }));
 
+  fit('initial AssetSearchService should be of type AssetSearchService', inject([AssetSearchService], (searchService: AssetSearchService) => {
+
+    expect(typeof(searchService)).toBe('AssetSearchService')
+    // searchService.search().take(1).subscribe(
+    //   data => {
+    //     expect(data.size).toBe(24);
+    //   }
+    // );
   }));
 
   // it('should have default data', inject([ Search ], (search: Search) => {
