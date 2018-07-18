@@ -573,9 +573,9 @@
       ]
     },
     "AD": {
-      "LINK": "https://support.artstor.org/?article=about-public-access-to-artstor",
-      "IMG_SOURCE": "/assets/img/promo_pubcoll.jpg",
-      "ALT_TEXT": "Public Collections in Artstor."
+      "LINK": "https://support.artstor.org/?article=using-your-personal-collection",
+      "IMG_SOURCE": "/assets/img/promo-personalcollections.jpg",
+      "ALT_TEXT": "Upload your images to Artstor."
     },
     "QUESTIONS": {
       "HEADING": "Questions",
