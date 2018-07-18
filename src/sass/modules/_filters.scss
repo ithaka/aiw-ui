@@ -83,6 +83,8 @@ filter, .filter {
 		color: $activeFilterColor;
 		background: $filterHoverBg;
 		margin-bottom: 1px;
+		text-decoration: none;
+		font-weight: bold;
 	}
 
 	&:hover, &:active, &:focus{
@@ -203,7 +205,8 @@ button.filter--tag {
 }
 
 .filter--tag {
-	color:#8300e0;
+	color:#000;
+	text-decoration: underline;
 }
 
 filter.date-span-input {
