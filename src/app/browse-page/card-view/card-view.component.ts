@@ -52,19 +52,23 @@ export class CardViewComponent implements OnInit {
       if (this.group.public === true) {
         this.groupType = 'Artstor Curated';
       }
-      else if (this.group.group_type && this.group.group_type === 100) {
-        this.groupType = 'Private';
-      }
-      else if (this.group.group_type && this.group.group_type === 200) {
-        if (this.group.owner_id === this._auth.getUser().baseProfileId.toString()) {
+      // If I am the owner of the image group, group_type 100 means I make it to be private, group_type 200 means I make it to be institutional
+      else if (this.group.owner_id === this._auth.getUser().baseProfileId.toString()) {
+        if (this.group.group_type && this.group.group_type === 100) {
+          this.groupType = 'Private';
+        }
+        else if (this.group.group_type && this.group.group_type === 200) {
           this.groupType = 'Shared';
         }
-        else {
+      }
+      // If I am NOT the owner of the image group, group_type 100 means its owner makes it private and I can see it because it is shared with me, group_type 200 means its owner makes it institutional 
+      else if (this.group.owner_id !== this._auth.getUser().baseProfileId.toString()) {
+        if (this.group.group_type && this.group.group_type === 100) {
+          this.groupType = 'Shared with Me';
+        }
+        else if (this.group.group_type && this.group.group_type === 200) {
           this.groupType = 'Institutional';
         }
-      }
-      else {
-        this.groupType = 'Shared with Me';
       }
     }
 
