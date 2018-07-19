@@ -98,46 +98,12 @@ export class BrowseGroupsComponent implements OnInit {
 
     // this.processUrl()
     // subscribes to url navigation and causes image group list to update based on new urls
-    console.log('subscribing...', )
     this.subscriptions.push(this.createNavigationSubscription())
   }
 
   ngOnInit() {
     // set the title
     this._title.setSubtitle("Browse Groups")
-
-    // /** Here, we push in all of the options for different browse levels the user has access to */
-    // this.groupFilterArray.push({
-    //   label: 'All',
-    //   level: 'all',
-    //   selected: true // initialize with all groups selected
-    // })
-
-    // if (this._auth.getUser() && this._auth.getUser().isLoggedIn) {
-    //   this.groupFilterArray.push({
-    //     label: 'Private',
-    //     level: 'private'
-    //   })
-    // }
-
-    // this.groupFilterArray.push({
-    //   label: 'Institutional',
-    //   level: 'institution'
-    // })
-
-    // if (this.showArtstorCurated) {
-    //   this.groupFilterArray.push({
-    //     label: 'Artstor Curated',
-    //     level: 'public'
-    //   })
-    // }
-
-    // if (this._auth.getUser() && this._auth.getUser().isLoggedIn) {
-    //   this.groupFilterArray.push({
-    //     label: 'Shared with Me',
-    //     level: 'shared'
-    //   })
-    // }
     
     // Subscribe to asset search params
     this.subscriptions.push(
@@ -149,15 +115,6 @@ export class BrowseGroupsComponent implements OnInit {
         }
       })
     )
-
-    // this.subscriptions.push(
-    //   this.route.queryParams.subscribe((params) => {
-    //     if ( params && params['term'] ) {
-    //       this.searchTerm = params['term']
-    //     }
-    //   })
-    // )
-
   } // OnInit
 
   ngOnDestroy() {
@@ -179,7 +136,6 @@ export class BrowseGroupsComponent implements OnInit {
       if (!query) { console.error('no query!') }
       // let params = this.route.snapshot.params
       let groupQuery: GroupQuery = {}
-      console.log('ran the sub!!')
 
 
       // set the term every time there is one in the url
@@ -192,28 +148,12 @@ export class BrowseGroupsComponent implements OnInit {
       }
 
       // set query for tags, if it exists, and reset appliedTags if it doesn't
-      // let : boolean = false
       let urlTags: string[] = []
       if (query.tags) {
         urlTags = this._tagFilters.processFilterString(query.tags)
-        // tagAdded = this.appliedTags.join('') != urlTags.join('') // if the two strings aren't equal, a tag must have changed
       }
       this.appliedTags = urlTags
       groupQuery.tags = urlTags
-
-      // if (!this.showArtstorCurated && params.view == 'public') {
-      //   return this._router.navigate(['browse','groups'])
-      // }
-
-      // if (params.view !== (this.selectedBrowseLevel)) {
-      //   this.appliedTags = []
-      //   this.selectedBrowseLevel = params.view
-      // }
-
-      // // set default page
-      // let requestedPage = Number(query.page) || 1
-      // requestedPage < 1 && (requestedPage = 1) // set page to 1 if a negative number or 0 is requested
-      // this.addQueryParams({ page: requestedPage }, false, query)
 
       if (query.page) {
         let requestedPage: number = Number(query.page)
@@ -224,12 +164,6 @@ export class BrowseGroupsComponent implements OnInit {
         groupQuery.page = requestedPage
       }
 
-      // // set default level
-      // if (!query.level) {
-      //   return this.addQueryParams({ level: 'all' }, false, query)
-      // }
-
-      console.log('checking query.level')
       if (query.level) {
         groupQuery.level = query.level
         if (query.level !== this.selectedFilter.level) {
@@ -237,11 +171,7 @@ export class BrowseGroupsComponent implements OnInit {
           this.setSearchLevel(query.level)
         }
       }
-      console.log('after query.level check')
 
-      // if (tagAdded) { requestedPage = 1 } // if they're adding a tag, we want to nav them back to page 1
-      // let requestedLevel = this.selectedBrowseLevel !== 'search' ? this.selectedBrowseLevel : query.level;
-      // this.setSearchLevel(this.selectedFilter.level, false) // makes sure that the correct level filter is selected even if the user just navigated here from the url
       if (!this.selectedFilter || query.level != this.selectedFilter.level) {
         this.appliedTags = [] // if they're switching levels, reset the tags
         this.setSearchLevel(query.level, false)
@@ -251,15 +181,6 @@ export class BrowseGroupsComponent implements OnInit {
         groupQuery.id = query.id
       }
 
-      // let requestedTerm: string = query.term;
-      // let requestedId: string = !query.id ? '' : query.id;
-      // // if there is not a term, make sure the search term is cleared
-      // if (!query.term) {
-      //   this.updateSearchTerm.emit('')
-      // } else {
-      //   this.updateSearchTerm.emit(query.term)
-      // }
-      // this.loadIGs(this.appliedTags, requestedPage, requestedLevel, requestedTerm, requestedId)
       this.loadIGs(groupQuery)
     })
   }
@@ -269,10 +190,8 @@ export class BrowseGroupsComponent implements OnInit {
    * @param level The level param you want to search groups with
    */
   private setSearchLevel(level: string, navigate?: boolean): void {
-    console.log('setSearchLevel with ', level, navigate)
     if (!level) { level = 'all' }
     this.groupFilterArray.forEach((filter) => {
-      console.log('looking at filter...', filter)
       if (filter.level !== level) {
         filter.selected = false
       } else {
@@ -299,14 +218,7 @@ export class BrowseGroupsComponent implements OnInit {
    * @returns The currently selected search level, defaulted to 'all
    */
   private getSearchLevel(): string {
-    // let selectedLevel: string
-    // this.groupFilterArray.forEach((filter) => {
-    //   if (filter.selected) {
-    //     selectedLevel = filter.level
-    //   }
-    // })
     let selectedFilter = this.groupFilterArray.find((filter) => {
-      console.log('searching ' + filter.label, 'selected:', filter.selected)
       return filter.selected
     })
 
@@ -341,7 +253,6 @@ export class BrowseGroupsComponent implements OnInit {
    */
   // private loadIGs(appliedTags: string[], page: number, level?: string, searchTerm ?: string, searchid ?: string): void {
   private loadIGs(groupQuery: GroupQuery): void {
-    console.log('in loadIGs', 'groupQuery:', groupQuery)
     // short out the function if the user has just navigated to the search page without query params
     if (!this.shouldSearch(groupQuery.tags, groupQuery.level, groupQuery.term, groupQuery.id) && this.route.snapshot.params.view == 'search') {
       this.loading = false
