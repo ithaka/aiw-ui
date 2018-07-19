@@ -69,7 +69,7 @@ module.exports = function(env) {
        * This header is then picked up by Fastly, so it knows to cache our js files
        * Fastly Docs: https://docs.fastly.com/guides/tutorials/cache-control-tutorial.html
        */
-      filename: '[name].[chunkhash].bundle.js?response-cache-control=' + encodeURIComponent('s-maxage=31536000'),
+      filename: '[name].[chunkhash].bundle.js', //?response-cache-control=' + encodeURIComponent('s-maxage=31536000')
 
       /**
        * The filename of the SourceMaps for the JavaScript files.
