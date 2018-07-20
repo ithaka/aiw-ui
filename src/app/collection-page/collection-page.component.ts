@@ -61,29 +61,32 @@ export class CollectionPage implements OnInit, OnDestroy {
             })
         } else if (this.colId) {
           this._assets.clearAssets();
-          this.getCollectionInfo(this.colId)
-            .then((data) => {
-              this._assets.queryAll(routeParams, true);
+          this._auth.getUserInfo().take(1).toPromise()
+            .then(res => {
+              this.getCollectionInfo(this.colId)
+                .then((data) => {
+                  this._assets.queryAll(routeParams, true);
 
-              if (!Object.keys(data).length) {
-                throw new Error("No data!");
-              }
+                  if (!Object.keys(data).length) {
+                    throw new Error("No data!");
+                  }
 
-              this.assetCount = data['objCount'];
-              this.colName = data['collectionname'];
-              this.colDescription = data['blurburl'];
-              this.colThumbnail = data['bigimageurl'];
+                  this.assetCount = data['objCount'];
+                  this.colName = data['collectionname'];
+                  this.colDescription = data['blurburl'];
+                  this.colThumbnail = data['bigimageurl'];
 
-              // Set page title
-              this._title.setSubtitle(this.colName)
-            })
-            .catch((error) => {
-              console.error(error);
-              if(error.status === 401){
-                this.showaccessDeniedModal = true;
-              }
-            });
-        }
+                  // Set page title
+                  this._title.setSubtitle(this.colName)
+                })
+                .catch((error) => {
+                  console.error(error);
+                  if(error.status === 401){
+                    this.showaccessDeniedModal = true;
+                  }
+                });
+            }) 
+          }
       })
     );// End push to subscription
 
@@ -98,11 +101,11 @@ export class CollectionPage implements OnInit, OnDestroy {
   * @param colId The collection ID
   */
   private getCollectionInfo(colId: string) {
-      let options = { withCredentials: true };
+    let options = { withCredentials: true };
 
-      return this.http
-          .get(this._auth.getUrl() + '/v1/collections/' + colId, options)
-          .toPromise();
+    return this.http
+      .get(this._auth.getUrl() + '/collections/' + colId, options)
+      .toPromise();
   }
 
 
