@@ -6,14 +6,16 @@ import { Subject } from 'rxjs/Subject'
 export class TagFiltersService {
 
   private _filters: TagFilter[] = []
+  private _selectedFilters: TagFilter[] = []
   private _updateFilters: EventEmitter<any>
+  public showRemainTags: boolean = false
 
   public filterKeys: Subject<string[]> = new Subject()
 
   constructor(
     // don't put other services in here
     // data should be set from outside, and this service stores and curates it
-  ) {
+  ) { 
     this._updateFilters = new EventEmitter()
     // whenever a tag is updated, redistribute the tag filters string which is curated here
     this._updateFilters.subscribe((filter) => {
@@ -23,6 +25,10 @@ export class TagFiltersService {
 
   get filters() {
     return this._filters
+  }
+
+  get selectedFilters() {
+    return this._selectedFilters
   }
 
   /**
@@ -62,6 +68,18 @@ export class TagFiltersService {
       newFilters.push(new TagFilter(filter, this._updateFilters, isSelected))
     })
     this._filters = newFilters
+
+    this._selectedFilters = []
+    for (let tag of this._filters) {
+      if (tag.selected) {
+        // Push the selected filters to the top of the filter list
+        this._filters.splice(this._filters.indexOf(tag), 1)
+        this._filters.unshift(tag)
+
+        // Construct selectedFilters to show them on top of the image groups
+        this._selectedFilters.push(tag)
+      }
+    }
   }
 
   /**
