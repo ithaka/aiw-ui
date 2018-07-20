@@ -10,16 +10,17 @@
       div(*ngFor="let filter of groupFilterArray")
         button.filter.filter--tag((click)="setSearchLevel(filter.level, true)", [class.active]="filter.selected", [attr.title]="'Filter by ' + filter.label + ' image groups'")
           | {{ filter.label }}
-    ang-tags-list([browseLevel]="selectedBrowseLevel")
+        //- button.filter.filter--tag((click)="setSearchLevel(, true)", [class.active]="filter.selected", [attr.title]="'Filter by ' + filter.label + ' image groups'")
+    ang-tags-list([browseLevel]="selectedFilter.level")
   .col-md-9
     ang-general-search([updateSearchTerm]="updateSearchTerm", [init]="searchTerm", (executeSearch)="addQueryParams({ term: $event }, false)")
     h3.pb-1.px-2 Groups     
       pagination([pageObj]="pagination", (goToPage)="goToPage($event)", [right]="true")
     .group-list.has-icon-overlay.px-2
-      .alert.alert-warning(*ngIf="errorObj[selectedBrowseLevel]", [innerHtml]="errorObj[selectedBrowseLevel]")
+      .alert.alert-warning(*ngIf="errorObj[selectedFilter.level]", [innerHtml]="errorObj[selectedFilter.level]")
       .alert.alert-info(*ngIf="showSearchPrompt") {{ 'BROWSE.ERRORS.SEARCH_PROMPT' | translate }}
       ng-container(*ngIf="showCardView")
-        ang-card-view(*ngFor="let tag of tags; let i=index;", [tag]="tag", [group]="groups[i]", [browseLevel]="selectedBrowseLevel", link="true")
+        ang-card-view(*ngFor="let tag of tags; let i=index;", [tag]="tag", [group]="groups[i]", [browseLevel]="selectedFilter.level", link="true")
       ng-container(*ngIf="!showCardView")
         ang-tag(*ngFor="let tag of tags", [tag]="tag", link="true")  
 .row.has-icon-overlay(*ngIf="loading")
@@ -28,5 +29,5 @@
 .alert.alert-info(*ngIf="tags.length < 1 && !loading")
   h3 {{ 'BROWSE.ERRORS.NO_GROUPS_COLLECTIONS_HEADING' | translate }}
   br
-  div(*ngIf="selectedBrowseLevel === 'private'", [innerHtml]="'BROWSE.ERRORS.NO_PRIVATE_GROUPS_COLLECTIONS_PROMPT' | translate")
-  div(*ngIf="selectedBrowseLevel === 'institution'", [innerHtml]="'BROWSE.ERRORS.NO_INSTITUTIONAL_GROUPS_COLLECTIONS_PROMPT' | translate")
+  div(*ngIf="selectedFilter.level === 'private'", [innerHtml]="'BROWSE.ERRORS.NO_PRIVATE_GROUPS_COLLECTIONS_PROMPT' | translate")
+  div(*ngIf="selectedFilter.level === 'institution'", [innerHtml]="'BROWSE.ERRORS.NO_INSTITUTIONAL_GROUPS_COLLECTIONS_PROMPT' | translate")
