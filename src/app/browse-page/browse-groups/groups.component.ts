@@ -75,6 +75,11 @@ export class BrowseGroupsComponent implements OnInit {
         label: 'Private',
         level: 'private'
       })
+
+      this.groupFilterArray.push({
+        label: 'Shared',
+        level: 'shared'
+      })
     }
 
     this.groupFilterArray.push({
