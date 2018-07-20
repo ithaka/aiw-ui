@@ -1,3 +1,4 @@
+/* tslint:disable:no-unused-variable */
 import { inject, TestBed } from '@angular/core/testing';
 import { Component } from '@angular/core';
 // import { BaseRequestOptions, ConnectionBackend, Http } from '@angular/http';
@@ -11,7 +12,7 @@ import {
   //RawSearchAsset,
   RawSearchResponse,
   // HierarchicalFilter,
-} from './asset-search.service'
+} from './asset-search.service';
 
 //import { AuthService } from './'
 //import { AppConfig } from '../app.service'
@@ -86,20 +87,16 @@ let mockSearchInput = {
 // )
 
 describe('Search Service', () => {
-
   // provide our implementations or mocks to the dependency injector
-  beforeEach(() => TestBed.configureTestingModule({
-    providers: [ { provide: AssetSearchService }]
-  }));
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      providers: [AssetSearchService]
+    });
+  });
 
-  fit('initial AssetSearchService should be of type AssetSearchService', inject([AssetSearchService], (searchService: AssetSearchService) => {
+  fit('initial AssetSearchService should exist', inject([AssetSearchService], (service: AssetSearchService) => {
+    expect(service).toBeTruthy();
 
-    expect(typeof(searchService)).toBe('AssetSearchService')
-    // searchService.search().take(1).subscribe(
-    //   data => {
-    //     expect(data.size).toBe(24);
-    //   }
-    // );
   }));
 
   // it('should have default data', inject([ Search ], (search: Search) => {
