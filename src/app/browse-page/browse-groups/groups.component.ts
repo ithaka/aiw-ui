@@ -53,6 +53,7 @@ export class BrowseGroupsComponent implements OnInit {
     private _title: TitleService,
     private route: ActivatedRoute
   ) {
+    let isLoggedIn = this._auth.getUser() && this._auth.getUser().isLoggedIn
     this.showArtstorCurated = _appConfig.config.showArtstorCurated
 
     this.groupFilterArray.push({
@@ -60,7 +61,8 @@ export class BrowseGroupsComponent implements OnInit {
       level: 'all'
     })
 
-    if (this._auth.getUser() && this._auth.getUser().isLoggedIn) {
+    // If Logged In, default to My Groups
+    if (isLoggedIn) {
       this.groupFilterArray.push({
         label: 'My Groups',
         level: 'private',
@@ -68,12 +70,14 @@ export class BrowseGroupsComponent implements OnInit {
       })
     }
 
+    // If NOT Logged In, default to Institutional
     this.groupFilterArray.push({
       label: 'Institutional',
-      level: 'institution'
+      level: 'institution',
+      selected: !isLoggedIn
     })
 
-    if (this._auth.getUser() && this._auth.getUser().isLoggedIn) {
+    if (isLoggedIn) {
       this.groupFilterArray.push({
         label: 'Shared with Me',
         level: 'shared'
