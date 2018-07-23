@@ -85,6 +85,9 @@ export class AuthService implements CanActivate {
     this.subdomain = 'library'
     this.solrUrl = '/api/search/v1.0/search'
 
+    // Set WLV variables
+    this.isOpenAccess = this._app.config.isOpenAccess
+
     let testHostnames = [
       'localhost',
       'local.artstor.org',
@@ -129,7 +132,6 @@ export class AuthService implements CanActivate {
       this.solrUrl = '/api/search/v1.0/search'
       this.IIIFUrl = '//tsstage.artstor.org/rosa-iiif-endpoint-1.0-SNAPSHOT/fpx'
       this.ENV = 'test'
-      this.isOpenAccess = this._app.config.isOpenAccess
     }
 
     // Additional Local dev domains
