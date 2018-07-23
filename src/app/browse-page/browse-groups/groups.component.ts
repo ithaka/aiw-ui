@@ -45,14 +45,13 @@ export class BrowseGroupsComponent implements OnInit {
   private errorObj: any = {}
 
   constructor(
+    _appConfig: AppConfig,
     private _router: Router,
-    private _assets: AssetService,
     private _groups: GroupService,
     private _tagFilters: TagFiltersService,
     private _auth: AuthService,
     private _title: TitleService,
-    private route: ActivatedRoute,
-    private _appConfig: AppConfig
+    private route: ActivatedRoute
   ) {
     this.showArtstorCurated = _appConfig.config.showArtstorCurated
 
@@ -121,10 +120,10 @@ export class BrowseGroupsComponent implements OnInit {
 
     if (!filter) {
       filter = this.groupFilterArray.find((filter) => {
-        return filter.level == 'private'
+        return filter.level == 'institution'
       })
     }
-
+    filter.selected = true
     return filter
   }
 
