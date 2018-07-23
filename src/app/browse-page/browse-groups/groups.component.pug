@@ -14,7 +14,7 @@
     ang-tags-list(*ngIf="selectedFilter")
   .col-md-9
     ang-general-search([updateSearchTerm]="updateSearchTerm", [init]="searchTerm", (executeSearch)="addQueryParams({ term: $event }, false)")
-    h3.pb-1.px-2 Groups     
+    h3.pb-1.px-2 {{ selectedFilter.label }}     
       pagination([pageObj]="pagination", (goToPage)="goToPage($event)", [right]="true")
     h3.pb-1.px-2(*ngIf="_tagFilters.selectedFilters.length>0") Tags:
       .filter.filter--aboveGroup(*ngFor="let tag of _tagFilters.selectedFilters", (click)="tag.selected = !tag.selected", [class.active]="tag.selected")
