@@ -47,53 +47,11 @@ export class CollectionPage implements OnInit, OnDestroy {
   ngOnInit() {
     this.subscriptions.push(
       this._auth.currentUser.subscribe((user) => {
-        // userSessionFresh: Do not attempt to load asset until we know user object is fresh
+        // userSessionFresh: Do not attempt to call collection endpoint until we know user object is fresh
         if (!this.userSessionFresh && this._auth.userSessionFresh) {
-            this.userSessionFresh = true
-
-      this.route.params.subscribe((routeParams) => {
-        this.colId = routeParams["colId"];
-        // Old links pass a name into the ID, just use that as a search term instead
-        if (!/^[0-9]+$/.test(this.colId)) {
-          this.http.get('/assets/collection-links.json')
-            .subscribe(data => {
-              let linkObj = data
-              let link = linkObj[this.colId]
-              if (link) {
-                this._router.navigateByUrl(link)
-              } else {
-                this._router.navigate(['/search', this.colId.replace('_', ' ')])
-              }
-            })
-        } else if (this.colId) {
-          this._assets.clearAssets();
-          this.getCollectionInfo(this.colId)
-            .then((data) => {
-              this._assets.queryAll(routeParams, true);
-
-              if (!Object.keys(data).length) {
-                throw new Error("No data!");
-              }
-
-              this.assetCount = data['objCount'];
-              this.colName = data['collectionname'];
-              this.colDescription = data['blurburl'];
-              this.colThumbnail = data['leadImageURL'] ? data['leadImageURL'] : data['bigimageurl'];
-
-              // Set page title
-              this._title.setSubtitle(this.colName)
-            })
-            .catch((error) => {
-              console.error(error);
-              if(error.status === 401){
-                this.showaccessDeniedModal = true;
-              }
-            });
-        }
-      
-
+          this.userSessionFresh = true       
           this.route.params.subscribe((routeParams) => {
-
+    
             this.colId = routeParams["colId"];
             // Old links pass a name into the ID, just use that as a search term instead
             if (!/^[0-9]+$/.test(this.colId)) {
@@ -109,32 +67,32 @@ export class CollectionPage implements OnInit, OnDestroy {
                 })
             } else if (this.colId) {
               this._assets.clearAssets();
-                  this.getCollectionInfo(this.colId)
-                    .then((data) => {
-                      this._assets.queryAll(routeParams, true);
-    
-                      if (!Object.keys(data).length) {
-                        throw new Error("No data!");
-                      }
-    
-                      this.assetCount = data['objCount'];
-                      this.colName = data['collectionname'];
-                      this.colDescription = data['blurburl'];
-                      this.colThumbnail = data['bigimageurl'];
-    
-                      // Set page title
-                      this._title.setSubtitle(this.colName)
-                    })
-                    .catch((error) => {
-                      console.error(error);
-                      if(error.status === 401){
-                        this.showaccessDeniedModal = true;
-                      }
-                    });
-                }
-          })
-        }
-      )
+                this.getCollectionInfo(this.colId)
+                  .then((data) => {
+                    this._assets.queryAll(routeParams, true);
+  
+                    if (!Object.keys(data).length) {
+                      throw new Error("No data!");
+                    }
+  
+                    this.assetCount = data['objCount'];
+                    this.colName = data['collectionname'];
+                    this.colDescription = data['blurburl'];
+                    this.colThumbnail = data['bigimageurl'];
+  
+                    // Set page title
+                    this._title.setSubtitle(this.colName)
+                  })
+                  .catch((error) => {
+                    console.error(error);
+                    if(error.status === 401){
+                      this.showaccessDeniedModal = true;
+                    }
+                  });
+              }
+          })// End of Route Param Subscription
+        }// End of if
+      })// End of Route param subscription   
     );// End push to subscription
 
   } // OnInit
