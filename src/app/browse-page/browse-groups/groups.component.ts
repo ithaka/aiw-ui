@@ -154,7 +154,7 @@ export class BrowseGroupsComponent implements OnInit {
         let requestedPage: number = Number(query.page)
         // if invalid page, end execution here and navigate to new url with valid page query
         if (requestedPage < 1) {
-          return this.addQueryParams({ page: 1 }, false, query)
+          return this.addQueryParams({ page: 1 }, false, false, query)
         }
         groupQuery.page = requestedPage
       } else {
@@ -269,8 +269,6 @@ export class BrowseGroupsComponent implements OnInit {
       browseLevel = groupQuery.level
     }
 
-    console.log(this.pagination)
-
     this._groups.getAll(
       browseLevel,
       this.pagination.size,
@@ -349,7 +347,7 @@ export class BrowseGroupsComponent implements OnInit {
    * @param params the parameters to add to the url (if duplicate parameters already in url, this will overwrite them)
    * @param reset allows resetting of queryParams to empty object plus whatever params you pass, instead of keeping old params
    */
-  private addQueryParams(params: { [key: string]: any }, reset?: boolean, currentParams?: any) {
+  private addQueryParams(params: { [key: string]: any }, reset?: boolean, searchWithTerm?: boolean, currentParams?: any) {
     let baseParams
     if (reset) {
       baseParams = {}
@@ -358,7 +356,8 @@ export class BrowseGroupsComponent implements OnInit {
     } else {
       baseParams = Object.assign({}, this.route.snapshot.queryParams)
     }
-    if(baseParams['id']){
+    if (searchWithTerm && baseParams['id']) {
+      delete baseParams['tags']
       delete baseParams['id']
     }
     let queryParams = Object.assign(baseParams, params)

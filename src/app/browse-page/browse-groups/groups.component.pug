@@ -14,7 +14,7 @@
         //- button.filter.filter--tag((click)="setSearchLevel(, true)", [class.active]="filter.selected", [attr.title]="'Filter by ' + filter.label + ' image groups'")
     ang-tags-list(*ngIf="selectedFilter")
   .col-md-9
-    ang-general-search([updateSearchTerm]="updateSearchTerm", [init]="searchTerm", (executeSearch)="addQueryParams({ term: $event }, false)")
+    ang-general-search([updateSearchTerm]="updateSearchTerm", [init]="searchTerm", (executeSearch)="addQueryParams({ term: $event }, false, true)")
     h3.pb-1.px-2 {{ selectedFilter.label }}     
       pagination([pageObj]="pagination", (goToPage)="goToPage($event)", [right]="true")
     h3.pb-1.px-2(*ngIf="_tagFilters.selectedFilters.length>0") Tags:

@@ -20,6 +20,7 @@ This repository is open sourced by Ithaka as part of our initiative to increase 
     * [Installing](#installing)
     * [Running the app](#running-the-app)
 * [Configuration](#configuration)
+* [Environment Variables](#environment-variables)
 * [WLVs Local Setup](#white-label-verticals)
 * [Styles](#styles)
 * [TypeScript](#typescript)
@@ -205,6 +206,74 @@ npm run build:docker
 NPM and Webpack combine to provide all of our task running needs.
 
 Configuration files live in `config/` for webpack, karma, and protractor.
+
+---
+
+# Environment Variables
+We manager our environment variables at runtime using webpack. To add or update variables, you will need to:
+
+1. Edit the constants and custom plugin in the respective Webpack config (eg. /config/webpack.dev.js):
+```
+/**
+ * Webpack Constants
+ */
+const ENV = process.env.ENV = process.env.NODE_ENV = 'development';
+const API_URL = process.env.API_URL = 'localhost';
+const HMR = helpers.hasProcessFlag('hot');
+const METADATA = webpackMerge(commonConfig.metadata, {
+  host: 'localhost',
+  API_URL: API_URL,
+  port: 8080,
+  ENV: ENV,
+  HMR: HMR
+});
+
+```
+
+In the plugin section, add the new entry in the list:
+
+```
+plugins: [
+
+    /**
+     * Plugin: DefinePlugin
+     * Description: Define free variables.
+     * Useful for having development builds with debug logging or adding global constants.
+     *
+     * Environment helpers
+     *
+     * See: https://webpack.github.io/docs/list-of-plugins.html#defineplugin
+     */
+    // NOTE: when adding more properties, make sure you include them in custom-typings.d.ts
+    new DefinePlugin({
+      'ENV': JSON.stringify(METADATA.ENV),
+      'API_URL': JSON.stringify(METADATA.API_URL),
+      'HMR': METADATA.HMR,
+      'process.env': {
+        'ENV': JSON.stringify(METADATA.ENV),
+        'NODE_ENV': JSON.stringify(METADATA.ENV),
+        'HMR': METADATA.HMR,
+        'API_URL' : JSON.stringify(METADATA.API_URL),
+      }
+    }),
+  ],
+  ```
+
+And to allow access to the variable within the app, we'll need to let Typescript know it exists using 
+ /src/custom-typings.d.ts :
+
+```
+// Extra variables that live on Global that will be replaced by webpack DefinePlugin
+declare var ENV: string;
+declare var HMR: boolean;
+declare var API_URL: string;
+
+interface GlobalEnvironment {
+  ENV;
+  HMR;
+  API_URL;
+}
+```
 
 ---
 
