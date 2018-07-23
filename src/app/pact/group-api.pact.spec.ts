@@ -69,7 +69,7 @@ describe("Group Calls #pact", () => {
 
       it("should return a Group List object", function(done) {
         //Run the tests
-        _groups.getAll('public')
+        _groups.getAll('public', 48, 0)
           .subscribe(res => {
             expect(res).toEqual(expectedGroupList)
             done()

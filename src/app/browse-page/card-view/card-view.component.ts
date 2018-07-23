@@ -106,7 +106,7 @@ export class CardViewComponent implements OnInit {
   private updateUrl(tag: string): void {
     let queryParams: any = Object.assign({}, this.route.snapshot.queryParams)
     delete queryParams['tags']
-    queryParams = Object.assign({}, {'tags': tag})
+    queryParams = Object.assign(queryParams, {'tags': tag})
 
     this._router.navigate(['/browse','groups', this.browseLevel], { queryParams: queryParams })
   }
