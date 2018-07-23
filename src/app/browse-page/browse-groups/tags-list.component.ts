@@ -10,8 +10,6 @@ import { TagFiltersService } from './tag-filters.service'
 })
 
 export class TagsListComponent implements OnInit {
-  @Input() browseLevel: string
-
   private subscriptions: Subscription[] = []
 
   constructor(
@@ -38,6 +36,6 @@ export class TagsListComponent implements OnInit {
       delete queryParams['tags']
     }
 
-    this._router.navigate(['/browse','groups', this.browseLevel], { queryParams: queryParams })
+    this._router.navigate(['/browse','groups'], { queryParams: queryParams })
   }
 }

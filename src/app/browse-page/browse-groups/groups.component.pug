@@ -11,7 +11,7 @@
         button.filter.filter--tag((click)="setSearchLevel(filter.level, true)", [class.active]="filter.selected", [attr.title]="'Filter by ' + filter.label + ' image groups'")
           | {{ filter.label }}
         //- button.filter.filter--tag((click)="setSearchLevel(, true)", [class.active]="filter.selected", [attr.title]="'Filter by ' + filter.label + ' image groups'")
-    ang-tags-list(*ngIf="selectedFilter", [browseLevel]="selectedFilter.level")
+    ang-tags-list(*ngIf="selectedFilter")
   .col-md-9
     ang-general-search([updateSearchTerm]="updateSearchTerm", [init]="searchTerm", (executeSearch)="addQueryParams({ term: $event }, false)")
     h3.pb-1.px-2 Groups     

@@ -58,13 +58,9 @@ export class BrowseGroupsComponent implements OnInit {
 
     if (this._auth.getUser() && this._auth.getUser().isLoggedIn) {
       this.groupFilterArray.push({
-        label: 'Private',
-        level: 'private'
-      })
-
-      this.groupFilterArray.push({
-        label: 'Shared with Me',
-        level: 'shared'
+        label: 'My Groups',
+        level: 'private',
+        selected: true
       })
     }
 
@@ -72,6 +68,13 @@ export class BrowseGroupsComponent implements OnInit {
       label: 'Institutional',
       level: 'institution'
     })
+
+    if (this._auth.getUser() && this._auth.getUser().isLoggedIn) {
+      this.groupFilterArray.push({
+        label: 'Shared with Me',
+        level: 'shared'
+      })
+    }
 
     if (this.showArtstorCurated) {
       this.groupFilterArray.push({
@@ -111,7 +114,13 @@ export class BrowseGroupsComponent implements OnInit {
       return filter.selected
     })
 
-    return filter || { label: 'none', level: 'none' }
+    if (!filter) {
+      filter = this.groupFilterArray.find((filter) => {
+        return filter.level == 'private'
+      })
+    }
+
+    return filter
   }
 
   /** Every time the url updates, we process the new tags and reload image groups if the tags query param changes */
@@ -176,7 +185,7 @@ export class BrowseGroupsComponent implements OnInit {
    * @param level The level param you want to search groups with
    */
   private setSearchLevel(level: string, navigate?: boolean): void {
-    if (!level) { level = 'all' }
+    if (!level) { level = 'private' }
     this.groupFilterArray.forEach((filter) => {
       if (filter.level !== level) {
         filter.selected = false
