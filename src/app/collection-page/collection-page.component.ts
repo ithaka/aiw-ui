@@ -30,6 +30,7 @@ export class CollectionPage implements OnInit, OnDestroy {
   private showaccessDeniedModal: boolean = false;
 
   private subscriptions: Subscription[] = [];
+  private userSessionFresh: boolean = false;
 
   // private searchInResults: boolean = false;
 
@@ -45,49 +46,56 @@ export class CollectionPage implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.subscriptions.push(
-      this.route.params.subscribe((routeParams) => {
-        this.colId = routeParams["colId"];
-        // Old links pass a name into the ID, just use that as a search term instead
-        if (!/^[0-9]+$/.test(this.colId)) {
-          this.http.get('/assets/collection-links.json')
-            .subscribe(data => {
-              let linkObj = data
-              let link = linkObj[this.colId]
-              if (link) {
-                this._router.navigateByUrl(link)
-              } else {
-                this._router.navigate(['/search', this.colId.replace('_', ' ')])
-              }
-            })
-        } else if (this.colId) {
-          this._assets.clearAssets();
-          this._auth.getUserInfo().take(1).toPromise()
-            .then(res => {
-              this.getCollectionInfo(this.colId)
-                .then((data) => {
-                  this._assets.queryAll(routeParams, true);
+      this._auth.currentUser.subscribe((user) => {
+        // userSessionFresh: Do not attempt to load asset until we know user object is fresh
+        if (!this.userSessionFresh && this._auth.userSessionFresh) {
+            this.userSessionFresh = true
+        }
+      
 
-                  if (!Object.keys(data).length) {
-                    throw new Error("No data!");
+          this.route.params.subscribe((routeParams) => {
+
+            this.colId = routeParams["colId"];
+            // Old links pass a name into the ID, just use that as a search term instead
+            if (!/^[0-9]+$/.test(this.colId)) {
+              this.http.get('/assets/collection-links.json')
+                .subscribe(data => {
+                  let linkObj = data
+                  let link = linkObj[this.colId]
+                  if (link) {
+                    this._router.navigateByUrl(link)
+                  } else {
+                    this._router.navigate(['/search', this.colId.replace('_', ' ')])
                   }
-
-                  this.assetCount = data['objCount'];
-                  this.colName = data['collectionname'];
-                  this.colDescription = data['blurburl'];
-                  this.colThumbnail = data['bigimageurl'];
-
-                  // Set page title
-                  this._title.setSubtitle(this.colName)
                 })
-                .catch((error) => {
-                  console.error(error);
-                  if(error.status === 401){
-                    this.showaccessDeniedModal = true;
-                  }
-                });
-            }) 
-          }
-      })
+            } else if (this.colId) {
+              this._assets.clearAssets();
+                  this.getCollectionInfo(this.colId)
+                    .then((data) => {
+                      this._assets.queryAll(routeParams, true);
+    
+                      if (!Object.keys(data).length) {
+                        throw new Error("No data!");
+                      }
+    
+                      this.assetCount = data['objCount'];
+                      this.colName = data['collectionname'];
+                      this.colDescription = data['blurburl'];
+                      this.colThumbnail = data['bigimageurl'];
+    
+                      // Set page title
+                      this._title.setSubtitle(this.colName)
+                    })
+                    .catch((error) => {
+                      console.error(error);
+                      if(error.status === 401){
+                        this.showaccessDeniedModal = true;
+                      }
+                    });
+                }
+          })
+        }
+      )
     );// End push to subscription
 
   } // OnInit
