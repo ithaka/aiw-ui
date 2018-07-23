@@ -90,30 +90,19 @@ describe('Search Service', () => {
   // provide our implementations or mocks to the dependency injector
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [AssetSearchService]
+      providers: [
+        { provide: AssetSearchService, useValue: {}, deps: [] }
+      ]
     });
   });
 
   fit('initial AssetSearchService should exist', inject([AssetSearchService], (service: AssetSearchService) => {
     expect(service).toBeTruthy();
-
   }));
 
-  // it('should have default data', inject([ Search ], (search: Search) => {
-  //   expect(Search.localState).toEqual({ value: '' });
-  // }));
-
-  // it('should have a title', inject([ Search ], (search: Search) => {
-  //   expect(!!Search.title).toEqual(true);
-  // }));
-
-  // it('should log ngOnInit', inject([ Search ], (search: Search) => {
-  //   spyOn(console, 'log');
-  //   expect(console.log).not.toHaveBeenCalled();
-
-  //   Search.ngOnInit();
-  //   expect(console.log).toHaveBeenCalled();
-  // }));
+  fit('initialize AssetSearchService search method', inject([AssetSearchService], (service: AssetSearchService) => {
+    expect(service.search).toBeTruthy();
+  }));
 
 });
 
