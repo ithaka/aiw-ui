@@ -108,7 +108,7 @@ export class CardViewComponent implements OnInit {
     delete queryParams['tags']
     queryParams = Object.assign(queryParams, {'tags': tag})
 
-    this._router.navigate(['/browse','groups', this.browseLevel], { queryParams: queryParams })
+    this._router.navigate(['/browse','groups'], { queryParams: queryParams })
   }
 
   /** Implement the search of owner by owner_id */
