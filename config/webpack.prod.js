@@ -72,7 +72,8 @@ module.exports = function(env) {
        * "/assets" folder:
        * - An Apps-Gateway rule in ArtstorRouting.groovy ensures assets in "/assets" are not re-routed or modified in any way
        */
-      filename: 'assets/[name].[chunkhash].bundle.js?response-cache-control=' + encodeURIComponent('s-maxage=31536000'),
+      // filename: 'assets/[name].[chunkhash].bundle.js?response-cache-control=' + encodeURIComponent('s-maxage=31536000'),
+      filename: '[name].[chunkhash].bundle.js',
 
       /**
        * The filename of the SourceMaps for the JavaScript files.
@@ -88,7 +89,7 @@ module.exports = function(env) {
        *
        * See: http://webpack.github.io/docs/configuration.html#output-chunkfilename
        */
-      chunkFilename: 'assets/[id].[chunkhash].chunk.js'
+      chunkFilename: '[id].[chunkhash].chunk.js'
 
     },
 
