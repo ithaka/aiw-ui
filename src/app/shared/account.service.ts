@@ -25,7 +25,7 @@ export class AccountService {
 
     return this._http.put<UpdateUserResponse>(
       '/api/v1/users',
-      { user: updateBody },
+      updateBody,
       { withCredentials: true }
     )
   }

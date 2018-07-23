@@ -5,7 +5,7 @@ import { AccountService } from './../shared'
 import { PactWeb, Matchers} from '@pact-foundation/pact-web'
 import { HttpClientModule } from '@angular/common/http'
 
-describe("PUT /api/v1/user pact", () => {
+describe("PUT /api/v1/user #pact", () => {
 
   let provider
 
@@ -35,33 +35,12 @@ describe("PUT /api/v1/user pact", () => {
         ]
     })
     const testbed = getTestBed();
-      service = testbed.get(AccountService);
+    service = testbed.get(AccountService);
   })
 
-  describe("update user's first name", () => {
-    const exampleUpdateResponse = {
-      updated: {
-        firstName: 'my updated name'
-      }
-    }
+  describe("update properties on user object", () => {
 
-    beforeAll(function (done) {
-      provider.addInteraction({
-        uponReceiving: 'a request to update a user',
-        withRequest: {
-          method: 'PUT',
-          path: '/api/v1/users'
-        },
-        willRespondWith: {
-          status: 200,
-          headers: { "Content-Type": "application/json" },
-          body: Matchers.somethingLike(exampleUpdateResponse)
-        }
-      })
-      .then(function () { done() }, function (err) { done.fail(err) })
-    })
-
-    let updateObjects: { field: string, value: any }[] = [
+    const updateObjects: { field: string, value: any }[] = [
       {
         field: 'firstName',
         value: 'a new first name!'
@@ -85,48 +64,86 @@ describe("PUT /api/v1/user pact", () => {
       {
         field: 'allowUpdatesSurvey',
         value: true
-      },
-      {
-        field: 'allowSurvey',
-        value: false
-      },
-      {
-        field: 'allowUpdatesSurvey',
-        value: false
       }
     ]
 
-    for(let obj of updateObjects) {
-      fit("should update a user's " + obj.field, (done) => {
-        //Run the tests
-        service.update({ [obj.field]: obj.value })
-          .subscribe(res => {
-            expect(res.updated.firstName).toEqual(obj.value)
-            done()
-          },
-          err => {
-          done.fail(err)
-        })
-      })
-    }
+    beforeAll(async function () {
+      let interactions = []
+      // for(let obj of updateObjects) {
+      //   let body = {
+      //     [obj.field]: obj.value
+      //   }
+      //   interactions.push(
+      //     provider.addInteraction({
+      //       uponReceiving: "a request to update a user's " + obj.field,
+      //       withRequest: {
+      //         method: 'PUT',
+      //         path: '/api/v1/users',
+      //         body: Matchers.somethingLike(body)
+      //       },
+      //       willRespondWith: {
+      //         status: 200
+      //       }
+      //     })
+      //   )
+      // }
 
-    fit("should update all of a users updateable properties", (done) => {
-      let updateObj = {}
-      // get one value for every object
-      for(let obj of updateObjects) {
-        updateObj[obj.field] = obj.value
-      }
+        interactions.push(
+          provider.addInteraction({
+            uponReceiving: "a PUT request",
+            withRequest: {
+              method: 'PUT',
+              path: '/api/v1/users',
+              body: Matchers.somethingLike({ fieldName: 'value' })
+            },
+            willRespondWith: {
+              status: 200
+            }
+          })
+        )
 
-      service.update(updateObj)
-      .subscribe(res => {
-        for(let key in updateObj) {
-          expect(res.updated[key]).toEqual(updateObj[key])
-        }
+      await Promise.all(interactions)
+    })
+
+    it('should work', (done) => {
+      service.update({ firstName: 'corbin' })
+      .subscribe((res) => {
         done()
-      },
-        err => {
+      }, (err) => {
         done.fail(err)
       })
     })
+
+    // for(let obj of updateObjects) {
+    //   it("should update a user's " + obj.field, (done) => {
+    //     //Run the tests
+    //     service.update({ [obj.field]: obj.value })
+    //       .subscribe(res => {
+    //         done()
+    //       },
+    //       err => {
+    //         done.fail(err)
+    //     })
+    //   })
+    // }
+
+    // it("should update all of a users updateable properties", (done) => {
+    //   let updateObj = {}
+    //   // get one value for every object
+    //   for(let obj of updateObjects) {
+    //     updateObj[obj.field] = obj.value
+    //   }
+
+    //   service.update(updateObj)
+    //   .subscribe(res => {
+    //     for(let key in updateObj) {
+    //       expect(res.updated[key]).toEqual(updateObj[key])
+    //     }
+    //     done()
+    //   },
+    //     err => {
+    //     done.fail(err)
+    //   })
+    // })
   })
 })
