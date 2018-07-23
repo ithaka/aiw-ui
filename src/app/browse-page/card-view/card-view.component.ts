@@ -116,7 +116,7 @@ export class CardViewComponent implements OnInit {
     let queryParams: GroupQuery = Object.assign({}, this.route.snapshot.queryParams)
     queryParams.level = 'all'
     delete queryParams['term']
-    queryParams = Object.assign({}, {'term': imageGroup.owner_name, 'id': imageGroup.owner_id})
+    Object.assign(queryParams, {'term': imageGroup.owner_name, 'id': imageGroup.owner_id})
     this._router.navigate(['/browse','groups'], { queryParams: queryParams })
   }
 
