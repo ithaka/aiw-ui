@@ -11,7 +11,7 @@ import { AppConfig } from '../../app.service';
 @Component({
   selector: 'ang-browse-groups',
   templateUrl: 'groups.component.pug',
-  styleUrls: [ './../browse-page.component.scss' ]
+  styleUrls: [ './../browse-page.component.scss', './groups.component.scss' ]
 })
 export class BrowseGroupsComponent implements OnInit {
   private showArtstorCurated: boolean = true
