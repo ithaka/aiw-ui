@@ -11,10 +11,10 @@ export class AccountService {
     const updatableFields: string[] = [
       'firstName',
       'lastName',
-      'role',
-      'dept',
-      'newsletter_pref',
-      'survey_pref'
+      'departmentRole',
+      'department',
+      'allowUpdatesSurvey',
+      'allowSurvey'
     ]
     let updateBody = {}
 
@@ -25,7 +25,7 @@ export class AccountService {
 
     return this._http.put<UpdateUserResponse>(
       '/api/v1/users',
-      { user: updateBody },
+      updateBody,
       { withCredentials: true }
     )
   }

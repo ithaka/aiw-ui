@@ -5,7 +5,7 @@ import { AccountService } from './../shared'
 import { PactWeb, Matchers} from '@pact-foundation/pact-web'
 import { HttpClientModule } from '@angular/common/http'
 
-describe("PUT /api/v1/user pact", () => {
+describe("PUT /api/v1/user #pact", () => {
 
   let provider
 
@@ -38,6 +38,33 @@ describe("PUT /api/v1/user pact", () => {
       service = testbed.get(AccountService);
   })
 
+  const updateObjects: { field: string, value: any }[] = [
+    {
+      field: 'firstName',
+      value: 'my updated name'
+    },
+    {
+      field: 'lastName',
+      value: 'a new last name!'
+    },
+    {
+      field: 'departmentRole',
+      value: 'a new role for the user!'
+    },
+    {
+      field: 'department',
+      value: 'a new department!'
+    },
+    {
+      field: 'allowSurvey',
+      value: true
+    },
+    {
+      field: 'allowUpdatesSurvey',
+      value: true
+    }
+  ]
+
   describe("update user's first name", () => {
     const exampleUpdateResponse = {
       updated: {
@@ -61,43 +88,8 @@ describe("PUT /api/v1/user pact", () => {
       .then(function () { done() }, function (err) { done.fail(err) })
     })
 
-    let updateObjects: { field: string, value: any }[] = [
-      {
-        field: 'firstName',
-        value: 'a new first name!'
-      },
-      {
-        field: 'lastName',
-        value: 'a new last name!'
-      },
-      {
-        field: 'departmentRole',
-        value: 'a new role for the user!'
-      },
-      {
-        field: 'department',
-        value: 'a new department!'
-      },
-      {
-        field: 'allowSurvey',
-        value: true
-      },
-      {
-        field: 'allowUpdatesSurvey',
-        value: true
-      },
-      {
-        field: 'allowSurvey',
-        value: false
-      },
-      {
-        field: 'allowUpdatesSurvey',
-        value: false
-      }
-    ]
-
     for(let obj of updateObjects) {
-      fit("should update a user's " + obj.field, (done) => {
+      it("should update a user's " + obj.field, (done) => {
         //Run the tests
         service.update({ [obj.field]: obj.value })
           .subscribe(res => {
@@ -110,7 +102,7 @@ describe("PUT /api/v1/user pact", () => {
       })
     }
 
-    fit("should update all of a users updateable properties", (done) => {
+    it("should update all of a users updateable properties", (done) => {
       let updateObj = {}
       // get one value for every object
       for(let obj of updateObjects) {
