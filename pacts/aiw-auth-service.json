@@ -1,0 +1,38 @@
+{
+  "consumer": {
+    "name": "aiw"
+  },
+  "provider": {
+    "name": "auth-service"
+  },
+  "interactions": [
+    {
+      "description": "a request to update a user",
+      "request": {
+        "method": "PUT",
+        "path": "/api/v1/users"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "updated": {
+            "firstName": "my updated name"
+          }
+        },
+        "matchingRules": {
+          "$.body": {
+            "match": "type"
+          }
+        }
+      }
+    }
+  ],
+  "metadata": {
+    "pactSpecification": {
+      "version": "2.0.0"
+    }
+  }
+}

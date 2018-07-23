@@ -61,18 +61,53 @@ describe("PUT /api/v1/user pact", () => {
       .then(function () { done() }, function (err) { done.fail(err) })
     })
 
-    it("should update a user", function(done) {
-      let testName: string = 'a new first name!'
+    let updateObjects: { field: string, value: any }[] = [
+      {
+        field: 'firstName',
+        value: 'a new first name!'
+      },
+      {
+        field: 'lastName',
+        value: 'a new last name!'
+      },
+      {
+        field: 'artstorDeptRole',
+        value: 'a new role for the user!'
+      },
+      {
+        field: 'artstorDepartment',
+        value: 'a new department!'
+      },
+      {
+        field: 'artstorAllowSurvey',
+        value: true
+      },
+      {
+        field: 'artstorAllowUpdatesSurvey',
+        value: true
+      },
+      {
+        field: 'artstorAllowSurvey',
+        value: false
+      },
+      {
+        field: 'artstorAllowUpdatesSurvey',
+        value: false
+      }
+    ]
 
-      //Run the tests
-      service.update({ firstName: testName })
-        .subscribe(res => {
-          expect(res.updated.firstName).toEqual(testName)
-          done()
-        },
-        err => {
-        done.fail(err)
+    for(let obj of updateObjects) {
+      fit("should update a user's " + obj.field, (done) => {
+        //Run the tests
+        service.update({ [obj.field]: obj.value })
+          .subscribe(res => {
+            expect(res.updated.firstName).toEqual(obj.value)
+            done()
+          },
+          err => {
+          done.fail(err)
+        })
       })
-    })
+    }
   })
 })
