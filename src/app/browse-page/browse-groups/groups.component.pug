@@ -6,7 +6,8 @@
   .col-md-3.hidden-sm-down
     //- .filter-list-wrap
     #searchFilterList.mb-3.filter-list
-      h3 Group Type Filter
+      h3.pt-2 Groups
+      hr
       div(*ngFor="let filter of groupFilterArray")
         button.filter.filter--tag.group-filter((click)="setSearchLevel(filter.level, true)", [class.active]="filter.selected", [attr.title]="'Filter by ' + filter.label + ' image groups'")
           | {{ filter.label }}
