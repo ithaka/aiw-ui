@@ -42,7 +42,6 @@ export class BrowseGroupsComponent implements OnInit {
 
   // private selectedBrowseLevel: string
   private groupFilterArray: GroupFilter[] = []
-  private showSearchPrompt: boolean = false
   private errorObj: any = {}
 
   constructor(
@@ -57,19 +56,6 @@ export class BrowseGroupsComponent implements OnInit {
   ) {
     this.showArtstorCurated = _appConfig.config.showArtstorCurated
 
-    // if (this.showArtstorCurated) {
-    //   this.selectedBrowseLevel = 'public'
-    // } else {
-    //   this.selectedBrowseLevel = 'institution'
-    // }
-
-    /** Here, we push in all of the options for different browse levels the user has access to */
-    this.groupFilterArray.push({
-      label: 'All',
-      level: 'all',
-      selected: true // initialize with all groups selected
-    })
-
     if (this._auth.getUser() && this._auth.getUser().isLoggedIn) {
       this.groupFilterArray.push({
         label: 'Private',
@@ -77,7 +63,7 @@ export class BrowseGroupsComponent implements OnInit {
       })
 
       this.groupFilterArray.push({
-        label: 'Shared',
+        label: 'Shared with Me',
         level: 'shared'
       })
     }
@@ -91,13 +77,6 @@ export class BrowseGroupsComponent implements OnInit {
       this.groupFilterArray.push({
         label: 'Artstor Curated',
         level: 'public'
-      })
-    }
-
-    if (this._auth.getUser() && this._auth.getUser().isLoggedIn) {
-      this.groupFilterArray.push({
-        label: 'Shared with Me',
-        level: 'shared'
       })
     }
 
@@ -128,9 +107,11 @@ export class BrowseGroupsComponent implements OnInit {
 
   // find which of the filters is selected
   private get selectedFilter(): GroupFilter {
-    return this.groupFilterArray.find((filter) => {
+    let filter: GroupFilter = this.groupFilterArray.find((filter) => {
       return filter.selected
     })
+
+    return filter || { label: 'none', level: 'none' }
   }
 
   /** Every time the url updates, we process the new tags and reload image groups if the tags query param changes */
@@ -345,9 +326,6 @@ export class BrowseGroupsComponent implements OnInit {
       this.tags = []
       this.pagination.page = 1
       this.pagination.totalPages = 1
-      this.showSearchPrompt = true
-    } else {
-      this.showSearchPrompt = false
     }
 
     return search
