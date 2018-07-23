@@ -71,27 +71,27 @@ describe("PUT /api/v1/user pact", () => {
         value: 'a new last name!'
       },
       {
-        field: 'artstorDeptRole',
+        field: 'departmentRole',
         value: 'a new role for the user!'
       },
       {
-        field: 'artstorDepartment',
+        field: 'department',
         value: 'a new department!'
       },
       {
-        field: 'artstorAllowSurvey',
+        field: 'allowSurvey',
         value: true
       },
       {
-        field: 'artstorAllowUpdatesSurvey',
+        field: 'allowUpdatesSurvey',
         value: true
       },
       {
-        field: 'artstorAllowSurvey',
+        field: 'allowSurvey',
         value: false
       },
       {
-        field: 'artstorAllowUpdatesSurvey',
+        field: 'allowUpdatesSurvey',
         value: false
       }
     ]
@@ -124,9 +124,9 @@ describe("PUT /api/v1/user pact", () => {
         }
         done()
       },
-      err => {
-      done.fail(err)
-    })
+        err => {
+        done.fail(err)
+      })
     })
   })
 })
