@@ -109,5 +109,24 @@ describe("PUT /api/v1/user pact", () => {
         })
       })
     }
+
+    fit("should update all of a users updateable properties", (done) => {
+      let updateObj = {}
+      // get one value for every object
+      for(let obj of updateObjects) {
+        updateObj[obj.field] = obj.value
+      }
+
+      service.update(updateObj)
+      .subscribe(res => {
+        for(let key in updateObj) {
+          expect(res.updated[key]).toEqual(updateObj[key])
+        }
+        done()
+      },
+      err => {
+      done.fail(err)
+    })
+    })
   })
 })
