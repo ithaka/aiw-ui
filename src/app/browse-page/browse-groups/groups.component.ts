@@ -157,6 +157,8 @@ export class BrowseGroupsComponent implements OnInit {
           return this.addQueryParams({ page: 1 }, false, query)
         }
         groupQuery.page = requestedPage
+      } else {
+        groupQuery.page = 1
       }
 
       if (query.level) {
@@ -266,6 +268,8 @@ export class BrowseGroupsComponent implements OnInit {
     } else {
       browseLevel = groupQuery.level
     }
+
+    console.log(this.pagination)
 
     this._groups.getAll(
       browseLevel,
