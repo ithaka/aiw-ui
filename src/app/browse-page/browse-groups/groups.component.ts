@@ -56,6 +56,11 @@ export class BrowseGroupsComponent implements OnInit {
   ) {
     this.showArtstorCurated = _appConfig.config.showArtstorCurated
 
+    this.groupFilterArray.push({
+      label: 'All',
+      level: 'all'
+    })
+
     if (this._auth.getUser() && this._auth.getUser().isLoggedIn) {
       this.groupFilterArray.push({
         label: 'My Groups',
@@ -372,7 +377,7 @@ interface GroupFilter {
   selected?: boolean
 }
 
-interface GroupQuery {
+export interface GroupQuery {
   page?: number
   level?: string
   tags?: string[]
