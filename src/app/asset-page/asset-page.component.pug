@@ -13,27 +13,28 @@
         span#assetPageCount {{ totalAssetCount - restrictedAssetsCount }}
     //- Asset Viewer Row
     .asset-col([ngClass]="[ isFullscreen ? 'fullscreen-container' : 'col-md-8', showAssetDrawer && isFullscreen ? 'drawer' : '' ]")
-      artstor-viewer(*ngFor="let assetId of (isFullscreen ? assetIds : [assetIds[0]]); let i = index",
-        [testEnv]="_auth.getEnv() === 'test'",
-        [assetId]="assetId",
-        [encrypted]="encryptedAccess",
-        [groupId]="assetGroupId",
-        (assetMetadata)="handleLoadedMetadata($event, i)",
-        [ngClass]="[ 'asset-viewer-' + assetIds.length ]",
-        (fullscreenChange)="updateFullscreenVar($event)",
-        [index]="i",
-        [assetCompareCount]="assets.length",
-        [assetNumber]="assetNumber",
-        [assetGroupCount]="totalAssetCount - restrictedAssetsCount",
-        [assets]="assets",
-        [isFullscreen]="isFullscreen",
-        [showCaption]="showAssetCaption",
-        [quizMode]="quizMode",
-        [prevAssetResults]="prevAssetResults",
-        (removeAsset)="toggleAsset($event)",
-        (nextPage)="showNextAsset()",
-        (prevPage)="showPrevAsset()",
-        (assetDrawer)="toggleAssetDrawer(!showAssetDrawer)")
+      ng-container(*ngIf="userSessionFresh")
+        artstor-viewer(*ngFor="let assetId of (isFullscreen ? assetIds : [assetIds[0]]); let i = index",
+          [testEnv]="_auth.getEnv() === 'test'",
+          [assetId]="assetId",
+          [encrypted]="encryptedAccess",
+          [groupId]="assetGroupId",
+          (assetMetadata)="handleLoadedMetadata($event, i)",
+          [ngClass]="[ 'asset-viewer-' + assetIds.length ]",
+          (fullscreenChange)="updateFullscreenVar($event)",
+          [index]="i",
+          [assetCompareCount]="assets.length",
+          [assetNumber]="assetNumber",
+          [assetGroupCount]="totalAssetCount - restrictedAssetsCount",
+          [assets]="assets",
+          [isFullscreen]="isFullscreen",
+          [showCaption]="showAssetCaption",
+          [quizMode]="quizMode",
+          [prevAssetResults]="prevAssetResults",
+          (removeAsset)="toggleAsset($event)",
+          (nextPage)="showNextAsset()",
+          (prevPage)="showPrevAsset()",
+          (assetDrawer)="toggleAssetDrawer(!showAssetDrawer)")
       //- Related results from JSTOR
       .pl-3(*ngIf="jstorResults.length > 0 && relatedResFlag")
         .row-hdr.pt-3 Related Results from JSTOR
@@ -137,12 +138,12 @@
             ng-container(*ngIf="fieldName != 'Rights'")
               .label([attr.id]="cleanId(fieldName)") {{ fieldName }}
               div(*ngFor="let value of assets[0].formattedMetadata[fieldName]; let i=index")
-                a.value.col-link(*ngIf="(fieldName === 'Collection' && i===0)", [routerLink]="setCollectionLink(assets[0])", [innerHTML]="cleanFieldValue(value) | linkify")
-                .value(*ngIf="(fieldName !== 'Collection' || i!==0)", [innerHTML]="cleanFieldValue(value) | linkify")
+                a.value.col-link(*ngIf="(fieldName === 'Collection' && i===0)", [routerLink]="setCollectionLink(assets[0])", [innerHTML]="cleanFieldValue(value) | linkify", [attr.aria-labelledby]="cleanId(fieldName)")
+                .value(*ngIf="(fieldName !== 'Collection' || i!==0)", [innerHTML]="cleanFieldValue(value) | linkify", [attr.aria-labelledby]="cleanId(fieldName)")
           .meta-block(*ngIf="assets[0].formattedMetadata.Rights && assets[0].formattedMetadata.Rights.length > 0")
             .label#Rights Rights
             div(*ngFor="let right of assets[0].formattedMetadata.Rights")
-              .value([innerHTML]="cleanFieldValue(right) | linkify")
+              .value([innerHTML]="cleanFieldValue(right) | linkify", [attr.aria-labelledby]="'Rights'")
 
           .row-hdr.pt-3(*ngIf="assets[0].filePropertiesArray.length > 0") {{ 'ASSET_PAGE.HEADER_LABELS.FILE_PROPS' | translate}}
           //- Loop through File Properties Array
@@ -151,10 +152,10 @@
           //-     .value([innerHTML]="filePropObj.fieldValue")
           .meta-block(*ngIf="assets[0].fileName")
             .label#fileName {{ 'ASSET_PAGE.METADATA_LABELS.FILE_NAME' | translate }}
-              .value([innerHtml]="assets[0].fileName")
+              .value([innerHtml]="assets[0].fileName", aria-labelledby="fileName")
           .meta-block(*ngIf="assets[0].SSID")
             .label#ssid {{ 'ASSET_PAGE.METADATA_LABELS.SSID' | translate }}
-              .value([innerHtml]="assets[0].SSID")
+              .value([innerHtml]="assets[0].SSID", aria-labelledby="ssid")
           .text-left.pt-2
             a#buttonRequestIap.btn.btn-secondary.my-1(*ngIf="route.snapshot.params.iap == 'true'", [attr.href]="'http://www.artstor.org/form/iap-request-form?name=' + assets[0].title + '&collectionName=' + assets[0].collectionName + '&id=' + assets[0].id + '&email=' + user.username", title="Request Image for Academic Publishing", tabindex="8", target="_blank") {{'ASSET_PAGE.BUTTONS.GET_IAP' | translate}}
             a#buttonReportAssetError.btn.btn-secondary.my-1([attr.href]="getErrorFormUrl(assets[0])", title="Report an error", tabindex="9", target="_blank") {{'ASSET_PAGE.BUTTONS.REPORT_ERROR' | translate}}

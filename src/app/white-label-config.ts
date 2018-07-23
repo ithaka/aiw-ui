@@ -10,6 +10,7 @@ export const WLV_ARTSTOR = {
     siteID: "ARTSTOR",
     logoUrl: "/assets/img/logo-v1-1.png",
     contributingInstFilters : [],
+    isOpenAccess: true,
     footerLinks: [
         "ABOUT",
         "GETTING_STARTED",

@@ -36,7 +36,8 @@ export class AssetPage implements OnInit, OnDestroy {
 
     @ViewChild(ArtstorViewer) assetViewer: any
 
-    private user: any
+    public user: any
+    public userSessionFresh: boolean = false
     private encryptedAccess: boolean = false
     private document = document
     private URL = URL
@@ -169,6 +170,13 @@ export class AssetPage implements OnInit, OnDestroy {
 
         // sets up subscription to allResults, which is the service providing thumbnails
         this.subscriptions.push(
+            this._auth.currentUser.subscribe((user) => {
+                this.user = user
+                // userSessionFresh: Do not attempt to load asset until we know user object is fresh
+                if (!this.userSessionFresh && this._auth.userSessionFresh) {
+                    this.userSessionFresh = true
+                }
+            }),
             this._assets.allResults.subscribe((allResults) => {
                 if (allResults.thumbnails) {
                     // Set asset id property to reference
@@ -361,6 +369,10 @@ export class AssetPage implements OnInit, OnDestroy {
 
 
     handleLoadedMetadata(asset: Asset, assetIndex: number) {
+        // Reset modals if new data comes in
+        this.showAccessDeniedModal = false
+        this.showServerErrorModal = false
+
         if (asset && asset['error']) {
             let err = asset['error']
             if (err.status === 403 || err.message == "Unable to load metadata!") {

@@ -50,6 +50,45 @@ export class CollectionPage implements OnInit, OnDestroy {
         // userSessionFresh: Do not attempt to load asset until we know user object is fresh
         if (!this.userSessionFresh && this._auth.userSessionFresh) {
             this.userSessionFresh = true
+
+      this.route.params.subscribe((routeParams) => {
+        this.colId = routeParams["colId"];
+        // Old links pass a name into the ID, just use that as a search term instead
+        if (!/^[0-9]+$/.test(this.colId)) {
+          this.http.get('/assets/collection-links.json')
+            .subscribe(data => {
+              let linkObj = data
+              let link = linkObj[this.colId]
+              if (link) {
+                this._router.navigateByUrl(link)
+              } else {
+                this._router.navigate(['/search', this.colId.replace('_', ' ')])
+              }
+            })
+        } else if (this.colId) {
+          this._assets.clearAssets();
+          this.getCollectionInfo(this.colId)
+            .then((data) => {
+              this._assets.queryAll(routeParams, true);
+
+              if (!Object.keys(data).length) {
+                throw new Error("No data!");
+              }
+
+              this.assetCount = data['objCount'];
+              this.colName = data['collectionname'];
+              this.colDescription = data['blurburl'];
+              this.colThumbnail = data['leadImageURL'] ? data['leadImageURL'] : data['bigimageurl'];
+
+              // Set page title
+              this._title.setSubtitle(this.colName)
+            })
+            .catch((error) => {
+              console.error(error);
+              if(error.status === 401){
+                this.showaccessDeniedModal = true;
+              }
+            });
         }
       
 
@@ -111,9 +150,11 @@ export class CollectionPage implements OnInit, OnDestroy {
   private getCollectionInfo(colId: string) {
     let options = { withCredentials: true };
 
-    return this.http
-      .get(this._auth.getUrl() + '/collections/' + colId, options)
-      .toPromise();
+
+      return this.http
+          .get(this._auth.getUrl() + '/collections/' + colId, options)
+          .toPromise();
+
   }
 
 

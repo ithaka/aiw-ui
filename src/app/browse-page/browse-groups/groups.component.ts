@@ -138,6 +138,9 @@ export class BrowseGroupsComponent implements OnInit {
     this.subscriptions.push(
       this._router.events.filter(event=>event instanceof NavigationEnd)
       .subscribe(event => {
+        // Set showRemainTags to be false so that the choice of see all tags show up everytime browselevel is changed
+        this._tagFilters.showRemainTags = false
+
         let query = this.route.snapshot.queryParams;
         let params = this.route.snapshot.params;
 

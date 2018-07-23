@@ -162,6 +162,12 @@
     }
   },
   "IMAGE_GROUP_PAGE": {
+    "IG_DOWNLOAD_MODAL": {
+      "TITLE": "Export/Download Guidelines",
+      "TEXT": "<p>All logged in users may export/download up to <b>2000</b> images in a <b>120</b> day period. Multimedia files are not exported.</p><p>Also note that, by accepting this download, you are agreeing to the <a href=\"http://www.artstor.org/terms\" class=\"link\" name=\"Terms and conditions of use\" target=\"_blank\">terms and conditions of use.</a></p><p>Would you like to proceed?</p>",
+      "DOWNLOAD_ERROR_BIG": "We're sorry, we were unable to generate your file. The recommended group size is under 100 images.",
+      "DOWNLOAD_ERROR_SMALL": "We're sorry, we were unable to generate your file. Please try again. If the problem persists, contact us at <a href=\"mailto:support@artstor.org\" class=\"link\" target=\"_blank\">support@artstor.org</a>"
+    },
     "DOWNLOAD_LIMIT_MODAL": {
       "TITLE": "Download Limit Reached",
       "CLOSE_BUTTON": "Ok",
@@ -573,9 +579,9 @@
       ]
     },
     "AD": {
-      "LINK": "https://support.artstor.org/?article=about-public-access-to-artstor",
-      "IMG_SOURCE": "/assets/img/promo_pubcoll.jpg",
-      "ALT_TEXT": "Public Collections in Artstor."
+      "LINK": "https://support.artstor.org/?article=using-your-personal-collection",
+      "IMG_SOURCE": "/assets/img/promo-personalcollections.jpg",
+      "ALT_TEXT": "Upload your images to Artstor."
     },
     "QUESTIONS": {
       "HEADING": "Questions",
@@ -628,7 +634,7 @@
     "MESSAGE": "We are currently experiencing issues with images and downloads due to a power outage. <a href=\"http://support.artstor.org/?article=current-technical-issues-alerts\" target=\"_blank\" class=\"link\">Learn more</a>."
   },
   "DOWNTIME_BANNER": {
-    "MESSAGE": "We're sorry, we're experiencing problems affecting login.  We apologize for the inconvenience, and appreciate your patience. If you have any questions, please <a href=\"mailto:support@artstor.org\" target=\"_blank\" class=\"link\">contact Artstor Support</a> or check <a href=\"https://twitter.com/ArtstorHelp\" target=\"_blank\" class=\"link\">Twitter</a> for additional updates."
+    "MESSAGE": "We're currently experiencing problems affecting the site's performance.  We apologize for the inconvenience, and appreciate your patience. If you have any questions, please <a href=\"mailto:support@artstor.org\" target=\"_blank\" class=\"link\">contact Artstor Support</a> or check <a href=\"https://twitter.com/ArtstorHelp\" target=\"_blank\" class=\"link\">Twitter</a> for additional updates."
   },
   "SEARCH_SKY_BANNER": {
     "MESSAGE": "⚠️ This is a testing instance for the new Search index. Please excuse the broken bits."
