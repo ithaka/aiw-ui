@@ -89,6 +89,8 @@ let mockSearchInput = {
 describe('Search Service', () => {
   // provide our implementations or mocks to the dependency injector
   beforeEach(() => {
+    let assetSearch: AssetSearchService
+
     TestBed.configureTestingModule({
       providers: [
         { provide: AssetSearchService, useValue: {}, deps: [] }
@@ -96,12 +98,21 @@ describe('Search Service', () => {
     });
   });
 
-  fit('initial AssetSearchService should exist', inject([AssetSearchService], (service: AssetSearchService) => {
-    expect(service).toBeTruthy();
+  it('initial AssetSearchService should exist', inject([AssetSearchService], (assetSearch: AssetSearchService) => {
+    expect(assetSearch).toBeTruthy();
   }));
 
-  fit('initialize AssetSearchService search method', inject([AssetSearchService], (service: AssetSearchService) => {
-    expect(service.search).toBeTruthy();
+  /**
+   * Search assets service
+   * @param keyword          String to search for.
+   * @param filters       Array of filter objects (with filterGroup and filterValue properties)
+   * @param sortIndex     An integer representing a type of sort.
+   * @param dateFacet     Object with the dateFacet values
+   * @returns       Returns an object with the properties: thumbnails, count, altKey, classificationFacets, geographyFacets, minDate, maxDate, collTypeFacets, dateFacets
+   */
+
+  it('initialize AssetSearchService search method', inject([AssetSearchService], (assetSearch: AssetSearchService) => {
+    expect(assetSearch.search).toBeDefined();
   }));
 
 });
