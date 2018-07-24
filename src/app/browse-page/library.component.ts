@@ -125,25 +125,13 @@ export class LibraryComponent implements OnInit {
 
         // Fetch browse collection object from local storage & check if the required collection list has already been set
         let storageBrwseColObj = this._storage.get('browseColObject')
-        let hasCategoryTitles = storageBrwseColObj && storageBrwseColObj['categoryid'] && storageBrwseColObj['categoryid'][0].title.length > 0
-        if( storageBrwseColObj && storageBrwseColObj[facetType] && hasCategoryTitles ){
+        
+        let hasCategoryTitles = storageBrwseColObj && storageBrwseColObj[facetType] && storageBrwseColObj[facetType][2].title.length > 0
+        if( storageBrwseColObj && storageBrwseColObj[facetType] && hasCategoryTitles){
           if(facetType === 'artstor-geography'){
             this.hierarchicalFacets = storageBrwseColObj[facetType]
           } else{
-            let categoryFacets: any[] = storageBrwseColObj[facetType]
-
-            // To make the filter work on ADL collection, assign value to this.categoryFacets only if it contains search term
-            if(this.facetQueryMap[facetType] === 'category' && this.searchTerm){
-              for (let facet of categoryFacets) {
-                if (facet.title &&  facet.title.toLowerCase().indexOf(this.searchTerm.toLowerCase()) > -1) {
-                  this.categoryFacets.push(facet)
-                }
-              }
-            }
-            else{
-              this.categoryFacets = categoryFacets
-            }
-              
+            this.categoryFacets = storageBrwseColObj[facetType]       
           }
           this.loading = false
         } else{
@@ -181,17 +169,7 @@ export class LibraryComponent implements OnInit {
                       })
                     this.loading = false
 
-                    // To make the filter work on ADL collection, assign value to this.categoryFacets only if it contains search term
-                    if(this.facetQueryMap[facetType] === 'category' && this.searchTerm){
-                      for (let facet of categoryFacets) {
-                        if (facet.title &&  facet.title.toLowerCase().indexOf(this.searchTerm.toLowerCase()) > -1) {
-                          this.categoryFacets.push(facet)
-                        }
-                      }
-                    }
-                    else{
-                      this.categoryFacets = categoryFacets
-                    }
+                    this.categoryFacets = categoryFacets
 
                     storageBrwseColObj[facetType] = this.categoryFacets
                     this._storage.set('browseColObject', storageBrwseColObj)
@@ -216,17 +194,7 @@ export class LibraryComponent implements OnInit {
                 else return 0
               })
 
-              // To make the filter work on ADL collection, assign value to this.categoryFacets only if it contains search term
-              if(this.facetQueryMap[facetType] === 'category' && this.searchTerm){
-                for (let facet of categoryFacets) {
-                  if (facet.title &&  facet.title.toLowerCase().indexOf(this.searchTerm.toLowerCase()) > -1) {
-                    this.categoryFacets.push(facet)
-                  }
-                }
-              }
-              else{
-                this.categoryFacets = categoryFacets
-              }
+              this.categoryFacets = categoryFacets
 
               this.loading = false
 
