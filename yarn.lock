@@ -9154,6 +9154,12 @@ pug-html-loader@^1.1.5:
     loader-utils "^0.2.17"
     pug "^2.0.0-rc.2"
 
+pug-jest@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/pug-jest/-/pug-jest-1.0.1.tgz#ea823a7dd9b6160b0269878e059e5fcd91f10f68"
+  dependencies:
+    pug "^2.0.0-beta6"
+
 pug-lexer@^4.0.0:
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/pug-lexer/-/pug-lexer-4.0.0.tgz#210c18457ef2e1760242740c5e647bd794cec278"
@@ -9197,7 +9203,7 @@ pug-walk@^1.1.7:
   version "1.1.7"
   resolved "https://registry.yarnpkg.com/pug-walk/-/pug-walk-1.1.7.tgz#c00d5c5128bac5806bec15d2b7e7cdabe42531f3"
 
-pug@^2.0.0-rc.2, pug@^2.0.0-rc.4:
+pug@^2.0.0-beta6, pug@^2.0.0-rc.2, pug@^2.0.0-rc.4:
   version "2.0.3"
   resolved "https://registry.yarnpkg.com/pug/-/pug-2.0.3.tgz#71cba82537c95a5eab7ed04696e4221f53aa878e"
   dependencies:

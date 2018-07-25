@@ -35,7 +35,7 @@
         "github-deploy": "npm run github-deploy:dev",
         "lint": "npm run tslint \"src/**/*.ts\"",
         "local": "yarn run server:local",
-        "pact": "jest -t=\"*.pact.spec.ts\"",
+        "pact": "jest -t=\\.(pact.spec.ts)$",
         "pact:publish": "node config/pact.publish.js",
         "postversion": "git push && git push --tags",
         "prebuild:dev": "npm run clean:dist",
@@ -162,6 +162,7 @@
         "phantomjs": "^2.1.7",
         "protractor": "^5.1.0",
         "protractor-cucumber-framework": "^0.6.0",
+        "pug-jest": "^1.0.1",
         "raw-loader": "^0.5.1",
         "rimraf": "^2.5.4",
         "sass-loader": "^6.0.7",
@@ -196,6 +197,12 @@
     },
     "jest": {
         "preset": "jest-preset-angular",
-        "setupTestFrameworkScriptFile": "<rootDir>/config/jest-setup.ts"
+        "setupTestFrameworkScriptFile": "<rootDir>/config/jest-setup.ts",
+        "globals": {
+            "API_URL": ""
+        },
+        "transform": {
+            "\\.(pug)$": "<rootDir>/node_modules/pug-jest"
+        }
     }
 }
