@@ -21,7 +21,7 @@ const ENV = process.env.ENV = process.env.NODE_ENV = 'development';
 const HOST = process.env.HOST || 'localhost';
 const PORT = process.env.PORT || 3000;
 const HMR = helpers.hasProcessFlag('hot');
-const API_URL = 'stage.artstor.org';
+const API_URL = '//stage.artstor.org';
 const COMMON = commonConfig({env: ENV}).plugins.filter(plugin => plugin.options && plugin.options.metadata)[0].options.metadata;
 const METADATA = webpackMerge(COMMON, {
   host: HOST,
@@ -124,12 +124,12 @@ module.exports = function(options) {
       new DefinePlugin({
         'ENV': JSON.stringify(METADATA.ENV),
         'HMR': METADATA.HMR,
-        'API_URL': METADATA.API_URL,
+        'API_URL': JSON.stringify(METADATA.API_URL),
         'process.env': {
           'ENV': JSON.stringify(METADATA.ENV),
           'NODE_ENV': JSON.stringify(METADATA.ENV),
           'HMR': METADATA.HMR,
-          'API_URL': METADATA.API_URL
+          'API_URL': JSON.stringify(METADATA.API_URL)
         }
       }),
 
