@@ -24,12 +24,15 @@ const ClosureCompilerPlugin = require('webpack-closure-compiler');
 const ENV = process.env.NODE_ENV = process.env.ENV = 'production';
 const HOST = process.env.HOST || 'localhost';
 const PORT = process.env.PORT || 8080;
+// API URL should be left relative for Prod
+const API_URL = '/';
 const COMMON = commonConfig({env: ENV}).plugins.filter(plugin => plugin.options && plugin.options.metadata)[0].options.metadata;
 const METADATA = webpackMerge(COMMON, {
   host: HOST,
   port: PORT,
   ENV: ENV,
-  HMR: false
+  HMR: false,
+  API_URL: API_URL
 });
 
 module.exports = function(env) {
@@ -168,10 +171,12 @@ module.exports = function(env) {
       new DefinePlugin({
         'ENV': JSON.stringify(METADATA.ENV),
         'HMR': METADATA.HMR,
+        'API_URL': JSON.stringify(METADATA.API_URL),
         'process.env': {
           'ENV': JSON.stringify(METADATA.ENV),
           'NODE_ENV': JSON.stringify(METADATA.ENV),
           'HMR': METADATA.HMR,
+          'API_URL': JSON.stringify(METADATA.API_URL)
         }
       }),
       /**
