@@ -353,7 +353,8 @@ export class BrowseGroupsComponent implements OnInit {
     } else {
       baseParams = Object.assign({}, this.route.snapshot.queryParams)
     }
-    if(searchWithTerm && baseParams['id']){
+    if (searchWithTerm && baseParams['id']) {
+      delete baseParams['tags']
       delete baseParams['id']
     }
     let queryParams = Object.assign(baseParams, params)
