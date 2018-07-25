@@ -126,7 +126,7 @@ export class LibraryComponent implements OnInit {
         // Fetch browse collection object from local storage & check if the required collection list has already been set
         let storageBrwseColObj = this._storage.get('browseColObject')
         
-        let hasCategoryTitles = storageBrwseColObj && storageBrwseColObj['categoryid'] && storageBrwseColObj['categoryid'][2].title.length > 0
+        let hasCategoryTitles = storageBrwseColObj && storageBrwseColObj['categoryid'] && storageBrwseColObj['categoryid'][2] && storageBrwseColObj['categoryid'][2].title.length > 0
         if( storageBrwseColObj && storageBrwseColObj[facetType] && hasCategoryTitles){
           if(facetType === 'artstor-geography'){
             this.hierarchicalFacets = storageBrwseColObj[facetType]
