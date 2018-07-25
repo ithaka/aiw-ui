@@ -15,7 +15,8 @@ export class GroupService {
     constructor(
         private http: HttpClient
     ) {
-      this.groupUrl = '/api/v1/group'
+        console.log("GROUP", ENV, API_URL)
+        this.groupUrl = '/api/v1/group'
         this.options = { withCredentials: true }
     }
 
