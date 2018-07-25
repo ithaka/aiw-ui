@@ -115,7 +115,7 @@ export class BrowseGroupsComponent implements OnInit {
       .subscribe((params: Params) => {
         // Find feature flags
         if(params && params['featureFlag'] && params['featureFlag'] === 'cardview'){
-              this.showCardView = true;
+          this.showCardView = true;
         }
       })
     )
@@ -166,7 +166,7 @@ export class BrowseGroupsComponent implements OnInit {
 
         let requestedPage = Number(query.page) || 1
         if (requestedPage < 1 || tagAdded) {
-          this.addQueryParams({page: 1}, false, query)
+          this.addQueryParams({page: 1}, false, false, query)
         } // STOP THEM if they're trying to enter a negative number
         // if (tagAdded) { requestedPage = 1 } // if they're adding a tag, we want to nav them back to page 1
         let requestedLevel = this.selectedBrowseLevel !== 'search' ? this.selectedBrowseLevel : query.level;
@@ -344,7 +344,7 @@ export class BrowseGroupsComponent implements OnInit {
    * @param params the parameters to add to the url (if duplicate parameters already in url, this will overwrite them)
    * @param reset allows resetting of queryParams to empty object plus whatever params you pass, instead of keeping old params
    */
-  private addQueryParams(params: { [key: string]: any }, reset?: boolean, currentParams?: any) {
+  private addQueryParams(params: { [key: string]: any }, reset?: boolean, searchWithTerm?: boolean, currentParams?: any) {
     let baseParams
     if (reset) {
       baseParams = {}
@@ -353,7 +353,7 @@ export class BrowseGroupsComponent implements OnInit {
     } else {
       baseParams = Object.assign({}, this.route.snapshot.queryParams)
     }
-    if(baseParams['id']){
+    if(searchWithTerm && baseParams['id']){
       delete baseParams['id']
     }
     let queryParams = Object.assign(baseParams, params)
