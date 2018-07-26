@@ -15,6 +15,8 @@ const LoaderPlugin = require('webpack/lib/LoaderOptionsPlugin');
  * Webpack Constants
  */
 const ENV = process.env.ENV = process.env.NODE_ENV = 'test';
+// API URL should be left relative for Pact testing
+const API_URL = '';
 
 /**
  * Webpack configuration
@@ -191,10 +193,12 @@ module.exports = function (options) {
       new DefinePlugin({
         'ENV': JSON.stringify(ENV),
         'HMR': false,
+        'API_URL': JSON.stringify(API_URL),
         'process.env': {
           'ENV': JSON.stringify(ENV),
           'NODE_ENV': JSON.stringify(ENV),
           'HMR': false,
+          'API_URL': JSON.stringify(API_URL)
         }
       }),
 

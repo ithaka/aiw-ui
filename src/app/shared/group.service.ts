@@ -13,10 +13,9 @@ export class GroupService {
     private options: {}
 
     constructor(
-        private http: HttpClient,
-        private _auth: AuthService
+        private http: HttpClient
     ) {
-      this.groupUrl = this._auth.getUrl() + '/v1/group'
+        this.groupUrl = API_URL + '/api/v1/group'
         this.options = { withCredentials: true }
     }
 

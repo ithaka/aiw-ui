@@ -12,12 +12,18 @@ nav.nav.nav-inline.browse-nav
           | {{ filter.label }}
     ang-tags-list([browseLevel]="selectedBrowseLevel")
   .col-md-9
-    ang-general-search(*ngIf="route.snapshot.params.view == 'search'", [updateSearchTerm]="updateSearchTerm", [init]="searchTerm", (executeSearch)="addQueryParams({ term: $event }, false)")
+    ang-general-search(*ngIf="route.snapshot.params.view == 'search'", [updateSearchTerm]="updateSearchTerm", [init]="searchTerm", (executeSearch)="addQueryParams({ term: $event }, false, true)")
     h3.pb-1.px-2 Groups     
       pagination([pageObj]="pagination", (goToPage)="goToPage($event)", [right]="true")
+    h3.pb-1.px-2(*ngIf="_tagFilters.selectedFilters.length>0") Tags:
+      .filter.filter--aboveGroup(*ngFor="let tag of _tagFilters.selectedFilters", (click)="tag.selected = !tag.selected", [class.active]="tag.selected")
+        span.notranslate {{ tag.key }} ({{ tag.doc_count }})
+        i.icon.icon-add
+        i.icon.icon-close
+      a#groupTagsClear.link--accent.small(*ngIf="_tagFilters.selectedFilters.length>1", tabindex="", style="margin:3px;", (click)="_tagFilters.clearFilters();") Clear All
     .group-list.has-icon-overlay.px-2
       .alert.alert-warning(*ngIf="errorObj[selectedBrowseLevel]", [innerHtml]="errorObj[selectedBrowseLevel]")
-      .alert.alert-info(*ngIf="showSearchPrompt && route.snapshot.params.view == 'search'") {{ 'BROWSE.ERRORS.SEARCH_PROMPT' | translate }}
+      .alert.alert-info(*ngIf="showSearchPrompt && route.snapshot.params.view == 'search'") {{ 'BROWSE.ERRORS.SEARCH_PROMPT' | translate }}    
       ng-container(*ngIf="showCardView")
         ang-card-view(*ngFor="let tag of tags; let i=index;", [tag]="tag", [group]="groups[i]", [browseLevel]="selectedBrowseLevel", link="true")
       ng-container(*ngIf="!showCardView")
