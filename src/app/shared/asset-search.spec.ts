@@ -13,6 +13,10 @@ import {
   RawSearchResponse,
   // HierarchicalFilter,
 } from './asset-search.service';
+import { AppConfig } from '../app.service';
+import { AuthService } from '.';
+import { HttpClientModule } from '@angular/common/http';
+import { WLV_ARTSTOR } from '../white-label-config';
 
 //import { AuthService } from './'
 //import { AppConfig } from '../app.service'
@@ -50,6 +54,8 @@ import {
 // //       selected: boolean
 // //     }
 // //   }
+
+let searchFunc;
 
 let mockSearchInput = {
   facets: {
@@ -89,23 +95,31 @@ let mockSearchInput = {
 describe('Search Service', () => {
   // provide our implementations or mocks to the dependency injector
   beforeEach(() => {
-    let assetSearch: AssetSearchService
+    // let assetSearch: AssetSearchService
+
+    // searchFunc = assetSearch.search
 
     TestBed.configureTestingModule({
       providers: [
-        { provide: AssetSearchService, useValue:{}, deps: [] }
-      ]
+        AssetSearchService,
+        { provide: AssetFiltersService, useValue:{}, deps: [] },
+        { provide: AppConfig, useValue: { config: WLV_ARTSTOR }, deps: [] },
+        { provide: AuthService, useValue: {}, deps: [] }
+      ],
+      imports: [ HttpClientModule]
     });
   });
 
-  fit('initial AssetSearchService should exist', inject([AssetSearchService], (assetSearch: AssetSearchService) => {
+  it('initial AssetSearchService exists and methods available', inject([AssetSearchService], (assetSearch: AssetSearchService) => {
     expect(assetSearch).toBeTruthy();
-    //expect(assetSearch.search).toBeDefined()
+    expect(assetSearch.search).toBeDefined()
+    expect(assetSearch.getAssetById).toBeDefined()
+    expect(assetSearch.getFacets).toBeDefined()
   }));
 
   /**
    * Search assets service
-   * @param keyword          String to search for.
+   * @param keyword       String to search for.
    * @param filters       Array of filter objects (with filterGroup and filterValue properties)
    * @param sortIndex     An integer representing a type of sort.
    * @param dateFacet     Object with the dateFacet values
