@@ -12,7 +12,7 @@ nav.nav.nav-inline.browse-nav
           | {{ filter.label }}
     ang-tags-list([browseLevel]="selectedBrowseLevel")
   .col-md-9
-    ang-general-search(*ngIf="route.snapshot.params.view == 'search'", [updateSearchTerm]="updateSearchTerm", [init]="searchTerm", (executeSearch)="addQueryParams({ term: $event }, false)")
+    ang-general-search(*ngIf="route.snapshot.params.view == 'search'", [updateSearchTerm]="updateSearchTerm", [init]="searchTerm", (executeSearch)="addQueryParams({ term: $event }, false, true)")
     h3.pb-1.px-2 Groups     
       pagination([pageObj]="pagination", (goToPage)="goToPage($event)", [right]="true")
     h3.pb-1.px-2(*ngIf="_tagFilters.selectedFilters.length>0") Tags:
