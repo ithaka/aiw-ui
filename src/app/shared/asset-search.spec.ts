@@ -9,54 +9,60 @@ import { AssetFiltersService } from '../asset-filters/asset-filters.service';
 import {
   AssetSearchService,
   SearchResponse,
-  //RawSearchAsset,
+  RawSearchAsset,
   RawSearchResponse,
-  // HierarchicalFilter,
+  HierarchicalFilter,
+  MediaObject,
+  SearchRequest
+
 } from './asset-search.service';
 import { AppConfig } from '../app.service';
 import { AuthService } from '.';
 import { HttpClientModule } from '@angular/common/http';
 import { WLV_ARTSTOR } from '../white-label-config';
+import { SearchQueryUtil } from './search-query'; // Query filter helpers
 
 //import { AuthService } from './'
 //import { AppConfig } from '../app.service'
 //import { Observable } from 'rxjs/Observable'
 
-/* Helper for generating search query input values */
-// createSearchQuery() {}
+/** Mock Filters, MediaObject, SearchRequest, SearchOptions, SearchResponse */
 
-// class genFilters {
-//   public newFilter() {
-//     return new HierarchicalFilter(
-//       "filter key",
-//       {},
-//       {
-//         count: 1,
-//         depth: "depth value",
-//         efq: "efq value",
-//         label: ["label 1", "label 2"],
-//         selected: false
-//       }
-//     )
-//   }
-// }
+// TODO: Pass in labels array, other filters array, count, and depth as params
+function newFilter(): HierarchicalFilter {
+  return {
+    "filter key": {
+      children: newFilter(),
+      element: {
+        count: 1, // number
+        depth: "depth", // string
+        efq: "efq",
+        label: ["label1", "label2"], // string array
+        selected: true // boolean
+      }
+    }
+  }
+}
 
-// let mockHierarchicalFilter = genFilters.newFilter
+/** Mock MediaObject */
+let mockMediaObject: MediaObject = {
+  format: "format", //string
+  thumbnailSizeOnePath: "thumb size", //string
+  width: 360, //number
+  sizeInBytes: 100000, //number
+  downloadSize: 700000, //number
+  type: "video", //string
+  icc_profile_location: "profile location", //string
+  thumbnailSizeZeroPath: "zero path", //string
+  filename: "fasdfafasf", //string
+  lps: "lps", //string
+  iiif: "iiif", //string
+  storId: "sdfad", //string
+  adlObjectType: 103, //number
+  height: 500 //number
+}
 
-// // interface HierarchicalFilter {
-// //   [key: string]: {
-// //     children: HierarchicalFilter
-// //     element: {
-// //       count: number
-// //       depth: string
-// //       efq: string
-// //       label: string[]
-// //       selected: boolean
-// //     }
-// //   }
-
-let searchFunc;
-
+/** Mock SearchResponse */
 let mockSearchInput = {
   facets: {
     name: "facet name",
@@ -69,35 +75,65 @@ let mockSearchInput = {
   },
   bad_request: false,
   requestId: '12345',
-  //results: RawSearchAsset,
+  results: [],
   total: 10, // total number of assets returned
-  //hierarchies2: HierarchicalFilter
+  hierarchies2: // HierarchicalFilter
+    newFilter()
 }
 
-// let mockSearchResponse = new RawSearchResponse(
-//   facets: {
-//     name: string
-//     values: {
-//       count: number
-//       efq: string
-//       fq: string
-//       name: string
-//     }[]
-//   }[]
-//   bad_request: boolean
-//   requestId: string
-//   results: RawSearchAsset[]
-//   total: number // total number of assets returned
-//   hierarchies2: HierarchicalFilter
-// }
-// )
+/** Mock SearchRequest */
+let mockSearchRequest: SearchRequest = {
+  limit: 10, // number    <= optional
+  start: 1, // number    <= optional
+  content_types: ["type1", "type2"], // string[]
+  query: "query string", // string
+  facet_fields: [{    // <= optional array of facet_fields object values
+    name: "facet name", // string
+    mincount: 1, // number
+    limit: 10, // number
+  }],
+  hier_facet_fields2: [{    // <= optional array of hier_facet_fields2 object values
+    field: "facet field", // string
+    hierarchy: "hierarchy",// string
+    look_ahead: 3, // number
+    look_behind: 2, // number
+    d_look_ahead: 1, // number
+  }],
+  filter_query: ["filter val 1", "filter val 2"], // string[]    <= optional
+  sortorder: "asc", // string    <= optional
+  sort: "yearend", // string    <= optional
+}
 
-describe('Search Service', () => {
-  // provide our implementations or mocks to the dependency injector
+/** Mock SearchResponse */
+
+/** Mock RawSearchAsset */
+let mockSearchAsset: RawSearchAsset = {
+  agent: "creator", // creator of the piece
+  artstorid: "12345", // the correct id to reference when searching for artstor assets
+  clusterid: "12345", // id of the cluser the asset exists in, if any
+  collections: ["collections1", "collections2"], // array of collections this asset exists under
+  collectiontypenameid: ["adl", "private"],
+  collectiontypes: [103, 100, 200], // all of the collection types this asset fits
+  contributinginstitutionid: 103, // which institution added the asset
+  date: "1970", // a string entered by the user, not an actually useful date other than display
+  doi: "10.2307/artstor.16515779", // ex: "10.2307/artstor.16515779"
+  frequentlygroupedwith: ["1", "2", "3"], // array of other asset ids this image is grouped with
+  iap: false, // do we support Images for Academic Publishing for the asset
+  // id: string // the id used by the SOLR cluster, which is not reliable, therefore it's left commented out
+  media: "{ mediaobject: {} }", // this one is weird because it's a json object encoded as a string
+  name: "asset name", // the asset's name
+  partofcluster: false,
+  tokens: ["token1", "token2"],
+  type: "art", // going to be "art" for all artstor assets
+  updatedon: new Date("{year:1970}"), // date the asset was last updated in Forum
+  workid: "12345", // id of the work record in Forum that the asset belongs to
+  year: 1970, // the year the asset is marked as being created
+  yearbegin: 1970, // beginning of date range the asset is thought to have been created in
+  yearend: 1970, // end of date range the asset is thought to have been created in
+}
+
+describe('Asset Search Service', () => {
   beforeEach(() => {
-    // let assetSearch: AssetSearchService
-
-    // searchFunc = assetSearch.search
 
     TestBed.configureTestingModule({
       providers: [
@@ -110,14 +146,18 @@ describe('Search Service', () => {
     });
   });
 
-  it('initial AssetSearchService exists and methods available', inject([AssetSearchService], (assetSearch: AssetSearchService) => {
+  // Test if AssetSearchService methods are defined
+  fit('initial AssetSearchService exists and methods available', inject([AssetSearchService], (assetSearch: AssetSearchService) => {
     expect(assetSearch).toBeTruthy();
     expect(assetSearch.search).toBeDefined()
     expect(assetSearch.getAssetById).toBeDefined()
     expect(assetSearch.getFacets).toBeDefined()
+    expect(assetSearch.makeThumbUrl).toBeDefined()
   }));
 
-  /**
+  // Test AssetSearchService.search method
+
+   /**
    * Search assets service
    * @param keyword       String to search for.
    * @param filters       Array of filter objects (with filterGroup and filterValue properties)
@@ -126,41 +166,8 @@ describe('Search Service', () => {
    * @returns       Returns an object with the properties: thumbnails, count, altKey, classificationFacets, geographyFacets, minDate, maxDate, collTypeFacets, dateFacets
    */
 
+  // it('calls search method', inject([AssetSearchService], (assetSearch: AssetSearchService) => {
+  //   expect(assetSearch.search())
+  // }));
+
 });
-
-
-// // the cleaned response object which is returned by the service
-// export interface SearchResponse {
-//   facets: {
-//     name: string
-//     values: {
-//       count: number
-//       efq: string
-//       fq: string
-//       name: string
-//     }[]
-//   }[]
-//   bad_request: boolean
-//   requestId: string
-//   results: SearchAsset[]
-//   total: number // total number of assets returned
-//   hierarchies2: HierarchicalFilter
-// }
-
-// // the response directly from search
-// export interface RawSearchResponse {
-//   facets: {
-//     name: string
-//     values: {
-//       count: number
-//       efq: string
-//       fq: string
-//       name: string
-//     }[]
-//   }[]
-//   bad_request: boolean
-//   requestId: string
-//   results: RawSearchAsset[]
-//   total: number // total number of assets returned
-//   hierarchies2: HierarchicalFilter
-// }

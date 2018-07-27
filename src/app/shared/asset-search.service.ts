@@ -500,7 +500,7 @@ export interface RawSearchResponse {
 }
 
 // the data returned from search in the results array
-interface RawSearchAsset {
+export interface RawSearchAsset {
   agent: string // creator of the piece
   artstorid: string // the correct id to reference when searching for artstor assets
   clusterid: string // id of the cluser the asset exists in, if any
@@ -552,7 +552,7 @@ export interface SearchAsset {
   yearend: number // end of date range the asset is thought to have been created in
 }
 
-interface HierarchicalFilter {
+export interface HierarchicalFilter {
   [key: string]: {
     children: HierarchicalFilter
     element: {
@@ -565,7 +565,7 @@ interface HierarchicalFilter {
   }
 }
 
-interface MediaObject {
+export interface MediaObject {
   format: string
   thumbnailSizeOnePath: string
   width: number
@@ -582,7 +582,7 @@ interface MediaObject {
   height: number
 }
 
-interface SearchRequest {
+export interface SearchRequest {
   limit?: number
   start?: number
   content_types: string[]
@@ -604,7 +604,7 @@ interface SearchRequest {
   sort?: string
 }
 
-interface SearchOptions {
+export interface SearchOptions {
   page?: number
   size?: number
   colId?: string
