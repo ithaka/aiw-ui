@@ -76,8 +76,7 @@ export class AssetSearchService {
       // ],
       // Add fuzzy operator
       "query": keyword,
-      // Fuzzy searches are expensive, avoid by request of Archie
-      // + "~0.8",
+      filter_query: [],
       "hier_facet_fields2": [
         {
           "field": "hierarchies",

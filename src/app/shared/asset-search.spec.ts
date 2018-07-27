@@ -26,8 +26,12 @@ import { SearchQueryUtil } from './search-query'; // Query filter helpers
 //import { AuthService } from './'
 //import { AppConfig } from '../app.service'
 //import { Observable } from 'rxjs/Observable'
-
 /** Mock Filters, MediaObject, SearchRequest, SearchOptions, SearchResponse */
+
+/** Test values from AssetFilterService */
+let filterService: AssetFiltersService
+let filterNames
+let filtersAvailable
 
 // TODO: Pass in labels array, other filters array, count, and depth as params
 function newFilter(): HierarchicalFilter {
@@ -145,7 +149,8 @@ let mockSearchAsset: RawSearchAsset = {
 describe('Asset Search Service', () => {
   beforeEach(() => {
 
-
+    filterNames = filterService.getFilterNameMap()
+    filtersAvailable = filterService.getAvailable()
 
     TestBed.configureTestingModule({
       providers: [
@@ -167,8 +172,15 @@ describe('Asset Search Service', () => {
     expect(assetSearch.makeThumbUrl).toBeDefined()
   }));
 
-  // Test AssetSearchService.search method
+  // Testvalues AssetFiltersService methodsa used in search
+  fit('AssetFilterService Filter methods are defined', inject([filterNames, filtersAvailable], () => {
+    console.log('Filter Names: ', filterNames)
+    console.log('Filters Available: ', filtersAvailable)
+    expect(filterNames).toBeDefined()
+    expect(filtersAvailable).toBeDefined()
+  }));
 
+  // Test AssetSearchService.search method
    /**
    * Search assets service
    * @param keyword       String to search for.
@@ -178,8 +190,9 @@ describe('Asset Search Service', () => {
    * @returns       Returns an object with the properties: thumbnails, count, altKey, classificationFacets, geographyFacets, minDate, maxDate, collTypeFacets, dateFacets
    */
 
-  // it('calls search method', inject([AssetSearchService], (assetSearch: AssetSearchService) => {
-  //   expect(assetSearch.search())
-  // }));
+  it('calls basic unfiltered or sorted search method', inject([AssetSearchService], (assetSearch: AssetSearchService) => {
+    let req = this.mockSearchRequest
+    expect(assetSearch.search(this.mockSearchOptions, "", 0)).toBeDefined()
+  }));
 
 });
