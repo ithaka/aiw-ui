@@ -64,7 +64,7 @@ let mockMediaObject: MediaObject = {
 }
 
 /** Mock SearchResponse */
-let mockSearchInput = {
+let mockSearchResponse = {
   facets: {
     name: "facet name",
     values: {
@@ -82,27 +82,29 @@ let mockSearchInput = {
     newFilter()
 }
 
-/** Mock SearchRequest */
+/** Mock SearchRequest
+ * based on search for 'mona lisa' - without filters
+*/
 let mockSearchRequest: SearchRequest = {
-  limit: 10, // number    <= optional
-  start: 1, // number    <= optional
-  content_types: ["type1", "type2"], // string[]
-  query: "query string", // string
-  facet_fields: [{    // <= optional array of facet_fields object values
-    name: "facet name", // string
-    mincount: 1, // number
-    limit: 10, // number
-  }],
+  limit: 24, // number    <= optional
+  start: 0, // number    <= optional
+  content_types: ["art"], // string[]
+  query: "mona lisa", // string
+  // facet_fields: [{    // <= optional array of facet_fields object values
+  //   name: "facet name", // string
+  //   mincount: 1, // number
+  //   limit: 10, // number
+  // }],
   hier_facet_fields2: [{    // <= optional array of hier_facet_fields2 object values
-    field: "facet field", // string
-    hierarchy: "hierarchy",// string
-    look_ahead: 3, // number
-    look_behind: 2, // number
+    field: "hierarchies", // string
+    hierarchy: "artstor-geography",// string
+    look_ahead: 2, // number
+    look_behind: -10, // number
     d_look_ahead: 1, // number
   }],
-  filter_query: ["filter val 1", "filter val 2"], // string[]    <= optional
+  // filter_query: ["filter val 1", "filter val 2"], // string[]    <= optional
   sortorder: "asc", // string    <= optional
-  sort: "yearend", // string    <= optional
+  // sort: "yearend", // string    <= optional
 }
 
 /** Mock SearchOptions */
@@ -142,6 +144,8 @@ let mockSearchAsset: RawSearchAsset = {
 
 describe('Asset Search Service', () => {
   beforeEach(() => {
+
+
 
     TestBed.configureTestingModule({
       providers: [
