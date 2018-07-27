@@ -42,20 +42,24 @@ describe("Group Calls #pact", () => {
             {"count":1,"fieldName":"Exhibition History", "fieldValue":"Mel Bochner: If the Color Changes, Michael C. Carlos Museum, August 22, 2002 - January 26, 2003<br/> Modern and Contemporary Masters: Highlights from the Works on Paper Collection, Michael C. Carlos Museum, January 24 - May 17, 2009","index":1},
             {"count":1,"fieldName":"On View", "fieldValue":"No","index":1}
         ],
-        "fileProperties":[{"fileName":"11008184.fpx"}],
-        "updated_on":"2017-06-09T18:36:37Z",
-        "image_url":"sslps/c35538/11008184.fpx/47cA6zw3AJcbqsn2RT5KkA/1532635760/",
-        "collections":[{"type":"5",
-            "id":"87730057",
-            "name":"Michael C. Carlos Museum Collections Online"},
-            {"type":"2",
-            "id":"35538",
-            "name":"Michael C. Carlos Museum Collections Online"}],"title":"If the Color Changes",
-            "category_name":"",
-            "icc_profile_loc":null,"resolution_y":600,"contributinginstitutionid":10028,"category_id":"",
-            "height":2131,
-            "download_size":"1024,1024"
-        }]
+        "fileProperties": [
+          {"fileName":"11008184.fpx"}
+        ],
+        "updated_on": "2017-06-09T18:36:37Z",
+        "image_url": "sslps/c35538/11008184.fpx/47cA6zw3AJcbqsn2RT5KkA/1532635760/",
+        "collections": [
+            { "type":"5", "id":"87730057", "name":"Michael C. Carlos Museum Collections Online"},
+            {"type":"2", "id":"35538", "name":"Michael C. Carlos Museum Collections Online"}
+        ],
+        "title":"If the Color Changes",
+        "category_name":"",
+        "icc_profile_loc":null,
+        "resolution_y":600,
+        "contributinginstitutionid":10028,
+        "category_id":"",
+        "height":2131,
+        "download_size":"1024,1024"
+      }]
     }
 
     beforeAll(function(done) {
@@ -87,8 +91,7 @@ describe("Group Calls #pact", () => {
     /**
      * Mock and test group listing endpoint
      */
-    describe("getAllGroups",
-     () => {
+    describe("GET /api/v1/metadata", () => {
       beforeAll((done) =>  {
         provider.addInteraction({
           uponReceiving: 'a request for all public groups',
@@ -100,7 +103,7 @@ describe("Group Calls #pact", () => {
           willRespondWith: {
             status: 200,
             headers: { "Content-Type": "application/json" },
-            body: expectedGroupList
+            body: expectedMetadataObject
             //Matchers.somethingLike(expectedGroupList)
           }
         })
@@ -112,7 +115,7 @@ describe("Group Calls #pact", () => {
         //Run the tests
         _groups.getAll('public', 48, 0)
           .subscribe(res => {
-            expect(res).toEqual(expectedGroupList)
+            expect(res).toEqual(expectedMetadataObject)
             done()
           },
           err => {
