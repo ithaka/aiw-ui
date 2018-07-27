@@ -60,16 +60,20 @@ module.exports = function(env) {
 
       /**
        * Specifies the name of each output file on disk.
-       * IMPORTANT: You must not specify an absolute path here!
-       *
-       * See: http://webpack.github.io/docs/configuration.html#output-filename
+       * - IMPORTANT: You must not specify an absolute path here!
+       * - See: http://webpack.github.io/docs/configuration.html#output-filename
        * 
-       * "response-cache-control" query param is attached to tell S3 to a attach a Cache-Control header
-       * S3 Docs: https://docs.aws.amazon.com/AmazonS3/latest/API/RESTObjectGET.html
-       * This header is then picked up by Fastly, so it knows to cache our js files
-       * Fastly Docs: https://docs.fastly.com/guides/tutorials/cache-control-tutorial.html
+       * "response-cache-control" to trigger Fastly caching:
+       * - query param is attached to tell S3 to a attach a Cache-Control header
+       * - S3 Docs: https://docs.aws.amazon.com/AmazonS3/latest/API/RESTObjectGET.html
+       * - This header is then picked up by Fastly, so it knows to cache our js files
+       * - Fastly Docs: https://docs.fastly.com/guides/tutorials/cache-control-tutorial.html
+       * 
+       * "/assets" folder:
+       * - An Apps-Gateway rule in ArtstorRouting.groovy ensures assets in "/assets" are not re-routed or modified in any way
        */
-      filename: '[name].[chunkhash].bundle.js', //?response-cache-control=' + encodeURIComponent('s-maxage=31536000')
+      // filename: 'assets/[name].[chunkhash].bundle.js?response-cache-control=' + encodeURIComponent('s-maxage=31536000'),
+      filename: '[name].[chunkhash].bundle.js',
 
       /**
        * The filename of the SourceMaps for the JavaScript files.

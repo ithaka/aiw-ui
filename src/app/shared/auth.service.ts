@@ -85,6 +85,9 @@ export class AuthService implements CanActivate {
     this.subdomain = 'library'
     this.solrUrl = '/api/search/v1.0/search'
 
+    // Set WLV variables
+    this.isOpenAccess = this._app.config.isOpenAccess
+
     let testHostnames = [
       'localhost',
       'local.artstor.org',
@@ -129,7 +132,6 @@ export class AuthService implements CanActivate {
       this.solrUrl = '/api/search/v1.0/search'
       this.IIIFUrl = '//tsstage.artstor.org/rosa-iiif-endpoint-1.0-SNAPSHOT/fpx'
       this.ENV = 'test'
-      this.isOpenAccess = this._app.config.isOpenAccess
     }
 
     // Additional Local dev domains
@@ -497,10 +499,12 @@ export class AuthService implements CanActivate {
       .map(
         (data)  => {
           let user = this.decorateValidUser(data)
+          console.log('Decorated User: ', Object.assign({}, user))
           // Track whether or not user object has been refreshed since app opened
           this.userSessionFresh = true
-          
+
           if (user && (this.isOpenAccess || user.status)) {
+            console.log(Object.assign({}, user))
             // Clear expired session modal
             this.showUserInactiveModal.next(false)
             // Update user object
@@ -509,9 +513,11 @@ export class AuthService implements CanActivate {
           } else {
             // We don't have a user here, and WLV is not open access, go to /login
             if (!this.isOpenAccess) {
+              console.log('Not open access - redirecting')
               this._router.navigate(['/login'])
             }
             else {
+              console.log('fell through to this.logout')
               this.logout()
               // Store the route so that we know where to put them after login!
               this.store("stashedRoute", this.location.path(false))
@@ -549,7 +555,7 @@ export class AuthService implements CanActivate {
           let user = this.decorateValidUser(data)
           // Track whether or not user object has been refreshed since app opened
           this.userSessionFresh = true
-          
+
           if (user && (this.isOpenAccess || user.status)) {
             // Clear expired session modal
             this.showUserInactiveModal.next(false)
@@ -581,8 +587,8 @@ export class AuthService implements CanActivate {
     let newUser = data['user'] ? data['user'] : {}
     let currentUsername = currentUser.username
     let loggedInSessionLost = currentUser.isLoggedIn ? (!newUser.username || currentUsername !== newUser.username) : false;
-    
-    if (data['status'] === true) {      
+
+    if (data['status'] === true) {
       // User is authorized - if you want to check ipAuth then you can tell on the individual route by user.isLoggedIn = false
       let user = data['user']
       user.status = data['status']
@@ -693,7 +699,7 @@ export class AuthService implements CanActivate {
   public getGACategory(): string {
     let category = "unaffiliatedUser"
     let user = this.getUser()
-    
+
     if (user.isLoggedIn) {
       category = "loggedInUser"
     } else if (user.institutionId && user.institutionId.toString().length > 0) {

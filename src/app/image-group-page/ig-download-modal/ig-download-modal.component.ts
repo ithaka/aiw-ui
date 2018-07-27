@@ -27,7 +27,7 @@ export class PptModalComponent implements OnInit {
   private zipDownloadLink: string = '';
   private downloadTitle: string = 'Image Group';
   private allowedDownloads: number = 0;
-  private imgCount: number = 0;
+  private error: boolean = false;
 
   private header = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
   private defaultOptions = { withCredentials: true};
@@ -41,7 +41,6 @@ export class PptModalComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-
   }
 
   private getPPT() {
@@ -58,7 +57,8 @@ export class PptModalComponent implements OnInit {
     })
     .catch((err) => {
       console.error(err)
-       this.isLoading = false
+      this.error = true
+      this.isLoading = false
     })
   }
 
@@ -76,6 +76,7 @@ export class PptModalComponent implements OnInit {
     })
     .catch((err) => {
       console.error(err)
+      this.error = true
       this.zipLoading = false
     })
   }
