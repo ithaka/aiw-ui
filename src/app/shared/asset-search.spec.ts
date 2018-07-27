@@ -13,7 +13,8 @@ import {
   RawSearchResponse,
   HierarchicalFilter,
   MediaObject,
-  SearchRequest
+  SearchRequest,
+  SearchOptions
 
 } from './asset-search.service';
 import { AppConfig } from '../app.service';
@@ -104,7 +105,14 @@ let mockSearchRequest: SearchRequest = {
   sort: "yearend", // string    <= optional
 }
 
-/** Mock SearchResponse */
+/** Mock SearchOptions */
+let mockSearchOptions: SearchOptions = {
+  page: 1,             // number    <=optional
+  size: 2,             // number    <=optional
+  colId: "",           // string    <=optional
+  collections: "",     // string    <=optional
+  pcolId: ""           // string    <=optional
+}
 
 /** Mock RawSearchAsset */
 let mockSearchAsset: RawSearchAsset = {

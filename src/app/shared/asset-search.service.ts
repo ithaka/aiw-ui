@@ -55,6 +55,57 @@ export class AssetSearchService {
     })
   }
 
+  private initQuery(keyword: string, pageSize, startIndex) {
+
+    return {
+      "limit": pageSize,
+      "start": startIndex,
+      "content_types": [
+        "art"
+      ],
+      // "startdate" : earliestDate,
+      // "enddate" : latestDate,
+      //   "facet_fields": [
+      //       "artclassification"
+      //   ],
+      // "ms_facet_fields": [
+      //     {
+      //     "field": "artclassification",
+      //     "efq": []
+      //     }
+      // ],
+      // Add fuzzy operator
+      "query": keyword,
+      // Fuzzy searches are expensive, avoid by request of Archie
+      // + "~0.8",
+      "hier_facet_fields2": [
+        {
+          "field": "hierarchies",
+          "hierarchy": "artstor-geography",
+          "look_ahead": 2,
+          "look_behind": -10,
+          "d_look_ahead": 1
+        }
+      ],
+      "facet_fields":
+        [
+          // Limited to 16 classifications (based on the fact that Artstor has 16 classifications)
+          // + 1 to allow for empty string values crowding out the top 16
+          {
+            "name": "artclassification_str",
+            "mincount": 1,
+            "limit": 17
+          }
+          // ,
+          // {
+          //   "name" : "artcollectiontitle_str",
+          //   "mincount" : 1,
+          //   "limit" : 15
+          // }
+        ],
+    };
+  }
+
   /**
    * Uses wildcard search to retrieve filters
    */
@@ -166,53 +217,7 @@ export class AssetSearchService {
       }
     }
 
-    let query: any = { // haven't added the SearchRequest type yet because I don't know how to deal with the TS error I'm getting - can't even see the whole thing
-      "limit": pageSize,
-      "start": START_INDEX,
-      "content_types": [
-        "art"
-      ],
-      // "startdate" : earliestDate,
-      // "enddate" : latestDate,
-    //   "facet_fields": [
-    //       "artclassification"
-    //   ],
-        // "ms_facet_fields": [
-        //     {
-        //     "field": "artclassification",
-        //     "efq": []
-        //     }
-        // ],
-      // Add fuzzy operator
-      "query": keyword,
-      // Fuzzy searches are expensive, avoid by request of Archie
-      // + "~0.8",
-      "hier_facet_fields2": [
-      {
-        "field": "hierarchies",
-        "hierarchy": "artstor-geography",
-        "look_ahead": 2,
-        "look_behind": -10,
-        "d_look_ahead": 1
-      }
-    ],
-      "facet_fields" :
-      [
-        // Limited to 16 classifications (based on the fact that Artstor has 16 classifications)
-        // + 1 to allow for empty string values crowding out the top 16
-        {
-          "name" : "artclassification_str",
-          "mincount" : 1,
-          "limit" : 17
-        }
-        // ,
-        // {
-        //   "name" : "artcollectiontitle_str",
-        //   "mincount" : 1,
-        //   "limit" : 15
-        // }
-      ],
-    };
+    let query = this.initQuery(keyword, pageSize, startIndex)
 
     if (this.showCollectionType) {
       query.facet_fields.push({
