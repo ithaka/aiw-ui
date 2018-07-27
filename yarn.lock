@@ -3147,6 +3147,10 @@ dotenv@^5.0.1:
   version "5.0.1"
   resolved "https://registry.yarnpkg.com/dotenv/-/dotenv-5.0.1.tgz#a5317459bd3d79ab88cff6e44057a6a3fbb1fcef"
 
+driver.js@^0.6.2:
+  version "0.6.2"
+  resolved "https://registry.yarnpkg.com/driver.js/-/driver.js-0.6.2.tgz#b30a59572646bd83b6bee17b3b2c11d41ad5a4da"
+
 dtrace-provider@~0.8:
   version "0.8.7"
   resolved "https://registry.yarnpkg.com/dtrace-provider/-/dtrace-provider-0.8.7.tgz#dc939b4d3e0620cfe0c1cd803d0d2d7ed04ffd04"

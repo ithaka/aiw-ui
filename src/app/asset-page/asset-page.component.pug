@@ -240,3 +240,4 @@ ang-server-error-modal(*ngIf="showServerErrorModal", (exitFullScreen)="assetView
 ang-generate-citation(*ngIf="showGenerateCitation", [asset]="assets[0]", (closeModal)="showGenerateCitation = false")
 ang-confirm-modal(*ngIf="showExitEdit", (closeModal)="closeEditDetails($event)", title="{{ 'ASSET_PAGE.EXIT_EDIT_CONFIRM_MODAL.TITLE' | translate }}", description="{{ 'ASSET_PAGE.EXIT_EDIT_CONFIRM_MODAL.DESC' | translate }}", dismiss="{{ 'ASSET_PAGE.EXIT_EDIT_CONFIRM_MODAL.CANCEL' | translate }}", primary="{{ 'ASSET_PAGE.EXIT_EDIT_CONFIRM_MODAL.CONTINUE' | translate }}")
 ang-confirm-modal(*ngIf="showDeletePCModal", (closeModal)="closeDeletePC($event)", title="{{ 'ASSET_PAGE.DELETE_PC_MODAL.TITLE' | translate }}", description="{{ 'ASSET_PAGE.DELETE_PC_MODAL.DESCRIPTION' | translate }}", primary="Confirm")
+ang-guide-tour([steps]="steps")

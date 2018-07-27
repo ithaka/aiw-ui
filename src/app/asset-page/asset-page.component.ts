@@ -26,6 +26,7 @@ import {
 import { TitleService } from '../shared/title.service'
 import { ScriptService } from '../shared/script.service'
 import { LocalPCService, LocalPCAsset } from '../_local-pc-asset.service'
+import { TourStep } from '../shared/tour/tour.service'
 
 @Component({
     selector: 'ang-asset-page',
@@ -132,6 +133,18 @@ export class AssetPage implements OnInit, OnDestroy {
     private uiMessages: {
         deleteFailure?: boolean
     } = {}
+
+    private steps: TourStep[] = [
+        {
+            element: '#assetpage-btn',
+            popover: {
+                title: 'Save the image for later',
+                description: 'If you want to save the iamge for later, click this button.',
+                closeBtnText: 'Exit tour',
+                nextBtnText: 'NEXT'
+            }
+        }
+    ]
 
     constructor(
         private _assets: AssetService,

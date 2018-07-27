@@ -2,7 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Thumbnail } from './../../shared/datatypes/thumbnail.interface';
 import { Tag } from '../tag/tag.class';
-import { AssetService, AssetSearchService, AuthService, } from '../../shared';
+import { AssetService, AssetSearchService, AuthService } from '../../shared';
 
 @Component({
   selector: 'ang-card-view',
