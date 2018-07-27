@@ -25,7 +25,7 @@ const ENV = process.env.NODE_ENV = process.env.ENV = 'production';
 const HOST = process.env.HOST || 'localhost';
 const PORT = process.env.PORT || 8080;
 // API URL should be left relative for Prod
-const API_URL = '/';
+const API_URL = '';
 const COMMON = commonConfig({env: ENV}).plugins.filter(plugin => plugin.options && plugin.options.metadata)[0].options.metadata;
 const METADATA = webpackMerge(COMMON, {
   host: HOST,
