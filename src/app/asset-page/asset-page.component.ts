@@ -136,12 +136,17 @@ export class AssetPage implements OnInit, OnDestroy {
 
     private steps: TourStep[] = [
         {
+            element: '#testtest',
+            popover: {
+                title: 'Test',
+                description: 'If you want to save the iamge for later, click this button.',
+            }
+        },
+        {
             element: '#assetpage-btn',
             popover: {
                 title: 'Save the image for later',
                 description: 'If you want to save the iamge for later, click this button.',
-                closeBtnText: 'Exit tour',
-                nextBtnText: 'NEXT'
             }
         }
     ]

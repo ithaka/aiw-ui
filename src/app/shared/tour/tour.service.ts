@@ -13,7 +13,5 @@ export interface TourStep {
     popover: {
         title: string
         description: string
-        closeBtnText: string
-        nextBtnText: string
     }
 }
