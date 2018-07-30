@@ -28,13 +28,15 @@ describe('SearchQueryUtil', () => {
             operator: 'OR'
         }]
 
-        it("should process a multi-field search query", () => {
+        fit("should process a multi-field search query", () => {
             let generatedQuery: string = queryUtil.generateSearchQuery(mockQueries)
+
+            console.log('!!!!!!!!!!!!!!!', generatedQuery)
 
             expect(generatedQuery).toBe('Van Gogh|100#or,Sunflowers|101')
         })
 
-        it("should process an empty multi-field query as wildcard", () => {
+        fit("should process an empty multi-field query as wildcard", () => {
             let generatedQuery: string = queryUtil.generateSearchQuery([])
 
             expect(generatedQuery).toBe('*')
@@ -70,7 +72,7 @@ describe('SearchQueryUtil', () => {
             startEra : "BCE"
         }
 
-        it("should process search filters", () => {
+        fit("should process search filters", () => {
             let filterObj: string = queryUtil.generateFilters(mockFilters, mockDateFilter)
 
             expect(filterObj['startDate']).toBe(-100)

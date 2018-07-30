@@ -106,6 +106,103 @@ export class AssetSearchService {
   }
 
   /**
+   * applyFilters
+   * Wraps logic for applying filters to search requests.
+   * @params are locally scoped to the search method objects
+   */
+  public applyFilters(query, filters, filterArray, institutionalTypeFilter, options, sortIndex, earliestDate, latestDate, dateFacet) {
+    // Loop through applied filters
+    for (var i = 0; i < filters.length; i++) {
+      let currentFilter = filters[i]
+
+      // for these values, do nothing
+      if (['collTypes', 'page', 'size', 'sort', 'startDate', 'endDate'].indexOf(currentFilter.filterGroup) > -1) {
+
+      } else if (currentFilter.filterGroup == 'geography') {
+        for (let j = 0; j < currentFilter.filterValue.length; j++) {
+          if (!query['hier_facet_fields2'][0]['efq']) {
+            query['hier_facet_fields2'][0]['efq'] = [currentFilter.filterValue[j]]
+          } else {
+            query['hier_facet_fields2'][0]['efq'].push(currentFilter.filterValue[j])
+          }
+        }
+      } else {
+        for (let j = 0; j < currentFilter.filterValue.length; j++) {
+          let filterValue = currentFilter.filterValue[j]
+          /**
+           * In case of Inst. colType filter, also use the contributing inst. ID to filter
+           */
+          if ((currentFilter.filterGroup === 'collectiontypes') && (filterValue === 2 || filterValue === 4)) {
+            institutionalTypeFilter = true
+            filterArray.push('contributinginstitutionid:\"' + this._auth.getUser().institutionId.toString() + '\"')
+          }
+
+          // Push filter queries into the array
+          let filterValueArray = filterValue.toString().trim().split('|')
+          for (let filterVal of filterValueArray) {
+            filterArray.push(currentFilter.filterGroup + ':\"' + filterVal + '\"')
+          }
+        }
+      }
+    }
+
+    if (options.colId || options['coll'] || options.pcolId) {
+      let colId = ''
+      if (options['coll']) {
+        colId = options['coll']
+      }
+      else if (options.colId) {
+        colId = options.colId
+      }
+      else if (options.pcolId) {
+        // Loading Personal OR Private Collection
+        colId = options.pcolId
+      }
+
+      filterArray.push("collections:\"" + colId + "\"");
+    }
+
+    if (options.collections) {
+      let colsArray = options.collections.toString().trim().split(',');
+      for (let col of colsArray) { // Push each collection id seperately in the filterArray
+        filterArray.push("collections:\"" + col + "\"");
+      }
+    }
+
+    query.filter_query = filterArray
+
+    if (dateFacet.modified) {
+      earliestDate = dateFacet.earliest.date;
+      earliestDate = (dateFacet.earliest.era == 'BCE') ? (parseInt(earliestDate) * -1).toString() : earliestDate.toString();
+
+      latestDate = dateFacet.latest.date;
+      latestDate = (dateFacet.latest.era == 'BCE') ? (parseInt(latestDate) * -1).toString() : latestDate.toString();
+
+      query["filter_query"].push("year:[" + earliestDate + " TO " + latestDate + "]")
+    }
+
+    if (sortIndex) {
+      // Set the sort order to descending for sort by 'Recently Added' else ascending
+      if (sortIndex == '4') {
+        query["sortorder"] = "desc"
+      } else {
+        query["sortorder"] = "asc"
+      }
+
+      if (sortIndex == '1') {
+        query["sort"] = 'name_str'
+      } else if (sortIndex == '2') {
+        query["sort"] = 'agent_str'
+      } else if (sortIndex == '3') {
+        query["filter_query"].push('year:[* TO *]', '-year:((0) OR (9999))', 'yearend:[* TO *]', '-yearend:((0) OR (9999))')
+        query["sort"] = 'yearend'
+      } else if (sortIndex == '4') {
+        query["sort"] = 'updatedon_str'
+      }
+    }
+  }
+
+  /**
    * Uses wildcard search to retrieve filters
    */
   public getFacets() {
@@ -226,96 +323,7 @@ export class AssetSearchService {
       })
     }
 
-    // Loop through applied filters
-    for (var i = 0; i < filters.length; i++) {
-      let currentFilter = filters[i]
-
-      // for these values, do nothing
-      if ( ['collTypes', 'page', 'size', 'sort', 'startDate', 'endDate'].indexOf(currentFilter.filterGroup) > -1) {
-
-      } else if (currentFilter.filterGroup == 'geography') {
-        for (let j = 0; j < currentFilter.filterValue.length; j++) {
-          if (!query['hier_facet_fields2'][0]['efq']) {
-            query['hier_facet_fields2'][0]['efq'] = [currentFilter.filterValue[j]]
-          } else {
-            query['hier_facet_fields2'][0]['efq'].push(currentFilter.filterValue[j])
-          }
-        }
-      } else {
-        for (let j = 0; j < currentFilter.filterValue.length; j++) {
-          let filterValue = currentFilter.filterValue[j]
-          /**
-           * In case of Inst. colType filter, also use the contributing inst. ID to filter
-           */
-          if( (currentFilter.filterGroup === 'collectiontypes') && (filterValue === 2 || filterValue === 4) ){
-            institutionalTypeFilter = true
-            filterArray.push('contributinginstitutionid:\"' + this._auth.getUser().institutionId.toString() + '\"')
-          }
-
-          // Push filter queries into the array
-          let filterValueArray = filterValue.toString().trim().split('|')
-          for( let filterVal of filterValueArray){
-            filterArray.push(currentFilter.filterGroup + ':\"' + filterVal + '\"')
-          }
-        }
-      }
-    }
-
-    if(options.colId || options['coll'] || options.pcolId){
-      let colId = ''
-      if(options['coll']){
-        colId = options['coll']
-      }
-      else if(options.colId){
-        colId = options.colId
-      }
-      else if(options.pcolId){
-        // Loading Personal OR Private Collection
-        colId = options.pcolId
-      }
-
-      filterArray.push("collections:\"" + colId + "\"");
-    }
-
-    if(options.collections){
-      let colsArray = options.collections.toString().trim().split(',');
-      for(let col of colsArray){ // Push each collection id seperately in the filterArray
-        filterArray.push("collections:\"" + col + "\"");
-      }
-    }
-
-    query.filter_query = filterArray
-
-    if (dateFacet.modified) {
-      earliestDate = dateFacet.earliest.date;
-      earliestDate = (dateFacet.earliest.era == 'BCE') ? (parseInt(earliestDate) * -1).toString() : earliestDate.toString();
-
-      latestDate = dateFacet.latest.date;
-      latestDate = (dateFacet.latest.era == 'BCE') ? (parseInt(latestDate) * -1).toString() : latestDate.toString();
-
-      query["filter_query"].push( "year:[" + earliestDate + " TO " + latestDate + "]")
-    }
-
-    if (sortIndex) {
-      // Set the sort order to descending for sort by 'Recently Added' else ascending
-      if (sortIndex == '4'){
-        query["sortorder"] = "desc"
-      } else{
-        query["sortorder"] = "asc"
-      }
-
-      if (sortIndex == '1') {
-        query["sort"] = 'name_str'
-      } else if(sortIndex == '2') {
-        query["sort"] = 'agent_str'
-      } else if(sortIndex == '3') {
-        query["filter_query"].push('year:[* TO *]', '-year:((0) OR (9999))', 'yearend:[* TO *]', '-yearend:((0) OR (9999))')
-        query["sort"] = 'yearend'
-      } else if(sortIndex == '4') {
-        query["sort"] = 'updatedon_str'
-      }
-    }
-
+    this.applyFilters(query, filters, filterArray, institutionalTypeFilter, options, sortIndex, earliestDate, latestDate, dateFacet)
 
     return this.http.post<RawSearchResponse>(
       this._auth.getSearchUrl(),
