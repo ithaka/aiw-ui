@@ -110,10 +110,10 @@ export class AssetSearchService {
    * Wraps logic for applying filters to search requests.
    * @params are locally scoped to the search method objects
    */
-  public applyFilters(query, filters, filterArray, institutionalTypeFilter, options, sortIndex, earliestDate, latestDate, dateFacet) {
+  public applyFilters(query, institutionalTypeFilter, options, sortIndex, filterOptions) {
     // Loop through applied filters
-    for (var i = 0; i < filters.length; i++) {
-      let currentFilter = filters[i]
+    for (var i = 0; i < filterOptions.filters.length; i++) {
+      let currentFilter = filterOptions.filters[i]
 
       // for these values, do nothing
       if (['collTypes', 'page', 'size', 'sort', 'startDate', 'endDate'].indexOf(currentFilter.filterGroup) > -1) {
@@ -134,13 +134,13 @@ export class AssetSearchService {
            */
           if ((currentFilter.filterGroup === 'collectiontypes') && (filterValue === 2 || filterValue === 4)) {
             institutionalTypeFilter = true
-            filterArray.push('contributinginstitutionid:\"' + this._auth.getUser().institutionId.toString() + '\"')
+            filterOptions.filterArray.push('contributinginstitutionid:\"' + this._auth.getUser().institutionId.toString() + '\"')
           }
 
           // Push filter queries into the array
           let filterValueArray = filterValue.toString().trim().split('|')
           for (let filterVal of filterValueArray) {
-            filterArray.push(currentFilter.filterGroup + ':\"' + filterVal + '\"')
+            filterOptions.filterArray.push(currentFilter.filterGroup + ':\"' + filterVal + '\"')
           }
         }
       }
@@ -159,26 +159,26 @@ export class AssetSearchService {
         colId = options.pcolId
       }
 
-      filterArray.push("collections:\"" + colId + "\"");
+      filterOptions.filterArray.push("collections:\"" + colId + "\"");
     }
 
     if (options.collections) {
       let colsArray = options.collections.toString().trim().split(',');
       for (let col of colsArray) { // Push each collection id seperately in the filterArray
-        filterArray.push("collections:\"" + col + "\"");
+        filterOptions.filterArray.push("collections:\"" + col + "\"");
       }
     }
 
-    query.filter_query = filterArray
+    query.filter_query = filterOptions.filterArray
 
-    if (dateFacet.modified) {
-      earliestDate = dateFacet.earliest.date;
-      earliestDate = (dateFacet.earliest.era == 'BCE') ? (parseInt(earliestDate) * -1).toString() : earliestDate.toString();
+    if (filterOptions.dateFacet.modified) {
+      filterOptions.earliestDate = filterOptions.dateFacet.earliest.date;
+      filterOptions.earliestDate = (filterOptions.dateFacet.earliest.era == 'BCE') ? (parseInt(filterOptions.earliestDate) * -1).toString() : filterOptions.earliestDate.toString();
 
-      latestDate = dateFacet.latest.date;
-      latestDate = (dateFacet.latest.era == 'BCE') ? (parseInt(latestDate) * -1).toString() : latestDate.toString();
+      filterOptions.latestDate = filterOptions.dateFacet.latest.date;
+      filterOptions.latestDate = (filterOptions.dateFacet.latest.era == 'BCE') ? (parseInt(filterOptions.latestDate) * -1).toString() : filterOptions.latestDate.toString();
 
-      query["filter_query"].push("year:[" + earliestDate + " TO " + latestDate + "]")
+      query["filter_query"].push("year:[" + filterOptions.earliestDate + " TO " + filterOptions.latestDate + "]")
     }
 
     if (sortIndex) {
@@ -274,7 +274,7 @@ export class AssetSearchService {
    * @returns       Returns an object with the properties: thumbnails, count, altKey, classificationFacets, geographyFacets, minDate, maxDate, collTypeFacets, dateFacets
    */
   public search(options: SearchOptions, keyword: string, sortIndex): Observable<SearchResponse> {
-    let startIndex = ((options.page - 1) * options.size) + 1;
+
     let thumbSize = 0;
     let type = 6;
     let colTypeIds = '';
@@ -283,13 +283,15 @@ export class AssetSearchService {
     let geographyIds = '';
     let institutionalTypeFilter: boolean = false
 
-    let earliestDate = '';
-    let latestDate = '';
-
-    let filters = this._filters.getApplied();
-    // To-do: break dateObj out of available filters
-    let dateFacet = this._filters.getAvailable()['dateObj'];
-    let filterArray = []
+    // Shared Variables passed to applyFilters
+    let filterOptions = {
+      filters: this._filters.getApplied(),
+      // To-do: break dateObj out of available filters
+      dateFacet: this._filters.getAvailable()['dateObj'],
+      filterArray: [],
+      earliestDate: '',
+      latestDate: '',
+    }
 
     /**
      * Check for WLVs Institution filter
@@ -297,7 +299,7 @@ export class AssetSearchService {
      */
     let institutionFilters: number[] = this._app.config.contributingInstFilters
     for (let i = 0; i < institutionFilters.length; i++) {
-      filterArray.push("contributinginstitutionid:" + institutionFilters[i])
+      filterOptions.filterArray.push("contributinginstitutionid:" + institutionFilters[i])
     }
 
     let pageSize: number = options.size
@@ -313,7 +315,7 @@ export class AssetSearchService {
       }
     }
 
-    let query = this.initQuery(keyword, pageSize, startIndex)
+    let query = this.initQuery(keyword, pageSize, sortIndex)
 
     if (this.showCollectionType) {
       query.facet_fields.push({
@@ -323,7 +325,7 @@ export class AssetSearchService {
       })
     }
 
-    this.applyFilters(query, filters, filterArray, institutionalTypeFilter, options, sortIndex, earliestDate, latestDate, dateFacet)
+    this.applyFilters(query, institutionalTypeFilter, options, sortIndex, filterOptions)
 
     return this.http.post<RawSearchResponse>(
       this._auth.getSearchUrl(),
