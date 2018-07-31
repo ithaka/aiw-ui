@@ -9,13 +9,17 @@ describe("Group Calls #pact", () => {
     let provider;
     let _groups;
 
+    let pact = require('pact');
+    const { somethingLike: like, term, eachLike } = pact;
+
+
     const expectedGroupList: GroupList = {
       "success":true,
       "total":3,
       "groups":[
-        {"tags":[],"sequence_number":0,"update_date":"2017-12-06T13:50:41Z","name":"All PC Assets","public":false,"creation_date":"2017-12-06T13:49:57Z","id":"ba35d77a-7b98-49ee-8102-25c7e4a35ae5","access":[],"items":["SS36904_36904_35824231"]},
-        {"tags":[],"sequence_number":0,"update_date":"2017-07-07T17:00:40Z","name":"Some Assets","public":false,"creation_date":"2017-07-07T17:00:40Z","id":"a1fc32cc-8859-49f7-a560-5da0c5928500","access":[],"items":["AAFOLKAIG_10313142481","AAFOLKAIG_10313142791","AAFOLKAIG_10313143138","AAGOIG_10314000081"]},
-        {"tags":["PC Test","MLK"],"sequence_number":0,"update_date":"2017-08-07T16:03:09Z","name":"PC test","public":false,"creation_date":"2017-01-09T23:45:40Z","id":"900590","access":[],"items":["CARNEGIE_700001","MOMA_620002","MOMA_600006"]}],
+        {"tags":[],"sequence_number":0,"update_date":"2017-12-06T13:50:41Z","name":"All PC Assets","public":false,"creation_date":"2017-12-06T13:49:57Z","id":"ba35d77a-7b98-49ee-8102-25c7e4a35ae5","access":[],"items":["SS36904_36904_35824231"], "group_type":200, "owner_id":"706217", "owner_name":"air01@artstor.org"},
+        {"tags":[],"sequence_number":0,"update_date":"2017-07-07T17:00:40Z","name":"Some Assets","public":false,"creation_date":"2017-07-07T17:00:40Z","id":"a1fc32cc-8859-49f7-a560-5da0c5928500","access":[],"items":["AAFOLKAIG_10313142481","AAFOLKAIG_10313142791","AAFOLKAIG_10313143138","AAGOIG_10314000081"], "group_type":200, "owner_id":"706217", "owner_name":"air01@artstor.org"},
+        {"tags":["PC Test","MLK"],"sequence_number":0,"update_date":"2017-08-07T16:03:09Z","name":"PC test","public":false,"creation_date":"2017-01-09T23:45:40Z","id":"900590","access":[],"items":["CARNEGIE_700001","MOMA_620002","MOMA_600006"], "group_type":200, "owner_id":"706217", "owner_name":"air01@artstor.org"}],
       "tags":[{"key":"MLK","doc_count":1},{"key":"PC Test","doc_count":1}]
     }
 
@@ -51,16 +55,29 @@ describe("Group Calls #pact", () => {
     describe("getAllGroups", () => {
       beforeAll((done) =>  {
         provider.addInteraction({
-          uponReceiving: 'a request for all public groups',
+          uponReceiving: 'a request for all private groups',
           withRequest: {
             method: 'GET',
             path: '/api/v1/group',
-            query: 'size=48&level=public&from=0'
+            query: {
+              size: 48,
+              level: 'private',
+              from: 0,
+              // sort: 'alpha',
+              // order: 'asc'
+            }
+            // 'size=48&level=private&from=0'
           },
           willRespondWith: {
             status: 200,
             headers: { "Content-Type": "application/json" },
-            body: expectedGroupList
+            body: {
+              "success": true,
+              "total": 3,
+              "tags": eachLike( {key: "MLK", doc_count: 1} ),
+              "groups": eachLike( {"tags":[], "sequence_number":0, "update_date":"2017-12-06T13:50:41Z", "name":"All PC Assets", "public":false, "creation_date":"2017-12-06T13:49:57Z", "id":"ba35d77a-7b98-49ee-8102-25c7e4a35ae5", "access":[], "items":["SS36904_36904_35824231"], "group_type":200, "owner_id":"706217", "owner_name":"air01@artstor.org"} )
+            }
+            // body: expectedGroupList
             //Matchers.somethingLike(expectedGroupList)
           }
         })
@@ -69,7 +86,7 @@ describe("Group Calls #pact", () => {
 
       it("should return a Group List object", function(done) {
         //Run the tests
-        _groups.getAll('public', 48, 0)
+        _groups.getAll('private', 48, 0)
           .subscribe(res => {
             expect(res).toEqual(expectedGroupList)
             done()
