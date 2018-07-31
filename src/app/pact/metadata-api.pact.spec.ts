@@ -1,14 +1,16 @@
 /*eslint-disable*/
-import { HttpClientModule } from '@angular/common/http';
-import { TestBed, getTestBed } from '@angular/core/testing';
-import { PactWeb, Matchers } from '@pact-foundation/pact-web';
-import { AssetService, AuthService, GroupList, MetadataRes } from '../shared';
-import { Asset } from '../asset-page/asset';
+import { HttpClientModule } from '@angular/common/http'
+import { TestBed, getTestBed } from '@angular/core/testing'
+import { PactWeb } from '@pact-foundation/pact-web'
+
+// Project Dependencies
+import { MetadataRes } from '../shared/datatypes'
+import { MetadataService } from '../shared/metadata.service';
 
 describe("Group Calls #pact", () => {
 
     let provider;
-    let _assets;
+    let _metadata;
 
     // Metadata for SS35538_35538_29885250, "If the Color Changes"
     const expectedMetadataObject: MetadataRes  = {
@@ -78,14 +80,14 @@ describe("Group Calls #pact", () => {
     beforeEach(() => {
       TestBed.configureTestingModule({
         providers: [
-          AssetService
+          MetadataService
         ],
         imports: [
           HttpClientModule
         ] 
       });
 
-      _assets = getTestBed().get(AssetService)
+      _metadata = getTestBed().get(MetadataService)
     });
 
     /**
@@ -115,7 +117,7 @@ describe("Group Calls #pact", () => {
       it("should return metadata for one object",
        function(done) {
         //Run the tests
-        _assets.getMetadata('SS35538_35538_29885250')
+        _metadata.getMetadata('SS35538_35538_29885250')
           .subscribe(res => {
             expect(res).toEqual(expectedMetadataObject)
             done()
