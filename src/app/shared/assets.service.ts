@@ -1071,6 +1071,12 @@ export interface MetadataRes {
         resolution_x: number
         resolution_y: number
         thumbnail_url: string
-        title: string
+        title: string,
+        updated_on: string,
+        collections: any[],
+        category_name: string,
+        icc_profile_loc ?: any,
+        contributinginstitutionid: number,
+        category_id: string
     }[]
 }

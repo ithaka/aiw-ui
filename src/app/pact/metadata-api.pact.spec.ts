@@ -2,16 +2,16 @@
 import { HttpClientModule } from '@angular/common/http';
 import { TestBed, getTestBed } from '@angular/core/testing';
 import { PactWeb, Matchers } from '@pact-foundation/pact-web';
-import { GroupService, AuthService, GroupList } from '../shared';
+import { AssetService, AuthService, GroupList, MetadataRes } from '../shared';
 import { Asset } from '../asset-page/asset';
 
 describe("Group Calls #pact", () => {
 
     let provider;
-    let _groups;
+    let _assets;
 
     // Metadata for SS35538_35538_29885250, "If the Color Changes"
-    const expectedMetadataObject  = {
+    const expectedMetadataObject: MetadataRes  = {
       "success":true,
       "total":1,
       "metadata":[{
@@ -78,14 +78,14 @@ describe("Group Calls #pact", () => {
     beforeEach(() => {
       TestBed.configureTestingModule({
         providers: [
-          GroupService
+          AssetService
         ],
         imports: [
           HttpClientModule
         ] 
       });
 
-      _groups = getTestBed().get(GroupService)
+      _assets = getTestBed().get(AssetService)
     });
 
     /**
@@ -94,14 +94,12 @@ describe("Group Calls #pact", () => {
     describe("GET /api/v1/metadata", () => {
       beforeAll((done) =>  {
         provider.addInteraction({
-          uponReceiving: 'a request for all public groups',
+          uponReceiving: 'a request for an asset\'s metadata',
           withRequest: {
             method: 'GET',
-            path: '/api/v1/group',
+            path: '/api/v1/metadata',
             query: {
-              size: 48,
-              level: 'public',
-              from: 0
+              object_id: 'SS35538_35538_29885250' 
             }
           },
           willRespondWith: {
@@ -114,10 +112,10 @@ describe("Group Calls #pact", () => {
         .then(() => { done() }, (err) => { done.fail(err) })
       })
 
-      it("should return a Group List object",
+      it("should return metadata for one object",
        function(done) {
         //Run the tests
-        _groups.getAll('public', 48, 0)
+        _assets.getMetadata('SS35538_35538_29885250')
           .subscribe(res => {
             expect(res).toEqual(expectedMetadataObject)
             done()
