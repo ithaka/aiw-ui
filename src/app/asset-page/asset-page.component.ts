@@ -136,16 +136,23 @@ export class AssetPage implements OnInit, OnDestroy {
 
     private steps: TourStep[] = [
         {
-            element: '#testtest',
+            element: '.icon-zoom-in',
             popover: {
-                title: 'Test',
-                description: 'If you want to save the iamge for later, click this button.',
+                title: '<p>1 OF 3</p><b>Zoom and pan</b>',
+                description: 'You can zoom in with this button.',
+            }
+        },
+        {
+            element: '.icon-fullscreen',
+            popover: {
+                title: '<p>2 OF 3</p><b>View full image and compare</b>',
+                description: 'If you came to this page from search or a group, you can enter fullscreen mode to see it side-by-side with others.'
             }
         },
         {
             element: '#assetpage-btn',
             popover: {
-                title: 'Save the image for later',
+                title: '<p>3 OF 3</p><b>Save the image for later</b>',
                 description: 'If you want to save the iamge for later, click this button.',
             }
         }
