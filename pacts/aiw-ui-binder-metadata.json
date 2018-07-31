@@ -3,7 +3,7 @@
     "name": "aiw-ui"
   },
   "provider": {
-    "name": "binder-group"
+    "name": "binder-metadata"
   },
   "interactions": [
     {
