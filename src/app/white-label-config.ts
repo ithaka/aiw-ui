@@ -29,7 +29,6 @@ export const WLV_ARTSTOR = {
         'myCol': true,
         'igs': true
     },
-    defaultGrpBrwseBy: "institution",
     homeBrowseSec: {
         'collection': true,
         'instCollection': false,
@@ -76,7 +75,6 @@ export const WLV_SAHARA = {
         'myCol': false,
         'igs': true
     },
-    defaultGrpBrwseBy: "private",
     featuredCollection: "HOME.SAHARA_FEATURED",
     copyModifier: "SAHARA",
     homeBrowseSec: {

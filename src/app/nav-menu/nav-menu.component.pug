@@ -15,9 +15,7 @@
             button.dropdown-item(*ngIf="!_auth.isPublicOnly() && browseOpts.instCol", [routerLink]="['/browse', 'institution']") {{ 'NAV_MENU.COLLECTIONS.INSTITUTION' | translate }}
             button.dropdown-item(*ngIf="browseOpts.openCol", [routerLink]="['/browse', 'commons']") {{ 'NAV_MENU.COLLECTIONS.OPEN' | translate }}
             button.dropdown-item(*ngIf="!_auth.isPublicOnly() && browseOpts.myCol", [class.disabled]="!user.isLoggedIn", [routerLink]="['/browse', 'mycollections']") {{ 'NAV_MENU.COLLECTIONS.OWNED' | translate }}
-            button.dropdown-item(*ngIf="!_auth.isPublicOnly() && browseOpts.igs", [routerLink]="['/browse','groups', defaultGrpBrwseBy]") {{ 'NAV_MENU.COLLECTIONS.GROUPS' | translate }}
-        //li.nav-item(*ngIf="!_auth.isPublicOnly()")
-          a.btn.btn-link([routerLink]="['/browse','groups', defaultGrpBrwseBy]", routerLinkActive="active") {{ 'NAV_MENU.GROUPS' | translate }}
+            button.dropdown-item(*ngIf="!_auth.isPublicOnly() && browseOpts.igs", [routerLink]="['/browse','groups']") {{ 'NAV_MENU.COLLECTIONS.GROUPS' | translate }}
         li.nav-item(*ngIf="!_auth.isPublicOnly()", ngbDropdown, (mouseenter)="openDrop($event, drop2)", (mouseleave)="closeDrop($event, drop2)", #drop2="ngbDropdown")
           button#organizeMenu.btn.btn-link(ngbDropdownToggle) {{ 'NAV_MENU.ORGANIZE.TITLE' | translate }}
           .dropdown-menu(ngbDropdownMenu, aria-labelledby="organizeMenu")
