@@ -1,19 +1,21 @@
-nav.nav.nav-inline.browse-nav
-  a.label Browse By:
-  a.nav-link(*ngFor="let browseOpt of browseMenuArray", [ngClass]="{'active': browseOpt.level == route.snapshot.params.view}", [routerLink]="['/browse', 'groups', browseOpt.level]", (click)="browseOpt.level === 'search' ? firstSearch = true : firstSearch = false")
-    div(*ngIf="browseOpt.level !== 'all'") {{ browseOpt.label }}
-.row
+//- nav.nav.nav-inline.browse-nav
+  //- a.label Browse By:
+  //- a.nav-link(*ngFor="let browseOpt of groupFilterArray", [ngClass]="{'active': browseOpt.level == route.snapshot.params.view}", [routerLink]="['/browse', 'groups', browseOpt.level]", (click)="browseOpt.level === 'search' ? firstSearch = true : firstSearch = false")
+  //-   div(*ngIf="browseOpt.level !== 'all'") {{ browseOpt.label }}
+.row.pt-3
   .col-md-3.hidden-sm-down
-    #searchFilterList.mb-3(*ngIf="route.snapshot.params.view == 'search'")
-      h3 Group Type Filter
-        a#searchFilterClear.link--accent.small(tabindex="0", style="float:right;", (click)="setSearchLevel('none', true)") Clear
-      div(*ngFor="let filter of browseMenuArray")
-        button.filter.filter--tag(*ngIf="filter.level !== 'search'", (click)="setSearchLevel(filter.level, true)", [class.active]="filter.selected", [attr.title]="'Filter by ' + filter.label + ' image groups'")
+    //- .filter-list-wrap
+    #searchFilterList.mb-3.filter-list
+      h3.pt-2 Groups
+      hr
+      div(*ngFor="let filter of groupFilterArray")
+        button.filter.filter--tag.group-filter((click)="setSearchLevel(filter.level, true)", [class.active]="filter.selected", [attr.title]="'Filter by ' + filter.label + ' image groups'")
           | {{ filter.label }}
-    ang-tags-list([browseLevel]="selectedBrowseLevel")
+        //- button.filter.filter--tag((click)="setSearchLevel(, true)", [class.active]="filter.selected", [attr.title]="'Filter by ' + filter.label + ' image groups'")
+    ang-tags-list(*ngIf="selectedFilter")
   .col-md-9
-    ang-general-search(*ngIf="route.snapshot.params.view == 'search'", [updateSearchTerm]="updateSearchTerm", [init]="searchTerm", (executeSearch)="addQueryParams({ term: $event }, false, true)")
-    h3.pb-1.px-2 Groups     
+    ang-general-search([updateSearchTerm]="updateSearchTerm", [init]="searchTerm", (executeSearch)="addQueryParams({ term: $event }, false, true)")
+    h3.pb-1.px-2 {{ selectedFilter.label }}     
       pagination([pageObj]="pagination", (goToPage)="goToPage($event)", [right]="true")
     h3.pb-1.px-2(*ngIf="_tagFilters.selectedFilters.length>0") Tags:
       .filter.filter--aboveGroup(*ngFor="let tag of _tagFilters.selectedFilters", (click)="tag.selected = !tag.selected", [class.active]="tag.selected")
@@ -22,17 +24,16 @@ nav.nav.nav-inline.browse-nav
         i.icon.icon-close
       a#groupTagsClear.link--accent.small(*ngIf="_tagFilters.selectedFilters.length>1", tabindex="", style="margin:3px;", (click)="_tagFilters.clearFilters();") Clear All
     .group-list.has-icon-overlay.px-2
-      .alert.alert-warning(*ngIf="errorObj[selectedBrowseLevel]", [innerHtml]="errorObj[selectedBrowseLevel]")
-      .alert.alert-info(*ngIf="showSearchPrompt && route.snapshot.params.view == 'search'") {{ 'BROWSE.ERRORS.SEARCH_PROMPT' | translate }}    
+      .alert.alert-warning(*ngIf="selectedFilter && errorObj[selectedFilter.level]", [innerHtml]="errorObj[selectedFilter.level]")
       ng-container(*ngIf="showCardView")
-        ang-card-view(*ngFor="let tag of tags; let i=index;", [tag]="tag", [group]="groups[i]", [browseLevel]="selectedBrowseLevel", link="true")
+        ang-card-view(*ngFor="let tag of tags; let i=index;", [tag]="tag", [group]="groups[i]", [browseLevel]="selectedFilter.level", link="true")
       ng-container(*ngIf="!showCardView")
         ang-tag(*ngFor="let tag of tags", [tag]="tag", link="true")  
 .row.has-icon-overlay(*ngIf="loading")
   i.icon-lg.icon-overlay--top.icon-loading-large
 // Don't show this if there is a filters list, if it's loading, or if the user hasn't searched for anything yet
-.alert.alert-info(*ngIf="tags.length < 1 && !loading && route.snapshot.params.view !== 'search'")
+.alert.alert-info(*ngIf="tags.length < 1 && !loading")
   h3 {{ 'BROWSE.ERRORS.NO_GROUPS_COLLECTIONS_HEADING' | translate }}
   br
-  div(*ngIf="selectedBrowseLevel === 'private'", [innerHtml]="'BROWSE.ERRORS.NO_PRIVATE_GROUPS_COLLECTIONS_PROMPT' | translate")
-  div(*ngIf="selectedBrowseLevel === 'institution'", [innerHtml]="'BROWSE.ERRORS.NO_INSTITUTIONAL_GROUPS_COLLECTIONS_PROMPT' | translate")
+  div(*ngIf="selectedFilter && selectedFilter.level === 'private'", [innerHtml]="'BROWSE.ERRORS.NO_PRIVATE_GROUPS_COLLECTIONS_PROMPT' | translate")
+  div(*ngIf="selectedFilter && selectedFilter.level === 'institution'", [innerHtml]="'BROWSE.ERRORS.NO_INSTITUTIONAL_GROUPS_COLLECTIONS_PROMPT' | translate")

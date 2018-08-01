@@ -331,16 +331,10 @@ export class AssetPage implements OnInit, OnDestroy {
         // MS Browser Agent ?
         this.isMSAgent = this.navigator.msSaveOrOpenBlob !== undefined
 
-        // Append Crazy Egg A/B Testing script to head
-        this.scriptService.load('crazyegg')
-
     } // OnInit
 
     ngOnDestroy() {
         this.subscriptions.forEach((sub) => { sub.unsubscribe(); });
-
-        // Remove Crazy Egg Script from head on destroy because we're only tracking on asset pages
-        this.scriptService.removeScript('crazyegg');
     }
 
     private handleSkipAsset(): void {
@@ -418,7 +412,7 @@ export class AssetPage implements OnInit, OnDestroy {
                     this.assets[0].formattedMetadata['Collection'] = splitValues
                 }
 
-                
+
 
                 // Load related results from jstor
                 if (this.relatedResFlag) {
