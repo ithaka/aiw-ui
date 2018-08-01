@@ -67,7 +67,8 @@ module.exports = function(config) {
     pact: [{cors: true, spec: 2, port: 1234, dir: 'pacts/'}], 
     // 4) here we can define proxies to redirect requests from our pact tests to the mock server
     proxies: { 
-      '/api/v1/group': 'http://localhost:1234/api/v1/group'
+      '/api/v1/group': 'http://localhost:1234/api/v1/group',
+      '/api/v1/metadata': 'http://localhost:1234/api/v1/metadata'
     },
 
     /*
