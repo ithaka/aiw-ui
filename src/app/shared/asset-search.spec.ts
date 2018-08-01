@@ -1,7 +1,7 @@
-import { inject, TestBed } from '@angular/core/testing';
+import { inject, TestBed, tick } from '@angular/core/testing';
 import { Component } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
-import { BaseRequestOptions, ConnectionBackend, Http, Response, RequestOptions } from '@angular/http';
+import { BaseRequestOptions, ConnectionBackend, Http, Response, RequestOptions, ResponseOptions } from '@angular/http';
 import { MockBackend, MockConnection } from '@angular/http/testing';
 
 // Asset Search Service Test Dependencies
@@ -41,7 +41,7 @@ describe('AssetSearchService', () => {
         AssetSearchService,
         // MockConnection,
         // MockBackend,
-        // Http,
+        Http,
 
         { provide: AssetFiltersService, useValue: {}, deps: [] },
         { provide: AppConfig, useValue: { config: WLV_ARTSTOR }, deps: [] },
@@ -52,7 +52,10 @@ describe('AssetSearchService', () => {
       imports: [HttpClientModule]
     });
 
-    backend = TestBed.get(ConnectionBackend);
+    //backend = TestBed.get(MockBackend);
+
+    //this.backend = this.injector.get(ConnectionBackend) as MockBackend;
+    //backend.connections.subscribe((connection: any) => this.lastConnection = connection);
   });
 
   // Test if AssetSearchService methods are defined
@@ -66,13 +69,14 @@ describe('AssetSearchService', () => {
   }));
 
   // Test AssetSearchService.search method
-  fit('search returns a valid SearchResponse type', inject([AssetSearchService], (assetSearch: AssetSearchService, backend) => {
+  fit('search returns a valid SearchResponse type', inject([AssetSearchService], (assetSearch: AssetSearchService, backend: MockBackend) => {
     let mockResponse = mockSearchResponseData
 
     backend.connections.subscribe(connection => {
-      connection.mockRespond({
+      connection.mockRespond(new Response(new ResponseOptions({
         body: mockResponse
-      })
+      })))
+      tick()
     })
 
     expect(assetSearch.search(mockSearchOptions, "mona lisa", 0)).toMatch(mockSearchResponseData)
