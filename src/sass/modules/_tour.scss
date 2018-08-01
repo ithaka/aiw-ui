@@ -21,7 +21,9 @@ div#driver-popover-item .driver-popover-footer button{
     font-weight: unset;
     text-transform: none;
     &:hover, &:focus, &:active {
-        background: #fff;
+        background: transparent;
+        text-decoration: underline;
+        color: $blue;
         border-color: #fff;
      }
 }
