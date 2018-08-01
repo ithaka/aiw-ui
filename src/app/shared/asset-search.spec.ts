@@ -1,11 +1,11 @@
-/* tslint:disable:no-unused-variable */
-import { inject, TestBed } from '@angular/core/testing';
-import { Component } from '@angular/core';
-// import { BaseRequestOptions, ConnectionBackend, Http } from '@angular/http';
-// import { MockBackend } from '@angular/http/testing';
+import { inject, TestBed } from '@angular/core/testing'
+import { Component } from '@angular/core'
+import { Observable } from 'rxjs/Observable'
+import { BaseRequestOptions, ConnectionBackend, Http, ResponseOptions } from '@angular/http';
+import { MockBackend, MockConnection } from '@angular/http/testing'
 
 // Asset Search Service Test Dependencies
-import { AssetFiltersService } from '../asset-filters/asset-filters.service';
+// import { AssetFiltersService } from '../asset-filters/asset-filters.service';
 import {
   AssetSearchService,
   SearchResponse,
@@ -21,17 +21,16 @@ import { AppConfig } from '../app.service';
 import { AuthService } from '.';
 import { HttpClientModule } from '@angular/common/http';
 import { WLV_ARTSTOR } from '../white-label-config';
-import { SearchQueryUtil } from './search-query'; // Query filter helpers
 
-//import { AuthService } from './'
-//import { AppConfig } from '../app.service'
-//import { Observable } from 'rxjs/Observable'
-/** Mock Filters, MediaObject, SearchRequest, SearchOptions, SearchResponse */
+// NOTE: Query filter helpers - we're not using these in search tests, (yet).
+import { SearchQueryUtil } from './search-query';
 
 /** Test values from AssetFilterService */
-let filterService: AssetFiltersService
-let filterNames
-let filtersAvailable
+// let filterService: AssetFiltersService
+// let filterNames
+// let filtersAvailable
+
+/** Mock Filters, MediaObject, SearchRequest, SearchOptions, SearchResponse */
 
 // TODO: Pass in labels array, other filters array, count, and depth as params
 function newFilter(): HierarchicalFilter {
@@ -47,24 +46,6 @@ function newFilter(): HierarchicalFilter {
       }
     }
   }
-}
-
-/** Mock MediaObject */
-let mockMediaObject: MediaObject = {
-  format: "format", //string
-  thumbnailSizeOnePath: "thumb size", //string
-  width: 360, //number
-  sizeInBytes: 100000, //number
-  downloadSize: 700000, //number
-  type: "video", //string
-  icc_profile_location: "profile location", //string
-  thumbnailSizeZeroPath: "zero path", //string
-  filename: "fasdfafasf", //string
-  lps: "lps", //string
-  iiif: "iiif", //string
-  storId: "sdfad", //string
-  adlObjectType: 103, //number
-  height: 500 //number
 }
 
 /** Mock SearchResponse */
@@ -146,39 +127,210 @@ let mockSearchAsset: RawSearchAsset = {
   yearend: 1970, // end of date range the asset is thought to have been created in
 }
 
-describe('Asset Search Service', () => {
+describe('AssetSearchService', () => {
   beforeEach(() => {
 
-    filterNames = filterService.getFilterNameMap()
-    filtersAvailable = filterService.getAvailable()
+    //filterNames = filterService.getFilterNameMap()
+    //filtersAvailable = filterService.getAvailable()
+    let backend: MockBackend
 
     TestBed.configureTestingModule({
       providers: [
         AssetSearchService,
-        { provide: AssetFiltersService, useValue:{}, deps: [] },
+        MockConnection,
+        MockBackend,
+        {
+          provide: Http,
+          useFactory: function (backend: ConnectionBackend, defaultOptions: BaseRequestOptions) {
+            return new Http(backend, defaultOptions);
+          },
+          deps: [MockBackend, BaseRequestOptions]
+        },
+        // { provide: AssetFiltersService, useValue:{}, deps: [] },
         { provide: AppConfig, useValue: { config: WLV_ARTSTOR }, deps: [] },
         { provide: AuthService, useValue: {}, deps: [] }
       ],
       imports: [ HttpClientModule]
     });
+
+    backend = TestBed.get(MockBackend);
   });
 
   // Test if AssetSearchService methods are defined
-  fit('initial AssetSearchService exists and methods available', inject([AssetSearchService], (assetSearch: AssetSearchService) => {
+  it('AssetSearchService methods are available', inject([AssetSearchService], (assetSearch: AssetSearchService) => {
     expect(assetSearch).toBeTruthy();
     expect(assetSearch.search).toBeDefined()
     expect(assetSearch.getAssetById).toBeDefined()
     expect(assetSearch.getFacets).toBeDefined()
     expect(assetSearch.makeThumbUrl).toBeDefined()
-  }));
+    expect(assetSearch.applyFilters).toBeDefined()
+  }))
 
-  // Testvalues AssetFiltersService methodsa used in search
-  fit('AssetFilterService Filter methods are defined', inject([filterNames, filtersAvailable], () => {
-    console.log('Filter Names: ', filterNames)
-    console.log('Filters Available: ', filtersAvailable)
-    expect(filterNames).toBeDefined()
-    expect(filtersAvailable).toBeDefined()
-  }));
+  // Test AssetSearchService.search method
+  it('search returns a valid SearchResponse type', inject([AssetSearchService], (assetSearch: AssetSearchService, backend) => {
+    let mockResponse = mockSearchResponseData
+
+    backend.connections.subscribe(connection => {
+      connection.mockRespond(new Response(<ResponseOptions>{
+        body: mockResponse
+      }))
+    })
+
+    expect(assetSearch.search(mockSearchOptions, "mona lisa", 0)).toMatch(mockSearchResponseData)
+  }))
+});
+
+// Search result example for keyword 'flyers' filtered by Geography=>Central America and the Caribbean (1) result
+const mockSearchResponseData = JSON.stringify(
+  { "total": 1,
+    "modified_query": "",
+    "results": [
+      { "id": "014c0ef4-189d-36a9-9f9d-4c120b9c3896",
+        "doi": "10.2307/artstor.14400092",
+        "debug_fields": {},
+        "agent": "Mora, Gabriel de la, Mexican, b.1968",
+        "artstorid": "ABARNITZ_10310363702",
+        "artadditionalfields": null,
+        "clusterid": "ABARNITZ_10310363702",
+        "categoryid": 1034380360,
+        "collectiontypes": [1],
+        "collectiontypenameid": ["1|Artstor Digital Library|35953"],
+        "collections": ["35953"],
+        "contributinginstitutionid": 1000,
+        "date": "1999",
+        "frequentlygroupedwith": [],
+        "iap": false,
+        "media": "{\"format\":null,\"thumbnailSizeOnePath\":\"imgstor/size1/barnitz/d0001/utexas_barnitz_01-00412_post_as_8b_srgb.jpg\",\"width\":4276,\"sizeInBytes\":null,\"downloadSize\":1024,\"type\":null,\"icc_profile_location\":null,\"thumbnailSizeZeroPath\":\"imgstor/size0/barnitz/d0001/utexas_barnitz_01-00412_post_as_8b_srgb.jpg\",\"filename\":\"utexas_barnitz_01-00412_post_as_8b_srgb.jpg\",\"lps\":\"barnitz/d0001\",\"iiif\":null,\"storId\":null,\"adlObjectType\":10,\"height\":3378}",
+        "name": "Flyers",
+        "partofcluster": false,
+        "tokens": ["123959834799265", "17000000040", "99999003098185", "99999003098215", "99999003098225"],
+        "type": "art",
+        "updatedon": "2018-06-06T01:22:06Z",
+        "workid": null,
+        "year": 1999,
+        "yearbegin": 1999,
+        "yearend": 1999,
+        "additional_Fields": {} }],
+        "errors": [],
+        "servers": [],
+        "warnings": [],
+        "solr_queries": {},
+        "debug": {},
+        "requestId": "ae911ad8f4c4fa9af1700ae2383732b1",
+        "facets": [
+          { "name": "artclassification_str",
+          "values": [
+            { "name": "Paintings",
+              "fq": "artclassification_str:(\"Paintings\")",
+              "efq": "AWFydGNsYXNzaWZpY2F0aW9uX3N0cjooIlBhaW50aW5ncyIp",
+              "count": 1
+            }
+          ]},
+          { "name": "collectiontypes",
+            "values": [
+              { "name": "1",
+                "fq": "collectiontypes:(\"1\")",
+                "efq": "AWNvbGxlY3Rpb250eXBlczooIjEiKQ",
+                "count": 1
+              }
+            ]
+          }
+        ],
+        "hierarchies": {},
+        "hierarchies2": {
+          "artstor-geography": {
+            "children": {
+              "Central America and the Caribbean": {
+                "children": {
+                  "Mexico": {
+                      "children": {},
+                      "element": {
+                          "label": ["artstor-geography", "Central America and the Caribbean", "Mexico"],
+                          "efq": "eyJmaWVsZCI6ImhpZXJhcmNoaWVzIiwiZGVwdGgiOjIsImxhYmVscyI6WyJhcnRzdG9yLWdlb2dyYXBoeSIsIkNlbnRyYWwgQW1lcmljYSBhbmQgdGhlIENhcmliYmVhbiIsIk1leGljbyJdfQ==",
+                          "selected": false,
+                          "count": 1,
+                          "depth": "2"
+                      }
+                  }
+                },
+                "element": {
+                  "label": [
+                    "artstor-geography",
+                    "Central America and the Caribbean"
+                  ],
+                  "efq": "eyJmaWVsZCI6ImhpZXJhcmNoaWVzIiwiZGVwdGgiOjEsImxhYmVscyI6WyJhcnRzdG9yLWdlb2dyYXBoeSIsIkNlbnRyYWwgQW1lcmljYSBhbmQgdGhlIENhcmliYmVhbiJdfQ==",
+                  "selected": true,
+                  "count": 1,
+                  "depth": "1"
+                }
+              },
+              "North America": {
+                "children": {},
+                "element": {
+                  "label": ["artstor-geography", "North America"],
+                  "efq": "eyJmaWVsZCI6ImhpZXJhcmNoaWVzIiwiZGVwdGgiOjEsImxhYmVscyI6WyJhcnRzdG9yLWdlb2dyYXBoeSIsIk5vcnRoIEFtZXJpY2EiXX0=",
+                  "selected": false,
+                  "count": 1, "depth": "1"
+                }
+              }
+            },
+            "element": {
+              "label": [],
+              "efq": null,
+              "selected": false,
+              "count": 0,
+              "depth": null
+            }
+          }
+        },
+    "bad_request": null,
+    "ms_facets": [],
+    "nextCursorMark": null
+  }
+)
+
+
+  // /** Mock MediaObject */
+// let mockMediaObject: MediaObject = {
+//   format: "format", //string
+//   thumbnailSizeOnePath: "thumb size", //string
+//   width: 360, //number
+//   sizeInBytes: 100000, //number
+//   downloadSize: 700000, //number
+//   type: "video", //string
+//   icc_profile_location: "profile location", //string
+//   thumbnailSizeZeroPath: "zero path", //string
+//   filename: "fasdfafasf", //string
+//   lps: "lps", //string
+//   iiif: "iiif", //string
+//   storId: "sdfad", //string
+//   adlObjectType: 103, //number
+//   height: 500 //number
+// }
+
+
+    // let searchResponse = assetSearch.search( <=== This is what we should do with MockBackend
+    //   mockSearchOptions, // options
+    //   "mona lisa",       // keyword
+    //   0                  // startIndex
+    // ).subscribe(
+    //   res => {
+    //     expect(res).toBeDefined()
+    //   })
+
+
+
+  // fit('AssetSearchService.applyFilters returns array of filter', inject([AssetSearchService], (assetSearch: AssetSearchService) => {
+  //   expect(assetSearch.applyFilters()).toThrowError('missing parameters')
+  // }))
+
+  // Testvalues AssetFiltersService methods used in search
+  // it('AssetFilterService Filter methods are defined', inject([filterNames, filtersAvailable], () => {
+  //   console.log('Filter Names: ', filterNames)
+  //   console.log('Filters Available: ', filtersAvailable)
+  //   expect(filterNames).toBeDefined()
+  //   expect(filtersAvailable).toBeDefined()
+  // }));
 
   // Test AssetSearchService.search method
    /**
@@ -190,9 +342,7 @@ describe('Asset Search Service', () => {
    * @returns       Returns an object with the properties: thumbnails, count, altKey, classificationFacets, geographyFacets, minDate, maxDate, collTypeFacets, dateFacets
    */
 
-  it('calls basic unfiltered or sorted search method', inject([AssetSearchService], (assetSearch: AssetSearchService) => {
-    let req = this.mockSearchRequest
-    expect(assetSearch.search(this.mockSearchOptions, "", 0)).toBeDefined()
-  }));
-
-});
+  // it('calls basic unfiltered or sorted search method', inject([AssetSearchService], (assetSearch: AssetSearchService) => {
+  //   let req = this.mockSearchRequest
+  //   expect(assetSearch.search(this.mockSearchOptions, "", 0)).toBeDefined()
+  // }));
