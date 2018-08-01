@@ -1,11 +1,11 @@
-import { inject, TestBed } from '@angular/core/testing'
-import { Component } from '@angular/core'
-import { Observable } from 'rxjs/Observable'
-import { BaseRequestOptions, ConnectionBackend, Http, ResponseOptions } from '@angular/http';
-import { MockBackend, MockConnection } from '@angular/http/testing'
+import { inject, TestBed } from '@angular/core/testing';
+import { Component } from '@angular/core';
+import { Observable } from 'rxjs/Observable';
+import { BaseRequestOptions, ConnectionBackend, Http, Response, RequestOptions } from '@angular/http';
+import { MockBackend, MockConnection } from '@angular/http/testing';
 
 // Asset Search Service Test Dependencies
-// import { AssetFiltersService } from '../asset-filters/asset-filters.service';
+import { AssetFiltersService } from '../asset-filters/asset-filters.service';
 import {
   AssetSearchService,
   SearchResponse,
@@ -28,6 +28,57 @@ import { SearchQueryUtil } from './search-query';
 // let filterService: AssetFiltersService
 // let filterNames
 // let filtersAvailable
+
+describe('AssetSearchService', () => {
+  beforeEach(() => {
+
+    //filterNames = filterService.getFilterNameMap()
+    //filtersAvailable = filterService.getAvailable()
+    let backend: MockBackend;
+
+    TestBed.configureTestingModule({
+      providers: [
+        AssetSearchService,
+        // MockConnection,
+        // MockBackend,
+        // Http,
+
+        { provide: AssetFiltersService, useValue: {}, deps: [] },
+        { provide: AppConfig, useValue: { config: WLV_ARTSTOR }, deps: [] },
+        { provide: AuthService, useValue: {}, deps: [] },
+        { provide: ConnectionBackend, useClass: MockBackend },
+        { provide: RequestOptions, useClass: BaseRequestOptions },
+      ],
+      imports: [HttpClientModule]
+    });
+
+    backend = TestBed.get(ConnectionBackend);
+  });
+
+  // Test if AssetSearchService methods are defined
+  fit('initial AssetSearchService exists and methods available', inject([AssetSearchService], (assetSearch: AssetSearchService) => {
+    expect(assetSearch).toBeTruthy();
+    expect(assetSearch.search).toBeDefined()
+    expect(assetSearch.getAssetById).toBeDefined()
+    expect(assetSearch.getFacets).toBeDefined()
+    expect(assetSearch.makeThumbUrl).toBeDefined()
+    expect(assetSearch.applyFilters).toBeDefined()
+  }));
+
+  // Test AssetSearchService.search method
+  fit('search returns a valid SearchResponse type', inject([AssetSearchService], (assetSearch: AssetSearchService, backend) => {
+    let mockResponse = mockSearchResponseData
+
+    backend.connections.subscribe(connection => {
+      connection.mockRespond({
+        body: mockResponse
+      })
+    })
+
+    expect(assetSearch.search(mockSearchOptions, "mona lisa", 0)).toMatch(mockSearchResponseData)
+  }))
+
+});
 
 /** Mock Filters, MediaObject, SearchRequest, SearchOptions, SearchResponse */
 
@@ -125,59 +176,6 @@ let mockSearchAsset: RawSearchAsset = {
   yearbegin: 1970, // beginning of date range the asset is thought to have been created in
   yearend: 1970, // end of date range the asset is thought to have been created in
 }
-
-describe('Search Service', () => {
-  beforeEach(() => {
-
-    //filterNames = filterService.getFilterNameMap()
-    //filtersAvailable = filterService.getAvailable()
-    let backend: MockBackend
-
-    TestBed.configureTestingModule({
-      providers: [
-        AssetSearchService,
-        MockConnection,
-      //   MockBackend,
-      //   {
-      //     provide: Http,
-      //     useFactory: function (backend: ConnectionBackend, defaultOptions: BaseRequestOptions) {
-      //       return new Http(backend, defaultOptions);
-      //     },
-      //     deps: [MockBackend, BaseRequestOptions]
-      //   },
-      //   // { provide: AssetFiltersService, useValue:{}, deps: [] },
-        { provide: AppConfig, useValue: { config: WLV_ARTSTOR }, deps: [] },
-        { provide: AuthService, useValue: {}, deps: [] }
-      ],
-      imports: [ HttpClientModule]
-    });
-
-    //backend = TestBed.get(MockBackend);
-  });
-
-  // Test if AssetSearchService methods are defined
-  fit('should return that AssetSearchService methods are available', inject([AssetSearchService], (assetSearch: AssetSearchService) => {
-    expect(assetSearch).toBeTruthy();
-    expect(assetSearch.search).toBeDefined()
-    expect(assetSearch.getAssetById).toBeDefined()
-    expect(assetSearch.getFacets).toBeDefined()
-    expect(assetSearch.makeThumbUrl).toBeDefined()
-    expect(assetSearch.applyFilters).toBeDefined()
-  }));
-
-  // // Test AssetSearchService.search method
-  // it('search returns a valid SearchResponse type', inject([AssetSearchService], (assetSearch: AssetSearchService, backend) => {
-  //   let mockResponse = mockSearchResponseData
-
-  //   backend.connections.subscribe(connection => {
-  //     connection.mockRespond(new Response(<ResponseOptions>{
-  //       body: mockResponse
-  //     }))
-  //   })
-
-  //   expect(assetSearch.search(mockSearchOptions, "mona lisa", 0)).toMatch(mockSearchResponseData)
-  // }))
-});
 
 // Search result example for keyword 'flyers' filtered by Geography=>Central America and the Caribbean (1) result
 const mockSearchResponseData = JSON.stringify(
