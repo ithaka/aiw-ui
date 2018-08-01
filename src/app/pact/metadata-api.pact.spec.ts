@@ -7,7 +7,7 @@ import { PactWeb } from '@pact-foundation/pact-web'
 import { MetadataRes } from '../shared/datatypes'
 import { MetadataService } from '../shared/metadata.service';
 
-describe("Group Calls #pact", () => {
+describe("Metadata Calls #pact", () => {
 
     let provider;
     let _metadata;
@@ -65,7 +65,12 @@ describe("Group Calls #pact", () => {
     }
 
     beforeAll(function(done) {
-      provider = new PactWeb({ consumer: 'aiw-ui', provider: 'binder-metadata', port: 1234, host: 'localhost' })
+      provider = new PactWeb({ 
+        consumer: 'aiw-ui', 
+        provider: 'binder-metadata', 
+        port: 1234, 
+        host: 'localhost' 
+      })
       // Required for slower environments
       setTimeout(function () { done() }, 2000)
       // Required if run with `singleRun: false` (see karma config)
@@ -100,8 +105,10 @@ describe("Group Calls #pact", () => {
           withRequest: {
             method: 'GET',
             path: '/api/v1/metadata',
+            headers: { 'Content-Type': 'application/json' },
             query: {
-              object_id: 'SS35538_35538_29885250' 
+              legacy: false,
+              object_ids: 'SS35538_35538_29885250'
             }
           },
           willRespondWith: {
