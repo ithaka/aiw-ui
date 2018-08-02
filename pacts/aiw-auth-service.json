@@ -7,15 +7,36 @@
   },
   "interactions": [
     {
-      "description": "a request to update a user's allowUpdatesSurvey",
+      "description": "a request to update a user's allowSurvey",
       "request": {
         "method": "PUT",
         "path": "/api/v1/users",
         "body": {
-          "allowUpdatesSurvey": true
+          "allowSurvey": true
         },
         "matchingRules": {
-          "$.body.allowUpdatesSurvey": {
+          "$.body.allowSurvey": {
+            "match": "type"
+          }
+        }
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      }
+    },
+    {
+      "description": "a request to update a user's departmentRole",
+      "request": {
+        "method": "PUT",
+        "path": "/api/v1/users",
+        "body": {
+          "departmentRole": "a new role for the user!"
+        },
+        "matchingRules": {
+          "$.body.departmentRole": {
             "match": "type"
           }
         }
@@ -49,27 +70,6 @@
       }
     },
     {
-      "description": "a request to update a user's allowSurvey",
-      "request": {
-        "method": "PUT",
-        "path": "/api/v1/users",
-        "body": {
-          "allowSurvey": true
-        },
-        "matchingRules": {
-          "$.body.allowSurvey": {
-            "match": "type"
-          }
-        }
-      },
-      "response": {
-        "status": 200,
-        "headers": {
-          "Content-Type": "application/json"
-        }
-      }
-    },
-    {
       "description": "a request to update a user's firstName",
       "request": {
         "method": "PUT",
@@ -91,15 +91,15 @@
       }
     },
     {
-      "description": "a request to update a user's lastName",
+      "description": "a request to update a user's allowUpdatesSurvey",
       "request": {
         "method": "PUT",
         "path": "/api/v1/users",
         "body": {
-          "lastName": "a new last name!"
+          "allowUpdatesSurvey": true
         },
         "matchingRules": {
-          "$.body.lastName": {
+          "$.body.allowUpdatesSurvey": {
             "match": "type"
           }
         }
@@ -112,15 +112,15 @@
       }
     },
     {
-      "description": "a request to update a user's departmentRole",
+      "description": "a request to update a user's lastName",
       "request": {
         "method": "PUT",
         "path": "/api/v1/users",
         "body": {
-          "departmentRole": "a new role for the user!"
+          "lastName": "a new last name!"
         },
         "matchingRules": {
-          "$.body.departmentRole": {
+          "$.body.lastName": {
             "match": "type"
           }
         }
