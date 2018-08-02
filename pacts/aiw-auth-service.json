@@ -10,22 +10,20 @@
       "description": "a request to update a user",
       "request": {
         "method": "PUT",
-        "path": "/api/v1/users"
+        "path": "/api/v1/users",
+        "body": {
+          "lastName": "a new last name!"
+        },
+        "matchingRules": {
+          "$.body.lastName": {
+            "match": "type"
+          }
+        }
       },
       "response": {
         "status": 200,
         "headers": {
           "Content-Type": "application/json"
-        },
-        "body": {
-          "updated": {
-            "firstName": "my updated name"
-          }
-        },
-        "matchingRules": {
-          "$.body": {
-            "match": "type"
-          }
         }
       }
     }
