@@ -77,37 +77,59 @@ describe("PUT /api/v1/user #pact #updateuser", () => {
     beforeAll(function (done) {
       let interactions = []
 
-      interactions.push(
-        provider.addInteraction({
-          uponReceiving: 'a request to update a user',
-          withRequest: {
-            method: 'PUT',
-            path: '/api/v1/users',
-            body: body
-          },
-          willRespondWith: {
-            status: 200,
-            headers: { "Content-Type": "application/json" },
-            // body: Matchers.somethingLike(exampleUpdateResponse)
-          }
-        })
-      )
-      interactions.push(
-        provider.addInteraction({
-          uponReceiving: 'a request to update a user',
-          withRequest: {
-            method: 'PUT',
-            path: '/api/v1/users',
-            body: {
-              [updateObjects[1].field]: Matchers.somethingLike(updateObjects[1].value)
+      // create each interaction to be tested
+      updateObjects.forEach((obj) => {
+        let body = {
+          [obj.field]: Matchers.somethingLike(obj.value)
+        }
+
+        interactions.push(
+          provider.addInteraction({
+            uponReceiving: "a request to update a user's " + obj.field,
+            withRequest: {
+              method: 'PUT',
+              path: '/api/v1/users',
+              body: body
+            },
+            willRespondWith: {
+              status: 200,
+              headers: { "Content-Type": "application/json" }
             }
-          },
-          willRespondWith: {
-            status: 200,
-            headers: { "Content-Type": "application/json" }
-          }
-        })
-      )
+          })
+        )
+      })
+
+      // interactions.push(
+      //   provider.addInteraction({
+      //     uponReceiving: 'a request to update a user',
+      //     withRequest: {
+      //       method: 'PUT',
+      //       path: '/api/v1/users',
+      //       body: body
+      //     },
+      //     willRespondWith: {
+      //       status: 200,
+      //       headers: { "Content-Type": "application/json" },
+      //       // body: Matchers.somethingLike(exampleUpdateResponse)
+      //     }
+      //   })
+      // )
+      // interactions.push(
+      //   provider.addInteraction({
+      //     uponReceiving: 'a request to update a user',
+      //     withRequest: {
+      //       method: 'PUT',
+      //       path: '/api/v1/users',
+      //       body: {
+      //         [updateObjects[1].field]: Matchers.somethingLike(updateObjects[1].value)
+      //       }
+      //     },
+      //     willRespondWith: {
+      //       status: 200,
+      //       headers: { "Content-Type": "application/json" }
+      //     }
+      //   })
+      // )
 
       Promise.all(interactions)
       .then(() => { done() })
