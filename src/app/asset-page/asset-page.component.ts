@@ -476,7 +476,7 @@ export class AssetPage implements OnInit, OnDestroy {
 
         if (this.user && this.user.isLoggedIn) {
             // Check if the logged-in user has private image groups
-            this._group.getAll('private')
+            this._group.getAll('created')
                 .take(1)
                 .subscribe((res) => {
                     if (res.groups && (res.groups.length > 0)) {

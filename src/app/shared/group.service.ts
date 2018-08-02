@@ -22,6 +22,7 @@ export class GroupService {
     /**
      * Get All Groups
      * @param level Indicates access level of group: 'institution', 'private', 'public', 'all' or 'shared'
+     * NOTE: v1.8.72 we pass 'created' as level instead of 'private'
      */
     public getAll(level: string, size?: number, pageNo ?: number, tags ?: string[], query ?: string, owner_id ?: string ): Observable<GroupList> {
         if (!tags) {
