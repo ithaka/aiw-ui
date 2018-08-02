@@ -65,7 +65,7 @@ export class BrowseGroupsComponent implements OnInit {
     if (isLoggedIn) {
       this.groupFilterArray.push({
         label: 'My Groups',
-        level: 'private',
+        level: 'created',
         selected: true
       })
     }
@@ -195,7 +195,7 @@ export class BrowseGroupsComponent implements OnInit {
    * @param level The level param you want to search groups with
    */
   private setSearchLevel(level: string, navigate?: boolean): void {
-    if (!level) { level = 'private' }
+    if (!level) { level = 'created' }
     this.groupFilterArray.forEach((filter) => {
       if (filter.level !== level) {
         filter.selected = false
