@@ -55,11 +55,7 @@ describe("Group Calls #pact", () => {
           withRequest: {
             method: 'GET',
             path: '/api/v1/group',
-            query: {
-              size: 48,
-              level: 'public',
-              from: 0
-            }
+            query: "size=48&level=public&from=0"
           },
           willRespondWith: {
             status: 200,

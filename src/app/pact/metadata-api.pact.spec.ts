@@ -1,7 +1,7 @@
 /*eslint-disable*/
 import { HttpClientModule } from '@angular/common/http'
 import { TestBed, getTestBed } from '@angular/core/testing'
-import { PactWeb } from '@pact-foundation/pact-web'
+import { PactWeb, Matchers } from '@pact-foundation/pact-web'
 
 // Project Dependencies
 import { MetadataRes } from '../shared/datatypes'
@@ -64,6 +64,12 @@ describe("Metadata Calls #pact", () => {
       }]
     }
 
+    // We want to use Pact to verify the types of the properties on the response
+    let matcherMetadataObject = {}
+    Object.keys(expectedMetadataObject).forEach( (key) => {
+      matcherMetadataObject[key] = Matchers.somethingLike(expectedMetadataObject[key])
+    })
+
     beforeAll(function(done) {
       provider = new PactWeb({ 
         consumer: 'aiw-ui', 
@@ -100,22 +106,18 @@ describe("Metadata Calls #pact", () => {
      */
     describe("GET /api/v1/metadata", () => {
       beforeAll((done) =>  {
+
         provider.addInteraction({
           uponReceiving: 'a request for an asset\'s metadata',
           withRequest: {
             method: 'GET',
             path: '/api/v1/metadata',
-            headers: { 'Content-Type': 'application/json' },
-            query: {
-              legacy: false,
-              object_ids: 'SS35538_35538_29885250'
-            }
+            query: "legacy=false&object_ids=SS35538_35538_29885250"
           },
           willRespondWith: {
             status: 200,
-            headers: { "Content-Type": "application/json" },
-            body: expectedMetadataObject
-            //Matchers.somethingLike(expectedGroupList)
+            headers: { 'Content-Type': 'application/json' },
+            body: matcherMetadataObject
           }
         })
         .then(() => { done() }, (err) => { done.fail(err) })
