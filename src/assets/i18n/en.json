@@ -515,31 +515,31 @@
       ],
       "PUBLIC_COLLECTIONS": [
         {
-          "SUBHEADING": "Tuskegee University: Chapel Audio Collection",
-          "DESCRIPTION": "Audio from speeches given by important Civil Rights leaders and events",
-          "CAPTION": "Tuskegee University President Luther H. Foster singing with students. Image courtesy of Tuskegee University Archive: Chapel Collection.",
-          "LINK": "/#/collection/87730897",
-          "IMG_SOURCE": "/assets/img/featured-collections/Tuskegee_singing.jpg",
-          "LINK_TITLE": "Tuskegee University: Chapel Audio Collection",
-          "ALT_TEXT": "Tuskegee University: Chapel Audio Collection"
+          "SUBHEADING": "UD Library: Postcard Collection",
+          "DESCRIPTION": "Postcards documenting small town life in Delaware",
+          "CAPTION": "Aerial View Delaware Memorial Bridge near Wilmington, Delaware 1930-1945. Image courtesy of the University of Delaware Postcard Collection.",
+          "LINK": "/#/collection/87729444",
+          "IMG_SOURCE": "/assets/img/featured-collections/ud_postcard.jpg",
+          "LINK_TITLE": "UD Library: Postcard Collection",
+          "ALT_TEXT": "UD Library: Postcard Collection"
         },
         {
-          "SUBHEADING": "OCAD U Zine Collection",
-          "DESCRIPTION": "Self-published and handmade objects",
-          "CAPTION": "Punch Drunk, Tim Gaedke. Image courtesy of the OCAD University Zine Collection. ",
-          "LINK": "/#/collection/87731595 ",
-          "IMG_SOURCE": "/assets/img/featured-collections/punchdrunk_ocad.jpg",
-          "LINK_TITLE": "OCAD U Zine Collection",
-          "ALT_TEXT": "OCAD U Zine Collection"
+          "SUBHEADING": "Pratt Institute Archives Image Collection",
+          "DESCRIPTION": "The history and creative output of Pratt Institute",
+          "CAPTION": "1967 Prattonia, Poster 48.  Image courtesy of the Pratt Institute Archives.",
+          "LINK": "/#/collection/87729432 ",
+          "IMG_SOURCE": "/assets/img/featured-collections/pratt_poster.jpg",
+          "LINK_TITLE": "Pratt Institute Archives Image Collection",
+          "ALT_TEXT": "Pratt Institute Archives Image Collection"
         },
         {
-          "SUBHEADING": "Martin Methodist Marine Biology Collection: Key Largo",
-          "DESCRIPTION": "Marine images taken in and around Key Largo",
-          "CAPTION": "Smooth trunkfish (Lactophrys triqueter). Image courtesy of Martin Methodist Marine Biology Collection.",
-          "LINK": "/#/collection/87730675",
-          "IMG_SOURCE": "/assets/img/featured-collections/martin_trunkfish.jpg",
-          "LINK_TITLE": "Martin Methodist Marine Biology Collection: Key Largo",
-          "ALT_TEXT": "Martin Methodist Marine Biology Collection: Key Largo"
+          "SUBHEADING": "Cornell: Historic Glacial Images of Alaska and Greenland",
+          "DESCRIPTION": "Photographs from expeditions from 1864-1912",
+          "CAPTION": "Iceberg, Baffins Bay (Black/Davis). Image courtesy of the Cornell: Historic Glacial Images of Alaska and Greenland.",
+          "LINK": "/#/collection/87730735",
+          "IMG_SOURCE": "/assets/img/featured-collections/cornell_iceberg.jpg",
+          "LINK_TITLE": "Cornell: Historic Glacial Images of Alaska and Greenland",
+          "ALT_TEXT": "Cornell: Historic Glacial Images of Alaska and Greenland"
         }
       ]
     },
