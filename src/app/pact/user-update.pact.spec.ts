@@ -75,21 +75,25 @@ describe("PUT /api/v1/user #pact #updateuser", () => {
     }
 
     beforeAll(function (done) {
-      provider.addInteraction({
-        uponReceiving: 'a request to update a user',
-        withRequest: {
-          method: 'PUT',
-          path: '/api/v1/users',
-          body: body
-        },
-        willRespondWith: {
-          status: 200,
-          headers: { "Content-Type": "application/json" },
-          // body: Matchers.somethingLike(exampleUpdateResponse)
-        }
-      })
-      .then(() => {
-        return provider.addInteraction({
+      let interactions = []
+
+      interactions.push(
+        provider.addInteraction({
+          uponReceiving: 'a request to update a user',
+          withRequest: {
+            method: 'PUT',
+            path: '/api/v1/users',
+            body: body
+          },
+          willRespondWith: {
+            status: 200,
+            headers: { "Content-Type": "application/json" },
+            // body: Matchers.somethingLike(exampleUpdateResponse)
+          }
+        })
+      )
+      interactions.push(
+        provider.addInteraction({
           uponReceiving: 'a request to update a user',
           withRequest: {
             method: 'PUT',
@@ -103,7 +107,9 @@ describe("PUT /api/v1/user #pact #updateuser", () => {
             headers: { "Content-Type": "application/json" }
           }
         })
-      })
+      )
+
+      Promise.all(interactions)
       .then(() => { done() })
       .catch((err) => { done.fail(err) })
     })
