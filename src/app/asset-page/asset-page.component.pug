@@ -72,7 +72,7 @@
     .col-md-4(*ngIf="assets[0]",[class.hidden]="isFullscreen")
       .py-3
         //- If the user has not accepted the agreement, show modal when clicked, otherwise download immediately
-        .btn-row#testtest
+        .btn-row
           //- Edit
           //- * (mouseup) is a Firefox fix for firing the copy event
           button.btn.btn-secondary(*ngIf="user.isLoggedIn && assets[0].personalCollectionOwner === user['baseProfileId']", [class.active]="showEditDetails", tabindex="6", (click)="loadEditDetailsForm()")
