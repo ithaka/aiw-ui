@@ -22,11 +22,11 @@ import { TourStep } from './tour.service'
             this.manipulateDom('id', 'driver-popover-item', -1, true)
             //this.manipulateDom('className', 'driver-prev-btn', 4, false, 'aria-label', 'previous button')
 
-            window.setTimeout(function ()
-            {
-
-              let el2:HTMLElement = <HTMLElement><any>(document.getElementsByClassName('driver-prev-btn')[0])
-              if(el2)el2.classList.add('hidden')
+            //Remove Previous button
+            window.setTimeout(function (){
+              let el:HTMLElement = <HTMLElement><any>(document.getElementsByClassName('driver-prev-btn')[0])
+              if(el)
+                el.classList.add('hidden')
             }, 0);
 
         },
@@ -40,16 +40,19 @@ import { TourStep } from './tour.service'
           //this.manipulateDom('className', 'driver-prev-btn', 4, false, 'aria-label', 'previous button')
           this.manipulateDom('className', 'driver-next-btn', 3, false, 'aria-label', 'next button')
           this.manipulateDom('className', 'driver-popover-description', 2, false)
+
+          // Set focus on the title of the popover, the setTimeout is necessary for the behavior to appear
           window.setTimeout(function ()
           {
-
             let el:HTMLElement = <HTMLElement><any>(document.getElementsByClassName('driver-popover-title')[0])
-            if(el) {el.tabIndex = 1
-            el.focus()}
+            if(el) {
+              el.tabIndex = 1
+              el.focus()
+            }
           }, 0);
         },
         onDeselected: (Element) => {
-          // Enable the element when it is not highted
+          // Enable the element when it is not highlighted
           if(Element.node.classList[0] === 'btn') Element.node.disabled = false
           else Element.node.offsetParent.disabled = false
         },
@@ -60,8 +63,12 @@ import { TourStep } from './tour.service'
           this.manipulateDom('id', 'nav-logout', 2)
           this.manipulateDom('id', 'nav-login', 2)
           this.manipulateDom('id', 'nav-register', 2)
+
+          // Remove the hidden of the previous button to ensure next tour loads fine
           let el2:HTMLElement = <HTMLElement><any>(document.getElementsByClassName('driver-prev-btn')[0])
-          if(el2){console.log(el2);el2.classList.remove('hidden')}
+          if(el2) {
+            el2.classList.remove('hidden')
+          }
         }
     })
 
