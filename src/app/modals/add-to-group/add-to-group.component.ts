@@ -65,7 +65,7 @@ export class AddToGroupModal implements OnInit, OnDestroy {
     }
 
     // Load list of Groups, and update autocomplete as Groups load
-    this._group.getEveryGroup('private')
+    this._group.getEveryGroup('created')
       .subscribe((groups) => {
         if (groups) {
           this.groups = groups;
