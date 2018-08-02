@@ -99,38 +99,6 @@ describe("PUT /api/v1/user #pact #updateuser", () => {
         )
       })
 
-      // interactions.push(
-      //   provider.addInteraction({
-      //     uponReceiving: 'a request to update a user',
-      //     withRequest: {
-      //       method: 'PUT',
-      //       path: '/api/v1/users',
-      //       body: body
-      //     },
-      //     willRespondWith: {
-      //       status: 200,
-      //       headers: { "Content-Type": "application/json" },
-      //       // body: Matchers.somethingLike(exampleUpdateResponse)
-      //     }
-      //   })
-      // )
-      // interactions.push(
-      //   provider.addInteraction({
-      //     uponReceiving: 'a request to update a user',
-      //     withRequest: {
-      //       method: 'PUT',
-      //       path: '/api/v1/users',
-      //       body: {
-      //         [updateObjects[1].field]: Matchers.somethingLike(updateObjects[1].value)
-      //       }
-      //     },
-      //     willRespondWith: {
-      //       status: 200,
-      //       headers: { "Content-Type": "application/json" }
-      //     }
-      //   })
-      // )
-
       Promise.all(interactions)
       .then(() => { done() })
       .catch((err) => { done.fail(err) })
@@ -149,24 +117,5 @@ describe("PUT /api/v1/user #pact #updateuser", () => {
         })
       })
     }
-
-    // it("should update all of a users updateable properties", (done) => {
-    //   let updateObj = {}
-    //   // get one value for every object
-    //   for(let obj of updateObjects) {
-    //     updateObj[obj.field] = obj.value
-    //   }
-
-    //   service.update(updateObj)
-    //   .subscribe(res => {
-    //     for(let key in updateObj) {
-    //       expect(res.updated[key]).toEqual(updateObj[key])
-    //     }
-    //     done()
-    //   },
-    //     err => {
-    //     done.fail(err)
-    //   })
-    // })
   })
 })
