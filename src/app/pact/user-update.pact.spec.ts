@@ -5,7 +5,7 @@ import { AccountService } from './../shared'
 import { PactWeb, Matchers} from '@pact-foundation/pact-web'
 import { HttpClientModule } from '@angular/common/http'
 
-describe("PUT /api/v1/user #pact #updateuser", () => {
+describe("PUT /api/secure/user/{{profileId}} #pact #updateuser", () => {
 
   let provider
 
@@ -88,7 +88,7 @@ describe("PUT /api/v1/user #pact #updateuser", () => {
             uponReceiving: "a request to update a user's " + obj.field,
             withRequest: {
               method: 'PUT',
-              path: '/api/v1/users',
+              path: '/api/secure/user/' + 706217,
               body: body
             },
             willRespondWith: {
@@ -107,7 +107,7 @@ describe("PUT /api/v1/user #pact #updateuser", () => {
     for(let obj of updateObjects) {
       it("should update a user's " + obj.field, (done) => {
         //Run the tests
-        service.update({ [obj.field]: obj.value })
+        service.update({ [obj.field]: obj.value, baseProfileId: 706217 })
           .subscribe(res => {
             expect(true).toEqual(true)
             done()

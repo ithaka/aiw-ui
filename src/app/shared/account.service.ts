@@ -24,7 +24,7 @@ export class AccountService {
     }
 
     return this._http.put<UpdateUserResponse>(
-      '/api/v1/users',
+      '/api/secure/user/' + user.baseProfileId,
       updateBody,
       { withCredentials: true }
     )
@@ -39,6 +39,7 @@ interface User {
   newsletter_pref: string
   survey_pref: string
   username: string
+  baseProfileId: number
 }
 
 interface UpdateUserResponse {
