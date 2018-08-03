@@ -92,29 +92,44 @@ export class Home implements OnInit, OnDestroy {
     this.loaders['collections'] = true;
     this.loaders['instCollections'] = true;
 
-    this.subscriptions
-      .push(
-        this._assets.getCollectionsList()
-          .subscribe(
-            data => {
-              // Filter SSC content
-              this.collections = data["Collections"].filter((collection) => {
-                return collection.collectionType == 5
-              })
-              this.loaders['collections'] = false;
-              // Filter institutional content
-              this.instCollections = data["Collections"].filter((collection) => {
-                return collection.collectionType == 2 || collection.collectionType == 4
-              })
-              this.loaders['instCollections'] = false;
-            },
-            err => {
-              if (err && err.status != 401 && err.status != 403) {
-                console.error(err)
-              }
-            }
-          )
+    /*
+     * Subscribe to user object 
+     * and fetch collections list only after we have the user object returned
+     */ 
+    this.subscriptions.push(
+      this._auth.currentUser.subscribe(
+        (userObj) => {
+          if(userObj.institutionId && (this.instCollections.length === 0)){
+            this.subscriptions
+              .push(
+                this._assets.getCollectionsList()
+                  .subscribe(
+                    data => {
+                      // Filter SSC content
+                      this.collections = data["Collections"].filter((collection) => {
+                        return collection.collectionType == 5
+                      })
+                      this.loaders['collections'] = false;
+                      // Filter institutional content
+                      this.instCollections = data["Collections"].filter((collection) => {
+                        return collection.collectionType == 2 || collection.collectionType == 4
+                      })
+                      this.loaders['instCollections'] = false;
+                    },
+                    err => {
+                      if (err && err.status != 401 && err.status != 403) {
+                        console.error("Failed to load collection list", err)
+                      }
+                    }
+                  )
+              )
+          }
+        },
+        err => {
+          console.error("Failed to load user object", err)
+        }
       )
+    );
 
     this._assets.getBlogEntries()
       .then((data) => {

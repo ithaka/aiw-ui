@@ -105,7 +105,8 @@ import {
   ToolboxService,
   TypeIdPipe,
   ScriptService,
-  PersonalCollectionService
+  PersonalCollectionService,
+  AccountService
 } from './shared'
 import { LocalPCService } from './_local-pc-asset.service'
 import { AssetFiltersService } from './asset-filters/asset-filters.service'
@@ -121,11 +122,13 @@ import { CustomUrlSerializer } from './shared/custom-url-serializer'
 
 const APP_PROVIDERS = [
   ...APP_RESOLVER_PROVIDERS,
-  DatePipe,
+  
+  AccountService,
   AppConfig,
   AssetService,
   AssetSearchService,
   AuthService,
+  DatePipe,
   FlagService,
   GroupService,
   PersonalCollectionService,

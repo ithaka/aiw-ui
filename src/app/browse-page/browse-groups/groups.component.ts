@@ -11,7 +11,7 @@ import { AppConfig } from '../../app.service';
 @Component({
   selector: 'ang-browse-groups',
   templateUrl: 'groups.component.pug',
-  styleUrls: [ './../browse-page.component.scss' ]
+  styleUrls: [ './../browse-page.component.scss', './groups.component.scss' ]
 })
 export class BrowseGroupsComponent implements OnInit {
   private showArtstorCurated: boolean = true
@@ -40,90 +40,73 @@ export class BrowseGroupsComponent implements OnInit {
   private tagFilters = []
   private appliedTags: string[] = []
 
-  private selectedBrowseLevel: string
-  private browseMenuArray: { label: string, level: string, selected ?: boolean }[] = []
-  private showSearchPrompt: boolean = false
+  // private selectedBrowseLevel: string
+  private groupFilterArray: GroupFilter[] = []
   private errorObj: any = {}
-  // Var for setting aside Groups "getAll" requests so they can be unsubscribed
-  private groupsGetAllSub: Subscription
 
   constructor(
+    _appConfig: AppConfig,
     private _router: Router,
-    private _assets: AssetService,
     private _groups: GroupService,
     private _tagFilters: TagFiltersService,
     private _auth: AuthService,
     private _title: TitleService,
-    private route: ActivatedRoute,
-    private _appConfig: AppConfig
+    private route: ActivatedRoute
   ) {
+    let isLoggedIn = this._auth.getUser() && this._auth.getUser().isLoggedIn
     this.showArtstorCurated = _appConfig.config.showArtstorCurated
 
-    if (this.showArtstorCurated) {
-      this.selectedBrowseLevel = 'public'
-    } else {
-      this.selectedBrowseLevel = 'institution'
+    this.groupFilterArray.push({
+      label: 'All',
+      level: 'all'
+    })
+
+    // If Logged In, default to My Groups
+    if (isLoggedIn) {
+      this.groupFilterArray.push({
+        label: 'My Groups',
+        level: 'created',
+        selected: true
+      })
     }
 
-    this.processUrl();
+    // If NOT Logged In, default to Institutional
+    this.groupFilterArray.push({
+      label: 'Institutional',
+      level: 'institution',
+      selected: !isLoggedIn
+    })
+
+    if (isLoggedIn) {
+      this.groupFilterArray.push({
+        label: 'Shared with Me',
+        level: 'shared'
+      })
+    }
+
+    if (this.showArtstorCurated) {
+      this.groupFilterArray.push({
+        label: 'Artstor Curated',
+        level: 'public'
+      })
+    }
+
+    // this.processUrl()
+    // subscribes to url navigation and causes image group list to update based on new urls
+    this.subscriptions.push(this.createNavigationSubscription())
   }
 
   ngOnInit() {
     // set the title
     this._title.setSubtitle("Browse Groups")
-
-    // this is only for the search page and won't show in the top-level menu
-    this.browseMenuArray.push({
-      label: 'All',
-      level: 'all'
-    })
-
-    /** Here, we push in all of the options for different browse levels the user has access to */
-    if (this._auth.getUser() && this._auth.getUser().isLoggedIn) {
-      this.browseMenuArray.push({
-        label: 'Private',
-        level: 'private'
-      })
-    }
-
-    this.browseMenuArray.push({
-      label: 'Institutional',
-      level: 'institution'
-    })
-
-    if (this.showArtstorCurated) {
-      this.browseMenuArray.push({
-        label: 'Artstor Curated',
-        level: 'public'
-      })
-      this.browseMenuArray.push({
-        label: 'Search',
-        level: 'search'
-      })
-    }
-
-    if (this._auth.getUser() && this._auth.getUser().isLoggedIn) {
-      this.browseMenuArray.push({
-        label: 'Shared with Me',
-        level: 'shared'
-      })
-    }
     
     // Subscribe to asset search params
     this.subscriptions.push(
       this.route.params
-      .subscribe((params: Params) => {
+      .subscribe((params) => {
         // Find feature flags
-        if(params && params['featureFlag'] && params['featureFlag'] === 'cardview'){
-              this.showCardView = true;
-        }
-      })
-    )
-
-    this.subscriptions.push(
-      this.route.queryParams.subscribe((params) => {
-        if ( params && params['term'] ) {
-          this.searchTerm = params['term']
+        if(params && params.featureFlag && params.featureFlag === 'cardview'){
+          this.showCardView = true
         }
       })
     )
@@ -133,56 +116,78 @@ export class BrowseGroupsComponent implements OnInit {
     this.subscriptions.forEach((sub) => { sub.unsubscribe() })
   }
 
-  /** Every time the url updates, we process the new tags and reload image groups if the tags query param changes */
-  private processUrl() {
-    this.subscriptions.push(
-      this._router.events.filter(event=>event instanceof NavigationEnd)
-      .subscribe(event => {
-        // Set showRemainTags to be false so that the choice of see all tags show up everytime browselevel is changed
-        this._tagFilters.showRemainTags = false
+  // find which of the filters is selected
+  private get selectedFilter(): GroupFilter {
+    let filter: GroupFilter = this.groupFilterArray.find((filter) => {
+      return filter.selected
+    })
 
-        let query = this.route.snapshot.queryParams;
-        let params = this.route.snapshot.params;
-
-        if (!this.showArtstorCurated && params.view == 'public') {
-          this._router.navigate(['browse','groups','institution'])
-          return
-        }
-
-        if (params.view !== (this.selectedBrowseLevel)) {
-          this.appliedTags = []
-          this.selectedBrowseLevel = params.view
-        }
-
-        let tagAdded: boolean = false
-        // this is only expected to run when searching
-        if (query.tags) {
-          let newTags: string[] = this._tagFilters.processFilterString(query.tags)
-          tagAdded = this.appliedTags.join('') != newTags.join('') // if the two strings aren't equal, a tag must have changed
-          this.appliedTags = newTags
-        } else {
-          this.appliedTags = []
-        }
-
-        let requestedPage = Number(query.page) || 1
-        if (requestedPage < 1 || tagAdded) {
-          this.addQueryParams({page: 1}, false, query)
-        } // STOP THEM if they're trying to enter a negative number
-        // if (tagAdded) { requestedPage = 1 } // if they're adding a tag, we want to nav them back to page 1
-        let requestedLevel = this.selectedBrowseLevel !== 'search' ? this.selectedBrowseLevel : query.level;
-        this.setSearchLevel(requestedLevel, false) // makes sure that the correct level filter is selected even if the user just navigated here from the url
-
-        let requestedTerm = this.selectedBrowseLevel !== 'search' ? '' : query.term;
-        let requestedId = this.selectedBrowseLevel !== 'search' && !query.id ? '' : query.id;
-        // if there is not a term, make sure the search term is cleared
-        if (!query.term) {
-          this.updateSearchTerm.emit('')
-        } else {
-          this.updateSearchTerm.emit(query.term)
-        }
-        this.loadIGs(this.appliedTags, requestedPage, requestedLevel, requestedTerm, requestedId)
+    if (!filter) {
+      filter = this.groupFilterArray.find((filter) => {
+        return filter.level == 'institution'
       })
-    )
+    }
+    filter.selected = true
+    return filter
+  }
+
+  /** Every time the url updates, we process the new tags and reload image groups if the tags query param changes */
+  private createNavigationSubscription(): Subscription {
+    return this._router.events.filter(event=>event instanceof NavigationEnd)
+    .subscribe(event => {
+      let query = this.route.snapshot.queryParams
+      if (!query) { console.error('no query!') }
+      // let params = this.route.snapshot.params
+      let groupQuery: GroupQuery = {}
+
+
+      // set the term every time there is one in the url
+      if (query.term) {
+        this.searchTerm = query.term
+        groupQuery.term = query.term
+        this.updateSearchTerm.emit(query.term) // sets the term in the search box
+      } else {
+        this.updateSearchTerm.emit('')
+      }
+
+      // set query for tags, if it exists, and reset appliedTags if it doesn't
+      let urlTags: string[] = []
+      if (query.tags) {
+        urlTags = this._tagFilters.processFilterString(query.tags)
+      }
+      this.appliedTags = urlTags
+      groupQuery.tags = urlTags
+
+      if (query.page) {
+        let requestedPage: number = Number(query.page)
+        // if invalid page, end execution here and navigate to new url with valid page query
+        if (requestedPage < 1) {
+          return this.addQueryParams({ page: 1 }, false, false, query)
+        }
+        groupQuery.page = requestedPage
+      } else {
+        groupQuery.page = 1
+      }
+
+      if (query.level) {
+        groupQuery.level = query.level
+        if (query.level !== this.selectedFilter.level) {
+          this.appliedTags = []
+          this.setSearchLevel(query.level)
+        }
+      }
+
+      if (!this.selectedFilter || query.level != this.selectedFilter.level) {
+        this.appliedTags = [] // if they're switching levels, reset the tags
+        this.setSearchLevel(query.level, false)
+      }
+
+      if (query.id) {
+        groupQuery.id = query.id
+      }
+
+      this.loadIGs(groupQuery)
+    })
   }
 
   /**
@@ -190,13 +195,17 @@ export class BrowseGroupsComponent implements OnInit {
    * @param level The level param you want to search groups with
    */
   private setSearchLevel(level: string, navigate?: boolean): void {
-    this.browseMenuArray.forEach((filter) => {
+    if (!level) { level = 'created' }
+    this.groupFilterArray.forEach((filter) => {
       if (filter.level !== level) {
         filter.selected = false
       } else {
         filter.selected = true
       }
     })
+
+    // reset appliedTags to empty array because a new level likely wont have the same tags
+    this.appliedTags = [] 
 
     /**
      * Sometimes setSearchLevel is just used to control which one of the filters is active, such as when the user
@@ -214,18 +223,15 @@ export class BrowseGroupsComponent implements OnInit {
    * @returns The currently selected search level, defaulted to 'all
    */
   private getSearchLevel(): string {
-    // return undefined if search isn't even selected
-    if (this.route.snapshot.params.view !== 'search') {
-      return
-    }
-
-    let selectedLevel: string
-    this.browseMenuArray.forEach((filter) => {
-      if (filter.selected) {
-        selectedLevel = filter.level
-      }
+    let selectedFilter = this.groupFilterArray.find((filter) => {
+      return filter.selected
     })
-    return selectedLevel || 'all' // default to 'all'
+
+    if (selectedFilter) {
+      return selectedFilter.level
+    } else {
+      return 'all'
+    }
   }
 
   /**
@@ -250,52 +256,60 @@ export class BrowseGroupsComponent implements OnInit {
    * @param page The desired page number to navigate to
    * @param level The query param for the groups call that indicates what share permissions the user has
    */
-  private loadIGs(appliedTags: string[], page: number, level?: string, searchTerm ?: string, searchid ?: string): void {
+  // private loadIGs(appliedTags: string[], page: number, level?: string, searchTerm ?: string, searchid ?: string): void {
+  private loadIGs(groupQuery: GroupQuery): void {
     // short out the function if the user has just navigated to the search page without query params
-    if (!this.shouldSearch(appliedTags, level, searchTerm, searchid) && this.route.snapshot.params.view == 'search') {
+    if (!this.shouldSearch(groupQuery.tags, groupQuery.level, groupQuery.term, groupQuery.id) && this.route.snapshot.params.view == 'search') {
       this.loading = false
       return
     }
 
-    this.errorObj[this.selectedBrowseLevel] = ''
+    this.errorObj[this.selectedFilter.level] = ''
     this.loading = true
     let browseLevel: string
 
     // if level is not provided explicitly, here is some logic for determining what it should be - search takes priority, then browse level, default to 'public'
-    if (level === 'search') {
+    if (groupQuery.level === 'search') {
       browseLevel = this.getSearchLevel()
-    } else if (!level) {
-      browseLevel = this.getSearchLevel() || this.selectedBrowseLevel || 'public'
+    } else if (!groupQuery.level) {
+      browseLevel = this.getSearchLevel() || this.selectedFilter.level || 'public'
     } else {
-      browseLevel = level
+      browseLevel = groupQuery.level
     }
 
-    // Some Groups calls take a while, please stop listening to an old request if a new one is made
-    this.groupsGetAllSub && this.groupsGetAllSub.unsubscribe()
-    this.groupsGetAllSub = this._groups.getAll(browseLevel, this.pagination.size, page, appliedTags, searchTerm, searchid)
-        .take(1).subscribe(
-          (data)  => {
-            this.pagination.page = page
-            this.pagination.totalPages = Math.ceil(data.total/this.pagination.size) // update pagination, which is injected into pagination component
-            if (this.pagination.page > this.pagination.totalPages && data.total > 0) {
-              return this.goToPage(this.pagination.totalPages) // go to the last results page if they try to navigate to a page that is more than results
-            }
-            this._tagFilters.setFilters(data.tags, appliedTags) // give the tag service the new data
-            this.tags = this.createGroupTags(data.groups) // save the image groups for display
-            this.loading = false
+    this._groups.getAll(
+      browseLevel,
+      this.pagination.size,
+      groupQuery.page,
+      groupQuery.tags,
+      groupQuery.term,
+      groupQuery.id
+    )
+    .take(1)
+    .subscribe(
+      (data)  => {
+        this.pagination.page = groupQuery.page
+        this.pagination.totalPages = Math.ceil(data.total/this.pagination.size) // update pagination, which is injected into pagination component
+        if (this.pagination.page > this.pagination.totalPages && data.total > 0) {
+          return this.goToPage(this.pagination.totalPages) // go to the last results page if they try to navigate to a page that is more than results
+        }
+        this._tagFilters.setFilters(data.tags, groupQuery.tags) // give the tag service the new data
+        this.tags = this.createGroupTags(data.groups) // save the image groups for display
+        this.loading = false
 
-            // show them the search error
-            if (data.total === 0 && this.route.snapshot.params.view === 'search') {
-              this.errorObj['search'] = 'No search results found'
-            }
-          },
-          (error) => {
-            this._tagFilters.setFilters([], appliedTags)
-            this.tags = []
-            this.errorObj[browseLevel] = "Sorry, we were unable to load these Image Groups"
-            this.loading = false
-          }
-        )
+        // show them the search error
+        if (data.total === 0 && this.route.snapshot.params.view === 'search') {
+          this.errorObj['search'] = 'No search results found'
+        }
+      },
+      (error) => {
+        console.error(error)
+        this._tagFilters.setFilters([], groupQuery.tags)
+        this.tags = []
+        this.errorObj[browseLevel] = "Sorry, we were unable to load these Image Groups"
+        this.loading = false
+      }
+    )
   }
 
   /**
@@ -331,9 +345,6 @@ export class BrowseGroupsComponent implements OnInit {
       this.tags = []
       this.pagination.page = 1
       this.pagination.totalPages = 1
-      this.showSearchPrompt = true
-    } else {
-      this.showSearchPrompt = false
     }
 
     return search
@@ -344,7 +355,7 @@ export class BrowseGroupsComponent implements OnInit {
    * @param params the parameters to add to the url (if duplicate parameters already in url, this will overwrite them)
    * @param reset allows resetting of queryParams to empty object plus whatever params you pass, instead of keeping old params
    */
-  private addQueryParams(params: { [key: string]: any }, reset?: boolean, currentParams?: any) {
+  private addQueryParams(params: { [key: string]: any }, reset?: boolean, searchWithTerm?: boolean, currentParams?: any) {
     let baseParams
     if (reset) {
       baseParams = {}
@@ -353,11 +364,26 @@ export class BrowseGroupsComponent implements OnInit {
     } else {
       baseParams = Object.assign({}, this.route.snapshot.queryParams)
     }
-    if(baseParams['id']){
+    if (searchWithTerm && baseParams['id']) {
+      delete baseParams['tags']
       delete baseParams['id']
     }
     let queryParams = Object.assign(baseParams, params)
 
-    this._router.navigate(['/browse','groups', this.selectedBrowseLevel], { queryParams: queryParams })
+    this._router.navigate(['/browse','groups'], { queryParams: queryParams })
   }
+}
+
+interface GroupFilter {
+  label: string
+  level: string
+  selected?: boolean
+}
+
+export interface GroupQuery {
+  page?: number
+  level?: string
+  tags?: string[]
+  term?: string
+  id?: string // rn i'm not sure what id this is, so I'm leaving the name, but would like to change to more specific like groupId or something
 }
