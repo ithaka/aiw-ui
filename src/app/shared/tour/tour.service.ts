@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core'
 
 export interface TourStep {
-    element: string
+    step: number,
+    element: string[]
     popover: {
         title: string
         description: string
