@@ -19,6 +19,12 @@ describe("Group Calls #pact", () => {
       "tags":[{"key":"MLK","doc_count":1},{"key":"PC Test","doc_count":1}]
     }
 
+    // Use PACT matchers to verify types of response properties
+    let matcherPrivateGroupListObject = {}
+    Object.keys(expectedPrivateGroupList).forEach( (key) => {
+      matcherPrivateGroupListObject[key] = Matchers.somethingLike(expectedPrivateGroupList[key])
+    })
+
     beforeAll(function(done) {
       provider = new PactWeb({ consumer: 'aiw-ui', provider: 'binder-group', port: 1234, host: 'localhost' })
       // Required for slower environments
@@ -60,7 +66,7 @@ describe("Group Calls #pact", () => {
           willRespondWith: {
             status: 200,
             headers: { "Content-Type": "application/json" },
-            body: expectedPrivateGroupList
+            body: matcherPrivateGroupListObject
           }
         })
         .then(() => { done() }, (err) => { done.fail(err) })
