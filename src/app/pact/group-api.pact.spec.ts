@@ -45,7 +45,7 @@ describe("Group Calls #pact", () => {
         ],
         imports: [
           HttpClientModule
-        ] 
+        ]
       });
 
       _groups = getTestBed().get(GroupService)
@@ -72,7 +72,7 @@ describe("Group Calls #pact", () => {
         .then(() => { done() }, (err) => { done.fail(err) })
       })
 
-      fit("should return a list of private group object", function(done) {
+      it("should return a list of private group object", function(done) {
         //Run the tests
         _groups.getAll('private', 48, 0, [], '', '', 'alpha', 'asc')
           .subscribe(res => {
@@ -106,7 +106,7 @@ describe("Group Calls #pact", () => {
       });
 
       // verify with Pact, and reset expectations
-      fit('successfully verifies', function(done) {
+      it('successfully verifies', function(done) {
         provider.verify()
           .then(function(a) {
             done()
