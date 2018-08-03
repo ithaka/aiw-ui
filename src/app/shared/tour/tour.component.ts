@@ -11,7 +11,7 @@ import { TourStep } from './tour.service'
     @Input() public steps: TourStep[]
 
     private startTour() {
-      const driver = new Driver({ allowClose: false, closeBtnText: 'Exit tour', nextBtnText: 'NEXT', prevBtnText: 'PREVIOUS', doneBtnText: 'DONE',
+      const driver = new Driver({ allowClose: false, closeBtnText: 'exit tour', nextBtnText: 'NEXT', prevBtnText: 'BACK', doneBtnText: 'DONE',
         onHighlightStarted: (Element) => {
           // Change the tabIndex of the brand label and links in the login box to ensure if there is tour, the links of the tour is first to be tabbed for accessibility
             this.manipulateDom('className', 'navbar-brand', 6)
