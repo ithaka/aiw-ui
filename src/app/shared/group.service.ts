@@ -24,7 +24,7 @@ export class GroupService {
      * @param level Indicates access level of group: 'institution', 'private', 'public', 'all' or 'shared'
      * NOTE: v1.8.72 we pass 'created' as level instead of 'private'
      */
-    public getAll(level: string, size?: number, pageNo ?: number, tags ?: string[], query ?: string, owner_id ?: string ): Observable<GroupList> {
+    public getAll(level: string, size?: number, pageNo ?: number, tags ?: string[], query ?: string, owner_id ?: string, sort ?: string, order ?: string ): Observable<GroupList> {
         if (!tags) {
             tags = []
         }
@@ -40,12 +40,16 @@ export class GroupService {
             tagParam += '&tags=' + encodeURIComponent(tag)
         })
 
+        let sortParam = sort ? '&sort=' + sort : ""
+        let orderParam = order ? '&order=' + order : ""
+
+
         let queryParam: string = ''
         query && (queryParam = '&q=' + query)
         owner_id && (queryParam = '&owner_id=' + owner_id)
 
         return this.http.get<GroupList>(
-            [this.groupUrl, "?size=", size, '&level=', level, '&from=', ( (pageNo - 1) * size),  tagParam, queryParam].join(''), this.options
+            [this.groupUrl, "?size=", size, '&level=', level, '&from=', ( (pageNo - 1) * size),  tagParam, sortParam, orderParam, queryParam].join(''), this.options
         )
     }
 
