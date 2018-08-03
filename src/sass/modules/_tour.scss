@@ -1,0 +1,69 @@
+@import './dist/driver.min';
+
+div#driver-popover-item .driver-popover-footer{
+    text-align: center;
+    display:block;
+    clear:both;
+    margin-top:5px
+}
+
+div#driver-popover-item .driver-popover-footer button{
+&.driver-close-btn {
+    border: none;
+    background: none;
+    color: black;
+    text-decoration: underline;
+    position: absolute;
+    right: 5%;
+    top: 2%;
+    font-size:small;
+    letter-spacing: unset;
+    font-weight: unset;
+    text-transform: none;
+    &:hover, &:focus, &:active {
+        background: transparent;
+        text-decoration: underline;
+        color: $blue;
+        border-color: #fff;
+     }
+}
+    display:inline-block;
+    padding:3px 10px;
+    text-decoration:none;
+    color: #fff;
+    background: #C9510D;
+    border-color: #C9510D;
+    cursor:pointer;
+    margin:10px 0 0;
+    border: 1px solid transparent;
+    text-shadow: none;
+    font: unset;
+    outline: none;
+    zoom: 0;
+    border-radius: unset;
+    letter-spacing: 0.5px;
+    height: 30px;
+    font-size: 12px;
+    font-family: Verdana, Arial, sans-serif;
+    font-weight: 700;
+    font-style: normal;
+    font-stretch: normal;
+    text-transform: uppercase;
+    &:hover, &:focus, &:active {
+       background: darken(#C9510D, 10%);
+       border-color: darken(#C9510D, 10%);
+    }
+}
+
+div#driver-popover-item .driver-popover-footer button.driver-disabled{
+    color: #fff;
+    pointer-events: none;
+    opacity: 0.4;
+    -webkit-filter: grayscale(100%); /* Safari 6.0 - 9.0 */
+   filter: grayscale(100%);
+}
+
+div#driver-popover-item .driver-popover-footer .driver-btn-group{
+    margin: 0 auto;
+    float: none;
+}
