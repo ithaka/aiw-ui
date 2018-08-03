@@ -49,13 +49,6 @@ export class BrowsePage implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-
-    // Redirect public 'isPublicOnly' users visiting /browse/groups to /login
-    if (this._auth.isPublicOnly()) {
-      this.router.navigate(['/login'])
-      return
-    }
-
     // Subscribe to User object updates
     this.subscriptions.push(
         this._auth.currentUser.subscribe(
