@@ -5,6 +5,7 @@ import 'rxjs/add/operator/toPromise';
 
 import { AuthService } from './../shared/auth.service';
 import { AssetService } from './../shared/assets.service';
+import { MetadataService } from '../shared';
 
 @Component({
   selector: 'ang-associated-page',
@@ -26,8 +27,9 @@ export class AssociatedPage implements OnInit, OnDestroy {
   constructor(
       private _router: Router,
       private _assets: AssetService,
+      private _metadata: MetadataService,
       private route: ActivatedRoute,
-      private _auth: AuthService,
+      private _auth: AuthService
     ) {}
 
   /**
@@ -45,7 +47,7 @@ export class AssociatedPage implements OnInit, OnDestroy {
         }
         if (this.objectId && this.colId) {
           this._assets.queryAll(params);
-          this._assets.getMetadata(this.objectId)
+          this._metadata.getMetadata(this.objectId)
             .take(1)
             .subscribe((res) => {
               if (res.metadata && res.metadata.length > 0 && res.metadata[0].title) {
