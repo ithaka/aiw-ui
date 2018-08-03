@@ -24,6 +24,7 @@ export class BrowseGroupsComponent implements OnInit {
   private searchTerm: string = ''
   private loading: boolean = true
   private showCardView: boolean = false
+  private showAccessDeniedModal: boolean = false
 
   private pagination: {
     totalPages: number,
@@ -97,9 +98,14 @@ export class BrowseGroupsComponent implements OnInit {
   }
 
   ngOnInit() {
+
+    if (this._auth.isPublicOnly()) {
+      this.showAccessDeniedModal = true
+    }
+
     // set the title
     this._title.setSubtitle("Browse Groups")
-    
+
     // Subscribe to asset search params
     this.subscriptions.push(
       this.route.params
@@ -205,7 +211,7 @@ export class BrowseGroupsComponent implements OnInit {
     })
 
     // reset appliedTags to empty array because a new level likely wont have the same tags
-    this.appliedTags = [] 
+    this.appliedTags = []
 
     /**
      * Sometimes setSearchLevel is just used to control which one of the filters is active, such as when the user

@@ -113,7 +113,7 @@ export class BrowsePage implements OnInit, OnDestroy {
     if( this.browseOpts.igs && !this._auth.isPublicOnly() ){
         this.colMenuArray.push( { label: 'Groups', id: '5', link: 'groups' } );
     }
-    
+
   }
 
   ngOnDestroy() {
