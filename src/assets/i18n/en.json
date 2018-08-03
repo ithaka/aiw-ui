@@ -353,7 +353,7 @@
       "NO_INSTITUTIONAL_COLLECTIONS_PROMPT": "<p>There are no institutional collections available for your institution. You can add institutional collections using JSTOR Forum.</p><p>Learn more about <a href=\"http://artstor.org/jstorforum\" class=\"link\">JSTOR Forum</a>.</p>",
       "LOGIN_PC_COLLECTIONS_PROMPT": "<p>Please login to access your Personal Collection.</p><p>Learn more about <a href=\"https://support.artstor.org/?article-category=09-using-your-own-images\" class=\"link\">Personal Collections</a>.</p>",
       "NO_GROUPS_COLLECTIONS_HEADING": "No Groups Found",
-      "NO_PRIVATE_GROUPS_COLLECTIONS_PROMPT": "<p>You haven't made any private groups yet. Learn more about <a href='http://support.artstor.org/?article=create-and-manage-image-groups' class='link'>groups</a>.</p>",
+      "NO_PRIVATE_GROUPS_COLLECTIONS_PROMPT": "<p>You haven't created any image groups yet. Learn more about <a href='http://support.artstor.org/?article=create-and-manage-image-groups' class='link'>groups</a>.</p>",
       "NO_INSTITUTIONAL_GROUPS_COLLECTIONS_PROMPT": "<p>You haven't made any institutional groups yet. Learn more about <a href='http://support.artstor.org/?article=create-and-manage-image-groups' class='link'>groups</a>.</p>",
       "SEARCH_PROMPT": "Enter a keyword or select a filter to begin a search"
     },
@@ -486,60 +486,60 @@
         "VIEW_PUBLIC_LINK": "View All Public Collections"
       },
       "COLLECTIONS": [{
-          "SUBHEADING": "Reynolda House Museum",
-          "DESCRIPTION": "Grant Wood and eclectic Americana",
-          "CAPTION": "Grant Wood. Spring Turning. 1936. Image and data provided by the Reynolda House Museum of American Art.",
-          "LINK": "/#/category/10374058926 ",
-          "IMG_SOURCE": "/assets/img/featured-collections/rhm_spring.jpg",
-          "LINK_TITLE": "Reynolda House Museum",
-          "ALT_TEXT": "Reynolda House Museum"
+          "SUBHEADING": "Metropolitan Museum of Art",
+          "DESCRIPTION": "Highlights from Asia from the encylopedic collections",
+          "CAPTION": "Suzuki Kiitsu. Morning Glories. Early 19th c. Ink, color, gold on gilded paper. Image © The Metropolitan Museum of Art.",
+          "LINK": "/#/category/1031896061 ",
+          "IMG_SOURCE": "/assets/img/featured-collections/mma_morningglories.jpg",
+          "LINK_TITLE": "Metropolitan Museum of Art",
+          "ALT_TEXT": "Metropolitan Museum of Art"
         },
         {
-          "SUBHEADING": "The National Gallery of Art",
-          "DESCRIPTION": "Hidden treasures and iconic works",
-          "CAPTION": "Florentine ? A Crow. Late 16th c. Bronze. Image and data provided by the National Gallery of Art.",
-          "LINK": "/#/category/1034953422 ",
-          "IMG_SOURCE": "/assets/img/featured-collections/nga_crow.jpg",
-          "LINK_TITLE": "The National Gallery of Art",
-          "ALT_TEXT": "The National Gallery of Art"
+          "SUBHEADING": "Ai Weiwei: AW Asia Archive",
+          "DESCRIPTION": "Ai Wewei's Circle of Animals",
+          "CAPTION": "Ai Weiwei. Circle of Animals: Zodiac Heads, Dragon. 2010. Photographer: Tim Nighswander. Image courtesy of the artist and AW Asia, New York.",
+          "LINK": "/#/category/10374058875 ",
+          "IMG_SOURCE": "/assets/img/featured-collections/weiwei_animal.jpg",
+          "LINK_TITLE": "Ai Weiwei: AW Asia Archive",
+          "ALT_TEXT": "Ai Weiwei: AW Asia Archive"
         },
         {
-          "SUBHEADING": "Brooklyn College: Farm Labor Project",
-          "DESCRIPTION": "Student farmers lend a hand to the war effort",
-          "CAPTION": "Viewing the Cows. Photograph. 1944. Brooklyn College Archives and Special Collections.",
-          "LINK": "/#/collection/87730215 ",
-          "IMG_SOURCE": "/assets/img/featured-collections/brooklyn_cows.jpg",
-          "LINK_TITLE": "Brooklyn College: Farm Labor Project",
-          "ALT_TEXT": "Brooklyn College: Farm Labor Project"
+          "SUBHEADING": "Hamilton College: Geosciences Rock Collection",
+          "DESCRIPTION": "Rock samples collected over two centuries",
+          "CAPTION": "Tholeiitic basalt. Hamilton College: Geosciences Rock Collection.",
+          "LINK": "/#/collection/87730818 ",
+          "IMG_SOURCE": "/assets/img/featured-collections/hamilton_basalt.jpg",
+          "LINK_TITLE": "Hamilton College: Geosciences Rock Collection",
+          "ALT_TEXT": "Hamilton College: Geosciences Rock Collection"
         }
       ],
       "PUBLIC_COLLECTIONS": [
         {
-          "SUBHEADING": "Tuskegee University: Chapel Audio Collection",
-          "DESCRIPTION": "Audio from speeches given by important Civil Rights leaders and events",
-          "CAPTION": "Tuskegee University President Luther H. Foster singing with students. Image courtesy of Tuskegee University Archive: Chapel Collection.",
-          "LINK": "/#/collection/87730897",
-          "IMG_SOURCE": "/assets/img/featured-collections/Tuskegee_singing.jpg",
-          "LINK_TITLE": "Tuskegee University: Chapel Audio Collection",
-          "ALT_TEXT": "Tuskegee University: Chapel Audio Collection"
+          "SUBHEADING": "UD Library: Postcard Collection",
+          "DESCRIPTION": "Postcards documenting small town life in Delaware",
+          "CAPTION": "Aerial View Delaware Memorial Bridge near Wilmington, Delaware 1930-1945. Image courtesy of the University of Delaware Postcard Collection.",
+          "LINK": "/#/collection/87729444",
+          "IMG_SOURCE": "/assets/img/featured-collections/ud_postcard.jpg",
+          "LINK_TITLE": "UD Library: Postcard Collection",
+          "ALT_TEXT": "UD Library: Postcard Collection"
         },
         {
-          "SUBHEADING": "OCAD U Zine Collection",
-          "DESCRIPTION": "Self-published and handmade objects",
-          "CAPTION": "Punch Drunk, Tim Gaedke. Image courtesy of the OCAD University Zine Collection. ",
-          "LINK": "/#/collection/87731595 ",
-          "IMG_SOURCE": "/assets/img/featured-collections/punchdrunk_ocad.jpg",
-          "LINK_TITLE": "OCAD U Zine Collection",
-          "ALT_TEXT": "OCAD U Zine Collection"
+          "SUBHEADING": "Pratt Institute Archives Image Collection",
+          "DESCRIPTION": "The history and creative output of Pratt Institute",
+          "CAPTION": "1967 Prattonia, Poster 48.  Image courtesy of the Pratt Institute Archives.",
+          "LINK": "/#/collection/87729432 ",
+          "IMG_SOURCE": "/assets/img/featured-collections/pratt_poster.jpg",
+          "LINK_TITLE": "Pratt Institute Archives Image Collection",
+          "ALT_TEXT": "Pratt Institute Archives Image Collection"
         },
         {
-          "SUBHEADING": "Martin Methodist Marine Biology Collection: Key Largo",
-          "DESCRIPTION": "Marine images taken in and around Key Largo",
-          "CAPTION": "Smooth trunkfish (Lactophrys triqueter). Image courtesy of Martin Methodist Marine Biology Collection.",
-          "LINK": "/#/collection/87730675",
-          "IMG_SOURCE": "/assets/img/featured-collections/martin_trunkfish.jpg",
-          "LINK_TITLE": "Martin Methodist Marine Biology Collection: Key Largo",
-          "ALT_TEXT": "Martin Methodist Marine Biology Collection: Key Largo"
+          "SUBHEADING": "Cornell: Historic Glacial Images of Alaska and Greenland",
+          "DESCRIPTION": "Photographs from expeditions from 1864-1912",
+          "CAPTION": "Iceberg, Baffins Bay (Black/Davis). Image courtesy of the Cornell: Historic Glacial Images of Alaska and Greenland.",
+          "LINK": "/#/collection/87730735",
+          "IMG_SOURCE": "/assets/img/featured-collections/cornell_iceberg.jpg",
+          "LINK_TITLE": "Cornell: Historic Glacial Images of Alaska and Greenland",
+          "ALT_TEXT": "Cornell: Historic Glacial Images of Alaska and Greenland"
         }
       ]
     },

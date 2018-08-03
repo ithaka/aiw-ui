@@ -35,5 +35,5 @@
 .alert.alert-info(*ngIf="tags.length < 1 && !loading")
   h3 {{ 'BROWSE.ERRORS.NO_GROUPS_COLLECTIONS_HEADING' | translate }}
   br
-  div(*ngIf="selectedFilter && selectedFilter.level === 'private'", [innerHtml]="'BROWSE.ERRORS.NO_PRIVATE_GROUPS_COLLECTIONS_PROMPT' | translate")
+  div(*ngIf="selectedFilter && selectedFilter.level === 'created'", [innerHtml]="'BROWSE.ERRORS.NO_PRIVATE_GROUPS_COLLECTIONS_PROMPT' | translate")
   div(*ngIf="selectedFilter && selectedFilter.level === 'institution'", [innerHtml]="'BROWSE.ERRORS.NO_INSTITUTIONAL_GROUPS_COLLECTIONS_PROMPT' | translate")

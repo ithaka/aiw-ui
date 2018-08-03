@@ -1,7 +1,8 @@
 import { Component, OnInit, Input } from '@angular/core'
 import { Router, ActivatedRoute } from '@angular/router'
+
 import { Tag } from '../tag/tag.class'
-import { AssetService, AssetSearchService, AuthService, } from '../../shared'
+import { AssetService, AssetSearchService, AuthService } from '../../shared'
 import { GroupQuery } from './../browse-groups/groups.component'
 
 @Component({
