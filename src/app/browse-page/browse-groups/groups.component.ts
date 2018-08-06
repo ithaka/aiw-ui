@@ -312,6 +312,8 @@ export class BrowseGroupsComponent implements OnInit {
         
         this.pagination.page = groupQuery.page
         this.pagination.totalPages = Math.ceil(data.total/this.pagination.size) // update pagination, which is injected into pagination component
+        if (this.pagination.totalPages === 0) // The pagination should at least have one page even if there is no results, so that we don't show '1 of 0' on the pagination
+          this.pagination.totalPages = 1 
         if (this.pagination.page > this.pagination.totalPages && data.total > 0) {
           return this.goToPage(this.pagination.totalPages) // go to the last results page if they try to navigate to a page that is more than results
         }
