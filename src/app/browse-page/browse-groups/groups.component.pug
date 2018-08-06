@@ -32,7 +32,7 @@
 .row.has-icon-overlay(*ngIf="loading")
   i.icon-lg.icon-overlay--top.icon-loading-large
 // Don't show this if there is a filters list, if it's loading, or if the user hasn't searched for anything yet
-.alert.alert-info(*ngIf="tags.length < 1 && !loading")
+.alert.alert-info(*ngIf="!isSearch && tags.length < 1 && !loading")
   h3 {{ 'BROWSE.ERRORS.NO_GROUPS_COLLECTIONS_HEADING' | translate }}
   br
   div(*ngIf="selectedFilter && selectedFilter.level === 'created'", [innerHtml]="'BROWSE.ERRORS.NO_PRIVATE_GROUPS_COLLECTIONS_PROMPT' | translate")
