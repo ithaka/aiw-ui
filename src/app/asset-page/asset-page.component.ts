@@ -137,7 +137,7 @@ export class AssetPage implements OnInit, OnDestroy {
     private steps: TourStep[] = [
         {
             step: 1,
-            element: ['.icon-zoom-in'],
+            element: ['.btn--zoomIn'],
             popover: {
                 title: '<p>1 OF 5</p><b>Zoom and pan</b>',
                 description: 'You can zoom in with this button.',
@@ -145,7 +145,7 @@ export class AssetPage implements OnInit, OnDestroy {
         },
         {
             step: 2,
-            element: ['.icon-zoom-out'],
+            element: ['.btn--zoomOut'],
             popover: {
                 title: '<p>2 OF 5</p><b>Zoom and pan</b>',
                 description: 'You can zoom out with this button.',
@@ -153,7 +153,7 @@ export class AssetPage implements OnInit, OnDestroy {
         },
         {
             step: 3,
-            element: ['.icon-fit'],
+            element: ['.btn--zoomFit'],
             popover: {
                 title: '<p>3 OF 5</p><b>Zoom and pan</b>',
                 description: 'You can fit the image with this button.',
@@ -161,7 +161,7 @@ export class AssetPage implements OnInit, OnDestroy {
         },
         {
             step: 4,
-            element: ['.icon-fullscreen'],
+            element: ['.btn--fullScreen'],
             popover: {
                 title: '<p>4 OF 5</p><b>View full image and compare</b>',
                 description: 'If you came to this page from search or a group, you can enter fullscreen mode to see it side-by-side with others.'
