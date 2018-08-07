@@ -1,6 +1,6 @@
 .card-block.card-text
   .card-img-top
-    a(href="http://library.artstor.org")
+    a([routerLink]="navigationParams")
       img(*ngIf="thumbnail.status != 'not-available'", [class.disablePointerEvents]="reorderMode", [attr.src]="_search.makeThumbUrl(thumbnail.thumbnailImgUrl, thumbnailSize)", (error)="thumbnailError()", [attr.alt]="thumbnail.arttitle && thumbnail.arttitle[0] ? 'Thumbnail of ' + thumbnail.thumbnail1 : 'No title available'")
   .metadata-wrap
     //- New Asset display

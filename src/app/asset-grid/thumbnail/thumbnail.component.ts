@@ -34,6 +34,9 @@ export class ThumbnailComponent implements OnInit, OnChanges {
   @Input()
   private editMode: boolean
 
+  @Input()
+  private navigationParams: any[]
+
   private constraints: any = {}
 
   // Variable that determines the thumbnail image size based on largeThmbView and available size for the asset. Defaults to 1 (Small thumbnail view)
