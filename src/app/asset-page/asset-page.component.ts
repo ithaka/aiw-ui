@@ -1219,8 +1219,8 @@ export class AssetPage implements OnInit, OnDestroy {
     setCollectionLink(asset: Asset): any[] {
         let link = []
 
-        // 103 Collection Id routes to /category/<categoryId>
-        if (String(asset.collectionId) === '103') {
+        // 103 Collection Id routes to /category/<categoryId>, some of the collections have collectionId of NaN, check the id in the collections array instead
+        if (String(asset.collectionId) === '103' || String(asset.collections[0].id) === '103') {
             return ['/category', String(asset.categoryId)]
         }
         else {

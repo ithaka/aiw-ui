@@ -293,6 +293,12 @@ body body{
   height: unset;
 }
 
+.gdpr-banner{
+  @media(max-width: $tablet) {
+    margin-top: 50px;
+  }
+}
+
 // Bootstrap tooltip override
 .tooltip-inner {
   width: 140px;
