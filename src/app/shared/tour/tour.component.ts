@@ -1,18 +1,39 @@
-import { Component, Input } from '@angular/core'
+import { Component, Input, OnInit  } from '@angular/core'
 import * as Driver from '../../../../node_modules/driver.js/dist/driver.min.js'
 import { TourStep } from './tour.service'
+import { Router, NavigationStart } from '@angular/router';
 
 @Component({
     selector: 'ang-guide-tour',
-    templateUrl: 'tour.component.pug'
+    templateUrl: 'tour.component.pug',
+    styleUrls: ['./tour.component.scss']
   })
-  export class GuideTourComponent{
+  export class GuideTourComponent {
+
+    private driver: any
+    private startModalShow: boolean = false
 
     @Input() public steps: TourStep[]
 
+    constructor(
+      private router:Router
+    ){
+      router.events.subscribe(event => {
+        // End the tour when go to another page with browser's forward and backward button
+        if(event instanceof NavigationStart) {
+          if(this.driver){
+            this.driver.reset()
+          }
+        }
+      })
+    }
+
+
     private startTour() {
-      const driver = new Driver({ allowClose: false, closeBtnText: 'exit tour', nextBtnText: 'NEXT', prevBtnText: 'BACK', doneBtnText: 'DONE',
+      this.startModalShow = false
+      this.driver = new Driver({ allowClose: false, closeBtnText: 'exit tour', nextBtnText: 'NEXT', prevBtnText: 'BACK', doneBtnText: 'GOT IT, THANKS!',
         onHighlightStarted: (Element) => {
+          
           // Change the tabIndex of the brand label and links in the login box to ensure if there is tour, the links of the tour is first to be tabbed for accessibility
             this.manipulateDom('className', 'navbar-brand', 6)
             this.manipulateDom('id', 'nav-setting', 7)
@@ -71,8 +92,8 @@ import { TourStep } from './tour.service'
         }
     })
 
-      driver.defineSteps(this.steps)
-      driver.start()
+      this.driver.defineSteps(this.steps)
+      this.driver.start()
     }
 
     /**
