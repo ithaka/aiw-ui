@@ -104,6 +104,15 @@ describe("PUT /api/secure/user/{{profileId}} #pact #updateuser", () => {
       .catch((err) => { done.fail(err) })
     })
 
+    afterEach((done) => {
+      provider.verify()
+      .then(function(a) {
+        done()
+      }, function(e) {
+        done.fail(e)
+      })
+    })
+
     for(let obj of updateObjects) {
       it("should update a user's " + obj.field, (done) => {
         //Run the tests
