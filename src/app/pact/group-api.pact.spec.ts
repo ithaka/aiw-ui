@@ -58,6 +58,7 @@ describe("Group Calls #pact", () => {
     describe("getAllPrivateGroups", () => {
       beforeAll((done) =>  {
         provider.addInteraction({
+          state: 'I am logged in as qapact@artstor.org',
           uponReceiving: 'a request for all private groups',
           withRequest: {
             method: 'GET',
