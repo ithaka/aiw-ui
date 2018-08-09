@@ -104,7 +104,8 @@ describe("PUT /api/secure/user/{{profileId}} #pact #updateuser", () => {
       .catch((err) => { done.fail(err) })
     })
 
-    afterEach((done) => {
+    afterAll((done) => {
+      // called in afterAll to make sure it fires after all interactions have been tested
       provider.verify()
       .then(function(a) {
         done()
@@ -122,8 +123,9 @@ describe("PUT /api/secure/user/{{profileId}} #pact #updateuser", () => {
             done()
           },
           err => {
-          done.fail(err)
-        })
+            done.fail(err)
+          }
+        )
       })
     }
   })

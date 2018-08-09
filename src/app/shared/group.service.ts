@@ -48,8 +48,13 @@ export class GroupService {
         query && (queryParam = '&q=' + query)
         owner_id && (queryParam = '&owner_id=' + owner_id)
 
+        let options = {
+            headers: new HttpHeaders({'Accept': 'application/json;charset=UTF-8'}),
+            withCredentials: true
+        }
+
         return this.http.get<GroupList>(
-            [this.groupUrl, "?size=", size, '&level=', level, '&from=', ( (pageNo - 1) * size),  tagParam, sortParam, orderParam, queryParam].join(''), this.options
+            [this.groupUrl, "?size=", size, '&level=', level, '&from=', ( (pageNo - 1) * size),  tagParam, sortParam, orderParam, queryParam].join(''), options
         )
     }
 

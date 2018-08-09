@@ -7,7 +7,7 @@ import { PactWeb, Matchers } from '@pact-foundation/pact-web'
 import { MetadataRes } from '../shared/datatypes'
 import { MetadataService } from '../shared/metadata.service';
 
-describe("Metadata Calls #pact", () => {
+describe("Metadata Calls #pact #metadata", () => {
 
     let provider;
     let _metadata;
@@ -138,11 +138,12 @@ describe("Metadata Calls #pact", () => {
         _metadata.getMetadata('SS35538_35538_29885250')
           .subscribe(res => {
             expect(res).toEqual(expectedMetadataObject)
+            done()
           },
           err => {
-
-          done.fail(err)
-        })
+            done.fail(err)
+          }
+        )
       })
     })
   })
