@@ -7,7 +7,7 @@ import { PactWeb, Matchers } from '@pact-foundation/pact-web'
 import { MetadataRes } from '../shared/datatypes'
 import { MetadataService } from '../shared/metadata.service';
 
-describe("Metadata Calls #pact", () => {
+describe("Metadata Calls #pact #metadata", () => {
 
     let provider;
     let _metadata;
@@ -123,6 +123,15 @@ describe("Metadata Calls #pact", () => {
         .then(() => { done() }, (err) => { done.fail(err) })
       })
 
+      afterEach((done) => {
+        provider.verify()
+        .then(function(a) {
+          done()
+        }, function(e) {
+          done.fail(e)
+        })
+      })
+
       it("should return metadata for one object",
        function(done) {
         //Run the tests
@@ -132,19 +141,9 @@ describe("Metadata Calls #pact", () => {
             done()
           },
           err => {
-
-          done.fail(err)
-        })
-      });
-
-      // verify with Pact, and reset expectations
-      it('successfully verifies', function(done) {
-        provider.verify()
-          .then(function(a) {
-            done()
-          }, function(e) {
-            done.fail(e)
-          })
+            done.fail(err)
+          }
+        )
       })
     })
   })

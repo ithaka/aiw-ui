@@ -2,12 +2,12 @@ const pact = require('@pact-foundation/pact-node')
 const path = require('path')
 
 const opts = {
-  pactFilesOrDirs: [path.resolve(__dirname, '../pacts/aiw-ui-binder-group.json')],
+  pactFilesOrDirs: [path.resolve(__dirname, '../pacts')],
   pactBroker: 'http://pact-broker.apps.test.cirrostratus.org',
 //   pactBrokerUsername: '',
 //   pactBrokerPassword: '',
   tags: ['test'],
-  consumerVersion: '1.0.0'
+  consumerVersion: '2.0.1'
 }
 
 pact.publishPacts(opts)

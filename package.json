@@ -36,7 +36,7 @@
         "lint": "npm run tslint \"src/**/*.ts\"",
         "local": "yarn run server:local",
         "pact": "karma start --tags pact",
-        "pact:publish": "node config/pact.publish.js",
+        "pact:publish": "rm -rf pacts && yarn pact && node config/pact.publish.js",
         "postversion": "git push && git push --tags",
         "prebuild:dev": "npm run clean:dist",
         "prebuild:prod": "npm run clean:dist",
