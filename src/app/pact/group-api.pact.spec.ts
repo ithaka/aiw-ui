@@ -66,7 +66,7 @@ describe("Group Calls #pact", () => {
           },
           willRespondWith: {
             status: 200,
-            headers: { "Content-Type": "application/json" },
+            headers: { "Content-Type": "application/json;charset=UTF-8" },
             body: matcherPrivateGroupListObject
           }
         })
