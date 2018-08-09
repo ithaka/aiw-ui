@@ -25,6 +25,8 @@ export class BrowseGroupsComponent implements OnInit {
   private loading: boolean = true
   private showCardView: boolean = false
   private showAccessDeniedModal: boolean = false
+  private isSearch: boolean = false
+  private numResultMsg: string = ''
 
   private pagination: {
     totalPages: number,
@@ -149,10 +151,12 @@ export class BrowseGroupsComponent implements OnInit {
 
       // set the term every time there is one in the url
       if (query.term) {
+        this.isSearch = true
         this.searchTerm = query.term
         groupQuery.term = query.term
         this.updateSearchTerm.emit(query.term) // sets the term in the search box
       } else {
+        this.isSearch = false
         this.updateSearchTerm.emit('')
       }
 
@@ -294,8 +298,22 @@ export class BrowseGroupsComponent implements OnInit {
     .take(1)
     .subscribe(
       (data)  => {
+        if (data.total !== 0){
+          if (this.pagination.size < data.total) {
+            this.numResultMsg = 'Showing ' + this.pagination.size + ' of ' + data.total + ' results for \"' + this.searchTerm + '\"'
+          }
+          else {
+            this.numResultMsg = 'Showing ' + data.total + ' of ' + data.total + ' results for \"' + this.searchTerm + '\"'
+          }
+        }
+        else {
+          this.numResultMsg = '0 results to show for \"' + this.searchTerm + '\"'
+        }
+        
         this.pagination.page = groupQuery.page
         this.pagination.totalPages = Math.ceil(data.total/this.pagination.size) // update pagination, which is injected into pagination component
+        if (this.pagination.totalPages === 0) // The pagination should at least have one page even if there is no results, so that we don't show '1 of 0' on the pagination
+          this.pagination.totalPages = 1 
         if (this.pagination.page > this.pagination.totalPages && data.total > 0) {
           return this.goToPage(this.pagination.totalPages) // go to the last results page if they try to navigate to a page that is more than results
         }
