@@ -69,6 +69,8 @@ export class AssetGrid implements OnInit, OnDestroy {
   private excludedAssetsCount: number = 0;
   private sortByDateTotal: number = 0;
 
+  private navigationParams: any[] = []
+
   @Input()
   private actionOptions: any = {};
 
@@ -252,6 +254,8 @@ export class AssetGrid implements OnInit, OnDestroy {
         //   this.selectedAssets = [];
         //   this._assets.setSelectedAssets(this.selectedAssets);
         // }
+
+        this.navigationParams = ['/asset', this.route.snapshot.params, this.route.snapshot.queryParams]
 
         this.isLoading = true;
       })
