@@ -123,28 +123,26 @@ describe("Metadata Calls #pact", () => {
         .then(() => { done() }, (err) => { done.fail(err) })
       })
 
+      afterEach((done) => {
+        provider.verify()
+        .then(function(a) {
+          done()
+        }, function(e) {
+          done.fail(e)
+        })
+      })
+
       it("should return metadata for one object",
        function(done) {
         //Run the tests
         _metadata.getMetadata('SS35538_35538_29885250')
           .subscribe(res => {
             expect(res).toEqual(expectedMetadataObject)
-            done()
           },
           err => {
 
           done.fail(err)
         })
-      });
-
-      // verify with Pact, and reset expectations
-      it('successfully verifies', function(done) {
-        provider.verify()
-          .then(function(a) {
-            done()
-          }, function(e) {
-            done.fail(e)
-          })
       })
     })
   })

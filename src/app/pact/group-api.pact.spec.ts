@@ -106,15 +106,5 @@ describe("Group Calls #pact", () => {
           done.fail(err)
         })
       });
-
-      // verify with Pact, and reset expectations
-      it('successfully verifies', function(done) {
-        provider.verify()
-          .then(function(a) {
-            done()
-          }, function(e) {
-            done.fail(e)
-          })
-      })
     })
   })

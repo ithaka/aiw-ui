@@ -8,6 +8,7 @@
   "interactions": [
     {
       "description": "a request for all private groups",
+      "providerState": "I am logged in as qapact@artstor.org",
       "request": {
         "method": "GET",
         "path": "/api/v1/group",
@@ -16,7 +17,7 @@
       "response": {
         "status": 200,
         "headers": {
-          "Content-Type": "application/json"
+          "Content-Type": "application/json;charset=UTF-8"
         },
         "body": {
           "success": true,
@@ -45,30 +46,6 @@
             },
             {
               "tags": [
-
-              ],
-              "sequence_number": 0,
-              "update_date": "2017-07-07T17:00:40Z",
-              "name": "Some Assets",
-              "description": "",
-              "public": false,
-              "creation_date": "2017-07-07T17:00:40Z",
-              "id": "a1fc32cc-8859-49f7-a560-5da0c5928500",
-              "access": [
-
-              ],
-              "items": [
-                "AAFOLKAIG_10313142481",
-                "AAFOLKAIG_10313142791",
-                "AAFOLKAIG_10313143138",
-                "AAGOIG_10314000081"
-              ],
-              "group_type": 200,
-              "owner_id": "706217",
-              "owner_name": "air01@artstor.org"
-            },
-            {
-              "tags": [
                 "PC Test",
                 "MLK"
               ],
@@ -86,6 +63,30 @@
                 "CARNEGIE_700001",
                 "MOMA_620002",
                 "MOMA_600006"
+              ],
+              "group_type": 200,
+              "owner_id": "706217",
+              "owner_name": "air01@artstor.org"
+            },
+            {
+              "tags": [
+
+              ],
+              "sequence_number": 0,
+              "update_date": "2017-07-07T17:00:40Z",
+              "name": "Some Assets",
+              "description": "",
+              "public": false,
+              "creation_date": "2017-07-07T17:00:40Z",
+              "id": "a1fc32cc-8859-49f7-a560-5da0c5928500",
+              "access": [
+
+              ],
+              "items": [
+                "AAFOLKAIG_10313142481",
+                "AAFOLKAIG_10313142791",
+                "AAFOLKAIG_10313143138",
+                "AAGOIG_10314000081"
               ],
               "group_type": 200,
               "owner_id": "706217",
