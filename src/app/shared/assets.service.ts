@@ -569,20 +569,6 @@ export class AssetService {
     }
 
     /**
-     * Get metadata for an Asset
-     * @param assetId string Asset or object ID
-     */
-    public getMetadata(assetId: string, groupId?: string): Observable<MetadataRes> {
-        let url = this._auth.getUrl() + '/v1/metadata?legacy=false&object_ids=' + assetId
-        if (groupId){
-            // Groups service modifies certain access rights for shared assets
-            url = this._auth.getUrl() + '/v1/group/'+ groupId +'/metadata?object_ids=' + assetId
-        }
-        return this.http
-            .get<MetadataRes>(url, this.defaultOptions)
-    }
-
-    /**
      * Gets array of thumbnails associated to objectId
      * @param objectId Object Id for which to retrieve image results
      * @param colId Collection Id in which the Object resides
@@ -1053,24 +1039,4 @@ export interface SolrFacet {
     children?: SolrFacet[]
     // Value added by the UI
     title?: string
-}
-
-export interface MetadataRes {
-    success: boolean
-    total: number
-    metadata: {
-        SSID: string
-        download_size: string
-        fileProperties: any[]
-        height: number
-        width: number
-        image_url: string
-        metadata_json: any[]
-        object_id: string
-        object_type_id: number
-        resolution_x: number
-        resolution_y: number
-        thumbnail_url: string
-        title: string
-    }[]
 }

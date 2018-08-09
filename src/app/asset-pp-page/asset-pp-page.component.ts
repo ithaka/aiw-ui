@@ -4,7 +4,7 @@ import { Router, ActivatedRoute, UrlSegment } from '@angular/router';
 import { Subscription }   from 'rxjs/Subscription';
 
 // Internal Dependencies
-import { AssetService, AssetSearchService } from './../shared';
+import { AssetSearchService, MetadataService } from './../shared';
 
 @Component({
   selector: 'ang-asset-pp-page',
@@ -25,7 +25,7 @@ export class AssetPPPage implements OnInit, OnDestroy {
 
 
   constructor(
-    private _assets: AssetService,
+    private _metadata: MetadataService,
     private _search: AssetSearchService,
     private _router: Router,
     private route: ActivatedRoute,
@@ -46,7 +46,7 @@ export class AssetPPPage implements OnInit, OnDestroy {
   // Load Image Group Assets
   loadAsset(): void{
     let self = this;
-    this._assets.getMetadata( this.assetId )
+    this._metadata.getMetadata( this.assetId )
     .subscribe((res) => {
         let assetData = res && res.metadata && res.metadata[0] ? res.metadata[0]['metadata_json'] : []
         for(let data of assetData){
