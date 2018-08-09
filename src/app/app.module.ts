@@ -113,6 +113,7 @@ import { LocalPCService } from './_local-pc-asset.service'
 import { AssetFiltersService } from './asset-filters/asset-filters.service'
 import { TagsService } from './browse-page/tags.service'
 import { LegacyRouteResolver } from './legacy.service'
+import { GroupsRouteResolver } from './browse-page/groups-redirect.service'
 import { HTTP_INTERCEPTORS } from '@angular/common/http'
 import { UnauthorizedInterceptor } from './interceptors'
 
@@ -142,6 +143,7 @@ const APP_PROVIDERS = [
   TagsService,
   ToolboxService,
   LegacyRouteResolver,
+  GroupsRouteResolver,
   Title,
   TitleService,
   MetadataService,
