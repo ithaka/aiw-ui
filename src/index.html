@@ -6,12 +6,12 @@
   <script type="text/javascript">
     var initPath = window.location.href;
     var initOrigin = window.location.origin;
+    // To cater for legacy links via both proxy and without proxy, we avoid matching ".org"
     if ( initPath.indexOf('/#/library') < 0 &&
           (initPath.indexOf('/library/ExternalIV.jsp') > -1
           || initPath.indexOf('/library/secure/ViewImages') > -1
-          || initPath.indexOf('.org/library/collection') > -1
-          // || initPath.indexOf('.org/library/welcome.html') > -1
-          || initPath.indexOf('/library/welcome.html') > -1 // To cater for legacy links via both proxy and without proxy
+          || initPath.indexOf('/library/collection') > -1
+          || initPath.indexOf('/library/welcome.html') > -1 
           || initPath.indexOf('.org/library/#') > -1
           || initPath.indexOf('/asset/') > -1
           || initPath.indexOf('/assetprint/') > -1
