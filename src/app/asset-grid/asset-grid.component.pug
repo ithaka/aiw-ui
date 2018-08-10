@@ -95,7 +95,7 @@
           .mobile--show
             input.check-mobile(type="checkbox", [checked]="isSelectedAsset(asset) > -1", (change)="editMode = true; selectAsset(asset);")
           a.card.card--asset([attr.data-id]="asset.objectId", [ngClass]="{'selected': ( isSelectedAsset(asset) > -1 ), 'lrgThmb': largeThmbView }", (click)="selectAsset(asset)", (focus)="showBox($event)", (blur)="hideBox($event)")
-            ang-thumbnail([thumbnail]="asset", [reorderMode]="reorderMode", [editMode]="editMode", [largeThmbView]="largeThmbView")
+            ang-thumbnail([thumbnail]="asset", [reorderMode]="reorderMode", [editMode]="editMode", [largeThmbView]="largeThmbView", [navigationParams]="navigationParams")
         .alert.alert-warning(*ngIf="!isLoading && (searchError.length < 1) && ((isPartialPage && hasMaxAssetLimit) || searchLimitError)")
           | {{ "BROWSE.WARNINGS.ADDITIONAL_RESULTS" | translate }}
       //- Sortable Thumbails
