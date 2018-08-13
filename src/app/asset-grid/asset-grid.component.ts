@@ -476,8 +476,11 @@ export class AssetGrid implements OnInit, OnDestroy {
    * Edit Mode : Selects / deselects an asset - Inserts / Removes the asset object to the selectedAssets array
    * @param asset object to be selected / deselected
    */
-  private selectAsset(asset): void{
-    if (this.editMode){
+
+  private selectAsset(asset, event): void{
+    event.preventDefault()
+
+    if(this.editMode){
       let index: number = this.isSelectedAsset(asset)
       if (index > -1){
         this.selectedAssets.splice(index, 1)
