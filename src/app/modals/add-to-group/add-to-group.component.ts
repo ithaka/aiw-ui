@@ -47,7 +47,7 @@ export class AddToGroupModal implements OnInit, OnDestroy {
 
   ngOnInit() {
     // Set focus to the modal to make the links in the modal first thing to tab for accessibility
-    let htmlelement:HTMLElement = document.getElementById("modal");
+    let htmlelement: HTMLElement = document.getElementById('modal');
     htmlelement.focus()
 
     if (this.selectedAssets.length < 1) { // if no assets were added when component was initialized, the component gets the current selection list
@@ -86,7 +86,7 @@ export class AddToGroupModal implements OnInit, OnDestroy {
    * @param event key or click event
    * @param term string being typed by user
    */
-  public sortGroup(event, term) : void {
+  public sortGroup(event, term): void {
      // Do not evaluate if key up event is arrow key
      if ([37, 38, 39, 40].indexOf(event.keyCode) > -1) {
       return
@@ -120,7 +120,7 @@ export class AddToGroupModal implements OnInit, OnDestroy {
     })
 
     if (!this.selectedIg || this.selectedGroupName.length < 1) {
-      this.selectedGroupError = "ADD_TO_GROUP_MODAL.NO_GROUP"
+      this.selectedGroupError = 'ADD_TO_GROUP_MODAL.NO_GROUP'
       return
     }
 
@@ -131,7 +131,7 @@ export class AddToGroupModal implements OnInit, OnDestroy {
     this.selectedAssets.forEach((asset: any) => {
       let assetId: string
       if (!asset) {
-        console.error("Attempted selecting undefined asset")
+        console.error('Attempted selecting undefined asset')
       } else {
         // Find asset id
         if (asset.artstorid) {
@@ -144,7 +144,7 @@ export class AddToGroupModal implements OnInit, OnDestroy {
           // Asset has "id" when constructed via the Artstor Viewer (see type: Asset)
           assetId = asset.id
         } else {
-          console.error("Asset id not found when adding to group", asset)
+          console.error('Asset id not found when adding to group', asset)
         }
         // Add id to group if it's not already in the group
         if (assetId && putGroup.items.indexOf(assetId) < 0) {

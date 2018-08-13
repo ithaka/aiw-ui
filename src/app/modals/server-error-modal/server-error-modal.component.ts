@@ -20,7 +20,7 @@ export class ServerErrorModal implements OnInit {
 
   ngOnInit() {
     // Set focus to the modal to make the links in the modal first thing to tab for accessibility
-    let htmlelement:HTMLElement = document.getElementById("modal");
+    let htmlelement: HTMLElement = document.getElementById('modal');
     htmlelement.focus()
   }
 
@@ -29,7 +29,7 @@ export class ServerErrorModal implements OnInit {
    */
   stashThenRoute(routeValue: string) {
     console.log(window.location.pathname)
-    this._storage.set("stashedRoute", window.location.pathname)
-    this._router.navigate([routeValue]); 
+    this._storage.set('stashedRoute', window.location.pathname)
+    this._router.navigate([routeValue]);
   }
 }

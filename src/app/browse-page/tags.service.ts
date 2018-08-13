@@ -15,11 +15,11 @@ export class TagsService {
    * @returns a chainable promise resolved with an array of tags
    */
   public initTags(switchObj: any): Promise<Tag[]> {
-    if (switchObj.type === "commons") {
+    if (switchObj.type === 'commons') {
       return this.loadCollectionsList('ssc');
-    } else if (switchObj.type === "institution") {
+    } else if (switchObj.type === 'institution') {
       return this.loadCollectionsList('institution');
-    } else if (switchObj.type === "library" && switchObj.collectionId) {
+    } else if (switchObj.type === 'library' && switchObj.collectionId) {
       return this.getCategories(null, switchObj.collectionId);
     }
   }
@@ -30,26 +30,26 @@ export class TagsService {
    */
   private loadCollectionsList(type: string): Promise<Tag[]> {
     let colTypeValue: number
-    if(type === 'institution'){
+    if (type === 'institution'){
       // Institutional Collections = Type #2
       colTypeValue = 2
-    } else if(type === 'ssc'){
+    } else if (type === 'ssc'){
       // Public Collections = Type #5
       colTypeValue = 5
     }
 
-    if(colTypeValue){
+    if (colTypeValue){
       // Use SOLR to load collection list by faceting on collectiontypenameid and filtering on colTypeValue
       return this._assets.categoryByFacet('collectiontypenameid', colTypeValue)
         .then( (facetData) => {
-          if(facetData){
+          if (facetData){
             // Filter for the required collectionType
             facetData = facetData.filter((facet) => {
               return parseInt(facet.name.split('|')[0]) === colTypeValue
             })
 
             let tags: Tag[] = []
-            
+
             // Extract required facets data
             let facetsArray: any[] = []
             facetData.forEach((facet, index) => {
@@ -68,7 +68,7 @@ export class TagsService {
 
             // Create tags
             facetsArray.forEach((facet, index) => {
-              tags.push(new Tag(facet.id, facet.name, true, null, { label: "collection", folder: true }, true))
+              tags.push(new Tag(facet.id, facet.name, true, null, { label: 'collection', folder: true }, true))
             })
 
             return tags
@@ -83,11 +83,11 @@ export class TagsService {
             let tags: Tag[] = []
             data['Collections'].forEach((collection, index) => {
               let openable = collection.collectionType === 5 || collection.collectionType === 2
-              tags.push(new Tag(collection.collectionid, collection.collectionname, true, null, { label: "collection", folder: true }, openable))
+              tags.push(new Tag(collection.collectionid, collection.collectionname, true, null, { label: 'collection', folder: true }, openable))
             });
             return tags
           } else {
-            throw new Error("no Collections returned in data")
+            throw new Error('no Collections returned in data')
           }
 
         })
@@ -99,21 +99,21 @@ export class TagsService {
    * @returns a chainable promise, resolved with an array of tags
    */
   private getCategories(tag?: Tag, collectionId?: string): Promise<Tag[]> {
-    //the tag doesn't have any children, so we run a call to get any
+    // the tag doesn't have any children, so we run a call to get any
     let childArr: Tag[] = [];
-    if (tag && tag.type && tag.type.label === "collection") {
+    if (tag && tag.type && tag.type.label === 'collection') {
       collectionId = tag.tagId;
     }
-    
-    if (tag.type.label === "group") {
+
+    if (tag.type.label === 'group') {
       // Image Group folders come through with ugly widgetIds
-      let tagId = tag.tagId.replace('fldr_','');
+      let tagId = tag.tagId.replace('fldr_', '');
 
       return this._assets.subGroups(tagId)
         .then((data) => {
           let arr: any = data;
-          for(let group of arr) {
-            let groupTag = new Tag(group.widgetId.replace('fldr_',''), group.title, true, tag, { label: "group", folder: group.isFolder }, true);
+          for (let group of arr) {
+            let groupTag = new Tag(group.widgetId.replace('fldr_', ''), group.title, true, tag, { label: 'group', folder: group.isFolder }, true);
             // Is folder property cleaning: comes through as string
             group.isFolder = (group.isFolder === 'true') ?  true : false;
             // Set description if it exists

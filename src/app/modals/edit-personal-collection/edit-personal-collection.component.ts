@@ -4,11 +4,11 @@ import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms'
 
 
 import {
-  AssetService, 
+  AssetService,
   PersonalCollectionService,
-  AssetSearchService, 
-  SearchAsset, 
-  AuthService, 
+  AssetSearchService,
+  SearchAsset,
+  AuthService,
   PersonalCollectionUploadAsset,
   AssetDetailsFormValue
 } from './../../shared'
@@ -104,7 +104,7 @@ export class EditPersonalCollectionModal implements OnInit {
 
   private editMetaFormSubmit( formData: AssetDetailsFormValue ): void {
     this.submitted = true
-    
+
     if (this.metadataUpdateLoading) { return }
     if (!this.editAssetMetaForm.valid) { return }
 
@@ -154,7 +154,7 @@ export class EditPersonalCollectionModal implements OnInit {
 
     this.uiMessages = { }
     this.deleteLoading = true
-    
+
     this._pc.deletePersonalAssets([ssid])
     .map((res) => {
       this.deleteLoading = false
@@ -177,9 +177,9 @@ export class EditPersonalCollectionModal implements OnInit {
     this.collectionAssets.unshift(item)
 
     // Track the SSIDs (in local storage) for recently uploaded assets untill they get available in SOLR
-    if(item.ssid){
+    if (item.ssid){
       let publishingAssets = this._auth.getFromStorage('publishingAssets')
-      if(!publishingAssets){
+      if (!publishingAssets){
         publishingAssets = {
           ssids: [],
           showPublishingMsgs: true
@@ -190,5 +190,5 @@ export class EditPersonalCollectionModal implements OnInit {
       this._auth.store('publishingAssets', publishingAssets)
     }
   }
-  
+
 }

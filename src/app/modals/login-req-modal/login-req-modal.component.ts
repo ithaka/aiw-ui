@@ -23,20 +23,20 @@ export class LoginReqModal {
 
   ngOnInit() {
     // Set focus to the modal to make the links in the modal first thing to tab for accessibility
-    let htmlelement:HTMLElement = document.getElementById("modal");
+    let htmlelement: HTMLElement = document.getElementById('modal');
     htmlelement.focus();
   }
 
   goToLogin() {
     // could utilize RouteReuseStrategy here
 
-    this._auth.store("stashedRoute", this.location.path(false));
+    this._auth.store('stashedRoute', this.location.path(false));
 
     this._router.navigate(['/login']);
   }
 
   test() {
-    this._router.navigateByUrl(this._auth.getFromStorage("stashedRoute"));
+    this._router.navigateByUrl(this._auth.getFromStorage('stashedRoute'));
   }
 
 }

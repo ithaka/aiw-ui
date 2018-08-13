@@ -36,6 +36,6 @@ export class TagsListComponent implements OnInit {
       delete queryParams['tags']
     }
 
-    this._router.navigate(['/browse','groups'], { queryParams: queryParams })
+    this._router.navigate(['/browse', 'groups'], { queryParams: queryParams })
   }
 }

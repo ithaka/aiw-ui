@@ -1,6 +1,6 @@
 .asset-img{
     text-align: center;
-    margin: 15px 0px;
+    margin: 15px 0;
 }
 .disclaimer{
     text-align: center;
@@ -12,16 +12,16 @@
     width: 950px;
 
     h2{
-        padding: 10px 0px;
+        padding: 10px 0;
     }
 
     .table{
         border: 1px solid #f0f0f0;
 
         .meta-row{
-            padding: 10px 0px;
+            padding: 10px 0;
             border-bottom: 1px solid #f0f0f0;
-            margin: 0px;
+            margin: 0;
 
             &.last-row{
                 border-bottom: none;

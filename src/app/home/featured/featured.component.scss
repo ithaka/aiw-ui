@@ -13,7 +13,7 @@
     margin-bottom: 10px;
 
     #featured-side {
-        padding: 0px;
+        padding: 0;
 
         & .card {
             height: 33.3%;
@@ -21,11 +21,11 @@
             margin-left: 5px;
 
             &:first-child {
-                padding-top: 0px;
+                padding-top: 0;
             }
 
             &:last-child {
-                padding-bottom: 0px;
+                padding-bottom: 0;
             }
             
             & .featured-side-img {
@@ -95,7 +95,7 @@
     }
 
     @media(min-width: $phone) {
-        padding: 0px;
+        padding: 0;
     }
 }
 
@@ -107,7 +107,7 @@
     // Use the first card for relative sizing, and display the others on top
     & + & {
         position: absolute;
-        top: 0px;
+        top: 0;
     }
 
     &.fade-in {
