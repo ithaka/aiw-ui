@@ -54,7 +54,9 @@ export class CardViewComponent implements OnInit {
         this.groupType = 'Artstor Curated'
       }
       // If I am the owner of the image group, group_type 100 means I make it to be private, group_type 200 means I make it to be institutional
-      else if (this.group.owner_id === this._auth.getUser().baseProfileId.toString()) {
+      // Some of the groups have multiple owners, so there is possibility that the owner_id is not equal to baseProfileId but it is still my group.
+      // To prevent it to be showed as "Shared with Me", as long as on created level, show either "Private" or "Shared"
+      else if (this.browseLevel === 'created' || this.group.owner_id === this._auth.getUser().baseProfileId.toString()) {
         if (this.group.group_type && this.group.group_type === 100) {
           this.groupType = 'Private'
         }
