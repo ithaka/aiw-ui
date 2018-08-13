@@ -11,7 +11,7 @@ describe("PUT /api/secure/user/{{profileId}} #pact #updateuser", () => {
 
 
   beforeAll(function(done) {
-    provider = new PactWeb({ consumer: 'aiw', provider: 'auth-service' })
+    provider = new PactWeb({ consumer: 'aiw-ui', provider: 'artaa_service' })
 
     // required for slower Travis CI environment
     setTimeout(function () { done() }, 2000)
@@ -104,6 +104,16 @@ describe("PUT /api/secure/user/{{profileId}} #pact #updateuser", () => {
       .catch((err) => { done.fail(err) })
     })
 
+    afterAll((done) => {
+      // called in afterAll to make sure it fires after all interactions have been tested
+      provider.verify()
+      .then(function(a) {
+        done()
+      }, function(e) {
+        done.fail(e)
+      })
+    })
+
     for(let obj of updateObjects) {
       it("should update a user's " + obj.field, (done) => {
         //Run the tests
@@ -113,8 +123,9 @@ describe("PUT /api/secure/user/{{profileId}} #pact #updateuser", () => {
             done()
           },
           err => {
-          done.fail(err)
-        })
+            done.fail(err)
+          }
+        )
       })
     }
   })

@@ -7,6 +7,7 @@ import { Tag } from './../tag'
 import { TagFiltersService } from './tag-filters.service'
 import { TitleService } from '../../shared/title.service'
 import { AppConfig } from '../../app.service';
+import { TourStep } from '../../shared/tour/tour.service'
 
 @Component({
   selector: 'ang-browse-groups',
@@ -44,6 +45,36 @@ export class BrowseGroupsComponent implements OnInit {
   // private selectedBrowseLevel: string
   private groupFilterArray: GroupFilter[] = []
   private errorObj: any = {}
+
+  private steps: TourStep[] = [
+    {
+      step: 1,
+      element: ['.card-view'],
+      popover: {
+          position: 'bottom',
+          title: '<p>1 OF 3</p><b>Preview groups</b>',
+          description: 'See more information about groups at a glance, including the creator, date, and description.',
+      }
+    },
+    {
+      step: 2,
+      element: ['#group-and-tag'], 
+      popover: {
+        position: 'right',
+        title: '<p>2 OF 3</p><b>Find groups easily</b>',
+        description: 'Filter the groups you want to view by type, tag, or owner. Make sure to log in to see all of the groups you\'ve created, all in one place.',
+      }
+    },
+    {
+      step: 3,
+        element: ['#inputSearchTerm'], 
+        popover: {
+          position: 'bottom',
+          title: '<p>3 OF 3</p><b>Search across all groups</b>',
+          description: 'Filter the groups you want to view by type, tag, or owner. Make sure to log in to see all of the groups you\'ve created, all in one place.',
+        }
+    }
+]
 
   constructor(
     _appConfig: AppConfig,

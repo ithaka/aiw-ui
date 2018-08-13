@@ -106,7 +106,7 @@
     "no-consecutive-blank-lines": false,
     "no-constructor-vars": false,
     "one-line": [
-      true,
+      false,
       "check-open-brace",
       "check-catch",
       "check-else",
@@ -118,7 +118,7 @@
       "single",
       "avoid-escape"
     ],
-    "semicolon": [true, "always"],
+    "semicolon": [false, "never"],
     "variable-name": [
       true,
       "check-format",

@@ -2,7 +2,7 @@
   //- a.label Browse By:
   //- a.nav-link(*ngFor="let browseOpt of groupFilterArray", [ngClass]="{'active': browseOpt.level == route.snapshot.params.view}", [routerLink]="['/browse', 'groups', browseOpt.level]", (click)="browseOpt.level === 'search' ? firstSearch = true : firstSearch = false")
   //-   div(*ngIf="browseOpt.level !== 'all'") {{ browseOpt.label }}
-.row.pt-3
+.row.pt-3#browse-group-wrap
   .col-md-3.hidden-sm-down
     //- .filter-list-wrap
     #searchFilterList.mb-3.filter-list
@@ -18,7 +18,11 @@
           | {{ filter.label }}
     ang-tags-list(*ngIf="selectedFilter")
   .col-md-9
-    ang-general-search([updateSearchTerm]="updateSearchTerm", [init]="searchTerm", (executeSearch)="addQueryParams({ term: $event }, false, true)")
+    .row#search-row
+      .col-sm-9
+        ang-general-search([updateSearchTerm]="updateSearchTerm", [init]="searchTerm", (executeSearch)="addQueryParams({ term: $event }, false, true)")
+      .col-sm-3
+        ang-guide-tour([steps]="steps")
     h3.pb-1.px-2 {{ selectedFilter.label }}
       pagination([pageObj]="pagination", (goToPage)="goToPage($event)", [right]="true")
     h3.pb-1.px-2(*ngIf="_tagFilters.selectedFilters.length>0") Tags:
