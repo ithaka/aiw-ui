@@ -7,8 +7,8 @@ import { PactWeb, Matchers } from '@pact-foundation/pact-web'
 import { GroupService } from '../shared';
 
 /**
-* Pact for GroupService.get method - api request for a single image group
-*/
+ * Pact for GroupService.get method - api request for a single image group
+ */
 describe("Group Id #pact #groupId", () => {
 
   let provider;
@@ -116,15 +116,27 @@ describe("Group Id #pact #groupId", () => {
 
     it("should return an image group object",
       function (done) {
-        //Run the tests
+
         _groupService.get('44d14fe7-13ec-4d84-b911-7ee3ffc4b0cb')
           .subscribe(res => {
 
             let actualResKeys = Object.keys(res) // response object keys
             let resAccessKeys = Object.keys(res.access[0]) // response 'access' object keys
 
-            let expectedResKeys = ['description', 'owner_name', 'tags', 'owner_id', 'sequence_number',
-              'update_date', 'name', 'public', 'creation_date', 'id', 'access', 'items']
+            let expectedResKeys = [
+              'description',
+              'owner_name',
+              'tags',
+              'owner_id',
+              'sequence_number',
+              'update_date',
+              'name',
+              'public',
+              'creation_date',
+              'id',
+              'access',
+              'items'
+            ]
 
             let expectedAccessKeys = [
               'entity_type',
