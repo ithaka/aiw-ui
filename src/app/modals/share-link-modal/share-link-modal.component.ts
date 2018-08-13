@@ -37,7 +37,7 @@ export class ShareLinkModal implements OnInit {
    * @param id of the field whose innerText is to be copied to the clipboard
    */
   private copyTexttoClipBoard(id: string): void{
-    var textArea = document.createElement("textarea");
+    let textArea = document.createElement('textarea');
 
     textArea.style.position = 'fixed';
     textArea.style.top = '0';
@@ -51,30 +51,30 @@ export class ShareLinkModal implements OnInit {
     textArea.style.boxShadow = 'none';
     textArea.style.background = 'transparent';
 
-    var element = document.getElementById(id);
+    let element = document.getElementById(id);
     textArea.value = element.textContent;
 
     document.body.appendChild(textArea);
     textArea.select();
 
     try {
-      var successful = document.execCommand('copy');
-      var msg = '';
+      let successful = document.execCommand('copy');
+      let msg = '';
 
-      if(successful){
+      if (successful){
         msg = 'Successfully Copied!';
       }
       else{
         msg = 'Not able to copy!';
       }
 
-      if(id === 'copyURL'){
+      if (id === 'copyURL'){
         this.copyURLStatusMsg = msg;
         setTimeout(() => {
           this.copyURLStatusMsg = '';
         }, 8000);
       }
-      else if(id === 'copyHTML'){
+      else if (id === 'copyHTML'){
         this.copyHTMLStatusMsg = msg;
         setTimeout(() => {
           this.copyHTMLStatusMsg = '';
@@ -88,7 +88,7 @@ export class ShareLinkModal implements OnInit {
   }
 
   private showHelp(): void{
-    window.open('http://support.artstor.org/?article=creating-links','Artstor Support','width=600,height=500');
+    window.open('http://support.artstor.org/?article=creating-links', 'Artstor Support', 'width=600,height=500');
   }
 
 }

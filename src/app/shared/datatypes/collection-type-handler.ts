@@ -1,16 +1,16 @@
-import { CollectionData } from "../../asset-page/asset";
+import { CollectionData } from '../../asset-page/asset';
 
-export class CollectionTypeHandler { 
+export class CollectionTypeHandler {
   public static collectionTypeMap: {
     [key: string]: CollectionTypeInfo
   } = {
     0: { name: '', alt: '', badgeText: '', type: 0 },
-    1: { name: "artstor-asset", alt: "The Artstor Digital Library is accessible to all participating institutions", badgeText: 'Artstor', type: 1 },
-    2: { name: "institution-asset", alt: "Available to your institution only", badgeText: 'Institutional', type: 2 },
-    3: { name: "personal-asset", alt: "Available only to the owner unless shared in a group", badgeText: 'Personal', type: 3 },
-    4: { name: "institution-asset", alt: "Available to your institution only", badgeText: 'Institutional', type: 4 },
-    5: { name: "ssc-asset", alt: "Available to everyone", badgeText: 'Public', type: 5 },
-    6: { name: "personal-asset", alt: "Available only to the owner unless shared in a group", badgeText: 'Personal', type: 6 }
+    1: { name: 'artstor-asset', alt: 'The Artstor Digital Library is accessible to all participating institutions', badgeText: 'Artstor', type: 1 },
+    2: { name: 'institution-asset', alt: 'Available to your institution only', badgeText: 'Institutional', type: 2 },
+    3: { name: 'personal-asset', alt: 'Available only to the owner unless shared in a group', badgeText: 'Personal', type: 3 },
+    4: { name: 'institution-asset', alt: 'Available to your institution only', badgeText: 'Institutional', type: 4 },
+    5: { name: 'ssc-asset', alt: 'Available to everyone', badgeText: 'Public', type: 5 },
+    6: { name: 'personal-asset', alt: 'Available only to the owner unless shared in a group', badgeText: 'Personal', type: 6 }
   }
 
   /**

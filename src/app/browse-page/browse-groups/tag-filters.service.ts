@@ -15,7 +15,7 @@ export class TagFiltersService {
   constructor(
     // don't put other services in here
     // data should be set from outside, and this service stores and curates it
-  ) { 
+  ) {
     this._updateFilters = new EventEmitter()
     // whenever a tag is updated, redistribute the tag filters string which is curated here
     this._updateFilters.subscribe((filter) => {
@@ -47,7 +47,7 @@ export class TagFiltersService {
     return selectedArr
   }
 
-  public processFilterString(tags: string[]) : string[] {
+  public processFilterString(tags: string[]): string[] {
     if (!Array.isArray(tags)) {
       tags = [tags];
     }

@@ -9,8 +9,8 @@ $cardBorderStyle: 1px solid rgba(0, 0, 0, 0.15);
 $assetCardBorderSize: 1px;
 
 .card{
-    border-radius: 0px;
-    border: 0px solid transparent;
+    border-radius: 0;
+    border: 0 solid transparent;
 
     &.disabled {
         opacity: 0.4;
@@ -43,16 +43,16 @@ $assetCardBorderSize: 1px;
 
 
 .card--v-pad {
-    padding: 24px 0px;
+    padding: 24px 0;
     @media (max-width: $phone) {
         padding: $cardPadding;
     }
 }
 
  .card-header {
-    padding: $cardPadding 0px $cardPadding/2;
+    padding: $cardPadding 0 $cardPadding/2;
     background: transparent;
-    border: 0px solid transparent;
+    border: 0 solid transparent;
  } 
 
 .form-card {
@@ -85,12 +85,12 @@ img.no-stretch {
 
 
 .card.card--asset, .card--asset {
-    margin-bottom: 0px;
+    margin-bottom: 0;
     height: 210px;
     overflow: visible;
     text-overflow: ellipsis;
-    padding: 3px 0px;
-    margin: 0px auto;
+    padding: 3px 0;
+    margin: 0 auto;
     cursor: pointer;
 
     max-width: 300px;
@@ -159,8 +159,8 @@ img.no-stretch {
     font-size:11px;
     line-height: 14px;
     margin-top: 12px;
-    margin-bottom: 0px;
-    padding: 0px;
+    margin-bottom: 0;
+    padding: 0;
     position: relative;
 
     & i {
@@ -195,7 +195,7 @@ img.no-stretch {
         background: #fafafa;
         border-color: #ababab;
         transform: translateY(-1px);
-        box-shadow: 0px 1px 3px 0px rgba(0,0,0,0.3);
+        box-shadow: 0 1px 3px 0 rgba(0,0,0,0.3);
     }
 }
 
@@ -204,7 +204,7 @@ img.no-stretch {
     & .card-block {
         border-color: #ababab;
         transform: translateY(-1px);
-        box-shadow: 0px 1px 3px 0px rgba(0,0,0,0.3);
+        box-shadow: 0 1px 3px 0 rgba(0,0,0,0.3);
     }
 }
 

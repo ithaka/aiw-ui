@@ -35,7 +35,7 @@
 
       input[type="file"]{
           visibility: hidden;
-          height: 0px;
+          height: 0;
           display: block;
       }
 
@@ -61,7 +61,7 @@
   .info-lbl{
       display: inline-block;
       font-size: 12px;
-      padding: 10px 0px;
+      padding: 10px 0;
       color: #444;
       letter-spacing: 0.4px;
   }

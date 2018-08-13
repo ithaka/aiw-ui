@@ -16,11 +16,11 @@ export class MetadataService {
     // ... Set content type to JSON
     private header = new HttpHeaders().set('Content-Type', 'application/json')
     private defaultOptions = { headers: this.header, withCredentials: true  }
-    
+
     constructor(
         private http: HttpClient
     ) {
-        
+
     }
 
 
@@ -32,7 +32,7 @@ export class MetadataService {
         let url = API_URL + '/api/v1/metadata?legacy=false&object_ids=' + assetId
         if (groupId){
             // Groups service modifies certain access rights for shared assets
-            url = API_URL + '/api/v1/group/'+ groupId +'/metadata?object_ids=' + assetId
+            url = API_URL + '/api/v1/group/' + groupId + '/metadata?object_ids=' + assetId
         }
         return this.http.get<MetadataRes>(url,  this.defaultOptions)
     }

@@ -16,12 +16,12 @@ export class GroupsRouteResolver implements Resolve<boolean> {
    */
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
     let browseGroupQueryParams: any = Object.assign({}, route.queryParams);
-    if(!browseGroupQueryParams.level && route.params['level']){
+    if (!browseGroupQueryParams.level && route.params['level']){
         browseGroupQueryParams['level'] = route.params['level']
     }
     this._router.navigate(['/browse/groups'], { queryParams: browseGroupQueryParams })
     return true
   }
-    
+
 }
 
