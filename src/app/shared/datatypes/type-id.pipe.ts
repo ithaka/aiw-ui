@@ -5,14 +5,14 @@ import { Pipe, PipeTransform } from '@angular/core';
 })
 
 export class TypeIdPipe implements PipeTransform {
-  private objectTypeNames: { [key: number] : string } = {
+  private objectTypeNames: { [key: number]: string } = {
     1: 'specimen',
     2: 'visual',
     3: 'use',
     6: 'publication',
     7: 'synonyms',
     8: 'people',
-    9: 'repository', 
+    9: 'repository',
     10: 'image',
     11: 'panorama', // used in styles
     12: 'audio',
@@ -33,7 +33,7 @@ export class TypeIdPipe implements PipeTransform {
     } else if (typeof value === 'number') {
       return this.objectTypeNames[value];
     } else {
-      throw new Error("type " + (typeof value) + " not recognized by typeIdPipe");
+      throw new Error('type ' + (typeof value) + ' not recognized by typeIdPipe');
     }
   }
 }

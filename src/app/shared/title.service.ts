@@ -13,14 +13,14 @@ constructor(
     private _app: AppConfig
     ) { }
 
-    public setTitle(newTitle: string) : void {
+    public setTitle(newTitle: string): void {
         this._platformTitle.setTitle(newTitle)
     }
 
     /**
      * Appends app title to subtitle, and sets it
      */
-    public setSubtitle(newSubtitle: string) : void {
+    public setSubtitle(newSubtitle: string): void {
         this._platformTitle.setTitle(this._app.config.pageTitle + ' | ' + newSubtitle)
     }
 }

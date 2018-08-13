@@ -51,7 +51,7 @@ export class LocalPCService {
         return item.ssid == ssid
       })
     } else {
-      return 
+      return
     }
   }
 

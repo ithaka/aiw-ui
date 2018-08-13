@@ -19,7 +19,7 @@ export class AccountService {
     let updateBody = {}
 
     // copy over only the updatable fields
-    for(let field of updatableFields) {
+    for (let field of updatableFields) {
       updateBody[field] = user[field]
     }
 

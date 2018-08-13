@@ -2,7 +2,7 @@
  * Structure to be implemented in a tag component (can be constructed and then injected into a component to implement view)
  */
 export class Tag {
-  //in constructor
+  // in constructor
   tagId: string;
   title: string;
   isCollapsed: boolean = false;
@@ -15,10 +15,10 @@ export class Tag {
   */
   type: any = {};
   /** Used for showing Image Group and Collection Description */
-  public description: string = "";
-  public thumbnail: string = "";
+  public description: string = '';
+  public thumbnail: string = '';
 
-  //in functions
+  // in functions
   /** array of tags that are categorized beneath this tag */
   private children: Tag[] = [];
   /** number of parents that the tag has */
@@ -26,7 +26,7 @@ export class Tag {
   /** has getters and setters - allows implementation to determine when touched is set */
   touched: boolean = false;
 
-  //type can be: 'collection' or 'category'
+  // type can be: 'collection' or 'category'
   constructor(tagId: string, title: string, isCollapsed?: boolean, parentTag?: Tag, type?: any, canOpen ?: boolean) {
     this.tagId = tagId;
     this.title = title;
@@ -62,7 +62,7 @@ export class Tag {
     this.description = description;
   }
 
-  public setThumbnail(thumbUrl: string) : void {
+  public setThumbnail(thumbUrl: string): void {
     this.thumbnail = thumbUrl;
   }
 

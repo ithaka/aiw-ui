@@ -11,7 +11,7 @@ describe('SearchQueryUtil', () => {
     /**
      * Test generating query string from multi-field queries
      */
-    describe("prepareQuery", () => {
+    describe('prepareQuery', () => {
         let mockQueries = [ {
             term: 'Van Gogh',
             field: {
@@ -19,7 +19,7 @@ describe('SearchQueryUtil', () => {
                     'value' : 100
                 },
             operator: 'AND'
-        },{
+        }, {
             term: 'Sunflowers',
             field: {
                     'name' : 'Title',
@@ -28,13 +28,13 @@ describe('SearchQueryUtil', () => {
             operator: 'OR'
         }]
 
-        it("should process a multi-field search query", () => {
+        it('should process a multi-field search query', () => {
             let generatedQuery: string = queryUtil.generateSearchQuery(mockQueries)
 
             expect(generatedQuery).toBe('Van Gogh|100#or,Sunflowers|101')
         })
 
-        it("should process an empty multi-field query as wildcard", () => {
+        it('should process an empty multi-field query as wildcard', () => {
             let generatedQuery: string = queryUtil.generateSearchQuery([])
 
             expect(generatedQuery).toBe('*')
@@ -44,33 +44,33 @@ describe('SearchQueryUtil', () => {
     /**
      * Test generating filter object for route navigation
      */
-    describe("prepareFilterObject", () => {
+    describe('prepareFilterObject', () => {
         let mockFilters = [
             {
-                group: "geography",
+                group: 'geography',
                 value: 500040
             },
             {
-                group: "geography",
+                group: 'geography',
                 value: 500030
             },
             {
-                group: "geography",
+                group: 'geography',
                 value: 500010
             },
             {
-                group: "classification",
+                group: 'classification',
                 value: 401000
             }
         ]
         let mockDateFilter = {
             endDate : 2010,
-            endEra : "CE",
+            endEra : 'CE',
             startDate : 100,
-            startEra : "BCE"
+            startEra : 'BCE'
         }
 
-        it("should process search filters", () => {
+        it('should process search filters', () => {
             let filterObj: string = queryUtil.generateFilters(mockFilters, mockDateFilter)
 
             expect(filterObj['startDate']).toBe(-100)

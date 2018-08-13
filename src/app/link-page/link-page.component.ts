@@ -28,8 +28,8 @@ export class LinkPage implements OnInit {
       this._router.navigate(['/login'])
     }
 
-    this.shibParams = { 
-      samlTokenId: this.route.snapshot.params.samlTokenId, 
+    this.shibParams = {
+      samlTokenId: this.route.snapshot.params.samlTokenId,
       email: this.route.snapshot.params.email,
       type: this.route.snapshot.params.type,
       error: this.route.snapshot.params.error
