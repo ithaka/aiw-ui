@@ -19,7 +19,7 @@ export class AssociatedPage implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = [];
   // the object id for which to retrieve related assets (retrieved from matrix param)
   private objectId: string;
-  //the colection which the associated asset comes from
+  // the colection which the associated asset comes from
   private colId: string;
   // gets assigned with the asset's title
   private assetTitle: string;
@@ -38,8 +38,8 @@ export class AssociatedPage implements OnInit, OnDestroy {
   ngOnInit() {
     this.subscriptions.push(
       this.route.params.subscribe((routeParams) => {
-        this.objectId = routeParams["objectId"];
-        this.colId = routeParams["colId"];
+        this.objectId = routeParams['objectId'];
+        this.colId = routeParams['colId'];
         let params = Object.assign({}, routeParams);
         // If a page number isn't set, reset to page 1!
         if (!params['page']){

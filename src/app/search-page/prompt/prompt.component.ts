@@ -7,6 +7,6 @@ import { Component, OnInit } from '@angular/core';
 })
 export class PromptComponent implements OnInit {
 
-  ngOnInit() {} 
+  ngOnInit() {}
 
 }

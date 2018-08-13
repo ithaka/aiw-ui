@@ -64,7 +64,7 @@ filter, .filter {
 			position: absolute;
 			content: ' ';
 			display: block;
-			left: 0px;
+			left: 0;
 			width: $filterTextIndent;
 			height: 100%;
 		}
@@ -75,7 +75,7 @@ filter, .filter {
 
 	&.no-buttons {
 		&:hover, &:active, &:focus {
-			padding-right: 0px;
+			padding-right: 0;
 		}
 	}
 
@@ -176,7 +176,7 @@ filter, .filter {
 }
 
 .filter-list {
-	padding-left: 0px;
+	padding-left: 0;
 	
 	& li,
 	& li.filter {

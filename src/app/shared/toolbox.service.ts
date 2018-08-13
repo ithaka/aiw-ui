@@ -7,7 +7,7 @@ export class ToolboxService {
 
     constructor() { }
 
-     /** 
+     /**
      * This nasty bugger finds out whether the objects are _traditionally_ equal to each other, like you might assume someone else would have put this function in vanilla JS already
      * One thing to note is that it uses coercive comparison (==) on properties which both objects have, not strict comparison (===)
      * @param base The base object which you would like to compare another object to
@@ -21,7 +21,7 @@ export class ToolboxService {
 
             // determine if comparrison object has that property, if not: return false
             if (compare.hasOwnProperty(baseProperty)) {
-                switch(typeof base[baseProperty]) {
+                switch (typeof base[baseProperty]) {
                     // if one is object and other is not: return false
                     // if they are both objects, recursively call this comparison function
                     case 'object':
@@ -43,7 +43,7 @@ export class ToolboxService {
 
             // determine if comparrison object has that property, if not: return false
             if (base.hasOwnProperty(compareProperty)) {
-                switch(typeof compare[compareProperty]) {
+                switch (typeof compare[compareProperty]) {
                     case 'object':
                         if ( typeof base[compareProperty] !== 'object' || !this.compareObjects(compare[compareProperty], base[compareProperty]) ) { return false; } break;
                     case 'function':

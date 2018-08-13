@@ -6,27 +6,27 @@ import { AuthService } from '.'
 
 @Injectable()
 export class PersonalCollectionService {
-  
+
   private pcImgMetaUpdateURL: string = ''
   private options: {}
 
   constructor(
     private _auth: AuthService,
     private _http: HttpClient
-  ) { 
+  ) {
     this.pcImgMetaUpdateURL = this._auth.getHostname() + '/api/v1/pcollection/image/metadata'
     this.options = { withCredentials: true }
   }
 
   private metadataIds: { label: string, id: string }[] = [
-    {label: "creator", id: "fd_68602_s",  },
-    {label: "title", id: "fd_68607_s" },
-    {label: "work_type", id: "fd_68609_s" },
-    {label: "date", id: "fd_68612_s" },
-    {label: "location", id: "fd_68616_s" },
-    {label: "material", id: "fd_68619_s" },
-    {label: "description", id: "fd_68627_s" },
-    {label: "subject", id: "fd_68632_s" }
+    {label: 'creator', id: 'fd_68602_s'  },
+    {label: 'title', id: 'fd_68607_s' },
+    {label: 'work_type', id: 'fd_68609_s' },
+    {label: 'date', id: 'fd_68612_s' },
+    {label: 'location', id: 'fd_68616_s' },
+    {label: 'material', id: 'fd_68619_s' },
+    {label: 'description', id: 'fd_68627_s' },
+    {label: 'subject', id: 'fd_68632_s' }
   ]
 
   /**
@@ -41,8 +41,8 @@ export class PersonalCollectionService {
       metadata: []
     }
 
-    for(let metaIdObj of this.metadataIds){
-      if( form[metaIdObj.label] ) {
+    for (let metaIdObj of this.metadataIds){
+      if ( form[metaIdObj.label] ) {
         let fldObj: AssetDetailField = {
           field_id: metaIdObj.id,
           value: form[metaIdObj.label]
@@ -82,18 +82,18 @@ export class PersonalCollectionService {
       .set('Content-Type', 'application/json')
 
     return this._http.delete<DeletePersonalAssetResponse>(
-      [this._auth.getUrl(), 'v1', 'pcollection', 'image'].join('/') + "?ssids=" + ssids.join(","),
+      [this._auth.getUrl(), 'v1', 'pcollection', 'image'].join('/') + '?ssids=' + ssids.join(','),
       { headers: headers, withCredentials: true }
     )
   }
 }
 
 interface DeletePersonalAssetResponse {
-  
+
 }
 
 interface GetPersonalCollectionResponse {
-  
+
 }
 
 export interface PostPersonalCollectionResponse {

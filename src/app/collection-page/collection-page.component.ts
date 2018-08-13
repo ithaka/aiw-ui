@@ -49,7 +49,7 @@ export class CollectionPage implements OnInit, OnDestroy {
       this._auth.currentUser.subscribe((user) => {
         // userSessionFresh: Do not attempt to call collection endpoint until we know user object is fresh
         if (!this.userSessionFresh && this._auth.userSessionFresh) {
-          this.userSessionFresh = true       
+          this.userSessionFresh = true
           this.routeParamSubscrpt()
         }
       })
@@ -83,7 +83,7 @@ export class CollectionPage implements OnInit, OnDestroy {
 
   private routeParamSubscrpt(): void {
     this.route.params.subscribe((routeParams) => {
-      this.colId = routeParams["colId"];
+      this.colId = routeParams['colId'];
       // Old links pass a name into the ID, just use that as a search term instead
       if (!/^[0-9]+$/.test(this.colId)) {
         this.http.get('/assets/collection-links.json')
@@ -103,7 +103,7 @@ export class CollectionPage implements OnInit, OnDestroy {
               this._assets.queryAll(routeParams, true);
 
               if (!Object.keys(data).length) {
-                throw new Error("No data!");
+                throw new Error('No data!');
               }
 
               this.assetCount = data['objCount'];
@@ -116,7 +116,7 @@ export class CollectionPage implements OnInit, OnDestroy {
             })
             .catch((error) => {
               console.error(error);
-              if(error.status === 401){
+              if (error.status === 401){
                 this.showaccessDeniedModal = true;
               }
             });
