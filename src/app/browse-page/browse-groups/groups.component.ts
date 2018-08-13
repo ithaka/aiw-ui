@@ -100,6 +100,18 @@ export class BrowseGroupsComponent implements OnInit {
         level: 'created',
         selected: true
       })
+
+      this.groupFilterArray.push({
+        label: 'Private',
+        level: 'private',
+        selected: false
+      })
+
+      this.groupFilterArray.push({
+        label: 'Shared by me',
+        level: 'shared_by_me',
+        selected: false
+      })
     }
 
     // If NOT Logged In, default to Institutional
