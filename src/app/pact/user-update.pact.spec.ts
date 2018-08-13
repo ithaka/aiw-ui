@@ -5,7 +5,7 @@ import { AccountService } from './../shared'
 import { PactWeb, Matchers} from '@pact-foundation/pact-web'
 import { HttpClientModule } from '@angular/common/http'
 
-describe("PUT /api/secure/user/{{profileId}} #pact #updateuser", () => {
+describe('PUT /api/secure/user/{{profileId}} #pact #updateuser', () => {
 
   let provider
 
@@ -70,7 +70,7 @@ describe("PUT /api/secure/user/{{profileId}} #pact #updateuser", () => {
       firstName: 'my updated name'
     }
 
-    let body ={
+    let body = {
       [updateObjects[0].field]:  Matchers.somethingLike(updateObjects[0].value)
     }
 
@@ -93,7 +93,7 @@ describe("PUT /api/secure/user/{{profileId}} #pact #updateuser", () => {
             },
             willRespondWith: {
               status: 200,
-              headers: { "Content-Type": "application/json" }
+              headers: { 'Content-Type': 'application/json' }
             }
           })
         )
@@ -114,9 +114,9 @@ describe("PUT /api/secure/user/{{profileId}} #pact #updateuser", () => {
       })
     })
 
-    for(let obj of updateObjects) {
+    for (let obj of updateObjects) {
       it("should update a user's " + obj.field, (done) => {
-        //Run the tests
+        // Run the tests
         service.update({ [obj.field]: obj.value, baseProfileId: 706217 })
           .subscribe(res => {
             expect(true).toEqual(true)

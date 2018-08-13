@@ -5,7 +5,7 @@ import { Angulartics2 } from 'angulartics2'
 
 import { AssetService } from '../shared/assets.service'
 import { AssetFiltersService } from '../asset-filters/asset-filters.service'
-import { AuthService, FlagService } from "app/shared";
+import { AuthService, FlagService } from 'app/shared';
 
 declare var _satellite: any
 
@@ -81,9 +81,9 @@ export class AssetFilters {
     // Read filters from URL
     this.subscriptions.push(
       this.route.params.subscribe((routeParams) => {
-        this.term = routeParams["term"];
+        this.term = routeParams['term'];
 
-        if(routeParams['startDate'] && routeParams['endDate']){
+        if (routeParams['startDate'] && routeParams['endDate']){
           this.filterDate = true;
         }
 
@@ -91,13 +91,13 @@ export class AssetFilters {
         // this._filters.clearApplied();
 
         // Find feature flags
-        if(routeParams && routeParams['featureFlag']){
+        if (routeParams && routeParams['featureFlag']){
             this._flags[routeParams['featureFlag']] = true
         }
 
         for (let paramName in routeParams) {
             if (this._filters.isFilterGroup(paramName)) {
-              let parsedParam:any
+              let parsedParam: any
 
               try { // attempt to parse an array param
                 parsedParam = JSON.parse(routeParams[paramName])
@@ -124,7 +124,7 @@ export class AssetFilters {
             }
             // If auth.isPublicOnly 'unaffiliated' user, filter out all but type 5 collection type
             if (this._auth.isPublicOnly())
-              filters['collectiontypes'] = filters['collectiontypes'].filter(collectionType => collectionType.name === "5")
+              filters['collectiontypes'] = filters['collectiontypes'].filter(collectionType => collectionType.name === '5')
           }
 
           this.availableFilters = filters;
@@ -156,47 +156,47 @@ export class AssetFilters {
     }
 
     for (let filter of this.appliedFilters) {
-      if(filter.filterGroup == 'page'){
+      if (filter.filterGroup == 'page'){
         params[filter.filterGroup] =  parseInt(filter.filterValue[0]);
       }
-      else if(filter.filterGroup == 'size'){
+      else if (filter.filterGroup == 'size'){
         params[filter.filterGroup] =  parseInt(filter.filterValue[0]);
       }
-      else if(filter.filterGroup == 'sort'){
+      else if (filter.filterGroup == 'sort'){
         params[filter.filterGroup] =  parseInt(filter.filterValue[0]);
       }
-      else if((filter.filterGroup != 'startDate') && (filter.filterGroup != 'endDate') && (filter.filterValue && filter.filterValue.length > 0)){
+      else if ((filter.filterGroup != 'startDate') && (filter.filterGroup != 'endDate') && (filter.filterValue && filter.filterValue.length > 0)){
         // Arrays must be stringified, as angular router doesnt handle them well
         params[filter.filterGroup] =  Array.isArray(filter.filterValue) ? JSON.stringify(filter.filterValue) : filter.filterValue;
       }
     }
 
-    this.angulartics.eventTrack.next({ action: "filteredSearch", properties: { category: this._auth.getGACategory(), label: params } })
+    this.angulartics.eventTrack.next({ action: 'filteredSearch', properties: { category: this._auth.getGACategory(), label: params } })
 
-    if(params['page']){
+    if (params['page']){
       params['page'] = this.pagination.page
     }
 
-    if(currentParams.colId || currentParams.catId){
+    if (currentParams.colId || currentParams.catId){
 
       let baseParams = {}
 
-      if(currentParams.name){
+      if (currentParams.name){
         baseParams['name'] = currentParams.name
       }
-      if(currentParams.browseType){
+      if (currentParams.browseType){
         baseParams['browseType'] = currentParams.browseType
       }
-      if(currentParams.size){
+      if (currentParams.size){
         baseParams['size'] = currentParams.size
       }
-      if(currentParams.page){
+      if (currentParams.page){
         baseParams['page'] = currentParams.page
       }
-      if(currentParams.sort){
+      if (currentParams.sort){
         baseParams['sort'] = currentParams.sort
       }
-      if(this._filters.searchWithin && currentParams.term){ // If searchWithin is checked, then include the term param as well
+      if (this._filters.searchWithin && currentParams.term){ // If searchWithin is checked, then include the term param as well
         baseParams['term'] = currentParams.term
       }
 
@@ -207,7 +207,7 @@ export class AssetFilters {
       this.router.navigate( [ '/' + route, colId, queryParams ] )
     }
     else{
-      this.router.navigate(['search', this.term ? this.term : "*", params])
+      this.router.navigate(['search', this.term ? this.term : '*', params])
     }
 
   }
@@ -224,16 +224,16 @@ export class AssetFilters {
    * - Convenience function useful for ngFor loops
    * @param obj Any Object
    */
-  keys(obj: any) : Array<string> {
+  keys(obj: any): Array<string> {
     return (Object.keys(obj) && Object.keys(obj).length > 0) ? Object.keys(obj) : []
   }
 
-  isArray(thing) : boolean {
+  isArray(thing): boolean {
     return Object.prototype.toString.call( thing ) === '[object Array]'
   }
 
   toggleEra(dateObj){
-    if(dateObj.era == 'BCE'){
+    if (dateObj.era == 'BCE'){
       dateObj.era = 'CE';
     }
     else{
@@ -242,7 +242,7 @@ export class AssetFilters {
   }
 
   toggleTree(geoFacet){
-    if(geoFacet.expanded){
+    if (geoFacet.expanded){
       geoFacet.expanded = false;
     }
     else{
@@ -252,7 +252,7 @@ export class AssetFilters {
   }
 
   toggleFilter(value, group){
-    if(this._filters.isApplied(group, value)){ // Remove Filter
+    if (this._filters.isApplied(group, value)){ // Remove Filter
       this._filters.remove(group, value);
     } else { // Add Filter
       this._filters.apply(group, value);
@@ -267,13 +267,13 @@ export class AssetFilters {
   }
 
   clearAllFilterGroup(group){
-    if(group == 'date'){
+    if (group == 'date'){
       this.availableFilters.dateObj.modified = false;
     }
     else{
-      for(var i = 0; i < this.appliedFilters.length; i++){
-        var filter = this.appliedFilters[i];
-        if(filter.filterGroup === group){
+      for (let i = 0; i < this.appliedFilters.length; i++){
+        let filter = this.appliedFilters[i];
+        if (filter.filterGroup === group){
           this.appliedFilters.splice(i, 1);
           i = -1;
         }
@@ -289,13 +289,13 @@ export class AssetFilters {
   hasAppliedFilters(group): boolean {
     let hasFilters: boolean = false;
 
-    if(group == 'date'){
+    if (group == 'date'){
       hasFilters = this.availableFilters.dateObj.modified;
     }
     else{
-      for(var i = 0; i < this.appliedFilters.length; i++){
-        var filter = this.appliedFilters[i];
-        if(filter.filterGroup === group){
+      for (let i = 0; i < this.appliedFilters.length; i++){
+        let filter = this.appliedFilters[i];
+        if (filter.filterGroup === group){
           hasFilters = true;
           break;
         }
@@ -319,13 +319,13 @@ export class AssetFilters {
   }
 
   getUniqueColTypeIds(facetArray){
-    var colTypeIds = [];
-    for(var i = 0; i < facetArray.length; i++){
-      var facetObj = facetArray[i];
-      var idArray = facetObj.collectionType.split(',');
-      for(var j = 0; j < idArray.length; j++){
+    let colTypeIds = [];
+    for (let i = 0; i < facetArray.length; i++){
+      let facetObj = facetArray[i];
+      let idArray = facetObj.collectionType.split(',');
+      for (let j = 0; j < idArray.length; j++){
         idArray[j] = idArray[j].trim();
-        if(colTypeIds.indexOf(idArray[j]) === -1){
+        if (colTypeIds.indexOf(idArray[j]) === -1){
           colTypeIds.push(idArray[j]);
         }
       }
@@ -335,14 +335,14 @@ export class AssetFilters {
 
 
   applyDateFilter(){
-    var sdate = parseInt(this.availableFilters.dateObj.earliest.date);
+    let sdate = parseInt(this.availableFilters.dateObj.earliest.date);
     sdate = this.availableFilters.dateObj.earliest.era == 'BCE' ? (sdate * -1) : sdate;
 
-    var edate = parseInt(this.availableFilters.dateObj.latest.date);
+    let edate = parseInt(this.availableFilters.dateObj.latest.date);
     edate = this.availableFilters.dateObj.latest.era == 'BCE' ? (edate * -1) : edate;
 
     // Show error message if Start date is greater than End date
-    if(sdate > edate){
+    if (sdate > edate){
       this.dateError = true;
       return;
     }
@@ -357,10 +357,10 @@ export class AssetFilters {
   }
 
   existsInRegion(countryId, childerenIds){
-    var result = false;
-    for(var i = 0; i < childerenIds.length; i++){
-      var child = childerenIds[i];
-      if(child._reference == countryId){
+    let result = false;
+    for (let i = 0; i < childerenIds.length; i++){
+      let child = childerenIds[i];
+      if (child._reference == countryId){
         result = true;
         break;
       }
@@ -369,17 +369,17 @@ export class AssetFilters {
   }
 
   private dateKeyPress(event: any): boolean{
-      if((event.key == 'ArrowUp') || (event.key == 'ArrowDown') || (event.key == 'ArrowRight') || (event.key == 'ArrowLeft') || (event.key == 'Backspace')){
+      if ((event.key == 'ArrowUp') || (event.key == 'ArrowDown') || (event.key == 'ArrowRight') || (event.key == 'ArrowLeft') || (event.key == 'Backspace')){
         return true;
       }
 
-      var theEvent = event || window.event;
-      var key = theEvent.keyCode || theEvent.which;
+      let theEvent = event || window.event;
+      let key = theEvent.keyCode || theEvent.which;
       key = String.fromCharCode( key );
-      var regex = /[0-9]|\./;
-      if( !regex.test(key) ) {
+      let regex = /[0-9]|\./;
+      if ( !regex.test(key) ) {
         theEvent.returnValue = false;
-        if(theEvent.preventDefault) theEvent.preventDefault();
+        if (theEvent.preventDefault) theEvent.preventDefault();
       }
 
       return theEvent.returnValue;

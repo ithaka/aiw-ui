@@ -42,7 +42,7 @@ export class NavMenu implements OnInit, OnDestroy {
   @Output() refreshIG: EventEmitter<any> = new EventEmitter();
 
   private user: any = {}
-  private siteID: string = ""
+  private siteID: string = ''
   private institutionObj: any = {}
 
   private mobileCollapsed: boolean = true
@@ -141,7 +141,7 @@ export class NavMenu implements OnInit, OnDestroy {
         if (assets.thumbnails) {
           // Make a copy of the Results array
           let assetsOnPage = [];
-          for(var i=0;i<assets.thumbnails.length;i++){
+          for (let i = 0; i < assets.thumbnails.length; i++){
               assetsOnPage.push(assets.thumbnails[i]);
           }
           // Set all assets on page as selected
@@ -200,14 +200,14 @@ export class NavMenu implements OnInit, OnDestroy {
   }
 
 
-  private reloadIG():void{
+  private reloadIG(): void{
     this.refreshIG.emit();
   }
 
   private logout(): void {
     this._auth.logout()
       .then(() => {
-        if (this.location.path().indexOf("home") >= 0) {
+        if (this.location.path().indexOf('home') >= 0) {
           location.reload() // this will reload the app and give the user a feeling they actually logged out
         } else {
           this._router.navigate(['/home'])

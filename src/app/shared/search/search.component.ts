@@ -29,7 +29,7 @@ export class SearchComponent implements OnInit, OnDestroy {
   private nestedSrchLbl: string = 'results';
 
   @Input()
-  private allowSearchInRes:boolean;
+  private allowSearchInRes: boolean;
 
   @Input()
   private UserNotLoggedIn: boolean;
@@ -63,9 +63,9 @@ export class SearchComponent implements OnInit, OnDestroy {
 
     this.subscriptions.push(
       this._router.events.subscribe( (event) => {
-        if(event instanceof NavigationEnd) {
+        if (event instanceof NavigationEnd) {
           let routeName = event.url.split('/')[1]
-          if((routeName === 'category') || (routeName === 'collection')){
+          if ((routeName === 'category') || (routeName === 'collection')){
             this.nestedSrchLbl = routeName;
           }
           else{
@@ -85,7 +85,7 @@ export class SearchComponent implements OnInit, OnDestroy {
    * @param term Term for desired search
    */
   private updateSearchTerm(term: string) {
-    if (!term || term === "") {
+    if (!term || term === '') {
       return
     }
 
@@ -95,7 +95,7 @@ export class SearchComponent implements OnInit, OnDestroy {
     // Pipes are reserved by Advanced Search
     term = term.replace('|', ' ')
 
-    this.angulartics.eventTrack.next({ action: "simpleSearch", properties: { category: this._auth.getGACategory(), label: this.term }})
+    this.angulartics.eventTrack.next({ action: 'simpleSearch', properties: { category: this._auth.getGACategory(), label: this.term }})
 
     let routeParams = this.route.snapshot.params;
     let params: Params = {
@@ -108,34 +108,34 @@ export class SearchComponent implements OnInit, OnDestroy {
       params.featureFlag = routeParams.featureFlag
     }
 
-    if(this.searchInResults){ // Search within results
+    if (this.searchInResults){ // Search within results
 
-      if(routeParams.colId){
+      if (routeParams.colId){
         // params['coll'] = [ routeParams['colId'] ];
         params.term = term;
         this._router.navigate( [ '/collection', routeParams['colId'], params ] );
         return;
       }
-      else if(routeParams.catId){
+      else if (routeParams.catId){
         params.term = term;
         this._router.navigate( [ '/category', routeParams.catId, params ] );
         return;
       }
-      else if(routeParams.term){
+      else if (routeParams.term){
         let updatedTermValue = '';
         updatedTermValue = routeParams.term + ' AND ' + term;
         term = updatedTermValue;
 
-        if(routeParams.classification){
+        if (routeParams.classification){
           params.classification = routeParams.classification.split(',');
         }
-        if(routeParams.coll){
+        if (routeParams.coll){
           params.coll = routeParams.coll.split(',');
         }
-        if(routeParams.collTypes){
+        if (routeParams.collTypes){
           params.collTypes = routeParams.collTypes.split(',');
         }
-        if(routeParams.geography){
+        if (routeParams.geography){
           params.geography = routeParams.geography.split(',');
         }
       }
@@ -159,14 +159,14 @@ export class SearchComponent implements OnInit, OnDestroy {
     let queries = searchString.split('#');
     let searchTerm = '';
 
-    for(let query of queries){
+    for (let query of queries){
       let queryParts = query.split(',');
-      if(queryParts.length > 1){
+      if (queryParts.length > 1){
         searchTerm += ' ' + queryParts[0].toUpperCase();
         searchTerm += ' ' + queryParts[1];
         // searchTerm += ' ' + queryParts[1].split('|')[0];
       }
-      else if(queryParts.length === 1){
+      else if (queryParts.length === 1){
         searchTerm += queryParts[0];
         // searchTerm += queryParts[0].split('|')[0];
       }

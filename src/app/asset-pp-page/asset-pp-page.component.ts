@@ -37,7 +37,7 @@ export class AssetPPPage implements OnInit, OnDestroy {
     // Subscribe to ID in params
     this.subscriptions.push(
       this.route.params.subscribe((routeParams) => {
-        this.assetId = routeParams["assetId"];
+        this.assetId = routeParams['assetId'];
         this.loadAsset();
       })
     );
@@ -49,18 +49,18 @@ export class AssetPPPage implements OnInit, OnDestroy {
     this._metadata.getMetadata( this.assetId )
     .subscribe((res) => {
         let assetData = res && res.metadata && res.metadata[0] ? res.metadata[0]['metadata_json'] : []
-        for(let data of assetData){
+        for (let data of assetData){
           let fieldExists = false;
 
-          for(let metaData of self.metaArray){
-            if(metaData['fieldName'] === data.fieldName){
+          for (let metaData of self.metaArray){
+            if (metaData['fieldName'] === data.fieldName){
               metaData['fieldValue'].push(data.fieldValue);
               fieldExists = true;
               break;
             }
           }
 
-          if(!fieldExists){
+          if (!fieldExists){
             let fieldObj = {
               'fieldName': data.fieldName,
               'fieldValue': []
@@ -72,7 +72,7 @@ export class AssetPPPage implements OnInit, OnDestroy {
         }
 
         self.asset = res.metadata[0];
-    },(err) => {
+    }, (err) => {
         console.error('Unable to load asset metadata.');
     });
   }

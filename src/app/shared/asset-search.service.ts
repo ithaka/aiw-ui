@@ -18,20 +18,20 @@ export class AssetSearchService {
   showCollectionType: boolean = false
 
   public filterFields: { name: string, value: string, description?: string }[] = [
-    { name: "In any field", value: "", description: "ADVANCED_SEARCH_MODAL.FIELDS.ANY" },
-    { name: "Creator", value: "artcreator", description: "ADVANCED_SEARCH_MODAL.FIELDS.CREATOR" },
-    { name: "Title", value: "arttitle", description: "ADVANCED_SEARCH_MODAL.FIELDS.TITLE" },
-    { name: "Location", value: "artlocation", description: "ADVANCED_SEARCH_MODAL.FIELDS.LOCATION" },
-    { name: "Repository", value: "artcurrentrepository", description: "ADVANCED_SEARCH_MODAL.FIELDS.REPOSITORY" },
-    { name: "Subject", value: "artsubject", description: "ADVANCED_SEARCH_MODAL.FIELDS.SUBJECT" },
-    { name: "Material", value: "artmaterial", description: "ADVANCED_SEARCH_MODAL.FIELDS.MATERIAL" },
-    { name: "Style or Period", value: "artstyleperiod", description: "ADVANCED_SEARCH_MODAL.FIELDS.STYLE_PERIOD" },
-    { name: "Work Type", value: "artworktype", description: "ADVANCED_SEARCH_MODAL.FIELDS.WORK_TYPE" },
-    { name: "Culture", value: "artculture", description: "ADVANCED_SEARCH_MODAL.FIELDS.CULTURE" },
-    { name: "Technique", value: "arttechnique", description: "ADVANCED_SEARCH_MODAL.FIELDS.TECHNIQUE" },
-    { name: "Number", value: "artidnumber", description: "ADVANCED_SEARCH_MODAL.FIELDS.NUMBER" },
-    { name: "SSID", value: "ssid", description: "ADVANCED_SEARCH_MODAL.FIELDS.SSID" },
-    { name: "Repository ID", value: "artcurrentrepositoryidnumber", description: "ADVANCED_SEARCH_MODAL.FIELDS.REPO_ID" }
+    { name: 'In any field', value: '', description: 'ADVANCED_SEARCH_MODAL.FIELDS.ANY' },
+    { name: 'Creator', value: 'artcreator', description: 'ADVANCED_SEARCH_MODAL.FIELDS.CREATOR' },
+    { name: 'Title', value: 'arttitle', description: 'ADVANCED_SEARCH_MODAL.FIELDS.TITLE' },
+    { name: 'Location', value: 'artlocation', description: 'ADVANCED_SEARCH_MODAL.FIELDS.LOCATION' },
+    { name: 'Repository', value: 'artcurrentrepository', description: 'ADVANCED_SEARCH_MODAL.FIELDS.REPOSITORY' },
+    { name: 'Subject', value: 'artsubject', description: 'ADVANCED_SEARCH_MODAL.FIELDS.SUBJECT' },
+    { name: 'Material', value: 'artmaterial', description: 'ADVANCED_SEARCH_MODAL.FIELDS.MATERIAL' },
+    { name: 'Style or Period', value: 'artstyleperiod', description: 'ADVANCED_SEARCH_MODAL.FIELDS.STYLE_PERIOD' },
+    { name: 'Work Type', value: 'artworktype', description: 'ADVANCED_SEARCH_MODAL.FIELDS.WORK_TYPE' },
+    { name: 'Culture', value: 'artculture', description: 'ADVANCED_SEARCH_MODAL.FIELDS.CULTURE' },
+    { name: 'Technique', value: 'arttechnique', description: 'ADVANCED_SEARCH_MODAL.FIELDS.TECHNIQUE' },
+    { name: 'Number', value: 'artidnumber', description: 'ADVANCED_SEARCH_MODAL.FIELDS.NUMBER' },
+    { name: 'SSID', value: 'ssid', description: 'ADVANCED_SEARCH_MODAL.FIELDS.SSID' },
+    { name: 'Repository ID', value: 'artcurrentrepositoryidnumber', description: 'ADVANCED_SEARCH_MODAL.FIELDS.REPO_ID' }
   ]
 
   public latestSearchRequestId: string
@@ -58,10 +58,10 @@ export class AssetSearchService {
   private initQuery(keyword: string, pageSize, startIndex) {
 
     return {
-      "limit": pageSize,
-      "start": startIndex,
-      "content_types": [
-        "art"
+      'limit': pageSize,
+      'start': startIndex,
+      'content_types': [
+        'art'
       ],
       // "startdate" : earliestDate,
       // "enddate" : latestDate,
@@ -75,25 +75,25 @@ export class AssetSearchService {
       //     }
       // ],
       // Add fuzzy operator
-      "query": keyword,
+      'query': keyword,
       filter_query: [],
-      "hier_facet_fields2": [
+      'hier_facet_fields2': [
         {
-          "field": "hierarchies",
-          "hierarchy": "artstor-geography",
-          "look_ahead": 2,
-          "look_behind": -10,
-          "d_look_ahead": 1
+          'field': 'hierarchies',
+          'hierarchy': 'artstor-geography',
+          'look_ahead': 2,
+          'look_behind': -10,
+          'd_look_ahead': 1
         }
       ],
-      "facet_fields":
+      'facet_fields':
         [
           // Limited to 16 classifications (based on the fact that Artstor has 16 classifications)
           // + 1 to allow for empty string values crowding out the top 16
           {
-            "name": "artclassification_str",
-            "mincount": 1,
-            "limit": 17
+            'name': 'artclassification_str',
+            'mincount': 1,
+            'limit': 17
           }
           // ,
           // {
@@ -112,7 +112,7 @@ export class AssetSearchService {
    */
   public applyFilters(query, institutionalTypeFilter, options, sortIndex, filterOptions) {
     // Loop through applied filters
-    for (var i = 0; i < filterOptions.filters.length; i++) {
+    for (let i = 0; i < filterOptions.filters.length; i++) {
       let currentFilter = filterOptions.filters[i]
 
       // for these values, do nothing
@@ -159,13 +159,13 @@ export class AssetSearchService {
         colId = options.pcolId
       }
 
-      filterOptions.filterArray.push("collections:\"" + colId + "\"");
+      filterOptions.filterArray.push('collections:"' + colId + '"');
     }
 
     if (options.collections) {
       let colsArray = options.collections.toString().trim().split(',');
       for (let col of colsArray) { // Push each collection id seperately in the filterArray
-        filterOptions.filterArray.push("collections:\"" + col + "\"");
+        filterOptions.filterArray.push('collections:"' + col + '"');
       }
     }
 
@@ -178,26 +178,26 @@ export class AssetSearchService {
       filterOptions.latestDate = filterOptions.dateFacet.latest.date;
       filterOptions.latestDate = (filterOptions.dateFacet.latest.era == 'BCE') ? (parseInt(filterOptions.latestDate) * -1).toString() : filterOptions.latestDate.toString();
 
-      query["filter_query"].push("year:[" + filterOptions.earliestDate + " TO " + filterOptions.latestDate + "]")
+      query['filter_query'].push('year:[' + filterOptions.earliestDate + ' TO ' + filterOptions.latestDate + ']')
     }
 
     if (sortIndex) {
       // Set the sort order to descending for sort by 'Recently Added' else ascending
       if (sortIndex == '4') {
-        query["sortorder"] = "desc"
+        query['sortorder'] = 'desc'
       } else {
-        query["sortorder"] = "asc"
+        query['sortorder'] = 'asc'
       }
 
       if (sortIndex == '1') {
-        query["sort"] = 'name_str'
+        query['sort'] = 'name_str'
       } else if (sortIndex == '2') {
-        query["sort"] = 'agent_str'
+        query['sort'] = 'agent_str'
       } else if (sortIndex == '3') {
-        query["filter_query"].push('year:[* TO *]', '-year:((0) OR (9999))', 'yearend:[* TO *]', '-yearend:((0) OR (9999))')
-        query["sort"] = 'yearend'
+        query['filter_query'].push('year:[* TO *]', '-year:((0) OR (9999))', 'yearend:[* TO *]', '-yearend:((0) OR (9999))')
+        query['sort'] = 'yearend'
       } else if (sortIndex == '4') {
-        query["sort"] = 'updatedon_str'
+        query['sort'] = 'updatedon_str'
       }
     }
   }
@@ -208,29 +208,29 @@ export class AssetSearchService {
   public getFacets() {
 
     let query = {
-      "limit": 0,
-      "start": 1,
-      "content_types": [
-        "art"
+      'limit': 0,
+      'start': 1,
+      'content_types': [
+        'art'
       ],
       // "query": "*",
-      "hier_facet_fields2": [
+      'hier_facet_fields2': [
         {
-          "field": "hierarchies",
-          "hierarchy": "artstor-geography",
-          "look_ahead": 2,
-          "look_behind": -10,
-          "d_look_ahead": 1
+          'field': 'hierarchies',
+          'hierarchy': 'artstor-geography',
+          'look_ahead': 2,
+          'look_behind': -10,
+          'd_look_ahead': 1
         }
       ],
-      "facet_fields":
+      'facet_fields':
         [
           // Limited to 16 classifications (based on the fact that Artstor has 16 classifications)
           // + 1 to allow for empty string values crowding out the top 16
           {
-            "name": "artclassification_str",
-            "mincount": 1,
-            "limit": 17
+            'name': 'artclassification_str',
+            'mincount': 1,
+            'limit': 17
           }
           // {
           //   "name" : "artcollectiontitle_str",
@@ -245,9 +245,9 @@ export class AssetSearchService {
     // if not sahara push this facet
     if (this.showCollectionType) {
       query.facet_fields.push({
-        "name": "collectiontypes",
-        "mincount": 1,
-        "limit": 10
+        'name': 'collectiontypes',
+        'mincount': 1,
+        'limit': 10
       })
     }
 
@@ -257,10 +257,10 @@ export class AssetSearchService {
      */
     let institutionFilters: number[] = this._app.config.contributingInstFilters
     for (let i = 0; i < institutionFilters.length; i++) {
-      filterArray.push("contributinginstitutionid:" + institutionFilters[i])
+      filterArray.push('contributinginstitutionid:' + institutionFilters[i])
     }
 
-    query["filter_query"] = filterArray
+    query['filter_query'] = filterArray
 
     return this.http.post(this._auth.getSearchUrl(), query, { withCredentials: true })
   }
@@ -299,7 +299,7 @@ export class AssetSearchService {
      */
     let institutionFilters: number[] = this._app.config.contributingInstFilters
     for (let i = 0; i < institutionFilters.length; i++) {
-      filterOptions.filterArray.push("contributinginstitutionid:" + institutionFilters[i])
+      filterOptions.filterArray.push('contributinginstitutionid:' + institutionFilters[i])
     }
 
     let pageSize: number = options.size
@@ -319,9 +319,9 @@ export class AssetSearchService {
 
     if (this.showCollectionType) {
       query.facet_fields.push({
-        "name": "collectiontypes",
-        "mincount": 1,
-        "limit": 15
+        'name': 'collectiontypes',
+        'mincount': 1,
+        'limit': 15
       })
     }
 
@@ -337,10 +337,10 @@ export class AssetSearchService {
           for (let i = 0; i < res.facets.length; i++) {
             if (res.facets[i].name == 'collectiontypes') {
               // Push the fake Institutional collection type facet only if its not already returned in the response
-              if (res.facets[i].values.filter(e => e.name === "2").length === 0) {
+              if (res.facets[i].values.filter(e => e.name === '2').length === 0) {
                 res.facets[i].values.push({
-                  name: "2",
-                  fq: "collectiontypes:(\"2\")",
+                  name: '2',
+                  fq: 'collectiontypes:("2")',
                   count: null,
                   efq: null
                 })
@@ -351,7 +351,7 @@ export class AssetSearchService {
 
         // media comes as a json string, so we'll parse it into an object for each result
         let cleanedResults: SearchAsset[] = res.results.map((item) => {
-          let cleanedSSID: string = item.doi.substr(item.doi.lastIndexOf(".") + 1) // split the ssid off the doi
+          let cleanedSSID: string = item.doi.substr(item.doi.lastIndexOf('.') + 1) // split the ssid off the doi
           let cleanedMedia: MediaObject
           if (item.media && typeof item.media == 'string') { cleanedMedia = JSON.parse(item.media) }
           let cleanedAsset: SearchAsset = Object.assign(
@@ -387,27 +387,27 @@ export class AssetSearchService {
   public searchJstor(searchTerm: string): Observable<any> {
 
     let query = {
-      "content_types": [],
-      "additional_fields": ["rectype", "raw_type", "htopic_st"],
-      "hier_facet_fields": [
+      'content_types': [],
+      'additional_fields': ['rectype', 'raw_type', 'htopic_st'],
+      'hier_facet_fields': [
         {
-          "maxdepth": 10,
-          "mincount": 1,
-          "name": "htopic_st",
-          "alias": "thesaurus1",
-          "limit": 500
+          'maxdepth': 10,
+          'mincount': 1,
+          'name': 'htopic_st',
+          'alias': 'thesaurus1',
+          'limit': 500
         }
       ],
-      "limit": 25,
-      "result_includes": [],
-      "hier_facet_fields2": [],
-      "ms_facet_fields": [],
-      "query": searchTerm,
-      "facet_fields": [
+      'limit': 25,
+      'result_includes': [],
+      'hier_facet_fields2': [],
+      'ms_facet_fields': [],
+      'query': searchTerm,
+      'facet_fields': [
         {
-          "name": "disc",
-          "mincount": 1,
-          "limit": 10
+          'name': 'disc',
+          'mincount': 1,
+          'limit': 10
         }
       ]
     }
@@ -426,7 +426,7 @@ export class AssetSearchService {
   public getAssetById(assetId: string): Observable<SearchAsset> {
     let assetQuery: SearchRequest = {
       query: assetId,
-      content_types: ["art"]
+      content_types: ['art']
     }
 
     return this.http.post<SearchResponse>(

@@ -37,7 +37,7 @@ $filterBorderStyle: 1px solid rgba(0, 0, 0, 0.15);
 
 .filter-group[data-state="active"].collapsed .filter-group__label{
     line-height: 34px;
-    margin-top: 0px;
+    margin-top: 0;
     background: #F6F6F2;
 }
 
@@ -89,37 +89,37 @@ $filterBorderStyle: 1px solid rgba(0, 0, 0, 0.15);
 	}
 
 	&.no-margin {
-		margin: 0px;
+		margin: 0;
 	}
 
 	&.border-top {
-		padding-top: 0px;
-		margin-top: 0px;
+		padding-top: 0;
+		margin-top: 0;
 	}
 
 	&.collapsed {
-		padding: 0px;
+		padding: 0;
 		
 		&:hover, &:active, &:focus {
 			.filter-group__label {
 				line-height:34px;
-				margin-top: 0px;
+				margin-top: 0;
 				background: #F6F6F2;
 			}
 		}
 
 		& .filter, & .filter .link, & .filter i{
 			pointer-events: none;
-			max-height: 0px;
-			min-height: 0px;
+			max-height: 0;
+			min-height: 0;
 			color: #fff;
-			padding-top: 0px;
-			padding-bottom: 0px;
+			padding-top: 0;
+			padding-bottom: 0;
 		}
 
 		& .filter form, & .filter .row {
 			opacity: 0;
-			max-height: 0px;
+			max-height: 0;
 		}
 
 		& .expandIcon {
@@ -193,7 +193,7 @@ $filterBorderStyle: 1px solid rgba(0, 0, 0, 0.15);
 	-webkit-box-sizing: border-box;
 
 	border-top: 8px solid #cdcdcd;
-	padding: 0px;
+	padding: 0;
 	padding-top: 18px; // + 8px;
 }
 

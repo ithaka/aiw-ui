@@ -26,7 +26,7 @@ export class ClusterPage implements OnInit, OnDestroy {
     this.subscriptions.push(
       this.route.params
         .subscribe((routeParams: Params) => {
-          this.clusterId = routeParams["clusterId"];
+          this.clusterId = routeParams['clusterId'];
           let params = Object.assign({}, routeParams);
           // If a page number isn't set, reset to page 1!
           if (!params['page']){
@@ -35,7 +35,7 @@ export class ClusterPage implements OnInit, OnDestroy {
           if (this.clusterId) {
             this._assets.queryAll(params);
           }
-          if(routeParams['objTitle']) {
+          if (routeParams['objTitle']) {
             this.clusterObjTitle = routeParams['objTitle'];
           }
         })

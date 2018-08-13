@@ -89,7 +89,7 @@ export class ImageGroupPage implements OnInit, OnDestroy {
      */
     this.subscriptions.push(
       this.route.params.subscribe((routeParams) => {
-        id = routeParams["igId"];
+        id = routeParams['igId'];
         let params = Object.assign({}, routeParams);
         // If a page number isn't set, reset to page 1!
         if (!params['page']){
@@ -122,13 +122,13 @@ export class ImageGroupPage implements OnInit, OnDestroy {
             }
 
             // If the user has private / instituional access, then allow Generate Image Group Link
-            if( (accessObj.entity_identifier == this.user.baseProfileId && accessObj.entity_type == 100) || (accessObj.entity_identifier == this._auth.getUser().institutionId.toString() && accessObj.entity_type == 200) ){
+            if ( (accessObj.entity_identifier == this.user.baseProfileId && accessObj.entity_type == 100) || (accessObj.entity_identifier == this._auth.getUser().institutionId.toString() && accessObj.entity_type == 200) ){
               this.genImgGrpLink = true;
             }
           });
 
           // Allow Generate Image Group Link for Artstor curated IGs
-          if(this.ig.access.length === 0){
+          if (this.ig.access.length === 0){
             this.genImgGrpLink = true;
           }
 
