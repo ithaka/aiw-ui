@@ -17,8 +17,9 @@
   .col-md-9
     .row#search-row
       .col-sm-9
-        ang-general-search([updateSearchTerm]="updateSearchTerm", [init]="searchTerm", (executeSearch)="addQueryParams({ term: $event }, false, true)")
-      .col-sm-3
+        ang-general-search([updateSearchTerm]="updateSearchTerm", [init]="searchTerm", [loadingGrps]="loading", (clearGrpSearch)="clearGrpSearch()", (executeSearch)="addQueryParams({ term: $event }, false, true)")
+      .col-sm-3.p-0
+        a.clear-link.link--accent.small(*ngIf="searchTerm && !loading", (click)="clearGrpSearch()", tabindex) Clear search
         ang-guide-tour([steps]="steps")
     h3.pb-1.px-2 {{ selectedFilter.label }}
       pagination([pageObj]="pagination", (goToPage)="goToPage($event)", [right]="true")

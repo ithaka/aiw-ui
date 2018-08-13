@@ -1,4 +1,5 @@
 .form-group
   .input-group
     input#inputSearchTerm.form-control.has-icon([(ngModel)]="term", (keyup.enter)="executeSearch.emit(term)", aria-describedby="search-label", type="text", placeholder="Search", data-sc="search: simple keyword")
-    i#iconSearchSubmit.icon.icon-search.form-control__icon((click)="executeSearch.emit(term)")
+    i#iconClearSearch.icon.icon-close.form-control__icon(*ngIf="term && !loadingGrps", (click)="clearGrpSearch.emit()")
+    i#iconSearchSubmit.icon.icon-search.form-control__icon(*ngIf="!term", (click)="executeSearch.emit(term)")

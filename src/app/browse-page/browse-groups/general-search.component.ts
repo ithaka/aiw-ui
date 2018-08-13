@@ -11,6 +11,9 @@ export class GeneralSearchComponent implements OnInit {
   @Input() updateSearchTerm: EventEmitter<string> = new EventEmitter() // allows an outside component to set the search term
   @Input() init: string = ''
 
+  @Input() loadingGrps: boolean
+  @Output() clearGrpSearch: EventEmitter<string> = new EventEmitter() // Invoke clear group search method in parent component
+
   private subscriptions: Subscription[] = []
 
   // the term that will be searched for

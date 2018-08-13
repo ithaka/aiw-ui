@@ -168,6 +168,10 @@ export class BrowseGroupsComponent implements OnInit {
     return filter
   }
 
+  private clearGrpSearch(): void{
+    this.addQueryParams({}, true) // Load default view for group search
+  }
+
   /** Every time the url updates, we process the new tags and reload image groups if the tags query param changes */
   private createNavigationSubscription(): Subscription {
     return this._router.events.filter(event=>event instanceof NavigationEnd)
