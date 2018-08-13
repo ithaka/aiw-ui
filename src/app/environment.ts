@@ -12,7 +12,7 @@ Raven.config('https://9ef1f98534914bf6826e202370d1f627@sentry.io/209953', {
   release: appVersion
 }).install();
 export class RavenErrorHandler implements ErrorHandler {
-  handleError(err:any) : void {
+  handleError(err: any): void {
     Raven.captureException(err);
   }
 }
@@ -30,7 +30,7 @@ if ('production' === ENV) {
   // Production
   disableDebugTools();
   enableProdMode();
-  
+
   PROVIDERS = [
     ...PROVIDERS,
     { provide: ErrorHandler, useClass: RavenErrorHandler }

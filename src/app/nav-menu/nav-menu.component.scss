@@ -1,7 +1,7 @@
 @import '../../sass/core/variables';
 
 // Navigation Items
-$dropdownShadow: 0px 2px 3px 0px rgba(0,0,0,0.2);
+$dropdownShadow: 0 2px 3px 0 rgba(0,0,0,0.2);
 $navBarLightBg: #eee;
 $navBarHeight: 50px;
 $navBarPad: 0.5rem;
@@ -61,8 +61,8 @@ $navBarPad: 0.5rem;
     left: 0;
     right: 0;
 
-    padding-left: 0px;
-    padding-right: 0px;
+    padding-left: 0;
+    padding-right: 0;
     z-index: 2000;
     @media (min-width: $phone) {
         position: relative;
@@ -89,7 +89,7 @@ $navBarPad: 0.5rem;
 
     & > ul {
         padding-bottom: 20px;
-        box-shadow: 0px 2px 3px 0px rgba(0, 0, 0, 0.2);
+        box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.2);
         @media (min-width: $phone) {
             box-shadow: none !important;
             padding-bottom: 0;
@@ -112,7 +112,7 @@ $navBarPad: 0.5rem;
     margin: 6px 6px 6px 15px;
 
     @media (min-width: $tablet) {
-        margin: 6px 12px 6px 0px;
+        margin: 6px 12px 6px 0;
     }
 
     & > .btn, a {

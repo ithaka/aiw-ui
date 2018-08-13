@@ -14,7 +14,7 @@ export class CardViewComponent implements OnInit {
 
   @Input() public tag: Tag
   @Input() public group: any
-  @Input() public browseLevel:string
+  @Input() public browseLevel: string
   @Input() public link: boolean
 
   public linkRoute: string = ''
@@ -33,8 +33,8 @@ export class CardViewComponent implements OnInit {
 
   ngOnInit() {
     // Remove the html format from description and truncate it if it's more than 150 characters long
-    this.description = this.group.description ? this.group.description.replace(/(<([^>]+)>)/ig,"") : ''
-    this.description = this.description.length>150 ? this.description.slice(0,150) + '...' : this.description
+    this.description = this.group.description ? this.group.description.replace(/(<([^>]+)>)/ig, '') : ''
+    this.description = this.description.length > 150 ? this.description.slice(0, 150) + '...' : this.description
 
     // For institutional page, show everything as institutional
     if (this.browseLevel === 'institution') {
@@ -62,7 +62,7 @@ export class CardViewComponent implements OnInit {
           this.groupType = 'Shared'
         }
       }
-      // If I am NOT the owner of the image group, group_type 100 means its owner makes it private and I can see it because it is shared with me, group_type 200 means its owner makes it institutional 
+      // If I am NOT the owner of the image group, group_type 100 means its owner makes it private and I can see it because it is shared with me, group_type 200 means its owner makes it institutional
       else if (this.group.owner_id !== this._auth.getUser().baseProfileId.toString()) {
         if (this.group.group_type && this.group.group_type === 100) {
           this.groupType = 'Shared with Me'
@@ -89,7 +89,7 @@ export class CardViewComponent implements OnInit {
     }
 
     // Get the first three images of the image group to show on the card view
-    let itemIds: string[] = this.group.items.slice(0,3)
+    let itemIds: string[] = this.group.items.slice(0, 3)
     this._assets.getAllThumbnails(itemIds)
       .then( allThumbnails => {
         this.thumbnails = allThumbnails
@@ -99,7 +99,7 @@ export class CardViewComponent implements OnInit {
       })
   }
 
-  private selectTag(tag:string) {
+  private selectTag(tag: string) {
     this.updateUrl(encodeURIComponent(tag))
   }
 
@@ -109,7 +109,7 @@ export class CardViewComponent implements OnInit {
     delete queryParams['tags']
     queryParams = Object.assign(queryParams, {'tags': tag})
 
-    this._router.navigate(['/browse','groups'], { queryParams: queryParams })
+    this._router.navigate(['/browse', 'groups'], { queryParams: queryParams })
   }
 
   /** Implement the search of owner by owner_id */
@@ -118,7 +118,7 @@ export class CardViewComponent implements OnInit {
     queryParams.level = 'all'
     delete queryParams['term']
     Object.assign(queryParams, {'term': imageGroup.owner_name, 'id': imageGroup.owner_id})
-    this._router.navigate(['/browse','groups'], { queryParams: queryParams })
+    this._router.navigate(['/browse', 'groups'], { queryParams: queryParams })
   }
 
 }

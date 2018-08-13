@@ -19,7 +19,7 @@ export class GeneralSearchComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    if(this.init)
+    if (this.init)
       this.term = this.init
     if (this.updateSearchTerm) {
       this.subscriptions.push(

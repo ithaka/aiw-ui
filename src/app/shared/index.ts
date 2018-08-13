@@ -1,4 +1,4 @@
-//barrel file for exporting directives from shared to app.module
+// barrel file for exporting directives from shared to app.module
 export * from './flag.service'
 export * from './auth.service'
 export * from './assets.service'
