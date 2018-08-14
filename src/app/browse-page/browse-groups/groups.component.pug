@@ -15,8 +15,12 @@
     ang-tags-list(*ngIf="selectedFilter")
   .col-md-9
     ang-general-search([updateSearchTerm]="updateSearchTerm", [init]="searchTerm", (executeSearch)="addQueryParams({ term: $event }, false, true)")
-    h3.pb-1.px-2 {{ isSearch ? numResultMsg : selectedFilter.label }}
-      pagination([pageObj]="pagination", (goToPage)="goToPage($event)", [right]="true")
+    h3.pb-1.px-2([innerHTML]="isSearch ? numResultMsg : selectedFilter.label")
+    .row
+      .col-sm-7.col-md-7.col-lg-8
+        //- This is where the sort method, number of group per page selection and toggle between cardview and listview go
+      .col-sm-5.col-md-5.col-lg-4.text-right.grid-pagination-bar
+        pagination([pageObj]="pagination", (goToPage)="goToPage($event)", [right]="true")
     h3.pb-1.px-2(*ngIf="_tagFilters.selectedFilters.length>0") Tags:
       .filter.filter--aboveGroup(*ngFor="let tag of _tagFilters.selectedFilters", (click)="tag.selected = !tag.selected", [class.active]="tag.selected")
         span.notranslate {{ tag.key }} ({{ tag.doc_count }})

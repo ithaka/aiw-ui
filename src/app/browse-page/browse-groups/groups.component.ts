@@ -298,16 +298,51 @@ export class BrowseGroupsComponent implements OnInit {
     .take(1)
     .subscribe(
       (data)  => {
+        let groupLabel : string = ''
+        switch (browseLevel) {
+          case 'all': {
+            groupLabel = 'All groups'
+            break
+          }
+          case 'created': {
+            groupLabel = 'My groups'
+            break
+          }
+          case 'private': {
+            groupLabel = 'Private groups'
+            break
+          }
+          case 'shared_by_me': {
+            groupLabel = 'Shared by Me groups'
+            break
+          }
+          case 'institution': {
+            groupLabel = 'Institutional groups'
+            break
+          }
+          case 'shared': {
+            groupLabel = 'Shared with Me groups'
+            break
+          }
+          case 'public': {
+            groupLabel = 'Artstor Curated groups'
+            break
+          }
+          default: {
+              break
+          }
+        }
+
         if (data.total !== 0){
           if (this.pagination.size < data.total) {
-            this.numResultMsg = 'Showing ' + this.pagination.size + ' of ' + data.total + ' results for \"' + this.searchTerm + '\"'
+            this.numResultMsg = this.pagination.size + ' of ' + data.total + ' results for \"' + this.searchTerm + '\"' + ' from <i>' + groupLabel + '</i>.'
           }
           else {
-            this.numResultMsg = 'Showing ' + data.total + ' of ' + data.total + ' results for \"' + this.searchTerm + '\"'
+            this.numResultMsg = data.total + ' of ' + data.total + ' results for \"' + this.searchTerm + '\"' + ' from <i>' + groupLabel + '</i>.'
           }
         }
         else {
-          this.numResultMsg = '0 results to show for \"' + this.searchTerm + '\"'
+          this.numResultMsg = '0 results to show for \"' + this.searchTerm + '\"' + ' from <i>' + groupLabel + '</i>. Try checking your spelling, or browse our <a href=\'/#/browse/groups?level=public\' class=\'link\'><b>curated groups</b></a>.'
         }
         
         this.pagination.page = groupQuery.page
