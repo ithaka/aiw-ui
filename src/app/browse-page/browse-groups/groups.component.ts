@@ -388,13 +388,14 @@ export class BrowseGroupsComponent implements OnInit {
         }
         else {
           this.numResultMsg = '0 results to show for \"' + this.searchTerm + '\"' + ' from <i>' + groupLabel + '</i>. Try checking your spelling, or browse our <a href=\'/#/browse/groups?level=public\' class=\'link\'><b>curated groups</b></a>.'
+          this.goToPage(1)
         }
-        
+
         this.pagination.page = groupQuery.page
 
         this.pagination.totalPages = Math.ceil(data.total / this.pagination.size) // update pagination, which is injected into pagination component
         if (this.pagination.totalPages === 0) // The pagination should at least have one page even if there is no results, so that we don't show '1 of 0' on the pagination
-          this.pagination.totalPages = 1 
+          this.pagination.totalPages = 1
 
         if (this.pagination.page > this.pagination.totalPages && data.total > 0) {
           return this.goToPage(this.pagination.totalPages) // go to the last results page if they try to navigate to a page that is more than results
@@ -449,8 +450,6 @@ export class BrowseGroupsComponent implements OnInit {
     if (!search) {
       this._tagFilters.setFilters([], [])
       this.tags = []
-      this.pagination.page = 1
-      this.pagination.totalPages = 1
     }
 
     return search
