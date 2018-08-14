@@ -48,7 +48,7 @@ export class AuthService implements CanActivate {
   public userSessionFresh: boolean = false
 
   private idleState: string = 'Not started.';
-  public showUserInactiveModal: Subject<boolean> = new Subject(); //Set up subject observable for showing inactive user modal
+  public showUserInactiveModal: Subject<boolean> = new Subject(); // Set up subject observable for showing inactive user modal
 
   private isOpenAccess: boolean;
 
@@ -59,14 +59,14 @@ export class AuthService implements CanActivate {
    * - 'no-store' > 'no-cache' in denying caching
    */
   private userInfoHeader: HttpHeaders = new HttpHeaders().set('Cache-Control', 'no-store, no-cache')
-  private genUserInfoUrl() : string {
+  private genUserInfoUrl(): string {
     return this.getUrl(true) + '/userinfo?no-cache=' + new Date().valueOf()
   }
 
   constructor(
-    private _router:Router,
+    private _router: Router,
     // private _login: LoginService,
-    locker:Locker,
+    locker: Locker,
     private http: HttpClient,
     private location: Location,
     private _app: AppConfig,
@@ -107,22 +107,22 @@ export class AuthService implements CanActivate {
     ]
 
     // Check domain
-    if (  new RegExp(prodHostnames.join("|")).test(document.location.hostname)  ) {
+    if (  new RegExp(prodHostnames.join('|')).test(document.location.hostname)  ) {
       // Explicit live endpoints
       this.logUrl = '//ang-ui-logger.apps.prod.cirrostratus.org/api/v1'
       this.solrUrl = '/api/search/v1.0/search'
       this.ENV = 'prod'
     }
     else if ( document.location.hostname.indexOf('prod.cirrostratus.org') > -1 ) {
-      console.info("Using Prod Endpoints (Absolute)")
+      console.info('Using Prod Endpoints (Absolute)')
       // Prod/Lively endpoints
       this.hostname = '//library.artstor.org'
       this.baseUrl =  '//library.artstor.org/api'
       this.logUrl = '//ang-ui-logger.apps.prod.cirrostratus.org/api/v1'
       this.solrUrl = this.hostname + '/api/search/v1.0/search'
       this.ENV = 'prod'
-    } else if ( new RegExp(testHostnames.join("|")).test(document.location.hostname) ) {
-      console.info("Using Test Endpoints")
+    } else if ( new RegExp(testHostnames.join('|')).test(document.location.hostname) ) {
+      console.info('Using Test Endpoints')
       // Test Endpoints
       this.hostname = '//stage.artstor.org'
       this.subdomain = 'stage'
@@ -151,7 +151,7 @@ export class AuthService implements CanActivate {
 
     // Local routing should point to full URL
     // * This should NEVER apply when using a proxy, as it will break authorization
-    if (new RegExp(["cirrostratus.org", "localhost", "local.", "sahara.beta.stage.artstor.org", "sahara.prod.artstor.org"].join("|")).test(document.location.hostname)) {
+    if (new RegExp(['cirrostratus.org', 'localhost', 'local.', 'sahara.beta.stage.artstor.org', 'sahara.prod.artstor.org'].join('|')).test(document.location.hostname)) {
       this.baseUrl = this.hostname + '/api'
       this.solrUrl = this.hostname + '/api/search/v1.0/search'
     }
@@ -169,7 +169,7 @@ export class AuthService implements CanActivate {
     idle.onTimeout.subscribe(() => {
       let user = this.getUser();
       // console.log(user);
-      if(user && user.isLoggedIn){
+      if (user && user.isLoggedIn){
         this.expireSession();
         this.showUserInactiveModal.next(true);
         this.idleState = 'Timed out!';
@@ -202,7 +202,7 @@ export class AuthService implements CanActivate {
      * - Poll /userinfo every 15min
      * - Refreshs AccessToken with IAC
      */
-    const userInfoInterval = 15*1000*60*60
+    const userInfoInterval = 15 * 1000 * 60 * 60
     // Run on Init
     this.refreshUserSession(true)
     // Run every X mins
@@ -275,8 +275,8 @@ export class AuthService implements CanActivate {
    * @param obj The object to be encoded
    */
   public formEncode(obj: Object): string {
-      var encodedString = '';
-      for (var key in obj) {
+      let encodedString = '';
+      for (let key in obj) {
           if (encodedString.length !== 0) {
               encodedString += '&';
           }
@@ -325,7 +325,7 @@ export class AuthService implements CanActivate {
    * @returns Observable resolved with object containing: roleArray, deptArray
    */
   public getUserRoles(): Observable<any> {
-    return this.http.get(this.getUrl(true) + "/user?_method=deptRoles")
+    return this.http.get(this.getUrl(true) + '/user?_method=deptRoles')
   }
 
   /** Calls service to register a user
@@ -336,7 +336,7 @@ export class AuthService implements CanActivate {
 
     let header = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded'); // form encode it
     let options = { headers: header, withCredentials: true }; // Create a request option
-    return this.http.post(this.getUrl(true) + "/register", data , options);
+    return this.http.post(this.getUrl(true) + '/register', data , options);
   }
 
   /**
@@ -345,13 +345,13 @@ export class AuthService implements CanActivate {
    */
   public registerSamlUser(registration: any): Observable<any> {
     // Clear method used for regular registration
-    registration["_method"] = null
+    registration['_method'] = null
     // // Encode da
     // let dataStr = this.formEncode(registration)
     let header = new HttpHeaders().set('Content-Type', 'application/json')
     let options = { headers: header, withCredentials: true }
 
-    return this.http.post(this.getHostname() + "/saml/user/create", registration , options)
+    return this.http.post(this.getHostname() + '/saml/user/create', registration , options)
   }
 
   /**
@@ -362,7 +362,7 @@ export class AuthService implements CanActivate {
     let header = new HttpHeaders().set('Content-Type', 'application/json')
     let options = { headers: header, withCredentials: true }
 
-    return this.http.post(this.getHostname() + "/saml/user/link", credentials , options)
+    return this.http.post(this.getHostname() + '/saml/user/link', credentials , options)
       .toPromise()
   }
 
@@ -370,18 +370,18 @@ export class AuthService implements CanActivate {
     let header = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded'); // form encode it
     let options = { headers: header, withCredentials: true }; // Create a request option
     let data = this.formEncode({
-      _method: "updatePassword",
+      _method: 'updatePassword',
       oldPassword: oldPass,
       password: newPass
     });
 
-    return this.http.post(this.getUrl(true) + "/profile", data, options)
+    return this.http.post(this.getUrl(true) + '/profile', data, options)
   }
 
   public getUrl(secure?: boolean): string {
     let url: string = this.baseUrl
     if (secure) {
-      url += "/secure"
+      url += '/secure'
     }
     return url
   }
@@ -441,13 +441,13 @@ export class AuthService implements CanActivate {
   /**
    * Gets user object from local storage
    */
-  public getUser() : any {
+  public getUser(): any {
       return this._storage.get('user') ? this._storage.get('user') : {};
   }
 
   /** Stores an object in local storage for you - your welcome */
   public store(key: string, value: any): void {
-      if (key != "user" && key != "token") {
+      if (key != 'user' && key != 'token') {
           this._storage.set(key, value);
       }
   }
@@ -459,7 +459,7 @@ export class AuthService implements CanActivate {
 
   /** Deletes things (not user or token) from local storage */
   public deleteFromStorage(key: string): void {
-      if (key != "user" && key != "token") {
+      if (key != 'user' && key != 'token') {
           this._storage.remove(key);
       }
   }
@@ -475,7 +475,7 @@ export class AuthService implements CanActivate {
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
     let options = { headers: this.userInfoHeader, withCredentials: true }
 
-    if ((route.params.samlTokenId || route.params.type == "shibboleth") && state.url.includes('/register')) {
+    if ((route.params.samlTokenId || route.params.type == 'shibboleth') && state.url.includes('/register')) {
       // Shibboleth workflow is unique, should allow access to the register page
       return new Observable(observer => {
         observer.next(true)
@@ -520,7 +520,7 @@ export class AuthService implements CanActivate {
               console.log('fell through to this.logout')
               this.logout()
               // Store the route so that we know where to put them after login!
-              this.store("stashedRoute", this.location.path(false))
+              this.store('stashedRoute', this.location.path(false))
               return false
             }
           }
@@ -582,7 +582,7 @@ export class AuthService implements CanActivate {
    * - Used to verify that we want the user object
    * - Used to decorate the user object for saving
    */
-  private decorateValidUser(data: any) : any {
+  private decorateValidUser(data: any): any {
     let currentUser = this.getUser()
     let newUser = data['user'] ? data['user'] : {}
     let currentUsername = currentUser.username
@@ -606,7 +606,7 @@ export class AuthService implements CanActivate {
       } else {
         return null
       }
-    } else if(data['status'] === false) {
+    } else if (data['status'] === false) {
       // Return generic user object for unaffiliated users
       let user = {
         'status': false,
@@ -615,7 +615,7 @@ export class AuthService implements CanActivate {
       }
       return user
     } else {
-      console.error("Did not receive a valid user object", data)
+      console.error('Did not receive a valid user object', data)
       return null
     }
   }
@@ -638,7 +638,7 @@ export class AuthService implements CanActivate {
      * Logs user in
      * @param user User must have username (which is an email address) and password to be passed in the request
      */
-    login(user: User) : Promise<any> {
+    login(user: User): Promise<any> {
         let header = new HttpHeaders().set('Cache-Control', 'no-store, no-cache').set('Content-Type', 'application/x-www-form-urlencoded'); // ... Set content type to JSON
         let options = { headers: header, withCredentials: true }; // Create a request option
         let data = this.formEncode({
@@ -681,7 +681,7 @@ export class AuthService implements CanActivate {
     let data = this.formEncode({ username: username, password: password })
     let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded')
     return this.http.post<SSLoginResponse>(
-      [this.hostname, "gust", "login"].join("/"),
+      [this.hostname, 'gust', 'login'].join('/'),
       data,
       { withCredentials: true, headers: headers }
     )
@@ -697,13 +697,13 @@ export class AuthService implements CanActivate {
    * - We use category to track the type of user the event is tied to
    */
   public getGACategory(): string {
-    let category = "unaffiliatedUser"
+    let category = 'unaffiliatedUser'
     let user = this.getUser()
 
     if (user.isLoggedIn) {
-      category = "loggedInUser"
+      category = 'loggedInUser'
     } else if (user.institutionId && user.institutionId.toString().length > 0) {
-      category = "institutionalUser"
+      category = 'institutionalUser'
     }
 
     return category

@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
 import { Ng2DeviceService } from 'ng2-device-detector';
 
-import { AssetService, AuthService, } from '../shared';
+import { AssetService, AuthService } from '../shared';
 import { AppConfig } from '../app.service';
 import { Featured } from './featured'
 
@@ -41,7 +41,7 @@ export class Home implements OnInit, OnDestroy {
   private browseSec: any = {}
   private showHomeSSC: boolean = false
   private showHomePromo: boolean = false
-  private siteID: string = ""
+  private siteID: string = ''
 
   // Default IG 'Browse By:' Option controlled via the WLV file
   private defaultGrpBrwseBy: string = 'institution'
@@ -93,32 +93,32 @@ export class Home implements OnInit, OnDestroy {
     this.loaders['instCollections'] = true;
 
     /*
-     * Subscribe to user object 
+     * Subscribe to user object
      * and fetch collections list only after we have the user object returned
-     */ 
+     */
     this.subscriptions.push(
       this._auth.currentUser.subscribe(
         (userObj) => {
-          if(userObj.institutionId && (this.instCollections.length === 0)){
+          if (userObj.institutionId && (this.instCollections.length === 0)){
             this.subscriptions
               .push(
                 this._assets.getCollectionsList()
                   .subscribe(
                     data => {
                       // Filter SSC content
-                      this.collections = data["Collections"].filter((collection) => {
+                      this.collections = data['Collections'].filter((collection) => {
                         return collection.collectionType == 5
                       })
                       this.loaders['collections'] = false;
                       // Filter institutional content
-                      this.instCollections = data["Collections"].filter((collection) => {
+                      this.instCollections = data['Collections'].filter((collection) => {
                         return collection.collectionType == 2 || collection.collectionType == 4
                       })
                       this.loaders['instCollections'] = false;
                     },
                     err => {
                       if (err && err.status != 401 && err.status != 403) {
-                        console.error("Failed to load collection list", err)
+                        console.error('Failed to load collection list', err)
                       }
                     }
                   )
@@ -126,7 +126,7 @@ export class Home implements OnInit, OnDestroy {
           }
         },
         err => {
-          console.error("Failed to load user object", err)
+          console.error('Failed to load user object', err)
         }
       )
     );
@@ -137,7 +137,7 @@ export class Home implements OnInit, OnDestroy {
           this.blogPosts = data['posts'];
         }
         this.blogLoading = false;
-      }, )
+      } )
       .catch((error) => {
         console.log(error);
         this.blogLoading = false;

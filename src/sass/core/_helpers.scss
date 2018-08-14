@@ -16,8 +16,8 @@
         margin-top: -2em;
         // transition: margin 0.3s cubic-bezier(0.55, 0.07, 0.44, 0.93);
         & > ang-tag {
-            min-height: 0px;
-            max-height: 0px;
+            min-height: 0;
+            max-height: 0;
             transition: max-height 0.02s linear;
             display: block;
             overflow: hidden;

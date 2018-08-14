@@ -35,21 +35,26 @@ export class GroupService {
             pageNo = 1
         }
 
-        let tagParam = ""
+        let tagParam = ''
         tags.forEach( tag => {
             tagParam += '&tags=' + encodeURIComponent(tag)
         })
 
-        let sortParam = sort ? '&sort=' + sort : ""
-        let orderParam = order ? '&order=' + order : ""
+        let sortParam = sort ? '&sort=' + sort : ''
+        let orderParam = order ? '&order=' + order : ''
 
 
         let queryParam: string = ''
         query && (queryParam = '&q=' + query)
         owner_id && (queryParam = '&owner_id=' + owner_id)
 
+        let options = {
+            headers: new HttpHeaders({'Accept': 'application/json;charset=UTF-8'}),
+            withCredentials: true
+        }
+
         return this.http.get<GroupList>(
-            [this.groupUrl, "?size=", size, '&level=', level, '&from=', ( (pageNo - 1) * size),  tagParam, sortParam, orderParam, queryParam].join(''), this.options
+            [this.groupUrl, '?size=', size, '&level=', level, '&from=', ( (pageNo - 1) * size),  tagParam, sortParam, orderParam, queryParam].join(''), options
         )
     }
 
@@ -57,7 +62,7 @@ export class GroupService {
      * Gets all group objects by looping through every page
      * @param level Indicates access level of group: 'institution', 'private', 'public', 'all' or 'shared'
      */
-    public getEveryGroup(level: string) : Observable<any[]> {
+    public getEveryGroup(level: string): Observable<any[]> {
         let everyGroupSubject = new BehaviorSubject([])
         let everyGroupObservable = everyGroupSubject.asObservable()
         let size = 100 // max the service handles
@@ -67,24 +72,24 @@ export class GroupService {
 
         // Get first page to find out how many Groups are available
         this.http.get(
-            this.groupUrl + "?size=" + size + '&level=' + level + '&from=0', this.options
+            this.groupUrl + '?size=' + size + '&level=' + level + '&from=0', this.options
         ).toPromise()
         .then( data => {
             // Load first page
             groups = groups.concat(data['groups'])
             everyGroupSubject.next(groups)
             // Set total number of pages
-            totalPages = (data['total']/size) + 1
+            totalPages = (data['total'] / size) + 1
             // Increment pageNo since we just loaded the first page
             pageNo++
 
-            for(pageNo; pageNo <= totalPages; pageNo++) {
+            for (pageNo; pageNo <= totalPages; pageNo++) {
                 // Use locally scoped pageNo since Timeout fires after loop
                 let thisPageNo = pageNo
                 // Timeout for debouncing to prevent spamming the service
                 setTimeout(() => {
                     this.http.get(
-                        this.groupUrl + "?size=" + size + '&level=' + level + '&from=' + ( (thisPageNo - 1) * size), this.options
+                        this.groupUrl + '?size=' + size + '&level=' + level + '&from=' + ( (thisPageNo - 1) * size), this.options
                     ).toPromise()
                     .then(data => {
                         groups = groups.concat(data['groups'])
@@ -93,7 +98,7 @@ export class GroupService {
                         everyGroupSubject.error(error)
                     })
                 // Provide a debounce for every set of 5 calls
-                }, Math.floor(pageNo/5) * 1000 )
+                }, Math.floor(pageNo / 5) * 1000 )
             }
         }, error => {
             everyGroupSubject.error(error)
@@ -167,7 +172,7 @@ export class GroupService {
         ]
 
         // Contruct putGroup object, based on expected properties on backend groups update call
-        for(let key in group){
+        for (let key in group){
             if (updateProperties.indexOf(key) > -1) {
                 putGroup[key] = group[key]
             }
@@ -198,7 +203,7 @@ export class GroupService {
      */
     public generateToken(id: string, options: { access_type: number, expiration_time?: Date }): Observable<any> {
         return this.http.post(
-            [this.groupUrl, id, "share"].join("/"),
+            [this.groupUrl, id, 'share'].join('/'),
             {}, // this call does not have any options for a body
             this.options
         )
@@ -211,7 +216,7 @@ export class GroupService {
      */
     public redeemToken(token: string): Observable<{ success: boolean, group: any }> {
         return this.http.post<{ success: boolean, group: any }>(
-            [this.groupUrl, "redeem", token].join("/"),
+            [this.groupUrl, 'redeem', token].join('/'),
             {},
             this.options
         );
@@ -223,7 +228,7 @@ export class GroupService {
      * @returns Observable resolved with { success: boolean, message: string }
      */
     public updateIgPublic(igId: string, makePublic: boolean) {
-        let reqUrl = [this.groupUrl,igId, "admin", "public"].join("/")
+        let reqUrl = [this.groupUrl, igId, 'admin', 'public'].join('/')
         let body = { public: makePublic }
 
         return this.http.put(
@@ -248,6 +253,6 @@ export class GroupService {
      * Get a list of Tag suggestions
      */
     public getTagSuggestions(term: string) {
-        return this.http.get( this.groupUrl + "/tags/suggest?q=" + term + "&size=20", this.options)
+        return this.http.get( this.groupUrl + '/tags/suggest?q=' + term + '&size=20', this.options)
     }
 }

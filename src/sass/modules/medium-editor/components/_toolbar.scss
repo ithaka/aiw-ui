@@ -11,12 +11,12 @@
 
 .medium-toolbar-arrow-under:after {
     @extend %medium-toolbar-arrow;
-    border-width: 8px 8px 0 8px;
+    border-width: 8px 8px 0;
 }
 
 .medium-toolbar-arrow-over:before {
     @extend %medium-toolbar-arrow;
-    border-width: 0 8px 8px 8px;
+    border-width: 0 8px 8px;
     top: -8px;
 }
 

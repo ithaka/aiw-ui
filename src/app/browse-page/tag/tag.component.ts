@@ -19,7 +19,7 @@ export class TagComponent {
   @Output() editTag: EventEmitter<any> = new EventEmitter();
 
   private showAsFolder: boolean;
-  public linkRoute: string = "";
+  public linkRoute: string = '';
   public showDescription: boolean = false;
   private loading: boolean = false;
 
@@ -58,6 +58,6 @@ export class TagComponent {
    * - Simpler route behavior (can't pass paranthesis as a route)
    */
   private cleanTitle(title: string): string {
-    return title.replace(/[\(\)]/g,'');
+    return title.replace(/[\(\)]/g, '');
   }
 }

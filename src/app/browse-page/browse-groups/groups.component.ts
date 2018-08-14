@@ -7,6 +7,7 @@ import { Tag } from './../tag'
 import { TagFiltersService } from './tag-filters.service'
 import { TitleService } from '../../shared/title.service'
 import { AppConfig } from '../../app.service';
+import { TourStep } from '../../shared/tour/tour.service'
 
 @Component({
   selector: 'ang-browse-groups',
@@ -47,6 +48,36 @@ export class BrowseGroupsComponent implements OnInit {
   private groupFilterArray: GroupFilter[] = []
   private errorObj: any = {}
 
+  private steps: TourStep[] = [
+    {
+      step: 1,
+      element: ['.card-view'],
+      popover: {
+          position: 'bottom',
+          title: '<p>1 OF 3</p><b>Preview groups</b>',
+          description: 'See more information about groups at a glance, including the creator, date, and description.',
+      }
+    },
+    {
+      step: 2,
+      element: ['#group-and-tag'],
+      popover: {
+        position: 'right',
+        title: '<p>2 OF 3</p><b>Find groups easily</b>',
+        description: 'Filter the groups you want to view by type, tag, or owner. Make sure to log in to see all of the groups you\'ve created, all in one place.',
+      }
+    },
+    {
+      step: 3,
+        element: ['#inputSearchTerm'],
+        popover: {
+          position: 'bottom',
+          title: '<p>3 OF 3</p><b>Search across all groups</b>',
+          description: 'Filter the groups you want to view by type, tag, or owner. Make sure to log in to see all of the groups you\'ve created, all in one place.',
+        }
+    }
+]
+
   constructor(
     _appConfig: AppConfig,
     private _router: Router,
@@ -70,6 +101,18 @@ export class BrowseGroupsComponent implements OnInit {
         label: 'My Groups',
         level: 'created',
         selected: true
+      })
+
+      this.groupFilterArray.push({
+        label: 'Private',
+        level: 'private',
+        selected: false
+      })
+
+      this.groupFilterArray.push({
+        label: 'Shared by me',
+        level: 'shared_by_me',
+        selected: false
       })
     }
 
@@ -106,14 +149,14 @@ export class BrowseGroupsComponent implements OnInit {
     }
 
     // set the title
-    this._title.setSubtitle("Browse Groups")
+    this._title.setSubtitle('Browse Groups')
 
     // Subscribe to asset search params
     this.subscriptions.push(
       this.route.params
       .subscribe((params) => {
         // Find feature flags
-        if(params && params.featureFlag && params.featureFlag === 'cardview'){
+        if (params && params.featureFlag && params.featureFlag === 'cardview'){
           this.showCardView = true
         }
       })
@@ -141,7 +184,7 @@ export class BrowseGroupsComponent implements OnInit {
 
   /** Every time the url updates, we process the new tags and reload image groups if the tags query param changes */
   private createNavigationSubscription(): Subscription {
-    return this._router.events.filter(event=>event instanceof NavigationEnd)
+    return this._router.events.filter(event => event instanceof NavigationEnd)
     .subscribe(event => {
       let query = this.route.snapshot.queryParams
       if (!query) { console.error('no query!') }
@@ -253,8 +296,8 @@ export class BrowseGroupsComponent implements OnInit {
     let parentTag = null
     this.groups = folderArray
 
-    for(let group of folderArray) {
-            let groupTag = new Tag(group.id, group.name, true, null, { label: "group", folder: false }, true)
+    for (let group of folderArray) {
+            let groupTag = new Tag(group.id, group.name, true, null, { label: 'group', folder: false }, true)
             childArr.push(groupTag)
           }
     return childArr
@@ -348,9 +391,11 @@ export class BrowseGroupsComponent implements OnInit {
         }
         
         this.pagination.page = groupQuery.page
-        this.pagination.totalPages = Math.ceil(data.total/this.pagination.size) // update pagination, which is injected into pagination component
+
+        this.pagination.totalPages = Math.ceil(data.total / this.pagination.size) // update pagination, which is injected into pagination component
         if (this.pagination.totalPages === 0) // The pagination should at least have one page even if there is no results, so that we don't show '1 of 0' on the pagination
           this.pagination.totalPages = 1 
+
         if (this.pagination.page > this.pagination.totalPages && data.total > 0) {
           return this.goToPage(this.pagination.totalPages) // go to the last results page if they try to navigate to a page that is more than results
         }
@@ -367,7 +412,7 @@ export class BrowseGroupsComponent implements OnInit {
         console.error(error)
         this._tagFilters.setFilters([], groupQuery.tags)
         this.tags = []
-        this.errorObj[browseLevel] = "Sorry, we were unable to load these Image Groups"
+        this.errorObj[browseLevel] = 'Sorry, we were unable to load these Image Groups'
         this.loading = false
       }
     )
@@ -431,7 +476,7 @@ export class BrowseGroupsComponent implements OnInit {
     }
     let queryParams = Object.assign(baseParams, params)
 
-    this._router.navigate(['/browse','groups'], { queryParams: queryParams })
+    this._router.navigate(['/browse', 'groups'], { queryParams: queryParams })
   }
 }
 

@@ -5,13 +5,13 @@ import { AccountService } from './../shared'
 import { PactWeb, Matchers} from '@pact-foundation/pact-web'
 import { HttpClientModule } from '@angular/common/http'
 
-describe("PUT /api/secure/user/{{profileId}} #pact #updateuser", () => {
+describe('PUT /api/secure/user/{{profileId}} #pact #updateuser', () => {
 
   let provider
 
 
   beforeAll(function(done) {
-    provider = new PactWeb({ consumer: 'aiw', provider: 'auth-service' })
+    provider = new PactWeb({ consumer: 'aiw-ui', provider: 'artaa_service' })
 
     // required for slower Travis CI environment
     setTimeout(function () { done() }, 2000)
@@ -70,7 +70,7 @@ describe("PUT /api/secure/user/{{profileId}} #pact #updateuser", () => {
       firstName: 'my updated name'
     }
 
-    let body ={
+    let body = {
       [updateObjects[0].field]:  Matchers.somethingLike(updateObjects[0].value)
     }
 
@@ -93,7 +93,7 @@ describe("PUT /api/secure/user/{{profileId}} #pact #updateuser", () => {
             },
             willRespondWith: {
               status: 200,
-              headers: { "Content-Type": "application/json" }
+              headers: { 'Content-Type': 'application/json' }
             }
           })
         )
@@ -104,17 +104,28 @@ describe("PUT /api/secure/user/{{profileId}} #pact #updateuser", () => {
       .catch((err) => { done.fail(err) })
     })
 
-    for(let obj of updateObjects) {
+    afterAll((done) => {
+      // called in afterAll to make sure it fires after all interactions have been tested
+      provider.verify()
+      .then(function(a) {
+        done()
+      }, function(e) {
+        done.fail(e)
+      })
+    })
+
+    for (let obj of updateObjects) {
       it("should update a user's " + obj.field, (done) => {
-        //Run the tests
+        // Run the tests
         service.update({ [obj.field]: obj.value, baseProfileId: 706217 })
           .subscribe(res => {
             expect(true).toEqual(true)
             done()
           },
           err => {
-          done.fail(err)
-        })
+            done.fail(err)
+          }
+        )
       })
     }
   })

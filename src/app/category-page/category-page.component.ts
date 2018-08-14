@@ -49,7 +49,7 @@ export class CategoryPage implements OnInit, OnDestroy {
           this.user = userObj;
         },
         (err) => {
-          console.error("Failed to load user information", err)
+          console.error('Failed to load user information', err)
         }
       )
     );
@@ -105,7 +105,7 @@ export class CategoryPage implements OnInit, OnDestroy {
 
         this.unaffiliatedUser = this._auth.isPublicOnly() ? true : false
       })
-    );// End push to subscription
+    ); // End push to subscription
 
   } // OnInit
 

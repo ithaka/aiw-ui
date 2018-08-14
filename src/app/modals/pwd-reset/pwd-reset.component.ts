@@ -23,7 +23,7 @@ export class PwdResetModal implements OnInit {
     private _fb: FormBuilder
   ) {
     this.pwdResetForm = _fb.group({
-      'email': ['',[Validators.required, Validators.pattern(/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)]]
+      'email': ['', [Validators.required, Validators.pattern(/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)]]
     });
   }
 
@@ -43,7 +43,7 @@ export class PwdResetModal implements OnInit {
       );
   }
   loadPwdRstRes(res: any){
-    if(!res.status || res.status === "false"){
+    if (!res.status || res.status === 'false'){
       this.errorMsgPwdRst = 'Sorry! ' + this.pwdResetForm.value.email + ' is invalid for Artstor.';
       setTimeout(() => {
         this.errorMsgPwdRst = '';

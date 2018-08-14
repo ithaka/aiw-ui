@@ -64,7 +64,7 @@ button.page-link {
     border-color: transparent;
     // vertical alignment adjustment
     // border-color: transparent;
-    border-radius: 0px !important;
+    border-radius: 0 !important;
     padding: 0.35rem 0.4rem;
     white-space: nowrap;
     // Better arrow characters
@@ -89,7 +89,7 @@ button.page-link {
     white-space: nowrap;
     color: #666;
     vertical-align: middle;
-    padding: 0.5rem 4px 0.5rem 0px;
+    padding: 0.5rem 4px 0.5rem 0;
     border-bottom: 1px solid transparent;
 }
 

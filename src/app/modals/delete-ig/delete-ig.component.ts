@@ -32,15 +32,15 @@ export class DeleteIgModal implements OnInit {
   ) {}
 
   ngOnInit() {
-    if(this.ig.id){
+    if (this.ig.id){
       this.igName = this.ig.name;
     }
   }
 
   deleteImageGroup(): void {
 
-    this._group.delete(this.igId).subscribe(res =>{
-      if(res){
+    this._group.delete(this.igId).subscribe(res => {
+      if (res){
         // Clear Group Assets locally
         this._assets.clearAssets();
         this.groupDeleted = true;
