@@ -298,6 +298,7 @@ export class BrowseGroupsComponent implements OnInit {
     .take(1)
     .subscribe(
       (data)  => {
+        // Set the group level to show in the number of result message
         let groupLabel : string = ''
         switch (browseLevel) {
           case 'all': {
@@ -333,6 +334,7 @@ export class BrowseGroupsComponent implements OnInit {
           }
         }
 
+        // Set the number of result message
         if (data.total !== 0){
           if (this.pagination.size < data.total) {
             this.numResultMsg = this.pagination.size + ' of ' + data.total + ' results for \"' + this.searchTerm + '\"' + ' from <i>' + groupLabel + '</i>.'
