@@ -2,7 +2,8 @@
 //  if you need more, you can add them to the interface
 
 export interface Thumbnail {
-  objectId: string
+  objectId?: string
+  artstorid?: string
   collectionId: string
   collectionType: number
   cfObjCount: number // number of associated assets
@@ -10,7 +11,7 @@ export interface Thumbnail {
   count: number
   largeImageUrl: string
   publicAccess: boolean
-  iapFlag?: number
+  iap?: number
   status: string
   media: {
     adlObjectType: string
@@ -21,6 +22,7 @@ export interface Thumbnail {
   thumbnail2: any
   thumbnail3: any
   thumbnail4: any
+  navigationCommands: any[] // added when thumbnail is constructed, allows proper navigation from search
 }
 
 // export interface SearchThumbnail {

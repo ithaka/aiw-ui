@@ -50,8 +50,6 @@ export class ThumbnailComponent implements OnInit, OnChanges {
     if (this.thumbnail['media']) {
       this.thumbnail.thumbnailImgUrl = this.thumbnail.media.thumbnailSizeOnePath
     }
-
-    this.thumbnail.iapFlag = this.determineIAP(this.thumbnail['artstorid'] ? this.thumbnail['artstorid'] : this.thumbnail['objectId'])
   }
 
   // Fires when the component input(s) (i.e largeThmbView) changes - Updates the thumbnailSize based on largeThmbView current value

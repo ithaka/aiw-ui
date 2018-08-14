@@ -94,7 +94,7 @@
             input.check(type="checkbox", [checked]="isSelectedAsset(asset) > -1", [ngStyle]="{ 'display': isSelectedAsset(asset) > -1 ? 'block' : 'none' }", (change)="editMode = true; selectAsset(asset);")
           .mobile--show
             input.check-mobile(type="checkbox", [checked]="isSelectedAsset(asset) > -1", (change)="editMode = true; selectAsset(asset);")
-          a.card.card--asset([attr.data-id]="asset.objectId", [ngClass]="{'selected': ( isSelectedAsset(asset) > -1 ), 'lrgThmb': largeThmbView }", (click)="selectAsset(asset, $event)", (focus)="showBox($event)", (blur)="hideBox($event)", [routerLink]="['/asset', asset.objectId ? asset.objectId : asset.artstorid]")
+          a.card.card--asset([attr.data-id]="asset.objectId", [ngClass]="{'selected': ( isSelectedAsset(asset) > -1 ), 'lrgThmb': largeThmbView }", (click)="selectAsset(asset, $event)", (focus)="showBox($event)", (blur)="hideBox($event)", [routerLink]="constructNavigationCommands(asset)")
             ang-thumbnail([thumbnail]="asset", [reorderMode]="reorderMode", [editMode]="editMode", [largeThmbView]="largeThmbView")
         .alert.alert-warning(*ngIf="!isLoading && (searchError.length < 1) && ((isPartialPage && hasMaxAssetLimit) || searchLimitError)")
           | {{ "BROWSE.WARNINGS.ADDITIONAL_RESULTS" | translate }}

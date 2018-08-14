@@ -511,21 +511,32 @@ export class AssetGrid implements OnInit, OnDestroy {
       }
 
       // Navigate to asset page here instead of using routerLink in the template to enable route parameter
-      let params = asset.objectId ? asset.objectId : asset.artstorid
-      let queryParams = {}
-      if (asset.iapFlag > 0 || asset.iap) {
-        queryParams["iap"] = 'true'
+      let assetId: string = asset.objectId ? asset.objectId : asset.artstorid
+      let routeParams = {}
+      if (asset.iap) {
+        routeParams["iap"] = 'true'
       }
       if (this._search.latestSearchRequestId)
-        queryParams['requestId'] = this._search.latestSearchRequestId
+        routeParams['requestId'] = this._search.latestSearchRequestId
       if (this.ig && this.ig.id) {
-        queryParams['groupId'] = this.ig.id
+        routeParams['groupId'] = this.ig.id
       }
       if (this.editMode)
-        this._router.navigate(['./', , queryParams])
+        this._router.navigate(['./', , routeParams])
       else
-        this._router.navigate(['/asset', params, queryParams]);
+        this._router.navigate(['/asset', assetId, routeParams]);
     }
+  }
+
+  private constructNavigationCommands (thumbnail: Thumbnail) {
+    let assetId = thumbnail.objectId ? thumbnail.objectId : thumbnail.artstorid
+    let params: any = {
+      requestId: this._search.latestSearchRequestId
+    }
+    thumbnail.iap && (params.iap = 'true')
+    this.ig && this.ig.id && (params.groupId = this.ig.id)
+
+    return ['/asset', assetId, params]
   }
 
   /**
