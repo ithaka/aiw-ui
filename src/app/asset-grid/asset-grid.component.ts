@@ -284,6 +284,8 @@ export class AssetGrid implements OnInit, OnDestroy {
     this.subscriptions.push(
       this._assets.allResults.subscribe(
         (allResults) => {
+
+
           if(this.activeSort.index && this.activeSort.index == '3'){
             this.sortByDateTotal =  allResults.total
             this._search.search(this.UrlParams, this.searchTerm, '0').forEach((res) => {
@@ -342,6 +344,14 @@ export class AssetGrid implements OnInit, OnDestroy {
             this.totalAssets = this.assetCount
             this.isLoading = false;
           }
+
+          this._session.set('totalAssets', this.totalAssets ? this.totalAssets : 1)
+
+          // Tie prevRouteParams array with requestId before sending to asset page
+          let id: string = this._search.latestSearchRequestId ? this._search.latestSearchRequestId.toString() : 'undefined'
+          let prevRouteParams = this._session.get('prevRouteParams') || {}
+          prevRouteParams[id] = this.route.snapshot.url
+          this._session.set('prevRouteParams', prevRouteParams)
 
           //Generate Facets
           if (allResults && allResults.collTypeFacets) {
@@ -490,41 +500,6 @@ export class AssetGrid implements OnInit, OnDestroy {
         this._assets.setSelectedAssets(this.selectedAssets)
       }
       this.selectedAssets.length ? this.editMode = true : this.editMode = false
-    }
-    else{
-      this._session.set('totalAssets', this.totalAssets ? this.totalAssets : 1)
-
-      // Tie prevRouteParams array with requestId before sending to asset page
-      let id: string = this._search.latestSearchRequestId ? this._search.latestSearchRequestId.toString() : 'undefined'
-      let prevRouteParams = {}
-      prevRouteParams[id]=this.route.snapshot.url
-      this._session.set('prevRouteParams', prevRouteParams)
-
-      // only log the event if the asset came from search, and therefore has an artstorid
-      if (asset['artstorid']) {
-        // log the event connecting the search to the asset clicked
-        this._log.log({
-          eventType: 'artstor_item_view',
-          referring_requestid: this._search.latestSearchRequestId,
-          item_id: asset['artstorid']
-        })
-      }
-
-      // Navigate to asset page here instead of using routerLink in the template to enable route parameter
-      let assetId: string = asset.objectId ? asset.objectId : asset.artstorid
-      let routeParams = {}
-      if (asset.iap) {
-        routeParams["iap"] = 'true'
-      }
-      if (this._search.latestSearchRequestId)
-        routeParams['requestId'] = this._search.latestSearchRequestId
-      if (this.ig && this.ig.id) {
-        routeParams['groupId'] = this.ig.id
-      }
-      if (this.editMode)
-        this._router.navigate(['./', , routeParams])
-      else
-        this._router.navigate(['/asset', assetId, routeParams]);
     }
   }
 
