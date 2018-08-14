@@ -246,7 +246,7 @@ export class AssetPage implements OnInit, OnDestroy {
 
                             let queryParams = {}
                             if (this.assetGroupId) {
-                                queryParams["groupId"] = this.assetGroupId
+                                queryParams['groupId'] = this.assetGroupId
                             }
                             // Maintain the requestId route parameter for next page
                             queryParams['requestId'] = this.requestId
@@ -265,7 +265,7 @@ export class AssetPage implements OnInit, OnDestroy {
 
                             let queryParams = {}
                             if (this.assetGroupId) {
-                                queryParams["groupId"] = this.assetGroupId
+                                queryParams['groupId'] = this.assetGroupId
                             }
                             // Maintain the requestId route parameter for previous page
                             queryParams['requestId'] = this.requestId
@@ -297,14 +297,14 @@ export class AssetPage implements OnInit, OnDestroy {
 
                 if (routeParams['encryptedId']) {
                     this.encryptedAccess = true
-                    this.assetIds[0] = routeParams["encryptedId"]
+                    this.assetIds[0] = routeParams['encryptedId']
                 } else {
-                    this.assetIds[0] = routeParams["assetId"]
+                    this.assetIds[0] = routeParams['assetId']
 
                     if (this.prevAssetResults.thumbnails.length > 0) {
                         let currentAssetIndex = this.currentAssetIndex();
-                        if(currentAssetIndex === -1){
-                            if( this.assetIndex % 24 === 0 ) { // Browser back button pressed
+                        if (currentAssetIndex === -1){
+                            if ( this.assetIndex % 24 === 0 ) { // Browser back button pressed
                                 this._assets.loadPrevAssetPage();
                             } else { // Browser next button pressed
                                 this._assets.loadNextAssetPage();
@@ -422,12 +422,12 @@ export class AssetPage implements OnInit, OnDestroy {
 
         if (asset && asset['error']) {
             let err = asset['error']
-            if (err.status === 403 || err.message == "Unable to load metadata!") {
+            if (err.status === 403 || err.message == 'Unable to load metadata!') {
                 // here is where we make the "access denied" modal appear
                 if (!this.encryptedAccess) {
                     this.showAccessDeniedModal = true
                 } else {
-                    console.error("Failed to load externally shared asset", err)
+                    console.error('Failed to load externally shared asset', err)
                     this.showServerErrorModal = true
                 }
             } else if (err.status === 401) {
@@ -466,11 +466,11 @@ export class AssetPage implements OnInit, OnDestroy {
                 }
 
                 // Split existing collection urls in the metadata so that urls can be linked separately
-                if(this.assets[assetIndex].formattedMetadata['Collection'].join().indexOf('<br/>') > -1) {
+                if (this.assets[assetIndex].formattedMetadata['Collection'].join().indexOf('<br/>') > -1) {
                     let collections = this.assets[0].formattedMetadata['Collection']
                     let splitValues = []
                     for (let i = 0; i < collections.length; i++){
-                        splitValues= splitValues.concat( collections[i].split('<br/>') )
+                        splitValues = splitValues.concat( collections[i].split('<br/>') )
                     }
                     this.assets[0].formattedMetadata['Collection'] = splitValues
                 }
@@ -519,7 +519,7 @@ export class AssetPage implements OnInit, OnDestroy {
         let assetIndex: number = 1
         let assetFound = false
         if (this.assetIds[0]) {
-            for (var i = 0; i < this.prevAssetResults.thumbnails.length; i++) {
+            for (let i = 0; i < this.prevAssetResults.thumbnails.length; i++) {
                 // Select the thumbnail if its arstor_id is in assetIds
                 if (this.assetIds.indexOf(this.prevAssetResults.thumbnails[i][this.assetIdProperty]) > -1) {
                     this.prevAssetResults.thumbnails[i].selected = true
@@ -562,7 +562,7 @@ export class AssetPage implements OnInit, OnDestroy {
                 let prevAssetIndex = this.quizShuffle ? Math.floor(Math.random() * this.prevAssetResults.thumbnails.length) + 0 : this.assetIndex - 1; // Assign random thumbnail index if quiz shuffle is true
                 let queryParams = {}
                 if (this.assetGroupId) {
-                    queryParams["groupId"] = this.assetGroupId
+                    queryParams['groupId'] = this.assetGroupId
                 }
 
                 // Maintain the requestId route parameter for previous page
@@ -586,7 +586,7 @@ export class AssetPage implements OnInit, OnDestroy {
                 let nextAssetIndex = this.quizShuffle ? Math.floor(Math.random() * this.prevAssetResults.thumbnails.length) + 0 : this.assetIndex + 1; // Assign random thumbnail index if quiz shuffle is true
                 let queryParams = {}
                 if (this.assetGroupId) {
-                    queryParams["groupId"] = this.assetGroupId
+                    queryParams['groupId'] = this.assetGroupId
                 }
 
                 // Maintain the requestId route parameter for next page
@@ -665,8 +665,8 @@ export class AssetPage implements OnInit, OnDestroy {
         let add = true;
         // Groups/items services use "objectid"
         // Solr search uses "artstorid" — but also has an "id" we should ignore!
-        if (!asset.id || asset["artstorid"]) {
-            asset.id = asset["artstorid"] || asset["objectId"]
+        if (!asset.id || asset['artstorid']) {
+            asset.id = asset['artstorid'] || asset['objectId']
         }
         // remove from assetIds
         let assetIdIndex = this.assetIds.indexOf(asset.id)
@@ -676,7 +676,7 @@ export class AssetPage implements OnInit, OnDestroy {
         }
         // remove from assets
         this.assets.forEach((viewAsset, i) => {
-            if ([viewAsset.id, viewAsset["artstorid"], viewAsset["objectId"]].indexOf(asset.id) > -1) {
+            if ([viewAsset.id, viewAsset['artstorid'], viewAsset['objectId']].indexOf(asset.id) > -1) {
                 asset.selected = false;
                 this.assets.splice(i, 1);
                 add = false;
@@ -687,7 +687,7 @@ export class AssetPage implements OnInit, OnDestroy {
                     }
                 });
 
-                //Once the primary asset (assets[0]) is removed change the URL (navigate) to the new primary asset
+                // Once the primary asset (assets[0]) is removed change the URL (navigate) to the new primary asset
                 if (i === 0) {
                     this._router.navigate(['/asset', this.assetIds[0]]);
                 }
@@ -705,7 +705,7 @@ export class AssetPage implements OnInit, OnDestroy {
 
         // log compared assets
         this._log.log({
-            eventType: "artstor_image_compare",
+            eventType: 'artstor_image_compare',
             item_id: asset.id,
             additional_fields: {
                 compared_assets: this.assetIds,
@@ -757,7 +757,7 @@ export class AssetPage implements OnInit, OnDestroy {
         }
         else { // Enter Quiz mode
             this._log.log({
-                eventType: "artstor_quiz_toggle"
+                eventType: 'artstor_quiz_toggle'
             })
             this.quizMode = true;
             this.showAssetCaption = false;
@@ -903,11 +903,11 @@ export class AssetPage implements OnInit, OnDestroy {
      * Set full image download url
      */
     setDownloadFull(): void {
-        let url = this.assets[0] ? this.assets[0].downloadLink : "";
+        let url = this.assets[0] ? this.assets[0].downloadLink : '';
         if (this.assetGroupId) {
             // Group id needs to be passed to allow download for images accessed via groups
             // - Binder prefers lowercase service url params
-            url = url + "&groupid=" + this.assetGroupId
+            url = url + '&groupid=' + this.assetGroupId
         }
         this.generatedFullURL = url
     }
@@ -939,16 +939,16 @@ export class AssetPage implements OnInit, OnDestroy {
 
     trackDownloadImage(): void {
         // Track download
-        this.angulartics.eventTrack.next({ action: "downloadAsset", properties: { category: this._auth.getGACategory(), label: this.assets[0].id } });
+        this.angulartics.eventTrack.next({ action: 'downloadAsset', properties: { category: this._auth.getGACategory(), label: this.assets[0].id } });
     }
 
     trackDownloadView(): void {
         // Track download view
         this._log.log({
-            eventType: "artstor_image_download_view",
+            eventType: 'artstor_image_download_view',
             item_id: this.assets[0].id
         })
-        this.angulartics.eventTrack.next({ action: "downloadView", properties: { category: this._auth.getGACategory(), label: this.assets[0].id } });
+        this.angulartics.eventTrack.next({ action: 'downloadView', properties: { category: this._auth.getGACategory(), label: this.assets[0].id } });
     }
 
     /**
@@ -1199,7 +1199,7 @@ export class AssetPage implements OnInit, OnDestroy {
      */
     private logPrint(asset: Asset): void {
         this._log.log({
-            eventType: "artstor_print_image",
+            eventType: 'artstor_print_image',
             item_id: asset.id,
             additional_fields: {
                 institutionID: asset.contributinginstitutionid

@@ -14,10 +14,10 @@ import { Angulartics2 } from 'angulartics2';
 // our file imports
 import { Login } from './login.component';
 import { AuthService } from './../shared/auth.service';
-//import { LoginService, User } from './login.service';
+// import { LoginService, User } from './login.service';
 
-describe("testy test", () => {
-  it("it should test", () => {
+describe('testy test', () => {
+  it('it should test', () => {
     expect(true).toBe(true);
   });
 });
@@ -28,7 +28,7 @@ describe("testy test", () => {
 //   label: "name"
 // }
 
-describe("Login component inline template", () => {
+describe('Login component inline template', () => {
   let login: Login;
   let fixture: ComponentFixture<Login>;
   let de: DebugElement;
@@ -43,7 +43,7 @@ describe("Login component inline template", () => {
       providers: [
         { provide: Router, useValue: {} },
         { provide: AuthService, useValue: {} },
-        //{ provide: LoginService },
+        // { provide: LoginService },
         { provide: Http, useValue: {} },
         { provide: Locker, useValue: {} },
         { provide: Location, useValue: {} },
@@ -58,7 +58,7 @@ describe("Login component inline template", () => {
     login = fixture.componentInstance;
   });
 
-  it("should have a heading", () => {
+  it('should have a heading', () => {
     // initial test to verify that heading exists
     let heading = fixture.debugElement.queryAll(By.css('#loginHeading'));
     expect(heading.length).toEqual(1);
@@ -69,12 +69,12 @@ describe("Login component inline template", () => {
   });
 
   // this test wasn't working so I gave up on it. fixture.detectChanges() caused an error that has something to do with the services
-  it("it should show an error message", () => {
+  it('it should show an error message', () => {
     // check that there are no error messages to begin with
     let messages = fixture.debugElement.queryAll(By.css('#errorMsg'));
     expect(messages.length).toEqual(0);
 
-    login.errorMsg = "this is an error message";
+    login.errorMsg = 'this is an error message';
     fixture.detectChanges();
     let msg = fixture.debugElement.queryAll(By.css('#errorMsg'));
     // console.log(msg.nativeElement);
@@ -87,8 +87,8 @@ describe("Login component inline template", () => {
 
 class TestData {
   public institutionData: any = {
-      identifier: "name",
-      items: [{ entityId: "test1", name: "Test College 1" }, { entityId: "test2", name: "Test College 2" }],
-      label: "name"
+      identifier: 'name',
+      items: [{ entityId: 'test1', name: 'Test College 1' }, { entityId: 'test2', name: 'Test College 2' }],
+      label: 'name'
     }
 }

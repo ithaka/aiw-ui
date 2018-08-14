@@ -22,7 +22,7 @@ export class LoginFormComponent implements OnInit {
   private copyBase: string = ''
 
   // Set our default values
-  public user = new User('','')
+  public user = new User('', '')
   public errorMsg: string = ''
   public instErrorMsg: string = ''
   public showPwdModal = false
@@ -66,18 +66,18 @@ export class LoginFormComponent implements OnInit {
 
   ngOnInit() {
     if (this._app.config.copyModifier) {
-      this.copyBase = this._app.config.copyModifier + "."
+      this.copyBase = this._app.config.copyModifier + '.'
     }
   } // OnInit
 
   loadForUser(data: any) {
     if (data && data.user) {
-      data.user.hasOwnProperty("username") && this.angulartics.setUsername.next(data.user.username);
-      data.user.hasOwnProperty("institutionId") && this.angulartics.setUserProperties.next({ institutionId: data.user.institutionId });
-      data.user.hasOwnProperty("isLoggedIn") && this.angulartics.setUserProperties.next({ isLoggedIn: data.user.isLoggedIn });
-      data.user.hasOwnProperty("shibbolethUser") && this.angulartics.setUserProperties.next({ shibbolethUser: data.user.shibbolethUser });
-      data.user.hasOwnProperty("dept") && this.angulartics.setUserProperties.next({ dept: data.user.dept });
-      data.user.hasOwnProperty("ssEnabled") && this.angulartics.setUserProperties.next({ ssEnabled: data.user.ssEnabled })
+      data.user.hasOwnProperty('username') && this.angulartics.setUsername.next(data.user.username);
+      data.user.hasOwnProperty('institutionId') && this.angulartics.setUserProperties.next({ institutionId: data.user.institutionId });
+      data.user.hasOwnProperty('isLoggedIn') && this.angulartics.setUserProperties.next({ isLoggedIn: data.user.isLoggedIn });
+      data.user.hasOwnProperty('shibbolethUser') && this.angulartics.setUserProperties.next({ shibbolethUser: data.user.shibbolethUser });
+      data.user.hasOwnProperty('dept') && this.angulartics.setUserProperties.next({ dept: data.user.dept });
+      data.user.hasOwnProperty('ssEnabled') && this.angulartics.setUserProperties.next({ ssEnabled: data.user.ssEnabled })
 
       if (data.isRememberMe || data.remoteaccess) {
         data.user.isLoggedIn = true
@@ -89,7 +89,7 @@ export class LoginFormComponent implements OnInit {
       this._assets.pccollection()
       .then((res) => {
         let pcEnabled: boolean = false;
-        if( (res['privateCollection'] && (res['privateCollection'].length > 0)) || (res['pcCollection'] && res['pcCollection'].collectionid) ){
+        if ( (res['privateCollection'] && (res['privateCollection'].length > 0)) || (res['pcCollection'] && res['pcCollection'].collectionid) ){
           pcEnabled = true;
         }
 
@@ -98,14 +98,14 @@ export class LoginFormComponent implements OnInit {
           console.error('Unable to load user PC');
       });
 
-      if (this._auth.getFromStorage("stashedRoute")) {
+      if (this._auth.getFromStorage('stashedRoute')) {
         // We do not want to navigate to the page we are already on
-        if (this._auth.getFromStorage("stashedRoute").indexOf('login') > -1) {
+        if (this._auth.getFromStorage('stashedRoute').indexOf('login') > -1) {
           this.router.navigate(['/home']);
         } else {
-          this.router.navigateByUrl(this._auth.getFromStorage("stashedRoute"));
+          this.router.navigateByUrl(this._auth.getFromStorage('stashedRoute'));
         }
-        this._auth.deleteFromStorage("stashedRoute");
+        this._auth.deleteFromStorage('stashedRoute');
       } else {
         this.router.navigate(['/home']);
       }
@@ -116,15 +116,15 @@ export class LoginFormComponent implements OnInit {
   getLoginError(user) {
     this._auth.getLoginError(user)
       .then((data) => {
-        if(data['message'] === 'loginExpired'){
+        if (data['message'] === 'loginExpired'){
           this.expirePwd = true;
           this.showPwdModal = true;
         }
-        else if(data['message'] === 'loginFailed'){
+        else if (data['message'] === 'loginFailed'){
           this.errorMsg = 'LOGIN.WRONG_PASSWORD';
         } else {
-          //handles any server errors
-          this.errorMsg = "LOGIN.SERVER_ERROR";
+          // handles any server errors
+          this.errorMsg = 'LOGIN.SERVER_ERROR';
         }
       })
       .catch((error) => {
@@ -141,13 +141,13 @@ export class LoginFormComponent implements OnInit {
     this.errorMsg = ''
     this.forcePwdRst = false
 
-    if(!this.validateEmail(user.username)){
+    if (!this.validateEmail(user.username)){
       this.errorMsg = 'LOGIN.INVALID_EMAIL';
       this.loginLoading = false;
       return;
     }
 
-    if(!this.validatePwd(user.password)){
+    if (!this.validatePwd(user.password)){
       this.errorMsg = 'LOGIN.PASSWORD_REQUIRED';
       this.loginLoading = false;
       return;
@@ -158,14 +158,14 @@ export class LoginFormComponent implements OnInit {
       this.loginCall = (user) => { return this._auth.linkSamlUser(user)}
     }
 
-    this.angulartics.eventTrack.next({ action:"remoteLogin", properties: { category: this._auth.getGACategory(), label: "attempt" }});
+    this.angulartics.eventTrack.next({ action: 'remoteLogin', properties: { category: this._auth.getGACategory(), label: 'attempt' }});
 
     this.loginCall(user)
       .then(
         (data)  => {
           this.loginLoading = false;
           if (data.status === false) {
-            if(data.message === 'loginFailed' || data.message === 'Invalid credentials'){
+            if (data.message === 'loginFailed' || data.message === 'Invalid credentials'){
               // Check if old bad-case password
               this.isBadCasePassword(user)
             }
@@ -174,7 +174,7 @@ export class LoginFormComponent implements OnInit {
             // In some situations the service might return an ip auth object even tho login was unsuccessful
             this.errorMsg = 'There was an issue with your account, please contact support.';
           } else {
-            this.angulartics.eventTrack.next({ action:"remoteLogin", properties: { category: this._auth.getGACategory(), label: "success" }});
+            this.angulartics.eventTrack.next({ action: 'remoteLogin', properties: { category: this._auth.getGACategory(), label: 'success' }});
             this.loadForUser(data);
             this._auth.resetIdleWatcher() // Start Idle on login
           }
@@ -186,7 +186,7 @@ export class LoginFormComponent implements OnInit {
         this.errorMsg = this.getLoginErrorMsg(errObj.message)
         if (!this.getLoginErrorMsg(errObj.message)){
           this.getLoginError(user)
-          this.angulartics.eventTrack.next({ action:"remoteLogin", properties: { category: this._auth.getGACategory(), label: "failed" }});
+          this.angulartics.eventTrack.next({ action: 'remoteLogin', properties: { category: this._auth.getGACategory(), label: 'failed' }});
         }
         // Shibboleth linking error
         if (errObj && errObj.code) {
@@ -197,9 +197,9 @@ export class LoginFormComponent implements OnInit {
       });
   }
 
-  getLoginErrorMsg(serverMsg: string) : string {
+  getLoginErrorMsg(serverMsg: string): string {
     if (serverMsg) {
-       if(serverMsg === 'loginFailed' || serverMsg === 'Invalid credentials'){
+       if (serverMsg === 'loginFailed' || serverMsg === 'Invalid credentials'){
         return 'LOGIN.WRONG_PASSWORD'
       } else if (serverMsg === 'loginExpired' || serverMsg === 'Login Expired') {
         return 'LOGIN.EXPIRED'
@@ -221,7 +221,7 @@ export class LoginFormComponent implements OnInit {
    */
   isBadCasePassword(user) {
     // Do not test if the user isn't using upparcase characters
-    if(user.password == user.password.toLowerCase()) {
+    if (user.password == user.password.toLowerCase()) {
       return;
     }
     // Try password all lowercase
@@ -242,7 +242,7 @@ export class LoginFormComponent implements OnInit {
   }
 
   validatePwd(pwd){
-    if((pwd.length >= 7) && (pwd.length <= 20) ){
+    if ((pwd.length >= 7) && (pwd.length <= 20) ){
       return true;
     }
     else{

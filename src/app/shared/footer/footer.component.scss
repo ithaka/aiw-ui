@@ -4,7 +4,7 @@ $footerBg: #f9f9f9;
 $linkColor : #444;
 
 .footer {
-    padding: 30px 15px 60px 15px;
+    padding: 30px 15px 60px;
     font-size: 11px;
     line-height: 24px;
     background: $footerBg;
@@ -32,12 +32,12 @@ $linkColor : #444;
 
 .footer__explore-link {
     display: block;
-    padding: 0px;
-    margin-left: 0px;
+    padding: 0;
+    margin-left: 0;
     text-decoration: none;
 
     & a.link {
-        padding: 0px;
+        padding: 0;
     }
 
     &:hover {
@@ -62,7 +62,7 @@ p.small {
 }
 
 .col--explore {
-    padding-left: 0px;
+    padding-left: 0;
 }
 
 .social-icons {
@@ -70,7 +70,7 @@ p.small {
     margin-bottom: 1em;
 
     & .icon {
-        margin: 0px;
+        margin: 0;
         opacity: 0.8;
 
         &:hover, &:focus {

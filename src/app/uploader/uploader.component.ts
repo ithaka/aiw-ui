@@ -27,7 +27,7 @@ export class UploaderComponent implements OnInit {
 
     this.uploader = new FileUploader({
       url: this.UPLOAD_URL,
-      allowedMimeType:["image/JPEG", "image/JPG", "image/jpeg", "image/jpg"],
+      allowedMimeType: ['image/JPEG', 'image/JPG', 'image/jpeg', 'image/jpg'],
       autoUpload: true
     })
   }
@@ -67,8 +67,8 @@ export class UploaderComponent implements OnInit {
    * @param file the file for which we'd like to get the blob loaded from local files
    */
   private getFileSource(file: File): void {
-    var reader  = new FileReader()
-    reader.addEventListener("load",() => {
+    let reader  = new FileReader()
+    reader.addEventListener('load', () => {
       file['local-src'] = reader.result // assigning this property to pass-through to the _file object on onCompleteItem
     })
 

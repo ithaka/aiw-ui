@@ -38,7 +38,7 @@ export class LibraryComponent implements OnInit {
   private browseMenuArray: any[];
   private categoryFacets: any[]
   private hierarchicalFacets: object = {}
-  private facetType: string = ""
+  private facetType: string = ''
   private splashImgURL: string = '';
   private errorMessage: string = ''
   private JSObject: Object = Object;
@@ -53,9 +53,9 @@ export class LibraryComponent implements OnInit {
     270 : []
   };
   private descObj: any  = {
-    "103" : "BROWSE.LIBRARY_COLLECTION",
-    "250" : "BROWSE.CLASSIFICATION",
-    "260" : "BROWSE.GEOGRAPHY"
+    '103' : 'BROWSE.LIBRARY_COLLECTION',
+    '250' : 'BROWSE.CLASSIFICATION',
+    '260' : 'BROWSE.GEOGRAPHY'
   };
 
   private categoryFacetMap = {
@@ -93,11 +93,11 @@ export class LibraryComponent implements OnInit {
       {
         label : 'Teaching Resources',
         id: '270',
-        link: ['/browse/groups/public', {tags:'Teaching Resources', page: 1}]
+        link: ['/browse/groups/public', {tags: 'Teaching Resources', page: 1}]
       }
     ];
     // Set page title
-    this._title.setSubtitle("Browse Collections")
+    this._title.setSubtitle('Browse Collections')
 
     if (!this.route.snapshot.params['viewId']) {
       this.selectedBrowseId = '103'
@@ -108,12 +108,12 @@ export class LibraryComponent implements OnInit {
       .subscribe((params: Params) => {
         this.loading = true
 
-        if(params && params['viewId']){
+        if (params && params['viewId']){
             this.selectedBrowseId = params['viewId'].toString()
             // this.updateSplashImgURL();
         }
 
-        if(params && params['searchTerm']){
+        if (params && params['searchTerm']){
           this.searchTerm = params['searchTerm']
         }
         // load category facets
@@ -125,18 +125,18 @@ export class LibraryComponent implements OnInit {
 
         // Fetch browse collection object from local storage & check if the required collection list has already been set
         let storageBrwseColObj = this._storage.get('browseColObject')
-        
+
         let hasCategoryTitles = storageBrwseColObj && storageBrwseColObj['categoryid'] && storageBrwseColObj['categoryid'][2] && storageBrwseColObj['categoryid'][2].title.length > 0
-        if( storageBrwseColObj && storageBrwseColObj[facetType] && hasCategoryTitles){
-          if(facetType === 'artstor-geography'){
+        if ( storageBrwseColObj && storageBrwseColObj[facetType] && hasCategoryTitles){
+          if (facetType === 'artstor-geography'){
             this.hierarchicalFacets = storageBrwseColObj[facetType]
           } else{
-            this.categoryFacets = storageBrwseColObj[facetType]       
+            this.categoryFacets = storageBrwseColObj[facetType]
           }
           this.loading = false
         } else{
 
-          if(storageBrwseColObj === null){
+          if (storageBrwseColObj === null){
             storageBrwseColObj = {}
           }
           // Get facets from Solr/search
@@ -158,7 +158,7 @@ export class LibraryComponent implements OnInit {
                     // Append titles to the facets (we can't replace "name", as its the ID, which we need)
                     let categoryFacets: any[] = facetData
                       .map( facet => {
-                        facet.title = categoryIndex[facet.name] ? categoryIndex[facet.name] : ""
+                        facet.title = categoryIndex[facet.name] ? categoryIndex[facet.name] : ''
                         return facet
                       })
                       // Then also sort the facets, A-Z

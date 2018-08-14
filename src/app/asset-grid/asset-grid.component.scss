@@ -28,10 +28,10 @@
 }
 
 .grid-tool-bar{
-    padding-right: 0px;
+    padding-right: 0;
 }
 .grid-pagination-bar{
-    padding: 0px;
+    padding: 0;
 }
 
 .pag__index {
@@ -90,7 +90,7 @@ input[type=number] {
         width: 16px;
         height: 16px;
         vertical-align: middle;
-        margin: 0px 5px 0px 0px;
+        margin: 0 5px 0 0;
     }
 
     &:hover .icon-download-white{
@@ -137,7 +137,7 @@ input[type=number] {
 }
 
 .col--thumbnails {
-    padding: 0px;
+    padding: 0;
 }
 
 .selection {

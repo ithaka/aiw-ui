@@ -19,7 +19,7 @@
         margin-right: -10px;
 
         & p {
-            margin: 0px;
+            margin: 0;
         }
     }
     li.list-group-item {
@@ -37,8 +37,8 @@
 
 .featured-card {
     & .card-img-top {
-        border-top-left-radius: 0px;
-        border-top-right-radius: 0px;
+        border-top-left-radius: 0;
+        border-top-right-radius: 0;
     }
     &:hover {
         color: $blue;
@@ -52,7 +52,7 @@
 }
 
 .card-body {
-  padding: 0px;
+  padding: 0;
 }
 
 #home-promo {

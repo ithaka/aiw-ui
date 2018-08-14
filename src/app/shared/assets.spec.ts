@@ -9,7 +9,7 @@ import { Observable, BehaviorSubject } from 'rxjs/Rx';
 import { Locker, LockerConfig } from 'angular2-locker';
 import 'rxjs/add/operator/toPromise';
 import { Subscription }   from 'rxjs/Subscription';
- 
+
 // Project dependencies
 import { AuthService } from './auth.service';
 import { AssetFiltersService } from './../asset-filters/asset-filters.service';
@@ -34,9 +34,9 @@ describe('AssetServiceTest', () => {
     });
 
     // _assets = AssetService;
-    
-  }); 
-  
+
+  });
+
 
   it('initial AssetService should have default pagination values', inject([AssetService], ( _assets: AssetService) => {
         _assets.pagination.take(1).subscribe(
