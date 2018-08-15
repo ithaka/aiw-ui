@@ -25,6 +25,7 @@ export interface MetadataRes {
         category_name: string,
         icc_profile_loc ?: any,
         contributinginstitutionid: number,
-        category_id: string
+        category_id: string,
+        image_compound_urls?: string[]
     }[]
 }
