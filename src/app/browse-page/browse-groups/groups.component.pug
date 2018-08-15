@@ -5,8 +5,8 @@
 .row.pt-3#browse-group-wrap
   .col-md-3.hidden-sm-down
     //- .filter-list-wrap
-    //- The #searchFilterList id is important for the tour to find it, be careful when removing or changing it
-    #searchFilterList.mb-3.filter-list
+    //- The .driver-find-group class is important for the tour to find it, be careful when removing or changing it
+    #searchFilterList.mb-3.filter-list.driver-find-group
       h3.pt-2 Groups
       hr
       div(*ngFor="let filter of groupFilterArray")
