@@ -15,7 +15,7 @@ describe('Metadata Calls #pact #metadata', () => {
      *  We want to use Pact to verify the types of the properties on the response
      * - Ensure type checking on nested properties, and array objects
      */
-    let generateMetadataMatcher = (expectedObject) : any => {
+    let generateMetadataMatcher = (expectedObject): any => {
       let matcherObject = {}
       Object.keys(expectedObject).forEach( (key) => {
         if (typeof(expectedObject[key] === 'Array') && expectedObject[key][0]) {
