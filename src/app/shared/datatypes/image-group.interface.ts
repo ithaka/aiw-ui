@@ -7,16 +7,21 @@ export interface ImageGroup {
     entity_type: number,
     entity_identifier: string,
     access_type: number
-  }[];
-  public?: boolean;
-  igId?: string;
-  count?: number;
-  thumbnails?: Thumbnail[];
-  items?: string[];
+  }[],
+  owner_name?: string,
+  owner_id?: string,
+  public?: boolean,
+  igId?: string,
+  count?: number,
+  thumbnails?: Thumbnail[],
+  items?: string[],
   description?: string
-  // description?: ImageGroupDescription; // this does not naturally come with image groups, but sometimes we attach it
-  igDownloadInfo?: IgDownloadInfo; // we also attach this to image groups when we have it
-  tags?: string[];
+  // description?: ImageGroupDescription, // this does not naturally come with image groups, but sometimes we attach it
+  igDownloadInfo?: IgDownloadInfo, // we also attach this to image groups when we have it
+  sequence_number?: number,
+  tags?: string[],
+  creation_date?: string,
+  update_date?: string
 }
 
 export interface ImageGroupDescription {
