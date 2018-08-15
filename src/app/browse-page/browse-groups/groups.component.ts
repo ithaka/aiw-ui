@@ -166,7 +166,7 @@ export class BrowseGroupsComponent implements OnInit {
       }
 
       // set the sort method
-      if(query['sort']){
+      if(!query.term && query['sort']){
         this.activeSort.label = query['sort'];
 
         if(this.activeSort.label === 'date'){
@@ -177,8 +177,8 @@ export class BrowseGroupsComponent implements OnInit {
         }
       }
       else{ // If no sort params - Sort by date
-        this.activeSort.label = 'date';
-        this.activeSort.name = 'Recently Modified';
+        this.activeSort.label = 'alpha';
+        this.activeSort.name = 'Alphabetical';
       }
 
       // set query for tags, if it exists, and reset appliedTags if it doesn't
