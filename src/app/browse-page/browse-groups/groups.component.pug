@@ -21,7 +21,7 @@
   .col-md-9
     .row#search-row
       .col-sm-9
-        ang-general-search([updateSearchTerm]="updateSearchTerm", [init]="searchTerm", (executeSearch)="addQueryParams({ term: $event }, false, true)")
+        ang-general-search([updateSearchTerm]="updateSearchTerm", [init]="searchTerm", (executeSearch)="addQueryParams({ term: $event, page: 1 }, false, true)")
       .col-sm-3(*ngIf="showCardView")
         ang-guide-tour([steps]="steps")
     h3.pb-1.px-2.numResult([innerHTML]="isSearch ? numResultMsg : selectedFilter.label")
