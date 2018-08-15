@@ -455,6 +455,16 @@ export class AssetPage implements OnInit, OnDestroy {
                     this.collectionType = CollectionTypeHandler.getCollectionType(collectiontypeIds, asset.contributinginstitutionid)
                 }
 
+                // only log the event if the asset came from search, and therefore has an artstorid
+                if (this.assets[0]['id']) {
+                    // log the event connecting the search to the asset clicked
+                    this._log.log({
+                        eventType: 'artstor_item_view',
+                        referring_requestid: this._search.latestSearchRequestId,
+                        item_id: this.assets[0]['id']
+                    })
+                }
+
                 // Split existing collection urls in the metadata so that urls can be linked separately
                 if (this.assets[assetIndex].formattedMetadata['Collection'].join().indexOf('<br/>') > -1) {
                     let collections = this.assets[0].formattedMetadata['Collection']
