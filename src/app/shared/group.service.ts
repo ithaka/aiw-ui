@@ -40,8 +40,11 @@ export class GroupService {
             tagParam += '&tags=' + encodeURIComponent(tag)
         })
 
-        if (!query && !sort) {
+        if (!sort) {
             sort = 'alpha'
+        }
+        if (sort === 'relevance') {
+            sort = ''
         }
         let sortParam = sort ? '&sort=' + sort : ""
         

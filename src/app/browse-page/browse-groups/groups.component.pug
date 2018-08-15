@@ -14,7 +14,7 @@
         //- button.filter.filter--tag((click)="setSearchLevel(, true)", [class.active]="filter.selected", [attr.title]="'Filter by ' + filter.label + ' image groups'")
     ang-tags-list(*ngIf="selectedFilter")
   .col-md-9
-    ang-general-search([updateSearchTerm]="updateSearchTerm", [init]="searchTerm", (executeSearch)="addQueryParams({ term: $event, sort: '' }, false, true)")
+    ang-general-search([updateSearchTerm]="updateSearchTerm", [init]="searchTerm", (executeSearch)="addQueryParams({ term: $event, sort: 'relevance' }, false, true)")
     h3.pb-1.px-2.numResult([innerHTML]="isSearch ? numResultMsg : selectedFilter.label")
     .row
       .col-sm-7.col-md-7.col-lg-8.pd-left
@@ -26,6 +26,7 @@
           .dropdown-menu(ngbDropdownMenu, aria-labelledby="sortdropdownMenu")
             button.dropdown-item([ngClass]="{ 'disable': activeSort.label === 'date' }", (click)="changeSortOpt('date')") Recently Modified
             button.dropdown-item([ngClass]="{ 'disable': activeSort.label === 'alpha' }", (click)="changeSortOpt('alpha')") Alphabetical
+            button.dropdown-item(*ngIf="isSearch", [ngClass]="{ 'disable': activeSort.label === 'relevance' }", (click)="changeSortOpt('relevance')") Relevance
 
       .col-sm-5.col-md-5.col-lg-4.text-right.grid-pagination-bar
         pagination([pageObj]="pagination", (goToPage)="goToPage($event)", [right]="true")

@@ -161,12 +161,13 @@ export class BrowseGroupsComponent implements OnInit {
         groupQuery.term = query.term
         this.updateSearchTerm.emit(query.term) // sets the term in the search box
       } else {
+        this.addQueryParams({ sort: '' })
         this.isSearch = false
         this.updateSearchTerm.emit('')
       }
 
       // set the sort method
-      if(!query.term && query['sort']){
+      if(query['sort']){
         this.activeSort.label = query['sort'];
 
         if(this.activeSort.label === 'date'){
@@ -175,8 +176,11 @@ export class BrowseGroupsComponent implements OnInit {
         else if(this.activeSort.label === 'alpha'){
           this.activeSort.name = 'Alphabetical'
         }
+        else if(this.activeSort.label === 'relevance'){
+          this.activeSort.name = 'Relevance'
+        }
       }
-      else{ // If no sort params - Sort by date
+      else{ // If no sort params - Sort from A-Z
         this.activeSort.label = 'alpha';
         this.activeSort.name = 'Alphabetical';
       }
