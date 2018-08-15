@@ -81,13 +81,13 @@ export class Asset {
             case 21:
             case 22:
             case 23:
-                downloadLink = [data.baseUrl + 'media', data.object_type_id, data.object_type_id].join("/")
+                downloadLink = [data.baseUrl + 'media', data.object_type_id, data.object_type_id].join('/')
                 break
             default:
-                if (data.image_url) { //this is a general fallback, but should work specifically for images and video thumbnails
+                if (data.image_url) { // this is a general fallback, but should work specifically for images and video thumbnails
                     let imageServer = 'http://imgserver.artstor.net/' // TODO: check if this should be different for test
-                    let url = imageServer + data.image_url + "?cell=" + data.download_size + "&rgnn=0,0,1,1&cvt=JPEG"
-                    downloadLink = data.baseUrl + "api/download?imgid=" + this.id + "&url=" + encodeURIComponent(url)
+                    let url = imageServer + data.image_url + '?cell=' + data.download_size + '&rgnn=0,0,1,1&cvt=JPEG'
+                    downloadLink = data.baseUrl + 'api/download?imgid=' + this.id + '&url=' + encodeURIComponent(url)
                 } else {
                     // nothing happens here because some assets are not allowed to be downloaded
                 }
@@ -157,7 +157,7 @@ export class Asset {
         }).fileName
         // Set Download information
         let fileExt = this.fileName.substr(this.fileName.lastIndexOf('.'), this.fileName.length - 1)
-        this.downloadName = this.title.replace(/\./g,'-') + '.' + fileExt
+        this.downloadName = this.title.replace(/\./g, '-') + '.' + fileExt
         this.downloadLink = this.buildDownloadLink(data)
         data.viewer_data && (this.viewerData = data.viewer_data)
 

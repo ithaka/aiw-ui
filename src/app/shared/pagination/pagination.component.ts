@@ -37,8 +37,8 @@ export class PaginationComponent implements OnInit {
    * @param event
    */
   private pageNumberKeyUp(event): boolean{
-    if(this.pageObj.page){
-      if( (this.pageObj.page < 1) || (this.pageObj.page > this.pageObj.totalPages) ){
+    if (this.pageObj.page){
+      if ( (this.pageObj.page < 1) || (this.pageObj.page > this.pageObj.totalPages) ){
         this.pageObj.page = this.pageValueOnKeyPress;
         event.stopPropagation();
         return false;

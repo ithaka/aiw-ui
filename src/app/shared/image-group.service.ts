@@ -39,7 +39,7 @@ export class ImageGroupService {
    * @returns JS Object with parameters: count, igId, igName, igNotes and more if it is a folder
    */
   getGroupDescription(groupId: string): Observable<ImageGroupDescription> {
-    let requestUrl = [this.baseUrl, "imagegroup", groupId].join("/") + "?_method=igdescription";
+    let requestUrl = [this.baseUrl, 'imagegroup', groupId].join('/') + '?_method=igdescription';
 
     return this.http
       .get<ImageGroupDescription>(requestUrl, this.options)
@@ -51,7 +51,7 @@ export class ImageGroupService {
    * @param startIndex Starting index for the image group assets
    */
   loadIgAssets(igId: string, startIndex: number): void {
-      let requestString: string = [this._auth.getUrl(), "imagegroup",igId, "thumbnails", startIndex, 72, 0].join("/");
+      let requestString: string = [this._auth.getUrl(), 'imagegroup', igId, 'thumbnails', startIndex, 72, 0].join('/');
       this.http
           .get(requestString, this.options)
           .toPromise()
@@ -70,11 +70,11 @@ export class ImageGroupService {
     let header = new HttpHeaders().set('content-type', 'application/x-www-form-urlencoded');
     let options = { headers: header, withCredentials: true};
     let data = this._auth.formEncode({
-      _method: "isExportToPPTAllowed",
+      _method: 'isExportToPPTAllowed',
       igId: igId
     });
 
-    return this.http.post(this._auth.getUrl() + "/downloadpptimages", data, options)
+    return this.http.post(this._auth.getUrl() + '/downloadpptimages', data, options)
   }
 
   public triggerIgDownload(): void {

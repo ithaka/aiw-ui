@@ -12,7 +12,7 @@ $loginPanelBg: #f9f9f9; //#f5f9f5; //#d4cd98
     width: auto;
     margin: ($mobileNavHeight - $logoHeight)/2 0;
     margin-right: 20px;
-    padding: 0px;
+    padding: 0;
 
     @media (min-width: 768px) {
         margin: ($navBarHeight - $logoHeight)/2 0;
@@ -28,7 +28,7 @@ $loginPanelBg: #f9f9f9; //#f5f9f5; //#d4cd98
 }
 .navbar-brand {
     border: none !important;
-    padding: 0px;
+    padding: 0;
 }
 
 .navbar-light {
@@ -36,9 +36,9 @@ $loginPanelBg: #f9f9f9; //#f5f9f5; //#d4cd98
     /*width: 100%;
     height: 108px;*/
     display: block;
-    border-radius: 0px;
-    padding-top: 0px;
-    padding-bottom: 0px;
+    border-radius: 0;
+    padding-top: 0;
+    padding-bottom: 0;
 
     & .navbar-collapse {
         line-height: $mobileNavHeight - 20px;
@@ -54,7 +54,7 @@ $loginPanelBg: #f9f9f9; //#f5f9f5; //#d4cd98
 }
 
 $loginPanelCollapseHeight: $navBarHeight;
-$loginPanelMobileHeight: 0px;
+$loginPanelMobileHeight: 0;
 
 .login-panel {
     position: relative;
@@ -64,7 +64,7 @@ $loginPanelMobileHeight: 0px;
     height: 100%;
 
     @media (max-width: $phone) {
-        max-height: 0px;
+        max-height: 0;
     }
 
     @media (min-width: 768px) {

@@ -5,20 +5,23 @@
 .row.pt-3#browse-group-wrap
   .col-md-3.hidden-sm-down
     //- .filter-list-wrap
-    div#group-and-tag
-      #searchFilterList.mb-3.filter-list
-        h3.pt-2 Groups
-        hr
-        div(*ngFor="let filter of groupFilterArray")
-          button.filter.filter--tag.group-filter((click)="setSearchLevel(filter.level, true)", [class.active]="filter.selected", [attr.title]="'Filter by ' + filter.label + ' image groups'")
-            | {{ filter.label }}
-          //- button.filter.filter--tag((click)="setSearchLevel(, true)", [class.active]="filter.selected", [attr.title]="'Filter by ' + filter.label + ' image groups'")
-      ang-tags-list(*ngIf="selectedFilter")
+    #searchFilterList.mb-3.filter-list
+      h3.pt-2 Groups
+      hr
+      div(*ngFor="let filter of groupFilterArray")
+        button.filter.filter--tag(
+            [ngClass]="{ 'child' : filter.level==='private' || filter.level==='shared_by_me', 'group-filter': !(filter.level==='private' || filter.level==='shared_by_me') }",
+            (click)="setSearchLevel(filter.level, true)",
+            [class.active]="filter.selected",
+            [attr.title]="'Filter by ' + filter.label + ' image groups'"
+          )
+          | {{ filter.label }}
+    ang-tags-list(*ngIf="selectedFilter")
   .col-md-9
     .row#search-row
       .col-sm-9
         ang-general-search([updateSearchTerm]="updateSearchTerm", [init]="searchTerm", [loadingGrps]="loading", (clearGrpSearch)="clearGrpSearch()", (executeSearch)="addQueryParams({ term: $event }, false, true)")
-      .col-sm-3
+      .col-sm-3(*ngIf="showCardView")
         ang-guide-tour([steps]="steps")
     h3.pb-1.px-2 {{ selectedFilter.label }}
       pagination([pageObj]="pagination", (goToPage)="goToPage($event)", [right]="true")

@@ -37,7 +37,7 @@ import { MomentModule } from 'angular2-moment'; // optional, provides moment-sty
 import {DndModule} from 'ng2-dnd';
 
 // File Uploader
-import { FileUploadModule } from "ng2-file-upload";
+import { FileUploadModule } from 'ng2-file-upload';
 
 // App is our top level component
 import { App } from './app.component'
@@ -124,7 +124,7 @@ import { CustomUrlSerializer } from './shared/custom-url-serializer'
 
 const APP_PROVIDERS = [
   ...APP_RESOLVER_PROVIDERS,
-  
+
   AccountService,
   AppConfig,
   AssetService,

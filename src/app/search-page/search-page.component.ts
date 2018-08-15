@@ -20,7 +20,7 @@ export class SearchPage implements OnInit, OnDestroy {
   // Add user to decide whether to show the banner
   private user: any = this._auth.getUser();
 
-  private siteID: string = ""
+  private siteID: string = ''
 
   private subscriptions: Subscription[] = [];
 
@@ -56,7 +56,7 @@ export class SearchPage implements OnInit, OnDestroy {
           this.user = userObj;
         },
         (err) => {
-          console.error("Nav failed to load Institution information", err)
+          console.error('Nav failed to load Institution information', err)
         }
       )
     );
@@ -68,7 +68,7 @@ export class SearchPage implements OnInit, OnDestroy {
         let params = Object.assign({}, routeParams);
 
         // Find feature flags (needs to be checked before running queryAll)
-        if(params && params['featureFlag']){
+        if (params && params['featureFlag']){
             this._flags[params['featureFlag']] = true;
         }
 
@@ -81,21 +81,21 @@ export class SearchPage implements OnInit, OnDestroy {
         let refreshSearch = this.unaffiliatedUser && this._auth.isPublicOnly() ? false : true
 
         // Make a search call if there is a search term or any selected filter
-        if (params["term"] || params["classification"] || params["geography"] || params["collectiontypes"]  || params["collTypes"] || params["startDate"] || params["endDate"]) {
+        if (params['term'] || params['classification'] || params['geography'] || params['collectiontypes']  || params['collTypes'] || params['startDate'] || params['endDate']) {
           // Build *reporting* search filters object
           let logFilters = Object.assign({}, params)
           // Remove search term value
-          delete logFilters["term"]
+          delete logFilters['term']
           // Post search info to Captain's Log
           this._captainsLog.log({
-            eventType: "artstor_search",
+            eventType: 'artstor_search',
             additional_fields: {
-              "searchTerm": params["term"],
-              "searchFilters": logFilters
+              'searchTerm': params['term'],
+              'searchFilters': logFilters
             }
           })
 
-          this._title.setSubtitle( '"'+ params["term"] + '"' )
+          this._title.setSubtitle( '"' + params['term'] + '"' )
           this._assets.queryAll(params, refreshSearch);
         } else {
           this._title.setTitle( 'Artstor' )
