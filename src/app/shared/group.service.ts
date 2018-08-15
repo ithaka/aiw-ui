@@ -41,8 +41,10 @@ export class GroupService {
         })
 
         let sortParam = sort ? '&sort=' + sort : ""
+        if (sort === 'date' && !order) {
+            order = 'desc'
+        }
         let orderParam = order ? '&order=' + order : ""
-
 
         let queryParam: string = ''
         query && (queryParam = '&q=' + query)

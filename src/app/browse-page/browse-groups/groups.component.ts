@@ -47,6 +47,11 @@ export class BrowseGroupsComponent implements OnInit {
   private groupFilterArray: GroupFilter[] = []
   private errorObj: any = {}
 
+  private activeSort = {
+    label : 'date',
+    name : 'Recently Modified'
+  }
+
   constructor(
     _appConfig: AppConfig,
     private _router: Router,
@@ -160,6 +165,22 @@ export class BrowseGroupsComponent implements OnInit {
         this.updateSearchTerm.emit('')
       }
 
+      // set the sort method
+      if(query['sort']){
+        this.activeSort.label = query['sort'];
+
+        if(this.activeSort.label === 'date'){
+          this.activeSort.name = 'Recently Modified';
+        }
+        else if(this.activeSort.label === 'alpha'){
+          this.activeSort.name = 'Alphabetical'
+        }
+      }
+      else{ // If no sort params - Sort by date
+        this.activeSort.label = 'date';
+        this.activeSort.name = 'Recently Modified';
+      }
+
       // set query for tags, if it exists, and reset appliedTags if it doesn't
       let urlTags: string[] = []
       if (query.tags) {
@@ -184,6 +205,13 @@ export class BrowseGroupsComponent implements OnInit {
         if (query.level !== this.selectedFilter.level) {
           this.appliedTags = []
           this.setSearchLevel(query.level)
+        }
+      }
+
+      if (query.sort) {
+        groupQuery.sort = query.sort
+        if (query.sort !== this.activeSort.label) {
+          this.changeSortOpt(query.sort)
         }
       }
 
@@ -244,6 +272,16 @@ export class BrowseGroupsComponent implements OnInit {
     }
   }
 
+  private changeSortOpt(label) {
+    if( this.activeSort.label != label){
+      this.activeSort.label = label;
+      this.activeSort.name = name;
+
+      this.goToPage(1);
+      this.addQueryParams({ sort: label })
+    }
+  }
+
   /**
    * Turns the groups into a ui-usable Tag, which doesn't make logical sense but it's how it works
    * @param folderArray An array of groups returned by the services
@@ -293,7 +331,8 @@ export class BrowseGroupsComponent implements OnInit {
       groupQuery.page,
       groupQuery.tags,
       groupQuery.term,
-      groupQuery.id
+      groupQuery.id,
+      groupQuery.sort
     )
     .take(1)
     .subscribe(
@@ -444,6 +483,7 @@ interface GroupFilter {
 export interface GroupQuery {
   page?: number
   level?: string
+  sort?: string
   tags?: string[]
   term?: string
   id?: string // rn i'm not sure what id this is, so I'm leaving the name, but would like to change to more specific like groupId or something
