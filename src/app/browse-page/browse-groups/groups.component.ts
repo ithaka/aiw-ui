@@ -51,14 +51,14 @@ export class BrowseGroupsComponent implements OnInit {
       step: 1,
       element: ['.card-view'],
       popover: {
-          position: 'bottom',
-          title: '<p>1 OF 3</p><b>Preview groups</b>',
-          description: 'See more information about groups at a glance, including the creator, date, and description.',
+        position: 'bottom',
+        title: '<p>1 OF 3</p><b>Preview groups</b>',
+        description: 'See more information about groups at a glance, including the creator, date, and description.',
       }
     },
     {
       step: 2,
-      element: ['#group-and-tag'],
+      element: ['#searchFilterList'],
       popover: {
         position: 'right',
         title: '<p>2 OF 3</p><b>Find groups easily</b>',
