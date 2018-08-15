@@ -18,7 +18,7 @@ describe('Metadata Calls #pact #metadata', () => {
     let generateMetadataMatcher = (expectedObject) : any => {
       let matcherObject = {}
       Object.keys(expectedObject).forEach( (key) => {
-        if (typeof(expectedObject[key] == 'Array')) {
+        if (typeof(expectedObject[key] === 'Array') && expectedObject[key][0]) {
           matcherObject[key] = Matchers.eachLike(expectedObject[key][0])
         } else {
           matcherObject[key] = Matchers.like(expectedObject[key])
@@ -116,7 +116,7 @@ describe('Metadata Calls #pact #metadata', () => {
           withRequest: {
             method: 'GET',
             path: '/api/v1/metadata',
-            query: 'legacy=false&object_ids=SS_IMAGE_ASSET_ID_1'
+            query: 'legacy=false&object_ids=SS35538_35538_29885250'
           },
           willRespondWith: {
             status: 200,
@@ -136,10 +136,10 @@ describe('Metadata Calls #pact #metadata', () => {
         })
       })
 
-      it('should return metadata for an image object',
+      it('should return metadata for an asset',
        function(done) {
         // Run the tests
-        _metadata.getMetadata('SS_IMAGE_ASSET_ID_1')
+        _metadata.getMetadata('SS35538_35538_29885250')
           .subscribe(res => {
             expect(res).toEqual(expectedMetadataObject)
             done()
