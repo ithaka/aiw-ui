@@ -54,7 +54,6 @@ export class RegisterComponent implements OnInit {
       passwordConfirm: [null, Validators.required],
       role: [null, Validators.required],
       dept: [null, Validators.required],
-      age: [false, Validators.requiredTrue],
       terms: [false, Validators.requiredTrue],
       info: false,
       survey: false
