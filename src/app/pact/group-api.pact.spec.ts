@@ -2,7 +2,7 @@
 import { HttpClientModule } from '@angular/common/http';
 import { TestBed, getTestBed } from '@angular/core/testing';
 import { PactWeb, Matchers } from '@pact-foundation/pact-web';
-import { GroupService, AuthService, GroupList } from '../shared';
+import { GroupService, AuthService, GroupList, ImageGroup } from '../shared';
 
 describe('Group Calls #pact', () => {
 
@@ -21,7 +21,7 @@ describe('Group Calls #pact', () => {
     }
 
     // Image Group with id of 44d14fe7-13ec-4d84-b911-7ee3ffc4b0cb
-    const expectedImageGroupObject = {
+    const expectedImageGroupObject: ImageGroup = {
       'description': '',
       'owner_name': 'air01@artstor.org',
       'tags': ['adl', 'collection'],
