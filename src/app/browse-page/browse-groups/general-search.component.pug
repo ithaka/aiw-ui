@@ -1,5 +1,5 @@
 .form-group
   .input-group
-    //- the #inputSearchTerm id is important for the tour to find it, be careful when removing or changing it
-    input#inputSearchTerm.form-control.has-icon([(ngModel)]="term", (keyup.enter)="executeSearch.emit(term)", aria-describedby="search-label", type="text", placeholder="Search", data-sc="search: simple keyword")
+    //- the .driver-find-inputbox class is important for the tour to find it, be careful when removing or changing it
+    input#inputSearchTerm.form-control.has-icon.driver-find-inputbox([(ngModel)]="term", (keyup.enter)="executeSearch.emit(term)", aria-describedby="search-label", type="text", placeholder="Search", data-sc="search: simple keyword")
     i#iconSearchSubmit.icon.icon-search.form-control__icon((click)="executeSearch.emit(term)")

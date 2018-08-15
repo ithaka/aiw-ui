@@ -49,7 +49,7 @@ export class BrowseGroupsComponent implements OnInit {
   private steps: TourStep[] = [
     {
       step: 1,
-      element: ['.card-view'],
+      element: ['.driver-find-cardview'],
       popover: {
         position: 'bottom',
         title: '<p>1 OF 3</p><b>Preview groups</b>',
@@ -58,7 +58,7 @@ export class BrowseGroupsComponent implements OnInit {
     },
     {
       step: 2,
-      element: ['#searchFilterList'],
+      element: ['.driver-find-group'],
       popover: {
         position: 'right',
         title: '<p>2 OF 3</p><b>Find groups easily</b>',
@@ -67,7 +67,7 @@ export class BrowseGroupsComponent implements OnInit {
     },
     {
       step: 3,
-        element: ['#inputSearchTerm'],
+        element: ['.driver-find-inputbox'],
         popover: {
           position: 'bottom',
           title: '<p>3 OF 3</p><b>Search across all groups</b>',
