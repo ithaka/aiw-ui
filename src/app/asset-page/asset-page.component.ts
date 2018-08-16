@@ -173,7 +173,7 @@ export class AssetPage implements OnInit, OnDestroy {
         },
         {
             step: 5,
-            element: ['#assetpage-btn'],
+            element: ['.driver-find-group-btn'],
             popover: {
                 position: 'bottom',
                 title: '<p>5 OF 5</p><b>Save the image for later</b>',

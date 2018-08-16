@@ -5,7 +5,8 @@
 .row.pt-3#browse-group-wrap
   .col-md-3.hidden-sm-down
     //- .filter-list-wrap
-    #searchFilterList.mb-3.filter-list
+    //- The .driver-find-group class is important for the tour to find it, be careful when removing or changing it
+    #searchFilterList.mb-3.filter-list.driver-find-group
       h3.pt-2 Groups
       hr
       div(*ngFor="let filter of groupFilterArray")
@@ -20,11 +21,15 @@
   .col-md-9
     .row#search-row
       .col-sm-9
-        ang-general-search([updateSearchTerm]="updateSearchTerm", [init]="searchTerm", [loadingGrps]="loading", (clearGrpSearch)="clearGrpSearch()", (executeSearch)="addQueryParams({ term: $event }, false, true)")
+        ang-general-search([updateSearchTerm]="updateSearchTerm", [init]="searchTerm", [loadingGrps]="loading", (clearGrpSearch)="clearGrpSearch()", (executeSearch)="addQueryParams({ term: $event, page: 1 }, false, true)")
       .col-sm-3(*ngIf="showCardView")
         ang-guide-tour([steps]="steps")
-    h3.pb-1.px-2 {{ selectedFilter.label }}
-      pagination([pageObj]="pagination", (goToPage)="goToPage($event)", [right]="true")
+    h3.pb-1.px-2.numResult([innerHTML]="isSearch ? numResultMsg : selectedFilter.label")
+    .row
+      .col-sm-7.col-md-7.col-lg-8
+        //- This is where the sort method, number of group per page selection and toggle between cardview and listview go
+      .col-sm-5.col-md-5.col-lg-4.text-right.grid-pagination-bar
+        pagination([pageObj]="pagination", (goToPage)="goToPage($event)", [right]="true")
     h3.pb-1.px-2(*ngIf="_tagFilters.selectedFilters.length>0") Tags:
       .filter.filter--aboveGroup(*ngFor="let tag of _tagFilters.selectedFilters", (click)="tag.selected = !tag.selected", [class.active]="tag.selected")
         span.notranslate {{ tag.key }} ({{ tag.doc_count }})
@@ -40,7 +45,7 @@
 .row.has-icon-overlay(*ngIf="loading")
   i.icon-lg.icon-overlay--top.icon-loading-large
 // Don't show this if there is a filters list, if it's loading, or if the user hasn't searched for anything yet
-.alert.alert-info(*ngIf="tags.length < 1 && !loading")
+.alert.alert-info(*ngIf="!isSearch && tags.length < 1 && !loading")
   h3 {{ 'BROWSE.ERRORS.NO_GROUPS_COLLECTIONS_HEADING' | translate }}
   br
   div(*ngIf="selectedFilter && selectedFilter.level === 'created'", [innerHtml]="'BROWSE.ERRORS.NO_PRIVATE_GROUPS_COLLECTIONS_PROMPT' | translate")

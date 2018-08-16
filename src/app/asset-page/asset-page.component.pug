@@ -78,7 +78,8 @@
           button.btn.btn-secondary(*ngIf="user.isLoggedIn && assets[0].personalCollectionOwner === user['baseProfileId']", [class.active]="showEditDetails", tabindex="6", (click)="loadEditDetailsForm()")
             | {{ 'ASSET_PAGE.BUTTONS.EDIT_DETAILS' | translate}}
 
-          button#assetpage-btn.btn.btn-primary((click)="addAssetToIG()", (keydown.enter)="addAssetToIG()", tabindex="7")
+          //- the .driver-find-group-btn class is important for the tour to find it, be careful when removing or changing it
+          button#assetpage-btn.btn.btn-primary.driver-find-group-btn((click)="addAssetToIG()", (keydown.enter)="addAssetToIG()", tabindex="7")
             | {{ 'ASSET_PAGE.BUTTONS.ADD_TO_GROUP' | translate }}
             //- i.icon.icon-add-white(aria-hidden="true")
           //- Download dropdown options

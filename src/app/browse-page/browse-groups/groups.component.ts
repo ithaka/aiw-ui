@@ -26,6 +26,8 @@ export class BrowseGroupsComponent implements OnInit {
   private loading: boolean = true
   private showCardView: boolean = false
   private showAccessDeniedModal: boolean = false
+  private isSearch: boolean = false
+  private numResultMsg: string = ''
 
   private pagination: {
     totalPages: number,
@@ -48,7 +50,7 @@ export class BrowseGroupsComponent implements OnInit {
   private steps: TourStep[] = [
     {
       step: 1,
-      element: ['.card-view'],
+      element: ['.driver-find-cardview'],
       popover: {
         position: 'bottom',
         title: '<p>1 OF 3</p><b>Preview groups</b>',
@@ -57,7 +59,7 @@ export class BrowseGroupsComponent implements OnInit {
     },
     {
       step: 2,
-      element: ['#group-and-tag'],
+      element: ['.driver-find-group'],
       popover: {
         position: 'right',
         title: '<p>2 OF 3</p><b>Find groups easily</b>',
@@ -66,12 +68,12 @@ export class BrowseGroupsComponent implements OnInit {
     },
     {
       step: 3,
-      element: ['#inputSearchTerm'],
-      popover: {
-        position: 'bottom',
-        title: '<p>3 OF 3</p><b>Search across all groups</b>',
-        description: 'Filter the groups you want to view by type, tag, or owner. Make sure to log in to see all of the groups you\'ve created, all in one place.',
-      }
+        element: ['.driver-find-inputbox'],
+        popover: {
+          position: 'bottom',
+          title: '<p>3 OF 3</p><b>Search across all groups</b>',
+          description: 'Filter the groups you want to view by type, tag, or owner. Make sure to log in to see all of the groups you\'ve created, all in one place.',
+        }
     }
   ]
 
@@ -186,21 +188,23 @@ export class BrowseGroupsComponent implements OnInit {
   /** Every time the url updates, we process the new tags and reload image groups if the tags query param changes */
   private createNavigationSubscription(): Subscription {
     return this._router.events.filter(event => event instanceof NavigationEnd)
-      .subscribe(event => {
-        let query = this.route.snapshot.queryParams
-        if (!query) { console.error('no query!') }
-        // let params = this.route.snapshot.params
-        let groupQuery: GroupQuery = {}
+    .subscribe(event => {
+      let query = this.route.snapshot.queryParams
+      if (!query) { console.error('no query!') }
+      // let params = this.route.snapshot.params
+      let groupQuery: GroupQuery = {}
 
 
-        // set the term every time there is one in the url
-        if (query.term) {
-          this.searchTerm = query.term
-          groupQuery.term = query.term
-          this.updateSearchTerm.emit(query.term) // sets the term in the search box
-        } else {
-          this.updateSearchTerm.emit('')
-        }
+      // set the term every time there is one in the url
+      if (query.term) {
+        this.isSearch = true
+        this.searchTerm = query.term
+        groupQuery.term = query.term
+        this.updateSearchTerm.emit(query.term) // sets the term in the search box
+      } else {
+        this.isSearch = false
+        this.updateSearchTerm.emit('')
+      }
 
         // set query for tags, if it exists, and reset appliedTags if it doesn't
         let urlTags: string[] = []
@@ -337,17 +341,71 @@ export class BrowseGroupsComponent implements OnInit {
       groupQuery.term,
       groupQuery.id
     )
-      .take(1)
-      .subscribe(
-        (data) => {
-          this.pagination.page = groupQuery.page
-          this.pagination.totalPages = Math.ceil(data.total / this.pagination.size) // update pagination, which is injected into pagination component
-          if (this.pagination.page > this.pagination.totalPages && data.total > 0) {
-            return this.goToPage(this.pagination.totalPages) // go to the last results page if they try to navigate to a page that is more than results
+    .take(1)
+    .subscribe(
+      (data)  => {
+        // Set the group level to show in the number of result message
+        let groupLabel : string = ''
+        switch (browseLevel) {
+          case 'all': {
+            groupLabel = 'All groups'
+            break
           }
-          this._tagFilters.setFilters(data.tags, groupQuery.tags) // give the tag service the new data
-          this.tags = this.createGroupTags(data.groups) // save the image groups for display
-          this.loading = false
+          case 'created': {
+            groupLabel = 'My groups'
+            break
+          }
+          case 'private': {
+            groupLabel = 'Private groups'
+            break
+          }
+          case 'shared_by_me': {
+            groupLabel = 'Shared by Me groups'
+            break
+          }
+          case 'institution': {
+            groupLabel = 'Institutional groups'
+            break
+          }
+          case 'shared': {
+            groupLabel = 'Shared with Me groups'
+            break
+          }
+          case 'public': {
+            groupLabel = 'Artstor Curated groups'
+            break
+          }
+          default: {
+              break
+          }
+        }
+
+        // Set the number of result message
+        if (data.total !== 0){
+          if (this.pagination.size < data.total) {
+            this.numResultMsg = this.pagination.size + ' of ' + data.total + ' results for \"' + this.searchTerm + '\"' + ' from <i>' + groupLabel + '</i>.'
+          }
+          else {
+            this.numResultMsg = data.total + ' of ' + data.total + ' results for \"' + this.searchTerm + '\"' + ' from <i>' + groupLabel + '</i>.'
+          }
+        }
+        else {
+          this.numResultMsg = '0 results to show for \"' + this.searchTerm + '\"' + ' from <i>' + groupLabel + '</i>. Try checking your spelling, or browse our <a href=\'/#/browse/groups?level=public\' class=\'link\'><b>curated groups</b></a>.'
+          this.goToPage(1)
+        }
+
+        this.pagination.page = groupQuery.page
+
+        this.pagination.totalPages = Math.ceil(data.total / this.pagination.size) // update pagination, which is injected into pagination component
+        if (this.pagination.totalPages === 0) // The pagination should at least have one page even if there is no results, so that we don't show '1 of 0' on the pagination
+          this.pagination.totalPages = 1
+
+        if (this.pagination.page > this.pagination.totalPages && data.total > 0) {
+          return this.goToPage(this.pagination.totalPages) // go to the last results page if they try to navigate to a page that is more than results
+        }
+        this._tagFilters.setFilters(data.tags, groupQuery.tags) // give the tag service the new data
+        this.tags = this.createGroupTags(data.groups) // save the image groups for display
+        this.loading = false
 
           // show them the search error
           if (data.total === 0 && this.route.snapshot.params.view === 'search') {
@@ -395,8 +453,6 @@ export class BrowseGroupsComponent implements OnInit {
     if (!search) {
       this._tagFilters.setFilters([], [])
       this.tags = []
-      this.pagination.page = 1
-      this.pagination.totalPages = 1
     }
 
     return search
