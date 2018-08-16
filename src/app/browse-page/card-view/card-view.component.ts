@@ -36,44 +36,8 @@ export class CardViewComponent implements OnInit {
     this.description = this.group.description ? this.group.description.replace(/(<([^>]+)>)/ig, '') : ''
     this.description = this.description.length > 150 ? this.description.slice(0, 150) + '...' : this.description
 
-    // For institutional page, show everything as institutional
-    if (this.browseLevel === 'institution') {
-      this.groupType = 'Institutional'
-    }
-    // For public page, show everything as public
-    else if (this.browseLevel === 'public') {
-      this.groupType = 'Artstor Curated'
-    }
-    // For shared with me page, show everything as shared with me
-    else if (this.browseLevel === 'shared') {
-      this.groupType = 'Shared with Me'
-    }
-    // For private and search page
-    else {
-      if (this.group.public === true) {
-        this.groupType = 'Artstor Curated'
-      }
-      // If I am the owner of the image group, group_type 100 means I make it to be private, group_type 200 means I make it to be institutional
-      // Some of the groups have multiple owners, so there is possibility that the owner_id is not equal to baseProfileId but it is still my group.
-      // To prevent it to be showed as "Shared with Me", as long as on created level, show either "Private" or "Shared"
-      else if (this.browseLevel === 'created' || this.group.owner_id === this._auth.getUser().baseProfileId.toString()) {
-        if (this.group.group_type && this.group.group_type === 100) {
-          this.groupType = 'Private'
-        }
-        else if (this.group.group_type && this.group.group_type === 200) {
-          this.groupType = 'Shared'
-        }
-      }
-      // If I am NOT the owner of the image group, group_type 100 means its owner makes it private and I can see it because it is shared with me, group_type 200 means its owner makes it institutional
-      else if (this.group.owner_id !== this._auth.getUser().baseProfileId.toString()) {
-        if (this.group.group_type && this.group.group_type === 100) {
-          this.groupType = 'Shared with Me'
-        }
-        else if (this.group.group_type && this.group.group_type === 200) {
-          this.groupType = 'Institutional'
-        }
-      }
-    }
+    // Decide the group type showed in the cardview
+    this.groupType = this.decideGroupType(this.browseLevel, this.group)
 
     if (this.tag.type) {
       if (this.tag.type.label === 'collection') {
@@ -101,7 +65,66 @@ export class CardViewComponent implements OnInit {
       })
   }
 
-  private selectTag(tag: string) {
+  /**
+   * Decide the group type to show in the cardview
+   * @param browseLevel the browse level: all, created, private, shared_by_me, institution, shared, public
+   * @param group the current group object we want to show in this cardview
+   */
+  private decideGroupType(browseLevel: string, group: any) : string {
+    // For institutional page, show everything as institutional
+    if (browseLevel === 'institution') {
+      return 'Institutional'
+    }
+    // For public page, show everything as public
+    else if (browseLevel === 'public') {
+      return 'Artstor Curated'
+    }
+    // For shared_with_me page, show everything as shared with me
+    else if (browseLevel === 'shared') {
+      return 'Shared with Me'
+    }
+    // For private page, show everything as private
+    else if (browseLevel === 'private') {
+      return 'Private'
+    }
+    // For shared_by_me page, if group_type 100, it is shared privately, otherwise it is shared with institution
+    else if (browseLevel === 'shared_by_me') {
+      if (group.group_type && group.group_type === 100) {
+        return 'Shared Privately'
+      }
+      else if (group.group_type && group.group_type === 200) {
+        return 'Shared Institutionally'
+      }
+    }
+    // For private and search page
+    else {
+      if (group.public === true) {
+        return 'Artstor Curated'
+      }
+      // If I am the owner of the image group, group_type 100 means I make it to be private, group_type 200 means I make it to be institutional
+      // Some of the groups have multiple owners, so there is possibility that the owner_id is not equal to baseProfileId but it is still my group.
+      // To prevent it to be showed as "Shared with Me", as long as on created level, show either "Private" or "Shared"
+      else if (browseLevel === 'created' || group.owner_id === this._auth.getUser().baseProfileId.toString()) {
+        if (group.group_type && group.group_type === 100) {
+          return 'Private'
+        }
+        else if (group.group_type && group.group_type === 200) {
+          return 'Shared'
+        }
+      }
+      // If I am NOT the owner of the image group, group_type 100 means its owner makes it private and I can see it because it is shared with me, group_type 200 means its owner makes it institutional 
+      else if (this.group.owner_id !== this._auth.getUser().baseProfileId.toString()) {
+        if (this.group.group_type && this.group.group_type === 100) {
+          return 'Shared with Me'
+        }
+        else if (this.group.group_type && this.group.group_type === 200) {
+          return 'Institutional'
+        }
+      }
+    }
+  }
+
+  private selectTag(tag: string) : void {
     this.updateUrl(encodeURIComponent(tag))
   }
 
