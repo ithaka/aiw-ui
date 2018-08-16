@@ -1,18 +1,39 @@
-import { Component, Input } from '@angular/core'
+import { Component, Input, OnInit  } from '@angular/core'
 import * as Driver from '../../../../node_modules/driver.js/dist/driver.min.js'
 import { TourStep } from './tour.service'
+import { Router, NavigationStart } from '@angular/router';
 
 @Component({
     selector: 'ang-guide-tour',
-    templateUrl: 'tour.component.pug'
+    templateUrl: 'tour.component.pug',
+    styleUrls: ['./tour.component.scss']
   })
-  export class GuideTourComponent{
+  export class GuideTourComponent {
+
+    private driver: any
+    private startModalShow: boolean = false
 
     @Input() public steps: TourStep[]
 
+    constructor(
+      private router: Router
+    ){
+      router.events.subscribe(event => {
+        // End the tour when go to another page with browser's forward and backward button
+        if (event instanceof NavigationStart) {
+          if (this.driver){
+            this.driver.reset()
+          }
+        }
+      })
+    }
+
+
     private startTour() {
-      const driver = new Driver({ allowClose: false, closeBtnText: 'exit tour', nextBtnText: 'NEXT', prevBtnText: 'BACK', doneBtnText: 'DONE',
+      this.startModalShow = false
+      this.driver = new Driver({ allowClose: false, closeBtnText: 'exit tour', nextBtnText: 'NEXT', prevBtnText: 'BACK', doneBtnText: 'GOT IT, THANKS!',
         onHighlightStarted: (Element) => {
+
           // Change the tabIndex of the brand label and links in the login box to ensure if there is tour, the links of the tour is first to be tabbed for accessibility
             this.manipulateDom('className', 'navbar-brand', 6)
             this.manipulateDom('id', 'nav-setting', 7)
@@ -21,15 +42,15 @@ import { TourStep } from './tour.service'
             this.manipulateDom('id', 'nav-register', 7)
             this.manipulateDom('id', 'driver-popover-item', -1, true)
 
-          //Remove the back button on the first popover
-          if(Element.options.step === 1) {
-            let el:HTMLElement = <HTMLElement><any>(document.getElementsByClassName('driver-prev-btn')[0])
-              if(el)
+          // Remove the back button on the first popover
+          if (Element.options.step === 1) {
+            let el: HTMLElement = <HTMLElement><any>(document.getElementsByClassName('driver-prev-btn')[0])
+              if (el)
                 el.classList.add('hidden')
           }
           else {
-            let el:HTMLElement = <HTMLElement><any>(document.getElementsByClassName('driver-prev-btn')[0])
-            if(el) {
+            let el: HTMLElement = <HTMLElement><any>(document.getElementsByClassName('driver-prev-btn')[0])
+            if (el) {
               el.classList.remove('hidden')
             }
           }
@@ -37,7 +58,7 @@ import { TourStep } from './tour.service'
         },
         onHighlighted: (Element) => {
           // Disable the Element that is being highlighed
-          if(Element.node.classList[0] === 'btn') Element.node.disabled = true
+          if (Element.node.classList[0] === 'btn') Element.node.disabled = true
           else Element.node.offsetParent.disabled = true
 
           // Set tabIndex and aria-label of the tour elements for accessibility
@@ -49,8 +70,8 @@ import { TourStep } from './tour.service'
           // Set focus on the title of the popover, the setTimeout is necessary for the behavior to appear
           window.setTimeout(function ()
           {
-            let el:HTMLElement = <HTMLElement><any>(document.getElementsByClassName('driver-popover-title')[0])
-            if(el) {
+            let el: HTMLElement = <HTMLElement><any>(document.getElementsByClassName('driver-popover-title')[0])
+            if (el) {
               el.tabIndex = 1
               el.focus()
             }
@@ -58,7 +79,7 @@ import { TourStep } from './tour.service'
         },
         onDeselected: (Element) => {
           // Enable the element when it is not highlighted
-          if(Element.node.classList[0] === 'btn') Element.node.disabled = false
+          if (Element.node.classList[0] === 'btn') Element.node.disabled = false
           else Element.node.offsetParent.disabled = false
         },
         onReset: (Element) => {
@@ -71,8 +92,8 @@ import { TourStep } from './tour.service'
         }
     })
 
-      driver.defineSteps(this.steps)
-      driver.start()
+      this.driver.defineSteps(this.steps)
+      this.driver.start()
     }
 
     /**
@@ -98,7 +119,7 @@ import { TourStep } from './tour.service'
         return el
       if (tabIndex)
         el.tabIndex = tabIndex
-      if (focus) 
+      if (focus)
         el.focus()
       if (attrKey && attrValue)
         el.setAttribute(attrKey, attrValue)

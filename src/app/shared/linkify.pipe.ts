@@ -1,6 +1,6 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
-var linkifyHtml = require('linkifyjs/html');
+let linkifyHtml = require('linkifyjs/html');
 
 @Pipe({name: 'linkify'})
 export class LinkifyPipe implements PipeTransform {

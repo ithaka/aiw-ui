@@ -64,12 +64,12 @@
 // ----------------------------------------------------
 
 .form-control {
-  border-radius: 0px;
+  border-radius: 0;
 }
 html, body{
   height: 100%;
   font-family: Arial, Helvetica, sans-serif;
-  margin: 0px;
+  margin: 0;
   background: $bgDefault;
 
   &:fullscreen, &:-webkit-full-screen {
@@ -118,7 +118,7 @@ span.active {
   padding-bottom: $basePadding;
 
   nav-menu + & {
-    padding-top: 0px;
+    padding-top: 0;
   }
 }
 
@@ -232,7 +232,7 @@ a.blog-post {
 }
 
 .blog-post__preview {
-  padding: 6px 0px;
+  padding: 6px 0;
 
   &, & * {
     font-family: 'Graphik', Arial, Helvetica, sans-serif !important;
@@ -241,7 +241,7 @@ a.blog-post {
   }
 
   & p {
-    padding: 0px !important;
+    padding: 0 !important;
   }
 }
 
@@ -275,7 +275,7 @@ nav-menu {
     }
 
     & img.goog-te-gadget-icon {
-      margin-right: 0px;
+      margin-right: 0;
     }
 
     & a, & a.goog-te-menu-value {
@@ -291,6 +291,12 @@ nav-menu {
 // Style for cookie banner
 body body{
   height: unset;
+}
+
+.gdpr-banner{
+  @media(max-width: $tablet) {
+    margin-top: 50px;
+  }
 }
 
 // Bootstrap tooltip override
@@ -318,4 +324,12 @@ body body{
           height: 12px;
       }
     }
+}
+
+#search-row {
+  .tooltip-inner{
+    width: auto !important;
+    font-size: 0.75rem !important;
+    white-space: nowrap;
+  }
 }

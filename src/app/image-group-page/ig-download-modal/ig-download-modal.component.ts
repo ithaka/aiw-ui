@@ -52,7 +52,7 @@ export class PptModalComponent implements OnInit {
       // Goal: A downlink that looks like:
       // http://mdxdv.artstor.org/thumb/imgstor/...
       if (data.path) {
-        this.downloadLink = this._auth.getThumbUrl() + data.path.replace('/nas/','/thumb/')
+        this.downloadLink = this._auth.getThumbUrl() + data.path.replace('/nas/', '/thumb/')
       }
     })
     .catch((err) => {
@@ -71,7 +71,7 @@ export class PptModalComponent implements OnInit {
       // Goal: A downlink that looks like:
       // http://mdxdv.artstor.org/thumb/imgstor/...
       if (data.path) {
-        this.zipDownloadLink = this._auth.getThumbUrl() + data.path.replace('/nas/','/thumb/');
+        this.zipDownloadLink = this._auth.getThumbUrl() + data.path.replace('/nas/', '/thumb/');
       }
     })
     .catch((err) => {
@@ -106,7 +106,7 @@ export class PptModalComponent implements OnInit {
       let imgDownloadStrings: string[] = []
 
       thumbnails.forEach((thumbnail, index) => {
-        let imgStr: string = [(index + 1), thumbnail.objectId, "1024x1024"].join(":")
+        let imgStr: string = [(index + 1), thumbnail.objectId, '1024x1024'].join(':')
         thumbnail.status == 'available' && imgDownloadStrings.push(imgStr)
       })
 
@@ -133,8 +133,8 @@ export class PptModalComponent implements OnInit {
     })
   }
 
-  trackDownload(downloadType: string) : void {
-    this._angulartics.eventTrack.next({ action: "downloadGroup" + downloadType, properties: { category: this._auth.getGACategory(), label: this.ig.id }})
+  trackDownload(downloadType: string): void {
+    this._angulartics.eventTrack.next({ action: 'downloadGroup' + downloadType, properties: { category: this._auth.getGACategory(), label: this.ig.id }})
   }
 
 }

@@ -50,13 +50,11 @@ export class ThumbnailComponent implements OnInit, OnChanges {
     if (this.thumbnail['media']) {
       this.thumbnail.thumbnailImgUrl = this.thumbnail.media.thumbnailSizeOnePath
     }
-
-    this.thumbnail.iapFlag = this.determineIAP(this.thumbnail['artstorid'] ? this.thumbnail['artstorid'] : this.thumbnail['objectId'])
   }
 
   // Fires when the component input(s) (i.e largeThmbView) changes - Updates the thumbnailSize based on largeThmbView current value
   ngOnChanges(changes: SimpleChanges) {
-    if(changes.largeThmbView){
+    if (changes.largeThmbView){
       this.thumbnailSize = changes.largeThmbView.currentValue ? 2 : 1
     }
   }
@@ -90,7 +88,7 @@ export class ThumbnailComponent implements OnInit, OnChanges {
 
   // If large thumbnail image fails to load, fallback to smaller thumbnail image
   thumbnailError(): void{
-    if(this.thumbnailSize > 1){
+    if (this.thumbnailSize > 1){
       this.thumbnailSize--
     }
   }

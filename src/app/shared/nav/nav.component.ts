@@ -19,18 +19,18 @@ export class Nav implements OnInit, OnDestroy {
   private user: any = {};
   private institutionObj: any = {};
   private _tool: ToolboxService = new ToolboxService();
-  
+
   private showinactiveUserLogoutModal: boolean = false;
   private appConfig: any
 
   // Display variables
-  private logoUrl = ""
+  private logoUrl = ''
 
   private ipAuthed: boolean = false
 
   // TypeScript public modifiers
   constructor(
-    public _app: AppConfig, 
+    public _app: AppConfig,
     private _auth: AuthService,
     private _assets: AssetService,
     private _router: Router,
@@ -51,7 +51,7 @@ export class Nav implements OnInit, OnDestroy {
          */
         if (e instanceof NavigationEnd) {
           let baseRoute: string = e.url.split('/')[1].split('?')[0].split(';')[0]
-          switch(baseRoute) {
+          switch (baseRoute) {
             case 'assetprint':
             case 'link':
             case 'login':
@@ -89,8 +89,8 @@ export class Nav implements OnInit, OnDestroy {
         (userObj) => {
           this.user = userObj;
 
-          // Add user context to sentry.io errors 
-          if(this.user.username){
+          // Add user context to sentry.io errors
+          if (this.user.username){
             Raven.setUserContext({
                 email: this.user.username
             })
@@ -99,7 +99,7 @@ export class Nav implements OnInit, OnDestroy {
           }
         },
         (err) => {
-          console.error("Nav failed to load Institution information", err)
+          console.error('Nav failed to load Institution information', err)
         }
       )
     );
@@ -118,7 +118,7 @@ export class Nav implements OnInit, OnDestroy {
           this.institutionObj = institutionObj;
         },
         (err) => {
-          console.error("Nav failed to load Institution information", err)
+          console.error('Nav failed to load Institution information', err)
         }
       )
     );
@@ -131,7 +131,7 @@ export class Nav implements OnInit, OnDestroy {
   logout(): void {
     this._auth.logout()
       .then(() => {
-        if (this.location.path().indexOf("home") >= 0) {
+        if (this.location.path().indexOf('home') >= 0) {
           location.reload() // this will reload the app and give the user a feeling they actually logged out
         } else {
           this._router.navigate(['/home'])
@@ -143,7 +143,7 @@ export class Nav implements OnInit, OnDestroy {
   }
 
   navigateAndSaveRoute(route: string): void {
-    this._auth.store("stashedRoute", this.location.path(false));
+    this._auth.store('stashedRoute', this.location.path(false));
 
     this._router.navigate([route]);
   }
@@ -153,5 +153,5 @@ export class Nav implements OnInit, OnDestroy {
     this._auth.resetIdleWatcher();
     this.showinactiveUserLogoutModal = false;
   }
-  
-} 
+
+}

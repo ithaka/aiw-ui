@@ -27,11 +27,11 @@ export class AppConfig {
   get config(): any {
     return this._config
   }
-  
+
   private getWLVConfig() {
-    if (document.location.hostname.indexOf('sahara.artstor.org') > -1 
-        || document.location.hostname.indexOf('sahara.local.artstor.org') > -1 
-        || document.location.hostname.indexOf('sahara.prod.artstor.org') > -1 
+    if (document.location.hostname.indexOf('sahara.artstor.org') > -1
+        || document.location.hostname.indexOf('sahara.local.artstor.org') > -1
+        || document.location.hostname.indexOf('sahara.prod.artstor.org') > -1
         || document.location.hostname.indexOf('sahara.test.artstor.org') > -1
         || document.location.hostname.indexOf('sahara.beta.stage.artstor.org') > -1 ) {
       return WLV_SAHARA

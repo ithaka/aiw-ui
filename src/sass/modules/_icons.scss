@@ -141,7 +141,7 @@
     background-size: 70% 70%;
 }
 
-.icon-search {
+.icon-search, .icon-close {
     cursor: pointer;
     opacity: 0.6;
 
@@ -225,7 +225,7 @@ a .icon {
 
  .icon-bar {
      font-size: 18px;
-     margin: 0px 6px;
+     margin: 0 6px;
      display: inline-block;
      position: relative;
      vertical-align: middle;

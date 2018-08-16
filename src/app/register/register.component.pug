@@ -60,11 +60,6 @@ nav-menu
             
             .form-group
               .form-check
-                label.form-check-label([attr.title]="'REGISTER.AGE_PROMPT_HOVER' | translate")
-                  input#checkAge.form-check-input(type="checkbox", [formControl]="registerForm.controls['age']", tabindex="0")
-                  = " "
-                  | {{ 'REGISTER.AGE_PROMPT' | translate }}
-              .form-check
                 label.form-check-label
                   input#checkInfo.form-check-input(type="checkbox", [formControl]="registerForm.controls['info']", tabindex="0")
                   = " "
@@ -79,8 +74,6 @@ nav-menu
                   input#checkSurvey.form-check-input(type="checkbox", [formControl]="registerForm.controls['terms']", tabindex="0")
                   = " "
                   .terms-txt([innerHtml]="'REGISTER.TERMS' | translate ")
-              .has-danger(*ngIf="submitted && registerForm.controls['age'].hasError('required')")
-                p#errAgeRequired.form-control-feedback {{ 'REGISTER.ERRORS.AGE_REQUIRED' | translate}}
               .has-danger(*ngIf="submitted && registerForm.controls['terms'].hasError('required')")
                 p#errTermsRequired.form-control-feedback {{ 'REGISTER.ERRORS.TERMS_REQUIRED' | translate}}
             .form-group

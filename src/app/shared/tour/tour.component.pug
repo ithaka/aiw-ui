@@ -1,1 +1,13 @@
-button.btn.btn-secondary#startTourBtn(type="button", (click)="startTour()") Start Tour
+a.start-tour(title="How do I use image groups?", (click)="startModalShow=true" , target="_blank") ?
+.modal(tabindex="-1", [class.show]="startModalShow")
+    .modal-dialog(role="document")
+        .modal-content
+            .modal-header
+                h4.modal-title We've made some updates to image groups!
+                button.close(type="button", (click)="startModalShow=false", aria-label="Close")
+                    span(aria-hidden="true") &times;
+            .modal-body
+                p We've made a few adjustments to give you a better experience with your groups. Take the tour to learn more about the changes. 
+            .modal-footer
+                button.btn.btn-secondary(tabindex="4", aria-label="not now button", (click)="startModalShow=false") NOT NOW
+                button.btn.btn-primary(tabindex="3", aria-label="take the tour button", (click)="startTour()") TAKE THE TOUR

@@ -24,11 +24,11 @@ export class IgFormUtil {
       (item) => {
         if (item[assetIdProperty]) {
           itemIds.push(item[assetIdProperty]) // sometimes this is an array of real assets
-        } 
-        else if(item.objectId) {
+        }
+        else if (item.objectId) {
           itemIds.push(item.objectId) // sometimes assets are from legacy collection services
         }
-        else if(item.id) {
+        else if (item.id) {
           itemIds.push(item.id) // sometimes this is an array of real assets
         } else {
           itemIds.push(item) // sometimes though it's just an array of strings
@@ -43,9 +43,9 @@ export class IgFormUtil {
       sequence_number: 0,
       access: currentIg && currentIg.access ? currentIg.access : [ { // if the image group already exists, use that access object
         // This is the user's access object
-        "entity_type": 100,
-        "entity_identifier": user.baseProfileId.toString(),
-        "access_type": 300
+        'entity_type': 100,
+        'entity_identifier': user.baseProfileId.toString(),
+        'access_type': 300
       } ],
       items: itemIds,
       tags: form.tags
@@ -62,18 +62,18 @@ export class IgFormUtil {
      * Add institution access object if shared with Institution
      *  otherwise, remove the institution access obj (this won't fail if it doesn't exist, but will remove it if it does)
      */
-    if (form.artstorPermissions == "institution") {
-      
+    if (form.artstorPermissions == 'institution') {
+
       /** Assign institutional access only if the group doesn't have that already */
       let institutionAccessExists = false;
       group.access.forEach(
         (accessObj) => {
-          if((accessObj.entity_type == institutionAccessObj.entity_type) && (accessObj.entity_identifier == institutionAccessObj.entity_identifier) && (accessObj.access_type == institutionAccessObj.access_type)){
+          if ((accessObj.entity_type == institutionAccessObj.entity_type) && (accessObj.entity_identifier == institutionAccessObj.entity_identifier) && (accessObj.access_type == institutionAccessObj.access_type)){
             institutionAccessExists = true;
           }
         }
       )
-      if(!institutionAccessExists){
+      if (!institutionAccessExists){
         group.access.push(institutionAccessObj)
       }
     } else {
@@ -83,7 +83,7 @@ export class IgFormUtil {
     }
 
     // Make sure to trim/remove the leading and trailing space from each tag
-    for(let tag of group.tags){
+    for (let tag of group.tags){
       tag = tag.trim()
     }
 

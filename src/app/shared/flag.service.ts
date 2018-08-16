@@ -11,7 +11,7 @@ export class FlagService {
   public pcUpload: boolean = false
   public unaffiliated: boolean = false
   public bannerShow: boolean = false
-  public bannerCopy: string = ""
+  public bannerCopy: string = ''
 
   constructor(
     private _http: HttpClient
@@ -20,7 +20,7 @@ export class FlagService {
 
   public getFlagsFromService(): Observable<FlagServiceResponse> {
     const flagUrl: string = '//stage.artstor.org/api/v1/flags/aiw-ui.json'
-    
+
     return this._http.get<FlagServiceResponse>(
       // Cache busting param added to ensure fresh headers and flags
       flagUrl + '?no-cache=' + new Date().valueOf(),

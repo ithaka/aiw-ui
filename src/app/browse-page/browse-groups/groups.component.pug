@@ -2,19 +2,28 @@
   //- a.label Browse By:
   //- a.nav-link(*ngFor="let browseOpt of groupFilterArray", [ngClass]="{'active': browseOpt.level == route.snapshot.params.view}", [routerLink]="['/browse', 'groups', browseOpt.level]", (click)="browseOpt.level === 'search' ? firstSearch = true : firstSearch = false")
   //-   div(*ngIf="browseOpt.level !== 'all'") {{ browseOpt.label }}
-.row.pt-3
+.row.pt-3#browse-group-wrap
   .col-md-3.hidden-sm-down
     //- .filter-list-wrap
-    #searchFilterList.mb-3.filter-list
+    //- The .driver-find-group class is important for the tour to find it, be careful when removing or changing it
+    #searchFilterList.mb-3.filter-list.driver-find-group
       h3.pt-2 Groups
       hr
       div(*ngFor="let filter of groupFilterArray")
-        button.filter.filter--tag.group-filter((click)="setSearchLevel(filter.level, true)", [class.active]="filter.selected", [attr.title]="'Filter by ' + filter.label + ' image groups'")
+        button.filter.filter--tag(
+            [ngClass]="{ 'child' : filter.level==='private' || filter.level==='shared_by_me', 'group-filter': !(filter.level==='private' || filter.level==='shared_by_me') }",
+            (click)="setSearchLevel(filter.level, true)",
+            [class.active]="filter.selected",
+            [attr.title]="'Filter by ' + filter.label + ' image groups'"
+          )
           | {{ filter.label }}
-        //- button.filter.filter--tag((click)="setSearchLevel(, true)", [class.active]="filter.selected", [attr.title]="'Filter by ' + filter.label + ' image groups'")
     ang-tags-list(*ngIf="selectedFilter")
   .col-md-9
-    ang-general-search([updateSearchTerm]="updateSearchTerm", [init]="searchTerm", (executeSearch)="addQueryParams({ term: $event, sort: 'relevance' }, false, true)")
+    .row#search-row
+      .col-sm-9
+        ang-general-search([updateSearchTerm]="updateSearchTerm", [init]="searchTerm", [loadingGrps]="loading", (clearGrpSearch)="clearGrpSearch()", (executeSearch)="addQueryParams({ term: $event, page: 1, sort: 'relevance' }, false, true)")
+      .col-sm-3(*ngIf="showCardView")
+        ang-guide-tour([steps]="steps")
     h3.pb-1.px-2.numResult([innerHTML]="isSearch ? numResultMsg : selectedFilter.label")
     .row
       .col-sm-7.col-md-7.col-lg-8.pd-left

@@ -1,4 +1,5 @@
-.card-view
+//- The .driver-find-cardview class is important for the tour to find it, be careful when removing or changing it
+.card-view.driver-find-cardview
   .row
     .col-sm-2.col-4
       div(style="min-height: 140px;")
@@ -15,10 +16,10 @@
             a(id="tagItem{{ tag.tagId }}Open", [ngClass]="{ 'no-link' : linkRoute.length < 1 || !tag.canOpen }", [routerLink]="[ linkRoute, tag.tagId, { 'browseType': browseType } ]")
               span.font-weight-bold.notranslate {{ tag.title }}
           .value.mobile--hide#description([innerHtml]="description")
-          //p.mobile--hide This is the description that I don't have.
           .row.mobile--show#information-row
               span.font-weight-bold Creator:&nbsp;
-              span {{ group.owner_name }}
+              span.link(*ngIf="group.owner_name", (click)="searchOwner(group)") {{  group.owner_name }}
+              span(*ngIf="!group.owner_name") -
         .col-sm-4.mobile--hide#no-padding-left
           .row#information-row
             .col-sm-6
@@ -30,7 +31,8 @@
             .col-sm-6
               p.font-weight-bold Creator:
             .col-sm-6
-              p.link((click)="searchOwner(group)") {{ group.owner_name }}
+              p.link(*ngIf="group.owner_name", (click)="searchOwner(group)") {{  group.owner_name }}
+              p(*ngIf="!group.owner_name") -
           .row#information-row
             .col-sm-6
               p.font-weight-bold Type:
@@ -41,5 +43,4 @@
           ul.list-inline
             li.list-inline-item(*ngFor="let tag of group.tags")
               a.tag-link.font-weight-bold((click)="selectTag(tag)") {{ tag }}
-              //span(style="background-color:white;") &nbsp;
 

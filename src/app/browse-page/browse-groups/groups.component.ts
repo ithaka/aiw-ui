@@ -1,17 +1,18 @@
 import { Component, OnInit, EventEmitter } from '@angular/core'
 import { Router, ActivatedRoute, Params, NavigationEnd } from '@angular/router'
-import { Subscription }   from 'rxjs/Subscription'
+import { Subscription } from 'rxjs/Subscription'
 
 import { AssetService, AuthService, GroupService } from './../../shared'
 import { Tag } from './../tag'
 import { TagFiltersService } from './tag-filters.service'
 import { TitleService } from '../../shared/title.service'
 import { AppConfig } from '../../app.service';
+import { TourStep } from '../../shared/tour/tour.service'
 
 @Component({
   selector: 'ang-browse-groups',
   templateUrl: 'groups.component.pug',
-  styleUrls: [ './../browse-page.component.scss', './groups.component.scss' ]
+  styleUrls: ['./../browse-page.component.scss', './groups.component.scss']
 })
 export class BrowseGroupsComponent implements OnInit {
   private showArtstorCurated: boolean = true
@@ -33,17 +34,16 @@ export class BrowseGroupsComponent implements OnInit {
     size: number,
     page: number
   } = {
-    totalPages: 1,
-    size: 48,
-    page: 1
-  }
+      totalPages: 1,
+      size: 48,
+      page: 1
+    }
 
   private updateSearchTerm: EventEmitter<string> = new EventEmitter()
 
   private tagFilters = []
   private appliedTags: string[] = []
 
-  // private selectedBrowseLevel: string
   private groupFilterArray: GroupFilter[] = []
   private errorObj: any = {}
 
@@ -51,6 +51,36 @@ export class BrowseGroupsComponent implements OnInit {
     label : 'date',
     name : 'Recently Modified'
   }
+
+  private steps: TourStep[] = [
+    {
+      step: 1,
+      element: ['.driver-find-cardview'],
+      popover: {
+        position: 'bottom',
+        title: '<p>1 OF 3</p><b>Preview groups</b>',
+        description: 'See more information about groups at a glance, including the creator, date, and description.',
+      }
+    },
+    {
+      step: 2,
+      element: ['.driver-find-group'],
+      popover: {
+        position: 'right',
+        title: '<p>2 OF 3</p><b>Find groups easily</b>',
+        description: 'Filter the groups you want to view by type, tag, or owner. Make sure to log in to see all of the groups you\'ve created, all in one place.',
+      }
+    },
+    {
+      step: 3,
+        element: ['.driver-find-inputbox'],
+        popover: {
+          position: 'bottom',
+          title: '<p>3 OF 3</p><b>Search across all groups</b>',
+          description: 'Filter the groups you want to view by type, tag, or owner. Make sure to log in to see all of the groups you\'ve created, all in one place.',
+        }
+    }
+  ]
 
   constructor(
     _appConfig: AppConfig,
@@ -75,6 +105,18 @@ export class BrowseGroupsComponent implements OnInit {
         label: 'My Groups',
         level: 'created',
         selected: true
+      })
+
+      this.groupFilterArray.push({
+        label: 'Private',
+        level: 'private',
+        selected: false
+      })
+
+      this.groupFilterArray.push({
+        label: 'Shared by me',
+        level: 'shared_by_me',
+        selected: false
       })
     }
 
@@ -111,17 +153,17 @@ export class BrowseGroupsComponent implements OnInit {
     }
 
     // set the title
-    this._title.setSubtitle("Browse Groups")
+    this._title.setSubtitle('Browse Groups')
 
     // Subscribe to asset search params
     this.subscriptions.push(
       this.route.params
-      .subscribe((params) => {
-        // Find feature flags
-        if(params && params.featureFlag && params.featureFlag === 'cardview'){
-          this.showCardView = true
-        }
-      })
+        .subscribe((params) => {
+          // Find feature flags
+          if (params && params.featureFlag && params.featureFlag === 'cardview') {
+            this.showCardView = true
+          }
+        })
     )
   } // OnInit
 
@@ -144,9 +186,13 @@ export class BrowseGroupsComponent implements OnInit {
     return filter
   }
 
+  private clearGrpSearch(): void {
+    this.addQueryParams({}, true) // Load default view for group search
+  }
+
   /** Every time the url updates, we process the new tags and reload image groups if the tags query param changes */
   private createNavigationSubscription(): Subscription {
-    return this._router.events.filter(event=>event instanceof NavigationEnd)
+    return this._router.events.filter(event => event instanceof NavigationEnd)
     .subscribe(event => {
       let query = this.route.snapshot.queryParams
       if (!query) { console.error('no query!') }
@@ -297,10 +343,10 @@ export class BrowseGroupsComponent implements OnInit {
     let parentTag = null
     this.groups = folderArray
 
-    for(let group of folderArray) {
-            let groupTag = new Tag(group.id, group.name, true, null, { label: "group", folder: false }, true)
-            childArr.push(groupTag)
-          }
+    for (let group of folderArray) {
+      let groupTag = new Tag(group.id, group.name, true, null, { label: 'group', folder: false }, true)
+      childArr.push(groupTag)
+    }
     return childArr
   }
 
@@ -390,12 +436,15 @@ export class BrowseGroupsComponent implements OnInit {
         }
         else {
           this.numResultMsg = '0 results to show for \"' + this.searchTerm + '\"' + ' from <i>' + groupLabel + '</i>. Try checking your spelling, or browse our <a href=\'/#/browse/groups?level=public\' class=\'link\'><b>curated groups</b></a>.'
+          this.goToPage(1)
         }
-        
+
         this.pagination.page = groupQuery.page
-        this.pagination.totalPages = Math.ceil(data.total/this.pagination.size) // update pagination, which is injected into pagination component
+
+        this.pagination.totalPages = Math.ceil(data.total / this.pagination.size) // update pagination, which is injected into pagination component
         if (this.pagination.totalPages === 0) // The pagination should at least have one page even if there is no results, so that we don't show '1 of 0' on the pagination
-          this.pagination.totalPages = 1 
+          this.pagination.totalPages = 1
+
         if (this.pagination.page > this.pagination.totalPages && data.total > 0) {
           return this.goToPage(this.pagination.totalPages) // go to the last results page if they try to navigate to a page that is more than results
         }
@@ -403,19 +452,19 @@ export class BrowseGroupsComponent implements OnInit {
         this.tags = this.createGroupTags(data.groups) // save the image groups for display
         this.loading = false
 
-        // show them the search error
-        if (data.total === 0 && this.route.snapshot.params.view === 'search') {
-          this.errorObj['search'] = 'No search results found'
+          // show them the search error
+          if (data.total === 0 && this.route.snapshot.params.view === 'search') {
+            this.errorObj['search'] = 'No search results found'
+          }
+        },
+        (error) => {
+          console.error(error)
+          this._tagFilters.setFilters([], groupQuery.tags)
+          this.tags = []
+          this.errorObj[browseLevel] = 'Sorry, we were unable to load these Image Groups'
+          this.loading = false
         }
-      },
-      (error) => {
-        console.error(error)
-        this._tagFilters.setFilters([], groupQuery.tags)
-        this.tags = []
-        this.errorObj[browseLevel] = "Sorry, we were unable to load these Image Groups"
-        this.loading = false
-      }
-    )
+      )
   }
 
   /**
@@ -449,8 +498,6 @@ export class BrowseGroupsComponent implements OnInit {
     if (!search) {
       this._tagFilters.setFilters([], [])
       this.tags = []
-      this.pagination.page = 1
-      this.pagination.totalPages = 1
     }
 
     return search
@@ -476,7 +523,7 @@ export class BrowseGroupsComponent implements OnInit {
     }
     let queryParams = Object.assign(baseParams, params)
 
-    this._router.navigate(['/browse','groups'], { queryParams: queryParams })
+    this._router.navigate(['/browse', 'groups'], { queryParams: queryParams })
   }
 }
 
