@@ -188,9 +188,6 @@ export class BrowseGroupsComponent implements OnInit {
         }
 
         groupQuery.sort = this.activeSort.label
-        if (query.sort !== this.activeSort.label) {
-          this.changeSortOpt(this.activeSort.label)
-        }
       }
       else{ // If no sort params - Sort from A-Z
         this.activeSort.label = 'alpha';
