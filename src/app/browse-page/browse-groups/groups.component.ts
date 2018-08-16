@@ -1,6 +1,6 @@
 import { Component, OnInit, EventEmitter } from '@angular/core'
 import { Router, ActivatedRoute, Params, NavigationEnd } from '@angular/router'
-import { Subscription }   from 'rxjs/Subscription'
+import { Subscription } from 'rxjs/Subscription'
 
 import { AssetService, AuthService, GroupService } from './../../shared'
 import { Tag } from './../tag'
@@ -12,7 +12,7 @@ import { TourStep } from '../../shared/tour/tour.service'
 @Component({
   selector: 'ang-browse-groups',
   templateUrl: 'groups.component.pug',
-  styleUrls: [ './../browse-page.component.scss', './groups.component.scss' ]
+  styleUrls: ['./../browse-page.component.scss', './groups.component.scss']
 })
 export class BrowseGroupsComponent implements OnInit {
   private showArtstorCurated: boolean = true
@@ -34,17 +34,16 @@ export class BrowseGroupsComponent implements OnInit {
     size: number,
     page: number
   } = {
-    totalPages: 1,
-    size: 48,
-    page: 1
-  }
+      totalPages: 1,
+      size: 48,
+      page: 1
+    }
 
   private updateSearchTerm: EventEmitter<string> = new EventEmitter()
 
   private tagFilters = []
   private appliedTags: string[] = []
 
-  // private selectedBrowseLevel: string
   private groupFilterArray: GroupFilter[] = []
   private errorObj: any = {}
 
@@ -76,7 +75,7 @@ export class BrowseGroupsComponent implements OnInit {
           description: 'Filter the groups you want to view by type, tag, or owner. Make sure to log in to see all of the groups you\'ve created, all in one place.',
         }
     }
-]
+  ]
 
   constructor(
     _appConfig: AppConfig,
@@ -154,12 +153,12 @@ export class BrowseGroupsComponent implements OnInit {
     // Subscribe to asset search params
     this.subscriptions.push(
       this.route.params
-      .subscribe((params) => {
-        // Find feature flags
-        if (params && params.featureFlag && params.featureFlag === 'cardview'){
-          this.showCardView = true
-        }
-      })
+        .subscribe((params) => {
+          // Find feature flags
+          if (params && params.featureFlag && params.featureFlag === 'cardview') {
+            this.showCardView = true
+          }
+        })
     )
   } // OnInit
 
@@ -180,6 +179,10 @@ export class BrowseGroupsComponent implements OnInit {
     }
     filter.selected = true
     return filter
+  }
+
+  private clearGrpSearch(): void {
+    this.addQueryParams({}, true) // Load default view for group search
   }
 
   /** Every time the url updates, we process the new tags and reload image groups if the tags query param changes */
@@ -203,44 +206,44 @@ export class BrowseGroupsComponent implements OnInit {
         this.updateSearchTerm.emit('')
       }
 
-      // set query for tags, if it exists, and reset appliedTags if it doesn't
-      let urlTags: string[] = []
-      if (query.tags) {
-        urlTags = this._tagFilters.processFilterString(query.tags)
-      }
-      this.appliedTags = urlTags
-      groupQuery.tags = urlTags
-
-      if (query.page) {
-        let requestedPage: number = Number(query.page)
-        // if invalid page, end execution here and navigate to new url with valid page query
-        if (requestedPage < 1) {
-          return this.addQueryParams({ page: 1 }, false, false, query)
+        // set query for tags, if it exists, and reset appliedTags if it doesn't
+        let urlTags: string[] = []
+        if (query.tags) {
+          urlTags = this._tagFilters.processFilterString(query.tags)
         }
-        groupQuery.page = requestedPage
-      } else {
-        groupQuery.page = 1
-      }
+        this.appliedTags = urlTags
+        groupQuery.tags = urlTags
 
-      if (query.level) {
-        groupQuery.level = query.level
-        if (query.level !== this.selectedFilter.level) {
-          this.appliedTags = []
-          this.setSearchLevel(query.level)
+        if (query.page) {
+          let requestedPage: number = Number(query.page)
+          // if invalid page, end execution here and navigate to new url with valid page query
+          if (requestedPage < 1) {
+            return this.addQueryParams({ page: 1 }, false, false, query)
+          }
+          groupQuery.page = requestedPage
+        } else {
+          groupQuery.page = 1
         }
-      }
 
-      if (!this.selectedFilter || query.level != this.selectedFilter.level) {
-        this.appliedTags = [] // if they're switching levels, reset the tags
-        this.setSearchLevel(query.level, false)
-      }
+        if (query.level) {
+          groupQuery.level = query.level
+          if (query.level !== this.selectedFilter.level) {
+            this.appliedTags = []
+            this.setSearchLevel(query.level)
+          }
+        }
 
-      if (query.id) {
-        groupQuery.id = query.id
-      }
+        if (!this.selectedFilter || query.level != this.selectedFilter.level) {
+          this.appliedTags = [] // if they're switching levels, reset the tags
+          this.setSearchLevel(query.level, false)
+        }
 
-      this.loadIGs(groupQuery)
-    })
+        if (query.id) {
+          groupQuery.id = query.id
+        }
+
+        this.loadIGs(groupQuery)
+      })
   }
 
   /**
@@ -297,9 +300,9 @@ export class BrowseGroupsComponent implements OnInit {
     this.groups = folderArray
 
     for (let group of folderArray) {
-            let groupTag = new Tag(group.id, group.name, true, null, { label: 'group', folder: false }, true)
-            childArr.push(groupTag)
-          }
+      let groupTag = new Tag(group.id, group.name, true, null, { label: 'group', folder: false }, true)
+      childArr.push(groupTag)
+    }
     return childArr
   }
 
@@ -404,19 +407,19 @@ export class BrowseGroupsComponent implements OnInit {
         this.tags = this.createGroupTags(data.groups) // save the image groups for display
         this.loading = false
 
-        // show them the search error
-        if (data.total === 0 && this.route.snapshot.params.view === 'search') {
-          this.errorObj['search'] = 'No search results found'
+          // show them the search error
+          if (data.total === 0 && this.route.snapshot.params.view === 'search') {
+            this.errorObj['search'] = 'No search results found'
+          }
+        },
+        (error) => {
+          console.error(error)
+          this._tagFilters.setFilters([], groupQuery.tags)
+          this.tags = []
+          this.errorObj[browseLevel] = 'Sorry, we were unable to load these Image Groups'
+          this.loading = false
         }
-      },
-      (error) => {
-        console.error(error)
-        this._tagFilters.setFilters([], groupQuery.tags)
-        this.tags = []
-        this.errorObj[browseLevel] = 'Sorry, we were unable to load these Image Groups'
-        this.loading = false
-      }
-    )
+      )
   }
 
   /**

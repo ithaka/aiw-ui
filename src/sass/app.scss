@@ -325,3 +325,11 @@ body body{
       }
     }
 }
+
+#search-row {
+  .tooltip-inner{
+    width: auto !important;
+    font-size: 0.75rem !important;
+    white-space: nowrap;
+  }
+}
