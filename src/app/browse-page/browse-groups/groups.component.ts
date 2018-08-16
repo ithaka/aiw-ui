@@ -71,8 +71,8 @@ export class BrowseGroupsComponent implements OnInit {
         element: ['.driver-find-inputbox'],
         popover: {
           position: 'bottom',
-          title: '<p>3 OF 3</p><b>Search across all groups</b>',
-          description: 'Filter the groups you want to view by type, tag, or owner. Make sure to log in to see all of the groups you\'ve created, all in one place.',
+          title: '<p>3 OF 3</p><b>Search by title</b>',
+          description: 'Enter a term or phrase to find what the group you’re looking for. Select “All” to search across all groups.',
         }
     }
   ]
