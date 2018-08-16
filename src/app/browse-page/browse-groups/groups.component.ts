@@ -161,7 +161,6 @@ export class BrowseGroupsComponent implements OnInit {
         groupQuery.term = query.term
         this.updateSearchTerm.emit(query.term) // sets the term in the search box
       } else {
-        this.addQueryParams({ sort: '' })
         this.isSearch = false
         this.updateSearchTerm.emit('')
       }
@@ -177,7 +176,20 @@ export class BrowseGroupsComponent implements OnInit {
           this.activeSort.name = 'Alphabetical'
         }
         else if(this.activeSort.label === 'relevance'){
-          this.activeSort.name = 'Relevance'
+          // Handle the edge case when we type nothing in the search box.
+          // The sort label will still be relevance but actually we are not searching, this time we should sort from A-Z
+          if (!query.term) {
+            this.activeSort.label = 'alpha'
+            this.activeSort.name = 'Alphabetical'
+          }
+          else {
+            this.activeSort.name = 'Relevance'
+          }
+        }
+
+        groupQuery.sort = this.activeSort.label
+        if (query.sort !== this.activeSort.label) {
+          this.changeSortOpt(this.activeSort.label)
         }
       }
       else{ // If no sort params - Sort from A-Z
@@ -209,13 +221,6 @@ export class BrowseGroupsComponent implements OnInit {
         if (query.level !== this.selectedFilter.level) {
           this.appliedTags = []
           this.setSearchLevel(query.level)
-        }
-      }
-
-      if (query.sort) {
-        groupQuery.sort = query.sort
-        if (query.sort !== this.activeSort.label) {
-          this.changeSortOpt(query.sort)
         }
       }
 

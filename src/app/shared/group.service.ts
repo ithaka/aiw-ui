@@ -40,17 +40,28 @@ export class GroupService {
             tagParam += '&tags=' + encodeURIComponent(tag)
         })
 
+        // if there is no sort, default it to be alphabetically
         if (!sort) {
             sort = 'alpha'
         }
+        // Binder will sort by relevance if we don't pass any sort parameter
         if (sort === 'relevance') {
-            sort = ''
+            if (query) {
+                sort = ''
+            }
+            // This is for the edge case if we type nothing in the search box
+            // In this case, we should still sort alphabetically
+            else {
+                sort = 'alpha'
+            }
         }
         let sortParam = sort ? '&sort=' + sort : ""
         
+        // Default the order to be descending when we sort by date
         if (sort === 'date' && !order) {
             order = 'desc'
         }
+        // Default the order to be ascending when we sort alphabetically
         else if (sort === 'alpha' && !order) {
             order = 'asc'
         }
