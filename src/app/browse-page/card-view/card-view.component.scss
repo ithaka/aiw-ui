@@ -184,3 +184,20 @@ $tagLinkBg: #efefef;
 .link {
     word-wrap: break-word;
 }
+
+.icon {
+    width: 5.5em;
+    height: 7em;    
+}
+
+.no-image-placeholder {
+    background-image: url("/assets/img/no-images.svg");
+    background-size: 98%;
+    position: absolute;
+    left: 1.5em;
+}
+
+.cardview-text {
+    padding-left: 1em;
+    padding-right: 1em;
+}
