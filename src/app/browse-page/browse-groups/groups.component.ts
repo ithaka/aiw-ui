@@ -330,7 +330,7 @@ export class BrowseGroupsComponent implements OnInit {
       this.activeSort.name = name;
 
       this.goToPage(1);
-      this.addQueryParams({ sort: label })
+      this.addQueryParams({ sort: label, page: 1 })
     }
   }
 
