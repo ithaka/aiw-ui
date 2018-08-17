@@ -489,7 +489,10 @@ export class BrowseGroupsComponent implements OnInit {
    */
 
   private cleanGroupSearchTerm(term: string) {
-    return encodeURIComponent(term.replace('/', '\\'))
+    while(term.includes('/')) {
+      term.replace('/', '\\')
+    }
+    return encodeURIComponent(term)
   }
 }
 
