@@ -71,8 +71,8 @@ export class BrowseGroupsComponent implements OnInit {
         element: ['.driver-find-inputbox'],
         popover: {
           position: 'bottom',
-          title: '<p>3 OF 3</p><b>Search across all groups</b>',
-          description: 'Filter the groups you want to view by type, tag, or owner. Make sure to log in to see all of the groups you\'ve created, all in one place.',
+          title: '<p>3 OF 3</p><b>Search by title</b>',
+          description: 'Enter a term or phrase to find what the group you’re looking for. Select “All” to search across all groups.',
         }
     }
   ]
@@ -486,13 +486,18 @@ export class BrowseGroupsComponent implements OnInit {
    * For group search, 'term' is url encoded, and backslash '\' is a valid.
    * But we need to replace '/' %2F chars, as they're not handled by the group service,
    * and will return a 500 error.
+   * @returns cleaned and URI encoded string value for the search term
    */
 
   private cleanGroupSearchTerm(term: string) {
-    while(term.includes('/')) {
-      term.replace('/', '\\')
+    if(term) {
+      while(term.includes('/')) {
+        term.replace('/', '\\')
+      }
+      return encodeURIComponent(term)
+    } else {
+      return ''
     }
-    return encodeURIComponent(term)
   }
 }
 
