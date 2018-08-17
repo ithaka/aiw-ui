@@ -77,6 +77,10 @@
         //- Restricted assets warning message
         .alert.alert-warning(*ngIf="rstd_imgs")
           | {{ "BROWSE.WARNINGS.RSTD_IMGS" | translate }}
+          br
+          br
+          div.mt-2 As the <b>Owner</b> of this group, would you like to remove the deleted images?
+          a.mt-1.btn.btn-secondary.btn-sm.float-right(tabindex="0") Remove deleted images
         .alert.alert-warning(*ngIf="!isLoading && (totalAssets == '0') && (!results || results.length < 1) && (searchError.length < 1) && !searchLimitError")
           b Unable to find any assets
           br
