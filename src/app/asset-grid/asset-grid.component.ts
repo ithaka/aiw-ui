@@ -508,7 +508,7 @@ export class AssetGrid implements OnInit, OnDestroy {
     }
     thumbnail.iap && (params.iap = 'true')
     this.ig && this.ig.id && (params.groupId = this.ig.id)
-    
+
     let url = ['/#/asset', assetId].join('/')
     for (let key in params) {
       url = url.concat([';', key, '=', params[key]].join(''))
