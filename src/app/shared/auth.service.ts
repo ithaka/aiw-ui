@@ -546,6 +546,7 @@ export class AuthService implements CanActivate {
    * @param triggerSessionExpModal Sometimes this is called after unsuccessful logins, and we don't want failovers to always trigger the modal, so it's an option
    */
   public getUserInfo(triggerSessionExpModal?: boolean): Observable<any> {
+    console.log('running getUserInfo function')
     let options = { headers: this.userInfoHeader, withCredentials: true };
 
     return this.http

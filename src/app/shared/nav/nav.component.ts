@@ -72,16 +72,14 @@ export class Nav implements OnInit, OnDestroy {
       })
     );
 
-    // this handles showing the register link for only ip auth'd users
-    this._auth.getUserInfo()
-      .take(1)
-      .subscribe((res) => {
-        if (res.remoteaccess === false && res.user) {
+    // check every new user value to see if they're ip auth'd
+    this.subscriptions.push(
+      this._auth.currentUser.subscribe((user) => {
+        if (user && user.ipAuthed == true) {
           this.ipAuthed = true
         }
-      }, (err) => {
-        console.error(err)
       })
+    )
 
     // Subscribe to User object updates
     this.subscriptions.push(
