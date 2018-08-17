@@ -315,7 +315,7 @@ export class BrowseGroupsComponent implements OnInit {
   // private loadIGs(appliedTags: string[], page: number, level?: string, searchTerm ?: string, searchid ?: string): void {
   private loadIGs(groupQuery: GroupQuery): void {
     // short out the function if the user has just navigated to the search page without query params
-    if (!this.shouldSearch(groupQuery.tags, groupQuery.level, groupQuery.term, groupQuery.id) && this.route.snapshot.params.view == 'search') {
+    if (!this.shouldSearch(groupQuery.tags, groupQuery.level, this.cleanGroupSearchTerm(groupQuery.term), groupQuery.id) && this.route.snapshot.params.view == 'search') {
       this.loading = false
       return
     }
@@ -338,7 +338,7 @@ export class BrowseGroupsComponent implements OnInit {
       this.pagination.size,
       groupQuery.page,
       groupQuery.tags,
-      groupQuery.term,
+      this.cleanGroupSearchTerm(groupQuery.term),
       groupQuery.id
     )
     .take(1)
@@ -479,6 +479,22 @@ export class BrowseGroupsComponent implements OnInit {
     let queryParams = Object.assign(baseParams, params)
 
     this._router.navigate(['/browse', 'groups'], { queryParams: queryParams })
+  }
+
+  /**
+   * @param term string
+   * For group search, 'term' is url encoded, and backslash '\' is a valid.
+   * But we need to replace '/' %2F chars, as they're not handled by the group service,
+   * and will return a 500 error.
+   * @returns cleaned and URI encoded string value for the search term
+   */
+
+  private cleanGroupSearchTerm(term: string): string {
+    if(term) {
+      return encodeURIComponent(term.replace('/', '\\'))
+    } else {
+      return ''
+    }
   }
 }
 
