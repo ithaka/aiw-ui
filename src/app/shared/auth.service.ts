@@ -499,12 +499,10 @@ export class AuthService implements CanActivate {
       .map(
         (data)  => {
           let user = this.decorateValidUser(data)
-          console.log('Decorated User: ', Object.assign({}, user))
           // Track whether or not user object has been refreshed since app opened
           this.userSessionFresh = true
 
           if (user && (this.isOpenAccess || user.status)) {
-            console.log(Object.assign({}, user))
             // Clear expired session modal
             this.showUserInactiveModal.next(false)
             // Update user object
@@ -546,7 +544,6 @@ export class AuthService implements CanActivate {
    * @param triggerSessionExpModal Sometimes this is called after unsuccessful logins, and we don't want failovers to always trigger the modal, so it's an option
    */
   public getUserInfo(triggerSessionExpModal?: boolean): Observable<any> {
-    console.log('running getUserInfo function')
     let options = { headers: this.userInfoHeader, withCredentials: true };
 
     return this.http
