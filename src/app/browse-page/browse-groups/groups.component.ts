@@ -486,10 +486,15 @@ export class BrowseGroupsComponent implements OnInit {
    * For group search, 'term' is url encoded, and backslash '\' is a valid.
    * But we need to replace '/' %2F chars, as they're not handled by the group service,
    * and will return a 500 error.
+   * @returns cleaned and URI encoded string value for the search term
    */
 
-  private cleanGroupSearchTerm(term: string) {
-    return encodeURIComponent(term.replace('/', '\\'))
+  private cleanGroupSearchTerm(term: string): string {
+    if(term) {
+      return encodeURIComponent(term.replace('/', '\\'))
+    } else {
+      return ''
+    }
   }
 }
 
