@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="94px" height="125px" viewBox="0 0 94 125" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 48.2 (47327) - http://www.bohemiancoding.com/sketch -->
+    <title>Group 11</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="No-Images-#5" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" transform="translate(-505.000000, -529.000000)">
+        <g id="Group-10" transform="translate(505.000000, 529.000000)">
+            <g id="Group-11">
+                <rect id="Rectangle-8" fill="#F1EFEF" x="0" y="0" width="94" height="125"></rect>
+                <text id="No-images" font-family="Verdana" font-size="14" font-weight="normal" letter-spacing="0.157499999" fill="#8A8484">
+                    <tspan x="9.23363282" y="49">No images</tspan>
+                </text>
+                <g id="Group-4" transform="translate(33.000000, 63.000000)">
+                    <rect id="Rectangle-6" stroke="#C4C2C2" stroke-width="2" x="0" y="3" width="26" height="20" rx="1"></rect>
+                    <rect id="Rectangle-6" stroke="#C4C2C2" stroke-width="2" fill="#F1EFEF" x="3" y="0" width="26" height="20" rx="1"></rect>
+                    <circle id="Oval" fill="#C4C2C2" cx="9" cy="6" r="2"></circle>
+                    <path d="M6,18.1947664 L10.4121393,11.7828603 C10.725215,11.3278855 11.347843,11.2128536 11.8028177,11.5259293 C11.8796782,11.5788183 11.948759,11.6422033 12.0080501,11.7142404 L13.8132448,13.9074991 C13.9887316,14.1207103 14.3038335,14.151292 14.5170447,13.9758053 C14.5583027,13.9418473 14.5938504,13.9014952 14.6223351,13.8562847 L18.6478296,7.4670656 C18.9422332,6.99979161 19.5596948,6.85965245 20.0269688,7.15405601 C20.1754094,7.24758025 20.296632,7.37851226 20.3784646,7.53370512 L26,18.1947664 L6,18.1947664 Z" id="Path-4" fill="#C4C2C2"></path>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>
