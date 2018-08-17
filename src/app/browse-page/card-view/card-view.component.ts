@@ -56,13 +56,16 @@ export class CardViewComponent implements OnInit {
 
     // Get the first three images of the image group to show on the card view
     let itemIds: string[] = this.group.items.slice(0, 3)
-    this._assets.getAllThumbnails(itemIds)
-      .then( allThumbnails => {
-        this.thumbnails = allThumbnails
-      })
-      .catch( error => {
-        console.error(error)
-      })
+
+    if (itemIds.length) {
+      this._assets.getAllThumbnails(itemIds)
+        .then( allThumbnails => {
+          this.thumbnails = allThumbnails
+        })
+        .catch( error => {
+          console.error(error)
+        })
+      }
   }
 
   /**
@@ -112,7 +115,7 @@ export class CardViewComponent implements OnInit {
           return 'Shared'
         }
       }
-      // If I am NOT the owner of the image group, group_type 100 means its owner makes it private and I can see it because it is shared with me, group_type 200 means its owner makes it institutional 
+      // If I am NOT the owner of the image group, group_type 100 means its owner makes it private and I can see it because it is shared with me, group_type 200 means its owner makes it institutional
       else if (this.group.owner_id !== this._auth.getUser().baseProfileId.toString()) {
         if (this.group.group_type && this.group.group_type === 100) {
           return 'Shared with Me'
