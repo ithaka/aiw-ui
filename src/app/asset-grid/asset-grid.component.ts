@@ -486,9 +486,8 @@ export class AssetGrid implements OnInit, OnDestroy {
    */
 
   private selectAsset(asset, event?): void {
-    event && event.preventDefault()
-
     if(this.editMode){
+      event && event.preventDefault()
       let index: number = this.isSelectedAsset(asset)
       if (index > -1){
         this.selectedAssets.splice(index, 1)
@@ -509,8 +508,12 @@ export class AssetGrid implements OnInit, OnDestroy {
     }
     thumbnail.iap && (params.iap = 'true')
     this.ig && this.ig.id && (params.groupId = this.ig.id)
-
-    return ['/asset', assetId, params]
+    
+    let url = ['/#/asset', assetId].join('/')
+    for (let key in params) {
+      url = url.concat([';', key, '=', params[key]].join(''))
+    }
+    return url
   }
 
   /**
