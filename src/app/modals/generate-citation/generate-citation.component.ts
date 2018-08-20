@@ -72,8 +72,7 @@ export class GenerateCitation implements OnInit {
 
 
     // MLA Citation
-    // [Creator]. [Title(italicized)]. [Date]. [Repository]. [asset page url]. Web. [Today's date ex: 1 Nov 2017].
-    // let today = Date.now();
+    // [Creator]. [Title(italicized)]. [Date]. [Artstor(italicized)], [asset page url starting with library (no http)]. 
     if ( this.getMetaValue('Creator') ){
       this.mla_citation += this.getMetaValue('Creator') + '. '
     }
@@ -84,12 +83,7 @@ export class GenerateCitation implements OnInit {
       this.mla_citation += this.getMetaValue('Date') + '. '
     }
 
-    this.mla_citation += '<i>Artstor</i>, ' + currentUrl
-
-    // if ( this.getMetaValue('Repository') ){
-    //   this.mla_citation += this.getMetaValue('Repository') + '. '
-    // }
-    // this.mla_citation += currentUrl + '. Web. ' + this._date.transform(today, 'd MMM y') + '.'
+    this.mla_citation += '<i>Artstor</i>, ' + currentUrl.replace(/(^\w+:|^)\/\//, '')
 
 
     // Chicago Citation
