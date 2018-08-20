@@ -336,31 +336,31 @@ export class BrowseGroupsComponent implements OnInit {
         let groupLabel : string = ''
         switch (browseLevel) {
           case 'all': {
-            groupLabel = 'All groups'
+            groupLabel = 'All Groups'
             break
           }
           case 'created': {
-            groupLabel = 'My groups'
+            groupLabel = 'My Groups'
             break
           }
           case 'private': {
-            groupLabel = 'Private groups'
+            groupLabel = 'Private Groups'
             break
           }
           case 'shared_by_me': {
-            groupLabel = 'Shared by Me groups'
+            groupLabel = 'Shared by Me Groups'
             break
           }
           case 'institution': {
-            groupLabel = 'Institutional groups'
+            groupLabel = 'Institutional Groups'
             break
           }
           case 'shared': {
-            groupLabel = 'Shared with Me groups'
+            groupLabel = 'Shared with Me Groups'
             break
           }
           case 'public': {
-            groupLabel = 'Artstor Curated groups'
+            groupLabel = 'Artstor Curated Groups'
             break
           }
           default: {
@@ -372,7 +372,7 @@ export class BrowseGroupsComponent implements OnInit {
         if (data.total !== 0){
             this.numResultMsg = data.total + ' results for \"' + this.searchTerm + '\"' + ' from <i>' + groupLabel + '</i>.'
         } else {
-          this.numResultMsg = '0 results to show for \"' + this.searchTerm + '\"' + ' from <i>' + groupLabel + '</i>. Try checking your spelling, or browse our <a href=\'/#/browse/groups?level=public\' class=\'link\'><b>curated groups</b></a>.'
+          this.numResultMsg = '0 results for \"' + this.searchTerm + '\"' + ' from <i>' + groupLabel + '</i>. Try checking your spelling, or browse our <a href=\'/#/browse/groups?level=public\' class=\'link\'><b>curated groups</b></a>.'
           this.goToPage(1)
         }
 
