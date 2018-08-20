@@ -13,6 +13,13 @@
   }
 }
 
+#group--list {
+  &:hover, &:active, &:focus, &.active {
+    background-color: #C9510D;
+    color: white;
+  }
+}
+
 .group-filter {
   width: calc(100% + 10px);
   margin-left: -5px;
