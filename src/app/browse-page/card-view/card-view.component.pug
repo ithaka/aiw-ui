@@ -41,6 +41,7 @@
               p {{ groupType }}
       .row.cardview-text#tag-row
         .col-sm-12
+          p.font-weight-bold#tag-text Group tags:
           ul.list-inline
             li.list-inline-item(*ngFor="let tag of group.tags")
               a.tag-link.font-weight-bold((click)="selectTag(tag)") {{ tag }}
