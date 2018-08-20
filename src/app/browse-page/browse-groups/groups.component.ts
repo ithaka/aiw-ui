@@ -483,8 +483,8 @@ export class BrowseGroupsComponent implements OnInit {
 
   /**
    * @param term string
-   * For group search, 'term' is url encoded, and backslash '\' is a valid.
-   * But we need to replace '/' %2F chars, as they're not handled by the group service,
+   * For group search, 'term' is url encoded, and backslash '\' is a valid char,
+   * but we need to replace '/' %2F chars, as they're not handled by the group service,
    * and will return a 500 error.
    * @returns cleaned and URI encoded string value for the search term
    */
