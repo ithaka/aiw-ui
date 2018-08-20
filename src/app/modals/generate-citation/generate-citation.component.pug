@@ -17,7 +17,7 @@
           .pb-3.form-group
             label(for="copyMLA") {{ 'GENERATE_CITATION_MODAL.COPY_MLA' | translate }}
             .value
-              textarea#copyMLA(#copyMLA="", readonly) {{ mla_citation }}
+              textarea#copyMLA(#copyMLA="", readonly, [innerHTML]="mla_citation")
             .copy-clipboard((click)=" copyMLA.select(); document.execCommand('copy', false, null); citationCopied = true; ") {{ 'GENERATE_CITATION_MODAL.COPY_CLIPBOARD' | translate }}
           //- Chicago
           .pb-3.form-group
