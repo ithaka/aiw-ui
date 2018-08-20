@@ -233,7 +233,7 @@ export class AssetPage implements OnInit, OnDestroy {
                     this.assetIdProperty = (allResults.thumbnails[0] && allResults.thumbnails[0].objectId) ? 'objectId' : 'artstorid'
 
                     this.prevAssetResults.thumbnails = allResults.thumbnails
-                    this.restrictedAssetsCount = allResults.rstd_imgs_count && (allResults.rstd_imgs_count > 0) ? allResults.rstd_imgs_count : 0
+                    this.restrictedAssetsCount = allResults.restricted_thumbnails.length
                     if (this.loadArrayFirstAsset) {
                         this.loadArrayFirstAsset = false;
                         if ((this.prevAssetResults) && (this.prevAssetResults.thumbnails.length > 0)) {
