@@ -33,7 +33,7 @@ import { Router, NavigationStart } from '@angular/router';
       this.startModalShow = false
       this.driver = new Driver({ allowClose: false, closeBtnText: 'exit tour', nextBtnText: 'NEXT', prevBtnText: 'BACK', doneBtnText: 'GOT IT, THANKS!',
         onHighlightStarted: (Element) => {
-          
+ 
           Element.node.scrollIntoView({block: "center"})
 
           // Change the tabIndex of the brand label and links in the login box to ensure if there is tour, the links of the tour is first to be tabbed for accessibility
