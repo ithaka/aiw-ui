@@ -489,7 +489,7 @@ export class BrowseGroupsComponent implements OnInit {
    * @returns cleaned and URI encoded string value for the search term
    */
 
-  private cleanGroupSearchTerm(term: string) {
+  private cleanGroupSearchTerm(term: string): string {
     if(term) {
       term = term.replace(/\//g, '\\');
       return encodeURIComponent(term)
