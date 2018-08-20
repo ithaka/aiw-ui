@@ -22,7 +22,7 @@
     .row#search-row
       .col-sm-9
         ang-general-search([updateSearchTerm]="updateSearchTerm", [init]="searchTerm", [loadingGrps]="loading", (clearGrpSearch)="clearGrpSearch()", (executeSearch)="addQueryParams({ term: $event, page: 1 }, false, true)")
-      .col-sm-3(*ngIf="showCardView")
+      .col-sm-3
         ang-guide-tour([steps]="steps")
     h3.pb-1.px-2.numResult([innerHTML]="isSearch ? numResultMsg : selectedFilter.label")
     .row
