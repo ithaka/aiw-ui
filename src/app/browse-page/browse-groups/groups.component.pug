@@ -38,10 +38,10 @@
       a#groupTagsClear.link--accent.small(*ngIf="_tagFilters.selectedFilters.length>1", tabindex="", style="margin:3px;", (click)="_tagFilters.clearFilters();") Clear All
     .group-list.has-icon-overlay.px-2
       .alert.alert-warning(*ngIf="selectedFilter && errorObj[selectedFilter.level]", [innerHtml]="errorObj[selectedFilter.level]")
-      ng-container(*ngIf="showCardView")
+      ng-container
         ang-card-view(*ngFor="let tag of tags; let i=index;", [tag]="tag", [group]="groups[i]", [browseLevel]="selectedFilter.level", link="true")
-      ng-container(*ngIf="!showCardView")
-        ang-tag(*ngFor="let tag of tags", [tag]="tag", link="true")
+      //- ng-container(*ngIf="!showCardView")
+      //-   ang-tag(*ngFor="let tag of tags", [tag]="tag", link="true")
 .row.has-icon-overlay(*ngIf="loading")
   i.icon-lg.icon-overlay--top.icon-loading-large
 // Don't show this if there is a filters list, if it's loading, or if the user hasn't searched for anything yet
