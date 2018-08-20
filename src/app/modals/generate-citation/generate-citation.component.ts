@@ -77,13 +77,13 @@ export class GenerateCitation implements OnInit {
       this.mla_citation += this.getMetaValue('Creator') + '. '
     }
     if ( this.getMetaValue('Title') ){
-      this.mla_citation += '<i>' + this.getMetaValue('Title') + '</i>. '
+      this.mla_citation += this.getMetaValue('Title') + '. '
     }
     if ( this.getMetaValue('Date') ){
       this.mla_citation += this.getMetaValue('Date') + '. '
     }
 
-    this.mla_citation += '<i>Artstor</i>, ' + currentUrl.replace(/(^\w+:|^)\/\//, '')
+    this.mla_citation += 'Artstor, ' + currentUrl.replace(/(^\w+:|^)\/\//, '')
 
 
     // Chicago Citation
