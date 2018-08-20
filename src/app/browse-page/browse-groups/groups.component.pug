@@ -8,6 +8,8 @@
     //- The .driver-find-group class is important for the tour to find it, be careful when removing or changing it
     #searchFilterList.mb-3.filter-list.driver-find-group
       h3.pt-2 Groups
+        = " "
+        ang-guide-tour([steps]="steps")
       hr
       div(*ngFor="let filter of groupFilterArray")
         button.filter.filter--tag#group--list(
@@ -23,7 +25,7 @@
       .col-sm-9
         ang-general-search([updateSearchTerm]="updateSearchTerm", [init]="searchTerm", [loadingGrps]="loading", (clearGrpSearch)="clearGrpSearch()", (executeSearch)="addQueryParams({ term: $event, page: 1 }, false, true)")
       .col-sm-3
-        ang-guide-tour([steps]="steps")
+        //- Further functionality will go here
     h3.pb-1.px-2.numResult([innerHTML]="isSearch ? numResultMsg : selectedFilter.label")
     .row
       .col-sm-7.col-md-7.col-lg-8
