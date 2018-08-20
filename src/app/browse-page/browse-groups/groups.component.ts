@@ -24,7 +24,6 @@ export class BrowseGroupsComponent implements OnInit {
   private groups: any[] = []
   private searchTerm: string = ''
   private loading: boolean = true
-  private showCardView: boolean = false
   private showAccessDeniedModal: boolean = false
   private isSearch: boolean = false
   private numResultMsg: string = ''
@@ -149,17 +148,6 @@ export class BrowseGroupsComponent implements OnInit {
 
     // set the title
     this._title.setSubtitle('Browse Groups')
-
-    // Subscribe to asset search params
-    this.subscriptions.push(
-      this.route.params
-        .subscribe((params) => {
-          // Find feature flags
-          if (params && params.featureFlag && params.featureFlag === 'cardview') {
-            this.showCardView = true
-          }
-        })
-    )
   } // OnInit
 
   ngOnDestroy() {
