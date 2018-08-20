@@ -924,6 +924,7 @@ export class AssetService {
      * @returns Chainable promise containing collection data
      */
     public getCollectionsList(type?: string) {
+        console.log('calling getCollectionsList')
         let options = { withCredentials: true };
         // Returns all of the collections names
         return this.http

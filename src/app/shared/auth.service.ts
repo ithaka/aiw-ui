@@ -189,7 +189,7 @@ export class AuthService implements CanActivate {
       // console.log(this.idleState);
     });
 
-    // Init idle watcher
+    // Init idle watcher (this will also run getUserInfo)
     this.resetIdleWatcher()
 
     // Initialize user and institution objects from localstorage
@@ -203,8 +203,6 @@ export class AuthService implements CanActivate {
      * - Refreshs AccessToken with IAC
      */
     const userInfoInterval = 15 * 1000 * 60 * 60
-    // Run on Init
-    this.refreshUserSession(true)
     // Run every X mins
     setInterval(() => {
       this.refreshUserSession(true)
