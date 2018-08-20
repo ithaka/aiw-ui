@@ -189,7 +189,7 @@ export class AuthService implements CanActivate {
       // console.log(this.idleState);
     });
 
-    // Init idle watcher
+    // Init idle watcher (this will also run getUserInfo)
     this.resetIdleWatcher()
 
     // Initialize user and institution objects from localstorage
@@ -203,8 +203,6 @@ export class AuthService implements CanActivate {
      * - Refreshs AccessToken with IAC
      */
     const userInfoInterval = 15 * 1000 * 60 * 60
-    // Run on Init
-    this.refreshUserSession(true)
     // Run every X mins
     setInterval(() => {
       this.refreshUserSession(true)
@@ -499,12 +497,10 @@ export class AuthService implements CanActivate {
       .map(
         (data)  => {
           let user = this.decorateValidUser(data)
-          console.log('Decorated User: ', Object.assign({}, user))
           // Track whether or not user object has been refreshed since app opened
           this.userSessionFresh = true
 
           if (user && (this.isOpenAccess || user.status)) {
-            console.log(Object.assign({}, user))
             // Clear expired session modal
             this.showUserInactiveModal.next(false)
             // Update user object
