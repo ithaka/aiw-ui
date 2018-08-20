@@ -43,6 +43,7 @@
         .col-sm-12
           p.font-weight-bold#tag-text Group tags:
           ul.list-inline
+            i(*ngIf="!group.tags.length") This group does not have any tags.
             li.list-inline-item(*ngFor="let tag of group.tags")
               a.tag-link.font-weight-bold((click)="selectTag(tag)") {{ tag }}
 

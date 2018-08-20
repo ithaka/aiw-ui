@@ -3,6 +3,7 @@
 $tagLinkBg: #efefef;
 
 .card-view {
+    font-family: Verdana;
     box-shadow: 0 0 8px 1px #00000014;
     padding: 2rem;
     border-radius: 3px;
@@ -14,6 +15,11 @@ $tagLinkBg: #efefef;
     p {
         font-size: 12px;
         margin: 0;
+    }
+
+    i {
+        font-size: 12px;
+        margin: 0;      
     }
 
     .group-thumb {
@@ -179,7 +185,6 @@ $tagLinkBg: #efefef;
 #description {
     width: 95%;
     word-wrap: break-word;
-    font-family: Verdana;
 }
 
 #owner-name {
