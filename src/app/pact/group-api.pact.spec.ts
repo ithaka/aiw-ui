@@ -66,7 +66,7 @@ describe('Group Calls #pact', () => {
     })
 
     beforeAll(function(done) {
-      provider = new PactWeb({ consumer: 'aiw-ui', provider: 'binder-group', port: 1234, host: 'localhost' })
+      provider = new PactWeb({ consumer: 'aiw-ui', provider: 'binder-group' })
       // Required for slower environments
       setTimeout(function () { done() }, 2000)
       // Required if run with `singleRun: false` (see karma config)

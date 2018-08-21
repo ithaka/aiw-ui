@@ -64,7 +64,13 @@ module.exports = function(config) {
     webpackMiddleware: { stats: 'errors-only'},
 
      // 3) configure one or multiple pact-mock-services here
-    pact: [{cors: true, spec: 2, port: 1234, dir: 'pacts/'}], 
+    pact: [{
+      cors: true, 
+      host: 'localhost',
+      port: 1234, 
+      dir: 'pacts/',
+      consumer: 'aiw-ui'
+    }], 
     // 4) here we can define proxies to redirect requests from our pact tests to the mock server
     proxies: { 
       '/api/v1/group': 'http://localhost:1234/api/v1/group',
