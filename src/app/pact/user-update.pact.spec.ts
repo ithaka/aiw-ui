@@ -11,7 +11,7 @@ describe('PUT /api/secure/user/{{profileId}} #pact #updateuser', () => {
 
 
   beforeAll(function(done) {
-    provider = new PactWeb({ consumer: 'aiw-ui', provider: 'artaa_service' })
+    provider = new PactWeb({ consumer: 'aiw-ui', provider: 'artaa_service', port: 1203 })
 
     // required for slower Travis CI environment
     setTimeout(function () { done() }, 2000)

@@ -75,7 +75,7 @@ describe('Metadata Calls #pact #metadata', () => {
     }
 
     beforeAll(function(done) {
-      provider = new PactWeb({consumer: 'aiw-ui', provider: 'binder-metadata' })
+      provider = new PactWeb({ consumer: 'aiw-ui', provider: 'binder-metadata', port: 1202 })
       // Required for slower environments
       setTimeout(function () { done() }, 2000)
       // Required if run with `singleRun: false` (see karma config)
