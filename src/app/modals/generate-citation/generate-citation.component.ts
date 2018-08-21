@@ -49,9 +49,9 @@ export class GenerateCitation implements OnInit {
 
     let assetPath
     if (window.location.host.indexOf('localhost:') > -1) {
-      assetPath = '/#/asset/'
+      assetPath = '#/asset/'
     } else {
-      assetPath = '/asset/'
+      assetPath = 'asset/'
     }
 
     // Note: The request protocol is added to ADA, and Chicago citations, but not MLA
