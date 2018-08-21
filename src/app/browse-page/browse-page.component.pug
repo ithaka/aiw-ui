@@ -1,5 +1,6 @@
-nav-menu
-#mainContent.container.main-content(tabindex="-1")
-  nav.nav.nav-inline.coll-nav
-    a.nav-link(*ngFor="let colOpt of colMenuArray", [routerLink]="[colOpt.link]", routerLinkActive="active", (click)="selectColMenu(colOpt.link)") {{ colOpt.label }}
-  router-outlet
+.voiceover-fix-wrap
+  nav-menu
+  #mainContent.container.main-content(tabindex="-1")
+    nav.nav.nav-inline.coll-nav
+      a.nav-link(*ngFor="let colOpt of colMenuArray", [routerLink]="[colOpt.link]", routerLinkActive="active", (click)="selectColMenu(colOpt.link)") {{ colOpt.label }}
+    router-outlet
