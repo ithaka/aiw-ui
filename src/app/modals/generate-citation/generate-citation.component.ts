@@ -72,7 +72,7 @@ export class GenerateCitation implements OnInit {
 
 
     // MLA Citation
-    // [Creator]. [Title(italicized)]. [Date]. [Artstor(italicized)], [asset page url starting with library (no http)]. 
+    // [Creator]. [Title(italicized)]. [Date]. [Artstor(italicized)], [asset page url starting with library (no http)].
     if ( this.getMetaValue('Creator') ){
       this.mla_citation += this.getMetaValue('Creator') + '. '
     }
