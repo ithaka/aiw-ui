@@ -108,7 +108,7 @@ export class BrowseGroupsComponent implements OnInit {
       })
 
       this.groupFilterArray.push({
-        label: 'Shared by me',
+        label: 'Shared by Me',
         level: 'shared_by_me',
         selected: false
       })
