@@ -8,7 +8,7 @@ import { HttpClientModule } from '@angular/common/http'
 describe('PUT /api/secure/user/{{profileId}} #pact #updateuser', () => {
 
   let provider
-
+  const validBaseProfileId = 706217
 
   beforeAll(function(done) {
     provider = new PactWeb({ consumer: 'aiw-ui', provider: 'artaa_service' })
@@ -65,14 +65,7 @@ describe('PUT /api/secure/user/{{profileId}} #pact #updateuser', () => {
     }
   ]
 
-  describe("update user's first name", () => {
-    const exampleUpdateResponse = {
-      firstName: 'my updated name'
-    }
-
-    let body = {
-      [updateObjects[0].field]:  Matchers.somethingLike(updateObjects[0].value)
-    }
+  describe("update individual user properties", () => {
 
     beforeAll(function (done) {
       let interactions = []
@@ -88,7 +81,7 @@ describe('PUT /api/secure/user/{{profileId}} #pact #updateuser', () => {
             uponReceiving: "a request to update a user's " + obj.field,
             withRequest: {
               method: 'PUT',
-              path: '/api/secure/user/' + 706217,
+              path: '/api/secure/user/' + validBaseProfileId,
               body: body
             },
             willRespondWith: {
@@ -117,16 +110,90 @@ describe('PUT /api/secure/user/{{profileId}} #pact #updateuser', () => {
     for (let obj of updateObjects) {
       it("should update a user's " + obj.field, (done) => {
         // Run the tests
-        service.update({ [obj.field]: obj.value, baseProfileId: 706217 })
-          .subscribe(res => {
-            expect(true).toEqual(true)
-            done()
-          },
-          err => {
-            done.fail(err)
-          }
-        )
+        service.update({ [obj.field]: obj.value, baseProfileId: validBaseProfileId })
+        .subscribe(res => {
+          expect(true).toEqual(true)
+          done()
+        },
+        err => {
+          done.fail(err)
+        }
+      )
       })
     }
+  })
+
+  describe('400 errors', () => {
+    beforeAll((done) => {
+      let interactions: Promise<any>[] = []
+
+      interactions.push(
+        provider.addInteraction({
+          uponReceiving: "a request with an empty body",
+          withRequest: {
+            method: 'PUT',
+            path: '/api/secure/user/' + validBaseProfileId,
+            body: {}
+          },
+          willRespondWith: {
+            status: 400,
+            headers: { 'Content-Type': 'application/json' },
+            body: {
+              error: Matchers.somethingLike('no fields sent with update request')
+            }
+          }
+        })
+      )
+
+      // interactions.push(
+      //   provider.addInteraction({
+      //     uponReceiving: "a request with a non-updateable field",
+      //     withRequest: {
+      //       method: 'PUT',
+      //       path: '/api/secure/user/' + validBaseProfileId,
+      //       body: {
+      //         cantUpdateThisHa: Matchers.somethingLike('new value'),
+      //         anotherThingYouCantUpdate: Matchers.somethingLike('fizz bop')
+      //       }
+      //     },
+      //     willRespondWith: {
+      //       status: 400,
+      //       headers: { 'Content-Type': 'application/json' },
+      //       body: {
+      //         error: "invalid fields named: 'cantUpdateThisHa', 'anotherThingYouCantUpdate' could not be updated"
+      //       }
+      //     }
+      //   })
+      // )
+
+      Promise.all(interactions)
+      .then(() => {
+        done()
+      })
+      .catch((err) => {
+        done.fail(err)
+      })
+    })
+
+    afterAll((done) => {
+      // called in afterAll to make sure it fires after all interactions have been tested
+      provider.verify()
+      .then(function(a) {
+        done()
+      }, function(e) {
+        done.fail(e)
+      })
+    })
+
+    it('should receive an error for an empty body', (done) => {
+      service.update({ baseProfileId: validBaseProfileId })
+      .subscribe(res => {
+        done.fail('successful response received when failure was expected')
+      },
+      err => {
+        console.log(err)
+        done()
+      })
+    })
   })
 })
