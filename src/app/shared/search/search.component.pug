@@ -8,6 +8,6 @@
       input#searchInResChkBx(type="checkbox", [(ngModel)]="searchInResults",  (ngModelChange)="onSearchWithinChange($event)")
       = " "
       label(for="searchInResChkBx") Search within {{ nestedSrchLbl }}
-    .alert.alert-info#empty-search-alert([class.hidden]="term || !startSearch", tabindex="0", role="alert", aria-label="no search term alert") Please enter search term(s).
+    .alert.alert-warning#empty-search-alert([class.hidden]="term || !startSearch", tabindex="0", role="alert", aria-label="no search term alert") Please enter search term(s).
 a.link.small.open-modal((click)="showSearchModal = true", tabindex="0") {{ 'HOME.LINKS.ADVNC_SRCH' | translate}}
 ang-search-modal(*ngIf="showSearchModal", (closeModal)="showSearchModal = false")
