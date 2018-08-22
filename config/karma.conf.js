@@ -97,7 +97,8 @@ module.exports = function(config) {
     proxies: { 
       '/api/v1/group': 'http://localhost:1201/api/v1/group',
       '/api/v1/metadata': 'http://localhost:1202/api/v1/metadata',
-      '/api/secure/user/706217': 'http://localhost:1203/api/secure/user/706217'
+      '/api/secure/user/706217': 'http://localhost:1203/api/secure/user/706217',
+      '/api/secure/user/abcdefg': 'http://localhost:1203/api/secure/user/abcdefg'
     },
 
     /*
