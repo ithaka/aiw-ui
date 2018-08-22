@@ -12,9 +12,7 @@ export class AccountService {
       'firstName',
       'lastName',
       'departmentRole',
-      'department',
-      'allowUpdatesSurvey',
-      'allowSurvey'
+      'department'
     ]
     let updateBody = {}
 
