@@ -16,6 +16,7 @@ export class GenerateCitation implements OnInit {
   @Input() private asset: Asset /** the asset in question */
 
   private document = document
+  private reqProtocol = document.location.protocol + '//'
 
   private apa_citation: string = '' // APA style citation to be copied to the clipboard
   private mla_citation: string = '' // MLA style citation to be copied to the clipboard
@@ -48,64 +49,64 @@ export class GenerateCitation implements OnInit {
 
     let assetPath
     if (window.location.host.indexOf('localhost:') > -1) {
-      assetPath = '/#/asset/'
+      assetPath = '#/asset/'
     } else {
-      assetPath = '/asset/'
+      assetPath = 'asset/'
     }
-    let currentUrl = [ 'http://', document.location.host, assetPath, asset.id ].join('')
+
+    // Note: The request protocol is added to ADA, and Chicago citations, but not MLA
+    let currentUrl = document.location.host + document.location.pathname + assetPath + asset.id
 
     // APA Citation
     // [Creator]. [Date(in parentheses)]. [Title(italicized)]. [Work Type(in brackets)]. Retrieved from [asset page url].
-    if ( this.getMetaValue('Creator') ){
+    if (this.getMetaValue('Creator')) {
       this.apa_citation += this.getMetaValue('Creator') + '. '
     }
-    if ( this.getMetaValue('Date') ){
+    if (this.getMetaValue('Date')) {
       this.apa_citation += '(' + this.getMetaValue('Date') + '). '
     }
-    if ( this.getMetaValue('Title') ){
+    if (this.getMetaValue('Title')) {
       this.apa_citation += this.getMetaValue('Title') + '. '
     }
-    if ( this.getMetaValue('Work Type') ){
+    if (this.getMetaValue('Work Type')) {
       this.apa_citation += '[' + this.getMetaValue('Work Type') + ']. '
     }
-    this.apa_citation += 'Retrieved from ' + currentUrl
+    this.apa_citation += 'Retrieved from ' + this.reqProtocol + currentUrl
 
 
     // MLA Citation
-    // [Creator]. [Title(italicized)]. [Date]. [Repository]. [asset page url]. Web. [Today's date ex: 1 Nov 2017].
-    let today = Date.now();
-    if ( this.getMetaValue('Creator') ){
+    // [Creator]. [Title(italicized)]. [Date]. [Artstor], [asset page url starting with library (no http)].
+    if (this.getMetaValue('Creator')) {
       this.mla_citation += this.getMetaValue('Creator') + '. '
     }
-    if ( this.getMetaValue('Title') ){
+    if (this.getMetaValue('Title')) {
       this.mla_citation += this.getMetaValue('Title') + '. '
     }
-    if ( this.getMetaValue('Date') ){
+    if (this.getMetaValue('Date')) {
       this.mla_citation += this.getMetaValue('Date') + '. '
     }
-    if ( this.getMetaValue('Repository') ){
-      this.mla_citation += this.getMetaValue('Repository') + '. '
-    }
-    this.mla_citation += currentUrl + '. Web. ' + this._date.transform(today, 'd MMM y') + '.'
+
+    this.mla_citation += 'Artstor, ' + currentUrl
+
 
     // Chicago Citation
     // [Creator]. [Date]. Title(italicized)]. [Work Type]. Place: [Repository]. [asset page url].
-    if ( this.getMetaValue('Creator') ){
+    if (this.getMetaValue('Creator')) {
       this.chicago_citation += this.getMetaValue('Creator') + '. '
     }
-    if ( this.getMetaValue('Date') ){
+    if (this.getMetaValue('Date')) {
       this.chicago_citation += this.getMetaValue('Date') + '. '
     }
-    if ( this.getMetaValue('Title') ){
+    if (this.getMetaValue('Title')) {
       this.chicago_citation += this.getMetaValue('Title') + '. '
     }
-    if ( this.getMetaValue('Work Type') ){
+    if (this.getMetaValue('Work Type')) {
       this.chicago_citation += this.getMetaValue('Work Type') + '. '
     }
-    if ( this.getMetaValue('Repository') ){
+    if (this.getMetaValue('Repository')) {
       this.chicago_citation += 'Place: ' + this.getMetaValue('Repository') + '. '
     }
-    this.chicago_citation += currentUrl + '.'
+    this.chicago_citation += this.reqProtocol + currentUrl + '.'
 
   }
 
