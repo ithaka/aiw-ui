@@ -152,11 +152,29 @@ describe('PUT /api/secure/user/{{profileId}} #pact #updateuser', () => {
       //       status: 400,
       //       headers: { 'Content-Type': 'application/json' },
       //       body: {
-      //         error: "invalid fields named: 'cantUpdateThisHa', 'anotherThingYouCantUpdate' could not be updated"
+      //         error: "INVALID_FIELD",
+      //         value: "cantUpdateThisHa, anotherThingYouCantUpdate"
       //       }
       //     }
       //   })
       // )
+
+      interactions.push(
+        provider.addInteraction({
+          uponReceiving: "a request with an invalid id",
+          withRequest: {
+            method: 'PUT',
+            path: '/api/secure/user/abcdefg',
+            body: {
+              [updateObjects[0].field]: updateObjects[0].value
+            }
+          },
+          willRespondWith: {
+            status: 404,
+            headers: { 'Content-Type': 'application/json' }
+          }
+        })
+      )
 
       Promise.all(interactions)
       .then(() => {
@@ -183,6 +201,7 @@ describe('PUT /api/secure/user/{{profileId}} #pact #updateuser', () => {
         done.fail('successful response received when failure was expected')
       },
       err => {
+        expect(err.status).toEqual(400)
         expect(err.error.error).toEqual('EMPTY_REQUEST')
         done()
       })
@@ -198,7 +217,22 @@ describe('PUT /api/secure/user/{{profileId}} #pact #updateuser', () => {
         done.fail('successful response received when failure was expected')
       },
       err => {
+        expect(err.status).toEqual(400)
         expect(err.error.error).toEqual('EMPTY_REQUEST')
+        done()
+      })
+    })
+
+    it('should receive an error when passing an invalid baseProfileId', (done) => {
+      service.update({
+        baseProfileId: 'abcdefg',
+        [updateObjects[0].field]: updateObjects[0].value
+      })
+      .subscribe(res => {
+        done.fail('successful response received when failure was expected')
+      },
+      err => {
+        expect(err.status).toEqual(404)
         done()
       })
     })
