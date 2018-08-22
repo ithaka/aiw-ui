@@ -137,27 +137,27 @@ describe('PUT /api/secure/user/{{profileId}} #pact #updateuser', () => {
         })
       )
 
-      // interactions.push(
-      //   provider.addInteraction({
-      //     uponReceiving: "a request with a non-updateable field",
-      //     withRequest: {
-      //       method: 'PUT',
-      //       path: '/api/secure/user/' + validBaseProfileId,
-      //       body: {
-      //         cantUpdateThisHa: Matchers.somethingLike('new value'),
-      //         anotherThingYouCantUpdate: Matchers.somethingLike('fizz bop')
-      //       }
-      //     },
-      //     willRespondWith: {
-      //       status: 400,
-      //       headers: { 'Content-Type': 'application/json' },
-      //       body: {
-      //         error: "INVALID_FIELD",
-      //         value: "cantUpdateThisHa, anotherThingYouCantUpdate"
-      //       }
-      //     }
-      //   })
-      // )
+      interactions.push(
+        provider.addInteraction({
+          uponReceiving: "a request with a non-updateable field",
+          withRequest: {
+            method: 'PUT',
+            path: '/api/secure/user/' + validBaseProfileId,
+            body: {
+              cantUpdateThisHa: Matchers.somethingLike('new value'),
+              anotherThingYouCantUpdate: Matchers.somethingLike('fizz bop')
+            }
+          },
+          willRespondWith: {
+            status: 400,
+            headers: { 'Content-Type': 'application/json' },
+            body: {
+              error: "INVALID_FIELD",
+              value: "cantUpdateThisHa, anotherThingYouCantUpdate"
+            }
+          }
+        })
+      )
 
       interactions.push(
         provider.addInteraction({
@@ -166,7 +166,7 @@ describe('PUT /api/secure/user/{{profileId}} #pact #updateuser', () => {
             method: 'PUT',
             path: '/api/secure/user/abcdefg',
             body: {
-              [updateObjects[0].field]: updateObjects[0].value
+              [updateObjects[0].field]: Matchers.somethingLike(updateObjects[0].value)
             }
           },
           willRespondWith: {
@@ -218,7 +218,7 @@ describe('PUT /api/secure/user/{{profileId}} #pact #updateuser', () => {
       },
       err => {
         expect(err.status).toEqual(400)
-        expect(err.error.error).toEqual('EMPTY_REQUEST')
+        expect(err.error.error).toEqual('INVALID_FIELD')
         done()
       })
     })
