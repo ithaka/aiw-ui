@@ -232,7 +232,6 @@ describe('PUT /api/secure/user/{{profileId}} #pact #updateuser', () => {
         done.fail('successful response received when failure was expected')
       },
       err => {
-        expect(err.status).toEqual(404)
         done()
       })
     })
