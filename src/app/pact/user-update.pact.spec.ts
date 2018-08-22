@@ -139,7 +139,7 @@ describe('PUT /api/secure/user/{{profileId}} #pact #updateuser', () => {
             status: 400,
             headers: { 'Content-Type': 'application/json' },
             body: {
-              error: Matchers.somethingLike('no fields sent with update request')
+              error: 'EMPTY_REQUEST'
             }
           }
         })
@@ -191,7 +191,22 @@ describe('PUT /api/secure/user/{{profileId}} #pact #updateuser', () => {
         done.fail('successful response received when failure was expected')
       },
       err => {
-        console.log(err)
+        expect(err.error.error).toEqual('EMPTY_REQUEST')
+        done()
+      })
+    })
+
+    it('should receive an error for an invalid field', (done) => {
+      service.update({
+        baseProfileId: validBaseProfileId,
+        cantUpdateThisHa: 'a string here',
+        anotherThingYouCantUpdate: 'another string here'
+      })
+      .subscribe(res => {
+        done.fail('successful response received when failure was expected')
+      },
+      err => {
+        expect(err.error.error).toEqual('EMPTY_REQUEST')
         done()
       })
     })
