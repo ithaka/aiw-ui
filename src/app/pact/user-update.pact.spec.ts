@@ -54,14 +54,6 @@ describe('PUT /api/secure/user/{{profileId}} #pact #updateuser', () => {
     {
       field: 'department',
       value: 'a new department!'
-    },
-    {
-      field: 'allowSurvey',
-      value: true
-    },
-    {
-      field: 'allowUpdatesSurvey',
-      value: true
     }
   ]
 
