@@ -8,6 +8,7 @@ import { TagFiltersService } from './tag-filters.service'
 import { TitleService } from '../../shared/title.service'
 import { AppConfig } from '../../app.service';
 import { TourStep } from '../../shared/tour/tour.service'
+import { Angulartics2 } from 'angulartics2';
 
 @Component({
   selector: 'ang-browse-groups',
@@ -88,7 +89,8 @@ export class BrowseGroupsComponent implements OnInit {
     private _tagFilters: TagFiltersService,
     private _auth: AuthService,
     private _title: TitleService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private angulartics: Angulartics2
   ) {
     let isLoggedIn = this._auth.getUser() && this._auth.getUser().isLoggedIn
     this.showArtstorCurated = _appConfig.config.showArtstorCurated
@@ -314,6 +316,7 @@ export class BrowseGroupsComponent implements OnInit {
 
   private changeSortOpt(label) {
     if( this.activeSort.label != label){
+      this.angulartics.eventTrack.next({ action: 'sortGroup', properties: { category: this._auth.getGACategory() }});
       this.activeSort.label = label;
       this.activeSort.name = name;
 
