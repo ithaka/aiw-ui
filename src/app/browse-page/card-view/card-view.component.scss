@@ -3,15 +3,21 @@
 $tagLinkBg: #efefef;
 
 .card-view {
-    box-shadow: 0 0 0 5px #00000014;
-    padding: 0.8rem;
+    font-family: Verdana;
+    box-shadow: 0 0 8px 1px #00000014;
+    padding: 2rem;
     border-radius: 3px;
-    margin-top: 25px;
-    margin-bottom: 25px;
+    margin-bottom: 2.4em;
     min-height: 140px;
     position: relative;
+    border: 1px solid #CFCFCF;
 
     p {
+        font-size: 12px;
+        margin: 0;
+    }
+
+    i {
         font-size: 12px;
         margin: 0;
     }
@@ -146,8 +152,12 @@ $tagLinkBg: #efefef;
   }
 
 #tag-row {
-    margin-top: 2rem;
-    margin-bottom: -1rem;
+    margin-top: 1.5em;
+    margin-bottom: -1em;
+}
+
+#tag-text {
+    margin-bottom: 1em;
 }
 
 #information-row {
@@ -183,4 +193,21 @@ $tagLinkBg: #efefef;
 
 .link {
     word-wrap: break-word;
+}
+
+.icon {
+    width: 5.5em;
+    height: 7em;    
+}
+
+.no-image-placeholder {
+    background-image: url("/assets/img/no-images.svg");
+    background-size: 98%;
+    position: absolute;
+    left: 1.5em;
+}
+
+.cardview-text {
+    padding-left: 1em;
+    padding-right: 1em;
 }

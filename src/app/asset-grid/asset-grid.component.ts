@@ -64,7 +64,7 @@ export class AssetGrid implements OnInit, OnDestroy {
   private isPartialPage: boolean = false;
 
   // Flag to check if the results have any restricted images.
-  private rstd_imgs: boolean = false;
+  private restricted_results: any[] = [];
 
   private excludedAssetsCount: number = 0;
   private sortByDateTotal: number = 0;
@@ -323,7 +323,7 @@ export class AssetGrid implements OnInit, OnDestroy {
             this.itemIds = allResults.items
             this.ig = allResults
           }
-          this.rstd_imgs = allResults.rstd_imgs_count && (allResults.rstd_imgs_count > 0) ? true : false
+          this.restricted_results = allResults.restricted_thumbnails
 
           if (this.results && this.results.length > 0) {
             this.isLoading = false;
@@ -486,9 +486,8 @@ export class AssetGrid implements OnInit, OnDestroy {
    */
 
   private selectAsset(asset, event?): void {
-    event && event.preventDefault()
-
     if(this.editMode){
+      event && event.preventDefault()
       let index: number = this.isSelectedAsset(asset)
       if (index > -1){
         this.selectedAssets.splice(index, 1)
@@ -510,7 +509,11 @@ export class AssetGrid implements OnInit, OnDestroy {
     thumbnail.iap && (params.iap = 'true')
     this.ig && this.ig.id && (params.groupId = this.ig.id)
 
-    return ['/asset', assetId, params]
+    let url = ['/#/asset', assetId].join('/')
+    for (let key in params) {
+      url = url.concat([';', key, '=', params[key]].join(''))
+    }
+    return url
   }
 
   /**
@@ -701,4 +704,24 @@ export class AssetGrid implements OnInit, OnDestroy {
     this._renderer.setElementClass(event.target.parentElement, 'show-box', false);
   }
 
+  /**
+   * Remove Assets from a Group
+   * - Owner of Group only
+   */
+  private removeFromGroup(assetsToRemove: Thumbnail[], clearRestricted?: boolean): void {
+    for(let i = 0; i < assetsToRemove.length; i++) {
+      let assetId = assetsToRemove[i].objectId
+      this.ig.items.splice(this.ig.items.indexOf(assetId), 1)
+    }
+    // Save removal to Group
+    this._groups.update(this.ig)
+      .take(1)
+      .subscribe(
+        data => {
+          // Reload group after removing assets
+          window.location.reload()
+        }, error => {
+          console.error(error);
+        });
+  }
 }

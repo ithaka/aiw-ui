@@ -75,8 +75,11 @@
       //- Error Row
       div
         //- Restricted assets warning message
-        .alert.alert-warning(*ngIf="rstd_imgs")
+        .alert.alert-warning(*ngIf="restricted_results && restricted_results.length > 0")
           | {{ "BROWSE.WARNINGS.RSTD_IMGS" | translate }}
+          ng-container(*ngIf="ig.owner_id == user.baseProfileId")
+            div.mt-4 As the <b>Owner</b> of this group, would you like to remove the deleted images?
+            a.mt-2.btn.btn-secondary.btn-sm(tabindex="0", (click)="removeFromGroup(restricted_results)") Remove deleted images
         .alert.alert-warning(*ngIf="!isLoading && (totalAssets == '0') && (!results || results.length < 1) && (searchError.length < 1) && !searchLimitError")
           b Unable to find any assets
           br
@@ -94,7 +97,7 @@
             input.check(type="checkbox", [checked]="isSelectedAsset(asset) > -1", [ngStyle]="{ 'display': isSelectedAsset(asset) > -1 ? 'block' : 'none' }", (change)="editMode = true; selectAsset(asset);")
           .mobile--show
             input.check-mobile(type="checkbox", [checked]="isSelectedAsset(asset) > -1", (change)="editMode = true; selectAsset(asset);")
-          a.card.card--asset([attr.data-id]="asset.objectId", [ngClass]="{'selected': ( isSelectedAsset(asset) > -1 ), 'lrgThmb': largeThmbView }", (click)="selectAsset(asset, $event)", (focus)="showBox($event)", (blur)="hideBox($event)", [routerLink]="constructNavigationCommands(asset)")
+          a.card.card--asset([attr.data-id]="asset.objectId", [ngClass]="{'selected': ( isSelectedAsset(asset) > -1 ), 'lrgThmb': largeThmbView }", (click)="selectAsset(asset, $event)", (focus)="showBox($event)", (blur)="hideBox($event)", [attr.href]="constructNavigationCommands(asset)")
             ang-thumbnail([thumbnail]="asset", [reorderMode]="reorderMode", [editMode]="editMode", [largeThmbView]="largeThmbView")
         .alert.alert-warning(*ngIf="!isLoading && (searchError.length < 1) && ((isPartialPage && hasMaxAssetLimit) || searchLimitError)")
           | {{ "BROWSE.WARNINGS.ADDITIONAL_RESULTS" | translate }}

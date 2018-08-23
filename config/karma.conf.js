@@ -63,13 +63,42 @@ module.exports = function(config) {
     // Webpack please don't spam the console when running in karma!
     webpackMiddleware: { stats: 'errors-only'},
 
-     // 3) configure one or multiple pact-mock-services here
-    pact: [{cors: true, spec: 2, port: 1234, dir: 'pacts/'}], 
+    /**
+     * Configure Pact mock servers
+     * - EACH provider needs a configuration with a unique *port*
+     */
+    pact: [
+      {
+        cors: true, 
+        host: 'localhost',
+        port: 1201, 
+        dir: 'pacts/',
+        consumer: 'aiw-ui',
+        provider: 'binder-group'
+      },
+      {
+        cors: true, 
+        host: 'localhost',
+        port: 1202, 
+        dir: 'pacts/',
+        consumer: 'aiw-ui',
+        provider: 'binder-metadata'
+      },
+      {
+        cors: true, 
+        host: 'localhost',
+        port: 1203, 
+        dir: 'pacts/',
+        consumer: 'aiw-ui',
+        provider: 'artaa_service'
+      }
+    ], 
     // 4) here we can define proxies to redirect requests from our pact tests to the mock server
     proxies: { 
-      '/api/v1/group': 'http://localhost:1234/api/v1/group',
-      '/api/v1/metadata': 'http://localhost:1234/api/v1/metadata',
-      '/api/secure/user/706217': 'http://localhost:1234/api/secure/user/706217'
+      '/api/v1/group': 'http://localhost:1201/api/v1/group',
+      '/api/v1/metadata': 'http://localhost:1202/api/v1/metadata',
+      '/api/secure/user/706217': 'http://localhost:1203/api/secure/user/706217',
+      '/api/secure/user/abcdefg': 'http://localhost:1203/api/secure/user/abcdefg'
     },
 
     /*

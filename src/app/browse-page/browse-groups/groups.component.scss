@@ -13,13 +13,25 @@
   }
 }
 
-.group-filter {
+#group--list {
+  text-decoration: none;
   width: calc(100% + 10px);
   margin-left: -5px;
   padding: 5px 10px;
-  text-indent: 10px;
-}
+  
+  &:active, &.active {
+    background-color: #C9510D;
+    color: white;
+  }
 
+  &.child {
+    text-indent: 20px;
+  }
+
+  &.group-filter {
+    text-indent: 10px;
+  }
+}
 
 .numResult {
   margin-top: 2em;

@@ -174,17 +174,19 @@ export class AssetService {
         this.paginationSource.next(paginationValue);
 
         /**
-         * Include only availble assets to the resultsObj thumbnails array, Also keep the count for the restricted assets
+         * Include only availble assets to the resultsObj thumbnails array, set aside restricted assets
          */
         if (resultObj.thumbnails){
-            let thumbnailsOrignalLength: number = resultObj.thumbnails.length
+            // let thumbnailsOrignalLength: number = resultObj.thumbnails.length
+            resultObj['restricted_thumbnails'] = []
             resultObj.thumbnails = resultObj.thumbnails.filter( thumbnail => {
-                let assetAvailable: boolean = thumbnail.status === 'not-available' ? false : true
-                return assetAvailable
+                if (thumbnail.status === 'not-available') {
+                    resultObj['restricted_thumbnails'].push(thumbnail)
+                    return false
+                } else {
+                    return true
+                }
             })
-            if (thumbnailsOrignalLength > resultObj.thumbnails.length){
-                resultObj['rstd_imgs_count'] = thumbnailsOrignalLength - resultObj.thumbnails.length
-            }
         }
         // Update results thumbnail array
         this.allResultsValue = resultObj;
@@ -661,27 +663,30 @@ export class AssetService {
         this.noIGSource.next(false)
         this.noAccessIGSource.next(false);
 
-        // set up the string for calling search
-        ig.count = ig.items.length
-        let pageStart = (this.urlParams.page - 1) * this.urlParams.size
-        let pageEnd = this.urlParams.page * this.urlParams.size
-        let idsAsTerm: string =  ig.items.slice(pageStart, pageEnd).join('&object_id=')
+        if (ig.items.length) {
 
-        let options = { withCredentials: true }
+          // set up the string for calling search
+          ig.count = ig.items.length
+          let pageStart = (this.urlParams.page - 1) * this.urlParams.size
+          let pageEnd = this.urlParams.page * this.urlParams.size
+          let idsAsTerm: string =  ig.items.slice(pageStart, pageEnd).join('&object_id=')
 
-        this.http.get(this._auth.getHostname() + '/api/v1/items?object_id=' + idsAsTerm, options)
-            .subscribe(
-                (res) => {
-                    let results = res
-                    ig.thumbnails = results['items']
-                    // Set the allResults object
-                    this.updateLocalResults(ig)
-            }, (error) => {
-                // Pass portion of the data we have
-                this.updateLocalResults(ig)
-                // Pass error down to allResults listeners
-                this.allResultsSource.next({'error': error}) // .throw(error)
-            })
+          let options = { withCredentials: true }
+
+          this.http.get(this._auth.getHostname() + '/api/v1/items?object_id=' + idsAsTerm, options)
+              .subscribe(
+                  (res) => {
+                      let results = res
+                      ig.thumbnails = results['items']
+                      // Set the allResults object
+                      this.updateLocalResults(ig)
+              }, (error) => {
+                  // Pass portion of the data we have
+                  this.updateLocalResults(ig)
+                  // Pass error down to allResults listeners
+                  this.allResultsSource.next({'error': error}) // .throw(error)
+              })
+          }
     }
 
     /**

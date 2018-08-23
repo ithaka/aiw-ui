@@ -24,7 +24,6 @@ export class BrowseGroupsComponent implements OnInit {
   private groups: any[] = []
   private searchTerm: string = ''
   private loading: boolean = true
-  private showCardView: boolean = false
   private showAccessDeniedModal: boolean = false
   private isSearch: boolean = false
   private numResultMsg: string = ''
@@ -76,8 +75,8 @@ export class BrowseGroupsComponent implements OnInit {
         element: ['.driver-find-inputbox'],
         popover: {
           position: 'bottom',
-          title: '<p>3 OF 3</p><b>Search across all groups</b>',
-          description: 'Filter the groups you want to view by type, tag, or owner. Make sure to log in to see all of the groups you\'ve created, all in one place.',
+          title: '<p>3 OF 3</p><b>Search by title</b>',
+          description: 'Enter a term or phrase to find what the group you’re looking for. Select “All” to search across all groups.',
         }
     }
   ]
@@ -114,7 +113,7 @@ export class BrowseGroupsComponent implements OnInit {
       })
 
       this.groupFilterArray.push({
-        label: 'Shared by me',
+        label: 'Shared by Me',
         level: 'shared_by_me',
         selected: false
       })
@@ -154,17 +153,6 @@ export class BrowseGroupsComponent implements OnInit {
 
     // set the title
     this._title.setSubtitle('Browse Groups')
-
-    // Subscribe to asset search params
-    this.subscriptions.push(
-      this.route.params
-        .subscribe((params) => {
-          // Find feature flags
-          if (params && params.featureFlag && params.featureFlag === 'cardview') {
-            this.showCardView = true
-          }
-        })
-    )
   } // OnInit
 
   ngOnDestroy() {
@@ -359,7 +347,7 @@ export class BrowseGroupsComponent implements OnInit {
   // private loadIGs(appliedTags: string[], page: number, level?: string, searchTerm ?: string, searchid ?: string): void {
   private loadIGs(groupQuery: GroupQuery): void {
     // short out the function if the user has just navigated to the search page without query params
-    if (!this.shouldSearch(groupQuery.tags, groupQuery.level, groupQuery.term, groupQuery.id) && this.route.snapshot.params.view == 'search') {
+    if (!this.shouldSearch(groupQuery.tags, groupQuery.level, this.cleanGroupSearchTerm(groupQuery.term), groupQuery.id) && this.route.snapshot.params.view == 'search') {
       this.loading = false
       return
     }
@@ -382,7 +370,8 @@ export class BrowseGroupsComponent implements OnInit {
       this.pagination.size,
       groupQuery.page,
       groupQuery.tags,
-      groupQuery.term,
+
+      this.cleanGroupSearchTerm(groupQuery.term),
       groupQuery.id,
       groupQuery.sort
     )
@@ -393,31 +382,31 @@ export class BrowseGroupsComponent implements OnInit {
         let groupLabel : string = ''
         switch (browseLevel) {
           case 'all': {
-            groupLabel = 'All groups'
+            groupLabel = 'All Groups'
             break
           }
           case 'created': {
-            groupLabel = 'My groups'
+            groupLabel = 'My Groups'
             break
           }
           case 'private': {
-            groupLabel = 'Private groups'
+            groupLabel = 'Private Groups'
             break
           }
           case 'shared_by_me': {
-            groupLabel = 'Shared by Me groups'
+            groupLabel = 'Shared by Me Groups'
             break
           }
           case 'institution': {
-            groupLabel = 'Institutional groups'
+            groupLabel = 'Institutional Groups'
             break
           }
           case 'shared': {
-            groupLabel = 'Shared with Me groups'
+            groupLabel = 'Shared with Me Groups'
             break
           }
           case 'public': {
-            groupLabel = 'Artstor Curated groups'
+            groupLabel = 'Artstor Curated Groups'
             break
           }
           default: {
@@ -427,15 +416,9 @@ export class BrowseGroupsComponent implements OnInit {
 
         // Set the number of result message
         if (data.total !== 0){
-          if (this.pagination.size < data.total) {
-            this.numResultMsg = this.pagination.size + ' of ' + data.total + ' results for \"' + this.searchTerm + '\"' + ' from <i>' + groupLabel + '</i>.'
-          }
-          else {
-            this.numResultMsg = data.total + ' of ' + data.total + ' results for \"' + this.searchTerm + '\"' + ' from <i>' + groupLabel + '</i>.'
-          }
-        }
-        else {
-          this.numResultMsg = '0 results to show for \"' + this.searchTerm + '\"' + ' from <i>' + groupLabel + '</i>. Try checking your spelling, or browse our <a href=\'/#/browse/groups?level=public\' class=\'link\'><b>curated groups</b></a>.'
+            this.numResultMsg = data.total + ' results for \"' + this.searchTerm + '\"' + ' from <i>' + groupLabel + '</i>.'
+        } else {
+          this.numResultMsg = '0 results for \"' + this.searchTerm + '\"' + ' from <i>' + groupLabel + '</i>. Try checking your spelling, or browse our <a href=\'/#/browse/groups?level=public\' class=\'link\'><b>curated groups</b></a>.'
           this.goToPage(1)
         }
 
@@ -524,6 +507,23 @@ export class BrowseGroupsComponent implements OnInit {
     let queryParams = Object.assign(baseParams, params)
 
     this._router.navigate(['/browse', 'groups'], { queryParams: queryParams })
+  }
+
+  /**
+   * @param term string
+   * For group search, 'term' is url encoded, and backslash '\' is a valid char,
+   * but we need to replace '/' %2F chars, as they're not handled by the group service,
+   * and will return a 500 error.
+   * @returns cleaned and URI encoded string value for the search term
+   */
+
+  private cleanGroupSearchTerm(term: string): string {
+    if(term) {
+      term = term.replace(/\//g, '\\');
+      return encodeURIComponent(term)
+    } else {
+      return ''
+    }
   }
 }
 
