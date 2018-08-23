@@ -5,7 +5,6 @@ import { Subscription }   from 'rxjs/Subscription';
 
 // Internal Dependencies
 // import { CollectionService } from './collection.service';
-import { AnalyticsService } from '../analytics.service';
 import { AssetService } from './../shared/assets.service';
 import { AuthService } from './../shared/auth.service';
 import { TitleService } from '../shared/title.service';
@@ -47,7 +46,6 @@ export class PCollectionPage implements OnInit, OnDestroy {
     private _router: Router,
     private route: ActivatedRoute,
     private http: HttpClient,
-    private _analytics: AnalyticsService,
     private _title: TitleService
   ) {}
 
@@ -62,7 +60,7 @@ export class PCollectionPage implements OnInit, OnDestroy {
           // Default to sorting by Recently Added
           params['sort'] = 4
         }
-        this.colId = params["pcolId"];
+        this.colId = params['pcolId'];
         // Old links pass a name into the ID, just use that as a search term instead
         if (!/^[0-9]+$/.test(this.colId)) {
           this.http.get('/assets/collection-links.json')
@@ -88,11 +86,11 @@ export class PCollectionPage implements OnInit, OnDestroy {
               this._assets.queryAll(params, true);
 
               if (!Object.keys(data).length) {
-                throw new Error("No data!");
+                throw new Error('No data!');
               }
-              
+
               // If Global Personal Collection, rename as "My Personal Collection"
-              this.colName = this.colId == '37436' ? "My Personal Collection" : data['collectionname'];
+              this.colName = this.colId == '37436' ? 'My Personal Collection' : data['collectionname'];
               this.colDescription = data['blurburl'];
               this.colThumbnail = data['leadImageURL'] ? data['leadImageURL'] : data['bigimageurl'];
 
@@ -101,13 +99,13 @@ export class PCollectionPage implements OnInit, OnDestroy {
             })
             .catch((error) => {
               console.error(error);
-              if(error.status === 401){
+              if (error.status === 401){
                 this.showaccessDeniedModal = true;
               }
             });
         }
       })
-    );// End push to subscription
+    ); // End push to subscription
 
     this.subscriptions.push(this.route.queryParams.subscribe((params) => {
       console.log(params, !!params.deleteSuccess)
@@ -115,7 +113,6 @@ export class PCollectionPage implements OnInit, OnDestroy {
       console.log(this.showDeleteSuccessBanner)
       this.deleteBannerParams.title = params.deleteSuccess
     }))
-    this._analytics.setPageValues('collection', this.colId)
 
   } // OnInit
 
@@ -143,22 +140,22 @@ export class PCollectionPage implements OnInit, OnDestroy {
 
   private pollNewPCAssetsStatus(): void{
     let publishingAssets = this._auth.getFromStorage('publishingAssets')
-    if(publishingAssets){
+    if (publishingAssets){
       this.publishingAssets = publishingAssets
     }
-    
+
 
     let statusArray: Array<any> = []
-    for(let ssid of this.publishingAssets['ssids']){
+    for (let ssid of this.publishingAssets['ssids']){
       this._assets.getPCImageStatus(ssid)
         .subscribe(
           (res) => {
             let assetStatus = '' // i.e. available, publishing_que, publishing_failure
-            if(res.status){
+            if (res.status){
               assetStatus = 'available'
-            } else if(res.error && res.error.message === 'Published & Indexed OK'){
+            } else if (res.error && res.error.message === 'Published & Indexed OK'){
               assetStatus = 'publishing_que'
-            } else if(res.error && ( res.error.message === 'Failed to publish, trying again' || res.error.message === 'Failed to index, trying again' )){
+            } else if (res.error && ( res.error.message === 'Failed to publish, trying again' || res.error.message === 'Failed to index, trying again' )){
               assetStatus = 'publishing_failure'
             }
             let statusObj = {
@@ -166,7 +163,7 @@ export class PCollectionPage implements OnInit, OnDestroy {
               status: assetStatus
             }
             statusArray.push(statusObj)
-            if(statusArray.length === this.publishingAssets['ssids'].length){ // Was last asset in the array
+            if (statusArray.length === this.publishingAssets['ssids'].length){ // Was last asset in the array
               this.updateNewPCAssetStatus(statusArray)
             }
         }, (error) => {
@@ -183,12 +180,12 @@ export class PCollectionPage implements OnInit, OnDestroy {
 
     let ssids: Array<string> = []
     let pub_que_count: number = 0
-    let pub_failure_count: number = 0 
-    for(let statusObj of statusArray){
+    let pub_failure_count: number = 0
+    for (let statusObj of statusArray){
       ssids.push(statusObj.ssid)
-      if(statusObj.status === 'publishing_que'){
+      if (statusObj.status === 'publishing_que'){
         pub_que_count++
-      } else if(statusObj.status === 'publishing_failure'){
+      } else if (statusObj.status === 'publishing_failure'){
         pub_failure_count++
       }
     }
@@ -200,7 +197,7 @@ export class PCollectionPage implements OnInit, OnDestroy {
     this.pub_que_count = pub_que_count
     this.pub_failure_count = pub_failure_count
 
-    if(ssids.length > 0){ // If all the uploaded assets are still not available then poll for update in 2 mins
+    if (ssids.length > 0){ // If all the uploaded assets are still not available then poll for update in 2 mins
       setTimeout( () => {
         this.pollNewPCAssetsStatus()
       }, 120000)

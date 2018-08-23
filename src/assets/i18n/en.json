@@ -42,8 +42,10 @@
   "LINK_PAGE": {
     "LOGIN_HEADING": "Link your existing Artstor account",
     "LOGIN_BUTTON": "Link Account",
+    "LOGIN_OPTION": "Link Existing Account",
     "REGISTER_HEADING": "Link a new Artstor account",
-    "REGISTER_LINK": "Register a new account"
+    "REGISTER_LINK": "Register a new account",
+    "REGISTER_OPTION" : "Link a New Account"
   },
   "REGISTER": {
     "REGISTER_HEADING": "Register for a new Artstor account",
@@ -59,15 +61,12 @@
       "PASSWORD_REQUIRED": "Password must be 7-20 characters",
       "PASSWORD_MINLENGTH": "Password must be 7-20 characters",
       "PASSWORD_MISMATCH": "Password confirmation does not match",
-      "AGE_REQUIRED": "Please confirm you are 13 or older",
       "TERMS_REQUIRED": "Please agree to the Artstor Digital Library Terms",
       "INSTITUTION_ROLE_REQUIRED": "Please select a role",
       "ACADEMIC_DEPT_REQUIRED": "Please select a department",
       "LOGIN_SERVER": "Server is not responding. Please try again later.",
       "SERVER_ERROR": "The server encountered an error processing the request. Please try again."
     },
-    "AGE_PROMPT": "I confirm that I am 13 or older",
-    "AGE_PROMPT_HOVER": "If you are under 13, please provide your legal guardian's email address to register",
     "INFO_PROMPT": "Yes, send me information about new Artstor content and tools (Optional)",
     "SURVEY_PROMPT": "Yes, send me surveys (Optional)",
     "TERMS": "I agree to the Artstor Digital Library <a id=\"linkTermsConditions\" data-automation-component=\"artstor-register-terms\" href=\"http://www.artstor.org/terms\" class=\"link bold\" target=\"_blank\">Terms</a>",
@@ -75,6 +74,7 @@
     "FIELDS_REQUIRED": "Please note that all fields are required unless noted."
   },
   "SHIBBOLETH_ERRORS": {
+    "INST404": "There was a problem identifying your institution. Please contact your institution admin to report this error, and to learn more about off-campus access.",
     "2010": "This account is already linked to an Artstor account.",
     "2020": "There was an error linking your institutional account. The session may have expired, please try again.",
     "2040": "This account is associated with another institution. Please create a new account.",
@@ -113,10 +113,10 @@
     },
     "BUTTONS": {
       "DOWNLOAD": "Download",
-      "GENERATE_CITATION": "Generate Citation",
-      "PRINT": "Print",
+      "GENERATE_CITATION": "Cite this Item",
+      "PRINT": "Print Preview",
       "EDIT_DETAILS": "Edit Details",
-      "LINK": "Link",
+      "LINK": "Copy",
       "EXT": "Exit",
       "COMPARE": "Compare",
       "GET_IAP": "Request IAP",
@@ -159,6 +159,12 @@
     }
   },
   "IMAGE_GROUP_PAGE": {
+    "IG_DOWNLOAD_MODAL": {
+      "TITLE": "Export/Download Guidelines",
+      "TEXT": "<p>All logged in users may export/download up to <b>2000</b> images in a <b>120</b> day period. Multimedia files are not exported.</p><p>Also note that, by accepting this download, you are agreeing to the <a href=\"http://www.artstor.org/terms\" class=\"link\" name=\"Terms and conditions of use\" target=\"_blank\">terms and conditions of use.</a></p><p>Would you like to proceed?</p>",
+      "DOWNLOAD_ERROR_BIG": "We're sorry, we were unable to generate your file. The recommended group size is under 100 images.",
+      "DOWNLOAD_ERROR_SMALL": "We're sorry, we were unable to generate your file. Please try again. If the problem persists, contact us at <a href=\"mailto:support@artstor.org\" class=\"link\" target=\"_blank\">support@artstor.org</a>"
+    },
     "DOWNLOAD_LIMIT_MODAL": {
       "TITLE": "Download Limit Reached",
       "CLOSE_BUTTON": "Ok",
@@ -310,23 +316,27 @@
   "BROWSE_GROUPS" : "Browse Groups",
   "LOGIN_REQUIRED_MODAL": {
     "HEADING": "User account required",
-    "PROMPT": "Please log in or <a href=\"/#/register\" class=\"link\">Register</a> to save images."
+    "PROMPT": "Please log in or <a href=\"/#/register\" class=\"link\">Register</a> to save images.",
+    "PROMPT_NO_REGISTER": "Please log in to save images."
   },
   "BROWSE": {
     "LIBRARY_COLLECTION" : {
       "HEADING" : "Artstor Collections",
       "DESCRIPTION" : "The Artstor Digital Library is an extensive and representative visual resource of images for teaching and research in the arts, humanities and social sciences. We build partnerships with museums, libraries, photographers, and photographic archives whose images are widely used in teaching and learning contexts. In addition, we work with scholars and special collections in libraries to develop depth and richness in areas that are especially important to the community.<br/><br/>In order to increase our relevance and use to the academic community, the collections are expanded and updated with the assistance of our individual and institutional partners. Thus, the Digital Library is increasingly characterized by high-quality images and authoritative cataloging information.",
-      "LEAD_IMAGE" : "http://library.artstor.org/assets/img/collection-splash.png"
+      "LEAD_IMAGE" : "http://library.artstor.org/assets/img/collection-splash.png",
+      "CAPTION" : "René Magritte. Les valeurs personnelles (Personal Values), 1952. Oil on canvas. Image and original data provided by San Francisco Museum of Modern Art. © Charly Herscovici, Brussels / Artists Rights Society (ARS), New York"
     },
     "CLASSIFICATION" : {
       "HEADING" : "Browse by Classification",
       "DESCRIPTION" : "Users may navigate the breadth and depth of the Artstor Digital Library using the sixteen classification terms at left. Artstor strives to assign each image in the Digital Library one term at minimum. When particular images are characterized by two terms or more, they will appear in multiple classification groups.<br/><br/>Users may browse these terms in conjunction with their geographic sub-groupings and perform searches using the Advanced Search feature, accessible from the Library home page.",
-      "LEAD_IMAGE" : "http://library.artstor.org/assets/img/classification-splash.png"
+      "LEAD_IMAGE" : "http://library.artstor.org/assets/img/classification-splash.png",
+      "CAPTION" : "Vicomte de Barde Leroy. Selection of Shells, late 18th or early 19th century. Watercolor, gouache. Image and original data provided by Réunion des Musées Nationaux / Art Resource, N.Y."
     },
     "GEOGRAPHY" : {
       "HEADING" : "Browse by Geography",
       "DESCRIPTION" : "Images in the Digital Library have been assigned geography terms according to two different criteria: location of the work (for site-specific works such as architecture, mural painting, public monuments, etc.), and nationality of the creator. When these two criteria overlap (for example, an American architect's preparatory drawing for a building built in another country), both country terms are assigned.<br/><br/>Users may browse these terms in conjunction with their classification sub-groupings, as well as keyword and Advanced Search, accessible from the Library home page.",
-      "LEAD_IMAGE" : "http://library.artstor.org/assets/img/geography-splash.png"
+      "LEAD_IMAGE" : "http://library.artstor.org/assets/img/geography-splash.png",
+      "CAPTION" : "Karel Allard. Map of the World, c. 1710. Engraving. Image and original data provided by The Minneapolis Institute of Arts"
     },
     "MY_COLLECTION": {
       "UPLOAD_IMGS": "Upload Images",
@@ -340,7 +350,7 @@
       "NO_INSTITUTIONAL_COLLECTIONS_PROMPT": "<p>There are no institutional collections available for your institution. You can add institutional collections using JSTOR Forum.</p><p>Learn more about <a href=\"http://artstor.org/jstorforum\" class=\"link\">JSTOR Forum</a>.</p>",
       "LOGIN_PC_COLLECTIONS_PROMPT": "<p>Please login to access your Personal Collection.</p><p>Learn more about <a href=\"https://support.artstor.org/?article-category=09-using-your-own-images\" class=\"link\">Personal Collections</a>.</p>",
       "NO_GROUPS_COLLECTIONS_HEADING": "No Groups Found",
-      "NO_PRIVATE_GROUPS_COLLECTIONS_PROMPT": "<p>You haven't made any private groups yet. Learn more about <a href='http://support.artstor.org/?article=create-and-manage-image-groups' class='link'>groups</a>.</p>",
+      "NO_PRIVATE_GROUPS_COLLECTIONS_PROMPT": "<p>You haven't created any image groups yet. Learn more about <a href='http://support.artstor.org/?article=create-and-manage-image-groups' class='link'>groups</a>.</p>",
       "NO_INSTITUTIONAL_GROUPS_COLLECTIONS_PROMPT": "<p>You haven't made any institutional groups yet. Learn more about <a href='http://support.artstor.org/?article=create-and-manage-image-groups' class='link'>groups</a>.</p>",
       "SEARCH_PROMPT": "Enter a keyword or select a filter to begin a search"
     },
@@ -359,13 +369,14 @@
     "LINKS": {
       "ABOUT": "<a href=\"http://www.artstor.org/content/artstor-digital-library-features-benefits\" class=\"link\" target=\"_blank\">About</a>",
       "GETTING_STARTED": "<a href=\"http://support.artstor.org/?page_id=52\" class=\"link\" target=\"_blank\">Getting Started</a>",
-      "TEACHING_IDEAS": "<a href=\"http://www.artstor.org/content/teaching-resources-overview\" class=\"link\" target=\"_blank\">Teaching and Study Ideas</a>",
+      "TEACHING_IDEAS": "<a href=\"http://www.artstor.org/content/teaching-resources-overview\" class=\"link\" target=\"_blank\">Teaching and Studying Resources</a>",
       "STAY_INFORMED": "<a href=\"http://www.artstor.org/content/join-our-mailing-list\" class=\"link\" target=\"_blank\">Stay Informed</a>",
       "TERMS": "<a href=\"http://www.artstor.org/terms\" class=\"link\" target=\"_blank\">Terms</a>",
       "PRIVACY": "<a href=\"http://www.artstor.org/privacy-policy\" class=\"link\" target=\"_blank\">Privacy</a>",
       "COOKIE_POLICY": "<a href=\"http://www.ithaka.org/cookies\" class=\"link\" target=\"_blank\">Cookie Policy</a>",
       "COPYRIGHT": "<a href=\"http://www.artstor.org/copyright\" class=\"link\" target=\"_blank\">Copyright Concerns</a>",
       "SUPPORT": "<a href=\"http://support.artstor.org\" class=\"link\" target=\"_blank\">Support</a>",
+      "SUPPORT_UNAFFILIATED": "<a href=\"//support.artstor.org/?article-category=05-public-access-to-artstor\" class=\"link\" target=\"_blank\">Support</a>",
       "ARTSTOR": "<a href=\"http://artstor.org\" class=\"link\" target=\"_blank\">Artstor.org</a>",
       "SAHARA": "<a href=\"http://sah.org\" class=\"link\" target=\"_blank\">SAH.org</a>",
       "SARARA_CONTRIBUTE": "<a href=\"http://catalog.sharedshelf.artstor.org\" class=\"link\" target=\"_blank\">Contribute to SAHARA using Forum</a>",
@@ -407,7 +418,19 @@
     "MAIN_HEADING": "Share link to image group",
     "URL_LABEL": "Copy URL",
     "COPY_SUCCESS": "Link copied to clipboard",
-    "SERVICE_ERROR": "We've encountered an error in getting a share token. Please refresh or try again later."
+    "SERVICE_ERROR": "We've encountered an error in getting a share token. Please refresh or try again later.",
+    "TEXTAREA_ARIA_LABEL": "Textarea containing the share URL for the image group"
+  },
+  "SHARE_IMG_LINK_MODAL": {
+    "MAIN_HEADING": "Share Image",
+    "DESC": "Copy the image URL or the HTML code to share this image with others at your institution.",
+    "IMG_URL_LBL": "Image URL",
+    "THMB_LNK_IMG_LBL": "Thumbnail hyperlink to the Image",
+    "HELP": "Help",
+    "CLOSE": "Close",
+    "COPY_TO_CLIPBOARD": "Copy to Clipboard",
+    "TEXTAREA_URL_ARIA_LABEL": "Textarea containing the image URL for the selected asset",
+    "TEXTAREA_HTML_ARIA_LABEL": "Textarea containing the HTML code for thumbnail hyperlink to the image"
   },
   "GENERATE_CITATION_MODAL": {
     "MAIN_HEADING": "Generate citation for asset",
@@ -438,7 +461,7 @@
       "GEO_HEADING": "Geography",
       "GEO_LIST": "Filter by continent or country",
       "CLASS_HEADING": "Classification",
-      "CLASS_LIST": "Browse by categories such as paintings, performing arts, sculpture, or textiles",
+      "CLASS_LIST": "Browse by categories such as paintings, performing arts, sculpture, or decorative arts",
       "COLL_HEADING": "Collection",
       "COLL_LIST": "Artstor, Institutional, Public, and Personal",
       "COLL_LIST_SHORT": "Institutional Collections",
@@ -449,8 +472,8 @@
       "GROUPS_LIST_SAHARA": "Groups created by you and others at your institution",
       "PUB_COLL_HEADING": "Public Collections",
       "PUB_COLL_LIST": "Open content provided by multiple institutions",
-      "MORE_CONT_HEADING": "More Content",
-      "MORE_CONT_LIST": "To browse the Artstor Digital Library collections, institutional collections, create image groups, and more, you will need to login as part of your institution."
+      "MORE_CONT_HEADING": "Core Collections",
+      "MORE_CONT_LIST": "Access 2.5 million images from museums, photo archives, scholars, and artists, create image groups, upload your own files, and more."
     },
     "FEATURED": {
       "HEADINGS": {
@@ -460,60 +483,60 @@
         "VIEW_PUBLIC_LINK": "View All Public Collections"
       },
       "COLLECTIONS": [{
-          "SUBHEADING": "Art Institute of Chicago",
-          "DESCRIPTION": "The greatest hits and more",
-          "CAPTION": "Georges Seurat. A Sunday on La Grande Jatte. 1884-1886. Oil on canvas. Image and original data provided by The Art Institute of Chicago.",
-          "LINK": "/#/category/1031896041 ",
-          "IMG_SOURCE": "/assets/img/featured-collections/AIC_Sunday.jpg",
-          "LINK_TITLE": "Art Institute of Chicago",
-          "ALT_TEXT": "Art Institute of Chicago"
+          "SUBHEADING": "Metropolitan Museum of Art",
+          "DESCRIPTION": "Highlights from Asia from the encylopedic collections",
+          "CAPTION": "Suzuki Kiitsu. Morning Glories. Early 19th c. Ink, color, gold on gilded paper. Image © The Metropolitan Museum of Art.",
+          "LINK": "/#/category/1031896061 ",
+          "IMG_SOURCE": "/assets/img/featured-collections/mma_morningglories.jpg",
+          "LINK_TITLE": "Metropolitan Museum of Art",
+          "ALT_TEXT": "Metropolitan Museum of Art"
         },
         {
-          "SUBHEADING": "Muhlenberg College: Navy V-12 and V-5 World War II Photograph Collection",
-          "DESCRIPTION": "Students becoming sailors",
-          "CAPTION": "Navy V-12 students on parade. 1943. Photograph. Muhlenberg College: Navy V-12 and V-5 World War II Photograph Collection",
-          "LINK": "/#/collection/87731255 ",
-          "IMG_SOURCE": "/assets/img/featured-collections/Muhlenberg_Navy.jpg",
-          "LINK_TITLE": "Muhlenberg College: Navy V-12 and V-5 World War II Photograph Collection",
-          "ALT_TEXT": "Muhlenberg College: Navy V-12 and V-5 World War II Photograph Collection"
+          "SUBHEADING": "Ai Weiwei: AW Asia Archive",
+          "DESCRIPTION": "Ai Wewei's Circle of Animals",
+          "CAPTION": "Ai Weiwei. Circle of Animals: Zodiac Heads, Dragon. 2010. Photographer: Tim Nighswander. Image courtesy of the artist and AW Asia, New York.",
+          "LINK": "/#/category/10374058875 ",
+          "IMG_SOURCE": "/assets/img/featured-collections/weiwei_animal.jpg",
+          "LINK_TITLE": "Ai Weiwei: AW Asia Archive",
+          "ALT_TEXT": "Ai Weiwei: AW Asia Archive"
         },
         {
-          "SUBHEADING": "The Metropolitan Museum of Art: Brooklyn Museum Costumes",
-          "DESCRIPTION": "The finest fashion and accessories",
-          "CAPTION": "Parasol. 1886. Silk, wood, metal. Image and original data from the Brooklyn Museum.",
-          "LINK": "/#/category/1034948173 ",
-          "IMG_SOURCE": "/assets/img/featured-collections/BrooklynMuseum_parasol.jpg",
-          "LINK_TITLE": "The Metropolitan Museum of Art: Brooklyn Museum Costumes",
-          "ALT_TEXT": "The Metropolitan Museum of Art: Brooklyn Museum Costumes"
+          "SUBHEADING": "Hamilton College: Geosciences Rock Collection",
+          "DESCRIPTION": "Rock samples collected over two centuries",
+          "CAPTION": "Tholeiitic basalt. Hamilton College: Geosciences Rock Collection.",
+          "LINK": "/#/collection/87730818 ",
+          "IMG_SOURCE": "/assets/img/featured-collections/hamilton_basalt.jpg",
+          "LINK_TITLE": "Hamilton College: Geosciences Rock Collection",
+          "ALT_TEXT": "Hamilton College: Geosciences Rock Collection"
         }
       ],
       "PUBLIC_COLLECTIONS": [
         {
-          "SUBHEADING": "Tuskegee University: Chapel Audio Collection",
-          "DESCRIPTION": "Audio from speeches given by important Civil Rights leaders and events",
-          "CAPTION": "Tuskegee University President Luther H. Foster singing with students. Image courtesy of Tuskegee University Archive: Chapel Collection.",
-          "LINK": "/#/collection/87730897",
-          "IMG_SOURCE": "/assets/img/featured-collections/Tuskegee_singing.jpg",
-          "LINK_TITLE": "Tuskegee University: Chapel Audio Collection",
-          "ALT_TEXT": "Tuskegee University: Chapel Audio Collection"
+          "SUBHEADING": "UD Library: Postcard Collection",
+          "DESCRIPTION": "Postcards documenting small town life in Delaware",
+          "CAPTION": "Aerial View Delaware Memorial Bridge near Wilmington, Delaware 1930-1945. Image courtesy of the University of Delaware Postcard Collection.",
+          "LINK": "/#/collection/87729444",
+          "IMG_SOURCE": "/assets/img/featured-collections/ud_postcard.jpg",
+          "LINK_TITLE": "UD Library: Postcard Collection",
+          "ALT_TEXT": "UD Library: Postcard Collection"
         },
         {
-          "SUBHEADING": "OCAD U Zine Collection",
-          "DESCRIPTION": "Self-published and handmade objects",
-          "CAPTION": "Punch Drunk, Tim Gaedke. Image courtesy of the OCAD University Zine Collection. ",
-          "LINK": "/#/collection/87731595 ",
-          "IMG_SOURCE": "/assets/img/featured-collections/punchdrunk_ocad.jpg",
-          "LINK_TITLE": "OCAD U Zine Collection",
-          "ALT_TEXT": "OCAD U Zine Collection"
+          "SUBHEADING": "Pratt Institute Archives Image Collection",
+          "DESCRIPTION": "The history and creative output of Pratt Institute",
+          "CAPTION": "1967 Prattonia, Poster 48.  Image courtesy of the Pratt Institute Archives.",
+          "LINK": "/#/collection/87729432 ",
+          "IMG_SOURCE": "/assets/img/featured-collections/pratt_poster.jpg",
+          "LINK_TITLE": "Pratt Institute Archives Image Collection",
+          "ALT_TEXT": "Pratt Institute Archives Image Collection"
         },
         {
-          "SUBHEADING": "Martin Methodist Marine Biology Collection: Key Largo",
-          "DESCRIPTION": "Marine images taken in and around Key Largo",
-          "CAPTION": "Smooth trunkfish (Lactophrys triqueter). Image courtesy of Martin Methodist Marine Biology Collection.",
-          "LINK": "/#/collection/87730675",
-          "IMG_SOURCE": "/assets/img/featured-collections/martin_trunkfish.jpg",
-          "LINK_TITLE": "Martin Methodist Marine Biology Collection: Key Largo",
-          "ALT_TEXT": "Martin Methodist Marine Biology Collection: Key Largo"
+          "SUBHEADING": "Cornell: Historic Glacial Images of Alaska and Greenland",
+          "DESCRIPTION": "Photographs from expeditions from 1864-1912",
+          "CAPTION": "Iceberg, Baffins Bay (Black/Davis). Image courtesy of the Cornell: Historic Glacial Images of Alaska and Greenland.",
+          "LINK": "/#/collection/87730735",
+          "IMG_SOURCE": "/assets/img/featured-collections/cornell_iceberg.jpg",
+          "LINK_TITLE": "Cornell: Historic Glacial Images of Alaska and Greenland",
+          "ALT_TEXT": "Cornell: Historic Glacial Images of Alaska and Greenland"
         }
       ]
     },
@@ -553,16 +576,15 @@
       ]
     },
     "AD": {
-      "LINK": "http://goo.gl/KAZksy",
-      "IMG_SOURCE": "/assets/img/promo-panoramas.jpg",
-      "ALT_TEXT": "New Virtual Reality Panoramas."
+      "LINK": "https://support.artstor.org/?article=using-your-personal-collection",
+      "IMG_SOURCE": "/assets/img/promo-personalcollections.jpg",
+      "ALT_TEXT": "Upload your images to Artstor."
     },
     "QUESTIONS": {
       "HEADING": "Questions",
       "EMAIL_INSTITUTION": "Email your institutional contact",
       "EMAIL_ARTSTOR": "Email Artstor",
       "WEBINAR": "Sign up for an Artstor webinar",
-      "SURVEY": "Take a survey: Tell us what you think!",
       "SAHARA_QUESTIONS": "Not finding something? We're in the process of moving content to the new site. Thanks for your patience! For other collection, contribution &amp; data questions, please email SAHARA.",
       "ARTSTOR_QUESTIONS": "For functionality, technology &amp; tool questions, please email Artstor."
     },
@@ -603,13 +625,13 @@
     }
   },
   "SEARCH_ANNOUNCEMENT_BANNER": {
-    "MESSAGE": "We are making changes and you may experience issues with login and search. <a href=\"http://support.artstor.org/?article=current-technical-issues-alerts\" target=\"_blank\" class=\"link\">Learn more</a>."
+    "MESSAGE": "We've made changes over the summer! <a href=\"https://support.artstor.org/?page_id=37\" target=\"_blank\" class=\"link\">Learn more</a>."
   },
   "MEDIA_ISSUES_BANNER": {
     "MESSAGE": "We are currently experiencing issues with images and downloads due to a power outage. <a href=\"http://support.artstor.org/?article=current-technical-issues-alerts\" target=\"_blank\" class=\"link\">Learn more</a>."
   },
   "DOWNTIME_BANNER": {
-    "MESSAGE": "We're sorry, we're experiencing problems affecting login.  We apologize for the inconvenience, and appreciate your patience. If you have any questions, please <a href=\"mailto:support@artstor.org\" target=\"_blank\" class=\"link\">contact Artstor Support</a> or check <a href=\"https://twitter.com/ArtstorHelp\" target=\"_blank\" class=\"link\">Twitter</a> for additional updates."
+    "MESSAGE": "We're currently experiencing problems affecting the site's performance.  We apologize for the inconvenience, and appreciate your patience. If you have any questions, please <a href=\"mailto:support@artstor.org\" target=\"_blank\" class=\"link\">contact Artstor Support</a> or check <a href=\"https://twitter.com/ArtstorHelp\" target=\"_blank\" class=\"link\">Twitter</a> for additional updates."
   },
   "SEARCH_SKY_BANNER": {
     "MESSAGE": "⚠️ This is a testing instance for the new Search index. Please excuse the broken bits."

@@ -2,10 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { Subscription }   from 'rxjs/Subscription';
 
-import { AnalyticsService } from '../analytics.service';
 import { TagsService } from './tags.service';
 import { Tag } from './tag/tag.class';
-import { TitleService, AssetSearchService, AuthService, AssetService } from '../shared';
+import { TitleService, AssetSearchService, AuthService, AssetService, FlagService } from '../shared';
 
 @Component({
   selector: 'ang-my-collections',
@@ -14,24 +13,20 @@ import { TitleService, AssetSearchService, AuthService, AssetService } from '../
 })
 export class MyCollectionsComponent implements OnInit {
 
-  private isLoggedIn: boolean
-
   constructor(
     private _auth: AuthService,
+    private _flags: FlagService,
     private router: Router,
     private route: ActivatedRoute,
     private _search: AssetSearchService,
     private _assets: AssetService,
-    private _analytics: AnalyticsService,
     private _title: TitleService
-  ) {
+  ) {}
 
-   }
-
+  private isLoggedIn: boolean
   private subscriptions: Subscription[] = [];
-
   private categories = [];
-  private tags : Tag[] = [];
+  private tags: Tag[] = [];
   private expandedCategories: any = {};
   private selectedBrowseId: string = '';
 //   private showUploadImgsModal: boolean = false;
@@ -46,31 +41,29 @@ export class MyCollectionsComponent implements OnInit {
 
   ngOnInit() {
     // Add tag for My Personal Collection
-    let colTag = new Tag("37436", "My Personal Collection", true, null, { label: "pcollection", folder: true }, true);
+    let colTag = new Tag('37436', 'My Personal Collection', true, null, { label: 'pcollection', folder: true }, true);
     this.tags.push(colTag);
-    
+
     // Set page title
-    this._title.setSubtitle("Browse My Collections")
+    this._title.setSubtitle('Browse My Collections')
 
     this.subscriptions.push(
       this.route.params
       .subscribe((params: Params) => {
           if (params) {
-            if(params['viewId']){
+            if (params['viewId']){
                 this.selectedBrowseId = params['viewId'];
                 // this.loadCategory();
             }
-    
-            if(params['featureFlag']){
-                this._auth.featureFlags[params['featureFlag']] = true;
+
+            if (params['featureFlag']){
+                this._flags[params['featureFlag']] = true;
             }
 
             if (params['upload']) {
-                this.showEditPCModal = params['upload']   
+                this.showEditPCModal = params['upload']
             }
           }
-        
-
       })
     )
 
@@ -84,10 +77,9 @@ export class MyCollectionsComponent implements OnInit {
       )
     )
 
-    if(this.isLoggedIn){ // If user is logged-in get data for user's personal collections
+    if (this.isLoggedIn) { // If user is logged-in get data for user's personal collections
       this.getUserPCol()
     }
-    this._analytics.setPageValues('mycollection', '')
   } // OnInit
 
   ngOnDestroy() {
@@ -112,9 +104,9 @@ export class MyCollectionsComponent implements OnInit {
     this.loading = true;
     this._assets.pccollection()
       .then((res) => {
-          if(res['privateCollection'] && (res['privateCollection'].length > 0)){
+          if (res['privateCollection'] && (res['privateCollection'].length > 0)){
             for (let colObj of res['privateCollection']){
-                let privTag = new Tag(colObj.collectionid, colObj.collectionname, true, null, { label: "privateCollection", folder: true }, true);
+                let privTag = new Tag(colObj.collectionid, colObj.collectionname, true, null, { label: 'privateCollection', folder: true }, true);
                 this.tags.push(privTag);
             }
           }
@@ -134,11 +126,11 @@ export class MyCollectionsComponent implements OnInit {
   }
 
   toggleInfo(node){
-      if(node.info_expanded){
+      if (node.info_expanded){
           node.info_expanded = false;
       }
       else{
-          if(typeof node.info_expanded == 'undefined'){
+          if (typeof node.info_expanded == 'undefined'){
               this.showNodeDesc(node);
           }
           node.info_expanded = true;
@@ -146,21 +138,21 @@ export class MyCollectionsComponent implements OnInit {
   }
 
   showNodeDesc(node){
-    var descId = '';
-    var nodeId = '';
+    let descId = '';
+    let nodeId = '';
 
-    if(node.descriptionId){
+    if (node.descriptionId){
         descId = node.descriptionId;
         nodeId = node.widgetId;
     }
-    else if(node.parentDescId){
+    else if (node.parentDescId){
         descId = node.parentDescId;
         nodeId = node.parentId;
     }
 
     this._assets.nodeDesc( descId, nodeId )
     .then((res) => {
-        if(res['blurbUrl']){
+        if (res['blurbUrl']){
             node.info_desc = res['blurbUrl'];
             node.info_img = res['imageUrl'];
         }
@@ -171,7 +163,7 @@ export class MyCollectionsComponent implements OnInit {
   }
 
   openAssets(node){
-     if(!node.isFolder){
+     if (!node.isFolder){
         if (node.hasOwnProperty('grpId')) {
             // Navigate to Collection
             this.router.navigate(['image-group', { 'igId' : node.grpId }]);
@@ -184,11 +176,11 @@ export class MyCollectionsComponent implements OnInit {
 
   showHideNode(node){
     // A node in the tree will only be hidden if any of its parent nodes, going up the hierarchy, is collapsed.
-    var isExpanded = true;
-    var parentNode : any = {};
-    if(node.parentId){
+    let isExpanded = true;
+    let parentNode: any = {};
+    if (node.parentId){
         parentNode = this.getNodeByWidgetId(node.parentId);
-        if(this.expandedCategories[parentNode.widgetId] == false){
+        if (this.expandedCategories[parentNode.widgetId] == false){
             isExpanded = false;
         }
         else{
@@ -199,9 +191,9 @@ export class MyCollectionsComponent implements OnInit {
   }
 
   getNodeByWidgetId( id ){
-      var node = {};
-      for( let cat of this.categories){
-          if(cat.widgetId == id){
+      let node = {};
+      for ( let cat of this.categories){
+          if (cat.widgetId == id){
               node = cat;
           }
       }

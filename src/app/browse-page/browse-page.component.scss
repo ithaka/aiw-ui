@@ -11,8 +11,8 @@
 .nav-link{
     cursor: pointer;
     border-bottom: 2px solid transparent;
-    padding-right: 0px;
-    padding-left: 0px;
+    padding-right: 0;
+    padding-left: 0;
     margin-right: 1rem;
     display: inline-block;
 
@@ -38,7 +38,7 @@
 }
 .browse-nav{
     margin-bottom: $basePadding;
-    padding: 10px 0px 10px;
+    padding: 10px 0;
     border-bottom: 1px solid #f0f0f0;
     text-indent: -88px;
     padding-left: 88px;
@@ -51,7 +51,7 @@
 
     & .nav-link {
         display: inline-block;
-        text-indent: 0px;
+        text-indent: 0;
         padding: 0;
 
         &:hover, &:active, &:focus {
@@ -78,7 +78,7 @@
 
 .mycol-info{
     border-left: 1px solid #f0f0f0;
-    padding: 0px 20px;
+    padding: 0 20px;
 
     .img{
         text-align: center;
@@ -134,7 +134,7 @@
 .info-cntnr{
     padding: 10px 20px;
     background-color: #f2f2f2;
-    margin: 5px 0px 5px 45px;
+    margin: 5px 0 5px 45px;
     word-wrap: break-word;
 }
 .info-cntnr img{
@@ -156,7 +156,7 @@
     font-size: 13px;
     line-height: 16px;
     cursor: default;
-    padding: 0px;
+    padding: 0;
     display: inline-block;
 
     .icon-cntnr{
@@ -193,4 +193,33 @@
             background: #d6d6d6;
         }
     }
+}
+
+.input-group {
+    margin-bottom: 2rem;
+    width: 85%;
+}
+
+#browsePageFilter {
+    &.alert {
+        width: 85%;
+    }
+}
+
+
+#iconSearchSubmit, #iconSearchClear {
+    &.form-control__icon {
+        opacity: 0.4;
+        cursor: pointer;
+
+        &:hover, &:focus {
+            opacity: 0.9;
+        }
+    }
+}
+
+.filter--aboveGroup {
+	width: auto;
+	display: inline-block;
+	margin: 3px;
 }

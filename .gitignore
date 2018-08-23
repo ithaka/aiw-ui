@@ -34,6 +34,7 @@ Thumbs.db
 /node_modules
 /bower_components
 npm-debug.log
+/pacts
 
 # Coverage #
 /coverage/
@@ -65,3 +66,11 @@ npm-debug.log
 # Cache #
 .awcache
 .awcache/**/*
+
+# files that were removed from our repo #
+src/app/beta-users-email.ts
+src/app/shared/sso.service.ts
+
+# SSL certificate Files #
+/ssl/*
+!/ssl/ssl.conf

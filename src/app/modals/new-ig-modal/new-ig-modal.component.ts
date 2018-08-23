@@ -7,7 +7,6 @@ import { Angulartics2 } from 'angulartics2';
 
 // Project dependencies
 import { AssetService, AuthService, GroupService, ImageGroup, LogService } from './../../shared';
-import { AnalyticsService } from './../../analytics.service';
 import { IgFormValue, IgFormUtil } from './new-ig';
 
 @Component({
@@ -33,7 +32,7 @@ export class NewIgModal implements OnInit {
   /** Gives artstor institution users the ability to curate image public image groups */
   private isArtstorUser: boolean = false;
   // We need to seed the medium editor with an empty div to fix line return issues in Firefox!
-  private igDescription: string = "";
+  private igDescription: string = '';
   /** The list of assets which are currently selected from the asset grid */
   @Input() private selectedAssets: any[] = [];
 
@@ -60,7 +59,6 @@ export class NewIgModal implements OnInit {
       private _auth: AuthService,
       private _fb: FormBuilder,
       private _group: GroupService,
-      private _analytics: AnalyticsService,
       private _log: LogService,
       private _angulartics: Angulartics2,
       private router: Router,
@@ -68,12 +66,16 @@ export class NewIgModal implements OnInit {
   ) {
     this.newIgForm = _fb.group({
       title: [null, Validators.required],
-      artstorPermissions: ["private", Validators.required],
+      artstorPermissions: ['private', Validators.required],
       tags: [[]] // just initialize an empty array
     })
   }
 
   ngOnInit() {
+    // Set focus to the modal to make the links in the modal first thing to tab for accessibility
+    let htmlelement: HTMLElement = document.getElementById('modal');
+    htmlelement.focus()
+
     /** Set isArtstorUser to true if the user's institution is 1000. This will let them make global image groups */
     this.isArtstorUser = this._auth.getUser().institutionId == 1000;
 
@@ -81,7 +83,7 @@ export class NewIgModal implements OnInit {
      * Set the field values, depending on the image group that is input
      *  only set the field values if you are copying or editing - otherwise, you're trying to make a new image group
      */
-    if(this.ig.id && (this.copyIG || this.editIG)){
+    if (this.ig.id && (this.copyIG || this.editIG)){
       this.setFormValues()
     }
 
@@ -116,7 +118,7 @@ export class NewIgModal implements OnInit {
   private tagLastSearched: string = ''
   private tagDebouncing: boolean = false
 
-  private getTagSuggestions(event: any) : void  {
+  private getTagSuggestions(event: any): void  {
     this.tagSuggestTerm = event.target.value
 
     if (!this.tagDebouncing) {
@@ -172,10 +174,9 @@ export class NewIgModal implements OnInit {
      */
     let group = this.util.prepareGroup(formValue, igDescValue, this.copyIG || this.editIG ? this.ig.items : this.selectedAssets, this._auth.getUser(), this.ig)
 
-    if(this.editIG){
+    if (this.editIG){
       // Editing group
-      this._analytics.directCall('edit_img_group')
-      this._angulartics.eventTrack.next({ action:"editGroup", properties: { category: "group", label: group.id }});
+      this._angulartics.eventTrack.next({ action: 'editGroup', properties: { category: this._auth.getGACategory(), label: group.id }});
 
       group.id = this.ig.id // need this for the update call
 
@@ -195,33 +196,18 @@ export class NewIgModal implements OnInit {
         );
       // if an Artstor user, make sure the public property is set correctly
       if (this.isArtstorUser) {
-        this.changeGlobalSetting(group, formValue.artstorPermissions == "global")
+        this.changeGlobalSetting(group, formValue.artstorPermissions == 'global')
       }
 
     }
     else {
       // analytics events
-      if(this.copyIG) {
+      if (this.copyIG) {
         // Copying old group
-        this._analytics.directCall('save_img_group_as')
-        this._angulartics.eventTrack.next({ action:"copyGroup", properties: { category: "group", label: group.id }});
-
-        // Log copy group event into Captain's Log
-        this._log.log({
-          eventType: "artstor_copy_group",
-          additional_fields: { 
-            "source_group_id": this.ig.id
-          }
-        })
+        this._angulartics.eventTrack.next({ action: 'copyGroup', properties: { category: this._auth.getGACategory(), label: group.id }})
       } else {
         // Create New Group
-        this._analytics.directCall('save_selections_new_img_group')
-        this._angulartics.eventTrack.next({ action:"newGroup", properties: { category: "group" }});
-
-        // Log create group event into Captain's Log
-        this._log.log({
-          eventType: "artstor_create_group"
-        })
+        this._angulartics.eventTrack.next({ action: 'newGroup', properties: { category: this._auth.getGACategory() }})
       }
 
       // create the group using the group service
@@ -235,7 +221,27 @@ export class NewIgModal implements OnInit {
 
             // if an Artstor user, make sure the public property is set correctly
             if (this.isArtstorUser) {
-              this.changeGlobalSetting(this.newGroup, formValue.artstorPermissions == "global")
+              this.changeGlobalSetting(this.newGroup, formValue.artstorPermissions == 'global')
+            }
+
+            if (this.copyIG && this.ig && this.ig.id) {
+              // Log copy group event into Captain's Log
+              this._log.log({
+                eventType: 'artstor_copy_group',
+                additional_fields: {
+                  'source_group_id': this.ig.id,
+                  'group_id': this.newGroup.id
+                }
+              })
+            }
+            else {
+              // Log create group event into Captain's Log
+              this._log.log({
+                eventType: 'artstor_create_group',
+                additional_fields: {
+                  'group_id': this.newGroup.id
+                }
+              })
             }
           },
           error => {
@@ -254,11 +260,11 @@ export class NewIgModal implements OnInit {
    */
   private extractDescription(): string {
     let igDescValue = ''
-    if(this.igDescription){
+    if (this.igDescription){
       let parentElement = document.createElement('div');
       parentElement.innerHTML = this.igDescription;
 
-      if( parentElement.firstElementChild && (parentElement.firstElementChild.id === 'angularMediumEditor' )){
+      if ( parentElement.firstElementChild && (parentElement.firstElementChild.id === 'angularMediumEditor' )){
         igDescValue = parentElement.firstElementChild.innerHTML;
       }
       else{
@@ -282,15 +288,15 @@ export class NewIgModal implements OnInit {
     // Set tags values
     this.newIgForm.controls['tags'].setValue(tagsCopy);
 
-    if (this.ig.public) { this.newIgForm.controls['artstorPermissions'].setValue("global") }
-    else if (this.institutionView()) { this.newIgForm.controls['artstorPermissions'].setValue("institution") }
+    if (this.ig.public) { this.newIgForm.controls['artstorPermissions'].setValue('global') }
+    else if (this.institutionView()) { this.newIgForm.controls['artstorPermissions'].setValue('institution') }
 
     /** Setting the description based on the current image group's description requires some workarounds */
-    if(this.ig.description){
+    if (this.ig.description){
       let parentElement = document.createElement('div');
       parentElement.innerHTML = this.ig.description;
 
-      if( parentElement.firstElementChild && (parentElement.firstElementChild.id === 'angularMediumEditor' )){
+      if ( parentElement.firstElementChild && (parentElement.firstElementChild.id === 'angularMediumEditor' )){
         this.igDescription = parentElement.firstElementChild.innerHTML;
       }
       else{
@@ -305,8 +311,8 @@ export class NewIgModal implements OnInit {
    */
   private institutionView(): boolean {
     let institutionView = false
-    for(let accessObj of this.ig.access) {
-      if(accessObj.entity_type === 200) {
+    for (let accessObj of this.ig.access) {
+      if (accessObj.entity_type === 200) {
         institutionView = true
         break
       }

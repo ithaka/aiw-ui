@@ -15,8 +15,22 @@ module.exports = function(config) {
      *
      * available frameworks: https://npmjs.org/browse/keyword/karma-adapter
      */
-    frameworks: ['jasmine'],
+    frameworks: ['jasmine', 'jasmine-spec-tags', 'pact'],
 
+    // Plugins starting with "karma-" are already auto imported
+    plugins: [
+      'karma-chrome-launcher',
+      'karma-coverage',
+      'karma-jasmine',
+      'karma-jasmine-spec-tags',
+      'karma-mocha-reporter',
+      'karma-phantomjs-launcher',
+      'karma-remap-coverage',
+      'karma-sourcemap-loader',
+      'karma-webpack',
+      '@pact-foundation/karma-pact'
+    ],
+    
     // list of files to exclude
     exclude: [ ],
 
@@ -48,6 +62,44 @@ module.exports = function(config) {
 
     // Webpack please don't spam the console when running in karma!
     webpackMiddleware: { stats: 'errors-only'},
+
+    /**
+     * Configure Pact mock servers
+     * - EACH provider needs a configuration with a unique *port*
+     */
+    pact: [
+      {
+        cors: true, 
+        host: 'localhost',
+        port: 1201, 
+        dir: 'pacts/',
+        consumer: 'aiw-ui',
+        provider: 'binder-group'
+      },
+      {
+        cors: true, 
+        host: 'localhost',
+        port: 1202, 
+        dir: 'pacts/',
+        consumer: 'aiw-ui',
+        provider: 'binder-metadata'
+      },
+      {
+        cors: true, 
+        host: 'localhost',
+        port: 1203, 
+        dir: 'pacts/',
+        consumer: 'aiw-ui',
+        provider: 'artaa_service'
+      }
+    ], 
+    // 4) here we can define proxies to redirect requests from our pact tests to the mock server
+    proxies: { 
+      '/api/v1/group': 'http://localhost:1201/api/v1/group',
+      '/api/v1/metadata': 'http://localhost:1202/api/v1/metadata',
+      '/api/secure/user/706217': 'http://localhost:1203/api/secure/user/706217',
+      '/api/secure/user/abcdefg': 'http://localhost:1203/api/secure/user/abcdefg'
+    },
 
     /*
      * test results reporter to use

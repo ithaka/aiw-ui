@@ -31,17 +31,17 @@ export class LegacyRouteResolver implements Resolve<boolean> {
     }
 
     // Keep this log around: we have a lot of exceptions
-    console.log("Attempting to resolve legacy url:\n", url)
+    console.log('Attempting to resolve legacy url:\n', url)
 
     /**
      * Example URLs being handled:
      * /library/#3|search|1|Globe20Theater|Multiple20Collection20Search|||type3D3126kw3DGlobe20Theater26id3Dall26name3DAll20Collections26origKW3D (public site)
      */
 
-    if (!isNaN(Number(url.substr(1,2)))) {
+    if (!isNaN(Number(url.substr(1, 2)))) {
       // Anchors in some old links cause some of the path to be lost
       url = '/library/welcome.html#' + url.substr(1)
-    } else if(url.endsWith("welcome.html")) { // If the legacy URL ends with 'welcome.html'
+    } else if (url.endsWith('welcome.html')) { // If the legacy URL ends with 'welcome.html'
       this._router.navigate(['/home'])
       return true
     } else if (url.indexOf('/library') == 0) {
@@ -53,25 +53,41 @@ export class LegacyRouteResolver implements Resolve<boolean> {
       url = decodeURI(url)
     }
 
-    let urlArr = url.split("/")
+    let urlArr = url.split('/')
     // Paths that trail "/library" with "/" can drop the first two strings
     if (url.split('/').length > 2) {
-      urlArr.splice(0,2)
+      urlArr.splice(0, 2)
     }
     // A leading forward slash will cause an empty string on split
     if (urlArr[0].length < 1) {
-      urlArr.splice(0,1)
+      urlArr.splice(0, 1)
     }
-    
-    if (urlArr[0].substr(0, 10).toLowerCase() === "externaliv") {
-      let encryptedId = urlArr[0].split("=")[1]
+
+    if (urlArr[0].substr(0, 10).toLowerCase() === 'externaliv') {
+      let encryptedId = urlArr[0].split('=')[1]
       this._router.navigate(['/asset', 'external', encryptedId])
 
-    } else if (urlArr[0] === "secure") {
-      let idRe: RegExp = /id=(.*)/
-      let encryptedId = idRe.exec(urlArr[1])[1]
+    } else if (urlArr[0] === 'secure') {
+      /**
+       * This breaks the query param string into an object which can be passed to the angular router
+       */
+      let path: string = urlArr[1]
+      let queryString: string = path.substr(path.indexOf('?') + 1)
+      let rawParams: string[] = queryString.split('&')
+      let queryParams: { [key: string]: string } = {}
+      rawParams.forEach((param) => {
+        let paramArr: string[] = param.split('=')
+        if (paramArr && paramArr.length > 1) {
+          let key: string = paramArr[0]
+          let value: string = paramArr[1]
+          queryParams[key] = value
+        }
+      })
 
-      this._router.navigate(['/asset', 'external', encryptedId])
+      let encryptedId: string = queryParams.id
+      delete queryParams.id
+
+      this._router.navigate(['/asset', 'external', encryptedId], {queryParams: queryParams})
 
     } else {
       let routeNum = urlArr[0].substr(0, 2)
@@ -80,44 +96,44 @@ export class LegacyRouteResolver implements Resolve<boolean> {
         urlArr[index] = decodeURIComponent(value)
       })
 
-      let pipeArr = urlArr[0].split("|")
+      let pipeArr = urlArr[0].split('|')
 
       // At some point, someone made pretty urls as: '/library/collection/patel'
       if (pipeArr[0] == 'collection' && urlArr[1]) {
-        this._router.navigate(["/collection", urlArr[1]])
+        this._router.navigate(['/collection', urlArr[1]])
       }
 
       // Handling for '/library/welcome.html'
       if (pipeArr[0] == 'welcome.html') {
-        this._router.navigate(["/home"])
+        this._router.navigate(['/home'])
       }
 
       if (pipeArr[0].indexOf('#') > 0) {
         routeNum = pipeArr[0].substr(pipeArr[0].indexOf('#'), 2)
       }
       switch (routeNum) {
-        case "#2": // handles all of the #2 routes
-          this._router.navigate(["/browse", "library", { viewId: pipeArr[1] }])
+        case '#2': // handles all of the #2 routes
+          this._router.navigate(['/browse', 'library', { viewId: pipeArr[1] }])
           break
-        case "#3": // handles all of the #3 routes
+        case '#3': // handles all of the #3 routes
           // #3 routes are usually an array split by the pipe symbol, and the key is the second value in that array (index 1)
           if (pipeArr && pipeArr.length > 0) {
             switch (pipeArr[1]) {
-              case "categories":
-                this._router.navigate(["/category", pipeArr[2]]) // the 3rd item in the array is the category id
+              case 'categories':
+                this._router.navigate(['/category', pipeArr[2]]) // the 3rd item in the array is the category id
                 break
-              case "collections":
-                this._router.navigate(["/collection", pipeArr[2]]) // the 3rd item in the array is the collection id
+              case 'collections':
+                this._router.navigate(['/collection', pipeArr[2]]) // the 3rd item in the array is the collection id
                 break
-              case "imagegroup":
-                this._router.navigate(["group", pipeArr[2]])
+              case 'imagegroup':
+                this._router.navigate(['group', pipeArr[2]])
                 break
-              case "search":
+              case 'search':
                 let params = this.splitParams(pipeArr[7])
                 // break out the term separately, just to clean up the url a little
                 let term = params.term
                 delete params.term
-                this._router.navigate(["/search", term, params])
+                this._router.navigate(['/search', term, params])
                 break
               default:
                 // we might want to provide some feedback to the user here
@@ -160,7 +176,7 @@ export class LegacyRouteResolver implements Resolve<boolean> {
 
 
     // we init search with a term of * and only replace it if the query has a search term
-    let searchParams: SearchParams = { term: "*" }
+    let searchParams: SearchParams = { term: '*' }
 
     // handle the keyword(s) & conditions
     // this is the only parameter that's not handled with the execRegExp
@@ -172,25 +188,25 @@ export class LegacyRouteResolver implements Resolve<boolean> {
 
     // geography handler
     let geo = this.execRegExp(/geoIds3D(.*?(?=26))/, params)
-    if (geo) { searchParams.geography = geo.join(",") }
+    if (geo) { searchParams.geography = geo.join(',') }
 
     // classification handler
     let cls = this.execRegExp(/clsIds3D(.*?(?=26))/, params)
-    if (cls) { searchParams.classification = cls.join(",") }
+    if (cls) { searchParams.classification = cls.join(',') }
 
     // collection handler
     let col = this.execRegExp(/id3D(.*?(?=26))/, params)
-    if (col && (col.indexOf('all') === -1)) { searchParams.coll = col.join(",") }
+    if (col && (col.indexOf('all') === -1)) { searchParams.coll = col.join(',') }
 
     // beginning date handler
     // bDate isn't ever a list, so we need to make sure it's a single parameter that comes back
     let bDate = this.execRegExp(/bDate3D(.*?(?=26))/, params)
-    if (bDate && bDate.length == 1) { searchParams.startDate = bDate.join("") }
+    if (bDate && bDate.length == 1) { searchParams.startDate = bDate.join('') }
 
     // end date handler
     // eDate, like bDate, should never be an array with length more than one
     let eDate = this.execRegExp(/eDate3D(.*?(?=26))/, params)
-    if (eDate && eDate.length == 1) { searchParams.endDate = eDate.join("") }
+    if (eDate && eDate.length == 1) { searchParams.endDate = eDate.join('') }
 
     return searchParams
 
@@ -218,7 +234,7 @@ export class LegacyRouteResolver implements Resolve<boolean> {
   private execRegExp(re: RegExp, target: string): string[] {
     let match = re.exec(target)
     if (match && match[1]) {
-      let res: string[] = this.hydrateUrlArr(match[1].split("2C"))
+      let res: string[] = this.hydrateUrlArr(match[1].split('2C'))
       if (res && res.length > 0) {
         return res
       } else { return }
@@ -232,19 +248,19 @@ export class LegacyRouteResolver implements Resolve<boolean> {
    */
   private hydrateUrlString(url: string): string {
     // make sure the string really exists and is not empty
-    if (url && url.length && url[0] != "") {
+    if (url && url.length && url[0] != '') {
       // split string into array
-      let strArray: string[] = url.split("")
+      let strArray: string[] = url.split('')
       // cycle backward through the array
-      for(let i = strArray.length - 1; i >= 0; i--) {
+      for (let i = strArray.length - 1; i >= 0; i--) {
         // if there should be a percent sign there, put one there (that should be every 3rd character)
         if (i % 2 == 0) {
-          strArray.splice(i, 0, "%")
+          strArray.splice(i, 0, '%')
         }
       }
 
       try {
-        return decodeURIComponent(strArray.join(""))
+        return decodeURIComponent(strArray.join(''))
       } catch (err) {
         // we know we'll get some error here about decodeURIComponent not working - we'll go ahead and ignore that
         // this happens when non-urlencoded info comes through, "allArt" for example
@@ -261,7 +277,7 @@ export class LegacyRouteResolver implements Resolve<boolean> {
    */
   private hydrateUrlArr(urls: string[]): string[] {
     // make sure the first item in the array is a non-empty string
-    if (urls && urls.length && urls[0] != "") {
+    if (urls && urls.length && urls[0] != '') {
       // the array we'll return
       let hydrated: string[] = []
       // cycle through urls and use hydrateUrlString to convert the string individually
@@ -280,10 +296,10 @@ export class LegacyRouteResolver implements Resolve<boolean> {
   private hydrateKeywordExpression(keywordStr: string) {
     // the "search within" fields are specified with dehydrated ids so we have to water them
     let fieldRe = /7C([0-9]*)/g
-    
+
     // we'll cycle through all of the matches for ids and give them a drink 💧
     let result
-    
+
     while ((result = fieldRe.exec(keywordStr)) !== null) {
       if (result[1] && result[1].length > 0) {
         keywordStr = keywordStr.replace(result[1], this.hydrateUrlString(result[1]))
@@ -293,23 +309,14 @@ export class LegacyRouteResolver implements Resolve<boolean> {
     // just make a bunch of specific replacements for badly urlencoded characters
     // then decode that sucker
     let decoded = decodeURIComponent(
-      keywordStr.replace(/7C/g, "%7C")
-        .replace(/23/g, "%23")
-        .replace(/2C/g, "%2C")
-        .replace(/20/g, "%20")
+      keywordStr.replace(/7C/g, '%7C')
+        .replace(/23/g, '%23')
+        .replace(/2C/g, '%2C')
+        .replace(/20/g, '%20')
     )
 
     return decoded
   }
-
-  // private decryptToken(token: string): Observable<any> {
-  //   return this.http.get(this._auth.getHostname() + "/api/v1/items/resolve?encrypted_id=" + token)
-  //     .map((res) => {
-  //       let jsonRes = res.json() || {}
-  //       if (jsonRes && jsonRes.success && jsonRes.item) { return jsonRes.item }
-  //       else { throw new Error("No success or item found on response object") }
-  //     })
-  // }
 }
 
 /**

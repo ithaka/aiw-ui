@@ -15,21 +15,22 @@ import { AppConfig } from '../../app.service';
 export class Nav implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = [];
   public showLoginPanel = false;
+  public allowExpiredModal = false;
   private user: any = {};
   private institutionObj: any = {};
   private _tool: ToolboxService = new ToolboxService();
-  
+
   private showinactiveUserLogoutModal: boolean = false;
   private appConfig: any
 
   // Display variables
-  private logoUrl = ""
+  private logoUrl = ''
 
   private ipAuthed: boolean = false
 
   // TypeScript public modifiers
   constructor(
-    public _app: AppConfig, 
+    public _app: AppConfig,
     private _auth: AuthService,
     private _assets: AssetService,
     private _router: Router,
@@ -43,37 +44,42 @@ export class Nav implements OnInit, OnDestroy {
 
     this.subscriptions.push(
       this._router.events.subscribe(e => {
+        /**
+         * Show/Hide logic for login info
+         * - Hides "login panel" in top right for certain pages
+         * - Hides session expiration modal for certain pages
+         */
         if (e instanceof NavigationEnd) {
           let baseRoute: string = e.url.split('/')[1].split('?')[0].split(';')[0]
-          switch(baseRoute) {
+          switch (baseRoute) {
             case 'assetprint':
             case 'link':
             case 'login':
+            case 'register':
             case 'printpreview':
               this.showLoginPanel = false
+              this.allowExpiredModal = false
               break
             default:
               this.showLoginPanel = true
+              this.allowExpiredModal = true
+          }
+          // Allow external asset links
+          if (e.url.includes('asset/external')) {
+            this.allowExpiredModal = false
           }
         }
-        // if (e instanceof NavigationEnd && (e.url != '/login') && (e.url.split('/')[1] != 'printpreview') && (e.url.split('/')[1] != 'assetprint')) {
-        //     this.showLoginPanel = true
-        // } else {
-        //     this.showLoginPanel = false
-        // }
       })
     );
 
-    // this handles showing the register link for only ip auth'd users
-    this._auth.getIpAuth()
-      .take(1)
-      .subscribe((res) => {
-        if (res.remoteaccess === false && res.user) {
+    // check every new user value to see if they're ip auth'd
+    this.subscriptions.push(
+      this._auth.currentUser.subscribe((user) => {
+        if (user && user.ipAuthed == true) {
           this.ipAuthed = true
         }
-      }, (err) => {
-        console.error(err)
       })
+    )
 
     // Subscribe to User object updates
     this.subscriptions.push(
@@ -81,8 +87,8 @@ export class Nav implements OnInit, OnDestroy {
         (userObj) => {
           this.user = userObj;
 
-          // Add user context to sentry.io errors 
-          if(this.user.username){
+          // Add user context to sentry.io errors
+          if (this.user.username){
             Raven.setUserContext({
                 email: this.user.username
             })
@@ -91,7 +97,7 @@ export class Nav implements OnInit, OnDestroy {
           }
         },
         (err) => {
-          console.error("Nav failed to load Institution information", err)
+          console.error('Nav failed to load Institution information', err)
         }
       )
     );
@@ -110,7 +116,7 @@ export class Nav implements OnInit, OnDestroy {
           this.institutionObj = institutionObj;
         },
         (err) => {
-          console.error("Nav failed to load Institution information", err)
+          console.error('Nav failed to load Institution information', err)
         }
       )
     );
@@ -123,7 +129,7 @@ export class Nav implements OnInit, OnDestroy {
   logout(): void {
     this._auth.logout()
       .then(() => {
-        if (this.location.path().indexOf("home") >= 0) {
+        if (this.location.path().indexOf('home') >= 0) {
           location.reload() // this will reload the app and give the user a feeling they actually logged out
         } else {
           this._router.navigate(['/home'])
@@ -135,7 +141,7 @@ export class Nav implements OnInit, OnDestroy {
   }
 
   navigateAndSaveRoute(route: string): void {
-    this._auth.store("stashedRoute", this.location.path(false));
+    this._auth.store('stashedRoute', this.location.path(false));
 
     this._router.navigate([route]);
   }
@@ -145,5 +151,5 @@ export class Nav implements OnInit, OnDestroy {
     this._auth.resetIdleWatcher();
     this.showinactiveUserLogoutModal = false;
   }
-  
-} 
+
+}

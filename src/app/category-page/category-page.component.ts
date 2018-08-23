@@ -4,7 +4,6 @@ import { Router, ActivatedRoute, UrlSegment } from '@angular/router';
 import { Subscription }   from 'rxjs/Subscription';
 
 // Internal Dependencies
-import { AnalyticsService } from '../analytics.service';
 import { AssetService } from './../shared/assets.service';
 import { AuthService } from './../shared/auth.service';
 import { TitleService } from '../shared/title.service';
@@ -21,6 +20,8 @@ export class CategoryPage implements OnInit, OnDestroy {
   private header = new HttpHeaders().set('Content-Type', 'application/json'); // ... Set content type to JSON
   private options = { headers: this.header, withCredentials: true }; // Create a request option
 
+  private user: any = this._auth.getUser();
+
   private catId: string;
   private catName: string;
   private catDescription: string;
@@ -29,7 +30,7 @@ export class CategoryPage implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = [];
 
   // private searchInResults: boolean = false;
-
+  private unaffiliatedUser: boolean = false
 
   constructor(
     private _assets: AssetService,
@@ -37,11 +38,22 @@ export class CategoryPage implements OnInit, OnDestroy {
     private _router: Router,
     private route: ActivatedRoute,
     private http: HttpClient,
-    private _analytics: AnalyticsService,
     private _title: TitleService
   ) {}
 
   ngOnInit() {
+    // Subscribe User object updates
+    this.subscriptions.push(
+      this._auth.currentUser.subscribe(
+        (userObj) => {
+          this.user = userObj;
+        },
+        (err) => {
+          console.error('Failed to load user information', err)
+        }
+      )
+    );
+
     this.subscriptions.push(
       this.route.params.subscribe((routeParams) => {
         this.catId = routeParams['catId'];
@@ -52,8 +64,11 @@ export class CategoryPage implements OnInit, OnDestroy {
         }
 
         if (this.catId) {
+          // If the _auth.isPublicOnly()  doesn't match the component's "unaffiliatedUser" flag then refresh search results
+          let refreshSearch = this.unaffiliatedUser && this._auth.isPublicOnly() ? false : true
+
           // Tell AssetService to load thumbnails (Asset Grid will get them)
-          this._assets.queryAll(params);
+          this._assets.queryAll(params, refreshSearch);
 
           // Get Category metadata
           this.getCategoryInfo(this.catId)
@@ -87,10 +102,11 @@ export class CategoryPage implements OnInit, OnDestroy {
             console.error(error);
           });
         }
-      })
-    );// End push to subscription
 
-    this._analytics.setPageValues('category', this.catId)
+        this.unaffiliatedUser = this._auth.isPublicOnly() ? true : false
+      })
+    ); // End push to subscription
+
   } // OnInit
 
 

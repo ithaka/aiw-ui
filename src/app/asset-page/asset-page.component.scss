@@ -3,7 +3,7 @@
 $titleNavBg: #eee;
 
 .asset-col {
-    padding: 0px !important;
+    padding: 0 !important;
 
     @media(max-width: $phone) {
         max-height: 50vh;
@@ -67,7 +67,7 @@ $titleNavBg: #eee;
     box-shadow: 1px 2px 3px rgba(0, 0, 0, 0.3);
     background: white;
     color: black;
-    padding: 2px 15px 0px;
+    padding: 2px 15px 0;
     opacity: 0;
     -webkit-transition: opacity linear 0.3s;
     -moz-transition: opacity linear 0.3s;
@@ -118,7 +118,7 @@ $titleNavBg: #eee;
     cursor: pointer;
     vertical-align: middle;
     line-height: 41px;
-    padding: 36px 0px 12px;
+    padding: 36px 0 12px;
     // Offset to fix position "sticky" clicking behavior
     top: -24px;
     position: sticky;
@@ -169,12 +169,12 @@ $titleNavBg: #eee;
     height: 100%;
     background: rgba(255,255,255,0.98);
     overflow-y: scroll;
-    padding: 30px 0px 80px;
+    padding: 30px 0 80px;
     // Let the asset drawer cover the exit fullscreen button
-    margin-top: 0px;
+    margin-top: 0;
 
     transition: 300ms ease all;
-    box-shadow: 0px 1px 5px 0px rgba(0,0,0,0.3);
+    box-shadow: 0 1px 5px 0 rgba(0,0,0,0.3);
 
     &.slideOut {
       -webkit-transform: translateX(-230px);
@@ -286,7 +286,7 @@ $titleNavBg: #eee;
 .quiz-caption-cntnr{
     position: absolute;
     background: #f1f8f1;
-    left: 0px;
+    left: 0;
     top: 100%;
     z-index: 1;
     opacity: 1;
@@ -294,7 +294,7 @@ $titleNavBg: #eee;
     height: 40px;
     padding: 10px;
     transition: transform 0.2s linear;
-    transform: translateY(0px);
+    transform: translateY(0);
 
     &.cntnr-bg{
         background: #f1f8f1;
@@ -427,7 +427,7 @@ $titleNavBg: #eee;
     display: block;
     
     a{
-        padding: 5px 5px 5px 0px;
+        padding: 5px 5px 5px 0;
         &:hover{
             background: #f9f9f9;
         }
@@ -443,5 +443,52 @@ $titleNavBg: #eee;
 
     .label{
         display: inline;
+    }
+}
+
+#copy-link {
+    margin-left: 0.15rem;
+    max-width: 25rem;
+    width: 100%;
+    #assetpage-btn {
+        margin-left:0;
+        width:6rem;
+    }
+}
+
+#asset-btn {
+    margin: 0; 
+}
+
+#generatedImgURL {
+    display: inline-block;
+    width: 75%;
+    height: 2.11rem;
+    margin-top: 4px;
+    margin-left: 3px;
+    margin-right: 0;
+}
+
+#assetpage-btn, #downloadAssetDropdown {
+
+    &.btn-primary {
+        width: 12rem;
+    }
+
+    &.btn-secondary, a.btn-secondary {
+      width: 12rem;
+
+      &.dropdown-toggle {
+          &:hover, &:focus, &:active, &.active {
+              background-color: #C9510D;
+              color: white;
+          }
+      }
+  }
+}
+
+.btn-secondary {
+    &.active .icon-download-asset-orange, &:hover .icon-download-asset-orange, &:focus .icon-download-asset-orange {
+        background-image: url("/assets/img/icon-download-asset-white.svg");
     }
 }

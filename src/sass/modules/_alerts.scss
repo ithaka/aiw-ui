@@ -5,9 +5,9 @@ $infoColor: $blue;
     @extend %SansRegular;
     font-size: 12px;
     line-height: 14px;
-    margin: $basePadding/2 0px;
+    margin: $basePadding/2 0;
     background: #fafafa;
-    border-radius: 0px;
+    border-radius: 0;
 
     & h1, h2, h3, h4, h5, h6 {
         color: inherit;

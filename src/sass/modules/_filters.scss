@@ -64,7 +64,7 @@ filter, .filter {
 			position: absolute;
 			content: ' ';
 			display: block;
-			left: 0px;
+			left: 0;
 			width: $filterTextIndent;
 			height: 100%;
 		}
@@ -75,7 +75,7 @@ filter, .filter {
 
 	&.no-buttons {
 		&:hover, &:active, &:focus {
-			padding-right: 0px;
+			padding-right: 0;
 		}
 	}
 
@@ -83,6 +83,8 @@ filter, .filter {
 		color: $activeFilterColor;
 		background: $filterHoverBg;
 		margin-bottom: 1px;
+		text-decoration: none;
+		font-weight: bold;
 	}
 
 	&:hover, &:active, &:focus{
@@ -174,7 +176,7 @@ filter, .filter {
 }
 
 .filter-list {
-	padding-left: 0px;
+	padding-left: 0;
 	
 	& li,
 	& li.filter {
@@ -203,7 +205,8 @@ button.filter--tag {
 }
 
 .filter--tag {
-	color:#8300e0;
+	color:#000;
+	text-decoration: underline;
 }
 
 filter.date-span-input {

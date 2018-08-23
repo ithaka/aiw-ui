@@ -5,7 +5,6 @@ import { Subscription }   from 'rxjs/Subscription';
 
 // Internal Dependencies
 import { AssetService, AuthService, ImageGroupDescription, ImageGroupService } from './../shared';
-import { AnalyticsService } from '../analytics.service';
 
 @Component({
   selector: 'ang-image-group-pp-page',
@@ -33,7 +32,6 @@ export class ImageGroupPPPage implements OnInit, OnDestroy {
     private _router: Router,
     private route: ActivatedRoute,
     private http: HttpClient,
-    private _analytics: AnalyticsService
   ) {}
 
   ngOnInit() {
@@ -42,7 +40,7 @@ export class ImageGroupPPPage implements OnInit, OnDestroy {
     // Subscribe to ID in params
     this.subscriptions.push(
       this.route.params.subscribe((routeParams) => {
-        let id = routeParams["igId"];
+        let id = routeParams['igId'];
         let params = Object.assign({}, routeParams);
         // If a page number isn't set, reset to page 1!
         if (!params['page']){
@@ -58,7 +56,7 @@ export class ImageGroupPPPage implements OnInit, OnDestroy {
     this.subscriptions.push(
       this._assets.allResults.subscribe((results: any) => {
         console.log(results);
-        if(results.id){
+        if (results.id){
             this.igDesc = results.description;
 
             this._assets.getAllThumbnails(results.items)
@@ -78,14 +76,14 @@ export class ImageGroupPPPage implements OnInit, OnDestroy {
         }
       })
     );
-    this._analytics.setPageValues('groupprint', this.igId)
+
   } // OnInit
 
   // Load Image Group Descrition
   loadIgDesc(igId: string): void{
       this._igService.getGroupDescription(igId).take(1)
             .subscribe((data: ImageGroupDescription) => {
-                if(data){
+                if (data){
                     this.igDesc = data.igNotes;
                 }
             });

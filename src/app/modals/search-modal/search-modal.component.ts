@@ -5,9 +5,8 @@ import { Angulartics2 } from 'angulartics2';
 
 // Project dependencies
 import { SearchQueryUtil } from './search-query';
-import { AnalyticsService } from '../../analytics.service';
 import { AssetFiltersService } from './../../asset-filters/asset-filters.service';
-import { AuthService, AssetService, AssetSearchService } from "app/shared";
+import { AuthService, AssetService, AssetSearchService } from 'app/shared';
 import { AppConfig } from '../../app.service';
 
 @Component({
@@ -64,7 +63,7 @@ export class SearchModal implements OnInit {
       collections: []
     }
   ];
-  private instName: string = ""
+  private instName: string = ''
   private instCollections: any[] = []
   private filterSelections: any[] = []
   private subscriptions: Subscription[] = []
@@ -88,7 +87,6 @@ export class SearchModal implements OnInit {
         private _filters: AssetFiltersService,
         private _router: Router,
         private route: ActivatedRoute,
-        private _analytics: AnalyticsService,
         private angulartics: Angulartics2,
         private _auth: AuthService,
         // Solr Search service
@@ -121,30 +119,30 @@ export class SearchModal implements OnInit {
     // Used to determine if generateSelectedFilters will be called or not, should only be called if we have a tri-state checkbox checked
     let updateSelectedFilters: boolean = false
 
-    for(let key in routeParams){
+    for (let key in routeParams){
       let switchCaseValue: string = ( key === 'collectiontypes' || key === 'geography' ) ? 'colTypeGeo' : key
-      switch( switchCaseValue ){
+      switch ( switchCaseValue ){
         case 'term': { // Update the advanceQueries Array as per the term param
           this.updateAdvanceQueries( routeParams )
           break
         }
-       
+
         case 'startDate': { // Update advanceSearchDate Object as per the startDate
           this.advanceSearchDate.startDate = Math.abs(routeParams[key])
           this.advanceSearchDate.startEra = parseInt(routeParams[key]) < 0 ? 'BCE' : 'CE'
           break
         }
-       
+
         case 'endDate': { // Update advanceSearchDate Object as per the endDate
           this.advanceSearchDate.endDate = Math.abs(routeParams[key])
           this.advanceSearchDate.endEra = parseInt(routeParams[key]) < 0 ? 'BCE' : 'CE'
           break
         }
-        
-        //For tri-state checkboxes set the checked flag for filter object based on param value and in the end run generateSelectedFilters to updated selected filters object
+
+        // For tri-state checkboxes set the checked flag for filter object based on param value and in the end run generateSelectedFilters to updated selected filters object
         case 'artclassification_str': {
           let classificatioFilters = routeParams[key].split('|')
-          for(let filter of classificatioFilters){
+          for (let filter of classificatioFilters){
             let clsFilterGroup =  this.availableFilters.find( filterGroup => filterGroup.name === key )
             let updtFilterObj = clsFilterGroup.values.find( filterObj => filterObj.value === filter )
             updtFilterObj.checked = true
@@ -154,21 +152,21 @@ export class SearchModal implements OnInit {
 
         case 'colTypeGeo': {
           let filters = routeParams[key].split('|')
-          for(let filter of filters){
+          for (let filter of filters){
             let filterGroup =  this.availableFilters.find( filterGroup => filterGroup.name === key )
             let updtFilterObj = filterGroup.values.find( filterObj => filterObj.value === filter )
-            if( updtFilterObj ){ // If match is found at the parent node level
+            if ( updtFilterObj ){ // If match is found at the parent node level
               updtFilterObj.checked = true
-              if( updtFilterObj.children && updtFilterObj.children.length > 0 ){
-                for(let child of updtFilterObj.children){
+              if ( updtFilterObj.children && updtFilterObj.children.length > 0 ){
+                for (let child of updtFilterObj.children){
                   child.checked = true
                 }
               }
             } else{ // If we don't find a match at parent node level then search for a match in children nodes
-              for(let value of filterGroup.values){
-                if(value.children && value.children.length > 0){
+              for (let value of filterGroup.values){
+                if (value.children && value.children.length > 0){
                   let updtFilterObj = value.children.find( filterObj => filterObj.value === filter )
-                  if(updtFilterObj){
+                  if (updtFilterObj){
                     updtFilterObj.checked = true
                     break
                   }
@@ -181,11 +179,11 @@ export class SearchModal implements OnInit {
 
         case 'collections': {
           let colIds = routeParams[key].split('|')
-          for(let colId of colIds){ // Indv. collection filters are only available udner Inst. Col Type filter. Find the collection filter object and mark it checked
+          for (let colId of colIds){ // Indv. collection filters are only available udner Inst. Col Type filter. Find the collection filter object and mark it checked
             let filterGroup =  this.availableFilters.find( filterGroup => filterGroup.name === 'collectiontypes' )
             let instColFilters = filterGroup.values.find( colTypefilter => colTypefilter.value === '2' )
             let updtFilterObj = instColFilters.children.find( filterObj => filterObj.value === colId )
-            if( updtFilterObj ){
+            if ( updtFilterObj ){
               updtFilterObj.checked = true
             }
           }
@@ -195,18 +193,18 @@ export class SearchModal implements OnInit {
     }
 
     // Finally generate selected filters from available filters marked as checked if any
-    if( updateSelectedFilters ) {
+    if ( updateSelectedFilters ) {
       this.generateSelectedFilters()
     }
   }
 
   private updateAdvanceQueries( params: any ): void{
     let terms = params['term'].split(' ')
-    if( terms.length > 0 ){
+    if ( terms.length > 0 ){
       this.advanceQueries = []
       let operator = 'AND'
-      for(let term of terms){
-        if( term === 'AND' || term === 'OR' || term === 'NOT' ){
+      for (let term of terms){
+        if ( term === 'AND' || term === 'OR' || term === 'NOT' ){
           operator = term
           continue
         }
@@ -228,7 +226,7 @@ export class SearchModal implements OnInit {
   /**
    * Load filters (Geo, Collection, Collection Type)
    */
-  private loadFilters() : void {
+  private loadFilters(): void {
     this._search.getFacets().take(1)
       .subscribe(data => {
 
@@ -248,7 +246,11 @@ export class SearchModal implements OnInit {
               let facetName = facet.values[i].name
               if (!this.showPrivateCollections && facetName.match(/3|6/)) { // NOTE: 3 & 6 are Private Collections names
                 facet.values.splice(i, 1)
-              } else if (facetName && facetName.length > 0){ // Some filters return empty strings, avoid those
+              }
+              if (this._auth.isPublicOnly() && facet.name == 'collectiontypes' && !(facetName.match(/5/))) { // For public user, only show public collection in collectiontype filter, 5 is Public Collection name
+                facet.values.splice(i, 1)
+              }
+              else if (facetName && facetName.length > 0){ // Some filters return empty strings, avoid those
                 // Push filter objects to Facet Group 'values' Array
                 let facetObject: FacetObject = {
                   checked: false,
@@ -259,7 +261,7 @@ export class SearchModal implements OnInit {
                 }
 
                 // institutional collection counts are wrong, so assign them a count of 0 to indicate it shouldn't be displayed
-                facetObject.value == "2" && (facetObject.count = 0)
+                facetObject.value == '2' && (facetObject.count = 0)
 
                 facetGroup.values.push( facetObject )
               }
@@ -278,7 +280,7 @@ export class SearchModal implements OnInit {
             values: []
           }
 
-          for(let geoObj of topObj){
+          for (let geoObj of topObj){
             let geoFacetObj: FacetObject = {
               checked: false,
               name: geoObj.name,
@@ -287,7 +289,7 @@ export class SearchModal implements OnInit {
               children: []
             }
 
-            for(let child of geoObj.children){
+            for (let child of geoObj.children){
               let geoChildFacetObj: FacetObject = {
                 checked: false,
                 name: child.name,
@@ -307,15 +309,16 @@ export class SearchModal implements OnInit {
           .toPromise()
           .then((data) => {
             if (data && data['Collections']) {
-              for(let collection of data['Collections']){
+              for (let collection of data['Collections']){
                 let colFacetObj: FacetObject = {} as FacetObject
                 colFacetObj.checked = false
                 colFacetObj.name = collection.collectionname
                 colFacetObj.value = collection.collectionid
-                this.availableFilters[1].values[2].children.push( colFacetObj )
+                if (this.availableFilters[1].values[2])
+                  this.availableFilters[1].values[2].children.push( colFacetObj )
               }
             } else {
-              throw new Error("no Collections returned in data")
+              throw new Error('no Collections returned in data')
             }
             this.loadAppliedFiltersFromURL()
           })
@@ -328,7 +331,7 @@ export class SearchModal implements OnInit {
   /**
    * Depracated once new search launches
    */
-  private legacyLoadFilters() : void {
+  private legacyLoadFilters(): void {
     // Get GeoTree and Classifications
     // this._assets.loadTermList( )
     //       .then((res) => {
@@ -348,7 +351,7 @@ export class SearchModal implements OnInit {
           }
         },
         (err) => {
-          console.log("Nav failed to load Institution information", err)
+          console.log('Nav failed to load Institution information', err)
         }
       )
     );
@@ -393,7 +396,7 @@ export class SearchModal implements OnInit {
   }
 
   private toggleEra(dateEra): void{
-    if(this.advanceSearchDate[dateEra] == 'BCE'){
+    if (this.advanceSearchDate[dateEra] == 'BCE'){
       this.advanceSearchDate[dateEra] = 'CE';
     }
     else{
@@ -402,17 +405,17 @@ export class SearchModal implements OnInit {
   }
 
   private dateKeyPress(event: any): boolean{
-      if((event.key == 'ArrowUp') || (event.key == 'ArrowDown') || (event.key == 'ArrowRight') || (event.key == 'ArrowLeft') || (event.key == 'Backspace')){
+      if ((event.key == 'ArrowUp') || (event.key == 'ArrowDown') || (event.key == 'ArrowRight') || (event.key == 'ArrowLeft') || (event.key == 'Backspace')){
         return true;
       }
 
-      var theEvent = event || window.event;
-      var key = theEvent.keyCode || theEvent.which;
+      let theEvent = event || window.event;
+      let key = theEvent.keyCode || theEvent.which;
       key = String.fromCharCode( key );
-      var regex = /[0-9]|\./;
-      if( !regex.test(key) ) {
+      let regex = /[0-9]|\./;
+      if ( !regex.test(key) ) {
         theEvent.returnValue = false;
-        if(theEvent.preventDefault) theEvent.preventDefault();
+        if (theEvent.preventDefault) theEvent.preventDefault();
       }
 
       return theEvent.returnValue;
@@ -458,7 +461,7 @@ export class SearchModal implements OnInit {
       this.error.empty = true;
       this.error.date = false;
     }
-    else if(startDate > endDate){
+    else if (startDate > endDate){
       // Start Date is greater than End Date
       this.error.date = true;
       this.error.empty = false;
@@ -488,18 +491,17 @@ export class SearchModal implements OnInit {
 
     for (let key in filterParams) {
       let filterValue = ''
-      if( filterParams[key] instanceof Array ){
+      if ( filterParams[key] instanceof Array ){
         let filterValue = ''
-        for( let filter of filterParams[key]){
+        for ( let filter of filterParams[key]){
           filterValue += filterValue ? '|' + filter : filter
         }
         filterParams[key] = filterValue
       }
     }
 
-    // Track in Adobe Analytics
-    this._analytics.directCall('advanced_search');
-    this.angulartics.eventTrack.next({ action: "advSearch", properties: { category: "search", label: advQuery } })
+    // Track in angulartics
+    this.angulartics.eventTrack.next({ action: 'advSearch', properties: { category: this._auth.getGACategory(), label: advQuery } })
 
     // Maintain feature flags
     if (currentParams['featureFlag']) {
@@ -517,17 +519,17 @@ export class SearchModal implements OnInit {
     // Toggle filter checked state
     filterObj.checked = !filterObj.checked
 
-    if( parentFilterObj ) { // If a child node is clicked, check the parent node if all children are checked else do otherwise
+    if ( parentFilterObj ) { // If a child node is clicked, check the parent node if all children are checked else do otherwise
       let parentChecked: boolean = true
-      for( let child of parentFilterObj.children ){
-        if( !child.checked ){
+      for ( let child of parentFilterObj.children ){
+        if ( !child.checked ){
           parentChecked = false
           break
         }
       }
       parentFilterObj.checked = parentChecked
-    } else if( filterObj.children ) { // If a parent node is clicked and it has children make sure they are all checked/unchecked accordingly
-      for( let child of filterObj.children ){
+    } else if ( filterObj.children ) { // If a parent node is clicked and it has children make sure they are all checked/unchecked accordingly
+      for ( let child of filterObj.children ){
         child.checked = filterObj.checked
       }
     }
@@ -537,18 +539,18 @@ export class SearchModal implements OnInit {
   private generateSelectedFilters(): void {
     let selectedFiltersArray: Array<SelectedFilter> = []
     // Traverse the availableFilters and check which ones are checked and push them to selectedFilters Array
-    for( let filterGroup of this.availableFilters ) {
-      for( let filter of filterGroup.values ){
+    for ( let filterGroup of this.availableFilters ) {
+      for ( let filter of filterGroup.values ){
         // If the parent node is checked just push the selected filter object for the parent itself, no need to check the children
-        if( filter.checked ){
+        if ( filter.checked ){
           let selectedFilterObject: SelectedFilter = {} as SelectedFilter
           selectedFilterObject.group = filterGroup.name
           selectedFilterObject.value = filter.value
           selectedFiltersArray.push( selectedFilterObject )
         }
         else if ( filter.children ){ // If the parent is not checked then check the children and push thier selected filter objects individually
-          for( let child of filter.children ){
-            if( child.checked ){
+          for ( let child of filter.children ){
+            if ( child.checked ){
               let selectedFilterObject: SelectedFilter = {} as SelectedFilter
               selectedFilterObject.group = filterGroup.name === 'collectiontypes' ? 'collections' : filterGroup.name
               selectedFilterObject.value = child.value
@@ -564,7 +566,7 @@ export class SearchModal implements OnInit {
 
   // Gives the index of an object in an array
   private arrayObjectIndexOf(array, searchObj): number {
-    for(let i = 0; i < array.length; i++) {
+    for (let i = 0; i < array.length; i++) {
         if ( (array[i].group === searchObj.group) && (array[i].value === searchObj.value) ) return i;
     }
     return -1;
@@ -574,7 +576,7 @@ export class SearchModal implements OnInit {
    * Open Help page on Advanced Search
    */
   private openHelp(): void {
-    window.open('http://support.artstor.org/?article=advanced-search','Advanced Search Support','width=800,height=600');
+    window.open('http://support.artstor.org/?article=advanced-search', 'Advanced Search Support', 'width=800,height=600');
   }
 }
 

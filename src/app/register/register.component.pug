@@ -1,11 +1,17 @@
 nav-menu
 #mainContent.container.main-content(tabindex="-1")
   .row
-    .col-sm-2
-    .col-sm-8
-      .card.card--light
+    .col-sm-1
+    .col-sm-10
+      .alert.alert-danger.mb-4(*ngIf="serviceErrors['shibbolethInst']") 
+        b Error Linking&nbsp;
+        | {{ 'SHIBBOLETH_ERRORS.INST404' | translate }}
+      .text-right.mb-2(*ngIf="isShibbFlow")
+        .btn.btn-secondary((click)="navigateToLogin()", [class.disabled]="!shibParameters.samlTokenId") {{ 'LINK_PAGE.LOGIN_OPTION' | translate }}
+      .card.card--light([class.disabled]="isShibbFlow && !shibParameters.samlTokenId")
         .card-header
-          h1#registerHeading {{ 'REGISTER.REGISTER_HEADING' | translate }}
+          h1#registerHeading(*ngIf="!isShibbFlow") {{ 'REGISTER.REGISTER_HEADING' | translate }}
+          h1#registerHeading(*ngIf="isShibbFlow") {{ 'LINK_PAGE.REGISTER_HEADING' | translate }}
         p#registerDescription {{ 'REGISTER.REGISTER_DESCRIPTION' | translate }}
         p#registerJstorMessage
           b {{ 'REGISTER.REGISTER_JSTOR_MESSAGE' | translate }}
@@ -54,11 +60,6 @@ nav-menu
             
             .form-group
               .form-check
-                label.form-check-label([attr.title]="'REGISTER.AGE_PROMPT_HOVER' | translate")
-                  input#checkAge.form-check-input(type="checkbox", [formControl]="registerForm.controls['age']", tabindex="0")
-                  = " "
-                  | {{ 'REGISTER.AGE_PROMPT' | translate }}
-              .form-check
                 label.form-check-label
                   input#checkInfo.form-check-input(type="checkbox", [formControl]="registerForm.controls['info']", tabindex="0")
                   = " "
@@ -73,8 +74,6 @@ nav-menu
                   input#checkSurvey.form-check-input(type="checkbox", [formControl]="registerForm.controls['terms']", tabindex="0")
                   = " "
                   .terms-txt([innerHtml]="'REGISTER.TERMS' | translate ")
-              .has-danger(*ngIf="submitted && registerForm.controls['age'].hasError('required')")
-                p#errAgeRequired.form-control-feedback {{ 'REGISTER.ERRORS.AGE_REQUIRED' | translate}}
               .has-danger(*ngIf="submitted && registerForm.controls['terms'].hasError('required')")
                 p#errTermsRequired.form-control-feedback {{ 'REGISTER.ERRORS.TERMS_REQUIRED' | translate}}
             .form-group

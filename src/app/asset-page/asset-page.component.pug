@@ -1,4 +1,5 @@
 .container-fluid.asset-page(*ngIf="assetIds[0]", [class.fullscreen]="isFullscreen")
+  ang-guide-tour(*ngIf="showTour", [steps]="steps")
   .row
     //- View prev/next asset
     .title-nav-cntnr.col-md-12([class.hidden]="isFullscreen")
@@ -13,27 +14,28 @@
         span#assetPageCount {{ totalAssetCount - restrictedAssetsCount }}
     //- Asset Viewer Row
     .asset-col([ngClass]="[ isFullscreen ? 'fullscreen-container' : 'col-md-8', showAssetDrawer && isFullscreen ? 'drawer' : '' ]")
-      artstor-viewer(*ngFor="let assetId of (isFullscreen ? assetIds : [assetIds[0]]); let i = index",
-        [testEnv]="_auth.getEnv() === 'test'",
-        [assetId]="assetId",
-        [encrypted]="encryptedAccess",
-        [groupId]="assetGroupId",
-        (assetMetadata)="handleLoadedMetadata($event, i)",
-        [ngClass]="[ 'asset-viewer-' + assetIds.length ]",
-        (fullscreenChange)="updateFullscreenVar($event)",
-        [index]="i",
-        [assetCompareCount]="assets.length",
-        [assetNumber]="assetNumber",
-        [assetGroupCount]="totalAssetCount - restrictedAssetsCount",
-        [assets]="assets",
-        [isFullscreen]="isFullscreen",
-        [showCaption]="showAssetCaption",
-        [quizMode]="quizMode",
-        [prevAssetResults]="prevAssetResults",
-        (removeAsset)="toggleAsset($event)",
-        (nextPage)="showNextAsset()",
-        (prevPage)="showPrevAsset()",
-        (assetDrawer)="toggleAssetDrawer(!showAssetDrawer)")
+      ng-container(*ngIf="userSessionFresh")
+        artstor-viewer(*ngFor="let assetId of (isFullscreen ? assetIds : [assetIds[0]]); let i = index",
+          [testEnv]="_auth.getEnv() === 'test'",
+          [assetId]="assetId",
+          [encrypted]="encryptedAccess",
+          [groupId]="assetGroupId",
+          (assetMetadata)="handleLoadedMetadata($event, i)",
+          [ngClass]="[ 'asset-viewer-' + assetIds.length ]",
+          (fullscreenChange)="updateFullscreenVar($event)",
+          [index]="i",
+          [assetCompareCount]="assets.length",
+          [assetNumber]="assetNumber",
+          [assetGroupCount]="totalAssetCount - restrictedAssetsCount",
+          [assets]="assets",
+          [isFullscreen]="isFullscreen",
+          [showCaption]="showAssetCaption",
+          [quizMode]="quizMode",
+          [prevAssetResults]="prevAssetResults",
+          (removeAsset)="toggleAsset($event)",
+          (nextPage)="showNextAsset()",
+          (prevPage)="showPrevAsset()",
+          (assetDrawer)="toggleAssetDrawer(!showAssetDrawer)")
       //- Related results from JSTOR
       .pl-3(*ngIf="jstorResults.length > 0 && relatedResFlag")
         .row-hdr.pt-3 Related Results from JSTOR
@@ -42,7 +44,7 @@
             .type {{ result.type + ': '}}
             .label([innerHTML]="result.label")
         a.link.small([attr.href]="'http://www.jstor.org/action/doBasicSearch?Query=' + relatedResultsQuery", target="_blank") See more Results
-      ng-template(#tipContent="", placement="right") 
+      ng-template(#tipContent="", placement="right")
         div(*ngIf="selectedJstorResult.title")
           h3 {{ selectedJstorResult.title }}
           .tool-tip-lbl(*ngIf="selectedJstorResult.authors") Author
@@ -71,52 +73,62 @@
       .py-3
         //- If the user has not accepted the agreement, show modal when clicked, otherwise download immediately
         .btn-row
-          //- (mouseup) is a Firefox fix for firing the copy event
-          button.btn.btn-secondary(*ngIf="assets[0].personalCollectionOwner === user['baseProfileId']", [class.active]="showEditDetails", tabindex="1", (click)="loadEditDetailsForm()")
+          //- Edit
+          //- * (mouseup) is a Firefox fix for firing the copy event
+          button.btn.btn-secondary(*ngIf="user.isLoggedIn && assets[0].personalCollectionOwner === user['baseProfileId']", [class.active]="showEditDetails", tabindex="6", (click)="loadEditDetailsForm()")
             | {{ 'ASSET_PAGE.BUTTONS.EDIT_DETAILS' | translate}}
-          button.btn.btn-secondary(*ngIf="assets[0].personalCollectionOwner != user['baseProfileId']", [class.active]="showCopyUrl", tabindex="2", (mousedown)="showCopyUrl ? showCopyUrl = false : copyGeneratedImgURL()", (mouseup)="copyUrlInput.select(); document.execCommand('copy', false, null)")
-            | {{ 'ASSET_PAGE.BUTTONS.LINK' | translate}}
-            i#genImgURLlink.icon.icon-share-white
-            
+
+          //- the .driver-find-group-btn class is important for the tour to find it, be careful when removing or changing it
+          button#assetpage-btn.btn.btn-primary.driver-find-group-btn((click)="addAssetToIG()", (keydown.enter)="addAssetToIG()", tabindex="7")
+            | {{ 'ASSET_PAGE.BUTTONS.ADD_TO_GROUP' | translate }}
+            //- i.icon.icon-add-white(aria-hidden="true")
           //- Download dropdown options
           | {{downloadUrl}}
           .dropdown.d-inline-block(ngbDropdown, *ngIf="assets[0].downloadLink && (user.isLoggedIn || hasExternalAccess || assets[0].publicDownload)")
-            button#downloadAssetDropdown.btn.btn-secondary(ngbDropdownToggle [class.loading]="downloadLoading", (click)="(isMSAgent ? null : genDownloadViewLink())", tabindex="3")
+            button#downloadAssetDropdown.btn.btn-secondary(ngbDropdownToggle [class.loading]="downloadLoading", (click)="(isMSAgent ? null : genDownloadViewLink())", (keydown.enter)="(isMSAgent ? null : genDownloadViewLink())", tabindex="8")
               | {{ 'ASSET_PAGE.BUTTONS.DOWNLOAD' | translate}}
               = " "
             .dropdown-menu(ngbDropdownMenu, aria-labelledby="dropdownBasic1")
               a#downloadAssetLink.dropdown-item(download,
                 [attr.href]="((assets[0].publicDownload || !assets[0].disableDownload) && downloadAuth()) ? generatedFullURL : null",
                 (click)="((assets[0].publicDownload || !assets[0].disableDownload) && downloadAuth()) ? trackDownloadImage() : setDownloadImage()",
+                (keydown.enter)="((assets[0].publicDownload || !assets[0].disableDownload) && downloadAuth()) ? trackDownloadImage() : setDownloadImage()",
                 [class.disabled]="assets[0].disableDownload",
                 title="{{ assets[0].disableDownload ? 'Image is not available for download.' : 'Image download'}}",
                 target="_blank",
-                tabindex="3")
+                tabindex="8")
                 i.icon.icon-download-black
                 | Download File
               a#downloadViewLink.dropdown-item(download="download.jpg",
                 type="image/jpeg",
                 [attr.href]="((assets[0].publicDownload || !assets[0].disableDownload) && downloadAuth()) ? generatedViewURL : (isMSAgent ? '#' : null)",
                 (click)="((assets[0].publicDownload || !assets[0].disableDownload) && downloadAuth()) ? trackDownloadView() : setDownloadView()",
+                (keydown.enter)="((assets[0].publicDownload || !assets[0].disableDownload) && downloadAuth()) ? trackDownloadView() : setDownloadView()",
                 [class.disabled]="assets[0].disableDownload || assets[0].typeName !== 'image'",
                 target="_self",
-                tabindex="3")
+                tabindex="8")
                 i.icon.icon-download-black
                 | Download View
           //- False door button if user is not logged in
-          button.btn.btn-secondary(tabindex="4", *ngIf="assets[0].downloadLink && !(user.isLoggedIn || hasExternalAccess) && !assets[0].publicDownload", (click)="showLoginModal = true")
+          button#assetpage-btn.btn.btn-secondary(tabindex="9", *ngIf="assets[0].downloadLink && !(user.isLoggedIn || hasExternalAccess) && !assets[0].publicDownload", (click)="showLoginModal = true", (keydown.enter)="showLoginModal = true")
             | {{ 'ASSET_PAGE.BUTTONS.DOWNLOAD' | translate}}
-            i#downloadAssetLink.icon.icon-download
-          a.btn.btn-secondary(*ngIf="assets[0]", tabindex="5", (click)="showGenerateCitation = true")
-            | {{ 'ASSET_PAGE.BUTTONS.GENERATE_CITATION' | translate}}
-          a.btn.btn-secondary(*ngIf="assets[0]", tabindex="6", [attr.href]=" '/#/assetprint/' + assets[0].id ", target="_blank", (click)="logPrint(assets[0])")
-            | {{ 'ASSET_PAGE.BUTTONS.PRINT' | translate}}
-          button.btn.btn-primary((click)="addAssetToIG()", tabindex="7")
-            | {{ 'ASSET_PAGE.BUTTONS.ADD_TO_GROUP' | translate }}
-            i.icon.icon-add-white(aria-hidden="true")
+            i#downloadAssetLink.icon.icon-download-asset-orange
+          .row#asset-btn
+            a#assetpage-btn.btn.btn-secondary(*ngIf="assets[0]", tabindex="10", (click)="showGenerateCitation = true", (keydown.enter)="showGenerateCitation = true")
+              | {{ 'ASSET_PAGE.BUTTONS.GENERATE_CITATION' | translate}}
+            a#assetpage-btn.btn.btn-secondary(*ngIf="assets[0]", tabindex="11", [attr.href]=" '/#/assetprint/' + assets[0].id ", target="_blank", (click)="logPrint(assets[0])", (keydown.enter)="logPrint(assets[0])")
+              | {{ 'ASSET_PAGE.BUTTONS.PRINT' | translate}}
+
+          //- Copy URL
+          //- * Do not show for Personal Collection assets
+          .btn-group#copy-link
+            input#generatedImgURL.form-control.form-control__copy(#copyUrlInput="", readonly, [ngModel]="generatedImgURL", (click)="copyUrlInput.select(); document.execCommand('copy', false, null);")
+            button#assetpage-btn.btn.btn-secondary(*ngIf="!assets[0].personalCollectionOwner", [class.active]="showCopyUrl", tabindex="12", (mousedown)="showCopyUrl ? showCopyUrl = false : copyGeneratedImgURL()", (mouseup)="copyUrlInput.select(); document.execCommand('copy', false, null);", (keydown.enter)="showCopyUrl ? showCopyUrl = false : copyGeneratedImgURL()", (keyup.enter)="copyUrlInput.select(); document.execCommand('copy', false, null);")
+              | {{ 'ASSET_PAGE.BUTTONS.LINK' | translate}}
+              //- i#genImgURLlink.icon.icon-share-white
+
           .form-group.pt-1([class.hidden]="!showCopyUrl")
-            label {{ 'ASSET_PAGE.HEADER_LABELS.SHR_LNK' | translate}}
-            input#generatedImgURL.form-control.form-control__copy(#copyUrlInput="", readonly, [ngModel]="generatedImgURL", (click)="copyUrlInput.select(); document.execCommand('copy', false, null)")
+            //- label {{ 'ASSET_PAGE.HEADER_LABELS.SHR_LNK' | translate}}
             .alert.alert-info(*ngIf="copyURLStatusMsg") {{ copyURLStatusMsg }}
         //- div(*ngIf="!showEditDetails")
         div#mainContent([class.d-none]="showEditDetails", tabindex="0")
@@ -127,13 +139,13 @@
           .meta-block(*ngFor="let fieldName of assets[0].formattedMetadata | keys")
             ng-container(*ngIf="fieldName != 'Rights'")
               .label([attr.id]="cleanId(fieldName)") {{ fieldName }}
-              div(*ngFor="let value of assets[0].formattedMetadata[fieldName]")
-                a.value.col-link(*ngIf="(fieldName === 'Collection')", [routerLink]="setCollectionLink(assets[0])", [innerHTML]="cleanFieldValue(value)")
-                .value(*ngIf="(fieldName !== 'Collection')", [innerHTML]="cleanFieldValue(value) | linkify")
+              div(*ngFor="let value of assets[0].formattedMetadata[fieldName]; let i=index")
+                a.value.col-link(*ngIf="(fieldName === 'Collection' && i===0)", [routerLink]="setCollectionLink(assets[0])", [innerHTML]="cleanFieldValue(value) | linkify", [attr.aria-labelledby]="cleanId(fieldName)")
+                .value(*ngIf="(fieldName !== 'Collection' || i!==0)", [innerHTML]="cleanFieldValue(value) | linkify", [attr.aria-labelledby]="cleanId(fieldName)")
           .meta-block(*ngIf="assets[0].formattedMetadata.Rights && assets[0].formattedMetadata.Rights.length > 0")
             .label#Rights Rights
             div(*ngFor="let right of assets[0].formattedMetadata.Rights")
-              .value([innerHTML]="cleanFieldValue(right) | linkify")
+              .value([innerHTML]="cleanFieldValue(right) | linkify", [attr.aria-labelledby]="'Rights'")
 
           .row-hdr.pt-3(*ngIf="assets[0].filePropertiesArray.length > 0") {{ 'ASSET_PAGE.HEADER_LABELS.FILE_PROPS' | translate}}
           //- Loop through File Properties Array
@@ -142,14 +154,14 @@
           //-     .value([innerHTML]="filePropObj.fieldValue")
           .meta-block(*ngIf="assets[0].fileName")
             .label#fileName {{ 'ASSET_PAGE.METADATA_LABELS.FILE_NAME' | translate }}
-              .value([innerHtml]="assets[0].fileName")
+              .value([innerHtml]="assets[0].fileName", aria-labelledby="fileName")
           .meta-block(*ngIf="assets[0].SSID")
             .label#ssid {{ 'ASSET_PAGE.METADATA_LABELS.SSID' | translate }}
-              .value([innerHtml]="assets[0].SSID")
+              .value([innerHtml]="assets[0].SSID", aria-labelledby="ssid")
           .text-left.pt-2
-            a#buttonRequestIap.btn.btn-secondary.my-1(*ngIf="route.snapshot.queryParams.iap == 'true'", [attr.href]="'http://www.artstor.org/form/iap-request-form?name=' + assets[0].title + '&collectionName=' + assets[0].collectionName + '&id=' + assets[0].id + '&email=' + user.username", title="Request Image for Academic Publishing", tabindex="8", target="_blank") {{'ASSET_PAGE.BUTTONS.GET_IAP' | translate}}
-            a#buttonReportAssetError.btn.btn-secondary.my-1([attr.href]="getErrorFormUrl(assets[0])", title="Report an error", tabindex="9", target="_blank") {{'ASSET_PAGE.BUTTONS.REPORT_ERROR' | translate}}
-        
+            a#buttonRequestIap.btn.btn-secondary.my-1(*ngIf="route.snapshot.params.iap == 'true'", [attr.href]="'http://www.artstor.org/form/iap-request-form?name=' + assets[0].title + '&collectionName=' + assets[0].collectionName + '&id=' + assets[0].id + '&email=' + user.username", title="Request Image for Academic Publishing", tabindex="8", target="_blank") {{'ASSET_PAGE.BUTTONS.GET_IAP' | translate}}
+            a#buttonReportAssetError.btn.btn-secondary.my-1([attr.href]="getErrorFormUrl(assets[0])", title="Report an error", tabindex="14", target="_blank") {{'ASSET_PAGE.BUTTONS.REPORT_ERROR' | translate}}
+
         //- Form hidden by default
         .mt-2.d-none([class.d-block]="showEditDetails")
           button.close.mb-3((click)="showExitEdit = true", type="button", aria-label="Close")
@@ -159,37 +171,37 @@
             .form-body
               .form-group
                 label(for="creatorInput") {{ 'ASSET_PAGE.EDIT_DETAILS_FORM.CREATOR' | translate }}
-                input#creatorInput.form-control(type="text", [formControl]="editDetailsForm.controls['creator']", placeholder="", spellcheck="false", tabindex="1")
+                input#creatorInput.form-control(type="text", [formControl]="editDetailsForm.controls['creator']", placeholder="", spellcheck="false", tabindex="6")
               .form-group
                 label(for="titleInput") {{ 'ASSET_PAGE.EDIT_DETAILS_FORM.TITLE' | translate }}
-                input#titleInput.form-control(type="text", [formControl]="editDetailsForm.controls['title']", placeholder="", spellcheck="false", tabindex="1")
+                input#titleInput.form-control(type="text", [formControl]="editDetailsForm.controls['title']", placeholder="", spellcheck="false", tabindex="6")
                 .has-danger(*ngIf="editDetailsFormSubmitted && editDetailsForm.controls['title'].hasError('required')")
                   p.form-control-feedback {{ 'ASSET_PAGE.EDIT_DETAILS_FORM.TITLE_REQUIRED_MSG' | translate }}
               .form-group
                 label(for="worktypeInput") {{ 'ASSET_PAGE.EDIT_DETAILS_FORM.WORK_TYPE' | translate }}
-                input#worktypeInput.form-control(type="text", [formControl]="editDetailsForm.controls['work_type']", placeholder="", spellcheck="false", tabindex="1")
+                input#worktypeInput.form-control(type="text", [formControl]="editDetailsForm.controls['work_type']", placeholder="", spellcheck="false", tabindex="6")
               .form-group
                 label(for="dateInput") {{ 'ASSET_PAGE.EDIT_DETAILS_FORM.DATE' | translate }}
-                input#dateInput.form-control(type="text", [formControl]="editDetailsForm.controls['date']", placeholder="", spellcheck="false", tabindex="1")
+                input#dateInput.form-control(type="text", [formControl]="editDetailsForm.controls['date']", placeholder="", spellcheck="false", tabindex="6")
               .form-group
                 label(for="locationInput") {{ 'ASSET_PAGE.EDIT_DETAILS_FORM.LOCATION' | translate }}
-                input#locationInput.form-control(type="text", [formControl]="editDetailsForm.controls['location']", placeholder="", spellcheck="false", tabindex="1")
+                input#locationInput.form-control(type="text", [formControl]="editDetailsForm.controls['location']", placeholder="", spellcheck="false", tabindex="6")
               .form-group
                 label(for="materialInput") {{ 'ASSET_PAGE.EDIT_DETAILS_FORM.MATERIAL' | translate }}
-                input#materialInput.form-control(type="text", [formControl]="editDetailsForm.controls['material']", placeholder="", spellcheck="false", tabindex="1")
+                input#materialInput.form-control(type="text", [formControl]="editDetailsForm.controls['material']", placeholder="", spellcheck="false", tabindex="6")
               .form-group
                 label(for="descriptionInput") {{ 'ASSET_PAGE.EDIT_DETAILS_FORM.DESCRIPTION' | translate }}
-                input#descriptionInput.form-control(type="text", [formControl]="editDetailsForm.controls['description']", placeholder="", spellcheck="false", tabindex="1")
+                input#descriptionInput.form-control(type="text", [formControl]="editDetailsForm.controls['description']", placeholder="", spellcheck="false", tabindex="6")
               .form-group
                 label(for="subjectInput") {{ 'ASSET_PAGE.EDIT_DETAILS_FORM.SUBJECT' | translate }}
-                input#subjectInput.form-control(type="text", [formControl]="editDetailsForm.controls['subject']", placeholder="", spellcheck="false", tabindex="1")
+                input#subjectInput.form-control(type="text", [formControl]="editDetailsForm.controls['subject']", placeholder="", spellcheck="false", tabindex="6")
               .form-group.has-danger(*ngIf="uiMessages.deleteFailure")
                 .form-group-feedback {{ 'ASSET_PAGE.EDIT_DETAILS_FORM.DELETE_ERROR' | translate }}
               .form-group
-                button.btn.btn-secondary((click)="showDeletePCModal = true", type="button", tabindex="1", [class.loading]="deleteLoading") {{ 'ASSET_PAGE.EDIT_DETAILS_FORM.DELETE_BTN' | translate }}
+                button.btn.btn-secondary((click)="showDeletePCModal = true", type="button", tabindex="6", [class.loading]="deleteLoading") {{ 'ASSET_PAGE.EDIT_DETAILS_FORM.DELETE_BTN' | translate }}
                 = " "
-                button.btn.btn-primary(type="submit", [class.loading]="isProcessing", tabindex="1") {{ 'ASSET_PAGE.EDIT_DETAILS_FORM.SAVE_BTN' | translate }}
-              
+                button.btn.btn-primary(type="submit", [class.loading]="isProcessing", tabindex="6") {{ 'ASSET_PAGE.EDIT_DETAILS_FORM.SAVE_BTN' | translate }}
+
     .fullscreen-btns.button-group(*ngIf="isFullscreen", [class.fade-out]="showAssetDrawer")
       button.btn.btn-light(*ngIf="!quizMode", (click)="showAssetDrawer = !showAssetDrawer")
           | {{ 'ASSET_PAGE.BUTTONS.COMPARE' | translate}}

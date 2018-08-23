@@ -63,6 +63,7 @@
 }
 
 @include icon('search', 'svg');
+@include icon('filter', 'png');
 @include icon('up', 'svg');
 @include icon('down', 'svg');
 @include icon('left', 'svg');
@@ -70,7 +71,8 @@
 @include icon('loading', 'gif');
 @include icon('loading-large', 'gif');
 @include icon('open-link', 'svg');
-@include icon('download', 'svg');
+@include icon('download-asset-orange', 'svg');
+@include icon('download-asset-white', 'svg');
 @include icon('download-white', 'svg');
 @include icon('download-black', 'svg');
 @include icon('select-white', 'svg');
@@ -139,7 +141,7 @@
     background-size: 70% 70%;
 }
 
-.icon-search {
+.icon-search, .icon-close {
     cursor: pointer;
     opacity: 0.6;
 
@@ -223,7 +225,7 @@ a .icon {
 
  .icon-bar {
      font-size: 18px;
-     margin: 0px 6px;
+     margin: 0 6px;
      display: inline-block;
      position: relative;
      vertical-align: middle;

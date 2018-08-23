@@ -5,7 +5,6 @@ import { Subscription }   from 'rxjs/Subscription';
 
 // Internal Dependencies
 // import { CollectionService } from './collection.service';
-import { AnalyticsService } from '../analytics.service';
 import { AssetService } from './../shared/assets.service';
 import { AuthService } from './../shared/auth.service';
 import { TitleService } from '../shared/title.service';
@@ -31,6 +30,7 @@ export class CollectionPage implements OnInit, OnDestroy {
   private showaccessDeniedModal: boolean = false;
 
   private subscriptions: Subscription[] = [];
+  private userSessionFresh: boolean = false;
 
   // private searchInResults: boolean = false;
 
@@ -41,54 +41,20 @@ export class CollectionPage implements OnInit, OnDestroy {
     private _router: Router,
     private route: ActivatedRoute,
     private http: HttpClient,
-    private _analytics: AnalyticsService,
     private _title: TitleService
   ) {}
 
   ngOnInit() {
     this.subscriptions.push(
-      this.route.params.subscribe((routeParams) => {
-        this.colId = routeParams["colId"];
-        // Old links pass a name into the ID, just use that as a search term instead
-        if (!/^[0-9]+$/.test(this.colId)) {
-          this.http.get('/assets/collection-links.json')
-            .subscribe(data => {
-              let linkObj = data
-              let link = linkObj[this.colId]
-              if (link) {
-                this._router.navigateByUrl(link)
-              } else {
-                this._router.navigate(['/search', this.colId.replace('_', ' ')])
-              }
-            })
-        } else if (this.colId) {
-          this._assets.clearAssets();
-          this.getCollectionInfo(this.colId)
-            .then((data) => {
-              this._assets.queryAll(routeParams, true);
-
-              if (!Object.keys(data).length) {
-                throw new Error("No data!");
-              }
-
-              this.assetCount = data['objCount'];
-              this.colName = data['collectionname'];
-              this.colDescription = data['blurburl'];
-              this.colThumbnail = data['leadImageURL'] ? data['leadImageURL'] : data['bigimageurl'];
-
-              // Set page title
-              this._title.setSubtitle(this.colName)
-            })
-            .catch((error) => {
-              console.error(error);
-              if(error.status === 401){
-                this.showaccessDeniedModal = true;
-              }
-            });
+      this._auth.currentUser.subscribe((user) => {
+        // userSessionFresh: Do not attempt to call collection endpoint until we know user object is fresh
+        if (!this.userSessionFresh && this._auth.userSessionFresh) {
+          this.userSessionFresh = true
+          this.routeParamSubscrpt()
         }
       })
-    );// End push to subscription
-    this._analytics.setPageValues('collection', this.colId)
+    );
+
   } // OnInit
 
   ngOnDestroy() {
@@ -100,17 +66,62 @@ export class CollectionPage implements OnInit, OnDestroy {
   * @param colId The collection ID
   */
   private getCollectionInfo(colId: string) {
-      let options = { withCredentials: true };
+    let options = { withCredentials: true };
+
 
       return this.http
           .get(this._auth.getUrl() + '/collections/' + colId, options)
           .toPromise();
+
   }
 
 
-  private resourceAccessDenied(): void{
+  private resourceAccessDenied(): void {
     this.showaccessDeniedModal = false;
      this._router.navigate(['/home']);
+  }
+
+  private routeParamSubscrpt(): void {
+    this.route.params.subscribe((routeParams) => {
+      this.colId = routeParams['colId'];
+      // Old links pass a name into the ID, just use that as a search term instead
+      if (!/^[0-9]+$/.test(this.colId)) {
+        this.http.get('/assets/collection-links.json')
+          .subscribe(data => {
+            let linkObj = data
+            let link = linkObj[this.colId]
+            if (link) {
+              this._router.navigateByUrl(link)
+            } else {
+              this._router.navigate(['/search', this.colId.replace('_', ' ')])
+            }
+          })
+      } else if (this.colId) {
+        this._assets.clearAssets();
+          this.getCollectionInfo(this.colId)
+            .then((data) => {
+              this._assets.queryAll(routeParams, true);
+
+              if (!Object.keys(data).length) {
+                throw new Error('No data!');
+              }
+
+              this.assetCount = data['objCount'];
+              this.colName = data['collectionname'];
+              this.colDescription = data['blurburl'];
+              this.colThumbnail = data['bigimageurl'];
+
+              // Set page title
+              this._title.setSubtitle(this.colName)
+            })
+            .catch((error) => {
+              console.error(error);
+              if (error.status === 401){
+                this.showaccessDeniedModal = true;
+              }
+            });
+        }
+    })
   }
 
   // private updateSearchInRes(value: boolean): void{

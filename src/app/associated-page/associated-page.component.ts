@@ -5,8 +5,7 @@ import 'rxjs/add/operator/toPromise';
 
 import { AuthService } from './../shared/auth.service';
 import { AssetService } from './../shared/assets.service';
-import { AnalyticsService } from '../analytics.service';
-
+import { MetadataService } from '../shared';
 
 @Component({
   selector: 'ang-associated-page',
@@ -20,20 +19,18 @@ export class AssociatedPage implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = [];
   // the object id for which to retrieve related assets (retrieved from matrix param)
   private objectId: string;
-  //the colection which the associated asset comes from
+  // the colection which the associated asset comes from
   private colId: string;
   // gets assigned with the asset's title
   private assetTitle: string;
 
   constructor(
-        private _router: Router,
-        private _assets: AssetService,
-        private route: ActivatedRoute,
-        private _auth: AuthService,
-        private _analytics: AnalyticsService
-      ) {
-
-  }
+      private _router: Router,
+      private _assets: AssetService,
+      private _metadata: MetadataService,
+      private route: ActivatedRoute,
+      private _auth: AuthService
+    ) {}
 
   /**
    * Sets up subscription to objectId matrix param, which gets assetTitle from service
@@ -41,8 +38,8 @@ export class AssociatedPage implements OnInit, OnDestroy {
   ngOnInit() {
     this.subscriptions.push(
       this.route.params.subscribe((routeParams) => {
-        this.objectId = routeParams["objectId"];
-        this.colId = routeParams["colId"];
+        this.objectId = routeParams['objectId'];
+        this.colId = routeParams['colId'];
         let params = Object.assign({}, routeParams);
         // If a page number isn't set, reset to page 1!
         if (!params['page']){
@@ -50,7 +47,7 @@ export class AssociatedPage implements OnInit, OnDestroy {
         }
         if (this.objectId && this.colId) {
           this._assets.queryAll(params);
-          this._assets.getMetadata(this.objectId)
+          this._metadata.getMetadata(this.objectId)
             .take(1)
             .subscribe((res) => {
               if (res.metadata && res.metadata.length > 0 && res.metadata[0].title) {
@@ -62,8 +59,6 @@ export class AssociatedPage implements OnInit, OnDestroy {
         }
       })
     );
-
-    this._analytics.setPageValues('associated', this.objectId)
   } // OnInit
 
   ngOnDestroy() {

@@ -1,14 +1,13 @@
-import { Locker } from 'angular2-locker';
+import { Locker } from 'angular2-locker'
 import { Component, OnInit, OnDestroy } from '@angular/core'
 import { Router, ActivatedRoute } from '@angular/router'
 import { Location } from '@angular/common'
 import { Angulartics2 } from 'angulartics2'
 import { CompleterService, LocalData } from 'ng2-completer'
-import { BehaviorSubject, Observable, Subscription } from 'rxjs/Rx';
+import { BehaviorSubject, Observable, Subscription } from 'rxjs/Rx'
 
 import { AppConfig } from '../app.service'
-import { AuthService, User, AssetService } from './../shared'
-import { AnalyticsService } from '../analytics.service'
+import { AuthService, User, AssetService, FlagService } from './../shared'
 
 declare var initPath: string
 
@@ -22,7 +21,7 @@ export class Login implements OnInit, OnDestroy {
   private copyBase: string = ''
 
   // Set our default values
-  public user = new User('','')
+  public user = new User('', '')
   public errorMsg: string = ''
   public instErrorMsg: string = ''
   public showPwdModal = false
@@ -40,9 +39,9 @@ export class Login implements OnInit, OnDestroy {
 
   public showRegister: boolean = false
 
-  /** 
+  /**
    * Observable for autocomplete list of institutions
-   * - We apply additional sorting 
+   * - We apply additional sorting
    */
   private instListSubject: BehaviorSubject<any[]> = new BehaviorSubject([])
   private instListObs: Observable<any[]> = this.instListSubject.asObservable()
@@ -59,8 +58,8 @@ export class Login implements OnInit, OnDestroy {
     private router: Router,
     private location: Location,
     private angulartics: Angulartics2,
-    private _analytics: AnalyticsService,
     private _app: AppConfig,
+    private _flags: FlagService,
     private _storage: Locker
   ) {
   }
@@ -68,13 +67,13 @@ export class Login implements OnInit, OnDestroy {
   ngOnInit() {
     /*
      * Subscribe to route params
-     * Set featureFlag in Auth service if the route param contains featureFlag
-     * The featureFlag values in Auth service would be persistant until the page is refreshed
+     * - Set featureFlag in Auth service if the route param contains featureFlag
+     * - The featureFlag values in Auth service would be persistent until the page is refreshed
     */
     this.subscriptions.push(
       this.route.params.subscribe((params) => {
-        if(params && params['featureFlag']){
-          this._auth.featureFlags[params['featureFlag']] = true
+        if (params && params['featureFlag']){
+          this._flags[params['featureFlag']] = true
         }
       })
     )
@@ -82,20 +81,10 @@ export class Login implements OnInit, OnDestroy {
     // Check for a stashed route to pass to proxy links
     // Change from this._storage.get() to this._auth.getFromStorage() to remember the original url, not tested yet
     // this.stashedRoute = this._storage.get("stashedRoute")
-    this.stashedRoute = this._auth.getFromStorage("stashedRoute")
+    this.stashedRoute = this._auth.getFromStorage('stashedRoute')
 
     if (this._app.config.copyModifier) {
-      this.copyBase = this._app.config.copyModifier + "."
-    }
-
-    // Provide redirects for initPath detected in index.html from inital load
-    if ( initPath && (initPath.indexOf('ViewImages') > -1 || initPath.indexOf('ExternalIV') > -1 ) ) {
-      this.router.navigateByUrl(initPath)
-        .then( result => {
-          // Clear variable to prevent further redirects
-          initPath = null
-          console.log('Redirect to initial path attempt: ' + result)
-        })
+      this.copyBase = this._app.config.copyModifier + '.'
     }
 
     // The true institutions call. Don't throw an error, since the above call will provide a backup
@@ -105,22 +94,22 @@ export class Login implements OnInit, OnDestroy {
           this.loginInstitutions = data['items'];
           // Hardcoded test url for new Shibboleth provider
           if (this._auth.getEnv() === 'test') {
-            let theUrl = "https://testshibbolethsp.jstor.org/Shibboleth.sso/Login?entityID=https%3A%2F%2Fidp.artstor.org%2Fidp%2Fshibboleth&target=%2Fsecure%2Fshib%3Fdest%3Dhttp%253A%252F%252Fstage.artstor.org%252F%2523%252F%2526site%253Dartstor";
+            let theUrl = 'https://testshibbolethsp.jstor.org/Shibboleth.sso/Login?entityID=https%3A%2F%2Fidp.artstor.org%2Fidp%2Fshibboleth&target=%2Fsecure%2Fshib%3Fdest%3Dhttp%253A%252F%252Fstage.artstor.org%252F%2523%252F%2526site%253Dartstor';
             this.loginInstitutions.push({
               artstorShibbolethLoginUrl: theUrl,
               entityID: theUrl,
-              name: "AUSS/Ithaka"
+              name: 'AUSS/Ithaka'
             });
           }
           else {
-            let theUrl = "https://shibbolethsp.jstor.org/Shibboleth.sso/Login?entityID=https%3A%2F%2Fidp.artstor.org%2Fidp%2Fshibboleth&target=%2Fsecure%2Fshib%3Fdest%3Dhttp%253A%252F%252Flibrary.artstor.org%252F%2523%252F%2526site%253Dartstor";
+            let theUrl = 'https://shibbolethsp.jstor.org/Shibboleth.sso/Login?entityID=https%3A%2F%2Fidp.artstor.org%2Fidp%2Fshibboleth&target=%2Fsecure%2Fshib%3Fdest%3Dhttp%253A%252F%252Flibrary.artstor.org%252F%2523%252F%2526site%253Dartstor';
             this.loginInstitutions.push({
               artstorShibbolethLoginUrl: theUrl,
               entityID: theUrl,
-              name: "AUSS/Ithaka"
+              name: 'AUSS/Ithaka'
             });
           }
-          this.dataService = this._completer.local(this.instListObs, 'name', 'name');          
+          this.dataService = this._completer.local(this.instListObs, 'name', 'name');
         }
       })
       .catch((error) => {
@@ -128,7 +117,7 @@ export class Login implements OnInit, OnDestroy {
       });
 
     // this handles showing the register link for only ip auth'd users
-    this._auth.getIpAuth()
+    this._auth.getUserInfo()
       .take(1)
       .subscribe((res) => {
         if (res.remoteaccess === false && res.user) {
@@ -138,18 +127,23 @@ export class Login implements OnInit, OnDestroy {
         console.error(err)
       })
 
-    this._analytics.setPageValues('login', '')
   } // OnInit
 
   ngOnDestroy() {
     this.subscriptions.forEach((sub) => { sub.unsubscribe() })
   }
 
-  private sortInstitution(event) : void {
-    // sort array by string input
-    let term = this.loginInstName
+  /**
+   * Filtering and sorting function for institution login list
+   * @param event keyup value event
+   */
+  public sortInstitution(event, term): void {
+    // Do not evaluate if key up event is arrow key
+    if ([37, 38, 39, 40].indexOf(event.keyCode) > -1) {
+      return
+    }
     let termReg = new RegExp(term, 'i')
-    
+
     let filtered = this.loginInstitutions.filter( inst => {
       return inst && inst.name.search(termReg) > -1
     })
@@ -161,7 +155,6 @@ export class Login implements OnInit, OnDestroy {
     // We need to clear any error messages here if there is one
     if (this.instErrorMsg.length)
         this.instErrorMsg = ''
-        
   }
 
   /**
@@ -178,10 +171,10 @@ export class Login implements OnInit, OnDestroy {
         break
       }
     }
-    
+
     // if the user selected some institution that doesn't exist, kick them out!!
     if (!selectedInst) {
-      this.instErrorMsg = "LOGIN.INSTITUTION_LOGIN.ERRORS.SELECT_INSTITUTION";
+      this.instErrorMsg = 'LOGIN.INSTITUTION_LOGIN.ERRORS.SELECT_INSTITUTION';
       return;
     }
     else {
@@ -192,14 +185,14 @@ export class Login implements OnInit, OnDestroy {
 
     if (selectedInst.type === 'proxy') {
       // Hashes within a parameter are interpretted incorrectly, and we don't need 'em
-      let stashedRoute = this.stashedRoute ? this.stashedRoute.replace("#/", "") : "/"
+      let stashedRoute = this.stashedRoute ? this.stashedRoute.replace('#/', '') : '/'
       // WORKAROUND: Auth is still cleaning data to replace www.artstor.org with library.artstor.org
-      if (url.match("//www.artstor.org")) {
-        url = url.replace("//www.artstor.org", "//library.artstor.org")
+      if (url.match('//www.artstor.org')) {
+        url = url.replace('//www.artstor.org', '//library.artstor.org')
       }
       // WORKAROUND: Auth is still cleaning data with legacy "basicSearch" pathes
-      if (url.match("/action/showBasicSearch")) {
-        url = url.replace("/action/showBasicSearch", "")
+      if (url.match('/action/showBasicSearch')) {
+        url = url.replace('/action/showBasicSearch', '')
       }
       // Handle passing stashed url to proxies
       let urlToken = /!+TARGET_FULL_PATH!+/g;
@@ -217,16 +210,16 @@ export class Login implements OnInit, OnDestroy {
          * Auth provides !!!TARGET_NO_SERVER!!! as a token/string to replace for forwarding
          */
         // pathTokens are appended after a trailing forward slash
-        if (stashedRoute[0] === "/") { stashedRoute = stashedRoute.substr(1) }
+        if (stashedRoute[0] === '/') { stashedRoute = stashedRoute.substr(1) }
         url = url.replace(pathToken, stashedRoute)
       } else if (url.match(baseUrlParam)) {
         /**
          * Legacy proxy configurations that point "library.artstor.org" without any tokens
          */
         // Verify URL ends with a slash
-        if(url[url.length - 1] != "/") { url = url + "/" }
+        if (url[url.length - 1] != '/') { url = url + '/' }
         // Verify stashed route does NOT start with a slash
-        if (stashedRoute[0] == "/") { stashedRoute = stashedRoute.substr(1) }
+        if (stashedRoute[0] == '/') { stashedRoute = stashedRoute.substr(1) }
         // Append stashed route to query param
         url = url + stashedRoute
       }
@@ -235,7 +228,7 @@ export class Login implements OnInit, OnDestroy {
     } else {
       // Else if Shibboleth, add parameters:
       // eg. for AUSS https://sso.artstor.org/sso/shibssoinit?idpEntityID=https://idp.artstor.org/idp/shibboleth&target=https%3A%2F%2Fsso.artstor.org%2Fsso%2Fshibbolethapplication%3Fo%3D0049a162-7dbe-4fcf-adac-d257e8db95e5
-      
+
       // For institution that has the key "artstorShibbolethLoginUrl", just open the Url
       if (selectedInst.artstorShibbolethLoginUrl) {
         window.open(selectedInst.artstorShibbolethLoginUrl);

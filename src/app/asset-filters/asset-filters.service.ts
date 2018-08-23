@@ -45,10 +45,10 @@ export class AssetFiltersService {
         },
         page : 1,
         size : 24,
-        sort: "0"
+        sort: '0'
     };
 
-    private availableFilters: any = Object.assign({},this.defaultAvailable);
+    private availableFilters: any = Object.assign({}, this.defaultAvailable);
 
     private dateFacet: any = {};
     private dateFacetsArray = [];
@@ -60,7 +60,7 @@ export class AssetFiltersService {
     public available$ = this.availableSource.asObservable();
     public applied$ = this.appliedSource.asObservable();
 
-    //'Search within' boolean flag
+    // 'Search within' boolean flag
     public searchWithin: boolean = false
     public contributors: any[] = [];
 
@@ -68,11 +68,11 @@ export class AssetFiltersService {
     private institution: any = {};
 
     private filterNameMap: any = {
-        "collectiontypes" : {
-        1 : "Artstor Digital Library",
-        3 : "Private Collections",
-        5 : "Public Collections",
-        6 : "Private Collections"
+        'collectiontypes' : {
+        1 : 'Artstor Digital Library',
+        3 : 'Private Collections',
+        5 : 'Public Collections',
+        6 : 'Private Collections'
         }
     }
 
@@ -93,7 +93,7 @@ export class AssetFiltersService {
         this.subscriptions.push(
             this._auth.getInstitution().subscribe(
                 institution => {
-                    this.filterNameMap["collectiontypes"][2] = this.filterNameMap["collectiontypes"][4] = institution && institution.shortName ? institution.shortName + ' Collections' : 'Institutional Collections';
+                    this.filterNameMap['collectiontypes'][2] = this.filterNameMap['collectiontypes'][4] = institution && institution.shortName ? institution.shortName + ' Collections' : 'Institutional Collections';
                 }
             )
         )
@@ -105,20 +105,20 @@ export class AssetFiltersService {
     }
 
 
-    public getFilterNameMap() : any {
+    public getFilterNameMap(): any {
         return this.filterNameMap
     }
 
     // Empties all filter objects without publishing them
-    public clearApplied(isQuiet ?: boolean):void {
+    public clearApplied(isQuiet ?: boolean): void {
         this.appliedFilters = [];
         if (!isQuiet) {
             this.appliedSource.next(this.appliedFilters);
         }
     }
 
-    public clearAvailable(isQuiet ?: boolean):void {
-        this.availableFilters = Object.assign({},this.defaultAvailable);
+    public clearAvailable(isQuiet ?: boolean): void {
+        this.availableFilters = Object.assign({}, this.defaultAvailable);
         if (!isQuiet) {
             this.availableSource.next(this.availableFilters);
         }
@@ -127,7 +127,7 @@ export class AssetFiltersService {
     /**
      * Returns a boolean if unable to add filters to available filters
      */
-    public setAvailable(name: string, filters: any ) : boolean {
+    public setAvailable(name: string, filters: any ): boolean {
         // if (name == 'geography') {
         //     let filterKeys = (Object.keys(filters) && Object.keys(filters).length > 0) ? Object.keys(filters) : []
         //     let filterArr = []
@@ -158,7 +158,7 @@ export class AssetFiltersService {
     }
 
     public apply(group: string, value: string, isQuiet ?: boolean) {
-      let parsedValue:any
+      let parsedValue: any
         try { // parse possible array
           parsedValue = JSON.parse(value)
         } catch (err) { // not an array
@@ -166,9 +166,9 @@ export class AssetFiltersService {
         }
 
         let groupExists = false;
-        for(let i = 0; i < this.appliedFilters.length; i++){
+        for (let i = 0; i < this.appliedFilters.length; i++){
 
-            if(group === this.appliedFilters[i].filterGroup){
+            if (group === this.appliedFilters[i].filterGroup){
                 if (Array.isArray(parsedValue)) {
                     this.appliedFilters[i].filterValue.concat(parsedValue)
                 } else if (this.appliedFilters[i].filterValue.indexOf(parsedValue) < 0) {
@@ -193,9 +193,9 @@ export class AssetFiltersService {
 
     public isApplied(group: string, filter: any) {
         filter = (group === 'collectiontypes') ? parseInt( filter ) : filter;
-        for(var i = 0; i < this.appliedFilters.length; i++){
-            var filterObj = this.appliedFilters[i];
-            if((group === filterObj.filterGroup)){
+        for (let i = 0; i < this.appliedFilters.length; i++){
+            let filterObj = this.appliedFilters[i];
+            if ((group === filterObj.filterGroup)){
                 if (filterObj.filterValue.indexOf(filter) > -1) {
                     return true;
                 } else if (filterObj.filterValue == filter) {
@@ -208,8 +208,8 @@ export class AssetFiltersService {
 
     // Available Filters is used to determine which parameters are true filter parameters
     // This method returns whether a filter group exists or not
-    public isFilterGroup(groupName:string): boolean {
-        if((groupName == 'startDate') || (groupName == 'endDate')){
+    public isFilterGroup(groupName: string): boolean {
+        if ((groupName == 'startDate') || (groupName == 'endDate')){
             return true;
         }
         else{
@@ -220,9 +220,9 @@ export class AssetFiltersService {
     public remove(group, filter, isQuiet ?: boolean) {
         let filterRemoved = false;
         filter = (group === 'collectiontypes') ? parseInt( filter ) : filter;
-        for(var i = 0; i < this.appliedFilters.length; i++){
-            var filterObj = this.appliedFilters[i];
-            if((group === filterObj.filterGroup)){
+        for (let i = 0; i < this.appliedFilters.length; i++){
+            let filterObj = this.appliedFilters[i];
+            if ((group === filterObj.filterGroup)){
                 let valueIndex = filterObj.filterValue.indexOf(filter);
                 if (valueIndex > -1) {
                     filterObj.filterValue.splice(valueIndex, 1);
@@ -262,31 +262,31 @@ export class AssetFiltersService {
      * Populates the "dateObj" on this.availableFilters for applying/displaying date constraints
      * @param dateFacetsArray Array returned with search results with multiple data and era values
      */
-    public generateDateFacets(dateFacetsArray ?: any[]) : void {
+    public generateDateFacets(dateFacetsArray ?: any[]): void {
         if (!dateFacetsArray && this.availableFilters.date) {
             dateFacetsArray = this.availableFilters.date;
-        } else if(!dateFacetsArray) {
+        } else if (!dateFacetsArray) {
             dateFacetsArray = []
         }
 
-        if(dateFacetsArray.length > 0){
-            var startDate = dateFacetsArray[0].date;
-            var endDate = dateFacetsArray[dateFacetsArray.length - 1].date;
+        if (dateFacetsArray.length > 0){
+            let startDate = dateFacetsArray[0].date;
+            let endDate = dateFacetsArray[dateFacetsArray.length - 1].date;
 
             this.availableFilters.dateObj.earliest.date = Math.abs(startDate);
-            this.availableFilters.dateObj.earliest.era = startDate < 0 ? "BCE" : "CE";
+            this.availableFilters.dateObj.earliest.era = startDate < 0 ? 'BCE' : 'CE';
 
             this.availableFilters.dateObj.latest.date = Math.abs(endDate);
-            this.availableFilters.dateObj.latest.era = endDate < 0 ? "BCE" : "CE";
+            this.availableFilters.dateObj.latest.era = endDate < 0 ? 'BCE' : 'CE';
 
             // this.availableFilters.dateObj.modified = false;
 
             // Fallback date filter values
             this.availableFilters.prevDateObj.earliest.date = Math.abs(startDate);
-            this.availableFilters.prevDateObj.earliest.era = startDate < 0 ? "BCE" : "CE";
+            this.availableFilters.prevDateObj.earliest.era = startDate < 0 ? 'BCE' : 'CE';
 
             this.availableFilters.prevDateObj.latest.date = Math.abs(endDate);
-            this.availableFilters.prevDateObj.latest.era = endDate < 0 ? "BCE" : "CE";
+            this.availableFilters.prevDateObj.latest.era = endDate < 0 ? 'BCE' : 'CE';
 
             this.setAvailable('date', dateFacetsArray);
             this.setAvailable('dateObj', this.availableFilters.dateObj);
@@ -297,20 +297,20 @@ export class AssetFiltersService {
     /**
      * Generate hierarchical facets from SOLR hierarchy object
      */
-    public generateHierFacets(facetsObj: any, label: string) : any[] {
+    public generateHierFacets(facetsObj: any, label: string): any[] {
 
-        var generatedFacets = [];
+        let generatedFacets = [];
 
-        for(let label in facetsObj) {
-            var resFacet = facetsObj[label] && facetsObj[label].element;
-            var childrenObj = facetsObj[label] && facetsObj[label].children;
+        for (let label in facetsObj) {
+            let resFacet = facetsObj[label] && facetsObj[label].element;
+            let childrenObj = facetsObj[label] && facetsObj[label].children;
 
             if (resFacet) {
                 resFacet.name = label
                 resFacet.children = []
 
                 for (let childName in childrenObj) {
-                    var child = childrenObj[childName].element
+                    let child = childrenObj[childName].element
                     child.name = childName
                     resFacet.children.push(child)
                 }
@@ -328,17 +328,17 @@ export class AssetFiltersService {
 
     public generateColTypeFacets(idsArray){
         idsArray = this.getUniqueColTypeIds(idsArray);
-        var generatedFacetsArray = [];
+        let generatedFacetsArray = [];
 
-        for(var i = 0; i < idsArray.length; i++){
-            var facetObj = {
+        for (let i = 0; i < idsArray.length; i++){
+            let facetObj = {
                 id : idsArray[i],
                 label: ''
             };
-            if(facetObj.id === '1'){
+            if (facetObj.id === '1'){
                 facetObj.label = 'Artstor Digital Library';
             }
-            else if(facetObj.id === '5'){
+            else if (facetObj.id === '5'){
                 facetObj.label = 'Shared Shelf Commons';
             }
             else{
@@ -353,13 +353,13 @@ export class AssetFiltersService {
     }
 
     private getUniqueColTypeIds(facetArray){
-        var colTypeIds = [];
-        for(var i = 0; i < facetArray.length; i++){
-        var facetObj = facetArray[i];
-        var idArray = facetObj.collectionType.split(',');
-        for(var j = 0; j < idArray.length; j++){
+        let colTypeIds = [];
+        for (let i = 0; i < facetArray.length; i++){
+        let facetObj = facetArray[i];
+        let idArray = facetObj.collectionType.split(',');
+        for (let j = 0; j < idArray.length; j++){
             idArray[j] = idArray[j].trim();
-            if(colTypeIds.indexOf(idArray[j]) === -1){
+            if (colTypeIds.indexOf(idArray[j]) === -1){
             colTypeIds.push(idArray[j]);
             }
         }
@@ -368,10 +368,10 @@ export class AssetFiltersService {
     }
 
     private existsInRegion(countryId, childerenIds){
-        var result = false;
-        for(var i = 0; i < childerenIds.length; i++){
-            var child = childerenIds[i];
-            if(child._reference == countryId){
+        let result = false;
+        for (let i = 0; i < childerenIds.length; i++){
+            let child = childerenIds[i];
+            if (child._reference == countryId){
                 result = true;
                 break;
             }

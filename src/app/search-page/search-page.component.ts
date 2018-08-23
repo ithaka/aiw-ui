@@ -4,9 +4,8 @@ import { Subscription }   from 'rxjs/Subscription';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 import { AssetService } from './../shared/assets.service';
-import { AuthService, LogService } from '../shared';
+import { AuthService, LogService, FlagService } from '../shared';
 import { AssetFiltersService } from '../asset-filters/asset-filters.service';
-import { AnalyticsService } from '../analytics.service';
 import { AssetGrid } from './../asset-grid/asset-grid.component';
 import { TitleService } from '../shared/title.service';
 import { AppConfig } from '../app.service';
@@ -22,10 +21,7 @@ export class SearchPage implements OnInit, OnDestroy {
   // Add user to decide whether to show the banner
   private user: any = this._auth.getUser();
 
-  // Contributors is the list of map of institution id and institution name used for show Contributor filter
-
-  private unaffiliatedFlag: boolean;
-  private siteID: string = ""
+  private siteID: string = ''
 
   private subscriptions: Subscription[] = [];
 
@@ -33,13 +29,15 @@ export class SearchPage implements OnInit, OnDestroy {
   private assetGrid: AssetGrid;
   // private searchInResults: boolean = false;
 
+  private unaffiliatedUser: boolean = false
+
   constructor(
         public _appConfig: AppConfig,
         private _assets: AssetService,
         private route: ActivatedRoute,
         private _filters: AssetFiltersService,
+        private _flags: FlagService,
         private _router: Router,
-        private _analytics: AnalyticsService,
         private _title: TitleService,
         private _auth: AuthService,
         private _captainsLog: LogService,
@@ -61,7 +59,7 @@ export class SearchPage implements OnInit, OnDestroy {
           this.user = userObj;
         },
         (err) => {
-          console.error("Nav failed to load Institution information", err)
+          console.error('Nav failed to load Institution information', err)
         }
       )
     );
@@ -71,14 +69,10 @@ export class SearchPage implements OnInit, OnDestroy {
     this.subscriptions.push(
       this.route.params.subscribe( (routeParams) => {
         let params = Object.assign({}, routeParams);
+
         // Find feature flags (needs to be checked before running queryAll)
-        if(params && params['featureFlag']){
-            console.log(params['featureFlag'])
-            this._auth.featureFlags[params['featureFlag']] = true;
-            // Check for unaffiliated user flag
-            if (params['featureFlag']=="unaffiliated"){
-              this.unaffiliatedFlag = true;
-            }
+        if (params && params['featureFlag']){
+            this._flags[params['featureFlag']] = true;
         }
 
         // If a page number isn't set, reset to page 1!
@@ -86,32 +80,36 @@ export class SearchPage implements OnInit, OnDestroy {
           params['page'] = 1;
         }
 
+        // If the _auth.isPublicOnly() doesn't match the component's "unaffiliatedUser" flag then refresh search results
+        let refreshSearch = this.unaffiliatedUser && this._auth.isPublicOnly() ? false : true
+
         // Make a search call if there is a search term or any selected filter
-        if (params["term"] || params["classification"] || params["geography"] || params["collectiontypes"]  || params["collTypes"] || params["startDate"] || params["endDate"]) {
+        if (params['term'] || params['classification'] || params['geography'] || params['collectiontypes']  || params['collTypes'] || params['startDate'] || params['endDate']) {
           // Build *reporting* search filters object
           let logFilters = Object.assign({}, params)
           // Remove search term value
-          delete logFilters["term"]
+          delete logFilters['term']
           // Post search info to Captain's Log
           this._captainsLog.log({
-            eventType: "artstor_search",
-            additional_fields: { 
-              "searchTerm": params["term"],
-              "searchFilters": logFilters
+            eventType: 'artstor_search',
+            additional_fields: {
+              'searchTerm': params['term'],
+              'searchFilters': logFilters
             }
           })
 
-          this._title.setSubtitle( '"'+ params["term"] + '"' )
-          this._assets.queryAll(params);
+          this._title.setSubtitle( '"' + params['term'] + '"' )
+          this._assets.queryAll(params, refreshSearch);
         } else {
           this._title.setTitle( 'Artstor' )
           console.log('No search term');
           params['term'] = '*';
-          this._assets.queryAll(params);
+          this._assets.queryAll(params, refreshSearch);
         }
+
+        this.unaffiliatedUser = this._auth.isPublicOnly() ? true : false
       })
     );
-    this._analytics.setPageValues('search', '')
   } // OnInit
 
   ngOnDestroy() {

@@ -58,7 +58,7 @@ export class BrowsePage implements OnInit, OnDestroy {
     );
 
     // Set page title
-    this._title.setSubtitle("Browse")
+    this._title.setSubtitle('Browse')
 
     // Clear previously applied filters on search
     this._filters.clearApplied()
@@ -70,7 +70,7 @@ export class BrowsePage implements OnInit, OnDestroy {
       })
     );
 
-    if( this.browseOpts.artstorCol && !this.user.unaffliatedUser){
+    if ( this.browseOpts.artstorCol && !this._auth.isPublicOnly()){
         this.colMenuArray.push( { label: 'Artstor Digital Library', id: '1', link: 'library' } );
     }
 
@@ -80,40 +80,40 @@ export class BrowsePage implements OnInit, OnDestroy {
             (institutionObj) => {
                 this.institution = institutionObj;
                 this.userTypeId = this._auth.getUser().typeId;
-                if( (this.userTypeId == 1 || this.userTypeId == 2 || this.userTypeId == 3) && this.browseOpts.instCol && !this.user.unaffliatedUser ){
+                if ( (this.userTypeId == 1 || this.userTypeId == 2 || this.userTypeId == 3) && this.browseOpts.instCol && !this._auth.isPublicOnly() ){
                     let instName = this.institution && this.institution.shortName ? this.institution.shortName : 'Institutional';
-                    var obj = {
+                    let obj = {
                         label : instName + ' Collections',
                         id: '2',
                         link: 'institution'
                     }
                     // Replace the item of the array instead of push
-                    this.colMenuArray.splice(1, 1 ,obj);
+                    this.colMenuArray.splice(1, 1 , obj);
                 }
             },
             (err) => {
-                console.error("Nav failed to load Institution information", err)
+                console.error('Nav failed to load Institution information', err)
             }
         )
     );
 
-    if( this.browseOpts.openCol ){
+    if ( this.browseOpts.openCol ){
         this.colMenuArray.push( { label: 'Public Collections', id: '3', link: 'commons' } );
     }
 
-    if(this.browseOpts.myCol){
-        var obj = {
+    if (this.browseOpts.myCol && !this._auth.isPublicOnly()){
+        let obj = {
             label : 'My Collections',
             id: '4',
             link: 'mycollections'
         }
-        this.colMenuArray.splice(2, 0 ,obj);
+        this.colMenuArray.splice(2, 0 , obj);
     }
 
-    if( this.browseOpts.igs && !this.user.unaffliatedUser ){
+    if ( this.browseOpts.igs && !this._auth.isPublicOnly() ){
         this.colMenuArray.push( { label: 'Groups', id: '5', link: 'groups' } );
     }
-    
+
   }
 
   ngOnDestroy() {

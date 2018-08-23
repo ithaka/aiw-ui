@@ -17,7 +17,7 @@ export class AccessDeniedModal implements OnInit {
   @Output() closeModal: EventEmitter<any> = new EventEmitter()
 
   private isLoggedIn: boolean
-  private promptCopy: string = ""
+  private promptCopy: string = ''
 
   constructor(
     private _auth: AuthService,
@@ -26,22 +26,26 @@ export class AccessDeniedModal implements OnInit {
   ) { }
 
   ngOnInit() {
+    // Set focus to the modal to make the links in the modal first thing to tab for accessibility
+    let htmlelement: HTMLElement = document.getElementById('modal');
+    htmlelement.focus()
+
       this._auth.currentUser.take(1).subscribe(
         (user) => {
           this.isLoggedIn = user.isLoggedIn
 
           if (this.isLoggedIn) {
             // Logged In
-            this.promptCopy = "ACCESS_DENIED_MODAL.USER_AUTH.PROMPT"
+            this.promptCopy = 'ACCESS_DENIED_MODAL.USER_AUTH.PROMPT'
           } else if (user.status) {
             // IP Auth
-            this.promptCopy = "ACCESS_DENIED_MODAL.IP_AUTH.PROMPT"
+            this.promptCopy = 'ACCESS_DENIED_MODAL.IP_AUTH.PROMPT'
           } else {
-            this.promptCopy = "ACCESS_DENIED_MODAL.NO_AUTH.PROMPT"
+            this.promptCopy = 'ACCESS_DENIED_MODAL.NO_AUTH.PROMPT'
           }
         },
         (err) => {
-          console.error("Failed to load Institution information", err)
+          console.error('Failed to load Institution information', err)
         }
       )
   }
@@ -50,7 +54,7 @@ export class AccessDeniedModal implements OnInit {
    * Set aside our current/intended path so the user can return
    */
   stashThenRoute(routeValue: string) {
-    this._auth.store("stashedRoute", this.location.path(false))
-    this._router.navigate([routeValue]); 
+    this._auth.store('stashedRoute', this.location.path(false))
+    this._router.navigate([routeValue]);
   }
 }

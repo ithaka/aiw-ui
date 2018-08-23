@@ -14,7 +14,7 @@ import { AuthService, ToolboxService } from './../../shared';
     }
   `]
 })
-export class LoginReqModal implements OnInit {
+export class LoginReqModal {
   /** Meant only to trigger display of modal */
   @Output()
   private closeModal: EventEmitter<any> = new EventEmitter();
@@ -22,18 +22,21 @@ export class LoginReqModal implements OnInit {
   constructor(private _router: Router, private _auth: AuthService, private route: ActivatedRoute, private _tool: ToolboxService, private location: Location) { }
 
   ngOnInit() {
+    // Set focus to the modal to make the links in the modal first thing to tab for accessibility
+    let htmlelement: HTMLElement = document.getElementById('modal');
+    htmlelement.focus();
   }
 
   goToLogin() {
     // could utilize RouteReuseStrategy here
 
-    this._auth.store("stashedRoute", this.location.path(false));
+    this._auth.store('stashedRoute', this.location.path(false));
 
     this._router.navigate(['/login']);
   }
 
   test() {
-    this._router.navigateByUrl(this._auth.getFromStorage("stashedRoute"));
+    this._router.navigateByUrl(this._auth.getFromStorage('stashedRoute'));
   }
 
 }

@@ -37,13 +37,14 @@ import { MomentModule } from 'angular2-moment'; // optional, provides moment-sty
 import {DndModule} from 'ng2-dnd';
 
 // File Uploader
-import { FileUploadModule } from "ng2-file-upload";
+import { FileUploadModule } from 'ng2-file-upload';
 
 // App is our top level component
 import { App } from './app.component'
 import { APP_RESOLVER_PROVIDERS } from './app.resolver'
 import { AppConfig } from './app.service'
-import { Nav, Footer, SearchComponent, PaginationComponent, AssetSearchService, CardSortModal } from './shared'
+import { Nav, Footer, SearchComponent, PaginationComponent, AssetSearchService } from './shared'
+import { GuideTourComponent } from './shared/tour/tour.component'
 import { NavMenu } from './nav-menu'
 import { AssetFilters } from './asset-filters'
 import { AssetGrid, ThumbnailComponent } from './asset-grid'
@@ -55,8 +56,8 @@ import { CategoryPage } from './category-page'
 import { ImageGroupPPPage } from './image-group-pp-page'
 import { AssetPPPage } from './asset-pp-page'
 import { ClusterPage } from './cluster-page'
-import { BrowsePage, LibraryComponent, BrowseCommonsComponent,
-  MyCollectionsComponent, BrowseInstitutionComponent, BrowseGroupsComponent, TagComponent,
+import { BrowsePage, LibraryComponent, IgGroupFilterPipe, BrowseCommonsComponent,
+  MyCollectionsComponent, BrowseInstitutionComponent, BrowseGroupsComponent, TagComponent, CardViewComponent,
   TagsListComponent, TagFiltersService } from './browse-page'
 import { AssetPage, AgreeModalComponent } from './asset-page'
 import { AccountPage } from './account-page'
@@ -96,22 +97,23 @@ import { SkyBannerComponent } from './sky-banner/sky-banner.component'
 import {
   AuthService,
   AssetService,
+  FlagService,
   GroupService,
   ImageGroupService,
   LogService,
+  MetadataService,
   TitleService,
   ToolboxService,
   TypeIdPipe,
   ScriptService,
-  PersonalCollectionService
+  PersonalCollectionService,
+  AccountService
 } from './shared'
 import { LocalPCService } from './_local-pc-asset.service'
-import { SSOService } from './shared/sso.service'
 import { AssetFiltersService } from './asset-filters/asset-filters.service'
 import { TagsService } from './browse-page/tags.service'
-import { CustomReuseStrategy } from './reuse-strategy'
 import { LegacyRouteResolver } from './legacy.service'
-import { AnalyticsService } from './analytics.service'
+import { GroupsRouteResolver } from './browse-page/groups-redirect.service'
 import { HTTP_INTERCEPTORS } from '@angular/common/http'
 import { UnauthorizedInterceptor } from './interceptors'
 
@@ -122,15 +124,16 @@ import { CustomUrlSerializer } from './shared/custom-url-serializer'
 
 const APP_PROVIDERS = [
   ...APP_RESOLVER_PROVIDERS,
-  DatePipe,
-  AnalyticsService,
+
+  AccountService,
   AppConfig,
   AssetService,
   AssetSearchService,
-  GroupService,
   AuthService,
+  DatePipe,
+  FlagService,
+  GroupService,
   PersonalCollectionService,
-  SSOService,
   LocalPCService,
   LogService,
   ImageGroupService,
@@ -140,8 +143,10 @@ const APP_PROVIDERS = [
   TagsService,
   ToolboxService,
   LegacyRouteResolver,
+  GroupsRouteResolver,
   Title,
   TitleService,
+  MetadataService,
   { provide: UrlSerializer, useClass: CustomUrlSerializer },
   { provide: HTTP_INTERCEPTORS, useClass: UnauthorizedInterceptor, multi: true }
   // { provide: RouteReuseStrategy, useClass: CustomReuseStrategy } // to be implemented later
@@ -172,7 +177,6 @@ export function HttpLoaderFactory(http: HttpClient) {
     BrowseGroupsComponent,
     BrowseInstitutionComponent,
     BrowsePage,
-    CardSortModal,
     CategoryPage,
     ClickOutsideDirective,
     ClusterPage,
@@ -185,11 +189,13 @@ export function HttpLoaderFactory(http: HttpClient) {
     FeaturedComponent,
     Footer,
     GeneralSearchComponent,
+    CardViewComponent,
     Home,
     ImageGroupPage,
     ImageGroupPPPage,
     KeysPipe,
     LibraryComponent,
+    IgGroupFilterPipe,
     LinkifyPipe,
     LinkPage,
     Login,
@@ -203,6 +209,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     NoContent,
     NoIgModal,
     PaginationComponent,
+    GuideTourComponent,
     PCollectionPage,
     PptModalComponent,
     PwdResetModal,
@@ -254,15 +261,5 @@ export function HttpLoaderFactory(http: HttpClient) {
   ]
 })
 export class AppModule {
-  constructor(public appRef: ApplicationRef, private router: Router, private _satellite: AnalyticsService) {
-
-    // Track page changes with Adobe Analytics
-    router.events.subscribe((val: NavigationEnd) => {
-      // If this is a different page, report it!
-      if (val.urlAfterRedirects != val.url) {
-        _satellite.directCall('page_name')
-      }
-    })
-  }
+  constructor(public appRef: ApplicationRef, private router: Router) {}
 }
-

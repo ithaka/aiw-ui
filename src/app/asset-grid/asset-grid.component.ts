@@ -14,7 +14,8 @@ import {
   ImageGroupService,
   LogService,
   Thumbnail,
-  ToolboxService
+  ToolboxService,
+  FlagService
 } from '../shared'
 import { AssetFiltersService } from '../asset-filters/asset-filters.service'
 
@@ -28,12 +29,11 @@ export class AssetGrid implements OnInit, OnDestroy {
   // Add user to decide whether to show the banner
   private user: any = this._auth.getUser();
 
-  private unaffiliatedFlag: boolean;
-  private siteID: string = ""
+  private siteID: string = ''
 
   // Set our default values
   private subscriptions: Subscription[] = [];
-   
+
   public searchLoading: boolean;
   public showFilters: boolean = true;
   public showAdvancedModal: boolean = false;
@@ -55,7 +55,7 @@ export class AssetGrid implements OnInit, OnDestroy {
 
   // Default show as loading until results have update
   private isLoading: boolean = true;
-  private searchError: string = "";
+  private searchError: string = '';
   private searchLimitError: boolean = false;
 
   private searchTerm: string = '';
@@ -64,7 +64,10 @@ export class AssetGrid implements OnInit, OnDestroy {
   private isPartialPage: boolean = false;
 
   // Flag to check if the results have any restricted images.
-  private rstd_imgs: boolean = false;
+  private restricted_results: any[] = [];
+
+  private excludedAssetsCount: number = 0;
+  private sortByDateTotal: number = 0;
 
   @Input()
   private actionOptions: any = {};
@@ -75,13 +78,13 @@ export class AssetGrid implements OnInit, OnDestroy {
 
   // Value
   private totalAssets: number = 0;
-  @Input() 
+  @Input()
   set assetCount(count: number) {
     if (typeof(count) != 'undefined') {
       this.totalAssets = count
     }
   }
-  get assetCount() : number {
+  get assetCount(): number {
     return this.totalAssets
   }
 
@@ -120,14 +123,30 @@ export class AssetGrid implements OnInit, OnDestroy {
   };
   sub;
 
+  private UrlParams: any = {
+    term: '',
+    size: 24,
+    page: 1,
+    startDate: 0,
+    endDate: 0,
+    igId: '',
+    objectId: '',
+    colId: '',
+    catId: '',
+    collTypes: '',
+    sort: '0',
+    coll: ''
+  };
+
   // Object Id parameter, for Clusters
-  private objectId : string = '';
+  private objectId: string = '';
   // Collection Id parameter
-  private colId : string = '';
+  private colId: string = '';
   // Image group
-  private ig : any = {};
+  private ig: any = {};
 
   private _storage;
+  private _session;
 
   // TypeScript public modifiers
   constructor(
@@ -135,6 +154,7 @@ export class AssetGrid implements OnInit, OnDestroy {
     private _assets: AssetService,
     private _auth: AuthService,
     private _filters: AssetFiltersService,
+    private _flags: FlagService,
     private _groups: GroupService,
     private _ig: ImageGroupService,
     private _log: LogService,
@@ -147,6 +167,7 @@ export class AssetGrid implements OnInit, OnDestroy {
   ) {
       this.siteID = this._appConfig.config.siteID;
       this._storage = locker.useDriver(Locker.DRIVERS.LOCAL);
+      this._session = locker.useDriver(Locker.DRIVERS.SESSION);
       let prefs = this._auth.getFromStorage('prefs')
       if (prefs && prefs.pageSize && prefs.pageSize != 24) {
         this.pagination.size = prefs.pageSize
@@ -168,7 +189,7 @@ export class AssetGrid implements OnInit, OnDestroy {
           this.user = userObj;
         },
         (err) => {
-          console.error("Nav failed to load Institution information", err)
+          console.error('Nav failed to load Institution information', err)
         }
       )
     );
@@ -178,33 +199,46 @@ export class AssetGrid implements OnInit, OnDestroy {
       this.route.params
       .subscribe((params: Params) => {
         // Find feature flags
-        if(params && params['featureFlag']){
-          this._auth.featureFlags[params['featureFlag']] = true;
-          if (params['featureFlag']=="unaffiliated"){
-              this.unaffiliatedFlag = true;
-          }
-      }
-
-        if(params['term']){
-          this.searchTerm = params['term'];
+        if (params && params['featureFlag']){
+          this._flags[params['featureFlag']] = true
         }
 
-        if(params['sort']){
+        if (params['term']){
+          this.searchTerm = params['term'];
+          this.UrlParams.term = this.searchTerm;
+        }
+        if (params['startDate']){
+          this.UrlParams.startDate = params['startDate'];
+        }
+        if (params['endDate']){
+          this.UrlParams.endDate = params['endDate'];
+        }
+        if (params['artclassification_str']){
+          this.UrlParams.artclassification_str = params['artclassification_str'];
+        }
+        if (params['geography']){
+          this.UrlParams.geography = params['geography'];
+        }
+        if (params['collectiontypes']){
+          this.UrlParams.collectiontypes = params['collectiontypes'];
+        }
+
+        if (params['sort']){
           this.activeSort.index = params['sort'];
 
-          if(this.activeSort.index == '0'){
+          if (this.activeSort.index == '0'){
             this.activeSort.label = 'Relevance';
           }
-          else if(this.activeSort.index == '1'){
+          else if (this.activeSort.index == '1'){
             this.activeSort.label = 'Title';
           }
-          else if(this.activeSort.index == '2'){
+          else if (this.activeSort.index == '2'){
             this.activeSort.label = 'Creator';
           }
-          else if(this.activeSort.index == '3'){
+          else if (this.activeSort.index == '3'){
             this.activeSort.label = 'Date';
           }
-          else if(this.activeSort.index == '4'){
+          else if (this.activeSort.index == '4'){
             this.activeSort.label = 'Recently Added';
           }
         }
@@ -250,6 +284,15 @@ export class AssetGrid implements OnInit, OnDestroy {
     this.subscriptions.push(
       this._assets.allResults.subscribe(
         (allResults) => {
+          if (this.activeSort.index && this.activeSort.index == '3'){
+            this.sortByDateTotal =  allResults.total
+            this._search.search(this.UrlParams, this.searchTerm, '0').forEach((res) => {
+              this.excludedAssetsCount = res.total - this.sortByDateTotal
+            })
+          }
+          else {
+            this.excludedAssetsCount = 0
+          }
           // Prep display of search term next to results count
           this.formatSearchTerm(this.searchTerm)
           // Update results array
@@ -259,10 +302,10 @@ export class AssetGrid implements OnInit, OnDestroy {
           // Server error handling
           if (allResults === null) {
             this.isLoading = false
-            this.searchError = "There was a server error loading your search. Please try again later."
+            this.searchError = 'There was a server error loading your search. Please try again later.'
             return
           }
-          else if(allResults.errors && allResults.errors[0] && (allResults.errors[0] === 'Too many rows requested')){
+          else if (allResults.errors && allResults.errors[0] && (allResults.errors[0] === 'Too many rows requested')){
             this.isLoading = false
             this.searchLimitError = true
             return
@@ -270,7 +313,7 @@ export class AssetGrid implements OnInit, OnDestroy {
           else if (allResults.error) {
             console.error(allResults.error)
             this.isLoading = false
-            this.searchError = "There was a server error loading your search. Please try again later."
+            this.searchError = 'There was a server error loading your search. Please try again later.'
             return
           }
 
@@ -280,7 +323,7 @@ export class AssetGrid implements OnInit, OnDestroy {
             this.itemIds = allResults.items
             this.ig = allResults
           }
-          this.rstd_imgs = allResults.rstd_imgs_count && (allResults.rstd_imgs_count > 0) ? true : false
+          this.restricted_results = allResults.restricted_thumbnails
 
           if (this.results && this.results.length > 0) {
             this.isLoading = false;
@@ -290,15 +333,23 @@ export class AssetGrid implements OnInit, OnDestroy {
           }
 
           const MAX_RESULTS_COUNT: number = 1500
-          if('total' in allResults){
+          if ('total' in allResults){
             this.totalAssets = allResults.total
             let total = this.hasMaxAssetLimit && this.totalAssets > MAX_RESULTS_COUNT ? MAX_RESULTS_COUNT : this.totalAssets
             this.pagination.totalPages = ( total === 0 ) ? 1 : Math.floor((total + this.pagination.size - 1) / this.pagination.size)
             this.isLoading = false
-          } else if(this.assetCount && this.results && this.results.length > 0){
+          } else if (this.assetCount && this.results && this.results.length > 0){
             this.totalAssets = this.assetCount
             this.isLoading = false;
           }
+
+          this._session.set('totalAssets', this.totalAssets ? this.totalAssets : 1)
+
+          // Tie prevRouteParams array with requestId before sending to asset page
+          let id: string = this._search.latestSearchRequestId ? this._search.latestSearchRequestId.toString() : 'undefined'
+          let prevRouteParams = this._session.get('prevRouteParams') || {}
+          prevRouteParams[id] = this.route.snapshot.url
+          this._session.set('prevRouteParams', prevRouteParams)
 
           //Generate Facets
           if (allResults && allResults.collTypeFacets) {
@@ -346,7 +397,7 @@ export class AssetGrid implements OnInit, OnDestroy {
     // Clear all selected assets and close edit mode
     this.subscriptions.push(
       this._assets.clearSelectMode.subscribe( value => {
-        if(value){
+        if (value){
           this.deactivateSelectMode();
         }
       })
@@ -367,7 +418,7 @@ export class AssetGrid implements OnInit, OnDestroy {
    */
   private goToPage(newPage: number) {
     // The requested page should be within the limits (i.e 1 to totalPages)
-    if( (newPage >= 1) ){
+    if ( (newPage >= 1) ){
       this._assets.paginated = true;
       this.isLoading = true;
       this.pagination.page = newPage;
@@ -389,7 +440,7 @@ export class AssetGrid implements OnInit, OnDestroy {
    * @param size Number of assets requested on page
    */
   private changePageSize(size: number){
-    if(this.pagination.size != size){
+    if (this.pagination.size != size){
       this._assets.goToPage(1, true)
       this._assets.setPageSize(size)
       // this._auth.store('prefs', { pageSize: size })
@@ -399,7 +450,7 @@ export class AssetGrid implements OnInit, OnDestroy {
   }
 
   private changeSortOpt(index, label) {
-    if( this.activeSort.index != index){
+    if ( this.activeSort.index != index){
       this.activeSort.index = index;
       this.activeSort.label = label;
 
@@ -413,17 +464,17 @@ export class AssetGrid implements OnInit, OnDestroy {
    * @param event Event emitted on keypress inside the current page number field
    */
   private pageNumberKeyPress(event: any): boolean{
-      if((event.key == 'ArrowUp') || (event.key == 'ArrowDown') || (event.key == 'ArrowRight') || (event.key == 'ArrowLeft') || (event.key == 'Backspace')){
+      if ((event.key == 'ArrowUp') || (event.key == 'ArrowDown') || (event.key == 'ArrowRight') || (event.key == 'ArrowLeft') || (event.key == 'Backspace')){
         return true;
       }
 
-      var theEvent = event || window.event;
-      var key = theEvent.keyCode || theEvent.which;
+      let theEvent = event || window.event;
+      let key = theEvent.keyCode || theEvent.which;
       key = String.fromCharCode( key );
-      var regex = /[1-9]|\./;
-      if( !regex.test(key) ) {
+      let regex = /[1-9]|\./;
+      if ( !regex.test(key) ) {
         theEvent.returnValue = false;
-        if(theEvent.preventDefault) theEvent.preventDefault();
+        if (theEvent.preventDefault) theEvent.preventDefault();
       }
 
       return theEvent.returnValue;
@@ -433,10 +484,12 @@ export class AssetGrid implements OnInit, OnDestroy {
    * Edit Mode : Selects / deselects an asset - Inserts / Removes the asset object to the selectedAssets array
    * @param asset object to be selected / deselected
    */
-  private selectAsset(asset: Thumbnail): void{
+
+  private selectAsset(asset, event?): void {
     if(this.editMode){
+      event && event.preventDefault()
       let index: number = this.isSelectedAsset(asset)
-      if(index > -1){
+      if (index > -1){
         this.selectedAssets.splice(index, 1)
         this._assets.setSelectedAssets(this.selectedAssets)
       }
@@ -446,22 +499,21 @@ export class AssetGrid implements OnInit, OnDestroy {
       }
       this.selectedAssets.length ? this.editMode = true : this.editMode = false
     }
-    else{
-      this._storage.set('totalAssets', this.totalAssets ? this.totalAssets : 1)
-      this._storage.set('prevRouteParams', this.route.snapshot.url)
+  }
 
-      // only log the event if the asset came from search, and therefore has an artstorid
-      if (asset['artstorid']) {
-        // log the event connecting the search to the asset clicked
-        this._log.log({
-          eventType: 'artstor_item_view',
-          referring_requestid: this._search.latestSearchRequestId,
-          item_id: asset['artstorid']
-        })
-      }
-
-      // Let template routerLink navigate at this point
+  private constructNavigationCommands (thumbnail: Thumbnail) {
+    let assetId = thumbnail.objectId ? thumbnail.objectId : thumbnail.artstorid
+    let params: any = {
+      requestId: this._search.latestSearchRequestId
     }
+    thumbnail.iap && (params.iap = 'true')
+    this.ig && this.ig.id && (params.groupId = this.ig.id)
+
+    let url = ['/#/asset', assetId].join('/')
+    for (let key in params) {
+      url = url.concat([';', key, '=', params[key]].join(''))
+    }
+    return url
   }
 
   /**
@@ -505,7 +557,7 @@ export class AssetGrid implements OnInit, OnDestroy {
 
   private cancelReorder(): void {
     // IE 11 specificially has a caching problem when reloading the group contents
-    let isIE11 = !!window["MSInputMethodContext"] && !!document["documentMode"]
+    let isIE11 = !!window['MSInputMethodContext'] && !!document['documentMode']
     this.reorderMode = false
     this.reordering.emit(this.reorderMode)
     this.goToPage(1)
@@ -557,8 +609,8 @@ export class AssetGrid implements OnInit, OnDestroy {
       assetIdProperty = 'objectId'
     }
     let len = this.selectedAssets.length
-    for(var i = 0; i < len; i++){
-      if(this.selectedAssets[i][assetIdProperty] === asset[assetIdProperty]){
+    for (let i = 0; i < len; i++){
+      if (this.selectedAssets[i][assetIdProperty] === asset[assetIdProperty]){
         index = i
         break
       }
@@ -566,20 +618,20 @@ export class AssetGrid implements OnInit, OnDestroy {
     return index
   }
 
-  private convertCollectionTypes(collectionId: number) : string {
+  private convertCollectionTypes(collectionId: number): string {
     switch (collectionId) {
       case 3:
-        return "personal-asset";
+        return 'personal-asset';
       default:
-        return "";
+        return '';
     }
   }
 
   /**
    * Format the search term to display advance search queries nicely
    */
-  private formatSearchTerm(query: string) : void {
-    let fQuery = "\"" + query + "\"";
+  private formatSearchTerm(query: string): void {
+    let fQuery = '"' + query + '"';
     // Cleanup filter pipes
     // fQuery = fQuery.replace(/\|[0-9]{3}/g, );
 
@@ -652,4 +704,24 @@ export class AssetGrid implements OnInit, OnDestroy {
     this._renderer.setElementClass(event.target.parentElement, 'show-box', false);
   }
 
+  /**
+   * Remove Assets from a Group
+   * - Owner of Group only
+   */
+  private removeFromGroup(assetsToRemove: Thumbnail[], clearRestricted?: boolean): void {
+    for(let i = 0; i < assetsToRemove.length; i++) {
+      let assetId = assetsToRemove[i].objectId
+      this.ig.items.splice(this.ig.items.indexOf(assetId), 1)
+    }
+    // Save removal to Group
+    this._groups.update(this.ig)
+      .take(1)
+      .subscribe(
+        data => {
+          // Reload group after removing assets
+          window.location.reload()
+        }, error => {
+          console.error(error);
+        });
+  }
 }

@@ -11,6 +11,9 @@
     "strictNullChecks": false,
     "baseUrl": "./src",
     "paths": {
+      "@angular/*": [
+        "../node_modules/@angular/*"
+      ]
     },
     "lib": [
       "dom",

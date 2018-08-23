@@ -10,6 +10,7 @@ export const WLV_ARTSTOR = {
     siteID: "ARTSTOR",
     logoUrl: "/assets/img/logo-v1-1.png",
     contributingInstFilters : [],
+    isOpenAccess: true,
     footerLinks: [
         "ABOUT",
         "GETTING_STARTED",
@@ -28,7 +29,6 @@ export const WLV_ARTSTOR = {
         'myCol': true,
         'igs': true
     },
-    defaultGrpBrwseBy: "institution",
     homeBrowseSec: {
         'collection': true,
         'instCollection': false,
@@ -53,6 +53,7 @@ export const WLV_SAHARA = {
     logoUrl : "/assets/img/logo-sahara-v1.png",
     saharaLogin: true,
     institutionLogin : false,
+    isOpenAccess: false,
     disableIPAuth : true,
     pageTitle : "SAHARA",
     siteID: "SAHARA",
@@ -63,7 +64,7 @@ export const WLV_SAHARA = {
         "SARARA_CONTRIBUTE",
         "SAHARA_TERMS",
         "SAHARA_PRIVACY",
-        "COOKIE_POLICY"    
+        "COOKIE_POLICY"
     ],
     showSSLogin: true,
     showInstitutionalLogin: false,
@@ -74,7 +75,6 @@ export const WLV_SAHARA = {
         'myCol': false,
         'igs': true
     },
-    defaultGrpBrwseBy: "private",
     featuredCollection: "HOME.SAHARA_FEATURED",
     copyModifier: "SAHARA",
     homeBrowseSec: {

@@ -15,16 +15,16 @@ header.navbar.navbar-light
               #navMessageWelcome Welcome, {{ user.username ? user.username : ''}}
               #navMessageInstitution.login-panel__institution(*ngIf="institutionObj.displayName || institutionObj.institutionName") Access provided by {{ institutionObj.displayName ? institutionObj.displayName : institutionObj.institutionName }}
               .login-panel__links
-                a.link--accent([routerLink]=" ['./account'] " routerLinkActive="active" tabindex="2") Settings
-                a.link--accent((click)="logout()" tabindex="2") Log Out
+                a.link--accent#nav-setting([routerLink]=" ['./account'] " routerLinkActive="active" tabindex="2") Settings
+                a.link--accent#nav-logout((click)="logout()" tabindex="2") Log Out
             .login-panel__status(*ngIf="!user.isLoggedIn")
               b(*ngIf="_auth.isPublicOnly()") Welcome to Artstor's public collections!
               #navMessageInstitution.login-panel__institution(*ngIf="!_auth.isPublicOnly() && (institutionObj.displayName || institutionObj.institutionName)") Access provided by {{ institutionObj.displayName ? institutionObj.displayName : institutionObj.institutionName }}
               div
-                a.link((click)="navigateAndSaveRoute('/login')" tabindex="2") Log in
+                a.link#nav-login((click)="navigateAndSaveRoute('/login')" tabindex="2") Log in
                 ng-container(*ngIf="ipAuthed")
                   span &nbsp;or&nbsp;
-                  a.link((click)="navigateAndSaveRoute('/register')", tabindex="2") Register
+                  a.link#nav-register((click)="navigateAndSaveRoute('/register')", tabindex="2") Register
                 span(*ngIf="_auth.isPublicOnly()") &nbsp;to access the core collections.
                 span(*ngIf="user.status && !user.isLoggedIn") &nbsp;to save images
-ang-session-expire-modal(*ngIf="showinactiveUserLogoutModal && showLoginPanel" "(closeModal)"="inactiveUsrLogOut()")
+ang-session-expire-modal(*ngIf="showinactiveUserLogoutModal && allowExpiredModal" "(closeModal)"="inactiveUsrLogOut()")

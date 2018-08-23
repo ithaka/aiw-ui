@@ -6,7 +6,9 @@ import { Subject } from 'rxjs/Subject'
 export class TagFiltersService {
 
   private _filters: TagFilter[] = []
+  private _selectedFilters: TagFilter[] = []
   private _updateFilters: EventEmitter<any>
+  public showRemainTags: boolean = false
 
   public filterKeys: Subject<string[]> = new Subject()
 
@@ -25,6 +27,10 @@ export class TagFiltersService {
     return this._filters
   }
 
+  get selectedFilters() {
+    return this._selectedFilters
+  }
+
   /**
    * Creates the tag filter string to put in the url
    * @returns string containing tag filters
@@ -41,7 +47,7 @@ export class TagFiltersService {
     return selectedArr
   }
 
-  public processFilterString(tags: string[]) : string[] {
+  public processFilterString(tags: string[]): string[] {
     if (!Array.isArray(tags)) {
       tags = [tags];
     }
@@ -62,6 +68,18 @@ export class TagFiltersService {
       newFilters.push(new TagFilter(filter, this._updateFilters, isSelected))
     })
     this._filters = newFilters
+
+    this._selectedFilters = []
+    for (let tag of this._filters) {
+      if (tag.selected) {
+        // Push the selected filters to the top of the filter list
+        this._filters.splice(this._filters.indexOf(tag), 1)
+        this._filters.unshift(tag)
+
+        // Construct selectedFilters to show them on top of the image groups
+        this._selectedFilters.push(tag)
+      }
+    }
   }
 
   /**

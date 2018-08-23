@@ -1,3 +1,4 @@
+export * from './asset.interface'
 export * from './image-group.interface'
 export * from './thumbnail.interface'
 export * from './type-id.pipe'

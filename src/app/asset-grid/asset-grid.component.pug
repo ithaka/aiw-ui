@@ -61,6 +61,10 @@
               span(*ngIf="siteID!='SAHARA' && _auth.isPublicOnly()", [innerHtml]="'HOME.CONTENT_ACCESS.SEARCH_PAGE_PUBLIC' | translate")
               span(*ngIf="siteID!='SAHARA' && !_auth.isPublicOnly()", [innerHtml]="'HOME.CONTENT_ACCESS.SEARCH_PAGE_USER' | translate")
               span(*ngIf="siteID=='SAHARA'", [innerHtml]="'HOME.CONTENT_ACCESS.SEARCH_PAGE_SAHARA' | translate")
+            = " "
+            span.font-weight-bold(*ngIf="excludedAssetsCount") {{ excludedAssetsCount }} results
+            = " " 
+            span(*ngIf="excludedAssetsCount") have no date and were excluded.
           
     .col-sm-4.col-md-4.col-lg-3.text-right.grid-pagination-bar(*ngIf="!reorderMode")
       pagination([pageObj]="pagination", (goToPage)="goToPage($event)", [right]="true")
@@ -71,8 +75,11 @@
       //- Error Row
       div
         //- Restricted assets warning message
-        .alert.alert-warning(*ngIf="rstd_imgs")
+        .alert.alert-warning(*ngIf="restricted_results && restricted_results.length > 0")
           | {{ "BROWSE.WARNINGS.RSTD_IMGS" | translate }}
+          ng-container(*ngIf="ig.owner_id == user.baseProfileId")
+            div.mt-4 As the <b>Owner</b> of this group, would you like to remove the deleted images?
+            a.mt-2.btn.btn-secondary.btn-sm(tabindex="0", (click)="removeFromGroup(restricted_results)") Remove deleted images
         .alert.alert-warning(*ngIf="!isLoading && (totalAssets == '0') && (!results || results.length < 1) && (searchError.length < 1) && !searchLimitError")
           b Unable to find any assets
           br
@@ -90,7 +97,7 @@
             input.check(type="checkbox", [checked]="isSelectedAsset(asset) > -1", [ngStyle]="{ 'display': isSelectedAsset(asset) > -1 ? 'block' : 'none' }", (change)="editMode = true; selectAsset(asset);")
           .mobile--show
             input.check-mobile(type="checkbox", [checked]="isSelectedAsset(asset) > -1", (change)="editMode = true; selectAsset(asset);")
-          a.card.card--asset([attr.data-id]="asset.objectId", [ngClass]="{'selected': ( isSelectedAsset(asset) > -1 ), 'lrgThmb': largeThmbView }", [routerLink]="getAssetPath(asset)", [queryParams]="(asset.iapFlag > 0 || asset.iap) ? { iap: 'true' } : {}", (click)="selectAsset(asset)", (focus)="showBox($event)", (blur)="hideBox($event)")
+          a.card.card--asset([attr.data-id]="asset.objectId", [ngClass]="{'selected': ( isSelectedAsset(asset) > -1 ), 'lrgThmb': largeThmbView }", (click)="selectAsset(asset, $event)", (focus)="showBox($event)", (blur)="hideBox($event)", [attr.href]="constructNavigationCommands(asset)")
             ang-thumbnail([thumbnail]="asset", [reorderMode]="reorderMode", [editMode]="editMode", [largeThmbView]="largeThmbView")
         .alert.alert-warning(*ngIf="!isLoading && (searchError.length < 1) && ((isPartialPage && hasMaxAssetLimit) || searchLimitError)")
           | {{ "BROWSE.WARNINGS.ADDITIONAL_RESULTS" | translate }}
@@ -103,6 +110,8 @@
               ang-thumbnail([thumbnail]="asset", [reorderMode]="reorderMode", [editMode]="editMode", [largeThmbView]="largeThmbView")
         .alert.alert-warning(*ngIf="!isLoading && (searchError.length < 1) && ((isPartialPage && hasMaxAssetLimit) || searchLimitError)")
           | {{ "BROWSE.WARNINGS.ADDITIONAL_RESULTS" | translate }}
+  .row
+    ang-prompt(*ngIf="_auth.isPublicOnly() && searchTerm", style='width:100%; margin-top:36px; margin-bottom:20px;')
   .row
     .mobile--hide.grid-tool-bar([ngClass]="[ reorderMode ? 'col-12' : 'col-sm-8 col-md-8 col-lg-9']")
     .col-sm-4.col-md-4.col-lg-3.text-right.grid-pagination-bar(*ngIf="!reorderMode")

@@ -18,7 +18,7 @@
     //- Legacy Service icons
     i.icon.icon-collab.float-right(*ngIf="thumbnail.cfObjectId && thumbnail.cfObjectId.length > 0", [id]="thumbnail.objectId + '_associated_images'", (click)="openLink($event, ['/associated', thumbnail.cfObjectId, thumbnail.collectionId])" title="Others are also interested in...")
     i.icon.icon-cluster.float-right(*ngIf="thumbnail.clustered == 1", [id]="thumbnail.objectId + '_clustered_images'", (click)="openLink($event, ['/cluster', thumbnail.objectId, { objTitle :  thumbnail.thumbnail1 }])", title="View related media")
-    i.icon.icon-iap.float-right(*ngIf="thumbnail.iapFlag > 0 || thumbnail.iap")
+    i.icon.icon-iap.float-right(*ngIf="thumbnail.iap")
     //- New search icons
     i.icon.icon-cluster.float-right(
       *ngIf="thumbnail.partofcluster", 

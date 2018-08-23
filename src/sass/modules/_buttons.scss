@@ -17,7 +17,7 @@ $iconBtnSize: $btnHeight;
      @extend %Graphik-Bold-Web;
      color: #fff;
      font-size: 12px;
-     padding: 0px 24px;
+     padding: 0 24px;
      text-transform: uppercase;
      letter-spacing: 0.5px;
      border-bottom: none;
@@ -32,7 +32,9 @@ $iconBtnSize: $btnHeight;
 
      &.disabled, &:disabled {
          pointer-events: none;
-         opacity: 0.25;
+         opacity: 0.4;
+         -webkit-filter: grayscale(100%); /* Safari 6.0 - 9.0 */
+        filter: grayscale(100%);
      }
 }
 
@@ -48,33 +50,34 @@ $iconBtnSize: $btnHeight;
  *  <button type="button" class="btn btn-danger">Danger</button>
  *  <button type="button" class="btn btn-link">Link</button>
  */
+
  .btn-primary, a.btn-primary {
-     background: $primaryBtnBg;
-     border-color: $primaryBtnBg;
+    background: #C9510D;
+    border-color: #C9510D;
 
-     &:hover, &:focus, &:active {
-        background: darken($primaryBtnBg, 10%);
-        border-color: darken($primaryBtnBg, 10%);
-     }
- }
+    &:hover, &:focus, &:active {
+       background: darken(#C9510D, 10%);
+       border-color: darken(#C9510D, 10%);
+    }
+}
  
+
  .btn-secondary, a.btn-secondary {
-    background: $secondaryBtnBg;
-    //  border-color: $secondaryBtnBg;
-    border: none;
-    color: $secondaryBtnColor; 
+    background: white;
+    border: solid 1px #C9510D;
+    color: #C9510D;
 
-     &:hover, &:focus, &:active, &.active {
-        background: darken($secondaryBtnBg, 10%);
-        // border-color: darken($secondaryBtnBg, 10%);
-        background-color: #000000;
-        color: $secondaryBtnColor;
-     }
+    &:hover, &:focus, &:active, &.active {
+        background-color: #C9510D;
+        color: white;
+    }
 
-     &.disabled, &:disabled {
-         background: lighten($secondaryBtnBg, 12%);
-     }
- }
+    // Override Bootstrap default
+    &.disabled, &:disabled {
+        background: white;
+        border-color:#C9510D;
+    }
+}
 
  .btn-dark {
      background: #2d2d2d;
@@ -95,7 +98,7 @@ $iconBtnSize: $btnHeight;
  }
 
  .btn:not(.btn--icon) > .icon {
-    margin: 0px 0.5em;
+    margin: 0 0.5em;
     width: 1.2em;
     height: 1.2em;
     vertical-align: middle;
@@ -104,12 +107,12 @@ $iconBtnSize: $btnHeight;
 
  .btn.btn-link, a.btn.btn-link { 
      text-transform: none !important;
-     padding: 0px 6px 0px 0px;
+     padding: 0 6px 0 0;
      color: #000;
      background: none;
      
      &.with-pad {
-        margin: 0px 24px;
+        margin: 0 24px;
      }
 
      &:active {
@@ -134,7 +137,7 @@ $iconBtnSize: $btnHeight;
 
      & .value {
          color: #000;
-         letter-spacing: 0px;
+         letter-spacing: 0;
          font-weight: normal;
      }
  }
@@ -155,12 +158,12 @@ $iconBtnSize: $btnHeight;
     }
  }
 
- $btnBorderRadius: 0px;
+ $btnBorderRadius: 0;
 
 .btn.btn--square {
     height: $iconBtnSize;
     width: $iconBtnSize;
-    padding: 0px;
+    padding: 0;
 }
 
  .btn.btn--icon {
@@ -173,7 +176,7 @@ $iconBtnSize: $btnHeight;
     background: rgba(255,255,255,0.98);
     color: #333;
     box-shadow: $btnShadow;
-    padding: 0px;
+    padding: 0;
     text-align: center;
     border-bottom: none;
 
@@ -202,8 +205,8 @@ $iconBtnSize: $btnHeight;
 
  .button-group {
      & .btn {
-         border-radius: 0px;
-         margin: 0px;
+         border-radius: 0;
+         margin: 0;
          border-right: 1px solid rgba(0,0,0,0.05);
 
          &:first-of-type {
@@ -214,16 +217,16 @@ $iconBtnSize: $btnHeight;
          &:last-of-type {
              border-top-right-radius: $btnBorderRadius;
              border-bottom-right-radius: $btnBorderRadius;
-             border-right: 0px solid transparent;
+             border-right: 0 solid transparent;
          }
      }
  }
 
  .btn-row {
      // White space fix
-     font-size: 0px;
+     font-size: 0;
 
      & .btn {
-         margin: 1px;
+         margin: 4px;
      }
  }

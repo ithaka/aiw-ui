@@ -5,8 +5,6 @@ import { Location } from '@angular/common';
 
 // Project Dependencies
 import { AssetService, ImageGroupService, ImageGroup, GroupService, AuthService } from '../shared';
-import { AnalyticsService } from '../analytics.service';
-
 import { AppConfig } from '../app.service';
 
 @Component({
@@ -44,7 +42,7 @@ export class NavMenu implements OnInit, OnDestroy {
   @Output() refreshIG: EventEmitter<any> = new EventEmitter();
 
   private user: any = {}
-  private siteID: string = ""
+  private siteID: string = ''
   private institutionObj: any = {}
 
   private mobileCollapsed: boolean = true
@@ -60,9 +58,6 @@ export class NavMenu implements OnInit, OnDestroy {
 
   private browseOpts: any = {}
 
-  // Default IG 'Browse By:' Option controlled via the WLV file 
-  private defaultGrpBrwseBy: string = 'institution'
-
   // Flag for confimation popup for deleting selected asset(s) from the IG
   private showConfirmationModal: boolean = false
 
@@ -77,10 +72,8 @@ export class NavMenu implements OnInit, OnDestroy {
     private _group: GroupService,
     private route: ActivatedRoute,
     private _auth: AuthService,
-    private _analytics: AnalyticsService
   ) {
     this.browseOpts = this._app.config.browseOptions
-    this.defaultGrpBrwseBy = this._app.config.defaultGrpBrwseBy
     this.siteID = this._appConfig.config.siteID
   }
 
@@ -148,7 +141,7 @@ export class NavMenu implements OnInit, OnDestroy {
         if (assets.thumbnails) {
           // Make a copy of the Results array
           let assetsOnPage = [];
-          for(var i=0;i<assets.thumbnails.length;i++){
+          for (let i = 0; i < assets.thumbnails.length; i++){
               assetsOnPage.push(assets.thumbnails[i]);
           }
           // Set all assets on page as selected
@@ -207,14 +200,14 @@ export class NavMenu implements OnInit, OnDestroy {
   }
 
 
-  private reloadIG():void{
+  private reloadIG(): void{
     this.refreshIG.emit();
   }
 
   private logout(): void {
     this._auth.logout()
       .then(() => {
-        if (this.location.path().indexOf("home") >= 0) {
+        if (this.location.path().indexOf('home') >= 0) {
           location.reload() // this will reload the app and give the user a feeling they actually logged out
         } else {
           this._router.navigate(['/home'])

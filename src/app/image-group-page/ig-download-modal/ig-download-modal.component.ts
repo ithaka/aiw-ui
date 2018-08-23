@@ -4,7 +4,6 @@ import { Observable } from 'rxjs/Observable';
 import { Angulartics2 } from 'angulartics2';
 
 import { AssetService, AuthService, ImageGroup } from './../../shared';
-import { AnalyticsService } from '../../analytics.service'
 
 @Component({
   selector: 'ang-ig-download-modal',
@@ -28,7 +27,7 @@ export class PptModalComponent implements OnInit {
   private zipDownloadLink: string = '';
   private downloadTitle: string = 'Image Group';
   private allowedDownloads: number = 0;
-  private imgCount: number = 0;
+  private error: boolean = false;
 
   private header = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
   private defaultOptions = { withCredentials: true};
@@ -39,11 +38,9 @@ export class PptModalComponent implements OnInit {
     private _auth: AuthService,
     private _angulartics: Angulartics2,
     private http: HttpClient,
-    private _analytics: AnalyticsService
-  ) { }
+  ) {}
 
   ngOnInit() {
-
   }
 
   private getPPT() {
@@ -55,12 +52,13 @@ export class PptModalComponent implements OnInit {
       // Goal: A downlink that looks like:
       // http://mdxdv.artstor.org/thumb/imgstor/...
       if (data.path) {
-        this.downloadLink = this._auth.getThumbUrl() + data.path.replace('/nas/','/thumb/')
+        this.downloadLink = this._auth.getThumbUrl() + data.path.replace('/nas/', '/thumb/')
       }
     })
     .catch((err) => {
       console.error(err)
-       this.isLoading = false
+      this.error = true
+      this.isLoading = false
     })
   }
 
@@ -73,11 +71,12 @@ export class PptModalComponent implements OnInit {
       // Goal: A downlink that looks like:
       // http://mdxdv.artstor.org/thumb/imgstor/...
       if (data.path) {
-        this.zipDownloadLink = this._auth.getThumbUrl() + data.path.replace('/nas/','/thumb/');
+        this.zipDownloadLink = this._auth.getThumbUrl() + data.path.replace('/nas/', '/thumb/');
       }
     })
     .catch((err) => {
       console.error(err)
+      this.error = true
       this.zipLoading = false
     })
   }
@@ -107,10 +106,10 @@ export class PptModalComponent implements OnInit {
       let imgDownloadStrings: string[] = []
 
       thumbnails.forEach((thumbnail, index) => {
-        let imgStr: string = [(index + 1), thumbnail.objectId, "1024x1024"].join(":")
+        let imgStr: string = [(index + 1), thumbnail.objectId, '1024x1024'].join(':')
         thumbnail.status == 'available' && imgDownloadStrings.push(imgStr)
       })
-  
+
       data = {
           igName: group.name,
           images: imgDownloadStrings.join(',')
@@ -134,9 +133,8 @@ export class PptModalComponent implements OnInit {
     })
   }
 
-  trackDownload(downloadType: string) : void {
-    this._analytics.directCall('request' + downloadType)
-    this._angulartics.eventTrack.next({ action: "downloadGroup" + downloadType, properties: { category: "group", label: this.ig.id }})
+  trackDownload(downloadType: string): void {
+    this._angulartics.eventTrack.next({ action: 'downloadGroup' + downloadType, properties: { category: this._auth.getGACategory(), label: this.ig.id }})
   }
 
 }

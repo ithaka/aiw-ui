@@ -10,8 +10,6 @@ import { TagFiltersService } from './tag-filters.service'
 })
 
 export class TagsListComponent implements OnInit {
-  @Input() browseLevel: string
-
   private subscriptions: Subscription[] = []
 
   constructor(
@@ -32,12 +30,16 @@ export class TagsListComponent implements OnInit {
   /** Updates the url to contain all of the selected filters */
   private updateUrl(tagList: string[]): void {
     let queryParams: any = Object.assign({}, this.route.snapshot.queryParams)
+
+    // Set page number to 1 to make sure applying and clearing tags from pages >= 2 should land the user on page 1 to show results
+    queryParams.page = '1'
+
     if (tagList && tagList.length > 0) {
       queryParams.tags = tagList
     } else if (queryParams.tags) {
       delete queryParams['tags']
     }
 
-    this._router.navigate(['/browse','groups', this.browseLevel], { queryParams: queryParams })
+    this._router.navigate(['/browse', 'groups'], { queryParams: queryParams })
   }
 }

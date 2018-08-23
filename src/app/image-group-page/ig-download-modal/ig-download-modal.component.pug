@@ -2,19 +2,13 @@
   .modal-dialog(role="document")
     .modal-content
       .modal-header
-        h4.modal-title Export/Download Guidelines
+        h4.modal-title {{ 'IMAGE_GROUP_PAGE.IG_DOWNLOAD_MODAL.TITLE' | translate }}
         button.close(type="button", (click)="closeModal.emit()", aria-label="Close")
           span(aria-hidden="true") &times;
       .modal-body
-        p All logged in users may export/download up to
-          b  2000
-          |  images in a
-          b  120
-          |  day period. Multimedia files are not exported.
-        p Also note that, by accepting this download, you are agreeing to the
-          = " "
-          a.link(href="http://www.artstor.org/terms", name="Terms and conditions of use", target="_blank") terms and conditions of use.
-        p Would you like to proceed?
+        div([innerHtml]="'IMAGE_GROUP_PAGE.IG_DOWNLOAD_MODAL.TEXT' | translate")
+        .alert.alert-danger(*ngIf="!(isLoading || zipLoading || downloadLink || zipDownloadLink) && error && ig.total>100", style="margin:0;", [innerHtml]="'IMAGE_GROUP_PAGE.IG_DOWNLOAD_MODAL.DOWNLOAD_ERROR_BIG' | translate")
+        .alert.alert-danger(*ngIf="!(isLoading || zipLoading || downloadLink || zipDownloadLink) && error && ig.total<=100", style="margin:0;", [innerHtml]="'IMAGE_GROUP_PAGE.IG_DOWNLOAD_MODAL.DOWNLOAD_ERROR_SMALL' | translate")
       .modal-footer
         button.btn.btn-secondary(type="button", (click)="closeModal.emit()") Cancel
         a#generatePowerpointLink.btn.btn-primary(*ngIf="!downloadLink  && !isLoading", tabindex="1", (click)="getPPT()") Request PPT

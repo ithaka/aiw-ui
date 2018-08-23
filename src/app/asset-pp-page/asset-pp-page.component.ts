@@ -4,8 +4,7 @@ import { Router, ActivatedRoute, UrlSegment } from '@angular/router';
 import { Subscription }   from 'rxjs/Subscription';
 
 // Internal Dependencies
-import { AssetService, AssetSearchService } from './../shared';
-import { AnalyticsService } from '../analytics.service';
+import { AssetSearchService, MetadataService } from './../shared';
 
 @Component({
   selector: 'ang-asset-pp-page',
@@ -26,12 +25,11 @@ export class AssetPPPage implements OnInit, OnDestroy {
 
 
   constructor(
-    private _assets: AssetService,
+    private _metadata: MetadataService,
     private _search: AssetSearchService,
     private _router: Router,
     private route: ActivatedRoute,
     private http: HttpClient,
-    private _analytics: AnalyticsService
   ) {}
 
   ngOnInit() {
@@ -39,32 +37,30 @@ export class AssetPPPage implements OnInit, OnDestroy {
     // Subscribe to ID in params
     this.subscriptions.push(
       this.route.params.subscribe((routeParams) => {
-        this.assetId = routeParams["assetId"];
+        this.assetId = routeParams['assetId'];
         this.loadAsset();
       })
     );
-
-    // this._analytics.setPageValues('groupprint', this.assetId);
-  } // OnInit
+  }
 
   // Load Image Group Assets
   loadAsset(): void{
     let self = this;
-    this._assets.getMetadata( this.assetId )
+    this._metadata.getMetadata( this.assetId )
     .subscribe((res) => {
         let assetData = res && res.metadata && res.metadata[0] ? res.metadata[0]['metadata_json'] : []
-        for(let data of assetData){
+        for (let data of assetData){
           let fieldExists = false;
-          
-          for(let metaData of self.metaArray){
-            if(metaData['fieldName'] === data.fieldName){
+
+          for (let metaData of self.metaArray){
+            if (metaData['fieldName'] === data.fieldName){
               metaData['fieldValue'].push(data.fieldValue);
               fieldExists = true;
               break;
             }
           }
 
-          if(!fieldExists){
+          if (!fieldExists){
             let fieldObj = {
               'fieldName': data.fieldName,
               'fieldValue': []
@@ -74,9 +70,9 @@ export class AssetPPPage implements OnInit, OnDestroy {
           }
 
         }
-        
+
         self.asset = res.metadata[0];
-    },(err) => {
+    }, (err) => {
         console.error('Unable to load asset metadata.');
     });
   }

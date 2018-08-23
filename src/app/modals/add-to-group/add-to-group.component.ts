@@ -4,7 +4,6 @@ import { BehaviorSubject, Observable, Subscription } from 'rxjs/Rx';
 import { CompleterService, CompleterData } from 'ng2-completer';
 
 import { AssetService, GroupService, ImageGroup } from './../../shared';
-import { AnalyticsService } from '../../analytics.service';
 
 @Component({
   selector: 'ang-add-to-group',
@@ -36,20 +35,21 @@ export class AddToGroupModal implements OnInit, OnDestroy {
   constructor(
     private _assets: AssetService,
     private _group: GroupService,
-    private _analytics: AnalyticsService,
     private completerService: CompleterService
-  ) {
+  ) {}
 
-  }
-
-  /** 
+  /**
    * Observable for autocomplete list of groups
-   * - We apply additional sorting 
+   * - We apply additional sorting
    */
   private groupListSubject: BehaviorSubject<any[]> = new BehaviorSubject([])
   private groupListObs: Observable<any[]> = this.groupListSubject.asObservable()
 
   ngOnInit() {
+    // Set focus to the modal to make the links in the modal first thing to tab for accessibility
+    let htmlelement: HTMLElement = document.getElementById('modal');
+    htmlelement.focus()
+
     if (this.selectedAssets.length < 1) { // if no assets were added when component was initialized, the component gets the current selection list
       // Subscribe to asset selection
       this.subscriptions.push(
@@ -65,7 +65,7 @@ export class AddToGroupModal implements OnInit, OnDestroy {
     }
 
     // Load list of Groups, and update autocomplete as Groups load
-    this._group.getEveryGroup('private')
+    this._group.getEveryGroup('created')
       .subscribe((groups) => {
         if (groups) {
           this.groups = groups;
@@ -74,18 +74,26 @@ export class AddToGroupModal implements OnInit, OnDestroy {
         }
       }, (err) => { console.error(err); });
 
-       
+
   }
 
   ngOnDestroy() {
       this.subscriptions.forEach((sub) => { sub.unsubscribe(); });
   }
 
-  private sortGroup(event) : void {
+  /**
+   * Sort/filter function for ng2-completer
+   * @param event key or click event
+   * @param term string being typed by user
+   */
+  public sortGroup(event, term): void {
+     // Do not evaluate if key up event is arrow key
+     if ([37, 38, 39, 40].indexOf(event.keyCode) > -1) {
+      return
+    }
     // sort array by string input
-    let term = this.selectedGroupName
     let termReg = new RegExp(term, 'i')
-    
+
     let filtered = this.groups.filter( group => {
       return group && group.name.search(termReg) > -1
     })
@@ -112,7 +120,7 @@ export class AddToGroupModal implements OnInit, OnDestroy {
     })
 
     if (!this.selectedIg || this.selectedGroupName.length < 1) {
-      this.selectedGroupError = "ADD_TO_GROUP_MODAL.NO_GROUP"
+      this.selectedGroupError = 'ADD_TO_GROUP_MODAL.NO_GROUP'
       return
     }
 
@@ -123,7 +131,7 @@ export class AddToGroupModal implements OnInit, OnDestroy {
     this.selectedAssets.forEach((asset: any) => {
       let assetId: string
       if (!asset) {
-        console.error("Attempted selecting undefined asset")
+        console.error('Attempted selecting undefined asset')
       } else {
         // Find asset id
         if (asset.artstorid) {
@@ -136,8 +144,8 @@ export class AddToGroupModal implements OnInit, OnDestroy {
           // Asset has "id" when constructed via the Artstor Viewer (see type: Asset)
           assetId = asset.id
         } else {
-          console.error("Asset id not found when adding to group", asset)
-        } 
+          console.error('Asset id not found when adding to group', asset)
+        }
         // Add id to group if it's not already in the group
         if (assetId && putGroup.items.indexOf(assetId) < 0) {
           putGroup.items.push(assetId);
@@ -150,8 +158,6 @@ export class AddToGroupModal implements OnInit, OnDestroy {
     if (putGroup.items && putGroup.items.length > 1000) {
       return this.serviceResponse.tooManyAssets = true
     }
-
-    this._analytics.directCall('save_selections_existing_img_group')
 
     // go get the group from the server
     this._group.get(this.selectedIg.id)

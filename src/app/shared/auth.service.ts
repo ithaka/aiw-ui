@@ -1,30 +1,22 @@
-import { Injectable } from '@angular/core';
-import { Location } from '@angular/common';
-import { Locker } from 'angular2-locker';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Injectable } from '@angular/core'
+import { Location } from '@angular/common'
+import { Locker } from 'angular2-locker'
+import { HttpClient, HttpHeaders } from '@angular/common/http'
 import {
   CanActivate,
   Router,
   ActivatedRouteSnapshot,
   RouterStateSnapshot
-} from '@angular/router';
-import { Observable, BehaviorSubject, Subject } from 'rxjs/Rx';
-import { Angulartics2 } from 'angulartics2';
+} from '@angular/router'
+import { Observable, BehaviorSubject, Subject } from 'rxjs/Rx'
 
 // Project dependencies
-import { AnalyticsService } from '../analytics.service';
-import { AppConfig } from '../app.service';
-
-// Import beta tester emails
-import { BETA_USR_EMAILS } from '../beta-users-email.ts'
+import { AppConfig } from '../app.service'
 
 // For session timeout management
-
-// import { LoginService } from '../login/login.service';
-
-import { IdleWatcherUtil } from './idle-watcher';
-import {Idle, DEFAULT_INTERRUPTSOURCES} from '@ng-idle/core';
-import {Keepalive} from '@ng-idle/keepalive';
+import { IdleWatcherUtil } from './idle-watcher'
+import {Idle, DEFAULT_INTERRUPTSOURCES} from '@ng-idle/core'
+import { FlagService } from '.'
 
 /**
  * Controls authorization through IP address and locally stored user object
@@ -33,6 +25,7 @@ import {Keepalive} from '@ng-idle/keepalive';
 @Injectable()
 export class AuthService implements CanActivate {
   private _storage: Locker;
+  private _session: Locker;
   private ENV: string;
   private baseUrl;
   private imageFpxUrl;
@@ -51,11 +44,13 @@ export class AuthService implements CanActivate {
 
   private userSource: BehaviorSubject<any> = new BehaviorSubject({});
   public currentUser: Observable<any> = this.userSource.asObservable();
+  // Track whether or not user object has been refreshed since app opened
+  public userSessionFresh: boolean = false
 
   private idleState: string = 'Not started.';
-  public showUserInactiveModal: Subject<boolean> = new Subject(); //Set up subject observable for showing inactive user modal
+  public showUserInactiveModal: Subject<boolean> = new Subject(); // Set up subject observable for showing inactive user modal
 
-  private betausers: Array<string>
+  private isOpenAccess: boolean;
 
   /**
    * We need to make SURE /userinfo is not cached
@@ -64,33 +59,22 @@ export class AuthService implements CanActivate {
    * - 'no-store' > 'no-cache' in denying caching
    */
   private userInfoHeader: HttpHeaders = new HttpHeaders().set('Cache-Control', 'no-store, no-cache')
-  private genUserInfoUrl() : string {
+  private genUserInfoUrl(): string {
     return this.getUrl(true) + '/userinfo?no-cache=' + new Date().valueOf()
-  }
-  /**
-   * Global Feature Flag object
-   * - Keep updated when flags are added or removed, for reference
-   * - Update via url param subscriptions inside of relevant components
-   */
-  public featureFlags = {
-    pcUpload : false,
-    unaffiliated: false
   }
 
   constructor(
-    private _router:Router,
+    private _router: Router,
     // private _login: LoginService,
-    locker:Locker,
+    locker: Locker,
     private http: HttpClient,
     private location: Location,
-    private angulartics: Angulartics2,
-    private _analytics: AnalyticsService,
     private _app: AppConfig,
-    private idle: Idle,
-    private keepalive: Keepalive
+    private _flags: FlagService,
+    private idle: Idle
   ) {
-    this._storage = locker.useDriver(Locker.DRIVERS.LOCAL);
-    this._router = _router;
+    this._storage = locker.useDriver(Locker.DRIVERS.LOCAL)
+    this._router = _router
 
     // Default to relative or prod endpoints
     this.ENV = 'prod'
@@ -100,6 +84,9 @@ export class AuthService implements CanActivate {
     this.IIIFUrl = '//tsprod.artstor.org/rosa-iiif-endpoint-1.0-SNAPSHOT/fpx'
     this.subdomain = 'library'
     this.solrUrl = '/api/search/v1.0/search'
+
+    // Set WLV variables
+    this.isOpenAccess = this._app.config.isOpenAccess
 
     let testHostnames = [
       'localhost',
@@ -120,22 +107,22 @@ export class AuthService implements CanActivate {
     ]
 
     // Check domain
-    if (  new RegExp(prodHostnames.join("|")).test(document.location.hostname)  ) {
+    if (  new RegExp(prodHostnames.join('|')).test(document.location.hostname)  ) {
       // Explicit live endpoints
       this.logUrl = '//ang-ui-logger.apps.prod.cirrostratus.org/api/v1'
       this.solrUrl = '/api/search/v1.0/search'
       this.ENV = 'prod'
     }
     else if ( document.location.hostname.indexOf('prod.cirrostratus.org') > -1 ) {
-      console.info("Using Prod Endpoints (Absolute)")
+      console.info('Using Prod Endpoints (Absolute)')
       // Prod/Lively endpoints
       this.hostname = '//library.artstor.org'
       this.baseUrl =  '//library.artstor.org/api'
       this.logUrl = '//ang-ui-logger.apps.prod.cirrostratus.org/api/v1'
       this.solrUrl = this.hostname + '/api/search/v1.0/search'
       this.ENV = 'prod'
-    } else if ( new RegExp(testHostnames.join("|")).test(document.location.hostname) ) {
-      console.info("Using Test Endpoints")
+    } else if ( new RegExp(testHostnames.join('|')).test(document.location.hostname) ) {
+      console.info('Using Test Endpoints')
       // Test Endpoints
       this.hostname = '//stage.artstor.org'
       this.subdomain = 'stage'
@@ -164,7 +151,7 @@ export class AuthService implements CanActivate {
 
     // Local routing should point to full URL
     // * This should NEVER apply when using a proxy, as it will break authorization
-    if (new RegExp(["cirrostratus.org", "localhost", "local.", "sahara.beta.stage.artstor.org", "sahara.prod.artstor.org"].join("|")).test(document.location.hostname)) {
+    if (new RegExp(['cirrostratus.org', 'localhost', 'local.', 'sahara.beta.stage.artstor.org', 'sahara.prod.artstor.org'].join('|')).test(document.location.hostname)) {
       this.baseUrl = this.hostname + '/api'
       this.solrUrl = this.hostname + '/api/search/v1.0/search'
     }
@@ -182,7 +169,7 @@ export class AuthService implements CanActivate {
     idle.onTimeout.subscribe(() => {
       let user = this.getUser();
       // console.log(user);
-      if(user && user.isLoggedIn){
+      if (user && user.isLoggedIn){
         this.expireSession();
         this.showUserInactiveModal.next(true);
         this.idleState = 'Timed out!';
@@ -202,7 +189,7 @@ export class AuthService implements CanActivate {
       // console.log(this.idleState);
     });
 
-    // Init idle watcher
+    // Init idle watcher (this will also run getUserInfo)
     this.resetIdleWatcher()
 
     // Initialize user and institution objects from localstorage
@@ -215,16 +202,11 @@ export class AuthService implements CanActivate {
      * - Poll /userinfo every 15min
      * - Refreshs AccessToken with IAC
      */
-    const userInfoInterval = 15*1000*60*60
-    // Run on Init
-    this.refreshUserSession()
+    const userInfoInterval = 15 * 1000 * 60 * 60
     // Run every X mins
     setInterval(() => {
-      this.refreshUserSession()
+      this.refreshUserSession(true)
     }, userInfoInterval)
-    
-    // Set beta users email
-    this.betausers = Object.assign(BETA_USR_EMAILS)
   }
 
   // Reset the idle watcher
@@ -291,8 +273,8 @@ export class AuthService implements CanActivate {
    * @param obj The object to be encoded
    */
   public formEncode(obj: Object): string {
-      var encodedString = '';
-      for (var key in obj) {
+      let encodedString = '';
+      for (let key in obj) {
           if (encodedString.length !== 0) {
               encodedString += '&';
           }
@@ -300,7 +282,7 @@ export class AuthService implements CanActivate {
       }
       return encodedString.replace(/%20/g, '+');
   }
-  
+
   /**
    * Wrapper function for HTTP call to get user institution. Used by nav component
    * @returns Chainable promise containing collection data
@@ -334,8 +316,6 @@ export class AuthService implements CanActivate {
     // Update Observable
     this.institutionObjValue = institutionObj;
     this.institutionObjSource.next(this.institutionObjValue);
-    // Update Analytics object
-    this._analytics.setUserInstitution(institutionObj.institutionId ? institutionObj.institutionId : '')
   }
 
   /**
@@ -343,7 +323,7 @@ export class AuthService implements CanActivate {
    * @returns Observable resolved with object containing: roleArray, deptArray
    */
   public getUserRoles(): Observable<any> {
-    return this.http.get(this.getUrl(true) + "/user?_method=deptRoles")
+    return this.http.get(this.getUrl(true) + '/user?_method=deptRoles')
   }
 
   /** Calls service to register a user
@@ -354,7 +334,7 @@ export class AuthService implements CanActivate {
 
     let header = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded'); // form encode it
     let options = { headers: header, withCredentials: true }; // Create a request option
-    return this.http.post(this.getUrl(true) + "/register", data , options);
+    return this.http.post(this.getUrl(true) + '/register', data , options);
   }
 
   /**
@@ -363,13 +343,13 @@ export class AuthService implements CanActivate {
    */
   public registerSamlUser(registration: any): Observable<any> {
     // Clear method used for regular registration
-    registration["_method"] = null
+    registration['_method'] = null
     // // Encode da
     // let dataStr = this.formEncode(registration)
     let header = new HttpHeaders().set('Content-Type', 'application/json')
     let options = { headers: header, withCredentials: true }
-    
-    return this.http.post(this.getHostname() + "/saml/user/create", registration , options)
+
+    return this.http.post(this.getHostname() + '/saml/user/create', registration , options)
   }
 
   /**
@@ -380,7 +360,7 @@ export class AuthService implements CanActivate {
     let header = new HttpHeaders().set('Content-Type', 'application/json')
     let options = { headers: header, withCredentials: true }
 
-    return this.http.post(this.getHostname() + "/saml/user/link", credentials , options)
+    return this.http.post(this.getHostname() + '/saml/user/link', credentials , options)
       .toPromise()
   }
 
@@ -388,18 +368,18 @@ export class AuthService implements CanActivate {
     let header = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded'); // form encode it
     let options = { headers: header, withCredentials: true }; // Create a request option
     let data = this.formEncode({
-      _method: "updatePassword",
+      _method: 'updatePassword',
       oldPassword: oldPass,
       password: newPass
     });
 
-    return this.http.post(this.getUrl(true) + "/profile", data, options)
+    return this.http.post(this.getUrl(true) + '/profile', data, options)
   }
 
   public getUrl(secure?: boolean): string {
     let url: string = this.baseUrl
     if (secure) {
-      url += "/secure"
+      url += '/secure'
     }
     return url
   }
@@ -430,7 +410,7 @@ export class AuthService implements CanActivate {
   public getThumbUrl(): string {
     return this.thumbUrl;
   }
-  
+
   /** Returns url used for downloading some media, such as documents */
   public getMediaUrl(): string {
     // This is a special case, and should always points to library.artstor or stage
@@ -442,12 +422,7 @@ export class AuthService implements CanActivate {
    * @param user The user should be an object to store in sessionstorage
    */
   public saveUser(user: any) {
-    // short-circuit this function so it can't be used to replace an existing user with a non-existing one
-    //  clearing the user should only be done using the logout function
-    let currentUser = this._storage.get('user')
-    if (currentUser && currentUser.username && !user.username) { return }
-    
-    // Should have session timeout, username, baseProfileId, typeId
+    // Preserve user via localstorage
     this._storage.set('user', user);
     // only do these things if the user is ip auth'd or logged in and the user has changed
     let institution = this.institutionObjSource.getValue();
@@ -457,22 +432,20 @@ export class AuthService implements CanActivate {
     }
     // Update observable
     this.userSource.next(user)
-    // Set analytics object
-    this._analytics.setUserInstitution(user.institutionId ? user.institutionId : '')
-    
+
     // if (user.status && (this._storage.get('user').username != user.username || !institution.institutionid)) {
   }
 
   /**
    * Gets user object from local storage
    */
-  public getUser() : any {
+  public getUser(): any {
       return this._storage.get('user') ? this._storage.get('user') : {};
   }
 
   /** Stores an object in local storage for you - your welcome */
   public store(key: string, value: any): void {
-      if (key != "user" && key != "token") {
+      if (key != 'user' && key != 'token') {
           this._storage.set(key, value);
       }
   }
@@ -484,7 +457,7 @@ export class AuthService implements CanActivate {
 
   /** Deletes things (not user or token) from local storage */
   public deleteFromStorage(key: string): void {
-      if (key != "user" && key != "token") {
+      if (key != 'user' && key != 'token') {
           this._storage.remove(key);
       }
   }
@@ -500,15 +473,22 @@ export class AuthService implements CanActivate {
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
     let options = { headers: this.userInfoHeader, withCredentials: true }
 
-    if (this.isPublicOnly() && state.url.includes('/register')) { // For unaffiliated users, trying to access /register route
-      return new Observable(observer => {
-        observer.next(false)
-      })
-    } else if (this.canUserAccess(this.getUser()) || route.params.samlTokenId) { // If user object already exists, we're done here
+    if ((route.params.samlTokenId || route.params.type == 'shibboleth') && state.url.includes('/register')) {
+      // Shibboleth workflow is unique, should allow access to the register page
       return new Observable(observer => {
         observer.next(true)
       })
-    } 
+    } else if (this.isPublicOnly() && state.url.includes('/register')) {
+      // For unaffiliated users, trying to access /register route
+      return new Observable(observer => {
+        observer.next(false)
+      })
+    } else if (this.canUserAccess(this.getUser())) {
+      // If user object already exists, we're done here
+      return new Observable(observer => {
+        observer.next(true)
+      })
+    }
 
     // If user object doesn't exist, try to get one!
     return new Observable(observer => {
@@ -517,31 +497,42 @@ export class AuthService implements CanActivate {
       .map(
         (data)  => {
           let user = this.decorateValidUser(data)
-          let onSahara: boolean = this.getHostname().toString().includes('sahara')
-          if (user && (!onSahara || user.status)) {
+          // Track whether or not user object has been refreshed since app opened
+          this.userSessionFresh = true
+
+          if (user && (this.isOpenAccess || user.status)) {
             // Clear expired session modal
             this.showUserInactiveModal.next(false)
             // Update user object
             this.saveUser(user)
             return true
           } else {
-            this.logout()
-            // Store the route so that we know where to put them after login!
-            this.store("stashedRoute", this.location.path(false))
-            return false
+            // We don't have a user here, and WLV is not open access, go to /login
+            if (!this.isOpenAccess) {
+              console.log('Not open access - redirecting')
+              this._router.navigate(['/login'])
+            }
+            else {
+              console.log('fell through to this.logout')
+              this.logout()
+              // Store the route so that we know where to put them after login!
+              this.store('stashedRoute', this.location.path(false))
+              return false
+            }
           }
         }
       )
+      .take(1)
       .subscribe(res => {
-          // CanActivate is not handling the Observable value properly,
-          // ... so we do an extra redirect in here
-          if (res === false) {
-            this._router.navigate(['/login'])
-          }
-          observer.next(res)
-        }, err => {
+        // CanActivate is not handling the Observable value properly,
+        // ... so we do an extra redirect in here
+        if (res === false) {
           this._router.navigate(['/login'])
-          observer.next(false)
+        }
+        observer.next(res)
+      }, err => {
+        this._router.navigate(['/login'])
+        observer.next(false)
       })
     })
   }
@@ -558,7 +549,10 @@ export class AuthService implements CanActivate {
       .map(
         (data)  => {
           let user = this.decorateValidUser(data)
-          if (user) {
+          // Track whether or not user object has been refreshed since app opened
+          this.userSessionFresh = true
+
+          if (user && (this.isOpenAccess || user.status)) {
             // Clear expired session modal
             this.showUserInactiveModal.next(false)
             // Update user object
@@ -566,9 +560,13 @@ export class AuthService implements CanActivate {
           } else {
             // Clear user session (local objects and cookies)
             this.logout()
-            if (triggerSessionExpModal === true) {
-              this.showUserInactiveModal.next(triggerSessionExpModal)
-            }
+          }
+          // If user session was downgraded/expired, notify
+          if (triggerSessionExpModal && user.loggedInSessionLost) {
+              // Current saved user object needs to be cleared if session was lost
+              this.logout()
+              // Tell user their session was lost
+              this.showUserInactiveModal.next(true)
           }
           return data
         }
@@ -580,11 +578,13 @@ export class AuthService implements CanActivate {
    * - Used to verify that we want the user object
    * - Used to decorate the user object for saving
    */
-  private decorateValidUser(data: any) : any {
+  private decorateValidUser(data: any): any {
     let currentUser = this.getUser()
+    let newUser = data['user'] ? data['user'] : {}
     let currentUsername = currentUser.username
+    let loggedInSessionLost = currentUser.isLoggedIn ? (!newUser.username || currentUsername !== newUser.username) : false;
 
-    if (data['status'] === true && (!currentUsername || data['user'].username == currentUsername)) {
+    if (data['status'] === true) {
       // User is authorized - if you want to check ipAuth then you can tell on the individual route by user.isLoggedIn = false
       let user = data['user']
       user.status = data['status']
@@ -594,24 +594,24 @@ export class AuthService implements CanActivate {
 
       // Save ipAuthed flag to user object
       user.ipAuthed = !user.isLoggedIn && user.status ? true : false
+      // If user downgraded from logged in user to ip auth or other, add flag
+      user.loggedInSessionLost = loggedInSessionLost
 
       if (this.canUserAccess(user)) {
         return user
       } else {
         return null
       }
-    } else if(!data['status'] && this.featureFlags['unaffiliated']) {
-      // For downloads with this feature flag
-      this.authorizeDownload();
-
-      // Return generic user object for unaffliated users
+    } else if (data['status'] === false) {
+      // Return generic user object for unaffiliated users
       let user = {
-        'unaffliatedUser' : true,
-        'status' : data['status'],
-        'isLoggedIn' : false
+        'status': false,
+        'isLoggedIn': false,
+        'loggedInSessionLost': loggedInSessionLost
       }
       return user
     } else {
+      console.error('Did not receive a valid user object', data)
       return null
     }
   }
@@ -634,7 +634,7 @@ export class AuthService implements CanActivate {
      * Logs user in
      * @param user User must have username (which is an email address) and password to be passed in the request
      */
-    login(user: User) : Promise<any> {
+    login(user: User): Promise<any> {
         let header = new HttpHeaders().set('Cache-Control', 'no-store, no-cache').set('Content-Type', 'application/x-www-form-urlencoded'); // ... Set content type to JSON
         let options = { headers: header, withCredentials: true }; // Create a request option
         let data = this.formEncode({
@@ -672,51 +672,37 @@ export class AuthService implements CanActivate {
             .toPromise();
     }
 
-  /**
-   * This is the same call we use in canActivate to determine if the user is IP Auth'd
-   * @returns json which should have
-   */
-  public getIpAuth(): Observable<any> {
-    let options = { headers: this.userInfoHeader, withCredentials: true };
-    return this.http.get(this.genUserInfoUrl(), options)
-  }
-
-
-
-  /**
-   * Gets user's geo IP information
-   * @returns Observable resolved with object containing geo IP information
-   */
-  public getUserIP(): Observable<any> {
-    return this.http.get("https://freegeoip.net/json/")
-  }
-
   public ssLogin(username: string, password: string): Observable<SSLoginResponse> {
 
     let data = this.formEncode({ username: username, password: password })
     let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded')
     return this.http.post<SSLoginResponse>(
-      [this.hostname, "gust", "login"].join("/"),
+      [this.hostname, 'gust', 'login'].join('/'),
       data,
       { withCredentials: true, headers: headers }
     )
   }
 
-
-  /**
-   * Check if the logged-in username matches the beta tester emails
-   */
-  public isBetaUser(): boolean{
-    let isBeta: boolean = false
-    let loggedInUser: any = this.getUser()
-    if(loggedInUser && loggedInUser.username){
-      isBeta = this.betausers.indexOf(loggedInUser.username) > -1
-    }
-    return isBeta
+  public isPublicOnly(): boolean{
+    return !(this.getUser() && this.getUser().status)
   }
 
-  public isPublicOnly(): boolean{
-    return this.featureFlags.unaffiliated && !(this.getUser() && this.getUser().status)
+
+  /**
+   * Return "category" to report to Google Analytics
+   * - We use category to track the type of user the event is tied to
+   */
+  public getGACategory(): string {
+    let category = 'unaffiliatedUser'
+    let user = this.getUser()
+
+    if (user.isLoggedIn) {
+      category = 'loggedInUser'
+    } else if (user.institutionId && user.institutionId.toString().length > 0) {
+      category = 'institutionalUser'
+    }
+
+    return category
   }
 }
 

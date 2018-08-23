@@ -3,8 +3,7 @@ import { Router } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
 import { Ng2DeviceService } from 'ng2-device-detector';
 
-import { AssetService, AuthService, } from '../shared';
-import { AnalyticsService } from '../analytics.service';
+import { AssetService, AuthService } from '../shared';
 import { AppConfig } from '../app.service';
 import { Featured } from './featured'
 
@@ -25,7 +24,6 @@ export class Home implements OnInit, OnDestroy {
 
   private artStorEmailLink: string = ''
   private userGeoIP: any = {}
-  // private featuredCollectionConf = ''
 
   // Set our default values
   localState = { value: '' }
@@ -43,9 +41,9 @@ export class Home implements OnInit, OnDestroy {
   private browseSec: any = {}
   private showHomeSSC: boolean = false
   private showHomePromo: boolean = false
-  private siteID: string = ""
+  private siteID: string = ''
 
-  // Default IG 'Browse By:' Option controlled via the WLV file 
+  // Default IG 'Browse By:' Option controlled via the WLV file
   private defaultGrpBrwseBy: string = 'institution'
 
   // TypeScript public modifiers
@@ -54,7 +52,6 @@ export class Home implements OnInit, OnDestroy {
     private _assets: AssetService,
     private _router: Router,
     private _auth: AuthService,
-    private _analytics: AnalyticsService,
     private deviceService: Ng2DeviceService
   ) {
     // this makes the window always render scrolled to the top
@@ -69,7 +66,6 @@ export class Home implements OnInit, OnDestroy {
     this.showHomePromo = this._appConfig.config.showHomeAd
     this.siteID = this._appConfig.config.siteID
     this.defaultGrpBrwseBy = this._appConfig.config.defaultGrpBrwseBy
-    // this.featuredCollectionConf = this._appConfig.config.featuredCollection
   }
 
   ngOnInit() {
@@ -96,29 +92,44 @@ export class Home implements OnInit, OnDestroy {
     this.loaders['collections'] = true;
     this.loaders['instCollections'] = true;
 
-    this.subscriptions
-      .push(
-        this._assets.getCollectionsList()
-          .subscribe(
-            data => {
-              // Filter SSC content
-              this.collections = data["Collections"].filter((collection) => {
-                return collection.collectionType == 5
-              })
-              this.loaders['collections'] = false;
-              // Filter institutional content
-              this.instCollections = data["Collections"].filter((collection) => {
-                return collection.collectionType == 2 || collection.collectionType == 4
-              })
-              this.loaders['instCollections'] = false;
-            },
-            err => {
-              if (err && err.status != 401 && err.status != 403) {
-                console.error(err)
-              }
-            }
-          )
+    /*
+     * Subscribe to user object
+     * and fetch collections list only after we have the user object returned
+     */
+    this.subscriptions.push(
+      this._auth.currentUser.subscribe(
+        (userObj) => {
+          if (userObj.institutionId && (this.instCollections.length === 0)){
+            this.subscriptions
+              .push(
+                this._assets.getCollectionsList()
+                  .subscribe(
+                    data => {
+                      // Filter SSC content
+                      this.collections = data['Collections'].filter((collection) => {
+                        return collection.collectionType == 5
+                      })
+                      this.loaders['collections'] = false;
+                      // Filter institutional content
+                      this.instCollections = data['Collections'].filter((collection) => {
+                        return collection.collectionType == 2 || collection.collectionType == 4
+                      })
+                      this.loaders['instCollections'] = false;
+                    },
+                    err => {
+                      if (err && err.status != 401 && err.status != 403) {
+                        console.error('Failed to load collection list', err)
+                      }
+                    }
+                  )
+              )
+          }
+        },
+        err => {
+          console.error('Failed to load user object', err)
+        }
       )
+    );
 
     this._assets.getBlogEntries()
       .then((data) => {
@@ -126,21 +137,15 @@ export class Home implements OnInit, OnDestroy {
           this.blogPosts = data['posts'];
         }
         this.blogLoading = false;
-      }, )
+      } )
       .catch((error) => {
         console.log(error);
         this.blogLoading = false;
       });
 
-    this._analytics.setPageValues('Home', '')
+    // Set session info for Email Artstor link
+    this.fetchDeviceInfo();
 
-    // Grab session info for Email Artstor link
-    this._auth.getUserIP().subscribe((res) => {
-      if (res) {
-        this.userGeoIP = res;
-        this.fetchDeviceInfo();
-      }
-    })
   } // OnInit
 
   ngOnDestroy() {
@@ -170,7 +175,6 @@ export class Home implements OnInit, OnDestroy {
         deviceInfoHTML += 'Browser: ' + deviceInfo.browser + ' - ' + deviceInfo.browser_version + ' \n ';
         deviceInfoHTML += 'User Agent: ' + deviceInfo.userAgent + ' \n ';
         deviceInfoHTML += 'Screen Resolution: ' + window.screen.width + ' * ' + window.screen.height + ' \n ';
-        deviceInfoHTML += 'IP Address: ' + this.userGeoIP.ip + ' \n ';
         deviceInfoHTML += 'Absolute Path: ' + window.location.href + ' \n ';
         deviceInfoHTML += 'Adblocker Enabled: ' + adBlockEnabled + ' \n ';
         deviceInfoHTML += '\n ------------------------------------------------------------------------------ \n';

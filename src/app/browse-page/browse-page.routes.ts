@@ -1,7 +1,10 @@
-import { Routes } from '@angular/router';
+import { Routes } from '@angular/router'
 
 import { LibraryComponent, BrowseCommonsComponent, MyCollectionsComponent,
-  BrowseInstitutionComponent, BrowseGroupsComponent } from '.';
+  BrowseInstitutionComponent, BrowseGroupsComponent } from '.'
+
+import { GroupsRouteResolver } from './groups-redirect.service'
+import { NoContent } from './../no-content'
 
 export const BrowseRoutes: Routes = [
   { path: '', redirectTo: 'library', pathMatch: 'full'},
@@ -9,6 +12,7 @@ export const BrowseRoutes: Routes = [
   { path: 'institution', component: BrowseInstitutionComponent },
   { path: 'commons', component: BrowseCommonsComponent },
   { path: 'mycollections', component: MyCollectionsComponent },
-  { path: 'groups', redirectTo: 'groups/public'},
-  { path: 'groups/:view', component: BrowseGroupsComponent}
-];
+  { path: 'groups/:level', component: NoContent, resolve: [GroupsRouteResolver] },
+  // { path: 'groups/:level', redirectTo: '/browse/groups' },
+  { path: 'groups', component: BrowseGroupsComponent }
+]

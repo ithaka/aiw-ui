@@ -11,7 +11,7 @@
     font-size: 13px;
     line-height: 16px;
     cursor: default;
-    padding: 0px;
+    padding: 0;
 
     & .no-link {
         cursor: default;
@@ -78,7 +78,7 @@
 }
 
 .expand-button {
-    padding: 2px 5px 5px 5px;
+    padding: 2px 5px 5px;
     display: inline-block;
     font-size: 1.1em;
     vertical-align: top;
@@ -130,7 +130,7 @@
     padding: 2px;
     border-radius: 2px;
     overflow: hidden;
-    margin: 0px 5px;
+    margin: 0 5px;
     letter-spacing: 0.5px;
 
     &:hover{
