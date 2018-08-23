@@ -1,7 +1,6 @@
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router'
 import { Subscription }   from 'rxjs/Subscription';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 import { AssetService } from './../shared/assets.service';
 import { AuthService, LogService, FlagService } from '../shared';
@@ -40,8 +39,7 @@ export class SearchPage implements OnInit, OnDestroy {
         private _router: Router,
         private _title: TitleService,
         private _auth: AuthService,
-        private _captainsLog: LogService,
-        private http: HttpClient
+        private _captainsLog: LogService
       ) {
     this.siteID = this._appConfig.config.siteID;
     // this makes the window always render scrolled to the top
@@ -51,7 +49,6 @@ export class SearchPage implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-
     // Subscribe User object updates
     this.subscriptions.push(
       this._auth.currentUser.subscribe(

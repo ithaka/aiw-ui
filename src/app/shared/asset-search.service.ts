@@ -322,7 +322,6 @@ export class AssetSearchService {
 
     let query = this.initQuery(keyword, pageSize, START_INDEX)
 
-
     if (this.showCollectionType) {
       query.facet_fields.push({
         'name': 'collectiontypes',
