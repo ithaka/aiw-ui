@@ -9,5 +9,5 @@ a.contextual-help(title="How do I use image groups?", (click)="startModalShow=tr
             .modal-body
                 p We've made a few adjustments to give you a better experience with your groups. Take the tour to learn more about the changes. 
             .modal-footer
-                button.btn.btn-secondary(tabindex="4", aria-label="not now button", (click)="startModalShow=false") NOT NOW
-                button.btn.btn-primary(tabindex="3", aria-label="take the tour button", (click)="startTour()") TAKE THE TOUR
+                button.btn.btn-secondary(tabindex="4", (click)="startModalShow=false") NOT NOW
+                button.btn.btn-primary(tabindex="3", (click)="startTour()") TAKE THE TOUR
