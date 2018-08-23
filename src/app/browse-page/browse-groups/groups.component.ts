@@ -316,7 +316,7 @@ export class BrowseGroupsComponent implements OnInit {
 
   private changeSortOpt(label) {
     if( this.activeSort.label != label){
-      this.angulartics.eventTrack.next({ action: 'sortGroup', properties: { category: this._auth.getGACategory() }});
+      this.angulartics.eventTrack.next({ action: 'sortGroup', properties: { category: this._auth.getGACategory(), label: 'cardviewSort' }});
       this.activeSort.label = label;
       this.activeSort.name = name;
 
