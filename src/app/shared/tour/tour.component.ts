@@ -35,7 +35,7 @@ import { AuthService } from './..'
 
     private startTour() {
       this.startModalShow = false
-      this._ga.eventTrack.next({ action: 'endTour', properties: { category: this._auth.getGACategory(), label: 'imageGroupTour' } })
+      this._ga.eventTrack.next({ action: 'beginTour', properties: { category: this._auth.getGACategory(), label: 'imageGroupTour' } })
       this.driver = new Driver({ allowClose: false, closeBtnText: 'exit tour', nextBtnText: 'NEXT', prevBtnText: 'BACK', doneBtnText: 'GOT IT, THANKS!',
         onHighlightStarted: (Element) => {
 
