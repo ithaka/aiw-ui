@@ -20,6 +20,7 @@ export class SearchComponent implements OnInit, OnDestroy {
 
   private showSearchModal: boolean = false;
   private term: string;
+  private startSearch: boolean = false
 
   private size: number = 24;
 
@@ -181,5 +182,13 @@ export class SearchComponent implements OnInit, OnDestroy {
    */
   private onSearchWithinChange(value: boolean): void{
     this._filters.searchWithin = value
+  }
+
+  private setFocus() : void {
+    window.setTimeout(function () {
+      if (document.getElementById('empty-search-alert')){
+        document.getElementById('empty-search-alert').focus()
+      }    
+    }, 110);  
   }
 }

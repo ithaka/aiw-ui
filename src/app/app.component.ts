@@ -22,7 +22,7 @@ import { ScriptService, FlagService } from './shared';
   template: `
     <ang-sky-banner *ngIf="showSkyBanner" [textValue]="skyBannerCopy" (closeBanner)="showSkyBanner = false"></ang-sky-banner>
     <div id="skip" tabindex="-1" aria-activedescendant="button">
-      <button id="button" (click)="findMainContent()" (keydown.enter)="findMainContent()" tabindex="1" class="sr-only sr-only-focusable"> Skip to main content </button>
+      <button id="button" (click)="findMainContent()" (keyup.enter)="findMainContent()" tabindex="1" class="sr-only sr-only-focusable"> Skip to main content </button>
     </div>
     <nav-bar tabindex="-1"></nav-bar>
 
@@ -141,20 +141,23 @@ export class App {
   }
 
   private findMainContent(): void {
-    let htmlelement: HTMLElement = document.getElementById('mainContent');
-    let element: Element;
-    // On log in page, go to log in box
-    if (htmlelement.querySelector('form div input')){
-      element = htmlelement.querySelector('form div input');
-    }
-    // On any page that has search bar, go to search box
-    else if (htmlelement.querySelector('div input')){
-      element = htmlelement.querySelector('div input');
-    }
-    // On asset page, go to the container that contains the item details
-    else {
-      element = htmlelement;
-    }
-    (<HTMLElement>element).focus();
+    window.setTimeout(function ()
+    {
+      let htmlelement: HTMLElement = document.getElementById('mainContent');
+      let element: Element;
+      // On log in page, go to log in box
+      if (htmlelement.querySelector('form div input')){
+        element = htmlelement.querySelector('form div input');
+      }
+      // On any page that has search bar, go to search box
+      else if (htmlelement.querySelector('div input')){
+        element = htmlelement.querySelector('div input');
+      }
+      // On asset page, go to the container that contains the item details
+      else {
+        element = htmlelement;
+      }
+      (<HTMLElement>element).focus();
+    }, 100);
   }
 }
