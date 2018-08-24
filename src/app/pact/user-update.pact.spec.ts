@@ -70,6 +70,7 @@ describe('PUT /api/secure/user/{{profileId}} #pact #updateuser', () => {
 
         interactions.push(
           provider.addInteraction({
+            state: 'I am logged in as qapact@artstor.org',
             uponReceiving: "a request to update a user's " + obj.field,
             withRequest: {
               method: 'PUT',
@@ -121,6 +122,7 @@ describe('PUT /api/secure/user/{{profileId}} #pact #updateuser', () => {
 
       interactions.push(
         provider.addInteraction({
+          state: 'I am logged in as qapact@artstor.org',
           uponReceiving: "a request with an empty body",
           withRequest: {
             method: 'PUT',
@@ -139,6 +141,7 @@ describe('PUT /api/secure/user/{{profileId}} #pact #updateuser', () => {
 
       interactions.push(
         provider.addInteraction({
+          state: 'I am logged in as qapact@artstor.org',
           uponReceiving: "a request with a non-updateable field",
           withRequest: {
             method: 'PUT',
@@ -161,6 +164,7 @@ describe('PUT /api/secure/user/{{profileId}} #pact #updateuser', () => {
 
       interactions.push(
         provider.addInteraction({
+          state: 'I am logged in as qapact@artstor.org',
           uponReceiving: "a request with an invalid id",
           withRequest: {
             method: 'PUT',
