@@ -20,7 +20,6 @@ export class AssetFiltersService {
         collectiontypes : [],
         classification: [],
         geography: [],
-        institution: [],
         date: [],
         dateObj : {
             earliest : {
@@ -65,6 +64,7 @@ export class AssetFiltersService {
 
     private _storage;
     private institution: any = {};
+
 
     private filterNameMap: any = {
         'collectiontypes' : {
