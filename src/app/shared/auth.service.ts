@@ -704,6 +704,15 @@ export class AuthService implements CanActivate {
 
     return category
   }
+
+  public getAllInstitutions(): Observable<any> {
+    // Before we subscribe available filter, make sure we get the list of institution id-name map
+    return this.http.get(
+      this.getUrl() + '/v1/collections/institutions?_method=allinstitutions',
+      { withCredentials: true }
+    )
+    this.getUrl()
+  }
 }
 
 export class User {
