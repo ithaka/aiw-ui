@@ -43,6 +43,12 @@ input.form-control, select.form-control {
     }
 }
 
+// Apply default webkit outline to input/search field(s) once focused
+input.form-control:focus{
+    outline: auto 5px -webkit-focus-ring-color;
+    box-shadow: none;
+}
+
 .dropdown:hover {
     & > .btn-link.dropdown-toggle {
         text-decoration: none;
