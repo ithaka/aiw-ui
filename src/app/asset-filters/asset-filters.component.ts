@@ -7,7 +7,6 @@ import { AssetService } from '../shared/assets.service'
 import { AssetFiltersService } from '../asset-filters/asset-filters.service'
 import { AnalyticsService } from '../analytics.service'
 import { AuthService, FlagService } from 'app/shared';
-import { HttpClient } from '@angular/common/http';
 
 
 declare var _satellite: any
@@ -73,8 +72,7 @@ export class AssetFilters {
     private router: Router,
     private angulartics: Angulartics2,
     private _auth: AuthService,
-    private _flags: FlagService,
-    private http: HttpClient
+    private _flags: FlagService
   ) {
   }
 
