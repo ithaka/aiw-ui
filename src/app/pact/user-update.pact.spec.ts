@@ -8,7 +8,7 @@ import { HttpClientModule } from '@angular/common/http'
 describe('PUT /api/secure/user/{{profileId}} #pact #updateuser', () => {
 
   let provider
-  const validBaseProfileId = 706217
+  const validBaseProfileId = 500863455
 
   beforeAll(function(done) {
     provider = new PactWeb({ consumer: 'aiw-ui', provider: 'artaa_service', port: 1203 })
