@@ -133,7 +133,7 @@ describe('PUT /api/secure/user/{{profileId}} #pact #updateuser', () => {
             status: 400,
             headers: { 'Content-Type': 'application/json' },
             body: {
-              error: 'EMPTY_REQUEST'
+              message: 'EMPTY_REQUEST'
             }
           }
         })
