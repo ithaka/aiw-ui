@@ -18,6 +18,7 @@ export class GeneralSearchComponent implements OnInit {
 
   // the term that will be searched for
   private term: string = ''
+  private startSearch: boolean = false
 
   constructor() { }
 
@@ -31,6 +32,14 @@ export class GeneralSearchComponent implements OnInit {
         })
       )
     }
+  }
+
+  private setFocus() : void {
+    window.setTimeout(function () {
+      if (document.getElementById('empty-search-alert')){
+        document.getElementById('empty-search-alert').focus()
+      }    
+    }, 110);  
   }
 
 }
