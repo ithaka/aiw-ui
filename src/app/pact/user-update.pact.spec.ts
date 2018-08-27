@@ -155,8 +155,7 @@ describe('PUT /api/secure/user/{{profileId}} #pact #updateuser', () => {
             status: 400,
             headers: { 'Content-Type': 'application/json' },
             body: {
-              error: "INVALID_FIELD",
-              value: "cantUpdateThisHa, anotherThingYouCantUpdate"
+              message: "INVALID_FIELD: 'cantUpdateThisHa'"
             }
           }
         })
@@ -222,7 +221,8 @@ describe('PUT /api/secure/user/{{profileId}} #pact #updateuser', () => {
       },
       err => {
         expect(err.status).toEqual(400)
-        expect(err.error.error).toEqual('INVALID_FIELD')
+        expect(err.error.message.indexOf('INVALID_FIELD')).toBeGreaterThan(-1)
+        expect(err.error.message.indexOf('cantUpdateThisHa')).toBeGreaterThan(-1)
         done()
       })
     })
