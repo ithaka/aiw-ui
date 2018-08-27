@@ -81,8 +81,9 @@ export class AssetFilters {
 
   ngOnInit() {
     
-    // Before we subscribe available filter, make sure we get the list of institution id-name map
-    this.http.get('http://stage.artstor.org/api/v1/collections/institutions?_method=allinstitutions').subscribe(data => {
+    this._auth.getAllInstitutions()
+    .take(1)
+    .subscribe((data) => {
       this.subscribeAvailableFilter(data['allInstitutions'])
     })
 
