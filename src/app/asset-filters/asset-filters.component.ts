@@ -5,10 +5,7 @@ import { Angulartics2 } from 'angulartics2'
 
 import { AssetService } from '../shared/assets.service'
 import { AssetFiltersService } from '../asset-filters/asset-filters.service'
-import { AnalyticsService } from '../analytics.service'
 import { AuthService, FlagService } from 'app/shared';
-import { HttpClient } from '@angular/common/http';
-
 
 declare var _satellite: any
 
@@ -18,7 +15,6 @@ declare var _satellite: any
   templateUrl: './asset-filters.component.pug'
 })
 export class AssetFilters {
-
   // Set our default values
   public searchLoading: boolean
   public showFilters: boolean = true
@@ -73,18 +69,12 @@ export class AssetFilters {
     private router: Router,
     private angulartics: Angulartics2,
     private _auth: AuthService,
-    private _flags: FlagService,
-    private http: HttpClient
+    private _flags: FlagService
   ) {
   }
 
 
   ngOnInit() {
-    
-    // Before we subscribe available filter, make sure we get the list of institution id-name map
-    this.http.get('http://stage.artstor.org/api/v1/collections/institutions?_method=allinstitutions').subscribe(data => {
-      this.subscribeAvailableFilter(data['allInstitutions'])
-    })
 
     this.filterNameMap = this._filters.getFilterNameMap()
 
@@ -120,21 +110,7 @@ export class AssetFilters {
       })
     );
 
-
-    // Subscribe to all applied filters in case something fires outside this component
-    this.subscriptions.push(
-      this._filters.applied$
-            .subscribe(filters => {
-                this.appliedFilters = filters;
-            })
-    );
-
-  }
-
-  /**
-   * Keep an eye for available filter updates
-   */
-  private subscribeAvailableFilter(institutionList: any[]) : void {
+    // Keep an eye for available filter updates
     this.subscriptions.push(
       this._filters.available$.subscribe(
         filters => {
@@ -151,20 +127,18 @@ export class AssetFilters {
               filters['collectiontypes'] = filters['collectiontypes'].filter(collectionType => collectionType.name === '5')
           }
 
-          if (filters['contributinginstitutionid']) {
-            let InstMap = institutionList
-            for (let i = 0; i < filters['contributinginstitutionid'].length; i++) {
-              for (let j = 0; j < InstMap.length; j++) {
-                if (filters['contributinginstitutionid'][i].name === InstMap[j].institutionId) {
-                  filters['contributinginstitutionid'][i].showingName = InstMap[j].institutionName;
-                }
-              }
-            }
-          }
           this.availableFilters = filters;
         }
       )
     );
+    // Subscribe to all applied filters in case something fires outside this component
+    this.subscriptions.push(
+      this._filters.applied$
+            .subscribe(filters => {
+                this.appliedFilters = filters;
+            })
+    );
+
   }
 
   private loadRoute() {
