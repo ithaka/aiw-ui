@@ -47,6 +47,11 @@ export class BrowseGroupsComponent implements OnInit {
   private groupFilterArray: GroupFilter[] = []
   private errorObj: any = {}
 
+  private activeSort = {
+    label : 'date',
+    name : 'Recently Modified'
+  }
+
   private steps: TourStep[] = [
     {
       step: 1,
@@ -199,44 +204,73 @@ export class BrowseGroupsComponent implements OnInit {
         this.updateSearchTerm.emit('')
       }
 
-        // set query for tags, if it exists, and reset appliedTags if it doesn't
-        let urlTags: string[] = []
-        if (query.tags) {
-          urlTags = this._tagFilters.processFilterString(query.tags)
-        }
-        this.appliedTags = urlTags
-        groupQuery.tags = urlTags
+      // set the sort method
+      if (query['sort']){
+        this.activeSort.label = query['sort'];
 
-        if (query.page) {
-          let requestedPage: number = Number(query.page)
-          // if invalid page, end execution here and navigate to new url with valid page query
-          if (requestedPage < 1) {
-            return this.addQueryParams({ page: 1 }, false, false, query)
+        if (this.activeSort.label === 'date'){
+          this.activeSort.name = 'Recently Modified';
+        }
+        else if (this.activeSort.label === 'alpha'){
+          this.activeSort.name = 'Alphabetical'
+        }
+        else if (this.activeSort.label === 'relevance'){
+          // Handle the edge case when we type nothing in the search box.
+          // The sort label will still be relevance but actually we are not searching, this time we should sort from A-Z
+          if (!query.term) {
+            this.activeSort.label = 'alpha'
+            this.activeSort.name = 'Alphabetical'
           }
-          groupQuery.page = requestedPage
-        } else {
-          groupQuery.page = 1
-        }
-
-        if (query.level) {
-          groupQuery.level = query.level
-          if (query.level !== this.selectedFilter.level) {
-            this.appliedTags = []
-            this.setSearchLevel(query.level)
+          else {
+            this.activeSort.name = 'Relevance'
           }
         }
 
-        if (!this.selectedFilter || query.level != this.selectedFilter.level) {
-          this.appliedTags = [] // if they're switching levels, reset the tags
-          this.setSearchLevel(query.level, false)
-        }
+        groupQuery.sort = this.activeSort.label
+      }
+      else{ // If no sort params - Sort from A-Z
+        this.activeSort.label = 'alpha';
+        this.activeSort.name = 'Alphabetical';
+      }
 
-        if (query.id) {
-          groupQuery.id = query.id
-        }
+      // set query for tags, if it exists, and reset appliedTags if it doesn't
+      let urlTags: string[] = []
+      if (query.tags) {
+        urlTags = this._tagFilters.processFilterString(query.tags)
+      }
+      this.appliedTags = urlTags
+      groupQuery.tags = urlTags
 
-        this.loadIGs(groupQuery)
-      })
+      if (query.page) {
+        let requestedPage: number = Number(query.page)
+        // if invalid page, end execution here and navigate to new url with valid page query
+        if (requestedPage < 1) {
+          return this.addQueryParams({ page: 1 }, false, false, query)
+        }
+        groupQuery.page = requestedPage
+      } else {
+        groupQuery.page = 1
+      }
+
+      if (query.level) {
+        groupQuery.level = query.level
+        if (query.level !== this.selectedFilter.level) {
+          this.appliedTags = []
+          this.setSearchLevel(query.level)
+        }
+      }
+
+      if (!this.selectedFilter || query.level != this.selectedFilter.level) {
+        this.appliedTags = [] // if they're switching levels, reset the tags
+        this.setSearchLevel(query.level, false)
+      }
+
+      if (query.id) {
+        groupQuery.id = query.id
+      }
+
+      this.loadIGs(groupQuery)
+    })
   }
 
   /**
@@ -280,6 +314,17 @@ export class BrowseGroupsComponent implements OnInit {
       return selectedFilter.level
     } else {
       return 'all'
+    }
+  }
+
+  private changeSortOpt(label) {
+    if ( this.activeSort.label != label){
+      this._ga.eventTrack.next({ action: 'sortGroup', properties: { category: this._auth.getGACategory(), label: 'cardviewSort' }});
+      this.activeSort.label = label;
+      this.activeSort.name = name;
+
+      this.goToPage(1);
+      this.addQueryParams({ sort: label, page: 1 })
     }
   }
 
@@ -331,14 +376,16 @@ export class BrowseGroupsComponent implements OnInit {
       this.pagination.size,
       groupQuery.page,
       groupQuery.tags,
+
       this.cleanGroupSearchTerm(groupQuery.term),
-      groupQuery.id
+      groupQuery.id,
+      groupQuery.sort
     )
     .take(1)
     .subscribe(
       (data)  => {
         // Set the group level to show in the number of result message
-        let groupLabel : string = ''
+        let groupLabel: string = ''
         switch (browseLevel) {
           case 'all': {
             groupLabel = 'All Groups'
@@ -477,7 +524,7 @@ export class BrowseGroupsComponent implements OnInit {
    */
 
   private cleanGroupSearchTerm(term: string): string {
-    if(term) {
+    if (term) {
       term = term.replace(/\//g, '\\');
       return encodeURIComponent(term)
     } else {
@@ -495,6 +542,7 @@ interface GroupFilter {
 export interface GroupQuery {
   page?: number
   level?: string
+  sort?: string
   tags?: string[]
   term?: string
   id?: string // rn i'm not sure what id this is, so I'm leaving the name, but would like to change to more specific like groupId or something

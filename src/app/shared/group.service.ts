@@ -40,9 +40,30 @@ export class GroupService {
             tagParam += '&tags=' + encodeURIComponent(tag)
         })
 
+        // if there is no sort, default it to be alphabetically
+        if (!sort) {
+            sort = 'alpha'
+        }
+        // Binder will sort by relevance if we don't pass any sort parameter
+        if (sort === 'relevance') {
+            if (query) {
+                sort = ''
+            } else {
+                // This is for the edge case if we type nothing in the search box
+                // In this case, we should still sort alphabetically
+                sort = 'alpha'
+            }
+        }
         let sortParam = sort ? '&sort=' + sort : ''
-        let orderParam = order ? '&order=' + order : ''
 
+        // Default the order to be descending when we sort by date
+        if (sort === 'date' && !order) {
+            order = 'desc'
+        } else if (sort === 'alpha' && !order) {
+            // Default the order to be ascending when we sort alphabetically
+            order = 'asc'
+        }
+        let orderParam = order ? '&order=' + order : ''
 
         let queryParam: string = ''
         query && (queryParam = '&q=' + query)
@@ -97,8 +118,7 @@ export class GroupService {
                     }, error => {
                         everyGroupSubject.error(error)
                     })
-                // Provide a debounce for every set of 5 calls
-                }, Math.floor(pageNo / 5) * 1000 )
+                }, Math.floor(pageNo / 5) * 1000 ) // Provide a debounce for every set of 5 calls
             }
         }, error => {
             everyGroupSubject.error(error)

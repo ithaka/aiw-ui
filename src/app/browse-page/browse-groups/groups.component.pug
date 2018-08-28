@@ -23,13 +23,22 @@
   .col-md-9
     .row#search-row
       .col-sm-9
-        ang-general-search([updateSearchTerm]="updateSearchTerm", [init]="searchTerm", [loadingGrps]="loading", (clearGrpSearch)="clearGrpSearch()", (executeSearch)="addQueryParams({ term: $event, page: 1 }, false, true)")
+        ang-general-search([updateSearchTerm]="updateSearchTerm", [init]="searchTerm", [loadingGrps]="loading", (clearGrpSearch)="clearGrpSearch()", (executeSearch)="addQueryParams({ term: $event, page: 1, sort: 'relevance' }, false, true)")
       .col-sm-3
         //- Further functionality will go here
     h3.pb-1.px-2.numResult([innerHTML]="isSearch ? numResultMsg : selectedFilter.label")
     .row
-      .col-sm-7.col-md-7.col-lg-8
+      .col-sm-7.col-md-7.col-lg-8.pd-left
         //- This is where the sort method, number of group per page selection and toggle between cardview and listview go
+        li.sortlist.dropdown(ngbDropdown)
+          button#sortdropdownMenu.btn.btn-link(ngbDropdownToggle) Sort:
+            = " "
+            span.value {{ activeSort.name ? activeSort.name : 'Alphabetical' }}
+          .dropdown-menu(ngbDropdownMenu, aria-labelledby="sortdropdownMenu")
+            button.dropdown-item([ngClass]="{ 'disable': activeSort.label === 'date' }", (click)="changeSortOpt('date')") Recently Modified
+            button.dropdown-item([ngClass]="{ 'disable': activeSort.label === 'alpha' }", (click)="changeSortOpt('alpha')") Alphabetical
+            button.dropdown-item(*ngIf="isSearch", [ngClass]="{ 'disable': activeSort.label === 'relevance' }", (click)="changeSortOpt('relevance')") Relevance
+
       .col-sm-5.col-md-5.col-lg-4.text-right.grid-pagination-bar
         pagination([pageObj]="pagination", (goToPage)="goToPage($event)", [right]="true")
     h3.pb-1.px-2(*ngIf="_tagFilters.selectedFilters.length>0") Tags:
