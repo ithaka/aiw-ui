@@ -53,13 +53,10 @@ export class AssetSearchService {
   public downloadViewBlob(url: string): Observable<any> {
 
     let res: Observable<Blob>
-    if (url.includes('blob')) {
       res = this.http.get(url, {
         responseType: 'blob'
       })
-    // } else {
-    //   return 'failed'
-    }
+
     return res
   }
 
