@@ -48,10 +48,9 @@ export class GroupService {
         if (sort === 'relevance') {
             if (query) {
                 sort = ''
-            }
-            // This is for the edge case if we type nothing in the search box
-            // In this case, we should still sort alphabetically
-            else {
+            } else {
+                // This is for the edge case if we type nothing in the search box
+                // In this case, we should still sort alphabetically
                 sort = 'alpha'
             }
         }
@@ -60,9 +59,8 @@ export class GroupService {
         // Default the order to be descending when we sort by date
         if (sort === 'date' && !order) {
             order = 'desc'
-        }
-        // Default the order to be ascending when we sort alphabetically
-        else if (sort === 'alpha' && !order) {
+        } else if (sort === 'alpha' && !order) {
+            // Default the order to be ascending when we sort alphabetically
             order = 'asc'
         }
         let orderParam = order ? '&order=' + order : ""
@@ -120,8 +118,7 @@ export class GroupService {
                     }, error => {
                         everyGroupSubject.error(error)
                     })
-                // Provide a debounce for every set of 5 calls
-                }, Math.floor(pageNo / 5) * 1000 )
+                }, Math.floor(pageNo / 5) * 1000 ) // Provide a debounce for every set of 5 calls
             }
         }, error => {
             everyGroupSubject.error(error)
