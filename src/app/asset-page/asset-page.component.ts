@@ -321,19 +321,14 @@ export class AssetPage implements OnInit, OnDestroy {
                 }
 
                 // For "Go Back to Results" and pagination, for asset that is not from image group look for requestId to set prevRouteParams
-                if (routeParams['requestId'] || routeParams['groupId']) {
+                if (routeParams['requestId'] || routeParams['groupId'] || routeParams['prevRouteTS']) {
                     // For "Go Back to Results"
                     // Get map of previous search params
                     let prevRoutesMap = this._session.get('prevRouteParams')
                     this.requestId = routeParams['requestId']
                     
-                    let prevRouteParams: any[] = []
-                    // For image groups use the prevRouteTS to fetch the search params from session storage
-                    if(routeParams['groupId']) {
-                        prevRouteParams = prevRoutesMap[routeParams['prevRouteTS']]
-                    } else { // Reference previous search params for the current request id
-                        prevRouteParams = prevRoutesMap[this.requestId]
-                    }
+                    // Reference previous search params for the prevRouteTS
+                    let prevRouteParams = prevRoutesMap[routeParams['prevRouteTS']]
 
                     // Set previous route params if available, showing "Back to Results" link
                     if (prevRoutesMap && prevRouteParams && (prevRouteParams.length > 0)) {
