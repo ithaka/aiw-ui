@@ -75,6 +75,7 @@ export class BrowseGroupsComponent implements OnInit {
         }
     }
   ]
+  private showTourOnStart: boolean = false
 
   constructor(
     _appConfig: AppConfig,
@@ -148,6 +149,8 @@ export class BrowseGroupsComponent implements OnInit {
 
     // set the title
     this._title.setSubtitle('Browse Groups')
+
+    this.showTourOnStart = !this.userHasDoneTour()
   } // OnInit
 
   ngOnDestroy() {
@@ -171,6 +174,13 @@ export class BrowseGroupsComponent implements OnInit {
 
   private clearGrpSearch(): void {
     this.addQueryParams({}, true) // Load default view for group search
+  }
+
+  /**
+   * determines and returns whether or not the user has completed the image group tour
+   */
+  userHasDoneTour(): boolean {
+    return !!this._auth.getFromStorage('igTourComplete')
   }
 
   /** Every time the url updates, we process the new tags and reload image groups if the tags query param changes */
