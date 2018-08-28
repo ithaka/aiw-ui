@@ -75,6 +75,7 @@ describe('PUT /api/secure/user/{{profileId}} #pact #updateuser', () => {
             withRequest: {
               method: 'PUT',
               path: '/api/secure/user/' + validBaseProfileId,
+              headers: { 'Content-Type': 'application/json' },
               body: body
             },
             willRespondWith: {
@@ -127,6 +128,7 @@ describe('PUT /api/secure/user/{{profileId}} #pact #updateuser', () => {
           withRequest: {
             method: 'PUT',
             path: '/api/secure/user/' + validBaseProfileId,
+            headers: { 'Content-Type': 'application/json' },
             body: {}
           },
           willRespondWith: {
@@ -146,6 +148,7 @@ describe('PUT /api/secure/user/{{profileId}} #pact #updateuser', () => {
           withRequest: {
             method: 'PUT',
             path: '/api/secure/user/' + validBaseProfileId,
+            headers: { 'Content-Type': 'application/json' },
             body: {
               cantUpdateThisHa: Matchers.somethingLike('new value'),
               anotherThingYouCantUpdate: Matchers.somethingLike('fizz bop')
@@ -168,6 +171,7 @@ describe('PUT /api/secure/user/{{profileId}} #pact #updateuser', () => {
           withRequest: {
             method: 'PUT',
             path: '/api/secure/user/abcdefg',
+            headers: { 'Content-Type': 'application/json' },
             body: {
               [updateObjects[0].field]: Matchers.somethingLike(updateObjects[0].value)
             }
