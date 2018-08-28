@@ -1,6 +1,13 @@
 
 $infoColor: $blue;
 
+/**
+ * @atom Alert Warning
+ * @section Alerts
+ * @markup
+ *  <div aria-label="no search term alert" class="alert alert-warning" id="empty-search-alert" role="alert" tabindex="0">Please enter search term(s).</div>
+ */
+
 .alert {
     @extend %SansRegular;
     font-size: 12px;
@@ -21,6 +28,13 @@ $infoColor: $blue;
     }
 }
 
+
+/**
+ * @atom Alert Info
+ * @section Alerts
+ * @markup
+ *  <div aria-label="no search term alert" class="alert alert-info" id="empty-search-alert" role="alert" tabindex="0">Please enter search term(s).</div>
+ */
 .alert-info {
     border-color: $infoColor;
     color: $infoColor;

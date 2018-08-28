@@ -1,6 +1,7 @@
 import { Component, OnInit, EventEmitter } from '@angular/core'
 import { Router, ActivatedRoute, Params, NavigationEnd } from '@angular/router'
 import { Subscription } from 'rxjs/Subscription'
+import { Angulartics2 } from 'angulartics2'
 
 import { AssetService, AuthService, GroupService } from './../../shared'
 import { Tag } from './../tag'
@@ -8,7 +9,6 @@ import { TagFiltersService } from './tag-filters.service'
 import { TitleService } from '../../shared/title.service'
 import { AppConfig } from '../../app.service';
 import { TourStep } from '../../shared/tour/tour.service'
-import { Angulartics2 } from 'angulartics2';
 
 @Component({
   selector: 'ang-browse-groups',
@@ -34,10 +34,10 @@ export class BrowseGroupsComponent implements OnInit {
     size: number,
     page: number
   } = {
-      totalPages: 1,
-      size: 48,
-      page: 1
-    }
+    totalPages: 1,
+    size: 48,
+    page: 1
+  }
 
   private updateSearchTerm: EventEmitter<string> = new EventEmitter()
 
@@ -69,6 +69,9 @@ export class BrowseGroupsComponent implements OnInit {
         position: 'right',
         title: '<p>2 OF 3</p><b>Find groups easily</b>',
         description: 'Filter the groups you want to view by type, tag, or owner. Make sure to log in to see all of the groups you\'ve created, all in one place.',
+      },
+      onNext: () => {
+        this._ga.eventTrack.next({ action: 'endTour', properties: { category: this._auth.getGACategory(), label: 'imageGroupTour' } })
       }
     },
     {
@@ -89,8 +92,8 @@ export class BrowseGroupsComponent implements OnInit {
     private _tagFilters: TagFiltersService,
     private _auth: AuthService,
     private _title: TitleService,
-    private route: ActivatedRoute,
-    private angulartics: Angulartics2
+    private _ga: Angulartics2,
+    private route: ActivatedRoute
   ) {
     let isLoggedIn = this._auth.getUser() && this._auth.getUser().isLoggedIn
     this.showArtstorCurated = _appConfig.config.showArtstorCurated

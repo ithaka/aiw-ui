@@ -8,7 +8,7 @@ import { HttpClientModule } from '@angular/common/http'
 describe('PUT /api/secure/user/{{profileId}} #pact #updateuser', () => {
 
   let provider
-  const validBaseProfileId = 706217
+  const validBaseProfileId = 500863455
 
   beforeAll(function(done) {
     provider = new PactWeb({ consumer: 'aiw-ui', provider: 'artaa_service', port: 1203 })
@@ -75,11 +75,12 @@ describe('PUT /api/secure/user/{{profileId}} #pact #updateuser', () => {
             withRequest: {
               method: 'PUT',
               path: '/api/secure/user/' + validBaseProfileId,
+              headers: { 'Content-Type': 'application/json;charset=UTF-8' },
               body: body
             },
             willRespondWith: {
               status: 200,
-              headers: { 'Content-Type': 'application/json' }
+              headers: { 'Content-Type': 'application/json;charset=UTF-8' },
             }
           })
         )
@@ -127,13 +128,14 @@ describe('PUT /api/secure/user/{{profileId}} #pact #updateuser', () => {
           withRequest: {
             method: 'PUT',
             path: '/api/secure/user/' + validBaseProfileId,
+            headers: { 'Content-Type': 'application/json;charset=UTF-8' },
             body: {}
           },
           willRespondWith: {
             status: 400,
-            headers: { 'Content-Type': 'application/json' },
+            headers: { 'Content-Type': 'application/json;charset=UTF-8' },
             body: {
-              error: 'EMPTY_REQUEST'
+              message: 'EMPTY_REQUEST'
             }
           }
         })
@@ -146,6 +148,7 @@ describe('PUT /api/secure/user/{{profileId}} #pact #updateuser', () => {
           withRequest: {
             method: 'PUT',
             path: '/api/secure/user/' + validBaseProfileId,
+            headers: { 'Content-Type': 'application/json;charset=UTF-8' },
             body: {
               cantUpdateThisHa: Matchers.somethingLike('new value'),
               anotherThingYouCantUpdate: Matchers.somethingLike('fizz bop')
@@ -153,10 +156,9 @@ describe('PUT /api/secure/user/{{profileId}} #pact #updateuser', () => {
           },
           willRespondWith: {
             status: 400,
-            headers: { 'Content-Type': 'application/json' },
+            headers: { 'Content-Type': 'application/json;charset=UTF-8' },
             body: {
-              error: "INVALID_FIELD",
-              value: "cantUpdateThisHa, anotherThingYouCantUpdate"
+              message: "INVALID_FIELD: 'cantUpdateThisHa'"
             }
           }
         })
@@ -169,13 +171,14 @@ describe('PUT /api/secure/user/{{profileId}} #pact #updateuser', () => {
           withRequest: {
             method: 'PUT',
             path: '/api/secure/user/abcdefg',
+            headers: { 'Content-Type': 'application/json;charset=UTF-8' },
             body: {
               [updateObjects[0].field]: Matchers.somethingLike(updateObjects[0].value)
             }
           },
           willRespondWith: {
             status: 404,
-            headers: { 'Content-Type': 'application/json' }
+            headers: { 'Content-Type': 'application/json;charset=UTF-8' },
           }
         })
       )
@@ -222,7 +225,8 @@ describe('PUT /api/secure/user/{{profileId}} #pact #updateuser', () => {
       },
       err => {
         expect(err.status).toEqual(400)
-        expect(err.error.error).toEqual('INVALID_FIELD')
+        expect(err.error.message.indexOf('INVALID_FIELD')).toBeGreaterThan(-1)
+        expect(err.error.message.indexOf('cantUpdateThisHa')).toBeGreaterThan(-1)
         done()
       })
     })
