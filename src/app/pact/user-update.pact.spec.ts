@@ -79,8 +79,7 @@ describe('PUT /api/secure/user/{{profileId}} #pact #updateuser', () => {
               body: body
             },
             willRespondWith: {
-              status: 200,
-              headers: { 'Content-Type': 'application/json' }
+              status: 200
             }
           })
         )
