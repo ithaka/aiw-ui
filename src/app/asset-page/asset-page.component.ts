@@ -326,8 +326,15 @@ export class AssetPage implements OnInit, OnDestroy {
                     // Get map of previous search params
                     let prevRoutesMap = this._session.get('prevRouteParams')
                     this.requestId = routeParams['requestId']
-                    // Reference previous search params for the current request id
-                    let prevRouteParams = prevRoutesMap[this.requestId]
+                    
+                    let prevRouteParams: any[] = []
+                    // For image groups use the prevRouteTS to fetch the search params from session storage
+                    if(routeParams['groupId']) {
+                        prevRouteParams = prevRoutesMap[routeParams['prevRouteTS']]
+                    } else { // Reference previous search params for the current request id
+                        prevRouteParams = prevRoutesMap[this.requestId]
+                    }
+
                     // Set previous route params if available, showing "Back to Results" link
                     if (prevRoutesMap && prevRouteParams && (prevRouteParams.length > 0)) {
                         this.prevRouteParams = prevRouteParams
