@@ -205,7 +205,7 @@ describe('PUT /api/secure/user/{{profileId}} #pact #updateuser', () => {
       },
       err => {
         expect(err.status).toEqual(400)
-        expect(err.error.error).toEqual('EMPTY_REQUEST')
+        expect(err.error.message).toEqual('EMPTY_REQUEST')
         done()
       })
     })
