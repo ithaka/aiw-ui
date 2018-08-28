@@ -9,6 +9,7 @@ describe('PUT /api/secure/user/{{profileId}} #pact #updateuser', () => {
 
   let provider
   const validBaseProfileId = 500863455
+  const fakeUserId = 12345
 
   beforeAll(function(done) {
     provider = new PactWeb({ consumer: 'aiw-ui', provider: 'artaa_service', port: 1203 })
@@ -169,7 +170,7 @@ describe('PUT /api/secure/user/{{profileId}} #pact #updateuser', () => {
           uponReceiving: "a request with an invalid id",
           withRequest: {
             method: 'PUT',
-            path: '/api/secure/user/abcdefg',
+            path: '/api/secure/user/' + fakeUserId,
             headers: { 'Content-Type': 'application/json' },
             body: {
               [updateObjects[0].field]: Matchers.somethingLike(updateObjects[0].value)
@@ -232,7 +233,7 @@ describe('PUT /api/secure/user/{{profileId}} #pact #updateuser', () => {
 
     it('should receive an error when passing an invalid baseProfileId', (done) => {
       service.update({
-        baseProfileId: '12345',
+        baseProfileId: fakeUserId,
         [updateObjects[0].field]: updateObjects[0].value
       })
       .subscribe(res => {
