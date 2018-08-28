@@ -9,6 +9,7 @@ describe('PUT /api/secure/user/{{profileId}} #pact #updateuser', () => {
 
   let provider
   const validBaseProfileId = 500863455
+  const fakeUserId = 12345
 
   beforeAll(function(done) {
     provider = new PactWeb({ consumer: 'aiw-ui', provider: 'artaa_service', port: 1203 })
@@ -75,12 +76,11 @@ describe('PUT /api/secure/user/{{profileId}} #pact #updateuser', () => {
             withRequest: {
               method: 'PUT',
               path: '/api/secure/user/' + validBaseProfileId,
-              headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+              headers: { 'Content-Type': Matchers.somethingLike('application/json') },
               body: body
             },
             willRespondWith: {
-              status: 200,
-              headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+              status: 200
             }
           })
         )
@@ -128,12 +128,12 @@ describe('PUT /api/secure/user/{{profileId}} #pact #updateuser', () => {
           withRequest: {
             method: 'PUT',
             path: '/api/secure/user/' + validBaseProfileId,
-            headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+            headers: { 'Content-Type': Matchers.somethingLike('application/json') },
             body: {}
           },
           willRespondWith: {
             status: 400,
-            headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+            headers: { 'Content-Type': Matchers.somethingLike('application/json') },
             body: {
               message: 'EMPTY_REQUEST'
             }
@@ -148,7 +148,7 @@ describe('PUT /api/secure/user/{{profileId}} #pact #updateuser', () => {
           withRequest: {
             method: 'PUT',
             path: '/api/secure/user/' + validBaseProfileId,
-            headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+            headers: { 'Content-Type': Matchers.somethingLike('application/json') },
             body: {
               cantUpdateThisHa: Matchers.somethingLike('new value'),
               anotherThingYouCantUpdate: Matchers.somethingLike('fizz bop')
@@ -156,7 +156,7 @@ describe('PUT /api/secure/user/{{profileId}} #pact #updateuser', () => {
           },
           willRespondWith: {
             status: 400,
-            headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+            headers: { 'Content-Type': Matchers.somethingLike('application/json') },
             body: {
               message: "INVALID_FIELD: 'cantUpdateThisHa'"
             }
@@ -170,15 +170,15 @@ describe('PUT /api/secure/user/{{profileId}} #pact #updateuser', () => {
           uponReceiving: "a request with an invalid id",
           withRequest: {
             method: 'PUT',
-            path: '/api/secure/user/abcdefg',
-            headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+            path: '/api/secure/user/' + fakeUserId,
+            headers: { 'Content-Type': Matchers.somethingLike('application/json') },
             body: {
               [updateObjects[0].field]: Matchers.somethingLike(updateObjects[0].value)
             }
           },
           willRespondWith: {
             status: 404,
-            headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+            headers: { 'Content-Type': Matchers.somethingLike('application/json') }
           }
         })
       )
@@ -209,7 +209,7 @@ describe('PUT /api/secure/user/{{profileId}} #pact #updateuser', () => {
       },
       err => {
         expect(err.status).toEqual(400)
-        expect(err.error.error).toEqual('EMPTY_REQUEST')
+        expect(err.error.message).toEqual('EMPTY_REQUEST')
         done()
       })
     })
@@ -233,7 +233,7 @@ describe('PUT /api/secure/user/{{profileId}} #pact #updateuser', () => {
 
     it('should receive an error when passing an invalid baseProfileId', (done) => {
       service.update({
-        baseProfileId: 'abcdefg',
+        baseProfileId: fakeUserId,
         [updateObjects[0].field]: updateObjects[0].value
       })
       .subscribe(res => {
