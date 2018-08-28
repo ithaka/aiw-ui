@@ -11,6 +11,7 @@ import {
 import { AuthService } from './'
 import { AppConfig } from '../app.service'
 import { Observable } from 'rxjs/Observable'
+import { error } from 'util';
 
 @Injectable()
 export class AssetSearchService {
@@ -50,9 +51,16 @@ export class AssetSearchService {
   * @param url - Generated tilemap view url
   */
   public downloadViewBlob(url: string): Observable<any> {
-    return this.http.get(url, {
-      responseType: 'blob'
-    })
+
+    let res: Observable<Blob>
+    if (url.includes('blob')) {
+      res = this.http.get(url, {
+        responseType: 'blob'
+      })
+    // } else {
+    //   return 'failed'
+    }
+    return res
   }
 
   private initQuery(keyword: string, pageSize, startIndex) {

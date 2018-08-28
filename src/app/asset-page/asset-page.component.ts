@@ -793,34 +793,34 @@ export class AssetPage implements OnInit, OnDestroy {
         if (retryCount <= 2) {
             // Download generated jpg as local blob file
             let blob = this._search.downloadViewBlob(dlink)
-                .take(1)
-                .subscribe((blob) => {
-                    // Call recursively two more times if Promise blob.size < 7.5kb
-                    if (blob.size < 7500) {
-                        result = false
-                        retryCount += 1
-                        this.runDownloadView(dlink, retryCount)
+              .take(1)
+              .subscribe((blob) => {
+                // Call recursively two more times if Promise blob.size < 7.5kb
+                if (blob.size < 7500) {
+                    result = false
+                    retryCount += 1
+                    this.runDownloadView(dlink, retryCount)
+                }
+                else {
+                    if (this.isMSAgent) {
+                        this.downloadLoading = false
+                        console.log('MSAgent Blob: ', blob)
+                        this.navigator.msSaveBlob(blob, 'download.jpg')
+
                     }
                     else {
-                        if (this.isMSAgent) {
-                            this.downloadLoading = false
-                            console.log('MSAgent Blob: ', blob)
-                            this.navigator.msSaveBlob(blob, 'download.jpg')
-
-                        }
-                        else {
-                            this.blobURL = this.URL.createObjectURL(blob)
-                            this.generatedViewURL = this._sanitizer.bypassSecurityTrustUrl(this.blobURL)
-                        }
-                        this.downloadLoading = false
-                        result = true
+                        this.blobURL = this.URL.createObjectURL(blob)
+                        this.generatedViewURL = this._sanitizer.bypassSecurityTrustUrl(this.blobURL)
                     }
-                }, (err) => {
-                    console.error('Error returning generated download view', err)
-                    result = false
                     this.downloadLoading = false
-                    this.showServerErrorModal = true
-                })
+                    result = true
+                }
+            }, (err) => {
+                console.error('Error returning generated download view', err)
+                result = false
+                this.downloadLoading = false
+                this.showServerErrorModal = true
+            })
         }
 
         return result
@@ -842,8 +842,8 @@ export class AssetPage implements OnInit, OnDestroy {
         // Revoke the browser reference to a previously generated view download blob URL
         if (this.blobURL.length) {
             this.URL.revokeObjectURL(this.blobURL)
-            this.blobURL = ''
-            this.generatedViewURL = ''
+            //this.blobURL = ''
+            //this.generatedViewURL = ''
         }
 
         if (asset.typeName === 'image' && asset.viewportDimensions.contentSize) {
