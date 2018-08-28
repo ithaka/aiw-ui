@@ -233,7 +233,7 @@ describe('PUT /api/secure/user/{{profileId}} #pact #updateuser', () => {
 
     it('should receive an error when passing an invalid baseProfileId', (done) => {
       service.update({
-        baseProfileId: 'abcdefg',
+        baseProfileId: '12345',
         [updateObjects[0].field]: updateObjects[0].value
       })
       .subscribe(res => {
