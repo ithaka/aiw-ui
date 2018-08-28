@@ -75,12 +75,11 @@ describe('PUT /api/secure/user/{{profileId}} #pact #updateuser', () => {
             withRequest: {
               method: 'PUT',
               path: '/api/secure/user/' + validBaseProfileId,
-              headers: { 'Content-Type': 'application/json;charset=UTF-8' },
               body: body
             },
             willRespondWith: {
               status: 200,
-              headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+              headers: { 'Content-Type': 'application/json' }
             }
           })
         )
@@ -128,12 +127,11 @@ describe('PUT /api/secure/user/{{profileId}} #pact #updateuser', () => {
           withRequest: {
             method: 'PUT',
             path: '/api/secure/user/' + validBaseProfileId,
-            headers: { 'Content-Type': 'application/json;charset=UTF-8' },
             body: {}
           },
           willRespondWith: {
             status: 400,
-            headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+            headers: { 'Content-Type': 'application/json' },
             body: {
               message: 'EMPTY_REQUEST'
             }
@@ -148,7 +146,6 @@ describe('PUT /api/secure/user/{{profileId}} #pact #updateuser', () => {
           withRequest: {
             method: 'PUT',
             path: '/api/secure/user/' + validBaseProfileId,
-            headers: { 'Content-Type': 'application/json;charset=UTF-8' },
             body: {
               cantUpdateThisHa: Matchers.somethingLike('new value'),
               anotherThingYouCantUpdate: Matchers.somethingLike('fizz bop')
@@ -156,7 +153,7 @@ describe('PUT /api/secure/user/{{profileId}} #pact #updateuser', () => {
           },
           willRespondWith: {
             status: 400,
-            headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+            headers: { 'Content-Type': 'application/json' },
             body: {
               message: "INVALID_FIELD: 'cantUpdateThisHa'"
             }
@@ -171,14 +168,13 @@ describe('PUT /api/secure/user/{{profileId}} #pact #updateuser', () => {
           withRequest: {
             method: 'PUT',
             path: '/api/secure/user/abcdefg',
-            headers: { 'Content-Type': 'application/json;charset=UTF-8' },
             body: {
               [updateObjects[0].field]: Matchers.somethingLike(updateObjects[0].value)
             }
           },
           willRespondWith: {
             status: 404,
-            headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+            headers: { 'Content-Type': 'application/json' }
           }
         })
       )
