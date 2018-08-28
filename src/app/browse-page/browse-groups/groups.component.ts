@@ -205,16 +205,16 @@ export class BrowseGroupsComponent implements OnInit {
       }
 
       // set the sort method
-      if(query['sort']){
+      if (query['sort']){
         this.activeSort.label = query['sort'];
 
-        if(this.activeSort.label === 'date'){
+        if (this.activeSort.label === 'date'){
           this.activeSort.name = 'Recently Modified';
         }
-        else if(this.activeSort.label === 'alpha'){
+        else if (this.activeSort.label === 'alpha'){
           this.activeSort.name = 'Alphabetical'
         }
-        else if(this.activeSort.label === 'relevance'){
+        else if (this.activeSort.label === 'relevance'){
           // Handle the edge case when we type nothing in the search box.
           // The sort label will still be relevance but actually we are not searching, this time we should sort from A-Z
           if (!query.term) {
@@ -318,7 +318,7 @@ export class BrowseGroupsComponent implements OnInit {
   }
 
   private changeSortOpt(label) {
-    if( this.activeSort.label != label){
+    if ( this.activeSort.label != label){
       this._ga.eventTrack.next({ action: 'sortGroup', properties: { category: this._auth.getGACategory(), label: 'cardviewSort' }});
       this.activeSort.label = label;
       this.activeSort.name = name;
@@ -385,7 +385,7 @@ export class BrowseGroupsComponent implements OnInit {
     .subscribe(
       (data)  => {
         // Set the group level to show in the number of result message
-        let groupLabel : string = ''
+        let groupLabel: string = ''
         switch (browseLevel) {
           case 'all': {
             groupLabel = 'All Groups'
@@ -524,7 +524,7 @@ export class BrowseGroupsComponent implements OnInit {
    */
 
   private cleanGroupSearchTerm(term: string): string {
-    if(term) {
+    if (term) {
       term = term.replace(/\//g, '\\');
       return encodeURIComponent(term)
     } else {

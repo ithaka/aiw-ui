@@ -54,8 +54,8 @@ export class GroupService {
                 sort = 'alpha'
             }
         }
-        let sortParam = sort ? '&sort=' + sort : ""
-        
+        let sortParam = sort ? '&sort=' + sort : ''
+
         // Default the order to be descending when we sort by date
         if (sort === 'date' && !order) {
             order = 'desc'
@@ -63,7 +63,7 @@ export class GroupService {
             // Default the order to be ascending when we sort alphabetically
             order = 'asc'
         }
-        let orderParam = order ? '&order=' + order : ""
+        let orderParam = order ? '&order=' + order : ''
 
         let queryParam: string = ''
         query && (queryParam = '&q=' + query)
