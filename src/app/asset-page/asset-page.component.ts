@@ -832,8 +832,6 @@ export class AssetPage implements OnInit, OnDestroy {
         // Revoke the browser reference to a previously generated view download blob URL
         if (this.blobURL.length) {
             this.URL.revokeObjectURL(this.blobURL)
-            //this.blobURL = ''
-            //this.generatedViewURL = ''
         }
 
         if (asset.typeName === 'image' && asset.viewportDimensions.contentSize) {
