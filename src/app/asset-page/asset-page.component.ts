@@ -831,50 +831,26 @@ export class AssetPage implements OnInit, OnDestroy {
 
     private genDownloadViewLink(): void {
 
-        // Do nothing if this is not an image
-        if (!this.assets[0].typeName || !this.assets[0].typeName.length) {
-            return
-        }
+      // Do nothing if this is not an image
+      if (!this.assets[0].typeName || !this.assets[0].typeName.length) {
+          return
+      }
 
-        let asset = this.assets[0]
-        this.downloadLoading = true // sets to false on success of runDownloadView
+      let asset = this.assets[0]
+      this.downloadLoading = true // sets to false on success of runDownloadView
 
-        // Revoke the browser reference to a previously generated view download blob URL
-        if (this.blobURL.length) {
-            this.URL.revokeObjectURL(this.blobURL)
-            this.blobURL = ''
-            this.generatedViewURL = ''
-        }
+      // Revoke the browser reference to a previously generated view download blob URL
+      if (this.blobURL.length) {
+          this.URL.revokeObjectURL(this.blobURL)
+          this.blobURL = ''
+          this.generatedViewURL = ''
+      }
 
-        if (asset.typeName === 'image' && asset.viewportDimensions.contentSize) {
-            // Full source image size (max output possible)
-            let fullWidth = Math.floor(asset.viewportDimensions.contentSize.x)
-            let fullY = Math.floor(asset.viewportDimensions.contentSize.y)
-            // Zoom is a factor of the image's full width
-            let zoom = Math.floor(asset.viewportDimensions.zoom)
-            // Viewport dimensions (size of cropped image)
-            let viewX = Math.floor(asset.viewportDimensions.containerSize.x)
-            let viewY = Math.floor(asset.viewportDimensions.containerSize.y)
-            // Dimensions of the source size of the cropped image
-            let zoomX = Math.floor(fullWidth / zoom)
-            let zoomY = Math.floor(zoomX * (viewY / viewX))
-            // Make sure zoom area is not larger than source, or else error
-            if (zoomX > fullWidth) {
-                zoomX = fullWidth
-            }
-            if (zoomY > fullY) {
-                zoomY = fullY
-            }
-            // Positioning of the viewport's crop
-            let xOffset = Math.floor((asset.viewportDimensions.center.x * fullWidth) - (zoomX / 2))
-            let yOffset = Math.floor((asset.viewportDimensions.center.y * fullWidth) - (zoomY / 2))
+      let downloadLink = asset.buildDownloadViewURL()
 
-            // Generate the view url from tilemap service
-            let downloadLink: string = asset.tileSource.replace('info.json', '') + xOffset + ',' + yOffset + ',' + zoomX + ',' + zoomY + '/' + viewX + ',' + viewY + '/0/native.jpg'
+      // Call runDownloadView and check for success, tries 3 times.
+      this.runDownloadView(downloadLink, 0)
 
-            // Call runDownloadView and check for success, tries 3 times.
-            this.runDownloadView(downloadLink, 0)
-        }
     }
 
     /**
@@ -933,7 +909,7 @@ export class AssetPage implements OnInit, OnDestroy {
 
         // If MS Browser, call genDownloadViewLink here
         if (this.isMSAgent) {
-            this.genDownloadViewLink()
+          this.assets[0].genDownloadViewLink()
         }
     }
 

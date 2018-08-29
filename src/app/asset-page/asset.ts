@@ -95,6 +95,40 @@ export class Asset {
         return downloadLink
     }
 
+    buildDownloadViewURL(): string {
+
+      let downloadViewLink: string
+
+      if (this.typeName === 'image' && this.viewportDimensions.contentSize) {
+        // Full source image size (max output possible)
+        let fullWidth = Math.floor(this.viewportDimensions.contentSize.x)
+        let fullY = Math.floor(this.viewportDimensions.contentSize.y)
+        // Zoom is a factor of the image's full width
+        let zoom = Math.floor(this.viewportDimensions.zoom)
+        // Viewport dimensions (size of cropped image)
+        let viewX = Math.floor(this.viewportDimensions.containerSize.x)
+        let viewY = Math.floor(this.viewportDimensions.containerSize.y)
+        // Dimensions of the source size of the cropped image
+        let zoomX = Math.floor(fullWidth / zoom)
+        let zoomY = Math.floor(zoomX * (viewY / viewX))
+        // Make sure zoom area is not larger than source, or else error
+        if (zoomX > fullWidth) {
+          zoomX = fullWidth
+        }
+        if (zoomY > fullY) {
+          zoomY = fullY
+        }
+        // Positioning of the viewport's crop
+        let xOffset = Math.floor((this.viewportDimensions.center.x * fullWidth) - (zoomX / 2))
+        let yOffset = Math.floor((this.viewportDimensions.center.y * fullWidth) - (zoomY / 2))
+
+        // Generate the view url from tilemap service
+        downloadViewLink = this.tileSource.replace('info.json', '') + xOffset + ',' + yOffset + ',' + zoomX + ',' + zoomY + '/' + viewX + ',' + viewY + '/0/native.jpg'
+      }
+
+      return downloadViewLink
+    }
+
     /**
      * Sets the correct typeName based on a map
      * @param typeId the asset's object_type_id
