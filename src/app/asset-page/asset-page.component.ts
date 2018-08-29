@@ -782,54 +782,43 @@ export class AssetPage implements OnInit, OnDestroy {
     }
 
 
-    /**
-     * runDownloadView handles the DownloadView results from AssetSearch.downloadViewBlob
-     * @param dlink String from generateDownloadView
-     * @param retryCount Number, tracks recursive calls of this function for download tries
-     */
-    private runDownloadView(dlink: string, retryCount: number): boolean {
-        let result: boolean = false
+  /**
+   * runDownloadView handles the DownloadView results from AssetSearch.downloadViewBlob
+   * @param dlink String from generateDownloadView
+   */
+  private runDownloadView(dlink: string): boolean {
+    let result: boolean = false
 
-        if (retryCount <= 2) {
-            // Download generated jpg as local blob file
-            let blob = this._search.downloadViewBlob(dlink)
-                .take(1)
-                .subscribe((blob) => {
-                    // Call recursively two more times if Promise blob.size < 7.5kb
-                    if (blob.size < 7500) {
-                        result = false
-                        retryCount += 1
-                        this.runDownloadView(dlink, retryCount)
-                    }
-                    else {
-                        if (this.isMSAgent) {
-                            this.downloadLoading = false
-                            console.log('MSAgent Blob: ', blob)
-                            this.navigator.msSaveBlob(blob, 'download.jpg')
+    // Download generated jpg as local blob file
+    let blob = this._search.downloadViewBlob(dlink)
+      .take(1)
+      .subscribe((blob) => {
 
-                        }
-                        else {
-                            this.blobURL = this.URL.createObjectURL(blob)
-                            this.generatedViewURL = this._sanitizer.bypassSecurityTrustUrl(this.blobURL)
-                        }
-                        this.downloadLoading = false
-                        result = true
-                    }
-                }, (err) => {
-                    console.error('Error returning generated download view', err)
-                    result = false
-                    this.downloadLoading = false
-                    this.showServerErrorModal = true
-                })
-        }
+        if (blob && blob.size)
+          if (this.isMSAgent) {
+            this.downloadLoading = false
+            this.navigator.msSaveBlob(blob, 'download.jpg')
+          }
+          else {
+            this.blobURL = this.URL.createObjectURL(blob)
+            this.generatedViewURL = this._sanitizer.bypassSecurityTrustUrl(this.blobURL)
+          }
+        this.downloadLoading = false
+        result = true
+      },
+        (err) => {
+          result = false
+          this.downloadLoading = false
+          this.showServerErrorModal = true
+        })
 
-        return result
-    }
+    return result
+  }
 
     /** Calls downloadViewBlob in AssetSearch service to retrieve blob file,
         and then sets generatedViewUrl to this local reference. **/
 
-    private genDownloadViewLink(): void {
+    private prepDownloadView(): void {
 
       // Do nothing if this is not an image
       if (!this.assets[0].typeName || !this.assets[0].typeName.length) {
@@ -842,14 +831,12 @@ export class AssetPage implements OnInit, OnDestroy {
       // Revoke the browser reference to a previously generated view download blob URL
       if (this.blobURL.length) {
           this.URL.revokeObjectURL(this.blobURL)
-          this.blobURL = ''
-          this.generatedViewURL = ''
       }
 
       let downloadLink = asset.buildDownloadViewURL()
 
       // Call runDownloadView and check for success, tries 3 times.
-      this.runDownloadView(downloadLink, 0)
+      this.runDownloadView(downloadLink)
 
     }
 
@@ -909,7 +896,7 @@ export class AssetPage implements OnInit, OnDestroy {
 
         // If MS Browser, call genDownloadViewLink here
         if (this.isMSAgent) {
-          this.assets[0].genDownloadViewLink()
+          this.prepDownloadView()
         }
     }
 

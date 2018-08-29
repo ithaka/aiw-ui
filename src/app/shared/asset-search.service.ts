@@ -46,13 +46,17 @@ export class AssetSearchService {
   }
 
   /**
-  * Download an Asset View blob file from tilemap service
-  * @param url - Generated tilemap view url
-  */
+   * Download an Asset View blob file from tilemap service
+   * @param url - Generated tilemap view url
+   */
   public downloadViewBlob(url: string): Observable<any> {
-    return this.http.get(url, {
+
+    let res: Observable<Blob>
+    res = this.http.get(url, {
       responseType: 'blob'
     })
+
+    return res
   }
 
   private initQuery(keyword: string, pageSize, startIndex) {
