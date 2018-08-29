@@ -2,7 +2,8 @@ import { Component, Input, OnInit  } from '@angular/core'
 import * as Driver from '../../../../node_modules/driver.js/dist/driver.min.js'
 import { TourStep } from './tour.service'
 import { Router, NavigationStart } from '@angular/router'
-import { AuthService } from '..'
+import { Angulartics2 } from 'angulartics2'
+import { AuthService } from './..'
 
 @Component({
     selector: 'ang-guide-tour',
@@ -19,6 +20,7 @@ import { AuthService } from '..'
 
     constructor(
       private _auth: AuthService,
+      private _ga: Angulartics2,
       private router: Router
     ){
       router.events.subscribe(event => {
@@ -41,6 +43,7 @@ import { AuthService } from '..'
 
     private startTour() {
       this.startModalShow = false
+      this._ga.eventTrack.next({ action: 'beginTour', properties: { category: this._auth.getGACategory(), label: 'imageGroupTour' } })
       this.driver = new Driver({ allowClose: false, closeBtnText: 'exit tour', nextBtnText: 'NEXT', prevBtnText: 'BACK', doneBtnText: 'GOT IT, THANKS!',
         onHighlightStarted: (Element) => {
 
