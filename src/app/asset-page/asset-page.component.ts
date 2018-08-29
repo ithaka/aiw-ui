@@ -781,6 +781,41 @@ export class AssetPage implements OnInit, OnDestroy {
         }
     }
 
+  buildDownloadViewURL(): string {
+
+    let downloadViewLink: string
+    let asset = this.assets[0]
+
+    if (asset.typeName === 'image' && asset.viewportDimensions.contentSize) {
+      // Full source image size (max output possible)
+      let fullWidth = Math.floor(asset.viewportDimensions.contentSize.x)
+      let fullY = Math.floor(asset.viewportDimensions.contentSize.y)
+      // Zoom is a factor of the image's full width
+      let zoom = Math.floor(asset.viewportDimensions.zoom)
+      // Viewport dimensions (size of cropped image)
+      let viewX = Math.floor(asset.viewportDimensions.containerSize.x)
+      let viewY = Math.floor(asset.viewportDimensions.containerSize.y)
+      // Dimensions of the source size of the cropped image
+      let zoomX = Math.floor(fullWidth / zoom)
+      let zoomY = Math.floor(zoomX * (viewY / viewX))
+      // Make sure zoom area is not larger than source, or else error
+      if (zoomX > fullWidth) {
+        zoomX = fullWidth
+      }
+      if (zoomY > fullY) {
+        zoomY = fullY
+      }
+      // Positioning of the viewport's crop
+      let xOffset = Math.floor((asset.viewportDimensions.center.x * fullWidth) - (zoomX / 2))
+      let yOffset = Math.floor((asset.viewportDimensions.center.y * fullWidth) - (zoomY / 2))
+
+      // Generate the view url from tilemap service
+      downloadViewLink = asset.tileSource.replace('info.json', '') + xOffset + ',' + yOffset + ',' + zoomX + ',' + zoomY + '/' + viewX + ',' + viewY + '/0/native.jpg'
+    }
+
+    return downloadViewLink
+  }
+
 
   /**
    * runDownloadView handles the DownloadView results from AssetSearch.downloadViewBlob
@@ -825,7 +860,6 @@ export class AssetPage implements OnInit, OnDestroy {
           return
       }
 
-      let asset = this.assets[0]
       this.downloadLoading = true // sets to false on success of runDownloadView
 
       // Revoke the browser reference to a previously generated view download blob URL
@@ -833,11 +867,8 @@ export class AssetPage implements OnInit, OnDestroy {
           this.URL.revokeObjectURL(this.blobURL)
       }
 
-      let downloadLink = asset.buildDownloadViewURL()
-
-      // Call runDownloadView and check for success, tries 3 times.
+      let downloadLink = this.buildDownloadViewURL()
       this.runDownloadView(downloadLink)
-
     }
 
     /**
@@ -894,7 +925,7 @@ export class AssetPage implements OnInit, OnDestroy {
         this.showAgreeModal = true
         this.downloadName = 'download.jpg'
 
-        // If MS Browser, call genDownloadViewLink here
+        // If MS Browser, call prepDownloadView here
         if (this.isMSAgent) {
           this.prepDownloadView()
         }
