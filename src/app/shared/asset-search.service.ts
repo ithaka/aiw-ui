@@ -11,8 +11,6 @@ import {
 import { AuthService } from './'
 import { AppConfig } from '../app.service'
 import { Observable } from 'rxjs/Observable'
-import { error } from 'util';
-
 @Injectable()
 export class AssetSearchService {
 
