@@ -781,74 +781,82 @@ export class AssetPage implements OnInit, OnDestroy {
         }
     }
 
-  buildDownloadViewURL(): string {
-
-    let downloadViewLink: string
-    let asset = this.assets[0]
-
-    if (asset.typeName === 'image' && asset.viewportDimensions.contentSize) {
-      // Full source image size (max output possible)
-      let fullWidth = Math.floor(asset.viewportDimensions.contentSize.x)
-      let fullY = Math.floor(asset.viewportDimensions.contentSize.y)
-      // Zoom is a factor of the image's full width
-      let zoom = Math.floor(asset.viewportDimensions.zoom)
-      // Viewport dimensions (size of cropped image)
-      let viewX = Math.floor(asset.viewportDimensions.containerSize.x)
-      let viewY = Math.floor(asset.viewportDimensions.containerSize.y)
-      // Dimensions of the source size of the cropped image
-      let zoomX = Math.floor(fullWidth / zoom)
-      let zoomY = Math.floor(zoomX * (viewY / viewX))
-      // Make sure zoom area is not larger than source, or else error
-      if (zoomX > fullWidth) {
-        zoomX = fullWidth
-      }
-      if (zoomY > fullY) {
-        zoomY = fullY
-      }
-      // Positioning of the viewport's crop
-      let xOffset = Math.floor((asset.viewportDimensions.center.x * fullWidth) - (zoomX / 2))
-      let yOffset = Math.floor((asset.viewportDimensions.center.y * fullWidth) - (zoomY / 2))
-
-      // Generate the view url from tilemap service
-      downloadViewLink = asset.tileSource.replace('info.json', '') + xOffset + ',' + yOffset + ',' + zoomX + ',' + zoomY + '/' + viewX + ',' + viewY + '/0/native.jpg'
+    private downloadViewFromImageServer(): string  {
+      let imageServer = 'http://imgserver.artstor.net/'
+      let hostname = document.location.origin
+      let url = imageServer + this.buildDownloadViewURL()
+      let result = hostname + 'api/download?imgid=' + this.assets[0].id + '&url=' + encodeURIComponent(url)
+      console.log('!!!!!', result, '!!!!!')
+      return result
     }
 
-    return downloadViewLink
-  }
+    private buildDownloadViewURL(): string {
 
+      let downloadViewLink: string
+      let asset = this.assets[0]
 
-  /**
-   * runDownloadView handles the DownloadView results from AssetSearch.downloadViewBlob
-   * @param dlink String from generateDownloadView
-   */
-  private runDownloadView(dlink: string): boolean {
-    let result: boolean = false
+      if (asset.typeName === 'image' && asset.viewportDimensions.contentSize) {
+        // Full source image size (max output possible)
+        let fullWidth = Math.floor(asset.viewportDimensions.contentSize.x)
+        let fullY = Math.floor(asset.viewportDimensions.contentSize.y)
+        // Zoom is a factor of the image's full width
+        let zoom = Math.floor(asset.viewportDimensions.zoom)
+        // Viewport dimensions (size of cropped image)
+        let viewX = Math.floor(asset.viewportDimensions.containerSize.x)
+        let viewY = Math.floor(asset.viewportDimensions.containerSize.y)
+        // Dimensions of the source size of the cropped image
+        let zoomX = Math.floor(fullWidth / zoom)
+        let zoomY = Math.floor(zoomX * (viewY / viewX))
+        // Make sure zoom area is not larger than source, or else error
+        if (zoomX > fullWidth) {
+          zoomX = fullWidth
+        }
+        if (zoomY > fullY) {
+          zoomY = fullY
+        }
+        // Positioning of the viewport's crop
+        let xOffset = Math.floor((asset.viewportDimensions.center.x * fullWidth) - (zoomX / 2))
+        let yOffset = Math.floor((asset.viewportDimensions.center.y * fullWidth) - (zoomY / 2))
 
-    // Download generated jpg as local blob file
-    let blob = this._search.downloadViewBlob(dlink)
-      .take(1)
-      .subscribe((blob) => {
+        // Generate the view url from tilemap service
+        downloadViewLink = asset.tileSource.replace('info.json', '') + xOffset + ',' + yOffset + ',' + zoomX + ',' + zoomY + '/' + viewX + ',' + viewY + '/0/native.jpg'
+      }
 
-        if (blob && blob.size)
-          if (this.isMSAgent) {
-            this.downloadLoading = false
-            this.navigator.msSaveBlob(blob, 'download.jpg')
-          }
-          else {
-            this.blobURL = this.URL.createObjectURL(blob)
-            this.generatedViewURL = this._sanitizer.bypassSecurityTrustUrl(this.blobURL)
-          }
-        this.downloadLoading = false
-        result = true
-      },
-        (err) => {
-          result = false
+      return downloadViewLink
+    }
+
+    /**
+     * runDownloadView handles the DownloadView results from AssetSearch.downloadViewBlob
+     * @param dlink String from generateDownloadView
+     */
+    private runDownloadView(dlink: string): boolean {
+      let result: boolean = false
+
+      // Download generated jpg as local blob file
+      let blob = this._search.downloadViewBlob(dlink)
+        .take(1)
+        .subscribe((blob) => {
+
+          if (blob && blob.size)
+            if (this.isMSAgent) {
+              this.downloadLoading = false
+              this.navigator.msSaveBlob(blob, 'download.jpg')
+            }
+            else {
+              this.blobURL = this.URL.createObjectURL(blob)
+              this.generatedViewURL = this._sanitizer.bypassSecurityTrustUrl(this.blobURL)
+            }
           this.downloadLoading = false
-          this.showServerErrorModal = true
-        })
+          result = true
+        },
+          (err) => {
+            result = false
+            this.downloadLoading = false
+            this.showServerErrorModal = true
+          })
 
-    return result
-  }
+      return result
+    }
 
     /** Calls downloadViewBlob in AssetSearch service to retrieve blob file,
         and then sets generatedViewUrl to this local reference. **/
