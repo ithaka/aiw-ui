@@ -326,7 +326,7 @@ export class AssetPage implements OnInit, OnDestroy {
                     // Get map of previous search params
                     let prevRoutesMap = this._session.get('prevRouteParams')
                     this.requestId = routeParams['requestId']
-                    
+
                     // Reference previous search params for the prevRouteTS
                     let prevRouteParams = prevRoutesMap[routeParams['prevRouteTS']]
 

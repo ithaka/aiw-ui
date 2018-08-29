@@ -351,12 +351,12 @@ export class AssetGrid implements OnInit, OnDestroy {
           // Tie prevRouteParams array with previousRouteTS (time stamp) before sending to asset page
           this.prevRouteTS = Date.now().toString()
           let id: string = this.prevRouteTS
-          
+
           let prevRouteParams = this._session.get('prevRouteParams') || {}
           prevRouteParams[id] = this.route.snapshot.url
           this._session.set('prevRouteParams', prevRouteParams)
 
-          //Generate Facets
+          // Generate Facets
           if (allResults && allResults.collTypeFacets) {
               this._filters.generateColTypeFacets( allResults.collTypeFacets );
               // this._filters.generateGeoFilters( allResults.geographyFacets );
@@ -491,7 +491,7 @@ export class AssetGrid implements OnInit, OnDestroy {
    */
 
   private selectAsset(asset, event?): void {
-    if(this.editMode){
+    if (this.editMode){
       event && event.preventDefault()
       let index: number = this.isSelectedAsset(asset)
       if (index > -1){
@@ -715,7 +715,7 @@ export class AssetGrid implements OnInit, OnDestroy {
    * - Owner of Group only
    */
   private removeFromGroup(assetsToRemove: Thumbnail[], clearRestricted?: boolean): void {
-    for(let i = 0; i < assetsToRemove.length; i++) {
+    for (let i = 0; i < assetsToRemove.length; i++) {
       let assetId = assetsToRemove[i].objectId
       this.ig.items.splice(this.ig.items.indexOf(assetId), 1)
     }
