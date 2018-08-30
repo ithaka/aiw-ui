@@ -319,13 +319,17 @@ export class AssetPage implements OnInit, OnDestroy {
                     // Set image share link
                     this.generateImgURL(this.assetIds[0])
                 }
+                
+                // Set requestId for logging purposes
+                if(routeParams['requestId']){
+                    this.requestId = routeParams['requestId']
+                }
 
-                // For "Go Back to Results" and pagination, for asset that is not from image group look for requestId to set prevRouteParams
-                if (routeParams['requestId'] || routeParams['groupId'] || routeParams['prevRouteTS']) {
+                // For "Back to Results" link and pagination, look for prevRouteTS to set prevRouteParams
+                if (routeParams['prevRouteTS']) {
                     // For "Go Back to Results"
                     // Get map of previous search params
                     let prevRoutesMap = this._session.get('prevRouteParams')
-                    this.requestId = routeParams['requestId']
 
                     // Reference previous search params for the prevRouteTS
                     let prevRouteParams = prevRoutesMap[routeParams['prevRouteTS']]
