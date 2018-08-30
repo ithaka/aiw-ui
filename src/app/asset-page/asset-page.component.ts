@@ -351,6 +351,8 @@ export class AssetPage implements OnInit, OnDestroy {
             })
         );
 
+      let dl = this.downloadViewFromImageService()
+
         // Get latest set of results with at least one asset
         // this.prevAssetResults = this._assets.getRecentResults();
 
@@ -474,8 +476,6 @@ export class AssetPage implements OnInit, OnDestroy {
                     }
                     this.assets[0].formattedMetadata['Collection'] = splitValues
                 }
-
-
 
                 // Load related results from jstor
                 if (this.relatedResFlag) {
@@ -781,29 +781,30 @@ export class AssetPage implements OnInit, OnDestroy {
         }
     }
 
-    private downloadViewFromImageServer(): string  {
+    private downloadViewFromImageService(): string  {
       let imageServer = 'http://imgserver.artstor.net/'
       let hostname = document.location.origin
-      let url = imageServer + this.buildDownloadViewURL()
+      let url = imageServer + this.buildDownloadViewURL(this.assets[0])
       let result = hostname + 'api/download?imgid=' + this.assets[0].id + '&url=' + encodeURIComponent(url)
       console.log('!!!!!', result, '!!!!!')
       return result
     }
 
-    private buildDownloadViewURL(): string {
+    private buildDownloadViewURL(asset: Asset): string {
 
       let downloadViewLink: string
-      let asset = this.assets[0]
 
-      if (asset.typeName === 'image' && asset.viewportDimensions.contentSize) {
+      console.log(this.assets[0])
+
+      //if (asset.assetTypeName() === 'image' && asset.viewportDimensions.contentSize) {
         // Full source image size (max output possible)
-        let fullWidth = Math.floor(asset.viewportDimensions.contentSize.x)
-        let fullY = Math.floor(asset.viewportDimensions.contentSize.y)
+        let fullWidth = Math.floor(this.assets[0].viewportDimensions.contentSize.x)
+        let fullY = Math.floor(this.assets[0].viewportDimensions.contentSize.y)
         // Zoom is a factor of the image's full width
-        let zoom = Math.floor(asset.viewportDimensions.zoom)
+        let zoom = Math.floor(this.assets[0].viewportDimensions.zoom)
         // Viewport dimensions (size of cropped image)
-        let viewX = Math.floor(asset.viewportDimensions.containerSize.x)
-        let viewY = Math.floor(asset.viewportDimensions.containerSize.y)
+        let viewX = Math.floor(this.assets[0].viewportDimensions.containerSize.x)
+        let viewY = Math.floor(this.assets[0].viewportDimensions.containerSize.y)
         // Dimensions of the source size of the cropped image
         let zoomX = Math.floor(fullWidth / zoom)
         let zoomY = Math.floor(zoomX * (viewY / viewX))
@@ -815,12 +816,12 @@ export class AssetPage implements OnInit, OnDestroy {
           zoomY = fullY
         }
         // Positioning of the viewport's crop
-        let xOffset = Math.floor((asset.viewportDimensions.center.x * fullWidth) - (zoomX / 2))
-        let yOffset = Math.floor((asset.viewportDimensions.center.y * fullWidth) - (zoomY / 2))
+        let xOffset = Math.floor((this.assets[0].viewportDimensions.center.x * fullWidth) - (zoomX / 2))
+        let yOffset = Math.floor((this.assets[0].viewportDimensions.center.y * fullWidth) - (zoomY / 2))
 
         // Generate the view url from tilemap service
-        downloadViewLink = asset.tileSource.replace('info.json', '') + xOffset + ',' + yOffset + ',' + zoomX + ',' + zoomY + '/' + viewX + ',' + viewY + '/0/native.jpg'
-      }
+        downloadViewLink = this.assets[0].tileSource.replace('info.json', '') + xOffset + ',' + yOffset + ',' + zoomX + ',' + zoomY + '/' + viewX + ',' + viewY + '/0/native.jpg'
+      //}
 
       return downloadViewLink
     }
@@ -861,7 +862,7 @@ export class AssetPage implements OnInit, OnDestroy {
     /** Calls downloadViewBlob in AssetSearch service to retrieve blob file,
         and then sets generatedViewUrl to this local reference. **/
 
-    private prepDownloadView(): void {
+    private prepDownloadView(asset: Asset): void {
 
       // Do nothing if this is not an image
       if (!this.assets[0].typeName || !this.assets[0].typeName.length) {
@@ -872,11 +873,18 @@ export class AssetPage implements OnInit, OnDestroy {
 
       // Revoke the browser reference to a previously generated view download blob URL
       if (this.blobURL.length) {
+        console.log(this.blobURL, 'Blob URL before revoked')
           this.URL.revokeObjectURL(this.blobURL)
+        console.log(this.blobURL, 'Blob URL after revoked')
+      }
+      else {
+        console.log('Blob URL length is 0', this.blobURL)
       }
 
-      let downloadLink = this.buildDownloadViewURL()
-      this.runDownloadView(downloadLink)
+      let downloadLink = this.buildDownloadViewURL(asset)
+      console.log('downloadLink: ', downloadLink)
+      let return_val_of_runDownloadView = this.runDownloadView(downloadLink)
+      console.log('return_val_of_runDownloadView: ', return_val_of_runDownloadView)
     }
 
     /**
@@ -935,7 +943,7 @@ export class AssetPage implements OnInit, OnDestroy {
 
         // If MS Browser, call prepDownloadView here
         if (this.isMSAgent) {
-          this.prepDownloadView()
+          this.prepDownloadView(this.assets[0])
         }
     }
 

@@ -129,6 +129,9 @@ export class Asset {
     get description(): string {
         return this.formattedMetadata.Description[0] || ''
     }
+    get assetTypeName(): string {
+      return this.typeName
+    }
 
     /**
      * Sets up the Asset object with needed properties
