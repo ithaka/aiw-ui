@@ -785,7 +785,6 @@ export class AssetPage implements OnInit, OnDestroy {
     /**
      * runDownloadView handles the DownloadView results from AssetSearch.downloadViewBlob
      * @param dlink String from generateDownloadView
-     * @param retryCount Number, tracks recursive calls of this function for download tries
      */
     private runDownloadView(dlink: string): boolean {
       let result: boolean = false
