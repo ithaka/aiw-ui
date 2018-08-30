@@ -79,6 +79,7 @@ export class AssetPage implements OnInit, OnDestroy {
     private generatedImgURL: string = ''
     private generatedViewURL: SafeUrl | string = ''
     private generatedFullURL: string = ''
+    public downloadViewReady: boolean = false
     // Used for agree modal input, changes based on selection
     private downloadUrl: any
     private downloadName: string
@@ -782,18 +783,6 @@ export class AssetPage implements OnInit, OnDestroy {
     }
 
     /**
-     * Set state of downloadViewButton on or off
-     * @param on 1 for enabled, 0 for class .disabled
-     */
-    private setDownloadViewButton(on: Number) {
-      if (on)
-        document.getElementById('downloadViewLink').classList.remove('disabled')
-      else
-        document.getElementById('downloadViewLink').classList.add('disabled')
-    }
-
-
-    /**
      * runDownloadView handles the DownloadView results from AssetSearch.downloadViewBlob
      * @param dlink String from generateDownloadView
      */
@@ -812,11 +801,11 @@ export class AssetPage implements OnInit, OnDestroy {
                   this.generatedViewURL = this._sanitizer.bypassSecurityTrustUrl(this.blobURL)
               }
               this.downloadLoading = false
-              this.setDownloadViewButton(1)
+              this.downloadViewReady = true
           }},
           (err) => {
             this.downloadLoading = false
-            this.setDownloadViewButton(1)
+            this.downloadViewReady = false
             this.showServerErrorModal = true
 
           })
@@ -868,7 +857,7 @@ export class AssetPage implements OnInit, OnDestroy {
             let downloadLink: string = asset.tileSource.replace('info.json', '') + xOffset + ',' + yOffset + ',' + zoomX + ',' + zoomY + '/' + viewX + ',' + viewY + '/0/native.jpg'
 
             // Disable download view link button until file is ready
-            this.setDownloadViewButton(0)
+            this.downloadViewReady = false
 
             // Call runDownloadView after 1 sec, downloads local view image blob file to browser
             setTimeout(() => {
