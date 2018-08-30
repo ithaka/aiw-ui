@@ -509,7 +509,6 @@ export class AssetGrid implements OnInit, OnDestroy {
   private constructNavigationCommands (thumbnail: Thumbnail) {
     let assetId = thumbnail.objectId ? thumbnail.objectId : thumbnail.artstorid
     let params: any = {
-      requestId: this._search.latestSearchRequestId,
       prevRouteTS: this.prevRouteTS // for fetching previous route params from session storage, on asset page
     }
     thumbnail.iap && (params.iap = 'true')

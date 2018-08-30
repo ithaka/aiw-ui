@@ -128,8 +128,6 @@ export class AssetPage implements OnInit, OnDestroy {
     private showDeletePCModal: boolean = false
     private downloadLoading: boolean = false
 
-    private requestId: string = ''
-
     private uiMessages: {
         deleteFailure?: boolean
     } = {}
@@ -248,8 +246,6 @@ export class AssetPage implements OnInit, OnDestroy {
                             if (this.assetGroupId) {
                                 queryParams['groupId'] = this.assetGroupId
                             }
-                            // Maintain the requestId route parameter for next page
-                            queryParams['requestId'] = this.requestId
                             this._router.navigate(['/asset', this.prevAssetResults.thumbnails[0][this.assetIdProperty], queryParams]);
                         }
                     }
@@ -267,8 +263,6 @@ export class AssetPage implements OnInit, OnDestroy {
                             if (this.assetGroupId) {
                                 queryParams['groupId'] = this.assetGroupId
                             }
-                            // Maintain the requestId route parameter for previous page
-                            queryParams['requestId'] = this.requestId
                             this._router.navigate(['/asset', this.prevAssetResults.thumbnails[this.prevAssetResults.thumbnails.length - 1][this.assetIdProperty], queryParams]);
                         }
                     }
@@ -318,11 +312,6 @@ export class AssetPage implements OnInit, OnDestroy {
 
                     // Set image share link
                     this.generateImgURL(this.assetIds[0])
-                }
-                
-                // Set requestId for logging purposes
-                if(routeParams['requestId']){
-                    this.requestId = routeParams['requestId']
                 }
 
                 // For "Back to Results" link and pagination, look for prevRouteTS to set prevRouteParams
@@ -571,9 +560,6 @@ export class AssetPage implements OnInit, OnDestroy {
                     queryParams['groupId'] = this.assetGroupId
                 }
 
-                // Maintain the requestId route parameter for previous page
-                queryParams['requestId'] = this.requestId
-
                 this._router.navigate(['/asset', this.prevAssetResults.thumbnails[prevAssetIndex][this.assetIdProperty], queryParams]);
             }
             else if (this.assetIndex == 0) {
@@ -594,9 +580,6 @@ export class AssetPage implements OnInit, OnDestroy {
                 if (this.assetGroupId) {
                     queryParams['groupId'] = this.assetGroupId
                 }
-
-                // Maintain the requestId route parameter for next page
-                queryParams['requestId'] = this.requestId
 
                 this._router.navigate(['/asset', this.prevAssetResults.thumbnails[nextAssetIndex][this.assetIdProperty], queryParams]);
             }
