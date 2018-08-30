@@ -79,6 +79,7 @@ export class AssetPage implements OnInit, OnDestroy {
     private generatedImgURL: string = ''
     private generatedViewURL: SafeUrl | string = ''
     private generatedFullURL: string = ''
+    public downloadViewReady: boolean = false
     // Used for agree modal input, changes based on selection
     private downloadUrl: any
     private downloadName: string
@@ -781,21 +782,16 @@ export class AssetPage implements OnInit, OnDestroy {
         }
     }
 
-
     /**
      * runDownloadView handles the DownloadView results from AssetSearch.downloadViewBlob
      * @param dlink String from generateDownloadView
-     * @param retryCount Number, tracks recursive calls of this function for download tries
      */
-    private runDownloadView(dlink: string): boolean {
-      let result: boolean = false
-
+    private runDownloadView(dlink: string): Subscription {
       // Download generated jpg as local blob file
-      let blob = this._search.downloadViewBlob(dlink)
+      return this._search.downloadViewBlob(dlink)
         .take(1)
         .subscribe((blob) => {
-
-          if (blob && blob.size)
+          if (blob.size > 0) {
               if (this.isMSAgent) {
                   this.downloadLoading = false
                   this.navigator.msSaveBlob(blob, 'download.jpg')
@@ -805,21 +801,21 @@ export class AssetPage implements OnInit, OnDestroy {
                   this.generatedViewURL = this._sanitizer.bypassSecurityTrustUrl(this.blobURL)
               }
               this.downloadLoading = false
-              result = true
-          },
+              this.downloadViewReady = true
+          }},
           (err) => {
-            result = false
             this.downloadLoading = false
+            this.downloadViewReady = false
             this.showServerErrorModal = true
+
           })
 
-      return result
     }
 
     /** Calls downloadViewBlob in AssetSearch service to retrieve blob file,
         and then sets generatedViewUrl to this local reference. **/
 
-    private genDownloadViewLink(): void {
+    private genDownloadViewLink() {
 
         // Do nothing if this is not an image
         if (!this.assets[0].typeName || !this.assets[0].typeName.length) {
@@ -860,8 +856,13 @@ export class AssetPage implements OnInit, OnDestroy {
             // Generate the view url from tilemap service
             let downloadLink: string = asset.tileSource.replace('info.json', '') + xOffset + ',' + yOffset + ',' + zoomX + ',' + zoomY + '/' + viewX + ',' + viewY + '/0/native.jpg'
 
-            // Call runDownloadView, downloads local view image blob file to browser
-            this.runDownloadView(downloadLink)
+            // Disable download view link button until file is ready
+            this.downloadViewReady = false
+
+            // Call runDownloadView after 1 sec, downloads local view image blob file to browser
+            setTimeout(() => {
+              this.runDownloadView(downloadLink)
+            }, 1000);
         }
     }
 
