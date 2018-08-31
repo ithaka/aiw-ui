@@ -8,29 +8,29 @@
           .form-group
             label Email Address
             p.form-control-static {{ user.username }}
-          // Change Password Form
-          form#changePasswordForm([formGroup]="passForm", (ngSubmit)="changePass(passForm.value)")
-            .form-group([class.has-danger]="submitted && passForm.controls['oldPass'].hasError('required')")
-              label(for="inputOldPassword") {{ 'ACCOUNT.CHANGE_PASS.LABELS.OLD_PASS' | translate }}
-              input#inputOldPassword.form-control([formControl]="passForm.controls['oldPass']", type="password")
-              div#msgOldPassRequired.form-control-feedback(*ngIf="submitted && passForm.controls['oldPass'].hasError('required')")
-                | {{ 'ACCOUNT.CHANGE_PASS.OLD_PASS_REQUIRED' | translate }}
-            .form-group([class.has-danger]="submitted && passForm.controls['newPass'].hasError('required')", [class.has-warning]="passForm.controls['newPass'].dirty && passForm.controls['newPass'].hasError('required') || passForm.controls['newPass'].hasError('minlength')")
-              label(for="inputNewPassword") {{ 'ACCOUNT.CHANGE_PASS.LABELS.NEW_PASS' | translate }}
-              input#inputNewPassword.form-control([formControl]="passForm.controls['newPass']", type="password")
-              div#msgNewPassMinLength.form-control-feedback(*ngIf="passForm.controls['newPass'].dirty && passForm.controls['newPass'].hasError('required') || passForm.controls['newPass'].hasError('minlength')")
-                | {{ 'ACCOUNT.CHANGE_PASS.MIN_LENGTH_PROMPT' | translate }}
-              div#msgNewPassRequired.form-control-feedback(*ngIf="submitted && passForm.controls['newPass'].hasError('required')")
-                | {{ 'ACCOUNT.CHANGE_PASS.NEW_PASS_REQUIRED' | translate }}
-            .form-group([class.has-danger]="submitted && passForm.controls['newPassConfirm'].hasError('required')", [class.has-warning]="passForm.hasError('passwordMismatch')")
-              label(for="inputOldPassword") {{ 'ACCOUNT.CHANGE_PASS.LABELS.NEW_PASS_CONFIRM' | translate }}
-              input#inputNewPasswordConfirm.form-control([formControl]="passForm.controls['newPassConfirm']", type="password")
-              div#msgPassConfirmError.form-control-feedback(*ngIf="passForm.hasError('passwordMismatch')") {{ 'ACCOUNT.CHANGE_PASS.PASS_CONFIRM_ERROR' | translate }}
-            .form-group([class.has-danger]="serviceResponses.generalError || serviceResponses.wrongPass", [class.has-success]="serviceResponses.success")
-              button#btnSubmitChangePassword.btn.btn-primary([class.loading]="changePassLoading", type="submit", name="action") Update
-              .form-control-feedback(*ngIf="serviceResponses.success") {{ 'ACCOUNT.CHANGE_PASS.CHANGE_SUCCESS' | translate }}
-              .form-control-feedback(*ngIf="serviceResponses.generalError") {{ 'ACCOUNT.CHANGE_PASS.GENERAL_ERROR' | translate }}
-              .form-control-feedback(*ngIf="serviceResponses.wrongPass") {{ 'ACCOUNT.CHANGE_PASS.WRONG_PASS_ERROR' | translate }}
+          //- // Change Password Form
+          //- form#changePasswordForm([formGroup]="passForm", (ngSubmit)="changePass(passForm.value)")
+          //-   .form-group([class.has-danger]="submitted && passForm.controls['oldPass'].hasError('required')")
+          //-     label(for="inputOldPassword") {{ 'ACCOUNT.CHANGE_PASS.LABELS.OLD_PASS' | translate }}
+          //-     input#inputOldPassword.form-control([formControl]="passForm.controls['oldPass']", type="password")
+          //-     div#msgOldPassRequired.form-control-feedback(*ngIf="submitted && passForm.controls['oldPass'].hasError('required')")
+          //-       | {{ 'ACCOUNT.CHANGE_PASS.OLD_PASS_REQUIRED' | translate }}
+          //-   .form-group([class.has-danger]="submitted && passForm.controls['newPass'].hasError('required')", [class.has-warning]="passForm.controls['newPass'].dirty && passForm.controls['newPass'].hasError('required') || passForm.controls['newPass'].hasError('minlength')")
+          //-     label(for="inputNewPassword") {{ 'ACCOUNT.CHANGE_PASS.LABELS.NEW_PASS' | translate }}
+          //-     input#inputNewPassword.form-control([formControl]="passForm.controls['newPass']", type="password")
+          //-     div#msgNewPassMinLength.form-control-feedback(*ngIf="passForm.controls['newPass'].dirty && passForm.controls['newPass'].hasError('required') || passForm.controls['newPass'].hasError('minlength')")
+          //-       | {{ 'ACCOUNT.CHANGE_PASS.MIN_LENGTH_PROMPT' | translate }}
+          //-     div#msgNewPassRequired.form-control-feedback(*ngIf="submitted && passForm.controls['newPass'].hasError('required')")
+          //-       | {{ 'ACCOUNT.CHANGE_PASS.NEW_PASS_REQUIRED' | translate }}
+          //-   .form-group([class.has-danger]="submitted && passForm.controls['newPassConfirm'].hasError('required')", [class.has-warning]="passForm.hasError('passwordMismatch')")
+          //-     label(for="inputOldPassword") {{ 'ACCOUNT.CHANGE_PASS.LABELS.NEW_PASS_CONFIRM' | translate }}
+          //-     input#inputNewPasswordConfirm.form-control([formControl]="passForm.controls['newPassConfirm']", type="password")
+          //-     div#msgPassConfirmError.form-control-feedback(*ngIf="passForm.hasError('passwordMismatch')") {{ 'ACCOUNT.CHANGE_PASS.PASS_CONFIRM_ERROR' | translate }}
+          //-   .form-group([class.has-danger]="serviceResponses.generalError || serviceResponses.wrongPass", [class.has-success]="serviceResponses.success")
+          //-     button#btnSubmitChangePassword.btn.btn-primary([class.loading]="changePassLoading", type="submit", name="action") Update
+          //-     .form-control-feedback(*ngIf="serviceResponses.success") {{ 'ACCOUNT.CHANGE_PASS.CHANGE_SUCCESS' | translate }}
+          //-     .form-control-feedback(*ngIf="serviceResponses.generalError") {{ 'ACCOUNT.CHANGE_PASS.GENERAL_ERROR' | translate }}
+          //-     .form-control-feedback(*ngIf="serviceResponses.wrongPass") {{ 'ACCOUNT.CHANGE_PASS.WRONG_PASS_ERROR' | translate }}
           br
           a.link(href="http://support.artstor.org/?article=user-preferences", target="_blank") Account Help
 ang-change-password-modal
