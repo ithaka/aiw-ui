@@ -774,6 +774,17 @@ export class AssetPage implements OnInit, OnDestroy {
         }
     }
 
+    private checkWindowsBlobReady(): Boolean {
+      let el = document.getElementById('downloadViewLink')
+      if (el.getAttribute('href').includes('blob')) {
+        return true
+      }
+      // Check if blob is readyvon windows, 5 times a second
+      setTimeout(() => {
+        this.checkWindowsBlobReady()
+      }, 200);
+    }
+
     /**
      * runDownloadView handles the DownloadView results from AssetSearch.downloadViewBlob
      * @param dlink String from generateDownloadView
@@ -789,6 +800,7 @@ export class AssetPage implements OnInit, OnDestroy {
                   setTimeout(() => {
                     this.downloadViewReady = true
                     this.downloadLoading = false
+                    this.checkWindowsBlobReady()
                     this.navigator.msSaveBlob(blob, 'download.jpg')
                   }, 2000);
               }
