@@ -129,6 +129,8 @@ export class AssetPage implements OnInit, OnDestroy {
     private showDeletePCModal: boolean = false
     private downloadLoading: boolean = false
 
+    private prevRouteTS: string = '' // Used to track the (Timestamp) key for previous route params in session storage
+
     private uiMessages: {
         deleteFailure?: boolean
     } = {}
@@ -317,12 +319,13 @@ export class AssetPage implements OnInit, OnDestroy {
 
                 // For "Back to Results" link and pagination, look for prevRouteTS to set prevRouteParams
                 if (routeParams['prevRouteTS']) {
+                    this.prevRouteTS = routeParams['prevRouteTS']
                     // For "Go Back to Results"
                     // Get map of previous search params
                     let prevRoutesMap = this._session.get('prevRouteParams')
 
                     // Reference previous search params for the prevRouteTS
-                    let prevRouteParams = prevRoutesMap[routeParams['prevRouteTS']]
+                    let prevRouteParams = prevRoutesMap[this.prevRouteTS]
 
                     // Set previous route params if available, showing "Back to Results" link
                     if (prevRoutesMap && prevRouteParams && (prevRouteParams.length > 0)) {
@@ -557,6 +560,9 @@ export class AssetPage implements OnInit, OnDestroy {
             if ((this.assetIndex > 0)) {
                 let prevAssetIndex = this.quizShuffle ? Math.floor(Math.random() * this.prevAssetResults.thumbnails.length) + 0 : this.assetIndex - 1; // Assign random thumbnail index if quiz shuffle is true
                 let queryParams = {}
+                if (this.prevRouteTS) {
+                    queryParams['prevRouteTS'] = this.prevRouteTS
+                }
                 if (this.assetGroupId) {
                     queryParams['groupId'] = this.assetGroupId
                 }
@@ -578,6 +584,9 @@ export class AssetPage implements OnInit, OnDestroy {
             if ((this.prevAssetResults.thumbnails) && (this.assetIndex < (this.prevAssetResults.thumbnails.length - 1))) {
                 let nextAssetIndex = this.quizShuffle ? Math.floor(Math.random() * this.prevAssetResults.thumbnails.length) + 0 : this.assetIndex + 1; // Assign random thumbnail index if quiz shuffle is true
                 let queryParams = {}
+                if (this.prevRouteTS) {
+                    queryParams['prevRouteTS'] = this.prevRouteTS
+                }
                 if (this.assetGroupId) {
                     queryParams['groupId'] = this.assetGroupId
                 }
