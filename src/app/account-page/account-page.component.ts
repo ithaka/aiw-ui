@@ -15,8 +15,7 @@ export class AccountPage implements OnInit {
   private institutionObj: any = {};
   private subscriptions: Subscription[] = [];
 
-  // private passForm: FormGroup;
-  private submitted: boolean = false;
+  private showChangePassModal: boolean = false
 
   constructor(private _auth: AuthService, private _router: Router) {
   }
