@@ -246,6 +246,9 @@ export class AssetPage implements OnInit, OnDestroy {
                             this.assetNumber = this._assets.currentLoadedParams.page ? this.assetIndex + 1 + ((this._assets.currentLoadedParams.page - 1) * this._assets.currentLoadedParams.size) : this.assetIndex + 1;
 
                             let queryParams = {}
+                            if (this.prevRouteTS) {
+                                queryParams['prevRouteTS'] = this.prevRouteTS
+                            }
                             if (this.assetGroupId) {
                                 queryParams['groupId'] = this.assetGroupId
                             }
@@ -263,6 +266,9 @@ export class AssetPage implements OnInit, OnDestroy {
                             this.assetNumber = this._assets.currentLoadedParams.page ? this.assetIndex + 1 + ((this._assets.currentLoadedParams.page - 1) * this._assets.currentLoadedParams.size) : this.assetIndex + 1;
 
                             let queryParams = {}
+                            if (this.prevRouteTS) {
+                                queryParams['prevRouteTS'] = this.prevRouteTS
+                            }
                             if (this.assetGroupId) {
                                 queryParams['groupId'] = this.assetGroupId
                             }
