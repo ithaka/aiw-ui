@@ -9,7 +9,7 @@
     #searchFilterList.mb-3.filter-list.driver-find-group
       h3.pt-2 Groups
         = " "
-        ang-guide-tour([steps]="steps")
+        ang-guide-tour([steps]="steps", [showOnInit]="showTourOnStart")
       hr
       div(*ngFor="let filter of groupFilterArray")
         button.filter.filter--tag#group--list(

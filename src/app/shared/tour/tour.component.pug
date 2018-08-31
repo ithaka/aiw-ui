@@ -4,10 +4,10 @@ a.contextual-help(title="How do I use image groups?", (click)="startModalShow=tr
         .modal-content
             .modal-header
                 h4.modal-title We've made some updates to image groups!
-                button.close(type="button", (click)="startModalShow=false", aria-label="Close")
+                button.close(type="button", (click)="closeTourModal()", aria-label="Close")
                     span(aria-hidden="true") &times;
             .modal-body
                 p We've made a few adjustments to give you a better experience with your groups. Take the tour to learn more about the changes. 
             .modal-footer
-                button.btn.btn-secondary(tabindex="4", (click)="startModalShow=false") NOT NOW
+                button.btn.btn-secondary(tabindex="4", (click)="closeTourModal()") NOT NOW
                 button.btn.btn-primary(tabindex="3", (click)="startTour()") TAKE THE TOUR
