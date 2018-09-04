@@ -33,8 +33,8 @@ export class ScriptService {
                 // load script
                 let script = document.createElement('script')
                 script.type = 'text/javascript'
-                script['async'] = 'true'
-                script['charset'] = 'utf-8'
+                script.async = 'true'
+                script.charset = 'utf-8'
                 script.src = this.scripts[name].src
                 script.id = name
                 if (script.readyState) {  // IE
