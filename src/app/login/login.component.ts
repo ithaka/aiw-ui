@@ -18,7 +18,6 @@ declare var initPath: string
 })
 export class Login implements OnInit, OnDestroy {
 
-  private siteId: string = ""
   private copyBase: string = ''
 
   // Set our default values
@@ -66,7 +65,6 @@ export class Login implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.siteId = this._app.config.siteID
     /*
      * Subscribe to route params
      * - Set featureFlag in Auth service if the route param contains featureFlag
@@ -118,11 +116,16 @@ export class Login implements OnInit, OnDestroy {
         console.error(error);
       });
 
-    // this handles showing the register link for only ip auth'd users
+    /**
+     * This handles showing the register link for only ip auth'd users
+     *
+     * @todo - Should we have to call gtUserInfo here?
+     * We don't need to reload user info that we should alreay have.
+     */
     this._auth.getUserInfo()
       .take(1)
       .subscribe((res) => {
-        if ((res.remoteaccess === false) && res.user && (this.siteId !== 'SAHARA')) {
+        if ((res.remoteaccess === false) && res.user && (!this._app.config.disableIPAuth)) {
           this.showRegister = true
         }
       }, (err) => {
