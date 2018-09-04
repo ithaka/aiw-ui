@@ -31,10 +31,12 @@ export class ScriptService {
             }
             else {
                 // load script
-                let script = document.createElement('script');
-                script.type = 'text/javascript';
-                script.src = this.scripts[name].src;
-                script.id = name;
+                let script = document.createElement('script')
+                script.type = 'text/javascript'
+                script['async'] = 'true'
+                script['charset'] = 'utf-8'
+                script.src = this.scripts[name].src
+                script.id = name
                 if (script.readyState) {  // IE
                     script.onreadystatechange = () => {
                         if (script.readyState === 'loaded' || script.readyState === 'complete') {
