@@ -145,6 +145,9 @@ export class AssetGrid implements OnInit, OnDestroy {
   // Image group
   private ig: any = {};
 
+  // Used as a key to save the previous route params in session storage (incase of image group)
+  private prevRouteTS: string = ''
+
   private _storage;
   private _session;
 
@@ -345,8 +348,10 @@ export class AssetGrid implements OnInit, OnDestroy {
 
           this._session.set('totalAssets', this.totalAssets ? this.totalAssets : 1)
 
-          // Tie prevRouteParams array with requestId before sending to asset page
-          let id: string = this._search.latestSearchRequestId ? this._search.latestSearchRequestId.toString() : 'undefined'
+          // Tie prevRouteParams array with previousRouteTS (time stamp) before sending to asset page
+          this.prevRouteTS = Date.now().toString()
+          let id: string = this.prevRouteTS
+          
           let prevRouteParams = this._session.get('prevRouteParams') || {}
           prevRouteParams[id] = this.route.snapshot.url
           this._session.set('prevRouteParams', prevRouteParams)
@@ -504,7 +509,7 @@ export class AssetGrid implements OnInit, OnDestroy {
   private constructNavigationCommands (thumbnail: Thumbnail) {
     let assetId = thumbnail.objectId ? thumbnail.objectId : thumbnail.artstorid
     let params: any = {
-      requestId: this._search.latestSearchRequestId
+      prevRouteTS: this.prevRouteTS // for fetching previous route params from session storage, on asset page
     }
     thumbnail.iap && (params.iap = 'true')
     this.ig && this.ig.id && (params.groupId = this.ig.id)
