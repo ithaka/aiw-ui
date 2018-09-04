@@ -388,6 +388,9 @@ export class AssetPage implements OnInit, OnDestroy {
 
         // MS Browser Agent ?
         this.isMSAgent = this.navigator.msSaveOrOpenBlob !== undefined
+        if (this.isMSAgent) {
+          this.downloadViewReady = true // enable button
+        }
 
     } // OnInit
 
@@ -797,23 +800,25 @@ export class AssetPage implements OnInit, OnDestroy {
         .subscribe((blob) => {
           if (blob.size > 0) {
               if (this.isMSAgent) {
-                  this.downloadLoading = false
-                  this.navigator.msSaveBlob(blob, 'download.jpg')
+                  // We give MS Browsers an extra pause of 2 secs
+                  setTimeout(() => {
+                    this.downloadViewReady = true
+                    this.downloadLoading = false
+                    this.navigator.msSaveBlob(blob, 'download.jpg')
+                  }, 2000);
               }
               else {
                   this.blobURL = this.URL.createObjectURL(blob)
                   this.generatedViewURL = this._sanitizer.bypassSecurityTrustUrl(this.blobURL)
+                  this.downloadViewReady = true
+                  this.downloadLoading = false
               }
-              this.downloadLoading = false
-              this.downloadViewReady = true
           }},
           (err) => {
             this.downloadLoading = false
             this.downloadViewReady = false
             this.showServerErrorModal = true
-
           })
-
     }
 
     /** Calls downloadViewBlob in AssetSearch service to retrieve blob file,
@@ -926,6 +931,7 @@ export class AssetPage implements OnInit, OnDestroy {
 
         // If MS Browser, call genDownloadViewLink here
         if (this.isMSAgent) {
+            this.downloadViewReady = false
             this.genDownloadViewLink()
         }
     }
