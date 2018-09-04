@@ -18,6 +18,7 @@ declare var initPath: string
 })
 export class Login implements OnInit, OnDestroy {
 
+  private siteId: string = ""
   private copyBase: string = ''
 
   // Set our default values
@@ -65,6 +66,7 @@ export class Login implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.siteId = this._app.config.siteID
     /*
      * Subscribe to route params
      * - Set featureFlag in Auth service if the route param contains featureFlag
@@ -120,7 +122,7 @@ export class Login implements OnInit, OnDestroy {
     this._auth.getUserInfo()
       .take(1)
       .subscribe((res) => {
-        if (res.remoteaccess === false && res.user) {
+        if ((res.remoteaccess === false) && res.user && (this.siteId !== 'SAHARA')) {
           this.showRegister = true
         }
       }, (err) => {
