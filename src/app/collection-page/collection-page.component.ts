@@ -4,10 +4,10 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { Subscription }   from 'rxjs/Subscription';
 
 // Internal Dependencies
-// import { CollectionService } from './collection.service';
 import { AssetService } from './../shared/assets.service';
 import { AuthService } from './../shared/auth.service';
 import { TitleService } from '../shared/title.service';
+import { ScriptService } from '../shared';
 
 @Component({
   selector: 'ang-collection-page',
@@ -41,10 +41,19 @@ export class CollectionPage implements OnInit, OnDestroy {
     private _router: Router,
     private route: ActivatedRoute,
     private http: HttpClient,
-    private _title: TitleService
+    private _title: TitleService,
+    private _script: ScriptService
   ) {}
 
   ngOnInit() {
+    /** ETHNIO SCRIPT */
+    this._script.loadScript('ethnio')
+      .then( data => {
+        console.log("Loaded script", data)
+      })
+    .catch( error => console.error(error) )
+    /** ETHNIO SCRIPT */
+
     this.subscriptions.push(
       this._auth.currentUser.subscribe((user) => {
         // userSessionFresh: Do not attempt to call collection endpoint until we know user object is fresh
