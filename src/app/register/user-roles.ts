@@ -1,4 +1,4 @@
-export const USER_ROLES = [{
+export const USER_ROLES: UserRolesAndDepts[] = [{
   "id": "ROLE_CU_ADMIN",
   "desc": "College/University Administrator"
 }, {
@@ -57,7 +57,7 @@ export const USER_ROLES = [{
   "desc": "Other"
 }]
 
-export const USER_DEPTS = [{
+export const USER_DEPTS: UserRolesAndDepts[] = [{
   "id": "DEPT_AMERI_STUDIES",
   "desc": "American Studies"
 }, {
@@ -178,3 +178,8 @@ export const USER_DEPTS = [{
   "id": "DEPT_OTHER",
   "desc": "Other"
 }]
+
+export interface UserRolesAndDepts {
+  id: string
+  desc: string
+}

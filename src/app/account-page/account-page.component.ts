@@ -5,6 +5,7 @@ import { Router } from '@angular/router'
 // Project Dependencies
 import { AuthService } from '../shared'
 import { FormBuilder, FormGroup } from '@angular/forms'
+import { USER_ROLES, USER_DEPTS, UserRolesAndDepts } from './../register/user-roles'
 
 @Component({
   selector: 'app-account-page',
@@ -18,6 +19,11 @@ export class AccountPage implements OnInit {
 
   private showChangePassModal: boolean = false
   private accountUpdateForm: FormGroup
+  private updateSubmitted: boolean = false
+
+  // update form select field values
+  private userDepts: UserRolesAndDepts[] = []
+  private userRoles: UserRolesAndDepts[] = []
 
   constructor(
     private _auth: AuthService,
@@ -29,8 +35,8 @@ export class AccountPage implements OnInit {
     this.accountUpdateForm = _fb.group({
       firstName: this.user.firstName,
       lastName: this.user.lastName,
-      departmentRole: null,
-      department: null
+      dept: null,
+      role: null
     })
   }
 
@@ -43,11 +49,19 @@ export class AccountPage implements OnInit {
       this._auth.getInstitution().subscribe((institutionObj) => {
         this.institutionObj = institutionObj
       })
-    );
+    )
+
+    // Issues with unauthorized access to the service, and the fact that the data NEVER changes, led us to hardcode these values:
+    this.userDepts = USER_DEPTS
+    this.userRoles = USER_ROLES
   }
 
   ngOnDestroy() {
     this.subscriptions.forEach((sub) => { sub.unsubscribe() });
+  }
+
+  submitAccountUpdate(form: FormGroup): void {
+
   }
 
 }

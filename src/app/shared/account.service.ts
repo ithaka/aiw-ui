@@ -11,8 +11,8 @@ export class AccountService {
     const updatableFields: string[] = [
       'firstName',
       'lastName',
-      'departmentRole',
-      'department',
+      'role',
+      'dept',
       /**
        * the proceeding two fields are used for testing. In order to create a pact that tests
        *  invalid field errors, we allow these two fields to be passed. Their names are not field
