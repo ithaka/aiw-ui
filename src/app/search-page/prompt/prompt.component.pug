@@ -6,7 +6,7 @@
       div(style="margin-bottom:2px;")
         p#promptText These are images in public collections. There's more content available for participating institutions.
       div
-        a(href='/#/login') Log in through your institution to begin
+        a(href='/#/login', (click)="trackUnaffiliatedInstLogin()") Log in through your institution to begin
     .col-sm-3
       .mobile--hide
         .row
