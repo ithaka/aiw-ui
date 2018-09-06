@@ -779,7 +779,7 @@ export class AssetPage implements OnInit, OnDestroy {
       if (el.getAttribute('href').includes('blob')) {
         return true
       }
-      // Check if blob is readyvon windows, 5 times a second
+      // Check if blob is ready on windows, 5 times a second
       setTimeout(() => {
         this.checkWindowsBlobReady()
       }, 200);
@@ -801,7 +801,7 @@ export class AssetPage implements OnInit, OnDestroy {
                     this.downloadViewReady = true
                     this.downloadLoading = false
                     this.checkWindowsBlobReady()
-                    this.navigator.msSaveBlob(blob, 'download.jpg')
+                    this.navigator.msSaveOrOpenBlob(blob, 'download.jpg')
                   }, 2000);
               }
               else {
@@ -831,9 +831,11 @@ export class AssetPage implements OnInit, OnDestroy {
         let asset = this.assets[0]
         this.downloadLoading = true // sets to false on success of runDownloadView
 
-        // Revoke the browser reference to a previously generated view download blob URL
+        // Revoke the browser reference to a previous blob URL, needs 100ms pause
         if (this.blobURL.length) {
-            this.URL.revokeObjectURL(this.blobURL)
+            setTimeout(() => {
+              this.URL.revokeObjectURL(this.blobURL)
+            }, 100);
         }
 
         if (asset.typeName === 'image' && asset.viewportDimensions.contentSize) {
