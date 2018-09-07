@@ -108,7 +108,8 @@
       "FIRST_NAME": "First name",
       "LAST_NAME": "Last name",
       "ROLE": "Role at institution",
-      "DEPARTMENT": "Academic department"
+      "DEPARTMENT": "Academic department",
+      "SUBMIT_BUTTON": "Save updates"
     },
     "CHANGE_PASSWORD_LINK": "Change password",
     "ACCOUNT_HELP_LINK": "Account help"

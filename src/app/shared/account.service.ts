@@ -47,8 +47,6 @@ interface User {
   lastName: string
   role: string
   dept: string
-  newsletter_pref: string
-  survey_pref: string
   username: string
   baseProfileId: number
 }

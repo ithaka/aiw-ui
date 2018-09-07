@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core'
 import { Router } from '@angular/router'
 
 // Project Dependencies
-import { AuthService } from '../shared'
+import { AuthService, AccountService } from '../shared'
 import { FormBuilder, FormGroup } from '@angular/forms'
 import { USER_ROLES, USER_DEPTS, UserRolesAndDepts } from './../register/user-roles'
 
@@ -20,12 +20,14 @@ export class AccountPage implements OnInit {
   private showChangePassModal: boolean = false
   private accountUpdateForm: FormGroup
   private updateSubmitted: boolean = false
+  private updateLoading: boolean = false
 
   // update form select field values
   private userDepts: UserRolesAndDepts[] = []
   private userRoles: UserRolesAndDepts[] = []
 
   constructor(
+    private _account: AccountService,
     private _auth: AuthService,
     private _router: Router,
     _fb: FormBuilder
@@ -61,7 +63,17 @@ export class AccountPage implements OnInit {
   }
 
   submitAccountUpdate(form: FormGroup): void {
+    // this will trigger any messages
+    this.updateSubmitted = true
+    setTimeout(() => {
+      this.updateSubmitted = false
+    }, 3000)
+    if (!form.valid) { return } // I don't think this would actually get hit, but it's here just in case
 
+    this.updateLoading = true
+    // this._account.update()
+    console.log(form.value)
+    this.updateLoading = false
   }
 
 }
