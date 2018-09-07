@@ -224,7 +224,7 @@
       "TITLE": "Add Images to Group",
       "SELECT_PROMPT": "Select an image group",
       "ADD_SUCCESS": "Images successfully added to group",
-      "ADD_FAILURE": "Unable to add images to group. Sorry about that.",
+      "ADD_FAILURE": "Oops, something went wrong and images were not added to your group. Please try again.",
       "TOO_MANY_ASSETS": "This image group has exceeded the 1000 image limit.",
       "OPEN_CREATE_GROUP_MODAL": "Create a new group with images"
     },
