@@ -25,7 +25,7 @@ export class AccountPage implements OnInit {
   private messages: {
     updateSuccess?: boolean,
     updateError?: boolean
-  } = {}
+  } = { }
 
   // update form select field values
   private userDepts: UserRolesAndDepts[] = []

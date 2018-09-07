@@ -25,6 +25,11 @@
                 option(*ngFor="let dept of userDepts", [ngValue]="dept.id") {{ dept.desc }}
             .form-group
               button#btnSubmitUpdate.btn.btn-primary([class.loading]="updateLoading", [disabled]="accountUpdateForm.pristine", type="submit", name="action", tabindex="0") {{ 'ACCOUNT.UPDATE_FORM.SUBMIT_BUTTON' | translate }}
+            .form-group.has-success(*ngIf="messages.updateSuccess")
+              .form-control-feedback {{ 'ACCOUNT.UPDATE_FORM.SUCCESS_MESSAGE' | translate }}
+            .form-group.has-danger(*ngIf="messages.updateError")
+              .form-control-feedback {{ 'ACCOUNT.UPDATE_FORM.FAILURE_MESSAGE' | translate }}
+
           a.link((click)="showChangePassModal = true", tabindex="1") {{ 'ACCOUNT.CHANGE_PASSWORD_LINK' | translate }}
           br
           a.link(href="http://support.artstor.org/?article=user-preferences", target="_blank") {{ 'ACCOUNT.ACCOUNT_HELP_LINK' | translate }}

@@ -109,7 +109,9 @@
       "LAST_NAME": "Last name",
       "ROLE": "Role at institution",
       "DEPARTMENT": "Academic department",
-      "SUBMIT_BUTTON": "Save updates"
+      "SUBMIT_BUTTON": "Save updates",
+      "SUCCESS_MESSAGE": "Your account was updated successfully",
+      "FAILURE_MESSAGE": "An error occured while updating your account. Please try again, or contact support."
     },
     "CHANGE_PASSWORD_LINK": "Change password",
     "ACCOUNT_HELP_LINK": "Account help"
