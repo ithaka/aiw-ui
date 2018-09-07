@@ -4,6 +4,10 @@
 
   <!--Track initial URL in cases where we need to re-route legacy links-->
   <script type="text/javascript">
+    // Redirect to HTTPS before handling anything else
+    if (window.location.href.match('http:')) {
+      window.location.href = window.location.href.replace('http', 'https')
+    }
     var initPath = window.location.href;
     var initOrigin = window.location.origin;
     // To cater for legacy links via both proxy and without proxy, we avoid matching ".org"
