@@ -74,6 +74,7 @@ $tagLinkBg: #efefef;
         
         &.limit{
             max-height: 66px;
+            margin-bottom: 5px;
             display: -webkit-box;
             text-overflow: ellipsis;
             -webkit-line-clamp: 4;
