@@ -42,8 +42,8 @@
       .row.cardview-text#tag-row
         .col-sm-12
           p.font-weight-bold#tag-text Group Tags:
-          ul.list-inline
+          ul.list-inline.groupTagsCntnr(#groupTagsCntnr="", [class.limit]="tagsCollapsed")
             i(*ngIf="!group.tags.length") This group does not have any tags.
             li.list-inline-item(*ngFor="let tag of group.tags")
               a.tag-link.font-weight-bold((click)="selectTag(tag)") {{ tag }}
-
+          .expander.link--action.small([class.hidden]="groupTagsCntnr.clientHeight < 63", [class.collapsed]="tagsCollapsed", (click)="tagsCollapsed = !tagsCollapsed", [innerHtml]="tagsCollapsed ? 'Show all ' + group.tags.length + ' tags....' : 'Show less'", role="button") Show all {{ group.tags.length }} tags....
