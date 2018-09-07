@@ -711,7 +711,6 @@ export class AuthService implements CanActivate {
       this.getUrl() + '/v1/collections/institutions?_method=allinstitutions',
       { withCredentials: true }
     )
-    this.getUrl()
   }
 }
 

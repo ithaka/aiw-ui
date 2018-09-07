@@ -21,6 +21,7 @@ export class AssetFilters {
   // Set our default values
   public searchLoading: boolean
   public showFilters: boolean = true
+  public showContribFilter: boolean = false
   public showAdvancedModal: boolean = false
   private subscriptions: Subscription[] = []
   private filterDate: boolean = false
@@ -78,7 +79,7 @@ export class AssetFilters {
 
 
   ngOnInit() {
-    
+
     this._auth.getAllInstitutions()
     .take(1)
     .subscribe((data) => {
@@ -94,6 +95,10 @@ export class AssetFilters {
 
         if (routeParams['startDate'] && routeParams['endDate']){
           this.filterDate = true;
+        }
+
+        if (routeParams['featureFlag'] && routeParams['featureFlag'] === 'contribFilter') {
+          this.showContribFilter = true
         }
 
         // When params are adjusted, applied filters need to be cleared
@@ -150,7 +155,7 @@ export class AssetFilters {
               filters['collectiontypes'] = filters['collectiontypes'].filter(collectionType => collectionType.name === '5')
           }
 
-          if (filters['contributinginstitutionid']) {
+          if (filters['contributinginstitutionid'] && this.showContribFilter) {
             let InstMap = institutionList
             for (let i = 0; i < filters['contributinginstitutionid'].length; i++) {
               for (let j = 0; j < InstMap.length; j++) {
