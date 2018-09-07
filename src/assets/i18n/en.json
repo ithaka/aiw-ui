@@ -483,31 +483,31 @@
         "VIEW_PUBLIC_LINK": "View All Public Collections"
       },
       "COLLECTIONS": [{
-          "SUBHEADING": "Metropolitan Museum of Art",
-          "DESCRIPTION": "Highlights from Asia from the encylopedic collections",
-          "CAPTION": "Suzuki Kiitsu. Morning Glories. Early 19th c. Ink, color, gold on gilded paper. Image © The Metropolitan Museum of Art.",
-          "LINK": "/#/category/1031896061 ",
-          "IMG_SOURCE": "/assets/img/featured-collections/mma_morningglories.jpg",
-          "LINK_TITLE": "Metropolitan Museum of Art",
-          "ALT_TEXT": "Metropolitan Museum of Art"
+          "SUBHEADING": "Ralph Lieberman: Architectural Photography",
+          "DESCRIPTION": "Architectural landmarks",
+          "CAPTION": "Frank Gehry, architect, Ralph Lieberman, photographer. Guggenheim Museum Bilbao. 1991-1997. Image and data provided by Ralph Lieberman.",
+          "LINK": "/#/category/1034668830 ",
+          "IMG_SOURCE": "/assets/img/featured-collections/lieberman_gehry.jpg",
+          "LINK_TITLE": "Ralph Lieberman: Architectural Photography",
+          "ALT_TEXT": "Ralph Lieberman: Architectural Photography"
         },
         {
-          "SUBHEADING": "Ai Weiwei: AW Asia Archive",
-          "DESCRIPTION": "Ai Wewei's Circle of Animals",
-          "CAPTION": "Ai Weiwei. Circle of Animals: Zodiac Heads, Dragon. 2010. Photographer: Tim Nighswander. Image courtesy of the artist and AW Asia, New York.",
-          "LINK": "/#/category/10374058875 ",
-          "IMG_SOURCE": "/assets/img/featured-collections/weiwei_animal.jpg",
-          "LINK_TITLE": "Ai Weiwei: AW Asia Archive",
-          "ALT_TEXT": "Ai Weiwei: AW Asia Archive"
+          "SUBHEADING": "Erich Lessing Culture and Fine Arts Archives",
+          "DESCRIPTION": "Mondrian among the many masterworks from European museums",
+          "CAPTION": "Piet Mondrian. Landscape. c. 1907. Oil on canvas. Image and original data provided by Erich Lessing Culture and Fine Arts Archives/ART RESOURCE, N.Y.",
+          "LINK": "/#/category/1033958751 ",
+          "IMG_SOURCE": "/assets/img/featured-collections/lessing_mondrian.jpg",
+          "LINK_TITLE": "Erich Lessing Culture and Fine Arts Archives",
+          "ALT_TEXT": "Erich Lessing Culture and Fine Arts Archives"
         },
         {
-          "SUBHEADING": "Hamilton College: Geosciences Rock Collection",
-          "DESCRIPTION": "Rock samples collected over two centuries",
-          "CAPTION": "Tholeiitic basalt. Hamilton College: Geosciences Rock Collection.",
-          "LINK": "/#/collection/87730818 ",
-          "IMG_SOURCE": "/assets/img/featured-collections/hamilton_basalt.jpg",
-          "LINK_TITLE": "Hamilton College: Geosciences Rock Collection",
-          "ALT_TEXT": "Hamilton College: Geosciences Rock Collection"
+          "SUBHEADING": "Martin Methodist College Marine Biology Collection: Trinidad",
+          "DESCRIPTION": "Discover sea life",
+          "CAPTION": "Portuguese Man-of-War. Photograph. Martin Methodist College Marine Biology Collection: Trinidad.",
+          "LINK": "/#/collection/87730662 ",
+          "IMG_SOURCE": "/assets/img/featured-collections/martin_manofwar.jpg",
+          "LINK_TITLE": "Martin Methodist College Marine Biology Collection: Trinidad",
+          "ALT_TEXT": "Martin Methodist College Marine Biology Collection: Trinidad"
         }
       ],
       "PUBLIC_COLLECTIONS": [
