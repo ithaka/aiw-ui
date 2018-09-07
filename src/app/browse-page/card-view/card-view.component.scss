@@ -73,7 +73,7 @@ $tagLinkBg: #efefef;
         overflow: hidden;
         
         &.limit{
-            max-height: 63px;
+            max-height: 66px;
             display: -webkit-box;
             text-overflow: ellipsis;
             -webkit-line-clamp: 4;
@@ -95,6 +95,7 @@ $tagLinkBg: #efefef;
     & li,
     & li.list-inline-item {
         background-color: transparent;
+        margin-bottom: 2px;
 
         a {
             color: #000;
