@@ -19,8 +19,13 @@ export class AccountPage implements OnInit {
 
   private showChangePassModal: boolean = false
   private accountUpdateForm: FormGroup
-  private updateSubmitted: boolean = false
+
+  // ui display controls
   private updateLoading: boolean = false
+  private messages: {
+    updateSuccess?: boolean,
+    updateError?: boolean
+  } = {}
 
   // update form select field values
   private userDepts: UserRolesAndDepts[] = []
@@ -63,17 +68,25 @@ export class AccountPage implements OnInit {
   }
 
   submitAccountUpdate(form: FormGroup): void {
-    // this will trigger any messages
-    this.updateSubmitted = true
-    setTimeout(() => {
-      this.updateSubmitted = false
-    }, 3000)
+    this.messages = {}
     if (!form.valid) { return } // I don't think this would actually get hit, but it's here just in case
 
     this.updateLoading = true
-    // this._account.update()
-    console.log(form.value)
-    this.updateLoading = false
+
+    // get a copy of the current user value, modify it in memory, send it in the update, and then save it back to local storage
+    let updateUser = this._auth.getUser()
+    Object.assign(updateUser, form.value)
+    this._account.update(updateUser)
+    .take(1)
+    .subscribe((res) => {
+      this.updateLoading = false
+      this._auth.saveUser(updateUser)
+      this.messages.updateSuccess = true
+    }, (err) => {
+      this.updateLoading = false
+      console.error(err)
+      this.messages.updateError = true
+    })
   }
 
 }

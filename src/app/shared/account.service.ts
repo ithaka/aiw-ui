@@ -2,10 +2,15 @@ import { Injectable } from '@angular/core'
 import { HttpClient, HttpHeaders } from '@angular/common/http'
 import { Observable } from 'rxjs'
 
+import { AuthService } from '.'
+
 @Injectable()
 export class AccountService {
 
-  constructor(private _http: HttpClient) { }
+  constructor(
+    private _auth: AuthService,
+    private _http: HttpClient
+  ) { }
 
   update(user: User): Observable<UpdateUserResponse> {
     const updatableFields: string[] = [
@@ -30,7 +35,7 @@ export class AccountService {
     }
 
     return this._http.put<UpdateUserResponse>(
-      '/api/secure/user/' + user.baseProfileId,
+      this._auth.getUrl(true) + '/api/secure/user/' + user.baseProfileId,
       updateBody,
       {
         headers: new HttpHeaders({
