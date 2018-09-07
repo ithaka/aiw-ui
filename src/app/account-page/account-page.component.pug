@@ -16,11 +16,11 @@
               label(for="inputLastName") {{ 'ACCOUNT.UPDATE_FORM.LAST_NAME' | translate }}
               input#inputLastName.form-control([formControl]="accountUpdateForm.controls['lastName']", type="text", tabindex="0")
             .form-group
-              label(for="selectUserDept") Role at Institution
+              label(for="selectUserDept") {{ 'ACCOUNT.UPDATE_FORM.ROLE' | translate }}
               select#selectUserRole.form-control.custom-select([formControl]="accountUpdateForm.controls['role']", tabindex="0")
                 option(*ngFor="let role of userRoles", [ngValue]="role.id") {{ role.desc }}
             .form-group
-              label(for="selectUserDept") Academic Department
+              label(for="selectUserDept") {{ 'ACCOUNT.UPDATE_FORM.DEPARTMENT' | translate }}
               select#selectUserDept.form-control.custom-select([formControl]="accountUpdateForm.controls['dept']", tabindex="0")
                 option(*ngFor="let dept of userDepts", [ngValue]="dept.id") {{ dept.desc }}
           a.link((click)="showChangePassModal = true", tabindex="1") {{ 'ACCOUNT.CHANGE_PASSWORD_LINK' | translate }}
