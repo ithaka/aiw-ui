@@ -1,4 +1,0 @@
-User-agent: *
-Allow: /
-
-Sitemap: http://library.artstor.org/sitemap.txt

@@ -245,11 +245,14 @@ module.exports = function(options) {
           'robots.txt'
         ]
       }),
-      new CopyWebpackPlugin([{
-        from: 'src/assets/robots.txt'
-      },{
-        from: 'src/assets/sitemap.txt'
-      }, {
+      new CopyWebpackPlugin([
+        // Sycamore is handling redirects for robots and sitemap
+        //   {
+        //   from: 'src/assets/robots.txt'
+        // },{
+        //   from: 'src/assets/sitemap.txt'
+        // }, 
+      {
         from: 'src/assets/humans.txt'
       }]),
 
