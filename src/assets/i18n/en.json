@@ -644,7 +644,7 @@
     "geography" : "Geography",
     "collTypes" : "Collection Type",
     "collectiontypes" : "Collection Type",
-    "data" : "Date"
+    "date" : "Date"
   },
   "FIELD" : {
     "artclassification" : "Classification",
