@@ -35,7 +35,7 @@ export class AccountService {
     }
 
     return this._http.put<UpdateUserResponse>(
-      this._auth.getUrl(true) + '/api/secure/user/' + user.baseProfileId,
+      this._auth.getUrl(true) + '/user/' + user.baseProfileId,
       updateBody,
       {
         headers: new HttpHeaders({
