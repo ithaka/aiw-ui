@@ -17,11 +17,11 @@
               input#inputLastName.form-control([formControl]="accountUpdateForm.controls['lastName']", type="text", tabindex="0")
             .form-group
               label(for="selectUserDept") {{ 'ACCOUNT.UPDATE_FORM.ROLE' | translate }}
-              select#selectUserRole.form-control.custom-select([formControl]="accountUpdateForm.controls['role']", tabindex="0")
+              select#selectUserRole.form-control.custom-select([formControl]="accountUpdateForm.controls['departmentRole']", tabindex="0")
                 option(*ngFor="let role of userRoles", [ngValue]="role.id") {{ role.desc }}
             .form-group
               label(for="selectUserDept") {{ 'ACCOUNT.UPDATE_FORM.DEPARTMENT' | translate }}
-              select#selectUserDept.form-control.custom-select([formControl]="accountUpdateForm.controls['dept']", tabindex="0")
+              select#selectUserDept.form-control.custom-select([formControl]="accountUpdateForm.controls['department']", tabindex="0")
                 option(*ngFor="let dept of userDepts", [ngValue]="dept.id") {{ dept.desc }}
             .form-group
               button#btnSubmitUpdate.btn.btn-primary([class.loading]="updateLoading", [disabled]="accountUpdateForm.pristine", type="submit", name="action", tabindex="0") {{ 'ACCOUNT.UPDATE_FORM.SUBMIT_BUTTON' | translate }}
