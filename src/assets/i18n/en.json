@@ -91,6 +91,7 @@
   },
   "ACCOUNT": {
     "CHANGE_PASS": {
+      "TITLE" : "Change Password",
       "LABELS": {
         "OLD_PASS": "Current Password",
         "NEW_PASS": "New Password",
