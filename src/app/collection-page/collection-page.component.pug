@@ -20,6 +20,6 @@ nav-menu([allowSelectAll]="true")
           .expander.link--action.small([class.hidden]="colDesc.clientHeight < 75", [class.collapsed]="descCollapsed", (click)="descCollapsed = !descCollapsed", [innerHtml]="descCollapsed ? 'More' : 'Less'", role="button") More
         .col-sm-3(*ngIf="colThumbnail.length > 0")
           .thumbnail-shelf
-            img.collection-thumb(src="http://viewer2.artstor.org/{{ colThumbnail }}")
+            img.collection-thumb(src="{{ colThumbnail }}")
       ang-asset-grid([actionOptions]="{collection: true}", [assetCount]="assetCount", [hasMaxAssetLimit]="true")
   ang-access-denied-modal(*ngIf="showaccessDeniedModal")
