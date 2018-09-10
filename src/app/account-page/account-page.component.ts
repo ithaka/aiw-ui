@@ -43,11 +43,12 @@ export class AccountPage implements OnInit {
   ) {
     this.user = this._auth.getUser();
 
+    console.log(this.user.dept);
     this.accountUpdateForm = _fb.group({
       firstName: this.user.firstName,
       lastName: this.user.lastName,
-      departmentRole: this.user.role,
-      department: this.user.dept
+      departmentRole: [this.user.role],
+      department: [this.user.dept]
     });
   }
 
