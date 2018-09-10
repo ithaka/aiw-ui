@@ -12,7 +12,7 @@ import { TitleService, AssetSearchService, AuthService, AssetService, FlagServic
   styleUrls: [ './browse-page.component.scss' ]
 })
 export class MyCollectionsComponent implements OnInit {
-
+  private unaffiliatedUser: boolean = false
   constructor(
     private _auth: AuthService,
     private _flags: FlagService,
@@ -21,7 +21,9 @@ export class MyCollectionsComponent implements OnInit {
     private _search: AssetSearchService,
     private _assets: AssetService,
     private _title: TitleService
-  ) {}
+  ) {
+    this.unaffiliatedUser = this._auth.isPublicOnly() ? true : false
+  }
 
   private isLoggedIn: boolean
   private subscriptions: Subscription[] = [];
