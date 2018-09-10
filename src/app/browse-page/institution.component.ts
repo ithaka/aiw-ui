@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 import { AssetService } from './../shared/assets.service';
+import { AuthService } from './../shared/auth.service';
 import { TagsService } from './tags.service';
 import { Tag } from './tag/tag.class';
 import { TitleService } from '../shared/title.service';
@@ -14,12 +15,16 @@ import { TitleService } from '../shared/title.service';
 export class BrowseInstitutionComponent implements OnInit {
   private tags: Tag[] = [];
   private loading: boolean = true;
+  private unaffiliatedUser: boolean = false
 
   constructor(
     private _assets: AssetService,
     private _tags: TagsService,
-    private _title: TitleService
-  ) { }
+    private _title: TitleService,
+    private _auth: AuthService,
+  ) {
+    this.unaffiliatedUser = this._auth.isPublicOnly() ? true : false
+  }
 
   ngOnInit() {
     // Set page title
