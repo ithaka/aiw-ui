@@ -3,5 +3,6 @@ interface Scripts {
     src: string;
 }
 export const ScriptStore: Scripts[] = [
-    { name: 'zendesk', src: '../../assets/js/zendesk.js' }
+    { name: 'zendesk', src: '../../assets/js/zendesk.js' },
+    { name: 'ethnio', src: '//ethn.io/92143.js' }
 ];

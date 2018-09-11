@@ -1,94 +1,107 @@
-import { Subscription } from 'rxjs/Rx';
-import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { formGroupNameProvider } from '@angular/forms/src/directives/reactive_directives/form_group_name';
-import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
+import { Subscription } from "rxjs/Rx"
+import { Component, OnInit } from "@angular/core"
+import { Router } from "@angular/router"
 
 // Project Dependencies
-import { AuthService } from '../shared';
+import { AuthService, AccountService } from "../shared"
+import { FormBuilder, FormGroup } from "@angular/forms"
+import {
+  USER_ROLES,
+  USER_DEPTS,
+  UserRolesAndDepts
+} from "./../register/user-roles"
 
 @Component({
-  selector: 'app-account-page',
-  templateUrl: './account-page.component.pug',
-  styleUrls: ['./account-page.component.scss']
+  selector: "app-account-page",
+  templateUrl: "./account-page.component.pug",
+  styleUrls: ["./account-page.component.scss"]
 })
 export class AccountPage implements OnInit {
-  private user: any = {};
-  private institutionObj: any = {};
-  private subscriptions: Subscription[] = [];
-  private changePassLoading: boolean = false;
-  private changePassSuccess: boolean;
-  private changePassFailure: boolean;
-  private serviceResponses: {
-    success?: boolean,
-    wrongPass?: boolean,
-    generalError?: boolean
-  } = {};
+  private user: any = {}
+  private institutionObj: any = {}
+  private subscriptions: Subscription[] = []
 
-  private passForm: FormGroup;
-  private submitted: boolean = false;
+  private showChangePassModal: boolean = false
+  private accountUpdateForm: FormGroup
 
-  constructor(private _auth: AuthService, private _router: Router, _fb: FormBuilder) {
-    this.passForm = _fb.group({
-      oldPass: [null, Validators.required],
-      newPass: [null, Validators.compose([Validators.required, Validators.minLength(7)])],
-      newPassConfirm: [null, Validators.required]
-    }, { validator: this.passwordsEqual });
+  // ui display controls
+  private updateLoading: boolean = false
+  private messages: {
+    updateSuccess?: boolean
+    updateError?: boolean
+  } = {}
+
+  // update form select field values
+  private userDepts: UserRolesAndDepts[] = []
+  private userRoles: UserRolesAndDepts[] = []
+
+  constructor(
+    private _account: AccountService,
+    private _auth: AuthService,
+    private _router: Router,
+    _fb: FormBuilder
+  ) {
+    this.user = this._auth.getUser()
+
+    console.log(this.user.dept)
+    this.accountUpdateForm = _fb.group({
+      firstName: this.user.firstName,
+      lastName: this.user.lastName,
+      departmentRole: [this.user.role],
+      department: [this.user.dept]
+    })
   }
 
   ngOnInit() {
-    this.user = this._auth.getUser();
-
     if (!this.user.isLoggedIn) {
-      this._router.navigate(['/home']);
+      this._router.navigate(["/home"])
     }
 
     this.subscriptions.push(
-      this._auth.getInstitution().subscribe((institutionObj) => {
-        this.institutionObj = institutionObj;
+      this._auth.getInstitution().subscribe(institutionObj => {
+        this.institutionObj = institutionObj
       })
-    );
+    )
+
+    // Issues with unauthorized access to the service, and the fact that the data NEVER changes, led us to hardcode these values:
+    this.userDepts = USER_DEPTS
+    this.userRoles = USER_ROLES
+
+    this.accountUpdateForm.controls.departmentRole.setValue(this.user.role)
+    this.accountUpdateForm.controls.department.setValue(this.user.dept)
   }
 
   ngOnDestroy() {
-    this.subscriptions.forEach((sub) => { sub.unsubscribe(); });
+    this.subscriptions.forEach(sub => {
+      sub.unsubscribe()
+    })
   }
 
-  /** Validates that the passwords are equal and assigns error if not
-   * @returns error to FormGroup called 'mismatch' if the passwords are not equal
-   */
-  private passwordsEqual(group: FormGroup): any {
-    return group.get('newPass').value === group.get('newPassConfirm').value
-      ? null : { passwordMismatch: true };
-  }
+  submitAccountUpdate(form: FormGroup): void {
+    this.messages = {}
+    if (!form.valid) {
+      return
+    } // I don't think this would actually get hit, but it's here just in case
 
-  private changePass(formValue: any): void {
-    this.submitted = true;
-    this.serviceResponses = {};
+    this.updateLoading = true
 
-    // don't call the service if the form isn't valid
-    if ( !this.passForm.valid ) { return; }
-
-    this.changePassLoading = true;
-
-    this._auth.changePassword(formValue.oldPass, formValue.newPass)
+    // get a copy of the current user value, modify it in memory, send it in the update, and then save it back to local storage
+    let updateUser = this._auth.getUser()
+    Object.assign(updateUser, form.value)
+    this._account
+      .update(updateUser)
       .take(1)
-      .subscribe((res) => {
-        this.changePassLoading = false;
-
-        switch (res.statusCode) {
-          case 0: this.serviceResponses.success = true; break;
-          case 6: this.serviceResponses.wrongPass = true; break;
-          default: this.serviceResponses.generalError = true;
+      .subscribe(
+        res => {
+          this.updateLoading = false
+          this._auth.saveUser(updateUser)
+          this.messages.updateSuccess = true
+        },
+        err => {
+          this.updateLoading = false
+          console.error(err)
+          this.messages.updateError = true
         }
-
-      }, (err) => {
-        this.changePassLoading = false;
-        this.serviceResponses.generalError = true;
-        console.error(err);
-      });
-
-
+      )
   }
-
 }

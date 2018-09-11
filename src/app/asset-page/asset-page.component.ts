@@ -79,6 +79,7 @@ export class AssetPage implements OnInit, OnDestroy {
     private generatedImgURL: string = ''
     private generatedViewURL: SafeUrl | string = ''
     private generatedFullURL: string = ''
+    public downloadViewReady: boolean = false
     // Used for agree modal input, changes based on selection
     private downloadUrl: any
     private downloadName: string
@@ -128,7 +129,7 @@ export class AssetPage implements OnInit, OnDestroy {
     private showDeletePCModal: boolean = false
     private downloadLoading: boolean = false
 
-    private requestId: string = ''
+    private prevRouteTS: string = '' // Used to track the (Timestamp) key for previous route params in session storage
 
     private uiMessages: {
         deleteFailure?: boolean
@@ -245,11 +246,12 @@ export class AssetPage implements OnInit, OnDestroy {
                             this.assetNumber = this._assets.currentLoadedParams.page ? this.assetIndex + 1 + ((this._assets.currentLoadedParams.page - 1) * this._assets.currentLoadedParams.size) : this.assetIndex + 1;
 
                             let queryParams = {}
+                            if (this.prevRouteTS) {
+                                queryParams['prevRouteTS'] = this.prevRouteTS
+                            }
                             if (this.assetGroupId) {
                                 queryParams['groupId'] = this.assetGroupId
                             }
-                            // Maintain the requestId route parameter for next page
-                            queryParams['requestId'] = this.requestId
                             this._router.navigate(['/asset', this.prevAssetResults.thumbnails[0][this.assetIdProperty], queryParams]);
                         }
                     }
@@ -264,11 +266,12 @@ export class AssetPage implements OnInit, OnDestroy {
                             this.assetNumber = this._assets.currentLoadedParams.page ? this.assetIndex + 1 + ((this._assets.currentLoadedParams.page - 1) * this._assets.currentLoadedParams.size) : this.assetIndex + 1;
 
                             let queryParams = {}
+                            if (this.prevRouteTS) {
+                                queryParams['prevRouteTS'] = this.prevRouteTS
+                            }
                             if (this.assetGroupId) {
                                 queryParams['groupId'] = this.assetGroupId
                             }
-                            // Maintain the requestId route parameter for previous page
-                            queryParams['requestId'] = this.requestId
                             this._router.navigate(['/asset', this.prevAssetResults.thumbnails[this.prevAssetResults.thumbnails.length - 1][this.assetIdProperty], queryParams]);
                         }
                     }
@@ -320,14 +323,16 @@ export class AssetPage implements OnInit, OnDestroy {
                     this.generateImgURL(this.assetIds[0])
                 }
 
-                // For "Go Back to Results" and pagination, for asset that is not from image group look for requestId to set prevRouteParams
-                if (routeParams['requestId'] || routeParams['groupId']) {
+                // For "Back to Results" link and pagination, look for prevRouteTS to set prevRouteParams
+                if (routeParams['prevRouteTS']) {
+                    this.prevRouteTS = routeParams['prevRouteTS']
                     // For "Go Back to Results"
                     // Get map of previous search params
                     let prevRoutesMap = this._session.get('prevRouteParams')
-                    this.requestId = routeParams['requestId']
-                    // Reference previous search params for the current request id
-                    let prevRouteParams = prevRoutesMap[this.requestId]
+
+                    // Reference previous search params for the prevRouteTS
+                    let prevRouteParams = prevRoutesMap[this.prevRouteTS]
+
                     // Set previous route params if available, showing "Back to Results" link
                     if (prevRoutesMap && prevRouteParams && (prevRouteParams.length > 0)) {
                         this.prevRouteParams = prevRouteParams
@@ -383,6 +388,9 @@ export class AssetPage implements OnInit, OnDestroy {
 
         // MS Browser Agent ?
         this.isMSAgent = this.navigator.msSaveOrOpenBlob !== undefined
+        if (this.isMSAgent) {
+          this.downloadViewReady = true // enable button
+        }
 
     } // OnInit
 
@@ -554,19 +562,19 @@ export class AssetPage implements OnInit, OnDestroy {
     }
 
     private showPrevAsset(): void {
-        if (this.assetNumber > 1) {
+        if (this.quizShuffle || (this.assetNumber > 1)) {
             // Update browse direction
             this.browseAssetDirection = 'prev'
 
-            if ((this.assetIndex > 0)) {
+            if (this.quizShuffle || (this.assetIndex > 0)) {
                 let prevAssetIndex = this.quizShuffle ? Math.floor(Math.random() * this.prevAssetResults.thumbnails.length) + 0 : this.assetIndex - 1; // Assign random thumbnail index if quiz shuffle is true
                 let queryParams = {}
+                if (this.prevRouteTS) {
+                    queryParams['prevRouteTS'] = this.prevRouteTS
+                }
                 if (this.assetGroupId) {
                     queryParams['groupId'] = this.assetGroupId
                 }
-
-                // Maintain the requestId route parameter for previous page
-                queryParams['requestId'] = this.requestId
 
                 this._router.navigate(['/asset', this.prevAssetResults.thumbnails[prevAssetIndex][this.assetIdProperty], queryParams]);
             }
@@ -578,19 +586,19 @@ export class AssetPage implements OnInit, OnDestroy {
     }
 
     private showNextAsset(): void {
-        if (this.assetNumber < this.totalAssetCount) {
+        if (this.quizShuffle || (this.assetNumber < this.totalAssetCount)) {
             // Update browse direction
             this.browseAssetDirection = 'next'
 
-            if ((this.prevAssetResults.thumbnails) && (this.assetIndex < (this.prevAssetResults.thumbnails.length - 1))) {
+            if ((this.prevAssetResults.thumbnails) && ( this.quizShuffle || ( this.assetIndex < (this.prevAssetResults.thumbnails.length - 1)) )) {
                 let nextAssetIndex = this.quizShuffle ? Math.floor(Math.random() * this.prevAssetResults.thumbnails.length) + 0 : this.assetIndex + 1; // Assign random thumbnail index if quiz shuffle is true
                 let queryParams = {}
+                if (this.prevRouteTS) {
+                    queryParams['prevRouteTS'] = this.prevRouteTS
+                }
                 if (this.assetGroupId) {
                     queryParams['groupId'] = this.assetGroupId
                 }
-
-                // Maintain the requestId route parameter for next page
-                queryParams['requestId'] = this.requestId
 
                 this._router.navigate(['/asset', this.prevAssetResults.thumbnails[nextAssetIndex][this.assetIdProperty], queryParams]);
             }
@@ -781,55 +789,42 @@ export class AssetPage implements OnInit, OnDestroy {
         }
     }
 
-
     /**
      * runDownloadView handles the DownloadView results from AssetSearch.downloadViewBlob
      * @param dlink String from generateDownloadView
-     * @param retryCount Number, tracks recursive calls of this function for download tries
      */
-    private runDownloadView(dlink: string, retryCount: number): boolean {
-        let result: boolean = false
-
-        if (retryCount <= 2) {
-            // Download generated jpg as local blob file
-            let blob = this._search.downloadViewBlob(dlink)
-                .take(1)
-                .subscribe((blob) => {
-                    // Call recursively two more times if Promise blob.size < 7.5kb
-                    if (blob.size < 7500) {
-                        result = false
-                        retryCount += 1
-                        this.runDownloadView(dlink, retryCount)
-                    }
-                    else {
-                        if (this.isMSAgent) {
-                            this.downloadLoading = false
-                            console.log('MSAgent Blob: ', blob)
-                            this.navigator.msSaveBlob(blob, 'download.jpg')
-
-                        }
-                        else {
-                            this.blobURL = this.URL.createObjectURL(blob)
-                            this.generatedViewURL = this._sanitizer.bypassSecurityTrustUrl(this.blobURL)
-                        }
-                        this.downloadLoading = false
-                        result = true
-                    }
-                }, (err) => {
-                    console.error('Error returning generated download view', err)
-                    result = false
+    private runDownloadView(dlink: string): Subscription {
+      // Download generated jpg as local blob file
+      return this._search.downloadViewBlob(dlink)
+        .take(1)
+        .subscribe((blob) => {
+          if (blob.size > 0) {
+              if (this.isMSAgent) {
+                  // We give MS Browsers an extra pause of 2 secs
+                  setTimeout(() => {
+                    this.downloadViewReady = true
                     this.downloadLoading = false
-                    this.showServerErrorModal = true
-                })
-        }
-
-        return result
+                    this.navigator.msSaveBlob(blob, 'download.jpg')
+                  }, 2000);
+              }
+              else {
+                  this.blobURL = this.URL.createObjectURL(blob)
+                  this.generatedViewURL = this._sanitizer.bypassSecurityTrustUrl(this.blobURL)
+                  this.downloadViewReady = true
+                  this.downloadLoading = false
+              }
+          }},
+          (err) => {
+            this.downloadLoading = false
+            this.downloadViewReady = false
+            this.showServerErrorModal = true
+          })
     }
 
     /** Calls downloadViewBlob in AssetSearch service to retrieve blob file,
         and then sets generatedViewUrl to this local reference. **/
 
-    private genDownloadViewLink(): void {
+    private genDownloadViewLink() {
 
         // Do nothing if this is not an image
         if (!this.assets[0].typeName || !this.assets[0].typeName.length) {
@@ -842,8 +837,6 @@ export class AssetPage implements OnInit, OnDestroy {
         // Revoke the browser reference to a previously generated view download blob URL
         if (this.blobURL.length) {
             this.URL.revokeObjectURL(this.blobURL)
-            this.blobURL = ''
-            this.generatedViewURL = ''
         }
 
         if (asset.typeName === 'image' && asset.viewportDimensions.contentSize) {
@@ -872,8 +865,13 @@ export class AssetPage implements OnInit, OnDestroy {
             // Generate the view url from tilemap service
             let downloadLink: string = asset.tileSource.replace('info.json', '') + xOffset + ',' + yOffset + ',' + zoomX + ',' + zoomY + '/' + viewX + ',' + viewY + '/0/native.jpg'
 
-            // Call runDownloadView and check for success, tries 3 times.
-            this.runDownloadView(downloadLink, 0)
+            // Disable download view link button until file is ready
+            this.downloadViewReady = false
+
+            // Call runDownloadView after 1 sec, downloads local view image blob file to browser
+            setTimeout(() => {
+              this.runDownloadView(downloadLink)
+            }, 1000);
         }
     }
 
@@ -933,6 +931,7 @@ export class AssetPage implements OnInit, OnDestroy {
 
         // If MS Browser, call genDownloadViewLink here
         if (this.isMSAgent) {
+            this.downloadViewReady = false
             this.genDownloadViewLink()
         }
     }

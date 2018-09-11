@@ -11,7 +11,6 @@ import {
 import { AuthService } from './'
 import { AppConfig } from '../app.service'
 import { Observable } from 'rxjs/Observable'
-
 @Injectable()
 export class AssetSearchService {
 
@@ -50,9 +49,13 @@ export class AssetSearchService {
   * @param url - Generated tilemap view url
   */
   public downloadViewBlob(url: string): Observable<any> {
-    return this.http.get(url, {
-      responseType: 'blob'
-    })
+
+    let res: Observable<Blob>
+      res = this.http.get(url, {
+        responseType: 'blob'
+      })
+
+    return res
   }
 
   private initQuery(keyword: string, pageSize, startIndex) {
@@ -94,18 +97,13 @@ export class AssetSearchService {
             'name': 'artclassification_str',
             'mincount': 1,
             'limit': 17
-          },
+          }
           // ,
           // {
           //   "name" : "artcollectiontitle_str",
           //   "mincount" : 1,
           //   "limit" : 15
           // }
-          {
-            "name" : "contributinginstitutionid",
-            "mincount" : 1,
-            "limit" : 17
-          }
         ],
     };
   }

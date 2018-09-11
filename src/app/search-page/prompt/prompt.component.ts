@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { Angulartics2 } from 'angulartics2';
+
+import { AuthService } from './../../shared';
 
 @Component({
   selector: 'ang-prompt',
@@ -7,6 +10,16 @@ import { Component, OnInit } from '@angular/core';
 })
 export class PromptComponent implements OnInit {
 
+  constructor(
+    private _angulartics: Angulartics2,
+    private _auth: AuthService
+  ) {}
+
   ngOnInit() {}
+
+
+  private trackUnaffiliatedInstLogin(): void{
+    this._angulartics.eventTrack.next({ action: 'unaffiliatedInstLogin', properties: { category: this._auth.getGACategory() }})
+  }
 
 }

@@ -5,9 +5,7 @@ import { Angulartics2 } from 'angulartics2'
 
 import { AssetService } from '../shared/assets.service'
 import { AssetFiltersService } from '../asset-filters/asset-filters.service'
-import { AnalyticsService } from '../analytics.service'
 import { AuthService, FlagService } from 'app/shared';
-
 
 declare var _satellite: any
 
@@ -17,7 +15,6 @@ declare var _satellite: any
   templateUrl: './asset-filters.component.pug'
 })
 export class AssetFilters {
-
   // Set our default values
   public searchLoading: boolean
   public showFilters: boolean = true
@@ -124,21 +121,7 @@ export class AssetFilters {
       })
     );
 
-
-    // Subscribe to all applied filters in case something fires outside this component
-    this.subscriptions.push(
-      this._filters.applied$
-            .subscribe(filters => {
-                this.appliedFilters = filters;
-            })
-    );
-
-  }
-
-  /**
-   * Keep an eye for available filter updates
-   */
-  private subscribeAvailableFilter(institutionList: any[]) : void {
+    // Keep an eye for available filter updates
     this.subscriptions.push(
       this._filters.available$.subscribe(
         filters => {
@@ -172,11 +155,19 @@ export class AssetFilters {
               filters['contributinginstitutionid'] = []
             }
           }
-
+          
           this.availableFilters = filters;
         }
       )
     );
+    // Subscribe to all applied filters in case something fires outside this component
+    this.subscriptions.push(
+      this._filters.applied$
+            .subscribe(filters => {
+                this.appliedFilters = filters;
+            })
+    );
+
   }
 
   private loadRoute() {

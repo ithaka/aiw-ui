@@ -60,8 +60,8 @@
           span.caption-btn
           | {{ showAssetCaption ? 'HIDE CAPTION' : 'SHOW CAPTION' }}
         .quiz-browse-cntnr(*ngIf="quizMode")
-          i.icon.icon-direction.icon-left([class.disabled]="assetNumber <= 1", title="Previous in results", (click)="showPrevAsset()")
-          i.icon.icon-direction.icon-right([class.disabled]="assetNumber >= totalAssetCount - restrictedAssetsCount", title="Next in results", (click)="showNextAsset()")
+          i.icon.icon-direction.icon-left([class.disabled]="!quizShuffle && assetNumber <= 1 ? true : false", title="Previous in results", (click)="showPrevAsset()")
+          i.icon.icon-direction.icon-right([class.disabled]="!quizShuffle && assetNumber >= totalAssetCount - restrictedAssetsCount ? true: false", title="Next in results", (click)="showNextAsset()")
         .shuffle-cntnr(*ngIf="quizMode", [ngClass]="[ quizShuffle ? 'active' : '' ]", (click)="toggleQuizShuffle()", title="Toggle Asset Suffle")
           span.shuffle-btn
           | SHUFFLE {{ quizShuffle ? 'ON' : 'OFF' }}
@@ -98,17 +98,17 @@
                 target="_blank",
                 tabindex="8")
                 i.icon.icon-download-black
-                | Download File
+                | &nbsp;Download File
               a#downloadViewLink.dropdown-item(download="download.jpg",
                 type="image/jpeg",
                 [attr.href]="((assets[0].publicDownload || !assets[0].disableDownload) && downloadAuth()) ? generatedViewURL : (isMSAgent ? '#' : null)",
                 (click)="((assets[0].publicDownload || !assets[0].disableDownload) && downloadAuth()) ? trackDownloadView() : setDownloadView()",
                 (keydown.enter)="((assets[0].publicDownload || !assets[0].disableDownload) && downloadAuth()) ? trackDownloadView() : setDownloadView()",
-                [class.disabled]="assets[0].disableDownload || assets[0].typeName !== 'image'",
+                [class.disabled]="!downloadViewReady || assets[0].disableDownload || assets[0].typeName !== 'image'",
                 target="_self",
                 tabindex="8")
                 i.icon.icon-download-black
-                | Download View
+                | &nbsp;Download View
           //- False door button if user is not logged in
           button#assetpage-btn.btn.btn-secondary(tabindex="9", *ngIf="assets[0].downloadLink && !(user.isLoggedIn || hasExternalAccess) && !assets[0].publicDownload", (click)="showLoginModal = true", (keydown.enter)="showLoginModal = true")
             | {{ 'ASSET_PAGE.BUTTONS.DOWNLOAD' | translate}}
