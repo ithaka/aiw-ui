@@ -155,16 +155,24 @@ export class AssetFilters {
               filters['collectiontypes'] = filters['collectiontypes'].filter(collectionType => collectionType.name === '5')
           }
 
-          if (filters['contributinginstitutionid'] && this.showContribFilter) {
-            let InstMap = institutionList
-            for (let i = 0; i < filters['contributinginstitutionid'].length; i++) {
-              for (let j = 0; j < InstMap.length; j++) {
-                if (filters['contributinginstitutionid'][i].name === InstMap[j].institutionId) {
-                  filters['contributinginstitutionid'][i].showingName = InstMap[j].institutionName;
+          // Contributors List of search results
+          if (filters['contributinginstitutionid']) {
+
+            if (this.showContribFilter) {
+              let InstMap = institutionList
+              for (let i = 0; i < filters['contributinginstitutionid'].length; i++) {
+                for (let j = 0; j < InstMap.length; j++) {
+                  if (filters['contributinginstitutionid'][i].name === InstMap[j].institutionId) {
+                    filters['contributinginstitutionid'][i].showingName = InstMap[j].institutionName;
+                  }
                 }
               }
             }
+            else {
+              filters['contributinginstitutionid'] = []
+            }
           }
+
           this.availableFilters = filters;
         }
       )
