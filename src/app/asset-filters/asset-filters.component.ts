@@ -155,7 +155,7 @@ export class AssetFilters {
               filters['contributinginstitutionid'] = []
             }
           }
-          
+
           this.availableFilters = filters;
         }
       )
