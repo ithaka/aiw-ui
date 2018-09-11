@@ -114,8 +114,8 @@
       "SUCCESS_MESSAGE": "Your account was updated successfully",
       "FAILURE_MESSAGE": "An error occured while updating your account. Please try again, or contact support."
     },
-    "CHANGE_PASSWORD_LINK": "Change password",
-    "ACCOUNT_HELP_LINK": "Account help"
+    "CHANGE_PASSWORD_LINK": "Change Password",
+    "ACCOUNT_HELP_LINK": "Account Help"
   },
   "ASSET_PAGE": {
     "HEADER_LABELS": {
