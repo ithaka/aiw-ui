@@ -106,10 +106,10 @@
       "WRONG_PASS_ERROR": "The password is not correct for this account"
     },
     "UPDATE_FORM": {
-      "FIRST_NAME": "First name",
-      "LAST_NAME": "Last name",
-      "ROLE": "Role at institution",
-      "DEPARTMENT": "Academic department",
+      "FIRST_NAME": "First Name",
+      "LAST_NAME": "Last Name",
+      "ROLE": "Role at Institution",
+      "DEPARTMENT": "Academic Department",
       "SUBMIT_BUTTON": "Save updates",
       "SUCCESS_MESSAGE": "Your account was updated successfully",
       "FAILURE_MESSAGE": "An error occured while updating your account. Please try again, or contact support."
