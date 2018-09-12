@@ -99,9 +99,17 @@
                 tabindex="8")
                 i.icon.icon-download-black
                 | &nbsp;Download File
-              a#downloadViewLink.dropdown-item(download="download.jpg",
+              a#downloadViewLink.dropdown-item(*ngIf="isMSAgent" download="download.jpg",
                 type="image/jpeg",
-                [attr.href]="((assets[0].publicDownload || !assets[0].disableDownload) && downloadAuth()) ? generatedViewURL : (isMSAgent ? '#' : null)",
+                [attr.href]="((assets[0].publicDownload || !assets[0].disableDownload) && downloadAuth()) ? generatedViewURL : null",
+                [class.disabled]="!downloadViewReady || assets[0].disableDownload || assets[0].typeName !== 'image'",
+                target="_blank",
+                tabindex="8")
+                i.icon.icon-download-black
+                | &nbsp;Download View
+              a#downloadViewLink.dropdown-item(*ngIf="!isMSAgent" download="download.jpg",
+                type="image/jpeg",
+                [attr.href]="((assets[0].publicDownload || !assets[0].disableDownload) && downloadAuth()) ? generatedViewURL : null",
                 (click)="((assets[0].publicDownload || !assets[0].disableDownload) && downloadAuth()) ? trackDownloadView() : setDownloadView()",
                 (keydown.enter)="((assets[0].publicDownload || !assets[0].disableDownload) && downloadAuth()) ? trackDownloadView() : setDownloadView()",
                 [class.disabled]="!downloadViewReady || assets[0].disableDownload || assets[0].typeName !== 'image'",
