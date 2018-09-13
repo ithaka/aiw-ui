@@ -72,6 +72,7 @@ export class AssetPage implements OnInit, OnDestroy {
     private showAccessDeniedModal: boolean = false
     private showServerErrorModal: boolean = false
     private showGenerateCitation: boolean = false
+    private showMetadataPending: boolean = false
 
     private copyURLStatusMsg: string = ''
     private showCopyUrl: boolean = false
@@ -1147,12 +1148,20 @@ export class AssetPage implements OnInit, OnDestroy {
 
     private updateMetadataFromLocal(localData: LocalPCAsset): void {
         if (!localData) { return } // if we don't have metadata for that asset, we won't run any of the update code
-
+        // Track whether or not server has propagated changes yet
+        this.showMetadataPending = false
         for (let key in localData.asset_metadata) {
             let metadataLabel: string = this.mapLocalFieldToLabel(key)
             let fieldValue: string = localData.asset_metadata[key]
             // all objects in formattedMetadata are arrays, but these should all be length 0
-            fieldValue && (this.assets[0].formattedMetadata[metadataLabel] = [fieldValue])
+            if (fieldValue) {
+                if (this.assets[0].formattedMetadata[metadataLabel] && this.assets[0].formattedMetadata[metadataLabel].indexOf(fieldValue) > -1) {
+                    // No change
+                } else {
+                   this.assets[0].formattedMetadata[metadataLabel] = [fieldValue]
+                   this.showMetadataPending = true
+                }
+            }
         }
     }
 
