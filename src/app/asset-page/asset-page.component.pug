@@ -203,6 +203,8 @@
                 input#subjectInput.form-control(type="text", [formControl]="editDetailsForm.controls['subject']", placeholder="", spellcheck="false", tabindex="6")
               .form-group.has-danger(*ngIf="uiMessages.deleteFailure")
                 .form-group-feedback {{ 'ASSET_PAGE.EDIT_DETAILS_FORM.DELETE_ERROR' | translate }}
+              .form-group.has-danger(*ngIf="uiMessages.saveFailure")
+                .form-group-feedback {{ 'ASSET_PAGE.EDIT_DETAILS_FORM.SAVE_ERROR' | translate }}
               .form-group
                 button.btn.btn-secondary((click)="showDeletePCModal = true", type="button", tabindex="6", [class.loading]="deleteLoading") {{ 'ASSET_PAGE.EDIT_DETAILS_FORM.DELETE_BTN' | translate }}
                 = " "

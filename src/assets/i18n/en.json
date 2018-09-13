@@ -147,7 +147,8 @@
       "TITLE_REQUIRED_MSG": "A title is required",
       "SAVE_BTN": "Save",
       "DELETE_BTN": "Delete Record",
-      "DELETE_ERROR": "There was an error in deleting the asset. Please try again."
+      "DELETE_ERROR": "There was an error in deleting the asset. Please try again.",
+      "SAVE_ERROR": "There was an error updating the record. Please try again or contact support."
     },
     "DELETE_PC_MODAL": {
       "TITLE": "Delete Asset Confirmation",

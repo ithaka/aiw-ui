@@ -73,6 +73,7 @@ export class AssetPage implements OnInit, OnDestroy {
     private showServerErrorModal: boolean = false
     private showGenerateCitation: boolean = false
     private showMetadataPending: boolean = false
+    private showMetadataError: boolean = false
 
     private copyURLStatusMsg: string = ''
     private showCopyUrl: boolean = false
@@ -133,7 +134,8 @@ export class AssetPage implements OnInit, OnDestroy {
     private prevRouteTS: string = '' // Used to track the (Timestamp) key for previous route params in session storage
 
     private uiMessages: {
-        deleteFailure?: boolean
+        deleteFailure?: boolean,
+        saveFailure?: boolean
     } = {}
 
     private steps: TourStep[] = [
@@ -1048,7 +1050,7 @@ export class AssetPage implements OnInit, OnDestroy {
      * Called on edit (Asset) details form submission
      */
     private editDetailsFormSubmit(formValue: AssetDetailsFormValue): void {
-
+        this.uiMessages = {}
         this.editDetailsFormSubmitted = true
         if (!this.editDetailsForm.valid) {
             return
@@ -1079,6 +1081,8 @@ export class AssetPage implements OnInit, OnDestroy {
                 error => {
                     console.error(error)
                     this.isProcessing = false
+                    // Show user error message
+                    this.uiMessages.saveFailure = true
                 }
             );
     }
