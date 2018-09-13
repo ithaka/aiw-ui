@@ -77,7 +77,7 @@ export class AssetPage implements OnInit, OnDestroy {
     private showCopyUrl: boolean = false
     private showEditDetails: boolean = false
     private generatedImgURL: string = ''
-    private generatedViewURL: SafeUrl | string = '' // A Blob File
+    private generatedBlobURL: SafeUrl | string = '' // A Blob File
     private downloadViewLink: string = '' // IIIF View Link
     private generatedFullURL: string = ''
     public downloadViewReady: boolean = false
@@ -798,7 +798,7 @@ export class AssetPage implements OnInit, OnDestroy {
         .subscribe((blob) => {
           if (blob.size > 0) {
                   this.blobURL = this.URL.createObjectURL(blob)
-                  this.generatedViewURL = this._sanitizer.bypassSecurityTrustUrl(this.blobURL)
+                  this.generatedBlobURL = this._sanitizer.bypassSecurityTrustUrl(this.blobURL)
                   this.downloadViewReady = true
                   this.downloadLoading = false
           }},
@@ -810,7 +810,7 @@ export class AssetPage implements OnInit, OnDestroy {
     }
 
     /** Calls downloadViewBlob in AssetSearch service to retrieve blob file,
-        and then sets generatedViewUrl to this local reference. **/
+        and then sets generatedBlobUrl to this local reference. **/
 
     private genDownloadViewLink() {
 
@@ -916,7 +916,8 @@ export class AssetPage implements OnInit, OnDestroy {
      * - sets url used by agree modal
      */
     setDownloadView(): void {
-        this.downloadUrl = this.generatedViewURL
+        // For MS Browsers, we set downloadURL to the IIIF link
+        this.downloadUrl = this.isMSAgent ? this.downloadViewLink : this.generatedBlobURL
         this.showAgreeModal = true
         this.downloadName = 'download.jpg'
     }

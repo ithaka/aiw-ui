@@ -24,8 +24,6 @@ export class AgreeModalComponent implements OnInit {
   /** Is this MS IE or Edge? */
   @Input()
   isMSAgent: boolean
-  @Input()
-  downloadViewLink: string // IIIF View URL, image opens in new tab on IE / Edge
   /** Asset.setDownloadView */
   @Input()
   setDownloadView: () => void
