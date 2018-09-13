@@ -44,9 +44,9 @@ export class AgreeModalComponent implements OnInit {
 
     this.closeModal.emit()
 
-    if (this.isMSAgent) {
-      this.setDownloadView()
-    }
+    // if (this.isMSAgent) {
+    //   this.setDownloadView()
+    // }
   }
 
 }

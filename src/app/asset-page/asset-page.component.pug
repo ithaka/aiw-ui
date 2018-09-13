@@ -100,7 +100,7 @@
                 i.icon.icon-download-black
                 | &nbsp;Download File
               a#downloadViewLink.dropdown-item(*ngIf="isMSAgent",
-                [attr.href]="((assets[0].publicDownload || !assets[0].disableDownload) && downloadAuth()) ? generatedViewURL : null",
+                [attr.href]="((assets[0].publicDownload || !assets[0].disableDownload) && downloadAuth()) ? downloadViewLink : null",
                 [class.disabled]="!downloadViewReady || assets[0].disableDownload || assets[0].typeName !== 'image'",
                 target="_blank",
                 tabindex="8")

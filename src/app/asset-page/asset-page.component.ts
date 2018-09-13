@@ -77,7 +77,8 @@ export class AssetPage implements OnInit, OnDestroy {
     private showCopyUrl: boolean = false
     private showEditDetails: boolean = false
     private generatedImgURL: string = ''
-    private generatedViewURL: SafeUrl | string = ''
+    private generatedViewURL: SafeUrl | string = '' // A Blob File
+    private downloadViewLink: string = '' // IIIF View Link
     private generatedFullURL: string = ''
     public downloadViewReady: boolean = false
     // Used for agree modal input, changes based on selection
@@ -877,14 +878,15 @@ export class AssetPage implements OnInit, OnDestroy {
             let yOffset = Math.floor((asset.viewportDimensions.center.y * fullWidth) - (zoomY / 2))
 
             // Generate the view url from tilemap service
-            let downloadLink: string = asset.tileSource.replace('info.json', '') + xOffset + ',' + yOffset + ',' + zoomX + ',' + zoomY + '/' + viewX + ',' + viewY + '/0/native.jpg'
+            this.downloadViewLink = asset.tileSource.replace('info.json', '') + xOffset + ',' + yOffset + ',' + zoomX + ',' + zoomY + '/' + viewX + ',' + viewY + '/0/native.jpg'
+
 
             // Disable download view link button until file is ready
             this.downloadViewReady = false
 
             // Call runDownloadView after 1 sec, downloads local view image blob file to browser
             setTimeout(() => {
-              this.runDownloadView(downloadLink)
+              this.runDownloadView(this.downloadViewLink)
             }, 1000);
         }
     }
