@@ -26,6 +26,8 @@ export class AgreeModalComponent implements OnInit {
   isMSAgent: boolean
   /** Asset.setDownloadView */
   @Input()
+  setDownloadViewUrl: string
+  @Input()
   setDownloadView: () => void
 
   constructor(private _auth: AuthService) { }
