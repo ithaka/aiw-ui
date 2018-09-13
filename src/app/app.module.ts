@@ -71,6 +71,7 @@ import { LoginFormComponent } from './login-form'
 import {
   AccessDeniedModal,
   AddToGroupModal,
+  ChangePasswordModal,
   ConfirmModal,
   DeleteIgModal,
   DownloadLimitModal,
@@ -178,6 +179,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     BrowseInstitutionComponent,
     BrowsePage,
     CategoryPage,
+    ChangePasswordModal,
     ClickOutsideDirective,
     ClusterPage,
     CollectionBadgeComponent,

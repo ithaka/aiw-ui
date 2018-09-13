@@ -10,7 +10,7 @@ ang-sky-banner(*ngIf="showDeleteSuccessBanner", textValue="{{ 'PERSONAL_COLLECTI
       h1.mobile--show Results
       .row.no-gutters.row--search-bar
         #mainContent.col-md-7
-          ang-search([allowSearchInRes]="false")
+          ang-search([allowSearchInRes]="true")
       .row
         .col-sm-12
           h3#pageType Browse Personal Collection
@@ -21,7 +21,7 @@ ang-sky-banner(*ngIf="showDeleteSuccessBanner", textValue="{{ 'PERSONAL_COLLECTI
           .expander.link--action.small([class.hidden]="colDesc.clientHeight < 75", [class.collapsed]="descCollapsed", (click)="descCollapsed = !descCollapsed", [innerHtml]="descCollapsed ? 'More' : 'Less'", role="button") More
         .col-sm-3(*ngIf="colThumbnail.length > 0")
           .thumbnail-shelf
-            img.collection-thumb(src="http://viewer2.artstor.org/{{ colThumbnail }}")
+            img.collection-thumb(src="{{ colThumbnail }}")
       .row.alert.alert-info.alert-dismissible(*ngIf="pub_que_count > 0 && publishingAssets.showPublishingMsgs")
         b Processing&nbsp;
         | {{pub_que_count}} image(s) in the queue. Thank you for your patience.&nbsp;

@@ -9,3 +9,4 @@ nav.nav.nav-inline.browse-nav
       div([innerHtml]="'BROWSE.ERRORS.NO_INSTITUTIONAL_COLLECTIONS_PROMPT' | translate")
 .row.has-icon-overlay(*ngIf="loading")
   i.icon-lg.icon-overlay--top.icon-loading-large
+ang-access-denied-modal(*ngIf="unaffiliatedUser")

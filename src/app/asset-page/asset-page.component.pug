@@ -60,8 +60,8 @@
           span.caption-btn
           | {{ showAssetCaption ? 'HIDE CAPTION' : 'SHOW CAPTION' }}
         .quiz-browse-cntnr(*ngIf="quizMode")
-          i.icon.icon-direction.icon-left([class.disabled]="assetNumber <= 1", title="Previous in results", (click)="showPrevAsset()")
-          i.icon.icon-direction.icon-right([class.disabled]="assetNumber >= totalAssetCount - restrictedAssetsCount", title="Next in results", (click)="showNextAsset()")
+          i.icon.icon-direction.icon-left([class.disabled]="!quizShuffle && assetNumber <= 1 ? true : false", title="Previous in results", (click)="showPrevAsset()")
+          i.icon.icon-direction.icon-right([class.disabled]="!quizShuffle && assetNumber >= totalAssetCount - restrictedAssetsCount ? true: false", title="Next in results", (click)="showNextAsset()")
         .shuffle-cntnr(*ngIf="quizMode", [ngClass]="[ quizShuffle ? 'active' : '' ]", (click)="toggleQuizShuffle()", title="Toggle Asset Suffle")
           span.shuffle-btn
           | SHUFFLE {{ quizShuffle ? 'ON' : 'OFF' }}

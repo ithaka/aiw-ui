@@ -66,6 +66,27 @@ $tagLinkBg: #efefef;
         left: 24%;
         z-index: 2;
     }
+
+
+    // For expand/collapse tags exceeding three lines 
+    .groupTagsCntnr{
+        overflow: hidden;
+        
+        &.limit{
+            max-height: 66px;
+            margin-bottom: 5px;
+            display: -webkit-box;
+            text-overflow: ellipsis;
+            -webkit-line-clamp: 4;
+            -webkit-box-orient: vertical;
+        }
+    }
+    .expander{
+        cursor: pointer;
+        color: #444;
+        text-decoration: underline !important;
+        text-decoration-color: #444 !important;
+    }
 }
 
 
@@ -75,6 +96,7 @@ $tagLinkBg: #efefef;
     & li,
     & li.list-inline-item {
         background-color: transparent;
+        margin-bottom: 2px;
 
         a {
             color: #000;

@@ -116,11 +116,16 @@ export class Login implements OnInit, OnDestroy {
         console.error(error);
       });
 
-    // this handles showing the register link for only ip auth'd users
+    /**
+     * This handles showing the register link for only ip auth'd users
+     *
+     * @todo - Should we have to call gtUserInfo here?
+     * We don't need to reload user info that we should alreay have.
+     */
     this._auth.getUserInfo()
       .take(1)
       .subscribe((res) => {
-        if (res.remoteaccess === false && res.user) {
+        if ((res.remoteaccess === false) && res.user && (!this._app.config.disableIPAuth)) {
           this.showRegister = true
         }
       }, (err) => {

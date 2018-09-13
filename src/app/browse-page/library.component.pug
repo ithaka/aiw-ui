@@ -33,5 +33,6 @@ nav.nav.nav-inline.browse-nav
         .small([innerHTML]="descObj[selectedBrowseId] + '.CAPTION' | translate")
       .title {{ descObj[selectedBrowseId] + ".HEADING" | translate }}
       .browse__description([innerHTML]="descObj[selectedBrowseId] + '.DESCRIPTION' | translate")
+  ang-access-denied-modal(*ngIf="unaffiliatedUser")
 //- .row.has-icon-overlay(*ngIf="loading")
 //-   i.icon-lg.icon-overlay--top.icon-loading-large
