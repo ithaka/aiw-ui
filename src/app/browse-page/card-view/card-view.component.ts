@@ -57,13 +57,15 @@ export class CardViewComponent implements OnInit {
       }
     }
 
-    // Get the first three images of the image group to show on the card view
-    let itemIds: string[] = this.group.items.slice(0, 3)
+    // Get the first five images of the image group to show on the card view (5 incase there are unavailable assets amongst the first three)
+    let itemIds: string[] = this.group.items.slice(0, 5)
 
     if (itemIds.length) {
       this._assets.getAllThumbnails(itemIds)
         .then( allThumbnails => {
-          this.thumbnails = allThumbnails
+          this.thumbnails = allThumbnails.filter((thumbnail) => {
+            return thumbnail.status === 'available'
+          })
         })
         .catch( error => {
           console.error(error)
