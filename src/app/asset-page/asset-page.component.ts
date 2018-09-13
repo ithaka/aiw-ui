@@ -916,8 +916,7 @@ export class AssetPage implements OnInit, OnDestroy {
      * - sets url used by agree modal
      */
     setDownloadView(): void {
-        // For MS Browsers, we set downloadURL to the IIIF link
-        this.downloadUrl = this.isMSAgent ? this.downloadViewLink : this.generatedBlobURL
+        this.downloadUrl = this.generatedBlobURL
         this.showAgreeModal = true
         this.downloadName = 'download.jpg'
     }
