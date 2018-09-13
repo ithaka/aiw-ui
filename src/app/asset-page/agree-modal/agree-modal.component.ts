@@ -24,6 +24,8 @@ export class AgreeModalComponent implements OnInit {
   /** Is this MS IE or Edge? */
   @Input()
   isMSAgent: boolean
+  @Input()
+  downloadViewLink: string // IIIF View URL, image opens in new tab on IE / Edge
   /** Asset.setDownloadView */
   @Input()
   setDownloadView: () => void
@@ -41,12 +43,7 @@ export class AgreeModalComponent implements OnInit {
    */
   private agree(): void {
     this._auth.authorizeDownload()
-
     this.closeModal.emit()
-
-    // if (this.isMSAgent) {
-    //   this.setDownloadView()
-    // }
   }
 
 }
