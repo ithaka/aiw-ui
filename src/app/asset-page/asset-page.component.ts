@@ -787,17 +787,6 @@ export class AssetPage implements OnInit, OnDestroy {
         }
     }
 
-    private checkWindowsBlobReady(): Boolean {
-      let el = document.getElementById('downloadViewLink')
-      if (el.getAttribute('href').includes('blob')) {
-        return true
-      }
-      // Check if blob is ready on windows, 5 times a second
-      setTimeout(() => {
-        this.checkWindowsBlobReady()
-      }, 200);
-    }
-
     /**
      * runDownloadView handles the DownloadView results from AssetSearch.downloadViewBlob
      * @param dlink String from generateDownloadView
