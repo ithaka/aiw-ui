@@ -101,6 +101,7 @@
                 | &nbsp;Download File
               a#downloadViewLink.dropdown-item(*ngIf="isMSAgent",
                 [attr.href]="((assets[0].publicDownload || !assets[0].disableDownload) && downloadAuth()) ? downloadViewLink : null",
+                (click)="showAgreeModal ? null : showAgreeModal = true",
                 [class.disabled]="!downloadViewReady || assets[0].disableDownload || assets[0].typeName !== 'image'",
                 target="_blank",
                 tabindex="8")
