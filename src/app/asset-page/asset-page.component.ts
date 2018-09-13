@@ -388,9 +388,9 @@ export class AssetPage implements OnInit, OnDestroy {
 
         // MS Browser Agent ?
         this.isMSAgent = this.navigator.msSaveOrOpenBlob !== undefined
-        if (this.isMSAgent) {
-          this.downloadViewReady = true // enable button
-        }
+        // if (this.isMSAgent) {
+        //   this.downloadViewReady = true // enable button
+        // }
 
     } // OnInit
 
@@ -810,21 +810,21 @@ export class AssetPage implements OnInit, OnDestroy {
         .take(1)
         .subscribe((blob) => {
           if (blob.size > 0) {
-              if (this.isMSAgent) {
-                  // We give MS Browsers an extra pause of 2 secs
-                  setTimeout(() => {
-                    this.downloadViewReady = true
-                    this.downloadLoading = false
-                    this.checkWindowsBlobReady()
-                    this.navigator.msSaveOrOpenBlob(blob, 'download.jpg')
-                  }, 2000);
-              }
-              else {
+              // if (this.isMSAgent) {
+              //     // We give MS Browsers an extra pause of 2 secs
+              //     setTimeout(() => {
+              //       this.downloadViewReady = true
+              //       this.downloadLoading = false
+              //       this.checkWindowsBlobReady()
+              //       this.navigator.msSaveOrOpenBlob(blob, 'download.jpg')
+              //     }, 2000);
+              // }
+              // else {
                   this.blobURL = this.URL.createObjectURL(blob)
                   this.generatedViewURL = this._sanitizer.bypassSecurityTrustUrl(this.blobURL)
                   this.downloadViewReady = true
                   this.downloadLoading = false
-              }
+              // }
           }},
           (err) => {
             this.downloadLoading = false
@@ -943,11 +943,11 @@ export class AssetPage implements OnInit, OnDestroy {
         this.showAgreeModal = true
         this.downloadName = 'download.jpg'
 
-        // If MS Browser, call genDownloadViewLink here
-        if (this.isMSAgent) {
-            this.downloadViewReady = false
-            this.genDownloadViewLink()
-        }
+        // // If MS Browser, call genDownloadViewLink here
+        // if (this.isMSAgent) {
+        //     this.downloadViewReady = false
+        //     this.genDownloadViewLink()
+        // }
     }
 
     trackDownloadImage(): void {
