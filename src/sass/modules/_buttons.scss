@@ -55,9 +55,14 @@ $iconBtnSize: $btnHeight;
     background: #C9510D;
     border-color: #C9510D;
 
-    &:hover, &:focus, &:active {
-       background: darken(#C9510D, 10%);
-       border-color: darken(#C9510D, 10%);
+    &:hover {
+        background: darken(#C9510D, 10%);
+        border-color: darken(#C9510D, 10%);
+    }
+
+    &:focus, &:active {
+        filter: brightness(80%);
+        border-color: darken(#C9510D, 10%);
     }
 }
  
@@ -67,8 +72,12 @@ $iconBtnSize: $btnHeight;
     border: solid 1px #C9510D;
     color: #C9510D;
 
-    &:hover, &:focus, &:active, &.active {
+    &:hover {
         background-color: #C9510D;
+    }
+
+    &:focus, &:active, &.active {
+        filter: brightness(80%);
         color: white;
     }
 
