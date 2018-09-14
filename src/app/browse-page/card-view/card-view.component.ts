@@ -22,6 +22,9 @@ export class CardViewComponent implements OnInit {
   private thumbnails: any[] = []
   private groupType: string = '-'
   private description: string = ''
+  
+  // Tracks whether to expand or collapse the tags exceeding 3 lines
+  private tagsCollapsed: boolean = true
 
   constructor(
     private _auth: AuthService,

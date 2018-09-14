@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router'
 import { Subscription }   from 'rxjs/Subscription';
 
 import { AssetService } from './../shared/assets.service';
-import { AuthService, LogService, FlagService } from '../shared';
+import { AuthService, LogService, FlagService, ScriptService } from '../shared';
 import { AssetFiltersService } from '../asset-filters/asset-filters.service';
 import { AssetGrid } from './../asset-grid/asset-grid.component';
 import { TitleService } from '../shared/title.service';
@@ -39,7 +39,8 @@ export class SearchPage implements OnInit, OnDestroy {
         private _router: Router,
         private _title: TitleService,
         private _auth: AuthService,
-        private _captainsLog: LogService
+        private _captainsLog: LogService,
+        private _script: ScriptService
       ) {
     this.siteID = this._appConfig.config.siteID;
     // this makes the window always render scrolled to the top
@@ -49,6 +50,14 @@ export class SearchPage implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    /** ETHNIO SCRIPT */
+    this._script.loadScript('ethnio')
+      .then( data => {
+        console.log("Loaded script", data)
+      })
+    .catch( error => console.error(error) )
+    /** ETHNIO SCRIPT */
+
     // Subscribe User object updates
     this.subscriptions.push(
       this._auth.currentUser.subscribe(

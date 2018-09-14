@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
 import { Ng2DeviceService } from 'ng2-device-detector';
 
-import { AssetService, AuthService } from '../shared';
+import { AssetService, AuthService, ScriptService } from '../shared';
 import { AppConfig } from '../app.service';
 import { Featured } from './featured'
 
@@ -52,7 +52,8 @@ export class Home implements OnInit, OnDestroy {
     private _assets: AssetService,
     private _router: Router,
     private _auth: AuthService,
-    private deviceService: Ng2DeviceService
+    private deviceService: Ng2DeviceService,
+    private _script: ScriptService
   ) {
     // this makes the window always render scrolled to the top
     this._router.events.subscribe(() => {
@@ -69,6 +70,13 @@ export class Home implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    /** ETHNIO SCRIPT */
+    this._script.loadScript('ethnio')
+      .then( data => {
+        console.log("Loaded script", data)
+      })
+    .catch( error => console.error(error) )
+    /** ETHNIO SCRIPT */
 
     // Provide redirects for initPath detected in index.html from inital load
     if (initPath) {
