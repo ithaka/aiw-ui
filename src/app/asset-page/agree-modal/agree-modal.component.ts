@@ -17,7 +17,7 @@ export class AgreeModalComponent implements OnInit {
   @Output()
   downloadAsset = new EventEmitter();
   @Input()
-  assetUrl: string
+  downloadUrl: string
   /** The value of the download attribute for Download View **/
   @Input()
   downloadName: string
@@ -41,12 +41,7 @@ export class AgreeModalComponent implements OnInit {
    */
   private agree(): void {
     this._auth.authorizeDownload()
-
     this.closeModal.emit()
-
-    if (this.isMSAgent) {
-      this.setDownloadView()
-    }
   }
 
 }

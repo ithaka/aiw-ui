@@ -45,8 +45,8 @@ export class AssetSearchService {
   }
 
   /**
-  * Download an Asset View blob file from tilemap service
-  * @param url - Generated tilemap view url
+  * Download View from IIIF services as blob file
+  * @param url - Generated view url
   */
   public downloadViewBlob(url: string): Observable<any> {
 
