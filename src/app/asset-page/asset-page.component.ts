@@ -855,7 +855,6 @@ export class AssetPage implements OnInit, OnDestroy {
             // Generate the view url from tilemap service
             this.downloadViewLink = asset.tileSource.replace('info.json', '') + xOffset + ',' + yOffset + ',' + zoomX + ',' + zoomY + '/' + viewX + ',' + viewY + '/0/native.jpg'
 
-
             // Disable download view link button until file is ready
             this.downloadViewReady = false
 
@@ -916,7 +915,7 @@ export class AssetPage implements OnInit, OnDestroy {
      * - sets url used by agree modal
      */
     setDownloadView(): void {
-        this.downloadUrl = this.generatedBlobURL
+        this.downloadUrl = this.isMSAgent ? this.downloadViewLink : this.generatedBlobURL
         this.showAgreeModal = true
         this.downloadName = 'download.jpg'
     }

@@ -17,7 +17,7 @@ export class AgreeModalComponent implements OnInit {
   @Output()
   downloadAsset = new EventEmitter();
   @Input()
-  assetUrl: string
+  downloadUrl: string
   /** The value of the download attribute for Download View **/
   @Input()
   downloadName: string
@@ -25,8 +25,6 @@ export class AgreeModalComponent implements OnInit {
   @Input()
   isMSAgent: boolean
   /** Asset.setDownloadView */
-  @Input()
-  setDownloadViewUrl: string
   @Input()
   setDownloadView: () => void
 
