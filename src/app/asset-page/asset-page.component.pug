@@ -139,9 +139,15 @@
           .form-group.pt-1([class.hidden]="!showCopyUrl")
             //- label {{ 'ASSET_PAGE.HEADER_LABELS.SHR_LNK' | translate}}
             .alert.alert-info(*ngIf="copyURLStatusMsg") {{ copyURLStatusMsg }}
-        //- div(*ngIf="!showEditDetails")
+        //-------------------
+        //- Metadata Display
+        //-------------------
         div#mainContent([class.d-none]="showEditDetails", tabindex="0")
           .row-hdr.pt-3(*ngIf="(assets[0].formattedMetadata | keys).length > 0") {{ 'ASSET_PAGE.HEADER_LABELS.OBJ_DETAILS' | translate}}
+          //- Alert: Metdata Processing
+          .alert.alert-info(*ngIf="showMetadataPending")
+            b Metadata Updates Processing&nbsp;
+            | Changes to metadata will not yet be available in search results or to other users
           .meta-block.collection-type-display(*ngIf="collectionType")
             ang-collection-badge([collectionType]="collectionType")
           //- Old metadata loop
@@ -206,6 +212,8 @@
                 input#subjectInput.form-control(type="text", [formControl]="editDetailsForm.controls['subject']", placeholder="", spellcheck="false", tabindex="6")
               .form-group.has-danger(*ngIf="uiMessages.deleteFailure")
                 .form-group-feedback {{ 'ASSET_PAGE.EDIT_DETAILS_FORM.DELETE_ERROR' | translate }}
+              .form-group.has-danger(*ngIf="uiMessages.saveFailure")
+                .form-group-feedback {{ 'ASSET_PAGE.EDIT_DETAILS_FORM.SAVE_ERROR' | translate }}
               .form-group
                 button.btn.btn-secondary((click)="showDeletePCModal = true", type="button", tabindex="6", [class.loading]="deleteLoading") {{ 'ASSET_PAGE.EDIT_DETAILS_FORM.DELETE_BTN' | translate }}
                 = " "
