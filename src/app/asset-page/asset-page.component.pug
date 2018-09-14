@@ -146,8 +146,8 @@
           .row-hdr.pt-3(*ngIf="(assets[0].formattedMetadata | keys).length > 0") {{ 'ASSET_PAGE.HEADER_LABELS.OBJ_DETAILS' | translate}}
           //- Alert: Metdata Processing
           .alert.alert-info(*ngIf="showMetadataPending")
-            b Metadata Updates Processing&nbsp;
-            | Changes to metadata will not yet be available in search results or to other users
+            b {{ 'ASSET_PAGE.EDIT_DETAILS_FORM.PENDING_TITLE' | translate }}&nbsp;
+            | {{ 'ASSET_PAGE.EDIT_DETAILS_FORM.PENDING_MESSAGE' | translate }}
           .meta-block.collection-type-display(*ngIf="collectionType")
             ang-collection-badge([collectionType]="collectionType")
           //- Old metadata loop
