@@ -85,7 +85,7 @@
           //- Download dropdown options
           | {{downloadUrl}}
           .dropdown.d-inline-block(ngbDropdown, *ngIf="assets[0].downloadLink && (user.isLoggedIn || hasExternalAccess || assets[0].publicDownload)")
-            button#downloadAssetDropdown.btn.btn-secondary(ngbDropdownToggle [class.loading]="downloadLoading", (click)="(isMSAgent ? null : genDownloadViewLink())", (keydown.enter)="(isMSAgent ? null : genDownloadViewLink())", tabindex="8")
+            button#downloadAssetDropdown.btn.btn-secondary(ngbDropdownToggle [class.loading]="downloadLoading", (click)="genDownloadViewLink()", (keydown.enter)="genDownloadViewLink()", tabindex="8")
               | {{ 'ASSET_PAGE.BUTTONS.DOWNLOAD' | translate}}
               = " "
             .dropdown-menu(ngbDropdownMenu, aria-labelledby="dropdownBasic1")
@@ -99,9 +99,18 @@
                 tabindex="8")
                 i.icon.icon-download-black
                 | &nbsp;Download File
-              a#downloadViewLink.dropdown-item(download="download.jpg",
+              a#downloadViewLink.dropdown-item(*ngIf="isMSAgent",
+                [attr.href]="((assets[0].publicDownload || !assets[0].disableDownload) && downloadAuth()) ? downloadViewLink : null",
+                (click)="((assets[0].publicDownload || !assets[0].disableDownload) && downloadAuth()) ? trackDownloadView() : setDownloadView()",
+                (keydown.enter)="((assets[0].publicDownload || !assets[0].disableDownload) && downloadAuth()) ? trackDownloadView() : setDownloadView()",
+                [class.disabled]="!downloadViewReady || assets[0].disableDownload || assets[0].typeName !== 'image'",
+                target="_blank",
+                tabindex="8")
+                i.icon.icon-download-black
+                | &nbsp;Download View
+              a#downloadViewLink.dropdown-item(*ngIf="!isMSAgent" download="download.jpg",
                 type="image/jpeg",
-                [attr.href]="((assets[0].publicDownload || !assets[0].disableDownload) && downloadAuth()) ? generatedViewURL : (isMSAgent ? '#' : null)",
+                [attr.href]="((assets[0].publicDownload || !assets[0].disableDownload) && downloadAuth()) ? generatedBlobURL : null",
                 (click)="((assets[0].publicDownload || !assets[0].disableDownload) && downloadAuth()) ? trackDownloadView() : setDownloadView()",
                 (keydown.enter)="((assets[0].publicDownload || !assets[0].disableDownload) && downloadAuth()) ? trackDownloadView() : setDownloadView()",
                 [class.disabled]="!downloadViewReady || assets[0].disableDownload || assets[0].typeName !== 'image'",
@@ -121,18 +130,24 @@
 
           //- Copy URL
           //- * Do not show for Personal Collection assets
-          .btn-group#copy-link
+          .btn-group#copy-link(*ngIf="!assets[0].personalCollectionOwner")
             input#generatedImgURL.form-control.form-control__copy(#copyUrlInput="", readonly, [ngModel]="generatedImgURL", (click)="copyUrlInput.select(); document.execCommand('copy', false, null);")
-            button#assetpage-btn.btn.btn-secondary(*ngIf="!assets[0].personalCollectionOwner", [class.active]="showCopyUrl", tabindex="12", (mousedown)="showCopyUrl ? showCopyUrl = false : copyGeneratedImgURL()", (mouseup)="copyUrlInput.select(); document.execCommand('copy', false, null);", (keydown.enter)="showCopyUrl ? showCopyUrl = false : copyGeneratedImgURL()", (keyup.enter)="copyUrlInput.select(); document.execCommand('copy', false, null);")
+            button#assetpage-btn.btn.btn-secondary([class.active]="showCopyUrl", tabindex="12", (mousedown)="showCopyUrl ? showCopyUrl = false : copyGeneratedImgURL()", (mouseup)="copyUrlInput.select(); document.execCommand('copy', false, null);", (keydown.enter)="showCopyUrl ? showCopyUrl = false : copyGeneratedImgURL()", (keyup.enter)="copyUrlInput.select(); document.execCommand('copy', false, null);")
               | {{ 'ASSET_PAGE.BUTTONS.LINK' | translate}}
               //- i#genImgURLlink.icon.icon-share-white
 
           .form-group.pt-1([class.hidden]="!showCopyUrl")
             //- label {{ 'ASSET_PAGE.HEADER_LABELS.SHR_LNK' | translate}}
             .alert.alert-info(*ngIf="copyURLStatusMsg") {{ copyURLStatusMsg }}
-        //- div(*ngIf="!showEditDetails")
+        //-------------------
+        //- Metadata Display
+        //-------------------
         div#mainContent([class.d-none]="showEditDetails", tabindex="0")
           .row-hdr.pt-3(*ngIf="(assets[0].formattedMetadata | keys).length > 0") {{ 'ASSET_PAGE.HEADER_LABELS.OBJ_DETAILS' | translate}}
+          //- Alert: Metdata Processing
+          .alert.alert-info(*ngIf="showMetadataPending")
+            b {{ 'ASSET_PAGE.EDIT_DETAILS_FORM.PENDING_TITLE' | translate }}&nbsp;
+            | {{ 'ASSET_PAGE.EDIT_DETAILS_FORM.PENDING_MESSAGE' | translate }}
           .meta-block.collection-type-display(*ngIf="collectionType")
             ang-collection-badge([collectionType]="collectionType")
           //- Old metadata loop
@@ -197,6 +212,8 @@
                 input#subjectInput.form-control(type="text", [formControl]="editDetailsForm.controls['subject']", placeholder="", spellcheck="false", tabindex="6")
               .form-group.has-danger(*ngIf="uiMessages.deleteFailure")
                 .form-group-feedback {{ 'ASSET_PAGE.EDIT_DETAILS_FORM.DELETE_ERROR' | translate }}
+              .form-group.has-danger(*ngIf="uiMessages.saveFailure")
+                .form-group-feedback {{ 'ASSET_PAGE.EDIT_DETAILS_FORM.SAVE_ERROR' | translate }}
               .form-group
                 button.btn.btn-secondary((click)="showDeletePCModal = true", type="button", tabindex="6", [class.loading]="deleteLoading") {{ 'ASSET_PAGE.EDIT_DETAILS_FORM.DELETE_BTN' | translate }}
                 = " "
@@ -233,7 +250,7 @@
         ang-thumbnail.card.card--asset(*ngFor="let asset of prevAssetResults.thumbnails", [thumbnail]="asset", [ngClass]="{'selected' : asset.selected || (assets[0].id == asset[assetIdProperty]), 'disabled': (asset.selected && assets.length === 1) }", (click)="toggleAsset(asset)")
         .text-center.pt-2
           pagination([pageObj]="pagination", (goToPage)="goToPage($event)", style="display:inline-block")
-ang-agree-modal(*ngIf="showAgreeModal", (closeModal)="showAgreeModal = false", [assetUrl]="(isMSAgent ? '#' : downloadUrl)", [downloadName]="downloadName", [isMSAgent]="isMSAgent", [setDownloadView]="setDownloadView")
+ang-agree-modal(*ngIf="showAgreeModal", (closeModal)="showAgreeModal = false", [downloadUrl]="downloadUrl", [downloadName]="downloadName", [isMSAgent]="isMSAgent", [setDownloadView]="setDownloadView")
 ang-login-req-modal(*ngIf="showLoginModal", (closeModal)="showLoginModal = false")
 ang-add-to-group(*ngIf="showAddModal", [selectedAssets]="[ assets[0] ]", [showCreateGroup]="true", [copySelectionStr]=" 'ADD_TO_GROUP_MODAL.FROM_ASSET' ", (createGroup)="showCreateGroupModal = true; showAddModal = false;", (closeModal)="showAddModal = false")
 ang-new-ig-modal(*ngIf="showCreateGroupModal", [selectedAssets]="[ assets[0] ]", [showAddToGroup]="true", (addToGroup)="showAddModal = true; showCreateGroupModal = false;", (closeModal)="showCreateGroupModal = false")

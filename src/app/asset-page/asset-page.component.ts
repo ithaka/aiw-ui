@@ -72,12 +72,15 @@ export class AssetPage implements OnInit, OnDestroy {
     private showAccessDeniedModal: boolean = false
     private showServerErrorModal: boolean = false
     private showGenerateCitation: boolean = false
+    private showMetadataPending: boolean = false
+    private showMetadataError: boolean = false
 
     private copyURLStatusMsg: string = ''
     private showCopyUrl: boolean = false
     private showEditDetails: boolean = false
     private generatedImgURL: string = ''
-    private generatedViewURL: SafeUrl | string = ''
+    private generatedBlobURL: SafeUrl | string = '' // A Blob File
+    private downloadViewLink: string = '' // IIIF View Link
     private generatedFullURL: string = ''
     public downloadViewReady: boolean = false
     // Used for agree modal input, changes based on selection
@@ -132,7 +135,8 @@ export class AssetPage implements OnInit, OnDestroy {
     private prevRouteTS: string = '' // Used to track the (Timestamp) key for previous route params in session storage
 
     private uiMessages: {
-        deleteFailure?: boolean
+        deleteFailure?: boolean,
+        saveFailure?: boolean
     } = {}
 
     private steps: TourStep[] = [
@@ -388,9 +392,6 @@ export class AssetPage implements OnInit, OnDestroy {
 
         // MS Browser Agent ?
         this.isMSAgent = this.navigator.msSaveOrOpenBlob !== undefined
-        if (this.isMSAgent) {
-          this.downloadViewReady = true // enable button
-        }
 
     } // OnInit
 
@@ -799,20 +800,10 @@ export class AssetPage implements OnInit, OnDestroy {
         .take(1)
         .subscribe((blob) => {
           if (blob.size > 0) {
-              if (this.isMSAgent) {
-                  // We give MS Browsers an extra pause of 2 secs
-                  setTimeout(() => {
-                    this.downloadViewReady = true
-                    this.downloadLoading = false
-                    this.navigator.msSaveBlob(blob, 'download.jpg')
-                  }, 2000);
-              }
-              else {
                   this.blobURL = this.URL.createObjectURL(blob)
-                  this.generatedViewURL = this._sanitizer.bypassSecurityTrustUrl(this.blobURL)
+                  this.generatedBlobURL = this._sanitizer.bypassSecurityTrustUrl(this.blobURL)
                   this.downloadViewReady = true
                   this.downloadLoading = false
-              }
           }},
           (err) => {
             this.downloadLoading = false
@@ -822,7 +813,7 @@ export class AssetPage implements OnInit, OnDestroy {
     }
 
     /** Calls downloadViewBlob in AssetSearch service to retrieve blob file,
-        and then sets generatedViewUrl to this local reference. **/
+        and then sets generatedBlobUrl to this local reference. **/
 
     private genDownloadViewLink() {
 
@@ -834,9 +825,11 @@ export class AssetPage implements OnInit, OnDestroy {
         let asset = this.assets[0]
         this.downloadLoading = true // sets to false on success of runDownloadView
 
-        // Revoke the browser reference to a previously generated view download blob URL
+        // Revoke the browser reference to a previous blob URL, needs 100ms pause
         if (this.blobURL.length) {
-            this.URL.revokeObjectURL(this.blobURL)
+            setTimeout(() => {
+              this.URL.revokeObjectURL(this.blobURL)
+            }, 100);
         }
 
         if (asset.typeName === 'image' && asset.viewportDimensions.contentSize) {
@@ -863,14 +856,14 @@ export class AssetPage implements OnInit, OnDestroy {
             let yOffset = Math.floor((asset.viewportDimensions.center.y * fullWidth) - (zoomY / 2))
 
             // Generate the view url from tilemap service
-            let downloadLink: string = asset.tileSource.replace('info.json', '') + xOffset + ',' + yOffset + ',' + zoomX + ',' + zoomY + '/' + viewX + ',' + viewY + '/0/native.jpg'
+            this.downloadViewLink = asset.tileSource.replace('info.json', '') + xOffset + ',' + yOffset + ',' + zoomX + ',' + zoomY + '/' + viewX + ',' + viewY + '/0/native.jpg'
 
             // Disable download view link button until file is ready
             this.downloadViewReady = false
 
             // Call runDownloadView after 1 sec, downloads local view image blob file to browser
             setTimeout(() => {
-              this.runDownloadView(downloadLink)
+              this.runDownloadView(this.downloadViewLink)
             }, 1000);
         }
     }
@@ -925,15 +918,9 @@ export class AssetPage implements OnInit, OnDestroy {
      * - sets url used by agree modal
      */
     setDownloadView(): void {
-        this.downloadUrl = this.generatedViewURL
+        this.downloadUrl = this.isMSAgent ? this.downloadViewLink : this.generatedBlobURL
         this.showAgreeModal = true
         this.downloadName = 'download.jpg'
-
-        // If MS Browser, call genDownloadViewLink here
-        if (this.isMSAgent) {
-            this.downloadViewReady = false
-            this.genDownloadViewLink()
-        }
     }
 
     trackDownloadImage(): void {
@@ -1047,7 +1034,7 @@ export class AssetPage implements OnInit, OnDestroy {
      * Called on edit (Asset) details form submission
      */
     private editDetailsFormSubmit(formValue: AssetDetailsFormValue): void {
-
+        this.uiMessages = {}
         this.editDetailsFormSubmitted = true
         if (!this.editDetailsForm.valid) {
             return
@@ -1078,6 +1065,8 @@ export class AssetPage implements OnInit, OnDestroy {
                 error => {
                     console.error(error)
                     this.isProcessing = false
+                    // Show user error message
+                    this.uiMessages.saveFailure = true
                 }
             );
     }
@@ -1147,12 +1136,20 @@ export class AssetPage implements OnInit, OnDestroy {
 
     private updateMetadataFromLocal(localData: LocalPCAsset): void {
         if (!localData) { return } // if we don't have metadata for that asset, we won't run any of the update code
-
+        // Track whether or not server has propagated changes yet
+        this.showMetadataPending = false
         for (let key in localData.asset_metadata) {
             let metadataLabel: string = this.mapLocalFieldToLabel(key)
             let fieldValue: string = localData.asset_metadata[key]
             // all objects in formattedMetadata are arrays, but these should all be length 0
-            fieldValue && (this.assets[0].formattedMetadata[metadataLabel] = [fieldValue])
+            if (fieldValue) {
+                if (this.assets[0].formattedMetadata[metadataLabel] && this.assets[0].formattedMetadata[metadataLabel].indexOf(fieldValue) > -1) {
+                    // No change
+                } else {
+                   this.assets[0].formattedMetadata[metadataLabel] = [fieldValue]
+                   this.showMetadataPending = true
+                }
+            }
         }
     }
 
