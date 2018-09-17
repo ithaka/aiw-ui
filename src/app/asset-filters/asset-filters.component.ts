@@ -18,6 +18,7 @@ export class AssetFilters {
   // Set our default values
   public searchLoading: boolean
   public showFilters: boolean = true
+  public showContribFilter: boolean = false
   public showAdvancedModal: boolean = false
   private subscriptions: Subscription[] = []
   private filterDate: boolean = false
@@ -76,6 +77,12 @@ export class AssetFilters {
 
   ngOnInit() {
 
+    this._auth.getAllInstitutions()
+    .take(1)
+    .subscribe((data) => {
+      this.subscribeAvailableFilter(data['allInstitutions'])
+    })
+
     this.filterNameMap = this._filters.getFilterNameMap()
 
     // Read filters from URL
@@ -85,6 +92,10 @@ export class AssetFilters {
 
         if (routeParams['startDate'] && routeParams['endDate']){
           this.filterDate = true;
+        }
+
+        if (routeParams['featureFlag'] && routeParams['featureFlag'] === 'contribFilter') {
+          this.showContribFilter = true
         }
 
         // When params are adjusted, applied filters need to be cleared
@@ -109,8 +120,12 @@ export class AssetFilters {
         }
       })
     );
+  }
 
-    // Keep an eye for available filter updates
+  /**
+  * Keep an eye for available filter updates
+  */
+  private subscribeAvailableFilter(institutionList: any[]): void {
     this.subscriptions.push(
       this._filters.available$.subscribe(
         filters => {
@@ -127,7 +142,23 @@ export class AssetFilters {
               filters['collectiontypes'] = filters['collectiontypes'].filter(collectionType => collectionType.name === '5')
           }
 
-          this.availableFilters = filters;
+          // Contributors List of search results
+          if (filters['contributinginstitutionid']) {
+
+            if (this.showContribFilter) {
+              let InstMap = institutionList
+              for (let i = 0; i < filters['contributinginstitutionid'].length; i++) {
+                for (let j = 0; j < InstMap.length; j++) {
+                  if (filters['contributinginstitutionid'][i].name === InstMap[j].institutionId) {
+                    filters['contributinginstitutionid'][i].showingName = InstMap[j].institutionName;
+                  }
+                }
+              }
+            }
+            else {
+              filters['contributinginstitutionid'] = []
+            }
+          }
         }
       )
     );
@@ -138,7 +169,6 @@ export class AssetFilters {
                 this.appliedFilters = filters;
             })
     );
-
   }
 
   private loadRoute() {
