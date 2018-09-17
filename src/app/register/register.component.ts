@@ -5,7 +5,7 @@ import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms'
 import { Angulartics2 } from 'angulartics2';
 
 import { AuthService } from './../shared';
-import { USER_ROLES, USER_DEPTS } from './user-roles.ts';
+import { USER_ROLES, USER_DEPTS, UserRolesAndDepts } from './user-roles'
 
 @Component({
   selector: 'ang-register-page',
@@ -20,8 +20,8 @@ export class RegisterComponent implements OnInit {
   // Indicates user is registering for Shibboleth
   private isShibbFlow: boolean = false
 
-  private userDepts: any[] = [];
-  private userRoles: any[] = [];
+  private userDepts: UserRolesAndDepts[] = []
+  private userRoles: UserRolesAndDepts[] = []
 
   private serviceErrors: {
     duplicate?: boolean,

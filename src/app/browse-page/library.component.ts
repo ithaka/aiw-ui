@@ -4,7 +4,8 @@ import { Router, ActivatedRoute, Params } from '@angular/router';
 import { Subscription }   from 'rxjs/Subscription';
 
 import { AssetService } from './../shared/assets.service';
-import { AssetSearchService } from './../shared/asset-search.service'
+import { AssetSearchService } from './../shared/asset-search.service';
+import { AuthService } from './../shared/auth.service';
 import { TagsService } from './tags.service';
 import { Tag } from './tag/tag.class';
 import { TitleService } from '../shared/title.service';
@@ -18,11 +19,13 @@ import { Locker } from 'angular2-locker'
 })
 export class LibraryComponent implements OnInit {
   private _storage
+  private unaffiliatedUser: boolean = false
 
   constructor(
     private router: Router,
     private route: ActivatedRoute,
     private _assets: AssetService,
+    private _auth: AuthService,
     private _search: AssetSearchService,
     private _tags: TagsService,
     private _title: TitleService,
@@ -30,6 +33,7 @@ export class LibraryComponent implements OnInit {
     private locker: Locker
   ) {
     this._storage = locker.useDriver(Locker.DRIVERS.LOCAL)
+    this.unaffiliatedUser = this._auth.isPublicOnly() ? true : false
   }
 
   private loading: boolean = false;

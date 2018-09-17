@@ -10,12 +10,13 @@ import { AuthService } from './..'
     templateUrl: 'tour.component.pug',
     styleUrls: ['./tour.component.scss']
   })
-  export class GuideTourComponent {
+  export class GuideTourComponent implements OnInit {
 
     private driver: any
     private startModalShow: boolean = false
 
     @Input() public steps: TourStep[]
+    @Input() showOnInit: boolean = false
 
     constructor(
       private _auth: AuthService,
@@ -30,6 +31,13 @@ import { AuthService } from './..'
           }
         }
       })
+    }
+
+    ngOnInit() {
+      // let the initialization trigger the tour start modal
+      if (this.showOnInit) {
+        this.startModalShow = true
+      }
     }
 
 
@@ -90,6 +98,7 @@ import { AuthService } from './..'
           else Element.node.offsetParent.disabled = false
         },
         onReset: (Element) => {
+          this._auth.store('igTourComplete', Date.now()) // store the fact that the user dismissed the tour
           // Change BACK the tabIndex of the brand label and links in the login box when the tour is over
           this.manipulateDom('className', 'navbar-brand', 1)
           this.manipulateDom('id', 'nav-setting', 2)
@@ -101,6 +110,14 @@ import { AuthService } from './..'
 
       this.driver.defineSteps(this.steps)
       this.driver.start()
+    }
+
+    /**
+     * closes the modal and saves the fact that the user dismissed it
+     */
+    private closeTourModal(): void {
+      this.startModalShow = false
+      this._auth.store('igTourComplete', Date.now())
     }
 
     /**

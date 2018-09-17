@@ -122,6 +122,11 @@ export class SearchComponent implements OnInit, OnDestroy {
         this._router.navigate( [ '/category', routeParams.catId, params ] );
         return;
       }
+      else if (routeParams.pcolId){
+        params.term = term;
+        this._router.navigate( [ '/pcollection', routeParams.pcolId, params ] );
+        return;
+      }
       else if (routeParams.term){
         let updatedTermValue = '';
         updatedTermValue = routeParams.term + ' AND ' + term;
