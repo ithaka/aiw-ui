@@ -120,11 +120,12 @@ export class AssetFilters {
         }
       })
     );
+  }
 
   /**
   * Keep an eye for available filter updates
   */
-  private subscribeAvailableFilter(institutionList: any[]) : void {
+  private subscribeAvailableFilter(institutionList: any[]): void {
     this.subscriptions.push(
       this._filters.available$.subscribe(
         filters => {
@@ -168,7 +169,6 @@ export class AssetFilters {
                 this.appliedFilters = filters;
             })
     );
-
   }
 
   private loadRoute() {
