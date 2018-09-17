@@ -3,10 +3,11 @@
   .ig-desc(*ngIf="igDesc", [innerHTML]="igDesc")
   .assets-cntnr
     .assets-block.col-md-12(*ngFor="let asset of assets")
-      .col-md-3.inline
-        .thmbnail-cntnr
-          img(src="http://viewer2.artstor.org/{{ asset.largeImgUrl }}", alt="{{ asset.tombstone[0] }}")
-      .col-md-8.inline
-        .meta-block(*ngFor="let metadata of asset.tombstone")
-          .label
-            .value([innerHTML]="metadata")
+      .row
+        .col-md-4
+          .thmbnail-cntnr
+            img(src="http://viewer2.artstor.org/{{ asset.largeImgUrl }}", alt="{{ asset.tombstone[0] }}")
+        .col-md-8
+          .meta-block(*ngFor="let metadata of asset.tombstone")
+            .label
+              .value([innerHTML]="metadata")

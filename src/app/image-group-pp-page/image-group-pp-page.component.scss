@@ -24,7 +24,6 @@
 .meta-block{
     padding-top: 10px;
     font-size: 14px;
-    // font-family: 'Graphik', Futura, Helvetica, sans-serif;
 }
 .meta-block .label{
     color: #c9d0c9;
@@ -48,16 +47,9 @@
 }
 
 @media print {
-    .col-md-12 {
-        float: left;
-        width: 100%;
-    }
-    .col-md-8 {
-        float: left;
-        width: 55%;
-    }
-    .col-md-4 {
-        float: left;
-        width: 45%;
+    .assets-cntnr{
+        margin: 30px auto;
+        display: block;
+        width: 950px;
     }
 }
