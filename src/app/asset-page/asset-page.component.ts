@@ -1211,7 +1211,7 @@ export class AssetPage implements OnInit, OnDestroy {
      */
     getErrorFormUrl(asset: Asset): string {
         let baseUrl = 'http://www.artstor.org/form/report-error'
-        let collection = asset.collectionName
+        let collection = asset.categoryName
         let id = asset.id
         let email = this.user.username
         let title = asset.title

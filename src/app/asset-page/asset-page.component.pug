@@ -174,7 +174,7 @@
             .label#ssid {{ 'ASSET_PAGE.METADATA_LABELS.SSID' | translate }}
               .value([innerHtml]="assets[0].SSID", aria-labelledby="ssid")
           .text-left.pt-2
-            a#buttonRequestIap.btn.btn-secondary.my-1(*ngIf="route.snapshot.params.iap == 'true'", [attr.href]="'http://www.artstor.org/form/iap-request-form?name=' + assets[0].title + '&collectionName=' + assets[0].collectionName + '&id=' + assets[0].id + '&email=' + user.username", title="Request Image for Academic Publishing", tabindex="8", target="_blank") {{'ASSET_PAGE.BUTTONS.GET_IAP' | translate}}
+            a#buttonRequestIap.btn.btn-secondary.my-1(*ngIf="route.snapshot.params.iap == 'true'", [attr.href]="'http://www.artstor.org/form/iap-request-form?name=' + assets[0].title + '&collectionName=' + assets[0].categoryName + '&id=' + assets[0].id + '&email=' + user.username", title="Request Image for Academic Publishing", tabindex="8", target="_blank") {{'ASSET_PAGE.BUTTONS.GET_IAP' | translate}}
             a#buttonReportAssetError.btn.btn-secondary.my-1([attr.href]="getErrorFormUrl(assets[0])", title="Report an error", tabindex="14", target="_blank") {{'ASSET_PAGE.BUTTONS.REPORT_ERROR' | translate}}
 
         //- Form hidden by default
