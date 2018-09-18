@@ -20,6 +20,7 @@ export class AssetFiltersService {
         collectiontypes : [],
         classification: [],
         geography: [],
+        institution: [],
         date: [],
         dateObj : {
             earliest : {

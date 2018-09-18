@@ -7,6 +7,7 @@ import { AssetService } from '../shared/assets.service'
 import { AssetFiltersService } from '../asset-filters/asset-filters.service'
 import { AuthService, FlagService } from 'app/shared';
 
+
 declare var _satellite: any
 
 @Component({
@@ -18,6 +19,7 @@ export class AssetFilters {
   // Set our default values
   public searchLoading: boolean
   public showFilters: boolean = true
+  public showContribFilter: boolean = false
   public showAdvancedModal: boolean = false
   private subscriptions: Subscription[] = []
   private filterDate: boolean = false
@@ -76,6 +78,12 @@ export class AssetFilters {
 
   ngOnInit() {
 
+    this._auth.getAllInstitutions()
+    .take(1)
+    .subscribe((data) => {
+      this.subscribeAvailableFilter(data['allInstitutions'])
+    })
+
     this.filterNameMap = this._filters.getFilterNameMap()
 
     // Read filters from URL
@@ -85,6 +93,10 @@ export class AssetFilters {
 
         if (routeParams['startDate'] && routeParams['endDate']){
           this.filterDate = true;
+        }
+
+        if (routeParams['featureFlag'] && routeParams['featureFlag'] === 'contribFilter') {
+          this.showContribFilter = true
         }
 
         // When params are adjusted, applied filters need to be cleared
@@ -110,7 +122,20 @@ export class AssetFilters {
       })
     );
 
-    // Keep an eye for available filter updates
+    // Subscribe to all applied filters in case something fires outside this component
+    this.subscriptions.push(
+      this._filters.applied$
+            .subscribe(filters => {
+                this.appliedFilters = filters;
+            })
+    );
+
+  }
+
+  /**
+   * Keep an eye for available filter updates
+   */
+  private subscribeAvailableFilter(institutionList: any[]): void {
     this.subscriptions.push(
       this._filters.available$.subscribe(
         filters => {
@@ -127,18 +152,28 @@ export class AssetFilters {
               filters['collectiontypes'] = filters['collectiontypes'].filter(collectionType => collectionType.name === '5')
           }
 
+          // Contributors List of search results
+          if (filters['contributinginstitutionid']) {
+
+            if (this.showContribFilter) {
+              let instMap = institutionList
+              for (let i = 0; i < filters['contributinginstitutionid'].length; i++) {
+                for (let j = 0; j < instMap.length; j++) {
+                  if (filters['contributinginstitutionid'][i].name === instMap[j].institutionId) {
+                    filters['contributinginstitutionid'][i].showingName = instMap[j].institutionName;
+                  }
+                }
+              }
+            }
+            else {
+              filters['contributinginstitutionid'] = []
+            }
+
+          }
           this.availableFilters = filters;
         }
       )
     );
-    // Subscribe to all applied filters in case something fires outside this component
-    this.subscriptions.push(
-      this._filters.applied$
-            .subscribe(filters => {
-                this.appliedFilters = filters;
-            })
-    );
-
   }
 
   private loadRoute() {
