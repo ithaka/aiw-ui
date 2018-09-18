@@ -82,6 +82,10 @@ export class AssetFilters {
     .take(1)
     .subscribe((data) => {
       this.subscribeAvailableFilter(data['allInstitutions'])
+    }, err => {
+      // WORKAROUND
+      // Still subscribe to filters
+      this.subscribeAvailableFilter([])
     })
 
     this.filterNameMap = this._filters.getFilterNameMap()
