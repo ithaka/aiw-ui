@@ -135,7 +135,7 @@ export class AssetFilters {
   /**
    * Keep an eye for available filter updates
    */
-  private subscribeAvailableFilter(institutionList: any[]) : void {
+  private subscribeAvailableFilter(institutionList: any[]): void {
     this.subscriptions.push(
       this._filters.available$.subscribe(
         filters => {
@@ -156,11 +156,11 @@ export class AssetFilters {
           if (filters['contributinginstitutionid']) {
 
             if (this.showContribFilter) {
-              let InstMap = institutionList
+              let instMap = institutionList
               for (let i = 0; i < filters['contributinginstitutionid'].length; i++) {
-                for (let j = 0; j < InstMap.length; j++) {
-                  if (filters['contributinginstitutionid'][i].name === InstMap[j].institutionId) {
-                    filters['contributinginstitutionid'][i].showingName = InstMap[j].institutionName;
+                for (let j = 0; j < instMap.length; j++) {
+                  if (filters['contributinginstitutionid'][i].name === instMap[j].institutionId) {
+                    filters['contributinginstitutionid'][i].showingName = instMap[j].institutionName;
                   }
                 }
               }
