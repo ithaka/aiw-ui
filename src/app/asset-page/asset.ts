@@ -19,7 +19,6 @@ export class Asset {
     collectionId: number
     collectionType: number
     collectionName: string
-    categoryName: string
     categoryId: number
     contributinginstitutionid: number
     SSID: string

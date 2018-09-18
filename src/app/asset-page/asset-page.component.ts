@@ -1202,6 +1202,21 @@ export class AssetPage implements OnInit, OnDestroy {
             }
         })
     }
+    
+    /**
+     * Get link to IAP Form
+     * - Generate url with Query params for requesting IAP
+     * @param asset Asset for which the user is requesting IAP
+     * @returns string Request IAP form url with query params
+     */
+    getIapFormUrl(asset: Asset): string {
+        let baseUrl = 'http://www.artstor.org/form/iap-request-form'
+        let name = asset.title
+        let collection = asset.formattedMetadata['Collection'] && asset.formattedMetadata['Collection'][0] ? asset.formattedMetadata['Collection'][0] : ''
+        let id = asset.id
+        let email = this.user.username
+        return baseUrl + '?name=' + name + '&collectionName=' + collection + '&id=' + id + '&email=' + email
+    }
 
     /**
      * Get link to Error Form
@@ -1211,7 +1226,7 @@ export class AssetPage implements OnInit, OnDestroy {
      */
     getErrorFormUrl(asset: Asset): string {
         let baseUrl = 'http://www.artstor.org/form/report-error'
-        let collection = asset.categoryName
+        let collection = asset.formattedMetadata['Collection'] && asset.formattedMetadata['Collection'][0] ? asset.formattedMetadata['Collection'][0] : ''
         let id = asset.id
         let email = this.user.username
         let title = asset.title
