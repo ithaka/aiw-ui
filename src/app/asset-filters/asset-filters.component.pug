@@ -16,11 +16,11 @@
             [ngClass]="{'active': filterApplied(filterKey == 'geography' ? facet.efq : facet.name, filterKey)}",
             data-sc="search: facet"
           )
-          span(*ngIf="filterKey == 'contributinginstitutionid' && facet.showingName && facet.showingName.length < 2") {{ filterNameMap[filterKey] && filterNameMap[filterKey][facet.showingName] }}
+          //- Display of Collection Type Filters
           span(*ngIf="filterKey != 'contributinginstitutionid' && facet.name && facet.name.length < 2") {{ filterNameMap[filterKey] && filterNameMap[filterKey][facet.name] }}
-            span(*ngIf="facet.count") {{ '(' + facet.count + ')' }}
-          span(*ngIf="filterKey == 'contributinginstitutionid' && facet.showingName && facet.showingName.length > 1") {{ facet.showingName }} ({{ facet.count }})
-          span(*ngIf="filterKey != 'contributinginstitutionid' && facet.name && facet.name.length > 1") {{ facet.name }} ({{ facet.count }})
+            span(*ngIf="facet.count") {{ ' (' + facet.count + ')' }}
+          span(*ngIf="filterKey == 'contributinginstitutionid' && facet.showingName && facet.showingName.length > 1", [innerHtml]="facet.showingName + ' ('+facet.count+')'")
+          span(*ngIf="filterKey != 'contributinginstitutionid' && facet.name && facet.name.length > 1", [innerHtml]="facet.name + ' ('+facet.count+')'")
           i.icon.icon-add
           i.icon.icon-close
         //- Geo Child filters
