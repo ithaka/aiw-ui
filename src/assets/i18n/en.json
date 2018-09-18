@@ -150,7 +150,7 @@
       "DELETE_ERROR": "There was an error in deleting the asset. Please try again.",
       "SAVE_ERROR": "There was an error updating the record. Please try again or contact support.",
       "PENDING_TITLE": "Item Details Updates",
-      "PENDING_MESSAGE": "We're in the process of saving your latest changes, they'll be available in search results and to other users soon." 
+      "PENDING_MESSAGE": "We're in the process of saving your latest changes, they'll be available in search results and to other users soon."
     },
     "DELETE_PC_MODAL": {
       "TITLE": "Delete Asset Confirmation",
@@ -659,6 +659,7 @@
     "geography" : "Geography",
     "collTypes" : "Collection Type",
     "collectiontypes" : "Collection Type",
+    "contributinginstitutionid": "Contributor",
     "date" : "Date"
   },
   "FIELD" : {

@@ -131,7 +131,7 @@ export class AssetFilters {
     );
 
   }
-  
+
   /**
    * Keep an eye for available filter updates
    */
@@ -168,8 +168,8 @@ export class AssetFilters {
             else {
               filters['contributinginstitutionid'] = []
             }
-          }
 
+          }
           this.availableFilters = filters;
         }
       )

@@ -12,6 +12,7 @@ export class FlagService {
   public unaffiliated: boolean = false
   public bannerShow: boolean = false
   public bannerCopy: string = ''
+  public contribFilter: boolean = false
 
   constructor(
     private _http: HttpClient
