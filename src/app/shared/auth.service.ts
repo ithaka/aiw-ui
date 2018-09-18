@@ -288,10 +288,12 @@ export class AuthService implements CanActivate {
    * @returns Chainable promise containing collection data
    */
   private refreshUserInstitution() {
-    let options = { withCredentials: true }
+    let header = new HttpHeaders().set('Cache-Control', 'no-store, no-cache')
+    let options = { headers: header, withCredentials: true }
+
     // Returns all of the collections names
     return this.http
-      .get(this.getUrl() + '/v2/institution', options)
+      .get(this.getUrl() + '/v2/institution?no-cache=' + new Date().valueOf(), options)
       .toPromise()
       .then((data) => {
         this.setInstitution(data)
