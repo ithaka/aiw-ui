@@ -76,7 +76,7 @@ export class App {
         for (let routeParam of routeParams) {
           let key = routeParam.split('=')[0]
           let value = routeParam.split('=')[1]
-          if (key === 'featureflag' && value === 'solrmetadata') {
+          if (key === 'featureFlag' && value === 'solrMetadata') {
             document.cookie = 'featureflag=solrmetadata;';
           }
         }

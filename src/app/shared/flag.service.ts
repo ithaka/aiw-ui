@@ -51,6 +51,7 @@ export class FlagService {
       // Solr Metadata rollout
       if (flags.solrMetadataRollout.indexOf(userCountryCode) > -1) {
         this.solrMetadata = true
+        document.cookie = 'featureflag=solrmetadata;'
       }
 
       return flags
