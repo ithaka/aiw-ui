@@ -31,6 +31,7 @@ export class CategoryPage implements OnInit, OnDestroy {
 
   // private searchInResults: boolean = false;
   private unaffiliatedUser: boolean = false
+  private showAccessDeniedModal: boolean = false
 
   constructor(
     private _assets: AssetService,
@@ -39,7 +40,9 @@ export class CategoryPage implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private http: HttpClient,
     private _title: TitleService
-  ) {}
+  ) {
+    this.unaffiliatedUser = this._auth.isPublicOnly() ? true : false
+  }
 
   ngOnInit() {
     // Subscribe User object updates
@@ -84,6 +87,10 @@ export class CategoryPage implements OnInit, OnDestroy {
             })
             .catch((error) => {
               console.error(error);
+              if (error.status === 401) {
+                this.unaffiliatedUser = true
+                this.showAccessDeniedModal = true
+              }
             });
 
           // Get Category data
@@ -100,10 +107,13 @@ export class CategoryPage implements OnInit, OnDestroy {
           })
           .catch((error) => {
             console.error(error);
+            if (error.status === 401) {
+              this.unaffiliatedUser = true
+              this.showAccessDeniedModal = true
+            }
           });
         }
 
-        this.unaffiliatedUser = this._auth.isPublicOnly() ? true : false
       })
     ); // End push to subscription
 
