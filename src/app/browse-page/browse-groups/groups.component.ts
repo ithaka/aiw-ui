@@ -183,7 +183,11 @@ export class BrowseGroupsComponent implements OnInit {
   }
 
   private clearGrpSearch(): void {
-    this.addQueryParams({}, true) // Load default view for group search
+    let queryParams = Object.assign({}, this.route.snapshot.queryParams)
+    if (queryParams['term']){
+      delete queryParams['term']
+    }
+    this.addQueryParams(queryParams, true) // Load group search results without (after clearing) search term
   }
 
   /**
