@@ -122,7 +122,6 @@ export class AssetPage implements OnInit, OnDestroy {
     private relatedResultsQuery: string = ''
     private jstorResults: any[] = []
     private selectedJstorResult: any = {}
-    private relatedResFlag: boolean = false
 
     private editDetailsForm: FormGroup
     private editDetailsFormSubmitted: boolean = false // Set to true once the edit details form is submitted
@@ -188,6 +187,10 @@ export class AssetPage implements OnInit, OnDestroy {
     ]
     private showTour: boolean = false
 
+    // Feature Flags
+    public relatedResFlag: boolean = false
+    public solrMetadataFlag: boolean = false
+
     constructor(
         private _assets: AssetService,
         private _auth: AuthService,
@@ -222,6 +225,7 @@ export class AssetPage implements OnInit, OnDestroy {
 
     ngOnInit() {
         this.user = this._auth.getUser();
+        this.solrMetadataFlag = this._flags.solrMetadata
 
         // sets up subscription to allResults, which is the service providing thumbnails
         this.subscriptions.push(
@@ -298,6 +302,10 @@ export class AssetPage implements OnInit, OnDestroy {
                     if (routeParams['featureFlag'] === 'tour') {
                         this.showTour = true
                     }
+                    if (routeParams['featureFlag'] === 'solrMetadata') {
+                        this.solrMetadataFlag = true
+                    }
+                    
                 } else {
                     this.relatedResFlag = false
                 }

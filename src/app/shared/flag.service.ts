@@ -12,6 +12,7 @@ export class FlagService {
   public unaffiliated: boolean = false
   public bannerShow: boolean = false
   public bannerCopy: string = ''
+  public solrMetadata: boolean = false
 
   constructor(
     private _http: HttpClient
@@ -30,6 +31,7 @@ export class FlagService {
     )
     .map((res) => {
       let flags = res.body
+      let userCountryCode: string = res.headers.get('x-artstor-country-code').substr(0, 2)
 
       /**
        * EXAMPLE USE OF COUNTRY CODE ROLLOUT
@@ -44,6 +46,12 @@ export class FlagService {
        */
       this.bannerShow = flags.bannerShow
       this.bannerCopy = flags.bannerCopy
+      this.solrMetadata = flags.solrMetadata
+
+      // Solr Metadata rollout
+      if (flags.solrMetadataRollout.indexOf(userCountryCode) > -1) {
+        this.solrMetadata = true
+      }
 
       return flags
     })
@@ -55,4 +63,6 @@ interface FlagServiceResponse {
   unaffiliatedAccessRollout: string[]
   bannerShow: boolean
   bannerCopy: string
+  solrMetadata: boolean
+  solrMetadataRollout: string[]
 }
