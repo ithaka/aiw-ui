@@ -85,12 +85,6 @@ export class CollectionPage implements OnInit, OnDestroy {
       .toPromise();
   }
 
-
-  private resourceAccessDenied(): void {
-    this.unaffiliatedUser = false
-     this._router.navigate(['/home']);
-  }
-
   private routeParamSubscrpt(): void {
     this.route.params.subscribe((routeParams) => {
       this.colId = routeParams['colId'];
