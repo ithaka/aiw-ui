@@ -22,3 +22,5 @@ nav-menu([allowSelectAll]="true")
           .thumbnail-shelf
             img.collection-thumb(src="http://viewer2.artstor.org{{ catThumbnail }}")
       ang-asset-grid([actionOptions]="{category: true}")
+ang-access-denied-modal(*ngIf="showAccessDeniedModal")
+

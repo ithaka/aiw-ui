@@ -132,12 +132,6 @@ export class PCollectionPage implements OnInit, OnDestroy {
           .toPromise()
   }
 
-
-  private resourceAccessDenied(): void{
-    this.showaccessDeniedModal = false;
-     this._router.navigate(['/home']);
-  }
-
   private pollNewPCAssetsStatus(): void{
     let publishingAssets = this._auth.getFromStorage('publishingAssets')
     if (publishingAssets){

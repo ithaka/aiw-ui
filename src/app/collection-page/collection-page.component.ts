@@ -27,7 +27,8 @@ export class CollectionPage implements OnInit, OnDestroy {
   private colThumbnail: string = '';
   private assetCount: number;
   private descCollapsed: boolean = true;
-  private showaccessDeniedModal: boolean = false;
+  private unaffiliatedUser: boolean = false;
+  private showAccessDeniedModal: boolean = false;
 
   private subscriptions: Subscription[] = [];
   private userSessionFresh: boolean = false;
@@ -43,7 +44,9 @@ export class CollectionPage implements OnInit, OnDestroy {
     private http: HttpClient,
     private _title: TitleService,
     private _script: ScriptService
-  ) {}
+  ) {
+    this.unaffiliatedUser = this._auth.isPublicOnly() ? true : false
+  }
 
   ngOnInit() {
     /** ETHNIO SCRIPT */
@@ -77,17 +80,9 @@ export class CollectionPage implements OnInit, OnDestroy {
   private getCollectionInfo(colId: string) {
     let options = { withCredentials: true };
 
-
-      return this.http
-          .get(this._auth.getUrl() + '/collections/' + colId, options)
-          .toPromise();
-
-  }
-
-
-  private resourceAccessDenied(): void {
-    this.showaccessDeniedModal = false;
-     this._router.navigate(['/home']);
+    return this.http
+      .get(this._auth.getUrl() + '/collections/' + colId, options)
+      .toPromise();
   }
 
   private routeParamSubscrpt(): void {
@@ -126,7 +121,8 @@ export class CollectionPage implements OnInit, OnDestroy {
             .catch((error) => {
               console.error(error);
               if (error.status === 401){
-                this.showaccessDeniedModal = true;
+                this.unaffiliatedUser = true
+                this.showAccessDeniedModal = true
               }
             });
         }
