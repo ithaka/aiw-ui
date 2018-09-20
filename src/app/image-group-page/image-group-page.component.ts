@@ -31,12 +31,16 @@ export class ImageGroupPage implements OnInit, OnDestroy {
   private showNoIgModal: boolean = false;
   /** controls the modal to tell that the user does not have the rights to access the IG */
   private showNoAccessIgModal: boolean = false;
+  /** controls access denied modal for unaffiliated users landing on /geoup/id pages */
+  private showAccessDeniedModal: boolean = false;
   /** set to true when the call to download info has returned. We won't know what modal to show before that */
   private downloadInfoReturned: boolean = false;
   /** Enables / Disables the IG deletion based on user ownership */
   private allowIgUpdate: boolean = false;
 
   private genImgGrpLink: boolean = false;
+
+  private unaffiliatedUser: boolean = false
 
   /** Options object passed to the asset-grid component */
   private actionOptions: any = {
@@ -54,9 +58,16 @@ export class ImageGroupPage implements OnInit, OnDestroy {
     private _auth: AuthService,
     private route: ActivatedRoute,
     private _title: TitleService
-  ) {}
+  ) {
+    this.unaffiliatedUser = this._auth.isPublicOnly() ? true : false
+  }
 
   ngOnInit() {
+    if (this.unaffiliatedUser) {
+      this.showAccessDeniedModal = true
+      return
+    }
+
     this.user = this._auth.getUser();
     let id = null;
 
