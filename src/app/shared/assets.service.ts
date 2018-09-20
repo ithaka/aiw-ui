@@ -2,23 +2,24 @@
  * Assets service [DEPRECATED, do not add new functions/properties]
  * - Search calls should be moved to asset-search.service as we implement Solr
  */
-import { Injectable, OnDestroy, OnInit, EventEmitter } from '@angular/core';
-import { Router, ActivatedRoute, Params } from '@angular/router';
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-import { Observable, BehaviorSubject, Subject } from 'rxjs/Rx';
-import { Locker } from 'angular2-locker';
-import 'rxjs/add/operator/toPromise';
-import { Subscription }   from 'rxjs/Subscription';
-import { categoryName } from './datatypes/category.interface';
+import { Injectable, OnDestroy, OnInit, EventEmitter } from '@angular/core'
+import { Router, ActivatedRoute, Params } from '@angular/router'
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http'
+import { Observable, BehaviorSubject, Subject } from 'rxjs/Rx'
+import { Locker } from 'angular2-locker'
+import 'rxjs/add/operator/toPromise'
+import { Subscription }   from 'rxjs/Subscription'
+import { categoryName } from './datatypes/category.interface'
 
 // Project Dependencies
-import { AuthService } from './auth.service';
-import { GroupService } from './group.service';
-import { AssetFiltersService } from './../asset-filters/asset-filters.service';
-import { ToolboxService } from './toolbox.service';
-import { AssetSearchService, SearchResponse } from './asset-search.service';
-import { ImageGroup, Thumbnail } from '.';
-import { AppConfig } from 'app/app.service';
+import { AuthService } from './auth.service'
+import { GroupService } from './group.service'
+import { AssetFiltersService } from './../asset-filters/asset-filters.service'
+import { ToolboxService } from './toolbox.service'
+import { AssetSearchService, SearchResponse } from './asset-search.service'
+import { ImageGroup, Thumbnail } from '.'
+import { AppConfig } from 'app/app.service'
+import { APP_CONST } from '../app.constants'
 
 @Injectable()
 export class AssetService {
@@ -127,8 +128,6 @@ export class AssetService {
     // Pagination flag for preserving the select mode while paging through the results
     public paginated: boolean = false;
 
-    private MAX_RESULTS_COUNT: number = 5000
-
     // // bandaid for the re-search functionality
     // private searchErrorCount: number = 0
 
@@ -154,7 +153,7 @@ export class AssetService {
         let totalPages = 1;
 
         if (resultObj.count) {
-          const COUNT = Math.min(resultObj.count, this.MAX_RESULTS_COUNT)
+          const COUNT = Math.min(resultObj.count, APP_CONST.MAX_RESULTS)
 
           totalPages = Math.ceil( COUNT / this.urlParams.size );
         }

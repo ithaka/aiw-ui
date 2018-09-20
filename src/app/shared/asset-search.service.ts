@@ -11,6 +11,7 @@ import {
 import { AuthService } from './'
 import { AppConfig } from '../app.service'
 import { Observable } from 'rxjs/Observable'
+import { APP_CONST } from '../app.constants'
 @Injectable()
 export class AssetSearchService {
 
@@ -312,7 +313,7 @@ export class AssetSearchService {
 
     let pageSize: number = options.size
     const START_INDEX: number = (options.page - 1) * pageSize,
-      MAX_RESULTS_COUNT: number = 5000
+      MAX_RESULTS_COUNT: number = APP_CONST.MAX_RESULTS
 
     // final page may not contain exactly 24, 48, or 72 results, so get the exact ammount for the final page
     if ((START_INDEX + pageSize) > MAX_RESULTS_COUNT) {

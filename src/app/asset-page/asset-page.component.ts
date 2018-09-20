@@ -27,6 +27,7 @@ import { TitleService } from '../shared/title.service'
 import { ScriptService } from '../shared/script.service'
 import { LocalPCService, LocalPCAsset } from '../_local-pc-asset.service'
 import { TourStep } from '../shared/tour/tour.service'
+import { APP_CONST } from '../app.constants'
 
 @Component({
     selector: 'ang-asset-page',
@@ -386,8 +387,9 @@ export class AssetPage implements OnInit, OnDestroy {
                     this.pagination.totalPages = parseInt(pagination.totalPages);
                 }
                 // Page size can't be altered in the asset drawer, endpoint response is limited to 5000
-                if (this.pagination.totalPages > 63) {
-                    this.pagination.totalPages = 63
+                let maxPageCount = APP_CONST.MAX_RESULTS / this.pagination.size
+                if (this.pagination.totalPages > maxPageCount) {
+                    this.pagination.totalPages = maxPageCount
                 }
             })
         );

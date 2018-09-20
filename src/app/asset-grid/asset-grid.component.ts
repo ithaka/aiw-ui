@@ -18,6 +18,7 @@ import {
   FlagService
 } from '../shared'
 import { AssetFiltersService } from '../asset-filters/asset-filters.service'
+import { APP_CONST } from '../app.constants'
 
 @Component({
   selector: 'ang-asset-grid',
@@ -266,7 +267,7 @@ export class AssetGrid implements OnInit, OnDestroy {
         this.pagination.page = parseInt(pagination.page);
         this.pagination.size = parseInt(pagination.size);
 
-        const MAX_RESULTS_COUNT: number = 5000
+        const MAX_RESULTS_COUNT: number = APP_CONST.MAX_RESULTS
         if (this.assetCount) {
           let total = this.hasMaxAssetLimit && this.assetCount > MAX_RESULTS_COUNT ? MAX_RESULTS_COUNT : this.assetCount
           this.pagination.totalPages = Math.floor((total + this.pagination.size - 1) / this.pagination.size);
@@ -335,7 +336,7 @@ export class AssetGrid implements OnInit, OnDestroy {
             this.isLoading = true;
           }
 
-          const MAX_RESULTS_COUNT: number = 5000
+          const MAX_RESULTS_COUNT: number = APP_CONST.MAX_RESULTS
           if ('total' in allResults){
             this.totalAssets = allResults.total
             let total = this.hasMaxAssetLimit && this.totalAssets > MAX_RESULTS_COUNT ? MAX_RESULTS_COUNT : this.totalAssets
