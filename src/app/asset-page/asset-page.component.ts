@@ -27,6 +27,7 @@ import { TitleService } from '../shared/title.service'
 import { ScriptService } from '../shared/script.service'
 import { LocalPCService, LocalPCAsset } from '../_local-pc-asset.service'
 import { TourStep } from '../shared/tour/tour.service'
+import { APP_CONST } from '../app.constants'
 
 @Component({
     selector: 'ang-asset-page',
@@ -305,7 +306,7 @@ export class AssetPage implements OnInit, OnDestroy {
                     if (routeParams['featureFlag'] === 'solrMetadata') {
                         this.solrMetadataFlag = true
                     }
-                    
+
                 } else {
                     this.relatedResFlag = false
                 }
@@ -385,9 +386,10 @@ export class AssetPage implements OnInit, OnDestroy {
                 } else {
                     this.pagination.totalPages = parseInt(pagination.totalPages);
                 }
-                // Page size can't be altered in the asset drawer, and we don't want to exceed 1500 assets
-                if (this.pagination.totalPages > 63) {
-                    this.pagination.totalPages = 63
+                // Page size can't be altered in the asset drawer, endpoint response is limited to 5000
+                let maxPageCount = APP_CONST.MAX_RESULTS / this.pagination.size
+                if (this.pagination.totalPages > maxPageCount) {
+                    this.pagination.totalPages = maxPageCount
                 }
             })
         );
@@ -1210,7 +1212,7 @@ export class AssetPage implements OnInit, OnDestroy {
             }
         })
     }
-    
+
     /**
      * Get link to IAP Form
      * - Generate url with Query params for requesting IAP
