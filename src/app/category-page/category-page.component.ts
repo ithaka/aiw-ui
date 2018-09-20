@@ -88,6 +88,7 @@ export class CategoryPage implements OnInit, OnDestroy {
             .catch((error) => {
               console.error(error);
               if (error.status === 401) {
+                // Categories are ADL collections only, so we can make this assumption
                 this.unaffiliatedUser = true
                 this.showAccessDeniedModal = true
               }
@@ -108,6 +109,7 @@ export class CategoryPage implements OnInit, OnDestroy {
           .catch((error) => {
             console.error(error);
             if (error.status === 401) {
+              // Categories are ADL collections only, so we can make this assumption
               this.unaffiliatedUser = true
               this.showAccessDeniedModal = true
             }
