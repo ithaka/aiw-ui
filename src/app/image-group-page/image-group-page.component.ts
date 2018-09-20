@@ -31,7 +31,7 @@ export class ImageGroupPage implements OnInit, OnDestroy {
   private showNoIgModal: boolean = false;
   /** controls the modal to tell that the user does not have the rights to access the IG */
   private showNoAccessIgModal: boolean = false;
-  /** controls access denied modal for unaffiliated users landing on /geoup/id pages */
+  /** controls access denied modal for unaffiliated users landing on /group/id pages */
   private showAccessDeniedModal: boolean = false;
   /** set to true when the call to download info has returned. We won't know what modal to show before that */
   private downloadInfoReturned: boolean = false;
