@@ -312,7 +312,7 @@ export class AssetSearchService {
 
     let pageSize: number = options.size
     const START_INDEX: number = (options.page - 1) * pageSize,
-      MAX_RESULTS_COUNT: number = 1500
+      MAX_RESULTS_COUNT: number = 5000
 
     // final page may not contain exactly 24, 48, or 72 results, so get the exact ammount for the final page
     if ((START_INDEX + pageSize) > MAX_RESULTS_COUNT) {

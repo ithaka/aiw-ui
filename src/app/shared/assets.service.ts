@@ -127,7 +127,7 @@ export class AssetService {
     // Pagination flag for preserving the select mode while paging through the results
     public paginated: boolean = false;
 
-    private MAX_RESULTS_COUNT: number = 1500
+    private MAX_RESULTS_COUNT: number = 5000
 
     // // bandaid for the re-search functionality
     // private searchErrorCount: number = 0

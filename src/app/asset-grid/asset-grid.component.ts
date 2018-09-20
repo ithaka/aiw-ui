@@ -72,7 +72,7 @@ export class AssetGrid implements OnInit, OnDestroy {
   @Input()
   private actionOptions: any = {};
 
-  // With most pages using Solr, we want to default assuming a max of 1500
+  // With most pages using Solr, we want to default assuming a max of 5000
   @Input()
   private hasMaxAssetLimit: boolean = true
 
@@ -266,7 +266,7 @@ export class AssetGrid implements OnInit, OnDestroy {
         this.pagination.page = parseInt(pagination.page);
         this.pagination.size = parseInt(pagination.size);
 
-        const MAX_RESULTS_COUNT: number = 1500
+        const MAX_RESULTS_COUNT: number = 5000
         if (this.assetCount) {
           let total = this.hasMaxAssetLimit && this.assetCount > MAX_RESULTS_COUNT ? MAX_RESULTS_COUNT : this.assetCount
           this.pagination.totalPages = Math.floor((total + this.pagination.size - 1) / this.pagination.size);
@@ -335,7 +335,7 @@ export class AssetGrid implements OnInit, OnDestroy {
             this.isLoading = true;
           }
 
-          const MAX_RESULTS_COUNT: number = 1500
+          const MAX_RESULTS_COUNT: number = 5000
           if ('total' in allResults){
             this.totalAssets = allResults.total
             let total = this.hasMaxAssetLimit && this.totalAssets > MAX_RESULTS_COUNT ? MAX_RESULTS_COUNT : this.totalAssets
@@ -351,7 +351,7 @@ export class AssetGrid implements OnInit, OnDestroy {
           // Tie prevRouteParams array with previousRouteTS (time stamp) before sending to asset page
           this.prevRouteTS = Date.now().toString()
           let id: string = this.prevRouteTS
-          
+
           let prevRouteParams = this._session.get('prevRouteParams') || {}
           prevRouteParams[id] = this.route.snapshot.url
           this._session.set('prevRouteParams', prevRouteParams)

@@ -370,7 +370,7 @@
       "SEARCH_PROMPT": "Enter a keyword or select a filter to begin a search"
     },
     "WARNINGS": {
-      "ADDITIONAL_RESULTS": "Sorry, additional results cannot be displayed. In order to keep things quick, Artstor does not show more than 1500 results for any search. If you haven't found what you are looking for, try using advanced search.",
+      "ADDITIONAL_RESULTS": "Sorry, additional results cannot be displayed. In order to keep things quick, Artstor does not show more than 5000 results for any search. If you haven't found what you are looking for, try using advanced search.",
       "RSTD_IMGS": "This group contains restricted images or images that have been deleted by the creator."
     }
   },

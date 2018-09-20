@@ -305,7 +305,7 @@ export class AssetPage implements OnInit, OnDestroy {
                     if (routeParams['featureFlag'] === 'solrMetadata') {
                         this.solrMetadataFlag = true
                     }
-                    
+
                 } else {
                     this.relatedResFlag = false
                 }
@@ -385,7 +385,7 @@ export class AssetPage implements OnInit, OnDestroy {
                 } else {
                     this.pagination.totalPages = parseInt(pagination.totalPages);
                 }
-                // Page size can't be altered in the asset drawer, and we don't want to exceed 1500 assets
+                // Page size can't be altered in the asset drawer, endpoint response is limited to 5000
                 if (this.pagination.totalPages > 63) {
                     this.pagination.totalPages = 63
                 }
@@ -1210,7 +1210,7 @@ export class AssetPage implements OnInit, OnDestroy {
             }
         })
     }
-    
+
     /**
      * Get link to IAP Form
      * - Generate url with Query params for requesting IAP
