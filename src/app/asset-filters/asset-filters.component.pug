@@ -13,14 +13,14 @@
         button.filter.parent(
             *ngIf="facet.name && facet.name.length > 0",
             id="filterCollectionTypeItem{{ facet.name }}",
-            (click)="toggleFilter(filterKey == 'geography' ? facet.efq : facet.name, filterKey)",
+            (click)="toggleFilter(filterKey == 'geography' ? facet.efq : filterKey == 'contributnginstitutionid' ? 'collectiontypes:(2)': facet.name, filterKey)",
             [ngClass]="{'active': filterApplied(filterKey == 'geography' ? facet.efq : facet.name, filterKey)}",
             data-sc="search: facet"
           )
           //- Display of contributing institutions list
           span(*ngIf="filterKey != 'contributinginstitutionid' && facet.name && facet.name.length < 2") {{ filterNameMap[filterKey] && filterNameMap[filterKey][facet.name] }}
             span(*ngIf="facet.count") {{ ' (' + facet.count + ')' }}
-          span(*ngIf="filterKey == 'contributinginstitutionid' && facet.showingName && facet.showingName.length > 1", [innerHtml]="facet.showingName + ' ('+facet.count+')'")
+          span(*ngIf="filterKey == 'contributinginstitutionid' && facet.showingName && facet.showingName.length > 1", [innerHtml]="facet.showingName + ' ('+institutionFilterResultsCount+')'")
           span(*ngIf="filterKey != 'contributinginstitutionid' && facet.name && facet.name.length > 1", [innerHtml]="facet.name + ' ('+facet.count+')'")
           i.icon.icon-add
           i.icon.icon-close
