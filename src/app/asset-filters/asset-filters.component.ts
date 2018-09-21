@@ -25,6 +25,12 @@ export class AssetFilters {
   private filterDate: boolean = false
   private filterNameMap: any = {}
 
+  // Institution Filter
+  private institutionFilterResultsCount: number = 0
+
+
+
+
   errors = {}
   results = []
   appliedFilters = []
@@ -147,24 +153,34 @@ export class AssetFilters {
           if (filters['collectiontypes']) {
             for (let i = 0; i < filters['collectiontypes'].length; i++) {
               let colType = filters['collectiontypes'][i]
+
+              // TODO: This count is wrong so we need institutionCount
+              // collectionType:(2) in solr query
               if (colType.name == '2' || colType.name == '4') {
-                delete colType.count
+                colType.count = this.institutionFilterResultsCount + 1
               }
             }
             // If auth.isPublicOnly 'unaffiliated' user, filter out all but type 5 collection type
             if (this._auth.isPublicOnly())
               filters['collectiontypes'] = filters['collectiontypes'].filter(collectionType => collectionType.name === '5')
+
+              // TODO: With Institution Filter - we also need to remove type 5 from other institutions
           }
 
           // Contributors List of search results
           if (filters['contributinginstitutionid']) {
 
             if (this.showContribFilter) {
+
               let instMap = institutionList
               for (let i = 0; i < filters['contributinginstitutionid'].length; i++) {
                 for (let j = 0; j < instMap.length; j++) {
                   if (filters['contributinginstitutionid'][i].name === instMap[j].institutionId) {
                     filters['contributinginstitutionid'][i].showingName = instMap[j].institutionName;
+
+                    // If user's institution is contrib id, then institutionFilterResultsCount +=1
+                    this.institutionFilterResultsCount += 1
+                    console.log('Institution Assets: ' + this.institutionFilterResultsCount)
                   }
                 }
               }
