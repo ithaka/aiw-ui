@@ -57,6 +57,7 @@ export class PCollectionPage implements OnInit, OnDestroy {
     // Unaffiliated users show login modal when accessing /pcollection/
     if (this.unaffiliatedUser) {
       this.showAccessDeniedModal = true
+      return
     }
 
     this.pollNewPCAssetsStatus()
