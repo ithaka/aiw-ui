@@ -27,7 +27,7 @@ export class PCollectionPage implements OnInit, OnDestroy {
   private colThumbnail: string = ''
   private assetCount: number
   private descCollapsed: boolean = true
-  private showaccessDeniedModal: boolean = false
+  private showAccessDeniedModal: boolean = false
   private showDeleteSuccessBanner: boolean = false
   private deleteBannerParams: { title?: string } = {}
 
@@ -39,6 +39,7 @@ export class PCollectionPage implements OnInit, OnDestroy {
   }
   private pub_que_count: number = 0
   private pub_failure_count: number = 0
+  private unaffiliatedUser: boolean = false
 
   constructor(
     private _assets: AssetService,
@@ -47,9 +48,18 @@ export class PCollectionPage implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private http: HttpClient,
     private _title: TitleService
-  ) {}
+  ) {
+    this.unaffiliatedUser = this._auth.isPublicOnly() ? true : false
+  }
 
   ngOnInit() {
+
+    // Unaffiliated users show login modal when accessing /pcollection/
+    if (this.unaffiliatedUser) {
+      this.showAccessDeniedModal = true
+      return
+    }
+
     this.pollNewPCAssetsStatus()
 
     this.subscriptions.push(
@@ -100,7 +110,7 @@ export class PCollectionPage implements OnInit, OnDestroy {
             .catch((error) => {
               console.error(error);
               if (error.status === 401){
-                this.showaccessDeniedModal = true;
+                this.showAccessDeniedModal = true;
               }
             });
         }

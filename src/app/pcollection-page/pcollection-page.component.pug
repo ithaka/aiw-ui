@@ -35,4 +35,4 @@ ang-sky-banner(*ngIf="showDeleteSuccessBanner", textValue="{{ 'PERSONAL_COLLECTI
         button.close(type="button", (click)="closePublishingMsgs()", aria-label="Close")
           span(aria-hidden="true") &times;
       ang-asset-grid([actionOptions]="{collection: true}", [assetCount]="assetCount", [hasMaxAssetLimit]="true")
-  ang-access-denied-modal(*ngIf="showaccessDeniedModal")
+  ang-access-denied-modal(*ngIf="showAccessDeniedModal")
