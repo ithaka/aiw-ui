@@ -27,9 +27,7 @@ export class AssetFilters {
 
   // Institution Filter
   private institutionFilterResultsCount: number = 0
-
-
-
+  private institutionFilterQuery: string
 
   errors = {}
   results = []
@@ -149,28 +147,10 @@ export class AssetFilters {
     this.subscriptions.push(
       this._filters.available$.subscribe(
         filters => {
-          // Clean up filter data for display (i.e. insitutional asset counts are inaccurate)
-          if (filters['collectiontypes']) {
-            for (let i = 0; i < filters['collectiontypes'].length; i++) {
-              let colType = filters['collectiontypes'][i]
-
-              // TODO: This count is wrong so we need institutionCount
-              // collectionType:(2) in solr query
-              if (colType.name == '2' || colType.name == '4') {
-                colType.count = this.institutionFilterResultsCount + 1
-              }
-            }
-            // If auth.isPublicOnly 'unaffiliated' user, filter out all but type 5 collection type
-            if (this._auth.isPublicOnly())
-              filters['collectiontypes'] = filters['collectiontypes'].filter(collectionType => collectionType.name === '5')
-
-              // TODO: With Institution Filter - we also need to remove type 5 from other institutions
-          }
 
           // Contributors List of search results
           if (filters['contributinginstitutionid']) {
-
-            if (this.showContribFilter) {
+            // if (this.showContribFilter) {
 
               let instMap = institutionList
               for (let i = 0; i < filters['contributinginstitutionid'].length; i++) {
@@ -183,12 +163,29 @@ export class AssetFilters {
                     console.log('Institution Assets: ' + this.institutionFilterResultsCount)
                   }
                 }
+              //}
+            }
+            // else {
+            //   filters['contributinginstitutionid'] = []
+            // }
+
+          }
+          // Clean up filter data for display (i.e. insitutional asset counts are inaccurate)
+          if (filters['collectiontypes']) {
+            for (let i = 0; i < filters['collectiontypes'].length; i++) {
+              let colType = filters['collectiontypes'][i]
+
+              // TODO: This count is wrong so we need institutionCount
+              // collectionType:(2) in solr query
+              if (colType.name == '2' || colType.name == '4') {
+                colType.count = this.institutionFilterResultsCount
               }
             }
-            else {
-              filters['contributinginstitutionid'] = []
-            }
+            // If auth.isPublicOnly 'unaffiliated' user, filter out all but type 5 collection type
+            if (this._auth.isPublicOnly())
+              filters['collectiontypes'] = filters['collectiontypes'].filter(collectionType => collectionType.name === '5')
 
+            // TODO: With Institution Filter - we also need to remove type 5 from other institutions
           }
           this.availableFilters = filters;
         }
@@ -211,6 +208,8 @@ export class AssetFilters {
     }
 
     for (let filter of this.appliedFilters) {
+      console.log('APPLIED FILTERS', this.appliedFilters)
+
       if (filter.filterGroup == 'page'){
         params[filter.filterGroup] =  parseInt(filter.filterValue[0]);
       }
@@ -223,6 +222,9 @@ export class AssetFilters {
       else if ((filter.filterGroup != 'startDate') && (filter.filterGroup != 'endDate') && (filter.filterValue && filter.filterValue.length > 0)){
         // Arrays must be stringified, as angular router doesnt handle them well
         params[filter.filterGroup] =  Array.isArray(filter.filterValue) ? JSON.stringify(filter.filterValue) : filter.filterValue;
+      }
+      else if (filter.filterGroup === 'collectiontypes') {
+        this.institutionFilterQuery = '(collectiontypes:2 AND contributinginstitutionid:(10001)) OR (collectiontypes:(2) AND -(collectiontypes:(5)))'
       }
     }
 

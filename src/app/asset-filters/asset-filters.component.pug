@@ -13,7 +13,7 @@
         button.filter.parent(
             *ngIf="facet.name && facet.name.length > 0",
             id="filterCollectionTypeItem{{ facet.name }}",
-            (click)="toggleFilter(filterKey == 'geography' ? facet.efq : filterKey == 'contributnginstitutionid' ? 'collectiontypes:(2)': facet.name, filterKey)",
+            (click)="toggleFilter(filterKey == 'geography' ? facet.efq : (filterKey == 'contributnginstitutionid' ? institutionFilterQuery: facet.name), filterKey)",
             [ngClass]="{'active': filterApplied(filterKey == 'geography' ? facet.efq : facet.name, filterKey)}",
             data-sc="search: facet"
           )
