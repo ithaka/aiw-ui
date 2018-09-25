@@ -8,7 +8,7 @@ import { Observable } from 'rxjs'
 
 // Project Dependencies
 import { MetadataRes } from './datatypes/asset.interface'
-import { FlagService } from './flag.service';
+import { FlagService } from './flag.service'
 
 @Injectable()
 export class MetadataService {
