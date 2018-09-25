@@ -27,8 +27,6 @@ export class AssetFilters {
 
   // Institution Filter
   private institutionFilterResultsCount: number = 0
-  private institutionFilterQuery: string
-  private userInstId: string
 
   errors = {}
   results = []
@@ -151,17 +149,11 @@ export class AssetFilters {
 
           // Contributors List of search results
           if (filters['contributinginstitutionid']) {
-            // if (this.showContribFilter) {
-
-
 
               this.institutionFilterResultsCount = 0
 
               let instMap = institutionList
               for (let i = 0; i < filters['contributinginstitutionid'].length; i++) {
-
-                this.userInstId = filters['contributinginstitutionid'][i].name
-
                 for (let j = 0; j < instMap.length; j++) {
                   if (filters['contributinginstitutionid'][i].name === instMap[j].institutionId) {
                     filters['contributinginstitutionid'][i].showingName = instMap[j].institutionName;
@@ -170,12 +162,11 @@ export class AssetFilters {
                     console.log('Institution Assets: ' + this.institutionFilterResultsCount)
                   }
                 }
-              //}
-            }
-            // else {
-            //   filters['contributinginstitutionid'] = []
-            // }
 
+              if (!this.showContribFilter) {
+                filters['contributinginstitutionid'] = []
+              }
+            }
           }
           // Clean up filter data for display (i.e. insitutional asset counts are inaccurate)
           if (filters['collectiontypes']) {
@@ -228,9 +219,6 @@ export class AssetFilters {
       else if ((filter.filterGroup != 'startDate') && (filter.filterGroup != 'endDate') && (filter.filterValue && filter.filterValue.length > 0)){
         // Arrays must be stringified, as angular router doesnt handle them well
         params[filter.filterGroup] =  Array.isArray(filter.filterValue) ? JSON.stringify(filter.filterValue) : filter.filterValue;
-      }
-      else if (filter.filterGroup === 'collectiontypes') {
-        this.institutionFilterQuery = '(collectiontypes:2 AND contributinginstitutionid:(' + this.userInstId + ')) OR (collectiontypes:(2) AND -(collectiontypes:(5)))'
       }
     }
 
