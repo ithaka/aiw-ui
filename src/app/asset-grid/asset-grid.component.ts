@@ -210,6 +210,24 @@ export class AssetGrid implements OnInit, OnDestroy {
         if (params['term']){
           this.searchTerm = params['term'];
           this.UrlParams.term = this.searchTerm;
+        } else{
+          this.searchTerm = '';
+        }
+        if (params['catId']){
+          this.searchTerm = this.searchTerm + ' categoryid:' + params['catId'];
+          this.UrlParams.catId = params['catId'];
+        }
+        if (params['colId']){
+            this.UrlParams.colId = params['colId'];
+        }
+        if (params['pcolId']){
+          let user = this._auth.getUser();
+          this.searchTerm = this.searchTerm + ' personalcollectionowner:(' + user['baseProfileId']  + ')';
+          this.UrlParams.pcolId = params['pcolId'];
+        }
+        if (params['clusterId']){
+          this.searchTerm = this.searchTerm + ' clusterid:(' + params['clusterId']  + ')';
+          this.UrlParams.clusterId = params['clusterId'];
         }
         if (params['startDate']){
           this.UrlParams.startDate = params['startDate'];
