@@ -171,18 +171,24 @@ export class AssetFilters {
           }
           // Clean up filter data for display (i.e. insitutional asset counts are inaccurate)
           if (filters['collectiontypes']) {
+
+            if (!this.institutionFilterResultsCount) {
+              filters['collectiontypes'] = filters['collectiontypes'].filter(collectionType => collectionType.name != '2')
+            }
+
             for (let i = 0; i < filters['collectiontypes'].length; i++) {
               let colType = filters['collectiontypes'][i]
 
-              // TODO: This count is wrong so we need institutionCount
-              // collectionType:(2) in solr query
+              // Only Show institution filter count > 0
               if (colType.name == '2' || colType.name == '4') {
-                colType.count = this.institutionFilterResultsCount
+                delete colType.count
               }
+
             }
+
             // If auth.isPublicOnly 'unaffiliated' user, filter out all but type 5 collection type
             if (this._auth.isPublicOnly()) {
-              filters['collectiontypes'] = filters['collectiontypes'].filter(collectionType => collectionType.name === '5')
+             filters['collectiontypes'] = filters['collectiontypes'].filter(collectionType => collectionType.name === '5')
             }
           }
           this.availableFilters = filters;
