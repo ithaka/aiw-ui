@@ -6,6 +6,7 @@ import { PactWeb, Matchers } from '@pact-foundation/pact-web'
 // Project Dependencies
 import { MetadataRes } from '../shared/datatypes'
 import { MetadataService } from '../shared/metadata.service';
+import { FlagService } from '../shared';
 
 describe('Metadata Calls #pact #metadata', () => {
 
@@ -90,7 +91,8 @@ describe('Metadata Calls #pact #metadata', () => {
     beforeEach(() => {
       TestBed.configureTestingModule({
         providers: [
-          MetadataService
+          MetadataService,
+          FlagService
         ],
         imports: [
           HttpClientModule
@@ -111,11 +113,11 @@ describe('Metadata Calls #pact #metadata', () => {
           withRequest: {
             method: 'GET',
             path: '/api/v1/metadata',
-            query: 'legacy=false&object_ids=SS35538_35538_29885250'
+            query: 'object_ids=SS35538_35538_29885250&legacy=true'
           },
           willRespondWith: {
             status: 200,
-            headers: { 'Content-Type': 'application/json' },
+            headers: { 'Content-Type': 'application/json;charset=UTF-8' },
             body: generateMetadataMatcher(expectedMetadataObject)
           }
         })
