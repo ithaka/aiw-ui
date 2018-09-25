@@ -30,48 +30,49 @@ describe('Metadata Calls #pact #metadata', () => {
 
     /**
      * Image asset metadata
-     * - Metadata for SS35538_35538_29885250, "If the Color Changes"
+     * - Metadata for SS34216_34216_39230202, a compound object
      */
     const expectedMetadataObject: MetadataRes  = {
       'success': true,
       'total': 1,
       'metadata': [{
-          'resolution_x': 600,
-          'SSID': '11008184',
-          'object_id': 'SS35538_35538_29885250',
-          'object_type_id': 10,
-          'thumbnail_url': '/thumb/imgstor/size0/sslps/c35538/11008184.jpg',
-          'width': 2772,
-          'metadata_json': [
-            {'count': 1, 'fieldName': 'Creator', 'fieldValue': 'Mel Bochner, American, b. 1940, Pittsburgh, PA <br/> David Lasry, American, American', 'index': 1},
-            {'count': 1, 'fieldName': 'Title', 'fieldValue': 'If the Color Changes', 'index': 1},
-            {'count': 1, 'fieldName': 'Work Type', 'fieldValue': 'Monotype with embossing', 'index': 1},
-            {'count': 1, 'fieldName': 'Date', 'fieldValue': '2001', 'index': 1}
+        "resolution_x": 600,
+        "SSID": "1002547028",
+        "object_id": "SS34216_34216_39230202",
+        "object_type_id": 10,
+        "thumbnail_url": "/media-objects/25302/representation/size/2",
+        "width": 0,
+        "metadata_json": [
+          {
+            "count": 1,
+            "fieldName": "Rights",
+            "fieldValue": "This image has been selected and made available by a user using Artstor's software tools. Artstor has not screened or selected this image or cleared any rights to it and is acting as an online service provider pursuant to 17 U.S.C. §512. Artstor disclaims any liability associated with the use of this image. Should you have any legal objection to the use of this image, please visit http://www.artstor.org/copyright for contact information and instructions on how to proceed.",
+            "index": 1
+          }
         ],
-        'fileProperties': [
-          {'fileName': '11008184.fpx'}
+        "fileProperties": [],
+        "updated_on": "2018-09-07T14:52:54Z",
+        "image_url": "/2018/09/07/10/b157b359-de80-4d4b-893e-c41d299e0e66_deflate.tif/info.json",
+        "collections": [],
+        "title": "Sample Compound Object",
+        "category_name": "",
+        "image_compound_urls": [
+          "/2018/09/07/10/2f7742cd-414c-4da7-83b9-1a1f06629876_deflate.tif/info.json",
+          "/2018/09/07/10/8d0df8df-2b1c-4dd2-89d5-4b60beb8b842_deflate.tif/info.json",
+          "/2018/09/07/10/6e9b9835-ee80-4f0e-8daa-d5a6170f8e3a_deflate.tif/info.json",
+          "/2018/09/07/10/8ec0ce6d-f662-4833-aef0-0f45f500233f_deflate.tif/info.json",
+          "/2018/09/07/10/976b78c4-c72d-43c0-bfe7-60db03468bfa_deflate.tif/info.json",
+          "/2018/09/07/10/145169a0-548c-4cc9-a586-d2cd480b5306_deflate.tif/info.json",
+          "/2018/09/07/10/ca7319bf-8a01-4662-8d27-b3a2fe120144_deflate.tif/info.json",
+          "/2018/09/07/10/910b249e-8830-49f5-95e7-7a47d815fafc_deflate.tif/info.json",
+          "/2018/09/07/10/acb2538e-658f-4db3-af2e-ff4b8d332cf8_deflate.tif/info.json",
+          "/2018/09/07/10/b157b359-de80-4d4b-893e-c41d299e0e66_deflate.tif/info.json"
         ],
-        'updated_on': '2017-06-09T18:36:37Z',
-        'image_url': 'sslps/c35538/11008184.fpx/47cA6zw3AJcbqsn2RT5KkA/1532635760/',
-        // Optional property for compound objects
-        'image_compound_urls' : [
-          // Example image viewer URLs for "Illustrated Manuscript" (SSID: 18739143)
-          "sslps/c7731421/18739141.fpx/rY3pHQpNknS89SdoTjVW3g/1534355588/",
-          "sslps/c7731421/18739144.fpx/RprdR0J-Bw-15MF8q8DVrw/1534355589/",
-          "sslps/c7731421/18739143.fpx/t6Ois8iIBALNndLLo7TFnA/1534355591/"
-        ],
-        'collections': [
-            {'type': '5', 'id': '87730057', 'name': 'Michael C. Carlos Museum Collections Online'},
-            {'type': '2', 'id': '35538', 'name': 'Michael C. Carlos Museum Collections Online'}
-        ],
-        'title': 'If the Color Changes',
-        'category_name': '',
-        'icc_profile_loc': null,
-        'resolution_y': 600,
-        'contributinginstitutionid': 10028,
-        'category_id': '',
-        'height': 2131,
-        'download_size': '1024,1024'
+        "resolution_y": 600,
+        "contributinginstitutionid": 24615,
+        "category_id": "",
+        "height": 0,
+        "download_size": "1024,1024"
       }]
     }
 
@@ -113,7 +114,7 @@ describe('Metadata Calls #pact #metadata', () => {
           withRequest: {
             method: 'GET',
             path: '/api/v1/metadata',
-            query: 'object_ids=SS35538_35538_29885250&legacy=true'
+            query: 'object_ids=SS34216_34216_39230202&legacy=true'
           },
           willRespondWith: {
             status: 200,
@@ -136,7 +137,7 @@ describe('Metadata Calls #pact #metadata', () => {
       it('should return metadata for an asset',
        function(done) {
         // Run the tests
-        _metadata.getMetadata('SS35538_35538_29885250')
+        _metadata.getMetadata('SS34216_34216_39230202')
           .subscribe(res => {
             expect(res).toEqual(expectedMetadataObject)
             done()
