@@ -114,7 +114,7 @@ describe('Metadata Calls #pact #metadata', () => {
           withRequest: {
             method: 'GET',
             path: '/api/v1/metadata',
-            query: 'object_ids=SS34216_34216_39230202&legacy=true'
+            query: 'object_ids=SS34216_34216_39230202&legacy=false'
           },
           willRespondWith: {
             status: 200,
@@ -137,7 +137,7 @@ describe('Metadata Calls #pact #metadata', () => {
       it('should return metadata for an asset',
        function(done) {
         // Run the tests
-        _metadata.getMetadata('SS34216_34216_39230202')
+        _metadata.getMetadata('SS34216_34216_39230202', null, false)
           .subscribe(res => {
             expect(res).toEqual(expectedMetadataObject)
             done()
