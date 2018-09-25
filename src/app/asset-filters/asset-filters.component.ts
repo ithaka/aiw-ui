@@ -28,6 +28,7 @@ export class AssetFilters {
   // Institution Filter
   private institutionFilterResultsCount: number = 0
   private institutionFilterQuery: string
+  private userInstId: string
 
   errors = {}
   results = []
@@ -152,13 +153,19 @@ export class AssetFilters {
           if (filters['contributinginstitutionid']) {
             // if (this.showContribFilter) {
 
+
+
+              this.institutionFilterResultsCount = 0
+
               let instMap = institutionList
               for (let i = 0; i < filters['contributinginstitutionid'].length; i++) {
+
+                this.userInstId = filters['contributinginstitutionid'][i].name
+
                 for (let j = 0; j < instMap.length; j++) {
                   if (filters['contributinginstitutionid'][i].name === instMap[j].institutionId) {
                     filters['contributinginstitutionid'][i].showingName = instMap[j].institutionName;
 
-                    // If user's institution is contrib id, then institutionFilterResultsCount +=1
                     this.institutionFilterResultsCount += 1
                     console.log('Institution Assets: ' + this.institutionFilterResultsCount)
                   }
@@ -182,10 +189,9 @@ export class AssetFilters {
               }
             }
             // If auth.isPublicOnly 'unaffiliated' user, filter out all but type 5 collection type
-            if (this._auth.isPublicOnly())
+            if (this._auth.isPublicOnly()) {
               filters['collectiontypes'] = filters['collectiontypes'].filter(collectionType => collectionType.name === '5')
-
-            // TODO: With Institution Filter - we also need to remove type 5 from other institutions
+            }
           }
           this.availableFilters = filters;
         }
@@ -224,7 +230,7 @@ export class AssetFilters {
         params[filter.filterGroup] =  Array.isArray(filter.filterValue) ? JSON.stringify(filter.filterValue) : filter.filterValue;
       }
       else if (filter.filterGroup === 'collectiontypes') {
-        this.institutionFilterQuery = '(collectiontypes:2 AND contributinginstitutionid:(10001)) OR (collectiontypes:(2) AND -(collectiontypes:(5)))'
+        this.institutionFilterQuery = '(collectiontypes:2 AND contributinginstitutionid:(' + this.userInstId + ')) OR (collectiontypes:(2) AND -(collectiontypes:(5)))'
       }
     }
 
