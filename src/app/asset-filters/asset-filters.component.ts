@@ -163,6 +163,7 @@ export class AssetFilters {
                   }
                 }
 
+
               if (!this.showContribFilter) {
                 filters['contributinginstitutionid'] = []
               }
