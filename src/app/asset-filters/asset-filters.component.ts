@@ -168,15 +168,20 @@ export class AssetFilters {
           }
           // Clean up filter data for display (i.e. insitutional asset counts are inaccurate)
           if (filters['collectiontypes']) {
+            let instFilterIndex: number = 0
 
             for (let i = 0; i < filters['collectiontypes'].length; i++) {
               let colType = filters['collectiontypes'][i]
 
               // Only Show institution filter count > 0
               if (colType.name == '2' || colType.name == '4') {
-                console.log(filters['collectiontypes'][i])
+                instFilterIndex = i
                 delete colType.count
               }
+            }
+
+            if (instFilterIndex && filters['collectiontypes'][instFilterIndex].count < 1) {
+              filters['collectiontypes'][instFilterIndex] = []
             }
 
             // If auth.isPublicOnly 'unaffiliated' user, filter out all but type 5 collection type
