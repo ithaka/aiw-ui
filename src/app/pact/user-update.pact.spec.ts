@@ -1,9 +1,11 @@
 /*eslint-disable*/
 import {Http, HttpModule, BaseRequestOptions, Response, RequestOptions, XHRBackend, ResponseOptions, RequestMethod} from '@angular/http';
 import {TestBed, inject, getTestBed, async} from '@angular/core/testing';
-import { AccountService } from './../shared'
 import { PactWeb, Matchers} from '@pact-foundation/pact-web'
 import { HttpClientModule } from '@angular/common/http'
+
+// Project Dependencies
+import { AccountService } from './../shared'
 
 describe('PUT /api/secure/user/{{profileId}} #pact #updateuser', () => {
 
@@ -120,7 +122,7 @@ describe('PUT /api/secure/user/{{profileId}} #pact #updateuser', () => {
   describe('400 errors', () => {
     beforeAll((done) => {
       let interactions: Promise<any>[] = []
-
+      // Empty Body
       interactions.push(
         provider.addInteraction({
           state: 'I am logged in as qapact@artstor.org',
@@ -140,7 +142,7 @@ describe('PUT /api/secure/user/{{profileId}} #pact #updateuser', () => {
           }
         })
       )
-
+      // Invalid Field
       interactions.push(
         provider.addInteraction({
           state: 'I am logged in as qapact@artstor.org',
@@ -163,7 +165,7 @@ describe('PUT /api/secure/user/{{profileId}} #pact #updateuser', () => {
           }
         })
       )
-
+      // Invalid ID
       interactions.push(
         provider.addInteraction({
           state: 'I am logged in as qapact@artstor.org',
@@ -201,7 +203,7 @@ describe('PUT /api/secure/user/{{profileId}} #pact #updateuser', () => {
         done.fail(e)
       })
     })
-
+    // Test empty body
     it('should receive an error for an empty body', (done) => {
       service.update({ baseProfileId: validBaseProfileId })
       .subscribe(res => {
@@ -213,7 +215,7 @@ describe('PUT /api/secure/user/{{profileId}} #pact #updateuser', () => {
         done()
       })
     })
-
+    // Test invalid field
     it('should receive an error for an invalid field', (done) => {
       service.update({
         baseProfileId: validBaseProfileId,
@@ -230,7 +232,7 @@ describe('PUT /api/secure/user/{{profileId}} #pact #updateuser', () => {
         done()
       })
     })
-
+    // Test invalid profile id
     it('should receive an error when passing an invalid baseProfileId', (done) => {
       service.update({
         baseProfileId: fakeUserId,
