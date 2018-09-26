@@ -202,79 +202,96 @@ export class AssetGrid implements OnInit, OnDestroy {
     this.subscriptions.push(
       this.route.params
       .subscribe((params: Params) => {
-        // Find feature flags
-        if (params && params['featureFlag']){
-          this._flags[params['featureFlag']] = true
-        }
+        // Default values for searchTerm and active sort
+        this.searchTerm = ''
+        this.activeSort.index = '0'
+        this.activeSort.label = 'Relevance'
 
-        if (params['term']){
-          this.searchTerm = params['term'];
-          this.UrlParams.term = this.searchTerm;
-        } else{
-          this.searchTerm = '';
-        }
-        if (params['catId']){
-          this.searchTerm = this.searchTerm + ' categoryid:' + params['catId'];
-          this.UrlParams.catId = params['catId'];
-        }
-        if (params['colId']){
-            this.UrlParams.colId = params['colId'];
-        }
-        if (params['pcolId']){
-          let user = this._auth.getUser();
-          this.searchTerm = this.searchTerm + ' personalcollectionowner:(' + user['baseProfileId']  + ')';
-          this.UrlParams.pcolId = params['pcolId'];
-        }
-        if (params['clusterId']){
-          this.searchTerm = this.searchTerm + ' clusterid:(' + params['clusterId']  + ')';
-          this.UrlParams.clusterId = params['clusterId'];
-        }
-        if (params['startDate']){
-          this.UrlParams.startDate = params['startDate'];
-        }
-        if (params['endDate']){
-          this.UrlParams.endDate = params['endDate'];
-        }
-        if (params['artclassification_str']){
-          this.UrlParams.artclassification_str = params['artclassification_str'];
-        }
-        if (params['geography']){
-          this.UrlParams.geography = params['geography'];
-        }
-        if (params['collectiontypes']){
-          this.UrlParams.collectiontypes = params['collectiontypes'];
-        }
-
-        if (params['sort']){
-          this.activeSort.index = params['sort'];
-
-          if (this.activeSort.index == '0'){
-            this.activeSort.label = 'Relevance';
+        for (let key in params){
+          switch (key) {
+            case 'featureFlag': {
+              this._flags[params['featureFlag']] = true
+              break
+            }
+            case 'term': {
+              this.searchTerm = params['term']
+              this.UrlParams.term = this.searchTerm
+              break
+            }
+            case 'catId': {
+              this.searchTerm = this.searchTerm + ' categoryid:' + params['catId']
+              this.UrlParams.catId = params['catId']
+              break
+            }
+            case 'colId': {
+              this.UrlParams.colId = params['colId']
+              break
+            }
+            case 'pcolId': {
+              let user = this._auth.getUser()
+              this.searchTerm = this.searchTerm + ' personalcollectionowner:(' + user['baseProfileId']  + ')'
+              this.UrlParams.pcolId = params['pcolId']
+              break
+            }
+            case 'clusterId': {
+              this.searchTerm = this.searchTerm + ' clusterid:(' + params['clusterId']  + ')'
+              this.UrlParams.clusterId = params['clusterId']
+              break
+            }
+            case 'startDate': {
+              this.UrlParams.startDate = params['startDate']
+              break
+            }
+            case 'endDate': {
+              this.UrlParams.endDate = params['endDate']
+              break
+            }
+            case 'artclassification_str': {
+              this.UrlParams.artclassification_str = params['artclassification_str']
+              break
+            }
+            case 'geography': {
+              this.UrlParams.geography = params['geography']
+              break
+            }
+            case 'collectiontypes': {
+              this.UrlParams.collectiontypes = params['collectiontypes']
+              break
+            }
+            case 'sort': {
+              this.activeSort.index = params['sort']
+              switch (this.activeSort.index) {
+                case '0': {
+                  this.activeSort.label = 'Relevance'
+                  break
+                }
+                case '1': {
+                  this.activeSort.label = 'Title'
+                  break
+                }
+                case '2': {
+                  this.activeSort.label = 'Creator'
+                  break
+                }
+                case '3': {
+                  this.activeSort.label = 'Date'
+                  break
+                }
+                case '4': {
+                  this.activeSort.label = 'Recently Added'
+                  break
+                }
+                default: {
+                  break
+                }
+              }
+              break
+            }
+            default: {
+              break
+            }
           }
-          else if (this.activeSort.index == '1'){
-            this.activeSort.label = 'Title';
-          }
-          else if (this.activeSort.index == '2'){
-            this.activeSort.label = 'Creator';
-          }
-          else if (this.activeSort.index == '3'){
-            this.activeSort.label = 'Date';
-          }
-          else if (this.activeSort.index == '4'){
-            this.activeSort.label = 'Recently Added';
-          }
         }
-        else{ // If no sort params - Sort by Relevance
-          this.activeSort.index = '0';
-          this.activeSort.label = 'Relevance';
-        }
-
-        // if(params['igId'] && !params['page']){
-        //   this.editMode = false;
-        //   this.selectedAssets = [];
-        //   this._assets.setSelectedAssets(this.selectedAssets);
-        // }
-
         this.isLoading = true;
       })
     );
