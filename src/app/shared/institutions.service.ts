@@ -18,7 +18,7 @@ export class InstitutionsService {
 
   public getDonatingInstitutions(): Observable<any> {
     return this.http.get(
-      this._auth.getUrl() + '/v1/collections/institutions?_method=alldonatinginstitutions',
+      this._auth.getUrl() + '/v1/collections/institutions?_method=allinstitutions',
       { withCredentials: true }
     )
   }
