@@ -80,7 +80,7 @@ export class BrowseGroupsComponent implements OnInit {
         popover: {
           position: 'bottom',
           title: '<p>3 OF 3</p><b>Search by title</b>',
-          description: 'Enter a term or phrase to find what the group you’re looking for. Select “All” to search across all groups.',
+          description: 'Enter a term or phrase to find what group you’re looking for. Select “All” to search across all groups.',
         }
     }
   ]
