@@ -49,13 +49,6 @@ export class CollectionPage implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    /** ETHNIO SCRIPT */
-    this._script.loadScript('ethnio')
-      .then( data => {
-        console.log("Loaded script", data)
-      })
-    .catch( error => console.error(error) )
-    /** ETHNIO SCRIPT */
 
     this.subscriptions.push(
       this._auth.currentUser.subscribe((user) => {

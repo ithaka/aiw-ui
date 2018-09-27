@@ -70,13 +70,6 @@ export class Home implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    /** ETHNIO SCRIPT */
-    this._script.loadScript('ethnio')
-      .then( data => {
-        console.log("Loaded script", data)
-      })
-    .catch( error => console.error(error) )
-    /** ETHNIO SCRIPT */
 
     // Provide redirects for initPath detected in index.html from inital load
     if (initPath) {
