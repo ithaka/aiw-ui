@@ -50,13 +50,6 @@ export class SearchPage implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    /** ETHNIO SCRIPT */
-    this._script.loadScript('ethnio')
-      .then( data => {
-        console.log("Loaded script", data)
-      })
-    .catch( error => console.error(error) )
-    /** ETHNIO SCRIPT */
 
     // Subscribe User object updates
     this.subscriptions.push(
