@@ -333,3 +333,80 @@ body body{
     white-space: nowrap;
   }
 }
+
+
+// Multi View OpenSeaDragon Overrides
+
+
+.referencestrip {
+  position: absolute !important;
+  bottom: 0px !important;
+  height: 200px !important;
+  min-width: 500px !important;
+  width: 100% !important;
+  display: block !important;
+  float: none !important;
+  margin: 0px !important;
+  opacity: 1 !important;
+  white-space: nowrap !important;
+  overflow-x: scroll !important;
+  overflow-y: hidden !important;
+  touch-action: auto !important;
+  padding-left: 20px !important;
+  padding-right: 20px !important;
+}
+
+.referencestrip::-webkit-scrollbar {
+  -webkit-appearance: none;
+  width: 7px;
+}
+
+#referencestrip > div {
+  /* background: rgb(153, 153, 153) */
+  background: rgb(0,0,0) !important;
+  padding: 0px !important;
+  margin: 0px 5px !important;
+}
+
+.referencestrip > div[style^="background: rgb(153, 153, 153)"] canvas {
+  border: 2px solid #C9510D !important;
+  padding: 0px !important;
+}
+
+.referencestrip::-webkit-scrollbar-thumb {
+  border-radius: 4px;
+  background-color: rgba(255,255,255,.5);
+  -webkit-box-shadow: 0 0 1px rgba(255,255,255,.7);
+  width: 5px;
+}
+
+/* Select BOTTOM LEFT positioning div */
+.openseadragon-canvas + div + div + div + div {
+  position: static !important;
+}
+
+.referencestrip > div {
+  background: #000 !important;
+  border: 2px solid transparent !important;
+  margin: 0px 5px !important;
+  display: inline-block !important;
+  float: none !important;
+  height: 180px !important;
+  width: 150px !important;
+  position: relative !important;
+  touch-action: auto !important;
+  padding: 60px 0px 0px 0px !important;
+}
+
+.navigator {
+  position: absolute !important;
+  bottom: 120px !important;
+  z-index: 1 !important;
+  left: 10px !important;
+  border: 3px solid rgb(0,0,0) !important;
+  opacity: 0.95;
+}
+
+[class$="-displayregion"] {
+  border: 2px solid rgb(224, 11, 11) !important;
+}
