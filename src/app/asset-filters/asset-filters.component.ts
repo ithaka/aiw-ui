@@ -25,6 +25,9 @@ export class AssetFilters {
   private filterDate: boolean = false
   private filterNameMap: any = {}
 
+  // Institution Filter
+  private institutionFilterResultsCount: number = 0
+
   errors = {}
   results = []
   appliedFilters = []
@@ -143,36 +146,48 @@ export class AssetFilters {
     this.subscriptions.push(
       this._filters.available$.subscribe(
         filters => {
-          // Clean up filter data for display (i.e. insitutional asset counts are inaccurate)
-          if (filters['collectiontypes']) {
-            for (let i = 0; i < filters['collectiontypes'].length; i++) {
-              let colType = filters['collectiontypes'][i]
-              if (colType.name == '2' || colType.name == '4') {
-                delete colType.count
-              }
-            }
-            // If auth.isPublicOnly 'unaffiliated' user, filter out all but type 5 collection type
-            if (this._auth.isPublicOnly())
-              filters['collectiontypes'] = filters['collectiontypes'].filter(collectionType => collectionType.name === '5')
-          }
 
           // Contributors List of search results
           if (filters['contributinginstitutionid']) {
 
-            if (this.showContribFilter) {
+              this.institutionFilterResultsCount = 0
+
               let instMap = institutionList
               for (let i = 0; i < filters['contributinginstitutionid'].length; i++) {
                 for (let j = 0; j < instMap.length; j++) {
                   if (filters['contributinginstitutionid'][i].name === instMap[j].institutionId) {
                     filters['contributinginstitutionid'][i].showingName = instMap[j].institutionName;
+
+                    this.institutionFilterResultsCount += 1
                   }
                 }
               }
-            }
-            else {
-              filters['contributinginstitutionid'] = []
+              if (!this.showContribFilter) {
+                filters['contributinginstitutionid'] = []
+              }
+          }
+          // Clean up filter data for display (i.e. insitutional asset counts are inaccurate)
+          if (filters['collectiontypes']) {
+            let instFilterIndex: number = 0
+
+            for (let i = 0; i < filters['collectiontypes'].length; i++) {
+              let colType = filters['collectiontypes'][i]
+
+              // Only Show institution filter count > 0
+              if (colType.name == '2' || colType.name == '4') {
+                instFilterIndex = i
+                delete colType.count
+              }
             }
 
+            if (instFilterIndex && filters['collectiontypes'][instFilterIndex].count < 1) {
+              filters['collectiontypes'][instFilterIndex] = []
+            }
+
+            // If auth.isPublicOnly 'unaffiliated' user, filter out all but type 5 collection type
+            if (this._auth.isPublicOnly()) {
+             filters['collectiontypes'] = filters['collectiontypes'].filter(collectionType => collectionType.name === '5')
+            }
           }
           this.availableFilters = filters;
         }
@@ -195,6 +210,7 @@ export class AssetFilters {
     }
 
     for (let filter of this.appliedFilters) {
+
       if (filter.filterGroup == 'page'){
         params[filter.filterGroup] =  parseInt(filter.filterValue[0]);
       }
