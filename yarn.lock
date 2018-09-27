@@ -687,13 +687,13 @@ arrify@^1.0.0, arrify@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/arrify/-/arrify-1.0.1.tgz#898508da2226f380df904728456849c1501a4b0d"
 
-artstor-viewer@1.1.13:
-  version "1.1.13"
-  resolved "https://registry.yarnpkg.com/artstor-viewer/-/artstor-viewer-1.1.13.tgz#9ea881639c4726c09bf9f6ce73de4466ac1e9fa6"
+artstor-viewer@1.1.13-a:
+  version "1.1.13-a"
+  resolved "https://registry.yarnpkg.com/artstor-viewer/-/artstor-viewer-1.1.13-a.tgz#da33bd7c6e04ec28f3415dd6ff11e00d9bed13a1"
   dependencies:
     "@angular/http" "^5.2.0"
     npm "^5.7.1"
-    openseadragon "^2.3.1"
+    openseadragon "2.4.0"
 
 asap@^2.0.0, asap@~2.0.3:
   version "2.0.6"
@@ -7911,7 +7911,11 @@ opener@~1.4.0, opener@~1.4.3:
   version "1.4.3"
   resolved "https://registry.yarnpkg.com/opener/-/opener-1.4.3.tgz#5c6da2c5d7e5831e8ffa3964950f8d6674ac90b8"
 
-openseadragon@^2.2.1, openseadragon@^2.3.1:
+openseadragon@2.4.0:
+  version "2.4.0"
+  resolved "https://registry.yarnpkg.com/openseadragon/-/openseadragon-2.4.0.tgz#d0b28b37a953602c82432a0dbd8a3779dadf756f"
+
+openseadragon@^2.2.1:
   version "2.3.1"
   resolved "https://registry.yarnpkg.com/openseadragon/-/openseadragon-2.3.1.tgz#efdcfee19d8b3c46d00d7f7dda787c7057f68364"
 
