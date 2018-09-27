@@ -8,13 +8,14 @@
       //- Filters
       div(*ngFor="let facet of availableFilters[filterKey]")
         //- Show filters
-        i.icon.icon-direction.absolute-left.tree-icon(*ngIf="facet.children && facet.children.length > 0", (click)="toggleTree(facet)", [ngClass]="{ 'icon-down' : facet.expanded, 'icon-right' : !facet.expanded }")
+        i.icon.icon-direction.absolute-left.tree-icon((keydown.enter)="toggleTree(facet)", tabindex="1",  aria-label="Expand/collapse parent geography filter", *ngIf="facet.children && facet.children.length > 0", (click)="toggleTree(facet)", [ngClass]="{ 'icon-down' : facet.expanded, 'icon-right' : !facet.expanded }")
         button.filter.parent(
             *ngIf="facet.name && facet.name.length > 0",
             id="filterCollectionTypeItem{{ facet.name }}",
             (click)="toggleFilter(filterKey == 'geography' ? facet.efq : facet.name, filterKey)",
             [ngClass]="{'active': filterApplied(filterKey == 'geography' ? facet.efq : facet.name, filterKey)}",
-            data-sc="search: facet"
+            data-sc="search: facet",
+            tabindex="1"
           )
           //- Display of Collection Type Filters
           span(*ngIf="filterKey != 'contributinginstitutionid' && facet.name && facet.name.length < 2") {{ filterNameMap[filterKey] && filterNameMap[filterKey][facet.name] }}
@@ -25,7 +26,7 @@
           i.icon.icon-close
         //- Geo Child filters
         .child-cntnr.collapse([ngClass]="{ 'show' : facet.expanded }")
-          button.filter.child(*ngFor="let child of facet.children; let childIndex = index", id="filterGeographyItem{{ 'Child' + childIndex }}", (click)="toggleFilter(child.efq, filterKey)", [ngClass]="{'active': filterApplied(child.efq, 'geography')}", data-sc="search: facet") {{ child.name }} ({{child.count}})
+          button.filter.child(tabindex="1", *ngFor="let child of facet.children; let childIndex = index", id="filterGeographyItem{{ 'Child' + childIndex }}", (click)="toggleFilter(child.efq, filterKey)", [ngClass]="{'active': filterApplied(child.efq, 'geography')}", data-sc="search: facet") {{ child.name }} ({{child.count}})
             i.icon.icon-add
             i.icon.icon-close
   .filter-group(*ngIf="availableFilters.dateObj")
@@ -33,14 +34,14 @@
       h3 Date
         a#buttonDateFilterClear.link--accent.small(tabindex="1", [ngClass]="{ 'disable': !hasAppliedFilters('date') }", (click)="clearAllFilterGroup('date')") Clear
     .date-filter-row
-      input#inputDateFilterStart.form-control([(ngModel)]="availableFilters.dateObj.earliest.date", type="number", (keypress)="dateKeyPress($event)", min="0", placeholder="Start Date")
-      #buttonDateFilterStartBCE.side-toggle-btn((click)="availableFilters.dateObj.earliest.era = 'BCE'", [ngClass]="{'active': availableFilters.dateObj.earliest.era == 'BCE' }") BCE
-      #buttonDateFilterStartCE.side-toggle-btn((click)="availableFilters.dateObj.earliest.era = 'CE'", [ngClass]="{'active': availableFilters.dateObj.earliest.era == 'CE' }") CE
+      input#inputDateFilterStart.form-control(tabindex="1", [(ngModel)]="availableFilters.dateObj.earliest.date", type="number", (keypress)="dateKeyPress($event)", min="0", placeholder="Start Date")
+      #buttonDateFilterStartBCE.side-toggle-btn(tabindex="1", (click)="availableFilters.dateObj.earliest.era = 'BCE'", [ngClass]="{'active': availableFilters.dateObj.earliest.era == 'BCE' }") BCE
+      #buttonDateFilterStartCE.side-toggle-btn(tabindex="1", (click)="availableFilters.dateObj.earliest.era = 'CE'", [ngClass]="{'active': availableFilters.dateObj.earliest.era == 'CE' }") CE
     .date-filter-row
-      input#inputDateFilterEnd.form-control([(ngModel)]="availableFilters.dateObj.latest.date", type="number", (keypress)="dateKeyPress($event)", min="0", placeholder="End Date")
-      #buttonDateFilterEndBCE.side-toggle-btn((click)="availableFilters.dateObj.latest.era = 'BCE'", [ngClass]="{'active': availableFilters.dateObj.latest.era == 'BCE' }") BCE
-      #buttonDateFilterEndCE.side-toggle-btn((click)="availableFilters.dateObj.latest.era = 'CE'", [ngClass]="{'active': availableFilters.dateObj.latest.era == 'CE' }") CE
+      input#inputDateFilterEnd.form-control(tabindex="1", [(ngModel)]="availableFilters.dateObj.latest.date", type="number", (keypress)="dateKeyPress($event)", min="0", placeholder="End Date")
+      #buttonDateFilterEndBCE.side-toggle-btn(tabindex="1", (click)="availableFilters.dateObj.latest.era = 'BCE'", [ngClass]="{'active': availableFilters.dateObj.latest.era == 'BCE' }") BCE
+      #buttonDateFilterEndCE.side-toggle-btn(tabindex="1", (click)="availableFilters.dateObj.latest.era = 'CE'", [ngClass]="{'active': availableFilters.dateObj.latest.era == 'CE' }") CE
     .date-filter-row
-      #buttonDateFilterReset.btn((click)="clearDateFilter()") RESET
-      #buttonDateFilterSubmit.btn((click)="applyDateFilter()") APPLY
+      #buttonDateFilterReset.btn(tabindex="1", (click)="clearDateFilter()") RESET
+      #buttonDateFilterSubmit.btn(tabindex="1", (click)="applyDateFilter()") APPLY
     .date-filter-error-msg(*ngIf="dateError") End date must be greater than or equal to Start date.
