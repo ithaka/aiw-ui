@@ -202,7 +202,6 @@ export class AssetGrid implements OnInit, OnDestroy {
     this.subscriptions.push(
       this.route.params
       .subscribe((params: Params) => {
-        // Find feature flags
         if (params && params['featureFlag']){
           this._flags[params['featureFlag']] = true
         }
@@ -211,51 +210,58 @@ export class AssetGrid implements OnInit, OnDestroy {
           this.searchTerm = params['term'];
           this.UrlParams.term = this.searchTerm;
         }
-        if (params['startDate']){
-          this.UrlParams.startDate = params['startDate'];
-        }
-        if (params['endDate']){
-          this.UrlParams.endDate = params['endDate'];
-        }
-        if (params['artclassification_str']){
-          this.UrlParams.artclassification_str = params['artclassification_str'];
-        }
-        if (params['geography']){
-          this.UrlParams.geography = params['geography'];
-        }
-        if (params['collectiontypes']){
-          this.UrlParams.collectiontypes = params['collectiontypes'];
+
+        let filterKeysToPass: string[] = [
+          'catId',
+          'colId',
+          'pcolId',
+          'clusterId',
+          'startDate',
+          'endDate',
+          'artclassification_str',
+          'geography',
+          'collectiontypes'
+        ]
+
+        for (let i = 0; i < filterKeysToPass.length; i++) {
+          let filterKey: string = filterKeysToPass[i]
+          if (params[filterKey]) {
+            this.UrlParams[filterKey] = params[filterKey]
+          }
         }
 
         if (params['sort']){
-          this.activeSort.index = params['sort'];
-
-          if (this.activeSort.index == '0'){
-            this.activeSort.label = 'Relevance';
-          }
-          else if (this.activeSort.index == '1'){
-            this.activeSort.label = 'Title';
-          }
-          else if (this.activeSort.index == '2'){
-            this.activeSort.label = 'Creator';
-          }
-          else if (this.activeSort.index == '3'){
-            this.activeSort.label = 'Date';
-          }
-          else if (this.activeSort.index == '4'){
-            this.activeSort.label = 'Recently Added';
+          this.activeSort.index = params['sort']
+          switch (this.activeSort.index) {
+            case '0': {
+              this.activeSort.label = 'Relevance'
+              break
+            }
+            case '1': {
+              this.activeSort.label = 'Title'
+              break
+            }
+            case '2': {
+              this.activeSort.label = 'Creator'
+              break
+            }
+            case '3': {
+              this.activeSort.label = 'Date'
+              break
+            }
+            case '4': {
+              this.activeSort.label = 'Recently Added'
+              break
+            }
+            default: {
+              break
+            }
           }
         }
         else{ // If no sort params - Sort by Relevance
           this.activeSort.index = '0';
           this.activeSort.label = 'Relevance';
         }
-
-        // if(params['igId'] && !params['page']){
-        //   this.editMode = false;
-        //   this.selectedAssets = [];
-        //   this._assets.setSelectedAssets(this.selectedAssets);
-        // }
 
         this.isLoading = true;
       })
@@ -357,7 +363,7 @@ export class AssetGrid implements OnInit, OnDestroy {
           prevRouteParams[id] = this.route.snapshot.url
           this._session.set('prevRouteParams', prevRouteParams)
 
-          //Generate Facets
+          // Generate Facets
           if (allResults && allResults.collTypeFacets) {
               this._filters.generateColTypeFacets( allResults.collTypeFacets );
               // this._filters.generateGeoFilters( allResults.geographyFacets );
@@ -492,7 +498,7 @@ export class AssetGrid implements OnInit, OnDestroy {
    */
 
   private selectAsset(asset, event?): void {
-    if(this.editMode){
+    if (this.editMode){
       event && event.preventDefault()
       let index: number = this.isSelectedAsset(asset)
       if (index > -1){
@@ -715,7 +721,7 @@ export class AssetGrid implements OnInit, OnDestroy {
    * - Owner of Group only
    */
   private removeFromGroup(assetsToRemove: Thumbnail[], clearRestricted?: boolean): void {
-    for(let i = 0; i < assetsToRemove.length; i++) {
+    for (let i = 0; i < assetsToRemove.length; i++) {
       let assetId = assetsToRemove[i].objectId
       let igIndex = this.ig.items.indexOf(assetId)
       // Passing -1 will splice the wrong asset!
