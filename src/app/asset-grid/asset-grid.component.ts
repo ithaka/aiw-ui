@@ -211,7 +211,7 @@ export class AssetGrid implements OnInit, OnDestroy {
           this.UrlParams.term = this.searchTerm;
         }
 
-        let filterKeysToPass: string [] = [
+        let filterKeysToPass: string[] = [
           'catId',
           'colId',
           'pcolId',
@@ -224,7 +224,7 @@ export class AssetGrid implements OnInit, OnDestroy {
         ]
 
         for (let i = 0; i < filterKeysToPass.length; i++) {
-          let filterKey = params[filterKeysToPass[i]]
+          let filterKey: string = filterKeysToPass[i]
           if (params[filterKey]) {
             this.UrlParams[filterKey] = params[filterKey]
           } 
