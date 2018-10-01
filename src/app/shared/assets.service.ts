@@ -429,8 +429,8 @@ export class AssetService {
                 } else if (params.hasOwnProperty('igId') && params['igId'] !== '') {
                     // Load IG via Groups service
                     this.loadIgAssets(params.igId);
-                } else if ( 
-                    (params.hasOwnProperty('clusterId') && params['clusterId'] !== '') || 
+                } else if (
+                    (params.hasOwnProperty('clusterId') && params['clusterId'] !== '') ||
                     (params.hasOwnProperty('pcolId') && params['pcolId'] !== '') ||
                     (params.hasOwnProperty('colId') && params['colId'] !== '') ||
                     (params.hasOwnProperty('term'))

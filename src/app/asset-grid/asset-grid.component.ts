@@ -227,7 +227,7 @@ export class AssetGrid implements OnInit, OnDestroy {
           let filterKey: string = filterKeysToPass[i]
           if (params[filterKey]) {
             this.UrlParams[filterKey] = params[filterKey]
-          } 
+          }
         }
 
         if (params['sort']){
@@ -262,7 +262,7 @@ export class AssetGrid implements OnInit, OnDestroy {
           this.activeSort.index = '0';
           this.activeSort.label = 'Relevance';
         }
-        
+
         this.isLoading = true;
       })
     );
@@ -363,7 +363,7 @@ export class AssetGrid implements OnInit, OnDestroy {
           prevRouteParams[id] = this.route.snapshot.url
           this._session.set('prevRouteParams', prevRouteParams)
 
-          //Generate Facets
+          // Generate Facets
           if (allResults && allResults.collTypeFacets) {
               this._filters.generateColTypeFacets( allResults.collTypeFacets );
               // this._filters.generateGeoFilters( allResults.geographyFacets );
@@ -498,7 +498,7 @@ export class AssetGrid implements OnInit, OnDestroy {
    */
 
   private selectAsset(asset, event?): void {
-    if(this.editMode){
+    if (this.editMode){
       event && event.preventDefault()
       let index: number = this.isSelectedAsset(asset)
       if (index > -1){
@@ -721,7 +721,7 @@ export class AssetGrid implements OnInit, OnDestroy {
    * - Owner of Group only
    */
   private removeFromGroup(assetsToRemove: Thumbnail[], clearRestricted?: boolean): void {
-    for(let i = 0; i < assetsToRemove.length; i++) {
+    for (let i = 0; i < assetsToRemove.length; i++) {
       let assetId = assetsToRemove[i].objectId
       let igIndex = this.ig.items.indexOf(assetId)
       // Passing -1 will splice the wrong asset!
