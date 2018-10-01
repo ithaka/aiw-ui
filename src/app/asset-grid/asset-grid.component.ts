@@ -210,32 +210,24 @@ export class AssetGrid implements OnInit, OnDestroy {
           this.searchTerm = params['term'];
           this.UrlParams.term = this.searchTerm;
         }
-        if(params['catId']) {
-          this.UrlParams.catId = params['catId']
-        }
-        if(params['colId']) {
-          this.UrlParams.colId = params['colId']
-        }
-        if(params['pcolId']) {
-          this.UrlParams.pcolId = params['pcolId']
-        }
-        if(params['clusterId']) {
-          this.UrlParams.clusterId = params['clusterId']
-        }
-        if (params['startDate']){
-          this.UrlParams.startDate = params['startDate'];
-        }
-        if (params['endDate']){
-          this.UrlParams.endDate = params['endDate'];
-        }
-        if (params['artclassification_str']){
-          this.UrlParams.artclassification_str = params['artclassification_str'];
-        }
-        if (params['geography']){
-          this.UrlParams.geography = params['geography'];
-        }
-        if (params['collectiontypes']){
-          this.UrlParams.collectiontypes = params['collectiontypes'];
+
+        let filterKeysToPass: string [] = [
+          'catId',
+          'colId',
+          'pcolId',
+          'clusterId',
+          'startDate',
+          'endDate',
+          'artclassification_str',
+          'geography',
+          'collectiontypes'
+        ]
+
+        for (let i = 0; i < filterKeysToPass.length; i++) {
+          let filterKey = params[filterKeysToPass[i]]
+          if (params[filterKey]) {
+            this.UrlParams[filterKey] = params[filterKey]
+          } 
         }
 
         if (params['sort']){
