@@ -429,27 +429,13 @@ export class AssetService {
                 } else if (params.hasOwnProperty('igId') && params['igId'] !== '') {
                     // Load IG via Groups service
                     this.loadIgAssets(params.igId);
-                } else if (params.hasOwnProperty('clusterId') && params['clusterId'] !== '') {
-                    // Filter by clusterid
-                    searchTerm = 'clusterid:(' + params['clusterId'] + ')'
+                } else if ( 
+                    (params.hasOwnProperty('clusterId') && params['clusterId'] !== '') || 
+                    (params.hasOwnProperty('pcolId') && params['pcolId'] !== '') ||
+                    (params.hasOwnProperty('colId') && params['colId'] !== '') ||
+                    (params.hasOwnProperty('term'))
+                ) {
                     this.loadSearch(searchTerm)
-                } else if (params.hasOwnProperty('pcolId') && params['pcolId'] !== '') {
-                    // Filter by owner if filtering by Global Personal Collection
-                    if (params['pcolId'] === '37436') {
-                        let user = this._auth.getUser()
-                        searchTerm = searchTerm + ' personalcollectionowner:(' + user['baseProfileId']  + ')'
-                    }
-                    // get personal collection thumbnails via SOLR
-                    this.loadSearch(searchTerm)
-                }  else if (params.hasOwnProperty('colId') && params['colId'] !== '') {
-                    // get collection thumbnails;
-                    this.loadSearch(searchTerm);
-                } else if (params.hasOwnProperty('term')) {;
-                    // Search within Categories
-                    if (params.hasOwnProperty('catId')  && params['catId'] !== '') {
-                        searchTerm = searchTerm + ' categoryid:' + params['catId'];
-                    }
-                    this.loadSearch(searchTerm);
                 } else {
                     console.error("Don't know what to query!");
                 }

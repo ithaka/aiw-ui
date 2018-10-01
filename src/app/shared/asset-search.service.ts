@@ -283,6 +283,19 @@ export class AssetSearchService {
    * @returns       Returns an object with the properties: thumbnails, count, altKey, classificationFacets, geographyFacets, minDate, maxDate, collTypeFacets, dateFacets
    */
   public search(options: SearchOptions, keyword: string, sortIndex): Observable<SearchResponse> {
+    // Construct query keyword based on options
+    if (options.hasOwnProperty('clusterId') && options['clusterId'] !== '') {
+        keyword = 'clusterid:(' + options['clusterId'] + ')'
+    } else if (options.hasOwnProperty('pcolId') && options['pcolId'] !== '') {
+        if (options['pcolId'] === '37436') {
+            let user = this._auth.getUser()
+            keyword += ' personalcollectionowner:(' + user['baseProfileId']  + ')'
+        }
+    } else if (options.hasOwnProperty('term')) {;
+        if (options.hasOwnProperty('catId')  && options['catId'] !== '') {
+            keyword += ' categoryid:' + options['catId']
+        }
+    }
 
     let thumbSize = 0;
     let type = 6;
