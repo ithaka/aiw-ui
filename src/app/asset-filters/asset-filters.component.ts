@@ -32,8 +32,6 @@ export class AssetFilters {
   appliedFilters = []
   availableFilters: any = {}
 
-
-
   // collTypeFacets = [];
   // classificationFacets = [];
   geoTree = [];
@@ -159,13 +157,11 @@ export class AssetFilters {
           // Contributors List of search results
           if (filters['contributinginstitutionid']) {
 
-            let instMap = institutionList
             for (let i = 0; i < filters['contributinginstitutionid'].length; i++) {
+              for (let j = 0; j < institutionList.length; j++) {
 
-              for (let j = 0; j < instMap.length; j++) {
-
-                if (filters['contributinginstitutionid'][i].name === instMap[j].institutionId) {
-                  filters['contributinginstitutionid'][i].showingName = instMap[j].institutionName;
+                if (filters['contributinginstitutionid'][i].name === institutionList[j].institutionId) {
+                  filters['contributinginstitutionid'][i].showingName = institutionList[j].institutionName;
                 }
 
                 // If this contributor is the users institution, set instFilterCount to this filters' count value
