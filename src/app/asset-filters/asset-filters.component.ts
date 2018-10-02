@@ -24,9 +24,8 @@ export class AssetFilters {
   private filterDate: boolean = false
   private filterNameMap: any = {}
 
-  private userInstId
-  private instFilterCount
-  private userInstHasResults: boolean = false
+  private userInstId: string        // user's institution id
+  private instFilterCount: string   // collection type 2 filter for search results count
 
   errors = {}
   results = []
@@ -160,7 +159,6 @@ export class AssetFilters {
           // Contributors List of search results
           if (filters['contributinginstitutionid']) {
 
-
             let instMap = institutionList
             for (let i = 0; i < filters['contributinginstitutionid'].length; i++) {
 
@@ -170,10 +168,10 @@ export class AssetFilters {
                   filters['contributinginstitutionid'][i].showingName = instMap[j].institutionName;
                 }
 
+                // If this contributor is the users institution, set instFilterCount to this filters' count value
                 if (filters['contributinginstitutionid'][i].name === this.userInstId) {
                   if (filters['contributinginstitutionid'][i].count > 0) {
                     this.instFilterCount = filters['contributinginstitutionid'][i].count
-                    this.userInstHasResults = true
                   }
                 }
 
@@ -187,16 +185,17 @@ export class AssetFilters {
 
           }
 
-          // Clean up filter data for display (i.e. insitutional asset counts are inaccurate)
           if (filters['collectiontypes']) {
 
             for (let i = 0; i < filters['collectiontypes'].length; i++) {
               let colType = filters['collectiontypes'][i]
 
+              // The loggedd in user's institutional 'Collection Type' filter
               if (colType.name == '2' || colType.name == '4') {
                 filters['collectiontypes'][i]['count'] = this.instFilterCount
               }
             }
+
             // If auth.isPublicOnly 'unaffiliated' user, filter out all but type 5 collection type
             if (this._auth.isPublicOnly())
               filters['collectiontypes'] = filters['collectiontypes'].filter(collectionType => collectionType.name === '5')
