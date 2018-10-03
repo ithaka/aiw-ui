@@ -1,6 +1,6 @@
 .card-block.card-text
   .card-img-top
-    img(*ngIf="thumbnail.status != 'not-available'", [class.disablePointerEvents]="reorderMode", [attr.src]="_search.makeThumbUrl(thumbnail.thumbnailImgUrl, thumbnailSize)", (error)="thumbnailError()", [attr.alt]="thumbnail.arttitle && thumbnail.arttitle[0] ? 'Thumbnail of ' + thumbnail.thumbnail1 : 'No title available'")
+    img(*ngIf="thumbnail.status != 'not-available'", [class.disablePointerEvents]="reorderMode", [attr.src]="_search.makeThumbUrl(thumbnail.thumbnailImgUrl, thumbnailSize)", (error)="thumbnailError()", [attr.alt]="thumbnailAlt")
   .metadata-wrap
     //- New Asset display
     span.asset-title(*ngIf="thumbnail.name", title="{{ thumbnail.name }}", [innerHTML]="thumbnail.name")
