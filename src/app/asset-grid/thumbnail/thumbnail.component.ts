@@ -66,7 +66,13 @@ export class ThumbnailComponent implements OnInit, OnChanges {
     event.preventDefault()
     event.stopPropagation()
 
-    this.angulartics.eventTrack.next({ action: 'view associated images', properties: { label: this.thumbnail.objectId ? this.thumbnail.objectId : this.thumbnail.artstorid } })
+    console.log(urlParams)
+    if (urlParams[0] === '/associated') {
+      this.angulartics.eventTrack.next({ action: 'view associated images', properties: { label: this.thumbnail.objectId ? this.thumbnail.objectId : this.thumbnail.artstorid } })
+    }
+    if (urlParams[0] === '/cluster') {
+      this.angulartics.eventTrack.next({ action: 'view cluster', properties: { label: this.thumbnail.objectId ? this.thumbnail.objectId : this.thumbnail.artstorid } })
+    }
     this.router.navigate(urlParams)
   }
 
