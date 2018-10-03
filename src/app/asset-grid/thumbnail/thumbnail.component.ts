@@ -2,6 +2,7 @@ import { Router } from '@angular/router';
 import { Component, OnInit, OnChanges, Input, SimpleChanges } from '@angular/core';
 
 import { Thumbnail, AssetService, CollectionTypeHandler, AssetSearchService, CollectionTypeInfo } from './../../shared'
+import { Angulartics2 } from 'angulartics2';
 
 @Component({
   selector: 'ang-thumbnail',
@@ -43,6 +44,7 @@ export class ThumbnailComponent implements OnInit, OnChanges {
   private multiviewItemCount: number = 0
 
   constructor(
+    private angulartics: Angulartics2,
     private _assets: AssetService,
     private _search: AssetSearchService,
     private router: Router
@@ -68,6 +70,13 @@ export class ThumbnailComponent implements OnInit, OnChanges {
     event.preventDefault()
     event.stopPropagation()
 
+    console.log(urlParams)
+    if (urlParams[0] === '/associated') {
+      this.angulartics.eventTrack.next({ action: 'view associated images', properties: { label: this.thumbnail.objectId ? this.thumbnail.objectId : this.thumbnail.artstorid } })
+    }
+    if (urlParams[0] === '/cluster') {
+      this.angulartics.eventTrack.next({ action: 'view cluster', properties: { label: this.thumbnail.objectId ? this.thumbnail.objectId : this.thumbnail.artstorid } })
+    }
     this.router.navigate(urlParams)
   }
 
