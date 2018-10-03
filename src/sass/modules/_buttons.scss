@@ -39,7 +39,7 @@ $iconBtnSize: $btnHeight;
 }
 
 /**
- * @atom Button 
+ * @atom Button
  * @section Navigation > Buttons
  * @markup
  *  <button type="button" class="btn btn-primary">Primary</button>
@@ -65,7 +65,7 @@ $iconBtnSize: $btnHeight;
         border-color: darken(#C9510D, 10%);
     }
 }
- 
+
 
  .btn-secondary, a.btn-secondary {
     background: white;
@@ -114,12 +114,12 @@ $iconBtnSize: $btnHeight;
     transform: translateY(-0.1em);
  }
 
- .btn.btn-link, a.btn.btn-link { 
+ .btn.btn-link, a.btn.btn-link {
      text-transform: none !important;
      padding: 0 6px 0 0;
      color: #000;
      background: none;
-     
+
      &.with-pad {
         margin: 0 24px;
      }
@@ -133,16 +133,32 @@ $iconBtnSize: $btnHeight;
         color: #0039c6;
      }
 
-     &:hover, &:focus  {
-         text-decoration: none;
-         color: #0039c6;
-         outline: none;
-         background: none;
+    &:hover  {
+        text-decoration: none;
+        color: #0039c6;
+        outline: none;
+        background: none;
 
-         & .value {
-             text-decoration: underline;
-         }
-     }
+        & .value {
+            text-decoration: underline;
+        }
+    }
+
+    &:focus {
+        text-decoration: none;
+        color: #0039c6;
+        outline: rgb(77, 144, 254) auto 5px;
+        outline-offset: -2px;
+
+        & .value {
+            text-decoration: underline;
+        }
+
+        &:-moz-focusring {
+            outline: 1px dotted;
+        }
+    }
+
 
      & .value {
          color: #000;

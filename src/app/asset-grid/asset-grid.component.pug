@@ -54,14 +54,13 @@
           //- View size toggles
           .number-results(*ngIf="!isLoading") 
             span.font-weight-bold {{ totalAssets }}{{ totalAssets == 2000 ? '+' : '' }} results
-            = " "
-            span(*ngIf="searchTerm") for
-              = " "
+            span(*ngIf="searchTerm && !UrlParams.catId && !UrlParams.pcolId && !UrlParams.clusterId")
+              = " for "
               span([innerHtml]="formattedSearchTerm")
               span(*ngIf="siteID!='SAHARA' && _auth.isPublicOnly()", [innerHtml]="'HOME.CONTENT_ACCESS.SEARCH_PAGE_PUBLIC' | translate")
               span(*ngIf="siteID!='SAHARA' && !_auth.isPublicOnly()", [innerHtml]="'HOME.CONTENT_ACCESS.SEARCH_PAGE_USER' | translate")
               span(*ngIf="siteID=='SAHARA'", [innerHtml]="'HOME.CONTENT_ACCESS.SEARCH_PAGE_SAHARA' | translate")
-            = " "
+            = ". "
             span.font-weight-bold(*ngIf="excludedAssetsCount") {{ excludedAssetsCount }} results
             = " " 
             span(*ngIf="excludedAssetsCount") have no date and were excluded.

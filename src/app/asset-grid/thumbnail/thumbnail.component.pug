@@ -21,14 +21,21 @@
     i.icon.icon-iap.float-right(*ngIf="thumbnail.iap")
     //- New search icons
     i.icon.icon-cluster.float-right(
-      *ngIf="thumbnail.partofcluster", 
-      [id]="thumbnail.objectId + '_clustered_images'", 
+      *ngIf="thumbnail.partofcluster",
       (click)="openLink($event, ['/cluster', thumbnail.clusterid ? thumbnail.clusterid : thumbnail.artstorid, { objTitle :  thumbnail.name }])", 
       title="View related media",
       tabIndex="0"
     )
-    i.icon.icon-collab.float-right(*ngIf="thumbnail.frequentlygroupedwith && thumbnail.frequentlygroupedwith.length > 0", [id]="thumbnail.objectId + '_associated_images'", (click)="openLink($event, ['/associated', thumbnail.frequentlygroupedwith[0], 103])", title="Others are also interested in...", tabIndex="0")
+    i.icon.icon-collab.float-right(*ngIf="thumbnail.frequentlygroupedwith && thumbnail.frequentlygroupedwith.length > 0", (click)="openLink($event, ['/associated', thumbnail.frequentlygroupedwith[0], 103])", title="Others are also interested in...", tabIndex="0")
     //- i.icon.icon-collection-type(class="icon-{{getCollectionType().name}}", [attr.title]="getCollectionType().alt")
     ang-collection-badge([collectionType]="getCollectionType()")
     i.float-right(*ngIf="thumbnail.media && thumbnail.media.adlObjectType && thumbnail.media.adlObjectType != 10", class="icon icon-{{thumbnail.media.adlObjectType | typeIdPipe}}")
     i.float-right(*ngIf="!thumbnail.media && thumbnail.objectTypeId && thumbnail.objectTypeId != 10", class="icon icon-{{thumbnail.objectTypeId | typeIdPipe}}")
+    
+    .float-right.multiview-indicator(*ngIf="multiviewItemCount > 0", [ngbTooltip]="tipMultiView", ngbTooltip, triggers="focusin:focusout mouseenter:mouseleave", placement="right", aria-haspopup="true")
+      i.icon.icon-multiview
+      span.multiview-count {{multiviewItemCount}}
+    
+    <ng-template #tipMultiView>
+      div This item has <br> multiple views.
+    </ng-template>

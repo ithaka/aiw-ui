@@ -2,6 +2,7 @@ import { Router } from '@angular/router';
 import { Component, OnInit, OnChanges, Input, SimpleChanges } from '@angular/core';
 
 import { Thumbnail, AssetService, CollectionTypeHandler, AssetSearchService, CollectionTypeInfo } from './../../shared'
+import { Angulartics2 } from 'angulartics2';
 
 @Component({
   selector: 'ang-thumbnail',
@@ -42,7 +43,11 @@ export class ThumbnailComponent implements OnInit, OnChanges {
   // The alt message for a thumbnail, combined with thumbnail title and creator name
   private thumbnailAlt: string = ''
 
+  // Keeps the track of multiViewItems count associated with the current asset
+  private multiviewItemCount: number = 0
+
   constructor(
+    private angulartics: Angulartics2,
     private _assets: AssetService,
     private _search: AssetSearchService,
     private router: Router
@@ -53,9 +58,11 @@ export class ThumbnailComponent implements OnInit, OnChanges {
     if (this.thumbnail['media']) {
       this.thumbnail.thumbnailImgUrl = this.thumbnail.media.thumbnailSizeOnePath
     }
-
+    
     this.thumbnailAlt = this.thumbnail['name'] ? 'Thumbnail of ' + this.thumbnail['name'] : 'Untitled'
     this.thumbnailAlt = this.thumbnail['agent'] ? this.thumbnailAlt + ' by ' + this.thumbnail['agent'] : this.thumbnailAlt + ' by Unknown'
+
+    this.multiviewItemCount = this.thumbnail['compound_media'] ? JSON.parse(this.thumbnail['compound_media']).objects.length : 0;
   }
 
   // Fires when the component input(s) (i.e largeThmbView) changes - Updates the thumbnailSize based on largeThmbView current value
@@ -70,6 +77,13 @@ export class ThumbnailComponent implements OnInit, OnChanges {
     event.preventDefault()
     event.stopPropagation()
 
+    console.log(urlParams)
+    if (urlParams[0] === '/associated') {
+      this.angulartics.eventTrack.next({ action: 'view associated images', properties: { label: this.thumbnail.objectId ? this.thumbnail.objectId : this.thumbnail.artstorid } })
+    }
+    if (urlParams[0] === '/cluster') {
+      this.angulartics.eventTrack.next({ action: 'view cluster', properties: { label: this.thumbnail.objectId ? this.thumbnail.objectId : this.thumbnail.artstorid } })
+    }
     this.router.navigate(urlParams)
   }
 
