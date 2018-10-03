@@ -1,18 +1,17 @@
-.div 
-  nav-menu([allowSelectAll]="true")
-  .container.main-content
-    .row
-      .col-sm-3(style="margin-top: 1rem;")
-        .mobile--hide
-          h3.browse-category {{ 'HOME.HEADINGS.FEATURED' | translate }}
-          p.small(*ngIf="siteID!='SAHARA' && _auth.isPublicOnly()", [innerHtml]="'HOME.CONTENT_ACCESS.PUBLIC' | translate")
-          p.small(*ngIf="siteID!='SAHARA' && !_auth.isPublicOnly()", [innerHtml]="'HOME.CONTENT_ACCESS.USER' | translate")
-          p.small(*ngIf="siteID=='SAHARA'", [innerHtml]="'HOME.CONTENT_ACCESS.SAHARA' | translate")
-          ang-asset-filters
-      .col-sm-9
-        h1.mobile--show Results
-        .row.no-gutters.row--search-bar
-          #mainContent.col-md-9.search-page-highlight
-            ang-search(*ngIf="_auth.isPublicOnly()", [allowSearchInRes]="true", [UserNotLoggedIn]="true")
-            ang-search(*ngIf="siteID=='SAHARA' || !_auth.isPublicOnly()", [allowSearchInRes]="true", [UserNotLoggedIn]="false")
-        ang-asset-grid([hasMaxAssetLimit]="true")
+nav-menu([allowSelectAll]="true")
+.container.main-content
+  .row
+    .col-sm-3(style="margin-top: 1rem;")
+      .mobile--hide
+        h3.browse-category {{ 'HOME.HEADINGS.FEATURED' | translate }}
+        p.small(*ngIf="siteID!='SAHARA' && _auth.isPublicOnly()", [innerHtml]="'HOME.CONTENT_ACCESS.PUBLIC' | translate")
+        p.small(*ngIf="siteID!='SAHARA' && !_auth.isPublicOnly()", [innerHtml]="'HOME.CONTENT_ACCESS.USER' | translate")
+        p.small(*ngIf="siteID=='SAHARA'", [innerHtml]="'HOME.CONTENT_ACCESS.SAHARA' | translate")
+        ang-asset-filters
+    .col-sm-9
+      h1.mobile--show Results
+      .row.no-gutters.row--search-bar
+        #mainContent.col-md-9.search-page-highlight
+          ang-search(*ngIf="_auth.isPublicOnly()", [allowSearchInRes]="true", [UserNotLoggedIn]="true")
+          ang-search(*ngIf="siteID=='SAHARA' || !_auth.isPublicOnly()", [allowSearchInRes]="true", [UserNotLoggedIn]="false")
+      ang-asset-grid([hasMaxAssetLimit]="true")

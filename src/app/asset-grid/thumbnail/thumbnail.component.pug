@@ -1,5 +1,5 @@
 .card-block.card-text(tabIndex="-1")
-  .card-img-top()
+  .card-img-top
     img(*ngIf="thumbnail.status != 'not-available'", role="img", tabIndex="0", [class.disablePointerEvents]="reorderMode", [attr.src]="_search.makeThumbUrl(thumbnail.thumbnailImgUrl, thumbnailSize)", (error)="thumbnailError()", [attr.alt]="thumbnailAlt")
   .metadata-wrap
     //- New Asset display
