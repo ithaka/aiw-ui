@@ -65,7 +65,8 @@ export class ThumbnailComponent implements OnInit, OnChanges {
     // Prevent the parent anchor tag from firing
     event.preventDefault()
     event.stopPropagation()
-    this.angulartics.eventTrack.next({ action: 'view associated images', properties: { label: this.thumbnail.artstorid } })
+
+    this.angulartics.eventTrack.next({ action: 'view associated images', properties: { label: this.thumbnail.objectId ? this.thumbnail.objectId : this.thumbnail.artstorid } })
     this.router.navigate(urlParams)
   }
 
