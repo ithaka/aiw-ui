@@ -39,6 +39,9 @@ export class ThumbnailComponent implements OnInit, OnChanges {
   // Variable that determines the thumbnail image size based on largeThmbView and available size for the asset. Defaults to 1 (Small thumbnail view)
   private thumbnailSize: number = 1
 
+  // Keeps the track of multiViewItems count associated with the current asset
+  private multiviewItemCount: number = 0
+
   constructor(
     private _assets: AssetService,
     private _search: AssetSearchService,
@@ -50,6 +53,7 @@ export class ThumbnailComponent implements OnInit, OnChanges {
     if (this.thumbnail['media']) {
       this.thumbnail.thumbnailImgUrl = this.thumbnail.media.thumbnailSizeOnePath
     }
+    this.multiviewItemCount = this.thumbnail['compound_media'] ? JSON.parse(this.thumbnail['compound_media']).objects.length : 0;
   }
 
   // Fires when the component input(s) (i.e largeThmbView) changes - Updates the thumbnailSize based on largeThmbView current value
