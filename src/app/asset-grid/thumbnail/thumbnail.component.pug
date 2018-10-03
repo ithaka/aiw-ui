@@ -21,12 +21,11 @@
     i.icon.icon-iap.float-right(*ngIf="thumbnail.iap")
     //- New search icons
     i.icon.icon-cluster.float-right(
-      *ngIf="thumbnail.partofcluster", 
-      [id]="thumbnail.objectId + '_clustered_images'", 
+      *ngIf="thumbnail.partofcluster",
       (click)="openLink($event, ['/cluster', thumbnail.clusterid ? thumbnail.clusterid : thumbnail.artstorid, { objTitle :  thumbnail.name }])", 
       title="View related media"
     )
-    i.icon.icon-collab.float-right(*ngIf="thumbnail.frequentlygroupedwith && thumbnail.frequentlygroupedwith.length > 0", [id]="thumbnail.objectId ? thumbnail.objectId + '_associated_images' : thumbnail.artstorid + '_associated_images'", (click)="openLink($event, ['/associated', thumbnail.frequentlygroupedwith[0], 103])", title="Others are also interested in...")
+    i.icon.icon-collab.float-right(*ngIf="thumbnail.frequentlygroupedwith && thumbnail.frequentlygroupedwith.length > 0", (click)="openLink($event, ['/associated', thumbnail.frequentlygroupedwith[0], 103])", title="Others are also interested in...")
     //- i.icon.icon-collection-type(class="icon-{{getCollectionType().name}}", [attr.title]="getCollectionType().alt")
     ang-collection-badge([collectionType]="getCollectionType()")
     i.float-right(*ngIf="thumbnail.media && thumbnail.media.adlObjectType && thumbnail.media.adlObjectType != 10", class="icon icon-{{thumbnail.media.adlObjectType | typeIdPipe}}")
