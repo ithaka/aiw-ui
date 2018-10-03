@@ -2,6 +2,7 @@ import { Router } from '@angular/router';
 import { Component, OnInit, OnChanges, Input, SimpleChanges } from '@angular/core';
 
 import { Thumbnail, AssetService, CollectionTypeHandler, AssetSearchService, CollectionTypeInfo } from './../../shared'
+import { Angulartics2 } from 'angulartics2';
 
 @Component({
   selector: 'ang-thumbnail',
@@ -40,6 +41,7 @@ export class ThumbnailComponent implements OnInit, OnChanges {
   private thumbnailSize: number = 1
 
   constructor(
+    private angulartics: Angulartics2,
     private _assets: AssetService,
     private _search: AssetSearchService,
     private router: Router
@@ -63,7 +65,7 @@ export class ThumbnailComponent implements OnInit, OnChanges {
     // Prevent the parent anchor tag from firing
     event.preventDefault()
     event.stopPropagation()
-
+    this.angulartics.eventTrack.next({ action: 'view associated images', properties: { label: this.thumbnail.artstorid } })
     this.router.navigate(urlParams)
   }
 
