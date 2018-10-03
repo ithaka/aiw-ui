@@ -39,12 +39,12 @@
                 .form-card.card.dt-grp
                   .date-filter-row
                     input#inputDateFilterStart.form-control([(ngModel)]="advanceSearchDate['startDate']", (change)="validateForm()", type="number", (keypress)="dateKeyPress($event)", min="0", placeholder="Start Date")
-                    div#buttonDateFilterStartBCE.side-toggle-btn((click)="advanceSearchDate['startEra'] = 'BCE'", [ngClass]="{'active': advanceSearchDate['startEra'] == 'BCE' }") BCE
-                    div#buttonDateFilterStartCE.side-toggle-btn((click)="advanceSearchDate['startEra'] = 'CE'", [ngClass]="{'active': advanceSearchDate['startEra'] == 'CE' }") CE
+                    button#buttonDateFilterStartBCE.side-toggle-btn((click)="advanceSearchDate['startEra'] = 'BCE'", [ngClass]="{'active': advanceSearchDate['startEra'] == 'BCE' }", tabIndex="0", role="button") BCE
+                    button#buttonDateFilterStartCE.side-toggle-btn((click)="advanceSearchDate['startEra'] = 'CE'", [ngClass]="{'active': advanceSearchDate['startEra'] == 'CE' }", tabIndex="0", role="button") CE
                   .date-filter-row
                     input#inputDateFilterEnd.form-control([(ngModel)]="advanceSearchDate['endDate']", (change)="validateForm()", type="number", (keypress)="dateKeyPress($event)", min="0", placeholder="End Date")
-                    div#buttonDateFilterEndBCE.side-toggle-btn((click)="advanceSearchDate['endEra'] = 'BCE'", [ngClass]="{'active': advanceSearchDate['endEra'] == 'BCE' }") BCE
-                    div#buttonDateFilterEndCE.side-toggle-btn((click)="advanceSearchDate['endEra'] = 'CE'", [ngClass]="{'active': advanceSearchDate['endEra'] == 'CE' }") CE
+                    button#buttonDateFilterEndBCE.side-toggle-btn((click)="advanceSearchDate['endEra'] = 'BCE'", [ngClass]="{'active': advanceSearchDate['endEra'] == 'BCE' }", tabIndex="0", role="button") BCE
+                    button#buttonDateFilterEndCE.side-toggle-btn((click)="advanceSearchDate['endEra'] = 'CE'", [ngClass]="{'active': advanceSearchDate['endEra'] == 'CE' }", tabIndex="0", role="button") CE
             .col-lg-6
               h3 {{ 'ADVANCED_SEARCH_MODAL.FILTER_HEADING' | translate }}
               p.small {{ 'ADVANCED_SEARCH_MODAL.FILTER_DESCRIPTION' | translate }}
