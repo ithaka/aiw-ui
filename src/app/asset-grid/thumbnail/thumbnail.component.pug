@@ -31,3 +31,11 @@
     ang-collection-badge([collectionType]="getCollectionType()")
     i.float-right(*ngIf="thumbnail.media && thumbnail.media.adlObjectType && thumbnail.media.adlObjectType != 10", class="icon icon-{{thumbnail.media.adlObjectType | typeIdPipe}}")
     i.float-right(*ngIf="!thumbnail.media && thumbnail.objectTypeId && thumbnail.objectTypeId != 10", class="icon icon-{{thumbnail.objectTypeId | typeIdPipe}}")
+    
+    .float-right.multiview-indicator(*ngIf="multiviewItemCount > 0", [ngbTooltip]="tipMultiView", ngbTooltip, triggers="focusin:focusout mouseenter:mouseleave", placement="right", aria-haspopup="true")
+      i.icon.icon-multiview
+      span.multiview-count {{multiviewItemCount}}
+    
+    <ng-template #tipMultiView>
+      div This item has multiple views.
+    </ng-template>
