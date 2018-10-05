@@ -47,8 +47,8 @@
     &  button.close {
         cursor: pointer;
 
-        &:hover, &:active, &:focus{
-            background: #cdcdcd;
+        &:hover, &:active, &:focus {
+            background: none;  /** Changed in sprint 50 from #cdcdcd */
         }
     }
 
@@ -79,7 +79,7 @@
 
 .modal-body {
 	padding: $basePadding;
-    background-color: $bgLightAccent;
+  background-color: $bgLightAccent;
 }
 
 .modal-footer {
@@ -90,7 +90,10 @@
         display: block !important;
     }
 
-    .btn{
+    .btn-secondary {
+      &:focus {
+        background-color: #C9510D;
+      }
         @media(max-width: $phone) {
             display: block;
             margin: 10px auto;
@@ -100,6 +103,6 @@
 
 .modal-body .success-msg {
 	font-size: 14px;
-    font-weight: bold;
-    color: #4F5557;
+  font-weight: bold;
+  color: #4F5557;
 }
