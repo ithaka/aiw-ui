@@ -92,7 +92,8 @@
 
     .btn-secondary {
       &:focus {
-        background-color: #C9510D;
+        background: none;
+        color: #C9510D;
       }
         @media(max-width: $phone) {
             display: block;
