@@ -2,7 +2,7 @@
   .modal-dialog(role="dialog", (keydown.esc)="closeModal.emit()")
     .modal-content
       .modal-header
-        h4.modal-title#ig-download-title(tabindex="0") {{ 'IMAGE_GROUP_PAGE.IG_DOWNLOAD_MODAL.TITLE' | translate }}
+        h4.modal-title#ig-download-title(tabindex="0", (keydown.shift.tab)="closeModal.emit()") {{ 'IMAGE_GROUP_PAGE.IG_DOWNLOAD_MODAL.TITLE' | translate }}
         button.close#ig-modal-close((click)="closeModal.emit()", aria-label="Close")
           span(aria-hidden="true") &times;
       .modal-body
