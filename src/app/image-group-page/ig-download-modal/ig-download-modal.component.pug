@@ -11,7 +11,7 @@
         .alert.alert-danger(*ngIf="!(isLoading || zipLoading || downloadLink || zipDownloadLink) && error && ig.total<=100", style="margin:0;", [innerHtml]="'IMAGE_GROUP_PAGE.IG_DOWNLOAD_MODAL.DOWNLOAD_ERROR_SMALL' | translate")
       .modal-footer
         button.btn.btn-secondary((click)="closeModal.emit()") Cancel
-        button#generatePowerpointLink.btn.btn-primary(*ngIf="!downloadLink  && !isLoading", role="button", (click)="getPPT()") Request PPT
+        button#generatePowerpointLink.btn.btn-primary(*ngIf="!downloadLink  && !isLoading", (click)="getPPT()") Request PPT
         a#downloadPowerpointLink.btn.btn-primary(*ngIf="!isLoading && downloadLink", role="button",
           [attr.href]="downloadLink",
           [attr.download]="downloadTitle",
@@ -20,7 +20,7 @@
         button.btn.btn-primary(*ngIf="isLoading", disabled)
           | Generating PPT
           i.icon.icon-loading
-        button#generateZipLink.btn.btn-primary(*ngIf="!zipDownloadLink && !zipLoading", (focusout)="startModalFocus()", role="button", (click)="getZip()") Request Zip
+        button#generateZipLink.btn.btn-primary(*ngIf="!zipDownloadLink && !zipLoading", (focusout)="startModalFocus()", (click)="getZip()") Request Zip
         a#downloadZipLink.btn.btn-primary(*ngIf="!zipLoading && zipDownloadLink", role="button",
           [attr.href]="zipDownloadLink",
           [attr.download]="downloadTitle",
