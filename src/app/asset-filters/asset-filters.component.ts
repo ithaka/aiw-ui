@@ -424,6 +424,10 @@ export class AssetFilters {
       return theEvent.returnValue;
   }
 
+  private skipToSearchSec(): void{
+    console.log('skipToSearchSec called')
+  }
+
   ngOnDestroy() {
     this.subscriptions.forEach((sub) => { sub.unsubscribe(); });
   }

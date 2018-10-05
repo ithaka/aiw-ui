@@ -740,4 +740,8 @@ export class AssetGrid implements OnInit, OnDestroy {
           console.error(error);
         });
   }
+
+  private skipToFilterSec(): void{
+    console.log('skipToFilterSec called')
+  }
 }

@@ -1,6 +1,6 @@
-.card-block.card-text(tabIndex="-1")
+.card-block.card-text
   .card-img-top
-    img(*ngIf="thumbnail.status != 'not-available'", role="img", tabIndex="0", [class.disablePointerEvents]="reorderMode", [attr.src]="_search.makeThumbUrl(thumbnail.thumbnailImgUrl, thumbnailSize)", (error)="thumbnailError()", [attr.alt]="thumbnailAlt")
+    img(*ngIf="thumbnail.status != 'not-available'", role="img", [class.disablePointerEvents]="reorderMode", [attr.src]="_search.makeThumbUrl(thumbnail.thumbnailImgUrl, thumbnailSize)", (error)="thumbnailError()", [attr.alt]="thumbnailAlt")
   .metadata-wrap
     //- New Asset display
     span.asset-title(*ngIf="thumbnail.name", title="{{ thumbnail.name }}", [innerHTML]="thumbnail.name")
@@ -16,23 +16,24 @@
       span(*ngIf="data", [innerHtml]="data")
   .card-icon-group((click)="$event.stopPropagation(); $event.preventDefault();", [ngClass]="{ 'disablePointerEvents': editMode }")
     //- Legacy Service icons
-    i.icon.icon-collab.float-right(*ngIf="thumbnail.cfObjectId && thumbnail.cfObjectId.length > 0", [id]="thumbnail.objectId + '_associated_images'", (click)="openLink($event, ['/associated', thumbnail.cfObjectId, thumbnail.collectionId])" title="Others are also interested in...", tabIndex="0")
-    i.icon.icon-cluster.float-right(*ngIf="thumbnail.clustered == 1", [id]="thumbnail.objectId + '_clustered_images'", (click)="openLink($event, ['/cluster', thumbnail.objectId, { objTitle :  thumbnail.thumbnail1 }])", title="View related media", tabIndex="0")
-    i.icon.icon-iap.float-right(*ngIf="thumbnail.iap")
+    i.icon.icon-collab.float-right(*ngIf="thumbnail.cfObjectId && thumbnail.cfObjectId.length > 0", [id]="thumbnail.objectId + '_associated_images'", (click)="openLink($event, ['/associated', thumbnail.cfObjectId, thumbnail.collectionId])" title="Others are also interested in...", tabIndex="3", (keyup.enter)="openLink($event, ['/associated', thumbnail.cfObjectId, thumbnail.collectionId])")
+    i.icon.icon-cluster.float-right(*ngIf="thumbnail.clustered == 1", [id]="thumbnail.objectId + '_clustered_images'", (click)="openLink($event, ['/cluster', thumbnail.objectId, { objTitle :  thumbnail.thumbnail1 }])", title="View related media", tabIndex="3", (keyup.enter)="openLink($event, ['/cluster', thumbnail.objectId, { objTitle :  thumbnail.thumbnail1 }])")
+    i.icon.icon-iap.float-right(*ngIf="thumbnail.iap", tabIndex="3")
     //- New search icons
     i.icon.icon-cluster.float-right(
       *ngIf="thumbnail.partofcluster",
       (click)="openLink($event, ['/cluster', thumbnail.clusterid ? thumbnail.clusterid : thumbnail.artstorid, { objTitle :  thumbnail.name }])", 
       title="View related media",
-      tabIndex="0"
+      tabIndex="3",
+      (keyup.enter)="openLink($event, ['/cluster', thumbnail.clusterid ? thumbnail.clusterid : thumbnail.artstorid, { objTitle :  thumbnail.name }])"
     )
-    i.icon.icon-collab.float-right(*ngIf="thumbnail.frequentlygroupedwith && thumbnail.frequentlygroupedwith.length > 0", (click)="openLink($event, ['/associated', thumbnail.frequentlygroupedwith[0], 103])", title="Others are also interested in...", tabIndex="0")
+    i.icon.icon-collab.float-right(*ngIf="thumbnail.frequentlygroupedwith && thumbnail.frequentlygroupedwith.length > 0", (click)="openLink($event, ['/associated', thumbnail.frequentlygroupedwith[0], 103])", title="Others are also interested in...", tabIndex="3", (keyup.enter)="openLink($event, ['/associated', thumbnail.frequentlygroupedwith[0], 103])")
     //- i.icon.icon-collection-type(class="icon-{{getCollectionType().name}}", [attr.title]="getCollectionType().alt")
-    ang-collection-badge([collectionType]="getCollectionType()")
+    ang-collection-badge([collectionType]="getCollectionType()", tabIndex="3")
     i.float-right(*ngIf="thumbnail.media && thumbnail.media.adlObjectType && thumbnail.media.adlObjectType != 10", class="icon icon-{{thumbnail.media.adlObjectType | typeIdPipe}}")
     i.float-right(*ngIf="!thumbnail.media && thumbnail.objectTypeId && thumbnail.objectTypeId != 10", class="icon icon-{{thumbnail.objectTypeId | typeIdPipe}}")
     
-    .float-right.multiview-indicator(*ngIf="multiviewItemCount > 0", [ngbTooltip]="tipMultiView", ngbTooltip, triggers="focusin:focusout mouseenter:mouseleave", placement="right", aria-haspopup="true")
+    .float-right.multiview-indicator(*ngIf="multiviewItemCount > 0", [ngbTooltip]="tipMultiView", ngbTooltip, triggers="focusin:focusout mouseenter:mouseleave", placement="right", aria-haspopup="true", tabIndex="3")
       i.icon.icon-multiview
       span.multiview-count {{multiviewItemCount}}
     
