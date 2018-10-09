@@ -425,7 +425,11 @@ export class AssetFilters {
   }
 
   private skipToSearchSec(): void{
-    console.log('skipToSearchSec called')
+    window.setTimeout(function ()
+    {
+      let htmlelement: HTMLElement = document.getElementById('skip-to-filter-link');
+      (<HTMLElement>htmlelement).focus();
+    }, 100);
   }
 
   ngOnDestroy() {

@@ -1,12 +1,12 @@
 div(aria-activedescendant="button")
-  button.skip-btn((click)="skipToSearchSec()", (keyup.enter)="skipToSearchSec()", tabindex="2", class="sr-only sr-only-focusable") This is the filters section. Skip to the search results section.
+  button.skip-btn#skip-to-search-link((click)="skipToSearchSec()", (keyup.enter)="skipToSearchSec()", tabindex="2", class="sr-only sr-only-focusable") This is the filters section. Skip to the search results section.
 .col--filter-border.col--sliding([ngClass]="{ 'slide-up' : !showFilters }")
   // New Search Filters
   div(*ngFor="let filterKey of keys(availableFilters); let i = index")
     .filter-group(*ngIf="availableFilters[filterKey] && isArray(availableFilters[filterKey]) && availableFilters[filterKey].length > 0")
       span.filter-group__label
         h3 {{ 'FILTERS.' + filterKey | translate }}
-          a#buttonCollectionTypeClear.link--accent.small(tabindex="2", [ngClass]="{ 'disable': !hasAppliedFilters(filterKey) }", (click)="clearAllFilterGroup(filterKey)") Clear
+          a#buttonCollectionTypeClear.link--accent.small((keydown.enter)="clearAllFilterGroup(filterKey)", tabindex="2", [ngClass]="{ 'disable': !hasAppliedFilters(filterKey) }", (click)="clearAllFilterGroup(filterKey)") Clear
       //- Filters
       div(*ngFor="let facet of availableFilters[filterKey]")
         //- Show filters
@@ -34,16 +34,16 @@ div(aria-activedescendant="button")
   .filter-group(*ngIf="availableFilters.dateObj")
     span.filter-group__label
       h3 Date
-        a#buttonDateFilterClear.link--accent.small(tabindex="2", [ngClass]="{ 'disable': !hasAppliedFilters('date') }", (click)="clearAllFilterGroup('date')") Clear
+        a#buttonDateFilterClear.link--accent.small((keydown.enter)="clearAllFilterGroup('date')", tabindex="2", [ngClass]="{ 'disable': !hasAppliedFilters('date') }", (click)="clearAllFilterGroup('date')") Clear
     .date-filter-row
       input#inputDateFilterStart.form-control(tabindex="2", [(ngModel)]="availableFilters.dateObj.earliest.date", type="number", (keypress)="dateKeyPress($event)", min="0", placeholder="Start Date")
-      #buttonDateFilterStartBCE.side-toggle-btn(tabindex="2", (click)="availableFilters.dateObj.earliest.era = 'BCE'", [ngClass]="{'active': availableFilters.dateObj.earliest.era == 'BCE' }") BCE
-      #buttonDateFilterStartCE.side-toggle-btn(tabindex="2", (click)="availableFilters.dateObj.earliest.era = 'CE'", [ngClass]="{'active': availableFilters.dateObj.earliest.era == 'CE' }") CE
+      #buttonDateFilterStartBCE.side-toggle-btn((keydown.enter)="availableFilters.dateObj.earliest.era = 'BCE'", tabindex="2", (click)="availableFilters.dateObj.earliest.era = 'BCE'", [ngClass]="{'active': availableFilters.dateObj.earliest.era == 'BCE' }") BCE
+      #buttonDateFilterStartCE.side-toggle-btn((keydown.enter)="availableFilters.dateObj.earliest.era = 'CE'", tabindex="2", (click)="availableFilters.dateObj.earliest.era = 'CE'", [ngClass]="{'active': availableFilters.dateObj.earliest.era == 'CE' }") CE
     .date-filter-row
       input#inputDateFilterEnd.form-control(tabindex="2", [(ngModel)]="availableFilters.dateObj.latest.date", type="number", (keypress)="dateKeyPress($event)", min="0", placeholder="End Date")
-      #buttonDateFilterEndBCE.side-toggle-btn(tabindex="2", (click)="availableFilters.dateObj.latest.era = 'BCE'", [ngClass]="{'active': availableFilters.dateObj.latest.era == 'BCE' }") BCE
-      #buttonDateFilterEndCE.side-toggle-btn(tabindex="2", (click)="availableFilters.dateObj.latest.era = 'CE'", [ngClass]="{'active': availableFilters.dateObj.latest.era == 'CE' }") CE
+      #buttonDateFilterEndBCE.side-toggle-btn((keydown.enter)="availableFilters.dateObj.latest.era = 'BCE'", tabindex="2", (click)="availableFilters.dateObj.latest.era = 'BCE'", [ngClass]="{'active': availableFilters.dateObj.latest.era == 'BCE' }") BCE
+      #buttonDateFilterEndCE.side-toggle-btn((keydown.enter)="availableFilters.dateObj.latest.era = 'CE'", tabindex="2", (click)="availableFilters.dateObj.latest.era = 'CE'", [ngClass]="{'active': availableFilters.dateObj.latest.era == 'CE' }") CE
     .date-filter-row
-      #buttonDateFilterReset.btn(tabindex="2", (click)="clearDateFilter()") RESET
-      #buttonDateFilterSubmit.btn(tabindex="2", (click)="applyDateFilter()") APPLY
+      #buttonDateFilterReset.btn((keydown.enter)="clearDateFilter()", tabindex="2", (click)="clearDateFilter()") RESET
+      #buttonDateFilterSubmit.btn((keydown.enter)="applyDateFilter()", tabindex="2", (click)="applyDateFilter()") APPLY
     .date-filter-error-msg(*ngIf="dateError") End date must be greater than or equal to Start date.

@@ -149,6 +149,11 @@ input[type=number] {
         -moz-transform: scale(1.5);
         -moz-transform-origin: 100% 0;
         cursor: pointer;
+
+        &:focus{
+            // visibility: visible !important;
+            opacity: 1 !important;
+        }
     }
     .check-mobile {
         position: absolute;
@@ -159,13 +164,15 @@ input[type=number] {
     }
     &:hover, &:focus {
       .check {
-          display: block !important;
+        //   visibility: visible !important;
+          opacity: 1 !important;
       }
     }
 }
 
 .show-box {
   .check {
-    display: block !important;
+    // visibility: visible !important;
+    opacity: 1 !important;
   }
 }
