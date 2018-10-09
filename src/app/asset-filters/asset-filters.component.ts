@@ -5,8 +5,7 @@ import { Angulartics2 } from 'angulartics2'
 
 import { AssetService } from '../shared/assets.service'
 import { AssetFiltersService } from '../asset-filters/asset-filters.service'
-import { AuthService, FlagService } from 'app/shared';
-
+import { AuthService, FlagService, InstitutionsService } from 'app/shared';
 
 declare var _satellite: any
 
@@ -24,6 +23,9 @@ export class AssetFilters {
   private subscriptions: Subscription[] = []
   private filterDate: boolean = false
   private filterNameMap: any = {}
+
+  private userInstId: string        // user's institution id
+  private instFilterCount: number   // collection type 2 filter for search results count
 
   errors = {}
   results = []
@@ -71,21 +73,31 @@ export class AssetFilters {
     private router: Router,
     private angulartics: Angulartics2,
     private _auth: AuthService,
-    private _flags: FlagService
+    private _flags: FlagService,
+    private _inst: InstitutionsService
   ) {
   }
 
 
   ngOnInit() {
 
-    this._auth.getAllInstitutions()
+  // Get User Institution ID
+  this._auth.getInstitution()
+    .take(1)
+    .subscribe((data) => {
+      this.userInstId = data['institutionId']
+    }, err => {
+      console.log(err.status)
+    })
+
+    this._inst.getAllInstitutions()
     .take(1)
     .subscribe((data) => {
       this.subscribeAvailableFilter(data['allInstitutions'])
     }, err => {
-      // WORKAROUND
-      // Still subscribe to filters
+      // on error of all institutions, we still need to call subscriveAvailableFilter
       this.subscribeAvailableFilter([])
+      console.log(err.status)
     })
 
     this.filterNameMap = this._filters.getFilterNameMap()
@@ -143,36 +155,49 @@ export class AssetFilters {
     this.subscriptions.push(
       this._filters.available$.subscribe(
         filters => {
-          // Clean up filter data for display (i.e. insitutional asset counts are inaccurate)
-          if (filters['collectiontypes']) {
-            for (let i = 0; i < filters['collectiontypes'].length; i++) {
-              let colType = filters['collectiontypes'][i]
-              if (colType.name == '2' || colType.name == '4') {
-                delete colType.count
-              }
-            }
-            // If auth.isPublicOnly 'unaffiliated' user, filter out all but type 5 collection type
-            if (this._auth.isPublicOnly())
-              filters['collectiontypes'] = filters['collectiontypes'].filter(collectionType => collectionType.name === '5')
-          }
+          // Reset collection type filter count
+          this.instFilterCount = 0
 
           // Contributors List of search results
-          if (filters['contributinginstitutionid']) {
+          if (filters['contributinginstitutionid'] && institutionList.length) {
 
-            if (this.showContribFilter) {
-              let instMap = institutionList
-              for (let i = 0; i < filters['contributinginstitutionid'].length; i++) {
-                for (let j = 0; j < instMap.length; j++) {
-                  if (filters['contributinginstitutionid'][i].name === instMap[j].institutionId) {
-                    filters['contributinginstitutionid'][i].showingName = instMap[j].institutionName;
+            for (let i = 0; i < filters['contributinginstitutionid'].length; i++) {
+              for (let j = 0; j < institutionList.length; j++) {
+
+                if (filters['contributinginstitutionid'][i].name === institutionList[j].institutionId) {
+                  filters['contributinginstitutionid'][i].showingName = institutionList[j].institutionName;
+                }
+
+                // If this contributor is the users institution, set instFilterCount to this filters' count value
+                if (filters['contributinginstitutionid'][i].name === this.userInstId) {
+                  if (filters['contributinginstitutionid'][i].count > -1) {
+                    this.instFilterCount = parseInt(filters['contributinginstitutionid'][i].count)
                   }
                 }
               }
             }
-            else {
-              filters['contributinginstitutionid'] = []
+          }
+
+          // NOTE: Clear Contributors list array until we remove the contribFilter feature flag
+          if (!this.showContribFilter) {
+            filters['contributinginstitutionid'] = []
+          }
+
+          if (filters['collectiontypes']) {
+
+            for (let i = 0; i < filters['collectiontypes'].length; i++) {
+              let colType = filters['collectiontypes'][i]
+
+              // The loggedd in user's institutional 'Collection Type' filter
+              if (colType.name == '2' || colType.name == '4') {
+                filters['collectiontypes'][i]['count'] = this.instFilterCount
+              }
             }
 
+            // If auth.isPublicOnly 'unaffiliated' user, filter out all but type 5 collection type
+            if (this._auth.isPublicOnly()) {
+              filters['collectiontypes'] = filters['collectiontypes'].filter(collectionType => collectionType.name === '5')
+            }
           }
           this.availableFilters = filters;
         }

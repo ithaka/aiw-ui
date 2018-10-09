@@ -108,7 +108,7 @@ export class AssetSearchService {
           {
             "name": "contributinginstitutionid",
             "mincount": 1,
-            "limit": 17
+            "limit": 400
           }
         ],
     };
