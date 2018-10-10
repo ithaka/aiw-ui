@@ -643,7 +643,7 @@
     "MESSAGE": "We've made changes over the summer! <a href=\"https://support.artstor.org/?page_id=37\" target=\"_blank\" class=\"link\">Learn more</a>."
   },
   "MEDIA_ISSUES_BANNER": {
-    "MESSAGE": "We are currently experiencing issues with images and downloads due to a power outage. <a href=\"http://support.artstor.org/?article=current-technical-issues-alerts\" target=\"_blank\" class=\"link\">Learn more</a>."
+    "MESSAGE": "Personal Collection upload is temporarily unavailable. WeWe apologize for the inconvenience, and appreciate your patience. If you have any questions, please <a href=\"mailto:support@artstor.org\" target=\"_blank\" class=\"link\">contact Artstor Support</a> or check <a href=\"https://twitter.com/ArtstorHelp\" target=\"_blank\" class=\"link\">Twitter</a> for additional updates."
   },
   "DOWNTIME_BANNER": {
     "MESSAGE": "We're currently experiencing problems affecting the site's performance.  We apologize for the inconvenience, and appreciate your patience. If you have any questions, please <a href=\"mailto:support@artstor.org\" target=\"_blank\" class=\"link\">contact Artstor Support</a> or check <a href=\"https://twitter.com/ArtstorHelp\" target=\"_blank\" class=\"link\">Twitter</a> for additional updates."
