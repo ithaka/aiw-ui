@@ -155,11 +155,13 @@ export class AssetFilters {
     this.subscriptions.push(
       this._filters.available$.subscribe(
         filters => {
-          // Reset collection type filter count
-          this.instFilterCount = 0
+
+          console.log(filters['contributinginstitutionid'])
+          console.log(institutionList.length)
 
           // Contributors List of search results
           if (filters['contributinginstitutionid'] && institutionList.length) {
+            //this.instFilterCount = 1
 
             for (let i = 0; i < filters['contributinginstitutionid'].length; i++) {
               for (let j = 0; j < institutionList.length; j++) {
@@ -178,11 +180,6 @@ export class AssetFilters {
             }
           }
 
-          // NOTE: Clear Contributors list array until we remove the contribFilter feature flag
-          if (!this.showContribFilter) {
-            filters['contributinginstitutionid'] = []
-          }
-
           if (filters['collectiontypes']) {
 
             for (let i = 0; i < filters['collectiontypes'].length; i++) {
@@ -198,6 +195,10 @@ export class AssetFilters {
             if (this._auth.isPublicOnly()) {
               filters['collectiontypes'] = filters['collectiontypes'].filter(collectionType => collectionType.name === '5')
             }
+          }
+          // NOTE: Clear Contributors list array until we remove the contribFilter feature flag
+          if (!this.showContribFilter) {
+            filters['contributinginstitutionid'] = []
           }
           this.availableFilters = filters;
         }
