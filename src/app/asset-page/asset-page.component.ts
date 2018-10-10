@@ -387,9 +387,9 @@ export class AssetPage implements OnInit, OnDestroy {
                     this.pagination.totalPages = parseInt(pagination.totalPages);
                 }
                 // Page size can't be altered in the asset drawer, endpoint response is limited to 5000
-                let maxPageCount = APP_CONST.MAX_RESULTS / this.pagination.size
+                let maxPageCount = Math.floor(APP_CONST.MAX_RESULTS / this.pagination.size)
                 if (this.pagination.totalPages > maxPageCount) {
-                    this.pagination.totalPages = maxPageCount
+                    this.pagination.totalPages = maxPageCount + 1
                 }
             })
         );
