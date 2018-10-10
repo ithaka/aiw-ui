@@ -1,6 +1,6 @@
 nav.nav.nav-inline.browse-nav
   a.label Browse By:&ensp;
-  a.nav-link(*ngFor="let browseOpt of browseMenuArray", [ngClass]="{'active': browseOpt.id == selectedBrowseId}", (click)="selectBrowseOpt(browseOpt.id)") {{ browseOpt.label }}
+  button.nav-link(*ngFor="let browseOpt of browseMenuArray", [ngClass]="{'active': browseOpt.id == selectedBrowseId}", (click)="selectBrowseOpt(browseOpt.id)") {{ browseOpt.label }}
 .row
   .col-md-8
     ul.filter-list
