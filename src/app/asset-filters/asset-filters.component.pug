@@ -6,7 +6,7 @@
         h3 {{ 'FILTERS.' + filterKey | translate }}
           a#buttonCollectionTypeClear.link--accent.small(tabindex="1", [ngClass]="{ 'disable': !hasAppliedFilters(filterKey) }", (click)="clearAllFilterGroup(filterKey)") Clear
       //- Filters
-      div(*ngFor="let facet of availableFilters[filterKey]")
+      ng-container(*ngFor="let facet of availableFilters[filterKey]")
         //- Show filters
         i.icon.icon-direction.absolute-left.tree-icon((keydown.enter)="toggleTree(facet)", tabindex="1",  aria-label="Expand/collapse parent geography filter", *ngIf="facet.children && facet.children.length > 0", (click)="toggleTree(facet)", [ngClass]="{ 'icon-down' : facet.expanded, 'icon-right' : !facet.expanded }")
         button.filter.parent(
@@ -20,7 +20,7 @@
           //- Display of Collection Type Filters
           span(*ngIf="filterKey != 'contributinginstitutionid' && facet.name && facet.name.length < 2") {{ filterNameMap[filterKey] && filterNameMap[filterKey][facet.name] }}
             span(*ngIf="facet.count") {{ ' (' + facet.count + ')' }}
-          span(*ngIf="filterKey == 'contributinginstitutionid' && facet.showingName && facet.showingName.length > 1", [innerHtml]="facet.showingName + ' ('+facet.count+')'")
+          span(*ngIf="filterKey == 'contributinginstitutionid'", [innerHtml]="(facet.showingName ? facet.showingName : 'Institution '+facet.name) + ' ('+facet.count+')'")
           span(*ngIf="filterKey != 'contributinginstitutionid' && facet.name && facet.name.length > 1", [innerHtml]="facet.name + ' ('+facet.count+')'")
           i.icon.icon-add
           i.icon.icon-close

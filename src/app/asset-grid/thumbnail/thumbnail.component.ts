@@ -40,6 +40,9 @@ export class ThumbnailComponent implements OnInit, OnChanges {
   // Variable that determines the thumbnail image size based on largeThmbView and available size for the asset. Defaults to 1 (Small thumbnail view)
   private thumbnailSize: number = 1
 
+  // The alt message for a thumbnail, combined with thumbnail title and creator name
+  private thumbnailAlt: string = ''
+
   // Keeps the track of multiViewItems count associated with the current asset
   private multiviewItemCount: number = 0
 
@@ -55,6 +58,10 @@ export class ThumbnailComponent implements OnInit, OnChanges {
     if (this.thumbnail['media']) {
       this.thumbnail.thumbnailImgUrl = this.thumbnail.media.thumbnailSizeOnePath
     }
+
+    this.thumbnailAlt = this.thumbnail['name'] ? 'Thumbnail of ' + this.thumbnail['name'] : 'Untitled'
+    this.thumbnailAlt = this.thumbnail['agent'] ? this.thumbnailAlt + ' by ' + this.thumbnail['agent'] : this.thumbnailAlt + ' by Unknown'
+
     this.multiviewItemCount = this.thumbnail['compound_media'] ? JSON.parse(this.thumbnail['compound_media']).objects.length : 0;
   }
 
