@@ -7,8 +7,8 @@ nav.nav.nav-inline.browse-nav
       ng-container(*ngIf="facetQueryMap[facetType] == 'category'")
         .input-group
           input#browsePageFilter.form-control.has-icon(placeholder="Search Collections", tabindex="6", [(ngModel)]="searchTerm", (keyup)="addRouteParam('searchTerm',searchTerm)")
-          i#iconSearchClear.icon.icon-close.form-control__icon(*ngIf="searchTerm && searchTerm.length > 0", (click)="clearSearchTerm(term)")
-          i#iconSearchSubmit.icon.icon-filter.form-control__icon(*ngIf="!searchTerm || searchTerm.length == 0", (click)="addRouteParam('searchTerm',searchTerm)")
+          button#iconSearchClear.icon.icon-close.form-control__icon(*ngIf="searchTerm && searchTerm.length > 0", (click)="clearSearchTerm(term)", tabindex="6")
+          button#iconSearchSubmit.icon.icon-filter.form-control__icon(*ngIf="!searchTerm || searchTerm.length == 0", (click)="addRouteParam('searchTerm',searchTerm)", tabindex="6")
         #alertNoResults.alert.alert-warning.input-group(*ngIf="!(categoryFacets | iggroupfilter:searchTerm).length && !loading", [innerHtml]="'No search results found'")
       li.filter(*ngFor="let facet of categoryFacets | iggroupfilter:searchTerm", [class.hidden]="facet.title === '' || !facet.name")
         a.tag-link(*ngIf="facetQueryMap[facetType] == 'category'", [routerLink]="['/category', facet.name ]")

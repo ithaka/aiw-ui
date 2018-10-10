@@ -213,6 +213,8 @@
     &.form-control__icon {
         opacity: 0.4;
         cursor: pointer;
+        border: none;
+        height: 90%;
 
         &:hover, &:focus {
             opacity: 0.9;
