@@ -66,10 +66,8 @@ export class App {
       if (event instanceof NavigationStart) {
         // focus on the wrapper of the "skip to main content link" everytime new page is loaded
         let mainEl = <HTMLElement>(document.getElementById('skip'))
-        mainEl.focus()
-        // For the filter to work on browse/library page, focus on the input to make user can type in search term continuously
-        if (document.getElementById('browsePageFilter'))
-          document.getElementById('browsePageFilter').focus()
+        if (!(event.url.indexOf('browse') >- 1)) // Don't set focus to skip to main content on browse pages so that we can easily go between browse levels
+          mainEl.focus()
 
         // Detect featureflag=solrmetadata and set cookie
         let routeParams = event.url.split(';')
