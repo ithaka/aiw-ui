@@ -415,7 +415,8 @@ export class SearchModal implements OnInit, AfterViewInit {
   }
 
   private dateKeyPress(event: any): boolean{
-      if ((event.key == 'ArrowUp') || (event.key == 'ArrowDown') || (event.key == 'ArrowRight') || (event.key == 'ArrowLeft') || (event.key == 'Backspace')){
+      // Add check of Tab key to make sure the tabbingis enabled on Firefox
+      if ((event.key == 'ArrowUp') || (event.key == 'ArrowDown') || (event.key == 'ArrowRight') || (event.key == 'ArrowLeft') || (event.key == 'Backspace') || (event.key == 'Tab')){
         return true;
       }
 
