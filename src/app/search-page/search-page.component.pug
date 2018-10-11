@@ -13,7 +13,7 @@ nav-menu([allowSelectAll]="true")
     .col-sm-9
       h1.mobile--show Results
       div(aria-activedescendant="button")
-        button.skip-btn#skip-to-filter-link((click)="skipToFilterSec()", (keyup.enter)="skipToFilterSec()", tabindex="3", class="sr-only sr-only-focusable") This is the search results section. Skip to filters section.
+        button.skip-btn#skip-to-filter-link((click)="skipToFilterSec()", (keyup.enter)="skipToFilterSec()", tabindex="3", class="sr-only sr-only-focusable") This is the search results section. Skip to the filters section.
       .row.no-gutters.row--search-bar
         #mainContent.col-md-9.search-page-highlight
           ang-search(*ngIf="_auth.isPublicOnly()", [allowSearchInRes]="true", [UserNotLoggedIn]="true")
