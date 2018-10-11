@@ -747,12 +747,12 @@ export class AssetGrid implements OnInit, OnDestroy {
   }
 
   private closeGridDropdowns(): void{
-    let dropdownElements: Array<HTMLElement> = Array.from( document.querySelectorAll("ang-asset-grid .dropdown") )
-    for(let dropdownElement of dropdownElements){
+    let dropdownElements: Array<HTMLElement> = Array.from( document.querySelectorAll('ang-asset-grid .dropdown') )
+    for (let dropdownElement of dropdownElements){
       dropdownElement.classList.remove('show')
       dropdownElement.children[0].setAttribute('aria-expanded', 'false')
       dropdownElement.children[1].classList.remove('show')
     }
   }
-  
+
 }
