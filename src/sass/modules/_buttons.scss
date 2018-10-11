@@ -77,8 +77,11 @@ $iconBtnSize: $btnHeight;
     }
 
     &:focus, &:active, &.active {
-        filter: brightness(80%);
-        color: white;
+        // filter: brightness(80%);
+        // color: white;
+        background: none;
+        color: #C9510D;
+        outline: 5px auto -webkit-focus-ring-color;
     }
 
     // Override Bootstrap default
