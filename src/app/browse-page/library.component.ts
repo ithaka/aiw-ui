@@ -198,8 +198,11 @@ export class LibraryComponent implements OnInit {
                 else return 0
               })
 
-              this.categoryFacets = categoryFacets
-
+              // Filter out categories containing pipe in name field
+              this.categoryFacets = categoryFacets.filter((category) => {
+                return category.name.indexOf('|') === -1
+              })
+              
               this.loading = false
 
               storageBrwseColObj[facetType] = this.categoryFacets
