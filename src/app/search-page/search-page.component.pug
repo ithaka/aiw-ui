@@ -3,6 +3,8 @@ nav-menu([allowSelectAll]="true")
   .row
     .col-sm-3(style="margin-top: 1rem;")
       .mobile--hide
+        div(aria-activedescendant="button")
+          button.skip-btn#skip-to-search-link((click)="skipToSearchSec()", (keyup.enter)="skipToSearchSec()", tabindex="2", class="sr-only sr-only-focusable") This is the filters section. Skip to the search results section.
         h3.browse-category {{ 'HOME.HEADINGS.FEATURED' | translate }}
         p.small(*ngIf="siteID!='SAHARA' && _auth.isPublicOnly()", [innerHtml]="'HOME.CONTENT_ACCESS.PUBLIC' | translate")
         p.small(*ngIf="siteID!='SAHARA' && !_auth.isPublicOnly()", [innerHtml]="'HOME.CONTENT_ACCESS.USER' | translate")
@@ -10,6 +12,8 @@ nav-menu([allowSelectAll]="true")
         ang-asset-filters
     .col-sm-9
       h1.mobile--show Results
+      div(aria-activedescendant="button")
+        button.skip-btn#skip-to-filter-link((click)="skipToFilterSec()", (keyup.enter)="skipToFilterSec()", tabindex="3", class="sr-only sr-only-focusable") This is the search results section. Skip to filters section.
       .row.no-gutters.row--search-bar
         #mainContent.col-md-9.search-page-highlight
           ang-search(*ngIf="_auth.isPublicOnly()", [allowSearchInRes]="true", [UserNotLoggedIn]="true")

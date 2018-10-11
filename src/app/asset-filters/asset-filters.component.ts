@@ -424,14 +424,6 @@ export class AssetFilters {
       return theEvent.returnValue;
   }
 
-  private skipToSearchSec(): void{
-    window.setTimeout(function ()
-    {
-      let htmlelement: HTMLElement = document.getElementById('skip-to-filter-link');
-      (<HTMLElement>htmlelement).focus();
-    }, 100);
-  }
-
   ngOnDestroy() {
     this.subscriptions.forEach((sub) => { sub.unsubscribe(); });
   }

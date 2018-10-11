@@ -1,5 +1,3 @@
-div(aria-activedescendant="button")
-  button.skip-btn#skip-to-search-link((click)="skipToSearchSec()", (keyup.enter)="skipToSearchSec()", tabindex="2", class="sr-only sr-only-focusable") This is the filters section. Skip to the search results section.
 .col--filter-border.col--sliding([ngClass]="{ 'slide-up' : !showFilters }")
   // New Search Filters
   div(*ngFor="let filterKey of keys(availableFilters); let i = index")

@@ -121,6 +121,22 @@ export class SearchPage implements OnInit, OnDestroy {
     this.subscriptions.forEach((sub) => { sub.unsubscribe(); });
   }
 
+  private skipToFilterSec(): void{
+    window.setTimeout(function ()
+    {
+      let htmlelement: HTMLElement = document.getElementById('skip-to-search-link');
+      (<HTMLElement>htmlelement).focus();
+    }, 100);
+  }
+
+  private skipToSearchSec(): void{
+    window.setTimeout(function ()
+    {
+      let htmlelement: HTMLElement = document.getElementById('skip-to-filter-link');
+      (<HTMLElement>htmlelement).focus();
+    }, 100);
+  }
+
   // private updateSearchInRes(value: boolean): void{
   //  this.searchInResults = value;
   // }

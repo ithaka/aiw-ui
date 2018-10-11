@@ -144,6 +144,7 @@ input[type=number] {
     .check {
         position: absolute;
         right: -1px;
+        top: 0px;
         z-index: 1;
         zoom: 1.5;
         -moz-transform: scale(1.5);
@@ -158,6 +159,7 @@ input[type=number] {
     .check-mobile {
         position: absolute;
         right: -1px;
+        top: 0px;
         z-index: 1;
         height: 50px;
         width: 50px;

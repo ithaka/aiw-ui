@@ -741,14 +741,6 @@ export class AssetGrid implements OnInit, OnDestroy {
         });
   }
 
-  private skipToFilterSec(): void{
-    window.setTimeout(function ()
-    {
-      let htmlelement: HTMLElement = document.getElementById('skip-to-search-link');
-      (<HTMLElement>htmlelement).focus();
-    }, 100);
-  }
-
   private goToAsset(asset: any): void{
     let assetURL: string = this.constructNavigationCommands(asset)
     this._router.navigateByUrl(assetURL.replace('/#', ''))
