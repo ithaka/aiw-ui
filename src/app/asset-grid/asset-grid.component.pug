@@ -6,46 +6,46 @@
         .col-12
           ng-container(*ngIf="!reorderMode")
             li.sortlist.dropdown(*ngIf="!actionOptions.associated && !actionOptions.group", ngbDropdown)
-              button#sortdropdownMenu.btn.btn-link(ngbDropdownToggle) Sort:
+              button#sortdropdownMenu.btn.btn-link(ngbDropdownToggle, tabindex="3", (focus)="closeGridDropdowns()") Sort:
                 = " "
                 span.value {{ activeSort.label ? activeSort.label : 'Relevance' }}
               .dropdown-menu(ngbDropdownMenu, aria-labelledby="sortdropdownMenu")
-                button.dropdown-item([ngClass]="{ 'disable': activeSort.index == '1' }", (click)="changeSortOpt('1', 'Title')") Title
-                button.dropdown-item([ngClass]="{ 'disable': activeSort.index == '2' }", (click)="changeSortOpt('2', 'Creator')") Creator
-                button.dropdown-item([ngClass]="{ 'disable': activeSort.index == '3' }", (click)="changeSortOpt('3', 'Date')") Date
-                button.dropdown-item([ngClass]="{ 'disable': activeSort.index == '4' }", (click)="changeSortOpt('4', 'Recently Added')") Recently Added
-                button.dropdown-item([ngClass]="{ 'disable': activeSort.index == '0' }", (click)="changeSortOpt('0', 'Relevance')") Relevance
+                button.dropdown-item([disabled]="activeSort.index == '1'", (click)="changeSortOpt('1', 'Title')", tabindex="3") Title
+                button.dropdown-item([disabled]="activeSort.index == '2'", (click)="changeSortOpt('2', 'Creator')", tabindex="3") Creator
+                button.dropdown-item([disabled]="activeSort.index == '3'", (click)="changeSortOpt('3', 'Date')", tabindex="3") Date
+                button.dropdown-item([disabled]="activeSort.index == '4'", (click)="changeSortOpt('4', 'Recently Added')", tabindex="3") Recently Added
+                button.dropdown-item([disabled]="activeSort.index == '0'", (click)="changeSortOpt('0', 'Relevance')", tabindex="3") Relevance
             li.pagesizelist.dropdown(ngbDropdown)
-              button#pagesizedropdownMenu.btn.btn-link(ngbDropdownToggle) Images/page:
+              button#pagesizedropdownMenu.btn.btn-link(ngbDropdownToggle, tabindex="3", (focus)="closeGridDropdowns()") Images/page:
                 = " "
                 span.value {{ pagination.size ? pagination.size : '24' }}
               .dropdown-menu(ngbDropdownMenu, aria-labelledby="pagesizedropdownMenu")
-                button.dropdown-item([ngClass]="{ 'disable': pagination.size == 24 }", (click)="changePageSize(24)") 24
-                button.dropdown-item([ngClass]="{ 'disable': pagination.size == 48 }", (click)="changePageSize(48)") 48
-                button.dropdown-item([ngClass]="{ 'disable': pagination.size == 72 }", (click)="changePageSize(72)") 72
+                button.dropdown-item([disabled]="pagination.size == 24", (click)="changePageSize(24)", tabindex="3") 24
+                button.dropdown-item([disabled]="pagination.size == 48", (click)="changePageSize(48)", tabindex="3") 48
+                button.dropdown-item([disabled]="pagination.size == 72", (click)="changePageSize(72)", tabindex="3") 72
             .icon-bar
-              .icon--toggle((click)="setThumbnailSize(false)", [ngClass]="{ 'active': !largeThmbView }")
+              .icon--toggle((click)="setThumbnailSize(false)", [ngClass]="{ 'active': !largeThmbView }", (keyup.enter)="setThumbnailSize(false)", tabindex="3", (focus)="closeGridDropdowns()")
                 i.icon.icon-small-view
-              .icon--toggle((click)="setThumbnailSize(true)", [ngClass]="{ 'active': largeThmbView }")
+              .icon--toggle((click)="setThumbnailSize(true)", [ngClass]="{ 'active': largeThmbView }", (keyup.enter)="setThumbnailSize(true)", tabindex="3")
                 i.icon.icon-large-view
             //- Download
-            li.btn.btn-link([class.disabled]="reorderMode", (click)="_ig.triggerIgDownload()", *ngIf="actionOptions.group")
+            li.btn.btn-link([class.disabled]="reorderMode", (click)="_ig.triggerIgDownload()", *ngIf="actionOptions.group", (keyup.enter)="_ig.triggerIgDownload()", tabindex="3")
               i.icon.icon-download-white
               | Download
             //- Select
-            li.btn.btn-link([class.disabled]="reorderMode", (click)="toggleEditMode()", [ngClass]="{'active': editMode}")
+            li.btn.btn-link([class.disabled]="reorderMode", (click)="toggleEditMode()", [ngClass]="{'active': editMode}", (keyup.enter)="toggleEditMode()", tabindex="3")
               i.icon.icon-select-white
               | Select
             //- Reorder
-            li.btn.btn-link((click)="toggleReorderMode()", [ngClass]="{'active': reorderMode}", *ngIf="actionOptions.group && actionOptions.isowner")
+            li.btn.btn-link((click)="toggleReorderMode()", [ngClass]="{'active': reorderMode}", *ngIf="actionOptions.group && actionOptions.isowner", (keyup.enter)="toggleReorderMode()", tabindex="3")
               i.icon.icon-reorder-white
               | Reorder
           //- Save Order
-          li.btn.btn-link(*ngIf="reorderMode", [class.disabled]="!orderChanged", (click)="saveReorder()")
+          li.btn.btn-link(*ngIf="reorderMode", [class.disabled]="!orderChanged", (click)="saveReorder()", (keyup.enter)="saveReorder()", tabindex="3")
             i.icon.icon-reorder-white
             | Save Order
           //- Cancel Reorder
-          li.btn.btn-link(*ngIf="reorderMode", (click)="cancelReorder()")
+          li.btn.btn-link(*ngIf="reorderMode", (click)="cancelReorder()", (keyup.enter)="cancelReorder()", tabindex="3")
             i.icon.icon-close-white--round
             | Cancel Reorder
           //- Number of selected assets in edit mode
@@ -78,7 +78,7 @@
           | {{ "BROWSE.WARNINGS.RSTD_IMGS" | translate }}
           ng-container(*ngIf="ig.owner_id == user.baseProfileId")
             div.mt-4 As the <b>Owner</b> of this group, would you like to remove the deleted images?
-            a.mt-2.btn.btn-secondary.btn-sm(tabindex="0", (click)="removeFromGroup(restricted_results)") Remove deleted images
+            a.mt-2.btn.btn-secondary.btn-sm(tabindex="3", (click)="removeFromGroup(restricted_results)") Remove deleted images
         .alert.alert-warning(*ngIf="!isLoading && (totalAssets == '0') && (!results || results.length < 1) && (searchError.length < 1) && !searchLimitError")
           b Unable to find any assets
           br
@@ -90,14 +90,17 @@
         div.selection(
             [ngClass]="largeThmbView ? 'col-sm-12 col-md-6 col-lg-4' : 'col-sm-6 col-md-3 col-lg-2'", 
             *ngFor="let asset of results", 
-            [class.hidden]="asset.status == 'not-available'"
+            [class.hidden]="asset.status == 'not-available'",
+            tabIndex="3",
+            (keyup.enter)="goToAsset(asset)"
           )
+          a.card.card--asset([attr.data-id]="asset.objectId", [ngClass]="{'selected': ( isSelectedAsset(asset) > -1 ), 'lrgThmb': largeThmbView }", (click)="selectAsset(asset, $event)", (focus)="showBox($event)", (blur)="hideBox($event)", [attr.href]="constructNavigationCommands(asset)", tabIndex="-1")
+            ang-thumbnail([thumbnail]="asset", [reorderMode]="reorderMode", [editMode]="editMode", [largeThmbView]="largeThmbView")
           .mobile--hide
-            input.check(type="checkbox", [checked]="isSelectedAsset(asset) > -1", [ngStyle]="{ 'display': isSelectedAsset(asset) > -1 ? 'block' : 'none' }", (change)="editMode = true; selectAsset(asset);")
+            input.check(tabIndex="3", type="checkbox", [checked]="isSelectedAsset(asset) > -1", [ngStyle]="{ 'opacity': isSelectedAsset(asset) > -1 ? '1' : '0' }", (change)="editMode = true; selectAsset(asset);")
           .mobile--show
             input.check-mobile(type="checkbox", [checked]="isSelectedAsset(asset) > -1", (change)="editMode = true; selectAsset(asset);")
-          a.card.card--asset(tabIndex="-1", [attr.data-id]="asset.objectId", [ngClass]="{'selected': ( isSelectedAsset(asset) > -1 ), 'lrgThmb': largeThmbView }", (click)="selectAsset(asset, $event)", (focus)="showBox($event)", (blur)="hideBox($event)", [attr.href]="constructNavigationCommands(asset)")
-            ang-thumbnail(tabIndex="-1", [thumbnail]="asset", [reorderMode]="reorderMode", [editMode]="editMode", [largeThmbView]="largeThmbView")
+          
         .alert.alert-warning(*ngIf="!isLoading && (searchError.length < 1) && ((isPartialPage && hasMaxAssetLimit) || searchLimitError)")
           | {{ "BROWSE.WARNINGS.ADDITIONAL_RESULTS" | translate }}
       //- Sortable Thumbails
