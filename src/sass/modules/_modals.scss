@@ -56,20 +56,6 @@
         position: static;
     }
 }
-// .close-icon {
-//     color: #444;
-//     float: right;
-// 	font-size: 22px;
-//     height: 30px;
-//     line-height: 32px;
-
-//     &:hover,
-//     &:focus {
-//         color: $brightOrange;
-//         text-decoration: none;
-//         cursor: pointer;
-//     }
-// }
 
 .modal-header {
 	padding: 2px 16px;
@@ -90,11 +76,15 @@
         display: block !important;
     }
 
+   & a:focus, & a:active {
+      background: $orange;
+    }
+
     & .btn-secondary {
       /* Override color and focus outline on cancel button **/
       &:focus {
         background: none;
-        color: #C9510D;
+        color: $orange;
         outline: 5px auto -webkit-focus-ring-color;
       }
         @media(max-width: $phone) {
