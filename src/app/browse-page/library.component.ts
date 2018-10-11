@@ -202,7 +202,7 @@ export class LibraryComponent implements OnInit {
               this.categoryFacets = categoryFacets.filter((category) => {
                 return category.name.indexOf('|') === -1
               })
-              
+
               this.loading = false
 
               storageBrwseColObj[facetType] = this.categoryFacets
