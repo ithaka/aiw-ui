@@ -68,6 +68,8 @@
 @include icon('down', 'svg');
 @include icon('left', 'svg');
 @include icon('right', 'svg');
+@include icon('left--white', 'svg');
+@include icon('right--white', 'svg');
 @include icon('loading', 'gif');
 @include icon('loading-large', 'gif');
 @include icon('open-link', 'svg');
@@ -117,6 +119,14 @@
 @include icon('twitter', 'png');
 @include icon('wordpress', 'png');
 @include icon('newsletter', 'png');
+
+// Icons with alternate names
+.icon-prev--white {
+    @extend .icon-left--white;
+}
+.icon-next--white {
+    @extend .icon-right--white;
+}
 
 // Icons with adjustments
 @include icon('close', 'svg');

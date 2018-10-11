@@ -1,0 +1,53 @@
+
+// OpenSeaDragon overrides
+.openseadragon-canvas {
+    outline: none !important;
+    cursor: move;
+}
+
+.openseadragon-container {
+    min-height: 600px;
+    // Need to override inline styles
+    background: #f8faf8 !important;
+
+    @media(max-width: $phone) {
+    min-height: 50vh;
+    }
+
+    .fullscreen & {
+    background: #000 !important;
+    width: 100%;
+    height: 100%;
+    min-height: 100% !important;
+    }
+}
+
+// Hide minimap/navigator in fullscreen
+.fullscreen .navigator {
+    display: none !important;
+}
+
+.navigator .openseadragon-container {
+    min-height: 50px;
+}
+
+.mwEmbedKalturaIframe {
+    min-height: 600px !important;
+}
+
+.asset-viewer__edge-arrows .btn--prev {
+    margin-left: 28px !important;
+}
+
+// Referencestrip behavior in fullscreen
+.fullscreen .referencestrip {
+    bottom: 80px !important;
+}
+
+.fullscreen .asset-viewer_multi-view-info {
+    bottom: 145px + 80px !important;
+}
+
+.fullscreen .asset-viewer__pagination {
+    bottom: 215px + 80px !important;
+}

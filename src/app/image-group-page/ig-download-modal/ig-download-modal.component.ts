@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, AfterViewInit } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
 import { Angulartics2 } from 'angulartics2';
@@ -14,7 +14,7 @@ import { AssetService, AuthService, ImageGroup } from './../../shared';
     }
   `]
 })
-export class PptModalComponent implements OnInit {
+export class PptModalComponent implements OnInit, AfterViewInit {
   /** Meant only to trigger display of modal */
   @Output()
   private closeModal: EventEmitter<any> = new EventEmitter();
@@ -40,7 +40,15 @@ export class PptModalComponent implements OnInit {
     private http: HttpClient,
   ) {}
 
-  ngOnInit() {
+  ngOnInit() {}
+
+  ngAfterViewInit() {
+    this.startModalFocus()
+  }
+  // Set initial focus on the modal Title h4
+  private startModalFocus() {
+    let modalStartFocus = document.getElementById('ig-download-title')
+    modalStartFocus.focus()
   }
 
   private getPPT() {

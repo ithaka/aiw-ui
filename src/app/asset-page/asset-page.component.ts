@@ -485,7 +485,7 @@ export class AssetPage implements OnInit, OnDestroy {
                 }
 
                 // Split existing collection urls in the metadata so that urls can be linked separately
-                if (this.assets[assetIndex].formattedMetadata['Collection'].join().indexOf('<br/>') > -1) {
+                if (this.assets[assetIndex].formattedMetadata['Collection'] && this.assets[assetIndex].formattedMetadata['Collection'].join().indexOf('<br/>') > -1) {
                     let collections = this.assets[0].formattedMetadata['Collection']
                     let splitValues = []
                     for (let i = 0; i < collections.length; i++){
