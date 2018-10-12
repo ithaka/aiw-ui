@@ -162,15 +162,13 @@ export class AssetFilters {
       this._filters.available$.subscribe(
         filters => {
 
-          console.log(filters)
-
           // Contributors List of search results
-          console.log('INSTS: ', institutionList, this.userInstId)
           if (filters['contributinginstitutionid'] && institutionList.length) {
             this.instFilterCount = 0
 
             for (let i = 0; i < filters['contributinginstitutionid'].length; i++) {
 
+              // Map search results by contributing institution by matching against names from the institutions list
               for (let j = 0; j < institutionList.length; j++) {
                 if (filters['contributinginstitutionid'][i].name === institutionList[j].institutionId) {
                   filters['contributinginstitutionid'][i].showingName = institutionList[j].institutionName;
@@ -208,12 +206,6 @@ export class AssetFilters {
           }
 
           this.availableFilters = filters
-
-          // setTimeout(()=> {
-          //   this.availableFilters = filters;
-          // }, 100)
-
-
         }
       )
     );

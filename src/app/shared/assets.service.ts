@@ -894,11 +894,6 @@ export class AssetService {
                     // Set the allResults object
                     this.updateLocalResults(data)
 
-                  // Only call set available on last facet
-                  // for (let i = 1; i <= len; i++) {
-                  //   this._filters.setAvailable(facets[i].name, facets[i].values, i != len)
-                  // }
-
             }, (error) => {
                     console.error(error)
                     this.allResultsSource.next({'error': error})
