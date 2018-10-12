@@ -18,6 +18,7 @@ describe('Metadata Calls #pact #metadata', () => {
      */
     let generateMetadataMatcher = (expectedObject): any => {
       let matcherObject = {}
+
       Object.keys(expectedObject).forEach( (key) => {
         if (typeof(expectedObject[key] === 'Array') && expectedObject[key][0]) {
           matcherObject[key] = Matchers.eachLike(expectedObject[key][0])
@@ -44,10 +45,16 @@ describe('Metadata Calls #pact #metadata', () => {
         "width": 0,
         "metadata_json": [
           {
-            "count": 1,
+            "count": 2,
             "fieldName": "Rights",
-            "fieldValue": "This image has been selected and made available by a user using Artstor's software tools. Artstor has not screened or selected this image or cleared any rights to it and is acting as an online service provider pursuant to 17 U.S.C. §512. Artstor disclaims any liability associated with the use of this image. Should you have any legal objection to the use of this image, please visit http://www.artstor.org/copyright for contact information and instructions on how to proceed.",
+            "fieldValue": "",
             "index": 1
+          },
+          {
+            "count": 2,
+            "fieldName": "Rights",
+            "fieldValue": "",
+            "index": 2
           }
         ],
         "fileProperties": [],
