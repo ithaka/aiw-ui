@@ -192,6 +192,9 @@ export class AssetPage implements OnInit, OnDestroy {
     public relatedResFlag: boolean = false
     public solrMetadataFlag: boolean = false
 
+    // Flag for multiview items, true if the asset contains multiview items
+    private multiviewItems: boolean = false
+
     constructor(
         private _assets: AssetService,
         private _auth: AuthService,
@@ -459,6 +462,8 @@ export class AssetPage implements OnInit, OnDestroy {
         } else {
             this.assets[assetIndex] = asset
             if (assetIndex == 0) {
+                let tileSource: any = asset.tileSource
+                this.multiviewItems =  tileSource instanceof Array ? true : false 
                 this._title.setTitle(asset.title)
                 document.querySelector('meta[name="DC.type"]').setAttribute('content', 'Artwork')
                 document.querySelector('meta[name="DC.title"]').setAttribute('content', asset.title)

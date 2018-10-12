@@ -37,7 +37,7 @@
             (nextPage)="showNextAsset()",
             (prevPage)="showPrevAsset()",
             (assetDrawer)="toggleAssetDrawer(!showAssetDrawer)",
-            [legacyFlag]="solrMetadataFlag != true"
+            [legacyFlag]="false"
           )
       //- Related results from JSTOR
       .pl-3(*ngIf="jstorResults.length > 0 && relatedResFlag")
@@ -87,8 +87,8 @@
             //- i.icon.icon-add-white(aria-hidden="true")
           //- Download dropdown options
           | {{downloadUrl}}
-          .dropdown.d-inline-block(ngbDropdown, *ngIf="assets[0].downloadLink && (user.isLoggedIn || hasExternalAccess || assets[0].publicDownload)")
-            button#downloadAssetDropdown.btn.btn-secondary(ngbDropdownToggle [class.loading]="downloadLoading", (click)="genDownloadViewLink()", (keydown.enter)="genDownloadViewLink()", tabindex="8")
+          .dropdown.d-inline-block(ngbDropdown, *ngIf="assets[0].downloadLink && (user.isLoggedIn || hasExternalAccess || assets[0].publicDownload)", ngbTooltip, [disableTooltip]="!multiviewItems", [ngbTooltip]="multiViewDownloadDisabled", triggers="focusin:focusout mouseenter:mouseleave", placement="bottom", aria-haspopup="true")
+            button#downloadAssetDropdown.btn.btn-secondary(ngbDropdownToggle [class.loading]="downloadLoading", (click)="genDownloadViewLink()", (keydown.enter)="genDownloadViewLink()", tabindex="8", [disabled]="multiviewItems")
               | {{ 'ASSET_PAGE.BUTTONS.DOWNLOAD' | translate}}
               = " "
             .dropdown-menu(ngbDropdownMenu, aria-labelledby="dropdownBasic1")
@@ -262,3 +262,7 @@ ang-server-error-modal(*ngIf="showServerErrorModal", (exitFullScreen)="assetView
 ang-generate-citation(*ngIf="showGenerateCitation", [asset]="assets[0]", (closeModal)="showGenerateCitation = false")
 ang-confirm-modal(*ngIf="showExitEdit", (closeModal)="closeEditDetails($event)", title="{{ 'ASSET_PAGE.EXIT_EDIT_CONFIRM_MODAL.TITLE' | translate }}", description="{{ 'ASSET_PAGE.EXIT_EDIT_CONFIRM_MODAL.DESC' | translate }}", dismiss="{{ 'ASSET_PAGE.EXIT_EDIT_CONFIRM_MODAL.CANCEL' | translate }}", primary="{{ 'ASSET_PAGE.EXIT_EDIT_CONFIRM_MODAL.CONTINUE' | translate }}")
 ang-confirm-modal(*ngIf="showDeletePCModal", (closeModal)="closeDeletePC($event)", title="{{ 'ASSET_PAGE.DELETE_PC_MODAL.TITLE' | translate }}", description="{{ 'ASSET_PAGE.DELETE_PC_MODAL.DESCRIPTION' | translate }}", primary="Confirm")
+
+<ng-template #multiViewDownloadDisabled>
+  div This is not available for download at this time.
+</ng-template>
