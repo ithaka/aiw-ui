@@ -147,12 +147,6 @@ export class AssetFilters {
     );
 
   }
-  /**
-   * Getter for instFilterCount that assets.service uses
-   */
-  public getInstFilterCount(): Number {
-    return this.instFilterCount
-  }
 
   /**
    * Keep an eye for available filter updates
