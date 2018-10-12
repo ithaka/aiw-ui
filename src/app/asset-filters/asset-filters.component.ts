@@ -26,6 +26,7 @@ export class AssetFilters {
 
   private userInstId: string        // user's institution id
   private instFilterCount: number   // collection type 2 filter for search results count
+  private allInstFailed: boolean = false  // helper if/when call to getAllInstitutions fails
 
   errors = {}
   results = []
@@ -95,6 +96,8 @@ export class AssetFilters {
     .subscribe((data) => {
       this.subscribeAvailableFilter(data['allInstitutions'])
     }, err => {
+      this.allInstFailed = true
+
       // on error of all institutions, we still need to call subscriveAvailableFilter
       this.subscribeAvailableFilter([])
       console.log(err.status)
@@ -155,32 +158,27 @@ export class AssetFilters {
     this.subscriptions.push(
       this._filters.available$.subscribe(
         filters => {
-          // Reset collection type filter count
-          this.instFilterCount = 0
 
           // Contributors List of search results
           if (filters['contributinginstitutionid'] && institutionList.length) {
+            this.instFilterCount = 0
 
             for (let i = 0; i < filters['contributinginstitutionid'].length; i++) {
-              for (let j = 0; j < institutionList.length; j++) {
 
+              // Map search results by contributing institution by matching against names from the institutions list
+              for (let j = 0; j < institutionList.length; j++) {
                 if (filters['contributinginstitutionid'][i].name === institutionList[j].institutionId) {
                   filters['contributinginstitutionid'][i].showingName = institutionList[j].institutionName;
                 }
+              }
 
-                // If this contributor is the users institution, set instFilterCount to this filters' count value
-                if (filters['contributinginstitutionid'][i].name === this.userInstId) {
-                  if (filters['contributinginstitutionid'][i].count > -1) {
-                    this.instFilterCount = parseInt(filters['contributinginstitutionid'][i].count)
-                  }
+              // If this contributor is the users institution, set instFilterCount to this filters' count value
+              if (filters['contributinginstitutionid'][i].name === this.userInstId) {
+                if (filters['contributinginstitutionid'][i].count > -1) {
+                  this.instFilterCount = parseInt(filters['contributinginstitutionid'][i].count)
                 }
               }
             }
-          }
-
-          // NOTE: Clear Contributors list array until we remove the contribFilter feature flag
-          if (!this.showContribFilter) {
-            filters['contributinginstitutionid'] = []
           }
 
           if (filters['collectiontypes']) {
@@ -199,7 +197,14 @@ export class AssetFilters {
               filters['collectiontypes'] = filters['collectiontypes'].filter(collectionType => collectionType.name === '5')
             }
           }
-          this.availableFilters = filters;
+
+          // NOTE: Clear Contributors list array until we remove the contribFilter feature flag
+          if (!this.showContribFilter || this.allInstFailed) {
+            filters['contributinginstitutionid'] = null
+          }
+
+          this.availableFilters = filters
+
         }
       )
     );

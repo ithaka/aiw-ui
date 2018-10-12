@@ -870,7 +870,10 @@ export class AssetService {
             .subscribe(
                 (res) => {
                     let data = res
-                    data.facets.forEach( (facet, index) => {
+                    let facets = data.facets
+                    let len = facets.length
+
+                    data.facets.forEach((facet, index) => {
                         this._filters.setAvailable(facet.name, facet.values)
                     })
 

@@ -122,7 +122,7 @@ export class AssetFiltersService {
     /**
      * Returns a boolean if unable to add filters to available filters
      */
-    public setAvailable(name: string, filters: any ): boolean {
+    public setAvailable(name: string, filters: any): boolean {
         // if (name == 'geography') {
         //     let filterKeys = (Object.keys(filters) && Object.keys(filters).length > 0) ? Object.keys(filters) : []
         //     let filterArr = []
