@@ -870,7 +870,10 @@ export class AssetService {
             .subscribe(
                 (res) => {
                     let data = res
-                    data.facets.forEach( (facet, index) => {
+                    let facets = data.facets
+                    let len = facets.length
+
+                    data.facets.forEach((facet, index) => {
                         this._filters.setAvailable(facet.name, facet.values)
                     })
 
@@ -887,8 +890,15 @@ export class AssetService {
                         data['thumbnails'] = data.results
                     }
                     data['count'] = data.total
+
                     // Set the allResults object
                     this.updateLocalResults(data)
+
+                  // Only call set available on last facet
+                  // for (let i = 1; i <= len; i++) {
+                  //   this._filters.setAvailable(facets[i].name, facets[i].values, i != len)
+                  // }
+
             }, (error) => {
                     console.error(error)
                     this.allResultsSource.next({'error': error})

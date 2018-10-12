@@ -147,6 +147,12 @@ export class AssetFilters {
     );
 
   }
+  /**
+   * Getter for instFilterCount that assets.service uses
+   */
+  public getInstFilterCount(): Number {
+    return this.instFilterCount
+  }
 
   /**
    * Keep an eye for available filter updates
@@ -156,25 +162,25 @@ export class AssetFilters {
       this._filters.available$.subscribe(
         filters => {
 
-          console.log(filters['contributinginstitutionid'])
-          console.log(institutionList.length)
+          console.log(filters)
 
           // Contributors List of search results
+          console.log('INSTS: ', institutionList, this.userInstId)
           if (filters['contributinginstitutionid'] && institutionList.length) {
-            //this.instFilterCount = 1
+            this.instFilterCount = 0
 
             for (let i = 0; i < filters['contributinginstitutionid'].length; i++) {
-              for (let j = 0; j < institutionList.length; j++) {
 
+              for (let j = 0; j < institutionList.length; j++) {
                 if (filters['contributinginstitutionid'][i].name === institutionList[j].institutionId) {
                   filters['contributinginstitutionid'][i].showingName = institutionList[j].institutionName;
                 }
+              }
 
-                // If this contributor is the users institution, set instFilterCount to this filters' count value
-                if (filters['contributinginstitutionid'][i].name === this.userInstId) {
-                  if (filters['contributinginstitutionid'][i].count > -1) {
-                    this.instFilterCount = parseInt(filters['contributinginstitutionid'][i].count)
-                  }
+              // If this contributor is the users institution, set instFilterCount to this filters' count value
+              if (filters['contributinginstitutionid'][i].name === this.userInstId) {
+                if (filters['contributinginstitutionid'][i].count > -1) {
+                  this.instFilterCount = parseInt(filters['contributinginstitutionid'][i].count)
                 }
               }
             }
@@ -200,7 +206,14 @@ export class AssetFilters {
           if (!this.showContribFilter) {
             filters['contributinginstitutionid'] = []
           }
-          this.availableFilters = filters;
+
+          this.availableFilters = filters
+
+          // setTimeout(()=> {
+          //   this.availableFilters = filters;
+          // }, 100)
+
+
         }
       )
     );
