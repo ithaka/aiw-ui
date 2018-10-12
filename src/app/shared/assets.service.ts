@@ -890,10 +890,8 @@ export class AssetService {
                         data['thumbnails'] = data.results
                     }
                     data['count'] = data.total
-
                     // Set the allResults object
                     this.updateLocalResults(data)
-
             }, (error) => {
                     console.error(error)
                     this.allResultsSource.next({'error': error})
