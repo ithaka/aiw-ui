@@ -26,6 +26,7 @@ export class AssetFilters {
 
   private userInstId: string        // user's institution id
   private instFilterCount: number   // collection type 2 filter for search results count
+  private allInstFailed: boolean = false  // helper if/when call to getAllInstitutions fails
 
   errors = {}
   results = []
@@ -95,6 +96,8 @@ export class AssetFilters {
     .subscribe((data) => {
       this.subscribeAvailableFilter(data['allInstitutions'])
     }, err => {
+      this.allInstFailed = true
+
       // on error of all institutions, we still need to call subscriveAvailableFilter
       this.subscribeAvailableFilter([])
       console.log(err.status)
@@ -194,12 +197,14 @@ export class AssetFilters {
               filters['collectiontypes'] = filters['collectiontypes'].filter(collectionType => collectionType.name === '5')
             }
           }
+
           // NOTE: Clear Contributors list array until we remove the contribFilter feature flag
-          if (!this.showContribFilter) {
-            filters['contributinginstitutionid'] = []
+          if (!this.showContribFilter || this.allInstFailed) {
+            filters['contributinginstitutionid'] = null
           }
 
           this.availableFilters = filters
+
         }
       )
     );
