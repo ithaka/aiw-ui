@@ -1,13 +1,13 @@
 .search-wrap
   .form-group.row
     .input-group([ngClass]="{'col-md-7': allowSearchInRes}")
-      input#inputSearchTerm.form-control.has-icon(*ngIf="!UserNotLoggedIn", [(ngModel)]="term", (keyup)="startSearch=false;", (keyup.enter)="startSearch=true; updateSearchTerm(term); setFocus();", aria-describedby="search-label", type="text", placeholder="Search", data-sc="search: simple keyword")
-      input#inputSearchTerm.form-control.has-icon(*ngIf="UserNotLoggedIn", [(ngModel)]="term", (keyup)="startSearch=false;", (keyup.enter)="startSearch=true; updateSearchTerm(term); setFocus();", aria-describedby="search-label", type="text", placeholder="Search Public Collections", data-sc="search: simple keyword")
+      input#inputSearchTerm.form-control.has-icon(*ngIf="!UserNotLoggedIn", [(ngModel)]="term", (keyup)="startSearch=false;", (keyup.enter)="startSearch=true; updateSearchTerm(term); setFocus();", aria-describedby="search-label", type="text", placeholder="Search", data-sc="search: simple keyword", tabindex="3")
+      input#inputSearchTerm.form-control.has-icon(*ngIf="UserNotLoggedIn", [(ngModel)]="term", (keyup)="startSearch=false;", (keyup.enter)="startSearch=true; updateSearchTerm(term); setFocus();", aria-describedby="search-label", type="text", placeholder="Search Public Collections", data-sc="search: simple keyword", tabindex="3")
       i#iconSearchSubmit.icon.icon-search.form-control__icon((click)="startSearch=true; updateSearchTerm(term); setFocus();")
     .search-in-results.col-md-5.hidden-sm-down(*ngIf="allowSearchInRes")
-      input#searchInResChkBx(type="checkbox", [(ngModel)]="searchInResults",  (ngModelChange)="onSearchWithinChange($event)")
+      input#searchInResChkBx(type="checkbox", [(ngModel)]="searchInResults",  (ngModelChange)="onSearchWithinChange($event)", tabindex="3")
       = " "
       label(for="searchInResChkBx") Search within {{ nestedSrchLbl }}
-    .alert.alert-warning#empty-search-alert([class.hidden]="term || !startSearch", tabindex="0", role="alert", aria-label="no search term alert", style="width:100%;") Please enter search term(s).
-a.link.small.open-modal((click)="showSearchModal = true", tabindex="0") {{ 'HOME.LINKS.ADVNC_SRCH' | translate}}
+    .alert.alert-warning#empty-search-alert([class.hidden]="term || !startSearch", tabindex="3", role="alert", aria-label="no search term alert", style="width:100%;") Please enter search term(s).
+a.link.small.open-modal((click)="showSearchModal = true", tabindex="3", (keyup.enter)="showSearchModal = true") {{ 'HOME.LINKS.ADVNC_SRCH' | translate}}
 ang-search-modal(*ngIf="showSearchModal", (closeModal)="showSearchModal = false")

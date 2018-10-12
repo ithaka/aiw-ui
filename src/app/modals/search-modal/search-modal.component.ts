@@ -1,6 +1,6 @@
 import { Subscription } from 'rxjs/Rx';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, AfterViewInit } from '@angular/core';
 import { Angulartics2 } from 'angulartics2';
 
 // Project dependencies
@@ -14,7 +14,7 @@ import { AppConfig } from '../../app.service';
   templateUrl: 'search-modal.component.pug',
   styleUrls: [ 'search-modal.component.scss' ]
 })
-export class SearchModal implements OnInit {
+export class SearchModal implements OnInit, AfterViewInit {
   @Output()
   private closeModal: EventEmitter<any> = new EventEmitter();
 
@@ -108,6 +108,16 @@ export class SearchModal implements OnInit {
     this.hideLegacyFilters = true
     this.loadingFilters = true
     this.loadFilters()
+  }
+
+  ngAfterViewInit() {
+    this.startModalFocus()
+  }
+
+  // Set initial focus on the modal Title h1
+  private startModalFocus() {
+    let modalStartFocus = document.getElementById('advanced-search-title')
+    modalStartFocus.focus()
   }
 
   /**
@@ -405,7 +415,8 @@ export class SearchModal implements OnInit {
   }
 
   private dateKeyPress(event: any): boolean{
-      if ((event.key == 'ArrowUp') || (event.key == 'ArrowDown') || (event.key == 'ArrowRight') || (event.key == 'ArrowLeft') || (event.key == 'Backspace')){
+      // Add check of Tab key to make sure the tabbingis enabled on Firefox
+      if ((event.key === 'ArrowUp') || (event.key === 'ArrowDown') || (event.key === 'ArrowRight') || (event.key === 'ArrowLeft') || (event.key === 'Backspace') || (event.key === 'Tab')){
         return true;
       }
 

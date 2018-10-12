@@ -2,53 +2,53 @@
 .container.nav-container
   nav.navbar.navbar-expand-sm.navbar-light.bg-faded
     div
-    button.navbar-toggler((click)="this.mobileCollapsed = !this.mobileCollapsed", [class.collapsed]="mobileCollapsed", type="button", aria-controls="navbarSupportedContent", aria-expanded="false", aria-label="Toggle navigation")
+    button.navbar-toggler(tabindex="3", (click)="this.mobileCollapsed = !this.mobileCollapsed", [class.collapsed]="mobileCollapsed", type="button", aria-controls="navbarSupportedContent", aria-expanded="false", aria-label="Toggle navigation")
       span.navbar-toggler-icon
     #navMenu.navbar-collapse.collapse([class.show]="!mobileCollapsed")
       ul.nav.navbar-nav
         li.nav-item
-          a.btn.btn-link([routerLink]="['/home']", routerLinkActive="active") {{ 'NAV_MENU.HOME' | translate }}
+          a.btn.btn-link([routerLink]="['/home']", routerLinkActive="active", tabindex="1", (focus)="closeNavMenuDropdowns()") {{ 'NAV_MENU.HOME' | translate }}
         li.nav-item(ngbDropdown, (mouseenter)="openDrop($event, drop1)", (mouseleave)="closeDrop($event, drop1)", #drop1="ngbDropdown")
-          button#dropdownMenu1.btn.btn-link(ngbDropdownToggle) {{ 'NAV_MENU.COLLECTIONS.TITLE' | translate }}
+          button#dropdownMenu1.btn.btn-link(ngbDropdownToggle, tabindex="1", (focus)="closeNavMenuDropdowns()") {{ 'NAV_MENU.COLLECTIONS.TITLE' | translate }}
           .dropdown-menu(ngbDropdownMenu, aria-labelledby="dropdownMenu1")
-            button.dropdown-item(*ngIf="!_auth.isPublicOnly() && browseOpts.artstorCol", [routerLink]="['/browse', 'library']") {{ 'NAV_MENU.COLLECTIONS.ARTSTOR' | translate }}
-            button.dropdown-item(*ngIf="!_auth.isPublicOnly() && browseOpts.instCol", [routerLink]="['/browse', 'institution']") {{ 'NAV_MENU.COLLECTIONS.INSTITUTION' | translate }}
-            button.dropdown-item(*ngIf="browseOpts.openCol", [routerLink]="['/browse', 'commons']") {{ 'NAV_MENU.COLLECTIONS.OPEN' | translate }}
-            button.dropdown-item(*ngIf="!_auth.isPublicOnly() && browseOpts.myCol", [class.disabled]="!user.isLoggedIn", [routerLink]="['/browse', 'mycollections']") {{ 'NAV_MENU.COLLECTIONS.OWNED' | translate }}
-            button.dropdown-item(*ngIf="!_auth.isPublicOnly() && browseOpts.igs", [routerLink]="['/browse','groups']") {{ 'NAV_MENU.COLLECTIONS.GROUPS' | translate }}
+            button.dropdown-item(*ngIf="!_auth.isPublicOnly() && browseOpts.artstorCol", [routerLink]="['/browse', 'library']", tabindex="1") {{ 'NAV_MENU.COLLECTIONS.ARTSTOR' | translate }}
+            button.dropdown-item(*ngIf="!_auth.isPublicOnly() && browseOpts.instCol", [routerLink]="['/browse', 'institution']", tabindex="1") {{ 'NAV_MENU.COLLECTIONS.INSTITUTION' | translate }}
+            button.dropdown-item(*ngIf="browseOpts.openCol", [routerLink]="['/browse', 'commons']", tabindex="1") {{ 'NAV_MENU.COLLECTIONS.OPEN' | translate }}
+            button.dropdown-item(*ngIf="!_auth.isPublicOnly() && browseOpts.myCol", [disabled]="!user.isLoggedIn", [routerLink]="['/browse', 'mycollections']", tabindex="1") {{ 'NAV_MENU.COLLECTIONS.OWNED' | translate }}
+            button.dropdown-item(*ngIf="!_auth.isPublicOnly() && browseOpts.igs", [routerLink]="['/browse','groups']", tabindex="1") {{ 'NAV_MENU.COLLECTIONS.GROUPS' | translate }}
         li.nav-item(*ngIf="!_auth.isPublicOnly()", ngbDropdown, (mouseenter)="openDrop($event, drop2)", (mouseleave)="closeDrop($event, drop2)", #drop2="ngbDropdown")
-          button#organizeMenu.btn.btn-link(ngbDropdownToggle) {{ 'NAV_MENU.ORGANIZE.TITLE' | translate }}
+          button#organizeMenu.btn.btn-link(ngbDropdownToggle, tabindex="1", (focus)="closeNavMenuDropdowns()") {{ 'NAV_MENU.ORGANIZE.TITLE' | translate }}
           .dropdown-menu(ngbDropdownMenu, aria-labelledby="organizeMenu")
             // Active on Image Group Page
-            button.dropdown-item((click)="selectAllInAssetGrid()", [class.disabled]="!allowSelectAll || !user.isLoggedIn") {{ 'NAV_MENU.ORGANIZE.SELECT_ALL' | translate }}
-            button#btnSaveToNewGroup.dropdown-item([class.disabled]="selectedAssets.length < 1 || !user.isLoggedIn", (click)="copyIG = false; editIG = false; showImageGroupModal = true;") {{ 'NAV_MENU.ORGANIZE.NEW_GROUP' | translate }}
-            button#btnSaveToExistingGroup.dropdown-item([class.disabled]="selectedAssets.length < 1 || !user.isLoggedIn", (click)="showAddToGroupModal = true;") {{ 'NAV_MENU.ORGANIZE.EXISTING_GROUP' | translate }}
-            button#btnDeleteFromGroup.dropdown-item(*ngIf="params['igId']", [class.disabled]="selectedAssets.length < 1 || !allowIgUpdate", (click)="showConfirmationModal = true") {{ 'NAV_MENU.ORGANIZE.DELETE_SELECTIONS' | translate }}
-            button#btnDeselectImages.dropdown-item([class.disabled]="selectedAssets.length < 1 || !user.isLoggedIn", (click)="_assets.setSelectedAssets([])") {{ 'NAV_MENU.ORGANIZE.DESELECT' | translate }}
+            button.dropdown-item((click)="selectAllInAssetGrid()", [disabled]="!allowSelectAll || !user.isLoggedIn", tabindex="1") {{ 'NAV_MENU.ORGANIZE.SELECT_ALL' | translate }}
+            button#btnSaveToNewGroup.dropdown-item([disabled]="selectedAssets.length < 1 || !user.isLoggedIn", (click)="copyIG = false; editIG = false; showImageGroupModal = true;", tabindex="1") {{ 'NAV_MENU.ORGANIZE.NEW_GROUP' | translate }}
+            button#btnSaveToExistingGroup.dropdown-item([disabled]="selectedAssets.length < 1 || !user.isLoggedIn", (click)="showAddToGroupModal = true;", tabindex="1") {{ 'NAV_MENU.ORGANIZE.EXISTING_GROUP' | translate }}
+            button#btnDeleteFromGroup.dropdown-item(*ngIf="params['igId']", [disabled]="selectedAssets.length < 1 || !allowIgUpdate", (click)="showConfirmationModal = true", tabindex="1") {{ 'NAV_MENU.ORGANIZE.DELETE_SELECTIONS' | translate }}
+            button#btnDeselectImages.dropdown-item([disabled]="selectedAssets.length < 1 || !user.isLoggedIn", (click)="_assets.setSelectedAssets([])", tabindex="1") {{ 'NAV_MENU.ORGANIZE.DESELECT' | translate }}
             .dropdown-divider
             // Active on Image Group Page
-            button#btnEditGroup.dropdown-item([disabled]="!actionOptions.group || !allowIgUpdate", (click)="editIG = true; copyIG = false; showImageGroupModal = true;") {{ 'NAV_MENU.ORGANIZE.EDIT' | translate }}
-            button#btnSaveGroupAs.dropdown-item([disabled]="!actionOptions.group  || !user.isLoggedIn", (click)="copyIG = true; editIG = false; showImageGroupModal = true;") {{ 'NAV_MENU.ORGANIZE.SAVE' | translate }}
-            button#btnDeleteGroup.dropdown-item([disabled]="!actionOptions.group || !allowIgUpdate", (click)="deleteIgModal = true") {{ 'NAV_MENU.ORGANIZE.DELETE_GROUP' | translate }}
+            button#btnEditGroup.dropdown-item([disabled]="!actionOptions.group || !allowIgUpdate", (click)="editIG = true; copyIG = false; showImageGroupModal = true;", tabindex="1") {{ 'NAV_MENU.ORGANIZE.EDIT' | translate }}
+            button#btnSaveGroupAs.dropdown-item([disabled]="!actionOptions.group  || !user.isLoggedIn", (click)="copyIG = true; editIG = false; showImageGroupModal = true;", tabindex="1") {{ 'NAV_MENU.ORGANIZE.SAVE' | translate }}
+            button#btnDeleteGroup.dropdown-item([disabled]="!actionOptions.group || !allowIgUpdate", (click)="deleteIgModal = true", tabindex="1") {{ 'NAV_MENU.ORGANIZE.DELETE_GROUP' | translate }}
             .dropdown-divider(*ngIf="siteID!='SAHARA'")
             // Add Images to Personal Collection for AIW users
-            button#addImgsPC.dropdown-item(*ngIf="siteID!='SAHARA'", [disabled]="!user.isLoggedIn", [routerLink]="['/browse', 'mycollections', {upload:true}]") {{ 'NAV_MENU.ORGANIZE.ADD_IMGS_PC' | translate }}
+            button#addImgsPC.dropdown-item(*ngIf="siteID!='SAHARA'", [disabled]="!user.isLoggedIn", [routerLink]="['/browse', 'mycollections', {upload:true}]", tabindex="1") {{ 'NAV_MENU.ORGANIZE.ADD_IMGS_PC' | translate }}
         li.nav-item(ngbDropdown, (mouseenter)="openDrop($event, drop3)", (mouseleave)="closeDrop($event, drop3)", #drop3="ngbDropdown")
-          button#shareMenu.btn.btn-link(ngbDropdownToggle) {{ 'NAV_MENU.SHARE.TITLE' | translate }}
+          button#shareMenu.btn.btn-link(ngbDropdownToggle, tabindex="1", (focus)="closeNavMenuDropdowns()") {{ 'NAV_MENU.SHARE.TITLE' | translate }}
           .dropdown-menu(ngbDropdownMenu, aria-labelledby="shareMenu")
-            button.dropdown-item([class.disabled]="selectedAssets.length !== 1", (click)="showShareLinkModal = true") {{ 'NAV_MENU.SHARE.GENERATE_IMAGE_LINK' | translate }}
+            button.dropdown-item([disabled]="selectedAssets.length !== 1", (click)="showShareLinkModal = true", tabindex="1") {{ 'NAV_MENU.SHARE.GENERATE_IMAGE_LINK' | translate }}
             // Active on Image Group Page
-            button.dropdown-item([disabled]="!actionOptions.group || !genImgGrpLink", (click)="showShareIgModal = true") {{ 'NAV_MENU.SHARE.GENERATE_GROUP_LINK' | translate }}
+            button.dropdown-item([disabled]="!actionOptions.group || !genImgGrpLink", (click)="showShareIgModal = true", tabindex="1") {{ 'NAV_MENU.SHARE.GENERATE_GROUP_LINK' | translate }}
             // Active on Image Group Page
-            button.dropdown-item([disabled]="!actionOptions.group", (click)="printImageGroupPage()") {{ 'NAV_MENU.SHARE.PRINT_GROUP' | translate }}
+            button.dropdown-item([disabled]="!actionOptions.group", (click)="printImageGroupPage()", tabindex="1") {{ 'NAV_MENU.SHARE.PRINT_GROUP' | translate }}
             // Active on Image Group Page
-            button.dropdown-item(*ngIf="params['igId']", (click)="_ig.triggerIgDownload()") {{ 'NAV_MENU.SHARE.DOWNLOAD_GROUP' | translate }}
+            button.dropdown-item(*ngIf="params['igId']", (click)="_ig.triggerIgDownload()", tabindex="1") {{ 'NAV_MENU.SHARE.DOWNLOAD_GROUP' | translate }}
         li.nav-item
-          a#viewMenu.btn.btn-link(*ngIf="_auth.isPublicOnly()", href="//support.artstor.org/?article-category=05-public-access-to-artstor", target="_blank") Support
-          a#viewMenu.btn.btn-link(*ngIf="!_auth.isPublicOnly()", href="//support.artstor.org", target="_blank") Support
+          a#viewMenu.btn.btn-link(*ngIf="_auth.isPublicOnly()", href="//support.artstor.org/?article-category=05-public-access-to-artstor", target="_blank", tabindex="1", (focus)="closeNavMenuDropdowns()") Support
+          a#viewMenu.btn.btn-link(*ngIf="!_auth.isPublicOnly()", href="//support.artstor.org", target="_blank", tabindex="1", (focus)="closeNavMenuDropdowns()") Support
         li.nav-item(*ngIf="!mobileCollapsed")
-          a.link--accent((click)="logout()", *ngIf="user.isLoggedIn") Log Out
-          a.link--accent([routerLink]="['/login']", *ngIf="!user.isLoggedIn") Log In
+          a.link--accent(tabindex="3", (click)="logout()", *ngIf="user.isLoggedIn") Log Out
+          a.link--accent(tabindex="3", [routerLink]="['/login']", *ngIf="!user.isLoggedIn") Log In
         li.nav-item(*ngIf="!mobileCollapsed && institutionObj")
           | Institution: {{ institutionObj.shortName ? institutionObj.shortName : institutionObj.institutionName }}
 ang-delete-ig-modal(*ngIf="deleteIgModal", (closeModal)="deleteIgModal = false", [ig]="ig", [igId]="route.snapshot.params.igId", [igName]="route.snapshot.params.name")

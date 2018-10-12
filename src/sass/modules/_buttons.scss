@@ -52,39 +52,42 @@ $iconBtnSize: $btnHeight;
  */
 
  .btn-primary, a.btn-primary {
-    background: #C9510D;
-    border-color: #C9510D;
+    background: $orange;
+    border-color: $orange;
 
     &:hover {
-        background: darken(#C9510D, 10%);
-        border-color: darken(#C9510D, 10%);
+        background: darken($orange, 10%);
+        border-color: darken($orange, 10%);
     }
 
     &:focus, &:active {
         filter: brightness(80%);
-        border-color: darken(#C9510D, 10%);
+        border-color: darken($orange, 10%);
     }
 }
 
 
  .btn-secondary, a.btn-secondary {
     background: white;
-    border: solid 1px #C9510D;
-    color: #C9510D;
+    border: solid 1px $orange;
+    color: $orange;
 
     &:hover {
-        background-color: #C9510D;
+        background-color: $orange;
     }
 
     &:focus, &:active, &.active {
-        filter: brightness(80%);
-        color: white;
+        // filter: brightness(80%);
+        // color: white;
+        background: none;
+        color: #C9510D;
+        outline: 5px auto -webkit-focus-ring-color;
     }
 
     // Override Bootstrap default
     &.disabled, &:disabled {
         background: white;
-        border-color:#C9510D;
+        border-color:$orange;
     }
 }
 

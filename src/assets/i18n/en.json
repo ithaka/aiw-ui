@@ -26,7 +26,7 @@
     "WRONG_PASSWORD" : "Invalid email address or password. Try again.",
     "INVALID_EMAIL" : "Please enter a valid email address",
     "PASSWORD_REQUIRED": "Password must be 7-20 characters",
-    "EXPIRED" : "That login is expired. Please login from campus to renew your account.",
+    "EXPIRED" : "That login is expired. Please log in from campus to renew your account.",
     "REGISTER_PROMPT": "Not Registered?",
     "ACCESS_PROMPT": "How do I get access?",
     "LINK_ERROR" : "There was an error linking your institutional account. The session may have expired, please try again."
@@ -363,7 +363,7 @@
       "LOGIN_PC_HEADING": "Login Required",
       "NO_INSTITUTIONAL_COLLECTIONS_HEADING": "No Institutional Collections found",
       "NO_INSTITUTIONAL_COLLECTIONS_PROMPT": "<p>There are no institutional collections available for your institution. You can add institutional collections using JSTOR Forum.</p><p>Learn more about <a href=\"http://artstor.org/jstorforum\" class=\"link\">JSTOR Forum</a>.</p>",
-      "LOGIN_PC_COLLECTIONS_PROMPT": "<p>Please login to access your Personal Collection.</p><p>Learn more about <a href=\"https://support.artstor.org/?article-category=09-using-your-own-images\" class=\"link\">Personal Collections</a>.</p>",
+      "LOGIN_PC_COLLECTIONS_PROMPT": "<p>Please log in to access your Personal Collection.</p><p>Learn more about <a href=\"https://support.artstor.org/?article-category=09-using-your-own-images\" class=\"link\">Personal Collections</a>.</p>",
       "NO_GROUPS_COLLECTIONS_HEADING": "No Groups Found",
       "NO_PRIVATE_GROUPS_COLLECTIONS_PROMPT": "<p>You haven't created any image groups yet. Learn more about <a href='http://support.artstor.org/?article=create-and-manage-image-groups' class='link'>groups</a>.</p>",
       "NO_INSTITUTIONAL_GROUPS_COLLECTIONS_PROMPT": "<p>You haven't made any institutional groups yet. Learn more about <a href='http://support.artstor.org/?article=create-and-manage-image-groups' class='link'>groups</a>.</p>",
@@ -643,7 +643,7 @@
     "MESSAGE": "We've made changes over the summer! <a href=\"https://support.artstor.org/?page_id=37\" target=\"_blank\" class=\"link\">Learn more</a>."
   },
   "MEDIA_ISSUES_BANNER": {
-    "MESSAGE": "We are currently experiencing issues with images and downloads due to a power outage. <a href=\"http://support.artstor.org/?article=current-technical-issues-alerts\" target=\"_blank\" class=\"link\">Learn more</a>."
+    "MESSAGE": "Personal Collection upload is temporarily unavailable. We apologize for the inconvenience, and appreciate your patience. If you have any questions, please <a href=\"mailto:support@artstor.org\" target=\"_blank\" class=\"link\">contact Artstor Support</a> or check <a href=\"https://twitter.com/ArtstorHelp\" target=\"_blank\" class=\"link\">Twitter</a> for additional updates."
   },
   "DOWNTIME_BANNER": {
     "MESSAGE": "We're currently experiencing problems affecting the site's performance.  We apologize for the inconvenience, and appreciate your patience. If you have any questions, please <a href=\"mailto:support@artstor.org\" target=\"_blank\" class=\"link\">contact Artstor Support</a> or check <a href=\"https://twitter.com/ArtstorHelp\" target=\"_blank\" class=\"link\">Twitter</a> for additional updates."

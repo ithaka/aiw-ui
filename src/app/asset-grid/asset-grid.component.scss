@@ -144,28 +144,37 @@ input[type=number] {
     .check {
         position: absolute;
         right: -1px;
+        top: 0;
         z-index: 1;
         zoom: 1.5;
         -moz-transform: scale(1.5);
         -moz-transform-origin: 100% 0;
         cursor: pointer;
+
+        &:focus{
+            // visibility: visible !important;
+            opacity: 1 !important;
+        }
     }
     .check-mobile {
         position: absolute;
         right: -1px;
+        top: 0;
         z-index: 1;
         height: 50px;
         width: 50px;
     }
     &:hover, &:focus {
       .check {
-          display: block !important;
+        //   visibility: visible !important;
+          opacity: 1 !important;
       }
     }
 }
 
 .show-box {
   .check {
-    display: block !important;
+    // visibility: visible !important;
+    opacity: 1 !important;
   }
 }
