@@ -286,6 +286,8 @@ export class AssetSearchService {
     // Construct query keyword based on options
     if (options.hasOwnProperty('clusterId') && options['clusterId'] !== '') {
         keyword = 'clusterid:(' + options['clusterId'] + ')'
+    } else if (options.hasOwnProperty('objectId') && options['objectId'] !== '') {
+        keyword = 'frequentlygroupedwith:(' + options['objectId'] + ')'
     } else if (options.hasOwnProperty('pcolId') && options['pcolId'] !== '') {
         if (options['pcolId'] === '37436') {
             let user = this._auth.getUser()

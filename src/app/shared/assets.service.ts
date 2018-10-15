@@ -418,19 +418,12 @@ export class AssetService {
             .then(() => {
                 let searchTerm = params.term ? params.term : ''
                 // Pick function to load this query!
-                if (params.hasOwnProperty('objectId') && params['objectId'] !== '' && params.hasOwnProperty('colId') && params['colId'] !== '') {
-                    // gets associated images thumbnails
-                    this.loadAssociatedAssets(params.objectId, params.colId);
-                    /**
-                     * Future solr implementation
-                     * searchTerm = "frequentlygroupedwith:(" + params["objectId"] + ")"
-                     * this.loadSearch(searchTerm)
-                     */
-                } else if (params.hasOwnProperty('igId') && params['igId'] !== '') {
+                if (params.hasOwnProperty('igId') && params['igId'] !== '') {
                     // Load IG via Groups service
                     this.loadIgAssets(params.igId);
                 } else if (
                     (params.hasOwnProperty('clusterId') && params['clusterId'] !== '') ||
+                    (params.hasOwnProperty('objectId') && params['objectId'] !== '') ||
                     (params.hasOwnProperty('pcolId') && params['pcolId'] !== '') ||
                     (params.hasOwnProperty('colId') && params['colId'] !== '') ||
                     (params.hasOwnProperty('term'))
@@ -552,27 +545,6 @@ export class AssetService {
             .then(data => {
                 // This call only returns Html!
                 return data['_body'].toString();
-            });
-    }
-
-    /**
-     * Gets array of thumbnails associated to objectId
-     * @param objectId Object Id for which to retrieve image results
-     * @param colId Collection Id in which the Object resides
-     */
-    private loadAssociatedAssets(objectId: string, colId: string) {
-        let startIndex = ((this.urlParams.page - 1) * this.urlParams.size) + 1
-        this.getAssociated(objectId, colId, startIndex, this.urlParams.size)
-            .then((data) => {
-                if (!Object.keys(data).length) {
-                    throw new Error('No data in image group thumbnails response')
-                }
-                // The thumnail grid expects the total number of results in 'total' property of the response
-                data['total'] = data['count']
-                this.updateLocalResults(data)
-            })
-            .catch((error) => {
-                console.log(error)
             });
     }
 
@@ -950,23 +922,6 @@ export class AssetService {
 
         return this.http
             .get(requestString)
-            .toPromise()
-    }
-
-    /**
-     * Get associated images
-     * @param objectId The id of the object for which you want associated items
-     * @param colId The id of the collection from which the asset came
-     * @param pageNum Value for pagination
-     * @param size How many thumbnails per page
-     */
-    private getAssociated(objectId: string, colId: string, page: number, size: number) {
-        let header = new HttpHeaders().set('Content-Type', 'application/json'); // ... Set content type to JSON
-        let options = { headers: header, withCredentials: true }; // Create a request option
-        let requestString: string = [this._auth.getUrl(), 'collaboratoryfiltering', objectId, 'thumbnails', page, size].join('/') + '?collectionId=' + colId;
-
-        return this.http
-            .get(requestString, options)
             .toPromise()
     }
 
