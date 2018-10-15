@@ -18,7 +18,7 @@
     ang-collection-badge([collectionType]="getCollectionType()")
     .float-right
       //- Legacy Service icons
-      i.icon.icon-collab(*ngIf="thumbnail.cfObjectId && thumbnail.cfObjectId.length > 0", [id]="thumbnail.objectId + '_associated_images'", (click)="openLink($event, ['/associated', thumbnail.cfObjectId, thumbnail.collectionId])" title="Others are also interested in...", tabIndex="3", (keyup.enter)="openLink($event, ['/associated', thumbnail.cfObjectId, thumbnail.collectionId])")
+      i.icon.icon-collab(*ngIf="thumbnail.cfObjectId && thumbnail.cfObjectId.length > 0", [id]="thumbnail.objectId + '_associated_images'", (click)="openLink($event, ['/associated', thumbnail.artstorid])" title="Others are also interested in...", tabIndex="3", (keyup.enter)="openLink($event, ['/associated', thumbnail.artstorid])")
       i.icon.icon-cluster(*ngIf="thumbnail.clustered == 1", [id]="thumbnail.objectId + '_clustered_images'", (click)="openLink($event, ['/cluster', thumbnail.objectId, { objTitle :  thumbnail.thumbnail1 }])", title="View related media", tabIndex="3", (keyup.enter)="openLink($event, ['/cluster', thumbnail.objectId, { objTitle :  thumbnail.thumbnail1 }])")
       i.icon.icon-iap(*ngIf="thumbnail.iap", tabIndex="3")
       //- New search icons
@@ -29,7 +29,7 @@
         tabIndex="3",
         (keyup.enter)="openLink($event, ['/cluster', thumbnail.clusterid ? thumbnail.clusterid : thumbnail.artstorid, { objTitle :  thumbnail.name }])"
       )
-      i.icon.icon-collab(*ngIf="thumbnail.frequentlygroupedwith && thumbnail.frequentlygroupedwith.length > 0", (click)="openLink($event, ['/associated', thumbnail.frequentlygroupedwith[0], 103])", title="Others are also interested in...", tabIndex="3", (keyup.enter)="openLink($event, ['/associated', thumbnail.frequentlygroupedwith[0], 103])")
+      i.icon.icon-collab(*ngIf="thumbnail.frequentlygroupedwith && thumbnail.frequentlygroupedwith.length > 0", (click)="openLink($event, ['/associated', thumbnail.artstorid])", title="Others are also interested in...", tabIndex="3", (keyup.enter)="openLink($event, ['/associated', thumbnail.artstorid])")
       //- ang-collection-badge([collectionType]="getCollectionType()", tabIndex="3")
       i(*ngIf="thumbnail.media && thumbnail.media.adlObjectType && thumbnail.media.adlObjectType != 10", class="icon icon-{{thumbnail.media.adlObjectType | typeIdPipe}}")
       i(*ngIf="!thumbnail.media && thumbnail.objectTypeId && thumbnail.objectTypeId != 10", class="icon icon-{{thumbnail.objectTypeId | typeIdPipe}}")

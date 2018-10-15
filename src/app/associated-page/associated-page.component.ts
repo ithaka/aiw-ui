@@ -39,13 +39,12 @@ export class AssociatedPage implements OnInit, OnDestroy {
     this.subscriptions.push(
       this.route.params.subscribe((routeParams) => {
         this.objectId = routeParams['objectId'];
-        this.colId = routeParams['colId'];
         let params = Object.assign({}, routeParams);
         // If a page number isn't set, reset to page 1!
         if (!params['page']){
           params['page'] = 1;
         }
-        if (this.objectId && this.colId) {
+        if (this.objectId) {
           this._assets.queryAll(params);
           this._metadata.getMetadata(this.objectId)
             .take(1)
