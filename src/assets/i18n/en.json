@@ -498,60 +498,60 @@
         "VIEW_PUBLIC_LINK": "View All Public Collections"
       },
       "COLLECTIONS": [{
-          "SUBHEADING": "Ralph Lieberman: Architectural Photography",
-          "DESCRIPTION": "Architectural landmarks",
-          "CAPTION": "Frank Gehry, architect, Ralph Lieberman, photographer. Guggenheim Museum Bilbao. 1991-1997. Image and data provided by Ralph Lieberman.",
-          "LINK": "/#/category/1034668830 ",
-          "IMG_SOURCE": "/assets/img/featured-collections/lieberman_gehry.jpg",
-          "LINK_TITLE": "Ralph Lieberman: Architectural Photography",
-          "ALT_TEXT": "Ralph Lieberman: Architectural Photography"
+          "SUBHEADING": "Magnum Photos",
+          "DESCRIPTION": "See the world through the eyes of celebrated photographers",
+          "CAPTION": "Steve McCurry. Sri Lanka. Polonnarvwa. Buddhist monk praying near reclining Buddha. Photograph. 1995. ©Steve McCurry/Magnum Photos.",
+          "LINK": "/#/category/1034691020 ",
+          "IMG_SOURCE": "/assets/img/featured-collections/monk_magnum.jpg",
+          "LINK_TITLE": "Magnum Photos",
+          "ALT_TEXT": "Magnum Photos"
         },
         {
-          "SUBHEADING": "Erich Lessing Culture and Fine Arts Archives",
-          "DESCRIPTION": "Mondrian among the many masterworks from European museums",
-          "CAPTION": "Piet Mondrian. Landscape. c. 1907. Oil on canvas. Image and original data provided by Erich Lessing Culture and Fine Arts Archives/ART RESOURCE, N.Y.",
-          "LINK": "/#/category/1033958751 ",
+          "SUBHEADING": "Cooper Hewitt, Smithsonian Design Museum",
+          "DESCRIPTION": "Precious textiles, decorative arts and design",
+          "CAPTION": "Rank Badge. Silk, metallic yarns. 1368-1644. © Smithsonian Institution.",
+          "LINK": "/#/category/10374058890 ",
           "IMG_SOURCE": "/assets/img/featured-collections/lessing_mondrian.jpg",
-          "LINK_TITLE": "Erich Lessing Culture and Fine Arts Archives",
-          "ALT_TEXT": "Erich Lessing Culture and Fine Arts Archives"
+          "LINK_TITLE": "Cooper Hewitt, Smithsonian Design Museum",
+          "ALT_TEXT": "Cooper Hewitt, Smithsonian Design Museum"
         },
         {
-          "SUBHEADING": "Martin Methodist College Marine Biology Collection: Trinidad",
-          "DESCRIPTION": "Discover sea life",
-          "CAPTION": "Portuguese Man-of-War. Photograph. Martin Methodist College Marine Biology Collection: Trinidad.",
-          "LINK": "/#/collection/87730662 ",
-          "IMG_SOURCE": "/assets/img/featured-collections/martin_manofwar.jpg",
-          "LINK_TITLE": "Martin Methodist College Marine Biology Collection: Trinidad",
-          "ALT_TEXT": "Martin Methodist College Marine Biology Collection: Trinidad"
+          "SUBHEADING": "Colby College: Somalia, Middle Jubba Valley, Ethnographic Photographs",
+          "DESCRIPTION": "Life in Somalia",
+          "CAPTION": "Pastoralist with Camels. 1987. Photograph. © Jorge Acero. Colby IMAGO.",
+          "LINK": "/#/collection/87729427 ",
+          "IMG_SOURCE": "/assets/img/featured-collections/camels_colby.jpg",
+          "LINK_TITLE": "Colby College: Somalia, Middle Jubba Valley, Ethnographic Photographs",
+          "ALT_TEXT": "Colby College: Somalia, Middle Jubba Valley, Ethnographic Photographs"
         }
       ],
       "PUBLIC_COLLECTIONS": [
         {
-          "SUBHEADING": "UD Library: Postcard Collection",
-          "DESCRIPTION": "Postcards documenting small town life in Delaware",
-          "CAPTION": "Aerial View Delaware Memorial Bridge near Wilmington, Delaware 1930-1945. Image courtesy of the University of Delaware Postcard Collection.",
-          "LINK": "/#/collection/87729444",
-          "IMG_SOURCE": "/assets/img/featured-collections/ud_postcard.jpg",
-          "LINK_TITLE": "UD Library: Postcard Collection",
-          "ALT_TEXT": "UD Library: Postcard Collection"
+          "SUBHEADING": "Regis University: African Art Collection",
+          "DESCRIPTION": "Traditional masks, shrine figures, ancestor posts, and reliquaries from south of the Sahara",
+          "CAPTION": "Pwo mask. Anonymous.  Chokwe period.  Image courtesy of the Regis University: African Art Collection.",
+          "LINK": "/#/collection/87732009",
+          "IMG_SOURCE": "/assets/img/featured-collections/mask_regis.jpg",
+          "LINK_TITLE": "Regis University: African Art Collection",
+          "ALT_TEXT": "Regis University: African Art Collection"
         },
         {
-          "SUBHEADING": "Pratt Institute Archives Image Collection",
-          "DESCRIPTION": "The history and creative output of Pratt Institute",
-          "CAPTION": "1967 Prattonia, Poster 48.  Image courtesy of the Pratt Institute Archives.",
-          "LINK": "/#/collection/87729432 ",
-          "IMG_SOURCE": "/assets/img/featured-collections/pratt_poster.jpg",
-          "LINK_TITLE": "Pratt Institute Archives Image Collection",
-          "ALT_TEXT": "Pratt Institute Archives Image Collection"
+          "SUBHEADING": "University of Pennsylvania: Edgar Fahs Smith Chemistry Collection",
+          "DESCRIPTION": "An eclectic history of science through prints, engravings, and photographs",
+          "CAPTION": "Enlargement of a postage stamp from the Republic of Panama depicting Pierre and Marie Curie, dated 1939.  Image courtesy of the University of Pennsylvania: Edgar Fahs Smith Chemistry Collection.",
+          "LINK": "/#/collection/87731882 ",
+          "IMG_SOURCE": "/assets/img/featured-collections/curie_chemistry.jpg",
+          "LINK_TITLE": "University of Pennsylvania: Edgar Fahs Smith Chemistry Collection",
+          "ALT_TEXT": "University of Pennsylvania: Edgar Fahs Smith Chemistry Collection"
         },
         {
-          "SUBHEADING": "Cornell: Historic Glacial Images of Alaska and Greenland",
-          "DESCRIPTION": "Photographs from expeditions from 1864-1912",
-          "CAPTION": "Iceberg, Baffins Bay (Black/Davis). Image courtesy of the Cornell: Historic Glacial Images of Alaska and Greenland.",
-          "LINK": "/#/collection/87730735",
-          "IMG_SOURCE": "/assets/img/featured-collections/cornell_iceberg.jpg",
-          "LINK_TITLE": "Cornell: Historic Glacial Images of Alaska and Greenland",
-          "ALT_TEXT": "Cornell: Historic Glacial Images of Alaska and Greenland"
+          "SUBHEADING": "Allegheny College Egyptian Hieroglyphics",
+          "DESCRIPTION": "Heiroglyphics deciphered, 18th century style",
+          "CAPTION": "Egyptian hieroglyphics, from public monuments extracted from Denon. Winthrop, James, 1752-1821. Image courtesy of Allegheny College: Egyptian Hieroglyphics collection.",
+          "LINK": "/#/collection/87732257",
+          "IMG_SOURCE": "/assets/img/featured-collections/hieroglyphics_allegheny.jpg",
+          "LINK_TITLE": "Allegheny College Egyptian Hieroglyphics",
+          "ALT_TEXT": "Allegheny College Egyptian Hieroglyphics"
         }
       ]
     },
