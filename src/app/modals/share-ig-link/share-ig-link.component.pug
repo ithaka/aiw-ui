@@ -16,5 +16,5 @@
             .form-control-feedback(*ngIf="igCopied") {{ 'SHARE_IG_LINK_MODAL.COPY_SUCCESS' | translate }}
             .form-control-feedback(*ngIf="serviceStatus.tokenError") {{ 'SHARE_IG_LINK_MODAL.SERVICE_ERROR' | translate }}
       .modal-footer
-        button.btn.btn-link.with-pad(href="http://support.artstor.org/?article=creating-links", target="_blank", tabindex="0") Help
+        a.btn.btn-link.with-pad(href="http://support.artstor.org/?article=creating-links", role="button", target="_blank", tabindex="0") Help
         button.btn.btn-primary((click)="closeModal.emit()", tabindex="0", (keydown.tab)="$event.stopPropagation(); $event.preventDefault(); startModalFocus()") Close
