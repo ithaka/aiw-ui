@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, AfterViewInit } from '@angular/core';
 
 // Project Dependencies
 import { AssetService, AssetSearchService } from '../../shared';
@@ -9,7 +9,7 @@ import { Asset } from '../../asset-page/asset';
   templateUrl: './share-link-modal.component.pug',
   styleUrls: ['./share-link-modal.component.scss']
 })
-export class ShareLinkModal implements OnInit {
+export class ShareLinkModal implements OnInit, AfterViewInit {
 
   @Input() private asset: any;
   @Output() private closeModal: EventEmitter<any> = new EventEmitter();
@@ -30,6 +30,16 @@ export class ShareLinkModal implements OnInit {
         this.asset['name'] = this.asset['tombstone'][0]
       }
     }
+  }
+
+  ngAfterViewInit() {
+    this.startModalFocus()
+  }
+
+  // Set initial focus on the modal Title h1
+  private startModalFocus() {
+    let modalStartFocus = document.getElementById('share-img-link-title')
+    modalStartFocus.focus()
   }
 
   /**

@@ -153,6 +153,7 @@ $iconBtnSize: $btnHeight;
         color: #0039c6;
         outline: rgb(77, 144, 254) auto 5px;
         outline-offset: -2px;
+        background: transparent !important;
 
         & .value {
             text-decoration: underline;
