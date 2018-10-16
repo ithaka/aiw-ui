@@ -10,19 +10,19 @@
                 = " "
                 span.value {{ activeSort.label ? activeSort.label : 'Relevance' }}
               .dropdown-menu(ngbDropdownMenu, aria-labelledby="sortdropdownMenu")
-                button.dropdown-item([disabled]="activeSort.index == '1'", (click)="changeSortOpt('1', 'Title')", tabindex="3") Title
-                button.dropdown-item([disabled]="activeSort.index == '2'", (click)="changeSortOpt('2', 'Creator')", tabindex="3") Creator
-                button.dropdown-item([disabled]="activeSort.index == '3'", (click)="changeSortOpt('3', 'Date')", tabindex="3") Date
-                button.dropdown-item([disabled]="activeSort.index == '4'", (click)="changeSortOpt('4', 'Recently Added')", tabindex="3") Recently Added
-                button.dropdown-item([disabled]="activeSort.index == '0'", (click)="changeSortOpt('0', 'Relevance')", tabindex="3") Relevance
+                button.dropdown-item([disabled]="activeSort.index == '1'", (click)="changeSortOpt('1', 'Title')", tabindex="3", aria-label="read me please!") Title
+                button.dropdown-item([disabled]="activeSort.index == '2'", (click)="changeSortOpt('2', 'Creator')", tabindex="3", aria-label="read me please!") Creator
+                button.dropdown-item([disabled]="activeSort.index == '3'", (click)="changeSortOpt('3', 'Date')", tabindex="3", aria-label="read me please!") Date
+                button.dropdown-item([disabled]="activeSort.index == '4'", (click)="changeSortOpt('4', 'Recently Added')", tabindex="3", aria-label="read me please!") Recently Added
+                button.dropdown-item([disabled]="activeSort.index == '0'", (click)="changeSortOpt('0', 'Relevance')", tabindex="3", aria-label="read me please!") Relevance
             li.pagesizelist.dropdown(ngbDropdown)
-              button#pagesizedropdownMenu.btn.btn-link(ngbDropdownToggle, tabindex="3", (focus)="closeGridDropdowns()") Images/page:
+              button#pagesizedropdownMenu.btn.btn-link(ngbDropdownToggle, tabindex="3", aria-label="read me please!", (focus)="closeGridDropdowns()") Images/page:
                 = " "
                 span.value {{ pagination.size ? pagination.size : '24' }}
               .dropdown-menu(ngbDropdownMenu, aria-labelledby="pagesizedropdownMenu")
-                button.dropdown-item([disabled]="pagination.size == 24", (click)="changePageSize(24)", tabindex="3") 24
-                button.dropdown-item([disabled]="pagination.size == 48", (click)="changePageSize(48)", tabindex="3") 48
-                button.dropdown-item([disabled]="pagination.size == 72", (click)="changePageSize(72)", tabindex="3") 72
+                button.dropdown-item([disabled]="pagination.size == 24", (click)="changePageSize(24)", tabindex="3", aria-label="read me please!") 24
+                button.dropdown-item([disabled]="pagination.size == 48", (click)="changePageSize(48)", tabindex="3", aria-label="read me please!") 48
+                button.dropdown-item([disabled]="pagination.size == 72", (click)="changePageSize(72)", tabindex="3", aria-label="read me please!") 72
             .icon-bar
               .icon--toggle((click)="setThumbnailSize(false)", [ngClass]="{ 'active': !largeThmbView }", (keyup.enter)="setThumbnailSize(false)", tabindex="3", (focus)="closeGridDropdowns()")
                 i.icon.icon-small-view
@@ -52,7 +52,7 @@
           .selected-assets(*ngIf="editMode") {{ selectedAssets.length }} selected asset{{ selectedAssets.length > 1 ? 's' : '' }}
         .col-12.pb-3
           //- View size toggles
-          .number-results(*ngIf="!isLoading") 
+          .number-results(*ngIf="!isLoading")
             span.font-weight-bold {{ totalAssets }}{{ totalAssets == 2000 ? '+' : '' }} results
             span(*ngIf="searchTerm && !UrlParams.catId && !UrlParams.pcolId && !UrlParams.clusterId")
               = " for "
@@ -62,9 +62,9 @@
               span(*ngIf="siteID=='SAHARA'", [innerHtml]="'HOME.CONTENT_ACCESS.SEARCH_PAGE_SAHARA' | translate")
             = ". "
             span.font-weight-bold(*ngIf="excludedAssetsCount") {{ excludedAssetsCount }} results
-            = " " 
+            = " "
             span(*ngIf="excludedAssetsCount") have no date and were excluded.
-          
+
     .col-sm-4.col-md-4.col-lg-3.text-right.grid-pagination-bar(*ngIf="!reorderMode")
       pagination([pageObj]="pagination", (goToPage)="goToPage($event)", [right]="true")
   //- Thumbnail Grid
@@ -88,10 +88,9 @@
       //- Display Thumbnails
       #assetThumbnailsRow.row.no-gutters(*ngIf="!reorderMode")
         div.selection(
-            [ngClass]="largeThmbView ? 'col-sm-12 col-md-6 col-lg-4' : 'col-sm-6 col-md-3 col-lg-2'", 
-            *ngFor="let asset of results", 
+            [ngClass]="largeThmbView ? 'col-sm-12 col-md-6 col-lg-4' : 'col-sm-6 col-md-3 col-lg-2'",
+            *ngFor="let asset of results",
             [class.hidden]="asset.status == 'not-available'",
-            tabIndex="3",
             (keyup.enter)="goToAsset(asset)"
           )
           a.card.card--asset([attr.data-id]="asset.objectId", [ngClass]="{'selected': ( isSelectedAsset(asset) > -1 ), 'lrgThmb': largeThmbView }", (click)="selectAsset(asset, $event)", (focus)="showBox($event)", (blur)="hideBox($event)", [attr.href]="constructNavigationCommands(asset)", tabIndex="-1")
@@ -100,7 +99,7 @@
             input.check(tabIndex="3", type="checkbox", [checked]="isSelectedAsset(asset) > -1", [ngStyle]="{ 'opacity': isSelectedAsset(asset) > -1 ? '1' : '0' }", (change)="editMode = true; selectAsset(asset);")
           .mobile--show
             input.check-mobile(type="checkbox", [checked]="isSelectedAsset(asset) > -1", (change)="editMode = true; selectAsset(asset);")
-          
+
         .alert.alert-warning(*ngIf="!isLoading && (searchError.length < 1) && ((isPartialPage && hasMaxAssetLimit) || searchLimitError)")
           | {{ "BROWSE.WARNINGS.ADDITIONAL_RESULTS" | translate }}
       //- Sortable Thumbails

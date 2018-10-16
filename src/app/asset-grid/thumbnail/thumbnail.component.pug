@@ -1,6 +1,6 @@
-.card-block.card-text
+.card-block.card-text([attr.aria-labelledby]="thumbnail.artstorid", tabindex="3", role="dialog")
   .card-img-top
-    img(*ngIf="thumbnail.status != 'not-available'", role="img", [class.disablePointerEvents]="reorderMode", [attr.src]="_search.makeThumbUrl(thumbnail.thumbnailImgUrl, thumbnailSize)", (error)="thumbnailError()", [attr.alt]="thumbnailAlt")
+    img(*ngIf="thumbnail.status != 'not-available'", id="{{thumbnail.artstorid}}", [class.disablePointerEvents]="reorderMode", [attr.src]="_search.makeThumbUrl(thumbnail.thumbnailImgUrl, thumbnailSize)", (error)="thumbnailError()", [attr.alt]="thumbnailAlt", [attr.aria-label]="thumbnailAlt", [attr.title]="thumbnailAlt", aria-role="image")
   .metadata-wrap
     //- New Asset display
     span.asset-title(*ngIf="thumbnail.name", title="{{ thumbnail.name }}", [innerHTML]="thumbnail.name")
@@ -24,7 +24,7 @@
       //- New search icons
       i.icon.icon-cluster(
         *ngIf="thumbnail.partofcluster",
-        (click)="openLink($event, ['/cluster', thumbnail.clusterid ? thumbnail.clusterid : thumbnail.artstorid, { objTitle :  thumbnail.name }])", 
+        (click)="openLink($event, ['/cluster', thumbnail.clusterid ? thumbnail.clusterid : thumbnail.artstorid, { objTitle :  thumbnail.name }])",
         title="View related media",
         tabIndex="3",
         (keyup.enter)="openLink($event, ['/cluster', thumbnail.clusterid ? thumbnail.clusterid : thumbnail.artstorid, { objTitle :  thumbnail.name }])"
@@ -33,11 +33,11 @@
       //- ang-collection-badge([collectionType]="getCollectionType()", tabIndex="3")
       i(*ngIf="thumbnail.media && thumbnail.media.adlObjectType && thumbnail.media.adlObjectType != 10", class="icon icon-{{thumbnail.media.adlObjectType | typeIdPipe}}")
       i(*ngIf="!thumbnail.media && thumbnail.objectTypeId && thumbnail.objectTypeId != 10", class="icon icon-{{thumbnail.objectTypeId | typeIdPipe}}")
-      
-      .multiview-indicator(*ngIf="multiviewItemCount > 0", [ngbTooltip]="tipMultiView", ngbTooltip, triggers="focusin:focusout mouseenter:mouseleave", placement="right", aria-haspopup="true", tabIndex="3")
+
+      .multiview-indicator(*ngIf="multiviewItemCount > 0", [ngbTooltip]="tipMultiView", ngbTooltip, triggers="focusin:focusout mouseenter:mouseleave", placement="right", aria-haspopup="true", tabIndex="3", role="button")
         i.icon.icon-multiview
         span.multiview-count {{multiviewItemCount}}
-    
+
     <ng-template #tipMultiView>
       div This item has <br> multiple views.
     </ng-template>

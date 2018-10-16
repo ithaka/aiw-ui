@@ -1,25 +1,26 @@
-nav-menu([allowSelectAll]="true")
-.container.main-content
-  .row
-    .col-sm-3
-      .mobile--hide
-        h1 Filtered Search
-        ang-asset-filters
-    .col-sm-9
-      h1.mobile--show Results
-      .row.no-gutters.row--search-bar
-        #mainContent.col-md-7
-          ang-search([allowSearchInRes]="true")
-      .row
-        .col-sm-12
-          h3#pageType Browse Collection
-      .row.pb-4
-        .col-sm-9
-          h1#pageTitle.h1--title-block {{ colName }}
-          p#pageDescription.page__description(#colDesc="", [innerHtml]="colDescription", [class.limit]="descCollapsed")
-          .expander.link--action.small([class.hidden]="colDesc.clientHeight < 75", [class.collapsed]="descCollapsed", (click)="descCollapsed = !descCollapsed", [innerHtml]="descCollapsed ? 'More' : 'Less'", role="button") More
-        .col-sm-3(*ngIf="colThumbnail.length > 0")
-          .thumbnail-shelf
-            img.collection-thumb(src="{{ colThumbnail }}")
-      ang-asset-grid([actionOptions]="{collection: true}", [assetCount]="assetCount", [hasMaxAssetLimit]="true")
+div
+  nav-menu([allowSelectAll]="true")
+  .container.main-content
+    .row
+      .col-sm-3
+        .mobile--hide
+          h1 Filtered Search
+          ang-asset-filters
+      .col-sm-9
+        h1.mobile--show Results
+        .row.no-gutters.row--search-bar
+          #mainContent.col-md-7
+            ang-search([allowSearchInRes]="true")
+        .row
+          .col-sm-12
+            h3#pageType Browse Collection
+        .row.pb-4
+          .col-sm-9
+            h1#pageTitle.h1--title-block {{ colName }}
+            p#pageDescription.page__description(#colDesc="", [innerHtml]="colDescription", [class.limit]="descCollapsed")
+            .expander.link--action.small([class.hidden]="colDesc.clientHeight < 75", [class.collapsed]="descCollapsed", (click)="descCollapsed = !descCollapsed", [innerHtml]="descCollapsed ? 'More' : 'Less'", role="button") More
+          .col-sm-3(*ngIf="colThumbnail.length > 0")
+            .thumbnail-shelf
+              img.collection-thumb(src="{{ colThumbnail }}")
+        ang-asset-grid([actionOptions]="{collection: true}", [assetCount]="assetCount", [hasMaxAssetLimit]="true")
 ang-access-denied-modal(*ngIf="showAccessDeniedModal")
