@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core'
+import { Component, OnInit, Input, Output, EventEmitter, AfterViewInit } from '@angular/core'
 
 import { ImageGroup, GroupService, AuthService, LogService } from './../../shared'
 
@@ -7,7 +7,7 @@ import { ImageGroup, GroupService, AuthService, LogService } from './../../share
   templateUrl: 'share-ig-link.component.pug',
   styleUrls: ['./share-ig-link.component.scss']
 })
-export class ShareIgLinkModal implements OnInit {
+export class ShareIgLinkModal implements OnInit, AfterViewInit {
   @Output()
   private closeModal: EventEmitter<any> = new EventEmitter()
 
@@ -34,6 +34,16 @@ export class ShareIgLinkModal implements OnInit {
       eventType: 'artstor_group_link',
       item_id: this.ig.id
     })
+  }
+
+  ngAfterViewInit() {
+    this.startModalFocus()
+  }
+
+  // Set initial focus on the modal Title h1
+  private startModalFocus() {
+    let modalStartFocus = document.getElementById('share-ig-link-title')
+      modalStartFocus.focus()
   }
 
   createIgLink(ig: ImageGroup): void {

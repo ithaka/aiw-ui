@@ -3,18 +3,18 @@
     // modal content: Is deleted, now what?
     .modal-content
       .modal-header
-        h4.modal-title {{ 'SHARE_IG_LINK_MODAL.MAIN_HEADING' | translate }}
-        button.close(type="button", (click)="closeModal.emit()", aria-label="Close")
+        h4.modal-title#share-ig-link-title(tabindex="0", (keydown.shift.tab)="closeModal.emit()") {{ 'SHARE_IG_LINK_MODAL.MAIN_HEADING' | translate }}
+        button.close(type="button", (click)="closeModal.emit()", aria-label="Close", tabindex="0")
           span(aria-hidden="true") &times;
       .modal-body
         .pt-3
           .pb-3.form-group([class.has-success]="igCopied", [class.has-danger]="serviceStatus.tokenError")
             label(for="copyURL") {{ 'SHARE_IG_LINK_MODAL.URL_LABEL' | translate }}
             .value
-              textarea#copyURL(#copyURL="", readonly, [attr.aria-label]="'SHARE_IG_LINK_MODAL.TEXTAREA_ARIA_LABEL' | translate") {{ shareLink }}
-            .copy-clipboard((click)=" copyURL.select(); document.execCommand('copy', false, null); igCopied = true; ") Copy to Clipboard
+              textarea#copyURL(#copyURL="", readonly, [attr.aria-label]="'SHARE_IG_LINK_MODAL.TEXTAREA_ARIA_LABEL' | translate", tabindex="0") {{ shareLink }}
+            .copy-clipboard((click)=" copyURL.select(); document.execCommand('copy', false, null); igCopied = true; ", tabindex="0", (keyup.enter)=" copyURL.select(); document.execCommand('copy', false, null); igCopied = true; ") Copy to Clipboard
             .form-control-feedback(*ngIf="igCopied") {{ 'SHARE_IG_LINK_MODAL.COPY_SUCCESS' | translate }}
             .form-control-feedback(*ngIf="serviceStatus.tokenError") {{ 'SHARE_IG_LINK_MODAL.SERVICE_ERROR' | translate }}
       .modal-footer
-        a.btn.btn-link.with-pad(href="http://support.artstor.org/?article=creating-links", target="_blank") Help
-        button.btn.btn-primary((click)="closeModal.emit()") Close
+        button.btn.btn-link.with-pad(href="http://support.artstor.org/?article=creating-links", target="_blank", tabindex="0") Help
+        button.btn.btn-primary((click)="closeModal.emit()", tabindex="0", (keydown.tab)="$event.stopPropagation(); $event.preventDefault(); startModalFocus()") Close
