@@ -148,6 +148,7 @@ $iconBtnSize: $btnHeight;
     }
 
     &:focus {
+        background: none;
         text-decoration: none;
         color: #0039c6;
         outline: rgb(77, 144, 254) auto 5px;

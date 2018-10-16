@@ -1,8 +1,8 @@
-.modal.fade-in.show(id="modal", tabindex="-1")
+.modal.fade-in.show(id="modal", tabindex="0")
   .modal-dialog.modal-lg(role="document")
     .modal-content
       .modal-header
-        h4.modal-title {{ 'GENERATE_CITATION_MODAL.MAIN_HEADING' | translate }}
+        h4#generate-citation-title.modal-title(tabindex="0", (keydown.shift.tab)="closeModal.emit()") {{ 'GENERATE_CITATION_MODAL.MAIN_HEADING' | translate }}
         button.close(type="button", (click)="closeModal.emit()", aria-label="Close")
           span(aria-hidden="true") &times;
       .modal-body
@@ -12,20 +12,20 @@
             label(for="copyAPA") {{ 'GENERATE_CITATION_MODAL.COPY_APA' | translate }}
             .value
               textarea#copyAPA(#copyAPA="", readonly) {{ apa_citation }}
-            .copy-clipboard((click)=" copyAPA.select(); document.execCommand('copy', false, null); citationCopied = true; ") {{ 'GENERATE_CITATION_MODAL.COPY_CLIPBOARD' | translate }}
+            button.copy-clipboard((click)=" copyAPA.select(); document.execCommand('copy', false, null); citationCopied = true; ") {{ 'GENERATE_CITATION_MODAL.COPY_CLIPBOARD' | translate }}
           //- MLA
           .pb-3.form-group
             label(for="copyMLA") {{ 'GENERATE_CITATION_MODAL.COPY_MLA' | translate }}
             .value
               textarea#copyMLA(#copyMLA="", readonly) {{ mla_citation }}
-            .copy-clipboard((click)=" copyMLA.select(); document.execCommand('copy', false, null); citationCopied = true; ") {{ 'GENERATE_CITATION_MODAL.COPY_CLIPBOARD' | translate }}
+            button.copy-clipboard((click)=" copyMLA.select(); document.execCommand('copy', false, null); citationCopied = true; ") {{ 'GENERATE_CITATION_MODAL.COPY_CLIPBOARD' | translate }}
           //- Chicago
           .pb-3.form-group
             label(for="copyChicago") {{ 'GENERATE_CITATION_MODAL.COPY_CHICAGO' | translate }}
             .value
               textarea#copyChicago(#copyChicago="", readonly) {{ chicago_citation }}
-            .copy-clipboard((click)=" copyChicago.select(); document.execCommand('copy', false, null); citationCopied = true; ") {{ 'GENERATE_CITATION_MODAL.COPY_CLIPBOARD' | translate }}
+            button.copy-clipboard((click)=" copyChicago.select(); document.execCommand('copy', false, null); citationCopied = true; ") {{ 'GENERATE_CITATION_MODAL.COPY_CLIPBOARD' | translate }}
           .form-control-feedback(*ngIf="citationCopied") {{ 'GENERATE_CITATION_MODAL.COPY_SUCCESS' | translate }}
       .modal-footer
         a.btn.btn-link.with-pad(href="https://support.artstor.org/?article=export-citations", target="_blank") Help
-        button.btn.btn-primary((click)="closeModal.emit()") Close
+        button.btn.btn-primary((click)="closeModal.emit()", (focusout)="startModalFocus()") Close

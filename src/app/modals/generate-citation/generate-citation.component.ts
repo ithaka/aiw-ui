@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core'
+import { Component, OnInit, Input, Output, EventEmitter, AfterViewInit } from '@angular/core'
 import { DatePipe } from '@angular/common'
 
 import { Asset } from '../../asset-page/asset'
@@ -9,7 +9,7 @@ import { LogService } from '../../shared'
   templateUrl: 'generate-citation.component.pug',
   styleUrls: ['./generate-citation.component.scss']
 })
-export class GenerateCitation implements OnInit {
+export class GenerateCitation implements OnInit, AfterViewInit {
   @Output()
   private closeModal: EventEmitter<any> = new EventEmitter()
 
@@ -39,6 +39,16 @@ export class GenerateCitation implements OnInit {
       eventType: 'artstor_citation',
       item_id: this.asset.id
     })
+  }
+
+  ngAfterViewInit() {
+    this.startModalFocus()
+  }
+
+  // Set initial focus on the modal Title h1
+  private startModalFocus() {
+    let modalStartFocus = document.getElementById('generate-citation-title')
+    modalStartFocus.focus()
   }
 
   /**
