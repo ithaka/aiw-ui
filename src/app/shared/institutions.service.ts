@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
-import { Subject } from 'rxjs/Subject';
+import { Subject } from 'rxjs';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs/Rx';
 import { Locker } from 'angular2-locker';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import 'rxjs/add/operator/toPromise';
+
 
 import { AuthService } from '../shared/auth.service';
 

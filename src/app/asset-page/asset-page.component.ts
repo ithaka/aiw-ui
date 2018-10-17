@@ -2,7 +2,7 @@ import { KeysPipe } from './../shared/keys.pipe';
 import { Component, OnInit, OnDestroy, ViewChild, HostListener } from '@angular/core'
 import { ActivatedRoute, Params, Router } from '@angular/router'
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
-import { Subscription } from 'rxjs/Subscription'
+import { Subscription } from 'rxjs'
 import { Locker } from 'angular2-locker'
 import { Angulartics2 } from 'angulartics2'
 import { ArtstorViewer } from 'artstor-viewer'

@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
-import { Subscription } from 'rxjs/Subscription';
+import { Subscription } from 'rxjs';
 import { Ng2DeviceService } from 'ng2-device-detector';
 
 import { AssetService, AuthService, ScriptService } from '../shared';

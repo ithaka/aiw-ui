@@ -1,5 +1,5 @@
 import { Injectable, EventEmitter } from '@angular/core'
-import { Subject } from 'rxjs/Subject'
+import { Subject } from 'rxjs'
 
 /** Anything that involves managing/combining many filters should be kept here */
 @Injectable()

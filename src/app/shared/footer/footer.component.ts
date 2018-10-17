@@ -1,7 +1,7 @@
 import { Component } from '@angular/core'
 import { Location } from '@angular/common'
 import { ActivatedRoute, Router, NavigationEnd } from '@angular/router'
-import { Subscription } from 'rxjs/Subscription'
+import { Subscription } from 'rxjs'
 
 import { AppConfig } from '../../app.service'
 import { AuthService } from '../auth.service'

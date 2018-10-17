@@ -7,8 +7,8 @@ import { Router, ActivatedRoute, Params } from '@angular/router'
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http'
 import { Observable, BehaviorSubject, Subject } from 'rxjs/Rx'
 import { Locker } from 'angular2-locker'
-import 'rxjs/add/operator/toPromise'
-import { Subscription }   from 'rxjs/Subscription'
+
+import { Subscription }   from 'rxjs'
 import { categoryName } from './datatypes/category.interface'
 
 // Project Dependencies

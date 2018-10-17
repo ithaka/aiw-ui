@@ -1,7 +1,7 @@
 import { AssetFiltersService } from '../asset-filters/asset-filters.service';
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
-import { Subscription }   from 'rxjs/Subscription';
+import { Subscription }   from 'rxjs';
 
 import { AssetService } from './../shared/assets.service';
 import { AssetSearchService } from './../shared/asset-search.service';

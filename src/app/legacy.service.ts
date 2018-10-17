@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core'
 import { Router, Resolve, RouterStateSnapshot, ActivatedRouteSnapshot } from '@angular/router'
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs/Observable'
+import { Observable } from 'rxjs'
 
 import { AuthService } from './shared'
 

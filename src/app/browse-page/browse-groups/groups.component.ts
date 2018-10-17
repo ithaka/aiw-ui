@@ -1,6 +1,6 @@
 import { Component, OnInit, EventEmitter } from '@angular/core'
 import { Router, ActivatedRoute, Params, NavigationEnd } from '@angular/router'
-import { Subscription } from 'rxjs/Subscription'
+import { Subscription } from 'rxjs'
 import { Angulartics2 } from 'angulartics2'
 
 import { AssetService, AuthService, GroupService } from './../../shared'

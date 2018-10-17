@@ -10,7 +10,7 @@ import {
 } from '../asset-filters/asset-filters.service'
 import { AuthService } from './'
 import { AppConfig } from '../app.service'
-import { Observable } from 'rxjs/Observable'
+import { Observable } from 'rxjs'
 import { APP_CONST } from '../app.constants'
 @Injectable()
 export class AssetSearchService {

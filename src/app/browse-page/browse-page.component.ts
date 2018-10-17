@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute, Params, UrlSegment } from '@angular/router';
-import { Subscription }   from 'rxjs/Subscription';
+import { Subscription }   from 'rxjs';
 import { Locker } from 'angular2-locker';
 
 import { TitleService } from '../shared/title.service';
