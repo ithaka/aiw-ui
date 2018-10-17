@@ -1,6 +1,6 @@
 #advancedModal.modal.fade-in(tabindex="0")
   // Login Help Modal
-  .modal-dialog.modal(role="dialog", (keydown.esc)="closeModal.emit()")
+  .modal-dialog.modal-lg(role="dialog", (keydown.esc)="closeModal.emit()")
     .modal-content
       .modal-header
         h1#advanced-search-title(tabindex="0", (keydown.shift.tab)="closeModal.emit()") {{ 'ADVANCED_SEARCH_MODAL.TITLE' | translate }}
