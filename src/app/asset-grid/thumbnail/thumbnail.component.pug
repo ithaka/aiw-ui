@@ -34,7 +34,7 @@
       i(*ngIf="thumbnail.media && thumbnail.media.adlObjectType && thumbnail.media.adlObjectType != 10", class="icon icon-{{thumbnail.media.adlObjectType | typeIdPipe}}")
       i(*ngIf="!thumbnail.media && thumbnail.objectTypeId && thumbnail.objectTypeId != 10", class="icon icon-{{thumbnail.objectTypeId | typeIdPipe}}")
 
-      .multiview-indicator(*ngIf="multiviewItemCount > 0", [ngbTooltip]="tipMultiView", ngbTooltip, triggers="focusin:focusout mouseenter:mouseleave", placement="right", aria-haspopup="true", title="See multiview items button icon. Press enter to click this button", tabIndex="3", role="button")
+      .multiview-indicator(*ngIf="multiviewItemCount > 0", [ngbTooltip]="tipMultiView", ngbTooltip, triggers="focusin:focusout mouseenter:mouseleave", placement="right", aria-haspopup="true", title="See multiview items button icon. Press enter to click this button", tabIndex="3", aria-role="button")
         i.icon.icon-multiview
         span.multiview-count {{multiviewItemCount}}
 
