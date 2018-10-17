@@ -1,6 +1,6 @@
 #advancedModal.modal.fade-in(tabindex="0")
   // Login Help Modal
-  .modal-dialog.modal-lg
+  .modal-dialog.modal(role="dialog", (keydown.esc)="closeModal.emit()")
     .modal-content
       .modal-header
         h1#advanced-search-title(tabindex="0", (keydown.shift.tab)="closeModal.emit()") {{ 'ADVANCED_SEARCH_MODAL.TITLE' | translate }}
@@ -74,4 +74,4 @@
         .alert.alert-warning(*ngIf="error.date", [innerHtml]="'ADVANCED_SEARCH_MODAL.ERRORS.DUMB_DATE' | translate")
         button.btn.btn-link.with-pad(tabindex="0", (click)="openHelp()") {{ 'ADVANCED_SEARCH_MODAL.BUTTONS.HELP' | translate }}
         button.btn.btn-secondary((click)="resetFilters()") {{ 'ADVANCED_SEARCH_MODAL.BUTTONS.CLEAR' | translate }}
-        button.btn.btn-primary((click)="applyAllFilters()", data-sc="search: advanced query", (focusout)="startModalFocus()") {{ 'ADVANCED_SEARCH_MODAL.BUTTONS.SEARCH' | translate }}
+        button.btn.btn-primary((click)="applyAllFilters()", data-sc="search: advanced query", (keydown.tab)="$event.stopPropagation(); $event.preventDefault(); startModalFocus()") {{ 'ADVANCED_SEARCH_MODAL.BUTTONS.SEARCH' | translate }}
