@@ -28,8 +28,8 @@ import { RlTagInputModule } from 'angular2-tag-autocomplete';
 import { Ng2CompleterModule } from 'ng2-completer';
 
 // Directives
-import { ClickOutsideDirective } from 'angular2-click-outside/clickOutside.directive.ts';
-import { MediumEditorDirective } from 'angular2-medium-editor/medium-editor.directive.ts';
+import { ClickOutsideDirective } from './_directives';
+import { MediumEditorDirective } from 'angular2-medium-editor';
 
 // ng2-idle
 import { NgIdleKeepaliveModule } from '@ng-idle/keepalive'; // this includes the core NgIdleModule but includes keepalive providers for easy wireup
