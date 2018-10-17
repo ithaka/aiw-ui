@@ -1,26 +1,27 @@
-nav-menu([allowSelectAll]="true")
-.container.main-content
-  .row
-    .col-sm-3
-      .mobile--hide
-        h1 Filtered Search
-        ang-asset-filters
-    .col-sm-9
-      h1.mobile--show Results
-      .row.no-gutters.row--search-bar
-        #mainContent.col-md-7
-          ang-search([allowSearchInRes]="true")
-      .row
-        .col-sm-12
-          h3#pageType Browse Category
-      .row.pb-4
-        div([ngClass]="catThumbnail ? 'col-sm-9' : 'col-sm-12'")
-          h1#pageTitle.h1--title-block {{ catName }}
-          p#pageDescription.page__description(*ngIf="catDescription", [innerHtml]="catDescription")
+div
+  nav-menu([allowSelectAll]="true")
+  .container.main-content
+    .row
+      .col-sm-3
+        .mobile--hide
+          h1 Filtered Search
+          ang-asset-filters
+      .col-sm-9
+        h1.mobile--show Results
+        .row.no-gutters.row--search-bar
+          #mainContent.col-md-7
+            ang-search([allowSearchInRes]="true")
+        .row
+          .col-sm-12
+            h3#pageType Browse Category
+        .row.pb-4
+          div([ngClass]="catThumbnail ? 'col-sm-9' : 'col-sm-12'")
+            h1#pageTitle.h1--title-block {{ catName }}
+            p#pageDescription.page__description(*ngIf="catDescription", [innerHtml]="catDescription")
 
-        .col-sm-3(*ngIf="catThumbnail")
-          .thumbnail-shelf
-            img.collection-thumb(src="http://viewer2.artstor.org{{ catThumbnail }}")
-      ang-asset-grid([actionOptions]="{category: true}")
-ang-access-denied-modal(*ngIf="showAccessDeniedModal")
+          .col-sm-3(*ngIf="catThumbnail")
+            .thumbnail-shelf
+              img.collection-thumb(src="http://viewer2.artstor.org{{ catThumbnail }}")
+        ang-asset-grid([actionOptions]="{category: true}")
+  ang-access-denied-modal(*ngIf="showAccessDeniedModal")
 

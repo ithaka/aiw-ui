@@ -1,5 +1,6 @@
-nav-menu
-.container.main-content(tabindex="-1")
-  nav.nav.nav-inline.coll-nav
-    a.nav-link#mainContent(*ngFor="let colOpt of colMenuArray", [routerLink]="[colOpt.link]", routerLinkActive="active", (click)="selectColMenu(colOpt.link)", tabindex="3") {{ colOpt.label }}
-  router-outlet
+div
+  nav-menu
+  .container.main-content(tabindex="-1")
+    nav.nav.nav-inline.coll-nav
+      a.nav-link#mainContent(*ngFor="let colOpt of colMenuArray", [routerLink]="[colOpt.link]", routerLinkActive="active", (click)="selectColMenu(colOpt.link)", tabindex="3") {{ colOpt.label }}
+    router-outlet

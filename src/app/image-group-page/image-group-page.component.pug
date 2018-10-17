@@ -1,36 +1,37 @@
-nav-menu([allowSelectAll]="true", [actionOptions]="{group: true}", (refreshIG)="refreshIG()", [allowIgUpdate]="allowIgUpdate", [genImgGrpLink]="genImgGrpLink", [disableIgDelete]="disableIgDelete", [ig]="ig")
-#mainContent.container.main-content(tabindex="-1")
-  .row.no-gutters.row--search-bar
-    .col-md-5
-      ang-search
-  .row
-    .col-12.pb-4
-      h3#pageType Browse Group
-      .row
-        h1#pageTitle.h1--title-block.col-md-9 {{ ig.name }}
-        .col-md-3(*ngIf="!showDesc()")
-          .row-hdr.row-hdr--btn(*ngIf!="(ig.tags && ig.tags.length > 0) || ig.description", (click)="descExpanded = !descExpanded") Group Details
-            i.icon.icon-direction.tree-icon.desc-expnd-clps-icon([ngClass]="{ 'icon-down' : descExpanded, 'icon-left' : !descExpanded }", style="float:right")
-          .row-hdr(*ngIf!="(!ig.tags || ig.tags.length < 1) && !ig.description") No Group Details
-    div([ngClass]="[ showDesc() ? 'col-md-9' : 'col-md-12' ]")
-      ang-asset-grid([actionOptions]="actionOptions", (reordering)="toggleReorder($event)")
-      .alert.alert-warning(*ngIf!="ig.items && ig.items.length > 0 && !ig.thumbnails")
-        b Error Loading
-        = " "
-        | Unable to load the thumbnails for this group.
+div
+  nav-menu([allowSelectAll]="true", [actionOptions]="{group: true}", (refreshIG)="refreshIG()", [allowIgUpdate]="allowIgUpdate", [genImgGrpLink]="genImgGrpLink", [disableIgDelete]="disableIgDelete", [ig]="ig")
+  #mainContent.container.main-content(tabindex="-1")
+    .row.no-gutters.row--search-bar
+      .col-md-5
+        ang-search
+    .row
+      .col-12.pb-4
+        h3#pageType Browse Group
+        .row
+          h1#pageTitle.h1--title-block.col-md-9 {{ ig.name }}
+          .col-md-3(*ngIf="!showDesc()")
+            .row-hdr.row-hdr--btn(*ngIf!="(ig.tags && ig.tags.length > 0) || ig.description", (click)="descExpanded = !descExpanded") Group Details
+              i.icon.icon-direction.tree-icon.desc-expnd-clps-icon([ngClass]="{ 'icon-down' : descExpanded, 'icon-left' : !descExpanded }", style="float:right")
+            .row-hdr(*ngIf!="(!ig.tags || ig.tags.length < 1) && !ig.description") No Group Details
+      div([ngClass]="[ showDesc() ? 'col-md-9' : 'col-md-12' ]")
+        ang-asset-grid([actionOptions]="actionOptions", (reordering)="toggleReorder($event)")
+        .alert.alert-warning(*ngIf!="ig.items && ig.items.length > 0 && !ig.thumbnails")
+          b Error Loading
+          = " "
+          | Unable to load the thumbnails for this group.
 
-    div(*ngIf="showDesc()", [ngClass]="[ showDesc() ? 'col-md-3' : 'col-md-0'  ]")
-      .row-hdr.row-hdr--btn((click)="descExpanded = !descExpanded") Group Details
-        i.icon.icon-direction.tree-icon.desc-expnd-clps-icon([ngClass]="{ 'icon-down' : descExpanded, 'icon-left' : !descExpanded }", style="float:right")
-      .ig-tags.meta-block.pt-4(*ngIf!="ig.tags && ig.tags.length > 0")
-        .label Tags
-        div
-          a.tag(*ngFor="let tag of ig.tags", [routerLink]="['/browse', 'groups', 'search']", [queryParams]="{ 'level': 'all', 'tags' : encodeTag(tag), 'page' : '1' }") {{ tag }}
-      .meta-block(*ngIf!="ig.description && ig.description.length > 0")
-        .label Description
-      .desc-no-expand.meta-block(*ngIf="!ig.description || ig.description.length <= 0")
-        .label No Description
-      #pageDescription.page__description(*ngIf!="ig && ig.description", [innerHTML]="ig.description")
+      div(*ngIf="showDesc()", [ngClass]="[ showDesc() ? 'col-md-3' : 'col-md-0'  ]")
+        .row-hdr.row-hdr--btn((click)="descExpanded = !descExpanded") Group Details
+          i.icon.icon-direction.tree-icon.desc-expnd-clps-icon([ngClass]="{ 'icon-down' : descExpanded, 'icon-left' : !descExpanded }", style="float:right")
+        .ig-tags.meta-block.pt-4(*ngIf!="ig.tags && ig.tags.length > 0")
+          .label Tags
+          div
+            a.tag(*ngFor="let tag of ig.tags", [routerLink]="['/browse', 'groups', 'search']", [queryParams]="{ 'level': 'all', 'tags' : encodeTag(tag), 'page' : '1' }") {{ tag }}
+        .meta-block(*ngIf!="ig.description && ig.description.length > 0")
+          .label Description
+        .desc-no-expand.meta-block(*ngIf="!ig.description || ig.description.length <= 0")
+          .label No Description
+        #pageDescription.page__description(*ngIf!="ig && ig.description", [innerHTML]="ig.description")
 
 ang-ig-download-modal(*ngIf="showPptModal", (closeModal)="showPptModal = false", [ig]="ig")
 ang-download-limit-modal(*ngIf="showDownloadLimitModal", (closeModal)="showDownloadLimitModal = false", [ig]="ig")
