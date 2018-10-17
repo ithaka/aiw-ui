@@ -1,5 +1,5 @@
 import { HttpErrorResponse } from '@angular/common/http/public_api';
-import { BehaviorSubject, Observable } from 'rxjs/Rx';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 import { AssetService, AuthService, CollectionTypeHandler } from './../shared';
 

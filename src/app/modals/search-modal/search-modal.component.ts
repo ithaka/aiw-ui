@@ -1,4 +1,4 @@
-import { Subscription } from 'rxjs/Rx';
+import { Subscription } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Component, OnInit, Output, EventEmitter, AfterViewInit } from '@angular/core';
 import { Angulartics2 } from 'angulartics2';

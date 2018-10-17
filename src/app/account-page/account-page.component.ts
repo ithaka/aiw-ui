@@ -1,4 +1,4 @@
-import { Subscription } from "rxjs/Rx"
+import { Subscription } from "rxjs"
 import { Component, OnInit } from "@angular/core"
 import { Router } from "@angular/router"
 

@@ -8,7 +8,7 @@ import {
   ActivatedRouteSnapshot,
   RouterStateSnapshot
 } from '@angular/router'
-import { Observable, BehaviorSubject, Subject } from 'rxjs/Rx'
+import { Observable, BehaviorSubject, Subject } from 'rxjs'
 
 // Project dependencies
 import { AppConfig } from '../app.service'

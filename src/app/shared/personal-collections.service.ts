@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core'
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http'
-import { Observable } from 'rxjs/Rx'
+import { Observable } from 'rxjs'
 
 import { AuthService } from '.'
 

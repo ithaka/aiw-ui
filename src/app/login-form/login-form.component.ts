@@ -5,7 +5,7 @@ import { Router, ActivatedRoute } from '@angular/router'
 import { Location } from '@angular/common'
 import { Angulartics2 } from 'angulartics2'
 import { CompleterService, LocalData } from 'ng2-completer'
-import { BehaviorSubject, Observable, Subscription } from 'rxjs/Rx'
+import { BehaviorSubject, Observable, Subscription } from 'rxjs'
 
 import { AppConfig } from '../app.service'
 import { AuthService, User, AssetService } from './../shared'

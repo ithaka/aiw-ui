@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, Renderer } from '@angular/core'
 import { ActivatedRoute, NavigationStart, Params, Router } from '@angular/router'
 
-import { BehaviorSubject } from 'rxjs/Rx'
+import { BehaviorSubject } from 'rxjs'
 import { Subscription }   from 'rxjs'
 import { Locker } from 'angular2-locker'
 import { AppConfig } from '../app.service'

@@ -5,7 +5,7 @@ import { AssetService } from './assets.service';
 import { Injectable, OnDestroy, OnInit } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { Http, Response, Headers, RequestOptions } from '@angular/http';
-import { Observable, BehaviorSubject } from 'rxjs/Rx';
+import { Observable, BehaviorSubject } from 'rxjs';
 import { Locker, LockerConfig } from 'angular2-locker';
 import 'rxjs/add/operator/toPromise';
 import { Subscription }   from 'rxjs/Subscription';

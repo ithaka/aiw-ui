@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
-import { BehaviorSubject, Observable, Subscription } from 'rxjs/Rx';
+import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 import { Locker } from 'angular2-locker';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 

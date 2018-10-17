@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { BehaviorSubject, Observable, Subscription } from 'rxjs/Rx';
+import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 import { CompleterService, CompleterData } from 'ng2-completer';
 
 import { AssetService, GroupService, ImageGroup } from './../../shared';

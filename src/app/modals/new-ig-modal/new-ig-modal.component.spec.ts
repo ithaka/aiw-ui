@@ -1,6 +1,6 @@
 // import { NewIgModal } from './new-ig-modal.component'
 import { IgFormUtil, IgFormValue } from './new-ig'
-import { BehaviorSubject, Observable } from 'rxjs/Rx'
+import { BehaviorSubject, Observable } from 'rxjs'
 
 import { ImageGroup } from '../../shared/datatypes'
 
