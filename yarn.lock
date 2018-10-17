@@ -320,13 +320,13 @@
   dependencies:
     tslib "^1.9.0"
 
-"@ng-idle/core@^2.0.0-beta.13":
-  version "2.0.0-beta.15"
-  resolved "https://registry.yarnpkg.com/@ng-idle/core/-/core-2.0.0-beta.15.tgz#c99049405e96aa28e56c2d281dc370ded9c4984c"
+"@ng-idle/core@^6.0.0-beta.3":
+  version "6.0.0-beta.3"
+  resolved "https://registry.yarnpkg.com/@ng-idle/core/-/core-6.0.0-beta.3.tgz#1ca377c90743dc54d6bbb8b69f3858d871a549ad"
 
-"@ng-idle/keepalive@^2.0.0-beta.13":
-  version "2.0.0-beta.15"
-  resolved "https://registry.yarnpkg.com/@ng-idle/keepalive/-/keepalive-2.0.0-beta.15.tgz#c0ee6a23d45020b0530ca360d7b6257ad97a97eb"
+"@ng-idle/keepalive@^6.0.0-beta.3":
+  version "6.0.0-beta.3"
+  resolved "https://registry.yarnpkg.com/@ng-idle/keepalive/-/keepalive-6.0.0-beta.3.tgz#9e7293fb011913b5f45b164d75b3fe3ed6420837"
 
 "@ngtools/webpack@6.0.8":
   version "6.0.8"
@@ -787,9 +787,9 @@ amdefine@>=0.0.4, amdefine@^1.0.0:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/amdefine/-/amdefine-1.0.1.tgz#4a5282ac164729e93619bcfd3ad151f817ce91f5"
 
-angular2-click-outside@^0.1.0:
-  version "0.1.0"
-  resolved "https://registry.yarnpkg.com/angular2-click-outside/-/angular2-click-outside-0.1.0.tgz#fa156b0f7893311cfbbbaba1ba02127afcf7db87"
+angular-safeguard@^2.0.2:
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/angular-safeguard/-/angular-safeguard-2.0.2.tgz#84fa2ae703f33c2fa8a5f3593c74a6edae71fb98"
 
 angular2-locker@^0.5.0:
   version "0.5.0"
@@ -817,11 +817,11 @@ angular2-template-loader@^0.6.2:
   dependencies:
     loader-utils "^0.2.15"
 
-angulartics2@^4.2.0:
-  version "4.6.3"
-  resolved "https://registry.yarnpkg.com/angulartics2/-/angulartics2-4.6.3.tgz#ec627ef69072cc2ddf5655ae943e96f7d0f8af41"
+angulartics2@^7.0.1:
+  version "7.0.1"
+  resolved "https://registry.yarnpkg.com/angulartics2/-/angulartics2-7.0.1.tgz#e1390f393556088961af68063330f0c32f60024e"
   dependencies:
-    tslib "^1.7.1"
+    tslib "^1.9.0"
 
 ansi-align@^2.0.0:
   version "2.0.0"
@@ -6876,10 +6876,6 @@ openseadragon@2.4.0:
   version "2.4.0"
   resolved "https://registry.yarnpkg.com/openseadragon/-/openseadragon-2.4.0.tgz#d0b28b37a953602c82432a0dbd8a3779dadf756f"
 
-openseadragon@^2.2.1:
-  version "2.3.1"
-  resolved "https://registry.yarnpkg.com/openseadragon/-/openseadragon-2.3.1.tgz#efdcfee19d8b3c46d00d7f7dda787c7057f68364"
-
 opn@^5.1.0:
   version "5.3.0"
   resolved "https://registry.yarnpkg.com/opn/-/opn-5.3.0.tgz#64871565c863875f052cfdf53d3e3cb5adb53b1c"
@@ -8543,6 +8539,10 @@ run-queue@^1.0.0, run-queue@^1.0.3:
 rx@^4.1.0:
   version "4.1.0"
   resolved "https://registry.yarnpkg.com/rx/-/rx-4.1.0.tgz#a5f13ff79ef3b740fe30aa803fb09f98805d4782"
+
+rxjs-compat@^6.3.3:
+  version "6.3.3"
+  resolved "https://registry.yarnpkg.com/rxjs-compat/-/rxjs-compat-6.3.3.tgz#2ab3b9ac0dac0c073749d55fef9c03ea1df2045c"
 
 rxjs@^6.0.0:
   version "6.3.3"
