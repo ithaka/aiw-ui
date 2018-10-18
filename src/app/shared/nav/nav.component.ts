@@ -46,82 +46,86 @@ export class Nav implements OnInit, OnDestroy {
   ngOnInit() {
 
     this.subscriptions.push(
-      this._router.events.subscribe(e => {
-        /**
-         * Show/Hide logic for login info
-         * - Hides "login panel" in top right for certain pages
-         * - Hides session expiration modal for certain pages
-         */
-        if (e instanceof NavigationEnd) {
-          let baseRoute: string = e.url.split('/')[1].split('?')[0].split(';')[0]
-          switch (baseRoute) {
-            case 'assetprint':
-            case 'link':
-            case 'login':
-            case 'register':
-            case 'printpreview':
-              this.showLoginPanel = false
+      this._router.events.pipe(
+        map(e => {
+          /**
+           * Show/Hide logic for login info
+           * - Hides "login panel" in top right for certain pages
+           * - Hides session expiration modal for certain pages
+           */
+          if (e instanceof NavigationEnd) {
+            let baseRoute: string = e.url.split('/')[1].split('?')[0].split(';')[0]
+            switch (baseRoute) {
+              case 'assetprint':
+              case 'link':
+              case 'login':
+              case 'register':
+              case 'printpreview':
+                this.showLoginPanel = false
+                this.allowExpiredModal = false
+                break
+              default:
+                this.showLoginPanel = true
+                this.allowExpiredModal = true
+            }
+            // Allow external asset links
+            if (e.url.includes('asset/external')) {
               this.allowExpiredModal = false
-              break
-            default:
-              this.showLoginPanel = true
-              this.allowExpiredModal = true
+            }
           }
-          // Allow external asset links
-          if (e.url.includes('asset/external')) {
-            this.allowExpiredModal = false
-          }
-        }
-      })
+        })).subscribe()
     );
 
     // check every new user value to see if they're ip auth'd
     this.subscriptions.push(
-      this._auth.currentUser.subscribe((user) => {
-        if (user && user.ipAuthed == true) {
-          this.ipAuthed = true
-        }
-      })
+      this._auth.currentUser.pipe(
+        map(user => {
+          if (user && user.ipAuthed == true) {
+            this.ipAuthed = true
+          }
+        })).subscribe()
     )
 
     // Subscribe to User object updates
     this.subscriptions.push(
-      this._auth.currentUser.subscribe(
-        (userObj) => {
-          this.user = userObj;
+      this._auth.currentUser.pipe(
+        map(userObj => {
+            this.user = userObj;
 
-          // Add user context to sentry.io errors
-          if (this.user.username){
-            Raven.setUserContext({
-                email: this.user.username
-            })
-          } else{
-            Raven.setUserContext()
+            // Add user context to sentry.io errors
+            if (this.user.username){
+              Raven.setUserContext({
+                  email: this.user.username
+              })
+            } else{
+              Raven.setUserContext()
+            }
+          },
+          (err) => {
+            console.error('Nav failed to load Institution information', err)
           }
-        },
-        (err) => {
-          console.error('Nav failed to load Institution information', err)
-        }
-      )
-    );
+        )).subscribe()
+    )
 
     // Show inactive user logout modal once the subject is set by auth.service
     this.subscriptions.push(
-      this._auth.showUserInactiveModal.subscribe( value => {
-        this.showinactiveUserLogoutModal = value;
-      })
-    );
+      this._auth.showUserInactiveModal.pipe(
+        map(value => {
+          this.showinactiveUserLogoutModal = value;
+        })).subscribe()
+    )
 
     // Subscribe to Institution object updates
     this.subscriptions.push(
-      this._auth.getInstitution().subscribe(
-        (institutionObj) => {
-          this.institutionObj = institutionObj;
-        },
-        (err) => {
-          console.error('Nav failed to load Institution information', err)
-        }
-      )
+      this._auth.getInstitution().pipe(
+        map(
+          (institutionObj) => {
+            this.institutionObj = institutionObj;
+          },
+          (err) => {
+            console.error('Nav failed to load Institution information', err)
+          }
+        )).subscribe()
     );
   }
 
