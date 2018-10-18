@@ -1,8 +1,9 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Router, ActivatedRoute, Params } from '@angular/router';
-import { Subscription }   from 'rxjs';
+import { Component, OnInit, OnDestroy } from '@angular/core'
+import { Router, ActivatedRoute, Params } from '@angular/router'
+import { Subscription }   from 'rxjs'
+import { map } from 'rxjs/operators'
 
-import { AssetService } from './../shared/assets.service';
+import { AssetService } from './../shared/assets.service'
 @Component({
   selector: 'ang-cluster-page',
   providers: [],
@@ -24,8 +25,8 @@ export class ClusterPage implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.subscriptions.push(
-      this.route.params
-        .subscribe((routeParams: Params) => {
+      this.route.params.pipe(
+        map((routeParams: Params) => {
           this.clusterId = routeParams['clusterId'];
           let params = Object.assign({}, routeParams);
           // If a page number isn't set, reset to page 1!
@@ -38,7 +39,7 @@ export class ClusterPage implements OnInit, OnDestroy {
           if (routeParams['objTitle']) {
             this.clusterObjTitle = routeParams['objTitle'];
           }
-        })
+        })).subscribe()
     );
 
   } // OnInit

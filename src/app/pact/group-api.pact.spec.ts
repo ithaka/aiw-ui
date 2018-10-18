@@ -1,8 +1,9 @@
 /*eslint-disable*/
-import { HttpClientModule } from '@angular/common/http';
-import { TestBed, getTestBed } from '@angular/core/testing';
-import { PactWeb, Matchers } from '@pact-foundation/pact-web';
-import { GroupService, AuthService, GroupList, ImageGroup } from '../shared';
+import { HttpClientModule } from '@angular/common/http'
+import { TestBed, getTestBed } from '@angular/core/testing'
+import { PactWeb, Matchers } from '@pact-foundation/pact-web'
+import { map } from 'rxjs/operators'
+import { GroupService, AuthService, GroupList, ImageGroup } from '../shared'
 
 describe('Group Calls #pact', () => {
 

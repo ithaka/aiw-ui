@@ -1,9 +1,10 @@
-import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
-import { NgForm } from '@angular/forms';
-import { BehaviorSubject, Observable, Subscription } from 'rxjs';
-import { CompleterService, CompleterData } from 'ng2-completer';
+import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core'
+import { NgForm } from '@angular/forms'
+import { BehaviorSubject, Observable, Subscription } from 'rxjs'
+import { map } from 'rxjs/operators'
+import { CompleterService, CompleterData } from 'ng2-completer'
 
-import { AssetService, GroupService, ImageGroup } from './../../shared';
+import { AssetService, GroupService, ImageGroup } from './../../shared'
 
 @Component({
   selector: 'ang-add-to-group',

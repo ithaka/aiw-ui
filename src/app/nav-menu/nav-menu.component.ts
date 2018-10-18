@@ -1,11 +1,12 @@
-import { Subscription } from 'rxjs';
-import { Component, OnInit, OnDestroy, Output, EventEmitter, Input } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { Location } from '@angular/common';
+import { Subscription } from 'rxjs'
+import { map } from 'rxjs/operators'
+import { Component, OnInit, OnDestroy, Output, EventEmitter, Input } from '@angular/core'
+import { ActivatedRoute, Router } from '@angular/router'
+import { Location } from '@angular/common'
 
 // Project Dependencies
-import { AssetService, ImageGroupService, ImageGroup, GroupService, AuthService } from '../shared';
-import { AppConfig } from '../app.service';
+import { AssetService, ImageGroupService, ImageGroup, GroupService, AuthService } from '../shared'
+import { AppConfig } from '../app.service'
 
 @Component({
   selector: 'nav-menu',

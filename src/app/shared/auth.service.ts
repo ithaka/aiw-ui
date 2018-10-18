@@ -9,6 +9,7 @@ import {
   RouterStateSnapshot
 } from '@angular/router'
 import { Observable, BehaviorSubject, Subject } from 'rxjs'
+import { map } from 'rxjs/operators'
 
 // Project dependencies
 import { AppConfig } from '../app.service'

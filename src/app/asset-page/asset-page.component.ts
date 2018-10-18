@@ -3,6 +3,7 @@ import { Component, OnInit, OnDestroy, ViewChild, HostListener } from '@angular/
 import { ActivatedRoute, Params, Router } from '@angular/router'
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { Subscription } from 'rxjs'
+import { map } from 'rxjs/operators'
 import { Locker } from 'angular2-locker'
 import { Angulartics2 } from 'angulartics2'
 import { ArtstorViewer } from 'artstor-viewer'

@@ -1,14 +1,15 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Router, ActivatedRoute, Params, UrlSegment } from '@angular/router';
-import { Subscription }   from 'rxjs';
-import { Locker } from 'angular2-locker';
+import { Component, OnInit, OnDestroy } from '@angular/core'
+import { Router, ActivatedRoute, Params, UrlSegment } from '@angular/router'
+import { Subscription }   from 'rxjs'
+import { map } from 'rxjs/operators'
+import { Locker } from 'angular2-locker'
 
-import { TitleService } from '../shared/title.service';
-import { AssetService } from '../shared/assets.service';
-import { AuthService } from '../shared/auth.service';
-import { AssetFiltersService } from '../asset-filters/asset-filters.service';
+import { TitleService } from '../shared/title.service'
+import { AssetService } from '../shared/assets.service'
+import { AuthService } from '../shared/auth.service'
+import { AssetFiltersService } from '../asset-filters/asset-filters.service'
 
-import { AppConfig } from '../app.service';
+import { AppConfig } from '../app.service'
 
 @Component({
   selector: 'ang-browse-page',
@@ -51,11 +52,13 @@ export class BrowsePage implements OnInit, OnDestroy {
   ngOnInit() {
     // Subscribe to User object updates
     this.subscriptions.push(
-        this._auth.currentUser.subscribe(
-            (userObj) => { this.user = userObj },
-            (err) => { console.error(err) }
-        )
-    );
+        this._auth.currentUser.pipe(
+          map(userObj => {
+            this.user = userObj
+          },
+          (err) => { console.error(err) }
+        )).subscribe()
+    )
 
     // Set page title
     this._title.setSubtitle('Browse')
@@ -64,10 +67,10 @@ export class BrowsePage implements OnInit, OnDestroy {
     this._filters.clearApplied()
 
     this.subscriptions.push(
-      this.route.firstChild.url
-      .subscribe((url: UrlSegment[]) => {
+      this.route.firstChild.url.pipe(
+      map((url: UrlSegment[]) => {
         this.selectedColMenuId = url[0].path;
-      })
+      })).subscribe()
     );
 
     if ( this.browseOpts.artstorCol && !this._auth.isPublicOnly()){
@@ -76,25 +79,25 @@ export class BrowsePage implements OnInit, OnDestroy {
 
     // Subscribe to Institution object updates and change MenuArray on the run
     this.subscriptions.push(
-        this._auth.getInstitution().subscribe(
-            (institutionObj) => {
-                this.institution = institutionObj;
-                this.userTypeId = this._auth.getUser().typeId;
-                if ( (this.userTypeId == 1 || this.userTypeId == 2 || this.userTypeId == 3) && this.browseOpts.instCol && !this._auth.isPublicOnly() ){
-                    let instName = this.institution && this.institution.shortName ? this.institution.shortName : 'Institutional';
-                    let obj = {
-                        label : instName + ' Collections',
-                        id: '2',
-                        link: 'institution'
-                    }
-                    // Replace the item of the array instead of push
-                    this.colMenuArray.splice(1, 1 , obj);
+        this._auth.getInstitution().pipe(
+          map(institutionObj => {
+            this.institution = institutionObj;
+            this.userTypeId = this._auth.getUser().typeId;
+            if ( (this.userTypeId == 1 || this.userTypeId == 2 || this.userTypeId == 3) && this.browseOpts.instCol && !this._auth.isPublicOnly() ){
+                let instName = this.institution && this.institution.shortName ? this.institution.shortName : 'Institutional';
+                let obj = {
+                    label : instName + ' Collections',
+                    id: '2',
+                    link: 'institution'
                 }
-            },
-            (err) => {
-                console.error('Nav failed to load Institution information', err)
+                // Replace the item of the array instead of push
+                this.colMenuArray.splice(1, 1 , obj);
             }
-        )
+              },
+              (err) => {
+                  console.error('Nav failed to load Institution information', err)
+              }
+        )).subscribe()
     );
 
     if ( this.browseOpts.openCol ){

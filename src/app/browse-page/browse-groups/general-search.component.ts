@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Subscription } from 'rxjs'
+import { map } from 'rxjs/operators'
 
 @Component({
   selector: 'ang-general-search',
@@ -27,9 +28,10 @@ export class GeneralSearchComponent implements OnInit {
       this.term = this.init
     if (this.updateSearchTerm) {
       this.subscriptions.push(
-        this.updateSearchTerm.subscribe((term) => {
+        this.updateSearchTerm.pipe(
+          map(term => {
           this.term = term
-        })
+        })).subscribe()
       )
     }
   }
@@ -38,8 +40,8 @@ export class GeneralSearchComponent implements OnInit {
     window.setTimeout(function () {
       if (document.getElementById('empty-search-alert')){
         document.getElementById('empty-search-alert').focus()
-      }    
-    }, 110);  
+      }
+    }, 110);
   }
 
 }

@@ -1,13 +1,14 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Router, ActivatedRoute } from '@angular/router';
-import { Subscription }   from 'rxjs';
+import { Component, OnInit, OnDestroy } from '@angular/core'
+import { HttpClient, HttpHeaders } from '@angular/common/http'
+import { Router, ActivatedRoute } from '@angular/router'
+import { Subscription }   from 'rxjs'
+import { map } from 'rxjs/operators'
 
 // Internal Dependencies
-import { AssetService } from './../shared/assets.service';
-import { AuthService } from './../shared/auth.service';
-import { TitleService } from '../shared/title.service';
-import { ScriptService } from '../shared';
+import { AssetService } from './../shared/assets.service'
+import { AuthService } from './../shared/auth.service'
+import { TitleService } from '../shared/title.service'
+import { ScriptService } from '../shared'
 
 @Component({
   selector: 'ang-collection-page',
@@ -51,13 +52,14 @@ export class CollectionPage implements OnInit, OnDestroy {
   ngOnInit() {
 
     this.subscriptions.push(
-      this._auth.currentUser.subscribe((user) => {
+      this._auth.currentUser.pipe(
+        map(user => {
         // userSessionFresh: Do not attempt to call collection endpoint until we know user object is fresh
         if (!this.userSessionFresh && this._auth.userSessionFresh) {
           this.userSessionFresh = true
           this.routeParamSubscrpt()
         }
-      })
+      })).subscribe()
     );
 
   } // OnInit
@@ -79,12 +81,13 @@ export class CollectionPage implements OnInit, OnDestroy {
   }
 
   private routeParamSubscrpt(): void {
-    this.route.params.subscribe((routeParams) => {
+    this.route.params.pipe(
+    map(routeParams => {
       this.colId = routeParams['colId'];
       // Old links pass a name into the ID, just use that as a search term instead
       if (!/^[0-9]+$/.test(this.colId)) {
-        this.http.get('/assets/collection-links.json')
-          .subscribe(data => {
+        this.http.get('/assets/collection-links.json').pipe(
+          map(data => {
             let linkObj = data
             let link = linkObj[this.colId]
             if (link) {
@@ -92,7 +95,7 @@ export class CollectionPage implements OnInit, OnDestroy {
             } else {
               this._router.navigate(['/search', this.colId.replace('_', ' ')])
             }
-          })
+          })).subscribe()
       } else if (this.colId) {
         this._assets.clearAssets();
           this.getCollectionInfo(this.colId)

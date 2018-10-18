@@ -1,11 +1,12 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Location } from '@angular/common';
-import { Router, NavigationEnd, ActivatedRoute } from '@angular/router';
-import { Subscription } from 'rxjs';
-import * as Raven from 'raven-js';
+import { Component, OnInit, OnDestroy } from '@angular/core'
+import { Location } from '@angular/common'
+import { Router, NavigationEnd, ActivatedRoute } from '@angular/router'
+import { Subscription } from 'rxjs'
+import { map } from 'rxjs/operators'
+import * as Raven from 'raven-js'
 
-import { AuthService, AssetService, ToolboxService } from '..';
-import { AppConfig } from '../../app.service';
+import { AuthService, AssetService, ToolboxService } from '..'
+import { AppConfig } from '../../app.service'
 
 @Component({
   selector: 'nav-bar',

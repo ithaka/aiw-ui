@@ -1,6 +1,7 @@
 import { Router } from '@angular/router'
 import { Component, OnInit, EventEmitter, Input, Output } from '@angular/core'
 import { Location } from '@angular/common'
+import { map } from 'rxjs/operators'
 
 // Project Dependencies
 import { AuthService } from '../../shared'

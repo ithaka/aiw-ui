@@ -1,6 +1,7 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core'
 import { FormBuilder, FormGroup, Validators } from '@angular/forms'
 import { AuthService } from '../../shared'
+import { map } from 'rxjs/operators'
 
 @Component({
   selector: 'ang-change-password-modal',

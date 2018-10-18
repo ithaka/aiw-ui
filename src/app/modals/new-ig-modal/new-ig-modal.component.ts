@@ -1,13 +1,14 @@
-import { Router, ActivatedRoute } from '@angular/router';
-import { Component, EventEmitter, HostListener, Input, OnInit, Output } from '@angular/core';
-import { formGroupNameProvider } from '@angular/forms/src/directives/reactive_directives/form_group_name';
-import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
-import { Subscription } from 'rxjs';
-import { Angulartics2 } from 'angulartics2';
+import { Router, ActivatedRoute } from '@angular/router'
+import { Component, EventEmitter, HostListener, Input, OnInit, Output } from '@angular/core'
+import { formGroupNameProvider } from '@angular/forms/src/directives/reactive_directives/form_group_name'
+import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms'
+import { Subscription } from 'rxjs'
+import { map } from 'rxjs/operators'
+import { Angulartics2 } from 'angulartics2'
 
 // Project dependencies
-import { AssetService, AuthService, GroupService, ImageGroup, LogService } from './../../shared';
-import { IgFormValue, IgFormUtil } from './new-ig';
+import { AssetService, AuthService, GroupService, ImageGroup, LogService } from './../../shared'
+import { IgFormValue, IgFormUtil } from './new-ig'
 
 @Component({
   selector: 'ang-new-ig-modal',

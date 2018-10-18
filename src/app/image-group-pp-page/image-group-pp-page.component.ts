@@ -1,7 +1,8 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Router, ActivatedRoute, UrlSegment } from '@angular/router';
-import { Subscription }   from 'rxjs';
+import { Component, OnInit, OnDestroy } from '@angular/core'
+import { HttpClient, HttpHeaders } from '@angular/common/http'
+import { Router, ActivatedRoute, UrlSegment } from '@angular/router'
+import { Subscription }   from 'rxjs'
+import { map } from 'rxjs/operators'
 
 // Internal Dependencies
 import { AssetService, AuthService, ImageGroupDescription, ImageGroupService } from './../shared';
