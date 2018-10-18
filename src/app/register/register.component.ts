@@ -3,7 +3,7 @@ import { Router, ActivatedRoute } from '@angular/router'
 import { formGroupNameProvider } from '@angular/forms/src/directives/reactive_directives/form_group_name'
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms'
 import { Angulartics2 } from 'angulartics2'
-import { map } from 'rxjs/operators'
+import { map, take } from 'rxjs/operators'
 
 import { AuthService } from './../shared'
 import { USER_ROLES, USER_DEPTS, UserRolesAndDepts } from './user-roles'
@@ -135,9 +135,9 @@ export class RegisterComponent implements OnInit {
       registerCall = (value) => { return this._auth.registerSamlUser(value) }
     }
 
-    registerCall(userInfo)
-      .take(1)
-      .subscribe((data) => {
+    registerCall(userInfo).pipe(
+      take(1),
+      map((data) => {
         this.isLoading = false;
         if (data.user) {
           let user: any = Object.assign({}, data.user);
@@ -154,7 +154,8 @@ export class RegisterComponent implements OnInit {
             this.serviceErrors.duplicate = true
           }
         }
-      }, (res) => {
+      },
+      (res) => {
         console.error(res);
 
         this.isLoading = false;
@@ -165,7 +166,7 @@ export class RegisterComponent implements OnInit {
         if (res.error && res.error.code) {
           this.serviceErrors.shibboleth = res.error.code
         }
-      });
+      })).subscribe()
 
     // if the call is unsuccessful, you will get a 200 w/o a user and with a field called 'statusMessage'
   }

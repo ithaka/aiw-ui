@@ -573,7 +573,7 @@ export class AssetService {
                 data.total = data.items.length
 
                 // Fetch the asset(s) via items call only if the IG has atleast one asset
-                if (data.total > 0){
+                if (data.total > 0) {
                     let pageStart = (this.urlParams.page - 1) * this.urlParams.size
                     let pageEnd = this.urlParams.page * this.urlParams.size
                     // Maintain param string in a single place to avoid debugging thumbnails lost to a bad param
@@ -582,19 +582,18 @@ export class AssetService {
 
                     let options = { withCredentials: true }
 
-                    this.http.get(this._auth.getHostname() + '/api/v1/group/' + igId + '/items?' + ID_PARAM + idsAsTerm, options)
-                        .subscribe(
-                            (res) => {
-                                let results = res
-                                data.thumbnails = results['items']
-                                // Set the allResults object
-                                this.updateLocalResults(data)
-                        }, (error) => {
-                            // Pass portion of the data we have
+                    this.http.get(this._auth.getHostname() + '/api/v1/group/' + igId + '/items?' + ID_PARAM + idsAsTerm, options).pipe(
+                      map((res) => {
+                            let results = res
+                            data.thumbnails = results['items']
+                            // Set the allResults object
                             this.updateLocalResults(data)
-                            // Pass error down to allResults listeners
-                            this.allResultsSource.next({'error': error}) // .throw(error);
-                        });
+                      }, (error) => {
+                        // Pass portion of the data we have
+                        this.updateLocalResults(data)
+                        // Pass error down to allResults listeners
+                        this.allResultsSource.next({'error': error}) // .throw(error);
+                    })).subscribe()
                 } else {
                     data.thumbnails = []
                     this.updateLocalResults(data)
@@ -631,19 +630,18 @@ export class AssetService {
 
           let options = { withCredentials: true }
 
-          this.http.get(this._auth.getHostname() + '/api/v1/items?object_id=' + idsAsTerm, options)
-              .subscribe(
-                  (res) => {
-                      let results = res
-                      ig.thumbnails = results['items']
-                      // Set the allResults object
-                      this.updateLocalResults(ig)
-              }, (error) => {
-                  // Pass portion of the data we have
-                  this.updateLocalResults(ig)
-                  // Pass error down to allResults listeners
-                  this.allResultsSource.next({'error': error}) // .throw(error)
-              })
+          this.http.get(this._auth.getHostname() + '/api/v1/items?object_id=' + idsAsTerm, options).pipe(
+            map(res => {
+                let results = res
+                ig.thumbnails = results['items']
+                // Set the allResults object
+                this.updateLocalResults(ig)
+            }, (error) => {
+                // Pass portion of the data we have
+                this.updateLocalResults(ig)
+                // Pass error down to allResults listeners
+                this.allResultsSource.next({'error': error}) // .throw(error)
+            })).subscribe()
           }
     }
 
@@ -688,7 +686,8 @@ export class AssetService {
             }
             loadBatch(0);
         });
-    }
+
+    } // end setResults
 
     // Used by Browse page
     public pccollection(){
@@ -839,36 +838,36 @@ export class AssetService {
         }
 
          // Solr Search
-        this.searchSubscription = this._assetSearch.search(this.urlParams, term, this.activeSort.index)
-            .subscribe(
-                (res) => {
-                    let data = res
-                    let facets = data.facets
-                    let len = facets.length
+        this.searchSubscription = this._assetSearch.search(this.urlParams, term, this.activeSort.index).pipe(
+          map(res => {
+            let data = res
+            let facets = data.facets
+            let len = facets.length
 
-                    data.facets.forEach((facet, index) => {
-                        this._filters.setAvailable(facet.name, facet.values)
-                    })
+            data.facets.forEach((facet, index) => {
+                this._filters.setAvailable(facet.name, facet.values)
+            })
 
-                    if (data.hierarchies2 && data.hierarchies2['artstor-geography']){
-                        this._filters.generateHierFacets( data.hierarchies2['artstor-geography'].children, 'geography' )
-                    }
-                    else{
-                        this._filters.generateHierFacets( [], 'geography' )
-                    }
+            if (data.hierarchies2 && data.hierarchies2['artstor-geography']){
+                this._filters.generateHierFacets( data.hierarchies2['artstor-geography'].children, 'geography' )
+            }
+            else{
+                this._filters.generateHierFacets( [], 'geography' )
+            }
 
-                    // count and thumbnails are relics from the previous search logic and should be removed eventaully
-                    // Transform data from SOLR queries
-                    if (data.results) {
-                        data['thumbnails'] = data.results
-                    }
-                    data['count'] = data.total
-                    // Set the allResults object
-                    this.updateLocalResults(data)
-            }, (error) => {
-                    console.error(error)
-                    this.allResultsSource.next({'error': error})
-            });
+            // count and thumbnails are relics from the previous search logic and should be removed eventaully
+            // Transform data from SOLR queries
+            if (data.results) {
+                data['thumbnails'] = data.results
+            }
+            data['count'] = data.total
+            // Set the allResults object
+            this.updateLocalResults(data)
+          }, (error) => {
+            console.error(error)
+            this.allResultsSource.next({'error': error})
+          }
+        )).subscribe()
     }
 
     /**
