@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core'
+import { Component, OnInit } from '@angular/core'
 import { HttpClient, HttpHeaders } from '@angular/common/http'
 import { Router, ActivatedRoute, UrlSegment } from '@angular/router'
 import { Subscription }   from 'rxjs'
@@ -13,7 +13,7 @@ import { AssetSearchService, MetadataService } from './../shared';
   templateUrl: './asset-pp-page.component.pug'
 })
 
-export class AssetPPPage implements OnInit, OnDestroy {
+export class AssetPPPage implements OnInit {
 
   private header = new HttpHeaders().set('Content-Type', 'application/json'); // ... Set content type to JSON
   private options = { headers: this.header, withCredentials: true }; // Create a request option
@@ -37,18 +37,19 @@ export class AssetPPPage implements OnInit, OnDestroy {
 
     // Subscribe to ID in params
     this.subscriptions.push(
-      this.route.params.subscribe((routeParams) => {
+      this.route.params.pipe(
+        map(routeParams => {
         this.assetId = routeParams['assetId'];
         this.loadAsset();
-      })
-    );
+    })).subscribe()
+    )
   }
 
   // Load Image Group Assets
   loadAsset(): void{
     let self = this;
-    this._metadata.getMetadata( this.assetId )
-    .subscribe((res) => {
+    this._metadata.getMetadata(this.assetId).pipe(
+      map(res => {
         let assetData = res && res.metadata && res.metadata[0] ? res.metadata[0]['metadata_json'] : []
         for (let data of assetData){
           let fieldExists = false;
@@ -75,9 +76,7 @@ export class AssetPPPage implements OnInit, OnDestroy {
         self.asset = res.metadata[0];
     }, (err) => {
         console.error('Unable to load asset metadata.');
-    });
+    })).subscribe()
   }
 
-  ngOnDestroy() {
-  }
 }
