@@ -17,7 +17,7 @@ import { AppConfig } from '../app.service'
 // For session timeout management
 import { IdleWatcherUtil } from './idle-watcher'
 import {Idle, DEFAULT_INTERRUPTSOURCES} from '@ng-idle/core'
-import { FlagService } from '.'
+import { FlagService } from './flag.service'
 
 /**
  * Controls authorization through IP address and locally stored user object

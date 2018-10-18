@@ -5,7 +5,9 @@ import { Subscription } from 'rxjs'
 import { map } from 'rxjs/operators'
 import * as Raven from 'raven-js'
 
-import { AuthService, AssetService, ToolboxService } from '..'
+import { AuthService } from '../auth.service'
+import { AssetService } from '../assets.service'
+import { ToolboxService } from '../toolbox.service'
 import { AppConfig } from '../../app.service'
 
 @Component({

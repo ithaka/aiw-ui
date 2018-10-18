@@ -8,7 +8,7 @@ import { Injectable } from '@angular/core'
 import {
   AssetFiltersService
 } from '../asset-filters/asset-filters.service'
-import { AuthService } from './'
+import { AuthService } from './auth.service'
 import { AppConfig } from '../app.service'
 import { Observable } from 'rxjs'
 import { APP_CONST } from '../app.constants'
