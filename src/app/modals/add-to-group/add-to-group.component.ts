@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core'
 import { NgForm } from '@angular/forms'
 import { BehaviorSubject, Observable, Subscription } from 'rxjs'
-import { map } from 'rxjs/operators'
+import { map, take } from 'rxjs/operators'
 import { CompleterService, CompleterData } from 'ng2-completer'
 
 import { AssetService, GroupService, ImageGroup } from './../../shared'
@@ -54,26 +54,27 @@ export class AddToGroupModal implements OnInit, OnDestroy {
     if (this.selectedAssets.length < 1) { // if no assets were added when component was initialized, the component gets the current selection list
       // Subscribe to asset selection
       this.subscriptions.push(
-        this._assets.selection.subscribe(
-          assets => {
+        this._assets.selection.pipe(
+        map(assets => {
             this.selectedAssets = assets;
           },
           error => {
             console.error(error);
           }
-        )
+        )).subscribe()
       );
     }
 
     // Load list of Groups, and update autocomplete as Groups load
-    this._group.getEveryGroup('created')
-      .subscribe((groups) => {
+    this._group.getEveryGroup('created').pipe(
+      map(groups => {
         if (groups) {
-          this.groups = groups;
+          this.groups = groups
           // Data service for the autocomplete component (ng2 completer)
-          this.dataService = this.completerService.local(this.groupListObs, 'name', 'name');
+          this.dataService = this.completerService.local(this.groupListObs, 'name', 'name')
         }
-      }, (err) => { console.error(err); });
+      }, (err) => { console.error(err)
+    })).subscribe()
 
 
   }
@@ -162,16 +163,16 @@ export class AddToGroupModal implements OnInit, OnDestroy {
 
     // go get the group from the server
     this._group.get(this.selectedIg.id)
-      .toPromise()
+      .toPromise() // TODO REMOVE RXJS toPromise
       .then((data) => {
         data.items = putGroup.items
 
-        this._group.update(data)
-          .take(1)
-          .subscribe(
+        this._group.update(data).pipe(
+          take(1),
+          map(
             (res) => { this.serviceResponse.success = true; this._assets.clearSelectMode.next(true); },
             (err) => { console.error(err); this.serviceResponse.failure = true;
-          })
+        })).subscribe()
 
       })
       .catch((error) => {

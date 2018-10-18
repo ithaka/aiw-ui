@@ -1,7 +1,7 @@
 import { Router } from '@angular/router'
 import { Component, OnInit, EventEmitter, Input, Output } from '@angular/core'
 import { Location } from '@angular/common'
-import { map } from 'rxjs/operators'
+import { map, take } from 'rxjs/operators'
 
 // Project Dependencies
 import { AuthService } from '../../shared'
@@ -31,24 +31,25 @@ export class AccessDeniedModal implements OnInit {
     let htmlelement: HTMLElement = document.getElementById('modal');
     htmlelement.focus()
 
-      this._auth.currentUser.take(1).subscribe(
-        (user) => {
-          this.isLoggedIn = user.isLoggedIn
+      this._auth.currentUser.pipe(
+      take(1),
+      map(user => {
+        this.isLoggedIn = user.isLoggedIn
 
-          if (this.isLoggedIn) {
-            // Logged In
-            this.promptCopy = 'ACCESS_DENIED_MODAL.USER_AUTH.PROMPT'
-          } else if (user.status) {
-            // IP Auth
-            this.promptCopy = 'ACCESS_DENIED_MODAL.IP_AUTH.PROMPT'
-          } else {
-            this.promptCopy = 'ACCESS_DENIED_MODAL.NO_AUTH.PROMPT'
-          }
-        },
-        (err) => {
-          console.error('Failed to load Institution information', err)
+        if (this.isLoggedIn) {
+          // Logged In
+          this.promptCopy = 'ACCESS_DENIED_MODAL.USER_AUTH.PROMPT'
+        } else if (user.status) {
+          // IP Auth
+          this.promptCopy = 'ACCESS_DENIED_MODAL.IP_AUTH.PROMPT'
+        } else {
+          this.promptCopy = 'ACCESS_DENIED_MODAL.NO_AUTH.PROMPT'
         }
-      )
+      },
+      (err) => {
+        console.error('Failed to load Institution information', err)
+      }
+    )).subscribe()
   }
 
   /**
