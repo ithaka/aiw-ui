@@ -42,28 +42,28 @@ export class SearchPage implements OnInit, OnDestroy {
         private _auth: AuthService,
         private _captainsLog: LogService,
         private _script: ScriptService
-      ) {
-    this.siteID = this._appConfig.config.siteID;
-    // this makes the window always render scrolled to the top
-    this._router.events.subscribe(() => {
-      window.scrollTo(0, 0);
-    });
+    ) {
+      this.siteID = this._appConfig.config.siteID;
+      // this makes the window always render scrolled to the top
+      this._router.events.pipe(
+        map(() => {
+          window.scrollTo(0, 0)
+        })).subscribe()
   }
 
   ngOnInit() {
 
     // Subscribe User object updates
     this.subscriptions.push(
-      this._auth.currentUser.subscribe(
-        (userObj) => {
-          this.user = userObj;
+      this._auth.currentUser.pipe(
+      map(userObj => {
+          this.user = userObj
         },
         (err) => {
           console.error('Nav failed to load Institution information', err)
         }
-      )
-    );
-
+      )).subscribe()
+    )
 
     // Subscribe to term in params
     this.subscriptions.push(
