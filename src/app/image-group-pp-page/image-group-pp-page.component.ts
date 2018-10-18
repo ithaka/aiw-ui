@@ -77,7 +77,7 @@ export class ImageGroupPPPage implements OnInit, OnDestroy {
   } // OnInit
 
   // Load Image Group Descrition
-  loadIgDesc(igId: string): void{
+  loadIgDesc(igId: string): void {
     this._igService.getGroupDescription(igId).pipe(
     take(1),
     map((data: ImageGroupDescription) => {

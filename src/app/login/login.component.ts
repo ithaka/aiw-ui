@@ -5,7 +5,7 @@ import { Location } from '@angular/common'
 import { Angulartics2 } from 'angulartics2'
 import { CompleterService, LocalData } from 'ng2-completer'
 import { BehaviorSubject, Observable, Subscription } from 'rxjs'
-import { map } from 'rxjs/operators'
+import { map, take } from 'rxjs/operators'
 
 import { AppConfig } from '../app.service'
 import { AuthService, User, AssetService, FlagService } from './../shared'
@@ -72,11 +72,12 @@ export class Login implements OnInit, OnDestroy {
      * - The featureFlag values in Auth service would be persistent until the page is refreshed
     */
     this.subscriptions.push(
-      this.route.params.subscribe((params) => {
-        if (params && params['featureFlag']){
+      this.route.params.pipe(
+      map(params => {
+        if (params && params['featureFlag']) {
           this._flags[params['featureFlag']] = true
         }
-      })
+      })).subscribe()
     )
 
     // Check for a stashed route to pass to proxy links
@@ -123,15 +124,15 @@ export class Login implements OnInit, OnDestroy {
      * @todo - Should we have to call gtUserInfo here?
      * We don't need to reload user info that we should alreay have.
      */
-    this._auth.getUserInfo()
-      .take(1)
-      .subscribe((res) => {
+    this._auth.getUserInfo().pipe(
+      take(1),
+      map((res) => {
         if ((res.remoteaccess === false) && res.user && (!this._app.config.disableIPAuth)) {
           this.showRegister = true
         }
       }, (err) => {
         console.error(err)
-      })
+      })).subscribe()
 
   } // OnInit
 
