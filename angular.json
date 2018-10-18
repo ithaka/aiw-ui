@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "ang-ui-proto": {
+    "avatar": {
       "root": "",
       "sourceRoot": "src",
       "projectType": "application",
@@ -17,7 +17,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/ang-ui-proto",
+            "outputPath": "dist/avatar",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
@@ -54,18 +54,19 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "ang-ui-proto:build"
+            "port" : 3000,
+            "browserTarget": "avatar:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "ang-ui-proto:build:production"
+              "browserTarget": "avatar:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "ang-ui-proto:build"
+            "browserTarget": "avatar:build"
           }
         },
         "test": {
@@ -99,7 +100,7 @@
         }
       }
     },
-    "ang-ui-proto-e2e": {
+    "avatar-e2e": {
       "root": "e2e/",
       "projectType": "application",
       "architect": {
@@ -107,11 +108,11 @@
           "builder": "@angular-devkit/build-angular:protractor",
           "options": {
             "protractorConfig": "e2e/protractor.conf.js",
-            "devServerTarget": "ang-ui-proto:serve"
+            "devServerTarget": "avatar:serve"
           },
           "configurations": {
             "production": {
-              "devServerTarget": "ang-ui-proto:serve:production"
+              "devServerTarget": "avatar:serve:production"
             }
           }
         },
@@ -127,5 +128,5 @@
       }
     }
   },
-  "defaultProject": "ang-ui-proto"
+  "defaultProject": "avatar"
 }
