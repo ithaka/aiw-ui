@@ -9,7 +9,7 @@ import {
   RouterStateSnapshot
 } from '@angular/router'
 import { Observable, BehaviorSubject, Subject } from 'rxjs'
-import { map } from 'rxjs/operators'
+import { map, take } from 'rxjs/operators'
 
 // Project dependencies
 import { AppConfig } from '../app.service'
@@ -162,33 +162,39 @@ export class AuthService implements CanActivate {
     idle.setTimeout(IdleWatcherUtil.generateSessionLength()); // Log user out after 90 mins of inactivity
     idle.setInterrupts(DEFAULT_INTERRUPTSOURCES);
 
-    idle.onIdleEnd.subscribe(() => {
-      this.idleState = 'No longer idle.';
-      // We want to ensure a user is refreshed as soon as they return to the tab
-      this.refreshUserSession(true)
-    });
-    idle.onTimeout.subscribe(() => {
-      let user = this.getUser();
-      // console.log(user);
-      if (user && user.isLoggedIn){
-        this.expireSession();
-        this.showUserInactiveModal.next(true);
-        this.idleState = 'Timed out!';
-      }
-      else{
-        this.resetIdleWatcher()
-      }
-    });
-    idle.onIdleStart.subscribe(() => {
-      this.idleState = 'You\'ve gone idle!';
+    idle.onIdleEnd.pipe(
+      map(() => {
+        this.idleState = 'No longer idle.';
+        // We want to ensure a user is refreshed as soon as they return to the tab
+        this.refreshUserSession(true)
+      })).subscribe()
 
-      let currentDateTime = new Date().toUTCString();
-      this._storage.set('userGoneIdleAt', currentDateTime);
-    });
-    idle.onTimeoutWarning.subscribe((countdown) => {
-      this.idleState = 'You will time out in ' + countdown + ' seconds!'
-      // console.log(this.idleState);
-    });
+    idle.onTimeout.pipe(
+      map(() => {
+        let user = this.getUser();
+        // console.log(user);
+        if (user && user.isLoggedIn){
+          this.expireSession();
+          this.showUserInactiveModal.next(true);
+          this.idleState = 'Timed out!';
+        }
+        else{
+          this.resetIdleWatcher()
+        }
+      })).subscribe()
+
+    idle.onIdleStart.pipe(
+      map(() => {
+        this.idleState = 'You\'ve gone idle!';
+        let currentDateTime = new Date().toUTCString();
+        this._storage.set('userGoneIdleAt', currentDateTime);
+      })).subscribe()
+
+    idle.onTimeoutWarning.pipe(
+      map((countdown) => {
+        this.idleState = 'You will time out in ' + countdown + ' seconds!'
+        // console.log(this.idleState);
+      })).subscribe()
 
     // Init idle watcher (this will also run getUserInfo)
     this.resetIdleWatcher()
@@ -524,9 +530,9 @@ export class AuthService implements CanActivate {
             }
           }
         }
-      )
-      .take(1)
-      .subscribe(res => {
+      ).pipe(
+      take(1),
+      map((res) => {
         // CanActivate is not handling the Observable value properly,
         // ... so we do an extra redirect in here
         if (res === false) {
@@ -536,7 +542,7 @@ export class AuthService implements CanActivate {
       }, err => {
         this._router.navigate(['/login'])
         observer.next(false)
-      })
+      })).subscribe()
     })
   }
 
