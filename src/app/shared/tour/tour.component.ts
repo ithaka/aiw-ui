@@ -25,14 +25,15 @@ import { TourStep } from './tour.service'
       private _ga: Angulartics2,
       private router: Router
     ){
-      router.events.subscribe(event => {
+      router.events.pipe(
+      map(event => {
         // End the tour when go to another page with browser's forward and backward button
         if (event instanceof NavigationStart) {
           if (this.driver){
             this.driver.reset()
           }
         }
-      })
+      })).subscribe()
     }
 
     private startTour() {
