@@ -57,9 +57,11 @@ export class Home implements OnInit, OnDestroy {
     private _script: ScriptService
   ) {
     // this makes the window always render scrolled to the top
-    this._router.events.subscribe(() => {
-      window.scrollTo(0, 0);
-    });
+    this._router.events.pipe(
+      map(() => {
+        window.scrollTo(0, 0);
+      }
+    )).subscribe()
 
     this.showBlog = this._appConfig.config.showHomeBlog
     this.showPrivateCollections = this._appConfig.config.browseOptions.myCol
@@ -84,12 +86,13 @@ export class Home implements OnInit, OnDestroy {
 
     this.user = this._auth.getUser();
 
-    this.subscriptions
-      .push(
-        this._auth.getInstitution().subscribe((institutionObj) => {
-          this.institution = institutionObj;
-        })
-      )
+    this.subscriptions.push(
+      this._auth.getInstitution().pipe(
+        map(institutionObj => {
+          this.institution = institutionObj
+        }
+      )).subscribe()
+    )
 
     this.loaders['collections'] = true;
     this.loaders['instCollections'] = true;
@@ -99,39 +102,37 @@ export class Home implements OnInit, OnDestroy {
      * and fetch collections list only after we have the user object returned
      */
     this.subscriptions.push(
-      this._auth.currentUser.subscribe(
-        (userObj) => {
-          if (userObj.institutionId && (this.instCollections.length === 0)){
-            this.subscriptions
-              .push(
-                this._assets.getCollectionsList()
-                  .subscribe(
-                    data => {
-                      // Filter SSC content
-                      this.collections = data['Collections'].filter((collection) => {
-                        return collection.collectionType == 5
-                      })
-                      this.loaders['collections'] = false;
-                      // Filter institutional content
-                      this.instCollections = data['Collections'].filter((collection) => {
-                        return collection.collectionType == 2 || collection.collectionType == 4
-                      })
-                      this.loaders['instCollections'] = false;
-                    },
-                    err => {
-                      if (err && err.status != 401 && err.status != 403) {
-                        console.error('Failed to load collection list', err)
-                      }
-                    }
-                  )
-              )
+      this._auth.currentUser.pipe(
+        map(userObj => {
+          if (userObj.institutionId && (this.instCollections.length === 0)) {
+
+            this.subscriptions.push(this._assets.getCollectionsList().pipe(
+                map(data => {
+                  // Filter SSC content
+                  this.collections = data['Collections'].filter((collection) => {
+                    return collection.collectionType == 5
+                  })
+                  this.loaders['collections'] = false;
+                  // Filter institutional content
+                  this.instCollections = data['Collections'].filter((collection) => {
+                    return collection.collectionType == 2 || collection.collectionType == 4
+                  })
+                  this.loaders['instCollections'] = false;
+                },
+                err => {
+                  if (err && err.status != 401 && err.status != 403) {
+                    console.error('Failed to load collection list', err)
+                  }
+                }
+              )).subscribe()
+            ) // end push
           }
         },
         err => {
           console.error('Failed to load user object', err)
         }
-      )
-    );
+      )).subscribe()
+    ) // end push
 
     this._assets.getBlogEntries()
       .then((data) => {
