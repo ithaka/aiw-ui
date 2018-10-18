@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter, AfterViewInit } from '@angular/core'
-import { map } from 'rxjs/operators'
+import { map, take } from 'rxjs/operators'
 
 import { ImageGroup, GroupService, AuthService, LogService } from './../../shared'
 
@@ -72,9 +72,9 @@ export class ShareIgLinkModal implements OnInit, AfterViewInit {
     } else {
       // if the image group is private, we call a service to generate a token, then attach that to the route so the user can share it
       this.serviceStatus.isLoading = true
-      this._group.generateToken(this.ig.id, { access_type: 100 })
-        .take(1)
-        .subscribe((res) => {
+      this._group.generateToken(this.ig.id, { access_type: 100 }).pipe(
+        take(1),
+        map(res => {
           this.serviceStatus.isLoading = false
           if (res.success && res.token) {
             this.shareLink = [protocol, document.location.host, groupPath, ig.id, '?token=', encodeURIComponent(res.token)].join('')
@@ -84,7 +84,7 @@ export class ShareIgLinkModal implements OnInit, AfterViewInit {
         }, (err) => {
           console.error(err)
           this.serviceStatus.tokenError = true
-        })
+      })).subscribe()
     }
   }
 }

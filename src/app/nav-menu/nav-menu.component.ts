@@ -1,5 +1,5 @@
 import { Subscription } from 'rxjs'
-import { map } from 'rxjs/operators'
+import { map, take } from 'rxjs/operators'
 import { Component, OnInit, OnDestroy, Output, EventEmitter, Input } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { Location } from '@angular/common'
@@ -81,40 +81,43 @@ export class NavMenu implements OnInit, OnDestroy {
   ngOnInit() {
     // Subscribe to User object updates
     this.subscriptions.push(
-      this._auth.currentUser.subscribe(
-        (userObj) => {
+      this._auth.currentUser.pipe(
+        map(userObj => {
           this.user = userObj
         },
         (err) => { console.error(err) }
-      )
-    );
+      )).subscribe()
+    )
 
     this.subscriptions.push(
-      this._assets.selection.subscribe(
-        selectedAssets => {
+      this._assets.selection.pipe(
+        map(selectedAssets => {
           this.selectedAssets = selectedAssets
         },
         error => {
           console.error(error)
-        })
-    );
+        }
+      )).subscribe()
+    )
 
     this.subscriptions.push(
-      this.route.params.subscribe((params) => {
+      this.route.params.pipe(
+      map(params => {
         this.params = params
-
         if (params['igId'] && !params['page']){
           this.showImageGroupModal = false
         }
-      })
+      })).subscribe()
     )
 
     this.subscriptions.push(
-      this._auth.getInstitution().subscribe((institutionObj) => {
-        this.institutionObj = institutionObj;
-      })
+      this._auth.getInstitution().pipe(
+        map(institutionObj => {
+          this.institutionObj = institutionObj;
+      })).subscribe()
     )
-  }
+
+  } // onInit
 
   ngOnDestroy() {
     this.subscriptions.forEach((sub) => { sub.unsubscribe() })
@@ -137,8 +140,9 @@ export class NavMenu implements OnInit, OnDestroy {
    */
   private selectAllInAssetGrid(): void {
 
-    this._assets.allResults.take(1).subscribe(
-      assets => {
+    this._assets.allResults.pipe(
+      take(1),
+      map(assets => {
         if (assets.thumbnails) {
           // Make a copy of the Results array
           let assetsOnPage = [];
@@ -149,7 +153,7 @@ export class NavMenu implements OnInit, OnDestroy {
           this._assets.setSelectedAssets(assetsOnPage);
         }
       }
-    );
+    )).subscribe()
   }
 
   /**
@@ -173,9 +177,9 @@ export class NavMenu implements OnInit, OnDestroy {
       return !assetFound // if the asset was not found, we want to keep it
     });
 
-    this._group.update(putGroup)
-      .take(1)
-      .subscribe((res) => {
+    this._group.update(putGroup).pipe(
+      take(1),
+      map(res => {
         this.ig = putGroup
         let removeIds: string[] = []
         this._assets.getSelectedAssets().forEach((asset) => {
@@ -183,9 +187,10 @@ export class NavMenu implements OnInit, OnDestroy {
         })
         this._assets.removeFromResults(removeIds, this.ig.items.length) // make the call to asset service which will update the asset grid with modified assets and also pass the total # of items for pagination values
         this._assets.selectModeToggle.emit()
-      })
-  }
+      }
+    )).subscribe()
 
+  }
 
   /**
    * Closes confirmation modal
