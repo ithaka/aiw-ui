@@ -1,13 +1,14 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Router, ActivatedRoute } from '@angular/router';
-import { Subscription }   from 'rxjs';
+import { Component, OnInit, OnDestroy } from '@angular/core'
+import { HttpClient, HttpHeaders } from '@angular/common/http'
+import { Router, ActivatedRoute } from '@angular/router'
+import { Subscription }   from 'rxjs'
+import { map } from 'rxjs/operators'
 
 // Internal Dependencies
-import { AssetService } from './../shared/assets.service';
-import { AuthService } from './../shared/auth.service';
-import { TitleService } from '../shared/title.service';
-import { ScriptService } from '../shared';
+import { AssetService } from './../shared/assets.service'
+import { AuthService } from './../shared/auth.service'
+import { TitleService } from '../shared/title.service'
+import { ScriptService } from '../shared'
 
 @Component({
   selector: 'ang-collection-page',

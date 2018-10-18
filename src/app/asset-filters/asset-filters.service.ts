@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core'
 import { BehaviorSubject, Subscription } from 'rxjs'
+import { map } from 'rxjs/operators'
 import { Locker } from 'angular2-locker'
 import { HttpClient, HttpHeaders } from '@angular/common/http'
 

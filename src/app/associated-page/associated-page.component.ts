@@ -1,11 +1,11 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
-import { Subscription }   from 'rxjs';
+import { Component, OnInit, OnDestroy } from '@angular/core'
+import { Router, ActivatedRoute } from '@angular/router'
+import { Subscription }   from 'rxjs'
+import { map } from 'rxjs/operators'
 
-
-import { AuthService } from './../shared/auth.service';
-import { AssetService } from './../shared/assets.service';
-import { MetadataService } from '../shared';
+import { AuthService } from './../shared/auth.service'
+import { AssetService } from './../shared/assets.service'
+import { MetadataService } from '../shared'
 
 @Component({
   selector: 'ang-associated-page',

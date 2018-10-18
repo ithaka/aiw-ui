@@ -9,6 +9,7 @@ import { Observable, BehaviorSubject, Subject } from 'rxjs'
 import { Locker } from 'angular2-locker'
 
 import { Subscription }   from 'rxjs'
+import { map } from 'rxjs/operators'
 import { categoryName } from './datatypes/category.interface'
 
 // Project Dependencies

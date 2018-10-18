@@ -1,14 +1,15 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Router, ActivatedRoute, Params, UrlSegment } from '@angular/router';
-import { Subscription }   from 'rxjs';
-import { Locker } from 'angular2-locker';
+import { Component, OnInit, OnDestroy } from '@angular/core'
+import { Router, ActivatedRoute, Params, UrlSegment } from '@angular/router'
+import { Subscription }   from 'rxjs'
+import { map } from 'rxjs/operators'
+import { Locker } from 'angular2-locker'
 
-import { TitleService } from '../shared/title.service';
-import { AssetService } from '../shared/assets.service';
-import { AuthService } from '../shared/auth.service';
-import { AssetFiltersService } from '../asset-filters/asset-filters.service';
+import { TitleService } from '../shared/title.service'
+import { AssetService } from '../shared/assets.service'
+import { AuthService } from '../shared/auth.service'
+import { AssetFiltersService } from '../asset-filters/asset-filters.service'
 
-import { AppConfig } from '../app.service';
+import { AppConfig } from '../app.service'
 
 @Component({
   selector: 'ang-browse-page',

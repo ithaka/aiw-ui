@@ -1,19 +1,19 @@
-import { TestBed, inject, async } from '@angular/core/testing';
-import { AssetService } from './assets.service';
+import { TestBed, inject, async } from '@angular/core/testing'
+import { AssetService } from './assets.service'
 
 // Library imports
-import { Injectable, OnDestroy, OnInit } from '@angular/core';
-import { Router, ActivatedRoute, Params } from '@angular/router';
-import { Http, Response, Headers, RequestOptions } from '@angular/http';
-import { Observable, BehaviorSubject } from 'rxjs';
-import { Locker, LockerConfig } from 'angular2-locker';
-import 'rxjs/add/operator/toPromise';
-import { Subscription }   from 'rxjs/Subscription';
+import { Injectable, OnDestroy, OnInit } from '@angular/core'
+import { Router, ActivatedRoute, Params } from '@angular/router'
+import { Http, Response, Headers, RequestOptions } from '@angular/http'
+import { Observable, BehaviorSubject, Subscription } from 'rxjs'
+import { Locker, LockerConfig } from 'angular2-locker'
+import 'rxjs/add/operator/toPromise' // TODO REMOVE USAGE RXJS toPromise
+import { map } from 'rxjs/operators'
 
 // Project dependencies
-import { AuthService } from './auth.service';
-import { AssetFiltersService } from './../asset-filters/asset-filters.service';
-import { ToolboxService } from './toolbox.service';
+import { AuthService } from './auth.service'
+import { AssetFiltersService } from './../asset-filters/asset-filters.service'
+import { ToolboxService } from './toolbox.service'
 
 describe('AssetServiceTest', () => {
    let _assets;

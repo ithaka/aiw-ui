@@ -1,13 +1,14 @@
-import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
-import { Subscription }   from 'rxjs';
+import { Subscription }   from 'rxjs'
+import { map } from 'rxjs/operators'
 
-import { AssetService } from './../shared/assets.service';
-import { AuthService, LogService, FlagService, ScriptService } from '../shared';
-import { AssetFiltersService } from '../asset-filters/asset-filters.service';
-import { AssetGrid } from './../asset-grid/asset-grid.component';
-import { TitleService } from '../shared/title.service';
-import { AppConfig } from '../app.service';
+import { AssetService } from './../shared/assets.service'
+import { AuthService, LogService, FlagService, ScriptService } from '../shared'
+import { AssetFiltersService } from '../asset-filters/asset-filters.service'
+import { AssetGrid } from './../asset-grid/asset-grid.component'
+import { TitleService } from '../shared/title.service'
+import { AppConfig } from '../app.service'
 
 @Component({
   selector: 'ang-search-page',

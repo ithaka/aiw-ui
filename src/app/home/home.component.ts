@@ -1,10 +1,11 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Router } from '@angular/router';
-import { Subscription } from 'rxjs';
-import { Ng2DeviceService } from 'ng2-device-detector';
+import { Component, OnInit, OnDestroy } from '@angular/core'
+import { Router } from '@angular/router'
+import { Subscription } from 'rxjs'
+import { map } from 'rxjs/operators'
+import { Ng2DeviceService } from 'ng2-device-detector'
 
-import { AssetService, AuthService, ScriptService } from '../shared';
-import { AppConfig } from '../app.service';
+import { AssetService, AuthService, ScriptService } from '../shared'
+import { AppConfig } from '../app.service'
 import { Featured } from './featured'
 
 declare var initPath: string

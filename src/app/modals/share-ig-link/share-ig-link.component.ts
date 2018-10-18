@@ -1,4 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter, AfterViewInit } from '@angular/core'
+import { map } from 'rxjs/operators'
 
 import { ImageGroup, GroupService, AuthService, LogService } from './../../shared'
 

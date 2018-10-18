@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Subscription } from 'rxjs'
+import { map } from 'rxjs/operators'
 
 @Component({
   selector: 'ang-general-search',
@@ -38,8 +39,8 @@ export class GeneralSearchComponent implements OnInit {
     window.setTimeout(function () {
       if (document.getElementById('empty-search-alert')){
         document.getElementById('empty-search-alert').focus()
-      }    
-    }, 110);  
+      }
+    }, 110);
   }
 
 }

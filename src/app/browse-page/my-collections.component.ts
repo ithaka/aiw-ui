@@ -1,10 +1,11 @@
-import { Component, OnInit } from '@angular/core';
-import { Router, ActivatedRoute, Params } from '@angular/router';
-import { Subscription }   from 'rxjs';
+import { Component, OnInit } from '@angular/core'
+import { Router, ActivatedRoute, Params } from '@angular/router'
+import { Subscription }   from 'rxjs'
+import { map } from 'rxjs/operators'
 
-import { TagsService } from './tags.service';
-import { Tag } from './tag/tag.class';
-import { TitleService, AssetSearchService, AuthService, AssetService, FlagService } from '../shared';
+import { TagsService } from './tags.service'
+import { Tag } from './tag/tag.class'
+import { TitleService, AssetSearchService, AuthService, AssetService, FlagService } from '../shared'
 
 @Component({
   selector: 'ang-my-collections',

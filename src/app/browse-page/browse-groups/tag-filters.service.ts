@@ -1,5 +1,6 @@
 import { Injectable, EventEmitter } from '@angular/core'
 import { Subject } from 'rxjs'
+import { map } from 'rxjs/operators'
 
 /** Anything that involves managing/combining many filters should be kept here */
 @Injectable()

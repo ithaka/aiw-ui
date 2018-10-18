@@ -1,8 +1,9 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Router, ActivatedRoute, Params } from '@angular/router';
-import { Subscription }   from 'rxjs';
+import { Component, OnInit, OnDestroy } from '@angular/core'
+import { Router, ActivatedRoute, Params } from '@angular/router'
+import { Subscription }   from 'rxjs'
+import { map } from 'rxjs/operators'
 
-import { AssetService } from './../shared/assets.service';
+import { AssetService } from './../shared/assets.service'
 @Component({
   selector: 'ang-cluster-page',
   providers: [],

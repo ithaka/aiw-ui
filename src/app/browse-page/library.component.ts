@@ -1,14 +1,15 @@
-import { AssetFiltersService } from '../asset-filters/asset-filters.service';
-import { Component, OnInit } from '@angular/core';
-import { Router, ActivatedRoute, Params } from '@angular/router';
-import { Subscription }   from 'rxjs';
+import { AssetFiltersService } from '../asset-filters/asset-filters.service'
+import { Component, OnInit } from '@angular/core'
+import { Router, ActivatedRoute, Params } from '@angular/router'
+import { Subscription }   from 'rxjs'
+import { map } from 'rxjs/operators'
 
-import { AssetService } from './../shared/assets.service';
-import { AssetSearchService } from './../shared/asset-search.service';
-import { AuthService } from './../shared/auth.service';
-import { TagsService } from './tags.service';
-import { Tag } from './tag/tag.class';
-import { TitleService } from '../shared/title.service';
+import { AssetService } from './../shared/assets.service'
+import { AssetSearchService } from './../shared/asset-search.service'
+import { AuthService } from './../shared/auth.service'
+import { TagsService } from './tags.service'
+import { Tag } from './tag/tag.class'
+import { TitleService } from '../shared/title.service'
 
 import { Locker } from 'angular2-locker'
 

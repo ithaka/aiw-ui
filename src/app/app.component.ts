@@ -1,14 +1,15 @@
 /*
  * Angular 2 decorators and services
  */
-import { Component, ViewEncapsulation } from '@angular/core';
-import { Angulartics2GoogleAnalytics } from 'angulartics2/ga';
-import { Title } from '@angular/platform-browser';
-import { Router, NavigationStart, NavigationEnd } from '@angular/router';
-import { TranslateService } from '@ngx-translate/core';
+import { Component, ViewEncapsulation } from '@angular/core'
+import { Angulartics2GoogleAnalytics } from 'angulartics2/ga'
+import { Title } from '@angular/platform-browser'
+import { Router, NavigationStart, NavigationEnd } from '@angular/router'
+import { TranslateService } from '@ngx-translate/core'
+import { map } from 'rxjs/operators'
 
-import { AppConfig } from './app.service';
-import { ScriptService, FlagService } from './shared';
+import { AppConfig } from './app.service'
+import { ScriptService, FlagService } from './shared'
 /*
  * App Component
  * Top Level Component

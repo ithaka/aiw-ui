@@ -2,6 +2,7 @@ import { Component, Input, OnInit  } from '@angular/core'
 import * as Driver from '../../../../node_modules/driver.js/dist/driver.min.js'
 import { TourStep } from './tour.service'
 import { Router, NavigationStart } from '@angular/router'
+import { map } from 'rxjs/operators'
 import { Angulartics2 } from 'angulartics2'
 import { AuthService } from './..'
 

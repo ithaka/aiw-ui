@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core'
 import { Router, ActivatedRoute } from '@angular/router'
 import { Subscription } from 'rxjs'
+import { map } from 'rxjs/operators'
 
 import { TagFiltersService } from './tag-filters.service'
 

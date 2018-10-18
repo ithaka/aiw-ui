@@ -1,11 +1,12 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
-import { Subscription }   from 'rxjs';
+import { Component, OnInit, OnDestroy } from '@angular/core'
+import { Router, ActivatedRoute } from '@angular/router'
+import { Subscription }   from 'rxjs'
+import { map } from 'rxjs/operators'
 
 // Internal Dependencies
-import { AssetService, AuthService } from './../shared';
-import { ImageGroup, ImageGroupDescription, IgDownloadInfo, ImageGroupService, GroupService } from './../shared';
-import { TitleService } from '../shared/title.service';
+import { AssetService, AuthService } from './../shared'
+import { ImageGroup, ImageGroupDescription, IgDownloadInfo, ImageGroupService, GroupService } from './../shared'
+import { TitleService } from '../shared/title.service'
 
 @Component({
   selector: 'ang-image-group',

@@ -1,11 +1,12 @@
 import { Component } from '@angular/core'
 import { Router, ActivatedRoute } from '@angular/router'
 import { Subscription } from 'rxjs'
+import { map } from 'rxjs/operators'
 import { Angulartics2 } from 'angulartics2'
 
 import { AssetService } from '../shared/assets.service'
 import { AssetFiltersService } from '../asset-filters/asset-filters.service'
-import { AuthService, FlagService, InstitutionsService } from 'app/shared';
+import { AuthService, FlagService, InstitutionsService } from 'app/shared'
 
 declare var _satellite: any
 

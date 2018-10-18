@@ -1,4 +1,5 @@
 import { Subscription } from "rxjs"
+import { map } from 'rxjs/operators'
 import { Component, OnInit } from "@angular/core"
 import { Router } from "@angular/router"
 

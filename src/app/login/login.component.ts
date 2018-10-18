@@ -5,6 +5,7 @@ import { Location } from '@angular/common'
 import { Angulartics2 } from 'angulartics2'
 import { CompleterService, LocalData } from 'ng2-completer'
 import { BehaviorSubject, Observable, Subscription } from 'rxjs'
+import { map } from 'rxjs/operators'
 
 import { AppConfig } from '../app.service'
 import { AuthService, User, AssetService, FlagService } from './../shared'
