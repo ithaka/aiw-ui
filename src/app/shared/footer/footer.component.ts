@@ -48,15 +48,16 @@ export class Footer {
   ngOnInit() {
 
     this.subscriptions.push(
-      this._router.events.subscribe(e => {
+      this._router.events.pipe(
+      map(e => {
         if (e instanceof NavigationEnd) {
-            this.user = this._auth.getUser()
-            if (this._auth.isPublicOnly()) {
-              let index: number = this.links.indexOf('SUPPORT')
-              this.links[index] = "SUPPORT_UNAFFILIATED"
-            }
+          this.user = this._auth.getUser()
+          if (this._auth.isPublicOnly()) {
+            let index: number = this.links.indexOf('SUPPORT')
+            this.links[index] = "SUPPORT_UNAFFILIATED"
+          }
         }
-      })
+      })).subscribe()
     )
 
     // Workaround: Make sure Google translate has loaded

@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http'
 import { Injectable } from '@angular/core'
-import { map } from 'rxjs/operators'
+import { map, take } from 'rxjs/operators'
 
 import { AuthService } from 'app/shared/auth.service'
 
@@ -17,14 +17,14 @@ export class LogService {
       [this._auth.getUrl(), 'v1', 'log'].join('/'),
       message,
       { withCredentials: true }
-    )
-    .take(1)
-    .subscribe((res) => {
-      console.log(res)
-    }, (err) => {
-      console.error(err)
-    })
-  }
+    ).pipe(
+      take(1),
+      map(res => {
+        console.log(res)
+      }, (err) => {
+        console.error(err)
+      })).subscribe()
+    }
 }
 
 interface LogResponse {
