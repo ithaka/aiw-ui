@@ -215,42 +215,42 @@ export class NewIgModal implements OnInit {
       // create the group using the group service
       this._group.create(group).pipe(
         map(data => {
-            this.isLoading = false;
-            this.newGroup = data;
-            this.serviceResponse.success = true;
-            this._assets.clearSelectMode.next(true);
+          this.isLoading = false
+          this.newGroup = data
+          this.serviceResponse.success = true
+          this._assets.clearSelectMode.next(true)
 
-            // if an Artstor user, make sure the public property is set correctly
-            if (this.isArtstorUser) {
-              this.changeGlobalSetting(this.newGroup, formValue.artstorPermissions == 'global')
-            }
-
-            if (this.copyIG && this.ig && this.ig.id) {
-              // Log copy group event into Captain's Log
-              this._log.log({
-                eventType: 'artstor_copy_group',
-                additional_fields: {
-                  'source_group_id': this.ig.id,
-                  'group_id': this.newGroup.id
-                }
-              })
-            }
-            else {
-              // Log create group event into Captain's Log
-              this._log.log({
-                eventType: 'artstor_create_group',
-                additional_fields: {
-                  'group_id': this.newGroup.id
-                }
-              })
-            }
-          },
-          error => {
-            console.error(error);
-            this.serviceResponse.failure = true;
-            this.isLoading = false;
+          // if an Artstor user, make sure the public property is set correctly
+          if (this.isArtstorUser) {
+            this.changeGlobalSetting(this.newGroup, formValue.artstorPermissions == 'global')
           }
-        )).subscribe()
+
+          if (this.copyIG && this.ig && this.ig.id) {
+            // Log copy group event into Captain's Log
+            this._log.log({
+              eventType: 'artstor_copy_group',
+              additional_fields: {
+                'source_group_id': this.ig.id,
+                'group_id': this.newGroup.id
+              }
+            })
+          }
+          else {
+            // Log create group event into Captain's Log
+            this._log.log({
+              eventType: 'artstor_create_group',
+              additional_fields: {
+                'group_id': this.newGroup.id
+              }
+            })
+          }
+        },
+        error => {
+          console.error(error)
+          this.serviceResponse.failure = true
+          this.isLoading = false;
+        }
+      )).subscribe()
     }
   }
 

@@ -1,5 +1,5 @@
 import { Subscription } from 'rxjs'
-import { map } from 'rxjs/operators'
+import { map, take } from 'rxjs/operators'
 import { ActivatedRoute, Router } from '@angular/router'
 import { Component, OnInit, Output, EventEmitter, AfterViewInit } from '@angular/core'
 import { Angulartics2 } from 'angulartics2'
@@ -238,104 +238,105 @@ export class SearchModal implements OnInit, AfterViewInit {
    * Load filters (Geo, Collection, Collection Type)
    */
   private loadFilters(): void {
-    this._search.getFacets().take(1)
-      .subscribe(data => {
+    this._search.getFacets().pipe(
+    take(1),
+    map(data => {
 
-        // Process through "facets" & construct the availableFilters array, based on the defined interfaces, from facets response
-        for (let facetKey in data['facets']) {
-          const facet = data['facets'][facetKey]
+      // Process through "facets" & construct the availableFilters array, based on the defined interfaces, from facets response
+      for (let facetKey in data['facets']) {
+        const facet = data['facets'][facetKey]
 
-          if ((facet.name === 'collectiontypes' && this.showCollectionType) || facet.name !== 'collectiontypes') {
-            // Construct Facet Group
-            let facetGroup: FacetGroup = {
-              name: facet.name,
-              values: []
-            }
-
-            // Prune any facets not available to the user (ex. Private Collections on SAHARA)
-            for (let i = facet.values.length - 1; i >= 0; i--){
-              let facetName = facet.values[i].name
-              if (!this.showPrivateCollections && facetName.match(/3|6/)) { // NOTE: 3 & 6 are Private Collections names
-                facet.values.splice(i, 1)
-              }
-              if (this._auth.isPublicOnly() && facet.name == 'collectiontypes' && !(facetName.match(/5/))) { // For public user, only show public collection in collectiontype filter, 5 is Public Collection name
-                facet.values.splice(i, 1)
-              }
-              else if (facetName && facetName.length > 0){ // Some filters return empty strings, avoid those
-                // Push filter objects to Facet Group 'values' Array
-                let facetObject: FacetObject = {
-                  checked: false,
-                  name: facet.name === 'collectiontypes' ? this.filterNameMap['collectiontypes'][facetName] : facetName,
-                  count: facet.values[i].count,
-                  value: facetName,
-                  children: []
-                }
-
-                // institutional collection counts are wrong, so assign them a count of 0 to indicate it shouldn't be displayed
-                facetObject.value == '2' && (facetObject.count = 0)
-
-                facetGroup.values.push( facetObject )
-              }
-            }
-            facetGroup.values.reverse()
-            this.availableFilters.push(facetGroup)
-          }
-        }
-
-        // Process "hierarchies2" & create Geo Facet Group & push it to available filters
-        for (let hierFacet in data['hierarchies2']) {
-          let topObj = this._assetFilters.generateHierFacets(data['hierarchies2'][hierFacet].children, 'geography')
-
-          let geoFacetGroup: FacetGroup = {
-            name: 'geography',
+        if ((facet.name === 'collectiontypes' && this.showCollectionType) || facet.name !== 'collectiontypes') {
+          // Construct Facet Group
+          let facetGroup: FacetGroup = {
+            name: facet.name,
             values: []
           }
 
-          for (let geoObj of topObj){
-            let geoFacetObj: FacetObject = {
-              checked: false,
-              name: geoObj.name,
-              count: geoObj.count,
-              value: geoObj.efq,
-              children: []
+          // Prune any facets not available to the user (ex. Private Collections on SAHARA)
+          for (let i = facet.values.length - 1; i >= 0; i--){
+            let facetName = facet.values[i].name
+            if (!this.showPrivateCollections && facetName.match(/3|6/)) { // NOTE: 3 & 6 are Private Collections names
+              facet.values.splice(i, 1)
             }
-
-            for (let child of geoObj.children){
-              let geoChildFacetObj: FacetObject = {
+            if (this._auth.isPublicOnly() && facet.name == 'collectiontypes' && !(facetName.match(/5/))) { // For public user, only show public collection in collectiontype filter, 5 is Public Collection name
+              facet.values.splice(i, 1)
+            }
+            else if (facetName && facetName.length > 0){ // Some filters return empty strings, avoid those
+              // Push filter objects to Facet Group 'values' Array
+              let facetObject: FacetObject = {
                 checked: false,
-                name: child.name,
-                count: child.count,
-                value: child.efq
+                name: facet.name === 'collectiontypes' ? this.filterNameMap['collectiontypes'][facetName] : facetName,
+                count: facet.values[i].count,
+                value: facetName,
+                children: []
               }
 
-              geoFacetObj.children.push( geoChildFacetObj )
+              // institutional collection counts are wrong, so assign them a count of 0 to indicate it shouldn't be displayed
+              facetObject.value == '2' && (facetObject.count = 0)
+
+              facetGroup.values.push( facetObject )
             }
-            geoFacetGroup.values.push( geoFacetObj )
           }
-          this.availableFilters.push( geoFacetGroup )
+          facetGroup.values.reverse()
+          this.availableFilters.push(facetGroup)
+        }
+      }
+
+      // Process "hierarchies2" & create Geo Facet Group & push it to available filters
+      for (let hierFacet in data['hierarchies2']) {
+        let topObj = this._assetFilters.generateHierFacets(data['hierarchies2'][hierFacet].children, 'geography')
+
+        let geoFacetGroup: FacetGroup = {
+          name: 'geography',
+          values: []
         }
 
-        // Fetch institutional collections and add them as children of institutional collectiontype filter
-        this._assets.getCollectionsList( 'institution' )
-          .toPromise()
-          .then((data) => {
-            if (data && data['Collections']) {
-              for (let collection of data['Collections']){
-                let colFacetObj: FacetObject = {} as FacetObject
-                colFacetObj.checked = false
-                colFacetObj.name = collection.collectionname
-                colFacetObj.value = collection.collectionid
-                if (this.availableFilters[1].values[2])
-                  this.availableFilters[1].values[2].children.push( colFacetObj )
-              }
-            } else {
-              throw new Error('no Collections returned in data')
-            }
-            this.loadAppliedFiltersFromURL()
-          })
+        for (let geoObj of topObj){
+          let geoFacetObj: FacetObject = {
+            checked: false,
+            name: geoObj.name,
+            count: geoObj.count,
+            value: geoObj.efq,
+            children: []
+          }
 
-          this.loadingFilters = false
-      })
+          for (let child of geoObj.children){
+            let geoChildFacetObj: FacetObject = {
+              checked: false,
+              name: child.name,
+              count: child.count,
+              value: child.efq
+            }
+
+            geoFacetObj.children.push( geoChildFacetObj )
+          }
+          geoFacetGroup.values.push( geoFacetObj )
+        }
+        this.availableFilters.push( geoFacetGroup )
+      }
+
+      // Fetch institutional collections and add them as children of institutional collectiontype filter
+      this._assets.getCollectionsList( 'institution' )
+        .toPromise()
+        .then((data) => {
+          if (data && data['Collections']) {
+            for (let collection of data['Collections']){
+              let colFacetObj: FacetObject = {} as FacetObject
+              colFacetObj.checked = false
+              colFacetObj.name = collection.collectionname
+              colFacetObj.value = collection.collectionid
+              if (this.availableFilters[1].values[2])
+                this.availableFilters[1].values[2].children.push( colFacetObj )
+            }
+          } else {
+            throw new Error('no Collections returned in data')
+          }
+          this.loadAppliedFiltersFromURL()
+        })
+
+        this.loadingFilters = false
+    })).subscribe()
 
   }
 
@@ -354,36 +355,35 @@ export class SearchModal implements OnInit, AfterViewInit {
     //       });
 
     this.subscriptions.push(
-      this._auth.getInstitution().subscribe(
-        (institutionObj) => {
+      this._auth.getInstitution().pipe(
+        map(institutionObj => {
           console.log(institutionObj)
           if (institutionObj['shortName']) {
-              this.instName = institutionObj['shortName'];
+              this.instName = institutionObj['shortName']
           }
         },
         (err) => {
           console.log('Nav failed to load Institution information', err)
         }
-      )
-    );
+      )).subscribe()
+    )
 
     // Get institutional collections
     this.subscriptions.push(
-      this._assets.getCollectionsList('institution')
-        .subscribe(
-          (data)  => {
-              this.colTree.push({
-                id: 'allSS',
-                name: 'Institutional Collections',
-                collections: data['Collections']
-              });
-          },
-          (err) => {
-            if (err && err.status != 401 && err.status != 403) {
-              console.error(err)
-            }
+      this._assets.getCollectionsList('institution').pipe(
+        map(data => {
+            this.colTree.push({
+              id: 'allSS',
+              name: 'Institutional Collections',
+              collections: data['Collections']
+            });
+        },
+        (err) => {
+          if (err && err.status != 401 && err.status != 403) {
+            console.error(err)
           }
-        )
+        }
+      )).subscribe()
     )
   }
 
