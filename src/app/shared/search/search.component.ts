@@ -1,14 +1,11 @@
-import { Component, OnInit, OnDestroy, Input, Output } from '@angular/core';
-import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
-import { Angulartics2 } from 'angulartics2';
-import { Subscription }   from 'rxjs';
+import { Component, OnInit, OnDestroy, Input, Output } from '@angular/core'
+import { Router, ActivatedRoute, NavigationEnd } from '@angular/router'
+import { Angulartics2 } from 'angulartics2'
 
 // Project dependencies
-import { AssetService } from '../../shared';
-import { AssetFiltersService } from '../../asset-filters/asset-filters.service';
-import { Params } from '@angular/router/src/shared';
-import { PACKAGE_ROOT_URL } from '@angular/core/src/application_tokens';
-import { AuthService } from '../auth.service';
+import { AssetService } from '../../shared/assets.service'
+import { AssetFiltersService } from '../../asset-filters/asset-filters.service'
+import { AuthService } from '../auth.service'
 
 @Component({
   selector: 'ang-search',
