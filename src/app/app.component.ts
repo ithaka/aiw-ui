@@ -6,7 +6,7 @@ import { Angulartics2GoogleAnalytics } from 'angulartics2/ga'
 import { Title } from '@angular/platform-browser'
 import { Router, NavigationStart, NavigationEnd } from '@angular/router'
 import { TranslateService } from '@ngx-translate/core'
-import { map } from 'rxjs/operators'
+import { map, take } from 'rxjs/operators'
 
 import { AppConfig } from './app.service'
 import { ScriptService, FlagService } from './shared'
@@ -63,7 +63,7 @@ export class App {
     this.title = this._app.config.pageTitle
 
     // Set metatitle to "Artstor" except for asset page where metatitle is {{ Asset Title }}
-    router.events.subscribe(event => {
+    router.events.pipe(map(event => {
       if (event instanceof NavigationStart) {
         // focus on the wrapper of the "skip to main content link" everytime new page is loaded
         let mainEl = <HTMLElement>(document.getElementById('skip'))
@@ -107,19 +107,19 @@ export class App {
           }
         }
       }
-    })
+    })).subscribe()
 
-    this._flags.getFlagsFromService()
-    .take(1)
-    .subscribe((flags) => {
-      // don't need to handle successful response here - this just initiates the flags
-      console.log(flags)
-      // Set skybanner
-      this.showSkyBanner = flags.bannerShow
-      this.skyBannerCopy = flags.bannerCopy
-    }, (err) => {
-      console.error(err)
-    })
+    this._flags.getFlagsFromService().pipe(
+      take(1),
+      map(flags => {
+        // don't need to handle successful response here - this just initiates the flags
+        console.log(flags)
+        // Set skybanner
+        this.showSkyBanner = flags.bannerShow
+        this.skyBannerCopy = flags.bannerCopy
+      }, (err) => {
+        console.error(err)
+    })).subscribe()
   }
 
   ngOnInit() {
