@@ -28,9 +28,10 @@ export class GeneralSearchComponent implements OnInit {
       this.term = this.init
     if (this.updateSearchTerm) {
       this.subscriptions.push(
-        this.updateSearchTerm.subscribe((term) => {
+        this.updateSearchTerm.pipe(
+          map(term => {
           this.term = term
-        })
+        })).subscribe()
       )
     }
   }
