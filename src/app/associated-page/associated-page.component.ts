@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core'
 import { Router, ActivatedRoute } from '@angular/router'
 import { Subscription }   from 'rxjs'
-import { map } from 'rxjs/operators'
+import { map, take } from 'rxjs/operators'
 
 import { AuthService } from './../shared/auth.service'
 import { AssetService } from './../shared/assets.service'
@@ -37,7 +37,8 @@ export class AssociatedPage implements OnInit, OnDestroy {
    */
   ngOnInit() {
     this.subscriptions.push(
-      this.route.params.subscribe((routeParams) => {
+      this.route.params.pipe(
+        map(routeParams => {
         this.objectId = routeParams['objectId'];
         let params = Object.assign({}, routeParams);
         // If a page number isn't set, reset to page 1!
@@ -46,17 +47,17 @@ export class AssociatedPage implements OnInit, OnDestroy {
         }
         if (this.objectId) {
           this._assets.queryAll(params);
-          this._metadata.getMetadata(this.objectId)
-            .take(1)
-            .subscribe((res) => {
+          this._metadata.getMetadata(this.objectId).pipe(
+            take(1),
+            map(res => {
               if (res.metadata && res.metadata.length > 0 && res.metadata[0].title) {
                 this.assetTitle = res.metadata[0].title
               }
             }, (err) => {
               console.error(err)
-            })
+            })).subscribe()
         }
-      })
+      })).subscribe()
     );
   } // OnInit
 
