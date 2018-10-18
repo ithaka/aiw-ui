@@ -83,14 +83,14 @@ export class AssetFiltersService {
         private http: HttpClient,
         private _auth: AuthService
     ){
-        this._storage = locker.useDriver(Locker.DRIVERS.LOCAL);
+        this._storage = locker.useDriver(Locker.DRIVERS.LOCAL)
 
         this.subscriptions.push(
-            this._auth.getInstitution().subscribe(
-                institution => {
-                    this.filterNameMap['collectiontypes'][2] = this.filterNameMap['collectiontypes'][4] = institution && institution.shortName ? institution.shortName + ' Collections' : 'Institutional Collections';
-                }
-            )
+          this._auth.getInstitution().pipe(
+              map(institution => {
+                  this.filterNameMap['collectiontypes'][2] = this.filterNameMap['collectiontypes'][4] = institution && institution.shortName ? institution.shortName + ' Collections' : 'Institutional Collections'
+              }
+          )).subscribe()
         )
     }
 

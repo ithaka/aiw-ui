@@ -2,7 +2,7 @@ import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, Renderer } f
 import { ActivatedRoute, NavigationStart, Params, Router } from '@angular/router'
 
 import { BehaviorSubject, Subscription } from 'rxjs'
-import { map } from 'rxjs/operators'
+import { map, take } from 'rxjs/operators'
 import { Locker } from 'angular2-locker'
 import { AppConfig } from '../app.service'
 
@@ -200,8 +200,8 @@ export class AssetGrid implements OnInit, OnDestroy {
 
     // Subscribe to asset search params
     this.subscriptions.push(
-      this.route.params
-      .subscribe((params: Params) => {
+      this.route.params.pipe(
+      map((params: Params) => {
         if (params && params['featureFlag']){
           this._flags[params['featureFlag']] = true
         }
@@ -264,26 +264,27 @@ export class AssetGrid implements OnInit, OnDestroy {
         }
 
         this.isLoading = true;
-      })
+      })).subscribe()
     );
 
     // Subscribe to pagination values
     this.subscriptions.push(
-      this._assets.pagination.subscribe((pagination: any) => {
-        this.pagination.page = parseInt(pagination.page);
-        this.pagination.size = parseInt(pagination.size);
+      this._assets.pagination.pipe(
+        map((pagination: any) => {
+          this.pagination.page = parseInt(pagination.page)
+          this.pagination.size = parseInt(pagination.size)
 
-        const MAX_RESULTS_COUNT: number = APP_CONST.MAX_RESULTS
-        if (this.assetCount) {
-          let total = this.hasMaxAssetLimit && this.assetCount > MAX_RESULTS_COUNT ? MAX_RESULTS_COUNT : this.assetCount
-          this.pagination.totalPages = Math.floor((total + this.pagination.size - 1) / this.pagination.size);
-        } else {
-          this.pagination.totalPages = parseInt(pagination.totalPages);
-        }
+          const MAX_RESULTS_COUNT: number = APP_CONST.MAX_RESULTS
+          if (this.assetCount) {
+            let total = this.hasMaxAssetLimit && this.assetCount > MAX_RESULTS_COUNT ? MAX_RESULTS_COUNT : this.assetCount
+            this.pagination.totalPages = Math.floor((total + this.pagination.size - 1) / this.pagination.size)
+          } else {
+            this.pagination.totalPages = parseInt(pagination.totalPages)
+          }
 
-        // last page is a partial page
-        this.isPartialPage = (this.pagination.page * this.pagination.size) >= (MAX_RESULTS_COUNT - 1)
-      })
+          // last page is a partial page
+          this.isPartialPage = (this.pagination.page * this.pagination.size) >= (MAX_RESULTS_COUNT - 1)
+      })).subscribe()
     );
 
     /**
@@ -292,9 +293,9 @@ export class AssetGrid implements OnInit, OnDestroy {
      * - allResults maintains array of results which persists outside of this component
      */
     this.subscriptions.push(
-      this._assets.allResults.subscribe(
-        (allResults) => {
-          if (this.activeSort.index && this.activeSort.index == '3'){
+      this._assets.allResults.pipe(
+        map(allResults => {
+          if (this.activeSort.index && this.activeSort.index == '3') {
             this.sortByDateTotal =  allResults.total
             this._search.search(this.UrlParams, this.searchTerm, '0').forEach((res) => {
               this.excludedAssetsCount = res.total - this.sortByDateTotal
@@ -376,7 +377,7 @@ export class AssetGrid implements OnInit, OnDestroy {
         (error) => {
           console.error(error)
         }
-      )
+      )).subscribe()
     );
 
     /**
@@ -385,8 +386,8 @@ export class AssetGrid implements OnInit, OnDestroy {
      * - (Nav Menu modifies selection)
      */
     this.subscriptions.push(
-      this._assets.selection.subscribe(
-        selectedAssets => {
+      this._assets.selection.pipe(
+        map(selectedAssets => {
           // Set selected assets
           this.selectedAssets = selectedAssets;
           // Trigger Edit Mode if items are being added to the selection
@@ -397,22 +398,23 @@ export class AssetGrid implements OnInit, OnDestroy {
         error => {
           console.error(error);
         }
-      )
+      )).subscribe()
     );
 
     this.subscriptions.push(
-      this._assets.selectModeToggle.subscribe(() => {
+      this._assets.selectModeToggle.pipe(map(() => {
         this.toggleEditMode()
-      })
+      })).subscribe()
     )
 
     // Clear all selected assets and close edit mode
     this.subscriptions.push(
-      this._assets.clearSelectMode.subscribe( value => {
-        if (value){
-          this.deactivateSelectMode();
-        }
-      })
+      this._assets.clearSelectMode.pipe(
+        map(value => {
+          if (value){
+            this.deactivateSelectMode();
+          }
+      })).subscribe()
     )
   }
 
@@ -596,15 +598,14 @@ export class AssetGrid implements OnInit, OnDestroy {
 
     this.ig.items = newItemsArray;
 
-    this._groups.update(this.ig)
-      .take(1)
-      .subscribe(
-        data => {
+    this._groups.update(this.ig).pipe(
+      take(1),
+      map(data => {
           this.cancelReorder();
         }, error => {
           console.error(error);
           this.cancelReorder();
-        });
+    })).subscribe()
   }
 
   /**
@@ -730,15 +731,14 @@ export class AssetGrid implements OnInit, OnDestroy {
       }
     }
     // Save removal to Group
-    this._groups.update(this.ig)
-      .take(1)
-      .subscribe(
-        data => {
+    this._groups.update(this.ig).pipe(
+      take(1),
+      map(data => {
           // Reload group after removing assets
           window.location.reload()
         }, error => {
           console.error(error);
-        });
+    })).subscribe()
   }
 
   private goToAsset(asset: any): void{
