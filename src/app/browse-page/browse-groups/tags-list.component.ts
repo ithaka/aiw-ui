@@ -22,9 +22,10 @@ export class TagsListComponent implements OnInit {
 
   ngOnInit() {
     this.subscriptions.push(
-      this._tagFilters.filterKeys.subscribe((filters) => {
+      this._tagFilters.filterKeys.pipe(
+      map(filters => {
         this.updateUrl(filters)
-      })
+      })).subscribe()
     )
   }
 

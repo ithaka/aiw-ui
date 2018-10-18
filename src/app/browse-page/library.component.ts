@@ -109,8 +109,8 @@ export class LibraryComponent implements OnInit {
     }
 
     this.subscriptions.push(
-      this.route.params
-      .subscribe((params: Params) => {
+      this.route.params.pipe(
+      map((params: Params) => {
         this.loading = true
 
         if (params && params['viewId']){
@@ -211,8 +211,9 @@ export class LibraryComponent implements OnInit {
             }
           })
         }
-      })
-    );
+      })).subscribe()
+    )
+
   } // OnInit
 
   private clearFacets(): void {

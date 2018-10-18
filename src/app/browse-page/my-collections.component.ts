@@ -51,8 +51,8 @@ export class MyCollectionsComponent implements OnInit {
     this._title.setSubtitle('Browse My Collections')
 
     this.subscriptions.push(
-      this.route.params
-      .subscribe((params: Params) => {
+      this.route.params.pipe(
+      map((params: Params) => {
           if (params) {
             if (params['viewId']){
                 this.selectedBrowseId = params['viewId'];
@@ -67,17 +67,17 @@ export class MyCollectionsComponent implements OnInit {
                 this.showEditPCModal = params['upload']
             }
           }
-      })
+      })).subscribe()
     )
 
     // Subscribe to User object updates
     this.subscriptions.push(
-      this._auth.currentUser.subscribe(
-        (userObj) => {
-            this.isLoggedIn = userObj.isLoggedIn
+      this._auth.currentUser.pipe(
+        map(userObj => {
+          this.isLoggedIn = userObj.isLoggedIn
         },
         (err) => { console.error(err) }
-      )
+      )).subscribe()
     )
 
     if (this.isLoggedIn) { // If user is logged-in get data for user's personal collections
