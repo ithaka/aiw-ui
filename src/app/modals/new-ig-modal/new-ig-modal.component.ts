@@ -3,7 +3,7 @@ import { Component, EventEmitter, HostListener, Input, OnInit, Output } from '@a
 import { formGroupNameProvider } from '@angular/forms/src/directives/reactive_directives/form_group_name'
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms'
 import { Subscription } from 'rxjs'
-import { map } from 'rxjs/operators'
+import { map, take } from 'rxjs/operators'
 import { Angulartics2 } from 'angulartics2'
 
 // Project dependencies
@@ -93,15 +93,15 @@ export class NewIgModal implements OnInit {
     if (this.selectedAssets.length < 1) {
       // Subscribe to asset selection
       this.subscriptions.push(
-        this._assets.selection.subscribe(
-          assets => {
-            this.selectedAssets = assets;
-          },
-          error => {
-            console.error(error);
-          }
-        )
-      );
+        this._assets.selection.pipe(
+        map(assets => {
+          this.selectedAssets = assets
+        },
+        error => {
+          console.error(error)
+        }
+        )).subscribe()
+      )
     }
   }
 
@@ -131,10 +131,9 @@ export class NewIgModal implements OnInit {
         if (this.tagLastSearched != this.tagSuggestTerm) {
           this.tagLastSearched = this.tagSuggestTerm
 
-          this._group.getTagSuggestions(this.tagSuggestTerm)
-          .take(1)
-          .subscribe(
-            data => {
+          this._group.getTagSuggestions(this.tagSuggestTerm).pipe(
+            take(1),
+            map(data => {
               if (data['success']) {
                 this.tagSuggestions = data['tags']
                 // Trigger tag input to re-assess autocomplete array
@@ -144,7 +143,7 @@ export class NewIgModal implements OnInit {
             err => {
               console.error(err)
             }
-          )
+          )).subscribe()
         }
       }, 700)
     }
@@ -173,17 +172,20 @@ export class NewIgModal implements OnInit {
      *  only funky thing here is that sometimes we get the list of asset ids from the image group, and sometimes from selected assets
      *  that depends on whether you're copying an image group or making a new one
      */
-    let group = this.util.prepareGroup(formValue, igDescValue, this.copyIG || this.editIG ? this.ig.items : this.selectedAssets, this._auth.getUser(), this.ig)
+    let group = this.util.prepareGroup(
+      formValue, igDescValue, this.copyIG || this.editIG ? this.ig.items : this.selectedAssets,
+      this._auth.getUser(),
+      this.ig
+    )
 
-    if (this.editIG){
+    if (this.editIG) {
       // Editing group
       this._angulartics.eventTrack.next({ action: 'editGroup', properties: { category: this._auth.getGACategory(), label: group.id }});
 
       group.id = this.ig.id // need this for the update call
 
-      this._group.update(group)
-        .subscribe(
-          data => {
+      this._group.update(group).pipe(
+        map(data => {
             this.isLoading = false;
             this.newGroup = data;
             this.serviceResponse.success = true;
@@ -194,12 +196,11 @@ export class NewIgModal implements OnInit {
             this.serviceResponse.failure = true;
             this.isLoading = false;
           }
-        );
+        )).subscribe()
       // if an Artstor user, make sure the public property is set correctly
       if (this.isArtstorUser) {
         this.changeGlobalSetting(group, formValue.artstorPermissions == 'global')
       }
-
     }
     else {
       // analytics events
@@ -212,9 +213,8 @@ export class NewIgModal implements OnInit {
       }
 
       // create the group using the group service
-      this._group.create(group)
-        .subscribe(
-          data => {
+      this._group.create(group).pipe(
+        map(data => {
             this.isLoading = false;
             this.newGroup = data;
             this.serviceResponse.success = true;
@@ -250,7 +250,7 @@ export class NewIgModal implements OnInit {
             this.serviceResponse.failure = true;
             this.isLoading = false;
           }
-        );
+        )).subscribe()
     }
   }
 
@@ -328,13 +328,15 @@ export class NewIgModal implements OnInit {
    * @param isPublic the value to set the public property to
    */
   private changeGlobalSetting(group: ImageGroup, isPublic: boolean): void {
-    this._group.updateIgPublic(group.id, isPublic)
-      .take(1)
-      .subscribe((res) => {
+
+    this._group.updateIgPublic(group.id, isPublic).pipe(
+      take(1),
+      map(res => {
         // not really sure what to do here?
       }, (err) => {
         console.error(err)
         // also not really sure what to do here...
-      })
+    })).subscribe()
   }
+
 }
