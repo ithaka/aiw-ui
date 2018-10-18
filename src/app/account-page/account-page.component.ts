@@ -59,9 +59,11 @@ export class AccountPage implements OnInit {
     }
 
     this.subscriptions.push(
-      this._auth.getInstitution().subscribe(institutionObj => {
-        this.institutionObj = institutionObj
-      })
+      this._auth.getInstitution().pipe(
+        map(institutionObj => {
+          this.institutionObj = institutionObj
+        })
+      ).subscribe()
     )
 
     // Issues with unauthorized access to the service, and the fact that the data NEVER changes, led us to hardcode these values:
