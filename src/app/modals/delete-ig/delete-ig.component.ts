@@ -40,13 +40,14 @@ export class DeleteIgModal implements OnInit {
 
   deleteImageGroup(): void {
 
-    this._group.delete(this.igId).subscribe(res => {
-      if (res){
-        // Clear Group Assets locally
-        this._assets.clearAssets();
-        this.groupDeleted = true;
-      }
-    });
+    this._group.delete(this.igId).pipe(
+      map(res => {
+        if (res){
+          // Clear Group Assets locally
+          this._assets.clearAssets();
+          this.groupDeleted = true;
+        }
+    })).subscribe()
   }
 
 }

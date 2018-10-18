@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core'
 import { Subscription } from 'rxjs'
-import { map } from 'rxjs/operators'
+import { map, take } from 'rxjs/operators'
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms'
 
 
@@ -111,32 +111,33 @@ export class EditPersonalCollectionModal implements OnInit {
 
     this.uiMessages = {}
     this.metadataUpdateLoading = true
+    // TODO Look into response of .map and map() from RXJS updates
     this._pc.updatepcImageMetadata(formData, String(this.selectedAsset.ssid))
     .map((res) => {
       this.metadataUpdateLoading = false
       return res
-    })
-    .take(1)
-    .subscribe((res) => {
-      let updateItem = res.results.find((result) => {
-        return result.ssid == String(this.selectedAsset.ssid)
-      })
-
-      if (updateItem.success) {
-        this.uiMessages.metadataUpdateSuccess = true
-        // store this asset in local storage to be loaded later
-        this._localPC.setAsset({
-          ssid: this.selectedAsset.ssid, // typescript doesn't know that javascript can convert numbers to strings :(
-          asset_metadata: formData
+    }).pipe(
+      take(1),
+      map(res => {
+        let updateItem = res.results.find((result) => {
+          return result.ssid == String(this.selectedAsset.ssid)
         })
-      } else {
-        this.uiMessages.metadataUpdateFailure = true
-      }
 
-    }, (err) => {
-      this.uiMessages.metadataUpdateFailure = true
-      console.error(err)
-    })
+        if (updateItem.success) {
+          this.uiMessages.metadataUpdateSuccess = true
+          // store this asset in local storage to be loaded later
+          this._localPC.setAsset({
+            ssid: this.selectedAsset.ssid, // typescript doesn't know that javascript can convert numbers to strings :(
+            asset_metadata: formData
+          })
+        } else {
+          this.uiMessages.metadataUpdateFailure = true
+        }
+
+      }, (err) => {
+        this.uiMessages.metadataUpdateFailure = true
+        console.error(err)
+    })).subscribe()
   }
 
   /**
@@ -160,16 +161,16 @@ export class EditPersonalCollectionModal implements OnInit {
     .map((res) => {
       this.deleteLoading = false
       return res
-    })
-    .take(1)
-    .subscribe((res) => {
+    }).pipe(
+    take(1),
+    map((res) => {
       this.uiMessages.imgDeleteSuccess = true
       this.removeSelectedAsset()
       this.clearSelectedAsset()
     }, (err) => {
       console.error(err)
       this.uiMessages.imgDeleteFailure = true
-    })
+    })).subscribe()
   }
 
   private handleNewAssetUpload(item: PersonalCollectionUploadAsset): void {

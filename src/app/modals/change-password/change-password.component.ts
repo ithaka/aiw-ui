@@ -1,7 +1,7 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core'
 import { FormBuilder, FormGroup, Validators } from '@angular/forms'
 import { AuthService } from '../../shared'
-import { map } from 'rxjs/operators'
+import { map, take } from 'rxjs/operators'
 
 @Component({
   selector: 'ang-change-password-modal',
@@ -55,9 +55,9 @@ export class ChangePasswordModal implements OnInit {
 
     this.changePassLoading = true;
 
-    this._auth.changePassword(formValue.oldPass, formValue.newPass)
-      .take(1)
-      .subscribe((res) => {
+    this._auth.changePassword(formValue.oldPass, formValue.newPass).pipe(
+      take(1),
+      map(res => {
         this.changePassLoading = false;
 
         switch (res.statusCode) {
@@ -70,6 +70,6 @@ export class ChangePasswordModal implements OnInit {
         this.changePassLoading = false;
         this.serviceResponses.generalError = true;
         console.error(err);
-      });
+      })).subscribe()
   }
 }
