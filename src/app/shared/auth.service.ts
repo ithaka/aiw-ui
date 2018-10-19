@@ -8,8 +8,8 @@ import {
   ActivatedRouteSnapshot,
   RouterStateSnapshot
 } from '@angular/router'
-import { Observable, BehaviorSubject, Subject } from 'rxjs'
-import { map, take } from 'rxjs/operators'
+import { Observable, BehaviorSubject, Subject, from } from 'rxjs'
+import { map, take, catchError } from 'rxjs/operators'
 
 // Project dependencies
 import { AppConfig } from '../app.service'
@@ -18,6 +18,7 @@ import { AppConfig } from '../app.service'
 import { IdleWatcherUtil } from './idle-watcher'
 import {Idle, DEFAULT_INTERRUPTSOURCES} from '@ng-idle/core'
 import { FlagService } from './flag.service'
+import { error } from '@angular/compiler/src/util';
 
 /**
  * Controls authorization through IP address and locally stored user object
@@ -224,7 +225,7 @@ export class AuthService implements CanActivate {
   }
 
   private refreshUserSessionInProgress: boolean = false
-  public refreshUserSession(triggerSessionExpModal?: boolean): void {
+  public refreshUserSession(triggerSessionExpModal?: boolean) {
     // cancel out if we're currently getting the user session
     if (this.refreshUserSessionInProgress && !triggerSessionExpModal) { return }
 
@@ -232,15 +233,15 @@ export class AuthService implements CanActivate {
     this.refreshUserSessionInProgress = true
     this.getUserInfo(triggerSessionExpModal).pipe(
       take(1),
-      .toPromise()
-      .then(res => {
+      //toPromise()
+      map((res, err) => {
         this.refreshUserSessionInProgress = false
         console.info('Access Token refreshed <3')
-      })
-      .catch(err => {
-        this.refreshUserSessionInProgress = false
-        console.error('Access Token refresh failed </3')
-      })
+
+      // catchError(err => {
+      //   this.refreshUserSessionInProgress = false
+      //   console.error('Access Token refresh failed </3')
+      })).subscribe()
   }
 
   private expireSession(): void {
@@ -504,8 +505,8 @@ export class AuthService implements CanActivate {
     // If user object doesn't exist, try to get one!
     return new Observable(observer => {
       this.http
-      .get(this.genUserInfoUrl(), options)
-      .map(
+      .get(this.genUserInfoUrl(), options).pipe(
+      map(
         (data)  => {
           let user = this.decorateValidUser(data)
           // Track whether or not user object has been refreshed since app opened
@@ -532,15 +533,15 @@ export class AuthService implements CanActivate {
             }
           }
         }
-      ).pipe(
+      )).pipe(
       take(1),
-      map((res) => {
+      map(res => {
         // CanActivate is not handling the Observable value properly,
         // ... so we do an extra redirect in here
         if (res === false) {
           this._router.navigate(['/login'])
         }
-        observer.next(res)
+        observer.next() // observer.next(res) BRETT TODO
       }, err => {
         this._router.navigate(['/login'])
         observer.next(false)
@@ -556,9 +557,8 @@ export class AuthService implements CanActivate {
     let options = { headers: this.userInfoHeader, withCredentials: true };
 
     return this.http
-      .get(this.genUserInfoUrl(), options)
-      .map(
-        (data)  => {
+      .get(this.genUserInfoUrl(), options).pipe(
+      map((data)  => {
           let user = this.decorateValidUser(data)
           // Track whether or not user object has been refreshed since app opened
           this.userSessionFresh = true
@@ -581,7 +581,7 @@ export class AuthService implements CanActivate {
           }
           return data
         }
-      )
+      ))
   }
 
   /**
@@ -633,7 +633,7 @@ export class AuthService implements CanActivate {
 
   /** Getter for downloadAuthorized parameter of local storage */
   public downloadAuthorized(): boolean {
-    return this._storage.get('downloadAuthorized');
+    return this._storage.get(DRIVERS.LOCAL, 'downloadAuthorized');
   }
 
   /** Setter for downloadAuthorized parameter of local storage */

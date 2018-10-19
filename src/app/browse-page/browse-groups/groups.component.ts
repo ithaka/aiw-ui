@@ -191,6 +191,7 @@ export class BrowseGroupsComponent implements OnInit {
 
   /** Every time the url updates, we process the new tags and reload image groups if the tags query param changes */
   private createNavigationSubscription(): Subscription {
+    // BRETT TODO
     return this._router.events.filter(event => event instanceof NavigationEnd).pipe(
     map(event => {
       let query = this.route.snapshot.queryParams
