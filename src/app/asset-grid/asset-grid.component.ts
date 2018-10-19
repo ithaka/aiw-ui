@@ -3,7 +3,7 @@ import { ActivatedRoute, NavigationStart, Params, Router } from '@angular/router
 
 import { BehaviorSubject, Subscription } from 'rxjs'
 import { map, take } from 'rxjs/operators'
-import { Locker } from 'angular2-locker'
+import { Locker } from 'angular-safeguard'
 import { AppConfig } from '../app.service'
 
 import {

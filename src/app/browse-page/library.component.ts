@@ -11,7 +11,7 @@ import { TagsService } from './tags.service'
 import { Tag } from './tag/tag.class'
 import { TitleService } from '../shared/title.service'
 
-import { Locker } from 'angular2-locker'
+import { Locker } from 'angular-safeguard'
 
 @Component({
   selector: 'ang-lib',

@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core'
 import { Router, ActivatedRoute, Params, UrlSegment } from '@angular/router'
 import { Subscription }   from 'rxjs'
 import { map } from 'rxjs/operators'
-import { Locker } from 'angular2-locker'
+import { Locker } from 'angular-safeguard'
 
 import { TitleService } from '../shared/title.service'
 import { AssetService } from '../shared/assets.service'

@@ -1,26 +1,26 @@
 // test imports
-import { ComponentFixture, TestBed, async } from '@angular/core/testing';
-import { By }              from '@angular/platform-browser';
-import { DebugElement }    from '@angular/core';
+import { ComponentFixture, TestBed, async } from '@angular/core/testing'
+import { By }              from '@angular/platform-browser'
+import { DebugElement }    from '@angular/core'
 
 // angular imports
-import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
-import { Http } from '@angular/http';
-import { Locker } from 'angular2-locker';
-import { Location } from '@angular/common';
-import { Angulartics2 } from 'angulartics2';
+import { FormsModule } from '@angular/forms'
+import { Router } from '@angular/router'
+import { Http } from '@angular/http'
+import { Locker } from 'angular-safeguard'
+import { Location } from '@angular/common'
+import { Angulartics2 } from 'angulartics2'
 
 // our file imports
-import { Login } from './login.component';
-import { AuthService } from './../shared/auth.service';
-// import { LoginService, User } from './login.service';
+import { Login } from './login.component'
+import { AuthService } from './../shared/auth.service'
+// import { LoginService, User } from './login.service'
 
 describe('testy test', () => {
   it('it should test', () => {
-    expect(true).toBe(true);
-  });
-});
+    expect(true).toBe(true)
+  })
+})
 
 // let institutionData: any = {
 //   identifier: "name",

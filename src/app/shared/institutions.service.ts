@@ -1,11 +1,10 @@
-import { Injectable } from '@angular/core';
-import { Subject } from 'rxjs';
-import { BehaviorSubject, Observable, Subscription } from 'rxjs';
-import { Locker } from 'angular2-locker';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Injectable } from '@angular/core'
+import { Subject } from 'rxjs'
+import { BehaviorSubject, Observable, Subscription } from 'rxjs'
+import { Locker } from 'angular-safeguard'
+import { HttpClient, HttpHeaders } from '@angular/common/http'
 
-
-import { AuthService } from '../shared/auth.service';
+import { AuthService } from '../shared/auth.service'
 
 @Injectable()
 export class InstitutionsService {

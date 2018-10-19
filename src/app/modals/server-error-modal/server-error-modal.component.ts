@@ -1,5 +1,5 @@
-import { Router } from '@angular/router';
-import { Locker } from 'angular2-locker';
+import { Router } from '@angular/router'
+import { Locker } from 'angular-safeguard'
 import { Component, OnInit, EventEmitter, Input, Output } from '@angular/core'
 
 // Project Dependencies
