@@ -3,7 +3,7 @@ import { ActivatedRoute, NavigationStart, Params, Router } from '@angular/router
 
 import { BehaviorSubject, Subscription } from 'rxjs'
 import { map, take } from 'rxjs/operators'
-import { Locker } from 'angular-safeguard'
+import { Locker, DRIVERS } from 'angular-safeguard'
 import { AppConfig } from '../app.service'
 
 import {
@@ -170,8 +170,8 @@ export class AssetGrid implements OnInit, OnDestroy {
     private route: ActivatedRoute
   ) {
       this.siteID = this._appConfig.config.siteID;
-      this._storage = locker.useDriver(Locker.DRIVERS.LOCAL);
-      this._session = locker.useDriver(Locker.DRIVERS.SESSION);
+      this._storage = DRIVERS.LOCAL
+      this._session = DRIVERS.SESSION;
       let prefs = this._auth.getFromStorage('prefs')
       if (prefs && prefs.pageSize && prefs.pageSize != 24) {
         this.pagination.size = prefs.pageSize
