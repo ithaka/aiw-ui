@@ -98,6 +98,7 @@ $loginPanelMobileHeight: 0;
 
 .fit {
   width: 100%;
-  width: -moz-available;
-  width: -webkit-fill-available;
+  // width: -moz-available;
+  // width: -webkit-fill-available;
+  width: stretch; // fill-available changed in spec to stretch
 }
