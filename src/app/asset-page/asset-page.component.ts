@@ -4,7 +4,7 @@ import { ActivatedRoute, Params, Router } from '@angular/router'
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { Subscription } from 'rxjs'
 import { map } from 'rxjs/operators'
-import { Locker } from 'angular2-locker'
+import { Locker } from 'angular-safeguard'
 import { Angulartics2 } from 'angulartics2'
 import { ArtstorViewer } from 'artstor-viewer'
 import { formGroupNameProvider } from '@angular/forms/src/directives/reactive_directives/form_group_name'

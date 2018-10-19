@@ -6,7 +6,7 @@ import { Injectable, OnDestroy, OnInit } from '@angular/core'
 import { Router, ActivatedRoute, Params } from '@angular/router'
 import { Http, Response, Headers, RequestOptions } from '@angular/http'
 import { Observable, BehaviorSubject, Subscription } from 'rxjs'
-import { Locker, LockerConfig } from 'angular2-locker'
+import { Locker, LockerConfig, DRIVERS } from 'angular-safeguard'
 import 'rxjs/add/operator/toPromise' // TODO REMOVE USAGE RXJS toPromise
 import { map } from 'rxjs/operators'
 

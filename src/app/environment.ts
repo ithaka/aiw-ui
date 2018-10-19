@@ -6,7 +6,7 @@ import { ApplicationRef, enableProdMode, ErrorHandler } from '@angular/core';
 
 // Error tracking utility for sentry.io
 import * as Raven from 'raven-js';
-const { version: appVersion } = require('../../package.json');
+const { version: appVersion } = ('../../package.json');
 
 Raven.config('https://9ef1f98534914bf6826e202370d1f627@sentry.io/209953', {
   release: appVersion

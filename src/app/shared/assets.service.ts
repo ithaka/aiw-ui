@@ -6,7 +6,7 @@ import { Injectable, OnDestroy, OnInit, EventEmitter } from '@angular/core'
 import { Router, ActivatedRoute, Params } from '@angular/router'
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http'
 import { Observable, BehaviorSubject, Subject } from 'rxjs'
-import { Locker } from 'angular2-locker'
+import { Locker } from 'angular-safeuard'
 
 import { Subscription }   from 'rxjs'
 import { map } from 'rxjs/operators'
