@@ -7,8 +7,10 @@ import { map } from 'rxjs/operators'
 import { AppConfig } from '../../app.service'
 import { AuthService } from '../auth.service'
 
+import version from '../../../../package.json'
+
 // Project Dependencies
-const { version: appVersion } = require('../../../../package.json')
+const { version: appVersion } = version // BRETT TODO - replaces require, appVersion still working?
 
 declare let google
 
