@@ -9,6 +9,7 @@ import {
   HttpErrorResponse
 } from '@angular/common/http'
 import { Observable } from 'rxjs'
+import { tap } from 'rxjs/operators'
 
 // our code
 import { AuthService } from 'app/shared'
@@ -33,8 +34,8 @@ export class UnauthorizedInterceptor implements HttpInterceptor {
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     // this wires the handler to the reqest's response
-    return next.handle(req)
-      .do((event) => {
+    return next.handle(req).pipe(
+      tap((event) => { // BRETT TODO do => tap wrapped by pipe, is this still the same behavior?
         if (event instanceof HttpResponse) {
           // this is the success handler for the response - we don't want to do anything here for now
         }
@@ -48,6 +49,6 @@ export class UnauthorizedInterceptor implements HttpInterceptor {
             this._inj.get(AuthService).refreshUserSession(true)
           }
         }
-      })
+      }))
   }
 }
