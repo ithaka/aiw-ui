@@ -137,20 +137,20 @@ export class RegisterComponent implements OnInit {
 
     registerCall(userInfo).pipe(
       take(1),
-      map((data) => {
+      map(data => {
         this.isLoading = false;
-        if (data.user) {
-          let user: any = Object.assign({}, data.user);
+        if (data['user']) {
+          let user: any = Object.assign({}, data['user']);
           // A user that just registered is obviously logged in as a user
           user.isLoggedIn = true;
-          this._auth.saveUser(data.user);
+          this._auth.saveUser(data['user']); // BRETT TODO DEBUG data.user and data['user'] here
           this.angulartics.eventTrack.next({ action: 'remoteLogin', properties: { category: this._auth.getGACategory(), label: 'success' }});
           this.loadForUser(data);
         } else {
-          if (data.statusMessage.includes('JSTOR account exists') && data.statusCode === 2) {
+          if (data['statusMessage'].includes('JSTOR account exists') && data['statusCode'] === 2) {
             // Jstor account exists also returns a status code of 2
             this.serviceErrors.hasJstor = true
-          } else if (data.statusMessage === 'User already exists.' && data.statusCode === 1) {
+          } else if (data['statusMessage'] === 'User already exists.' && data['statusCode'] === 1) {
             this.serviceErrors.duplicate = true
           }
         }
