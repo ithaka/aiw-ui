@@ -24,7 +24,10 @@ import { Angulartics2Module } from 'angulartics2';
 import { Angulartics2GoogleAnalytics } from 'angulartics2/ga';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
-import { RlTagInputModule } from 'angular2-tag-autocomplete';
+
+// BRETT
+// import { RlTagInputModule } from 'angular2-tag-autocomplete'; // TODO: ANGULAR 6 WIP:
+
 import { Ng2CompleterModule } from 'ng2-completer';
 
 // Directives
@@ -33,8 +36,13 @@ import { MediumEditorDirective } from 'angular2-medium-editor';
 
 // ng2-idle
 import { NgIdleKeepaliveModule } from '@ng-idle/keepalive'; // this includes the core NgIdleModule but includes keepalive providers for easy wireup
-import { MomentModule } from 'angular2-moment'; // optional, provides moment-style pipes for date formatting
-import {DndModule} from 'ng2-dnd';
+
+// BRETT
+// TODO: ANGULAR 6 WIP
+import { MomentModule } from 'ngx-moment'; // optional, provides moment-style pipes for date formatting
+// BRETT
+// TODO: ANGULAR 6 WIP
+// import {DndModule} from 'ng2-dnd';
 
 // File Uploader
 import { FileUploadModule } from 'ng2-file-upload';
@@ -239,14 +247,14 @@ export function HttpLoaderFactory(http: HttpClient) {
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
-    RlTagInputModule,
+    //RlTagInputModule, autocomplete module gone // BRETT TODO
     Ng2CompleterModule,
     LockerModule,
     FileUploadModule,
     ArtstorViewerModule,
     RouterModule.forRoot(ROUTES, { useHash: true }),
     Ng2DeviceDetectorModule.forRoot(),
-    Angulartics2Module.forRoot([ Angulartics2GoogleAnalytics ]),
+    Angulartics2Module.forRoot([ Angulartics2GoogleAnalytics ]), // BRETT TODO
     TranslateModule.forRoot({
       loader: {
           provide: TranslateLoader,
@@ -256,7 +264,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     }),
     NgbModule.forRoot(), // Ng Bootstrap Import
     NgIdleKeepaliveModule.forRoot(),
-    DndModule.forRoot() // Drag n Drop import
+    // DndModule.forRoot() // Drag n Drop import BRETT TODO
   ],
   providers: [ // expose our Services and Providers into Angular's dependency injection
     ENV_PROVIDERS,

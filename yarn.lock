@@ -929,10 +929,6 @@ angular2-medium-editor@1.2.0:
   dependencies:
     tslib "^1.9.0"
 
-angular2-tag-autocomplete@^1.2.10:
-  version "1.2.10"
-  resolved "https://registry.yarnpkg.com/angular2-tag-autocomplete/-/angular2-tag-autocomplete-1.2.10.tgz#0e01b599fb474dd806f0958da1535379ed0825dc"
-
 angular2-template-loader@^0.6.2:
   version "0.6.2"
   resolved "https://registry.yarnpkg.com/angular2-template-loader/-/angular2-template-loader-0.6.2.tgz#c0d44e90fff0fac95e8b23f043acda7fd1c51d7c"
@@ -1452,9 +1448,9 @@ bl@~1.0.0:
   dependencies:
     readable-stream "~2.0.5"
 
-blob-polyfill@^2.0.20171115:
-  version "2.0.20171115"
-  resolved "https://registry.yarnpkg.com/blob-polyfill/-/blob-polyfill-2.0.20171115.tgz#8e5c2659dda443365fafd6dd421517653f1d5ffd"
+blob-polyfill@^3.0.20180112:
+  version "3.0.20180112"
+  resolved "https://registry.yarnpkg.com/blob-polyfill/-/blob-polyfill-3.0.20180112.tgz#7f7c3e235ae298867f8c22b429d33aa9a7cc65b5"
 
 blob@0.0.4:
   version "0.0.4"
@@ -1543,9 +1539,9 @@ boom@5.x.x:
   dependencies:
     hoek "4.x.x"
 
-bootstrap@4.0.0-beta.2:
-  version "4.0.0-beta.2"
-  resolved "https://registry.yarnpkg.com/bootstrap/-/bootstrap-4.0.0-beta.2.tgz#4d67d2aa2219f062cd90bc1247e6747b9e8fd051"
+bootstrap@4.1.3:
+  version "4.1.3"
+  resolved "https://registry.yarnpkg.com/bootstrap/-/bootstrap-4.1.3.tgz#0eb371af2c8448e8c210411d0cb824a6409a12be"
 
 boxen@^1.2.1:
   version "1.3.0"
@@ -3117,9 +3113,9 @@ dotenv@^5.0.1:
   version "5.0.1"
   resolved "https://registry.yarnpkg.com/dotenv/-/dotenv-5.0.1.tgz#a5317459bd3d79ab88cff6e44057a6a3fbb1fcef"
 
-driver.js@^0.6.2:
-  version "0.6.2"
-  resolved "https://registry.yarnpkg.com/driver.js/-/driver.js-0.6.2.tgz#b30a59572646bd83b6bee17b3b2c11d41ad5a4da"
+driver.js@^0.8.1:
+  version "0.8.1"
+  resolved "https://registry.yarnpkg.com/driver.js/-/driver.js-0.8.1.tgz#e356e314dcfb56c5c369f34121075ac9f063cc2b"
 
 dtrace-provider@~0.8:
   version "0.8.7"
@@ -6488,10 +6484,6 @@ ng2-completer@2.0.8:
   version "2.0.8"
   resolved "https://registry.yarnpkg.com/ng2-completer/-/ng2-completer-2.0.8.tgz#36101eb5a796f966897e7894fc437effd88ebdfb"
 
-ng2-dnd@^4.0.0:
-  version "4.2.0"
-  resolved "https://registry.yarnpkg.com/ng2-dnd/-/ng2-dnd-4.2.0.tgz#85d7ac75199f39a3434b7c32b9ab006677b19b59"
-
 ng2-file-upload@^1.3.0:
   version "1.3.0"
   resolved "https://registry.yarnpkg.com/ng2-file-upload/-/ng2-file-upload-1.3.0.tgz#d90f8f568f62383462175f8bdfa0096b131f277a"
@@ -7406,6 +7398,10 @@ plugin-error@^0.1.2:
     arr-diff "^1.0.1"
     arr-union "^2.0.1"
     extend-shallow "^1.1.2"
+
+popper.js@^1.14.4:
+  version "1.14.4"
+  resolved "https://registry.yarnpkg.com/popper.js/-/popper.js-1.14.4.tgz#8eec1d8ff02a5a3a152dd43414a15c7b79fd69b6"
 
 popsicle@^9.2.0:
   version "9.2.0"
@@ -9960,7 +9956,7 @@ typescript@2.2.2:
   version "2.2.2"
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-2.2.2.tgz#606022508479b55ffa368b58fee963a03dfd7b0c"
 
-"typescript@>=2.6.2 <2.10", typescript@^2.0.10, typescript@^2.5.2, typescript@~2.9.1:
+"typescript@>=2.6.2 <2.10", typescript@^2.5.2, typescript@^2.7.0, typescript@~2.9.1:
   version "2.9.2"
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-2.9.2.tgz#1cbf61d05d6b96269244eb6a3bce4bd914e0f00c"
 
