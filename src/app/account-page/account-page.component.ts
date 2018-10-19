@@ -1,5 +1,5 @@
 import { Subscription } from "rxjs"
-import { map } from 'rxjs/operators'
+import { map, take } from 'rxjs/operators'
 import { Component, OnInit } from "@angular/core"
 import { Router } from "@angular/router"
 
@@ -89,11 +89,10 @@ export class AccountPage implements OnInit {
     // get a copy of the current user value, modify it in memory, send it in the update, and then save it back to local storage
     let updateUser = this._auth.getUser()
     Object.assign(updateUser, form.value)
-    this._account
-      .update(updateUser)
-      .take(1)
-      .subscribe(
-        res => {
+
+    this._account.update(updateUser).pipe(
+      take(1),
+      map(res => {
           this.updateLoading = false
           this._auth.saveUser(updateUser)
           this.messages.updateSuccess = true
@@ -103,6 +102,6 @@ export class AccountPage implements OnInit {
           console.error(err)
           this.messages.updateError = true
         }
-      )
+      )).subscribe()
   }
 }
