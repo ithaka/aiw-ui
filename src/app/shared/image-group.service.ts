@@ -4,7 +4,8 @@ import { Router } from '@angular/router'
 
 import { Observable, BehaviorSubject } from 'rxjs'
 
-import { AuthService, ImageGroupDescription } from './../shared/auth.service'
+import { AuthService } from './../shared/auth.service'
+import { ImageGroupDescription } from './../shared'
 
 /**
  *
