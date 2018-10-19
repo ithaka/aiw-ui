@@ -112,11 +112,12 @@ export class EditPersonalCollectionModal implements OnInit {
     this.uiMessages = {}
     this.metadataUpdateLoading = true
     // TODO Look into response of .map and map() from RXJS updates
-    this._pc.updatepcImageMetadata(formData, String(this.selectedAsset.ssid))
-    .map((res) => {
+    // TODO BRETT
+    this._pc.updatepcImageMetadata(formData, String(this.selectedAsset.ssid)).pipe(
+    map(res => {
       this.metadataUpdateLoading = false
       return res
-    }).pipe(
+    })).pipe(
       take(1),
       map(res => {
         let updateItem = res.results.find((result) => {
@@ -156,12 +157,12 @@ export class EditPersonalCollectionModal implements OnInit {
 
     this.uiMessages = { }
     this.deleteLoading = true
-
-    this._pc.deletePersonalAssets([ssid])
-    .map((res) => {
+    // TODO BRETT pipe.pipe chaining and reworking these requests
+    this._pc.deletePersonalAssets([ssid]).pipe(
+    map((res) => {
       this.deleteLoading = false
       return res
-    }).pipe(
+    })).pipe(
     take(1),
     map((res) => {
       this.uiMessages.imgDeleteSuccess = true

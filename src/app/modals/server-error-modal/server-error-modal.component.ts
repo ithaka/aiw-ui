@@ -1,5 +1,5 @@
 import { Router } from '@angular/router'
-import { Locker } from 'angular-safeguard'
+import { Locker, DRIVERS } from 'angular-safeguard'
 import { Component, OnInit, EventEmitter, Input, Output } from '@angular/core'
 
 // Project Dependencies
@@ -29,7 +29,7 @@ export class ServerErrorModal implements OnInit {
    */
   stashThenRoute(routeValue: string) {
     console.log(window.location.pathname)
-    this._storage.set('stashedRoute', window.location.pathname)
+    this._storage.set(DRIVERS.LOCAL, 'stashedRoute', window.location.pathname)
     this._router.navigate([routeValue]);
   }
 }

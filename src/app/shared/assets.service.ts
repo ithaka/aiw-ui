@@ -6,7 +6,7 @@ import { Injectable, OnDestroy, OnInit, EventEmitter } from '@angular/core'
 import { Router, ActivatedRoute, Params } from '@angular/router'
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http'
 import { Observable, BehaviorSubject, Subject } from 'rxjs'
-import { Locker } from 'angular-safeuard'
+import { Locker, DRIVERS } from 'angular-safeuard'
 
 import { Subscription }   from 'rxjs'
 import { map } from 'rxjs/operators'
@@ -24,6 +24,21 @@ import { APP_CONST } from '../app.constants'
 
 @Injectable()
 export class AssetService {
+
+  constructor(
+        private _filters: AssetFiltersService,
+        private _router: Router,
+        private route: ActivatedRoute,
+        private http: HttpClient,
+        private locker: Locker,
+        private _auth: AuthService,
+        private _groups: GroupService,
+        private _toolbox: ToolboxService,
+        private _assetSearch: AssetSearchService,
+        private _app: AppConfig
+    ) {
+        this._storage = locker.DRIVERS.LOCAL;
+    }
 
     /** Constant that defines which collectionType belongs to institutions */
     static readonly institutionCollectionType: number = 2;
@@ -131,21 +146,6 @@ export class AssetService {
 
     // // bandaid for the re-search functionality
     // private searchErrorCount: number = 0
-
-    constructor(
-        private _filters: AssetFiltersService,
-        private _router: Router,
-        private route: ActivatedRoute,
-        private http: HttpClient,
-        locker: Locker,
-        private _auth: AuthService,
-        private _groups: GroupService,
-        private _toolbox: ToolboxService,
-        private _assetSearch: AssetSearchService,
-        private _app: AppConfig
-    ) {
-        this._storage = locker.useDriver(Locker.DRIVERS.LOCAL);
-    }
 
     private updateLocalResults(resultObj: any) {
         // These Params have been loaded now
@@ -892,8 +892,8 @@ export class AssetService {
         let options = { withCredentials: true };
         // Returns all of the collections names
         return this.http
-            .get(this._auth.getUrl() + '/collections/', options)
-            .map( res => {
+            .get(this._auth.getUrl() + '/collections/', options).pipe(
+              map(res => {
                 if (type) {
                     let data = res
 
@@ -912,7 +912,8 @@ export class AssetService {
                 } else {
                     return res
                 }
-            })
+              }
+            )) // PIPE BRETT TODO - Do we return (data) within pipes?
     }
 
     public getFolders() {
