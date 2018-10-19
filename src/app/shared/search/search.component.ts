@@ -1,5 +1,6 @@
 import { Component, OnInit, OnDestroy, Input, Output } from '@angular/core'
-import { Router, ActivatedRoute, NavigationEnd } from '@angular/router'
+import { Router, ActivatedRoute, NavigationEnd, Params } from '@angular/router'
+import { Subscription } from 'rxjs'
 import { map } from 'rxjs/operators'
 import { Angulartics2 } from 'angulartics2'
 
