@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core'
 import { HttpClient } from '@angular/common/http'
 import { Observable } from 'rxjs'
+import { map } from 'rxjs/operators'
 
 @Injectable()
 export class FlagService {
@@ -28,8 +29,8 @@ export class FlagService {
       {
         observe: 'response'
       }
-    )
-    .map((res) => {
+    ).pipe(
+    map((res) => {
       let flags = res.body
       let userCountryCode: string = res.headers.get('x-artstor-country-code').substr(0, 2)
 
@@ -55,7 +56,7 @@ export class FlagService {
       }
 
       return flags
-    })
+    })) // TODO BRETT - Does pipe require calling subscribe() - this isn't a Subscription reponse so does return flags work within pipe
   }
 }
 
