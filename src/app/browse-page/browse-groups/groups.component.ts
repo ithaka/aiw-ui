@@ -1,7 +1,7 @@
 import { Component, OnInit, EventEmitter } from '@angular/core'
 import { Router, ActivatedRoute, Params, NavigationEnd } from '@angular/router'
 import { Subscription } from 'rxjs'
-import { map } from 'rxjs/operators'
+import { map, take } from 'rxjs/operators'
 import { Angulartics2 } from 'angulartics2'
 
 import { AssetService, AuthService, GroupService } from './../../shared'
@@ -386,10 +386,9 @@ export class BrowseGroupsComponent implements OnInit {
       this.cleanGroupSearchTerm(groupQuery.term),
       groupQuery.id,
       groupQuery.sort
-    )
-    .take(1)
-    .subscribe(
-      (data)  => {
+    ).pipe(
+    take(1),
+      map(data  => {
         // Set the group level to show in the number of result message
         let groupLabel: string = ''
         switch (browseLevel) {
@@ -459,7 +458,7 @@ export class BrowseGroupsComponent implements OnInit {
           this.errorObj[browseLevel] = 'Sorry, we were unable to load these Image Groups'
           this.loading = false
         }
-      )
+      )).subscribe()
   }
 
   /**

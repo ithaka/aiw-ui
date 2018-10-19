@@ -8,7 +8,7 @@ import { Http, Response, Headers, RequestOptions } from '@angular/http'
 import { Observable, BehaviorSubject, Subscription } from 'rxjs'
 import { Locker, LockerConfig, DRIVERS } from 'angular-safeguard'
 import 'rxjs/add/operator/toPromise' // TODO REMOVE USAGE RXJS toPromise
-import { map } from 'rxjs/operators'
+import { map, take } from 'rxjs/operators'
 
 // Project dependencies
 import { AuthService } from './auth.service'
@@ -39,12 +39,13 @@ describe('AssetServiceTest', () => {
 
 
   it('initial AssetService should have default pagination values', inject([AssetService], ( _assets: AssetService) => {
-        _assets.pagination.take(1).subscribe(
-            data => {
-                expect(data.page).toBe(1);
-                expect(data.size).toBe(24);
-                expect(data.totalPages).toBe(1);
-            }
-        );
+        _assets.pagination.pipe(
+          take(1),
+          map(data => {
+            expect(data.page).toBe(1);
+            expect(data.size).toBe(24);
+            expect(data.totalPages).toBe(1);
+          }
+        )).subscribe()
     }));
 });
