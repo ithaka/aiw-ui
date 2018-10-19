@@ -2010,9 +2010,9 @@ code-point-at@^1.0.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/code-point-at/-/code-point-at-1.1.0.tgz#0d070b4d043a5bea33a2f1a40e2edb3d9a4ccf77"
 
-codelyzer@^2.0.0-beta.1:
-  version "2.1.1"
-  resolved "https://registry.yarnpkg.com/codelyzer/-/codelyzer-2.1.1.tgz#0573c7f8da4ac2a4473b0042807f7b901dec8b0a"
+codelyzer@~4.2.1:
+  version "4.2.1"
+  resolved "http://registry.npmjs.org/codelyzer/-/codelyzer-4.2.1.tgz#d56eaacefca7e8138aac0a630e484bdb09988544"
   dependencies:
     app-root-path "^2.0.1"
     css-selector-tokenizer "^0.7.0"
@@ -5187,15 +5187,11 @@ istanbul@0.4.5, istanbul@^0.4.0, istanbul@^0.4.5:
     which "^1.1.1"
     wordwrap "^1.0.0"
 
-jasmine-core@^3.1.0:
-  version "3.1.0"
-  resolved "https://registry.yarnpkg.com/jasmine-core/-/jasmine-core-3.1.0.tgz#a4785e135d5df65024dfc9224953df585bd2766c"
-
 jasmine-core@~2.8.0:
   version "2.8.0"
   resolved "https://registry.yarnpkg.com/jasmine-core/-/jasmine-core-2.8.0.tgz#bcc979ae1f9fd05701e45e52e65d3a5d63f1a24e"
 
-jasmine-core@~2.99.0:
+jasmine-core@~2.99.0, jasmine-core@~2.99.1:
   version "2.99.1"
   resolved "https://registry.yarnpkg.com/jasmine-core/-/jasmine-core-2.99.1.tgz#e6400df1e6b56e130b61c4bcd093daa7f6e8ca15"
 
@@ -6341,10 +6337,6 @@ ng2-completer@2.0.8:
   version "2.0.8"
   resolved "https://registry.yarnpkg.com/ng2-completer/-/ng2-completer-2.0.8.tgz#36101eb5a796f966897e7894fc437effd88ebdfb"
 
-ng2-device-detector@^1.0.0:
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/ng2-device-detector/-/ng2-device-detector-1.0.1.tgz#5abbc6380eac8b265f7dded9451a2672c18c8eaf"
-
 ng2-dnd@^4.0.0:
   version "4.2.0"
   resolved "https://registry.yarnpkg.com/ng2-dnd/-/ng2-dnd-4.2.0.tgz#85d7ac75199f39a3434b7c32b9ab006677b19b59"
@@ -6352,6 +6344,10 @@ ng2-dnd@^4.0.0:
 ng2-file-upload@^1.3.0:
   version "1.3.0"
   resolved "https://registry.yarnpkg.com/ng2-file-upload/-/ng2-file-upload-1.3.0.tgz#d90f8f568f62383462175f8bdfa0096b131f277a"
+
+ngx-device-detector@^1.3.3:
+  version "1.3.3"
+  resolved "https://registry.yarnpkg.com/ngx-device-detector/-/ngx-device-detector-1.3.3.tgz#87371c03abe08a6bf1b96ab5ca891e6356b63913"
 
 no-case@^2.2.0:
   version "2.3.2"

@@ -82,49 +82,51 @@ export class CollectionPage implements OnInit, OnDestroy {
 
   private routeParamSubscrpt(): void {
     this.route.params.pipe(
-    map(routeParams => {
-      this.colId = routeParams['colId'];
-      // Old links pass a name into the ID, just use that as a search term instead
-      if (!/^[0-9]+$/.test(this.colId)) {
-        this.http.get('/assets/collection-links.json').pipe(
-          map(data => {
-            let linkObj = data
-            let link = linkObj[this.colId]
-            if (link) {
-              this._router.navigateByUrl(link)
-            } else {
-              this._router.navigate(['/search', this.colId.replace('_', ' ')])
+      map(routeParams => {
+        this.colId = routeParams['colId'];
+        // Old links pass a name into the ID, just use that as a search term instead
+        if (!/^[0-9]+$/.test(this.colId)) {
+          this.http.get('/assets/collection-links.json').pipe(
+            map(data => {
+              let linkObj = data
+              let link = linkObj[this.colId]
+              if (link) {
+                this._router.navigateByUrl(link)
+              } else {
+                this._router.navigate(['/search', this.colId.replace('_', ' ')])
+              }
             }
-          })).subscribe()
-      } else if (this.colId) {
-        this._assets.clearAssets();
-          this.getCollectionInfo(this.colId)
-            .then((data) => {
-              this._assets.queryAll(routeParams, true);
+          )).subscribe()
 
-              if (!Object.keys(data).length) {
-                throw new Error('No data!');
-              }
+        } else if (this.colId) {
+          this._assets.clearAssets();
+            this.getCollectionInfo(this.colId)
+              .then((data) => {
+                this._assets.queryAll(routeParams, true);
 
-              this.assetCount = data['objCount'];
-              this.colName = data['collectionname'];
-              this.colDescription = data['blurburl'];
-              this.colThumbnail = data['bigimageurl'];
+                if (!Object.keys(data).length) {
+                  throw new Error('No data!');
+                }
 
-              // Set page title
-              this._title.setSubtitle(this.colName)
-            })
-            .catch((error) => {
-              console.error(error);
-              if (error.status === 401){
-                this.unaffiliatedUser = true
-                this.showAccessDeniedModal = true
-              }
-            });
+                this.assetCount = data['objCount'];
+                this.colName = data['collectionname'];
+                this.colDescription = data['blurburl'];
+                this.colThumbnail = data['bigimageurl'];
+
+                // Set page title
+                this._title.setSubtitle(this.colName)
+              })
+              .catch((error) => {
+                console.error(error);
+                if (error.status === 401){
+                  this.unaffiliatedUser = true
+                  this.showAccessDeniedModal = true
+                }
+              });
         }
-    })
-  }
+    })).subscribe()
 
+  }
   // private updateSearchInRes(value: boolean): void{
   //  this.searchInResults = value;
   // }
