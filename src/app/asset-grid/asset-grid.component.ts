@@ -170,8 +170,8 @@ export class AssetGrid implements OnInit, OnDestroy {
     private route: ActivatedRoute
   ) {
       this.siteID = this._appConfig.config.siteID;
-      this._storage = DRIVERS.LOCAL
-      this._session = DRIVERS.SESSION;
+      this._storage = DRIVERS.LOCAL // BRETT TODO bug? others do storage.get
+    this._session = DRIVERS.SESSION; // BRETT TODO bug? others session.get
       let prefs = this._auth.getFromStorage('prefs')
       if (prefs && prefs.pageSize && prefs.pageSize != 24) {
         this.pagination.size = prefs.pageSize

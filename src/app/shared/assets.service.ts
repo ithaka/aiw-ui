@@ -6,7 +6,7 @@ import { Injectable, OnDestroy, OnInit, EventEmitter } from '@angular/core'
 import { Router, ActivatedRoute, Params } from '@angular/router'
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http'
 import { Observable, BehaviorSubject, Subject } from 'rxjs'
-import { Locker, DRIVERS } from 'angular-safeuard'
+import { Locker, DRIVERS } from 'angular-safeguard'
 
 import { Subscription }   from 'rxjs'
 import { map } from 'rxjs/operators'
@@ -37,7 +37,7 @@ export class AssetService {
         private _assetSearch: AssetSearchService,
         private _app: AppConfig
     ) {
-        this._storage = locker.DRIVERS.LOCAL;
+        this._storage = locker
     }
 
     /** Constant that defines which collectionType belongs to institutions */
