@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core'
 import { Router } from '@angular/router'
 import { Subscription } from 'rxjs'
 import { map } from 'rxjs/operators'
-import { Ng2DeviceService } from 'ng2-device-detector'
+import { DeviceDetectorModule, DeviceDetectorService } from 'ngx-device-detector'
 
 import { AssetService, AuthService, ScriptService } from '../shared'
 import { AppConfig } from '../app.service'
@@ -53,7 +53,7 @@ export class Home implements OnInit, OnDestroy {
     private _assets: AssetService,
     private _router: Router,
     private _auth: AuthService,
-    private deviceService: Ng2DeviceService,
+    private deviceService: DeviceDetectorService,
     private _script: ScriptService
   ) {
     // this makes the window always render scrolled to the top
@@ -170,7 +170,7 @@ export class Home implements OnInit, OnDestroy {
         testAd.remove();
 
         // Fetch device info
-        let deviceInfo = this.deviceService.getDeviceInfo();
+        let deviceInfo = this.deviceService
 
         // Construct content Artstor email
         let deviceInfoHTML = 'Session Info \n ';

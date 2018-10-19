@@ -3,8 +3,8 @@ import { Component, OnInit, OnDestroy, ViewChild, HostListener } from '@angular/
 import { ActivatedRoute, Params, Router } from '@angular/router'
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { Subscription } from 'rxjs'
-import { map } from 'rxjs/operators'
-import { Locker } from 'angular-safeguard'
+import { map, take } from 'rxjs/operators'
+import { Locker, DRIVERS } from 'angular-safeguard'
 import { Angulartics2 } from 'angulartics2'
 import { ArtstorViewer } from 'artstor-viewer'
 import { formGroupNameProvider } from '@angular/forms/src/directives/reactive_directives/form_group_name'
@@ -214,7 +214,7 @@ export class AssetPage implements OnInit, OnDestroy {
         _fb: FormBuilder,
         locker: Locker
     ) {
-        this._session = locker.useDriver(Locker.DRIVERS.SESSION)
+        this._session = DRIVERS.SESSION
 
         this.editDetailsForm = _fb.group({
             creator: [null],
@@ -564,15 +564,17 @@ export class AssetPage implements OnInit, OnDestroy {
 
         if (this.user && this.user.isLoggedIn) {
             // Check if the logged-in user has private image groups
-            this._group.getAll('created')
-                .take(1)
-                .subscribe((res) => {
-                    if (res.groups && (res.groups.length > 0)) {
-                        this.showAddModal = true;
-                    } else {
-                        this.showCreateGroupModal = true;
-                    }
-                }, (err) => { console.error(err); });
+            this._group.getAll('created').pipe(
+                take(1),
+                map(res => {
+                  if (res.groups && (res.groups.length > 0)) {
+                      this.showAddModal = true;
+                  } else {
+                      this.showCreateGroupModal = true;
+                  }
+                },
+                (err) => { console.error(err); }
+            )).subscribe()
         } else {
             this.showLoginModal = true;
         }
@@ -812,9 +814,9 @@ export class AssetPage implements OnInit, OnDestroy {
      */
     private runDownloadView(dlink: string): Subscription {
       // Download generated jpg as local blob file
-      return this._search.downloadViewBlob(dlink)
-        .take(1)
-        .subscribe((blob) => {
+      return this._search.downloadViewBlob(dlink).pipe(
+        take(1),
+        map(blob => {
           if (blob.size > 0) {
                   this.blobURL = this.URL.createObjectURL(blob)
                   this.generatedBlobURL = this._sanitizer.bypassSecurityTrustUrl(this.blobURL)
@@ -825,7 +827,7 @@ export class AssetPage implements OnInit, OnDestroy {
             this.downloadLoading = false
             this.downloadViewReady = false
             this.showServerErrorModal = true
-          })
+          })).subscribe()
     }
 
     /** Calls downloadViewBlob in AssetSearch service to retrieve blob file,
@@ -985,15 +987,15 @@ export class AssetPage implements OnInit, OnDestroy {
         this.uiMessages = {}
 
         this.deleteLoading = true
-        this._pcservice.deletePersonalAssets([this.assets[0].SSID])
-            .take(1)
-            .subscribe((res) => {
+        this._pcservice.deletePersonalAssets([this.assets[0].SSID]).pipe(
+            take(1),
+            map(res => {
                 this.deleteLoading = false
                 this._router.navigate(['/pcollection', '37436'], { queryParams: { deleteSuccess: this.assets[0].title } })
             }, (err) => {
                 this.deleteLoading = false
                 this.uiMessages.deleteFailure = true
-            })
+            })).subscribe()
     }
 
     /**

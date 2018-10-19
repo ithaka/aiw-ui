@@ -4,7 +4,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule, HttpClient } from '@angular/common/http';
 import { NavigationEnd, Router, RouteReuseStrategy, RouterModule, UrlSerializer } from '@angular/router';
 // import { removeNgStyles, createNewHosts, createInputTransfer } from '@angularclass/hmr';
-import { Ng2DeviceDetectorModule } from 'ng2-device-detector';
+import { DeviceDetectorModule } from 'ngx-device-detector';
 import { DatePipe } from '@angular/common'
 
 // Ithaka/Artstor Dependencies
@@ -253,8 +253,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     FileUploadModule,
     ArtstorViewerModule,
     RouterModule.forRoot(ROUTES, { useHash: true }),
-    Ng2DeviceDetectorModule.forRoot(),
-    Angulartics2Module.forRoot([ Angulartics2GoogleAnalytics ]), // BRETT TODO
+    DeviceDetectorModule.forRoot(),
+    //Angulartics2Module.forRoot([ Angulartics2GoogleAnalytics ]), // BRETT TODO
     TranslateModule.forRoot({
       loader: {
           provide: TranslateLoader,
