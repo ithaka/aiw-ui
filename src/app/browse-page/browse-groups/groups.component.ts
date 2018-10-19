@@ -1,7 +1,7 @@
 import { Component, OnInit, EventEmitter } from '@angular/core'
 import { Router, ActivatedRoute, Params, NavigationEnd } from '@angular/router'
 import { Subscription } from 'rxjs'
-import { map, take } from 'rxjs/operators'
+import { map, take, filter } from 'rxjs/operators'
 import { Angulartics2 } from 'angulartics2'
 
 import { AssetService, AuthService, GroupService } from './../../shared'
@@ -192,7 +192,8 @@ export class BrowseGroupsComponent implements OnInit {
   /** Every time the url updates, we process the new tags and reload image groups if the tags query param changes */
   private createNavigationSubscription(): Subscription {
     // BRETT TODO
-    return this._router.events.filter(event => event instanceof NavigationEnd).pipe(
+    return this._router.events.pipe(
+    filter(event => event instanceof NavigationEnd),
     map(event => {
       let query = this.route.snapshot.queryParams
       if (!query) { console.error('no query!') }
