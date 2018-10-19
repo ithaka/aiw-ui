@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core'
 import { Router, ActivatedRoute, Params, UrlSegment } from '@angular/router'
 import { Subscription }   from 'rxjs'
 import { map } from 'rxjs/operators'
-import { Locker } from 'angular-safeguard'
+import { Locker, DRIVERS } from 'angular-safeguard'
 
 import { TitleService } from '../shared/title.service'
 import { AssetService } from '../shared/assets.service'
@@ -44,8 +44,8 @@ export class BrowsePage implements OnInit, OnDestroy {
       private _title: TitleService,
       private _filters: AssetFiltersService
   ) {
-      this._storage = locker.useDriver(Locker.DRIVERS.LOCAL);
-      this.institution = this._storage.get('institution');
+      this._storage = locker
+      this.institution = this._storage.get(DRIVERS.LOCAL, 'institution');
       this.browseOpts = this._app.config.browseOptions;
   }
 

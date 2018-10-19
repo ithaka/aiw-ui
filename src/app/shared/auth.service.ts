@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core'
 import { Location } from '@angular/common'
-import { Locker } from 'angular-safeguard'
+import { Locker, LockerConfig, DRIVERS } from 'angular-safeguard'
 import { HttpClient, HttpHeaders } from '@angular/common/http'
 import {
   CanActivate,
@@ -74,7 +74,7 @@ export class AuthService implements CanActivate {
     private _flags: FlagService,
     private idle: Idle
   ) {
-    this._storage = locker.useDriver(Locker.DRIVERS.LOCAL)
+    this._storage = locker
     this._router = _router
 
     // Default to relative or prod endpoints
@@ -187,7 +187,7 @@ export class AuthService implements CanActivate {
       map(() => {
         this.idleState = 'You\'ve gone idle!';
         let currentDateTime = new Date().toUTCString();
-        this._storage.set('userGoneIdleAt', currentDateTime);
+        this._storage.set(DRIVERS.LOCAL, 'userGoneIdleAt', currentDateTime);
       })).subscribe()
 
     idle.onTimeoutWarning.pipe(
@@ -201,7 +201,7 @@ export class AuthService implements CanActivate {
 
     // Initialize user and institution objects from localstorage
     this.userSource.next(this.getUser())
-    let institution = this._storage.get('institution')
+    let institution = this._storage.get(DRIVERS.LOCAL, 'institution')
     if (institution) { this.institutionObjSource.next(institution) }
 
     /**
@@ -321,7 +321,7 @@ export class AuthService implements CanActivate {
 
   public setInstitution(institutionObj: any): void {
     // Save to local storage
-    this._storage.set('institution', institutionObj)
+    this._storage.set(DRIVERS.LOCAL, 'institution', institutionObj)
     // Update Observable
     this.institutionObjValue = institutionObj;
     this.institutionObjSource.next(this.institutionObjValue);
@@ -432,7 +432,7 @@ export class AuthService implements CanActivate {
    */
   public saveUser(user: any) {
     // Preserve user via localstorage
-    this._storage.set('user', user);
+    this._storage.set(DRIVERS.LOCAL, 'user', user);
     // only do these things if the user is ip auth'd or logged in and the user has changed
     let institution = this.institutionObjSource.getValue();
     if (user.status && (!institution.institutionId || user.institutionId != institution.institutionId)) {
@@ -449,31 +449,31 @@ export class AuthService implements CanActivate {
    * Gets user object from local storage
    */
   public getUser(): any {
-      return this._storage.get('user') ? this._storage.get('user') : {};
+      return this._storage.get(DRIVERS.LOCAL, 'user') ? this._storage.get(DRIVERS.LOCAL, 'user') : {};
   }
 
   /** Stores an object in local storage for you - your welcome */
   public store(key: string, value: any): void {
       if (key != 'user' && key != 'token') {
-          this._storage.set(key, value);
+          this._storage.set(DRIVERS.LOCAL, key, value);
       }
   }
 
   /** Gets an object from local storage */
   public getFromStorage(key: string): any {
-      return this._storage.get(key);
+      return this._storage.get(DRIVERS.LOCAL, key);
   }
 
   /** Deletes things (not user or token) from local storage */
   public deleteFromStorage(key: string): void {
       if (key != 'user' && key != 'token') {
-          this._storage.remove(key);
+          this._storage.remove(DRIVERS.LOCAL, key);
       }
   }
 
   /** Clears all variables held in local storage */
   public clearStorage(): void {
-    this._storage.clear();
+    this._storage.clear(DRIVERS.LOCAL);
   }
 
   /**
@@ -636,7 +636,7 @@ export class AuthService implements CanActivate {
 
   /** Setter for downloadAuthorized parameter of local storage */
   public authorizeDownload(): void {
-    this._storage.set('downloadAuthorized', true);
+    this._storage.set(DRIVERS.LOCAL, 'downloadAuthorized', true);
   }
 
     /**

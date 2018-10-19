@@ -11,7 +11,7 @@ import { TagsService } from './tags.service'
 import { Tag } from './tag/tag.class'
 import { TitleService } from '../shared/title.service'
 
-import { Locker } from 'angular-safeguard'
+import { Locker, DRIVERS } from 'angular-safeguard'
 
 @Component({
   selector: 'ang-lib',
@@ -33,7 +33,7 @@ export class LibraryComponent implements OnInit {
     private _filters: AssetFiltersService,
     private locker: Locker
   ) {
-    this._storage = locker.useDriver(Locker.DRIVERS.LOCAL)
+    this._storage = locker
     this.unaffiliatedUser = this._auth.isPublicOnly() ? true : false
   }
 
