@@ -29,7 +29,9 @@
             "styles": [
               "src/sass/app.scss"
             ],
-            "scripts": []
+            "scripts": [
+              "src/assets/js/krpano.js"
+            ]
           },
           "configurations": {
             "production": {
