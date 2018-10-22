@@ -49,6 +49,8 @@ export class App {
     private router: Router,
     private translate: TranslateService
   ) {
+    // Start GA trackiong
+    angulartics2GoogleAnalytics.startTracking()
     // append query param to dodge caching
     let langStr = 'en.json?no-cache=' + new Date().valueOf()
     // I'm hoping this sets these for the entire app

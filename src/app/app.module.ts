@@ -254,7 +254,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     // ArtstorViewerModule,
     RouterModule.forRoot(ROUTES, { useHash: true }),
     DeviceDetectorModule.forRoot(),
-    Angulartics2Module.forRoot([ <Angulartics2Settings>Angulartics2GoogleAnalytics ]),
+    Angulartics2Module.forRoot(),
     TranslateModule.forRoot({
       loader: {
           provide: TranslateLoader,
