@@ -6,7 +6,7 @@ import { Subscription } from 'rxjs'
 import { map, take } from 'rxjs/operators'
 import { Locker, DRIVERS } from 'angular-safeguard'
 import { Angulartics2 } from 'angulartics2'
-import { ArtstorViewer } from 'artstor-viewer'
+// import { ArtstorViewer } from 'artstor-viewer'
 import { formGroupNameProvider } from '@angular/forms/src/directives/reactive_directives/form_group_name'
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms'
 
@@ -37,7 +37,8 @@ import { APP_CONST } from '../app.constants'
 })
 export class AssetPage implements OnInit, OnDestroy {
 
-    @ViewChild(ArtstorViewer) assetViewer: any
+    // @ViewChild(ArtstorViewer) 
+    public assetViewer: any
 
     public user: any
     public userSessionFresh: boolean = false
