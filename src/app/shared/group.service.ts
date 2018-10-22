@@ -5,6 +5,7 @@ import { GroupList } from './datatypes';
 
 // Project Dependencies
 import { AuthService } from '.';
+import { environment } from 'environments/environment';
 
 @Injectable()
 export class GroupService {
@@ -15,7 +16,7 @@ export class GroupService {
     constructor(
         private http: HttpClient
     ) {
-        this.groupUrl = API_URL + '/api/v1/group'
+        this.groupUrl = environment.API_URL + '/api/v1/group'
         this.options = { withCredentials: true }
     }
 

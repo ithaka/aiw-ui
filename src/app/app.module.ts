@@ -20,8 +20,8 @@ import { ROUTES } from './app.routes';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 // import { CoolStorageModule } from 'angular2-cool-storage';
 import { LockerModule, Locker, LockerConfig, DRIVERS } from 'angular-safeguard'
-import { Angulartics2Module } from 'angulartics2';
-import { Angulartics2GoogleAnalytics } from 'angulartics2/ga';
+import { Angulartics2Module, Angulartics2Settings } from 'angulartics2'
+import { Angulartics2GoogleAnalytics } from 'angulartics2/ga'
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 
@@ -254,7 +254,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     // ArtstorViewerModule,
     RouterModule.forRoot(ROUTES, { useHash: true }),
     DeviceDetectorModule.forRoot(),
-    //Angulartics2Module.forRoot([ Angulartics2GoogleAnalytics ]), // BRETT TODO
+    Angulartics2Module.forRoot([ <Angulartics2Settings>Angulartics2GoogleAnalytics ]),
     TranslateModule.forRoot({
       loader: {
           provide: TranslateLoader,
