@@ -3,7 +3,7 @@
 import { enableDebugTools, disableDebugTools } from '@angular/platform-browser';
 import { ApplicationRef, enableProdMode, ErrorHandler } from '@angular/core';
 
-import * as version from '../..d/package.json' // BRETT TODO - versions still works?
+import * as version from '../../package.json' // BRETT TODO - versions still works?
 
 
 // Error tracking utility for sentry.io
