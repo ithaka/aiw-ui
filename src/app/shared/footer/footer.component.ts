@@ -9,9 +9,6 @@ import { AuthService } from '../auth.service'
 
 import version from '../../../../package.json'
 
-// Project Dependencies
-const { version: appVersion } = version // BRETT TODO - replaces require, appVersion still working?
-
 declare let google
 
 @Component({
@@ -38,7 +35,7 @@ export class Footer {
   ) {
     this.siteID = this._appConfig.config.siteID;
     // Get version number
-    this.appVersion = appVersion
+    this.appVersion = version
     this.links = this._app.config.footerLinks
     this.browseSec = this._app.config.homeBrowseSec
 

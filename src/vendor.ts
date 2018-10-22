@@ -23,9 +23,11 @@ import '@angularclass/hmr';
 
 // Bootstrap JS
 import '@ng-bootstrap/ng-bootstrap';
-// import 'bootstrap-sass/assets/javascripts/bootstrap';
 
-if ('production' === ENV) {
+// Env vars
+import { environment } from './environments/environment';
+
+if (environment.production) {
   // Production
 
 

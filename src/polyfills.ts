@@ -35,7 +35,10 @@ import 'blob-polyfill';
 // Typescript emit helpers polyfill
 import 'ts-helpers';
 
-if ('production' === ENV) {
+// Env vars
+import { environment } from './environments/environment';
+
+if (environment.production) {
   // Production
 
 

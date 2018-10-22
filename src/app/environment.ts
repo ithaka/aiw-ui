@@ -7,17 +7,12 @@ import * as version from '../../package.json' // BRETT TODO - versions still wor
 
 
 // Error tracking utility for sentry.io
-import * as Raven from 'raven-js';
+import * as Raven from 'raven-js'
 const { version: appVersion } = version
 
-Raven.config('https://9ef1f98534914bf6826e202370d1f627@sentry.io/209953', {
-  release: appVersion
-}).install();
-export class RavenErrorHandler implements ErrorHandler {
-  handleError(err: any): void {
-    Raven.captureException(err);
-  }
-}
+// Env vars
+import { environment } from 'environments/environment'
+
 
 // Environment Providers
 let PROVIDERS: any[] = [
@@ -28,10 +23,20 @@ let PROVIDERS: any[] = [
 // https://github.com/angular/angular/blob/86405345b781a9dc2438c0fbe3e9409245647019/TOOLS_JS.md
 let _decorateModuleRef = function identity<T>(value: T): T { return value; };
 
-if ('production' === ENV) {
+if (environment.production) {
   // Production
   disableDebugTools();
   enableProdMode();
+
+  // Sentry Raven reporter
+  Raven.config('https://9ef1f98534914bf6826e202370d1f627@sentry.io/209953', {
+    release: appVersion
+  }).install();
+  class RavenErrorHandler implements ErrorHandler {
+    handleError(err: any): void {
+      Raven.captureException(err);
+    }
+  }
 
   PROVIDERS = [
     ...PROVIDERS,
