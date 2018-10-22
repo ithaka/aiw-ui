@@ -66,6 +66,7 @@ export class RegisterComponent implements OnInit {
     let samlTokenId: string = this.route.snapshot.params.samlTokenId
     let type: string = this.route.snapshot.params.type
     this.serviceErrors['shibbolethInst'] = this.route.snapshot.params.error == 'INST404'
+    this.serviceErrors['user'] = this.route.snapshot.params.error == 'USER404'
 
     if (samlTokenId || type == 'shibboleth') {
       email && this.registerForm.controls.email.setValue(email) // set the email
