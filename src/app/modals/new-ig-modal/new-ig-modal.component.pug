@@ -35,16 +35,17 @@
                 | {{ 'NEW_GROUP_MODAL.PERMISSIONS.PRIVATE' | translate }}
           .form-group([class.has-danger]="serviceResponse.failure")
             label(for="igTagInput") {{ 'NEW_GROUP_MODAL.TAGS_FIELD_LABEL' | translate }}
-            rl-tag-input#igTagInput(
-              [formControl]="newIgForm.controls['tags']",
-              placeholder="Add a tag...",
-              [addOnBlur]="true",
-              [addOnEnter]="true",
-              [autocompleteSelectFirstItem]="false",
-              [autocomplete]="true",
-              [autocompleteItems]="tagSuggestions",
-              [autocompleteMustMatch]="false",
-              (keyup)="getTagSuggestions($event)")
+            //- TO DO
+            //- rl-tag-input#igTagInput(
+            //-   [formControl]="newIgForm.controls['tags']",
+            //-   placeholder="Add a tag...",
+            //-   [addOnBlur]="true",
+            //-   [addOnEnter]="true",
+            //-   [autocompleteSelectFirstItem]="false",
+            //-   [autocomplete]="true",
+            //-   [autocompleteItems]="tagSuggestions",
+            //-   [autocompleteMustMatch]="false",
+            //-   (keyup)="getTagSuggestions($event)")
             .form-control-feedback(*ngIf="serviceResponse.failure") {{ 'NEW_GROUP_MODAL.CREATE_FAILURE' | translate }}
           .link(*ngIf="showAddToGroup", (click)="addToGroup.emit()") {{ 'NEW_GROUP_MODAL.SHOW_ADD_TO_IMAGE_GROUP' | translate }}
         .modal-footer

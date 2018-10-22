@@ -103,15 +103,16 @@
           
         .alert.alert-warning(*ngIf="!isLoading && (searchError.length < 1) && ((isPartialPage && hasMaxAssetLimit) || searchLimitError)")
           | {{ "BROWSE.WARNINGS.ADDITIONAL_RESULTS" | translate }}
+      //- TO DO
       //- Sortable Thumbails
-      #assetThumbnailsRow.row.no-gutters(*ngIf="reorderMode", dnd-sortable-container, [sortableData]="allResults")
-        ng-container(*ngFor="let asset of results; let i = index")
-          //- Show thumbnails for only available assets
-          .col-sm-4.col-md-2.col-lg-1.draggable(*ngIf="asset.status === 'available'", dnd-sortable, [dragEnabled]="reorderMode && !isLoading", [sortableIndex]="i", (onDragEnd)="orderChanged = true")
-            .card.card--asset([ngClass]="{ 'lrgThmb': largeThmbView }")
-              ang-thumbnail([thumbnail]="asset", [reorderMode]="reorderMode", [editMode]="editMode", [largeThmbView]="largeThmbView")
-        .alert.alert-warning(*ngIf="!isLoading && (searchError.length < 1) && ((isPartialPage && hasMaxAssetLimit) || searchLimitError)")
-          | {{ "BROWSE.WARNINGS.ADDITIONAL_RESULTS" | translate }}
+      //- #assetThumbnailsRow.row.no-gutters(*ngIf="reorderMode", dnd-sortable-container, [sortableData]="allResults")
+      //-   ng-container(*ngFor="let asset of results; let i = index")
+      //-     //- Show thumbnails for only available assets
+      //-     .col-sm-4.col-md-2.col-lg-1.draggable(*ngIf="asset.status === 'available'", dnd-sortable, [dragEnabled]="reorderMode && !isLoading", [sortableIndex]="i", (onDragEnd)="orderChanged = true")
+      //-       .card.card--asset([ngClass]="{ 'lrgThmb': largeThmbView }")
+      //-         ang-thumbnail([thumbnail]="asset", [reorderMode]="reorderMode", [editMode]="editMode", [largeThmbView]="largeThmbView")
+      //-   .alert.alert-warning(*ngIf="!isLoading && (searchError.length < 1) && ((isPartialPage && hasMaxAssetLimit) || searchLimitError)")
+      //-     | {{ "BROWSE.WARNINGS.ADDITIONAL_RESULTS" | translate }}
   .row
     ang-prompt(*ngIf="_auth.isPublicOnly() && searchTerm", style='width:100%; margin-top:36px; margin-bottom:20px;')
   .row

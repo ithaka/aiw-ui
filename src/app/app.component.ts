@@ -17,9 +17,6 @@ import { ScriptService, FlagService } from './shared'
 @Component({
   selector: 'app',
   encapsulation: ViewEncapsulation.None,
-  styleUrls: [
-    '../sass/app.scss'
-  ],
   template: `
     <ang-sky-banner *ngIf="showSkyBanner" [textValue]="skyBannerCopy" (closeBanner)="showSkyBanner = false"></ang-sky-banner>
     <div id="skip" tabindex="-1" aria-activedescendant="button">
