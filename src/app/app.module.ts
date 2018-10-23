@@ -253,7 +253,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     Ng2CompleterModule,
     LockerModule,
     FileUploadModule,
-    // ArtstorViewerModule,
+    ArtstorViewerModule,
     RouterModule.forRoot(ROUTES, { useHash: true }),
     DeviceDetectorModule.forRoot(),
     Angulartics2Module.forRoot(),
