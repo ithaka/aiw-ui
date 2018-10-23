@@ -29,6 +29,7 @@ import { ScriptService } from '../shared/script.service'
 import { LocalPCService, LocalPCAsset } from '../_local-pc-asset.service'
 import { TourStep } from '../shared/tour/tour.service'
 import { APP_CONST } from '../app.constants'
+import { LockerService } from 'app/_services';
 
 @Component({
     selector: 'ang-asset-page',
@@ -92,7 +93,6 @@ export class AssetPage implements OnInit, OnDestroy {
     // Used for generated view blob url
     private blobURL: string = ''
     private prevRouteParams: any = []
-    private _session
 
     private quizMode: boolean = false;
     private quizShuffle: boolean = false;
@@ -213,10 +213,8 @@ export class AssetPage implements OnInit, OnDestroy {
         private scriptService: ScriptService,
         private _sanitizer: DomSanitizer,
         _fb: FormBuilder,
-        locker: Locker
+        private _locker: LockerService
     ) {
-        this._session = DRIVERS.SESSION
-
         this.editDetailsForm = _fb.group({
             creator: [null],
             title: [null, Validators.required],
@@ -346,7 +344,7 @@ export class AssetPage implements OnInit, OnDestroy {
                     this.prevRouteTS = routeParams['prevRouteTS']
                     // For "Go Back to Results"
                     // Get map of previous search params
-                    let prevRoutesMap = this._session.get('prevRouteParams')
+                    let prevRoutesMap = this._locker.sessionGet('prevRouteParams')
 
                     // Reference previous search params for the prevRouteTS
                     let prevRouteParams = prevRoutesMap[this.prevRouteTS]
@@ -357,7 +355,7 @@ export class AssetPage implements OnInit, OnDestroy {
                     }
 
                     // TotalAssets - for browsing between the assets
-                    let totalAssets = this._session.get('totalAssets');
+                    let totalAssets = this._locker.sessionGet('totalAssets');
                     if (totalAssets) {
                         this.totalAssetCount = totalAssets;
                     }
