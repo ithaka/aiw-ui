@@ -24,9 +24,7 @@ import { Angulartics2Module, Angulartics2Settings } from 'angulartics2'
 import { Angulartics2GoogleAnalytics } from 'angulartics2/ga'
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
-
 import { NgxTagInputModule } from 'ngx-tag-autocomplete';
-
 import { Ng2CompleterModule } from 'ng2-completer';
 
 // Directives
@@ -39,9 +37,7 @@ import { NgIdleKeepaliveModule } from '@ng-idle/keepalive'; // this includes the
 // BRETT
 // TODO: ANGULAR 6 WIP
 import { MomentModule } from 'ngx-moment'; // optional, provides moment-style pipes for date formatting
-// BRETT
-// TODO: ANGULAR 6 WIP
-// import {DndModule} from 'ng2-dnd';
+import { SortablejsModule } from 'angular-sortablejs'
 
 // File Uploader
 import { FileUploadModule } from 'ng2-file-upload';
@@ -265,7 +261,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     }),
     NgbModule.forRoot(), // Ng Bootstrap Import
     NgIdleKeepaliveModule.forRoot(),
-    // DndModule.forRoot() // Drag n Drop import BRETT TODO
+    SortablejsModule.forRoot({ animation: 150 })
   ],
   providers: [ // expose our Services and Providers into Angular's dependency injection
     ENV_PROVIDERS,

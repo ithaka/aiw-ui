@@ -20,6 +20,7 @@ import {
 import { AssetFiltersService } from '../asset-filters/asset-filters.service'
 import { APP_CONST } from '../app.constants'
 import { LockerService } from 'app/_services';
+import { SortablejsOptions } from 'angular-sortablejs';
 
 @Component({
   selector: 'ang-asset-grid',
@@ -149,6 +150,13 @@ export class AssetGrid implements OnInit, OnDestroy {
 
   // Used as a key to save the previous route params in session storage (incase of image group)
   private prevRouteTS: string = ''
+
+  // Options for Sortablejs reordering of assets
+  public sortableOptions: SortablejsOptions = {
+    onUpdate: (event) => {
+      this.orderChanged = true
+    }
+  }
 
   // TypeScript public modifiers
   constructor(
@@ -750,5 +758,4 @@ export class AssetGrid implements OnInit, OnDestroy {
       dropdownElement.children[1].classList.remove('show')
     }
   }
-
 }
