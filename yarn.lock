@@ -969,6 +969,10 @@ angular2-medium-editor@1.2.0:
   dependencies:
     tslib "^1.9.0"
 
+angular2-tag-autocomplete@^1.2.10:
+  version "1.2.10"
+  resolved "https://registry.yarnpkg.com/angular2-tag-autocomplete/-/angular2-tag-autocomplete-1.2.10.tgz#0e01b599fb474dd806f0958da1535379ed0825dc"
+
 angulartics2@^7.0.2:
   version "7.0.2"
   resolved "https://registry.yarnpkg.com/angulartics2/-/angulartics2-7.0.2.tgz#b0e07375883b522a0059e8efb070603b122899df"
@@ -6248,6 +6252,10 @@ ngx-moment@^3.1.0:
   resolved "https://registry.yarnpkg.com/ngx-moment/-/ngx-moment-3.1.0.tgz#41380b4dd8b68e7bd6d17cc6fe7f703ae506dc3a"
   dependencies:
     tslib "^1.9.0"
+
+ngx-tag-autocomplete@^2.0.3:
+  version "2.0.3"
+  resolved "https://registry.yarnpkg.com/ngx-tag-autocomplete/-/ngx-tag-autocomplete-2.0.3.tgz#a0d9def79ee03a96d04b2505372b691cf616fdbb"
 
 nice-try@^1.0.4:
   version "1.0.5"

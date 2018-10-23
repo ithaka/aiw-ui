@@ -25,8 +25,7 @@ import { Angulartics2GoogleAnalytics } from 'angulartics2/ga'
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 
-// BRETT
-// import { RlTagInputModule } from 'angular2-tag-autocomplete'; // TODO: ANGULAR 6 WIP:
+import { NgxTagInputModule } from 'ngx-tag-autocomplete';
 
 import { Ng2CompleterModule } from 'ng2-completer';
 
@@ -249,7 +248,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
-    //RlTagInputModule, autocomplete module gone // BRETT TODO
+    NgxTagInputModule,
     Ng2CompleterModule,
     LockerModule,
     FileUploadModule,
