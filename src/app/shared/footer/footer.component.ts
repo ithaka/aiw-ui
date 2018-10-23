@@ -7,7 +7,7 @@ import { map } from 'rxjs/operators'
 import { AppConfig } from '../../app.service'
 import { AuthService } from '../auth.service'
 
-import version from '../../../../package.json'
+import { version } from '../../../../package.json'
 
 declare let google
 
@@ -46,6 +46,8 @@ export class Footer {
 
   ngOnInit() {
 
+
+    console.log('Version: ', version)
     this.subscriptions.push(
       this._router.events.pipe(
       map(e => {
