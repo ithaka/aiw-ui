@@ -2,14 +2,14 @@ import { Component, OnInit, OnDestroy } from '@angular/core'
 import { Router, ActivatedRoute, Params, UrlSegment } from '@angular/router'
 import { Subscription }   from 'rxjs'
 import { map } from 'rxjs/operators'
-import { Locker, DRIVERS } from 'angular-safeguard'
 
+// Project Dependencies
 import { TitleService } from '../shared/title.service'
 import { AssetService } from '../shared/assets.service'
 import { AuthService } from '../shared/auth.service'
 import { AssetFiltersService } from '../asset-filters/asset-filters.service'
-
 import { AppConfig } from '../app.service'
+import { LockerService } from 'app/_services';
 
 @Component({
   selector: 'ang-browse-page',
@@ -19,7 +19,6 @@ import { AppConfig } from '../app.service'
 
 export class BrowsePage implements OnInit, OnDestroy {
 
-  private _storage: Locker
   private subscriptions: Subscription[] = []
   private institution: any = {}
 
@@ -35,7 +34,7 @@ export class BrowsePage implements OnInit, OnDestroy {
 
   // TypeScript public modifiers
   constructor(
-      locker: Locker,
+      private _locker: LockerService,
       private _auth: AuthService,
       private _assets: AssetService,
       private _app: AppConfig,
@@ -44,8 +43,7 @@ export class BrowsePage implements OnInit, OnDestroy {
       private _title: TitleService,
       private _filters: AssetFiltersService
   ) {
-      this._storage = locker
-      this.institution = this._storage.get(DRIVERS.LOCAL, 'institution');
+      this.institution = this._locker.get('institution');
       this.browseOpts = this._app.config.browseOptions;
   }
 

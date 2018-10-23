@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core'
 import { BehaviorSubject, Subscription } from 'rxjs'
 import { map } from 'rxjs/operators'
-import { Locker, DRIVERS } from 'angular-safeguard'
 import { HttpClient, HttpHeaders } from '@angular/common/http'
 
 import { AuthService } from '../shared/auth.service'
@@ -62,7 +61,6 @@ export class AssetFiltersService {
     // 'Search within' boolean flag
     public searchWithin: boolean = false
 
-    private _storage;
     private institution: any = {};
 
 
@@ -78,12 +76,9 @@ export class AssetFiltersService {
     private subscriptions: Subscription[] = []
 
     constructor(
-        private locker: Locker,
         private http: HttpClient,
         private _auth: AuthService
     ){
-        this._storage = locker
-
         this.subscriptions.push(
           this._auth.getInstitution().pipe(
               map(institution => {
