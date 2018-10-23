@@ -3,7 +3,14 @@
 
 export interface Thumbnail {
   name?: string
+  agent?: string
+  date?: string
+  tombstone?: string[]
+  clustered?: number
+  partofcluster?: boolean
+  frequentlygroupedwith?: string[]
   objectId?: string
+  objectTypeId?: number
   artstorid?: string
   collectionId: string
   collectionType: number
@@ -15,7 +22,7 @@ export interface Thumbnail {
   iap?: number
   status: string
   media: {
-    adlObjectType: string
+    adlObjectType: number
     thumbnailSizeOnePath: string
   }
   thumbnailImgUrl: string
