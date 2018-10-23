@@ -354,7 +354,7 @@ export class AssetGrid implements OnInit, OnDestroy {
             this.isLoading = false;
           }
 
-          this._session.set('totalAssets', this.totalAssets ? this.totalAssets : 1)
+          this._session.set(DRIVERS.SESSION, 'totalAssets', this.totalAssets ? this.totalAssets : 1)
 
           // Tie prevRouteParams array with previousRouteTS (time stamp) before sending to asset page
           this.prevRouteTS = Date.now().toString()
