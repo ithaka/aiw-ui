@@ -15,10 +15,10 @@ nav.nav.nav-inline.browse-nav
           | {{ facet.title }} ({{facet.count}})
         a.tag-link(*ngIf="facetQueryMap[facetType] != 'category'", [routerLink]="['/search/*', getLinkParam(facetType, facet.name)]")
           | {{facet.name}} ({{facet.count}})
-      li.filter(*ngFor="let key of JSObject.keys(hierarchicalFacets).sort()")
+      li.filter(*ngFor="let key of ObjectKeys(hierarchicalFacets).sort()")
         a.tag-link([routerLink]="['/search/*', getLinkParam(facetType, hierarchicalFacets[key].element.efq)]") {{key}} ({{hierarchicalFacets[key].element.count}})
         ul
-          li.filter(*ngFor="let childKey of JSObject.keys(hierarchicalFacets[key].children).sort()")
+          li.filter(*ngFor="let childKey of ObjectKeys(hierarchicalFacets[key].children).sort()")
             a.tag-link([routerLink]="['/search/*', getLinkParam(facetType,hierarchicalFacets[key].children[childKey].element.efq)]") {{childKey}} ({{hierarchicalFacets[key].children[childKey].element.count}})
     //- ul.filter-list
     //-   li.filter(*ngFor)

@@ -13,6 +13,7 @@ export interface ImageGroup {
   public?: boolean,
   igId?: string,
   count?: number,
+  total?: number,
   thumbnails?: Thumbnail[],
   items?: string[],
   description?: string

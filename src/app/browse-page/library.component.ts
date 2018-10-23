@@ -44,7 +44,7 @@ export class LibraryComponent implements OnInit {
   public facetType: string = ''
   private splashImgURL: string = '';
   public errorMessage: string = ''
-  public JSObject: Object = Object;
+  public ObjectKeys = Object.keys;
   private JSArray: Object = Array;
   private encodeURIComponent = encodeURIComponent
   public searchTerm: string = ''
