@@ -23,17 +23,17 @@ import { LocalPCService, LocalPCAsset } from '../../_local-pc-asset.service'
 })
 export class EditPersonalCollectionModal implements OnInit {
   @Output() closeModal: EventEmitter<any> = new EventEmitter()
-  @Input() private colId: string
+  @Input() public colId: string
 
-  private pcColThumbs: Array<any> = []
-  private collectionAssets: Array<PersonalCollectionUploadAsset> = []
-  private editMode: boolean = false
-  private selectedAsset: PersonalCollectionUploadAsset // this is the asset which the user selects from the list of assets
-  private selectedAssetData: AssetDetailsFormValue = {} // the asset emitted from the viewer
+  public pcColThumbs: Array<any> = []
+  public collectionAssets: Array<PersonalCollectionUploadAsset> = []
+  public editMode: boolean = false
+  public selectedAsset: PersonalCollectionUploadAsset // this is the asset which the user selects from the list of assets
+  public selectedAssetData: AssetDetailsFormValue = {} // the asset emitted from the viewer
 
-  private editAssetMetaForm: FormGroup
+  public editAssetMetaForm: FormGroup
 
-  private uiMessages: {
+  public uiMessages: {
     imgUploadSuccess?: boolean,
     imgUploadFailure?: boolean,
     metadataUpdateSuccess?: boolean,
@@ -41,18 +41,18 @@ export class EditPersonalCollectionModal implements OnInit {
     imgDeleteSuccess?: boolean,
     imgDeleteFailure?: boolean
   } = {}
-  private submitted: boolean = false // keeps track of whether or not the form was submitted
+  public submitted: boolean = false // keeps track of whether or not the form was submitted
 
-  private deleteLoading: boolean = false // state before delete call has returned
-  private metadataUpdateLoading: boolean = false
+  public deleteLoading: boolean = false // state before delete call has returned
+  public metadataUpdateLoading: boolean = false
 
   constructor(
-    private _fb: FormBuilder,
-    private _auth: AuthService,
-    private _search: AssetSearchService,
-    private _assets: AssetService,
-    private _pc: PersonalCollectionService,
-    private _localPC: LocalPCService
+    public _fb: FormBuilder,
+    public _auth: AuthService,
+    public _search: AssetSearchService,
+    public _assets: AssetService,
+    public _pc: PersonalCollectionService,
+    public _localPC: LocalPCService
   ) {
     this.editAssetMetaForm = _fb.group({
       creator: [null],
@@ -70,7 +70,7 @@ export class EditPersonalCollectionModal implements OnInit {
   ngOnInit() {
   }
 
-  private setMetadataValues(asset: LocalPCAsset): void {
+  public setMetadataValues(asset: LocalPCAsset): void {
     if (asset) {
       this.selectedAssetData = asset.asset_metadata
     } else {
@@ -87,7 +87,7 @@ export class EditPersonalCollectionModal implements OnInit {
     this.editAssetMetaForm.controls['subject'].setValue(this.selectedAssetData.subject)
   }
 
-  private editAssetMeta(asset: PersonalCollectionUploadAsset): void{
+  public editAssetMeta(asset: PersonalCollectionUploadAsset): void{
     this.uiMessages = {}
     this.submitted = false // reset this value for a new metadata form
 
@@ -97,13 +97,13 @@ export class EditPersonalCollectionModal implements OnInit {
     this.editMode = true
   }
 
-  private clearSelectedAsset(): void {
+  public clearSelectedAsset(): void {
     this.selectedAsset = <PersonalCollectionUploadAsset>{}
     this.selectedAssetData = <AssetDetailsFormValue>{}
     this.editMode = false
   }
 
-  private editMetaFormSubmit( formData: AssetDetailsFormValue ): void {
+  public editMetaFormSubmit( formData: AssetDetailsFormValue ): void {
     this.submitted = true
 
     if (this.metadataUpdateLoading) { return }
@@ -144,7 +144,7 @@ export class EditPersonalCollectionModal implements OnInit {
   /**
    * Removes the selected asset from the array of thumbnails
    */
-  private removeSelectedAsset(): void {
+  public removeSelectedAsset(): void {
     this.collectionAssets.splice(this.collectionAssets.indexOf(this.selectedAsset), 1)
   }
 
@@ -152,7 +152,7 @@ export class EditPersonalCollectionModal implements OnInit {
    * Uses personal collection service to make http call and delete asset
    * @param ssid the ssid of the asset to delete
    */
-  private deleteAssetById(ssid: string): void {
+  public deleteAssetById(ssid: string): void {
     if (this.deleteLoading) { return }
 
     this.uiMessages = { }
@@ -174,7 +174,7 @@ export class EditPersonalCollectionModal implements OnInit {
     })).subscribe()
   }
 
-  private handleNewAssetUpload(item: PersonalCollectionUploadAsset): void {
+  public handleNewAssetUpload(item: PersonalCollectionUploadAsset): void {
     this.uiMessages = {}
 
     this.collectionAssets.unshift(item)

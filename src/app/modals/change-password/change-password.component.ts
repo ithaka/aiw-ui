@@ -12,14 +12,14 @@ export class ChangePasswordModal implements OnInit {
 
   @Output() closeModal: EventEmitter<any> = new EventEmitter()
 
-  private passForm: FormGroup
-  private serviceResponses: {
+  public passForm: FormGroup
+  public serviceResponses: {
     success?: boolean,
     wrongPass?: boolean,
     generalError?: boolean
   } = {};
-  private submitted: boolean = false
-  private changePassLoading: boolean = false
+  public submitted: boolean = false
+  public changePassLoading: boolean = false
 
   constructor(
     private _auth: AuthService,
@@ -46,7 +46,7 @@ export class ChangePasswordModal implements OnInit {
       ? null : { passwordMismatch: true };
   }
 
-  private changePass(formValue: any): void {
+  public changePass(formValue: any): void {
     this.submitted = true;
     this.serviceResponses = {};
 

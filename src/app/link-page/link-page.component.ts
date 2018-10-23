@@ -8,7 +8,7 @@ import { Router, ActivatedRoute } from '@angular/router'
 
 export class LinkPage implements OnInit {
 
-  private shibParams: {
+  public shibParams: {
     email: string,
     samlTokenId: string,
     type: string,
@@ -20,6 +20,7 @@ export class LinkPage implements OnInit {
     private _router: Router
   ) { }
 
+  public showPwdModal: boolean = false
   private copyBase: string = 'SHIB_'
 
   ngOnInit() {

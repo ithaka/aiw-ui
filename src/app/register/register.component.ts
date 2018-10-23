@@ -15,16 +15,16 @@ import { USER_ROLES, USER_DEPTS, UserRolesAndDepts } from './user-roles'
 })
 export class RegisterComponent implements OnInit {
 
-  private registerForm: FormGroup
-  private submitted: boolean = false
-  private isLoading: boolean = false
+  public registerForm: FormGroup
+  public submitted: boolean = false
+  public isLoading: boolean = false
   // Indicates user is registering for Shibboleth
-  private isShibbFlow: boolean = false
+  public isShibbFlow: boolean = false
 
-  private userDepts: UserRolesAndDepts[] = []
-  private userRoles: UserRolesAndDepts[] = []
+  public userDepts: UserRolesAndDepts[] = []
+  public userRoles: UserRolesAndDepts[] = []
 
-  private serviceErrors: {
+  public serviceErrors: {
     duplicate?: boolean,
     hasJstor?: boolean,
     server?: boolean,
@@ -32,9 +32,9 @@ export class RegisterComponent implements OnInit {
     shibbolethInst?: boolean
   } = {};
 
-  private showJstorModal: boolean = false
+  public showJstorModal: boolean = false
 
-  private shibParameters = {
+  public shibParameters = {
     email: null,
     samlTokenId: null
   }
@@ -110,7 +110,7 @@ export class RegisterComponent implements OnInit {
   }
 
   /** Gets called when the registration form is submitted */
-  private registerSubmit(formValue: any) {
+  public registerSubmit(formValue: any) {
     let registerCall: Function = (value) => { return this._auth.registerUser(value) }
     this.serviceErrors = {};
     this.submitted = true;
@@ -194,7 +194,7 @@ export class RegisterComponent implements OnInit {
   /**
    * Navigates to correct page for login depending on whether or not shiboleth params exist
    */
-  private navigateToLogin(): void {
+  public navigateToLogin(): void {
     if (this.shibParameters) {
       this._router.navigate(['/link', this.shibParameters])
     } else {

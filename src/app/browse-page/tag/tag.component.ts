@@ -15,7 +15,7 @@ export class TagComponent {
   @Input() public link: boolean;
   @Input() public browseType: boolean;
 
-  @Input() private edit: boolean;
+  @Input() public edit: boolean;
   @Output() editTag: EventEmitter<any> = new EventEmitter();
 
   private showAsFolder: boolean;

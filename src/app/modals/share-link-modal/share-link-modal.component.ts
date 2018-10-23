@@ -11,8 +11,8 @@ import { Asset } from '../../asset-page/asset';
 })
 export class ShareLinkModal implements OnInit, AfterViewInit {
 
-  @Input() private asset: any;
-  @Output() private closeModal: EventEmitter<any> = new EventEmitter();
+  @Input() public asset: any;
+  @Output() public closeModal: EventEmitter<any> = new EventEmitter();
   private shareLink: string = '';
   private genImgMode: string = 'half';
 
@@ -37,7 +37,7 @@ export class ShareLinkModal implements OnInit, AfterViewInit {
   }
 
   // Set initial focus on the modal Title h1
-  private startModalFocus() {
+  public startModalFocus() {
     let modalStartFocus = document.getElementById('share-img-link-title')
     modalStartFocus.focus()
   }
@@ -97,7 +97,7 @@ export class ShareLinkModal implements OnInit, AfterViewInit {
     document.body.removeChild(textArea);
   }
 
-  private showHelp(): void{
+  public showHelp(): void{
     window.open('http://support.artstor.org/?article=creating-links', 'Artstor Support', 'width=600,height=500');
   }
 

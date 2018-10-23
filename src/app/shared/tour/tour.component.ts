@@ -16,7 +16,7 @@ import { TourStep } from './tour.service'
   export class GuideTourComponent {
 
     private driver: any
-    private startModalShow: boolean = false
+    public startModalShow: boolean = false
 
     @Input() public steps: TourStep[]
 
@@ -36,7 +36,7 @@ import { TourStep } from './tour.service'
       })).subscribe()
     }
 
-    private startTour() {
+    public startTour() {
       this.startModalShow = false
       this._ga.eventTrack.next({ action: 'beginTour', properties: { category: this._auth.getGACategory(), label: 'imageGroupTour' } })
       this.driver = new Driver({ allowClose: false, closeBtnText: 'exit tour', nextBtnText: 'NEXT', prevBtnText: 'BACK', doneBtnText: 'GOT IT, THANKS!',
@@ -109,7 +109,7 @@ import { TourStep } from './tour.service'
     /**
      * closes the modal and saves the fact that the user dismissed it
      */
-    private closeTourModal(): void {
+    public closeTourModal(): void {
       this.startModalShow = false
     }
 

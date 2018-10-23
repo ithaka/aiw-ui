@@ -23,23 +23,23 @@ export class PCollectionPage implements OnInit, OnDestroy {
   private options = { headers: this.header, withCredentials: true }; // Create a request option
 
   private colId: string = ''
-  private colName: string = ''
-  private colDescription: string = ''
-  private colThumbnail: string = ''
-  private assetCount: number
-  private descCollapsed: boolean = true
-  private showAccessDeniedModal: boolean = false
-  private showDeleteSuccessBanner: boolean = false
+  public colName: string = ''
+  public colDescription: string = ''
+  public colThumbnail: string = ''
+  public assetCount: number
+  public descCollapsed: boolean = true
+  public showAccessDeniedModal: boolean = false
+  public showDeleteSuccessBanner: boolean = false
   private deleteBannerParams: { title?: string } = {}
 
   private subscriptions: Subscription[] = []
 
-  private publishingAssets: any = {
+  public publishingAssets: any = {
     ssids: [],
     showPublishingMsgs: true // Flag that hides the publishing msgs untill a new PC asset is uploaded
   }
-  private pub_que_count: number = 0
-  private pub_failure_count: number = 0
+  public pub_que_count: number = 0
+  public pub_failure_count: number = 0
   private unaffiliatedUser: boolean = false
 
   constructor(

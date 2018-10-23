@@ -18,20 +18,20 @@ export class AddToGroupModal implements OnInit, OnDestroy {
 
   @Input() private selectedAssets: any[] = []; // this is used in the asset page, where a single asset can be injected directly
   private groups: ImageGroup[] = [];
-  private selectedIg: ImageGroup;
-  private selectedGroupName: string;
-  private selectedGroupError: string;
+  public selectedIg: ImageGroup;
+  public selectedGroupName: string;
+  public selectedGroupError: string;
 
   @Input()
-  private copySelectionStr: string = 'ADD_TO_GROUP_MODAL.FROM_SELECTED'
+  public copySelectionStr: string = 'ADD_TO_GROUP_MODAL.FROM_SELECTED'
 
-  private serviceResponse: {
+  public serviceResponse: {
     success?: boolean,
     failure?: boolean,
     tooManyAssets?: boolean
   } = {};
 
-  private dataService: any;
+  public dataService: any;
 
   constructor(
     private _assets: AssetService,
@@ -109,7 +109,7 @@ export class AddToGroupModal implements OnInit, OnDestroy {
    * Submits updates to Group
    * @param form Values to update the group with
    */
-  private submitGroupUpdate(form: NgForm) {
+  public submitGroupUpdate(form: NgForm) {
     // clear any service status
     this.serviceResponse = {}
     this.selectedGroupError = ''

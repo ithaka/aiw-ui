@@ -22,7 +22,7 @@ export class AssociatedPage implements OnInit, OnDestroy {
   // the colection which the associated asset comes from
   private colId: string;
   // gets assigned with the asset's title
-  private assetTitle: string;
+  public assetTitle: string;
 
   constructor(
       private _router: Router,

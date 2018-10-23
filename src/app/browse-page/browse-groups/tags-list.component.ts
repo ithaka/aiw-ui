@@ -14,7 +14,7 @@ export class TagsListComponent implements OnInit {
   private subscriptions: Subscription[] = []
 
   constructor(
-    private _tagFilters: TagFiltersService,
+    public _tagFilters: TagFiltersService,
     private _router: Router,
     private route: ActivatedRoute
   ) {

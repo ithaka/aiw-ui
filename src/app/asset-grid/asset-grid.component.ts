@@ -41,15 +41,15 @@ export class AssetGrid implements OnInit, OnDestroy {
   public showFilters: boolean = true;
   public showAdvancedModal: boolean = false;
   errors = {};
-  private results: any[] = [];
+  public results: any[] = [];
   // Sometimes we get all the ids but not thumbnails for assets (eg. Groups)
   private itemIds: string[] = [];
   // Array to be filled with *all* assets for reorder mode
   private allResults: any[] = [];
   filters = [];
-  private editMode: boolean = false;
-  private reorderMode: boolean = false;
-  private showLoseReorder: boolean = false;
+  public editMode: boolean = false;
+  public reorderMode: boolean = false;
+  public showLoseReorder: boolean = false;
   private orderChanged: boolean = false;
 
   private largeThmbView: boolean = false;
@@ -57,17 +57,17 @@ export class AssetGrid implements OnInit, OnDestroy {
   private selectedAssets: any[] = [];
 
   // Default show as loading until results have update
-  private isLoading: boolean = true;
-  private searchError: string = '';
-  private searchLimitError: boolean = false;
+  public isLoading: boolean = true;
+  public searchError: string = '';
+  public searchLimitError: boolean = false;
 
-  private searchTerm: string = '';
+  public searchTerm: string = '';
   private formattedSearchTerm: string = '';
   private searchInResults: boolean = false;
   private isPartialPage: boolean = false;
 
   // Flag to check if the results have any restricted images.
-  private restricted_results: any[] = [];
+  public restricted_results: any[] = [];
 
   private excludedAssetsCount: number = 0;
   private sortByDateTotal: number = 0;
@@ -80,7 +80,7 @@ export class AssetGrid implements OnInit, OnDestroy {
   private hasMaxAssetLimit: boolean = true
 
   // Value
-  private totalAssets: number = 0;
+  public totalAssets: number = 0;
   @Input()
   set assetCount(count: number) {
     if (typeof(count) != 'undefined') {
@@ -162,7 +162,7 @@ export class AssetGrid implements OnInit, OnDestroy {
   constructor(
     public _appConfig: AppConfig,
     private _assets: AssetService,
-    private _auth: AuthService,
+    public _auth: AuthService,
     private _filters: AssetFiltersService,
     private _flags: FlagService,
     private _groups: GroupService,
@@ -647,7 +647,7 @@ export class AssetGrid implements OnInit, OnDestroy {
   /**
    * Format the search term to display advance search queries nicely
    */
-  private formatSearchTerm(query: string): void {
+  public formatSearchTerm(query: string): void {
     let fQuery = '"' + query + '"';
     // Cleanup filter pipes
     // fQuery = fQuery.replace(/\|[0-9]{3}/g, );
@@ -665,7 +665,7 @@ export class AssetGrid implements OnInit, OnDestroy {
   /**
    * Display "exiting reorder" modal
    */
-  private shouldSaveModal(event) {
+  public shouldSaveModal(event) {
     if (this.reorderMode && this.showLoseReorder == false) {
       this.showLoseReorder = true;
     }

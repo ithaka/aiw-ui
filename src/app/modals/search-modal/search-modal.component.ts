@@ -17,7 +17,7 @@ import { AppConfig } from '../../app.service'
 })
 export class SearchModal implements OnInit, AfterViewInit {
   @Output()
-  private closeModal: EventEmitter<any> = new EventEmitter();
+  public closeModal: EventEmitter<any> = new EventEmitter();
 
   public fields = []
   private filterNameMap: any = {}
@@ -40,7 +40,7 @@ export class SearchModal implements OnInit, AfterViewInit {
       operator: 'AND'
     };
 
-  private error: any = {};
+  public error: any = {};
   public advanceQueries = [];
   public advanceSearchDate: any = {
     'startDate' : '',
@@ -72,14 +72,14 @@ export class SearchModal implements OnInit, AfterViewInit {
   private showCollectionType: boolean = false;
 
   // Filters
-  private availableFilters: FacetGroup[] = []
+  public availableFilters: FacetGroup[] = []
 
   // Search query trasnformation logic is abstracted to a utility
   private queryUtil: SearchQueryUtil = new SearchQueryUtil()
 
   // Flag while transitioning to Solr search
   private hideLegacyFilters: boolean
-  private loadingFilters: boolean
+  public loadingFilters: boolean
 
   constructor(
         private _appConfig: AppConfig,
@@ -116,7 +116,7 @@ export class SearchModal implements OnInit, AfterViewInit {
   }
 
   // Set initial focus on the modal Title h1
-  private startModalFocus() {
+  public startModalFocus() {
     let modalStartFocus = document.getElementById('advanced-search-title')
     modalStartFocus.focus()
   }
@@ -387,7 +387,7 @@ export class SearchModal implements OnInit, AfterViewInit {
     )
   }
 
-  private close(): void {
+  public close(): void {
     document.body.style.overflow = 'auto';
     this.closeModal.emit()
   }
@@ -415,7 +415,7 @@ export class SearchModal implements OnInit, AfterViewInit {
     }
   }
 
-  private dateKeyPress(event: any): boolean{
+  public dateKeyPress(event: any): boolean{
       // Add check of Tab key to make sure the tabbingis enabled on Firefox
       if ((event.key === 'ArrowUp') || (event.key === 'ArrowDown') || (event.key === 'ArrowRight') || (event.key === 'ArrowLeft') || (event.key === 'Backspace') || (event.key === 'Tab')){
         return true;
@@ -433,7 +433,7 @@ export class SearchModal implements OnInit, AfterViewInit {
       return theEvent.returnValue;
   }
 
-  private resetFilters(): void {
+  public resetFilters(): void {
     this.advanceSearchDate = {
       'startDate' : '',
       'startEra' : 'BCE',
@@ -458,7 +458,7 @@ export class SearchModal implements OnInit, AfterViewInit {
   /**
    * Simple validation to test if the form is empty (This form is structured oddly, so it's simpler to do our own minimum validation)
    */
-  private validateForm(): boolean {
+  public validateForm(): boolean {
     let isValid = false;
 
     let startDate = 0;
@@ -486,7 +486,7 @@ export class SearchModal implements OnInit, AfterViewInit {
     return isValid;
   }
 
-  private applyAllFilters(): void {
+  public applyAllFilters(): void {
     if (!this.validateForm()) {
       return;
     }
@@ -587,7 +587,7 @@ export class SearchModal implements OnInit, AfterViewInit {
   /**
    * Open Help page on Advanced Search
    */
-  private openHelp(): void {
+  public openHelp(): void {
     window.open('http://support.artstor.org/?article=advanced-search', 'Advanced Search Support', 'width=800,height=600');
   }
 }

@@ -17,9 +17,9 @@ import { AuthService } from '../auth.service'
 export class SearchComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = [];
 
-  private showSearchModal: boolean = false;
-  private term: string;
-  private startSearch: boolean = false
+  public showSearchModal: boolean = false;
+  public term: string;
+  public startSearch: boolean = false
 
   private size: number = 24;
 
@@ -29,10 +29,10 @@ export class SearchComponent implements OnInit, OnDestroy {
   private nestedSrchLbl: string = 'results';
 
   @Input()
-  private allowSearchInRes: boolean;
+  public allowSearchInRes: boolean;
 
   @Input()
-  private UserNotLoggedIn: boolean;
+  public UserNotLoggedIn: boolean;
 
   constructor(
     private _assets: AssetService,
@@ -88,7 +88,7 @@ export class SearchComponent implements OnInit, OnDestroy {
    * Called from template when new search term is entered
    * @param term Term for desired search
    */
-  private updateSearchTerm(term: string) {
+  public updateSearchTerm(term: string) {
     if (!term || term === '') {
       return
     }
@@ -192,7 +192,7 @@ export class SearchComponent implements OnInit, OnDestroy {
     this._filters.searchWithin = value
   }
 
-  private setFocus() : void {
+  public setFocus() : void {
     window.setTimeout(function () {
       if (document.getElementById('empty-search-alert')){
         document.getElementById('empty-search-alert').focus()

@@ -13,7 +13,7 @@ import { TitleService, AssetSearchService, AuthService, AssetService, FlagServic
   styleUrls: [ './browse-page.component.scss' ]
 })
 export class MyCollectionsComponent implements OnInit {
-  private unaffiliatedUser: boolean = false
+  public unaffiliatedUser: boolean = false
   constructor(
     private _auth: AuthService,
     private _flags: FlagService,
@@ -26,21 +26,21 @@ export class MyCollectionsComponent implements OnInit {
     this.unaffiliatedUser = this._auth.isPublicOnly() ? true : false
   }
 
-  private isLoggedIn: boolean
+  public isLoggedIn: boolean
   private subscriptions: Subscription[] = [];
   private categories = [];
   private tags: Tag[] = [];
   private expandedCategories: any = {};
   private selectedBrowseId: string = '';
 //   private showUploadImgsModal: boolean = false;
-  private showEditPCModal: boolean = false;
+  public showEditPCModal: boolean = false;
 
   private editTagId: string = '';
 
   // Reference activeTag for description on side
   private activeTag:  Tag;
 
-  private loading: boolean = false;
+  public loading: boolean = false;
 
   ngOnInit() {
     // Add tag for My Personal Collection

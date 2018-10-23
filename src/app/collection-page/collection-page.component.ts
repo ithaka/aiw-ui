@@ -23,13 +23,13 @@ export class CollectionPage implements OnInit, OnDestroy {
   private options = { headers: this.header, withCredentials: true }; // Create a request option
 
   private colId: string = '';
-  private colName: string = '';
-  private colDescription: string = '';
-  private colThumbnail: string = '';
-  private assetCount: number;
-  private descCollapsed: boolean = true;
+  public colName: string = '';
+  public colDescription: string = '';
+  public colThumbnail: string = '';
+  public assetCount: number;
+  public descCollapsed: boolean = true;
   private unaffiliatedUser: boolean = false;
-  private showAccessDeniedModal: boolean = false;
+  public showAccessDeniedModal: boolean = false;
 
   private subscriptions: Subscription[] = [];
   private userSessionFresh: boolean = false;

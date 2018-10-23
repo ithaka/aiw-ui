@@ -18,14 +18,14 @@ export class LoginFormComponent implements OnInit {
 
   @Input() samlTokenId: string
 
-  private copyBase: string = ''
+  public copyBase: string = ''
 
   // Set our default values
   public user = new User('', '')
   public errorMsg: string = ''
   public instErrorMsg: string = ''
   public showPwdModal = false
-  public showHelpModal = false
+  // public showHelpModal = false BRETT TODO TEST, exists ??
   public pwdReset = false
   public expirePwd = false
   public pwdRstEmail = ''
@@ -34,10 +34,10 @@ export class LoginFormComponent implements OnInit {
   public successMsgPwdRst = ''
   public loginInstitutions = [] /** Stores the institutions returned by the server */
 
-  @Input() private copyModifier: string = 'DEFAULT'
+  @Input() public copyModifier: string = 'DEFAULT'
 
   private loginInstName: string = '' /** Bound to the autocomplete field */
-  private loginLoading = false
+  public loginLoading = false
   // loginCall is scoped globally for isBadCasePassword() as well as login()
   private loginCall: Function
 
@@ -58,7 +58,7 @@ export class LoginFormComponent implements OnInit {
     private router: Router,
     private location: Location,
     private angulartics: Angulartics2,
-    private _app: AppConfig
+    public _app: AppConfig
   ) {
   }
 

@@ -23,11 +23,11 @@ export class Nav implements OnInit, OnDestroy {
   private institutionObj: any = {};
   private _tool: ToolboxService = new ToolboxService();
 
-  private showinactiveUserLogoutModal: boolean = false;
+  public showinactiveUserLogoutModal: boolean = false;
   private appConfig: any
 
   // Display variables
-  private logoUrl = ''
+  public logoUrl = ''
 
   private ipAuthed: boolean = false
 

@@ -12,8 +12,8 @@ import { TitleService } from '../shared/title.service';
   styleUrls: [ './browse-page.component.scss' ]
 })
 export class BrowseCommonsComponent implements OnInit {
-  private tags: Tag[] = [];
-  private loading: boolean = true;
+  public tags: Tag[] = [];
+  public loading: boolean = true;
 
   constructor(
     private _assets: AssetService,

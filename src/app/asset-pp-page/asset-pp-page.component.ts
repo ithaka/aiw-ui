@@ -19,8 +19,8 @@ export class AssetPPPage implements OnInit {
   private options = { headers: this.header, withCredentials: true }; // Create a request option
 
   private assetId: string;
-  private asset: any = {};
-  private metaArray: Array<any> = [];
+  public asset: any = {};
+  public metaArray: Array<any> = [];
 
   private subscriptions: Subscription[] = [];
 

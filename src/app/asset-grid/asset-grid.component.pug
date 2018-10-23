@@ -76,10 +76,10 @@
         //- Restricted assets warning message
         .alert.alert-warning(*ngIf="restricted_results && restricted_results.length > 0")
           | {{ "BROWSE.WARNINGS.RSTD_IMGS" | translate }}
-          ng-container(*ngIf="ig.owner_id == user.baseProfileId")
+          ng-container(*ngIf="ig.owner_id == user.baseProfileId.toString()")
             div.mt-4 As the <b>Owner</b> of this group, would you like to remove the deleted images?
             a.mt-2.btn.btn-secondary.btn-sm(tabindex="3", (click)="removeFromGroup(restricted_results)") Remove deleted images
-        .alert.alert-warning(*ngIf="!isLoading && (totalAssets == '0') && (!results || results.length < 1) && (searchError.length < 1) && !searchLimitError")
+        .alert.alert-warning(*ngIf="!isLoading && (totalAssets == 0) && (!results || results.length < 1) && (searchError.length < 1) && !searchLimitError")
           b Unable to find any assets
           br
           | A less specific query might be able to find what you are looking for.

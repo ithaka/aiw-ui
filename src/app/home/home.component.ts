@@ -37,12 +37,12 @@ export class Home implements OnInit, OnDestroy {
   private blogPosts: any[] = []
   private blogLoading: boolean = true
 
-  private showBlog: boolean = false
+  public showBlog: boolean = false
   private showPrivateCollections: boolean = false
   private browseSec: any = {}
   private showHomeSSC: boolean = false
-  private showHomePromo: boolean = false
-  private siteID: string = ''
+  public showHomePromo: boolean = false
+  public siteID: string = ''
 
   // Default IG 'Browse By:' Option controlled via the WLV file
   private defaultGrpBrwseBy: string = 'institution'
@@ -52,7 +52,7 @@ export class Home implements OnInit, OnDestroy {
     public _appConfig: AppConfig,
     private _assets: AssetService,
     private _router: Router,
-    private _auth: AuthService,
+    public _auth: AuthService,
     private deviceService: DeviceDetectorService,
     private _script: ScriptService
   ) {

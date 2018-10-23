@@ -23,7 +23,7 @@ export class NavMenu implements OnInit, OnDestroy {
    * }
    */
   @Input()
-  private actionOptions: any = {};
+  public actionOptions: any = {};
 
   @Input()
   private disableIgDelete: boolean = false;
@@ -32,7 +32,7 @@ export class NavMenu implements OnInit, OnDestroy {
   private allowIgUpdate: boolean = false;
 
   @Input()
-  private genImgGrpLink: boolean = false;
+  public genImgGrpLink: boolean = false;
 
   @Input()
   private allowSelectAll: boolean = false;
@@ -44,23 +44,25 @@ export class NavMenu implements OnInit, OnDestroy {
 
   private user: any = {}
   private siteID: string = ''
-  private institutionObj: any = {}
+  public institutionObj: any = {}
 
-  private mobileCollapsed: boolean = true
-  private selectedAssets: any[] = []
+  public mobileCollapsed: boolean = true
+  public selectedAssets: any[] = []
   private subscriptions: Subscription[] = []
 
-  private showImageGroupModal: boolean = false
-  private showAddToGroupModal: boolean = false
-  private showShareIgModal: boolean = false
+  public showShareLinkModal: boolean = false
+  public showDeleteIgModal: boolean = false
+  public showImageGroupModal: boolean = false
+  public showAddToGroupModal: boolean = false
+  public showShareIgModal: boolean = false
   private copyIG: boolean = false
   private editIG: boolean = false
-  private params: any = {}
+  public params: any = {}
 
-  private browseOpts: any = {}
+  public browseOpts: any = {}
 
   // Flag for confimation popup for deleting selected asset(s) from the IG
-  private showConfirmationModal: boolean = false
+  public showConfirmationModal: boolean = false
 
   // TypeScript public modifiers
   constructor(
@@ -72,7 +74,7 @@ export class NavMenu implements OnInit, OnDestroy {
     private _ig: ImageGroupService,
     private _group: GroupService,
     private route: ActivatedRoute,
-    private _auth: AuthService,
+    public _auth: AuthService,
   ) {
     this.browseOpts = this._app.config.browseOptions
     this.siteID = this._appConfig.config.siteID
@@ -123,7 +125,7 @@ export class NavMenu implements OnInit, OnDestroy {
     this.subscriptions.forEach((sub) => { sub.unsubscribe() })
   }
 
-  private printImageGroupPage(): void {
+  public printImageGroupPage(): void {
     if (this.actionOptions.group) {
       let params = this.route.snapshot.params
 
@@ -224,7 +226,7 @@ export class NavMenu implements OnInit, OnDestroy {
   /**
    * Opens dropdown
    */
-  private openDrop(event, dropdown): void {
+  public openDrop(event, dropdown): void {
     event.stopPropagation();
     dropdown.open();
   }
@@ -232,12 +234,12 @@ export class NavMenu implements OnInit, OnDestroy {
   /**
    * Closes dropdown
    */
-  private closeDrop(event, dropdown): void {
+  public closeDrop(event, dropdown): void {
     event.stopPropagation();
     dropdown.close();
   }
 
-  private closeNavMenuDropdowns(): void{
+  public closeNavMenuDropdowns(): void{
     let dropdownElements: Array<HTMLElement> = Array.from( document.querySelectorAll('.nav-item.dropdown') )
     for (let dropdownElement of dropdownElements){
       dropdownElement.classList.remove('show')
