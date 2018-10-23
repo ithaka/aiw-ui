@@ -109,7 +109,7 @@ export class AddToGroupModal implements OnInit, OnDestroy {
    * Submits updates to Group
    * @param form Values to update the group with
    */
-  private submitGroupUpdate(form: NgForm) {
+  public submitGroupUpdate(form: NgForm) {
     // clear any service status
     this.serviceResponse = {}
     this.selectedGroupError = ''

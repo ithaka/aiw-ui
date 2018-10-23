@@ -40,7 +40,7 @@ export class BrowseGroupsComponent implements OnInit {
     page: 1
   }
 
-  private updateSearchTerm: EventEmitter<string> = new EventEmitter()
+  public updateSearchTerm: EventEmitter<string> = new EventEmitter()
 
   private tagFilters = []
   private appliedTags: string[] = []

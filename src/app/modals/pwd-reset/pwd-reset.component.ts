@@ -16,7 +16,7 @@ export class PwdResetModal implements OnInit {
   private pwdRstEmail = '';
   public errorMsgPwdRst = '';
   public successMsgPwdRst = '';
-  private submitted = false;
+  public submitted = false;
 
   constructor(
     private _auth: AuthService,
