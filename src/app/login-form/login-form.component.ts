@@ -1,5 +1,4 @@
 import { OnInit, Input } from '@angular/core'
-import { Locker } from 'angular-safeguard'
 import { Component } from '@angular/core'
 import { Router, ActivatedRoute } from '@angular/router'
 import { Location } from '@angular/common'
@@ -59,8 +58,7 @@ export class LoginFormComponent implements OnInit {
     private router: Router,
     private location: Location,
     private angulartics: Angulartics2,
-    private _app: AppConfig,
-    private _storage: Locker
+    private _app: AppConfig
   ) {
   }
 

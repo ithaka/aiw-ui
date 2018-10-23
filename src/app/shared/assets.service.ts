@@ -6,7 +6,6 @@ import { Injectable, OnDestroy, OnInit, EventEmitter } from '@angular/core'
 import { Router, ActivatedRoute, Params } from '@angular/router'
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http'
 import { Observable, BehaviorSubject, Subject } from 'rxjs'
-import { Locker, DRIVERS } from 'angular-safeguard'
 
 import { Subscription }   from 'rxjs'
 import { map } from 'rxjs/operators'
@@ -21,6 +20,7 @@ import { AssetSearchService, SearchResponse } from './asset-search.service'
 import { ImageGroup, Thumbnail } from '.'
 import { AppConfig } from 'app/app.service'
 import { APP_CONST } from '../app.constants'
+import { LockerService } from 'app/_services';
 
 @Injectable()
 export class AssetService {
@@ -30,14 +30,14 @@ export class AssetService {
         private _router: Router,
         private route: ActivatedRoute,
         private http: HttpClient,
-        private locker: Locker,
+        private _locker: LockerService,
         private _auth: AuthService,
         private _groups: GroupService,
         private _toolbox: ToolboxService,
         private _assetSearch: AssetSearchService,
         private _app: AppConfig
     ) {
-        this._storage = locker
+        
     }
 
     /** Constant that defines which collectionType belongs to institutions */
@@ -132,10 +132,6 @@ export class AssetService {
         index: 0
      };
 
-    /** Keeps track of all filters available in url */
-    // private knownFilters: any = {};
-    public _storage;
-
     /** Default Headers for this service */
     // ... Set content type to JSON
     private header = new HttpHeaders().set('Content-Type', 'application/json');
@@ -194,7 +190,7 @@ export class AssetService {
 
         // Set Recent Results (used by Compare Mode)
         if (resultObj.thumbnails && resultObj.thumbnails.length > 0) {
-            this._storage.set('results', resultObj);
+            this._locker.set('results', resultObj)
         }
 
         if (this.paginated){
@@ -209,10 +205,10 @@ export class AssetService {
      * Return most recent results set with at least one asset
      */
     public getRecentResults(): any {
-        if (this._storage.get('results')) {
-            return this._storage.get('results');
+        if (this._locker.get('results')) {
+            return this._locker.get('results')
         } else {
-            return { thumbnails: [] };
+            return { thumbnails: [] }
         }
     }
 
