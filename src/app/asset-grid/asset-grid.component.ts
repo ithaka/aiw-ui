@@ -19,6 +19,7 @@ import {
 } from '../shared'
 import { AssetFiltersService } from '../asset-filters/asset-filters.service'
 import { APP_CONST } from '../app.constants'
+import { LockerService } from 'app/_services';
 
 @Component({
   selector: 'ang-asset-grid',
@@ -149,9 +150,6 @@ export class AssetGrid implements OnInit, OnDestroy {
   // Used as a key to save the previous route params in session storage (incase of image group)
   private prevRouteTS: string = ''
 
-  private _storage;
-  private _session;
-
   // TypeScript public modifiers
   constructor(
     public _appConfig: AppConfig,
@@ -166,12 +164,10 @@ export class AssetGrid implements OnInit, OnDestroy {
     private _router: Router,
     private _search: AssetSearchService,
     private _toolbox: ToolboxService,
-    private locker: Locker,
+    private _locker: LockerService,
     private route: ActivatedRoute
   ) {
       this.siteID = this._appConfig.config.siteID;
-      this._storage = DRIVERS.LOCAL // BRETT TODO bug? others do storage.get
-    this._session = DRIVERS.SESSION; // BRETT TODO bug? others session.get
       let prefs = this._auth.getFromStorage('prefs')
       if (prefs && prefs.pageSize && prefs.pageSize != 24) {
         this.pagination.size = prefs.pageSize
@@ -354,15 +350,15 @@ export class AssetGrid implements OnInit, OnDestroy {
             this.isLoading = false;
           }
 
-          this._session.set(DRIVERS.SESSION, 'totalAssets', this.totalAssets ? this.totalAssets : 1)
+          this._locker.sessionSet('totalAssets', this.totalAssets ? this.totalAssets : 1)
 
           // Tie prevRouteParams array with previousRouteTS (time stamp) before sending to asset page
           this.prevRouteTS = Date.now().toString()
           let id: string = this.prevRouteTS
 
-          let prevRouteParams = this._session.get('prevRouteParams') || {}
+          let prevRouteParams = this._locker.sessionGet('prevRouteParams') || {}
           prevRouteParams[id] = this.route.snapshot.url
-          this._session.set('prevRouteParams', prevRouteParams)
+          this._locker.sessionSet('prevRouteParams', prevRouteParams)
 
           // Generate Facets
           if (allResults && allResults.collTypeFacets) {
@@ -458,8 +454,8 @@ export class AssetGrid implements OnInit, OnDestroy {
       this._assets.goToPage(1, true)
       this._assets.setPageSize(size)
       // this._auth.store('prefs', { pageSize: size })
-      let updatedPrefs = Object.assign(this._storage.get('prefs') || {}, { pageSize: size })
-      this._storage.set('prefs', updatedPrefs)
+      let updatedPrefs = Object.assign(this._locker.get('prefs') || {}, { pageSize: size })
+      this._locker.set('prefs', updatedPrefs)
     }
   }
 
@@ -688,8 +684,8 @@ export class AssetGrid implements OnInit, OnDestroy {
    */
   private setThumbnailSize(large: boolean): void {
     this.largeThmbView = large
-    let updatedPrefs = Object.assign(this._storage.get('prefs') || {}, { largeThumbnails: large })
-    this._storage.set('prefs', updatedPrefs)
+    let updatedPrefs = Object.assign(this._locker.get('prefs') || {}, { largeThumbnails: large })
+    this._locker.set('prefs', updatedPrefs)
   }
 
   /**

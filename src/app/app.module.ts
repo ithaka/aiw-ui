@@ -118,6 +118,7 @@ import {
   PersonalCollectionService,
   AccountService
 } from './shared'
+import { LockerService } from './_services'
 import { LocalPCService } from './_local-pc-asset.service'
 import { AssetFiltersService } from './asset-filters/asset-filters.service'
 import { TagsService } from './browse-page/tags.service'
@@ -145,6 +146,7 @@ const APP_PROVIDERS = [
   GroupService,
   PersonalCollectionService,
   LocalPCService,
+  LockerService,
   LogService,
   ImageGroupService,
   ScriptService,
