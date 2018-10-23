@@ -40,7 +40,7 @@ export class AssetGrid implements OnInit, OnDestroy {
   public showFilters: boolean = true;
   public showAdvancedModal: boolean = false;
   errors = {};
-  private results: any[] = [];
+  public results: any[] = [];
   // Sometimes we get all the ids but not thumbnails for assets (eg. Groups)
   private itemIds: string[] = [];
   // Array to be filled with *all* assets for reorder mode
@@ -57,10 +57,10 @@ export class AssetGrid implements OnInit, OnDestroy {
 
   // Default show as loading until results have update
   public isLoading: boolean = true;
-  private searchError: string = '';
-  private searchLimitError: boolean = false;
+  public searchError: string = '';
+  public searchLimitError: boolean = false;
 
-  private searchTerm: string = '';
+  public searchTerm: string = '';
   private formattedSearchTerm: string = '';
   private searchInResults: boolean = false;
   private isPartialPage: boolean = false;
@@ -79,7 +79,7 @@ export class AssetGrid implements OnInit, OnDestroy {
   private hasMaxAssetLimit: boolean = true
 
   // Value
-  private totalAssets: number = 0;
+  public totalAssets: number = 0;
   @Input()
   set assetCount(count: number) {
     if (typeof(count) != 'undefined') {
@@ -154,7 +154,7 @@ export class AssetGrid implements OnInit, OnDestroy {
   constructor(
     public _appConfig: AppConfig,
     private _assets: AssetService,
-    private _auth: AuthService,
+    public _auth: AuthService,
     private _filters: AssetFiltersService,
     private _flags: FlagService,
     private _groups: GroupService,
@@ -639,7 +639,7 @@ export class AssetGrid implements OnInit, OnDestroy {
   /**
    * Format the search term to display advance search queries nicely
    */
-  private formatSearchTerm(query: string): void {
+  public formatSearchTerm(query: string): void {
     let fQuery = '"' + query + '"';
     // Cleanup filter pipes
     // fQuery = fQuery.replace(/\|[0-9]{3}/g, );
@@ -657,7 +657,7 @@ export class AssetGrid implements OnInit, OnDestroy {
   /**
    * Display "exiting reorder" modal
    */
-  private shouldSaveModal(event) {
+  public shouldSaveModal(event) {
     if (this.reorderMode && this.showLoseReorder == false) {
       this.showLoseReorder = true;
     }

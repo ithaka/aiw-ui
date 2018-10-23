@@ -130,8 +130,8 @@ export class AssetPage implements OnInit, OnDestroy {
     private editDetailsFormSubmitted: boolean = false // Set to true once the edit details form is submitted
     private isProcessing: boolean = false // controls loading class on delete button
     private deleteLoading: boolean = false
-    private showExitEdit: boolean = false
-    private showDeletePCModal: boolean = false
+    public showExitEdit: boolean = false
+    public showDeletePCModal: boolean = false
     private downloadLoading: boolean = false
 
     private prevRouteTS: string = '' // Used to track the (Timestamp) key for previous route params in session storage

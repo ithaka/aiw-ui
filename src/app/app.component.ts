@@ -138,7 +138,7 @@ export class App {
       }
   }
 
-  private findMainContent(): void {
+  public findMainContent(): void {
     window.setTimeout(function ()
     {
       let htmlelement: HTMLElement = document.getElementById('mainContent');
