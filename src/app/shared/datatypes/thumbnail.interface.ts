@@ -2,6 +2,7 @@
 //  if you need more, you can add them to the interface
 
 export interface Thumbnail {
+  name?: string
   objectId?: string
   artstorid?: string
   collectionId: string

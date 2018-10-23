@@ -18,23 +18,23 @@ import {
   styleUrls: ["./account-page.component.scss"]
 })
 export class AccountPage implements OnInit {
-  private user: any = {}
-  private institutionObj: any = {}
-  private subscriptions: Subscription[] = []
+ public user: any = {}
+ public institutionObj: any = {}
+ public subscriptions: Subscription[] = []
 
-  private showChangePassModal: boolean = false
-  private accountUpdateForm: FormGroup
+ public showChangePassModal: boolean = false
+ public accountUpdateForm: FormGroup
 
   // ui display controls
-  private updateLoading: boolean = false
-  private messages: {
+ public updateLoading: boolean = false
+ public messages: {
     updateSuccess?: boolean
     updateError?: boolean
   } = {}
 
   // update form select field values
-  private userDepts: UserRolesAndDepts[] = []
-  private userRoles: UserRolesAndDepts[] = []
+ public userDepts: UserRolesAndDepts[] = []
+ public userRoles: UserRolesAndDepts[] = []
 
   constructor(
     private _account: AccountService,

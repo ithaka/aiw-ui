@@ -20,7 +20,7 @@ declare var initPath: string
 })
 export class Login implements OnInit, OnDestroy {
 
-  private copyBase: string = ''
+  public copyBase: string = ''
 
   // Set our default values
   public user = new User('', '')
@@ -60,7 +60,7 @@ export class Login implements OnInit, OnDestroy {
     private router: Router,
     private location: Location,
     private angulartics: Angulartics2,
-    private _app: AppConfig,
+    public _app: AppConfig,
     private _flags: FlagService,
     private _locker: LockerService
   ) {

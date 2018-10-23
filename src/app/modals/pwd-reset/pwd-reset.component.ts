@@ -10,12 +10,12 @@ import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms'
 export class PwdResetModal implements OnInit {
   @Output() closeModal: EventEmitter<any> = new EventEmitter();
 
-  private pwdResetForm: FormGroup;
+  public pwdResetForm: FormGroup;
 
-  private pwdReset = true;
+  public pwdReset = true;
   private pwdRstEmail = '';
-  private errorMsgPwdRst = '';
-  private successMsgPwdRst = '';
+  public errorMsgPwdRst = '';
+  public successMsgPwdRst = '';
   private submitted = false;
 
   constructor(

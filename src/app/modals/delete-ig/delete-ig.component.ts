@@ -24,7 +24,7 @@ export class DeleteIgModal implements OnInit {
   @Input()
   igName: string;
 
-  private groupDeleted: boolean = false;
+  public groupDeleted: boolean = false;
 
   constructor(
       private _group: GroupService,

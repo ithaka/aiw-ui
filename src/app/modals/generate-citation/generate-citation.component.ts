@@ -11,18 +11,18 @@ import { LogService } from '../../shared'
 })
 export class GenerateCitation implements OnInit, AfterViewInit {
   @Output()
-  private closeModal: EventEmitter<any> = new EventEmitter()
+  public closeModal: EventEmitter<any> = new EventEmitter()
 
   @Input() private asset: Asset /** the asset in question */
 
-  private document = document
+  public document = document
   private reqProtocol = document.location.protocol + '//'
 
-  private apa_citation: string = '' // APA style citation to be copied to the clipboard
-  private mla_citation: string = '' // MLA style citation to be copied to the clipboard
-  private chicago_citation: string = '' // Chicago style citation to be copied to the clipboard
+  public apa_citation: string = '' // APA style citation to be copied to the clipboard
+  public mla_citation: string = '' // MLA style citation to be copied to the clipboard
+  public chicago_citation: string = '' // Chicago style citation to be copied to the clipboard
 
-  private citationCopied: boolean = false
+  public citationCopied: boolean = false
 
   constructor(
     private _date: DatePipe,
@@ -46,7 +46,7 @@ export class GenerateCitation implements OnInit, AfterViewInit {
   }
 
   // Set initial focus on the modal Title h1
-  private startModalFocus() {
+  public startModalFocus() {
     let modalStartFocus = document.getElementById('generate-citation-title')
     modalStartFocus.focus()
   }

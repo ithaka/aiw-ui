@@ -38,7 +38,7 @@ import { LockerService } from 'app/_services';
 })
 export class AssetPage implements OnInit, OnDestroy {
 
-    // @ViewChild(ArtstorViewer) 
+    // @ViewChild(ArtstorViewer)
     public assetViewer: any
 
     public user: any
@@ -50,7 +50,7 @@ export class AssetPage implements OnInit, OnDestroy {
 
     // Array to support multiple viewers on the page
     private assets: Asset[] = []
-    private assetIds: string[] = []
+    public assetIds: string[] = []
     private assetIndex: number = 0
     private assetGroupId: string
     private assetNumber: number = 1
@@ -69,13 +69,13 @@ export class AssetPage implements OnInit, OnDestroy {
     private restrictedAssetsCount: number = 0
 
     /** controls whether or not the modals are visible */
-    private showAgreeModal: boolean = false
-    private showLoginModal: boolean = false
-    private showAddModal: boolean = false
-    private showCreateGroupModal: boolean = false
-    private showAccessDeniedModal: boolean = false
-    private showServerErrorModal: boolean = false
-    private showGenerateCitation: boolean = false
+    public showAgreeModal: boolean = false
+    public showLoginModal: boolean = false
+    public showAddModal: boolean = false
+    public showCreateGroupModal: boolean = false
+    public showAccessDeniedModal: boolean = false
+    public showServerErrorModal: boolean = false
+    public showGenerateCitation: boolean = false
     private showMetadataPending: boolean = false
     private showMetadataError: boolean = false
 

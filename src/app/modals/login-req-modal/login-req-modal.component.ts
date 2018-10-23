@@ -17,9 +17,9 @@ import { AuthService, ToolboxService } from './../../shared';
 export class LoginReqModal {
   /** Meant only to trigger display of modal */
   @Output()
-  private closeModal: EventEmitter<any> = new EventEmitter();
+  public closeModal: EventEmitter<any> = new EventEmitter();
 
-  constructor(private _router: Router, private _auth: AuthService, private route: ActivatedRoute, private _tool: ToolboxService, private location: Location) { }
+  constructor(private _router: Router, public _auth: AuthService, private route: ActivatedRoute, private _tool: ToolboxService, private location: Location) { }
 
   ngOnInit() {
     // Set focus to the modal to make the links in the modal first thing to tab for accessibility

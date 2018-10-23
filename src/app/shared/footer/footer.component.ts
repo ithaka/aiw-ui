@@ -18,12 +18,12 @@ declare let google
 })
 export class Footer {
   private subscriptions: Subscription[] = []
-  private appVersion = ''
-  private currentYear
+  public appVersion = ''
+  public currentYear
   private user: any = {}
-  private links: string[]
+  public links: string[]
   private browseSec: { [key: string]: boolean } = {}
-  private siteID: string = ""
+  public siteID: string = ""
 
   // TypeScript public modifiers
   constructor(
@@ -31,7 +31,7 @@ export class Footer {
     private location: Location,
     private _app: AppConfig,
     private _router: Router,
-    private _auth: AuthService
+    public _auth: AuthService
   ) {
     this.siteID = this._appConfig.config.siteID;
     // Get version number

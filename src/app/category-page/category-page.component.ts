@@ -24,15 +24,15 @@ export class CategoryPage implements OnInit, OnDestroy {
   private user: any = this._auth.getUser();
 
   private catId: string;
-  private catName: string;
-  private catDescription: string;
-  private catThumbnail: string;
+  public catName: string;
+  public catDescription: string;
+  public catThumbnail: string;
 
   private subscriptions: Subscription[] = [];
 
   // private searchInResults: boolean = false;
   private unaffiliatedUser: boolean = false
-  private showAccessDeniedModal: boolean = false
+  public showAccessDeniedModal: boolean = false
 
   constructor(
     private _assets: AssetService,

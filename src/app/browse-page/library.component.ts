@@ -19,7 +19,7 @@ import { LockerService } from 'app/_services';
   styleUrls: [ './browse-page.component.scss' ]
 })
 export class LibraryComponent implements OnInit {
-  private unaffiliatedUser: boolean = false
+  public unaffiliatedUser: boolean = false
 
   constructor(
     private router: Router,
@@ -35,19 +35,19 @@ export class LibraryComponent implements OnInit {
     this.unaffiliatedUser = this._auth.isPublicOnly() ? true : false
   }
 
-  private loading: boolean = false;
+  public loading: boolean = false;
   private subscriptions: Subscription[] = [];
-  private selectedBrowseId: string = '';
-  private browseMenuArray: any[];
-  private categoryFacets: any[]
-  private hierarchicalFacets: object = {}
-  private facetType: string = ''
+  public selectedBrowseId: string = '';
+  public browseMenuArray: any[];
+  public categoryFacets: any[]
+  public hierarchicalFacets: object = {}
+  public facetType: string = ''
   private splashImgURL: string = '';
-  private errorMessage: string = ''
-  private JSObject: Object = Object;
+  public errorMessage: string = ''
+  public JSObject: Object = Object;
   private JSArray: Object = Array;
   private encodeURIComponent = encodeURIComponent
-  private searchTerm: string = ''
+  public searchTerm: string = ''
 
   private tagsObj: any = {
     103 : [],
@@ -55,7 +55,7 @@ export class LibraryComponent implements OnInit {
     260 : [],
     270 : []
   };
-  private descObj: any  = {
+  public descObj: any  = {
     '103' : 'BROWSE.LIBRARY_COLLECTION',
     '250' : 'BROWSE.CLASSIFICATION',
     '260' : 'BROWSE.GEOGRAPHY'
@@ -68,7 +68,7 @@ export class LibraryComponent implements OnInit {
     // '270': '/browse/groups/public?tags=Teaching%2520Resources&page=1',
     'undefined': 'artcollectiontitle_str' // default
   }
-  private facetQueryMap = {
+  public facetQueryMap = {
     'artcollectiontitle_str': 'artcollectiontitle_str',
     'artclassification_str': 'artclassification_str',
     'artstor-geography': 'geography',

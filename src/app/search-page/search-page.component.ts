@@ -21,7 +21,7 @@ export class SearchPage implements OnInit, OnDestroy {
   // Add user to decide whether to show the banner
   private user: any = this._auth.getUser();
 
-  private siteID: string = ''
+  public siteID: string = ''
 
   private subscriptions: Subscription[] = [];
 
@@ -39,7 +39,7 @@ export class SearchPage implements OnInit, OnDestroy {
         private _flags: FlagService,
         private _router: Router,
         private _title: TitleService,
-        private _auth: AuthService,
+        public _auth: AuthService,
         private _captainsLog: LogService,
         private _script: ScriptService
     ) {
@@ -116,7 +116,7 @@ export class SearchPage implements OnInit, OnDestroy {
     this.subscriptions.forEach((sub) => { sub.unsubscribe(); });
   }
 
-  private skipToFilterSec(): void{
+  public skipToFilterSec(): void{
     window.setTimeout(function ()
     {
       let htmlelement: HTMLElement = document.getElementById('skip-to-search-link');
@@ -124,7 +124,7 @@ export class SearchPage implements OnInit, OnDestroy {
     }, 100);
   }
 
-  private skipToSearchSec(): void{
+  public skipToSearchSec(): void{
     window.setTimeout(function ()
     {
       let htmlelement: HTMLElement = document.getElementById('skip-to-filter-link');

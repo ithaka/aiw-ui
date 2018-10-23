@@ -46,9 +46,9 @@ export class AssetGrid implements OnInit, OnDestroy {
   // Array to be filled with *all* assets for reorder mode
   private allResults: any[] = [];
   filters = [];
-  private editMode: boolean = false;
-  private reorderMode: boolean = false;
-  private showLoseReorder: boolean = false;
+  public editMode: boolean = false;
+  public reorderMode: boolean = false;
+  public showLoseReorder: boolean = false;
   private orderChanged: boolean = false;
 
   private largeThmbView: boolean = false;
@@ -56,7 +56,7 @@ export class AssetGrid implements OnInit, OnDestroy {
   private selectedAssets: any[] = [];
 
   // Default show as loading until results have update
-  private isLoading: boolean = true;
+  public isLoading: boolean = true;
   private searchError: string = '';
   private searchLimitError: boolean = false;
 
@@ -66,7 +66,7 @@ export class AssetGrid implements OnInit, OnDestroy {
   private isPartialPage: boolean = false;
 
   // Flag to check if the results have any restricted images.
-  private restricted_results: any[] = [];
+  public restricted_results: any[] = [];
 
   private excludedAssetsCount: number = 0;
   private sortByDateTotal: number = 0;

@@ -18,8 +18,8 @@ export class GeneralSearchComponent implements OnInit {
   private subscriptions: Subscription[] = []
 
   // the term that will be searched for
-  private term: string = ''
-  private startSearch: boolean = false
+  public term: string = ''
+  public startSearch: boolean = false
 
   constructor() { }
 
@@ -36,7 +36,7 @@ export class GeneralSearchComponent implements OnInit {
     }
   }
 
-  private setFocus() : void {
+  public setFocus() : void {
     window.setTimeout(function () {
       if (document.getElementById('empty-search-alert')){
         document.getElementById('empty-search-alert').focus()

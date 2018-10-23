@@ -22,7 +22,7 @@ export class NewIgModal implements OnInit {
   /** Switch for running logic to copy image group */
   @Input() private copyIG: boolean = false;
   /** Switch for running loginc to edit image group */
-  @Input() private editIG: boolean = false;
+  @Input() public editIG: boolean = false;
   /** The image group object */
   @Input() private ig: ImageGroup = <ImageGroup>{};
   /** Controls the user seeing the toggle to add images to group or create a new group */
@@ -44,7 +44,7 @@ export class NewIgModal implements OnInit {
   /** Set to true once the form is submitted */
   private submitted: boolean = false;
   /** Quick interface for controlling display of errors/response feedback */
-  private serviceResponse: {
+  public serviceResponse: {
     success?: boolean,
     failure?: boolean
   } = {};

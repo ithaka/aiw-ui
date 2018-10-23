@@ -19,9 +19,9 @@ export class ImageGroupPPPage implements OnInit, OnDestroy {
   private options = { headers: this.header, withCredentials: true }; // Create a request option
 
   private igId: string;
-  private igName: string;
-  private igDesc: string;
-  private assets: any = [];
+  public igName: string;
+  public igDesc: string;
+  public assets: any = [];
 
   private subscriptions: Subscription[] = [];
 

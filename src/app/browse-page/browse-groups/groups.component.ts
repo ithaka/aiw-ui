@@ -22,15 +22,15 @@ export class BrowseGroupsComponent implements OnInit {
 
   private userTypeId: any
   private currentBrowseRes: any = {}
-  private tags: Tag[] = []
+  public tags: Tag[] = []
   private groups: any[] = []
-  private searchTerm: string = ''
-  private loading: boolean = true
-  private showAccessDeniedModal: boolean = false
-  private isSearch: boolean = false
-  private numResultMsg: string = ''
+  public searchTerm: string = ''
+  public loading: boolean = true
+  public showAccessDeniedModal: boolean = false
+  public isSearch: boolean = false
+  public numResultMsg: string = ''
 
-  private pagination: {
+  public pagination: {
     totalPages: number,
     size: number,
     page: number
@@ -45,15 +45,15 @@ export class BrowseGroupsComponent implements OnInit {
   private tagFilters = []
   private appliedTags: string[] = []
 
-  private groupFilterArray: GroupFilter[] = []
-  private errorObj: any = {}
+  public groupFilterArray: GroupFilter[] = []
+  public errorObj: any = {}
 
-  private activeSort = {
+  public activeSort = {
     label : 'date',
     name : 'Recently Modified'
   }
 
-  private steps: TourStep[] = [
+  public steps: TourStep[] = [
     {
       step: 1,
       element: ['.driver-find-cardview'],
@@ -90,7 +90,7 @@ export class BrowseGroupsComponent implements OnInit {
     _appConfig: AppConfig,
     private _router: Router,
     private _groups: GroupService,
-    private _tagFilters: TagFiltersService,
+    public _tagFilters: TagFiltersService,
     private _auth: AuthService,
     private _title: TitleService,
     private _ga: Angulartics2,
@@ -167,7 +167,7 @@ export class BrowseGroupsComponent implements OnInit {
   }
 
   // find which of the filters is selected
-  private get selectedFilter(): GroupFilter {
+  public get selectedFilter(): GroupFilter {
     let filter: GroupFilter = this.groupFilterArray.find((filter) => {
       return filter.selected
     })
@@ -181,7 +181,7 @@ export class BrowseGroupsComponent implements OnInit {
     return filter
   }
 
-  private clearGrpSearch(): void {
+  public clearGrpSearch(): void {
     let queryParams = Object.assign({}, this.route.snapshot.queryParams)
     if (queryParams['term']){
       delete queryParams['term']
@@ -325,7 +325,7 @@ export class BrowseGroupsComponent implements OnInit {
     }
   }
 
-  private changeSortOpt(label) {
+  public changeSortOpt(label) {
     if ( this.activeSort.label != label){
       this._ga.eventTrack.next({ action: 'sortGroup', properties: { category: this._auth.getGACategory(), label: 'cardviewSort' }});
       this.activeSort.label = label;
@@ -467,7 +467,7 @@ export class BrowseGroupsComponent implements OnInit {
    * Gets the image groups for a new page - applies all currently applied filters, just updates the page number
    * @param newPageNum The page number you wish to navigate to
    */
-  private goToPage(newPageNum: number) {
+  public goToPage(newPageNum: number) {
     this.addQueryParams({ page: newPageNum })
   }
 
@@ -504,7 +504,7 @@ export class BrowseGroupsComponent implements OnInit {
    * @param params the parameters to add to the url (if duplicate parameters already in url, this will overwrite them)
    * @param reset allows resetting of queryParams to empty object plus whatever params you pass, instead of keeping old params
    */
-  private addQueryParams(params: { [key: string]: any }, reset?: boolean, searchWithTerm?: boolean, currentParams?: any) {
+  public addQueryParams(params: { [key: string]: any }, reset?: boolean, searchWithTerm?: boolean, currentParams?: any) {
     let baseParams
     if (reset) {
       baseParams = {}

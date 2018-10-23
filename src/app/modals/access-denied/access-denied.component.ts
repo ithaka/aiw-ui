@@ -11,14 +11,14 @@ import { AuthService } from '../../shared'
   templateUrl: 'access-denied.component.pug'
 })
 export class AccessDeniedModal implements OnInit {
-  @Input() private showSkipAsset: boolean
+  @Input() public showSkipAsset: boolean
   @Output() skipAsset: EventEmitter<any> = new EventEmitter()
   @Output() exitFullScreen: EventEmitter<any> = new EventEmitter()
 
   @Output() closeModal: EventEmitter<any> = new EventEmitter()
 
-  private isLoggedIn: boolean
-  private promptCopy: string = ''
+  public isLoggedIn: boolean
+  public promptCopy: string = ''
 
   constructor(
     private _auth: AuthService,

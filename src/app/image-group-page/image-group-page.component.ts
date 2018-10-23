@@ -15,7 +15,7 @@ import { TitleService } from '../shared/title.service'
 })
 
 export class ImageGroupPage implements OnInit, OnDestroy {
-  private ig: ImageGroup = <ImageGroup>{};
+  public ig: ImageGroup = <ImageGroup>{};
   private hasDesc: boolean = false;
   private user: any;
   private descExpanded: boolean = true;
@@ -23,28 +23,28 @@ export class ImageGroupPage implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = [];
 
   /** controls when PPT agreement modal is or is not shown */
-  private showPptModal: boolean = false;
+  public showPptModal: boolean = false;
   /** controls the modal that tells a user he/she has met the download limit */
-  private showDownloadLimitModal: boolean = false;
+  public showDownloadLimitModal: boolean = false;
   /** controls the modal to tell the user to login */
-  private showLoginModal: boolean = false;
+  public showLoginModal: boolean = false;
   /** controls the modal to tell the user that the IG doesn't exists */
-  private showNoIgModal: boolean = false;
+  public showNoIgModal: boolean = false;
   /** controls the modal to tell that the user does not have the rights to access the IG */
-  private showNoAccessIgModal: boolean = false;
+  public showNoAccessIgModal: boolean = false;
   /** controls access denied modal for unaffiliated users landing on /group/id pages */
-  private showAccessDeniedModal: boolean = false;
+  public showAccessDeniedModal: boolean = false;
   /** set to true when the call to download info has returned. We won't know what modal to show before that */
   private downloadInfoReturned: boolean = false;
   /** Enables / Disables the IG deletion based on user ownership */
-  private allowIgUpdate: boolean = false;
+  public allowIgUpdate: boolean = false;
 
-  private genImgGrpLink: boolean = false;
+  public genImgGrpLink: boolean = false;
 
   private unaffiliatedUser: boolean = false
 
   /** Options object passed to the asset-grid component */
-  private actionOptions: any = {
+  public actionOptions: any = {
     group: true,
     isowner: false
   }
@@ -201,7 +201,7 @@ export class ImageGroupPage implements OnInit, OnDestroy {
     }
   }
 
-  private refreshIG(): void{
+  public refreshIG(): void{
     this._assets.queryAll(this.route.snapshot.params, true);
   }
 
@@ -210,7 +210,7 @@ export class ImageGroupPage implements OnInit, OnDestroy {
    * - A description exists
    * - View hasn't changed to hide the description
    */
-  private showDesc(): boolean {
+  public showDesc(): boolean {
     if (this.ig && ((this.ig.description && this.ig.description.length > 0) || (this.ig.tags && this.ig.tags.length > 0)) && !this.reorderMode && this.descExpanded) {
       return true;
     } else {
@@ -221,7 +221,7 @@ export class ImageGroupPage implements OnInit, OnDestroy {
   /**
    * Toggle Reorder: Handle output from the Asset Grid
    */
-  private toggleReorder(isReordering: boolean): void {
+  public toggleReorder(isReordering: boolean): void {
     this.reorderMode = isReordering;
   }
 

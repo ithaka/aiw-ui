@@ -10,15 +10,15 @@ import { ImageGroup, GroupService, AuthService, LogService } from './../../share
 })
 export class ShareIgLinkModal implements OnInit, AfterViewInit {
   @Output()
-  private closeModal: EventEmitter<any> = new EventEmitter()
+  public closeModal: EventEmitter<any> = new EventEmitter()
 
   @Input() private ig: ImageGroup /** the image group in question */
 
-  private document = document
+  public document = document
 
-  private shareLink: string = '' // this is the url which will be copied to the user's clipboard
-  private igCopied: boolean = false
-  private serviceStatus: {
+  public shareLink: string = '' // this is the url which will be copied to the user's clipboard
+  public igCopied: boolean = false
+  public serviceStatus: {
     isLoading?: boolean,
     tokenError?: boolean
   } = {}
@@ -42,7 +42,7 @@ export class ShareIgLinkModal implements OnInit, AfterViewInit {
   }
 
   // Set initial focus on the modal Title h1
-  private startModalFocus() {
+  public startModalFocus() {
     let modalStartFocus = document.getElementById('share-ig-link-title')
       modalStartFocus.focus()
   }
