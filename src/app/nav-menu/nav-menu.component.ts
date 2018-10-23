@@ -50,6 +50,8 @@ export class NavMenu implements OnInit, OnDestroy {
   public selectedAssets: any[] = []
   private subscriptions: Subscription[] = []
 
+  public showShareLinkModal: boolean = false
+  public showDeleteIgModal: boolean = false
   public showImageGroupModal: boolean = false
   public showAddToGroupModal: boolean = false
   public showShareIgModal: boolean = false
