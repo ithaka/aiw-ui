@@ -40,6 +40,7 @@ export class Login implements OnInit, OnDestroy {
   private dataService: LocalData
 
   public showRegister: boolean = false
+  public showHelpModal: boolean = false
 
   /**
    * Observable for autocomplete list of institutions

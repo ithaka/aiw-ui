@@ -20,6 +20,7 @@ export class LinkPage implements OnInit {
     private _router: Router
   ) { }
 
+  public showPwdModal: boolean = false
   private copyBase: string = 'SHIB_'
 
   ngOnInit() {

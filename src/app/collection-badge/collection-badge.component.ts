@@ -9,6 +9,7 @@ import { Component, OnInit, Input } from '@angular/core';
 export class CollectionBadgeComponent implements OnInit {
   @Input() collectionType: {
     name: string,
+    badgeText: string,
     alt: string
   }
 
