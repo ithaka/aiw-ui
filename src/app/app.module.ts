@@ -8,7 +8,7 @@ import { DeviceDetectorModule } from 'ngx-device-detector';
 import { DatePipe } from '@angular/common'
 
 // Ithaka/Artstor Dependencies
-import { ArtstorViewerModule } from 'artstor-viewer';
+import { ArtstorViewerModule } from 'artstor-viewer'
 
 /*
  * Platform and Environment providers/directives/pipes
