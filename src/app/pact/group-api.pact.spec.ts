@@ -39,7 +39,7 @@ describe('Group Calls #pact', () => {
           'access_type': 300
         }
       ],
-      'newItems': [
+      'items': [
         {'artstorid': 'ASITESPHOTOIG_10312738558', zoom: { viewerX: 100, viewerY: 500, pointWidth: 600, pointHeight: 800 }},
         {'artstorid': 'AWAYNEIG_10311326670'},
         {'artstorid': 'ADAVISIG_10311277805'},
@@ -61,10 +61,10 @@ describe('Group Calls #pact', () => {
     // Verify types of response properties - Individual Image Group
     let matcherImageGroupObject = {}
     Object.keys(expectedImageGroupObject).forEach((key) => {
-      if (key === 'newItems'){
+      if (key === 'items'){
         if (Array.isArray(expectedImageGroupObject[key]) && expectedImageGroupObject[key][0]){
-          let newItemsArray = Matchers.eachLike(expectedImageGroupObject[key][0])
-          matcherImageGroupObject[key] = Matchers.somethingLike(newItemsArray)
+          let itemsArray = Matchers.eachLike(expectedImageGroupObject[key][0])
+          matcherImageGroupObject[key] = Matchers.somethingLike(itemsArray)
         }
       } else{
         matcherImageGroupObject[key] = Matchers.somethingLike(expectedImageGroupObject[key])
@@ -213,7 +213,7 @@ describe('Group Calls #pact', () => {
                 'creation_date',
                 'id',
                 'access',
-                'newItems'
+                'items'
               ]
 
               let expectedAccessKeys = [
@@ -229,7 +229,7 @@ describe('Group Calls #pact', () => {
               expect(resAccessKeys).toEqual(expectedAccessKeys)
 
               // Test res.items length
-              expect(res.newItems.length).toBeGreaterThan(0)
+              expect(res.items.length).toBeGreaterThan(0)
               done()
             },
               err => {
