@@ -7,7 +7,7 @@ nav-menu
         b Error Linking&nbsp;
         | {{ 'SHIBBOLETH_ERRORS.INST404' | translate }}
       .alert.alert-warning.mb-4(*ngIf="serviceErrors['user']") 
-        b Step 2 of 2 (required): Link to an existing Artstor account or register for a new one.
+        b {{ 'SHIBBOLETH_ERRORS.USER404' | translate }}
       .text-right.mb-2(*ngIf="isShibbFlow")
         .btn.btn-secondary((click)="navigateToLogin()", [class.disabled]="!shibParameters.samlTokenId") {{ 'LINK_PAGE.LOGIN_OPTION' | translate }}
       .card.card--light([class.disabled]="isShibbFlow && !shibParameters.samlTokenId")
