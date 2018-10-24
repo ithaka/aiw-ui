@@ -34,7 +34,7 @@ echo "Starting webpack build"
 $TIMEOUT -t 600 yarn run build:prod
 
 # Collect our built files
-rsync -a ${SRC_DIR}/dist/* ${BUILD_DIR}/
+rsync -a ${SRC_DIR}/dist/avatar/* ${BUILD_DIR}/
 
 # Package our built app
-tar -cvzf package.tgz ${SRC_DIR}/dist/
+tar -cvzf package.tgz ${SRC_DIR}/dist/avatar/
