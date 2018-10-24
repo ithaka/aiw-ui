@@ -65,10 +65,10 @@ export class RegisterComponent implements OnInit {
     let email: string = this.route.snapshot.params.email
     let samlTokenId: string = this.route.snapshot.params.samlTokenId
     let type: string = this.route.snapshot.params.type
-    this.serviceErrors['shibbolethInst'] = this.route.snapshot.params.error == 'INST404'
-    this.serviceErrors['user'] = this.route.snapshot.params.error == 'USER404'
+    this.serviceErrors['shibbolethInst'] = this.route.snapshot.params.error === 'INST404'
+    this.serviceErrors['user'] = this.route.snapshot.params.error === 'USER404'
 
-    if (samlTokenId || type == 'shibboleth') {
+    if (samlTokenId || type === 'shibboleth') {
       email && this.registerForm.controls.email.setValue(email) // set the email
       this.shibParameters = { email: email, samlTokenId: samlTokenId }
       this.isShibbFlow = true
