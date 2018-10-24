@@ -75,6 +75,7 @@
   },
   "SHIBBOLETH_ERRORS": {
     "INST404": "There was a problem identifying your institution. Please contact your institution admin to report this error, and to learn more about off-campus access.",
+    "USER404": "Step 2 of 2 (required): Link to an existing Artstor account or register for a new one.",
     "2010": "This account is already linked to an Artstor account.",
     "2020": "There was an error linking your institutional account. The session may have expired, please try again.",
     "2040": "This account is associated with another institution. Please create a new account.",
