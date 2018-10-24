@@ -4,7 +4,8 @@
   triggers="focusin:focusout mouseenter:mouseleave",
   placement="right",
   aria-haspopup="true",
-  tabIndex="3"
+  [attr.aria-label]="collectionType.alt",
+  tabindex="3"
 ) {{ collectionType.badgeText }}
 <ng-template #tipContent>
   div {{ collectionType.alt }}

@@ -509,7 +509,7 @@ export class AssetGrid implements OnInit, OnDestroy {
    * @param event Event emitted on keypress inside the current page number field
    */
   private pageNumberKeyPress(event: any): boolean{
-      if ((event.key == 'ArrowUp') || (event.key == 'ArrowDown') || (event.key == 'ArrowRight') || (event.key == 'ArrowLeft') || (event.key == 'Backspace')){
+      if ((event.key === 'ArrowUp') || (event.key === 'ArrowDown') || (event.key === 'ArrowRight') || (event.key === 'ArrowLeft') || (event.key === 'Backspace') || (event.key === 'Tab')){
         return true;
       }
 

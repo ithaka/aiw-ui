@@ -1,5 +1,5 @@
 .modal.fade-in.show(id="modal", tabindex="0")
-  .modal-dialog.modal-lg(role="document")
+  .modal-dialog.modal-lg(role="dialog", (keydown.esc)="closeModal.emit()")
     .modal-content
       .modal-header
         h4#generate-citation-title.modal-title(tabindex="0", (keydown.shift.tab)="closeModal.emit()") {{ 'GENERATE_CITATION_MODAL.MAIN_HEADING' | translate }}
@@ -28,4 +28,4 @@
           .form-control-feedback(*ngIf="citationCopied") {{ 'GENERATE_CITATION_MODAL.COPY_SUCCESS' | translate }}
       .modal-footer
         a.btn.btn-link.with-pad(href="https://support.artstor.org/?article=export-citations", target="_blank") Help
-        button.btn.btn-primary((click)="closeModal.emit()", (focusout)="startModalFocus()") Close
+        button.btn.btn-primary((click)="closeModal.emit()", (keydown.tab)="$event.stopPropagation(); $event.preventDefault(); startModalFocus()") Close

@@ -1,38 +1,39 @@
-nav-menu([allowSelectAll]="true")
-ang-sky-banner(*ngIf="showDeleteSuccessBanner", textValue="{{ 'PERSONAL_COLLECTION_PAGE.BANNER.DELETE_SUCCESS' | translate:deleteBannerParams }}", (closeBanner)="showDeleteSuccessBanner = false")
-.container.main-content
-  .row
-    //- .col-sm-3
-    //-   .mobile--hide
-    //-     h1 Filtered Search
-    //-     ang-asset-filters
-    .col-12
-      h1.mobile--show Results
-      .row.no-gutters.row--search-bar
-        #mainContent.col-md-7
-          ang-search([allowSearchInRes]="true")
-      .row
-        .col-sm-12
-          h3#pageType Browse Personal Collection
-      .row.pb-4
-        .col-sm-9
-          h1#pageTitle.h1--title-block {{ colName }}
-          p#pageDescription.page__description(#colDesc="", [innerHtml]="colDescription | linkify", [class.limit]="descCollapsed")
-          .expander.link--action.small([class.hidden]="colDesc.clientHeight < 75", [class.collapsed]="descCollapsed", (click)="descCollapsed = !descCollapsed", [innerHtml]="descCollapsed ? 'More' : 'Less'", role="button") More
-        .col-sm-3(*ngIf="colThumbnail.length > 0")
-          .thumbnail-shelf
-            img.collection-thumb(src="{{ colThumbnail }}")
-      .row.alert.alert-info.alert-dismissible(*ngIf="pub_que_count > 0 && publishingAssets.showPublishingMsgs")
-        b Processing&nbsp;
-        | {{pub_que_count}} image(s) in the queue. Thank you for your patience.&nbsp;
-        span([innerHTML]=" 'PERSONAL_COLLECTION_PAGE.MORE_ABOUT_PUBLISHING' | translate ")
-        button.close(type="button", (click)="closePublishingMsgs()", aria-label="Close")
-          span(aria-hidden="true") &times;
-      .row.alert.alert-warning.alert-dismissible(*ngIf="pub_failure_count > 0 && publishingAssets.showPublishingMsgs")
-        b Processing Delay&nbsp;
-        | We're sorry, there was a processing error. {{pub_failure_count}} {{pub_failure_count == 1 ? 'image was' : 'images were'}} re-added to the publishing queue.&nbsp;
-        span([innerHTML]=" 'PERSONAL_COLLECTION_PAGE.MORE_ABOUT_PUBLISHING' | translate ")
-        button.close(type="button", (click)="closePublishingMsgs()", aria-label="Close")
-          span(aria-hidden="true") &times;
-      ang-asset-grid([actionOptions]="{collection: true}", [assetCount]="assetCount", [hasMaxAssetLimit]="true")
+div
+  nav-menu([allowSelectAll]="true")
+  ang-sky-banner(*ngIf="showDeleteSuccessBanner", textValue="{{ 'PERSONAL_COLLECTION_PAGE.BANNER.DELETE_SUCCESS' | translate:deleteBannerParams }}", (closeBanner)="showDeleteSuccessBanner = false")
+  .container.main-content
+    .row
+      //- .col-sm-3
+      //-   .mobile--hide
+      //-     h1 Filtered Search
+      //-     ang-asset-filters
+      .col-12
+        h1.mobile--show Results
+        .row.no-gutters.row--search-bar
+          #mainContent.col-md-7
+            ang-search([allowSearchInRes]="true")
+        .row
+          .col-sm-12
+            h3#pageType Browse Personal Collection
+        .row.pb-4
+          .col-sm-9
+            h1#pageTitle.h1--title-block {{ colName }}
+            p#pageDescription.page__description(#colDesc="", [innerHtml]="colDescription | linkify", [class.limit]="descCollapsed")
+            .expander.link--action.small([class.hidden]="colDesc.clientHeight < 75", [class.collapsed]="descCollapsed", (click)="descCollapsed = !descCollapsed", [innerHtml]="descCollapsed ? 'More' : 'Less'", role="button") More
+          .col-sm-3(*ngIf="colThumbnail.length > 0")
+            .thumbnail-shelf
+              img.collection-thumb(src="{{ colThumbnail }}")
+        .row.alert.alert-info.alert-dismissible(*ngIf="pub_que_count > 0 && publishingAssets.showPublishingMsgs")
+          b Processing&nbsp;
+          | {{pub_que_count}} image(s) in the queue. Thank you for your patience.&nbsp;
+          span([innerHTML]=" 'PERSONAL_COLLECTION_PAGE.MORE_ABOUT_PUBLISHING' | translate ")
+          button.close(type="button", (click)="closePublishingMsgs()", aria-label="Close")
+            span(aria-hidden="true") &times;
+        .row.alert.alert-warning.alert-dismissible(*ngIf="pub_failure_count > 0 && publishingAssets.showPublishingMsgs")
+          b Processing Delay&nbsp;
+          | We're sorry, there was a processing error. {{pub_failure_count}} {{pub_failure_count == 1 ? 'image was' : 'images were'}} re-added to the publishing queue.&nbsp;
+          span([innerHTML]=" 'PERSONAL_COLLECTION_PAGE.MORE_ABOUT_PUBLISHING' | translate ")
+          button.close(type="button", (click)="closePublishingMsgs()", aria-label="Close")
+            span(aria-hidden="true") &times;
+        ang-asset-grid([actionOptions]="{collection: true}", [assetCount]="assetCount", [hasMaxAssetLimit]="true")
   ang-access-denied-modal(*ngIf="showAccessDeniedModal")

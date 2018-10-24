@@ -20,11 +20,11 @@
         button.btn.btn-primary(*ngIf="isLoading", disabled)
           | Generating PPT
           i.icon.icon-loading
-        button#generateZipLink.btn.btn-primary(*ngIf="!zipDownloadLink && !zipLoading", (focusout)="startModalFocus()", (click)="getZip()") Request Zip
+        button#generateZipLink.btn.btn-primary(*ngIf="!zipDownloadLink && !zipLoading", (keydown.tab)="$event.stopPropagation(); $event.preventDefault(); startModalFocus()", (click)="getZip()") Request Zip
         a#downloadZipLink.btn.btn-primary(*ngIf="!zipLoading && zipDownloadLink", role="button",
           [attr.href]="zipDownloadLink",
           [attr.download]="downloadTitle",
-          (focusout)="startModalFocus()",
+          (keydown.tab)="$event.stopPropagation(); $event.preventDefault(); startModalFocus()",
           (click)="trackDownload('ZIP'); closeModal.emit()")
           | Download Zip
         button.btn.btn-primary(*ngIf="zipLoading", disabled)
