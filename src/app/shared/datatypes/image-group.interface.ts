@@ -1,5 +1,15 @@
 import { Thumbnail } from './thumbnail.interface';
 
+export interface ImageGroupItem {
+  artstorid: string, 
+  zoom?: { 
+    viewerX: number, 
+    viewerY: number, 
+    pointWidth: number, 
+    pointHeight: number 
+  } 
+}
+
 export interface ImageGroup {
   id?: string; // new ig property
   name?: string; // new ig property
@@ -14,8 +24,9 @@ export interface ImageGroup {
   igId?: string,
   count?: number,
   thumbnails?: Thumbnail[],
+  newItems?: ImageGroupItem[],
   items?: string[],
-  description?: string
+  description?: string,
   // description?: ImageGroupDescription, // this does not naturally come with image groups, but sometimes we attach it
   igDownloadInfo?: IgDownloadInfo, // we also attach this to image groups when we have it
   sequence_number?: number,

@@ -39,17 +39,16 @@ describe('Group Calls #pact', () => {
           'access_type': 300
         }
       ],
-      'items': [
-        'AWAYNEIG_10311326670',
-        'ADAVISIG_10311277805',
-        'AWSS35953_35953_38398951',
-        'HARTILL_12324316',
-        'ASITESPHOTOIG_10312738558',
-        'AWSS35953_35953_38398953',
-        'HARTILL_12326634',
-        'HCAP_10310729952',
-        'HCAP_10310728522',
-        'ASITESPHOTOIG_10313835802'
+      'newItems': [
+        {'artstorid': 'ASITESPHOTOIG_10312738558', zoom: { viewerX: 100, viewerY: 500, pointWidth: 600, pointHeight: 800 }},
+        {'artstorid': 'AWAYNEIG_10311326670'},
+        {'artstorid': 'ADAVISIG_10311277805'},
+        {'artstorid': 'AWSS35953_35953_38398951'},
+        {'artstorid': 'HARTILL_12324316'},
+        {'artstorid': 'AWSS35953_35953_38398953'},
+        {'artstorid': 'HCAP_10310729952'},
+        {'artstorid': 'HCAP_10310728522'},
+        {'artstorid': 'ASITESPHOTOIG_10313835802'}
       ]
     }
 
@@ -62,7 +61,14 @@ describe('Group Calls #pact', () => {
     // Verify types of response properties - Individual Image Group
     let matcherImageGroupObject = {}
     Object.keys(expectedImageGroupObject).forEach((key) => {
-      matcherImageGroupObject[key] = Matchers.somethingLike(expectedImageGroupObject[key])
+      if(key === 'newItems'){
+        if(Array.isArray(expectedImageGroupObject[key]) && expectedImageGroupObject[key][0]){ 
+          let newItemsArray = Matchers.eachLike(expectedImageGroupObject[key][0])
+          matcherImageGroupObject[key] = Matchers.somethingLike(newItemsArray)
+        }
+      } else{
+        matcherImageGroupObject[key] = Matchers.somethingLike(expectedImageGroupObject[key])
+      }
     })
 
     beforeAll(function(done) {
@@ -207,7 +213,7 @@ describe('Group Calls #pact', () => {
                 'creation_date',
                 'id',
                 'access',
-                'items'
+                'newItems'
               ]
 
               let expectedAccessKeys = [
@@ -223,7 +229,7 @@ describe('Group Calls #pact', () => {
               expect(resAccessKeys).toEqual(expectedAccessKeys)
 
               // Test res.items length
-              expect(res.items.length).toBeGreaterThan(0)
+              expect(res.newItems.length).toBeGreaterThan(0)
               done()
             },
               err => {
