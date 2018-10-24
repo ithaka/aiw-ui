@@ -28,7 +28,9 @@ export class SearchPage implements OnInit, OnDestroy {
   private assetGrid: AssetGrid;
   // private searchInResults: boolean = false;
 
-  private unaffiliatedUser: boolean = false
+  private unaffiliatedUser: boolean = false;
+
+  private userSessionFresh: boolean = false;
 
   constructor(
         public _appConfig: AppConfig,
@@ -56,16 +58,15 @@ export class SearchPage implements OnInit, OnDestroy {
       this._auth.currentUser.subscribe(
         (userObj) => {
           this.user = userObj;
+          // userSessionFresh: Do not attempt to search until we know user object is fresh
+          if (!this.userSessionFresh && this._auth.userSessionFresh) {
+            this.userSessionFresh = true; 
+          }
         },
         (err) => {
-          console.error('Nav failed to load Institution information', err)
+          console.error('Nav failed to load Institution information', err);
         }
-      )
-    );
-
-
-    // Subscribe to term in params
-    this.subscriptions.push(
+      ),
       this.route.params.subscribe( (routeParams) => {
         let params = Object.assign({}, routeParams);
 
