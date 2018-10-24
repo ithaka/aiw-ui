@@ -122,7 +122,7 @@ export class SearchPage implements OnInit, OnDestroy {
     })
   }
 
-  private skipToFilterSec(): void{
+  public skipToFilterSec(): void{
     window.setTimeout(function ()
     {
       let htmlelement: HTMLElement = document.getElementById('skip-to-search-link');
