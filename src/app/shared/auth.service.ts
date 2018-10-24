@@ -33,6 +33,7 @@ export class AuthService implements CanActivate {
   private hostname;
   private subdomain;
   private thumbUrl;
+  private compoundUrl;
   private IIIFUrl;
   private logUrl: string;
   private groupUrl = '';
@@ -81,6 +82,7 @@ export class AuthService implements CanActivate {
     this.hostname = ''
     this.baseUrl =  '/api'
     this.thumbUrl = '//mdxdv.artstor.org'
+    this.compoundUrl = '//catalog.sharedshelf.artstor.org'
     this.IIIFUrl = '//tsprod.artstor.org/rosa-iiif-endpoint-1.0-SNAPSHOT/fpx'
     this.subdomain = 'library'
     this.solrUrl = '/api/search/v1.0/search'
@@ -409,7 +411,10 @@ export class AuthService implements CanActivate {
   /**
    * Our thumbnails come
    */
-  public getThumbUrl(): string {
+  public getThumbUrl(compound?: boolean): string {
+    if (compound) {
+      return this.compoundUrl;
+    }
     return this.thumbUrl;
   }
 

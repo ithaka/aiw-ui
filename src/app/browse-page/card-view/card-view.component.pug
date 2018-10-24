@@ -4,9 +4,9 @@
     .col-sm-2.col-4
       div(style="min-height: 140px;")
         i.icon.no-image-placeholder(*ngIf="!thumbnails.length")
-        img.group-thumb(*ngIf="thumbnails[0]", [ngClass]="thumbnails.length==3 ? 'group-thumb-1-3': thumbnails.length==2 ? 'group-thumb-1-2' : 'group-thumb-1-1'", [attr.src]="_search.makeThumbUrl(thumbnails[0].thumbnailImgUrl, 0)", alt="Sample image for this image group")
-        img.group-thumb(*ngIf="thumbnails[1]", [ngClass]="thumbnails.length==3 ? 'group-thumb-2-3' : 'group-thumb-2-2'", [attr.src]="_search.makeThumbUrl(thumbnails[1].thumbnailImgUrl, 0)", alt="Sample image for this image group")
-        img.group-thumb.group-thumb-3-3(*ngIf="thumbnails[2]", [attr.src]="_search.makeThumbUrl(thumbnails[2].thumbnailImgUrl, 0)", alt="Sample image for this image group")
+        img.group-thumb(*ngIf="thumbnails[0]", [ngClass]="thumbnails.length==3 ? 'group-thumb-1-3': thumbnails.length==2 ? 'group-thumb-1-2' : 'group-thumb-1-1'", [attr.src]="_search.makeThumbUrl(thumbnails[0].thumbnailImgUrl, 0, thumbnails[0]['compound_media'])", alt="Sample image for this image group")
+        img.group-thumb(*ngIf="thumbnails[1]", [ngClass]="thumbnails.length==3 ? 'group-thumb-2-3' : 'group-thumb-2-2'", [attr.src]="_search.makeThumbUrl(thumbnails[1].thumbnailImgUrl, 0, thumbnails[1]['compound_media'])", alt="Sample image for this image group")
+        img.group-thumb.group-thumb-3-3(*ngIf="thumbnails[2]", [attr.src]="_search.makeThumbUrl(thumbnails[2].thumbnailImgUrl, 0, thumbnails[2]['compound_media'])", alt="Sample image for this image group")
       div
         i#item-row(*ngIf="group.items.length>1") {{ group.items.length }} items
         i#item-row(*ngIf="group.items.length<2") {{ group.items.length }} item

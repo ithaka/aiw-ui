@@ -71,6 +71,16 @@ export class CardViewComponent implements OnInit {
           console.error(error)
         })
       }
+
+      this.thumbnails.forEach( thumbnail => {
+        if (thumbnail['compound_media']) {
+          let objects = JSON.parse(thumbnail['compound_media']).objects
+          thumbnail.thumbnailImgUrl = objects[0].thumbnailSizeOnePath
+        }
+        else if (thumbnail['media']) {
+          thumbnail.thumbnailImgUrl = thumbnail.media.thumbnailSizeOnePath
+        }
+      })
   }
 
   /**
