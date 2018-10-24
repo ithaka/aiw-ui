@@ -26,25 +26,25 @@ import { LockerService } from 'app/_services';
 export class AssetService {
 
     /** Constant that defines which collectionType belongs to institutions */
-    static readonly institutionCollectionType: number = 2;
-    public allResults: Observable<any> = this.allResultsSource.asObservable();
-    public noIG: Observable<any> = this.noIGSource.asObservable();
-    public noAccessIG: Observable<any> = this.noAccessIGSource.asObservable();
+    static readonly institutionCollectionType: number = 2
+    public allResults: Observable<any>
+    public noIG: Observable<any>
+    public noAccessIG: Observable<any>
 
     // Set up subject observable for clearing select mode
     public clearSelectMode: Subject<boolean> = new Subject();
 
     // Set up subject observable for skipping the unauthorized asset on asset page, while browsing though assets
     public unAuthorizedAsset: Subject<boolean> = new Subject();
-    public pagination = this.paginationSource.asObservable();
-    public selection = this.selectedAssetsSource.asObservable();
+    public pagination: Observable<any> 
+    public selection: Observable<any> 
     public selectModeToggle: EventEmitter<any> = new EventEmitter()
 
 
     // Keep track of which params the current results are related to
     public currentLoadedParams: any = {};
 
-     public filterFields: { name: string, value: string }[] = [
+    public filterFields: { name: string, value: string }[] = [
         {name: 'Creator', value: '100' },
         {name: 'Title', value: '101' },
         {name: 'Location', value: '102' },
@@ -137,7 +137,12 @@ export class AssetService {
         private _assetSearch: AssetSearchService,
         private _app: AppConfig
     ) {
-
+        // initialize observables
+        this.allResults = this.allResultsSource.asObservable()
+        this.noIG = this.noIGSource.asObservable()
+        this.noAccessIG = this.noAccessIGSource.asObservable()
+        this.pagination = this.paginationSource.asObservable()
+        this.selection = this.selectedAssetsSource.asObservable()
     }
 
     /**

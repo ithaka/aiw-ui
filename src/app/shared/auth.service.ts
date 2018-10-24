@@ -27,7 +27,7 @@ import { LockerService } from 'app/_services';
 
 @Injectable()
 export class AuthService implements CanActivate {
-  public currentUser: Observable<any> = this.userSource.asObservable();
+  public currentUser: Observable<any>
   // Track whether or not user object has been refreshed since app opened
   public userSessionFresh: boolean = false
   public showUserInactiveModal: Subject<boolean> = new Subject(); // Set up subject observable for showing inactive user modal
@@ -73,6 +73,8 @@ export class AuthService implements CanActivate {
     private _flags: FlagService,
     private idle: Idle
   ) {
+    // Initialize observables
+    this.currentUser = this.userSource.asObservable()
     // Default to relative or prod endpoints
     this.ENV = 'prod'
     this.hostname = ''
