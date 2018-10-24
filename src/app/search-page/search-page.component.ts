@@ -60,7 +60,7 @@ export class SearchPage implements OnInit, OnDestroy {
           this.user = userObj;
           // userSessionFresh: Do not attempt to search until we know user object is fresh
           if (!this.userSessionFresh && this._auth.userSessionFresh) {
-            this.userSessionFresh = true; 
+            this.userSessionFresh = true;
           }
         },
         (err) => {
