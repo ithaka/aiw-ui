@@ -61,59 +61,63 @@ export class SearchPage implements OnInit, OnDestroy {
           // userSessionFresh: Do not attempt to search until we know user object is fresh
           if (!this.userSessionFresh && this._auth.userSessionFresh) {
             this.userSessionFresh = true;
+            this.routeParamSubscrpt()
           }
         },
         (err) => {
           console.error('Nav failed to load Institution information', err);
         }
-      ),
-      this.route.params.subscribe( (routeParams) => {
-        let params = Object.assign({}, routeParams);
-
-        // Find feature flags (needs to be checked before running queryAll)
-        if (params && params['featureFlag']){
-            this._flags[params['featureFlag']] = true;
-        }
-
-        // If a page number isn't set, reset to page 1!
-        if (!params['page']){
-          params['page'] = 1;
-        }
-
-        // If the _auth.isPublicOnly() doesn't match the component's "unaffiliatedUser" flag then refresh search results
-        let refreshSearch = this.unaffiliatedUser && this._auth.isPublicOnly() ? false : true
-
-        // Make a search call if there is a search term or any selected filter
-        if (params['term'] || params['classification'] || params['geography'] || params['collectiontypes']  || params['collTypes'] || params['startDate'] || params['endDate']) {
-          // Build *reporting* search filters object
-          let logFilters = Object.assign({}, params)
-          // Remove search term value
-          delete logFilters['term']
-          // Post search info to Captain's Log
-          this._captainsLog.log({
-            eventType: 'artstor_search',
-            additional_fields: {
-              'searchTerm': params['term'],
-              'searchFilters': logFilters
-            }
-          })
-
-          this._title.setSubtitle( '"' + params['term'] + '"' )
-          this._assets.queryAll(params, refreshSearch);
-        } else {
-          this._title.setTitle( 'Artstor' )
-          console.log('No search term');
-          params['term'] = '*';
-          this._assets.queryAll(params, refreshSearch);
-        }
-
-        this.unaffiliatedUser = this._auth.isPublicOnly() ? true : false
-      })
+      )
     );
   } // OnInit
 
   ngOnDestroy() {
     this.subscriptions.forEach((sub) => { sub.unsubscribe(); });
+  }
+
+  private routeParamSubscrpt(): void {
+    this.route.params.subscribe( (routeParams) => {
+      let params = Object.assign({}, routeParams);
+
+      // Find feature flags (needs to be checked before running queryAll)
+      if (params && params['featureFlag']){
+          this._flags[params['featureFlag']] = true;
+      }
+
+      // If a page number isn't set, reset to page 1!
+      if (!params['page']){
+        params['page'] = 1;
+      }
+
+      // If the _auth.isPublicOnly() doesn't match the component's "unaffiliatedUser" flag then refresh search results
+      let refreshSearch = this.unaffiliatedUser && this._auth.isPublicOnly() ? false : true
+
+      // Make a search call if there is a search term or any selected filter
+      if (params['term'] || params['classification'] || params['geography'] || params['collectiontypes']  || params['collTypes'] || params['startDate'] || params['endDate']) {
+        // Build *reporting* search filters object
+        let logFilters = Object.assign({}, params)
+        // Remove search term value
+        delete logFilters['term']
+        // Post search info to Captain's Log
+        this._captainsLog.log({
+          eventType: 'artstor_search',
+          additional_fields: {
+            'searchTerm': params['term'],
+            'searchFilters': logFilters
+          }
+        })
+
+        this._title.setSubtitle( '"' + params['term'] + '"' )
+        this._assets.queryAll(params, refreshSearch);
+      } else {
+        this._title.setTitle( 'Artstor' )
+        console.log('No search term');
+        params['term'] = '*';
+        this._assets.queryAll(params, refreshSearch);
+      }
+
+      this.unaffiliatedUser = this._auth.isPublicOnly() ? true : false
+    })
   }
 
   private skipToFilterSec(): void{
