@@ -44,7 +44,7 @@ import { FileUploadModule } from 'ng2-file-upload';
 
 // App is our top level component
 import { App } from './app.component'
-//import { APP_RESOLVER_PROVIDERS } from './app.resolver'
+// import { APP_RESOLVER_PROVIDERS } from './app.resolver'
 import { AppConfig } from './app.service'
 import { Nav, Footer, SearchComponent, PaginationComponent, AssetSearchService, InstitutionsService } from './shared'
 import { GuideTourComponent } from './shared/tour/tour.component'

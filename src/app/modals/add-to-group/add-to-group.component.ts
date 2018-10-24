@@ -14,10 +14,6 @@ export class AddToGroupModal implements OnInit, OnDestroy {
   @Output() closeModal: EventEmitter<any> = new EventEmitter();
   @Output() createGroup: EventEmitter<any> = new EventEmitter();
   @Input() showCreateGroup: boolean = false;
-  private subscriptions: Subscription[] = [];
-
-  @Input() private selectedAssets: any[] = []; // this is used in the asset page, where a single asset can be injected directly
-  private groups: ImageGroup[] = [];
   public selectedIg: ImageGroup;
   public selectedGroupName: string;
   public selectedGroupError: string;
@@ -32,12 +28,10 @@ export class AddToGroupModal implements OnInit, OnDestroy {
   } = {};
 
   public dataService: any;
+  private subscriptions: Subscription[] = [];
 
-  constructor(
-    private _assets: AssetService,
-    private _group: GroupService,
-    private completerService: CompleterService
-  ) {}
+  @Input() private selectedAssets: any[] = []; // this is used in the asset page, where a single asset can be injected directly
+  private groups: ImageGroup[] = [];
 
   /**
    * Observable for autocomplete list of groups
@@ -45,6 +39,12 @@ export class AddToGroupModal implements OnInit, OnDestroy {
    */
   private groupListSubject: BehaviorSubject<any[]> = new BehaviorSubject([])
   private groupListObs: Observable<any[]> = this.groupListSubject.asObservable()
+
+  constructor(
+    private _assets: AssetService,
+    private _group: GroupService,
+    private completerService: CompleterService
+  ) {}
 
   ngOnInit() {
     // Set focus to the modal to make the links in the modal first thing to tab for accessibility

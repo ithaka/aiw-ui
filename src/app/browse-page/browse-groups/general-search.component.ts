@@ -15,11 +15,11 @@ export class GeneralSearchComponent implements OnInit {
   @Input() loadingGrps: boolean
   @Output() clearGrpSearch: EventEmitter<string> = new EventEmitter() // Invoke clear group search method in parent component
 
-  private subscriptions: Subscription[] = []
-
   // the term that will be searched for
   public term: string = ''
   public startSearch: boolean = false
+
+  private subscriptions: Subscription[] = []
 
   constructor() { }
 
@@ -36,7 +36,7 @@ export class GeneralSearchComponent implements OnInit {
     }
   }
 
-  public setFocus() : void {
+  public setFocus(): void {
     window.setTimeout(function () {
       if (document.getElementById('empty-search-alert')){
         document.getElementById('empty-search-alert').focus()

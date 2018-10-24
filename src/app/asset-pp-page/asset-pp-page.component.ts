@@ -14,13 +14,13 @@ import { AssetSearchService, MetadataService } from './../shared';
 })
 
 export class AssetPPPage implements OnInit {
+  public asset: any = {};
+  public metaArray: Array<any> = [];
 
   private header = new HttpHeaders().set('Content-Type', 'application/json'); // ... Set content type to JSON
   private options = { headers: this.header, withCredentials: true }; // Create a request option
 
   private assetId: string;
-  public asset: any = {};
-  public metaArray: Array<any> = [];
 
   private subscriptions: Subscription[] = [];
 

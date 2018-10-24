@@ -16,11 +16,6 @@ import { TitleService } from '../shared/title.service'
 
 export class ImageGroupPage implements OnInit, OnDestroy {
   public ig: ImageGroup = <ImageGroup>{};
-  private hasDesc: boolean = false;
-  private user: any;
-  private descExpanded: boolean = true;
-
-  private subscriptions: Subscription[] = [];
 
   /** controls when PPT agreement modal is or is not shown */
   public showPptModal: boolean = false;
@@ -34,23 +29,28 @@ export class ImageGroupPage implements OnInit, OnDestroy {
   public showNoAccessIgModal: boolean = false;
   /** controls access denied modal for unaffiliated users landing on /group/id pages */
   public showAccessDeniedModal: boolean = false;
-  /** set to true when the call to download info has returned. We won't know what modal to show before that */
-  private downloadInfoReturned: boolean = false;
   /** Enables / Disables the IG deletion based on user ownership */
   public allowIgUpdate: boolean = false;
 
   public genImgGrpLink: boolean = false;
-
-  private unaffiliatedUser: boolean = false
 
   /** Options object passed to the asset-grid component */
   public actionOptions: any = {
     group: true,
     isowner: false
   }
+  public disableIgDelete: boolean = false
+  private hasDesc: boolean = false;
+  private user: any;
+  private descExpanded: boolean = true;
+
+  private subscriptions: Subscription[] = [];
+  /** set to true when the call to download info has returned. We won't know what modal to show before that */
+  private downloadInfoReturned: boolean = false;
+
+  private unaffiliatedUser: boolean = false
   /** Reorder: Modifies the layout */
   private reorderMode: boolean = false
-  public disableIgDelete: boolean = false
 
   constructor(
     private _ig: ImageGroupService, // this will be confusing for a bit. ImageGroupService deals with all the old image group service stuff, and some state management
@@ -180,28 +180,6 @@ export class ImageGroupPage implements OnInit, OnDestroy {
     this.subscriptions.forEach((sub) => { sub.unsubscribe(); });
   }
 
-  /**
-   * Decides which download modal should be shown
-   * - If the user is not logged in -> login required modal
-   * - If the user is logged in but has met download limit -> download limit modal
-   * - If the user is logged in and is allowed to download the image group -> download modal
-   */
-  private showDownloadModal() {
-    // the template will not show the button if there is not an ig.igName and ig.igDownloadInfo
-    // if the user is logged in and the download info is available
-    if (this.user.isLoggedIn) {
-      // we will need a new way to know whether or not the user is authorized to download - for now, I will always enable them
-      if (this.ig.igDownloadInfo.pptExportAllowed) {
-        this.showPptModal = true;
-      } else {
-        this.showDownloadLimitModal = true;
-      }
-    } else if (!this.user.isLoggedIn) {
-      // show login required modal if they're not logged in
-      this.showLoginModal = true;
-    }
-  }
-
   public refreshIG(): void{
     this._assets.queryAll(this.route.snapshot.params, true);
   }
@@ -224,6 +202,28 @@ export class ImageGroupPage implements OnInit, OnDestroy {
    */
   public toggleReorder(isReordering: boolean): void {
     this.reorderMode = isReordering;
+  }
+
+  /**
+   * Decides which download modal should be shown
+   * - If the user is not logged in -> login required modal
+   * - If the user is logged in but has met download limit -> download limit modal
+   * - If the user is logged in and is allowed to download the image group -> download modal
+   */
+  private showDownloadModal() {
+    // the template will not show the button if there is not an ig.igName and ig.igDownloadInfo
+    // if the user is logged in and the download info is available
+    if (this.user.isLoggedIn) {
+      // we will need a new way to know whether or not the user is authorized to download - for now, I will always enable them
+      if (this.ig.igDownloadInfo.pptExportAllowed) {
+        this.showPptModal = true;
+      } else {
+        this.showDownloadLimitModal = true;
+      }
+    } else if (!this.user.isLoggedIn) {
+      // show login required modal if they're not logged in
+      this.showLoginModal = true;
+    }
   }
 
   /**

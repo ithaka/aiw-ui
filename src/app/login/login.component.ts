@@ -35,12 +35,12 @@ export class Login implements OnInit, OnDestroy {
   public successMsgPwdRst = ''
   public loginInstitutions = [] /** Stores the institutions returned by the server */
 
+  public showRegister: boolean = false
+  public showHelpModal: boolean = false
+
   private loginInstName: string = '' /** Bound to the autocomplete field */
   private stashedRoute: string
   private dataService: LocalData
-
-  public showRegister: boolean = false
-  public showHelpModal: boolean = false
 
   /**
    * Observable for autocomplete list of institutions

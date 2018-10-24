@@ -14,14 +14,14 @@ import { AssetService, AuthService, ImageGroupDescription, ImageGroupService } f
 })
 
 export class ImageGroupPPPage implements OnInit, OnDestroy {
+  public igName: string;
+  public igDesc: string;
+  public assets: any = [];
 
   private header = new HttpHeaders().set('Content-Type', 'application/json'); // ... Set content type to JSON
   private options = { headers: this.header, withCredentials: true }; // Create a request option
 
   private igId: string;
-  public igName: string;
-  public igDesc: string;
-  public assets: any = [];
 
   private subscriptions: Subscription[] = [];
 

@@ -26,13 +26,31 @@ export class NavMenu implements OnInit, OnDestroy {
   public actionOptions: any = {};
 
   @Input()
+  public genImgGrpLink: boolean = false;
+
+  @Output() refreshIG: EventEmitter<any> = new EventEmitter();
+  public institutionObj: any = {}
+
+  public mobileCollapsed: boolean = true
+  public selectedAssets: any[] = []
+
+  public showShareLinkModal: boolean = false
+  public showDeleteIgModal: boolean = false
+  public showImageGroupModal: boolean = false
+  public showAddToGroupModal: boolean = false
+  public showShareIgModal: boolean = false
+  public params: any = {}
+
+  public browseOpts: any = {}
+
+  // Flag for confimation popup for deleting selected asset(s) from the IG
+  public showConfirmationModal: boolean = false
+
+  @Input()
   private disableIgDelete: boolean = false;
 
   @Input()
   private allowIgUpdate: boolean = false;
-
-  @Input()
-  public genImgGrpLink: boolean = false;
 
   @Input()
   private allowSelectAll: boolean = false;
@@ -40,29 +58,11 @@ export class NavMenu implements OnInit, OnDestroy {
   @Input()
   private ig: any = {};
 
-  @Output() refreshIG: EventEmitter<any> = new EventEmitter();
-
   private user: any = {}
   private siteID: string = ''
-  public institutionObj: any = {}
-
-  public mobileCollapsed: boolean = true
-  public selectedAssets: any[] = []
   private subscriptions: Subscription[] = []
-
-  public showShareLinkModal: boolean = false
-  public showDeleteIgModal: boolean = false
-  public showImageGroupModal: boolean = false
-  public showAddToGroupModal: boolean = false
-  public showShareIgModal: boolean = false
   private copyIG: boolean = false
   private editIG: boolean = false
-  public params: any = {}
-
-  public browseOpts: any = {}
-
-  // Flag for confimation popup for deleting selected asset(s) from the IG
-  public showConfirmationModal: boolean = false
 
   // TypeScript public modifiers
   constructor(
@@ -132,6 +132,31 @@ export class NavMenu implements OnInit, OnDestroy {
       if (params['igId']) {
         this._router.navigate(['/printpreview/' + params['igId']])
       }
+    }
+  }
+
+  /**
+   * Opens dropdown
+   */
+  public openDrop(event, dropdown): void {
+    event.stopPropagation();
+    dropdown.open();
+  }
+
+  /**
+   * Closes dropdown
+   */
+  public closeDrop(event, dropdown): void {
+    event.stopPropagation();
+    dropdown.close();
+  }
+
+  public closeNavMenuDropdowns(): void{
+    let dropdownElements: Array<HTMLElement> = Array.from( document.querySelectorAll('.nav-item.dropdown') )
+    for (let dropdownElement of dropdownElements){
+      dropdownElement.classList.remove('show')
+      dropdownElement.children[0].setAttribute('aria-expanded', 'false')
+      dropdownElement.children[1].classList.remove('show')
     }
   }
 
@@ -221,30 +246,5 @@ export class NavMenu implements OnInit, OnDestroy {
           this._router.navigate(['/home'])
         }
       })
-  }
-
-  /**
-   * Opens dropdown
-   */
-  public openDrop(event, dropdown): void {
-    event.stopPropagation();
-    dropdown.open();
-  }
-
-  /**
-   * Closes dropdown
-   */
-  public closeDrop(event, dropdown): void {
-    event.stopPropagation();
-    dropdown.close();
-  }
-
-  public closeNavMenuDropdowns(): void{
-    let dropdownElements: Array<HTMLElement> = Array.from( document.querySelectorAll('.nav-item.dropdown') )
-    for (let dropdownElement of dropdownElements){
-      dropdownElement.classList.remove('show')
-      dropdownElement.children[0].setAttribute('aria-expanded', 'false')
-      dropdownElement.children[1].classList.remove('show')
-    }
   }
 }

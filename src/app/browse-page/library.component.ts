@@ -21,6 +21,46 @@ import { LockerService } from 'app/_services';
 export class LibraryComponent implements OnInit {
   public unaffiliatedUser: boolean = false
 
+  public loading: boolean = false;
+  public selectedBrowseId: string = '';
+  public browseMenuArray: any[];
+  public categoryFacets: any[]
+  public hierarchicalFacets: object = {}
+  public facetType: string = ''
+  public errorMessage: string = ''
+  public ObjectKeys = Object.keys;
+  public searchTerm: string = ''
+  public descObj: any  = {
+    '103' : 'BROWSE.LIBRARY_COLLECTION',
+    '250' : 'BROWSE.CLASSIFICATION',
+    '260' : 'BROWSE.GEOGRAPHY'
+  };
+  public facetQueryMap = {
+    'artcollectiontitle_str': 'artcollectiontitle_str',
+    'artclassification_str': 'artclassification_str',
+    'artstor-geography': 'geography',
+    'categoryid': 'category'
+  }
+  private subscriptions: Subscription[] = [];
+  private splashImgURL: string = '';
+  private JSArray: Object = Array;
+  private encodeURIComponent = encodeURIComponent
+
+  private tagsObj: any = {
+    103 : [],
+    250 : [],
+    260 : [],
+    270 : []
+  };
+
+  private categoryFacetMap = {
+    '103': 'categoryid',
+    '250': 'artclassification_str',
+    '260': 'artstor-geography',
+    // '270': '/browse/groups/public?tags=Teaching%2520Resources&page=1',
+    'undefined': 'artcollectiontitle_str' // default
+  }
+
   constructor(
     private router: Router,
     private route: ActivatedRoute,
@@ -33,46 +73,6 @@ export class LibraryComponent implements OnInit {
     private _locker: LockerService
   ) {
     this.unaffiliatedUser = this._auth.isPublicOnly() ? true : false
-  }
-
-  public loading: boolean = false;
-  private subscriptions: Subscription[] = [];
-  public selectedBrowseId: string = '';
-  public browseMenuArray: any[];
-  public categoryFacets: any[]
-  public hierarchicalFacets: object = {}
-  public facetType: string = ''
-  private splashImgURL: string = '';
-  public errorMessage: string = ''
-  public ObjectKeys = Object.keys;
-  private JSArray: Object = Array;
-  private encodeURIComponent = encodeURIComponent
-  public searchTerm: string = ''
-
-  private tagsObj: any = {
-    103 : [],
-    250 : [],
-    260 : [],
-    270 : []
-  };
-  public descObj: any  = {
-    '103' : 'BROWSE.LIBRARY_COLLECTION',
-    '250' : 'BROWSE.CLASSIFICATION',
-    '260' : 'BROWSE.GEOGRAPHY'
-  };
-
-  private categoryFacetMap = {
-    '103': 'categoryid',
-    '250': 'artclassification_str',
-    '260': 'artstor-geography',
-    // '270': '/browse/groups/public?tags=Teaching%2520Resources&page=1',
-    'undefined': 'artcollectiontitle_str' // default
-  }
-  public facetQueryMap = {
-    'artcollectiontitle_str': 'artcollectiontitle_str',
-    'artclassification_str': 'artclassification_str',
-    'artstor-geography': 'geography',
-    'categoryid': 'category'
   }
 
   ngOnInit() {
@@ -214,13 +214,13 @@ export class LibraryComponent implements OnInit {
 
   } // OnInit
 
+  ngOnDestroy() {
+    this.subscriptions.forEach((sub) => { sub.unsubscribe(); });
+  }
+
   private clearFacets(): void {
     this.hierarchicalFacets = {}
     this.categoryFacets = []
-  }
-
-  ngOnDestroy() {
-    this.subscriptions.forEach((sub) => { sub.unsubscribe(); });
   }
 
   /**

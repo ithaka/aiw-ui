@@ -20,7 +20,6 @@ export class SearchModal implements OnInit, AfterViewInit {
   public closeModal: EventEmitter<any> = new EventEmitter();
 
   public fields = []
-  private filterNameMap: any = {}
 
   public geographyFields = [
     {name: 'North America'},
@@ -49,6 +48,11 @@ export class SearchModal implements OnInit, AfterViewInit {
     'endEra' : 'CE'
   }
 
+  // Filters
+  public availableFilters: FacetGroup[] = []
+  public loadingFilters: boolean
+  private filterNameMap: any = {}
+
   // legacy
   private termsList: any = {};
   // legacy
@@ -71,15 +75,11 @@ export class SearchModal implements OnInit, AfterViewInit {
   private showPrivateCollections = false
   private showCollectionType: boolean = false;
 
-  // Filters
-  public availableFilters: FacetGroup[] = []
-
   // Search query trasnformation logic is abstracted to a utility
   private queryUtil: SearchQueryUtil = new SearchQueryUtil()
 
   // Flag while transitioning to Solr search
   private hideLegacyFilters: boolean
-  public loadingFilters: boolean
 
   constructor(
         private _appConfig: AppConfig,
@@ -119,6 +119,130 @@ export class SearchModal implements OnInit, AfterViewInit {
   public startModalFocus() {
     let modalStartFocus = document.getElementById('advanced-search-title')
     modalStartFocus.focus()
+  }
+
+  public close(): void {
+    document.body.style.overflow = 'auto';
+    this.closeModal.emit()
+  }
+
+  public dateKeyPress(event: any): boolean{
+      // Add check of Tab key to make sure the tabbingis enabled on Firefox
+      if ((event.key === 'ArrowUp') || (event.key === 'ArrowDown') || (event.key === 'ArrowRight') || (event.key === 'ArrowLeft') || (event.key === 'Backspace') || (event.key === 'Tab')){
+        return true;
+      }
+
+      let theEvent = event || window.event;
+      let key = theEvent.keyCode || theEvent.which;
+      key = String.fromCharCode( key );
+      let regex = /[0-9]|\./;
+      if ( !regex.test(key) ) {
+        theEvent.returnValue = false;
+        if (theEvent.preventDefault) theEvent.preventDefault();
+      }
+
+      return theEvent.returnValue;
+  }
+
+  public resetFilters(): void {
+    this.advanceSearchDate = {
+      'startDate' : '',
+      'startEra' : 'BCE',
+      'endDate' : '',
+      'endEra' : 'CE'
+    };
+    this.advanceQueries = [];
+     // Set up two query fields
+    this.advanceQueries.push(Object.assign({}, this.advQueryTemplate));
+    this.advanceQueries.push(Object.assign({}, this.advQueryTemplate));
+
+    // Clear selected filters
+    this.filterSelections = [];
+
+    // Clear checkbox UI
+    let checkboxes: Array<any> = Array.from( document.querySelectorAll("#advancedModal input[type='checkbox']") );
+    checkboxes.forEach(field => {
+      field.checked = false;
+    });
+  }
+
+  /**
+   * Simple validation to test if the form is empty (This form is structured oddly, so it's simpler to do our own minimum validation)
+   */
+  public validateForm(): boolean {
+    let isValid = false;
+
+    let startDate = 0;
+    let endDate = 0;
+    if (this.advanceSearchDate['startDate'] && this.advanceSearchDate['endDate']) {
+      startDate = this.advanceSearchDate['startDate'] * (this.advanceSearchDate['startEra'] == 'BCE' ? -1 : 1);
+      endDate = this.advanceSearchDate['endDate'] * (this.advanceSearchDate['endEra'] == 'BCE' ? -1 : 1);
+    }
+
+    if (this.filterSelections.length < 1 && this.advanceQueries[0].term.length < 1 && this.advanceSearchDate['startDate'].length < 1 && this.advanceSearchDate['endDate'].length < 1 ) {
+      // Nothing was selected! Tell the user to select something
+      this.error.empty = true;
+      this.error.date = false;
+    }
+    else if (startDate > endDate){
+      // Start Date is greater than End Date
+      this.error.date = true;
+      this.error.empty = false;
+    }
+    else {
+      this.error.empty = false;
+      this.error.date = false;
+      isValid = true;
+    }
+    return isValid;
+  }
+
+  public applyAllFilters(): void {
+    if (!this.validateForm()) {
+      return;
+    }
+
+    // Clear existing filters set outside this modal
+    this._filters.clearApplied(true)
+
+    let advQuery
+    let filterParams
+    let currentParams = this.route.snapshot.params
+
+    advQuery = this.queryUtil.generateSearchQuery(this.advanceQueries)
+    filterParams = this.queryUtil.generateFilters(this.filterSelections, this.advanceSearchDate)
+
+    for (let key in filterParams) {
+      let filterValue = ''
+      if ( filterParams[key] instanceof Array ){
+        let filterValue = ''
+        for ( let filter of filterParams[key]){
+          filterValue += filterValue ? '|' + filter : filter
+        }
+        filterParams[key] = filterValue
+      }
+    }
+
+    // Track in angulartics
+    this.angulartics.eventTrack.next({ action: 'advSearch', properties: { category: this._auth.getGACategory(), label: advQuery } })
+
+    // Maintain feature flags
+    if (currentParams['featureFlag']) {
+      filterParams['featureFlag'] = currentParams['featureFlag']
+    }
+
+    // Open search page with new query
+    this._router.navigate(['/search', advQuery, filterParams]);
+
+    // Close advance search modal
+    this.close();
+  }
+
+  /**
+   * Open Help page on Advanced Search
+   */
+  public openHelp(): void {
+    window.open('http://support.artstor.org/?article=advanced-search', 'Advanced Search Support', 'width=800,height=600');
   }
 
   /**
@@ -387,11 +511,6 @@ export class SearchModal implements OnInit, AfterViewInit {
     )
   }
 
-  public close(): void {
-    document.body.style.overflow = 'auto';
-    this.closeModal.emit()
-  }
-
   /**
    * Add query to array of field queries
    */
@@ -413,118 +532,6 @@ export class SearchModal implements OnInit, AfterViewInit {
     else{
       this.advanceSearchDate[dateEra] = 'BCE';
     }
-  }
-
-  public dateKeyPress(event: any): boolean{
-      // Add check of Tab key to make sure the tabbingis enabled on Firefox
-      if ((event.key === 'ArrowUp') || (event.key === 'ArrowDown') || (event.key === 'ArrowRight') || (event.key === 'ArrowLeft') || (event.key === 'Backspace') || (event.key === 'Tab')){
-        return true;
-      }
-
-      let theEvent = event || window.event;
-      let key = theEvent.keyCode || theEvent.which;
-      key = String.fromCharCode( key );
-      let regex = /[0-9]|\./;
-      if ( !regex.test(key) ) {
-        theEvent.returnValue = false;
-        if (theEvent.preventDefault) theEvent.preventDefault();
-      }
-
-      return theEvent.returnValue;
-  }
-
-  public resetFilters(): void {
-    this.advanceSearchDate = {
-      'startDate' : '',
-      'startEra' : 'BCE',
-      'endDate' : '',
-      'endEra' : 'CE'
-    };
-    this.advanceQueries = [];
-     // Set up two query fields
-    this.advanceQueries.push(Object.assign({}, this.advQueryTemplate));
-    this.advanceQueries.push(Object.assign({}, this.advQueryTemplate));
-
-    // Clear selected filters
-    this.filterSelections = [];
-
-    // Clear checkbox UI
-    let checkboxes: Array<any> = Array.from( document.querySelectorAll("#advancedModal input[type='checkbox']") );
-    checkboxes.forEach(field => {
-      field.checked = false;
-    });
-  }
-
-  /**
-   * Simple validation to test if the form is empty (This form is structured oddly, so it's simpler to do our own minimum validation)
-   */
-  public validateForm(): boolean {
-    let isValid = false;
-
-    let startDate = 0;
-    let endDate = 0;
-    if (this.advanceSearchDate['startDate'] && this.advanceSearchDate['endDate']) {
-      startDate = this.advanceSearchDate['startDate'] * (this.advanceSearchDate['startEra'] == 'BCE' ? -1 : 1);
-      endDate = this.advanceSearchDate['endDate'] * (this.advanceSearchDate['endEra'] == 'BCE' ? -1 : 1);
-    }
-
-    if (this.filterSelections.length < 1 && this.advanceQueries[0].term.length < 1 && this.advanceSearchDate['startDate'].length < 1 && this.advanceSearchDate['endDate'].length < 1 ) {
-      // Nothing was selected! Tell the user to select something
-      this.error.empty = true;
-      this.error.date = false;
-    }
-    else if (startDate > endDate){
-      // Start Date is greater than End Date
-      this.error.date = true;
-      this.error.empty = false;
-    }
-    else {
-      this.error.empty = false;
-      this.error.date = false;
-      isValid = true;
-    }
-    return isValid;
-  }
-
-  public applyAllFilters(): void {
-    if (!this.validateForm()) {
-      return;
-    }
-
-    // Clear existing filters set outside this modal
-    this._filters.clearApplied(true)
-
-    let advQuery
-    let filterParams
-    let currentParams = this.route.snapshot.params
-
-    advQuery = this.queryUtil.generateSearchQuery(this.advanceQueries)
-    filterParams = this.queryUtil.generateFilters(this.filterSelections, this.advanceSearchDate)
-
-    for (let key in filterParams) {
-      let filterValue = ''
-      if ( filterParams[key] instanceof Array ){
-        let filterValue = ''
-        for ( let filter of filterParams[key]){
-          filterValue += filterValue ? '|' + filter : filter
-        }
-        filterParams[key] = filterValue
-      }
-    }
-
-    // Track in angulartics
-    this.angulartics.eventTrack.next({ action: 'advSearch', properties: { category: this._auth.getGACategory(), label: advQuery } })
-
-    // Maintain feature flags
-    if (currentParams['featureFlag']) {
-      filterParams['featureFlag'] = currentParams['featureFlag']
-    }
-
-    // Open search page with new query
-    this._router.navigate(['/search', advQuery, filterParams]);
-
-    // Close advance search modal
-    this.close();
   }
 
   private toggleFilter( filterObj: FacetObject, parentFilterObj?: FacetObject): void{
@@ -582,13 +589,6 @@ export class SearchModal implements OnInit, AfterViewInit {
         if ( (array[i].group === searchObj.group) && (array[i].value === searchObj.value) ) return i;
     }
     return -1;
-  }
-
-  /**
-   * Open Help page on Advanced Search
-   */
-  public openHelp(): void {
-    window.open('http://support.artstor.org/?article=advanced-search', 'Advanced Search Support', 'width=800,height=600');
   }
 }
 

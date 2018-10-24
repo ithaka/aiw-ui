@@ -29,58 +29,6 @@ import { SortablejsOptions } from 'angular-sortablejs';
 })
 
 export class AssetGrid implements OnInit, OnDestroy {
-  // Add user to decide whether to show the banner
-  private user: any = this._auth.getUser();
-
-  private siteID: string = ''
-
-  // Set our default values
-  private subscriptions: Subscription[] = [];
-
-  public searchLoading: boolean;
-  public showFilters: boolean = true;
-  public showAdvancedModal: boolean = false;
-  errors = {};
-  public results: any[] = [];
-  // Sometimes we get all the ids but not thumbnails for assets (eg. Groups)
-  private itemIds: string[] = [];
-  // Array to be filled with *all* assets for reorder mode
-  private allResults: any[] = [];
-  filters = [];
-  public editMode: boolean = false;
-  public reorderMode: boolean = false;
-  public showLoseReorder: boolean = false;
-  private orderChanged: boolean = false;
-
-  private largeThmbView: boolean = false;
-
-  private selectedAssets: any[] = [];
-
-  // Default show as loading until results have update
-  public isLoading: boolean = true;
-  public searchError: string = '';
-  public searchLimitError: boolean = false;
-
-  public searchTerm: string = '';
-  private formattedSearchTerm: string = '';
-  private searchInResults: boolean = false;
-  private isPartialPage: boolean = false;
-
-  // Flag to check if the results have any restricted images.
-  public restricted_results: any[] = [];
-
-  private excludedAssetsCount: number = 0;
-  private sortByDateTotal: number = 0;
-
-  @Input()
-  private actionOptions: any = {};
-
-  // With most pages using Solr, we want to default assuming a max of 5000
-  @Input()
-  private hasMaxAssetLimit: boolean = true
-
-  // Value
-  public totalAssets: number = 0;
   @Input()
   set assetCount(count: number) {
     if (typeof(count) != 'undefined') {
@@ -91,22 +39,33 @@ export class AssetGrid implements OnInit, OnDestroy {
     return this.totalAssets
   }
 
+  public searchLoading: boolean;
+  public showFilters: boolean = true;
+  public showAdvancedModal: boolean = false;
+  errors = {};
+  public results: any[] = [];
+  filters = [];
+  public editMode: boolean = false;
+  public reorderMode: boolean = false;
+  public showLoseReorder: boolean = false;
+
+  // Default show as loading until results have update
+  public isLoading: boolean = true;
+  public searchError: string = '';
+  public searchLimitError: boolean = false;
+
+  public searchTerm: string = '';
+
+  // Flag to check if the results have any restricted images.
+  public restricted_results: any[] = [];
+
+  // Value
+  public totalAssets: number = 0;
+
   // @Input()
   // private allowSearchInRes:boolean;
 
   @Output() reordering: EventEmitter<boolean> = new EventEmitter();
-
-  // @Output() updateSearchInRes: EventEmitter<boolean> = new EventEmitter();
-
-  private pagination: {
-    totalPages: number,
-    size: number,
-    page: number
-  } = {
-    totalPages: 1,
-    size: 24,
-    page: 1
-  };
 
   dateFacet = {
     earliest : {
@@ -125,6 +84,54 @@ export class AssetGrid implements OnInit, OnDestroy {
     label : 'Relevance'
   };
   sub;
+
+  // Options for Sortablejs reordering of assets
+  public sortableOptions: SortablejsOptions = {
+    onUpdate: (event) => {
+      this.orderChanged = true
+    }
+  }
+  // Add user to decide whether to show the banner
+  private user: any = this._auth.getUser();
+
+  private siteID: string = ''
+
+  // Set our default values
+  private subscriptions: Subscription[] = [];
+  // Sometimes we get all the ids but not thumbnails for assets (eg. Groups)
+  private itemIds: string[] = [];
+  // Array to be filled with *all* assets for reorder mode
+  private allResults: any[] = [];
+  private orderChanged: boolean = false;
+
+  private largeThmbView: boolean = false;
+
+  private selectedAssets: any[] = [];
+  private formattedSearchTerm: string = '';
+  private searchInResults: boolean = false;
+  private isPartialPage: boolean = false;
+
+  private excludedAssetsCount: number = 0;
+  private sortByDateTotal: number = 0;
+
+  @Input()
+  private actionOptions: any = {};
+
+  // With most pages using Solr, we want to default assuming a max of 5000
+  @Input()
+  private hasMaxAssetLimit: boolean = true
+
+  // @Output() updateSearchInRes: EventEmitter<boolean> = new EventEmitter();
+
+  private pagination: {
+    totalPages: number,
+    size: number,
+    page: number
+  } = {
+    totalPages: 1,
+    size: 24,
+    page: 1
+  };
 
   private UrlParams: any = {
     term: '',
@@ -150,13 +157,6 @@ export class AssetGrid implements OnInit, OnDestroy {
 
   // Used as a key to save the previous route params in session storage (incase of image group)
   private prevRouteTS: string = ''
-
-  // Options for Sortablejs reordering of assets
-  public sortableOptions: SortablejsOptions = {
-    onUpdate: (event) => {
-      this.orderChanged = true
-    }
-  }
 
   // TypeScript public modifiers
   constructor(
@@ -431,6 +431,33 @@ export class AssetGrid implements OnInit, OnDestroy {
   }
 
   /**
+   * Format the search term to display advance search queries nicely
+   */
+  public formatSearchTerm(query: string): void {
+    let fQuery = '"' + query + '"';
+    // Cleanup filter pipes
+    // fQuery = fQuery.replace(/\|[0-9]{3}/g, );
+
+    fQuery = fQuery.replace(/\|\#/g, '| (in any) #');
+    fQuery = fQuery.replace(/\|$/, '| (in any)')
+    fQuery = fQuery.replace(/\|/g, '</b>');
+    fQuery = fQuery.replace(/(#or,)/g, ' or <b>');
+    fQuery = fQuery.replace(/(#and,)/g, ' and <b>');
+    fQuery = fQuery.replace(/(#not,)/g, ' not <b>');
+
+    this.formattedSearchTerm = fQuery;
+  }
+
+  /**
+   * Display "exiting reorder" modal
+   */
+  public shouldSaveModal(event) {
+    if (this.reorderMode && this.showLoseReorder == false) {
+      this.showLoseReorder = true;
+    }
+  }
+
+  /**
    * Set newPage in url and navigate, which triggers this._assets.queryAll() again
    * @param newPage number of desired page
    */
@@ -641,33 +668,6 @@ export class AssetGrid implements OnInit, OnDestroy {
         return 'personal-asset';
       default:
         return '';
-    }
-  }
-
-  /**
-   * Format the search term to display advance search queries nicely
-   */
-  public formatSearchTerm(query: string): void {
-    let fQuery = '"' + query + '"';
-    // Cleanup filter pipes
-    // fQuery = fQuery.replace(/\|[0-9]{3}/g, );
-
-    fQuery = fQuery.replace(/\|\#/g, '| (in any) #');
-    fQuery = fQuery.replace(/\|$/, '| (in any)')
-    fQuery = fQuery.replace(/\|/g, '</b>');
-    fQuery = fQuery.replace(/(#or,)/g, ' or <b>');
-    fQuery = fQuery.replace(/(#and,)/g, ' and <b>');
-    fQuery = fQuery.replace(/(#not,)/g, ' not <b>');
-
-    this.formattedSearchTerm = fQuery;
-  }
-
-  /**
-   * Display "exiting reorder" modal
-   */
-  public shouldSaveModal(event) {
-    if (this.reorderMode && this.showLoseReorder == false) {
-      this.showLoseReorder = true;
     }
   }
 

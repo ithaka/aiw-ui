@@ -21,10 +21,6 @@ declare var initPath: string
   templateUrl: './home.component.pug'
 })
 export class Home implements OnInit, OnDestroy {
-  private subscriptions: Subscription[] = []
-
-  private artStorEmailLink: string = ''
-  private userGeoIP: any = {}
 
   // Set our default values
   localState = { value: '' }
@@ -33,16 +29,20 @@ export class Home implements OnInit, OnDestroy {
   institution: any = {}
   errors = {}
   loaders = {}
+
+  public showBlog: boolean = false
+  public showHomePromo: boolean = false
+  public siteID: string = ''
+  private subscriptions: Subscription[] = []
+
+  private artStorEmailLink: string = ''
+  private userGeoIP: any = {}
   private user: any
   private blogPosts: any[] = []
   private blogLoading: boolean = true
-
-  public showBlog: boolean = false
   private showPrivateCollections: boolean = false
   private browseSec: any = {}
   private showHomeSSC: boolean = false
-  public showHomePromo: boolean = false
-  public siteID: string = ''
 
   // Default IG 'Browse By:' Option controlled via the WLV file
   private defaultGrpBrwseBy: string = 'institution'

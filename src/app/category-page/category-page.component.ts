@@ -17,6 +17,10 @@ import { TitleService } from '../shared/title.service'
 })
 
 export class CategoryPage implements OnInit, OnDestroy {
+  public catName: string;
+  public catDescription: string;
+  public catThumbnail: string;
+  public showAccessDeniedModal: boolean = false
 
   private header = new HttpHeaders().set('Content-Type', 'application/json'); // ... Set content type to JSON
   private options = { headers: this.header, withCredentials: true }; // Create a request option
@@ -24,15 +28,11 @@ export class CategoryPage implements OnInit, OnDestroy {
   private user: any = this._auth.getUser();
 
   private catId: string;
-  public catName: string;
-  public catDescription: string;
-  public catThumbnail: string;
 
   private subscriptions: Subscription[] = [];
 
   // private searchInResults: boolean = false;
   private unaffiliatedUser: boolean = false
-  public showAccessDeniedModal: boolean = false
 
   constructor(
     private _assets: AssetService,
@@ -124,6 +124,10 @@ export class CategoryPage implements OnInit, OnDestroy {
 
   } // OnInit
 
+  ngOnDestroy() {
+    this.subscriptions.forEach((sub) => { sub.unsubscribe(); });
+  }
+
 
   /**
   * Get metadata about a Category
@@ -158,10 +162,6 @@ export class CategoryPage implements OnInit, OnDestroy {
         .get(this._auth.getUrl() + '/categories/' + catId, options)
         .toPromise();
 }
-
-  ngOnDestroy() {
-    this.subscriptions.forEach((sub) => { sub.unsubscribe(); });
-  }
 
   // private updateSearchInRes(value: boolean): void{
   //  this.searchInResults = value;

@@ -12,9 +12,9 @@ import { AssetService } from './../shared/assets.service'
 })
 
 export class ClusterPage implements OnInit, OnDestroy {
-  private subscriptions: Subscription[] = [];
   // Cluster Asset Title
   public clusterObjTitle: string;
+  private subscriptions: Subscription[] = [];
   private clusterId: string;
 
   // TypeScript public modifiers

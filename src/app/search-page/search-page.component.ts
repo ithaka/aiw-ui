@@ -18,10 +18,10 @@ import { AppConfig } from '../app.service'
 })
 
 export class SearchPage implements OnInit, OnDestroy {
-  // Add user to decide whether to show the banner
-  private user: any = this._auth.getUser();
 
   public siteID: string = ''
+  // Add user to decide whether to show the banner
+  private user: any = this._auth.getUser();
 
   private subscriptions: Subscription[] = [];
 

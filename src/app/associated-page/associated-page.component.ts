@@ -15,14 +15,14 @@ import { MetadataService } from '../shared'
 })
 
 export class AssociatedPage implements OnInit, OnDestroy {
+  // gets assigned with the asset's title
+  public assetTitle: string;
   // array of all subscriptions, which is destroyed OnDestroy
   private subscriptions: Subscription[] = [];
   // the object id for which to retrieve related assets (retrieved from matrix param)
   private objectId: string;
   // the colection which the associated asset comes from
   private colId: string;
-  // gets assigned with the asset's title
-  public assetTitle: string;
 
   constructor(
       private _router: Router,

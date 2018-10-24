@@ -16,18 +16,18 @@ import { AppConfig } from '../../app.service'
   styleUrls: [ './nav.component.scss' ],
 })
 export class Nav implements OnInit, OnDestroy {
-  private subscriptions: Subscription[] = [];
   public showLoginPanel = false;
   public allowExpiredModal = false;
-  private user: any = {};
-  private institutionObj: any = {};
-  private _tool: ToolboxService = new ToolboxService();
 
   public showinactiveUserLogoutModal: boolean = false;
-  private appConfig: any
 
   // Display variables
   public logoUrl = ''
+  private subscriptions: Subscription[] = [];
+  private user: any = {};
+  private institutionObj: any = {};
+  private _tool: ToolboxService = new ToolboxService();
+  private appConfig: any
 
   private ipAuthed: boolean = false
 

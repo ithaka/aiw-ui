@@ -15,11 +15,17 @@ import { AuthService } from '../auth.service'
   styleUrls: [ './search.component.scss' ]
 })
 export class SearchComponent implements OnInit, OnDestroy {
-  private subscriptions: Subscription[] = [];
 
   public showSearchModal: boolean = false;
   public term: string;
   public startSearch: boolean = false
+
+  @Input()
+  public allowSearchInRes: boolean;
+
+  @Input()
+  public UserNotLoggedIn: boolean;
+  private subscriptions: Subscription[] = [];
 
   private size: number = 24;
 
@@ -27,12 +33,6 @@ export class SearchComponent implements OnInit, OnDestroy {
   private searchInResults: boolean = false;
 
   private nestedSrchLbl: string = 'results';
-
-  @Input()
-  public allowSearchInRes: boolean;
-
-  @Input()
-  public UserNotLoggedIn: boolean;
 
   constructor(
     private _assets: AssetService,
@@ -160,6 +160,14 @@ export class SearchComponent implements OnInit, OnDestroy {
       })
   }
 
+  public setFocus(): void {
+    window.setTimeout(function () {
+      if (document.getElementById('empty-search-alert')){
+        document.getElementById('empty-search-alert').focus()
+      }
+    }, 110);
+  }
+
   /**
    * Formats search string to strip symbols
    * @param searchString Search term from the URL
@@ -190,13 +198,5 @@ export class SearchComponent implements OnInit, OnDestroy {
    */
   private onSearchWithinChange(value: boolean): void{
     this._filters.searchWithin = value
-  }
-
-  public setFocus() : void {
-    window.setTimeout(function () {
-      if (document.getElementById('empty-search-alert')){
-        document.getElementById('empty-search-alert').focus()
-      }
-    }, 110);
   }
 }

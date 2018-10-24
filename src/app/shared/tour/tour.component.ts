@@ -14,11 +14,11 @@ import { TourStep } from './tour.service'
     styleUrls: ['./tour.component.scss']
   })
   export class GuideTourComponent {
-
-    private driver: any
     public startModalShow: boolean = false
 
     @Input() public steps: TourStep[]
+
+    private driver: any
 
     constructor(
       private _auth: AuthService,
@@ -42,7 +42,7 @@ import { TourStep } from './tour.service'
       this.driver = new Driver({ allowClose: false, closeBtnText: 'exit tour', nextBtnText: 'NEXT', prevBtnText: 'BACK', doneBtnText: 'GOT IT, THANKS!',
         onHighlightStarted: (Element) => {
 
-          Element.node.scrollIntoView({block: "center"})
+          Element.node.scrollIntoView({block: 'center'})
 
           // Change the tabIndex of the brand label and links in the login box to ensure if there is tour, the links of the tour is first to be tabbed for accessibility
             this.manipulateDom('className', 'navbar-brand', 6)

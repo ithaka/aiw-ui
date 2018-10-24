@@ -14,6 +14,22 @@ import { TitleService, AssetSearchService, AuthService, AssetService, FlagServic
 })
 export class MyCollectionsComponent implements OnInit {
   public unaffiliatedUser: boolean = false
+
+  public isLoggedIn: boolean
+//   private showUploadImgsModal: boolean = false;
+  public showEditPCModal: boolean = false;
+
+  public loading: boolean = false;
+  private subscriptions: Subscription[] = [];
+  private categories = [];
+  private tags: Tag[] = [];
+  private expandedCategories: any = {};
+  private selectedBrowseId: string = '';
+
+  private editTagId: string = '';
+
+  // Reference activeTag for description on side
+  private activeTag:  Tag;
   constructor(
     private _auth: AuthService,
     private _flags: FlagService,
@@ -25,22 +41,6 @@ export class MyCollectionsComponent implements OnInit {
   ) {
     this.unaffiliatedUser = this._auth.isPublicOnly() ? true : false
   }
-
-  public isLoggedIn: boolean
-  private subscriptions: Subscription[] = [];
-  private categories = [];
-  private tags: Tag[] = [];
-  private expandedCategories: any = {};
-  private selectedBrowseId: string = '';
-//   private showUploadImgsModal: boolean = false;
-  public showEditPCModal: boolean = false;
-
-  private editTagId: string = '';
-
-  // Reference activeTag for description on side
-  private activeTag:  Tag;
-
-  public loading: boolean = false;
 
   ngOnInit() {
     // Add tag for My Personal Collection
@@ -123,11 +123,6 @@ export class MyCollectionsComponent implements OnInit {
       });
   }
 
-  private showEditModal(tag): void{
-      this.editTagId = tag.tagId;
-      this.showEditPCModal = true;
-  }
-
   toggleInfo(node){
       if (node.info_expanded){
           node.info_expanded = false;
@@ -201,6 +196,11 @@ export class MyCollectionsComponent implements OnInit {
           }
       }
       return node;
+  }
+
+  private showEditModal(tag): void{
+      this.editTagId = tag.tagId;
+      this.showEditPCModal = true;
   }
 
     /**

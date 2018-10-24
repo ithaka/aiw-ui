@@ -35,9 +35,9 @@ export class LoginFormComponent implements OnInit {
   public loginInstitutions = [] /** Stores the institutions returned by the server */
 
   @Input() public copyModifier: string = 'DEFAULT'
+  public loginLoading = false
 
   private loginInstName: string = '' /** Bound to the autocomplete field */
-  public loginLoading = false
   // loginCall is scoped globally for isBadCasePassword() as well as login()
   private loginCall: Function
 

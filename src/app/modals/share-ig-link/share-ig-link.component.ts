@@ -12,8 +12,6 @@ export class ShareIgLinkModal implements OnInit, AfterViewInit {
   @Output()
   public closeModal: EventEmitter<any> = new EventEmitter()
 
-  @Input() private ig: ImageGroup /** the image group in question */
-
   public document = document
 
   public shareLink: string = '' // this is the url which will be copied to the user's clipboard
@@ -22,6 +20,8 @@ export class ShareIgLinkModal implements OnInit, AfterViewInit {
     isLoading?: boolean,
     tokenError?: boolean
   } = {}
+
+  @Input() private ig: ImageGroup /** the image group in question */
 
   constructor(
     private _group: GroupService,

@@ -17,13 +17,13 @@ declare let google
   styleUrls: [ './footer.component.scss' ],
 })
 export class Footer {
-  private subscriptions: Subscription[] = []
   public appVersion = ''
   public currentYear
-  private user: any = {}
   public links: string[]
+  public siteID: string = ''
+  private subscriptions: Subscription[] = []
+  private user: any = {}
   private browseSec: { [key: string]: boolean } = {}
-  public siteID: string = ""
 
   // TypeScript public modifiers
   constructor(
@@ -55,7 +55,7 @@ export class Footer {
           this.user = this._auth.getUser()
           if (this._auth.isPublicOnly()) {
             let index: number = this.links.indexOf('SUPPORT')
-            this.links[index] = "SUPPORT_UNAFFILIATED"
+            this.links[index] = 'SUPPORT_UNAFFILIATED'
           }
         }
       })).subscribe()
@@ -80,7 +80,7 @@ export class Footer {
   private logout(): void {
     this._auth.logout()
       .then(() => {
-        if (this.location.path().indexOf("home") >= 0) {
+        if (this.location.path().indexOf('home') >= 0) {
           location.reload() // this will reload the app and give the user a feeling they actually logged out
         } else {
           this._router.navigate(['/home'])

@@ -38,14 +38,6 @@ export class ChangePasswordModal implements OnInit {
 
   }
 
-  /** Validates that the passwords are equal and assigns error if not
-   * @returns error to FormGroup called 'mismatch' if the passwords are not equal
-   */
-  private passwordsEqual(group: FormGroup): any {
-    return group.get('newPass').value === group.get('newPassConfirm').value
-      ? null : { passwordMismatch: true };
-  }
-
   public changePass(formValue: any): void {
     this.submitted = true;
     this.serviceResponses = {};
@@ -71,5 +63,13 @@ export class ChangePasswordModal implements OnInit {
         this.serviceResponses.generalError = true;
         console.error(err);
       })).subscribe()
+  }
+
+  /** Validates that the passwords are equal and assigns error if not
+   * @returns error to FormGroup called 'mismatch' if the passwords are not equal
+   */
+  private passwordsEqual(group: FormGroup): any {
+    return group.get('newPass').value === group.get('newPassConfirm').value
+      ? null : { passwordMismatch: true };
   }
 }

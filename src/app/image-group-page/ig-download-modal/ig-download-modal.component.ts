@@ -25,9 +25,9 @@ export class PptModalComponent implements OnInit, AfterViewInit {
   public zipLoading: boolean = false;
   public downloadLink: string = '';
   public zipDownloadLink: string = '';
+  public error: boolean = false;
   private downloadTitle: string = 'Image Group';
   private allowedDownloads: number = 0;
-  public error: boolean = false;
 
   private header = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
   private defaultOptions = { withCredentials: true};
@@ -49,6 +49,10 @@ export class PptModalComponent implements OnInit, AfterViewInit {
   public startModalFocus() {
     let modalStartFocus = document.getElementById('ig-download-title')
     modalStartFocus.focus()
+  }
+
+  trackDownload(downloadType: string): void {
+    this._angulartics.eventTrack.next({ action: 'downloadGroup' + downloadType, properties: { category: this._auth.getGACategory(), label: this.ig.id }})
   }
 
   private getPPT() {
@@ -139,10 +143,6 @@ export class PptModalComponent implements OnInit, AfterViewInit {
 
       return res
     })
-  }
-
-  trackDownload(downloadType: string): void {
-    this._angulartics.eventTrack.next({ action: 'downloadGroup' + downloadType, properties: { category: this._auth.getGACategory(), label: this.ig.id }})
   }
 
 }

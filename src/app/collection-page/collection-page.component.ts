@@ -18,18 +18,18 @@ import { ScriptService } from '../shared'
 })
 
 export class CollectionPage implements OnInit, OnDestroy {
-
-  private header = new HttpHeaders().set('Content-Type', 'application/json'); // ... Set content type to JSON
-  private options = { headers: this.header, withCredentials: true }; // Create a request option
-
-  private colId: string = '';
   public colName: string = '';
   public colDescription: string = '';
   public colThumbnail: string = '';
   public assetCount: number;
   public descCollapsed: boolean = true;
-  private unaffiliatedUser: boolean = false;
   public showAccessDeniedModal: boolean = false;
+
+  private header = new HttpHeaders().set('Content-Type', 'application/json'); // ... Set content type to JSON
+  private options = { headers: this.header, withCredentials: true }; // Create a request option
+
+  private colId: string = '';
+  private unaffiliatedUser: boolean = false;
 
   private subscriptions: Subscription[] = [];
   private userSessionFresh: boolean = false;

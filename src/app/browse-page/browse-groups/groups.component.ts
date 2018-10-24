@@ -17,13 +17,22 @@ import { TourStep } from '../../shared/tour/tour.service'
   styleUrls: ['./../browse-page.component.scss', './groups.component.scss']
 })
 export class BrowseGroupsComponent implements OnInit {
-  private showArtstorCurated: boolean = true
-  private subscriptions: Subscription[] = []
 
-  private userTypeId: any
-  private currentBrowseRes: any = {}
+  // find which of the filters is selected
+  public get selectedFilter(): GroupFilter {
+    let filter: GroupFilter = this.groupFilterArray.find((filter) => {
+      return filter.selected
+    })
+
+    if (!filter) {
+      filter = this.groupFilterArray.find((filter) => {
+        return filter.level == 'institution'
+      })
+    }
+    filter.selected = true
+    return filter
+  }
   public tags: Tag[] = []
-  private groups: any[] = []
   public searchTerm: string = ''
   public loading: boolean = true
   public showAccessDeniedModal: boolean = false
@@ -41,9 +50,6 @@ export class BrowseGroupsComponent implements OnInit {
   }
 
   public updateSearchTerm: EventEmitter<string> = new EventEmitter()
-
-  private tagFilters = []
-  private appliedTags: string[] = []
 
   public groupFilterArray: GroupFilter[] = []
   public errorObj: any = {}
@@ -85,6 +91,15 @@ export class BrowseGroupsComponent implements OnInit {
         }
     }
   ]
+  private showArtstorCurated: boolean = true
+  private subscriptions: Subscription[] = []
+
+  private userTypeId: any
+  private currentBrowseRes: any = {}
+  private groups: any[] = []
+
+  private tagFilters = []
+  private appliedTags: string[] = []
 
   constructor(
     _appConfig: AppConfig,
@@ -166,27 +181,54 @@ export class BrowseGroupsComponent implements OnInit {
     this.subscriptions.forEach((sub) => { sub.unsubscribe() })
   }
 
-  // find which of the filters is selected
-  public get selectedFilter(): GroupFilter {
-    let filter: GroupFilter = this.groupFilterArray.find((filter) => {
-      return filter.selected
-    })
-
-    if (!filter) {
-      filter = this.groupFilterArray.find((filter) => {
-        return filter.level == 'institution'
-      })
-    }
-    filter.selected = true
-    return filter
-  }
-
   public clearGrpSearch(): void {
     let queryParams = Object.assign({}, this.route.snapshot.queryParams)
     if (queryParams['term']){
       delete queryParams['term']
     }
     this.addQueryParams(queryParams, true) // Load group search results without (after clearing) search term
+  }
+
+  public changeSortOpt(label) {
+    if ( this.activeSort.label != label){
+      this._ga.eventTrack.next({ action: 'sortGroup', properties: { category: this._auth.getGACategory(), label: 'cardviewSort' }});
+      this.activeSort.label = label;
+      this.activeSort.name = name;
+
+      this.goToPage(1);
+      this.addQueryParams({ sort: label, page: 1 })
+    }
+  }
+
+  /**
+   * Gets the image groups for a new page - applies all currently applied filters, just updates the page number
+   * @param newPageNum The page number you wish to navigate to
+   */
+  public goToPage(newPageNum: number) {
+    this.addQueryParams({ page: newPageNum })
+  }
+
+  /**
+   * Allows direct modification of the url's query parameters and creates a navigation event
+   * @param params the parameters to add to the url (if duplicate parameters already in url, this will overwrite them)
+   * @param reset allows resetting of queryParams to empty object plus whatever params you pass, instead of keeping old params
+   */
+  public addQueryParams(params: { [key: string]: any }, reset?: boolean, searchWithTerm?: boolean, currentParams?: any) {
+    let baseParams
+    if (reset) {
+      baseParams = {}
+    } else if (currentParams) {
+      baseParams = Object.assign({}, currentParams)
+    } else {
+      baseParams = Object.assign({}, this.route.snapshot.queryParams)
+    }
+    if (searchWithTerm && baseParams['id']) {
+      delete baseParams['tags']
+      delete baseParams['id']
+    }
+    let queryParams = Object.assign(baseParams, params)
+
+    this._router.navigate(['/browse', 'groups'], { queryParams: queryParams })
   }
 
   /** Every time the url updates, we process the new tags and reload image groups if the tags query param changes */
@@ -325,17 +367,6 @@ export class BrowseGroupsComponent implements OnInit {
     }
   }
 
-  public changeSortOpt(label) {
-    if ( this.activeSort.label != label){
-      this._ga.eventTrack.next({ action: 'sortGroup', properties: { category: this._auth.getGACategory(), label: 'cardviewSort' }});
-      this.activeSort.label = label;
-      this.activeSort.name = name;
-
-      this.goToPage(1);
-      this.addQueryParams({ sort: label, page: 1 })
-    }
-  }
-
   /**
    * Turns the groups into a ui-usable Tag, which doesn't make logical sense but it's how it works
    * @param folderArray An array of groups returned by the services
@@ -464,14 +495,6 @@ export class BrowseGroupsComponent implements OnInit {
   }
 
   /**
-   * Gets the image groups for a new page - applies all currently applied filters, just updates the page number
-   * @param newPageNum The page number you wish to navigate to
-   */
-  public goToPage(newPageNum: number) {
-    this.addQueryParams({ page: newPageNum })
-  }
-
-  /**
    * shouldSearch is where any logic is packaged that determines whether or not to search image groups. Right now,
    *  the only reason not to search is if the user is on the 'vanilla' search route (they have no tags or levels specified).
    *  If they get straight to the search page, we don't want to fill it with groups before they've searched anything.
@@ -497,29 +520,6 @@ export class BrowseGroupsComponent implements OnInit {
     }
 
     return search
-  }
-
-  /**
-   * Allows direct modification of the url's query parameters and creates a navigation event
-   * @param params the parameters to add to the url (if duplicate parameters already in url, this will overwrite them)
-   * @param reset allows resetting of queryParams to empty object plus whatever params you pass, instead of keeping old params
-   */
-  public addQueryParams(params: { [key: string]: any }, reset?: boolean, searchWithTerm?: boolean, currentParams?: any) {
-    let baseParams
-    if (reset) {
-      baseParams = {}
-    } else if (currentParams) {
-      baseParams = Object.assign({}, currentParams)
-    } else {
-      baseParams = Object.assign({}, this.route.snapshot.queryParams)
-    }
-    if (searchWithTerm && baseParams['id']) {
-      delete baseParams['tags']
-      delete baseParams['id']
-    }
-    let queryParams = Object.assign(baseParams, params)
-
-    this._router.navigate(['/browse', 'groups'], { queryParams: queryParams })
   }
 
   /**

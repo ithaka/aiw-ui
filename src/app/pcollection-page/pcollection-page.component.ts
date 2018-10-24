@@ -18,11 +18,6 @@ import { TitleService } from '../shared/title.service'
 })
 
 export class PCollectionPage implements OnInit, OnDestroy {
-
-  private header = new HttpHeaders().set('Content-Type', 'application/json'); // ... Set content type to JSON
-  private options = { headers: this.header, withCredentials: true }; // Create a request option
-
-  private colId: string = ''
   public colName: string = ''
   public colDescription: string = ''
   public colThumbnail: string = ''
@@ -30,9 +25,6 @@ export class PCollectionPage implements OnInit, OnDestroy {
   public descCollapsed: boolean = true
   public showAccessDeniedModal: boolean = false
   public showDeleteSuccessBanner: boolean = false
-  private deleteBannerParams: { title?: string } = {}
-
-  private subscriptions: Subscription[] = []
 
   public publishingAssets: any = {
     ssids: [],
@@ -40,6 +32,14 @@ export class PCollectionPage implements OnInit, OnDestroy {
   }
   public pub_que_count: number = 0
   public pub_failure_count: number = 0
+
+  private header = new HttpHeaders().set('Content-Type', 'application/json'); // ... Set content type to JSON
+  private options = { headers: this.header, withCredentials: true }; // Create a request option
+
+  private colId: string = ''
+  private deleteBannerParams: { title?: string } = {}
+
+  private subscriptions: Subscription[] = []
   private unaffiliatedUser: boolean = false
 
   constructor(

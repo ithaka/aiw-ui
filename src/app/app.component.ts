@@ -126,18 +126,6 @@ export class App {
     // this.showSkyBanner = true
   }
 
-  // Show the chat widget on: 'login', 'browse/library', or 'browse/groups/public'
-  private showChatWidget(eventUrl: string): boolean {
-      if (eventUrl.indexOf('browse/library') > -1 ||
-          eventUrl.indexOf('browse/groups/public') > -1 ||
-          eventUrl.indexOf('login') > -1) {
-           return true
-        }
-      else {
-        return false
-      }
-  }
-
   public findMainContent(): void {
     window.setTimeout(function ()
     {
@@ -157,5 +145,17 @@ export class App {
       }
       (<HTMLElement>element).focus();
     }, 100);
+  }
+
+  // Show the chat widget on: 'login', 'browse/library', or 'browse/groups/public'
+  private showChatWidget(eventUrl: string): boolean {
+      if (eventUrl.indexOf('browse/library') > -1 ||
+          eventUrl.indexOf('browse/groups/public') > -1 ||
+          eventUrl.indexOf('login') > -1) {
+           return true
+        }
+      else {
+        return false
+      }
   }
 }

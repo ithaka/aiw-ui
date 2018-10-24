@@ -27,6 +27,10 @@ import { LockerService } from 'app/_services';
 
 @Injectable()
 export class AuthService implements CanActivate {
+  public currentUser: Observable<any> = this.userSource.asObservable();
+  // Track whether or not user object has been refreshed since app opened
+  public userSessionFresh: boolean = false
+  public showUserInactiveModal: Subject<boolean> = new Subject(); // Set up subject observable for showing inactive user modal
   private ENV: string;
   private baseUrl;
   private imageFpxUrl;
@@ -44,12 +48,8 @@ export class AuthService implements CanActivate {
   private currentInstitutionObj: Observable<any> = this.institutionObjSource.asObservable();
 
   private userSource: BehaviorSubject<any> = new BehaviorSubject({});
-  public currentUser: Observable<any> = this.userSource.asObservable();
-  // Track whether or not user object has been refreshed since app opened
-  public userSessionFresh: boolean = false
 
   private idleState: string = 'Not started.';
-  public showUserInactiveModal: Subject<boolean> = new Subject(); // Set up subject observable for showing inactive user modal
 
   private isOpenAccess: boolean;
 
@@ -60,9 +60,8 @@ export class AuthService implements CanActivate {
    * - 'no-store' > 'no-cache' in denying caching
    */
   private userInfoHeader: HttpHeaders = new HttpHeaders().set('Cache-Control', 'no-store, no-cache')
-  private genUserInfoUrl(): string {
-    return this.getUrl(true) + '/userinfo?no-cache=' + new Date().valueOf()
-  }
+
+  private refreshUserSessionInProgress: boolean = false
 
   constructor(
     private _router: Router,
@@ -219,8 +218,6 @@ export class AuthService implements CanActivate {
     // When a user comes back, we don't want to wait for the time interval to refresh the session
     this.refreshUserSession(true)
   }
-
-  private refreshUserSessionInProgress: boolean = false
   public refreshUserSession(triggerSessionExpModal?: boolean) {
     // cancel out if we're currently getting the user session
     if (this.refreshUserSessionInProgress && !triggerSessionExpModal) { return }
@@ -229,7 +226,7 @@ export class AuthService implements CanActivate {
     this.refreshUserSessionInProgress = true
     this.getUserInfo(triggerSessionExpModal).pipe(
       take(1),
-      //toPromise()
+      // toPromise()
       map((res, err) => {
         this.refreshUserSessionInProgress = false
         console.info('Access Token refreshed <3')
@@ -238,14 +235,6 @@ export class AuthService implements CanActivate {
       //   this.refreshUserSessionInProgress = false
       //   console.error('Access Token refresh failed </3')
       })).subscribe()
-  }
-
-  private expireSession(): void {
-    this.logout()
-      .then(() => {
-        // We want the user to see the "Session Expired" modal triggered by this.refreshUserSession() & this.getUserInfo()
-        // Do not route user away
-      })
   }
 
   /**
@@ -287,31 +276,6 @@ export class AuthService implements CanActivate {
           encodedString += key + '=' + encodeURIComponent(obj[key]);
       }
       return encodedString.replace(/%20/g, '+');
-  }
-
-  /**
-   * Wrapper function for HTTP call to get user institution. Used by nav component
-   * @returns Chainable promise containing collection data
-   */
-  private refreshUserInstitution() {
-    let header = new HttpHeaders().set('Cache-Control', 'no-store, no-cache')
-    let options = { headers: header, withCredentials: true }
-
-    // Returns all of the collections names
-    return this.http
-      .get(this.getUrl() + '/v2/institution?no-cache=' + new Date().valueOf(), options)
-      .toPromise()
-      .then((data) => {
-        this.setInstitution(data)
-        // this.institutionRefreshInProgress = false
-        return data
-      })
-      .catch((err) => {
-        // this.institutionRefreshInProgress = false
-        if (err && err.status != 401 && err.status != 403) {
-          console.error(err)
-        }
-      })
   }
 
   public getInstitution(): Observable<any> {
@@ -580,53 +544,6 @@ export class AuthService implements CanActivate {
       ))
   }
 
-  /**
-   * Decorates and Validates user from the user response
-   * - Used to verify that we want the user object
-   * - Used to decorate the user object for saving
-   */
-  private decorateValidUser(data: any): any {
-    let currentUser = this.getUser()
-    let newUser = data['user'] ? data['user'] : {}
-    let currentUsername = currentUser.username
-    let loggedInSessionLost = currentUser.isLoggedIn ? (!newUser.username || currentUsername !== newUser.username) : false;
-
-    if (data['status'] === true) {
-      // User is authorized - if you want to check ipAuth then you can tell on the individual route by user.isLoggedIn = false
-      let user = data['user']
-      user.status = data['status']
-      if (data['isRememberMe'] || data['remoteaccess']) {
-        user.isLoggedIn = true
-      }
-
-      // Save ipAuthed flag to user object
-      user.ipAuthed = !user.isLoggedIn && user.status ? true : false
-      // If user downgraded from logged in user to ip auth or other, add flag
-      user.loggedInSessionLost = loggedInSessionLost
-
-      if (this.canUserAccess(user)) {
-        return user
-      } else {
-        return null
-      }
-    } else if (data['status'] === false) {
-      // Return generic user object for unaffiliated users
-      let user = {
-        'status': false,
-        'isLoggedIn': false,
-        'loggedInSessionLost': loggedInSessionLost
-      }
-      return user
-    } else {
-      console.error('Did not receive a valid user object', data)
-      return null
-    }
-  }
-
-  private canUserAccess(user: any): boolean {
-    return user && user.hasOwnProperty('status') && (this._app.config.disableIPAuth === true ? user.isLoggedIn : true)
-  }
-
   /** Getter for downloadAuthorized parameter of local storage */
   public downloadAuthorized(): boolean {
     return this._locker.get('downloadAuthorized');
@@ -710,6 +627,89 @@ export class AuthService implements CanActivate {
     }
 
     return category
+  }
+  private genUserInfoUrl(): string {
+    return this.getUrl(true) + '/userinfo?no-cache=' + new Date().valueOf()
+  }
+
+  private expireSession(): void {
+    this.logout()
+      .then(() => {
+        // We want the user to see the "Session Expired" modal triggered by this.refreshUserSession() & this.getUserInfo()
+        // Do not route user away
+      })
+  }
+
+  /**
+   * Wrapper function for HTTP call to get user institution. Used by nav component
+   * @returns Chainable promise containing collection data
+   */
+  private refreshUserInstitution() {
+    let header = new HttpHeaders().set('Cache-Control', 'no-store, no-cache')
+    let options = { headers: header, withCredentials: true }
+
+    // Returns all of the collections names
+    return this.http
+      .get(this.getUrl() + '/v2/institution?no-cache=' + new Date().valueOf(), options)
+      .toPromise()
+      .then((data) => {
+        this.setInstitution(data)
+        // this.institutionRefreshInProgress = false
+        return data
+      })
+      .catch((err) => {
+        // this.institutionRefreshInProgress = false
+        if (err && err.status != 401 && err.status != 403) {
+          console.error(err)
+        }
+      })
+  }
+
+  /**
+   * Decorates and Validates user from the user response
+   * - Used to verify that we want the user object
+   * - Used to decorate the user object for saving
+   */
+  private decorateValidUser(data: any): any {
+    let currentUser = this.getUser()
+    let newUser = data['user'] ? data['user'] : {}
+    let currentUsername = currentUser.username
+    let loggedInSessionLost = currentUser.isLoggedIn ? (!newUser.username || currentUsername !== newUser.username) : false;
+
+    if (data['status'] === true) {
+      // User is authorized - if you want to check ipAuth then you can tell on the individual route by user.isLoggedIn = false
+      let user = data['user']
+      user.status = data['status']
+      if (data['isRememberMe'] || data['remoteaccess']) {
+        user.isLoggedIn = true
+      }
+
+      // Save ipAuthed flag to user object
+      user.ipAuthed = !user.isLoggedIn && user.status ? true : false
+      // If user downgraded from logged in user to ip auth or other, add flag
+      user.loggedInSessionLost = loggedInSessionLost
+
+      if (this.canUserAccess(user)) {
+        return user
+      } else {
+        return null
+      }
+    } else if (data['status'] === false) {
+      // Return generic user object for unaffiliated users
+      let user = {
+        'status': false,
+        'isLoggedIn': false,
+        'loggedInSessionLost': loggedInSessionLost
+      }
+      return user
+    } else {
+      console.error('Did not receive a valid user object', data)
+      return null
+    }
+  }
+
+  private canUserAccess(user: any): boolean {
+    return user && user.hasOwnProperty('status') && (this._app.config.disableIPAuth === true ? user.isLoggedIn : true)
   }
 }
 

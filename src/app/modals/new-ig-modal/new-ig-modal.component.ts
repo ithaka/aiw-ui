@@ -18,11 +18,16 @@ export class NewIgModal implements OnInit {
   @Output() closeModal: EventEmitter<any> = new EventEmitter();
   @Output() addToGroup: EventEmitter<any> = new EventEmitter();
   @Output() igReloadTriggered: EventEmitter<any> = new EventEmitter();
+  /** Switch for running loginc to edit image group */
+  @Input() public editIG: boolean = false;
+  /** Quick interface for controlling display of errors/response feedback */
+  public serviceResponse: {
+    success?: boolean,
+    failure?: boolean
+  } = {};
 
   /** Switch for running logic to copy image group */
   @Input() private copyIG: boolean = false;
-  /** Switch for running loginc to edit image group */
-  @Input() public editIG: boolean = false;
   /** The image group object */
   @Input() private ig: ImageGroup = <ImageGroup>{};
   /** Controls the user seeing the toggle to add images to group or create a new group */
@@ -43,17 +48,17 @@ export class NewIgModal implements OnInit {
   private isLoading: boolean = false;
   /** Set to true once the form is submitted */
   private submitted: boolean = false;
-  /** Quick interface for controlling display of errors/response feedback */
-  public serviceResponse: {
-    success?: boolean,
-    failure?: boolean
-  } = {};
   /** The new group created after it comes back from the service */
   private newGroup: ImageGroup;
 
   private util: IgFormUtil = new IgFormUtil()
 
   private tagSuggestions: string[] = []
+
+  // There must be a more Angular way to handle this debounce
+  private tagSuggestTerm: string = ''
+  private tagLastSearched: string = ''
+  private tagDebouncing: boolean = false
 
   constructor(
       private _assets: AssetService,
@@ -113,11 +118,6 @@ export class NewIgModal implements OnInit {
     this.igReloadTriggered.emit()
     this.closeModal.emit()
   }
-
-  // There must be a more Angular way to handle this debounce
-  private tagSuggestTerm: string = ''
-  private tagLastSearched: string = ''
-  private tagDebouncing: boolean = false
 
   private getTagSuggestions(event: any): void  {
     this.tagSuggestTerm = event.target.value
