@@ -61,8 +61,8 @@ describe('Group Calls #pact', () => {
     // Verify types of response properties - Individual Image Group
     let matcherImageGroupObject = {}
     Object.keys(expectedImageGroupObject).forEach((key) => {
-      if(key === 'newItems'){
-        if(Array.isArray(expectedImageGroupObject[key]) && expectedImageGroupObject[key][0]){ 
+      if (key === 'newItems'){
+        if (Array.isArray(expectedImageGroupObject[key]) && expectedImageGroupObject[key][0]){
           let newItemsArray = Matchers.eachLike(expectedImageGroupObject[key][0])
           matcherImageGroupObject[key] = Matchers.somethingLike(newItemsArray)
         }

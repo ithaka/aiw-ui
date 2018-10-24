@@ -1,13 +1,13 @@
 import { Thumbnail } from './thumbnail.interface';
 
 export interface ImageGroupItem {
-  artstorid: string, 
-  zoom?: { 
-    viewerX: number, 
-    viewerY: number, 
-    pointWidth: number, 
-    pointHeight: number 
-  } 
+  artstorid: string,
+  zoom?: {
+    viewerX: number,
+    viewerY: number,
+    pointWidth: number,
+    pointHeight: number
+  }
 }
 
 export interface ImageGroup {
