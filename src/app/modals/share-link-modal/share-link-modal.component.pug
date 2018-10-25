@@ -1,4 +1,4 @@
-#genImgURL.modal.fade.show
+#genImgURL.modal.fade.show(tabindex="0")
   .modal-dialog.modal-lg
     .modal-content
       .modal-header
@@ -15,15 +15,15 @@
           .pb-3
             label {{ 'SHARE_IMG_LINK_MODAL.IMG_URL_LBL' | translate }}
             .value
-              textarea#copyURL(readonly, [attr.aria-label]="'SHARE_IMG_LINK_MODAL.TEXTAREA_URL_ARIA_LABEL' | translate", tabindex="0") {{ shareLink }}
-            .copy-clipboard((click)="copyTexttoClipBoard('copyURL')", tabindex="0", (keyup.enter)="copyTexttoClipBoard('copyURL')")
+              textarea#copyURL(#copyURL="", readonly, [attr.aria-label]="'SHARE_IMG_LINK_MODAL.TEXTAREA_URL_ARIA_LABEL' | translate", tabindex="0") {{ shareLink }}
+            .copy-clipboard((click)="copyTexttoClipBoard('copyURL'); copyURL.select()", tabindex="0", (keyup.enter)="copyTexttoClipBoard('copyURL'); copyURL.select()")
               | {{ 'SHARE_IMG_LINK_MODAL.COPY_TO_CLIPBOARD' | translate }}
             .copy-status-msg {{ copyURLStatusMsg }}
           .pb-3
             label {{ 'SHARE_IMG_LINK_MODAL.THMB_LNK_IMG_LBL' | translate }}
             .value
-              textarea#copyHTML(readonly, [attr.aria-label]="'SHARE_IMG_LINK_MODAL.TEXTAREA_HTML_ARIA_LABEL' | translate", tabindex="0") {{ '<a target="_blank" href="' + shareLink + '"><img src="' + _search.makeThumbUrl(asset.thumbnailImgUrl, 0) + '"  alt="' + asset.name + '" title="' + asset.name + '" /></a>' }}
-            .copy-clipboard((click)="copyTexttoClipBoard('copyHTML')", tabindex="0", (keyup.enter)="copyTexttoClipBoard('copyHTML')")
+              textarea#copyHTML(#copyHTML="", readonly, [attr.aria-label]="'SHARE_IMG_LINK_MODAL.TEXTAREA_HTML_ARIA_LABEL' | translate", tabindex="0") {{ '<a target="_blank" href="' + shareLink + '"><img src="' + _search.makeThumbUrl(asset.thumbnailImgUrl, 0) + '"  alt="' + asset.name + '" title="' + asset.name + '" /></a>' }}
+            .copy-clipboard((click)="copyTexttoClipBoard('copyHTML'); copyHTML.select()", tabindex="0", (keyup.enter)="copyTexttoClipBoard('copyHTML'); copyHTML.select()")
               | {{ 'SHARE_IMG_LINK_MODAL.COPY_TO_CLIPBOARD' | translate }}
             .copy-status-msg {{ copyHTMLStatusMsg }}
       .modal-footer

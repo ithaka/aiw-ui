@@ -7,7 +7,7 @@ const opts = {
 //   pactBrokerUsername: '',
 //   pactBrokerPassword: '',
   tags: ['test'],
-  consumerVersion: '2.0.2'
+  consumerVersion: '2.0.3'
 }
 
 pact.publishPacts(opts)
