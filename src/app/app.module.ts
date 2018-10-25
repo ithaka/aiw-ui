@@ -33,10 +33,6 @@ import { MediumEditorDirective } from 'angular2-medium-editor';
 
 // ng2-idle
 import { NgIdleKeepaliveModule } from '@ng-idle/keepalive'; // this includes the core NgIdleModule but includes keepalive providers for easy wireup
-
-// BRETT
-// TODO: ANGULAR 6 WIP
-import { MomentModule } from 'ngx-moment'; // optional, provides moment-style pipes for date formatting
 import { SortablejsModule } from 'angular-sortablejs'
 
 // File Uploader
