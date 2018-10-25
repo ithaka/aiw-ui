@@ -6,7 +6,7 @@ import { ApplicationRef, enableProdMode, ErrorHandler } from '@angular/core';
 import * as Raven from 'raven-js'
 
 // Project Dependencies
-import { version } from '../../../../package.json'
+import { version } from '../../package.json'
 
 
 // Env vars
