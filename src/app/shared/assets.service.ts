@@ -569,18 +569,17 @@ export class AssetService {
                     throw new Error('No data in image group thumbnails response')
                 }
 
-                if(data.hasOwnProperty('newItems')){
-                    data.total = data.newItems.length
-                    data.itemIds = data.newItems.map( item => {
-                        return item.artstorid
-                    })
-                } else if(data.hasOwnProperty('items')){
-                    data.total = data.items.length
-                    data.itemIds = data.items
-                }
+                data.total = data.items.length
 
                 // Fetch the asset(s) via items call only if the IG has atleast one asset
                 if (data.total > 0){
+                    if(typeof data.items[0] === 'object'){
+                        data.itemIds = data.items.map( item => {
+                            return item.artstorid
+                        })
+                    } else{
+                        data.itemIds = data.items
+                    }
                     let pageStart = (this.urlParams.page - 1) * this.urlParams.size
                     let pageEnd = this.urlParams.page * this.urlParams.size
                     // Maintain param string in a single place to avoid debugging thumbnails lost to a bad param
@@ -634,7 +633,17 @@ export class AssetService {
           ig.count = ig.items.length
           let pageStart = (this.urlParams.page - 1) * this.urlParams.size
           let pageEnd = this.urlParams.page * this.urlParams.size
-          let idsAsTerm: string =  ig.items.slice(pageStart, pageEnd).join('&object_id=')
+          let itemIds: string[] = []
+
+          if(typeof ig.items[0] === 'object'){
+            itemIds = ig.items.map( item => {
+                return item.artstorid
+            })
+          } else{
+                itemIds = ig.items
+          }
+        
+          let idsAsTerm: string =  itemIds.slice(pageStart, pageEnd).join('&object_id=')
 
           let options = { withCredentials: true }
 
