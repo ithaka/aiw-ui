@@ -2,7 +2,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 
 import * as linkify from 'linkifyjs/html'
 
-let linkifyHtml = linkify // BRETT TODO replaced require, does linkify still work?
+let linkifyHtml = linkify
 
 @Pipe({name: 'linkify'})
 export class LinkifyPipe implements PipeTransform {

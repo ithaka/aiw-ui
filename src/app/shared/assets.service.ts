@@ -637,7 +637,7 @@ export class AssetService {
                     return res
                 }
               }
-            )) // PIPE BRETT TODO - Do we return (data) within pipes?
+            ))
     }
 
     public getFolders() {
