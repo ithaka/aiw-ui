@@ -569,7 +569,15 @@ export class AssetService {
                     throw new Error('No data in image group thumbnails response')
                 }
 
-                data.total = data.items.length
+                if(data.hasOwnProperty('newItems')){
+                    data.total = data.newItems.length
+                    data.itemIds = data.newItems.map( item => {
+                        return item.artstorid
+                    })
+                } else if(data.hasOwnProperty('items')){
+                    data.total = data.items.length
+                    data.itemIds = data.items
+                }
 
                 // Fetch the asset(s) via items call only if the IG has atleast one asset
                 if (data.total > 0){
@@ -577,7 +585,7 @@ export class AssetService {
                     let pageEnd = this.urlParams.page * this.urlParams.size
                     // Maintain param string in a single place to avoid debugging thumbnails lost to a bad param
                     const ID_PARAM = 'object_ids='
-                    let idsAsTerm: string =  data.items.slice(pageStart, pageEnd).join('&' + ID_PARAM)
+                    let idsAsTerm: string =  data.itemIds.slice(pageStart, pageEnd).join('&' + ID_PARAM)
 
                     let options = { withCredentials: true }
 
