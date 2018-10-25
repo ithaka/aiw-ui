@@ -111,8 +111,7 @@ export class EditPersonalCollectionModal implements OnInit {
 
     this.uiMessages = {}
     this.metadataUpdateLoading = true
-    // TODO Look into response of .map and map() from RXJS updates
-    // TODO BRETT
+    
     this._pc.updatepcImageMetadata(formData, String(this.selectedAsset.ssid)).pipe(
     map(res => {
       this.metadataUpdateLoading = false
@@ -157,20 +156,16 @@ export class EditPersonalCollectionModal implements OnInit {
 
     this.uiMessages = { }
     this.deleteLoading = true
-    // TODO BRETT pipe.pipe chaining and reworking these requests
     this._pc.deletePersonalAssets([ssid]).pipe(
-    map((res) => {
-      this.deleteLoading = false
-      return res
-    })).pipe(
-    take(1),
-    map((res) => {
-      this.uiMessages.imgDeleteSuccess = true
-      this.removeSelectedAsset()
-      this.clearSelectedAsset()
-    }, (err) => {
-      console.error(err)
-      this.uiMessages.imgDeleteFailure = true
+      take(1),
+      map((res) => {
+        this.deleteLoading = false
+        this.uiMessages.imgDeleteSuccess = true
+        this.removeSelectedAsset()
+        this.clearSelectedAsset()
+      }, (err) => {
+        console.error(err)
+        this.uiMessages.imgDeleteFailure = true
     })).subscribe()
   }
 
