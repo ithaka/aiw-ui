@@ -503,7 +503,7 @@ export class AuthService implements CanActivate {
         if (res === false) {
           this._router.navigate(['/login'])
         }
-        observer.next() // observer.next(res) BRETT TODO
+        observer.next(res)
       }, err => {
         this._router.navigate(['/login'])
         observer.next(false)
