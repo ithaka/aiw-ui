@@ -35,7 +35,7 @@ export class UnauthorizedInterceptor implements HttpInterceptor {
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     // this wires the handler to the reqest's response
     return next.handle(req).pipe(
-      tap((event) => { // BRETT TODO do => tap wrapped by pipe, is this still the same behavior?
+      tap((event) => {
         if (event instanceof HttpResponse) {
           // this is the success handler for the response - we don't want to do anything here for now
         }

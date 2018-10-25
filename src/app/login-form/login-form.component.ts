@@ -25,7 +25,6 @@ export class LoginFormComponent implements OnInit {
   public errorMsg: string = ''
   public instErrorMsg: string = ''
   public showPwdModal = false
-  // public showHelpModal = false BRETT TODO TEST, exists ??
   public pwdReset = false
   public expirePwd = false
   public pwdRstEmail = ''
