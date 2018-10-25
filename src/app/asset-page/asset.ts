@@ -74,6 +74,27 @@ export class Asset {
         return formattedData
     }
 
+    private buildDownloadLink(data: AssetData): string {
+        let downloadLink: string
+        switch (data.object_type_id) {
+            case 20:
+            case 21:
+            case 22:
+            case 23:
+                downloadLink = [data.baseUrl + 'media', data.object_type_id, data.object_type_id].join('/')
+                break
+            default:
+                if (data.image_url) { // this is a general fallback, but should work specifically for images and video thumbnails
+                    let imageServer = 'http://imgserver.artstor.net/' // TODO: check if this should be different for test
+                    let url = imageServer + data.image_url + '?cell=' + data.download_size + '&rgnn=0,0,1,1&cvt=JPEG'
+                    downloadLink = data.baseUrl + 'api/download?imgid=' + this.id + '&url=' + encodeURIComponent(url)
+                } else {
+                    // nothing happens here because some assets are not allowed to be downloaded
+                }
+        }
+        return downloadLink
+    }
+
     /**
      * Sets the correct typeName based on a map
      * @param typeId the asset's object_type_id
