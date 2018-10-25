@@ -2,13 +2,12 @@
 // rc2 workaround
 import { enableDebugTools, disableDebugTools } from '@angular/platform-browser';
 import { ApplicationRef, enableProdMode, ErrorHandler } from '@angular/core';
-
-import * as version from '../../package.json' // BRETT TODO - versions still works?
-
-
 // Error tracking utility for sentry.io
 import * as Raven from 'raven-js'
-const { version: appVersion } = version
+
+// Project Dependencies
+import { version } from '../../../../package.json'
+
 
 // Env vars
 import { environment } from 'environments/environment'
@@ -30,7 +29,7 @@ if (environment.production) {
 
   // Sentry Raven reporter
   Raven.config('https://9ef1f98534914bf6826e202370d1f627@sentry.io/209953', {
-    release: appVersion
+    release: version
   }).install();
   class RavenErrorHandler implements ErrorHandler {
     handleError(err: any): void {
