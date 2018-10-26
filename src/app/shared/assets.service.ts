@@ -26,21 +26,8 @@ export class AssetService {
 
     /** Constant that defines which collectionType belongs to institutions */
     static readonly institutionCollectionType: number = 2;
-
-    // set up thumbnail observables
-    private allResultsValue: any[] = [];
-    // BehaviorSubjects push last value on subscribe
-    private allResultsSource: BehaviorSubject<any> = new BehaviorSubject(this.allResultsValue);
     public allResults: Observable<any> = this.allResultsSource.asObservable();
-
-    // set up noIG observables
-    private noIGValue: boolean = false;
-    private noIGSource: BehaviorSubject<boolean> = new BehaviorSubject(this.noIGValue);
     public noIG: Observable<any> = this.noIGSource.asObservable();
-
-    // set up noIG observables
-    private noAccessIGValue: boolean = false;
-    private noAccessIGSource: BehaviorSubject<boolean> = new BehaviorSubject(this.noAccessIGValue);
     public noAccessIG: Observable<any> = this.noAccessIGSource.asObservable();
 
     // Set up subject observable for clearing select mode
@@ -48,36 +35,13 @@ export class AssetService {
 
     // Set up subject observable for skipping the unauthorized asset on asset page, while browsing though assets
     public unAuthorizedAsset: Subject<boolean> = new Subject();
-
-    // Pagination value observable
-    private paginationValue: {
-        totalPages: number,
-        size: number,
-        page: number
-    } = {
-        totalPages: 1,
-        size: 24,
-        page: 1
-    };
-    private paginationSource = new BehaviorSubject<any>(this.paginationValue);
     public pagination = this.paginationSource.asObservable();
-
-    /**
-     * Asset Selection Observable
-     * - Allow other components to access selected assets via subscription
-     */
-    private selectedAssets: any[] = [];
-    private selectedAssetsSource = new BehaviorSubject<any[]>(this.selectedAssets);
     public selection = this.selectedAssetsSource.asObservable();
     public selectModeToggle: EventEmitter<any> = new EventEmitter()
 
 
     // Keep track of which params the current results are related to
     public currentLoadedParams: any = {};
-
-    private subscriptions: Subscription[] = [];
-
-    private searchSubscription: Subscription;
 
      public filterFields: { name: string, value: string }[] = [
         {name: 'Creator', value: '100' },
@@ -93,6 +57,49 @@ export class AssetService {
         {name: 'Technique', value: '110' },
         {name: 'Number', value: '111' }
     ];
+
+    /** Keeps track of all filters available in url */
+    // private knownFilters: any = {};
+    public _storage;
+
+    // Pagination flag for preserving the select mode while paging through the results
+    public paginated: boolean = false;
+
+    // set up thumbnail observables
+    private allResultsValue: any[] = [];
+    // BehaviorSubjects push last value on subscribe
+    private allResultsSource: BehaviorSubject<any> = new BehaviorSubject(this.allResultsValue);
+
+    // set up noIG observables
+    private noIGValue: boolean = false;
+    private noIGSource: BehaviorSubject<boolean> = new BehaviorSubject(this.noIGValue);
+
+    // set up noIG observables
+    private noAccessIGValue: boolean = false;
+    private noAccessIGSource: BehaviorSubject<boolean> = new BehaviorSubject(this.noAccessIGValue);
+
+    // Pagination value observable
+    private paginationValue: {
+        totalPages: number,
+        size: number,
+        page: number
+    } = {
+        totalPages: 1,
+        size: 24,
+        page: 1
+    };
+    private paginationSource = new BehaviorSubject<any>(this.paginationValue);
+
+    /**
+     * Asset Selection Observable
+     * - Allow other components to access selected assets via subscription
+     */
+    private selectedAssets: any[] = [];
+    private selectedAssetsSource = new BehaviorSubject<any[]>(this.selectedAssets);
+
+    private subscriptions: Subscription[] = [];
+
+    private searchSubscription: Subscription;
 
     /**
      * urlParams is used as an enum for special parameters
@@ -116,17 +123,10 @@ export class AssetService {
         index: 0
      };
 
-    /** Keeps track of all filters available in url */
-    // private knownFilters: any = {};
-    public _storage;
-
     /** Default Headers for this service */
     // ... Set content type to JSON
     private header = new HttpHeaders().set('Content-Type', 'application/json');
     private defaultOptions = { headers: this.header, withCredentials: true };
-
-    // Pagination flag for preserving the select mode while paging through the results
-    public paginated: boolean = false;
 
     // // bandaid for the re-search functionality
     // private searchErrorCount: number = 0
@@ -144,64 +144,6 @@ export class AssetService {
         private _app: AppConfig
     ) {
         this._storage = locker.useDriver(Locker.DRIVERS.LOCAL);
-    }
-
-    private updateLocalResults(resultObj: any) {
-        // These Params have been loaded now
-        this.currentLoadedParams = Object.assign(Object.assign({}, this.defaultUrlParams), this.urlParams);
-
-        let totalPages = 1;
-
-        if (resultObj.count) {
-          const COUNT = Math.min(resultObj.count, APP_CONST.MAX_RESULTS)
-
-          totalPages = Math.ceil( COUNT / this.urlParams.size );
-        }
-
-        // Retain total pages if results limit exceeds
-        if (resultObj.errors && resultObj.errors[0] && (resultObj.errors[0] === 'Too many rows requested')){
-            totalPages = this.paginationValue.totalPages;
-        }
-
-        // Update pagination object
-        let paginationValue = {
-            totalPages: totalPages,
-            size: this.urlParams.size,
-            page: this.urlParams.page
-        };
-        this.paginationValue = paginationValue;
-        this.paginationSource.next(paginationValue);
-
-        /**
-         * Include only availble assets to the resultsObj thumbnails array, set aside restricted assets
-         */
-        if (resultObj.thumbnails){
-            // let thumbnailsOrignalLength: number = resultObj.thumbnails.length
-            resultObj['restricted_thumbnails'] = []
-            resultObj.thumbnails = resultObj.thumbnails.filter( thumbnail => {
-                if (thumbnail.status === 'not-available') {
-                    resultObj['restricted_thumbnails'].push(thumbnail)
-                    return false
-                } else {
-                    return true
-                }
-            })
-        }
-        // Update results thumbnail array
-        this.allResultsValue = resultObj;
-        this.allResultsSource.next(resultObj);
-
-        // Set Recent Results (used by Compare Mode)
-        if (resultObj.thumbnails && resultObj.thumbnails.length > 0) {
-            this._storage.set('results', resultObj);
-        }
-
-        if (this.paginated){
-            this.paginated = false;
-        }
-        else{
-            this.clearSelectMode.next(true);
-        }
     }
 
     /**
@@ -270,68 +212,6 @@ export class AssetService {
         this.paginationValue.totalPages = Math.ceil(count / this.paginationValue.size)
         this.paginationSource.next(this.paginationValue)
     }
-
-    private setUrlParam(key: string, value: any, quiet?: boolean) {
-        this.urlParams[key] = value;
-        let currentParamsObj: Params = {};
-
-        let term: string = '';
-        for (let paramKey in this.urlParams){
-            if (paramKey == 'term'){
-                term = this.urlParams[paramKey];
-                continue;
-            }
-            if ((this.urlParams[paramKey] !== '') && (this.urlParams[paramKey] !== 0)){
-                currentParamsObj[paramKey] = this.urlParams[paramKey];
-            }
-        }
-
-        if (currentParamsObj['size']){
-            currentParamsObj['size'] = currentParamsObj['size'].toString();
-        }
-        if (currentParamsObj['page']){
-            currentParamsObj['page'] = currentParamsObj['page'].toString();
-        }
-
-        if (!quiet){
-            if (term.length > 0){
-                this._router.navigate(['/search', term, currentParamsObj]);
-            }
-            else if (currentParamsObj['catId']){
-                let cat_id = currentParamsObj['catId'];
-                delete currentParamsObj['catId'];
-                this._router.navigate(['/category', cat_id, currentParamsObj]);
-            }
-            else if (currentParamsObj['colId']){
-                let col_id = currentParamsObj['colId'];
-                delete currentParamsObj['colId'];
-                this._router.navigate(['/collection', col_id, currentParamsObj]);
-            }
-            else if (currentParamsObj['igId']){
-                let ig_id = currentParamsObj['igId'];
-                delete currentParamsObj['igId'];
-                this._router.navigate(['/group', ig_id, currentParamsObj]);
-            }
-            else{
-                let newUrl = this._router.createUrlTree([
-                    currentParamsObj
-                ], {relativeTo: this.route });
-                this._router.navigateByUrl(newUrl);
-            }
-        }
-    }
-
-    private formEncode = function (obj) {
-        let encodedString = '';
-        for (let key in obj) {
-            if (encodedString.length !== 0) {
-                encodedString += '&';
-            }
-
-            encodedString += key + '=' + encodeURIComponent(obj[key]);
-        }
-        return encodedString.replace(/%20/g, '+');
-    };
 
     public loadPrevAssetPage(): void{
         let currentParamsObj: Params = Object.assign({}, this.currentLoadedParams);
@@ -436,55 +316,6 @@ export class AssetService {
     }
 
     /**
-     * Set the filters using filter service from URL params
-     * @param params Object conaining all route params
-     */
-    private setFiltersFromURLParams(params: any): Promise<any>{
-        return new Promise((resolve, reject) => {
-            let dateObj;
-
-            Object.keys(params).forEach((key) => {
-                let filter = {};
-                if (key.indexOf('str') > -1){
-                    if (!this._filters.isApplied(key, params[key])){ // Add Filter
-                        this._filters.apply(key, params[key]);
-                    }
-                }
-            });
-
-            if (params['startDate'] && params['endDate']){
-                dateObj = {
-                    modified : true,
-                    earliest : {
-                        date : Math.abs(params['startDate']),
-                        era : params['startDate'] < 0 ? 'BCE' : 'CE'
-                    },
-                    latest : {
-                        date : Math.abs(params['endDate']),
-                        era : params['endDate'] < 0 ? 'BCE' : 'CE'
-                    }
-                }
-                this._filters.setAvailable('dateObj', dateObj);
-                resolve(this._filters.getAvailable())
-            } else {
-                dateObj = {
-                    modified : false,
-                    earliest : {
-                        date : 1000,
-                        era : 'BCE'
-                    },
-                    latest : {
-                        date : 2017,
-                        era : 'CE'
-                    }
-                }
-                this._filters.setAvailable('dateObj', dateObj);
-                resolve(this._filters.getAvailable())
-            }
-        })
-    }
-
-    /**
      * DEPRECATED
      * Generates Image URL
      * @param assetId: string Asset or object ID
@@ -549,69 +380,6 @@ export class AssetService {
     }
 
     /**
-     * Gets array of thumbnails and sets equal to results
-     * @param igId Image group id for which to retrieve thumbnails
-     */
-    private loadIgAssets(igId: string) {
-        // Reset No IG observable
-        this.noIGSource.next(false)
-        this.noAccessIGSource.next(false)
-
-        // Create a request option
-        let startIndex = ((this.urlParams.page - 1) * this.urlParams.size) + 1
-
-        let requestString: string = [this._auth.getUrl(), 'imagegroup', igId, 'thumbnails', startIndex, this.urlParams.size, this.activeSort.index].join('/')
-
-        this._groups.get(igId)
-            .toPromise()
-            .then((data) => {
-                if (!Object.keys(data).length) {
-                    throw new Error('No data in image group thumbnails response')
-                }
-
-                data.total = data.items.length
-
-                // Fetch the asset(s) via items call only if the IG has atleast one asset
-                if (data.total > 0){
-                    let pageStart = (this.urlParams.page - 1) * this.urlParams.size
-                    let pageEnd = this.urlParams.page * this.urlParams.size
-                    // Maintain param string in a single place to avoid debugging thumbnails lost to a bad param
-                    const ID_PARAM = 'object_ids='
-                    let idsAsTerm: string =  data.items.slice(pageStart, pageEnd).join('&' + ID_PARAM)
-
-                    let options = { withCredentials: true }
-
-                    this.http.get(this._auth.getHostname() + '/api/v1/group/' + igId + '/items?' + ID_PARAM + idsAsTerm, options)
-                        .subscribe(
-                            (res) => {
-                                let results = res
-                                data.thumbnails = results['items']
-                                // Set the allResults object
-                                this.updateLocalResults(data)
-                        }, (error) => {
-                            // Pass portion of the data we have
-                            this.updateLocalResults(data)
-                            // Pass error down to allResults listeners
-                            this.allResultsSource.next({'error': error}) // .throw(error);
-                        });
-                } else {
-                    data.thumbnails = []
-                    this.updateLocalResults(data)
-                }
-
-            })
-            .catch((error) => {
-                // console.error(error)
-                if (error.status === 404){
-                    this.noIGSource.next(true)
-                }
-                else if (error.status === 403){
-                    this.noAccessIGSource.next(true)
-                }
-            });
-    }
-
-    /**
      * When given an image group, updates the allResultsSource with the ids from that image group
      * @param ig Image group for which you want the results
      */
@@ -626,7 +394,17 @@ export class AssetService {
           ig.count = ig.items.length
           let pageStart = (this.urlParams.page - 1) * this.urlParams.size
           let pageEnd = this.urlParams.page * this.urlParams.size
-          let idsAsTerm: string =  ig.items.slice(pageStart, pageEnd).join('&object_id=')
+          let itemIds: string[] = []
+
+          if (typeof ig.items[0] === 'object'){
+            itemIds = ig.items.map( item => {
+                return item.artstorid
+            })
+          } else{
+                itemIds = ig.items
+          }
+
+          let idsAsTerm: string =  itemIds.slice(pageStart, pageEnd).join('&object_id=')
 
           let options = { withCredentials: true }
 
@@ -828,49 +606,6 @@ export class AssetService {
     }
 
     /**
-     * Executes search and sets relevant asset-grid parameters
-     * @param term Search term for which a search should be executed
-     */
-    private loadSearch(term: string): void {
-        // Don't wait for previous subscription anymore
-        if (this.searchSubscription && this.searchSubscription.hasOwnProperty('unsubscribe')) {
-            this.searchSubscription.unsubscribe()
-        }
-
-         // Solr Search
-        this.searchSubscription = this._assetSearch.search(this.urlParams, term, this.activeSort.index)
-            .subscribe(
-                (res) => {
-                    let data = res
-                    let facets = data.facets
-                    let len = facets.length
-
-                    data.facets.forEach((facet, index) => {
-                        this._filters.setAvailable(facet.name, facet.values)
-                    })
-
-                    if (data.hierarchies2 && data.hierarchies2['artstor-geography']){
-                        this._filters.generateHierFacets( data.hierarchies2['artstor-geography'].children, 'geography' )
-                    }
-                    else{
-                        this._filters.generateHierFacets( [], 'geography' )
-                    }
-
-                    // count and thumbnails are relics from the previous search logic and should be removed eventaully
-                    // Transform data from SOLR queries
-                    if (data.results) {
-                        data['thumbnails'] = data.results
-                    }
-                    data['count'] = data.total
-                    // Set the allResults object
-                    this.updateLocalResults(data)
-            }, (error) => {
-                    console.error(error)
-                    this.allResultsSource.next({'error': error})
-            });
-    }
-
-    /**
      * Wrapper function for HTTP call to get subImageGroups. Used by browse/groups component
      * @param subImageGroup id
      * @returns Chainable promise containing subImageGroups data
@@ -946,6 +681,288 @@ export class AssetService {
         let options = { withCredentials: true };
         return this.http
             .get(this._auth.getUrl() + '/v1/pcollection/image-status/' + ssid, options)
+    }
+
+    private updateLocalResults(resultObj: any) {
+        // These Params have been loaded now
+        this.currentLoadedParams = Object.assign(Object.assign({}, this.defaultUrlParams), this.urlParams);
+
+        let totalPages = 1;
+
+        if (resultObj.count) {
+          const COUNT = Math.min(resultObj.count, APP_CONST.MAX_RESULTS)
+
+          totalPages = Math.ceil( COUNT / this.urlParams.size );
+        }
+
+        // Retain total pages if results limit exceeds
+        if (resultObj.errors && resultObj.errors[0] && (resultObj.errors[0] === 'Too many rows requested')){
+            totalPages = this.paginationValue.totalPages;
+        }
+
+        // Update pagination object
+        let paginationValue = {
+            totalPages: totalPages,
+            size: this.urlParams.size,
+            page: this.urlParams.page
+        };
+        this.paginationValue = paginationValue;
+        this.paginationSource.next(paginationValue);
+
+        /**
+         * Include only availble assets to the resultsObj thumbnails array, set aside restricted assets
+         */
+        if (resultObj.thumbnails){
+            // let thumbnailsOrignalLength: number = resultObj.thumbnails.length
+            resultObj['restricted_thumbnails'] = []
+            resultObj.thumbnails = resultObj.thumbnails.filter( thumbnail => {
+                if (thumbnail.status === 'not-available') {
+                    resultObj['restricted_thumbnails'].push(thumbnail)
+                    return false
+                } else {
+                    return true
+                }
+            })
+        }
+        // Update results thumbnail array
+        this.allResultsValue = resultObj;
+        this.allResultsSource.next(resultObj);
+
+        // Set Recent Results (used by Compare Mode)
+        if (resultObj.thumbnails && resultObj.thumbnails.length > 0) {
+            this._storage.set('results', resultObj);
+        }
+
+        if (this.paginated){
+            this.paginated = false;
+        }
+        else{
+            this.clearSelectMode.next(true);
+        }
+    }
+
+    private setUrlParam(key: string, value: any, quiet?: boolean) {
+        this.urlParams[key] = value;
+        let currentParamsObj: Params = {};
+
+        let term: string = '';
+        for (let paramKey in this.urlParams){
+            if (paramKey == 'term'){
+                term = this.urlParams[paramKey];
+                continue;
+            }
+            if ((this.urlParams[paramKey] !== '') && (this.urlParams[paramKey] !== 0)){
+                currentParamsObj[paramKey] = this.urlParams[paramKey];
+            }
+        }
+
+        if (currentParamsObj['size']){
+            currentParamsObj['size'] = currentParamsObj['size'].toString();
+        }
+        if (currentParamsObj['page']){
+            currentParamsObj['page'] = currentParamsObj['page'].toString();
+        }
+
+        if (!quiet){
+            if (term.length > 0){
+                this._router.navigate(['/search', term, currentParamsObj]);
+            }
+            else if (currentParamsObj['catId']){
+                let cat_id = currentParamsObj['catId'];
+                delete currentParamsObj['catId'];
+                this._router.navigate(['/category', cat_id, currentParamsObj]);
+            }
+            else if (currentParamsObj['colId']){
+                let col_id = currentParamsObj['colId'];
+                delete currentParamsObj['colId'];
+                this._router.navigate(['/collection', col_id, currentParamsObj]);
+            }
+            else if (currentParamsObj['igId']){
+                let ig_id = currentParamsObj['igId'];
+                delete currentParamsObj['igId'];
+                this._router.navigate(['/group', ig_id, currentParamsObj]);
+            }
+            else{
+                let newUrl = this._router.createUrlTree([
+                    currentParamsObj
+                ], {relativeTo: this.route });
+                this._router.navigateByUrl(newUrl);
+            }
+        }
+    }
+
+    private formEncode = function (obj) {
+        let encodedString = '';
+        for (let key in obj) {
+            if (encodedString.length !== 0) {
+                encodedString += '&';
+            }
+
+            encodedString += key + '=' + encodeURIComponent(obj[key]);
+        }
+        return encodedString.replace(/%20/g, '+');
+    };
+
+    /**
+     * Set the filters using filter service from URL params
+     * @param params Object conaining all route params
+     */
+    private setFiltersFromURLParams(params: any): Promise<any>{
+        return new Promise((resolve, reject) => {
+            let dateObj;
+
+            Object.keys(params).forEach((key) => {
+                let filter = {};
+                if (key.indexOf('str') > -1){
+                    if (!this._filters.isApplied(key, params[key])){ // Add Filter
+                        this._filters.apply(key, params[key]);
+                    }
+                }
+            });
+
+            if (params['startDate'] && params['endDate']){
+                dateObj = {
+                    modified : true,
+                    earliest : {
+                        date : Math.abs(params['startDate']),
+                        era : params['startDate'] < 0 ? 'BCE' : 'CE'
+                    },
+                    latest : {
+                        date : Math.abs(params['endDate']),
+                        era : params['endDate'] < 0 ? 'BCE' : 'CE'
+                    }
+                }
+                this._filters.setAvailable('dateObj', dateObj);
+                resolve(this._filters.getAvailable())
+            } else {
+                dateObj = {
+                    modified : false,
+                    earliest : {
+                        date : 1000,
+                        era : 'BCE'
+                    },
+                    latest : {
+                        date : 2017,
+                        era : 'CE'
+                    }
+                }
+                this._filters.setAvailable('dateObj', dateObj);
+                resolve(this._filters.getAvailable())
+            }
+        })
+    }
+
+    /**
+     * Gets array of thumbnails and sets equal to results
+     * @param igId Image group id for which to retrieve thumbnails
+     */
+    private loadIgAssets(igId: string) {
+        // Reset No IG observable
+        this.noIGSource.next(false)
+        this.noAccessIGSource.next(false)
+
+        // Create a request option
+        let startIndex = ((this.urlParams.page - 1) * this.urlParams.size) + 1
+
+        let requestString: string = [this._auth.getUrl(), 'imagegroup', igId, 'thumbnails', startIndex, this.urlParams.size, this.activeSort.index].join('/')
+
+        this._groups.get(igId)
+            .toPromise()
+            .then((data) => {
+                if (!Object.keys(data).length) {
+                    throw new Error('No data in image group thumbnails response')
+                }
+
+                data.total = data.items.length
+
+                // Fetch the asset(s) via items call only if the IG has atleast one asset
+                if (data.total > 0){
+                    if (typeof data.items[0] === 'object'){
+                        data.itemIds = data.items.map( item => {
+                            return item.artstorid
+                        })
+                    } else{
+                        data.itemIds = data.items
+                    }
+                    let pageStart = (this.urlParams.page - 1) * this.urlParams.size
+                    let pageEnd = this.urlParams.page * this.urlParams.size
+                    // Maintain param string in a single place to avoid debugging thumbnails lost to a bad param
+                    const ID_PARAM = 'object_ids='
+                    let idsAsTerm: string =  data.itemIds.slice(pageStart, pageEnd).join('&' + ID_PARAM)
+
+                    let options = { withCredentials: true }
+
+                    this.http.get(this._auth.getHostname() + '/api/v1/group/' + igId + '/items?' + ID_PARAM + idsAsTerm, options)
+                        .subscribe(
+                            (res) => {
+                                let results = res
+                                data.thumbnails = results['items']
+                                // Set the allResults object
+                                this.updateLocalResults(data)
+                        }, (error) => {
+                            // Pass portion of the data we have
+                            this.updateLocalResults(data)
+                            // Pass error down to allResults listeners
+                            this.allResultsSource.next({'error': error}) // .throw(error);
+                        });
+                } else {
+                    data.thumbnails = []
+                    this.updateLocalResults(data)
+                }
+
+            })
+            .catch((error) => {
+                // console.error(error)
+                if (error.status === 404){
+                    this.noIGSource.next(true)
+                }
+                else if (error.status === 403){
+                    this.noAccessIGSource.next(true)
+                }
+            });
+    }
+
+    /**
+     * Executes search and sets relevant asset-grid parameters
+     * @param term Search term for which a search should be executed
+     */
+    private loadSearch(term: string): void {
+        // Don't wait for previous subscription anymore
+        if (this.searchSubscription && this.searchSubscription.hasOwnProperty('unsubscribe')) {
+            this.searchSubscription.unsubscribe()
+        }
+
+         // Solr Search
+        this.searchSubscription = this._assetSearch.search(this.urlParams, term, this.activeSort.index)
+            .subscribe(
+                (res) => {
+                    let data = res
+                    let facets = data.facets
+                    let len = facets.length
+
+                    data.facets.forEach((facet, index) => {
+                        this._filters.setAvailable(facet.name, facet.values)
+                    })
+
+                    if (data.hierarchies2 && data.hierarchies2['artstor-geography']){
+                        this._filters.generateHierFacets( data.hierarchies2['artstor-geography'].children, 'geography' )
+                    }
+                    else{
+                        this._filters.generateHierFacets( [], 'geography' )
+                    }
+
+                    // count and thumbnails are relics from the previous search logic and should be removed eventaully
+                    // Transform data from SOLR queries
+                    if (data.results) {
+                        data['thumbnails'] = data.results
+                    }
+                    data['count'] = data.total
+                    // Set the allResults object
+                    this.updateLocalResults(data)
+            }, (error) => {
+                    console.error(error)
+                    this.allResultsSource.next({'error': error})
+            });
     }
 
 //     /**
