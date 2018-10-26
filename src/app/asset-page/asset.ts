@@ -1,10 +1,8 @@
-import { HttpErrorResponse } from '@angular/common/http/public_api';
-import { BehaviorSubject, Observable } from 'rxjs';
-
-import { AssetService, AuthService, CollectionTypeHandler } from './../shared';
+// Project Dependencies
+import { AssetData, MetadataField, FileProperty, CollectionValue } from './asset.service'
 
 export class Asset {
-  id: string
+    id: string
     groupId: string
     typeId: number // determines what media type the asset is
     typeName: string // the name correlating to the typeId
@@ -14,17 +12,20 @@ export class Asset {
     kalturaUrl: string
     downloadLink: string
     downloadName: string
-    tileSource: string
-    collections: CollectionData[]
-    collectionId: number
+    tileSource: any
     collectionType: number
-    collectionName: string
-    categoryId: number
     contributinginstitutionid: number
+    personalCollectionOwner: number
+    // Not reliably available
+    categoryId: string
+    categoryName: string
+    collections: CollectionValue[]
+    collectionId: string
+    collectionName: string
     SSID: string
     fileName: string
-    updated_on?: string
-    publicDownload: boolean
+    updated_on: string
+    publicDownload: any
 
     viewportDimensions: {
         contentSize?: any,
@@ -49,11 +50,11 @@ export class Asset {
         panorama_xml?: string
     }
 
-    constructor(assetData: AssetData) {
+    constructor(assetData: AssetData, testEnv ?: boolean) {
         if (!assetData) {
             throw new Error('No data passed to construct asset')
         }
-        this.initAssetProperties(assetData)
+        this.initAssetProperties(assetData, testEnv)
     }
 
     private formatMetadata(metadata: MetadataField[]): FormattedMetadata {
@@ -64,10 +65,10 @@ export class Asset {
                 data.fieldValue = data.link
             }
 
-            // if the field exists, add to it
-            if (formattedData[data.fieldName]) {
+            // if the field exists, add to it (make sure the field vaue exists)
+            if (formattedData[data.fieldName] && data.fieldValue) {
                 formattedData[data.fieldName].push(data.fieldValue)
-            } else { // otherwise make a new field
+            } else if(data.fieldValue) { // otherwise make a new field (make sure the field vaue exists)
                 formattedData[data.fieldName] = [data.fieldValue]
             }
         }
@@ -81,13 +82,14 @@ export class Asset {
             case 21:
             case 22:
             case 23:
-                downloadLink = [data.baseUrl + 'media', data.object_type_id, data.object_type_id].join('/')
+                // Non-image Download Link format: /media/ARTSTORID/TYPEID
+                downloadLink = [data.baseUrl + 'media', this.id, data.object_type_id].join("/")
                 break
             default:
-                if (data.image_url) { // this is a general fallback, but should work specifically for images and video thumbnails
+                if (data.image_url) { //this is a general fallback, but should work specifically for images and video thumbnails
                     let imageServer = 'http://imgserver.artstor.net/' // TODO: check if this should be different for test
-                    let url = imageServer + data.image_url + '?cell=' + data.download_size + '&rgnn=0,0,1,1&cvt=JPEG'
-                    downloadLink = data.baseUrl + 'api/download?imgid=' + this.id + '&url=' + encodeURIComponent(url)
+                    let url = imageServer + data.image_url + "?cell=" + data.download_size + "&rgnn=0,0,1,1&cvt=JPEG"
+                    downloadLink = data.baseUrl + "api/download?imgid=" + this.id + "&url=" + encodeURIComponent(url)
                 } else {
                     // nothing happens here because some assets are not allowed to be downloaded
                 }
@@ -121,13 +123,13 @@ export class Asset {
     }
 
     get creator(): string {
-        return this.formattedMetadata.Creator[0] || ''
+        return (this.formattedMetadata.Creator && this.formattedMetadata.Creator[0]) || ''
     }
     get date(): string {
-        return this.formattedMetadata.Date[0] || ''
+        return (this.formattedMetadata.Date && this.formattedMetadata.Date[0]) || ''
     }
     get description(): string {
-        return this.formattedMetadata.Description[0] || ''
+        return (this.formattedMetadata.Description && this.formattedMetadata.Description[0]) || ''
     }
 
     /**
@@ -135,7 +137,8 @@ export class Asset {
      * - Behaves like a delayed constructor
      * - Reports status via 'this.dataLoadedSource' observable
      */
-    private initAssetProperties(data: AssetData): void {
+    private initAssetProperties(data: AssetData, testEnv?: boolean): void {
+        let storUrl: string = testEnv ? '//stor.stage.artstor.org' : '//stor.artstor.org' 
         // Set array of asset metadata fields to Asset, and format
         if (data.metadata_json) {
             this.formattedMetadata = this.formatMetadata(data.metadata_json)
@@ -143,21 +146,34 @@ export class Asset {
         this.id = data.object_id
         this.typeId = data.object_type_id
         this.title = data.title
+        this.categoryId = data.category_id
+        this.categoryName = data.category_name
+        this.collections = data.collections
+        this.collectionId = data.collection_id
+        this.collectionName = data.collection_name
         this.filePropertiesArray = data.fileProperties
+        this.collectionType = data.collection_type
+        this.contributinginstitutionid = data.contributinginstitutionid
+        this.personalCollectionOwner = data.personalCollectionOwner
         // we control the default size of the thumbnail url
         this.thumbnail_url = this.replaceThumbnailSize(data.thumbnail_url, this.thumbnail_size)
         this.typeId = data.object_type_id
         this.typeName = this.initTypeName(data.object_type_id)
         this.disableDownload =  data.download_size === '0,0'
         this.SSID = data.SSID
-        this.collections = data.collections
-        this.setDisplayCollection(this.collections)
-        this.fileName = data.fileProperties.find((obj) => {
-            return !!obj.fileName
-        }).fileName
+        // Set filename
+        if (this.filePropertiesArray && this.filePropertiesArray[0]){
+            let fileProperty = this.filePropertiesArray.find((obj) => {
+                return !!obj && !!obj.fileName
+            })
+            this.fileName = fileProperty ? fileProperty.fileName : 'file'
+        } else {
+            this.fileName = 'file'
+        }
+        this.updated_on = data.updated_on
         // Set Download information
         let fileExt = this.fileName.substr(this.fileName.lastIndexOf('.'), this.fileName.length - 1)
-        this.downloadName = this.title.replace(/\./g, '-') + '.' + fileExt
+        this.downloadName = this.title.replace(/\./g,'-') + '.' + fileExt
         this.downloadLink = this.buildDownloadLink(data)
         data.viewer_data && (this.viewerData = data.viewer_data)
 
@@ -169,26 +185,22 @@ export class Asset {
         } else {
             imgPath = '/' + data.image_url
         }
-        this.tileSource = data.tileSourceHostname + '/rosa-iiif-endpoint-1.0-SNAPSHOT/fpx' + encodeURIComponent(imgPath) + '/info.json'
+        if (data.image_compound_urls && data.image_compound_urls[0]) {
+            for (let i = 0; i < data.image_compound_urls.length; i++) {
+                let path = data.image_compound_urls[i]
+                // path = path.replace('/info.json','')
+                // data.image_compound_urls[i] = '//tsstage.artstor.org/rosa-iiif-endpoint-1.0-SNAPSHOT/fpx' + encodeURIComponent(path) + '/info.json'
+                data.image_compound_urls[i] = storUrl + '/fcgi-bin/iipsrv.fcgi?IIIF=' + path
+            }
+            this.tileSource = data.image_compound_urls
+        } else {
+            this.tileSource = data.tileSourceHostname + '/rosa-iiif-endpoint-1.0-SNAPSHOT/fpx' + encodeURIComponent(imgPath) + '/info.json'
+        }
 
         // set up kaltura info if it exists
         if (data.fpxInfo) {
-            this.kalturaUrl = data.fpxInfo.imageUrl
+            this.kalturaUrl = data.fpxInfo.imageUrl.replace('http://', '//')
         }
-    }
-
-    private setDisplayCollection(collections: CollectionData[]) {
-        let collectionTypes: number[] = []
-        this.collections.forEach((collection) => {
-            collectionTypes.push(collection.type)
-        })
-
-        this.collectionType = CollectionTypeHandler.getCollectionType(collectionTypes, this.contributinginstitutionid).type
-        let displayCollection = collections.find((collection) => {
-            return collection.type == this.collectionType
-        })
-        this.collectionName = displayCollection.name
-        this.collectionId = displayCollection.id
     }
 
     /**
@@ -206,93 +218,107 @@ export class Asset {
     }
 }
 
-
-export interface MetadataResponse {
-  metadata: AssetDataResponse[]
-  success: boolean
-  total: 1 // the total number of items returned
-}
-
-export interface AssetData {
-  groupId?: string
-  SSID?: string
-  category_id: string
-  category_name: string
-  collections: CollectionData[]
-  download_size: string
-  fileProperties: FileProperty[] // array of objects with a key/value pair
-  height: number
-  image_url: string
-  metadata_json: MetadataField[]
-  object_id: string
-  object_type_id: number
-  resolution_x: number
-  resolution_y: number
-  thumbnail_url: string
-  tileSourceHostname: string
-  title: string
-  viewer_data?: {
-      base_asset_url?: string,
-      panorama_xml?: string
-  }
-  width: number
-  baseUrl: string
-  fpxInfo?: ImageFPXResponse
-}
-
-interface AssetDataResponse {
-  SSID?: string
-  category_id: string
-  category_name: string
-  collections: CollectionData[]
-  downloadSize?: string
-  download_size?: string
-  fileProperties: { [key: string]: string }[] // array of objects with a key/value pair
-  height: number
-  image_url: string
-  metadata_json: MetadataField[]
-  object_id: string
-  object_type_id: number
-  resolution_x: number
-  resolution_y: number
-  thumbnail_url: string
-  title: string
-  viewer_data: {
-    base_asset_url?: string,
-    panorama_xml?: string
-  }
-  width: number
-}
-
-export interface CollectionData {
-    id: number
-    name: string
-    type: number
-}
-
-export interface MetadataField {
-  count: number // the number of fields with this name
-  fieldName: string
-  fieldValue: string
-  index: number
-  link?: string
-}
-
-export interface ImageFPXResponse {
-  height: number
-  id: {
-    fileName: string
-    resolution: number
-  }
-  imageId: string
-  imageUrl: string
-  resolutionX: number
-  resolutionY: number
-  width: number
-}
-
-export interface FileProperty { [key: string]: string }
-
-interface FormattedMetadata {
+export interface FormattedMetadata {
     [fieldName: string]: string[]
 }
+
+// From asset.service
+
+export interface MetadataResponse {
+    metadata: AssetDataResponse[]
+    success: boolean
+    total: 1 // the total number of items returned
+  }
+  
+  export interface AssetData {
+    groupId?: string
+    SSID?: string
+    category_id: string
+    category_name: string
+    collections: CollectionValue[]
+    collection_id: string
+    collection_name: string
+    collection_type: number
+    contributinginstitutionid: number
+    personalCollectionOwner: number
+    download_size: string
+    fileProperties: FileProperty[] // array of objects with a key/value pair
+    height: number
+    image_url: string
+    image_compound_urls?: string[],
+    metadata_json: MetadataField[]
+    object_id?: string
+    object_type_id?: number
+    resolution_x: number
+    resolution_y: number
+    thumbnail_url: string
+    tileSourceHostname: string
+    title: string
+    updated_on: string
+  
+    viewer_data?: {
+        base_asset_url?: string,
+        panorama_xml?: string
+    }
+    width: number
+    baseUrl: string
+    fpxInfo?: ImageFPXResponse
+  }
+  
+  export interface AssetDataResponse {
+    SSID?: string
+    category_id: string
+    category_name: string
+    collection_id: string
+    collection_name: string
+    collection_type: number
+    contributinginstitutionid: number
+    personalCollectionOwner: number
+    downloadSize?: string
+    download_size?: string
+    fileProperties: { [key: string]: string }[] // array of objects with a key/value pair
+    height: number
+    image_url: string
+    metadata_json: MetadataField[]
+    object_id: string
+    object_type_id: number
+    resolution_x: number
+    resolution_y: number
+    thumbnail_url: string
+    title: string
+    updated_on: string
+    viewer_data: {
+      base_asset_url?: string,
+      panorama_xml?: string
+    }
+    width: number
+  }
+  
+  export interface MetadataField {
+    count: number // the number of fields with this name
+    fieldName: string
+    fieldValue: string
+    index: number
+    link?: string
+  }
+  
+  export interface CollectionValue {
+    type: string
+    name: string
+    id: string
+  }
+  
+  export interface ImageFPXResponse {
+    height: number
+    id: {
+      fileName: string
+      resolution: number
+    }
+    imageId: string
+    imageUrl: string
+    resolutionX: number
+    resolutionY: number
+    width: number
+  }
+  
+  export interface FileProperty { [key: string]: string }

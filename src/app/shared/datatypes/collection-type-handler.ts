@@ -1,4 +1,4 @@
-import { CollectionData } from '../../asset-page/asset';
+// import { CollectionData } from '../../asset-page/asset';
 
 export class CollectionTypeHandler {
   public static collectionTypeMap: {
