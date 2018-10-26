@@ -26,17 +26,17 @@ export class AssetService {
 
     /** Constant that defines which collectionType belongs to institutions */
     static readonly institutionCollectionType: number = 2;
-    public allResults: Observable<any> = this.allResultsSource.asObservable();
-    public noIG: Observable<any> = this.noIGSource.asObservable();
-    public noAccessIG: Observable<any> = this.noAccessIGSource.asObservable();
+    public allResults: Observable<any>
+    public noIG: Observable<any>
+    public noAccessIG: Observable<any>
 
     // Set up subject observable for clearing select mode
     public clearSelectMode: Subject<boolean> = new Subject();
 
     // Set up subject observable for skipping the unauthorized asset on asset page, while browsing though assets
     public unAuthorizedAsset: Subject<boolean> = new Subject();
-    public pagination = this.paginationSource.asObservable();
-    public selection = this.selectedAssetsSource.asObservable();
+    public pagination: Observable<any>
+    public selection: Observable<any>
     public selectModeToggle: EventEmitter<any> = new EventEmitter()
 
 
@@ -144,6 +144,11 @@ export class AssetService {
         private _app: AppConfig
     ) {
         this._storage = locker.useDriver(Locker.DRIVERS.LOCAL);
+        this.allResults = this.allResultsSource.asObservable();
+        this.noIG = this.noIGSource.asObservable();
+        this.noAccessIG = this.noAccessIGSource.asObservable();
+        this.pagination = this.paginationSource.asObservable();
+        this.selection = this.selectedAssetsSource.asObservable();
     }
 
     /**
