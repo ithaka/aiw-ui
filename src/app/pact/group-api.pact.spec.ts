@@ -20,35 +20,35 @@ describe('Group Calls #pact', () => {
       'tags': [{'key': 'MLK', 'doc_count': 1}, {'key': 'PC Test', 'doc_count': 1}]
     }
 
-    // Image Group with id of 44d14fe7-13ec-4d84-b911-7ee3ffc4b0cb
+    // Image Group with id of f907383d-4412-4875-b7bc-344fda158d40
     const expectedImageGroupObject: ImageGroup = {
-      'description': '',
-      'owner_name': 'air01@artstor.org',
-      'tags': ['adl', 'collection'],
+      'description': "<p>Favorites of Diego Rivera's works displayed at the DIA.</p>",
+      'owner_name': 'my updated name a new last name!',
+      'tags': [],
       'owner_id': '706217',
       'sequence_number': 0,
-      'update_date': '2018-01-16T18:49:07Z',
-      'name': 'ADL_Group1_copy',
+      'update_date': '2018-10-26T15:36:05Z',
+      'name': 'my updated name a new last name!',
       'public': false,
-      'creation_date': '2018-01-16T18:48:43Z',
-      'id': '44d14fe7-13ec-4d84-b911-7ee3ffc4b0cb',
+      'creation_date': '2018-10-25T19:37:38Z',
+      'id': 'f907383d-4412-4875-b7bc-344fda158d40',
       'access': [
         {
           'entity_type': 100,
-          'entity_identifier': '706217',
+          'entity_identifier': '500863455',
           'access_type': 300
         }
       ],
       'items': [
-        {'artstorid': 'ASITESPHOTOIG_10312738558', zoom: { viewerX: 100, viewerY: 500, pointWidth: 600, pointHeight: 800 }},
-        {'artstorid': 'AWAYNEIG_10311326670'},
-        {'artstorid': 'ADAVISIG_10311277805'},
-        {'artstorid': 'AWSS35953_35953_38398951'},
-        {'artstorid': 'HARTILL_12324316'},
-        {'artstorid': 'AWSS35953_35953_38398953'},
-        {'artstorid': 'HCAP_10310729952'},
-        {'artstorid': 'HCAP_10310728522'},
-        {'artstorid': 'ASITESPHOTOIG_10313835802'}
+        { artstorid: 'SS34888_34888_25943882', zoom: { viewerX: 100, viewerY: 500, pointWidth: 600, pointHeight: 800 }},
+        'ABARNITZ_10310367033',
+        'ABARNITZ_10310366171',
+        'ABARNITZ_10310366099',
+        'ABARNITZ_10310365176',
+        'ASITESPHOTOIG_10312738558',
+        'AAFOLKAIG_10313142791',
+        'AAFOLKAIG_10313143138',
+        'AAGOIG_10314000081'
       ]
     }
 
@@ -172,7 +172,7 @@ describe('Group Calls #pact', () => {
           uponReceiving: 'a request for an individual image group',
           withRequest: {
             method: 'GET',
-            path: '/api/v1/group/44d14fe7-13ec-4d84-b911-7ee3ffc4b0cb',
+            path: '/api/v1/group/f907383d-4412-4875-b7bc-344fda158d40',
           },
           willRespondWith: {
             status: 200,
@@ -195,7 +195,7 @@ describe('Group Calls #pact', () => {
       it('should return an image group object',
         function (done) {
 
-          _groupService.get('44d14fe7-13ec-4d84-b911-7ee3ffc4b0cb')
+          _groupService.get('f907383d-4412-4875-b7bc-344fda158d40')
             .subscribe(res => {
 
               let actualResKeys = Object.keys(res) // response object keys
