@@ -10,7 +10,7 @@
           .media-body
             .asset-title([innerHTML]="asset.name")
             .imgURL-gen-info {{ 'SHARE_IMG_LINK_MODAL.DESC' | translate }}
-          img.d-flex.align-self-center.ml-3([attr.src]="_search.makeThumbUrl(asset.thumbnailImgUrl, 0)", [attr.alt]="asset.name")
+          img.d-flex.align-self-center.ml-3([attr.src]="_search.makeThumbUrl(asset.thumbnailImgUrl, 0, asset['compound_media'])", [attr.alt]="asset.name")
         .pt-3
           .pb-3
             label {{ 'SHARE_IMG_LINK_MODAL.IMG_URL_LBL' | translate }}

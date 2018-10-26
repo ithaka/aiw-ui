@@ -55,7 +55,11 @@ export class ThumbnailComponent implements OnInit, OnChanges {
    }
 
   ngOnInit() {
-    if (this.thumbnail['media']) {
+    if (this.thumbnail['compound_media']) {
+      let objects = JSON.parse(this.thumbnail['compound_media']).objects
+      this.thumbnail.thumbnailImgUrl = objects[0].thumbnailSizeOnePath
+    }
+    else if (this.thumbnail['media']) {
       this.thumbnail.thumbnailImgUrl = this.thumbnail.media.thumbnailSizeOnePath
     }
 

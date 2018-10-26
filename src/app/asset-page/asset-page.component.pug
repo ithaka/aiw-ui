@@ -12,6 +12,8 @@
         span#assetPageNumber {{ assetNumber }}  OF
         = " "
         span#assetPageCount {{ totalAssetCount - restrictedAssetsCount }}
+    //- for accessibility so that page has title
+    h1.sr-only(*ngIf="isFullscreen") Full screen mode
     //- Asset Viewer Row
     .asset-col([ngClass]="[ isFullscreen ? 'fullscreen-container' : 'col-md-8', showAssetDrawer && isFullscreen ? 'drawer' : '' ]")
       ng-container(*ngIf="userSessionFresh")

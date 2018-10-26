@@ -1,9 +1,11 @@
 .container.main-content
   .row
+    //- for accessibility so that page has title
+    h1.sr-only Artstor login page
     .col-sm-6
       .card.card--light
         .card-header
-          h1#loginHeading {{ copyBase + 'LOGIN.REG_LOGIN.HEADING' | translate }}
+          h2.h1#loginHeading {{ copyBase + 'LOGIN.REG_LOGIN.HEADING' | translate }}
         .card-body
           ang-login-form#mainContent
           a#linkLoginResetModal((click)="showPwdModal = true" tabindex="0" class="link" data-automation-component="artstor-pw-reset-link") {{ 'LOGIN.REG_LOGIN.FORGOT_PW_PROMPT' | translate }}
@@ -17,7 +19,7 @@
     .col-sm-6(*ngIf="_app.config.showInstitutionalLogin")
       .card.card--v-pad
         .card-header
-          h1#institutionHeading {{ 'LOGIN.INSTITUTION_LOGIN.HEADING' | translate }}
+          h2.h1#institutionHeading {{ 'LOGIN.INSTITUTION_LOGIN.HEADING' | translate }}
         .card-body
           .form-group
             label {{ 'LOGIN.INSTITUTION_LOGIN.SELECT_LABEL' | translate }}
