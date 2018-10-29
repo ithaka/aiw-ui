@@ -95,12 +95,14 @@ export class LoginFormComponent implements OnInit {
           console.error('Unable to load user PC');
       });
 
-      if (this._auth.getFromStorage('stashedRoute')) {
+      let stasedRoute = this._auth.getFromStorage('stashedRoute')
+
+      if (typeof(stasedRoute) == 'string') {
         // We do not want to navigate to the page we are already on
-        if (this._auth.getFromStorage('stashedRoute').indexOf('login') > -1) {
+        if (stasedRoute.indexOf('login') > -1) {
           this.router.navigate(['/home']);
         } else {
-          this.router.navigateByUrl(this._auth.getFromStorage('stashedRoute'));
+          this.router.navigateByUrl(stasedRoute);
         }
         this._auth.deleteFromStorage('stashedRoute');
       } else {
