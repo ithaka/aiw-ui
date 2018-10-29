@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core'
 import { Router, ActivatedRoute } from '@angular/router'
-import { Subscription } from 'rxjs/Subscription'
+import { Subscription } from 'rxjs'
+import { map } from 'rxjs/operators'
 
 import { TagFiltersService } from './tag-filters.service'
 
@@ -13,7 +14,7 @@ export class TagsListComponent implements OnInit {
   private subscriptions: Subscription[] = []
 
   constructor(
-    private _tagFilters: TagFiltersService,
+    public _tagFilters: TagFiltersService,
     private _router: Router,
     private route: ActivatedRoute
   ) {
@@ -21,9 +22,10 @@ export class TagsListComponent implements OnInit {
 
   ngOnInit() {
     this.subscriptions.push(
-      this._tagFilters.filterKeys.subscribe((filters) => {
+      this._tagFilters.filterKeys.pipe(
+      map(filters => {
         this.updateUrl(filters)
-      })
+      })).subscribe()
     )
   }
 

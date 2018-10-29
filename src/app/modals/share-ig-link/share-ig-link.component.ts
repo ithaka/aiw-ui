@@ -1,4 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter, AfterViewInit } from '@angular/core'
+import { map, take } from 'rxjs/operators'
 
 import { ImageGroup, GroupService, AuthService, LogService } from './../../shared'
 
@@ -9,18 +10,18 @@ import { ImageGroup, GroupService, AuthService, LogService } from './../../share
 })
 export class ShareIgLinkModal implements OnInit, AfterViewInit {
   @Output()
-  private closeModal: EventEmitter<any> = new EventEmitter()
+  public closeModal: EventEmitter<any> = new EventEmitter()
 
-  @Input() private ig: ImageGroup /** the image group in question */
+  public document = document
 
-  private document = document
-
-  private shareLink: string = '' // this is the url which will be copied to the user's clipboard
-  private igCopied: boolean = false
-  private serviceStatus: {
+  public shareLink: string = '' // this is the url which will be copied to the user's clipboard
+  public igCopied: boolean = false
+  public serviceStatus: {
     isLoading?: boolean,
     tokenError?: boolean
   } = {}
+
+  @Input() private ig: ImageGroup /** the image group in question */
 
   constructor(
     private _group: GroupService,
@@ -41,7 +42,7 @@ export class ShareIgLinkModal implements OnInit, AfterViewInit {
   }
 
   // Set initial focus on the modal Title h1
-  private startModalFocus() {
+  public startModalFocus() {
     let modalStartFocus = document.getElementById('share-ig-link-title')
       modalStartFocus.focus()
   }
@@ -71,9 +72,9 @@ export class ShareIgLinkModal implements OnInit, AfterViewInit {
     } else {
       // if the image group is private, we call a service to generate a token, then attach that to the route so the user can share it
       this.serviceStatus.isLoading = true
-      this._group.generateToken(this.ig.id, { access_type: 100 })
-        .take(1)
-        .subscribe((res) => {
+      this._group.generateToken(this.ig.id, { access_type: 100 }).pipe(
+        take(1),
+        map(res => {
           this.serviceStatus.isLoading = false
           if (res.success && res.token) {
             this.shareLink = [protocol, document.location.host, groupPath, ig.id, '?token=', encodeURIComponent(res.token)].join('')
@@ -83,7 +84,7 @@ export class ShareIgLinkModal implements OnInit, AfterViewInit {
         }, (err) => {
           console.error(err)
           this.serviceStatus.tokenError = true
-        })
+      })).subscribe()
     }
   }
 }

@@ -1,11 +1,10 @@
 import { OnInit, Input } from '@angular/core'
-import { Locker } from 'angular2-locker'
 import { Component } from '@angular/core'
 import { Router, ActivatedRoute } from '@angular/router'
 import { Location } from '@angular/common'
 import { Angulartics2 } from 'angulartics2'
 import { CompleterService, LocalData } from 'ng2-completer'
-import { BehaviorSubject, Observable, Subscription } from 'rxjs/Rx'
+import { BehaviorSubject, Observable, Subscription } from 'rxjs'
 
 import { AppConfig } from '../app.service'
 import { AuthService, User, AssetService } from './../shared'
@@ -19,14 +18,13 @@ export class LoginFormComponent implements OnInit {
 
   @Input() samlTokenId: string
 
-  private copyBase: string = ''
+  public copyBase: string = ''
 
   // Set our default values
   public user = new User('', '')
   public errorMsg: string = ''
   public instErrorMsg: string = ''
   public showPwdModal = false
-  public showHelpModal = false
   public pwdReset = false
   public expirePwd = false
   public pwdRstEmail = ''
@@ -35,10 +33,10 @@ export class LoginFormComponent implements OnInit {
   public successMsgPwdRst = ''
   public loginInstitutions = [] /** Stores the institutions returned by the server */
 
-  @Input() private copyModifier: string = 'DEFAULT'
+  @Input() public copyModifier: string = 'DEFAULT'
+  public loginLoading = false
 
   private loginInstName: string = '' /** Bound to the autocomplete field */
-  private loginLoading = false
   // loginCall is scoped globally for isBadCasePassword() as well as login()
   private loginCall: Function
 
@@ -59,8 +57,7 @@ export class LoginFormComponent implements OnInit {
     private router: Router,
     private location: Location,
     private angulartics: Angulartics2,
-    private _app: AppConfig,
-    private _storage: Locker
+    public _app: AppConfig
   ) {
   }
 
@@ -98,12 +95,14 @@ export class LoginFormComponent implements OnInit {
           console.error('Unable to load user PC');
       });
 
-      if (this._auth.getFromStorage('stashedRoute')) {
+      let stashedRoute = this._auth.getFromStorage('stashedRoute')
+
+      if (typeof(stashedRoute) == 'string') {
         // We do not want to navigate to the page we are already on
-        if (this._auth.getFromStorage('stashedRoute').indexOf('login') > -1) {
+        if (stashedRoute.indexOf('login') > -1) {
           this.router.navigate(['/home']);
         } else {
-          this.router.navigateByUrl(this._auth.getFromStorage('stashedRoute'));
+          this.router.navigateByUrl(stashedRoute);
         }
         this._auth.deleteFromStorage('stashedRoute');
       } else {
@@ -183,8 +182,8 @@ export class LoginFormComponent implements OnInit {
       ).catch((err) => {
         this.loginLoading = false;
         let errObj = err.error
-        this.errorMsg = this.getLoginErrorMsg(errObj.message)
-        if (!this.getLoginErrorMsg(errObj.message)){
+        this.errorMsg = this.getLoginErrorMsg(errObj && errObj.message)
+        if (!this.errorMsg){
           this.getLoginError(user)
           this.angulartics.eventTrack.next({ action: 'remoteLogin', properties: { category: this._auth.getGACategory(), label: 'failed' }});
         }

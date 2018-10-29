@@ -1,14 +1,15 @@
 /*
  * Angular 2 decorators and services
  */
-import { Component, ViewEncapsulation } from '@angular/core';
-import { Angulartics2GoogleAnalytics } from 'angulartics2/ga';
-import { Title } from '@angular/platform-browser';
-import { Router, NavigationStart, NavigationEnd } from '@angular/router';
-import { TranslateService } from '@ngx-translate/core';
+import { Component, ViewEncapsulation } from '@angular/core'
+import { Angulartics2GoogleAnalytics } from 'angulartics2/ga'
+import { Title } from '@angular/platform-browser'
+import { Router, NavigationStart, NavigationEnd } from '@angular/router'
+import { TranslateService } from '@ngx-translate/core'
+import { map, take } from 'rxjs/operators'
 
-import { AppConfig } from './app.service';
-import { ScriptService, FlagService } from './shared';
+import { AppConfig } from './app.service'
+import { ScriptService, FlagService } from './shared'
 /*
  * App Component
  * Top Level Component
@@ -16,9 +17,6 @@ import { ScriptService, FlagService } from './shared';
 @Component({
   selector: 'app',
   encapsulation: ViewEncapsulation.None,
-  styleUrls: [
-    '../sass/app.scss'
-  ],
   template: `
     <ang-sky-banner *ngIf="showSkyBanner" [textValue]="skyBannerCopy" (closeBanner)="showSkyBanner = false"></ang-sky-banner>
     <div id="skip" tabindex="-1" aria-activedescendant="button">
@@ -51,6 +49,8 @@ export class App {
     private router: Router,
     private translate: TranslateService
   ) {
+    // Start GA trackiong
+    angulartics2GoogleAnalytics.startTracking()
     // append query param to dodge caching
     let langStr = 'en.json?no-cache=' + new Date().valueOf()
     // I'm hoping this sets these for the entire app
@@ -62,7 +62,7 @@ export class App {
     this.title = this._app.config.pageTitle
 
     // Set metatitle to "Artstor" except for asset page where metatitle is {{ Asset Title }}
-    router.events.subscribe(event => {
+    router.events.pipe(map(event => {
       if (event instanceof NavigationStart) {
         // focus on the wrapper of the "skip to main content link" everytime new page is loaded
         let mainEl = <HTMLElement>(document.getElementById('skip'))
@@ -106,19 +106,19 @@ export class App {
           }
         }
       }
-    })
+    })).subscribe()
 
-    this._flags.getFlagsFromService()
-    .take(1)
-    .subscribe((flags) => {
-      // don't need to handle successful response here - this just initiates the flags
-      console.log(flags)
-      // Set skybanner
-      this.showSkyBanner = flags.bannerShow
-      this.skyBannerCopy = flags.bannerCopy
-    }, (err) => {
-      console.error(err)
-    })
+    this._flags.getFlagsFromService().pipe(
+      take(1),
+      map(flags => {
+        // don't need to handle successful response here - this just initiates the flags
+        console.log(flags)
+        // Set skybanner
+        this.showSkyBanner = flags.bannerShow
+        this.skyBannerCopy = flags.bannerCopy
+      }, (err) => {
+        console.error(err)
+    })).subscribe()
   }
 
   ngOnInit() {
@@ -126,19 +126,7 @@ export class App {
     // this.showSkyBanner = true
   }
 
-  // Show the chat widget on: 'login', 'browse/library', or 'browse/groups/public'
-  private showChatWidget(eventUrl: string): boolean {
-      if (eventUrl.indexOf('browse/library') > -1 ||
-          eventUrl.indexOf('browse/groups/public') > -1 ||
-          eventUrl.indexOf('login') > -1) {
-           return true
-        }
-      else {
-        return false
-      }
-  }
-
-  private findMainContent(): void {
+  public findMainContent(): void {
     window.setTimeout(function ()
     {
       let htmlelement: HTMLElement = document.getElementById('mainContent');
@@ -157,5 +145,17 @@ export class App {
       }
       (<HTMLElement>element).focus();
     }, 100);
+  }
+
+  // Show the chat widget on: 'login', 'browse/library', or 'browse/groups/public'
+  private showChatWidget(eventUrl: string): boolean {
+      if (eventUrl.indexOf('browse/library') > -1 ||
+          eventUrl.indexOf('browse/groups/public') > -1 ||
+          eventUrl.indexOf('login') > -1) {
+           return true
+        }
+      else {
+        return false
+      }
   }
 }

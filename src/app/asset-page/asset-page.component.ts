@@ -1,9 +1,9 @@
-import { KeysPipe } from './../shared/keys.pipe';
 import { Component, OnInit, OnDestroy, ViewChild, HostListener } from '@angular/core'
 import { ActivatedRoute, Params, Router } from '@angular/router'
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
-import { Subscription } from 'rxjs/Subscription'
-import { Locker } from 'angular2-locker'
+import { Subscription } from 'rxjs'
+import { map, take } from 'rxjs/operators'
+import { Locker, DRIVERS } from 'angular-safeguard'
 import { Angulartics2 } from 'angulartics2'
 import { ArtstorViewer } from 'artstor-viewer'
 import { formGroupNameProvider } from '@angular/forms/src/directives/reactive_directives/form_group_name'
@@ -28,6 +28,7 @@ import { ScriptService } from '../shared/script.service'
 import { LocalPCService, LocalPCAsset } from '../_local-pc-asset.service'
 import { TourStep } from '../shared/tour/tour.service'
 import { APP_CONST } from '../app.constants'
+import { LockerService } from 'app/_services';
 
 @Component({
     selector: 'ang-asset-page',
@@ -36,10 +37,28 @@ import { APP_CONST } from '../app.constants'
 })
 export class AssetPage implements OnInit, OnDestroy {
 
-    @ViewChild(ArtstorViewer) assetViewer: any
+    @ViewChild(ArtstorViewer)
+    public assetViewer: any
 
     public user: any
     public userSessionFresh: boolean = false
+    public assetIds: string[] = []
+
+    /** controls whether or not the modals are visible */
+    public showAgreeModal: boolean = false
+    public showLoginModal: boolean = false
+    public showAddModal: boolean = false
+    public showCreateGroupModal: boolean = false
+    public showAccessDeniedModal: boolean = false
+    public showServerErrorModal: boolean = false
+    public showGenerateCitation: boolean = false
+    public downloadViewReady: boolean = false
+    public showExitEdit: boolean = false
+    public showDeletePCModal: boolean = false
+
+    // Feature Flags
+    public relatedResFlag: boolean = false
+    public solrMetadataFlag: boolean = false
     private encryptedAccess: boolean = false
     private document = document
     private URL = URL
@@ -47,7 +66,6 @@ export class AssetPage implements OnInit, OnDestroy {
 
     // Array to support multiple viewers on the page
     private assets: Asset[] = []
-    private assetIds: string[] = []
     private assetIndex: number = 0
     private assetGroupId: string
     private assetNumber: number = 1
@@ -64,15 +82,6 @@ export class AssetPage implements OnInit, OnDestroy {
 
     // Keep track of the restricted assets count from previous result set, to accurately navigate through available assets
     private restrictedAssetsCount: number = 0
-
-    /** controls whether or not the modals are visible */
-    private showAgreeModal: boolean = false
-    private showLoginModal: boolean = false
-    private showAddModal: boolean = false
-    private showCreateGroupModal: boolean = false
-    private showAccessDeniedModal: boolean = false
-    private showServerErrorModal: boolean = false
-    private showGenerateCitation: boolean = false
     private showMetadataPending: boolean = false
     private showMetadataError: boolean = false
 
@@ -83,14 +92,12 @@ export class AssetPage implements OnInit, OnDestroy {
     private generatedBlobURL: SafeUrl | string = '' // A Blob File
     private downloadViewLink: string = '' // IIIF View Link
     private generatedFullURL: string = ''
-    public downloadViewReady: boolean = false
     // Used for agree modal input, changes based on selection
     private downloadUrl: any
     private downloadName: string
     // Used for generated view blob url
     private blobURL: string = ''
     private prevRouteParams: any = []
-    private _session
 
     private quizMode: boolean = false;
     private quizShuffle: boolean = false;
@@ -128,8 +135,6 @@ export class AssetPage implements OnInit, OnDestroy {
     private editDetailsFormSubmitted: boolean = false // Set to true once the edit details form is submitted
     private isProcessing: boolean = false // controls loading class on delete button
     private deleteLoading: boolean = false
-    private showExitEdit: boolean = false
-    private showDeletePCModal: boolean = false
     private downloadLoading: boolean = false
 
     private prevRouteTS: string = '' // Used to track the (Timestamp) key for previous route params in session storage
@@ -188,10 +193,6 @@ export class AssetPage implements OnInit, OnDestroy {
     ]
     private showTour: boolean = false
 
-    // Feature Flags
-    public relatedResFlag: boolean = false
-    public solrMetadataFlag: boolean = false
-
     // Flag for multiview items, true if the asset contains multiview items
     private multiviewItems: boolean = false
 
@@ -211,10 +212,8 @@ export class AssetPage implements OnInit, OnDestroy {
         private scriptService: ScriptService,
         private _sanitizer: DomSanitizer,
         _fb: FormBuilder,
-        locker: Locker
+        private _locker: LockerService
     ) {
-        this._session = locker.useDriver(Locker.DRIVERS.SESSION)
-
         this.editDetailsForm = _fb.group({
             creator: [null],
             title: [null, Validators.required],
@@ -344,7 +343,7 @@ export class AssetPage implements OnInit, OnDestroy {
                     this.prevRouteTS = routeParams['prevRouteTS']
                     // For "Go Back to Results"
                     // Get map of previous search params
-                    let prevRoutesMap = this._session.get('prevRouteParams')
+                    let prevRoutesMap = this._locker.sessionGet('prevRouteParams')
 
                     // Reference previous search params for the prevRouteTS
                     let prevRouteParams = prevRoutesMap[this.prevRouteTS]
@@ -355,7 +354,7 @@ export class AssetPage implements OnInit, OnDestroy {
                     }
 
                     // TotalAssets - for browsing between the assets
-                    let totalAssets = this._session.get('totalAssets');
+                    let totalAssets = this._locker.sessionGet('totalAssets');
                     if (totalAssets) {
                         this.totalAssetCount = totalAssets;
                     }
@@ -410,30 +409,6 @@ export class AssetPage implements OnInit, OnDestroy {
 
     ngOnDestroy() {
         this.subscriptions.forEach((sub) => { sub.unsubscribe(); });
-    }
-
-    private handleSkipAsset(): void {
-        if (this.browseAssetDirection === 'prev') {
-            this.showPrevAsset()
-        }
-        else if (this.browseAssetDirection === 'next') {
-            this.showNextAsset()
-        }
-
-        // Close the modal after handling skip asset
-        this.showAccessDeniedModal = false
-    }
-
-    // Determines if the asset can be skipped to the prev / next asset in the array, if the current asset is unauthorized
-    private isAssetSkipable(): boolean {
-        let skipable: boolean = false
-        if ((this.browseAssetDirection === 'prev') && (this.assetNumber > 1)) {
-            skipable = true
-        }
-        else if ((this.browseAssetDirection === 'next') && (this.assetNumber < this.totalAssetCount)) {
-            skipable = true
-        }
-        return skipable
     }
 
 
@@ -531,6 +506,167 @@ export class AssetPage implements OnInit, OnDestroy {
     }
 
     /**
+     * Set full image download url
+     */
+    setDownloadFull(): void {
+        let url = this.assets[0] ? this.assets[0].downloadLink : '';
+        if (this.assetGroupId) {
+            // Group id needs to be passed to allow download for images accessed via groups
+            // - Binder prefers lowercase service url params
+            url = url + '&groupid=' + this.assetGroupId
+        }
+        this.generatedFullURL = url
+    }
+
+    /**
+     * Function called if not yet agreed to download image
+     * - sets url used by agree modal
+     */
+    setDownloadImage(): void {
+        this.downloadUrl = this.generatedFullURL
+        this.showAgreeModal = true
+        this.downloadName = 'download'
+    }
+
+    /**
+     * Function called if not yet agreed to download image view
+     * - sets url used by agree modal
+     */
+    setDownloadView(): void {
+        this.downloadUrl = this.isMSAgent ? this.downloadViewLink : this.generatedBlobURL
+        this.showAgreeModal = true
+        this.downloadName = 'download.jpg'
+    }
+
+    // Track download file
+    trackDownloadImage(): void {
+        this.angulartics.eventTrack.next({ action: 'downloadAsset', properties: { category: this._auth.getGACategory(), label: this.assets[0].id } });
+    }
+
+    // Track download view
+    trackDownloadView(): void {
+        this._log.log({
+            eventType: 'artstor_image_download_view',
+            item_id: this.assets[0].id
+        })
+        this.angulartics.eventTrack.next({ action: 'downloadView', properties: { category: this._auth.getGACategory(), label: this.assets[0].id } });
+    }
+
+    // Track metadata collection link click
+    trackCollectionLink(collectionName: string): void {
+      this.angulartics.eventTrack.next({ action: 'metadata_collection_link', properties: { category: this._auth.getGACategory(), label: collectionName } });
+    }
+
+    /**
+     * Function called when keyboard key is pressed
+     * allows user to go to previous/next asset in group or search
+     */
+    @HostListener('document:keydown', ['$event'])
+    handleKeyboardEvent(event: KeyboardEvent) {
+        let key = event.keyCode;
+        // Make sure not comparing images
+        if (this.assets.length === 1) {
+            // Left -> Previous
+            if (key === 37 && this.assetNumber > 1) {
+                this.showPrevAsset();
+            }
+            // Right -> Next
+            else if (key === 39 && this.assetNumber < this.totalAssetCount) {
+                this.showNextAsset();
+            }
+        }
+    }
+
+    /**
+     * Get link to IAP Form
+     * - Generate url with Query params for requesting IAP
+     * @param asset Asset for which the user is requesting IAP
+     * @returns string Request IAP form url with query params
+     */
+    getIapFormUrl(asset: Asset): string {
+        let baseUrl = 'http://www.artstor.org/form/iap-request-form'
+        let name = asset.title
+        let collection = asset.formattedMetadata['Collection'] && asset.formattedMetadata['Collection'][0] ? asset.formattedMetadata['Collection'][0] : ''
+        let id = asset.id
+        let email = this.user.username
+        return baseUrl + '?name=' + name + '&collectionName=' + collection + '&id=' + id + '&email=' + email
+    }
+
+    /**
+     * Get link to Error Form
+     * - Generate url with Query params for reporting asset error
+     * @param asset Asset for which the user is reporting an error
+     * @returns string Error form url with query params
+     */
+    getErrorFormUrl(asset: Asset): string {
+        let baseUrl = 'http://www.artstor.org/form/report-error'
+        let collection = asset.formattedMetadata['Collection'] && asset.formattedMetadata['Collection'][0] ? asset.formattedMetadata['Collection'][0] : ''
+        let id = asset.id
+        let email = this.user.username
+        let title = asset.title
+        let creator = asset.creator
+        let repo = (asset.formattedMetadata['Repository'] && asset.formattedMetadata['Repository'][0]) || ''
+        let fileName = asset.fileName
+        let ssid = asset.SSID
+        return baseUrl + '?collectionName=' + collection + '&id=' + id + '&email=' + email + '&title=' + title + '&creator=' + creator + '&fileName=' + fileName + '&ssid=' + ssid + '&repository=' + repo
+    }
+
+    /**
+     * Sets collection id for the Collection href
+     * A collection may be private, institutional, or public.
+     * If both institional(2) and public(5), we set the link to the public collection id.
+     */
+    setCollectionLink(asset: Asset): any[] {
+        let link = []
+
+        // 103 Collection Id routes to /category/<categoryId>, some of the collections have collectionId of NaN, check the id in the collections array instead
+        if (String(asset.collectionId) === '103' || String(asset.collections[0].id) === '103') {
+            return ['/category', String(asset.categoryId)]
+        }
+        else {
+            for (let col of this.collections) {
+                // Private/Personal Collection
+                if (col.type === '6') {
+                    return ['/pcollection', col.id]
+                }
+                // Public Collection
+                else if (col.type === '5') {
+                    asset.publicDownload = true
+                    return ['/collection', col.id]
+                }
+                else {
+                    link = ['/collection', col.id]
+                }
+            }
+        }
+        return link
+    }
+
+    private handleSkipAsset(): void {
+        if (this.browseAssetDirection === 'prev') {
+            this.showPrevAsset()
+        }
+        else if (this.browseAssetDirection === 'next') {
+            this.showNextAsset()
+        }
+
+        // Close the modal after handling skip asset
+        this.showAccessDeniedModal = false
+    }
+
+    // Determines if the asset can be skipped to the prev / next asset in the array, if the current asset is unauthorized
+    private isAssetSkipable(): boolean {
+        let skipable: boolean = false
+        if ((this.browseAssetDirection === 'prev') && (this.assetNumber > 1)) {
+            skipable = true
+        }
+        else if ((this.browseAssetDirection === 'next') && (this.assetNumber < this.totalAssetCount)) {
+            skipable = true
+        }
+        return skipable
+    }
+
+    /**
      * Find out if the user has accepted the agreement during this session
      * @returns boolean which is true if the user has accepted the agreement
      */
@@ -563,17 +699,19 @@ export class AssetPage implements OnInit, OnDestroy {
 
         if (this.user && this.user.isLoggedIn) {
             // Check if the logged-in user has private image groups
-            this._group.getAll('created')
-                .take(1)
-                .subscribe((res) => {
-                    if (res.groups && (res.groups.length > 0)) {
-                        this.showAddModal = true;
-                    } else {
-                        this.showCreateGroupModal = true;
-                    }
-                }, (err) => { console.error(err); });
+            this._group.getAll('created').pipe(
+              take(1),
+              map(res => {
+                if (res.groups && (res.groups.length > 0)) {
+                    this.showAddModal = true;
+                } else {
+                    this.showCreateGroupModal = true;
+                }
+              },
+              (err) => { console.error(err); }
+            )).subscribe()
         } else {
-            this.showLoginModal = true;
+          this.showLoginModal = true;
         }
     }
 
@@ -811,20 +949,21 @@ export class AssetPage implements OnInit, OnDestroy {
      */
     private runDownloadView(dlink: string): Subscription {
       // Download generated jpg as local blob file
-      return this._search.downloadViewBlob(dlink)
-        .take(1)
-        .subscribe((blob) => {
+      return this._search.downloadViewBlob(dlink).pipe(
+        take(1),
+        map(blob => {
           if (blob.size > 0) {
-                  this.blobURL = this.URL.createObjectURL(blob)
-                  this.generatedBlobURL = this._sanitizer.bypassSecurityTrustUrl(this.blobURL)
-                  this.downloadViewReady = true
-                  this.downloadLoading = false
+            this.blobURL = this.URL.createObjectURL(blob)
+            this.generatedBlobURL = this._sanitizer.bypassSecurityTrustUrl(this.blobURL)
+            this.downloadViewReady = true
+            this.downloadLoading = false
           }},
           (err) => {
             this.downloadLoading = false
             this.downloadViewReady = false
             this.showServerErrorModal = true
-          })
+          }
+        )).subscribe()
     }
 
     /** Calls downloadViewBlob in AssetSearch service to retrieve blob file,
@@ -906,93 +1045,22 @@ export class AssetPage implements OnInit, OnDestroy {
     }
 
     /**
-     * Set full image download url
-     */
-    setDownloadFull(): void {
-        let url = this.assets[0] ? this.assets[0].downloadLink : '';
-        if (this.assetGroupId) {
-            // Group id needs to be passed to allow download for images accessed via groups
-            // - Binder prefers lowercase service url params
-            url = url + '&groupid=' + this.assetGroupId
-        }
-        this.generatedFullURL = url
-    }
-
-    /**
-     * Function called if not yet agreed to download image
-     * - sets url used by agree modal
-     */
-    setDownloadImage(): void {
-        this.downloadUrl = this.generatedFullURL
-        this.showAgreeModal = true
-        this.downloadName = 'download'
-    }
-
-    /**
-     * Function called if not yet agreed to download image view
-     * - sets url used by agree modal
-     */
-    setDownloadView(): void {
-        this.downloadUrl = this.isMSAgent ? this.downloadViewLink : this.generatedBlobURL
-        this.showAgreeModal = true
-        this.downloadName = 'download.jpg'
-    }
-
-    // Track download file
-    trackDownloadImage(): void {
-        this.angulartics.eventTrack.next({ action: 'downloadAsset', properties: { category: this._auth.getGACategory(), label: this.assets[0].id } });
-    }
-
-    // Track download view
-    trackDownloadView(): void {
-        this._log.log({
-            eventType: 'artstor_image_download_view',
-            item_id: this.assets[0].id
-        })
-        this.angulartics.eventTrack.next({ action: 'downloadView', properties: { category: this._auth.getGACategory(), label: this.assets[0].id } });
-    }
-
-    // Track metadata collection link click
-    trackCollectionLink(collectionName: string): void {
-      this.angulartics.eventTrack.next({ action: 'metadata_collection_link', properties: { category: this._auth.getGACategory(), label: collectionName } });
-    }
-
-    /**
-     * Function called when keyboard key is pressed
-     * allows user to go to previous/next asset in group or search
-     */
-    @HostListener('document:keydown', ['$event'])
-    handleKeyboardEvent(event: KeyboardEvent) {
-        let key = event.keyCode;
-        // Make sure not comparing images
-        if (this.assets.length === 1) {
-            // Left -> Previous
-            if (key === 37 && this.assetNumber > 1) {
-                this.showPrevAsset();
-            }
-            // Right -> Next
-            else if (key === 39 && this.assetNumber < this.totalAssetCount) {
-                this.showNextAsset();
-            }
-        }
-    }
-
-    /**
      * Controls display indicating asset deletion, makes http call to delete asset and navigates back to My Collection page
      */
     private deleteAsset(): void {
         this.uiMessages = {}
 
         this.deleteLoading = true
-        this._pcservice.deletePersonalAssets([this.assets[0].SSID])
-            .take(1)
-            .subscribe((res) => {
-                this.deleteLoading = false
-                this._router.navigate(['/pcollection', '37436'], { queryParams: { deleteSuccess: this.assets[0].title } })
-            }, (err) => {
-                this.deleteLoading = false
-                this.uiMessages.deleteFailure = true
-            })
+        this._pcservice.deletePersonalAssets([this.assets[0].SSID]).pipe(
+          take(1),
+          map(res => {
+              this.deleteLoading = false
+              this._router.navigate(['/pcollection', '37436'], { queryParams: { deleteSuccess: this.assets[0].title } })
+          }, (err) => {
+              this.deleteLoading = false
+              this.uiMessages.deleteFailure = true
+          }
+        )).subscribe()
     }
 
     /**
@@ -1221,71 +1289,6 @@ export class AssetPage implements OnInit, OnDestroy {
                 institutionID: asset.contributinginstitutionid
             }
         })
-    }
-
-    /**
-     * Get link to IAP Form
-     * - Generate url with Query params for requesting IAP
-     * @param asset Asset for which the user is requesting IAP
-     * @returns string Request IAP form url with query params
-     */
-    getIapFormUrl(asset: Asset): string {
-        let baseUrl = 'http://www.artstor.org/form/iap-request-form'
-        let name = asset.title
-        let collection = asset.formattedMetadata['Collection'] && asset.formattedMetadata['Collection'][0] ? asset.formattedMetadata['Collection'][0] : ''
-        let id = asset.id
-        let email = this.user.username
-        return baseUrl + '?name=' + name + '&collectionName=' + collection + '&id=' + id + '&email=' + email
-    }
-
-    /**
-     * Get link to Error Form
-     * - Generate url with Query params for reporting asset error
-     * @param asset Asset for which the user is reporting an error
-     * @returns string Error form url with query params
-     */
-    getErrorFormUrl(asset: Asset): string {
-        let baseUrl = 'http://www.artstor.org/form/report-error'
-        let collection = asset.formattedMetadata['Collection'] && asset.formattedMetadata['Collection'][0] ? asset.formattedMetadata['Collection'][0] : ''
-        let id = asset.id
-        let email = this.user.username
-        let title = asset.title
-        let creator = asset.creator
-        let repo = (asset.formattedMetadata['Repository'] && asset.formattedMetadata['Repository'][0]) || ''
-        let fileName = asset.fileName
-        let ssid = asset.SSID
-        return baseUrl + '?collectionName=' + collection + '&id=' + id + '&email=' + email + '&title=' + title + '&creator=' + creator + '&fileName=' + fileName + '&ssid=' + ssid + '&repository=' + repo
-    }
-
-    /**
-     * Sets collection id for the Collection href
-     * A collection may be private, institutional, or public.
-     * If both institional(2) and public(5), we set the link to the public collection id.
-     */
-    setCollectionLink(asset: Asset): any[] {
-        let link = []
-
-        // 103 Collection Id routes to /category/<categoryId>, some of the collections have collectionId of NaN, check the id in the collections array instead
-        if (String(asset.collectionId) === '103' || String(asset.collections[0].id) === '103') {
-            return ['/category', String(asset.categoryId)]
-        }
-        else {
-            for (let col of this.collections) {
-                // Private/Personal Collection
-                if (col.type === '6') {
-                    return ['/pcollection', col.id]
-                }
-                // Public Collection
-                else if (col.type === '5') {
-                    asset.publicDownload = true
-                    return ['/collection', col.id]
-                }
-                else {
-                    link = ['/collection', col.id]
-                }
-            }
-        }
-        return link
     }
 
 }

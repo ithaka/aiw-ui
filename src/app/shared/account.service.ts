@@ -1,6 +1,7 @@
 import { Injectable } from "@angular/core"
 import { HttpClient, HttpHeaders } from "@angular/common/http"
 import { Observable } from "rxjs"
+import { environment } from "environments/environment";
 
 @Injectable()
 export class AccountService {
@@ -29,7 +30,7 @@ export class AccountService {
     }
 
     return this._http.put<UpdateUserResponse>(
-      API_URL + "/api/secure/user/" + user.baseProfileId,
+      environment.API_URL + "/api/secure/user/" + user.baseProfileId,
       updateBody,
       {
         headers: new HttpHeaders({

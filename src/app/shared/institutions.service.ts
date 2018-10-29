@@ -1,17 +1,14 @@
-import { Injectable } from '@angular/core';
-import { Subject } from 'rxjs/Subject';
-import { BehaviorSubject, Observable, Subscription } from 'rxjs/Rx';
-import { Locker } from 'angular2-locker';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import 'rxjs/add/operator/toPromise';
+import { Injectable } from '@angular/core'
+import { Subject } from 'rxjs'
+import { BehaviorSubject, Observable, Subscription } from 'rxjs'
+import { HttpClient, HttpHeaders } from '@angular/common/http'
 
-import { AuthService } from '../shared/auth.service';
+import { AuthService } from '../shared/auth.service'
 
 @Injectable()
 export class InstitutionsService {
 
   constructor(
-    private locker: Locker,
     private http: HttpClient,
     private _auth: AuthService
   ) {}

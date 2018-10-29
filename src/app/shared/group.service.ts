@@ -1,10 +1,12 @@
 import { Injectable } from '@angular/core'
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { BehaviorSubject, Observable, Subject } from 'rxjs/Rx';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
+import { catchError } from 'rxjs/operators'
 import { GroupList } from './datatypes';
 
 // Project Dependencies
 import { AuthService } from '.';
+import { environment } from 'environments/environment';
 
 @Injectable()
 export class GroupService {
@@ -15,7 +17,7 @@ export class GroupService {
     constructor(
         private http: HttpClient
     ) {
-        this.groupUrl = API_URL + '/api/v1/group'
+        this.groupUrl = environment.API_URL + '/api/v1/group'
         this.options = { withCredentials: true }
     }
 
@@ -167,7 +169,7 @@ export class GroupService {
         let options = { headers: headers }
 
         return this.http.delete(reqUrl, this.options)
-            .catch(err =>
+            .pipe(catchError(err =>
                 this.http.post(
                     // Backup POST call for DELETE failures over Proxies
                     reqUrl,
@@ -177,7 +179,7 @@ export class GroupService {
                       withCredentials: true
                     }
                 )
-            )
+            ))
     }
 
     /**
@@ -205,7 +207,7 @@ export class GroupService {
             putGroup,
             this.options
         )
-        .catch(err =>
+        .pipe(catchError(err =>
             this.http.post(
                 // Backup POST call for PUT failures over Proxies
                 reqUrl,
@@ -215,7 +217,7 @@ export class GroupService {
                   withCredentials: true
                 }
             )
-        )
+        ))
     }
 
     /**
@@ -256,7 +258,7 @@ export class GroupService {
             body,
             this.options
         )
-        .catch(err =>
+        .pipe(catchError(err =>
             this.http.post(
                 // Backup POST call for PUT failures over Proxies
                 reqUrl,
@@ -266,7 +268,7 @@ export class GroupService {
                   withCredentials: true
                 }
             )
-        )
+        ))
     }
 
     /**

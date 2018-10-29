@@ -2,20 +2,16 @@
 // rc2 workaround
 import { enableDebugTools, disableDebugTools } from '@angular/platform-browser';
 import { ApplicationRef, enableProdMode, ErrorHandler } from '@angular/core';
-
-
 // Error tracking utility for sentry.io
-import * as Raven from 'raven-js';
-const { version: appVersion } = require('../../package.json');
+import * as Raven from 'raven-js'
 
-Raven.config('https://9ef1f98534914bf6826e202370d1f627@sentry.io/209953', {
-  release: appVersion
-}).install();
-export class RavenErrorHandler implements ErrorHandler {
-  handleError(err: any): void {
-    Raven.captureException(err);
-  }
-}
+// Project Dependencies
+import { version } from '../../package.json'
+
+
+// Env vars
+import { environment } from 'environments/environment'
+
 
 // Environment Providers
 let PROVIDERS: any[] = [
@@ -26,10 +22,20 @@ let PROVIDERS: any[] = [
 // https://github.com/angular/angular/blob/86405345b781a9dc2438c0fbe3e9409245647019/TOOLS_JS.md
 let _decorateModuleRef = function identity<T>(value: T): T { return value; };
 
-if ('production' === ENV) {
+if (environment.production) {
   // Production
   disableDebugTools();
   enableProdMode();
+
+  // Sentry Raven reporter
+  Raven.config('https://9ef1f98534914bf6826e202370d1f627@sentry.io/209953', {
+    release: version
+  }).install();
+  class RavenErrorHandler implements ErrorHandler {
+    handleError(err: any): void {
+      Raven.captureException(err);
+    }
+  }
 
   PROVIDERS = [
     ...PROVIDERS,

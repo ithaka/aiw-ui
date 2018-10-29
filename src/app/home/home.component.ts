@@ -1,10 +1,11 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Router } from '@angular/router';
-import { Subscription } from 'rxjs/Subscription';
-import { Ng2DeviceService } from 'ng2-device-detector';
+import { Component, OnInit, OnDestroy } from '@angular/core'
+import { Router } from '@angular/router'
+import { Subscription } from 'rxjs'
+import { map } from 'rxjs/operators'
+import { DeviceDetectorModule, DeviceDetectorService } from 'ngx-device-detector'
 
-import { AssetService, AuthService, ScriptService } from '../shared';
-import { AppConfig } from '../app.service';
+import { AssetService, AuthService, ScriptService } from '../shared'
+import { AppConfig } from '../app.service'
 import { Featured } from './featured'
 
 declare var initPath: string
@@ -20,10 +21,6 @@ declare var initPath: string
   templateUrl: './home.component.pug'
 })
 export class Home implements OnInit, OnDestroy {
-  private subscriptions: Subscription[] = []
-
-  private artStorEmailLink: string = ''
-  private userGeoIP: any = {}
 
   // Set our default values
   localState = { value: '' }
@@ -32,16 +29,20 @@ export class Home implements OnInit, OnDestroy {
   institution: any = {}
   errors = {}
   loaders = {}
+
+  public showBlog: boolean = false
+  public showHomePromo: boolean = false
+  public siteID: string = ''
+  private subscriptions: Subscription[] = []
+
+  private artStorEmailLink: string = ''
+  private userGeoIP: any = {}
   private user: any
   private blogPosts: any[] = []
   private blogLoading: boolean = true
-
-  private showBlog: boolean = false
   private showPrivateCollections: boolean = false
   private browseSec: any = {}
   private showHomeSSC: boolean = false
-  private showHomePromo: boolean = false
-  private siteID: string = ''
 
   // Default IG 'Browse By:' Option controlled via the WLV file
   private defaultGrpBrwseBy: string = 'institution'
@@ -51,14 +52,16 @@ export class Home implements OnInit, OnDestroy {
     public _appConfig: AppConfig,
     private _assets: AssetService,
     private _router: Router,
-    private _auth: AuthService,
-    private deviceService: Ng2DeviceService,
+    public _auth: AuthService,
+    private deviceService: DeviceDetectorService,
     private _script: ScriptService
   ) {
     // this makes the window always render scrolled to the top
-    this._router.events.subscribe(() => {
-      window.scrollTo(0, 0);
-    });
+    this._router.events.pipe(
+      map(() => {
+        window.scrollTo(0, 0);
+      }
+    )).subscribe()
 
     this.showBlog = this._appConfig.config.showHomeBlog
     this.showPrivateCollections = this._appConfig.config.browseOptions.myCol
@@ -83,12 +86,13 @@ export class Home implements OnInit, OnDestroy {
 
     this.user = this._auth.getUser();
 
-    this.subscriptions
-      .push(
-        this._auth.getInstitution().subscribe((institutionObj) => {
-          this.institution = institutionObj;
-        })
-      )
+    this.subscriptions.push(
+      this._auth.getInstitution().pipe(
+        map(institutionObj => {
+          this.institution = institutionObj
+        }
+      )).subscribe()
+    )
 
     this.loaders['collections'] = true;
     this.loaders['instCollections'] = true;
@@ -98,39 +102,37 @@ export class Home implements OnInit, OnDestroy {
      * and fetch collections list only after we have the user object returned
      */
     this.subscriptions.push(
-      this._auth.currentUser.subscribe(
-        (userObj) => {
-          if (userObj.institutionId && (this.instCollections.length === 0)){
-            this.subscriptions
-              .push(
-                this._assets.getCollectionsList()
-                  .subscribe(
-                    data => {
-                      // Filter SSC content
-                      this.collections = data['Collections'].filter((collection) => {
-                        return collection.collectionType == 5
-                      })
-                      this.loaders['collections'] = false;
-                      // Filter institutional content
-                      this.instCollections = data['Collections'].filter((collection) => {
-                        return collection.collectionType == 2 || collection.collectionType == 4
-                      })
-                      this.loaders['instCollections'] = false;
-                    },
-                    err => {
-                      if (err && err.status != 401 && err.status != 403) {
-                        console.error('Failed to load collection list', err)
-                      }
-                    }
-                  )
-              )
+      this._auth.currentUser.pipe(
+        map(userObj => {
+          if (userObj.institutionId && (this.instCollections.length === 0)) {
+
+            this.subscriptions.push(this._assets.getCollectionsList().pipe(
+                map(data => {
+                  // Filter SSC content
+                  this.collections = data['Collections'].filter((collection) => {
+                    return collection.collectionType == 5
+                  })
+                  this.loaders['collections'] = false;
+                  // Filter institutional content
+                  this.instCollections = data['Collections'].filter((collection) => {
+                    return collection.collectionType == 2 || collection.collectionType == 4
+                  })
+                  this.loaders['instCollections'] = false;
+                },
+                err => {
+                  if (err && err.status != 401 && err.status != 403) {
+                    console.error('Failed to load collection list', err)
+                  }
+                }
+              )).subscribe()
+            ) // end push
           }
         },
         err => {
           console.error('Failed to load user object', err)
         }
-      )
-    );
+      )).subscribe()
+    ) // end push
 
     this._assets.getBlogEntries()
       .then((data) => {
@@ -168,7 +170,7 @@ export class Home implements OnInit, OnDestroy {
         testAd.remove();
 
         // Fetch device info
-        let deviceInfo = this.deviceService.getDeviceInfo();
+        let deviceInfo = this.deviceService
 
         // Construct content Artstor email
         let deviceInfoHTML = 'Session Info \n ';

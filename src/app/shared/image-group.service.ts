@@ -1,10 +1,11 @@
-import { Injectable, EventEmitter } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Router } from '@angular/router';
-import 'rxjs/add/operator/toPromise';
-import { Observable, BehaviorSubject } from 'rxjs/Rx';
+import { Injectable, EventEmitter } from '@angular/core'
+import { HttpClient, HttpHeaders } from '@angular/common/http'
+import { Router } from '@angular/router'
 
-import { AuthService, ImageGroupDescription } from './../shared';
+import { Observable, BehaviorSubject } from 'rxjs'
+
+import { AuthService } from './../shared/auth.service'
+import { ImageGroupDescription } from './../shared'
 
 /**
  *

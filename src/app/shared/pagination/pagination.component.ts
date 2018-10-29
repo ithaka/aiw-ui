@@ -26,7 +26,7 @@ export class PaginationComponent implements OnInit {
    * @param event
    */
 
-  private pageNumberKeyPress(event): boolean{
+  public pageNumberKeyPress(event): boolean{
     this.pageValueOnKeyPress = this.pageObj.page;
     return true;
   }
@@ -36,7 +36,7 @@ export class PaginationComponent implements OnInit {
    * on keyup of pagination input field - Make sure that the current page is greater than 0 and is not greater than total pages
    * @param event
    */
-  private pageNumberKeyUp(event): boolean{
+  public pageNumberKeyUp(event): boolean{
     if (this.pageObj.page){
       if ( (this.pageObj.page < 1) || (this.pageObj.page > this.pageObj.totalPages) ){
         this.pageObj.page = this.pageValueOnKeyPress;

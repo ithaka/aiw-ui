@@ -1,11 +1,11 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
-import { Subscription }   from 'rxjs/Subscription';
-import 'rxjs/add/operator/toPromise';
+import { Component, OnInit, OnDestroy } from '@angular/core'
+import { Router, ActivatedRoute } from '@angular/router'
+import { Subscription }   from 'rxjs'
+import { map, take } from 'rxjs/operators'
 
-import { AuthService } from './../shared/auth.service';
-import { AssetService } from './../shared/assets.service';
-import { MetadataService } from '../shared';
+import { AuthService } from './../shared/auth.service'
+import { AssetService } from './../shared/assets.service'
+import { MetadataService } from '../shared'
 
 @Component({
   selector: 'ang-associated-page',
@@ -15,14 +15,14 @@ import { MetadataService } from '../shared';
 })
 
 export class AssociatedPage implements OnInit, OnDestroy {
+  // gets assigned with the asset's title
+  public assetTitle: string;
   // array of all subscriptions, which is destroyed OnDestroy
   private subscriptions: Subscription[] = [];
   // the object id for which to retrieve related assets (retrieved from matrix param)
   private objectId: string;
   // the colection which the associated asset comes from
   private colId: string;
-  // gets assigned with the asset's title
-  private assetTitle: string;
 
   constructor(
       private _router: Router,
@@ -37,7 +37,8 @@ export class AssociatedPage implements OnInit, OnDestroy {
    */
   ngOnInit() {
     this.subscriptions.push(
-      this.route.params.subscribe((routeParams) => {
+      this.route.params.pipe(
+        map(routeParams => {
         this.objectId = routeParams['objectId'];
         let params = Object.assign({}, routeParams);
         // If a page number isn't set, reset to page 1!
@@ -46,17 +47,17 @@ export class AssociatedPage implements OnInit, OnDestroy {
         }
         if (this.objectId) {
           this._assets.queryAll(params);
-          this._metadata.getMetadata(this.objectId)
-            .take(1)
-            .subscribe((res) => {
+          this._metadata.getMetadata(this.objectId).pipe(
+            take(1),
+            map(res => {
               if (res.metadata && res.metadata.length > 0 && res.metadata[0].title) {
                 this.assetTitle = res.metadata[0].title
               }
             }, (err) => {
               console.error(err)
-            })
+            })).subscribe()
         }
-      })
+      })).subscribe()
     );
   } // OnInit
 

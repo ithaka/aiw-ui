@@ -1,6 +1,7 @@
 import { Component, OnInit, EventEmitter } from '@angular/core'
 import { Router, ActivatedRoute, Params, NavigationEnd } from '@angular/router'
-import { Subscription } from 'rxjs/Subscription'
+import { Subscription } from 'rxjs'
+import { map, take, filter } from 'rxjs/operators'
 import { Angulartics2 } from 'angulartics2'
 
 import { AssetService, AuthService, GroupService } from './../../shared'
@@ -16,20 +17,29 @@ import { TourStep } from '../../shared/tour/tour.service'
   styleUrls: ['./../browse-page.component.scss', './groups.component.scss']
 })
 export class BrowseGroupsComponent implements OnInit {
-  private showArtstorCurated: boolean = true
-  private subscriptions: Subscription[] = []
 
-  private userTypeId: any
-  private currentBrowseRes: any = {}
-  private tags: Tag[] = []
-  private groups: any[] = []
-  private searchTerm: string = ''
-  private loading: boolean = true
-  private showAccessDeniedModal: boolean = false
-  private isSearch: boolean = false
-  private numResultMsg: string = ''
+  // find which of the filters is selected
+  public get selectedFilter(): GroupFilter {
+    let filter: GroupFilter = this.groupFilterArray.find((filter) => {
+      return filter.selected
+    })
 
-  private pagination: {
+    if (!filter) {
+      filter = this.groupFilterArray.find((filter) => {
+        return filter.level == 'institution'
+      })
+    }
+    filter.selected = true
+    return filter
+  }
+  public tags: Tag[] = []
+  public searchTerm: string = ''
+  public loading: boolean = true
+  public showAccessDeniedModal: boolean = false
+  public isSearch: boolean = false
+  public numResultMsg: string = ''
+
+  public pagination: {
     totalPages: number,
     size: number,
     page: number
@@ -39,20 +49,17 @@ export class BrowseGroupsComponent implements OnInit {
     page: 1
   }
 
-  private updateSearchTerm: EventEmitter<string> = new EventEmitter()
+  public updateSearchTerm: EventEmitter<string> = new EventEmitter()
 
-  private tagFilters = []
-  private appliedTags: string[] = []
+  public groupFilterArray: GroupFilter[] = []
+  public errorObj: any = {}
 
-  private groupFilterArray: GroupFilter[] = []
-  private errorObj: any = {}
-
-  private activeSort = {
+  public activeSort = {
     label : 'date',
     name : 'Recently Modified'
   }
 
-  private steps: TourStep[] = [
+  public steps: TourStep[] = [
     {
       step: 1,
       element: ['.driver-find-cardview'],
@@ -84,12 +91,21 @@ export class BrowseGroupsComponent implements OnInit {
         }
     }
   ]
+  private showArtstorCurated: boolean = true
+  private subscriptions: Subscription[] = []
+
+  private userTypeId: any
+  private currentBrowseRes: any = {}
+  private groups: any[] = []
+
+  private tagFilters = []
+  private appliedTags: string[] = []
 
   constructor(
     _appConfig: AppConfig,
     private _router: Router,
     private _groups: GroupService,
-    private _tagFilters: TagFiltersService,
+    public _tagFilters: TagFiltersService,
     private _auth: AuthService,
     private _title: TitleService,
     private _ga: Angulartics2,
@@ -165,22 +181,7 @@ export class BrowseGroupsComponent implements OnInit {
     this.subscriptions.forEach((sub) => { sub.unsubscribe() })
   }
 
-  // find which of the filters is selected
-  private get selectedFilter(): GroupFilter {
-    let filter: GroupFilter = this.groupFilterArray.find((filter) => {
-      return filter.selected
-    })
-
-    if (!filter) {
-      filter = this.groupFilterArray.find((filter) => {
-        return filter.level == 'institution'
-      })
-    }
-    filter.selected = true
-    return filter
-  }
-
-  private clearGrpSearch(): void {
+  public clearGrpSearch(): void {
     let queryParams = Object.assign({}, this.route.snapshot.queryParams)
     if (queryParams['term']){
       delete queryParams['term']
@@ -188,10 +189,53 @@ export class BrowseGroupsComponent implements OnInit {
     this.addQueryParams(queryParams, true) // Load group search results without (after clearing) search term
   }
 
+  public changeSortOpt(label) {
+    if ( this.activeSort.label != label){
+      this._ga.eventTrack.next({ action: 'sortGroup', properties: { category: this._auth.getGACategory(), label: 'cardviewSort' }});
+      this.activeSort.label = label;
+      this.activeSort.name = name;
+
+      this.goToPage(1);
+      this.addQueryParams({ sort: label, page: 1 })
+    }
+  }
+
+  /**
+   * Gets the image groups for a new page - applies all currently applied filters, just updates the page number
+   * @param newPageNum The page number you wish to navigate to
+   */
+  public goToPage(newPageNum: number) {
+    this.addQueryParams({ page: newPageNum })
+  }
+
+  /**
+   * Allows direct modification of the url's query parameters and creates a navigation event
+   * @param params the parameters to add to the url (if duplicate parameters already in url, this will overwrite them)
+   * @param reset allows resetting of queryParams to empty object plus whatever params you pass, instead of keeping old params
+   */
+  public addQueryParams(params: { [key: string]: any }, reset?: boolean, searchWithTerm?: boolean, currentParams?: any) {
+    let baseParams
+    if (reset) {
+      baseParams = {}
+    } else if (currentParams) {
+      baseParams = Object.assign({}, currentParams)
+    } else {
+      baseParams = Object.assign({}, this.route.snapshot.queryParams)
+    }
+    if (searchWithTerm && baseParams['id']) {
+      delete baseParams['tags']
+      delete baseParams['id']
+    }
+    let queryParams = Object.assign(baseParams, params)
+
+    this._router.navigate(['/browse', 'groups'], { queryParams: queryParams })
+  }
+
   /** Every time the url updates, we process the new tags and reload image groups if the tags query param changes */
   private createNavigationSubscription(): Subscription {
-    return this._router.events.filter(event => event instanceof NavigationEnd)
-    .subscribe(event => {
+    return this._router.events.pipe(
+    filter(event => event instanceof NavigationEnd),
+    map(event => {
       let query = this.route.snapshot.queryParams
       if (!query) { console.error('no query!') }
       // let params = this.route.snapshot.params
@@ -275,7 +319,7 @@ export class BrowseGroupsComponent implements OnInit {
       }
 
       this.loadIGs(groupQuery)
-    })
+    })).subscribe()
   }
 
   /**
@@ -319,17 +363,6 @@ export class BrowseGroupsComponent implements OnInit {
       return selectedFilter.level
     } else {
       return 'all'
-    }
-  }
-
-  private changeSortOpt(label) {
-    if ( this.activeSort.label != label){
-      this._ga.eventTrack.next({ action: 'sortGroup', properties: { category: this._auth.getGACategory(), label: 'cardviewSort' }});
-      this.activeSort.label = label;
-      this.activeSort.name = name;
-
-      this.goToPage(1);
-      this.addQueryParams({ sort: label, page: 1 })
     }
   }
 
@@ -385,10 +418,9 @@ export class BrowseGroupsComponent implements OnInit {
       this.cleanGroupSearchTerm(groupQuery.term),
       groupQuery.id,
       groupQuery.sort
-    )
-    .take(1)
-    .subscribe(
-      (data)  => {
+    ).pipe(
+    take(1),
+      map(data  => {
         // Set the group level to show in the number of result message
         let groupLabel: string = ''
         switch (browseLevel) {
@@ -458,15 +490,7 @@ export class BrowseGroupsComponent implements OnInit {
           this.errorObj[browseLevel] = 'Sorry, we were unable to load these Image Groups'
           this.loading = false
         }
-      )
-  }
-
-  /**
-   * Gets the image groups for a new page - applies all currently applied filters, just updates the page number
-   * @param newPageNum The page number you wish to navigate to
-   */
-  private goToPage(newPageNum: number) {
-    this.addQueryParams({ page: newPageNum })
+      )).subscribe()
   }
 
   /**
@@ -495,29 +519,6 @@ export class BrowseGroupsComponent implements OnInit {
     }
 
     return search
-  }
-
-  /**
-   * Allows direct modification of the url's query parameters and creates a navigation event
-   * @param params the parameters to add to the url (if duplicate parameters already in url, this will overwrite them)
-   * @param reset allows resetting of queryParams to empty object plus whatever params you pass, instead of keeping old params
-   */
-  private addQueryParams(params: { [key: string]: any }, reset?: boolean, searchWithTerm?: boolean, currentParams?: any) {
-    let baseParams
-    if (reset) {
-      baseParams = {}
-    } else if (currentParams) {
-      baseParams = Object.assign({}, currentParams)
-    } else {
-      baseParams = Object.assign({}, this.route.snapshot.queryParams)
-    }
-    if (searchWithTerm && baseParams['id']) {
-      delete baseParams['tags']
-      delete baseParams['id']
-    }
-    let queryParams = Object.assign(baseParams, params)
-
-    this._router.navigate(['/browse', 'groups'], { queryParams: queryParams })
   }
 
   /**

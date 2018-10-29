@@ -10,7 +10,7 @@ import { FeaturedCollection } from './featured-collection.ts';
 })
 export class FeaturedComponent implements OnInit {
 
-  private siteId: string = ""
+  public siteId: string = ""
   private conf = ""
   private user: any
 
@@ -19,13 +19,13 @@ export class FeaturedComponent implements OnInit {
   private base: string
   private headings: string
 
-  private featured: FeaturedCollection[] = [] // Array of collection objects
+  public featured: FeaturedCollection[] = [] // Array of collection objects
 
   // Array index for which collection is the 'primary image'
-  private primaryFeaturedIndex: number = 0
+  public primaryFeaturedIndex: number = 0
   private skipAutoSlide: boolean = false
 
-  constructor(public _appConfig: AppConfig, private _auth: AuthService) {
+  constructor(public _appConfig: AppConfig, public _auth: AuthService) {
     this.conf = this._appConfig.config.featuredCollection // 'HOME.FEATURED' in en.json
   }
 

@@ -130,13 +130,13 @@ select.form-control {
     }
 }
 
-rl-tag-input, rl-tag-input-item, .ng2-tag-input-field, .rl-autocomplete-item {
+ngx-tag-input, ngx-tag-input-item, .ng2-tag-input-field, .rl-autocomplete-item {
     font-size: 12px !important;
     line-height: 36px !important;
-    font-family: Graphik, Futura, Arial !important;
+    font-family: Verdana, Geneva, Tahoma, sans-serif !important;
 }
 
-rl-tag-input-item {
+ngx-tag-input-item {
     color: #8300e0 !important;
     cursor: pointer;
     transition: color 0s linear;
@@ -179,11 +179,11 @@ rl-tag-input-item {
     }
 }
 
-.rl-tag-input-autocomplete-container {
+.ngx-tag-input-autocomplete-container {
     display: block !important;
 }
 
-rl-tag-input-autocomplete {
+ngx-tag-input-autocomplete {
     max-height: 300px;
     overflow-y: auto;
     width: auto;
@@ -217,7 +217,7 @@ rl-tag-input-autocomplete {
     }
 }
 
-rl-tag-input {
+ngx-tag-input {
     line-height: 40px;
     background: #fff;
     padding: 6px !important;
@@ -225,14 +225,14 @@ rl-tag-input {
     box-shadow: none !important;
 }
 
-rl-tag-input > form > input {
+ngx-tag-input > form > input {
     border-radius: 5px;
     height: 34px;
     width: 100px !important;
     text-align: center;
 }
 
-rl-tag-input-item {
+ngx-tag-input-item {
     border-radius: 5px !important;
     height: 34px !important;
 }

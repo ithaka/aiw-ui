@@ -1,10 +1,11 @@
-import { Component, OnInit } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
-import { formGroupNameProvider } from '@angular/forms/src/directives/reactive_directives/form_group_name';
-import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
-import { Angulartics2 } from 'angulartics2';
+import { Component, OnInit } from '@angular/core'
+import { Router, ActivatedRoute } from '@angular/router'
+import { formGroupNameProvider } from '@angular/forms/src/directives/reactive_directives/form_group_name'
+import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms'
+import { Angulartics2 } from 'angulartics2'
+import { map, take } from 'rxjs/operators'
 
-import { AuthService } from './../shared';
+import { AuthService } from './../shared'
 import { USER_ROLES, USER_DEPTS, UserRolesAndDepts } from './user-roles'
 
 @Component({
@@ -14,16 +15,16 @@ import { USER_ROLES, USER_DEPTS, UserRolesAndDepts } from './user-roles'
 })
 export class RegisterComponent implements OnInit {
 
-  private registerForm: FormGroup
-  private submitted: boolean = false
-  private isLoading: boolean = false
+  public registerForm: FormGroup
+  public submitted: boolean = false
+  public isLoading: boolean = false
   // Indicates user is registering for Shibboleth
-  private isShibbFlow: boolean = false
+  public isShibbFlow: boolean = false
 
-  private userDepts: UserRolesAndDepts[] = []
-  private userRoles: UserRolesAndDepts[] = []
+  public userDepts: UserRolesAndDepts[] = []
+  public userRoles: UserRolesAndDepts[] = []
 
-  private serviceErrors: {
+  public serviceErrors: {
     duplicate?: boolean,
     hasJstor?: boolean,
     server?: boolean,
@@ -31,9 +32,9 @@ export class RegisterComponent implements OnInit {
     shibbolethInst?: boolean
   } = {};
 
-  private showJstorModal: boolean = false
+  public showJstorModal: boolean = false
 
-  private shibParameters = {
+  public shibParameters = {
     email: null,
     samlTokenId: null
   }
@@ -84,33 +85,8 @@ export class RegisterComponent implements OnInit {
     }
   } // OnInit
 
-  // https://angular.io/docs/ts/latest/api/forms/index/FormGroup-class.html
-  /** Validates that the passwords are equal and assigns error if not
-   * @returns error to FormGroup called 'mismatch' if the passwords are not equal
-   */
-  private passwordsEqual(group: FormGroup): any {
-    return group.get('password').value === group.get('passwordConfirm').value
-      ? null : { passwordMismatch: true };
-  }
-
-  /** Validates that the emails are equal and assigns error if not
-   * @returns error to FormGroup called 'mismatch' if the emails are not equal
-   */
-  private emailsEqual(group: FormGroup): any {
-    return group.get('email').value === group.get('emailConfirm').value
-      ? null : { emailMismatch: true };
-  }
-
-  /** Validates email against the same regex used on the server
-   * @returns error which should be assigned to the email input
-   */
-  private emailValidator(control: FormControl): any {
-    let emailRe: RegExp = /^\w+([\+\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-    return emailRe.test(control.value) ? null : { 'emailInvalid': true };
-  }
-
   /** Gets called when the registration form is submitted */
-  private registerSubmit(formValue: any) {
+  public registerSubmit(formValue: any) {
     let registerCall: Function = (value) => { return this._auth.registerUser(value) }
     this.serviceErrors = {};
     this.submitted = true;
@@ -135,26 +111,27 @@ export class RegisterComponent implements OnInit {
       registerCall = (value) => { return this._auth.registerSamlUser(value) }
     }
 
-    registerCall(userInfo)
-      .take(1)
-      .subscribe((data) => {
+    registerCall(userInfo).pipe(
+      take(1),
+      map(data => {
         this.isLoading = false;
-        if (data.user) {
-          let user: any = Object.assign({}, data.user);
+        if (data['user']) {
+          let user: any = Object.assign({}, data['user']);
           // A user that just registered is obviously logged in as a user
           user.isLoggedIn = true;
-          this._auth.saveUser(data.user);
+          this._auth.saveUser(data['user']);
           this.angulartics.eventTrack.next({ action: 'remoteLogin', properties: { category: this._auth.getGACategory(), label: 'success' }});
           this.loadForUser(data);
         } else {
-          if (data.statusMessage.includes('JSTOR account exists') && data.statusCode === 2) {
+          if (data['statusMessage'].includes('JSTOR account exists') && data['statusCode'] === 2) {
             // Jstor account exists also returns a status code of 2
             this.serviceErrors.hasJstor = true
-          } else if (data.statusMessage === 'User already exists.' && data.statusCode === 1) {
+          } else if (data['statusMessage'] === 'User already exists.' && data['statusCode'] === 1) {
             this.serviceErrors.duplicate = true
           }
         }
-      }, (res) => {
+      },
+      (res) => {
         console.error(res);
 
         this.isLoading = false;
@@ -165,7 +142,7 @@ export class RegisterComponent implements OnInit {
         if (res.error && res.error.code) {
           this.serviceErrors.shibboleth = res.error.code
         }
-      });
+      })).subscribe()
 
     // if the call is unsuccessful, you will get a 200 w/o a user and with a field called 'statusMessage'
   }
@@ -193,12 +170,37 @@ export class RegisterComponent implements OnInit {
   /**
    * Navigates to correct page for login depending on whether or not shiboleth params exist
    */
-  private navigateToLogin(): void {
+  public navigateToLogin(): void {
     if (this.shibParameters) {
       this._router.navigate(['/link', this.shibParameters])
     } else {
       this._router.navigate(['/login'])
     }
+  }
+
+  // https://angular.io/docs/ts/latest/api/forms/index/FormGroup-class.html
+  /** Validates that the passwords are equal and assigns error if not
+   * @returns error to FormGroup called 'mismatch' if the passwords are not equal
+   */
+  private passwordsEqual(group: FormGroup): any {
+    return group.get('password').value === group.get('passwordConfirm').value
+      ? null : { passwordMismatch: true };
+  }
+
+  /** Validates that the emails are equal and assigns error if not
+   * @returns error to FormGroup called 'mismatch' if the emails are not equal
+   */
+  private emailsEqual(group: FormGroup): any {
+    return group.get('email').value === group.get('emailConfirm').value
+      ? null : { emailMismatch: true };
+  }
+
+  /** Validates email against the same regex used on the server
+   * @returns error which should be assigned to the email input
+   */
+  private emailValidator(control: FormControl): any {
+    let emailRe: RegExp = /^\w+([\+\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+    return emailRe.test(control.value) ? null : { 'emailInvalid': true };
   }
 
   /**

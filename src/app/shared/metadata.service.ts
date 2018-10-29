@@ -9,6 +9,7 @@ import { Observable } from 'rxjs'
 // Project Dependencies
 import { MetadataRes } from './datatypes/asset.interface'
 import { FlagService } from './flag.service'
+import { environment } from 'environments/environment';
 
 @Injectable()
 export class MetadataService {
@@ -32,10 +33,10 @@ export class MetadataService {
      */
     public getMetadata(assetId: string, groupId?: string, legacyOverride?: boolean): Observable<MetadataRes> {
         let legacyFlag = typeof legacyOverride !== 'undefined' ? legacyOverride : !this._flags.solrMetadata
-        let url = API_URL + '/api/v1/metadata?object_ids=' + assetId + "&legacy=" + legacyFlag
+        let url = environment.API_URL + '/api/v1/metadata?object_ids=' + assetId + "&legacy=" + legacyFlag
         if (groupId){
             // Groups service modifies certain access rights for shared assets
-            url = API_URL + '/api/v1/group/' + groupId + '/metadata?object_ids=' + assetId
+            url = environment.API_URL + '/api/v1/group/' + groupId + '/metadata?object_ids=' + assetId
         }
         return this.http.get<MetadataRes>(url,  this.defaultOptions)
     }

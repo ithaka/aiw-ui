@@ -1,4 +1,4 @@
-import { BehaviorSubject, Observable } from 'rxjs/Rx'
+import { BehaviorSubject, Observable } from 'rxjs'
 import { SearchQueryUtil } from './search-query';
 
 describe('SearchQueryUtil', () => {

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core'
 import { Location } from '@angular/common'
-import { Locker } from 'angular2-locker'
+import { Locker, LockerConfig, DRIVERS } from 'angular-safeguard'
 import { HttpClient, HttpHeaders } from '@angular/common/http'
 import {
   CanActivate,
@@ -8,7 +8,8 @@ import {
   ActivatedRouteSnapshot,
   RouterStateSnapshot
 } from '@angular/router'
-import { Observable, BehaviorSubject, Subject } from 'rxjs/Rx'
+import { Observable, BehaviorSubject, Subject, from } from 'rxjs'
+import { map, take, catchError } from 'rxjs/operators'
 
 // Project dependencies
 import { AppConfig } from '../app.service'
@@ -16,7 +17,9 @@ import { AppConfig } from '../app.service'
 // For session timeout management
 import { IdleWatcherUtil } from './idle-watcher'
 import {Idle, DEFAULT_INTERRUPTSOURCES} from '@ng-idle/core'
-import { FlagService } from '.'
+import { FlagService } from './flag.service'
+import { error } from '@angular/compiler/src/util';
+import { LockerService } from 'app/_services';
 
 /**
  * Controls authorization through IP address and locally stored user object
@@ -24,8 +27,10 @@ import { FlagService } from '.'
 
 @Injectable()
 export class AuthService implements CanActivate {
-  private _storage: Locker;
-  private _session: Locker;
+  public currentUser: Observable<any>
+  // Track whether or not user object has been refreshed since app opened
+  public userSessionFresh: boolean = false
+  public showUserInactiveModal: Subject<boolean> = new Subject(); // Set up subject observable for showing inactive user modal
   private ENV: string;
   private baseUrl;
   private imageFpxUrl;
@@ -44,12 +49,8 @@ export class AuthService implements CanActivate {
   private currentInstitutionObj: Observable<any> = this.institutionObjSource.asObservable();
 
   private userSource: BehaviorSubject<any> = new BehaviorSubject({});
-  public currentUser: Observable<any> = this.userSource.asObservable();
-  // Track whether or not user object has been refreshed since app opened
-  public userSessionFresh: boolean = false
 
   private idleState: string = 'Not started.';
-  public showUserInactiveModal: Subject<boolean> = new Subject(); // Set up subject observable for showing inactive user modal
 
   private isOpenAccess: boolean;
 
@@ -60,23 +61,21 @@ export class AuthService implements CanActivate {
    * - 'no-store' > 'no-cache' in denying caching
    */
   private userInfoHeader: HttpHeaders = new HttpHeaders().set('Cache-Control', 'no-store, no-cache')
-  private genUserInfoUrl(): string {
-    return this.getUrl(true) + '/userinfo?no-cache=' + new Date().valueOf()
-  }
+
+  private refreshUserSessionInProgress: boolean = false
 
   constructor(
     private _router: Router,
     // private _login: LoginService,
-    locker: Locker,
+    private _locker: LockerService,
     private http: HttpClient,
     private location: Location,
     private _app: AppConfig,
     private _flags: FlagService,
     private idle: Idle
   ) {
-    this._storage = locker.useDriver(Locker.DRIVERS.LOCAL)
-    this._router = _router
-
+    // Initialize observables
+    this.currentUser = this.userSource.asObservable()
     // Default to relative or prod endpoints
     this.ENV = 'prod'
     this.hostname = ''
@@ -164,40 +163,46 @@ export class AuthService implements CanActivate {
     idle.setTimeout(IdleWatcherUtil.generateSessionLength()); // Log user out after 90 mins of inactivity
     idle.setInterrupts(DEFAULT_INTERRUPTSOURCES);
 
-    idle.onIdleEnd.subscribe(() => {
-      this.idleState = 'No longer idle.';
-      // We want to ensure a user is refreshed as soon as they return to the tab
-      this.refreshUserSession(true)
-    });
-    idle.onTimeout.subscribe(() => {
-      let user = this.getUser();
-      // console.log(user);
-      if (user && user.isLoggedIn){
-        this.expireSession();
-        this.showUserInactiveModal.next(true);
-        this.idleState = 'Timed out!';
-      }
-      else{
-        this.resetIdleWatcher()
-      }
-    });
-    idle.onIdleStart.subscribe(() => {
-      this.idleState = 'You\'ve gone idle!';
+    idle.onIdleEnd.pipe(
+      map(() => {
+        this.idleState = 'No longer idle.';
+        // We want to ensure a user is refreshed as soon as they return to the tab
+        this.refreshUserSession(true)
+      })).subscribe()
 
-      let currentDateTime = new Date().toUTCString();
-      this._storage.set('userGoneIdleAt', currentDateTime);
-    });
-    idle.onTimeoutWarning.subscribe((countdown) => {
-      this.idleState = 'You will time out in ' + countdown + ' seconds!'
-      // console.log(this.idleState);
-    });
+    idle.onTimeout.pipe(
+      map(() => {
+        let user = this.getUser();
+        // console.log(user);
+        if (user && user.isLoggedIn){
+          this.expireSession();
+          this.showUserInactiveModal.next(true);
+          this.idleState = 'Timed out!';
+        }
+        else{
+          this.resetIdleWatcher()
+        }
+      })).subscribe()
+
+    idle.onIdleStart.pipe(
+      map(() => {
+        this.idleState = 'You\'ve gone idle!';
+        let currentDateTime = new Date().toUTCString();
+        this._locker.set('userGoneIdleAt', currentDateTime);
+      })).subscribe()
+
+    idle.onTimeoutWarning.pipe(
+      map((countdown) => {
+        this.idleState = 'You will time out in ' + countdown + ' seconds!'
+        // console.log(this.idleState);
+      })).subscribe()
 
     // Init idle watcher (this will also run getUserInfo)
     this.resetIdleWatcher()
 
     // Initialize user and institution objects from localstorage
     this.userSource.next(this.getUser())
-    let institution = this._storage.get('institution')
+    let institution = this._locker.get('institution')
     if (institution) { this.institutionObjSource.next(institution) }
 
     /**
@@ -218,31 +223,24 @@ export class AuthService implements CanActivate {
     // When a user comes back, we don't want to wait for the time interval to refresh the session
     this.refreshUserSession(true)
   }
-
-  private refreshUserSessionInProgress: boolean = false
-  public refreshUserSession(triggerSessionExpModal?: boolean): void {
+  public refreshUserSession(triggerSessionExpModal?: boolean) {
     // cancel out if we're currently getting the user session
     if (this.refreshUserSessionInProgress && !triggerSessionExpModal) { return }
 
     // set to true so we don't have multiple /userinfo calls going on at once
     this.refreshUserSessionInProgress = true
-    this.getUserInfo(triggerSessionExpModal).take(1).toPromise()
-      .then(res => {
-        this.refreshUserSessionInProgress = false
-        console.info('Access Token refreshed <3')
-      })
-      .catch(err => {
-        this.refreshUserSessionInProgress = false
-        console.error('Access Token refresh failed </3')
-      })
-  }
-
-  private expireSession(): void {
-    this.logout()
-      .then(() => {
-        // We want the user to see the "Session Expired" modal triggered by this.refreshUserSession() & this.getUserInfo()
-        // Do not route user away
-      })
+    this.getUserInfo(triggerSessionExpModal)
+      .pipe(
+        take(1),
+        map((res) => {
+          this.refreshUserSessionInProgress = false
+          console.info('Access Token refreshed <3')
+        },
+        (err) => {
+          this.refreshUserSessionInProgress = false
+          console.error('Access Token refresh failed </3', err)
+        })
+      ).subscribe()
   }
 
   /**
@@ -286,38 +284,13 @@ export class AuthService implements CanActivate {
       return encodedString.replace(/%20/g, '+');
   }
 
-  /**
-   * Wrapper function for HTTP call to get user institution. Used by nav component
-   * @returns Chainable promise containing collection data
-   */
-  private refreshUserInstitution() {
-    let header = new HttpHeaders().set('Cache-Control', 'no-store, no-cache')
-    let options = { headers: header, withCredentials: true }
-
-    // Returns all of the collections names
-    return this.http
-      .get(this.getUrl() + '/v2/institution?no-cache=' + new Date().valueOf(), options)
-      .toPromise()
-      .then((data) => {
-        this.setInstitution(data)
-        // this.institutionRefreshInProgress = false
-        return data
-      })
-      .catch((err) => {
-        // this.institutionRefreshInProgress = false
-        if (err && err.status != 401 && err.status != 403) {
-          console.error(err)
-        }
-      })
-  }
-
   public getInstitution(): Observable<any> {
     return this.currentInstitutionObj;
   }
 
   public setInstitution(institutionObj: any): void {
     // Save to local storage
-    this._storage.set('institution', institutionObj)
+    this._locker.set('institution', institutionObj)
     // Update Observable
     this.institutionObjValue = institutionObj;
     this.institutionObjSource.next(this.institutionObjValue);
@@ -431,7 +404,7 @@ export class AuthService implements CanActivate {
    */
   public saveUser(user: any) {
     // Preserve user via localstorage
-    this._storage.set('user', user);
+    this._locker.set('user', user);
     // only do these things if the user is ip auth'd or logged in and the user has changed
     let institution = this.institutionObjSource.getValue();
     if (user.status && (!institution.institutionId || user.institutionId != institution.institutionId)) {
@@ -441,38 +414,38 @@ export class AuthService implements CanActivate {
     // Update observable
     this.userSource.next(user)
 
-    // if (user.status && (this._storage.get('user').username != user.username || !institution.institutionid)) {
+    // if (user.status && (this._locker.get('user').username != user.username || !institution.institutionid)) {
   }
 
   /**
    * Gets user object from local storage
    */
   public getUser(): any {
-      return this._storage.get('user') ? this._storage.get('user') : {};
+      return this._locker.get('user') ? this._locker.get('user') : {};
   }
 
   /** Stores an object in local storage for you - your welcome */
   public store(key: string, value: any): void {
       if (key != 'user' && key != 'token') {
-          this._storage.set(key, value);
+          this._locker.set(key, value);
       }
   }
 
   /** Gets an object from local storage */
   public getFromStorage(key: string): any {
-      return this._storage.get(key);
+      return this._locker.get(key);
   }
 
   /** Deletes things (not user or token) from local storage */
   public deleteFromStorage(key: string): void {
       if (key != 'user' && key != 'token') {
-          this._storage.remove(key);
+          this._locker.remove(key);
       }
   }
 
   /** Clears all variables held in local storage */
   public clearStorage(): void {
-    this._storage.clear();
+    this._locker.clear();
   }
 
   /**
@@ -501,8 +474,8 @@ export class AuthService implements CanActivate {
     // If user object doesn't exist, try to get one!
     return new Observable(observer => {
       this.http
-      .get(this.genUserInfoUrl(), options)
-      .map(
+      .get(this.genUserInfoUrl(), options).pipe(
+      map(
         (data)  => {
           let user = this.decorateValidUser(data)
           // Track whether or not user object has been refreshed since app opened
@@ -529,9 +502,9 @@ export class AuthService implements CanActivate {
             }
           }
         }
-      )
-      .take(1)
-      .subscribe(res => {
+      )).pipe(
+      take(1),
+      map(res => {
         // CanActivate is not handling the Observable value properly,
         // ... so we do an extra redirect in here
         if (res === false) {
@@ -541,7 +514,7 @@ export class AuthService implements CanActivate {
       }, err => {
         this._router.navigate(['/login'])
         observer.next(false)
-      })
+      })).subscribe()
     })
   }
 
@@ -553,9 +526,8 @@ export class AuthService implements CanActivate {
     let options = { headers: this.userInfoHeader, withCredentials: true };
 
     return this.http
-      .get(this.genUserInfoUrl(), options)
-      .map(
-        (data)  => {
+      .get(this.genUserInfoUrl(), options).pipe(
+      map((data)  => {
           let user = this.decorateValidUser(data)
           // Track whether or not user object has been refreshed since app opened
           this.userSessionFresh = true
@@ -578,64 +550,17 @@ export class AuthService implements CanActivate {
           }
           return data
         }
-      )
-  }
-
-  /**
-   * Decorates and Validates user from the user response
-   * - Used to verify that we want the user object
-   * - Used to decorate the user object for saving
-   */
-  private decorateValidUser(data: any): any {
-    let currentUser = this.getUser()
-    let newUser = data['user'] ? data['user'] : {}
-    let currentUsername = currentUser.username
-    let loggedInSessionLost = currentUser.isLoggedIn ? (!newUser.username || currentUsername !== newUser.username) : false;
-
-    if (data['status'] === true) {
-      // User is authorized - if you want to check ipAuth then you can tell on the individual route by user.isLoggedIn = false
-      let user = data['user']
-      user.status = data['status']
-      if (data['isRememberMe'] || data['remoteaccess']) {
-        user.isLoggedIn = true
-      }
-
-      // Save ipAuthed flag to user object
-      user.ipAuthed = !user.isLoggedIn && user.status ? true : false
-      // If user downgraded from logged in user to ip auth or other, add flag
-      user.loggedInSessionLost = loggedInSessionLost
-
-      if (this.canUserAccess(user)) {
-        return user
-      } else {
-        return null
-      }
-    } else if (data['status'] === false) {
-      // Return generic user object for unaffiliated users
-      let user = {
-        'status': false,
-        'isLoggedIn': false,
-        'loggedInSessionLost': loggedInSessionLost
-      }
-      return user
-    } else {
-      console.error('Did not receive a valid user object', data)
-      return null
-    }
-  }
-
-  private canUserAccess(user: any): boolean {
-    return user && user.hasOwnProperty('status') && (this._app.config.disableIPAuth === true ? user.isLoggedIn : true)
+      ))
   }
 
   /** Getter for downloadAuthorized parameter of local storage */
   public downloadAuthorized(): boolean {
-    return this._storage.get('downloadAuthorized');
+    return this._locker.get('downloadAuthorized');
   }
 
   /** Setter for downloadAuthorized parameter of local storage */
   public authorizeDownload(): void {
-    this._storage.set('downloadAuthorized', true);
+    this._locker.set('downloadAuthorized', true);
   }
 
     /**
@@ -711,6 +636,89 @@ export class AuthService implements CanActivate {
     }
 
     return category
+  }
+  private genUserInfoUrl(): string {
+    return this.getUrl(true) + '/userinfo?no-cache=' + new Date().valueOf()
+  }
+
+  private expireSession(): void {
+    this.logout()
+      .then(() => {
+        // We want the user to see the "Session Expired" modal triggered by this.refreshUserSession() & this.getUserInfo()
+        // Do not route user away
+      })
+  }
+
+  /**
+   * Wrapper function for HTTP call to get user institution. Used by nav component
+   * @returns Chainable promise containing collection data
+   */
+  private refreshUserInstitution() {
+    let header = new HttpHeaders().set('Cache-Control', 'no-store, no-cache')
+    let options = { headers: header, withCredentials: true }
+
+    // Returns all of the collections names
+    return this.http
+      .get(this.getUrl() + '/v2/institution?no-cache=' + new Date().valueOf(), options)
+      .toPromise()
+      .then((data) => {
+        this.setInstitution(data)
+        // this.institutionRefreshInProgress = false
+        return data
+      })
+      .catch((err) => {
+        // this.institutionRefreshInProgress = false
+        if (err && err.status != 401 && err.status != 403) {
+          console.error(err)
+        }
+      })
+  }
+
+  /**
+   * Decorates and Validates user from the user response
+   * - Used to verify that we want the user object
+   * - Used to decorate the user object for saving
+   */
+  private decorateValidUser(data: any): any {
+    let currentUser = this.getUser()
+    let newUser = data['user'] ? data['user'] : {}
+    let currentUsername = currentUser.username
+    let loggedInSessionLost = currentUser.isLoggedIn ? (!newUser.username || currentUsername !== newUser.username) : false;
+
+    if (data['status'] === true) {
+      // User is authorized - if you want to check ipAuth then you can tell on the individual route by user.isLoggedIn = false
+      let user = data['user']
+      user.status = data['status']
+      if (data['isRememberMe'] || data['remoteaccess']) {
+        user.isLoggedIn = true
+      }
+
+      // Save ipAuthed flag to user object
+      user.ipAuthed = !user.isLoggedIn && user.status ? true : false
+      // If user downgraded from logged in user to ip auth or other, add flag
+      user.loggedInSessionLost = loggedInSessionLost
+
+      if (this.canUserAccess(user)) {
+        return user
+      } else {
+        return null
+      }
+    } else if (data['status'] === false) {
+      // Return generic user object for unaffiliated users
+      let user = {
+        'status': false,
+        'isLoggedIn': false,
+        'loggedInSessionLost': loggedInSessionLost
+      }
+      return user
+    } else {
+      console.error('Did not receive a valid user object', data)
+      return null
+    }
+  }
+
+  private canUserAccess(user: any): boolean {
+    return user && user.hasOwnProperty('status') && (this._app.config.disableIPAuth === true ? user.isLoggedIn : true)
   }
 }
 

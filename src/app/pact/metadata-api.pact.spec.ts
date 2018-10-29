@@ -2,6 +2,7 @@
 import { HttpClientModule } from '@angular/common/http'
 import { TestBed, getTestBed } from '@angular/core/testing'
 import { PactWeb, Matchers } from '@pact-foundation/pact-web'
+import { map } from 'rxjs/operators'
 
 // Project Dependencies
 import { MetadataRes } from '../shared/datatypes'

@@ -8,9 +8,10 @@ import { Injectable } from '@angular/core'
 import {
   AssetFiltersService
 } from '../asset-filters/asset-filters.service'
-import { AuthService } from './'
+import { AuthService } from './auth.service'
 import { AppConfig } from '../app.service'
-import { Observable } from 'rxjs/Observable'
+import { Observable } from 'rxjs'
+import { map } from 'rxjs/operators'
 import { APP_CONST } from '../app.constants'
 @Injectable()
 export class AssetSearchService {
@@ -355,8 +356,8 @@ export class AssetSearchService {
       this._auth.getSearchUrl(),
       query,
       { withCredentials: true }
-    )
-      .map((res) => {
+    ).pipe(
+      map((res) => {
         if (institutionalTypeFilter && res.facets) {
           for (let i = 0; i < res.facets.length; i++) {
             if (res.facets[i].name == 'collectiontypes') {
@@ -405,7 +406,7 @@ export class AssetSearchService {
 
         this.latestSearchRequestId = res.requestId
         return searchResponse
-      })
+      }))
   }
 
   /**
@@ -462,8 +463,8 @@ export class AssetSearchService {
       this._auth.getSearchUrl(),
       assetQuery,
       { withCredentials: true }
-    )
-      .map((res) => {
+    ).pipe(
+      map((res) => {
         // search through results and make sure the id's match
         let desiredAsset: SearchAsset = res.results.find((asset) => {
           return asset.artstorid === assetId
@@ -474,7 +475,7 @@ export class AssetSearchService {
         } else {
           throw new Error('No results found for the requested id')
         }
-      })
+      }))
   }
 
   /**

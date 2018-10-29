@@ -19,6 +19,8 @@ export class ConfirmModal implements OnInit {
   @Input() primary: string = 'Okay';
   @Input() secondary: string;
 
+  public groupDeleted: boolean = false
+
   constructor(
     private _router: Router
   ) { }

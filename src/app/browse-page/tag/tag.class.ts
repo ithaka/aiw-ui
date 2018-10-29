@@ -20,7 +20,7 @@ export class Tag {
 
   // in functions
   /** array of tags that are categorized beneath this tag */
-  private children: Tag[] = [];
+  public children: Tag[] = [];
   /** number of parents that the tag has */
   private levelsDeep: number = 0;
   /** has getters and setters - allows implementation to determine when touched is set */

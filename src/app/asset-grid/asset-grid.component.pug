@@ -76,10 +76,10 @@
         //- Restricted assets warning message
         .alert.alert-warning(*ngIf="restricted_results && restricted_results.length > 0")
           | {{ "BROWSE.WARNINGS.RSTD_IMGS" | translate }}
-          ng-container(*ngIf="ig.owner_id == user.baseProfileId")
+          ng-container(*ngIf="ig.owner_id == user.baseProfileId.toString()")
             div.mt-4 As the <b>Owner</b> of this group, would you like to remove the deleted images?
             a.mt-2.btn.btn-secondary.btn-sm(tabindex="3", (click)="removeFromGroup(restricted_results)") Remove deleted images
-        .alert.alert-warning(*ngIf="!isLoading && (totalAssets == '0') && (!results || results.length < 1) && (searchError.length < 1) && !searchLimitError")
+        .alert.alert-warning(*ngIf="!isLoading && (totalAssets == 0) && (!results || results.length < 1) && (searchError.length < 1) && !searchLimitError")
           b Unable to find any assets
           br
           | A less specific query might be able to find what you are looking for.
@@ -103,10 +103,9 @@
         .alert.alert-warning(*ngIf="!isLoading && (searchError.length < 1) && ((isPartialPage && hasMaxAssetLimit) || searchLimitError)")
           | {{ "BROWSE.WARNINGS.ADDITIONAL_RESULTS" | translate }}
       //- Sortable Thumbails
-      #assetThumbnailsRow.row.no-gutters(*ngIf="reorderMode", dnd-sortable-container, [sortableData]="allResults")
+      #assetThumbnailsRow.row.no-gutters(*ngIf="reorderMode", [sortablejs]="allResults", [sortablejsOptions]="sortableOptions")
         ng-container(*ngFor="let asset of results; let i = index")
-          //- Show thumbnails for only available assets
-          .col-sm-4.col-md-2.col-lg-1.draggable(*ngIf="asset.status === 'available'", dnd-sortable, [dragEnabled]="reorderMode && !isLoading", [sortableIndex]="i", (onDragEnd)="orderChanged = true")
+          .col-sm-4.col-md-2.col-lg-1.draggable(*ngIf="asset.status === 'available'")
             .card.card--asset([ngClass]="{ 'lrgThmb': largeThmbView }")
               ang-thumbnail([thumbnail]="asset", [reorderMode]="reorderMode", [editMode]="editMode", [largeThmbView]="largeThmbView")
         .alert.alert-warning(*ngIf="!isLoading && (searchError.length < 1) && ((isPartialPage && hasMaxAssetLimit) || searchLimitError)")

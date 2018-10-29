@@ -1,7 +1,8 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Router, ActivatedRoute, UrlSegment } from '@angular/router';
-import { Subscription }   from 'rxjs/Subscription';
+import { Component, OnInit, OnDestroy } from '@angular/core'
+import { HttpClient, HttpHeaders } from '@angular/common/http'
+import { Router, ActivatedRoute, UrlSegment } from '@angular/router'
+import { Subscription }   from 'rxjs'
+import { map, take } from 'rxjs/operators'
 
 // Internal Dependencies
 import { AssetService, AuthService, ImageGroupDescription, ImageGroupService } from './../shared';
@@ -13,14 +14,14 @@ import { AssetService, AuthService, ImageGroupDescription, ImageGroupService } f
 })
 
 export class ImageGroupPPPage implements OnInit, OnDestroy {
+  public igName: string;
+  public igDesc: string;
+  public assets: any = [];
 
   private header = new HttpHeaders().set('Content-Type', 'application/json'); // ... Set content type to JSON
   private options = { headers: this.header, withCredentials: true }; // Create a request option
 
   private igId: string;
-  private igName: string;
-  private igDesc: string;
-  private assets: any = [];
 
   private subscriptions: Subscription[] = [];
 
@@ -39,54 +40,51 @@ export class ImageGroupPPPage implements OnInit, OnDestroy {
 
     // Subscribe to ID in params
     this.subscriptions.push(
-      this.route.params.subscribe((routeParams) => {
-        let id = routeParams['igId'];
-        let params = Object.assign({}, routeParams);
-        // If a page number isn't set, reset to page 1!
-        if (!params['page']){
-          params['page'] = 1;
-        }
-        if (id) {
-          this._assets.queryAll(params);
-          this.igId = id;
-        }
-      })
+      this.route.params.pipe(
+        map(routeParams => {
+          let id = routeParams['igId']
+          let params = Object.assign({}, routeParams)
+          // If a page number isn't set, reset to page 1!
+          if (!params['page']){
+            params['page'] = 1
+          }
+          if (id) {
+            this._assets.queryAll(params)
+            this.igId = id
+          }
+        })).subscribe()
     );
 
     this.subscriptions.push(
-      this._assets.allResults.subscribe((results: any) => {
-        console.log(results);
-        if (results.id){
+      this._assets.allResults.pipe(
+        map((results: any) => {
+          console.log(results);
+
+          if (results.id) {
             this.igDesc = results.description;
 
             this._assets.getAllThumbnails(results.items)
-              .then( allThumbnails => {
+              .then(allThumbnails => {
                 this.assets = allThumbnails;
               })
-              .catch( error => {
+              .catch(error => {
                 console.error(error);
-              });
-
-            // this.assets = this.assets.concat(results.thumbnails);
-
-            // for(var i = 0; i < this.assets.length; i++){
-            //     this.assets[i].metaData = this.assets[i].jsonListSt;
-            // }
-
-        }
-      })
-    );
+              })
+          }
+      })).subscribe()
+    )
 
   } // OnInit
 
   // Load Image Group Descrition
-  loadIgDesc(igId: string): void{
-      this._igService.getGroupDescription(igId).take(1)
-            .subscribe((data: ImageGroupDescription) => {
-                if (data){
-                    this.igDesc = data.igNotes;
-                }
-            });
+  loadIgDesc(igId: string): void {
+    this._igService.getGroupDescription(igId).pipe(
+    take(1),
+    map((data: ImageGroupDescription) => {
+      if (data) {
+        this.igDesc = data.igNotes;
+      }
+    })).subscribe()
   }
 
   // Load Image Group Assets

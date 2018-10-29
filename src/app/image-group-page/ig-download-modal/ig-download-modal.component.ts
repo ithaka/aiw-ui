@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter, AfterViewInit } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import { Angulartics2 } from 'angulartics2';
 
 import { AssetService, AuthService, ImageGroup } from './../../shared';
@@ -17,17 +17,17 @@ import { AssetService, AuthService, ImageGroup } from './../../shared';
 export class PptModalComponent implements OnInit, AfterViewInit {
   /** Meant only to trigger display of modal */
   @Output()
-  private closeModal: EventEmitter<any> = new EventEmitter();
+  public closeModal: EventEmitter<any> = new EventEmitter();
   @Input()
-  private ig: ImageGroup;
+  public ig: ImageGroup;
 
-  private isLoading: boolean = false;
-  private zipLoading: boolean = false;
-  private downloadLink: string = '';
-  private zipDownloadLink: string = '';
+  public isLoading: boolean = false;
+  public zipLoading: boolean = false;
+  public downloadLink: string = '';
+  public zipDownloadLink: string = '';
+  public error: boolean = false;
   private downloadTitle: string = 'Image Group';
   private allowedDownloads: number = 0;
-  private error: boolean = false;
 
   private header = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
   private defaultOptions = { withCredentials: true};
@@ -46,9 +46,13 @@ export class PptModalComponent implements OnInit, AfterViewInit {
     this.startModalFocus()
   }
   // Set initial focus on the modal Title h4
-  private startModalFocus() {
+  public startModalFocus() {
     let modalStartFocus = document.getElementById('ig-download-title')
     modalStartFocus.focus()
+  }
+
+  trackDownload(downloadType: string): void {
+    this._angulartics.eventTrack.next({ action: 'downloadGroup' + downloadType, properties: { category: this._auth.getGACategory(), label: this.ig.id }})
   }
 
   private getPPT() {
@@ -139,10 +143,6 @@ export class PptModalComponent implements OnInit, AfterViewInit {
 
       return res
     })
-  }
-
-  trackDownload(downloadType: string): void {
-    this._angulartics.eventTrack.next({ action: 'downloadGroup' + downloadType, properties: { category: this._auth.getGACategory(), label: this.ig.id }})
   }
 
 }
