@@ -33,13 +33,6 @@ export class AddToGroupModal implements OnInit, OnDestroy {
   @Input() private selectedAssets: any[] = []; // this is used in the asset page, where a single asset can be injected directly
   private groups: ImageGroup[] = [];
 
-  /**
-   * Observable for autocomplete list of groups
-   * - We apply additional sorting
-   */
-  private groupListSubject: BehaviorSubject<any[]> = new BehaviorSubject([])
-  private groupListObs: Observable<any[]> = this.groupListSubject.asObservable()
-
   constructor(
     private _assets: AssetService,
     private _group: GroupService,
@@ -71,7 +64,7 @@ export class AddToGroupModal implements OnInit, OnDestroy {
         if (groups) {
           this.groups = groups
           // Data service for the autocomplete component (ng2 completer)
-          this.dataService = this.completerService.local(this.groupListObs, 'name', 'name')
+          this.dataService = this.completerService.local(this.groups, 'name', 'name')
         }
       }, (err) => { console.error(err)
     })).subscribe()
@@ -102,7 +95,8 @@ export class AddToGroupModal implements OnInit, OnDestroy {
     filtered = filtered.sort((a, b) => {
         return a.name.search(termReg) - b.name.search(termReg)
     });
-    this.groupListSubject.next(filtered)
+    // Update completer with sorted values
+    this.dataService = this.completerService.local(filtered, 'name', 'name');
   }
 
   /**

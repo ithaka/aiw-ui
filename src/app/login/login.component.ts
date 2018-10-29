@@ -111,7 +111,7 @@ export class Login implements OnInit, OnDestroy {
               name: 'AUSS/Ithaka'
             });
           }
-          this.dataService = this._completer.local(this.instListObs, 'name', 'name');
+          this.dataService = this._completer.local(this.loginInstitutions, 'name', 'name');
         }
       })
       .catch((error) => {
@@ -157,7 +157,8 @@ export class Login implements OnInit, OnDestroy {
     filtered = filtered.sort((a, b) => {
         return a.name.search(termReg) - b.name.search(termReg)
     });
-    this.instListSubject.next(filtered)
+    // Update completer with sorted values
+    this.dataService = this._completer.local(filtered, 'name', 'name');
 
     // We need to clear any error messages here if there is one
     if (this.instErrorMsg.length)
