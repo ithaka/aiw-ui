@@ -3,7 +3,7 @@
   nav-menu
   .container.main-content
     //- for accessibility so that page has title
-    h1.hidden Artstor Home Page
+    h1.sr-only Artstor Home Page
     
     .row.my-4
       .col-sm-4
@@ -25,7 +25,7 @@
       .col-sm-6(*ngIf="showBlog")
         .card
           .card-header
-            h1([innerHtml]="'HOME.HEADINGS.FRM_BLOG' | translate")
+            h2.h1([innerHtml]="'HOME.HEADINGS.FRM_BLOG' | translate")
           .loading(*ngIf="blogLoading")
           div(*ngIf="!blogLoading")
             a.blog-post(*ngFor="let post of blogPosts | slice:0:3", [href]="post['URL']", target="_blank")
@@ -35,7 +35,7 @@
         //- Institution Shared Shelf Collections
         .card(*ngIf="institution && instCollections.length > 0", [class.col-sm-4]="!showBlog")
           .card-header
-            h1 {{ 'HOME.HEADINGS.INSTITUTION_COLLECTIONS' | translate:{ institutionName: institution.shortName ? institution.shortName : 'Institutional' } }}
+            h2.h1 {{ 'HOME.HEADINGS.INSTITUTION_COLLECTIONS' | translate:{ institutionName: institution.shortName ? institution.shortName : 'Institutional' } }}
           .list--home-collections([class.loading]="loaders['instCollections']")
             .list-group.list-group-flush
               a.list-group-item.list-group-item-action(*ngFor="let collection of instCollections", [routerLink]="[ '/collection', collection.collectionid ]")

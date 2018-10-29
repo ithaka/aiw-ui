@@ -390,7 +390,12 @@ export class AssetSearchService {
           )
           // make the thumbnail urls and add them to the array
           for (let i = 0; i < 5; i++) {
-            cleanedAsset.thumbnailUrls.push(this.makeThumbUrl(cleanedAsset.media.thumbnailSizeOnePath, i))
+            if (cleanedAsset['compound_media']) {
+              let objects = JSON.parse(cleanedAsset['compound_media']).objects
+              cleanedAsset.thumbnailUrls.push(this.makeThumbUrl(objects[0].thumbnailSizeOnePath, i))
+            }
+            else
+              cleanedAsset.thumbnailUrls.push(this.makeThumbUrl(cleanedAsset.media.thumbnailSizeOnePath, i))
           }
 
           return cleanedAsset
@@ -476,8 +481,11 @@ export class AssetSearchService {
   /**
    * Generate Thumbnail URL
    */
-  public makeThumbUrl(imagePath: string, size: number): string {
-    if (imagePath) {
+  public makeThumbUrl(imagePath: string, size: number, isCompound?: boolean): string {
+    if (isCompound) {
+      return this._auth.getThumbUrl(isCompound) + imagePath;
+    }
+    else if (imagePath) {
       if (size) {
         imagePath = imagePath.replace(/(size)[0-4]/g, 'size' + size);
       }
@@ -496,7 +504,6 @@ export class AssetSearchService {
     } else {
       imagePath = '';
     }
-
     // Ceanup
     return this._auth.getThumbUrl() + imagePath;
   }
