@@ -1,8 +1,9 @@
 /*eslint-disable*/
-import {Http, HttpModule, BaseRequestOptions, Response, RequestOptions, XHRBackend, ResponseOptions, RequestMethod} from '@angular/http';
-import {TestBed, inject, getTestBed, async} from '@angular/core/testing';
+import { BaseRequestOptions, Response, RequestOptions, XHRBackend, ResponseOptions, RequestMethod } from '@angular/http';
+import { TestBed, inject, getTestBed, async } from '@angular/core/testing';
 import { PactWeb, Matchers} from '@pact-foundation/pact-web'
-import { HttpClientModule } from '@angular/common/http'
+import { HttpClientModule, HttpClient } from '@angular/common/http'
+import { map } from 'rxjs/operators'
 
 // Project Dependencies
 import { AccountService } from './../shared'

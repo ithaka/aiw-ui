@@ -3,7 +3,7 @@ import {
   TestBed
 } from '@angular/core/testing';
 
-import { Observable, Subject } from 'rxjs/Rx';
+import { Observable, Subject } from 'rxjs';
 
 // Load the implementations that should be tested
 import { App } from './app.component';

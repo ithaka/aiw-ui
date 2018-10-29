@@ -1,13 +1,14 @@
-import { Subscription } from 'rxjs/Rx';
-import { ActivatedRoute, Router } from '@angular/router';
-import { Component, OnInit, Output, EventEmitter, AfterViewInit } from '@angular/core';
-import { Angulartics2 } from 'angulartics2';
+import { Subscription } from 'rxjs'
+import { map, take } from 'rxjs/operators'
+import { ActivatedRoute, Router } from '@angular/router'
+import { Component, OnInit, Output, EventEmitter, AfterViewInit } from '@angular/core'
+import { Angulartics2 } from 'angulartics2'
 
 // Project dependencies
-import { SearchQueryUtil } from './search-query';
-import { AssetFiltersService } from './../../asset-filters/asset-filters.service';
-import { AuthService, AssetService, AssetSearchService } from 'app/shared';
-import { AppConfig } from '../../app.service';
+import { SearchQueryUtil } from './search-query'
+import { AssetFiltersService } from './../../asset-filters/asset-filters.service'
+import { AuthService, AssetService, AssetSearchService } from 'app/shared'
+import { AppConfig } from '../../app.service'
 
 @Component({
   selector: 'ang-search-modal',
@@ -16,10 +17,9 @@ import { AppConfig } from '../../app.service';
 })
 export class SearchModal implements OnInit, AfterViewInit {
   @Output()
-  private closeModal: EventEmitter<any> = new EventEmitter();
+  public closeModal: EventEmitter<any> = new EventEmitter();
 
   public fields = []
-  private filterNameMap: any = {}
 
   public geographyFields = [
     {name: 'North America'},
@@ -39,7 +39,7 @@ export class SearchModal implements OnInit, AfterViewInit {
       operator: 'AND'
     };
 
-  private error: any = {};
+  public error: any = {};
   public advanceQueries = [];
   public advanceSearchDate: any = {
     'startDate' : '',
@@ -47,6 +47,11 @@ export class SearchModal implements OnInit, AfterViewInit {
     'endDate' : '',
     'endEra' : 'CE'
   }
+
+  // Filters
+  public availableFilters: FacetGroup[] = []
+  public loadingFilters: boolean
+  private filterNameMap: any = {}
 
   // legacy
   private termsList: any = {};
@@ -70,15 +75,11 @@ export class SearchModal implements OnInit, AfterViewInit {
   private showPrivateCollections = false
   private showCollectionType: boolean = false;
 
-  // Filters
-  private availableFilters: FacetGroup[] = []
-
   // Search query trasnformation logic is abstracted to a utility
   private queryUtil: SearchQueryUtil = new SearchQueryUtil()
 
   // Flag while transitioning to Solr search
   private hideLegacyFilters: boolean
-  private loadingFilters: boolean
 
   constructor(
         private _appConfig: AppConfig,
@@ -115,9 +116,133 @@ export class SearchModal implements OnInit, AfterViewInit {
   }
 
   // Set initial focus on the modal Title h1
-  private startModalFocus() {
+  public startModalFocus() {
     let modalStartFocus = document.getElementById('advanced-search-title')
     modalStartFocus.focus()
+  }
+
+  public close(): void {
+    document.body.style.overflow = 'auto';
+    this.closeModal.emit()
+  }
+
+  public dateKeyPress(event: any): boolean{
+      // Add check of Tab key to make sure the tabbingis enabled on Firefox
+      if ((event.key === 'ArrowUp') || (event.key === 'ArrowDown') || (event.key === 'ArrowRight') || (event.key === 'ArrowLeft') || (event.key === 'Backspace') || (event.key === 'Tab')){
+        return true;
+      }
+
+      let theEvent = event || window.event;
+      let key = theEvent.keyCode || theEvent.which;
+      key = String.fromCharCode( key );
+      let regex = /[0-9]|\./;
+      if ( !regex.test(key) ) {
+        theEvent.returnValue = false;
+        if (theEvent.preventDefault) theEvent.preventDefault();
+      }
+
+      return theEvent.returnValue;
+  }
+
+  public resetFilters(): void {
+    this.advanceSearchDate = {
+      'startDate' : '',
+      'startEra' : 'BCE',
+      'endDate' : '',
+      'endEra' : 'CE'
+    };
+    this.advanceQueries = [];
+     // Set up two query fields
+    this.advanceQueries.push(Object.assign({}, this.advQueryTemplate));
+    this.advanceQueries.push(Object.assign({}, this.advQueryTemplate));
+
+    // Clear selected filters
+    this.filterSelections = [];
+
+    // Clear checkbox UI
+    let checkboxes: Array<any> = Array.from( document.querySelectorAll("#advancedModal input[type='checkbox']") );
+    checkboxes.forEach(field => {
+      field.checked = false;
+    });
+  }
+
+  /**
+   * Simple validation to test if the form is empty (This form is structured oddly, so it's simpler to do our own minimum validation)
+   */
+  public validateForm(): boolean {
+    let isValid = false;
+
+    let startDate = 0;
+    let endDate = 0;
+    if (this.advanceSearchDate['startDate'] && this.advanceSearchDate['endDate']) {
+      startDate = this.advanceSearchDate['startDate'] * (this.advanceSearchDate['startEra'] == 'BCE' ? -1 : 1);
+      endDate = this.advanceSearchDate['endDate'] * (this.advanceSearchDate['endEra'] == 'BCE' ? -1 : 1);
+    }
+
+    if (this.filterSelections.length < 1 && this.advanceQueries[0].term.length < 1 && this.advanceSearchDate['startDate'].length < 1 && this.advanceSearchDate['endDate'].length < 1 ) {
+      // Nothing was selected! Tell the user to select something
+      this.error.empty = true;
+      this.error.date = false;
+    }
+    else if (startDate > endDate){
+      // Start Date is greater than End Date
+      this.error.date = true;
+      this.error.empty = false;
+    }
+    else {
+      this.error.empty = false;
+      this.error.date = false;
+      isValid = true;
+    }
+    return isValid;
+  }
+
+  public applyAllFilters(): void {
+    if (!this.validateForm()) {
+      return;
+    }
+
+    // Clear existing filters set outside this modal
+    this._filters.clearApplied(true)
+
+    let advQuery
+    let filterParams
+    let currentParams = this.route.snapshot.params
+
+    advQuery = this.queryUtil.generateSearchQuery(this.advanceQueries)
+    filterParams = this.queryUtil.generateFilters(this.filterSelections, this.advanceSearchDate)
+
+    for (let key in filterParams) {
+      let filterValue = ''
+      if ( filterParams[key] instanceof Array ){
+        let filterValue = ''
+        for ( let filter of filterParams[key]){
+          filterValue += filterValue ? '|' + filter : filter
+        }
+        filterParams[key] = filterValue
+      }
+    }
+
+    // Track in angulartics
+    this.angulartics.eventTrack.next({ action: 'advSearch', properties: { category: this._auth.getGACategory(), label: advQuery } })
+
+    // Maintain feature flags
+    if (currentParams['featureFlag']) {
+      filterParams['featureFlag'] = currentParams['featureFlag']
+    }
+
+    // Open search page with new query
+    this._router.navigate(['/search', advQuery, filterParams]);
+
+    // Close advance search modal
+    this.close();
+  }
+
+  /**
+   * Open Help page on Advanced Search
+   */
+  public openHelp(): void {
+    window.open('http://support.artstor.org/?article=advanced-search', 'Advanced Search Support', 'width=800,height=600');
   }
 
   /**
@@ -237,104 +362,105 @@ export class SearchModal implements OnInit, AfterViewInit {
    * Load filters (Geo, Collection, Collection Type)
    */
   private loadFilters(): void {
-    this._search.getFacets().take(1)
-      .subscribe(data => {
+    this._search.getFacets().pipe(
+    take(1),
+    map(data => {
 
-        // Process through "facets" & construct the availableFilters array, based on the defined interfaces, from facets response
-        for (let facetKey in data['facets']) {
-          const facet = data['facets'][facetKey]
+      // Process through "facets" & construct the availableFilters array, based on the defined interfaces, from facets response
+      for (let facetKey in data['facets']) {
+        const facet = data['facets'][facetKey]
 
-          if ((facet.name === 'collectiontypes' && this.showCollectionType) || facet.name !== 'collectiontypes') {
-            // Construct Facet Group
-            let facetGroup: FacetGroup = {
-              name: facet.name,
-              values: []
-            }
-
-            // Prune any facets not available to the user (ex. Private Collections on SAHARA)
-            for (let i = facet.values.length - 1; i >= 0; i--){
-              let facetName = facet.values[i].name
-              if (!this.showPrivateCollections && facetName.match(/3|6/)) { // NOTE: 3 & 6 are Private Collections names
-                facet.values.splice(i, 1)
-              }
-              if (this._auth.isPublicOnly() && facet.name == 'collectiontypes' && !(facetName.match(/5/))) { // For public user, only show public collection in collectiontype filter, 5 is Public Collection name
-                facet.values.splice(i, 1)
-              }
-              else if (facetName && facetName.length > 0){ // Some filters return empty strings, avoid those
-                // Push filter objects to Facet Group 'values' Array
-                let facetObject: FacetObject = {
-                  checked: false,
-                  name: facet.name === 'collectiontypes' ? this.filterNameMap['collectiontypes'][facetName] : facetName,
-                  count: facet.values[i].count,
-                  value: facetName,
-                  children: []
-                }
-
-                // institutional collection counts are wrong, so assign them a count of 0 to indicate it shouldn't be displayed
-                facetObject.value == '2' && (facetObject.count = 0)
-
-                facetGroup.values.push( facetObject )
-              }
-            }
-            facetGroup.values.reverse()
-            this.availableFilters.push(facetGroup)
-          }
-        }
-
-        // Process "hierarchies2" & create Geo Facet Group & push it to available filters
-        for (let hierFacet in data['hierarchies2']) {
-          let topObj = this._assetFilters.generateHierFacets(data['hierarchies2'][hierFacet].children, 'geography')
-
-          let geoFacetGroup: FacetGroup = {
-            name: 'geography',
+        if ((facet.name === 'collectiontypes' && this.showCollectionType) || facet.name !== 'collectiontypes') {
+          // Construct Facet Group
+          let facetGroup: FacetGroup = {
+            name: facet.name,
             values: []
           }
 
-          for (let geoObj of topObj){
-            let geoFacetObj: FacetObject = {
-              checked: false,
-              name: geoObj.name,
-              count: geoObj.count,
-              value: geoObj.efq,
-              children: []
+          // Prune any facets not available to the user (ex. Private Collections on SAHARA)
+          for (let i = facet.values.length - 1; i >= 0; i--){
+            let facetName = facet.values[i].name
+            if (!this.showPrivateCollections && facetName.match(/3|6/)) { // NOTE: 3 & 6 are Private Collections names
+              facet.values.splice(i, 1)
             }
-
-            for (let child of geoObj.children){
-              let geoChildFacetObj: FacetObject = {
+            if (this._auth.isPublicOnly() && facet.name == 'collectiontypes' && !(facetName.match(/5/))) { // For public user, only show public collection in collectiontype filter, 5 is Public Collection name
+              facet.values.splice(i, 1)
+            }
+            else if (facetName && facetName.length > 0){ // Some filters return empty strings, avoid those
+              // Push filter objects to Facet Group 'values' Array
+              let facetObject: FacetObject = {
                 checked: false,
-                name: child.name,
-                count: child.count,
-                value: child.efq
+                name: facet.name === 'collectiontypes' ? this.filterNameMap['collectiontypes'][facetName] : facetName,
+                count: facet.values[i].count,
+                value: facetName,
+                children: []
               }
 
-              geoFacetObj.children.push( geoChildFacetObj )
+              // institutional collection counts are wrong, so assign them a count of 0 to indicate it shouldn't be displayed
+              facetObject.value == '2' && (facetObject.count = 0)
+
+              facetGroup.values.push( facetObject )
             }
-            geoFacetGroup.values.push( geoFacetObj )
           }
-          this.availableFilters.push( geoFacetGroup )
+          facetGroup.values.reverse()
+          this.availableFilters.push(facetGroup)
+        }
+      }
+
+      // Process "hierarchies2" & create Geo Facet Group & push it to available filters
+      for (let hierFacet in data['hierarchies2']) {
+        let topObj = this._assetFilters.generateHierFacets(data['hierarchies2'][hierFacet].children, 'geography')
+
+        let geoFacetGroup: FacetGroup = {
+          name: 'geography',
+          values: []
         }
 
-        // Fetch institutional collections and add them as children of institutional collectiontype filter
-        this._assets.getCollectionsList( 'institution' )
-          .toPromise()
-          .then((data) => {
-            if (data && data['Collections']) {
-              for (let collection of data['Collections']){
-                let colFacetObj: FacetObject = {} as FacetObject
-                colFacetObj.checked = false
-                colFacetObj.name = collection.collectionname
-                colFacetObj.value = collection.collectionid
-                if (this.availableFilters[1].values[2])
-                  this.availableFilters[1].values[2].children.push( colFacetObj )
-              }
-            } else {
-              throw new Error('no Collections returned in data')
-            }
-            this.loadAppliedFiltersFromURL()
-          })
+        for (let geoObj of topObj){
+          let geoFacetObj: FacetObject = {
+            checked: false,
+            name: geoObj.name,
+            count: geoObj.count,
+            value: geoObj.efq,
+            children: []
+          }
 
-          this.loadingFilters = false
-      })
+          for (let child of geoObj.children){
+            let geoChildFacetObj: FacetObject = {
+              checked: false,
+              name: child.name,
+              count: child.count,
+              value: child.efq
+            }
+
+            geoFacetObj.children.push( geoChildFacetObj )
+          }
+          geoFacetGroup.values.push( geoFacetObj )
+        }
+        this.availableFilters.push( geoFacetGroup )
+      }
+
+      // Fetch institutional collections and add them as children of institutional collectiontype filter
+      this._assets.getCollectionsList( 'institution' )
+        .toPromise()
+        .then((data) => {
+          if (data && data['Collections']) {
+            for (let collection of data['Collections']){
+              let colFacetObj: FacetObject = {} as FacetObject
+              colFacetObj.checked = false
+              colFacetObj.name = collection.collectionname
+              colFacetObj.value = collection.collectionid
+              if (this.availableFilters[1].values[2])
+                this.availableFilters[1].values[2].children.push( colFacetObj )
+            }
+          } else {
+            throw new Error('no Collections returned in data')
+          }
+          this.loadAppliedFiltersFromURL()
+        })
+
+        this.loadingFilters = false
+    })).subscribe()
 
   }
 
@@ -353,42 +479,36 @@ export class SearchModal implements OnInit, AfterViewInit {
     //       });
 
     this.subscriptions.push(
-      this._auth.getInstitution().subscribe(
-        (institutionObj) => {
+      this._auth.getInstitution().pipe(
+        map(institutionObj => {
           console.log(institutionObj)
           if (institutionObj['shortName']) {
-              this.instName = institutionObj['shortName'];
+              this.instName = institutionObj['shortName']
           }
         },
         (err) => {
           console.log('Nav failed to load Institution information', err)
         }
-      )
-    );
+      )).subscribe()
+    )
 
     // Get institutional collections
     this.subscriptions.push(
-      this._assets.getCollectionsList('institution')
-        .subscribe(
-          (data)  => {
-              this.colTree.push({
-                id: 'allSS',
-                name: 'Institutional Collections',
-                collections: data['Collections']
-              });
-          },
-          (err) => {
-            if (err && err.status != 401 && err.status != 403) {
-              console.error(err)
-            }
+      this._assets.getCollectionsList('institution').pipe(
+        map(data => {
+            this.colTree.push({
+              id: 'allSS',
+              name: 'Institutional Collections',
+              collections: data['Collections']
+            });
+        },
+        (err) => {
+          if (err && err.status != 401 && err.status != 403) {
+            console.error(err)
           }
-        )
+        }
+      )).subscribe()
     )
-  }
-
-  private close(): void {
-    document.body.style.overflow = 'auto';
-    this.closeModal.emit()
   }
 
   /**
@@ -412,118 +532,6 @@ export class SearchModal implements OnInit, AfterViewInit {
     else{
       this.advanceSearchDate[dateEra] = 'BCE';
     }
-  }
-
-  private dateKeyPress(event: any): boolean{
-      // Add check of Tab key to make sure the tabbingis enabled on Firefox
-      if ((event.key === 'ArrowUp') || (event.key === 'ArrowDown') || (event.key === 'ArrowRight') || (event.key === 'ArrowLeft') || (event.key === 'Backspace') || (event.key === 'Tab')){
-        return true;
-      }
-
-      let theEvent = event || window.event;
-      let key = theEvent.keyCode || theEvent.which;
-      key = String.fromCharCode( key );
-      let regex = /[0-9]|\./;
-      if ( !regex.test(key) ) {
-        theEvent.returnValue = false;
-        if (theEvent.preventDefault) theEvent.preventDefault();
-      }
-
-      return theEvent.returnValue;
-  }
-
-  private resetFilters(): void {
-    this.advanceSearchDate = {
-      'startDate' : '',
-      'startEra' : 'BCE',
-      'endDate' : '',
-      'endEra' : 'CE'
-    };
-    this.advanceQueries = [];
-     // Set up two query fields
-    this.advanceQueries.push(Object.assign({}, this.advQueryTemplate));
-    this.advanceQueries.push(Object.assign({}, this.advQueryTemplate));
-
-    // Clear selected filters
-    this.filterSelections = [];
-
-    // Clear checkbox UI
-    let checkboxes: Array<any> = Array.from( document.querySelectorAll("#advancedModal input[type='checkbox']") );
-    checkboxes.forEach(field => {
-      field.checked = false;
-    });
-  }
-
-  /**
-   * Simple validation to test if the form is empty (This form is structured oddly, so it's simpler to do our own minimum validation)
-   */
-  private validateForm(): boolean {
-    let isValid = false;
-
-    let startDate = 0;
-    let endDate = 0;
-    if (this.advanceSearchDate['startDate'] && this.advanceSearchDate['endDate']) {
-      startDate = this.advanceSearchDate['startDate'] * (this.advanceSearchDate['startEra'] == 'BCE' ? -1 : 1);
-      endDate = this.advanceSearchDate['endDate'] * (this.advanceSearchDate['endEra'] == 'BCE' ? -1 : 1);
-    }
-
-    if (this.filterSelections.length < 1 && this.advanceQueries[0].term.length < 1 && this.advanceSearchDate['startDate'].length < 1 && this.advanceSearchDate['endDate'].length < 1 ) {
-      // Nothing was selected! Tell the user to select something
-      this.error.empty = true;
-      this.error.date = false;
-    }
-    else if (startDate > endDate){
-      // Start Date is greater than End Date
-      this.error.date = true;
-      this.error.empty = false;
-    }
-    else {
-      this.error.empty = false;
-      this.error.date = false;
-      isValid = true;
-    }
-    return isValid;
-  }
-
-  private applyAllFilters(): void {
-    if (!this.validateForm()) {
-      return;
-    }
-
-    // Clear existing filters set outside this modal
-    this._filters.clearApplied(true)
-
-    let advQuery
-    let filterParams
-    let currentParams = this.route.snapshot.params
-
-    advQuery = this.queryUtil.generateSearchQuery(this.advanceQueries)
-    filterParams = this.queryUtil.generateFilters(this.filterSelections, this.advanceSearchDate)
-
-    for (let key in filterParams) {
-      let filterValue = ''
-      if ( filterParams[key] instanceof Array ){
-        let filterValue = ''
-        for ( let filter of filterParams[key]){
-          filterValue += filterValue ? '|' + filter : filter
-        }
-        filterParams[key] = filterValue
-      }
-    }
-
-    // Track in angulartics
-    this.angulartics.eventTrack.next({ action: 'advSearch', properties: { category: this._auth.getGACategory(), label: advQuery } })
-
-    // Maintain feature flags
-    if (currentParams['featureFlag']) {
-      filterParams['featureFlag'] = currentParams['featureFlag']
-    }
-
-    // Open search page with new query
-    this._router.navigate(['/search', advQuery, filterParams]);
-
-    // Close advance search modal
-    this.close();
   }
 
   private toggleFilter( filterObj: FacetObject, parentFilterObj?: FacetObject): void{
@@ -581,13 +589,6 @@ export class SearchModal implements OnInit, AfterViewInit {
         if ( (array[i].group === searchObj.group) && (array[i].value === searchObj.value) ) return i;
     }
     return -1;
-  }
-
-  /**
-   * Open Help page on Advanced Search
-   */
-  private openHelp(): void {
-    window.open('http://support.artstor.org/?article=advanced-search', 'Advanced Search Support', 'width=800,height=600');
   }
 }
 

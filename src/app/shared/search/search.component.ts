@@ -1,14 +1,13 @@
-import { Component, OnInit, OnDestroy, Input, Output } from '@angular/core';
-import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
-import { Angulartics2 } from 'angulartics2';
-import { Subscription }   from 'rxjs/Subscription';
+import { Component, OnInit, OnDestroy, Input, Output } from '@angular/core'
+import { Router, ActivatedRoute, NavigationEnd, Params } from '@angular/router'
+import { Subscription } from 'rxjs'
+import { map } from 'rxjs/operators'
+import { Angulartics2 } from 'angulartics2'
 
 // Project dependencies
-import { AssetService } from '../../shared';
-import { AssetFiltersService } from '../../asset-filters/asset-filters.service';
-import { Params } from '@angular/router/src/shared';
-import { PACKAGE_ROOT_URL } from '@angular/core/src/application_tokens';
-import { AuthService } from '../auth.service';
+import { AssetService } from '../../shared/assets.service'
+import { AssetFiltersService } from '../../asset-filters/asset-filters.service'
+import { AuthService } from '../auth.service'
 
 @Component({
   selector: 'ang-search',
@@ -16,11 +15,17 @@ import { AuthService } from '../auth.service';
   styleUrls: [ './search.component.scss' ]
 })
 export class SearchComponent implements OnInit, OnDestroy {
-  private subscriptions: Subscription[] = [];
 
-  private showSearchModal: boolean = false;
-  private term: string;
-  private startSearch: boolean = false
+  public showSearchModal: boolean = false;
+  public term: string;
+  public startSearch: boolean = false
+
+  @Input()
+  public allowSearchInRes: boolean;
+
+  @Input()
+  public UserNotLoggedIn: boolean;
+  private subscriptions: Subscription[] = [];
 
   private size: number = 24;
 
@@ -28,12 +33,6 @@ export class SearchComponent implements OnInit, OnDestroy {
   private searchInResults: boolean = false;
 
   private nestedSrchLbl: string = 'results';
-
-  @Input()
-  private allowSearchInRes: boolean;
-
-  @Input()
-  private UserNotLoggedIn: boolean;
 
   constructor(
     private _assets: AssetService,
@@ -48,32 +47,36 @@ export class SearchComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.subscriptions.push(
-      this.route.params.subscribe((params) => {
-        if (params.term) {
-          this.formatSearchTerm(params.term)
-        }
-      })
+      this.route.params.pipe(
+        map(params => {
+          if (params.term) {
+            this.formatSearchTerm(params.term)
+          }
+      })).subscribe()
     )
 
     // Subscribe to pagination values
     this.subscriptions.push(
-      this._assets.pagination.subscribe((pagination) => {
-        this.size = parseInt(pagination.size)
-      })
-    );
+      this._assets.pagination.pipe(
+        map(pagination => {
+          this.size = parseInt(pagination.size)
+      })).subscribe()
+    )
 
     this.subscriptions.push(
-      this._router.events.subscribe( (event) => {
-        if (event instanceof NavigationEnd) {
-          let routeName = event.url.split('/')[1]
-          if ((routeName === 'category') || (routeName === 'collection')){
-            this.nestedSrchLbl = routeName;
-          }
-          else{
-            this.nestedSrchLbl = 'results'
+      this._router.events.pipe(
+        map(event => {
+          if (event instanceof NavigationEnd) {
+            let routeName = event.url.split('/')[1]
+            if ((routeName === 'category') || (routeName === 'collection')){
+              this.nestedSrchLbl = routeName;
+            }
+            else{
+              this.nestedSrchLbl = 'results'
+            }
           }
         }
-      })
+      )).subscribe()
     )
   }
 
@@ -85,7 +88,7 @@ export class SearchComponent implements OnInit, OnDestroy {
    * Called from template when new search term is entered
    * @param term Term for desired search
    */
-  private updateSearchTerm(term: string) {
+  public updateSearchTerm(term: string) {
     if (!term || term === '') {
       return
     }
@@ -157,6 +160,14 @@ export class SearchComponent implements OnInit, OnDestroy {
       })
   }
 
+  public setFocus(): void {
+    window.setTimeout(function () {
+      if (document.getElementById('empty-search-alert')){
+        document.getElementById('empty-search-alert').focus()
+      }
+    }, 110);
+  }
+
   /**
    * Formats search string to strip symbols
    * @param searchString Search term from the URL
@@ -187,13 +198,5 @@ export class SearchComponent implements OnInit, OnDestroy {
    */
   private onSearchWithinChange(value: boolean): void{
     this._filters.searchWithin = value
-  }
-
-  private setFocus() : void {
-    window.setTimeout(function () {
-      if (document.getElementById('empty-search-alert')){
-        document.getElementById('empty-search-alert').focus()
-      }    
-    }, 110);  
   }
 }

@@ -1,11 +1,12 @@
-import { Subscription } from 'rxjs/Rx';
-import { Component, OnInit, OnDestroy, Output, EventEmitter, Input } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { Location } from '@angular/common';
+import { Subscription } from 'rxjs'
+import { map, take } from 'rxjs/operators'
+import { Component, OnInit, OnDestroy, Output, EventEmitter, Input } from '@angular/core'
+import { ActivatedRoute, Router } from '@angular/router'
+import { Location } from '@angular/common'
 
 // Project Dependencies
-import { AssetService, ImageGroupService, ImageGroup, GroupService, AuthService } from '../shared';
-import { AppConfig } from '../app.service';
+import { AssetService, ImageGroupService, ImageGroup, GroupService, AuthService } from '../shared'
+import { AppConfig } from '../app.service'
 
 @Component({
   selector: 'nav-menu',
@@ -22,7 +23,28 @@ export class NavMenu implements OnInit, OnDestroy {
    * }
    */
   @Input()
-  private actionOptions: any = {};
+  public actionOptions: any = {};
+
+  @Input()
+  public genImgGrpLink: boolean = false;
+
+  @Output() refreshIG: EventEmitter<any> = new EventEmitter();
+  public institutionObj: any = {}
+
+  public mobileCollapsed: boolean = true
+  public selectedAssets: any[] = []
+
+  public showShareLinkModal: boolean = false
+  public showDeleteIgModal: boolean = false
+  public showImageGroupModal: boolean = false
+  public showAddToGroupModal: boolean = false
+  public showShareIgModal: boolean = false
+  public params: any = {}
+
+  public browseOpts: any = {}
+
+  // Flag for confimation popup for deleting selected asset(s) from the IG
+  public showConfirmationModal: boolean = false
 
   @Input()
   private disableIgDelete: boolean = false;
@@ -31,35 +53,16 @@ export class NavMenu implements OnInit, OnDestroy {
   private allowIgUpdate: boolean = false;
 
   @Input()
-  private genImgGrpLink: boolean = false;
-
-  @Input()
   private allowSelectAll: boolean = false;
 
   @Input()
   private ig: any = {};
 
-  @Output() refreshIG: EventEmitter<any> = new EventEmitter();
-
   private user: any = {}
   private siteID: string = ''
-  private institutionObj: any = {}
-
-  private mobileCollapsed: boolean = true
-  private selectedAssets: any[] = []
   private subscriptions: Subscription[] = []
-
-  private showImageGroupModal: boolean = false
-  private showAddToGroupModal: boolean = false
-  private showShareIgModal: boolean = false
   private copyIG: boolean = false
   private editIG: boolean = false
-  private params: any = {}
-
-  private browseOpts: any = {}
-
-  // Flag for confimation popup for deleting selected asset(s) from the IG
-  private showConfirmationModal: boolean = false
 
   // TypeScript public modifiers
   constructor(
@@ -71,7 +74,7 @@ export class NavMenu implements OnInit, OnDestroy {
     private _ig: ImageGroupService,
     private _group: GroupService,
     private route: ActivatedRoute,
-    private _auth: AuthService,
+    public _auth: AuthService,
   ) {
     this.browseOpts = this._app.config.browseOptions
     this.siteID = this._appConfig.config.siteID
@@ -80,46 +83,49 @@ export class NavMenu implements OnInit, OnDestroy {
   ngOnInit() {
     // Subscribe to User object updates
     this.subscriptions.push(
-      this._auth.currentUser.subscribe(
-        (userObj) => {
+      this._auth.currentUser.pipe(
+        map(userObj => {
           this.user = userObj
         },
         (err) => { console.error(err) }
-      )
-    );
+      )).subscribe()
+    )
 
     this.subscriptions.push(
-      this._assets.selection.subscribe(
-        selectedAssets => {
+      this._assets.selection.pipe(
+        map(selectedAssets => {
           this.selectedAssets = selectedAssets
         },
         error => {
           console.error(error)
-        })
-    );
+        }
+      )).subscribe()
+    )
 
     this.subscriptions.push(
-      this.route.params.subscribe((params) => {
+      this.route.params.pipe(
+      map(params => {
         this.params = params
-
         if (params['igId'] && !params['page']){
           this.showImageGroupModal = false
         }
-      })
+      })).subscribe()
     )
 
     this.subscriptions.push(
-      this._auth.getInstitution().subscribe((institutionObj) => {
-        this.institutionObj = institutionObj;
-      })
+      this._auth.getInstitution().pipe(
+        map(institutionObj => {
+          this.institutionObj = institutionObj;
+      })).subscribe()
     )
-  }
+
+  } // onInit
 
   ngOnDestroy() {
     this.subscriptions.forEach((sub) => { sub.unsubscribe() })
   }
 
-  private printImageGroupPage(): void {
+  public printImageGroupPage(): void {
     if (this.actionOptions.group) {
       let params = this.route.snapshot.params
 
@@ -130,14 +136,40 @@ export class NavMenu implements OnInit, OnDestroy {
   }
 
   /**
+   * Opens dropdown
+   */
+  public openDrop(event, dropdown): void {
+    event.stopPropagation();
+    dropdown.open();
+  }
+
+  /**
+   * Closes dropdown
+   */
+  public closeDrop(event, dropdown): void {
+    event.stopPropagation();
+    dropdown.close();
+  }
+
+  public closeNavMenuDropdowns(): void{
+    let dropdownElements: Array<HTMLElement> = Array.from( document.querySelectorAll('.nav-item.dropdown') )
+    for (let dropdownElement of dropdownElements){
+      dropdownElement.classList.remove('show')
+      dropdownElement.children[0].setAttribute('aria-expanded', 'false')
+      dropdownElement.children[1].classList.remove('show')
+    }
+  }
+
+  /**
    * Select All for Edit Mode
    * - Takes all current results from Asset Service, and selects them!
    * - The selection then broadcasts out to the Asset Grid by observable
    */
   private selectAllInAssetGrid(): void {
 
-    this._assets.allResults.take(1).subscribe(
-      assets => {
+    this._assets.allResults.pipe(
+      take(1),
+      map(assets => {
         if (assets.thumbnails) {
           // Make a copy of the Results array
           let assetsOnPage = [];
@@ -148,7 +180,7 @@ export class NavMenu implements OnInit, OnDestroy {
           this._assets.setSelectedAssets(assetsOnPage);
         }
       }
-    );
+    )).subscribe()
   }
 
   /**
@@ -172,9 +204,9 @@ export class NavMenu implements OnInit, OnDestroy {
       return !assetFound // if the asset was not found, we want to keep it
     });
 
-    this._group.update(putGroup)
-      .take(1)
-      .subscribe((res) => {
+    this._group.update(putGroup).pipe(
+      take(1),
+      map(res => {
         this.ig = putGroup
         let removeIds: string[] = []
         this._assets.getSelectedAssets().forEach((asset) => {
@@ -182,9 +214,10 @@ export class NavMenu implements OnInit, OnDestroy {
         })
         this._assets.removeFromResults(removeIds, this.ig.items.length) // make the call to asset service which will update the asset grid with modified assets and also pass the total # of items for pagination values
         this._assets.selectModeToggle.emit()
-      })
-  }
+      }
+    )).subscribe()
 
+  }
 
   /**
    * Closes confirmation modal
@@ -213,30 +246,5 @@ export class NavMenu implements OnInit, OnDestroy {
           this._router.navigate(['/home'])
         }
       })
-  }
-
-  /**
-   * Opens dropdown
-   */
-  private openDrop(event, dropdown): void {
-    event.stopPropagation();
-    dropdown.open();
-  }
-
-  /**
-   * Closes dropdown
-   */
-  private closeDrop(event, dropdown): void {
-    event.stopPropagation();
-    dropdown.close();
-  }
-
-  private closeNavMenuDropdowns(): void{
-    let dropdownElements: Array<HTMLElement> = Array.from( document.querySelectorAll('.nav-item.dropdown') )
-    for (let dropdownElement of dropdownElements){
-      dropdownElement.classList.remove('show')
-      dropdownElement.children[0].setAttribute('aria-expanded', 'false')
-      dropdownElement.children[1].classList.remove('show')
-    }
   }
 }

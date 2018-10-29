@@ -1,6 +1,7 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core'
 import { FormBuilder, FormGroup, Validators } from '@angular/forms'
 import { AuthService } from '../../shared'
+import { map, take } from 'rxjs/operators'
 
 @Component({
   selector: 'ang-change-password-modal',
@@ -11,14 +12,14 @@ export class ChangePasswordModal implements OnInit {
 
   @Output() closeModal: EventEmitter<any> = new EventEmitter()
 
-  private passForm: FormGroup
-  private serviceResponses: {
+  public passForm: FormGroup
+  public serviceResponses: {
     success?: boolean,
     wrongPass?: boolean,
     generalError?: boolean
   } = {};
-  private submitted: boolean = false
-  private changePassLoading: boolean = false
+  public submitted: boolean = false
+  public changePassLoading: boolean = false
 
   constructor(
     private _auth: AuthService,
@@ -37,15 +38,7 @@ export class ChangePasswordModal implements OnInit {
 
   }
 
-  /** Validates that the passwords are equal and assigns error if not
-   * @returns error to FormGroup called 'mismatch' if the passwords are not equal
-   */
-  private passwordsEqual(group: FormGroup): any {
-    return group.get('newPass').value === group.get('newPassConfirm').value
-      ? null : { passwordMismatch: true };
-  }
-
-  private changePass(formValue: any): void {
+  public changePass(formValue: any): void {
     this.submitted = true;
     this.serviceResponses = {};
 
@@ -54,9 +47,9 @@ export class ChangePasswordModal implements OnInit {
 
     this.changePassLoading = true;
 
-    this._auth.changePassword(formValue.oldPass, formValue.newPass)
-      .take(1)
-      .subscribe((res) => {
+    this._auth.changePassword(formValue.oldPass, formValue.newPass).pipe(
+      take(1),
+      map(res => {
         this.changePassLoading = false;
 
         switch (res.statusCode) {
@@ -69,6 +62,14 @@ export class ChangePasswordModal implements OnInit {
         this.changePassLoading = false;
         this.serviceResponses.generalError = true;
         console.error(err);
-      });
+      })).subscribe()
+  }
+
+  /** Validates that the passwords are equal and assigns error if not
+   * @returns error to FormGroup called 'mismatch' if the passwords are not equal
+   */
+  private passwordsEqual(group: FormGroup): any {
+    return group.get('newPass').value === group.get('newPassConfirm').value
+      ? null : { passwordMismatch: true };
   }
 }

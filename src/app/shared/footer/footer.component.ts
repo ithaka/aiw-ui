@@ -1,13 +1,13 @@
 import { Component } from '@angular/core'
 import { Location } from '@angular/common'
 import { ActivatedRoute, Router, NavigationEnd } from '@angular/router'
-import { Subscription } from 'rxjs/Subscription'
+import { Subscription } from 'rxjs'
+import { map } from 'rxjs/operators'
 
 import { AppConfig } from '../../app.service'
 import { AuthService } from '../auth.service'
 
-// Project Dependencies
-const { version: appVersion } = require('../../../../package.json')
+import { version } from '../../../../package.json'
 
 declare let google
 
@@ -17,13 +17,13 @@ declare let google
   styleUrls: [ './footer.component.scss' ],
 })
 export class Footer {
+  public appVersion = ''
+  public currentYear
+  public links: string[]
+  public siteID: string = ''
   private subscriptions: Subscription[] = []
-  private appVersion = ''
-  private currentYear
   private user: any = {}
-  private links: string[]
   private browseSec: { [key: string]: boolean } = {}
-  private siteID: string = ""
 
   // TypeScript public modifiers
   constructor(
@@ -31,11 +31,11 @@ export class Footer {
     private location: Location,
     private _app: AppConfig,
     private _router: Router,
-    private _auth: AuthService
+    public _auth: AuthService
   ) {
     this.siteID = this._appConfig.config.siteID;
     // Get version number
-    this.appVersion = appVersion
+    this.appVersion = version
     this.links = this._app.config.footerLinks
     this.browseSec = this._app.config.homeBrowseSec
 
@@ -46,16 +46,19 @@ export class Footer {
 
   ngOnInit() {
 
+
+    console.log('Version: ', version)
     this.subscriptions.push(
-      this._router.events.subscribe(e => {
+      this._router.events.pipe(
+      map(e => {
         if (e instanceof NavigationEnd) {
-            this.user = this._auth.getUser()
-            if (this._auth.isPublicOnly()) {
-              let index: number = this.links.indexOf('SUPPORT')
-              this.links[index] = "SUPPORT_UNAFFILIATED"
-            }
+          this.user = this._auth.getUser()
+          if (this._auth.isPublicOnly()) {
+            let index: number = this.links.indexOf('SUPPORT')
+            this.links[index] = 'SUPPORT_UNAFFILIATED'
+          }
         }
-      })
+      })).subscribe()
     )
 
     // Workaround: Make sure Google translate has loaded
@@ -77,7 +80,7 @@ export class Footer {
   private logout(): void {
     this._auth.logout()
       .then(() => {
-        if (this.location.path().indexOf("home") >= 0) {
+        if (this.location.path().indexOf('home') >= 0) {
           location.reload() // this will reload the app and give the user a feeling they actually logged out
         } else {
           this._router.navigate(['/home'])

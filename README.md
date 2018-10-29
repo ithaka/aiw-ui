@@ -99,7 +99,7 @@ angular2-webpack-starter/
  │   └──webpack.test.js        * our testing webpack config
  │
  ├──src/                       * our application source files
- |   ├──main.browser.ts        * our entry file for our browser environment
+ |   ├──main.ts        * our entry file for our browser environment
  │   │
  |   ├──index.html             * Index.html: where we generate our index page
  │   │

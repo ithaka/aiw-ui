@@ -1,4 +1,5 @@
-import { Subscription } from "rxjs/Rx"
+import { Subscription } from "rxjs"
+import { map, take } from 'rxjs/operators'
 import { Component, OnInit } from "@angular/core"
 import { Router } from "@angular/router"
 
@@ -17,23 +18,23 @@ import {
   styleUrls: ["./account-page.component.scss"]
 })
 export class AccountPage implements OnInit {
-  private user: any = {}
-  private institutionObj: any = {}
-  private subscriptions: Subscription[] = []
+ public user: any = {}
+ public institutionObj: any = {}
+ public subscriptions: Subscription[] = []
 
-  private showChangePassModal: boolean = false
-  private accountUpdateForm: FormGroup
+ public showChangePassModal: boolean = false
+ public accountUpdateForm: FormGroup
 
   // ui display controls
-  private updateLoading: boolean = false
-  private messages: {
+ public updateLoading: boolean = false
+ public messages: {
     updateSuccess?: boolean
     updateError?: boolean
   } = {}
 
   // update form select field values
-  private userDepts: UserRolesAndDepts[] = []
-  private userRoles: UserRolesAndDepts[] = []
+ public userDepts: UserRolesAndDepts[] = []
+ public userRoles: UserRolesAndDepts[] = []
 
   constructor(
     private _account: AccountService,
@@ -58,9 +59,9 @@ export class AccountPage implements OnInit {
     }
 
     this.subscriptions.push(
-      this._auth.getInstitution().subscribe(institutionObj => {
+      this._auth.getInstitution().pipe(map(institutionObj => {
         this.institutionObj = institutionObj
-      })
+      })).subscribe()
     )
 
     // Issues with unauthorized access to the service, and the fact that the data NEVER changes, led us to hardcode these values:
@@ -88,11 +89,10 @@ export class AccountPage implements OnInit {
     // get a copy of the current user value, modify it in memory, send it in the update, and then save it back to local storage
     let updateUser = this._auth.getUser()
     Object.assign(updateUser, form.value)
-    this._account
-      .update(updateUser)
-      .take(1)
-      .subscribe(
-        res => {
+
+    this._account.update(updateUser).pipe(
+      take(1),
+      map(res => {
           this.updateLoading = false
           this._auth.saveUser(updateUser)
           this.messages.updateSuccess = true
@@ -102,6 +102,6 @@ export class AccountPage implements OnInit {
           console.error(err)
           this.messages.updateError = true
         }
-      )
+      )).subscribe()
   }
 }

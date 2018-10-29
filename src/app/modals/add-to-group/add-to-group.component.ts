@@ -1,9 +1,10 @@
-import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
-import { NgForm } from '@angular/forms';
-import { BehaviorSubject, Observable, Subscription } from 'rxjs/Rx';
-import { CompleterService, CompleterData } from 'ng2-completer';
+import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core'
+import { NgForm } from '@angular/forms'
+import { BehaviorSubject, Observable, Subscription } from 'rxjs'
+import { map, take } from 'rxjs/operators'
+import { CompleterService, CompleterData } from 'ng2-completer'
 
-import { AssetService, GroupService, ImageGroup } from './../../shared';
+import { AssetService, GroupService, ImageGroup } from './../../shared'
 
 @Component({
   selector: 'ang-add-to-group',
@@ -13,37 +14,30 @@ export class AddToGroupModal implements OnInit, OnDestroy {
   @Output() closeModal: EventEmitter<any> = new EventEmitter();
   @Output() createGroup: EventEmitter<any> = new EventEmitter();
   @Input() showCreateGroup: boolean = false;
-  private subscriptions: Subscription[] = [];
-
-  @Input() private selectedAssets: any[] = []; // this is used in the asset page, where a single asset can be injected directly
-  private groups: ImageGroup[] = [];
-  private selectedIg: ImageGroup;
-  private selectedGroupName: string;
-  private selectedGroupError: string;
+  public selectedIg: ImageGroup;
+  public selectedGroupName: string;
+  public selectedGroupError: string;
 
   @Input()
-  private copySelectionStr: string = 'ADD_TO_GROUP_MODAL.FROM_SELECTED'
+  public copySelectionStr: string = 'ADD_TO_GROUP_MODAL.FROM_SELECTED'
 
-  private serviceResponse: {
+  public serviceResponse: {
     success?: boolean,
     failure?: boolean,
     tooManyAssets?: boolean
   } = {};
 
-  private dataService: any;
+  public dataService: any;
+  private subscriptions: Subscription[] = [];
+
+  @Input() private selectedAssets: any[] = []; // this is used in the asset page, where a single asset can be injected directly
+  private groups: ImageGroup[] = [];
 
   constructor(
     private _assets: AssetService,
     private _group: GroupService,
     private completerService: CompleterService
   ) {}
-
-  /**
-   * Observable for autocomplete list of groups
-   * - We apply additional sorting
-   */
-  private groupListSubject: BehaviorSubject<any[]> = new BehaviorSubject([])
-  private groupListObs: Observable<any[]> = this.groupListSubject.asObservable()
 
   ngOnInit() {
     // Set focus to the modal to make the links in the modal first thing to tab for accessibility
@@ -53,26 +47,27 @@ export class AddToGroupModal implements OnInit, OnDestroy {
     if (this.selectedAssets.length < 1) { // if no assets were added when component was initialized, the component gets the current selection list
       // Subscribe to asset selection
       this.subscriptions.push(
-        this._assets.selection.subscribe(
-          assets => {
+        this._assets.selection.pipe(
+        map(assets => {
             this.selectedAssets = assets;
           },
           error => {
             console.error(error);
           }
-        )
+        )).subscribe()
       );
     }
 
     // Load list of Groups, and update autocomplete as Groups load
-    this._group.getEveryGroup('created')
-      .subscribe((groups) => {
+    this._group.getEveryGroup('created').pipe(
+      map(groups => {
         if (groups) {
-          this.groups = groups;
+          this.groups = groups
           // Data service for the autocomplete component (ng2 completer)
-          this.dataService = this.completerService.local(this.groupListObs, 'name', 'name');
+          this.dataService = this.completerService.local(this.groups, 'name', 'name')
         }
-      }, (err) => { console.error(err); });
+      }, (err) => { console.error(err)
+    })).subscribe()
 
 
   }
@@ -100,14 +95,15 @@ export class AddToGroupModal implements OnInit, OnDestroy {
     filtered = filtered.sort((a, b) => {
         return a.name.search(termReg) - b.name.search(termReg)
     });
-    this.groupListSubject.next(filtered)
+    // Update completer with sorted values
+    this.dataService = this.completerService.local(filtered, 'name', 'name');
   }
 
   /**
    * Submits updates to Group
    * @param form Values to update the group with
    */
-  private submitGroupUpdate(form: NgForm) {
+  public submitGroupUpdate(form: NgForm) {
     // clear any service status
     this.serviceResponse = {}
     this.selectedGroupError = ''
@@ -165,12 +161,12 @@ export class AddToGroupModal implements OnInit, OnDestroy {
       .then((data) => {
         data.items = putGroup.items
 
-        this._group.update(data)
-          .take(1)
-          .subscribe(
+        this._group.update(data).pipe(
+          take(1),
+          map(
             (res) => { this.serviceResponse.success = true; this._assets.clearSelectMode.next(true); },
             (err) => { console.error(err); this.serviceResponse.failure = true;
-          })
+        })).subscribe()
 
       })
       .catch((error) => {

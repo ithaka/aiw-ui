@@ -1,13 +1,14 @@
-import { Router, ActivatedRoute } from '@angular/router';
-import { Component, EventEmitter, HostListener, Input, OnInit, Output } from '@angular/core';
-import { formGroupNameProvider } from '@angular/forms/src/directives/reactive_directives/form_group_name';
-import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
-import { Subscription } from 'rxjs/Rx';
-import { Angulartics2 } from 'angulartics2';
+import { Router, ActivatedRoute } from '@angular/router'
+import { Component, EventEmitter, HostListener, Input, OnInit, Output } from '@angular/core'
+import { formGroupNameProvider } from '@angular/forms/src/directives/reactive_directives/form_group_name'
+import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms'
+import { Subscription } from 'rxjs'
+import { map, take } from 'rxjs/operators'
+import { Angulartics2 } from 'angulartics2'
 
 // Project dependencies
-import { AssetService, AuthService, GroupService, ImageGroup, LogService } from './../../shared';
-import { IgFormValue, IgFormUtil } from './new-ig';
+import { AssetService, AuthService, GroupService, ImageGroup, LogService } from './../../shared'
+import { IgFormValue, IgFormUtil } from './new-ig'
 
 @Component({
   selector: 'ang-new-ig-modal',
@@ -17,11 +18,16 @@ export class NewIgModal implements OnInit {
   @Output() closeModal: EventEmitter<any> = new EventEmitter();
   @Output() addToGroup: EventEmitter<any> = new EventEmitter();
   @Output() igReloadTriggered: EventEmitter<any> = new EventEmitter();
+  /** Switch for running loginc to edit image group */
+  @Input() public editIG: boolean = false;
+  /** Quick interface for controlling display of errors/response feedback */
+  public serviceResponse: {
+    success?: boolean,
+    failure?: boolean
+  } = {};
 
   /** Switch for running logic to copy image group */
   @Input() private copyIG: boolean = false;
-  /** Switch for running loginc to edit image group */
-  @Input() private editIG: boolean = false;
   /** The image group object */
   @Input() private ig: ImageGroup = <ImageGroup>{};
   /** Controls the user seeing the toggle to add images to group or create a new group */
@@ -42,17 +48,17 @@ export class NewIgModal implements OnInit {
   private isLoading: boolean = false;
   /** Set to true once the form is submitted */
   private submitted: boolean = false;
-  /** Quick interface for controlling display of errors/response feedback */
-  private serviceResponse: {
-    success?: boolean,
-    failure?: boolean
-  } = {};
   /** The new group created after it comes back from the service */
   private newGroup: ImageGroup;
 
   private util: IgFormUtil = new IgFormUtil()
 
   private tagSuggestions: string[] = []
+
+  // There must be a more Angular way to handle this debounce
+  private tagSuggestTerm: string = ''
+  private tagLastSearched: string = ''
+  private tagDebouncing: boolean = false
 
   constructor(
       private _assets: AssetService,
@@ -92,15 +98,15 @@ export class NewIgModal implements OnInit {
     if (this.selectedAssets.length < 1) {
       // Subscribe to asset selection
       this.subscriptions.push(
-        this._assets.selection.subscribe(
-          assets => {
-            this.selectedAssets = assets;
-          },
-          error => {
-            console.error(error);
-          }
-        )
-      );
+        this._assets.selection.pipe(
+        map(assets => {
+          this.selectedAssets = assets
+        },
+        error => {
+          console.error(error)
+        }
+        )).subscribe()
+      )
     }
   }
 
@@ -112,11 +118,6 @@ export class NewIgModal implements OnInit {
     this.igReloadTriggered.emit()
     this.closeModal.emit()
   }
-
-  // There must be a more Angular way to handle this debounce
-  private tagSuggestTerm: string = ''
-  private tagLastSearched: string = ''
-  private tagDebouncing: boolean = false
 
   private getTagSuggestions(event: any): void  {
     this.tagSuggestTerm = event.target.value
@@ -130,10 +131,9 @@ export class NewIgModal implements OnInit {
         if (this.tagLastSearched != this.tagSuggestTerm) {
           this.tagLastSearched = this.tagSuggestTerm
 
-          this._group.getTagSuggestions(this.tagSuggestTerm)
-          .take(1)
-          .subscribe(
-            data => {
+          this._group.getTagSuggestions(this.tagSuggestTerm).pipe(
+            take(1),
+            map(data => {
               if (data['success']) {
                 this.tagSuggestions = data['tags']
                 // Trigger tag input to re-assess autocomplete array
@@ -143,7 +143,7 @@ export class NewIgModal implements OnInit {
             err => {
               console.error(err)
             }
-          )
+          )).subscribe()
         }
       }, 700)
     }
@@ -172,17 +172,20 @@ export class NewIgModal implements OnInit {
      *  only funky thing here is that sometimes we get the list of asset ids from the image group, and sometimes from selected assets
      *  that depends on whether you're copying an image group or making a new one
      */
-    let group = this.util.prepareGroup(formValue, igDescValue, this.copyIG || this.editIG ? this.ig.items : this.selectedAssets, this._auth.getUser(), this.ig)
+    let group = this.util.prepareGroup(
+      formValue, igDescValue, this.copyIG || this.editIG ? this.ig.items : this.selectedAssets,
+      this._auth.getUser(),
+      this.ig
+    )
 
-    if (this.editIG){
+    if (this.editIG) {
       // Editing group
       this._angulartics.eventTrack.next({ action: 'editGroup', properties: { category: this._auth.getGACategory(), label: group.id }});
 
       group.id = this.ig.id // need this for the update call
 
-      this._group.update(group)
-        .subscribe(
-          data => {
+      this._group.update(group).pipe(
+        map(data => {
             this.isLoading = false;
             this.newGroup = data;
             this.serviceResponse.success = true;
@@ -193,12 +196,11 @@ export class NewIgModal implements OnInit {
             this.serviceResponse.failure = true;
             this.isLoading = false;
           }
-        );
+        )).subscribe()
       // if an Artstor user, make sure the public property is set correctly
       if (this.isArtstorUser) {
         this.changeGlobalSetting(group, formValue.artstorPermissions == 'global')
       }
-
     }
     else {
       // analytics events
@@ -211,45 +213,44 @@ export class NewIgModal implements OnInit {
       }
 
       // create the group using the group service
-      this._group.create(group)
-        .subscribe(
-          data => {
-            this.isLoading = false;
-            this.newGroup = data;
-            this.serviceResponse.success = true;
-            this._assets.clearSelectMode.next(true);
+      this._group.create(group).pipe(
+        map(data => {
+          this.isLoading = false
+          this.newGroup = data
+          this.serviceResponse.success = true
+          this._assets.clearSelectMode.next(true)
 
-            // if an Artstor user, make sure the public property is set correctly
-            if (this.isArtstorUser) {
-              this.changeGlobalSetting(this.newGroup, formValue.artstorPermissions == 'global')
-            }
-
-            if (this.copyIG && this.ig && this.ig.id) {
-              // Log copy group event into Captain's Log
-              this._log.log({
-                eventType: 'artstor_copy_group',
-                additional_fields: {
-                  'source_group_id': this.ig.id,
-                  'group_id': this.newGroup.id
-                }
-              })
-            }
-            else {
-              // Log create group event into Captain's Log
-              this._log.log({
-                eventType: 'artstor_create_group',
-                additional_fields: {
-                  'group_id': this.newGroup.id
-                }
-              })
-            }
-          },
-          error => {
-            console.error(error);
-            this.serviceResponse.failure = true;
-            this.isLoading = false;
+          // if an Artstor user, make sure the public property is set correctly
+          if (this.isArtstorUser) {
+            this.changeGlobalSetting(this.newGroup, formValue.artstorPermissions == 'global')
           }
-        );
+
+          if (this.copyIG && this.ig && this.ig.id) {
+            // Log copy group event into Captain's Log
+            this._log.log({
+              eventType: 'artstor_copy_group',
+              additional_fields: {
+                'source_group_id': this.ig.id,
+                'group_id': this.newGroup.id
+              }
+            })
+          }
+          else {
+            // Log create group event into Captain's Log
+            this._log.log({
+              eventType: 'artstor_create_group',
+              additional_fields: {
+                'group_id': this.newGroup.id
+              }
+            })
+          }
+        },
+        error => {
+          console.error(error)
+          this.serviceResponse.failure = true
+          this.isLoading = false;
+        }
+      )).subscribe()
     }
   }
 
@@ -327,13 +328,15 @@ export class NewIgModal implements OnInit {
    * @param isPublic the value to set the public property to
    */
   private changeGlobalSetting(group: ImageGroup, isPublic: boolean): void {
-    this._group.updateIgPublic(group.id, isPublic)
-      .take(1)
-      .subscribe((res) => {
+
+    this._group.updateIgPublic(group.id, isPublic).pipe(
+      take(1),
+      map(res => {
         // not really sure what to do here?
       }, (err) => {
         console.error(err)
         // also not really sure what to do here...
-      })
+    })).subscribe()
   }
+
 }

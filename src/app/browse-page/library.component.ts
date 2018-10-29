@@ -1,16 +1,17 @@
-import { AssetFiltersService } from '../asset-filters/asset-filters.service';
-import { Component, OnInit } from '@angular/core';
-import { Router, ActivatedRoute, Params } from '@angular/router';
-import { Subscription }   from 'rxjs/Subscription';
+import { AssetFiltersService } from '../asset-filters/asset-filters.service'
+import { Component, OnInit } from '@angular/core'
+import { Router, ActivatedRoute, Params } from '@angular/router'
+import { Subscription }   from 'rxjs'
+import { map } from 'rxjs/operators'
 
-import { AssetService } from './../shared/assets.service';
-import { AssetSearchService } from './../shared/asset-search.service';
-import { AuthService } from './../shared/auth.service';
-import { TagsService } from './tags.service';
-import { Tag } from './tag/tag.class';
-import { TitleService } from '../shared/title.service';
+import { AssetService } from './../shared/assets.service'
+import { AssetSearchService } from './../shared/asset-search.service'
+import { AuthService } from './../shared/auth.service'
+import { TagsService } from './tags.service'
+import { Tag } from './tag/tag.class'
+import { TitleService } from '../shared/title.service'
+import { LockerService } from 'app/_services';
 
-import { Locker } from 'angular2-locker'
 
 @Component({
   selector: 'ang-lib',
@@ -18,8 +19,47 @@ import { Locker } from 'angular2-locker'
   styleUrls: [ './browse-page.component.scss' ]
 })
 export class LibraryComponent implements OnInit {
-  private _storage
-  private unaffiliatedUser: boolean = false
+  public unaffiliatedUser: boolean = false
+
+  public loading: boolean = false;
+  public selectedBrowseId: string = '';
+  public browseMenuArray: any[];
+  public categoryFacets: any[]
+  public hierarchicalFacets: object = {}
+  public facetType: string = ''
+  public errorMessage: string = ''
+  public ObjectKeys = Object.keys;
+  public searchTerm: string = ''
+  public descObj: any  = {
+    '103' : 'BROWSE.LIBRARY_COLLECTION',
+    '250' : 'BROWSE.CLASSIFICATION',
+    '260' : 'BROWSE.GEOGRAPHY'
+  };
+  public facetQueryMap = {
+    'artcollectiontitle_str': 'artcollectiontitle_str',
+    'artclassification_str': 'artclassification_str',
+    'artstor-geography': 'geography',
+    'categoryid': 'category'
+  }
+  private subscriptions: Subscription[] = [];
+  private splashImgURL: string = '';
+  private JSArray: Object = Array;
+  private encodeURIComponent = encodeURIComponent
+
+  private tagsObj: any = {
+    103 : [],
+    250 : [],
+    260 : [],
+    270 : []
+  };
+
+  private categoryFacetMap = {
+    '103': 'categoryid',
+    '250': 'artclassification_str',
+    '260': 'artstor-geography',
+    // '270': '/browse/groups/public?tags=Teaching%2520Resources&page=1',
+    'undefined': 'artcollectiontitle_str' // default
+  }
 
   constructor(
     private router: Router,
@@ -30,50 +70,9 @@ export class LibraryComponent implements OnInit {
     private _tags: TagsService,
     private _title: TitleService,
     private _filters: AssetFiltersService,
-    private locker: Locker
+    private _locker: LockerService
   ) {
-    this._storage = locker.useDriver(Locker.DRIVERS.LOCAL)
     this.unaffiliatedUser = this._auth.isPublicOnly() ? true : false
-  }
-
-  private loading: boolean = false;
-  private subscriptions: Subscription[] = [];
-  private selectedBrowseId: string = '';
-  private browseMenuArray: any[];
-  private categoryFacets: any[]
-  private hierarchicalFacets: object = {}
-  private facetType: string = ''
-  private splashImgURL: string = '';
-  private errorMessage: string = ''
-  private JSObject: Object = Object;
-  private JSArray: Object = Array;
-  private encodeURIComponent = encodeURIComponent
-  private searchTerm: string = ''
-
-  private tagsObj: any = {
-    103 : [],
-    250 : [],
-    260 : [],
-    270 : []
-  };
-  private descObj: any  = {
-    '103' : 'BROWSE.LIBRARY_COLLECTION',
-    '250' : 'BROWSE.CLASSIFICATION',
-    '260' : 'BROWSE.GEOGRAPHY'
-  };
-
-  private categoryFacetMap = {
-    '103': 'categoryid',
-    '250': 'artclassification_str',
-    '260': 'artstor-geography',
-    // '270': '/browse/groups/public?tags=Teaching%2520Resources&page=1',
-    'undefined': 'artcollectiontitle_str' // default
-  }
-  private facetQueryMap = {
-    'artcollectiontitle_str': 'artcollectiontitle_str',
-    'artclassification_str': 'artclassification_str',
-    'artstor-geography': 'geography',
-    'categoryid': 'category'
   }
 
   ngOnInit() {
@@ -108,8 +107,8 @@ export class LibraryComponent implements OnInit {
     }
 
     this.subscriptions.push(
-      this.route.params
-      .subscribe((params: Params) => {
+      this.route.params.pipe(
+      map((params: Params) => {
         this.loading = true
 
         if (params && params['viewId']){
@@ -128,7 +127,7 @@ export class LibraryComponent implements OnInit {
         this.clearFacets()
 
         // Fetch browse collection object from local storage & check if the required collection list has already been set
-        let storageBrwseColObj = this._storage.get('browseColObject')
+        let storageBrwseColObj = this._locker.get('browseColObject')
 
         let hasCategoryTitles = storageBrwseColObj && storageBrwseColObj['categoryid'] && storageBrwseColObj['categoryid'][2] && storageBrwseColObj['categoryid'][2].title.length > 0
         if ( storageBrwseColObj && storageBrwseColObj[facetType] && hasCategoryTitles){
@@ -176,7 +175,7 @@ export class LibraryComponent implements OnInit {
                     this.categoryFacets = categoryFacets
 
                     storageBrwseColObj[facetType] = this.categoryFacets
-                    this._storage.set('browseColObject', storageBrwseColObj)
+                    this._locker.set('browseColObject', storageBrwseColObj)
                   })
                   .catch((err) => {
                     console.error(err)
@@ -188,7 +187,7 @@ export class LibraryComponent implements OnInit {
               this.loading = false
 
               storageBrwseColObj[facetType] = this.hierarchicalFacets
-              this._storage.set('browseColObject', storageBrwseColObj)
+              this._locker.set('browseColObject', storageBrwseColObj)
             } else {
               // Generically handle all other facets, which use "name" property to filter and display
               // - Sort by name, A-Z, then set to categoryFacets array
@@ -206,21 +205,22 @@ export class LibraryComponent implements OnInit {
               this.loading = false
 
               storageBrwseColObj[facetType] = this.categoryFacets
-              this._storage.set('browseColObject', storageBrwseColObj)
+              this._locker.set('browseColObject', storageBrwseColObj)
             }
           })
         }
-      })
-    );
+      })).subscribe()
+    )
+
   } // OnInit
+
+  ngOnDestroy() {
+    this.subscriptions.forEach((sub) => { sub.unsubscribe(); });
+  }
 
   private clearFacets(): void {
     this.hierarchicalFacets = {}
     this.categoryFacets = []
-  }
-
-  ngOnDestroy() {
-    this.subscriptions.forEach((sub) => { sub.unsubscribe(); });
   }
 
   /**

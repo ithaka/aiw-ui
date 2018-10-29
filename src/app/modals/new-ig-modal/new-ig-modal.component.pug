@@ -35,7 +35,7 @@
                 | {{ 'NEW_GROUP_MODAL.PERMISSIONS.PRIVATE' | translate }}
           .form-group([class.has-danger]="serviceResponse.failure")
             label(for="igTagInput") {{ 'NEW_GROUP_MODAL.TAGS_FIELD_LABEL' | translate }}
-            rl-tag-input#igTagInput(
+            ngx-tag-input#igTagInput(
               [formControl]="newIgForm.controls['tags']",
               placeholder="Add a tag...",
               [addOnBlur]="true",

@@ -1,11 +1,12 @@
 import { Component } from '@angular/core'
 import { Router, ActivatedRoute } from '@angular/router'
-import { Subscription } from 'rxjs/Subscription'
+import { Subscription } from 'rxjs'
+import { map, take } from 'rxjs/operators'
 import { Angulartics2 } from 'angulartics2'
 
 import { AssetService } from '../shared/assets.service'
 import { AssetFiltersService } from '../asset-filters/asset-filters.service'
-import { AuthService, FlagService, InstitutionsService } from 'app/shared';
+import { AuthService, FlagService, InstitutionsService } from 'app/shared'
 
 declare var _satellite: any
 
@@ -83,31 +84,31 @@ export class AssetFilters {
   ngOnInit() {
 
   // Get User Institution ID
-  this._auth.getInstitution()
-    .take(1)
-    .subscribe((data) => {
+  this._auth.getInstitution().pipe(
+    take(1),
+    map(data => {
       this.userInstId = data['institutionId']
     }, err => {
       console.log(err.status)
-    })
+  })).subscribe()
 
-    this._inst.getAllInstitutions()
-    .take(1)
-    .subscribe((data) => {
-      this.subscribeAvailableFilter(data['allInstitutions'])
-    }, err => {
-      this.allInstFailed = true
+    this._inst.getAllInstitutions().pipe(
+      take(1),
+      map(data => {
+        this.subscribeAvailableFilter(data['allInstitutions'])
+      }, err => {
+        this.allInstFailed = true
 
-      // on error of all institutions, we still need to call subscriveAvailableFilter
-      this.subscribeAvailableFilter([])
-      console.log(err.status)
-    })
+        // on error of all institutions, we still need to call subscriveAvailableFilter
+        this.subscribeAvailableFilter([])
+        console.log(err.status)
+    })).subscribe()
 
     this.filterNameMap = this._filters.getFilterNameMap()
 
     // Read filters from URL
     this.subscriptions.push(
-      this.route.params.subscribe((routeParams) => {
+      this.route.params.pipe(map(routeParams => {
         this.term = routeParams['term'];
 
         if (routeParams['startDate'] && routeParams['endDate']){
@@ -138,16 +139,16 @@ export class AssetFilters {
               this._filters.apply(paramName, parsedParam);
             }
         }
-      })
+      })).subscribe()
     );
 
     // Subscribe to all applied filters in case something fires outside this component
     this.subscriptions.push(
-      this._filters.applied$
-            .subscribe(filters => {
-                this.appliedFilters = filters;
-            })
-    );
+      this._filters.applied$.pipe(
+        map(filters => {
+          this.appliedFilters = filters
+      })).subscribe()
+    )
 
   }
 
@@ -156,8 +157,8 @@ export class AssetFilters {
    */
   private subscribeAvailableFilter(institutionList: any[]): void {
     this.subscriptions.push(
-      this._filters.available$.subscribe(
-        filters => {
+      this._filters.available$.pipe(
+        map(filters => {
 
           // Contributors List of search results
           if (filters['contributinginstitutionid'] && institutionList.length) {
@@ -206,8 +207,8 @@ export class AssetFilters {
           this.availableFilters = filters
 
         }
-      )
-    );
+      )).subscribe()
+    )
   }
 
   private loadRoute() {

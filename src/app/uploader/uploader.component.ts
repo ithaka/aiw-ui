@@ -14,13 +14,13 @@ import { AuthService, PostPersonalCollectionResponse } from '../shared'
 export class UploaderComponent implements OnInit {
   @Output() fileUploaded: EventEmitter<PostPersonalCollectionResponse> = new EventEmitter()
 
-  private uploader: FileUploader
+  public uploader: FileUploader
   private UPLOAD_URL: string
 
   // controls display of drop zone while there is a file over it
-  private fileOverDropZone: boolean = false
+  public fileOverDropZone: boolean = false
   // keep an array of files which were of invalid type
-  private invalidFiles: FileLikeObject[] = []
+  public invalidFiles: FileLikeObject[] = []
 
   constructor(private _auth: AuthService) {
     this.UPLOAD_URL = [this._auth.getUrl(), 'v1', 'pcollection', 'image'].join('/')
@@ -58,7 +58,7 @@ export class UploaderComponent implements OnInit {
    * Triggered by the fileOver event from ng2-file-upload
    * @param fileOver boolean indicates whether or not a file is over the drop area
    */
-  private fileOverBase(fileOver: boolean): void {
+  public fileOverBase(fileOver: boolean): void {
     this.fileOverDropZone = fileOver;
   }
 

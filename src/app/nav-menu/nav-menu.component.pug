@@ -29,7 +29,7 @@
             // Active on Image Group Page
             button#btnEditGroup.dropdown-item([disabled]="!actionOptions.group || !allowIgUpdate", (click)="editIG = true; copyIG = false; showImageGroupModal = true;", tabindex="1") {{ 'NAV_MENU.ORGANIZE.EDIT' | translate }}
             button#btnSaveGroupAs.dropdown-item([disabled]="!actionOptions.group  || !user.isLoggedIn", (click)="copyIG = true; editIG = false; showImageGroupModal = true;", tabindex="1") {{ 'NAV_MENU.ORGANIZE.SAVE' | translate }}
-            button#btnDeleteGroup.dropdown-item([disabled]="!actionOptions.group || !allowIgUpdate", (click)="deleteIgModal = true", tabindex="1") {{ 'NAV_MENU.ORGANIZE.DELETE_GROUP' | translate }}
+            button#btnDeleteGroup.dropdown-item([disabled]="!actionOptions.group || !allowIgUpdate", (click)="showDeleteIgModal = true", tabindex="1") {{ 'NAV_MENU.ORGANIZE.DELETE_GROUP' | translate }}
             .dropdown-divider(*ngIf="siteID!='SAHARA'")
             // Add Images to Personal Collection for AIW users
             button#addImgsPC.dropdown-item(*ngIf="siteID!='SAHARA'", [disabled]="!user.isLoggedIn", [routerLink]="['/browse', 'mycollections', {upload:true}]", tabindex="1") {{ 'NAV_MENU.ORGANIZE.ADD_IMGS_PC' | translate }}
@@ -51,7 +51,7 @@
           a.link--accent(tabindex="3", [routerLink]="['/login']", *ngIf="!user.isLoggedIn") Log In
         li.nav-item(*ngIf="!mobileCollapsed && institutionObj")
           | Institution: {{ institutionObj.shortName ? institutionObj.shortName : institutionObj.institutionName }}
-ang-delete-ig-modal(*ngIf="deleteIgModal", (closeModal)="deleteIgModal = false", [ig]="ig", [igId]="route.snapshot.params.igId", [igName]="route.snapshot.params.name")
+ang-delete-ig-modal(*ngIf="showDeleteIgModal", (closeModal)="showDeleteIgModal = false", [ig]="ig", [igId]="route.snapshot.params.igId", [igName]="route.snapshot.params.name")
 ang-new-ig-modal(*ngIf="showImageGroupModal", [copyIG]="copyIG", [editIG]="editIG", [ig]="ig", (igReloadTriggered)="reloadIG()", (closeModal)="showImageGroupModal = false")
 ang-share-link-modal(*ngIf="showShareLinkModal", [asset]="selectedAssets[0]", (closeModal)="showShareLinkModal = false")
 ang-add-to-group(*ngIf="showAddToGroupModal", (closeModal)="showAddToGroupModal = false")

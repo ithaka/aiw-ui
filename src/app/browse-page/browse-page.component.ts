@@ -1,14 +1,15 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Router, ActivatedRoute, Params, UrlSegment } from '@angular/router';
-import { Subscription }   from 'rxjs/Subscription';
-import { Locker } from 'angular2-locker';
+import { Component, OnInit, OnDestroy } from '@angular/core'
+import { Router, ActivatedRoute, Params, UrlSegment } from '@angular/router'
+import { Subscription }   from 'rxjs'
+import { map } from 'rxjs/operators'
 
-import { TitleService } from '../shared/title.service';
-import { AssetService } from '../shared/assets.service';
-import { AuthService } from '../shared/auth.service';
-import { AssetFiltersService } from '../asset-filters/asset-filters.service';
-
-import { AppConfig } from '../app.service';
+// Project Dependencies
+import { TitleService } from '../shared/title.service'
+import { AssetService } from '../shared/assets.service'
+import { AuthService } from '../shared/auth.service'
+import { AssetFiltersService } from '../asset-filters/asset-filters.service'
+import { AppConfig } from '../app.service'
+import { LockerService } from 'app/_services';
 
 @Component({
   selector: 'ang-browse-page',
@@ -18,7 +19,6 @@ import { AppConfig } from '../app.service';
 
 export class BrowsePage implements OnInit, OnDestroy {
 
-  private _storage: Locker
   private subscriptions: Subscription[] = []
   private institution: any = {}
 
@@ -34,7 +34,7 @@ export class BrowsePage implements OnInit, OnDestroy {
 
   // TypeScript public modifiers
   constructor(
-      locker: Locker,
+      private _locker: LockerService,
       private _auth: AuthService,
       private _assets: AssetService,
       private _app: AppConfig,
@@ -43,19 +43,21 @@ export class BrowsePage implements OnInit, OnDestroy {
       private _title: TitleService,
       private _filters: AssetFiltersService
   ) {
-      this._storage = locker.useDriver(Locker.DRIVERS.LOCAL);
-      this.institution = this._storage.get('institution');
+      this.institution = this._locker.get('institution');
       this.browseOpts = this._app.config.browseOptions;
   }
 
   ngOnInit() {
     // Subscribe to User object updates
     this.subscriptions.push(
-        this._auth.currentUser.subscribe(
-            (userObj) => { this.user = userObj },
-            (err) => { console.error(err) }
-        )
-    );
+        this._auth.currentUser.pipe(
+          map(userObj => {
+            console.log(userObj)
+            this.user = userObj
+          },
+          (err) => { console.error(err) }
+        )).subscribe()
+    )
 
     // Set page title
     this._title.setSubtitle('Browse')
@@ -64,10 +66,10 @@ export class BrowsePage implements OnInit, OnDestroy {
     this._filters.clearApplied()
 
     this.subscriptions.push(
-      this.route.firstChild.url
-      .subscribe((url: UrlSegment[]) => {
+      this.route.firstChild.url.pipe(
+      map((url: UrlSegment[]) => {
         this.selectedColMenuId = url[0].path;
-      })
+      })).subscribe()
     );
 
     if ( this.browseOpts.artstorCol && !this._auth.isPublicOnly()){
@@ -76,25 +78,25 @@ export class BrowsePage implements OnInit, OnDestroy {
 
     // Subscribe to Institution object updates and change MenuArray on the run
     this.subscriptions.push(
-        this._auth.getInstitution().subscribe(
-            (institutionObj) => {
-                this.institution = institutionObj;
-                this.userTypeId = this._auth.getUser().typeId;
-                if ( (this.userTypeId == 1 || this.userTypeId == 2 || this.userTypeId == 3) && this.browseOpts.instCol && !this._auth.isPublicOnly() ){
-                    let instName = this.institution && this.institution.shortName ? this.institution.shortName : 'Institutional';
-                    let obj = {
-                        label : instName + ' Collections',
-                        id: '2',
-                        link: 'institution'
-                    }
-                    // Replace the item of the array instead of push
-                    this.colMenuArray.splice(1, 1 , obj);
+        this._auth.getInstitution().pipe(
+          map(institutionObj => {
+            this.institution = institutionObj;
+            this.userTypeId = this._auth.getUser().typeId;
+            if ( (this.userTypeId == 1 || this.userTypeId == 2 || this.userTypeId == 3) && this.browseOpts.instCol && !this._auth.isPublicOnly() ){
+                let instName = this.institution && this.institution.shortName ? this.institution.shortName : 'Institutional';
+                let obj = {
+                    label : instName + ' Collections',
+                    id: '2',
+                    link: 'institution'
                 }
-            },
-            (err) => {
-                console.error('Nav failed to load Institution information', err)
+                // Replace the item of the array instead of push
+                this.colMenuArray.splice(1, 1 , obj);
             }
-        )
+              },
+              (err) => {
+                  console.error('Nav failed to load Institution information', err)
+              }
+        )).subscribe()
     );
 
     if ( this.browseOpts.openCol ){

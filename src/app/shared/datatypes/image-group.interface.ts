@@ -23,11 +23,12 @@ export interface ImageGroup {
   public?: boolean,
   igId?: string,
   count?: number,
+  total?: number,
   thumbnails?: Thumbnail[],
   items?: any[],
   description?: string,
   // description?: ImageGroupDescription, // this does not naturally come with image groups, but sometimes we attach it
-  igDownloadInfo?: IgDownloadInfo, // we also attach this to image groups when we have it
+  // igDownloadInfo?: IgDownloadInfo, // we also attach this to image groups when we have it
   sequence_number?: number,
   tags?: string[],
   creation_date?: string,
@@ -40,25 +41,6 @@ export interface ImageGroupDescription {
   igNotes: string;
   count: number;
   isFldrOwner: boolean;
-}
-
-export interface IgDownloadInfo {
-  alreadyDwnldImgCnt: number;
-  canCache?: boolean;
-  curAllowedDwnldCnt: number;
-  dwnldDuration?: number;
-  igId?: string;
-  igImgCount: number;
-  igName?: string;
-  images?: string; // this is a big string of concatenated images and resolutions
-  mediaCnt?: number;
-  message?: string;
-  nonPrivateImgCnt?: number;
-  origDwnldLimit?: number;
-  pptExportAllowed: boolean;
-  pubAudioCnt?: number;
-  qtvrCnt?: number;
-  zooms?: boolean;
 }
 
 /**

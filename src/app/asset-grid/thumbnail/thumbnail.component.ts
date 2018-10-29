@@ -24,7 +24,7 @@ import { Angulartics2 } from 'angulartics2';
 })
 export class ThumbnailComponent implements OnInit, OnChanges {
   @Input()
-  private thumbnail: Thumbnail
+  public thumbnail: Thumbnail
 
   @Input()
   private largeThmbView: boolean
@@ -33,7 +33,7 @@ export class ThumbnailComponent implements OnInit, OnChanges {
   private reorderMode: boolean
 
   @Input()
-  private editMode: boolean
+  public editMode: boolean
 
   private constraints: any = {}
 
@@ -44,7 +44,7 @@ export class ThumbnailComponent implements OnInit, OnChanges {
   private thumbnailAlt: string = ''
 
   // Keeps the track of multiViewItems count associated with the current asset
-  private multiviewItemCount: number = 0
+  public multiviewItemCount: number = 0
 
   constructor(
     private angulartics: Angulartics2,

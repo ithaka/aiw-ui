@@ -1,13 +1,14 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Router, ActivatedRoute } from '@angular/router';
-import { Subscription }   from 'rxjs/Subscription';
+import { Component, OnInit, OnDestroy } from '@angular/core'
+import { HttpClient, HttpHeaders } from '@angular/common/http'
+import { Router, ActivatedRoute } from '@angular/router'
+import { Subscription }   from 'rxjs'
+import { map } from 'rxjs/operators'
 
 // Internal Dependencies
-// import { CollectionService } from './collection.service';
-import { AssetService } from './../shared/assets.service';
-import { AuthService } from './../shared/auth.service';
-import { TitleService } from '../shared/title.service';
+// import { CollectionService } from './collection.service'
+import { AssetService } from './../shared/assets.service'
+import { AuthService } from './../shared/auth.service'
+import { TitleService } from '../shared/title.service'
 
 @Component({
   selector: 'ang-pcollection-page',
@@ -17,28 +18,28 @@ import { TitleService } from '../shared/title.service';
 })
 
 export class PCollectionPage implements OnInit, OnDestroy {
+  public colName: string = ''
+  public colDescription: string = ''
+  public colThumbnail: string = ''
+  public assetCount: number
+  public descCollapsed: boolean = true
+  public showAccessDeniedModal: boolean = false
+  public showDeleteSuccessBanner: boolean = false
+
+  public publishingAssets: any = {
+    ssids: [],
+    showPublishingMsgs: true // Flag that hides the publishing msgs untill a new PC asset is uploaded
+  }
+  public pub_que_count: number = 0
+  public pub_failure_count: number = 0
 
   private header = new HttpHeaders().set('Content-Type', 'application/json'); // ... Set content type to JSON
   private options = { headers: this.header, withCredentials: true }; // Create a request option
 
   private colId: string = ''
-  private colName: string = ''
-  private colDescription: string = ''
-  private colThumbnail: string = ''
-  private assetCount: number
-  private descCollapsed: boolean = true
-  private showAccessDeniedModal: boolean = false
-  private showDeleteSuccessBanner: boolean = false
   private deleteBannerParams: { title?: string } = {}
 
   private subscriptions: Subscription[] = []
-
-  private publishingAssets: any = {
-    ssids: [],
-    showPublishingMsgs: true // Flag that hides the publishing msgs untill a new PC asset is uploaded
-  }
-  private pub_que_count: number = 0
-  private pub_failure_count: number = 0
   private unaffiliatedUser: boolean = false
 
   constructor(
@@ -63,66 +64,70 @@ export class PCollectionPage implements OnInit, OnDestroy {
     this.pollNewPCAssetsStatus()
 
     this.subscriptions.push(
-      this.route.params.subscribe((routeParams) => {
-        // Make copy of params object so we can modify it
-        let params = Object.assign({}, routeParams)
-        if (!params['sort']) {
-          // Default to sorting by Recently Added
-          params['sort'] = 4
+      this.route.params.pipe(
+        map(routeParams => {
+          // Make copy of params object so we can modify it
+          let params = Object.assign({}, routeParams)
+          if (!params['sort']) {
+            // Default to sorting by Recently Added
+            params['sort'] = 4
+          }
+          this.colId = params['pcolId'];
+          // Old links pass a name into the ID, just use that as a search term instead
+          if (!/^[0-9]+$/.test(this.colId)) {
+            this.http.get('/assets/collection-links.json').pipe(
+              map(data => {
+                let linkObj = data
+                let link = linkObj[this.colId]
+                if (link) {
+                  this._router.navigateByUrl(link)
+                } else {
+                  this._router.navigate(['/search', this.colId.replace('_', ' ')])
+                }
+              })).subscribe()
+          } else if (this.colId) {
+            this._assets.clearAssets();
+            /**
+             * Get Collection metadata
+             * - Name
+             * - Description
+             * - Thumbnail
+             */
+            this.getCollectionInfo(this.colId)
+              .then((data) => {
+                this._assets.queryAll(params, true);
+
+                if (!Object.keys(data).length) {
+                  throw new Error('No data!');
+                }
+
+                // If Global Personal Collection, rename as "My Personal Collection"
+                this.colName = this.colId == '37436' ? 'My Personal Collection' : data['collectionname'];
+                this.colDescription = data['blurburl'];
+                this.colThumbnail = data['leadImageURL'] ? data['leadImageURL'] : data['bigimageurl'];
+
+                // Set page title
+                this._title.setSubtitle(this.colName)
+              })
+              .catch((error) => {
+                console.error(error);
+                if (error.status === 401){
+                  this.showAccessDeniedModal = true;
+                }
+              });
         }
-        this.colId = params['pcolId'];
-        // Old links pass a name into the ID, just use that as a search term instead
-        if (!/^[0-9]+$/.test(this.colId)) {
-          this.http.get('/assets/collection-links.json')
-            .subscribe(data => {
-              let linkObj = data
-              let link = linkObj[this.colId]
-              if (link) {
-                this._router.navigateByUrl(link)
-              } else {
-                this._router.navigate(['/search', this.colId.replace('_', ' ')])
-              }
-            })
-        } else if (this.colId) {
-          this._assets.clearAssets();
-          /**
-           * Get Collection metadata
-           * - Name
-           * - Description
-           * - Thumbnail
-           */
-          this.getCollectionInfo(this.colId)
-            .then((data) => {
-              this._assets.queryAll(params, true);
+      })).subscribe()
 
-              if (!Object.keys(data).length) {
-                throw new Error('No data!');
-              }
-
-              // If Global Personal Collection, rename as "My Personal Collection"
-              this.colName = this.colId == '37436' ? 'My Personal Collection' : data['collectionname'];
-              this.colDescription = data['blurburl'];
-              this.colThumbnail = data['leadImageURL'] ? data['leadImageURL'] : data['bigimageurl'];
-
-              // Set page title
-              this._title.setSubtitle(this.colName)
-            })
-            .catch((error) => {
-              console.error(error);
-              if (error.status === 401){
-                this.showAccessDeniedModal = true;
-              }
-            });
-        }
-      })
     ); // End push to subscription
 
-    this.subscriptions.push(this.route.queryParams.subscribe((params) => {
-      console.log(params, !!params.deleteSuccess)
-      this.showDeleteSuccessBanner = !!params.deleteSuccess
-      console.log(this.showDeleteSuccessBanner)
-      this.deleteBannerParams.title = params.deleteSuccess
-    }))
+    this.subscriptions.push(this.route.queryParams.pipe(
+      map(params => {
+        console.log(params, !!params.deleteSuccess)
+        this.showDeleteSuccessBanner = !!params.deleteSuccess
+        console.log(this.showDeleteSuccessBanner)
+        this.deleteBannerParams.title = params.deleteSuccess
+      })).subscribe()
+    )
 
   } // OnInit
 
@@ -151,28 +156,27 @@ export class PCollectionPage implements OnInit, OnDestroy {
 
     let statusArray: Array<any> = []
     for (let ssid of this.publishingAssets['ssids']){
-      this._assets.getPCImageStatus(ssid)
-        .subscribe(
-          (res) => {
-            let assetStatus = '' // i.e. available, publishing_que, publishing_failure
-            if (res.status){
-              assetStatus = 'available'
-            } else if (res.error && res.error.message === 'Published & Indexed OK'){
-              assetStatus = 'publishing_que'
-            } else if (res.error && ( res.error.message === 'Failed to publish, trying again' || res.error.message === 'Failed to index, trying again' )){
-              assetStatus = 'publishing_failure'
-            }
-            let statusObj = {
-              ssid: ssid,
-              status: assetStatus
-            }
-            statusArray.push(statusObj)
-            if (statusArray.length === this.publishingAssets['ssids'].length){ // Was last asset in the array
-              this.updateNewPCAssetStatus(statusArray)
-            }
-        }, (error) => {
-          console.error(error)
-        })
+      this._assets.getPCImageStatus(ssid).pipe(
+        map(res => {
+          let assetStatus = '' // i.e. available, publishing_que, publishing_failure
+          if (res.status){
+            assetStatus = 'available'
+          } else if (res.error && res.error.message === 'Published & Indexed OK'){
+            assetStatus = 'publishing_que'
+          } else if (res.error && ( res.error.message === 'Failed to publish, trying again' || res.error.message === 'Failed to index, trying again' )){
+            assetStatus = 'publishing_failure'
+          }
+          let statusObj = {
+            ssid: ssid,
+            status: assetStatus
+          }
+          statusArray.push(statusObj)
+          if (statusArray.length === this.publishingAssets['ssids'].length){ // Was last asset in the array
+            this.updateNewPCAssetStatus(statusArray)
+          }
+      }, (error) => {
+        console.error(error)
+      })).subscribe()
     }
   }
 

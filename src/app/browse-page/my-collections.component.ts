@@ -1,10 +1,11 @@
-import { Component, OnInit } from '@angular/core';
-import { Router, ActivatedRoute, Params } from '@angular/router';
-import { Subscription }   from 'rxjs/Subscription';
+import { Component, OnInit } from '@angular/core'
+import { Router, ActivatedRoute, Params } from '@angular/router'
+import { Subscription }   from 'rxjs'
+import { map } from 'rxjs/operators'
 
-import { TagsService } from './tags.service';
-import { Tag } from './tag/tag.class';
-import { TitleService, AssetSearchService, AuthService, AssetService, FlagService } from '../shared';
+import { TagsService } from './tags.service'
+import { Tag } from './tag/tag.class'
+import { TitleService, AssetSearchService, AuthService, AssetService, FlagService } from '../shared'
 
 @Component({
   selector: 'ang-my-collections',
@@ -12,7 +13,23 @@ import { TitleService, AssetSearchService, AuthService, AssetService, FlagServic
   styleUrls: [ './browse-page.component.scss' ]
 })
 export class MyCollectionsComponent implements OnInit {
-  private unaffiliatedUser: boolean = false
+  public unaffiliatedUser: boolean = false
+
+  public isLoggedIn: boolean
+//   private showUploadImgsModal: boolean = false;
+  public showEditPCModal: boolean = false;
+
+  public loading: boolean = false;
+  private subscriptions: Subscription[] = [];
+  private categories = [];
+  private tags: Tag[] = [];
+  private expandedCategories: any = {};
+  private selectedBrowseId: string = '';
+
+  private editTagId: string = '';
+
+  // Reference activeTag for description on side
+  private activeTag:  Tag;
   constructor(
     private _auth: AuthService,
     private _flags: FlagService,
@@ -25,22 +42,6 @@ export class MyCollectionsComponent implements OnInit {
     this.unaffiliatedUser = this._auth.isPublicOnly() ? true : false
   }
 
-  private isLoggedIn: boolean
-  private subscriptions: Subscription[] = [];
-  private categories = [];
-  private tags: Tag[] = [];
-  private expandedCategories: any = {};
-  private selectedBrowseId: string = '';
-//   private showUploadImgsModal: boolean = false;
-  private showEditPCModal: boolean = false;
-
-  private editTagId: string = '';
-
-  // Reference activeTag for description on side
-  private activeTag:  Tag;
-
-  private loading: boolean = false;
-
   ngOnInit() {
     // Add tag for My Personal Collection
     let colTag = new Tag('37436', 'My Personal Collection', true, null, { label: 'pcollection', folder: true }, true);
@@ -50,8 +51,8 @@ export class MyCollectionsComponent implements OnInit {
     this._title.setSubtitle('Browse My Collections')
 
     this.subscriptions.push(
-      this.route.params
-      .subscribe((params: Params) => {
+      this.route.params.pipe(
+      map((params: Params) => {
           if (params) {
             if (params['viewId']){
                 this.selectedBrowseId = params['viewId'];
@@ -66,17 +67,17 @@ export class MyCollectionsComponent implements OnInit {
                 this.showEditPCModal = params['upload']
             }
           }
-      })
+      })).subscribe()
     )
 
     // Subscribe to User object updates
     this.subscriptions.push(
-      this._auth.currentUser.subscribe(
-        (userObj) => {
-            this.isLoggedIn = userObj.isLoggedIn
+      this._auth.currentUser.pipe(
+        map(userObj => {
+          this.isLoggedIn = userObj.isLoggedIn
         },
         (err) => { console.error(err) }
-      )
+      )).subscribe()
     )
 
     if (this.isLoggedIn) { // If user is logged-in get data for user's personal collections
@@ -120,11 +121,6 @@ export class MyCollectionsComponent implements OnInit {
           console.log('Unable to load User Personal Collections.');
           this.loading = false;
       });
-  }
-
-  private showEditModal(tag): void{
-      this.editTagId = tag.tagId;
-      this.showEditPCModal = true;
   }
 
   toggleInfo(node){
@@ -200,6 +196,11 @@ export class MyCollectionsComponent implements OnInit {
           }
       }
       return node;
+  }
+
+  private showEditModal(tag): void{
+      this.editTagId = tag.tagId;
+      this.showEditPCModal = true;
   }
 
     /**

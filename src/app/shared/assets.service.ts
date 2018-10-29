@@ -5,10 +5,10 @@
 import { Injectable, OnDestroy, OnInit, EventEmitter } from '@angular/core'
 import { Router, ActivatedRoute, Params } from '@angular/router'
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http'
-import { Observable, BehaviorSubject, Subject } from 'rxjs/Rx'
-import { Locker } from 'angular2-locker'
-import 'rxjs/add/operator/toPromise'
-import { Subscription }   from 'rxjs/Subscription'
+import { Observable, BehaviorSubject, Subject } from 'rxjs'
+
+import { Subscription }   from 'rxjs'
+import { map } from 'rxjs/operators'
 import { categoryName } from './datatypes/category.interface'
 
 // Project Dependencies
@@ -20,12 +20,13 @@ import { AssetSearchService, SearchResponse } from './asset-search.service'
 import { ImageGroup, Thumbnail } from '.'
 import { AppConfig } from 'app/app.service'
 import { APP_CONST } from '../app.constants'
+import { LockerService } from 'app/_services';
 
 @Injectable()
 export class AssetService {
 
     /** Constant that defines which collectionType belongs to institutions */
-    static readonly institutionCollectionType: number = 2;
+    static readonly institutionCollectionType: number = 2
     public allResults: Observable<any>
     public noIG: Observable<any>
     public noAccessIG: Observable<any>
@@ -35,15 +36,15 @@ export class AssetService {
 
     // Set up subject observable for skipping the unauthorized asset on asset page, while browsing though assets
     public unAuthorizedAsset: Subject<boolean> = new Subject();
-    public pagination: Observable<any>
-    public selection: Observable<any>
+    public pagination: Observable<any> 
+    public selection: Observable<any> 
     public selectModeToggle: EventEmitter<any> = new EventEmitter()
 
 
     // Keep track of which params the current results are related to
     public currentLoadedParams: any = {};
 
-     public filterFields: { name: string, value: string }[] = [
+    public filterFields: { name: string, value: string }[] = [
         {name: 'Creator', value: '100' },
         {name: 'Title', value: '101' },
         {name: 'Location', value: '102' },
@@ -57,10 +58,6 @@ export class AssetService {
         {name: 'Technique', value: '110' },
         {name: 'Number', value: '111' }
     ];
-
-    /** Keeps track of all filters available in url */
-    // private knownFilters: any = {};
-    public _storage;
 
     // Pagination flag for preserving the select mode while paging through the results
     public paginated: boolean = false;
@@ -136,29 +133,29 @@ export class AssetService {
         private _router: Router,
         private route: ActivatedRoute,
         private http: HttpClient,
-        locker: Locker,
+        private _locker: LockerService,
         private _auth: AuthService,
         private _groups: GroupService,
         private _toolbox: ToolboxService,
         private _assetSearch: AssetSearchService,
         private _app: AppConfig
     ) {
-        this._storage = locker.useDriver(Locker.DRIVERS.LOCAL);
-        this.allResults = this.allResultsSource.asObservable();
-        this.noIG = this.noIGSource.asObservable();
-        this.noAccessIG = this.noAccessIGSource.asObservable();
-        this.pagination = this.paginationSource.asObservable();
-        this.selection = this.selectedAssetsSource.asObservable();
+        // initialize observables
+        this.allResults = this.allResultsSource.asObservable()
+        this.noIG = this.noIGSource.asObservable()
+        this.noAccessIG = this.noAccessIGSource.asObservable()
+        this.pagination = this.paginationSource.asObservable()
+        this.selection = this.selectedAssetsSource.asObservable()
     }
 
     /**
      * Return most recent results set with at least one asset
      */
     public getRecentResults(): any {
-        if (this._storage.get('results')) {
-            return this._storage.get('results');
+        if (this._locker.get('results')) {
+            return this._locker.get('results')
         } else {
-            return { thumbnails: [] };
+            return { thumbnails: [] }
         }
     }
 
@@ -399,33 +396,22 @@ export class AssetService {
           ig.count = ig.items.length
           let pageStart = (this.urlParams.page - 1) * this.urlParams.size
           let pageEnd = this.urlParams.page * this.urlParams.size
-          let itemIds: string[] = []
-
-          if (typeof ig.items[0] === 'object'){
-            itemIds = ig.items.map( item => {
-                return item.artstorid
-            })
-          } else{
-                itemIds = ig.items
-          }
-
-          let idsAsTerm: string =  itemIds.slice(pageStart, pageEnd).join('&object_id=')
+          let idsAsTerm: string =  ig.items.slice(pageStart, pageEnd).join('&object_id=')
 
           let options = { withCredentials: true }
 
-          this.http.get(this._auth.getHostname() + '/api/v1/items?object_id=' + idsAsTerm, options)
-              .subscribe(
-                  (res) => {
-                      let results = res
-                      ig.thumbnails = results['items']
-                      // Set the allResults object
-                      this.updateLocalResults(ig)
-              }, (error) => {
-                  // Pass portion of the data we have
-                  this.updateLocalResults(ig)
-                  // Pass error down to allResults listeners
-                  this.allResultsSource.next({'error': error}) // .throw(error)
-              })
+          this.http.get(this._auth.getHostname() + '/api/v1/items?object_id=' + idsAsTerm, options).pipe(
+            map(res => {
+                let results = res
+                ig.thumbnails = results['items']
+                // Set the allResults object
+                this.updateLocalResults(ig)
+            }, (error) => {
+                // Pass portion of the data we have
+                this.updateLocalResults(ig)
+                // Pass error down to allResults listeners
+                this.allResultsSource.next({'error': error}) // .throw(error)
+            })).subscribe()
           }
     }
 
@@ -470,7 +456,8 @@ export class AssetService {
             }
             loadBatch(0);
         });
-    }
+
+    } // end setResults
 
     // Used by Browse page
     public pccollection(){
@@ -632,8 +619,8 @@ export class AssetService {
         let options = { withCredentials: true };
         // Returns all of the collections names
         return this.http
-            .get(this._auth.getUrl() + '/collections/', options)
-            .map( res => {
+            .get(this._auth.getUrl() + '/collections/', options).pipe(
+              map(res => {
                 if (type) {
                     let data = res
 
@@ -652,7 +639,8 @@ export class AssetService {
                 } else {
                     return res
                 }
-            })
+              }
+            ))
     }
 
     public getFolders() {
@@ -735,7 +723,7 @@ export class AssetService {
 
         // Set Recent Results (used by Compare Mode)
         if (resultObj.thumbnails && resultObj.thumbnails.length > 0) {
-            this._storage.set('results', resultObj);
+            this._locker.set('results', resultObj)
         }
 
         if (this.paginated){
@@ -881,35 +869,27 @@ export class AssetService {
                 data.total = data.items.length
 
                 // Fetch the asset(s) via items call only if the IG has atleast one asset
-                if (data.total > 0){
-                    if (typeof data.items[0] === 'object'){
-                        data.itemIds = data.items.map( item => {
-                            return item.artstorid
-                        })
-                    } else{
-                        data.itemIds = data.items
-                    }
+                if (data.total > 0) {
                     let pageStart = (this.urlParams.page - 1) * this.urlParams.size
                     let pageEnd = this.urlParams.page * this.urlParams.size
                     // Maintain param string in a single place to avoid debugging thumbnails lost to a bad param
                     const ID_PARAM = 'object_ids='
-                    let idsAsTerm: string =  data.itemIds.slice(pageStart, pageEnd).join('&' + ID_PARAM)
+                    let idsAsTerm: string =  data.items.slice(pageStart, pageEnd).join('&' + ID_PARAM)
 
                     let options = { withCredentials: true }
 
-                    this.http.get(this._auth.getHostname() + '/api/v1/group/' + igId + '/items?' + ID_PARAM + idsAsTerm, options)
-                        .subscribe(
-                            (res) => {
-                                let results = res
-                                data.thumbnails = results['items']
-                                // Set the allResults object
-                                this.updateLocalResults(data)
-                        }, (error) => {
-                            // Pass portion of the data we have
+                    this.http.get(this._auth.getHostname() + '/api/v1/group/' + igId + '/items?' + ID_PARAM + idsAsTerm, options).pipe(
+                      map((res) => {
+                            let results = res
+                            data.thumbnails = results['items']
+                            // Set the allResults object
                             this.updateLocalResults(data)
-                            // Pass error down to allResults listeners
-                            this.allResultsSource.next({'error': error}) // .throw(error);
-                        });
+                      }, (error) => {
+                        // Pass portion of the data we have
+                        this.updateLocalResults(data)
+                        // Pass error down to allResults listeners
+                        this.allResultsSource.next({'error': error}) // .throw(error);
+                    })).subscribe()
                 } else {
                     data.thumbnails = []
                     this.updateLocalResults(data)

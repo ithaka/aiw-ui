@@ -19,12 +19,12 @@ export class CardViewComponent implements OnInit {
 
   public linkRoute: string = ''
   private tags: any[] = []
-  private thumbnails: any[] = []
-  private groupType: string = '-'
-  private description: string = ''
-  
+  public thumbnails: any[] = []
+  public groupType: string = '-'
+  public description: string = ''
+
   // Tracks whether to expand or collapse the tags exceeding 3 lines
-  private tagsCollapsed: boolean = true
+  public tagsCollapsed: boolean = true
 
   constructor(
     private _auth: AuthService,

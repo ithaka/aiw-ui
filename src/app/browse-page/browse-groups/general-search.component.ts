@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { Subscription } from 'rxjs/Subscription'
+import { Subscription } from 'rxjs'
+import { map } from 'rxjs/operators'
 
 @Component({
   selector: 'ang-general-search',
@@ -14,11 +15,11 @@ export class GeneralSearchComponent implements OnInit {
   @Input() loadingGrps: boolean
   @Output() clearGrpSearch: EventEmitter<string> = new EventEmitter() // Invoke clear group search method in parent component
 
-  private subscriptions: Subscription[] = []
-
   // the term that will be searched for
-  private term: string = ''
-  private startSearch: boolean = false
+  public term: string = ''
+  public startSearch: boolean = false
+
+  private subscriptions: Subscription[] = []
 
   constructor() { }
 
@@ -27,19 +28,20 @@ export class GeneralSearchComponent implements OnInit {
       this.term = this.init
     if (this.updateSearchTerm) {
       this.subscriptions.push(
-        this.updateSearchTerm.subscribe((term) => {
+        this.updateSearchTerm.pipe(
+          map(term => {
           this.term = term
-        })
+        })).subscribe()
       )
     }
   }
 
-  private setFocus() : void {
+  public setFocus(): void {
     window.setTimeout(function () {
       if (document.getElementById('empty-search-alert')){
         document.getElementById('empty-search-alert').focus()
-      }    
-    }, 110);  
+      }
+    }, 110);
   }
 
 }

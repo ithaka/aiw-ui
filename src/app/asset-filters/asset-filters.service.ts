@@ -1,11 +1,9 @@
-import { Injectable } from '@angular/core';
-import { Subject } from 'rxjs/Subject';
-import { BehaviorSubject, Observable, Subscription } from 'rxjs/Rx';
-import { Locker } from 'angular2-locker';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import 'rxjs/add/operator/toPromise';
+import { Injectable } from '@angular/core'
+import { BehaviorSubject, Subscription } from 'rxjs'
+import { map } from 'rxjs/operators'
+import { HttpClient, HttpHeaders } from '@angular/common/http'
 
-import { AuthService } from '../shared/auth.service';
+import { AuthService } from '../shared/auth.service'
 
 @Injectable()
 export class AssetFiltersService {
@@ -63,7 +61,6 @@ export class AssetFiltersService {
     // 'Search within' boolean flag
     public searchWithin: boolean = false
 
-    private _storage;
     private institution: any = {};
 
 
@@ -79,18 +76,15 @@ export class AssetFiltersService {
     private subscriptions: Subscription[] = []
 
     constructor(
-        private locker: Locker,
         private http: HttpClient,
         private _auth: AuthService
     ){
-        this._storage = locker.useDriver(Locker.DRIVERS.LOCAL);
-
         this.subscriptions.push(
-            this._auth.getInstitution().subscribe(
-                institution => {
-                    this.filterNameMap['collectiontypes'][2] = this.filterNameMap['collectiontypes'][4] = institution && institution.shortName ? institution.shortName + ' Collections' : 'Institutional Collections';
-                }
-            )
+          this._auth.getInstitution().pipe(
+              map(institution => {
+                  this.filterNameMap['collectiontypes'][2] = this.filterNameMap['collectiontypes'][4] = institution && institution.shortName ? institution.shortName + ' Collections' : 'Institutional Collections'
+              }
+          )).subscribe()
         )
     }
 

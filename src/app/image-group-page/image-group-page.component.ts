@@ -1,11 +1,12 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
-import { Subscription }   from 'rxjs/Subscription';
+import { Component, OnInit, OnDestroy } from '@angular/core'
+import { Router, ActivatedRoute } from '@angular/router'
+import { Subscription }   from 'rxjs'
+import { map, take } from 'rxjs/operators'
 
 // Internal Dependencies
-import { AssetService, AuthService } from './../shared';
-import { ImageGroup, ImageGroupDescription, IgDownloadInfo, ImageGroupService, GroupService } from './../shared';
-import { TitleService } from '../shared/title.service';
+import { AssetService, AuthService } from './../shared'
+import { ImageGroup, ImageGroupDescription, ImageGroupService, GroupService } from './../shared'
+import { TitleService } from '../shared/title.service'
 
 @Component({
   selector: 'ang-image-group',
@@ -14,41 +15,42 @@ import { TitleService } from '../shared/title.service';
 })
 
 export class ImageGroupPage implements OnInit, OnDestroy {
-  private ig: ImageGroup = <ImageGroup>{};
+  public ig: ImageGroup = <ImageGroup>{};
+
+  /** controls when PPT agreement modal is or is not shown */
+  public showPptModal: boolean = false;
+  /** controls the modal that tells a user he/she has met the download limit */
+  public showDownloadLimitModal: boolean = false;
+  /** controls the modal to tell the user to login */
+  public showLoginModal: boolean = false;
+  /** controls the modal to tell the user that the IG doesn't exists */
+  public showNoIgModal: boolean = false;
+  /** controls the modal to tell that the user does not have the rights to access the IG */
+  public showNoAccessIgModal: boolean = false;
+  /** controls access denied modal for unaffiliated users landing on /group/id pages */
+  public showAccessDeniedModal: boolean = false;
+  /** Enables / Disables the IG deletion based on user ownership */
+  public allowIgUpdate: boolean = false;
+
+  public genImgGrpLink: boolean = false;
+
+  /** Options object passed to the asset-grid component */
+  public actionOptions: any = {
+    group: true,
+    isowner: false
+  }
+  public disableIgDelete: boolean = false
   private hasDesc: boolean = false;
   private user: any;
   private descExpanded: boolean = true;
 
   private subscriptions: Subscription[] = [];
-
-  /** controls when PPT agreement modal is or is not shown */
-  private showPptModal: boolean = false;
-  /** controls the modal that tells a user he/she has met the download limit */
-  private showDownloadLimitModal: boolean = false;
-  /** controls the modal to tell the user to login */
-  private showLoginModal: boolean = false;
-  /** controls the modal to tell the user that the IG doesn't exists */
-  private showNoIgModal: boolean = false;
-  /** controls the modal to tell that the user does not have the rights to access the IG */
-  private showNoAccessIgModal: boolean = false;
-  /** controls access denied modal for unaffiliated users landing on /group/id pages */
-  private showAccessDeniedModal: boolean = false;
   /** set to true when the call to download info has returned. We won't know what modal to show before that */
   private downloadInfoReturned: boolean = false;
-  /** Enables / Disables the IG deletion based on user ownership */
-  private allowIgUpdate: boolean = false;
-
-  private genImgGrpLink: boolean = false;
 
   private unaffiliatedUser: boolean = false
-
-  /** Options object passed to the asset-grid component */
-  private actionOptions: any = {
-    group: true,
-    isowner: false
-  }
   /** Reorder: Modifies the layout */
-  private reorderMode: boolean = false;
+  private reorderMode: boolean = false
 
   constructor(
     private _ig: ImageGroupService, // this will be confusing for a bit. ImageGroupService deals with all the old image group service stuff, and some state management
@@ -72,14 +74,14 @@ export class ImageGroupPage implements OnInit, OnDestroy {
     let id = null;
 
     this.subscriptions.push(
-      this.route.queryParams.subscribe((params) => {
-        // if we have a token param, it is a share link and we need to redeem the token
-        if ( params['token'] ) {
-          // go redeem the token here
-          this._group.redeemToken(params['token'])
-            .take(1)
-            .subscribe(
-              (res) => {
+      this.route.queryParams.pipe(
+        map(params => {
+          // if we have a token param, it is a share link and we need to redeem the token
+          if ( params['token'] ) {
+            // go redeem the token here
+            this._group.redeemToken(params['token']).pipe(
+              take(1),
+              map(res => {
                 if (res.success && res.group) {
                   this._assets.setResultsFromIg(res.group)
                 }
@@ -89,27 +91,28 @@ export class ImageGroupPage implements OnInit, OnDestroy {
                   console.error(err)
                 }
               }
-            )
-        }
-      })
-    )
+            )).subscribe()
+          }
+      })).subscribe()
+     ) // end push
 
     /**
      * Get Route Params
      * - Let Assets service know what group to load
      */
     this.subscriptions.push(
-      this.route.params.subscribe((routeParams) => {
-        id = routeParams['igId'];
-        let params = Object.assign({}, routeParams);
-        // If a page number isn't set, reset to page 1!
-        if (!params['page']){
-          params['page'] = 1;
-        }
-        if (id) {
-          this._assets.queryAll(params);
-        }
-      })
+      this.route.params.pipe(
+        map(routeParams => {
+          id = routeParams['igId']
+          let params = Object.assign({}, routeParams)
+          // If a page number isn't set, reset to page 1!
+          if (!params['page']) {
+            params['page'] = 1
+          }
+          if (id) {
+            this._assets.queryAll(params)
+          }
+      })).subscribe()
     );
 
     /**
@@ -117,7 +120,8 @@ export class ImageGroupPage implements OnInit, OnDestroy {
      * - Assets service will provide the image group and its assets
      */
     this.subscriptions.push(
-      this._assets.allResults.subscribe((results: ImageGroup) => {
+      this._assets.allResults.pipe(
+      map((results: ImageGroup) => {
         if ('id' in results) {
           // Set ig properties from results
           this.ig = results;
@@ -139,58 +143,65 @@ export class ImageGroupPage implements OnInit, OnDestroy {
           });
 
           // Allow Generate Image Group Link for Artstor curated IGs
-          if (this.ig.access.length === 0){
+          if (this.ig.access.length === 0) {
             this.genImgGrpLink = true;
           }
-
-          // THIS IS MOCK CODE FOR THE USER'S DOWNLOAD PERMISSIONS
-          // IT HELPS THIS PAGE AND THE IMAGE GROUP DOWNLOAD MODAL FUNCTION IN THE ABSENCE OF DOWNLOAD INFORMATION
-          this.ig.igDownloadInfo = {
-            alreadyDwnldImgCnt: 0,
-            curAllowedDwnldCnt: 2000,
-            igImgCount: this.ig.items.length,
-            igId: id,
-            pptExportAllowed: this.ig.items.length <= 2000
-          }
-
-          // // get the user's download count
-          // this._ig.getDownloadCount(this.ig.igId)
-          //   .take(1)
-          //   .subscribe((res: IgDownloadInfo) => {
-          //     this.downloadInfoReturned = true;
-          //     this.ig.igDownloadInfo = res;
-          //   }, (err) => {
-          //     console.error(err);
-          //   });
         }
-      })
+      })).subscribe()
     );
 
     this.subscriptions.push(
-      this._assets.noIG.subscribe((res: any) => {
+      this._assets.noIG.pipe(
+      map((res: any) => {
         this.showNoIgModal = res;
-      })
-    );
+      })).subscribe()
+    )
 
     this.subscriptions.push(
-      this._assets.noAccessIG.subscribe((res: any) => {
+      this._assets.noAccessIG.pipe(
+      map((res: any) => {
         this.showNoAccessIgModal = res;
-      })
-    );
+      })).subscribe()
+    )
 
     this.subscriptions.push(
-      this._ig.igDownloadTrigger.subscribe((event) => { // right now event will be undefined, it is just a dumb trigger
+      this._ig.igDownloadTrigger.pipe(
+      map(event => { // right now event will be undefined, it is just a dumb trigger
         // make sure we have the info we need
         if (id) {
           this.showDownloadModal();
         }
-      })
-    );
+      })).subscribe()
+    )
 
   } // OnInit
 
   ngOnDestroy() {
     this.subscriptions.forEach((sub) => { sub.unsubscribe(); });
+  }
+
+  public refreshIG(): void{
+    this._assets.queryAll(this.route.snapshot.params, true);
+  }
+
+  /**
+   * Show Description, returns true if:
+   * - A description exists
+   * - View hasn't changed to hide the description
+   */
+  public showDesc(): boolean {
+    if (this.ig && ((this.ig.description && this.ig.description.length > 0) || (this.ig.tags && this.ig.tags.length > 0)) && !this.reorderMode && this.descExpanded) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  /**
+   * Toggle Reorder: Handle output from the Asset Grid
+   */
+  public toggleReorder(isReordering: boolean): void {
+    this.reorderMode = isReordering;
   }
 
   /**
@@ -204,7 +215,7 @@ export class ImageGroupPage implements OnInit, OnDestroy {
     // if the user is logged in and the download info is available
     if (this.user.isLoggedIn) {
       // we will need a new way to know whether or not the user is authorized to download - for now, I will always enable them
-      if (this.ig.igDownloadInfo.pptExportAllowed) {
+      if (this.ig.id) {
         this.showPptModal = true;
       } else {
         this.showDownloadLimitModal = true;
@@ -213,30 +224,6 @@ export class ImageGroupPage implements OnInit, OnDestroy {
       // show login required modal if they're not logged in
       this.showLoginModal = true;
     }
-  }
-
-  private refreshIG(): void{
-    this._assets.queryAll(this.route.snapshot.params, true);
-  }
-
-  /**
-   * Show Description, returns true if:
-   * - A description exists
-   * - View hasn't changed to hide the description
-   */
-  private showDesc(): boolean {
-    if (this.ig && ((this.ig.description && this.ig.description.length > 0) || (this.ig.tags && this.ig.tags.length > 0)) && !this.reorderMode && this.descExpanded) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-
-  /**
-   * Toggle Reorder: Handle output from the Asset Grid
-   */
-  private toggleReorder(isReordering: boolean): void {
-    this.reorderMode = isReordering;
   }
 
   /**

@@ -1,13 +1,15 @@
-import { Locker } from 'angular2-locker'
+import { Locker } from 'angular-safeguard'
 import { Component, OnInit, OnDestroy } from '@angular/core'
 import { Router, ActivatedRoute } from '@angular/router'
 import { Location } from '@angular/common'
 import { Angulartics2 } from 'angulartics2'
 import { CompleterService, LocalData } from 'ng2-completer'
-import { BehaviorSubject, Observable, Subscription } from 'rxjs/Rx'
+import { BehaviorSubject, Observable, Subscription } from 'rxjs'
+import { map, take } from 'rxjs/operators'
 
 import { AppConfig } from '../app.service'
 import { AuthService, User, AssetService, FlagService } from './../shared'
+import { LockerService } from 'app/_services';
 
 declare var initPath: string
 
@@ -18,7 +20,7 @@ declare var initPath: string
 })
 export class Login implements OnInit, OnDestroy {
 
-  private copyBase: string = ''
+  public copyBase: string = ''
 
   // Set our default values
   public user = new User('', '')
@@ -33,11 +35,12 @@ export class Login implements OnInit, OnDestroy {
   public successMsgPwdRst = ''
   public loginInstitutions = [] /** Stores the institutions returned by the server */
 
+  public showRegister: boolean = false
+  public showHelpModal: boolean = false
+
   private loginInstName: string = '' /** Bound to the autocomplete field */
   private stashedRoute: string
   private dataService: LocalData
-
-  public showRegister: boolean = false
 
   /**
    * Observable for autocomplete list of institutions
@@ -58,9 +61,9 @@ export class Login implements OnInit, OnDestroy {
     private router: Router,
     private location: Location,
     private angulartics: Angulartics2,
-    private _app: AppConfig,
+    public _app: AppConfig,
     private _flags: FlagService,
-    private _storage: Locker
+    private _locker: LockerService
   ) {
   }
 
@@ -71,17 +74,16 @@ export class Login implements OnInit, OnDestroy {
      * - The featureFlag values in Auth service would be persistent until the page is refreshed
     */
     this.subscriptions.push(
-      this.route.params.subscribe((params) => {
-        if (params && params['featureFlag']){
+      this.route.params.pipe(
+      map(params => {
+        if (params && params['featureFlag']) {
           this._flags[params['featureFlag']] = true
         }
-      })
+      })).subscribe()
     )
 
     // Check for a stashed route to pass to proxy links
-    // Change from this._storage.get() to this._auth.getFromStorage() to remember the original url, not tested yet
-    // this.stashedRoute = this._storage.get("stashedRoute")
-    this.stashedRoute = this._auth.getFromStorage('stashedRoute')
+    this.stashedRoute = this._locker.get('stashedRoute')
 
     if (this._app.config.copyModifier) {
       this.copyBase = this._app.config.copyModifier + '.'
@@ -109,7 +111,7 @@ export class Login implements OnInit, OnDestroy {
               name: 'AUSS/Ithaka'
             });
           }
-          this.dataService = this._completer.local(this.instListObs, 'name', 'name');
+          this.dataService = this._completer.local(this.loginInstitutions, 'name', 'name');
         }
       })
       .catch((error) => {
@@ -122,15 +124,15 @@ export class Login implements OnInit, OnDestroy {
      * @todo - Should we have to call gtUserInfo here?
      * We don't need to reload user info that we should alreay have.
      */
-    this._auth.getUserInfo()
-      .take(1)
-      .subscribe((res) => {
+    this._auth.getUserInfo().pipe(
+      take(1),
+      map((res) => {
         if ((res.remoteaccess === false) && res.user && (!this._app.config.disableIPAuth)) {
           this.showRegister = true
         }
       }, (err) => {
         console.error(err)
-      })
+      })).subscribe()
 
   } // OnInit
 
@@ -155,7 +157,8 @@ export class Login implements OnInit, OnDestroy {
     filtered = filtered.sort((a, b) => {
         return a.name.search(termReg) - b.name.search(termReg)
     });
-    this.instListSubject.next(filtered)
+    // Update completer with sorted values
+    this.dataService = this._completer.local(filtered, 'name', 'name');
 
     // We need to clear any error messages here if there is one
     if (this.instErrorMsg.length)

@@ -3,12 +3,12 @@ import { BrowserModule, Title } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule, HttpClient } from '@angular/common/http';
 import { NavigationEnd, Router, RouteReuseStrategy, RouterModule, UrlSerializer } from '@angular/router';
-import { removeNgStyles, createNewHosts, createInputTransfer } from '@angularclass/hmr';
-import { Ng2DeviceDetectorModule } from 'ng2-device-detector';
+// import { removeNgStyles, createNewHosts, createInputTransfer } from '@angularclass/hmr';
+import { DeviceDetectorModule } from 'ngx-device-detector';
 import { DatePipe } from '@angular/common'
 
 // Ithaka/Artstor Dependencies
-import { ArtstorViewer, ArtstorViewerModule } from 'artstor-viewer';
+import { ArtstorViewerModule } from 'artstor-viewer'
 
 /*
  * Platform and Environment providers/directives/pipes
@@ -19,22 +19,21 @@ import { ROUTES } from './app.routes';
 // UI modules
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 // import { CoolStorageModule } from 'angular2-cool-storage';
-import { LockerModule, Locker, LockerConfig } from 'angular2-locker'
-import { Angulartics2Module } from 'angulartics2';
-import { Angulartics2GoogleAnalytics } from 'angulartics2/ga';
+import { LockerModule, Locker, LockerConfig, DRIVERS } from 'angular-safeguard'
+import { Angulartics2Module, Angulartics2Settings } from 'angulartics2'
+import { Angulartics2GoogleAnalytics } from 'angulartics2/ga'
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
-import { RlTagInputModule } from 'angular2-tag-autocomplete';
+import { NgxTagInputModule } from 'ngx-tag-autocomplete';
 import { Ng2CompleterModule } from 'ng2-completer';
 
 // Directives
-import { ClickOutsideDirective } from 'angular2-click-outside/clickOutside.directive.ts';
-import { MediumEditorDirective } from 'angular2-medium-editor/medium-editor.directive.ts';
+import { ClickOutsideDirective } from './_directives';
+import { MediumEditorDirective } from 'angular2-medium-editor';
 
 // ng2-idle
 import { NgIdleKeepaliveModule } from '@ng-idle/keepalive'; // this includes the core NgIdleModule but includes keepalive providers for easy wireup
-import { MomentModule } from 'angular2-moment'; // optional, provides moment-style pipes for date formatting
-import {DndModule} from 'ng2-dnd';
+import { SortablejsModule } from 'angular-sortablejs'
 
 // File Uploader
 import { FileUploadModule } from 'ng2-file-upload';
@@ -110,6 +109,7 @@ import {
   PersonalCollectionService,
   AccountService
 } from './shared'
+import { LockerService } from './_services'
 import { LocalPCService } from './_local-pc-asset.service'
 import { AssetFiltersService } from './asset-filters/asset-filters.service'
 import { TagsService } from './browse-page/tags.service'
@@ -137,6 +137,7 @@ const APP_PROVIDERS = [
   GroupService,
   PersonalCollectionService,
   LocalPCService,
+  LockerService,
   LogService,
   ImageGroupService,
   ScriptService,
@@ -239,14 +240,14 @@ export function HttpLoaderFactory(http: HttpClient) {
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
-    RlTagInputModule,
+    NgxTagInputModule,
     Ng2CompleterModule,
     LockerModule,
     FileUploadModule,
     ArtstorViewerModule,
     RouterModule.forRoot(ROUTES, { useHash: true }),
-    Ng2DeviceDetectorModule.forRoot(),
-    Angulartics2Module.forRoot([ Angulartics2GoogleAnalytics ]),
+    DeviceDetectorModule.forRoot(),
+    Angulartics2Module.forRoot(),
     TranslateModule.forRoot({
       loader: {
           provide: TranslateLoader,
@@ -256,7 +257,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     }),
     NgbModule.forRoot(), // Ng Bootstrap Import
     NgIdleKeepaliveModule.forRoot(),
-    DndModule.forRoot() // Drag n Drop import
+    SortablejsModule.forRoot({ animation: 150 })
   ],
   providers: [ // expose our Services and Providers into Angular's dependency injection
     ENV_PROVIDERS,

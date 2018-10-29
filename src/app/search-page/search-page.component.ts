@@ -1,13 +1,14 @@
-import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
-import { Subscription }   from 'rxjs/Subscription';
+import { Subscription }   from 'rxjs'
+import { map } from 'rxjs/operators'
 
-import { AssetService } from './../shared/assets.service';
-import { AuthService, LogService, FlagService, ScriptService } from '../shared';
-import { AssetFiltersService } from '../asset-filters/asset-filters.service';
-import { AssetGrid } from './../asset-grid/asset-grid.component';
-import { TitleService } from '../shared/title.service';
-import { AppConfig } from '../app.service';
+import { AssetService } from './../shared/assets.service'
+import { AuthService, LogService, FlagService, ScriptService } from '../shared'
+import { AssetFiltersService } from '../asset-filters/asset-filters.service'
+import { AssetGrid } from './../asset-grid/asset-grid.component'
+import { TitleService } from '../shared/title.service'
+import { AppConfig } from '../app.service'
 
 @Component({
   selector: 'ang-search-page',
@@ -17,10 +18,10 @@ import { AppConfig } from '../app.service';
 })
 
 export class SearchPage implements OnInit, OnDestroy {
+
+  public siteID: string = ''
   // Add user to decide whether to show the banner
   private user: any = this._auth.getUser();
-
-  private siteID: string = ''
 
   private subscriptions: Subscription[] = [];
 
@@ -40,15 +41,16 @@ export class SearchPage implements OnInit, OnDestroy {
         private _flags: FlagService,
         private _router: Router,
         private _title: TitleService,
-        private _auth: AuthService,
+        public _auth: AuthService,
         private _captainsLog: LogService,
         private _script: ScriptService
-      ) {
-    this.siteID = this._appConfig.config.siteID;
-    // this makes the window always render scrolled to the top
-    this._router.events.subscribe(() => {
-      window.scrollTo(0, 0);
-    });
+    ) {
+      this.siteID = this._appConfig.config.siteID;
+      // this makes the window always render scrolled to the top
+      this._router.events.pipe(
+        map(() => {
+          window.scrollTo(0, 0)
+        })).subscribe()
   }
 
   ngOnInit() {
@@ -120,7 +122,7 @@ export class SearchPage implements OnInit, OnDestroy {
     })
   }
 
-  private skipToFilterSec(): void{
+  public skipToFilterSec(): void{
     window.setTimeout(function ()
     {
       let htmlelement: HTMLElement = document.getElementById('skip-to-search-link');
@@ -128,7 +130,7 @@ export class SearchPage implements OnInit, OnDestroy {
     }, 100);
   }
 
-  private skipToSearchSec(): void{
+  public skipToSearchSec(): void{
     window.setTimeout(function ()
     {
       let htmlelement: HTMLElement = document.getElementById('skip-to-filter-link');

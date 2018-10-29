@@ -1,9 +1,12 @@
 import { Component, Input, OnInit  } from '@angular/core'
 import * as Driver from '../../../../node_modules/driver.js/dist/driver.min.js'
-import { TourStep } from './tour.service'
 import { Router, NavigationStart } from '@angular/router'
+import { map } from 'rxjs/operators'
 import { Angulartics2 } from 'angulartics2'
-import { AuthService } from './..'
+
+// Project Dependencies
+import { AuthService } from './../auth.service'
+import { TourStep } from './tour.service'
 
 @Component({
     selector: 'ang-guide-tour',
@@ -11,34 +14,35 @@ import { AuthService } from './..'
     styleUrls: ['./tour.component.scss']
   })
   export class GuideTourComponent {
-
-    private driver: any
-    private startModalShow: boolean = false
+    public startModalShow: boolean = false
 
     @Input() public steps: TourStep[]
+
+    private driver: any
 
     constructor(
       private _auth: AuthService,
       private _ga: Angulartics2,
       private router: Router
     ){
-      router.events.subscribe(event => {
+      router.events.pipe(
+      map(event => {
         // End the tour when go to another page with browser's forward and backward button
         if (event instanceof NavigationStart) {
           if (this.driver){
             this.driver.reset()
           }
         }
-      })
+      })).subscribe()
     }
 
-    private startTour() {
+    public startTour() {
       this.startModalShow = false
       this._ga.eventTrack.next({ action: 'beginTour', properties: { category: this._auth.getGACategory(), label: 'imageGroupTour' } })
       this.driver = new Driver({ allowClose: false, closeBtnText: 'exit tour', nextBtnText: 'NEXT', prevBtnText: 'BACK', doneBtnText: 'GOT IT, THANKS!',
         onHighlightStarted: (Element) => {
 
-          Element.node.scrollIntoView({block: "center"})
+          Element.node.scrollIntoView({block: 'center'})
 
           // Change the tabIndex of the brand label and links in the login box to ensure if there is tour, the links of the tour is first to be tabbed for accessibility
             this.manipulateDom('className', 'navbar-brand', 6)
@@ -105,7 +109,7 @@ import { AuthService } from './..'
     /**
      * closes the modal and saves the fact that the user dismissed it
      */
-    private closeTourModal(): void {
+    public closeTourModal(): void {
       this.startModalShow = false
     }
 

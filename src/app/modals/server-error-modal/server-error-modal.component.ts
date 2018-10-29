@@ -1,9 +1,9 @@
-import { Router } from '@angular/router';
-import { Locker } from 'angular2-locker';
+import { Router } from '@angular/router'
 import { Component, OnInit, EventEmitter, Input, Output } from '@angular/core'
 
 // Project Dependencies
 import { AuthService } from '../../shared'
+import { LockerService } from 'app/_services';
 
 @Component({
   selector: 'ang-server-error-modal',
@@ -14,7 +14,7 @@ export class ServerErrorModal implements OnInit {
   @Output() closeModal: EventEmitter<any> = new EventEmitter()
 
   constructor(
-    private _storage: Locker,
+    private _locker: LockerService,
     private _router: Router
   ) { }
 
@@ -29,7 +29,7 @@ export class ServerErrorModal implements OnInit {
    */
   stashThenRoute(routeValue: string) {
     console.log(window.location.pathname)
-    this._storage.set('stashedRoute', window.location.pathname)
+    this._locker.set('stashedRoute', window.location.pathname)
     this._router.navigate([routeValue]);
   }
 }
