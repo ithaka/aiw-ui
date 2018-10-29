@@ -215,7 +215,7 @@ export class ImageGroupPage implements OnInit, OnDestroy {
     // if the user is logged in and the download info is available
     if (this.user.isLoggedIn) {
       // we will need a new way to know whether or not the user is authorized to download - for now, I will always enable them
-      if (this.ig.igDownloadInfo.pptExportAllowed) {
+      if (this.ig.igDownloadInfo && this.ig.igDownloadInfo.pptExportAllowed) {
         this.showPptModal = true;
       } else {
         this.showDownloadLimitModal = true;
