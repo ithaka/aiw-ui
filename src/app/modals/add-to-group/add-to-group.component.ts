@@ -157,7 +157,7 @@ export class AddToGroupModal implements OnInit, OnDestroy {
 
     // go get the group from the server
     this._group.get(this.selectedIg.id)
-      .toPromise() // TODO REMOVE RXJS toPromise
+      .toPromise()
       .then((data) => {
         data.items = putGroup.items
 

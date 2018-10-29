@@ -7,7 +7,7 @@ import { Router, ActivatedRoute, Params } from '@angular/router'
 import { Http, Response, Headers, RequestOptions } from '@angular/http'
 import { Observable, BehaviorSubject, Subscription } from 'rxjs'
 import { Locker, LockerConfig, DRIVERS } from 'angular-safeguard'
-import 'rxjs/add/operator/toPromise' // TODO REMOVE USAGE RXJS toPromise
+import 'rxjs/add/operator/toPromise'
 import { map, take } from 'rxjs/operators'
 
 // Project dependencies
