@@ -31,7 +31,8 @@
             ],
             "scripts": [
               "src/assets/js/krpano.js"
-            ]
+            ],
+            "deployUrl" : "/"
           },
           "configurations": {
             "production": {
