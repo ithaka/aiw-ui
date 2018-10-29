@@ -5,7 +5,7 @@ import { map, take } from 'rxjs/operators'
 
 // Internal Dependencies
 import { AssetService, AuthService } from './../shared'
-import { ImageGroup, ImageGroupDescription, IgDownloadInfo, ImageGroupService, GroupService } from './../shared'
+import { ImageGroup, ImageGroupDescription, ImageGroupService, GroupService } from './../shared'
 import { TitleService } from '../shared/title.service'
 
 @Component({
