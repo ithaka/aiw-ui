@@ -81,7 +81,6 @@ export class ThumbnailComponent implements OnInit, OnChanges {
     event.preventDefault()
     event.stopPropagation()
 
-    console.log(urlParams)
     if (urlParams[0] === '/associated') {
       this.angulartics.eventTrack.next({ action: 'view associated images', properties: { label: this.thumbnail.objectId ? this.thumbnail.objectId : this.thumbnail.artstorid } })
     }
