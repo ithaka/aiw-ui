@@ -1,4 +1,3 @@
-import { KeysPipe } from './../shared/keys.pipe';
 import { Component, OnInit, OnDestroy, ViewChild, HostListener } from '@angular/core'
 import { ActivatedRoute, Params, Router } from '@angular/router'
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';

@@ -229,17 +229,18 @@ export class AuthService implements CanActivate {
 
     // set to true so we don't have multiple /userinfo calls going on at once
     this.refreshUserSessionInProgress = true
-    this.getUserInfo(triggerSessionExpModal).pipe(
-      take(1),
-      // toPromise()
-      map((res, err) => {
-        this.refreshUserSessionInProgress = false
-        console.info('Access Token refreshed <3')
-
-      // catchError(err => {
-      //   this.refreshUserSessionInProgress = false
-      //   console.error('Access Token refresh failed </3')
-      })).subscribe()
+    this.getUserInfo(triggerSessionExpModal)
+      .pipe(
+        take(1),
+        map((res) => {
+          this.refreshUserSessionInProgress = false
+          console.info('Access Token refreshed <3')
+        },
+        (err) => {
+          this.refreshUserSessionInProgress = false
+          console.error('Access Token refresh failed </3', err)
+        })
+      ).subscribe()
   }
 
   /**
