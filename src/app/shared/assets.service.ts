@@ -26,11 +26,7 @@ import { LockerService } from 'app/_services';
 export class AssetService {
 
     /** Constant that defines which collectionType belongs to institutions */
-<<<<<<< HEAD
     static readonly institutionCollectionType: number = 2
-=======
-    static readonly institutionCollectionType: number = 2;
->>>>>>> master
     public allResults: Observable<any>
     public noIG: Observable<any>
     public noAccessIG: Observable<any>
@@ -40,24 +36,15 @@ export class AssetService {
 
     // Set up subject observable for skipping the unauthorized asset on asset page, while browsing though assets
     public unAuthorizedAsset: Subject<boolean> = new Subject();
-<<<<<<< HEAD
     public pagination: Observable<any> 
     public selection: Observable<any> 
-=======
-    public pagination: Observable<any>
-    public selection: Observable<any>
->>>>>>> master
     public selectModeToggle: EventEmitter<any> = new EventEmitter()
 
 
     // Keep track of which params the current results are related to
     public currentLoadedParams: any = {};
 
-<<<<<<< HEAD
     public filterFields: { name: string, value: string }[] = [
-=======
-     public filterFields: { name: string, value: string }[] = [
->>>>>>> master
         {name: 'Creator', value: '100' },
         {name: 'Title', value: '101' },
         {name: 'Location', value: '102' },
@@ -72,13 +59,6 @@ export class AssetService {
         {name: 'Number', value: '111' }
     ];
 
-<<<<<<< HEAD
-=======
-    /** Keeps track of all filters available in url */
-    // private knownFilters: any = {};
-    public _storage;
-
->>>>>>> master
     // Pagination flag for preserving the select mode while paging through the results
     public paginated: boolean = false;
 
@@ -145,14 +125,10 @@ export class AssetService {
     private header = new HttpHeaders().set('Content-Type', 'application/json');
     private defaultOptions = { headers: this.header, withCredentials: true };
 
-<<<<<<< HEAD
-  constructor(
-=======
     // // bandaid for the re-search functionality
     // private searchErrorCount: number = 0
 
     constructor(
->>>>>>> master
         private _filters: AssetFiltersService,
         private _router: Router,
         private route: ActivatedRoute,
@@ -164,21 +140,12 @@ export class AssetService {
         private _assetSearch: AssetSearchService,
         private _app: AppConfig
     ) {
-<<<<<<< HEAD
         // initialize observables
         this.allResults = this.allResultsSource.asObservable()
         this.noIG = this.noIGSource.asObservable()
         this.noAccessIG = this.noAccessIGSource.asObservable()
         this.pagination = this.paginationSource.asObservable()
         this.selection = this.selectedAssetsSource.asObservable()
-=======
-        this._storage = locker.useDriver(Locker.DRIVERS.LOCAL);
-        this.allResults = this.allResultsSource.asObservable();
-        this.noIG = this.noIGSource.asObservable();
-        this.noAccessIG = this.noAccessIGSource.asObservable();
-        this.pagination = this.paginationSource.asObservable();
-        this.selection = this.selectedAssetsSource.asObservable();
->>>>>>> master
     }
 
     /**
@@ -422,20 +389,13 @@ export class AssetService {
         // Reset No IG observable
         this.noIGSource.next(false)
         this.noAccessIGSource.next(false);
-<<<<<<< HEAD
 
         if (ig.items.length) {
 
-=======
-
-        if (ig.items.length) {
-
->>>>>>> master
           // set up the string for calling search
           ig.count = ig.items.length
           let pageStart = (this.urlParams.page - 1) * this.urlParams.size
           let pageEnd = this.urlParams.page * this.urlParams.size
-<<<<<<< HEAD
           let idsAsTerm: string =  ig.items.slice(pageStart, pageEnd).join('&object_id=')
 
           let options = { withCredentials: true }
@@ -452,35 +412,6 @@ export class AssetService {
                 // Pass error down to allResults listeners
                 this.allResultsSource.next({'error': error}) // .throw(error)
             })).subscribe()
-=======
-          let itemIds: string[] = []
-
-          if (typeof ig.items[0] === 'object'){
-            itemIds = ig.items.map( item => {
-                return item.artstorid
-            })
-          } else{
-                itemIds = ig.items
-          }
-
-          let idsAsTerm: string =  itemIds.slice(pageStart, pageEnd).join('&object_id=')
-
-          let options = { withCredentials: true }
-
-          this.http.get(this._auth.getHostname() + '/api/v1/items?object_id=' + idsAsTerm, options)
-              .subscribe(
-                  (res) => {
-                      let results = res
-                      ig.thumbnails = results['items']
-                      // Set the allResults object
-                      this.updateLocalResults(ig)
-              }, (error) => {
-                  // Pass portion of the data we have
-                  this.updateLocalResults(ig)
-                  // Pass error down to allResults listeners
-                  this.allResultsSource.next({'error': error}) // .throw(error)
-              })
->>>>>>> master
           }
     }
 
@@ -745,12 +676,6 @@ export class AssetService {
             .get(this._auth.getUrl() + '/v1/pcollection/image-status/' + ssid, options)
     }
 
-<<<<<<< HEAD
-    // // bandaid for the re-search functionality
-    // private searchErrorCount: number = 0
-
-=======
->>>>>>> master
     private updateLocalResults(resultObj: any) {
         // These Params have been loaded now
         this.currentLoadedParams = Object.assign(Object.assign({}, this.defaultUrlParams), this.urlParams);
@@ -798,11 +723,7 @@ export class AssetService {
 
         // Set Recent Results (used by Compare Mode)
         if (resultObj.thumbnails && resultObj.thumbnails.length > 0) {
-<<<<<<< HEAD
             this._locker.set('results', resultObj)
-=======
-            this._storage.set('results', resultObj);
->>>>>>> master
         }
 
         if (this.paginated){
@@ -948,23 +869,11 @@ export class AssetService {
                 data.total = data.items.length
 
                 // Fetch the asset(s) via items call only if the IG has atleast one asset
-<<<<<<< HEAD
                 if (data.total > 0) {
-=======
-                if (data.total > 0){
-                    if (typeof data.items[0] === 'object'){
-                        data.itemIds = data.items.map( item => {
-                            return item.artstorid
-                        })
-                    } else{
-                        data.itemIds = data.items
-                    }
->>>>>>> master
                     let pageStart = (this.urlParams.page - 1) * this.urlParams.size
                     let pageEnd = this.urlParams.page * this.urlParams.size
                     // Maintain param string in a single place to avoid debugging thumbnails lost to a bad param
                     const ID_PARAM = 'object_ids='
-<<<<<<< HEAD
                     let idsAsTerm: string =  data.items.slice(pageStart, pageEnd).join('&' + ID_PARAM)
 
                     let options = { withCredentials: true }
@@ -981,25 +890,6 @@ export class AssetService {
                         // Pass error down to allResults listeners
                         this.allResultsSource.next({'error': error}) // .throw(error);
                     })).subscribe()
-=======
-                    let idsAsTerm: string =  data.itemIds.slice(pageStart, pageEnd).join('&' + ID_PARAM)
-
-                    let options = { withCredentials: true }
-
-                    this.http.get(this._auth.getHostname() + '/api/v1/group/' + igId + '/items?' + ID_PARAM + idsAsTerm, options)
-                        .subscribe(
-                            (res) => {
-                                let results = res
-                                data.thumbnails = results['items']
-                                // Set the allResults object
-                                this.updateLocalResults(data)
-                        }, (error) => {
-                            // Pass portion of the data we have
-                            this.updateLocalResults(data)
-                            // Pass error down to allResults listeners
-                            this.allResultsSource.next({'error': error}) // .throw(error);
-                        });
->>>>>>> master
                 } else {
                     data.thumbnails = []
                     this.updateLocalResults(data)
@@ -1028,38 +918,6 @@ export class AssetService {
         }
 
          // Solr Search
-<<<<<<< HEAD
-        this.searchSubscription = this._assetSearch.search(this.urlParams, term, this.activeSort.index).pipe(
-          map(res => {
-            let data = res
-            let facets = data.facets
-            let len = facets.length
-
-            data.facets.forEach((facet, index) => {
-                this._filters.setAvailable(facet.name, facet.values)
-            })
-
-            if (data.hierarchies2 && data.hierarchies2['artstor-geography']){
-                this._filters.generateHierFacets( data.hierarchies2['artstor-geography'].children, 'geography' )
-            }
-            else{
-                this._filters.generateHierFacets( [], 'geography' )
-            }
-
-            // count and thumbnails are relics from the previous search logic and should be removed eventaully
-            // Transform data from SOLR queries
-            if (data.results) {
-                data['thumbnails'] = data.results
-            }
-            data['count'] = data.total
-            // Set the allResults object
-            this.updateLocalResults(data)
-          }, (error) => {
-            console.error(error)
-            this.allResultsSource.next({'error': error})
-          }
-        )).subscribe()
-=======
         this.searchSubscription = this._assetSearch.search(this.urlParams, term, this.activeSort.index)
             .subscribe(
                 (res) => {
@@ -1090,7 +948,6 @@ export class AssetService {
                     console.error(error)
                     this.allResultsSource.next({'error': error})
             });
->>>>>>> master
     }
 
 //     /**
