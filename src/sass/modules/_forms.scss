@@ -133,21 +133,23 @@ select.form-control {
 rl-tag-input, rl-tag-input-item, .ng2-tag-input-field, .rl-autocomplete-item {
     font-size: 12px !important;
     line-height: 36px !important;
-    font-family: Graphik, Futura, Arial !important;
+    font-family: Verdana !important;
+    font-weight: bold !important;
 }
 
 rl-tag-input-item {
-    color: #8300e0 !important;
-    cursor: pointer;
-    transition: color 0s linear;
-    background: #f8f8f8  !important;
-    border-radius: 3px;
+    color: #000 !important;
+    cursor: pointer !important;
+    background-color: #efefef !important;
+    border-radius: 3px !important;
+    margin-right: 8px !important;
+    margin-bottom: 12px !important;
 }
 
 .rl-autocomplete-item {
-    height: 36px !important;
-    padding: 0 10px !important;
-    white-space: nowrap !important;
+    color: #000 !important;
+    background-color: #efefef !important;
+    border-radius: 3px !important;
 }
 
 .ng2-tag-input-form {
@@ -220,7 +222,7 @@ rl-tag-input-autocomplete {
 rl-tag-input {
     line-height: 40px;
     background: #fff;
-    padding: 6px !important;
+    padding: 12px 0px 0px 6px !important;
     border: 1px solid #cdcdcd;
     box-shadow: none !important;
 }
@@ -233,8 +235,9 @@ rl-tag-input > form > input {
 }
 
 rl-tag-input-item {
-    border-radius: 5px !important;
-    height: 34px !important;
+    color: #000 !important;
+    background-color: #efefef !important;
+    border-radius: 3px !important;
 }
 
 .has-danger {

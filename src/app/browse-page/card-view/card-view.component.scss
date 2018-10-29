@@ -89,33 +89,6 @@ $tagLinkBg: #efefef;
     }
 }
 
-
-.list-inline {
-    padding-left: 0;
-    
-    & li,
-    & li.list-inline-item {
-        background-color: transparent;
-        margin-bottom: 2px;
-
-        a {
-            color: #000;
-            background-color: #efefef;
-            padding: 2px 3px;
-            border-radius: 2px;
-
-            &:hover {
-            background-color: #d6d6d6;
-            }
-        }
-
-        ul,
-        .list-inline-item {
-            padding-left: 5px;
-        }
-    }
-}
-
   .tag-item {
     color: #000;
     font-size: 13px;
