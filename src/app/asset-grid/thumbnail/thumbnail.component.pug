@@ -18,7 +18,7 @@
     ang-collection-badge([collectionType]="getCollectionType()")
     .float-right
       //- Legacy Service icons
-      i.icon.icon-collab(*ngIf="thumbnail.cfObjectId && thumbnail.cfObjectId.length > 0", [id]="thumbnail.objectId + '_associated_images'", (click)="openLink($event, ['/associated', thumbnail.artstorid])" title="Others are also interested in button icon. Press enter to click this button", (keyup.enter)="openLink($event, ['/associated', thumbnail.artstorid])", tabindex="3", aria-role="button")
+      i.icon.icon-collab(*ngIf="thumbnail.cfObjectId && thumbnail.cfObjectId.length > 0", [id]="thumbnail.objectId + '_associated_images'", (click)="openLink($event, ['/associated', thumbnail.artstorid ? thumbnail.artstorid : thumbnail.objectId])" title="Others are also interested in button icon. Press enter to click this button", (keyup.enter)="openLink($event, ['/associated', thumbnail.artstorid])", tabindex="3", aria-role="button")
       i.icon.icon-cluster(*ngIf="thumbnail.clustered == 1", [id]="thumbnail.objectId + '_clustered_images'", (click)="openLink($event, ['/cluster', thumbnail.objectId, { objTitle :  thumbnail.thumbnail1 }])", title="View related media button icon. Press enter to click this button", (keyup.enter)="openLink($event, ['/cluster', thumbnail.objectId, { objTitle :  thumbnail.thumbnail1 }])", tabindex="3", aria-role="button")
       i.icon.icon-iap(*ngIf="thumbnail.iap", tabindex="3", aria-role="button")
       //- New search icons
@@ -29,7 +29,7 @@
         tabIndex="3",
         (keyup.enter)="openLink($event, ['/cluster', thumbnail.clusterid ? thumbnail.clusterid : thumbnail.artstorid, { objTitle :  thumbnail.name }])"
       )
-      i.icon.icon-collab(*ngIf="thumbnail.frequentlygroupedwith && thumbnail.frequentlygroupedwith.length > 0", (click)="openLink($event, ['/associated', thumbnail.artstorid])", title="Others are also interested in button icon. Press enter to click this button", tabIndex="3", (keyup.enter)="openLink($event, ['/associated', thumbnail.artstorid])")
+      i.icon.icon-collab(*ngIf="thumbnail.frequentlygroupedwith && thumbnail.frequentlygroupedwith.length > 0", (click)="openLink($event, ['/associated', thumbnail.artstorid ? thumbnail.artstorid : thumbnail.objectId])", title="Others are also interested in button icon. Press enter to click this button", tabIndex="3", (keyup.enter)="openLink($event, ['/associated', thumbnail.artstorid])")
       //- ang-collection-badge([collectionType]="getCollectionType()", tabIndex="3")
       i(*ngIf="thumbnail.media && thumbnail.media.adlObjectType && thumbnail.media.adlObjectType != 10", class="icon icon-{{thumbnail.media.adlObjectType | typeIdPipe}}")
       i(*ngIf="!thumbnail.media && thumbnail.objectTypeId && thumbnail.objectTypeId != 10", class="icon icon-{{thumbnail.objectTypeId | typeIdPipe}}")
