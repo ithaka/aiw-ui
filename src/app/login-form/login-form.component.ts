@@ -180,8 +180,8 @@ export class LoginFormComponent implements OnInit {
       ).catch((err) => {
         this.loginLoading = false;
         let errObj = err.error
-        this.errorMsg = this.getLoginErrorMsg(errObj.message)
-        if (!this.getLoginErrorMsg(errObj.message)){
+        this.errorMsg = this.getLoginErrorMsg(errObj && errObj.message)
+        if (!this.errorMsg){
           this.getLoginError(user)
           this.angulartics.eventTrack.next({ action: 'remoteLogin', properties: { category: this._auth.getGACategory(), label: 'failed' }});
         }
