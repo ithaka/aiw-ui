@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core'
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
+import { catchError } from 'rxjs/operators'
 import { GroupList } from './datatypes';
 
 // Project Dependencies
@@ -168,7 +169,7 @@ export class GroupService {
         let options = { headers: headers }
 
         return this.http.delete(reqUrl, this.options)
-            .catch(err =>
+            .pipe(catchError(err =>
                 this.http.post(
                     // Backup POST call for DELETE failures over Proxies
                     reqUrl,
@@ -178,7 +179,7 @@ export class GroupService {
                       withCredentials: true
                     }
                 )
-            )
+            ))
     }
 
     /**
@@ -206,7 +207,7 @@ export class GroupService {
             putGroup,
             this.options
         )
-        .catch(err =>
+        .pipe(catchError(err =>
             this.http.post(
                 // Backup POST call for PUT failures over Proxies
                 reqUrl,
@@ -216,7 +217,7 @@ export class GroupService {
                   withCredentials: true
                 }
             )
-        )
+        ))
     }
 
     /**
@@ -257,7 +258,7 @@ export class GroupService {
             body,
             this.options
         )
-        .catch(err =>
+        .pipe(catchError(err =>
             this.http.post(
                 // Backup POST call for PUT failures over Proxies
                 reqUrl,
@@ -267,7 +268,7 @@ export class GroupService {
                   withCredentials: true
                 }
             )
-        )
+        ))
     }
 
     /**
