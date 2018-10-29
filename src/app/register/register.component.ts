@@ -119,7 +119,7 @@ export class RegisterComponent implements OnInit {
           let user: any = Object.assign({}, data['user']);
           // A user that just registered is obviously logged in as a user
           user.isLoggedIn = true;
-          this._auth.saveUser(data['user']); // BRETT TODO DEBUG data.user and data['user'] here
+          this._auth.saveUser(data['user']);
           this.angulartics.eventTrack.next({ action: 'remoteLogin', properties: { category: this._auth.getGACategory(), label: 'success' }});
           this.loadForUser(data);
         } else {

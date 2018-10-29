@@ -52,6 +52,7 @@ export class BrowsePage implements OnInit, OnDestroy {
     this.subscriptions.push(
         this._auth.currentUser.pipe(
           map(userObj => {
+            console.log(userObj)
             this.user = userObj
           },
           (err) => { console.error(err) }

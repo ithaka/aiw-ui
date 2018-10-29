@@ -30,7 +30,7 @@ export class FlagService {
         observe: 'response'
       }
     ).pipe(
-    map((res) => {
+    map(res => {
       let flags = res.body
       let userCountryCode: string = res.headers.get('x-artstor-country-code').substr(0, 2)
 
@@ -56,7 +56,7 @@ export class FlagService {
       }
 
       return flags
-    })) // TODO BRETT - Does pipe require calling subscribe() - this isn't a Subscription reponse so does return flags work within pipe
+    }))
   }
 }
 
