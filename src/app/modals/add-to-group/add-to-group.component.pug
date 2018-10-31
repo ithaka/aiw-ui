@@ -27,12 +27,12 @@
           .form-group(*ngIf="!serviceResponse.success")
             a.btn.btn-link.with-pad(href="http://support.artstor.org/?article=create-and-manage-image-groups", target="_blank") {{ 'ADD_TO_GROUP_MODAL.CONTROLS.HELP' | translate }}
             = " "
-            button.btn.btn-secondary((click)="closeModal.emit()", type="button", data-dismiss="modal") {{ 'ADD_TO_GROUP_MODAL.CONTROLS.CLOSE' | translate}}
+            button.btn.btn-secondary((click)="closeModal.emit()", type="button", data-dismiss="modal", style="margin-right: 5px;") {{ 'ADD_TO_GROUP_MODAL.CONTROLS.CLOSE' | translate}}
             = " "
             button.btn.btn-primary(type="submit") {{ 'ADD_TO_GROUP_MODAL.CONTROLS.SAVE' | translate }}
           .form-group(*ngIf="serviceResponse.success")
             a.btn.btn-link.with-pad(href="http://support.artstor.org/?article=create-and-manage-image-groups", target="_blank") {{ 'ADD_TO_GROUP_MODAL.CONTROLS.HELP' | translate}}
             = " "
-            button.btn.btn-primary((click)="closeModal.emit()", [routerLink]="['/group', selectedIg.id]", type="button") {{ 'ADD_TO_GROUP_MODAL.CONTROLS.NAV_TO_GROUP' | translate}}
+            button.btn.btn-primary((click)="closeModal.emit()", [routerLink]="['/group', selectedIg.id]", type="button", style="margin-right: 5px;") {{ 'ADD_TO_GROUP_MODAL.CONTROLS.NAV_TO_GROUP' | translate}}
             = " "
             button.btn.btn-secondary((click)="closeModal.emit()", type="button") {{ 'ADD_TO_GROUP_MODAL.CONTROLS.RETURN_TO_RESULTS' | translate}}
