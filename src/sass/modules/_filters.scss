@@ -16,7 +16,7 @@ $filterBorderStyle: 1px solid rgba(0, 0, 0, 0.15);
 
 filter, .filter {
     cursor: pointer;
-	font-size: 13px;
+	font-size: 12px;
 	/*@extend %bodyFontStyle;*/
 	display: block;
 	position: relative;
@@ -176,6 +176,7 @@ filter, .filter {
 }
 
 .filter-list {
+	font-size: 12px;
 	padding-left: 0;
 	margin-top: 2px;
 	
