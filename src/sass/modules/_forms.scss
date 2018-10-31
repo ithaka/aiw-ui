@@ -194,6 +194,12 @@ ngx-tag-input-autocomplete {
 }
 
 .ng2-tag-input-remove {
+    font-size: 16px !important;
+    height: 17px !important;
+    line-height: 16px !important;
+    margin-left: 3px !important;
+    width: 17px !important;
+
     &:hover {
         background: $red !important;
         color: #fff !important;
