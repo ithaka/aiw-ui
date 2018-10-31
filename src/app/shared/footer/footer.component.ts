@@ -37,6 +37,12 @@ export class Footer {
     // Get version number
     this.appVersion = version
     this.links = this._app.config.footerLinks
+    if (_auth.getEnv() === 'test') {
+      this.links.splice(2, 1) // if it's stage, remove "SARARA_CONTRIBUTE_PROD"
+    }
+    else {
+      this.links.splice(3, 1) // if it's prod, remove "SARARA_CONTRIBUTE_STAGE"
+    }
     this.browseSec = this._app.config.homeBrowseSec
 
     // Set current year
