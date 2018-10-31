@@ -132,7 +132,7 @@ select.form-control {
 
 ngx-tag-input, ngx-tag-input-item, .ng2-tag-input-field, .rl-autocomplete-item {
     font-size: 12px !important;
-    line-height: 36px !important;
+    line-height: 33px !important;
     font-family: Verdana !important;
     font-weight: bold !important;
 }
@@ -162,6 +162,7 @@ ngx-tag-input-item {
     text-align: left;
     background: #fff;
     padding-left: 5px !important;
+    margin-bottom: 12px !important;
     border: 1px dotted #cdcdcd !important;
     line-height: 12px !important;
     position: relative !important;
@@ -194,11 +195,11 @@ ngx-tag-input-autocomplete {
 }
 
 .ng2-tag-input-remove {
-    font-size: 16px !important;
-    height: 17px !important;
+    font-size: 12px !important;
+    height: 16px !important;
     line-height: 16px !important;
     margin-left: 3px !important;
-    width: 17px !important;
+    width: 16px !important;
 
     &:hover {
         background: $red !important;
