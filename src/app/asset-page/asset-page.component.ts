@@ -1020,6 +1020,9 @@ export class AssetPage implements OnInit, OnDestroy {
               this.runDownloadView(this.downloadViewLink)
             }, 1000);
         }
+        else {
+            this.downloadLoading = false
+        }
     }
 
     /**
