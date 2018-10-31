@@ -5,7 +5,7 @@ import { PactWeb, Matchers } from '@pact-foundation/pact-web'
 import { map } from 'rxjs/operators'
 import { GroupService, AuthService, GroupList, ImageGroup } from '../shared'
 
-describe('Group Calls #pact', () => {
+describe('Group Calls #pact #group', () => {
 
     let provider;
     let _groupService;
@@ -53,6 +53,19 @@ describe('Group Calls #pact', () => {
       ]
     }
 
+    // Data for creating a new image group
+    const newImageGroupObject: ImageGroup = {
+      'name': 'New Image Group',
+      'description' : '<p>Description for a new image group</p>',
+      'tags' : [],
+      'access' : [{
+        // Example is "Institutional"
+        'entity_type': 200,
+        'entity_identifier': '24615',
+        'access_type': 100
+      }]
+    }
+
     // Verify types of response properties - Private Group List
     let matcherPrivateGroupListObject = {}
     Object.keys(expectedPrivateGroupList).forEach( (key) => {
@@ -97,6 +110,46 @@ describe('Group Calls #pact', () => {
 
       _groupService = getTestBed().get(GroupService)
     });
+
+    /**
+     * Create group endpoint
+     */
+    describe('createNewGroup', () => {
+      beforeAll((done) =>  {
+        provider.addInteraction({
+          state: 'I am logged in as qapact@artstor.org',
+          uponReceiving: 'a request for all private groups',
+          withRequest: {
+            method: 'PUT',
+            path: '/api/v1/group',
+            headers: { 'Content-Type': Matchers.somethingLike('application/json') }
+          },
+          willRespondWith: {
+            status: 200,
+            headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+            body: matcherImageGroupObject
+          }
+        })
+        .then(() => { done() }, (err) => { done.fail(err) })
+      })
+
+      afterEach((done) => {
+        provider.verify()
+        .then(function(a) {
+          done()
+        }, function(e) {
+          done.fail(e)
+        })
+      })
+
+      it('should create a new image group via PUT', function(done) {
+        _groupService.create(newImageGroupObject)
+          .subscribe(res => {
+            expect(res).toEqual(expectedImageGroupObject)
+            done()
+          })
+      })
+    })
 
     /**
      * Mock and test group listing endpoint
