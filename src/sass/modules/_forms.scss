@@ -139,9 +139,9 @@ ngx-tag-input, ngx-tag-input-item, .ng2-tag-input-field, .rl-autocomplete-item {
 
 ngx-tag-input-item {
     color: #000 !important;
-    cursor: pointer;
+    cursor: pointer !important;
     background-color: #efefef !important;
-    border-radius: 3px;
+    border-radius: 3px !important;
     margin-right: 8px !important;
     margin-bottom: 12px !important;
     font-family: Verdana, Geneva, Tahoma, sans-serif !important;
@@ -229,7 +229,7 @@ ngx-tag-input-autocomplete {
 ngx-tag-input {
     line-height: 40px;
     background: #fff;
-    padding: 12px 0px 0px 6px !important;
+    padding: 12px 0 0 6px !important;
     border: 1px solid #cdcdcd;
     box-shadow: none !important;
 }
@@ -239,12 +239,6 @@ ngx-tag-input > form > input {
     height: 34px;
     width: 100px !important;
     text-align: center;
-}
-
-ngx-tag-input-item {
-    color: #000 !important;
-    background-color: #efefef !important;
-    border-radius: 3px !important;
 }
 
 .has-danger {
