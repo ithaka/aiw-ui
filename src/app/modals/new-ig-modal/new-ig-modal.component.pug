@@ -49,7 +49,7 @@
           .link(*ngIf="showAddToGroup", (click)="addToGroup.emit()") {{ 'NEW_GROUP_MODAL.SHOW_ADD_TO_IMAGE_GROUP' | translate }}
         .modal-footer
           .form-group
-            button.btn.btn-secondary(type="button", (click)="closeModal.emit()") {{ 'NEW_GROUP_MODAL.CONTROLS.CLOSE' | translate }}
+            button.btn.btn-secondary(type="button", (click)="closeModal.emit()", style="margin-right:5px;") {{ 'NEW_GROUP_MODAL.CONTROLS.CLOSE' | translate }}
             = " "
             button.btn.btn-primary(type="submit", [class.loading]="isLoading") {{ 'NEW_GROUP_MODAL.CONTROLS.SAVE_EDIT' | translate }}
     .modal-content(*ngIf="serviceResponse.success && !editIG")
@@ -63,7 +63,7 @@
           |  created
       .modal-footer
         .form-group
-          button.btn.btn-secondary((click)="closeModal.emit()", type="button") {{ 'NEW_GROUP_MODAL.CONTROLS.RETURN_TO_RESULTS' | translate }}
+          button.btn.btn-secondary((click)="closeModal.emit()", type="button", style="margin-right:5px;") {{ 'NEW_GROUP_MODAL.CONTROLS.RETURN_TO_RESULTS' | translate }}
           = " "
           button.btn.btn-primary([routerLink]="['/group', newGroup.id]", type="button") {{ 'NEW_GROUP_MODAL.CONTROLS.NAV_TO_GROUP' | translate }}
     .modal-content(*ngIf="serviceResponse.success && editIG")
