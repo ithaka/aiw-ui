@@ -35,7 +35,7 @@ export class Login implements OnInit, OnDestroy {
   public forcePwdRst = false
   public successMsgPwdRst = ''
   public loginInstitutions = [] /** Stores the institutions returned by the server */
-  public prod:boolean = environment.production
+  public prod: boolean = environment.production
 
   public showRegister: boolean = false
   public showHelpModal: boolean = false
