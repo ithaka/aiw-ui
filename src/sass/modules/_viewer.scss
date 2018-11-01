@@ -11,7 +11,7 @@
 
 .openseadragon-container {
     // Need to override inline styles
-    background: #f8faf8 !important;
+    background: #000 !important;
 
     @media(max-width: $phone) {
         min-height: 50vh;
