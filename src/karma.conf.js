@@ -6,16 +6,24 @@ module.exports = function (config) {
     basePath: '',
     frameworks: ['jasmine', 'jasmine-spec-tags', 'pact', '@angular-devkit/build-angular'],
     plugins: [
-      require('karma-chrome-launcher'),
-      require('karma-coverage'),
       require('karma-jasmine'),
       require('karma-jasmine-spec-tags'),
-      require('karma-mocha-reporter'),
-      require('karma-phantomjs-launcher'),
-      require('karma-remap-coverage'),
-      require('karma-sourcemap-loader'),
-      require('karma-webpack'),
-      require('@pact-foundation/karma-pact')
+      require('karma-chrome-launcher'),
+      require('karma-jasmine-html-reporter'),
+      require('karma-coverage-istanbul-reporter'),
+      require('@angular-devkit/build-angular/plugins/karma'),
+      require('@pact-foundation/karma-pact'),
+      // require('karma-chrome-launcher'),
+      // require('karma-coverage'),
+      // require('karma-jasmine'),
+      // require('karma-jasmine-spec-tags'),
+      // require('karma-mocha-reporter'),
+      // require('karma-phantomjs-launcher'),
+      // require('karma-remap-coverage'),
+      // require('karma-sourcemap-loader'),
+      // require('karma-webpack'),
+      // require('@pact-foundation/karma-pact'),
+      // require('@angular-devkit/build-angular/plugins/karma')
     ],
     client: {
       clearContext: false // leave Jasmine Spec Runner output visible in browser

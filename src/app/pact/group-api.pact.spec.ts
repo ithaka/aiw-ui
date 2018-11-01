@@ -41,7 +41,10 @@ describe('Group Calls #pact #group', () => {
         }
       ],
       'items': [
-        { artstorid: 'SS34888_34888_25943882', zoom: { viewerX: 100, viewerY: 500, pointWidth: 600, pointHeight: 800 }},
+        { 
+          artstorid: 'SS34888_34888_25943882', 
+          zoom: { viewerX: 100, viewerY: 500, pointWidth: 600, pointHeight: 800 }
+        },
         'ABARNITZ_10310367033',
         'ABARNITZ_10310366171',
         'ABARNITZ_10310366099',
