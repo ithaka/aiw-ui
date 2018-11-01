@@ -71,9 +71,10 @@ $tagLinkBg: #efefef;
     // For expand/collapse tags exceeding three lines 
     .groupTagsCntnr{
         overflow: hidden;
+        padding-top: 1px;
         
         &.limit{
-            max-height: 66px;
+            max-height: 4em;
             margin-bottom: 5px;
             display: -webkit-box;
             text-overflow: ellipsis;
