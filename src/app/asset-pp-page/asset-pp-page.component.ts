@@ -16,11 +16,11 @@ import { AssetSearchService, MetadataService } from './../shared'
 export class AssetPPPage implements OnInit {
   public asset: any = {}
   public metaArray: Array<any> = []
+  public isMultiView: boolean = false // flag for print preview of multiview asset
   private header = new HttpHeaders().set('Content-Type', 'application/json') // ... Set content type to JSON
   private options = { headers: this.header, withCredentials: true } // Create a request option\
   private assetId: string
   private subscriptions: Subscription[] = []
-  public isMultiView: boolean  = false // flag for print preview of multiview asset
 
   constructor(
     private _metadata: MetadataService,
