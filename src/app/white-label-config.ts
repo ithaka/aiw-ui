@@ -61,8 +61,8 @@ export const WLV_SAHARA = {
     footerLinks: [
         "ARTSTOR",
         "SAHARA",
-        "SARARA_CONTRIBUTE_PROD",
-        "SARARA_CONTRIBUTE_STAGE",
+        "SAHARA_CONTRIBUTE_PROD",
+        "SAHARA_CONTRIBUTE_STAGE",
         "SAHARA_TERMS",
         "SAHARA_PRIVACY",
         "COOKIE_POLICY"
