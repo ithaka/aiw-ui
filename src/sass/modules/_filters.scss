@@ -16,7 +16,7 @@ $filterBorderStyle: 1px solid rgba(0, 0, 0, 0.15);
 
 filter, .filter {
     cursor: pointer;
-	font-size: 13px;
+	font-size: 12px;
 	/*@extend %bodyFontStyle;*/
 	display: block;
 	position: relative;
@@ -176,17 +176,22 @@ filter, .filter {
 }
 
 .filter-list {
+	font-size: 12px;
 	padding-left: 0;
+	margin-top: 2px;
 	
 	& li,
-	& li.filter {
+	& li.filter-item {
+		display: inline-block;
 		background-color: transparent;
+		margin-right: 8px;
+		margin-bottom: 10px;
 
 		a {
 			color: #000;
 			background-color: #efefef;
-			padding: 2px 3px;
-			border-radius: 2px;
+			padding: 4px 8px;
+            border-radius: 3px;
 
 			&:hover {
 			background-color: #d6d6d6;
@@ -194,7 +199,7 @@ filter, .filter {
 		}
 
 		ul,
-		.filter-list {
+		.filter-item {
 			padding-left: 5px;
 		}
 	}
