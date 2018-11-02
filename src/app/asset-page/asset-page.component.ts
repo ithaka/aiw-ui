@@ -501,8 +501,11 @@ export class AssetPage implements OnInit, OnDestroy {
             }
             this.assets.splice(1)
             this.assetIds.splice(1)
+        } else if (Array.isArray(this.assets[0].tileSource)){ // Log GA event for opening a multi view item in Fullscreen 
+            this.angulartics.eventTrack.next({ action: 'multiViewItemFullscreen', properties: { category: this._auth.getGACategory(), label: this.assets[0].id } });
         }
         this.isFullscreen = isFullscreen
+        
     }
 
     /**
@@ -1045,6 +1048,9 @@ export class AssetPage implements OnInit, OnDestroy {
      */
     private toggleAssetDrawer(show: boolean) {
         this.showAssetDrawer = show
+        if (Array.isArray(show && this.assets[0].tileSource)){ // Log GA event for comparing a multi view item in Fullscreen mode
+            this.angulartics.eventTrack.next({ action: 'multiViewItemCompare', properties: { category: this._auth.getGACategory(), label: this.assets[0].id } });
+        }
     }
 
     /**
