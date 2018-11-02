@@ -57,18 +57,16 @@
                   .form-card.card
                     ul.list-group.list-group-flush.compact
                       li.list-group-item(*ngFor="let filter of filterGroup.values")
-                        label.custom-control.custom-checkbox
-                          input.custom-control-input((click)="toggleFilter(filter)", type="checkbox", [checked]="filter.checked")
-                          span.custom-control-indicator
-                          span.custom-control-description
-                            span {{ filter.name }} {{ filter.count ? '(' + filter.count +')' : '' }}
+                        .custom-control.custom-checkbox
+                          input.custom-control-input(type="checkbox", [checked]="filter.checked")
+                          label.custom-control-label((click)="toggleFilter(filter)")
+                            | {{ filter.name }} {{ filter.count ? '(' + filter.count +')' : '' }}
                         ul.list-group.list-group-child(*ngIf="filter.children")
                           li.list-group-item(*ngFor="let child of filter.children")
-                            label.custom-control.custom-checkbox
-                              input.custom-control-input( (click)="toggleFilter(child, filter)", type="checkbox", [checked]="child.checked")
-                              span.custom-control-indicator
-                              span.custom-control-description
-                                span {{ child.name }} {{ child.count ? '(' + child.count +')' : '' }}
+                            .custom-control.custom-checkbox
+                              input.custom-control-input(type="checkbox", [checked]="child.checked")
+                              label.custom-control-label((click)="toggleFilter(child, filter)")
+                                | {{ child.name }} {{ child.count ? '(' + child.count +')' : '' }}
       .modal-footer
         .alert.alert-warning(*ngIf="error.empty", [innerHtml]="'ADVANCED_SEARCH_MODAL.ERRORS.EMPTY_SEARCH' | translate")
         .alert.alert-warning(*ngIf="error.date", [innerHtml]="'ADVANCED_SEARCH_MODAL.ERRORS.DUMB_DATE' | translate")

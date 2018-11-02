@@ -123,15 +123,17 @@
 }
 
 .edit{
+    text-indent: 0;
     cursor: pointer;
     background: rgba(100, 99, 100, 0.25);
     color: #fff;
     display: inline-block;
-    padding: 2px;
+    padding: 2px 4px;
     border-radius: 2px;
     overflow: hidden;
-    margin: 0 5px;
+    margin: 0 5px -1px 5px;
     letter-spacing: 0.5px;
+    vertical-align: bottom;
 
     &:hover{
         background: rgba(100, 99, 100, 0.55);

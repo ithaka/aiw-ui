@@ -43,6 +43,10 @@
     border-color: $blue;
   }
 }
+
+.pad-top {
+  padding-top: 10px;
+}
 // removed expander because of moving description into column
 // may want to implement this gradient on collection page
 // .page__description {

@@ -225,5 +225,12 @@
 .filter--aboveGroup {
 	width: auto;
 	display: inline-block;
-	margin: 3px;
+    margin-left: 4px;
+    margin-right: 4px;
+    margin-bottom: 12px;
+    border-radius: 3px;
+}
+
+.filter-padding {
+    padding: 4px 8px;
 }

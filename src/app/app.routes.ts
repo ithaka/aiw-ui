@@ -26,6 +26,12 @@ import { LinkPage } from './link-page'
 
 export const ROUTES: Routes = [
   { path: '', component: Home, canActivate: [AuthService], pathMatch: 'full' },
+  // "Hashbang" support for sitemap
+  { path: '!', redirectTo: '', canActivate: [AuthService], pathMatch: 'full' },
+  { path: '!/asset/:assetId', redirectTo: 'asset/:assetId', pathMatch: 'full' },
+  { path: '!/collection/:colId', redirectTo: 'collection/:colId', pathMatch: 'full' },
+  { path: '!/category/:colId', redirectTo: 'category/:colId', pathMatch: 'full' },
+  // Component Routes
   { path: 'account', component: AccountPage, canActivate: [AuthService] },
   { path: 'login', component: Login },
   { path: 'home',  component: Home, canActivate: [AuthService] },

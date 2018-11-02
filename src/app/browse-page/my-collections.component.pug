@@ -4,8 +4,9 @@ nav.nav.nav-inline.browse-nav
     .tree
       // Show tags for Personal and Private collections (when logged in)
       ng-container(*ngIf="isLoggedIn")
-        ang-tag(*ngFor="let tag of tags", [tag]="tag", [edit]="tag.type && tag.type.label === 'pcollection'", (editTag)="showEditModal(tag)")
-
+        ul.filter-list
+          li.filter.filter--browse(*ngFor="let tag of tags")
+            ang-tag(*ngFor="let tag of tags", [tag]="tag", [edit]="tag.type && tag.type.label === 'pcollection'", (editTag)="showEditModal(tag)")
       .alert.alert-info(*ngIf="!isLoggedIn")
         h3 {{ 'BROWSE.ERRORS.LOGIN_PC_HEADING' | translate }}
         br

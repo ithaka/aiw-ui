@@ -25,8 +25,11 @@ div
           i.icon.icon-direction.tree-icon.desc-expnd-clps-icon([ngClass]="{ 'icon-down' : descExpanded, 'icon-left' : !descExpanded }", style="float:right")
         .ig-tags.meta-block.pt-4(*ngIf!="ig.tags && ig.tags.length > 0")
           .label Tags
-          div
-            a.tag(*ngFor="let tag of ig.tags", [routerLink]="['/browse', 'groups', 'search']", [queryParams]="{ 'level': 'all', 'tags' : encodeTag(tag), 'page' : '1' }") {{ tag }}
+          ul.filter-list.pad-top(#groupTagsList="")
+            li.filter-item(*ngFor="let tag of ig.tags")
+              a.font-weight-bold([routerLink]="['/browse', 'groups', 'search']", [queryParams]="{ 'level': 'all', 'tags' : encodeTag(tag), 'page' : '1' }") {{ tag }}
+          //- div
+          //-   a.tag(*ngFor="let tag of ig.tags", [routerLink]="['/browse', 'groups', 'search']", [queryParams]="{ 'level': 'all', 'tags' : encodeTag(tag), 'page' : '1' }") {{ tag }}
         .meta-block(*ngIf!="ig.description && ig.description.length > 0")
           .label Description
         .desc-no-expand.meta-block(*ngIf="!ig.description || ig.description.length <= 0")

@@ -90,7 +90,7 @@ export class Login implements OnInit, OnDestroy {
     )
 
     // Check for a stashed route to pass to proxy links
-    this.stashedRoute = this._locker.get('stashedRoute')
+    this.stashedRoute = this._locker.get('stashedRoute') || ''
 
     if (this._app.config.copyModifier) {
       this.copyBase = this._app.config.copyModifier + '.'
@@ -200,7 +200,8 @@ export class Login implements OnInit, OnDestroy {
 
     if (selectedInst.type === 'proxy') {
       // Hashes within a parameter are interpretted incorrectly, and we don't need 'em
-      let stashedRoute = this.stashedRoute ? this.stashedRoute.replace('#/', '') : '/'
+      let stashedRoute = this.stashedRoute || ''
+      stashedRoute = this.stashedRoute.replace ? this.stashedRoute.replace('#/', '') : '/'
       // WORKAROUND: Auth is still cleaning data to replace www.artstor.org with library.artstor.org
       if (url.match('//www.artstor.org')) {
         url = url.replace('//www.artstor.org', '//library.artstor.org')
