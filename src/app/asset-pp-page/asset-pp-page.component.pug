@@ -1,6 +1,8 @@
 #printable-cntnr.container-fluid(*ngIf="asset && metaArray")
   .asset-img
-    img([class.disablePointerEvents]="reorderMode", [attr.src]="_search.makeThumbUrl(asset.thumbnail_url, 2)", [attr.alt]="asset.title ? 'Thumbnail of ' + asset.title : 'No title available'")
+    img([class.disablePointerEvents]="reorderMode",
+    [attr.src]="_search.makeThumbUrl(asset.thumbnail_url, 2, isMultiView)",
+    [attr.alt]="asset.title ? 'Thumbnail of ' + asset.title : 'No title available'")
   .disclaimer This image and the text corresponding to this image may only be used for noncommercial educational and scholarly purposes.
   .meta-cntnr
     h2 Image Information
