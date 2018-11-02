@@ -83,7 +83,7 @@ export class Login implements OnInit, OnDestroy {
     )
 
     // Check for a stashed route to pass to proxy links
-    this.stashedRoute = this._locker.get('stashedRoute')
+    this.stashedRoute = this._locker.get('stashedRoute') || ''
 
     if (this._app.config.copyModifier) {
       this.copyBase = this._app.config.copyModifier + '.'
