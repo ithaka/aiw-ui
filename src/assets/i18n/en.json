@@ -1,8 +1,4 @@
 {
-  "FORUM": {
-    "PROD": "http://new.forum.jstor.org",
-    "TEST": "http://test.forum.jstor.org"
-  },
   "LOGIN": {
     "REG_LOGIN": {
       "HEADING": "Log in with your Artstor account",

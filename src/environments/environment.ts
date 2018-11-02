@@ -4,7 +4,8 @@
 
 export const environment = {
   production: false,
-  API_URL: '//stage.artstor.org'
+  API_URL: '//stage.artstor.org',
+  FORUM_URL: 'http://test.forum.jstor.org'
 };
 
 /*

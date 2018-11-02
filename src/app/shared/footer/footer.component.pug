@@ -39,7 +39,7 @@
               p.small(*ngIf="siteID!='SAHARA'", [innerHtml]="'HOME.BROWSE.GROUPS_LIST' | translate")
               p.small(*ngIf="siteID=='SAHARA'", [innerHtml]="'HOME.BROWSE.GROUPS_LIST_SAHARA' | translate")
           //- Public Collections for Unaffiliated users
-          span(*ngIf="_auth.isPublicOnly()")
+          span(*ngIf="_auth.isPublicOnly() && siteID!='SAHARA'")
             a.link#footerLinkBrowseIGs.footer__explore-link([routerLink]="['/browse','commons']")
               h2.browse-category {{ 'HOME.BROWSE.PUB_COLL_HEADING' | translate }}
               p.small([innerHtml]="'HOME.BROWSE.PUB_COLL_LIST' | translate")
@@ -61,7 +61,7 @@
             //-   a.link.footer-logout((click)="logout()", *ngIf="user && !_auth.isPublicOnly()") Log Out
             //- li
             //-   a.link.footer-logout([routerLink]="['/login']", *ngIf="!user || _auth.isPublicOnly()") Log In
-          .mt-1 
+          .mt-1
             #google_translate_element.translate-flyout
         .col-md-3.col-6
           div.social-icons
