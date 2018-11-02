@@ -10,15 +10,15 @@ nav.nav.nav-inline.browse-nav
           button#iconSearchClear.icon.icon-close.form-control__icon(*ngIf="searchTerm && searchTerm.length > 0", (click)="clearSearchTerm(term)", tabindex="6")
           button#iconSearchSubmit.icon.icon-filter.form-control__icon(*ngIf="!searchTerm || searchTerm.length == 0", (click)="addRouteParam('searchTerm',searchTerm)", tabindex="6")
         #alertNoResults.alert.alert-warning.input-group(*ngIf="!(categoryFacets | iggroupfilter:searchTerm).length && !loading", [innerHtml]="'No search results found'")
-      li.filter(*ngFor="let facet of categoryFacets | iggroupfilter:searchTerm", [class.hidden]="facet.title === '' || !facet.name")
+      li.filter.filter--browse(*ngFor="let facet of categoryFacets | iggroupfilter:searchTerm", [class.hidden]="facet.title === '' || !facet.name")
         a.tag-link(*ngIf="facetQueryMap[facetType] == 'category'", [routerLink]="['/category', facet.name ]")
           | {{ facet.title }} ({{facet.count}})
         a.tag-link(*ngIf="facetQueryMap[facetType] != 'category'", [routerLink]="['/search/*', getLinkParam(facetType, facet.name)]")
           | {{facet.name}} ({{facet.count}})
-      li.filter(*ngFor="let key of ObjectKeys(hierarchicalFacets).sort()")
+      li.filter.filter--browse(*ngFor="let key of ObjectKeys(hierarchicalFacets).sort()")
         a.tag-link([routerLink]="['/search/*', getLinkParam(facetType, hierarchicalFacets[key].element.efq)]") {{key}} ({{hierarchicalFacets[key].element.count}})
         ul
-          li.filter(*ngFor="let childKey of ObjectKeys(hierarchicalFacets[key].children).sort()")
+          li.filter.filter--browse(*ngFor="let childKey of ObjectKeys(hierarchicalFacets[key].children).sort()")
             a.tag-link([routerLink]="['/search/*', getLinkParam(facetType,hierarchicalFacets[key].children[childKey].element.efq)]") {{childKey}} ({{hierarchicalFacets[key].children[childKey].element.count}})
     //- ul.filter-list
     //-   li.filter(*ngFor)

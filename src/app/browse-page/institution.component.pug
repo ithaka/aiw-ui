@@ -1,8 +1,9 @@
 nav.nav.nav-inline.browse-nav
 .row
   .col-md-8
-    .tree
-      ang-tag(*ngFor="let tag of tags", [tag]="tag")
+    ul.filter-list
+      li.filter.filter--browse(*ngFor="let tag of tags")
+        ang-tag([tag]="tag")
     .alert.alert-info(*ngIf="!loading && tags.length < 1")
       h3 {{ 'BROWSE.ERRORS.NO_INSTITUTIONAL_COLLECTIONS_HEADING' | translate }}
       br

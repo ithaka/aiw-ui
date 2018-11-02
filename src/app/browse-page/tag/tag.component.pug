@@ -1,6 +1,6 @@
 //- Sets up the tag passed into the component
-div(id="tagItem{{ tag.tagId }}", title="{{ tag.title }}", [ngClass]="[ link ? 'tag-link' : '', 'tag-item', tag.canOpen ? 'clickable' : '', 'tag-item__indent-' + tag.getLevel(), linkRoute.length < 1 ? 'no-link' : '']")
-  a(id="tagItem{{ tag.tagId }}Open", [ngClass]="{ 'no-link' : linkRoute.length < 1 || !tag.canOpen }", [routerLink]="[ linkRoute, tag.tagId, { 'browseType': browseType } ]")
+div(id="tagItem{{ tag.tagId }}", title="{{ tag.title }}", [ngClass]="[ tag.canOpen ? 'clickable' : '', 'tag-item__indent-' + tag.getLevel(), linkRoute.length < 1 ? 'no-link' : '']")
+  a.tag-link(id="tagItem{{ tag.tagId }}Open", [ngClass]="{ 'no-link' : linkRoute.length < 1 || !tag.canOpen }", [routerLink]="[ linkRoute, tag.tagId, { 'browseType': browseType } ]")
     span.notranslate {{tag.title}}
   span.edit(*ngIf="edit", (click)="editTag.emit()") Edit
   .info-cntnr([ngbCollapse]="tag.isCollapsed", *ngIf="tag.description")

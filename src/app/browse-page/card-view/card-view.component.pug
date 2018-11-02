@@ -43,8 +43,8 @@
         .col-sm-12
           p.font-weight-bold#tag-text Group Tags:
           .groupTagsCntnr([class.limit]="tagsCollapsed")
-            ul.list-inline(#groupTagsList="")
+            ul.filter-list(#groupTagsList="")
               i(*ngIf="!group.tags.length") This group does not have any tags.
-              li.list-inline-item(*ngFor="let tag of group.tags")
-                a.tag-link.font-weight-bold((click)="selectTag(tag)") {{ tag }}
-          .expander.link--action.small([class.hidden]="groupTagsList.clientHeight < 70", [class.collapsed]="tagsCollapsed", (click)="tagsCollapsed = !tagsCollapsed", [innerHtml]="tagsCollapsed ? 'Show all ' + group.tags.length + ' tags....' : 'Show less'", role="button") Show all {{ group.tags.length }} tags....
+              li.filter-item(*ngFor="let tag of group.tags")
+                a.font-weight-bold((click)="selectTag(tag)") {{ tag }}
+          .expander.link--action.small([class.hidden]="groupTagsList.scrollHeight < 70", [class.collapsed]="tagsCollapsed", (click)="tagsCollapsed = !tagsCollapsed", [innerHtml]="tagsCollapsed ? 'Show all ' + group.tags.length + ' tags....' : 'Show less'", role="button") Show all {{ group.tags.length }} tags....
