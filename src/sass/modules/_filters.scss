@@ -16,7 +16,7 @@ $filterBorderStyle: 1px solid rgba(0, 0, 0, 0.15);
 
 filter, .filter {
     cursor: pointer;
-	font-size: 12px;
+	font-size: 13px;
 	/*@extend %bodyFontStyle;*/
 	display: block;
 	position: relative;
@@ -181,7 +181,8 @@ filter, .filter {
 	margin-top: 2px;
 	
 	& li,
-	& li.filter-item {
+	& li.filter-item,
+	& .filter-item {
 		display: inline-block;
 		background-color: transparent;
 		margin-right: 8px;
@@ -191,7 +192,8 @@ filter, .filter {
 			color: #000;
 			background-color: #efefef;
 			padding: 4px 8px;
-            border-radius: 3px;
+			border-radius: 3px;
+			word-break: break-word;
 
 			&:hover {
 			background-color: #d6d6d6;
