@@ -39,7 +39,7 @@
               p.small(*ngIf="siteID!='SAHARA'", [innerHtml]="'HOME.BROWSE.GROUPS_LIST' | translate")
               p.small(*ngIf="siteID=='SAHARA'", [innerHtml]="'HOME.BROWSE.GROUPS_LIST_SAHARA' | translate")
           //- Public Collections for Unaffiliated users
-          span(*ngIf="_auth.isPublicOnly() && siteID!='SAHARA'")
+          span(*ngIf="_auth.isPublicOnly()")
             a.link#footerLinkBrowseIGs.footer__explore-link([routerLink]="['/browse','commons']")
               h2.browse-category {{ 'HOME.BROWSE.PUB_COLL_HEADING' | translate }}
               p.small([innerHtml]="'HOME.BROWSE.PUB_COLL_LIST' | translate")
