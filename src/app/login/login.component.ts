@@ -9,7 +9,8 @@ import { map, take } from 'rxjs/operators'
 
 import { AppConfig } from '../app.service'
 import { AuthService, User, AssetService, FlagService } from './../shared'
-import { LockerService } from 'app/_services';
+import { LockerService } from 'app/_services'
+import { environment } from 'environments/environment'
 
 declare var initPath: string
 
@@ -34,6 +35,12 @@ export class Login implements OnInit, OnDestroy {
   public forcePwdRst = false
   public successMsgPwdRst = ''
   public loginInstitutions = [] /** Stores the institutions returned by the server */
+
+  // Use environment for forum urls
+  // This is temporary until stage deployment build is updated for env vars
+  public env: {} = environment
+  public FORUM_PROD: string = 'http://new.forum.jstor.org'
+  public FORUM_TEST: string = 'http://test.forum.jstor.org'
 
   public showRegister: boolean = false
   public showHelpModal: boolean = false

@@ -8,6 +8,7 @@ import { AppConfig } from '../../app.service'
 import { AuthService } from '../auth.service'
 
 import { version } from '../../../../package.json'
+import { environment } from 'environments/environment'
 
 declare let google
 
@@ -37,6 +38,16 @@ export class Footer {
     // Get version number
     this.appVersion = version
     this.links = this._app.config.footerLinks
+
+    if (this._auth.getEnv() !== 'test') {
+      // Remove stage links
+      this.links = this.links.filter((link) => { return link !== 'SAHARA_CONTRIBUTE_STAGE'})
+    }
+    else {
+      // Remove prod links
+      this.links = this.links.filter((link) => { return link !== 'SAHARA_CONTRIBUTE_PROD' })
+    }
+
     this.browseSec = this._app.config.homeBrowseSec
 
     // Set current year
