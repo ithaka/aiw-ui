@@ -39,10 +39,12 @@ export class Footer {
     this.appVersion = version
     this.links = this._app.config.footerLinks
 
-    if (environment.production) {
+    if (this._auth.getEnv() !== 'test') {
+      // Remove stage links
       this.links = this.links.filter((link) => { return link !== 'SAHARA_CONTRIBUTE_STAGE'})
     }
     else {
+      // Remove prod links
       this.links = this.links.filter((link) => { return link !== 'SAHARA_CONTRIBUTE_PROD' })
     }
 
