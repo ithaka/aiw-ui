@@ -2,8 +2,9 @@
 import { HttpClientModule } from '@angular/common/http'
 import { TestBed, getTestBed } from '@angular/core/testing'
 import { PactWeb, Matchers } from '@pact-foundation/pact-web'
-import { map } from 'rxjs/operators'
-import { GroupService, AuthService, GroupList, ImageGroup } from '../shared'
+
+// Project Dependencies
+import { GroupService, GroupList, ImageGroup } from '../shared'
 
 describe('Group Calls #pact #group', () => {
 
