@@ -1,6 +1,6 @@
 // Interface for featured collections defined in en.json
 
-interface FeaturedCollection {
+export interface FeaturedCollection {
     subheading: string;
     caption: string;
     description: string;

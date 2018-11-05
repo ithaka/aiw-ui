@@ -8,22 +8,11 @@ module.exports = function (config) {
     plugins: [
       require('karma-jasmine'),
       require('karma-jasmine-spec-tags'),
+      require('@pact-foundation/karma-pact'),
       require('karma-chrome-launcher'),
       require('karma-jasmine-html-reporter'),
       require('karma-coverage-istanbul-reporter'),
-      require('@angular-devkit/build-angular/plugins/karma'),
-      require('@pact-foundation/karma-pact'),
-      // require('karma-chrome-launcher'),
-      // require('karma-coverage'),
-      // require('karma-jasmine'),
-      // require('karma-jasmine-spec-tags'),
-      // require('karma-mocha-reporter'),
-      // require('karma-phantomjs-launcher'),
-      // require('karma-remap-coverage'),
-      // require('karma-sourcemap-loader'),
-      // require('karma-webpack'),
-      // require('@pact-foundation/karma-pact'),
-      // require('@angular-devkit/build-angular/plugins/karma')
+      require('@angular-devkit/build-angular/plugins/karma')
     ],
     client: {
       clearContext: false // leave Jasmine Spec Runner output visible in browser
@@ -39,6 +28,45 @@ module.exports = function (config) {
     logLevel: config.LOG_INFO,
     autoWatch: true,
     browsers: ['Chrome'],
-    singleRun: false
+    singleRun: true,
+
+    /**
+     * Configure Pact mock servers
+     * - EACH provider needs a configuration with a unique *port*
+     */
+    pact: [
+      {
+        cors: true, 
+        host: 'localhost',
+        port: 1201, 
+        dir: 'pacts/',
+        consumer: 'aiw-ui',
+        provider: 'binder-group'
+      },
+      {
+        cors: true, 
+        host: 'localhost',
+        port: 1202, 
+        dir: 'pacts/',
+        consumer: 'aiw-ui',
+        provider: 'binder-metadata'
+      },
+      {
+        cors: true, 
+        host: 'localhost',
+        port: 1203, 
+        dir: 'pacts/',
+        consumer: 'aiw-ui',
+        provider: 'artaa_service'
+      }
+    ], 
+    // 4) here we can define proxies to redirect requests from our pact tests to the mock server
+    proxies: { 
+      '/api/v1/group': 'http://localhost:1201/api/v1/group',
+      '/api/v1/metadata': 'http://localhost:1202/api/v1/metadata',
+      '/api/secure/user/': 'http://localhost:1203/api/secure/user/',
+      '/api/secure/user/abcdefg': 'http://localhost:1203/api/secure/user/abcdefg'
+    }
+
   });
 };
