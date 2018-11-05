@@ -501,11 +501,11 @@ export class AssetPage implements OnInit, OnDestroy {
             }
             this.assets.splice(1)
             this.assetIds.splice(1)
-        } else if (Array.isArray(this.assets[0].tileSource)){ // Log GA event for opening a multi view item in Fullscreen 
+        } else if (Array.isArray(this.assets[0].tileSource)){ // Log GA event for opening a multi view item in Fullscreen
             this.angulartics.eventTrack.next({ action: 'multiViewItemFullscreen', properties: { category: this._auth.getGACategory(), label: this.assets[0].id } });
         }
         this.isFullscreen = isFullscreen
-        
+
     }
 
     /**
@@ -1301,7 +1301,7 @@ export class AssetPage implements OnInit, OnDestroy {
     }
 
     private multiViewPageViaArrow(): void{
-        if(this.isFullscreen){
+        if (this.isFullscreen){
             this.angulartics.eventTrack.next({ action: 'multiViewFullscreenPageViaArrow', properties: { category: this._auth.getGACategory(), label: this.assets[0].id } })
         } else{
             this.angulartics.eventTrack.next({ action: 'multiViewPageViaArrow', properties: { category: this._auth.getGACategory(), label: this.assets[0].id } })
@@ -1309,7 +1309,7 @@ export class AssetPage implements OnInit, OnDestroy {
     }
 
     private multiViewPageViaThumbnail(): void{
-        if(this.isFullscreen){
+        if (this.isFullscreen){
             this.angulartics.eventTrack.next({ action: 'multiViewFullscreenPageViaThumbnail', properties: { category: this._auth.getGACategory(), label: this.assets[0].id } })
         } else {
             this.angulartics.eventTrack.next({ action: 'multiViewPageViaThumbnail', properties: { category: this._auth.getGACategory(), label: this.assets[0].id } })
