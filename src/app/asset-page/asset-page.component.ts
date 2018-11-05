@@ -504,7 +504,7 @@ export class AssetPage implements OnInit, OnDestroy {
         }
         else {
             // Make sure we only send one ga event when going to fullscreen mode
-            if (this.isFullscreen != isFullscreen) {
+            if (this.isFullscreen !== isFullscreen) {
                 // Add Google Analytics tracking to "fullscreen" button
                 this.angulartics.eventTrack.next({ action: 'Enter Fullscreen', properties: { label: this.assetIds[0] } })
             } 
