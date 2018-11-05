@@ -116,6 +116,8 @@ export class AssetPage implements OnInit, OnDestroy {
     // To keep a track of browse direction ('prev' / 'next') while browsing through assets, to load next asset if the current asset is un-authorized
     private browseAssetDirection: string = ''
 
+    private sendGA: boolean = false
+
     private pagination: {
         totalPages: number,
         size: number,
@@ -501,6 +503,16 @@ export class AssetPage implements OnInit, OnDestroy {
             }
             this.assets.splice(1)
             this.assetIds.splice(1)
+            // When go back from fullscreen mode, toggle the boolean to enable google analytics again
+            this.sendGA = false
+        }
+        else {
+            // Use boolean to make sure we only send one ga event when going to fullscreen mode
+            if (!this.sendGA) {
+                // Add Google Analytics tracking to "fullscreen" button
+                this.angulartics.eventTrack.next({ action: 'Enter Fullscreen', properties: { label: this.assetIds[0] } })
+                this.sendGA = true
+            } 
         }
         this.isFullscreen = isFullscreen
     }
