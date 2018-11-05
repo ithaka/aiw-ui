@@ -696,7 +696,8 @@
       "SAHARA_LOGIN": {
         "HEADING": "Add your images to the SAHARA collection"
       }
-    }
+    },
+    "DESCRIPTION": "SAHARA is a digital image archive developed by the Society of Architectural Historians in collaboration with Artstor. Funded by the Andrew W. Mellon Foundation, SAHARA contains over 100,000 images of architecture and landscapes contributed by SAH members—architects, scholars, photographers, graduate students, preservationists, and others who share an interest in the built environment."
   },
   "GENERIC_ERROR" : "There was an error while loading. Please verify your network connection and try again. If you continue to have a problem, please <a href='mailto:userservices@artstor.org' class='link'>contact support</a>.",
   "SESSION_EXPIRE_MODAL": {
