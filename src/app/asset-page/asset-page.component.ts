@@ -863,6 +863,9 @@ export class AssetPage implements OnInit, OnDestroy {
         if (add == true) {
             asset.selected = true;
             this.assetIds.push(asset[this.assetIdProperty]);
+
+            // Add GA tracking to select image to compare action
+            this.angulartics.eventTrack.next({ action: 'Compare image', properties: { label: this.assetIds.length } })
         }
 
         // log compared assets
