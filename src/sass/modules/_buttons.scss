@@ -86,8 +86,8 @@ $iconBtnSize: $btnHeight;
 
     // Override Bootstrap default
     &.disabled, &:disabled {
-        background: white;
-        border-color:$orange;
+        background: #6c757d;
+        border-color: #6c757d;
     }
 }
 
