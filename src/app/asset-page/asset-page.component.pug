@@ -38,6 +38,8 @@
             (removeAsset)="toggleAsset($event)",
             (nextPage)="showNextAsset()",
             (prevPage)="showPrevAsset()",
+            (multiViewPageViaArrow)="multiViewPageViaArrow()",
+            (multiViewPageViaThumbnail)="multiViewPageViaThumbnail()",
             (assetDrawer)="toggleAssetDrawer(!showAssetDrawer)",
             [legacyFlag]="false"
           )

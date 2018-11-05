@@ -1300,4 +1300,20 @@ export class AssetPage implements OnInit, OnDestroy {
         })
     }
 
+    private multiViewPageViaArrow(): void{
+        if(this.isFullscreen){
+            this.angulartics.eventTrack.next({ action: 'multiViewFullscreenPageViaArrow', properties: { category: this._auth.getGACategory(), label: this.assets[0].id } })
+        } else{
+            this.angulartics.eventTrack.next({ action: 'multiViewPageViaArrow', properties: { category: this._auth.getGACategory(), label: this.assets[0].id } })
+        }
+    }
+
+    private multiViewPageViaThumbnail(): void{
+        if(this.isFullscreen){
+            this.angulartics.eventTrack.next({ action: 'multiViewFullscreenPageViaThumbnail', properties: { category: this._auth.getGACategory(), label: this.assets[0].id } })
+        } else {
+            this.angulartics.eventTrack.next({ action: 'multiViewPageViaThumbnail', properties: { category: this._auth.getGACategory(), label: this.assets[0].id } })
+        }
+    }
+
 }
