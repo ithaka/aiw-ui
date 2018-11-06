@@ -18,7 +18,7 @@ div
           .col-sm-9
             h1#pageTitle.h1--title-block {{ colName }}
             p#pageDescription.page__description(#colDesc="", [innerHtml]="colDescription", [class.limit]="descCollapsed")
-            .expander.link--action.small([class.hidden]="colDesc.clientHeight < 75", [class.collapsed]="descCollapsed", (click)="descCollapsed = !descCollapsed", [innerHtml]="descCollapsed ? 'More' : 'Less'", role="button") More
+            .expander.link--action.small([class.hidden]="colDesc.scrollHeight < 85", [class.collapsed]="descCollapsed", (click)="descCollapsed = !descCollapsed", [innerHtml]="descCollapsed ? 'More' : 'Less'", role="button") More
           .col-sm-3(*ngIf="colThumbnail.length > 0")
             .thumbnail-shelf
               img.collection-thumb(src="{{ colThumbnail }}")

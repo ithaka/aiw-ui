@@ -71,9 +71,10 @@ $tagLinkBg: #efefef;
     // For expand/collapse tags exceeding three lines 
     .groupTagsCntnr{
         overflow: hidden;
+        padding-top: 1px;
         
         &.limit{
-            max-height: 66px;
+            max-height: 4em;
             margin-bottom: 5px;
             display: -webkit-box;
             text-overflow: ellipsis;
@@ -86,33 +87,6 @@ $tagLinkBg: #efefef;
         color: #444;
         text-decoration: underline !important;
         text-decoration-color: #444 !important;
-    }
-}
-
-
-.list-inline {
-    padding-left: 0;
-    
-    & li,
-    & li.list-inline-item {
-        background-color: transparent;
-        margin-bottom: 2px;
-
-        a {
-            color: #000;
-            background-color: #efefef;
-            padding: 2px 3px;
-            border-radius: 2px;
-
-            &:hover {
-            background-color: #d6d6d6;
-            }
-        }
-
-        ul,
-        .list-inline-item {
-            padding-left: 5px;
-        }
     }
 }
 

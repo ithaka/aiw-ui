@@ -132,22 +132,25 @@ select.form-control {
 
 ngx-tag-input, ngx-tag-input-item, .ng2-tag-input-field, .rl-autocomplete-item {
     font-size: 12px !important;
-    line-height: 36px !important;
-    font-family: Verdana, Geneva, Tahoma, sans-serif !important;
+    line-height: 33px !important;
+    font-family: Verdana !important;
+    font-weight: bold !important;
 }
 
 ngx-tag-input-item {
-    color: #8300e0 !important;
-    cursor: pointer;
-    transition: color 0s linear;
-    background: #f8f8f8  !important;
-    border-radius: 3px;
+    color: #000 !important;
+    cursor: pointer !important;
+    background-color: #efefef !important;
+    border-radius: 3px !important;
+    margin-right: 8px !important;
+    margin-bottom: 12px !important;
+    font-family: Verdana, Geneva, Tahoma, sans-serif !important;
 }
 
 .rl-autocomplete-item {
-    height: 36px !important;
-    padding: 0 10px !important;
-    white-space: nowrap !important;
+    color: #000 !important;
+    background-color: #efefef !important;
+    border-radius: 3px !important;
 }
 
 .ng2-tag-input-form {
@@ -159,6 +162,7 @@ ngx-tag-input-item {
     text-align: left;
     background: #fff;
     padding-left: 5px !important;
+    margin-bottom: 12px !important;
     border: 1px dotted #cdcdcd !important;
     line-height: 12px !important;
     position: relative !important;
@@ -191,6 +195,12 @@ ngx-tag-input-autocomplete {
 }
 
 .ng2-tag-input-remove {
+    font-size: 12px !important;
+    height: 16px !important;
+    line-height: 16px !important;
+    margin-left: 3px !important;
+    width: 16px !important;
+
     &:hover {
         background: $red !important;
         color: #fff !important;
@@ -220,7 +230,7 @@ ngx-tag-input-autocomplete {
 ngx-tag-input {
     line-height: 40px;
     background: #fff;
-    padding: 6px !important;
+    padding: 12px 0 0 6px !important;
     border: 1px solid #cdcdcd;
     box-shadow: none !important;
 }
@@ -230,11 +240,6 @@ ngx-tag-input > form > input {
     height: 34px;
     width: 100px !important;
     text-align: center;
-}
-
-ngx-tag-input-item {
-    border-radius: 5px !important;
-    height: 34px !important;
 }
 
 .has-danger {
