@@ -433,11 +433,11 @@ export class AssetService {
                 let objectIdTerm: string = igId ? '&object_ids=' : '&object_id=' // the group version of the call takes object_ids instead of object_id
 
                 let idsAsTerm: string = objectIdTerm + assetIds.slice(i, countEnd).join(objectIdTerm) // concat the query params
-                let url: string = this._auth.getHostname() + '/api/v2'
+                let url: string = this._auth.getHostname() + '/api/'
                 if (igId) {
-                    url += '/group/' + igId + '/items?' + idsAsTerm
+                    url += 'v1/group/' + igId + '/items?' + idsAsTerm
                 } else {
-                    url += '/items?' + idsAsTerm
+                    url += 'v2/items?' + idsAsTerm
                 }
 
                 this.http.get(url, options)
