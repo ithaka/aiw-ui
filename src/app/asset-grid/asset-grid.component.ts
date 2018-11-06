@@ -305,7 +305,7 @@ export class AssetGrid implements OnInit, OnDestroy {
             this.sortFilterByDateTotal =  allResults.total
 
             let withoutDateParams = Object.assign({}, this.UrlParams)
-            if(withoutDateParams['startDate']){
+            if (withoutDateParams['startDate']){
               delete withoutDateParams['startDate']
               delete withoutDateParams['endDate']
               this._filters.clearAvailable(true)
