@@ -24,7 +24,7 @@ describe('Group Calls #pact #group', () => {
 
     // Image Group with id of f907383d-4412-4875-b7bc-344fda158d40
     const expectedImageGroupObject: ImageGroup = {
-      'description': "<p>Description for a test image group</p>",
+      'description': '<p>Description for a test image group</p>',
       'owner_name': 'QA Pact',
       'tags': [],
       'owner_id': '706217',
@@ -42,8 +42,8 @@ describe('Group Calls #pact #group', () => {
         }
       ],
       'items': [
-        { 
-          artstorid: 'SS34888_34888_25943882', 
+        {
+          artstorid: 'SS34888_34888_25943882',
           zoom: { viewerX: 100, viewerY: 500, pointWidth: 600, pointHeight: 800 }
         },
         'ABARNITZ_10310367033',
@@ -64,8 +64,8 @@ describe('Group Calls #pact #group', () => {
       'tags' : [],
       'public': false,
       'items' : [
-        { 
-          artstorid: 'SS34888_34888_25943882', 
+        {
+          artstorid: 'SS34888_34888_25943882',
           zoom: { viewerX: 100, viewerY: 500, pointWidth: 600, pointHeight: 800 }
         },
         'ABARNITZ_10310367033',
