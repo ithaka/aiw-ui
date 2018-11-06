@@ -9,7 +9,9 @@
   },
   "files": [
     "test.ts",
-    "polyfills.ts"
+    "pact.ts",
+    "polyfills.ts",
+    "app/white-label-config.ts"
   ],
   "include": [
     "**/*.spec.ts",

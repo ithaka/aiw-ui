@@ -2,10 +2,11 @@
 import { HttpClientModule } from '@angular/common/http'
 import { TestBed, getTestBed } from '@angular/core/testing'
 import { PactWeb, Matchers } from '@pact-foundation/pact-web'
-import { map } from 'rxjs/operators'
-import { GroupService, AuthService, GroupList, ImageGroup } from '../shared'
 
-describe('Group Calls #pact', () => {
+// Project Dependencies
+import { GroupService, GroupList, ImageGroup } from '../shared'
+
+describe('Group Calls #pact #group', () => {
 
     let provider;
     let _groupService;
@@ -23,13 +24,13 @@ describe('Group Calls #pact', () => {
 
     // Image Group with id of f907383d-4412-4875-b7bc-344fda158d40
     const expectedImageGroupObject: ImageGroup = {
-      'description': "<p>Favorites of Diego Rivera's works displayed at the DIA.</p>",
-      'owner_name': 'my updated name a new last name!',
+      'description': '<p>Description for a test image group</p>',
+      'owner_name': 'QA Pact',
       'tags': [],
       'owner_id': '706217',
       'sequence_number': 0,
       'update_date': '2018-10-26T15:36:05Z',
-      'name': 'my updated name a new last name!',
+      'name': 'Test Image Group',
       'public': false,
       'creation_date': '2018-10-25T19:37:38Z',
       'id': 'f907383d-4412-4875-b7bc-344fda158d40',
@@ -41,7 +42,10 @@ describe('Group Calls #pact', () => {
         }
       ],
       'items': [
-        { artstorid: 'SS34888_34888_25943882', zoom: { viewerX: 100, viewerY: 500, pointWidth: 600, pointHeight: 800 }},
+        {
+          artstorid: 'SS34888_34888_25943882',
+          zoom: { viewerX: 100, viewerY: 500, pointWidth: 600, pointHeight: 800 }
+        },
         'ABARNITZ_10310367033',
         'ABARNITZ_10310366171',
         'ABARNITZ_10310366099',
@@ -51,6 +55,34 @@ describe('Group Calls #pact', () => {
         'AAFOLKAIG_10313143138',
         'AAGOIG_10314000081'
       ]
+    }
+
+    // Data for creating a new image group
+    const newImageGroupObject: ImageGroup = {
+      'name': 'Test Image Group',
+      'description' : '<p>Description for a test image group</p>',
+      'tags' : [],
+      'public': false,
+      'items' : [
+        {
+          artstorid: 'SS34888_34888_25943882',
+          zoom: { viewerX: 100, viewerY: 500, pointWidth: 600, pointHeight: 800 }
+        },
+        'ABARNITZ_10310367033',
+        'ABARNITZ_10310366171',
+        'ABARNITZ_10310366099',
+        'ABARNITZ_10310365176',
+        'ASITESPHOTOIG_10312738558',
+        'AAFOLKAIG_10313142791',
+        'AAFOLKAIG_10313143138',
+        'AAGOIG_10314000081'
+      ]
+      // 'access' : [{
+      //   // Example is "Institutional"
+      //   'entity_type': 200,
+      //   'entity_identifier': '24615',
+      //   'access_type': 100
+      // }]
     }
 
     // Verify types of response properties - Private Group List
@@ -97,6 +129,46 @@ describe('Group Calls #pact', () => {
 
       _groupService = getTestBed().get(GroupService)
     });
+
+    /**
+     * Create group endpoint
+     */
+    describe('createNewGroup', () => {
+      beforeAll((done) =>  {
+        provider.addInteraction({
+          state: 'I am logged in as qapact@artstor.org',
+          uponReceiving: 'a request to create a new image group',
+          withRequest: {
+            method: 'POST',
+            path: '/api/v1/group',
+            headers: { 'Content-Type': Matchers.somethingLike('application/json') }
+          },
+          willRespondWith: {
+            status: 200,
+            headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+            body: expectedImageGroupObject
+          }
+        })
+        .then(() => { done() }, (err) => { done.fail(err) })
+      })
+
+      afterEach((done) => {
+        provider.verify()
+        .then(function(a) {
+          done()
+        }, function(e) {
+          done.fail(e)
+        })
+      })
+
+      it('should create a new image group via PUT', function(done) {
+        _groupService.create(newImageGroupObject)
+          .subscribe(res => {
+            expect(res).toEqual(expectedImageGroupObject)
+            done()
+          })
+      })
+    })
 
     /**
      * Mock and test group listing endpoint

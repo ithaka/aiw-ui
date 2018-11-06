@@ -1,7 +1,9 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { AppConfig } from '../../app.service';
+
+// Project Dependencies
 import { AuthService } from '../../shared';
-import { FeaturedCollection } from './featured-collection.ts';
+import { FeaturedCollection } from './featured-collection';
 
 @Component({
   selector: 'ang-featured',
