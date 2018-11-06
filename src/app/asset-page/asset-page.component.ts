@@ -507,7 +507,7 @@ export class AssetPage implements OnInit, OnDestroy {
             if (this.isFullscreen !== isFullscreen) {
                 // Add Google Analytics tracking to "fullscreen" button
                 this.angulartics.eventTrack.next({ action: 'Enter Fullscreen', properties: { label: this.assetIds[0] } })
-            } 
+            }
         }
         this.isFullscreen = isFullscreen
     }
