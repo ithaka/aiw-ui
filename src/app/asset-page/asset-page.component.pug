@@ -221,9 +221,8 @@
                 .form-group-feedback {{ 'ASSET_PAGE.EDIT_DETAILS_FORM.DELETE_ERROR' | translate }}
               .form-group.has-danger(*ngIf="uiMessages.saveFailure")
                 .form-group-feedback {{ 'ASSET_PAGE.EDIT_DETAILS_FORM.SAVE_ERROR' | translate }}
-              .form-group
+              .btn-row
                 button.btn.btn-secondary((click)="showDeletePCModal = true", type="button", tabindex="6", [class.loading]="deleteLoading") {{ 'ASSET_PAGE.EDIT_DETAILS_FORM.DELETE_BTN' | translate }}
-                = " "
                 button.btn.btn-primary(type="submit", [class.loading]="isProcessing", tabindex="6") {{ 'ASSET_PAGE.EDIT_DETAILS_FORM.SAVE_BTN' | translate }}
 
     .fullscreen-btns.button-group(*ngIf="isFullscreen", [class.fade-out]="showAssetDrawer")
