@@ -90,14 +90,17 @@ html, body{
 }
 
 // Bootstrap tooltip override
-.tooltip-inner {
-  padding: 0.5rem 0.6rem !important;
-  width: auto !important;
-  max-width: none !important;
-  white-space: nowrap;
+.tooltip{
+  margin-left: 2px;
+  .tooltip-inner {
+    padding: 0.5rem 0.6rem !important;
+    width: auto !important;
+    max-width: none !important;
+    white-space: nowrap;
 
-  h3{
-    color: #fff
+    h3{
+      color: #fff
+    }
   }
 }
 
