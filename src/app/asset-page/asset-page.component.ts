@@ -504,6 +504,13 @@ export class AssetPage implements OnInit, OnDestroy {
         } else if (Array.isArray(this.assets[0].tileSource)){ // Log GA event for opening a multi view item in Fullscreen
             this.angulartics.eventTrack.next({ action: 'multiViewItemFullscreen', properties: { category: this._auth.getGACategory(), label: this.assets[0].id } });
         }
+        else {
+            // Make sure we only send one ga event when going to fullscreen mode
+            if (this.isFullscreen !== isFullscreen) {
+                // Add Google Analytics tracking to "fullscreen" button
+                this.angulartics.eventTrack.next({ action: 'Enter Fullscreen', properties: { label: this.assetIds[0] } })
+            }
+        }
         this.isFullscreen = isFullscreen
 
     }
@@ -866,6 +873,9 @@ export class AssetPage implements OnInit, OnDestroy {
         if (add == true) {
             asset.selected = true;
             this.assetIds.push(asset[this.assetIdProperty]);
+
+            // Add GA tracking to select image to compare action
+            this.angulartics.eventTrack.next({ action: 'Compare image', properties: { label: this.assetIds.length } })
         }
 
         // log compared assets
