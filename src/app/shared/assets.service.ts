@@ -400,7 +400,7 @@ export class AssetService {
 
           let options = { withCredentials: true }
 
-          this.http.get(this._auth.getHostname() + '/api/v1/items?object_id=' + idsAsTerm, options).pipe(
+          this.http.get(this._auth.getHostname() + '/api/v2/items?object_id=' + idsAsTerm, options).pipe(
             map(res => {
                 let results = res
                 ig.thumbnails = results['items']
@@ -433,7 +433,7 @@ export class AssetService {
                 let objectIdTerm: string = igId ? '&object_ids=' : '&object_id=' // the group version of the call takes object_ids instead of object_id
 
                 let idsAsTerm: string = objectIdTerm + assetIds.slice(i, countEnd).join(objectIdTerm) // concat the query params
-                let url: string = this._auth.getHostname() + '/api/v1'
+                let url: string = this._auth.getHostname() + '/api/v2'
                 if (igId) {
                     url += '/group/' + igId + '/items?' + idsAsTerm
                 } else {
