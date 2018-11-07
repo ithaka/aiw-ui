@@ -53,10 +53,10 @@ $assetCardBorderSize: 1px;
     padding: $cardPadding 0 $cardPadding/2;
     background: transparent;
     border: 0 solid transparent;
- } 
+ }
 
 .form-card {
-    border: $cardBorderStyle; 
+    border: $cardBorderStyle;
     & .list-group {
         max-height: 100px;
         overflow-y: scroll;
@@ -200,7 +200,7 @@ img.no-stretch {
 
 .card-text li{
     cursor: pointer;
-} 
+}
 
 .edit .card--asset{
     opacity: 0.9;
@@ -208,16 +208,6 @@ img.no-stretch {
 
 .draggable .card--asset {
     cursor: move;
-}
-
-.dnd-sortable-drag .card--asset {
-    cursor: move;
-    & .card-block {
-        background: #fafafa;
-        border-color: #ababab;
-        transform: translateY(-1px);
-        box-shadow: 0 1px 3px 0 rgba(0,0,0,0.3);
-    }
 }
 
 .card--asset.selected{
@@ -230,6 +220,6 @@ img.no-stretch {
 }
 
 
-.list-group-clean .list-group-item {   
+.list-group-clean .list-group-item {
         padding-top: $basePadding/4;
 }
