@@ -44,7 +44,7 @@ export class LegacyRouteResolver implements Resolve<boolean> {
     } else if (url.endsWith('welcome.html')) { // If the legacy URL ends with 'welcome.html'
       this._router.navigate(['/home'])
       return true
-    } else if (url.indexOf('/library') == 0) {
+    } else if (url.indexOf('/library') == 0 || url.indexOf('/openlibrary') == 0) {
       // This is the normal expectation for old links!
     } else {
       return true
