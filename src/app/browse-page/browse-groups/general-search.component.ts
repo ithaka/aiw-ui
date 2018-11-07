@@ -10,6 +10,7 @@ import { map } from 'rxjs/operators'
 export class GeneralSearchComponent implements OnInit {
   @Output() executeSearch: EventEmitter<string> = new EventEmitter()
   @Input() updateSearchTerm: EventEmitter<string> = new EventEmitter() // allows an outside component to set the search term
+  @Input() updateLevel: EventEmitter<string> = new EventEmitter()
   @Input() init: string = ''
 
   @Input() loadingGrps: boolean
@@ -20,6 +21,7 @@ export class GeneralSearchComponent implements OnInit {
   public startSearch: boolean = false
 
   private subscriptions: Subscription[] = []
+  private level: string = ''
 
   constructor() { }
 
@@ -32,6 +34,18 @@ export class GeneralSearchComponent implements OnInit {
           map(term => {
           this.term = term
         })).subscribe()
+      )
+    }
+    if (this.updateLevel) {
+      this.subscriptions.push(
+        this.updateLevel.subscribe( (level) => {
+          console.log("this is the level:", level)
+          if (level !== this.level) {
+            this.level = level
+            this.startSearch = false;
+          }
+          
+        })
       )
     }
   }

@@ -50,6 +50,7 @@ export class BrowseGroupsComponent implements OnInit {
   }
 
   public updateSearchTerm: EventEmitter<string> = new EventEmitter()
+  public updateLevel: EventEmitter<string> = new EventEmitter()
 
   public groupFilterArray: GroupFilter[] = []
   public errorObj: any = {}
@@ -303,6 +304,7 @@ export class BrowseGroupsComponent implements OnInit {
 
       if (query.level) {
         groupQuery.level = query.level
+        this.updateLevel.emit(query.level)
         if (query.level !== this.selectedFilter.level) {
           this.appliedTags = []
           this.setSearchLevel(query.level)
