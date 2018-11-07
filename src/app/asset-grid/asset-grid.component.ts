@@ -5,6 +5,7 @@ import { BehaviorSubject, Subscription } from 'rxjs'
 import { map, take } from 'rxjs/operators'
 import { Locker, DRIVERS } from 'angular-safeguard'
 import { AppConfig } from '../app.service'
+import { Angulartics2 } from 'angulartics2'
 
 import {
   AuthService,
@@ -168,6 +169,7 @@ export class AssetGrid implements OnInit, OnDestroy {
     private _groups: GroupService,
     private _ig: ImageGroupService,
     private _log: LogService,
+    private angulartics: Angulartics2,
     private _renderer: Renderer,
     private _router: Router,
     private _search: AssetSearchService,
@@ -543,6 +545,8 @@ export class AssetGrid implements OnInit, OnDestroy {
         this._assets.setSelectedAssets(this.selectedAssets)
       }
       this.selectedAssets.length ? this.editMode = true : this.editMode = false
+    } else if (asset.compound_media){ // Log GA event for opening a multi view asset from grid
+      this.angulartics.eventTrack.next({ action: 'multiViewItemOpen', properties: { category: this._auth.getGACategory(), label: asset.artstorid } });
     }
   }
 

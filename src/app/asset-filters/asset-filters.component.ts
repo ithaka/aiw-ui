@@ -204,6 +204,12 @@ export class AssetFilters {
             filters['contributinginstitutionid'] = null
           }
 
+          // Filter out categories containing pipe in name field
+          if (filters && filters.artclassification_str && filters.artclassification_str.length !== 0 ) {
+            filters.artclassification_str = filters.artclassification_str.filter((category) => {
+              return category.name.indexOf('|') === -1
+            })
+          }
           this.availableFilters = filters
 
         }

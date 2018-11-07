@@ -501,8 +501,18 @@ export class AssetPage implements OnInit, OnDestroy {
             }
             this.assets.splice(1)
             this.assetIds.splice(1)
+        } else if (Array.isArray(this.assets[0].tileSource)){ // Log GA event for opening a multi view item in Fullscreen
+            this.angulartics.eventTrack.next({ action: 'multiViewItemFullscreen', properties: { category: this._auth.getGACategory(), label: this.assets[0].id } });
+        }
+        else {
+            // Make sure we only send one ga event when going to fullscreen mode
+            if (this.isFullscreen !== isFullscreen) {
+                // Add Google Analytics tracking to "fullscreen" button
+                this.angulartics.eventTrack.next({ action: 'Enter Fullscreen', properties: { label: this.assetIds[0] } })
+            }
         }
         this.isFullscreen = isFullscreen
+
     }
 
     /**
@@ -863,6 +873,9 @@ export class AssetPage implements OnInit, OnDestroy {
         if (add == true) {
             asset.selected = true;
             this.assetIds.push(asset[this.assetIdProperty]);
+
+            // Add GA tracking to select image to compare action
+            this.angulartics.eventTrack.next({ action: 'Compare image', properties: { label: this.assetIds.length } })
         }
 
         // log compared assets
@@ -1045,6 +1058,9 @@ export class AssetPage implements OnInit, OnDestroy {
      */
     private toggleAssetDrawer(show: boolean) {
         this.showAssetDrawer = show
+        if (Array.isArray(show && this.assets[0].tileSource)){ // Log GA event for comparing a multi view item in Fullscreen mode
+            this.angulartics.eventTrack.next({ action: 'multiViewItemCompare', properties: { category: this._auth.getGACategory(), label: this.assets[0].id } });
+        }
     }
 
     /**
@@ -1292,6 +1308,22 @@ export class AssetPage implements OnInit, OnDestroy {
                 institutionID: asset.contributinginstitutionid
             }
         })
+    }
+
+    private multiViewPageViaArrow(): void{
+        if (this.isFullscreen){
+            this.angulartics.eventTrack.next({ action: 'multiViewFullscreenPageViaArrow', properties: { category: this._auth.getGACategory(), label: this.assets[0].id } })
+        } else{
+            this.angulartics.eventTrack.next({ action: 'multiViewPageViaArrow', properties: { category: this._auth.getGACategory(), label: this.assets[0].id } })
+        }
+    }
+
+    private multiViewPageViaThumbnail(): void{
+        if (this.isFullscreen){
+            this.angulartics.eventTrack.next({ action: 'multiViewFullscreenPageViaThumbnail', properties: { category: this._auth.getGACategory(), label: this.assets[0].id } })
+        } else {
+            this.angulartics.eventTrack.next({ action: 'multiViewPageViaThumbnail', properties: { category: this._auth.getGACategory(), label: this.assets[0].id } })
+        }
     }
 
 }
