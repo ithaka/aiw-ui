@@ -18,7 +18,7 @@ export class SearchComponent implements OnInit, OnDestroy {
 
   public showSearchModal: boolean = false;
   public term: string;
-  public startSearch: boolean = false
+  public startSearch: boolean = false;
 
   @Input()
   public allowSearchInRes: boolean;
@@ -66,6 +66,7 @@ export class SearchComponent implements OnInit, OnDestroy {
     this.subscriptions.push(
       this._router.events.pipe(
         map(event => {
+          this.startSearch = false; // Remove error message when applying filter
           if (event instanceof NavigationEnd) {
             let routeName = event.url.split('/')[1]
             if ((routeName === 'category') || (routeName === 'collection')){
