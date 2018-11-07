@@ -48,17 +48,6 @@ export class GeneralSearchComponent implements OnInit {
     )
   }
 
-  private conductSearch(): void {
-    this.startSearch=true;
-    // Only add route params when the search term is not empty
-    // This is to ensure that the error message doesn't get removed...
-    // ...by the above subscription when we update route param for empty search term
-    if (this.term) {
-      this.executeSearch.emit(this.term);
-    }
-    this.setFocus();
-  }
-
   public setFocus(): void {
     window.setTimeout(function () {
       if (document.getElementById('empty-search-alert')){
@@ -67,4 +56,14 @@ export class GeneralSearchComponent implements OnInit {
     }, 110);
   }
 
+  private conductSearch(): void {
+    this.startSearch = true;
+    // Only add route params when the search term is not empty
+    // This is to ensure that the error message doesn't get removed...
+    // ...by the above subscription when we update route param for empty search term
+    if (this.term) {
+      this.executeSearch.emit(this.term);
+    }
+    this.setFocus();
+  }
 }
