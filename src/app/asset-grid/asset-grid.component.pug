@@ -62,8 +62,7 @@
               span(*ngIf="siteID=='SAHARA'", [innerHtml]="'HOME.CONTENT_ACCESS.SEARCH_PAGE_SAHARA' | translate")
             = ". "
             span.font-weight-bold(*ngIf="excludedAssetsCount") {{ excludedAssetsCount }} results
-            = " "
-            span(*ngIf="excludedAssetsCount") have no date and were excluded.
+            span(*ngIf="excludedAssetsCount", [innerHtml]="' have no date and were excluded.'")
 
     .col-sm-4.col-md-4.col-lg-3.text-right.grid-pagination-bar(*ngIf="!reorderMode")
       pagination([pageObj]="pagination", (goToPage)="goToPage($event)", [right]="true")
