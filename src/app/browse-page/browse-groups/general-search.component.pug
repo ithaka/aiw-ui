@@ -1,7 +1,7 @@
 .form-group
   .input-group
     //- the .driver-find-inputbox class is important for the tour to find it, be careful when removing or changing it
-    input#inputSearchTerm.form-control.has-icon.driver-find-inputbox([(ngModel)]="term", (keyup)="startSearch=false;", (keyup.enter)="startSearch=true; executeSearch.emit(term); setFocus();", aria-describedby="search-label", type="text", placeholder="Search for groups by title...", data-sc="search: simple keyword")
+    input#inputSearchTerm.form-control.has-icon.driver-find-inputbox([(ngModel)]="term", (keyup)="startSearch=false;", (keyup.enter)="conductSearch()", aria-describedby="search-label", type="text", placeholder="Search for groups by title...", data-sc="search: simple keyword")
     i#iconClearSearch.icon.icon-close.form-control__icon(*ngIf="term && !loadingGrps", (click)="term=''; startSearch=false; clearGrpSearch.emit()", placement="bottom", ngbTooltip="clear search")
-    i#iconSearchSubmit.icon.icon-search.form-control__icon(*ngIf="!term", (click)="startSearch=true; executeSearch.emit(term); setFocus();")
+    i#iconSearchSubmit.icon.icon-search.form-control__icon(*ngIf="!term", (click)="conductSearch()")
   .alert.alert-warning#empty-search-alert([class.hidden]="term || !startSearch", tabindex="0", role="alert", aria-label="no search term alert") Please enter search term(s).

@@ -661,7 +661,7 @@
     "geography" : "Geography",
     "collTypes" : "Collection Type",
     "collectiontypes" : "Collection Type",
-    "contributinginstitutionid": "Contributor",
+    "contributinginstitutionid" : "Contributor",
     "date" : "Date"
   },
   "FIELD" : {
