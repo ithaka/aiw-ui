@@ -62,8 +62,10 @@ export class ThumbnailComponent implements OnInit, OnChanges {
       this.isMultiView = true
       this.thumbnail.thumbnailImgUrl = this.thumbnail['thumbnailUrls'][0]
     }
-    // Note: We don't need to handle thumbnail['media']) here because it is set from
-    // the template by asset-search.makeThumbUrl
+
+    else if (this.thumbnail['media']) {
+      this.thumbnail.thumbnailImgUrl = this.thumbnail.media.thumbnailSizeOnePath
+    }
 
     this.thumbnailAlt = this.thumbnail['name'] ? 'Thumbnail of ' + this.thumbnail['name'] : 'Untitled'
     this.thumbnailAlt = this.thumbnail['agent'] ? this.thumbnailAlt + ' by ' + this.thumbnail['agent'] : this.thumbnailAlt + ' by Unknown'
