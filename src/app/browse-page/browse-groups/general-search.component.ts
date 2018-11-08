@@ -56,7 +56,7 @@ export class GeneralSearchComponent implements OnInit {
     }, 110);
   }
 
-  private conductSearch(): void {
+  public conductSearch(): void {
     this.startSearch = true;
     // Only add route params when the search term is not empty
     // This is to ensure that the error message doesn't get removed...
