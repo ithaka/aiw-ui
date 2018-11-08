@@ -5,6 +5,7 @@ import { BehaviorSubject, Subscription } from 'rxjs'
 import { map, take } from 'rxjs/operators'
 import { Locker, DRIVERS } from 'angular-safeguard'
 import { AppConfig } from '../app.service'
+import { Angulartics2 } from 'angulartics2'
 
 import {
   AuthService,
@@ -112,7 +113,7 @@ export class AssetGrid implements OnInit, OnDestroy {
   private isPartialPage: boolean = false;
 
   private excludedAssetsCount: number = 0;
-  private sortByDateTotal: number = 0;
+  private sortFilterByDateTotal: number = 0;
 
   @Input()
   private actionOptions: any = {};
@@ -168,6 +169,7 @@ export class AssetGrid implements OnInit, OnDestroy {
     private _groups: GroupService,
     private _ig: ImageGroupService,
     private _log: LogService,
+    private angulartics: Angulartics2,
     private _renderer: Renderer,
     private _router: Router,
     private _search: AssetSearchService,
@@ -231,6 +233,8 @@ export class AssetGrid implements OnInit, OnDestroy {
           let filterKey: string = filterKeysToPass[i]
           if (params[filterKey]) {
             this.UrlParams[filterKey] = params[filterKey]
+          } else{ // Delete the param from UrlParams object if its not available in the route params
+            delete this.UrlParams[filterKey]
           }
         }
 
@@ -299,10 +303,18 @@ export class AssetGrid implements OnInit, OnDestroy {
     this.subscriptions.push(
       this._assets.allResults.pipe(
         map(allResults => {
-          if (this.activeSort.index && this.activeSort.index == '3') {
-            this.sortByDateTotal =  allResults.total
-            this._search.search(this.UrlParams, this.searchTerm, '0').forEach((res) => {
-              this.excludedAssetsCount = res.total - this.sortByDateTotal
+          if ( (this.activeSort.index && this.activeSort.index == '3') || (this.UrlParams['startDate'])) {
+            this.sortFilterByDateTotal =  allResults.total
+
+            let withoutDateParams = Object.assign({}, this.UrlParams)
+            if (withoutDateParams['startDate']){
+              delete withoutDateParams['startDate']
+              delete withoutDateParams['endDate']
+              this._filters.clearAvailable(true)
+            }
+
+            this._search.search(withoutDateParams, this.searchTerm, '0').forEach((res) => {
+              this.excludedAssetsCount = res.total - this.sortFilterByDateTotal
             })
           }
           else {
@@ -543,6 +555,8 @@ export class AssetGrid implements OnInit, OnDestroy {
         this._assets.setSelectedAssets(this.selectedAssets)
       }
       this.selectedAssets.length ? this.editMode = true : this.editMode = false
+    } else if (asset.compound_media){ // Log GA event for opening a multi view asset from grid
+      this.angulartics.eventTrack.next({ action: 'multiViewItemOpen', properties: { category: this._auth.getGACategory(), label: asset.artstorid } });
     }
   }
 

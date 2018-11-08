@@ -89,12 +89,18 @@ html, body{
   font-weight: 700 !important;
 }
 
-.tooltip-inner {
-  max-width: 350px !important;
-  padding: .5rem !important;
+// Bootstrap tooltip override
+.tooltip{
+  margin-left: 2px;
+  .tooltip-inner {
+    padding: 0.5rem 0.6rem !important;
+    width: auto !important;
+    max-width: none !important;
+    white-space: nowrap;
 
-  h3{
-    color: #fff
+    h3{
+      color: #fff
+    }
   }
 }
 
@@ -262,11 +268,6 @@ body body{
   @media(max-width: $tablet) {
     margin-top: 50px;
   }
-}
-
-// Bootstrap tooltip override
-.tooltip-inner {
-  width: 140px;
 }
 
 // IE10+ specific style rules
