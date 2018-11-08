@@ -388,14 +388,19 @@ export class AssetSearchService {
               thumbnailUrls: [] // this is only the array init - we add the urls later
             }
           )
-          // make the thumbnail urls and add them to the array
-          for (let i = 0; i < 5; i++) {
-            if (cleanedAsset['compound_media']) {
-              let objects = JSON.parse(cleanedAsset['compound_media']).objects
-              cleanedAsset.thumbnailUrls.push(this.makeThumbUrl(objects[0].thumbnailSizeOnePath, i))
-            }
-            else
+
+          // Use the compound media thumbnail url where sequenceNum equals 1
+          if (cleanedAsset['compound_media']) {
+            let compoundAsset = JSON.parse(cleanedAsset['compound_media']).objects.filter((item) => {
+              return item['sequenceNum'] === 1
+            })
+
+            cleanedAsset.thumbnailUrls.push(this.makeThumbUrl(compoundAsset[0].thumbnailSizeOnePath, 2, true))
+          }
+          else { // make the thumbnail urls and add them to the array
+            for (let i = 1; i <= 5; i++) {
               cleanedAsset.thumbnailUrls.push(this.makeThumbUrl(cleanedAsset.media.thumbnailSizeOnePath, i))
+            }
           }
 
           return cleanedAsset
