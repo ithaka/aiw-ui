@@ -3,6 +3,9 @@ import { HttpClient } from '@angular/common/http'
 import { Observable } from 'rxjs'
 import { map } from 'rxjs/operators'
 
+// Project Dependencies
+import { environment } from 'environments/environment';
+
 @Injectable()
 export class FlagService {
   /**
@@ -21,7 +24,7 @@ export class FlagService {
   }
 
   public getFlagsFromService(): Observable<FlagServiceResponse> {
-    const flagUrl: string = '//stage.artstor.org/api/v1/flags/aiw-ui.json'
+    const flagUrl: string = environment.API_URL + '/api/v1/flags/aiw-ui.json'
 
     return this._http.get<FlagServiceResponse>(
       // Cache busting param added to ensure fresh headers and flags
