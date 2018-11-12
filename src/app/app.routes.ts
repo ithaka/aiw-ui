@@ -26,6 +26,8 @@ import { LinkPage } from './link-page'
 
 export const ROUTES: Routes = [
   { path: '', component: Home, canActivate: [AuthService], pathMatch: 'full' },
+  // Simple legacy redirects
+  { path: '1', redirectTo: '', canActivate: [AuthService], pathMatch: 'full'},
   // "Hashbang" support for sitemap
   { path: '!', redirectTo: '', canActivate: [AuthService], pathMatch: 'full' },
   { path: '!/asset/:assetId', redirectTo: 'asset/:assetId', pathMatch: 'full' },
