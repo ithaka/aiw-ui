@@ -110,7 +110,7 @@
                [reorderMode]="reorderMode",
                [editMode]="editMode",
                [largeThmbView]="largeThmbView",
-               (keydown)="arrowReorder(i, $event, asset)")
+               (keydown)="arrowReorder(i, $event)")
         .alert.alert-warning(*ngIf="!isLoading && (searchError.length < 1) && ((isPartialPage && hasMaxAssetLimit) || searchLimitError)")
           | {{ "BROWSE.WARNINGS.ADDITIONAL_RESULTS" | translate }}
   .row

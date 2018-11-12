@@ -22,6 +22,7 @@ import { AssetFiltersService } from '../asset-filters/asset-filters.service'
 import { APP_CONST } from '../app.constants'
 import { LockerService } from 'app/_services';
 import { SortablejsOptions } from 'angular-sortablejs';
+import { SortablejsService } from 'angular-sortablejs/dist/src/sortablejs.service';
 
 @Component({
   selector: 'ang-asset-grid',
@@ -92,10 +93,6 @@ export class AssetGrid implements OnInit, OnDestroy {
 
   // Options for Sortablejs reordering of assets
   public sortableOptions: SortablejsOptions = {
-
-    onChoose: (event) => {
-      console.log('SORTABLE:', 'sortable chosen - focused ?')
-    },
     onUpdate: (event) => {
       this.orderChanged = true
     }
@@ -654,7 +651,7 @@ export class AssetGrid implements OnInit, OnDestroy {
 
     this._groups.update(this.ig).pipe(
       take(1),
-      map(data => {
+      map((data) => {
           this.cancelReorder();
         }, error => {
           console.error(error);
@@ -662,7 +659,7 @@ export class AssetGrid implements OnInit, OnDestroy {
     })).subscribe()
   }
 
-  private arrowReorder(index, event, item) {
+  private arrowReorder(index, event) {
     switch(event.key) {
 
       case "ArrowRight": {
@@ -671,10 +668,15 @@ export class AssetGrid implements OnInit, OnDestroy {
         break
       }
       case "ArrowLeft": {
-        let removed = this.allResults.splice(index, 1)
-        this.allResults.splice(index - 1, 0, removed[0])
-        let id = 'thumbnail' + (index - 1)
-        document.getElementById(id).focus()
+        if (index > 0) {
+          let removed = this.allResults.splice(index, 1)
+          this.allResults.splice(index - 1, 0, removed[0])
+
+          setTimeout(() => {
+            let id = 'thumbnail' + (index - 1)
+            document.getElementById(id).focus()
+          }, 100)
+        }
         break
       }
       default: {
@@ -684,9 +686,6 @@ export class AssetGrid implements OnInit, OnDestroy {
 
     this.ig.items = this.allResults
     this.orderChanged = true
-
-    console.log(this.ig.items)
-
   }
 
   /**
