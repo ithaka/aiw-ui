@@ -57,6 +57,10 @@ export class ThumbnailComponent implements OnInit, OnChanges {
 
   ngOnInit() {
 
+    // Compound 'multiview' assets for image groups, assigned in assets service
+    if (this.thumbnail['thumbnailImgUrl'].indexOf('media-objects') > -1) {
+      this.isMultiView = true
+    }
     // Compound 'multiview' assets use cleanedAsset.thumbnailUrls[0], assigned in asset-search
     if (this.thumbnail['compound_media']) {
       this.isMultiView = true
