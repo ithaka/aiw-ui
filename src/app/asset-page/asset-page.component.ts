@@ -1165,7 +1165,8 @@ export class AssetPage implements OnInit, OnDestroy {
                         // Reload asset metadata
                         this._router.navigate(['/asset', ''])
                         setTimeout(() => {
-                            this._router.navigate(['/asset', this.assets[0].id])
+                            // Pass the prevRouteTS param to make sure we load prevRouteParams
+                            this._router.navigate([ '/asset', this.assets[0].id, this.prevRouteTS ? { prevRouteTS: this.prevRouteTS } : {} ])
                         }, 250)
                     }
                 },
