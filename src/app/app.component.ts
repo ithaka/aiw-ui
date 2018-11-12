@@ -19,11 +19,12 @@ import { ScriptService, FlagService } from './shared'
   encapsulation: ViewEncapsulation.None,
   template: `
     <ang-sky-banner *ngIf="showSkyBanner" [textValue]="skyBannerCopy" (closeBanner)="showSkyBanner = false"></ang-sky-banner>
-    <div id="skip" tabindex="-1" aria-activedescendant="button">
-      <button id="button" (click)="findMainContent()" (keyup.enter)="findMainContent()" tabindex="1" class="sr-only sr-only-focusable"> Skip to main content </button>
+    <div>
+      <div id="skip" tabindex="-1" aria-activedescendant="button">
+        <button id="button" (click)="findMainContent()" (keyup.enter)="findMainContent()" tabindex="1" class="sr-only sr-only-focusable"> Skip to main content </button>
+      </div>
+      <nav-bar tabindex="-1"></nav-bar>
     </div>
-    <nav-bar tabindex="-1"></nav-bar>
-
     <main tabindex="-1">
       <router-outlet></router-outlet>
     </main>
