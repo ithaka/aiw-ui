@@ -20,17 +20,26 @@ import { Angulartics2 } from 'angulartics2';
     .icon {
       margin-top: 3px;
     }
+    .card-block.card-text.reorder--asset:focus {
+      border: solid;
+    }
   `]
 })
 export class ThumbnailComponent implements OnInit, OnChanges {
   @Input()
   public thumbnail: Thumbnail
 
+  @Input() // allResults index for reorder
+  itemIndex: number
+
   @Input()
   private largeThmbView: boolean
 
   @Input()
   private reorderMode: boolean
+
+  @Input()
+  private arrowReorderMode: boolean
 
   @Input()
   public editMode: boolean

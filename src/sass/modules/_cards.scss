@@ -207,7 +207,12 @@ img.no-stretch {
 }
 
 .draggable .card--asset {
-    cursor: move;
+    &:hover {
+      cursor: grab;
+    }
+    &:active {
+      cursor: grabbing;
+    }
 }
 
 .card--asset.selected{

@@ -50,10 +50,7 @@ export class AssetGrid implements OnInit, OnDestroy {
   public editMode: boolean = false;
   public reorderMode: boolean = false;
   public showLoseReorder: boolean = false;
-
-  public reorderElements: HTMLAllCollection[]
-
-  public keyArrow: boolean = false;
+  public arrowReorderMode: boolean = false;
 
   // Default show as loading until results have update
   public isLoading: boolean = true;
@@ -660,27 +657,35 @@ export class AssetGrid implements OnInit, OnDestroy {
   }
 
   private arrowReorder(index, event) {
-    switch(event.key) {
+    if (event.key === "Enter") {
+      this.arrowReorderMode = this.arrowReorderMode ? false : true
+      return
+    }
 
-      case "ArrowRight": {
-        let removed = this.allResults.splice(index, 1)
-        this.allResults.splice(index + 1, 0, removed[0])
-        break
-      }
-      case "ArrowLeft": {
-        if (index > 0) {
+    if (this.arrowReorderMode) {
+      switch(event.key) {
+
+        case "ArrowRight": {
           let removed = this.allResults.splice(index, 1)
-          this.allResults.splice(index - 1, 0, removed[0])
-
-          setTimeout(() => {
-            let id = 'thumbnail' + (index - 1)
-            document.getElementById(id).focus()
-          }, 100)
+          this.allResults.splice(index + 1, 0, removed[0])
+          break
         }
-        break
-      }
-      default: {
-        break
+        case "ArrowLeft": {
+          if (index > 0) {
+            let removed = this.allResults.splice(index, 1)
+            this.allResults.splice(index - 1, 0, removed[0])
+
+            setTimeout(() => {
+              let id = 'item-' + (index - 1)
+              document.getElementById(id).focus()
+            }, 100)
+          }
+          break
+        }
+        default: {
+          this.arrowReorderMode = false
+          break
+        }
       }
     }
 

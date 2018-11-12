@@ -106,11 +106,13 @@
         ng-container(*ngFor="let asset of results; let i = index")
           .col-sm-4.col-md-2.col-lg-1.draggable(*ngIf="asset.status === 'available'")
             .card.card--asset([ngClass]="{ 'lrgThmb': largeThmbView }")
-              ang-thumbnail([thumbnail]="asset", [attr.aria-labelledby]="asset.artstorid", tabindex="3", [attr.id]="'thumbnail' + i",
-               [reorderMode]="reorderMode",
-               [editMode]="editMode",
-               [largeThmbView]="largeThmbView",
-               (keydown)="arrowReorder(i, $event)")
+              ang-thumbnail([thumbnail]="asset", [attr.aria-labelledby]="asset.artstorid",
+                [itemIndex]="i",
+                [arrowReorderMode]="arrowReorderMode",
+                [reorderMode]="reorderMode",
+                [editMode]="editMode",
+                [largeThmbView]="largeThmbView",
+                (keydown)="arrowReorder(i, $event)")
         .alert.alert-warning(*ngIf="!isLoading && (searchError.length < 1) && ((isPartialPage && hasMaxAssetLimit) || searchLimitError)")
           | {{ "BROWSE.WARNINGS.ADDITIONAL_RESULTS" | translate }}
   .row
