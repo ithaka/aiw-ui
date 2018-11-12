@@ -46,6 +46,8 @@ export class ThumbnailComponent implements OnInit, OnChanges {
   // Keeps the track of multiViewItems count associated with the current asset
   public multiviewItemCount: number = 0
 
+  public keyArrow = false
+
   constructor(
     private angulartics: Angulartics2,
     private _assets: AssetService,

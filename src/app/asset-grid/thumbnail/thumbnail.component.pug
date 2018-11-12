@@ -1,4 +1,4 @@
-.card-block.card-text([attr.aria-labelledby]="thumbnail.artstorid", tabindex="3")
+.card-block.card-text
   .card-img-top
     img(*ngIf="thumbnail.status != 'not-available'", id="{{thumbnail.artstorid}}", [class.disablePointerEvents]="reorderMode", [attr.src]="_search.makeThumbUrl(thumbnail.thumbnailImgUrl, thumbnailSize, thumbnail['compound_media'])", (error)="thumbnailError()", [attr.alt]="thumbnailAlt", [attr.aria-label]="thumbnailAlt", [attr.title]="thumbnailAlt", aria-role="image")
   .metadata-wrap

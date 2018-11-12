@@ -22,7 +22,7 @@ import { ScriptService, FlagService } from './shared'
     <div id="skip" tabindex="-1" aria-activedescendant="button">
       <button id="button" (click)="findMainContent()" (keyup.enter)="findMainContent()" tabindex="1" class="sr-only sr-only-focusable"> Skip to main content </button>
     </div>
-    <nav-bar tabindex="-1"></nav-bar>
+    <nav-bar tabindex="0"></nav-bar>
 
     <main tabindex="-1">
       <router-outlet></router-outlet>
@@ -66,9 +66,9 @@ export class App {
       if (event instanceof NavigationStart) {
         // focus on the wrapper of the "skip to main content link" everytime new page is loaded
         let mainEl = <HTMLElement>(document.getElementById('skip'))
-        if (!(event.url.indexOf('browse') > -1)) // Don't set focus to skip to main content on browse pages so that we can easily go between browse levels
+        if (!(event.url.indexOf('browse') > -1)) {// Don't set focus to skip to main content on browse pages so that we can easily go between browse levels
           mainEl.focus()
-
+        }
         // Detect featureflag=solrmetadata and set cookie
         let routeParams = event.url.split(';')
         for (let routeParam of routeParams) {

@@ -50,6 +50,10 @@ export class AssetGrid implements OnInit, OnDestroy {
   public reorderMode: boolean = false;
   public showLoseReorder: boolean = false;
 
+  public reorderElements: HTMLAllCollection[]
+
+  public keyArrow: boolean = false;
+
   // Default show as loading until results have update
   public isLoading: boolean = true;
   public searchError: string = '';
@@ -88,6 +92,10 @@ export class AssetGrid implements OnInit, OnDestroy {
 
   // Options for Sortablejs reordering of assets
   public sortableOptions: SortablejsOptions = {
+
+    onChoose: (event) => {
+      console.log('SORTABLE:', 'sortable chosen - focused ?')
+    },
     onUpdate: (event) => {
       this.orderChanged = true
     }
@@ -604,6 +612,7 @@ export class AssetGrid implements OnInit, OnDestroy {
         .then( allThumbnails => {
           this.isLoading = false;
           this.results = this.allResults = allThumbnails;
+          console.log('RESULTS: ', this.results)
         })
         .catch( error => {
           this.isLoading = false;
@@ -651,6 +660,33 @@ export class AssetGrid implements OnInit, OnDestroy {
           console.error(error);
           this.cancelReorder();
     })).subscribe()
+  }
+
+  private arrowReorder(index, event, item) {
+    switch(event.key) {
+
+      case "ArrowRight": {
+        let removed = this.allResults.splice(index, 1)
+        this.allResults.splice(index + 1, 0, removed[0])
+        break
+      }
+      case "ArrowLeft": {
+        let removed = this.allResults.splice(index, 1)
+        this.allResults.splice(index - 1, 0, removed[0])
+        let id = 'thumbnail' + (index - 1)
+        document.getElementById(id).focus()
+        break
+      }
+      default: {
+        break
+      }
+    }
+
+    this.ig.items = this.allResults
+    this.orderChanged = true
+
+    console.log(this.ig.items)
+
   }
 
   /**
