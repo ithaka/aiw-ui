@@ -14,7 +14,9 @@
           || initPath.indexOf('/library/collection') > -1
           || initPath.indexOf('/library/welcome.html') > -1 
           || initPath.indexOf('.org/library/#') > -1
+          || initPath.indexOf('/openlibrary') > -1
           || initPath.indexOf('/asset/') > -1
+          || initPath.indexOf('/object/') > -1
           || initPath.indexOf('/assetprint/') > -1
           || initPath.indexOf('/group/') > -1
           || initPath.indexOf('/browse/') > -1
@@ -24,7 +26,10 @@
         ) {
           if (initPath.indexOf('/library/') > -1) {
             initPath = initPath.substr(initPath.indexOf('/library/'));
+          } else if (initPath.indexOf('/openlibrary/') > -1) {
+            initPath = initPath.substr(initPath.indexOf('/openlibrary/'));
           } else if (initPath.indexOf(initOrigin) > -1) {
+            // Handle cases where hostname exists within the URL multiple times, especially on proxies
             initPath = initPath.substr(initPath.lastIndexOf(initOrigin) + initOrigin.length);
           } else {
             initPath = null
