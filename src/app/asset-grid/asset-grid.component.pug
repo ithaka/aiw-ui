@@ -37,15 +37,16 @@
               i.icon.icon-select-white
               | Select
             //- Reorder
-            li.btn.btn-link((click)="toggleReorderMode()", [ngClass]="{'active': reorderMode}", *ngIf="actionOptions.group && actionOptions.isowner", (keyup.enter)="toggleReorderMode()", tabindex="3")
+            li.btn.btn-link((click)="toggleReorderMode()", [ngClass]="{'active': reorderMode}", *ngIf="actionOptions.group && actionOptions.isowner", (keyup.enter)="toggleReorderMode()", tabindex="3", role="button",
+            aria-label="Press enter or spacebar to reorder the images in this group. Using drag and drop or keyboard arrow keys, you can change the order of the images.")
               i.icon.icon-reorder-white
               | Reorder
           //- Save Order
-          li.btn.btn-link(*ngIf="reorderMode", [class.disabled]="!orderChanged", (click)="saveReorder()", (keyup.enter)="saveReorder()", tabindex="3")
+          li.btn.btn-link#saveReorderButton(*ngIf="reorderMode", [class.disabled]="!orderChanged", (click)="saveReorder()", (keyup.enter)="saveReorder()", tabindex="3", role="button", aria-label="Press enter or spacebar to save reordering of the images in this group.")
             i.icon.icon-reorder-white
             | Save Order
           //- Cancel Reorder
-          li.btn.btn-link(*ngIf="reorderMode", (click)="cancelReorder()", (keyup.enter)="cancelReorder()", tabindex="3")
+          li.btn.btn-link(*ngIf="reorderMode", (click)="cancelReorder()", (keyup.enter)="cancelReorder()", tabindex="3", role="button", aria-label="Press enter or spacebar to cancel reordering of the images in this group.")
             i.icon.icon-close-white--round
             | Cancel Reorder
           //- Number of selected assets in edit mode

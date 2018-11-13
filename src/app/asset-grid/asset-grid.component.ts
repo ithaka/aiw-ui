@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, Renderer } from '@angular/core'
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, Renderer, ElementRef, ViewChild } from '@angular/core'
 import { ActivatedRoute, NavigationStart, Params, Router } from '@angular/router'
 
 import { BehaviorSubject, Subscription } from 'rxjs'
@@ -31,6 +31,9 @@ import { SortablejsService } from 'angular-sortablejs/dist/src/sortablejs.servic
 })
 
 export class AssetGrid implements OnInit, OnDestroy {
+
+  @ViewChild('saveReorderButton') saveReorderButton: HTMLElement
+
   @Input()
   set assetCount(count: number) {
     if (typeof(count) != 'undefined') {
@@ -606,7 +609,6 @@ export class AssetGrid implements OnInit, OnDestroy {
         .then( allThumbnails => {
           this.isLoading = false;
           this.results = this.allResults = allThumbnails;
-          console.log('RESULTS: ', this.results)
         })
         .catch( error => {
           this.isLoading = false;
@@ -656,12 +658,26 @@ export class AssetGrid implements OnInit, OnDestroy {
     })).subscribe()
   }
 
+  /**
+   * Reorder image group assets with keyboard arrows
+   * @param index The array index of the selected asset to move
+   * @param event The keyboard key event
+   */
   private arrowReorder(index, event) {
+
+    // Turn arrowReorderMode on/off with 'Enter' when on a thumbnail
     if (event.key === "Enter") {
       this.arrowReorderMode = this.arrowReorderMode ? false : true
       return
     }
 
+    // Exit reording back to focus on Save reorder button
+    if (event.key === "Escape") {
+      console.log(this.saveReorderButton)
+      this.saveReorderButton.focus()
+    }
+
+    // Left, Right arrow key reording - Uses splice on allResults array
     if (this.arrowReorderMode) {
       switch(event.key) {
 
