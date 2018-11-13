@@ -106,7 +106,7 @@
         ng-container(*ngFor="let asset of results; let i = index")
           .col-sm-4.col-md-2.col-lg-1.draggable(*ngIf="asset.status === 'available'")
             .card.card--asset([ngClass]="{ 'lrgThmb': largeThmbView }")
-              ang-thumbnail([thumbnail]="asset", [attr.aria-labelledby]="asset.artstorid",
+              ang-thumbnail([thumbnail]="asset",
                 [itemIndex]="i",
                 [arrowReorderMode]="arrowReorderMode",
                 [reorderMode]="reorderMode",
