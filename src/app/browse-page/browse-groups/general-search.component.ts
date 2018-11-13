@@ -1,4 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Router } from '@angular/router';
 import { Subscription } from 'rxjs'
 import { map } from 'rxjs/operators'
 
@@ -21,7 +22,9 @@ export class GeneralSearchComponent implements OnInit {
 
   private subscriptions: Subscription[] = []
 
-  constructor() { }
+  constructor(
+    private _router: Router
+  ) { }
 
   ngOnInit() {
     if (this.init)
@@ -34,6 +37,15 @@ export class GeneralSearchComponent implements OnInit {
         })).subscribe()
       )
     }
+
+    // Remove error message when route changes
+    this.subscriptions.push(
+      this._router.events.pipe(
+        map(event => {
+          this.startSearch = false;
+        }
+      )).subscribe()
+    )
   }
 
   public setFocus(): void {
@@ -44,4 +56,14 @@ export class GeneralSearchComponent implements OnInit {
     }, 110);
   }
 
+  public conductSearch(): void {
+    this.startSearch = true;
+    // Only add route params when the search term is not empty
+    // This is to ensure that the error message doesn't get removed...
+    // ...by the above subscription when we update route param for empty search term
+    if (this.term) {
+      this.executeSearch.emit(this.term);
+    }
+    this.setFocus();
+  }
 }

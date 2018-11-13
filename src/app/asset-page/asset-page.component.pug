@@ -82,7 +82,7 @@
         .btn-row
           //- Edit
           //- * (mouseup) is a Firefox fix for firing the copy event
-          button.btn.btn-secondary(*ngIf="user.isLoggedIn && assets[0].personalCollectionOwner === user['baseProfileId']", [class.active]="showEditDetails", tabindex="6", (click)="loadEditDetailsForm()")
+          button#assetpage-btn.btn.btn-secondary(*ngIf="user.isLoggedIn && assets[0].personalCollectionOwner === user['baseProfileId']", [class.active]="showEditDetails", tabindex="6", (click)="loadEditDetailsForm()")
             | {{ 'ASSET_PAGE.BUTTONS.EDIT_DETAILS' | translate}}
 
           //- the .driver-find-group-btn class is important for the tour to find it, be careful when removing or changing it

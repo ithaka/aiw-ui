@@ -37,14 +37,15 @@ export class LegacyRouteResolver implements Resolve<boolean> {
      * Example URLs being handled:
      * /library/#3|search|1|Globe20Theater|Multiple20Collection20Search|||type3D3126kw3DGlobe20Theater26id3Dall26name3DAll20Collections26origKW3D (public site)
      */
+    let welcomeRegExp = /(.)*welcome\.html#[0-9]$/ // If the legacy URL ends with 'welcome.html' or 'welcome.html#0'
 
     if (!isNaN(Number(url.substr(1, 2)))) {
       // Anchors in some old links cause some of the path to be lost
       url = '/library/welcome.html#' + url.substr(1)
-    } else if (url.endsWith('welcome.html')) { // If the legacy URL ends with 'welcome.html'
+    } else if (welcomeRegExp.test(url)) { 
       this._router.navigate(['/home'])
       return true
-    } else if (url.indexOf('/library') == 0) {
+    } else if (url.indexOf('/library') == 0 || url.indexOf('/openlibrary') == 0) {
       // This is the normal expectation for old links!
     } else {
       return true

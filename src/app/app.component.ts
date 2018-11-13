@@ -19,11 +19,12 @@ import { ScriptService, FlagService } from './shared'
   encapsulation: ViewEncapsulation.None,
   template: `
     <ang-sky-banner *ngIf="showSkyBanner" [textValue]="skyBannerCopy" (closeBanner)="showSkyBanner = false"></ang-sky-banner>
-    <div id="skip" tabindex="-1" aria-activedescendant="button">
-      <button id="button" (click)="findMainContent()" (keyup.enter)="findMainContent()" tabindex="1" class="sr-only sr-only-focusable"> Skip to main content </button>
+    <div>
+      <div id="skip" tabindex="-1" aria-activedescendant="button">
+        <button id="button" (click)="findMainContent()" (keyup.enter)="findMainContent()" tabindex="1" class="sr-only sr-only-focusable"> Skip to main content </button>
+      </div>
+      <nav-bar tabindex="-1"></nav-bar>
     </div>
-    <nav-bar tabindex="0"></nav-bar>
-
     <main tabindex="-1">
       <router-outlet></router-outlet>
     </main>
@@ -89,7 +90,7 @@ export class App {
         let zendeskElements = document.querySelectorAll('.zopim')
 
         // On navigation end, load the zendesk chat widget if user lands on login page else hide the widget
-        if (this.showChatWidget(window.location.href)) {
+        if (this.showChatWidget(window.location.href) && this._app.config.showZendeskWidget) {
           this._script.loadScript('zendesk')
             .then( data => {
               if (data['status'] === 'loaded'){

@@ -26,6 +26,8 @@ import { LinkPage } from './link-page'
 
 export const ROUTES: Routes = [
   { path: '', component: Home, canActivate: [AuthService], pathMatch: 'full' },
+  // Simple legacy redirects
+  { path: '1', redirectTo: '', canActivate: [AuthService], pathMatch: 'full'},
   // "Hashbang" support for sitemap
   { path: '!', redirectTo: '', canActivate: [AuthService], pathMatch: 'full' },
   { path: '!/asset/:assetId', redirectTo: 'asset/:assetId', pathMatch: 'full' },
@@ -37,6 +39,7 @@ export const ROUTES: Routes = [
   { path: 'home',  component: Home, canActivate: [AuthService] },
   { path: 'search/', redirectTo: '/search/*', pathMatch: 'full', canActivate: [AuthService] },
   { path: 'asset/:assetId', component: AssetPage, pathMatch: 'full' },
+  { path: 'object/:assetId', redirectTo: '/asset/:assetId', pathMatch: 'full' },
   { path: 'asset/external/:encryptedId', component: AssetPage, pathMatch: 'full' },
   { path: 'search/:term', component: SearchPage, canActivate: [AuthService] },
   { path: 'search', component: SearchPage, pathMatch: 'full', canActivate: [AuthService] },

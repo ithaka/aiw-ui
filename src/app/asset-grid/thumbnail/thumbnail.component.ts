@@ -54,6 +54,7 @@ export class ThumbnailComponent implements OnInit, OnChanges {
 
   // Keeps the track of multiViewItems count associated with the current asset
   public multiviewItemCount: number = 0
+  public isMultiView: boolean = false
 
   public keyArrow = false
 
@@ -66,10 +67,13 @@ export class ThumbnailComponent implements OnInit, OnChanges {
    }
 
   ngOnInit() {
+
+    // Compound 'multiview' assets use cleanedAsset.thumbnailUrls[0], assigned in asset-search
     if (this.thumbnail['compound_media']) {
-      let objects = JSON.parse(this.thumbnail['compound_media']).objects
-      this.thumbnail.thumbnailImgUrl = objects[0].thumbnailSizeOnePath
+      this.isMultiView = true
+      this.thumbnail.thumbnailImgUrl = this.thumbnail['thumbnailUrls'][0]
     }
+
     else if (this.thumbnail['media']) {
       this.thumbnail.thumbnailImgUrl = this.thumbnail.media.thumbnailSizeOnePath
     }
@@ -122,7 +126,7 @@ export class ThumbnailComponent implements OnInit, OnChanges {
 
   // If large thumbnail image fails to load, fallback to smaller thumbnail image
   thumbnailError(): void{
-    if (this.thumbnailSize > 1){
+    if (this.thumbnailSize > 1) {
       this.thumbnailSize--
     }
   }

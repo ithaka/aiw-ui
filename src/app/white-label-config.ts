@@ -11,6 +11,7 @@ export const WLV_ARTSTOR = {
     logoUrl: "/assets/img/logo-v1-1.png",
     contributingInstFilters : [],
     isOpenAccess: true,
+    showZendeskWidget: true,
     footerLinks: [
         "ABOUT",
         "GETTING_STARTED",
@@ -54,6 +55,7 @@ export const WLV_SAHARA = {
     saharaLogin: true,
     institutionLogin : false,
     isOpenAccess: false,
+    showZendeskWidget: false,
     disableIPAuth : true,
     pageTitle : "SAHARA",
     siteID: "SAHARA",

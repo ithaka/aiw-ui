@@ -73,10 +73,9 @@ export class Home implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-
     // Provide redirects for initPath detected in index.html from inital load
     if (initPath) {
-      this._router.navigateByUrl(initPath)
+      this._router.navigateByUrl(initPath, { replaceUrl: true })
         .then(result => {
           // Clear variable to prevent further redirects
           initPath = null

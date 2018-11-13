@@ -377,7 +377,7 @@
   },
   "PERSONAL_COLLECTION_PAGE": {
     "BANNER": {
-      "DELETE_SUCCESS": "{{title}} was successfully deleted from your personal collection."
+      "DELETE_SUCCESS": "{{title}} has been deleted. There may be a delay before it no longer appears in your collection."
     },
     "MORE_ABOUT_PUBLISHING": "<a href=\"https://support.artstor.org/?article=upload-images-to-personal-collections#Upload_messaging_PC\" class=\"link\" target=\"_blank\">More about publishing</a>"
   },
@@ -661,7 +661,7 @@
     "geography" : "Geography",
     "collTypes" : "Collection Type",
     "collectiontypes" : "Collection Type",
-    "contributinginstitutionid": "Contributor",
+    "contributinginstitutionid" : "Contributor",
     "date" : "Date"
   },
   "FIELD" : {
