@@ -24,6 +24,7 @@ export class LegacyRouteResolver implements Resolve<boolean> {
    */
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
     let url = state.url
+    let openCollection: boolean = false
 
     // Provide redirects for initPath detected in index.html from inital load
     if (initPath) {
@@ -45,8 +46,10 @@ export class LegacyRouteResolver implements Resolve<boolean> {
     } else if (welcomeRegExp.test(url)) { 
       this._router.navigate(['/home'])
       return true
-    } else if (url.indexOf('/library') == 0 || url.indexOf('/openlibrary') == 0) {
+    } else if (url.indexOf('/library') == 0) {
       // This is the normal expectation for old links!
+    } else if (url.indexOf('/openlibrary') == 0) {
+      openCollection = true
     } else {
       return true
     }
@@ -101,7 +104,11 @@ export class LegacyRouteResolver implements Resolve<boolean> {
 
       // At some point, someone made pretty urls as: '/library/collection/patel'
       if (pipeArr[0] == 'collection' && urlArr[1]) {
-        this._router.navigate(['/collection', urlArr[1]])
+        let colId = urlArr[1]
+        if (openCollection) {
+          colId = "8" + colId
+        }
+        this._router.navigate(['/collection', colId])
       }
 
       // Handling for '/library/welcome.html'
@@ -124,7 +131,11 @@ export class LegacyRouteResolver implements Resolve<boolean> {
                 this._router.navigate(['/category', pipeArr[2]]) // the 3rd item in the array is the category id
                 break
               case 'collections':
-                this._router.navigate(['/collection', pipeArr[2]]) // the 3rd item in the array is the collection id
+                let colId = pipeArr[2]
+                if (openCollection) {
+                  colId = "8" + pipeArr[2]
+                }
+                this._router.navigate(['/collection', colId]) // the 3rd item in the array is the collection id
                 break
               case 'imagegroup':
                 this._router.navigate(['group', pipeArr[2]])
