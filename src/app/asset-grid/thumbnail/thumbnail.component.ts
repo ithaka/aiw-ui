@@ -30,16 +30,16 @@ export class ThumbnailComponent implements OnInit, OnChanges {
   public thumbnail: Thumbnail
 
   @Input() // allResults index for reorder
-  itemIndex: number
+  public itemIndex: number
+
+  @Input()
+  public arrowReorderMode: boolean
 
   @Input()
   private largeThmbView: boolean
 
   @Input()
   private reorderMode: boolean
-
-  @Input()
-  private arrowReorderMode: boolean
 
   @Input()
   public editMode: boolean
