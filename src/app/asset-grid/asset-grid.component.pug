@@ -102,7 +102,7 @@
 
         .alert.alert-warning(*ngIf="!isLoading && (searchError.length < 1) && ((isPartialPage && hasMaxAssetLimit) || searchLimitError)")
           | {{ "BROWSE.WARNINGS.ADDITIONAL_RESULTS" | translate }}
-      //- Sortable Thumbails
+      //- Sortable Thumbails / Reorder Mode
       #assetThumbnailsRow.row.no-gutters(*ngIf="reorderMode", [sortablejs]="allResults", [sortablejsOptions]="sortableOptions")
         ng-container(*ngFor="let asset of results; let i = index")
           .col-sm-4.col-md-2.col-lg-1.draggable(*ngIf="asset.status === 'available'")

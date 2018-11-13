@@ -32,8 +32,6 @@ import { SortablejsService } from 'angular-sortablejs/dist/src/sortablejs.servic
 
 export class AssetGrid implements OnInit, OnDestroy {
 
-  @ViewChild('saveReorderButton') saveReorderButton: HTMLElement
-
   @Input()
   set assetCount(count: number) {
     if (typeof(count) != 'undefined') {
@@ -194,6 +192,7 @@ export class AssetGrid implements OnInit, OnDestroy {
       if (prefs && prefs.largeThumbnails) {
         this.largeThmbView = prefs.largeThumbnails
       }
+
   }
 
   ngOnInit() {
@@ -614,6 +613,13 @@ export class AssetGrid implements OnInit, OnDestroy {
           this.isLoading = false;
           this.reorderMode = false;
         });
+
+      // Set focus on the first tumbnail in reorder mode
+      setTimeout(() => {
+        let el = document.getElementById('item-0')
+        el.focus()
+      }, 600)
+
     } else {
       this.cancelReorder();
     }
@@ -663,20 +669,18 @@ export class AssetGrid implements OnInit, OnDestroy {
    * @param index The array index of the selected asset to move
    * @param event The keyboard key event
    */
-  private arrowReorder(index, event) {
-
+  private arrowReorder(index: number, event: KeyboardEvent): void {
     // Turn arrowReorderMode on/off with 'Enter' when on a thumbnail
     if (event.key === "Enter") {
       this.arrowReorderMode = this.arrowReorderMode ? false : true
       return
     }
-
     // Exit reording back to focus on Save reorder button
     if (event.key === "Escape") {
-      console.log(this.saveReorderButton)
-      this.saveReorderButton.focus()
+      this.arrowReorderMode = false
+      document.getElementById('saveReorderButton').focus()
+      return
     }
-
     // Left, Right arrow key reording - Uses splice on allResults array
     if (this.arrowReorderMode) {
       switch(event.key) {
