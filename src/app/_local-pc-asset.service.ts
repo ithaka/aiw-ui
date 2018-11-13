@@ -48,7 +48,6 @@ export class LocalPCService {
   public getAsset(ssid: number): LocalPCAsset {
     if (this.pcAssets) {
       return this.pcAssets.find((item) => {
-        // NOTE: BRETT if item.ssid.length
         return item.ssid == ssid
       })
     } else {
@@ -62,7 +61,6 @@ export class LocalPCService {
    */
   private _getAsset(ssid: number): LocalPCAsset {
     return this._pcAssets.find((item) => {
-      // NOTE: BRETT if item.ssid.length
       return item.ssid == ssid
     })
   }

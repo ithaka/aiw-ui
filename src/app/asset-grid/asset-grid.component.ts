@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, Renderer, ElementRef, ViewChild } from '@angular/core'
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, Renderer } from '@angular/core'
 import { ActivatedRoute, NavigationStart, Params, Router } from '@angular/router'
 
 import { BehaviorSubject, Subscription } from 'rxjs'
@@ -22,7 +22,6 @@ import { AssetFiltersService } from '../asset-filters/asset-filters.service'
 import { APP_CONST } from '../app.constants'
 import { LockerService } from 'app/_services';
 import { SortablejsOptions } from 'angular-sortablejs';
-import { SortablejsService } from 'angular-sortablejs/dist/src/sortablejs.service';
 
 @Component({
   selector: 'ang-asset-grid',
@@ -31,7 +30,6 @@ import { SortablejsService } from 'angular-sortablejs/dist/src/sortablejs.servic
 })
 
 export class AssetGrid implements OnInit, OnDestroy {
-
   @Input()
   set assetCount(count: number) {
     if (typeof(count) != 'undefined') {
@@ -192,7 +190,6 @@ export class AssetGrid implements OnInit, OnDestroy {
       if (prefs && prefs.largeThumbnails) {
         this.largeThmbView = prefs.largeThumbnails
       }
-
   }
 
   ngOnInit() {
@@ -656,7 +653,7 @@ export class AssetGrid implements OnInit, OnDestroy {
 
     this._groups.update(this.ig).pipe(
       take(1),
-      map((data) => {
+      map(data => {
           this.cancelReorder();
         }, error => {
           console.error(error);
