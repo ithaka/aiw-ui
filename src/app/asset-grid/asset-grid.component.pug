@@ -104,7 +104,7 @@
         .alert.alert-warning(*ngIf="!isLoading && (searchError.length < 1) && ((isPartialPage && hasMaxAssetLimit) || searchLimitError)")
           | {{ "BROWSE.WARNINGS.ADDITIONAL_RESULTS" | translate }}
       //- Sortable Thumbails / Reorder Mode
-      #assetThumbnailsRow.row.no-gutters(*ngIf="reorderMode", [sortablejs]="allResults", [sortablejsOptions]="sortableOptions")
+      #assetThumbnailsRow.row.no-gutters(*ngIf="reorderMode", [sortablejs]="results", [sortablejsOptions]="sortableOptions")
         //- Visual instructions
         .col-12
           .alert.alert-info(aria-hidden="true")
@@ -114,7 +114,6 @@
         p#reorder-status.sr-only(role="region", aria-live="assertive", aria-atomic="true") {{ arrowReorderStatus }}
         p.sr-only To Reorder images with keyboard arrow keys, tab to an image and press enter. Then move the image left or right using keyboard arrows.
         p.sr-only Press enter again to tun off reording for that image. Pressing the escape key places focus back on the save reorder button to save your changes.
-        ng-container(*ngFor="let asset of results; let i = index")
           .col-sm-4.col-md-2.col-xl-1.draggable
             .card.card--asset([ngClass]="{ 'lrgThmb': largeThmbView }")
               ang-thumbnail([thumbnail]="asset",
