@@ -122,6 +122,7 @@
                 [reorderMode]="reorderMode",
                 [editMode]="editMode",
                 [largeThmbView]="largeThmbView",
+                (click)="arrowReorderMode = false",
                 (keydown)="arrowReorder(i, $event)",
                 [attr.aria-controls]="reorder-status")
         .alert.alert-warning(*ngIf="!isLoading && (searchError.length < 1) && ((isPartialPage && hasMaxAssetLimit) || searchLimitError)")

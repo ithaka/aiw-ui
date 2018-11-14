@@ -709,10 +709,9 @@ export class AssetGrid implements OnInit, OnDestroy {
           break
         }
       }
+      this.ig.items = this.allResults
+      this.orderChanged = true
     }
-
-    this.ig.items = this.allResults
-    this.orderChanged = true
   }
 
   /**
