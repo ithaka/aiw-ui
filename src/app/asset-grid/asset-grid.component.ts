@@ -693,7 +693,7 @@ export class AssetGrid implements OnInit, OnDestroy {
         case "ArrowLeft": {
           if (index > 0) {
             let removed = this.allResults.splice(index, 1)
-            this.allResults.splice(index - 2, 0, removed[0])
+            this.allResults.splice(index - 1, 0, removed[0])
 
             setTimeout(() => {
               let id = 'item-' + (index - 1)
