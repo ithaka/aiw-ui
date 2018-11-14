@@ -50,7 +50,7 @@ export class AssetGrid implements OnInit, OnDestroy {
   public reorderMode: boolean = false;
   public showLoseReorder: boolean = false;
   public arrowReorderMode: boolean = false;
-  public arrowReorderStatus: string = ''
+  public arrowReorderMessage: string = ''
 
   // Default show as loading until results have update
   public isLoading: boolean = true;
@@ -662,7 +662,7 @@ export class AssetGrid implements OnInit, OnDestroy {
       take(1),
       map(data => {
           this.cancelReorder();
-          this.arrowReorderStatus = "Reordered images have been saved successfully"
+          this.arrowReorderMessage = "Reordered images have been saved successfully"
         }, error => {
           console.error(error);
           this.cancelReorder();
@@ -677,7 +677,14 @@ export class AssetGrid implements OnInit, OnDestroy {
   private arrowReorder(index: number, event: KeyboardEvent): void {
     // Turn arrowReorderMode on/off with 'Enter' when on a thumbnail
     if (event.key === "Enter") {
-      this.arrowReorderMode = this.arrowReorderMode ? false : true
+      if (this.arrowReorderMode) {
+        this.arrowReorderMode = false
+        this.arrowReorderMessage = "Reorder mode off" // aria live region message
+      }
+      else {
+        this.arrowReorderMode = true
+        this.arrowReorderMessage = "Reorder mode on" // aria live region message
+      }
       return
     }
     // Exit reording back to focus on Save reorder button
@@ -693,7 +700,7 @@ export class AssetGrid implements OnInit, OnDestroy {
         case "ArrowRight": {
           let removed = this.results.splice(index, 1)
           this.results.splice(index + 1, 0, removed[0])
-          this.arrowReorderStatus = 'moved to position ' + (index + 2) + ' of ' + this.results.length // aria live region message
+          this.arrowReorderMessage = 'moved to position ' + (index + 2) + ' of ' + this.results.length // aria live region message
           break
         }
         case "ArrowLeft": {
@@ -706,7 +713,7 @@ export class AssetGrid implements OnInit, OnDestroy {
               document.getElementById(id).focus()
             }, 100)
 
-            this.arrowReorderStatus = 'moved to postion ' + (index) + ' of ' + this.results.length // aria live region message
+            this.arrowReorderMessage = 'moved to postion ' + (index) + ' of ' + this.results.length // aria live region message
           }
           break
         }
