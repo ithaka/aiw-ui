@@ -42,7 +42,8 @@
               i.icon.icon-reorder-white
               | Reorder
           //- Save Order
-          li.btn.btn-link#saveReorderButton(*ngIf="reorderMode", [class.disabled]="!orderChanged", (click)="saveReorder()", (keyup.enter)="saveReorder()", tabindex="3", role="button", aria-label="Press enter or spacebar to save reordering of the images in this group.")
+          li.btn.btn-link#saveReorderButton(*ngIf="reorderMode", [class.disabled]="!orderChanged", (click)="saveReorder()", (keyup.enter)="saveReorder()", tabindex="3", role="button",
+          aria-label="Press enter or spacebar to save reordering of the images in this group.", [attr.aria-controls]="reorder-status")
             i.icon.icon-reorder-white
             | Save Order
           //- Cancel Reorder
@@ -104,6 +105,10 @@
           | {{ "BROWSE.WARNINGS.ADDITIONAL_RESULTS" | translate }}
       //- Sortable Thumbails / Reorder Mode
       #assetThumbnailsRow.row.no-gutters(*ngIf="reorderMode", [sortablejs]="allResults", [sortablejsOptions]="sortableOptions")
+        //- Screenreader keyboard reording messaging
+        p#reorder-status.sr-only(role="region", aria-live="assertive", aria-atomic="true") {{ arrowReorderStatus }}
+        p.sr-only To Reorder images with keyboard arrow keys, tab to an image and press enter. Then move the image left or right using keyboard arrows.
+        p.sr-only Press enter again to tun off reording for that image. Pressing the escape key places focus back on the save reorder button to save your changes.
         ng-container(*ngFor="let asset of results; let i = index")
           .col-sm-4.col-md-2.col-lg-1.draggable(*ngIf="asset.status === 'available'")
             .card.card--asset([ngClass]="{ 'lrgThmb': largeThmbView }")
@@ -113,7 +118,8 @@
                 [reorderMode]="reorderMode",
                 [editMode]="editMode",
                 [largeThmbView]="largeThmbView",
-                (keydown)="arrowReorder(i, $event)")
+                (keydown)="arrowReorder(i, $event)",
+                [attr.aria-controls]="reorder-status")
         .alert.alert-warning(*ngIf="!isLoading && (searchError.length < 1) && ((isPartialPage && hasMaxAssetLimit) || searchLimitError)")
           | {{ "BROWSE.WARNINGS.ADDITIONAL_RESULTS" | translate }}
   .row

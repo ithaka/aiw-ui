@@ -50,6 +50,7 @@ export class AssetGrid implements OnInit, OnDestroy {
   public reorderMode: boolean = false;
   public showLoseReorder: boolean = false;
   public arrowReorderMode: boolean = false;
+  public arrowReorderStatus: string = ''
 
   // Default show as loading until results have update
   public isLoading: boolean = true;
@@ -655,6 +656,7 @@ export class AssetGrid implements OnInit, OnDestroy {
       take(1),
       map(data => {
           this.cancelReorder();
+          this.arrowReorderStatus = "Reordered images have been saved successfully"
         }, error => {
           console.error(error);
           this.cancelReorder();
@@ -685,17 +687,20 @@ export class AssetGrid implements OnInit, OnDestroy {
         case "ArrowRight": {
           let removed = this.allResults.splice(index, 1)
           this.allResults.splice(index + 1, 0, removed[0])
+          this.arrowReorderStatus = 'moved to position ' + (index + 2) + ' of ' + this.allResults.length // aria live region message
           break
         }
         case "ArrowLeft": {
           if (index > 0) {
             let removed = this.allResults.splice(index, 1)
-            this.allResults.splice(index - 1, 0, removed[0])
+            this.allResults.splice(index - 2, 0, removed[0])
 
             setTimeout(() => {
               let id = 'item-' + (index - 1)
               document.getElementById(id).focus()
             }, 100)
+
+            this.arrowReorderStatus = 'moved to postion ' + (index) + ' of ' + this.allResults.length // aria live region message
           }
           break
         }
