@@ -646,6 +646,7 @@ export class AssetGrid implements OnInit, OnDestroy {
 
   private saveReorder(): void {
     this.isLoading = true;
+    this.allResults = this.results
 
     let newItemsArray = [];
 
@@ -690,22 +691,22 @@ export class AssetGrid implements OnInit, OnDestroy {
       switch(event.key) {
 
         case "ArrowRight": {
-          let removed = this.allResults.splice(index, 1)
-          this.allResults.splice(index + 1, 0, removed[0])
-          this.arrowReorderStatus = 'moved to position ' + (index + 2) + ' of ' + this.allResults.length // aria live region message
+          let removed = this.results.splice(index, 1)
+          this.results.splice(index + 1, 0, removed[0])
+          this.arrowReorderStatus = 'moved to position ' + (index + 2) + ' of ' + this.results.length // aria live region message
           break
         }
         case "ArrowLeft": {
           if (index > 0) {
-            let removed = this.allResults.splice(index, 1)
-            this.allResults.splice(index - 1, 0, removed[0])
+            let removed = this.results.splice(index, 1)
+            this.results.splice(index - 1, 0, removed[0])
 
             setTimeout(() => {
               let id = 'item-' + (index - 1)
               document.getElementById(id).focus()
             }, 100)
 
-            this.arrowReorderStatus = 'moved to postion ' + (index) + ' of ' + this.allResults.length // aria live region message
+            this.arrowReorderStatus = 'moved to postion ' + (index) + ' of ' + this.results.length // aria live region message
           }
           break
         }
@@ -714,7 +715,6 @@ export class AssetGrid implements OnInit, OnDestroy {
           break
         }
       }
-      this.ig.items = this.allResults
       this.orderChanged = true
     }
   }
