@@ -115,7 +115,7 @@
         p.sr-only To Reorder images with keyboard arrow keys, tab to an image and press enter. Then move the image left or right using keyboard arrows.
         p.sr-only Press enter again to tun off reording for that image. Pressing the escape key places focus back on the save reorder button to save your changes.
         ng-container(*ngFor="let asset of results; let i = index")
-          .col-sm-4.col-md-2.col-xl-1.draggable(*ngIf="asset.status === 'available'")
+          .col-sm-4.col-md-2.col-xl-1.draggable
             .card.card--asset([ngClass]="{ 'lrgThmb': largeThmbView }")
               ang-thumbnail([thumbnail]="asset",
                 [itemIndex]="i",

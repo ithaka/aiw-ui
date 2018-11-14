@@ -605,6 +605,10 @@ export class AssetGrid implements OnInit, OnDestroy {
       this._assets.getAllThumbnails(this.itemIds)
         .then( allThumbnails => {
           this.isLoading = false;
+          // Make sure we are only reordering Available assets
+          allThumbnails = allThumbnails.filter(thumbnail => {
+            return thumbnail.status === 'available'
+          })
           this.results = this.allResults = allThumbnails;
         })
         .catch( error => {
