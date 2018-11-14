@@ -20,9 +20,6 @@ import { Angulartics2 } from 'angulartics2';
     .icon {
       margin-top: 3px;
     }
-    .card-block.card-text.reorder--asset:focus {
-      border: solid 2px;
-    }
   `]
 })
 export class ThumbnailComponent implements OnInit, OnChanges {

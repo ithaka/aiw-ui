@@ -215,10 +215,12 @@ img.no-stretch {
     }
 }
 
+$selectedAssetBorderColor: #ababab;
+
 .card--asset.selected{
     opacity: 1 !important;
     & .card-block {
-        border-color: #ababab;
+        border-color: $selectedAssetBorderColor;
         transform: translateY(-1px);
         box-shadow: 0 1px 3px 0 rgba(0,0,0,0.3);
     }
@@ -227,4 +229,15 @@ img.no-stretch {
 
 .list-group-clean .list-group-item {
         padding-top: $basePadding/4;
+}
+
+// Card reorder styles
+.card-block.card-text {
+    transition: transform ease 200ms;
+}
+.card-block.card-text.reorder--asset:focus {
+    outline: none !important;
+    border: solid 1px $selectedAssetBorderColor;
+    box-shadow: 0 5px 10px 0 rgba(0,0,0,0.4);
+    transform: translateY(-5px);
 }
