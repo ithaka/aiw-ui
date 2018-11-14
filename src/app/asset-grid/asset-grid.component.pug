@@ -105,6 +105,10 @@
           | {{ "BROWSE.WARNINGS.ADDITIONAL_RESULTS" | translate }}
       //- Sortable Thumbails / Reorder Mode
       #assetThumbnailsRow.row.no-gutters(*ngIf="reorderMode", [sortablejs]="allResults", [sortablejsOptions]="sortableOptions")
+        //- Visual instructions
+        .alert.alert-info(aria-hidden="true")
+          b Reorder Images
+          | Use the mouse to drag and drop images. Alternatively, tab to an image, use enter to select, and arrow keys to move the image.
         //- Screenreader keyboard reording messaging
         p#reorder-status.sr-only(role="region", aria-live="assertive", aria-atomic="true") {{ arrowReorderStatus }}
         p.sr-only To Reorder images with keyboard arrow keys, tab to an image and press enter. Then move the image left or right using keyboard arrows.
