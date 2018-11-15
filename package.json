@@ -38,7 +38,11 @@
         "test": "ng test",
         "tslint": "tslint",
         "typedoc": "typedoc --options typedoc.json --exclude '**/*.spec.ts' ./src/ && npm run open:typedoc",
-        "open:typedoc": "open ./doc/index.html"
+        "open:typedoc": "open ./doc/index.html",
+        "build:ssr": "npm run build:client-and-server-bundles && npm run webpack:server",
+        "serve:ssr": "node dist/server",
+        "build:client-and-server-bundles": "ng build --prod && ng run avatar:server",
+        "webpack:server": "webpack --config webpack.server.config.js --progress --colors"
     },
     "dependencies": {
         "@angular/animations": "6.1.7",
@@ -48,11 +52,13 @@
         "@angular/http": "6.1.7",
         "@angular/platform-browser": "6.1.7",
         "@angular/platform-browser-dynamic": "6.1.7",
-        "@angular/platform-server": "6.1.7",
+        "@angular/platform-server": "^7.0.4",
         "@angular/router": "6.1.7",
         "@ng-bootstrap/ng-bootstrap": "^3.3.0",
         "@ng-idle/core": "^6.0.0-beta.3",
         "@ng-idle/keepalive": "^6.0.0-beta.3",
+        "@nguniversal/express-engine": "^7.0.2",
+        "@nguniversal/module-map-ngfactory-loader": "^7.0.2",
         "@ngx-translate/core": "^10.0.2",
         "@ngx-translate/http-loader": "^3.0.1",
         "@pact-foundation/pact-node": "^6.0.0",
@@ -80,6 +86,7 @@
         "rxjs": "^6.0.0",
         "rxjs-compat": "^6.3.3",
         "sortablejs": "^1.7.0",
+        "ts-loader": "^5.3.0",
         "url-loader": "^1.0.1",
         "webpack": "^4.21.0",
         "zone.js": "~0.8.26"
@@ -145,7 +152,8 @@
         "tslint": "~5.9.1",
         "tslint-loader": "^3.6.0",
         "typedoc": "^0.5.1",
-        "typescript": "2.7.2"
+        "typescript": "2.7.2",
+        "webpack-cli": "^3.1.2"
     },
     "repository": {
         "type": "git",

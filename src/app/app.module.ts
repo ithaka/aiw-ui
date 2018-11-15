@@ -236,7 +236,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     UploaderComponent
   ],
   imports: [ // import Angular's modules
-    BrowserModule,
+    BrowserModule.withServerTransition({ appId: 'avatar' }),
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
