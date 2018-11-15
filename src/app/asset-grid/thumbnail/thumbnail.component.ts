@@ -26,6 +26,12 @@ export class ThumbnailComponent implements OnInit, OnChanges {
   @Input()
   public thumbnail: Thumbnail
 
+  @Input() // allResults index for reorder
+  public itemIndex: number
+
+  @Input()
+  public arrowReorderMode: boolean
+
   @Input()
   private largeThmbView: boolean
 
@@ -35,6 +41,10 @@ export class ThumbnailComponent implements OnInit, OnChanges {
   @Input()
   public editMode: boolean
 
+  // Keeps the track of multiViewItems count associated with the current asset
+  public multiviewItemCount: number = 0
+  public isMultiView: boolean = false
+
   private constraints: any = {}
 
   // Variable that determines the thumbnail image size based on largeThmbView and available size for the asset. Defaults to 1 (Small thumbnail view)
@@ -42,10 +52,6 @@ export class ThumbnailComponent implements OnInit, OnChanges {
 
   // The alt message for a thumbnail, combined with thumbnail title and creator name
   private thumbnailAlt: string = ''
-
-  // Keeps the track of multiViewItems count associated with the current asset
-  public multiviewItemCount: number = 0
-  public isMultiView: boolean = false
 
   constructor(
     private angulartics: Angulartics2,

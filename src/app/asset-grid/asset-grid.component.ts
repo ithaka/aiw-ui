@@ -49,6 +49,8 @@ export class AssetGrid implements OnInit, OnDestroy {
   public editMode: boolean = false;
   public reorderMode: boolean = false;
   public showLoseReorder: boolean = false;
+  public arrowReorderMode: boolean = false;
+  public arrowReorderMessage: string = ''
 
   // Default show as loading until results have update
   public isLoading: boolean = true;
@@ -603,12 +605,24 @@ export class AssetGrid implements OnInit, OnDestroy {
       this._assets.getAllThumbnails(this.itemIds)
         .then( allThumbnails => {
           this.isLoading = false;
-          this.results = this.allResults = allThumbnails;
+          // Make sure we are only reordering Available assets
+          allThumbnails = allThumbnails.filter(thumbnail => {
+            return thumbnail.status === 'available'
+          })
+          this.allResults = allThumbnails
+          this.results = this.allResults.slice(0)
         })
         .catch( error => {
           this.isLoading = false;
           this.reorderMode = false;
         });
+
+      // Set focus on the first tumbnail in reorder mode
+      setTimeout(() => {
+        let el = document.getElementById('item-0')
+        el.focus()
+      }, 600)
+
     } else {
       this.cancelReorder();
     }
@@ -632,6 +646,7 @@ export class AssetGrid implements OnInit, OnDestroy {
 
   private saveReorder(): void {
     this.isLoading = true;
+    this.allResults = this.results
 
     let newItemsArray = [];
 
@@ -647,10 +662,68 @@ export class AssetGrid implements OnInit, OnDestroy {
       take(1),
       map(data => {
           this.cancelReorder();
+          this.arrowReorderMessage = "Reordered images have been saved successfully"
         }, error => {
           console.error(error);
           this.cancelReorder();
     })).subscribe()
+  }
+
+  /**
+   * Reorder image group assets with keyboard arrows
+   * @param index The array index of the selected asset to move
+   * @param event The keyboard key event
+   */
+  private arrowReorder(index: number, event: KeyboardEvent): void {
+    // Turn arrowReorderMode on/off with 'Enter' when on a thumbnail
+    if (event.key === "Enter") {
+      if (this.arrowReorderMode) {
+        this.arrowReorderMode = false
+        this.arrowReorderMessage = "Reorder mode off" // aria live region message
+      }
+      else {
+        this.arrowReorderMode = true
+        this.arrowReorderMessage = "Reorder mode on" // aria live region message
+      }
+      return
+    }
+    // Exit reording back to focus on Save reorder button
+    if (event.key === "Escape") {
+      this.arrowReorderMode = false
+      document.getElementById('saveReorderButton').focus()
+      return
+    }
+    // Left, Right arrow key reording - Uses splice on allResults array
+    if (this.arrowReorderMode) {
+      switch(event.key) {
+
+        case "ArrowRight": {
+          let removed = this.results.splice(index, 1)
+          this.results.splice(index + 1, 0, removed[0])
+          this.arrowReorderMessage = 'moved to position ' + (index + 2) + ' of ' + this.results.length // aria live region message
+          break
+        }
+        case "ArrowLeft": {
+          if (index > 0) {
+            let removed = this.results.splice(index, 1)
+            this.results.splice(index - 1, 0, removed[0])
+
+            setTimeout(() => {
+              let id = 'item-' + (index - 1)
+              document.getElementById(id).focus()
+            }, 100)
+
+            this.arrowReorderMessage = 'moved to postion ' + (index) + ' of ' + this.results.length // aria live region message
+          }
+          break
+        }
+        default: {
+          this.arrowReorderMode = false
+          break
+        }
+      }
+      this.orderChanged = true
+    }
   }
 
   /**
