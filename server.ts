@@ -32,7 +32,7 @@ app.engine('html', ngExpressEngine({
 }));
 
 app.set('view engine', 'html');
-app.set('views', join(DIST_FOLDER, 'browser'));
+app.set('views', join(DIST_FOLDER, 'avatar'));
 
 // TODO: implement data requests securely
 app.get('/api/*', (req, res) => {
@@ -40,7 +40,7 @@ app.get('/api/*', (req, res) => {
 });
 
 // Server static files from /browser
-app.get('*.*', express.static(join(DIST_FOLDER, 'browser')));
+app.get('*.*', express.static(join(DIST_FOLDER, 'avatar')));
 
 // All regular routes use the Universal engine
 app.get('*', (req, res) => {
