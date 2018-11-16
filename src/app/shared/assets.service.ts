@@ -36,8 +36,8 @@ export class AssetService {
 
     // Set up subject observable for skipping the unauthorized asset on asset page, while browsing though assets
     public unAuthorizedAsset: Subject<boolean> = new Subject();
-    public pagination: Observable<any> 
-    public selection: Observable<any> 
+    public pagination: Observable<any>
+    public selection: Observable<any>
     public selectModeToggle: EventEmitter<any> = new EventEmitter()
 
 
@@ -882,6 +882,15 @@ export class AssetService {
                       map((res) => {
                             let results = res
                             data.thumbnails = results['items']
+
+                            // For multi-view items, make the thumbnail urls and update the array
+                            data.thumbnails = data.thumbnails.map((thumbnail) => {
+                                if (thumbnail['thumbnailImgUrl'].indexOf('media-objects') > -1) {
+                                    thumbnail.thumbnailImgUrl = this._assetSearch.makeThumbUrl(thumbnail.thumbnailImgUrl, 1, true)
+                                }
+                                return thumbnail
+                            })
+
                             // Set the allResults object
                             this.updateLocalResults(data)
                       }, (error) => {
