@@ -346,7 +346,7 @@ export class AssetPage implements OnInit, OnDestroy {
                     let prevRoutesMap = this._locker.sessionGet('prevRouteParams')
 
                     // Reference previous search params for the prevRouteTS
-                    let prevRouteParams = prevRoutesMap[this.prevRouteTS]
+                    let prevRouteParams = prevRoutesMap ? prevRoutesMap[this.prevRouteTS] : {}
 
                     // Set previous route params if available, showing "Back to Results" link
                     if (prevRoutesMap && prevRouteParams && (prevRouteParams.length > 0)) {
@@ -1165,7 +1165,8 @@ export class AssetPage implements OnInit, OnDestroy {
                         // Reload asset metadata
                         this._router.navigate(['/asset', ''])
                         setTimeout(() => {
-                            this._router.navigate(['/asset', this.assets[0].id])
+                            // Pass the prevRouteTS param to make sure we load prevRouteParams
+                            this._router.navigate([ '/asset', this.assets[0].id, this.prevRouteTS ? { prevRouteTS: this.prevRouteTS } : {} ])
                         }, 250)
                     }
                 },

@@ -14,7 +14,7 @@
               p(class="small") {{ 'ADVANCED_SEARCH_MODAL.SEARCH_DESCRIPTION' | translate }}
               .form-group(*ngFor="let query of advanceQueries; let i = index;")
                 .input-group(id="advanceQueryGroup{{i + 1}}")
-                  .input-group-btn(ngbDropdown, *ngIf="i !== 0")
+                  .input-group-btn(ngbDropdown, #advDrop1="ngbDropdown", [ngClass]="{ 'show' : focus }", *ngIf="i !== 0")
                     button.btn.btn-secondary.dropdown-toggle(id="advanceQueryOperator{{i + 1}}", ngbDropdownToggle, type="button")
                       | {{ query.operator }}
                       = " "
