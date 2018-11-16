@@ -60,11 +60,13 @@ export class ThumbnailComponent implements OnInit, OnChanges {
     // Compound 'multiview' assets for image groups, assigned in assets service
     if (this.thumbnail['thumbnailImgUrl'].indexOf('media-objects') > -1) {
       this.isMultiView = true
+      this.multiviewItemCount = this.thumbnail['compoundmediaCount']
     }
     // Compound 'multiview' assets use cleanedAsset.thumbnailUrls[0], assigned in asset-search
     if (this.thumbnail['compound_media']) {
       this.isMultiView = true
       this.thumbnail.thumbnailImgUrl = this.thumbnail['thumbnailUrls'][0]
+      this.multiviewItemCount = JSON.parse(this.thumbnail['compound_media']).objects.length
     }
 
     else if (this.thumbnail['media']) {
@@ -73,8 +75,6 @@ export class ThumbnailComponent implements OnInit, OnChanges {
 
     this.thumbnailAlt = this.thumbnail['name'] ? 'Thumbnail of ' + this.thumbnail['name'] : 'Untitled'
     this.thumbnailAlt = this.thumbnail['agent'] ? this.thumbnailAlt + ' by ' + this.thumbnail['agent'] : this.thumbnailAlt + ' by Unknown'
-
-    this.multiviewItemCount = this.thumbnail['compound_media'] ? JSON.parse(this.thumbnail['compound_media']).objects.length : 0;
   }
 
   // Fires when the component input(s) (i.e largeThmbView) changes - Updates the thumbnailSize based on largeThmbView current value

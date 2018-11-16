@@ -36,8 +36,8 @@ export class AssetService {
 
     // Set up subject observable for skipping the unauthorized asset on asset page, while browsing though assets
     public unAuthorizedAsset: Subject<boolean> = new Subject();
-    public pagination: Observable<any> 
-    public selection: Observable<any> 
+    public pagination: Observable<any>
+    public selection: Observable<any>
     public selectModeToggle: EventEmitter<any> = new EventEmitter()
 
 
