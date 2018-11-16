@@ -114,7 +114,7 @@
         p#reorder-status.sr-only(role="region", aria-live="assertive", aria-atomic="true") {{ arrowReorderMessage }}
         p.sr-only To Reorder images with keyboard arrow keys, tab to an image and press enter. Then move the image left or right using keyboard arrows.
         p.sr-only Press enter again to tun off reording for that image. Pressing the escape key places focus back on the save reorder button to save your changes.
-        .row([sortablejs]="results", [sortablejsOptions]="sortableOptions")
+        .row.no-gutters([sortablejs]="results", [sortablejsOptions]="sortableOptions")
           ng-container(*ngFor="let asset of results; let i = index")
             .col-sm-4.col-md-2.col-xl-1.draggable
               .card.card--asset([ngClass]="{ 'lrgThmb': largeThmbView }")
