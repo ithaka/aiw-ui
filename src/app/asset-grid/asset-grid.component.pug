@@ -116,7 +116,7 @@
         p.sr-only Press enter again to tun off reording for that image. Pressing the escape key places focus back on the save reorder button to save your changes.
         .row.no-gutters([sortablejs]="results", [sortablejsOptions]="sortableOptions")
           ng-container(*ngFor="let asset of results; let i = index")
-            .col-sm-4.col-md-2.col-xl-1.draggable
+            .col-sm-4.col-md-2.col-xl-1.col--reorder.draggable
               .card.card--asset([ngClass]="{ 'lrgThmb': largeThmbView }")
                 ang-thumbnail([thumbnail]="asset",
                   [itemIndex]="i",
