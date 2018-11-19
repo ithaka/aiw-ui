@@ -101,7 +101,7 @@ export class App {
         let zendeskElements = document.querySelectorAll('.zopim')
 
         // Reset OGP tags with default values for every route other than asset and collection pages
-        if(event.url.indexOf('asset/') === -1){
+        if((event.url.indexOf('asset/') === -1) || (event.url.indexOf('collection/') === -1)){
           this.resetOgpTags();
         }
 
