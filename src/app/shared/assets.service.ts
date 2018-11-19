@@ -885,7 +885,7 @@ export class AssetService {
 
                             // For multi-view items, make the thumbnail urls and update the array
                             data.thumbnails = data.thumbnails.map((thumbnail) => {
-                                if (thumbnail['thumbnailImgUrl'].indexOf('media-objects') > -1) {
+                                if (thumbnail['thumbnailImgUrl'] && thumbnail['thumbnailImgUrl'].indexOf('media-objects') > -1) {
                                     thumbnail.thumbnailImgUrl = this._assetSearch.makeThumbUrl(thumbnail.thumbnailImgUrl, 1, true)
                                 }
                                 return thumbnail
