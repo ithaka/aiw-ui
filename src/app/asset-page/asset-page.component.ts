@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy, ViewChild, HostListener } from '@angular/core'
 import { ActivatedRoute, Params, Router } from '@angular/router'
-import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
+import { DomSanitizer, SafeUrl, Meta } from '@angular/platform-browser';
 import { Subscription } from 'rxjs'
 import { map, take } from 'rxjs/operators'
 import { Locker, DRIVERS } from 'angular-safeguard'
@@ -212,7 +212,8 @@ export class AssetPage implements OnInit, OnDestroy {
         private scriptService: ScriptService,
         private _sanitizer: DomSanitizer,
         _fb: FormBuilder,
-        private _locker: LockerService
+        private _locker: LockerService,
+        private meta: Meta
     ) {
         this.editDetailsForm = _fb.group({
             creator: [null],
@@ -480,6 +481,12 @@ export class AssetPage implements OnInit, OnDestroy {
                 if (this.relatedResFlag) {
                     this.getJstorRelatedResults(asset)
                 }
+
+                // Update OGP meta tags
+                this.meta.updateTag({ property: "og:title", content: asset.title }, 'property="og:title"')
+                this.meta.updateTag({ property: "og:description", content: asset.formattedMetadata['Description'] && asset.formattedMetadata['Description'][0] ? asset.formattedMetadata['Description'][0] : '' }, 'property="og:description"')
+                this.meta.updateTag({ property: "og:url", content: this._assets.getShareLink(asset.id) }, 'property="og:url"')
+                this.meta.updateTag({ property: "og:image", content: asset.thumbnail_url ? 'https:' + asset.thumbnail_url : '' }, 'property="og:image"')
             }
             // Assign collections array for this asset. Provided in metadata
             this.collections = asset.collections
