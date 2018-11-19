@@ -39,7 +39,12 @@ import { TourStep } from './tour.service'
     public startTour() {
       this.startModalShow = false
       this._ga.eventTrack.next({ action: 'beginTour', properties: { category: this._auth.getGACategory(), label: 'imageGroupTour' } })
-      this.driver = new Driver({ allowClose: false, closeBtnText: 'exit tour', nextBtnText: 'NEXT', prevBtnText: 'BACK', doneBtnText: 'GOT IT, THANKS!',
+      this.driver = new Driver({
+        allowClose: false,
+        closeBtnText: 'exit tour',
+        nextBtnText: 'NEXT',
+        prevBtnText: 'BACK',
+        doneBtnText: 'GOT IT, THANKS!',
         onHighlightStarted: (Element) => {
 
           Element.node.scrollIntoView({block: 'center'})
