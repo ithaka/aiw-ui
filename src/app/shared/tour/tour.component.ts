@@ -47,7 +47,7 @@ import { TourStep } from './tour.service'
         doneBtnText: 'GOT IT, THANKS!',
         onHighlightStarted: (Element) => {
 
-          Element.node.scrollIntoView({block: 'center'})
+          Element.node.scrollIntoView({block: 'center', inline: 'nearest'})
 
           // Change the tabIndex of the brand label and links in the login box to ensure if there is tour, the links of the tour is first to be tabbed for accessibility
             this.manipulateDom('className', 'navbar-brand', 6)
