@@ -122,7 +122,6 @@ import { LinkifyPipe } from './shared/linkify.pipe'
 import { KeysPipe } from './shared/keys.pipe'
 import { CustomUrlSerializer } from './shared/custom-url-serializer'
 
-
 const APP_PROVIDERS = [
   ...APP_RESOLVER_PROVIDERS,
 
