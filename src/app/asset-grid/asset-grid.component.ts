@@ -713,7 +713,7 @@ export class AssetGrid implements OnInit, OnDestroy {
               document.getElementById(id).focus()
             }, 100)
 
-            this.arrowReorderMessage = 'moved to postion ' + (index) + ' of ' + this.results.length // aria live region message
+            this.arrowReorderMessage = 'moved to position ' + (index) + ' of ' + this.results.length // aria live region message
           }
           break
         }
