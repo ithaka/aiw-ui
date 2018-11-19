@@ -441,9 +441,10 @@ export class AssetPage implements OnInit, OnDestroy {
                 let tileSource: any = asset.tileSource
                 this.multiviewItems =  Array.isArray(tileSource) ? true : false
                 this._title.setTitle(asset.title)
-                document.querySelector('meta[name="DC.type"]').setAttribute('content', 'Artwork')
-                document.querySelector('meta[name="DC.title"]').setAttribute('content', asset.title)
-                document.querySelector('meta[name="asset.id"]').setAttribute('content', asset.id)
+                // TO-DO: Only reference document client-side
+                // document.querySelector('meta[name="DC.type"]').setAttribute('content', 'Artwork')
+                // document.querySelector('meta[name="DC.title"]').setAttribute('content', asset.title)
+                // document.querySelector('meta[name="asset.id"]').setAttribute('content', asset.id)
                 let currentAssetId: string = this.assets[0].id || this.assets[0]['objectId'] // couldn't trust the 'this.assetIdProperty' variable
                 // Search returns a 401 if /userinfo has not yet set cookies
                 if (Object.keys(this._auth.getUser()).length !== 0) {
@@ -812,30 +813,31 @@ export class AssetPage implements OnInit, OnDestroy {
      * Adds a link to the current asset page to the user's clipboard
      */
     private copyGeneratedImgURL(): void {
-        let statusMsg = '';
-        let input: any = document.getElementById('generatedImgURL');
-        let iOSuser: boolean = false;
+        // TO-DO: Only reference document client-side
+        // let statusMsg = '';
+        // let input: any = document.getElementById('generatedImgURL');
+        // let iOSuser: boolean = false;
 
-        this.showCopyUrl = true;
-        input.focus()
-        input.select()
+        // this.showCopyUrl = true;
+        // input.focus()
+        // input.select()
 
-        // Determine if on iOS (no copy functionality)
-        if (/iPhone|iPad|iPod/i.test(navigator.userAgent)) {
-            iOSuser = true
-        }
+        // // Determine if on iOS (no copy functionality)
+        // if (/iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+        //     iOSuser = true
+        // }
 
-        setTimeout(() => {
-            input.select();
-            if (document.queryCommandSupported('copy') && !iOSuser) {
-                document.execCommand('copy', false, null)
-                statusMsg = 'Image URL successfully copied to the clipboard!';
-            }
-            else {
-                statusMsg = 'Select the above link, and copy to share!';
-            }
-            this.copyURLStatusMsg = statusMsg;
-        }, 50);
+        // setTimeout(() => {
+        //     input.select();
+        //     if (document.queryCommandSupported('copy') && !iOSuser) {
+        //         document.execCommand('copy', false, null)
+        //         statusMsg = 'Image URL successfully copied to the clipboard!';
+        //     }
+        //     else {
+        //         statusMsg = 'Select the above link, and copy to share!';
+        //     }
+        //     this.copyURLStatusMsg = statusMsg;
+        // }, 50);
     }
 
     // Add or remove assets from Assets array for comparison in full screen

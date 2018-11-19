@@ -219,7 +219,8 @@ export class Login implements OnInit, OnDestroy {
          * EZProxy forwarding
          * Auth provides !!!TARGET_FULL_PATH!!! as a string to replace for forwarding
          */
-        url = url.replace(urlToken, document.location.host + stashedRoute )
+        // TO-DO: Only reference document client-side
+        // url = url.replace(urlToken, document.location.host + stashedRoute )
       } else if (url.match(pathToken)) {
         /**
          * WAM Proxy forwarding

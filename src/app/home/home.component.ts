@@ -160,7 +160,8 @@ export class Home implements OnInit, OnDestroy {
     let testAd = document.createElement('div');
     testAd.innerHTML = '&nbsp;';
     testAd.className = 'adsbox';
-    document.body.appendChild(testAd);
+    // TO-DO: Only reference document client-side
+    // document.body.appendChild(testAd);
     setTimeout(
       () => {
         if (testAd.offsetHeight === 0) {

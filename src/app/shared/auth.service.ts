@@ -72,7 +72,7 @@ export class AuthService implements CanActivate {
     private location: Location,
     private _app: AppConfig,
     private _flags: FlagService,
-    private idle: Idle
+    // private idle: Idle
   ) {
     // Initialize observables
     this.currentUser = this.userSource.asObservable()
@@ -154,52 +154,52 @@ export class AuthService implements CanActivate {
 
     // Local routing should point to full URL
     // * This should NEVER apply when using a proxy, as it will break authorization
-    if (new RegExp(['cirrostratus.org', 'localhost', 'local.', 'sahara.beta.stage.artstor.org', 'sahara.prod.artstor.org'].join('|')).test(document.location.hostname)) {
-      this.baseUrl = this.hostname + '/api'
-      this.solrUrl = this.hostname + '/api/search/v1.0/search'
-    }
+    // if (new RegExp(['cirrostratus.org', 'localhost', 'local.', 'sahara.beta.stage.artstor.org', 'sahara.prod.artstor.org'].join('|')).test(document.location.hostname)) {
+    //   this.baseUrl = this.hostname + '/api'
+    //   this.solrUrl = this.hostname + '/api/search/v1.0/search'
+    // }
 
     // For session timeout on user inactivity
-    idle.setIdle(IdleWatcherUtil.generateIdleTime()); // Set an idle time of 1 min, before starting to watch for timeout
-    idle.setTimeout(IdleWatcherUtil.generateSessionLength()); // Log user out after 90 mins of inactivity
-    idle.setInterrupts(DEFAULT_INTERRUPTSOURCES);
+    // idle.setIdle(IdleWatcherUtil.generateIdleTime()); // Set an idle time of 1 min, before starting to watch for timeout
+    // idle.setTimeout(IdleWatcherUtil.generateSessionLength()); // Log user out after 90 mins of inactivity
+    // idle.setInterrupts(DEFAULT_INTERRUPTSOURCES);
 
-    idle.onIdleEnd.pipe(
-      map(() => {
-        this.idleState = 'No longer idle.';
-        // We want to ensure a user is refreshed as soon as they return to the tab
-        this.refreshUserSession(true)
-      })).subscribe()
+    // idle.onIdleEnd.pipe(
+    //   map(() => {
+    //     this.idleState = 'No longer idle.';
+    //     // We want to ensure a user is refreshed as soon as they return to the tab
+    //     this.refreshUserSession(true)
+    //   })).subscribe()
 
-    idle.onTimeout.pipe(
-      map(() => {
-        let user = this.getUser();
-        // console.log(user);
-        if (user && user.isLoggedIn){
-          this.expireSession();
-          this.showUserInactiveModal.next(true);
-          this.idleState = 'Timed out!';
-        }
-        else{
-          this.resetIdleWatcher()
-        }
-      })).subscribe()
+    // idle.onTimeout.pipe(
+    //   map(() => {
+    //     let user = this.getUser();
+    //     // console.log(user);
+    //     if (user && user.isLoggedIn){
+    //       this.expireSession();
+    //       this.showUserInactiveModal.next(true);
+    //       this.idleState = 'Timed out!';
+    //     }
+    //     else{
+    //       this.resetIdleWatcher()
+    //     }
+    //   })).subscribe()
 
-    idle.onIdleStart.pipe(
-      map(() => {
-        this.idleState = 'You\'ve gone idle!';
-        let currentDateTime = new Date().toUTCString();
-        this._locker.set('userGoneIdleAt', currentDateTime);
-      })).subscribe()
+    // idle.onIdleStart.pipe(
+    //   map(() => {
+    //     this.idleState = 'You\'ve gone idle!';
+    //     let currentDateTime = new Date().toUTCString();
+    //     this._locker.set('userGoneIdleAt', currentDateTime);
+    //   })).subscribe()
 
-    idle.onTimeoutWarning.pipe(
-      map((countdown) => {
-        this.idleState = 'You will time out in ' + countdown + ' seconds!'
-        // console.log(this.idleState);
-      })).subscribe()
+    // idle.onTimeoutWarning.pipe(
+    //   map((countdown) => {
+    //     this.idleState = 'You will time out in ' + countdown + ' seconds!'
+    //     // console.log(this.idleState);
+    //   })).subscribe()
 
-    // Init idle watcher (this will also run getUserInfo)
-    this.resetIdleWatcher()
+    // // Init idle watcher (this will also run getUserInfo)
+    // this.resetIdleWatcher()
 
     // Initialize user and institution objects from localstorage
     this.userSource.next(this.getUser())
@@ -220,7 +220,7 @@ export class AuthService implements CanActivate {
 
   // Reset the idle watcher
   public resetIdleWatcher(): void {
-    this.idle.watch();
+    // this.idle.watch();
     // When a user comes back, we don't want to wait for the time interval to refresh the session
     this.refreshUserSession(true)
   }
@@ -249,7 +249,7 @@ export class AuthService implements CanActivate {
    */
   public logout() {
       // Stop, unwatch Idle session. Note: resetIdleWatcher() calls watch, and is called from login component
-      this.idle.stop()
+      // this.idle.stop()
 
       let header = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded'); // ... Set content type to JSON
       let options = { headers: header, withCredentials: true };
