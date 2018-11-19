@@ -3,7 +3,7 @@
  */
 import { Component, ViewEncapsulation } from '@angular/core'
 import { Angulartics2GoogleAnalytics } from 'angulartics2/ga'
-import { Title } from '@angular/platform-browser'
+import { Title, Meta } from '@angular/platform-browser'
 import { Router, NavigationStart, NavigationEnd } from '@angular/router'
 import { TranslateService } from '@ngx-translate/core'
 import { map, take } from 'rxjs/operators'
@@ -48,7 +48,8 @@ export class App {
     private _script: ScriptService,
     private _flags: FlagService,
     private router: Router,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private meta: Meta
   ) {
     // Start GA trackiong
     angulartics2GoogleAnalytics.startTracking()
@@ -61,6 +62,16 @@ export class App {
     translate.use(langStr);
 
     this.title = this._app.config.pageTitle
+
+
+    // Adding meta OGP tags
+    this.meta.addTags([
+      { property: "og:title", content: "Artstor" },
+      { property: "og:description", content: "The Artstor Digital Library is the most extensive image resource available for educational and scholarly use. Our collections feature visual media from leading museums, photo archives, scholars, and artists, offering many rare and important collections available nowhere else." },
+      { property: "og:url", content: "https://library.artstor.org/" },
+      { property: "og:image", content: "/assets/img/logo-v1-1.png" },
+      { property: "og:type", content: "website" }
+    ])
 
     // Set metatitle to "Artstor" except for asset page where metatitle is {{ Asset Title }}
     router.events.pipe(map(event => {
@@ -88,6 +99,11 @@ export class App {
       else if (event instanceof NavigationEnd) {
         let event_url_array = event.url.split('/')
         let zendeskElements = document.querySelectorAll('.zopim')
+
+        // Reset OGP tags with default values for every route other than asset and collection pages
+        if(event.url.indexOf('asset/') === -1){
+          this.resetOgpTags();
+        }
 
         // On navigation end, load the zendesk chat widget if user lands on login page else hide the widget
         if (this.showChatWidget(window.location.href) && this._app.config.showZendeskWidget) {
@@ -125,6 +141,13 @@ export class App {
   ngOnInit() {
     // Toggle Banner here to show alerts and updates!
     // this.showSkyBanner = true
+  }
+
+  private resetOgpTags(): void{
+    this.meta.updateTag({ property: "og:title", content: "Artstor" }, 'property="og:title"')
+    this.meta.updateTag({ property: "og:description", content: "The Artstor Digital Library is the most extensive image resource available for educational and scholarly use. Our collections feature visual media from leading museums, photo archives, scholars, and artists, offering many rare and important collections available nowhere else." }, 'property="og:description"')
+    this.meta.updateTag({ property: "og:url", content: "https://library.artstor.org/" }, 'property="og:url"')
+    this.meta.updateTag({ property: "og:image", content: "/assets/img/logo-v1-1.png" }, 'property="og:image"')
   }
 
   public findMainContent(): void {

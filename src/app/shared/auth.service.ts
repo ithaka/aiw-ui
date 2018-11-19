@@ -108,48 +108,49 @@ export class AuthService implements CanActivate {
     ]
 
     // Check domain
-    if (  new RegExp(prodHostnames.join('|')).test(document.location.hostname)  ) {
-      // Explicit live endpoints
-      this.logUrl = '//ang-ui-logger.apps.prod.cirrostratus.org/api/v1'
-      this.solrUrl = '/api/search/v1.0/search'
-      this.ENV = 'prod'
-    }
-    else if ( document.location.hostname.indexOf('prod.cirrostratus.org') > -1 ) {
-      console.info('Using Prod Endpoints (Absolute)')
-      // Prod/Lively endpoints
-      this.hostname = '//library.artstor.org'
-      this.baseUrl =  '//library.artstor.org/api'
-      this.logUrl = '//ang-ui-logger.apps.prod.cirrostratus.org/api/v1'
-      this.solrUrl = this.hostname + '/api/search/v1.0/search'
-      this.ENV = 'prod'
-    } else if ( new RegExp(testHostnames.join('|')).test(document.location.hostname) ) {
-      console.info('Using Test Endpoints')
-      // Test Endpoints
-      this.hostname = '//stage.artstor.org'
-      this.subdomain = 'stage'
-      this.baseUrl = '//stage.artstor.org/api'
-      this.thumbUrl = '//mdxstage.artstor.org'
-      this.compoundUrl = 'http://catalog.sharedshelf.stage.artstor.org'
-      this.logUrl = '//ang-ui-logger.apps.test.cirrostratus.org/api/v1'
-      this.solrUrl = '/api/search/v1.0/search'
-      this.IIIFUrl = '//tsstage.artstor.org/rosa-iiif-endpoint-1.0-SNAPSHOT/fpx'
-      this.ENV = 'test'
-    }
+    // TO-DO: Only reference document client-side
+    // if (  new RegExp(prodHostnames.join('|')).test(document.location.hostname)  ) {
+    //   // Explicit live endpoints
+    //   this.logUrl = '//ang-ui-logger.apps.prod.cirrostratus.org/api/v1'
+    //   this.solrUrl = '/api/search/v1.0/search'
+    //   this.ENV = 'prod'
+    // }
+    // else if ( document.location.hostname.indexOf('prod.cirrostratus.org') > -1 ) {
+    //   console.info('Using Prod Endpoints (Absolute)')
+    //   // Prod/Lively endpoints
+    //   this.hostname = '//library.artstor.org'
+    //   this.baseUrl =  '//library.artstor.org/api'
+    //   this.logUrl = '//ang-ui-logger.apps.prod.cirrostratus.org/api/v1'
+    //   this.solrUrl = this.hostname + '/api/search/v1.0/search'
+    //   this.ENV = 'prod'
+    // } else if ( new RegExp(testHostnames.join('|')).test(document.location.hostname) ) {
+    //   console.info('Using Test Endpoints')
+    //   // Test Endpoints
+    //   this.hostname = '//stage.artstor.org'
+    //   this.subdomain = 'stage'
+    //   this.baseUrl = '//stage.artstor.org/api'
+    //   this.thumbUrl = '//mdxstage.artstor.org'
+    //   this.compoundUrl = 'http://catalog.sharedshelf.stage.artstor.org'
+    //   this.logUrl = '//ang-ui-logger.apps.test.cirrostratus.org/api/v1'
+    //   this.solrUrl = '/api/search/v1.0/search'
+    //   this.IIIFUrl = '//tsstage.artstor.org/rosa-iiif-endpoint-1.0-SNAPSHOT/fpx'
+    //   this.ENV = 'test'
+    // }
 
-    // Additional Local dev domains
-    if (document.location.hostname.indexOf('local.sahara') > -1) {
-      this.hostname = '//sahara.beta.stage.artstor.org'
-      this.ENV = 'test'
-    }
+    // // Additional Local dev domains
+    // if (document.location.hostname.indexOf('local.sahara') > -1) {
+    //   this.hostname = '//sahara.beta.stage.artstor.org'
+    //   this.ENV = 'test'
+    // }
 
-    // Sahara routing WORKAROUND
-    if (document.location.hostname.indexOf('sahara.beta.stage.artstor.org') > -1) {
-      this.hostname = '//sahara.beta.stage.artstor.org'
-      this.ENV = 'test'
-    }
-    if (document.location.hostname.indexOf('sahara.prod.artstor.org') > -1) {
-      this.hostname = '//sahara.prod.artstor.org/'
-    }
+    // // Sahara routing WORKAROUND
+    // if (document.location.hostname.indexOf('sahara.beta.stage.artstor.org') > -1) {
+    //   this.hostname = '//sahara.beta.stage.artstor.org'
+    //   this.ENV = 'test'
+    // }
+    // if (document.location.hostname.indexOf('sahara.prod.artstor.org') > -1) {
+    //   this.hostname = '//sahara.prod.artstor.org/'
+    // }
 
     // Local routing should point to full URL
     // * This should NEVER apply when using a proxy, as it will break authorization

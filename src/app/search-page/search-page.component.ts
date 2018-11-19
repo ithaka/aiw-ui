@@ -125,16 +125,18 @@ export class SearchPage implements OnInit, OnDestroy {
   public skipToFilterSec(): void{
     window.setTimeout(function ()
     {
-      let htmlelement: HTMLElement = document.getElementById('skip-to-search-link');
-      (<HTMLElement>htmlelement).focus();
+      // TO-DO: Only reference document client-side
+      // let htmlelement: HTMLElement = document.getElementById('skip-to-search-link');
+      // (<HTMLElement>htmlelement).focus();
     }, 100);
   }
 
   public skipToSearchSec(): void{
     window.setTimeout(function ()
     {
-      let htmlelement: HTMLElement = document.getElementById('skip-to-filter-link');
-      (<HTMLElement>htmlelement).focus();
+      // TO-DO: Only reference document client-side
+      // let htmlelement: HTMLElement = document.getElementById('skip-to-filter-link');
+      // (<HTMLElement>htmlelement).focus();
     }, 100);
   }
 
