@@ -179,3 +179,8 @@ input[type=number] {
     opacity: 1 !important;
   }
 }
+
+.col--reorder {
+    // We need to maintain enough space for the icons/labels on thumbnails to sit on the same row
+    min-width: 140px;
+}
