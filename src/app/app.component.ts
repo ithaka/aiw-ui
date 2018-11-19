@@ -66,11 +66,11 @@ export class App {
 
     // Adding meta OGP tags
     this.meta.addTags([
-      { property: "og:title", content: "Artstor" },
-      { property: "og:description", content: "The Artstor Digital Library is the most extensive image resource available for educational and scholarly use. Our collections feature visual media from leading museums, photo archives, scholars, and artists, offering many rare and important collections available nowhere else." },
-      { property: "og:url", content: "https://library.artstor.org/" },
-      { property: "og:image", content: "/assets/img/logo-v1-1.png" },
-      { property: "og:type", content: "website" }
+      { property: 'og:title', content: 'Artstor' },
+      { property: 'og:description', content: 'The Artstor Digital Library is the most extensive image resource available for educational and scholarly use. Our collections feature visual media from leading museums, photo archives, scholars, and artists, offering many rare and important collections available nowhere else.' },
+      { property: 'og:url', content: 'https://library.artstor.org/' },
+      { property: 'og:image', content: '/assets/img/logo-v1-1.png' },
+      { property: 'og:type', content: 'website' }
     ])
 
     // Set metatitle to "Artstor" except for asset page where metatitle is {{ Asset Title }}
@@ -101,7 +101,7 @@ export class App {
         let zendeskElements = document.querySelectorAll('.zopim')
 
         // Reset OGP tags with default values for every route other than asset and collection pages
-        if((event.url.indexOf('asset/') === -1) || (event.url.indexOf('collection/') === -1)){
+        if ((event.url.indexOf('asset/') === -1) || (event.url.indexOf('collection/') === -1)){
           this.resetOgpTags();
         }
 
@@ -143,13 +143,6 @@ export class App {
     // this.showSkyBanner = true
   }
 
-  private resetOgpTags(): void{
-    this.meta.updateTag({ property: "og:title", content: "Artstor" }, 'property="og:title"')
-    this.meta.updateTag({ property: "og:description", content: "The Artstor Digital Library is the most extensive image resource available for educational and scholarly use. Our collections feature visual media from leading museums, photo archives, scholars, and artists, offering many rare and important collections available nowhere else." }, 'property="og:description"')
-    this.meta.updateTag({ property: "og:url", content: "https://library.artstor.org/" }, 'property="og:url"')
-    this.meta.updateTag({ property: "og:image", content: "/assets/img/logo-v1-1.png" }, 'property="og:image"')
-  }
-
   public findMainContent(): void {
     window.setTimeout(function ()
     {
@@ -169,6 +162,13 @@ export class App {
       }
       (<HTMLElement>element).focus();
     }, 100);
+  }
+
+  private resetOgpTags(): void{
+    this.meta.updateTag({ property: 'og:title', content: 'Artstor' }, 'property="og:title"')
+    this.meta.updateTag({ property: 'og:description', content: 'The Artstor Digital Library is the most extensive image resource available for educational and scholarly use. Our collections feature visual media from leading museums, photo archives, scholars, and artists, offering many rare and important collections available nowhere else.' }, 'property="og:description"')
+    this.meta.updateTag({ property: 'og:url', content: 'https://library.artstor.org/' }, 'property="og:url"')
+    this.meta.updateTag({ property: 'og:image', content: '/assets/img/logo-v1-1.png' }, 'property="og:image"')
   }
 
   // Show the chat widget on: 'login', 'browse/library', or 'browse/groups/public'
