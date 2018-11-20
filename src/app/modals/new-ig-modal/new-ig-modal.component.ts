@@ -1,6 +1,4 @@
-import { Router, ActivatedRoute } from '@angular/router'
-import { Component, EventEmitter, HostListener, Input, OnInit, Output } from '@angular/core'
-import { formGroupNameProvider } from '@angular/forms/src/directives/reactive_directives/form_group_name'
+import { Component, EventEmitter, HostListener, Input, OnInit, Output, ElementRef, Inject, PLATFORM_ID } from '@angular/core'
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms'
 import { Subscription } from 'rxjs'
 import { map, take } from 'rxjs/operators'
@@ -9,6 +7,7 @@ import { Angulartics2 } from 'angulartics2'
 // Project dependencies
 import { AssetService, AuthService, GroupService, ImageGroup, LogService } from './../../shared'
 import { IgFormValue, IgFormUtil } from './new-ig'
+import { isPlatformBrowser } from '@angular/common';
 
 @Component({
   selector: 'ang-new-ig-modal',
@@ -67,8 +66,7 @@ export class NewIgModal implements OnInit {
       private _group: GroupService,
       private _log: LogService,
       private _angulartics: Angulartics2,
-      private router: Router,
-      private route?: ActivatedRoute
+      private el: ElementRef
   ) {
     this.newIgForm = _fb.group({
       title: [null, Validators.required],
@@ -79,7 +77,7 @@ export class NewIgModal implements OnInit {
 
   ngOnInit() {
     // Set focus to the modal to make the links in the modal first thing to tab for accessibility
-    let htmlelement: HTMLElement = document.getElementById('modal');
+    let htmlelement: HTMLElement = this.el.nativeElement
     htmlelement.focus()
 
     /** Set isArtstorUser to true if the user's institution is 1000. This will let them make global image groups */
@@ -165,7 +163,7 @@ export class NewIgModal implements OnInit {
     this.isLoading = true;
 
     /** extract the image group description and attach it to the igDescValue */
-    let igDescValue = this.extractDescription()
+    let igDescValue = this.igDescription
 
     /**
      * Create the group object that will be submitted to the server
@@ -255,28 +253,6 @@ export class NewIgModal implements OnInit {
   }
 
   /**
-   * A method to get the description string out of the field
-   *  unfortunately, it seems like the only way to do that is with some direct dom references, for now
-   * @returns the description string
-   */
-  private extractDescription(): string {
-    let igDescValue = ''
-    if (this.igDescription){
-      let parentElement = document.createElement('div');
-      parentElement.innerHTML = this.igDescription;
-
-      if ( parentElement.firstElementChild && (parentElement.firstElementChild.id === 'angularMediumEditor' )){
-        igDescValue = parentElement.firstElementChild.innerHTML;
-      }
-      else{
-        igDescValue = parentElement.innerHTML;
-      }
-    }
-
-    return igDescValue == '<div>&nbsp;</div>' ? '' : igDescValue
-  }
-
-  /**
    * Sets the values of form members based on the injected image group
    */
   private setFormValues(): void {
@@ -292,18 +268,8 @@ export class NewIgModal implements OnInit {
     if (this.ig.public) { this.newIgForm.controls['artstorPermissions'].setValue('global') }
     else if (this.institutionView()) { this.newIgForm.controls['artstorPermissions'].setValue('institution') }
 
-    /** Setting the description based on the current image group's description requires some workarounds */
-    if (this.ig.description){
-      let parentElement = document.createElement('div');
-      parentElement.innerHTML = this.ig.description;
-
-      if ( parentElement.firstElementChild && (parentElement.firstElementChild.id === 'angularMediumEditor' )){
-        this.igDescription = parentElement.firstElementChild.innerHTML;
-      }
-      else{
-        this.igDescription =  parentElement.innerHTML;
-      }
-    }
+    // TO-DO: Verify changing and saving description HTML is working correctly without old workaround
+    this.igDescription =  this.ig.description
   }
 
   /**

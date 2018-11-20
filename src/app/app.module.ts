@@ -30,7 +30,8 @@ import { Ng2CompleterModule } from 'ng2-completer';
 
 // Directives
 import { ClickOutsideDirective } from './_directives';
-import { MediumEditorDirective } from 'angular2-medium-editor';
+//- TO-DO: Enable medium editor with Universal
+// import { MediumEditorDirective } from 'angular2-medium-editor';
 
 // ng2-idle
 import { NgIdleKeepaliveModule } from '@ng-idle/keepalive'; // this includes the core NgIdleModule but includes keepalive providers for easy wireup
@@ -205,7 +206,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     Login,
     LoginFormComponent,
     LoginReqModal,
-    MediumEditorDirective,
+    //- TO-DO: Enable medium editor with Universal
+    // MediumEditorDirective,
     MyCollectionsComponent,
     Nav,
     NavMenu,
