@@ -1,7 +1,7 @@
 /*
  * Angular 2 decorators and services
  */
-import { Component, ViewEncapsulation } from '@angular/core'
+import { Component, ViewEncapsulation, PLATFORM_ID, Inject } from '@angular/core'
 import { Angulartics2GoogleAnalytics } from 'angulartics2/ga'
 import { Title, Meta } from '@angular/platform-browser'
 import { Router, NavigationStart, NavigationEnd } from '@angular/router'
@@ -10,6 +10,7 @@ import { map, take } from 'rxjs/operators'
 
 import { AppConfig } from './app.service'
 import { ScriptService, FlagService } from './shared'
+import { isPlatformBrowser } from '@angular/common';
 /*
  * App Component
  * Top Level Component
@@ -49,7 +50,8 @@ export class App {
     private _flags: FlagService,
     private router: Router,
     private translate: TranslateService,
-    private meta: Meta
+    private meta: Meta,
+    @Inject(PLATFORM_ID) private platformId: Object
   ) {
     // Start GA trackiong
     angulartics2GoogleAnalytics.startTracking()
@@ -76,18 +78,21 @@ export class App {
     // Set metatitle to "Artstor" except for asset page where metatitle is {{ Asset Title }}
     router.events.pipe(map(event => {
       if (event instanceof NavigationStart) {
-        // focus on the wrapper of the "skip to main content link" everytime new page is loaded
-        let mainEl = <HTMLElement>(document.getElementById('skip'))
-        if (!(event.url.indexOf('browse') > -1)) // Don't set focus to skip to main content on browse pages so that we can easily go between browse levels
-          mainEl.focus()
+        // Client-only code
+        if (isPlatformBrowser(this.platformId)) {
+          // focus on the wrapper of the "skip to main content link" everytime new page is loaded
+          let mainEl = <HTMLElement>(document.getElementById('skip'))
+          if (!(event.url.indexOf('browse') > -1)) // Don't set focus to skip to main content on browse pages so that we can easily go between browse levels
+            mainEl.focus()
 
-        // Detect featureflag=solrmetadata and set cookie
-        let routeParams = event.url.split(';')
-        for (let routeParam of routeParams) {
-          let key = routeParam.split('=')[0]
-          let value = routeParam.split('=')[1]
-          if (key === 'featureFlag' && value === 'solrMetadata') {
-            document.cookie = 'featureflag=solrmetadata;';
+          // Detect featureflag=solrmetadata and set cookie
+          let routeParams = event.url.split(';')
+          for (let routeParam of routeParams) {
+            let key = routeParam.split('=')[0]
+            let value = routeParam.split('=')[1]
+            if (key === 'featureFlag' && value === 'solrMetadata') {
+              document.cookie = 'featureflag=solrmetadata;';
+            }
           }
         }
 
@@ -98,44 +103,48 @@ export class App {
       }
       else if (event instanceof NavigationEnd) {
         let event_url_array = event.url.split('/')
-        let zendeskElements = document.querySelectorAll('.zopim')
 
         // Reset OGP tags with default values for every route other than asset and collection pages
         if(event.url.indexOf('asset/') === -1){
           this.resetOgpTags();
         }
 
-        // On navigation end, load the zendesk chat widget if user lands on login page else hide the widget
-        if (this.showChatWidget(window.location.href) && this._app.config.showZendeskWidget) {
-          this._script.loadScript('zendesk')
-            .then( data => {
-              if (data['status'] === 'loaded'){
-              } else if (data['status'] === 'already_loaded'){ // if the widget script has already been loaded then just show the widget
-                zendeskElements[0]['style']['display'] = 'block'
-              }
-            })
-            .catch( error => console.error(error) )
-        } else {
-          // If Zendesk chat is loaded, hide it
-          if (zendeskElements && zendeskElements.length > 1) {
-            zendeskElements[0]['style']['display'] = 'none'
-            zendeskElements[1]['style']['display'] = 'none'
+        // Client-only code
+        if (isPlatformBrowser(this.platformId)) {
+          let zendeskElements = document.querySelectorAll('.zopim')
+          // On navigation end, load the zendesk chat widget if user lands on login page else hide the widget
+          if (this.showChatWidget(window.location.href) && this._app.config.showZendeskWidget) {
+            this._script.loadScript('zendesk')
+              .then( data => {
+                if (data['status'] === 'loaded'){
+                } else if (data['status'] === 'already_loaded'){ // if the widget script has already been loaded then just show the widget
+                  zendeskElements[0]['style']['display'] = 'block'
+                }
+              })
+              .catch( error => console.error(error) )
+          } else {
+            // If Zendesk chat is loaded, hide it
+            if (zendeskElements && zendeskElements.length > 1) {
+              zendeskElements[0]['style']['display'] = 'none'
+              zendeskElements[1]['style']['display'] = 'none'
+            }
           }
         }
       }
     })).subscribe()
 
-    this._flags.getFlagsFromService().pipe(
-      take(1),
-      map(flags => {
-        // don't need to handle successful response here - this just initiates the flags
-        console.log(flags)
-        // Set skybanner
-        this.showSkyBanner = flags.bannerShow
-        this.skyBannerCopy = flags.bannerCopy
-      }, (err) => {
-        console.error(err)
-    })).subscribe()
+    // TO-DO: Universal support for flags service
+    // this._flags.getFlagsFromService().pipe(
+    //   take(1),
+    //   map(flags => {
+    //     // don't need to handle successful response here - this just initiates the flags
+    //     console.log(flags)
+    //     // Set skybanner
+    //     this.showSkyBanner = flags.bannerShow
+    //     this.skyBannerCopy = flags.bannerCopy
+    //   }, (err) => {
+    //     console.error(err)
+    // })).subscribe()
   }
 
   ngOnInit() {

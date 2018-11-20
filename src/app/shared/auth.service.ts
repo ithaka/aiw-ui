@@ -126,15 +126,15 @@ export class AuthService implements CanActivate {
     // } else if ( new RegExp(testHostnames.join('|')).test(document.location.hostname) ) {
     //   console.info('Using Test Endpoints')
     //   // Test Endpoints
-    //   this.hostname = '//stage.artstor.org'
-    //   this.subdomain = 'stage'
-    //   this.baseUrl = '//stage.artstor.org/api'
-    //   this.thumbUrl = '//mdxstage.artstor.org'
-    //   this.compoundUrl = 'http://catalog.sharedshelf.stage.artstor.org'
-    //   this.logUrl = '//ang-ui-logger.apps.test.cirrostratus.org/api/v1'
-    //   this.solrUrl = '/api/search/v1.0/search'
-    //   this.IIIFUrl = '//tsstage.artstor.org/rosa-iiif-endpoint-1.0-SNAPSHOT/fpx'
-    //   this.ENV = 'test'
+      this.hostname = '//stage.artstor.org'
+      this.subdomain = 'stage'
+      this.baseUrl = '//stage.artstor.org/api'
+      this.thumbUrl = '//mdxstage.artstor.org'
+      this.compoundUrl = 'http://catalog.sharedshelf.stage.artstor.org'
+      this.logUrl = '//ang-ui-logger.apps.test.cirrostratus.org/api/v1'
+      this.solrUrl = '/api/search/v1.0/search'
+      this.IIIFUrl = '//tsstage.artstor.org/rosa-iiif-endpoint-1.0-SNAPSHOT/fpx'
+      this.ENV = 'test'
     // }
 
     // // Additional Local dev domains
