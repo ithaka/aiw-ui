@@ -39,8 +39,12 @@ app.get('/api/*', (req, res) => {
   res.status(404).send('data requests are not supported');
 });
 
-// Server static files from /browser
-app.get('*.*', express.static(join(DIST_FOLDER, 'avatar')));
+// Serve static files from /browser
+app.use(express.static(join(DIST_FOLDER, 'avatar')));
+
+app.get('*.*', (req, res, next) => {
+   res.sendFile(join(DIST_FOLDER, 'avatar'));
+});
 
 // All regular routes use the Universal engine
 app.get('*', (req, res) => {
