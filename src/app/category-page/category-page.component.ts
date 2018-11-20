@@ -108,7 +108,7 @@ export class CategoryPage implements OnInit, OnDestroy {
 
                 // Update OGP meta tags
                 this.meta.updateTag({ property: "og:title", content: this.catName }, 'property="og:title"')
-                this.meta.updateTag({ property: "og:description", content: this.catDescription }, 'property="og:description"')
+                this.catDescription && this.meta.updateTag({ property: "og:description", content: this.catDescription }, 'property="og:description"')
                 this.meta.updateTag({ property: "og:url", content: window.document.location.href }, 'property="og:url"')
                 this.meta.updateTag({ property: "og:image", content: this.catThumbnail }, 'property="og:image"')
               }
