@@ -35,7 +35,8 @@ import { ClickOutsideDirective } from './_directives';
 // import { MediumEditorDirective } from 'angular2-medium-editor';
 
 // ng2-idle
-import { NgIdleKeepaliveModule } from '@ng-idle/keepalive'; // this includes the core NgIdleModule but includes keepalive providers for easy wireup
+//- TO-DO: Enable NgIdle with Universal
+// import { NgIdleKeepaliveModule } from '@ng-idle/keepalive'; // this includes the core NgIdleModule but includes keepalive providers for easy wireup
 import { SortablejsModule } from 'angular-sortablejs'
 
 // File Uploader
@@ -260,7 +261,8 @@ export function HttpLoaderFactory(http: HttpClient) {
       }
     }),
     NgbModule.forRoot(), // Ng Bootstrap Import
-    NgIdleKeepaliveModule.forRoot(),
+    //- TO-DO: Enable NgIdle with Universal
+    // NgIdleKeepaliveModule.forRoot(),
     SortablejsModule.forRoot({ animation: 150 })
   ],
   providers: [ // expose our Services and Providers into Angular's dependency injection
