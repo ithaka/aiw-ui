@@ -137,7 +137,7 @@ export class ImageGroupPage implements OnInit, OnDestroy {
             }
 
             // If the user has private / instituional access, then allow Generate Image Group Link
-            if ( (accessObj.entity_identifier == this.user.baseProfileId && accessObj.entity_type == 100) || (accessObj.entity_identifier == this._auth.getUser().institutionId.toString() && accessObj.entity_type == 200) ){
+            if ( (accessObj.entity_identifier === this.user.baseProfileId && accessObj.entity_type === 100) || (this.user.institutionId && accessObj.entity_identifier === this.user.institutionId.toString() && accessObj.entity_type === 200) ){
               this.genImgGrpLink = true;
             }
           });
