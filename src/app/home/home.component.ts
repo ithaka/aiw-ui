@@ -59,7 +59,8 @@ export class Home implements OnInit, OnDestroy {
     // this makes the window always render scrolled to the top
     this._router.events.pipe(
       map(() => {
-        window.scrollTo(0, 0);
+        // TO-DO: Only reference window on the client side
+        // window.scrollTo(0, 0);
       }
     )).subscribe()
 

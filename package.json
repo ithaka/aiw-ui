@@ -41,6 +41,7 @@
     "open:typedoc": "open ./doc/index.html",
     "build:ssr": "npm run build:client-and-server-bundles && npm run webpack:server",
     "serve:ssr": "node dist/server",
+    "build:ssr:dev" : "ng build --prod --build-optimizer=false && ng run avatar:server --optimization=false && npm run webpack:server",
     "build:client-and-server-bundles": "ng build --prod && ng run avatar:server",
     "webpack:server": "webpack --config webpack.server.config.js --progress --colors"
   },
@@ -57,6 +58,7 @@
     "@ng-bootstrap/ng-bootstrap": "^3.3.0",
     "@ng-idle/core": "^6.0.0-beta.3",
     "@ng-idle/keepalive": "^6.0.0-beta.3",
+    "@ng-toolkit/universal": "^1.1.47",
     "@nguniversal/express-engine": "^7.0.2",
     "@nguniversal/module-map-ngfactory-loader": "^7.0.2",
     "@ngx-translate/core": "^10.0.2",
