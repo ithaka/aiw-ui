@@ -590,6 +590,13 @@ export class SearchModal implements OnInit, AfterViewInit {
     }
     return -1;
   }
+
+  // close the dropdown when it is the last button in the dropdown and user hits tab key
+  private closeDropdown(currentIndex, length, dropdown) {
+    if (currentIndex === length - 1) {  
+      dropdown.close();
+    }
+  }
 }
 
 interface FacetObject {
