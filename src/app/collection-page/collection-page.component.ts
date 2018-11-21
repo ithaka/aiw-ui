@@ -1,4 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core'
+import { Meta } from '@angular/platform-browser'
 import { HttpClient, HttpHeaders } from '@angular/common/http'
 import { Router, ActivatedRoute } from '@angular/router'
 import { Subscription }   from 'rxjs'
@@ -44,7 +45,8 @@ export class CollectionPage implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private http: HttpClient,
     private _title: TitleService,
-    private _script: ScriptService
+    private _script: ScriptService,
+    private meta: Meta
   ) {
     this.unaffiliatedUser = this._auth.isPublicOnly() ? true : false
   }
@@ -115,6 +117,13 @@ export class CollectionPage implements OnInit, OnDestroy {
 
                 // Set page title
                 this._title.setSubtitle(this.colName)
+
+
+                // Update OGP meta tags
+                this.meta.updateTag({ property: "og:title", content: this.colName }, 'property="og:title"')
+                this.meta.updateTag({ property: "og:description", content: data['shortDescription'] }, 'property="og:description"')
+                this.meta.updateTag({ property: "og:url", content: window.document.location.href }, 'property="og:url"')
+                this.meta.updateTag({ property: "og:image", content: this.colThumbnail }, 'property="og:image"')
               })
               .catch((error) => {
                 console.error(error);
