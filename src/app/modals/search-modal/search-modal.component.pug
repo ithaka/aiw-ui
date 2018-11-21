@@ -15,20 +15,20 @@
               .form-group(*ngFor="let query of advanceQueries; let i = index;")
                 .input-group(id="advanceQueryGroup{{i + 1}}")
                   .input-group-btn(ngbDropdown, #advDrop1="ngbDropdown", [ngClass]="{ 'show' : focus }", *ngIf="i !== 0")
-                    button.btn.btn-secondary.dropdown-toggle(id="advanceQueryOperator{{i + 1}}", ngbDropdownToggle, type="button")
+                    button.btn.btn-secondary.dropdown-toggle(id="advanceQueryOperator{{i + 1}}", ngbDropdownToggle, type="button", (keydown.shift.tab)="advDrop1.close()")
                       | {{ query.operator }}
                       = " "
                     .dropdown-menu(ngbDropdownMenu, aria-labelledby="dropdown")
                       button.dropdown-item((click)="query.operator = 'AND'") {{ 'ADVANCED_SEARCH_MODAL.BOOLEAN_OPTIONS.AND' | translate }}
                       button.dropdown-item((click)="query.operator = 'OR'") {{ 'ADVANCED_SEARCH_MODAL.BOOLEAN_OPTIONS.OR' | translate }}
-                      button.dropdown-item((click)="query.operator = 'NOT'") {{ 'ADVANCED_SEARCH_MODAL.BOOLEAN_OPTIONS.NOT' | translate }}
+                      button.dropdown-item((click)="query.operator = 'NOT'", (keydown.tab)="advDrop1.close()") {{ 'ADVANCED_SEARCH_MODAL.BOOLEAN_OPTIONS.NOT' | translate }}
                   input.form-control(id="inputAdvanceQuery{{i + 1}}", [(ngModel)]="query.term", (change)="validateForm()", type="text")
-                  .input-group-btn(ngbDropdown)
-                    button.btn.btn-secondary.dropdown-toggle(id="advanceQueryField{{i + 1}}", ngbDropdownToggle, type="button")
+                  .input-group-btn(ngbDropdown, #advDrop2="ngbDropdown")
+                    button.btn.btn-secondary.dropdown-toggle(id="advanceQueryField{{i + 1}}", ngbDropdownToggle, type="button", (keydown.shift.tab)="advDrop2.close()")
                       | {{ query.field.name }}
                       = " "
                     .dropdown-menu(ngbDropdownMenu, aria-labelledby="fieldDropdown")
-                      button.dropdown-item(*ngFor="let field of fields", (click)="query.field = field", [attr.title]="field.description | translate") {{ field.name }}
+                      button.dropdown-item(*ngFor="let field of fields; let i = index", (click)="query.field = field", (keydown.tab)="closeDropdown(i, fields.length, advDrop2)", [attr.title]="field.description | translate") {{ field.name }}
                   button.close(type="button", (click)="clearAdvanceQuery(i)")
                     span(style="font-family:Aria, Arial, Helvetica;") &times;
               .form-group(*ngIf="advanceQueries.length < 10")
