@@ -593,7 +593,7 @@ export class SearchModal implements OnInit, AfterViewInit {
 
   // close the dropdown when it is the last button in the dropdown and user hits tab key
   private closeDropdown(currentIndex, length, dropdown) {
-    if (currentIndex === length - 1) {  
+    if (currentIndex === length - 1) {
       dropdown.close();
     }
   }
