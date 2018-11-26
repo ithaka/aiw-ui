@@ -8,8 +8,7 @@ import { DeviceDetectorModule } from 'ngx-device-detector';
 import { DatePipe } from '@angular/common'
 
 // Ithaka/Artstor Dependencies
-//- TO-DO: Enable Artstor Viewer with Universal
-// import { ArtstorViewerModule } from 'artstor-viewer'
+import { ArtstorViewerModule } from 'artstor-viewer'
 
 /*
  * Platform and Environment providers/directives/pipes
@@ -248,8 +247,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     Ng2CompleterModule,
     // LockerModule,
     FileUploadModule,
-    //- TO-DO: Enable Artstor Viewer with Universal
-    // ArtstorViewerModule,
+    ArtstorViewerModule,
     RouterModule.forRoot(ROUTES, { useHash: true }),
     DeviceDetectorModule.forRoot(),
     Angulartics2Module.forRoot(),

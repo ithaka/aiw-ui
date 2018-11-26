@@ -225,9 +225,12 @@ export class AssetPage implements OnInit, OnDestroy {
             description: [null],
             subject: [null]
         })
+
+        console.log("CONSTRUCT ASSET PAGE")
     }
 
     ngOnInit() {
+        console.log("INIT ASSET PAGE")
         this.user = this._auth.getUser();
         this.solrMetadataFlag = this._flags.solrMetadata
 
@@ -236,9 +239,9 @@ export class AssetPage implements OnInit, OnDestroy {
             this._auth.currentUser.subscribe((user) => {
                 this.user = user
                 // userSessionFresh: Do not attempt to load asset until we know user object is fresh
-                if (!this.userSessionFresh && this._auth.userSessionFresh) {
+                // if (!this.userSessionFresh && this._auth.userSessionFresh) {
                     this.userSessionFresh = true
-                }
+                // }
             }),
             this._assets.allResults.subscribe((allResults) => {
                 if (allResults.thumbnails) {
@@ -442,9 +445,9 @@ export class AssetPage implements OnInit, OnDestroy {
                 this.multiviewItems =  Array.isArray(tileSource) ? true : false
                 this._title.setTitle(asset.title)
                 // TO-DO: Only reference document client-side
-                // document.querySelector('meta[name="DC.type"]').setAttribute('content', 'Artwork')
-                // document.querySelector('meta[name="DC.title"]').setAttribute('content', asset.title)
-                // document.querySelector('meta[name="asset.id"]').setAttribute('content', asset.id)
+                this.meta.updateTag({name: 'DC.type', content: 'Artwork'})
+                this.meta.updateTag({name: 'DC.title', content: asset.title})
+                // this.meta.updateTag({name: 'asset.id"', content: asset.id})
                 let currentAssetId: string = this.assets[0].id || this.assets[0]['objectId'] // couldn't trust the 'this.assetIdProperty' variable
                 // Search returns a 401 if /userinfo has not yet set cookies
                 if (Object.keys(this._auth.getUser()).length !== 0) {

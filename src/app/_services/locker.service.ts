@@ -11,15 +11,19 @@ import { Locker, DRIVERS } from 'angular-safeguard';
 })
 export class LockerService {
 
+  private dataStore: any = {}
+
   constructor(
     // private _safeguard: Locker
     ) { }
 
   public get(key: string): any {
+    return this.dataStore[key]
     // return this._safeguard.get(DRIVERS.LOCAL, key)
   }
 
   public set(key: string, value: any): void {
+    this.dataStore[key] = value
     // return this._safeguard.set(DRIVERS.LOCAL, key, value)
   }
 
