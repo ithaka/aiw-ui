@@ -22,8 +22,8 @@
           h2.h1#institutionHeading {{ 'LOGIN.INSTITUTION_LOGIN.HEADING' | translate }}
         .card-body
           .form-group
-            label {{ 'LOGIN.INSTITUTION_LOGIN.SELECT_LABEL' | translate }}
-            ng2-completer(
+            label(for="completer") {{ 'LOGIN.INSTITUTION_LOGIN.SELECT_LABEL' | translate }}
+            ng2-completer#completer(
               [(ngModel)]="loginInstName",
               (keyup)="sortInstitution($event, loginInstName)",
               (click)="(instErrorMsg ? sortInstitution($event, loginInstName): 'null')",
@@ -33,7 +33,7 @@
               [placeholder]=`"Type to search your institution's name"`,
               [textSearching]="'Searching Institutions...'",
               [clearUnselected]="true",
-              name="institutionSelector"
+              aria-live="polite"
             )
             .login-errorMsg(*ngIf="instErrorMsg") {{ instErrorMsg | translate }}
           .form-group
