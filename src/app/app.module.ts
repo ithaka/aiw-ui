@@ -1,11 +1,11 @@
-import { ApplicationRef, ErrorHandler, NgModule } from '@angular/core';
+import { ApplicationRef, NgModule, Inject, APP_ID, PLATFORM_ID } from '@angular/core';
 import { BrowserModule, Title } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule, HttpClient } from '@angular/common/http';
 import { NavigationEnd, Router, RouteReuseStrategy, RouterModule, UrlSerializer } from '@angular/router';
 // import { removeNgStyles, createNewHosts, createInputTransfer } from '@angularclass/hmr';
 import { DeviceDetectorModule } from 'ngx-device-detector';
-import { DatePipe } from '@angular/common'
+import { DatePipe, isPlatformBrowser } from '@angular/common'
 
 // Ithaka/Artstor Dependencies
 import { ArtstorViewerModule } from 'artstor-viewer'
@@ -269,5 +269,10 @@ export function HttpLoaderFactory(http: HttpClient) {
   ]
 })
 export class AppModule {
-  constructor(public appRef: ApplicationRef, private router: Router) {}
+  constructor(@Inject(PLATFORM_ID) private platformId: Object,
+    @Inject(APP_ID) private appId: string) {
+    const platform = isPlatformBrowser(platformId) ?
+    'in the browser' : 'on the server';
+    console.log(`Running ${platform} with appId=${appId}`);
+  }
 }
