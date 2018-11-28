@@ -26,7 +26,7 @@
                   label.sr-only(for="inputAdvanceQuery{{i + 1}}") Search box {{i + 1}}: type your search terms and then choose which field to search
                   input.form-control(id="inputAdvanceQuery{{i + 1}}", [(ngModel)]="query.term", (change)="validateForm()", type="text")
                   .input-group-btn(ngbDropdown, #advDrop2="ngbDropdown")
-                    label.sr-only(for="advanceQueryField{{i + 1}}") In any field. Choose which fields to filter search box {{i + 1}} by, collapsed
+                    label.sr-only(for="advanceQueryField{{i + 1}}") {{ query.field.name }}. Choose which fields to filter search box {{i + 1}} by, collapsed
                     button.btn.btn-secondary.dropdown-toggle(id="advanceQueryField{{i + 1}}", ngbDropdownToggle, type="button", (keydown.shift.tab)="advDrop2.close()")
                       | {{ query.field.name }}
                       = " "
@@ -69,13 +69,13 @@
                     ul.list-group.list-group-flush.compact
                       li.list-group-item(*ngFor="let filter of filterGroup.values")
                         .custom-control.custom-checkbox
-                          input.custom-control-input(type="checkbox", [checked]="filter.checked")
+                          input.custom-control-input(type="checkbox", [checked]="filter.checked", attr.aria-label="{{ filter.name }}, which has {{ filter.count }} items")
                           label.custom-control-label((click)="toggleFilter(filter)")
                             | {{ filter.name }} {{ filter.count ? '(' + filter.count +')' : '' }}
                         ul.list-group.list-group-child(*ngIf="filter.children")
                           li.list-group-item(*ngFor="let child of filter.children")
                             .custom-control.custom-checkbox
-                              input.custom-control-input(type="checkbox", [checked]="child.checked")
+                              input.custom-control-input(type="checkbox", [checked]="child.checked", attr.aria-label="{{ child.name }}, which has {{ child.count }} items")
                               label.custom-control-label((click)="toggleFilter(child, filter)")
                                 | {{ child.name }} {{ child.count ? '(' + child.count +')' : '' }}
       .modal-footer
