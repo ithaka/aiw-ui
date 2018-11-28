@@ -1,10 +1,10 @@
 form((ngSubmit)="login(user)")
   #mainContent.form-group
     label#emailLabel(for="inputLoginEmail") {{ 'LOGIN.REG_LOGIN.EMAIL_LABEL' | translate }}
-    input#inputLoginEmail.form-control([(ngModel)]="user.username" name="username" type="text" placeholder="Email address" aria-labeledby="emailLabel")
+      input#inputLoginEmail.form-control([(ngModel)]="user.username" name="username" type="text" placeholder="Email address" aria-label="Email address, required")
   .form-group
     label(for="inputLoginPassword") {{ 'LOGIN.REG_LOGIN.PASSWORD_LABEL' | translate }}
-    input#inputLoginPassword.form-control([(ngModel)]="user.password" name="password" type="password" placeholder="Password" aria-describedby="info")
+      input#inputLoginPassword.form-control([(ngModel)]="user.password" name="password" type="password" placeholder="Password" aria-label="Artstor password, required")
     #errorMsg.form-text.text-danger(
       *ngIf="errorMsg",
       [innerHtml]="errorMsg | translate"
