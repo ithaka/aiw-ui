@@ -45,23 +45,42 @@ app.engine('html', ngExpressEngine({
 }));
 
 app.set('view engine', 'html');
-app.set('views', join(DIST_FOLDER, 'avatar'));
+app.set('views', join(DIST_FOLDER, 'browser'));
 
 // TODO: implement data requests securely
 app.get('/api/*', (req, res) => {
   res.status(404).send('data requests are not supported');
 });
 
-// Serve static files from /browser
-app.use(express.static(join(DIST_FOLDER, 'avatar')));
+// // Serve static files from /browser
+// app.use(express.static(join(DIST_FOLDER, 'browser')));
 
 app.get('*.*', (req, res, next) => {
-   res.sendFile(join(DIST_FOLDER, 'avatar'));
+   res.sendFile(join(DIST_FOLDER, 'browser'));
 });
 
 // All regular routes use the Universal engine
 app.get('*', (req, res) => {
-  res.render('index', { req });
+  // res.render('index.html', { req });
+  console.log('~ Fresh Request ~')
+  res.render('index', {
+    req,
+    res,
+    window: () => {
+      throw new Error("Window reference")
+    },
+    document: () => {
+      throw new Error("Document reference")
+    }
+  }, (err, html) => {
+    if (err) {
+      console.log("EXPRESS ERROR")
+      console.log(err)
+      return res.status(500).send(err)
+    } else {
+      return res.send(html)
+    }
+  });
 });
 
 // Start up the Node server
