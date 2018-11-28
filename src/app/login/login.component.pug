@@ -8,14 +8,14 @@
           h2.h1#loginHeading {{ copyBase + 'LOGIN.REG_LOGIN.HEADING' | translate }}
         .card-body
           ang-login-form#mainContent
-          a#linkLoginResetModal((click)="showPwdModal = true" tabindex="0" class="link" data-automation-component="artstor-pw-reset-link") {{ 'LOGIN.REG_LOGIN.FORGOT_PW_PROMPT' | translate }}
+          a#linkLoginResetModal((click)="showPwdModal = true" tabindex="1" class="link" data-automation-component="artstor-pw-reset-link") {{ 'LOGIN.REG_LOGIN.FORGOT_PW_PROMPT' | translate }}
           br
           div(*ngIf="showRegister")
-            a.link([routerLink]="['/register']" tabindex="0") {{ 'LOGIN.REGISTER_PROMPT' | translate }}
+            a.link([routerLink]="['/register']" tabindex="1") {{ 'LOGIN.REGISTER_PROMPT' | translate }}
             br
-          a.link([attr.href]="'LOGIN.REG_LOGIN.LOGIN_HELP_LINK' | translate" target="_blank" data-automation-component="artstor-login-help-link" tabindex="0") {{ 'LOGIN.REG_LOGIN.LOGIN_HELP_PROMPT' | translate }}
+          a.link([attr.href]="'LOGIN.REG_LOGIN.LOGIN_HELP_LINK' | translate" target="_blank" data-automation-component="artstor-login-help-link" tabindex="1") {{ 'LOGIN.REG_LOGIN.LOGIN_HELP_PROMPT' | translate }}
         .block-right
-          a.link((click)="showHelpModal = true" tabindex="0" data-automation-component="artstor-access-help-link") {{ 'LOGIN.ACCESS_PROMPT' | translate }}
+          a.link((click)="showHelpModal = true" tabindex="1" data-automation-component="artstor-access-help-link") {{ 'LOGIN.ACCESS_PROMPT' | translate }}
     .col-sm-6(*ngIf="_app.config.showInstitutionalLogin")
       .card.card--v-pad
         .card-header
@@ -33,14 +33,15 @@
               [placeholder]=`"Type to search your institution's name"`,
               [textSearching]="'Searching Institutions...'",
               [clearUnselected]="true",
-              aria-live="polite"
+              aria-live="polite",
+              tabindex="1"
             )
             .login-errorMsg(*ngIf="instErrorMsg") {{ instErrorMsg | translate }}
           .form-group
             p.notranslate([innerHtml]="'LOGIN.TERMS' | translate")
             p.small {{ 'LOGIN.INSTITUTION_LOGIN.LIST_INFO' | translate }}
           .form-group
-            button#btnLoginProxy.btn.btn-primary((click)="goToInstLogin()" type="submit" name="action" data-sc="account: institutional user log in" data-automation-component="artstor-institution-login-button" tabindex="0")
+            button#btnLoginProxy.btn.btn-primary((click)="goToInstLogin()" type="submit" name="action" data-sc="account: institutional user log in" data-automation-component="artstor-institution-login-button" tabindex="1")
               | {{ 'LOGIN.LOGIN_BTN' | translate }}
     .col-sm-6(*ngIf="_app.config.saharaLogin")
       .card.card--v-pad
@@ -48,15 +49,15 @@
           h1#saharaLoginHeading {{ copyBase + 'LOGIN.SAHARA_LOGIN.HEADING' | translate }}
         .card-body
           .form-group
-            | #[a#linkLoginSaharaSS.link(tabindex="0", [attr.href]="_auth.getEnv() === 'test' ? FORUM_TEST : FORUM_PROD", target="_blank", data-automation-component="ss-login-link") Log in] to JSTOR Forum
+            | #[a#linkLoginSaharaSS.link(tabindex="1", [attr.href]="_auth.getEnv() === 'test' ? FORUM_TEST : FORUM_PROD", target="_blank", data-automation-component="ss-login-link") Log in] to JSTOR Forum
 ang-pwd-reset-modal(*ngIf="showPwdModal", (closeModal)="showPwdModal = false")
 #helpModal.modal([ngClass]="{'show': showHelpModal }")
   .modal-dialog
     .modal-content
       .modal-header
         h5 {{ 'ACCESS_HELP_MODAL.HEADING' | translate }}
-        button.close((click)="showHelpModal = false" type="button" tabindex="0")
+        button.close((click)="showHelpModal = false" type="button" tabindex="1")
           span(aria-hidden="true") &times;
       .modal-body([innerHtml]="'ACCESS_HELP_MODAL.PROMPT' | translate")
       .modal-footer
-        button#btnLoginDismissHelp.btn.btn-primary((click)="showHelpModal = false" tabindex="0") {{ 'ACCESS_HELP_MODAL.DISMISS' | translate }}
+        button#btnLoginDismissHelp.btn.btn-primary((click)="showHelpModal = false" tabindex="1") {{ 'ACCESS_HELP_MODAL.DISMISS' | translate }}

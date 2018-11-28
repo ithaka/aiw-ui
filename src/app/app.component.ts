@@ -27,7 +27,7 @@ import { ScriptService, FlagService } from './shared'
       <main>
         <router-outlet></router-outlet>
       </main>
-      
+
       <footer></footer>
     </div>
   `

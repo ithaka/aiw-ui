@@ -1,10 +1,10 @@
 form((ngSubmit)="login(user)")
   #mainContent.form-group
     label#emailLabel(for="inputLoginEmail") {{ 'LOGIN.REG_LOGIN.EMAIL_LABEL' | translate }}
-      input#inputLoginEmail.form-control([(ngModel)]="user.username" name="username" type="text" placeholder="Email address" aria-label="Email address, required")
+      input#inputLoginEmail.form-control([(ngModel)]="user.username" name="username" type="text" placeholder="Email address" aria-label="Email address, required" tabindex="1")
   .form-group
     label(for="inputLoginPassword") {{ 'LOGIN.REG_LOGIN.PASSWORD_LABEL' | translate }}
-      input#inputLoginPassword.form-control([(ngModel)]="user.password" name="password" type="password" placeholder="Password" aria-label="Artstor password, required")
+      input#inputLoginPassword.form-control([(ngModel)]="user.password" name="password" type="password" placeholder="Password" aria-label="Artstor password, required" tabindex="1")
     #errorMsg.form-text.text-danger(
       *ngIf="errorMsg",
       [innerHtml]="errorMsg | translate"
@@ -12,5 +12,5 @@ form((ngSubmit)="login(user)")
     p.form-text.text-danger(*ngIf="forcePwdRst", [innerHtml]="'LOGIN.REG_LOGIN.FORCE_PW_RESET_MSG' | translate")
   p.notranslate([innerHtml]=" copyBase + 'LOGIN.TERMS' | translate ")
   .form-group
-    button#btnLoginRemote.btn.btn-primary([class.loading]="loginLoading" type="submit" name="action" data-sc="account: remote user log in" data-automation-component="artstor-login-button") 
+    button#btnLoginRemote.btn.btn-primary([class.loading]="loginLoading" type="submit" name="action" data-sc="account: remote user log in" data-automation-component="artstor-login-button" tabindex="1") 
       | {{ 'LOGIN_FORM.LOGIN_BUTTON.' + copyModifier | translate }}
