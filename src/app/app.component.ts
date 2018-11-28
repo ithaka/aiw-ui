@@ -24,14 +24,12 @@ import { ScriptService, FlagService } from './shared'
         <button id="button" (click)="findMainContent()" (keyup.enter)="findMainContent()" tabindex="1" class="sr-only sr-only-focusable"> Skip to main content </button>
       </div>
       <nav-bar tabindex="-1"></nav-bar>
+      <main>
+        <router-outlet></router-outlet>
+      </main>
+      
+      <footer></footer>
     </div>
-    <main tabindex="-1">
-      <router-outlet></router-outlet>
-    </main>
-
-    <footer>
-    </footer>
-
   `
 })
 export class App {
