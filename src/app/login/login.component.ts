@@ -72,6 +72,7 @@ export class Login implements OnInit, OnDestroy {
     private _flags: FlagService,
     private _locker: LockerService
   ) {
+    console.log("Constructing login component...")
   }
 
   ngOnInit() {

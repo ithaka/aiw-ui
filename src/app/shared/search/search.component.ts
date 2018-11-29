@@ -42,7 +42,7 @@ export class SearchComponent implements OnInit, OnDestroy {
     private _filters: AssetFiltersService,
     private _auth: AuthService
   ) {
-
+    console.log("Constructing nav component...")
   }
 
   ngOnInit() {

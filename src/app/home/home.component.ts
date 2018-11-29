@@ -56,13 +56,14 @@ export class Home implements OnInit, OnDestroy {
     private deviceService: DeviceDetectorService,
     private _script: ScriptService
   ) {
+    console.log("Constructing home component...")
     // this makes the window always render scrolled to the top
-    this._router.events.pipe(
-      map(() => {
-        // TO-DO: Only reference window on the client side
-        // window.scrollTo(0, 0);
-      }
-    )).subscribe()
+    // this._router.events.pipe(
+    //   map(() => {
+    //     // TO-DO: Only reference window on the client side
+    //     // window.scrollTo(0, 0);
+    //   }
+    // )).subscribe()
 
     this.showBlog = this._appConfig.config.showHomeBlog
     this.showPrivateCollections = this._appConfig.config.browseOptions.myCol
@@ -75,24 +76,24 @@ export class Home implements OnInit, OnDestroy {
 
   ngOnInit() {
     // Provide redirects for initPath detected in index.html from inital load
-    if (initPath) {
-      this._router.navigateByUrl(initPath, { replaceUrl: true })
-        .then(result => {
-          // Clear variable to prevent further redirects
-          initPath = null
-          console.log('Redirect to initial path attempt: ' + result)
-        })
-    }
+    // if (initPath) {
+    //   this._router.navigateByUrl(initPath, { replaceUrl: true })
+    //     .then(result => {
+    //       // Clear variable to prevent further redirects
+    //       initPath = null
+    //       console.log('Redirect to initial path attempt: ' + result)
+    //     })
+    // }
 
     this.user = this._auth.getUser();
 
-    this.subscriptions.push(
-      this._auth.getInstitution().pipe(
-        map(institutionObj => {
-          this.institution = institutionObj
-        }
-      )).subscribe()
-    )
+    // this.subscriptions.push(
+    //   this._auth.getInstitution().pipe(
+    //     map(institutionObj => {
+    //       this.institution = institutionObj
+    //     }
+    //   )).subscribe()
+    // )
 
     this.loaders['collections'] = true;
     this.loaders['instCollections'] = true;
@@ -101,53 +102,54 @@ export class Home implements OnInit, OnDestroy {
      * Subscribe to user object
      * and fetch collections list only after we have the user object returned
      */
-    this.subscriptions.push(
-      this._auth.currentUser.pipe(
-        map(userObj => {
-          if (userObj.institutionId && (this.instCollections.length === 0)) {
+    // this.subscriptions.push(
+    //   this._auth.currentUser.pipe(
+    //     map(userObj => {
+    //       console.log("Current user subscription returned for: ", userObj.username)
+    //       if (userObj.institutionId && (this.instCollections.length === 0)) {
 
-            this.subscriptions.push(this._assets.getCollectionsList().pipe(
-                map(data => {
-                  // Filter SSC content
-                  this.collections = data['Collections'].filter((collection) => {
-                    return collection.collectionType == 5
-                  })
-                  this.loaders['collections'] = false;
-                  // Filter institutional content
-                  this.instCollections = data['Collections'].filter((collection) => {
-                    return collection.collectionType == 2 || collection.collectionType == 4
-                  })
-                  this.loaders['instCollections'] = false;
-                },
-                err => {
-                  if (err && err.status != 401 && err.status != 403) {
-                    console.error('Failed to load collection list', err)
-                  }
-                }
-              )).subscribe()
-            ) // end push
-          }
-        },
-        err => {
-          console.error('Failed to load user object', err)
-        }
-      )).subscribe()
-    ) // end push
+    //         this.subscriptions.push(this._assets.getCollectionsList().pipe(
+    //             map(data => {
+    //               // Filter SSC content
+    //               this.collections = data['Collections'].filter((collection) => {
+    //                 return collection.collectionType == 5
+    //               })
+    //               this.loaders['collections'] = false;
+    //               // Filter institutional content
+    //               this.instCollections = data['Collections'].filter((collection) => {
+    //                 return collection.collectionType == 2 || collection.collectionType == 4
+    //               })
+    //               this.loaders['instCollections'] = false;
+    //             },
+    //             err => {
+    //               if (err && err.status != 401 && err.status != 403) {
+    //                 console.error('Failed to load collection list', err)
+    //               }
+    //             }
+    //           )).subscribe()
+    //         ) // end push
+    //       }
+    //     },
+    //     err => {
+    //       console.error('Failed to load user object', err)
+    //     }
+    //   )).subscribe()
+    // ) // end push
 
-    this._assets.getBlogEntries()
-      .then((data) => {
-        if (data['posts']) {
-          this.blogPosts = data['posts'];
-        }
-        this.blogLoading = false;
-      } )
-      .catch((error) => {
-        console.log(error);
-        this.blogLoading = false;
-      });
+    // this._assets.getBlogEntries()
+    //   .then((data) => {
+    //     if (data['posts']) {
+    //       this.blogPosts = data['posts'];
+    //     }
+    //     this.blogLoading = false;
+    //   } )
+    //   .catch((error) => {
+    //     console.log(error);
+    //     this.blogLoading = false;
+    //   });
 
-    // Set session info for Email Artstor link
-    this.fetchDeviceInfo();
+    // // Set session info for Email Artstor link
+    // this.fetchDeviceInfo();
 
   } // OnInit
 

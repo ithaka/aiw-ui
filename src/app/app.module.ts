@@ -36,13 +36,13 @@ import { ClickOutsideDirective } from './_directives';
 // ng2-idle
 //- TO-DO: Enable NgIdle with Universal
 // import { NgIdleKeepaliveModule } from '@ng-idle/keepalive'; // this includes the core NgIdleModule but includes keepalive providers for easy wireup
-import { SortablejsModule } from 'angular-sortablejs'
+// import { SortablejsModule } from 'angular-sortablejs'
 
 // File Uploader
 import { FileUploadModule } from 'ng2-file-upload';
 
 // App is our top level component
-import { App } from './app.component'
+import { AppComponent } from './app.component'
 import { APP_RESOLVER_PROVIDERS } from './app.resolver'
 import { AppConfig } from './app.service'
 import { Nav, Footer, SearchComponent, PaginationComponent, AssetSearchService, InstitutionsService } from './shared'
@@ -165,14 +165,13 @@ export function HttpLoaderFactory(http: HttpClient) {
  * `AppModule` is the main entry point into Angular2's bootstraping process
  */
 @NgModule({
-  bootstrap: [ App ],
   declarations: [
     AccessDeniedModal,
     AccountPage,
     EditPersonalCollectionModal,
     AddToGroupModal,
     AgreeModalComponent,
-    App,
+    AppComponent,
     AssetFilters,
     AssetGrid,
     AssetPage,
@@ -261,12 +260,13 @@ export function HttpLoaderFactory(http: HttpClient) {
     NgbModule.forRoot(), // Ng Bootstrap Import
     //- TO-DO: Enable NgIdle with Universal
     // NgIdleKeepaliveModule.forRoot(),
-    SortablejsModule.forRoot({ animation: 150 })
+    // SortablejsModule.forRoot({ animation: 150 })
   ],
   providers: [ // expose our Services and Providers into Angular's dependency injection
     ENV_PROVIDERS,
     APP_PROVIDERS
-  ]
+  ],
+  bootstrap: [ AppComponent ]
 })
 export class AppModule {
   constructor(@Inject(PLATFORM_ID) private platformId: Object,

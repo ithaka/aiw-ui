@@ -35,6 +35,7 @@ export class Footer {
     public _auth: AuthService,
     @Inject(PLATFORM_ID) private platformId: Object
   ) {
+    console.log("Constructing footer...")
     this.siteID = this._appConfig.config.siteID;
     // Get version number
     this.appVersion = version
@@ -59,36 +60,36 @@ export class Footer {
   ngOnInit() {
 
 
-    console.log('Version: ', version)
-    this.subscriptions.push(
-      this._router.events.pipe(
-      map(e => {
-        if (e instanceof NavigationEnd) {
-          this.user = this._auth.getUser()
-          if (this._auth.isPublicOnly()) {
-            let index: number = this.links.indexOf('SUPPORT')
-            this.links[index] = 'SUPPORT_UNAFFILIATED'
-          }
-        }
-      })).subscribe()
-    )
+    // console.log('Version: ', version)
+    // this.subscriptions.push(
+    //   this._router.events.pipe(
+    //   map(e => {
+    //     if (e instanceof NavigationEnd) {
+    //       this.user = this._auth.getUser()
+    //       if (this._auth.isPublicOnly()) {
+    //         let index: number = this.links.indexOf('SUPPORT')
+    //         this.links[index] = 'SUPPORT_UNAFFILIATED'
+    //       }
+    //     }
+    //   })).subscribe()
+    // )
 
-    // Workaround: Make sure Google translate has loaded
-    // Client-only 
-    if (isPlatformBrowser(this.platformId)) {
-      setTimeout(() => {
-        if (google && google.translate && typeof(google.translate.TranslateElement) == 'function' ) {
-          new google.translate.TranslateElement(
-              {
-                  pageLanguage: 'en',
-                  layout: google.translate.TranslateElement && google.translate.TranslateElement.InlineLayout.SIMPLE,
-                  autoDisplay: false
-              },
-              'google_translate_element'
-          )
-        }
-      }, 1000)
-    }
+    // // Workaround: Make sure Google translate has loaded
+    // // Client-only 
+    // if (isPlatformBrowser(this.platformId)) {
+    //   setTimeout(() => {
+    //     if (google && google.translate && typeof(google.translate.TranslateElement) == 'function' ) {
+    //       new google.translate.TranslateElement(
+    //           {
+    //               pageLanguage: 'en',
+    //               layout: google.translate.TranslateElement && google.translate.TranslateElement.InlineLayout.SIMPLE,
+    //               autoDisplay: false
+    //           },
+    //           'google_translate_element'
+    //       )
+    //     }
+    //   }, 1000)
+    // }
 
   }
 

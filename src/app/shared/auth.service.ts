@@ -206,16 +206,16 @@ export class AuthService implements CanActivate {
     let institution = this._locker.get('institution')
     if (institution) { this.institutionObjSource.next(institution) }
 
-    /**
-     * User Access Heartbeat
-     * - Poll /userinfo every 15min
-     * - Refreshs AccessToken with IAC
-     */
-    const userInfoInterval = 15 * 1000 * 60 * 60
-    // Run every X mins
-    setInterval(() => {
-      this.refreshUserSession(true)
-    }, userInfoInterval)
+    // /**
+    //  * User Access Heartbeat
+    //  * - Poll /userinfo every 15min
+    //  * - Refreshs AccessToken with IAC
+    //  */
+    // const userInfoInterval = 15 * 1000 * 60 * 60
+    // // Run every X mins
+    // setInterval(() => {
+    //   this.refreshUserSession(true)
+    // }, userInfoInterval)
   }
 
   // Reset the idle watcher
@@ -453,7 +453,13 @@ export class AuthService implements CanActivate {
    * Required by implementing CanActivate, and is called on routes which are protected by canActivate: [AuthService]
    */
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
+    console.log("Running canActivate...")
     let options = { headers: this.userInfoHeader, withCredentials: true }
+
+    // If user object already exists, we're done here
+return new Observable(observer => {
+  observer.next(true)
+})
 
     if ((route.params.samlTokenId || route.params.type == 'shibboleth') && state.url.includes('/register')) {
       // Shibboleth workflow is unique, should allow access to the register page
@@ -478,6 +484,7 @@ export class AuthService implements CanActivate {
       .get(this.genUserInfoUrl(), options).pipe(
       map(
         (data)  => {
+          console.log("User info call returned!")
           let user = this.decorateValidUser(data)
           // Track whether or not user object has been refreshed since app opened
           this.userSessionFresh = true
