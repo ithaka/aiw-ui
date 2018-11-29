@@ -29,6 +29,7 @@ import { LocalPCService, LocalPCAsset } from '../_local-pc-asset.service'
 import { TourStep } from '../shared/tour/tour.service'
 import { APP_CONST } from '../app.constants'
 import { LockerService } from 'app/_services';
+import { AppConfig } from '../app.service'
 
 @Component({
     selector: 'ang-asset-page',
@@ -43,6 +44,7 @@ export class AssetPage implements OnInit, OnDestroy {
     public user: any
     public userSessionFresh: boolean = false
     public assetIds: string[] = []
+
 
     /** controls whether or not the modals are visible */
     public showAgreeModal: boolean = false
@@ -197,6 +199,7 @@ export class AssetPage implements OnInit, OnDestroy {
     private multiviewItems: boolean = false
 
     constructor(
+        public _appConfig: AppConfig,
         private _assets: AssetService,
         private _auth: AuthService,
         private _search: AssetSearchService,
@@ -213,7 +216,7 @@ export class AssetPage implements OnInit, OnDestroy {
         private _sanitizer: DomSanitizer,
         _fb: FormBuilder,
         private _locker: LockerService,
-        private meta: Meta
+        private meta: Meta,
     ) {
         this.editDetailsForm = _fb.group({
             creator: [null],
@@ -405,6 +408,11 @@ export class AssetPage implements OnInit, OnDestroy {
 
         // MS Browser Agent ?
         this.isMSAgent = this.navigator.msSaveOrOpenBlob !== undefined
+
+      // Load Ethnio survey
+      if (this._appConfig.config.siteID !== 'SAHARA') {
+        this.scriptService.loadScript('ethnio-survey')
+      }
 
     } // OnInit
 
