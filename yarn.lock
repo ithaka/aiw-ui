@@ -1093,11 +1093,6 @@ amdefine@>=0.0.4, amdefine@^1.0.0:
   resolved "https://registry.yarnpkg.com/amdefine/-/amdefine-1.0.1.tgz#4a5282ac164729e93619bcfd3ad151f817ce91f5"
   integrity sha1-SlKCrBZHKek2Gbz9OtFR+BfOkfU=
 
-angular-safeguard@^2.0.2:
-  version "2.0.2"
-  resolved "https://registry.yarnpkg.com/angular-safeguard/-/angular-safeguard-2.0.2.tgz#84fa2ae703f33c2fa8a5f3593c74a6edae71fb98"
-  integrity sha512-79rV7wBpTn530kb2q0ikSl9p8wrAb+0gMVVAWdCk/Ktga4Q7f1QNhwp4A50/hMwzMzydJL1vJ7pIEgHNWclUTg==
-
 angular-sortablejs@^2.6.0:
   version "2.6.0"
   resolved "https://registry.yarnpkg.com/angular-sortablejs/-/angular-sortablejs-2.6.0.tgz#d41a5dcaf1dd08bcd79677b1fc0c64fb872fe2d3"
@@ -1347,10 +1342,10 @@ arrify@^1.0.0, arrify@^1.0.1:
   resolved "https://registry.yarnpkg.com/arrify/-/arrify-1.0.1.tgz#898508da2226f380df904728456849c1501a4b0d"
   integrity sha1-iYUI2iIm84DfkEcoRWhJwVAaSw0=
 
-artstor-viewer@1.3.3:
-  version "1.3.3"
-  resolved "https://registry.yarnpkg.com/artstor-viewer/-/artstor-viewer-1.3.3.tgz#bde76e0c2d9431fe30c41b1b69d144e61b6ba45a"
-  integrity sha512-sqccLV9u7E7L57vkc9b1FthXZR9KV99LIY/zrU34V6B2wOxGDZH60ccwGUYzm9uVonuOYr7699UI4G+ByKXvhQ==
+artstor-viewer@1.3.4:
+  version "1.3.4"
+  resolved "https://registry.yarnpkg.com/artstor-viewer/-/artstor-viewer-1.3.4.tgz#de31a39d71df31e71c82218d79901709433c64be"
+  integrity sha512-qVGxD3eD6282b8cbYqu0WvABZusQhxBRD+VSq0GnNszna5G0nrYFN81us4KkNCLeltX0u/RX0AbK/1jQGMrbCQ==
   dependencies:
     "@angular/http" "^6.1.10"
     npm "^5.7.1"
