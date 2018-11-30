@@ -40,6 +40,7 @@ export class Nav implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private location: Location
   ) {
+      console.log("Constructing nav component...")
       this.logoUrl = this._app.config.logoUrl
   }
 

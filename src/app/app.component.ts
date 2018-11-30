@@ -1,21 +1,22 @@
 /*
  * Angular 2 decorators and services
  */
-import { Component, ViewEncapsulation } from '@angular/core'
-import { Angulartics2GoogleAnalytics } from 'angulartics2/ga'
+import { Component, ViewEncapsulation, PLATFORM_ID, Inject } from '@angular/core'
+// import { Angulartics2GoogleAnalytics } from 'angulartics2/ga'
 import { Title, Meta } from '@angular/platform-browser'
 import { Router, NavigationStart, NavigationEnd } from '@angular/router'
 import { TranslateService } from '@ngx-translate/core'
 import { map, take } from 'rxjs/operators'
 
 import { AppConfig } from './app.service'
-import { ScriptService, FlagService } from './shared'
+// import { ScriptService, FlagService } from './shared'
+import { isPlatformBrowser } from '@angular/common';
 /*
  * App Component
  * Top Level Component
  */
 @Component({
-  selector: 'app',
+  selector: 'app-root',
   encapsulation: ViewEncapsulation.None,
   template: `
     <ang-sky-banner *ngIf="showSkyBanner" [textValue]="skyBannerCopy" (closeBanner)="showSkyBanner = false"></ang-sky-banner>
@@ -28,13 +29,11 @@ import { ScriptService, FlagService } from './shared'
     <main tabindex="-1">
       <router-outlet></router-outlet>
     </main>
-
-    <footer>
-    </footer>
+    <footer></footer>
 
   `
 })
-export class App {
+export class AppComponent {
   url = 'https://artstor.org/'
   title = 'Artstor'
 
@@ -43,25 +42,31 @@ export class App {
 
   constructor(
     public _app: AppConfig,
-    angulartics2GoogleAnalytics: Angulartics2GoogleAnalytics,
+    // angulartics2GoogleAnalytics: Angulartics2GoogleAnalytics,
     private titleService: Title,
-    private _script: ScriptService,
-    private _flags: FlagService,
+    // private _script: ScriptService,
+    // private _flags: FlagService,
     private router: Router,
     private translate: TranslateService,
-    private meta: Meta
+    private meta: Meta,
+    @Inject(PLATFORM_ID) private platformId: Object
   ) {
-    // Start GA trackiong
-    angulartics2GoogleAnalytics.startTracking()
-    // append query param to dodge caching
-    let langStr = 'en.json?no-cache=' + new Date().valueOf()
-    // I'm hoping this sets these for the entire app
-    // this language will be used as a fallback when a translation isn't found in the current language
-    translate.setDefaultLang(langStr);
-    // the lang to use, if the lang isn't available, it will use the current loader to get them
-    translate.use(langStr);
+    console.log("Constructing app component")
+    // // Start GA trackiong
+    // // angulartics2GoogleAnalytics.startTracking()
 
-    this.title = this._app.config.pageTitle
+    // Client-only code
+    if (isPlatformBrowser(this.platformId)) {
+      // append query param to dodge caching
+      let langStr = 'en.json?no-cache=' + new Date().valueOf()
+      // I'm hoping this sets these for the entire app
+      // this language will be used as a fallback when a translation isn't found in the current language
+      translate.setDefaultLang(langStr);
+      // // the lang to use, if the lang isn't available, it will use the current loader to get them
+      translate.use(langStr);
+    }
+
+    // this.title = this._app.config.pageTitle
 
 
     // Adding meta OGP tags
@@ -74,70 +79,75 @@ export class App {
     ])
 
     // Set metatitle to "Artstor" except for asset page where metatitle is {{ Asset Title }}
-    router.events.pipe(map(event => {
-      if (event instanceof NavigationStart) {
-        // focus on the wrapper of the "skip to main content link" everytime new page is loaded
-        let mainEl = <HTMLElement>(document.getElementById('skip'))
-        if (!(event.url.indexOf('browse') > -1)) // Don't set focus to skip to main content on browse pages so that we can easily go between browse levels
-          mainEl.focus()
+    // router.events.pipe(map(event => {
+    //   if (event instanceof NavigationStart) {
+    //     // Client-only code
+    //     if (isPlatformBrowser(this.platformId)) {
+    //       // focus on the wrapper of the "skip to main content link" everytime new page is loaded
+    //       let mainEl = <HTMLElement>(document.getElementById('skip'))
+    //       if (!(event.url.indexOf('browse') > -1)) // Don't set focus to skip to main content on browse pages so that we can easily go between browse levels
+    //         mainEl.focus()
 
-        // Detect featureflag=solrmetadata and set cookie
-        let routeParams = event.url.split(';')
-        for (let routeParam of routeParams) {
-          let key = routeParam.split('=')[0]
-          let value = routeParam.split('=')[1]
-          if (key === 'featureFlag' && value === 'solrMetadata') {
-            document.cookie = 'featureflag=solrmetadata;';
-          }
-        }
+    //       // Detect featureflag=solrmetadata and set cookie
+    //       let routeParams = event.url.split(';')
+    //       for (let routeParam of routeParams) {
+    //         let key = routeParam.split('=')[0]
+    //         let value = routeParam.split('=')[1]
+    //         if (key === 'featureFlag' && value === 'solrMetadata') {
+    //           document.cookie = 'featureflag=solrmetadata;';
+    //         }
+    //       }
+    //     }
 
-        let event_url_array = event.url.split('/')
-        if (event_url_array && (event_url_array.length > 1) && (event_url_array[1] !== 'asset')){
-          this.titleService.setTitle(this.title)
-        }
-      }
-      else if (event instanceof NavigationEnd) {
-        let event_url_array = event.url.split('/')
-        let zendeskElements = document.querySelectorAll('.zopim')
+    //     let event_url_array = event.url.split('/')
+    //     if (event_url_array && (event_url_array.length > 1) && (event_url_array[1] !== 'asset')){
+    //       this.titleService.setTitle(this.title)
+    //     }
+    //   }
+    //   else if (event instanceof NavigationEnd) {
+    //     let event_url_array = event.url.split('/')
 
-        // Reset OGP tags with default values for every route other than asset and collection pages
-        if (event.url.indexOf('asset/') === -1
-          || event.url.indexOf('collection/') === -1
-          || event.url.indexOf('category/') === -1) {
-          this.resetOgpTags();
-        }
+    //     // Reset OGP tags with default values for every route other than asset and collection pages
+    //     if(event.url.indexOf('asset/') === -1){
+    //       this.resetOgpTags();
+    //     }
 
-        // On navigation end, load the zendesk chat widget if user lands on login page else hide the widget
-        if (this.showChatWidget(window.location.href) && this._app.config.showZendeskWidget) {
-          this._script.loadScript('zendesk')
-            .then( data => {
-              if (data['status'] === 'loaded'){
-              } else if (data['status'] === 'already_loaded'){ // if the widget script has already been loaded then just show the widget
-                zendeskElements[0]['style']['display'] = 'block'
-              }
-            })
-            .catch( error => console.error(error) )
-        } else {
-          // If Zendesk chat is loaded, hide it
-          if (zendeskElements && zendeskElements.length > 1) {
-            zendeskElements[0]['style']['display'] = 'none'
-            zendeskElements[1]['style']['display'] = 'none'
-          }
-        }
-      }
-    })).subscribe()
+    //     // Client-only code
+    //     if (isPlatformBrowser(this.platformId)) {
+    //       let zendeskElements = document.querySelectorAll('.zopim')
+    //       // On navigation end, load the zendesk chat widget if user lands on login page else hide the widget
+    //       if (this.showChatWidget(window.location.href) && this._app.config.showZendeskWidget) {
+    //         // this._script.loadScript('zendesk')
+    //         //   .then( data => {
+    //         //     if (data['status'] === 'loaded'){
+    //         //     } else if (data['status'] === 'already_loaded'){ // if the widget script has already been loaded then just show the widget
+    //         //       zendeskElements[0]['style']['display'] = 'block'
+    //         //     }
+    //         //   })
+    //         //   .catch( error => console.error(error) )
+    //       } else {
+    //         // If Zendesk chat is loaded, hide it
+    //         if (zendeskElements && zendeskElements.length > 1) {
+    //           zendeskElements[0]['style']['display'] = 'none'
+    //           zendeskElements[1]['style']['display'] = 'none'
+    //         }
+    //       }
+    //     }
+    //   }
+    // })).subscribe()
 
-    this._flags.getFlagsFromService().pipe(
-      take(1),
-      map(flags => {
-        // don't need to handle successful response here - this just initiates the flags
-        console.log(flags)
-        // Set skybanner
-        this.showSkyBanner = flags.bannerShow
-        this.skyBannerCopy = flags.bannerCopy
-      }, (err) => {
-        console.error(err)
-    })).subscribe()
+    // TO-DO: Universal support for flags service
+    // this._flags.getFlagsFromService().pipe(
+    //   take(1),
+    //   map(flags => {
+    //     // don't need to handle successful response here - this just initiates the flags
+    //     console.log(flags)
+    //     // Set skybanner
+    //     this.showSkyBanner = flags.bannerShow
+    //     this.skyBannerCopy = flags.bannerCopy
+    //   }, (err) => {
+    //     console.error(err)
+    // })).subscribe()
   }
 
   ngOnInit() {
@@ -146,7 +156,7 @@ export class App {
   }
 
   public findMainContent(): void {
-    window.setTimeout(function ()
+    setTimeout(function ()
     {
       let htmlelement: HTMLElement = document.getElementById('mainContent');
       let element: Element;

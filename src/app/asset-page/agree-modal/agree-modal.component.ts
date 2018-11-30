@@ -32,8 +32,9 @@ export class AgreeModalComponent implements OnInit {
 
   ngOnInit() {
     // Set focus to the modal to make the links in the modal first thing to tab for accessibility
-    let htmlelement: HTMLElement = document.getElementById('modal');
-    htmlelement.focus();
+    // TO-DO: Only reference document client-side
+    // let htmlelement: HTMLElement = document.getElementById('modal');
+    // htmlelement.focus();
   }
 
   /**

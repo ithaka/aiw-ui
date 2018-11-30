@@ -3,10 +3,11 @@
  * - Global service used to maintain configuration variables
  * - Provides support for WLV options
  */
-import { Injectable } from '@angular/core';
+import { Injectable, Inject, PLATFORM_ID } from '@angular/core';
 
 // Import all WLV configs
 import { WLV_ARTSTOR, WLV_SAHARA } from './white-label-config.ts'
+import { isPlatformBrowser } from '@angular/common';
 
 @Injectable()
 export class AppConfig {
@@ -14,14 +15,16 @@ export class AppConfig {
   // public pageTitle = 'Artstor'
   // public logoUrl = '/assets/img/logo-v1-1.png'
   private _config
+  private isBrowser
 
-  constructor() {
+  constructor(@Inject(PLATFORM_ID) private platformId) {
     // let WLVConfig = this.getWLVConfig()
     // if (WLVConfig) {
     //   this.pageTitle = WLVConfig.pageTitle
     //   this.logoUrl = WLVConfig.logoUrl
     // }
     this._config = Object.assign(WLV_ARTSTOR, this.getWLVConfig())
+    this.isBrowser = isPlatformBrowser(platformId);
   }
 
   get config(): any {
@@ -29,14 +32,19 @@ export class AppConfig {
   }
 
   private getWLVConfig() {
-    if (document.location.hostname.indexOf('sahara.artstor.org') > -1
+    if (this.isBrowser) {
+      if (document.location.hostname.indexOf('sahara.artstor.org') > -1
         || document.location.hostname.indexOf('sahara.local.artstor.org') > -1
         || document.location.hostname.indexOf('sahara.prod.artstor.org') > -1
         || document.location.hostname.indexOf('sahara.test.artstor.org') > -1
         || document.location.hostname.indexOf('sahara.beta.stage.artstor.org') > -1 ) {
-      return WLV_SAHARA
+        return WLV_SAHARA
+      } else {
+        return WLV_ARTSTOR
+      }
     } else {
       return WLV_ARTSTOR
     }
+    
   }
 }

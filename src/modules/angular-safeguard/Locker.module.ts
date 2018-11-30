@@ -11,8 +11,9 @@ import {ILockerConfig} from './metadata'
     LockerConfig,
     ...DRIVER_TYPES_PROVIDERS,
     USER_CONFIG_PROVIDER
-  ]
+  ],
 })
+
 export class LockerModule {
   public static withConfig(userConfig: ILockerConfig): ModuleWithProviders {
     return {

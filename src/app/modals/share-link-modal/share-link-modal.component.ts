@@ -38,8 +38,9 @@ export class ShareLinkModal implements OnInit, AfterViewInit {
 
   // Set initial focus on the modal Title h1
   public startModalFocus() {
-    let modalStartFocus = document.getElementById('share-img-link-title')
-    modalStartFocus.focus()
+    // TO-DO: Only reference document client-side
+    // let modalStartFocus = document.getElementById('share-img-link-title')
+    // modalStartFocus.focus()
   }
 
   /**
@@ -47,25 +48,26 @@ export class ShareLinkModal implements OnInit, AfterViewInit {
    * @param id of the field whose innerText is to be copied to the clipboard
    */
   private copyTexttoClipBoard(id: string): void{
-    let textArea = document.createElement('textarea');
+    // TO-DO: Only reference document client-side
+    // let textArea = document.createElement('textarea');
 
-    textArea.style.position = 'fixed';
-    textArea.style.top = '0';
-    textArea.style.left = '0';
+    // textArea.style.position = 'fixed';
+    // textArea.style.top = '0';
+    // textArea.style.left = '0';
 
-    textArea.style.width = '2em';
-    textArea.style.height = '2em';
-    textArea.style.padding = '0';
-    textArea.style.border = 'none';
-    textArea.style.outline = 'none';
-    textArea.style.boxShadow = 'none';
-    textArea.style.background = 'transparent';
+    // textArea.style.width = '2em';
+    // textArea.style.height = '2em';
+    // textArea.style.padding = '0';
+    // textArea.style.border = 'none';
+    // textArea.style.outline = 'none';
+    // textArea.style.boxShadow = 'none';
+    // textArea.style.background = 'transparent';
 
-    let element = document.getElementById(id);
-    textArea.value = element.textContent;
+    // let element = document.getElementById(id);
+    // textArea.value = element.textContent;
 
-    document.body.appendChild(textArea);
-    textArea.select();
+    // document.body.appendChild(textArea);
+    // textArea.select();
 
     try {
       let successful = document.execCommand('copy');
@@ -94,7 +96,7 @@ export class ShareLinkModal implements OnInit, AfterViewInit {
       console.log('Unable to copy');
     }
 
-    document.body.removeChild(textArea);
+    // document.body.removeChild(textArea);
   }
 
   public showHelp(): void{
