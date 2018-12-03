@@ -58,6 +58,10 @@ export class AssetPage implements OnInit, OnDestroy {
     public showExitEdit: boolean = false
     public showDeletePCModal: boolean = false
 
+    // Variables related to how we call for metadata
+    public assetIdProperty: string = 'artstorid'
+    public fromOpenLibrary: boolean = false
+
     // Feature Flags
     public relatedResFlag: boolean = false
     public solrMetadataFlag: boolean = false
@@ -105,7 +109,6 @@ export class AssetPage implements OnInit, OnDestroy {
     private quizShuffle: boolean = false;
     private showAssetCaption: boolean = true;
 
-    private assetIdProperty: string = 'artstorid'
     /**
      *  Collection Variables
      *  - Specific to the first asset, this.assets[0]
@@ -320,6 +323,13 @@ export class AssetPage implements OnInit, OnDestroy {
                 if (routeParams['encryptedId']) {
                     this.encryptedAccess = true
                     this.assetIds[0] = routeParams['encryptedId']
+                } else if(routeParams['openLibId']) {
+                    this.fromOpenLibrary = true
+                    this.assetIds[0] = routeParams['openLibId']
+                } else if ( routeParams['encryptedOpenLibId']) {
+                    this.fromOpenLibrary = true
+                    this.encryptedAccess = true
+                    this.assetIds[0] = routeParams['encryptedOpenLibId']
                 } else {
                     this.assetIds[0] = routeParams['assetId']
 
