@@ -323,7 +323,7 @@ export class AssetPage implements OnInit, OnDestroy {
                 if (routeParams['encryptedId']) {
                     this.encryptedAccess = true
                     this.assetIds[0] = routeParams['encryptedId']
-                } else if(routeParams['openLibId']) {
+                } else if (routeParams['openLibId']) {
                     this.fromOpenLibrary = true
                     this.assetIds[0] = routeParams['openLibId']
                 } else if ( routeParams['encryptedOpenLibId']) {
@@ -501,10 +501,10 @@ export class AssetPage implements OnInit, OnDestroy {
                 }
 
                 // Update OGP meta tags
-                this.meta.updateTag({ property: "og:title", content: asset.title }, 'property="og:title"')
-                this.meta.updateTag({ property: "og:description", content: asset.formattedMetadata['Description'] && asset.formattedMetadata['Description'][0] ? asset.formattedMetadata['Description'][0] : '' }, 'property="og:description"')
-                this.meta.updateTag({ property: "og:url", content: this._assets.getShareLink(asset.id) }, 'property="og:url"')
-                this.meta.updateTag({ property: "og:image", content: asset.thumbnail_url ? 'https:' + asset.thumbnail_url : '' }, 'property="og:image"')
+                this.meta.updateTag({ property: 'og:title', content: asset.title }, 'property="og:title"')
+                this.meta.updateTag({ property: 'og:description', content: asset.formattedMetadata['Description'] && asset.formattedMetadata['Description'][0] ? asset.formattedMetadata['Description'][0] : '' }, 'property="og:description"')
+                this.meta.updateTag({ property: 'og:url', content: this._assets.getShareLink(asset.id) }, 'property="og:url"')
+                this.meta.updateTag({ property: 'og:image', content: asset.thumbnail_url ? 'https:' + asset.thumbnail_url : '' }, 'property="og:image"')
             }
             // Assign collections array for this asset. Provided in metadata
             this.collections = asset.collections
