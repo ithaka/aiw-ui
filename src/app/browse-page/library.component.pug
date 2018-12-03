@@ -3,23 +3,26 @@ nav.nav.nav-inline.browse-nav
   button.nav-link(*ngFor="let browseOpt of browseMenuArray", [ngClass]="{'active': browseOpt.id == selectedBrowseId}", (click)="selectBrowseOpt(browseOpt.id)", tabindex="4") {{ browseOpt.label }}
 .row
   .col-md-8
+    ng-container(*ngIf="facetQueryMap[facetType] == 'category'")
+      .input-group
+        label.sr-only(for="browsePageFilter") Filter Collections by title, there are more than 300 collections in the Artstor Digital Library
+        input#browsePageFilter.form-control.has-icon(placeholder="Filter by collection title...", tabindex="6", [(ngModel)]="searchTerm", (keyup)="addRouteParam('searchTerm',searchTerm)")
+        label.sr-only(*ngIf="searchTerm && searchTerm.length > 0", for="iconSearchClear") Clear search term
+        button#iconSearchClear.icon.icon-close.form-control__icon(*ngIf="searchTerm && searchTerm.length > 0", (click)="clearSearchTerm(term)", tabindex="6")
+        label.sr-only(*ngIf="!searchTerm || searchTerm.length == 0", for="iconSearchSubmit") Filter
+        button#iconSearchSubmit.icon.icon-filter.form-control__icon(*ngIf="!searchTerm || searchTerm.length == 0", (click)="addRouteParam('searchTerm',searchTerm)", tabindex="6")
+      #alertNoResults.alert.alert-warning.input-group(*ngIf="!(categoryFacets | iggroupfilter:searchTerm).length && !loading", [innerHtml]="'No search results found'")
     ul.filter-list
-      ng-container(*ngIf="facetQueryMap[facetType] == 'category'")
-        .input-group
-          input#browsePageFilter.form-control.has-icon(placeholder="Search Collections", tabindex="6", [(ngModel)]="searchTerm", (keyup)="addRouteParam('searchTerm',searchTerm)")
-          button#iconSearchClear.icon.icon-close.form-control__icon(*ngIf="searchTerm && searchTerm.length > 0", (click)="clearSearchTerm(term)", tabindex="6")
-          button#iconSearchSubmit.icon.icon-filter.form-control__icon(*ngIf="!searchTerm || searchTerm.length == 0", (click)="addRouteParam('searchTerm',searchTerm)", tabindex="6")
-        #alertNoResults.alert.alert-warning.input-group(*ngIf="!(categoryFacets | iggroupfilter:searchTerm).length && !loading", [innerHtml]="'No search results found'")
-      li.filter.filter--browse(*ngFor="let facet of categoryFacets | iggroupfilter:searchTerm", [class.hidden]="facet.title === '' || !facet.name")
-        a.tag-link(*ngIf="facetQueryMap[facetType] == 'category'", [routerLink]="['/category', facet.name ]")
+      li.filter.filter--browse(*ngFor="let facet of categoryFacets | iggroupfilter:searchTerm; let i=index;", [class.hidden]="facet.title === '' || !facet.name")
+        a.tag-link(*ngIf="facetQueryMap[facetType] == 'category'", [routerLink]="['/category', facet.name ]", tabindex="7", attr.aria-label="{{facet.title}}, which has {{facet.count}} items")
           | {{ facet.title }} ({{facet.count}})
-        a.tag-link(*ngIf="facetQueryMap[facetType] != 'category'", [routerLink]="['/search/*', getLinkParam(facetType, facet.name)]")
+        a.tag-link(*ngIf="facetQueryMap[facetType] != 'category'", [routerLink]="['/search/*', getLinkParam(facetType, facet.name)]", tabindex="7", attr.aria-label="{{facet.name}}, which has {{facet.count}} items")
           | {{facet.name}} ({{facet.count}})
       li.filter.filter--browse(*ngFor="let key of ObjectKeys(hierarchicalFacets).sort()")
-        a.tag-link([routerLink]="['/search/*', getLinkParam(facetType, hierarchicalFacets[key].element.efq)]") {{key}} ({{hierarchicalFacets[key].element.count}})
+        a.tag-link([routerLink]="['/search/*', getLinkParam(facetType, hierarchicalFacets[key].element.efq)]", tabindex="7", attr.aria-label="{{key}}, which has {{hierarchicalFacets[key].element.count}} items") {{key}} ({{hierarchicalFacets[key].element.count}})
         ul
           li.filter.filter--browse(*ngFor="let childKey of ObjectKeys(hierarchicalFacets[key].children).sort()")
-            a.tag-link([routerLink]="['/search/*', getLinkParam(facetType,hierarchicalFacets[key].children[childKey].element.efq)]") {{childKey}} ({{hierarchicalFacets[key].children[childKey].element.count}})
+            a.tag-link([routerLink]="['/search/*', getLinkParam(facetType,hierarchicalFacets[key].children[childKey].element.efq)]", tabindex="7", attr.aria-label="{{childKey}}, which has {{hierarchicalFacets[key].children[childKey].element.count}} items") {{childKey}} ({{hierarchicalFacets[key].children[childKey].element.count}})
     //- ul.filter-list
     //-   li.filter(*ngFor)
     .row.has-icon-overlay(*ngIf="loading")

@@ -71,31 +71,28 @@ export class AppComponent {
 
     // Adding meta OGP tags
     this.meta.addTags([
-      { property: "og:title", content: "Artstor" },
-      { property: "og:description", content: "The Artstor Digital Library is the most extensive image resource available for educational and scholarly use. Our collections feature visual media from leading museums, photo archives, scholars, and artists, offering many rare and important collections available nowhere else." },
-      { property: "og:url", content: "https://library.artstor.org/" },
-      { property: "og:image", content: "/assets/img/logo-v1-1.png" },
-      { property: "og:type", content: "website" }
+      { property: 'og:title', content: 'Artstor' },
+      { property: 'og:description', content: 'The Artstor Digital Library is the most extensive image resource available for educational and scholarly use. Our collections feature visual media from leading museums, photo archives, scholars, and artists, offering many rare and important collections available nowhere else.' },
+      { property: 'og:url', content: 'https://library.artstor.org/' },
+      { property: 'og:image', content: '/assets/img/logo-v1-1.png' },
+      { property: 'og:type', content: 'website' }
     ])
 
     // Set metatitle to "Artstor" except for asset page where metatitle is {{ Asset Title }}
     // router.events.pipe(map(event => {
     //   if (event instanceof NavigationStart) {
-    //     // Client-only code
-    //     if (isPlatformBrowser(this.platformId)) {
-    //       // focus on the wrapper of the "skip to main content link" everytime new page is loaded
-    //       let mainEl = <HTMLElement>(document.getElementById('skip'))
-    //       if (!(event.url.indexOf('browse') > -1)) // Don't set focus to skip to main content on browse pages so that we can easily go between browse levels
-    //         mainEl.focus()
+    //     // focus on the wrapper of the "skip to main content link" everytime new page is loaded
+    //     let mainEl = <HTMLElement>(document.getElementById('skip'))
+    //     if (!(event.url.indexOf('browse') > -1)) // Don't set focus to skip to main content on browse pages so that we can easily go between browse levels
+    //       mainEl.focus()
 
-    //       // Detect featureflag=solrmetadata and set cookie
-    //       let routeParams = event.url.split(';')
-    //       for (let routeParam of routeParams) {
-    //         let key = routeParam.split('=')[0]
-    //         let value = routeParam.split('=')[1]
-    //         if (key === 'featureFlag' && value === 'solrMetadata') {
-    //           document.cookie = 'featureflag=solrmetadata;';
-    //         }
+    //     // Detect featureflag=solrmetadata and set cookie
+    //     let routeParams = event.url.split(';')
+    //     for (let routeParam of routeParams) {
+    //       let key = routeParam.split('=')[0]
+    //       let value = routeParam.split('=')[1]
+    //       if (key === 'featureFlag' && value === 'solrMetadata') {
+    //         document.cookie = 'featureflag=solrmetadata;';
     //       }
     //     }
 
@@ -106,37 +103,35 @@ export class AppComponent {
     //   }
     //   else if (event instanceof NavigationEnd) {
     //     let event_url_array = event.url.split('/')
+    //     let zendeskElements = document.querySelectorAll('.zopim')
 
     //     // Reset OGP tags with default values for every route other than asset and collection pages
-    //     if(event.url.indexOf('asset/') === -1){
+    //     if (event.url.indexOf('asset/') === -1
+    //       || event.url.indexOf('collection/') === -1
+    //       || event.url.indexOf('category/') === -1) {
     //       this.resetOgpTags();
     //     }
 
-    //     // Client-only code
-    //     if (isPlatformBrowser(this.platformId)) {
-    //       let zendeskElements = document.querySelectorAll('.zopim')
-    //       // On navigation end, load the zendesk chat widget if user lands on login page else hide the widget
-    //       if (this.showChatWidget(window.location.href) && this._app.config.showZendeskWidget) {
-    //         // this._script.loadScript('zendesk')
-    //         //   .then( data => {
-    //         //     if (data['status'] === 'loaded'){
-    //         //     } else if (data['status'] === 'already_loaded'){ // if the widget script has already been loaded then just show the widget
-    //         //       zendeskElements[0]['style']['display'] = 'block'
-    //         //     }
-    //         //   })
-    //         //   .catch( error => console.error(error) )
-    //       } else {
-    //         // If Zendesk chat is loaded, hide it
-    //         if (zendeskElements && zendeskElements.length > 1) {
-    //           zendeskElements[0]['style']['display'] = 'none'
-    //           zendeskElements[1]['style']['display'] = 'none'
-    //         }
+    //     // On navigation end, load the zendesk chat widget if user lands on login page else hide the widget
+    //     if (this.showChatWidget(window.location.href) && this._app.config.showZendeskWidget) {
+    //       this._script.loadScript('zendesk')
+    //         .then( data => {
+    //           if (data['status'] === 'loaded'){
+    //           } else if (data['status'] === 'already_loaded'){ // if the widget script has already been loaded then just show the widget
+    //             zendeskElements[0]['style']['display'] = 'block'
+    //           }
+    //         })
+    //         .catch( error => console.error(error) )
+    //     } else {
+    //       // If Zendesk chat is loaded, hide it
+    //       if (zendeskElements && zendeskElements.length > 1) {
+    //         zendeskElements[0]['style']['display'] = 'none'
+    //         zendeskElements[1]['style']['display'] = 'none'
     //       }
     //     }
     //   }
     // })).subscribe()
 
-    // TO-DO: Universal support for flags service
     // this._flags.getFlagsFromService().pipe(
     //   take(1),
     //   map(flags => {
@@ -153,13 +148,6 @@ export class AppComponent {
   ngOnInit() {
     // Toggle Banner here to show alerts and updates!
     // this.showSkyBanner = true
-  }
-
-  private resetOgpTags(): void{
-    this.meta.updateTag({ property: "og:title", content: "Artstor" }, 'property="og:title"')
-    this.meta.updateTag({ property: "og:description", content: "The Artstor Digital Library is the most extensive image resource available for educational and scholarly use. Our collections feature visual media from leading museums, photo archives, scholars, and artists, offering many rare and important collections available nowhere else." }, 'property="og:description"')
-    this.meta.updateTag({ property: "og:url", content: "https://library.artstor.org/" }, 'property="og:url"')
-    this.meta.updateTag({ property: "og:image", content: "/assets/img/logo-v1-1.png" }, 'property="og:image"')
   }
 
   public findMainContent(): void {
@@ -181,6 +169,13 @@ export class AppComponent {
       }
       (<HTMLElement>element).focus();
     }, 100);
+  }
+
+  private resetOgpTags(): void{
+    this.meta.updateTag({ property: 'og:title', content: 'Artstor' }, 'property="og:title"')
+    this.meta.updateTag({ property: 'og:description', content: 'The Artstor Digital Library is the most extensive image resource available for educational and scholarly use. Our collections feature visual media from leading museums, photo archives, scholars, and artists, offering many rare and important collections available nowhere else.' }, 'property="og:description"')
+    this.meta.updateTag({ property: 'og:url', content: 'https://library.artstor.org/' }, 'property="og:url"')
+    this.meta.updateTag({ property: 'og:image', content: '/assets/img/logo-v1-1.png' }, 'property="og:image"')
   }
 
   // Show the chat widget on: 'login', 'browse/library', or 'browse/groups/public'

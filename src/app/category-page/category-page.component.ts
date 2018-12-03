@@ -1,4 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core'
+import { Meta } from '@angular/platform-browser'
 import { HttpClient, HttpHeaders } from '@angular/common/http'
 import { Router, ActivatedRoute, UrlSegment } from '@angular/router'
 import { Subscription } from 'rxjs'
@@ -40,7 +41,8 @@ export class CategoryPage implements OnInit, OnDestroy {
     private _router: Router,
     private route: ActivatedRoute,
     private http: HttpClient,
-    private _title: TitleService
+    private _title: TitleService,
+    private meta: Meta
   ) {
     this.unaffiliatedUser = this._auth.isPublicOnly() ? true : false
   }
@@ -80,8 +82,8 @@ export class CategoryPage implements OnInit, OnDestroy {
               .then((data) => {
 
                 if (data) {
-                  this.catDescription = data['blurbUrl'];
-                  this.catThumbnail = data['imageUrl'];
+                  this.catDescription = data['blurbUrl']
+                  this.catThumbnail = data['imageUrl']
                 } else {
                   // Some categories don't have descriptions
                 }
@@ -103,10 +105,13 @@ export class CategoryPage implements OnInit, OnDestroy {
                 this.catName = data['categoryName'];
                 // Set page title
                 this._title.setSubtitle(this.catName);
-              } else {
-                // no data
-              }
 
+                // Update OGP meta tags
+                this.meta.updateTag({ property: "og:title", content: this.catName }, 'property="og:title"')
+                this.catDescription && this.meta.updateTag({ property: "og:description", content: this.catDescription }, 'property="og:description"')
+                this.meta.updateTag({ property: "og:url", content: window.document.location.href }, 'property="og:url"')
+                this.meta.updateTag({ property: "og:image", content: this.catThumbnail }, 'property="og:image"')
+              }
             })
             .catch((error) => {
               console.error(error);

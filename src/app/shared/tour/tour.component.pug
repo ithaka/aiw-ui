@@ -10,4 +10,4 @@ a.contextual-help(title="How do I use image groups?", (click)="startModalShow=tr
                 p We've made a few adjustments to give you a better experience with your groups. Take the tour to learn more about the changes. 
             .modal-footer
                 button.btn.btn-secondary(tabindex="4", (click)="closeTourModal()") NOT NOW
-                button.btn.btn-primary(tabindex="3", (click)="startTour()") TAKE THE TOUR
+                button.btn.btn-primary(tabindex="3", (click)="$event.stopPropagation();startTour()") TAKE THE TOUR

@@ -43,74 +43,77 @@ import { isPlatformBrowser } from '@angular/common';
     public startTour() {
       this.startModalShow = false
       this._ga.eventTrack.next({ action: 'beginTour', properties: { category: this._auth.getGACategory(), label: 'imageGroupTour' } })
-      // Client-side only
-      if (isPlatformBrowser(this.platformId)) {
-        // this.driver = new Driver({ allowClose: false, closeBtnText: 'exit tour', nextBtnText: 'NEXT', prevBtnText: 'BACK', doneBtnText: 'GOT IT, THANKS!',
-        //   onHighlightStarted: (Element) => {
+    // TO-DO: Support Driverjs on SSR
+      //   this.driver = new Driver({
+    //     allowClose: false,
+    //     closeBtnText: 'exit tour',
+    //     nextBtnText: 'NEXT',
+    //     prevBtnText: 'BACK',
+    //     doneBtnText: 'GOT IT, THANKS!',
+    //     onHighlightStarted: (Element) => {
 
-        //     Element.node.scrollIntoView({block: 'center'})
+    //       Element.node.scrollIntoView({block: 'center', inline: 'nearest'})
 
-        //     // Change the tabIndex of the brand label and links in the login box to ensure if there is tour, the links of the tour is first to be tabbed for accessibility
-        //       this.manipulateDom('className', 'navbar-brand', 6)
-        //       this.manipulateDom('id', 'nav-setting', 7)
-        //       this.manipulateDom('id', 'nav-logout', 7)
-        //       this.manipulateDom('id', 'nav-login', 7)
-        //       this.manipulateDom('id', 'nav-register', 7)
-        //       this.manipulateDom('id', 'driver-popover-item', -1, true)
+    //       // Change the tabIndex of the brand label and links in the login box to ensure if there is tour, the links of the tour is first to be tabbed for accessibility
+    //         this.manipulateDom('className', 'navbar-brand', 6)
+    //         this.manipulateDom('id', 'nav-setting', 7)
+    //         this.manipulateDom('id', 'nav-logout', 7)
+    //         this.manipulateDom('id', 'nav-login', 7)
+    //         this.manipulateDom('id', 'nav-register', 7)
+    //         this.manipulateDom('id', 'driver-popover-item', -1, true)
 
-        //     // Remove the back button on the first popover
-        //     if (Element.options.step === 1) {
-        //       let el: HTMLElement = <HTMLElement><any>(document.getElementsByClassName('driver-prev-btn')[0])
-        //         if (el)
-        //           el.classList.add('hidden')
-        //     }
-        //     else {
-        //       let el: HTMLElement = <HTMLElement><any>(document.getElementsByClassName('driver-prev-btn')[0])
-        //       if (el) {
-        //         el.classList.remove('hidden')
-        //       }
-        //     }
+    //       // Remove the back button on the first popover
+    //       if (Element.options.step === 1) {
+    //         let el: HTMLElement = <HTMLElement><any>(document.getElementsByClassName('driver-prev-btn')[0])
+    //           if (el)
+    //             el.classList.add('hidden')
+    //       }
+    //       else {
+    //         let el: HTMLElement = <HTMLElement><any>(document.getElementsByClassName('driver-prev-btn')[0])
+    //         if (el) {
+    //           el.classList.remove('hidden')
+    //         }
+    //       }
 
-        //   },
-        //   onHighlighted: (Element) => {
-        //     // Disable the Element that is being highlighed
-        //     if (Element.node.classList[0] === 'btn') Element.node.disabled = true
-        //     else Element.node.offsetParent.disabled = true
+    //     },
+    //     onHighlighted: (Element) => {
+    //       // Disable the Element that is being highlighed
+    //       if (Element.node.classList[0] === 'btn') Element.node.disabled = true
+    //       else Element.node.offsetParent.disabled = true
 
-        //     // Set tabIndex and aria-label of the tour elements for accessibility
-        //     this.manipulateDom('className', 'driver-close-btn', 5, false, 'aria-label', 'close button')
-        //     this.manipulateDom('className', 'driver-prev-btn', 4, false, 'aria-label', 'previous button')
-        //     this.manipulateDom('className', 'driver-next-btn', 3, false, 'aria-label', 'next button')
-        //     this.manipulateDom('className', 'driver-popover-description', 2, false)
+    //       // Set tabIndex and aria-label of the tour elements for accessibility
+    //       this.manipulateDom('className', 'driver-close-btn', 5, false, 'aria-label', 'close button')
+    //       this.manipulateDom('className', 'driver-prev-btn', 4, false, 'aria-label', 'previous button')
+    //       this.manipulateDom('className', 'driver-next-btn', 3, false, 'aria-label', 'next button')
+    //       this.manipulateDom('className', 'driver-popover-description', 2, false)
 
-        //     // Set focus on the title of the popover, the setTimeout is necessary for the behavior to appear
-        //     window.setTimeout(function ()
-        //     {
-        //       let el: HTMLElement = <HTMLElement><any>(document.getElementsByClassName('driver-popover-title')[0])
-        //       if (el) {
-        //         el.tabIndex = 1
-        //         el.focus()
-        //       }
-        //     }, 0);
-        //   },
-        //   onDeselected: (Element) => {
-        //     // Enable the element when it is not highlighted
-        //     if (Element.node.classList[0] === 'btn') Element.node.disabled = false
-        //     else Element.node.offsetParent.disabled = false
-        //   },
-        //   onReset: (Element) => {
-        //     // Change BACK the tabIndex of the brand label and links in the login box when the tour is over
-        //     this.manipulateDom('className', 'navbar-brand', 1)
-        //     this.manipulateDom('id', 'nav-setting', 2)
-        //     this.manipulateDom('id', 'nav-logout', 2)
-        //     this.manipulateDom('id', 'nav-login', 2)
-        //     this.manipulateDom('id', 'nav-register', 2)
-        //   }
-        // })
+    //       // Set focus on the title of the popover, the setTimeout is necessary for the behavior to appear
+    //       window.setTimeout(function ()
+    //       {
+    //         let el: HTMLElement = <HTMLElement><any>(document.getElementsByClassName('driver-popover-title')[0])
+    //         if (el) {
+    //           el.tabIndex = 1
+    //           el.focus()
+    //         }
+    //       }, 0);
+    //     },
+    //     onDeselected: (Element) => {
+    //       // Enable the element when it is not highlighted
+    //       if (Element.node.classList[0] === 'btn') Element.node.disabled = false
+    //       else Element.node.offsetParent.disabled = false
+    //     },
+    //     onReset: (Element) => {
+    //       // Change BACK the tabIndex of the brand label and links in the login box when the tour is over
+    //       this.manipulateDom('className', 'navbar-brand', 1)
+    //       this.manipulateDom('id', 'nav-setting', 2)
+    //       this.manipulateDom('id', 'nav-logout', 2)
+    //       this.manipulateDom('id', 'nav-login', 2)
+    //       this.manipulateDom('id', 'nav-register', 2)
+    //     }
+    // })
 
-        this.driver.defineSteps(this.steps)
-        this.driver.start()
-      }
+    //   this.driver.defineSteps(this.steps)
+    //   this.driver.start()
     }
 
     /**
