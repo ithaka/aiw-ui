@@ -15,7 +15,7 @@
       "SELECT_LABEL": "Select your institution's name",
       "ERRORS": {
         "SELECT_INSTITUTION": "Please select an institution",
-        "SERVICE_ERROR": "We've experience an error and are unable to retrieve the insitutions"
+        "SERVICE_ERROR": "We've experience an error and are unable to retrieve the institutions"
       }
     },
     "INCORRECT_PORTAL" : "Sorry, that login is not valid for this portal. Please try again with a different account, or try accessing the main <a id=\"linkMainLibrarySite\" href=\"http://library.artstor.org\" class=\"link\" target=\"_blank\">Artstor Digital Library</a>.",
