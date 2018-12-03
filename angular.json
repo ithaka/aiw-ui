@@ -32,8 +32,8 @@
             "scripts": [
               "src/assets/js/krpano.js"
             ],
-            "deployUrl" : "/",
-            "extractCss" : true
+            "deployUrl": "/",
+            "extractCss": true
           },
           "configurations": {
             "production": {
@@ -58,7 +58,7 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "port" : 3000,
+            "port": 3000,
             "browserTarget": "avatar:build"
           },
           "configurations": {
@@ -84,10 +84,12 @@
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
-            "fileReplacements": [{
-              "replace": "src/environments/environment.ts",
-              "with": "src/environments/environment.spec.ts"
-            }],
+            "fileReplacements": [
+              {
+                "replace": "src/environments/environment.ts",
+                "with": "src/environments/environment.spec.ts"
+              }
+            ],
             "main": "src/test.ts",
             "polyfills": "src/polyfills.ts",
             "tsConfig": "src/tsconfig.spec.json",
@@ -136,6 +138,41 @@
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": "e2e/tsconfig.e2e.json",
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
+    },
+    "artstor-storage": {
+      "root": "projects/artstor-storage",
+      "sourceRoot": "projects/artstor-storage/src",
+      "projectType": "library",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "projects/artstor-storage/tsconfig.lib.json",
+            "project": "projects/artstor-storage/ng-package.json"
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/artstor-storage/src/test.ts",
+            "tsConfig": "projects/artstor-storage/tsconfig.spec.json",
+            "karmaConfig": "projects/artstor-storage/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/artstor-storage/tsconfig.lib.json",
+              "projects/artstor-storage/tsconfig.spec.json"
+            ],
             "exclude": [
               "**/node_modules/**"
             ]
