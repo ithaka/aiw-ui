@@ -194,6 +194,11 @@ export class AssetFilters {
             }
           }
 
+          // it is for if the allInstitutions request fails, it doesn’t break the entire filter UI
+          if (this.allInstFailed) {
+            filters['contributinginstitutionid'] = null
+          }
+
           // Filter out categories containing pipe in name field
           if (filters && filters.artclassification_str && filters.artclassification_str.length !== 0 ) {
             filters.artclassification_str = filters.artclassification_str.filter((category) => {
