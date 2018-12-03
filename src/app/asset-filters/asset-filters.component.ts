@@ -19,7 +19,6 @@ export class AssetFilters {
   // Set our default values
   public searchLoading: boolean
   public showFilters: boolean = true
-  public showContribFilter: boolean = false
   public showAdvancedModal: boolean = false
   private subscriptions: Subscription[] = []
   private filterDate: boolean = false
@@ -115,10 +114,6 @@ export class AssetFilters {
           this.filterDate = true;
         }
 
-        if (routeParams['featureFlag'] && routeParams['featureFlag'] === 'contribFilter') {
-          this.showContribFilter = true
-        }
-
         // When params are adjusted, applied filters need to be cleared
         // this._filters.clearApplied();
 
@@ -197,11 +192,6 @@ export class AssetFilters {
             if (this._auth.isPublicOnly()) {
               filters['collectiontypes'] = filters['collectiontypes'].filter(collectionType => collectionType.name === '5')
             }
-          }
-
-          // NOTE: Clear Contributors list array until we remove the contribFilter feature flag
-          if (!this.showContribFilter || this.allInstFailed) {
-            filters['contributinginstitutionid'] = null
           }
 
           // Filter out categories containing pipe in name field
