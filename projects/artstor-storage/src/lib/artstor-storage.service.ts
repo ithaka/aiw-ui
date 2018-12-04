@@ -1,6 +1,6 @@
-import { Injectable, Inject, PLATFORM_ID } from '@angular/core';
-import { isDefined } from '@angular/compiler/src/util';
-import { localStorageFactory } from '@ng-toolkit/universal';
+import { Injectable, Inject, PLATFORM_ID } from '@angular/core'
+import { isDefined } from '@angular/compiler/src/util'
+import { isPlatformBrowser } from '@angular/common'
 
 @Injectable({
   providedIn: 'root'
@@ -9,7 +9,7 @@ export class ArtstorStorageService {
   constructor(@Inject(PLATFORM_ID) private platformId: Object) {}
 
   // Is this code being interpretted by a browser-based client?
-  private isBrowser: boolean = this.platformId === 'browser'
+  private isBrowser: boolean = isPlatformBrowser(this.platformId)
 
   /**
    * hasSessionStorage
@@ -114,7 +114,5 @@ export class ArtstorStorageService {
       return sessionStorage.clear()
     }
   }
-
-
 
 }
