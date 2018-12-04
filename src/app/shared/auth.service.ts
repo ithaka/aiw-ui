@@ -253,7 +253,7 @@ export class AuthService implements CanActivate {
       let options = { headers: header, withCredentials: true };
 
       // Clear local user object, and other settings
-      this._storage.clearAll()
+      this._storage.clearLocalStorage()
       // Clear observables
       this.userSource.next({})
       this.institutionObjSource.next({})

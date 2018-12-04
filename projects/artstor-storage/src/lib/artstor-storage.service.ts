@@ -33,7 +33,7 @@ export class ArtstorStorageService {
    * @param value value to set key to
    * @returns string or void
    */
-  public setLocal(key: string, value: any): string | void {
+  public setLocal(key: string, value: any): any | void {
     if (this.hasLocalStorage()) {
       if (typeof(value) === 'object') {
         value = JSON.stringify({data:value})
@@ -47,7 +47,7 @@ export class ArtstorStorageService {
    * @param key local storage key to retrieve
    * @returns string value of key
    */
-  public getLocal(key: string): string | any {
+  public getLocal(key: string): any | void {
     if (this.hasLocalStorage()) {
       return localStorage.getItem(key)
     }
@@ -57,23 +57,27 @@ export class ArtstorStorageService {
    * removeLocalItem - remove a local storage item via key
    * @param key local storage key to remove
    */
-  public removeLocalItem(key: string): string | any | void {
-    return localStorage.removeItem(key)
+  public removeLocalItem(key: string): any | void {
+    if (this.hasLocalStorage()) {
+      return localStorage.removeItem(key)
+    }
   }
 
   /**
    * clearAll - clears all local storage set by application
    */
-  public clearAll() {
-    return localStorage.clear()
+  public clearLocalStorage(): void {
+    if (this.hasLocalStorage()) {
+      return localStorage.clear()
+    }
   }
 
   /**
    * setSession - set session storage value by key, value
-   * @param key
-   * @param value
+   * @param key - storage key to set
+   * @param value - value to set key to
    */
-  public setSession(key: string, value: any): string | any | void {
+  public setSession(key: string, value: any): any | void {
     if (this.hasSessionStorage()) {
       if (typeof(value) === 'object' || key === 'totalAssets') {
         value = JSON.stringify({ data: value })
@@ -84,12 +88,33 @@ export class ArtstorStorageService {
 
   /**
    * getSession - get a session value by key
-   * @param key
+   * @param key - session key to retrieve a value for
    */
-  public getSession(key: string): string | any | void {
+  public getSession(key: string): any | void {
     if (this.hasSessionStorage()) {
       return sessionStorage.getItem(key)
     }
   }
+
+  /**
+   * removeSessionItem - remove a session value by key
+   * @param key - session key to remove
+   */
+  public removeSessionItem(key: string): any | void {
+    if (this.hasSessionStorage) {
+      return sessionStorage.removeItem(key)
+    }
+  }
+
+  /**
+   * clearSession - clear session storage
+   */
+  public clearSessionStorage(): void {
+    if (this.hasSessionStorage()) {
+      return sessionStorage.clear()
+    }
+  }
+
+
 
 }
