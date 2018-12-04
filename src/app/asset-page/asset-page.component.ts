@@ -535,7 +535,7 @@ export class AssetPage implements OnInit, OnDestroy {
      */
     setDownloadFull(): void {
         let url = this.assets[0] ? this.assets[0].downloadLink : '';
-        if (this.assetGroupId) {
+        if (this.assetGroupId && url.indexOf("/media/") === -1 ) {
             // Group id needs to be passed to allow download for images accessed via groups
             // - Binder prefers lowercase service url params
             url = url + '&groupid=' + this.assetGroupId
