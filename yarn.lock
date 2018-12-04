@@ -1347,10 +1347,10 @@ arrify@^1.0.0, arrify@^1.0.1:
   resolved "https://registry.yarnpkg.com/arrify/-/arrify-1.0.1.tgz#898508da2226f380df904728456849c1501a4b0d"
   integrity sha1-iYUI2iIm84DfkEcoRWhJwVAaSw0=
 
-artstor-viewer@1.4.0-b:
-  version "1.4.0-b"
-  resolved "https://registry.yarnpkg.com/artstor-viewer/-/artstor-viewer-1.4.0-b.tgz#169e56d0f222faf4839ea0692a243e469b02237b"
-  integrity sha512-Y8gxJsPx0SQ2uFvqExbRhGhJw1aQm5NoshVKMah7RVLWgOY8c1CMD9yBTLhTkEjohmV7Nhwyu/Ll4L3OzgXR3w==
+artstor-viewer@1.3.5:
+  version "1.3.5"
+  resolved "https://registry.yarnpkg.com/artstor-viewer/-/artstor-viewer-1.3.5.tgz#f5715a02f19733c04407add4c486fbb1d5c2841d"
+  integrity sha512-I1UCJ4Z9J2UCgeJ3rfGluoUzxK7zAY+7va/+BZB8JVyVpBSskOafPipacRHdmQwYJlc1D2X5aS8I+hg9bE8flA==
   dependencies:
     "@angular/http" "^6.1.10"
     npm "^5.7.1"
