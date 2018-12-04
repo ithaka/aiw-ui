@@ -3,8 +3,7 @@ import { Component, OnInit, EventEmitter, Input, Output } from '@angular/core'
 
 // Project Dependencies
 import { AuthService } from '../../shared'
-import { LockerService } from 'app/_services';
-
+import { ArtstorStorageService } from '../../../../projects/artstor-storage/src/public_api';
 @Component({
   selector: 'ang-server-error-modal',
   templateUrl: 'server-error-modal.component.pug'
@@ -14,7 +13,7 @@ export class ServerErrorModal implements OnInit {
   @Output() closeModal: EventEmitter<any> = new EventEmitter()
 
   constructor(
-    private _locker: LockerService,
+    private _storage: ArtstorStorageService,
     private _router: Router
   ) { }
 
@@ -29,7 +28,7 @@ export class ServerErrorModal implements OnInit {
    */
   stashThenRoute(routeValue: string) {
     console.log(window.location.pathname)
-    this._locker.set('stashedRoute', window.location.pathname)
+    this._storage.setLocal('stashedRoute', window.location.pathname)
     this._router.navigate([routeValue]);
   }
 }

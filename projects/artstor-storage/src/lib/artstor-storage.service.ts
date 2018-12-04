@@ -44,7 +44,7 @@ export class ArtstorStorageService {
    * @param key local storage key to retrieve
    * @returns string value of key
    */
-  public getLocal(key: string): string {
+  public getLocal(key: string): string | any {
     if (this.hasLocalStorage()) {
       return localStorage.getItem(key)
     }
@@ -54,7 +54,7 @@ export class ArtstorStorageService {
    * removeLocalItem - remove a local storage item via key
    * @param key local storage key to remove
    */
-  public removeLocalItem(key: string): string | void {
+  public removeLocalItem(key: string): string | any | void {
     return localStorage.removeItem(key)
   }
 
@@ -70,7 +70,7 @@ export class ArtstorStorageService {
    * @param key
    * @param value
    */
-  public setSession(key: string, value: any): string | void {
+  public setSession(key: string, value: any): string | any | void {
     if (this.hasSessionStorage()) {
       return sessionStorage.setItem(key, value)
     }
@@ -80,7 +80,7 @@ export class ArtstorStorageService {
    * getSession - get a session value by key
    * @param key
    */
-  public getSession(key: string): string | void {
+  public getSession(key: string): string | any | void {
     if (this.hasSessionStorage()) {
       return sessionStorage.getItem(key)
     }

@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core'
 import { Location } from '@angular/common'
-import { Locker, LockerConfig, DRIVERS } from 'angular-safeguard'
 import { HttpClient, HttpHeaders } from '@angular/common/http'
 import {
   CanActivate,
@@ -19,8 +18,7 @@ import { IdleWatcherUtil } from './idle-watcher'
 import {Idle, DEFAULT_INTERRUPTSOURCES} from '@ng-idle/core'
 import { FlagService } from './flag.service'
 import { error } from '@angular/compiler/src/util';
-import { LockerService } from 'app/_services';
-
+import { ArtstorStorageService } from '../../../projects/artstor-storage/src/public_api';
 /**
  * Controls authorization through IP address and locally stored user object
  */
@@ -67,7 +65,7 @@ export class AuthService implements CanActivate {
   constructor(
     private _router: Router,
     // private _login: LoginService,
-    private _locker: LockerService,
+    private _storage: ArtstorStorageService,
     private http: HttpClient,
     private location: Location,
     private _app: AppConfig,
@@ -189,7 +187,7 @@ export class AuthService implements CanActivate {
     //   map(() => {
     //     this.idleState = 'You\'ve gone idle!';
     //     let currentDateTime = new Date().toUTCString();
-    //     this._locker.set('userGoneIdleAt', currentDateTime);
+    //     this._locker.set('userGoneIdleAt', currentDateTime); /** TODO: REPLACE ME WITH _storage.setLocal */
     //   })).subscribe()
 
     // idle.onTimeoutWarning.pipe(
@@ -203,7 +201,7 @@ export class AuthService implements CanActivate {
 
     // Initialize user and institution objects from localstorage
     this.userSource.next(this.getUser())
-    let institution = this._locker.get('institution')
+    let institution = this._storage.getLocal('institution')
     if (institution) { this.institutionObjSource.next(institution) }
 
     // /**
@@ -255,7 +253,7 @@ export class AuthService implements CanActivate {
       let options = { headers: header, withCredentials: true };
 
       // Clear local user object, and other settings
-      this.clearStorage()
+      this._storage.clearAll()
       // Clear observables
       this.userSource.next({})
       this.institutionObjSource.next({})
@@ -291,7 +289,7 @@ export class AuthService implements CanActivate {
 
   public setInstitution(institutionObj: any): void {
     // Save to local storage
-    this._locker.set('institution', institutionObj)
+    this._storage.setLocal('institution', institutionObj)
     // Update Observable
     this.institutionObjValue = institutionObj;
     this.institutionObjSource.next(this.institutionObjValue);
@@ -405,7 +403,7 @@ export class AuthService implements CanActivate {
    */
   public saveUser(user: any) {
     // Preserve user via localstorage
-    this._locker.set('user', user);
+    this._storage.setLocal('user', user);
     // only do these things if the user is ip auth'd or logged in and the user has changed
     let institution = this.institutionObjSource.getValue();
     if (user.status && (!institution.institutionId || user.institutionId != institution.institutionId)) {
@@ -415,6 +413,7 @@ export class AuthService implements CanActivate {
     // Update observable
     this.userSource.next(user)
 
+    // TODO: REMOVE
     // if (user.status && (this._locker.get('user').username != user.username || !institution.institutionid)) {
   }
 
@@ -422,31 +421,26 @@ export class AuthService implements CanActivate {
    * Gets user object from local storage
    */
   public getUser(): any {
-      return this._locker.get('user') ? this._locker.get('user') : {};
+      return this._storage.getLocal('user') ? this._storage.getLocal('user') : {};
   }
 
   /** Stores an object in local storage for you - your welcome */
   public store(key: string, value: any): void {
       if (key != 'user' && key != 'token') {
-          this._locker.set(key, value);
+          this._storage.setLocal(key, value);
       }
   }
 
   /** Gets an object from local storage */
   public getFromStorage(key: string): any {
-      return this._locker.get(key);
+      return this._storage.getLocal(key);
   }
 
   /** Deletes things (not user or token) from local storage */
   public deleteFromStorage(key: string): void {
       if (key != 'user' && key != 'token') {
-          this._locker.remove(key);
+          this._storage.removeLocalItem(key);
       }
-  }
-
-  /** Clears all variables held in local storage */
-  public clearStorage(): void {
-    this._locker.clear();
   }
 
   /**
@@ -563,12 +557,12 @@ return new Observable(observer => {
 
   /** Getter for downloadAuthorized parameter of local storage */
   public downloadAuthorized(): boolean {
-    return this._locker.get('downloadAuthorized');
+    return this._storage.getLocal('downloadAuthorized');
   }
 
   /** Setter for downloadAuthorized parameter of local storage */
   public authorizeDownload(): void {
-    this._locker.set('downloadAuthorized', true);
+    this._storage.setLocal('downloadAuthorized', true);
   }
 
     /**
