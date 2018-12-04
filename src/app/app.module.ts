@@ -122,7 +122,7 @@ import { LinkifyPipe } from './shared/linkify.pipe'
 import { KeysPipe } from './shared/keys.pipe'
 import { CustomUrlSerializer } from './shared/custom-url-serializer'
 import { LOCAL_STORAGE , WINDOW} from '@ng-toolkit/universal'
-import { ArtstorStorageService } from 'artstor-storage.service';
+import { ArtstorStorageService } from '../../../projects/artstor-storage/src/public_api';
 
 const APP_PROVIDERS = [
   ...APP_RESOLVER_PROVIDERS,
