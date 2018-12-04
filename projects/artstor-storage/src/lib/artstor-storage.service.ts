@@ -36,7 +36,7 @@ export class ArtstorStorageService {
   public setLocal(key: string, value: any): string | void {
     if (this.hasLocalStorage()) {
       if (typeof(value) === 'object') {
-        value = JSON.stringify(value)
+        value = JSON.stringify({data:value})
       }
       return localStorage.setItem(key, value)
     }
@@ -75,8 +75,8 @@ export class ArtstorStorageService {
    */
   public setSession(key: string, value: any): string | any | void {
     if (this.hasSessionStorage()) {
-      if (typeof(value) === 'object') {
-        value = JSON.stringify(value)
+      if (typeof(value) === 'object' || key === 'totalAssets') {
+        value = JSON.stringify({ data: value })
       }
       return sessionStorage.setItem(key, value)
     }
