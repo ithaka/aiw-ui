@@ -32,7 +32,7 @@ import { ClickOutsideDirective } from './_directives';
 
 // ng2-idle
 //- TO-DO: Enable NgIdle with Universal
-// import { NgIdleKeepaliveModule } from '@ng-idle/keepalive'; // this includes the core NgIdleModule but includes keepalive providers for easy wireup
+import { NgIdleKeepaliveModule } from '@ng-idle/keepalive'; // this includes the core NgIdleModule but includes keepalive providers for easy wireup
 // import { SortablejsModule } from 'angular-sortablejs'
 
 // File Uploader
@@ -122,7 +122,7 @@ import { LinkifyPipe } from './shared/linkify.pipe'
 import { KeysPipe } from './shared/keys.pipe'
 import { CustomUrlSerializer } from './shared/custom-url-serializer'
 import { LOCAL_STORAGE , WINDOW} from '@ng-toolkit/universal'
-import { ArtstorStorageService } from '../../../projects/artstor-storage/src/public_api';
+import { ArtstorStorageService } from '../../../projects/artstor-storage/src/public_api'
 
 const APP_PROVIDERS = [
   ...APP_RESOLVER_PROVIDERS,
@@ -255,7 +255,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     }),
     NgbModule.forRoot(), // Ng Bootstrap Import
     //- TO-DO: Enable NgIdle with Universal
-    // NgIdleKeepaliveModule.forRoot(),
+    NgIdleKeepaliveModule.forRoot(),
     // SortablejsModule.forRoot({ animation: 150 })
   ],
   providers: [ // expose our Services and Providers into Angular's dependency injection
