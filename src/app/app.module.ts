@@ -21,6 +21,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 // import { CoolStorageModule } from 'angular2-cool-storage';
 // TO-DO: Write our own Locker that safely uses localStorage only client-side
 // import { LockerModule, Locker, LockerConfig, DRIVERS } from 'angular-safeguard'
+import { ArtstorStorageService } from 'artstor-storage.service';
 import { Angulartics2Module, Angulartics2Settings } from 'angulartics2'
 import { Angulartics2GoogleAnalytics } from 'angulartics2/ga'
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
@@ -112,7 +113,7 @@ import {
   PersonalCollectionService,
   AccountService
 } from './shared'
-import { LockerService } from './_services'
+//import { LockerService } from './_services'
 import { LocalPCService } from './_local-pc-asset.service'
 import { AssetFiltersService } from './asset-filters/asset-filters.service'
 import { TagsService } from './browse-page/tags.service'
