@@ -18,10 +18,6 @@ import { ROUTES } from './app.routes';
 
 // UI modules
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-// import { CoolStorageModule } from 'angular2-cool-storage';
-// TO-DO: Write our own Locker that safely uses localStorage only client-side
-// import { LockerModule, Locker, LockerConfig, DRIVERS } from 'angular-safeguard'
-import { ArtstorStorageService } from 'artstor-storage.service';
 import { Angulartics2Module, Angulartics2Settings } from 'angulartics2'
 import { Angulartics2GoogleAnalytics } from 'angulartics2/ga'
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
@@ -113,7 +109,7 @@ import {
   PersonalCollectionService,
   AccountService
 } from './shared'
-//import { LockerService } from './_services'
+
 import { LocalPCService } from './_local-pc-asset.service'
 import { AssetFiltersService } from './asset-filters/asset-filters.service'
 import { TagsService } from './browse-page/tags.service'
@@ -126,6 +122,7 @@ import { LinkifyPipe } from './shared/linkify.pipe'
 import { KeysPipe } from './shared/keys.pipe'
 import { CustomUrlSerializer } from './shared/custom-url-serializer'
 import { LOCAL_STORAGE , WINDOW} from '@ng-toolkit/universal'
+import { ArtstorStorageService } from 'artstor-storage.service';
 
 const APP_PROVIDERS = [
   ...APP_RESOLVER_PROVIDERS,
@@ -140,7 +137,6 @@ const APP_PROVIDERS = [
   GroupService,
   PersonalCollectionService,
   LocalPCService,
-  LockerService,
   LogService,
   ImageGroupService,
   ScriptService,
@@ -245,7 +241,6 @@ export function HttpLoaderFactory(http: HttpClient) {
     HttpClientModule,
     NgxTagInputModule,
     Ng2CompleterModule,
-    // LockerModule,
     FileUploadModule,
     ArtstorViewerModule,
     RouterModule.forRoot(ROUTES, { useHash: true }),

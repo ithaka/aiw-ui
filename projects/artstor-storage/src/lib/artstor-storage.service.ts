@@ -33,7 +33,7 @@ export class ArtstorStorageService {
    * @param value value to set key to
    * @returns string or void
    */
-  public setLocal(key: string, value: string): string | void {
+  public setLocal(key: string, value: any): string | void {
     if (this.hasLocalStorage()) {
       return localStorage.setItem(key, value)
     }
@@ -70,7 +70,7 @@ export class ArtstorStorageService {
    * @param key
    * @param value
    */
-  public setSession(key: string, value: string): string | void {
+  public setSession(key: string, value: any): string | void {
     if (this.hasSessionStorage()) {
       return sessionStorage.setItem(key, value)
     }
