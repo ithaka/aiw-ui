@@ -20,7 +20,7 @@ import { ScriptService, FlagService } from './shared'
   template: `
     <ang-sky-banner *ngIf="showSkyBanner" [textValue]="skyBannerCopy" (closeBanner)="showSkyBanner = false"></ang-sky-banner>
     <div>
-      <div id="skip" tabindex="-1" aria-activedescendant="button">
+      <div id="skip" tabindex="-1">
         <button id="button" (click)="findMainContent()" (keyup.enter)="findMainContent()" tabindex="1" class="sr-only sr-only-focusable"> Skip to main content </button>
       </div>
       <nav-bar tabindex="-1"></nav-bar>
@@ -146,12 +146,17 @@ export class App {
   }
 
   public findMainContent(): void {
-    window.setTimeout(function ()
+    window.setTimeout(() =>
     {
       let htmlelement: HTMLElement = document.getElementById('mainContent');
       let element: Element;
+
+      // On search page go to the start of filter section
+      if (this.router.url.indexOf('search') > -1){
+        element = document.getElementById('skip-to-search-link');
+      }
       // On log in page, go to log in box
-      if (htmlelement.querySelector('form div input')){
+      else if (htmlelement.querySelector('form div input')){
         element = htmlelement.querySelector('form div input');
       }
       // On any page that has search bar, go to search box
