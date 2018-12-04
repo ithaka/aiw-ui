@@ -64,6 +64,11 @@
 // [+] Inbox
 // ----------------------------------------------------
 
+// Ethnio: hide screener pop-up in fullscreen
+body:fullscreen #ethnio-campaign-theme {
+  display: none !important;
+}
+
 .form-control {
   border-radius: 0;
 }
