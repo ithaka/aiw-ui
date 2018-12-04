@@ -3,7 +3,7 @@
     "REG_LOGIN": {
       "HEADING": "Log in with your Artstor account",
       "EMAIL_LABEL": "Email Address",
-      "PASSWORD_LABEL": "Artstor Password",
+      "PASSWORD_LABEL": "<span class=\"sr-only\">Artstor </span>Password",
       "FORCE_PW_RESET_MSG": "Please <a id=\"forcePwdResetModal\" (click)=\"showPwdModal = true\" class=\"link\">reset your password</a> in order to log in.",
       "FORGOT_PW_PROMPT": "Forgot password?",
       "LOGIN_HELP_LINK": "http://support.artstor.org/?article-category=03-accessing-the-artstor-digital-library",
