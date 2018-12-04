@@ -1,11 +1,11 @@
-import { ApplicationRef, ErrorHandler, NgModule } from '@angular/core';
+import { ApplicationRef, NgModule, Inject, APP_ID, PLATFORM_ID } from '@angular/core';
 import { BrowserModule, Title } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule, HttpClient } from '@angular/common/http';
 import { NavigationEnd, Router, RouteReuseStrategy, RouterModule, UrlSerializer } from '@angular/router';
 // import { removeNgStyles, createNewHosts, createInputTransfer } from '@angularclass/hmr';
 import { DeviceDetectorModule } from 'ngx-device-detector';
-import { DatePipe } from '@angular/common'
+import { DatePipe, isPlatformBrowser } from '@angular/common'
 
 // Ithaka/Artstor Dependencies
 import { ArtstorViewerModule } from 'artstor-viewer'
@@ -19,7 +19,8 @@ import { ROUTES } from './app.routes';
 // UI modules
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 // import { CoolStorageModule } from 'angular2-cool-storage';
-import { LockerModule, Locker, LockerConfig, DRIVERS } from 'angular-safeguard'
+// TO-DO: Write our own Locker that safely uses localStorage only client-side
+// import { LockerModule, Locker, LockerConfig, DRIVERS } from 'angular-safeguard'
 import { Angulartics2Module, Angulartics2Settings } from 'angulartics2'
 import { Angulartics2GoogleAnalytics } from 'angulartics2/ga'
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
@@ -29,17 +30,19 @@ import { Ng2CompleterModule } from 'ng2-completer';
 
 // Directives
 import { ClickOutsideDirective } from './_directives';
-import { MediumEditorDirective } from 'angular2-medium-editor';
+//- TO-DO: Enable medium editor with Universal
+// import { MediumEditorDirective } from 'angular2-medium-editor';
 
 // ng2-idle
-import { NgIdleKeepaliveModule } from '@ng-idle/keepalive'; // this includes the core NgIdleModule but includes keepalive providers for easy wireup
-import { SortablejsModule } from 'angular-sortablejs'
+//- TO-DO: Enable NgIdle with Universal
+// import { NgIdleKeepaliveModule } from '@ng-idle/keepalive'; // this includes the core NgIdleModule but includes keepalive providers for easy wireup
+// import { SortablejsModule } from 'angular-sortablejs'
 
 // File Uploader
 import { FileUploadModule } from 'ng2-file-upload';
 
 // App is our top level component
-import { App } from './app.component'
+import { AppComponent } from './app.component'
 import { APP_RESOLVER_PROVIDERS } from './app.resolver'
 import { AppConfig } from './app.service'
 import { Nav, Footer, SearchComponent, PaginationComponent, AssetSearchService, InstitutionsService } from './shared'
@@ -121,11 +124,10 @@ import { UnauthorizedInterceptor } from './interceptors'
 import { LinkifyPipe } from './shared/linkify.pipe'
 import { KeysPipe } from './shared/keys.pipe'
 import { CustomUrlSerializer } from './shared/custom-url-serializer'
-
+import { LOCAL_STORAGE , WINDOW} from '@ng-toolkit/universal'
 
 const APP_PROVIDERS = [
   ...APP_RESOLVER_PROVIDERS,
-
   AccountService,
   AppConfig,
   AssetService,
@@ -163,14 +165,13 @@ export function HttpLoaderFactory(http: HttpClient) {
  * `AppModule` is the main entry point into Angular2's bootstraping process
  */
 @NgModule({
-  bootstrap: [ App ],
   declarations: [
     AccessDeniedModal,
     AccountPage,
     EditPersonalCollectionModal,
     AddToGroupModal,
     AgreeModalComponent,
-    App,
+    AppComponent,
     AssetFilters,
     AssetGrid,
     AssetPage,
@@ -205,7 +206,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     Login,
     LoginFormComponent,
     LoginReqModal,
-    MediumEditorDirective,
+    //- TO-DO: Enable medium editor with Universal
+    // MediumEditorDirective,
     MyCollectionsComponent,
     Nav,
     NavMenu,
@@ -236,13 +238,13 @@ export function HttpLoaderFactory(http: HttpClient) {
     UploaderComponent
   ],
   imports: [ // import Angular's modules
-    BrowserModule,
+    BrowserModule.withServerTransition({ appId: 'avatar' }),
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
     NgxTagInputModule,
     Ng2CompleterModule,
-    LockerModule,
+    // LockerModule,
     FileUploadModule,
     ArtstorViewerModule,
     RouterModule.forRoot(ROUTES, { useHash: true }),
@@ -256,14 +258,21 @@ export function HttpLoaderFactory(http: HttpClient) {
       }
     }),
     NgbModule.forRoot(), // Ng Bootstrap Import
-    NgIdleKeepaliveModule.forRoot(),
-    SortablejsModule.forRoot({ animation: 150 })
+    //- TO-DO: Enable NgIdle with Universal
+    // NgIdleKeepaliveModule.forRoot(),
+    // SortablejsModule.forRoot({ animation: 150 })
   ],
   providers: [ // expose our Services and Providers into Angular's dependency injection
     ENV_PROVIDERS,
     APP_PROVIDERS
-  ]
+  ],
+  bootstrap: [ AppComponent ]
 })
 export class AppModule {
-  constructor(public appRef: ApplicationRef, private router: Router) {}
+  constructor(@Inject(PLATFORM_ID) private platformId: Object,
+    @Inject(APP_ID) private appId: string) {
+    const platform = isPlatformBrowser(platformId) ?
+    'in the browser' : 'on the server';
+    console.log(`Running ${platform} with appId=${appId}`);
+  }
 }

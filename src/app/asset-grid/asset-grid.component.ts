@@ -21,7 +21,7 @@ import {
 import { AssetFiltersService } from '../asset-filters/asset-filters.service'
 import { APP_CONST } from '../app.constants'
 import { LockerService } from 'app/_services';
-import { SortablejsOptions } from 'angular-sortablejs';
+// import { SortablejsOptions } from 'angular-sortablejs';
 
 @Component({
   selector: 'ang-asset-grid',
@@ -89,11 +89,11 @@ export class AssetGrid implements OnInit, OnDestroy {
   sub;
 
   // Options for Sortablejs reordering of assets
-  public sortableOptions: SortablejsOptions = {
-    onUpdate: (event) => {
-      this.orderChanged = true
-    }
-  }
+  // public sortableOptions: SortablejsOptions = {
+  //   onUpdate: (event) => {
+  //     this.orderChanged = true
+  //   }
+  // }
   // Add user to decide whether to show the banner
   private user: any = this._auth.getUser();
 

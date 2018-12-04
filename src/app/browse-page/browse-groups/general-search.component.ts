@@ -49,11 +49,12 @@ export class GeneralSearchComponent implements OnInit {
   }
 
   public setFocus(): void {
-    window.setTimeout(function () {
-      if (document.getElementById('empty-search-alert')){
-        document.getElementById('empty-search-alert').focus()
-      }
-    }, 110);
+    // TO-DO: Only reference document client-side
+    // window.setTimeout(function () {
+    //   if (document.getElementById('empty-search-alert')){
+    //     document.getElementById('empty-search-alert').focus()
+    //   }
+    // }, 110);
   }
 
   public conductSearch(): void {

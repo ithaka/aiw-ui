@@ -43,8 +43,9 @@ export class ShareIgLinkModal implements OnInit, AfterViewInit {
 
   // Set initial focus on the modal Title h1
   public startModalFocus() {
-    let modalStartFocus = document.getElementById('share-ig-link-title')
-      modalStartFocus.focus()
+    // TO-DO: Only reference document client-side
+    // let modalStartFocus = document.getElementById('share-ig-link-title')
+    // modalStartFocus.focus()
   }
 
   createIgLink(ig: ImageGroup): void {
@@ -68,7 +69,8 @@ export class ShareIgLinkModal implements OnInit, AfterViewInit {
     // If the group is not owned by the user, we simply give back the url of the group
     // Only a group owner can generate a token share link
     if (!userOwned) {
-      this.shareLink = [protocol, document.location.host, groupPath, ig.id].join('')
+      // TO-DO: Only reference document client-side
+      // this.shareLink = [protocol, document.location.host, groupPath, ig.id].join('')
     } else {
       // if the image group is private, we call a service to generate a token, then attach that to the route so the user can share it
       this.serviceStatus.isLoading = true
@@ -77,7 +79,8 @@ export class ShareIgLinkModal implements OnInit, AfterViewInit {
         map(res => {
           this.serviceStatus.isLoading = false
           if (res.success && res.token) {
-            this.shareLink = [protocol, document.location.host, groupPath, ig.id, '?token=', encodeURIComponent(res.token)].join('')
+            // TO-DO: Only reference document client-side
+            // this.shareLink = [protocol, document.location.host, groupPath, ig.id, '?token=', encodeURIComponent(res.token)].join('')
           } else {
             this.serviceStatus.tokenError = true
           }

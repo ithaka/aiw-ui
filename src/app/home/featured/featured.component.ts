@@ -1,9 +1,10 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Inject, PLATFORM_ID } from '@angular/core';
 import { AppConfig } from '../../app.service';
 
 // Project Dependencies
 import { AuthService } from '../../shared';
 import { FeaturedCollection } from './featured-collection';
+import { isPlatformBrowser } from '@angular/common';
 
 @Component({
   selector: 'ang-featured',
@@ -27,7 +28,11 @@ export class FeaturedComponent implements OnInit {
   public primaryFeaturedIndex: number = 0
   private skipAutoSlide: boolean = false
 
-  constructor(public _appConfig: AppConfig, public _auth: AuthService) {
+  constructor(
+      public _appConfig: AppConfig, 
+      public _auth: AuthService,
+      @Inject(PLATFORM_ID) private platformId: Object
+      ) {
     this.conf = this._appConfig.config.featuredCollection // 'HOME.FEATURED' in en.json
   }
 
@@ -67,16 +72,16 @@ export class FeaturedComponent implements OnInit {
   private runSlideshow(primary_index: number) {
     this.primaryFeaturedIndex = primary_index
 
-      setInterval(() => {
-        if (!this.skipAutoSlide) {
-          if (this.primaryFeaturedIndex === 2)
-            this.primaryFeaturedIndex = 0
-          else
-            this.primaryFeaturedIndex += 1
-        } else {
-          this.skipAutoSlide = false
-        }
-      }, 9000)
+    setInterval(() => {
+      if (!this.skipAutoSlide) {
+        if (this.primaryFeaturedIndex === 2)
+          this.primaryFeaturedIndex = 0
+        else
+          this.primaryFeaturedIndex += 1
+      } else {
+        this.skipAutoSlide = false
+      }
+    }, 9000)
   }
 
   ngOnInit() {
@@ -98,8 +103,11 @@ export class FeaturedComponent implements OnInit {
     this.base = this.conf + '.' + this.featuredType + "."
     this.initCollections()
 
-    // Start slideshow
-    this.runSlideshow(this.primaryFeaturedIndex)
+    // Run client-side
+    if (isPlatformBrowser(this.platformId)) {
+      // Start slideshow
+      this.runSlideshow(this.primaryFeaturedIndex)
+    }
   }
 
 }

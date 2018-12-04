@@ -72,7 +72,7 @@ export class AuthService implements CanActivate {
     private location: Location,
     private _app: AppConfig,
     private _flags: FlagService,
-    private idle: Idle
+    // private idle: Idle
   ) {
     // Initialize observables
     this.currentUser = this.userSource.asObservable()
@@ -108,23 +108,24 @@ export class AuthService implements CanActivate {
     ]
 
     // Check domain
-    if (  new RegExp(prodHostnames.join('|')).test(document.location.hostname)  ) {
-      // Explicit live endpoints
-      this.logUrl = '//ang-ui-logger.apps.prod.cirrostratus.org/api/v1'
-      this.solrUrl = '/api/search/v1.0/search'
-      this.ENV = 'prod'
-    }
-    else if ( document.location.hostname.indexOf('prod.cirrostratus.org') > -1 ) {
-      console.info('Using Prod Endpoints (Absolute)')
-      // Prod/Lively endpoints
-      this.hostname = '//library.artstor.org'
-      this.baseUrl =  '//library.artstor.org/api'
-      this.logUrl = '//ang-ui-logger.apps.prod.cirrostratus.org/api/v1'
-      this.solrUrl = this.hostname + '/api/search/v1.0/search'
-      this.ENV = 'prod'
-    } else if ( new RegExp(testHostnames.join('|')).test(document.location.hostname) ) {
-      console.info('Using Test Endpoints')
-      // Test Endpoints
+    // TO-DO: Only reference document client-side
+    // if (  new RegExp(prodHostnames.join('|')).test(document.location.hostname)  ) {
+    //   // Explicit live endpoints
+    //   this.logUrl = '//ang-ui-logger.apps.prod.cirrostratus.org/api/v1'
+    //   this.solrUrl = '/api/search/v1.0/search'
+    //   this.ENV = 'prod'
+    // }
+    // else if ( document.location.hostname.indexOf('prod.cirrostratus.org') > -1 ) {
+    //   console.info('Using Prod Endpoints (Absolute)')
+    //   // Prod/Lively endpoints
+    //   this.hostname = '//library.artstor.org'
+    //   this.baseUrl =  '//library.artstor.org/api'
+    //   this.logUrl = '//ang-ui-logger.apps.prod.cirrostratus.org/api/v1'
+    //   this.solrUrl = this.hostname + '/api/search/v1.0/search'
+    //   this.ENV = 'prod'
+    // } else if ( new RegExp(testHostnames.join('|')).test(document.location.hostname) ) {
+    //   console.info('Using Test Endpoints')
+    //   // Test Endpoints
       this.hostname = '//stage.artstor.org'
       this.subdomain = 'stage'
       this.baseUrl = '//stage.artstor.org/api'
@@ -134,92 +135,92 @@ export class AuthService implements CanActivate {
       this.solrUrl = '/api/search/v1.0/search'
       this.IIIFUrl = '//tsstage.artstor.org/rosa-iiif-endpoint-1.0-SNAPSHOT/fpx'
       this.ENV = 'test'
-    }
+    // }
 
-    // Additional Local dev domains
-    if (document.location.hostname.indexOf('local.sahara') > -1) {
-      this.hostname = '//sahara.beta.stage.artstor.org'
-      this.ENV = 'test'
-    }
+    // // Additional Local dev domains
+    // if (document.location.hostname.indexOf('local.sahara') > -1) {
+    //   this.hostname = '//sahara.beta.stage.artstor.org'
+    //   this.ENV = 'test'
+    // }
 
-    // Sahara routing WORKAROUND
-    if (document.location.hostname.indexOf('sahara.beta.stage.artstor.org') > -1) {
-      this.hostname = '//sahara.beta.stage.artstor.org'
-      this.ENV = 'test'
-    }
-    if (document.location.hostname.indexOf('sahara.prod.artstor.org') > -1) {
-      this.hostname = '//sahara.prod.artstor.org/'
-    }
+    // // Sahara routing WORKAROUND
+    // if (document.location.hostname.indexOf('sahara.beta.stage.artstor.org') > -1) {
+    //   this.hostname = '//sahara.beta.stage.artstor.org'
+    //   this.ENV = 'test'
+    // }
+    // if (document.location.hostname.indexOf('sahara.prod.artstor.org') > -1) {
+    //   this.hostname = '//sahara.prod.artstor.org/'
+    // }
 
     // Local routing should point to full URL
     // * This should NEVER apply when using a proxy, as it will break authorization
-    if (new RegExp(['cirrostratus.org', 'localhost', 'local.', 'sahara.beta.stage.artstor.org', 'sahara.prod.artstor.org'].join('|')).test(document.location.hostname)) {
+    // if (new RegExp(['cirrostratus.org', 'localhost', 'local.', 'sahara.beta.stage.artstor.org', 'sahara.prod.artstor.org'].join('|')).test(document.location.hostname)) {
       this.baseUrl = this.hostname + '/api'
       this.solrUrl = this.hostname + '/api/search/v1.0/search'
-    }
+    // }
 
     // For session timeout on user inactivity
-    idle.setIdle(IdleWatcherUtil.generateIdleTime()); // Set an idle time of 1 min, before starting to watch for timeout
-    idle.setTimeout(IdleWatcherUtil.generateSessionLength()); // Log user out after 90 mins of inactivity
-    idle.setInterrupts(DEFAULT_INTERRUPTSOURCES);
+    // idle.setIdle(IdleWatcherUtil.generateIdleTime()); // Set an idle time of 1 min, before starting to watch for timeout
+    // idle.setTimeout(IdleWatcherUtil.generateSessionLength()); // Log user out after 90 mins of inactivity
+    // idle.setInterrupts(DEFAULT_INTERRUPTSOURCES);
 
-    idle.onIdleEnd.pipe(
-      map(() => {
-        this.idleState = 'No longer idle.';
-        // We want to ensure a user is refreshed as soon as they return to the tab
-        this.refreshUserSession(true)
-      })).subscribe()
+    // idle.onIdleEnd.pipe(
+    //   map(() => {
+    //     this.idleState = 'No longer idle.';
+    //     // We want to ensure a user is refreshed as soon as they return to the tab
+    //     this.refreshUserSession(true)
+    //   })).subscribe()
 
-    idle.onTimeout.pipe(
-      map(() => {
-        let user = this.getUser();
-        // console.log(user);
-        if (user && user.isLoggedIn){
-          this.expireSession();
-          this.showUserInactiveModal.next(true);
-          this.idleState = 'Timed out!';
-        }
-        else{
-          this.resetIdleWatcher()
-        }
-      })).subscribe()
+    // idle.onTimeout.pipe(
+    //   map(() => {
+    //     let user = this.getUser();
+    //     // console.log(user);
+    //     if (user && user.isLoggedIn){
+    //       this.expireSession();
+    //       this.showUserInactiveModal.next(true);
+    //       this.idleState = 'Timed out!';
+    //     }
+    //     else{
+    //       this.resetIdleWatcher()
+    //     }
+    //   })).subscribe()
 
-    idle.onIdleStart.pipe(
-      map(() => {
-        this.idleState = 'You\'ve gone idle!';
-        let currentDateTime = new Date().toUTCString();
-        this._locker.set('userGoneIdleAt', currentDateTime);
-      })).subscribe()
+    // idle.onIdleStart.pipe(
+    //   map(() => {
+    //     this.idleState = 'You\'ve gone idle!';
+    //     let currentDateTime = new Date().toUTCString();
+    //     this._locker.set('userGoneIdleAt', currentDateTime);
+    //   })).subscribe()
 
-    idle.onTimeoutWarning.pipe(
-      map((countdown) => {
-        this.idleState = 'You will time out in ' + countdown + ' seconds!'
-        // console.log(this.idleState);
-      })).subscribe()
+    // idle.onTimeoutWarning.pipe(
+    //   map((countdown) => {
+    //     this.idleState = 'You will time out in ' + countdown + ' seconds!'
+    //     // console.log(this.idleState);
+    //   })).subscribe()
 
-    // Init idle watcher (this will also run getUserInfo)
-    this.resetIdleWatcher()
+    // // Init idle watcher (this will also run getUserInfo)
+    // this.resetIdleWatcher()
 
     // Initialize user and institution objects from localstorage
     this.userSource.next(this.getUser())
     let institution = this._locker.get('institution')
     if (institution) { this.institutionObjSource.next(institution) }
 
-    /**
-     * User Access Heartbeat
-     * - Poll /userinfo every 15min
-     * - Refreshs AccessToken with IAC
-     */
-    const userInfoInterval = 15 * 1000 * 60 * 60
-    // Run every X mins
-    setInterval(() => {
-      this.refreshUserSession(true)
-    }, userInfoInterval)
+    // /**
+    //  * User Access Heartbeat
+    //  * - Poll /userinfo every 15min
+    //  * - Refreshs AccessToken with IAC
+    //  */
+    // const userInfoInterval = 15 * 1000 * 60 * 60
+    // // Run every X mins
+    // setInterval(() => {
+    //   this.refreshUserSession(true)
+    // }, userInfoInterval)
   }
 
   // Reset the idle watcher
   public resetIdleWatcher(): void {
-    this.idle.watch();
+    // this.idle.watch();
     // When a user comes back, we don't want to wait for the time interval to refresh the session
     this.refreshUserSession(true)
   }
@@ -248,7 +249,7 @@ export class AuthService implements CanActivate {
    */
   public logout() {
       // Stop, unwatch Idle session. Note: resetIdleWatcher() calls watch, and is called from login component
-      this.idle.stop()
+      // this.idle.stop()
 
       let header = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded'); // ... Set content type to JSON
       let options = { headers: header, withCredentials: true };
@@ -452,7 +453,13 @@ export class AuthService implements CanActivate {
    * Required by implementing CanActivate, and is called on routes which are protected by canActivate: [AuthService]
    */
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
+    console.log("Running canActivate...")
     let options = { headers: this.userInfoHeader, withCredentials: true }
+
+    // If user object already exists, we're done here
+return new Observable(observer => {
+  observer.next(true)
+})
 
     if ((route.params.samlTokenId || route.params.type == 'shibboleth') && state.url.includes('/register')) {
       // Shibboleth workflow is unique, should allow access to the register page
@@ -477,6 +484,7 @@ export class AuthService implements CanActivate {
       .get(this.genUserInfoUrl(), options).pipe(
       map(
         (data)  => {
+          console.log("User info call returned!")
           let user = this.decorateValidUser(data)
           // Track whether or not user object has been refreshed since app opened
           this.userSessionFresh = true
