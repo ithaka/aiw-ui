@@ -28,7 +28,7 @@ import { ScriptService } from '../shared/script.service'
 import { LocalPCService, LocalPCAsset } from '../_local-pc-asset.service'
 import { TourStep } from '../shared/tour/tour.service'
 import { APP_CONST } from '../app.constants'
-import { LockerService } from 'app/_services';
+import { LockerService } from 'app/_services'
 import { AppConfig } from '../app.service'
 
 @Component({
@@ -408,6 +408,11 @@ export class AssetPage implements OnInit, OnDestroy {
 
         // MS Browser Agent ?
         this.isMSAgent = this.navigator.msSaveOrOpenBlob !== undefined
+
+      // Load Ethnio survey
+      if (this._appConfig.config.siteID !== 'SAHARA') {
+        this.scriptService.loadScript('ethnio-survey')
+      }
 
     } // OnInit
 
