@@ -96,8 +96,11 @@ export class LegacyRouteResolver implements Resolve<boolean> {
       let encryptedId: string = queryParams.id
       delete queryParams.id
 
-      this._router.navigate(['/asset', 'external', encryptedId], {queryParams: queryParams})
-
+      if (openLibrary) {
+        this._router.navigate(['/asset', 'openlibrary', 'external', encryptedId], {queryParams: queryParams})
+      } else {
+        this._router.navigate(['/asset', 'external', encryptedId], {queryParams: queryParams})
+      }
     } else {
       let routeNum = urlArr[0].substr(0, 2)
 
