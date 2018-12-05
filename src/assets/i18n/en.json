@@ -3,7 +3,7 @@
     "REG_LOGIN": {
       "HEADING": "Log in with your Artstor account",
       "EMAIL_LABEL": "Email Address",
-      "PASSWORD_LABEL": "Password",
+      "PASSWORD_LABEL": "<span class=\"sr-only\">Artstor </span>Password",
       "FORCE_PW_RESET_MSG": "Please <a id=\"forcePwdResetModal\" (click)=\"showPwdModal = true\" class=\"link\">reset your password</a> in order to log in.",
       "FORGOT_PW_PROMPT": "Forgot password?",
       "LOGIN_HELP_LINK": "http://support.artstor.org/?article-category=03-accessing-the-artstor-digital-library",
@@ -15,14 +15,14 @@
       "SELECT_LABEL": "Select your institution's name",
       "ERRORS": {
         "SELECT_INSTITUTION": "Please select an institution",
-        "SERVICE_ERROR": "We've experience an error and are unable to retrieve the insitutions"
+        "SERVICE_ERROR": "We've experience an error and are unable to retrieve the institutions"
       }
     },
     "INCORRECT_PORTAL" : "Sorry, that login is not valid for this portal. Please try again with a different account, or try accessing the main <a id=\"linkMainLibrarySite\" href=\"http://library.artstor.org\" class=\"link\" target=\"_blank\">Artstor Digital Library</a>.",
     "LOGIN_BTN": "Log in",
     "SERVER_ERROR": "Server is not responding. Please try again later.",
     "ARCHIVED_ERROR": "That login has been disabled. Please contact your institutional contact.",
-    "TERMS": "By using Artstor Digital Library, I agree to the <a id=\"linkTermsAndConditions\" data-automation-component=\"artstor-login-terms\" href=\"http://www.artstor.org/terms\" class=\"link\" target=\"_blank\">Terms</a>",
+    "TERMS": "By using Artstor Digital Library, I agree to the <a id=\"linkTermsAndConditions\" tabindex=\"1\" data-automation-component=\"artstor-login-terms\" href=\"http://www.artstor.org/terms\" class=\"link\" target=\"_blank\">Terms</a>",
     "WRONG_PASSWORD" : "Invalid email address or password. Try again.",
     "INVALID_EMAIL" : "Please enter a valid email address",
     "PASSWORD_REQUIRED": "Password must be 7-20 characters",
@@ -631,7 +631,7 @@
       "EDIT": "Edit Image Group Info",
       "SAVE": "Save Image Group as...",
       "DELETE_GROUP": "Delete Image Group",
-      "ADD_IMGS_PC": "Add Images to Personal Collection"
+      "ADD_IMGS_PC": "Upload Images to Personal Collection"
     },
     "SHARE": {
       "TITLE": "Share",

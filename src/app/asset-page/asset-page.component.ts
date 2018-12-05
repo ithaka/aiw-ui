@@ -58,6 +58,10 @@ export class AssetPage implements OnInit, OnDestroy {
     public showExitEdit: boolean = false
     public showDeletePCModal: boolean = false
 
+    // Variables related to how we call for metadata
+    public assetIdProperty: string = 'artstorid'
+    public fromOpenLibrary: boolean = false
+
     // Feature Flags
     public relatedResFlag: boolean = false
     public solrMetadataFlag: boolean = false
@@ -105,7 +109,6 @@ export class AssetPage implements OnInit, OnDestroy {
     private quizShuffle: boolean = false;
     private showAssetCaption: boolean = true;
 
-    private assetIdProperty: string = 'artstorid'
     /**
      *  Collection Variables
      *  - Specific to the first asset, this.assets[0]
@@ -320,6 +323,13 @@ export class AssetPage implements OnInit, OnDestroy {
                 if (routeParams['encryptedId']) {
                     this.encryptedAccess = true
                     this.assetIds[0] = routeParams['encryptedId']
+                } else if (routeParams['openLibId']) {
+                    this.fromOpenLibrary = true
+                    this.assetIds[0] = routeParams['openLibId']
+                } else if ( routeParams['encryptedOpenLibId']) {
+                    this.fromOpenLibrary = true
+                    this.encryptedAccess = true
+                    this.assetIds[0] = routeParams['encryptedOpenLibId']
                 } else {
                     this.assetIds[0] = routeParams['assetId']
 
@@ -491,10 +501,10 @@ export class AssetPage implements OnInit, OnDestroy {
                 }
 
                 // Update OGP meta tags
-                this.meta.updateTag({ property: "og:title", content: asset.title }, 'property="og:title"')
-                this.meta.updateTag({ property: "og:description", content: asset.formattedMetadata['Description'] && asset.formattedMetadata['Description'][0] ? asset.formattedMetadata['Description'][0] : '' }, 'property="og:description"')
-                this.meta.updateTag({ property: "og:url", content: this._assets.getShareLink(asset.id) }, 'property="og:url"')
-                this.meta.updateTag({ property: "og:image", content: asset.thumbnail_url ? 'https:' + asset.thumbnail_url : '' }, 'property="og:image"')
+                this.meta.updateTag({ property: 'og:title', content: asset.title }, 'property="og:title"')
+                this.meta.updateTag({ property: 'og:description', content: asset.formattedMetadata['Description'] && asset.formattedMetadata['Description'][0] ? asset.formattedMetadata['Description'][0] : '' }, 'property="og:description"')
+                this.meta.updateTag({ property: 'og:url', content: this._assets.getShareLink(asset.id) }, 'property="og:url"')
+                this.meta.updateTag({ property: 'og:image', content: asset.thumbnail_url ? 'https:' + asset.thumbnail_url : '' }, 'property="og:image"')
             }
             // Assign collections array for this asset. Provided in metadata
             this.collections = asset.collections
@@ -535,7 +545,7 @@ export class AssetPage implements OnInit, OnDestroy {
      */
     setDownloadFull(): void {
         let url = this.assets[0] ? this.assets[0].downloadLink : '';
-        if (this.assetGroupId) {
+        if (this.assetGroupId && url.indexOf("/media/") === -1 ) {
             // Group id needs to be passed to allow download for images accessed via groups
             // - Binder prefers lowercase service url params
             url = url + '&groupid=' + this.assetGroupId

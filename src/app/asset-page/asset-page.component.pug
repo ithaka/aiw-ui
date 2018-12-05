@@ -41,7 +41,8 @@
             (multiViewPageViaArrow)="multiViewPageViaArrow()",
             (multiViewPageViaThumbnail)="multiViewPageViaThumbnail()",
             (assetDrawer)="toggleAssetDrawer(!showAssetDrawer)",
-            [legacyFlag]="false"
+            [legacyFlag]="false",
+            [openLibraryFlag]="fromOpenLibrary"
           )
       //- Related results from JSTOR
       .pl-3(*ngIf="jstorResults.length > 0 && relatedResFlag")
