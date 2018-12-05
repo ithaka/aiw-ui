@@ -3,7 +3,7 @@
     .input-group([ngClass]="{'col-md-7': allowSearchInRes}")
       input#inputSearchTerm.form-control.has-icon(*ngIf="!UserNotLoggedIn", [(ngModel)]="term", (keyup)="startSearch=false;", (keyup.enter)="startSearch=true; updateSearchTerm(term); setFocus();", type="text", placeholder="Search", data-sc="search: simple keyword", tabindex="3")
       input#inputSearchTerm.form-control.has-icon(*ngIf="UserNotLoggedIn", [(ngModel)]="term", (keyup)="startSearch=false;", (keyup.enter)="startSearch=true; updateSearchTerm(term); setFocus();", type="text", placeholder="Search Public Collections", data-sc="search: simple keyword", tabindex="3")
-      i#iconSearchSubmit.icon.icon-search.form-control__icon((click)="startSearch=true; updateSearchTerm(term); setFocus();", role="button", tabindex="3", aria-label="Submit search")
+      i#iconSearchSubmit.icon.icon-search.form-control__icon((click)="startSearch=true; updateSearchTerm(term); setFocus();", role="button", tabindex="3", (keyup.enter)="startSearch=true; updateSearchTerm(term); setFocus();", aria-label="Submit search")
     .search-in-results.col-md-5.hidden-sm-down(*ngIf="allowSearchInRes")
       input#searchInResChkBx(type="checkbox", [(ngModel)]="searchInResults", (ngModelChange)="onSearchWithinChange($event)", (keyup.enter)="searchInResults = !searchInResults", tabindex="3")
       = " "
