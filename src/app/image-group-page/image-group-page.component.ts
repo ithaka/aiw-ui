@@ -7,6 +7,8 @@ import { map, take } from 'rxjs/operators'
 import { AssetService, AuthService } from './../shared'
 import { ImageGroup, ImageGroupDescription, ImageGroupService, GroupService } from './../shared'
 import { TitleService } from '../shared/title.service'
+import { AppConfig } from '../app.service'
+import { ScriptService } from '../shared/script.service'
 
 @Component({
   selector: 'ang-image-group',
@@ -53,13 +55,15 @@ export class ImageGroupPage implements OnInit, OnDestroy {
   private reorderMode: boolean = false
 
   constructor(
+    public _appConfig: AppConfig,
     private _ig: ImageGroupService, // this will be confusing for a bit. ImageGroupService deals with all the old image group service stuff, and some state management
     private _group: GroupService, // GroupService is dealing with the new image groups service
     private _router: Router,
     private _assets: AssetService,
     private _auth: AuthService,
     private route: ActivatedRoute,
-    private _title: TitleService
+    private _title: TitleService,
+    private scriptService: ScriptService
   ) {
     this.unaffiliatedUser = this._auth.isPublicOnly() ? true : false
   }
@@ -174,6 +178,11 @@ export class ImageGroupPage implements OnInit, OnDestroy {
         }
       })).subscribe()
     )
+
+    // Load Ethnio survey
+    if (this._appConfig.config.siteID !== 'SAHARA') {
+      this.scriptService.loadScript('ethnio-survey')
+    }
 
   } // OnInit
 

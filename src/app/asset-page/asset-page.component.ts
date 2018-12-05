@@ -28,7 +28,7 @@ import { ScriptService } from '../shared/script.service'
 import { LocalPCService, LocalPCAsset } from '../_local-pc-asset.service'
 import { TourStep } from '../shared/tour/tour.service'
 import { APP_CONST } from '../app.constants'
-import { LockerService } from 'app/_services';
+import { LockerService } from 'app/_services'
 import { AppConfig } from '../app.service'
 
 @Component({
