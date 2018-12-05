@@ -148,11 +148,6 @@ export class Home implements OnInit, OnDestroy {
     // Set session info for Email Artstor link
     this.fetchDeviceInfo();
 
-    // Load Ethnio survey
-    if (this.siteID !== 'SAHARA') {
-      this._script.loadScript('ethnio-survey')
-    }
-
   } // OnInit
 
   ngOnDestroy() {
