@@ -59,7 +59,7 @@ export class ScriptService {
 
     // Remove a script node from document head
     removeScript(id: string): void{
-        let script = document.getElementById(id);
+        let script = document.utilElementById(id);
 
         if (script) {
             document.querySelector('head').removeChild(script);

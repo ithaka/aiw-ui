@@ -35,6 +35,10 @@ const win = domino.createWindow('');
 
 global['window'] = win;
 global['document'] = win.document;
+global['Node'] = win.Node;
+global['Text'] = win.Text;
+global['HTMLElement'] = win.HTMLElement;
+global['navigator'] = win.navigator;
 global['XMLHttpRequest'] = require('xmlhttprequest').XMLHttpRequest;
 
 

@@ -44,7 +44,7 @@ export class ShareIgLinkModal implements OnInit, AfterViewInit {
   // Set initial focus on the modal Title h1
   public startModalFocus() {
     // TO-DO: Only reference document client-side
-    // let modalStartFocus = document.getElementById('share-ig-link-title')
+    // let modalStartFocus = document.utilElementById('share-ig-link-title')
     // modalStartFocus.focus()
   }
 

@@ -39,7 +39,7 @@ export class ShareLinkModal implements OnInit, AfterViewInit {
   // Set initial focus on the modal Title h1
   public startModalFocus() {
     // TO-DO: Only reference document client-side
-    // let modalStartFocus = document.getElementById('share-img-link-title')
+    // let modalStartFocus = document.utilElementById('share-img-link-title')
     // modalStartFocus.focus()
   }
 
@@ -63,7 +63,7 @@ export class ShareLinkModal implements OnInit, AfterViewInit {
     // textArea.style.boxShadow = 'none';
     // textArea.style.background = 'transparent';
 
-    // let element = document.getElementById(id);
+    // let element = document.utilElementById(id);
     // textArea.value = element.textContent;
 
     // document.body.appendChild(textArea);

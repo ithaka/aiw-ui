@@ -618,7 +618,7 @@ export class AssetGrid implements OnInit, OnDestroy {
 
       // Set focus on the first tumbnail in reorder mode
       setTimeout(() => {
-        let el = document.getElementById('item-0')
+        let el = document.utilElementById('item-0')
         el.focus()
       }, 600)
 
@@ -689,7 +689,7 @@ export class AssetGrid implements OnInit, OnDestroy {
     // Exit reording back to focus on Save reorder button
     if (event.key === "Escape") {
       this.arrowReorderMode = false
-      document.getElementById('saveReorderButton').focus()
+      document.utilElementById('saveReorderButton').focus()
       return
     }
     // Left, Right arrow key reording - Uses splice on allResults array
@@ -709,7 +709,7 @@ export class AssetGrid implements OnInit, OnDestroy {
 
             setTimeout(() => {
               let id = 'item-' + (index - 1)
-              document.getElementById(id).focus()
+              document.utilElementById(id).focus()
             }, 100)
 
             this.arrowReorderMessage = 'moved to position ' + (index) + ' of ' + this.results.length // aria live region message

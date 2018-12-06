@@ -137,7 +137,7 @@ import { isPlatformBrowser } from '@angular/common';
     private manipulateDom ( method: string, query: string, tabIndex?: number, focus?: boolean, attrKey?: string, attrValue?: string ): HTMLElement {
       let el: HTMLElement
       if (method === 'id') {
-        el = document.getElementById(query)
+        el = document.utilElementById(query)
       }
       else if (method === 'className') {
         el = <HTMLElement><any>(document.getElementsByClassName(query)[0])

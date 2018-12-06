@@ -117,7 +117,7 @@ export class SearchModal implements OnInit, AfterViewInit {
 
   // Set initial focus on the modal Title h1
   public startModalFocus() {
-    let modalStartFocus = document.getElementById('advanced-search-title')
+    let modalStartFocus = document.utilElementById('advanced-search-title')
     modalStartFocus.focus()
   }
 
