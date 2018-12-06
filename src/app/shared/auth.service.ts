@@ -209,16 +209,16 @@ export class AuthService implements CanActivate {
     //  * - Poll /userinfo every 15min
     //  * - Refreshs AccessToken with IAC
     //  */
-    // const userInfoInterval = 15 * 1000 * 60 * 60
-    // // Run every X mins
-    // setInterval(() => {
-    //   this.refreshUserSession(true)
-    // }, userInfoInterval)
+    const userInfoInterval = 15 * 1000 * 60 * 60
+    // Run every X mins
+    setInterval(() => {
+      this.refreshUserSession(true)
+    }, userInfoInterval)
   }
 
   // Reset the idle watcher
   public resetIdleWatcher(): void {
-    // this.idle.watch();
+    this.idle.watch();
     // When a user comes back, we don't want to wait for the time interval to refresh the session
     this.refreshUserSession(true)
   }
@@ -247,7 +247,7 @@ export class AuthService implements CanActivate {
    */
   public logout() {
       // Stop, unwatch Idle session. Note: resetIdleWatcher() calls watch, and is called from login component
-      // this.idle.stop()
+      this.idle.stop()
 
       let header = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded'); // ... Set content type to JSON
       let options = { headers: header, withCredentials: true };
@@ -449,13 +449,6 @@ export class AuthService implements CanActivate {
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
     console.log("Running canActivate...")
     let options = { headers: this.userInfoHeader, withCredentials: true }
-
-    // If user object already exists, we're done here
-    if (this.getUser().length) {
-      return new Observable(observer => {
-        observer.next(true)
-      })
-    }
 
     if ((route.params.samlTokenId || route.params.type == 'shibboleth') && state.url.includes('/register')) {
       // Shibboleth workflow is unique, should allow access to the register page

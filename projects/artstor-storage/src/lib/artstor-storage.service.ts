@@ -10,8 +10,12 @@ export class ArtstorStorageService {
 
   // Is this code being interpretted by a browser-based client?
   private isBrowser: boolean = isPlatformBrowser(this.platformId)
-  private localStorageData = this.isBrowser ? null : {}
-  private localSessionData = this.isBrowser ? null : {}
+
+  // Server side object to hold generic user object
+  // Note: We don't need one for sessionStorage on the server
+  private localStorageData = this.isBrowser ? null : {
+    user: { data: { status: false, isLoggedIn: false, loggedInSessionLost: false } }
+  }
 
   /**
    * hasSessionStorage
@@ -42,19 +46,6 @@ export class ArtstorStorageService {
       }
       return localStorage.setItem(key, value)
     }
-    else {
-      if (key === 'user') {
-        let userObj = { data: { status: false, isLoggedIn: false, loggedInSessionLost: false } }
-        this.localStorageData[key] = { data: userObj}
-        console.log('LOCAL STORAGE DATA AFTER SAVING USER OBJECT', this.localStorageData)
-      }
-      else {
-        this.localStorageData[key] = { data: value }
-        console.log('LOCAL STORAGE DATA AFTER SAVING other OBJECTs', this.localStorageData)
-      }
-
-      console.log('LOCAL STORAGE DATA: ', this.localStorageData)
-    }
   }
 
   /**
@@ -66,10 +57,8 @@ export class ArtstorStorageService {
     if (this.hasLocalStorage()) {
       return localStorage.getItem(key)
     }
-    else {
-      console.log('GET LOCAL STORAGE with key: ', key)
-      console.log(this.localStorageData[key])
-      return this.localStorageData[key]
+    else if (key === 'user') {
+      return this.localStorageData.user
     }
   }
 
@@ -104,10 +93,6 @@ export class ArtstorStorageService {
       }
       return sessionStorage.setItem(key, value)
     }
-    else {
-      this.localSessionData[key] = typeof (value) === 'object' ? JSON.stringify({ data: value }) : { data: value }
-      console.log('localSessionData: ', this.localSessionData)
-    }
   }
 
   /**
@@ -117,9 +102,6 @@ export class ArtstorStorageService {
   public getSession(key: string): any | void {
     if (this.hasSessionStorage()) {
       return sessionStorage.getItem(key)
-    }
-    else {
-      return this.localSessionData[key].data
     }
   }
 
