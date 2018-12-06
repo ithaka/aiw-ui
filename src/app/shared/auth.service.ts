@@ -187,7 +187,7 @@ export class AuthService implements CanActivate {
       map(() => {
         this.idleState = 'You\'ve gone idle!';
         let currentDateTime = new Date().toUTCString();
-        this._storage.setLocal('userGoneIdleAt', currentDateTime); /** TODO: REPLACE ME WITH _storage.setLocal */
+        this._storage.setLocal('userGoneIdleAt', currentDateTime);
       })).subscribe()
 
     idle.onTimeoutWarning.pipe(
@@ -451,9 +451,11 @@ export class AuthService implements CanActivate {
     let options = { headers: this.userInfoHeader, withCredentials: true }
 
     // If user object already exists, we're done here
-return new Observable(observer => {
-  observer.next(true)
-})
+    if (this.getUser().length) {
+      return new Observable(observer => {
+        observer.next(true)
+      })
+    }
 
     if ((route.params.samlTokenId || route.params.type == 'shibboleth') && state.url.includes('/register')) {
       // Shibboleth workflow is unique, should allow access to the register page

@@ -64,7 +64,7 @@
     "@ngx-translate/core": "^10.0.2",
     "@ngx-translate/http-loader": "^3.0.1",
     "@pact-foundation/pact-node": "^6.0.0",
-    "angular-safeguard": "^2.0.2",
+    "angular-safeguard": "file:../Artstor-Locker",
     "angular-sortablejs": "^2.6.0",
     "angular2-medium-editor": "1.2.0",
     "angular2-tag-autocomplete": "^1.2.10",

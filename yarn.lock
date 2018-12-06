@@ -1194,10 +1194,8 @@ amdefine@>=0.0.4, amdefine@^1.0.0:
   resolved "https://registry.yarnpkg.com/amdefine/-/amdefine-1.0.1.tgz#4a5282ac164729e93619bcfd3ad151f817ce91f5"
   integrity sha1-SlKCrBZHKek2Gbz9OtFR+BfOkfU=
 
-angular-safeguard@^2.0.2:
+"angular-safeguard@file:../Artstor-Locker":
   version "2.0.2"
-  resolved "https://registry.yarnpkg.com/angular-safeguard/-/angular-safeguard-2.0.2.tgz#84fa2ae703f33c2fa8a5f3593c74a6edae71fb98"
-  integrity sha512-79rV7wBpTn530kb2q0ikSl9p8wrAb+0gMVVAWdCk/Ktga4Q7f1QNhwp4A50/hMwzMzydJL1vJ7pIEgHNWclUTg==
 
 angular-sortablejs@^2.6.0:
   version "2.6.0"
