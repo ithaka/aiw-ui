@@ -1,3 +1,4 @@
+import { DomUtilityService } from 'app/shared';
 import { Component, OnInit, Input, Output, EventEmitter, AfterViewInit } from '@angular/core'
 import { DatePipe } from '@angular/common'
 
@@ -26,12 +27,13 @@ export class GenerateCitation implements OnInit, AfterViewInit {
 
   constructor(
     private _date: DatePipe,
-    private _log: LogService
+    private _log: LogService,
+    private _dom: DomUtilityService
   ) { }
 
   ngOnInit() {
     // Set focus to the modal to make the links in the modal first thing to tab for accessibility
-    let htmlelement: HTMLElement = document.utilElementById('modal');
+    let htmlelement: HTMLElement = <HTMLElement>this._dom.utilElementById('modal');
     htmlelement.focus()
 
     this.generateCitations(this.asset)
@@ -47,7 +49,7 @@ export class GenerateCitation implements OnInit, AfterViewInit {
 
   // Set initial focus on the modal Title h1
   public startModalFocus() {
-    let modalStartFocus = document.utilElementById('generate-citation-title')
+    let modalStartFocus: HTMLElement = <HTMLElement>this._dom.utilElementById('generate-citation-title')
     modalStartFocus.focus()
   }
 

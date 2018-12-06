@@ -1,3 +1,4 @@
+import { DomUtilityService } from 'app/shared';
 import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core'
 import { NgForm } from '@angular/forms'
 import { BehaviorSubject, Observable, Subscription } from 'rxjs'
@@ -36,12 +37,13 @@ export class AddToGroupModal implements OnInit, OnDestroy {
   constructor(
     private _assets: AssetService,
     private _group: GroupService,
+    private _dom: DomUtilityService,
     private completerService: CompleterService
   ) {}
 
   ngOnInit() {
     // Set focus to the modal to make the links in the modal first thing to tab for accessibility
-    let htmlelement: HTMLElement = document.utilElementById('modal');
+    let htmlelement: HTMLElement = <HTMLElement>this._dom.utilElementById('modal');
     htmlelement.focus()
 
     if (this.selectedAssets.length < 1) { // if no assets were added when component was initialized, the component gets the current selection list

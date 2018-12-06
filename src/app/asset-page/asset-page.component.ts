@@ -1,3 +1,4 @@
+import { DomUtilityService } from 'app/shared';
 import { Component, OnInit, OnDestroy, ViewChild, HostListener } from '@angular/core'
 import { ActivatedRoute, Params, Router } from '@angular/router'
 import { DomSanitizer, SafeUrl, Meta } from '@angular/platform-browser'
@@ -215,6 +216,7 @@ export class AssetPage implements OnInit, OnDestroy {
         private _sanitizer: DomSanitizer,
         _fb: FormBuilder,
         private _storage: ArtstorStorageService,
+        private _dom: DomUtilityService,
         private meta: Meta,
     ) {
         this.editDetailsForm = _fb.group({
@@ -824,18 +826,18 @@ export class AssetPage implements OnInit, OnDestroy {
      */
     private copyGeneratedImgURL(): void {
         // TO-DO: Only reference document client-side
-        // let statusMsg = '';
-        // let input: any = document.utilElementById('generatedImgURL');
-        // let iOSuser: boolean = false;
+        let statusMsg = '';
+        let input: any = this._dom.utilElementById('generatedImgURL');
+        let iOSuser: boolean = false;
 
-        // this.showCopyUrl = true;
-        // input.focus()
-        // input.select()
+        this.showCopyUrl = true;
+        input.focus()
+        input.select()
 
-        // // Determine if on iOS (no copy functionality)
-        // if (/iPhone|iPad|iPod/i.test(navigator.userAgent)) {
-        //     iOSuser = true
-        // }
+        // Determine if on iOS (no copy functionality)
+        if (/iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+            iOSuser = true
+        }
 
         // setTimeout(() => {
         //     input.select();

@@ -2,6 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs'
 import { map } from 'rxjs/operators'
+import { DomUtilityService } from 'app/shared';
 
 @Component({
   selector: 'ang-general-search',
@@ -23,7 +24,8 @@ export class GeneralSearchComponent implements OnInit {
   private subscriptions: Subscription[] = []
 
   constructor(
-    private _router: Router
+    private _router: Router,
+    private _dom: DomUtilityService
   ) { }
 
   ngOnInit() {
@@ -50,11 +52,11 @@ export class GeneralSearchComponent implements OnInit {
 
   public setFocus(): void {
     // TO-DO: Only reference document client-side
-    // window.setTimeout(function () {
-    //   if (document.utilElementById('empty-search-alert')){
-    //     document.utilElementById('empty-search-alert').focus()
-    //   }
-    // }, 110);
+    window.setTimeout(function () {
+      if (this._dom.utilElementById('empty-search-alert')){
+        this._dom.utilElementById('empty-search-alert').focus()
+      }
+    }, 110);
   }
 
   public conductSearch(): void {

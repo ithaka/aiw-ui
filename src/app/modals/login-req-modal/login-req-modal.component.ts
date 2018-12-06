@@ -1,3 +1,4 @@
+import { DomUtilityService } from 'app/shared';
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Location } from '@angular/common';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -19,11 +20,18 @@ export class LoginReqModal {
   @Output()
   public closeModal: EventEmitter<any> = new EventEmitter();
 
-  constructor(private _router: Router, public _auth: AuthService, private route: ActivatedRoute, private _tool: ToolboxService, private location: Location) { }
+  constructor(
+    private _router: Router,
+    public _auth: AuthService,
+    private route: ActivatedRoute,
+    private _tool: ToolboxService,
+    private _dom: DomUtilityService,
+    private location: Location
+  ) { }
 
   ngOnInit() {
     // Set focus to the modal to make the links in the modal first thing to tab for accessibility
-    let htmlelement: HTMLElement = document.utilElementById('modal');
+    let htmlelement: HTMLElement = <HTMLElement>this._dom.utilElementById('modal');
     htmlelement.focus();
   }
 

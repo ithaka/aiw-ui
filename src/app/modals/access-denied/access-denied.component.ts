@@ -1,3 +1,4 @@
+import { DomUtilityService } from 'app/shared';
 import { Router } from '@angular/router'
 import { Component, OnInit, EventEmitter, Input, Output } from '@angular/core'
 import { Location } from '@angular/common'
@@ -22,13 +23,14 @@ export class AccessDeniedModal implements OnInit {
 
   constructor(
     private _auth: AuthService,
+    private _dom: DomUtilityService,
     private _router: Router,
     private location: Location
   ) { }
 
   ngOnInit() {
     // Set focus to the modal to make the links in the modal first thing to tab for accessibility
-    let htmlelement: HTMLElement = document.utilElementById('modal');
+    let htmlelement: HTMLElement = <HTMLElement>this._dom.utilElementById('modal');
     htmlelement.focus()
 
       this._auth.currentUser.pipe(

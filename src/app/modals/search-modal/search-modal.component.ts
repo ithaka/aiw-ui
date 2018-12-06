@@ -7,7 +7,7 @@ import { Angulartics2 } from 'angulartics2'
 // Project dependencies
 import { SearchQueryUtil } from './search-query'
 import { AssetFiltersService } from './../../asset-filters/asset-filters.service'
-import { AuthService, AssetService, AssetSearchService } from 'app/shared'
+import { AuthService, AssetService, AssetSearchService, DomUtilityService } from 'app/shared'
 import { AppConfig } from '../../app.service'
 
 @Component({
@@ -91,7 +91,8 @@ export class SearchModal implements OnInit, AfterViewInit {
         private angulartics: Angulartics2,
         private _auth: AuthService,
         // Solr Search service
-        private _assetFilters: AssetFiltersService
+        private _assetFilters: AssetFiltersService,
+        private _dom: DomUtilityService
       ) {
 
     // Setup two query fields
@@ -117,7 +118,7 @@ export class SearchModal implements OnInit, AfterViewInit {
 
   // Set initial focus on the modal Title h1
   public startModalFocus() {
-    let modalStartFocus = document.utilElementById('advanced-search-title')
+    let modalStartFocus = <HTMLElement>this._dom.utilElementById('advanced-search-title')
     modalStartFocus.focus()
   }
 

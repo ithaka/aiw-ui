@@ -1,3 +1,4 @@
+import { DomUtilityService } from 'app/shared';
 import { Router } from '@angular/router'
 import { Component, OnInit, EventEmitter, Input, Output } from '@angular/core'
 
@@ -14,12 +15,13 @@ export class ServerErrorModal implements OnInit {
 
   constructor(
     private _storage: ArtstorStorageService,
-    private _router: Router
+    private _router: Router,
+    private _dom: DomUtilityService
   ) { }
 
   ngOnInit() {
     // Set focus to the modal to make the links in the modal first thing to tab for accessibility
-    let htmlelement: HTMLElement = document.utilElementById('modal');
+    let htmlelement: HTMLElement = <HTMLElement>this._dom.utilElementById('modal');
     htmlelement.focus()
   }
 

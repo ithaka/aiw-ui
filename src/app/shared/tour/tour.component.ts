@@ -10,6 +10,7 @@ import { Angulartics2 } from 'angulartics2'
 import { AuthService } from './../auth.service'
 import { TourStep } from './tour.service'
 import { isPlatformBrowser } from '@angular/common';
+import { DomUtilityService } from 'app/shared';
 
 @Component({
     selector: 'ang-guide-tour',
@@ -25,6 +26,7 @@ import { isPlatformBrowser } from '@angular/common';
 
     constructor(
       private _auth: AuthService,
+      private _dom: DomUtilityService,
       private _ga: Angulartics2,
       private router: Router,
       @Inject(PLATFORM_ID) private platformId: Object
@@ -137,7 +139,7 @@ import { isPlatformBrowser } from '@angular/common';
     private manipulateDom ( method: string, query: string, tabIndex?: number, focus?: boolean, attrKey?: string, attrValue?: string ): HTMLElement {
       let el: HTMLElement
       if (method === 'id') {
-        el = document.utilElementById(query)
+        el = <HTMLElement>this._dom.utilElementById(query)
       }
       else if (method === 'className') {
         el = <HTMLElement><any>(document.getElementsByClassName(query)[0])

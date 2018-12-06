@@ -3,7 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Angulartics2 } from 'angulartics2';
 
-import { AssetService, AuthService, ImageGroup } from './../../shared';
+import { AssetService, AuthService, ImageGroup, DomUtilityService } from './../../shared';
 
 @Component({
   selector: 'ang-ig-download-modal',
@@ -37,6 +37,7 @@ export class PptModalComponent implements OnInit, AfterViewInit {
     private _assets: AssetService,
     private _auth: AuthService,
     private _angulartics: Angulartics2,
+    private _dom: DomUtilityService,
     private http: HttpClient,
   ) {}
 
@@ -48,8 +49,8 @@ export class PptModalComponent implements OnInit, AfterViewInit {
   // Set initial focus on the modal Title h4
   public startModalFocus() {
     // TO-DO: Only reference document client-side
-    // let modalStartFocus = document.utilElementById('ig-download-title')
-    // modalStartFocus.focus()
+    let modalStartFocus : HTMLElement = <HTMLElement>this._dom.utilElementById('ig-download-title')
+    modalStartFocus.focus()
   }
 
   trackDownload(downloadType: string): void {

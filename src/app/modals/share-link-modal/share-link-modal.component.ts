@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter, AfterViewInit } from '@angular/core';
 
 // Project Dependencies
-import { AssetService, AssetSearchService } from '../../shared';
+import { AssetService, AssetSearchService, DomUtilityService } from '../../shared';
 import { Asset } from '../../asset-page/asset';
 
 @Component({
@@ -20,7 +20,11 @@ export class ShareLinkModal implements OnInit, AfterViewInit {
   private copyURLStatusMsg: string = '';
   private copyHTMLStatusMsg: string = '';
 
-  constructor(private _assets: AssetService, private _search: AssetSearchService) { }
+  constructor(
+    private _assets: AssetService,
+    private _search: AssetSearchService,
+    private _dom: DomUtilityService
+  ) { }
 
   ngOnInit() {
     if (this.asset) {
@@ -39,8 +43,8 @@ export class ShareLinkModal implements OnInit, AfterViewInit {
   // Set initial focus on the modal Title h1
   public startModalFocus() {
     // TO-DO: Only reference document client-side
-    // let modalStartFocus = document.utilElementById('share-img-link-title')
-    // modalStartFocus.focus()
+    let modalStartFocus : HTMLElement = <HTMLElement>this._dom.utilElementById('share-img-link-title')
+    modalStartFocus.focus()
   }
 
   /**

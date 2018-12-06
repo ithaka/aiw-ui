@@ -2,6 +2,7 @@ import { Component, OnInit, Output, Input, EventEmitter } from '@angular/core';
 
 import { AuthService } from './../../shared/auth.service';
 import { Asset } from './../asset';
+import { DomUtilityService } from 'app/shared';
 
 @Component({
   selector: 'ang-agree-modal',
@@ -28,13 +29,16 @@ export class AgreeModalComponent implements OnInit {
   @Input()
   setDownloadView: () => void
 
-  constructor(private _auth: AuthService) { }
+  constructor(
+    private _auth: AuthService,
+    private _dom: DomUtilityService
+  ) { }
 
   ngOnInit() {
     // Set focus to the modal to make the links in the modal first thing to tab for accessibility
     // TO-DO: Only reference document client-side
-    // let htmlelement: HTMLElement = document.utilElementById('modal');
-    // htmlelement.focus();
+    let htmlelement: HTMLElement = <HTMLElement>this._dom.utilElementById('modal');
+    htmlelement.focus();
   }
 
   /**

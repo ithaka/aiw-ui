@@ -1,5 +1,6 @@
 import {Injectable} from '@angular/core';
 import {ScriptStore} from './script.store';
+import { DomUtilityService } from 'app/shared';
 
 declare var document: any;
 
@@ -8,7 +9,7 @@ export class ScriptService {
 
     private scripts: any = {};
 
-    constructor() {
+    constructor(private _dom: DomUtilityService) {
         ScriptStore.forEach((script: any) => {
             this.scripts[script.name] = {
                 loaded: false,
@@ -59,7 +60,7 @@ export class ScriptService {
 
     // Remove a script node from document head
     removeScript(id: string): void{
-        let script = document.utilElementById(id);
+        let script = this._dom.utilElementById(id);
 
         if (script) {
             document.querySelector('head').removeChild(script);
