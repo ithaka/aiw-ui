@@ -60,7 +60,7 @@ export class DomUtilityService {
    * If no matches are found, null is returned.
    */
 
-  public bySelector(selectorName: string): Element | void {
+  public bySelector(selectorName: string) {
     if (this.isBrowser) {
       return document.querySelector(selectorName)
     }

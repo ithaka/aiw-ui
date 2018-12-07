@@ -1,5 +1,5 @@
-import { Injectable } from '@angular/core'
-import { Location } from '@angular/common'
+import { Injectable, Inject, PLATFORM_ID } from '@angular/core'
+import { Location, isPlatformBrowser } from '@angular/common'
 import { HttpClient, HttpHeaders } from '@angular/common/http'
 import {
   CanActivate,
@@ -62,7 +62,10 @@ export class AuthService implements CanActivate {
 
   private refreshUserSessionInProgress: boolean = false
 
+  private isBrowser: boolean = isPlatformBrowser(this.platformId)
+
   constructor(
+    @Inject(PLATFORM_ID) private platformId: Object,
     private _router: Router,
     // private _login: LoginService,
     private _storage: ArtstorStorageService,
@@ -456,7 +459,8 @@ export class AuthService implements CanActivate {
       return new Observable(observer => {
         observer.next(true)
       })
-    } else if (this.isPublicOnly() && state.url.includes('/register')) {
+    } else
+    if (this.isPublicOnly() && state.url.includes('/register')) {
       // For unaffiliated users, trying to access /register route
       return new Observable(observer => {
         observer.next(false)
@@ -475,9 +479,9 @@ export class AuthService implements CanActivate {
       map(
         (data)  => {
           console.log("User info call returned!")
-          let user = this.decorateValidUser(data)
+          let user = this.isBrowser ? this.decorateValidUser(data) : this._storage.getLocal('user')
           // Track whether or not user object has been refreshed since app opened
-          this.userSessionFresh = true
+          //this.userSessionFresh = true
 
           if (user && (this.isOpenAccess || user.status)) {
             // Clear expired session modal

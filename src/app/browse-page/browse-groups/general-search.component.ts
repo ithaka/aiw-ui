@@ -51,7 +51,6 @@ export class GeneralSearchComponent implements OnInit {
   }
 
   public setFocus(): void {
-    // TO-DO: Only reference document client-side
     window.setTimeout(function () {
       if (this._dom.byId('empty-search-alert')){
         this._dom.byId('empty-search-alert').focus()

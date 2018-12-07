@@ -63,7 +63,7 @@ export class ScriptService {
         let script = this._dom.byId(id);
 
         if (script) {
-            document.querySelector('head').removeChild(script);
+            this._dom.bySelector('head').removeChild(script);
         }
     }
 
