@@ -72,7 +72,7 @@ export class DomUtilityService {
    * @returns NodeList (array) containing one Element object for each element that matches
    * at least one of the specified selectors or an empty NodeList in case of no matches.
    */
-  public bySelectorAll(selectorName): NodeListOf<Element> | void {
+  public bySelectorAll(selectorName) {
     if (this.isBrowser) {
       return document.querySelectorAll(selectorName)
     }

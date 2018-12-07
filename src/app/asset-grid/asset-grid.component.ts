@@ -1,4 +1,5 @@
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, Renderer } from '@angular/core'
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, Renderer, Inject, PLATFORM_ID } from '@angular/core'
+import { isPlatformBrowser } from '@angular/common'
 import { ActivatedRoute, NavigationStart, Params, Router } from '@angular/router'
 
 import { BehaviorSubject, Subscription } from 'rxjs'
@@ -163,6 +164,7 @@ export class AssetGrid implements OnInit, OnDestroy {
 
   // TypeScript public modifiers
   constructor(
+    @Inject(PLATFORM_ID) private platformId: Object,
     public _appConfig: AppConfig,
     private _assets: AssetService,
     public _auth: AuthService,
@@ -178,8 +180,12 @@ export class AssetGrid implements OnInit, OnDestroy {
     private _toolbox: ToolboxService,
     private _storage: ArtstorStorageService,
     private route: ActivatedRoute,
-    private _dom: DomUtilityService
+    private _dom: DomUtilityService,
+    private isBrowser: boolean
   ) {
+
+    this.isBrowser = isPlatformBrowser(this.platformId)
+
       this.siteID = this._appConfig.config.siteID;
       let prefs = this._auth.getFromStorage('prefs')
       if (prefs && prefs.pageSize && prefs.pageSize != 24) {
@@ -631,7 +637,12 @@ export class AssetGrid implements OnInit, OnDestroy {
 
   private cancelReorder(): void {
     // IE 11 specificially has a caching problem when reloading the group contents
-    let isIE11 = !!window['MSInputMethodContext'] && !!document['documentMode']
+    let isIE11
+
+    if (this.isBrowser) {
+      isIE11 = !!window['MSInputMethodContext'] && !!document['documentMode']
+    }
+
     this.reorderMode = false
     this.reordering.emit(this.reorderMode)
     this.goToPage(1)
@@ -839,7 +850,7 @@ export class AssetGrid implements OnInit, OnDestroy {
   }
 
   private closeGridDropdowns(): void{
-    let dropdownElements: Array<HTMLElement> = Array.from( document.querySelectorAll('ang-asset-grid .dropdown') )
+    let dropdownElements: Array<HTMLElement> = Array.from(this._dom.bySelectorAll('ang-asset-grid .dropdown') )
     for (let dropdownElement of dropdownElements){
       dropdownElement.classList.remove('show')
       dropdownElement.children[0].setAttribute('aria-expanded', 'false')
