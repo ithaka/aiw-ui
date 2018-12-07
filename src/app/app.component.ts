@@ -84,17 +84,19 @@ export class AppComponent {
     router.events.pipe(map(event => {
       if (event instanceof NavigationStart) {
         // focus on the wrapper of the "skip to main content link" everytime new page is loaded
-        let mainEl = <HTMLElement>(_dom.byId('skip'))
-        if (!(event.url.indexOf('browse') > -1)) // Don't set focus to skip to main content on browse pages so that we can easily go between browse levels
-          mainEl.focus()
+        let mainEl = this._dom.byId('skip')
+        // if (!(event.url.indexOf('browse') > -1)) { // Don't set focus to skip to main content on browse pages so that we can easily go between browse levels
+        //   mainEl.focus()
+        // }
 
         // Detect featureflag=solrmetadata and set cookie
         let routeParams = event.url.split(';')
         for (let routeParam of routeParams) {
           let key = routeParam.split('=')[0]
           let value = routeParam.split('=')[1]
+
           if (key === 'featureFlag' && value === 'solrMetadata') {
-            document.cookie = 'featureflag=solrmetadata;';
+            this._dom.setCookie('featureflag=solrmetadata')
           }
         }
 
@@ -105,7 +107,7 @@ export class AppComponent {
       }
       else if (event instanceof NavigationEnd) {
         let event_url_array = event.url.split('/')
-        let zendeskElements = document.querySelectorAll('.zopim')
+        let zendeskElements = this._dom.bySelectorAll('.zopim')
 
         // Reset OGP tags with default values for every route other than asset and collection pages
         if (event.url.indexOf('asset/') === -1

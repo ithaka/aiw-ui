@@ -33,7 +33,7 @@ export class DomUtilityService {
    * @returns HTMLCollection (array) of elements with the given tag name
    *
    */
-  public byTagName(tagName: string): NodeListOf<Element> | void {
+  public byTagName(tagName: string) {
     if (this.isBrowser) {
       return document.getElementsByTagName(tagName);
     }
@@ -47,7 +47,7 @@ export class DomUtilityService {
    * @returns an array-like object of all child elements which have all of the given class names
    *
    */
-  public byClassName(className: string): NodeListOf<Element> | void {
+  public byClassName(className: string) {
     if (this.isBrowser) {
       return document.getElementsByClassName(className);
     }
@@ -84,6 +84,10 @@ export class DomUtilityService {
 
   public create(type) {
     return document.createElement(type)
+  }
+
+  public setCookie(value) {
+    return document.cookie = value
   }
 
 }
