@@ -180,12 +180,8 @@ export class AssetGrid implements OnInit, OnDestroy {
     private _toolbox: ToolboxService,
     private _storage: ArtstorStorageService,
     private route: ActivatedRoute,
-    private _dom: DomUtilityService,
-    private isBrowser: boolean
+    private _dom: DomUtilityService
   ) {
-
-    this.isBrowser = isPlatformBrowser(this.platformId)
-
       this.siteID = this._appConfig.config.siteID;
       let prefs = this._auth.getFromStorage('prefs')
       if (prefs && prefs.pageSize && prefs.pageSize != 24) {
@@ -199,6 +195,8 @@ export class AssetGrid implements OnInit, OnDestroy {
         this.largeThmbView = prefs.largeThumbnails
       }
   }
+
+  private isBrowser: boolean = isPlatformBrowser(this.platformId)
 
   ngOnInit() {
     // Subscribe User object updates
@@ -850,7 +848,7 @@ export class AssetGrid implements OnInit, OnDestroy {
   }
 
   private closeGridDropdowns(): void{
-    let dropdownElements: Array<HTMLElement> = Array.from(this._dom.bySelectorAll('ang-asset-grid .dropdown') )
+    let dropdownElements = Array.from(this._dom.bySelectorAll('ang-asset-grid .dropdown') )
     for (let dropdownElement of dropdownElements){
       dropdownElement.classList.remove('show')
       dropdownElement.children[0].setAttribute('aria-expanded', 'false')

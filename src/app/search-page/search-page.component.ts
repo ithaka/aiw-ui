@@ -133,8 +133,8 @@ export class SearchPage implements OnInit, OnDestroy {
     window.setTimeout(function ()
     {
       // TO-DO: Only reference document client-side
-      let htmlelement: HTMLElement = this._dom.byId('skip-to-search-link');
-      (<HTMLElement>htmlelement).focus();
+      let htmlelement = this._dom.byId('skip-to-search-link');
+      htmlelement.focus();
     }, 100);
   }
 
@@ -142,7 +142,7 @@ export class SearchPage implements OnInit, OnDestroy {
     window.setTimeout(function ()
     {
       // TO-DO: Only reference document client-side
-      let htmlelement: HTMLElement = <HTMLElement>this._dom.byId('skip-to-filter-link');
+      let htmlelement = this._dom.byId('skip-to-filter-link');
       htmlelement.focus();
     }, 100);
   }

@@ -43,7 +43,7 @@ export class ShareLinkModal implements OnInit, AfterViewInit {
   // Set initial focus on the modal Title h1
   public startModalFocus() {
     // TO-DO: Only reference document client-side
-    let modalStartFocus : HTMLElement = <HTMLElement>this._dom.byId('share-img-link-title')
+    let modalStartFocus = this._dom.byId('share-img-link-title')
     modalStartFocus.focus()
   }
 
