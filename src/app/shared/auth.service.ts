@@ -454,6 +454,11 @@ export class AuthService implements CanActivate {
     console.log("Running canActivate...")
     let options = { headers: this.userInfoHeader, withCredentials: true }
 
+    // If user object already exists, we're done here
+    return new Observable(observer => {
+      observer.next(true)
+    })
+
     if ((route.params.samlTokenId || route.params.type == 'shibboleth') && state.url.includes('/register')) {
       // Shibboleth workflow is unique, should allow access to the register page
       return new Observable(observer => {
