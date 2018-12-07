@@ -84,7 +84,7 @@ export class AppComponent {
     router.events.pipe(map(event => {
       if (event instanceof NavigationStart) {
         // focus on the wrapper of the "skip to main content link" everytime new page is loaded
-        let mainEl = <HTMLElement>(_dom.utilElementById('skip'))
+        let mainEl = <HTMLElement>(_dom.byId('skip'))
         if (!(event.url.indexOf('browse') > -1)) // Don't set focus to skip to main content on browse pages so that we can easily go between browse levels
           mainEl.focus()
 
@@ -155,7 +155,7 @@ export class AppComponent {
   public findMainContent(): void {
     setTimeout(function ()
     {
-      let htmlelement: HTMLElement = this._dom.utilElementById('mainContent');
+      let htmlelement: HTMLElement = this._dom.byyId('mainContent');
       let element: Element;
       // On log in page, go to log in box
       if (htmlelement.querySelector('form div input')){

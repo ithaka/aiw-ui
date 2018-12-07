@@ -43,7 +43,7 @@ export class ShareLinkModal implements OnInit, AfterViewInit {
   // Set initial focus on the modal Title h1
   public startModalFocus() {
     // TO-DO: Only reference document client-side
-    let modalStartFocus : HTMLElement = <HTMLElement>this._dom.utilElementById('share-img-link-title')
+    let modalStartFocus : HTMLElement = <HTMLElement>this._dom.byId('share-img-link-title')
     modalStartFocus.focus()
   }
 
@@ -52,26 +52,25 @@ export class ShareLinkModal implements OnInit, AfterViewInit {
    * @param id of the field whose innerText is to be copied to the clipboard
    */
   private copyTexttoClipBoard(id: string): void{
-    // TO-DO: Only reference document client-side
-    // let textArea = document.createElement('textarea');
+    let textArea = document.createElement('textarea');
 
-    // textArea.style.position = 'fixed';
-    // textArea.style.top = '0';
-    // textArea.style.left = '0';
+    textArea.style.position = 'fixed';
+    textArea.style.top = '0';
+    textArea.style.left = '0';
 
-    // textArea.style.width = '2em';
-    // textArea.style.height = '2em';
-    // textArea.style.padding = '0';
-    // textArea.style.border = 'none';
-    // textArea.style.outline = 'none';
-    // textArea.style.boxShadow = 'none';
-    // textArea.style.background = 'transparent';
+    textArea.style.width = '2em';
+    textArea.style.height = '2em';
+    textArea.style.padding = '0';
+    textArea.style.border = 'none';
+    textArea.style.outline = 'none';
+    textArea.style.boxShadow = 'none';
+    textArea.style.background = 'transparent';
 
-    // let element = document.utilElementById(id);
-    // textArea.value = element.textContent;
+    let element = this._dom.byId(id);
+    textArea.value = element.textContent;
 
-    // document.body.appendChild(textArea);
-    // textArea.select();
+    document.body.appendChild(textArea);
+    textArea.select();
 
     try {
       let successful = document.execCommand('copy');

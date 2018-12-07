@@ -15,7 +15,8 @@ import {
   LogService,
   Thumbnail,
   ToolboxService,
-  FlagService
+  FlagService,
+  DomUtilityService
 } from '../shared'
 import { AssetFiltersService } from '../asset-filters/asset-filters.service'
 import { APP_CONST } from '../app.constants'
@@ -176,7 +177,8 @@ export class AssetGrid implements OnInit, OnDestroy {
     private _search: AssetSearchService,
     private _toolbox: ToolboxService,
     private _storage: ArtstorStorageService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private _dom: DomUtilityService
   ) {
       this.siteID = this._appConfig.config.siteID;
       let prefs = this._auth.getFromStorage('prefs')
@@ -618,7 +620,7 @@ export class AssetGrid implements OnInit, OnDestroy {
 
       // Set focus on the first tumbnail in reorder mode
       setTimeout(() => {
-        let el = document.utilElementById('item-0')
+        let el = this._dom.byId('item-0')
         el.focus()
       }, 600)
 
@@ -689,7 +691,7 @@ export class AssetGrid implements OnInit, OnDestroy {
     // Exit reording back to focus on Save reorder button
     if (event.key === "Escape") {
       this.arrowReorderMode = false
-      document.utilElementById('saveReorderButton').focus()
+      this._dom.byId('saveReorderButton').focus()
       return
     }
     // Left, Right arrow key reording - Uses splice on allResults array
@@ -709,7 +711,7 @@ export class AssetGrid implements OnInit, OnDestroy {
 
             setTimeout(() => {
               let id = 'item-' + (index - 1)
-              document.utilElementById(id).focus()
+              this._dom.byId(id).focus()
             }, 100)
 
             this.arrowReorderMessage = 'moved to position ' + (index) + ' of ' + this.results.length // aria live region message

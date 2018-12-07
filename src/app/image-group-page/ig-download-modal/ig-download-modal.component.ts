@@ -49,7 +49,7 @@ export class PptModalComponent implements OnInit, AfterViewInit {
   // Set initial focus on the modal Title h4
   public startModalFocus() {
     // TO-DO: Only reference document client-side
-    let modalStartFocus : HTMLElement = <HTMLElement>this._dom.utilElementById('ig-download-title')
+    let modalStartFocus : HTMLElement = <HTMLElement>this._dom.byId('ig-download-title')
     modalStartFocus.focus()
   }
 

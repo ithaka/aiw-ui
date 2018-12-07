@@ -165,8 +165,8 @@ export class SearchComponent implements OnInit, OnDestroy {
 
   public setFocus(): void {
     window.setTimeout(function () {
-      if (this._dom.utilElementById('empty-search-alert')){
-        this._dom.utilElementById('empty-search-alert').focus()
+      if (this._dom.byId('empty-search-alert')){
+        this._dom.byId('empty-search-alert').focus()
       }
     }, 110);
   }

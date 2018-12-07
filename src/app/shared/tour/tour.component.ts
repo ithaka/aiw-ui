@@ -139,7 +139,7 @@ import { DomUtilityService } from 'app/shared';
     private manipulateDom ( method: string, query: string, tabIndex?: number, focus?: boolean, attrKey?: string, attrValue?: string ): HTMLElement {
       let el: HTMLElement
       if (method === 'id') {
-        el = <HTMLElement>this._dom.utilElementById(query)
+        el = <HTMLElement>this._dom.byId(query)
       }
       else if (method === 'className') {
         el = <HTMLElement><any>(document.getElementsByClassName(query)[0])

@@ -1,4 +1,3 @@
-import { DomUtilityService } from 'app/shared';
 import { Component, OnInit, OnDestroy, ViewChild, HostListener } from '@angular/core'
 import { ActivatedRoute, Params, Router } from '@angular/router'
 import { DomSanitizer, SafeUrl, Meta } from '@angular/platform-browser'
@@ -21,7 +20,8 @@ import {
     PersonalCollectionService,
     AssetDetailsFormValue,
     CollectionTypeInfo,
-    FlagService
+    FlagService,
+    DomUtilityService,
 } from './../shared'
 import { TitleService } from '../shared/title.service'
 import { ScriptService } from '../shared/script.service'
@@ -30,6 +30,7 @@ import { TourStep } from '../shared/tour/tour.service'
 import { APP_CONST } from '../app.constants'
 import { AppConfig } from '../app.service'
 import { ArtstorStorageService } from '../../../projects/artstor-storage/src/public_api';
+
 
 @Component({
     selector: 'ang-asset-page',
@@ -827,7 +828,7 @@ export class AssetPage implements OnInit, OnDestroy {
     private copyGeneratedImgURL(): void {
         // TO-DO: Only reference document client-side
         let statusMsg = '';
-        let input: any = this._dom.utilElementById('generatedImgURL');
+        let input: any = this._dom.byId('generatedImgURL');
         let iOSuser: boolean = false;
 
         this.showCopyUrl = true;

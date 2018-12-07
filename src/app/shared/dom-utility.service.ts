@@ -21,7 +21,7 @@ export class DomUtilityService {
    * whose id property matches the specified string
    *
    */
-  public byId(id: string): Element | void {
+  public byId(id: string): HTMLElement {
     if (this.isBrowser) {
       return document.getElementById(id);
     }
@@ -76,6 +76,14 @@ export class DomUtilityService {
     if (this.isBrowser) {
       return document.querySelectorAll(selectorName)
     }
+  }
+
+  public append(parent, child) {
+    return parent.appendChild(parent, child)
+  }
+
+  public create(type) {
+    return document.createElement(type)
   }
 
 }

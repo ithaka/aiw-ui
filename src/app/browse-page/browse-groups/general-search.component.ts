@@ -53,8 +53,8 @@ export class GeneralSearchComponent implements OnInit {
   public setFocus(): void {
     // TO-DO: Only reference document client-side
     window.setTimeout(function () {
-      if (this._dom.utilElementById('empty-search-alert')){
-        this._dom.utilElementById('empty-search-alert').focus()
+      if (this._dom.byId('empty-search-alert')){
+        this._dom.byId('empty-search-alert').focus()
       }
     }, 110);
   }

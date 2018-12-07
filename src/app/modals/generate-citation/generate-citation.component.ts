@@ -33,7 +33,7 @@ export class GenerateCitation implements OnInit, AfterViewInit {
 
   ngOnInit() {
     // Set focus to the modal to make the links in the modal first thing to tab for accessibility
-    let htmlelement: HTMLElement = <HTMLElement>this._dom.utilElementById('modal');
+    let htmlelement: HTMLElement = <HTMLElement>this._dom.byId('modal');
     htmlelement.focus()
 
     this.generateCitations(this.asset)
@@ -49,7 +49,7 @@ export class GenerateCitation implements OnInit, AfterViewInit {
 
   // Set initial focus on the modal Title h1
   public startModalFocus() {
-    let modalStartFocus: HTMLElement = <HTMLElement>this._dom.utilElementById('generate-citation-title')
+    let modalStartFocus: HTMLElement = <HTMLElement>this._dom.byId('generate-citation-title')
     modalStartFocus.focus()
   }
 
