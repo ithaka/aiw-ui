@@ -32,7 +32,7 @@ export class ScriptService {
             }
             else {
                 // load script
-                let script = document.createElement('script')
+                let script = this._dom.create('script')
                 script.type = 'text/javascript'
                 script.async = 'true'
                 script.charset = 'utf-8'
@@ -53,7 +53,7 @@ export class ScriptService {
                     };
                 }
                 script.onerror = (error: any) => resolve({script: name, loaded: false, status: 'not_loaded'});
-                document.getElementsByTagName('head')[0].appendChild(script);
+                this._dom.byTagName('head')[0].appendChild(script);
             }
         });
     }

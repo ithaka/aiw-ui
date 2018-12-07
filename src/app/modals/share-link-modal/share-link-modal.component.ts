@@ -52,7 +52,7 @@ export class ShareLinkModal implements OnInit, AfterViewInit {
    * @param id of the field whose innerText is to be copied to the clipboard
    */
   private copyTexttoClipBoard(id: string): void{
-    let textArea = document.createElement('textarea');
+    let textArea =this._dom.create('textarea');
 
     textArea.style.position = 'fixed';
     textArea.style.top = '0';

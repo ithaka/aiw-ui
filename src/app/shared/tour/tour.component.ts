@@ -66,12 +66,12 @@ import { DomUtilityService } from 'app/shared';
 
     //       // Remove the back button on the first popover
     //       if (Element.options.step === 1) {
-    //         let el: HTMLElement = <HTMLElement><any>(document.getElementsByClassName('driver-prev-btn')[0])
+    //         let el: HTMLElement = <HTMLElement><any>(this._dom.byClassName('driver-prev-btn')[0])
     //           if (el)
     //             el.classList.add('hidden')
     //       }
     //       else {
-    //         let el: HTMLElement = <HTMLElement><any>(document.getElementsByClassName('driver-prev-btn')[0])
+    //         let el: HTMLElement = <HTMLElement><any>(this._dom.byClassName('driver-prev-btn')[0])
     //         if (el) {
     //           el.classList.remove('hidden')
     //         }
@@ -92,7 +92,7 @@ import { DomUtilityService } from 'app/shared';
     //       // Set focus on the title of the popover, the setTimeout is necessary for the behavior to appear
     //       window.setTimeout(function ()
     //       {
-    //         let el: HTMLElement = <HTMLElement><any>(document.getElementsByClassName('driver-popover-title')[0])
+    //         let el: HTMLElement = <HTMLElement><any>(this._dom.byClassName('driver-popover-title')[0])
     //         if (el) {
     //           el.tabIndex = 1
     //           el.focus()
@@ -142,7 +142,7 @@ import { DomUtilityService } from 'app/shared';
         el = <HTMLElement>this._dom.byId(query)
       }
       else if (method === 'className') {
-        el = <HTMLElement><any>(document.getElementsByClassName(query)[0])
+        el = <HTMLElement><any>(this._dom.byClassName(query)[0])
       }
       if (!el)
         return el
