@@ -11,6 +11,12 @@ export class ArtstorStorageService {
   // Is this code being interpretted by a browser-based client?
   private isBrowser: boolean = isPlatformBrowser(this.platformId)
 
+  // Server side object to hold generic user object
+  // Note: We don't need one for sessionStorage on the server
+  private localStorageData = this.isBrowser ? null : {
+    user: { data: { status: false, isLoggedIn: false, loggedInSessionLost: false } }
+  }
+
   /**
    * hasSessionStorage
    * @returns boolean - sessionStorage is defined and platform is browser
@@ -50,6 +56,9 @@ export class ArtstorStorageService {
   public getLocal(key: string): any | void {
     if (this.hasLocalStorage()) {
       return localStorage.getItem(key)
+    }
+    else if (key === 'user') {
+      return this.localStorageData.user
     }
   }
 

@@ -7,7 +7,6 @@ import { DebugElement }    from '@angular/core'
 import { FormsModule } from '@angular/forms'
 import { Router } from '@angular/router'
 import { Http } from '@angular/http'
-import { Locker } from 'angular-safeguard'
 import { Location } from '@angular/common'
 import { Angulartics2 } from 'angulartics2'
 
@@ -45,7 +44,6 @@ describe('Login component inline template', () => {
         { provide: AuthService, useValue: {} },
         // { provide: LoginService },
         { provide: Http, useValue: {} },
-        { provide: Locker, useValue: {} },
         { provide: Location, useValue: {} },
         { provide: Angulartics2, useValue: {} }
       ]
