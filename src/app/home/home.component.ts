@@ -4,7 +4,7 @@ import { Subscription } from 'rxjs'
 import { map } from 'rxjs/operators'
 import { DeviceDetectorModule, DeviceDetectorService } from 'ngx-device-detector'
 
-import { AssetService, AuthService, ScriptService } from '../shared'
+import { AssetService, AuthService, ScriptService, DomUtilityService } from '../shared'
 import { AppConfig } from '../app.service'
 import { Featured } from './featured'
 
@@ -54,7 +54,8 @@ export class Home implements OnInit, OnDestroy {
     private _router: Router,
     public _auth: AuthService,
     private deviceService: DeviceDetectorService,
-    private _script: ScriptService
+    private _script: ScriptService,
+    private _dom: DomUtilityService
   ) {
     console.log("Constructing home component...")
     // this makes the window always render scrolled to the top
@@ -165,11 +166,13 @@ export class Home implements OnInit, OnDestroy {
   private fetchDeviceInfo(): void {
     // Detect if adblocker is enabled or not
     let adBlockEnabled = false;
-    let testAd = document.createElement('div');
+    let testAd = this._dom.create('div');
     testAd.innerHTML = '&nbsp;';
     testAd.className = 'adsbox';
-    // TO-DO: Only reference document client-side
-    // document.body.appendChild(testAd);
+
+    let docBody = this._dom.byTagName('body')[0]
+    this._dom.append(docBody, testAd);
+
     setTimeout(
       () => {
         if (testAd.offsetHeight === 0) {
