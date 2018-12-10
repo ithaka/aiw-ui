@@ -500,31 +500,31 @@
         "VIEW_PUBLIC_LINK": "View All Public Collections"
       },
       "COLLECTIONS": [{
-          "SUBHEADING": "Magnum Photos",
-          "DESCRIPTION": "See the world through the eyes of celebrated photographers",
-          "CAPTION": "Steve McCurry. Sri Lanka. Polonnarvwa. Buddhist monk praying near reclining Buddha. Photograph. 1995. ©Steve McCurry/Magnum Photos.",
-          "LINK": "/#/category/1034691020 ",
-          "IMG_SOURCE": "/assets/img/featured-collections/monk_magnum.jpg",
-          "LINK_TITLE": "Magnum Photos",
-          "ALT_TEXT": "Magnum Photos"
+          "SUBHEADING": "Art Institute of Chicago",
+          "DESCRIPTION": "Contemporary highlights from diverse collections",
+          "CAPTION": "Peter Doig. Gasthof zur Muldentalsperre. 2000-2002. Oil on canvas. Image and data provided by the Art Institute of Chicago. © 2014 Artists Rights Society (ARS), New York / DACS, London.",
+          "LINK": "/#/category/1031896041 ",
+          "IMG_SOURCE": "/assets/img/featured-collections/chicaho_doig.jpg",
+          "LINK_TITLE": "Art Institute of Chicago",
+          "ALT_TEXT": "Art Institute of Chicago"
         },
         {
-          "SUBHEADING": "Cooper Hewitt, Smithsonian Design Museum",
-          "DESCRIPTION": "Precious textiles, decorative arts and design",
-          "CAPTION": "Rank Badge. Silk, metallic yarns. 1368-1644. © Smithsonian Institution.",
-          "LINK": "/#/category/10374058890 ",
-          "IMG_SOURCE": "/assets/img/featured-collections/tapestry_cooper.jpg",
-          "LINK_TITLE": "Cooper Hewitt, Smithsonian Design Museum",
-          "ALT_TEXT": "Cooper Hewitt, Smithsonian Design Museum"
+          "SUBHEADING": "The Cleveland Museum of Art",
+          "DESCRIPTION": "A singular find among global treasures",
+          "CAPTION": "Zhu Bishan. Raft Cup. 1345. Silver. Image and data provided by the Cleveland Museum of Art.",
+          "LINK": "/#/category/1031896044 ",
+          "IMG_SOURCE": "/assets/img/featured-collections/cleveland_raft.jpg",
+          "LINK_TITLE": "The Cleveland Museum of Art",
+          "ALT_TEXT": "The Cleveland Museum of Art"
         },
         {
-          "SUBHEADING": "Colby College: Somalia, Middle Jubba Valley, Ethnographic Photographs",
-          "DESCRIPTION": "Life in Somalia",
-          "CAPTION": "Pastoralist with Camels. 1987. Photograph. © Jorge Acero. Colby IMAGO.",
-          "LINK": "/#/collection/87729427 ",
-          "IMG_SOURCE": "/assets/img/featured-collections/camels_colby.jpg",
-          "LINK_TITLE": "Colby College: Somalia, Middle Jubba Valley, Ethnographic Photographs",
-          "ALT_TEXT": "Colby College: Somalia, Middle Jubba Valley, Ethnographic Photographs"
+          "SUBHEADING": "Cornell: Historic Glacial Images of Alaska and Greenland",
+          "DESCRIPTION": "Pioneering documentation of glaciers",
+          "CAPTION": "Beateu Silver Iceberg, Yakutat Bay. Photograph.1909. Cornell: Historic Glacial Images of Alaska and Greenland.",
+          "LINK": "/#/collection/87730735 ",
+          "IMG_SOURCE": "/assets/img/featured-collections/cornell_iceberg2.jpg",
+          "LINK_TITLE": "Cornell: Historic Glacial Images of Alaska and Greenland",
+          "ALT_TEXT": "Cornell: Historic Glacial Images of Alaska and Greenland"
         }
       ],
       "PUBLIC_COLLECTIONS": [
