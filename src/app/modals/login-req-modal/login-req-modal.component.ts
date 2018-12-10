@@ -1,5 +1,5 @@
 import { DomUtilityService } from 'app/shared';
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ElementRef, ViewChild } from '@angular/core';
 import { Location } from '@angular/common';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
@@ -20,6 +20,8 @@ export class LoginReqModal {
   @Output()
   public closeModal: EventEmitter<any> = new EventEmitter();
 
+  @ViewChild("modal", {read: ElementRef}) modalElement: ElementRef;
+
   constructor(
     private _router: Router,
     public _auth: AuthService,
@@ -31,8 +33,11 @@ export class LoginReqModal {
 
   ngOnInit() {
     // Set focus to the modal to make the links in the modal first thing to tab for accessibility
-    let htmlelement: HTMLElement = <HTMLElement>this._dom.byId('modal');
-    htmlelement.focus();
+    // let htmlelement: HTMLElement = <HTMLElement>this._dom.byId('modal');
+    // htmlelement.focus();
+    if (this.modalElement && this.modalElement.nativeElement){
+      this.modalElement.nativeElement.focus()
+    }
   }
 
   goToLogin() {

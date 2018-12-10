@@ -1,9 +1,8 @@
-import { DomUtilityService } from 'app/shared';
-import { Component, OnInit, Input, Output, EventEmitter, AfterViewInit } from '@angular/core'
+import { Component, OnInit, Input, Output, EventEmitter, AfterViewInit, ElementRef, ViewChild  } from '@angular/core'
 import { DatePipe } from '@angular/common'
 
 import { Asset } from '../../asset-page/asset'
-import { LogService } from '../../shared'
+import { LogService, DomUtilityService } from '../../shared'
 
 @Component({
   selector: 'ang-generate-citation',
@@ -15,6 +14,8 @@ export class GenerateCitation implements OnInit, AfterViewInit {
   public closeModal: EventEmitter<any> = new EventEmitter()
 
   @Input() private asset: Asset /** the asset in question */
+
+  @ViewChild("modal", {read: ElementRef}) modalElement: ElementRef;
 
   public document = document
   private reqProtocol = document.location.protocol + '//'
@@ -33,8 +34,11 @@ export class GenerateCitation implements OnInit, AfterViewInit {
 
   ngOnInit() {
     // Set focus to the modal to make the links in the modal first thing to tab for accessibility
-    let htmlelement: HTMLElement = <HTMLElement>this._dom.byId('modal');
-    htmlelement.focus()
+    // let htmlelement: HTMLElement = <HTMLElement>this._dom.byId('modal');
+    // htmlelement.focus()
+    if (this.modalElement && this.modalElement.nativeElement){
+      this.modalElement.nativeElement.focus()
+    }
 
     this.generateCitations(this.asset)
     this._log.log({

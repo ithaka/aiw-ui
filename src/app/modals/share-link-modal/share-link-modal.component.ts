@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter, AfterViewInit } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, AfterViewInit, ElementRef, ViewChild } from '@angular/core';
 
 // Project Dependencies
 import { AssetService, AssetSearchService, DomUtilityService } from '../../shared';
@@ -13,6 +13,7 @@ export class ShareLinkModal implements OnInit, AfterViewInit {
 
   @Input() public asset: any;
   @Output() public closeModal: EventEmitter<any> = new EventEmitter();
+  @ViewChild("share-ig-link-title", {read: ElementRef}) shareLinkTitleElement: ElementRef;
   private shareLink: string = '';
   private genImgMode: string = 'half';
 
@@ -42,8 +43,11 @@ export class ShareLinkModal implements OnInit, AfterViewInit {
 
   // Set initial focus on the modal Title h1
   public startModalFocus() {
-    let modalStartFocus = this._dom.byId('share-img-link-title')
-    modalStartFocus.focus()
+    // let modalStartFocus = this._dom.byId('share-img-link-title')
+    // modalStartFocus.focus()
+    if (this.shareLinkTitleElement && this.shareLinkTitleElement.nativeElement){
+      this.shareLinkTitleElement.nativeElement.focus()
+    }
   }
 
   /**

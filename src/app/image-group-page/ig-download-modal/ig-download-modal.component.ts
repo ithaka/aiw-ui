@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter, AfterViewInit } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, AfterViewInit, ElementRef, ViewChild } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Angulartics2 } from 'angulartics2';
@@ -20,6 +20,8 @@ export class PptModalComponent implements OnInit, AfterViewInit {
   public closeModal: EventEmitter<any> = new EventEmitter();
   @Input()
   public ig: ImageGroup;
+
+  @ViewChild("ig-download-title", {read: ElementRef}) downloadTitleElement: ElementRef;
 
   public isLoading: boolean = false;
   public zipLoading: boolean = false;
@@ -49,8 +51,12 @@ export class PptModalComponent implements OnInit, AfterViewInit {
   // Set initial focus on the modal Title h4
   public startModalFocus() {
     // TO-DO: Only reference document client-side
-    let modalStartFocus : HTMLElement = <HTMLElement>this._dom.byId('ig-download-title')
-    modalStartFocus.focus()
+    // let htmlelement: HTMLElement = <HTMLElement>this._dom.byId('ig-download-title');
+    // htmlelement.focus()
+    if (this.downloadTitleElement && this.downloadTitleElement.nativeElement){
+      this.downloadTitleElement.nativeElement.focus()
+    }
+
   }
 
   trackDownload(downloadType: string): void {

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ElementRef, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs'
 import { map } from 'rxjs/operators'
@@ -16,6 +16,8 @@ export class GeneralSearchComponent implements OnInit {
 
   @Input() loadingGrps: boolean
   @Output() clearGrpSearch: EventEmitter<string> = new EventEmitter() // Invoke clear group search method in parent component
+
+  @ViewChild("empty-search-alert", {read: ElementRef}) emptySearchAlert: ElementRef;
 
   // the term that will be searched for
   public term: string = ''
@@ -51,9 +53,9 @@ export class GeneralSearchComponent implements OnInit {
   }
 
   public setFocus(): void {
-    window.setTimeout(function () {
-      if (this._dom.byId('empty-search-alert')){
-        this._dom.byId('empty-search-alert').focus()
+    setTimeout(function () {
+      if (this.emptySearchAlert && this.emptySearchAlert.nativeElement){
+        this.emptySearchAlert.nativeElement.focus()
       }
     }, 110);
   }

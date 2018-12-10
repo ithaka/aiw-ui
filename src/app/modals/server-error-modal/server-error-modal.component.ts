@@ -1,6 +1,6 @@
 import { DomUtilityService } from 'app/shared';
 import { Router } from '@angular/router'
-import { Component, OnInit, EventEmitter, Input, Output } from '@angular/core'
+import { Component, OnInit, EventEmitter, Input, Output, ElementRef, ViewChild } from '@angular/core'
 
 // Project Dependencies
 import { AuthService } from '../../shared'
@@ -12,6 +12,7 @@ import { ArtstorStorageService } from '../../../../projects/artstor-storage/src/
 export class ServerErrorModal implements OnInit {
   @Output() exitFullScreen: EventEmitter<any> = new EventEmitter()
   @Output() closeModal: EventEmitter<any> = new EventEmitter()
+  @ViewChild("modal", {read: ElementRef}) modalElement: ElementRef
 
   constructor(
     private _storage: ArtstorStorageService,
@@ -21,8 +22,11 @@ export class ServerErrorModal implements OnInit {
 
   ngOnInit() {
     // Set focus to the modal to make the links in the modal first thing to tab for accessibility
-    let htmlelement: HTMLElement = <HTMLElement>this._dom.byId('modal');
-    htmlelement.focus()
+    // let htmlelement: HTMLElement = <HTMLElement>this._dom.byId('modal');
+    // htmlelement.focus()
+    if (this.modalElement && this.modalElement.nativeElement){
+      this.modalElement.nativeElement.focus()
+    }
   }
 
   /**

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter, AfterViewInit } from '@angular/core'
+import { Component, OnInit, Input, Output, EventEmitter, AfterViewInit, ElementRef, ViewChild } from '@angular/core'
 import { map, take } from 'rxjs/operators'
 
 import { ImageGroup, GroupService, AuthService, LogService, DomUtilityService } from './../../shared'
@@ -23,6 +23,8 @@ export class ShareIgLinkModal implements OnInit, AfterViewInit {
 
   @Input() private ig: ImageGroup /** the image group in question */
 
+  @ViewChild("share-ig-link-title", {read: ElementRef}) shareLinkTitleElement: ElementRef
+
   constructor(
     private _group: GroupService,
     private _auth: AuthService,
@@ -45,8 +47,11 @@ export class ShareIgLinkModal implements OnInit, AfterViewInit {
   // Set initial focus on the modal Title h1
   public startModalFocus() {
     // TO-DO: Only reference document client-side
-    let modalStartFocus : HTMLElement = <HTMLElement>this._dom.byId('share-ig-link-title')
-    modalStartFocus.focus()
+    // let modalStartFocus : HTMLElement = <HTMLElement>this._dom.byId('share-ig-link-title')
+    // modalStartFocus.focus()
+    if (this.shareLinkTitleElement && this.shareLinkTitleElement.nativeElement){
+      this.shareLinkTitleElement.nativeElement.focus()
+    }
   }
 
   createIgLink(ig: ImageGroup): void {
