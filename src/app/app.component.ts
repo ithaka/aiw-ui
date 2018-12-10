@@ -2,14 +2,14 @@
  * Angular 2 decorators and services
  */
 import { Component, ViewEncapsulation, PLATFORM_ID, Inject } from '@angular/core'
-// import { Angulartics2GoogleAnalytics } from 'angulartics2/ga'
+import { Angulartics2GoogleAnalytics } from 'angulartics2/ga'
 import { Title, Meta } from '@angular/platform-browser'
 import { Router, NavigationStart, NavigationEnd } from '@angular/router'
 import { TranslateService } from '@ngx-translate/core'
 import { map, take } from 'rxjs/operators'
 
 import { AppConfig } from './app.service'
-// import { ScriptService, FlagService } from './shared'
+import { ScriptService, FlagService } from './shared'
 import { isPlatformBrowser } from '@angular/common';
 /*
  * App Component
@@ -42,18 +42,16 @@ export class AppComponent {
 
   constructor(
     public _app: AppConfig,
-    // angulartics2GoogleAnalytics: Angulartics2GoogleAnalytics,
+    angulartics2GoogleAnalytics: Angulartics2GoogleAnalytics,
     private titleService: Title,
-    // private _script: ScriptService,
-    // private _flags: FlagService,
+    private _script: ScriptService,
+    private _flags: FlagService,
     private router: Router,
     private translate: TranslateService,
     private meta: Meta,
     @Inject(PLATFORM_ID) private platformId: Object
   ) {
     console.log("Constructing app component")
-    // // Start GA trackiong
-    // // angulartics2GoogleAnalytics.startTracking()
 
     // Client-only code
     if (isPlatformBrowser(this.platformId)) {
@@ -62,11 +60,14 @@ export class AppComponent {
       // I'm hoping this sets these for the entire app
       // this language will be used as a fallback when a translation isn't found in the current language
       translate.setDefaultLang(langStr);
-      // // the lang to use, if the lang isn't available, it will use the current loader to get them
+      // the lang to use, if the lang isn't available, it will use the current loader to get them
       translate.use(langStr);
+
+      // Start GA trackiong
+      angulartics2GoogleAnalytics.startTracking()
     }
 
-    // this.title = this._app.config.pageTitle
+    this.title = this._app.config.pageTitle
 
 
     // Adding meta OGP tags
@@ -79,58 +80,63 @@ export class AppComponent {
     ])
 
     // Set metatitle to "Artstor" except for asset page where metatitle is {{ Asset Title }}
-    // router.events.pipe(map(event => {
-    //   if (event instanceof NavigationStart) {
-    //     // focus on the wrapper of the "skip to main content link" everytime new page is loaded
-    //     let mainEl = <HTMLElement>(document.getElementById('skip'))
-    //     if (!(event.url.indexOf('browse') > -1)) // Don't set focus to skip to main content on browse pages so that we can easily go between browse levels
-    //       mainEl.focus()
+    router.events.pipe(map(event => {
+      if (event instanceof NavigationStart) {
 
-    //     // Detect featureflag=solrmetadata and set cookie
-    //     let routeParams = event.url.split(';')
-    //     for (let routeParam of routeParams) {
-    //       let key = routeParam.split('=')[0]
-    //       let value = routeParam.split('=')[1]
-    //       if (key === 'featureFlag' && value === 'solrMetadata') {
-    //         document.cookie = 'featureflag=solrmetadata;';
-    //       }
-    //     }
+        if (isPlatformBrowser(this.platformId)) {
+          // focus on the wrapper of the "skip to main content link" everytime new page is loaded
+          let mainEl = <HTMLElement>(document.getElementById('skip'))
+          if (!(event.url.indexOf('browse') > -1)) // Don't set focus to skip to main content on browse pages so that we can easily go between browse levels
+            mainEl.focus()
+        }
 
-    //     let event_url_array = event.url.split('/')
-    //     if (event_url_array && (event_url_array.length > 1) && (event_url_array[1] !== 'asset')){
-    //       this.titleService.setTitle(this.title)
-    //     }
-    //   }
-    //   else if (event instanceof NavigationEnd) {
-    //     let event_url_array = event.url.split('/')
-    //     let zendeskElements = document.querySelectorAll('.zopim')
+        // Detect featureflag=solrmetadata and set cookie
+        let routeParams = event.url.split(';')
+        for (let routeParam of routeParams) {
+          let key = routeParam.split('=')[0]
+          let value = routeParam.split('=')[1]
+          if (key === 'featureFlag' && value === 'solrMetadata') {
+            document.cookie = 'featureflag=solrmetadata;';
+          }
+        }
 
-    //     // Reset OGP tags with default values for every route other than asset and collection pages
-    //     if (event.url.indexOf('asset/') === -1
-    //       || event.url.indexOf('collection/') === -1
-    //       || event.url.indexOf('category/') === -1) {
-    //       this.resetOgpTags();
-    //     }
+        let event_url_array = event.url.split('/')
+        if (event_url_array && (event_url_array.length > 1) && (event_url_array[1] !== 'asset')){
+          this.titleService.setTitle(this.title)
+        }
+      }
+      else if (event instanceof NavigationEnd) {
+        if (isPlatformBrowser(this.platformId)) {
+          let event_url_array = event.url.split('/')
+          let zendeskElements = document.querySelectorAll('.zopim')
 
-    //     // On navigation end, load the zendesk chat widget if user lands on login page else hide the widget
-    //     if (this.showChatWidget(window.location.href) && this._app.config.showZendeskWidget) {
-    //       this._script.loadScript('zendesk')
-    //         .then( data => {
-    //           if (data['status'] === 'loaded'){
-    //           } else if (data['status'] === 'already_loaded'){ // if the widget script has already been loaded then just show the widget
-    //             zendeskElements[0]['style']['display'] = 'block'
-    //           }
-    //         })
-    //         .catch( error => console.error(error) )
-    //     } else {
-    //       // If Zendesk chat is loaded, hide it
-    //       if (zendeskElements && zendeskElements.length > 1) {
-    //         zendeskElements[0]['style']['display'] = 'none'
-    //         zendeskElements[1]['style']['display'] = 'none'
-    //       }
-    //     }
-    //   }
-    // })).subscribe()
+          // Reset OGP tags with default values for every route other than asset and collection pages
+          if (event.url.indexOf('asset/') === -1
+            || event.url.indexOf('collection/') === -1
+            || event.url.indexOf('category/') === -1) {
+            this.resetOgpTags();
+          }
+
+          // On navigation end, load the zendesk chat widget if user lands on login page else hide the widget
+          if (this.showChatWidget(window.location.href) && this._app.config.showZendeskWidget) {
+            this._script.loadScript('zendesk')
+              .then( data => {
+                if (data['status'] === 'loaded'){
+                } else if (data['status'] === 'already_loaded'){ // if the widget script has already been loaded then just show the widget
+                  zendeskElements[0]['style']['display'] = 'block'
+                }
+              })
+              .catch( error => console.error(error) )
+          } else {
+            // If Zendesk chat is loaded, hide it
+            if (zendeskElements && zendeskElements.length > 1) {
+              zendeskElements[0]['style']['display'] = 'none'
+              zendeskElements[1]['style']['display'] = 'none'
+            }
+          }
+        }
+      }
+    })).subscribe()
 
     // this._flags.getFlagsFromService().pipe(
     //   take(1),
