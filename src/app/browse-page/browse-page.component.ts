@@ -9,7 +9,7 @@ import { AssetService } from '../shared/assets.service'
 import { AuthService } from '../shared/auth.service'
 import { AssetFiltersService } from '../asset-filters/asset-filters.service'
 import { AppConfig } from '../app.service'
-import { LockerService } from 'app/_services';
+import { ArtstorStorageService } from '../../../projects/artstor-storage/src/public_api';
 
 @Component({
   selector: 'ang-browse-page',
@@ -34,7 +34,7 @@ export class BrowsePage implements OnInit, OnDestroy {
 
   // TypeScript public modifiers
   constructor(
-      private _locker: LockerService,
+      private _storage: ArtstorStorageService,
       private _auth: AuthService,
       private _assets: AssetService,
       private _app: AppConfig,
@@ -43,7 +43,7 @@ export class BrowsePage implements OnInit, OnDestroy {
       private _title: TitleService,
       private _filters: AssetFiltersService
   ) {
-      this.institution = this._locker.get('institution');
+      this.institution = this._storage.getLocal('institution');
       this.browseOpts = this._app.config.browseOptions;
   }
 

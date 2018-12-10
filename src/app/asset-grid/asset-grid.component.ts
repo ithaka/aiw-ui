@@ -3,7 +3,6 @@ import { ActivatedRoute, NavigationStart, Params, Router } from '@angular/router
 
 import { BehaviorSubject, Subscription } from 'rxjs'
 import { map, take } from 'rxjs/operators'
-import { Locker, DRIVERS } from 'angular-safeguard'
 import { AppConfig } from '../app.service'
 import { Angulartics2 } from 'angulartics2'
 
@@ -20,7 +19,7 @@ import {
 } from '../shared'
 import { AssetFiltersService } from '../asset-filters/asset-filters.service'
 import { APP_CONST } from '../app.constants'
-import { LockerService } from 'app/_services';
+import { ArtstorStorageService } from '../../../projects/artstor-storage/src/public_api'
 // import { SortablejsOptions } from 'angular-sortablejs';
 
 @Component({
@@ -176,7 +175,7 @@ export class AssetGrid implements OnInit, OnDestroy {
     private _router: Router,
     private _search: AssetSearchService,
     private _toolbox: ToolboxService,
-    private _locker: LockerService,
+    private _storage: ArtstorStorageService,
     private route: ActivatedRoute
   ) {
       this.siteID = this._appConfig.config.siteID;
@@ -372,15 +371,15 @@ export class AssetGrid implements OnInit, OnDestroy {
             this.isLoading = false;
           }
 
-          this._locker.sessionSet('totalAssets', this.totalAssets ? this.totalAssets : 1)
+          this._storage.setSession('totalAssets', this.totalAssets ? this.totalAssets : 1)
 
           // Tie prevRouteParams array with previousRouteTS (time stamp) before sending to asset page
           this.prevRouteTS = Date.now().toString()
           let id: string = this.prevRouteTS
 
-          let prevRouteParams = this._locker.sessionGet('prevRouteParams') || {}
+          let prevRouteParams = this._storage.getSession('prevRouteParams') || {}
           prevRouteParams[id] = this.route.snapshot.url
-          this._locker.sessionSet('prevRouteParams', prevRouteParams)
+          this._storage.setSession('prevRouteParams', prevRouteParams)
 
           // Generate Facets
           if (allResults && allResults.collTypeFacets) {
@@ -503,8 +502,8 @@ export class AssetGrid implements OnInit, OnDestroy {
       this._assets.goToPage(1, true)
       this._assets.setPageSize(size)
       // this._auth.store('prefs', { pageSize: size })
-      let updatedPrefs = Object.assign(this._locker.get('prefs') || {}, { pageSize: size })
-      this._locker.set('prefs', updatedPrefs)
+      let updatedPrefs = Object.assign(this._storage.getLocal('prefs') || {}, { pageSize: size })
+      this._storage.setLocal('prefs', updatedPrefs)
     }
   }
 
@@ -779,8 +778,8 @@ export class AssetGrid implements OnInit, OnDestroy {
    */
   private setThumbnailSize(large: boolean): void {
     this.largeThmbView = large
-    let updatedPrefs = Object.assign(this._locker.get('prefs') || {}, { largeThumbnails: large })
-    this._locker.set('prefs', updatedPrefs)
+    let updatedPrefs = Object.assign(this._storage.getLocal('prefs') || {}, { largeThumbnails: large })
+    this._storage.setLocal('prefs', updatedPrefs)
   }
 
   /**
