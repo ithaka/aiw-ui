@@ -3,7 +3,6 @@ import { ActivatedRoute, Params, Router } from '@angular/router'
 import { DomSanitizer, SafeUrl, Meta } from '@angular/platform-browser'
 import { Subscription } from 'rxjs'
 import { map, take } from 'rxjs/operators'
-import { Locker, DRIVERS } from 'angular-safeguard'
 import { Angulartics2 } from 'angulartics2'
 import { ArtstorViewer } from 'artstor-viewer'
 import { formGroupNameProvider } from '@angular/forms/src/directives/reactive_directives/form_group_name'
@@ -28,8 +27,8 @@ import { ScriptService } from '../shared/script.service'
 import { LocalPCService, LocalPCAsset } from '../_local-pc-asset.service'
 import { TourStep } from '../shared/tour/tour.service'
 import { APP_CONST } from '../app.constants'
-import { LockerService } from 'app/_services';
 import { AppConfig } from '../app.service'
+import { ArtstorStorageService } from '../../../projects/artstor-storage/src/public_api';
 
 @Component({
     selector: 'ang-asset-page',
@@ -215,7 +214,7 @@ export class AssetPage implements OnInit, OnDestroy {
         private scriptService: ScriptService,
         private _sanitizer: DomSanitizer,
         _fb: FormBuilder,
-        private _locker: LockerService,
+        private _storage: ArtstorStorageService,
         private meta: Meta,
     ) {
         this.editDetailsForm = _fb.group({
@@ -350,7 +349,7 @@ export class AssetPage implements OnInit, OnDestroy {
                     this.prevRouteTS = routeParams['prevRouteTS']
                     // For "Go Back to Results"
                     // Get map of previous search params
-                    let prevRoutesMap = this._locker.sessionGet('prevRouteParams')
+                    let prevRoutesMap = this._storage.getSession('prevRouteParams')
 
                     // Reference previous search params for the prevRouteTS
                     let prevRouteParams = prevRoutesMap ? prevRoutesMap[this.prevRouteTS] : {}
@@ -361,9 +360,9 @@ export class AssetPage implements OnInit, OnDestroy {
                     }
 
                     // TotalAssets - for browsing between the assets
-                    let totalAssets = this._locker.sessionGet('totalAssets');
+                    let totalAssets = this._storage.getSession('totalAssets');
                     if (totalAssets) {
-                        this.totalAssetCount = totalAssets;
+                        this.totalAssetCount = parseInt(totalAssets);
                     }
                     else {
                         this.totalAssetCount = 1

@@ -1,4 +1,3 @@
-import { Locker } from 'angular-safeguard'
 import { Component, OnInit, OnDestroy } from '@angular/core'
 import { Router, ActivatedRoute } from '@angular/router'
 import { Location } from '@angular/common'
@@ -9,8 +8,8 @@ import { map, take } from 'rxjs/operators'
 
 import { AppConfig } from '../app.service'
 import { AuthService, User, AssetService, FlagService } from './../shared'
-import { LockerService } from 'app/_services'
 import { environment } from 'environments/environment'
+import { ArtstorStorageService } from '../../../projects/artstor-storage/src/public_api'
 
 declare var initPath: string
 
@@ -70,7 +69,7 @@ export class Login implements OnInit, OnDestroy {
     private angulartics: Angulartics2,
     public _app: AppConfig,
     private _flags: FlagService,
-    private _locker: LockerService
+    private _storage: ArtstorStorageService
   ) {
     console.log("Constructing login component...")
   }
@@ -91,7 +90,7 @@ export class Login implements OnInit, OnDestroy {
     )
 
     // Check for a stashed route to pass to proxy links
-    this.stashedRoute = this._locker.get('stashedRoute') || ''
+    this.stashedRoute = this._storage.getLocal('stashedRoute') || ''
 
     if (this._app.config.copyModifier) {
       this.copyBase = this._app.config.copyModifier + '.'
