@@ -160,64 +160,70 @@ export class AuthService implements CanActivate {
       this.solrUrl = this.hostname + '/api/search/v1.0/search'
     // }
 
-    // For session timeout on user inactivity
-    idle.setIdle(IdleWatcherUtil.generateIdleTime()); // Set an idle time of 1 min, before starting to watch for timeout
-    idle.setTimeout(IdleWatcherUtil.generateSessionLength()); // Log user out after 90 mins of inactivity
-    idle.setInterrupts(DEFAULT_INTERRUPTSOURCES);
+    // Set idle timer and auth heartbeat when loaded in Browser
+    if (this.isBrowser) {
+      this.initIdleWatcher()
 
-    idle.onIdleEnd.pipe(
-      map(() => {
-        this.idleState = 'No longer idle.';
-        // We want to ensure a user is refreshed as soon as they return to the tab
+      /**
+       * User Access Heartbeat
+       * - Poll /userinfo every 15min
+       * - Refreshs AccessToken with IAC
+       */
+      const userInfoInterval = 15 * 1000 * 60 * 60
+      // Run every X mins
+      setInterval(() => {
         this.refreshUserSession(true)
-      })).subscribe()
-
-    idle.onTimeout.pipe(
-      map(() => {
-        let user = this.getUser();
-        // console.log(user);
-        if (user && user.isLoggedIn){
-          this.expireSession();
-          this.showUserInactiveModal.next(true);
-          this.idleState = 'Timed out!';
-        }
-        else{
-          this.resetIdleWatcher()
-        }
-      })).subscribe()
-
-    idle.onIdleStart.pipe(
-      map(() => {
-        this.idleState = 'You\'ve gone idle!';
-        let currentDateTime = new Date().toUTCString();
-        this._storage.setLocal('userGoneIdleAt', currentDateTime);
-      })).subscribe()
-
-    idle.onTimeoutWarning.pipe(
-      map((countdown) => {
-        this.idleState = 'You will time out in ' + countdown + ' seconds!'
-        // console.log(this.idleState);
-      })).subscribe()
-
-    // Init idle watcher (this will also run getUserInfo)
-    this.resetIdleWatcher()
+      }, userInfoInterval)
+    }
 
     // Initialize user and institution objects from localstorage
     this.userSource.next(this.getUser())
     let institution = this._storage.getLocal('institution')
     if (institution) { this.institutionObjSource.next(institution) }
+  }
 
-    // /**
-    //  * User Access Heartbeat
-    //  * - Poll /userinfo every 15min
-    //  * - Refreshs AccessToken with IAC
-    //  */
-    // TODO SSR: this breaks site load
-    // const userInfoInterval = 15 * 1000 * 60 * 60
-    // // Run every X mins
-    // setInterval(() => {
-    //   this.refreshUserSession(true)
-    // }, userInfoInterval)
+  public initIdleWatcher(): void {
+     // For session timeout on user inactivity
+     this.idle.setIdle(IdleWatcherUtil.generateIdleTime()); // Set an idle time of 1 min, before starting to watch for timeout
+     this.idle.setTimeout(IdleWatcherUtil.generateSessionLength()); // Log user out after 90 mins of inactivity
+     this.idle.setInterrupts(DEFAULT_INTERRUPTSOURCES);
+ 
+     this.idle.onIdleEnd.pipe(
+       map(() => {
+         this.idleState = 'No longer idle.';
+         // We want to ensure a user is refreshed as soon as they return to the tab
+         this.refreshUserSession(true)
+       })).subscribe()
+ 
+     this.idle.onTimeout.pipe(
+       map(() => {
+         let user = this.getUser();
+         // console.log(user);
+         if (user && user.isLoggedIn){
+           this.expireSession();
+           this.showUserInactiveModal.next(true);
+           this.idleState = 'Timed out!';
+         }
+         else{
+           this.resetIdleWatcher()
+         }
+       })).subscribe()
+ 
+     this.idle.onIdleStart.pipe(
+       map(() => {
+         this.idleState = 'You\'ve gone idle!';
+         let currentDateTime = new Date().toUTCString();
+         this._storage.setLocal('userGoneIdleAt', currentDateTime);
+       })).subscribe()
+ 
+    this.idle.onTimeoutWarning.pipe(
+       map((countdown) => {
+         this.idleState = 'You will time out in ' + countdown + ' seconds!'
+         // console.log(this.idleState);
+       })).subscribe()
+ 
+     // Init idle watcher (this will also run getUserInfo)
+     this.resetIdleWatcher()
   }
 
   // Reset the idle watcher
@@ -484,6 +490,7 @@ export class AuthService implements CanActivate {
       map(
         (data)  => {
           console.log("User info call returned!")
+          // The Artstor Sotrage service will return a default user object for use on the Server
           let user = this.isBrowser ? this.decorateValidUser(data) : this._storage.getLocal('user')
           // Track whether or not user object has been refreshed since app opened
           //this.userSessionFresh = true
