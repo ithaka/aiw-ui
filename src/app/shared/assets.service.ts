@@ -472,7 +472,7 @@ export class AssetService {
         let options = { withCredentials: true }
 
         return this.http
-            .get(this._auth.getHostname() + '/api/collections/103/categorynames', options)
+            .get(this._auth.getHostname() + '/api/v1/collections/103/categorynames', options)
             .toPromise()
             .then(res => {
                 if (res && res[0]) {
@@ -619,7 +619,7 @@ export class AssetService {
         let options = { withCredentials: true };
         // Returns all of the collections names
         return this.http
-            .get(this._auth.getUrl() + '/collections/', options).pipe(
+            .get(this._auth.getUrl() + '/v1/collections/', options).pipe(
               map(res => {
                 if (type) {
                     let data = res
