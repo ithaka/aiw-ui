@@ -162,7 +162,7 @@ export class SearchComponent implements OnInit, OnDestroy {
   }
 
   public setFocus(): void {
-    window.setTimeout(function () {
+    setTimeout(function () {
       if (document.getElementById('empty-search-alert')){
         document.getElementById('empty-search-alert').focus()
       }

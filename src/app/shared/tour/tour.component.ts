@@ -88,7 +88,7 @@ import { isPlatformBrowser } from '@angular/common';
     //       this.manipulateDom('className', 'driver-popover-description', 2, false)
 
     //       // Set focus on the title of the popover, the setTimeout is necessary for the behavior to appear
-    //       window.setTimeout(function ()
+    //       setTimeout(function ()
     //       {
     //         let el: HTMLElement = <HTMLElement><any>(document.getElementsByClassName('driver-popover-title')[0])
     //         if (el) {

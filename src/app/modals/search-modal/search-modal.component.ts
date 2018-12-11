@@ -126,6 +126,7 @@ export class SearchModal implements OnInit, AfterViewInit {
     this.closeModal.emit()
   }
 
+  // Will only be executed on client side application
   public dateKeyPress(event: any): boolean{
       // Add check of Tab key to make sure the tabbingis enabled on Firefox
       if ((event.key === 'ArrowUp') || (event.key === 'ArrowDown') || (event.key === 'ArrowRight') || (event.key === 'ArrowLeft') || (event.key === 'Backspace') || (event.key === 'Tab')){
@@ -240,6 +241,7 @@ export class SearchModal implements OnInit, AfterViewInit {
 
   /**
    * Open Help page on Advanced Search
+   * Will only be executed on client side application
    */
   public openHelp(): void {
     window.open('http://support.artstor.org/?article=advanced-search', 'Advanced Search Support', 'width=800,height=600');
