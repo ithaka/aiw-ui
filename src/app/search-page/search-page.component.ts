@@ -1,10 +1,11 @@
+import { DomSanitizer } from '@angular/platform-browser';
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { Subscription }   from 'rxjs'
 import { map } from 'rxjs/operators'
 
 import { AssetService } from './../shared/assets.service'
-import { AuthService, LogService, FlagService, ScriptService } from '../shared'
+import { AuthService, LogService, FlagService, ScriptService, DomUtilityService } from '../shared'
 import { AssetFiltersService } from '../asset-filters/asset-filters.service'
 import { AssetGrid } from './../asset-grid/asset-grid.component'
 import { TitleService } from '../shared/title.service'
@@ -43,7 +44,8 @@ export class SearchPage implements OnInit, OnDestroy {
         private _title: TitleService,
         public _auth: AuthService,
         private _captainsLog: LogService,
-        private _script: ScriptService
+        private _script: ScriptService,
+        private _dom: DomUtilityService
     ) {
       this.siteID = this._appConfig.config.siteID;
       // this makes the window always render scrolled to the top
@@ -128,20 +130,16 @@ export class SearchPage implements OnInit, OnDestroy {
   }
 
   public skipToFilterSec(): void{
-    window.setTimeout(function ()
-    {
-      // TO-DO: Only reference document client-side
-      // let htmlelement: HTMLElement = document.getElementById('skip-to-search-link');
-      // (<HTMLElement>htmlelement).focus();
+    window.setTimeout(function () {
+      let htmlelement = this._dom.byId('skip-to-search-link');
+      htmlelement.focus();
     }, 100);
   }
 
   public skipToSearchSec(): void{
-    window.setTimeout(function ()
-    {
-      // TO-DO: Only reference document client-side
-      // let htmlelement: HTMLElement = document.getElementById('skip-to-filter-link');
-      // (<HTMLElement>htmlelement).focus();
+    window.setTimeout(function () {
+      let htmlelement = this._dom.byId('skip-to-filter-link');
+      htmlelement.focus();
     }, 100);
   }
 

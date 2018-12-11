@@ -1,7 +1,7 @@
-import { Component, OnInit, Input, Output, EventEmitter, AfterViewInit } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, AfterViewInit, ElementRef, ViewChild } from '@angular/core';
 
 // Project Dependencies
-import { AssetService, AssetSearchService } from '../../shared';
+import { AssetService, AssetSearchService, DomUtilityService } from '../../shared';
 import { Asset } from '../../asset-page/asset';
 
 @Component({
@@ -13,6 +13,7 @@ export class ShareLinkModal implements OnInit, AfterViewInit {
 
   @Input() public asset: any;
   @Output() public closeModal: EventEmitter<any> = new EventEmitter();
+  @ViewChild("share-ig-link-title", {read: ElementRef}) shareLinkTitleElement: ElementRef;
   private shareLink: string = '';
   private genImgMode: string = 'half';
 
@@ -20,7 +21,11 @@ export class ShareLinkModal implements OnInit, AfterViewInit {
   private copyURLStatusMsg: string = '';
   private copyHTMLStatusMsg: string = '';
 
-  constructor(private _assets: AssetService, private _search: AssetSearchService) { }
+  constructor(
+    private _assets: AssetService,
+    private _search: AssetSearchService,
+    private _dom: DomUtilityService
+  ) { }
 
   ngOnInit() {
     if (this.asset) {
@@ -38,9 +43,11 @@ export class ShareLinkModal implements OnInit, AfterViewInit {
 
   // Set initial focus on the modal Title h1
   public startModalFocus() {
-    // TO-DO: Only reference document client-side
-    // let modalStartFocus = document.getElementById('share-img-link-title')
+    // let modalStartFocus = this._dom.byId('share-img-link-title')
     // modalStartFocus.focus()
+    if (this.shareLinkTitleElement && this.shareLinkTitleElement.nativeElement){
+      this.shareLinkTitleElement.nativeElement.focus()
+    }
   }
 
   /**
@@ -48,26 +55,25 @@ export class ShareLinkModal implements OnInit, AfterViewInit {
    * @param id of the field whose innerText is to be copied to the clipboard
    */
   private copyTexttoClipBoard(id: string): void{
-    // TO-DO: Only reference document client-side
-    // let textArea = document.createElement('textarea');
+    let textArea =this._dom.create('textarea');
 
-    // textArea.style.position = 'fixed';
-    // textArea.style.top = '0';
-    // textArea.style.left = '0';
+    textArea.style.position = 'fixed';
+    textArea.style.top = '0';
+    textArea.style.left = '0';
 
-    // textArea.style.width = '2em';
-    // textArea.style.height = '2em';
-    // textArea.style.padding = '0';
-    // textArea.style.border = 'none';
-    // textArea.style.outline = 'none';
-    // textArea.style.boxShadow = 'none';
-    // textArea.style.background = 'transparent';
+    textArea.style.width = '2em';
+    textArea.style.height = '2em';
+    textArea.style.padding = '0';
+    textArea.style.border = 'none';
+    textArea.style.outline = 'none';
+    textArea.style.boxShadow = 'none';
+    textArea.style.background = 'transparent';
 
-    // let element = document.getElementById(id);
-    // textArea.value = element.textContent;
+    let element = this._dom.byId(id);
+    textArea.value = element.textContent;
 
-    // document.body.appendChild(textArea);
-    // textArea.select();
+    document.body.appendChild(textArea);
+    textArea.select();
 
     try {
       let successful = document.execCommand('copy');
@@ -96,6 +102,7 @@ export class ShareLinkModal implements OnInit, AfterViewInit {
       console.log('Unable to copy');
     }
 
+    // TODO SSR
     // document.body.removeChild(textArea);
   }
 

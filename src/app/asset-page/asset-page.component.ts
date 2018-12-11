@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ViewChild, HostListener } from '@angular/core'
+import { Component, OnInit, OnDestroy, ViewChild, HostListener, ElementRef } from '@angular/core'
 import { ActivatedRoute, Params, Router } from '@angular/router'
 import { DomSanitizer, SafeUrl, Meta } from '@angular/platform-browser'
 import { Subscription } from 'rxjs'
@@ -20,7 +20,8 @@ import {
     PersonalCollectionService,
     AssetDetailsFormValue,
     CollectionTypeInfo,
-    FlagService
+    FlagService,
+    DomUtilityService,
 } from './../shared'
 import { TitleService } from '../shared/title.service'
 import { ScriptService } from '../shared/script.service'
@@ -30,6 +31,7 @@ import { APP_CONST } from '../app.constants'
 import { AppConfig } from '../app.service'
 import { ArtstorStorageService } from '../../../projects/artstor-storage/src/public_api';
 
+
 @Component({
     selector: 'ang-asset-page',
     templateUrl: 'asset-page.component.pug',
@@ -38,6 +40,9 @@ import { ArtstorStorageService } from '../../../projects/artstor-storage/src/pub
 export class AssetPage implements OnInit, OnDestroy {
 
     @ViewChild(ArtstorViewer)
+
+    @ViewChild("generatedImgURL", {read: ElementRef}) generatedImgURLElement: ElementRef
+
     public assetViewer: any
 
     public user: any
@@ -215,6 +220,7 @@ export class AssetPage implements OnInit, OnDestroy {
         private _sanitizer: DomSanitizer,
         _fb: FormBuilder,
         private _storage: ArtstorStorageService,
+        private _dom: DomUtilityService,
         private meta: Meta,
     ) {
         this.editDetailsForm = _fb.group({
@@ -824,18 +830,22 @@ export class AssetPage implements OnInit, OnDestroy {
      */
     private copyGeneratedImgURL(): void {
         // TO-DO: Only reference document client-side
-        // let statusMsg = '';
-        // let input: any = document.getElementById('generatedImgURL');
-        // let iOSuser: boolean = false;
+        let statusMsg = '';
+        let input: any;
+        if (this.generatedImgURLElement && this.generatedImgURLElement.nativeElement){
+            input = this.generatedImgURLElement.nativeElement
+          }
+        // let input: any = this._dom.byId('generatedImgURL');
+        let iOSuser: boolean = false;
 
-        // this.showCopyUrl = true;
-        // input.focus()
-        // input.select()
+        this.showCopyUrl = true;
+        input.focus()
+        input.select()
 
-        // // Determine if on iOS (no copy functionality)
-        // if (/iPhone|iPad|iPod/i.test(navigator.userAgent)) {
-        //     iOSuser = true
-        // }
+        // Determine if on iOS (no copy functionality)
+        if (/iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+            iOSuser = true
+        }
 
         // setTimeout(() => {
         //     input.select();
