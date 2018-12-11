@@ -157,7 +157,7 @@ export class AppComponent {
   public findMainContent(): void {
     setTimeout(function ()
     {
-      let htmlelement: HTMLElement = this._dom.byyId('mainContent');
+      let htmlelement: HTMLElement = this._dom.byId('mainContent');
       let element: Element;
       // On log in page, go to log in box
       if (htmlelement.querySelector('form div input')){

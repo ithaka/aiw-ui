@@ -1,5 +1,9 @@
 /** This service is to wrap any usage of document with a check of if is a browser-based client
  * for the success of server side rendering
+ * - This should only be used as a last resort, preferring these Angular helpers first:
+ *   ElementRef - https://angular.io/api/core/ElementRef
+ *   ViewChild - https://angular.io/api/core/ViewChild
+ *   Renderer - https://angular.io/api/core/Renderer2
  */
 import { Injectable, Inject, PLATFORM_ID } from '@angular/core'
 import { isPlatformBrowser } from '@angular/common'
