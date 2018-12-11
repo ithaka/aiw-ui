@@ -1,4 +1,5 @@
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, Renderer } from '@angular/core'
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, Renderer, Inject, PLATFORM_ID } from '@angular/core'
+import { isPlatformBrowser } from '@angular/common'
 import { ActivatedRoute, NavigationStart, Params, Router } from '@angular/router'
 
 import { BehaviorSubject, Subscription } from 'rxjs'
@@ -15,7 +16,8 @@ import {
   LogService,
   Thumbnail,
   ToolboxService,
-  FlagService
+  FlagService,
+  DomUtilityService
 } from '../shared'
 import { AssetFiltersService } from '../asset-filters/asset-filters.service'
 import { APP_CONST } from '../app.constants'
@@ -162,6 +164,7 @@ export class AssetGrid implements OnInit, OnDestroy {
 
   // TypeScript public modifiers
   constructor(
+    @Inject(PLATFORM_ID) private platformId: Object,
     public _appConfig: AppConfig,
     private _assets: AssetService,
     public _auth: AuthService,
@@ -176,7 +179,8 @@ export class AssetGrid implements OnInit, OnDestroy {
     private _search: AssetSearchService,
     private _toolbox: ToolboxService,
     private _storage: ArtstorStorageService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private _dom: DomUtilityService
   ) {
       this.siteID = this._appConfig.config.siteID;
       let prefs = this._auth.getFromStorage('prefs')
@@ -191,6 +195,8 @@ export class AssetGrid implements OnInit, OnDestroy {
         this.largeThmbView = prefs.largeThumbnails
       }
   }
+
+  private isBrowser: boolean = isPlatformBrowser(this.platformId)
 
   ngOnInit() {
     // Subscribe User object updates
@@ -618,7 +624,7 @@ export class AssetGrid implements OnInit, OnDestroy {
 
       // Set focus on the first tumbnail in reorder mode
       setTimeout(() => {
-        let el = document.getElementById('item-0')
+        let el = this._dom.byId('item-0')
         el.focus()
       }, 600)
 
@@ -629,7 +635,12 @@ export class AssetGrid implements OnInit, OnDestroy {
 
   private cancelReorder(): void {
     // IE 11 specificially has a caching problem when reloading the group contents
-    let isIE11 = !!window['MSInputMethodContext'] && !!document['documentMode']
+    let isIE11
+
+    if (this.isBrowser) {
+      isIE11 = !!window['MSInputMethodContext'] && !!document['documentMode']
+    }
+
     this.reorderMode = false
     this.reordering.emit(this.reorderMode)
     this.goToPage(1)
@@ -689,7 +700,7 @@ export class AssetGrid implements OnInit, OnDestroy {
     // Exit reording back to focus on Save reorder button
     if (event.key === "Escape") {
       this.arrowReorderMode = false
-      document.getElementById('saveReorderButton').focus()
+      this._dom.byId('saveReorderButton').focus()
       return
     }
     // Left, Right arrow key reording - Uses splice on allResults array
@@ -709,7 +720,7 @@ export class AssetGrid implements OnInit, OnDestroy {
 
             setTimeout(() => {
               let id = 'item-' + (index - 1)
-              document.getElementById(id).focus()
+              this._dom.byId(id).focus()
             }, 100)
 
             this.arrowReorderMessage = 'moved to position ' + (index) + ' of ' + this.results.length // aria live region message
@@ -837,7 +848,7 @@ export class AssetGrid implements OnInit, OnDestroy {
   }
 
   private closeGridDropdowns(): void{
-    let dropdownElements: Array<HTMLElement> = Array.from( document.querySelectorAll('ang-asset-grid .dropdown') )
+    let dropdownElements = Array.from(this._dom.bySelectorAll('ang-asset-grid .dropdown') )
     for (let dropdownElement of dropdownElements){
       dropdownElement.classList.remove('show')
       dropdownElement.children[0].setAttribute('aria-expanded', 'false')

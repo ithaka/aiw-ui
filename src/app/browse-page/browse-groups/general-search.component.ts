@@ -2,6 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter, ElementRef, ViewChild }
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs'
 import { map } from 'rxjs/operators'
+import { DomUtilityService } from 'app/shared';
 
 @Component({
   selector: 'ang-general-search',
@@ -25,7 +26,8 @@ export class GeneralSearchComponent implements OnInit {
   private subscriptions: Subscription[] = []
 
   constructor(
-    private _router: Router
+    private _router: Router,
+    private _dom: DomUtilityService
   ) { }
 
   ngOnInit() {
@@ -51,7 +53,6 @@ export class GeneralSearchComponent implements OnInit {
   }
 
   public setFocus(): void {
-    // TO-DO: Only reference document client-side
     setTimeout(function () {
       if (this.emptySearchAlert && this.emptySearchAlert.nativeElement){
         this.emptySearchAlert.nativeElement.focus()

@@ -10,6 +10,7 @@ import { Angulartics2 } from 'angulartics2'
 import { AuthService } from './../auth.service'
 import { TourStep } from './tour.service'
 import { isPlatformBrowser } from '@angular/common';
+import { DomUtilityService } from 'app/shared';
 
 @Component({
     selector: 'ang-guide-tour',
@@ -25,6 +26,7 @@ import { isPlatformBrowser } from '@angular/common';
 
     constructor(
       private _auth: AuthService,
+      private _dom: DomUtilityService,
       private _ga: Angulartics2,
       private router: Router,
       @Inject(PLATFORM_ID) private platformId: Object
@@ -64,12 +66,12 @@ import { isPlatformBrowser } from '@angular/common';
 
     //       // Remove the back button on the first popover
     //       if (Element.options.step === 1) {
-    //         let el: HTMLElement = <HTMLElement><any>(document.getElementsByClassName('driver-prev-btn')[0])
+    //         let el: HTMLElement = <HTMLElement><any>(this._dom.byClassName('driver-prev-btn')[0])
     //           if (el)
     //             el.classList.add('hidden')
     //       }
     //       else {
-    //         let el: HTMLElement = <HTMLElement><any>(document.getElementsByClassName('driver-prev-btn')[0])
+    //         let el: HTMLElement = <HTMLElement><any>(this._dom.byClassName('driver-prev-btn')[0])
     //         if (el) {
     //           el.classList.remove('hidden')
     //         }
@@ -90,7 +92,7 @@ import { isPlatformBrowser } from '@angular/common';
     //       // Set focus on the title of the popover, the setTimeout is necessary for the behavior to appear
     //       setTimeout(function ()
     //       {
-    //         let el: HTMLElement = <HTMLElement><any>(document.getElementsByClassName('driver-popover-title')[0])
+    //         let el: HTMLElement = <HTMLElement><any>(this._dom.byClassName('driver-popover-title')[0])
     //         if (el) {
     //           el.tabIndex = 1
     //           el.focus()
@@ -137,10 +139,10 @@ import { isPlatformBrowser } from '@angular/common';
     private manipulateDom ( method: string, query: string, tabIndex?: number, focus?: boolean, attrKey?: string, attrValue?: string ): HTMLElement {
       let el: HTMLElement
       if (method === 'id') {
-        el = document.getElementById(query)
+        el = <HTMLElement>this._dom.byId(query)
       }
       else if (method === 'className') {
-        el = <HTMLElement><any>(document.getElementsByClassName(query)[0])
+        el = <HTMLElement><any>(this._dom.byClassName(query)[0])
       }
       if (!el)
         return el

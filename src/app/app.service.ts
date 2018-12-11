@@ -12,17 +12,17 @@ import { isPlatformBrowser } from '@angular/common';
 @Injectable()
 export class AppConfig {
   // Default values
-  // public pageTitle = 'Artstor'
-  // public logoUrl = '/assets/img/logo-v1-1.png'
+  public pageTitle = 'Artstor'
+  public logoUrl = '/assets/img/logo-v1-1.png'
   private _config
   private isBrowser
 
   constructor(@Inject(PLATFORM_ID) private platformId) {
-    // let WLVConfig = this.getWLVConfig()
-    // if (WLVConfig) {
-    //   this.pageTitle = WLVConfig.pageTitle
-    //   this.logoUrl = WLVConfig.logoUrl
-    // }
+    let WLVConfig = this.getWLVConfig()
+    if (WLVConfig) {
+      this.pageTitle = WLVConfig.pageTitle
+      this.logoUrl = WLVConfig.logoUrl
+    }
     this._config = Object.assign(WLV_ARTSTOR, this.getWLVConfig())
     this.isBrowser = isPlatformBrowser(platformId);
   }
@@ -45,6 +45,6 @@ export class AppConfig {
     } else {
       return WLV_ARTSTOR
     }
-    
+
   }
 }

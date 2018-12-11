@@ -1,4 +1,4 @@
-import { Component, EventEmitter, HostListener, Input, OnInit, Output, ElementRef, Inject, PLATFORM_ID } from '@angular/core'
+import { Component, EventEmitter, HostListener, Input, OnInit, Output, ElementRef, Inject, PLATFORM_ID, ViewChild } from '@angular/core'
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms'
 import { Subscription } from 'rxjs'
 import { map, take } from 'rxjs/operators'
@@ -31,6 +31,8 @@ export class NewIgModal implements OnInit {
   @Input() private ig: ImageGroup = <ImageGroup>{};
   /** Controls the user seeing the toggle to add images to group or create a new group */
   @Input() private showAddToGroup: boolean = false;
+
+  @ViewChild("modal", {read: ElementRef}) modalElement: ElementRef;
 
   /** The form */
   private newIgForm: FormGroup;
@@ -77,8 +79,11 @@ export class NewIgModal implements OnInit {
 
   ngOnInit() {
     // Set focus to the modal to make the links in the modal first thing to tab for accessibility
-    let htmlelement: HTMLElement = this.el.nativeElement
-    htmlelement.focus()
+    // let htmlelement: HTMLElement = this.el.nativeElement
+    // htmlelement.focus()
+    if (this.modalElement && this.modalElement.nativeElement){
+      this.modalElement.nativeElement.focus()
+    }
 
     /** Set isArtstorUser to true if the user's institution is 1000. This will let them make global image groups */
     this.isArtstorUser = this._auth.getUser().institutionId == 1000;
