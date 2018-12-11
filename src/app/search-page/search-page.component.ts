@@ -48,7 +48,7 @@ export class SearchPage implements OnInit, OnDestroy {
         private _dom: DomUtilityService
     ) {
       this.siteID = this._appConfig.config.siteID;
-      // this makes the window always render scrolled to the top
+      // this makes the window always render scrolled to the top - a dummy window.scrollTo method created for SSR compatibility
       this._router.events.pipe(
         map(() => {
           window.scrollTo(0, 0)

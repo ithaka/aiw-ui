@@ -1,8 +1,9 @@
-import { Component, OnInit, OnDestroy } from '@angular/core'
+import { Component, OnInit, OnDestroy, PLATFORM_ID, Inject } from '@angular/core'
 import { Router } from '@angular/router'
 import { Subscription } from 'rxjs'
 import { map } from 'rxjs/operators'
 import { DeviceDetectorModule, DeviceDetectorService } from 'ngx-device-detector'
+import { isPlatformBrowser } from '@angular/common'
 
 import { AssetService, AuthService, ScriptService, DomUtilityService } from '../shared'
 import { AppConfig } from '../app.service'
@@ -55,16 +56,17 @@ export class Home implements OnInit, OnDestroy {
     public _auth: AuthService,
     private deviceService: DeviceDetectorService,
     private _script: ScriptService,
+    @Inject(PLATFORM_ID) private platformId: Object,
     private _dom: DomUtilityService
   ) {
     console.log("Constructing home component...")
     // this makes the window always render scrolled to the top
-    // this._router.events.pipe(
-    //   map(() => {
-    //     // TO-DO: Only reference window on the client side
-    //     // window.scrollTo(0, 0);
-    //   }
-    // )).subscribe()
+    this._router.events.pipe(
+      map(() => {
+        // Dummy scrollTo method created for server rendered domino window object
+        window.scrollTo(0, 0);
+      }
+    )).subscribe()
 
     this.showBlog = this._appConfig.config.showHomeBlog
     this.showPrivateCollections = this._appConfig.config.browseOptions.myCol
@@ -149,8 +151,10 @@ export class Home implements OnInit, OnDestroy {
     //     this.blogLoading = false;
     //   });
 
-    // // Set session info for Email Artstor link
-    // this.fetchDeviceInfo();
+    // Set session info for Email Artstor link - only for the client side application
+    if (isPlatformBrowser(this.platformId)) {
+      this.fetchDeviceInfo();
+    }
 
     // Load Ethnio survey
     if (this.siteID !== 'SAHARA') {

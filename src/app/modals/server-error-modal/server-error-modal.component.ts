@@ -31,6 +31,7 @@ export class ServerErrorModal implements OnInit {
 
   /**
    * Set aside our current/intended path so the user can return
+   * Doesn't get called on SSR application
    */
   stashThenRoute(routeValue: string) {
     console.log(window.location.pathname)

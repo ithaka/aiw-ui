@@ -106,6 +106,7 @@ export class ShareLinkModal implements OnInit, AfterViewInit {
     // document.body.removeChild(textArea);
   }
 
+  // Doesn't get called on SSR application
   public showHelp(): void{
     window.open('http://support.artstor.org/?article=creating-links', 'Artstor Support', 'width=600,height=500');
   }

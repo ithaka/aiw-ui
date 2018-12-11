@@ -33,6 +33,10 @@ const DIST_FOLDER = join(process.cwd(), 'dist');
 const domino = require('domino');
 const win = domino.createWindow('');
 
+win.scrollTo = (x, y) => {
+  console.log('scrollTo called with: ' + x + ', ' + y)
+};
+
 global['window'] = win;
 global['document'] = win.document;
 global['Node'] = win.Node;
