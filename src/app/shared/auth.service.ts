@@ -94,6 +94,8 @@ export class AuthService implements CanActivate {
 
     let testHostnames = [
       'localhost',
+      'localhost:3000',
+      'localhost:4000',
       'local.artstor.org',
       'stage.artstor.org',
       // test.artstor subdomain is used for WLVs
@@ -138,7 +140,7 @@ export class AuthService implements CanActivate {
       this.IIIFUrl = '//tsstage.artstor.org/rosa-iiif-endpoint-1.0-SNAPSHOT/fpx'
       this.ENV = 'test'
     }
-
+    
     // Additional Local dev domains
     if (this.clientHostname.indexOf('local.sahara') > -1) {
       this.hostname = '//sahara.beta.stage.artstor.org'
@@ -365,6 +367,9 @@ export class AuthService implements CanActivate {
 
   public getUrl(secure?: boolean): string {
     let url: string = this.baseUrl
+    if (!this.isBrowser){
+      url = 'https:' + url
+    }
     if (secure) {
       url += '/secure'
     }
@@ -460,6 +465,12 @@ export class AuthService implements CanActivate {
     console.log("Running canActivate...")
     let options = { headers: this.userInfoHeader, withCredentials: true }
 
+    // TO-DO: Enable the server to call the user info call
+    if (!this.isBrowser) {
+      return new Observable(observer => {
+        observer.next(true)
+      })
+    }
 
     if ((route.params.samlTokenId || route.params.type == 'shibboleth') && state.url.includes('/register')) {
       // Shibboleth workflow is unique, should allow access to the register page
@@ -489,7 +500,7 @@ export class AuthService implements CanActivate {
           // The Artstor Sotrage service will return a default user object for use on the Server
           let user = this.isBrowser ? this.decorateValidUser(data) : this._storage.getLocal('user')
           // Track whether or not user object has been refreshed since app opened
-          //this.userSessionFresh = true
+          this.userSessionFresh = true
 
           if (user && (this.isOpenAccess || user.status)) {
             // Clear expired session modal

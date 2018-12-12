@@ -24,8 +24,9 @@ export class GenerateCitation implements OnInit, AfterViewInit {
   public apa_citation: string = '' // APA style citation to be copied to the clipboard
   public mla_citation: string = '' // MLA style citation to be copied to the clipboard
   public chicago_citation: string = '' // Chicago style citation to be copied to the clipboard
-
   public citationCopied: boolean = false
+  // For client side, template use only
+  public document = document
 
   constructor(
     private _date: DatePipe,
@@ -37,8 +38,6 @@ export class GenerateCitation implements OnInit, AfterViewInit {
 
   ngOnInit() {
     // Set focus to the modal to make the links in the modal first thing to tab for accessibility
-    // let htmlelement: HTMLElement = <HTMLElement>this._dom.byId('modal');
-    // htmlelement.focus()
     if (this.modalElement && this.modalElement.nativeElement){
       this.modalElement.nativeElement.focus()
     }
