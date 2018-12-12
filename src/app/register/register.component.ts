@@ -145,7 +145,7 @@ export class RegisterComponent implements OnInit {
         }
 
         // Set service error code from auth response
-        if (this.shibErrorCodes.indexOf(res.code) > -1) {
+        if (res.status === 400 && this.shibErrorCodes.indexOf(res.code) > -1) {
           this.serviceErrors.shibboleth = res.code
         }
       })).subscribe()
