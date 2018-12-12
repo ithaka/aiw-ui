@@ -633,6 +633,10 @@ export class AssetGrid implements OnInit, OnDestroy {
     }
   }
 
+  /**
+   * Cancel reordering of assets
+   * @requires browser
+   */
   private cancelReorder(): void {
     // IE 11 specificially has a caching problem when reloading the group contents
     let isIE11
@@ -821,6 +825,7 @@ export class AssetGrid implements OnInit, OnDestroy {
   /**
    * Remove Assets from a Group
    * - Owner of Group only
+   * @requires browser
    */
   private removeFromGroup(assetsToRemove: Thumbnail[], clearRestricted?: boolean): void {
     for (let i = 0; i < assetsToRemove.length; i++) {

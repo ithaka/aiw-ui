@@ -2,6 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter, AfterViewInit, ElementR
 import { map, take } from 'rxjs/operators'
 
 import { ImageGroup, GroupService, AuthService, LogService, DomUtilityService } from './../../shared'
+import { AppConfig } from 'app/app.service';
 
 @Component({
   selector: 'ang-share-ig-link',
@@ -29,7 +30,8 @@ export class ShareIgLinkModal implements OnInit, AfterViewInit {
     private _group: GroupService,
     private _auth: AuthService,
     private _log: LogService,
-    private _dom: DomUtilityService
+    private _dom: DomUtilityService,
+    private _app: AppConfig
   ) { }
 
   ngOnInit() {
@@ -58,15 +60,16 @@ export class ShareIgLinkModal implements OnInit, AfterViewInit {
     // Find out if group is owned by user
     let userOwned = false
     let user = this._auth.getUser()
-    let protocol = location.protocol + '//'
+    let protocol = 'https://'
+    let groupPath: string
+
     this.ig.access.forEach((accessObj) => {
       if ((accessObj.entity_identifier == user.baseProfileId.toString() && accessObj.access_type == 300) ){
         userOwned = true
       }
     })
 
-    let groupPath
-    if (window.location.host.indexOf('localhost:') > -1) {
+    if (this._app.clientHostname.indexOf('localhost:') > -1) {
       groupPath = '/#/group/'
     } else {
       groupPath = '/group/'
@@ -75,8 +78,7 @@ export class ShareIgLinkModal implements OnInit, AfterViewInit {
     // If the group is not owned by the user, we simply give back the url of the group
     // Only a group owner can generate a token share link
     if (!userOwned) {
-      // TO-DO: Only reference document client-side
-      // this.shareLink = [protocol, document.location.host, groupPath, ig.id].join('')
+      this.shareLink = [protocol, this._app.clientHostname, groupPath, ig.id].join('')
     } else {
       // if the image group is private, we call a service to generate a token, then attach that to the route so the user can share it
       this.serviceStatus.isLoading = true
@@ -85,8 +87,7 @@ export class ShareIgLinkModal implements OnInit, AfterViewInit {
         map(res => {
           this.serviceStatus.isLoading = false
           if (res.success && res.token) {
-            // TO-DO: Only reference document client-side
-            // this.shareLink = [protocol, document.location.host, groupPath, ig.id, '?token=', encodeURIComponent(res.token)].join('')
+            this.shareLink = [protocol, this._app.clientHostname, groupPath, ig.id, '?token=', encodeURIComponent(res.token)].join('')
           } else {
             this.serviceStatus.tokenError = true
           }

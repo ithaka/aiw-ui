@@ -175,6 +175,7 @@ export class Login implements OnInit, OnDestroy {
   /**
    * Fired when the user logs in through their institution
    * Will only be executed on client side application
+   * @requires browser
    */
   goToInstLogin(): void {
     let len: number = this.loginInstitutions.length
@@ -221,7 +222,7 @@ export class Login implements OnInit, OnDestroy {
          * Auth provides !!!TARGET_FULL_PATH!!! as a string to replace for forwarding
          */
         // TO-DO: Only reference document client-side
-        // url = url.replace(urlToken, document.location.host + stashedRoute )
+        url = url.replace(urlToken, document.location.host + stashedRoute )
       } else if (url.match(pathToken)) {
         /**
          * WAM Proxy forwarding

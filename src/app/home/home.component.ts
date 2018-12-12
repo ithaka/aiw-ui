@@ -167,6 +167,10 @@ export class Home implements OnInit, OnDestroy {
     this.subscriptions.forEach((sub) => { sub.unsubscribe(); });
   }
 
+  /**
+   * Gets client information for support email
+   * @requires browser
+   */
   private fetchDeviceInfo(): void {
     // Detect if adblocker is enabled or not
     let adBlockEnabled = false;

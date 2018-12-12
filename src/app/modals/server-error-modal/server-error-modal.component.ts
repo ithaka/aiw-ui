@@ -1,9 +1,9 @@
-import { DomUtilityService } from 'app/shared';
 import { Router } from '@angular/router'
 import { Component, OnInit, EventEmitter, Input, Output, ElementRef, ViewChild } from '@angular/core'
+import { Location } from '@angular/common'
 
 // Project Dependencies
-import { AuthService } from '../../shared'
+import { DomUtilityService } from 'app/shared'
 import { ArtstorStorageService } from '../../../../projects/artstor-storage/src/public_api';
 @Component({
   selector: 'ang-server-error-modal',
@@ -17,7 +17,8 @@ export class ServerErrorModal implements OnInit {
   constructor(
     private _storage: ArtstorStorageService,
     private _router: Router,
-    private _dom: DomUtilityService
+    private _dom: DomUtilityService,
+    private location: Location
   ) { }
 
   ngOnInit() {
@@ -31,11 +32,10 @@ export class ServerErrorModal implements OnInit {
 
   /**
    * Set aside our current/intended path so the user can return
-   * Doesn't get called on SSR application
    */
   stashThenRoute(routeValue: string) {
-    console.log(window.location.pathname)
-    this._storage.setLocal('stashedRoute', window.location.pathname)
+    console.log(this.location.path())
+    this._storage.setLocal('stashedRoute', this.location.path())
     this._router.navigate([routeValue]);
   }
 }
