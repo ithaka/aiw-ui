@@ -1,4 +1,4 @@
-import { Injectable, Inject, PLATFORM_ID, Injector } from '@angular/core'
+import { Injectable, Inject, PLATFORM_ID } from '@angular/core'
 import { Location, isPlatformBrowser } from '@angular/common'
 import { HttpClient, HttpHeaders } from '@angular/common/http'
 import {
@@ -74,18 +74,11 @@ export class AuthService implements CanActivate {
     private location: Location,
     private _app: AppConfig,
     private _flags: FlagService,
-    private idle: Idle,
-    private injector: Injector
+    private idle: Idle
   ) {
-    // Identify hostname from request or client side
-    if (isPlatformBrowser(this.platformId)) {
-      this.clientHostname = this.clientHostname
-    } else{
-      let req = this.injector.get('request');
-      this.clientHostname = req ? req.get('host') : '';
-    }
-    // Generic debugging between server/client rendering
-    console.log("Detected hostname: " + this.clientHostname)
+    // Set WLV and App Config variables
+    this.isOpenAccess = this._app.config.isOpenAccess
+    this.clientHostname = this._app.clientHostname
     // Initialize observables
     this.currentUser = this.userSource.asObservable()
     // Default to relative or prod endpoints
@@ -98,8 +91,6 @@ export class AuthService implements CanActivate {
     this.subdomain = 'library'
     this.solrUrl = '/api/search/v1.0/search'
 
-    // Set WLV variables
-    this.isOpenAccess = this._app.config.isOpenAccess
 
     let testHostnames = [
       'localhost',
