@@ -39,6 +39,9 @@ export class RegisterComponent implements OnInit {
     samlTokenId: null
   }
 
+  // Error codes for shibboleth messages
+  private shibErrorCodes: string[] = ['2010', '2020', '2030', '2040', '2050', '2060', '2070', '2080']
+
   constructor(
     private _auth: AuthService,
     private _router: Router,
@@ -68,6 +71,7 @@ export class RegisterComponent implements OnInit {
     let type: string = this.route.snapshot.params.type
     this.serviceErrors['shibbolethInst'] = this.route.snapshot.params.error === 'INST404'
     this.serviceErrors['user'] = this.route.snapshot.params.error === 'USER404'
+
 
     if (samlTokenId || type === 'shibboleth') {
       email && this.registerForm.controls.email.setValue(email) // set the email
@@ -139,8 +143,10 @@ export class RegisterComponent implements OnInit {
           this.serviceErrors.server = true
           console.error('Registration Server Error', userInfo, res)
         }
-        if (res.error && res.error.code) {
-          this.serviceErrors.shibboleth = res.error.code
+
+        // Set service error code from auth response
+        if (this.shibErrorCodes.indexOf(res.code) > -1) {
+          this.serviceErrors.shibboleth = res.code
         }
       })).subscribe()
 
