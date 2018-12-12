@@ -1,4 +1,4 @@
-import { Injectable, Inject, PLATFORM_ID } from '@angular/core'
+import { Injectable, Inject, PLATFORM_ID, Injector } from '@angular/core'
 import { Location, isPlatformBrowser } from '@angular/common'
 import { HttpClient, HttpHeaders } from '@angular/common/http'
 import {
@@ -29,15 +29,16 @@ export class AuthService implements CanActivate {
   // Track whether or not user object has been refreshed since app opened
   public userSessionFresh: boolean = false
   public showUserInactiveModal: Subject<boolean> = new Subject(); // Set up subject observable for showing inactive user modal
+  public clientHostname: string;
   private ENV: string;
   private baseUrl;
-  private imageFpxUrl;
-  private lostPassUrl;
-  private hostname;
-  private subdomain;
-  private thumbUrl;
-  private compoundUrl;
-  private IIIFUrl;
+  private imageFpxUrl: string;
+  private lostPassUrl: string;
+  private hostname: string;
+  private subdomain: string;
+  private thumbUrl: string;
+  private compoundUrl: string;
+  private IIIFUrl: string;
   private logUrl: string;
   private groupUrl = '';
   private solrUrl: string;
@@ -73,8 +74,18 @@ export class AuthService implements CanActivate {
     private location: Location,
     private _app: AppConfig,
     private _flags: FlagService,
-    private idle: Idle
+    private idle: Idle,
+    private injector: Injector
   ) {
+    // Identify hostname from request or client side
+    if (isPlatformBrowser(this.platformId)) {
+      this.clientHostname = this.clientHostname
+    } else{
+      let req = this.injector.get('request');
+      this.clientHostname = req ? req.get('host') : '';
+    }
+    // Generic debugging between server/client rendering
+    console.log("Detected hostname: " + this.clientHostname)
     // Initialize observables
     this.currentUser = this.userSource.asObservable()
     // Default to relative or prod endpoints
@@ -109,24 +120,23 @@ export class AuthService implements CanActivate {
     ]
 
     // Check domain
-    // TO-DO: Only reference document client-side
-    // if (  new RegExp(prodHostnames.join('|')).test(document.location.hostname)  ) {
-    //   // Explicit live endpoints
-    //   this.logUrl = '//ang-ui-logger.apps.prod.cirrostratus.org/api/v1'
-    //   this.solrUrl = '/api/search/v1.0/search'
-    //   this.ENV = 'prod'
-    // }
-    // else if ( document.location.hostname.indexOf('prod.cirrostratus.org') > -1 ) {
-    //   console.info('Using Prod Endpoints (Absolute)')
-    //   // Prod/Lively endpoints
-    //   this.hostname = '//library.artstor.org'
-    //   this.baseUrl =  '//library.artstor.org/api'
-    //   this.logUrl = '//ang-ui-logger.apps.prod.cirrostratus.org/api/v1'
-    //   this.solrUrl = this.hostname + '/api/search/v1.0/search'
-    //   this.ENV = 'prod'
-    // } else if ( new RegExp(testHostnames.join('|')).test(document.location.hostname) ) {
-    //   console.info('Using Test Endpoints')
-    //   // Test Endpoints
+    if (  new RegExp(prodHostnames.join('|')).test(this.clientHostname)  ) {
+      // Explicit live endpoints
+      this.logUrl = '//ang-ui-logger.apps.prod.cirrostratus.org/api/v1'
+      this.solrUrl = '/api/search/v1.0/search'
+      this.ENV = 'prod'
+    }
+    else if ( this.clientHostname.indexOf('prod.cirrostratus.org') > -1 ) {
+      console.info('Using Prod Endpoints (Absolute)')
+      // Prod/Lively endpoints
+      this.hostname = '//library.artstor.org'
+      this.baseUrl =  '//library.artstor.org/api'
+      this.logUrl = '//ang-ui-logger.apps.prod.cirrostratus.org/api/v1'
+      this.solrUrl = this.hostname + '/api/search/v1.0/search'
+      this.ENV = 'prod'
+    } else if ( new RegExp(testHostnames.join('|')).test(this.clientHostname) ) {
+      console.info('Using Test Endpoints')
+      // Test Endpoints
       this.hostname = '//stage.artstor.org'
       this.subdomain = 'stage'
       this.baseUrl = '//stage.artstor.org/api'
@@ -136,34 +146,33 @@ export class AuthService implements CanActivate {
       this.solrUrl = '/api/search/v1.0/search'
       this.IIIFUrl = '//tsstage.artstor.org/rosa-iiif-endpoint-1.0-SNAPSHOT/fpx'
       this.ENV = 'test'
-    // }
+    }
 
-    // // Additional Local dev domains
-    // if (document.location.hostname.indexOf('local.sahara') > -1) {
-    //   this.hostname = '//sahara.beta.stage.artstor.org'
-    //   this.ENV = 'test'
-    // }
+    // Additional Local dev domains
+    if (this.clientHostname.indexOf('local.sahara') > -1) {
+      this.hostname = '//sahara.beta.stage.artstor.org'
+      this.ENV = 'test'
+    }
 
-    // // Sahara routing WORKAROUND
-    // if (document.location.hostname.indexOf('sahara.beta.stage.artstor.org') > -1) {
-    //   this.hostname = '//sahara.beta.stage.artstor.org'
-    //   this.ENV = 'test'
-    // }
-    // if (document.location.hostname.indexOf('sahara.prod.artstor.org') > -1) {
-    //   this.hostname = '//sahara.prod.artstor.org/'
-    // }
+    // Sahara routing WORKAROUND
+    if (this.clientHostname.indexOf('sahara.beta.stage.artstor.org') > -1) {
+      this.hostname = '//sahara.beta.stage.artstor.org'
+      this.ENV = 'test'
+    }
+    if (this.clientHostname.indexOf('sahara.prod.artstor.org') > -1) {
+      this.hostname = '//sahara.prod.artstor.org/'
+    }
 
     // Local routing should point to full URL
     // * This should NEVER apply when using a proxy, as it will break authorization
-    // if (new RegExp(['cirrostratus.org', 'localhost', 'local.', 'sahara.beta.stage.artstor.org', 'sahara.prod.artstor.org'].join('|')).test(document.location.hostname)) {
+    if (new RegExp(['cirrostratus.org', 'localhost', 'local.', 'sahara.beta.stage.artstor.org', 'sahara.prod.artstor.org'].join('|')).test(this.clientHostname)) {
       this.baseUrl = this.hostname + '/api'
       this.solrUrl = this.hostname + '/api/search/v1.0/search'
-    // }
+    }
 
     // Set idle timer and auth heartbeat when loaded in Browser
     if (this.isBrowser) {
       this.initIdleWatcher()
-
       /**
        * User Access Heartbeat
        * - Poll /userinfo every 15min
