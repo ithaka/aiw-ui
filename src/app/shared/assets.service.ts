@@ -574,7 +574,7 @@ export class AssetService {
         }
 
         return this.http
-            .get(this._auth.getHostname() + '/api/categorydesc/' + descId + '/' + widgetId, options)
+            .get(this._auth.getHostname() + '/api/v1/categorydesc/' + descId + '/' + widgetId, options)
             .toPromise()
     }
 
