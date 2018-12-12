@@ -155,7 +155,7 @@ export class LibraryComponent implements OnInit {
                   .then((data) => {
                     // Create an index by ID for naming the facets
                     let categoryIndex = data.reduce( ( result, item ) => {
-                        result[item.categoryId] = item.categoryName;
+                        result[item.categoryid] = item.categoryname;
                         return result;
                     }, {});
                     // Append titles to the facets (we can't replace "name", as its the ID, which we need)
