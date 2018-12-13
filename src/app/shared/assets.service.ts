@@ -472,7 +472,7 @@ export class AssetService {
         let options = { withCredentials: true }
 
         return this.http
-            .get(this._auth.getHostname() + '/api/collections/103/categorynames', options)
+            .get(this._auth.getHostname() + '/api/v1/collections/103/categorynames', options)
             .toPromise()
             .then(res => {
                 if (res && res[0]) {
@@ -574,7 +574,7 @@ export class AssetService {
         }
 
         return this.http
-            .get(this._auth.getHostname() + '/api/categorydesc/' + descId + '/' + widgetId, options)
+            .get(this._auth.getHostname() + '/api/v1/categorydesc/' + descId + '/' + widgetId, options)
             .toPromise()
     }
 
@@ -619,7 +619,7 @@ export class AssetService {
         let options = { withCredentials: true };
         // Returns all of the collections names
         return this.http
-            .get(this._auth.getUrl() + '/collections/', options).pipe(
+            .get(this._auth.getUrl() + '/v1/collections/', options).pipe(
               map(res => {
                 if (type) {
                     let data = res
@@ -888,6 +888,11 @@ export class AssetService {
                                 if (thumbnail['thumbnailImgUrl'] && thumbnail['thumbnailImgUrl'].indexOf('media-objects') > -1) {
                                     thumbnail.thumbnailImgUrl = this._assetSearch.makeThumbUrl(thumbnail.thumbnailImgUrl, 1, true)
                                 }
+                                // New service for compound media thumbnails doesn't use 'media-objects' in the url string
+                                else if (thumbnail['thumbnailImgUrl'] && thumbnail['compoundmediaCount'] > 0) {
+                                  thumbnail.thumbnailImgUrl = 'https://stor.artstor.org/stor' + thumbnail.thumbnailImgUrl
+                                }
+
                                 return thumbnail
                             })
 
@@ -986,8 +991,8 @@ export class AssetService {
 }
 
 export interface categoryName {
-    categoryId: string,
-    categoryName: string
+    categoryid: string,
+    categoryname: string
 }
 export interface SolrFacet {
     name: string,
