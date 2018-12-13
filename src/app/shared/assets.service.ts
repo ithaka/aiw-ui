@@ -890,7 +890,7 @@ export class AssetService {
                                 }
                                 // New service for compound media thumbnails doesn't use 'media-objects' in the url string
                                 else if (thumbnail['thumbnailImgUrl'] && thumbnail['compoundmediaCount'] > 0) {
-                                  thumbnail.thumbnailImgUrl = 'stor.arstor.org/stor' + thumbnail.thumbnailImgUrl
+                                  thumbnail.thumbnailImgUrl = 'https://stor.artstor.org/stor' + thumbnail.thumbnailImgUrl
                                 }
 
                                 return thumbnail
