@@ -888,6 +888,11 @@ export class AssetService {
                                 if (thumbnail['thumbnailImgUrl'] && thumbnail['thumbnailImgUrl'].indexOf('media-objects') > -1) {
                                     thumbnail.thumbnailImgUrl = this._assetSearch.makeThumbUrl(thumbnail.thumbnailImgUrl, 1, true)
                                 }
+                                // New service for compound media thumbnails doesn't use 'media-objects' in the url string
+                                else if (thumbnail['thumbnailImgUrl'] && thumbnail['compoundmediaCount'] > 0) {
+                                  thumbnail.thumbnailImgUrl = 'stor.arstor.org/stor' + thumbnail.thumbnailImgUrl
+                                }
+
                                 return thumbnail
                             })
 
