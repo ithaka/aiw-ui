@@ -1352,4 +1352,13 @@ export class AssetPage implements OnInit, OnDestroy {
         }
     }
 
+    private closeDropdowns(): void{
+        let dropdownElements: Array<HTMLElement> = Array.from( document.querySelectorAll('.btn-row .dropdown') )
+        for (let dropdownElement of dropdownElements){
+            dropdownElement.classList.remove('show')
+            dropdownElement.children[0].setAttribute('aria-expanded', 'false')
+            dropdownElement.children[1].classList.remove('show')
+        }
+    }
+
 }
