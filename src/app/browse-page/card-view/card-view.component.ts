@@ -22,6 +22,7 @@ export class CardViewComponent implements OnInit {
   public thumbnails: any[] = []
   public groupType: string = '-'
   public description: string = ''
+  public newMultiViewThumbnailPath = 'https://stor.srtstor.org/stor'
 
   // Tracks whether to expand or collapse the tags exceeding 3 lines
   public tagsCollapsed: boolean = true
@@ -66,22 +67,30 @@ export class CardViewComponent implements OnInit {
           this.thumbnails = allThumbnails.filter((thumbnail) => {
             return thumbnail.status === 'available'
           })
+
+          this.thumbnails.forEach(thumbnail => {
+
+            if (thumbnail.compoundmediaCount > 0) {
+
+              // Catalog shared shelf with makeThumbUrl called in template
+              if (thumbnail.thumbnailImgUrl.indexOf('media-objects') > -1) {
+                thumbnail.useNewPath = false
+              }
+              // New MV URLs, doesn't call makeThumbUrl in template
+              else {
+                thumbnail.thumbnailImgUrl = this.newMultiViewThumbnailPath + thumbnail.thumbnailImgUrl
+                thumbnail.useNewPath = true
+              }
+            }
+            else if (thumbnail['media']) {
+              thumbnail.thumbnailImgUrl = thumbnail.media.thumbnailSizeOnePath
+            }
+          })
         })
         .catch( error => {
           console.error(error)
         })
       }
-
-      this.thumbnails.forEach( thumbnail => {
-        if (thumbnail['compound_media'] || thumbnail['compoundmediaCount']) {
-
-          let objects = JSON.parse(thumbnail['compound_media']).objects
-          thumbnail.thumbnailImgUrl = objects[0].thumbnailSizeOnePath
-        }
-        else if (thumbnail['media']) {
-          thumbnail.thumbnailImgUrl = thumbnail.media.thumbnailSizeOnePath
-        }
-      })
   }
 
   /**
