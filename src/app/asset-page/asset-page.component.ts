@@ -201,6 +201,9 @@ export class AssetPage implements OnInit, OnDestroy {
     // Flag for multiview items, true if the asset contains multiview items
     private multiviewItems: boolean = false
 
+    // Flag for show/hide page tooltip
+    private showPageToolTip: boolean = false
+
     constructor(
         public _appConfig: AppConfig,
         private _assets: AssetService,

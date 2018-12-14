@@ -5,10 +5,10 @@
     .title-nav-cntnr.col-md-12([class.hidden]="isFullscreen")
       span.back-results.hidden-sm-down(*ngIf="prevRouteParams.length > 0", (click)="backToResults()", tabindex="1", aria-label="Back to results", role="link") {{ 'ASSET_PAGE.LINKS.BACK' | translate}}
       .title-wrap(*ngIf="assets[0]")
-        i.icon.icon-direction.icon-left(title="Previous in results", (click)="showPrevAsset()", [class.disabled]="assetNumber <= 1", tabindex="1", aria-label="Previous item, use your left and right arrow keys to view previous and next items", role="button")
-        .title([ngClass]="[ prevRouteParams.length > 0 ? 'shortened' : '' ]", [innerHTML]="assets[0].title ? assets[0].title : ''", tabindex="1", attr.aria-label="{{assets[0].title ? assets[0].title : ''}}, result {{assetNumber}} of {{totalAssetCount - restrictedAssetsCount}}")
-        i.icon.icon-direction.icon-right(title="Next in results", (click)="showNextAsset()", [class.disabled]="assetNumber >= totalAssetCount - restrictedAssetsCount", tabindex="1", aria-label="Next item, use your left and right arrow keys to view previous and next items", role="button")
-      .page-tooltip
+        i.icon.icon-direction.icon-left(title="Previous in results", (click)="showPrevAsset()", [class.disabled]="assetNumber <= 1", [attr.tabindex]="assetNumber <= 1 ? -1 : 1", aria-label="Previous item, use your left and right arrow keys to view previous and next items", role="button")
+        .title([ngClass]="[ prevRouteParams.length > 0 ? 'shortened' : '' ]", [innerHTML]="assets[0].title ? assets[0].title : ''", (focus)="showPageToolTip = true", (focusout)="showPageToolTip = false", tabindex="1", attr.aria-label="{{assets[0].title ? assets[0].title : ''}}, result {{assetNumber}} of {{totalAssetCount - restrictedAssetsCount}}")
+        i.icon.icon-direction.icon-right(title="Next in results", (click)="showNextAsset()", [class.disabled]="assetNumber >= totalAssetCount - restrictedAssetsCount", [attr.tabindex]="assetNumber >= totalAssetCount - restrictedAssetsCount ? -1 : 1", aria-label="Next item, use your left and right arrow keys to view previous and next items", role="button")
+      .page-tooltip([ngClass]="[ showPageToolTip ? 'show' : '' ]")
         span#assetPageNumber {{ assetNumber }}  OF
         = " "
         span#assetPageCount {{ totalAssetCount - restrictedAssetsCount }}
