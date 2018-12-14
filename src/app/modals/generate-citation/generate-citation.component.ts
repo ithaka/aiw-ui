@@ -1,8 +1,9 @@
 import { Component, OnInit, Input, Output, EventEmitter, AfterViewInit, ElementRef, ViewChild  } from '@angular/core'
-import { DatePipe } from '@angular/common'
+import { DatePipe, Location } from '@angular/common'
 
 import { Asset } from '../../asset-page/asset'
 import { LogService, DomUtilityService } from '../../shared'
+import { AppConfig } from 'app/app.service';
 
 @Component({
   selector: 'ang-generate-citation',
@@ -17,25 +18,26 @@ export class GenerateCitation implements OnInit, AfterViewInit {
 
   @ViewChild("modal", {read: ElementRef}) modalElement: ElementRef;
 
-  public document = document
-  private reqProtocol = document.location.protocol + '//'
+  // Prefer saving links to HTTPS
+  private reqProtocol = 'https://'
 
   public apa_citation: string = '' // APA style citation to be copied to the clipboard
   public mla_citation: string = '' // MLA style citation to be copied to the clipboard
   public chicago_citation: string = '' // Chicago style citation to be copied to the clipboard
-
   public citationCopied: boolean = false
+  // For client side, template use only
+  public document = document
 
   constructor(
     private _date: DatePipe,
     private _log: LogService,
-    private _dom: DomUtilityService
+    private _dom: DomUtilityService,
+    private location: Location,
+    private _app: AppConfig
   ) { }
 
   ngOnInit() {
     // Set focus to the modal to make the links in the modal first thing to tab for accessibility
-    // let htmlelement: HTMLElement = <HTMLElement>this._dom.byId('modal');
-    // htmlelement.focus()
     if (this.modalElement && this.modalElement.nativeElement){
       this.modalElement.nativeElement.focus()
     }
@@ -64,14 +66,14 @@ export class GenerateCitation implements OnInit, AfterViewInit {
     // console.log(asset)
 
     let assetPath
-    if (window.location.host.indexOf('localhost:') > -1) {
+    if (this._app.clientHostname.indexOf('localhost:') > -1) {
       assetPath = '#/asset/'
     } else {
       assetPath = 'asset/'
     }
 
     // Note: The request protocol is added to ADA, and Chicago citations, but not MLA
-    let currentUrl = document.location.host + document.location.pathname + assetPath + asset.id
+    let currentUrl = this._app.clientHostname + this.location.path(false) + assetPath + asset.id
 
     // APA Citation
     // [Creator]. [Date(in parentheses)]. [Title(italicized)]. [Work Type(in brackets)]. Retrieved from [asset page url].

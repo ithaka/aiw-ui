@@ -334,7 +334,7 @@ export class AssetService {
      */
     public getShareLink(assetId: string) {
         //   Links in the clipboard need a protocol defined
-        return  `${window.location.protocol}//${window.location.host}/asset/${assetId}`
+        return  `https://${this._app.clientHostname}/asset/${assetId}`
 
         // For Reference: Old service for generating share url:
         // this._assets.genrateImageURL( this.assets[0].id )
