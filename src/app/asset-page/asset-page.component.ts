@@ -346,11 +346,10 @@ export class AssetPage implements OnInit, OnDestroy {
                             this.assetNumber = this._assets.currentLoadedParams.page ? this.assetIndex + 1 + ((this._assets.currentLoadedParams.page - 1) * this._assets.currentLoadedParams.size) : this.assetIndex + 1;
                         }
                     }
-
-
-                    // Set image share link
-                    this.generateImgURL(this.assetIds[0])
                 }
+
+                // Set image share link
+                this.generateImgURL(this.assetIds[0])
 
                 // For "Back to Results" link and pagination, look for prevRouteTS to set prevRouteParams
                 if (routeParams['prevRouteTS']) {
