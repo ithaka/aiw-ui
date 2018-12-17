@@ -109,7 +109,7 @@ export class Home implements OnInit, OnDestroy {
 
             let queryType = {};
             if (this._auth.isPublicOnly()) {
-              queryType['type'] = "ssc"
+              queryType['type'] = "commons"
             }
             else {
               queryType['type'] = "institution"
@@ -118,13 +118,12 @@ export class Home implements OnInit, OnDestroy {
             this._tags.initTags(queryType)
               .then((tags) => {
                 this.instCollections = tags;
-                console.log(this.instCollections);
                 this.loaders['instCollections'] = false;
               })
               .catch((err) => {
                 console.error(err);
               });
-              
+
           }
         },
         err => {
