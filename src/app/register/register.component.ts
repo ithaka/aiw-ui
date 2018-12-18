@@ -28,7 +28,8 @@ export class RegisterComponent implements OnInit {
     duplicate?: boolean,
     hasJstor?: boolean,
     server?: boolean,
-    shibboleth?: string,
+    showShibbolethError?: boolean,
+    shibbolethError?: string,
     shibbolethInst?: boolean
   } = {};
 
@@ -118,6 +119,9 @@ export class RegisterComponent implements OnInit {
     registerCall(userInfo).pipe(
       take(1),
       map(data => {
+
+        console.log('!!!!!!!!!!!!', 'Called registerCall')
+
         this.isLoading = false;
         if (data['user']) {
           let user: any = Object.assign({}, data['user']);
@@ -136,7 +140,7 @@ export class RegisterComponent implements OnInit {
         }
       },
       (res) => {
-        console.error(res);
+        console.error('FROM res......', res);
 
         this.isLoading = false;
         if (res.status === 500) {
@@ -145,8 +149,15 @@ export class RegisterComponent implements OnInit {
         }
 
         // Set service error code from auth response
-        if (res.status === 400 && this.shibErrorCodes.indexOf(res.code) > -1) {
-          this.serviceErrors.shibboleth = res.code
+        if (res.status == 400 && this.shibErrorCodes.indexOf(res.code) > -1) {
+          console.log('GOT THE 400')
+          console.log('RES', res)
+          console.log('RES.STATUS', res.status)
+          console.log(res.err);
+          console.log(res.status.error)
+
+          this.serviceErrors.shibbolethError = res.code
+          this.serviceErrors.showShibbolethError = true
         }
       })).subscribe()
 
