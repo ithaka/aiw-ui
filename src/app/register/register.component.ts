@@ -113,55 +113,75 @@ export class RegisterComponent implements OnInit {
 
     if (this.shibParameters && this.shibParameters.samlTokenId && this.shibParameters.samlTokenId.length > 0) {
       userInfo.samlTokenId = this.shibParameters.samlTokenId
-      registerCall = (value) => { return this._auth.registerSamlUser(value) }
+
+      this._auth.registerSamlUser(userInfo).pipe(
+        take(1),
+        map(data => {
+
+          console.log('!!!!!!!!!!!!', 'Called registerSAML CALLED')
+          this.handleRegistrationResp(data)
+
+        })).subscribe()
+    }
+    else {
+      registerCall(userInfo).pipe(
+        take(1),
+        map(data => {
+          console.log('!!!!!!!!!!!!', 'Called registerCall')
+          this.handleRegistrationResp(data)
+        // NONE OF THIS EVER RAN!
+        // (res) => {
+        //   console.error('FROM res......', res);
+
+        //   this.isLoading = false;
+        //   if (res.status === 500) {
+        //     this.serviceErrors.server = true
+        //     console.error('Registration Server Error', userInfo, res)
+        //   }
+
+        //   // Set service error code from auth response
+        //   if (res.status == 400 && this.shibErrorCodes.indexOf(res.code) > -1) {
+        //     console.log('GOT THE 400')
+        //     console.log('RES', res)
+        //     console.log('RES.STATUS', res.status)
+        //     console.log(res.err);
+        //     console.log(res.status.error)
+
+        //     this.serviceErrors.shibbolethError = res.code
+        //     this.serviceErrors.showShibbolethError = true
+        //   }
+      })).subscribe()
     }
 
-    registerCall(userInfo).pipe(
-      take(1),
-      map(data => {
-
-        console.log('!!!!!!!!!!!!', 'Called registerCall')
-
-        this.isLoading = false;
-        if (data['user']) {
-          let user: any = Object.assign({}, data['user']);
-          // A user that just registered is obviously logged in as a user
-          user.isLoggedIn = true;
-          this._auth.saveUser(data['user']);
-          this.angulartics.eventTrack.next({ action: 'remoteLogin', properties: { category: this._auth.getGACategory(), label: 'success' }});
-          this.loadForUser(data);
-        } else {
-          if (data['statusMessage'].includes('JSTOR account exists') && data['statusCode'] === 2) {
-            // Jstor account exists also returns a status code of 2
-            this.serviceErrors.hasJstor = true
-          } else if (data['statusMessage'] === 'User already exists.' && data['statusCode'] === 1) {
-            this.serviceErrors.duplicate = true
-          }
-        }
-      },
-      (res) => {
-        console.error('FROM res......', res);
-
-        this.isLoading = false;
-        if (res.status === 500) {
-          this.serviceErrors.server = true
-          console.error('Registration Server Error', userInfo, res)
-        }
-
-        // Set service error code from auth response
-        if (res.status == 400 && this.shibErrorCodes.indexOf(res.code) > -1) {
-          console.log('GOT THE 400')
-          console.log('RES', res)
-          console.log('RES.STATUS', res.status)
-          console.log(res.err);
-          console.log(res.status.error)
-
-          this.serviceErrors.shibbolethError = res.code
-          this.serviceErrors.showShibbolethError = true
-        }
-      })).subscribe()
-
     // if the call is unsuccessful, you will get a 200 w/o a user and with a field called 'statusMessage'
+  }
+
+  private handleRegistrationResp(formSubmissionResponse) {
+    if (formSubmissionResponse['user']) {
+      let user: any = Object.assign({}, formSubmissionResponse['user']);
+      // A user that just registered is obviously logged in as a user
+      user.isLoggedIn = true;
+      this._auth.saveUser(formSubmissionResponse['user']);
+      this.angulartics.eventTrack.next({ action: 'remoteLogin', properties: { category: this._auth.getGACategory(), label: 'success' } });
+      this.loadForUser(formSubmissionResponse);
+    }
+    else if (formSubmissionResponse['statusMessage'].includes('JSTOR account exists') && formSubmissionResponse['statusCode'] === 2) {
+      // Jstor account exists also returns a status code of 2
+      this.serviceErrors.hasJstor = true
+    }
+    else if (formSubmissionResponse['statusMessage'] === 'User already exists.' && formSubmissionResponse['statusCode'] === 1) {
+      this.serviceErrors.duplicate = true
+    }
+    // Handle 400 Error From Shibboleth Workflow
+    // TODO: We don't correctly catch http.post errors at all
+    else if (formSubmissionResponse['code']) {
+      let errorCode = formSubmissionResponse['code']
+
+      if (this.shibErrorCodes.indexOf(errorCode) > -1) {
+        this.serviceErrors.shibbolethError = errorCode
+        this.serviceErrors.showShibbolethError = true
+      }
+    }
   }
 
   loadForUser(data: any) {
