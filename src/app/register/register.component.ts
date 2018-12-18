@@ -3,10 +3,12 @@ import { Router, ActivatedRoute } from '@angular/router'
 import { formGroupNameProvider } from '@angular/forms/src/directives/reactive_directives/form_group_name'
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms'
 import { Angulartics2 } from 'angulartics2'
-import { map, take } from 'rxjs/operators'
+import { map, take, catchError } from 'rxjs/operators'
 
 import { AuthService } from './../shared'
 import { USER_ROLES, USER_DEPTS, UserRolesAndDepts } from './user-roles'
+import { HttpErrorResponse } from '@angular/common/http';
+import { ObservableInput } from 'rxjs';
 
 @Component({
   selector: 'ang-register-page',
@@ -121,7 +123,9 @@ export class RegisterComponent implements OnInit {
           console.log('!!!!!!!!!!!!', 'Called registerSAML CALLED')
           this.handleRegistrationResp(data)
 
-        })).subscribe()
+        },
+        catchError(this.handleError),
+      )).subscribe()
     }
     else {
       registerCall(userInfo).pipe(
@@ -156,6 +160,30 @@ export class RegisterComponent implements OnInit {
     // if the call is unsuccessful, you will get a 200 w/o a user and with a field called 'statusMessage'
   }
 
+  private handleError(err: HttpErrorResponse): any {
+    // Handle 400 Error From Shibboleth Workflow
+    // TODO: We don't correctly catch http.post errors at all
+    if (err.error instanceof ErrorEvent) {
+      // A client-side or network error occurred. Handle it accordingly.
+      console.error('An error occurred:', err.error.message);
+    } else {
+      // The backend returned an unsuccessful response code.
+      // The response body may contain clues as to what went wrong,
+      console.error(
+        `Backend returned code ${err.status}, ` +
+        `body was: ${err.error}`)
+
+      console.log('ERROR', err.error.code)
+
+      let errorCode = err.error.code
+
+      if (this.shibErrorCodes.indexOf(errorCode) > -1) {
+        this.serviceErrors.shibbolethError = errorCode
+        this.serviceErrors.showShibbolethError = true
+      }
+    }
+  }
+
   private handleRegistrationResp(formSubmissionResponse) {
     if (formSubmissionResponse['user']) {
       let user: any = Object.assign({}, formSubmissionResponse['user']);
@@ -171,16 +199,6 @@ export class RegisterComponent implements OnInit {
     }
     else if (formSubmissionResponse['statusMessage'] === 'User already exists.' && formSubmissionResponse['statusCode'] === 1) {
       this.serviceErrors.duplicate = true
-    }
-    // Handle 400 Error From Shibboleth Workflow
-    // TODO: We don't correctly catch http.post errors at all
-    else if (formSubmissionResponse['code']) {
-      let errorCode = formSubmissionResponse['code']
-
-      if (this.shibErrorCodes.indexOf(errorCode) > -1) {
-        this.serviceErrors.shibbolethError = errorCode
-        this.serviceErrors.showShibbolethError = true
-      }
     }
   }
 
