@@ -113,8 +113,8 @@ export class RegisterComponent implements OnInit {
       portal: 'library'
     }
 
-    if (this.shibParameters && this.shibParameters.samlTokenId && this.shibParameters.samlTokenId.length > 0) {
-      userInfo.samlTokenId = this.shibParameters.samlTokenId
+    // if (this.shibParameters && this.shibParameters.samlTokenId && this.shibParameters.samlTokenId.length > 0) {
+    //   userInfo.samlTokenId = this.shibParameters.samlTokenId
 
       this._auth.registerSamlUser(userInfo).pipe(
         take(1),
@@ -127,38 +127,38 @@ export class RegisterComponent implements OnInit {
         catchError(this.handleError),
       )).subscribe()
     }
-    else {
-      registerCall(userInfo).pipe(
-        take(1),
-        map(data => {
-          console.log('!!!!!!!!!!!!', 'Called registerCall')
-          this.handleRegistrationResp(data)
-        // NONE OF THIS EVER RAN!
-        // (res) => {
-        //   console.error('FROM res......', res);
+    // else {
+    //   registerCall(userInfo).pipe(
+    //     take(1),
+    //     map(data => {
+    //       console.log('!!!!!!!!!!!!', 'Called registerCall')
+    //       this.handleRegistrationResp(data)
+    //     // NONE OF THIS EVER RAN!
+    //     // (res) => {
+    //     //   console.error('FROM res......', res);
 
-        //   this.isLoading = false;
-        //   if (res.status === 500) {
-        //     this.serviceErrors.server = true
-        //     console.error('Registration Server Error', userInfo, res)
-        //   }
+    //     //   this.isLoading = false;
+    //     //   if (res.status === 500) {
+    //     //     this.serviceErrors.server = true
+    //     //     console.error('Registration Server Error', userInfo, res)
+    //     //   }
 
-        //   // Set service error code from auth response
-        //   if (res.status == 400 && this.shibErrorCodes.indexOf(res.code) > -1) {
-        //     console.log('GOT THE 400')
-        //     console.log('RES', res)
-        //     console.log('RES.STATUS', res.status)
-        //     console.log(res.err);
-        //     console.log(res.status.error)
+    //     //   // Set service error code from auth response
+    //     //   if (res.status == 400 && this.shibErrorCodes.indexOf(res.code) > -1) {
+    //     //     console.log('GOT THE 400')
+    //     //     console.log('RES', res)
+    //     //     console.log('RES.STATUS', res.status)
+    //     //     console.log(res.err);
+    //     //     console.log(res.status.error)
 
-        //     this.serviceErrors.shibbolethError = res.code
-        //     this.serviceErrors.showShibbolethError = true
-        //   }
-      })).subscribe()
-    }
+    //     //     this.serviceErrors.shibbolethError = res.code
+    //     //     this.serviceErrors.showShibbolethError = true
+    //     //   }
+    //   })).subscribe()
+
 
     // if the call is unsuccessful, you will get a 200 w/o a user and with a field called 'statusMessage'
-  }
+
 
   private handleError(err: HttpErrorResponse): any {
     // Handle 400 Error From Shibboleth Workflow
@@ -185,6 +185,9 @@ export class RegisterComponent implements OnInit {
   }
 
   private handleRegistrationResp(formSubmissionResponse) {
+
+    console.log('GOT FORMSUBMISSIONRESPONSE: ', formSubmissionResponse)
+
     if (formSubmissionResponse['user']) {
       let user: any = Object.assign({}, formSubmissionResponse['user']);
       // A user that just registered is obviously logged in as a user
