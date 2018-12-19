@@ -352,7 +352,7 @@ export class AssetPage implements OnInit, OnDestroy {
                 }
 
                 // Set image share link
-                this.generateImgURL(this.assetIds[0])
+                this.generateImgURL(this.assetIds[0], this.encryptedAccess || this.fromOpenLibrary)
 
                 // For "Back to Results" link and pagination, look for prevRouteTS to set prevRouteParams
                 if (routeParams['prevRouteTS']) {
@@ -824,8 +824,8 @@ export class AssetPage implements OnInit, OnDestroy {
         }
     }
 
-    private generateImgURL(assetId: string): void {
-        this.generatedImgURL = this._assets.getShareLink(assetId);
+    private generateImgURL(assetId: string, external?: boolean): void {
+        this.generatedImgURL = this._assets.getShareLink(assetId, external);
     }
 
     /**
