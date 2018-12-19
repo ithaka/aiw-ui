@@ -27,6 +27,9 @@ export class FeaturedComponent implements OnInit {
   public primaryFeaturedIndex: number = 0
   private skipAutoSlide: boolean = false
 
+  // To pause and resume slide show
+  private intervalId: any
+
   constructor(public _appConfig: AppConfig, public _auth: AuthService) {
     this.conf = this._appConfig.config.featuredCollection // 'HOME.FEATURED' in en.json
   }
@@ -67,7 +70,7 @@ export class FeaturedComponent implements OnInit {
   private runSlideshow(primary_index: number) {
     this.primaryFeaturedIndex = primary_index
 
-      setInterval(() => {
+      this.intervalId = setInterval(() => {
         if (!this.skipAutoSlide) {
           if (this.primaryFeaturedIndex === 2)
             this.primaryFeaturedIndex = 0
@@ -76,7 +79,14 @@ export class FeaturedComponent implements OnInit {
         } else {
           this.skipAutoSlide = false
         }
-      }, 9000)
+      }, 3000)
+  } 
+
+  /**
+   * runSlideShow - Pause the homepage slideshow
+   */
+  private pauseSlideShow(){
+    clearInterval(this.intervalId)
   }
 
   ngOnInit() {
