@@ -201,6 +201,9 @@ export class AssetPage implements OnInit, OnDestroy {
     // Flag for multiview items, true if the asset contains multiview items
     private multiviewItems: boolean = false
 
+    // Flag for show/hide page tooltip
+    private showPageToolTip: boolean = false
+
     constructor(
         public _appConfig: AppConfig,
         private _assets: AssetService,
@@ -1348,6 +1351,15 @@ export class AssetPage implements OnInit, OnDestroy {
             this.angulartics.eventTrack.next({ action: 'multiViewFullscreenPageViaThumbnail', properties: { category: this._auth.getGACategory(), label: this.assets[0].id } })
         } else {
             this.angulartics.eventTrack.next({ action: 'multiViewPageViaThumbnail', properties: { category: this._auth.getGACategory(), label: this.assets[0].id } })
+        }
+    }
+
+    private closeDropdowns(): void{
+        let dropdownElements: Array<HTMLElement> = Array.from( document.querySelectorAll('.btn-row .dropdown') )
+        for (let dropdownElement of dropdownElements){
+            dropdownElement.classList.remove('show')
+            dropdownElement.children[0].setAttribute('aria-expanded', 'false')
+            dropdownElement.children[1].classList.remove('show')
         }
     }
 

@@ -77,6 +77,10 @@ $titleNavBg: #eee;
     -webkit-transition: opacity linear 0.3s;
     -moz-transition: opacity linear 0.3s;
     transition: opacity linear 0.3s;
+
+    &.show{
+        opacity: 1;
+    }
 }
 .title-nav-cntnr:hover .page-tooltip{
     opacity: 1;

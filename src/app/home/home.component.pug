@@ -38,8 +38,8 @@
             h2.h1 {{ 'HOME.HEADINGS.INSTITUTION_COLLECTIONS' | translate:{ institutionName: institution.shortName ? institution.shortName : 'Institutional' } }}
           .list--home-collections([class.loading]="loaders['instCollections']")
             .list-group.list-group-flush
-              a.list-group-item.list-group-item-action(*ngFor="let collection of instCollections", [routerLink]="[ '/collection', collection.collectionid ]")
-                span.notranslate  {{ collection.collectionname }}
+              a.list-group-item.list-group-item-action(*ngFor="let collection of instCollections", [routerLink]="[ '/collection', collection.tagId ]")
+                span.notranslate  {{ collection.title }}
           .card-block(*ngIf="errors.instCollections")
             #errorCollectionsLoading.alert.alert-warning(role="alert")
               strong Error
