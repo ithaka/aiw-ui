@@ -79,7 +79,7 @@ export class FeaturedComponent implements OnInit {
         } else {
           this.skipAutoSlide = false
         }
-      }, 3000)
+      }, 9000)
   } 
 
   /**
@@ -87,6 +87,12 @@ export class FeaturedComponent implements OnInit {
    */
   private pauseSlideShow(){
     clearInterval(this.intervalId)
+  }
+
+  private secondaryImgsFocusOut(index){
+    if (index === 0 || index === 2){
+      this.runSlideshow(this.primaryFeaturedIndex)
+    }
   }
 
   ngOnInit() {

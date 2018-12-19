@@ -12,12 +12,12 @@
   //- Secondary Images
   .col-sm-3.featured-col#featured-side
     .card(*ngFor="let collection of featured; let i = index")
-      a.card__placard(*ngIf="primaryFeaturedIndex === i", [attr.href]="featured[i].link | translate", tabindex="4", [attr.aria-label]="'Clicking this link will open one of our featured collections. ' + (collection.subheading | translate)")
+      a.card__placard(*ngIf="primaryFeaturedIndex === i", (focus)="pauseSlideShow()", (focusout)="secondaryImgsFocusOut(i)", [attr.href]="featured[i].link | translate", tabindex="4", [attr.aria-label]="'Clicking this link will open one of our featured collections. ' + (collection.subheading | translate)")
         //- Title and description of the current primary image
         .featured-title([innerHtml]="collection.subheading | translate")
         p.featured-caption.small([innerHtml]="collection.description | translate")
       img.no-stretch.featured-side-img(*ngIf="primaryFeaturedIndex !== i", (mouseenter)="switchFeaturedIndex(i)", (click)="switchFeaturedIndex(i)", [attr.src]="collection.img_src | translate",
-       [attr.alt]="collection.alt | translate", [attr.title]="collection.link_title | translate", tabindex="4", [attr.aria-label]="'Clicking this link will open one of our featured collections. ' + (collection.subheading | translate)")
+       [attr.alt]="collection.alt | translate", [attr.title]="collection.link_title | translate", (focus)="pauseSlideShow()", (focusout)="secondaryImgsFocusOut(i)", tabindex="4", [attr.aria-label]="'Clicking this link will open one of our featured collections. ' + (collection.subheading | translate)")
 
 //- ngBoostrap carousel on mobile
 .row#featured-mobile-container
