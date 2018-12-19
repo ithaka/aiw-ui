@@ -84,6 +84,16 @@ export class CategoryPage implements OnInit, OnDestroy {
                 if (data) {
                   this.catDescription = data['blurbUrl']
                   this.catThumbnail = data['imageUrl']
+                  this.catName = data['name'];
+
+                  // Set page title
+                  this._title.setSubtitle(this.catName);
+
+                  // Update OGP meta tags
+                  this.meta.updateTag({ property: "og:title", content: this.catName }, 'property="og:title"')
+                  this.catDescription && this.meta.updateTag({ property: "og:description", content: this.catDescription }, 'property="og:description"')
+                  this.meta.updateTag({ property: "og:url", content: window.document.location.href }, 'property="og:url"')
+                  this.meta.updateTag({ property: "og:image", content: this.catThumbnail }, 'property="og:image"')
                 } else {
                   // Some categories don't have descriptions
                 }
@@ -98,29 +108,6 @@ export class CategoryPage implements OnInit, OnDestroy {
                 }
               });
 
-            // Get Category data
-            this.getCategoryData(this.catId)
-            .then((data) => {
-              if (data) {
-                this.catName = data['categoryName'];
-                // Set page title
-                this._title.setSubtitle(this.catName);
-
-                // Update OGP meta tags
-                this.meta.updateTag({ property: "og:title", content: this.catName }, 'property="og:title"')
-                this.catDescription && this.meta.updateTag({ property: "og:description", content: this.catDescription }, 'property="og:description"')
-                this.meta.updateTag({ property: "og:url", content: window.document.location.href }, 'property="og:url"')
-                this.meta.updateTag({ property: "og:image", content: this.catThumbnail }, 'property="og:image"')
-              }
-            })
-            .catch((error) => {
-              console.error(error);
-              if (error.status === 401) {
-                // Categories are ADL collections only, so we can make this assumption
-                this.unaffiliatedUser = true
-                this.showAccessDeniedModal = true
-              }
-            });
           }
         }
       )).subscribe()
@@ -151,24 +138,26 @@ export class CategoryPage implements OnInit, OnDestroy {
           .toPromise();
   }
 
-  /**
-  * Get title for a Category
-  * @param catId The Category ID
-  */
-  private getCategoryData(catId: string) {
-    let options = { withCredentials: true };
+// NOTE:getCategoryData is no longer used. The /category endpoint is now deprecated
+//   /**
+//   * Get title for a Category
+//   * @param catId The Category ID
+//   */
+//   private getCategoryData(catId: string) {
+//     let options = { withCredentials: true };
 
-    // Can be removed once region specific ids are no longer used
-    // if (catId.indexOf('103') == 1) {
-    //   catId = catId.slice(1)
-    // }
+//     // Can be removed once region specific ids are no longer used
+//     // if (catId.indexOf('103') == 1) {
+//     //   catId = catId.slice(1)
+//     // }
 
-    return this.http
-        .get(this._auth.getUrl() + '/categories/' + catId, options)
-        .toPromise();
-}
+//     return this.http
+//         .get(this._auth.getUrl() + '/categories/' + catId, options)
+//         .toPromise();
+// }
 
   // private updateSearchInRes(value: boolean): void{
   //  this.searchInResults = value;
   // }
+
 }
