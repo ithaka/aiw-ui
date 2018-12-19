@@ -113,8 +113,8 @@ export class RegisterComponent implements OnInit {
       portal: 'library'
     }
 
-    // if (this.shibParameters && this.shibParameters.samlTokenId && this.shibParameters.samlTokenId.length > 0) {
-    //   userInfo.samlTokenId = this.shibParameters.samlTokenId
+    if (this.shibParameters && this.shibParameters.samlTokenId && this.shibParameters.samlTokenId.length > 0) {
+      userInfo.samlTokenId = this.shibParameters.samlTokenId
 
       this._auth.registerSamlUser(userInfo).pipe(
         catchError(err => {
@@ -122,85 +122,44 @@ export class RegisterComponent implements OnInit {
         }),
         take(1),
         map(data => {
-          console.log('!!!!!!!!!!!!', 'Called registerSAML CALLED')
           this.handleRegistrationResp(data)
-
         },
-
       )).subscribe()
     }
-    // else {
-    //   registerCall(userInfo).pipe(
-    //     take(1),
-    //     map(data => {
-    //       console.log('!!!!!!!!!!!!', 'Called registerCall')
-    //       this.handleRegistrationResp(data)
-    //     // NONE OF THIS EVER RAN!
-    //     // (res) => {
-    //     //   console.error('FROM res......', res);
+    else {
+      registerCall(userInfo).pipe(
+        catchError(err => {
+          return this.handleError(err)
+        }),
+        take(1),
+        map(data => {
+          this.handleRegistrationResp(data)
+        })).subscribe()
+    }
+  }
 
-    //     //   this.isLoading = false;
-    //     //   if (res.status === 500) {
-    //     //     this.serviceErrors.server = true
-    //     //     console.error('Registration Server Error', userInfo, res)
-    //     //   }
-
-    //     //   // Set service error code from auth response
-    //     //   if (res.status == 400 && this.shibErrorCodes.indexOf(res.code) > -1) {
-    //     //     console.log('GOT THE 400')
-    //     //     console.log('RES', res)
-    //     //     console.log('RES.STATUS', res.status)
-    //     //     console.log(res.err);
-    //     //     console.log(res.status.error)
-
-    //     //     this.serviceErrors.shibbolethError = res.code
-    //     //     this.serviceErrors.showShibbolethError = true
-    //     //   }
-    //   })).subscribe()
-
-
-    // if the call is unsuccessful, you will get a 200 w/o a user and with a field called 'statusMessage'
-
-
+  // Catch and handle Error responses from submitted register form
   private handleError(err: any): any {
-    // Handle 400 Error From Shibboleth Workflow
-    // TODO: We don't correctly catch http.post errors at all
     if (err.error instanceof ErrorEvent) {
-      // A client-side or network error occurred. Handle it accordingly.
-      console.error('An error occurred:', err.error.message);
-      `Backend returned code ${err.status}, ` +
-        `body was: ${err.error}`
 
-      console.log('ERROR', err.error.code)
+      this.isLoading = false
 
-      let errorCode = err.error.code
-
-      if (this.shibErrorCodes.indexOf(errorCode) > -1) {
-        this.serviceErrors.shibbolethError = errorCode
-        this.serviceErrors.showShibbolethError = true
+      if (err.status === 500) {
+        this.serviceErrors.server = true
       }
-    } else {
-      // The backend returned an unsuccessful response code.
-      // The response body may contain clues as to what went wrong,
-      console.error(
-        `Backend returned code ${err.status}, ` +
-        `body was: ${err.error}`)
-
-      console.log('ERROR', err.error.code)
-
-      let errorCode = err.error.code
-
-      if (this.shibErrorCodes.indexOf(errorCode) > -1) {
-        this.serviceErrors.shibbolethError = errorCode
-        this.serviceErrors.showShibbolethError = true
+      else if (err.status === 400) {
+        console.log('GOT 400')
+        console.log('CODE: ', err.error.code)
+        if (err.error.code && this.shibErrorCodes.indexOf(err.error.code) > -1) {
+          this.serviceErrors.shibbolethError = err.error.code
+          this.serviceErrors.showShibbolethError = true
+        }
       }
     }
     return throwError(err)
   }
 
   private handleRegistrationResp(formSubmissionResponse) {
-
-    console.log('GOT FORMSUBMISSIONRESPONSE: ', formSubmissionResponse)
 
     if (formSubmissionResponse['user']) {
       let user: any = Object.assign({}, formSubmissionResponse['user']);
