@@ -3,12 +3,12 @@ import { Router, ActivatedRoute } from '@angular/router'
 import { formGroupNameProvider } from '@angular/forms/src/directives/reactive_directives/form_group_name'
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms'
 import { Angulartics2 } from 'angulartics2'
+import { throwError } from 'rxjs'
 import { map, take, catchError } from 'rxjs/operators'
 
 import { AuthService } from './../shared'
 import { USER_ROLES, USER_DEPTS, UserRolesAndDepts } from './user-roles'
 import { HttpErrorResponse } from '@angular/common/http';
-import { ObservableInput } from 'rxjs';
 
 @Component({
   selector: 'ang-register-page',
@@ -117,14 +117,16 @@ export class RegisterComponent implements OnInit {
     //   userInfo.samlTokenId = this.shibParameters.samlTokenId
 
       this._auth.registerSamlUser(userInfo).pipe(
+        catchError(err => {
+          return this.handleError(err)
+        }),
         take(1),
         map(data => {
-
           console.log('!!!!!!!!!!!!', 'Called registerSAML CALLED')
           this.handleRegistrationResp(data)
 
         },
-        catchError(this.handleError),
+
       )).subscribe()
     }
     // else {
@@ -160,12 +162,23 @@ export class RegisterComponent implements OnInit {
     // if the call is unsuccessful, you will get a 200 w/o a user and with a field called 'statusMessage'
 
 
-  private handleError(err: HttpErrorResponse): any {
+  private handleError(err: any): any {
     // Handle 400 Error From Shibboleth Workflow
     // TODO: We don't correctly catch http.post errors at all
     if (err.error instanceof ErrorEvent) {
       // A client-side or network error occurred. Handle it accordingly.
       console.error('An error occurred:', err.error.message);
+      `Backend returned code ${err.status}, ` +
+        `body was: ${err.error}`
+
+      console.log('ERROR', err.error.code)
+
+      let errorCode = err.error.code
+
+      if (this.shibErrorCodes.indexOf(errorCode) > -1) {
+        this.serviceErrors.shibbolethError = errorCode
+        this.serviceErrors.showShibbolethError = true
+      }
     } else {
       // The backend returned an unsuccessful response code.
       // The response body may contain clues as to what went wrong,
@@ -182,6 +195,7 @@ export class RegisterComponent implements OnInit {
         this.serviceErrors.showShibbolethError = true
       }
     }
+    return throwError(err)
   }
 
   private handleRegistrationResp(formSubmissionResponse) {
