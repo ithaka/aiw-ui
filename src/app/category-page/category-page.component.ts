@@ -138,6 +138,7 @@ export class CategoryPage implements OnInit, OnDestroy {
           .toPromise();
   }
 
+// NOTE:getCategoryData is no longer used. The /category endpoint is now deprecated
 //   /**
 //   * Get title for a Category
 //   * @param catId The Category ID
@@ -158,4 +159,5 @@ export class CategoryPage implements OnInit, OnDestroy {
   // private updateSearchInRes(value: boolean): void{
   //  this.searchInResults = value;
   // }
+
 }
