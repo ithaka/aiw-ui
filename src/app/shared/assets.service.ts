@@ -536,7 +536,13 @@ export class AssetService {
              * - Some schools have shared collections which have a contributinginsitutionid which differs from their own
              */
             filterArray.push('(collectiontypes:2 AND contributinginstitutionid:(' + this._auth.getUser().institutionId.toString() + ')) OR (collectiontypes:(2) AND -(collectiontypes:(5)))')
-          } else {
+
+          }
+          // Collction Type 6 Private Collections
+          else if (collectionType === 6) {
+            filterArray.push('(collectiontypes:6 AND contributinginstitutionid:(' + this._auth.getUser().institutionId.toString() + '))')
+          }
+          else {
             filterArray.push('collectiontypes:' + collectionType)
           }
       }
