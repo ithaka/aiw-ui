@@ -37,7 +37,8 @@ export class MyCollectionsComponent implements OnInit {
     private route: ActivatedRoute,
     private _search: AssetSearchService,
     private _assets: AssetService,
-    private _title: TitleService
+    private _title: TitleService,
+    private _tags: TagsService
   ) {
     this.unaffiliatedUser = this._auth.isPublicOnly() ? true : false
   }
@@ -81,6 +82,7 @@ export class MyCollectionsComponent implements OnInit {
     )
 
     if (this.isLoggedIn) { // If user is logged-in get data for user's personal collections
+      // DEPRECATED
       this.getUserPCol()
     }
   } // OnInit
@@ -105,22 +107,37 @@ export class MyCollectionsComponent implements OnInit {
    */
   getUserPCol(){
     this.loading = true;
-    this._assets.pccollection()
-      .then((res) => {
-          if (res['privateCollection'] && (res['privateCollection'].length > 0)){
-            for (let colObj of res['privateCollection']){
-                let privTag = new Tag(colObj.collectionid, colObj.collectionname, true, null, { label: 'privateCollection', folder: true }, true);
-                this.tags.push(privTag);
-            }
-          }
 
-          this.loading = false;
+    this._tags.initTags({ type: "private" })
+      .then((privateTag) => {
+        this.tags = this.tags.concat(privateTag)
+        this.loading = false;
+
+        console.log('TAGS: ', this.tags)
 
       })
-      .catch(function(err) {
-          console.log('Unable to load User Personal Collections.');
-          this.loading = false;
+      .catch((err) => {
+        console.error(err);
+        this.loading = false;
       });
+
+
+    // this._assets.pccollection()
+    //   .then((res) => {
+    //       if (res['privateCollection'] && (res['privateCollection'].length > 0)){
+    //         for (let colObj of res['privateCollection']){
+    //             let privTag = new Tag(colObj.collectionid, colObj.collectionname, true, null, { label: 'privateCollection', folder: true }, true);
+    //             this.tags.push(privTag);
+    //         }
+    //       }
+
+    //       this.loading = false;
+
+    //   })
+    //   .catch(function(err) {
+    //       console.log('Unable to load User Personal Collections.');
+    //       this.loading = false;
+    //   });
   }
 
   toggleInfo(node){

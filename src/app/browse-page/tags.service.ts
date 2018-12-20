@@ -22,6 +22,10 @@ export class TagsService {
     } else if (switchObj.type === 'library' && switchObj.collectionId) {
       return this.getCategories(null, switchObj.collectionId);
     }
+    // Private Collections
+    else if (switchObj.type === 'private') {
+      return this.loadCollectionsList('private')
+    }
   }
 
   /**
@@ -36,6 +40,9 @@ export class TagsService {
     } else if (type === 'ssc'){
       // Public Collections = Type #5
       colTypeValue = 5
+    }
+    else if (type === 'private') {
+      colTypeValue = 6
     }
 
     if (colTypeValue){
