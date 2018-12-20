@@ -11,7 +11,7 @@ export class TagsService {
 
   /**
    * Should be first call to get tags that a page makes
-   * @param type Can be values: "commons", and nothing else yet
+   * @param type Can be values: "commons", "ssc", "institution", "private"
    * @returns a chainable promise resolved with an array of tags
    */
   public initTags(switchObj: any): Promise<Tag[]> {
@@ -40,8 +40,8 @@ export class TagsService {
     } else if (type === 'ssc'){
       // Public Collections = Type #5
       colTypeValue = 5
-    }
-    else if (type === 'private') {
+    } else if (type === 'private') {
+      // Private Collections = Type #6
       colTypeValue = 6
     }
 
@@ -73,9 +73,12 @@ export class TagsService {
               }
             )
 
+            // Set label to privateCollection if colTypeValue is 6
+            let collectionLabel = colTypeValue === 6 ? 'privateCollection' : 'collection'
+
             // Create tags
             facetsArray.forEach((facet, index) => {
-              tags.push(new Tag(facet.id, facet.name, true, null, { label: 'collection', folder: true }, true))
+              tags.push(new Tag(facet.id, facet.name, true, null, { label: collectionLabel, folder: true }, true))
             })
 
             return tags
