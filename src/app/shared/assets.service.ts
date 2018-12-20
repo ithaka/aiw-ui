@@ -538,7 +538,7 @@ export class AssetService {
             filterArray.push('(collectiontypes:2 AND contributinginstitutionid:(' + this._auth.getUser().institutionId.toString() + ')) OR (collectiontypes:(2) AND -(collectiontypes:(5)))')
 
           }
-          // Colelction Type 6 Private Collections and NOT Collections Type 5 - because some are both Types
+          // Collction Type 6 Private Collections
           else if (collectionType == 6) {
             filterArray.push('(collectiontypes:6 AND contributinginstitutionid:(' + this._auth.getUser().institutionId.toString() + '))')
           }
