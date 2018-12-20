@@ -460,14 +460,16 @@ export class AssetService {
 
     } // end setResults
 
-    // Used by Browse page
-    public pccollection(){
-        let options = { withCredentials: true };
+    // NOTE: Deprecated /pccollection endpoint no longer available
+    // TODO: REMOVE
+    // // Used by Browse page
+    // public pccollection(){
+    //     let options = { withCredentials: true };
 
-        return this.http
-            .get(this._auth.getHostname() + '/api/pccollection', options)
-            .toPromise()
-    }
+    //     return this.http
+    //         .get(this._auth.getHostname() + '/api/pccollection', options)
+    //         .toPromise()
+    // }
 
     public categoryNames(): Promise<categoryName[]> {
         let options = { withCredentials: true }
