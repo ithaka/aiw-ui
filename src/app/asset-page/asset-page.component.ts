@@ -1365,13 +1365,13 @@ export class AssetPage implements OnInit, OnDestroy {
     }
 
     // Adding keyboard arrow keys navigation between download button options
-    private downloadOptsArrowDown(element: any): void{
+    downloadOptsArrowDown(element: any): void{
         let focusChildIndex = element.id === 'downloadAssetDropdown' && element.getAttribute('aria-expanded') ? 0 : 1
         let focusElement = <HTMLElement>(document.querySelectorAll('.dropdown-menu a')[focusChildIndex])
         focusElement.focus()
     }
 
-    private downloadOptsArrowUp(element: any): void{
+    downloadOptsArrowUp(element: any): void{
         let focusElementSelector = element.id === 'downloadViewLink' ? '#downloadAssetLink' : '#downloadAssetDropdown'
         let focusElement = <HTMLElement>(document.querySelector(focusElementSelector))
         focusElement.focus()
