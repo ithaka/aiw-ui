@@ -19,6 +19,18 @@ export class FeaturedComponent implements OnInit {
   // Array index for which collection is the 'primary image'
   public primaryFeaturedIndex: number = 0
 
+  private conf = ''
+  private user: any
+
+  // Determines which type of featured collections to display
+  private featuredType: string; // 'COLLECTIONS', 'PUBLIC_COLLECTIONS', or 'SAHARA'
+  private base: string
+  private headings: string
+  private skipAutoSlide: boolean = false
+
+  // To pause and resume slide show
+  private intervalId: any
+
   /**
    * runSlideShow - Start the homepage slideshow
    * @param primary_index pass in primaryFeaturedIndex,
@@ -51,18 +63,6 @@ export class FeaturedComponent implements OnInit {
       this.runSlideshow(this.primaryFeaturedIndex)
     }
   }
-
-  private conf = ''
-  private user: any
-
-  // Determines which type of featured collections to display
-  private featuredType: string; // 'COLLECTIONS', 'PUBLIC_COLLECTIONS', or 'SAHARA'
-  private base: string
-  private headings: string
-  private skipAutoSlide: boolean = false
-
-  // To pause and resume slide show
-  private intervalId: any
 
   constructor(public _appConfig: AppConfig, public _auth: AuthService) {
     this.conf = this._appConfig.config.featuredCollection // 'HOME.FEATURED' in en.json
