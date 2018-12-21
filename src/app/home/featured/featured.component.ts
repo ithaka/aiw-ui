@@ -18,6 +18,40 @@ export class FeaturedComponent implements OnInit {
 
   // Array index for which collection is the 'primary image'
   public primaryFeaturedIndex: number = 0
+
+  /**
+   * runSlideShow - Start the homepage slideshow
+   * @param primary_index pass in primaryFeaturedIndex,
+   * so it is locally scoped within setInterval.
+   */
+  public runSlideshow(primary_index: number) {
+    this.primaryFeaturedIndex = primary_index
+
+    this.intervalId = setInterval(() => {
+      if (!this.skipAutoSlide) {
+        if (this.primaryFeaturedIndex === 2)
+          this.primaryFeaturedIndex = 0
+        else
+          this.primaryFeaturedIndex += 1
+      } else {
+        this.skipAutoSlide = false
+      }
+    }, 9000)
+  }
+
+  /**
+   * runSlideShow - Pause the homepage slideshow
+   */
+  public pauseSlideShow() {
+    clearInterval(this.intervalId)
+  }
+
+  public secondaryImgsFocusOut(index) {
+    if (index === 0 || index === 2) {
+      this.runSlideshow(this.primaryFeaturedIndex)
+    }
+  }
+
   private conf = ''
   private user: any
 
@@ -83,39 +117,6 @@ export class FeaturedComponent implements OnInit {
   private switchFeaturedIndex(index: number): void {
     this.primaryFeaturedIndex = index
     this.skipAutoSlide = true
-  }
-
-  /**
-   * runSlideShow - Start the homepage slideshow
-   * @param primary_index pass in primaryFeaturedIndex,
-   * so it is locally scoped within setInterval.
-   */
-  private runSlideshow(primary_index: number) {
-    this.primaryFeaturedIndex = primary_index
-
-      this.intervalId = setInterval(() => {
-        if (!this.skipAutoSlide) {
-          if (this.primaryFeaturedIndex === 2)
-            this.primaryFeaturedIndex = 0
-          else
-            this.primaryFeaturedIndex += 1
-        } else {
-          this.skipAutoSlide = false
-        }
-      }, 9000)
-  }
-
-  /**
-   * runSlideShow - Pause the homepage slideshow
-   */
-  private pauseSlideShow(){
-    clearInterval(this.intervalId)
-  }
-
-  private secondaryImgsFocusOut(index){
-    if (index === 0 || index === 2){
-      this.runSlideshow(this.primaryFeaturedIndex)
-    }
   }
 
 }
