@@ -13,7 +13,6 @@ export class TagComponent {
 
   @Input() public tag: Tag;
   @Input() public link: boolean;
-  @Input() public browseType: boolean;
 
   @Input() public edit: boolean;
   @Output() editTag: EventEmitter<any> = new EventEmitter();

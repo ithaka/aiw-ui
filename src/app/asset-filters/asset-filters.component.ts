@@ -255,9 +255,6 @@ export class AssetFilters {
       if (currentParams.name){
         baseParams['name'] = currentParams.name
       }
-      if (currentParams.browseType){
-        baseParams['browseType'] = currentParams.browseType
-      }
       if (currentParams.size){
         baseParams['size'] = currentParams.size
       }
