@@ -92,6 +92,12 @@
             margin: 10px auto;
         }
     }
+
+    .pc-upload-info{
+        & a:focus, & a:active {
+            background: inherit !important;
+        }
+    }
 }
 
 .modal-body .success-msg {

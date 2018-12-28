@@ -74,6 +74,6 @@
           button.btn.btn-secondary.mr-2((click)="clearSelectedAsset()", type="button", tabindex="0") {{ 'EDIT_PC_MODAL.BUTTONS.CLOSE' | translate }}
           button.btn.btn-primary(type="submit", (click)="editMetaFormSubmit(editAssetMetaForm.value)", [class.loading]="metadataUpdateLoading", tabindex="0", (keydown.tab)="$event.stopPropagation(); $event.preventDefault(); startModalFocus()") {{ 'EDIT_PC_MODAL.BUTTONS.SAVE' | translate }}
         ng-container(*ngIf="!editMode && collectionAssets && collectionAssets.length > 0")
-          .alert.alert-info([innerHtml]=" 'EDIT_PC_MODAL.UPLOAD_TIME_DISCLAIMER' | translate ")
+          .alert.alert-info.pc-upload-info([innerHtml]=" 'EDIT_PC_MODAL.UPLOAD_TIME_DISCLAIMER' | translate ")
           .form-group
             button.btn.btn-primary((click)="closeModal.emit()", type="button", tabindex="0", (keydown.tab)="$event.stopPropagation(); $event.preventDefault(); startModalFocus()") {{ 'EDIT_PC_MODAL.BUTTONS.DONE' | translate }}
