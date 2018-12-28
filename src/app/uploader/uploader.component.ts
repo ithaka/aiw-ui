@@ -1,4 +1,4 @@
-import { Component, OnInit, EventEmitter, Output } from '@angular/core'
+import { Component, OnInit, EventEmitter, Input, Output } from '@angular/core'
 
 import { FileUploader, FileSelectDirective, FileLikeObject, FileItem } from 'ng2-file-upload'
 import { AuthService, PostPersonalCollectionResponse } from '../shared'
@@ -13,6 +13,9 @@ import { AuthService, PostPersonalCollectionResponse } from '../shared'
 
 export class UploaderComponent implements OnInit {
   @Output() fileUploaded: EventEmitter<PostPersonalCollectionResponse> = new EventEmitter()
+  @Output() focusOnFirstElement: EventEmitter<boolean> = new EventEmitter()
+
+  @Input() public colAssetsCount: number
 
   public uploader: FileUploader
   private UPLOAD_URL: string
@@ -52,6 +55,14 @@ export class UploaderComponent implements OnInit {
      */
     this.uploader.onAfterAddingFile = (file) => {
       this.getFileSource(file['some']) // this component is stupid and adds the file under the 'some' property but doesn't include it in the interface
+    }
+  }
+
+  helpTabKeyDown(event: any): void{
+    if(this.colAssetsCount === 0) {
+      event.stopPropagation()
+      event.preventDefault()
+      this.focusOnFirstElement.emit(true)
     }
   }
   /**

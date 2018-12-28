@@ -2,9 +2,9 @@
   .modal-dialog([ngClass]="{ 'edit-mode': editMode }", role="document")
     .modal-content
       .modal-header
-        h5.modal-title {{ 'EDIT_PC_MODAL.TITLE' | translate }}
+        h5.modal-title(tabindex="0") {{ 'EDIT_PC_MODAL.TITLE' | translate }}
         //- a.btn.btn-link.help(href="http://support.artstor.org/?article-category=09-using-your-own-images", target="_blank") {{ 'EDIT_PC_MODAL.HELP' | translate }}
-        button.close((click)="closeModal.emit()", type="button", data-dismiss="modal", aria-label="Close")
+        button.close((click)="closeModal.emit()", type="button", data-dismiss="modal", aria-label="Close window")
           span(aria-hidden="true") &times;
       .modal-body
         .row.no-gutters
@@ -20,11 +20,11 @@
             .form-control-feedback(*ngIf="uiMessages.imgDeleteSuccess") {{ 'EDIT_PC_MODAL.MESSAGES.IMG_DELETE_SUCCESS' | translate }}
         .row.no-gutters
           .thmb-cntnr([ngClass]="{ 'col-md-6': editMode, 'col-md-12': !editMode }")
-            ang-uploader((fileUploaded)="handleNewAssetUpload($event)")
+            ang-uploader((fileUploaded)="handleNewAssetUpload($event)", (focusOnFirstElement)="startModalFocus()", [colAssetsCount]="collectionAssets ? collectionAssets.length : 0")
             .lbl.mt-4(*ngIf="collectionAssets && collectionAssets.length > 0") {{ 'EDIT_PC_MODAL.RECENT_TITLE' | translate }}
               .thumb-preview-cntnr
                 .row.no-gutters
-                  .col-md-4.thumb([ngClass]="{ 'selected': selectedAsset && (selectedAsset.ssid === asset.ssid)}", *ngFor="let asset of collectionAssets")
+                  .col-md-4.thumb([ngClass]="{ 'selected': selectedAsset && (selectedAsset.ssid === asset.ssid)}", *ngFor="let asset of collectionAssets", (keyup.enter)="editAssetMeta( asset )", tabindex="0", aria-label="Uploaded image: Select to add metadata")
                     img([attr.src]="asset.src", [attr.alt]="asset.name ? 'Thumbnail of ' + asset.name : 'No title available'")
                     .thumb-overlay((click)="editAssetMeta( asset )")
               .info-lbl {{ 'EDIT_PC_MODAL.META_ADD_INFO' | translate }}
@@ -37,29 +37,29 @@
             form#editAssetMetaForm([formGroup]="editAssetMetaForm", (ngSubmit)="editMetaFormSubmit(editAssetMetaForm.value)")
               .form-group
                 label(for="assetCreatorInput") {{ 'EDIT_PC_MODAL.FORM.CREATOR' | translate }}
-                input#assetCreatorInput.form-control(type="text", [formControl]="editAssetMetaForm.controls['creator']", tabindex="1")
+                input#assetCreatorInput.form-control(type="text", [formControl]="editAssetMetaForm.controls['creator']", tabindex="0")
               .form-group([class.has-danger]="submitted && !editAssetMetaForm.controls['title'].valid")
                 label(for="assetTitleInput") {{ 'EDIT_PC_MODAL.FORM.TITLE' | translate }}
-                input#assetTitleInput.form-control(type="text", [formControl]="editAssetMetaForm.controls['title']", tabindex="1")
+                input#assetTitleInput.form-control(type="text", [formControl]="editAssetMetaForm.controls['title']", tabindex="0")
                 .form-control-feedback(*ngIf="submitted && editAssetMetaForm.controls['title'].hasError('required')") {{ 'EDIT_PC_MODAL.FORM.TITLE_INVALID' | translate }}
               .form-group
                 label(for="assetWrkTypInput") {{ 'EDIT_PC_MODAL.FORM.WRK_TYP' | translate }}
-                input#assetWrkTypInput.form-control(type="text", [formControl]="editAssetMetaForm.controls['work_type']", tabindex="1")
+                input#assetWrkTypInput.form-control(type="text", [formControl]="editAssetMetaForm.controls['work_type']", tabindex="0")
               .form-group
                 label(for="assetDateInput") {{ 'EDIT_PC_MODAL.FORM.DATE' | translate }}
-                input#assetDateInput.form-control(type="text", [formControl]="editAssetMetaForm.controls['date']", tabindex="1")
+                input#assetDateInput.form-control(type="text", [formControl]="editAssetMetaForm.controls['date']", tabindex="0")
               .form-group
                 label(for="assetLocInput") {{ 'EDIT_PC_MODAL.FORM.LOCATION' | translate }}
-                input#assetLocInput.form-control([formControl]="editAssetMetaForm.controls['location']", tabindex="1")
+                input#assetLocInput.form-control([formControl]="editAssetMetaForm.controls['location']", tabindex="0")
               .form-group
                 label(for="assetMatInput") {{ 'EDIT_PC_MODAL.FORM.MATERIAL' | translate }}
-                input#assetMatInput.form-control(type="text", [formControl]="editAssetMetaForm.controls['material']", tabindex="1")
+                input#assetMatInput.form-control(type="text", [formControl]="editAssetMetaForm.controls['material']", tabindex="0")
               .form-group
                 label(for="assetDescInput") {{ 'EDIT_PC_MODAL.FORM.DESCRIPTION' | translate }}
-                input#assetDescInput.form-control(type="text", [formControl]="editAssetMetaForm.controls['description']", tabindex="1")
+                input#assetDescInput.form-control(type="text", [formControl]="editAssetMetaForm.controls['description']", tabindex="0")
               .form-group
                 label(for="assetSubjectInput") {{ 'EDIT_PC_MODAL.FORM.SUBJECT' | translate }}
-                input#assetSubjectInput.form-control(type="text", [formControl]="editAssetMetaForm.controls['subject']", tabindex="1")
+                input#assetSubjectInput.form-control(type="text", [formControl]="editAssetMetaForm.controls['subject']", tabindex="0")
               .form-group.has-danger(
                 *ngIf="uiMessages.metadataUpdateFailure"
               )
@@ -70,10 +70,10 @@
                 .form-control-feedback(*ngIf="uiMessages.metadataUpdateSuccess") {{ 'EDIT_PC_MODAL.MESSAGES.METADATA_UPDATE_SUCCESS' | translate }}
       .modal-footer
         .form-group(*ngIf="editMode")
-          button.btn.btn-danger.mr-2((click)="deleteAssetById(selectedAsset.ssid)", type="button", [class.loading]="deleteLoading") {{ 'EDIT_PC_MODAL.BUTTONS.DELETE' | translate }}
-          button.btn.btn-secondary.mr-2((click)="clearSelectedAsset()", type="button") {{ 'EDIT_PC_MODAL.BUTTONS.CLOSE' | translate }}
-          button.btn.btn-primary(type="submit", (click)="editMetaFormSubmit(editAssetMetaForm.value)", [class.loading]="metadataUpdateLoading") {{ 'EDIT_PC_MODAL.BUTTONS.SAVE' | translate }}
+          button.btn.btn-danger.mr-2((click)="deleteAssetById(selectedAsset.ssid)", type="button", [class.loading]="deleteLoading", tabindex="0") {{ 'EDIT_PC_MODAL.BUTTONS.DELETE' | translate }}
+          button.btn.btn-secondary.mr-2((click)="clearSelectedAsset()", type="button", tabindex="0") {{ 'EDIT_PC_MODAL.BUTTONS.CLOSE' | translate }}
+          button.btn.btn-primary(type="submit", (click)="editMetaFormSubmit(editAssetMetaForm.value)", [class.loading]="metadataUpdateLoading", tabindex="0", (keydown.tab)="$event.stopPropagation(); $event.preventDefault(); startModalFocus()") {{ 'EDIT_PC_MODAL.BUTTONS.SAVE' | translate }}
         ng-container(*ngIf="!editMode && collectionAssets && collectionAssets.length > 0")
           .alert.alert-info([innerHtml]=" 'EDIT_PC_MODAL.UPLOAD_TIME_DISCLAIMER' | translate ")
           .form-group
-            button.btn.btn-primary((click)="closeModal.emit()", type="button") {{ 'EDIT_PC_MODAL.BUTTONS.DONE' | translate }}
+            button.btn.btn-primary((click)="closeModal.emit()", type="button", tabindex="0", (keydown.tab)="$event.stopPropagation(); $event.preventDefault(); startModalFocus()") {{ 'EDIT_PC_MODAL.BUTTONS.DONE' | translate }}
