@@ -86,10 +86,10 @@ img.no-stretch {
 
 .card.card--asset, .card--asset {
     margin-bottom: 0;
-    height: 210px;
+    height: 216px;
     overflow: visible;
     text-overflow: ellipsis;
-    padding: 3px 0;
+    padding: 8px 0;
     margin: 0 auto;
     cursor: pointer;
 
@@ -131,6 +131,7 @@ img.no-stretch {
         height: 120px;
         position: relative;
         margin-bottom: 6px;
+        overflow: hidden;
 
         & img {
             /*@extend %vertical-center;*/
@@ -164,7 +165,8 @@ img.no-stretch {
     position: relative;
 
     & i {
-        font-size: 16px;
+        font-size: 15px;
+        margin-left: 1px;
     }
     & span {
         /*max-height: 2em;*/
