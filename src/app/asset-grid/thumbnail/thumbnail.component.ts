@@ -10,6 +10,7 @@ import { Angulartics2 } from 'angulartics2';
   styles: [`
     .card-icon-group {
         height: 19px;
+        margin-top: 4px;
     }
     .metadata-wrap {
       min-height: 42px;
