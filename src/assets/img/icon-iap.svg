@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="14px" height="14px" viewBox="0 0 14 14" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 52.5 (67469) - http://www.bohemiancoding.com/sketch -->
+    <title>iap</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <linearGradient x1="0%" y1="57.5419234%" x2="100%" y2="57.5419234%" id="linearGradient-1">
+            <stop stop-color="#0395DF" offset="0%"></stop>
+            <stop stop-color="#006699" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="new-icons??" transform="translate(-403.000000, -405.000000)">
+            <g id="iap" transform="translate(403.000000, 405.000000)">
+                <path d="M2,0 L12,0 C13.1045695,0 14,0.8954305 14,2 L14,12 C14,13.1045695 13.1045695,14 12,14 L2,14 C0.8954305,14 0,13.1045695 0,12 L0,2 C0,0.8954305 0.8954305,0 2,0 Z" id="Path" fill="url(#linearGradient-1)"></path>
+                <text id="IAP" font-family="HelveticaNeue-Bold, Helvetica Neue" font-size="5" font-weight="bold" line-spacing="6" letter-spacing="0.5" fill="#FFFFFF">
+                    <tspan x="2.3825" y="9">IA</tspan>
+                    <tspan x="8.2825" y="9">P</tspan>
+                </text>
+            </g>
+        </g>
+    </g>
+</svg>

@@ -24,14 +24,35 @@ export class TypeIdPipe implements PipeTransform {
     24: 'video' // used in styles
   };
 
+  private objectTypeLabels: { [key: number]: string } = {
+    1: 'Specimen Media',
+    2: 'Visual',
+    3: 'Use',
+    6: 'Publication',
+    7: 'Synonyms',
+    8: 'People',
+    9: 'Repository',
+    10: 'Image',
+    11: 'Panoramic Image', // used in styles
+    12: 'Audio File',
+    13: '3D Object', // used in styles
+    20: 'PDF Document', // used in styles
+    21: 'PowerPoint Document', // used in styles
+    22: 'Word Document', // used in styles
+    23: 'Excel Document', // used in styles
+    24: 'Video File' // used in styles
+  };
+
   // perhaps could take a 'style' or 'name' arg, depending on if you want abbrevs?
-  transform(value: any): any {
+  transform(value: any, returnLabel?: boolean): any {
+    let referenceObject = returnLabel ? this.objectTypeLabels : this.objectTypeNames
+
     if (typeof value === 'string') {
-      for (let property in this.objectTypeNames) {
-        if (this.objectTypeNames[property] === value) { return property; }
+      for (let property in referenceObject) {
+        if (referenceObject[property] === value) { return property; }
       }
     } else if (typeof value === 'number') {
-      return this.objectTypeNames[value];
+      return referenceObject[value];
     } else {
       throw new Error('type ' + (typeof value) + ' not recognized by typeIdPipe');
     }
