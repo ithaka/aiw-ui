@@ -32,7 +32,7 @@
               .icon--toggle((click)="setThumbnailSize(true)", [ngClass]="{ 'active': largeThmbView }", (keyup.enter)="setThumbnailSize(true)", tabindex="3", role="button", attr.aria-label="View larger thumbnails, {{largeThmbView ? 'selected' : 'unselected'}}")
                 i.icon.icon-large-view
             //- Download
-            li.btn.btn-link([class.disabled]="reorderMode", (click)="_ig.triggerIgDownload()", *ngIf="actionOptions.group", (keyup.enter)="_ig.triggerIgDownload()", tabindex="3")
+            li.btn.btn-link([class.disabled]="reorderMode", (click)="_ig.triggerIgDownload()", *ngIf="actionOptions.group", (keyup.enter)="_ig.triggerIgDownload()", tabindex="3", role="button", aria-label="Download the image group")
               i.icon.icon-download-white
               | Download
             //- Select
