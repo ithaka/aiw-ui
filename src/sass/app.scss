@@ -101,7 +101,8 @@ html, body{
     padding: 0.5rem 0.6rem !important;
     width: auto !important;
     max-width: none !important;
-    white-space: nowrap;
+    // white-space: nowrap;
+    white-space: pre;
 
     h3{
       color: #fff
