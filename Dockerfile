@@ -1,3 +1,27 @@
 # Builds a Docker to deliver dist/
-FROM nginx:latest
-COPY dist/ /usr/share/nginx/html
+FROM node:10
+
+# Add environment variables
+ENV PORT=443
+
+# Create app directory
+WORKDIR /usr/src/app
+
+# Install app dependencies
+COPY package.json ./
+RUN npm install
+
+# Bundle app source
+COPY . .
+
+# Ensure pug is compiled on first build, and avoid "missing command" issue in @angular cache
+RUN npm run postinstall
+RUN npm link @angular/cli
+
+# Build app
+RUN npm run build:ssr
+
+EXPOSE 8080
+EXPOSE 443
+
+CMD [ "npm", "run", "serve:ssr" ]
