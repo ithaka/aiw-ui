@@ -10,7 +10,7 @@ div
         .row
           h1#pageTitle.h1--title-block.col-md-9 {{ ig.name }}
           .col-md-3(*ngIf="!showDesc()")
-            .row-hdr.row-hdr--btn(*ngIf!="(ig.tags && ig.tags.length > 0) || ig.description", (click)="descExpanded = !descExpanded") Group Details
+            .row-hdr.row-hdr--btn(*ngIf!="(ig.tags && ig.tags.length > 0) || ig.description", (click)="descExpanded = !descExpanded", (keyup.enter)="descExpanded = !descExpanded", tabindex="4", role="button", aria-label="This is the Group Details section, press enter to expand this section") Group Details
               i.icon.icon-direction.tree-icon.desc-expnd-clps-icon([ngClass]="{ 'icon-down' : descExpanded, 'icon-left' : !descExpanded }", style="float:right")
             .row-hdr(*ngIf!="(!ig.tags || ig.tags.length < 1) && !ig.description") No Group Details
       div([ngClass]="[ showDesc() ? 'col-md-9' : 'col-md-12' ]")
@@ -21,7 +21,7 @@ div
           | Unable to load the thumbnails for this group.
 
       div(*ngIf="showDesc()", [ngClass]="[ showDesc() ? 'col-md-3' : 'col-md-0'  ]")
-        .row-hdr.row-hdr--btn((click)="descExpanded = !descExpanded") Group Details
+        .row-hdr.row-hdr--btn((click)="descExpanded = !descExpanded", (keyup.enter)="descExpanded = !descExpanded", tabindex="4", role="button", aria-label="This is the Group Details section, press enter to collapse this section") Group Details
           i.icon.icon-direction.tree-icon.desc-expnd-clps-icon([ngClass]="{ 'icon-down' : descExpanded, 'icon-left' : !descExpanded }", style="float:right")
         .ig-tags.meta-block.pt-4(*ngIf!="ig.tags && ig.tags.length > 0")
           .label Tags
