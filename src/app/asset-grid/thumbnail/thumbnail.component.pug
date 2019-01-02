@@ -1,4 +1,4 @@
-.card-block.card-text(tabindex="3", [attr.aria-label]="thumbnail.name + ', '  + thumbnail.agent + ', ' + thumbnail.date", [attr.id]="('item-' + itemIndex)", [ngClass]="{ 'reorder--asset' : arrowReorderMode }")
+.card-block.card-text(tabindex="3", [attr.aria-label]="thumbnail.tombstone && thumbnail.tombstone.length > 0 ? thumbnail.tombstone.join(', ') : thumbnail.name + ', '  + thumbnail.agent + ', ' + thumbnail.date", [attr.id]="('item-' + itemIndex)", [ngClass]="{ 'reorder--asset' : arrowReorderMode }")
   .card-img-top
     img(*ngIf="thumbnail.status != 'not-available'", id="{{thumbnail.artstorid}}", [class.disablePointerEvents]="reorderMode", [attr.src]="isMultiView && !reorderMode ? thumbnail.thumbnailImgUrl : _search.makeThumbUrl(thumbnail.thumbnailImgUrl, thumbnailSize, isMultiView)", (error)="thumbnailError()", [attr.alt]="thumbnailAlt", [attr.title]="thumbnailAlt", aria-role="image")
   .metadata-wrap

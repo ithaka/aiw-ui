@@ -41,7 +41,7 @@
               | Select
             //- Reorder
             li.btn.btn-link((click)="toggleReorderMode()", [ngClass]="{'active': reorderMode}", *ngIf="actionOptions.group && actionOptions.isowner", (keyup.enter)="toggleReorderMode()", tabindex="3", role="button",
-            aria-label="Press enter or spacebar to reorder the images in this group. Using drag and drop or keyboard arrow keys, you can change the order of the images.")
+            aria-label="Reorder the image group")
               i.icon.icon-reorder-white
               | Reorder
           //- Number of selected assets in edit mode
@@ -54,11 +54,11 @@
               | Use the mouse to drag and drop images. For keyboard control, tab to an image, use enter to select, and the left and right arrow keys to move the image.
             //- Save Order
             li.btn.btn-link#saveReorderButton([class.disabled]="!orderChanged", (click)="saveReorder()", (keyup.enter)="saveReorder()", tabindex="3", role="button",
-            aria-label="Press enter or spacebar to save reordering of the images in this group.", [attr.aria-controls]="reorder-status")
+            aria-label="Save the reorder of this image group", [attr.aria-controls]="reorder-status")
               i.icon.icon-reorder-white
               | Save Order
             //- Cancel Reorder
-            li.btn.btn-link((click)="cancelReorder()", (keyup.enter)="cancelReorder()", tabindex="3", role="button", aria-label="Press enter or spacebar to cancel reordering of the images in this group.")
+            li.btn.btn-link((click)="cancelReorder()", (keyup.enter)="cancelReorder()", tabindex="3", role="button", aria-label="Cancel the reorder of this image group")
               i.icon.icon-close-white--round
               | Cancel Reorder
           //- Asset Counts
@@ -87,7 +87,7 @@
           | {{ "BROWSE.WARNINGS.RSTD_IMGS" | translate }}
           ng-container(*ngIf="ig.owner_id == user.baseProfileId.toString()")
             div.mt-4 As the <b>Owner</b> of this group, would you like to remove the deleted images?
-            a.mt-2.btn.btn-secondary.btn-sm(tabindex="3", (click)="removeFromGroup(restricted_results)") Remove deleted images
+            a.mt-2.btn.btn-secondary.btn-sm(tabindex="3", (click)="removeFromGroup(restricted_results)", role="button") Remove deleted images
         .alert.alert-warning(*ngIf="!isLoading && (totalAssets == 0) && (!results || results.length < 1) && (searchError.length < 1) && !searchLimitError")
           b Unable to find any assets
           br
