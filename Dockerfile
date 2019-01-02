@@ -2,7 +2,7 @@
 FROM node:10
 
 # Add environment variables
-ENV PORT=443
+ENV PORT=80
 
 # Create app directory
 WORKDIR /usr/src/app
@@ -21,6 +21,7 @@ RUN npm link @angular/cli
 # Build app
 RUN npm run build:ssr
 
+EXPOSE 80
 EXPOSE 8080
 EXPOSE 443
 
