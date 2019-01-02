@@ -1,9 +1,11 @@
 version: '3'
 services:
-  labs_blazegraph:
+  app:
     build:
       context: .
       dockerfile: Dockerfile
+      image: artstor-ui
+      container_name: docker-webapp
     restart: always
     ports:
     - "80:8080"
