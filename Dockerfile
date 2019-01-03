@@ -3,6 +3,7 @@ FROM node:10
 
 # Add environment variables
 ENV PORT=80
+ENV SAGOKU=true
 
 # Create app directory
 WORKDIR /usr/src/app
