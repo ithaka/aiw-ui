@@ -7,7 +7,7 @@ fi
 APP_NAME="artstor-ui"
 SAGOKU_BUILD_USER="cody.pumper@ithaka.org"
 GIT_SHA=$(git rev-parse HEAD)
-IMAGE="artifactory.acorn.cirrostratus.org/artstor-air-node:${GIT_SHA:0:6}"
+IMAGE="artifactory.acorn.cirrostratus.org/artstor-air-node:${GIT_SHA:0:8}"
 
 uuid=$(uuidgen | tr -d \'\n\' | tr \'[:upper:]\' \'[:lower:]\')
 sagokuURL="http://sagoku.${ENVIRONMENT}.cirrostratus.org/api/docker/${APP_NAME}/deploy"

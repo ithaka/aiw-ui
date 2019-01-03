@@ -1,3 +1,15 @@
 #!/bin/bash
 GIT_SHA=$(git rev-parse HEAD)
-docker build -t  artifactory.acorn.cirrostratus.org/artstor-air-node:${GIT_SHA:0:6} .
+export IMAGE=artifactory.acorn.cirrostratus.org/artstor-air-node:${GIT_SHA:0:8}
+
+# Update docker-compose with version
+rm -f docker-compose.yml temp.yml  
+( echo "cat <<EOF >docker-compose.yml";
+  cat docker-compose.template.yml;
+  echo "EOF";
+) >temp.yml
+. temp.yml
+cat docker-compose.yml
+rm -f temp.yml
+
+docker build -t ${IMAGE} .
