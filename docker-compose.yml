@@ -7,8 +7,7 @@ services:
     restart: always
     ports:
     - "80:80"
-    - "8080:8080"
-    - "443:443"
+    - "8080:80"
     environment:
       SGK_APP: "${SGK_APP}"
       SGK_APP_SERVICE_NAME: "${SGK_APP_SERVICE_NAME}"

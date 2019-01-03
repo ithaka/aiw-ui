@@ -22,7 +22,5 @@ RUN npm link @angular/cli
 RUN npm run build:ssr
 
 EXPOSE 80
-EXPOSE 8080
-EXPOSE 443
 
 CMD [ "npm", "run", "serve:ssr" ]
