@@ -12,4 +12,8 @@ rm -f docker-compose.yml temp.yml
 cat docker-compose.yml
 rm -f temp.yml
 
+# Build docker image
 docker build -t ${IMAGE} .
+
+# Push image to Ithaka repository
+docker push ${IMAGE}
