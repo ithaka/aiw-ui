@@ -1,8 +1,8 @@
-.modal.fade.show
+.modal.fade.show(tabindex="0")
   .modal-dialog([ngClass]="{ 'edit-mode': editMode }", role="document")
     .modal-content
       .modal-header
-        h5.modal-title(tabindex="0") {{ 'EDIT_PC_MODAL.TITLE' | translate }}
+        h5.modal-title(tabindex="0", (keydown.shift.tab)="closeModal.emit()") {{ 'EDIT_PC_MODAL.TITLE' | translate }}
         //- a.btn.btn-link.help(href="http://support.artstor.org/?article-category=09-using-your-own-images", target="_blank") {{ 'EDIT_PC_MODAL.HELP' | translate }}
         button.close((click)="closeModal.emit()", type="button", data-dismiss="modal", aria-label="Close window")
           span(aria-hidden="true") &times;
