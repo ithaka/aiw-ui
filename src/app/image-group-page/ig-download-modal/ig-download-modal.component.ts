@@ -93,7 +93,7 @@ export class PptModalComponent implements OnInit, AfterViewInit {
     })
   }
 
-  private hideModal(event: any): void{
+  public hideModal(event: any): void{
     event.stopPropagation()
     event.preventDefault()
     setTimeout( () => {
