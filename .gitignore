@@ -74,3 +74,6 @@ src/app/shared/sso.service.ts
 # SSL certificate Files #
 /ssl/*
 !/ssl/ssl.conf
+
+# Local Docker/Deployment Files #
+docker-compose.yml
