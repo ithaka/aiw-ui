@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg width="14px" height="14px" viewBox="0 0 14 14" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<svg width="16px" height="5px" viewBox="0 0 16 5" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
     <!-- Generator: Sketch 52.5 (67469) - http://www.bohemiancoding.com/sketch -->
-    <title>pdf</title>
+    <title>ppt copy 4</title>
     <desc>Created with Sketch.</desc>
-    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <g id="new-icons??" transform="translate(-499.000000, -323.000000)">
-            <g id="pdf" transform="translate(499.000000, 323.000000)">
-                <path d="M2,0 L12,0 C13.1045695,0 14,0.8954305 14,2 L14,12 C14,13.1045695 13.1045695,14 12,14 L2,14 C0.8954305,14 0,13.1045695 0,12 L0,2 C0,0.8954305 0.8954305,0 2,0 Z" id="Path-Copy-3" fill="#D4393C"></path>
-                <text id="PDF" font-family="HelveticaNeue-Bold, Helvetica Neue" font-size="5" font-weight="bold" fill="#FFFFFF">
-                    <tspan x="1.9975" y="9">PDF</tspan>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" font-family="HelveticaNeue-Bold, Helvetica Neue" font-size="7" font-weight="bold">
+        <g id="new-icons??" transform="translate(-498.000000, -360.000000)" fill="#D4393C">
+            <g id="ppt-copy-4" transform="translate(498.000000, 358.000000)">
+                <text id=".PDF">
+                    <tspan x="0.0235" y="7">.PDF</tspan>
                 </text>
             </g>
         </g>
