@@ -207,6 +207,26 @@ export class ImageGroupPage implements OnInit, OnDestroy {
     }
   }
 
+  private expandDetails(): void{
+    this.descExpanded = true
+    setTimeout( () => {
+      let expandedDescHeader: HTMLElement = document.getElementById('exp-desc-hdr')
+      if(expandedDescHeader) {
+        expandedDescHeader.focus()
+      }
+    }, 250)
+  }
+
+  private collapseDetails(): void{
+    this.descExpanded = false
+    setTimeout( () => {
+      let collapsedDescHeader: HTMLElement = document.getElementById('colpsd-desc-hdr')
+      if(collapsedDescHeader) {
+        collapsedDescHeader.focus()
+      }
+    }, 250)
+  }
+
   /**
    * Toggle Reorder: Handle output from the Asset Grid
    */
