@@ -311,3 +311,8 @@ body body{
     text-decoration: underline;
     cursor: pointer;
 }
+
+// Thumbnail collection-badge spacing
+.card-icon-group .collection-badge {
+  margin-top: 3px !important;
+}

@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg width="12px" height="5px" viewBox="0 0 12 5" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<svg width="14px" height="5px" viewBox="0 0 14 5" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
     <!-- Generator: Sketch 52.5 (67469) - http://www.bohemiancoding.com/sketch -->
-    <title>iap</title>
+    <title>icons_iap</title>
     <desc>Created with Sketch.</desc>
-    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" font-family="HelveticaNeue-Bold, Helvetica Neue" font-size="7" font-weight="bold" line-spacing="6">
-        <g id="new-icons??" transform="translate(-404.000000, -410.000000)" fill="#444444">
-            <g id="iap" transform="translate(404.000000, 409.000000)">
-                <text id="IAP">
-                    <tspan x="0" y="7">IAP</tspan>
-                </text>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="new-icons??" transform="translate(-684.000000, -357.000000)">
+            <g id="icons_iap" transform="translate(684.000000, 352.000000)">
+                <rect id="Rectangle-Copy-23" x="0" y="0" width="14" height="14"></rect>
+                <path d="M0,5 L1.55703627,5 L1.55703627,10 L0,10 L0,5 Z M6.56787099,9.17462483 L4.79819982,9.17462483 L4.55469855,10 L2.96679592,10 L4.85650294,5 L6.55072302,5 L8.44043003,10 L6.81480185,10 L6.56787099,9.17462483 Z M6.24205944,8.09345157 L5.686465,6.29604366 L5.13430016,8.09345157 L6.24205944,8.09345157 Z M9.73358344,5 L12.3160687,5 C12.8785251,5 13.2997896,5.13301368 13.5798746,5.39904502 C13.8599596,5.66507636 14,6.04365375 14,6.53478854 C14,7.03956596 13.8473845,7.43405952 13.542149,7.71828104 C13.2369135,8.00250256 12.7710648,8.14461119 12.1445889,8.14461119 L11.2940493,8.14461119 L11.2940493,10 L9.73358344,10 L9.73358344,5 Z M11.2940493,7.13165075 L11.6747344,7.13165075 C11.9742539,7.13165075 12.1846003,7.07992321 12.3057799,6.97646658 C12.4269596,6.87300994 12.4875485,6.7405647 12.4875485,6.57912688 C12.4875485,6.4222366 12.4349619,6.28922292 12.3297871,6.18008186 C12.2246123,6.07094079 12.026841,6.01637108 11.7364671,6.01637108 L11.2940493,6.01637108 L11.2940493,7.13165075 Z" id="IAP" fill="#444444"></path>
             </g>
         </g>
     </g>

@@ -19,7 +19,7 @@ import { Angulartics2 } from 'angulartics2';
         pointer-events: none;
     }
     .icon {
-      margin-top: 3.5px;
+      margin-top: 3px;
     }
   `]
 })
