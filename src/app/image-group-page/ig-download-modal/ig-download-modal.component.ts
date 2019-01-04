@@ -93,6 +93,16 @@ export class PptModalComponent implements OnInit, AfterViewInit {
     })
   }
 
+  private hideModal(event: any): void{
+    event.stopPropagation()
+    event.preventDefault()
+    setTimeout( () => {
+      this.closeModal.emit()
+      let downloadButtonElement: HTMLElement = document.getElementById('ig-download-btn')
+      downloadButtonElement.focus()
+    }, 250)
+  }
+
   /** Gets the link at which the resource can be downloaded. Will be set to the "accept" button's download property */
   private getDownloadLink(group: ImageGroup, zip ?: boolean): Promise<any> {
     let header = new HttpHeaders().set('content-type', 'application/x-www-form-urlencoded')
