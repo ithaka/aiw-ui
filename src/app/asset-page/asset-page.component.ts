@@ -1306,20 +1306,24 @@ export class AssetPage implements OnInit, OnDestroy {
         return fieldLabelMap[field]
     }
 
-    private closeEditDetails(action: string): void {
+    private closeEditDetails(confirmed: number): void {
         this.uiMessages = {}
         // Hide and reset the edit details form
-        if (action && action === 'Continue') {
+        if (confirmed === 1) {
             this.showEditDetails = false
             this.editDetailsForm.reset()
+        } else {
+            // Do nothing
         }
         this.showExitEdit = false
     }
 
-    private closeDeletePC(action: string): void {
-        if (action && action == 'Confirm') {
+    private closeDeletePC(confirmed: number): void {
+        if (confirmed === 1) {
+            // Confirmed
             this.deleteAsset()
-        } else {
+        } else if (confirmed === 0) {
+            // Canceled
             this.showDeletePCModal = false
         }
     }
