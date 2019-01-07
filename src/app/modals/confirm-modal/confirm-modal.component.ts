@@ -6,8 +6,15 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
   templateUrl: 'confirm-modal.component.pug'
 })
 export class ConfirmModal implements OnInit {
+  /**
+   * ConfirmModal emits the following:
+   * 0 for "False" or "dismiss"
+   * 1 for "primary" action or "confirm"
+   * 2 for "secondary" action
+   * (could be extended by incrementing onward 3,4,5...)
+   */
   @Output()
-  closeModal: EventEmitter<any> = new EventEmitter();
+  closeModal: EventEmitter<number> = new EventEmitter();
 
   @Input() title: string = 'Confirm';
 

@@ -93,11 +93,10 @@ export class PptModalComponent implements OnInit, AfterViewInit {
     })
   }
 
-  public hideModal(event: any): void{
-    event.stopPropagation()
-    event.preventDefault()
+  // Closes the IG download modal and sets focus back to initial download button
+  public hideModal(event: any): void {
+    this.closeModal.emit()
     setTimeout( () => {
-      this.closeModal.emit()
       let downloadButtonElement: HTMLElement = document.getElementById('ig-download-btn')
       downloadButtonElement.focus()
     }, 250)
