@@ -764,10 +764,10 @@ export class AssetGrid implements OnInit, OnDestroy {
   public ditchingReorder(confirmed: number) {
     // Hide modal
     this.showLoseReorder = false;
-    if (confirmed && confirmed == 1) {
+    if (confirmed === 1) {
         this.saveReorder();
     }
-    else {
+    else if (confirmed === 2) {
         this.cancelReorder();
     }
   }
