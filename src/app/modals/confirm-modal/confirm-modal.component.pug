@@ -4,7 +4,7 @@
     .modal-content(*ngIf="!groupDeleted")
       .modal-header
         h4.modal-title {{ title | translate }}
-        button.close(type="button", (click)="closeModal.emit()", aria-label="Close")
+        button.close(type="button", (click)="closeModal.emit(dismiss)", aria-label="Close")
           span(aria-hidden="true") &times;
       .modal-body
         p([innerHtml]="description")

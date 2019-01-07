@@ -761,7 +761,7 @@ export class AssetGrid implements OnInit, OnDestroy {
   /**
    * Closes "exiting reorder" modal
    */
-  private ditchingReorder(command) {
+  public ditchingReorder(command) {
     // Hide modal
     this.showLoseReorder = false;
     if (command.includes('Save')) {
