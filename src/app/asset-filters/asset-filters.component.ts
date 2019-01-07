@@ -212,7 +212,7 @@ export class AssetFilters {
     )
   }
 
-  private loadRoute() {
+  private loadRoute(filterType?: string) {
     let params = {};
     let currentParams = this.route.snapshot.params
 
@@ -242,7 +242,7 @@ export class AssetFilters {
       }
     }
 
-    this.angulartics.eventTrack.next({ action: 'filteredSearch', properties: { category: this._auth.getGACategory(), label: params } })
+    this.angulartics.eventTrack.next({ action: 'filteredSearch', properties: { category: this._auth.getGACategory(), label: filterType } })
 
     if (params['page']){
       params['page'] = this.pagination.page
@@ -284,7 +284,7 @@ export class AssetFilters {
     this.activeSort.index = index;
     this.activeSort.label = label;
     this.pagination.page = 1;
-    this.loadRoute();
+    this.loadRoute('sort');
   }
 
   /**
@@ -320,14 +320,16 @@ export class AssetFilters {
   }
 
   toggleFilter(value, group){
+    let addFilter: boolean = false
     if (this._filters.isApplied(group, value)){ // Remove Filter
-      this._filters.remove(group, value);
+      this._filters.remove(group, value)
     } else { // Add Filter
-      this._filters.apply(group, value);
+      this._filters.apply(group, value)
+      addFilter = true
     }
-    this.pagination.page = 1;
+    this.pagination.page = 1
 
-    this.loadRoute();
+    this.loadRoute(addFilter ? group : '');
   }
 
   filterApplied(value, group){
@@ -350,7 +352,7 @@ export class AssetFilters {
 
     this.pagination.page = 1;
 
-    this.loadRoute();
+    this.loadRoute('');
   }
 
   // To check if a filter group has any applied filters
@@ -421,7 +423,7 @@ export class AssetFilters {
     this.availableFilters.dateObj.modified = true;
     this.filterDate = true;
     this.pagination.page = 1;
-    this.loadRoute();
+    this.loadRoute('date');
   }
 
   existsInRegion(countryId, childerenIds){
