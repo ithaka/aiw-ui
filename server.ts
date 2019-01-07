@@ -6,13 +6,8 @@ import { enableProdMode } from '@angular/core';
 
 import * as express from 'express';
 import * as fs from 'fs';
-import * as https from 'https';
 import { join } from 'path';
-
-// HTTPS/SSL credentials
-var privateKey  = fs.readFileSync('ssl/private.key', 'utf8');
-var certificate = fs.readFileSync('ssl/private.pem', 'utf8');
-var options = {key: privateKey, cert: certificate};
+import * as https from 'https';
 
 // Faster server renders w/ Prod mode (dev mode never needed)
 enableProdMode();
@@ -20,11 +15,18 @@ enableProdMode();
 // Express server
 const app = express();
 
-// Use https server for hosting
-app.listen = function() {
-  var server = https.createServer(options, this);
-  return server.listen.apply(server, arguments);
-};
+// Only use HTTPS settings locally
+if (!process.env.SAGOKU) {
+  // HTTPS/SSL credentials
+  var privateKey  = fs.readFileSync('ssl/private.key', 'utf8');
+  var certificate = fs.readFileSync('ssl/private.pem', 'utf8');
+  var options = {key: privateKey, cert: certificate};
+  // Use https server for hosting
+  app.listen = function() {
+    var server = https.createServer(options, this);
+    return server.listen.apply(server, arguments);
+  };
+}
 
 const PORT = process.env.PORT || 4000;
 const DIST_FOLDER = join(process.cwd(), 'dist');
