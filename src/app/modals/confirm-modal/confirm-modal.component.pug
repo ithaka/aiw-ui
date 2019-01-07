@@ -4,11 +4,11 @@
     .modal-content(*ngIf="!groupDeleted")
       .modal-header
         h4.modal-title {{ title | translate }}
-        button.close(type="button", (click)="closeModal.emit(dismiss)", aria-label="Close")
+        button.close(type="button", (click)="closeModal.emit(0)", aria-label="Close")
           span(aria-hidden="true") &times;
       .modal-body
         p([innerHtml]="description")
       .modal-footer
-        button.btn.btn-secondary(type="button", (click)="closeModal.emit(dismiss)") {{ dismiss | translate }}
-        button.btn.btn-primary(*ngIf="secondary", type="button", (click)="closeModal.emit(secondary)") {{ secondary | translate }}
-        button.btn.btn-primary(type="button", (click)="closeModal.emit(primary)") {{ primary | translate }}
+        button.btn.btn-secondary(type="button", (click)="closeModal.emit(0)") {{ dismiss | translate }}
+        button.btn.btn-primary(*ngIf="secondary", type="button", (click)="closeModal.emit(2)") {{ secondary | translate }}
+        button.btn.btn-primary(type="button", (click)="closeModal.emit(1)") {{ primary | translate }}
