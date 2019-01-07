@@ -222,13 +222,16 @@ export class NavMenu implements OnInit, OnDestroy {
   /**
    * Closes confirmation modal
    */
-  private closeConfirmationModal(command) {
+  private closeConfirmationModal(confirmed: number) {
     console.log(this.params);
     // Hide modal
     this.showConfirmationModal = false;
 
-    if (command && command.includes('Yes')) {
+    if (confirmed === 1) {
+      // Confirmed
       this.deleteSelectedAssets();
+    } else if (confirmed === 0) {
+      // Cancelled
     }
   }
 

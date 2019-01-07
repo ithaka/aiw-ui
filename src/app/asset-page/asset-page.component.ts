@@ -1187,7 +1187,7 @@ export class AssetPage implements OnInit, OnDestroy {
                             asset_metadata: formValue
                         })
 
-                        this.closeEditDetails('Continue')
+                        this.closeEditDetails(1)
 
                         // Reload asset metadata
                         this._router.navigate(['/asset', ''])
