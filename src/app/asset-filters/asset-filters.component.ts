@@ -156,22 +156,22 @@ export class AssetFilters {
         map(filters => {
 
           // Contributors List of search results
-          if (filters['contributinginstitutionid'] && institutionList.length) {
+          if (filters['donatinginstitutionids'] && institutionList.length) {
             this.instFilterCount = 0
 
-            for (let i = 0; i < filters['contributinginstitutionid'].length; i++) {
+            for (let i = 0; i < filters['donatinginstitutionids'].length; i++) {
 
               // Map search results by contributing institution by matching against names from the institutions list
               for (let j = 0; j < institutionList.length; j++) {
-                if (filters['contributinginstitutionid'][i].name === institutionList[j].institutionId) {
-                  filters['contributinginstitutionid'][i].showingName = institutionList[j].institutionName;
+                if (filters['donatinginstitutionids'][i].name === institutionList[j].institutionId) {
+                  filters['donatinginstitutionids'][i].showingName = institutionList[j].institutionName;
                 }
               }
 
               // If this contributor is the users institution, set instFilterCount to this filters' count value
-              if (filters['contributinginstitutionid'][i].name === this.userInstId) {
-                if (filters['contributinginstitutionid'][i].count > -1) {
-                  this.instFilterCount = parseInt(filters['contributinginstitutionid'][i].count)
+              if (filters['donatinginstitutionids'][i].name === this.userInstId) {
+                if (filters['donatinginstitutionids'][i].count > -1) {
+                  this.instFilterCount = parseInt(filters['donatinginstitutionids'][i].count)
                 }
               }
             }
@@ -196,7 +196,7 @@ export class AssetFilters {
 
           // it is for if the allInstitutions request fails, it doesn’t break the entire filter UI
           if (this.allInstFailed) {
-            filters['contributinginstitutionid'] = null
+            filters['donatinginstitutionids'] = null
           }
 
           // Filter out categories containing pipe in name field

@@ -662,6 +662,7 @@
     "collTypes" : "Collection Type",
     "collectiontypes" : "Collection Type",
     "contributinginstitutionid" : "Contributor",
+    "donatinginstitutionids": "Contributor",
     "date" : "Date"
   },
   "FIELD" : {
