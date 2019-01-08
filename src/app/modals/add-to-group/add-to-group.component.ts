@@ -3,8 +3,10 @@ import { NgForm } from '@angular/forms'
 import { BehaviorSubject, Observable, Subscription } from 'rxjs'
 import { map, take } from 'rxjs/operators'
 import { CompleterService, CompleterData } from 'ng2-completer'
+import { Angulartics2 } from 'angulartics2'
+import { Router } from '@angular/router'
 
-import { AssetService, GroupService, ImageGroup } from './../../shared'
+import { AssetService, GroupService, ImageGroup, AuthService } from './../../shared'
 
 @Component({
   selector: 'ang-add-to-group',
@@ -36,10 +38,13 @@ export class AddToGroupModal implements OnInit, OnDestroy {
   constructor(
     private _assets: AssetService,
     private _group: GroupService,
-    private completerService: CompleterService
-  ) {}
+    private _angulartics: Angulartics2,
+    private completerService: CompleterService,
+    private _auth: AuthService,
+    private router: Router
+      ) {}
 
-  ngOnInit() {
+    ngOnInit() {
     // Set focus to the modal to make the links in the modal first thing to tab for accessibility
     let htmlelement: HTMLElement = document.getElementById('modal');
     htmlelement.focus()
@@ -160,13 +165,19 @@ export class AddToGroupModal implements OnInit, OnDestroy {
       .toPromise()
       .then((data) => {
         data.items = putGroup.items
-
         this._group.update(data).pipe(
           take(1),
           map(
-            (res) => { this.serviceResponse.success = true; this._assets.clearSelectMode.next(true); },
-            (err) => { console.error(err); this.serviceResponse.failure = true;
-        })).subscribe()
+            (res) => { 
+              this.serviceResponse.success = true
+              this._assets.clearSelectMode.next(true)
+              // Add to Group GA event 
+              this._angulartics.eventTrack.next({ action: 'addToGroup', properties: { category: this._auth.getGACategory(), label: this.router.url }})
+            },
+            (err) => { 
+              console.error(err); this.serviceResponse.failure = true;
+            }
+        )).subscribe()
 
       })
       .catch((error) => {

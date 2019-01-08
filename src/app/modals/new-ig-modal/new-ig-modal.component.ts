@@ -243,6 +243,9 @@ export class NewIgModal implements OnInit {
                 'group_id': this.newGroup.id
               }
             })
+
+            // Add to Group GA event
+            this._angulartics.eventTrack.next({ action: 'addToGroup', properties: { category: this._auth.getGACategory(), label: this.router.url }})
           }
         },
         error => {
