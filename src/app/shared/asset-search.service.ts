@@ -107,7 +107,7 @@ export class AssetSearchService {
           //   "limit" : 15
           // }
           {
-            "name": "donatinginstitutionids",
+            "name": "contributinginstitutionid",
             "mincount": 1,
             "limit": 400
           }
