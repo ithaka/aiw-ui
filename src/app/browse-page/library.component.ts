@@ -116,8 +116,8 @@ export class LibraryComponent implements OnInit {
             // this.updateSplashImgURL();
         }
 
-        if (params && params['searchTerm']){
-          this.searchTerm = params['searchTerm']
+        if (params && params['searchTerm']) {
+          this.searchTerm = this.selectedBrowseId === '250' ? '' : params['searchTerm']
         }
         // load category facets
         // > Use locally scope variable to avoid data crossover
