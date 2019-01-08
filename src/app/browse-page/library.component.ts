@@ -120,7 +120,7 @@ export class LibraryComponent implements OnInit {
         } else {
           reload = true
         }
-        
+
         // Set searchTerm for pipe when updated
         if (params && params['searchTerm']) {
           this.searchTerm = this.selectedBrowseId === '250' ? '' : params['searchTerm']
