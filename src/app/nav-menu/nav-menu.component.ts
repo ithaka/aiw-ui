@@ -214,6 +214,7 @@ export class NavMenu implements OnInit, OnDestroy {
         })
         this._assets.removeFromResults(removeIds, this.ig.items.length) // make the call to asset service which will update the asset grid with modified assets and also pass the total # of items for pagination values
         this._assets.selectModeToggle.emit()
+        this.reloadIG() // Reload IG assets after deleting selected assets
       }
     )).subscribe()
 
