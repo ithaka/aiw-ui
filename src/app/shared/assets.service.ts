@@ -21,7 +21,6 @@ import { ImageGroup, Thumbnail } from '.'
 import { AppConfig } from 'app/app.service'
 import { APP_CONST } from '../app.constants'
 import { LockerService } from 'app/_services'
-import { environment } from 'environments/environment'
 
 @Injectable()
 export class AssetService {
@@ -895,15 +894,10 @@ export class AssetService {
 
                             // For multi-view items, make the thumbnail urls and update the array
                             data.thumbnails = data.thumbnails.map((thumbnail) => {
-                                if (thumbnail['thumbnailImgUrl'] && thumbnail['thumbnailImgUrl'].indexOf('media-objects') > -1) {
-                                    thumbnail.thumbnailImgUrl = this._assetSearch.makeThumbUrl(thumbnail.thumbnailImgUrl, 1, true)
-                                }
-                                // New service for compound media thumbnails doesn't use 'media-objects' in the url string
-                                else if (thumbnail['thumbnailImgUrl'] && thumbnail['compoundmediaCount'] > 0) {
-                                  thumbnail.thumbnailImgUrl = this._auth.compoundUrl + thumbnail.thumbnailImgUrl
-                                }
-
-                                return thumbnail
+                              if (thumbnail['thumbnailImgUrl'] && thumbnail['compoundmediaCount'] > 0) {
+                                thumbnail.thumbnailImgUrl = this._auth.compoundUrl + thumbnail.thumbnailImgUrl
+                              }
+                              return thumbnail
                             })
 
                             // Set the allResults object
