@@ -3,6 +3,7 @@
  */
 import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http'
 import { Injectable } from '@angular/core'
+import { environment } from 'environments/environment'
 
 // Project Dependencies
 import {
@@ -395,14 +396,14 @@ export class AssetSearchService {
               return item['sequenceNum'] === 1
             })
 
-            // Uses catalog.sharedshelf
-            if (compoundAsset[0].thumbnailSizeOnePath.indexOf('media-objects') > -1) {
-              cleanedAsset.thumbnailUrls.push(this.makeThumbUrl(compoundAsset[0].thumbnailSizeOnePath, 2, true))
-            }
+            // Uses catalog.sharedshelf NOTE: Deprecated in AIR-2070
+            // if (compoundAsset[0].thumbnailSizeOnePath.indexOf('media-objects') > -1) {
+            //   cleanedAsset.thumbnailUrls.push(this.makeThumbUrl(compoundAsset[0].thumbnailSizeOnePath, 2, true))
+            // }
             // Uses stor.artstor.org/stor
-            else {
-              cleanedAsset.thumbnailUrls.push('https://stor.artstor.org/stor' + compoundAsset[0].thumbnailSizeOnePath)
-            }
+            // else {
+              cleanedAsset.thumbnailUrls.push(this._auth.compoundUrl + compoundAsset[0].thumbnailSizeOnePath)
+            // }
           }
           else { // make the thumbnail urls and add them to the array
             for (let i = 1; i <= 5; i++) {

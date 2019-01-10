@@ -22,7 +22,6 @@ export class CardViewComponent implements OnInit {
   public thumbnails: any[] = []
   public groupType: string = '-'
   public description: string = ''
-  public newMultiViewThumbnailPath = 'https://stor.artstor.org/stor'
 
   // Tracks whether to expand or collapse the tags exceeding 3 lines
   public tagsCollapsed: boolean = true
@@ -78,7 +77,7 @@ export class CardViewComponent implements OnInit {
               }
               // New MV URLs, doesn't call makeThumbUrl in template
               else {
-                thumbnail.thumbnailImgUrl = this.newMultiViewThumbnailPath + thumbnail.thumbnailImgUrl
+                thumbnail.thumbnailImgUrl = this._auth.compoundUrl + thumbnail.thumbnailImgUrl
                 thumbnail.useNewPath = true
               }
             }

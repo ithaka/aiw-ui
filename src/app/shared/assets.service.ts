@@ -20,7 +20,8 @@ import { AssetSearchService, SearchResponse } from './asset-search.service'
 import { ImageGroup, Thumbnail } from '.'
 import { AppConfig } from 'app/app.service'
 import { APP_CONST } from '../app.constants'
-import { LockerService } from 'app/_services';
+import { LockerService } from 'app/_services'
+import { environment } from 'environments/environment'
 
 @Injectable()
 export class AssetService {
@@ -899,7 +900,7 @@ export class AssetService {
                                 }
                                 // New service for compound media thumbnails doesn't use 'media-objects' in the url string
                                 else if (thumbnail['thumbnailImgUrl'] && thumbnail['compoundmediaCount'] > 0) {
-                                  thumbnail.thumbnailImgUrl = 'https://stor.artstor.org/stor' + thumbnail.thumbnailImgUrl
+                                  thumbnail.thumbnailImgUrl = this._auth.compoundUrl + thumbnail.thumbnailImgUrl
                                 }
 
                                 return thumbnail
