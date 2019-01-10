@@ -4,7 +4,6 @@ import { Router, ActivatedRoute } from '@angular/router'
 import { Tag } from '../tag/tag.class'
 import { AssetService, AssetSearchService, AuthService } from '../../shared'
 import { GroupQuery } from './../browse-groups/groups.component'
-import { environment } from 'environments/environment'
 
 @Component({
   selector: 'ang-card-view',
@@ -78,7 +77,7 @@ export class CardViewComponent implements OnInit {
               }
               // New MV URLs, doesn't call makeThumbUrl in template
               else {
-                thumbnail.thumbnailImgUrl = environment.STOR_URL + thumbnail.thumbnailImgUrl
+                thumbnail.thumbnailImgUrl = this._auth.compoundUrl + thumbnail.thumbnailImgUrl
                 thumbnail.useNewPath = true
               }
             }

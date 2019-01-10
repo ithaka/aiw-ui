@@ -402,7 +402,7 @@ export class AssetSearchService {
             // }
             // Uses stor.artstor.org/stor
             // else {
-              cleanedAsset.thumbnailUrls.push(environment.STOR_URL + compoundAsset[0].thumbnailSizeOnePath)
+              cleanedAsset.thumbnailUrls.push(this._auth.compoundUrl + compoundAsset[0].thumbnailSizeOnePath)
             // }
           }
           else { // make the thumbnail urls and add them to the array

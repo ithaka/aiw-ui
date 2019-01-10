@@ -900,7 +900,7 @@ export class AssetService {
                                 }
                                 // New service for compound media thumbnails doesn't use 'media-objects' in the url string
                                 else if (thumbnail['thumbnailImgUrl'] && thumbnail['compoundmediaCount'] > 0) {
-                                  thumbnail.thumbnailImgUrl = environment.STOR_URL + thumbnail.thumbnailImgUrl
+                                  thumbnail.thumbnailImgUrl = this._auth.compoundUrl + thumbnail.thumbnailImgUrl
                                 }
 
                                 return thumbnail
