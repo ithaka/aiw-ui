@@ -20,6 +20,7 @@ import {Idle, DEFAULT_INTERRUPTSOURCES} from '@ng-idle/core'
 import { FlagService } from './flag.service'
 import { error } from '@angular/compiler/src/util';
 import { LockerService } from 'app/_services';
+import { environment } from 'environments/environment'
 
 /**
  * Controls authorization through IP address and locally stored user object
@@ -81,7 +82,7 @@ export class AuthService implements CanActivate {
     this.hostname = ''
     this.baseUrl =  '/api'
     this.thumbUrl = '//mdxdv.artstor.org'
-    this.compoundUrl = '//catalog.sharedshelf.artstor.org'
+    this.compoundUrl = environment.STOR_URL
     this.IIIFUrl = '//tsprod.artstor.org/rosa-iiif-endpoint-1.0-SNAPSHOT/fpx'
     this.subdomain = 'library'
     this.solrUrl = '/api/search/v1.0/search'
@@ -129,7 +130,7 @@ export class AuthService implements CanActivate {
       this.subdomain = 'stage'
       this.baseUrl = '//stage.artstor.org/api'
       this.thumbUrl = '//mdxstage.artstor.org'
-      this.compoundUrl = 'http://catalog.sharedshelf.stage.artstor.org'
+      // this.compoundUrl = 'http://catalog.sharedshelf.stage.artstor.org' <- Handled with environment AIR-2070
       this.logUrl = '//ang-ui-logger.apps.test.cirrostratus.org/api/v1'
       this.solrUrl = '/api/search/v1.0/search'
       this.IIIFUrl = '//tsstage.artstor.org/rosa-iiif-endpoint-1.0-SNAPSHOT/fpx'
