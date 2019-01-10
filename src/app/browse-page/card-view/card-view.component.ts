@@ -4,6 +4,7 @@ import { Router, ActivatedRoute } from '@angular/router'
 import { Tag } from '../tag/tag.class'
 import { AssetService, AssetSearchService, AuthService } from '../../shared'
 import { GroupQuery } from './../browse-groups/groups.component'
+import { environment } from 'environments/environment'
 
 @Component({
   selector: 'ang-card-view',
@@ -22,7 +23,6 @@ export class CardViewComponent implements OnInit {
   public thumbnails: any[] = []
   public groupType: string = '-'
   public description: string = ''
-  public newMultiViewThumbnailPath = 'https://stor.artstor.org/stor'
 
   // Tracks whether to expand or collapse the tags exceeding 3 lines
   public tagsCollapsed: boolean = true
@@ -78,7 +78,7 @@ export class CardViewComponent implements OnInit {
               }
               // New MV URLs, doesn't call makeThumbUrl in template
               else {
-                thumbnail.thumbnailImgUrl = this.newMultiViewThumbnailPath + thumbnail.thumbnailImgUrl
+                thumbnail.thumbnailImgUrl = environment.STOR_URL + thumbnail.thumbnailImgUrl
                 thumbnail.useNewPath = true
               }
             }

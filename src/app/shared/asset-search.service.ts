@@ -3,6 +3,7 @@
  */
 import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http'
 import { Injectable } from '@angular/core'
+import { environment } from 'environments/environment'
 
 // Project Dependencies
 import {
@@ -401,7 +402,7 @@ export class AssetSearchService {
             }
             // Uses stor.artstor.org/stor
             else {
-              cleanedAsset.thumbnailUrls.push('https://stor.artstor.org/stor' + compoundAsset[0].thumbnailSizeOnePath)
+              cleanedAsset.thumbnailUrls.push(environment.STOR_URL + compoundAsset[0].thumbnailSizeOnePath)
             }
           }
           else { // make the thumbnail urls and add them to the array
