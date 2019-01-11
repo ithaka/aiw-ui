@@ -20,7 +20,6 @@ import {Idle, DEFAULT_INTERRUPTSOURCES} from '@ng-idle/core'
 import { FlagService } from './flag.service'
 import { error } from '@angular/compiler/src/util';
 import { LockerService } from 'app/_services';
-import { environment } from 'environments/environment'
 
 /**
  * Controls authorization through IP address and locally stored user object
