@@ -459,7 +459,7 @@ export class AssetPage implements OnInit, OnDestroy {
             this.assets[assetIndex] = asset
             if (assetIndex == 0) {
                 let tileSource: any = asset.tileSource
-                this.multiviewItems =  Array.isArray(tileSource) ? true : false
+                this.multiviewItems =  Array.isArray(tileSource) && tileSource.length > 1 ? true : false
                 this._title.setTitle(asset.title)
                 document.querySelector('meta[name="DC.type"]').setAttribute('content', 'Artwork')
                 document.querySelector('meta[name="DC.title"]').setAttribute('content', asset.title)
