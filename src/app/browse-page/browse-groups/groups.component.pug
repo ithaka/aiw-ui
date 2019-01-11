@@ -4,6 +4,8 @@
   //-   div(*ngIf="browseOpt.level !== 'all'") {{ browseOpt.label }}
 .row.pt-3#browse-group-wrap
   .col-md-3.hidden-sm-down
+    div(aria-activedescendant="button")
+      button.skip-btn#skip-to-groups-link((click)="skipToGrpSec()", (keyup.enter)="skipToGrpSec()", tabindex="3", class="sr-only sr-only-focusable") This is the filter by groups and tags section, skip to the image groups section.
     //- .filter-list-wrap
     //- The .driver-find-group class is important for the tour to find it, be careful when removing or changing it
     #searchFilterList.mb-3.filter-list.driver-find-group
