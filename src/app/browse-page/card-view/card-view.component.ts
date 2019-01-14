@@ -68,20 +68,7 @@ export class CardViewComponent implements OnInit {
           })
 
           this.thumbnails.forEach(thumbnail => {
-
-            if (thumbnail.compoundmediaCount > 0) {
-
-              // Catalog shared shelf with makeThumbUrl called in template
-              if (thumbnail.thumbnailImgUrl.indexOf('media-objects') > -1) {
-                thumbnail.useNewPath = false
-              }
-              // New MV URLs, doesn't call makeThumbUrl in template
-              else {
-                thumbnail.thumbnailImgUrl = this._auth.compoundUrl + thumbnail.thumbnailImgUrl
-                thumbnail.useNewPath = true
-              }
-            }
-            else if (thumbnail['media']) {
+            if (thumbnail['media']) {
               thumbnail.thumbnailImgUrl = thumbnail.media.thumbnailSizeOnePath
             }
           })
