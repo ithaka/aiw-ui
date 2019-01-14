@@ -1,13 +1,13 @@
 .pagination([class.right]="right")
   li.page-item
-    button.page-link((click)="goToPage.emit(1)", [disabled]="!pageObj.page || pageObj.page <= 1", title="First", (keyup.enter)="goToPage.emit(1)", tabindex="3", aria-label="First page of results")
+    button.page-link((click)="goToPage.emit(1)", [disabled]="!pageObj.page || pageObj.page <= 1", title="First", (keyup.enter)="goToPage.emit(1)", tabindex="3", aria-label="First page of results", (focus)="paginationFocused.emit()")
       span(aria-hidden="true") |&#10094;
   li.page-item
-    button.page-link((click)="goToPage.emit(pageObj.page - 1)", [disabled]="!pageObj.page || pageObj.page <= 1", title="Previous", (keyup.enter)="goToPage.emit(pageObj.page - 1)", tabindex="3", aria-label="Previous page")
+    button.page-link((click)="goToPage.emit(pageObj.page - 1)", [disabled]="!pageObj.page || pageObj.page <= 1", title="Previous", (keyup.enter)="goToPage.emit(pageObj.page - 1)", tabindex="3", aria-label="Previous page", (focus)="paginationFocused.emit()")
       span(aria-hidden="true") &#10094;
   li.page-item
     label.sr-only(for="currentpageinput") Page {{pageObj.page}} of {{pageObj.totalPages}}
-    input.page-input#currentpageinput(type="number", min="1", (keypress)="pageNumberKeyPress($event)", (keyup)="pageNumberKeyUp($event)", [(ngModel)]="pageObj.page", (keyup.enter)="goToPage.emit(pageObj.page)", tabindex="3")
+    input.page-input#currentpageinput(type="number", min="1", (keypress)="pageNumberKeyPress($event)", (keyup)="pageNumberKeyUp($event)", [(ngModel)]="pageObj.page", (keyup.enter)="goToPage.emit(pageObj.page)", tabindex="3", (focus)="paginationFocused.emit()")
     = " "
     span.page-info of {{ pageObj.totalPages }}
   li.page-item

@@ -153,6 +153,10 @@ export class App {
       if (this.router.url.indexOf('search') > -1){
         element = document.getElementById('skip-to-search-link');
       }
+      // On group browse page go to the start of filter groups & tags section
+      else if (this.router.url.indexOf('browse/groups') > -1){
+        element = document.getElementById('skip-to-groups-link');
+      }
       // On asset page, go to first button
       else if (this.router.url.indexOf('asset') > -1){
         element = document.querySelector('.btn-row button');

@@ -18,11 +18,15 @@
             [ngClass]="{ 'child' : filter.level==='private' || filter.level==='shared_by_me', 'group-filter': !(filter.level==='private' || filter.level==='shared_by_me') }",
             (click)="setSearchLevel(filter.level, true)",
             [class.active]="filter.selected",
-            [attr.title]="'Filter by ' + filter.label + ' image groups'"
+            [attr.title]="'Filter by ' + filter.label + ' image groups'",
+            [attr.aria-label]="'Filter by ' + filter.label + ' image groups'",
+            tabindex="3"
           )
           | {{ filter.label }}
     ang-tags-list(*ngIf="selectedFilter")
   .col-md-9
+    div(aria-activedescendant="button")
+      button.skip-btn#skip-to-filters-link((click)="skipToFilterSec()", (keyup.enter)="skipToFilterSec()", tabindex="3", class="sr-only sr-only-focusable") This is the image groups section. Skip to the filter by groups and tags section.
     .row#search-row
       .col-sm-9
         ang-general-search([updateSearchTerm]="updateSearchTerm", [init]="searchTerm", [loadingGrps]="loading", (clearGrpSearch)="clearGrpSearch()", (executeSearch)="addQueryParams({ term: $event, page: 1, sort: 'relevance' }, false, true)")
@@ -33,22 +37,22 @@
       .col-sm-7.col-md-7.col-lg-8.pd-left
         //- This is where the sort method, number of group per page selection and toggle between cardview and listview go
         li.sortlist.dropdown(ngbDropdown)
-          button#sortdropdownMenu.btn.btn-link(ngbDropdownToggle) Sort:
+          button#sortdropdownMenu.btn.btn-link(ngbDropdownToggle, tabindex="3", attr.aria-label="Sort by {{ activeSort.name ? activeSort.name : 'Alphabetical' }}", (focus)="closeSortDropdown()", (keyup.esc)="closeSortDropdown()") Sort:
             = " "
             span.value {{ activeSort.name ? activeSort.name : 'Alphabetical' }}
           .dropdown-menu(ngbDropdownMenu, aria-labelledby="sortdropdownMenu")
-            button.dropdown-item([ngClass]="{ 'disable': activeSort.label === 'date' }", (click)="changeSortOpt('date')") Recently Modified
-            button.dropdown-item([ngClass]="{ 'disable': activeSort.label === 'alpha' }", (click)="changeSortOpt('alpha')") Alphabetical
-            button.dropdown-item(*ngIf="isSearch", [ngClass]="{ 'disable': activeSort.label === 'relevance' }", (click)="changeSortOpt('relevance')") Relevance
+            button.dropdown-item(id="recentSortOpt", [disabled]="activeSort.label === 'date'", [ngClass]="{ 'disable': activeSort.label === 'date' }", (click)="changeSortOpt('date')", tabindex="3", (keyup.arrowdown)="sortDropdownOptsArrowDown($event.target)", (keyup.esc)="closeSortDropdown()") Recently Modified
+            button.dropdown-item(id="alphaSortOpt", [disabled]="activeSort.label === 'alpha'", [ngClass]="{ 'disable': activeSort.label === 'alpha' }", (click)="changeSortOpt('alpha')", tabindex="3", (keyup.arrowup)="sortDropdownOptsArrowUp($event.target)", (keyup.arrowdown)="sortDropdownOptsArrowDown($event.target)", (keyup.esc)="closeSortDropdown()") Alphabetical
+            button.dropdown-item(id="relSortOpt", [disabled]="activeSort.label === 'relevance'", *ngIf="isSearch", [ngClass]="{ 'disable': activeSort.label === 'relevance' }", (click)="changeSortOpt('relevance')", tabindex="3", (keyup.arrowup)="sortDropdownOptsArrowUp($event.target)", (keyup.esc)="closeSortDropdown()") Relevance
 
       .col-sm-5.col-md-5.col-lg-4.text-right.grid-pagination-bar
-        pagination([pageObj]="pagination", (goToPage)="goToPage($event)", [right]="true")
+        pagination([pageObj]="pagination", (goToPage)="goToPage($event)", [right]="true", (paginationFocused)="closeSortDropdown()")
     h3.pb-1.px-2(*ngIf="_tagFilters.selectedFilters.length>0") Tags:
-      .filter.filter--aboveGroup(*ngFor="let tag of _tagFilters.selectedFilters", (click)="tag.selected = !tag.selected", [class.active]="tag.selected")
+      .filter.filter--aboveGroup(*ngFor="let tag of _tagFilters.selectedFilters", (click)="tag.selected = !tag.selected", (keyup.enter)="tag.selected = !tag.selected", [class.active]="tag.selected", tabindex="3", [attr.aria-label]="'Filtering by ' + tag.key + ', which is associated with ' + tag.doc_count + ' image groups. Press enter to remove this tag currently being used to filter down the image group results.'", role="button")
         span.notranslate.filter-padding {{ tag.key }} ({{ tag.doc_count }})
         i.icon.icon-add
         i.icon.icon-close
-      a#groupTagsClear.link--accent.small(*ngIf="_tagFilters.selectedFilters.length>1", tabindex="", style="margin:3px;", (click)="_tagFilters.clearFilters();") Clear All
+      a#groupTagsClear.link--accent.small(*ngIf="_tagFilters.selectedFilters.length>1", style="margin:3px;", (click)="_tagFilters.clearFilters();", (keyup.enter)="_tagFilters.clearFilters();", tabindex="3", aria-label="Clear all tags") Clear All
     .group-list.has-icon-overlay.px-2
       .alert.alert-warning(*ngIf="selectedFilter && errorObj[selectedFilter.level]", [innerHtml]="errorObj[selectedFilter.level]")
       ng-container
