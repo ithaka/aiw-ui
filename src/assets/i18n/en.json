@@ -400,8 +400,8 @@
       "SAHARA_TERMS": "<a href=\"http://artstor.org/sahara-terms\" class=\"link\" target=\"_blank\">Terms</a>",
       "SAHARA_PRIVACY": "<a href=\"http://artstor.org/privacy-policy\" class=\"link\" target=\"_blank\">Privacy</a>"
     },
-    "DISCLAIMER" : "Artstor is in a strategic alliance with ITHAKA, a not-for-profit organization helping the academic community use digital technologies to preserve the scholarly record and to advance research and teaching in sustainable ways.",
-    "RIGHTS" : "All Rights Reserved. JSTOR® and ITHAKA® are registered trademarks of ITHAKA.  Artstor® is a registered trademark of Artstor Inc."
+    "DISCLAIMER" : "Artstor is a part of <a href=\"https://www.ithaka.org/\" class=\"link\" target=\"_blank\">ITHAKA</a>, a not-for-profit organization helping the academic community use digital technologies to preserve the scholarly record and to advance research and teaching in sustainable ways.",
+    "RIGHTS" : "All Rights Reserved. JSTOR®, ITHAKA®, and Artstor® are registered trademarks of ITHAKA."
   },
   "ACCESS_HELP_MODAL": {
     "HEADING": "How do I get access?",
