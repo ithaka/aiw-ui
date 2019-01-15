@@ -459,11 +459,6 @@ export class AuthService implements CanActivate {
       return new Observable(observer => {
         observer.next(true)
       })
-    } else if (this.isPublicOnly() && state.url.includes('/register')) {
-      // For unaffiliated users, trying to access /register route
-      return new Observable(observer => {
-        observer.next(false)
-      })
     } else if (this.canUserAccess(this.getUser())) {
       // If user object already exists, we're done here
       return new Observable(observer => {
