@@ -22,7 +22,6 @@ export class CardViewComponent implements OnInit {
   public thumbnails: any[] = []
   public groupType: string = '-'
   public description: string = ''
-  public newMultiViewThumbnailPath = 'https://stor.artstor.org/stor'
 
   // Tracks whether to expand or collapse the tags exceeding 3 lines
   public tagsCollapsed: boolean = true
@@ -69,20 +68,7 @@ export class CardViewComponent implements OnInit {
           })
 
           this.thumbnails.forEach(thumbnail => {
-
-            if (thumbnail.compoundmediaCount > 0) {
-
-              // Catalog shared shelf with makeThumbUrl called in template
-              if (thumbnail.thumbnailImgUrl.indexOf('media-objects') > -1) {
-                thumbnail.useNewPath = false
-              }
-              // New MV URLs, doesn't call makeThumbUrl in template
-              else {
-                thumbnail.thumbnailImgUrl = this.newMultiViewThumbnailPath + thumbnail.thumbnailImgUrl
-                thumbnail.useNewPath = true
-              }
-            }
-            else if (thumbnail['media']) {
+            if (thumbnail['media']) {
               thumbnail.thumbnailImgUrl = thumbnail.media.thumbnailSizeOnePath
             }
           })
