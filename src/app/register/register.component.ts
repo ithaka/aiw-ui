@@ -79,9 +79,9 @@ export class RegisterComponent implements OnInit {
     this.userDepts = USER_DEPTS
     this.userRoles = USER_ROLES
 
-    // If logged in OR not proxied/IP-authed OR not Shibboleth workflow, redirect to Home
+    // If logged in OR not proxied/IP-authed OR not Shibboleth workflow, redirect to Login
     if (!this.isShibbFlow && (this._auth.isPublicOnly() || this._auth.getUser().isLoggedIn)) {
-      this._router.navigate(['/home'])
+      this._router.navigate(['/login'])
     }
   } // OnInit
 
