@@ -574,6 +574,18 @@ export class AssetService {
         })
     }
 
+    /**
+     * Get metadata about a Category
+     * @param catId The Category ID
+     */
+    public getCategoryInfo(catId: string) {
+        let options = { withCredentials: true };
+        
+        return this.http
+            .get(this._auth.getUrl() + '/v1/categorydesc/' + catId, options)
+            .toPromise();
+    }
+
     nodeDesc(descId, widgetId){
         let options = { withCredentials: true };
 
