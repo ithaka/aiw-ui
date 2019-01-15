@@ -78,7 +78,7 @@ export class CategoryPage implements OnInit, OnDestroy {
             this._assets.queryAll(params, refreshSearch);
 
             // Get Category metadata
-            this.getCategoryInfo(this.catId)
+            this._assets.getCategoryInfo(this.catId)
               .then((data) => {
 
                 if (data) {
@@ -101,7 +101,6 @@ export class CategoryPage implements OnInit, OnDestroy {
               })
               .catch((error) => {
                 console.error(error);
-                if (error.status === 401) {
                 if (error.status === 401 || error.status === 403) {
                   // Categories are ADL collections only, so we can make this assumption
                   this.unaffiliatedUser = true
@@ -120,45 +119,5 @@ export class CategoryPage implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.subscriptions.forEach((sub) => { sub.unsubscribe(); });
   }
-
-
-  /**
-  * Get metadata about a Category
-  * @param catId The Category ID
-  */
-  private getCategoryInfo(catId: string) {
-      let options = { withCredentials: true };
-
-      // Can be removed once region specific ids are no longer used
-      // if (catId.indexOf('103') == 1) {
-      //   catId = catId.slice(1)
-      // }
-
-      return this.http
-          .get(this._auth.getUrl() + '/v1/categorydesc/' + catId, options)
-          .toPromise();
-  }
-
-// NOTE:getCategoryData is no longer used. The /category endpoint is now deprecated
-//   /**
-//   * Get title for a Category
-//   * @param catId The Category ID
-//   */
-//   private getCategoryData(catId: string) {
-//     let options = { withCredentials: true };
-
-//     // Can be removed once region specific ids are no longer used
-//     // if (catId.indexOf('103') == 1) {
-//     //   catId = catId.slice(1)
-//     // }
-
-//     return this.http
-//         .get(this._auth.getUrl() + '/categories/' + catId, options)
-//         .toPromise();
-// }
-
-  // private updateSearchInRes(value: boolean): void{
-  //  this.searchInResults = value;
-  // }
 
 }
