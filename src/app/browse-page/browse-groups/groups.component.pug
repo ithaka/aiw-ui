@@ -19,7 +19,7 @@
             (click)="setSearchLevel(filter.level, true)",
             [class.active]="filter.selected",
             [attr.title]="'Filter by ' + filter.label + ' image groups'",
-            [attr.aria-label]="'Filter by ' + filter.label + ' image groups'",
+            [attr.aria-label]="filter.ariaLabel",
             tabindex="3"
           )
           | {{ filter.label }}
@@ -33,7 +33,7 @@
       .col-sm-3
         //- Further functionality will go here
     h3.pb-1.px-2.numResult([innerHTML]="isSearch ? numResultMsg : selectedFilter.label")
-    .row
+    .row.mb-3
       .col-sm-7.col-md-7.col-lg-8.pd-left
         //- This is where the sort method, number of group per page selection and toggle between cardview and listview go
         li.sortlist.dropdown(ngbDropdown)
