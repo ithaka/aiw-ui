@@ -249,6 +249,7 @@ export class SearchModal implements OnInit, AfterViewInit {
    * Update advanceQueries, advanceSearchDate and selected filters based on applied filters from URL
    */
   private loadAppliedFiltersFromURL(): void{
+
     let routeParams = this.route.snapshot.params
 
     // Used to determine if generateSelectedFilters will be called or not, should only be called if we have a tri-state checkbox checked
@@ -331,6 +332,9 @@ export class SearchModal implements OnInit, AfterViewInit {
     if ( updateSelectedFilters ) {
       this.generateSelectedFilters()
     }
+
+    // Done loading filters and prefilling
+    this.loadingFilters = false
   }
 
   private updateAdvanceQueries( params: any ): void{
@@ -440,26 +444,8 @@ export class SearchModal implements OnInit, AfterViewInit {
         this.availableFilters.push( geoFacetGroup )
       }
 
-      // Fetch institutional collections and add them as children of institutional collectiontype filter
-      this._assets.getCollectionsList( 'institution' )
-        .toPromise()
-        .then((data) => {
-          if (data && data['Collections']) {
-            for (let collection of data['Collections']){
-              let colFacetObj: FacetObject = {} as FacetObject
-              colFacetObj.checked = false
-              colFacetObj.name = collection.collectionname
-              colFacetObj.value = collection.collectionid
-              if (this.availableFilters[1].values[2])
-                this.availableFilters[1].values[2].children.push( colFacetObj )
-            }
-          } else {
-            throw new Error('no Collections returned in data')
-          }
-          this.loadAppliedFiltersFromURL()
-        })
-
-        this.loadingFilters = false
+      // Pre-fill any currently applied filters
+      this.loadAppliedFiltersFromURL()
     })).subscribe()
 
   }
