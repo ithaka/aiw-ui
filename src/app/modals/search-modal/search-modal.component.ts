@@ -318,7 +318,8 @@ export class SearchModal implements OnInit, AfterViewInit {
           for (let colId of colIds){ // Indv. collection filters are only available udner Inst. Col Type filter. Find the collection filter object and mark it checked
             let filterGroup =  this.availableFilters.find( filterGroup => filterGroup.name === 'collectiontypes' )
             let instColFilters = filterGroup.values.find( colTypefilter => colTypefilter.value === '2' )
-            let updtFilterObj = instColFilters.children.find( filterObj => filterObj.value === colId )
+            // Public user will not return any institution collections
+            let updtFilterObj = instColFilters && instColFilters.children.find( filterObj => filterObj.value === colId )
             if ( updtFilterObj ){
               updtFilterObj.checked = true
             }
