@@ -249,7 +249,7 @@ export class SearchModal implements OnInit, AfterViewInit {
    * Update advanceQueries, advanceSearchDate and selected filters based on applied filters from URL
    */
   private loadAppliedFiltersFromURL(): void{
-    console.log("Load applied")
+
     let routeParams = this.route.snapshot.params
 
     // Used to determine if generateSelectedFilters will be called or not, should only be called if we have a tri-state checkbox checked
