@@ -280,8 +280,8 @@ export class SearchModal implements OnInit, AfterViewInit {
           let classificatioFilters = routeParams[key].split('|')
           for (let filter of classificatioFilters){
             let clsFilterGroup =  this.availableFilters.find( filterGroup => filterGroup.name === key )
-            let updtFilterObj = clsFilterGroup.values.find( filterObj => filterObj.value === filter )
-            updtFilterObj.checked = true
+            let updateFilterObj = clsFilterGroup && clsFilterGroup.values.find( filterObj => filterObj.value === filter )
+            updateFilterObj && (updateFilterObj.checked = true)
           }
           updateSelectedFilters = true
         }
