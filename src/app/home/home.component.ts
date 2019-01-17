@@ -90,13 +90,13 @@ export class Home implements OnInit, OnDestroy {
 
     this.user = this._auth.getUser();
 
-    // this.subscriptions.push(
-    //   this._auth.getInstitution().pipe(
-    //     map(institutionObj => {
-    //       this.institution = institutionObj
-    //     }
-    //   )).subscribe()
-    // )
+    this.subscriptions.push(
+      this._auth.getInstitution().pipe(
+        map(institutionObj => {
+          this.institution = institutionObj
+        }
+      )).subscribe()
+    )
 
     this.loaders['collections'] = true;
     this.loaders['instCollections'] = true;
@@ -157,9 +157,9 @@ export class Home implements OnInit, OnDestroy {
     }
 
     // Load Ethnio survey
-    if (this.siteID !== 'SAHARA') {
-      this._script.loadScript('ethnio-survey')
-    }
+    // if (this.siteID !== 'SAHARA') {
+    //   this._script.loadScript('ethnio-survey')
+    // }
 
   } // OnInit
 

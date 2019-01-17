@@ -12,6 +12,10 @@ import { AppConfig } from './app.service'
 import { ScriptService, FlagService } from './shared'
 import { isPlatformBrowser } from '@angular/common';
 import { DomUtilityService } from 'app/shared';
+
+// Server only imports
+import * as enTranslation from '../assets/i18n/en.json'
+
 /*
  * App Component
  * Top Level Component
@@ -54,20 +58,20 @@ export class AppComponent {
     @Inject(PLATFORM_ID) private platformId: Object
   ) {
     console.log("Constructing app component")
-
-    // Client-only code
+    // append query param to dodge caching
+    // let langStr = 'en.json?no-cache=' + new Date().valueOf()
     if (isPlatformBrowser(this.platformId)) {
-      // append query param to dodge caching
-      let langStr = 'en.json?no-cache=' + new Date().valueOf()
-      // I'm hoping this sets these for the entire app
-      // this language will be used as a fallback when a translation isn't found in the current language
-      translate.setDefaultLang(langStr);
-      // the lang to use, if the lang isn't available, it will use the current loader to get them
-      translate.use(langStr);
-
+      // Use the translate loader to pull translations client-side
+      this.translate.use('en');
       // Start GA trackiong
       angulartics2GoogleAnalytics.startTracking()
+    }  else {
+      // Reference translation json directly server-side
+      // Must be set *before* setting default
+      this.translate.setTranslation('en', enTranslation, true)
     }
+    // this language will be used as a fallback when a translation isn't found in the current language
+    this.translate.setDefaultLang('en');
 
     this.title = this._app.config.pageTitle
 
