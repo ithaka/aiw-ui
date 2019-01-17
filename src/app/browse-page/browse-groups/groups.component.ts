@@ -116,7 +116,8 @@ export class BrowseGroupsComponent implements OnInit {
 
     this.groupFilterArray.push({
       label: 'All',
-      level: 'all'
+      level: 'all',
+      ariaLabel: 'Filter by All image groups'
     })
 
     // If Logged In, default to My Groups
@@ -124,19 +125,22 @@ export class BrowseGroupsComponent implements OnInit {
       this.groupFilterArray.push({
         label: 'My Groups',
         level: 'created',
-        selected: true
+        selected: true,
+        ariaLabel: 'Filter image groups by My Groups'
       })
 
       this.groupFilterArray.push({
         label: 'Private',
         level: 'private',
-        selected: false
+        selected: false,
+        ariaLabel: 'Filter by Private image groups'
       })
 
       this.groupFilterArray.push({
         label: 'Shared by Me',
         level: 'shared_by_me',
-        selected: false
+        selected: false,
+        ariaLabel: 'Filter image groups by Shared by Me'
       })
     }
 
@@ -144,20 +148,23 @@ export class BrowseGroupsComponent implements OnInit {
     this.groupFilterArray.push({
       label: 'Institutional',
       level: 'institution',
-      selected: !isLoggedIn
+      selected: !isLoggedIn,
+      ariaLabel: 'Filter by Institutional image groups'
     })
 
     if (isLoggedIn) {
       this.groupFilterArray.push({
         label: 'Shared with Me',
-        level: 'shared'
+        level: 'shared',
+        ariaLabel: 'Filter image groups by Shared with Me'
       })
     }
 
     if (this.showArtstorCurated) {
       this.groupFilterArray.push({
         label: 'Artstor Curated',
-        level: 'public'
+        level: 'public',
+        ariaLabel: 'Filter by Artstor Curated image groups'
       })
     }
 
@@ -537,12 +544,53 @@ export class BrowseGroupsComponent implements OnInit {
       return ''
     }
   }
+
+  /**
+   * For skip to main groups (card view) section
+   */
+  private skipToGrpSec(): void{
+    window.setTimeout( () => {
+      let htmlelement: HTMLElement = document.getElementById('skip-to-filters-link');
+      (<HTMLElement>htmlelement).focus()
+    }, 100)
+  }
+  
+  private skipToFilterSec(): void{
+    window.setTimeout(() => {
+      let htmlelement: HTMLElement = document.getElementById('skip-to-groups-link');
+      (<HTMLElement>htmlelement).focus()
+    }, 100)
+  }
+
+  private closeSortDropdown(): void{
+    let dropdownElement: HTMLElement = document.querySelector('.dropdown.sortlist')
+    dropdownElement.classList.remove('show')
+    dropdownElement.children[0].setAttribute('aria-expanded', 'false')
+    dropdownElement.children[1].classList.remove('show')
+  }
+
+  // Adding keyboard arrow keys navigation between sort button options
+  private sortDropdownOptsArrowDown(element: any): void{
+    let focusElementSelector = element.id === 'recentSortOpt' ? '#alphaSortOpt' : '#relSortOpt'
+    let focusElement = <HTMLElement>(document.querySelector(focusElementSelector))
+    if(focusElement) {
+      focusElement.focus()
+    }
+  }
+  private sortDropdownOptsArrowUp(element: any): void{
+    let focusElementSelector = element.id === 'relSortOpt' ? '#alphaSortOpt' : '#recentSortOpt'
+    let focusElement = <HTMLElement>(document.querySelector(focusElementSelector))
+    if(focusElement) {
+      focusElement.focus()
+    }
+  }
 }
 
 interface GroupFilter {
   label: string
   level: string
   selected?: boolean
+  ariaLabel?: string
 }
 
 export interface GroupQuery {

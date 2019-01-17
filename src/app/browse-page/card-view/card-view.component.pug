@@ -21,8 +21,8 @@
     .col-sm-10.col-8
       .row.cardview-text
         .col-sm-8
-          div(id="tagItem{{ tag.tagId }}", title="{{ tag.title }}", [ngClass]="[ link ? 'tag-link' : '', 'tag-item', tag.canOpen ? 'clickable' : '', 'tag-item__indent-' + tag.getLevel(), linkRoute.length < 1 ? 'no-link' : '']")
-            a(id="tagItem{{ tag.tagId }}Open", [ngClass]="{ 'no-link' : linkRoute.length < 1 || !tag.canOpen }", [routerLink]="[ linkRoute, tag.tagId ]")
+          div(id="tagItem{{ tag.tagId }}", [ngClass]="[ link ? 'tag-link' : '', 'tag-item', tag.canOpen ? 'clickable' : '', 'tag-item__indent-' + tag.getLevel(), linkRoute.length < 1 ? 'no-link' : '']")
+            a(id="tagItem{{ tag.tagId }}Open", [ngClass]="{ 'no-link' : linkRoute.length < 1 || !tag.canOpen }", [routerLink]="[ linkRoute, tag.tagId ]", tabindex="3", attr.aria-label="{{ tag.title }}, which has {{ group.items.length }} items")
               span.font-weight-bold.notranslate {{ tag.title }}
           .value.mobile--hide#description([innerHtml]="description")
           .row.mobile--show#information-row
@@ -40,7 +40,7 @@
             .col-sm-6
               p.font-weight-bold Creator:
             .col-sm-6
-              p.link(*ngIf="group.owner_name", (click)="searchOwner(group)") {{  group.owner_name }}
+              p.link(*ngIf="group.owner_name", (click)="searchOwner(group)", (keyup.enter)="searchOwner(group)", tabindex="3", attr.aria-label="{{  group.owner_name }} created this image group. Press enter to display results for groups created by them.") {{  group.owner_name }}
               p(*ngIf="!group.owner_name") -
           .row#information-row
             .col-sm-6
@@ -54,5 +54,5 @@
             ul.filter-list(#groupTagsList="")
               i(*ngIf="!group.tags.length") This group does not have any tags.
               li.filter-item(*ngFor="let tag of group.tags")
-                a.font-weight-bold((click)="selectTag(tag)") {{ tag }}
-          .expander.link--action.small([class.hidden]="groupTagsList.scrollHeight < 70", [class.collapsed]="tagsCollapsed", (click)="tagsCollapsed = !tagsCollapsed", [innerHtml]="tagsCollapsed ? 'Show all ' + group.tags.length + ' tags....' : 'Show less'", role="button") Show all {{ group.tags.length }} tags....
+                a.font-weight-bold((click)="selectTag(tag)", (keyup.enter)="selectTag(tag)", tabindex="3", attr.aria-label="{{ tag }}, press enter to display image groups associated with this tag.") {{ tag }}
+          .expander.link--action.small([class.hidden]="groupTagsList.scrollHeight < 70", [class.collapsed]="tagsCollapsed", (click)="tagsCollapsed = !tagsCollapsed", (keyup.enter)="tagsCollapsed = !tagsCollapsed", [innerHtml]="tagsCollapsed ? 'Show all ' + group.tags.length + ' tags....' : 'Show less'", role="button", tabindex="3", [attr.aria-label]="tagsCollapsed ? 'Show all ' + group.tags.length + ' tags, press enter to view all tags associated with this group.' : 'Show less. Press enter to decrease the amount of tags displayed with this image group.'") Show all {{ group.tags.length }} tags....
