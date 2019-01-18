@@ -244,7 +244,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     Ng2CompleterModule,
     FileUploadModule,
     ArtstorViewerModule,
-    RouterModule.forRoot(ROUTES, { useHash: true }),
+    RouterModule.forRoot(ROUTES, { useHash: false }),
     DeviceDetectorModule.forRoot(),
     Angulartics2Module.forRoot(),
     TranslateModule.forRoot({
@@ -258,6 +258,9 @@ export function HttpLoaderFactory(http: HttpClient) {
     //- TO-DO: Enable NgIdle with Universal
     NgIdleKeepaliveModule.forRoot(),
     // SortablejsModule.forRoot({ animation: 150 })
+  ],
+  exports: [
+    RouterModule
   ],
   providers: [ // expose our Services and Providers into Angular's dependency injection
     ENV_PROVIDERS,

@@ -63,7 +63,7 @@ export class AuthService implements CanActivate {
 
   private refreshUserSessionInProgress: boolean = false
 
-  private isBrowser: boolean = isPlatformBrowser(this.platformId)
+  private isBrowser: boolean
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
@@ -76,6 +76,7 @@ export class AuthService implements CanActivate {
     private _flags: FlagService,
     private idle: Idle
   ) {
+    this.isBrowser = isPlatformBrowser(this.platformId)
     // Set WLV and App Config variables
     this.isOpenAccess = this._app.config.isOpenAccess
     this.clientHostname = this._app.clientHostname
