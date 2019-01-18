@@ -7985,6 +7985,9 @@ img.no-stretch {
   animation-name: animatetop;
   animation-duration: 0.4s; }
 
+.modal-lg .modal-content {
+  margin-top: 5em; }
+
 @-webkit-keyframes animatetop {
   from {
     top: -300px;
