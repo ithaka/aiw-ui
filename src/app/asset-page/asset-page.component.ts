@@ -30,6 +30,7 @@ import { TourStep } from '../shared/tour/tour.service'
 import { APP_CONST } from '../app.constants'
 import { LockerService } from 'app/_services'
 import { AppConfig } from '../app.service'
+import { rights } from './rights.ts'
 
 @Component({
     selector: 'ang-asset-page',
@@ -57,6 +58,9 @@ export class AssetPage implements OnInit, OnDestroy {
     public downloadViewReady: boolean = false
     public showExitEdit: boolean = false
     public showDeletePCModal: boolean = false
+
+    // If asset has a rights statement, the index of which rights type
+    public rightStatementIndex: number = 0
 
     // Variables related to how we call for metadata
     public assetIdProperty: string = 'artstorid'
@@ -678,6 +682,16 @@ export class AssetPage implements OnInit, OnDestroy {
             }
         }
         return link
+    }
+
+    public isRightStatement(right_type: string): boolean {
+      for (let i: number = 0; i < rights.length; i++) {
+        if (rights[i].name === right_type.toUpperCase()) {
+          this.rightStatementIndex = i
+          return true
+        }
+      }
+      return false
     }
 
     private handleSkipAsset(): void {
