@@ -238,6 +238,47 @@ export class BrowseGroupsComponent implements OnInit {
     this._router.navigate(['/browse', 'groups'], { queryParams: queryParams })
   }
 
+  /**
+   * For skip to main groups (card view) section
+   */
+  public skipToGrpSec(): void {
+    window.setTimeout(() => {
+      let htmlelement: HTMLElement = document.getElementById('skip-to-filters-link');
+      (<HTMLElement>htmlelement).focus()
+    }, 100)
+  }
+
+  public skipToFilterSec(): void {
+    window.setTimeout(() => {
+      let htmlelement: HTMLElement = document.getElementById('skip-to-groups-link');
+      (<HTMLElement>htmlelement).focus()
+    }, 100)
+  }
+
+  public closeSortDropdown(): void {
+    let dropdownElement: HTMLElement = document.querySelector('.dropdown.sortlist')
+    dropdownElement.classList.remove('show')
+    dropdownElement.children[0].setAttribute('aria-expanded', 'false')
+    dropdownElement.children[1].classList.remove('show')
+  }
+
+  // Adding keyboard arrow keys navigation between sort button options
+  public sortDropdownOptsArrowDown(element: any): void {
+    let focusElementSelector = element.id === 'recentSortOpt' ? '#alphaSortOpt' : '#relSortOpt'
+    let focusElement = <HTMLElement>(document.querySelector(focusElementSelector))
+    if (focusElement) {
+      focusElement.focus()
+    }
+  }
+
+  public sortDropdownOptsArrowUp(element: any): void {
+    let focusElementSelector = element.id === 'relSortOpt' ? '#alphaSortOpt' : '#recentSortOpt'
+    let focusElement = <HTMLElement>(document.querySelector(focusElementSelector))
+    if (focusElement) {
+      focusElement.focus()
+    }
+  }
+
   /** Every time the url updates, we process the new tags and reload image groups if the tags query param changes */
   private createNavigationSubscription(): Subscription {
     return this._router.events.pipe(
@@ -545,45 +586,7 @@ export class BrowseGroupsComponent implements OnInit {
     }
   }
 
-  /**
-   * For skip to main groups (card view) section
-   */
-  private skipToGrpSec(): void{
-    window.setTimeout( () => {
-      let htmlelement: HTMLElement = document.getElementById('skip-to-filters-link');
-      (<HTMLElement>htmlelement).focus()
-    }, 100)
-  }
-  
-  private skipToFilterSec(): void{
-    window.setTimeout(() => {
-      let htmlelement: HTMLElement = document.getElementById('skip-to-groups-link');
-      (<HTMLElement>htmlelement).focus()
-    }, 100)
-  }
 
-  private closeSortDropdown(): void{
-    let dropdownElement: HTMLElement = document.querySelector('.dropdown.sortlist')
-    dropdownElement.classList.remove('show')
-    dropdownElement.children[0].setAttribute('aria-expanded', 'false')
-    dropdownElement.children[1].classList.remove('show')
-  }
-
-  // Adding keyboard arrow keys navigation between sort button options
-  private sortDropdownOptsArrowDown(element: any): void{
-    let focusElementSelector = element.id === 'recentSortOpt' ? '#alphaSortOpt' : '#relSortOpt'
-    let focusElement = <HTMLElement>(document.querySelector(focusElementSelector))
-    if(focusElement) {
-      focusElement.focus()
-    }
-  }
-  private sortDropdownOptsArrowUp(element: any): void{
-    let focusElementSelector = element.id === 'relSortOpt' ? '#alphaSortOpt' : '#recentSortOpt'
-    let focusElement = <HTMLElement>(document.querySelector(focusElementSelector))
-    if(focusElement) {
-      focusElement.focus()
-    }
-  }
 }
 
 interface GroupFilter {
