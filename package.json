@@ -33,7 +33,7 @@
         "postinstall": "node ./ng-add-pug-loader.js",
         "protractor": "protractor",
         "start": "ng serve",
-        "styleguide": "./node_modules/.bin/node-sass src/sass/app.scss src/assets/styleguide/styles/all.css && nucleus --config nucleus/config.nucleus.json && npm run open:styleguide",
+        "styleguide": "./node_modules/.bin/node-sass src/sass/app.scss src/assets/styleguide/styles/all.css && nucleus --config nucleus/config.nucleus.json",
         "open:styleguide": "open ./src/assets/styleguide/index.html",
         "test": "ng test",
         "tslint": "tslint",
