@@ -34,6 +34,7 @@ echo "Starting webpack build"
 $TIMEOUT -t 600 yarn run build:prod
 
 # Styleguide
+npm install --global nucleus-styleguide
 yarn styleguide
 
 # Collect our built files
