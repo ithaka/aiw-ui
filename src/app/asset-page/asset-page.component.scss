@@ -434,7 +434,7 @@ $titleNavBg: #eee;
     cursor: pointer;
     padding-bottom: 5px;
     display: block;
-    
+
     a{
         padding: 5px 5px 5px 0;
         &:hover{
@@ -466,7 +466,7 @@ $titleNavBg: #eee;
 }
 
 #asset-btn {
-    margin: 0; 
+    margin: 0;
 }
 
 #generatedImgURL {
@@ -500,4 +500,9 @@ $titleNavBg: #eee;
     &.active .icon-download-asset-orange, &:hover .icon-download-asset-orange, &:focus .icon-download-asset-orange {
         background-image: url("/assets/img/icon-download-asset-white.svg");
     }
+}
+
+.rights-icon {
+  width: 15px;
+  display: inline-block;
 }

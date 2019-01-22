@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ViewChild, HostListener } from '@angular/core'
+import { Component, OnInit, OnDestroy, ViewChild, HostListener, Input } from '@angular/core'
 import { ActivatedRoute, Params, Router } from '@angular/router'
 import { DomSanitizer, SafeUrl, Meta } from '@angular/platform-browser'
 import { Subscription } from 'rxjs'
@@ -60,7 +60,8 @@ export class AssetPage implements OnInit, OnDestroy {
     public showDeletePCModal: boolean = false
 
     // If asset has a rights statement, the index of which rights type
-    public rightStatementIndex: number = 0
+    public rightsLink: string
+    public rightsImg: string
 
     // Variables related to how we call for metadata
     public assetIdProperty: string = 'artstorid'
@@ -499,8 +500,6 @@ export class AssetPage implements OnInit, OnDestroy {
                     this.assets[0].formattedMetadata['Collection'] = splitValues
                 }
 
-
-
                 // Load related results from jstor
                 if (this.relatedResFlag) {
                     this.getJstorRelatedResults(asset)
@@ -685,9 +684,10 @@ export class AssetPage implements OnInit, OnDestroy {
     }
 
     public isRightStatement(right_type: string): boolean {
-      for (let i: number = 0; i < rights.length; i++) {
+      for (let i = 0; i < rights.length; i++) {
         if (rights[i].name === right_type.toUpperCase()) {
-          this.rightStatementIndex = i
+          this.rightsLink = rights[i].link
+          this.rightsImg = rights[i].img
           return true
         }
       }
