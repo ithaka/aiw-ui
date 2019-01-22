@@ -60,6 +60,7 @@ export class AssetPage implements OnInit, OnDestroy {
     public showDeletePCModal: boolean = false
 
     // Rights Statements values
+    public rightsText: string
     public rightsLink: string
     public rightsImg: string
 
@@ -517,6 +518,12 @@ export class AssetPage implements OnInit, OnDestroy {
         }
         // Set download link
         this.setDownloadFull()
+
+        // Loop over Rights fields and set rights statement values via isRightStatement
+        for (let i = 0; i < this.assets[0].formattedMetadata.Rights.length; i++) {
+          let rightsField = this.assets[0].formattedMetadata.Rights[i]
+          this.isRightStatement(rightsField)
+        }
     }
 
     /**
@@ -691,6 +698,7 @@ export class AssetPage implements OnInit, OnDestroy {
     public isRightStatement(rights_text: string): boolean {
       for (let i = 0; i < rights.length; i++) {
         if (rights[i].name === rights_text.toUpperCase()) {
+          this.rightsText = rights_text
           this.rightsLink = rights[i].link
           this.rightsImg = rights[i].img
           return true
