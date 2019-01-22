@@ -46,7 +46,6 @@ export class AssetPage implements OnInit, OnDestroy {
     public userSessionFresh: boolean = false
     public assetIds: string[] = []
 
-
     /** controls whether or not the modals are visible */
     public showAgreeModal: boolean = false
     public showLoginModal: boolean = false
@@ -60,9 +59,9 @@ export class AssetPage implements OnInit, OnDestroy {
     public showDeletePCModal: boolean = false
 
     // Rights Statements values
-    public rightsText: string
-    public rightsLink: string
-    public rightsImg: string
+    public rightsText: string = ''
+    public rightsLink: string = ''
+    public rightsImg: string = ''
 
     // Variables related to how we call for metadata
     public assetIdProperty: string = 'artstorid'
