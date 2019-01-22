@@ -180,8 +180,9 @@
             div(*ngFor="let right of assets[0].formattedMetadata.Rights")
               span(*ngIf="isRightStatement(right)")
                 img.rights-icon([attr.src]="rightsImg", [attr.alt]="right")
-                span([innerHTML]="cleanFieldValue(right) | linkify", [attr.aria-labelledby]="'Rights'")
-              .value([innerHTML]="cleanFieldValue(right) | linkify", [attr.aria-labelledby]="'Rights'")
+                | &nbsp;
+                a.value.col-link([innerHTML]="cleanFieldValue(right) | linkify", [attr.href]="rightsLink", [attr.aria-labelledby]="'Rights'")
+              .value(*ngIf="!isRightStatement(right)", [innerHTML]="cleanFieldValue(right) | linkify", [attr.aria-labelledby]="'Rights'")
 
           .row-hdr.pt-3(*ngIf="assets[0].filePropertiesArray.length > 0") {{ 'ASSET_PAGE.HEADER_LABELS.FILE_PROPS' | translate}}
           //- Loop through File Properties Array

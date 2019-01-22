@@ -9,32 +9,32 @@ export const rights = [
     link: 'http://rightsstatements.org/vocab/InC/1.0/',
     img: '/assets/img/rights-statements/InC.Icon-Only.dark.png'
   },
-  { name: 'IN COPYRIGHT EU ORPHAN_WORK',
+  { name: 'IN COPYRIGHT - EU ORPHAN_WORK',
     link: 'http://rightsstatements.org/vocab/InC-OW-EU/1.0/',
     img: '/assets/img/rights-statements/InC.Icon-Only.dark.png'
   },
-  { name: 'IN COPYRIGHT EDUCATIONAL USE PERMITTED',
+  { name: 'IN COPYRIGHT - EDUCATIONAL USE PERMITTED',
     link: 'http://rightsstatements.org/vocab/InC-EDU/1.0/',
     img: '/assets/img/rights-statements/InC.Icon-Only.dark.png'
   },
-  { name: 'IN COPYRIGHT NON COMMERCIAL USE PERMITTED',
+  { name: 'IN COPYRIGHT - NON COMMERCIAL USE PERMITTED',
     link: 'http://rightsstatements.org/vocab/InC-NC/1.0/',
     img: '/assets/img/rights-statements/InC.Icon-Only.dark.png'
   },
-  { name: 'IN COPYRIGHT RIGHTS HOLDERS UNLOCATABLE OR UNIDENTIFIABLE',
+  { name: 'IN COPYRIGHT - RIGHTS HOLDERS UNLOCATABLE OR UNIDENTIFIABLE',
     link: 'http://rightsstatements.org/vocab/InC-RUU/1.0/',
     img: '/assets/img/rights-statements/InC.Icon-Only.dark.png'
   },
   // NO COPYRIGHT
-  { name: 'NO COPYRIGHT CONTRACTUAL RESTRICTIONS',
+  { name: 'NO COPYRIGHT - CONTRACTUAL RESTRICTIONS',
     link: 'http://rightsstatements.org/vocab/NoC-CR/1.0/',
     img: '/assets/img/rights-statements/NoC.Icon-Only.dark.png'
   },
-  { name: 'NO COPYRIGHT NON COMMERCIAL USE ONLY',
+  { name: 'NO COPYRIGHT - NON COMMERCIAL USE ONLY',
     link: 'http://rightsstatements.org/vocab/NoC-NC/1.0/',
     img: '/assets/img/rights-statements/NoC.Icon-Only.dark.png'
   },
-  { name: 'NO COPYRIGHT OTHER KNOWN LEGAL RESTRICTIONS',
+  { name: 'NO COPYRIGHT - OTHER KNOWN LEGAL RESTRICTIONS',
     link: 'http://rightsstatements.org/vocab/NoC-OKLR/1.0/',
     img: '/assets/img/rights-statements/NoC.Icon-Only.dark.png'
   },
