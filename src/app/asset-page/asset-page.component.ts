@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ViewChild, HostListener, Input } from '@angular/core'
+import { Component, OnInit, OnDestroy, ViewChild, HostListener } from '@angular/core'
 import { ActivatedRoute, Params, Router } from '@angular/router'
 import { DomSanitizer, SafeUrl, Meta } from '@angular/platform-browser'
 import { Subscription } from 'rxjs'
@@ -59,7 +59,7 @@ export class AssetPage implements OnInit, OnDestroy {
     public showExitEdit: boolean = false
     public showDeletePCModal: boolean = false
 
-    // If asset has a rights statement, the index of which rights type
+    // Rights Statements values
     public rightsLink: string
     public rightsImg: string
 
@@ -683,9 +683,14 @@ export class AssetPage implements OnInit, OnDestroy {
         return link
     }
 
-    public isRightStatement(right_type: string): boolean {
+    /**
+     * isRightStatement sets rightsLink and rightsImg values and
+     * returns boolean if an asset has a rights statement
+     * @param rights_text string
+     */
+    public isRightStatement(rights_text: string): boolean {
       for (let i = 0; i < rights.length; i++) {
-        if (rights[i].name === right_type.toUpperCase()) {
+        if (rights[i].name === rights_text.toUpperCase()) {
           this.rightsLink = rights[i].link
           this.rightsImg = rights[i].img
           return true

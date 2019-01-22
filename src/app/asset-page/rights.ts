@@ -1,6 +1,6 @@
 /**
  * This file defines values for displaying Rights Statements icons and links
- * to official right statements at rightsstaments.org
+ * to official right statements at rightsstatements.org
  */
 
 export const rights = [
