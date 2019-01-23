@@ -695,8 +695,13 @@ export class AssetPage implements OnInit, OnDestroy {
      * @param rights_text string
      */
     public isRightStatement(rights_text: string): boolean {
+
+      // Handle extra spaces and differences in punctuation in Rights fields
+      // by doing uppercase comparison of alphanumeric chars only
+      let reg = /[^a-z0-9]/
+
       for (let i = 0; i < rights.length; i++) {
-        if (rights[i].name === rights_text.toUpperCase()) {
+        if (rights[i].name.split(reg).join('').toUpperCase() === rights_text.split(reg).join('').toUpperCase()) {
           this.rightsText = rights_text
           this.rightsLink = rights[i].link
           this.rightsImg = rights[i].img
