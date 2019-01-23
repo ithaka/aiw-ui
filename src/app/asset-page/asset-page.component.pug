@@ -181,7 +181,7 @@
               span(*ngIf="rightsText === right")
                 img.rights-icon([attr.src]="rightsImg", [attr.alt]="right")
                 | &nbsp;
-                a.value.col-link.rights-text([innerHTML]="cleanFieldValue(right) | lowercase | linkify", [attr.href]="rightsLink", [attr.aria-labelledby]="'Rights'", target="_blank")
+                a.value.col-link.rights-text([innerHTML]="cleanFieldValue(right) | lowercase | linkify", [attr.href]="rightsLink", [attr.aria-label]="Learn about this rights statement on rightsstatements.org", target="_blank")
               .value(*ngIf="rightsText !== right", [innerHTML]="cleanFieldValue(right) | linkify", [attr.aria-labelledby]="'Rights'")
 
           .row-hdr.pt-3(*ngIf="assets[0].filePropertiesArray.length > 0") {{ 'ASSET_PAGE.HEADER_LABELS.FILE_PROPS' | translate}}
