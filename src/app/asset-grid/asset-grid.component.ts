@@ -305,7 +305,7 @@ export class AssetGrid implements OnInit, OnDestroy {
     this.subscriptions.push(
       this._assets.allResults.pipe(
         map(allResults => {
-          if ( (this.activeSort.index && this.activeSort.index == '3') || (this.UrlParams['startDate'])) {
+          if (this.activeSort.index && this.activeSort.index == '3') {
             this.sortFilterByDateTotal =  allResults.total
 
             let withoutDateParams = Object.assign({}, this.UrlParams)
