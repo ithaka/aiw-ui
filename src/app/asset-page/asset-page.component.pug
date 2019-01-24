@@ -18,32 +18,32 @@
     .asset-col([ngClass]="[ isFullscreen ? 'fullscreen-container' : 'col-md-8', showAssetDrawer && isFullscreen ? 'drawer' : '' ]")
       ng-container(*ngIf="userSessionFresh")
         //- TO-DO: Enable Artstor Viewer with Universal
-        //- artstor-viewer(
-        //-     *ngFor="let assetId of (isFullscreen ? assetIds : [assetIds[0]]); let i = index",
-        //-     [testEnv]="_auth.getEnv() === 'test'",
-        //-     [assetId]="assetId",
-        //-     [encrypted]="encryptedAccess",
-        //-     [groupId]="assetGroupId",
-        //-     (assetMetadata)="handleLoadedMetadata($event, i)",
-        //-     [ngClass]="[ 'asset-viewer-' + assetIds.length ]",
-        //-     (fullscreenChange)="updateFullscreenVar($event)",
-        //-     [index]="i",
-        //-     [assetCompareCount]="assets.length",
-        //-     [assetNumber]="assetNumber",
-        //-     [assetGroupCount]="totalAssetCount - restrictedAssetsCount",
-        //-     [assets]="assets",
-        //-     [isFullscreen]="isFullscreen",
-        //-     [showCaption]="showAssetCaption",
-        //-     [quizMode]="quizMode",
-        //-     [prevAssetResults]="prevAssetResults",
-        //-     (removeAsset)="toggleAsset($event)",
-        //-     (nextPage)="showNextAsset()",
-        //-     (prevPage)="showPrevAsset()",
-        //-     (multiViewPageViaArrow)="multiViewPageViaArrow()",
-        //-     (multiViewPageViaThumbnail)="multiViewPageViaThumbnail()",
-        //-     (assetDrawer)="toggleAssetDrawer(!showAssetDrawer)",
-        //-     [legacyFlag]="false"
-        //-   )
+        artstor-viewer(
+            *ngFor="let assetId of (isFullscreen ? assetIds : [assetIds[0]]); let i = index",
+            [testEnv]="_auth.getEnv() === 'test'",
+            [assetId]="assetId",
+            [encrypted]="encryptedAccess",
+            [groupId]="assetGroupId",
+            (assetMetadata)="handleLoadedMetadata($event, i)",
+            [ngClass]="[ 'asset-viewer-' + assetIds.length ]",
+            (fullscreenChange)="updateFullscreenVar($event)",
+            [index]="i",
+            [assetCompareCount]="assets.length",
+            [assetNumber]="assetNumber",
+            [assetGroupCount]="totalAssetCount - restrictedAssetsCount",
+            [assets]="assets",
+            [isFullscreen]="isFullscreen",
+            [showCaption]="showAssetCaption",
+            [quizMode]="quizMode",
+            [prevAssetResults]="prevAssetResults",
+            (removeAsset)="toggleAsset($event)",
+            (nextPage)="showNextAsset()",
+            (prevPage)="showPrevAsset()",
+            (multiViewPageViaArrow)="multiViewPageViaArrow()",
+            (multiViewPageViaThumbnail)="multiViewPageViaThumbnail()",
+            (assetDrawer)="toggleAssetDrawer(!showAssetDrawer)",
+            [legacyFlag]="false"
+          )
       //- Related results from JSTOR
       .pl-3(*ngIf="jstorResults.length > 0 && relatedResFlag")
         .row-hdr.pt-3 Related Results from JSTOR

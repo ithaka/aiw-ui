@@ -7,8 +7,6 @@ import { NavigationEnd, Router, RouteReuseStrategy, RouterModule, UrlSerializer 
 import { DeviceDetectorModule } from 'ngx-device-detector';
 import { DatePipe, isPlatformBrowser } from '@angular/common'
 
-// Ithaka/Artstor Dependencies
-import { ArtstorViewerModule } from 'artstor-viewer'
 
 /*
  * Platform and Environment providers/directives/pipes
@@ -58,7 +56,7 @@ import { ClusterPage } from './cluster-page'
 import { BrowsePage, LibraryComponent, IgGroupFilterPipe, BrowseCommonsComponent,
   MyCollectionsComponent, BrowseInstitutionComponent, BrowseGroupsComponent, TagComponent, CardViewComponent,
   TagsListComponent, TagFiltersService } from './browse-page'
-import { AssetPage, AgreeModalComponent } from './asset-page'
+import { AssetPage, AgreeModalComponent, ArtstorViewerComponent } from './asset-page'
 import { AccountPage } from './account-page'
 import { AssociatedPage } from './associated-page'
 import { ImageGroupPage, PptModalComponent } from './image-group-page'
@@ -173,6 +171,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     AssetFilters,
     AssetGrid,
     AssetPage,
+    ArtstorViewerComponent,
     AssociatedPage,
     AssetPPPage,
     BrowseCommonsComponent,
@@ -243,7 +242,6 @@ export function HttpLoaderFactory(http: HttpClient) {
     NgxTagInputModule,
     Ng2CompleterModule,
     FileUploadModule,
-    ArtstorViewerModule,
     RouterModule.forRoot(ROUTES, { useHash: false }),
     DeviceDetectorModule.forRoot(),
     Angulartics2Module.forRoot(),

@@ -384,8 +384,9 @@ export class AssetGrid implements OnInit, OnDestroy {
           let id: string = this.prevRouteTS
 
           let prevRouteParams = this._storage.getSession('prevRouteParams') || {}
-          prevRouteParams[id] = this.route.snapshot.url
-          this._storage.setSession('prevRouteParams', prevRouteParams)
+          // @todo
+          // prevRouteParams[id] = this.route.snapshot.url
+          // this._storage.setSession('prevRouteParams', prevRouteParams)
 
           // Generate Facets
           if (allResults && allResults.collTypeFacets) {

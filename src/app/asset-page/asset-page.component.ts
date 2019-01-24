@@ -4,7 +4,7 @@ import { DomSanitizer, SafeUrl, Meta } from '@angular/platform-browser'
 import { Subscription } from 'rxjs'
 import { map, take } from 'rxjs/operators'
 import { Angulartics2 } from 'angulartics2'
-import { ArtstorViewer } from 'artstor-viewer'
+import { ArtstorViewerComponent } from './artstor-viewer/artstor-viewer.component'
 import { formGroupNameProvider } from '@angular/forms/src/directives/reactive_directives/form_group_name'
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms'
 
@@ -40,11 +40,11 @@ import { MetadataService } from 'app/_services';
 })
 export class AssetPage implements OnInit, OnDestroy {
 
-    @ViewChild(ArtstorViewer)
+    @ViewChild(ArtstorViewerComponent) public assetViewer
 
     @ViewChild("generatedImgURL", {read: ElementRef}) generatedImgURLElement: ElementRef
 
-    public assetViewer: any
+    
 
     public user: any
     public userSessionFresh: boolean = false
