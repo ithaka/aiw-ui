@@ -27,9 +27,9 @@ export class LegacyRouteResolver implements Resolve<boolean> {
     let openCollection: boolean = false
 
     // Provide redirects for initPath detected in index.html from inital load
-    if (initPath) {
-      url = initPath
-    }
+    // if (initPath) {
+    //   url = initPath
+    // }
 
     // Keep this log around: we have a lot of exceptions
     console.log('Attempting to resolve legacy url:\n', url)

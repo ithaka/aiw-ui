@@ -5,7 +5,7 @@ import { PactWeb, Matchers } from '@pact-foundation/pact-web'
 import { map } from 'rxjs/operators'
 
 // Project Dependencies
-import { MetadataRes } from '../shared/datatypes'
+import { MetadataResponse, AssetDataResponse } from '../_services'
 import { MetadataService } from '../shared/metadata.service';
 import { FlagService } from '../shared';
 
@@ -34,10 +34,10 @@ describe('Metadata Calls #pact #metadata', () => {
      * Image asset metadata
      * - Metadata for SS34216_34216_39230202, a compound object
      */
-    const expectedMetadataObject: MetadataRes  = {
+    const expectedMetadataObject: MetadataResponse  = {
       'success': true,
       'total': 1,
-      'metadata': [{
+      'metadata': [<AssetDataResponse>{
         "resolution_x": 600,
         "SSID": "1002547028",
         "object_id": "SS34216_34216_39230202",

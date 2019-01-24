@@ -1,6 +1,5 @@
-import {Injectable} from '@angular/core';
-import {ScriptStore} from './script.store';
-import { DomUtilityService } from 'app/shared';
+import { Injectable } from '@angular/core';
+import { DomUtilityService, ScriptStore } from '../shared';
 
 declare var document: any;
 
@@ -26,35 +25,37 @@ export class ScriptService {
 
     loadScript(name: string) {
         return new Promise((resolve, reject) => {
-            // resolve if already loaded
-            if (this.scripts[name].loaded) {
-                resolve({script: name, loaded: true, status: 'already_loaded'});
-            }
-            else {
-                // load script
-                let script = this._dom.create('script')
-                script.type = 'text/javascript'
-                script.async = 'true'
-                script.charset = 'utf-8'
-                script.src = this.scripts[name].src
-                script.id = name
-                if (script.readyState) {  // IE
-                    script.onreadystatechange = () => {
-                        if (script.readyState === 'loaded' || script.readyState === 'complete') {
-                            script.onreadystatechange = null;
-                            this.scripts[name].loaded = true;
-                            resolve({script: name, loaded: true, status: 'loaded'});
-                        }
-                    };
-                } else {  // Others
-                    script.onload = () => {
-                        this.scripts[name].loaded = true;
-                        resolve({script: name, loaded: true, status: 'loaded'});
-                    };
-                }
-                script.onerror = (error: any) => resolve({script: name, loaded: false, status: 'not_loaded'});
-                this._dom.byTagName('head')[0].appendChild(script);
-            }
+            resolve("k")
+            // @todo Handle client side only or something?
+            // // resolve if already loaded
+            // if (this.scripts[name].loaded) {
+            //     resolve({script: name, loaded: true, status: 'already_loaded'});
+            // }
+            // else {
+            //     // load script
+            //     let script = this._dom.create('script')
+            //     script.type = 'text/javascript'
+            //     script.async = 'true'
+            //     script.charset = 'utf-8'
+            //     script.src = this.scripts[name].src
+            //     script.id = name
+            //     if (script.readyState) {  // IE
+            //         script.onreadystatechange = () => {
+            //             if (script.readyState === 'loaded' || script.readyState === 'complete') {
+            //                 script.onreadystatechange = null;
+            //                 this.scripts[name].loaded = true;
+            //                 resolve({script: name, loaded: true, status: 'loaded'});
+            //             }
+            //         };
+            //     } else {  // Others
+            //         script.onload = () => {
+            //             this.scripts[name].loaded = true;
+            //             resolve({script: name, loaded: true, status: 'loaded'});
+            //         };
+            //     }
+            //     script.onerror = (error: any) => resolve({script: name, loaded: false, status: 'not_loaded'});
+            //     this._dom.byTagName('head')[0].appendChild(script);
+            // }
         });
     }
 

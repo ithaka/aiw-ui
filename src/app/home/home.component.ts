@@ -178,8 +178,8 @@ export class Home implements OnInit, OnDestroy {
     testAd.innerHTML = '&nbsp;';
     testAd.className = 'adsbox';
 
-    let docBody = this._dom.byTagName('body')[0]
-    this._dom.append(docBody, testAd);
+    // let docBody = this._dom.byTagName('body')[0]
+    // this._dom.append(docBody, testAd);
 
     setTimeout(
       () => {

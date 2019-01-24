@@ -5,12 +5,11 @@ import { Component, Input, OnInit, PLATFORM_ID, Inject  } from '@angular/core'
 import { Router, NavigationStart } from '@angular/router'
 import { map } from 'rxjs/operators'
 import { Angulartics2 } from 'angulartics2'
+import { isPlatformBrowser } from '@angular/common'
 
 // Project Dependencies
 import { AuthService } from './../auth.service'
-import { TourStep } from './tour.service'
-import { isPlatformBrowser } from '@angular/common';
-import { DomUtilityService } from 'app/shared';
+import { DomUtilityService } from '../../shared'
 
 @Component({
     selector: 'ang-guide-tour',
@@ -156,3 +155,14 @@ import { DomUtilityService } from 'app/shared';
     }
 
   }// end of class
+
+export interface TourStep {
+    step?: number
+    element: string[]
+    popover: {
+        position?: string,
+        title: string,
+        description: string
+    }
+    onNext?: () => void
+}

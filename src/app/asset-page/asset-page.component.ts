@@ -26,10 +26,11 @@ import {
 import { TitleService } from '../shared/title.service'
 import { ScriptService } from '../shared/script.service'
 import { LocalPCService, LocalPCAsset } from '../_local-pc-asset.service'
-import { TourStep } from '../shared/tour/tour.service'
+import { TourStep } from '../shared/tour/tour.component'
 import { APP_CONST } from '../app.constants'
 import { AppConfig } from '../app.service'
 import { ArtstorStorageService } from '../../../projects/artstor-storage/src/public_api';
+import { MetadataService } from 'app/_services';
 
 
 @Component({
@@ -205,6 +206,7 @@ export class AssetPage implements OnInit, OnDestroy {
     constructor(
         public _appConfig: AppConfig,
         private _assets: AssetService,
+        private _metadata: MetadataService,
         private _auth: AuthService,
         private _search: AssetSearchService,
         private _flags: FlagService,
@@ -245,6 +247,7 @@ export class AssetPage implements OnInit, OnDestroy {
         // sets up subscription to allResults, which is the service providing thumbnails
         this.subscriptions.push(
             this._auth.currentUser.subscribe((user) => {
+                console.log("User subscription returned")
                 this.user = user
                 // userSessionFresh: Do not attempt to load asset until we know user object is fresh
                 // if (!this.userSessionFresh && this._auth.userSessionFresh) {
@@ -252,6 +255,7 @@ export class AssetPage implements OnInit, OnDestroy {
                 // }
             }),
             this._assets.allResults.subscribe((allResults) => {
+                console.log("allResults subscription returned")
                 if (allResults.thumbnails) {
                     // Set asset id property to reference
                     this.assetIdProperty = (allResults.thumbnails[0] && allResults.thumbnails[0].objectId) ? 'objectId' : 'artstorid'
@@ -309,6 +313,7 @@ export class AssetPage implements OnInit, OnDestroy {
 
         this.subscriptions.push(
             this.route.params.subscribe((routeParams) => {
+                console.log("Params subscription returned")
                 this.assetGroupId = routeParams['groupId']
                 // Find feature flags
                 if (routeParams && routeParams['featureFlag']) {
@@ -330,6 +335,16 @@ export class AssetPage implements OnInit, OnDestroy {
                     this.assetIds[0] = routeParams['encryptedId']
                 } else {
                     this.assetIds[0] = routeParams['assetId']
+
+                    this._metadata.buildAsset(this.assetIds[0]).pipe(take(1))
+                        .subscribe(asset => {
+                            console.log("built asset")
+                            console.log(asset)
+                            console.log(asset.id)
+                        }, err => {
+                            console.log("build asset error")
+                            console.log(err)
+                        })
 
                     if (this.prevAssetResults.thumbnails.length > 0) {
                         let currentAssetIndex = this.currentAssetIndex();
@@ -389,6 +404,7 @@ export class AssetPage implements OnInit, OnDestroy {
         // Subscribe to pagination values
         this.subscriptions.push(
             this._assets.pagination.subscribe((pagination) => {
+                console.log("Pagination subscription returned")
                 this.pagination.page = parseInt(pagination.page);
                 this.pagination.size = parseInt(pagination.size);
                 if (this.originPage < 1) {
@@ -409,6 +425,7 @@ export class AssetPage implements OnInit, OnDestroy {
         );
 
         this._assets.unAuthorizedAsset.subscribe((value) => {
+            console.log("unauthorizedAsset subscription returned")
             if (value) {
                 this.showAccessDeniedModal = true
             }
@@ -430,12 +447,19 @@ export class AssetPage implements OnInit, OnDestroy {
 
 
     handleLoadedMetadata(asset: Asset, assetIndex: number) {
+        console.log("Handle loaded metadata for " + asset['objectId'])
         // Reset modals if new data comes in
         this.showAccessDeniedModal = false
         this.showServerErrorModal = false
 
         if (asset && asset['error']) {
+            console.log("Asset error")
             let err = asset['error']
+            console.log(asset)
+            console.log(err.message)
+            console.log(err.keys())
+            console.log(err.keys().toString())
+            console.log(assetIndex)
             if (err.status === 403 || err.message == 'Unable to load metadata!') {
                 // here is where we make the "access denied" modal appear
                 if (!this.encryptedAccess) {
@@ -452,6 +476,10 @@ export class AssetPage implements OnInit, OnDestroy {
                 this.showServerErrorModal = true
             }
         } else {
+            console.log("Asset?")
+            if(!this.assets) {
+                this.assets = []
+            }
             this.assets[assetIndex] = asset
             if (assetIndex == 0) {
                 let tileSource: any = asset.tileSource
@@ -517,14 +545,15 @@ export class AssetPage implements OnInit, OnDestroy {
      * Maintains the isFullscreen variable, as set by child AssetViewers
      */
     updateFullscreenVar(isFullscreen: boolean): void {
+        console.log("update fullscreen var")
         if (!isFullscreen) {
             this.showAssetDrawer = false
             if (this.originPage > 0 && this.pagination.page !== this.originPage) {
                 this.pagination.page = this.originPage
                 this._assets.loadAssetPage(this.pagination.page)
             }
-            this.assets.splice(1)
-            this.assetIds.splice(1)
+            // this.assets.splice(1)
+            // this.assetIds.splice(1)
         } else if (Array.isArray(this.assets[0].tileSource)){ // Log GA event for opening a multi view item in Fullscreen
             this.angulartics.eventTrack.next({ action: 'multiViewItemFullscreen', properties: { category: this._auth.getGACategory(), label: this.assets[0].id } });
         }
@@ -710,6 +739,7 @@ export class AssetPage implements OnInit, OnDestroy {
 
     // Calculate the index of current asset from the previous assets result set
     private currentAssetIndex(): number {
+        console.log("currentAssetIndex")
         let assetIndex: number = 1
         let assetFound = false
         if (this.assetIds[0]) {

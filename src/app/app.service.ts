@@ -22,7 +22,7 @@ export class AppConfig {
     this.isBrowser = isPlatformBrowser(platformId);
     // Identify hostname from request or client side
     if (this.isBrowser) {
-      this.clientHostname = this.clientHostname
+      this.clientHostname = window.location.hostname
     } else{
       let req = this.injector.get('request');
       this.clientHostname = req ? req.get('host') : '';
