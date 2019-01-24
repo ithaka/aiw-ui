@@ -8,7 +8,7 @@ export class Asset {
     typeName: string // the name correlating to the typeId
     title: string
     thumbnail_url: string
-    thumbnail_size: number = 3
+    thumbnail_size: number = 2
     kalturaUrl: string
     downloadLink: string
     downloadName: string
