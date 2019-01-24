@@ -10,7 +10,8 @@ import { AssetService, GroupService, ImageGroup, AuthService } from './../../sha
 
 @Component({
   selector: 'ang-add-to-group',
-  templateUrl: 'add-to-group.component.pug'
+  templateUrl: 'add-to-group.component.pug',
+  styleUrls: ["./add-to-group.component.scss"]
 })
 export class AddToGroupModal implements OnInit, OnDestroy {
   @Output() closeModal: EventEmitter<any> = new EventEmitter();
@@ -34,6 +35,8 @@ export class AddToGroupModal implements OnInit, OnDestroy {
 
   @Input() private selectedAssets: any[] = []; // this is used in the asset page, where a single asset can be injected directly
   private groups: ImageGroup[] = [];
+
+  private detailedView: boolean = false
 
   constructor(
     private _assets: AssetService,

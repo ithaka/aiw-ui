@@ -1,0 +1,9 @@
+@import '../../../sass/core/variables';
+
+.modal-dialog.large{
+    max-width: 800px !important;
+
+    .detail-preview{
+        background-color: $color-gray-1;
+    }
+}
