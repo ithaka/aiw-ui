@@ -80,10 +80,18 @@ input[type=number] {
 }
 
 .btn-link{
+    margin: 0px 3px;
+    padding: 0px 3px;
 
     &.active {
-        border-radius: 3px;
-        background: #ccefcf;
+        border: 1px solid $orange;
+        color: $orange;
+        padding: 0px 5px;
+    }
+
+    &:focus, &:hover {
+        color: $orange;
+        background-color: #fafafa;
     }
 
     .icon{
@@ -101,8 +109,10 @@ input[type=number] {
         background-image: url("/assets/img/icon-export-black.svg");
     }
 
-    &.active .icon-select-white, &:hover .icon-select-white{
-        background-image: url("/assets/img/icon-select-black.svg");
+    &.active, &:hover, &:focus {
+        & .icon-select-white {
+            background-image: url("/assets/img/icon-select-orange-filled.svg");
+        }
     }
 
     &.active .icon-reorder-white, &:hover .icon-reorder-white{

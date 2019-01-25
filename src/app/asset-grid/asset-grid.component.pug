@@ -36,16 +36,19 @@
               i.icon.icon-download-white
               | Download
             //- Select
-            li.btn.btn-link(*ngIf="selectedAssets.length > 0", [class.disabled]="reorderMode", (click)="toggleEditMode()", [ngClass]="{'active': editMode}", (keyup.enter)="toggleEditMode()", tabindex="3", role="button", attr.aria-label="{{selectedAssets.length}} items selected, tap enter to deselect all. To take an action on these selected items, tab to the Organize menu.")
-              i.icon.icon-select-white
-              | Select
+            li.btn.btn-link([class.disabled]="reorderMode", (click)="toggleEditMode()", [ngClass]="{'active': editMode}", (keyup.enter)="toggleEditMode()", tabindex="3", role="button", attr.aria-label="{{selectedAssets.length}} items selected, tap enter to deselect all. To take an action on these selected items, tab to the Organize menu.")
+              ng-container(*ngIf="!editMode") 
+                i.icon.icon-select-white
+                | Select
+              ng-container(*ngIf="editMode") 
+                i.icon([ngClass]="[ selectedAssets.length >= 1 ? 'icon-select-orange' : 'icon-select-empty-orange' ]")
+                span.hide-on-hover {{ selectedAssets.length }} selected item{{ selectedAssets.length == 1 ? '' : 's' }}
+                span.show-on-hover Deselect all
             //- Reorder
             li.btn.btn-link((click)="toggleReorderMode()", [ngClass]="{'active': reorderMode}", *ngIf="actionOptions.group && actionOptions.isowner", (keyup.enter)="toggleReorderMode()", tabindex="3", role="button",
             aria-label="Reorder the image group")
               i.icon.icon-reorder-white
               | Reorder
-          //- Number of selected assets in edit mode
-          .selected-assets(*ngIf="editMode") {{ selectedAssets.length }} selected asset{{ selectedAssets.length > 1 ? 's' : '' }}
         .col-12.pb-3
           ng-container(*ngIf="reorderMode")
             //- Reorder: Visual instructions
