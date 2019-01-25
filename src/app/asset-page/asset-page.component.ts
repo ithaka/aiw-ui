@@ -198,15 +198,27 @@ export class AssetPage implements OnInit, OnDestroy {
         this.user = this._auth.getUser();
         this.solrMetadataFlag = this._flags.solrMetadata
 
+        // if (this.user) {
+        //   this.userSessionFresh = true
+        // }
+
+        // userSessionFresh: Do not attempt to load asset until we know user object is fresh
+
+        if (!this.userSessionFresh && this._auth.userSessionFresh) {
+            this.userSessionFresh = true
+        }
+
+        this.acceptedTerms = this.downloadAuth()
+
         // sets up subscription to allResults, which is the service providing thumbnails
         this.subscriptions.push(
-            this._auth.currentUser.subscribe((user) => {
-                this.user = user
-                // userSessionFresh: Do not attempt to load asset until we know user object is fresh
-                if (!this.userSessionFresh && this._auth.userSessionFresh) {
-                    this.userSessionFresh = true
-                }
-            }),
+            // this._auth.currentUser.subscribe((user) => {
+            //     this.user = user
+            //     // userSessionFresh: Do not attempt to load asset until we know user object is fresh
+            //     // if (!this.userSessionFresh && this._auth.userSessionFresh) {
+            //     //     this.userSessionFresh = true
+            //     // }
+            // }),
             this._assets.allResults.subscribe((allResults) => {
                 if (allResults.thumbnails) {
                     // Set asset id property to reference

@@ -173,7 +173,7 @@ export class AuthService implements CanActivate {
 
     idle.onTimeout.pipe(
       map(() => {
-        let user = this.getUser();
+        let user = this.user.hasOwnProperty('status') ? this.user : this.getUser();
         // console.log(user);
         if (user && user.isLoggedIn){
           this.expireSession();
@@ -474,8 +474,6 @@ export class AuthService implements CanActivate {
       map(
         (data)  => {
           let user = this.decorateValidUser(data)
-          // Track whether or not user object has been refreshed since app opened
-          this.userSessionFresh = true
 
           if (user && (this.isOpenAccess || user.status)) {
             // Clear expired session modal
@@ -709,6 +707,8 @@ export class AuthService implements CanActivate {
         'isLoggedIn': false,
         'loggedInSessionLost': loggedInSessionLost
       }
+      // Track whether or not user object has been refreshed since app opened
+      this.userSessionFresh = true
       return user
     } else {
       console.error('Did not receive a valid user object', data)
