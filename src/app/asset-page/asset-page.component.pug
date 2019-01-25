@@ -98,9 +98,9 @@
               = " "
             .dropdown-menu(ngbDropdownMenu, aria-labelledby="dropdownBasic1")
               a#downloadAssetLink.dropdown-item(download,
-                [attr.href]="((assets[0].publicDownload || !assets[0].disableDownload) && acceptedTerms) ? generatedFullURL : null",
-                (click)="((assets[0].publicDownload || !assets[0].disableDownload) && acceptedTerms) ? trackDownloadImage() : setDownloadImage()",
-                (keydown.enter)="((assets[0].publicDownload || !assets[0].disableDownload) && acceptedTerms) ? trackDownloadImage() : setDownloadImage()",
+                [attr.href]="((assets[0].publicDownload || !assets[0].disableDownload) && downloadAuth()) ? generatedFullURL : null",
+                (click)="((assets[0].publicDownload || !assets[0].disableDownload) && downloadAuth()) ? trackDownloadImage() : setDownloadImage()",
+                (keydown.enter)="((assets[0].publicDownload || !assets[0].disableDownload) && downloadAuth()) ? trackDownloadImage() : setDownloadImage()",
                 (keyup.arrowdown)="downloadOptsArrowDown($event.target)",
                 (keyup.arrowup)="downloadOptsArrowUp($event.target)",
                 [class.disabled]="assets[0].disableDownload",
@@ -112,9 +112,9 @@
                 i.icon.icon-download-black
                 | &nbsp;Download File
               a#downloadViewLink.dropdown-item(*ngIf="isMSAgent",
-                [attr.href]="((assets[0].publicDownload || !assets[0].disableDownload) && acceptedTerms) ? downloadViewLink : null",
-                (click)="((assets[0].publicDownload || !assets[0].disableDownload) && acceptedTerms) ? trackDownloadView() : setDownloadView()",
-                (keydown.enter)="((assets[0].publicDownload || !assets[0].disableDownload) && acceptedTerms) ? trackDownloadView() : setDownloadView()",
+                [attr.href]="((assets[0].publicDownload || !assets[0].disableDownload) && downloadAuth()) ? downloadViewLink : null",
+                (click)="((assets[0].publicDownload || !assets[0].disableDownload) && downloadAuth()) ? trackDownloadView() : setDownloadView()",
+                (keydown.enter)="((assets[0].publicDownload || !assets[0].disableDownload) && downloadAuth()) ? trackDownloadView() : setDownloadView()",
                 (keyup.arrowup)="downloadOptsArrowUp($event.target)",
                 [class.disabled]="!downloadViewReady || assets[0].disableDownload || assets[0].typeName !== 'image'",
                 target="_blank",
@@ -125,9 +125,9 @@
                 | &nbsp;Download View
               a#downloadViewLink.dropdown-item(*ngIf="!isMSAgent" download="download.jpg",
                 type="image/jpeg",
-                [attr.href]="((assets[0].publicDownload || !assets[0].disableDownload) && acceptedTerms) ? generatedBlobURL : null",
-                (click)="((assets[0].publicDownload || !assets[0].disableDownload) && acceptedTerms) ? trackDownloadView() : setDownloadView()",
-                (keydown.enter)="((assets[0].publicDownload || !assets[0].disableDownload) && acceptedTerms) ? trackDownloadView() : setDownloadView()",
+                [attr.href]="((assets[0].publicDownload || !assets[0].disableDownload) && downloadAuth()) ? generatedBlobURL : null",
+                (click)="((assets[0].publicDownload || !assets[0].disableDownload) && downloadAuth()) ? trackDownloadView() : setDownloadView()",
+                (keydown.enter)="((assets[0].publicDownload || !assets[0].disableDownload) && downloadAuth()) ? trackDownloadView() : setDownloadView()",
                 (keyup.arrowup)="downloadOptsArrowUp($event.target)",
                 [class.disabled]="!downloadViewReady || assets[0].disableDownload || assets[0].typeName !== 'image'",
                 target="_self",

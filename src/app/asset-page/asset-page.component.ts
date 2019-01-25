@@ -691,7 +691,10 @@ export class AssetPage implements OnInit, OnDestroy {
      * @returns boolean which is true if the user has accepted the agreement
      */
     private downloadAuth(): boolean {
-        return this.acceptedTerms ? this.acceptedTerms: this._auth.downloadAuthorized()
+        if (!this.acceptedTerms) {
+          this.acceptedTerms = this._auth.downloadAuthorized()
+        }
+        return this.acceptedTerms
     }
 
     // Calculate the index of current asset from the previous assets result set
