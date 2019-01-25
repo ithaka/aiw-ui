@@ -427,9 +427,9 @@ export class AssetPage implements OnInit, OnDestroy {
         this.isMSAgent = this.navigator.msSaveOrOpenBlob !== undefined
 
       // Load Ethnio survey
-      if (this._appConfig.config.siteID !== 'SAHARA') {
-        this.scriptService.loadScript('ethnio-survey')
-      }
+      // if (this._appConfig.config.siteID !== 'SAHARA') {
+      //   this.scriptService.loadScript('ethnio-survey')
+      // }
 
     } // OnInit
 
