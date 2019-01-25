@@ -55,6 +55,15 @@ export class ArtstorStorageService {
    */
   public getLocal(key: string): any | void {
     if (this.hasLocalStorage()) {
+      // @todo parse any json
+      //   function isJson(str) {
+      //     try {
+      //         JSON.parse(str);
+      //     } catch (e) {
+      //         return false;
+      //     }
+      //     return true;
+      // }
       return localStorage.getItem(key)
     }
     else if (key === 'user') {
