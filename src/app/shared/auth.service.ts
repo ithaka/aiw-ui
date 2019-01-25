@@ -614,12 +614,11 @@ export class AuthService implements CanActivate {
 
   public isPublicOnly(): boolean {
     if (!this.user.hasOwnProperty('status')) {
-      this.user = this.getUser()
+      this.user = JSON.parse(localStorage.getItem('user')).data
     }
 
     return !(this.user && this.user.status)
   }
-
 
   /**
    * Return "category" to report to Google Analytics
