@@ -47,6 +47,11 @@ $iconBtnSize: $btnHeight;
 
      &:hover .show-on-hover {
          display: inline;
+
+         &.tooltip {
+             display: block;
+             opacity: 0.9;
+         }
      }
 }
 
