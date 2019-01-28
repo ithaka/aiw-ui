@@ -133,7 +133,7 @@
           .row#asset-btn
             a#assetpage-btn.btn.btn-secondary(*ngIf="assets[0]", tabindex="10", (click)="showGenerateCitation = true", (keydown.enter)="showGenerateCitation = true")
               | {{ 'ASSET_PAGE.BUTTONS.GENERATE_CITATION' | translate}}
-            a#assetpage-btn.btn.btn-secondary(*ngIf="assets[0]", tabindex="11", [attr.href]=" '/#/assetprint/' + assets[0].id ", target="_blank", (click)="logPrint(assets[0])", (keydown.enter)="logPrint(assets[0])")
+            a#assetpage-btn.btn.btn-secondary(*ngIf="assets[0]", tabindex="11", [routerLink]="['/assetprint/' + assets[0].id]", (click)="logPrint(assets[0])", (keydown.enter)="logPrint(assets[0])")
               | {{ 'ASSET_PAGE.BUTTONS.PRINT' | translate}}
 
           //- Copy URL

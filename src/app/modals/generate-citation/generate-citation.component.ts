@@ -65,12 +65,7 @@ export class GenerateCitation implements OnInit, AfterViewInit {
   private generateCitations(asset: Asset): void {
     // console.log(asset)
 
-    let assetPath
-    if (this._app.clientHostname.indexOf('localhost:') > -1) {
-      assetPath = '#/asset/'
-    } else {
-      assetPath = 'asset/'
-    }
+    let assetPath = 'asset/'
 
     // Note: The request protocol is added to ADA, and Chicago citations, but not MLA
     let currentUrl = this._app.clientHostname + this.location.path(false) + assetPath + asset.id

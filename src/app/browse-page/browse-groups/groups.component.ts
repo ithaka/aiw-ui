@@ -461,7 +461,7 @@ export class BrowseGroupsComponent implements OnInit {
         if (data.total !== 0){
             this.numResultMsg = data.total + ' results for \"' + this.searchTerm + '\"' + ' from <i>' + groupLabel + '</i>.'
         } else {
-          this.numResultMsg = '0 results for \"' + this.searchTerm + '\"' + ' from <i>' + groupLabel + '</i>. Try checking your spelling, or browse our <a href=\'/#/browse/groups?level=public\' class=\'link\'><b>curated groups</b></a>.'
+          this.numResultMsg = '0 results for \"' + this.searchTerm + '\"' + ' from <i>' + groupLabel + '</i>. Try checking your spelling, or browse our <a href=\'/browse/groups?level=public\' class=\'link\'><b>curated groups</b></a>.'
           this.goToPage(1)
         }
 

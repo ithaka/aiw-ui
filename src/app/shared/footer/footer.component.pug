@@ -53,10 +53,10 @@
             p.small([innerHtml]=" 'SAHARA.DESCRIPTION' | translate")
             //- SAHARA Public Collection Link on Artstor
             h2.browse-category {{ 'HOME.BROWSE.PUB_COLL_HEADING' | translate }}
-            a.link(href="https://library.artstor.org/#/collection/87732181" target="_blank")
+            a.link([routerLink]="['/collection/87732181']" target="_blank")
               | Society of Architectural Historians SAHARA Collection
           //- Prompt to log in for unaffiliated users
-          a.link(*ngIf="_auth.isPublicOnly() && siteID != 'SAHARA'", href='/#/login') Log in to see more
+          a.link(*ngIf="_auth.isPublicOnly() && siteID != 'SAHARA'", [routerLink]="['/login']") Log in to see more
         //- mobile divider
         .col-sm-12.d-md-none
           hr

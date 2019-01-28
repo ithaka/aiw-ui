@@ -69,11 +69,7 @@ export class ShareIgLinkModal implements OnInit, AfterViewInit {
       }
     })
 
-    if (this._app.clientHostname.indexOf('localhost:') > -1) {
-      groupPath = '/#/group/'
-    } else {
-      groupPath = '/group/'
-    }
+    groupPath = '/group/'
 
     // If the group is not owned by the user, we simply give back the url of the group
     // Only a group owner can generate a token share link
