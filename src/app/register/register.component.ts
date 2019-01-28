@@ -201,7 +201,7 @@ export class RegisterComponent implements OnInit {
    * @returns error which should be assigned to the email input
    */
   private emailValidator(control: FormControl): any {
-    let emailRe: RegExp = /^\w+([\+\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+    let emailRe: RegExp = /^\w+([\+\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,30})+$/;
     return emailRe.test(control.value) ? null : { 'emailInvalid': true };
   }
 
