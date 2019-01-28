@@ -49,7 +49,7 @@ export class RegisterComponent implements OnInit {
     this.registerForm = _fb.group({
       // The first value of this array is the initial value for the control, the second is the
       //  validator for the control. Validators.compose allows you to use multiple validators against a single field
-      email: [null, Validators.compose([Validators.required, this.emailValidator])],
+      email: [null, { updateOn: 'blur' }, Validators.compose([Validators.required, this.emailValidator])],
       emailConfirm: [null, Validators.required],
       password: [null, Validators.compose([Validators.required, Validators.minLength(7)])],
       passwordConfirm: [null, Validators.required],
