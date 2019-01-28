@@ -316,3 +316,13 @@ body body{
 .card-icon-group .collection-badge {
   margin-top: 3px !important;
 }
+
+.tooltip.bs-tooltip-top {
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 100%;
+
+  & .arrow {
+    left: calc(50% - 0.4rem);
+  }
+}
