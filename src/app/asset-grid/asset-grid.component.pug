@@ -41,7 +41,7 @@
                 i.icon.icon-select-white
                 | Select
               ng-container(*ngIf="editMode") 
-                i.icon([ngClass]="[ selectedAssets.length >= 1 ? 'icon-select-orange' : 'icon-select-empty-orange' ]")
+                i.icon([ngClass]="[ selectedAssets.length >= 1 ? 'icon-select-orange-filled' : 'icon-select-empty-orange' ]")
                 span {{ selectedAssets.length }} selected item{{ selectedAssets.length == 1 ? '' : 's' }}
                 .tooltip.bs-tooltip-top.show-on-hover(role="tooltip")
                   .arrow

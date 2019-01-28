@@ -84,14 +84,13 @@ input[type=number] {
     padding: 0px 3px;
 
     &.active {
-        border: 1px solid $orange;
         color: $orange;
         padding: 0px 5px;
     }
 
     &:focus, &:hover {
         color: $orange;
-        background-color: #fafafa;
+        background-color: $gray-1;
     }
 
     .icon{
