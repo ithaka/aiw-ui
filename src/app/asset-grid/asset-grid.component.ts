@@ -568,18 +568,17 @@ export class AssetGrid implements OnInit, OnDestroy {
     }
   }
 
-  private constructNavigationCommands (thumbnail: Thumbnail) {
+  private constructNavigationCommands (thumbnail: Thumbnail) : any[] {
     let assetId = thumbnail.objectId ? thumbnail.objectId : thumbnail.artstorid
     let params: any = {
       prevRouteTS: this.prevRouteTS // for fetching previous route params from session storage, on asset page
     }
+    let url = []
     thumbnail.iap && (params.iap = 'true')
     this.ig && this.ig.id && (params.groupId = this.ig.id)
 
-    let url = ['/#/asset', assetId].join('/')
-    for (let key in params) {
-      url = url.concat([';', key, '=', params[key]].join(''))
-    }
+    url.push(['/asset', assetId].join('/'))
+    url.push(params)
     return url
   }
 
@@ -849,8 +848,8 @@ export class AssetGrid implements OnInit, OnDestroy {
   }
 
   private goToAsset(asset: any): void{
-    let assetURL: string = this.constructNavigationCommands(asset)
-    this._router.navigateByUrl(assetURL.replace('/#', ''))
+    let assetURLParams: any[] = this.constructNavigationCommands(asset)
+    this._router.navigate(assetURLParams)
   }
 
   private closeGridDropdowns(): void{

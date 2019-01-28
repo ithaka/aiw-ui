@@ -2,7 +2,7 @@ import { ApplicationRef, NgModule, Inject, APP_ID, PLATFORM_ID } from '@angular/
 import { BrowserModule, Title } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule, HttpClient } from '@angular/common/http';
-import { NavigationEnd, Router, RouteReuseStrategy, RouterModule, UrlSerializer } from '@angular/router';
+import { NavigationEnd, Router, RouteReuseStrategy, RouterModule, UrlSerializer, PreloadAllModules } from '@angular/router';
 // import { removeNgStyles, createNewHosts, createInputTransfer } from '@angularclass/hmr';
 import { DeviceDetectorModule } from 'ngx-device-detector';
 import { DatePipe, isPlatformBrowser } from '@angular/common'
@@ -242,7 +242,11 @@ export function HttpLoaderFactory(http: HttpClient) {
     NgxTagInputModule,
     Ng2CompleterModule,
     FileUploadModule,
-    RouterModule.forRoot(ROUTES, { useHash: false }),
+    RouterModule.forRoot(ROUTES, { 
+        useHash: false,
+        preloadingStrategy: PreloadAllModules,
+        initialNavigation: 'enabled' 
+      }),
     DeviceDetectorModule.forRoot(),
     Angulartics2Module.forRoot(),
     TranslateModule.forRoot({

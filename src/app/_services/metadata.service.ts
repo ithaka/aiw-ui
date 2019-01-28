@@ -63,12 +63,12 @@ export class MetadataService {
             .get<MetadataResponse>( url, { headers: headers, withCredentials: true })
             .pipe(map((res) => {
                 if (!res.metadata[0]) {
-                throw new Error('Unable to load metadata!')
+                    throw new Error('Unable to load metadata!')
                 }
                 let data: AssetDataResponse = res.metadata[0]
                 let assetData: AssetData = this.mapMetadata(data)
                 if (groupId) {
-                assetData.groupId = groupId
+                    assetData.groupId = groupId
                 }
                 return assetData
         }))

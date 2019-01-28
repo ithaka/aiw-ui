@@ -99,7 +99,7 @@
             [class.hidden]="asset.status == 'not-available'",
             (keyup.enter)="goToAsset(asset)"
           )
-          a.card.card--asset([attr.data-id]="asset.objectId", [ngClass]="{'selected': ( isSelectedAsset(asset) > -1 ), 'lrgThmb': largeThmbView }", (click)="selectAsset(asset, $event)", (focus)="showBox($event)", (blur)="hideBox($event)", [attr.href]="constructNavigationCommands(asset)", tabIndex="-1")
+          a.card.card--asset([attr.data-id]="asset.objectId", [ngClass]="{'selected': ( isSelectedAsset(asset) > -1 ), 'lrgThmb': largeThmbView }", (click)="selectAsset(asset, $event)", (focus)="showBox($event)", (blur)="hideBox($event)", [routerLink]="constructNavigationCommands(asset)", tabIndex="-1")
             ang-thumbnail([thumbnail]="asset", [reorderMode]="reorderMode", [editMode]="editMode", [largeThmbView]="largeThmbView")
           .mobile--hide
             input.check(tabIndex="3", type="checkbox", [checked]="isSelectedAsset(asset) > -1", [ngStyle]="{ 'opacity': isSelectedAsset(asset) > -1 ? '1' : '0' }", (change)="editMode = true; selectAsset(asset);")
