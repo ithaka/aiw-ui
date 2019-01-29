@@ -144,7 +144,7 @@
           .row#asset-btn
             a#assetpage-btn.btn.btn-secondary(*ngIf="assets[0]", (click)="showGenerateCitation = true", (focus)="closeDropdowns()", (keydown.enter)="showGenerateCitation = true", tabindex="2", aria-label="Cite this item", role="button")
               | {{ 'ASSET_PAGE.BUTTONS.GENERATE_CITATION' | translate}}
-            a#assetpage-btn.btn.btn-secondary(*ngIf="assets[0]", tabindex="11", [routerLink]="['/assetprint/' + assets[0].id]", (click)="logPrint(assets[0])", (keydown.enter)="logPrint(assets[0])", target="_blank", tabindex="2", aria-label="See this item in print preview", role="button")
+            a#assetpage-btn.btn.btn-secondary(*ngIf="assets[0]", [routerLink]="['/assetprint/' + assets[0].id]", (click)="logPrint(assets[0])", (keydown.enter)="logPrint(assets[0])", target="_blank", tabindex="2", aria-label="See this item in print preview", role="button")
               | {{ 'ASSET_PAGE.BUTTONS.PRINT' | translate}}
 
           //- Copy URL

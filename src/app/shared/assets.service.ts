@@ -906,7 +906,7 @@ export class AssetService {
                             // For multi-view items, make the thumbnail urls and update the array
                             data.thumbnails = data.thumbnails.map((thumbnail) => {
                               if (thumbnail['thumbnailImgUrl'] && thumbnail['compoundmediaCount'] > 0) {
-                                thumbnail.thumbnailImgUrl = this._auth.compoundUrl + thumbnail.thumbnailImgUrl
+                                thumbnail.thumbnailImgUrl = this._auth.getThumbUrl(true) + thumbnail.thumbnailImgUrl
                               }
                               return thumbnail
                             })
