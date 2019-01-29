@@ -46,7 +46,7 @@ export class LocalPCService {
    * @param ssid ssid for asset to return
    */
   public getAsset(ssid: number): LocalPCAsset {
-    if (this.pcAssets) {
+    if (this.pcAssets && this.pcAssets.find) {
       return this.pcAssets.find((item) => {
         return item.ssid == ssid
       })

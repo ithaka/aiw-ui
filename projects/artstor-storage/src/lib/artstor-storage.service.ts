@@ -42,7 +42,7 @@ export class ArtstorStorageService {
   public setLocal(key: string, value: any): any | void {
     if (this.hasLocalStorage()) {
       if (typeof(value) === 'object') {
-        value = JSON.stringify({data:value})
+        value = JSON.stringify(value)
       }
       return localStorage.setItem(key, value)
     }
@@ -63,7 +63,7 @@ export class ArtstorStorageService {
       } catch (e) {
         value = storedData
       }
-      return storedData
+      return value
     }
     else if (key === 'user') {
       return this.localStorageData.user
