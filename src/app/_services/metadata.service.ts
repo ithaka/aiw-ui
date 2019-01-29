@@ -16,7 +16,7 @@ export class MetadataService {
   ) { }
 
 
-    public buildAsset(assetId: string, { groupId = '', legacyFlag = true, openlib = false, encrypted = false }={}): Observable<Asset> {
+    public buildAsset(assetId: string, { groupId = '', legacyFlag = false, openlib = false, encrypted = false }={}): Observable<Asset> {
         let metadataObservable
         if (encrypted) {
             metadataObservable = this.getEncryptedMetadata(assetId, legacyFlag, openlib)
