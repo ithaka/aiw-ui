@@ -49,7 +49,7 @@ export class RegisterComponent implements OnInit {
     this.registerForm = _fb.group({
       // The first value of this array is the initial value for the control, the second is the
       //  validator for the control. Validators.compose allows you to use multiple validators against a single field
-      email: [null, Validators.compose([Validators.required, this.emailValidator])],
+      email: [null, { updateOn: 'blur' }, Validators.compose([Validators.required, this.emailValidator])],
       emailConfirm: [null, Validators.required],
       password: [null, Validators.compose([Validators.required, Validators.minLength(7)])],
       passwordConfirm: [null, Validators.required],
@@ -79,10 +79,12 @@ export class RegisterComponent implements OnInit {
     this.userDepts = USER_DEPTS
     this.userRoles = USER_ROLES
 
-    // If logged in OR not proxied/IP-authed OR not Shibboleth workflow, redirect to Home
-    if (!this.isShibbFlow && (this._auth.isPublicOnly() || this._auth.getUser().isLoggedIn)) {
-      this._router.navigate(['/home'])
+    // If not proxied/IP-authed OR not Shibboleth workflow, redirect to Login
+    // If logged in, redirect to Home
+    if (!this.isShibbFlow && this._auth.isPublicOnly() || this._auth.getUser().isLoggedIn) {
+      this._auth.getUser().isLoggedIn ? this._router.navigate(['/home']) : this._router.navigate(['/login'])
     }
+
   } // OnInit
 
   /** Gets called when the registration form is submitted */
@@ -199,7 +201,7 @@ export class RegisterComponent implements OnInit {
    * @returns error which should be assigned to the email input
    */
   private emailValidator(control: FormControl): any {
-    let emailRe: RegExp = /^\w+([\+\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+    let emailRe: RegExp = /^\w+([\+\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,30})+$/;
     return emailRe.test(control.value) ? null : { 'emailInvalid': true };
   }
 

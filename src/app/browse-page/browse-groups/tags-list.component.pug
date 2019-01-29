@@ -1,14 +1,14 @@
-h3 Tags
+h3.d-inline Tags
   = " "
-  a.contextual-help(title="How do I use tags?", href="http://support.artstor.org/?article=tags", target="_blank") ?
-  a#groupTagsClear.link--accent.small(tabindex="", style="float:right;", (click)="_tagFilters.clearFilters();") Clear All
-.filter.filter--tag(*ngFor="let tag of _tagFilters.filters.slice(0, 15)", (click)="tag.selected = !tag.selected", [class.active]="tag.selected")
+a.contextual-help(title="How do I use tags?", href="http://support.artstor.org/?article=tags", target="_blank", tabindex="3", aria-label="“Question: How do I use tags? Press enter to learn more about how to use tags with image groups.") ?
+a#groupTagsClear.link--accent.small(style="float:right;", (click)="_tagFilters.clearFilters();", (keyup.enter)="_tagFilters.clearFilters();", [tabindex]="_tagFilters.selectedFilters.length > 0 ? '3' : '-1'", aria-label="Clear all tags") Clear All
+.filter.filter--tag(*ngFor="let tag of _tagFilters.filters.slice(0, 15)", (click)="tag.selected = !tag.selected", (keyup.enter)="tag.selected = !tag.selected", [class.active]="tag.selected", tabindex="3", [attr.aria-label]="tag.selected ? 'Filtering by ' + tag.key + ', which is associated with ' + tag.doc_count + ' image groups. Press enter to remove this tag currently being used to filter down the image group results.' : 'Filter by ' + tag.key + ', which has ' + tag.doc_count + ' image groups associated with it. Press enter to select the tag to return results for the groups and tags associated with it.'", role="button")
   span.notranslate {{ tag.key }} ({{ tag.doc_count }})
   i.icon.icon-add
   i.icon.icon-close
-.filter.filter--tag(*ngIf="!_tagFilters.showRemainTags && _tagFilters.filters.length>15", (click)="_tagFilters.showRemainTags=true") See all {{ _tagFilters.filters.length }} tags
+.filter.filter--tag(*ngIf="!_tagFilters.showRemainTags && _tagFilters.filters.length>15", (click)="_tagFilters.showRemainTags=true", (keyup.enter)="_tagFilters.showRemainTags=true", tabindex="3", role="link") See all {{ _tagFilters.filters.length }} tags
 ng-container(*ngIf="_tagFilters.showRemainTags")
-  .filter.filter--tag(*ngFor="let tag of _tagFilters.filters.slice(15)", (click)="tag.selected = !tag.selected", [class.active]="tag.selected")
+  .filter.filter--tag(*ngFor="let tag of _tagFilters.filters.slice(15)", (click)="tag.selected = !tag.selected", (keyup.enter)="tag.selected = !tag.selected", [class.active]="tag.selected", tabindex="3", [attr.aria-label]="tag.selected ? 'Filtering by ' + tag.key + ', which is associated with ' + tag.doc_count + ' image groups. Press enter to remove this tag currently being used to filter down the image group results.' : 'Filter by ' + tag.key + ', which has ' + tag.doc_count + ' image groups associated with it. Press enter to select the tag to return results for the groups and tags associated with it.'", role="button")
     span.notranslate {{ tag.key }} ({{ tag.doc_count }})
     i.icon.icon-add
     i.icon.icon-close

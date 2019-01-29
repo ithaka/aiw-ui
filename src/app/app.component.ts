@@ -26,16 +26,16 @@ import * as enTranslation from '../assets/i18n/en.json'
   template: `
     <ang-sky-banner *ngIf="showSkyBanner" [textValue]="skyBannerCopy" (closeBanner)="showSkyBanner = false"></ang-sky-banner>
     <div>
-      <div id="skip" tabindex="-1" aria-activedescendant="button">
+      <div id="skip" tabindex="-1">
         <button id="button" (click)="findMainContent()" (keyup.enter)="findMainContent()" tabindex="1" class="sr-only sr-only-focusable"> Skip to main content </button>
       </div>
       <nav-bar tabindex="-1"></nav-bar>
-    </div>
-    <main tabindex="-1">
-      <router-outlet></router-outlet>
-    </main>
-    <footer></footer>
+      <main>
+        <router-outlet></router-outlet>
+      </main>
 
+      <footer></footer>
+    </div>
   `
 })
 export class AppComponent {
@@ -92,7 +92,7 @@ export class AppComponent {
         if (isPlatformBrowser(this.platformId)) {
           // focus on the wrapper of the "skip to main content link" everytime new page is loaded
           let mainEl = <HTMLElement>(this._dom.byId('skip'))
-          if (!(event.url.indexOf('browse') > -1)) // Don't set focus to skip to main content on browse pages so that we can easily go between browse levels
+          if (!(event.url.indexOf('browse') > -1) && !(event.url.indexOf('search') > -1) && !(event.url.indexOf('asset') > -1)) // Don't set focus to skip to main content on browse pages so that we can easily go between browse levels
             mainEl.focus()
         }
 
@@ -164,12 +164,25 @@ export class AppComponent {
   }
 
   public findMainContent(): void {
-    setTimeout(function ()
+    setTimeout(() =>
     {
       let htmlelement: HTMLElement = this._dom.byId('mainContent');
       let element: Element;
+
+      // On search page go to the start of filter section
+      if (this.router.url.indexOf('search') > -1){
+        element = document.getElementById('skip-to-search-link');
+      }
+      // On group browse page go to the start of filter groups & tags section
+      else if (this.router.url.indexOf('browse/groups') > -1){
+        element = document.getElementById('skip-to-groups-link');
+      }
+      // On asset page, go to first button
+      else if (this.router.url.indexOf('asset') > -1){
+        element = document.querySelector('.btn-row button');
+      }
       // On log in page, go to log in box
-      if (htmlelement.querySelector('form div input')){
+      else if (htmlelement.querySelector('form div input')){
         element = htmlelement.querySelector('form div input');
       }
       // On any page that has search bar, go to search box

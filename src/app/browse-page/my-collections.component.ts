@@ -37,7 +37,8 @@ export class MyCollectionsComponent implements OnInit {
     private route: ActivatedRoute,
     private _search: AssetSearchService,
     private _assets: AssetService,
-    private _title: TitleService
+    private _title: TitleService,
+    private _tags: TagsService
   ) {
     this.unaffiliatedUser = this._auth.isPublicOnly() ? true : false
   }
@@ -80,7 +81,8 @@ export class MyCollectionsComponent implements OnInit {
       )).subscribe()
     )
 
-    if (this.isLoggedIn) { // If user is logged-in get data for user's personal collections
+    // // If user is logged-in get data for user's Private Collections
+    if (this.isLoggedIn) {
       this.getUserPCol()
     }
   } // OnInit
@@ -100,26 +102,26 @@ export class MyCollectionsComponent implements OnInit {
   }
 
   /**
-   * Load Private Collection
-   * - No longer used for loading user's single Personal Collection
+   * Load Private Collections
+   * Used for loading user's Private Collections
    */
-  getUserPCol(){
+  getUserPCol() {
     this.loading = true;
-    this._assets.pccollection()
-      .then((res) => {
-          if (res['privateCollection'] && (res['privateCollection'].length > 0)){
-            for (let colObj of res['privateCollection']){
-                let privTag = new Tag(colObj.collectionid, colObj.collectionname, true, null, { label: 'privateCollection', folder: true }, true);
-                this.tags.push(privTag);
-            }
-          }
 
-          this.loading = false;
+    this._tags.initTags({ type: "private" })
+      .then((privateTagArray) => {
 
+        // Filter Private '37436' named Global Personal Collection
+        privateTagArray = privateTagArray.filter((privateCol) => {
+          return privateCol.tagId !== '37436'
+        })
+
+        this.tags = this.tags.concat(privateTagArray)
+        this.loading = false
       })
-      .catch(function(err) {
-          console.log('Unable to load User Personal Collections.');
-          this.loading = false;
+      .catch((err) => {
+        console.error(err);
+        this.loading = false;
       });
   }
 

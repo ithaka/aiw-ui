@@ -108,105 +108,28 @@ export class LibraryComponent implements OnInit {
     this.subscriptions.push(
       this.route.params.pipe(
       map((params: Params) => {
+        let reload: boolean = false
         this.loading = true
 
+        // If view changed, load the page
         if (params && params['viewId']){
-            this.selectedBrowseId = params['viewId'].toString()
-            // this.updateSplashImgURL();
+          reload = (this.selectedBrowseId !== params['viewId'].toString())
+          this.selectedBrowseId = params['viewId'].toString()
+          // this.updateSplashImgURL();
+        } else {
+          reload = true
         }
 
-        if (params && params['searchTerm']){
-          this.searchTerm = params['searchTerm']
+        // Set searchTerm for pipe when updated
+        if (params && params['searchTerm']) {
+          this.searchTerm = this.selectedBrowseId === '250' ? '' : params['searchTerm']
         }
-        // load category facets
-        // > Use locally scope variable to avoid data crossover
-        let facetType = this.facetType = this.categoryFacetMap[this.selectedBrowseId]
 
-        // Clear facet objects/arrays
-        this.clearFacets()
-
-        // Fetch browse collection object from local storage & check if the required collection list has already been set
-        let storageBrwseColObj = this._storage.getLocal('browseColObject')
-
-        let hasCategoryTitles = storageBrwseColObj && storageBrwseColObj['categoryid'] && storageBrwseColObj['categoryid'][2] && storageBrwseColObj['categoryid'][2].title.length > 0
-        if ( storageBrwseColObj && storageBrwseColObj[facetType] && hasCategoryTitles){
-          if (facetType === 'artstor-geography'){
-            this.hierarchicalFacets = storageBrwseColObj[facetType]
-          } else{
-            this.categoryFacets = storageBrwseColObj[facetType]
-          }
+        if (reload) {
+          // Only load Facets on initial load or page change
+          this.loadFacets()
+        } else {
           this.loading = false
-        } else{
-
-          if (storageBrwseColObj === null){
-            storageBrwseColObj = {}
-          }
-          // Get facets from Solr/search
-          this._assets.categoryByFacet(facetType, 1)
-          .then( (facetData) => {
-            // ensure they are emptied in case of multiple fast clicking
-            this.clearFacets()
-
-            // Categoryid facets require an additional call for labels/titles
-            if (facetType == 'categoryid') {
-
-                this._assets.categoryNames()
-                  .then((data) => {
-                    // Create an index by ID for naming the facets
-                    let categoryIndex = data.reduce( ( result, item ) => {
-                        result[item.categoryId] = item.categoryName;
-                        return result;
-                    }, {});
-                    // Append titles to the facets (we can't replace "name", as its the ID, which we need)
-                    let categoryFacets: any[] = facetData
-                      .map( facet => {
-                        facet.title = categoryIndex[facet.name] ? categoryIndex[facet.name] : ''
-                        return facet
-                      })
-                      // Then also sort the facets, A-Z
-                      .sort((elemA, elemB) => {
-                        if (elemA.title > elemB.title) return 1
-                        else if (elemA.title < elemB.title) return -1
-                        else return 0
-                      })
-                    this.loading = false
-
-                    this.categoryFacets = categoryFacets
-
-                    storageBrwseColObj[facetType] = this.categoryFacets
-                    this._storage.setLocal('browseColObject', storageBrwseColObj)
-                  })
-                  .catch((err) => {
-                    console.error(err)
-                  })
-              // }
-            } else if (facetData[0].children) {
-              // Hierarchical facets are stored in a separate object
-              this.hierarchicalFacets = facetData[0].children
-              this.loading = false
-
-              storageBrwseColObj[facetType] = this.hierarchicalFacets
-              this._storage.setLocal('browseColObject', storageBrwseColObj)
-            } else {
-              // Generically handle all other facets, which use "name" property to filter and display
-              // - Sort by name, A-Z, then set to categoryFacets array
-              let categoryFacets: any[] = facetData.sort((elemA, elemB) => {
-                if (elemA.name > elemB.name) return 1
-                else if (elemA.name < elemB.name) return -1
-                else return 0
-              })
-
-              // Filter out categories containing pipe in name field
-              this.categoryFacets = categoryFacets.filter((category) => {
-                return category.name.indexOf('|') === -1
-              })
-
-              this.loading = false
-
-              storageBrwseColObj[facetType] = this.categoryFacets
-              this._storage.setLocal('browseColObject', storageBrwseColObj)
-            }
-          })
         }
       })).subscribe()
     )
@@ -215,6 +138,102 @@ export class LibraryComponent implements OnInit {
 
   ngOnDestroy() {
     this.subscriptions.forEach((sub) => { sub.unsubscribe(); });
+  }
+
+  /**
+   * Loads facets and other variables needed for browse page display
+   */
+  private loadFacets(): void {
+    // load category facets
+    // > Use locally scope variable to avoid data crossover
+    let facetType = this.facetType = this.categoryFacetMap[this.selectedBrowseId]
+
+    // Clear facet objects/arrays
+    this.clearFacets()
+
+    // Fetch browse collection object from local storage & check if the required collection list has already been set
+    let storageBrwseColObj = this._storage.getLocal('browseColObject')
+    
+    let hasCategoryTitles = storageBrwseColObj && storageBrwseColObj['categoryid'] && storageBrwseColObj['categoryid'][2] && storageBrwseColObj['categoryid'][2].title.length > 0
+    if ( storageBrwseColObj && storageBrwseColObj[facetType] && hasCategoryTitles){
+      if (facetType === 'artstor-geography'){
+        this.hierarchicalFacets = storageBrwseColObj[facetType]
+      } else{
+        this.categoryFacets = storageBrwseColObj[facetType]
+      }
+      this.loading = false
+    } else{
+
+      if (storageBrwseColObj === null){
+        storageBrwseColObj = {}
+      }
+      // Get facets from Solr/search
+      this._assets.categoryByFacet(facetType, 1)
+      .then( (facetData) => {
+        // ensure they are emptied in case of multiple fast clicking
+        this.clearFacets()
+
+        // Categoryid facets require an additional call for labels/titles
+        if (facetType == 'categoryid') {
+
+            this._assets.categoryNames()
+              .then((data) => {
+                // Create an index by ID for naming the facets
+                let categoryIndex = data.reduce( ( result, item ) => {
+                    result[item.categoryid] = item.categoryname;
+                    return result;
+                }, {});
+                // Append titles to the facets (we can't replace "name", as its the ID, which we need)
+                let categoryFacets: any[] = facetData
+                  .map( facet => {
+                    facet.title = categoryIndex[facet.name] ? categoryIndex[facet.name] : ''
+                    return facet
+                  })
+                  // Then also sort the facets, A-Z
+                  .sort((elemA, elemB) => {
+                    if (elemA.title > elemB.title) return 1
+                    else if (elemA.title < elemB.title) return -1
+                    else return 0
+                  })
+                this.loading = false
+
+                this.categoryFacets = categoryFacets
+
+                storageBrwseColObj[facetType] = this.categoryFacets
+                this._storage.setLocal('browseColObject', storageBrwseColObj)
+              })
+              .catch((err) => {
+                console.error(err)
+              })
+          // }
+        } else if (facetData[0].children) {
+          // Hierarchical facets are stored in a separate object
+          this.hierarchicalFacets = facetData[0].children
+          this.loading = false
+
+          storageBrwseColObj[facetType] = this.hierarchicalFacets
+          this._storage.setLocal('browseColObject', storageBrwseColObj)
+        } else {
+          // Generically handle all other facets, which use "name" property to filter and display
+          // - Sort by name, A-Z, then set to categoryFacets array
+          let categoryFacets: any[] = facetData.sort((elemA, elemB) => {
+            if (elemA.name > elemB.name) return 1
+            else if (elemA.name < elemB.name) return -1
+            else return 0
+          })
+
+          // Filter out categories containing pipe in name field
+          this.categoryFacets = categoryFacets.filter((category) => {
+            return category.name.indexOf('|') === -1
+          })
+
+          this.loading = false
+
+          storageBrwseColObj[facetType] = this.categoryFacets
+          this._storage.setLocal('browseColObject', storageBrwseColObj)
+        }
+      })
+    }
   }
 
   private clearFacets(): void {
@@ -233,7 +252,6 @@ export class LibraryComponent implements OnInit {
     if (menuItem && menuItem.link) {
       this.router.navigate(menuItem.link)
     } else {
-      this.selectedBrowseId = id;
       this.addRouteParam('viewId', id);
     }
   }

@@ -101,6 +101,15 @@ export class PptModalComponent implements OnInit, AfterViewInit {
     })
   }
 
+  // Closes the IG download modal and sets focus back to initial download button
+  public hideModal(event: any): void {
+    this.closeModal.emit()
+    setTimeout( () => {
+      let downloadButtonElement: HTMLElement = document.getElementById('ig-download-btn')
+      downloadButtonElement.focus()
+    }, 250)
+  }
+
   /** Gets the link at which the resource can be downloaded. Will be set to the "accept" button's download property */
   private getDownloadLink(group: ImageGroup, zip ?: boolean): Promise<any> {
     let header = new HttpHeaders().set('content-type', 'application/x-www-form-urlencoded')

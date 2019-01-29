@@ -3,12 +3,12 @@
   .row
     //- View prev/next asset
     .title-nav-cntnr.col-md-12([class.hidden]="isFullscreen")
-      span.back-results.hidden-sm-down(*ngIf="prevRouteParams.length > 0", (click)="backToResults()") {{ 'ASSET_PAGE.LINKS.BACK' | translate}}
+      span.back-results.hidden-sm-down(*ngIf="prevRouteParams.length > 0", (keyup.enter)="backToResults()", (click)="backToResults()", tabindex="1", aria-label="Back to results", role="link") {{ 'ASSET_PAGE.LINKS.BACK' | translate}}
       .title-wrap(*ngIf="assets[0]")
-        i.icon.icon-direction.icon-left(title="Previous in results", (click)="showPrevAsset()", [class.disabled]="assetNumber <= 1")
-        .title([ngClass]="[ prevRouteParams.length > 0 ? 'shortened' : '' ]", [innerHTML]="assets[0].title ? assets[0].title : ''")
-        i.icon.icon-direction.icon-right(title="Next in results", (click)="showNextAsset()", [class.disabled]="assetNumber >= totalAssetCount - restrictedAssetsCount")
-      .page-tooltip
+        i.icon.icon-direction.icon-left(title="Previous in results", (click)="showPrevAsset()", (keyup.enter)="showPrevAsset()", [class.disabled]="assetNumber <= 1", [attr.tabindex]="assetNumber <= 1 ? -1 : 1", aria-label="Previous item, press enter to go to previous result item. You can also use left and right arrow keys to navigate between result items.", role="button")
+        .title([ngClass]="[ prevRouteParams.length > 0 ? 'shortened' : '' ]", [innerHTML]="assets[0].title ? assets[0].title : ''", (focus)="showPageToolTip = true", (focusout)="showPageToolTip = false", tabindex="1", attr.aria-label="{{assets[0].title ? assets[0].title : ''}}, result {{assetNumber}} of {{totalAssetCount - restrictedAssetsCount}}")
+        i.icon.icon-direction.icon-right(title="Next in results", (click)="showNextAsset()", (keyup.enter)="showNextAsset()", [class.disabled]="assetNumber >= totalAssetCount - restrictedAssetsCount", [attr.tabindex]="assetNumber >= totalAssetCount - restrictedAssetsCount ? -1 : 1", aria-label="Next item, press enter to go to next result item. You can also use left and right arrow keys to navigate between result items.", role="button")
+      .page-tooltip([ngClass]="[ showPageToolTip ? 'show' : '' ]")
         span#assetPageNumber {{ assetNumber }}  OF
         = " "
         span#assetPageCount {{ totalAssetCount - restrictedAssetsCount }}
@@ -42,7 +42,8 @@
             (multiViewPageViaArrow)="multiViewPageViaArrow()",
             (multiViewPageViaThumbnail)="multiViewPageViaThumbnail()",
             (assetDrawer)="toggleAssetDrawer(!showAssetDrawer)",
-            [legacyFlag]="false"
+            [legacyFlag]="false",
+            [openLibraryFlag]="fromOpenLibrary"
           )
       //- Related results from JSTOR
       .pl-3(*ngIf="jstorResults.length > 0 && relatedResFlag")
@@ -83,17 +84,17 @@
         .btn-row
           //- Edit
           //- * (mouseup) is a Firefox fix for firing the copy event
-          button#assetpage-btn.btn.btn-secondary(*ngIf="user.isLoggedIn && assets[0].personalCollectionOwner === user['baseProfileId']", [class.active]="showEditDetails", tabindex="6", (click)="loadEditDetailsForm()")
+          button#assetpage-btn.btn.btn-secondary(*ngIf="user.isLoggedIn && assets[0].personalCollectionOwner === user['baseProfileId']", [class.active]="showEditDetails", (click)="loadEditDetailsForm()", tabindex="2", aria-label="Edit details for this item")
             | {{ 'ASSET_PAGE.BUTTONS.EDIT_DETAILS' | translate}}
 
           //- the .driver-find-group-btn class is important for the tour to find it, be careful when removing or changing it
-          button#assetpage-btn.btn.btn-primary.driver-find-group-btn((click)="addAssetToIG()", (keydown.enter)="addAssetToIG()", tabindex="7")
+          button#assetpage-btn.btn.btn-primary.driver-find-group-btn((click)="addAssetToIG()", (focus)="closeDropdowns()", (keydown.enter)="addAssetToIG()", tabindex="2", aria-label="Add this item to a group")
             | {{ 'ASSET_PAGE.BUTTONS.ADD_TO_GROUP' | translate }}
             //- i.icon.icon-add-white(aria-hidden="true")
           //- Download dropdown options
           | {{downloadUrl}}
           .dropdown.d-inline-block(ngbDropdown, *ngIf="assets[0].downloadLink && (user.isLoggedIn || hasExternalAccess || assets[0].publicDownload)", ngbTooltip, [disableTooltip]="!multiviewItems", [ngbTooltip]="multiViewDownloadDisabled", triggers="focusin:focusout mouseenter:mouseleave", placement="bottom", aria-haspopup="true")
-            button#downloadAssetDropdown.btn.btn-secondary(ngbDropdownToggle [class.loading]="downloadLoading", (click)="genDownloadViewLink()", (keydown.enter)="genDownloadViewLink()", tabindex="8", [disabled]="multiviewItems")
+            button#downloadAssetDropdown.btn.btn-secondary(ngbDropdownToggle [class.loading]="downloadLoading", (click)="genDownloadViewLink()", (keydown.enter)="genDownloadViewLink()", (keyup.arrowdown)="downloadOptsArrowDown($event.target)", [disabled]="multiviewItems", tabindex="2", aria-label="Download")
               | {{ 'ASSET_PAGE.BUTTONS.DOWNLOAD' | translate}}
               = " "
             .dropdown-menu(ngbDropdownMenu, aria-labelledby="dropdownBasic1")
@@ -101,19 +102,26 @@
                 [attr.href]="((assets[0].publicDownload || !assets[0].disableDownload) && downloadAuth()) ? generatedFullURL : null",
                 (click)="((assets[0].publicDownload || !assets[0].disableDownload) && downloadAuth()) ? trackDownloadImage() : setDownloadImage()",
                 (keydown.enter)="((assets[0].publicDownload || !assets[0].disableDownload) && downloadAuth()) ? trackDownloadImage() : setDownloadImage()",
+                (keyup.arrowdown)="downloadOptsArrowDown($event.target)",
+                (keyup.arrowup)="downloadOptsArrowUp($event.target)",
                 [class.disabled]="assets[0].disableDownload",
                 title="{{ assets[0].disableDownload ? 'Image is not available for download.' : 'Image download'}}",
                 target="_blank",
-                tabindex="8")
+                tabindex="2",
+                aria-label="Download item",
+                role="button")
                 i.icon.icon-download-black
                 | &nbsp;Download File
               a#downloadViewLink.dropdown-item(*ngIf="isMSAgent",
                 [attr.href]="((assets[0].publicDownload || !assets[0].disableDownload) && downloadAuth()) ? downloadViewLink : null",
                 (click)="((assets[0].publicDownload || !assets[0].disableDownload) && downloadAuth()) ? trackDownloadView() : setDownloadView()",
                 (keydown.enter)="((assets[0].publicDownload || !assets[0].disableDownload) && downloadAuth()) ? trackDownloadView() : setDownloadView()",
+                (keyup.arrowup)="downloadOptsArrowUp($event.target)",
                 [class.disabled]="!downloadViewReady || assets[0].disableDownload || assets[0].typeName !== 'image'",
                 target="_blank",
-                tabindex="8")
+                tabindex="2",
+                aria-label="Download item’s detail view",
+                role="button")
                 i.icon.icon-download-black
                 | &nbsp;Download View
               a#downloadViewLink.dropdown-item(*ngIf="!isMSAgent" download="download.jpg",
@@ -121,26 +129,29 @@
                 [attr.href]="((assets[0].publicDownload || !assets[0].disableDownload) && downloadAuth()) ? generatedBlobURL : null",
                 (click)="((assets[0].publicDownload || !assets[0].disableDownload) && downloadAuth()) ? trackDownloadView() : setDownloadView()",
                 (keydown.enter)="((assets[0].publicDownload || !assets[0].disableDownload) && downloadAuth()) ? trackDownloadView() : setDownloadView()",
+                (keyup.arrowup)="downloadOptsArrowUp($event.target)",
                 [class.disabled]="!downloadViewReady || assets[0].disableDownload || assets[0].typeName !== 'image'",
                 target="_self",
-                tabindex="8")
+                tabindex="2",
+                aria-label="Download item’s detail view",
+                role="button")
                 i.icon.icon-download-black
                 | &nbsp;Download View
           //- False door button if user is not logged in
-          button#assetpage-btn.btn.btn-secondary(tabindex="9", *ngIf="assets[0].downloadLink && !(user.isLoggedIn || hasExternalAccess) && !assets[0].publicDownload", (click)="showLoginModal = true", (keydown.enter)="showLoginModal = true")
+          button#assetpage-btn.btn.btn-secondary(*ngIf="assets[0].downloadLink && !(user.isLoggedIn || hasExternalAccess) && !assets[0].publicDownload", (click)="showLoginModal = true", (keydown.enter)="showLoginModal = true", tabindex="2", aria-label="Download")
             | {{ 'ASSET_PAGE.BUTTONS.DOWNLOAD' | translate}}
             i#downloadAssetLink.icon.icon-download-asset-orange
           .row#asset-btn
-            a#assetpage-btn.btn.btn-secondary(*ngIf="assets[0]", tabindex="10", (click)="showGenerateCitation = true", (keydown.enter)="showGenerateCitation = true")
+            a#assetpage-btn.btn.btn-secondary(*ngIf="assets[0]", (click)="showGenerateCitation = true", (focus)="closeDropdowns()", (keydown.enter)="showGenerateCitation = true", tabindex="2", aria-label="Cite this item", role="button")
               | {{ 'ASSET_PAGE.BUTTONS.GENERATE_CITATION' | translate}}
-            a#assetpage-btn.btn.btn-secondary(*ngIf="assets[0]", tabindex="11", [routerLink]="['/assetprint/' + assets[0].id]", (click)="logPrint(assets[0])", (keydown.enter)="logPrint(assets[0])")
+            a#assetpage-btn.btn.btn-secondary(*ngIf="assets[0]", tabindex="11", [routerLink]="['/assetprint/' + assets[0].id]", (click)="logPrint(assets[0])", (keydown.enter)="logPrint(assets[0])", target="_blank", tabindex="2", aria-label="See this item in print preview", role="button")
               | {{ 'ASSET_PAGE.BUTTONS.PRINT' | translate}}
 
           //- Copy URL
           //- * Do not show for Personal Collection assets
           .btn-group#copy-link(*ngIf="!assets[0].personalCollectionOwner")
-            input#generatedImgURL.form-control.form-control__copy(#copyUrlInput="", readonly, [ngModel]="generatedImgURL", (click)="copyUrlInput.select(); document.execCommand('copy', false, null);")
-            button#assetpage-btn.btn.btn-secondary([class.active]="showCopyUrl", tabindex="12", (mousedown)="showCopyUrl ? showCopyUrl = false : copyGeneratedImgURL()", (mouseup)="copyUrlInput.select(); document.execCommand('copy', false, null);", (keydown.enter)="showCopyUrl ? showCopyUrl = false : copyGeneratedImgURL()", (keyup.enter)="copyUrlInput.select(); document.execCommand('copy', false, null);")
+            input#generatedImgURL.form-control.form-control__copy(#copyUrlInput="", readonly, [ngModel]="generatedImgURL", (click)="copyUrlInput.select(); document.execCommand('copy', false, null);", tabindex="2", aria-label="Item URL")
+            button#assetpage-btn.btn.btn-secondary([class.active]="showCopyUrl", (mousedown)="showCopyUrl ? showCopyUrl = false : copyGeneratedImgURL()", (mouseup)="copyUrlInput.select(); document.execCommand('copy', false, null);", (keydown.enter)="showCopyUrl ? showCopyUrl = false : copyGeneratedImgURL()", (keyup.enter)="copyUrlInput.select(); document.execCommand('copy', false, null);", tabindex="2", aria-label="Copy Item URL")
               | {{ 'ASSET_PAGE.BUTTONS.LINK' | translate}}
               //- i#genImgURLlink.icon.icon-share-white
 
@@ -168,7 +179,11 @@
           .meta-block(*ngIf="assets[0].formattedMetadata.Rights && assets[0].formattedMetadata.Rights.length > 0")
             .label#Rights Rights
             div(*ngFor="let right of assets[0].formattedMetadata.Rights")
-              .value([innerHTML]="cleanFieldValue(right) | linkify", [attr.aria-labelledby]="'Rights'")
+              span(*ngIf="rightsText === right")
+                img.rights-icon([attr.src]="rightsImg", [attr.alt]="right")
+                | &nbsp;
+                a.value.col-link.rights-text([innerHTML]="cleanFieldValue(right) | lowercase | linkify", [attr.href]="rightsLink", aria-label="Learn about this rights statement on rightsstatements.org", target="_blank")
+              .value(*ngIf="rightsText !== right", [innerHTML]="cleanFieldValue(right) | linkify", [attr.aria-labelledby]="'Rights'")
 
           .row-hdr.pt-3(*ngIf="assets[0].filePropertiesArray.length > 0") {{ 'ASSET_PAGE.HEADER_LABELS.FILE_PROPS' | translate}}
           //- Loop through File Properties Array

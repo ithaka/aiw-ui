@@ -76,9 +76,9 @@ export class SearchPage implements OnInit, OnDestroy {
     );
 
     // Load Ethnio survey
-    if (this._appConfig.config.siteID !== 'SAHARA') {
-      this._script.loadScript('ethnio-survey')
-    }
+    // if (this._appConfig.config.siteID !== 'SAHARA') {
+    //   this._script.loadScript('ethnio-survey')
+    // }
   } // OnInit
 
   ngOnDestroy() {

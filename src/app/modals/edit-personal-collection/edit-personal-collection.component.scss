@@ -92,7 +92,7 @@
                     }
                 }
 
-                &:hover .thumb-overlay, &.selected .thumb-overlay{
+                &:hover .thumb-overlay, &:focus .thumb-overlay, &.selected .thumb-overlay{
                     visibility: visible;
                     opacity: 1;
                 }

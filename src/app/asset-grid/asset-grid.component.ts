@@ -310,7 +310,7 @@ export class AssetGrid implements OnInit, OnDestroy {
     this.subscriptions.push(
       this._assets.allResults.pipe(
         map(allResults => {
-          if ( (this.activeSort.index && this.activeSort.index == '3') || (this.UrlParams['startDate'])) {
+          if (this.activeSort.index && this.activeSort.index == '3') {
             this.sortFilterByDateTotal =  allResults.total
 
             let withoutDateParams = Object.assign({}, this.UrlParams)
@@ -775,15 +775,14 @@ export class AssetGrid implements OnInit, OnDestroy {
   /**
    * Closes "exiting reorder" modal
    */
-  private ditchingReorder(command) {
+  public ditchingReorder(confirmed: number) {
     // Hide modal
     this.showLoseReorder = false;
-    if (command.includes('Save')) {
-      this.saveReorder();
-    } else if (command.includes('Discard')) {
-      this.cancelReorder();
-    } else {
-      // Return to Reorder
+    if (confirmed === 1) {
+        this.saveReorder();
+    }
+    else if (confirmed === 2) {
+        this.cancelReorder();
     }
   }
 

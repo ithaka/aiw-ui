@@ -31,7 +31,7 @@ import { APP_CONST } from '../app.constants'
 import { AppConfig } from '../app.service'
 import { ArtstorStorageService } from '../../../projects/artstor-storage/src/public_api';
 import { MetadataService } from 'app/_services';
-
+import { rights } from './rights.ts'
 
 @Component({
     selector: 'ang-asset-page',
@@ -50,7 +50,6 @@ export class AssetPage implements OnInit, OnDestroy {
     public userSessionFresh: boolean = false
     public assetIds: string[] = []
 
-
     /** controls whether or not the modals are visible */
     public showAgreeModal: boolean = false
     public showLoginModal: boolean = false
@@ -62,6 +61,15 @@ export class AssetPage implements OnInit, OnDestroy {
     public downloadViewReady: boolean = false
     public showExitEdit: boolean = false
     public showDeletePCModal: boolean = false
+
+    // Rights Statements values
+    public rightsText: string = ''
+    public rightsLink: string = ''
+    public rightsImg: string = ''
+
+    // Variables related to how we call for metadata
+    public assetIdProperty: string = 'artstorid'
+    public fromOpenLibrary: boolean = false
 
     // Feature Flags
     public relatedResFlag: boolean = false
@@ -110,7 +118,6 @@ export class AssetPage implements OnInit, OnDestroy {
     private quizShuffle: boolean = false;
     private showAssetCaption: boolean = true;
 
-    private assetIdProperty: string = 'artstorid'
     /**
      *  Collection Variables
      *  - Specific to the first asset, this.assets[0]
@@ -202,6 +209,9 @@ export class AssetPage implements OnInit, OnDestroy {
 
     // Flag for multiview items, true if the asset contains multiview items
     private multiviewItems: boolean = false
+
+    // Flag for show/hide page tooltip
+    private showPageToolTip: boolean = false
 
     constructor(
         public _appConfig: AppConfig,
@@ -333,6 +343,13 @@ export class AssetPage implements OnInit, OnDestroy {
                 if (routeParams['encryptedId']) {
                     this.encryptedAccess = true
                     this.assetIds[0] = routeParams['encryptedId']
+                } else if (routeParams['openLibId']) {
+                    this.fromOpenLibrary = true
+                    this.assetIds[0] = routeParams['openLibId']
+                } else if ( routeParams['encryptedOpenLibId']) {
+                    this.fromOpenLibrary = true
+                    this.encryptedAccess = true
+                    this.assetIds[0] = routeParams['encryptedOpenLibId']
                 } else {
                     this.assetIds[0] = routeParams['assetId']
 
@@ -359,11 +376,10 @@ export class AssetPage implements OnInit, OnDestroy {
                             this.assetNumber = this._assets.currentLoadedParams.page ? this.assetIndex + 1 + ((this._assets.currentLoadedParams.page - 1) * this._assets.currentLoadedParams.size) : this.assetIndex + 1;
                         }
                     }
-
-
-                    // Set image share link
-                    this.generateImgURL(this.assetIds[0])
                 }
+
+                // Set image share link
+                this.generateImgURL(this.assetIds[0], this.encryptedAccess || this.fromOpenLibrary)
 
                 // For "Back to Results" link and pagination, look for prevRouteTS to set prevRouteParams
                 if (routeParams['prevRouteTS']) {
@@ -435,9 +451,9 @@ export class AssetPage implements OnInit, OnDestroy {
         this.isMSAgent = this.navigator.msSaveOrOpenBlob !== undefined
 
       // Load Ethnio survey
-      if (this._appConfig.config.siteID !== 'SAHARA') {
-        this.scriptService.loadScript('ethnio-survey')
-      }
+      // if (this._appConfig.config.siteID !== 'SAHARA') {
+      //   this.scriptService.loadScript('ethnio-survey')
+      // }
 
     } // OnInit
 
@@ -520,18 +536,16 @@ export class AssetPage implements OnInit, OnDestroy {
                     this.assets[0].formattedMetadata['Collection'] = splitValues
                 }
 
-
-
                 // Load related results from jstor
                 if (this.relatedResFlag) {
                     this.getJstorRelatedResults(asset)
                 }
 
                 // Update OGP meta tags
-                this.meta.updateTag({ property: "og:title", content: asset.title }, 'property="og:title"')
-                this.meta.updateTag({ property: "og:description", content: asset.formattedMetadata['Description'] && asset.formattedMetadata['Description'][0] ? asset.formattedMetadata['Description'][0] : '' }, 'property="og:description"')
-                this.meta.updateTag({ property: "og:url", content: this._assets.getShareLink(asset.id) }, 'property="og:url"')
-                this.meta.updateTag({ property: "og:image", content: asset.thumbnail_url ? 'https:' + asset.thumbnail_url : '' }, 'property="og:image"')
+                this.meta.updateTag({ property: 'og:title', content: asset.title }, 'property="og:title"')
+                this.meta.updateTag({ property: 'og:description', content: asset.formattedMetadata['Description'] && asset.formattedMetadata['Description'][0] ? asset.formattedMetadata['Description'][0] : '' }, 'property="og:description"')
+                this.meta.updateTag({ property: 'og:url', content: this._assets.getShareLink(asset.id) }, 'property="og:url"')
+                this.meta.updateTag({ property: 'og:image', content: asset.thumbnail_url ? 'https:' + asset.thumbnail_url : '' }, 'property="og:image"')
             }
             // Assign collections array for this asset. Provided in metadata
             this.collections = asset.collections
@@ -539,6 +553,12 @@ export class AssetPage implements OnInit, OnDestroy {
         }
         // Set download link
         this.setDownloadFull()
+
+        // Loop over Rights fields and set rights statement values via isRightStatement
+        for (let i = 0; i < this.assets[0].formattedMetadata.Rights.length; i++) {
+          let rightsField = this.assets[0].formattedMetadata.Rights[i]
+          this.isRightStatement(rightsField)
+        }
     }
 
     /**
@@ -573,7 +593,7 @@ export class AssetPage implements OnInit, OnDestroy {
      */
     setDownloadFull(): void {
         let url = this.assets[0] ? this.assets[0].downloadLink : '';
-        if (this.assetGroupId) {
+        if (this.assetGroupId && url.indexOf("/media/") === -1 ) {
             // Group id needs to be passed to allow download for images accessed via groups
             // - Binder prefers lowercase service url params
             url = url + '&groupid=' + this.assetGroupId
@@ -652,7 +672,8 @@ export class AssetPage implements OnInit, OnDestroy {
         let collection = asset.formattedMetadata['Collection'] && asset.formattedMetadata['Collection'][0] ? asset.formattedMetadata['Collection'][0] : ''
         let id = asset.id
         let email = this.user.username
-        return baseUrl + '?name=' + name + '&collectionName=' + collection + '&id=' + id + '&email=' + email
+        let ssid = asset.SSID
+        return baseUrl + '?name=' + name + '&collectionName=' + collection + '&id=' + id + '&email=' + email + '&ssid=' + ssid
     }
 
     /**
@@ -703,6 +724,28 @@ export class AssetPage implements OnInit, OnDestroy {
             }
         }
         return link
+    }
+
+    /**
+     * isRightStatement sets rightsLink and rightsImg values and
+     * returns boolean if an asset has a rights statement
+     * @param rights_text string
+     */
+    public isRightStatement(rights_text: string): boolean {
+
+      // Handle extra spaces and differences in punctuation in Rights fields
+      // by doing uppercase comparison of alphanumeric chars only
+      let reg = /[^a-zA-Z0-9]/
+
+      for (let i = 0; i < rights.length; i++) {
+        if (rights[i].name.split(reg).join('').toUpperCase() === rights_text.split(reg).join('').toUpperCase()) {
+          this.rightsText = rights_text
+          this.rightsLink = rights[i].link
+          this.rightsImg = rights[i].img
+          return true
+        }
+      }
+      return false
     }
 
     private handleSkipAsset(): void {
@@ -851,8 +894,8 @@ export class AssetPage implements OnInit, OnDestroy {
         }
     }
 
-    private generateImgURL(assetId: string): void {
-        this.generatedImgURL = this._assets.getShareLink(assetId);
+    private generateImgURL(assetId: string, external?: boolean): void {
+        this.generatedImgURL = this._assets.getShareLink(assetId, external);
     }
 
     /**
@@ -1219,7 +1262,7 @@ export class AssetPage implements OnInit, OnDestroy {
                             asset_metadata: formValue
                         })
 
-                        this.closeEditDetails('Continue')
+                        this.closeEditDetails(1)
 
                         // Reload asset metadata
                         this._router.navigate(['/asset', ''])
@@ -1338,20 +1381,24 @@ export class AssetPage implements OnInit, OnDestroy {
         return fieldLabelMap[field]
     }
 
-    private closeEditDetails(action: string): void {
+    private closeEditDetails(confirmed: number): void {
         this.uiMessages = {}
         // Hide and reset the edit details form
-        if (action && action === 'Continue') {
+        if (confirmed === 1) {
             this.showEditDetails = false
             this.editDetailsForm.reset()
+        } else {
+            // Do nothing
         }
         this.showExitEdit = false
     }
 
-    private closeDeletePC(action: string): void {
-        if (action && action == 'Confirm') {
+    private closeDeletePC(confirmed: number): void {
+        if (confirmed === 1) {
+            // Confirmed
             this.deleteAsset()
-        } else {
+        } else if (confirmed === 0) {
+            // Canceled
             this.showDeletePCModal = false
         }
     }
@@ -1384,6 +1431,28 @@ export class AssetPage implements OnInit, OnDestroy {
         } else {
             this.angulartics.eventTrack.next({ action: 'multiViewPageViaThumbnail', properties: { category: this._auth.getGACategory(), label: this.assets[0].id } })
         }
+    }
+
+    private closeDropdowns(): void{
+        let dropdownElements: Array<HTMLElement> = Array.from( document.querySelectorAll('.btn-row .dropdown') )
+        for (let dropdownElement of dropdownElements){
+            dropdownElement.classList.remove('show')
+            dropdownElement.children[0].setAttribute('aria-expanded', 'false')
+            dropdownElement.children[1].classList.remove('show')
+        }
+    }
+
+    // Adding keyboard arrow keys navigation between download button options
+    downloadOptsArrowDown(element: any): void{
+        let focusChildIndex = element.id === 'downloadAssetDropdown' && element.getAttribute('aria-expanded') ? 0 : 1
+        let focusElement = <HTMLElement>(document.querySelectorAll('.dropdown-menu a')[focusChildIndex])
+        focusElement.focus()
+    }
+
+    downloadOptsArrowUp(element: any): void{
+        let focusElementSelector = element.id === 'downloadViewLink' ? '#downloadAssetLink' : '#downloadAssetDropdown'
+        let focusElement = <HTMLElement>(document.querySelector(focusElementSelector))
+        focusElement.focus()
     }
 
 }

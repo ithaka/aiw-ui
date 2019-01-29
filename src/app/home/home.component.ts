@@ -8,6 +8,7 @@ import { isPlatformBrowser } from '@angular/common'
 import { AssetService, AuthService, ScriptService, DomUtilityService } from '../shared'
 import { AppConfig } from '../app.service'
 import { Featured } from './featured'
+import { TagsService } from '../browse-page/tags.service';
 
 declare var initPath: string
 
@@ -57,7 +58,8 @@ export class Home implements OnInit, OnDestroy {
     private deviceService: DeviceDetectorService,
     private _script: ScriptService,
     @Inject(PLATFORM_ID) private platformId: Object,
-    private _dom: DomUtilityService
+    private _dom: DomUtilityService,
+    private _tags: TagsService
   ) {
     console.log("Constructing home component...")
     // this makes the window always render scrolled to the top
@@ -105,57 +107,54 @@ export class Home implements OnInit, OnDestroy {
      * Subscribe to user object
      * and fetch collections list only after we have the user object returned
      */
-    // this.subscriptions.push(
-    //   this._auth.currentUser.pipe(
-    //     map(userObj => {
-    //       console.log("Current user subscription returned for: ", userObj.username)
-    //       if (userObj.institutionId && (this.instCollections.length === 0)) {
+    this.subscriptions.push(
+      this._auth.currentUser.pipe(
+        map(userObj => {
+          if (userObj.institutionId && (this.instCollections.length === 0)) {
 
-    //         this.subscriptions.push(this._assets.getCollectionsList().pipe(
-    //             map(data => {
-    //               // Filter SSC content
-    //               this.collections = data['Collections'].filter((collection) => {
-    //                 return collection.collectionType == 5
-    //               })
-    //               this.loaders['collections'] = false;
-    //               // Filter institutional content
-    //               this.instCollections = data['Collections'].filter((collection) => {
-    //                 return collection.collectionType == 2 || collection.collectionType == 4
-    //               })
-    //               this.loaders['instCollections'] = false;
-    //             },
-    //             err => {
-    //               if (err && err.status != 401 && err.status != 403) {
-    //                 console.error('Failed to load collection list', err)
-    //               }
-    //             }
-    //           )).subscribe()
-    //         ) // end push
-    //       }
-    //     },
-    //     err => {
-    //       console.error('Failed to load user object', err)
-    //     }
-    //   )).subscribe()
-    // ) // end push
+            let queryType = {};
+            if (this._auth.isPublicOnly()) {
+              queryType['type'] = "commons"
+            }
+            else {
+              queryType['type'] = "institution"
+            }
 
-    // this._assets.getBlogEntries()
-    //   .then((data) => {
-    //     if (data['posts']) {
-    //       this.blogPosts = data['posts'];
-    //     }
-    //     this.blogLoading = false;
-    //   } )
-    //   .catch((error) => {
-    //     console.log(error);
-    //     this.blogLoading = false;
-    //   });
+            this._tags.initTags(queryType)
+              .then((tags) => {
+                this.instCollections = tags;
+                this.loaders['instCollections'] = false;
+              })
+              .catch((err) => {
+                console.error(err);
+              });
 
-    // Set session info for Email Artstor link - only for the client side application
+          }
+        },
+        err => {
+          console.error('Failed to load user object', err)
+        }
+      )).subscribe()
+    ) // end push
+
+    // Set session info for Email Artstor link
     if (isPlatformBrowser(this.platformId)) {
+      // Load blog posts for home page
+      this._assets.getBlogEntries()
+      .then((data) => {
+        if (data['posts']) {
+          this.blogPosts = data['posts'];
+        }
+        this.blogLoading = false;
+      } )
+      .catch((error) => {
+        console.log(error);
+        this.blogLoading = false;
+      });
+      // Device info for contact form
       this.fetchDeviceInfo();
     }
-
+    
     // Load Ethnio survey
     // if (this.siteID !== 'SAHARA') {
     //   this._script.loadScript('ethnio-survey')

@@ -332,9 +332,9 @@ export class AssetService {
     /**
      * Generate asset share link
      */
-    public getShareLink(assetId: string) {
+    public getShareLink(assetId: string, externalAsset?: boolean) {
         //   Links in the clipboard need a protocol defined
-        return  `https://${this._app.clientHostname}/asset/${assetId}`
+        return  `https://${this._app.clientHostname}/#/asset/${assetId}`
 
         // For Reference: Old service for generating share url:
         // this._assets.genrateImageURL( this.assets[0].id )
@@ -459,20 +459,22 @@ export class AssetService {
 
     } // end setResults
 
-    // Used by Browse page
-    public pccollection(){
-        let options = { withCredentials: true };
+    // NOTE: Deprecated /pccollection endpoint no longer available
+    // TODO: REMOVE
+    // // Used by Browse page
+    // public pccollection(){
+    //     let options = { withCredentials: true };
 
-        return this.http
-            .get(this._auth.getHostname() + '/api/pccollection', options)
-            .toPromise()
-    }
+    //     return this.http
+    //         .get(this._auth.getHostname() + '/api/pccollection', options)
+    //         .toPromise()
+    // }
 
     public categoryNames(): Promise<categoryName[]> {
         let options = { withCredentials: true }
 
         return this.http
-            .get(this._auth.getHostname() + '/api/collections/103/categorynames', options)
+            .get(this._auth.getHostname() + '/api/v1/collections/103/categorynames', options)
             .toPromise()
             .then(res => {
                 if (res && res[0]) {
@@ -533,7 +535,13 @@ export class AssetService {
              * - Some schools have shared collections which have a contributinginsitutionid which differs from their own
              */
             filterArray.push('(collectiontypes:2 AND contributinginstitutionid:(' + this._auth.getUser().institutionId.toString() + ')) OR (collectiontypes:(2) AND -(collectiontypes:(5)))')
-          } else {
+
+          }
+          // Collction Type 6 Private Collections
+          else if (collectionType === 6) {
+            filterArray.push('(collectiontypes:6 AND contributinginstitutionid:(' + this._auth.getUser().institutionId.toString() + '))')
+          }
+          else {
             filterArray.push('collectiontypes:' + collectionType)
           }
       }
@@ -565,6 +573,18 @@ export class AssetService {
         })
     }
 
+    /**
+     * Get metadata about a Category
+     * @param catId The Category ID
+     */
+    public getCategoryInfo(catId: string) {
+        let options = { withCredentials: true };
+        
+        return this.http
+            .get(this._auth.getUrl() + '/v1/categorydesc/' + catId, options)
+            .toPromise();
+    }
+
     nodeDesc(descId, widgetId){
         let options = { withCredentials: true };
 
@@ -574,7 +594,7 @@ export class AssetService {
         }
 
         return this.http
-            .get(this._auth.getHostname() + '/api/categorydesc/' + descId + '/' + widgetId, options)
+            .get(this._auth.getHostname() + '/api/v1/categorydesc/' + descId + '/' + widgetId, options)
             .toPromise()
     }
 
@@ -619,7 +639,7 @@ export class AssetService {
         let options = { withCredentials: true };
         // Returns all of the collections names
         return this.http
-            .get(this._auth.getUrl() + '/collections/', options).pipe(
+            .get(this._auth.getUrl() + '/v1/collections/', options).pipe(
               map(res => {
                 if (type) {
                     let data = res
@@ -885,10 +905,10 @@ export class AssetService {
 
                             // For multi-view items, make the thumbnail urls and update the array
                             data.thumbnails = data.thumbnails.map((thumbnail) => {
-                                if (thumbnail['thumbnailImgUrl'] && thumbnail['thumbnailImgUrl'].indexOf('media-objects') > -1) {
-                                    thumbnail.thumbnailImgUrl = this._assetSearch.makeThumbUrl(thumbnail.thumbnailImgUrl, 1, true)
-                                }
-                                return thumbnail
+                              if (thumbnail['thumbnailImgUrl'] && thumbnail['compoundmediaCount'] > 0) {
+                                thumbnail.thumbnailImgUrl = this._auth.compoundUrl + thumbnail.thumbnailImgUrl
+                              }
+                              return thumbnail
                             })
 
                             // Set the allResults object
@@ -986,8 +1006,8 @@ export class AssetService {
 }
 
 export interface categoryName {
-    categoryId: string,
-    categoryName: string
+    categoryid: string,
+    categoryname: string
 }
 export interface SolrFacet {
     name: string,

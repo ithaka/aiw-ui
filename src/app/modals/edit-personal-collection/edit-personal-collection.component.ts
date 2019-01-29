@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core'
+import { Component, OnInit, OnDestroy, Input, Output, EventEmitter, AfterViewInit } from '@angular/core'
 import { Subscription } from 'rxjs'
 import { map, take } from 'rxjs/operators'
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms'
@@ -21,7 +21,7 @@ import { LocalPCService, LocalPCAsset } from '../../_local-pc-asset.service'
   styleUrls: [ 'edit-personal-collection.component.scss' ],
   templateUrl: 'edit-personal-collection.component.pug'
 })
-export class EditPersonalCollectionModal implements OnInit {
+export class EditPersonalCollectionModal implements OnInit, AfterViewInit {
   @Output() closeModal: EventEmitter<any> = new EventEmitter()
   @Input() public colId: string
 
@@ -70,6 +70,16 @@ export class EditPersonalCollectionModal implements OnInit {
   ngOnInit() {
   }
 
+  ngAfterViewInit() {
+    this.startModalFocus()
+  }
+
+  // Set initial focus on the modal Title h1
+  public startModalFocus() {
+    let element = <HTMLElement>(document.querySelector('.modal-title'))
+    element.focus()
+  }
+
   public setMetadataValues(asset: LocalPCAsset): void {
     if (asset) {
       this.selectedAssetData = asset.asset_metadata
@@ -95,6 +105,12 @@ export class EditPersonalCollectionModal implements OnInit {
     this.setMetadataValues(this._localPC.getAsset(this.selectedAsset.ssid)) // update the form values to match the new asset metadata
 
     this.editMode = true
+
+    // Focus on the first element of the form
+    setTimeout( () => {
+      let element = <HTMLElement>(document.querySelector('#editAssetMetaForm input'))
+      element.focus()
+    }, 250)
   }
 
   public clearSelectedAsset(): void {
@@ -187,6 +203,12 @@ export class EditPersonalCollectionModal implements OnInit {
       publishingAssets.showPublishingMsgs = true
       this._auth.store('publishingAssets', publishingAssets)
     }
+
+    // focus on the recently uploaded asset
+    setTimeout(() => {
+      let element = <HTMLElement>(document.querySelector('.thumb-preview-cntnr .thumb'))
+      element.focus()
+    }, 250)
   }
 
 }

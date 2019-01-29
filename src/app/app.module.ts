@@ -53,7 +53,7 @@ import { CategoryPage } from './category-page'
 import { ImageGroupPPPage } from './image-group-pp-page'
 import { AssetPPPage } from './asset-pp-page'
 import { ClusterPage } from './cluster-page'
-import { BrowsePage, LibraryComponent, IgGroupFilterPipe, BrowseCommonsComponent,
+import { BrowsePage, LibraryComponent, AdlCollectionFilterPipe, IgGroupFilterPipe, BrowseCommonsComponent,
   MyCollectionsComponent, BrowseInstitutionComponent, BrowseGroupsComponent, TagComponent, CardViewComponent,
   TagsListComponent, TagFiltersService } from './browse-page'
 import { AssetPage, AgreeModalComponent, ArtstorViewerComponent } from './asset-page'
@@ -198,6 +198,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     KeysPipe,
     LibraryComponent,
     IgGroupFilterPipe,
+    AdlCollectionFilterPipe,
     LinkifyPipe,
     LinkPage,
     Login,

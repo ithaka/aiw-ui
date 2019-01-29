@@ -8,6 +8,6 @@
   tabindex="3"
 ) {{ collectionType.badgeText }}
 <ng-template #tipContent>
-  div {{ collectionType.alt }}
+  div([innerHtml]="collectionType.alt")
 </ng-template>
   //- ang-tooltip(data-tooltip)

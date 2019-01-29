@@ -4,7 +4,7 @@ import { Subscription } from 'rxjs'
 import { map, take, filter } from 'rxjs/operators'
 import { Angulartics2 } from 'angulartics2'
 
-import { AssetService, AuthService, GroupService } from './../../shared'
+import { AssetService, AuthService, GroupService, ScriptService } from './../../shared'
 import { Tag } from './../tag'
 import { TagFiltersService } from './tag-filters.service'
 import { TitleService } from '../../shared/title.service'
@@ -102,21 +102,23 @@ export class BrowseGroupsComponent implements OnInit {
   private appliedTags: string[] = []
 
   constructor(
-    _appConfig: AppConfig,
+    private _appConfig: AppConfig,
     private _router: Router,
     private _groups: GroupService,
     public _tagFilters: TagFiltersService,
     private _auth: AuthService,
     private _title: TitleService,
     private _ga: Angulartics2,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private scriptService: ScriptService
   ) {
     let isLoggedIn = this._auth.getUser() && this._auth.getUser().isLoggedIn
     this.showArtstorCurated = _appConfig.config.showArtstorCurated
 
     this.groupFilterArray.push({
       label: 'All',
-      level: 'all'
+      level: 'all',
+      ariaLabel: 'Filter by All image groups'
     })
 
     // If Logged In, default to My Groups
@@ -124,19 +126,22 @@ export class BrowseGroupsComponent implements OnInit {
       this.groupFilterArray.push({
         label: 'My Groups',
         level: 'created',
-        selected: true
+        selected: true,
+        ariaLabel: 'Filter image groups by My Groups'
       })
 
       this.groupFilterArray.push({
         label: 'Private',
         level: 'private',
-        selected: false
+        selected: false,
+        ariaLabel: 'Filter by Private image groups'
       })
 
       this.groupFilterArray.push({
         label: 'Shared by Me',
         level: 'shared_by_me',
-        selected: false
+        selected: false,
+        ariaLabel: 'Filter image groups by Shared by Me'
       })
     }
 
@@ -144,20 +149,23 @@ export class BrowseGroupsComponent implements OnInit {
     this.groupFilterArray.push({
       label: 'Institutional',
       level: 'institution',
-      selected: !isLoggedIn
+      selected: !isLoggedIn,
+      ariaLabel: 'Filter by Institutional image groups'
     })
 
     if (isLoggedIn) {
       this.groupFilterArray.push({
         label: 'Shared with Me',
-        level: 'shared'
+        level: 'shared',
+        ariaLabel: 'Filter image groups by Shared with Me'
       })
     }
 
     if (this.showArtstorCurated) {
       this.groupFilterArray.push({
         label: 'Artstor Curated',
-        level: 'public'
+        level: 'public',
+        ariaLabel: 'Filter by Artstor Curated image groups'
       })
     }
 
@@ -175,6 +183,10 @@ export class BrowseGroupsComponent implements OnInit {
     // set the title
     this._title.setSubtitle('Browse Groups')
 
+    // Load Ethnio survey
+    if (this._appConfig.config.siteID !== 'SAHARA') {
+      this.scriptService.loadScript('ethnio-survey')
+    }
   } // OnInit
 
   ngOnDestroy() {
@@ -229,6 +241,47 @@ export class BrowseGroupsComponent implements OnInit {
     let queryParams = Object.assign(baseParams, params)
 
     this._router.navigate(['/browse', 'groups'], { queryParams: queryParams })
+  }
+
+  /**
+   * For skip to main groups (card view) section
+   */
+  public skipToGrpSec(): void {
+    window.setTimeout(() => {
+      let htmlelement: HTMLElement = document.getElementById('skip-to-filters-link');
+      (<HTMLElement>htmlelement).focus()
+    }, 100)
+  }
+
+  public skipToFilterSec(): void {
+    window.setTimeout(() => {
+      let htmlelement: HTMLElement = document.getElementById('skip-to-groups-link');
+      (<HTMLElement>htmlelement).focus()
+    }, 100)
+  }
+
+  public closeSortDropdown(): void {
+    let dropdownElement: HTMLElement = document.querySelector('.dropdown.sortlist')
+    dropdownElement.classList.remove('show')
+    dropdownElement.children[0].setAttribute('aria-expanded', 'false')
+    dropdownElement.children[1].classList.remove('show')
+  }
+
+  // Adding keyboard arrow keys navigation between sort button options
+  public sortDropdownOptsArrowDown(element: any): void {
+    let focusElementSelector = element.id === 'recentSortOpt' ? '#alphaSortOpt' : '#relSortOpt'
+    let focusElement = <HTMLElement>(document.querySelector(focusElementSelector))
+    if (focusElement) {
+      focusElement.focus()
+    }
+  }
+
+  public sortDropdownOptsArrowUp(element: any): void {
+    let focusElementSelector = element.id === 'relSortOpt' ? '#alphaSortOpt' : '#recentSortOpt'
+    let focusElement = <HTMLElement>(document.querySelector(focusElementSelector))
+    if (focusElement) {
+      focusElement.focus()
+    }
   }
 
   /** Every time the url updates, we process the new tags and reload image groups if the tags query param changes */
@@ -537,12 +590,15 @@ export class BrowseGroupsComponent implements OnInit {
       return ''
     }
   }
+
+
 }
 
 interface GroupFilter {
   label: string
   level: string
   selected?: boolean
+  ariaLabel?: string
 }
 
 export interface GroupQuery {
