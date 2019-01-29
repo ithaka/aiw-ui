@@ -38,7 +38,6 @@ export class MetadataService {
                 return of(assetData)
             }
         }),map((assetData: AssetData) => {
-            console.log("data",assetData)
             return new Asset(assetData, (this._auth.getEnv() == 'test'))
         }))
     }

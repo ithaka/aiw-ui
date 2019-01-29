@@ -9,6 +9,7 @@ export class Asset {
     title: string
     thumbnail_url: string
     thumbnail_size: number = 2
+    image_compound_urls?: string[]
     kalturaUrl: string
     downloadLink: string
     downloadName: string

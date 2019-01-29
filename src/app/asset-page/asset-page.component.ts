@@ -461,11 +461,6 @@ export class AssetPage implements OnInit, OnDestroy {
         if (asset && asset['error']) {
             console.log("Asset error")
             let err = asset['error']
-            console.log(asset)
-            console.log(err.message)
-            console.log(err.keys())
-            console.log(err.keys().toString())
-            console.log(assetIndex)
             if (err.status === 403 || err.message == 'Unable to load metadata!') {
                 // here is where we make the "access denied" modal appear
                 if (!this.encryptedAccess) {
@@ -482,7 +477,6 @@ export class AssetPage implements OnInit, OnDestroy {
                 this.showServerErrorModal = true
             }
         } else {
-            console.log("Asset?")
             if(!this.assets) {
                 this.assets = []
             }
@@ -491,7 +485,6 @@ export class AssetPage implements OnInit, OnDestroy {
                 let tileSource: any = asset.tileSource
                 this.multiviewItems =  Array.isArray(tileSource) ? true : false
                 this._title.setTitle(asset.title)
-                // TO-DO: Only reference document client-side
                 this.meta.updateTag({name: 'DC.type', content: 'Artwork'})
                 this.meta.updateTag({name: 'DC.title', content: asset.title})
                 // this.meta.updateTag({name: 'asset.id"', content: asset.id})

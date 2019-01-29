@@ -99,7 +99,6 @@ import {
   GroupService,
   ImageGroupService,
   LogService,
-  MetadataService,
   TitleService,
   ToolboxService,
   TypeIdPipe,
@@ -107,6 +106,7 @@ import {
   PersonalCollectionService,
   AccountService
 } from './shared'
+import { MetadataService } from './_services'
 
 import { LocalPCService } from './_local-pc-asset.service'
 import { AssetFiltersService } from './asset-filters/asset-filters.service'

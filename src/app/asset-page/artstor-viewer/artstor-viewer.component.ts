@@ -253,117 +253,117 @@ export class ArtstorViewerComponent implements OnInit, OnDestroy, AfterViewInit 
         // Set state to IIIF/OpenSeaDragon
         this.state = viewState.openSeaReady
         // OpenSeaDragon Initializer
-        // this.osdViewer = new OpenSeadragon({
-        //     id: this.osdViewerId,
-        //     // prefix for Icon Images
-        //     prefixUrl: this._auth.getUrl() + 'assets/img/osd/',
-        //     tileSources: this.tileSource,
-        //     // Trigger conditionally if tilesource is an array of multiple sources
-        //     sequenceMode: this.isMultiView,
-        //     // OpenSeaDragon bug workaround: Reference strip will not load on init
-        //     showReferenceStrip: false,
-        //     referenceStripScroll: 'horizontal',
-        //     /**
-        //      * Workaround: Turn off "lazy loading" in reference strip
-        //      * OpenSeaDragon uses panelWidth to calc which reference images to load: 
-        //      * https://github.com/openseadragon/openseadragon/blob/869a3f6a134cdd143347b215a5da7796f8a7356d/src/referencestrip.js#L410
-        //      * This functionality is arguably broken, so by passing a small sizeRatio, OSD determines it should load ~100 thumbs at a time
-        //      */
-        //     referenceStripSizeRatio: 0.01,
-        //     autoHideControls: false,
-        //     gestureSettingsMouse: {
-        //         scrollToZoom: true,
-        //         pinchToZoom: true
-        //     },
-        //     controlsFadeLength: 500,
-        //     zoomInButton: 'zoomIn-' + this.osdViewerId,
-        //     zoomOutButton: 'zoomOut-' + this.osdViewerId,
-        //     homeButton: 'zoomFit-' + this.osdViewerId,
-        //     previousButton: 'previousButton-' + this.osdViewerId,
-        //     nextButton: 'nextButton-' + this.osdViewerId,
-        //     initialPage: 0,
-        //     showNavigator: true,
-        //     navigatorPosition: 'BOTTOM_LEFT',
-        //     navigatorSizeRatio: 0.15,
-        //     viewportMargins: {
-        //         // Center the image when reference strip shows
-        //         bottom: this.isMultiView ? 190 : 0
-        //     },
-        //     timeout: 60000,
-        //     // useCanvas: false,
-        //     // defaultZoomLevel: 1.2, // We don't want the image to be covered on load
-        //     // visibilityRatio: 0.2, // Determines percentage of background that has to be covered by the image while panning 
-        //     // debugMode: true,
-        // });
+        this.osdViewer = new OpenSeadragon({
+            id: this.osdViewerId,
+            // prefix for Icon Images
+            prefixUrl: this._auth.getUrl() + 'assets/img/osd/',
+            tileSources: this.tileSource,
+            // Trigger conditionally if tilesource is an array of multiple sources
+            sequenceMode: this.isMultiView,
+            // OpenSeaDragon bug workaround: Reference strip will not load on init
+            showReferenceStrip: false,
+            referenceStripScroll: 'horizontal',
+            /**
+             * Workaround: Turn off "lazy loading" in reference strip
+             * OpenSeaDragon uses panelWidth to calc which reference images to load: 
+             * https://github.com/openseadragon/openseadragon/blob/869a3f6a134cdd143347b215a5da7796f8a7356d/src/referencestrip.js#L410
+             * This functionality is arguably broken, so by passing a small sizeRatio, OSD determines it should load ~100 thumbs at a time
+             */
+            referenceStripSizeRatio: 0.01,
+            autoHideControls: false,
+            gestureSettingsMouse: {
+                scrollToZoom: true,
+                pinchToZoom: true
+            },
+            controlsFadeLength: 500,
+            zoomInButton: 'zoomIn-' + this.osdViewerId,
+            zoomOutButton: 'zoomOut-' + this.osdViewerId,
+            homeButton: 'zoomFit-' + this.osdViewerId,
+            previousButton: 'previousButton-' + this.osdViewerId,
+            nextButton: 'nextButton-' + this.osdViewerId,
+            initialPage: 0,
+            showNavigator: true,
+            navigatorPosition: 'BOTTOM_LEFT',
+            navigatorSizeRatio: 0.15,
+            viewportMargins: {
+                // Center the image when reference strip shows
+                bottom: this.isMultiView ? 190 : 0
+            },
+            timeout: 60000,
+            // useCanvas: false,
+            // defaultZoomLevel: 1.2, // We don't want the image to be covered on load
+            // visibilityRatio: 0.2, // Determines percentage of background that has to be covered by the image while panning 
+            // debugMode: true,
+        });
 
-        // // ---- Use handler in case other error crops up
-        // this.osdViewer.addOnceHandler('open-failed', (e: Event) => {
-        //     console.error("OSD Opening source failed:",e)
-        //     this.state = viewState.thumbnailFallback
-        //     this.osdViewer.destroy();
-        // });
+        // ---- Use handler in case other error crops up
+        this.osdViewer.addOnceHandler('open-failed', (e: Event) => {
+            console.error("OSD Opening source failed:",e)
+            this.state = viewState.thumbnailFallback
+            this.osdViewer.destroy();
+        });
 
-        // this.osdViewer.addHandler('pan', (value: any) => {
-        //     // Save viewport pan for downloading the view
-        //     this.asset.viewportDimensions.center = value.center
-        // });
+        this.osdViewer.addHandler('pan', (value: any) => {
+            // Save viewport pan for downloading the view
+            this.asset.viewportDimensions.center = value.center
+        });
 
-        // this.osdViewer.addHandler('page', (value: {page: number, eventSource: any, userData?: any}) => {
-        //     let index = value.page
-        //     // Set current view "page" number
-        //     this.multiViewPage = index + 1
+        this.osdViewer.addHandler('page', (value: {page: number, eventSource: any, userData?: any}) => {
+            let index = value.page
+            // Set current view "page" number
+            this.multiViewPage = index + 1
 
-        //     if(this.multiViewArrowPressed){
-        //         this.multiViewArrowPressed = false
-        //         this.multiViewPageViaArrow.emit()
-        //     } else {
-        //         this.multiViewPageViaThumbnail.emit()
-        //     }
-        // })
+            if(this.multiViewArrowPressed){
+                this.multiViewArrowPressed = false
+                this.multiViewPageViaArrow.emit()
+            } else {
+                this.multiViewPageViaThumbnail.emit()
+            }
+        })
 
-        // this.osdViewer.addHandler('zoom', (value: any) => {
-        //     this.lastZoomValue = value.zoom;
+        this.osdViewer.addHandler('zoom', (value: any) => {
+            this.lastZoomValue = value.zoom;
 
-        //     // Save viewport values for downloading the view
-        //     this.asset.viewportDimensions.containerSize = this.osdViewer.viewport.containerSize
-        //     this.asset.viewportDimensions.contentSize = this.osdViewer.viewport._contentSize
-        //     this.asset.viewportDimensions.zoom = value.zoom
-        // })
+            // Save viewport values for downloading the view
+            this.asset.viewportDimensions.containerSize = this.osdViewer.viewport.containerSize
+            this.asset.viewportDimensions.contentSize = this.osdViewer.viewport._contentSize
+            this.asset.viewportDimensions.zoom = value.zoom
+        })
 
-        // this.osdViewer.addOnceHandler('tile-load-failed', (e: Event) => {
-        //     console.warn("OSD Loading tiles failed:", e)
-        //     this.state = viewState.thumbnailFallback
-        //     this.osdViewer.destroy();
-        // })
+        this.osdViewer.addOnceHandler('tile-load-failed', (e: Event) => {
+            console.warn("OSD Loading tiles failed:", e)
+            this.state = viewState.thumbnailFallback
+            this.osdViewer.destroy();
+        })
 
-        // this.osdViewer.addOnceHandler('ready', () => {
-        //     console.info("Tiles are ready");
-        //     this.state = viewState.openSeaReady
-        // })
+        this.osdViewer.addOnceHandler('ready', () => {
+            console.info("Tiles are ready");
+            this.state = viewState.openSeaReady
+        })
 
-        // this.osdViewer.addOnceHandler('tile-loaded', () => {
-        //     console.info("Tiles are loaded")
-        //     this.state = viewState.openSeaReady
-        //     // Load Reference Strip once viewer is ready
-        //     if (this.isMultiView) {
-        //         this.osdViewer.addReferenceStrip()
+        this.osdViewer.addOnceHandler('tile-loaded', () => {
+            console.info("Tiles are loaded")
+            this.state = viewState.openSeaReady
+            // Load Reference Strip once viewer is ready
+            if (this.isMultiView) {
+                this.osdViewer.addReferenceStrip()
                 
-        //         this.osdViewer.nextButton.element.title = 'Next Item'
-        //         this.osdViewer.previousButton.element.title = 'Previous Item'
+                this.osdViewer.nextButton.element.title = 'Next Item'
+                this.osdViewer.previousButton.element.title = 'Previous Item'
 
-        //         this.osdViewer.previousButton.addHandler('press', () => {
-        //             this.multiViewArrowPressed = true
-        //         })
-        //         this.osdViewer.nextButton.addHandler('press', () => {
-        //             this.multiViewArrowPressed = true
-        //         })
-        //     }
-        // })
+                this.osdViewer.previousButton.addHandler('press', () => {
+                    this.multiViewArrowPressed = true
+                })
+                this.osdViewer.nextButton.addHandler('press', () => {
+                    this.multiViewArrowPressed = true
+                })
+            }
+        })
 
-        // if (this.osdViewer && this.osdViewer.ButtonGroup) {
-        //     this.osdViewer.ButtonGroup.element.addClass('button-group');
-        // }
-        // this.osdViewer.navigator.element.style.marginBottom = "50px";
+        if (this.osdViewer && this.osdViewer.ButtonGroup) {
+            this.osdViewer.ButtonGroup.element.addClass('button-group');
+        }
+        this.osdViewer.navigator.element.style.marginBottom = "50px";
     }
 
     private loadKrpanoViewer(): void{
