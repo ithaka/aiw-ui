@@ -57,7 +57,7 @@ export class AppComponent {
     private meta: Meta,
     @Inject(PLATFORM_ID) private platformId: Object
   ) {
-    console.info("Constructing app component")
+    // console.info("Constructing app component")
     // Append timestamp param to dodge caching
     if (isPlatformBrowser(this.platformId)) {
       let langStr = 'en.json?no-cache=' + new Date().valueOf()

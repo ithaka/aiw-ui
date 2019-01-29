@@ -61,7 +61,7 @@ export class Home implements OnInit, OnDestroy {
     private _dom: DomUtilityService,
     private _tags: TagsService
   ) {
-    console.log("Constructing home component...")
+    // console.log("Constructing home component...")
     // this makes the window always render scrolled to the top
     this._router.events.pipe(
       map(() => {

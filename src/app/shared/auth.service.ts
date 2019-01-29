@@ -428,9 +428,6 @@ export class AuthService implements CanActivate {
     }
     // Update observable
     this.userSource.next(user)
-
-    // TODO: REMOVE
-    // if (user.status && (this._locker.get('user').username != user.username || !institution.institutionid)) {
   }
 
   /**

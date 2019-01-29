@@ -71,7 +71,7 @@ export class Login implements OnInit, OnDestroy {
     private _flags: FlagService,
     private _storage: ArtstorStorageService
   ) {
-    console.log("Constructing login component...")
+    // console.log("Constructing login component...")
   }
 
   ngOnInit() {

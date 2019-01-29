@@ -44,7 +44,7 @@ export class SearchComponent implements OnInit, OnDestroy {
     private _auth: AuthService,
     private _dom: DomUtilityService
   ) {
-    console.log("Constructing Search component...")
+    // console.log("Constructing Search component...")
   }
 
   ngOnInit() {
