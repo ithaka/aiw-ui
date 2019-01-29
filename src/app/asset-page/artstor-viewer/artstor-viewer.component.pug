@@ -12,7 +12,10 @@
     i.icon-asterisk.icon-spin.icon-large
   //- IIIF Image Viewer
   div([class.aiw-hidden]='state != 1')
-    .item.osd-wrap([attr.id]='osdViewerId' [attr.zoomvalue]='lastZoomValue')
+    .item.osd-wrap(
+      [attr.id]='osdViewerId',
+      [attr.zoomvalue]='lastZoomValue'
+    )
   //- Video Player
   .video-player([class.aiw-hidden]='state != 2')
     iframe(id="{{ 'kalturaIframe-' + index }}" frameborder='0')
@@ -72,7 +75,7 @@
           title='Previous in results',
           (click)='prevPage.emit()'
         )
-        .title([innerhtml]='asset.title')
+        .title([innerHtml]='asset.title')
         i.icon.icon-direction.icon-right(
           *ngIf='assetCompareCount == 1 && !quizMode',
           [class.disabled]='assetNumber >= assetGroupCount',
@@ -80,5 +83,5 @@
           (click)='nextPage.emit()'
         )
         .meta-block.small
-          .creator([innerhtml]='asset.creator')
-          .date([innerhtml]='asset.date')
+          .creator([innerHtml]='asset.creator')
+          .date([innerHtml]='asset.date')

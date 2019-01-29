@@ -39,8 +39,7 @@ import { ArtstorViewerComponent } from './'
 })
 export class AssetPage implements OnInit, OnDestroy {
 
-    @ViewChild(ArtstorViewerComponent)
-    public assetViewer: any
+    @ViewChild(ArtstorViewerComponent) public assetViewer
 
     public user: any
     public userSessionFresh: boolean = false

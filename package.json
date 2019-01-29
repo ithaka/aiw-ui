@@ -41,15 +41,15 @@
         "open:typedoc": "open ./doc/index.html"
     },
     "dependencies": {
-        "@angular/animations": "6.1.7",
-        "@angular/common": "6.1.7",
-        "@angular/core": "^6.1.10",
-        "@angular/forms": "6.1.7",
-        "@angular/http": "6.1.7",
-        "@angular/platform-browser": "6.1.7",
-        "@angular/platform-browser-dynamic": "6.1.7",
-        "@angular/platform-server": "6.1.7",
-        "@angular/router": "6.1.7",
+        "@angular/animations": "7.0.4",
+        "@angular/common": "7.0.4",
+        "@angular/core": "7.0.4",
+        "@angular/forms": "7.0.4",
+        "@angular/http": "7.0.4",
+        "@angular/platform-browser": "7.0.4",
+        "@angular/platform-browser-dynamic": "7.0.4",
+        "@angular/platform-server": "7.0.4",
+        "@angular/router": "7.0.4",
         "@ng-bootstrap/ng-bootstrap": "^3.3.0",
         "@ng-idle/core": "^6.0.0-beta.3",
         "@ng-idle/keepalive": "^6.0.0-beta.3",
@@ -87,10 +87,10 @@
     "devDependencies": {
         "@angular-devkit/build-angular": "^0.10.3",
         "@angular-devkit/build-optimizer": "^0.10.3",
-        "@angular/cli": "6.0.8",
-        "@angular/compiler": "6.1.7",
-        "@angular/compiler-cli": "6.1.7",
-        "@angular/language-service": "6.1.7",
+        "@angular/cli": "7.0.4",
+        "@angular/compiler": "7.0.4",
+        "@angular/compiler-cli": "7.0.4",
+        "@angular/language-service": "7.0.4",
         "@pact-foundation/karma-pact": "^2.1.9",
         "@pact-foundation/pact": "^5.9.1",
         "@pact-foundation/pact-web": "^5.9.1",
@@ -145,7 +145,7 @@
         "tslint": "~5.9.1",
         "tslint-loader": "^3.6.0",
         "typedoc": "^0.5.1",
-        "typescript": "2.7.2"
+        "typescript": "3.1.6"
     },
     "repository": {
         "type": "git",
