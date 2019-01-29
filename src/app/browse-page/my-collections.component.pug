@@ -22,6 +22,5 @@ nav.nav.nav-inline.browse-nav
         p([innerHtml]="'BROWSE.MY_COLLECTION.DESCRIPTION' | translate")
 .row.has-icon-overlay(*ngIf="loading")
   i.icon-lg.icon-overlay--top.icon-loading-large
-//- ang-upload-images(*ngIf="showUploadImgsModal", (closeModal)="showUploadImgsModal = false")
 ang-edit-personal-collection(*ngIf="showEditPCModal", (closeModal)="showEditPCModal = false", [colId]="editTagId")
 ang-access-denied-modal(*ngIf="unaffiliatedUser")

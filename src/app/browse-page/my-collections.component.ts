@@ -4,9 +4,6 @@ import { Subscription } from 'rxjs'
 import { map } from 'rxjs/operators'
 import { HttpClient, HttpHeaders } from '@angular/common/http'
 
-
-//import { TagsService } from './tags.service'
-//import { Tag } from './tag/tag.class'
 import { LockerService } from 'app/_services'
 import { TitleService, AssetSearchService, AuthService, AssetService, FlagService } from '../shared'
 
@@ -19,22 +16,13 @@ export class MyCollectionsComponent implements OnInit {
   public unaffiliatedUser: boolean = false
 
   public isLoggedIn: boolean
-  //   private showUploadImgsModal: boolean = false;
   public showEditPCModal: boolean = false
 
   public pcollections: any = []
 
   public loading: boolean = false;
   private subscriptions: Subscription[] = [];
-  private categories = [];
-  //private tags: Tag[] = [];
-  private expandedCategories: any = {}
-  private selectedBrowseId: string = ''
 
-  private editTagId: string = '';
-
-  // Reference activeTag for description on side
-  //private activeTag: Tag;
   constructor(
     private _auth: AuthService,
     private _flags: FlagService,
@@ -43,7 +31,6 @@ export class MyCollectionsComponent implements OnInit {
     private _search: AssetSearchService,
     private _assets: AssetService,
     private _title: TitleService,
-    //private _tags: TagsService,
     private _http: HttpClient,
     private _locker: LockerService
   ) {
@@ -54,26 +41,6 @@ export class MyCollectionsComponent implements OnInit {
 
     // Set page title
     this._title.setSubtitle('Browse My Collections')
-
-    // this.subscriptions.push(
-    //   this.route.params.pipe(
-    //     map((params: Params) => {
-    //       if (params) {
-    //         if (params['viewId']) {
-    //           this.selectedBrowseId = params['viewId'];
-    //           // this.loadCategory();
-    //         }
-
-    //         if (params['featureFlag']) {
-    //           this._flags[params['featureFlag']] = true;
-    //         }
-
-    //         if (params['upload']) {
-    //           this.showEditPCModal = params['upload']
-    //         }
-    //       }
-    //     })).subscribe()
-    //)
 
     // Subscribe to User object updates
     this.subscriptions.push(
@@ -93,16 +60,6 @@ export class MyCollectionsComponent implements OnInit {
 
   ngOnDestroy() {
     this.subscriptions.forEach((sub) => { sub.unsubscribe(); });
-  }
-
-  /**
-   * Changes menu between ADL, University Collections, Open Collections, etc...
-   * @param id Id of desired menu from colMenuArray enum
-   */
-  selectBrowseOpt(id: string) {
-    this.expandedCategories = {};
-    this.selectedBrowseId = id;
-    this.addRouteParam('viewId', id);
   }
 
   /**
@@ -132,95 +89,4 @@ export class MyCollectionsComponent implements OnInit {
     this.pcollections.unshift(tempMyCol) // prepend My PC object back to pcollections
   }
 
-  toggleInfo(node) {
-    if (node.info_expanded) {
-      node.info_expanded = false;
-    }
-    else {
-      if (typeof node.info_expanded == 'undefined') {
-        this.showNodeDesc(node);
-      }
-      node.info_expanded = true;
-    }
-  }
-
-  showNodeDesc(node) {
-    let descId = '';
-    let nodeId = '';
-
-    if (node.descriptionId) {
-      descId = node.descriptionId;
-      nodeId = node.widgetId;
-    }
-    else if (node.parentDescId) {
-      descId = node.parentDescId;
-      nodeId = node.parentId;
-    }
-
-    this._assets.nodeDesc(descId, nodeId)
-      .then((res) => {
-        if (res['blurbUrl']) {
-          node.info_desc = res['blurbUrl'];
-          node.info_img = res['imageUrl'];
-        }
-      })
-      .catch(function (err) {
-        console.log('Unable to load Description.');
-      });
-  }
-
-  openAssets(node) {
-    if (!node.isFolder) {
-      if (node.hasOwnProperty('grpId')) {
-        // Navigate to Collection
-        this.router.navigate(['image-group', { 'igId': node.grpId }]);
-      } else {
-        // Navigate to Image Group
-        this.router.navigate(['collection', { 'colId': node.widgetId }]);
-      }
-    }
-  }
-
-  showHideNode(node) {
-    // A node in the tree will only be hidden if any of its parent nodes, going up the hierarchy, is collapsed.
-    let isExpanded = true;
-    let parentNode: any = {};
-    if (node.parentId) {
-      parentNode = this.getNodeByWidgetId(node.parentId);
-      if (this.expandedCategories[parentNode.widgetId] == false) {
-        isExpanded = false;
-      }
-      else {
-        isExpanded = this.showHideNode(parentNode);
-      }
-    }
-    return isExpanded;
-  }
-
-  getNodeByWidgetId(id) {
-    let node = {};
-    for (let cat of this.categories) {
-      if (cat.widgetId == id) {
-        node = cat;
-      }
-    }
-    return node;
-  }
-
-  private showEditModal(tag): void {
-    this.editTagId = tag.tagId;
-    this.showEditPCModal = true;
-  }
-
-  /**
- * Adds a parameter to the route and navigates to new route
- * @param key Parameter you want added to route (as matrix param)
- * @param value The value of the parameter
- */
-  private addRouteParam(key: string, value: any) {
-    let currentParamsObj: Params = Object.assign({}, this.route.snapshot.params);
-    currentParamsObj[key] = value;
-
-    this.router.navigate([currentParamsObj], { relativeTo: this.route });
-  }
 }
