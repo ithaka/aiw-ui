@@ -58,7 +58,7 @@ import { ClusterPage } from './cluster-page'
 import { BrowsePage, LibraryComponent, AdlCollectionFilterPipe, IgGroupFilterPipe, BrowseCommonsComponent,
   MyCollectionsComponent, BrowseInstitutionComponent, BrowseGroupsComponent, TagComponent, CardViewComponent,
   TagsListComponent, TagFiltersService } from './browse-page'
-import { AssetPage, AgreeModalComponent } from './asset-page'
+import { AssetPage, AgreeModalComponent, ArtstorViewerComponent } from './asset-page'
 import { AccountPage } from './account-page'
 import { AssociatedPage } from './associated-page'
 import { ImageGroupPage, PptModalComponent } from './image-group-page'
@@ -139,6 +139,7 @@ const APP_PROVIDERS = [
   LocalPCService,
   LockerService,
   LogService,
+  MetadataService,
   ImageGroupService,
   ScriptService,
   AssetFiltersService,
@@ -171,6 +172,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     AddToGroupModal,
     AgreeModalComponent,
     App,
+    ArtstorViewerComponent,
     AssetFilters,
     AssetGrid,
     AssetPage,
@@ -245,7 +247,6 @@ export function HttpLoaderFactory(http: HttpClient) {
     Ng2CompleterModule,
     LockerModule,
     FileUploadModule,
-    ArtstorViewerModule,
     RouterModule.forRoot(ROUTES, { useHash: true }),
     DeviceDetectorModule.forRoot(),
     Angulartics2Module.forRoot(),

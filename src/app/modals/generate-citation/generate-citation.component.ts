@@ -1,7 +1,8 @@
 import { Component, OnInit, Input, Output, EventEmitter, AfterViewInit } from '@angular/core'
 import { DatePipe } from '@angular/common'
 
-import { Asset } from '../../asset-page/asset'
+// Project Dependencies
+import { Asset } from '../../shared/datatypes/asset'
 import { LogService } from '../../shared'
 
 @Component({

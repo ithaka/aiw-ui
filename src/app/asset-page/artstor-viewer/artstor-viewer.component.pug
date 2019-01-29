@@ -1,0 +1,84 @@
+.asset-viewer([class.fullscreen]='isFullscreen', [class.multi-view]='isMultiView', (contextmenu)='disableContextMenu($event)')
+  //- Large thumbnail fallback
+    - Thumbnail is always showing, and hidden by other viewers placed on top
+    - This allows search crawlers to find the thumbnail
+  #fallbackViewer
+    img.item.item--thumbnail(
+      alt='{{ asset.title }}',
+      [attr.src]='asset.thumbnail_url',
+      (error)='asset.fallbackThumbnailUrl()'
+    )
+  #loader-wrapper.more-results.overlay-wrap--center(*ngIf='state == 0')
+    i.icon-asterisk.icon-spin.icon-large
+  //- IIIF Image Viewer
+  div([class.aiw-hidden]='state != 1')
+    .item.osd-wrap([attr.id]='osdViewerId' [attr.zoomvalue]='lastZoomValue')
+  //- Video Player
+  .video-player([class.aiw-hidden]='state != 2')
+    iframe(id="{{ 'kalturaIframe-' + index }}" frameborder='0')
+  //- panorama Krpano viewer
+  .krpano-viewer.osd-wrap([class.aiw-hidden]='state != 3')
+    .pano(id='pano-{{ index }}')
+  //- Viewer Buttons
+  div(*ngIf='!thumbnailMode')
+    .button-group.asset-viewer__buttons(id='imageButtons-{{ osdViewerId }}')
+      button.btn.btn--icon.btn--zoomIn([class.aiw-hidden]='state != 1' id='zoomIn-{{ osdViewerId}}' title='Zoom In')
+        i.icon.icon-zoom-in
+      button.btn.btn--icon.btn--zoomOut([class.aiw-hidden]='state != 1' id='zoomOut-{{ osdViewerId }}' title='Zoom Out')
+        i.icon.icon-zoom-out
+      button.btn.btn--icon.btn--zoomFit([class.aiw-hidden]='state != 1' id='zoomFit-{{ osdViewerId }}' title='Zoom Fit')
+        i.icon.icon-fit
+      button.btn.btn--icon.btn--fullScreen(
+          *ngIf='!isFullscreen', 
+          id='fullScreen-{{ osdViewerId }}',
+          (click)='togglePresentationMode()',
+          title='Full Screen'
+        )
+        i.icon.icon-fullscreen
+      button.btn.btn--icon(
+          *ngIf='isFullscreen && assetCompareCount > 1',
+          (click)='removeAsset.emit(asset)',
+          title='Remove from Comparison'
+        )
+        i.icon.icon-close
+    //- Hide if not multi view (do not use ngIf, OSD needs to bind)
+    //- Bottom right arrow style
+    //-
+      <div [class.aiw-hidden]="!isMultiView" class="button-group asset-viewer__pagination" id="imagePageButtons-{{ osdViewerId }}">
+      <button class="btn btn--icon btn--prev" id="previousButton-{{ osdViewerId}}"><</button><span class="btn-divider"></span><button class="btn btn--icon btn--next" id="nextButton-{{ osdViewerId}}">></button>
+      </div>
+    //- Edge pagination arrow style
+    .asset-viewer__edge-arrows([class.aiw-hidden]='!isMultiView' id='imagePageButtons-{{ osdViewerId }}')
+      button.btn.btn--icon.btn--prev(id='previousButton-{{ osdViewerId}}')
+        i.icon.icon-prev--white
+      button.btn.btn--icon.btn--next(id='nextButton-{{ osdViewerId}}')
+        i.icon.icon-next--white
+    .asset-viewer_multi-view-info(*ngIf='isMultiView')
+      b {{ multiViewPage }}
+      |  of 
+      b {{ multiViewCount }}
+      button.help-icon(
+        *ngIf='hasMultiViewHelp()',
+        (click)='multiViewHelp.emit()'
+      ) ?
+    .fullscreen-metadata(
+        *ngIf='isFullscreen',
+        [class.slideaway]='!showCaption'
+      )
+      .vertical-center-wrap
+        i.icon.icon-direction.icon-left(
+          *ngIf='assetCompareCount == 1 && !quizMode',
+          [class.disabled]='assetNumber <= 1',
+          title='Previous in results',
+          (click)='prevPage.emit()'
+        )
+        .title([innerhtml]='asset.title')
+        i.icon.icon-direction.icon-right(
+          *ngIf='assetCompareCount == 1 && !quizMode',
+          [class.disabled]='assetNumber >= assetGroupCount',
+          title='Next in results',
+          (click)='nextPage.emit()'
+        )
+        .meta-block.small
+          .creator([innerhtml]='asset.creator')
+          .date([innerhtml]='asset.date')

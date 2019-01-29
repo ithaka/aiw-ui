@@ -5,12 +5,10 @@ import { Subscription } from 'rxjs'
 import { map, take } from 'rxjs/operators'
 import { Locker, DRIVERS } from 'angular-safeguard'
 import { Angulartics2 } from 'angulartics2'
-import { ArtstorViewer } from 'artstor-viewer'
 import { formGroupNameProvider } from '@angular/forms/src/directives/reactive_directives/form_group_name'
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms'
 
 // Project Dependencies
-import { Asset } from './asset'
 import {
     AuthService,
     AssetService,
@@ -31,6 +29,8 @@ import { APP_CONST } from '../app.constants'
 import { LockerService } from 'app/_services'
 import { AppConfig } from '../app.service'
 import { rights } from './rights.ts'
+import { Asset } from '../shared/datatypes/asset'
+import { ArtstorViewerComponent } from './'
 
 @Component({
     selector: 'ang-asset-page',
@@ -39,7 +39,7 @@ import { rights } from './rights.ts'
 })
 export class AssetPage implements OnInit, OnDestroy {
 
-    @ViewChild(ArtstorViewer)
+    @ViewChild(ArtstorViewerComponent)
     public assetViewer: any
 
     public user: any

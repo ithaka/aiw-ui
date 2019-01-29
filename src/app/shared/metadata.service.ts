@@ -7,9 +7,9 @@ import { HttpClient, HttpHeaders } from '@angular/common/http'
 import { Observable } from 'rxjs'
 
 // Project Dependencies
-import { MetadataRes } from './datatypes/asset.interface'
+import { MetadataRes } from './datatypes/metadata.interface'
 import { FlagService } from './flag.service'
-import { environment } from 'environments/environment';
+import { environment } from 'environments/environment'
 
 @Injectable()
 export class MetadataService {
