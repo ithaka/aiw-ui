@@ -60,7 +60,7 @@ export class ScriptService {
                     };
                 }
                 script.onerror = (error: any) => resolve({script: name, loaded: false, status: 'not_loaded'});
-                this._dom.byTagName('head')[0].appendChild(script);
+                this._dom.byTagName('head').appendChild(script);
             }
         });
     }

@@ -536,12 +536,14 @@ export class AssetPage implements OnInit, OnDestroy {
         }
         // Set download link
         this.setDownloadFull()
-
-        // Loop over Rights fields and set rights statement values via isRightStatement
-        for (let i = 0; i < this.assets[0].formattedMetadata.Rights.length; i++) {
-          let rightsField = this.assets[0].formattedMetadata.Rights[i]
-          this.isRightStatement(rightsField)
-        }
+        
+        if (this.assets[0].formattedMetadata) {
+            // Loop over Rights fields and set rights statement values via isRightStatement
+            for (let i = 0; i < this.assets[0].formattedMetadata.Rights.length; i++) {
+                let rightsField = this.assets[0].formattedMetadata.Rights[i]
+                this.isRightStatement(rightsField)
+            }
+        }   
     }
 
     /**
