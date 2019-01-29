@@ -353,16 +353,6 @@ export class AssetPage implements OnInit, OnDestroy {
                 } else {
                     this.assetIds[0] = routeParams['assetId']
 
-                    this._metadata.buildAsset(this.assetIds[0]).pipe(take(1))
-                        .subscribe(asset => {
-                            console.log("built asset")
-                            console.log(asset)
-                            console.log(asset.id)
-                        }, err => {
-                            console.log("build asset error")
-                            console.log(err)
-                        })
-
                     if (this.prevAssetResults.thumbnails.length > 0) {
                         let currentAssetIndex = this.currentAssetIndex();
                         if (currentAssetIndex === -1){
