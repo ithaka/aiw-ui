@@ -310,7 +310,7 @@ export class AssetGrid implements OnInit, OnDestroy {
     this.subscriptions.push(
       this._assets.allResults.pipe(
         map(allResults => {
-          if ( (this.activeSort.index && this.activeSort.index == '3') || (this.UrlParams['startDate'])) {
+          if (this.activeSort.index && this.activeSort.index == '3') {
             this.sortFilterByDateTotal =  allResults.total
 
             let withoutDateParams = Object.assign({}, this.UrlParams)
@@ -384,8 +384,9 @@ export class AssetGrid implements OnInit, OnDestroy {
           let id: string = this.prevRouteTS
 
           let prevRouteParams = this._storage.getSession('prevRouteParams') || {}
-          prevRouteParams[id] = this.route.snapshot.url
-          this._storage.setSession('prevRouteParams', prevRouteParams)
+          // @todo
+          // prevRouteParams[id] = this.route.snapshot.url
+          // this._storage.setSession('prevRouteParams', prevRouteParams)
 
           // Generate Facets
           if (allResults && allResults.collTypeFacets) {
@@ -567,18 +568,17 @@ export class AssetGrid implements OnInit, OnDestroy {
     }
   }
 
-  private constructNavigationCommands (thumbnail: Thumbnail) {
+  private constructNavigationCommands (thumbnail: Thumbnail) : any[] {
     let assetId = thumbnail.objectId ? thumbnail.objectId : thumbnail.artstorid
     let params: any = {
       prevRouteTS: this.prevRouteTS // for fetching previous route params from session storage, on asset page
     }
+    let url = []
     thumbnail.iap && (params.iap = 'true')
     this.ig && this.ig.id && (params.groupId = this.ig.id)
 
-    let url = ['/#/asset', assetId].join('/')
-    for (let key in params) {
-      url = url.concat([';', key, '=', params[key]].join(''))
-    }
+    url.push(['/asset', assetId].join('/'))
+    url.push(params)
     return url
   }
 
@@ -775,15 +775,14 @@ export class AssetGrid implements OnInit, OnDestroy {
   /**
    * Closes "exiting reorder" modal
    */
-  private ditchingReorder(command) {
+  public ditchingReorder(confirmed: number) {
     // Hide modal
     this.showLoseReorder = false;
-    if (command.includes('Save')) {
-      this.saveReorder();
-    } else if (command.includes('Discard')) {
-      this.cancelReorder();
-    } else {
-      // Return to Reorder
+    if (confirmed === 1) {
+        this.saveReorder();
+    }
+    else if (confirmed === 2) {
+        this.cancelReorder();
     }
   }
 
@@ -848,8 +847,8 @@ export class AssetGrid implements OnInit, OnDestroy {
   }
 
   private goToAsset(asset: any): void{
-    let assetURL: string = this.constructNavigationCommands(asset)
-    this._router.navigateByUrl(assetURL.replace('/#', ''))
+    let assetURLParams: any[] = this.constructNavigationCommands(asset)
+    this._router.navigate(assetURLParams)
   }
 
   private closeGridDropdowns(): void{

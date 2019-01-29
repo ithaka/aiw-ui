@@ -63,7 +63,7 @@ export class AuthService implements CanActivate {
 
   private refreshUserSessionInProgress: boolean = false
 
-  private isBrowser: boolean = isPlatformBrowser(this.platformId)
+  private isBrowser: boolean
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
@@ -76,6 +76,7 @@ export class AuthService implements CanActivate {
     private _flags: FlagService,
     private idle: Idle
   ) {
+    this.isBrowser = isPlatformBrowser(this.platformId)
     // Set WLV and App Config variables
     this.isOpenAccess = this._app.config.isOpenAccess
     this.clientHostname = this._app.clientHostname
@@ -86,7 +87,7 @@ export class AuthService implements CanActivate {
     this.hostname = ''
     this.baseUrl =  '/api'
     this.thumbUrl = '//mdxdv.artstor.org'
-    this.compoundUrl = '//catalog.sharedshelf.artstor.org'
+    this.compoundUrl = '//stor.artstor.org/stor'
     this.IIIFUrl = '//tsprod.artstor.org/rosa-iiif-endpoint-1.0-SNAPSHOT/fpx'
     this.subdomain = 'library'
     this.solrUrl = '/api/search/v1.0/search'
@@ -134,7 +135,7 @@ export class AuthService implements CanActivate {
       this.subdomain = 'stage'
       this.baseUrl = '//stage.artstor.org/api'
       this.thumbUrl = '//mdxstage.artstor.org'
-      this.compoundUrl = 'http://catalog.sharedshelf.stage.artstor.org'
+      this.compoundUrl = '//stor.stage.artstor.org/stor'
       this.logUrl = '//ang-ui-logger.apps.test.cirrostratus.org/api/v1'
       this.solrUrl = '/api/search/v1.0/search'
       this.IIIFUrl = '//tsstage.artstor.org/rosa-iiif-endpoint-1.0-SNAPSHOT/fpx'
@@ -427,9 +428,6 @@ export class AuthService implements CanActivate {
     }
     // Update observable
     this.userSource.next(user)
-
-    // TODO: REMOVE
-    // if (user.status && (this._locker.get('user').username != user.username || !institution.institutionid)) {
   }
 
   /**
@@ -476,12 +474,6 @@ export class AuthService implements CanActivate {
       // Shibboleth workflow is unique, should allow access to the register page
       return new Observable(observer => {
         observer.next(true)
-      })
-    } else
-    if (this.isPublicOnly() && state.url.includes('/register')) {
-      // For unaffiliated users, trying to access /register route
-      return new Observable(observer => {
-        observer.next(false)
       })
     } else if (this.canUserAccess(this.getUser())) {
       // If user object already exists, we're done here

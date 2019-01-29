@@ -8,6 +8,7 @@ import { Angulartics2 } from 'angulartics2'
 import { AssetService, AuthService, GroupService, ImageGroup, LogService } from './../../shared'
 import { IgFormValue, IgFormUtil } from './new-ig'
 import { isPlatformBrowser } from '@angular/common';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'ang-new-ig-modal',
@@ -68,7 +69,8 @@ export class NewIgModal implements OnInit {
       private _group: GroupService,
       private _log: LogService,
       private _angulartics: Angulartics2,
-      private el: ElementRef
+      private el: ElementRef,
+      private router: Router
   ) {
     this.newIgForm = _fb.group({
       title: [null, Validators.required],
@@ -246,6 +248,9 @@ export class NewIgModal implements OnInit {
                 'group_id': this.newGroup.id
               }
             })
+
+            // Add to Group GA event
+            this._angulartics.eventTrack.next({ action: 'addToGroup', properties: { category: this._auth.getGACategory(), label: this.router.url }})
           }
         },
         error => {

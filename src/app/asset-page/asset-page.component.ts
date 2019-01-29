@@ -4,7 +4,7 @@ import { DomSanitizer, SafeUrl, Meta } from '@angular/platform-browser'
 import { Subscription } from 'rxjs'
 import { map, take } from 'rxjs/operators'
 import { Angulartics2 } from 'angulartics2'
-import { ArtstorViewer } from 'artstor-viewer'
+import { ArtstorViewerComponent } from './artstor-viewer/artstor-viewer.component'
 import { formGroupNameProvider } from '@angular/forms/src/directives/reactive_directives/form_group_name'
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms'
 
@@ -26,11 +26,12 @@ import {
 import { TitleService } from '../shared/title.service'
 import { ScriptService } from '../shared/script.service'
 import { LocalPCService, LocalPCAsset } from '../_local-pc-asset.service'
-import { TourStep } from '../shared/tour/tour.service'
+import { TourStep } from '../shared/tour/tour.component'
 import { APP_CONST } from '../app.constants'
 import { AppConfig } from '../app.service'
 import { ArtstorStorageService } from '../../../projects/artstor-storage/src/public_api';
-
+import { MetadataService } from 'app/_services';
+import { rights } from './rights.ts'
 
 @Component({
     selector: 'ang-asset-page',
@@ -39,16 +40,15 @@ import { ArtstorStorageService } from '../../../projects/artstor-storage/src/pub
 })
 export class AssetPage implements OnInit, OnDestroy {
 
-    @ViewChild(ArtstorViewer)
+    @ViewChild(ArtstorViewerComponent) public assetViewer
 
     @ViewChild("generatedImgURL", {read: ElementRef}) generatedImgURLElement: ElementRef
 
-    public assetViewer: any
+    
 
     public user: any
     public userSessionFresh: boolean = false
     public assetIds: string[] = []
-
 
     /** controls whether or not the modals are visible */
     public showAgreeModal: boolean = false
@@ -61,6 +61,15 @@ export class AssetPage implements OnInit, OnDestroy {
     public downloadViewReady: boolean = false
     public showExitEdit: boolean = false
     public showDeletePCModal: boolean = false
+
+    // Rights Statements values
+    public rightsText: string = ''
+    public rightsLink: string = ''
+    public rightsImg: string = ''
+
+    // Variables related to how we call for metadata
+    public assetIdProperty: string = 'artstorid'
+    public fromOpenLibrary: boolean = false
 
     // Feature Flags
     public relatedResFlag: boolean = false
@@ -109,7 +118,6 @@ export class AssetPage implements OnInit, OnDestroy {
     private quizShuffle: boolean = false;
     private showAssetCaption: boolean = true;
 
-    private assetIdProperty: string = 'artstorid'
     /**
      *  Collection Variables
      *  - Specific to the first asset, this.assets[0]
@@ -202,9 +210,13 @@ export class AssetPage implements OnInit, OnDestroy {
     // Flag for multiview items, true if the asset contains multiview items
     private multiviewItems: boolean = false
 
+    // Flag for show/hide page tooltip
+    private showPageToolTip: boolean = false
+
     constructor(
         public _appConfig: AppConfig,
         private _assets: AssetService,
+        private _metadata: MetadataService,
         private _auth: AuthService,
         private _search: AssetSearchService,
         private _flags: FlagService,
@@ -245,6 +257,7 @@ export class AssetPage implements OnInit, OnDestroy {
         // sets up subscription to allResults, which is the service providing thumbnails
         this.subscriptions.push(
             this._auth.currentUser.subscribe((user) => {
+                console.log("User subscription returned")
                 this.user = user
                 // userSessionFresh: Do not attempt to load asset until we know user object is fresh
                 // if (!this.userSessionFresh && this._auth.userSessionFresh) {
@@ -252,6 +265,7 @@ export class AssetPage implements OnInit, OnDestroy {
                 // }
             }),
             this._assets.allResults.subscribe((allResults) => {
+                console.log("allResults subscription returned")
                 if (allResults.thumbnails) {
                     // Set asset id property to reference
                     this.assetIdProperty = (allResults.thumbnails[0] && allResults.thumbnails[0].objectId) ? 'objectId' : 'artstorid'
@@ -309,6 +323,7 @@ export class AssetPage implements OnInit, OnDestroy {
 
         this.subscriptions.push(
             this.route.params.subscribe((routeParams) => {
+                console.log("Params subscription returned")
                 this.assetGroupId = routeParams['groupId']
                 // Find feature flags
                 if (routeParams && routeParams['featureFlag']) {
@@ -328,6 +343,13 @@ export class AssetPage implements OnInit, OnDestroy {
                 if (routeParams['encryptedId']) {
                     this.encryptedAccess = true
                     this.assetIds[0] = routeParams['encryptedId']
+                } else if (routeParams['openLibId']) {
+                    this.fromOpenLibrary = true
+                    this.assetIds[0] = routeParams['openLibId']
+                } else if ( routeParams['encryptedOpenLibId']) {
+                    this.fromOpenLibrary = true
+                    this.encryptedAccess = true
+                    this.assetIds[0] = routeParams['encryptedOpenLibId']
                 } else {
                     this.assetIds[0] = routeParams['assetId']
 
@@ -344,11 +366,10 @@ export class AssetPage implements OnInit, OnDestroy {
                             this.assetNumber = this._assets.currentLoadedParams.page ? this.assetIndex + 1 + ((this._assets.currentLoadedParams.page - 1) * this._assets.currentLoadedParams.size) : this.assetIndex + 1;
                         }
                     }
-
-
-                    // Set image share link
-                    this.generateImgURL(this.assetIds[0])
                 }
+
+                // Set image share link
+                this.generateImgURL(this.assetIds[0], this.encryptedAccess || this.fromOpenLibrary)
 
                 // For "Back to Results" link and pagination, look for prevRouteTS to set prevRouteParams
                 if (routeParams['prevRouteTS']) {
@@ -389,6 +410,7 @@ export class AssetPage implements OnInit, OnDestroy {
         // Subscribe to pagination values
         this.subscriptions.push(
             this._assets.pagination.subscribe((pagination) => {
+                console.log("Pagination subscription returned")
                 this.pagination.page = parseInt(pagination.page);
                 this.pagination.size = parseInt(pagination.size);
                 if (this.originPage < 1) {
@@ -409,6 +431,7 @@ export class AssetPage implements OnInit, OnDestroy {
         );
 
         this._assets.unAuthorizedAsset.subscribe((value) => {
+            console.log("unauthorizedAsset subscription returned")
             if (value) {
                 this.showAccessDeniedModal = true
             }
@@ -418,9 +441,9 @@ export class AssetPage implements OnInit, OnDestroy {
         this.isMSAgent = this.navigator.msSaveOrOpenBlob !== undefined
 
       // Load Ethnio survey
-      if (this._appConfig.config.siteID !== 'SAHARA') {
-        this.scriptService.loadScript('ethnio-survey')
-      }
+      // if (this._appConfig.config.siteID !== 'SAHARA') {
+      //   this.scriptService.loadScript('ethnio-survey')
+      // }
 
     } // OnInit
 
@@ -430,11 +453,13 @@ export class AssetPage implements OnInit, OnDestroy {
 
 
     handleLoadedMetadata(asset: Asset, assetIndex: number) {
+        console.log("Handle loaded metadata for " + asset['objectId'])
         // Reset modals if new data comes in
         this.showAccessDeniedModal = false
         this.showServerErrorModal = false
 
         if (asset && asset['error']) {
+            console.log("Asset error")
             let err = asset['error']
             if (err.status === 403 || err.message == 'Unable to load metadata!') {
                 // here is where we make the "access denied" modal appear
@@ -452,12 +477,14 @@ export class AssetPage implements OnInit, OnDestroy {
                 this.showServerErrorModal = true
             }
         } else {
+            if(!this.assets) {
+                this.assets = []
+            }
             this.assets[assetIndex] = asset
             if (assetIndex == 0) {
                 let tileSource: any = asset.tileSource
                 this.multiviewItems =  Array.isArray(tileSource) ? true : false
                 this._title.setTitle(asset.title)
-                // TO-DO: Only reference document client-side
                 this.meta.updateTag({name: 'DC.type', content: 'Artwork'})
                 this.meta.updateTag({name: 'DC.title', content: asset.title})
                 // this.meta.updateTag({name: 'asset.id"', content: asset.id})
@@ -492,18 +519,16 @@ export class AssetPage implements OnInit, OnDestroy {
                     this.assets[0].formattedMetadata['Collection'] = splitValues
                 }
 
-
-
                 // Load related results from jstor
                 if (this.relatedResFlag) {
                     this.getJstorRelatedResults(asset)
                 }
 
                 // Update OGP meta tags
-                this.meta.updateTag({ property: "og:title", content: asset.title }, 'property="og:title"')
-                this.meta.updateTag({ property: "og:description", content: asset.formattedMetadata['Description'] && asset.formattedMetadata['Description'][0] ? asset.formattedMetadata['Description'][0] : '' }, 'property="og:description"')
-                this.meta.updateTag({ property: "og:url", content: this._assets.getShareLink(asset.id) }, 'property="og:url"')
-                this.meta.updateTag({ property: "og:image", content: asset.thumbnail_url ? 'https:' + asset.thumbnail_url : '' }, 'property="og:image"')
+                this.meta.updateTag({ property: 'og:title', content: asset.title }, 'property="og:title"')
+                this.meta.updateTag({ property: 'og:description', content: asset.formattedMetadata['Description'] && asset.formattedMetadata['Description'][0] ? asset.formattedMetadata['Description'][0] : '' }, 'property="og:description"')
+                this.meta.updateTag({ property: 'og:url', content: this._assets.getShareLink(asset.id) }, 'property="og:url"')
+                this.meta.updateTag({ property: 'og:image', content: asset.thumbnail_url ? 'https:' + asset.thumbnail_url : '' }, 'property="og:image"')
             }
             // Assign collections array for this asset. Provided in metadata
             this.collections = asset.collections
@@ -511,20 +536,29 @@ export class AssetPage implements OnInit, OnDestroy {
         }
         // Set download link
         this.setDownloadFull()
+        
+        if (this.assets[0].formattedMetadata) {
+            // Loop over Rights fields and set rights statement values via isRightStatement
+            for (let i = 0; i < this.assets[0].formattedMetadata.Rights.length; i++) {
+                let rightsField = this.assets[0].formattedMetadata.Rights[i]
+                this.isRightStatement(rightsField)
+            }
+        }   
     }
 
     /**
      * Maintains the isFullscreen variable, as set by child AssetViewers
      */
     updateFullscreenVar(isFullscreen: boolean): void {
+        console.log("update fullscreen var")
         if (!isFullscreen) {
             this.showAssetDrawer = false
             if (this.originPage > 0 && this.pagination.page !== this.originPage) {
                 this.pagination.page = this.originPage
                 this._assets.loadAssetPage(this.pagination.page)
             }
-            this.assets.splice(1)
-            this.assetIds.splice(1)
+            // this.assets.splice(1)
+            // this.assetIds.splice(1)
         } else if (Array.isArray(this.assets[0].tileSource)){ // Log GA event for opening a multi view item in Fullscreen
             this.angulartics.eventTrack.next({ action: 'multiViewItemFullscreen', properties: { category: this._auth.getGACategory(), label: this.assets[0].id } });
         }
@@ -544,7 +578,7 @@ export class AssetPage implements OnInit, OnDestroy {
      */
     setDownloadFull(): void {
         let url = this.assets[0] ? this.assets[0].downloadLink : '';
-        if (this.assetGroupId) {
+        if (this.assetGroupId && url.indexOf("/media/") === -1 ) {
             // Group id needs to be passed to allow download for images accessed via groups
             // - Binder prefers lowercase service url params
             url = url + '&groupid=' + this.assetGroupId
@@ -623,7 +657,8 @@ export class AssetPage implements OnInit, OnDestroy {
         let collection = asset.formattedMetadata['Collection'] && asset.formattedMetadata['Collection'][0] ? asset.formattedMetadata['Collection'][0] : ''
         let id = asset.id
         let email = this.user.username
-        return baseUrl + '?name=' + name + '&collectionName=' + collection + '&id=' + id + '&email=' + email
+        let ssid = asset.SSID
+        return baseUrl + '?name=' + name + '&collectionName=' + collection + '&id=' + id + '&email=' + email + '&ssid=' + ssid
     }
 
     /**
@@ -676,6 +711,28 @@ export class AssetPage implements OnInit, OnDestroy {
         return link
     }
 
+    /**
+     * isRightStatement sets rightsLink and rightsImg values and
+     * returns boolean if an asset has a rights statement
+     * @param rights_text string
+     */
+    public isRightStatement(rights_text: string): boolean {
+
+      // Handle extra spaces and differences in punctuation in Rights fields
+      // by doing uppercase comparison of alphanumeric chars only
+      let reg = /[^a-zA-Z0-9]/
+
+      for (let i = 0; i < rights.length; i++) {
+        if (rights[i].name.split(reg).join('').toUpperCase() === rights_text.split(reg).join('').toUpperCase()) {
+          this.rightsText = rights_text
+          this.rightsLink = rights[i].link
+          this.rightsImg = rights[i].img
+          return true
+        }
+      }
+      return false
+    }
+
     private handleSkipAsset(): void {
         if (this.browseAssetDirection === 'prev') {
             this.showPrevAsset()
@@ -710,6 +767,7 @@ export class AssetPage implements OnInit, OnDestroy {
 
     // Calculate the index of current asset from the previous assets result set
     private currentAssetIndex(): number {
+        console.log("currentAssetIndex")
         let assetIndex: number = 1
         let assetFound = false
         if (this.assetIds[0]) {
@@ -821,8 +879,8 @@ export class AssetPage implements OnInit, OnDestroy {
         }
     }
 
-    private generateImgURL(assetId: string): void {
-        this.generatedImgURL = this._assets.getShareLink(assetId);
+    private generateImgURL(assetId: string, external?: boolean): void {
+        this.generatedImgURL = this._assets.getShareLink(assetId, external);
     }
 
     /**
@@ -1189,7 +1247,7 @@ export class AssetPage implements OnInit, OnDestroy {
                             asset_metadata: formValue
                         })
 
-                        this.closeEditDetails('Continue')
+                        this.closeEditDetails(1)
 
                         // Reload asset metadata
                         this._router.navigate(['/asset', ''])
@@ -1308,20 +1366,24 @@ export class AssetPage implements OnInit, OnDestroy {
         return fieldLabelMap[field]
     }
 
-    private closeEditDetails(action: string): void {
+    private closeEditDetails(confirmed: number): void {
         this.uiMessages = {}
         // Hide and reset the edit details form
-        if (action && action === 'Continue') {
+        if (confirmed === 1) {
             this.showEditDetails = false
             this.editDetailsForm.reset()
+        } else {
+            // Do nothing
         }
         this.showExitEdit = false
     }
 
-    private closeDeletePC(action: string): void {
-        if (action && action == 'Confirm') {
+    private closeDeletePC(confirmed: number): void {
+        if (confirmed === 1) {
+            // Confirmed
             this.deleteAsset()
-        } else {
+        } else if (confirmed === 0) {
+            // Canceled
             this.showDeletePCModal = false
         }
     }
@@ -1354,6 +1416,28 @@ export class AssetPage implements OnInit, OnDestroy {
         } else {
             this.angulartics.eventTrack.next({ action: 'multiViewPageViaThumbnail', properties: { category: this._auth.getGACategory(), label: this.assets[0].id } })
         }
+    }
+
+    private closeDropdowns(): void{
+        let dropdownElements: Array<HTMLElement> = Array.from( document.querySelectorAll('.btn-row .dropdown') )
+        for (let dropdownElement of dropdownElements){
+            dropdownElement.classList.remove('show')
+            dropdownElement.children[0].setAttribute('aria-expanded', 'false')
+            dropdownElement.children[1].classList.remove('show')
+        }
+    }
+
+    // Adding keyboard arrow keys navigation between download button options
+    downloadOptsArrowDown(element: any): void{
+        let focusChildIndex = element.id === 'downloadAssetDropdown' && element.getAttribute('aria-expanded') ? 0 : 1
+        let focusElement = <HTMLElement>(document.querySelectorAll('.dropdown-menu a')[focusChildIndex])
+        focusElement.focus()
+    }
+
+    downloadOptsArrowUp(element: any): void{
+        let focusElementSelector = element.id === 'downloadViewLink' ? '#downloadAssetLink' : '#downloadAssetDropdown'
+        let focusElement = <HTMLElement>(document.querySelector(focusElementSelector))
+        focusElement.focus()
     }
 
 }

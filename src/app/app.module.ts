@@ -2,13 +2,11 @@ import { ApplicationRef, NgModule, Inject, APP_ID, PLATFORM_ID } from '@angular/
 import { BrowserModule, Title } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule, HttpClient } from '@angular/common/http';
-import { NavigationEnd, Router, RouteReuseStrategy, RouterModule, UrlSerializer } from '@angular/router';
+import { NavigationEnd, Router, RouteReuseStrategy, RouterModule, UrlSerializer, PreloadAllModules } from '@angular/router';
 // import { removeNgStyles, createNewHosts, createInputTransfer } from '@angularclass/hmr';
 import { DeviceDetectorModule } from 'ngx-device-detector';
 import { DatePipe, isPlatformBrowser } from '@angular/common'
 
-// Ithaka/Artstor Dependencies
-import { ArtstorViewerModule } from 'artstor-viewer'
 
 /*
  * Platform and Environment providers/directives/pipes
@@ -55,10 +53,10 @@ import { CategoryPage } from './category-page'
 import { ImageGroupPPPage } from './image-group-pp-page'
 import { AssetPPPage } from './asset-pp-page'
 import { ClusterPage } from './cluster-page'
-import { BrowsePage, LibraryComponent, IgGroupFilterPipe, BrowseCommonsComponent,
+import { BrowsePage, LibraryComponent, AdlCollectionFilterPipe, IgGroupFilterPipe, BrowseCommonsComponent,
   MyCollectionsComponent, BrowseInstitutionComponent, BrowseGroupsComponent, TagComponent, CardViewComponent,
   TagsListComponent, TagFiltersService } from './browse-page'
-import { AssetPage, AgreeModalComponent } from './asset-page'
+import { AssetPage, AgreeModalComponent, ArtstorViewerComponent } from './asset-page'
 import { AccountPage } from './account-page'
 import { AssociatedPage } from './associated-page'
 import { ImageGroupPage, PptModalComponent } from './image-group-page'
@@ -101,7 +99,6 @@ import {
   GroupService,
   ImageGroupService,
   LogService,
-  MetadataService,
   TitleService,
   ToolboxService,
   TypeIdPipe,
@@ -109,6 +106,7 @@ import {
   PersonalCollectionService,
   AccountService
 } from './shared'
+import { MetadataService } from './_services'
 
 import { LocalPCService } from './_local-pc-asset.service'
 import { AssetFiltersService } from './asset-filters/asset-filters.service'
@@ -173,6 +171,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     AssetFilters,
     AssetGrid,
     AssetPage,
+    ArtstorViewerComponent,
     AssociatedPage,
     AssetPPPage,
     BrowseCommonsComponent,
@@ -199,6 +198,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     KeysPipe,
     LibraryComponent,
     IgGroupFilterPipe,
+    AdlCollectionFilterPipe,
     LinkifyPipe,
     LinkPage,
     Login,
@@ -243,8 +243,11 @@ export function HttpLoaderFactory(http: HttpClient) {
     NgxTagInputModule,
     Ng2CompleterModule,
     FileUploadModule,
-    ArtstorViewerModule,
-    RouterModule.forRoot(ROUTES, { useHash: true }),
+    RouterModule.forRoot(ROUTES, { 
+        useHash: false,
+        preloadingStrategy: PreloadAllModules,
+        initialNavigation: 'enabled' 
+      }),
     DeviceDetectorModule.forRoot(),
     Angulartics2Module.forRoot(),
     TranslateModule.forRoot({
@@ -258,6 +261,9 @@ export function HttpLoaderFactory(http: HttpClient) {
     //- TO-DO: Enable NgIdle with Universal
     NgIdleKeepaliveModule.forRoot(),
     // SortablejsModule.forRoot({ animation: 150 })
+  ],
+  exports: [
+    RouterModule
   ],
   providers: [ // expose our Services and Providers into Angular's dependency injection
     ENV_PROVIDERS,

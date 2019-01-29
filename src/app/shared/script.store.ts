@@ -4,5 +4,6 @@ interface Scripts {
 }
 export const ScriptStore: Scripts[] = [
   { name: 'zendesk', src: '../../assets/js/zendesk.js' },
-  { name: 'ethnio-survey', src: '//ethn.io/89097.js' }
+  // Current survey: Image groups
+  { name: 'ethnio-survey', src: '//ethn.io/32197.js' }
 ];

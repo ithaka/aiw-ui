@@ -12,6 +12,7 @@ export class PaginationComponent implements OnInit {
   @Input() right: boolean;
 
   @Output() goToPage: EventEmitter<any> = new EventEmitter();
+  @Output() paginationFocused: EventEmitter<boolean> = new EventEmitter() // Invoke pagination focused in parent component to close sort dropdown
 
   constructor() { }
 

@@ -38,7 +38,7 @@ export class AssetSearchService {
   public latestSearchRequestId: string
 
   constructor(
-    private http: HttpClient,
+    private _http: HttpClient,
     private _filters: AssetFiltersService,
     private _auth: AuthService,
     private _app: AppConfig
@@ -53,7 +53,7 @@ export class AssetSearchService {
   public downloadViewBlob(url: string): Observable<any> {
 
     let res: Observable<Blob>
-      res = this.http.get(url, {
+      res = this._http.get(url, {
         responseType: 'blob'
       })
 
@@ -107,7 +107,7 @@ export class AssetSearchService {
           //   "limit" : 15
           // }
           {
-            "name": "contributinginstitutionid",
+            "name": "donatinginstitutionids",
             "mincount": 1,
             "limit": 400
           }
@@ -272,7 +272,7 @@ export class AssetSearchService {
 
     query['filter_query'] = filterArray
 
-    return this.http.post(this._auth.getSearchUrl(), query, { withCredentials: true })
+    return this._http.post(this._auth.getSearchUrl(), query, { withCredentials: true })
   }
 
   /**
@@ -352,7 +352,7 @@ export class AssetSearchService {
 
     this.applyFilters(query, institutionalTypeFilter, options, sortIndex, filterOptions)
 
-    return this.http.post<RawSearchResponse>(
+    return this._http.post<RawSearchResponse>(
       this._auth.getSearchUrl(),
       query,
       { withCredentials: true }
@@ -395,7 +395,7 @@ export class AssetSearchService {
               return item['sequenceNum'] === 1
             })
 
-            cleanedAsset.thumbnailUrls.push(this.makeThumbUrl(compoundAsset[0].thumbnailSizeOnePath, 2, true))
+            cleanedAsset.thumbnailUrls.push(this._auth.getThumbUrl(true) + compoundAsset[0].thumbnailSizeOnePath)
           }
           else { // make the thumbnail urls and add them to the array
             for (let i = 1; i <= 5; i++) {
@@ -447,7 +447,7 @@ export class AssetSearchService {
       ]
     }
 
-    return this.http.post<SearchResponse>(
+    return this._http.post<SearchResponse>(
       'http://search-service.apps.test.cirrostratus.org/browse/',
       query,
       { withCredentials: true }
@@ -464,7 +464,7 @@ export class AssetSearchService {
       content_types: ['art']
     }
 
-    return this.http.post<SearchResponse>(
+    return this._http.post<SearchResponse>(
       this._auth.getSearchUrl(),
       assetQuery,
       { withCredentials: true }

@@ -8,7 +8,7 @@
   )
     .inner-wrapper
       h3.header-upload {{ 'UPLOAD_IMAGES_MODAL.DROP_TXT' | translate }}
-      button.btn.btn-primary.file-select-btn(type="button", (click)="file.click()") {{ 'UPLOAD_IMAGES_MODAL.SELECT_BUTTON_TXT' | translate }}
+      button.btn.btn-primary.file-select-btn(type="button", (click)="file.click()", tabindex="0", aria-label="Browse: Select to choose a jpeg file to upload.") {{ 'UPLOAD_IMAGES_MODAL.SELECT_BUTTON_TXT' | translate }}
       input(
         type="file",
         accept=".jpg,.jpeg",
@@ -23,4 +23,4 @@
             i.icon.icon-loading
       .file-name.error-wrap(*ngIf="invalidFiles && invalidFiles.length > 0")
         .error-msg(*ngFor="let file of invalidFiles") "{{ file.name }}" is not a valid JPEG
-  a.btn.btn-link.help(href="http://support.artstor.org/?article-category=09-using-your-own-images", target="_blank") {{ 'UPLOAD_IMAGES_MODAL.HELP' | translate }}
+  a.btn.btn-link.help(href="http://support.artstor.org/?article-category=09-using-your-own-images", target="_blank", tabindex="0", (keydown.tab)="helpTabKeyDown($event)") {{ 'UPLOAD_IMAGES_MODAL.HELP' | translate }}

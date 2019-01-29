@@ -39,7 +39,7 @@ export class DomUtilityService {
    */
   public byTagName(tagName: string) {
     if (this.isBrowser) {
-      return document.getElementsByTagName(tagName);
+      return document.querySelector(tagName);
     }
   }
 

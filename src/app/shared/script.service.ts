@@ -1,6 +1,7 @@
-import {Injectable} from '@angular/core';
-import {ScriptStore} from './script.store';
-import { DomUtilityService } from 'app/shared';
+import { Injectable, PLATFORM_ID, Inject } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
+
+import { DomUtilityService, ScriptStore } from '../shared';
 
 declare var document: any;
 
@@ -8,8 +9,12 @@ declare var document: any;
 export class ScriptService {
 
     private scripts: any = {};
+    private isBrowser: boolean
 
-    constructor(private _dom: DomUtilityService) {
+    constructor(private _dom: DomUtilityService, @Inject(PLATFORM_ID) private platformId: Object,) {
+        // Set platform
+        this.isBrowser = isPlatformBrowser(this.platformId)
+        // Populate available scripts
         ScriptStore.forEach((script: any) => {
             this.scripts[script.name] = {
                 loaded: false,
@@ -26,7 +31,9 @@ export class ScriptService {
 
     loadScript(name: string) {
         return new Promise((resolve, reject) => {
-            // resolve if already loaded
+            if (!this.isBrowser) {
+                resolve({script: name, loaded: false, status: 'server_rendered'})
+            }
             if (this.scripts[name].loaded) {
                 resolve({script: name, loaded: true, status: 'already_loaded'});
             }
@@ -53,7 +60,7 @@ export class ScriptService {
                     };
                 }
                 script.onerror = (error: any) => resolve({script: name, loaded: false, status: 'not_loaded'});
-                this._dom.byTagName('head')[0].appendChild(script);
+                this._dom.byTagName('head').appendChild(script);
             }
         });
     }

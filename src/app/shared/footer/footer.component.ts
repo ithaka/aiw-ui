@@ -35,7 +35,7 @@ export class Footer {
     public _auth: AuthService,
     @Inject(PLATFORM_ID) private platformId: Object
   ) {
-    console.log("Constructing footer...")
+    // console.log("Constructing footer...")
     this.siteID = this._appConfig.config.siteID;
     // Get version number
     this.appVersion = version

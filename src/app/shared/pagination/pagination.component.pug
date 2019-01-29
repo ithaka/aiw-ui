@@ -1,21 +1,18 @@
-ul.pagination([class.right]="right")
+.pagination([class.right]="right")
   li.page-item
-    button.page-link((click)="goToPage.emit(1)", [disabled]="!pageObj.page || pageObj.page <= 1", title="First", aria-label="First", (keyup.enter)="goToPage.emit(1)", tabindex="3")
+    button.page-link((click)="goToPage.emit(1)", [disabled]="!pageObj.page || pageObj.page <= 1", title="First", (keyup.enter)="goToPage.emit(1)", tabindex="3", aria-label="First page of results", (focus)="paginationFocused.emit()")
       span(aria-hidden="true") |&#10094;
-      span.sr-only First
   li.page-item
-    button.page-link((click)="goToPage.emit(pageObj.page - 1)", [disabled]="!pageObj.page || pageObj.page <= 1", title="Previous", aria-label="Previous", (keyup.enter)="goToPage.emit(pageObj.page - 1)", tabindex="3")
+    button.page-link((click)="goToPage.emit(pageObj.page - 1)", [disabled]="!pageObj.page || pageObj.page <= 1", title="Previous", (keyup.enter)="goToPage.emit(pageObj.page - 1)", tabindex="3", aria-label="Previous page", (focus)="paginationFocused.emit()")
       span(aria-hidden="true") &#10094;
-      span.sr-only Previous
   li.page-item
-    input.page-input(type="number", min="1", (keypress)="pageNumberKeyPress($event)", (keyup)="pageNumberKeyUp($event)", [(ngModel)]="pageObj.page", (keyup.enter)="goToPage.emit(pageObj.page)", tabindex="3")
+    label.sr-only(for="currentpageinput") Page {{pageObj.page}} of {{pageObj.totalPages}}
+    input.page-input#currentpageinput(type="number", min="1", (keypress)="pageNumberKeyPress($event)", (keyup)="pageNumberKeyUp($event)", [(ngModel)]="pageObj.page", (keyup.enter)="goToPage.emit(pageObj.page)", tabindex="3", (focus)="paginationFocused.emit()")
     = " "
     span.page-info of {{ pageObj.totalPages }}
   li.page-item
-    button.page-link((click)="goToPage.emit(pageObj.page + 1)", [disabled]="!pageObj.page || pageObj.page >= pageObj.totalPages", title="Next", aria-label="Next", (keyup.enter)="goToPage.emit(pageObj.page + 1)", tabindex="3")
+    button.page-link((click)="goToPage.emit(pageObj.page + 1)", [disabled]="!pageObj.page || pageObj.page >= pageObj.totalPages", title="Next", (keyup.enter)="goToPage.emit(pageObj.page + 1)", tabindex="3", aria-label="Next Page")
       span(aria-hidden="true") &#10095;
-      span.sr-only Next
   li.page-item(*ngIf="!solrFlag")
-    button.page-link((click)="goToPage.emit(pageObj.totalPages)", [disabled]="!pageObj.page || pageObj.page >= pageObj.totalPages", title="Last", aria-label="Last", (keyup.enter)="goToPage.emit(pageObj.totalPages)", tabindex="3")
+    button.page-link((click)="goToPage.emit(pageObj.totalPages)", [disabled]="!pageObj.page || pageObj.page >= pageObj.totalPages", title="Last", (keyup.enter)="goToPage.emit(pageObj.totalPages)", tabindex="3", aria-label="Last Page")
       span(aria-hidden="true") &#10095;|
-      span.sr-only Last

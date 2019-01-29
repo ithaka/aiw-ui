@@ -71,7 +71,7 @@ export class Login implements OnInit, OnDestroy {
     private _flags: FlagService,
     private _storage: ArtstorStorageService
   ) {
-    console.log("Constructing login component...")
+    // console.log("Constructing login component...")
   }
 
   ngOnInit() {
@@ -253,7 +253,7 @@ export class Login implements OnInit, OnDestroy {
         window.open(selectedInst.artstorShibbolethLoginUrl);
         return;
       }
-      let origin = window.location.origin + '/#/home';
+      let origin = window.location.origin + '/home';
       let ssoSubdomain = this._auth.getSubdomain() == 'library' ? 'sso' : 'sso.' + this._auth.getSubdomain()
       window.open('https://' + ssoSubdomain + '.artstor.org/sso/shibssoinit?idpEntityID=' + encodeURIComponent(url) + '&o=' + encodeURIComponent(origin));
     }
