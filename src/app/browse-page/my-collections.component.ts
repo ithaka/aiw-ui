@@ -5,8 +5,8 @@ import { map } from 'rxjs/operators'
 import { HttpClient, HttpHeaders } from '@angular/common/http'
 
 
-import { TagsService } from './tags.service'
-import { Tag } from './tag/tag.class'
+//import { TagsService } from './tags.service'
+//import { Tag } from './tag/tag.class'
 import { LockerService } from 'app/_services'
 import { TitleService, AssetSearchService, AuthService, AssetService, FlagService } from '../shared'
 
@@ -22,20 +22,19 @@ export class MyCollectionsComponent implements OnInit {
   //   private showUploadImgsModal: boolean = false;
   public showEditPCModal: boolean = false
 
-  public pcollections: any
-  public myPersonalCollection: Tag = new Tag('37436', 'My Personal Collection', true, null, { label: 'pcollection', folder: true }, true);
+  public pcollections: any = []
 
   public loading: boolean = false;
   private subscriptions: Subscription[] = [];
   private categories = [];
-  private tags: Tag[] = [];
+  //private tags: Tag[] = [];
   private expandedCategories: any = {}
   private selectedBrowseId: string = ''
 
   private editTagId: string = '';
 
   // Reference activeTag for description on side
-  private activeTag: Tag;
+  //private activeTag: Tag;
   constructor(
     private _auth: AuthService,
     private _flags: FlagService,
@@ -44,7 +43,7 @@ export class MyCollectionsComponent implements OnInit {
     private _search: AssetSearchService,
     private _assets: AssetService,
     private _title: TitleService,
-    private _tags: TagsService,
+    //private _tags: TagsService,
     private _http: HttpClient,
     private _locker: LockerService
   ) {
@@ -52,9 +51,6 @@ export class MyCollectionsComponent implements OnInit {
   }
 
   ngOnInit() {
-    // Add tag for My Personal Collection
-    let colTag = new Tag('37436', 'My Personal Collection', true, null, { label: 'pcollection', folder: true }, true);
-    this.tags.push(colTag);
 
     // Set page title
     this._title.setSubtitle('Browse My Collections')
@@ -129,14 +125,14 @@ export class MyCollectionsComponent implements OnInit {
         })).subscribe()
     }
 
-    // Set tags
-    for (let col of this.pcollections) {
-      // My Personal Collection
-      if (col.collectionid === '37436') {
-        // Add tag for My Personal Collection
-        this.tags.push(this.myPersonalCollection);
-      }
-    }
+    // // Set tags
+    // for (let col of this.pcollections) {
+    //   // My Personal Collection
+    //   if (col.collectionid === '37436') {
+    //     // Add tag for My Personal Collection
+    //     this.pcollections.push(this.myPersonalCollection);
+    //   }
+    // }
   }
 
   toggleInfo(node) {
