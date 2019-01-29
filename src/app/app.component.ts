@@ -57,21 +57,21 @@ export class AppComponent {
     private meta: Meta,
     @Inject(PLATFORM_ID) private platformId: Object
   ) {
-    console.log("Constructing app component")
-    // append query param to dodge caching
-    // let langStr = 'en.json?no-cache=' + new Date().valueOf()
+    console.info("Constructing app component")
+    // Append timestamp param to dodge caching
     if (isPlatformBrowser(this.platformId)) {
+      let langStr = 'en.json?no-cache=' + new Date().valueOf()
       // Use the translate loader to pull translations client-side
-      this.translate.use('en');
+      this.translate.use(langStr);
+      this.translate.setDefaultLang(langStr);
       // Start GA trackiong
       angulartics2GoogleAnalytics.startTracking()
     }  else {
       // Reference translation json directly server-side
       // Must be set *before* setting default
       this.translate.setTranslation('en', enTranslation, true)
+      this.translate.setDefaultLang('en');
     }
-    // this language will be used as a fallback when a translation isn't found in the current language
-    this.translate.setDefaultLang('en');
 
     this.title = this._app.config.pageTitle
 
