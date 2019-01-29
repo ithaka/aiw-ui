@@ -79,14 +79,16 @@ export class MyCollectionsComponent implements OnInit {
       this._http.get(this._auth.getHostname() + '/api/v1/collections?type=' + type, options).pipe(
         map(res => {
           this.pcollections = res
+
+          tempMyCol = this.pcollections.filter((col) => { return col.collectionid === '37436' })[0] // My PC object
+          tempMyCol.collectionname = 'My Personal Collection' // Change name from 'Global'
+          this.pcollections = this.pcollections.filter((col) => { return col.collectionid !== '37436' }) // filter out initial My PC object
+          this.pcollections.unshift(tempMyCol) // prepend My PC object back to pcollections
+
+          this._locker.set('37436', this.pcollections[0])
           this._locker.set('pcollections', this.pcollections)
         })).subscribe()
     }
-
-    tempMyCol = this.pcollections.filter((col) => { return col.collectionid === '37436' })[0] // My PC object
-    tempMyCol.collectionname = 'My Personal Collection' // Change name from 'Global'
-    this.pcollections = this.pcollections.filter((col) => { return col.collectionid !== '37436' }) // filter out initial My PC object
-    this.pcollections.unshift(tempMyCol) // prepend My PC object back to pcollections
   }
 
 }
