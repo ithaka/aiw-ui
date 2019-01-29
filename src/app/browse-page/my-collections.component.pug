@@ -6,11 +6,10 @@ nav.nav.nav-inline.browse-nav
       ng-container(*ngIf="isLoggedIn")
         ul.filter-list
           li.filter.filter--browse(*ngFor="let col of pcollections")
-            a.tag-link(id="{{ col.collectionid }}", title="{{ col.collectionname }}", [routerLink]="[ '/collection', col.collectionid ]")
+            a.tag-link(id="{{ col.collectionid }}", title="{{ col.collectionname }}",
+            [routerLink]="col.collectionid === '37436' ? ['/pcollection', col.collectionid] : ['/collection', col.collectionid ]")
               span.notranslate {{ col.collectionname }}
-              span.edit(*ngIf="col.collectionid === '37436' ", (click)="showEditModal(col)", tabIndex="0", role="button", aria-label="Add items to My Personal Collection") Edit
-            //- ADD edit, and editTag
-            //-ang-tag([tag]="tag", [edit]="tag.type && tag.type.label === 'pcollection'", (editTag)="showEditModal(tag)")
+            span.edit(*ngIf="col.collectionid === '37436' ", (click)="showEditPCModal = true", tabIndex="0", role="button", aria-label="Add items to My Personal Collection") Edit
       .alert.alert-info(*ngIf="!isLoggedIn")
         h3 {{ 'BROWSE.ERRORS.LOGIN_PC_HEADING' | translate }}
         br

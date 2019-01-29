@@ -13,7 +13,7 @@ import { TitleService, AssetSearchService, AuthService, AssetService, FlagServic
 @Component({
   selector: 'ang-my-collections',
   templateUrl: 'my-collections.component.pug',
-  styleUrls: ['./browse-page.component.scss']
+  styleUrls: ['./browse-page.component.scss', './tag/tag.component.scss']
 })
 export class MyCollectionsComponent implements OnInit {
   public unaffiliatedUser: boolean = false
@@ -55,25 +55,25 @@ export class MyCollectionsComponent implements OnInit {
     // Set page title
     this._title.setSubtitle('Browse My Collections')
 
-    this.subscriptions.push(
-      this.route.params.pipe(
-        map((params: Params) => {
-          if (params) {
-            if (params['viewId']) {
-              this.selectedBrowseId = params['viewId'];
-              // this.loadCategory();
-            }
+    // this.subscriptions.push(
+    //   this.route.params.pipe(
+    //     map((params: Params) => {
+    //       if (params) {
+    //         if (params['viewId']) {
+    //           this.selectedBrowseId = params['viewId'];
+    //           // this.loadCategory();
+    //         }
 
-            if (params['featureFlag']) {
-              this._flags[params['featureFlag']] = true;
-            }
+    //         if (params['featureFlag']) {
+    //           this._flags[params['featureFlag']] = true;
+    //         }
 
-            if (params['upload']) {
-              this.showEditPCModal = params['upload']
-            }
-          }
-        })).subscribe()
-    )
+    //         if (params['upload']) {
+    //           this.showEditPCModal = params['upload']
+    //         }
+    //       }
+    //     })).subscribe()
+    //)
 
     // Subscribe to User object updates
     this.subscriptions.push(
@@ -113,6 +113,7 @@ export class MyCollectionsComponent implements OnInit {
     this.loading = true
     let options = { withCredentials: true }
     let localPCollections = this._locker.get('pcollections')
+    let tempMyCol: any = {}
 
     if (localPCollections) {
       this.pcollections = localPCollections
@@ -121,18 +122,14 @@ export class MyCollectionsComponent implements OnInit {
       this._http.get(this._auth.getHostname() + '/api/v1/collections?type=' + type, options).pipe(
         map(res => {
           this.pcollections = res
-          console.log('PRIVATE COLLECTIONS: ', this.pcollections)
+          this._locker.set('pcollections', this.pcollections)
         })).subscribe()
     }
 
-    // // Set tags
-    // for (let col of this.pcollections) {
-    //   // My Personal Collection
-    //   if (col.collectionid === '37436') {
-    //     // Add tag for My Personal Collection
-    //     this.pcollections.push(this.myPersonalCollection);
-    //   }
-    // }
+    tempMyCol = this.pcollections.filter((col) => { return col.collectionid === '37436' })[0] // My PC object
+    tempMyCol.collectionname = 'My Personal Collection' // Change name from 'Global'
+    this.pcollections = this.pcollections.filter((col) => { return col.collectionid !== '37436' }) // filter out initial My PC object
+    this.pcollections.unshift(tempMyCol) // prepend My PC object back to pcollections
   }
 
   toggleInfo(node) {
