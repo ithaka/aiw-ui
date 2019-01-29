@@ -1,4 +1,6 @@
-import { Injectable } from '@angular/core';
+import { Injectable, PLATFORM_ID, Inject } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
+
 import { DomUtilityService, ScriptStore } from '../shared';
 
 declare var document: any;
@@ -7,8 +9,12 @@ declare var document: any;
 export class ScriptService {
 
     private scripts: any = {};
+    private isBrowser: boolean
 
-    constructor(private _dom: DomUtilityService) {
+    constructor(private _dom: DomUtilityService, @Inject(PLATFORM_ID) private platformId: Object,) {
+        // Set platform
+        this.isBrowser = isPlatformBrowser(this.platformId)
+        // Populate available scripts
         ScriptStore.forEach((script: any) => {
             this.scripts[script.name] = {
                 loaded: false,
@@ -25,37 +31,37 @@ export class ScriptService {
 
     loadScript(name: string) {
         return new Promise((resolve, reject) => {
-            resolve("k")
-            // @todo Handle client side only or something?
-            // // resolve if already loaded
-            // if (this.scripts[name].loaded) {
-            //     resolve({script: name, loaded: true, status: 'already_loaded'});
-            // }
-            // else {
-            //     // load script
-            //     let script = this._dom.create('script')
-            //     script.type = 'text/javascript'
-            //     script.async = 'true'
-            //     script.charset = 'utf-8'
-            //     script.src = this.scripts[name].src
-            //     script.id = name
-            //     if (script.readyState) {  // IE
-            //         script.onreadystatechange = () => {
-            //             if (script.readyState === 'loaded' || script.readyState === 'complete') {
-            //                 script.onreadystatechange = null;
-            //                 this.scripts[name].loaded = true;
-            //                 resolve({script: name, loaded: true, status: 'loaded'});
-            //             }
-            //         };
-            //     } else {  // Others
-            //         script.onload = () => {
-            //             this.scripts[name].loaded = true;
-            //             resolve({script: name, loaded: true, status: 'loaded'});
-            //         };
-            //     }
-            //     script.onerror = (error: any) => resolve({script: name, loaded: false, status: 'not_loaded'});
-            //     this._dom.byTagName('head')[0].appendChild(script);
-            // }
+            if (!this.isBrowser) {
+                resolve({script: name, loaded: false, status: 'server_rendered'})
+            }
+            if (this.scripts[name].loaded) {
+                resolve({script: name, loaded: true, status: 'already_loaded'});
+            }
+            else {
+                // load script
+                let script = this._dom.create('script')
+                script.type = 'text/javascript'
+                script.async = 'true'
+                script.charset = 'utf-8'
+                script.src = this.scripts[name].src
+                script.id = name
+                if (script.readyState) {  // IE
+                    script.onreadystatechange = () => {
+                        if (script.readyState === 'loaded' || script.readyState === 'complete') {
+                            script.onreadystatechange = null;
+                            this.scripts[name].loaded = true;
+                            resolve({script: name, loaded: true, status: 'loaded'});
+                        }
+                    };
+                } else {  // Others
+                    script.onload = () => {
+                        this.scripts[name].loaded = true;
+                        resolve({script: name, loaded: true, status: 'loaded'});
+                    };
+                }
+                script.onerror = (error: any) => resolve({script: name, loaded: false, status: 'not_loaded'});
+                this._dom.byTagName('head')[0].appendChild(script);
+            }
         });
     }
 
