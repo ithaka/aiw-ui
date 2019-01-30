@@ -1,7 +1,7 @@
-import { Component, OnInit, Output, Input, EventEmitter } from '@angular/core';
+import { Component, OnInit, Output, Input, EventEmitter } from '@angular/core'
 
-import { AuthService } from './../../shared/auth.service';
-import { Asset } from './../asset';
+import { AuthService } from './../../shared/auth.service'
+import { Asset } from './../asset'
 
 @Component({
   selector: 'ang-agree-modal',
@@ -12,10 +12,14 @@ export class AgreeModalComponent implements OnInit {
 
   /** Causes modal to be hidden */
   @Output()
-  closeModal = new EventEmitter();
+  closeModal = new EventEmitter()
   /** Tells asset-page to download the asset */
   @Output()
-  downloadAsset = new EventEmitter();
+  downloadAsset = new EventEmitter()
+  /** Asset.acceptedTerms */
+  @Output()
+  acceptedTerms = new EventEmitter()
+
   @Input()
   downloadUrl: string
   /** The value of the download attribute for Download View **/
@@ -32,8 +36,8 @@ export class AgreeModalComponent implements OnInit {
 
   ngOnInit() {
     // Set focus to the modal to make the links in the modal first thing to tab for accessibility
-    let htmlelement: HTMLElement = document.getElementById('modal');
-    htmlelement.focus();
+    let htmlelement: HTMLElement = document.getElementById('modal')
+    htmlelement.focus()
   }
 
   /**
@@ -41,6 +45,7 @@ export class AgreeModalComponent implements OnInit {
    */
   private agree(): void {
     this._auth.authorizeDownload()
+    this.acceptedTerms.emit()
     this.closeModal.emit()
   }
 

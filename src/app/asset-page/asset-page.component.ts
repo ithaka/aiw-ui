@@ -45,6 +45,9 @@ export class AssetPage implements OnInit, OnDestroy {
     public userSessionFresh: boolean = false
     public assetIds: string[] = []
 
+    // Whether user accepted download terms
+    public acceptedTerms: boolean = false
+
     /** controls whether or not the modals are visible */
     public showAgreeModal: boolean = false
     public showLoginModal: boolean = false
