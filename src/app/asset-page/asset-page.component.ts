@@ -68,7 +68,6 @@ export class AssetPage implements OnInit, OnDestroy {
 
     // Feature Flags
     public relatedResFlag: boolean = false
-    public solrMetadataFlag: boolean = false
     private encryptedAccess: boolean = false
     private document = document
     private URL = URL
@@ -193,7 +192,6 @@ export class AssetPage implements OnInit, OnDestroy {
 
     ngOnInit() {
         this.user = this._auth.getUser();
-        this.solrMetadataFlag = this._flags.solrMetadata
 
         // sets up subscription to allResults, which is the service providing thumbnails
         this.subscriptions.push(

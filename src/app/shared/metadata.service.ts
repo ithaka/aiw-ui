@@ -32,7 +32,7 @@ export class MetadataService {
      * @param assetId string Asset or object ID
      */
     public getMetadata(assetId: string, groupId?: string, legacyOverride?: boolean): Observable<MetadataRes> {
-        let legacyFlag = typeof legacyOverride !== 'undefined' ? legacyOverride : !this._flags.solrMetadata
+        let legacyFlag = typeof legacyOverride !== 'undefined' ? legacyOverride : false
         let url = environment.API_URL + '/api/v1/metadata?object_ids=' + assetId + "&legacy=" + legacyFlag
         if (groupId){
             // Groups service modifies certain access rights for shared assets

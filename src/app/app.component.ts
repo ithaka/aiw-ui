@@ -79,16 +79,6 @@ export class App {
         if (!(event.url.indexOf('browse') > -1) && !(event.url.indexOf('search') > -1) && !(event.url.indexOf('asset') > -1)) // Don't set focus to skip to main content on browse pages so that we can easily go between browse levels
           mainEl.focus()
 
-        // Detect featureflag=solrmetadata and set cookie
-        let routeParams = event.url.split(';')
-        for (let routeParam of routeParams) {
-          let key = routeParam.split('=')[0]
-          let value = routeParam.split('=')[1]
-          if (key === 'featureFlag' && value === 'solrMetadata') {
-            document.cookie = 'featureflag=solrmetadata;';
-          }
-        }
-
         let event_url_array = event.url.split('/')
         if (event_url_array && (event_url_array.length > 1) && (event_url_array[1] !== 'asset')){
           this.titleService.setTitle(this.title)
