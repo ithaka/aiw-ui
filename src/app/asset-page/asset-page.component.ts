@@ -26,7 +26,6 @@ import {
 import { TitleService } from '../shared/title.service'
 import { ScriptService } from '../shared/script.service'
 import { LocalPCService, LocalPCAsset } from '../_local-pc-asset.service'
-import { TourStep } from '../shared/tour/tour.service'
 import { APP_CONST } from '../app.constants'
 import { LockerService } from 'app/_services'
 import { AppConfig } from '../app.service'
@@ -154,55 +153,6 @@ export class AssetPage implements OnInit, OnDestroy {
         saveFailure?: boolean
     } = {}
 
-    private steps: TourStep[] = [
-        {
-            step: 1,
-            element: ['.btn--zoomIn'],
-            popover: {
-                position: 'bottom',
-                title: '<p>1 OF 5</p><b>Zoom and pan</b>',
-                description: 'You can zoom in with this button.',
-            }
-        },
-        {
-            step: 2,
-            element: ['.btn--zoomOut'],
-            popover: {
-                position: 'bottom',
-                title: '<p>2 OF 5</p><b>Zoom and pan</b>',
-                description: 'You can zoom out with this button.',
-            }
-        },
-        {
-            step: 3,
-            element: ['.btn--zoomFit'],
-            popover: {
-                position: 'bottom',
-                title: '<p>3 OF 5</p><b>Zoom and pan</b>',
-                description: 'You can fit the image with this button.',
-            }
-        },
-        {
-            step: 4,
-            element: ['.btn--fullScreen'],
-            popover: {
-                position: 'bottom',
-                title: '<p>4 OF 5</p><b>View full image and compare</b>',
-                description: 'If you came to this page from search or a group, you can enter fullscreen mode to see it side-by-side with others.'
-            }
-        },
-        {
-            step: 5,
-            element: ['.driver-find-group-btn'],
-            popover: {
-                position: 'bottom',
-                title: '<p>5 OF 5</p><b>Save the image for later</b>',
-                description: 'If you want to save the iamge for later, click this button.',
-            }
-        }
-    ]
-    private showTour: boolean = false
-
     // Flag for multiview items, true if the asset contains multiview items
     private multiviewItems: boolean = false
 
@@ -317,13 +267,6 @@ export class AssetPage implements OnInit, OnDestroy {
                 if (routeParams && routeParams['featureFlag']) {
                     this._flags[routeParams['featureFlag']] = true
                     this.relatedResFlag = this._flags['related-res-hack'] ? true : false
-                    if (routeParams['featureFlag'] === 'tour') {
-                        this.showTour = true
-                    }
-                    if (routeParams['featureFlag'] === 'solrMetadata') {
-                        this.solrMetadataFlag = true
-                    }
-
                 } else {
                     this.relatedResFlag = false
                 }

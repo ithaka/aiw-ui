@@ -1,5 +1,4 @@
 .container-fluid.asset-page(*ngIf="assetIds[0]", [class.fullscreen]="isFullscreen")
-  ang-guide-tour(*ngIf="showTour", [steps]="steps")
   .row
     //- View prev/next asset
     .title-nav-cntnr.col-md-12([class.hidden]="isFullscreen")
@@ -85,9 +84,7 @@
           //- * (mouseup) is a Firefox fix for firing the copy event
           button#assetpage-btn.btn.btn-secondary(*ngIf="user.isLoggedIn && assets[0].personalCollectionOwner === user['baseProfileId']", [class.active]="showEditDetails", (click)="loadEditDetailsForm()", tabindex="2", aria-label="Edit details for this item")
             | {{ 'ASSET_PAGE.BUTTONS.EDIT_DETAILS' | translate}}
-
-          //- the .driver-find-group-btn class is important for the tour to find it, be careful when removing or changing it
-          button#assetpage-btn.btn.btn-primary.driver-find-group-btn((click)="addAssetToIG()", (focus)="closeDropdowns()", (keydown.enter)="addAssetToIG()", tabindex="2", aria-label="Add this item to a group")
+          button#assetpage-btn.btn.btn-primary((click)="addAssetToIG()", (focus)="closeDropdowns()", (keydown.enter)="addAssetToIG()", tabindex="2", aria-label="Add this item to a group")
             | {{ 'ASSET_PAGE.BUTTONS.ADD_TO_GROUP' | translate }}
             //- i.icon.icon-add-white(aria-hidden="true")
           //- Download dropdown options
