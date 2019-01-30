@@ -18,7 +18,7 @@ export class AgreeModalComponent implements OnInit {
   downloadAsset = new EventEmitter()
   /** Asset.acceptedTerms */
   @Output()
-  acceptedTerms = new EventEmitter()
+  acceptedTerms = new EventEmitter(true)
 
   @Input()
   downloadUrl: string

@@ -423,7 +423,7 @@ export class AuthService implements CanActivate {
    * Gets user object from local storage
    */
   public getUser(): any {
-      let userObject = this.user.hasOwnProperty('status') ? this.user : this._locker.get('user')
+      let userObject = (this.user && this.user.hasOwnProperty('status')) ? this.user : this._locker.get('user')
       return userObject ? userObject : {}
   }
 
@@ -615,10 +615,12 @@ export class AuthService implements CanActivate {
   }
 
   public isPublicOnly(): boolean{
-    if (!this.user.hasOwnProperty('status')) {
-      this.user = JSON.parse(localStorage.getItem('user')).data
+    if (this.user && !this.user.hasOwnProperty('status')) {
+      this.user = JSON.parse(localStorage.getItem('user'))
     }
-
+    else {
+      this.user = this.getUser()
+    }
     return !(this.user && this.user.status)
   }
 
