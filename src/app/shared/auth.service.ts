@@ -49,6 +49,8 @@ export class AuthService implements CanActivate {
   private currentInstitutionObj: Observable<any> = this.institutionObjSource.asObservable();
 
   private userSource: BehaviorSubject<any> = new BehaviorSubject({});
+  private user: any = {}
+
 
   private idleState: string = 'Not started.';
 
@@ -421,7 +423,8 @@ export class AuthService implements CanActivate {
    * Gets user object from local storage
    */
   public getUser(): any {
-      return this._locker.get('user') ? this._locker.get('user') : {};
+      let userObject = this.user.hasOwnProperty('status') ? this.user : this._locker.get('user')
+      return userObject ? userObject : {}
   }
 
   /** Stores an object in local storage for you - your welcome */
@@ -612,7 +615,11 @@ export class AuthService implements CanActivate {
   }
 
   public isPublicOnly(): boolean{
-    return !(this.getUser() && this.getUser().status)
+    if (!this.user.hasOwnProperty('status')) {
+      this.user = JSON.parse(localStorage.getItem('user')).data
+    }
+
+    return !(this.user && this.user.status)
   }
 
 
@@ -675,7 +682,7 @@ export class AuthService implements CanActivate {
    * - Used to decorate the user object for saving
    */
   private decorateValidUser(data: any): any {
-    let currentUser = this.getUser()
+    let currentUser = this.user.hasOwnProperty('status') ? this.user : this.getUser()
     let newUser = data['user'] ? data['user'] : {}
     let currentUsername = currentUser.username
     let loggedInSessionLost = currentUser.isLoggedIn ? (!newUser.username || currentUsername !== newUser.username) : false;

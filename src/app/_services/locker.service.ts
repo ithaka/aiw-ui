@@ -14,22 +14,27 @@ export class LockerService {
   constructor(private _safeguard: Locker) { }
 
   public get(key: string): any {
+    console.log('KEY: ', key)
     return this._safeguard.get(DRIVERS.LOCAL, key)
   }
 
   public set(key: string, value: any): void {
+    console.log('KEY: ', key)
     return this._safeguard.set(DRIVERS.LOCAL, key, value)
   }
 
   public sessionGet(key: string): any {
+    console.log('KEY: ', key)
     return this._safeguard.get(DRIVERS.SESSION, key)
   }
 
   public sessionSet(key: string, value: any): void {
+    console.log('KEY: ', key)
     return this._safeguard.set(DRIVERS.SESSION, key, value)
   }
 
   public has(key: string): boolean {
+    console.log('KEY: ', key)
     return this._safeguard.has(DRIVERS.LOCAL, key)
   }
 
@@ -38,6 +43,7 @@ export class LockerService {
   }
 
   public remove(key: string): void {
+    console.log('KEY: ', key)
     return this._safeguard.remove(DRIVERS.LOCAL, key)
   }
 }
