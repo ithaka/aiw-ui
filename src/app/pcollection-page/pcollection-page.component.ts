@@ -144,7 +144,7 @@ export class PCollectionPage implements OnInit, OnDestroy {
   private getCollectionInfo(colId: string) {
 
     // We usually will have collection 37436 in local storage from /mycollections
-    // if not, the call collections service
+    // if not, then call collections service
     let pcollection = this._locker.get('37436')
 
     if (pcollection && pcollection.collectionid === '37436') {
@@ -226,7 +226,4 @@ export class PCollectionPage implements OnInit, OnDestroy {
     this._auth.store('publishingAssets', this.publishingAssets)
   }
 
-  // private updateSearchInRes(value: boolean): void{
-  //  this.searchInResults = value;
-  // }
 }

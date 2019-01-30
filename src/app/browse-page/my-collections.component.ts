@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core'
 import { Router, ActivatedRoute, Params } from '@angular/router'
 import { Subscription } from 'rxjs'
 import { map } from 'rxjs/operators'
-import { HttpClient, HttpHeaders } from '@angular/common/http'
+import { HttpClient } from '@angular/common/http'
 
 import { LockerService } from 'app/_services'
 import { TitleService, AssetSearchService, AuthService, AssetService, FlagService } from '../shared'
@@ -48,11 +48,11 @@ export class MyCollectionsComponent implements OnInit {
         map(userObj => {
           this.isLoggedIn = userObj.isLoggedIn
         },
-          (err) => { console.error(err) }
-        )).subscribe()
+        (err) => { console.error(err) }
+      )).subscribe()
     )
 
-    // // If user is logged-in get data for user's Private Collections
+    // If user is logged-in get data for user's Private Collections
     if (this.isLoggedIn) {
       this.getUserPCol('private')
     }
@@ -63,10 +63,12 @@ export class MyCollectionsComponent implements OnInit {
   }
 
   /**
-   * Load Private Collections
+   * genUserPCol - Load Private Collections
    * Used for loading user's Private Collections
+   * @param type string 'private'
+   * Note: /collections?type= accepts private, public, institution as well
    */
-  getUserPCol(type: string) {
+  getUserPCol(type: string): void {
     this.loading = true
     let options = { withCredentials: true }
     let localPCollections = this._locker.get('pcollections')
@@ -89,6 +91,8 @@ export class MyCollectionsComponent implements OnInit {
           this._locker.set('pcollections', this.pcollections)
         })).subscribe()
     }
+
+    this.loading = false
   }
 
 }

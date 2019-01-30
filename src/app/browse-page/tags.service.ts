@@ -21,10 +21,6 @@ export class TagsService {
     } else if (switchObj.type === 'library' && switchObj.collectionId) {
       return this.getCategories(null, switchObj.collectionId);
     }
-    // // Private Collections
-    // else if (switchObj.type === 'private') {
-    //   return this.loadCollectionsList('private')
-    // }
   }
 
   /**
@@ -40,17 +36,12 @@ export class TagsService {
       // Public Collections = Type #5
       colTypeValue = 5
     }
-    // } else if (type === 'private') {
-    //   // Private Collections = Type #6
-    //   colTypeValue = 6
-    // }
-
 
     if (colTypeValue) {
       // Use SOLR to load collection list by faceting on collectiontypenameid and filtering on colTypeValue
       return this._assets.categoryByFacet('collectiontypenameid', colTypeValue)
-        .then( (facetData) => {
-          if (facetData){
+        .then((facetData) => {
+          if (facetData) {
             // Filter for the required collectionType
             facetData = facetData.filter((facet) => {
               return parseInt(facet.name.split('|')[0]) === colTypeValue
@@ -84,25 +75,6 @@ export class TagsService {
         })
       }
   }
-    // else {
-    //   // Deprecated collection list call as fallback
-    //   return this._assets.getCollectionsList( type )
-    //     .toPromise()
-    //     .then((data) => {
-    //       if (data && data['Collections']) {
-    //         let tags: Tag[] = []
-    //         data['Collections'].forEach((collection, index) => {
-    //           let openable = collection.collectionType === 5 || collection.collectionType === 2
-    //           tags.push(new Tag(collection.collectionid, collection.collectionname, true, null, { label: 'collection', folder: true }, openable))
-    //         });
-    //         return tags
-    //       } else {
-    //         throw new Error('no Collections returned in data')
-    //       }
-
-    //     })
-    // }
-
 
   /**
    * Called by both getChildTags and initTags
