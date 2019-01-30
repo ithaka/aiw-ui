@@ -174,7 +174,7 @@ export class AuthService implements CanActivate {
 
     idle.onTimeout.pipe(
       map(() => {
-        let user = this.getUser();
+        let user = this.user || this.getUser();
         // console.log(user);
         if (user && user.isLoggedIn){
           this.expireSession();
@@ -203,7 +203,7 @@ export class AuthService implements CanActivate {
     this.resetIdleWatcher()
 
     // Initialize user and institution objects from localstorage
-    this.userSource.next(this.getUser())
+    this.userSource.next(this.user || this.getUser())
     let institution = this._locker.get('institution')
     if (institution) { this.institutionObjSource.next(institution) }
 
@@ -423,8 +423,9 @@ export class AuthService implements CanActivate {
    * Gets user object from local storage
    */
   public getUser(): any {
-      let userObject = (this.user && this.user.hasOwnProperty('status')) ? this.user : this._locker.get('user')
-      return userObject ? userObject : {}
+    let userObj = this._locker.get('user')
+    this.user = userObj ? userObj : {}
+    return this.user
   }
 
   /** Stores an object in local storage for you - your welcome */
@@ -614,14 +615,9 @@ export class AuthService implements CanActivate {
     )
   }
 
-  public isPublicOnly(): boolean{
-    if (this.user && !this.user.hasOwnProperty('status')) {
-      this.user = JSON.parse(localStorage.getItem('user'))
-    }
-    else {
-      this.user = this.getUser()
-    }
-    return !(this.user && this.user.status)
+  public isPublicOnly(): boolean {
+    let userObj = this.user || this.getUser()
+    return !(userObj && userObj.status)
   }
 
 
