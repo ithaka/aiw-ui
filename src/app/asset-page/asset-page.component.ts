@@ -69,6 +69,7 @@ export class AssetPage implements OnInit, OnDestroy {
 
     // Feature Flags
     public relatedResFlag: boolean = false
+    public detailViewsFlag: boolean = false
     public solrMetadataFlag: boolean = false
     private encryptedAccess: boolean = false
     private document = document
@@ -317,6 +318,7 @@ export class AssetPage implements OnInit, OnDestroy {
                 if (routeParams && routeParams['featureFlag']) {
                     this._flags[routeParams['featureFlag']] = true
                     this.relatedResFlag = this._flags['related-res-hack'] ? true : false
+                    this.detailViewsFlag = this._flags['detailViews'] ? true : false
                     if (routeParams['featureFlag'] === 'tour') {
                         this.showTour = true
                     }

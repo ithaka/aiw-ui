@@ -6,14 +6,13 @@ import { CompleterService, CompleterData } from 'ng2-completer'
 import { Angulartics2 } from 'angulartics2'
 import { Router } from '@angular/router'
 
-import { AssetService, GroupService, ImageGroup, AuthService, AssetSearchService } from './../../shared'
+import { AssetService, GroupService, ImageGroup, AuthService } from './../../shared'
 
 @Component({
-  selector: 'ang-add-to-group',
-  templateUrl: 'add-to-group.component.pug',
-  styleUrls: ["./add-to-group.component.scss"]
+  selector: 'ang-add-to-group-legacy',
+  templateUrl: 'add-to-group-legacy.component.pug'
 })
-export class AddToGroupModal implements OnInit, OnDestroy {
+export class AddToGroupLegacyModal implements OnInit, OnDestroy {
   @Output() closeModal: EventEmitter<any> = new EventEmitter();
   @Output() createGroup: EventEmitter<any> = new EventEmitter();
   @Input() showCreateGroup: boolean = false;
@@ -36,21 +35,8 @@ export class AddToGroupModal implements OnInit, OnDestroy {
   @Input() private selectedAssets: any[] = []; // this is used in the asset page, where a single asset can be injected directly
   private groups: ImageGroup[] = [];
 
-  private detailedView: boolean = true
-
-  private groupSearchTerm: string = ''
-  private recentGroups: any[] = []
-  private allGroups: any[] = []
-
-  private groupsCurrentPage: number = 1
-  private totalGroups: number = 0
-  private loadingGroups: boolean = false
-
-  private selectedGroup: any = {}
-
   constructor(
     private _assets: AssetService,
-    private _search: AssetSearchService,
     private _group: GroupService,
     private _angulartics: Angulartics2,
     private completerService: CompleterService,
@@ -78,18 +64,16 @@ export class AddToGroupModal implements OnInit, OnDestroy {
     }
 
     // Load list of Groups, and update autocomplete as Groups load
-    // this._group.getEveryGroup('created').pipe(
-    //   map(groups => {
-    //     if (groups) {
-    //       this.groups = groups
-    //       // Data service for the autocomplete component (ng2 completer)
-    //       this.dataService = this.completerService.local(this.groups, 'name', 'name')
-    //     }
-    //   }, (err) => { console.error(err)
-    // })).subscribe()
+    this._group.getEveryGroup('created').pipe(
+      map(groups => {
+        if (groups) {
+          this.groups = groups
+          // Data service for the autocomplete component (ng2 completer)
+          this.dataService = this.completerService.local(this.groups, 'name', 'name')
+        }
+      }, (err) => { console.error(err)
+    })).subscribe()
 
-    this.loadRecentGroups()
-    this.loadMyGroups()
 
   }
 
@@ -129,13 +113,20 @@ export class AddToGroupModal implements OnInit, OnDestroy {
     this.serviceResponse = {}
     this.selectedGroupError = ''
 
-    if (!this.selectedGroup.id) {
+    // Find full group object based on group name
+    this.groups.forEach( (group, index) => {
+      if (group.name == this.selectedGroupName) {
+        this.selectedIg = group
+      }
+    })
+
+    if (!this.selectedIg || this.selectedGroupName.length < 1) {
       this.selectedGroupError = 'ADD_TO_GROUP_MODAL.NO_GROUP'
       return
     }
 
     // Create object for new modified group
-    let putGroup: ImageGroup = Object.assign({}, this.selectedGroup)
+    let putGroup: ImageGroup = Object.assign({}, this.selectedIg)
 
     // assets come from different places and sometimes have id and sometimes objectId
     this.selectedAssets.forEach((asset: any) => {
@@ -170,11 +161,11 @@ export class AddToGroupModal implements OnInit, OnDestroy {
     }
 
     // go get the group from the server
-    this._group.get(this.selectedGroup.id)
+    this._group.get(this.selectedIg.id)
       .toPromise()
       .then((data) => {
         data.items = putGroup.items
-        console.log('Update data from new modal:- ', data)
+        console.log('Update data from legacy modal:- ', data)
         this._group.update(data).pipe(
           take(1),
           map(
@@ -195,106 +186,6 @@ export class AddToGroupModal implements OnInit, OnDestroy {
       });
 
 
-  }
-
-  private loadRecentGroups(): void{
-    this._group.getAll(
-      'created', 3, 1, [], '', '', 'date', 'desc'
-    ).pipe(
-    take(1),
-      map(data  => {
-        for(let group of data.groups){
-          this._assets.getAllThumbnails(group.items.slice(0, 1))
-            .then( allThumbnails => {
-              group['thumbnailImgUrl'] = allThumbnails[0]['thumbnailImgUrl']
-              group['compoundmediaCount'] = allThumbnails[0]['compoundmediaCount']
-              this.recentGroups.push( group )
-            })
-            .catch( error => {
-              console.error(error)
-            })
-        }
-      },
-      (error) => {
-        console.error(error)
-      }
-    )).subscribe()
-  }
-
-  private loadMyGroups(): void{
-    this.loadingGroups = true
-    this._group.getAll(
-      'created', 10, this.groupsCurrentPage, [], this.groupSearchTerm, '', 'alpha', 'asc'
-    ).pipe(
-    take(1),
-      map(data  => {
-        this.totalGroups = data.total
-        for(let i = 0; i < data.groups.length; i++){
-          let group = data.groups[i]
-          this._assets.getAllThumbnails(group.items.slice(0, 1))
-            .then( allThumbnails => {
-              group['thumbnailImgUrl'] = allThumbnails[0]['thumbnailImgUrl']
-              group['compoundmediaCount'] = allThumbnails[0]['compoundmediaCount']
-              this.allGroups.push( group )
-
-              if( i === (data.groups.length - 1) ){
-                this.loadingGroups = false
-              }
-            })
-            .catch( error => {
-              console.error(error)
-            })
-        }
-      },
-      (error) => {
-        console.error(error)
-      }
-    )).subscribe()
-  }
-
-  private loadMoreGroups(): void{
-    if(this.allGroups.length < this.totalGroups){
-      this.groupsCurrentPage++
-      this.loadMyGroups()
-    }
-  }
-
-  private selectGroup(selectedGroup: any): void{
-    this.recentGroups = this.recentGroups.map( (recentGroup) => {
-      if(recentGroup.id === selectedGroup.id) {
-        recentGroup.selected = !recentGroup.selected
-        this.selectedGroup = recentGroup.selected ? recentGroup : {}
-      } else {
-        recentGroup.selected = false
-      }
-      return recentGroup
-    })
-
-    this.allGroups = this.allGroups.map( (group) => {
-      if(group.id === selectedGroup.id) {
-        group.selected = !group.selected
-        this.selectedGroup = group.selected ? group : {}
-      } else {
-        group.selected = false
-      }
-      return group
-    })
-  }
-
-  private searchGroups(event): void{
-    // Execute search after every third character of the search term
-    // if( (this.groupSearchTerm.length > 0) && (this.groupSearchTerm.length % 3 === 0) ){
-      this.groupsCurrentPage = 1
-      this.allGroups = []
-      this.loadMyGroups()
-    // }
-  }
-
-  private clearGroupSearch(): void{
-    this.groupSearchTerm = ''
-    this.groupsCurrentPage = 1
-    this.allGroups = []
-    this.loadMyGroups()
   }
 
   private extractData(res: any) {

@@ -26,6 +26,7 @@ import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { NgxTagInputModule } from 'ngx-tag-autocomplete';
 import { Ng2CompleterModule } from 'ng2-completer';
+import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 
 // Directives
 import { ClickOutsideDirective } from './_directives';
@@ -70,6 +71,7 @@ import { LoginFormComponent } from './login-form'
 import {
   AccessDeniedModal,
   AddToGroupModal,
+  AddToGroupLegacyModal,
   ChangePasswordModal,
   ConfirmModal,
   DeleteIgModal,
@@ -169,6 +171,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     AccountPage,
     EditPersonalCollectionModal,
     AddToGroupModal,
+    AddToGroupLegacyModal,
     AgreeModalComponent,
     App,
     AssetFilters,
@@ -243,6 +246,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     HttpClientModule,
     NgxTagInputModule,
     Ng2CompleterModule,
+    InfiniteScrollModule,
     LockerModule,
     FileUploadModule,
     ArtstorViewerModule,

@@ -245,7 +245,8 @@
       "OPEN_CREATE_GROUP_MODAL": "Create a new group with images"
     },
     "FROM_ASSET": {
-      "TITLE": "Add Image to Group",
+      "TITLE": "Add Item to Group",
+      "TITLE_DETAIL": "Add Detail to Group",
       "SELECT_PROMPT": "Select an image group",
       "ADD_SUCCESS": "Image successfully added to group",
       "ADD_FAILURE": "Unable to add image to group. Sorry about that.",
@@ -253,6 +254,8 @@
       "OPEN_CREATE_GROUP_MODAL": "Create a new group with image"
     },
     "CONTROLS": {
+      "ADD": "ADD",
+      "CANCEL": "CANCEL",
       "SAVE": "Save Changes",
       "NAV_TO_GROUP": "Go to group",
       "CLOSE": "Close",
