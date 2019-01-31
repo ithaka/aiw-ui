@@ -120,7 +120,7 @@ export class RegisterComponent implements OnInit {
     }
 
       this.registerCall(userInfo).pipe(
-        catchError(this.handleError),
+        catchError(this.handleError.bind(this)),
         take(1),
         map(data => {
           this.handleRegistrationResp(data)
