@@ -63,7 +63,7 @@ export class MyCollectionsComponent implements OnInit {
   }
 
   /**
-   * genUserPCol - Load Private Collections
+   * getUserPCol - Load Private Collections
    * Used for loading user's Private Collections
    * @param type string 'private'
    * Note: /collections?type= accepts private, public, institution as well
