@@ -1,6 +1,6 @@
 {
     "name": "avatar",
-    "version": "1.11.63",
+    "version": "1.11.64",
     "description": "Front End for the Artstor Digital Library",
     "author": "Artstor Team Air",
     "license": "MIT",
@@ -33,8 +33,8 @@
         "postinstall": "node ./ng-add-pug-loader.js",
         "protractor": "protractor",
         "start": "ng serve",
-        "styleguide": "./node_modules/.bin/node-sass src/sass/app.scss styleguide/styles/all.css && nucleus --config nucleus/config.nucleus.json && npm run open:styleguide",
-        "open:styleguide": "open ./styleguide/index.html",
+        "styleguide": "./node_modules/.bin/node-sass src/sass/app.scss src/assets/styleguide/styles/all.css && nucleus --config nucleus/config.nucleus.json",
+        "open:styleguide": "open ./src/assets/styleguide/index.html",
         "test": "ng test",
         "tslint": "tslint",
         "typedoc": "typedoc --options typedoc.json --exclude '**/*.spec.ts' ./src/ && npm run open:typedoc",

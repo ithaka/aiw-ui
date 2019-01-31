@@ -1,0 +1,6 @@
+Sitemap: https://library.artstor.org/assets/sitemap-100.xml
+User-agent: *
+Allow: /asset
+Allow: /collection
+Allow: /category
+Disallow: /browse
