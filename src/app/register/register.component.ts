@@ -9,7 +9,6 @@ import { map, take, catchError } from 'rxjs/operators'
 import { AuthService } from './../shared'
 import { USER_ROLES, USER_DEPTS, UserRolesAndDepts } from './user-roles'
 import { HttpErrorResponse } from '@angular/common/http';
-import { error } from 'selenium-webdriver';
 
 @Component({
   selector: 'ang-register-page',
@@ -42,8 +41,6 @@ export class RegisterComponent implements OnInit {
     email: null,
     samlTokenId: null
   }
-
-  private errorObj: Error
 
   constructor(
     private _auth: AuthService,
@@ -96,7 +93,7 @@ export class RegisterComponent implements OnInit {
 
   /** Gets called when the registration form is submitted */
   public registerSubmit(formValue: any) {
-    let registerCall: Function = (value) => { return this._auth.registerUser(value) }
+    let registerCall = (value) => { return this._auth.registerUser(value) }
     this.serviceErrors = {};
     this.submitted = true;
 
@@ -121,7 +118,7 @@ export class RegisterComponent implements OnInit {
     }
 
       registerCall(userInfo).pipe(
-        catchError(this.handleError(error, this)),
+        catchError(this.handleError),
         take(1),
         map(data => {
           this.handleRegistrationResp(data)
@@ -130,17 +127,15 @@ export class RegisterComponent implements OnInit {
   }
 
   // Catch and handle Error responses from submitted register form
-  private handleError(err: any, regComp): any {
-    console.log('REG COMP', regComp)
-    console.log('REG serviceErrors: ', regComp.serviceErrors)
-    console.log('REG isLoading: ', regComp.isLoading)
+  private handleError(err: any): any {
+
     console.log('THIS: ', this)
     console.log('HANDLE ERROR: ', err, '\n', err.status, '\n', err.error, '\n', err.error.code)
-    regComp.submitted = true
-    regComp.isLoading = false
-    console.log('IS LOADING STATE: :', regComp.isLoading)
+    this.submitted = true
+    this.isLoading = false
+    console.log('IS LOADING STATE: :', this.isLoading)
 
-    console.log('SUBMITTED STATE: ', regComp.submitted)
+    console.log('SUBMITTED STATE: ', this.submitted)
 
     if (err.status === 500) {
       this.serviceErrors.server = true
