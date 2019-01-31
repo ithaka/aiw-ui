@@ -121,9 +121,7 @@ export class RegisterComponent implements OnInit {
       console.log('SHIB FLOW')
 
       this._auth.registerSamlUser(userInfo).pipe(
-        catchError(err => {
-          return this.handleError(err)
-        }),
+        catchError(this.handleError),
         take(1),
         map(data => {
           this.handleRegistrationResp(data)
@@ -133,9 +131,7 @@ export class RegisterComponent implements OnInit {
     else {
       console.log('NON SHIB')
       registerCall(userInfo).pipe(
-        catchError(err => {
-          return this.handleError(err)
-        }),
+        catchError(this.handleError),
         take(1),
         map(data => {
           this.handleRegistrationResp(data)
@@ -163,7 +159,7 @@ export class RegisterComponent implements OnInit {
         }
       }
     //}
-    return catchError(err)
+    return throwError(err)
   }
 
   private handleRegistrationResp(formSubmissionResponse) {
