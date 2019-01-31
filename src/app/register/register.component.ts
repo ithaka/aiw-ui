@@ -9,6 +9,7 @@ import { map, take, catchError } from 'rxjs/operators'
 import { AuthService } from './../shared'
 import { USER_ROLES, USER_DEPTS, UserRolesAndDepts } from './user-roles'
 import { HttpErrorResponse } from '@angular/common/http';
+import { error } from 'selenium-webdriver';
 
 @Component({
   selector: 'ang-register-page',
@@ -120,7 +121,7 @@ export class RegisterComponent implements OnInit {
     }
 
       registerCall(userInfo).pipe(
-        catchError(this.handleError(this)),
+        catchError(this.handleError(error, this)),
         take(1),
         map(data => {
           this.handleRegistrationResp(data)
