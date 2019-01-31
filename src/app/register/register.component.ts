@@ -128,6 +128,7 @@ export class RegisterComponent implements OnInit {
 
   // Catch and handle Error responses from submitted register form
   private handleError(err: any): any {
+    console.log('THIS: ', this)
     console.log('HANDLE ERROR: ', err, '\n', err.status, '\n', err.error, '\n', err.error.code)
     this.submitted = true
     this.isLoading = false
@@ -143,6 +144,8 @@ export class RegisterComponent implements OnInit {
       console.log('ERROR CODE TYPE: ', typeof(err.error.code))
       this.serviceErrors.shibbolethError = err.error.code.toString()
       this.serviceErrors.showShibbolethError = true
+
+      console.log('service errors: ', this.serviceErrors)
     }
     return throwError(err)
   }
