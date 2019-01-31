@@ -118,6 +118,8 @@ export class RegisterComponent implements OnInit {
     if (this.shibParameters && this.shibParameters.samlTokenId && this.shibParameters.samlTokenId.length > 0) {
       userInfo.samlTokenId = this.shibParameters.samlTokenId
 
+      console.log('SHIB FLOW')
+
       this._auth.registerSamlUser(userInfo).pipe(
         catchError(err => {
           return this.handleError(err)
@@ -129,6 +131,7 @@ export class RegisterComponent implements OnInit {
       )).subscribe()
     }
     else {
+      console.log('NON SHIB')
       registerCall(userInfo).pipe(
         catchError(err => {
           return this.handleError(err)
@@ -142,7 +145,9 @@ export class RegisterComponent implements OnInit {
 
   // Catch and handle Error responses from submitted register form
   private handleError(err: any): any {
-    if (err.error instanceof ErrorEvent) {
+    //if (err.error instanceof ErrorEvent) {
+
+      console.log('HANDLE ERROR: ', err, '\n', err.status, '\n', err.error, '\n', err.code, '\n', err.console.code)
 
       this.isLoading = false
 
@@ -157,8 +162,8 @@ export class RegisterComponent implements OnInit {
           this.serviceErrors.showShibbolethError = true
         }
       }
-    }
-    return throwError(err)
+    //}
+    return catchError(err)
   }
 
   private handleRegistrationResp(formSubmissionResponse) {
