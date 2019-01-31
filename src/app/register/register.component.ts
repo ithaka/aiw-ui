@@ -114,7 +114,7 @@ export class RegisterComponent implements OnInit {
 
     if (this.shibParameters && this.shibParameters.samlTokenId && this.shibParameters.samlTokenId.length > 0) {
       userInfo.samlTokenId = this.shibParameters.samlTokenId
-      registerCall = (value) => { return this._auth.registerSamlUser(userInfo) }
+      registerCall = (value) => { return this._auth.registerSamlUser(value) }
     }
 
       registerCall(userInfo).pipe(
@@ -129,6 +129,7 @@ export class RegisterComponent implements OnInit {
   // Catch and handle Error responses from submitted register form
   private handleError(err: any): any {
     console.log('HANDLE ERROR: ', err, '\n', err.status, '\n', err.error, '\n', err.error.code)
+    this.submitted = true
     this.isLoading = false
     console.log('IS LOADING STATE: :', this.isLoading)
 
