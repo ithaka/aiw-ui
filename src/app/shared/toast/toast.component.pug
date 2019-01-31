@@ -1,0 +1,9 @@
+.toast-cntnr.slide-in([ngClass]="{ 'slide-out' : hideToast, 'success' : type == 'success' }")
+  .toast-body
+    .row.no-gutters
+      .col-2
+        .toast-icon
+      .col-9
+        div([innerHTML]="stringHTML")
+      .col-1.text-center
+        i.icon.icon-close

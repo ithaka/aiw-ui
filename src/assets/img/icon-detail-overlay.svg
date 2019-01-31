@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="38px" height="38px" viewBox="0 0 38 38" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 52.6 (67491) - http://www.bohemiancoding.com/sketch -->
+    <title>detail icon overlay</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <filter x="-83.3%" y="-83.3%" width="266.7%" height="266.7%" filterUnits="objectBoundingBox" id="filter-1">
+            <feOffset dx="0" dy="3" in="SourceAlpha" result="shadowOffsetOuter1"></feOffset>
+            <feGaussianBlur stdDeviation="3.5" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+            <feColorMatrix values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.5 0" type="matrix" in="shadowBlurOuter1" result="shadowMatrixOuter1"></feColorMatrix>
+            <feMerge>
+                <feMergeNode in="shadowMatrixOuter1"></feMergeNode>
+                <feMergeNode in="SourceGraphic"></feMergeNode>
+            </feMerge>
+        </filter>
+    </defs>
+    <g id="Working" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="5-flow" transform="translate(-531.000000, -360.000000)">
+            <g id="add-zoomed-detail-to-group" transform="translate(506.000000, 225.000000)">
+                <g id="detail-preview">
+                    <g id="detail-icon-overlay" filter="url(#filter-1)" transform="translate(32.000000, 139.000000)">
+                        <path d="M0,20.5714286 L4.4408921e-16,3.42857143 C2.12196495e-16,1.53502371 1.53502371,-5.40339348e-16 3.42857143,-8.8817842e-16 L20.5714286,4.4408921e-16 C22.4649763,9.62501379e-17 24,1.53502371 24,3.42857143 L24,20.5714286 C24,22.4649763 22.4649763,24 20.5714286,24 L3.42857143,24 C1.53502371,24 -6.56285705e-16,22.4649763 -8.8817842e-16,20.5714286 Z" id="Rectangle-14" fill="#FFFFFF"></path>
+                        <path d="M12.5607607,12.6507778 L12.5607607,15.1648352 L11.4893321,15.1648352 L11.4893321,12.6507778 L8.78571429,12.6507778 L8.78571429,11.5958327 L11.4893321,11.5958327 L11.4893321,8.83516484 L12.5607607,8.83516484 L12.5607607,11.5958327 L15.2142857,11.5958327 L15.2142857,12.6507778 L12.5607607,12.6507778 Z M19.5218659,6.21150278 L15.6734694,6.21150278 L15.6734694,5.14285714 L20.5714286,5.14285714 L20.5714286,10.1298701 L19.5218659,10.1298701 L19.5218659,6.21150278 Z M19.5218659,17.7884972 L19.5218659,13.8701299 L20.5714286,13.8701299 L20.5714286,18.8571429 L15.6734694,18.8571429 L15.6734694,17.7884972 L19.5218659,17.7884972 Z M4.47813411,17.7884972 L8.32653061,17.7884972 L8.32653061,18.8571429 L3.42857143,18.8571429 L3.42857143,13.8701299 L4.47813411,13.8701299 L4.47813411,17.7884972 Z M4.47813411,6.21150278 L4.47813411,10.1298701 L3.42857143,10.1298701 L3.42857143,5.14285714 L8.32653061,5.14285714 L8.32653061,6.21150278 L4.47813411,6.21150278 Z" id="detail-icon" stroke="#333333" stroke-width="0.857142857" fill="#333333"></path>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>
