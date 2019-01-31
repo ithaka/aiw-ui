@@ -42,6 +42,8 @@ export class RegisterComponent implements OnInit {
     samlTokenId: null
   }
 
+  private errorObj: Error
+
   constructor(
     private _auth: AuthService,
     private _router: Router,
@@ -118,7 +120,7 @@ export class RegisterComponent implements OnInit {
     }
 
       registerCall(userInfo).pipe(
-        catchError(this.handleError),
+        catchError(this.handleError(this)),
         take(1),
         map(data => {
           this.handleRegistrationResp(data)
@@ -127,14 +129,17 @@ export class RegisterComponent implements OnInit {
   }
 
   // Catch and handle Error responses from submitted register form
-  private handleError(err: any): any {
+  private handleError(err: any, regComp): any {
+    console.log('REG COMP', regComp)
+    console.log('REG serviceErrors: ', regComp.serviceErrors)
+    console.log('REG isLoading: ', regComp.isLoading)
     console.log('THIS: ', this)
     console.log('HANDLE ERROR: ', err, '\n', err.status, '\n', err.error, '\n', err.error.code)
-    this.submitted = true
-    this.isLoading = false
-    console.log('IS LOADING STATE: :', this.isLoading)
+    regComp.submitted = true
+    regComp.isLoading = false
+    console.log('IS LOADING STATE: :', regComp.isLoading)
 
-    console.log('SUBMITTED STATE: ', this.submitted)
+    console.log('SUBMITTED STATE: ', regComp.submitted)
 
     if (err.status === 500) {
       this.serviceErrors.server = true
