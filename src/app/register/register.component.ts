@@ -143,7 +143,7 @@ export class RegisterComponent implements OnInit {
   private handleError(err: any): any {
     //if (err.error instanceof ErrorEvent) {
 
-      console.log('HANDLE ERROR: ', err, '\n', err.status, '\n', err.error, '\n', err.code, '\n', err.console.code)
+      console.log('HANDLE ERROR: ', err, '\n', err.status, '\n', err.error, '\n', err.error.code)
 
       this.isLoading = false
 
