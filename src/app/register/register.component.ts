@@ -141,7 +141,7 @@ export class RegisterComponent implements OnInit {
     else if (err.status === 400) {
       console.log('GOT 400: ', err.status)
       console.log('ERROR CODE TYPE: ', typeof(err.error.code))
-      this.serviceErrors.shibbolethError = err.error.code
+      this.serviceErrors.shibbolethError = err.error.code.toString()
       this.serviceErrors.showShibbolethError = true
     }
     return throwError(err)
