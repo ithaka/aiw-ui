@@ -7,6 +7,7 @@ import { DeviceDetectorModule, DeviceDetectorService } from 'ngx-device-detector
 import { AssetService, AuthService, ScriptService } from '../shared'
 import { AppConfig } from '../app.service'
 import { Featured } from './featured'
+import { TagsService } from '../browse-page/tags.service';
 
 declare var initPath: string
 
@@ -54,7 +55,8 @@ export class Home implements OnInit, OnDestroy {
     private _router: Router,
     public _auth: AuthService,
     private deviceService: DeviceDetectorService,
-    private _script: ScriptService
+    private _script: ScriptService,
+    private _tags: TagsService
   ) {
     // this makes the window always render scrolled to the top
     this._router.events.pipe(
@@ -105,26 +107,23 @@ export class Home implements OnInit, OnDestroy {
         map(userObj => {
           if (userObj.institutionId && (this.instCollections.length === 0)) {
 
-            this.subscriptions.push(this._assets.getCollectionsList().pipe(
-                map(data => {
-                  // Filter SSC content
-                  this.collections = data['Collections'].filter((collection) => {
-                    return collection.collectionType == 5
-                  })
-                  this.loaders['collections'] = false;
-                  // Filter institutional content
-                  this.instCollections = data['Collections'].filter((collection) => {
-                    return collection.collectionType == 2 || collection.collectionType == 4
-                  })
-                  this.loaders['instCollections'] = false;
-                },
-                err => {
-                  if (err && err.status != 401 && err.status != 403) {
-                    console.error('Failed to load collection list', err)
-                  }
-                }
-              )).subscribe()
-            ) // end push
+            let queryType = {};
+            if (this._auth.isPublicOnly()) {
+              queryType['type'] = "commons"
+            }
+            else {
+              queryType['type'] = "institution"
+            }
+
+            this._tags.initTags(queryType)
+              .then((tags) => {
+                this.instCollections = tags;
+                this.loaders['instCollections'] = false;
+              })
+              .catch((err) => {
+                console.error(err);
+              });
+
           }
         },
         err => {
@@ -149,9 +148,9 @@ export class Home implements OnInit, OnDestroy {
     this.fetchDeviceInfo();
 
     // Load Ethnio survey
-    if (this.siteID !== 'SAHARA') {
-      this._script.loadScript('ethnio-survey')
-    }
+    // if (this.siteID !== 'SAHARA') {
+    //   this._script.loadScript('ethnio-survey')
+    // }
 
   } // OnInit
 

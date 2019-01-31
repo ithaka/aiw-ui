@@ -31,6 +31,10 @@
     animation-duration: 0.4s
 }
 
+.modal-lg .modal-content {
+    margin-top: 5em;
+}
+
 @-webkit-keyframes animatetop {
     from {top:-300px; opacity:0}
     to {top:0; opacity:1}
@@ -90,6 +94,12 @@
         @media(max-width: $phone) {
             display: block;
             margin: 10px auto;
+        }
+    }
+
+    .pc-upload-info{
+        & a:focus, & a:active {
+            background: inherit !important;
         }
     }
 }

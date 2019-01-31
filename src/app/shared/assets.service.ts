@@ -20,7 +20,7 @@ import { AssetSearchService, SearchResponse } from './asset-search.service'
 import { ImageGroup, Thumbnail } from '.'
 import { AppConfig } from 'app/app.service'
 import { APP_CONST } from '../app.constants'
-import { LockerService } from 'app/_services';
+import { LockerService } from 'app/_services'
 
 @Injectable()
 export class AssetService {
@@ -332,9 +332,10 @@ export class AssetService {
     /**
      * Generate asset share link
      */
-    public getShareLink(assetId: string) {
+    public getShareLink(assetId: string, externalAsset?: boolean) {
         //   Links in the clipboard need a protocol defined
-        return  `${window.location.protocol}//${window.location.host}/asset/${assetId}`
+        let externalAssetString = externalAsset ? 'external/' : ''
+        return  `${window.location.protocol}//${window.location.host}/#/asset/${externalAssetString}${assetId}`
 
         // For Reference: Old service for generating share url:
         // this._assets.genrateImageURL( this.assets[0].id )
@@ -459,14 +460,16 @@ export class AssetService {
 
     } // end setResults
 
-    // Used by Browse page
-    public pccollection(){
-        let options = { withCredentials: true };
+    // NOTE: Deprecated /pccollection endpoint no longer available
+    // TODO: REMOVE
+    // // Used by Browse page
+    // public pccollection(){
+    //     let options = { withCredentials: true };
 
-        return this.http
-            .get(this._auth.getHostname() + '/api/pccollection', options)
-            .toPromise()
-    }
+    //     return this.http
+    //         .get(this._auth.getHostname() + '/api/pccollection', options)
+    //         .toPromise()
+    // }
 
     public categoryNames(): Promise<categoryName[]> {
         let options = { withCredentials: true }
@@ -533,7 +536,13 @@ export class AssetService {
              * - Some schools have shared collections which have a contributinginsitutionid which differs from their own
              */
             filterArray.push('(collectiontypes:2 AND contributinginstitutionid:(' + this._auth.getUser().institutionId.toString() + ')) OR (collectiontypes:(2) AND -(collectiontypes:(5)))')
-          } else {
+
+          }
+          // Collction Type 6 Private Collections
+          else if (collectionType === 6) {
+            filterArray.push('(collectiontypes:6 AND contributinginstitutionid:(' + this._auth.getUser().institutionId.toString() + '))')
+          }
+          else {
             filterArray.push('collectiontypes:' + collectionType)
           }
       }
@@ -563,6 +572,18 @@ export class AssetService {
           }
           return <SolrFacet[]>res
         })
+    }
+
+    /**
+     * Get metadata about a Category
+     * @param catId The Category ID
+     */
+    public getCategoryInfo(catId: string) {
+        let options = { withCredentials: true };
+        
+        return this.http
+            .get(this._auth.getUrl() + '/v1/categorydesc/' + catId, options)
+            .toPromise();
     }
 
     nodeDesc(descId, widgetId){
@@ -885,15 +906,10 @@ export class AssetService {
 
                             // For multi-view items, make the thumbnail urls and update the array
                             data.thumbnails = data.thumbnails.map((thumbnail) => {
-                                if (thumbnail['thumbnailImgUrl'] && thumbnail['thumbnailImgUrl'].indexOf('media-objects') > -1) {
-                                    thumbnail.thumbnailImgUrl = this._assetSearch.makeThumbUrl(thumbnail.thumbnailImgUrl, 1, true)
-                                }
-                                // New service for compound media thumbnails doesn't use 'media-objects' in the url string
-                                else if (thumbnail['thumbnailImgUrl'] && thumbnail['compoundmediaCount'] > 0) {
-                                  thumbnail.thumbnailImgUrl = 'https://stor.artstor.org/stor' + thumbnail.thumbnailImgUrl
-                                }
-
-                                return thumbnail
+                              if (thumbnail['thumbnailImgUrl'] && thumbnail['compoundmediaCount'] > 0) {
+                                thumbnail.thumbnailImgUrl = this._auth.compoundUrl + thumbnail.thumbnailImgUrl
+                              }
+                              return thumbnail
                             })
 
                             // Set the allResults object

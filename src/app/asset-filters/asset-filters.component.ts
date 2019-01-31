@@ -156,22 +156,22 @@ export class AssetFilters {
         map(filters => {
 
           // Contributors List of search results
-          if (filters['contributinginstitutionid'] && institutionList.length) {
+          if (filters['donatinginstitutionids'] && institutionList.length) {
             this.instFilterCount = 0
 
-            for (let i = 0; i < filters['contributinginstitutionid'].length; i++) {
+            for (let i = 0; i < filters['donatinginstitutionids'].length; i++) {
 
               // Map search results by contributing institution by matching against names from the institutions list
               for (let j = 0; j < institutionList.length; j++) {
-                if (filters['contributinginstitutionid'][i].name === institutionList[j].institutionId) {
-                  filters['contributinginstitutionid'][i].showingName = institutionList[j].institutionName;
+                if (filters['donatinginstitutionids'][i].name === institutionList[j].institutionId) {
+                  filters['donatinginstitutionids'][i].showingName = institutionList[j].institutionName;
                 }
               }
 
               // If this contributor is the users institution, set instFilterCount to this filters' count value
-              if (filters['contributinginstitutionid'][i].name === this.userInstId) {
-                if (filters['contributinginstitutionid'][i].count > -1) {
-                  this.instFilterCount = parseInt(filters['contributinginstitutionid'][i].count)
+              if (filters['donatinginstitutionids'][i].name === this.userInstId) {
+                if (filters['donatinginstitutionids'][i].count > -1) {
+                  this.instFilterCount = parseInt(filters['donatinginstitutionids'][i].count)
                 }
               }
             }
@@ -196,7 +196,7 @@ export class AssetFilters {
 
           // it is for if the allInstitutions request fails, it doesn’t break the entire filter UI
           if (this.allInstFailed) {
-            filters['contributinginstitutionid'] = null
+            filters['donatinginstitutionids'] = null
           }
 
           // Filter out categories containing pipe in name field
@@ -212,7 +212,7 @@ export class AssetFilters {
     )
   }
 
-  private loadRoute() {
+  private loadRoute(filterType?: string) {
     let params = {};
     let currentParams = this.route.snapshot.params
 
@@ -242,7 +242,7 @@ export class AssetFilters {
       }
     }
 
-    this.angulartics.eventTrack.next({ action: 'filteredSearch', properties: { category: this._auth.getGACategory(), label: params } })
+    this.angulartics.eventTrack.next({ action: 'filteredSearch', properties: { category: this._auth.getGACategory(), label: filterType } })
 
     if (params['page']){
       params['page'] = this.pagination.page
@@ -254,9 +254,6 @@ export class AssetFilters {
 
       if (currentParams.name){
         baseParams['name'] = currentParams.name
-      }
-      if (currentParams.browseType){
-        baseParams['browseType'] = currentParams.browseType
       }
       if (currentParams.size){
         baseParams['size'] = currentParams.size
@@ -287,7 +284,7 @@ export class AssetFilters {
     this.activeSort.index = index;
     this.activeSort.label = label;
     this.pagination.page = 1;
-    this.loadRoute();
+    this.loadRoute('sort');
   }
 
   /**
@@ -323,14 +320,16 @@ export class AssetFilters {
   }
 
   toggleFilter(value, group){
+    let addFilter: boolean = false
     if (this._filters.isApplied(group, value)){ // Remove Filter
-      this._filters.remove(group, value);
+      this._filters.remove(group, value)
     } else { // Add Filter
-      this._filters.apply(group, value);
+      this._filters.apply(group, value)
+      addFilter = true
     }
-    this.pagination.page = 1;
+    this.pagination.page = 1
 
-    this.loadRoute();
+    this.loadRoute(addFilter ? group : '');
   }
 
   filterApplied(value, group){
@@ -353,7 +352,7 @@ export class AssetFilters {
 
     this.pagination.page = 1;
 
-    this.loadRoute();
+    this.loadRoute('');
   }
 
   // To check if a filter group has any applied filters
@@ -424,7 +423,7 @@ export class AssetFilters {
     this.availableFilters.dateObj.modified = true;
     this.filterDate = true;
     this.pagination.page = 1;
-    this.loadRoute();
+    this.loadRoute('date');
   }
 
   existsInRegion(countryId, childerenIds){

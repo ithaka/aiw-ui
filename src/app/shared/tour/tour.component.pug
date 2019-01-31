@@ -1,4 +1,4 @@
-a.contextual-help(title="How do I use image groups?", (click)="startModalShow=true" , target="_blank") ?
+a.contextual-help(title="How do I use image groups?", (click)="startModalShow=true", (keyup.enter)="startModalShow=true", target="_blank", tabindex="3", aria-label="Learn more about how to use image groups with our tour.") ?
 .modal(tabindex="-1", [class.show]="startModalShow")
     .modal-dialog(role="document")
         .modal-content

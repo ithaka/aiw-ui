@@ -19,8 +19,8 @@
 
     .row
       .col-sm-3(*ngIf="showHomePromo")
-        a#imagePromoSpaceLink.card.hidden-xs-down([attr.href]=" 'HOME.AD.LINK' | translate ", target="_blank")
-          img#home-promo.card-img.no-stretch([attr.src]="'HOME.AD.IMG_SOURCE' | translate", [attr.alt]="'HOME.AD.ALT_TEXT' | translate")
+        a#imagePromoSpaceLink.card.hidden-xs-down([attr.href]=" 'HOME.AD.LINK' | translate ", target="_blank", tabindex="4", aria-label="New in Artstor: you can now upload your own images with Personal Collections to Artstor and add them to your image groups. Go to Browse > My Collections to get started, or press enter for more information")
+          img#home-promo.card-img.no-stretch([attr.src]="'HOME.AD.IMG_SOURCE' | translate", [attr.alt]="'HOME.AD.ALT_TEXT' | translate", aria-hidden="true")
         .card([class.pt-4]="showHomePromo")
       .col-sm-6(*ngIf="showBlog")
         .card
@@ -28,9 +28,9 @@
             h2.h1([innerHtml]="'HOME.HEADINGS.FRM_BLOG' | translate")
           .loading(*ngIf="blogLoading")
           div(*ngIf="!blogLoading")
-            a.blog-post(*ngFor="let post of blogPosts | slice:0:3", [href]="post['URL']", target="_blank")
-              h3.blog-post__title([innerHtml]="post.title")
-              p.blog-post__preview([innerHtml]="post.excerpt")
+            a.blog-post(*ngFor="let post of blogPosts | slice:0:3", [href]="post['URL']", target="_blank", tabindex="4", [attr.aria-label]="post.title")
+              h3.blog-post__title([innerHtml]="post.title", aria-hidden="true")
+              p.blog-post__preview([innerHtml]="post.excerpt", aria-hidden="true")
       div([ngClass]="showBlog ? 'col-sm-3' : 'row'")
         //- Institution Shared Shelf Collections
         .card(*ngIf="institution && instCollections.length > 0", [class.col-sm-4]="!showBlog")
@@ -38,8 +38,8 @@
             h2.h1 {{ 'HOME.HEADINGS.INSTITUTION_COLLECTIONS' | translate:{ institutionName: institution.shortName ? institution.shortName : 'Institutional' } }}
           .list--home-collections([class.loading]="loaders['instCollections']")
             .list-group.list-group-flush
-              a.list-group-item.list-group-item-action(*ngFor="let collection of instCollections", [routerLink]="[ '/collection', collection.collectionid ]")
-                span.notranslate  {{ collection.collectionname }}
+              a.list-group-item.list-group-item-action(*ngFor="let collection of instCollections", [routerLink]="[ '/collection', collection.tagId ]")
+                span.notranslate  {{ collection.title }}
           .card-block(*ngIf="errors.instCollections")
             #errorCollectionsLoading.alert.alert-warning(role="alert")
               strong Error

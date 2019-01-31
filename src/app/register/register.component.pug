@@ -91,13 +91,108 @@ nav-menu
             a.link(href="http://www.artstor.org/privacy-policy", tabindex="0") Privacy Policy
             = " "
             | |
-            = " "
-            a.link(href="http://www.artstor.org/form/contact-us", tabindex="0") Contact Us
+.div
+  nav-menu
+  #mainContent.container.main-content(tabindex="-1")
+    .row
+      .col-sm-1
+      .col-sm-10
+        .alert.alert-danger.mb-4(*ngIf="serviceErrors['shibbolethInst']")
+          b Error Linking&nbsp;
+          | {{ 'SHIBBOLETH_ERRORS.INST404' | translate }}
+        .alert.alert-warning.mb-4(*ngIf="serviceErrors['user']")
+          b {{ 'SHIBBOLETH_ERRORS.USER404' | translate }}
+        .text-right.mb-2(*ngIf="isShibbFlow")
+          .btn.btn-secondary((click)="navigateToLogin()", [class.disabled]="!shibParameters.samlTokenId") {{ 'LINK_PAGE.LOGIN_OPTION' | translate }}
+        .card.card--light([class.disabled]="isShibbFlow && !shibParameters.samlTokenId")
+          .info(tabindex="0", aria-describedby="registerHeading registerDescription registerJstorMessage fieldsRequired")
+            .card-header
+              h1#registerHeading(*ngIf="!isShibbFlow") {{ 'REGISTER.REGISTER_HEADING' | translate }}
+              h1#registerHeading(*ngIf="isShibbFlow") {{ 'LINK_PAGE.REGISTER_HEADING' | translate }}
+            p#registerDescription {{ 'REGISTER.REGISTER_DESCRIPTION' | translate }}
+            p#registerJstorMessage
+              b {{ 'REGISTER.REGISTER_JSTOR_MESSAGE' | translate }}
+          .card-body
+            form#registerForm([formGroup]="registerForm", (ngSubmit)="registerSubmit(registerForm.value)")
+              p#fieldsRequired {{ 'REGISTER.FIELDS_REQUIRED' | translate }}
+              .form-group
+                label(for="emailInput") Email Address
+                a.link((click)="showJstorModal = true", tabindex="0", style="float: right", aria-label="Use your JSTOR account to register") {{ 'REGISTER.EMAIL_HELP_TXT' | translate }}
+                  i.icon.icon-info.align-icon
+                //- Currently Shibboleth params do not reliably provide email, avoid disabling control of the email field even if prefilled
+                input#emailInput.form-control(type="text", spellcheck="false", [formControl]="registerForm.controls['email']", tabindex="0")
+                .has-danger(*ngIf="submitted && registerForm.controls['email'].hasError('required')")
+                  p#errEmailRequired.form-control-feedback {{ 'REGISTER.ERRORS.EMAIL_REQUIRED' | translate }}
+                .has-danger(*ngIf="submitted && registerForm.controls['email'].hasError('emailInvalid') && !registerForm.controls['email'].hasError('required')")
+                  p#errEmailInvalid.form-control-feedback {{ 'REGISTER.ERRORS.EMAIL_INVALID' | translate }}
+              .form-group
+                label(for="emailConfirmInput") Confirm Email Address
+                input#emailConfirmInput.form-control(type="text", spellcheck="false", [formControl]="registerForm.controls['emailConfirm']", tabindex="0")
+                .has-danger(*ngIf="submitted && registerForm.hasError('emailMismatch')")
+                  p#errEmailMismatch.form-control-feedback {{ 'REGISTER.ERRORS.EMAIL_MISMATCH' | translate }}
+              .form-group
+                label(for="passwordInput") Password (7 character minimum)
+                input#passwordInput.form-control(type="password", spellcheck="false", [formControl]="registerForm.controls['password']", tabindex="0")
+                .has-danger(*ngIf="submitted && registerForm.controls['password'].hasError('required')")
+                  p#errPasswordRequired.form-control-feedback {{ 'REGISTER.ERRORS.PASSWORD_REQUIRED' | translate }}
+                .has-danger(*ngIf="submitted && registerForm.controls['password'].hasError('minlength')")
+                  p#errPasswordMinlength.form-control-feedback {{ 'REGISTER.ERRORS.PASSWORD_MINLENGTH' | translate }}
+              .form-group
+                label(for="passwordConfirmInput") Confirm Password
+                input#passwordConfirmInput.form-control(type="password", spellcheck="false", [formControl]="registerForm.controls['passwordConfirm']", tabindex="0")
+                .has-danger(*ngIf="submitted && registerForm.hasError('passwordMismatch')")
+                  p#errPasswordMismatch.form-control-feedback {{ 'REGISTER.ERRORS.PASSWORD_MISMATCH' | translate }}
+              .form-group
+                label(for="selectUserDept") Role at Institution
+                select#selectUserRole.form-control.custom-select([formControl]="registerForm.controls['role']", tabindex="0", aria-label="Role at Institution: Choose your role from the following options")
+                  option(*ngFor="let role of userRoles", [ngValue]="role.id") {{ role.desc }}
+                .has-danger(*ngIf="submitted && registerForm.controls['role'].hasError('required')")
+                  p#errRoleRequired.form-control-feedback {{ 'REGISTER.ERRORS.INSTITUTION_ROLE_REQUIRED' | translate }}
+              .form-group
+                label(for="selectUserDept") Academic Department
+                select#selectUserDept.form-control.custom-select([formControl]="registerForm.controls['dept']", tabindex="0", aria-label="Academic Department: Choose your department from the following options")
+                  option(*ngFor="let dept of userDepts", [ngValue]="dept.id") {{ dept.desc }}
+                .has-danger(*ngIf="submitted && registerForm.controls['dept'].hasError('required')")
+                  p#errDeptRequired.form-control-feedback {{ 'REGISTER.ERRORS.ACADEMIC_DEPT_REQUIRED' | translate }}
+
+              .form-group
+                .form-check
+                  label.form-check-label
+                    input#checkInfo.form-check-input(type="checkbox", [formControl]="registerForm.controls['info']", tabindex="0", aria-label="Newsletter sign up. Yes, send me information about new Artstor content and tools (Optional)")
+                    = " "
+                    | {{ 'REGISTER.INFO_PROMPT' | translate }}
+                .form-check
+                  label.form-check-label
+                    input#checkSurvey.form-check-input(type="checkbox", [formControl]="registerForm.controls['survey']", tabindex="0", aria-label="Survey sign up. Yes, send me surveys (Optional)")
+                    = " "
+                    | {{ 'REGISTER.SURVEY_PROMPT' | translate }}
+                .form-check
+                  label.form-check-label
+                    input#checkSurvey.form-check-input(type="checkbox", [formControl]="registerForm.controls['terms']", tabindex="0", aria-label="Terms agreement. I agree to the Artstor Digital Library Terms (Required)")
+                    = " "
+                    .terms-txt([innerHtml]="'REGISTER.TERMS' | translate ")
+                .has-danger(*ngIf="submitted && registerForm.controls['terms'].hasError('required')")
+                  p#errTermsRequired.form-control-feedback {{ 'REGISTER.ERRORS.TERMS_REQUIRED' | translate}}
+              .form-group
+                button#btnRegister.btn.btn-primary([class.loading]="isLoading", type="submit", name="action", tabindex="0") Register
+              .form-group
+                .has-danger(*ngIf="submitted")
+                  p#errDuplicateUser.form-control-feedback(*ngIf="serviceErrors.duplicate", [innerHtml]="'REGISTER.ERRORS.EMAIL_DUPLICATE' | translate")
+                  p#errJstorUser.form-control-feedback(*ngIf="serviceErrors.hasJstor", [innerHtml]="'REGISTER.ERRORS.ALREADY_JSTOR' | translate")
+                  p#errServerUser.form-control-feedback(*ngIf="serviceErrors.server", [innerHtml]="'REGISTER.ERRORS.SERVER_ERROR' | translate")
+                  p#errShibboleth.form-control-feedback(*ngIf="serviceErrors.shibboleth", [innerHtml]="'SHIBBOLETH_ERRORS.' + serviceErrors.shibboleth | translate")
             br
-            | {{ 'REGISTER.PRIVACY_DISCLAIMER' | translate }}
-          | Already registered?
-          = " "
-          a#linkLoginResetModal.link((click)="navigateToLogin()", tabindex="1") Log in
-          br
-          a#linkRegisterHelp.link(href="http://support.artstor.org/?article=register-for-an-artstor-account", target="_blank", tabindex="1") Help
-ang-register-jstor-modal(*ngIf="showJstorModal", (closeModal)="closeJstorModal($event)")
+            p
+              a.link(href="http://www.artstor.org/privacy-policy", tabindex="0") Privacy Policy
+              = " "
+              | |
+              = " "
+              a.link(href="http://www.artstor.org/form/contact-us", tabindex="0") Contact Us
+              br
+              | {{ 'REGISTER.PRIVACY_DISCLAIMER' | translate }}
+            | Already registered?
+            = " "
+            a#linkLoginResetModal.link((click)="navigateToLogin()", tabindex="1") Log in
+            br
+            a#linkRegisterHelp.link(href="http://support.artstor.org/?article=register-for-an-artstor-account", target="_blank", tabindex="1") Help
+  ang-register-jstor-modal(*ngIf="showJstorModal", (closeModal)="closeJstorModal($event)")

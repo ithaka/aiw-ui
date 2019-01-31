@@ -76,7 +76,7 @@ export class App {
       if (event instanceof NavigationStart) {
         // focus on the wrapper of the "skip to main content link" everytime new page is loaded
         let mainEl = <HTMLElement>(document.getElementById('skip'))
-        if (!(event.url.indexOf('browse') > -1) && !(event.url.indexOf('search') > -1)) // Don't set focus to skip to main content on browse pages so that we can easily go between browse levels
+        if (!(event.url.indexOf('browse') > -1) && !(event.url.indexOf('search') > -1) && !(event.url.indexOf('asset') > -1)) // Don't set focus to skip to main content on browse pages so that we can easily go between browse levels
           mainEl.focus()
 
         // Detect featureflag=solrmetadata and set cookie
@@ -152,6 +152,14 @@ export class App {
       // On search page go to the start of filter section
       if (this.router.url.indexOf('search') > -1){
         element = document.getElementById('skip-to-search-link');
+      }
+      // On group browse page go to the start of filter groups & tags section
+      else if (this.router.url.indexOf('browse/groups') > -1){
+        element = document.getElementById('skip-to-groups-link');
+      }
+      // On asset page, go to first button
+      else if (this.router.url.indexOf('asset') > -1){
+        element = document.querySelector('.btn-row button');
       }
       // On log in page, go to log in box
       else if (htmlelement.querySelector('form div input')){

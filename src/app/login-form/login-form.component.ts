@@ -82,18 +82,20 @@ export class LoginFormComponent implements OnInit {
       this._auth.saveUser(data.user);
       this.errorMsg = '';
 
+      // NOTE: Deprecated /pccollection endpoint no longer available
+      // TODO: REMOVE
       // Save user personal collections count in local storage
-      this._assets.pccollection()
-      .then((res) => {
-        let pcEnabled: boolean = false;
-        if ( (res['privateCollection'] && (res['privateCollection'].length > 0)) || (res['pcCollection'] && res['pcCollection'].collectionid) ){
-          pcEnabled = true;
-        }
+      // this._assets.pccollection()
+      // .then((res) => {
+      //   let pcEnabled: boolean = false;
+      //   if ( (res['privateCollection'] && (res['privateCollection'].length > 0)) || (res['pcCollection'] && res['pcCollection'].collectionid) ){
+      //     pcEnabled = true;
+      //   }
 
-      })
-      .catch(function(err) {
-          console.error('Unable to load user PC');
-      });
+      // })
+      // .catch(function(err) {
+      //     console.error('Unable to load user PC');
+      // });
 
       let stashedRoute = this._auth.getFromStorage('stashedRoute')
 
