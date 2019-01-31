@@ -114,36 +114,35 @@ export class RegisterComponent implements OnInit {
 
     if (this.shibParameters && this.shibParameters.samlTokenId && this.shibParameters.samlTokenId.length > 0) {
       userInfo.samlTokenId = this.shibParameters.samlTokenId
-
-      this._auth.registerSamlUser(userInfo).pipe(
-        catchError(this.handleError),
-        take(1),
-        map(data => {
-          this.handleRegistrationResp(data)
-        },
-      )).subscribe()
+      registerCall = (value) => { return this._auth.registerSamlUser(userInfo) }
     }
-    else {
+
       registerCall(userInfo).pipe(
         catchError(this.handleError),
         take(1),
         map(data => {
           this.handleRegistrationResp(data)
         })).subscribe()
-    }
+
   }
 
   // Catch and handle Error responses from submitted register form
   private handleError(err: any): any {
-
+    console.log('HANDLE ERROR: ', err, '\n', err.status, '\n', err.error, '\n', err.error.code)
     this.isLoading = false
+    console.log('IS LOADING STATE: :', this.isLoading)
+
+    console.log('SUBMITTED STATE: ', this.submitted)
 
     if (err.status === 500) {
       this.serviceErrors.server = true
     }
     else if (err.status === 400) {
+      console.log('GOT 400: ', err.status)
       if (this.isShibbFlow) {
-        this.serviceErrors.shibbolethError = err.error.code
+        console.log('YEP, IS SHIB FLOW')
+        console.log('ERROR CODE TYPE: ', typeof(err.error.code))
+        this.serviceErrors.shibbolethError = err.error.code.toString()
         this.serviceErrors.showShibbolethError = true
       }
     }
