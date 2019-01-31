@@ -148,7 +148,7 @@ export class PCollectionPage implements OnInit, OnDestroy {
     let pcollection = this._locker.get('37436')
 
     if (pcollection && pcollection.collectionid === '37436') {
-      return pcollection
+      return Promise.resolve(pcollection)
     }
     else {
       let options = { withCredentials: true }
