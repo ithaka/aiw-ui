@@ -8,6 +8,29 @@
         .detail-preview {
             background-color: $color-gray-1;
             border-right: 1px solid $color-border-gray;
+            display: flex;
+
+            .preview-cntnr {
+                width: 352px;
+                height: 260px;
+                margin: auto;
+                position: relative;
+                
+                img {
+                    max-width: 352px;
+                    max-height: 260px;
+                    margin: auto;
+                    display: block;
+                }
+
+                .icon{
+                    width: 24px;
+                    height: 24px;
+                    position: absolute;
+                    top: 8px;
+                    left: 8px;
+                }
+            }
         }
     }
 

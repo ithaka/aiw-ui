@@ -210,6 +210,11 @@ export class AssetPage implements OnInit, OnDestroy {
     // Flag for show/hide page tooltip
     private showPageToolTip: boolean = false
 
+    // Toast Variables
+    private showToast: boolean = false
+    private toastType: string = ''
+    private toastHTML: string = ''
+
     constructor(
         public _appConfig: AppConfig,
         private _assets: AssetService,
@@ -1412,6 +1417,16 @@ export class AssetPage implements OnInit, OnDestroy {
         let focusElementSelector = element.id === 'downloadViewLink' ? '#downloadAssetLink' : '#downloadAssetDropdown'
         let focusElement = <HTMLElement>(document.querySelector(focusElementSelector))
         focusElement.focus()
+    }
+
+    public handleToast(event: any): void{
+        this.toastType = event.type
+        this.toastHTML = event.stringHTML
+        this.showToast = true
+    }
+
+    public closeToast(): void{
+        setTimeout(()=>{ this.showToast = false }, 1000)
     }
 
 }

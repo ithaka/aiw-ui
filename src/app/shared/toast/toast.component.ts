@@ -77,7 +77,7 @@ export class ToastComponent implements OnInit, OnDestroy {
     //     }
     //   )).subscribe()
     // )
-    this.sho
+    // this.sho
   }
 
   ngOnDestroy() {

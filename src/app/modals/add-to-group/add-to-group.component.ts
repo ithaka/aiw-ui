@@ -16,6 +16,7 @@ import { AssetService, GroupService, ImageGroup, AuthService, AssetSearchService
 export class AddToGroupModal implements OnInit, OnDestroy {
   @Output() closeModal: EventEmitter<any> = new EventEmitter();
   @Output() createGroup: EventEmitter<any> = new EventEmitter();
+  @Output() showToast: EventEmitter<any> = new EventEmitter();
   @Input() showCreateGroup: boolean = false;
   public selectedIg: ImageGroup;
   public selectedGroupName: string;
@@ -175,6 +176,10 @@ export class AddToGroupModal implements OnInit, OnDestroy {
       .then((data) => {
         data.items = putGroup.items
         console.log('Update data from new modal:- ', data)
+        this.showToast.emit({
+          type: 'success',
+          stringHTML: '<p>You have successfully added item to <b>' + data.name + '</b>.</p><a class="toast-content-links" href="/#/group/' + data.id + '">Go to Group</a>'
+        })
         this._group.update(data).pipe(
           take(1),
           map(
@@ -186,12 +191,14 @@ export class AddToGroupModal implements OnInit, OnDestroy {
             },
             (err) => { 
               console.error(err); this.serviceResponse.failure = true;
+              console.log('error happening');
             }
         )).subscribe()
 
       })
       .catch((error) => {
           console.error(error);
+          console.log('error happening');
       });
 
 

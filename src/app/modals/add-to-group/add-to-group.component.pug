@@ -3,6 +3,9 @@
     .modal-content
       .row.no-gutters
         .col-lg-6.detail-preview(*ngIf="detailedView")
+          .preview-cntnr
+            img(src="https://tsstage.artstor.org/rosa-iiif-endpoint-1.0-SNAPSHOT/fpx%2Flessing%2Fart%2Flessing_40120767_8b_srgb.fpx/full/352,/0/native.jpg", role="image")
+            i.icon.icon-detail-overlay
         div([ngClass]="[ detailedView ? 'col-lg-6' : 'col-lg-12' ]")
           .modal-header
             h4.modal-title {{ copySelectionStr + ( detailedView ? '.TITLE_DETAIL' : '.TITLE' ) | translate }}

@@ -43,7 +43,7 @@ import { FileUploadModule } from 'ng2-file-upload';
 import { App } from './app.component'
 import { APP_RESOLVER_PROVIDERS } from './app.resolver'
 import { AppConfig } from './app.service'
-import { Nav, Footer, SearchComponent, PaginationComponent, AssetSearchService, InstitutionsService } from './shared'
+import { Nav, Footer, SearchComponent, ToastComponent, PaginationComponent, AssetSearchService, InstitutionsService } from './shared'
 import { GuideTourComponent } from './shared/tour/tour.component'
 import { NavMenu } from './nav-menu'
 import { AssetFilters } from './asset-filters'
@@ -224,6 +224,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     RegisterComponent,
     RegisterJstorModal,
     SearchComponent,
+    ToastComponent,
     SearchModal,
     SearchPage,
     ServerErrorModal,
