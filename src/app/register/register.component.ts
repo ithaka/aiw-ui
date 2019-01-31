@@ -42,9 +42,6 @@ export class RegisterComponent implements OnInit {
     samlTokenId: null
   }
 
-  // Error codes for shibboleth messages
-  private shibErrorCodes: string[] = ['2010', '2020', '2030', '2040', '2050', '2060', '2070', '2080']
-
   constructor(
     private _auth: AuthService,
     private _router: Router,
@@ -118,8 +115,6 @@ export class RegisterComponent implements OnInit {
     if (this.shibParameters && this.shibParameters.samlTokenId && this.shibParameters.samlTokenId.length > 0) {
       userInfo.samlTokenId = this.shibParameters.samlTokenId
 
-      console.log('SHIB FLOW')
-
       this._auth.registerSamlUser(userInfo).pipe(
         catchError(this.handleError),
         take(1),
@@ -129,7 +124,6 @@ export class RegisterComponent implements OnInit {
       )).subscribe()
     }
     else {
-      console.log('NON SHIB')
       registerCall(userInfo).pipe(
         catchError(this.handleError),
         take(1),
@@ -141,24 +135,18 @@ export class RegisterComponent implements OnInit {
 
   // Catch and handle Error responses from submitted register form
   private handleError(err: any): any {
-    //if (err.error instanceof ErrorEvent) {
 
-      console.log('HANDLE ERROR: ', err, '\n', err.status, '\n', err.error, '\n', err.error.code)
+    this.isLoading = false
 
-      this.isLoading = false
-
-      if (err.status === 500) {
-        this.serviceErrors.server = true
+    if (err.status === 500) {
+      this.serviceErrors.server = true
+    }
+    else if (err.status === 400) {
+      if (this.isShibbFlow) {
+        this.serviceErrors.shibbolethError = err.error.code
+        this.serviceErrors.showShibbolethError = true
       }
-      else if (err.status === 400) {
-        console.log('GOT 400')
-        console.log('CODE: ', err.error.code)
-        if (err.error.code && this.shibErrorCodes.indexOf(err.error.code) > -1) {
-          this.serviceErrors.shibbolethError = err.error.code
-          this.serviceErrors.showShibbolethError = true
-        }
-      }
-    //}
+    }
     return throwError(err)
   }
 
