@@ -30,6 +30,7 @@ import { TourStep } from '../shared/tour/tour.service'
 import { APP_CONST } from '../app.constants'
 import { LockerService } from 'app/_services'
 import { AppConfig } from '../app.service'
+import { rights } from './rights.ts'
 
 @Component({
     selector: 'ang-asset-page',
@@ -45,7 +46,6 @@ export class AssetPage implements OnInit, OnDestroy {
     public userSessionFresh: boolean = false
     public assetIds: string[] = []
 
-
     /** controls whether or not the modals are visible */
     public showAgreeModal: boolean = false
     public showLoginModal: boolean = false
@@ -57,6 +57,11 @@ export class AssetPage implements OnInit, OnDestroy {
     public downloadViewReady: boolean = false
     public showExitEdit: boolean = false
     public showDeletePCModal: boolean = false
+
+    // Rights Statements values
+    public rightsText: string = ''
+    public rightsLink: string = ''
+    public rightsImg: string = ''
 
     // Variables related to how we call for metadata
     public assetIdProperty: string = 'artstorid'
@@ -422,9 +427,9 @@ export class AssetPage implements OnInit, OnDestroy {
         this.isMSAgent = this.navigator.msSaveOrOpenBlob !== undefined
 
       // Load Ethnio survey
-      if (this._appConfig.config.siteID !== 'SAHARA') {
-        this.scriptService.loadScript('ethnio-survey')
-      }
+      // if (this._appConfig.config.siteID !== 'SAHARA') {
+      //   this.scriptService.loadScript('ethnio-survey')
+      // }
 
     } // OnInit
 
@@ -495,8 +500,6 @@ export class AssetPage implements OnInit, OnDestroy {
                     this.assets[0].formattedMetadata['Collection'] = splitValues
                 }
 
-
-
                 // Load related results from jstor
                 if (this.relatedResFlag) {
                     this.getJstorRelatedResults(asset)
@@ -514,6 +517,12 @@ export class AssetPage implements OnInit, OnDestroy {
         }
         // Set download link
         this.setDownloadFull()
+
+        // Loop over Rights fields and set rights statement values via isRightStatement
+        for (let i = 0; i < this.assets[0].formattedMetadata.Rights.length; i++) {
+          let rightsField = this.assets[0].formattedMetadata.Rights[i]
+          this.isRightStatement(rightsField)
+        }
     }
 
     /**
@@ -678,6 +687,28 @@ export class AssetPage implements OnInit, OnDestroy {
             }
         }
         return link
+    }
+
+    /**
+     * isRightStatement sets rightsLink and rightsImg values and
+     * returns boolean if an asset has a rights statement
+     * @param rights_text string
+     */
+    public isRightStatement(rights_text: string): boolean {
+
+      // Handle extra spaces and differences in punctuation in Rights fields
+      // by doing uppercase comparison of alphanumeric chars only
+      let reg = /[^a-zA-Z0-9]/
+
+      for (let i = 0; i < rights.length; i++) {
+        if (rights[i].name.split(reg).join('').toUpperCase() === rights_text.split(reg).join('').toUpperCase()) {
+          this.rightsText = rights_text
+          this.rightsLink = rights[i].link
+          this.rightsImg = rights[i].img
+          return true
+        }
+      }
+      return false
     }
 
     private handleSkipAsset(): void {

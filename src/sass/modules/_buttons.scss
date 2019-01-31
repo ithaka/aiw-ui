@@ -36,6 +36,23 @@ $iconBtnSize: $btnHeight;
          -webkit-filter: grayscale(100%); /* Safari 6.0 - 9.0 */
         filter: grayscale(100%);
      }
+
+     .show-on-hover {
+         display: none;
+     }
+
+     &:hover .hide-on-hover {
+         display: none;
+     }
+
+     &:hover .show-on-hover {
+         display: inline;
+
+         &.tooltip {
+             display: block;
+             opacity: 0.9;
+         }
+     }
 }
 
 /**

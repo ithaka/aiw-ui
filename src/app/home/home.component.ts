@@ -148,9 +148,9 @@ export class Home implements OnInit, OnDestroy {
     this.fetchDeviceInfo();
 
     // Load Ethnio survey
-    if (this.siteID !== 'SAHARA') {
-      this._script.loadScript('ethnio-survey')
-    }
+    // if (this.siteID !== 'SAHARA') {
+    //   this._script.loadScript('ethnio-survey')
+    // }
 
   } // OnInit
 
