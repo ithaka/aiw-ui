@@ -42,6 +42,8 @@ export class RegisterComponent implements OnInit {
     samlTokenId: null
   }
 
+  private registerCall: Function
+
   constructor(
     private _auth: AuthService,
     private _router: Router,
@@ -93,7 +95,7 @@ export class RegisterComponent implements OnInit {
 
   /** Gets called when the registration form is submitted */
   public registerSubmit(formValue: any) {
-    let registerCall = (value) => { return this._auth.registerUser(value) }
+    this.registerCall = (value) => { return this._auth.registerUser(value) }
     this.serviceErrors = {};
     this.submitted = true;
 
@@ -114,10 +116,10 @@ export class RegisterComponent implements OnInit {
 
     if (this.shibParameters && this.shibParameters.samlTokenId && this.shibParameters.samlTokenId.length > 0) {
       userInfo.samlTokenId = this.shibParameters.samlTokenId
-      registerCall = (value) => { return this._auth.registerSamlUser(value) }
+      this.registerCall = (value) => { return this._auth.registerSamlUser(value) }
     }
 
-      registerCall(userInfo).pipe(
+      this.registerCall(userInfo).pipe(
         catchError(this.handleError),
         take(1),
         map(data => {
