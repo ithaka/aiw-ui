@@ -1,4 +1,4 @@
-Sitemap: https://library.artstor.org/assets/sitemap-100.xml
+Sitemap: https://library.artstor.org/sitemap.xml
 User-agent: *
 Allow: /asset
 Allow: /collection
