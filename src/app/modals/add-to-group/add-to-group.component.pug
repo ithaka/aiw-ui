@@ -12,7 +12,7 @@
             button.close((click)="closeModal.emit()", type="button", data-dismiss="modal", aria-label="Close")
               span(aria-hidden="true") &times;
           form(#igForm="ngForm", (ngSubmit)="submitGroupUpdate(igForm)")
-            .modal-body(infiniteScroll, [scrollWindow]="false", [infiniteScrollDistance]="1", [infiniteScrollThrottle]="150", [infiniteScrollDisabled]="allGroups.length < totalGroups && !loadingGroups ? false : true", (scrolled)="loadMoreGroups()")
+            .modal-body(infiniteScroll, [scrollWindow]="false", [infiniteScrollDistance]="1", [infiniteScrollThrottle]="150", [infiniteScrollDisabled]="allGroups.length < totalGroups && !loading.allGroups ? false : true", (scrolled)="loadMoreGroups()")
               .search-cntnr
                 .input-group
                   input#inputGroupSearchTerm.form-control.has-icon([(ngModel)]="groupSearchTerm", name="term", type="text", placeholder="Search groups...", (keyup.Space)="searchGroups()")
@@ -27,6 +27,10 @@
                       img([ngClass]="{ 'loaded' : recentGroup.imgLoaded }", [attr.src]="_search.makeThumbUrl(recentGroup['thumbnailImgUrl'], 1, recentGroup['compoundmediaCount'])", [attr.alt]="recentGroup.name", (load)="recentGroup.imgLoaded = true", aria-role="image")
                   .col-9
                     .title {{ recentGroup.name }}
+                .loading-dots(*ngIf="loading.recentGroups")
+                  .dot
+                  .dot
+                  .dot
               
               .all-my-groups
                 .hdr(*ngIf="!groupSearchTerm")
@@ -37,6 +41,10 @@
                       img([ngClass]="{ 'loaded' : group.imgLoaded }", [attr.src]="_search.makeThumbUrl(group['thumbnailImgUrl'], 1, group['compoundmediaCount'])", [attr.alt]="group.name", (load)="group.imgLoaded = true", aria-role="image")
                   .col-9
                     .title {{ group.name }}
+                .loading-dots(*ngIf="loading.allGroups")
+                  .dot
+                  .dot
+                  .dot
 
               //- .link(*ngIf="showCreateGroup", (click)="createGroup.emit()") {{ copySelectionStr + '.OPEN_CREATE_GROUP_MODAL' | translate }}
               //- br

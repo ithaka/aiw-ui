@@ -45,7 +45,11 @@ export class AddToGroupModal implements OnInit, OnDestroy {
 
   private groupsCurrentPage: number = 1
   private totalGroups: number = 0
-  private loadingGroups: boolean = false
+
+  private loading: any = {
+    recentGroups: false,
+    allGroups: false
+  }
 
   private selectedGroup: any = {}
 
@@ -205,17 +209,22 @@ export class AddToGroupModal implements OnInit, OnDestroy {
   }
 
   private loadRecentGroups(): void{
+    this.loading.recentGroups = true
     this._group.getAll(
       'created', 3, 1, [], '', '', 'date', 'desc'
     ).pipe(
     take(1),
       map(data  => {
-        for(let group of data.groups){
+        for(let i = 0; i < data.groups.length; i++){
+          let group = data.groups[i]
           this._assets.getAllThumbnails(group.items.slice(0, 1))
             .then( allThumbnails => {
               group['thumbnailImgUrl'] = allThumbnails[0]['thumbnailImgUrl']
               group['compoundmediaCount'] = allThumbnails[0]['compoundmediaCount']
               this.recentGroups.push( group )
+              if( i === (data.groups.length - 1) ){
+                this.loading.recentGroups = false
+              }
             })
             .catch( error => {
               console.error(error)
@@ -229,7 +238,7 @@ export class AddToGroupModal implements OnInit, OnDestroy {
   }
 
   private loadMyGroups(): void{
-    this.loadingGroups = true
+    this.loading.allGroups = true
     this._group.getAll(
       'created', 10, this.groupsCurrentPage, [], this.groupSearchTerm, '', 'alpha', 'asc'
     ).pipe(
@@ -245,7 +254,7 @@ export class AddToGroupModal implements OnInit, OnDestroy {
               this.allGroups.push( group )
 
               if( i === (data.groups.length - 1) ){
-                this.loadingGroups = false
+                this.loading.allGroups = false
               }
             })
             .catch( error => {

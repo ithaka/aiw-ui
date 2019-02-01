@@ -115,7 +115,7 @@
                 border-left: 6px solid transparent;
 
                 &.selectedGroup {
-                    border-left: 6px solid #c9510d;
+                    border-left: 6px solid $orange;
                     background-color: rgba(232, 232, 232, 0.6);
 
                     .title{
@@ -154,6 +154,34 @@
 
                 &:hover{
                     background-color: rgba(232, 232, 232, 0.6);
+                }
+            }
+            
+            .loading-dots {
+                text-align: center;
+                padding: 8px 0px;
+
+                .dot {
+                    display: inline-block;
+                    width: 8px;
+                    height: 8px;
+                    border-radius: 5px;
+                    opacity: 0;
+                    -webkit-animation: showHideDot 2.5s ease-in-out infinite;
+                    animation: showHideDot 2.5s ease-in-out infinite;
+                    background-color: $orange;
+                    margin: 0px 2px;
+
+                    &:nth-child(1) { animation-delay: 0.2s; }
+                    &:nth-child(2) { animation-delay: 0.4s; }
+                    &:nth-child(3) { animation-delay: 0.6s; }
+                }
+
+                @keyframes showHideDot {
+                    0% { opacity: 0; }
+                    50% { opacity: 1; }
+                    60% { opacity: 1; }
+                    100% { opacity: 0; }
                 }
             }
         }
