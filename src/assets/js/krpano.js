@@ -1,4 +1,4 @@
-﻿/*
+/*
 	krpano Embedding Script
 	krpano 1.19-pr13 (build 2017-09-21)
 */

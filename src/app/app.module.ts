@@ -1,14 +1,12 @@
-import { ApplicationRef, ErrorHandler, NgModule } from '@angular/core';
+import { ApplicationRef, NgModule, Inject, APP_ID, PLATFORM_ID } from '@angular/core';
 import { BrowserModule, Title } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule, HttpClient } from '@angular/common/http';
-import { NavigationEnd, Router, RouteReuseStrategy, RouterModule, UrlSerializer } from '@angular/router';
+import { NavigationEnd, Router, RouteReuseStrategy, RouterModule, UrlSerializer, PreloadAllModules } from '@angular/router';
 // import { removeNgStyles, createNewHosts, createInputTransfer } from '@angularclass/hmr';
 import { DeviceDetectorModule } from 'ngx-device-detector';
-import { DatePipe } from '@angular/common'
+import { DatePipe, isPlatformBrowser } from '@angular/common'
 
-// Ithaka/Artstor Dependencies
-import { ArtstorViewerModule } from 'artstor-viewer'
 
 /*
  * Platform and Environment providers/directives/pipes
@@ -18,8 +16,6 @@ import { ROUTES } from './app.routes';
 
 // UI modules
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-// import { CoolStorageModule } from 'angular2-cool-storage';
-import { LockerModule, Locker, LockerConfig, DRIVERS } from 'angular-safeguard'
 import { Angulartics2Module, Angulartics2Settings } from 'angulartics2'
 import { Angulartics2GoogleAnalytics } from 'angulartics2/ga'
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
@@ -30,20 +26,22 @@ import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 
 // Directives
 import { ClickOutsideDirective } from './_directives';
-import { MediumEditorDirective } from 'angular2-medium-editor';
+//- TO-DO: Enable medium editor with Universal
+// import { MediumEditorDirective } from 'angular2-medium-editor';
 
 // ng2-idle
+//- TO-DO: Enable NgIdle with Universal
 import { NgIdleKeepaliveModule } from '@ng-idle/keepalive'; // this includes the core NgIdleModule but includes keepalive providers for easy wireup
-import { SortablejsModule } from 'angular-sortablejs'
+// import { SortablejsModule } from 'angular-sortablejs'
 
 // File Uploader
 import { FileUploadModule } from 'ng2-file-upload';
 
 // App is our top level component
-import { App } from './app.component'
+import { AppComponent } from './app.component'
 import { APP_RESOLVER_PROVIDERS } from './app.resolver'
 import { AppConfig } from './app.service'
-import { Nav, Footer, SearchComponent, ToastComponent, PaginationComponent, AssetSearchService, InstitutionsService } from './shared'
+import { Nav, Footer, SearchComponent, PaginationComponent, AssetSearchService, InstitutionsService, DomUtilityService, ToastComponent } from './shared'
 import { GuideTourComponent } from './shared/tour/tour.component'
 import { NavMenu } from './nav-menu'
 import { AssetFilters } from './asset-filters'
@@ -59,7 +57,7 @@ import { ClusterPage } from './cluster-page'
 import { BrowsePage, LibraryComponent, AdlCollectionFilterPipe, IgGroupFilterPipe, BrowseCommonsComponent,
   MyCollectionsComponent, BrowseInstitutionComponent, BrowseGroupsComponent, TagComponent, CardViewComponent,
   TagsListComponent, TagFiltersService } from './browse-page'
-import { AssetPage, AgreeModalComponent } from './asset-page'
+import { AssetPage, AgreeModalComponent, ArtstorViewerComponent } from './asset-page'
 import { AccountPage } from './account-page'
 import { AssociatedPage } from './associated-page'
 import { ImageGroupPage, PptModalComponent } from './image-group-page'
@@ -103,7 +101,6 @@ import {
   GroupService,
   ImageGroupService,
   LogService,
-  MetadataService,
   TitleService,
   ToolboxService,
   TypeIdPipe,
@@ -111,7 +108,8 @@ import {
   PersonalCollectionService,
   AccountService
 } from './shared'
-import { LockerService } from './_services'
+import { MetadataService } from './_services'
+
 import { LocalPCService } from './_local-pc-asset.service'
 import { AssetFiltersService } from './asset-filters/asset-filters.service'
 import { TagsService } from './browse-page/tags.service'
@@ -123,11 +121,11 @@ import { UnauthorizedInterceptor } from './interceptors'
 import { LinkifyPipe } from './shared/linkify.pipe'
 import { KeysPipe } from './shared/keys.pipe'
 import { CustomUrlSerializer } from './shared/custom-url-serializer'
-
+import { LOCAL_STORAGE , WINDOW} from '@ng-toolkit/universal'
+import { ArtstorStorageService } from '../../../projects/artstor-storage/src/public_api'
 
 const APP_PROVIDERS = [
   ...APP_RESOLVER_PROVIDERS,
-
   AccountService,
   AppConfig,
   AssetService,
@@ -136,10 +134,10 @@ const APP_PROVIDERS = [
   DatePipe,
   FlagService,
   InstitutionsService,
+  DomUtilityService,
   GroupService,
   PersonalCollectionService,
   LocalPCService,
-  LockerService,
   LogService,
   ImageGroupService,
   ScriptService,
@@ -165,7 +163,6 @@ export function HttpLoaderFactory(http: HttpClient) {
  * `AppModule` is the main entry point into Angular2's bootstraping process
  */
 @NgModule({
-  bootstrap: [ App ],
   declarations: [
     AccessDeniedModal,
     AccountPage,
@@ -173,10 +170,11 @@ export function HttpLoaderFactory(http: HttpClient) {
     AddToGroupModal,
     AddToGroupLegacyModal,
     AgreeModalComponent,
-    App,
+    AppComponent,
     AssetFilters,
     AssetGrid,
     AssetPage,
+    ArtstorViewerComponent,
     AssociatedPage,
     AssetPPPage,
     BrowseCommonsComponent,
@@ -209,7 +207,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     Login,
     LoginFormComponent,
     LoginReqModal,
-    MediumEditorDirective,
+    //- TO-DO: Enable medium editor with Universal
+    // MediumEditorDirective,
     MyCollectionsComponent,
     Nav,
     NavMenu,
@@ -224,7 +223,6 @@ export function HttpLoaderFactory(http: HttpClient) {
     RegisterComponent,
     RegisterJstorModal,
     SearchComponent,
-    ToastComponent,
     SearchModal,
     SearchPage,
     ServerErrorModal,
@@ -236,22 +234,25 @@ export function HttpLoaderFactory(http: HttpClient) {
     TagComponent,
     TagsListComponent,
     ThumbnailComponent,
+    ToastComponent,
     PromptComponent,
     TypeIdPipe,
     UploaderComponent
   ],
   imports: [ // import Angular's modules
-    BrowserModule,
+    BrowserModule.withServerTransition({ appId: 'avatar' }),
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
     NgxTagInputModule,
     Ng2CompleterModule,
     InfiniteScrollModule,
-    LockerModule,
     FileUploadModule,
-    ArtstorViewerModule,
-    RouterModule.forRoot(ROUTES, { useHash: true }),
+    RouterModule.forRoot(ROUTES, { 
+        useHash: true,
+        preloadingStrategy: PreloadAllModules,
+        initialNavigation: 'enabled' 
+      }),
     DeviceDetectorModule.forRoot(),
     Angulartics2Module.forRoot(),
     TranslateModule.forRoot({
@@ -262,14 +263,24 @@ export function HttpLoaderFactory(http: HttpClient) {
       }
     }),
     NgbModule.forRoot(), // Ng Bootstrap Import
+    //- TO-DO: Enable NgIdle with Universal
     NgIdleKeepaliveModule.forRoot(),
-    SortablejsModule.forRoot({ animation: 150 })
+    // SortablejsModule.forRoot({ animation: 150 })
+  ],
+  exports: [
+    RouterModule
   ],
   providers: [ // expose our Services and Providers into Angular's dependency injection
     ENV_PROVIDERS,
     APP_PROVIDERS
-  ]
+  ],
+  bootstrap: [ AppComponent ]
 })
 export class AppModule {
-  constructor(public appRef: ApplicationRef, private router: Router) {}
+  constructor(@Inject(PLATFORM_ID) private platformId: Object,
+    @Inject(APP_ID) private appId: string) {
+    const platform = isPlatformBrowser(platformId) ?
+    'in the browser' : 'on the server';
+    console.log(`Running ${platform} with appId=${appId}`);
+  }
 }

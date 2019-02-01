@@ -5,7 +5,7 @@ import { map, take } from 'rxjs/operators'
 
 import { AuthService } from './../shared/auth.service'
 import { AssetService } from './../shared/assets.service'
-import { MetadataService } from '../shared'
+import { MetadataService } from '../_services'
 
 @Component({
   selector: 'ang-associated-page',
@@ -47,11 +47,11 @@ export class AssociatedPage implements OnInit, OnDestroy {
         }
         if (this.objectId) {
           this._assets.queryAll(params);
-          this._metadata.getMetadata(this.objectId).pipe(
+          this._metadata.buildAsset(this.objectId).pipe(
             take(1),
-            map(res => {
-              if (res.metadata && res.metadata.length > 0 && res.metadata[0].title) {
-                this.assetTitle = res.metadata[0].title
+            map(asset => {
+              if (asset) {
+                this.assetTitle = asset.title
               }
             }, (err) => {
               console.error(err)

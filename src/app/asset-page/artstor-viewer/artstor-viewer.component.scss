@@ -1,0 +1,486 @@
+/*20px: 20px;
+90vh: 90vh;
+600px: 600px;
+50vh: 50vh;
+
+#f1f8f1: #f1f8f1;
+
+// Breakpoints
+$xsphone: 320px;
+576px: 576px;
+$tablet: 768px;
+$desktop: 992px;*/
+
+.aiw-hidden {
+    display: none;
+    pointer-events: none;
+}
+
+.mwEmbedKalturaIframe {
+      min-height: 600px !important;
+}
+
+
+.asset-viewer {
+    text-align: center;
+    padding: 0;
+    z-index: 0;
+    position: relative;
+    height: 90vh;
+    min-height: 600px;
+    overflow: hidden;
+}
+
+.asset-viewer:hover .asset-viewer__buttons  {
+    opacity: 1;
+}
+
+@media(max-width: 576px) {
+    .asset-viewer {
+        height: 50vh;
+        min-height: 50vh;
+    }
+
+    .asset-viewer .asset-viewer__buttons {
+        opacity: 1;
+    }
+}
+
+.asset-viewer__buttons {
+    opacity: 0;
+    transition: opacity 0.2s linear;
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    z-index: 1000;
+    padding: 10px;
+}
+@media(max-width: 576px) {
+    .asset-viewer__buttons {
+        top: calc(100% - 40px);
+        left: 50%;
+        transform: translateX(-50%);
+    }
+}
+
+.asset-viewer__pagination {
+    position: absolute;
+    bottom: 215px;
+    right: 15px;
+    z-index: 1000;
+    padding: 0px;
+}
+
+
+.asset-viewer__edge-arrows {
+    opacity: 0;
+    transition: opacity 0.2s linear;
+    position: absolute;
+    pointer-events: none;
+    top: calc(50% - 120px);
+    width: 100%;
+}
+
+.asset-viewer:hover .asset-viewer__edge-arrows {
+    opacity: 1;
+}
+
+.asset-viewer__edge-arrows .btn {
+    pointer-events: all;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: rgba(66,66,66,0.6);
+}
+
+.asset-viewer__edge-arrows .btn .icon {
+    width: 24px;
+    height: 24px;
+}
+
+.asset-viewer__edge-arrows .btn:hover,
+.asset-viewer__edge-arrows .btn:active {
+    background: rgba(66,66,66,1.0);
+}
+
+.asset-viewer__edge-arrows .btn--prev {
+    float: left;
+    margin: 5px;
+    margin-left: 5px 5px 5px 28px;
+}
+
+.asset-viewer__edge-arrows .btn--next {
+    float: right;
+    margin: 5px 28px 5px 5px;
+}
+
+.asset-viewer__pagination .btn {
+    color: #fff;
+    background: rgba(0,0,0,0.7);
+}
+
+.asset-viewer__pagination .btn:hover,
+.asset-viewer__pagination .btn:active {
+    background: rgb(0,0,0);
+    color: #ddd;
+}
+
+
+.asset-viewer__pagination .btn::disabled,
+.asset-viewer__pagination .btn[disabled] {
+    color: #444 !important;
+    background: rgba(0,0,0,0.7) !important;
+}
+
+.asset-viewer__pagination .btn:first-child {
+    border-top-left-radius: 3px;
+    border-bottom-left-radius: 3px;
+}
+.asset-viewer__pagination .btn:last-child {
+    border-top-right-radius: 3px;
+    border-bottom-right-radius: 3px;
+}
+
+.asset-viewer_multi-view-info {
+    position: absolute;
+    left: 21px;
+    bottom: 147px;
+    z-index: 1000;
+    color: #fff;
+    font-family: Verdana;
+}
+
+
+.btn-divider {
+    display: inline-block;
+    width: 1px;
+    height: 20px;
+    margin: 0px -0.5px;
+    background: rgb(0,0,0);
+    z-index: 1001;
+    vertical-align: middle;
+}
+
+.video-player {
+    min-height: 600px;
+    min-height: 90vh;
+}
+@media(max-width: 576px) {
+    .video-player {
+        height: 50vh;
+        min-height: 50vh;
+    }
+}
+.video-player iframe {
+    min-width:100%;
+    min-height: 600px;
+    min-height: 90vh;
+}
+
+.osd-wrap {
+    position: relative;
+    height: 600px;
+    height: 90vh;
+    width: 100%;
+    min-height: 90vh;
+    background: #000;
+}
+@media(max-width: 576px) {
+    .osd-wrap {
+        height: 50vh;
+        min-height: 50vh;
+    }
+}
+
+.asset-viewer.fullscreen {
+    min-height: 100%;
+    width: 100%;
+    z-index: 1;
+    padding: 0px;
+}
+.asset-viewer.fullscreen .item  {
+    position: absolute !important;
+    width: 100%;
+    height: 100%;
+    min-height: 100% !important;
+}
+.asset-viewer-1 {
+    width: 100%;
+}
+.asset-viewer-2 {
+    width: 50%;
+}
+.asset-viewer-3 {
+    width: 33.3%;
+}
+.asset-viewer-4 {
+    width: 25%;
+}
+.asset-viewer-5 {
+    width: 20%;
+}
+.asset-viewer-6 {
+    width: 16.66%;
+}
+.asset-viewer-7 {
+    width: 14.285%;
+}
+.asset-viewer-8 {
+    width: 12.5%;
+}
+.asset-viewer-9 {
+    width: 11.11%;
+}
+.asset-viewer-10 {
+    width: 10%;
+}
+.asset-viewer-11 {
+    width: 9.09%;
+}
+.asset-viewer-12 {
+    width: 8.33%;
+}
+.asset-viewer-13 {
+    width: 7.69%;
+}
+.asset-viewer-14 {
+    width: 7.14%;
+}
+.asset-viewer-15 {
+    width: 6.66%;
+}
+.asset-viewer-16 {
+    width: 6.25%;
+}
+.asset-viewer-17 {
+    width: 5.88%;
+}
+.asset-viewer-18 {
+    width: 5.55%;
+}
+.asset-viewer-19 {
+    width: 5.26%;
+}
+.asset-viewer-20 {
+    width: 5%;
+}
+
+.item.item--thumbnail,
+.asset-viewer.fullscreen .item.item--thumbnail {
+    position: absolute;
+    width: auto;
+    height: auto;
+    min-height:0px !important;
+    min-width:0px;
+    max-height: 100%;
+    max-width: 100%;
+    top: 50%;
+    left: 50%;
+    transform: translate3d(-50%,-50%,0);
+    z-index: -1;
+}
+
+.fullscreen-metadata {
+    position: absolute;
+    background: #f1f8f1;
+    left: 0px;
+    bottom: 0px;
+    z-index: 1;
+    opacity: 0.98;
+    width: 100%;
+    height: 80px;
+    padding: 20px;
+    transition: transform 0.2s linear;
+    transform: translateY(0px);
+}
+
+
+.fullscreen-metadata.slideAway {
+    transform: translateY(100%);
+}
+
+.fullscreen-metadata i{
+    vertical-align: top;
+    margin: 3px;
+    cursor: pointer;
+}
+.fullscreen-metadata .title{
+    font-family: 'Lyon Display Web', Georgia, Times;
+    font-size: 18px;
+    display: inline-block;
+    width: 350px;
+    margin: auto;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    vertical-align: top;
+}
+.fullscreen-metadata .page-tooltip{
+    font-weight: normal;
+    font-size: 10px;
+    min-width: 120px;
+    line-height: 21px;
+    display: block;
+    position: absolute;
+    z-index: 5000;
+    top: 100%;
+    left: 50%;
+    -webkit-transform: translateX(-50%);
+    -moz-transform: translateX(-50%);
+    -ms-transform: translateX(-50%);
+    -o-transform: translateX(-50%);
+    transform: translateX(-50%);
+    box-shadow: 1px 2px 3px rgba(0, 0, 0, 0.3);
+    background: white;
+    color: black;
+    padding: 2px 15px 0px;
+    opacity: 0;
+    -webkit-transition: opacity linear 0.3s;
+    -moz-transition: opacity linear 0.3s;
+    transition: opacity linear 0.3s;
+}
+.fullscreen-metadata:hover .page-tooltip{
+    opacity: 1;
+}
+
+.fullscreen-metadata .caption-link{
+    display: inline-block;
+    float: left;
+    font-size: 12px;
+    cursor: pointer;
+    border-bottom: 1px dotted #373a3c;
+}
+
+.caption-cntnr{
+    display: block;
+    padding: 10px;
+    position: absolute;
+    bottom: 0px;
+    background: rgba(255,255,255,0.95);
+    width: 100%;
+}
+
+.pano {
+    width: 100%;
+    height: 100%;
+}
+
+.help-icon {
+    display: inline-block;
+    border: 0px solid transparent;
+    border-radius: 50%;
+    background: #777;
+    color: #fff;
+    font-weight: bold;
+    font-size: 10px;
+    height: 15px;
+    width: 15px;
+    line-height: 15px;
+    padding: 0px;
+    margin: 0 5px;
+    cursor: pointer;
+}
+
+/** OpenSeaDragon Overrides **/
+
+
+.referencestrip {
+    position: absolute !important;
+    bottom: 0px !important;
+    height: 175px !important;
+    min-width: 500px !important;
+    width: 100% !important;
+    display: block !important;
+    float: none !important;
+    margin: 0px !important;
+    opacity: 1 !important;
+    white-space: nowrap !important;
+    overflow-x: scroll !important;
+    overflow-y: hidden !important;
+    touch-action: auto !important;
+    padding-left: 12px !important;
+    padding-right: 12px !important;
+}
+
+.referencestrip::-webkit-scrollbar {
+    -webkit-appearance: none;
+    width: 7px;
+}
+
+#referencestrip > div {
+    /* background: rgb(153, 153, 153) */
+    background: rgb(0,0,0) !important;
+    padding: 0px !important;
+    margin: 0px 5px !important;
+}
+
+/* .referencestrip > div[style^="background: rgb(153, 153, 153)"] {
+background:  #000 !important;
+} */
+
+.referencestrip canvas {
+    opacity: 0.5;
+    cursor:  pointer !important;
+    -webkit-transition: opacity 250ms ease-in-out;
+    -moz-transition: opacity 250ms ease-in-out;
+    -ms-transition: opacity 250ms ease-in-out;
+    -o-transition: opacity 250ms ease-in-out;
+    transition: opacity 250ms ease-in-out;
+}
+.referencestrip .displayregion{
+    /* cursor: pointer !important; */
+    z-index: -1 !important;
+}
+.asset-viewer__edge-arrows .btn:disabled{
+    cursor: default !important;
+}
+
+.referencestrip > div[style^="background: rgb(153, 153, 153)"] canvas, .referencestrip canvas:hover {
+    /* border: 2px solid #C9510D !important; */
+    opacity: 1 !important;
+    padding: 0px !important;
+}
+
+.referencestrip::-webkit-scrollbar-thumb {
+    border-radius: 4px;
+    background-color: rgba(255,255,255,.5);
+    -webkit-box-shadow: 0 0 1px rgba(255,255,255,.7);
+    width: 5px;
+}
+
+/* Select BOTTOM LEFT positioning div */
+.openseadragon-canvas + div + div + div + div {
+    position: static !important;
+}
+
+.referencestrip > div {
+    background: #000 !important;
+    border: 2px solid transparent !important;
+    margin: 0px 5px !important;
+    display: inline-block !important;
+    float: none !important;
+    height: 165px !important;
+    width: 150px !important;
+    position: relative !important;
+    touch-action: auto !important;
+    /* padding: 60px 0px 0px 0px !important; */
+    /* cursor: pointer !important; */
+}
+
+.navigator {
+    position: absolute !important;
+    bottom: 10px !important;
+    z-index: 1 !important;
+    left: 10px !important;
+    border: 3px solid rgb(0,0,0) !important;
+    opacity: 0.95;
+    margin-bottom: 0px !important;
+}
+
+.multi-view .navigator {
+    bottom: 205px !important;
+}
+
+[class$="-displayregion"] {
+    border: 2px solid rgb(224, 11, 11) !important;
+}

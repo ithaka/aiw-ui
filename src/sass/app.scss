@@ -317,8 +317,17 @@ body body{
   margin-top: 3px !important;
 }
 
+.tooltip.bs-tooltip-top {
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 100%;
 
-// Custome style for toast content links
+  & .arrow {
+    left: calc(50% - 0.4rem);
+  }
+}
+
+// Custom style for toast content links
 .toast-content-links {
   color: #0039C6 !important;
   text-decoration: underline !important;

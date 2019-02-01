@@ -335,7 +335,7 @@
   "BROWSE_GROUPS" : "Browse Groups",
   "LOGIN_REQUIRED_MODAL": {
     "HEADING": "User account required",
-    "PROMPT": "Please log in or <a href=\"/#/register\" class=\"link\">Register</a> to save images.",
+    "PROMPT": "Please log in or <a href=\"/register\" class=\"link\">Register</a> to save images.",
     "PROMPT_NO_REGISTER": "Please log in to save images."
   },
   "BROWSE": {
@@ -413,7 +413,7 @@
   },
   "ACCESS_DENIED_MODAL": {
     "HEADING": "Content Unavailable",
-    "PROMPT": "If you are already <a href=\"/#/login\" class=\"link\">logged in</a>, this may be due to content limitations or your institutional access.",
+    "PROMPT": "If you are already <a href=\"/login\" class=\"link\">logged in</a>, this may be due to content limitations or your institutional access.",
     "IP_AUTH" : {
       "PROMPT" : "This content is not available due to content limitations or your institutional access. Please try using an account."
     },
@@ -428,7 +428,7 @@
     "HEADING" : "Server Error",
     "PROMPT": "Sorry, an error occurred loading the content you requested.<br/><br/>Please try again or come back later. If the problem persists, please <a class='link' href='mailto:support@artstor.org'>contact support</a>."
   },
-  "ACCESS_DENIED": "<b>Sorry, Content Unavailable:</b> If you are already <a href=\"/#/login\" class=\"link\">logged in</a>, this may be due to content limitations or your institutional access.",
+  "ACCESS_DENIED": "<b>Sorry, Content Unavailable:</b> If you are already <a href=\"/login\" class=\"link\">logged in</a>, this may be due to content limitations or your institutional access.",
   "NO_IG": {
     "HEADING": "Image group unavailable",
     "NO_EXISTS": "The image group you are trying to access does not exist.",
@@ -486,7 +486,7 @@
       "COLL_LIST": "Artstor, Institutional, Public, and Personal",
       "COLL_LIST_SHORT": "Institutional Collections",
       "TEACHING_HEADING": "Teaching Resources",
-      "TEACHING_LIST": "<a href=\"/#/browse/groups/public?tags=Curriculum%2520Guides&page=1\" class=\"link\">Curriculum Guides</a>, <a href=\"/#/browse/groups/public?page=1&tags=Case%2520Studies\" class=\"link\">Case Studies</a>, <a href=\"/#/browse/groups/search?level=public&tags=Art%2520%2526%2520Architecture%2520Overviews&page=1\" class=\"link\">Arts & Architecture Overviews</a>, <a href=\"/#/browse/groups/search?level=public&page=1&tags=Social%2520Studies%2520and%2520Humanities%2520Overviews\" class=\"link\">Social Sciences & Humanities Overviews</a>, <a href=\"http://artstor.libguides.com/APArtHistory\" target=\"_blank\" class=\"link\">AP Art History</a>, <a href=\"http://artstor.libguides.com/APUSH\" target=\"_blank\" class=\"link\">AP US History</a>, <a href=\"http://artstor.libguides.com/APEURO\" target=\"_blank\" class=\"link\">AP European History</a>, and <a href=\"/#/browse/groups/public\" class=\"link\">more...</a>",
+      "TEACHING_LIST": "<a href=\"/browse/groups/public?tags=Curriculum%2520Guides&page=1\" class=\"link\">Curriculum Guides</a>, <a href=\"/browse/groups/public?page=1&tags=Case%2520Studies\" class=\"link\">Case Studies</a>, <a href=\"/browse/groups/search?level=public&tags=Art%2520%2526%2520Architecture%2520Overviews&page=1\" class=\"link\">Arts & Architecture Overviews</a>, <a href=\"/browse/groups/search?level=public&page=1&tags=Social%2520Studies%2520and%2520Humanities%2520Overviews\" class=\"link\">Social Sciences & Humanities Overviews</a>, <a href=\"http://artstor.libguides.com/APArtHistory\" target=\"_blank\" class=\"link\">AP Art History</a>, <a href=\"http://artstor.libguides.com/APUSH\" target=\"_blank\" class=\"link\">AP US History</a>, <a href=\"http://artstor.libguides.com/APEURO\" target=\"_blank\" class=\"link\">AP European History</a>, and <a href=\"/browse/groups/public\" class=\"link\">more...</a>",
       "GROUPS_HEADING": "Image Groups",
       "GROUPS_LIST": "Groups of images created by Artstor, other users at your institution, and you",
       "GROUPS_LIST_SAHARA": "Groups created by you and others at your institution",

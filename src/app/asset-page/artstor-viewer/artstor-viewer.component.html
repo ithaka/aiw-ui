@@ -1,0 +1,48 @@
+<div class="asset-viewer" [class.fullscreen]="isFullscreen" [class.multi-view]="isMultiView" (contextmenu)="disableContextMenu($event)">
+    <!-- Large thumbnail fallback 
+        - Thumbnail is always showing, and hidden by other viewers placed on top
+        - This allows search crawlers to find the thumbnail
+        -->
+    <div id="fallbackViewer"><img class="item item--thumbnail" alt="{{ asset.title }}" [attr.src]="asset.thumbnail_url" (error)="asset.fallbackThumbnailUrl()"></div>
+    <div class="more-results overlay-wrap--center" id="loader-wrapper" *ngIf="state == 0"><i class="icon-asterisk icon-spin icon-large"></i></div>
+    <!-- IIIF Image Viewer-->
+    <div [class.aiw-hidden]="state != 1">
+        <div class="item osd-wrap" [attr.id]="osdViewerId" [attr.zoomValue]="lastZoomValue"></div>
+    </div>
+    <!-- Video Player-->
+    <div class="video-player" [class.aiw-hidden]="state != 2">
+        <iframe id="{{ 'kalturaIframe-' + index }}" frameborder="0"></iframe>
+    </div>
+    <!--panorama Krpano viewer-->
+    <div class="krpano-viewer osd-wrap" [class.aiw-hidden]="state != 3">
+        <div class="pano" id="pano-{{ index }}"></div>
+    </div>
+    <!--Viewer Buttons-->
+    <div *ngIf="!thumbnailMode">
+        <div class="button-group asset-viewer__buttons" id="imageButtons-{{ osdViewerId }}">
+        <button class="btn btn--icon btn--zoomIn" [class.aiw-hidden]="state != 1" id="zoomIn-{{ osdViewerId}}" title="Zoom In"><i class="icon icon-zoom-in"></i></button><button class="btn btn--icon btn--zoomOut" [class.aiw-hidden]="state != 1" id="zoomOut-{{ osdViewerId }}" title="Zoom Out"><i class="icon icon-zoom-out"></i></button><button class="btn btn--icon btn--zoomFit" [class.aiw-hidden]="state != 1" id="zoomFit-{{ osdViewerId }}" title="Zoom Fit"><i class="icon icon-fit"></i></button><button class="btn btn--icon btn--fullScreen" *ngIf="!isFullscreen" id="fullScreen-{{ osdViewerId }}" (click)="togglePresentationMode()" title="Full Screen"><i class="icon icon-fullscreen"></i></button><button class="btn btn--icon" *ngIf="isFullscreen && assetCompareCount > 1" (click)="removeAsset.emit(asset)" title="Remove from Comparison"><i class="icon icon-close"></i></button>
+        </div>
+        <!-- Hide if not multi view (do not use ngIf, OSD needs to bind) -->
+        <!-- Bottom right arrow style -->
+        <!-- <div [class.aiw-hidden]="!isMultiView" class="button-group asset-viewer__pagination" id="imagePageButtons-{{ osdViewerId }}">
+        <button class="btn btn--icon btn--prev" id="previousButton-{{ osdViewerId}}"><</button><span class="btn-divider"></span><button class="btn btn--icon btn--next" id="nextButton-{{ osdViewerId}}">></button>
+        </div> -->
+        <!-- Edge pagination arrow style -->
+        <div [class.aiw-hidden]="!isMultiView" class="asset-viewer__edge-arrows" id="imagePageButtons-{{ osdViewerId }}">
+        <button class="btn btn--icon btn--prev" id="previousButton-{{ osdViewerId}}"><i class="icon icon-prev--white"></i></button><button class="btn btn--icon btn--next" id="nextButton-{{ osdViewerId}}"><i class="icon icon-next--white"></i></button>
+        </div>
+        <div *ngIf="isMultiView" class="asset-viewer_multi-view-info">
+        <b>{{ multiViewPage }}</b> of <b>{{ multiViewCount }}</b>
+        <button *ngIf="hasMultiViewHelp()" (click)="multiViewHelp.emit()" class="help-icon">?</button>
+        </div>
+        <div class="fullscreen-metadata" *ngIf="isFullscreen" [class.slideAway]="!showCaption">
+        <div class="vertical-center-wrap"><i class="icon icon-direction icon-left" *ngIf="assetCompareCount == 1 && !quizMode" [class.disabled]="assetNumber <= 1" title="Previous in results" (click)="prevPage.emit()"></i>
+            <div class="title" [innerHtml]="asset.title"></div><i class="icon icon-direction icon-right" *ngIf="assetCompareCount == 1 && !quizMode" [class.disabled]="assetNumber >= assetGroupCount" title="Next in results" (click)="nextPage.emit()"></i>
+            <div class="meta-block small">
+            <div class="creator" [innerHtml]="asset.creator"></div>
+            <div class="date" [innerHtml]="asset.date"></div>
+            </div>
+        </div>
+        </div>
+    </div>
+</div>

@@ -1,4 +1,3 @@
-import { Locker } from 'angular-safeguard'
 import { Component, OnInit, OnDestroy } from '@angular/core'
 import { Router, ActivatedRoute } from '@angular/router'
 import { Location } from '@angular/common'
@@ -9,8 +8,8 @@ import { map, take } from 'rxjs/operators'
 
 import { AppConfig } from '../app.service'
 import { AuthService, User, AssetService, FlagService } from './../shared'
-import { LockerService } from 'app/_services'
 import { environment } from 'environments/environment'
+import { ArtstorStorageService } from '../../../projects/artstor-storage/src/public_api'
 
 declare var initPath: string
 
@@ -70,8 +69,9 @@ export class Login implements OnInit, OnDestroy {
     private angulartics: Angulartics2,
     public _app: AppConfig,
     private _flags: FlagService,
-    private _locker: LockerService
+    private _storage: ArtstorStorageService
   ) {
+    // console.log("Constructing login component...")
   }
 
   ngOnInit() {
@@ -90,7 +90,7 @@ export class Login implements OnInit, OnDestroy {
     )
 
     // Check for a stashed route to pass to proxy links
-    this.stashedRoute = this._locker.get('stashedRoute') || ''
+    this.stashedRoute = this._storage.getLocal('stashedRoute') || ''
 
     if (this._app.config.copyModifier) {
       this.copyBase = this._app.config.copyModifier + '.'
@@ -174,6 +174,8 @@ export class Login implements OnInit, OnDestroy {
 
   /**
    * Fired when the user logs in through their institution
+   * Will only be executed on client side application
+   * @requires browser
    */
   goToInstLogin(): void {
     let len: number = this.loginInstitutions.length
@@ -219,6 +221,7 @@ export class Login implements OnInit, OnDestroy {
          * EZProxy forwarding
          * Auth provides !!!TARGET_FULL_PATH!!! as a string to replace for forwarding
          */
+        // TO-DO: Only reference document client-side
         url = url.replace(urlToken, document.location.host + stashedRoute )
       } else if (url.match(pathToken)) {
         /**
@@ -250,8 +253,7 @@ export class Login implements OnInit, OnDestroy {
         window.open(selectedInst.artstorShibbolethLoginUrl);
         return;
       }
-
-      let origin = window.location.origin + '/#/home';
+      let origin = window.location.origin + '/home';
       let ssoSubdomain = this._auth.getSubdomain() == 'library' ? 'sso' : 'sso.' + this._auth.getSubdomain()
       window.open('https://' + ssoSubdomain + '.artstor.org/sso/shibssoinit?idpEntityID=' + encodeURIComponent(url) + '&o=' + encodeURIComponent(origin));
     }
