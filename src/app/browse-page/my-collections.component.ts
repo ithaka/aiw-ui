@@ -10,7 +10,7 @@ import { TitleService, AssetSearchService, AuthService, AssetService, FlagServic
 @Component({
   selector: 'ang-my-collections',
   templateUrl: 'my-collections.component.pug',
-  styleUrls: ['./browse-page.component.scss', './tag/tag.component.scss']
+  styleUrls: ['./browse-page.component.scss']
 })
 export class MyCollectionsComponent implements OnInit {
   public unaffiliatedUser: boolean = false
