@@ -15,30 +15,29 @@ import { AssetService, GroupService, ImageGroup, AuthService, AssetSearchService
   styleUrls: ["./add-to-group.component.scss"]
 })
 export class AddToGroupModal implements OnInit, OnDestroy {
-  @Output() closeModal: EventEmitter<any> = new EventEmitter();
-  @Output() createGroup: EventEmitter<any> = new EventEmitter();
-  @Output() showToast: EventEmitter<any> = new EventEmitter();
-  @Input() showCreateGroup: boolean = false;
-  public selectedIg: ImageGroup;
-  public selectedGroupName: string;
-  public selectedGroupError: string;
-
-  @Input()
-  public copySelectionStr: string = 'ADD_TO_GROUP_MODAL.FROM_SELECTED'
+  @Output() closeModal: EventEmitter<any> = new EventEmitter()
+  @Output() createGroup: EventEmitter<any> = new EventEmitter()
+  @Output() showToast: EventEmitter<any> = new EventEmitter()
+  @Input() public copySelectionStr: string = 'ADD_TO_GROUP_MODAL.FROM_SELECTED'
+  @Input() showCreateGroup: boolean = false
+  @Input() private selectedAssets: any[] = [] // this is used in the asset page, where a single asset can be injected directly
+  
+  public selectedIg: ImageGroup
+  public selectedGroupName: string
+  public selectedGroupError: string
 
   public serviceResponse: {
     success?: boolean,
     failure?: boolean,
     tooManyAssets?: boolean
-  } = {};
+  } = {}
 
-  public dataService: any;
-  private subscriptions: Subscription[] = [];
+  public dataService: any
+  private subscriptions: Subscription[] = []
 
-  @Input() private selectedAssets: any[] = []; // this is used in the asset page, where a single asset can be injected directly
-  private groups: ImageGroup[] = [];
+  private groups: ImageGroup[] = []
 
-  private detailedView: boolean = true
+  private detailPreviewURL: string = ''
 
   private groupSearchTerm: string = ''
   private recentGroups: any[] = []
@@ -52,9 +51,10 @@ export class AddToGroupModal implements OnInit, OnDestroy {
     allGroups: false
   }
 
+  private detailViewBounds: any = {}
   private selectedGroup: any = {}
 
-  @ViewChild("modal", {read: ElementRef}) modalElement: ElementRef;
+  @ViewChild("modal", {read: ElementRef}) modalElement: ElementRef
 
   constructor(
     private _assets: AssetService,
@@ -88,6 +88,13 @@ export class AddToGroupModal implements OnInit, OnDestroy {
 
     this.loadRecentGroups()
     this.loadMyGroups()
+
+    if(this.selectedAssets[0]['detailViewBounds'] && this.selectedAssets[0]['detailViewBounds']['width']){
+      this.detailViewBounds = this.selectedAssets[0]['detailViewBounds']
+      this.detailPreviewURL = this.selectedAssets[0].tileSource.replace('info.json', '') + 'pct:' + (this.detailViewBounds['x'] * 100) + ',' + (this.detailViewBounds['y'] * 100) + ',' + (this.detailViewBounds['width'] * 100) + ',' + (this.detailViewBounds['height'] * 100) + '/352,/0/native.jpg'
+    }
+
+    console.log(this.selectedAssets, 'selected asssets')
 
   }
 
@@ -136,7 +143,7 @@ export class AddToGroupModal implements OnInit, OnDestroy {
     let putGroup: ImageGroup = Object.assign({}, this.selectedGroup)
 
     // assets come from different places and sometimes have id and sometimes objectId
-    this.selectedAssets.forEach((asset: any) => {
+    this.selectedAssets.forEach((asset: any, index) => {
       let assetId: string
       if (!asset) {
         console.error('Attempted selecting undefined asset')
@@ -156,7 +163,19 @@ export class AddToGroupModal implements OnInit, OnDestroy {
         }
         // Add id to group if it's not already in the group
         if (assetId && putGroup.items.indexOf(assetId) < 0) {
-          putGroup.items.push(assetId);
+          if( index === 0 && this.detailViewBounds['width']){
+            putGroup.items.push({
+              "artstorid": assetId,
+              "zoom": {
+                "viewerX":this.detailViewBounds['x'],
+                "viewerY": this.detailViewBounds['y'],
+                "pointWidth": this.detailViewBounds['width'],
+                "pointHeight": this.detailViewBounds['height']
+              }
+            })
+          } else {
+            putGroup.items.push(assetId);
+          }
         }
       }
     })
@@ -173,29 +192,36 @@ export class AddToGroupModal implements OnInit, OnDestroy {
       .then((data) => {
         data.items = putGroup.items
         console.log('Update data from new modal:- ', data)
-        this.showToast.emit({
-          type: 'success',
-          stringHTML: '<p>You have successfully added item to <b>' + data.name + '</b>.</p><a class="toast-content-links" href="/#/group/' + data.id + '">Go to Group</a>'
-        })
         this._group.update(data).pipe(
           take(1),
           map(
             (res) => { 
               this.serviceResponse.success = true
               this._assets.clearSelectMode.next(true)
+              this.closeModal.emit()
+              this.showToast.emit({
+                type: 'success',
+                stringHTML: '<p>You have successfully added item to <b>' + data.name + '</b>.</p><a class="toast-content-links" href="/#/group/' + data.id + '">Go to Group</a>'
+              })
               // Add to Group GA event 
               this._angulartics.eventTrack.next({ action: 'addToGroup', properties: { category: this._auth.getGACategory(), label: this.router.url }})
             },
             (err) => { 
               console.error(err); this.serviceResponse.failure = true;
-              console.log('error happening');
+              this.showToast.emit({
+                type: 'error',
+                stringHTML: '<p>Unable to add item to group. Try again later or if the problem persists contact <a href="http://support.artstor.org/">support</a>.</p>'
+              })
             }
         )).subscribe()
 
       })
       .catch((error) => {
           console.error(error);
-          console.log('error happening');
+          this.showToast.emit({
+            type: 'error',
+            stringHTML: '<p>Unable to add item to group. Try again later or if the problem persists contact <a href="http://support.artstor.org/">support</a>.</p>'
+          })
       });
 
 

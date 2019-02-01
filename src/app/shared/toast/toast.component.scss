@@ -16,10 +16,10 @@
     -webkit-transform: translateX(100%);
 
     &.success {
-        border-color: #7DAD47;
+        border-color: #87AA55;
     }
     &.error{
-        border-color: red;
+        border-color: #ED3323;
     }
 
     &.slide-in {
@@ -57,12 +57,14 @@
         display: block;
         padding: 8px 0px;
 
-        .toast-icon{
-            width: 24px;
-            height: 24px;
-            background-color: #7DAD47;
-            border-radius: 13px;
+        .icon {
+            font-size: 24px;
             margin: auto;
+            display: block;
+
+            &.icon-close {
+                font-size: 18px !important;
+            }
         }
     }
 }

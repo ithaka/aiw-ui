@@ -14,7 +14,7 @@ export class ToastComponent implements OnInit, OnDestroy {
   public hideToast: boolean = false
 
   constructor() {}
-  
+
   ngOnInit() {
     this.hideToast = false
     setTimeout(() => {

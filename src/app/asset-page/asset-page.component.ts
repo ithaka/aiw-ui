@@ -794,21 +794,27 @@ export class AssetPage implements OnInit, OnDestroy {
         return assetIndex
     }
 
-    private addAssetToIG(): void {
+    private addAssetToIG(detailView?: boolean): void {
 
         if (this.user && this.user.isLoggedIn) {
-            // Check if the logged-in user has private image groups
-            this._group.getAll('created').pipe(
-              take(1),
-              map(res => {
-                if (res.groups && (res.groups.length > 0)) {
-                    this.showAddModal = true;
-                } else {
-                    this.showCreateGroupModal = true;
-                }
-              },
-              (err) => { console.error(err); }
-            )).subscribe()
+            if(this.detailViewsFlag) {
+                this.assets[0]['detailViewBounds'] = detailView ? this.assetViewer.osdViewer.viewport.getBounds(true) : {}
+                this.showAddModal = true
+
+            } else {
+                // Check if the logged-in user has private image groups
+                this._group.getAll('created').pipe(
+                take(1),
+                map(res => {
+                    if (res.groups && (res.groups.length > 0)) {
+                        this.showAddModal = true;
+                    } else {
+                        this.showCreateGroupModal = true;
+                    }
+                },
+                (err) => { console.error(err); }
+                )).subscribe()
+            }
         } else {
           this.showLoginModal = true;
         }

@@ -1,14 +1,14 @@
 .modal.fade.show(id="modal", tabindex="-1")
-  .modal-dialog(role="document", [ngClass]="{ 'large': detailedView }")
+  .modal-dialog(role="document", [ngClass]="{ 'large': detailViewBounds.width }")
     .modal-content
       .row.no-gutters
-        .col-lg-6.detail-preview(*ngIf="detailedView")
+        .col-lg-6.detail-preview(*ngIf="detailViewBounds.width")
           .preview-cntnr
-            img(src="https://tsstage.artstor.org/rosa-iiif-endpoint-1.0-SNAPSHOT/fpx%2Flessing%2Fart%2Flessing_40120767_8b_srgb.fpx/full/352,/0/native.jpg", role="image")
+            img([attr.src]="detailPreviewURL", role="image")
             i.icon.icon-detail-overlay
-        div([ngClass]="[ detailedView ? 'col-lg-6' : 'col-lg-12' ]")
+        div([ngClass]="[ detailViewBounds.width ? 'col-lg-6' : 'col-lg-12' ]")
           .modal-header
-            h4.modal-title {{ copySelectionStr + ( detailedView ? '.TITLE_DETAIL' : '.TITLE' ) | translate }}
+            h4.modal-title {{ copySelectionStr + ( detailViewBounds.width ? '.TITLE_DETAIL' : '.TITLE' ) | translate }}
             button.close((click)="closeModal.emit()", type="button", data-dismiss="modal", aria-label="Close")
               span(aria-hidden="true") &times;
           form(#igForm="ngForm", (ngSubmit)="submitGroupUpdate(igForm)")
