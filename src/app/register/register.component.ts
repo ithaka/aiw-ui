@@ -143,6 +143,7 @@ export class RegisterComponent implements OnInit {
         this.serviceErrors.showShibbolethError = true
       }
     }
+    this.isLoading = false
     return throwError(err)
   }
 
@@ -163,6 +164,7 @@ export class RegisterComponent implements OnInit {
     else if (formSubmissionResponse['statusMessage'] === 'User already exists.' && formSubmissionResponse['statusCode'] === 1) {
       this.serviceErrors.duplicate = true
     }
+    this.isLoading = false
   }
 
   loadForUser(data: any) {
