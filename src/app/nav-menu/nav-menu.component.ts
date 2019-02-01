@@ -5,7 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router'
 import { Location } from '@angular/common'
 
 // Project Dependencies
-import { AssetService, ImageGroupService, ImageGroup, GroupService, AuthService } from '../shared'
+import { AssetService, ImageGroupService, ImageGroup, GroupService, AuthService, FlagService } from '../shared'
 import { AppConfig } from '../app.service'
 
 @Component({
@@ -64,6 +64,8 @@ export class NavMenu implements OnInit, OnDestroy {
   private copyIG: boolean = false
   private editIG: boolean = false
 
+  public detailViewsFlag: boolean = false
+
   // TypeScript public modifiers
   constructor(
     public _appConfig: AppConfig,
@@ -75,6 +77,7 @@ export class NavMenu implements OnInit, OnDestroy {
     private _group: GroupService,
     private route: ActivatedRoute,
     public _auth: AuthService,
+    public _flags: FlagService
   ) {
     this.browseOpts = this._app.config.browseOptions
     this.siteID = this._appConfig.config.siteID
@@ -103,13 +106,20 @@ export class NavMenu implements OnInit, OnDestroy {
     )
 
     this.subscriptions.push(
-      this.route.params.pipe(
-      map(params => {
-        this.params = params
-        if (params['igId'] && !params['page']){
+      this.route.params.subscribe((routeParams) => {
+        this.params = routeParams
+        if (routeParams['igId'] && !routeParams['page']){
           this.showImageGroupModal = false
         }
-      })).subscribe()
+
+        if (routeParams && routeParams['featureFlag']) {
+          this._flags[routeParams['featureFlag']] = true
+          this.detailViewsFlag = this._flags['detailViews'] ? true : false
+
+        } else {
+            this.detailViewsFlag = false
+        }
+      })
     )
 
     this.subscriptions.push(
