@@ -40,7 +40,7 @@ npm install --global nucleus-styleguide
 yarn styleguide
 
 # Collect our built files
-rsync -a ${SRC_DIR}/dist/avatar/* ${BUILD_DIR}/
+rsync -a ${SRC_DIR}/dist/browser/* ${BUILD_DIR}/
 
 # Package our built app
-tar -cvzf package.tgz ${SRC_DIR}/dist/avatar/
+tar -cvzf package.tgz ${SRC_DIR}/dist/browser/
