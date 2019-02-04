@@ -19,7 +19,7 @@ export class AddToGroupModal implements OnInit, OnDestroy {
   @Output() createGroup: EventEmitter<any> = new EventEmitter()
   @Output() showToast: EventEmitter<any> = new EventEmitter()
   @Input() public copySelectionStr: string = 'ADD_TO_GROUP_MODAL.FROM_SELECTED'
-  @Input() showCreateGroup: boolean = false
+  @Input() showCreateGroup: boolean = true
   @Input() private selectedAssets: any[] = [] // this is used in the asset page, where a single asset can be injected directly
   
   public selectedIg: ImageGroup

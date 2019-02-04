@@ -8,7 +8,7 @@
             i.icon.icon-detail-overlay
         div([ngClass]="[ detailViewBounds.width ? 'col-lg-6' : 'col-lg-12' ]")
           .modal-header
-            h4.modal-title {{ copySelectionStr + ( detailViewBounds.width ? '.TITLE_DETAIL' : '.TITLE' ) | translate }}
+            h4.modal-title {{ detailViewBounds.width ? 'Add Detail to Group' : 'Add ' + ( selectedAssets.length > 1 ? selectedAssets.length + ' Items' : 'Item' ) + ' to Group' }}
             button.close((click)="closeModal.emit()", type="button", data-dismiss="modal", aria-label="Close")
               span(aria-hidden="true") &times;
           form(#igForm="ngForm", (ngSubmit)="submitGroupUpdate(igForm)")
@@ -45,33 +45,11 @@
                   .dot
                   .dot
                   .dot
-
-              //- .link(*ngIf="showCreateGroup", (click)="createGroup.emit()") {{ copySelectionStr + '.OPEN_CREATE_GROUP_MODAL' | translate }}
-              //- br
-              //- .form-group([class.has-success]="serviceResponse.success", [class.has-danger]="serviceResponse.failure")
-              //-   label(for="selectImageGroup") {{ copySelectionStr + '.SELECT_PROMPT' | translate }}
-              //-   ng2-completer.notranslate([(ngModel)]="selectedGroupName", name="imageGroup",
-              //-     (keyup)="sortGroup($event, selectedGroupName)",
-              //-     [datasource]="dataService",
-              //-     [minSearchLength]="0",
-              //-     [openOnFocus]="true",
-              //-     [placeholder]="'Type to search...'",
-              //-     [textSearching]="'Searching Groups...'",
-              //-     [clearUnselected]="true")
-              //-   #successMessage.form-text.text-success(*ngIf="serviceResponse.success") {{  copySelectionStr + '.ADD_SUCCESS' | translate}}
-              //-   #errorMessageUpdateFailure.form-text.text-danger(*ngIf="serviceResponse.failure") {{  copySelectionStr + '.ADD_FAILURE' | translate}}
-              //-   #errorMessageTooManyAssets.form-text.text-danger(*ngIf="serviceResponse.tooManyAssets") {{  copySelectionStr + '.TOO_MANY_ASSETS' | translate}}
-              //-   .form-text.text-warning(*ngIf="selectedGroupError") {{ selectedGroupError | translate }}
             .modal-footer
               ng-container(*ngIf="!serviceResponse.success")
                 .wrapper
                   a.help-link.mr-2(href="http://support.artstor.org/?article=create-and-manage-image-groups", target="_blank") ?
                   .link(*ngIf="showCreateGroup", (click)="createGroup.emit()") Create new group
-                //- a.btn.btn-link.with-pad(href="http://support.artstor.org/?article=create-and-manage-image-groups", target="_blank") {{ 'ADD_TO_GROUP_MODAL.CONTROLS.HELP' | translate }}
                 .wrapper
                   button.btn.btn-secondary.mr-2((click)="closeModal.emit()", type="button", data-dismiss="modal") {{ 'ADD_TO_GROUP_MODAL.CONTROLS.CANCEL' | translate}}
                   button.btn.btn-primary([ngClass]="{ 'disabled-btn' : !selectedGroup.id }", type="submit") {{ 'ADD_TO_GROUP_MODAL.CONTROLS.ADD' | translate }}
-              //- ng-container(*ngIf="serviceResponse.success")
-              //-   a.btn.btn-link.with-pad(href="http://support.artstor.org/?article=create-and-manage-image-groups", target="_blank") {{ 'ADD_TO_GROUP_MODAL.CONTROLS.HELP' | translate}}
-              //-   button.btn.btn-primary((click)="closeModal.emit()", [routerLink]="['/group', selectedIg.id]", type="button") {{ 'ADD_TO_GROUP_MODAL.CONTROLS.NAV_TO_GROUP' | translate}}
-              //-   button.btn.btn-secondary((click)="closeModal.emit()", type="button") {{ 'ADD_TO_GROUP_MODAL.CONTROLS.RETURN_TO_RESULTS' | translate}}
