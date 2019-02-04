@@ -10,6 +10,8 @@ WORKDIR /usr/src/app
 
 # Install app dependencies
 COPY package.json ./
+# Temp until cached @angular files catch-up
+RUN npm link @angular/cli
 RUN npm install
 
 # Bundle app source
