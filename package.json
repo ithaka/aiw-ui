@@ -75,7 +75,7 @@
     "blob-polyfill": "^3.0.20180112",
     "core-js": "^2.5.4",
     "debug": "^4.1.0",
-    "domino": "^2.1.0",
+    "domino": "^2.1.1",
     "driver.js": "^0.8.1",
     "ie-shim": "^0.1.0",
     "jquery": "^3.3.1",
