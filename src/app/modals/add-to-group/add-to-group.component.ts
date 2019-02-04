@@ -1,4 +1,5 @@
-import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core'
+import { DomUtilityService } from 'app/shared';
+import { Component, OnInit, OnDestroy, Input, Output, EventEmitter, ElementRef, ViewChild } from '@angular/core'
 import { NgForm } from '@angular/forms'
 import { BehaviorSubject, Observable, Subscription } from 'rxjs'
 import { map, take } from 'rxjs/operators'
@@ -35,19 +36,27 @@ export class AddToGroupModal implements OnInit, OnDestroy {
   @Input() private selectedAssets: any[] = []; // this is used in the asset page, where a single asset can be injected directly
   private groups: ImageGroup[] = [];
 
+  @ViewChild("modal", {read: ElementRef}) modalElement: ElementRef;
+
   constructor(
-    private _assets: AssetService,
-    private _group: GroupService,
-    private _angulartics: Angulartics2,
-    private completerService: CompleterService,
-    private _auth: AuthService,
-    private router: Router
-      ) {}
+      private _assets: AssetService,
+      private _group: GroupService,
+      private _dom: DomUtilityService,
+      private completerService: CompleterService,
+      private _angulartics: Angulartics2,
+      private _auth: AuthService,
+      private router: Router
+    ) {
+      // Constructor
+    }
 
     ngOnInit() {
     // Set focus to the modal to make the links in the modal first thing to tab for accessibility
-    let htmlelement: HTMLElement = document.getElementById('modal');
-    htmlelement.focus()
+    // let htmlelement: HTMLElement = <HTMLElement>this._dom.byId('modal');
+    // htmlelement.focus()
+    if (this.modalElement && this.modalElement.nativeElement){
+      this.modalElement.nativeElement.focus()
+    }
 
     if (this.selectedAssets.length < 1) { // if no assets were added when component was initialized, the component gets the current selection list
       // Subscribe to asset selection

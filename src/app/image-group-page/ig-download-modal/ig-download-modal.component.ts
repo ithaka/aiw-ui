@@ -1,9 +1,9 @@
-import { Component, OnInit, Input, Output, EventEmitter, AfterViewInit } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, AfterViewInit, ElementRef, ViewChild } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Angulartics2 } from 'angulartics2';
 
-import { AssetService, AuthService, ImageGroup } from './../../shared';
+import { AssetService, AuthService, ImageGroup, DomUtilityService } from './../../shared';
 
 @Component({
   selector: 'ang-ig-download-modal',
@@ -21,6 +21,8 @@ export class PptModalComponent implements OnInit, AfterViewInit {
   @Input()
   public ig: ImageGroup;
 
+  @ViewChild("ig-download-title", {read: ElementRef}) downloadTitleElement: ElementRef;
+
   public isLoading: boolean = false;
   public zipLoading: boolean = false;
   public downloadLink: string = '';
@@ -37,6 +39,7 @@ export class PptModalComponent implements OnInit, AfterViewInit {
     private _assets: AssetService,
     private _auth: AuthService,
     private _angulartics: Angulartics2,
+    private _dom: DomUtilityService,
     private http: HttpClient,
   ) {}
 
@@ -47,8 +50,13 @@ export class PptModalComponent implements OnInit, AfterViewInit {
   }
   // Set initial focus on the modal Title h4
   public startModalFocus() {
-    let modalStartFocus = document.getElementById('ig-download-title')
-    modalStartFocus.focus()
+    // TO-DO: Only reference document client-side
+    // let htmlelement: HTMLElement = <HTMLElement>this._dom.byId('ig-download-title');
+    // htmlelement.focus()
+    if (this.downloadTitleElement && this.downloadTitleElement.nativeElement){
+      this.downloadTitleElement.nativeElement.focus()
+    }
+
   }
 
   trackDownload(downloadType: string): void {

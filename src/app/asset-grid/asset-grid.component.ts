@@ -1,9 +1,9 @@
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, Renderer } from '@angular/core'
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, Renderer, Inject, PLATFORM_ID } from '@angular/core'
+import { isPlatformBrowser } from '@angular/common'
 import { ActivatedRoute, NavigationStart, Params, Router } from '@angular/router'
 
 import { BehaviorSubject, Subscription } from 'rxjs'
 import { map, take } from 'rxjs/operators'
-import { Locker, DRIVERS } from 'angular-safeguard'
 import { AppConfig } from '../app.service'
 import { Angulartics2 } from 'angulartics2'
 
@@ -16,12 +16,13 @@ import {
   LogService,
   Thumbnail,
   ToolboxService,
-  FlagService
+  FlagService,
+  DomUtilityService
 } from '../shared'
 import { AssetFiltersService } from '../asset-filters/asset-filters.service'
 import { APP_CONST } from '../app.constants'
-import { LockerService } from 'app/_services';
-import { SortablejsOptions } from 'angular-sortablejs';
+import { ArtstorStorageService } from '../../../projects/artstor-storage/src/public_api'
+// import { SortablejsOptions } from 'angular-sortablejs';
 
 @Component({
   selector: 'ang-asset-grid',
@@ -89,11 +90,11 @@ export class AssetGrid implements OnInit, OnDestroy {
   sub;
 
   // Options for Sortablejs reordering of assets
-  public sortableOptions: SortablejsOptions = {
-    onUpdate: (event) => {
-      this.orderChanged = true
-    }
-  }
+  // public sortableOptions: SortablejsOptions = {
+  //   onUpdate: (event) => {
+  //     this.orderChanged = true
+  //   }
+  // }
   // Add user to decide whether to show the banner
   private user: any = this._auth.getUser();
 
@@ -163,6 +164,7 @@ export class AssetGrid implements OnInit, OnDestroy {
 
   // TypeScript public modifiers
   constructor(
+    @Inject(PLATFORM_ID) private platformId: Object,
     public _appConfig: AppConfig,
     private _assets: AssetService,
     public _auth: AuthService,
@@ -176,8 +178,9 @@ export class AssetGrid implements OnInit, OnDestroy {
     private _router: Router,
     private _search: AssetSearchService,
     private _toolbox: ToolboxService,
-    private _locker: LockerService,
-    private route: ActivatedRoute
+    private _storage: ArtstorStorageService,
+    private route: ActivatedRoute,
+    private _dom: DomUtilityService
   ) {
       this.siteID = this._appConfig.config.siteID;
       let prefs = this._auth.getFromStorage('prefs')
@@ -192,6 +195,8 @@ export class AssetGrid implements OnInit, OnDestroy {
         this.largeThmbView = prefs.largeThumbnails
       }
   }
+
+  private isBrowser: boolean = isPlatformBrowser(this.platformId)
 
   ngOnInit() {
     // Subscribe User object updates
@@ -372,15 +377,16 @@ export class AssetGrid implements OnInit, OnDestroy {
             this.isLoading = false;
           }
 
-          this._locker.sessionSet('totalAssets', this.totalAssets ? this.totalAssets : 1)
+          this._storage.setSession('totalAssets', this.totalAssets ? this.totalAssets : 1)
 
           // Tie prevRouteParams array with previousRouteTS (time stamp) before sending to asset page
           this.prevRouteTS = Date.now().toString()
           let id: string = this.prevRouteTS
 
-          let prevRouteParams = this._locker.sessionGet('prevRouteParams') || {}
-          prevRouteParams[id] = this.route.snapshot.url
-          this._locker.sessionSet('prevRouteParams', prevRouteParams)
+          let prevRouteParams = this._storage.getSession('prevRouteParams') || {}
+          // @todo
+          // prevRouteParams[id] = this.route.snapshot.url
+          // this._storage.setSession('prevRouteParams', prevRouteParams)
 
           // Generate Facets
           if (allResults && allResults.collTypeFacets) {
@@ -503,8 +509,8 @@ export class AssetGrid implements OnInit, OnDestroy {
       this._assets.goToPage(1, true)
       this._assets.setPageSize(size)
       // this._auth.store('prefs', { pageSize: size })
-      let updatedPrefs = Object.assign(this._locker.get('prefs') || {}, { pageSize: size })
-      this._locker.set('prefs', updatedPrefs)
+      let updatedPrefs = Object.assign(this._storage.getLocal('prefs') || {}, { pageSize: size })
+      this._storage.setLocal('prefs', updatedPrefs)
     }
   }
 
@@ -562,18 +568,17 @@ export class AssetGrid implements OnInit, OnDestroy {
     }
   }
 
-  private constructNavigationCommands (thumbnail: Thumbnail) {
+  private constructNavigationCommands (thumbnail: Thumbnail) : any[] {
     let assetId = thumbnail.objectId ? thumbnail.objectId : thumbnail.artstorid
     let params: any = {
       prevRouteTS: this.prevRouteTS // for fetching previous route params from session storage, on asset page
     }
+    let url = []
     thumbnail.iap && (params.iap = 'true')
     this.ig && this.ig.id && (params.groupId = this.ig.id)
 
-    let url = ['/#/asset', assetId].join('/')
-    for (let key in params) {
-      url = url.concat([';', key, '=', params[key]].join(''))
-    }
+    url.push(['/asset', assetId].join('/'))
+    url.push(params)
     return url
   }
 
@@ -619,7 +624,7 @@ export class AssetGrid implements OnInit, OnDestroy {
 
       // Set focus on the first tumbnail in reorder mode
       setTimeout(() => {
-        let el = document.getElementById('item-0')
+        let el = this._dom.byId('item-0')
         el.focus()
       }, 600)
 
@@ -628,9 +633,18 @@ export class AssetGrid implements OnInit, OnDestroy {
     }
   }
 
+  /**
+   * Cancel reordering of assets
+   * @requires browser
+   */
   private cancelReorder(): void {
     // IE 11 specificially has a caching problem when reloading the group contents
-    let isIE11 = !!window['MSInputMethodContext'] && !!document['documentMode']
+    let isIE11
+
+    if (this.isBrowser) {
+      isIE11 = !!window['MSInputMethodContext'] && !!document['documentMode']
+    }
+
     this.reorderMode = false
     this.reordering.emit(this.reorderMode)
     this.goToPage(1)
@@ -690,7 +704,7 @@ export class AssetGrid implements OnInit, OnDestroy {
     // Exit reording back to focus on Save reorder button
     if (event.key === "Escape") {
       this.arrowReorderMode = false
-      document.getElementById('saveReorderButton').focus()
+      this._dom.byId('saveReorderButton').focus()
       return
     }
     // Left, Right arrow key reording - Uses splice on allResults array
@@ -710,7 +724,7 @@ export class AssetGrid implements OnInit, OnDestroy {
 
             setTimeout(() => {
               let id = 'item-' + (index - 1)
-              document.getElementById(id).focus()
+              this._dom.byId(id).focus()
             }, 100)
 
             this.arrowReorderMessage = 'moved to position ' + (index) + ' of ' + this.results.length // aria live region message
@@ -778,8 +792,8 @@ export class AssetGrid implements OnInit, OnDestroy {
    */
   private setThumbnailSize(large: boolean): void {
     this.largeThmbView = large
-    let updatedPrefs = Object.assign(this._locker.get('prefs') || {}, { largeThumbnails: large })
-    this._locker.set('prefs', updatedPrefs)
+    let updatedPrefs = Object.assign(this._storage.getLocal('prefs') || {}, { largeThumbnails: large })
+    this._storage.setLocal('prefs', updatedPrefs)
   }
 
   /**
@@ -810,6 +824,7 @@ export class AssetGrid implements OnInit, OnDestroy {
   /**
    * Remove Assets from a Group
    * - Owner of Group only
+   * @requires browser
    */
   private removeFromGroup(assetsToRemove: Thumbnail[], clearRestricted?: boolean): void {
     for (let i = 0; i < assetsToRemove.length; i++) {
@@ -832,12 +847,12 @@ export class AssetGrid implements OnInit, OnDestroy {
   }
 
   private goToAsset(asset: any): void{
-    let assetURL: string = this.constructNavigationCommands(asset)
-    this._router.navigateByUrl(assetURL.replace('/#', ''))
+    let assetURLParams: any[] = this.constructNavigationCommands(asset)
+    this._router.navigate(assetURLParams)
   }
 
   private closeGridDropdowns(): void{
-    let dropdownElements: Array<HTMLElement> = Array.from( document.querySelectorAll('ang-asset-grid .dropdown') )
+    let dropdownElements = Array.from(this._dom.bySelectorAll('ang-asset-grid .dropdown') )
     for (let dropdownElement of dropdownElements){
       dropdownElement.classList.remove('show')
       dropdownElement.children[0].setAttribute('aria-expanded', 'false')

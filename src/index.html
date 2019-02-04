@@ -12,7 +12,7 @@
           (initPath.indexOf('/library/ExternalIV.jsp') > -1
           || initPath.indexOf('/library/secure/ViewImages') > -1
           || initPath.indexOf('/library/collection') > -1
-          || initPath.indexOf('/library/welcome.html') > -1 
+          || initPath.indexOf('/library/welcome.html') > -1
           || initPath.indexOf('.org/library/#') > -1
           || initPath.indexOf('/openlibrary') > -1
           || initPath.indexOf('/asset/') > -1
@@ -100,6 +100,8 @@
 
   <!-- Load krpano JS file for Qtvr viewer -->
   <script src="/assets/js/krpano.js"></script>
+  <!-- Load OpenSeaDragon -->
+  <script src="https://cdn.jsdelivr.net/npm/openseadragon@2.4/build/openseadragon/openseadragon.min.js"></script>
 
   <style>
     /** Inititial loading styles **/
@@ -122,7 +124,7 @@
     }
   </style>
 
-  <noscript>
+  <!-- <noscript>
     <style>
       .page-overlay {
         display: none;
@@ -136,23 +138,23 @@
         margin: 4rem auto;
       }
     </style>
-  </noscript>
+  </noscript> -->
 </head>
 
 <body>
-  <noscript>
+  <!-- <noscript>
     <div id="nojs-container">
         <img id="nojs-logo"src="/assets/img/logo-v1-1.png" alt="Artstor logo">
         <p>Javascript must be enabled to view this site.</p>
         <p><a id = "nojs-support-link" href="https://support.artstor.org/?article=system-requirements-2" target="_blank">Read our system requirements.</a></p>
     </div>
-  </noscript>
+  </noscript> -->
 
-  <app>
+  <app-root>
     <div class="page-overlay">
       <i class="icon-loading-large"></i>
     </div>
-  </app>
+  </app-root>
 
   <!-- For cookie banner -->
   <script src="https://static.ithaka.org/gdpr-banner/js/banner.js" type="text/javascript"></script>

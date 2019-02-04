@@ -1,11 +1,10 @@
-import { Component, OnInit, OnDestroy, ViewChild, HostListener } from '@angular/core'
+import { Component, OnInit, OnDestroy, ViewChild, HostListener, ElementRef } from '@angular/core'
 import { ActivatedRoute, Params, Router } from '@angular/router'
 import { DomSanitizer, SafeUrl, Meta } from '@angular/platform-browser'
 import { Subscription } from 'rxjs'
 import { map, take } from 'rxjs/operators'
-import { Locker, DRIVERS } from 'angular-safeguard'
 import { Angulartics2 } from 'angulartics2'
-import { ArtstorViewer } from 'artstor-viewer'
+import { ArtstorViewerComponent } from './artstor-viewer/artstor-viewer.component'
 import { formGroupNameProvider } from '@angular/forms/src/directives/reactive_directives/form_group_name'
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms'
 
@@ -21,15 +20,17 @@ import {
     PersonalCollectionService,
     AssetDetailsFormValue,
     CollectionTypeInfo,
-    FlagService
+    FlagService,
+    DomUtilityService,
 } from './../shared'
 import { TitleService } from '../shared/title.service'
 import { ScriptService } from '../shared/script.service'
 import { LocalPCService, LocalPCAsset } from '../_local-pc-asset.service'
-import { TourStep } from '../shared/tour/tour.service'
+import { TourStep } from '../shared/tour/tour.component'
 import { APP_CONST } from '../app.constants'
-import { LockerService } from 'app/_services'
 import { AppConfig } from '../app.service'
+import { ArtstorStorageService } from '../../../projects/artstor-storage/src/public_api';
+import { MetadataService } from 'app/_services';
 import { rights } from './rights.ts'
 
 @Component({
@@ -39,8 +40,11 @@ import { rights } from './rights.ts'
 })
 export class AssetPage implements OnInit, OnDestroy {
 
-    @ViewChild(ArtstorViewer)
-    public assetViewer: any
+    @ViewChild(ArtstorViewerComponent) public assetViewer
+
+    @ViewChild("generatedImgURL", {read: ElementRef}) generatedImgURLElement: ElementRef
+
+    
 
     public user: any
     public userSessionFresh: boolean = false
@@ -212,6 +216,7 @@ export class AssetPage implements OnInit, OnDestroy {
     constructor(
         public _appConfig: AppConfig,
         private _assets: AssetService,
+        private _metadata: MetadataService,
         private _auth: AuthService,
         private _search: AssetSearchService,
         private _flags: FlagService,
@@ -226,7 +231,8 @@ export class AssetPage implements OnInit, OnDestroy {
         private scriptService: ScriptService,
         private _sanitizer: DomSanitizer,
         _fb: FormBuilder,
-        private _locker: LockerService,
+        private _storage: ArtstorStorageService,
+        private _dom: DomUtilityService,
         private meta: Meta,
     ) {
         this.editDetailsForm = _fb.group({
@@ -239,22 +245,27 @@ export class AssetPage implements OnInit, OnDestroy {
             description: [null],
             subject: [null]
         })
+
+        console.log("CONSTRUCT ASSET PAGE")
     }
 
     ngOnInit() {
+        console.log("INIT ASSET PAGE")
         this.user = this._auth.getUser();
         this.solrMetadataFlag = this._flags.solrMetadata
 
         // sets up subscription to allResults, which is the service providing thumbnails
         this.subscriptions.push(
             this._auth.currentUser.subscribe((user) => {
+                console.log("User subscription returned")
                 this.user = user
                 // userSessionFresh: Do not attempt to load asset until we know user object is fresh
-                if (!this.userSessionFresh && this._auth.userSessionFresh) {
+                // if (!this.userSessionFresh && this._auth.userSessionFresh) {
                     this.userSessionFresh = true
-                }
+                // }
             }),
             this._assets.allResults.subscribe((allResults) => {
+                console.log("allResults subscription returned")
                 if (allResults.thumbnails) {
                     // Set asset id property to reference
                     this.assetIdProperty = (allResults.thumbnails[0] && allResults.thumbnails[0].objectId) ? 'objectId' : 'artstorid'
@@ -312,6 +323,7 @@ export class AssetPage implements OnInit, OnDestroy {
 
         this.subscriptions.push(
             this.route.params.subscribe((routeParams) => {
+                console.log("Params subscription returned")
                 this.assetGroupId = routeParams['groupId']
                 // Find feature flags
                 if (routeParams && routeParams['featureFlag']) {
@@ -364,7 +376,7 @@ export class AssetPage implements OnInit, OnDestroy {
                     this.prevRouteTS = routeParams['prevRouteTS']
                     // For "Go Back to Results"
                     // Get map of previous search params
-                    let prevRoutesMap = this._locker.sessionGet('prevRouteParams')
+                    let prevRoutesMap = this._storage.getSession('prevRouteParams')
 
                     // Reference previous search params for the prevRouteTS
                     let prevRouteParams = prevRoutesMap ? prevRoutesMap[this.prevRouteTS] : {}
@@ -375,9 +387,9 @@ export class AssetPage implements OnInit, OnDestroy {
                     }
 
                     // TotalAssets - for browsing between the assets
-                    let totalAssets = this._locker.sessionGet('totalAssets');
+                    let totalAssets = this._storage.getSession('totalAssets');
                     if (totalAssets) {
-                        this.totalAssetCount = totalAssets;
+                        this.totalAssetCount = parseInt(totalAssets);
                     }
                     else {
                         this.totalAssetCount = 1
@@ -398,6 +410,7 @@ export class AssetPage implements OnInit, OnDestroy {
         // Subscribe to pagination values
         this.subscriptions.push(
             this._assets.pagination.subscribe((pagination) => {
+                console.log("Pagination subscription returned")
                 this.pagination.page = parseInt(pagination.page);
                 this.pagination.size = parseInt(pagination.size);
                 if (this.originPage < 1) {
@@ -418,6 +431,7 @@ export class AssetPage implements OnInit, OnDestroy {
         );
 
         this._assets.unAuthorizedAsset.subscribe((value) => {
+            console.log("unauthorizedAsset subscription returned")
             if (value) {
                 this.showAccessDeniedModal = true
             }
@@ -439,11 +453,13 @@ export class AssetPage implements OnInit, OnDestroy {
 
 
     handleLoadedMetadata(asset: Asset, assetIndex: number) {
+        console.log("Handle loaded metadata for " + asset['objectId'])
         // Reset modals if new data comes in
         this.showAccessDeniedModal = false
         this.showServerErrorModal = false
 
         if (asset && asset['error']) {
+            console.log("Asset error")
             let err = asset['error']
             if (err.status === 403 || err.message == 'Unable to load metadata!') {
                 // here is where we make the "access denied" modal appear
@@ -461,14 +477,17 @@ export class AssetPage implements OnInit, OnDestroy {
                 this.showServerErrorModal = true
             }
         } else {
+            if(!this.assets) {
+                this.assets = []
+            }
             this.assets[assetIndex] = asset
             if (assetIndex == 0) {
                 let tileSource: any = asset.tileSource
                 this.multiviewItems =  Array.isArray(tileSource) ? true : false
                 this._title.setTitle(asset.title)
-                document.querySelector('meta[name="DC.type"]').setAttribute('content', 'Artwork')
-                document.querySelector('meta[name="DC.title"]').setAttribute('content', asset.title)
-                document.querySelector('meta[name="asset.id"]').setAttribute('content', asset.id)
+                this.meta.updateTag({name: 'DC.type', content: 'Artwork'})
+                this.meta.updateTag({name: 'DC.title', content: asset.title})
+                // this.meta.updateTag({name: 'asset.id"', content: asset.id})
                 let currentAssetId: string = this.assets[0].id || this.assets[0]['objectId'] // couldn't trust the 'this.assetIdProperty' variable
                 // Search returns a 401 if /userinfo has not yet set cookies
                 if (Object.keys(this._auth.getUser()).length !== 0) {
@@ -517,26 +536,29 @@ export class AssetPage implements OnInit, OnDestroy {
         }
         // Set download link
         this.setDownloadFull()
-
-        // Loop over Rights fields and set rights statement values via isRightStatement
-        for (let i = 0; i < this.assets[0].formattedMetadata.Rights.length; i++) {
-          let rightsField = this.assets[0].formattedMetadata.Rights[i]
-          this.isRightStatement(rightsField)
-        }
+        
+        if (this.assets[0].formattedMetadata) {
+            // Loop over Rights fields and set rights statement values via isRightStatement
+            for (let i = 0; i < this.assets[0].formattedMetadata.Rights.length; i++) {
+                let rightsField = this.assets[0].formattedMetadata.Rights[i]
+                this.isRightStatement(rightsField)
+            }
+        }   
     }
 
     /**
      * Maintains the isFullscreen variable, as set by child AssetViewers
      */
     updateFullscreenVar(isFullscreen: boolean): void {
+        console.log("update fullscreen var")
         if (!isFullscreen) {
             this.showAssetDrawer = false
             if (this.originPage > 0 && this.pagination.page !== this.originPage) {
                 this.pagination.page = this.originPage
                 this._assets.loadAssetPage(this.pagination.page)
             }
-            this.assets.splice(1)
-            this.assetIds.splice(1)
+            // this.assets.splice(1)
+            // this.assetIds.splice(1)
         } else if (Array.isArray(this.assets[0].tileSource)){ // Log GA event for opening a multi view item in Fullscreen
             this.angulartics.eventTrack.next({ action: 'multiViewItemFullscreen', properties: { category: this._auth.getGACategory(), label: this.assets[0].id } });
         }
@@ -745,6 +767,7 @@ export class AssetPage implements OnInit, OnDestroy {
 
     // Calculate the index of current asset from the previous assets result set
     private currentAssetIndex(): number {
+        console.log("currentAssetIndex")
         let assetIndex: number = 1
         let assetFound = false
         if (this.assetIds[0]) {
@@ -864,8 +887,13 @@ export class AssetPage implements OnInit, OnDestroy {
      * Adds a link to the current asset page to the user's clipboard
      */
     private copyGeneratedImgURL(): void {
+        // TO-DO: Only reference document client-side
         let statusMsg = '';
-        let input: any = document.getElementById('generatedImgURL');
+        let input: any;
+        if (this.generatedImgURLElement && this.generatedImgURLElement.nativeElement){
+            input = this.generatedImgURLElement.nativeElement
+          }
+        // let input: any = this._dom.byId('generatedImgURL');
         let iOSuser: boolean = false;
 
         this.showCopyUrl = true;
@@ -877,17 +905,17 @@ export class AssetPage implements OnInit, OnDestroy {
             iOSuser = true
         }
 
-        setTimeout(() => {
-            input.select();
-            if (document.queryCommandSupported('copy') && !iOSuser) {
-                document.execCommand('copy', false, null)
-                statusMsg = 'Image URL successfully copied to the clipboard!';
-            }
-            else {
-                statusMsg = 'Select the above link, and copy to share!';
-            }
-            this.copyURLStatusMsg = statusMsg;
-        }, 50);
+        // setTimeout(() => {
+        //     input.select();
+        //     if (document.queryCommandSupported('copy') && !iOSuser) {
+        //         document.execCommand('copy', false, null)
+        //         statusMsg = 'Image URL successfully copied to the clipboard!';
+        //     }
+        //     else {
+        //         statusMsg = 'Select the above link, and copy to share!';
+        //     }
+        //     this.copyURLStatusMsg = statusMsg;
+        // }, 50);
     }
 
     // Add or remove assets from Assets array for comparison in full screen
