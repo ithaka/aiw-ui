@@ -27,6 +27,8 @@ yarn global add webpack webpack-dev-server karma karma-cli protractor typescript
 
 # Install dependencies
 yarn install
+# Ensure Angular CLI commands are available
+npm link @angular/cli
 
 # Build the project! (uses Webpack)
 # - sleep acts as a failsafe for broken dependencies stalling builds
