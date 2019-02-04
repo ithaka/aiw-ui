@@ -4,8 +4,9 @@ import { Subscription } from 'rxjs'
 import { map } from 'rxjs/operators'
 import { HttpClient } from '@angular/common/http'
 
-import { LockerService } from 'app/_services'
+// Project Dependencies
 import { TitleService, AssetSearchService, AuthService, AssetService, FlagService } from '../shared'
+import { ArtstorStorageService } from '../../../projects/artstor-storage/src/public_api';
 
 @Component({
   selector: 'ang-my-collections',
@@ -32,7 +33,7 @@ export class MyCollectionsComponent implements OnInit {
     private _assets: AssetService,
     private _title: TitleService,
     private _http: HttpClient,
-    private _locker: LockerService
+    private _storage: ArtstorStorageService
   ) {
     this.unaffiliatedUser = this._auth.isPublicOnly() ? true : false
   }
@@ -71,7 +72,7 @@ export class MyCollectionsComponent implements OnInit {
   getUserPCol(type: string): void {
     this.loading = true
     let options = { withCredentials: true }
-    let localPCollections = this._locker.get('pcollections')
+    let localPCollections = this._storage.getLocal('pcollections')
     let tempMyCol: any = {}
 
     if (localPCollections) {
@@ -87,8 +88,8 @@ export class MyCollectionsComponent implements OnInit {
           this.pcollections = this.pcollections.filter((col) => { return col.collectionid !== '37436' }) // filter out initial My PC object
           this.pcollections.unshift(tempMyCol) // prepend My PC object back to pcollections
 
-          this._locker.set('37436', this.pcollections[0])
-          this._locker.set('pcollections', this.pcollections)
+          this._storage.setLocal('37436', this.pcollections[0])
+          this._storage.setLocal('pcollections', this.pcollections)
         })).subscribe()
     }
 
