@@ -34,6 +34,22 @@ export class ArtstorStorageService {
   }
 
   /**
+   * Get data from Local or Session
+   * @param rawString 
+   * @returns value 
+   */
+  private parseData(rawString: string) : any {
+    let value: any
+    // Parse any json strings
+    try {
+      value = JSON.parse(rawString);
+    } catch (e) {
+      value = rawString
+    }
+    return value
+  }
+
+  /**
    * setLocal
    * @param key local stroage key name
    * @param value value to set key to
@@ -56,14 +72,7 @@ export class ArtstorStorageService {
   public getLocal(key: string): any | void {
     if (this.hasLocalStorage()) {
       let storedData = localStorage.getItem(key)
-      let value: any
-      // Parse any json strings
-      try {
-        value = JSON.parse(storedData);
-      } catch (e) {
-        value = storedData
-      }
-      return value
+      return this.parseData(storedData)
     }
     else if (key === 'user') {
       return this.localStorageData.user
@@ -97,7 +106,7 @@ export class ArtstorStorageService {
   public setSession(key: string, value: any): any | void {
     if (this.hasSessionStorage()) {
       if (typeof(value) === 'object' || key === 'totalAssets') {
-        value = JSON.stringify({ data: value })
+        value = JSON.stringify(value)
       }
       return sessionStorage.setItem(key, value)
     }
@@ -109,7 +118,8 @@ export class ArtstorStorageService {
    */
   public getSession(key: string): any | void {
     if (this.hasSessionStorage()) {
-      return sessionStorage.getItem(key)
+      let storedData = sessionStorage.getItem(key)
+      return this.parseData(storedData)
     }
   }
 
