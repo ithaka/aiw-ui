@@ -244,7 +244,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     Ng2CompleterModule,
     FileUploadModule,
     RouterModule.forRoot(ROUTES, { 
-        useHash: true,
+        useHash: false,
         preloadingStrategy: PreloadAllModules,
         initialNavigation: 'enabled' 
       }),
