@@ -9,8 +9,7 @@
         .title([ngClass]="[ prevRouteParams.length > 0 ? 'shortened' : '' ]", [innerHTML]="assets[0].title ? assets[0].title : ''", (focus)="showPageToolTip = true", (focusout)="showPageToolTip = false", tabindex="1", attr.aria-label="{{assets[0].title ? assets[0].title : ''}}, result {{assetNumber}} of {{totalAssetCount - restrictedAssetsCount}}")
         i.icon.icon-direction.icon-right(title="Next in results", (click)="showNextAsset()", (keyup.enter)="showNextAsset()", [class.disabled]="assetNumber >= totalAssetCount - restrictedAssetsCount", [attr.tabindex]="assetNumber >= totalAssetCount - restrictedAssetsCount ? -1 : 1", aria-label="Next item, press enter to go to next result item. You can also use left and right arrow keys to navigate between result items.", role="button")
       .page-tooltip([ngClass]="[ showPageToolTip ? 'show' : '' ]")
-        span#assetPageNumber {{ assetNumber }}  OF
-        = " "
+        span#assetPageNumber {{ assetNumber }}&nbsp;of&nbsp;
         span#assetPageCount {{ totalAssetCount - restrictedAssetsCount }}
     //- for accessibility so that page has title
     h1.sr-only(*ngIf="isFullscreen") Full screen mode

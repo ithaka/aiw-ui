@@ -2,7 +2,6 @@
 div(id="tagItem{{ tag.tagId }}", [ngClass]="[ tag.canOpen ? 'clickable' : '', 'tag-item__indent-' + tag.getLevel(), linkRoute.length < 1 ? 'no-link' : '']")
   a.tag-link(id="tagItem{{ tag.tagId }}Open", title="{{ tag.title }}", [ngClass]="{ 'no-link' : linkRoute.length < 1 || !tag.canOpen }", [routerLink]="[ linkRoute, tag.tagId ]")
     span.notranslate {{tag.title}}
-  span.edit(*ngIf="edit", (click)="editTag.emit()", (keyup.enter)="editTag.emit()", tabIndex="0", role="button", aria-label="Add items to My Personal Collection") Edit
   .info-cntnr([ngbCollapse]="tag.isCollapsed", *ngIf="tag.description")
     img(*ngIf="tag.thumbnail.length > 0", [src]="_assets.makeThumbUrl(tag.thumbnail)")
     .desc([innerHTML]="tag.description")

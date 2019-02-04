@@ -5,10 +5,10 @@ import { Subscription }   from 'rxjs'
 import { map } from 'rxjs/operators'
 
 // Internal Dependencies
-// import { CollectionService } from './collection.service'
 import { AssetService } from './../shared/assets.service'
 import { AuthService } from './../shared/auth.service'
 import { TitleService } from '../shared/title.service'
+import { ArtstorStorageService } from '../../../projects/artstor-storage/src/public_api'
 
 @Component({
   selector: 'ang-pcollection-page',
@@ -48,7 +48,8 @@ export class PCollectionPage implements OnInit, OnDestroy {
     private _router: Router,
     private route: ActivatedRoute,
     private http: HttpClient,
-    private _title: TitleService
+    private _title: TitleService,
+    private _storage: ArtstorStorageService
   ) {
     this.unaffiliatedUser = this._auth.isPublicOnly() ? true : false
   }
@@ -140,11 +141,18 @@ export class PCollectionPage implements OnInit, OnDestroy {
   * @param colId The collection ID
   */
   private getCollectionInfo(colId: string) {
-      let options = { withCredentials: true };
 
-      return this.http
-          .get(this._auth.getUrl() + '/v1/collections/' + colId, options)
-          .toPromise()
+    // We usually will have collection 37436 in local storage from /mycollections
+    // if not, then call collections service
+    let pcollection = this._storage.getLocal('37436')
+
+    if (pcollection && pcollection.collectionid === '37436') {
+      return Promise.resolve(pcollection)
+    }
+    else {
+      let options = { withCredentials: true }
+      return this.http.get(this._auth.getUrl() + '/v1/collections/' + colId, options).toPromise()
+    }
   }
 
   private pollNewPCAssetsStatus(): void{
@@ -217,7 +225,4 @@ export class PCollectionPage implements OnInit, OnDestroy {
     this._auth.store('publishingAssets', this.publishingAssets)
   }
 
-  // private updateSearchInRes(value: boolean): void{
-  //  this.searchInResults = value;
-  // }
 }

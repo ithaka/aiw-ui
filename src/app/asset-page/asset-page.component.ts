@@ -246,18 +246,17 @@ export class AssetPage implements OnInit, OnDestroy {
             subject: [null]
         })
 
-        console.log("CONSTRUCT ASSET PAGE")
+        // console.log("CONSTRUCT ASSET PAGE")
     }
 
     ngOnInit() {
-        console.log("INIT ASSET PAGE")
         this.user = this._auth.getUser();
         this.solrMetadataFlag = this._flags.solrMetadata
 
         // sets up subscription to allResults, which is the service providing thumbnails
         this.subscriptions.push(
             this._auth.currentUser.subscribe((user) => {
-                console.log("User subscription returned")
+                // console.log("User subscription returned")
                 this.user = user
                 // userSessionFresh: Do not attempt to load asset until we know user object is fresh
                 // if (!this.userSessionFresh && this._auth.userSessionFresh) {
@@ -265,7 +264,7 @@ export class AssetPage implements OnInit, OnDestroy {
                 // }
             }),
             this._assets.allResults.subscribe((allResults) => {
-                console.log("allResults subscription returned")
+                // console.log("allResults subscription returned")
                 if (allResults.thumbnails) {
                     // Set asset id property to reference
                     this.assetIdProperty = (allResults.thumbnails[0] && allResults.thumbnails[0].objectId) ? 'objectId' : 'artstorid'
@@ -323,7 +322,6 @@ export class AssetPage implements OnInit, OnDestroy {
 
         this.subscriptions.push(
             this.route.params.subscribe((routeParams) => {
-                console.log("Params subscription returned")
                 this.assetGroupId = routeParams['groupId']
                 // Find feature flags
                 if (routeParams && routeParams['featureFlag']) {
@@ -377,7 +375,6 @@ export class AssetPage implements OnInit, OnDestroy {
                     // For "Go Back to Results"
                     // Get map of previous search params
                     let prevRoutesMap = this._storage.getSession('prevRouteParams')
-
                     // Reference previous search params for the prevRouteTS
                     let prevRouteParams = prevRoutesMap ? prevRoutesMap[this.prevRouteTS] : {}
 
@@ -385,7 +382,6 @@ export class AssetPage implements OnInit, OnDestroy {
                     if (prevRoutesMap && prevRouteParams && (prevRouteParams.length > 0)) {
                         this.prevRouteParams = prevRouteParams
                     }
-
                     // TotalAssets - for browsing between the assets
                     let totalAssets = this._storage.getSession('totalAssets');
                     if (totalAssets) {
@@ -405,12 +401,11 @@ export class AssetPage implements OnInit, OnDestroy {
         );
 
         // Get latest set of results with at least one asset
-        // this.prevAssetResults = this._assets.getRecentResults();
+        this.prevAssetResults = this._assets.getRecentResults()
 
         // Subscribe to pagination values
         this.subscriptions.push(
             this._assets.pagination.subscribe((pagination) => {
-                console.log("Pagination subscription returned")
                 this.pagination.page = parseInt(pagination.page);
                 this.pagination.size = parseInt(pagination.size);
                 if (this.originPage < 1) {
@@ -431,7 +426,6 @@ export class AssetPage implements OnInit, OnDestroy {
         );
 
         this._assets.unAuthorizedAsset.subscribe((value) => {
-            console.log("unauthorizedAsset subscription returned")
             if (value) {
                 this.showAccessDeniedModal = true
             }
@@ -453,13 +447,12 @@ export class AssetPage implements OnInit, OnDestroy {
 
 
     handleLoadedMetadata(asset: Asset, assetIndex: number) {
-        console.log("Handle loaded metadata for " + asset['objectId'])
+        // console.log("Handle loaded metadata for " + asset['objectId'])
         // Reset modals if new data comes in
         this.showAccessDeniedModal = false
         this.showServerErrorModal = false
 
         if (asset && asset['error']) {
-            console.log("Asset error")
             let err = asset['error']
             if (err.status === 403 || err.message == 'Unable to load metadata!') {
                 // here is where we make the "access denied" modal appear
@@ -537,7 +530,7 @@ export class AssetPage implements OnInit, OnDestroy {
         // Set download link
         this.setDownloadFull()
         
-        if (this.assets[0].formattedMetadata) {
+        if (this.assets[0].formattedMetadata && this.assets[0].formattedMetadata.Rights) {
             // Loop over Rights fields and set rights statement values via isRightStatement
             for (let i = 0; i < this.assets[0].formattedMetadata.Rights.length; i++) {
                 let rightsField = this.assets[0].formattedMetadata.Rights[i]
@@ -550,7 +543,6 @@ export class AssetPage implements OnInit, OnDestroy {
      * Maintains the isFullscreen variable, as set by child AssetViewers
      */
     updateFullscreenVar(isFullscreen: boolean): void {
-        console.log("update fullscreen var")
         if (!isFullscreen) {
             this.showAssetDrawer = false
             if (this.originPage > 0 && this.pagination.page !== this.originPage) {
@@ -767,7 +759,6 @@ export class AssetPage implements OnInit, OnDestroy {
 
     // Calculate the index of current asset from the previous assets result set
     private currentAssetIndex(): number {
-        console.log("currentAssetIndex")
         let assetIndex: number = 1
         let assetFound = false
         if (this.assetIds[0]) {
@@ -807,6 +798,9 @@ export class AssetPage implements OnInit, OnDestroy {
         }
     }
 
+    /**
+     * Browse to the previous asset in the results, if available
+     */
     private showPrevAsset(): void {
         if (this.quizShuffle || (this.assetNumber > 1)) {
             // Update browse direction
@@ -831,6 +825,9 @@ export class AssetPage implements OnInit, OnDestroy {
         }
     }
 
+    /**
+     * Browse to the next asset in the results, if available
+     */
     private showNextAsset(): void {
         if (this.quizShuffle || (this.assetNumber < this.totalAssetCount)) {
             // Update browse direction
