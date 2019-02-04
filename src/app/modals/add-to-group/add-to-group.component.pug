@@ -15,7 +15,7 @@
             .modal-body(infiniteScroll, [scrollWindow]="false", [infiniteScrollDistance]="1", [infiniteScrollThrottle]="150", [infiniteScrollDisabled]="allGroups.length < totalGroups && !loading.allGroups ? false : true", (scrolled)="loadMoreGroups()")
               .search-cntnr
                 .input-group
-                  input#inputGroupSearchTerm.form-control.has-icon([(ngModel)]="groupSearchTerm", name="term", type="text", placeholder="Search groups...", (keyup.Space)="searchGroups()")
+                  input#inputGroupSearchTerm.form-control.has-icon([(ngModel)]="groupSearchTerm", name="term", type="text", placeholder="Search groups...", (keyup)="searchGroups()")
                   i#iconClearGroupSearch.icon.icon-close.form-control__icon(*ngIf="groupSearchTerm", (click)="clearGroupSearch()", placement="bottom", ngbTooltip="Clear search", role="button")
                   i#iconGroupSearchSubmit.icon.icon-search.form-control__icon(*ngIf="!groupSearchTerm", role="button", placement="bottom", ngbTooltip="Submit search")
               .recent-groups(*ngIf="!groupSearchTerm")
