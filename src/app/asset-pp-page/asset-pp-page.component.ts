@@ -5,7 +5,8 @@ import { Subscription }   from 'rxjs'
 import { map } from 'rxjs/operators'
 
 // Internal Dependencies
-import { AssetSearchService, MetadataService } from './../shared'
+import { AssetSearchService } from './../shared'
+import { MetadataService } from './../_services'
 
 @Component({
   selector: 'ang-asset-pp-page',
@@ -45,15 +46,15 @@ export class AssetPPPage implements OnInit {
   // Load Image Group Assets
   loadAsset(): void{
     let self = this
-    this._metadata.getMetadata(this.assetId, undefined, false).pipe(
-      map(res => {
+    this._metadata.buildAsset(this.assetId, null).pipe(
+      map(asset => {
 
         // Is this a multiview asset?
-        if (res.metadata[0].image_compound_urls && res.metadata[0].image_compound_urls.length) {
+        if (asset.image_compound_urls && asset.image_compound_urls.length) {
           this.isMultiView = true
         }
 
-        let assetData = res && res.metadata && res.metadata[0] ? res.metadata[0]['metadata_json'] : []
+        let assetData = asset ? asset['metadata_json'] : []
         for (let data of assetData){
           let fieldExists = false
 
@@ -75,7 +76,7 @@ export class AssetPPPage implements OnInit {
           }
 
         }
-        self.asset = res.metadata[0]
+        self.asset = asset
     }, (err) => {
         console.error('Unable to load asset metadata.')
     })).subscribe()

@@ -8,6 +8,7 @@ import { Angulartics2 } from 'angulartics2'
 import { AssetService } from '../../shared/assets.service'
 import { AssetFiltersService } from '../../asset-filters/asset-filters.service'
 import { AuthService } from '../auth.service'
+import { DomUtilityService } from '../../shared';
 
 @Component({
   selector: 'ang-search',
@@ -40,9 +41,10 @@ export class SearchComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private angulartics: Angulartics2,
     private _filters: AssetFiltersService,
-    private _auth: AuthService
+    private _auth: AuthService,
+    private _dom: DomUtilityService
   ) {
-
+    // console.log("Constructing Search component...")
   }
 
   ngOnInit() {
@@ -162,9 +164,9 @@ export class SearchComponent implements OnInit, OnDestroy {
   }
 
   public setFocus(): void {
-    window.setTimeout(function () {
-      if (document.getElementById('empty-search-alert')){
-        document.getElementById('empty-search-alert').focus()
+    window.setTimeout(() => {
+      if (this._dom.byId('empty-search-alert')){
+        this._dom.byId('empty-search-alert').focus()
       }
     }, 110);
   }

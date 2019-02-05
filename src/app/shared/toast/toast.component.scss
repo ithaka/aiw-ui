@@ -1,0 +1,70 @@
+@import '../../../sass/core/variables';
+
+.toast-cntnr {
+    position: fixed;
+    top: 75px;
+    right: 0px;
+    width: 400px;
+    min-height: 100px;  
+    background-color: $bgDefault;
+    z-index: 10000;
+    margin-right: 24px;
+    box-shadow: 0 1px 3px 0 rgba(0,0,0,0.3);
+    border-top: 4px solid;
+    
+    transform: translateX(100%);
+    -webkit-transform: translateX(100%);
+
+    &.success {
+        border-color: #87AA55;
+    }
+    &.error{
+        border-color: #ED3323;
+    }
+
+    &.slide-in {
+        animation: slide-in 0.5s forwards;
+        -webkit-animation: slide-in 0.5s forwards;
+    }
+    
+    &.slide-out {
+        margin-right: 0px;
+        animation: slide-out 0.5s forwards;
+        -webkit-animation: slide-out 0.5s forwards;
+    }
+        
+    @keyframes slide-in {
+        0% { transform: translateX(100%); }
+        100% { transform: translateX(0%); }
+    }
+    
+    @-webkit-keyframes slide-in {
+        0% { -webkit-transform: translateX(100%); }
+        100% { -webkit-transform: translateX(0%); }
+    }
+        
+    @keyframes slide-out {
+        0% { transform: translateX(0%); }
+        100% { transform: translateX(100%); }
+    }
+    
+    @-webkit-keyframes slide-out {
+        0% { -webkit-transform: translateX(0%); }
+        100% { -webkit-transform: translateX(100%); }
+    }
+
+    .toast-body{
+        display: block;
+        padding: 8px 0px;
+
+        .icon {
+            font-size: 24px;
+            margin: auto;
+            display: block;
+
+            &.icon-close {
+                font-size: 18px !important;
+            }
+        }
+    }
+}

@@ -1,5 +1,6 @@
 import { Router } from '@angular/router';
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ElementRef, ViewChild } from '@angular/core';
+import { DomUtilityService } from 'app/shared';
 
 @Component({
   selector: 'ang-confirm-modal',
@@ -26,15 +27,21 @@ export class ConfirmModal implements OnInit {
   @Input() primary: string = 'Okay';
   @Input() secondary: string;
 
+  @ViewChild("modal", {read: ElementRef}) modalElement: ElementRef;
+
   public groupDeleted: boolean = false
 
   constructor(
-    private _router: Router
+    private _router: Router,
+    private _dom: DomUtilityService,
   ) { }
 
   ngOnInit() {
     // Set focus to the modal to make the links in the modal first thing to tab for accessibility
-    let htmlelement: HTMLElement = document.getElementById('modal');
-    htmlelement.focus()
+    // let htmlelement: HTMLElement = <HTMLElement>this._dom.byId('modal');
+    // htmlelement.focus()
+    if (this.modalElement && this.modalElement.nativeElement){
+      this.modalElement.nativeElement.focus()
+    }
   }
 }

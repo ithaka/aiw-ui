@@ -20,7 +20,7 @@ import { AssetSearchService, SearchResponse } from './asset-search.service'
 import { ImageGroup, Thumbnail } from '.'
 import { AppConfig } from 'app/app.service'
 import { APP_CONST } from '../app.constants'
-import { LockerService } from 'app/_services'
+import { ArtstorStorageService } from '../../../projects/artstor-storage/src/public_api';
 
 @Injectable()
 export class AssetService {
@@ -133,7 +133,7 @@ export class AssetService {
         private _router: Router,
         private route: ActivatedRoute,
         private http: HttpClient,
-        private _locker: LockerService,
+        private _storage: ArtstorStorageService,
         private _auth: AuthService,
         private _groups: GroupService,
         private _toolbox: ToolboxService,
@@ -152,8 +152,8 @@ export class AssetService {
      * Return most recent results set with at least one asset
      */
     public getRecentResults(): any {
-        if (this._locker.get('results')) {
-            return this._locker.get('results')
+        if (this._storage.getLocal('results')) {
+            return this._storage.getLocal('results')
         } else {
             return { thumbnails: [] }
         }
@@ -334,8 +334,7 @@ export class AssetService {
      */
     public getShareLink(assetId: string, externalAsset?: boolean) {
         //   Links in the clipboard need a protocol defined
-        let externalAssetString = externalAsset ? 'external/' : ''
-        return  `${window.location.protocol}//${window.location.host}/#/asset/${externalAssetString}${assetId}`
+        return  `https://${this._app.clientHostname}/#/asset/${assetId}`
 
         // For Reference: Old service for generating share url:
         // this._assets.genrateImageURL( this.assets[0].id )
@@ -744,7 +743,7 @@ export class AssetService {
 
         // Set Recent Results (used by Compare Mode)
         if (resultObj.thumbnails && resultObj.thumbnails.length > 0) {
-            this._locker.set('results', resultObj)
+            this._storage.setLocal('results', resultObj)
         }
 
         if (this.paginated){
@@ -907,7 +906,7 @@ export class AssetService {
                             // For multi-view items, make the thumbnail urls and update the array
                             data.thumbnails = data.thumbnails.map((thumbnail) => {
                               if (thumbnail['thumbnailImgUrl'] && thumbnail['compoundmediaCount'] > 0) {
-                                thumbnail.thumbnailImgUrl = this._auth.compoundUrl + thumbnail.thumbnailImgUrl
+                                thumbnail.thumbnailImgUrl = this._auth.getThumbUrl(true) + thumbnail.thumbnailImgUrl
                               }
                               return thumbnail
                             })
