@@ -20,8 +20,8 @@ export class AddToGroupModal implements OnInit, OnDestroy {
   @Output() showToast: EventEmitter<any> = new EventEmitter()
   @Input() public copySelectionStr: string = 'ADD_TO_GROUP_MODAL.FROM_SELECTED'
   @Input() showCreateGroup: boolean = true
-  @Input() private selectedAssets: any[] = [] // this is used in the asset page, where a single asset can be injected directly
-  
+  @Input() public selectedAssets: any[] = [] // this is used in the asset page, where a single asset can be injected directly
+
   public selectedIg: ImageGroup
   public selectedGroupName: string
   public selectedGroupError: string
@@ -196,7 +196,7 @@ export class AddToGroupModal implements OnInit, OnDestroy {
         this._group.update(data).pipe(
           take(1),
           map(
-            (res) => { 
+            (res) => {
               this.serviceResponse.success = true
               this._assets.clearSelectMode.next(true)
               this.closeModal.emit()
@@ -204,10 +204,10 @@ export class AddToGroupModal implements OnInit, OnDestroy {
                 type: 'success',
                 stringHTML: '<p>You have successfully added item to <b>' + data.name + '</b>.</p><a class="toast-content-links" href="/#/group/' + data.id + '">Go to Group</a>'
               })
-              // Add to Group GA event 
+              // Add to Group GA event
               this._angulartics.eventTrack.next({ action: 'addToGroup', properties: { category: this._auth.getGACategory(), label: this.router.url }})
             },
-            (err) => { 
+            (err) => {
               console.error(err); this.serviceResponse.failure = true;
               this.showToast.emit({
                 type: 'error',
@@ -226,6 +226,22 @@ export class AddToGroupModal implements OnInit, OnDestroy {
       });
 
 
+  }
+
+  public loadMoreGroups(): void {
+    if (this.allGroups.length < this.totalGroups) {
+      this.groupsCurrentPage++
+      this.loadMyGroups()
+    }
+  }
+
+  public searchGroups(event): void {
+    // Execute search after every third character of the search term
+    if ((this.groupSearchTerm.length > 0) && (this.groupSearchTerm.length % 3 === 0)) {
+      this.groupsCurrentPage = 1
+      this.allGroups = []
+      this.loadMyGroups()
+    }
   }
 
   private loadRecentGroups(): void{
@@ -288,13 +304,6 @@ export class AddToGroupModal implements OnInit, OnDestroy {
     )).subscribe()
   }
 
-  private loadMoreGroups(): void{
-    if(this.allGroups.length < this.totalGroups){
-      this.groupsCurrentPage++
-      this.loadMyGroups()
-    }
-  }
-
   private selectGroup(selectedGroup: any): void{
     this.recentGroups = this.recentGroups.map( (recentGroup) => {
       if(recentGroup.id === selectedGroup.id) {
@@ -315,15 +324,6 @@ export class AddToGroupModal implements OnInit, OnDestroy {
       }
       return group
     })
-  }
-
-  private searchGroups(event): void{
-    // Execute search after every third character of the search term
-    if( (this.groupSearchTerm.length > 0) && (this.groupSearchTerm.length % 3 === 0) ){
-      this.groupsCurrentPage = 1
-      this.allGroups = []
-      this.loadMyGroups()
-    }
   }
 
   private clearGroupSearch(): void{
