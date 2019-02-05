@@ -44,7 +44,7 @@ export class AssetPage implements OnInit, OnDestroy {
 
     @ViewChild("generatedImgURL", {read: ElementRef}) generatedImgURLElement: ElementRef
 
-    
+
 
     public user: any
     public userSessionFresh: boolean = false
@@ -66,6 +66,11 @@ export class AssetPage implements OnInit, OnDestroy {
     public rightsText: string = ''
     public rightsLink: string = ''
     public rightsImg: string = ''
+
+    // Toast Variables
+    public showToast: boolean = false
+    public toastType: string = ''
+    public toastHTML: string = ''
 
     // Variables related to how we call for metadata
     public assetIdProperty: string = 'artstorid'
@@ -213,11 +218,6 @@ export class AssetPage implements OnInit, OnDestroy {
 
     // Flag for show/hide page tooltip
     private showPageToolTip: boolean = false
-
-    // Toast Variables
-    private showToast: boolean = false
-    private toastType: string = ''
-    private toastHTML: string = ''
 
     constructor(
         public _appConfig: AppConfig,
@@ -536,14 +536,14 @@ export class AssetPage implements OnInit, OnDestroy {
         }
         // Set download link
         this.setDownloadFull()
-        
+
         if (this.assets[0].formattedMetadata && this.assets[0].formattedMetadata.Rights) {
             // Loop over Rights fields and set rights statement values via isRightStatement
             for (let i = 0; i < this.assets[0].formattedMetadata.Rights.length; i++) {
                 let rightsField = this.assets[0].formattedMetadata.Rights[i]
                 this.isRightStatement(rightsField)
             }
-        }   
+        }
     }
 
     /**
