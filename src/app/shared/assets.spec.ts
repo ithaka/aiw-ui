@@ -6,7 +6,6 @@ import { Injectable, OnDestroy, OnInit } from '@angular/core'
 import { Router, ActivatedRoute, Params } from '@angular/router'
 import { Http, Response, Headers, RequestOptions } from '@angular/http'
 import { Observable, BehaviorSubject, Subscription } from 'rxjs'
-import { Locker, LockerConfig, DRIVERS } from 'angular-safeguard'
 import 'rxjs/add/operator/toPromise'
 import { map, take } from 'rxjs/operators'
 
@@ -24,8 +23,6 @@ describe('AssetServiceTest', () => {
             AssetService,
             { provide: AssetFiltersService },
             { provide: Http, useValue: {} },
-            { provide: Locker, useValue : { useDriver: function() {} } },
-            { provide: LockerConfig, useValue: {} },
             { provide: Router, useValue: {} },
             { provide: ActivatedRoute, useValue: {} },
             { provide: AuthService, useValue: {} },

@@ -1,7 +1,7 @@
 /*
  * Angular 2 decorators and services
  */
-import { Component, ViewEncapsulation } from '@angular/core'
+import { Component, ViewEncapsulation, PLATFORM_ID, Inject } from '@angular/core'
 import { Angulartics2GoogleAnalytics } from 'angulartics2/ga'
 import { Title, Meta } from '@angular/platform-browser'
 import { Router, NavigationStart, NavigationEnd } from '@angular/router'
@@ -10,12 +10,18 @@ import { map, take } from 'rxjs/operators'
 
 import { AppConfig } from './app.service'
 import { ScriptService, FlagService } from './shared'
+import { isPlatformBrowser } from '@angular/common';
+import { DomUtilityService } from 'app/shared';
+
+// Server only imports
+import * as enTranslation from '../assets/i18n/en.json'
+
 /*
  * App Component
  * Top Level Component
  */
 @Component({
-  selector: 'app',
+  selector: 'app-root',
   encapsulation: ViewEncapsulation.None,
   template: `
     <ang-sky-banner *ngIf="showSkyBanner" [textValue]="skyBannerCopy" (closeBanner)="showSkyBanner = false"></ang-sky-banner>
@@ -32,7 +38,7 @@ import { ScriptService, FlagService } from './shared'
     </div>
   `
 })
-export class App {
+export class AppComponent {
   url = 'https://artstor.org/'
   title = 'Artstor'
 
@@ -41,23 +47,31 @@ export class App {
 
   constructor(
     public _app: AppConfig,
+    private _dom: DomUtilityService,
     angulartics2GoogleAnalytics: Angulartics2GoogleAnalytics,
     private titleService: Title,
     private _script: ScriptService,
     private _flags: FlagService,
     private router: Router,
     private translate: TranslateService,
-    private meta: Meta
+    private meta: Meta,
+    @Inject(PLATFORM_ID) private platformId: Object
   ) {
-    // Start GA trackiong
-    angulartics2GoogleAnalytics.startTracking()
-    // append query param to dodge caching
-    let langStr = 'en.json?no-cache=' + new Date().valueOf()
-    // I'm hoping this sets these for the entire app
-    // this language will be used as a fallback when a translation isn't found in the current language
-    translate.setDefaultLang(langStr);
-    // the lang to use, if the lang isn't available, it will use the current loader to get them
-    translate.use(langStr);
+    // console.info("Constructing app component")
+    // Append timestamp param to dodge caching
+    if (isPlatformBrowser(this.platformId)) {
+      let langStr = 'en.json?no-cache=' + new Date().valueOf()
+      // Use the translate loader to pull translations client-side
+      this.translate.use(langStr);
+      this.translate.setDefaultLang(langStr);
+      // Start GA trackiong
+      angulartics2GoogleAnalytics.startTracking()
+    }  else {
+      // Reference translation json directly server-side
+      // Must be set *before* setting default
+      this.translate.setTranslation('en', enTranslation, true)
+      this.translate.setDefaultLang('en');
+    }
 
     this.title = this._app.config.pageTitle
 
@@ -74,58 +88,77 @@ export class App {
     // Set metatitle to "Artstor" except for asset page where metatitle is {{ Asset Title }}
     router.events.pipe(map(event => {
       if (event instanceof NavigationStart) {
-        // focus on the wrapper of the "skip to main content link" everytime new page is loaded
-        let mainEl = <HTMLElement>(document.getElementById('skip'))
-        if (!(event.url.indexOf('browse') > -1) && !(event.url.indexOf('search') > -1) && !(event.url.indexOf('asset') > -1)) // Don't set focus to skip to main content on browse pages so that we can easily go between browse levels
-          mainEl.focus()
 
+        if (isPlatformBrowser(this.platformId)) {
+          // focus on the wrapper of the "skip to main content link" everytime new page is loaded
+          let mainEl = <HTMLElement>(this._dom.byId('skip'))
+          if (!(event.url.indexOf('browse') > -1) && !(event.url.indexOf('search') > -1) && !(event.url.indexOf('asset') > -1)) // Don't set focus to skip to main content on browse pages so that we can easily go between browse levels
+            mainEl.focus()
+        }
+
+<<<<<<< HEAD
+=======
+        // Detect featureflag=solrmetadata and set cookie
+        let routeParams = event.url.split(';')
+        for (let routeParam of routeParams) {
+          let key = routeParam.split('=')[0]
+          let value = routeParam.split('=')[1]
+
+          if (key === 'featureFlag' && value === 'solrMetadata') {
+            this._dom.setCookie('featureflag=solrmetadata')
+          }
+        }
+
+>>>>>>> stage
         let event_url_array = event.url.split('/')
         if (event_url_array && (event_url_array.length > 1) && (event_url_array[1] !== 'asset')){
           this.titleService.setTitle(this.title)
         }
       }
       else if (event instanceof NavigationEnd) {
-        let event_url_array = event.url.split('/')
-        let zendeskElements = document.querySelectorAll('.zopim')
+        if (isPlatformBrowser(this.platformId)) {
+          let event_url_array = event.url.split('/')
+          let zendeskElements = this._dom.bySelectorAll('.zopim')
 
-        // Reset OGP tags with default values for every route other than asset and collection pages
-        if (event.url.indexOf('asset/') === -1
-          || event.url.indexOf('collection/') === -1
-          || event.url.indexOf('category/') === -1) {
-          this.resetOgpTags();
-        }
+          // Reset OGP tags with default values for every route other than asset and collection pages
+          if (event.url.indexOf('asset/') === -1
+            || event.url.indexOf('collection/') === -1
+            || event.url.indexOf('category/') === -1) {
+            this.resetOgpTags();
+          }
 
-        // On navigation end, load the zendesk chat widget if user lands on login page else hide the widget
-        if (this.showChatWidget(window.location.href) && this._app.config.showZendeskWidget) {
-          this._script.loadScript('zendesk')
-            .then( data => {
-              if (data['status'] === 'loaded'){
-              } else if (data['status'] === 'already_loaded'){ // if the widget script has already been loaded then just show the widget
-                zendeskElements[0]['style']['display'] = 'block'
-              }
-            })
-            .catch( error => console.error(error) )
-        } else {
-          // If Zendesk chat is loaded, hide it
-          if (zendeskElements && zendeskElements.length > 1) {
-            zendeskElements[0]['style']['display'] = 'none'
-            zendeskElements[1]['style']['display'] = 'none'
+          // On navigation end, load the zendesk chat widget if user lands on login page else hide the widget
+          if (this.showChatWidget(window.location.href) && this._app.config.showZendeskWidget) {
+            this._script.loadScript('zendesk')
+              .then( data => {
+                if (data['status'] === 'loaded'){
+                } else if (data['status'] === 'already_loaded'){ // if the widget script has already been loaded then just show the widget
+                  zendeskElements[0]['style']['display'] = 'block'
+                }
+              })
+              .catch( error => console.error(error) )
+          } else {
+            // If Zendesk chat is loaded, hide it
+            if (zendeskElements && zendeskElements.length > 1) {
+              zendeskElements[0]['style']['display'] = 'none'
+              zendeskElements[1]['style']['display'] = 'none'
+            }
           }
         }
       }
     })).subscribe()
 
-    this._flags.getFlagsFromService().pipe(
-      take(1),
-      map(flags => {
-        // don't need to handle successful response here - this just initiates the flags
-        console.log(flags)
-        // Set skybanner
-        this.showSkyBanner = flags.bannerShow
-        this.skyBannerCopy = flags.bannerCopy
-      }, (err) => {
-        console.error(err)
-    })).subscribe()
+    // this._flags.getFlagsFromService().pipe(
+    //   take(1),
+    //   map(flags => {
+    //     // don't need to handle successful response here - this just initiates the flags
+    //     console.log(flags)
+    //     // Set skybanner
+    //     this.showSkyBanner = flags.bannerShow
+    //     this.skyBannerCopy = flags.bannerCopy
+    //   }, (err) => {
+    //     console.error(err)
+    // })).subscribe()
   }
 
   ngOnInit() {
@@ -134,9 +167,9 @@ export class App {
   }
 
   public findMainContent(): void {
-    window.setTimeout(() =>
+    setTimeout(() =>
     {
-      let htmlelement: HTMLElement = document.getElementById('mainContent');
+      let htmlelement: HTMLElement = this._dom.byId('mainContent');
       let element: Element;
 
       // On search page go to the start of filter section

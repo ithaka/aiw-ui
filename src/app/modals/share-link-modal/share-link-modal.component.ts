@@ -1,7 +1,7 @@
-import { Component, OnInit, Input, Output, EventEmitter, AfterViewInit } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, AfterViewInit, ElementRef, ViewChild } from '@angular/core';
 
 // Project Dependencies
-import { AssetService, AssetSearchService } from '../../shared';
+import { AssetService, AssetSearchService, DomUtilityService } from '../../shared';
 import { Asset } from '../../asset-page/asset';
 
 @Component({
@@ -13,6 +13,7 @@ export class ShareLinkModal implements OnInit, AfterViewInit {
 
   @Input() public asset: any;
   @Output() public closeModal: EventEmitter<any> = new EventEmitter();
+  @ViewChild("share-ig-link-title", {read: ElementRef}) shareLinkTitleElement: ElementRef;
   private shareLink: string = '';
   private genImgMode: string = 'half';
 
@@ -20,7 +21,11 @@ export class ShareLinkModal implements OnInit, AfterViewInit {
   private copyURLStatusMsg: string = '';
   private copyHTMLStatusMsg: string = '';
 
-  constructor(private _assets: AssetService, private _search: AssetSearchService) { }
+  constructor(
+    private _assets: AssetService,
+    private _search: AssetSearchService,
+    private _dom: DomUtilityService
+  ) { }
 
   ngOnInit() {
     if (this.asset) {
@@ -38,8 +43,11 @@ export class ShareLinkModal implements OnInit, AfterViewInit {
 
   // Set initial focus on the modal Title h1
   public startModalFocus() {
-    let modalStartFocus = document.getElementById('share-img-link-title')
-    modalStartFocus.focus()
+    // let modalStartFocus = this._dom.byId('share-img-link-title')
+    // modalStartFocus.focus()
+    if (this.shareLinkTitleElement && this.shareLinkTitleElement.nativeElement){
+      this.shareLinkTitleElement.nativeElement.focus()
+    }
   }
 
   /**
@@ -47,7 +55,7 @@ export class ShareLinkModal implements OnInit, AfterViewInit {
    * @param id of the field whose innerText is to be copied to the clipboard
    */
   private copyTexttoClipBoard(id: string): void{
-    let textArea = document.createElement('textarea');
+    let textArea =this._dom.create('textarea');
 
     textArea.style.position = 'fixed';
     textArea.style.top = '0';
@@ -61,7 +69,7 @@ export class ShareLinkModal implements OnInit, AfterViewInit {
     textArea.style.boxShadow = 'none';
     textArea.style.background = 'transparent';
 
-    let element = document.getElementById(id);
+    let element = this._dom.byId(id);
     textArea.value = element.textContent;
 
     document.body.appendChild(textArea);
@@ -94,9 +102,11 @@ export class ShareLinkModal implements OnInit, AfterViewInit {
       console.log('Unable to copy');
     }
 
-    document.body.removeChild(textArea);
+    // TODO SSR
+    // document.body.removeChild(textArea);
   }
 
+  // Doesn't get called on SSR application
   public showHelp(): void{
     window.open('http://support.artstor.org/?article=creating-links', 'Artstor Support', 'width=600,height=500');
   }

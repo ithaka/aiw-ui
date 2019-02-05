@@ -5,8 +5,11 @@ nav.nav.nav-inline.browse-nav
       // Show tags for Personal and Private collections (when logged in)
       ng-container(*ngIf="isLoggedIn")
         ul.filter-list
-          li.filter.filter--browse(*ngFor="let tag of tags")
-            ang-tag([tag]="tag", [edit]="tag.type && tag.type.label === 'pcollection'", (editTag)="showEditModal(tag)")
+          li.filter.filter--browse(*ngFor="let col of pcollections")
+            a.tag-link(id="{{ col.collectionid }}", title="{{ col.collectionname }}",
+            [routerLink]="['/pcollection', col.collectionid]")
+              span.notranslate {{ col.collectionname }}
+            span.edit(*ngIf="col.collectionid === '37436' ", (click)="showEditPCModal = true", tabIndex="0", role="button", aria-label="Add items to My Personal Collection") Edit
       .alert.alert-info(*ngIf="!isLoggedIn")
         h3 {{ 'BROWSE.ERRORS.LOGIN_PC_HEADING' | translate }}
         br
@@ -19,6 +22,5 @@ nav.nav.nav-inline.browse-nav
         p([innerHtml]="'BROWSE.MY_COLLECTION.DESCRIPTION' | translate")
 .row.has-icon-overlay(*ngIf="loading")
   i.icon-lg.icon-overlay--top.icon-loading-large
-//- ang-upload-images(*ngIf="showUploadImgsModal", (closeModal)="showUploadImgsModal = false")
 ang-edit-personal-collection(*ngIf="showEditPCModal", (closeModal)="showEditPCModal = false", [colId]="editTagId")
 ang-access-denied-modal(*ngIf="unaffiliatedUser")

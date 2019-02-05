@@ -1,0 +1,22 @@
+version: '3'
+services:
+  app:
+    build: .
+    image: artifactory.acorn.cirrostratus.org/artstor-air-node:e63cb216
+    container-name: docker-webapp
+    restart: always
+    ports:
+    - "80:80"
+    - "8080:80"
+    # environment:
+    #   SGK_APP: ""
+    #   SGK_APP_SERVICE_NAME: ""
+    #   SGK_APP_TYPE: ""
+    #   SGK_APP_USER: ""
+    #   SGK_DEPLOY_ID: ""
+    #   SGK_BASE_DOMAIN: ""
+    #   SGK_ENVIRONMENT: ""
+    #   SGK_HEALTHCHECK_SERVICE: ""
+    #   SGK_WITH_EUREKA_SIDE_CAR: ""
+    #   SGK_APP_PACKAGE_VERSION: ""
+    #   SGK_VPC_ENABLED: ""EOF

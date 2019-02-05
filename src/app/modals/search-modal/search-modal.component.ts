@@ -1,13 +1,13 @@
 import { Subscription } from 'rxjs'
 import { map, take } from 'rxjs/operators'
 import { ActivatedRoute, Router } from '@angular/router'
-import { Component, OnInit, Output, EventEmitter, AfterViewInit } from '@angular/core'
+import { Component, OnInit, Output, EventEmitter, AfterViewInit, ElementRef, ViewChild } from '@angular/core'
 import { Angulartics2 } from 'angulartics2'
 
 // Project dependencies
 import { SearchQueryUtil } from './search-query'
 import { AssetFiltersService } from './../../asset-filters/asset-filters.service'
-import { AuthService, AssetService, AssetSearchService } from 'app/shared'
+import { AuthService, AssetService, AssetSearchService, DomUtilityService } from 'app/shared'
 import { AppConfig } from '../../app.service'
 
 @Component({
@@ -18,6 +18,8 @@ import { AppConfig } from '../../app.service'
 export class SearchModal implements OnInit, AfterViewInit {
   @Output()
   public closeModal: EventEmitter<any> = new EventEmitter();
+
+  @ViewChild("advanced-search-title", {read: ElementRef}) advSearchTitleElement: ElementRef;
 
   public fields = []
 
@@ -91,7 +93,8 @@ export class SearchModal implements OnInit, AfterViewInit {
         private angulartics: Angulartics2,
         private _auth: AuthService,
         // Solr Search service
-        private _assetFilters: AssetFiltersService
+        private _assetFilters: AssetFiltersService,
+        private _dom: DomUtilityService
       ) {
 
     // Setup two query fields
@@ -117,8 +120,11 @@ export class SearchModal implements OnInit, AfterViewInit {
 
   // Set initial focus on the modal Title h1
   public startModalFocus() {
-    let modalStartFocus = document.getElementById('advanced-search-title')
-    modalStartFocus.focus()
+    // let modalStartFocus = <HTMLElement>this._dom.byId('advanced-search-title')
+    // modalStartFocus.focus()
+    if (this.advSearchTitleElement && this.advSearchTitleElement.nativeElement){
+      this.advSearchTitleElement.nativeElement.focus()
+    }
   }
 
   public close(): void {
@@ -126,6 +132,7 @@ export class SearchModal implements OnInit, AfterViewInit {
     this.closeModal.emit()
   }
 
+  // Will only be executed on client side application
   public dateKeyPress(event: any): boolean{
       // Add check of Tab key to make sure the tabbingis enabled on Firefox
       if ((event.key === 'ArrowUp') || (event.key === 'ArrowDown') || (event.key === 'ArrowRight') || (event.key === 'ArrowLeft') || (event.key === 'Backspace') || (event.key === 'Tab')){
@@ -240,6 +247,7 @@ export class SearchModal implements OnInit, AfterViewInit {
 
   /**
    * Open Help page on Advanced Search
+   * Will only be executed on client side application
    */
   public openHelp(): void {
     window.open('http://support.artstor.org/?article=advanced-search', 'Advanced Search Support', 'width=800,height=600');

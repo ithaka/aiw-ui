@@ -27,14 +27,20 @@ yarn global add webpack webpack-dev-server karma karma-cli protractor typescript
 
 # Install dependencies
 yarn install
+# Ensure Angular CLI commands are available
+npm link @angular/cli
 
 # Build the project! (uses Webpack)
 # - sleep acts as a failsafe for broken dependencies stalling builds
 echo "Starting webpack build"
 $TIMEOUT -t 600 yarn run build:prod
 
+# Styleguide
+npm install --global nucleus-styleguide
+yarn styleguide
+
 # Collect our built files
-rsync -a ${SRC_DIR}/dist/avatar/* ${BUILD_DIR}/
+rsync -a ${SRC_DIR}/dist/browser/* ${BUILD_DIR}/
 
 # Package our built app
-tar -cvzf package.tgz ${SRC_DIR}/dist/avatar/
+tar -cvzf package.tgz ${SRC_DIR}/dist/browser/

@@ -1,6 +1,5 @@
-import { Injectable } from '@angular/core'
-import { Location } from '@angular/common'
-import { Locker, LockerConfig, DRIVERS } from 'angular-safeguard'
+import { Injectable, Inject, PLATFORM_ID } from '@angular/core'
+import { Location, isPlatformBrowser } from '@angular/common'
 import { HttpClient, HttpHeaders } from '@angular/common/http'
 import {
   CanActivate,
@@ -19,8 +18,7 @@ import { IdleWatcherUtil } from './idle-watcher'
 import {Idle, DEFAULT_INTERRUPTSOURCES} from '@ng-idle/core'
 import { FlagService } from './flag.service'
 import { error } from '@angular/compiler/src/util';
-import { LockerService } from 'app/_services';
-
+import { ArtstorStorageService } from '../../../projects/artstor-storage/src/public_api';
 /**
  * Controls authorization through IP address and locally stored user object
  */
@@ -31,15 +29,16 @@ export class AuthService implements CanActivate {
   // Track whether or not user object has been refreshed since app opened
   public userSessionFresh: boolean = false
   public showUserInactiveModal: Subject<boolean> = new Subject(); // Set up subject observable for showing inactive user modal
-  public compoundUrl;
+  public clientHostname: string;
   private ENV: string;
   private baseUrl;
-  private imageFpxUrl;
-  private lostPassUrl;
-  private hostname;
-  private subdomain;
-  private thumbUrl;
-  private IIIFUrl;
+  private imageFpxUrl: string;
+  private lostPassUrl: string;
+  private hostname: string;
+  private subdomain: string;
+  private thumbUrl: string;
+  private compoundUrl: string;
+  private IIIFUrl: string;
   private logUrl: string;
   private groupUrl = '';
   private solrUrl: string;
@@ -66,16 +65,23 @@ export class AuthService implements CanActivate {
 
   private refreshUserSessionInProgress: boolean = false
 
+  private isBrowser: boolean
+
   constructor(
+    @Inject(PLATFORM_ID) private platformId: Object,
     private _router: Router,
     // private _login: LoginService,
-    private _locker: LockerService,
+    private _storage: ArtstorStorageService,
     private http: HttpClient,
     private location: Location,
     private _app: AppConfig,
     private _flags: FlagService,
     private idle: Idle
   ) {
+    this.isBrowser = isPlatformBrowser(this.platformId)
+    // Set WLV and App Config variables
+    this.isOpenAccess = this._app.config.isOpenAccess
+    this.clientHostname = this._app.clientHostname
     // Initialize observables
     this.currentUser = this.userSource.asObservable()
     // Default to relative or prod endpoints
@@ -88,11 +94,11 @@ export class AuthService implements CanActivate {
     this.subdomain = 'library'
     this.solrUrl = '/api/search/v1.0/search'
 
-    // Set WLV variables
-    this.isOpenAccess = this._app.config.isOpenAccess
 
     let testHostnames = [
       'localhost',
+      'localhost:3000',
+      'localhost:4000',
       'local.artstor.org',
       'stage.artstor.org',
       // test.artstor subdomain is used for WLVs
@@ -110,13 +116,13 @@ export class AuthService implements CanActivate {
     ]
 
     // Check domain
-    if (  new RegExp(prodHostnames.join('|')).test(document.location.hostname)  ) {
+    if (  new RegExp(prodHostnames.join('|')).test(this.clientHostname)  ) {
       // Explicit live endpoints
       this.logUrl = '//ang-ui-logger.apps.prod.cirrostratus.org/api/v1'
       this.solrUrl = '/api/search/v1.0/search'
       this.ENV = 'prod'
     }
-    else if ( document.location.hostname.indexOf('prod.cirrostratus.org') > -1 ) {
+    else if ( this.clientHostname.indexOf('prod.cirrostratus.org') > -1 ) {
       console.info('Using Prod Endpoints (Absolute)')
       // Prod/Lively endpoints
       this.hostname = '//library.artstor.org'
@@ -124,7 +130,7 @@ export class AuthService implements CanActivate {
       this.logUrl = '//ang-ui-logger.apps.prod.cirrostratus.org/api/v1'
       this.solrUrl = this.hostname + '/api/search/v1.0/search'
       this.ENV = 'prod'
-    } else if ( new RegExp(testHostnames.join('|')).test(document.location.hostname) ) {
+    } else if ( new RegExp(testHostnames.join('|')).test(this.clientHostname) ) {
       console.info('Using Test Endpoints')
       // Test Endpoints
       this.hostname = '//stage.artstor.org'
@@ -137,39 +143,42 @@ export class AuthService implements CanActivate {
       this.IIIFUrl = '//tsstage.artstor.org/rosa-iiif-endpoint-1.0-SNAPSHOT/fpx'
       this.ENV = 'test'
     }
-
+    
     // Additional Local dev domains
-    if (document.location.hostname.indexOf('local.sahara') > -1) {
+    if (this.clientHostname.indexOf('local.sahara') > -1) {
       this.hostname = '//sahara.beta.stage.artstor.org'
       this.ENV = 'test'
     }
 
     // Sahara routing WORKAROUND
-    if (document.location.hostname.indexOf('sahara.beta.stage.artstor.org') > -1) {
+    if (this.clientHostname.indexOf('sahara.beta.stage.artstor.org') > -1) {
       this.hostname = '//sahara.beta.stage.artstor.org'
       this.ENV = 'test'
     }
-    if (document.location.hostname.indexOf('sahara.prod.artstor.org') > -1) {
+    if (this.clientHostname.indexOf('sahara.prod.artstor.org') > -1) {
       this.hostname = '//sahara.prod.artstor.org/'
     }
 
     // Local routing should point to full URL
     // * This should NEVER apply when using a proxy, as it will break authorization
-    if (new RegExp(['cirrostratus.org', 'localhost', 'local.', 'sahara.beta.stage.artstor.org', 'sahara.prod.artstor.org'].join('|')).test(document.location.hostname)) {
+    if (new RegExp(['cirrostratus.org', 'localhost', 'local.', 'sahara.beta.stage.artstor.org', 'sahara.prod.artstor.org'].join('|')).test(this.clientHostname)) {
       this.baseUrl = this.hostname + '/api'
       this.solrUrl = this.hostname + '/api/search/v1.0/search'
     }
 
-    // For session timeout on user inactivity
-    idle.setIdle(IdleWatcherUtil.generateIdleTime()); // Set an idle time of 1 min, before starting to watch for timeout
-    idle.setTimeout(IdleWatcherUtil.generateSessionLength()); // Log user out after 90 mins of inactivity
-    idle.setInterrupts(DEFAULT_INTERRUPTSOURCES);
-
-    idle.onIdleEnd.pipe(
-      map(() => {
-        this.idleState = 'No longer idle.';
-        // We want to ensure a user is refreshed as soon as they return to the tab
+    // Set idle timer and auth heartbeat when loaded in Browser
+    if (this.isBrowser) {
+      this.initIdleWatcher()
+      /**
+       * User Access Heartbeat
+       * - Poll /userinfo every 15min
+       * - Refreshs AccessToken with IAC
+       */
+      const userInfoInterval = 15 * 1000 * 60 * 60
+      // Run every X mins
+      setInterval(() => {
         this.refreshUserSession(true)
+<<<<<<< HEAD
       })).subscribe()
 
     idle.onTimeout.pipe(
@@ -205,23 +214,64 @@ export class AuthService implements CanActivate {
     // Initialize user and institution objects from localstorage
     this.userSource.next(this.user || this.getUser())
     let institution = this._locker.get('institution')
-    if (institution) { this.institutionObjSource.next(institution) }
+=======
+      }, userInfoInterval)
+    }
 
-    /**
-     * User Access Heartbeat
-     * - Poll /userinfo every 15min
-     * - Refreshs AccessToken with IAC
-     */
-    const userInfoInterval = 15 * 1000 * 60 * 60
-    // Run every X mins
-    setInterval(() => {
-      this.refreshUserSession(true)
-    }, userInfoInterval)
+    // Initialize user and institution objects from localstorage
+    this.userSource.next(this.getUser())
+    let institution = this._storage.getLocal('institution')
+>>>>>>> stage
+    if (institution) { this.institutionObjSource.next(institution) }
+  }
+
+  public initIdleWatcher(): void {
+     // For session timeout on user inactivity
+     this.idle.setIdle(IdleWatcherUtil.generateIdleTime()); // Set an idle time of 1 min, before starting to watch for timeout
+     this.idle.setTimeout(IdleWatcherUtil.generateSessionLength()); // Log user out after 90 mins of inactivity
+     this.idle.setInterrupts(DEFAULT_INTERRUPTSOURCES);
+ 
+     this.idle.onIdleEnd.pipe(
+       map(() => {
+         this.idleState = 'No longer idle.';
+         // We want to ensure a user is refreshed as soon as they return to the tab
+         this.refreshUserSession(true)
+       })).subscribe()
+ 
+     this.idle.onTimeout.pipe(
+       map(() => {
+         let user = this.getUser();
+         // console.log(user);
+         if (user && user.isLoggedIn){
+           this.expireSession();
+           this.showUserInactiveModal.next(true);
+           this.idleState = 'Timed out!';
+         }
+         else{
+           this.resetIdleWatcher()
+         }
+       })).subscribe()
+ 
+     this.idle.onIdleStart.pipe(
+       map(() => {
+         this.idleState = 'You\'ve gone idle!';
+         let currentDateTime = new Date().toUTCString();
+         this._storage.setLocal('userGoneIdleAt', currentDateTime);
+       })).subscribe()
+ 
+    this.idle.onTimeoutWarning.pipe(
+       map((countdown) => {
+         this.idleState = 'You will time out in ' + countdown + ' seconds!'
+         // console.log(this.idleState);
+       })).subscribe()
+ 
+     // Init idle watcher (this will also run getUserInfo)
+     this.resetIdleWatcher()
   }
 
   // Reset the idle watcher
   public resetIdleWatcher(): void {
-    this.idle.watch();
+    //this.idle.watch();
     // When a user comes back, we don't want to wait for the time interval to refresh the session
     this.refreshUserSession(true)
   }
@@ -250,13 +300,13 @@ export class AuthService implements CanActivate {
    */
   public logout() {
       // Stop, unwatch Idle session. Note: resetIdleWatcher() calls watch, and is called from login component
-      this.idle.stop()
+      //this.idle.stop()
 
       let header = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded'); // ... Set content type to JSON
       let options = { headers: header, withCredentials: true };
 
       // Clear local user object, and other settings
-      this.clearStorage()
+      this._storage.clearLocalStorage()
       // Clear observables
       this.userSource.next({})
       this.institutionObjSource.next({})
@@ -292,7 +342,7 @@ export class AuthService implements CanActivate {
 
   public setInstitution(institutionObj: any): void {
     // Save to local storage
-    this._locker.set('institution', institutionObj)
+    this._storage.setLocal('institution', institutionObj)
     // Update Observable
     this.institutionObjValue = institutionObj;
     this.institutionObjSource.next(this.institutionObjValue);
@@ -358,6 +408,9 @@ export class AuthService implements CanActivate {
 
   public getUrl(secure?: boolean): string {
     let url: string = this.baseUrl
+    if (!this.isBrowser){
+      url = 'https:' + url
+    }
     if (secure) {
       url += '/secure'
     }
@@ -406,7 +459,7 @@ export class AuthService implements CanActivate {
    */
   public saveUser(user: any) {
     // Preserve user via localstorage
-    this._locker.set('user', user);
+    this._storage.setLocal('user', user);
     // only do these things if the user is ip auth'd or logged in and the user has changed
     let institution = this.institutionObjSource.getValue();
     if (user.status && (!institution.institutionId || user.institutionId != institution.institutionId)) {
@@ -415,48 +468,53 @@ export class AuthService implements CanActivate {
     }
     // Update observable
     this.userSource.next(user)
-
-    // if (user.status && (this._locker.get('user').username != user.username || !institution.institutionid)) {
   }
 
   /**
    * Gets user object from local storage
    */
   public getUser(): any {
+<<<<<<< HEAD
     let userObj = this._locker.get('user')
     this.user = userObj ? userObj : {}
     return this.user
+=======
+      return this._storage.getLocal('user') ? this._storage.getLocal('user') : {};
+>>>>>>> stage
   }
 
   /** Stores an object in local storage for you - your welcome */
   public store(key: string, value: any): void {
       if (key != 'user' && key != 'token') {
-          this._locker.set(key, value);
+          this._storage.setLocal(key, value);
       }
   }
 
   /** Gets an object from local storage */
   public getFromStorage(key: string): any {
-      return this._locker.get(key);
+      return this._storage.getLocal(key);
   }
 
   /** Deletes things (not user or token) from local storage */
   public deleteFromStorage(key: string): void {
       if (key != 'user' && key != 'token') {
-          this._locker.remove(key);
+          this._storage.removeLocalItem(key);
       }
-  }
-
-  /** Clears all variables held in local storage */
-  public clearStorage(): void {
-    this._locker.clear();
   }
 
   /**
    * Required by implementing CanActivate, and is called on routes which are protected by canActivate: [AuthService]
    */
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
+    console.log("Running canActivate...")
     let options = { headers: this.userInfoHeader, withCredentials: true }
+
+    // TO-DO: Enable the server to call the user info call
+    if (!this.isBrowser) {
+      return new Observable(observer => {
+        observer.next(true)
+      })
+    }
 
     if ((route.params.samlTokenId || route.params.type == 'shibboleth') && state.url.includes('/register')) {
       // Shibboleth workflow is unique, should allow access to the register page
@@ -476,7 +534,9 @@ export class AuthService implements CanActivate {
       .get(this.genUserInfoUrl(), options).pipe(
       map(
         (data)  => {
-          let user = this.decorateValidUser(data)
+          console.log("User info call returned!")
+          // The Artstor Sotrage service will return a default user object for use on the Server
+          let user = this.isBrowser ? this.decorateValidUser(data) : this._storage.getLocal('user')
           // Track whether or not user object has been refreshed since app opened
           this.userSessionFresh = true
 
@@ -554,12 +614,12 @@ export class AuthService implements CanActivate {
 
   /** Getter for downloadAuthorized parameter of local storage */
   public downloadAuthorized(): boolean {
-    return this._locker.get('downloadAuthorized');
+    return this._storage.getLocal('downloadAuthorized');
   }
 
   /** Setter for downloadAuthorized parameter of local storage */
   public authorizeDownload(): void {
-    this._locker.set('downloadAuthorized', true);
+    this._storage.setLocal('downloadAuthorized', true);
   }
 
     /**

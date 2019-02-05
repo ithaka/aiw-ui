@@ -16,6 +16,11 @@ export class FlagService {
   public unaffiliated: boolean = false
   public bannerShow: boolean = false
   public bannerCopy: string = ''
+<<<<<<< HEAD
+=======
+  public solrMetadata: boolean = false
+  public detailViews: boolean = false
+>>>>>>> stage
 
   constructor(
     private _http: HttpClient

@@ -142,6 +142,9 @@ export class GroupService {
      * Create Group
      */
     public create(group: any): Observable<any> {
+
+        console.log('OPTIONS: ', this.options)
+
         return this.http.post(
             this.groupUrl,
             group,

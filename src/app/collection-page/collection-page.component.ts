@@ -122,7 +122,6 @@ export class CollectionPage implements OnInit, OnDestroy {
                 // Update OGP meta tags
                 this.meta.updateTag({ property: "og:title", content: this.colName }, 'property="og:title"')
                 this.meta.updateTag({ property: "og:description", content: data['shortDescription'] }, 'property="og:description"')
-                this.meta.updateTag({ property: "og:url", content: window.document.location.href }, 'property="og:url"')
                 this.meta.updateTag({ property: "og:image", content: this.colThumbnail }, 'property="og:image"')
               })
               .catch((error) => {
