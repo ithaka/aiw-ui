@@ -235,7 +235,7 @@ export class AddToGroupModal implements OnInit, OnDestroy {
     }
   }
 
-  public searchGroups(event): void {
+  public searchGroups(event?): void {
     // Execute search after every third character of the search term
     if ((this.groupSearchTerm.length > 0) && (this.groupSearchTerm.length % 3 === 0)) {
       this.groupsCurrentPage = 1
