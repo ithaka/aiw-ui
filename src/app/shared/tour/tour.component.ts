@@ -94,7 +94,7 @@ import { DomUtilityService } from '../../shared'
             this.manipulateDom('className', 'driver-popover-description', 2, false)
 
             // Set focus on the title of the popover, the setTimeout is necessary for the behavior to appear
-            setTimeout(function ()
+            setTimeout(() =>
             {
               let el: HTMLElement = <HTMLElement><any>(this._dom.byClassName('driver-popover-title')[0])
               if (el) {
