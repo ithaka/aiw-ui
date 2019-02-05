@@ -1,7 +1,7 @@
 import { Component, Input, OnInit, PLATFORM_ID, Inject  } from '@angular/core'
 // TO-DO: Import driver only on the clientside
 // Maybe use their CDN? https://github.com/kamranahmedse/driver.js
-// import * as Driver from '../../../../node_modules/driver.js/dist/driver.min.js'
+import * as Driver from '../../../../node_modules/driver.js/dist/driver.min.js'
 import { Router, NavigationStart } from '@angular/router'
 import { map } from 'rxjs/operators'
 import { Angulartics2 } from 'angulartics2'
@@ -22,6 +22,7 @@ import { DomUtilityService } from '../../shared'
     @Input() public steps: TourStep[]
 
     private driver: any
+    private isBrowser
 
     constructor(
       private _auth: AuthService,
@@ -30,6 +31,8 @@ import { DomUtilityService } from '../../shared'
       private router: Router,
       @Inject(PLATFORM_ID) private platformId: Object
     ){
+      this.isBrowser = isPlatformBrowser(platformId)
+
       router.events.pipe(
       map(event => {
         // End the tour when go to another page with browser's forward and backward button
@@ -41,80 +44,83 @@ import { DomUtilityService } from '../../shared'
       })).subscribe()
     }
 
+    // Initialize and start image group tour
     public startTour() {
       this.startModalShow = false
       this._ga.eventTrack.next({ action: 'beginTour', properties: { category: this._auth.getGACategory(), label: 'imageGroupTour' } })
-    // TO-DO: Support Driverjs on SSR
-      //   this.driver = new Driver({
-    //     allowClose: false,
-    //     closeBtnText: 'exit tour',
-    //     nextBtnText: 'NEXT',
-    //     prevBtnText: 'BACK',
-    //     doneBtnText: 'GOT IT, THANKS!',
-    //     onHighlightStarted: (Element) => {
 
-    //       Element.node.scrollIntoView({block: 'center', inline: 'nearest'})
+        if (this.isBrowser) {
+          this.driver = new Driver({
+          allowClose: false,
+          closeBtnText: 'exit tour',
+          nextBtnText: 'NEXT',
+          prevBtnText: 'BACK',
+          doneBtnText: 'GOT IT, THANKS!',
+          onHighlightStarted: (Element) => {
 
-    //       // Change the tabIndex of the brand label and links in the login box to ensure if there is tour, the links of the tour is first to be tabbed for accessibility
-    //         this.manipulateDom('className', 'navbar-brand', 6)
-    //         this.manipulateDom('id', 'nav-setting', 7)
-    //         this.manipulateDom('id', 'nav-logout', 7)
-    //         this.manipulateDom('id', 'nav-login', 7)
-    //         this.manipulateDom('id', 'nav-register', 7)
-    //         this.manipulateDom('id', 'driver-popover-item', -1, true)
+            Element.node.scrollIntoView({block: 'center', inline: 'nearest'})
 
-    //       // Remove the back button on the first popover
-    //       if (Element.options.step === 1) {
-    //         let el: HTMLElement = <HTMLElement><any>(this._dom.byClassName('driver-prev-btn')[0])
-    //           if (el)
-    //             el.classList.add('hidden')
-    //       }
-    //       else {
-    //         let el: HTMLElement = <HTMLElement><any>(this._dom.byClassName('driver-prev-btn')[0])
-    //         if (el) {
-    //           el.classList.remove('hidden')
-    //         }
-    //       }
+            // Change the tabIndex of the brand label and links in the login box to ensure if there is tour, the links of the tour is first to be tabbed for accessibility
+              this.manipulateDom('className', 'navbar-brand', 6)
+              this.manipulateDom('id', 'nav-setting', 7)
+              this.manipulateDom('id', 'nav-logout', 7)
+              this.manipulateDom('id', 'nav-login', 7)
+              this.manipulateDom('id', 'nav-register', 7)
+              this.manipulateDom('id', 'driver-popover-item', -1, true)
 
-    //     },
-    //     onHighlighted: (Element) => {
-    //       // Disable the Element that is being highlighed
-    //       if (Element.node.classList[0] === 'btn') Element.node.disabled = true
-    //       else Element.node.offsetParent.disabled = true
+            // Remove the back button on the first popover
+            if (Element.options.step === 1) {
+              let el: HTMLElement = <HTMLElement><any>(this._dom.byClassName('driver-prev-btn')[0])
+                if (el)
+                  el.classList.add('hidden')
+            }
+            else {
+              let el: HTMLElement = <HTMLElement><any>(this._dom.byClassName('driver-prev-btn')[0])
+              if (el) {
+                el.classList.remove('hidden')
+              }
+            }
 
-    //       // Set tabIndex and aria-label of the tour elements for accessibility
-    //       this.manipulateDom('className', 'driver-close-btn', 5, false, 'aria-label', 'close button')
-    //       this.manipulateDom('className', 'driver-prev-btn', 4, false, 'aria-label', 'previous button')
-    //       this.manipulateDom('className', 'driver-next-btn', 3, false, 'aria-label', 'next button')
-    //       this.manipulateDom('className', 'driver-popover-description', 2, false)
+          },
+          onHighlighted: (Element) => {
+            // Disable the Element that is being highlighed
+            if (Element.node.classList[0] === 'btn') Element.node.disabled = true
+            else Element.node.offsetParent.disabled = true
 
-    //       // Set focus on the title of the popover, the setTimeout is necessary for the behavior to appear
-    //       setTimeout(function ()
-    //       {
-    //         let el: HTMLElement = <HTMLElement><any>(this._dom.byClassName('driver-popover-title')[0])
-    //         if (el) {
-    //           el.tabIndex = 1
-    //           el.focus()
-    //         }
-    //       }, 0);
-    //     },
-    //     onDeselected: (Element) => {
-    //       // Enable the element when it is not highlighted
-    //       if (Element.node.classList[0] === 'btn') Element.node.disabled = false
-    //       else Element.node.offsetParent.disabled = false
-    //     },
-    //     onReset: (Element) => {
-    //       // Change BACK the tabIndex of the brand label and links in the login box when the tour is over
-    //       this.manipulateDom('className', 'navbar-brand', 1)
-    //       this.manipulateDom('id', 'nav-setting', 2)
-    //       this.manipulateDom('id', 'nav-logout', 2)
-    //       this.manipulateDom('id', 'nav-login', 2)
-    //       this.manipulateDom('id', 'nav-register', 2)
-    //     }
-    // })
+            // Set tabIndex and aria-label of the tour elements for accessibility
+            this.manipulateDom('className', 'driver-close-btn', 5, false, 'aria-label', 'close button')
+            this.manipulateDom('className', 'driver-prev-btn', 4, false, 'aria-label', 'previous button')
+            this.manipulateDom('className', 'driver-next-btn', 3, false, 'aria-label', 'next button')
+            this.manipulateDom('className', 'driver-popover-description', 2, false)
 
-    //   this.driver.defineSteps(this.steps)
-    //   this.driver.start()
+            // Set focus on the title of the popover, the setTimeout is necessary for the behavior to appear
+            setTimeout(function ()
+            {
+              let el: HTMLElement = <HTMLElement><any>(this._dom.byClassName('driver-popover-title')[0])
+              if (el) {
+                el.tabIndex = 1
+                el.focus()
+              }
+            }, 0);
+          },
+          onDeselected: (Element) => {
+            // Enable the element when it is not highlighted
+            if (Element.node.classList[0] === 'btn') Element.node.disabled = false
+            else Element.node.offsetParent.disabled = false
+          },
+          onReset: (Element) => {
+            // Change BACK the tabIndex of the brand label and links in the login box when the tour is over
+            this.manipulateDom('className', 'navbar-brand', 1)
+            this.manipulateDom('id', 'nav-setting', 2)
+            this.manipulateDom('id', 'nav-logout', 2)
+            this.manipulateDom('id', 'nav-login', 2)
+            this.manipulateDom('id', 'nav-register', 2)
+          }
+      })
+
+        this.driver.defineSteps(this.steps)
+        this.driver.start()
+      }
     }
 
     /**
