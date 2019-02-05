@@ -33,26 +33,27 @@ export class AddToGroupModal implements OnInit, OnDestroy {
   } = {}
 
   public dataService: any
-  private subscriptions: Subscription[] = []
 
-  private groups: ImageGroup[] = []
+  public groups: ImageGroup[] = []
 
-  private detailPreviewURL: string = ''
+  public detailPreviewURL: string = ''
 
-  private groupSearchTerm: string = ''
-  private recentGroups: any[] = []
-  private allGroups: any[] = []
+  public groupSearchTerm: string = ''
+  public recentGroups: any[] = []
+  public allGroups: any[] = []
 
-  private groupsCurrentPage: number = 1
-  private totalGroups: number = 0
+  public groupsCurrentPage: number = 1
+  public totalGroups: number = 0
 
-  private loading: any = {
+  public loading: any = {
     recentGroups: false,
     allGroups: false
   }
 
-  private detailViewBounds: any = {}
-  private selectedGroup: any = {}
+  public detailViewBounds: any = {}
+  public selectedGroup: any = {}
+
+  private subscriptions: Subscription[] = []
 
   @ViewChild("modal", {read: ElementRef}) modalElement: ElementRef
 
