@@ -895,6 +895,7 @@ export class AssetPage implements OnInit, OnDestroy {
 
     /**
      * Adds a link to the current asset page to the user's clipboard
+     * @requires browser
      */
     private copyGeneratedImgURL(): void {
         // TO-DO: Only reference document client-side
@@ -915,17 +916,17 @@ export class AssetPage implements OnInit, OnDestroy {
             iOSuser = true
         }
 
-        // setTimeout(() => {
-        //     input.select();
-        //     if (document.queryCommandSupported('copy') && !iOSuser) {
-        //         document.execCommand('copy', false, null)
-        //         statusMsg = 'Image URL successfully copied to the clipboard!';
-        //     }
-        //     else {
-        //         statusMsg = 'Select the above link, and copy to share!';
-        //     }
-        //     this.copyURLStatusMsg = statusMsg;
-        // }, 50);
+        setTimeout(() => {
+            input.select();
+            if (document.queryCommandSupported('copy') && !iOSuser) {
+                document.execCommand('copy', false, null)
+                statusMsg = 'Image URL successfully copied to the clipboard!';
+            }
+            else {
+                statusMsg = 'Select the above link, and copy to share!';
+            }
+            this.copyURLStatusMsg = statusMsg;
+        }, 50);
     }
 
     // Add or remove assets from Assets array for comparison in full screen
