@@ -22,7 +22,7 @@ import {
 import { AssetFiltersService } from '../asset-filters/asset-filters.service'
 import { APP_CONST } from '../app.constants'
 import { ArtstorStorageService } from '../../../projects/artstor-storage/src/public_api'
-// import { SortablejsOptions } from 'angular-sortablejs';
+import { SortablejsOptions } from 'angular-sortablejs';
 
 @Component({
   selector: 'ang-asset-grid',
@@ -90,11 +90,11 @@ export class AssetGrid implements OnInit, OnDestroy {
   sub;
 
   // Options for Sortablejs reordering of assets
-  // public sortableOptions: SortablejsOptions = {
-  //   onUpdate: (event) => {
-  //     this.orderChanged = true
-  //   }
-  // }
+  public sortableOptions: SortablejsOptions = {
+    onUpdate: (event) => {
+      this.orderChanged = true
+    }
+  }
   // Add user to decide whether to show the banner
   private user: any = this._auth.getUser();
 
@@ -624,7 +624,9 @@ export class AssetGrid implements OnInit, OnDestroy {
       // Set focus on the first tumbnail in reorder mode
       setTimeout(() => {
         let el = this._dom.byId('item-0')
-        el.focus()
+        if (el) {
+          el.focus()
+        }
       }, 600)
 
     } else {
