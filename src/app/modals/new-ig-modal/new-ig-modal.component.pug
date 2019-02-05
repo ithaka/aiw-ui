@@ -16,11 +16,10 @@
               p.form-control-feedback {{ 'NEW_GROUP_MODAL.TITLE_REQUIRED_MSG' | translate }}
           .form-group
             label(for="igDescription") {{ 'NEW_GROUP_MODAL.DESCRIPTION_FIELD_LABEL' | translate }}
-            //- TO-DO: Enable medium editor with Universal
-            //- medium-editor(
-            //-   [(editorModel)]="igDescription",
-            //-   [editorOptions]="{ 'toolbar': {'buttons': ['bold', 'italic', 'underline', 'h1', 'h2', 'h3']}, 'autoLink': true}",
-            //-   [editorPlaceholder]="'Give your image group a description...'")
+            medium-editor(
+              [(editorModel)]="igDescription",
+              [editorOptions]="{ 'toolbar': {'buttons': ['bold', 'italic', 'underline', 'h1', 'h2', 'h3']}, 'autoLink': true}",
+              [editorPlaceholder]="'Give your image group a description...'")
           //- Left this out of the div so that it remained left aligned...
           label(for="artstorPermissionsGroup") {{ 'NEW_GROUP_MODAL.PERMISSION_FIELD_LABEL' | translate }}
           .form-group.text-center
