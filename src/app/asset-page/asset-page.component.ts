@@ -73,6 +73,7 @@ export class AssetPage implements OnInit, OnDestroy {
 
     // Feature Flags
     public relatedResFlag: boolean = false
+    public detailViewsFlag: boolean = false
     public solrMetadataFlag: boolean = false
     private encryptedAccess: boolean = false
     private document = document
@@ -213,6 +214,11 @@ export class AssetPage implements OnInit, OnDestroy {
     // Flag for show/hide page tooltip
     private showPageToolTip: boolean = false
 
+    // Toast Variables
+    private showToast: boolean = false
+    private toastType: string = ''
+    private toastHTML: string = ''
+
     constructor(
         public _appConfig: AppConfig,
         private _assets: AssetService,
@@ -327,6 +333,7 @@ export class AssetPage implements OnInit, OnDestroy {
                 if (routeParams && routeParams['featureFlag']) {
                     this._flags[routeParams['featureFlag']] = true
                     this.relatedResFlag = this._flags['related-res-hack'] ? true : false
+                    this.detailViewsFlag = this._flags['detailViews'] ? true : false
                     if (routeParams['featureFlag'] === 'tour') {
                         this.showTour = true
                     }
@@ -778,21 +785,27 @@ export class AssetPage implements OnInit, OnDestroy {
         return assetIndex
     }
 
-    private addAssetToIG(): void {
+    private addAssetToIG(detailView?: boolean): void {
 
         if (this.user && this.user.isLoggedIn) {
-            // Check if the logged-in user has private image groups
-            this._group.getAll('created').pipe(
-              take(1),
-              map(res => {
-                if (res.groups && (res.groups.length > 0)) {
-                    this.showAddModal = true;
-                } else {
-                    this.showCreateGroupModal = true;
-                }
-              },
-              (err) => { console.error(err); }
-            )).subscribe()
+            if(this.detailViewsFlag) {
+                this.assets[0]['detailViewBounds'] = detailView ? this.assetViewer.osdViewer.viewport.getBounds(true) : {}
+                this.showAddModal = true
+
+            } else {
+                // Check if the logged-in user has private image groups
+                this._group.getAll('created').pipe(
+                take(1),
+                map(res => {
+                    if (res.groups && (res.groups.length > 0)) {
+                        this.showAddModal = true;
+                    } else {
+                        this.showCreateGroupModal = true;
+                    }
+                },
+                (err) => { console.error(err); }
+                )).subscribe()
+            }
         } else {
           this.showLoginModal = true;
         }
@@ -1435,6 +1448,16 @@ export class AssetPage implements OnInit, OnDestroy {
         let focusElementSelector = element.id === 'downloadViewLink' ? '#downloadAssetLink' : '#downloadAssetDropdown'
         let focusElement = <HTMLElement>(document.querySelector(focusElementSelector))
         focusElement.focus()
+    }
+
+    public handleToast(event: any): void{
+        this.toastType = event.type
+        this.toastHTML = event.stringHTML
+        this.showToast = true
+    }
+
+    public closeToast(): void{
+        setTimeout(()=>{ this.showToast = false }, 1000)
     }
 
 }

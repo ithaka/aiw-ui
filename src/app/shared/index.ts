@@ -18,6 +18,7 @@ export * from './institutions.service'
 export * from './script.store'
 export * from './dom-utility.service'
 export * from './script.service'
+export * from './toast/toast.component'
 // Components that rely on shared services
 export * from './tour/tour.component'
 export * from './search/search.component'

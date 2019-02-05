@@ -22,6 +22,7 @@ import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { NgxTagInputModule } from 'ngx-tag-autocomplete';
 import { Ng2CompleterModule } from 'ng2-completer';
+import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 
 // Directives
 import { ClickOutsideDirective } from './_directives';
@@ -40,7 +41,7 @@ import { FileUploadModule } from 'ng2-file-upload';
 import { AppComponent } from './app.component'
 import { APP_RESOLVER_PROVIDERS } from './app.resolver'
 import { AppConfig } from './app.service'
-import { Nav, Footer, SearchComponent, PaginationComponent, AssetSearchService, InstitutionsService, DomUtilityService } from './shared'
+import { Nav, Footer, SearchComponent, PaginationComponent, AssetSearchService, InstitutionsService, DomUtilityService, ToastComponent } from './shared'
 import { GuideTourComponent } from './shared/tour/tour.component'
 import { NavMenu } from './nav-menu'
 import { AssetFilters } from './asset-filters'
@@ -68,6 +69,7 @@ import { LoginFormComponent } from './login-form'
 import {
   AccessDeniedModal,
   AddToGroupModal,
+  AddToGroupLegacyModal,
   ChangePasswordModal,
   ConfirmModal,
   DeleteIgModal,
@@ -166,6 +168,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     AccountPage,
     EditPersonalCollectionModal,
     AddToGroupModal,
+    AddToGroupLegacyModal,
     AgreeModalComponent,
     AppComponent,
     AssetFilters,
@@ -231,6 +234,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     TagComponent,
     TagsListComponent,
     ThumbnailComponent,
+    ToastComponent,
     PromptComponent,
     TypeIdPipe,
     UploaderComponent
@@ -242,6 +246,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     HttpClientModule,
     NgxTagInputModule,
     Ng2CompleterModule,
+    InfiniteScrollModule,
     FileUploadModule,
     RouterModule.forRoot(ROUTES, { 
         useHash: true,

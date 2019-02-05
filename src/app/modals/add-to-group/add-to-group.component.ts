@@ -7,53 +7,67 @@ import { CompleterService, CompleterData } from 'ng2-completer'
 import { Angulartics2 } from 'angulartics2'
 import { Router } from '@angular/router'
 
-import { AssetService, GroupService, ImageGroup, AuthService } from './../../shared'
+import { AssetService, GroupService, ImageGroup, AuthService, AssetSearchService } from './../../shared'
 
 @Component({
   selector: 'ang-add-to-group',
-  templateUrl: 'add-to-group.component.pug'
+  templateUrl: 'add-to-group.component.pug',
+  styleUrls: ["./add-to-group.component.scss"]
 })
 export class AddToGroupModal implements OnInit, OnDestroy {
-  @Output() closeModal: EventEmitter<any> = new EventEmitter();
-  @Output() createGroup: EventEmitter<any> = new EventEmitter();
-  @Input() showCreateGroup: boolean = false;
-  public selectedIg: ImageGroup;
-  public selectedGroupName: string;
-  public selectedGroupError: string;
-
-  @Input()
-  public copySelectionStr: string = 'ADD_TO_GROUP_MODAL.FROM_SELECTED'
+  @Output() closeModal: EventEmitter<any> = new EventEmitter()
+  @Output() createGroup: EventEmitter<any> = new EventEmitter()
+  @Output() showToast: EventEmitter<any> = new EventEmitter()
+  @Input() public copySelectionStr: string = 'ADD_TO_GROUP_MODAL.FROM_SELECTED'
+  @Input() showCreateGroup: boolean = true
+  @Input() private selectedAssets: any[] = [] // this is used in the asset page, where a single asset can be injected directly
+  
+  public selectedIg: ImageGroup
+  public selectedGroupName: string
+  public selectedGroupError: string
 
   public serviceResponse: {
     success?: boolean,
     failure?: boolean,
     tooManyAssets?: boolean
-  } = {};
+  } = {}
 
-  public dataService: any;
-  private subscriptions: Subscription[] = [];
+  public dataService: any
+  private subscriptions: Subscription[] = []
 
-  @Input() private selectedAssets: any[] = []; // this is used in the asset page, where a single asset can be injected directly
-  private groups: ImageGroup[] = [];
+  private groups: ImageGroup[] = []
 
-  @ViewChild("modal", {read: ElementRef}) modalElement: ElementRef;
+  private detailPreviewURL: string = ''
+
+  private groupSearchTerm: string = ''
+  private recentGroups: any[] = []
+  private allGroups: any[] = []
+
+  private groupsCurrentPage: number = 1
+  private totalGroups: number = 0
+
+  private loading: any = {
+    recentGroups: false,
+    allGroups: false
+  }
+
+  private detailViewBounds: any = {}
+  private selectedGroup: any = {}
+
+  @ViewChild("modal", {read: ElementRef}) modalElement: ElementRef
 
   constructor(
-      private _assets: AssetService,
-      private _group: GroupService,
-      private _dom: DomUtilityService,
-      private completerService: CompleterService,
-      private _angulartics: Angulartics2,
-      private _auth: AuthService,
-      private router: Router
-    ) {
-      // Constructor
-    }
+    private _assets: AssetService,
+    private _search: AssetSearchService,
+    private _group: GroupService,
+    private _angulartics: Angulartics2,
+    private completerService: CompleterService,
+    private _auth: AuthService,
+    private router: Router
+      ) {}
 
     ngOnInit() {
     // Set focus to the modal to make the links in the modal first thing to tab for accessibility
-    // let htmlelement: HTMLElement = <HTMLElement>this._dom.byId('modal');
-    // htmlelement.focus()
     if (this.modalElement && this.modalElement.nativeElement){
       this.modalElement.nativeElement.focus()
     }
@@ -72,17 +86,15 @@ export class AddToGroupModal implements OnInit, OnDestroy {
       );
     }
 
-    // Load list of Groups, and update autocomplete as Groups load
-    this._group.getEveryGroup('created').pipe(
-      map(groups => {
-        if (groups) {
-          this.groups = groups
-          // Data service for the autocomplete component (ng2 completer)
-          this.dataService = this.completerService.local(this.groups, 'name', 'name')
-        }
-      }, (err) => { console.error(err)
-    })).subscribe()
+    this.loadRecentGroups()
+    this.loadMyGroups()
 
+    if(this.selectedAssets[0]['detailViewBounds'] && this.selectedAssets[0]['detailViewBounds']['width']){
+      this.detailViewBounds = this.selectedAssets[0]['detailViewBounds']
+      this.detailPreviewURL = this.selectedAssets[0].tileSource.replace('info.json', '') + 'pct:' + (this.detailViewBounds['x'] * 100) + ',' + (this.detailViewBounds['y'] * 100) + ',' + (this.detailViewBounds['width'] * 100) + ',' + (this.detailViewBounds['height'] * 100) + '/352,/0/native.jpg'
+    }
+
+    console.log(this.selectedAssets, 'selected asssets')
 
   }
 
@@ -122,23 +134,16 @@ export class AddToGroupModal implements OnInit, OnDestroy {
     this.serviceResponse = {}
     this.selectedGroupError = ''
 
-    // Find full group object based on group name
-    this.groups.forEach( (group, index) => {
-      if (group.name == this.selectedGroupName) {
-        this.selectedIg = group
-      }
-    })
-
-    if (!this.selectedIg || this.selectedGroupName.length < 1) {
+    if (!this.selectedGroup.id) {
       this.selectedGroupError = 'ADD_TO_GROUP_MODAL.NO_GROUP'
       return
     }
 
     // Create object for new modified group
-    let putGroup: ImageGroup = Object.assign({}, this.selectedIg)
+    let putGroup: ImageGroup = Object.assign({}, this.selectedGroup)
 
     // assets come from different places and sometimes have id and sometimes objectId
-    this.selectedAssets.forEach((asset: any) => {
+    this.selectedAssets.forEach((asset: any, index) => {
       let assetId: string
       if (!asset) {
         console.error('Attempted selecting undefined asset')
@@ -158,7 +163,19 @@ export class AddToGroupModal implements OnInit, OnDestroy {
         }
         // Add id to group if it's not already in the group
         if (assetId && putGroup.items.indexOf(assetId) < 0) {
-          putGroup.items.push(assetId);
+          if( index === 0 && this.detailViewBounds['width']){
+            putGroup.items.push({
+              "artstorid": assetId,
+              "zoom": {
+                "viewerX":this.detailViewBounds['x'],
+                "viewerY": this.detailViewBounds['y'],
+                "pointWidth": this.detailViewBounds['width'],
+                "pointHeight": this.detailViewBounds['height']
+              }
+            })
+          } else {
+            putGroup.items.push(assetId);
+          }
         }
       }
     })
@@ -170,30 +187,149 @@ export class AddToGroupModal implements OnInit, OnDestroy {
     }
 
     // go get the group from the server
-    this._group.get(this.selectedIg.id)
+    this._group.get(this.selectedGroup.id)
       .toPromise()
       .then((data) => {
         data.items = putGroup.items
+        console.log('Update data from new modal:- ', data)
         this._group.update(data).pipe(
           take(1),
           map(
             (res) => { 
               this.serviceResponse.success = true
               this._assets.clearSelectMode.next(true)
+              this.closeModal.emit()
+              this.showToast.emit({
+                type: 'success',
+                stringHTML: '<p>You have successfully added item to <b>' + data.name + '</b>.</p><a class="toast-content-links" href="/#/group/' + data.id + '">Go to Group</a>'
+              })
               // Add to Group GA event 
               this._angulartics.eventTrack.next({ action: 'addToGroup', properties: { category: this._auth.getGACategory(), label: this.router.url }})
             },
             (err) => { 
               console.error(err); this.serviceResponse.failure = true;
+              this.showToast.emit({
+                type: 'error',
+                stringHTML: '<p>Unable to add item to group. Try again later or if the problem persists contact <a href="http://support.artstor.org/">support</a>.</p>'
+              })
             }
         )).subscribe()
 
       })
       .catch((error) => {
           console.error(error);
+          this.showToast.emit({
+            type: 'error',
+            stringHTML: '<p>Unable to add item to group. Try again later or if the problem persists contact <a href="http://support.artstor.org/">support</a>.</p>'
+          })
       });
 
 
+  }
+
+  private loadRecentGroups(): void{
+    this.loading.recentGroups = true
+    this._group.getAll(
+      'created', 3, 1, [], '', '', 'date', 'desc'
+    ).pipe(
+    take(1),
+      map(data  => {
+        for(let i = 0; i < data.groups.length; i++){
+          let group = data.groups[i]
+          this._assets.getAllThumbnails(group.items.slice(0, 1))
+            .then( allThumbnails => {
+              group['thumbnailImgUrl'] = allThumbnails[0]['thumbnailImgUrl']
+              group['compoundmediaCount'] = allThumbnails[0]['compoundmediaCount']
+              this.recentGroups.push( group )
+              if( i === (data.groups.length - 1) ){
+                this.loading.recentGroups = false
+              }
+            })
+            .catch( error => {
+              console.error(error)
+            })
+        }
+      },
+      (error) => {
+        console.error(error)
+      }
+    )).subscribe()
+  }
+
+  private loadMyGroups(): void{
+    this.loading.allGroups = true
+    this._group.getAll(
+      'created', 10, this.groupsCurrentPage, [], this.groupSearchTerm, '', 'alpha', 'asc'
+    ).pipe(
+    take(1),
+      map(data  => {
+        this.totalGroups = data.total
+        for(let i = 0; i < data.groups.length; i++){
+          let group = data.groups[i]
+          this._assets.getAllThumbnails(group.items.slice(0, 1))
+            .then( allThumbnails => {
+              group['thumbnailImgUrl'] = allThumbnails[0]['thumbnailImgUrl']
+              group['compoundmediaCount'] = allThumbnails[0]['compoundmediaCount']
+              this.allGroups.push( group )
+
+              if( i === (data.groups.length - 1) ){
+                this.loading.allGroups = false
+              }
+            })
+            .catch( error => {
+              console.error(error)
+            })
+        }
+      },
+      (error) => {
+        console.error(error)
+      }
+    )).subscribe()
+  }
+
+  private loadMoreGroups(): void{
+    if(this.allGroups.length < this.totalGroups){
+      this.groupsCurrentPage++
+      this.loadMyGroups()
+    }
+  }
+
+  private selectGroup(selectedGroup: any): void{
+    this.recentGroups = this.recentGroups.map( (recentGroup) => {
+      if(recentGroup.id === selectedGroup.id) {
+        recentGroup.selected = !recentGroup.selected
+        this.selectedGroup = recentGroup.selected ? recentGroup : {}
+      } else {
+        recentGroup.selected = false
+      }
+      return recentGroup
+    })
+
+    this.allGroups = this.allGroups.map( (group) => {
+      if(group.id === selectedGroup.id) {
+        group.selected = !group.selected
+        this.selectedGroup = group.selected ? group : {}
+      } else {
+        group.selected = false
+      }
+      return group
+    })
+  }
+
+  private searchGroups(event): void{
+    // Execute search after every third character of the search term
+    if( (this.groupSearchTerm.length > 0) && (this.groupSearchTerm.length % 3 === 0) ){
+      this.groupsCurrentPage = 1
+      this.allGroups = []
+      this.loadMyGroups()
+    }
+  }
+
+  private clearGroupSearch(): void{
+    this.groupSearchTerm = ''
+    this.groupsCurrentPage = 1
+    this.allGroups = []
+    this.loadMyGroups()
   }
 
   private extractData(res: any) {
