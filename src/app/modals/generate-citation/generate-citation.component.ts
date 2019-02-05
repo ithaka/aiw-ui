@@ -1,9 +1,9 @@
 import { Component, OnInit, Input, Output, EventEmitter, AfterViewInit, ElementRef, ViewChild  } from '@angular/core'
 import { DatePipe, Location } from '@angular/common'
 
-import { Asset } from '../../asset-page/asset'
+import { Asset } from '../../shared'
 import { LogService, DomUtilityService } from '../../shared'
-import { AppConfig } from 'app/app.service';
+import { AppConfig } from 'app/app.service'
 
 @Component({
   selector: 'ang-generate-citation',

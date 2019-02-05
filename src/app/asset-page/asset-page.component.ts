@@ -9,7 +9,7 @@ import { formGroupNameProvider } from '@angular/forms/src/directives/reactive_di
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms'
 
 // Project Dependencies
-import { Asset } from './asset'
+import { Asset } from '../shared'
 import {
     AuthService,
     AssetService,

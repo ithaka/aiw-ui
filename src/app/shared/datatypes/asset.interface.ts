@@ -1,5 +1,5 @@
 // Project Dependencies
-import { AssetData, MetadataField, FileProperty, CollectionValue } from '../../_services'
+import { AssetData, MetadataField, FileProperty, CollectionValue } from './asset.service'
 
 export class Asset {
     id: string
@@ -9,11 +9,10 @@ export class Asset {
     title: string
     thumbnail_url: string
     thumbnail_size: number = 2
-    image_compound_urls?: string[]
     kalturaUrl: string
     downloadLink: string
     downloadName: string
-    tileSource: string | string[]
+    tileSource: any
     collectionType: number
     contributinginstitutionid: number
     personalCollectionOwner: number
@@ -26,6 +25,8 @@ export class Asset {
     SSID: string
     fileName: string
     updated_on: string
+    publicDownload?: any
+    image_compound_urls?: string[]
 
     viewportDimensions: {
         contentSize?: any,
@@ -89,7 +90,7 @@ export class Asset {
                 if (data.image_url) { //this is a general fallback, but should work specifically for images and video thumbnails
                     let imageServer = 'http://imgserver.artstor.net/' // TODO: check if this should be different for test
                     let url = imageServer + data.image_url + "?cell=" + data.download_size + "&rgnn=0,0,1,1&cvt=JPEG"
-                    downloadLink = data.baseUrl + "api/download?imgid=" + this.id + "&url=" + encodeURIComponent(url)
+                    downloadLink = data.baseUrl + "/download?imgid=" + this.id + "&url=" + encodeURIComponent(url)
                 } else {
                     // nothing happens here because some assets are not allowed to be downloaded
                 }
@@ -221,3 +222,104 @@ export class Asset {
 export interface FormattedMetadata {
     [fieldName: string]: string[]
 }
+
+// From asset.service
+
+export interface MetadataResponse {
+    metadata: AssetDataResponse[]
+    success: boolean
+    total: 1 // the total number of items returned
+  }
+  
+  export interface AssetData {
+    groupId?: string
+    SSID?: string
+    category_id: string
+    category_name: string
+    collections: CollectionValue[]
+    collection_id: string
+    collection_name: string
+    collection_type: number
+    contributinginstitutionid: number
+    personalCollectionOwner: number
+    download_size: string
+    fileProperties: FileProperty[] // array of objects with a key/value pair
+    height: number
+    image_url: string
+    image_compound_urls?: string[],
+    metadata_json: MetadataField[]
+    object_id?: string
+    object_type_id?: number
+    resolution_x: number
+    resolution_y: number
+    thumbnail_url: string
+    tileSourceHostname: string
+    title: string
+    updated_on: string
+  
+    viewer_data?: {
+        base_asset_url?: string,
+        panorama_xml?: string
+    }
+    width: number
+    baseUrl: string
+    fpxInfo?: ImageFPXResponse
+  }
+  
+  export interface AssetDataResponse {
+    SSID?: string
+    category_id: string
+    category_name: string
+    collection_id: string
+    collection_name: string
+    collection_type: number
+    contributinginstitutionid: number
+    personalCollectionOwner: number
+    downloadSize?: string
+    download_size?: string
+    fileProperties: { [key: string]: string }[] // array of objects with a key/value pair
+    height: number
+    image_url: string
+    metadata_json: MetadataField[]
+    object_id: string
+    object_type_id: number
+    resolution_x: number
+    resolution_y: number
+    thumbnail_url: string
+    title: string
+    updated_on: string
+    viewer_data: {
+      base_asset_url?: string,
+      panorama_xml?: string
+    }
+    width: number
+  }
+  
+  export interface MetadataField {
+    count: number // the number of fields with this name
+    fieldName: string
+    fieldValue: string
+    index: number
+    link?: string
+  }
+  
+  export interface CollectionValue {
+    type: string
+    name: string
+    id: string
+  }
+  
+  export interface ImageFPXResponse {
+    height: number
+    id: {
+      fileName: string
+      resolution: number
+    }
+    imageId: string
+    imageUrl: string
+    resolutionX: number
+    resolutionY: number
+    width: number
+  }
+  
+  export interface FileProperty { [key: string]: string }
