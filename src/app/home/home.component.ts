@@ -81,14 +81,14 @@ export class Home implements OnInit, OnDestroy {
 
   ngOnInit() {
     // Provide redirects for initPath detected in index.html from inital load
-    // if (initPath) {
-    //   this._router.navigateByUrl(initPath, { replaceUrl: true })
-    //     .then(result => {
-    //       // Clear variable to prevent further redirects
-    //       initPath = null
-    //       console.log('Redirect to initial path attempt: ' + result)
-    //     })
-    // }
+    if (initPath) {
+      this._router.navigateByUrl(initPath, { replaceUrl: true })
+        .then(result => {
+          // Clear variable to prevent further redirects
+          initPath = null
+          console.log('Redirect to initial path attempt: ' + result)
+        })
+    }
 
     this.user = this._auth.getUser();
 
@@ -177,8 +177,8 @@ export class Home implements OnInit, OnDestroy {
     testAd.innerHTML = '&nbsp;';
     testAd.className = 'adsbox';
 
-    // let docBody = this._dom.byTagName('body')[0]
-    // this._dom.append(docBody, testAd);
+    let docBody = this._dom.byTagName('body')
+    this._dom.append(docBody, testAd)
 
     setTimeout(
       () => {
