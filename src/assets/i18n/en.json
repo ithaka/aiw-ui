@@ -500,60 +500,60 @@
         "VIEW_PUBLIC_LINK": "View All Public Collections"
       },
       "COLLECTIONS": [{
-          "SUBHEADING": "Art Institute of Chicago",
-          "DESCRIPTION": "Contemporary highlights from diverse collections",
-          "CAPTION": "Peter Doig. Gasthof zur Muldentalsperre. 2000-2002. Oil on canvas. Image and data provided by the Art Institute of Chicago. © 2014 Artists Rights Society (ARS), New York / DACS, London.",
-          "LINK": "/#/category/1031896041 ",
-          "IMG_SOURCE": "/assets/img/featured-collections/chicago_doig.jpg",
-          "LINK_TITLE": "Art Institute of Chicago",
-          "ALT_TEXT": "Art Institute of Chicago"
+          "SUBHEADING": "Saint Louis Art Museum",
+          "DESCRIPTION": "Cotemporary art and much more",
+          "CAPTION": "Sandy Skoglund. Radioactive Cats. 1980. Dye destruction print. ©1980 Sandy Skoglund. Image and data provided by Saint Louis Art Museum.",
+          "LINK": "/#/category/1034993392 ",
+          "IMG_SOURCE": "/assets/img/featured-collections/cats_slam.jpg",
+          "LINK_TITLE": "Saint Louis Art Museum",
+          "ALT_TEXT": "Saint Louis Art Museum"
         },
         {
-          "SUBHEADING": "The Cleveland Museum of Art",
-          "DESCRIPTION": "A singular find among global treasures",
-          "CAPTION": "Zhu Bishan. Raft Cup. 1345. Silver. Image and data provided by the Cleveland Museum of Art.",
-          "LINK": "/#/category/1031896044 ",
-          "IMG_SOURCE": "/assets/img/featured-collections/cleveland_raft.jpg",
-          "LINK_TITLE": "The Cleveland Museum of Art",
-          "ALT_TEXT": "The Cleveland Museum of Art"
+          "SUBHEADING": "Brooklyn College: Farm Labor Project",
+          "DESCRIPTION": "Brooklyn goes to the farm for the war effort",
+          "CAPTION": "Men Standing in Front of Truck. 1944?. Photograph. Brooklyn College Archives and Special Collections.",
+          "LINK": "/#/collection/87730215 ",
+          "IMG_SOURCE": "/assets/img/featured-collections/truck_brooklyn.jpg",
+          "LINK_TITLE": "Brooklyn College: Farm Labor Project",
+          "ALT_TEXT": "Brooklyn College: Farm Labor Project"
         },
         {
-          "SUBHEADING": "Cornell: Historic Glacial Images of Alaska and Greenland",
-          "DESCRIPTION": "Pioneering documentation of glaciers",
-          "CAPTION": "Beateu Silver Iceberg, Yakutat Bay. Photograph.1909. Cornell: Historic Glacial Images of Alaska and Greenland.",
-          "LINK": "/#/collection/87730735 ",
-          "IMG_SOURCE": "/assets/img/featured-collections/cornell_iceberg2.jpg",
-          "LINK_TITLE": "Cornell: Historic Glacial Images of Alaska and Greenland",
-          "ALT_TEXT": "Cornell: Historic Glacial Images of Alaska and Greenland"
+          "SUBHEADING": "The Museum of Modern Art",
+          "DESCRIPTION": "20th century design",
+          "CAPTION": "Robert Budlong, design. Zenith Radio Corporation.The Pacemaker Table Radio. Before 1950. Image and data provided by The Museum of Modern Art.",
+          "LINK": "/#/category/1034213935 ",
+          "IMG_SOURCE": "/assets/img/featured-collections/clock_moma.jpg",
+          "LINK_TITLE": "The Museum of Modern Art",
+          "ALT_TEXT": "The Museum of Modern Art"
         }
       ],
       "PUBLIC_COLLECTIONS": [
         {
-          "SUBHEADING": "Regis University: African Art Collection",
-          "DESCRIPTION": "Traditional masks, shrine figures, ancestor posts, and reliquaries from south of the Sahara",
-          "CAPTION": "Pwo mask. Anonymous.  Chokwe period.  Image courtesy of the Regis University: African Art Collection.",
-          "LINK": "/#/collection/87732009",
-          "IMG_SOURCE": "/assets/img/featured-collections/mask_regis.jpg",
-          "LINK_TITLE": "Regis University: African Art Collection",
-          "ALT_TEXT": "Regis University: African Art Collection"
+          "SUBHEADING": "Guantanamo Bay Images",
+          "DESCRIPTION": "Artworks made by current and former detainees",
+          "CAPTION": "Untitled. Muhammad Ansi. 2015.  Image courtesy of Guantanamo Bay Images.",
+          "LINK": "/#/collection/87731784",
+          "IMG_SOURCE": "/assets/img/featured-collections/hand_guantanamo.jpg",
+          "LINK_TITLE": "Guantanamo Bay Images",
+          "ALT_TEXT": "Guantanamo Bay Images"
         },
         {
-          "SUBHEADING": "University of Pennsylvania: Edgar Fahs Smith Chemistry Collection",
-          "DESCRIPTION": "An eclectic history of science through prints, engravings, and photographs",
-          "CAPTION": "Enlargement of a postage stamp from the Republic of Panama depicting Pierre and Marie Curie, dated 1939.  Image courtesy of the University of Pennsylvania: Edgar Fahs Smith Chemistry Collection.",
-          "LINK": "/#/collection/87731882 ",
-          "IMG_SOURCE": "/assets/img/featured-collections/curie_chemistry.jpg",
-          "LINK_TITLE": "University of Pennsylvania: Edgar Fahs Smith Chemistry Collection",
-          "ALT_TEXT": "University of Pennsylvania: Edgar Fahs Smith Chemistry Collection"
+          "SUBHEADING": "Cornell: Persuasive Cartography: The PJ Mode Collection",
+          "DESCRIPTION": "Maps intended primarily to influence opinion",
+          "CAPTION": "Serio-Comic War Map. Fred W. Rose. 1877. Image courtesy of Cornell: Persuasive Cartography: The PJ Mode Collection.",
+          "LINK": "/#/collection/87730456 ",
+          "IMG_SOURCE": "/assets/img/featured-collections/map_cornell.jpg",
+          "LINK_TITLE": "Cornell: Persuasive Cartography: The PJ Mode Collection",
+          "ALT_TEXT": "Cornell: Persuasive Cartography: The PJ Mode Collection"
         },
         {
-          "SUBHEADING": "Allegheny College Egyptian Hieroglyphics",
-          "DESCRIPTION": "Heiroglyphics deciphered, 18th century style",
-          "CAPTION": "Egyptian hieroglyphics, from public monuments extracted from Denon. Winthrop, James, 1752-1821. Image courtesy of Allegheny College: Egyptian Hieroglyphics collection.",
-          "LINK": "/#/collection/87732257",
-          "IMG_SOURCE": "/assets/img/featured-collections/hieroglypics_allegheny.jpg",
-          "LINK_TITLE": "Allegheny College Egyptian Hieroglyphics",
-          "ALT_TEXT": "Allegheny College Egyptian Hieroglyphics"
+          "SUBHEADING": "Bard College: Montgomery Place Violetta White Delafield Mushroom Drawings",
+          "DESCRIPTION": "Botanical watercolors",
+          "CAPTION": "Pholiota squarrosa. Delafield, Violetta White. 1900. Image courtesy of Bard College: Montgomery Place Violetta White Delafield Mushroom Drawings.",
+          "LINK": "/#/collection/87732479",
+          "IMG_SOURCE": "/assets/img/featured-collections/mushroom_bard.jpg",
+          "LINK_TITLE": "Bard College: Montgomery Place Violetta White Delafield Mushroom Drawings",
+          "ALT_TEXT": "Bard College: Montgomery Place Violetta White Delafield Mushroom Drawings"
         }
       ]
     },
