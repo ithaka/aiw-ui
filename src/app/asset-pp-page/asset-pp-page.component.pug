@@ -1,12 +1,12 @@
-#printable-cntnr.container-fluid(*ngIf="asset && metaArray")
+#printable-cntnr.container-fluid(*ngIf="asset")
   .asset-img
     img([class.disablePointerEvents]="reorderMode",
     [attr.src]="_search.makeThumbUrl(asset.thumbnail_url, 2, isMultiView)",
     [attr.alt]="asset.title ? 'Thumbnail of ' + asset.title : 'No title available'")
   .disclaimer This image and the text corresponding to this image may only be used for noncommercial educational and scholarly purposes.
-  .meta-cntnr
+  .meta-cntnr(*ngIf="asset.formattedMetadata")
     h2 Item Details
-    .table  
+    .table
       .meta-row.row(*ngFor="let fieldName of asset.formattedMetadata | keys")
         .col-md-4.lbl([attr.id]="cleanId(fieldName)") {{ fieldName }}
         .col-md-8

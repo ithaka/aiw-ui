@@ -16,7 +16,6 @@ import { MetadataService } from './../_services'
 
 export class AssetPPPage implements OnInit {
   public asset: any = {}
-  public metaArray: Array<any> = []
   public isMultiView: boolean = false // flag for print preview of multiview asset
   private header = new HttpHeaders().set('Content-Type', 'application/json') // ... Set content type to JSON
   private options = { headers: this.header, withCredentials: true } // Create a request option\
