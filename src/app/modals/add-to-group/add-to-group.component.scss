@@ -1,6 +1,9 @@
 @import '../../../sass/core/variables';
 
 .modal-dialog {
+    margin: auto;
+    height: 100%;
+    display: flex;
 
     &.large {
         max-width: 800px !important;
@@ -9,10 +12,10 @@
             background-color: $color-gray-1;
             border-right: 1px solid $color-border-gray;
             display: flex;
+            border-top-left-radius: 0.3rem;
+            border-bottom-left-radius: 0.3rem;
 
             .preview-cntnr {
-                width: 352px;
-                height: 260px;
                 margin: auto;
                 position: relative;
                 
@@ -34,6 +37,10 @@
         }
     }
 
+    .modal-content{
+        margin: auto;
+    }
+
     .modal-body, .modal-footer {
         background-color: $color-white;
     }
@@ -46,6 +53,8 @@
         box-shadow: 0 -1px 8px 0 rgba(0, 0, 0, 0.15);
         justify-content: space-between !important;
         margin-top: 5px;
+        border-bottom-left-radius: 0.3rem;
+        border-bottom-right-radius: 0.3rem;
 
         .wrapper {
             display: inline-flex;
@@ -87,101 +96,115 @@
 
     .modal-body {
         padding: 0px;
-        height: 420px;
-        overflow: auto;
 
         .search-cntnr {
             padding: 24px;
             margin: 0px;
-        }
+            transition: all 0.3s ease-in-out;
 
-        .recent-groups {
-            padding-bottom: 24px;
-        }
-
-        .recent-groups, .all-my-groups{
-            .hdr{
-                padding: 0px 24px 16px 24px;
-            }
-            label {
-                font-size: 14px;
-                margin: 0px;
+            &.shadow{
+                box-shadow: 0 2px 3px rgba(0,0,0,.15) !important;
             }
 
-            .row{
-                padding: 8px 24px;
-                cursor: pointer;
-                transition: all 250ms ease;
-                border-left: 6px solid transparent;
+            .icon-clear{
+                width: 16px;
+                height: 16px;
+            }
+        }
 
-                &.selectedGroup {
-                    border-left: 6px solid $orange;
-                    background-color: rgba(232, 232, 232, 0.6);
+        .scroll-cntnr {
+            height: 340px;
+            overflow: auto;
+            padding: 5px 0px;
 
-                    .title{
-                        font-weight: 700;
-                    }
+            .recent-groups {
+                padding-bottom: 24px;
+            }
+
+            .recent-groups, .all-my-groups{
+                .hdr{
+                    padding: 0px 24px 16px 24px;
+                }
+                label {
+                    font-size: 14px;
+                    margin: 0px;
                 }
 
-                .ig-thmbnail-wrapper{
-                    width: 70px;
-                    height: 50px;
-                    display: block;
-                    // margin: auto;
-                    text-align: center;
-                    background-color: $color-gray-3;
+                .row{
+                    padding: 8px 24px;
+                    cursor: pointer;
+                    transition: all 250ms ease;
+                    border-left: 6px solid transparent;
 
-                    img{
-                        max-height: 50px;
-                        opacity: 0;
-                        transition: opacity 1s ease-in;
+                    &.selectedGroup {
+                        border-left: 6px solid $orange;
+                        background-color: rgba(232, 232, 232, 0.6);
 
-                        &.loaded{
-                            opacity: 1;
+                        .title{
+                            font-weight: 700;
                         }
                     }
+
+                    .ig-thmbnail-wrapper{
+                        width: 70px;
+                        height: 50px;
+                        display: flex;
+                        background-color: $color-gray-3;
+
+                        img{
+                            max-width: 70px;
+                            max-height: 50px;
+                            margin: auto;
+                            opacity: 0;
+                            transition: opacity 1s ease-in;
+
+                            &.loaded{
+                                opacity: 1;
+                            }
+                        }
+                    }
+
+                    .title{
+                        line-height: 50px;
+                        padding-left: 5px;
+                        padding-right: 8px;
+                        font-family: Verdana;
+                        white-space: nowrap;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                    }
+
+                    &:hover{
+                        background-color: rgba(232, 232, 232, 0.6);
+                    }
                 }
+                
+                .loading-dots {
+                    text-align: center;
+                    padding: 8px 0px;
 
-                .title{
-                    line-height: 50px;
-                    padding-left: 5px;
-                    padding-right: 8px;
-                    font-family: Verdana;
-                    white-space: nowrap;
-                    overflow: hidden;
-                    text-overflow: ellipsis;
-                }
+                    .dot {
+                        display: inline-block;
+                        width: 8px;
+                        height: 8px;
+                        border-radius: 5px;
+                        opacity: 0;
+                        -webkit-animation: showHideDot 2.5s ease-in-out infinite;
+                        animation: showHideDot 2.5s ease-in-out infinite;
+                        background-color: $orange;
+                        margin: 0px 2px;
 
-                &:hover{
-                    background-color: rgba(232, 232, 232, 0.6);
-                }
-            }
-            
-            .loading-dots {
-                text-align: center;
-                padding: 8px 0px;
+                        &:nth-child(1) { animation-delay: 0.2s; }
+                        &:nth-child(2) { animation-delay: 0.4s; }
+                        &:nth-child(3) { animation-delay: 0.6s; }
+                    }
 
-                .dot {
-                    display: inline-block;
-                    width: 8px;
-                    height: 8px;
-                    border-radius: 5px;
-                    opacity: 0;
-                    -webkit-animation: showHideDot 2.5s ease-in-out infinite;
-                    animation: showHideDot 2.5s ease-in-out infinite;
-                    background-color: $orange;
-                    margin: 0px 2px;
-
-                    &:nth-child(1) { animation-delay: 0.2s; }
-                    &:nth-child(2) { animation-delay: 0.4s; }
-                    &:nth-child(3) { animation-delay: 0.6s; }
-                }
-
-                @keyframes showHideDot {
-                    0% { opacity: 0; }
-                    50% { opacity: 1; }
-                    60% { opacity: 1; }
-                    100% { opacity: 0; }
+                    @keyframes showHideDot {
+                        0% { opacity: 0; }
+                        50% { opacity: 1; }
+                        60% { opacity: 1; }
+                        100% { opacity: 0; }
+                    }
                 }
             }
         }
