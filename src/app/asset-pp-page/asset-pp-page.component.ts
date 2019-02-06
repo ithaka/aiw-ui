@@ -47,7 +47,6 @@ export class AssetPPPage implements OnInit {
     let self = this
     this._metadata.buildAsset(this.assetId, {}).pipe(
       map(asset => {
-        console.log("FIRST LOG", asset, asset.image_compound_urls)
         // Is this a multiview asset?
         if (typeof(asset.image_compound_urls) !== 'undefined' && asset.image_compound_urls.length) {
           this.isMultiView = true
