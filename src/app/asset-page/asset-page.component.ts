@@ -537,7 +537,7 @@ export class AssetPage implements OnInit, OnDestroy {
         // Set download link
         this.setDownloadFull()
 
-        if (this.assets[0].formattedMetadata && this.assets[0].formattedMetadata.Rights) {
+        if (this.assets[0] && this.assets[0].formattedMetadata && this.assets[0].formattedMetadata.Rights) {
             // Loop over Rights fields and set rights statement values via isRightStatement
             for (let i = 0; i < this.assets[0].formattedMetadata.Rights.length; i++) {
                 let rightsField = this.assets[0].formattedMetadata.Rights[i]
@@ -556,8 +556,9 @@ export class AssetPage implements OnInit, OnDestroy {
                 this.pagination.page = this.originPage
                 this._assets.loadAssetPage(this.pagination.page)
             }
-            // this.assets.splice(1)
-            // this.assetIds.splice(1)
+            // Reduce number of loaded assets to one
+            this.assets = [this.assets[0]]
+            this.assetIds = [this.assetIds[0]]
         } else if (Array.isArray(this.assets[0].tileSource)){ // Log GA event for opening a multi view item in Fullscreen
             this.angulartics.eventTrack.next({ action: 'multiViewItemFullscreen', properties: { category: this._auth.getGACategory(), label: this.assets[0].id } });
         }
