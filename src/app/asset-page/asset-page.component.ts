@@ -899,13 +899,13 @@ export class AssetPage implements OnInit, OnDestroy {
      * @requires browser
      */
     private copyGeneratedImgURL(): void {
-        // TO-DO: Only reference document client-side
+
         let statusMsg = '';
         let input: any;
         if (this.generatedImgURLElement && this.generatedImgURLElement.nativeElement){
             input = this.generatedImgURLElement.nativeElement
           }
-        // let input: any = this._dom.byId('generatedImgURL');
+
         let iOSuser: boolean = false;
 
         this.showCopyUrl = true;
