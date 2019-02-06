@@ -42,7 +42,7 @@ export class AssetPage implements OnInit, OnDestroy {
 
     @ViewChild(ArtstorViewerComponent) public assetViewer
 
-    @ViewChild("generatedImgURL", {read: ElementRef}) generatedImgURLElement: ElementRef
+  @ViewChild("copyUrlInput", {read: ElementRef}) generatedImgURLElement: ElementRef
 
 
 
