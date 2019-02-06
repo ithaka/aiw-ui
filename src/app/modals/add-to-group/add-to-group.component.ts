@@ -304,26 +304,38 @@ export class AddToGroupModal implements OnInit, OnDestroy {
     )).subscribe()
   }
 
-  private selectGroup(selectedGroup: any): void{
-    this.recentGroups = this.recentGroups.map( (recentGroup) => {
-      if(recentGroup.id === selectedGroup.id) {
-        recentGroup.selected = !recentGroup.selected
-        this.selectedGroup = recentGroup.selected ? recentGroup : {}
-      } else {
-        recentGroup.selected = false
-      }
-      return recentGroup
-    })
-
-    this.allGroups = this.allGroups.map( (group) => {
-      if(group.id === selectedGroup.id) {
-        group.selected = !group.selected
-        this.selectedGroup = group.selected ? group : {}
-      } else {
+  private selectGroup(selectedGroup: any, type: string): void{
+    if (type === 'recent') { // If selected group is from recent groups
+      this.recentGroups = this.recentGroups.map( (recentGroup) => {
+        if(recentGroup.id === selectedGroup.id) {
+          recentGroup.selected = !recentGroup.selected
+          this.selectedGroup = recentGroup.selected ? recentGroup : {}
+        } else {
+          recentGroup.selected = false
+        }
+        return recentGroup
+      })
+      // Clear selection for all groups
+      this.allGroups = this.allGroups.map( (group) => {
         group.selected = false
-      }
-      return group
-    })
+        return group
+      })
+    } else { // If selected group is from all groups
+      this.allGroups = this.allGroups.map( (group) => {
+        if(group.id === selectedGroup.id) {
+          group.selected = !group.selected
+          this.selectedGroup = group.selected ? group : {}
+        } else {
+          group.selected = false
+        }
+        return group
+      })
+      // Clear selection for recent groups
+      this.recentGroups = this.recentGroups.map( (recentGroup) => {
+        recentGroup.selected = false
+        return recentGroup
+      })
+    }
   }
 
   private clearGroupSearch(): void{
