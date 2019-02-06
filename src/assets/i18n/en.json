@@ -245,7 +245,7 @@
       "OPEN_CREATE_GROUP_MODAL": "Create a new group with images"
     },
     "FROM_ASSET": {
-      "TITLE": "Add Item to Group",
+      "TITLE": "Add Image to Group",
       "TITLE_DETAIL": "Add Detail to Group",
       "SELECT_PROMPT": "Select an image group",
       "ADD_SUCCESS": "Image successfully added to group",
@@ -254,8 +254,6 @@
       "OPEN_CREATE_GROUP_MODAL": "Create a new group with image"
     },
     "CONTROLS": {
-      "ADD": "ADD",
-      "CANCEL": "CANCEL",
       "SAVE": "Save Changes",
       "NAV_TO_GROUP": "Go to group",
       "CLOSE": "Close",
@@ -335,7 +333,7 @@
   "BROWSE_GROUPS" : "Browse Groups",
   "LOGIN_REQUIRED_MODAL": {
     "HEADING": "User account required",
-    "PROMPT": "Please log in or <a href=\"/register\" class=\"link\">Register</a> to save images.",
+    "PROMPT": "Please log in or <a href=\"/#/register\" class=\"link\">Register</a> to save images.",
     "PROMPT_NO_REGISTER": "Please log in to save images."
   },
   "BROWSE": {
@@ -413,7 +411,7 @@
   },
   "ACCESS_DENIED_MODAL": {
     "HEADING": "Content Unavailable",
-    "PROMPT": "If you are already <a href=\"/login\" class=\"link\">logged in</a>, this may be due to content limitations or your institutional access.",
+    "PROMPT": "If you are already <a href=\"/#/login\" class=\"link\">logged in</a>, this may be due to content limitations or your institutional access.",
     "IP_AUTH" : {
       "PROMPT" : "This content is not available due to content limitations or your institutional access. Please try using an account."
     },
@@ -428,7 +426,7 @@
     "HEADING" : "Server Error",
     "PROMPT": "Sorry, an error occurred loading the content you requested.<br/><br/>Please try again or come back later. If the problem persists, please <a class='link' href='mailto:support@artstor.org'>contact support</a>."
   },
-  "ACCESS_DENIED": "<b>Sorry, Content Unavailable:</b> If you are already <a href=\"/login\" class=\"link\">logged in</a>, this may be due to content limitations or your institutional access.",
+  "ACCESS_DENIED": "<b>Sorry, Content Unavailable:</b> If you are already <a href=\"/#/login\" class=\"link\">logged in</a>, this may be due to content limitations or your institutional access.",
   "NO_IG": {
     "HEADING": "Image group unavailable",
     "NO_EXISTS": "The image group you are trying to access does not exist.",
@@ -486,7 +484,7 @@
       "COLL_LIST": "Artstor, Institutional, Public, and Personal",
       "COLL_LIST_SHORT": "Institutional Collections",
       "TEACHING_HEADING": "Teaching Resources",
-      "TEACHING_LIST": "<a href=\"/browse/groups/public?tags=Curriculum%2520Guides&page=1\" class=\"link\">Curriculum Guides</a>, <a href=\"/browse/groups/public?page=1&tags=Case%2520Studies\" class=\"link\">Case Studies</a>, <a href=\"/browse/groups/search?level=public&tags=Art%2520%2526%2520Architecture%2520Overviews&page=1\" class=\"link\">Arts & Architecture Overviews</a>, <a href=\"/browse/groups/search?level=public&page=1&tags=Social%2520Studies%2520and%2520Humanities%2520Overviews\" class=\"link\">Social Sciences & Humanities Overviews</a>, <a href=\"http://artstor.libguides.com/APArtHistory\" target=\"_blank\" class=\"link\">AP Art History</a>, <a href=\"http://artstor.libguides.com/APUSH\" target=\"_blank\" class=\"link\">AP US History</a>, <a href=\"http://artstor.libguides.com/APEURO\" target=\"_blank\" class=\"link\">AP European History</a>, and <a href=\"/browse/groups/public\" class=\"link\">more...</a>",
+      "TEACHING_LIST": "<a href=\"/#/browse/groups/public?tags=Curriculum%2520Guides&page=1\" class=\"link\">Curriculum Guides</a>, <a href=\"/#/browse/groups/public?page=1&tags=Case%2520Studies\" class=\"link\">Case Studies</a>, <a href=\"/#/browse/groups/search?level=public&tags=Art%2520%2526%2520Architecture%2520Overviews&page=1\" class=\"link\">Arts & Architecture Overviews</a>, <a href=\"/#/browse/groups/search?level=public&page=1&tags=Social%2520Studies%2520and%2520Humanities%2520Overviews\" class=\"link\">Social Sciences & Humanities Overviews</a>, <a href=\"http://artstor.libguides.com/APArtHistory\" target=\"_blank\" class=\"link\">AP Art History</a>, <a href=\"http://artstor.libguides.com/APUSH\" target=\"_blank\" class=\"link\">AP US History</a>, <a href=\"http://artstor.libguides.com/APEURO\" target=\"_blank\" class=\"link\">AP European History</a>, and <a href=\"/#/browse/groups/public\" class=\"link\">more...</a>",
       "GROUPS_HEADING": "Image Groups",
       "GROUPS_LIST": "Groups of images created by Artstor, other users at your institution, and you",
       "GROUPS_LIST_SAHARA": "Groups created by you and others at your institution",
@@ -503,60 +501,60 @@
         "VIEW_PUBLIC_LINK": "View All Public Collections"
       },
       "COLLECTIONS": [{
-          "SUBHEADING": "Art Institute of Chicago",
-          "DESCRIPTION": "Contemporary highlights from diverse collections",
-          "CAPTION": "Peter Doig. Gasthof zur Muldentalsperre. 2000-2002. Oil on canvas. Image and data provided by the Art Institute of Chicago. © 2014 Artists Rights Society (ARS), New York / DACS, London.",
-          "LINK": "/#/category/1031896041 ",
-          "IMG_SOURCE": "/assets/img/featured-collections/chicago_doig.jpg",
-          "LINK_TITLE": "Art Institute of Chicago",
-          "ALT_TEXT": "Art Institute of Chicago"
+          "SUBHEADING": "Saint Louis Art Museum",
+          "DESCRIPTION": "Cotemporary art and much more",
+          "CAPTION": "Sandy Skoglund. Radioactive Cats. 1980. Dye destruction print. ©1980 Sandy Skoglund. Image and data provided by Saint Louis Art Museum.",
+          "LINK": "/#/category/1034993392 ",
+          "IMG_SOURCE": "/assets/img/featured-collections/cats_slam.jpg",
+          "LINK_TITLE": "Saint Louis Art Museum",
+          "ALT_TEXT": "Saint Louis Art Museum"
         },
         {
-          "SUBHEADING": "The Cleveland Museum of Art",
-          "DESCRIPTION": "A singular find among global treasures",
-          "CAPTION": "Zhu Bishan. Raft Cup. 1345. Silver. Image and data provided by the Cleveland Museum of Art.",
-          "LINK": "/#/category/1031896044 ",
-          "IMG_SOURCE": "/assets/img/featured-collections/cleveland_raft.jpg",
-          "LINK_TITLE": "The Cleveland Museum of Art",
-          "ALT_TEXT": "The Cleveland Museum of Art"
+          "SUBHEADING": "Brooklyn College: Farm Labor Project",
+          "DESCRIPTION": "Brooklyn goes to the farm for the war effort",
+          "CAPTION": "Men Standing in Front of Truck. 1944?. Photograph. Brooklyn College Archives and Special Collections.",
+          "LINK": "/#/collection/87730215 ",
+          "IMG_SOURCE": "/assets/img/featured-collections/truck_brooklyn.jpg",
+          "LINK_TITLE": "Brooklyn College: Farm Labor Project",
+          "ALT_TEXT": "Brooklyn College: Farm Labor Project"
         },
         {
-          "SUBHEADING": "Cornell: Historic Glacial Images of Alaska and Greenland",
-          "DESCRIPTION": "Pioneering documentation of glaciers",
-          "CAPTION": "Beateu Silver Iceberg, Yakutat Bay. Photograph.1909. Cornell: Historic Glacial Images of Alaska and Greenland.",
-          "LINK": "/#/collection/87730735 ",
-          "IMG_SOURCE": "/assets/img/featured-collections/cornell_iceberg2.jpg",
-          "LINK_TITLE": "Cornell: Historic Glacial Images of Alaska and Greenland",
-          "ALT_TEXT": "Cornell: Historic Glacial Images of Alaska and Greenland"
+          "SUBHEADING": "The Museum of Modern Art",
+          "DESCRIPTION": "20th century design",
+          "CAPTION": "Robert Budlong, design. Zenith Radio Corporation.The Pacemaker Table Radio. Before 1950. Image and data provided by The Museum of Modern Art.",
+          "LINK": "/#/category/1034213935 ",
+          "IMG_SOURCE": "/assets/img/featured-collections/clock_moma.jpg",
+          "LINK_TITLE": "The Museum of Modern Art",
+          "ALT_TEXT": "The Museum of Modern Art"
         }
       ],
       "PUBLIC_COLLECTIONS": [
         {
-          "SUBHEADING": "Regis University: African Art Collection",
-          "DESCRIPTION": "Traditional masks, shrine figures, ancestor posts, and reliquaries from south of the Sahara",
-          "CAPTION": "Pwo mask. Anonymous.  Chokwe period.  Image courtesy of the Regis University: African Art Collection.",
-          "LINK": "/#/collection/87732009",
-          "IMG_SOURCE": "/assets/img/featured-collections/mask_regis.jpg",
-          "LINK_TITLE": "Regis University: African Art Collection",
-          "ALT_TEXT": "Regis University: African Art Collection"
+          "SUBHEADING": "Guantanamo Bay Images",
+          "DESCRIPTION": "Artworks made by current and former detainees",
+          "CAPTION": "Untitled. Muhammad Ansi. 2015.  Image courtesy of Guantanamo Bay Images.",
+          "LINK": "/#/collection/87731784",
+          "IMG_SOURCE": "/assets/img/featured-collections/hand_guantanamo.jpg",
+          "LINK_TITLE": "Guantanamo Bay Images",
+          "ALT_TEXT": "Guantanamo Bay Images"
         },
         {
-          "SUBHEADING": "University of Pennsylvania: Edgar Fahs Smith Chemistry Collection",
-          "DESCRIPTION": "An eclectic history of science through prints, engravings, and photographs",
-          "CAPTION": "Enlargement of a postage stamp from the Republic of Panama depicting Pierre and Marie Curie, dated 1939.  Image courtesy of the University of Pennsylvania: Edgar Fahs Smith Chemistry Collection.",
-          "LINK": "/#/collection/87731882 ",
-          "IMG_SOURCE": "/assets/img/featured-collections/curie_chemistry.jpg",
-          "LINK_TITLE": "University of Pennsylvania: Edgar Fahs Smith Chemistry Collection",
-          "ALT_TEXT": "University of Pennsylvania: Edgar Fahs Smith Chemistry Collection"
+          "SUBHEADING": "Cornell: Persuasive Cartography: The PJ Mode Collection",
+          "DESCRIPTION": "Maps intended primarily to influence opinion",
+          "CAPTION": "Serio-Comic War Map. Fred W. Rose. 1877. Image courtesy of Cornell: Persuasive Cartography: The PJ Mode Collection.",
+          "LINK": "/#/collection/87730456 ",
+          "IMG_SOURCE": "/assets/img/featured-collections/map_cornell.jpg",
+          "LINK_TITLE": "Cornell: Persuasive Cartography: The PJ Mode Collection",
+          "ALT_TEXT": "Cornell: Persuasive Cartography: The PJ Mode Collection"
         },
         {
-          "SUBHEADING": "Allegheny College Egyptian Hieroglyphics",
-          "DESCRIPTION": "Heiroglyphics deciphered, 18th century style",
-          "CAPTION": "Egyptian hieroglyphics, from public monuments extracted from Denon. Winthrop, James, 1752-1821. Image courtesy of Allegheny College: Egyptian Hieroglyphics collection.",
-          "LINK": "/#/collection/87732257",
-          "IMG_SOURCE": "/assets/img/featured-collections/hieroglypics_allegheny.jpg",
-          "LINK_TITLE": "Allegheny College Egyptian Hieroglyphics",
-          "ALT_TEXT": "Allegheny College Egyptian Hieroglyphics"
+          "SUBHEADING": "Bard College: Montgomery Place Violetta White Delafield Mushroom Drawings",
+          "DESCRIPTION": "Botanical watercolors",
+          "CAPTION": "Pholiota squarrosa. Delafield, Violetta White. 1900. Image courtesy of Bard College: Montgomery Place Violetta White Delafield Mushroom Drawings.",
+          "LINK": "/#/collection/87732479",
+          "IMG_SOURCE": "/assets/img/featured-collections/mushroom_bard.jpg",
+          "LINK_TITLE": "Bard College: Montgomery Place Violetta White Delafield Mushroom Drawings",
+          "ALT_TEXT": "Bard College: Montgomery Place Violetta White Delafield Mushroom Drawings"
         }
       ]
     },
