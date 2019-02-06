@@ -46,40 +46,41 @@ export class AssetPPPage implements OnInit {
   // Load Image Group Assets
   loadAsset(): void{
     let self = this
-    this._metadata.buildAsset(this.assetId, null).pipe(
+    this._metadata.buildAsset(this.assetId, {}).pipe(
       map(asset => {
-
+        console.log("FIRST LOG", asset, asset.image_compound_urls)
         // Is this a multiview asset?
-        if (asset.image_compound_urls && asset.image_compound_urls.length) {
+        if (typeof(asset.image_compound_urls) !== 'undefined' && asset.image_compound_urls.length) {
           this.isMultiView = true
         }
-
-        let assetData = asset ? asset['metadata_json'] : []
-        for (let data of assetData){
-          let fieldExists = false
-
-          for (let metaData of self.metaArray){
-            if (metaData['fieldName'] === data.fieldName){
-              metaData['fieldValue'].push(data.fieldValue)
-              fieldExists = true
-              break
-            }
-          }
-
-          if (!fieldExists){
-            let fieldObj = {
-              'fieldName': data.fieldName,
-              'fieldValue': []
-            }
-            fieldObj['fieldValue'].push(data.fieldValue)
-            self.metaArray.push(fieldObj)
-          }
-
-        }
+        
         self.asset = asset
     }, (err) => {
         console.error('Unable to load asset metadata.')
     })).subscribe()
+  }
+
+  /**
+    * Clean up the field label for use as an ID (used in testing)
+    */
+   private cleanId(label: string): string {
+    if (typeof (label) == 'string') {
+        return label.toLowerCase().replace(/\s/g, '')
+    } else {
+        return ''
+    }
+  }
+
+  /**
+   * Some html tags are ruining things:
+   * - <wbr> word break opportunities break our link detection
+   */
+  private cleanFieldValue(value: string): string {
+      if (typeof (value) == 'string') {
+          return value.replace(/\<wbr\>/g, '').replace(/\<wbr\/\>/g, '')
+      } else {
+          return ''
+      }
   }
 
 }

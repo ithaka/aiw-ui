@@ -5,9 +5,11 @@
     [attr.alt]="asset.title ? 'Thumbnail of ' + asset.title : 'No title available'")
   .disclaimer This image and the text corresponding to this image may only be used for noncommercial educational and scholarly purposes.
   .meta-cntnr
-    h2 Image Information
-    .table
-      .meta-row.row(*ngFor="let dataObj of metaArray; let isLast = last", [ngClass]="{'last-row': isLast }")
-        .col-md-4.lbl {{ dataObj.fieldName }}
+    h2 Item Details
+    .table  
+      .meta-row.row(*ngFor="let fieldName of asset.formattedMetadata | keys")
+        .col-md-4.lbl([attr.id]="cleanId(fieldName)") {{ fieldName }}
         .col-md-8
-          div(*ngFor="let value of dataObj.fieldValue", [innerHTML]="value")
+          .value(*ngFor="let value of asset.formattedMetadata[fieldName]")
+            span([innerHTML]="cleanFieldValue(value) | linkify", [attr.aria-labelledby]="cleanId(fieldName)")
+      
