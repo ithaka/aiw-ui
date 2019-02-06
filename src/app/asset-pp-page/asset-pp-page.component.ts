@@ -16,7 +16,6 @@ import { MetadataService } from './../_services'
 
 export class AssetPPPage implements OnInit {
   public asset: any = {}
-  public metaArray: Array<any> = []
   public isMultiView: boolean = false // flag for print preview of multiview asset
   private header = new HttpHeaders().set('Content-Type', 'application/json') // ... Set content type to JSON
   private options = { headers: this.header, withCredentials: true } // Create a request option\
@@ -46,40 +45,40 @@ export class AssetPPPage implements OnInit {
   // Load Image Group Assets
   loadAsset(): void{
     let self = this
-    this._metadata.buildAsset(this.assetId, null).pipe(
+    this._metadata.buildAsset(this.assetId, {}).pipe(
       map(asset => {
-
         // Is this a multiview asset?
-        if (asset.image_compound_urls && asset.image_compound_urls.length) {
+        if (typeof(asset.image_compound_urls) !== 'undefined' && asset.image_compound_urls.length) {
           this.isMultiView = true
         }
-
-        let assetData = asset ? asset['metadata_json'] : []
-        for (let data of assetData){
-          let fieldExists = false
-
-          for (let metaData of self.metaArray){
-            if (metaData['fieldName'] === data.fieldName){
-              metaData['fieldValue'].push(data.fieldValue)
-              fieldExists = true
-              break
-            }
-          }
-
-          if (!fieldExists){
-            let fieldObj = {
-              'fieldName': data.fieldName,
-              'fieldValue': []
-            }
-            fieldObj['fieldValue'].push(data.fieldValue)
-            self.metaArray.push(fieldObj)
-          }
-
-        }
+        
         self.asset = asset
     }, (err) => {
         console.error('Unable to load asset metadata.')
     })).subscribe()
+  }
+
+  /**
+    * Clean up the field label for use as an ID (used in testing)
+    */
+   private cleanId(label: string): string {
+    if (typeof (label) == 'string') {
+        return label.toLowerCase().replace(/\s/g, '')
+    } else {
+        return ''
+    }
+  }
+
+  /**
+   * Some html tags are ruining things:
+   * - <wbr> word break opportunities break our link detection
+   */
+  private cleanFieldValue(value: string): string {
+      if (typeof (value) == 'string') {
+          return value.replace(/\<wbr\>/g, '').replace(/\<wbr\/\>/g, '')
+      } else {
+          return ''
+      }
   }
 
 }
