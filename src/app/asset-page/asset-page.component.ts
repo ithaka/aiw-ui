@@ -80,6 +80,7 @@ export class AssetPage implements OnInit, OnDestroy {
 
     // Feature Flags
     public relatedResFlag: boolean = false
+    public detailViewsFlag: boolean = false
     private encryptedAccess: boolean = false
     private document = document
     private URL = URL

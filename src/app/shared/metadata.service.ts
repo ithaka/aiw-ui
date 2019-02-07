@@ -7,9 +7,8 @@ import { HttpClient, HttpHeaders } from '@angular/common/http'
 import { Observable } from 'rxjs'
 
 // Project Dependencies
-import { MetadataRes } from './datatypes/asset.interface'
-import { FlagService } from './flag.service'
-import { environment } from 'environments/environment';
+import { MetadataResponse } from './datatypes/asset.interface'
+import { environment } from 'environments/environment'
 
 @Injectable()
 export class MetadataService {
@@ -20,8 +19,7 @@ export class MetadataService {
     private defaultOptions = { headers: this.header, withCredentials: true  }
 
     constructor(
-        private http: HttpClient,
-        private _flags: FlagService
+        private http: HttpClient
     ) {
 
     }
@@ -31,13 +29,13 @@ export class MetadataService {
      * Get metadata for an Asset
      * @param assetId string Asset or object ID
      */
-    public getMetadata(assetId: string, groupId?: string, legacyOverride?: boolean): Observable<MetadataRes> {
+    public getMetadata(assetId: string, groupId?: string, legacyOverride?: boolean): Observable<MetadataResponse> {
         let legacyFlag = typeof legacyOverride !== 'undefined' ? legacyOverride : false
         let url = environment.API_URL + '/api/v1/metadata?object_ids=' + assetId + "&legacy=" + legacyFlag
         if (groupId){
             // Groups service modifies certain access rights for shared assets
             url = environment.API_URL + '/api/v1/group/' + groupId + '/metadata?object_ids=' + assetId
         }
-        return this.http.get<MetadataRes>(url,  this.defaultOptions)
+        return this.http.get<MetadataResponse>(url,  this.defaultOptions)
     }
 }
