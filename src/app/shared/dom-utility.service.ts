@@ -83,7 +83,13 @@ export class DomUtilityService {
   }
 
   public append(parent, child) {
-    return parent.appendChild(parent, child)
+    if (parent && parent.hasOwnProperty('appendChild')) {
+      return parent.appendChild(parent, child)
+    }
+    else {
+      console.log('Unable to append ', child, ' to element ', parent)
+    }
+
   }
 
   public create(type) {
