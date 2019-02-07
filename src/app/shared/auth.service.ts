@@ -178,50 +178,12 @@ export class AuthService implements CanActivate {
       // Run every X mins
       setInterval(() => {
         this.refreshUserSession(true)
-<<<<<<< HEAD
-      })).subscribe()
-
-    idle.onTimeout.pipe(
-      map(() => {
-        let user = this.user || this.getUser();
-        // console.log(user);
-        if (user && user.isLoggedIn){
-          this.expireSession();
-          this.showUserInactiveModal.next(true);
-          this.idleState = 'Timed out!';
-        }
-        else{
-          this.resetIdleWatcher()
-        }
-      })).subscribe()
-
-    idle.onIdleStart.pipe(
-      map(() => {
-        this.idleState = 'You\'ve gone idle!';
-        let currentDateTime = new Date().toUTCString();
-        this._locker.set('userGoneIdleAt', currentDateTime);
-      })).subscribe()
-
-    idle.onTimeoutWarning.pipe(
-      map((countdown) => {
-        this.idleState = 'You will time out in ' + countdown + ' seconds!'
-        // console.log(this.idleState);
-      })).subscribe()
-
-    // Init idle watcher (this will also run getUserInfo)
-    this.resetIdleWatcher()
-
-    // Initialize user and institution objects from localstorage
-    this.userSource.next(this.user || this.getUser())
-    let institution = this._locker.get('institution')
-=======
       }, userInfoInterval)
     }
 
     // Initialize user and institution objects from localstorage
     this.userSource.next(this.getUser())
     let institution = this._storage.getLocal('institution')
->>>>>>> stage
     if (institution) { this.institutionObjSource.next(institution) }
   }
 
@@ -474,13 +436,7 @@ export class AuthService implements CanActivate {
    * Gets user object from local storage
    */
   public getUser(): any {
-<<<<<<< HEAD
-    let userObj = this._locker.get('user')
-    this.user = userObj ? userObj : {}
-    return this.user
-=======
       return this._storage.getLocal('user') ? this._storage.getLocal('user') : {};
->>>>>>> stage
   }
 
   /** Stores an object in local storage for you - your welcome */

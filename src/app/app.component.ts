@@ -96,8 +96,6 @@ export class AppComponent {
             mainEl.focus()
         }
 
-<<<<<<< HEAD
-=======
         // Detect featureflag=solrmetadata and set cookie
         let routeParams = event.url.split(';')
         for (let routeParam of routeParams) {
@@ -109,7 +107,6 @@ export class AppComponent {
           }
         }
 
->>>>>>> stage
         let event_url_array = event.url.split('/')
         if (event_url_array && (event_url_array.length > 1) && (event_url_array[1] !== 'asset')){
           this.titleService.setTitle(this.title)
