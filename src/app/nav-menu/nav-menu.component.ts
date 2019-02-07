@@ -66,6 +66,11 @@ export class NavMenu implements OnInit, OnDestroy {
 
   public detailViewsFlag: boolean = false
 
+  // Toast Variables
+  public showToast: boolean = false
+  public toastType: string = ''
+  public toastHTML: string = ''
+
   // TypeScript public modifiers
   constructor(
     public _appConfig: AppConfig,
@@ -257,5 +262,15 @@ export class NavMenu implements OnInit, OnDestroy {
           this._router.navigate(['/home'])
         }
       })
+  }
+
+  public handleToast(event: any): void{
+    this.toastType = event.type
+    this.toastHTML = event.stringHTML
+    this.showToast = true
+  }
+
+  public closeToast(): void{
+      setTimeout(()=>{ this.showToast = false }, 1000)
   }
 }

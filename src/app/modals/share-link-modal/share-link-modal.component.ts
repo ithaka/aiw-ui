@@ -103,7 +103,7 @@ export class ShareLinkModal implements OnInit, AfterViewInit {
     }
 
     // TODO SSR
-    // document.body.removeChild(textArea);
+    document.body.removeChild(textArea);
   }
 
   // Doesn't get called on SSR application

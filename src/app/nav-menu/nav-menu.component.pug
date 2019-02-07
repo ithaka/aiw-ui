@@ -61,3 +61,4 @@ ang-confirm-modal(*ngIf="showConfirmationModal", (closeModal)="closeConfirmation
   [description]="'Are you sure you want to delete ' + _assets.getSelectedAssets().length + ' selected image(s) from the group? <br><b>Image group name: ' +  ig.name + '</b>'",
   [dismiss]="'Cancel'",
   [primary]="'Yes'")
+ang-toast(*ngIf="showToast", [type]="toastType", [stringHTML]="toastHTML", (closeToast)="closeToast()")

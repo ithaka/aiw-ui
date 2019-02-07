@@ -132,7 +132,7 @@ export class MetadataService {
             updated_on: data.updated_on,
             viewer_data: data.viewer_data,
             width: data.width,
-            baseUrl: this._auth.getUrl()
+            baseUrl: this._auth.getHostname()
             }
       } 
 

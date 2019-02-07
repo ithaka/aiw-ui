@@ -84,13 +84,13 @@ export class Asset {
             case 22:
             case 23:
                 // Non-image Download Link format: /media/ARTSTORID/TYPEID
-                downloadLink = [data.baseUrl + 'media', this.id, data.object_type_id].join("/")
+                downloadLink = [data.baseUrl, 'media', this.id, data.object_type_id].join("/")
                 break
             default:
                 if (data.image_url) { //this is a general fallback, but should work specifically for images and video thumbnails
                     let imageServer = 'http://imgserver.artstor.net/' // TODO: check if this should be different for test
                     let url = imageServer + data.image_url + "?cell=" + data.download_size + "&rgnn=0,0,1,1&cvt=JPEG"
-                    downloadLink = data.baseUrl + "/download?imgid=" + this.id + "&url=" + encodeURIComponent(url)
+                    downloadLink = data.baseUrl + "/api/download?imgid=" + this.id + "&url=" + encodeURIComponent(url)
                 } else {
                     // nothing happens here because some assets are not allowed to be downloaded
                 }

@@ -26,8 +26,7 @@ import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 
 // Directives
 import { ClickOutsideDirective } from './_directives';
-//- TO-DO: Enable medium editor with Universal
-// import { MediumEditorDirective } from 'angular2-medium-editor';
+import { MediumEditorDirective } from 'angular2-medium-editor';
 
 // ng2-idle
 import { NgIdleKeepaliveModule } from '@ng-idle/keepalive'; // this includes the core NgIdleModule but includes keepalive providers for easy wireup
@@ -206,8 +205,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     Login,
     LoginFormComponent,
     LoginReqModal,
-    //- TO-DO: Enable medium editor with Universal
-    // MediumEditorDirective,
+    MediumEditorDirective,
     MyCollectionsComponent,
     Nav,
     NavMenu,

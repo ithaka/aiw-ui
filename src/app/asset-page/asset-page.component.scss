@@ -26,6 +26,7 @@ $titleNavBg: #eee;
     padding: 1rem 0;
     text-align: center;
     font-weight: bold;
+    min-height: 48px;
 
     @media(max-width: $phone) {
         margin-top:22px;

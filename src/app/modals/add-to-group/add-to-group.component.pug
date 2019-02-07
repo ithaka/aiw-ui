@@ -12,39 +12,40 @@
             button.close((click)="closeModal.emit()", type="button", data-dismiss="modal", aria-label="Close")
               span(aria-hidden="true") &times;
           form(#igForm="ngForm", (ngSubmit)="submitGroupUpdate(igForm)")
-            .modal-body(infiniteScroll, [scrollWindow]="false", [infiniteScrollDistance]="1", [infiniteScrollThrottle]="150", [infiniteScrollDisabled]="allGroups.length < totalGroups && !loading.allGroups ? false : true", (scrolled)="loadMoreGroups()")
-              .search-cntnr
+            .modal-body
+              .search-cntnr([ngClass]="{ 'shadow' : scrollCntnr.scrollTop > 50 }")
                 .input-group
                   input#inputGroupSearchTerm.form-control.has-icon([(ngModel)]="groupSearchTerm", name="term", type="text", placeholder="Search groups...", (keyup)="searchGroups($event)")
-                  i#iconClearGroupSearch.icon.icon-close.form-control__icon(*ngIf="groupSearchTerm", (click)="clearGroupSearch()", placement="bottom", ngbTooltip="Clear search", role="button")
+                  i#iconClearGroupSearch.icon.icon-clear.form-control__icon(*ngIf="groupSearchTerm", (click)="clearGroupSearch()", placement="bottom", ngbTooltip="Clear search", role="button")
                   i#iconGroupSearchSubmit.icon.icon-search.form-control__icon(*ngIf="!groupSearchTerm", role="button", placement="bottom", ngbTooltip="Submit search")
-              .recent-groups(*ngIf="!groupSearchTerm")
-                .hdr
-                  label Recent Groups
-                .row.no-gutters(*ngFor="let recentGroup of recentGroups", [ngClass]="{ 'selectedGroup' : recentGroup.selected }", (click)="selectGroup(recentGroup)")
-                  .col-3
-                    .ig-thmbnail-wrapper
-                      img([ngClass]="{ 'loaded' : recentGroup.imgLoaded }", [attr.src]="_search.makeThumbUrl(recentGroup['thumbnailImgUrl'], 1, recentGroup['compoundmediaCount'])", [attr.alt]="recentGroup.name", (load)="recentGroup.imgLoaded = true", aria-role="image")
-                  .col-9
-                    .title {{ recentGroup.name }}
-                .loading-dots(*ngIf="loading.recentGroups")
-                  .dot
-                  .dot
-                  .dot
-              
-              .all-my-groups
-                .hdr(*ngIf="!groupSearchTerm")
-                  label All My Groups
-                .row.no-gutters(*ngFor="let group of allGroups", [ngClass]="{ 'selectedGroup' : group.selected }", (click)="selectGroup(group)")
-                  .col-3
-                    .ig-thmbnail-wrapper
-                      img([ngClass]="{ 'loaded' : group.imgLoaded }", [attr.src]="_search.makeThumbUrl(group['thumbnailImgUrl'], 1, group['compoundmediaCount'])", [attr.alt]="group.name", (load)="group.imgLoaded = true", aria-role="image")
-                  .col-9
-                    .title {{ group.name }}
-                .loading-dots(*ngIf="loading.allGroups")
-                  .dot
-                  .dot
-                  .dot
+              .scroll-cntnr(#scrollCntnr, infiniteScroll, [scrollWindow]="false", [infiniteScrollDistance]="1", [infiniteScrollThrottle]="150", [infiniteScrollDisabled]="allGroups.length < totalGroups && !loading.allGroups ? false : true", (scrolled)="loadMoreGroups()")
+                .recent-groups(*ngIf="!groupSearchTerm")
+                  .hdr
+                    label Recent Groups
+                  .row.no-gutters(*ngFor="let recentGroup of recentGroups", [ngClass]="{ 'selectedGroup' : recentGroup.selected }", (click)="selectGroup(recentGroup, 'recent')")
+                    .col-3
+                      .ig-thmbnail-wrapper
+                        img([ngClass]="{ 'loaded' : recentGroup.imgLoaded }", [attr.src]="_search.makeThumbUrl(recentGroup['thumbnailImgUrl'], 1, recentGroup['compoundmediaCount'])", [attr.alt]="recentGroup.name", (load)="recentGroup.imgLoaded = true", aria-role="image")
+                    .col-9
+                      .title {{ recentGroup.name }}
+                  .loading-dots(*ngIf="loading.recentGroups")
+                    .dot
+                    .dot
+                    .dot
+                
+                .all-my-groups
+                  .hdr(*ngIf="!groupSearchTerm")
+                    label All My Groups
+                  .row.no-gutters(*ngFor="let group of allGroups", [ngClass]="{ 'selectedGroup' : group.selected }", (click)="selectGroup(group, 'all')")
+                    .col-3
+                      .ig-thmbnail-wrapper
+                        img([ngClass]="{ 'loaded' : group.imgLoaded }", [attr.src]="_search.makeThumbUrl(group['thumbnailImgUrl'], 1, group['compoundmediaCount'])", [attr.alt]="group.name", (load)="group.imgLoaded = true", aria-role="image")
+                    .col-9
+                      .title {{ group.name }}
+                  .loading-dots(*ngIf="loading.allGroups")
+                    .dot
+                    .dot
+                    .dot
             .modal-footer
               ng-container(*ngIf="!serviceResponse.success")
                 .wrapper
