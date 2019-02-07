@@ -148,12 +148,17 @@ export class AuthService implements CanActivate {
       this.ENV = 'test'
     }
 
-    // SSR Stage routing WORKAROUND
+    // SSR routing WORKAROUND
     if (this.clientHostname.indexOf('beta.stage.artstor.org') > -1) {
       this.hostname = '//beta.stage.artstor.org'
       this.ENV = 'test'
-      this.baseUrl = '/api'
+      this.baseUrl = 'https://beta.stage.artstor.org/api'
       this.subdomain = "beta.stage"
+    } else if (this.clientHostname.indexOf('beta.artstor.org') > -1) {
+      this.hostname = '//beta.artstor.org'
+      this.ENV = 'prod'
+      this.baseUrl = 'https://beta.artstor.org/api'
+      this.subdomain = "beta"
     }
 
     // Sahara routing WORKAROUND
