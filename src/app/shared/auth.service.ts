@@ -48,6 +48,8 @@ export class AuthService implements CanActivate {
   private currentInstitutionObj: Observable<any> = this.institutionObjSource.asObservable();
 
   private userSource: BehaviorSubject<any> = new BehaviorSubject({});
+  // private user: any = {}
+
 
   private idleState: string = 'Not started.';
 
@@ -629,8 +631,10 @@ export class AuthService implements CanActivate {
     )
   }
 
-  public isPublicOnly(): boolean{
-    return !(this.getUser() && this.getUser().status)
+  public isPublicOnly(): boolean {
+    let user = this.userSource.value
+    let userObj = user || this.getUser()
+    return !(userObj && userObj.status)
   }
 
 
@@ -693,7 +697,8 @@ export class AuthService implements CanActivate {
    * - Used to decorate the user object for saving
    */
   private decorateValidUser(data: any): any {
-    let currentUser = this.getUser()
+    let user = this.userSource.value
+    let currentUser = user.hasOwnProperty('status') ? user : this.getUser()
     let newUser = data['user'] ? data['user'] : {}
     let currentUsername = currentUser.username
     let loggedInSessionLost = currentUser.isLoggedIn ? (!newUser.username || currentUsername !== newUser.username) : false;
