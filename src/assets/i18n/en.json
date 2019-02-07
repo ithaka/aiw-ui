@@ -254,6 +254,8 @@
       "OPEN_CREATE_GROUP_MODAL": "Create a new group with image"
     },
     "CONTROLS": {
+      "ADD": "ADD",
+      "CANCEL": "CANCEL",
       "SAVE": "Save Changes",
       "NAV_TO_GROUP": "Go to group",
       "CLOSE": "Close",
