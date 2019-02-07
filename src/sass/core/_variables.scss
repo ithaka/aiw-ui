@@ -36,8 +36,10 @@ $dark-gray: #989898;
 $color-gray-1: #F8F8F8;
 /** @color Gray 3 */
 $color-gray-3: #E8E8E8;
+/** @color Gray 4 */
+$color-gray-4: #DDDDDD;
 /** @color Border Gray */
-$color-border-gray:#DBDBDB;
+$color-border-gray:$color-gray-4;
 /** @color White */
 $color-white: #FFFFFF;
 /** @color Teal */

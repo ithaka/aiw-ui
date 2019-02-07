@@ -47,6 +47,7 @@
 
 .modal-header {
     padding: 15px !important;
+    border-bottom: 1px solid $color-border-gray;
 
     &  button.close {
         cursor: pointer;
@@ -63,18 +64,23 @@
 
 .modal-header {
 	padding: 2px 16px;
-    background: #fff;
-    border: none;
+    background: $color-white;
 }
 
 .modal-body {
 	padding: $basePadding;
-  background-color: $bgLightAccent;
+    background-color: $color-white;
 }
 
 .modal-footer {
-    border: none;
-    background-color: $bgLightAccent;
+    background-color: $color-white;
+    border-top: 1px solid $color-border-gray;
+    border-bottom-right-radius: 0.3rem;
+    border-bottom-left-radius: 0.3rem;
+
+    &.border-none{
+        border: none;
+    }
 
     @media(max-width: $phone) {
         display: block !important;
