@@ -13,10 +13,14 @@ export class AgreeModalComponent implements OnInit {
 
   /** Causes modal to be hidden */
   @Output()
-  closeModal = new EventEmitter();
+  closeModal = new EventEmitter()
   /** Tells asset-page to download the asset */
   @Output()
-  downloadAsset = new EventEmitter();
+  downloadAsset = new EventEmitter()
+  /** Asset.acceptedTerms */
+  @Output()
+  acceptedTerms = new EventEmitter(true)
+
   @Input()
   downloadUrl: string
   /** The value of the download attribute for Download View **/
@@ -51,6 +55,7 @@ export class AgreeModalComponent implements OnInit {
    */
   private agree(): void {
     this._auth.authorizeDownload()
+    this.acceptedTerms.emit()
     this.closeModal.emit()
   }
 

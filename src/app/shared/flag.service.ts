@@ -51,13 +51,6 @@ export class FlagService {
        */
       this.bannerShow = flags.bannerShow
       this.bannerCopy = flags.bannerCopy
-      this.solrMetadata = flags.solrMetadata
-
-      // Solr Metadata rollout
-      if (flags.solrMetadataRollout.indexOf(userCountryCode) > -1) {
-        this.solrMetadata = true
-        document.cookie = 'featureflag=solrmetadata;'
-      }
 
       return flags
     }))
@@ -69,6 +62,4 @@ interface FlagServiceResponse {
   unaffiliatedAccessRollout: string[]
   bannerShow: boolean
   bannerCopy: string
-  solrMetadata: boolean
-  solrMetadataRollout: string[]
 }
