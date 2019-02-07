@@ -3,8 +3,6 @@ import { Component, OnInit, EventEmitter, Input, Output } from '@angular/core'
 import { FileUploader, FileSelectDirective, FileLikeObject, FileItem } from 'ng2-file-upload'
 import { AuthService, PostPersonalCollectionResponse } from '../shared'
 
-// const UPLOAD_URL: string = 'https://evening-anchorage-3159.herokuapp.com/api/' //TODO: NEEDS CHANGING - JUST AND EXPERIMENT
-
 @Component({
   selector: 'ang-uploader',
   templateUrl: 'uploader.component.pug',

@@ -9,7 +9,7 @@ import { Tag } from './../tag'
 import { TagFiltersService } from './tag-filters.service'
 import { TitleService } from '../../shared/title.service'
 import { AppConfig } from '../../app.service';
-import { TourStep } from '../../shared/tour/tour.service'
+import { TourStep } from '../../shared/tour/tour.component'
 
 @Component({
   selector: 'ang-browse-groups',

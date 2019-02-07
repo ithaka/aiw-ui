@@ -17,6 +17,7 @@ export class FlagService {
   public bannerShow: boolean = false
   public bannerCopy: string = ''
   public solrMetadata: boolean = false
+  public detailViews: boolean = false
 
   constructor(
     private _http: HttpClient

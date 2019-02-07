@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="16px" height="16px" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 52.6 (67491) - http://www.bohemiancoding.com/sketch -->
+    <title>icon-clear-search</title>
+    <desc>Created with Sketch.</desc>
+    <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="modal/search/active" transform="translate(-406.000000, -10.000000)" fill="#989898">
+            <g id="icons/clear-search" transform="translate(406.000000, 10.000000)">
+                <path d="M8,16 C3.581722,16 0,12.418278 0,8 C0,3.581722 3.581722,0 8,0 C12.418278,0 16,3.581722 16,8 C16,12.418278 12.418278,16 8,16 Z M8,6.78781695 L5.7776644,4.56548135 L4.56548135,5.7776644 L6.78781695,8 L4.56548135,10.2223356 L5.7776644,11.4345187 L8,9.21218305 L10.2223356,11.4345187 L11.4345187,10.2223356 L9.21218305,8 L11.4345187,5.7776644 L10.2223356,4.56548135 L8,6.78781695 Z" id="icon-clear-search"></path>
+            </g>
+        </g>
+    </g>
+</svg>

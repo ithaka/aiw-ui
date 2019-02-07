@@ -1,0 +1,10 @@
+.toast-cntnr.slide-in([ngClass]="{ 'slide-out' : hideToast, 'success' : type == 'success', 'error' : type == 'error' }")
+  .toast-body
+    .row.no-gutters
+      .col-2
+        i.icon([ngClass]="{ 'icon-success' : type == 'success', 'icon-error' : type == 'error' }")
+        .toast-icon
+      .col-9
+        div([innerHTML]="stringHTML")
+      .col-1.text-center
+        i.icon.icon-close((click)="hideToast = true; closeToast.emit()")

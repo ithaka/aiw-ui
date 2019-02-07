@@ -1,10 +1,11 @@
-import { Component, OnInit, OnDestroy } from '@angular/core'
+import { Component, OnInit, OnDestroy, PLATFORM_ID, Inject } from '@angular/core'
 import { Router } from '@angular/router'
 import { Subscription } from 'rxjs'
 import { map } from 'rxjs/operators'
 import { DeviceDetectorModule, DeviceDetectorService } from 'ngx-device-detector'
+import { isPlatformBrowser } from '@angular/common'
 
-import { AssetService, AuthService, ScriptService } from '../shared'
+import { AssetService, AuthService, ScriptService, DomUtilityService } from '../shared'
 import { AppConfig } from '../app.service'
 import { Featured } from './featured'
 import { TagsService } from '../browse-page/tags.service';
@@ -56,11 +57,15 @@ export class Home implements OnInit, OnDestroy {
     public _auth: AuthService,
     private deviceService: DeviceDetectorService,
     private _script: ScriptService,
+    @Inject(PLATFORM_ID) private platformId: Object,
+    private _dom: DomUtilityService,
     private _tags: TagsService
   ) {
+    // console.log("Constructing home component...")
     // this makes the window always render scrolled to the top
     this._router.events.pipe(
       map(() => {
+        // Dummy scrollTo method created for server rendered domino window object
         window.scrollTo(0, 0);
       }
     )).subscribe()
@@ -132,7 +137,10 @@ export class Home implements OnInit, OnDestroy {
       )).subscribe()
     ) // end push
 
-    this._assets.getBlogEntries()
+    // Set session info for Email Artstor link
+    if (isPlatformBrowser(this.platformId)) {
+      // Load blog posts for home page
+      this._assets.getBlogEntries()
       .then((data) => {
         if (data['posts']) {
           this.blogPosts = data['posts'];
@@ -143,10 +151,10 @@ export class Home implements OnInit, OnDestroy {
         console.log(error);
         this.blogLoading = false;
       });
-
-    // Set session info for Email Artstor link
-    this.fetchDeviceInfo();
-
+      // Device info for contact form
+      this.fetchDeviceInfo();
+    }
+    
     // Load Ethnio survey
     // if (this.siteID !== 'SAHARA') {
     //   this._script.loadScript('ethnio-survey')
@@ -158,13 +166,20 @@ export class Home implements OnInit, OnDestroy {
     this.subscriptions.forEach((sub) => { sub.unsubscribe(); });
   }
 
+  /**
+   * Gets client information for support email
+   * @requires browser
+   */
   private fetchDeviceInfo(): void {
     // Detect if adblocker is enabled or not
     let adBlockEnabled = false;
-    let testAd = document.createElement('div');
+    let testAd = this._dom.create('div');
     testAd.innerHTML = '&nbsp;';
     testAd.className = 'adsbox';
-    document.body.appendChild(testAd);
+
+    let docBody = this._dom.byTagName('body')
+    this._dom.append(docBody, testAd)
+
     setTimeout(
       () => {
         if (testAd.offsetHeight === 0) {

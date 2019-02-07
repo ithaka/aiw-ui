@@ -21,6 +21,7 @@ This repository is open sourced by Ithaka as part of our initiative to increase 
     * [Running the app](#running-the-app)
 * [Configuration](#configuration)
 * [Environment Variables](#environment-variables)
+* [Server-Side Rendering](#server-side-rendering)
 * [WLVs Local Setup](#white-label-verticals)
 * [Styles](#styles)
 * [TypeScript](#typescript)
@@ -273,6 +274,26 @@ interface GlobalEnvironment {
   API_URL;
 }
 ```
+
+---
+
+# Server-Side Rendering
+
+To deploy our server-side rendering docker web app, *first commit all changeds*. Then, run:
+
+```bash
+yarn docker:build
+yarn deploy:ssr:test
+```
+
+For testing the docker image locally:
+
+```bash
+yarn docker:build
+docker run -p 49161:80 -d artifactory.acorn.cirrostratus.org/artstor-air-node:BUILD-HASH
+```
+
+And access via `localhost:49161`
 
 ---
 

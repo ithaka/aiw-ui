@@ -1,5 +1,5 @@
-import { Component } from '@angular/core'
-import { Location } from '@angular/common'
+import { Component, PLATFORM_ID, Inject } from '@angular/core'
+import { Location, isPlatformBrowser } from '@angular/common'
 import { ActivatedRoute, Router, NavigationEnd } from '@angular/router'
 import { Subscription } from 'rxjs'
 import { map } from 'rxjs/operators'
@@ -32,8 +32,10 @@ export class Footer {
     private location: Location,
     private _app: AppConfig,
     private _router: Router,
-    public _auth: AuthService
+    public _auth: AuthService,
+    @Inject(PLATFORM_ID) private platformId: Object
   ) {
+    // console.log("Constructing footer...")
     this.siteID = this._appConfig.config.siteID;
     // Get version number
     this.appVersion = version
@@ -57,8 +59,6 @@ export class Footer {
 
   ngOnInit() {
 
-
-    console.log('Version: ', version)
     this.subscriptions.push(
       this._router.events.pipe(
       map(e => {
@@ -72,19 +72,22 @@ export class Footer {
       })).subscribe()
     )
 
-    // Workaround: Make sure Google translate has loaded
-    setTimeout(() => {
-      if (google && google.translate && typeof(google.translate.TranslateElement) == 'function' ) {
-        new google.translate.TranslateElement(
-            {
-                pageLanguage: 'en',
-                layout: google.translate.TranslateElement && google.translate.TranslateElement.InlineLayout.SIMPLE,
-                autoDisplay: false
-            },
-            'google_translate_element'
-        )
-      }
-    }, 1000)
+    // // Workaround: Make sure Google translate has loaded
+    // // Client-only 
+    if (isPlatformBrowser(this.platformId)) {
+      setTimeout(() => {
+        if (google && google.translate && typeof(google.translate.TranslateElement) == 'function' ) {
+          new google.translate.TranslateElement(
+              {
+                  pageLanguage: 'en',
+                  layout: google.translate.TranslateElement && google.translate.TranslateElement.InlineLayout.SIMPLE,
+                  autoDisplay: false
+              },
+              'google_translate_element'
+          )
+        }
+      }, 1000)
+    }
 
   }
 

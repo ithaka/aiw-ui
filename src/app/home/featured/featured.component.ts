@@ -1,9 +1,10 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Inject, PLATFORM_ID } from '@angular/core';
 import { AppConfig } from '../../app.service';
 
 // Project Dependencies
 import { AuthService } from '../../shared';
 import { FeaturedCollection } from './featured-collection';
+import { isPlatformBrowser } from '@angular/common';
 
 @Component({
   selector: 'ang-featured',
@@ -27,9 +28,16 @@ export class FeaturedComponent implements OnInit {
   private base: string
   private headings: string
   private skipAutoSlide: boolean = false
-
   // To pause and resume slide show
   private intervalId: any
+
+  constructor(
+      public _appConfig: AppConfig, 
+      public _auth: AuthService,
+      @Inject(PLATFORM_ID) private platformId: Object
+      ) {
+    this.conf = this._appConfig.config.featuredCollection // 'HOME.FEATURED' in en.json
+  }
 
   /**
    * runSlideShow - Start the homepage slideshow
@@ -64,10 +72,6 @@ export class FeaturedComponent implements OnInit {
     }
   }
 
-  constructor(public _appConfig: AppConfig, public _auth: AuthService) {
-    this.conf = this._appConfig.config.featuredCollection // 'HOME.FEATURED' in en.json
-  }
-
   ngOnInit() {
     this.siteId = this._appConfig.config.siteID
     this.user = this._auth.getUser();
@@ -87,8 +91,11 @@ export class FeaturedComponent implements OnInit {
     this.base = this.conf + '.' + this.featuredType + '.'
     this.initCollections()
 
-    // Start slideshow
-    this.runSlideshow(this.primaryFeaturedIndex)
+    // Run client-side
+    if (isPlatformBrowser(this.platformId)) {
+      // Start slideshow
+      this.runSlideshow(this.primaryFeaturedIndex)
+    }
   }
 
   /**

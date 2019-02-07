@@ -1,8 +1,9 @@
-import { Component, OnInit, Input, Output, EventEmitter, AfterViewInit } from '@angular/core'
-import { DatePipe } from '@angular/common'
+import { Component, OnInit, Input, Output, EventEmitter, AfterViewInit, ElementRef, ViewChild  } from '@angular/core'
+import { DatePipe, Location } from '@angular/common'
 
-import { Asset } from '../../asset-page/asset'
-import { LogService } from '../../shared'
+import { Asset } from '../../shared'
+import { LogService, DomUtilityService } from '../../shared'
+import { AppConfig } from 'app/app.service'
 
 @Component({
   selector: 'ang-generate-citation',
@@ -15,24 +16,31 @@ export class GenerateCitation implements OnInit, AfterViewInit {
 
   @Input() private asset: Asset /** the asset in question */
 
-  public document = document
-  private reqProtocol = document.location.protocol + '//'
+  @ViewChild("modal", {read: ElementRef}) modalElement: ElementRef;
+
+  // Prefer saving links to HTTPS
+  private reqProtocol = 'https://'
 
   public apa_citation: string = '' // APA style citation to be copied to the clipboard
   public mla_citation: string = '' // MLA style citation to be copied to the clipboard
   public chicago_citation: string = '' // Chicago style citation to be copied to the clipboard
-
   public citationCopied: boolean = false
+  // For client side, template use only
+  public document = document
 
   constructor(
     private _date: DatePipe,
-    private _log: LogService
+    private _log: LogService,
+    private _dom: DomUtilityService,
+    private location: Location,
+    private _app: AppConfig
   ) { }
 
   ngOnInit() {
     // Set focus to the modal to make the links in the modal first thing to tab for accessibility
-    let htmlelement: HTMLElement = document.getElementById('modal');
-    htmlelement.focus()
+    if (this.modalElement && this.modalElement.nativeElement){
+      this.modalElement.nativeElement.focus()
+    }
 
     this.generateCitations(this.asset)
     this._log.log({
@@ -47,7 +55,7 @@ export class GenerateCitation implements OnInit, AfterViewInit {
 
   // Set initial focus on the modal Title h1
   public startModalFocus() {
-    let modalStartFocus = document.getElementById('generate-citation-title')
+    let modalStartFocus: HTMLElement = <HTMLElement>this._dom.byId('generate-citation-title')
     modalStartFocus.focus()
   }
 
@@ -57,15 +65,15 @@ export class GenerateCitation implements OnInit, AfterViewInit {
   private generateCitations(asset: Asset): void {
     // console.log(asset)
 
-    let assetPath
-    if (window.location.host.indexOf('localhost:') > -1) {
-      assetPath = '#/asset/'
-    } else {
-      assetPath = 'asset/'
-    }
+    let assetPath = '/asset/'
 
     // Note: The request protocol is added to ADA, and Chicago citations, but not MLA
-    let currentUrl = document.location.host + document.location.pathname + assetPath + asset.id
+    let currentUrl = this._app.clientHostname + assetPath + asset.id
+
+    // Clear citation strings
+    this.apa_citation = ""
+    this.mla_citation = ""
+    this.chicago_citation = ""
 
     // APA Citation
     // [Creator]. [Date(in parentheses)]. [Title(italicized)]. [Work Type(in brackets)]. Retrieved from [asset page url].

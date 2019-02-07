@@ -5,7 +5,8 @@ import { Subscription }   from 'rxjs'
 import { map } from 'rxjs/operators'
 
 // Internal Dependencies
-import { AssetSearchService, MetadataService } from './../shared'
+import { AssetSearchService } from './../shared'
+import { MetadataService } from './../_services'
 
 @Component({
   selector: 'ang-asset-pp-page',
@@ -15,7 +16,6 @@ import { AssetSearchService, MetadataService } from './../shared'
 
 export class AssetPPPage implements OnInit {
   public asset: any = {}
-  public metaArray: Array<any> = []
   public isMultiView: boolean = false // flag for print preview of multiview asset
   private header = new HttpHeaders().set('Content-Type', 'application/json') // ... Set content type to JSON
   private options = { headers: this.header, withCredentials: true } // Create a request option\
@@ -45,40 +45,40 @@ export class AssetPPPage implements OnInit {
   // Load Image Group Assets
   loadAsset(): void{
     let self = this
-    this._metadata.getMetadata(this.assetId, undefined, false).pipe(
-      map(res => {
-
+    this._metadata.buildAsset(this.assetId, {}).pipe(
+      map(asset => {
         // Is this a multiview asset?
-        if (res.metadata[0].image_compound_urls && res.metadata[0].image_compound_urls.length) {
+        if (typeof(asset.image_compound_urls) !== 'undefined' && asset.image_compound_urls.length) {
           this.isMultiView = true
         }
-
-        let assetData = res && res.metadata && res.metadata[0] ? res.metadata[0]['metadata_json'] : []
-        for (let data of assetData){
-          let fieldExists = false
-
-          for (let metaData of self.metaArray){
-            if (metaData['fieldName'] === data.fieldName){
-              metaData['fieldValue'].push(data.fieldValue)
-              fieldExists = true
-              break
-            }
-          }
-
-          if (!fieldExists){
-            let fieldObj = {
-              'fieldName': data.fieldName,
-              'fieldValue': []
-            }
-            fieldObj['fieldValue'].push(data.fieldValue)
-            self.metaArray.push(fieldObj)
-          }
-
-        }
-        self.asset = res.metadata[0]
+        
+        self.asset = asset
     }, (err) => {
         console.error('Unable to load asset metadata.')
     })).subscribe()
+  }
+
+  /**
+    * Clean up the field label for use as an ID (used in testing)
+    */
+   private cleanId(label: string): string {
+    if (typeof (label) == 'string') {
+        return label.toLowerCase().replace(/\s/g, '')
+    } else {
+        return ''
+    }
+  }
+
+  /**
+   * Some html tags are ruining things:
+   * - <wbr> word break opportunities break our link detection
+   */
+  private cleanFieldValue(value: string): string {
+      if (typeof (value) == 'string') {
+          return value.replace(/\<wbr\>/g, '').replace(/\<wbr\/\>/g, '')
+      } else {
+          return ''
+      }
   }
 
 }

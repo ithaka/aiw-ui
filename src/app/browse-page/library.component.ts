@@ -10,8 +10,7 @@ import { AuthService } from './../shared/auth.service'
 import { TagsService } from './tags.service'
 import { Tag } from './tag/tag.class'
 import { TitleService } from '../shared/title.service'
-import { LockerService } from 'app/_services';
-
+import { ArtstorStorageService } from '../../../projects/artstor-storage/src/public_api';
 
 @Component({
   selector: 'ang-lib',
@@ -70,7 +69,7 @@ export class LibraryComponent implements OnInit {
     private _tags: TagsService,
     private _title: TitleService,
     private _filters: AssetFiltersService,
-    private _locker: LockerService
+    private _storage: ArtstorStorageService
   ) {
     this.unaffiliatedUser = this._auth.isPublicOnly() ? true : false
   }
@@ -153,8 +152,8 @@ export class LibraryComponent implements OnInit {
     this.clearFacets()
 
     // Fetch browse collection object from local storage & check if the required collection list has already been set
-    let storageBrwseColObj = this._locker.get('browseColObject')
-
+    let storageBrwseColObj = this._storage.getLocal('browseColObject')
+    
     let hasCategoryTitles = storageBrwseColObj && storageBrwseColObj['categoryid'] && storageBrwseColObj['categoryid'][2] && storageBrwseColObj['categoryid'][2].title.length > 0
     if ( storageBrwseColObj && storageBrwseColObj[facetType] && hasCategoryTitles){
       if (facetType === 'artstor-geography'){
@@ -201,7 +200,7 @@ export class LibraryComponent implements OnInit {
                 this.categoryFacets = categoryFacets
 
                 storageBrwseColObj[facetType] = this.categoryFacets
-                this._locker.set('browseColObject', storageBrwseColObj)
+                this._storage.setLocal('browseColObject', storageBrwseColObj)
               })
               .catch((err) => {
                 console.error(err)
@@ -213,7 +212,7 @@ export class LibraryComponent implements OnInit {
           this.loading = false
 
           storageBrwseColObj[facetType] = this.hierarchicalFacets
-          this._locker.set('browseColObject', storageBrwseColObj)
+          this._storage.setLocal('browseColObject', storageBrwseColObj)
         } else {
           // Generically handle all other facets, which use "name" property to filter and display
           // - Sort by name, A-Z, then set to categoryFacets array
@@ -231,7 +230,7 @@ export class LibraryComponent implements OnInit {
           this.loading = false
 
           storageBrwseColObj[facetType] = this.categoryFacets
-          this._locker.set('browseColObject', storageBrwseColObj)
+          this._storage.setLocal('browseColObject', storageBrwseColObj)
         }
       })
     }

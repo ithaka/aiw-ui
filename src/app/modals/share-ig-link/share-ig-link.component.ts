@@ -1,7 +1,8 @@
-import { Component, OnInit, Input, Output, EventEmitter, AfterViewInit } from '@angular/core'
+import { Component, OnInit, Input, Output, EventEmitter, AfterViewInit, ElementRef, ViewChild } from '@angular/core'
 import { map, take } from 'rxjs/operators'
 
-import { ImageGroup, GroupService, AuthService, LogService } from './../../shared'
+import { ImageGroup, GroupService, AuthService, LogService, DomUtilityService } from './../../shared'
+import { AppConfig } from 'app/app.service';
 
 @Component({
   selector: 'ang-share-ig-link',
@@ -23,10 +24,14 @@ export class ShareIgLinkModal implements OnInit, AfterViewInit {
 
   @Input() private ig: ImageGroup /** the image group in question */
 
+  @ViewChild("share-ig-link-title", {read: ElementRef}) shareLinkTitleElement: ElementRef
+
   constructor(
     private _group: GroupService,
     private _auth: AuthService,
-    private _log: LogService
+    private _log: LogService,
+    private _dom: DomUtilityService,
+    private _app: AppConfig
   ) { }
 
   ngOnInit() {
@@ -43,32 +48,33 @@ export class ShareIgLinkModal implements OnInit, AfterViewInit {
 
   // Set initial focus on the modal Title h1
   public startModalFocus() {
-    let modalStartFocus = document.getElementById('share-ig-link-title')
-      modalStartFocus.focus()
+    // TO-DO: Only reference document client-side
+    // let modalStartFocus : HTMLElement = <HTMLElement>this._dom.byId('share-ig-link-title')
+    // modalStartFocus.focus()
+    if (this.shareLinkTitleElement && this.shareLinkTitleElement.nativeElement){
+      this.shareLinkTitleElement.nativeElement.focus()
+    }
   }
 
   createIgLink(ig: ImageGroup): void {
     // Find out if group is owned by user
     let userOwned = false
     let user = this._auth.getUser()
-    let protocol = location.protocol + '//'
+    let protocol = 'https://'
+    let groupPath: string
+
     this.ig.access.forEach((accessObj) => {
       if ((accessObj.entity_identifier == user.baseProfileId.toString() && accessObj.access_type == 300) ){
         userOwned = true
       }
     })
 
-    let groupPath
-    if (window.location.host.indexOf('localhost:') > -1) {
-      groupPath = '/#/group/'
-    } else {
-      groupPath = '/group/'
-    }
+    groupPath = '/group/'
 
     // If the group is not owned by the user, we simply give back the url of the group
     // Only a group owner can generate a token share link
     if (!userOwned) {
-      this.shareLink = [protocol, document.location.host, groupPath, ig.id].join('')
+      this.shareLink = [protocol, this._app.clientHostname, groupPath, ig.id].join('')
     } else {
       // if the image group is private, we call a service to generate a token, then attach that to the route so the user can share it
       this.serviceStatus.isLoading = true

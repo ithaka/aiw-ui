@@ -1,5 +1,7 @@
-import {Injectable} from '@angular/core';
-import {ScriptStore} from './script.store';
+import { Injectable, PLATFORM_ID, Inject } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
+
+import { DomUtilityService, ScriptStore } from '../shared';
 
 declare var document: any;
 
@@ -7,8 +9,12 @@ declare var document: any;
 export class ScriptService {
 
     private scripts: any = {};
+    private isBrowser: boolean
 
-    constructor() {
+    constructor(private _dom: DomUtilityService, @Inject(PLATFORM_ID) private platformId: Object,) {
+        // Set platform
+        this.isBrowser = isPlatformBrowser(this.platformId)
+        // Populate available scripts
         ScriptStore.forEach((script: any) => {
             this.scripts[script.name] = {
                 loaded: false,
@@ -25,13 +31,15 @@ export class ScriptService {
 
     loadScript(name: string) {
         return new Promise((resolve, reject) => {
-            // resolve if already loaded
+            if (!this.isBrowser) {
+                resolve({script: name, loaded: false, status: 'server_rendered'})
+            }
             if (this.scripts[name].loaded) {
                 resolve({script: name, loaded: true, status: 'already_loaded'});
             }
             else {
                 // load script
-                let script = document.createElement('script')
+                let script = this._dom.create('script')
                 script.type = 'text/javascript'
                 script.async = 'true'
                 script.charset = 'utf-8'
@@ -52,17 +60,17 @@ export class ScriptService {
                     };
                 }
                 script.onerror = (error: any) => resolve({script: name, loaded: false, status: 'not_loaded'});
-                document.getElementsByTagName('head')[0].appendChild(script);
+                this._dom.byTagName('head').appendChild(script);
             }
         });
     }
 
     // Remove a script node from document head
     removeScript(id: string): void{
-        let script = document.getElementById(id);
+        let script = this._dom.byId(id);
 
         if (script) {
-            document.querySelector('head').removeChild(script);
+            this._dom.bySelector('head').removeChild(script);
         }
     }
 

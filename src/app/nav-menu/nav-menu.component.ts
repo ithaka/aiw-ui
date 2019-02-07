@@ -5,7 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router'
 import { Location } from '@angular/common'
 
 // Project Dependencies
-import { AssetService, ImageGroupService, ImageGroup, GroupService, AuthService } from '../shared'
+import { AssetService, ImageGroupService, ImageGroup, GroupService, AuthService, FlagService } from '../shared'
 import { AppConfig } from '../app.service'
 
 @Component({
@@ -64,6 +64,13 @@ export class NavMenu implements OnInit, OnDestroy {
   private copyIG: boolean = false
   private editIG: boolean = false
 
+  public detailViewsFlag: boolean = false
+
+  // Toast Variables
+  public showToast: boolean = false
+  public toastType: string = ''
+  public toastHTML: string = ''
+
   // TypeScript public modifiers
   constructor(
     public _appConfig: AppConfig,
@@ -75,6 +82,7 @@ export class NavMenu implements OnInit, OnDestroy {
     private _group: GroupService,
     private route: ActivatedRoute,
     public _auth: AuthService,
+    public _flags: FlagService
   ) {
     this.browseOpts = this._app.config.browseOptions
     this.siteID = this._appConfig.config.siteID
@@ -103,13 +111,20 @@ export class NavMenu implements OnInit, OnDestroy {
     )
 
     this.subscriptions.push(
-      this.route.params.pipe(
-      map(params => {
-        this.params = params
-        if (params['igId'] && !params['page']){
+      this.route.params.subscribe((routeParams) => {
+        this.params = routeParams
+        if (routeParams['igId'] && !routeParams['page']){
           this.showImageGroupModal = false
         }
-      })).subscribe()
+
+        if (routeParams && routeParams['featureFlag']) {
+          this._flags[routeParams['featureFlag']] = true
+          this.detailViewsFlag = this._flags['detailViews'] ? true : false
+
+        } else {
+            this.detailViewsFlag = false
+        }
+      })
     )
 
     this.subscriptions.push(
@@ -152,12 +167,13 @@ export class NavMenu implements OnInit, OnDestroy {
   }
 
   public closeNavMenuDropdowns(): void{
-    let dropdownElements: Array<HTMLElement> = Array.from( document.querySelectorAll('.nav-item.dropdown') )
-    for (let dropdownElement of dropdownElements){
-      dropdownElement.classList.remove('show')
-      dropdownElement.children[0].setAttribute('aria-expanded', 'false')
-      dropdownElement.children[1].classList.remove('show')
-    }
+    // TO-DO: Only reference document client-side
+    // let dropdownElements: Array<HTMLElement> = Array.from( document.querySelectorAll('.nav-item.dropdown') )
+    // for (let dropdownElement of dropdownElements){
+    //   dropdownElement.classList.remove('show')
+    //   dropdownElement.children[0].setAttribute('aria-expanded', 'false')
+    //   dropdownElement.children[1].classList.remove('show')
+    // }
   }
 
   /**
@@ -246,5 +262,15 @@ export class NavMenu implements OnInit, OnDestroy {
           this._router.navigate(['/home'])
         }
       })
+  }
+
+  public handleToast(event: any): void{
+    this.toastType = event.type
+    this.toastHTML = event.stringHTML
+    this.showToast = true
+  }
+
+  public closeToast(): void{
+      setTimeout(()=>{ this.showToast = false }, 1000)
   }
 }
