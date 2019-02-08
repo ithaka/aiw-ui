@@ -4,10 +4,10 @@
     .row
       .col-sm-1
       .col-sm-10
-        .alert.alert-danger.mb-4(*ngIf="serviceErrors['shibbolethInst']") 
+        .alert.alert-danger.mb-4(*ngIf="serviceErrors['shibbolethInst']")
           b Error Linking&nbsp;
           | {{ 'SHIBBOLETH_ERRORS.INST404' | translate }}
-        .alert.alert-warning.mb-4(*ngIf="serviceErrors['user']") 
+        .alert.alert-warning.mb-4(*ngIf="serviceErrors['user']")
           b {{ 'SHIBBOLETH_ERRORS.USER404' | translate }}
         .text-right.mb-2(*ngIf="isShibbFlow")
           .btn.btn-secondary((click)="navigateToLogin()", [class.disabled]="!shibParameters.samlTokenId") {{ 'LINK_PAGE.LOGIN_OPTION' | translate }}
@@ -61,7 +61,7 @@
                   option(*ngFor="let dept of userDepts", [ngValue]="dept.id") {{ dept.desc }}
                 .has-danger(*ngIf="submitted && registerForm.controls['dept'].hasError('required')")
                   p#errDeptRequired.form-control-feedback {{ 'REGISTER.ERRORS.ACADEMIC_DEPT_REQUIRED' | translate }}
-              
+
               .form-group
                 .form-check
                   label.form-check-label
@@ -87,7 +87,8 @@
                   p#errDuplicateUser.form-control-feedback(*ngIf="serviceErrors.duplicate", [innerHtml]="'REGISTER.ERRORS.EMAIL_DUPLICATE' | translate")
                   p#errJstorUser.form-control-feedback(*ngIf="serviceErrors.hasJstor", [innerHtml]="'REGISTER.ERRORS.ALREADY_JSTOR' | translate")
                   p#errServerUser.form-control-feedback(*ngIf="serviceErrors.server", [innerHtml]="'REGISTER.ERRORS.SERVER_ERROR' | translate")
-                  p#errShibboleth.form-control-feedback(*ngIf="serviceErrors.shibboleth", [innerHtml]="'SHIBBOLETH_ERRORS.' + serviceErrors.shibboleth | translate")
+                  p#errShibboleth.form-control-feedback(*ngIf="serviceErrors.showShibbolethError", [innerHtml]="'SHIBBOLETH_ERRORS.' + serviceErrors.shibbolethError | translate")
+
             br
             p
               a.link(href="http://www.artstor.org/privacy-policy", tabindex="0") Privacy Policy
