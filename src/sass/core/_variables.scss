@@ -38,7 +38,7 @@ $dark-gray: #989898;
 
 /** @color Gray 1 */
 $color-gray-1: #FAF8F8;
-/* @ color Gray 2 **/
+/* @color Gray 2 **/
 $color-gray-2: #EEEEEE;
 /** @color Gray 3 */
 $color-gray-3: #E8E8E8;
@@ -50,28 +50,38 @@ $color-gray-5: #989898;
 $color-gray-6: #555555;
 /** @color Gray 7 */
 $color-gray-7: #333333;
-/** @color Border Gray */
-$color-border-gray:$color-gray-4;
+/** Border Gray */
+$color-border-gray: $color-gray-4;
 
 
 /** @color White */
 $color-white: #FFFFFF;
 /** @color Teal */
 $teal: rgb(225,232,225);
+/** @color Bright Teal */
 $brightTeal: #45bfab;
 
 /** @color Orange */
 $orange: #C9510D;
 
+/** @color Background Light Accent */
 $bgLightAccent: #f8faf8;
-$bgDefault: #fff;
+/** Background Default */
+$bgDefault: $color-white;
 
 /**
  Brand Colors from Public Site
  */
+
+ /** @color Blue */
  $blue: #0039c6;
+ /** @color Green */
  $green: #6EB032;
+ /** @color Red */
  $red: #e21c28;
+ /** @color Purple */
  $purple: #8300e0;
+ /** @color Dark Green */
  $darkGreen: #008d58;
+ /** @color Yellow */
  $yellow: #f2be19;
