@@ -152,12 +152,12 @@ export class AuthService implements CanActivate {
     if (this.clientHostname.indexOf('beta.stage.artstor.org') > -1) {
       this.hostname = '//beta.stage.artstor.org'
       this.ENV = 'test'
-      this.baseUrl = 'https://beta.stage.artstor.org/api'
+      this.baseUrl = '//beta.stage.artstor.org/api'
       this.subdomain = "beta.stage"
     } else if (this.clientHostname.indexOf('beta.artstor.org') > -1) {
       this.hostname = '//beta.artstor.org'
       this.ENV = 'prod'
-      this.baseUrl = 'https://beta.artstor.org/api'
+      this.baseUrl = '//beta.artstor.org/api'
       this.subdomain = "beta"
     }
 
@@ -381,7 +381,7 @@ export class AuthService implements CanActivate {
 
   public getUrl(secure?: boolean): string {
     let url: string = this.baseUrl
-    if (!this.isBrowser){
+    if (!this.isBrowser && url.indexOf('//') === 0){
       url = 'https:' + url
     }
     if (secure) {
