@@ -247,7 +247,7 @@ export class AddToGroupModal implements OnInit, OnDestroy {
     if ((this.groupSearchTerm.length > 0) && (this.groupSearchTerm.length % 3 === 0)) {
       this.groupsCurrentPage = 1
       this.allGroups = []
-      this.selectedGroup = {}
+      this.clearSelectedGroup()
       this.allGroupSearchTS = Date.now()
       this.loadMyGroups()
     }
@@ -374,7 +374,7 @@ export class AddToGroupModal implements OnInit, OnDestroy {
     this.groupSearchTerm = ''
     this.groupsCurrentPage = 1
     this.allGroups = []
-    this.selectedGroup = {}
+    this.clearSelectedGroup()
     this.allGroupSearchTS = Date.now()
     this.loadMyGroups()
   }
