@@ -99,6 +99,7 @@ export class AuthService implements CanActivate {
       'localhost:4000',
       'local.artstor.org',
       'stage.artstor.org',
+      'beta.stage.artstor.org',
       // test.artstor subdomain is used for WLVs
       'test.artstor.org',
       'test.cirrostratus.org'
