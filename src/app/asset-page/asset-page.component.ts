@@ -284,6 +284,7 @@ export class AssetPage implements OnInit, OnDestroy {
                 if (routeParams && routeParams['featureFlag']) {
                     this._flags[routeParams['featureFlag']] = true
                     this.relatedResFlag = this._flags['related-res-hack'] ? true : false
+                    this.detailViewsFlag = this._flags['detailViews'] ? true : false
                 } else {
                     this.relatedResFlag = false
                 }
