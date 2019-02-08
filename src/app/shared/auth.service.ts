@@ -381,8 +381,14 @@ export class AuthService implements CanActivate {
 
   public getUrl(secure?: boolean): string {
     let url: string = this.baseUrl
-    if (!this.isBrowser && url.indexOf('//') === 0){
-      url = 'https:' + url
+    if (!this.isBrowser){
+      if (url.indexOf('//') === 0) {
+        // append for local use, which is set to relative protocol
+        url = 'https:' + url
+      } else if (url.indexOf('http') < 0) {
+        // append for server when set by request host in app config (see app.service.ts)
+        url = 'https://' + url
+      }
     }
     if (secure) {
       url += '/secure'
