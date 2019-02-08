@@ -53,6 +53,8 @@ export class AddToGroupModal implements OnInit, OnDestroy {
   public detailViewBounds: any = {}
   public selectedGroup: any = {}
 
+  private allGroupSearchTS: number = 0
+
   private subscriptions: Subscription[] = []
 
   @ViewChild("modal", {read: ElementRef}) modalElement: ElementRef
@@ -87,6 +89,8 @@ export class AddToGroupModal implements OnInit, OnDestroy {
       );
     }
 
+    this.allGroupSearchTS = Date.now()
+
     this.loadRecentGroups()
     this.loadMyGroups()
 
@@ -95,12 +99,15 @@ export class AddToGroupModal implements OnInit, OnDestroy {
       this.detailPreviewURL = this.selectedAssets[0].tileSource.replace('info.json', '') + 'pct:' + (this.detailViewBounds['x'] * 100) + ',' + (this.detailViewBounds['y'] * 100) + ',' + (this.detailViewBounds['width'] * 100) + ',' + (this.detailViewBounds['height'] * 100) + '/352,/0/native.jpg'
     }
 
-    console.log(this.selectedAssets, 'selected asssets')
-
+    // Freeze background body scroll
+    document.getElementsByTagName('body')[0].style['overflow'] = 'hidden'
   }
 
   ngOnDestroy() {
-      this.subscriptions.forEach((sub) => { sub.unsubscribe(); });
+    this.subscriptions.forEach((sub) => { sub.unsubscribe(); });
+
+    // Unfreeze background body scroll
+    document.getElementsByTagName('body')[0].style['overflow'] = 'initial'
   }
 
   /**
@@ -240,6 +247,8 @@ export class AddToGroupModal implements OnInit, OnDestroy {
     if ((this.groupSearchTerm.length > 0) && (this.groupSearchTerm.length % 3 === 0)) {
       this.groupsCurrentPage = 1
       this.allGroups = []
+      this.selectedGroup = {}
+      this.allGroupSearchTS = Date.now()
       this.loadMyGroups()
     }
   }
@@ -251,21 +260,31 @@ export class AddToGroupModal implements OnInit, OnDestroy {
     ).pipe(
     take(1),
       map(data  => {
-        for(let i = 0; i < data.groups.length; i++){
-          let group = data.groups[i]
-          this._assets.getAllThumbnails(group.items.slice(0, 1))
-            .then( allThumbnails => {
-              group['thumbnailImgUrl'] = allThumbnails[0]['thumbnailImgUrl']
-              group['compoundmediaCount'] = allThumbnails[0]['compoundmediaCount']
-              this.recentGroups.push( group )
-              if( i === (data.groups.length - 1) ){
-                this.loading.recentGroups = false
-              }
-            })
-            .catch( error => {
-              console.error(error)
-            })
+        let itemIds: string[] = []
+        for(let group of data.groups){
+          if(group.items.length > 0){
+            itemIds.push(group.items[0])
+          }
         }
+
+        this._assets.getAllThumbnails(itemIds)
+        .then( allThumbnails => {
+          allThumbnails = allThumbnails.map( thmbObj => {
+            for (let group of data.groups) {
+              if(group.items[0] && group.items[0] === thmbObj.objectId){
+                group['thumbnailImgUrl'] = thmbObj['thumbnailImgUrl']
+                group['compoundmediaCount'] = thmbObj['compoundmediaCount']
+              }
+            }
+            return thmbObj
+          })
+          
+          this.recentGroups = data.groups
+          this.loading.recentGroups = false
+        })
+        .catch( error => {
+          console.error(error)
+        })
       },
       (error) => {
         console.error(error)
@@ -275,28 +294,41 @@ export class AddToGroupModal implements OnInit, OnDestroy {
 
   private loadMyGroups(): void{
     this.loading.allGroups = true
+    let timeStamp = this.allGroupSearchTS
     this._group.getAll(
       'created', 10, this.groupsCurrentPage, [], this.groupSearchTerm, '', 'alpha', 'asc'
     ).pipe(
     take(1),
       map(data  => {
         this.totalGroups = data.total
-        for(let i = 0; i < data.groups.length; i++){
-          let group = data.groups[i]
-          this._assets.getAllThumbnails(group.items.slice(0, 1))
-            .then( allThumbnails => {
-              group['thumbnailImgUrl'] = allThumbnails[0]['thumbnailImgUrl']
-              group['compoundmediaCount'] = allThumbnails[0]['compoundmediaCount']
-              this.allGroups.push( group )
-
-              if( i === (data.groups.length - 1) ){
-                this.loading.allGroups = false
-              }
-            })
-            .catch( error => {
-              console.error(error)
-            })
+        
+        let itemIds: string[] = []
+        for(let group of data.groups){
+          if(group.items.length > 0){
+            itemIds.push(group.items[0])
+          }
         }
+
+        this._assets.getAllThumbnails(itemIds)
+        .then( allThumbnails => {
+          allThumbnails = allThumbnails.map( thmbObj => {
+            for (let group of data.groups) {
+              if(group.items[0] && group.items[0] === thmbObj.objectId){
+                group['thumbnailImgUrl'] = thmbObj['thumbnailImgUrl']
+                group['compoundmediaCount'] = thmbObj['compoundmediaCount']
+              }
+            }
+            return thmbObj
+          })
+          
+          if(timeStamp === this.allGroupSearchTS) {
+            this.allGroups = this.allGroups.concat(data.groups)
+          }
+          this.loading.allGroups = false
+        })
+        .catch( error => {
+          console.error(error)
+        })
       },
       (error) => {
         console.error(error)
@@ -342,11 +374,21 @@ export class AddToGroupModal implements OnInit, OnDestroy {
     this.groupSearchTerm = ''
     this.groupsCurrentPage = 1
     this.allGroups = []
+    this.selectedGroup = {}
+    this.allGroupSearchTS = Date.now()
     this.loadMyGroups()
   }
 
   private extractData(res: any) {
       let body = res.json();
       return body || { };
+  }
+
+  private clearSelectedGroup(): void{
+    this.selectedGroup = {}
+    this.recentGroups = this.recentGroups.map( group => {
+      group.selected = false
+      return group
+    })
   }
 }
