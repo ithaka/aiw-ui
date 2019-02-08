@@ -27,44 +27,45 @@ $list-group-border-radius: 3px;
  */
 $basePadding: 24px;
 
-/** @color Gray */
-$gray: #cdcdcd;
-$gray-1: #fAf8f8;
+/** Primary Colors */
 
-/** @color Dark Gray */
-$dark-gray: #989898;
+/** @color Color Orange */
+$orange: #C9510D;
 
-/** Our Warm Grays */
+/** Color Grays */
 
-/** @color Gray 1 */
+/** @color Color Gray 1 */
 $color-gray-1: #FAF8F8;
-/* @color Gray 2 **/
+/* @color Color Gray 2 **/
 $color-gray-2: #EEEEEE;
-/** @color Gray 3 */
+/** @color Color Gray 3 */
 $color-gray-3: #E8E8E8;
-/** @color Gray 4 */
+/** @color Color Gray 4 */
 $color-gray-4: #DDDDDD;
 /** $color Gray 5 */
 $color-gray-5: #989898;
-/** @color Gray 6 */
+/** @color Color Gray 6 */
 $color-gray-6: #555555;
-/** @color Gray 7 */
+/** @color Color Gray 7 */
 $color-gray-7: #333333;
 /** Border Gray */
 $color-border-gray: $color-gray-4;
 
-
 /** @color White */
 $color-white: #FFFFFF;
+
+/** NOTE: These below will be replaced */
+
+/** @color Gray */
+$gray: #cdcdcd;
+$gray-1: #fAf8f8;
+/** @color Dark Gray */
+$dark-gray: #989898;
+
 /** @color Teal */
 $teal: rgb(225,232,225);
-/** @color Bright Teal */
-$brightTeal: #45bfab;
 
-/** @color Orange */
-$orange: #C9510D;
-
-/** @color Background Light Accent */
+/** Background Light Accent */
 $bgLightAccent: #f8faf8;
 /** Background Default */
 $bgDefault: $color-white;
