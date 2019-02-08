@@ -473,6 +473,7 @@ export class AssetPage implements OnInit, OnDestroy {
             if(!this.assets) {
                 this.assets = []
             }
+            
             this.assets[assetIndex] = asset
             if (assetIndex == 0) {
                 let tileSource: any = asset.tileSource
@@ -503,7 +504,7 @@ export class AssetPage implements OnInit, OnDestroy {
                 }
 
                 // Split existing collection urls in the metadata so that urls can be linked separately
-                if (this.assets[assetIndex].formattedMetadata['Collection'] && this.assets[assetIndex].formattedMetadata['Collection'].join().indexOf('<br/>') > -1) {
+                if (this.assets[assetIndex].formattedMetadata && this.assets[assetIndex].formattedMetadata['Collection'] && this.assets[assetIndex].formattedMetadata['Collection'].join().indexOf('<br/>') > -1) {
                     let collections = this.assets[0].formattedMetadata['Collection']
                     let splitValues = []
                     for (let i = 0; i < collections.length; i++){
@@ -519,24 +520,25 @@ export class AssetPage implements OnInit, OnDestroy {
 
                 // Update OGP meta tags
                 this.meta.updateTag({ property: 'og:title', content: asset.title }, 'property="og:title"')
-                this.meta.updateTag({ property: 'og:description', content: asset.formattedMetadata['Description'] && asset.formattedMetadata['Description'][0] ? asset.formattedMetadata['Description'][0] : '' }, 'property="og:description"')
+                this.meta.updateTag({ property: 'og:description', content: asset.formattedMetadata && asset.formattedMetadata['Description'] && asset.formattedMetadata['Description'][0] ? asset.formattedMetadata['Description'][0] : '' }, 'property="og:description"')
                 this.meta.updateTag({ property: 'og:url', content: this._assets.getShareLink(asset.id) }, 'property="og:url"')
                 this.meta.updateTag({ property: 'og:image', content: asset.thumbnail_url ? 'https:' + asset.thumbnail_url : '' }, 'property="og:image"')
             }
             // Assign collections array for this asset. Provided in metadata
             this.collections = asset.collections
             this.updateMetadataFromLocal(this._localPC.getAsset(parseInt(this.assets[0].SSID)))
+            // Set download link
+            this.setDownloadFull()
+            
+            if (this.assets[0].formattedMetadata && this.assets[0].formattedMetadata.Rights) {
+                // Loop over Rights fields and set rights statement values via isRightStatement
+                for (let i = 0; i < this.assets[0].formattedMetadata.Rights.length; i++) {
+                    let rightsField = this.assets[0].formattedMetadata.Rights[i]
+                    this.isRightStatement(rightsField)
+                }
+            }   
         }
-        // Set download link
-        this.setDownloadFull()
         
-        if (this.assets[0].formattedMetadata && this.assets[0].formattedMetadata.Rights) {
-            // Loop over Rights fields and set rights statement values via isRightStatement
-            for (let i = 0; i < this.assets[0].formattedMetadata.Rights.length; i++) {
-                let rightsField = this.assets[0].formattedMetadata.Rights[i]
-                this.isRightStatement(rightsField)
-            }
-        }   
     }
 
     /**
@@ -646,7 +648,7 @@ export class AssetPage implements OnInit, OnDestroy {
     getIapFormUrl(asset: Asset): string {
         let baseUrl = 'http://www.artstor.org/form/iap-request-form'
         let name = asset.title
-        let collection = asset.formattedMetadata['Collection'] && asset.formattedMetadata['Collection'][0] ? asset.formattedMetadata['Collection'][0] : ''
+        let collection = asset.formattedMetadata && asset.formattedMetadata['Collection'] && asset.formattedMetadata['Collection'][0] ? asset.formattedMetadata['Collection'][0] : ''
         let id = asset.id
         let email = this.user.username
         let ssid = asset.SSID
@@ -661,12 +663,12 @@ export class AssetPage implements OnInit, OnDestroy {
      */
     getErrorFormUrl(asset: Asset): string {
         let baseUrl = 'http://www.artstor.org/form/report-error'
-        let collection = asset.formattedMetadata['Collection'] && asset.formattedMetadata['Collection'][0] ? asset.formattedMetadata['Collection'][0] : ''
+        let collection = asset.formattedMetadata && asset.formattedMetadata['Collection'] && asset.formattedMetadata['Collection'][0] ? asset.formattedMetadata['Collection'][0] : ''
         let id = asset.id
         let email = this.user.username
         let title = asset.title
         let creator = asset.creator
-        let repo = (asset.formattedMetadata['Repository'] && asset.formattedMetadata['Repository'][0]) || ''
+        let repo = (asset.formattedMetadata && asset.formattedMetadata['Repository'] && asset.formattedMetadata['Repository'][0]) || ''
         let fileName = asset.fileName
         let ssid = asset.SSID
         return baseUrl + '?collectionName=' + collection + '&id=' + id + '&email=' + email + '&title=' + title + '&creator=' + creator + '&fileName=' + fileName + '&ssid=' + ssid + '&repository=' + repo
