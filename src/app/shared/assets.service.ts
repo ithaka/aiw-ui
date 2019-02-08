@@ -886,15 +886,16 @@ export class AssetService {
                     throw new Error('No data in image group thumbnails response')
                 }
 
-                data.items.push({
-                    "artstorid": "ASITESPHOTOIG_10312738558",
-                    "zoom": {
-                      "viewerX": 100,
-                      "viewerY": 500,
-                      "pointWidth": 600,
-                      "pointHeight": 800
-                    }
-                  })
+                // Add a dummy saved detail to the group - to be used untill we have the backend ready for saved details
+                // data.items.push({
+                //     "artstorid": "ASITESPHOTOIG_10312738558",
+                //     "zoom": {
+                //       "viewerX": 0.49138915291172104,
+                //       "viewerY": 0.3638532628030086,
+                //       "pointWidth": 0.44454747774480715,
+                //       "pointHeight": 0.375
+                //     }
+                //   })
                 data.total = data.items.length
 
                 // Fetch the asset(s) via items call only if the IG has atleast one asset
@@ -924,6 +925,12 @@ export class AssetService {
 
                             // For multi-view items, make the thumbnail urls and update the array
                             data.thumbnails = data.thumbnails.map((thumbnail) => {
+                              // Attach zoom object from items to the relevant thumbnail, to be used in asset grid
+                              for(let item of data.items){
+                                if(item['zoom'] && item['artstorid'] === thumbnail['objectId']){
+                                    thumbnail['zoom'] = item['zoom']
+                                }
+                              }
                               if (thumbnail['thumbnailImgUrl'] && thumbnail['compoundmediaCount'] > 0) {
                                 thumbnail.thumbnailImgUrl = this._auth.getThumbUrl(true) + thumbnail.thumbnailImgUrl
                               }

@@ -512,6 +512,18 @@ export class AssetSearchService {
     // Ceanup
     return this._auth.getThumbUrl() + imagePath;
   }
+
+
+  /**
+   * Generate Thumbnail URL for detailed view using the zoom property of the thumbnail
+   */
+  public makeDetailViewThmb(thumbnailObj: any): string{
+    let thumbURL: string = ''
+    let tileSourceHostname = (this._auth.getEnv() == 'test') ? '//tsstage.artstor.org' : '//tsprod.artstor.org'
+    let imgURL = thumbnailObj['thumbnailImgUrl'].replace('/thumb/imgstor/size0', '').replace('.jpg', '.fpx')
+    thumbURL = tileSourceHostname + '/rosa-iiif-endpoint-1.0-SNAPSHOT/fpx' + encodeURIComponent(imgURL) + '/pct:' + (thumbnailObj['zoom']['viewerX'] * 100) + ',' + (thumbnailObj['zoom']['viewerY'] * 100) + ',' + (thumbnailObj['zoom']['pointWidth'] * 100) + ',' + (thumbnailObj['zoom']['pointHeight'] * 100) + '/,115/0/native.jpg'
+    return thumbURL
+  }
 }
 
 // the cleaned response object which is returned by the service
