@@ -25,8 +25,7 @@ export class AppConfig {
       this.clientHostname = window.location.hostname
     } else{
       let req = this.injector.get('request');
-      this.clientHostname = "beta.stage.artstor.org"
-      //req ? req.get('host') : '';
+      this.clientHostname = req ? req.get('host') : '';
     }
     // Generic debugging between server/client rendering
     console.log("Detected hostname: " + this.clientHostname)
