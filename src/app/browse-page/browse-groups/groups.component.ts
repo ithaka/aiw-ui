@@ -183,10 +183,6 @@ export class BrowseGroupsComponent implements OnInit {
     // set the title
     this._title.setSubtitle('Browse Groups')
 
-    // Load Ethnio survey
-    if (this._appConfig.config.siteID !== 'SAHARA') {
-      this.scriptService.loadScript('ethnio-survey')
-    }
   } // OnInit
 
   ngOnDestroy() {
