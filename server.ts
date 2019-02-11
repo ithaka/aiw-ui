@@ -8,12 +8,21 @@ import * as express from 'express';
 import * as fs from 'fs';
 import { join } from 'path';
 import * as https from 'https';
+import * as Sentry from '@sentry/node';
+
+// Set up Sentry configuration
+Sentry.init({ dsn: 'https://80481e6afe274aa49c671606ca054bec@sentry.io/1391720' });
 
 // Faster server renders w/ Prod mode (dev mode never needed)
 enableProdMode();
 
 // Express server
 const app = express();
+
+// Sentry handler must be the first middleware on the app
+app.use(Sentry.Handlers.requestHandler());
+// The error handler must be before any other error middleware
+app.use(Sentry.Handlers.errorHandler());
 
 // Only use HTTPS settings locally
 if (!process.env.SAGOKU) {
