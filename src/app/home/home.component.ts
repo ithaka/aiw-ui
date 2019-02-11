@@ -5,7 +5,7 @@ import { map } from 'rxjs/operators'
 import { DeviceDetectorModule, DeviceDetectorService } from 'ngx-device-detector'
 import { isPlatformBrowser } from '@angular/common'
 
-import { AssetService, AuthService, ScriptService, DomUtilityService } from '../shared'
+import { AssetService, AuthService, DomUtilityService } from '../shared'
 import { AppConfig } from '../app.service'
 import { Featured } from './featured'
 import { TagsService } from '../browse-page/tags.service';
@@ -56,7 +56,6 @@ export class Home implements OnInit, OnDestroy {
     private _router: Router,
     public _auth: AuthService,
     private deviceService: DeviceDetectorService,
-    private _script: ScriptService,
     @Inject(PLATFORM_ID) private platformId: Object,
     private _dom: DomUtilityService,
     private _tags: TagsService
