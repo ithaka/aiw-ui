@@ -80,6 +80,7 @@ export class AuthService implements CanActivate {
     // Set WLV and App Config variables
     this.isOpenAccess = this._app.config.isOpenAccess
     this.clientHostname = this._app.clientHostname
+    console.log("_auth start Client hostname: " + this.clientHostname)
     // Initialize observables
     this.currentUser = this.userSource.asObservable()
     // Default to relative or prod endpoints
@@ -150,17 +151,17 @@ export class AuthService implements CanActivate {
     }
 
     // SSR routing WORKAROUND
-    if (this.clientHostname.indexOf('beta.stage.artstor.org') > -1) {
-      this.hostname = '//beta.stage.artstor.org'
-      this.ENV = 'test'
-      this.baseUrl = '//beta.stage.artstor.org/api'
-      this.subdomain = "beta.stage"
-    } else if (this.clientHostname.indexOf('beta.artstor.org') > -1) {
-      this.hostname = '//beta.artstor.org'
-      this.ENV = 'prod'
-      this.baseUrl = '//beta.artstor.org/api'
-      this.subdomain = "beta"
-    }
+    // if (this.clientHostname.indexOf('beta.stage.artstor.org') > -1) {
+    //   this.hostname = '//beta.stage.artstor.org'
+    //   this.ENV = 'test'
+    //   this.baseUrl = '//beta.stage.artstor.org/api'
+    //   this.subdomain = "beta.stage"
+    // } else if (this.clientHostname.indexOf('beta.artstor.org') > -1) {
+    //   this.hostname = '//beta.artstor.org'
+    //   this.ENV = 'prod'
+    //   this.baseUrl = '//beta.artstor.org/api'
+    //   this.subdomain = "beta"
+    // }
 
     // Sahara routing WORKAROUND
     if (this.clientHostname.indexOf('sahara.beta.stage.artstor.org') > -1) {
@@ -173,7 +174,7 @@ export class AuthService implements CanActivate {
 
     // Local routing should point to full URL
     // * This should NEVER apply when using a proxy, as it will break authorization
-    if (new RegExp(['cirrostratus.org', 'localhost', 'local.', 'sahara.beta.stage.artstor.org', 'sahara.prod.artstor.org'].join('|')).test(this.clientHostname)) {
+    if (new RegExp(['cirrostratus.org', 'localhost', 'local.', 'beta.stage.artstor.org', 'sahara.beta.stage.artstor.org', 'sahara.prod.artstor.org'].join('|')).test(this.clientHostname)) {
       this.baseUrl = this.hostname + '/api'
       this.solrUrl = this.hostname + '/api/search/v1.0/search'
     }
@@ -197,6 +198,9 @@ export class AuthService implements CanActivate {
     this.userSource.next(this.getUser())
     let institution = this._storage.getLocal('institution')
     if (institution) { this.institutionObjSource.next(institution) }
+
+    // SSR Logging
+    console.log("Auth service Base url: " + this.baseUrl + ", Hostname: " + this.hostname)
   }
 
   public initIdleWatcher(): void {
