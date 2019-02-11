@@ -26,6 +26,8 @@ export class NewIgModal implements OnInit {
     failure?: boolean
   } = {};
 
+  public hasGroups: boolean = false // If a user has at least one image group
+
   /** Switch for running logic to copy image group */
   @Input() private copyIG: boolean = false;
   /** The image group object */

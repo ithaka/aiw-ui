@@ -265,9 +265,10 @@
     "NO_GROUP" : "Please select a group."
   },
   "NEW_GROUP_MODAL": {
-    "CREATE_TITLE": "Create New Image Group",
+    "CREATE_TITLE": "Create New Group",
     "EDIT_TITLE": "Edit Image Group",
     "COPY_TITLE": "Copy Image Group",
+    "FIRST_GROUP_MSG": "You haven't created a group yet! Create your first group.",
     "TITLE_FIELD_LABEL": "Title",
     "TITLE_REQUIRED_MSG": "A title is required",
     "DESCRIPTION_FIELD_LABEL": "Description",
