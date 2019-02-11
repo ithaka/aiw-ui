@@ -182,7 +182,7 @@ export class ArtstorViewerComponent implements OnInit, OnDestroy, AfterViewInit 
         // Set viewer to "loading"
         this.state = viewState.loading
         
-        this._metadata.buildAsset(assetId, {groupId, legacyFlag: this.legacyFlag, openlib: this.openLibraryFlag })
+        this._metadata.buildAsset(assetId, {groupId, legacyFlag: this.legacyFlag, openlib: this.openLibraryFlag, encrypted: this.encrypted })
             .subscribe((asset) => {
                 // Replace <br/> tags from title, creator & date values with a space
                 asset.title = asset.title.replace(/<br\s*[\/]?>/gi, ' ')

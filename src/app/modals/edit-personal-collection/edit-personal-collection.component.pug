@@ -68,7 +68,7 @@
                 *ngIf="uiMessages.metadataUpdateSuccess"
               )
                 .form-control-feedback(*ngIf="uiMessages.metadataUpdateSuccess") {{ 'EDIT_PC_MODAL.MESSAGES.METADATA_UPDATE_SUCCESS' | translate }}
-      .modal-footer
+      .modal-footer([ngClass]="{ 'border-none' : !editMode && (!collectionAssets || collectionAssets.length === 0) }")
         .form-group(*ngIf="editMode")
           button.btn.btn-danger.mr-2((click)="deleteAssetById(selectedAsset.ssid)", type="button", [class.loading]="deleteLoading", tabindex="0") {{ 'EDIT_PC_MODAL.BUTTONS.DELETE' | translate }}
           button.btn.btn-secondary.mr-2((click)="clearSelectedAsset()", type="button", tabindex="0") {{ 'EDIT_PC_MODAL.BUTTONS.CLOSE' | translate }}

@@ -284,6 +284,7 @@ export class AssetPage implements OnInit, OnDestroy {
                 if (routeParams && routeParams['featureFlag']) {
                     this._flags[routeParams['featureFlag']] = true
                     this.relatedResFlag = this._flags['related-res-hack'] ? true : false
+                    this.detailViewsFlag = this._flags['detailViews'] ? true : false
                 } else {
                     this.relatedResFlag = false
                 }
@@ -383,11 +384,6 @@ export class AssetPage implements OnInit, OnDestroy {
 
         // MS Browser Agent ?
         this.isMSAgent = this.navigator.msSaveOrOpenBlob !== undefined
-
-      // Load Ethnio survey
-      // if (this._appConfig.config.siteID !== 'SAHARA') {
-      //   this.scriptService.loadScript('ethnio-survey')
-      // }
 
     } // OnInit
 
