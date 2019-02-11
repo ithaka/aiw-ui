@@ -48,6 +48,7 @@ export class MetadataService {
      * @param groupId The group from which the asset was accessed, if it exists (helps with authorization)
      */
     private getMetadata(assetId: string, { groupId, legacyFlag, openlib }): Observable<AssetData> {
+        console.log("_metadata: getMetadata() for: " + assetId)
         let url = this._auth.getUrl() + '/v1/metadata?object_ids=' + assetId + '&legacy=' + legacyFlag 
         if (groupId){
             // Groups service modifies certain access rights for shared assets

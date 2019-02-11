@@ -246,7 +246,7 @@ export class AssetPage implements OnInit, OnDestroy {
             subject: [null]
         })
 
-        // console.log("CONSTRUCT ASSET PAGE")
+        console.log("Construct asset page...")
     }
 
     ngOnInit() {
@@ -256,7 +256,7 @@ export class AssetPage implements OnInit, OnDestroy {
         // sets up subscription to allResults, which is the service providing thumbnails
         this.subscriptions.push(
             this._auth.currentUser.subscribe((user) => {
-                // console.log("User subscription returned")
+                console.log("User subscription returned")
                 this.user = user
                 // userSessionFresh: Do not attempt to load asset until we know user object is fresh
                 // if (!this.userSessionFresh && this._auth.userSessionFresh) {
@@ -264,7 +264,7 @@ export class AssetPage implements OnInit, OnDestroy {
                 // }
             }),
             this._assets.allResults.subscribe((allResults) => {
-                // console.log("allResults subscription returned")
+                console.log("allResults subscription returned")
                 if (allResults.thumbnails) {
                     // Set asset id property to reference
                     this.assetIdProperty = (allResults.thumbnails[0] && allResults.thumbnails[0].objectId) ? 'objectId' : 'artstorid'
@@ -447,7 +447,7 @@ export class AssetPage implements OnInit, OnDestroy {
 
 
     handleLoadedMetadata(asset: Asset, assetIndex: number) {
-        // console.log("Handle loaded metadata for " + asset['objectId'])
+        console.log("Handle loaded metadata for " + asset['objectId'])
         // Reset modals if new data comes in
         this.showAccessDeniedModal = false
         this.showServerErrorModal = false
