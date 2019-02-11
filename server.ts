@@ -11,7 +11,10 @@ import * as https from 'https';
 import * as Sentry from '@sentry/node';
 
 // Set up Sentry configuration
-Sentry.init({ dsn: 'https://80481e6afe274aa49c671606ca054bec@sentry.io/1391720' });
+Sentry.init({ 
+  // environment: process.env,
+  dsn: 'https://80481e6afe274aa49c671606ca054bec@sentry.io/1391720'
+});
 
 // Faster server renders w/ Prod mode (dev mode never needed)
 enableProdMode();
