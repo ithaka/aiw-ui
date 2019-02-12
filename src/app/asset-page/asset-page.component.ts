@@ -256,7 +256,12 @@ export class AssetPage implements OnInit, OnDestroy {
         this.solrMetadataFlag = this._flags.solrMetadata
 
         // Trigger userinfo call
-        this._auth.refreshUserSession()
+        this._auth.getUserInfo().pipe(take(1)).subscribe(user => {
+            // Manual user info call returned
+            this.user = user
+            console.log("Manually refreshed user received!")
+            this.userSessionFresh = true
+        })
 
         // this.waitForFreshUser = setInterval(() => {
         //     console.log("Waiting for fresh user...")
