@@ -443,7 +443,7 @@ export class AuthService implements CanActivate {
     this._storage.setLocal('user', user);
     // only do these things if the user is ip auth'd or logged in and the user has changed
     let institution = this.institutionObjSource.getValue();
-    if (user.status && (!institution.institutionId || user.institutionId != institution.institutionId)) {
+    if (this.isBrowser && user.status && (!institution.institutionId || user.institutionId != institution.institutionId)) {
       // Refresh institution object
       this.refreshUserInstitution()
     }
