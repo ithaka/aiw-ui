@@ -29,6 +29,7 @@ app.use(Sentry.Handlers.errorHandler());
 
 // Only use HTTPS settings locally
 if (!process.env.SAGOKU) {
+  console.log("Local Development: Setting SSL cert")
   // HTTPS/SSL credentials
   var privateKey  = fs.readFileSync('ssl/private.key', 'utf8');
   var certificate = fs.readFileSync('ssl/private.pem', 'utf8');
