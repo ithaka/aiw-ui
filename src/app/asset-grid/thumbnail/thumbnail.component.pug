@@ -42,7 +42,7 @@
       )
       i.icon.icon-collab(*ngIf="thumbnail.frequentlygroupedwith && thumbnail.frequentlygroupedwith.length > 0", (click)="openLink($event, ['/associated', thumbnail.artstorid ? thumbnail.artstorid : thumbnail.objectId])", title="Others are also interested in button icon. Press enter to click this button", tabIndex="3", (keyup.enter)="openLink($event, ['/associated', thumbnail.artstorid])")
       //- ang-collection-badge([collectionType]="getCollectionType()", tabIndex="3")
-      i( *ngIf="thumbnail.media && thumbnail.media.adlObjectType && thumbnail.media.adlObjectType != 10", 
+      i( *ngIf="thumbnail.media && thumbnail.media.adlObjectType && (thumbnail.media.adlObjectType != 10) && (multiviewItemCount == 0)", 
           class="icon icon-{{thumbnail.media.adlObjectType | typeIdPipe}}",
           [ngbTooltip]="mediaTooltip",
           triggers="focusin:focusout mouseenter:mouseleave",
