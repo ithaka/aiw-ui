@@ -258,9 +258,9 @@ export class AssetPage implements OnInit, OnDestroy {
         // Trigger userinfo call
         this._auth.refreshUserSession()
 
-        this.waitForFreshUser = setInterval(() => {
-            console.log("Waiting for fresh user...")
-        }, 200);
+        // this.waitForFreshUser = setInterval(() => {
+        //     console.log("Waiting for fresh user...")
+        // }, 200);
 
         // sets up subscription to allResults, which is the service providing thumbnails
         this.subscriptions.push(
@@ -270,7 +270,7 @@ export class AssetPage implements OnInit, OnDestroy {
                 // userSessionFresh: Do not attempt to load asset until we know user object is fresh
                 if (!this.userSessionFresh && this._auth.userSessionFresh) {
                     console.log("Fresh user received!")
-                    clearInterval(this.waitForFreshUser)
+                    // clearInterval(this.waitForFreshUser)
                     this.userSessionFresh = true
                 }
             }),
