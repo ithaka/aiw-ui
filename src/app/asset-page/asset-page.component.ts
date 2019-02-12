@@ -249,9 +249,23 @@ export class AssetPage implements OnInit, OnDestroy {
         console.log("Construct asset page...")
     }
 
+    private waitForFreshUser() : void {
+        // Server-side wait fix
+        setTimeout(() => {
+            if (!this.userSessionFresh) {
+                console.log("Continue to wait for fresh user")
+                this.waitForFreshUser()
+            } else {
+                console.log("User is now fresh")
+            }
+        }, 50)
+    }
+
     ngOnInit() {
         this.user = this._auth.getUser();
         this.solrMetadataFlag = this._flags.solrMetadata
+
+        this.waitForFreshUser()
 
         // sets up subscription to allResults, which is the service providing thumbnails
         this.subscriptions.push(

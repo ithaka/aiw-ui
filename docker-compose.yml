@@ -2,7 +2,7 @@ version: '3'
 services:
   app:
     build: .
-    image: artifactory.acorn.cirrostratus.org/artstor-air-node:4e010f9b
+    image: artifactory.acorn.cirrostratus.org/artstor-air-node:69729d2e
     # container-name: docker-webapp
     restart: always
     ports:
