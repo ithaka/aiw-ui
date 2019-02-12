@@ -12,7 +12,7 @@
           p(*ngIf="!hasGroups") {{ 'NEW_GROUP_MODAL.FIRST_GROUP_MSG' | translate }}
           .form-group
             label(for="igTitleInput") {{ 'NEW_GROUP_MODAL.TITLE_FIELD_LABEL' | translate }}
-            input#igTitleInput.form-control(type="text", [formControl]="newIgForm.controls['title']", placeholder="Give your image group a title...", spellcheck="false", tabindex="0")
+            input#igTitleInput.form-control.placeholder-text(type="text", [formControl]="newIgForm.controls['title']", placeholder="Give your image group a title...", spellcheck="false", tabindex="0")
             .has-danger(*ngIf="submitted && newIgForm.controls['title'].hasError('required')")
               p.form-control-feedback {{ 'NEW_GROUP_MODAL.TITLE_REQUIRED_MSG' | translate }}
           .form-group
@@ -23,15 +23,16 @@
               [editorPlaceholder]="'Give your image group a description...'")
           //- Left this out of the div so that it remained left aligned...
           label(for="artstorPermissionsGroup") {{ 'NEW_GROUP_MODAL.PERMISSION_FIELD_LABEL' | translate }}
-          .form-group.text-center
+            span.placeholder-text &nbsp; {{ 'NEW_GROUP_MODAL.PERMISSION_FIELD_HELPER' | translate }}
+          .form-group
             #artstorPermissionsGroup.btn-group(ngbRadioGroup, name="permissions type", [formControl]="newIgForm.controls['artstorPermissions']")
-              label.btn.btn-secondary(ngbButtonLabel, *ngIf="isArtstorUser")
+              label.orange-label(ngbButtonLabel, *ngIf="isArtstorUser")
                 input#artstorPermissionsRadioGlobal(ngbButton, type="radio", name="options", autocomplete="off", value="global")
                 | {{ 'NEW_GROUP_MODAL.PERMISSIONS.GLOBAL' | translate }}
-              label.btn.btn-secondary(ngbButtonLabel)
+              label.orange-label(ngbButtonLabel)
                 input#artstorPermissionsRadioInstitution(ngbButton, type="radio", name="options", autocomplete="off", value="institution")
                 | {{ 'NEW_GROUP_MODAL.PERMISSIONS.INSTITUTIONAL' | translate }}
-              label.btn.btn-secondary(ngbButtonLabel)
+              label.color-gray-5(ngbButtonLabel)
                 input#artstorPermissionsRadioPrivate(ngbButton, type="radio", name="options", autocomplete="off", value="private")
                 | {{ 'NEW_GROUP_MODAL.PERMISSIONS.PRIVATE' | translate }}
           .form-group([class.has-danger]="serviceResponse.failure")

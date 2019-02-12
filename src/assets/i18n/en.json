@@ -270,13 +270,14 @@
     "COPY_TITLE": "Copy Group",
     "FIRST_GROUP_MSG": "You haven't created a group yet! Create your first group",
     "TITLE_FIELD_LABEL": "Title",
-    "TITLE_REQUIRED_MSG": "A title is required",
+    "TITLE_REQUIRED_MSG": "Dont forget to add a title!",
     "DESCRIPTION_FIELD_LABEL": "Description",
-    "PERMISSION_FIELD_LABEL": "Who should see this image group?",
+    "PERMISSION_FIELD_LABEL": "Sharing Permissions",
+    "PERMISSION_FIELD_HELPER": "Who can see this group?",
     "PERMISSIONS": {
       "GLOBAL": "Everyone",
-      "INSTITUTIONAL": "This Institution",
-      "PRIVATE": "Only Me"
+      "INSTITUTIONAL": "Institutional",
+      "PRIVATE": "Private"
     },
     "TAGS_FIELD_LABEL": "Tags",
     "SHOW_ADD_TO_IMAGE_GROUP": "Add item to existing image group",

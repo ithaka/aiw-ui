@@ -115,3 +115,20 @@
   font-weight: bold;
   color: #4F5557;
 }
+
+/** fix me */
+ .placeholder-text, .placeholder-text::placeholder, .medium-editor-placeholder {
+  color: $color-gray-5;
+}
+
+.orange-label {
+  color: $orange;
+
+  &:hover {
+    color: $orange;
+  }
+}
+
+.color-gray-5 {
+  color: $color-gray-5;
+}
