@@ -4,7 +4,7 @@ import { Subscription } from 'rxjs'
 import { map, take, filter } from 'rxjs/operators'
 import { Angulartics2 } from 'angulartics2'
 
-import { AssetService, AuthService, GroupService, ScriptService } from './../../shared'
+import { AuthService, GroupService } from './../../shared'
 import { Tag } from './../tag'
 import { TagFiltersService } from './tag-filters.service'
 import { TitleService } from '../../shared/title.service'
@@ -109,8 +109,7 @@ export class BrowseGroupsComponent implements OnInit {
     private _auth: AuthService,
     private _title: TitleService,
     private _ga: Angulartics2,
-    private route: ActivatedRoute,
-    private scriptService: ScriptService
+    private route: ActivatedRoute
   ) {
     let isLoggedIn = this._auth.getUser() && this._auth.getUser().isLoggedIn
     this.showArtstorCurated = _appConfig.config.showArtstorCurated
@@ -183,10 +182,6 @@ export class BrowseGroupsComponent implements OnInit {
     // set the title
     this._title.setSubtitle('Browse Groups')
 
-    // Load Ethnio survey
-    if (this._appConfig.config.siteID !== 'SAHARA') {
-      this.scriptService.loadScript('ethnio-survey')
-    }
   } // OnInit
 
   ngOnDestroy() {
