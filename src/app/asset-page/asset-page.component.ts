@@ -259,9 +259,9 @@ export class AssetPage implements OnInit, OnDestroy {
                 console.log("User subscription returned")
                 this.user = user
                 // userSessionFresh: Do not attempt to load asset until we know user object is fresh
-                // if (!this.userSessionFresh && this._auth.userSessionFresh) {
+                if (!this.userSessionFresh && this._auth.userSessionFresh) {
                     this.userSessionFresh = true
-                // }
+                }
             }),
             this._assets.allResults.subscribe((allResults) => {
                 console.log("allResults subscription returned")
