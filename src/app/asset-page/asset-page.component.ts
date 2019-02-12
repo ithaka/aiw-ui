@@ -213,7 +213,7 @@ export class AssetPage implements OnInit, OnDestroy {
     // Flag for show/hide page tooltip
     private showPageToolTip: boolean = false
 
-    private waitForFreshUser: NodeJS.Timer
+    private waitForFreshUser: any
 
     constructor(
         public _appConfig: AppConfig,
@@ -255,9 +255,12 @@ export class AssetPage implements OnInit, OnDestroy {
         this.user = this._auth.getUser();
         this.solrMetadataFlag = this._flags.solrMetadata
 
+        // Trigger userinfo call
+        this._auth.refreshUserSession()
+
         this.waitForFreshUser = setInterval(() => {
             console.log("Waiting for fresh user...")
-        }, 50);
+        }, 200);
 
         // sets up subscription to allResults, which is the service providing thumbnails
         this.subscriptions.push(

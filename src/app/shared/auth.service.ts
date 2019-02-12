@@ -438,6 +438,7 @@ export class AuthService implements CanActivate {
    * @param user The user should be an object to store in sessionstorage
    */
   public saveUser(user: any) {
+    console.log("User saved: ", user)
     // Preserve user via localstorage
     this._storage.setLocal('user', user);
     // only do these things if the user is ip auth'd or logged in and the user has changed
