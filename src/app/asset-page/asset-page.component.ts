@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy, ViewChild, HostListener, ElementRef } from '@angular/core'
 import { ActivatedRoute, Params, Router } from '@angular/router'
 import { DomSanitizer, SafeUrl, Meta } from '@angular/platform-browser'
-import { Subscription } from 'rxjs'
+import { Subscription, TimeInterval } from 'rxjs'
 import { map, take } from 'rxjs/operators'
 import { Angulartics2 } from 'angulartics2'
 import { ArtstorViewerComponent } from './artstor-viewer/artstor-viewer.component'
@@ -213,6 +213,8 @@ export class AssetPage implements OnInit, OnDestroy {
     // Flag for show/hide page tooltip
     private showPageToolTip: boolean = false
 
+    private waitForFreshUser: NodeJS.Timer
+
     constructor(
         public _appConfig: AppConfig,
         private _assets: AssetService,
@@ -249,23 +251,13 @@ export class AssetPage implements OnInit, OnDestroy {
         console.log("Construct asset page...")
     }
 
-    private waitForFreshUser() : void {
-        // Server-side wait fix
-        setTimeout(() => {
-            if (!this.userSessionFresh) {
-                console.log("Continue to wait for fresh user")
-                this.waitForFreshUser()
-            } else {
-                console.log("User is now fresh")
-            }
-        }, 50)
-    }
-
     ngOnInit() {
         this.user = this._auth.getUser();
         this.solrMetadataFlag = this._flags.solrMetadata
 
-        this.waitForFreshUser()
+        this.waitForFreshUser = setInterval(() => {
+            console.log("Waiting for fresh user...")
+        }, 50);
 
         // sets up subscription to allResults, which is the service providing thumbnails
         this.subscriptions.push(
@@ -274,6 +266,8 @@ export class AssetPage implements OnInit, OnDestroy {
                 this.user = user
                 // userSessionFresh: Do not attempt to load asset until we know user object is fresh
                 if (!this.userSessionFresh && this._auth.userSessionFresh) {
+                    console.log("Fresh user received!")
+                    clearInterval(this.waitForFreshUser)
                     this.userSessionFresh = true
                 }
             }),
