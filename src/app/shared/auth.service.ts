@@ -151,17 +151,13 @@ export class AuthService implements CanActivate {
     }
 
     // SSR routing WORKAROUND
-    // if (this.clientHostname.indexOf('beta.stage.artstor.org') > -1) {
-    //   this.hostname = '//beta.stage.artstor.org'
-    //   this.ENV = 'test'
-    //   this.baseUrl = '//beta.stage.artstor.org/api'
-    //   this.subdomain = "beta.stage"
-    // } else if (this.clientHostname.indexOf('beta.artstor.org') > -1) {
-    //   this.hostname = '//beta.artstor.org'
-    //   this.ENV = 'prod'
-    //   this.baseUrl = '//beta.artstor.org/api'
-    //   this.subdomain = "beta"
-    // }
+    if (this.clientHostname.indexOf('beta.stage.artstor.org') > -1) {
+      this.hostname = '//beta.stage.artstor.org'
+      this.ENV = 'test'
+    } else if (this.clientHostname.indexOf('beta.artstor.org') > -1) {
+      this.hostname = '//beta.artstor.org'
+      this.ENV = 'prod'
+    }
 
     // Sahara routing WORKAROUND
     if (this.clientHostname.indexOf('sahara.beta.stage.artstor.org') > -1) {
