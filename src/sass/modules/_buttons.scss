@@ -89,6 +89,11 @@ $iconBtnSize: $btnHeight;
     border: solid 1px $orange;
     color: $orange;
 
+    &.loading {
+        background-color: lighten($orange, 10%);
+    }
+
+
     &:hover {
         background-color: $orange;
     }
@@ -198,6 +203,10 @@ $iconBtnSize: $btnHeight;
     @extend .progress-bar-animated;
     color: rgba(255,255,255,0.5);
     pointer-events: none;
+
+    &.dropdown-toggle {
+        pointer-events: all;  
+    }
 
     // Hide other class
     &:after {

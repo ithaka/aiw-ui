@@ -130,8 +130,8 @@
                 aria-label="Download item",
                 role="button")
                 i.icon.icon-download-item
-                | &nbsp;Download item
-              a#downloadViewLink.dropdown-item(*ngIf="isMSAgent",
+                | &nbsp;Download Item
+              a#downloadViewLink.dropdown-item(*ngIf="isMSAgent || !downloadViewAsBlob",
                 [attr.href]="((assets[0].publicDownload || !assets[0].disableDownload) && acceptedTerms) ? downloadViewLink : null",
                 (click)="((assets[0].publicDownload || !assets[0].disableDownload) && acceptedTerms) ? trackDownloadView() : setDownloadView()",
                 (keydown.enter)="((assets[0].publicDownload || !assets[0].disableDownload) && acceptedTerms) ? trackDownloadView() : setDownloadView()",
@@ -143,7 +143,7 @@
                 role="button")
                 i.icon.icon-download-detail
                 | &nbsp;Download detail view
-              a#downloadViewLink.dropdown-item(*ngIf="!isMSAgent" download="download.jpg",
+              a#downloadViewLink.dropdown-item(*ngIf="!isMSAgent && downloadViewAsBlob" download="download.jpg",
                 type="image/jpeg",
                 [attr.href]="((assets[0].publicDownload || !assets[0].disableDownload) && acceptedTerms) ? generatedBlobURL : null",
                 (click)="((assets[0].publicDownload || !assets[0].disableDownload) && acceptedTerms) ? trackDownloadView() : setDownloadView()",

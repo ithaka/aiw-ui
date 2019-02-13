@@ -87,8 +87,16 @@ export class Asset {
                 downloadLink = [data.baseUrl, 'media', this.id, data.object_type_id].join("/")
                 break
             default:
-                if (data.image_url) { //this is a general fallback, but should work specifically for images and video thumbnails
-                    let imageServer = 'http://imgserver.artstor.net/' // TODO: check if this should be different for test
+                if (Array.isArray(this.tileSource) && this.tileSource.length >= 1) {
+                    // Handle Multi View downloads using IIIF
+                    let url = 'https:' + this.tileSource[0].replace('info.json', '') + 'full/full/0/default.jpg' 
+                    // Pass IIIF url to Download Service for processing metadata
+                    // Include "iiif" param in this case
+                    downloadLink = data.baseUrl + "/api/download?imgid=" + this.id + "&url=" + encodeURIComponent(url) + "&iiif=true"
+                } else if (data.image_url) { 
+                    // Handle images and video thumbnails
+                    let imageServer = 'http://imgserver.artstor.net/'
+                    // Pass Image url to Download Service for processing metadata
                     let url = imageServer + data.image_url + "?cell=" + data.download_size + "&rgnn=0,0,1,1&cvt=JPEG"
                     downloadLink = data.baseUrl + "/api/download?imgid=" + this.id + "&url=" + encodeURIComponent(url)
                 } else {
@@ -160,6 +168,7 @@ export class Asset {
         this.thumbnail_url = this.replaceThumbnailSize(data.thumbnail_url, this.thumbnail_size)
         this.typeId = data.object_type_id
         this.typeName = this.initTypeName(data.object_type_id)
+        console.log("Download size: " + data.download_size )
         this.disableDownload =  data.download_size === '0,0'
         this.SSID = data.SSID
         // Set filename
@@ -175,7 +184,6 @@ export class Asset {
         // Set Download information
         let fileExt = this.fileName.substr(this.fileName.lastIndexOf('.'), this.fileName.length - 1)
         this.downloadName = this.title.replace(/\./g,'-') + '.' + fileExt
-        this.downloadLink = this.buildDownloadLink(data)
         data.viewer_data && (this.viewerData = data.viewer_data)
 
         // Save the Tile Source for IIIF
@@ -197,6 +205,8 @@ export class Asset {
         } else {
             this.tileSource = data.tileSourceHostname + '/rosa-iiif-endpoint-1.0-SNAPSHOT/fpx' + encodeURIComponent(imgPath) + '/info.json'
         }
+        // Set download after tilesource determined
+        this.downloadLink = this.buildDownloadLink(data)
 
         // set up kaltura info if it exists
         if (data.fpxInfo) {
