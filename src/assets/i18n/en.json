@@ -187,7 +187,7 @@
       "MAIN_BODY": "You have met your download limit."
     },
     "DELETE_IG": {
-      "TITLE": "Delete Image Group",
+      "TITLE": "Delete Group",
       "DELETE_BUTTON": "Delete",
       "CANCEL_BUTTON": "Cancel",
       "MAIN_BODY1": "Are you sure you want to delete",
@@ -238,19 +238,19 @@
   "ADD_TO_GROUP_MODAL": {
     "FROM_SELECTED": {
       "TITLE": "Add Images to Group",
-      "SELECT_PROMPT": "Select an image group",
+      "SELECT_PROMPT": "Select a group",
       "ADD_SUCCESS": "Images successfully added to group",
       "ADD_FAILURE": "Oops, something went wrong and images were not added to your group. Please try again.",
-      "TOO_MANY_ASSETS": "This image group has exceeded the 1000 image limit.",
+      "TOO_MANY_ASSETS": "This group has exceeded the 1000 image limit.",
       "OPEN_CREATE_GROUP_MODAL": "Create a new group with images"
     },
     "FROM_ASSET": {
       "TITLE": "Add Image to Group",
       "TITLE_DETAIL": "Add Detail to Group",
-      "SELECT_PROMPT": "Select an image group",
+      "SELECT_PROMPT": "Select a group",
       "ADD_SUCCESS": "Image successfully added to group",
       "ADD_FAILURE": "Unable to add image to group. Sorry about that.",
-      "TOO_MANY_ASSETS": "This image group has exceeded the 1000 image limit.",
+      "TOO_MANY_ASSETS": "This group has exceeded the 1000 image limit.",
       "OPEN_CREATE_GROUP_MODAL": "Create a new group with image"
     },
     "CONTROLS": {
@@ -265,23 +265,23 @@
     "NO_GROUP" : "Please select a group."
   },
   "NEW_GROUP_MODAL": {
-    "CREATE_TITLE": "Create New Image Group",
-    "EDIT_TITLE": "Edit Image Group",
-    "COPY_TITLE": "Copy Image Group",
+    "CREATE_TITLE": "Create New Group",
+    "EDIT_TITLE": "Edit Group",
+    "COPY_TITLE": "Copy Group",
     "TITLE_FIELD_LABEL": "Title",
     "TITLE_REQUIRED_MSG": "A title is required",
     "DESCRIPTION_FIELD_LABEL": "Description",
-    "PERMISSION_FIELD_LABEL": "Who should see this image group?",
+    "PERMISSION_FIELD_LABEL": "Who should see this group?",
     "PERMISSIONS": {
       "GLOBAL": "Everyone",
       "INSTITUTIONAL": "This Institution",
       "PRIVATE": "Only Me"
     },
     "TAGS_FIELD_LABEL": "Tags",
-    "SHOW_ADD_TO_IMAGE_GROUP": "Add item to existing image group",
-    "CREATE_SUCCESS": "You've successfully created an image group",
+    "SHOW_ADD_TO_IMAGE_GROUP": "Add item to existing group",
+    "CREATE_SUCCESS": "You've successfully created a group",
     "CREATE_FAILURE": "Oops, something went wrong and your group was not created. Please try again.",
-    "EDIT_SUCCESS" : "You've successfully edited the image group",
+    "EDIT_SUCCESS" : "You've successfully edited the group",
     "CONTROLS": {
       "RETURN_TO_RESULTS": "Return",
       "NAV_TO_GROUP": "Go to group",
@@ -359,9 +359,9 @@
     },
     "MY_COLLECTION": {
       "UPLOAD_IMGS": "Upload Images",
-      "PC_DESC": "Only you can see this collection. To share these images with others at your institution, add them to an image group. Learn more about Personal Collections.&nbsp; <a href=\"http://support.artstor.org/?article-category=09-using-your-own-images\", target=\"_blank\">http://support.artstor.org/?article-category=09-using-your-own-images</a>",
+      "PC_DESC": "Only you can see this collection. To share these images with others at your institution, add them to a group. Learn more about Personal Collections.&nbsp; <a href=\"http://support.artstor.org/?article-category=09-using-your-own-images\", target=\"_blank\">http://support.artstor.org/?article-category=09-using-your-own-images</a>",
       "HEADING" : "My Personal Collection",
-      "DESCRIPTION" : "Only you can see this collection. To share these images with others at your institution, add them to an image group.<br/><a href=\"http://support.artstor.org/?article-category=09-using-your-own-images\" target=\"_blank\">Learn more about Personal Collections</a>."
+      "DESCRIPTION" : "Only you can see this collection. To share these images with others at your institution, add them to a group.<br/><a href=\"http://support.artstor.org/?article-category=09-using-your-own-images\" target=\"_blank\">Learn more about Personal Collections</a>."
     },
     "ERRORS": {
       "LOGIN_PC_HEADING": "Login Required",
@@ -369,7 +369,7 @@
       "NO_INSTITUTIONAL_COLLECTIONS_PROMPT": "<p>There are no institutional collections available for your institution. You can add institutional collections using JSTOR Forum.</p><p>Learn more about <a href=\"http://artstor.org/jstorforum\" class=\"link\">JSTOR Forum</a>.</p>",
       "LOGIN_PC_COLLECTIONS_PROMPT": "<p>Please log in to access your Personal Collection.</p><p>Learn more about <a href=\"https://support.artstor.org/?article-category=09-using-your-own-images\" class=\"link\">Personal Collections</a>.</p>",
       "NO_GROUPS_COLLECTIONS_HEADING": "No Groups Found",
-      "NO_PRIVATE_GROUPS_COLLECTIONS_PROMPT": "<p>You haven't created any image groups yet. Learn more about <a href='http://support.artstor.org/?article=create-and-manage-image-groups' class='link'>groups</a>.</p>",
+      "NO_PRIVATE_GROUPS_COLLECTIONS_PROMPT": "<p>You haven't created any groups yet. Learn more about <a href='http://support.artstor.org/?article=create-and-manage-image-groups' class='link'>groups</a>.</p>",
       "NO_INSTITUTIONAL_GROUPS_COLLECTIONS_PROMPT": "<p>You haven't made any institutional groups yet. Learn more about <a href='http://support.artstor.org/?article=create-and-manage-image-groups' class='link'>groups</a>.</p>",
       "SEARCH_PROMPT": "Enter a keyword or select a filter to begin a search"
     },
@@ -430,16 +430,16 @@
   },
   "ACCESS_DENIED": "<b>Sorry, Content Unavailable:</b> If you are already <a href=\"/#/login\" class=\"link\">logged in</a>, this may be due to content limitations or your institutional access.",
   "NO_IG": {
-    "HEADING": "Image group unavailable",
-    "NO_EXISTS": "The image group you are trying to access does not exist.",
-    "NO_ACCESS": "Please log in to see this image group."
+    "HEADING": "Group unavailable",
+    "NO_EXISTS": "The group you are trying to access does not exist.",
+    "NO_ACCESS": "Please log in to see this group."
   },
   "SHARE_IG_LINK_MODAL": {
-    "MAIN_HEADING": "Share link to image group",
+    "MAIN_HEADING": "Share link to group",
     "URL_LABEL": "Copy URL",
     "COPY_SUCCESS": "Link copied to clipboard",
     "SERVICE_ERROR": "We've encountered an error in getting a share token. Please refresh or try again later.",
-    "TEXTAREA_ARIA_LABEL": "Textarea containing the share URL for the image group"
+    "TEXTAREA_ARIA_LABEL": "Textarea containing the share URL for the group"
   },
   "SHARE_IMG_LINK_MODAL": {
     "MAIN_HEADING": "Share Image",
@@ -487,13 +487,13 @@
       "COLL_LIST_SHORT": "Institutional Collections",
       "TEACHING_HEADING": "Teaching Resources",
       "TEACHING_LIST": "<a href=\"/#/browse/groups/public?tags=Curriculum%2520Guides&page=1\" class=\"link\">Curriculum Guides</a>, <a href=\"/#/browse/groups/public?page=1&tags=Case%2520Studies\" class=\"link\">Case Studies</a>, <a href=\"/#/browse/groups/search?level=public&tags=Art%2520%2526%2520Architecture%2520Overviews&page=1\" class=\"link\">Arts & Architecture Overviews</a>, <a href=\"/#/browse/groups/search?level=public&page=1&tags=Social%2520Studies%2520and%2520Humanities%2520Overviews\" class=\"link\">Social Sciences & Humanities Overviews</a>, <a href=\"http://artstor.libguides.com/APArtHistory\" target=\"_blank\" class=\"link\">AP Art History</a>, <a href=\"http://artstor.libguides.com/APUSH\" target=\"_blank\" class=\"link\">AP US History</a>, <a href=\"http://artstor.libguides.com/APEURO\" target=\"_blank\" class=\"link\">AP European History</a>, and <a href=\"/#/browse/groups/public\" class=\"link\">more...</a>",
-      "GROUPS_HEADING": "Image Groups",
+      "GROUPS_HEADING": "Groups",
       "GROUPS_LIST": "Groups of images created by Artstor, other users at your institution, and you",
       "GROUPS_LIST_SAHARA": "Groups created by you and others at your institution",
       "PUB_COLL_HEADING": "Public Collections",
       "PUB_COLL_LIST": "Open content provided by multiple institutions",
       "MORE_CONT_HEADING": "Core Collections",
-      "MORE_CONT_LIST": "Access 2.5 million images from museums, photo archives, scholars, and artists, create image groups, upload your own files, and more."
+      "MORE_CONT_LIST": "Access 2.5 million images from museums, photo archives, scholars, and artists, create groups, upload your own files, and more."
     },
     "FEATURED": {
       "HEADINGS": {
@@ -622,26 +622,26 @@
       "INSTITUTION": "Institutional Collections",
       "OPEN": "Public Collections",
       "OWNED": "My Collections",
-      "GROUPS": "Image Groups"
+      "GROUPS": "Groups"
     },
     "ORGANIZE": {
       "TITLE": "Organize",
       "SELECT_ALL": "Select All on Page",
-      "NEW_GROUP": "Save Selections to New Image Group",
-      "EXISTING_GROUP": "Save Selections to Existing Image Group",
-      "DELETE_SELECTIONS": "Delete Selections from Image Group",
+      "NEW_GROUP": "Save Selections to New Group",
+      "EXISTING_GROUP": "Save Selections to Existing Group",
+      "DELETE_SELECTIONS": "Delete Selections from Group",
       "DESELECT": "Deselect All",
-      "EDIT": "Edit Image Group Info",
-      "SAVE": "Save Image Group as...",
-      "DELETE_GROUP": "Delete Image Group",
+      "EDIT": "Edit Group Info",
+      "SAVE": "Save Group as...",
+      "DELETE_GROUP": "Delete Group",
       "ADD_IMGS_PC": "Upload Images to Personal Collection"
     },
     "SHARE": {
       "TITLE": "Share",
       "GENERATE_IMAGE_LINK": "Generate Image Link",
-      "GENERATE_GROUP_LINK": "Generate Image Group Link",
-      "PRINT_GROUP": "Print Image Group",
-      "DOWNLOAD_GROUP": "Download Image Group"
+      "GENERATE_GROUP_LINK": "Generate Group Link",
+      "PRINT_GROUP": "Print Group",
+      "DOWNLOAD_GROUP": "Download Group"
     }
   },
   "SEARCH_ANNOUNCEMENT_BANNER": {
