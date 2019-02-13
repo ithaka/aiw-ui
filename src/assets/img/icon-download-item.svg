@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="18px" height="16px" viewBox="0 0 18 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 52.6 (67491) - http://www.bohemiancoding.com/sketch -->
+    <title>Group 5</title>
+    <desc>Created with Sketch.</desc>
+    <g id="Working" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="2-asset---download-items" transform="translate(-1036.000000, -233.000000)" fill-rule="nonzero">
+            <g id="download-dropdown---update" transform="translate(1024.000000, 211.000000)">
+                <g id="Group-5" transform="translate(13.000000, 23.000000)">
+                    <path d="M12,9.91666667 L12,11.0833333 L4,11.0833333 L4,9.91666667 L12,9.91666667 Z M8.54271284,7.48324916 L9.99158936,6.00418771 L10.7997114,6.82914562 L7.97128427,9.71649831 L5.14285714,6.82914562 L5.95097918,6.00418771 L7.3998557,7.48324916 L7.3998557,2.91666667 L8.54271284,2.91666667 L8.54271284,7.48324916 Z" id="icon_download-item" fill="#333333"></path>
+                    <polygon id="Path" stroke="#333333" points="8.8817842e-16 -4.20959564e-16 16 0 16 14 8.8817842e-16 14"></polygon>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>
