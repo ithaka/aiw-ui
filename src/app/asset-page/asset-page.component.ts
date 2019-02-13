@@ -112,7 +112,8 @@ export class AssetPage implements OnInit, OnDestroy {
     private showEditDetails: boolean = false
     private generatedImgURL: string = ''
     private generatedBlobURL: SafeUrl | string = '' // A Blob File
-    private downloadViewLink: string = '' // IIIF View Link
+    public downloadViewLink: string = '' // IIIF View Link
+    public downloadViewAsBlob: boolean = false
     private generatedFullURL: string = ''
     // Used for agree modal input, changes based on selection
     private downloadUrl: any
@@ -541,7 +542,7 @@ export class AssetPage implements OnInit, OnDestroy {
      * - sets url used by agree modal
      */
     setDownloadView(): void {
-        this.downloadUrl = this.isMSAgent ? this.downloadViewLink : this.generatedBlobURL
+        this.downloadUrl = (this.isMSAgent || !this.downloadViewAsBlob) ? this.downloadViewLink : this.generatedBlobURL
         this.showAgreeModal = true
         this.downloadName = 'download.jpg'
     }
@@ -1073,14 +1074,24 @@ export class AssetPage implements OnInit, OnDestroy {
             if (tilesourceStr.indexOf('//') == 0) {
                 tilesourceStr = 'https:' + tilesourceStr
             }
-            this.downloadViewLink = tilesourceStr
-            // Disable download view link button until file is ready
-            this.downloadViewReady = false
-
-            // Call runDownloadView after 1 sec, downloads local view image blob file to browser
-            setTimeout(() => {
-              this.runDownloadView(this.downloadViewLink)
-            }, 1000);
+            // If download link is pointing to "stor.*.artstor", use download service
+            if (tilesourceStr.indexOf('stor.') >= 0) {
+                // Use download service
+                tilesourceStr = this._auth.getUrl() + "/download?imgid=" + asset.id + "&url=" + encodeURIComponent(tilesourceStr) + "&iiif=true"
+                this.downloadViewLink = tilesourceStr
+                this.downloadViewReady = true
+                this.downloadLoading = false
+                this.downloadViewAsBlob = false
+            } else {
+                this.downloadViewLink = tilesourceStr
+                // Disable download view link button until file is ready
+                this.downloadViewReady = false
+                this.downloadViewAsBlob = true
+                // Call runDownloadView after 1 sec, downloads local view image blob file to browser
+                setTimeout(() => {
+                    this.runDownloadView(this.downloadViewLink)
+                }, 1000);
+            }
         }
         else {
             this.downloadLoading = false
