@@ -121,14 +121,31 @@
   color: $color-gray-5;
 }
 
-.orange-label {
-  color: $orange;
 
-  &:hover {
+
+
+
+#newIgForm {
+  & .modal-label, .modal-label:hover {
+    color: $color-gray-6;
+    font-weight: 900;
+  }
+  & .orange-label, .orange-label:hover {
     color: $orange;
   }
+
+  & .form-group {
+    & .btn-group {
+      & .modal-label, .orange-label {
+        padding-left: 0;
+
+        /**
+        & input[type=radio]:active, input[type=radio]:active {
+          background-color: $orange;
+        } */
+      }
+    }
+  }
+
 }
 
-.color-gray-5 {
-  color: $color-gray-5;
-}
