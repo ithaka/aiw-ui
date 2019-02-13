@@ -112,7 +112,8 @@ export class AssetPage implements OnInit, OnDestroy {
     private showEditDetails: boolean = false
     private generatedImgURL: string = ''
     private generatedBlobURL: SafeUrl | string = '' // A Blob File
-    private downloadViewLink: string = '' // IIIF View Link
+    public downloadViewLink: string = '' // IIIF View Link
+    public downloadViewAsBlob: boolean = false
     private generatedFullURL: string = ''
     // Used for agree modal input, changes based on selection
     private downloadUrl: any
@@ -422,7 +423,8 @@ export class AssetPage implements OnInit, OnDestroy {
             this.assets[assetIndex] = asset
             if (assetIndex == 0) {
                 let tileSource: any = asset.tileSource
-                this.multiviewItems =  Array.isArray(tileSource) ? true : false
+                // We have "single view" items that were previously multiviews, so values are still in an array
+                this.multiviewItems =  (Array.isArray(tileSource) && tileSource.length > 1) ? true : false
                 this._title.setTitle(asset.title)
                 this.meta.updateTag({name: 'DC.type', content: 'Artwork'})
                 this.meta.updateTag({name: 'DC.title', content: asset.title})
@@ -540,7 +542,7 @@ export class AssetPage implements OnInit, OnDestroy {
      * - sets url used by agree modal
      */
     setDownloadView(): void {
-        this.downloadUrl = this.isMSAgent ? this.downloadViewLink : this.generatedBlobURL
+        this.downloadUrl = (this.isMSAgent || !this.downloadViewAsBlob) ? this.downloadViewLink : this.generatedBlobURL
         this.showAgreeModal = true
         this.downloadName = 'download.jpg'
     }
@@ -1001,20 +1003,22 @@ export class AssetPage implements OnInit, OnDestroy {
     private runDownloadView(dlink: string): Subscription {
       // Download generated jpg as local blob file
       return this._search.downloadViewBlob(dlink).pipe(
-        take(1),
-        map(blob => {
-          if (blob.size > 0) {
-            this.blobURL = this.URL.createObjectURL(blob)
-            this.generatedBlobURL = this._sanitizer.bypassSecurityTrustUrl(this.blobURL)
-            this.downloadViewReady = true
-            this.downloadLoading = false
-          }},
-          (err) => {
-            this.downloadLoading = false
-            this.downloadViewReady = false
-            this.showServerErrorModal = true
-          }
-        )).subscribe()
+            take(1)
+        ).subscribe(
+            (blob) => {
+                if (blob.size > 0) {
+                    this.blobURL = this.URL.createObjectURL(blob)
+                    this.generatedBlobURL = this._sanitizer.bypassSecurityTrustUrl(this.blobURL)
+                    this.downloadViewReady = true
+                    this.downloadLoading = false
+                }},
+            (err) => {
+                console.error("Download view failed", err)
+                this.downloadLoading = false
+                this.downloadViewReady = false
+            }
+
+        )
     }
 
     /** Calls downloadViewBlob in AssetSearch service to retrieve blob file,
@@ -1061,15 +1065,32 @@ export class AssetPage implements OnInit, OnDestroy {
             let yOffset = Math.floor((asset.viewportDimensions.center.y * fullWidth) - (zoomY / 2))
 
             // Generate the view url from tilemap service
-            this.downloadViewLink = asset.tileSource.replace('info.json', '') + xOffset + ',' + yOffset + ',' + zoomX + ',' + zoomY + '/' + viewX + ',' + viewY + '/0/native.jpg'
-
-            // Disable download view link button until file is ready
-            this.downloadViewReady = false
-
-            // Call runDownloadView after 1 sec, downloads local view image blob file to browser
-            setTimeout(() => {
-              this.runDownloadView(this.downloadViewLink)
-            }, 1000);
+            let tilesourceStr = Array.isArray(asset.tileSource) ? asset.tileSource[0] : asset.tileSource
+            // Attach zoom parameters to tilesource
+            tilesourceStr = tilesourceStr.replace('info.json', '') + xOffset + ',' + yOffset + ',' + zoomX + ',' + zoomY + '/' + viewX + ',' + viewY + '/0/native.jpg'
+            // Ensure iiif parameter is encoded correctly
+            tilesourceStr = tilesourceStr.replace('.fcgi%3F', '.fcgi?')
+            if (tilesourceStr.indexOf('//') == 0) {
+                tilesourceStr = 'https:' + tilesourceStr
+            }
+            // If download link is pointing to "stor.*.artstor", use download service
+            if (tilesourceStr.indexOf('//stor.') >= 0) {
+                // Use download service
+                tilesourceStr = this._auth.getUrl() + "/download?imgid=" + asset.id + "&url=" + encodeURIComponent(tilesourceStr) + "&iiif=true"
+                this.downloadViewLink = tilesourceStr
+                this.downloadViewReady = true
+                this.downloadLoading = false
+                this.downloadViewAsBlob = false
+            } else {
+                this.downloadViewLink = tilesourceStr
+                // Disable download view link button until file is ready
+                this.downloadViewReady = false
+                this.downloadViewAsBlob = true
+                // Call runDownloadView after 1 sec, downloads local view image blob file to browser
+                setTimeout(() => {
+                    this.runDownloadView(this.downloadViewLink)
+                }, 1000);
+            }
         }
         else {
             this.downloadLoading = false

@@ -11,7 +11,7 @@
         .modal-body
           .form-group
             label(for="igTitleInput") {{ 'NEW_GROUP_MODAL.TITLE_FIELD_LABEL' | translate }}
-            input#igTitleInput.form-control(type="text", [formControl]="newIgForm.controls['title']", placeholder="Give your image group a title...", spellcheck="false", tabindex="0")
+            input#igTitleInput.form-control(type="text", [formControl]="newIgForm.controls['title']", placeholder="Give your group a title...", spellcheck="false", tabindex="0")
             .has-danger(*ngIf="submitted && newIgForm.controls['title'].hasError('required')")
               p.form-control-feedback {{ 'NEW_GROUP_MODAL.TITLE_REQUIRED_MSG' | translate }}
           .form-group
@@ -19,7 +19,7 @@
             medium-editor(
               [(editorModel)]="igDescription",
               [editorOptions]="{ 'toolbar': {'buttons': ['bold', 'italic', 'underline', 'h1', 'h2', 'h3']}, 'autoLink': true}",
-              [editorPlaceholder]="'Give your image group a description...'")
+              [editorPlaceholder]="'Give your group a description...'")
           //- Left this out of the div so that it remained left aligned...
           label(for="artstorPermissionsGroup") {{ 'NEW_GROUP_MODAL.PERMISSION_FIELD_LABEL' | translate }}
           .form-group.text-center
@@ -52,7 +52,7 @@
           button.btn.btn-primary(type="submit", [class.loading]="isLoading") {{ 'NEW_GROUP_MODAL.CONTROLS.SAVE_EDIT' | translate }}
     .modal-content(*ngIf="serviceResponse.success && !editIG")
       .modal-header
-        h5.modal-title Image group created
+        h5.modal-title Group created
         button.close((click)="closeModal.emit()", type="button", aria-label="Close")
           span(aria-hidden="true") &times;
       .modal-body
@@ -64,7 +64,7 @@
         button.btn.btn-primary([routerLink]="['/group', newGroup.id]", type="button") {{ 'NEW_GROUP_MODAL.CONTROLS.NAV_TO_GROUP' | translate }}
     .modal-content(*ngIf="serviceResponse.success && editIG")
       .modal-header
-        h5.modal-title Image group saved
+        h5.modal-title Group saved
         button.close((click)="closeModal.emit()", type="button", aria-label="Close")
           span(aria-hidden="true") &times;
       .modal-body
@@ -73,4 +73,4 @@
           |  updated
       .modal-footer
         .form-group
-          button.btn.btn-primary((click)="refreshIG()", type="button") Refresh image group
+          button.btn.btn-primary((click)="refreshIG()", type="button") Refresh group
