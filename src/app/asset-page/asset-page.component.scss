@@ -514,8 +514,8 @@ $titleNavBg: #eee;
 
 // Custom styles for dropdown buttons menu
 .show > .btn-primary.dropdown-toggle {
-    border-color: $color-orage-active !important;
-    background-color: $color-orage-active !important;
+    border-color: $color-orange-active !important;
+    background-color: $color-orange-active !important;
 }
 
 .dropdown-menu {
@@ -571,3 +571,7 @@ $titleNavBg: #eee;
         }
     }
 }
+
+.btn.dropdown-toggle {
+     padding: 0px 20px;
+ }
