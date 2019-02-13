@@ -87,7 +87,7 @@ export class Asset {
                 downloadLink = [data.baseUrl, 'media', this.id, data.object_type_id].join("/")
                 break
             default:
-                if (this.tileSource && this.tileSource.length >= 1) {
+                if (Array.isArray(this.tileSource) && this.tileSource.length >= 1) {
                     // Handle Multi View downloads using IIIF
                     let url = 'https:' + this.tileSource[0].replace('info.json', '') + 'full/full/0/default.jpg' 
                     // Pass IIIF url to Download Service for processing metadata
