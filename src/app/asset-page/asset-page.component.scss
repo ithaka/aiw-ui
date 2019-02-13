@@ -513,21 +513,28 @@ $titleNavBg: #eee;
 }
 
 // Custom styles for dropdown buttons menu
+.show > .btn-primary.dropdown-toggle {
+    border-color: $color-orage-active !important;
+    background-color: $color-orage-active !important;
+}
+
 .dropdown-menu {
 
     border: 1px solid $color-border-gray;
     margin-top: 8px;
     left: 0 !important;
+    min-width: 173px;
+    box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.2) !important;
 
     &.download-menu:before, &.download-menu:after{
-        left: 66% !important;
+        left: 61% !important;
     }
 
     &:before, &:after{
         content: '';
         display: block;
         position: absolute;
-        left: 88%;
+        left: 80%;
         width: 0;
         height: 0;
         border-style: solid;
@@ -553,8 +560,12 @@ $titleNavBg: #eee;
         display: flex;
         align-items: center;
 
+        &:hover{
+            background-color: $color-gray-2;
+        }
+
         .icon {
-            font-size: 16px;
+            font-size: 20px;
             font-weight: 600;
             margin-right: 5px;
         }

@@ -86,7 +86,7 @@
             | {{ 'ASSET_PAGE.BUTTONS.EDIT_DETAILS' | translate}}
 
           .dropdown.d-inline-block(*ngIf="detailViewsFlag && assets[0].typeId === 10 && !multiviewItems", ngbDropdown, aria-haspopup="true")
-            button#addToGroupDropdown.btn.btn-secondary(ngbDropdownToggle, tabindex="2", aria-label="Add to groups")
+            button#addToGroupDropdown.btn.btn-primary(ngbDropdownToggle, tabindex="2", aria-label="Add to groups")
               | {{ 'ASSET_PAGE.BUTTONS.ADD_TO_GROUP' | translate}}
               = " "
             .dropdown-menu(ngbDropdownMenu)
@@ -98,6 +98,7 @@
                 i.icon.icon-add-item
                 | &nbsp;Add item
               a#downloadAssetLink.dropdown-item(
+                [ngClass]="{ 'disabled' : assetViewer.osdViewer.viewport.getBounds(true)['width'] > 1 || assetViewer.osdViewer.viewport.getBounds(true)['height'] > 1 || assetViewer.osdViewer.viewport.getBounds(true)['x'] > 1 || assetViewer.osdViewer.viewport.getBounds(true)['y'] > 1 }",
                 (click)="addAssetToIG(true)",
                 tabindex="2",
                 aria-label="Add View to Group",
