@@ -247,7 +247,8 @@ export class ArtstorViewerComponent implements OnInit, OnDestroy, AfterViewInit 
      * - Requires this.asset to have an id
      */
     private loadOpenSea(): void {
-        this.isMultiView = Array.isArray(this.tileSource)
+        // Single view "multi views" are treated as single images
+        this.isMultiView = Array.isArray(this.tileSource) && this.tileSource.length > 1
         this.multiViewPage = 1
         this.multiViewCount = this.tileSource.length
         // Set state to IIIF/OpenSeaDragon
