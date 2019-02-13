@@ -1001,7 +1001,6 @@ export class AssetPage implements OnInit, OnDestroy {
      * @param dlink String from generateDownloadView
      */
     private runDownloadView(dlink: string): Subscription {
-        console.log("Download view link: ", dlink)
       // Download generated jpg as local blob file
       return this._search.downloadViewBlob(dlink).pipe(
             take(1)
@@ -1018,7 +1017,7 @@ export class AssetPage implements OnInit, OnDestroy {
                 this.downloadLoading = false
                 this.downloadViewReady = false
             }
-              
+
         )
     }
 
@@ -1075,7 +1074,7 @@ export class AssetPage implements OnInit, OnDestroy {
                 tilesourceStr = 'https:' + tilesourceStr
             }
             // If download link is pointing to "stor.*.artstor", use download service
-            if (tilesourceStr.indexOf('stor.') >= 0) {
+            if (tilesourceStr.indexOf('//stor.') >= 0) {
                 // Use download service
                 tilesourceStr = this._auth.getUrl() + "/download?imgid=" + asset.id + "&url=" + encodeURIComponent(tilesourceStr) + "&iiif=true"
                 this.downloadViewLink = tilesourceStr
