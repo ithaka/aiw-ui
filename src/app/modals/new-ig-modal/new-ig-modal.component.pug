@@ -9,7 +9,7 @@
           span(aria-hidden="true") &times;
       form#newIgForm([formGroup]="newIgForm", (ngSubmit)="igFormSubmit(newIgForm.value)")
         .modal-body
-          p(*ngIf="!hasGroups") {{ 'NEW_GROUP_MODAL.FIRST_GROUP_MSG' | translate }}
+          p(*ngIf="!hasPrivateGroups") {{ 'NEW_GROUP_MODAL.FIRST_GROUP_MSG' | translate }}
           .form-group
             label.modal-label(for="igTitleInput") {{ 'NEW_GROUP_MODAL.TITLE_FIELD_LABEL' | translate }}&#42;
             input#igTitleInput.form-control.placeholder-text(type="text", [formControl]="newIgForm.controls['title']", placeholder="Give your image group a title...", spellcheck="false", tabindex="0")
@@ -49,9 +49,10 @@
               (keyup)="getTagSuggestions($event)")
             .form-control-feedback(*ngIf="serviceResponse.failure") {{ 'NEW_GROUP_MODAL.CREATE_FAILURE' | translate }}
         .modal-footer
-          span.link.pull-left(*ngIf="showAddToGroup", (click)="addToGroup.emit()") {{ 'NEW_GROUP_MODAL.SHOW_ADD_TO_IMAGE_GROUP' | translate }}
+          span.link.modal-footer-link-left(*ngIf="showAddToGroup && hasPrivateGroups", (click)="addToGroup.emit()") {{ 'NEW_GROUP_MODAL.SHOW_ADD_TO_IMAGE_GROUP' | translate }}
           button.btn.btn-secondary(type="button", (click)="closeModal.emit()") {{ 'NEW_GROUP_MODAL.CONTROLS.CLOSE' | translate }}
-          button.btn.btn-primary(type="submit", [class.loading]="isLoading") {{ 'NEW_GROUP_MODAL.CONTROLS.SAVE_EDIT' | translate }}
+          button.btn.btn-primary(type="submit", [class.loading]="isLoading",
+            [ngClass]="{ 'disabled-btn' : newIgForm.controls['title'].hasError('required') }") {{ 'NEW_GROUP_MODAL.CONTROLS.SAVE_EDIT' | translate }}
     .modal-content(*ngIf="serviceResponse.success && !editIG")
       .modal-header
         h5.modal-title Image group created

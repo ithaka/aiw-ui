@@ -116,14 +116,15 @@
   color: #4F5557;
 }
 
-/** fix me */
- .placeholder-text, .placeholder-text::placeholder, .medium-editor-placeholder {
-  color: $color-gray-5;
+/** TODO fix media editor placeholder */
+$medium-editor-placeholder-color: $color-gray-5 !important;
+.placeholder-text::placeholder, .medium-editor-element::placeholder {
+  color: $color-gray-5 !important;
 }
 
-
-
+/** Create Group Modal Specific Styles */
 #newIgForm {
+
   & .modal-label, .modal-label:hover {
     color: $color-gray-6;
     font-weight: 900;
@@ -136,32 +137,42 @@
     & .btn-group {
       & .modal-label, .orange-label {
         padding-left: 0;
-
+        box-shadow: none; /** :focus :active override for radio buttons */
       }
     }
 
+    /** Add Tag style for user input, changes from default $orange in forms.scss */
     & .ng2-tag-input-field:focus {
-      border: 1px dotted #cdcdcd !important;;
+      border: 1px dotted #cdcdcd !important;
 
       &::-webkit-input-placeholder {
-      color: $inputPlaceholderColor !important;
-      }
-      &:-moz-placeholder {
-      color: $inputPlaceholderColor !important;
+      color: $color-gray-5 !important;
       }
       &::-moz-placeholder {
-      color: $inputPlaceholderColor !important;
+      color: $color-gray-5 !important;
       }
-      &:-ms-input-placeholder {
-      color: $inputPlaceholderColor !important;
+      &::-moz-placeholder {
+      color: $color-gray-5 !important;
       }
-
+      &::-ms-input-placeholder {
+      color: $color-gray-5 !important;
+      }
     }
-
         /**
         & input[type=radio]:active, input[type=radio]:active {
           background-color: $orange;
         } */
+  }
+
+  /** New IG Create button disabled style */
+  .disabled-btn {
+    opacity: 0.5;
+    pointer-events: none;
+  }
+
+  /** Modal Footer link 'pulled left' */
+  .modal-footer-link-left {
+    margin-right: 25px;
   }
 
 }

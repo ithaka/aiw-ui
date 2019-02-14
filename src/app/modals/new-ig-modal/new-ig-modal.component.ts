@@ -3,12 +3,15 @@ import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms'
 import { Subscription } from 'rxjs'
 import { map, take } from 'rxjs/operators'
 import { Angulartics2 } from 'angulartics2'
+import { HttpClient, HttpHeaders } from '@angular/common/http'
 
 // Project dependencies
 import { AssetService, AuthService, GroupService, ImageGroup, LogService } from './../../shared'
 import { IgFormValue, IgFormUtil } from './new-ig'
-import { isPlatformBrowser } from '@angular/common';
-import { Router } from '@angular/router';
+import { isPlatformBrowser } from '@angular/common'
+import { Router } from '@angular/router'
+import { environment } from 'environments/environment'
+import { ArtstorStorageService } from '../../../../projects/artstor-storage/src/public_api';
 
 @Component({
   selector: 'ang-new-ig-modal',
@@ -26,7 +29,7 @@ export class NewIgModal implements OnInit {
     failure?: boolean
   } = {};
 
-  public hasGroups: boolean = false // If a user has at least one image group
+  public hasPrivateGroups: boolean = false // If a user has at least one image group
 
   /** Switch for running logic to copy image group */
   @Input() private copyIG: boolean = false;
@@ -64,6 +67,9 @@ export class NewIgModal implements OnInit {
   private tagLastSearched: string = ''
   private tagDebouncing: boolean = false
 
+  private groupUrl
+  private options: any = {}
+
   constructor(
       private _assets: AssetService,
       private _auth: AuthService,
@@ -72,16 +78,42 @@ export class NewIgModal implements OnInit {
       private _log: LogService,
       private _angulartics: Angulartics2,
       private el: ElementRef,
-      private router: Router
+      private router: Router,
+      private _storage: ArtstorStorageService,
+      private _http: HttpClient
   ) {
     this.newIgForm = _fb.group({
       title: [null, Validators.required],
       artstorPermissions: ['private', Validators.required],
       tags: [[]] // just initialize an empty array
     })
+
+    this.groupUrl = environment.API_URL + '/api/v1/group'
+    this.options = {
+      headers: new HttpHeaders({ 'Accept': 'application/json;charset=UTF-8' }),
+      withCredentials: true
+    }
   }
 
   ngOnInit() {
+
+    // let privateGroupCount = this._storage.getLocal('privateGroupCount')
+
+    // if (privateGroupCount && parseInt(privateGroupCount) > 0) {
+    //   this.hasPrivateGroups = true
+    // }
+    // else {
+    //   this._http.get(this.groupUrl + '?size=100&level=private&from=0' + this.options).pipe(
+    //     take(1),
+    //     map(res => {
+    //       console.log('GROUPS RESP: ', res)
+    //     },
+    //       (err) => {
+    //         console.error(err)
+    //       }
+    //     )).subscribe()
+    // }
+
     // Set focus to the modal to make the links in the modal first thing to tab for accessibility
     // let htmlelement: HTMLElement = this.el.nativeElement
     // htmlelement.focus()
