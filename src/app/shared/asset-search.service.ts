@@ -521,7 +521,7 @@ export class AssetSearchService {
     let thumbURL: string = ''
     let tileSourceHostname = (this._auth.getEnv() == 'test') ? '//tsstage.artstor.org' : '//tsprod.artstor.org'
     let imgURL = thumbnailObj['thumbnailImgUrl'].replace('/thumb/imgstor/size0', '').replace('.jpg', '.fpx')
-    thumbURL = tileSourceHostname + '/rosa-iiif-endpoint-1.0-SNAPSHOT/fpx' + encodeURIComponent(imgURL) + '/pct:' + (thumbnailObj['zoom']['viewerX'] * 100) + ',' + (thumbnailObj['zoom']['viewerY'] * 100) + ',' + (thumbnailObj['zoom']['pointWidth'] * 100) + ',' + (thumbnailObj['zoom']['pointHeight'] * 100) + '/,115/0/native.jpg'
+    thumbURL = tileSourceHostname + '/rosa-iiif-endpoint-1.0-SNAPSHOT/fpx' + encodeURIComponent(imgURL) + '/' + thumbnailObj['zoom']['viewerX'] + ',' + thumbnailObj['zoom']['viewerY'] + ',' + thumbnailObj['zoom']['pointWidth'] + ',' + thumbnailObj['zoom']['pointHeight'] + '/,115/0/native.jpg'
     return thumbURL
   }
 }

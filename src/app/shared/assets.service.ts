@@ -878,24 +878,13 @@ export class AssetService {
         let startIndex = ((this.urlParams.page - 1) * this.urlParams.size) + 1
 
         let requestString: string = [this._auth.getUrl(), 'imagegroup', igId, 'thumbnails', startIndex, this.urlParams.size, this.activeSort.index].join('/')
-
-        this._groups.get(igId)
+        this._groups.get(igId, this.urlParams.featureFlag && this.urlParams.featureFlag === 'detailViews' ? true : false)
             .toPromise()
             .then((data) => {
                 if (!Object.keys(data).length) {
                     throw new Error('No data in image group thumbnails response')
                 }
-
-                // Add a dummy saved detail to the group - to be used untill we have the backend ready for saved details
-                // data.items.push({
-                //     "artstorid": "ASITESPHOTOIG_10312738558",
-                //     "zoom": {
-                //       "viewerX": 0.49138915291172104,
-                //       "viewerY": 0.3638532628030086,
-                //       "pointWidth": 0.44454747774480715,
-                //       "pointHeight": 0.375
-                //     }
-                //   })
+                
                 data.total = data.items.length
 
                 // Fetch the asset(s) via items call only if the IG has atleast one asset
@@ -904,12 +893,12 @@ export class AssetService {
                     let pageEnd = this.urlParams.page * this.urlParams.size
 
                     let itemIdsArray: string[] = []
-                    for(let item of data.items) {
-                        if (item.artstorid) {
-                            itemIdsArray.push(item.artstorid)
-                        } else {
-                            itemIdsArray.push(item)
-                        }
+                    if(this.urlParams.featureFlag && this.urlParams.featureFlag === 'detailViews') {
+                        itemIdsArray = data.items.map( (item) => {
+                            return item.id
+                        })
+                    } else {
+                        itemIdsArray = data.items
                     }
 
                     // Maintain param string in a single place to avoid debugging thumbnails lost to a bad param
@@ -927,8 +916,16 @@ export class AssetService {
                             data.thumbnails = data.thumbnails.map((thumbnail) => {
                               // Attach zoom object from items to the relevant thumbnail, to be used in asset grid
                               for(let item of data.items){
-                                if(item['zoom'] && item['artstorid'] === thumbnail['objectId']){
+                                if(item['zoom'] && item['id'] === thumbnail['objectId']){
                                     thumbnail['zoom'] = item['zoom']
+
+                                    // Setting dummy values untill we get correct values from the backend
+                                    // thumbnail['zoom'] = {
+                                    //     "viewerX": 0.49138915291172104,
+                                    //     "viewerY": 0.3638532628030086,
+                                    //     "pointWidth": 0.44454747774480715,
+                                    //     "pointHeight": 0.375
+                                    // }
                                 }
                               }
                               if (thumbnail['thumbnailImgUrl'] && thumbnail['compoundmediaCount'] > 0) {
