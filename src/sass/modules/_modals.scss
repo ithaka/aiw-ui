@@ -123,8 +123,6 @@
 
 
 
-
-
 #newIgForm {
   & .modal-label, .modal-label:hover {
     color: $color-gray-6;
@@ -139,12 +137,31 @@
       & .modal-label, .orange-label {
         padding-left: 0;
 
+      }
+    }
+
+    & .ng2-tag-input-field:focus {
+      border: 1px dotted #cdcdcd !important;;
+
+      &::-webkit-input-placeholder {
+      color: $inputPlaceholderColor !important;
+      }
+      &:-moz-placeholder {
+      color: $inputPlaceholderColor !important;
+      }
+      &::-moz-placeholder {
+      color: $inputPlaceholderColor !important;
+      }
+      &:-ms-input-placeholder {
+      color: $inputPlaceholderColor !important;
+      }
+
+    }
+
         /**
         & input[type=radio]:active, input[type=radio]:active {
           background-color: $orange;
         } */
-      }
-    }
   }
 
 }
