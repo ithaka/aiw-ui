@@ -7,6 +7,7 @@ import { Angulartics2 } from 'angulartics2'
 import { AssetService } from '../shared/assets.service'
 import { AssetFiltersService } from '../asset-filters/asset-filters.service'
 import { AuthService, FlagService, InstitutionsService } from 'app/shared'
+import { ArtstorStorageService } from '../../../projects/artstor-storage/src/public_api';
 
 declare var _satellite: any
 
@@ -67,6 +68,8 @@ export class AssetFilters {
 
   private dateError: boolean = false;
 
+  private filters: any;
+
   // TypeScript public modifiers
   constructor(
     private _filters: AssetFiltersService,
@@ -75,7 +78,8 @@ export class AssetFilters {
     private angulartics: Angulartics2,
     private _auth: AuthService,
     private _flags: FlagService,
-    private _inst: InstitutionsService
+    private _inst: InstitutionsService,
+    private _storage: ArtstorStorageService
   ) {
   }
 
@@ -94,14 +98,30 @@ export class AssetFilters {
     this._inst.getAllInstitutions().pipe(
       take(1),
       map(data => {
-        this.subscribeAvailableFilter(data['allInstitutions'])
+        if (this._storage.getSession('allInstitutions') === 'undefined') {
+          this._storage.setSession('allInstitutions', data['allInstitutions'])
+        }
+        if (typeof(this.filters) !== 'undefined') {
+          this.assignFilters(this.filters, this._storage.getSession('allInstitutions'))
+        }
       }, err => {
         this.allInstFailed = true
 
         // on error of all institutions, we still need to call subscriveAvailableFilter
-        this.subscribeAvailableFilter([])
+        this.assignFilters(this.filters, [])
         console.log(err.status)
     })).subscribe()
+
+    this.subscriptions.push(
+      this._filters.available$.pipe(
+        map(filters => {
+          this.filters = filters
+          if (this._storage.getSession('allInstitutions') !== 'undefined') {
+            this.assignFilters(filters, this._storage.getSession('allInstitutions'))
+          } 
+        }
+      )).subscribe()
+    )
 
     this.filterNameMap = this._filters.getFilterNameMap()
 
@@ -147,69 +167,59 @@ export class AssetFilters {
 
   }
 
-  /**
-   * Keep an eye for available filter updates
-   */
-  private subscribeAvailableFilter(institutionList: any[]): void {
-    this.subscriptions.push(
-      this._filters.available$.pipe(
-        map(filters => {
 
-          // Contributors List of search results
-          if (filters['donatinginstitutionids'] && institutionList.length) {
-            this.instFilterCount = 0
+  private assignFilters(filters: any, institutionList: any[]): void {
+    // Contributors List of search results
+    if (filters['donatinginstitutionids'] && institutionList.length) {
+      this.instFilterCount = 0
 
-            for (let i = 0; i < filters['donatinginstitutionids'].length; i++) {
+      for (let i = 0; i < filters['donatinginstitutionids'].length; i++) {
 
-              // Map search results by contributing institution by matching against names from the institutions list
-              for (let j = 0; j < institutionList.length; j++) {
-                if (filters['donatinginstitutionids'][i].name === institutionList[j].institutionId) {
-                  filters['donatinginstitutionids'][i].showingName = institutionList[j].institutionName;
-                }
-              }
-
-              // If this contributor is the users institution, set instFilterCount to this filters' count value
-              if (filters['donatinginstitutionids'][i].name === this.userInstId) {
-                if (filters['donatinginstitutionids'][i].count > -1) {
-                  this.instFilterCount = parseInt(filters['donatinginstitutionids'][i].count)
-                }
-              }
-            }
+        // Map search results by contributing institution by matching against names from the institutions list
+        for (let j = 0; j < institutionList.length; j++) {
+          if (filters['donatinginstitutionids'][i].name === institutionList[j].institutionId) {
+            filters['donatinginstitutionids'][i].showingName = institutionList[j].institutionName;
           }
-
-          if (filters['collectiontypes']) {
-
-            for (let i = 0; i < filters['collectiontypes'].length; i++) {
-              let colType = filters['collectiontypes'][i]
-
-              // The loggedd in user's institutional 'Collection Type' filter
-              if (colType.name == '2' || colType.name == '4') {
-                filters['collectiontypes'][i]['count'] = this.instFilterCount
-              }
-            }
-
-            // If auth.isPublicOnly 'unaffiliated' user, filter out all but type 5 collection type
-            if (this._auth.isPublicOnly()) {
-              filters['collectiontypes'] = filters['collectiontypes'].filter(collectionType => collectionType.name === '5')
-            }
-          }
-
-          // it is for if the allInstitutions request fails, it doesn’t break the entire filter UI
-          if (this.allInstFailed) {
-            filters['donatinginstitutionids'] = null
-          }
-
-          // Filter out categories containing pipe in name field
-          if (filters && filters.artclassification_str && filters.artclassification_str.length !== 0 ) {
-            filters.artclassification_str = filters.artclassification_str.filter((category) => {
-              return category.name.indexOf('|') === -1
-            })
-          }
-          this.availableFilters = filters
-
         }
-      )).subscribe()
-    )
+
+        // If this contributor is the users institution, set instFilterCount to this filters' count value
+        if (filters['donatinginstitutionids'][i].name === this.userInstId) {
+          if (filters['donatinginstitutionids'][i].count > -1) {
+            this.instFilterCount = parseInt(filters['donatinginstitutionids'][i].count)
+          }
+        }
+      }
+    }
+
+    if (filters['collectiontypes']) {
+
+      for (let i = 0; i < filters['collectiontypes'].length; i++) {
+        let colType = filters['collectiontypes'][i]
+
+        // The loggedd in user's institutional 'Collection Type' filter
+        if (colType.name == '2' || colType.name == '4') {
+          filters['collectiontypes'][i]['count'] = this.instFilterCount
+        }
+      }
+
+      // If auth.isPublicOnly 'unaffiliated' user, filter out all but type 5 collection type
+      if (this._auth.isPublicOnly()) {
+        filters['collectiontypes'] = filters['collectiontypes'].filter(collectionType => collectionType.name === '5')
+      }
+    }
+
+    // it is for if the allInstitutions request fails, it doesn’t break the entire filter UI
+    if (this.allInstFailed) {
+      filters['donatinginstitutionids'] = null
+    }
+
+    // Filter out categories containing pipe in name field
+    if (filters && filters.artclassification_str && filters.artclassification_str.length !== 0 ) {
+      filters.artclassification_str = filters.artclassification_str.filter((category) => {
+        return category.name.indexOf('|') === -1
+      })
+    }
+    this.availableFilters = filters
   }
 
   private loadRoute(filterType?: string) {
