@@ -165,7 +165,7 @@ export class AssetFilters {
       })).subscribe()
     )
 
-  }
+  } // ngOnInit
 
 
   private assignFilters(filters: any, institutionList: any[]): void {
@@ -220,7 +220,9 @@ export class AssetFilters {
       })
     }
     this.availableFilters = filters
-  }
+  
+  } // assignFilters
+  
 
   private loadRoute(filterType?: string) {
     let params = {};
