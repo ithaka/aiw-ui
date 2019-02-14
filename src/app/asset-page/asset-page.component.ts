@@ -259,23 +259,17 @@ export class AssetPage implements OnInit, OnDestroy {
         this._auth.getUserInfo().pipe(take(1)).subscribe(user => {
             // Manual user info call returned
             this.user = user
-            console.log("Manually refreshed user received!")
+            console.log("Manually refreshed user received! Status: " + user.status)
             this.userSessionFresh = true
         })
-
-        // this.waitForFreshUser = setInterval(() => {
-        //     console.log("Waiting for fresh user...")
-        // }, 200);
 
         // sets up subscription to allResults, which is the service providing thumbnails
         this.subscriptions.push(
             this._auth.currentUser.subscribe((user) => {
-                console.log("User subscription returned")
                 this.user = user
+                console.log("Current User subscription returned! Status: " + user.status)
                 // userSessionFresh: Do not attempt to load asset until we know user object is fresh
-                if (!this.userSessionFresh && this._auth.userSessionFresh) {
-                    console.log("Fresh user received!")
-                    // clearInterval(this.waitForFreshUser)
+                if (user.status && !this.userSessionFresh && this._auth.userSessionFresh) {
                     this.userSessionFresh = true
                 }
             }),
