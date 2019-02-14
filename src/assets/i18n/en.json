@@ -268,7 +268,7 @@
     "CREATE_TITLE": "Create New Group",
     "EDIT_TITLE": "Edit Group",
     "COPY_TITLE": "Copy Group",
-    "FIRST_GROUP_MSG": "You haven't created a group yet! Create your first group",
+    "FIRST_GROUP_MSG": "You haven't created a group yet! Create your first group.",
     "TITLE_FIELD_LABEL": "Title",
     "TITLE_REQUIRED_MSG": "Dont forget to add a title!",
     "DESCRIPTION_FIELD_LABEL": "Description",

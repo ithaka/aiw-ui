@@ -129,6 +129,13 @@ export class GroupService {
         return everyGroupObservable
     }
 
+    /**
+     * Check if a user has at least one Private Group
+     */
+    public hasPrivateGroups(): Observable<any> {
+      return this.http.get(this.groupUrl + '?size=1&level=private', this.options)
+    }
+
      /**
      * Get Individual Group
      */

@@ -116,9 +116,9 @@
   color: #4F5557;
 }
 
-/** TODO fix media editor placeholder */
+/** Override media editor placeholder */
 $medium-editor-placeholder-color: $color-gray-5 !important;
-.placeholder-text::placeholder, .medium-editor-element::placeholder {
+.placeholder-text, .placeholder-text::placeholder, .medium-editor-element::placeholder {
   color: $color-gray-5 !important;
 }
 
@@ -158,22 +158,17 @@ $medium-editor-placeholder-color: $color-gray-5 !important;
       color: $color-gray-5 !important;
       }
     }
-        /**
-        & input[type=radio]:active, input[type=radio]:active {
-          background-color: $orange;
-        } */
   }
 
   /** New IG Create button disabled style */
-  .disabled-btn {
+  & .disabled-btn {
     opacity: 0.5;
     pointer-events: none;
   }
 
   /** Modal Footer link 'pulled left' */
-  .modal-footer-link-left {
-    margin-right: 25px;
+  & .modal-footer-link-left {
+    margin-right: 40px;
   }
 
 }
-
