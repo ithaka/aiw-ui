@@ -54,6 +54,9 @@ export class ThumbnailComponent implements OnInit, OnChanges {
   // The alt message for a thumbnail, combined with thumbnail title and creator name
   private thumbnailAlt: string = ''
 
+  // Flag that controls the class for detail view icon / hover state 
+  private mouseOverDetailIcon: boolean = false
+
   constructor(
     private angulartics: Angulartics2,
     private _assets: AssetService,

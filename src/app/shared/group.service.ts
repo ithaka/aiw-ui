@@ -132,9 +132,11 @@ export class GroupService {
      /**
      * Get Individual Group
      */
-    public get(groupId: string): Observable<any> {
+    public get(groupId: string, detailViewFlag?: boolean): Observable<any> {
+        // Use v2 endpoint under the detailView feature flag
+        let url = detailViewFlag ? environment.API_URL + '/api/v2/group/' + groupId : this.groupUrl + '/' + groupId
         return this.http.get(
-            this.groupUrl + '/' + groupId, this.options
+            url, this.options
         )
     }
 
