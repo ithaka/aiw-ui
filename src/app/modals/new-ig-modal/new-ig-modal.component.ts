@@ -94,7 +94,6 @@ export class NewIgModal implements OnInit {
     let hasPrivate = this._storage.getLocal('hasPrivateGroups')
 
     if (hasPrivate)  {
-      console.log('hasPrivate: ', hasPrivate)
       this.hasPrivateGroups = true
     }
     else {

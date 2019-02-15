@@ -58,7 +58,7 @@ ang-add-to-group(*ngIf="showAddToGroupModal && detailViewsFlag", (closeModal)="s
 ang-add-to-group-legacy(*ngIf="showAddToGroupModal && !detailViewsFlag", (closeModal)="showAddToGroupModal = false")
 ang-share-ig-link(*ngIf="showShareIgModal", [ig]="ig", (closeModal)="showShareIgModal = false")
 ang-confirm-modal(*ngIf="showConfirmationModal", (closeModal)="closeConfirmationModal($event)", [title]="'Delete Selected Asset(s)'",
-  [description]="'Are you sure you want to delete ' + _assets.getSelectedAssets().length + ' selected image(s) from the group? <br><b>Image group name: ' +  ig.name + '</b>'",
+  [description]="'Are you sure you want to delete ' + _assets.getSelectedAssets().length + ' selected image(s) from the group? <br><b>Group name: ' +  ig.name + '</b>'",
   [dismiss]="'Cancel'",
   [primary]="'Yes'")
 ang-toast(*ngIf="showToast", [type]="toastType", [stringHTML]="toastHTML", (closeToast)="closeToast()")
