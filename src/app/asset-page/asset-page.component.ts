@@ -256,12 +256,12 @@ export class AssetPage implements OnInit, OnDestroy {
         this.solrMetadataFlag = this._flags.solrMetadata
 
         // // Trigger userinfo call
-        // this._auth.getUserInfo().pipe(take(1)).subscribe(user => {
-        //     // Manual user info call returned
-        //     this.user = user
-        //     console.log("Manually refreshed user received! Status: " + user.status)
-        //     this.userSessionFresh = true
-        // })
+        this._auth.getUserInfo().pipe(take(1)).subscribe(user => {
+            // Manual user info call returned
+            this.user = user
+            console.log("Manually refreshed user received! Status: " + user.status)
+            this.userSessionFresh = true
+        })
 
         // sets up subscription to allResults, which is the service providing thumbnails
         this.subscriptions.push(
