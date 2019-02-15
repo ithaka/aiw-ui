@@ -255,13 +255,13 @@ export class AssetPage implements OnInit, OnDestroy {
         this.user = this._auth.getUser();
         this.solrMetadataFlag = this._flags.solrMetadata
 
-        // Trigger userinfo call
-        this._auth.getUserInfo().pipe(take(1)).subscribe(user => {
-            // Manual user info call returned
-            this.user = user
-            console.log("Manually refreshed user received! Status: " + user.status)
-            this.userSessionFresh = true
-        })
+        // // Trigger userinfo call
+        // this._auth.getUserInfo().pipe(take(1)).subscribe(user => {
+        //     // Manual user info call returned
+        //     this.user = user
+        //     console.log("Manually refreshed user received! Status: " + user.status)
+        //     this.userSessionFresh = true
+        // })
 
         // sets up subscription to allResults, which is the service providing thumbnails
         this.subscriptions.push(
@@ -269,7 +269,7 @@ export class AssetPage implements OnInit, OnDestroy {
                 this.user = user
                 console.log("Current User subscription returned! Status: " + user.status)
                 // userSessionFresh: Do not attempt to load asset until we know user object is fresh
-                if (user.status && !this.userSessionFresh && this._auth.userSessionFresh) {
+                if (!this.userSessionFresh && this._auth.userSessionFresh) {
                     this.userSessionFresh = true
                 }
             }),
