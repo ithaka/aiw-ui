@@ -133,8 +133,8 @@ $medium-editor-placeholder-color: $color-gray-5 !important;
     color: $orange;
   }
 
-  & .form-group {
-    & .btn-group {
+  .form-group {
+    .btn-group {
       & .modal-label, .orange-label {
         padding-left: 0;
         box-shadow: none; /** :focus :active override for radio buttons */
@@ -161,14 +161,45 @@ $medium-editor-placeholder-color: $color-gray-5 !important;
   }
 
   /** New IG Create button disabled style */
-  & .disabled-btn {
+  .disabled-btn {
     opacity: 0.5;
     pointer-events: none;
   }
 
-  /** Modal Footer link 'pulled left' */
-  & .modal-footer-link-left {
-    margin-right: 40px;
-  }
+  .wrapper {
+    display: inline-flex;
 
+    /** Modal Footer link 'pulled left' */
+    .modal-footer-link-left {
+      margin-right: 40px;
+    }
+
+    .help-link {
+        border-radius: 50%;
+        width: 22px;
+        height: 22px;
+        line-height: 22px;
+        text-align: center;
+        vertical-align: middle;
+        display: inline-block;
+        cursor: pointer;
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 12px;
+        font-weight: 600;
+        color: $color-white !important;
+        background-color: #999;
+
+        &:hover {
+            background-color: #fafafa;
+            color: #999 !important;
+        }
+    }
+
+    .link {
+        font-family: Verdana;
+        font-size: 12px;
+        font-weight: 600;
+        line-height: 22px;
+    }
+  }
 }
