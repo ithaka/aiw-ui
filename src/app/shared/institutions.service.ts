@@ -1,25 +1,34 @@
 import { Injectable } from '@angular/core'
-import { Subject } from 'rxjs'
+import { Subject, from } from 'rxjs'
 import { BehaviorSubject, Observable, Subscription } from 'rxjs'
 import { HttpClient, HttpHeaders } from '@angular/common/http'
 
 import { AuthService } from '../shared/auth.service'
+import { ArtstorStorageService } from '../../../projects/artstor-storage/src/public_api';
 
 @Injectable()
 export class InstitutionsService {
 
   constructor(
     private http: HttpClient,
-    private _auth: AuthService
-  ) {}
-
+    private _auth: AuthService,
+    private _storage: ArtstorStorageService
+  ) {
+  }
 
   // All institutions list is a combined cp[y of ss and donating lists
   public getAllInstitutions(): Observable<any> {
-    return this.http.get(
-      this._auth.getUrl() + '/v1/collections/institutions?_method=allinstitutions',
-      { withCredentials: true }
-    )
+    let storedInstitutions = this._storage.getSession('allInstitutions')
+    let allInstitutions = storedInstitutions && storedInstitutions !== 'undefined' ? storedInstitutions : []
+    if (allInstitutions.length > 0) {
+      return from(allInstitutions)
+    } else {
+      this._storage.setSession('allInstitutions', 'undefined')
+      return this.http.get(
+        this._auth.getUrl() + '/v1/collections/institutions?_method=allinstitutions',
+        { withCredentials: true }
+      )
+    }
   }
 
   // Shared Shelf institutions list
