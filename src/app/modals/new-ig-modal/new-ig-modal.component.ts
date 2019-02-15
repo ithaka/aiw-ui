@@ -7,8 +7,9 @@ import { Angulartics2 } from 'angulartics2'
 // Project dependencies
 import { AssetService, AuthService, GroupService, ImageGroup, LogService } from './../../shared'
 import { IgFormValue, IgFormUtil } from './new-ig'
-import { isPlatformBrowser } from '@angular/common';
-import { Router } from '@angular/router';
+import { isPlatformBrowser } from '@angular/common'
+import { Router } from '@angular/router'
+import { ArtstorStorageService } from '../../../../projects/artstor-storage/src/public_api';
 
 @Component({
   selector: 'ang-new-ig-modal',
@@ -25,6 +26,8 @@ export class NewIgModal implements OnInit {
     success?: boolean,
     failure?: boolean
   } = {};
+
+  public hasPrivateGroups: boolean = false // If a user has at least one image group
 
   /** Switch for running logic to copy image group */
   @Input() private copyIG: boolean = false;
@@ -62,6 +65,9 @@ export class NewIgModal implements OnInit {
   private tagLastSearched: string = ''
   private tagDebouncing: boolean = false
 
+  private groupUrl
+  private options: any = {}
+
   constructor(
       private _assets: AssetService,
       private _auth: AuthService,
@@ -70,7 +76,9 @@ export class NewIgModal implements OnInit {
       private _log: LogService,
       private _angulartics: Angulartics2,
       private el: ElementRef,
-      private router: Router
+      private router: Router,
+      private _storage: ArtstorStorageService
+
   ) {
     this.newIgForm = _fb.group({
       title: [null, Validators.required],
@@ -80,6 +88,29 @@ export class NewIgModal implements OnInit {
   }
 
   ngOnInit() {
+
+    // Does user have any private groups yet?
+    // Check local storage first, otherwise call group service
+    let hasPrivate = this._storage.getLocal('hasPrivateGroups')
+
+    if (hasPrivate)  {
+      this.hasPrivateGroups = true
+    }
+    else {
+      this._group.hasPrivateGroups().pipe(
+        take(1),
+        map(res => {
+          if (res['total'] > 0) {
+            this.hasPrivateGroups = true
+            this._storage.setLocal('hasPrivateGroups', true)
+          }
+        },
+          (err) => {
+            console.error(err)
+          }
+        )).subscribe()
+    }
+
     // Set focus to the modal to make the links in the modal first thing to tab for accessibility
     // let htmlelement: HTMLElement = this.el.nativeElement
     // htmlelement.focus()
