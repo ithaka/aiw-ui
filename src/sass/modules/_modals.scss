@@ -118,7 +118,7 @@
 
 /** Override media editor placeholder */
 $medium-editor-placeholder-color: $color-gray-5 !important;
-.placeholder-text, .placeholder-text::placeholder, .medium-editor-element::placeholder {
+span.placeholder-text, .placeholder-text::placeholder, .medium-editor-element::placeholder {
   color: $color-gray-5 !important;
 }
 
