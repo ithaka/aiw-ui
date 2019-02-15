@@ -22,7 +22,7 @@
               [editorOptions]="{ 'toolbar': {'buttons': ['bold', 'italic', 'underline', 'h1', 'h2', 'h3']}, 'autoLink': true}",
               [editorPlaceholder]="'Give your group a description...'")
           //- Left this out of the div so that it remained left aligned...
-          label(for="artstorPermissionsGroup") {{ 'NEW_GROUP_MODAL.PERMISSION_FIELD_LABEL' | translate }}
+          label(for="artstorPermissionsGroup") {{ 'NEW_GROUP_MODAL.PERMISSION_FIELD_LABEL' | translate }}&#42;
             span.placeholder-text &nbsp; {{ 'NEW_GROUP_MODAL.PERMISSION_FIELD_HELPER' | translate }}
           .form-group
             #artstorPermissionsGroup.btn-group(ngbRadioGroup, name="permissions type", [formControl]="newIgForm.controls['artstorPermissions']")
