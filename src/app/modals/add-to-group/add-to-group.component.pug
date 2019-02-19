@@ -44,7 +44,7 @@
                         img([ngClass]="{ 'loaded' : group.imgLoaded }", [attr.src]="_search.makeThumbUrl(group['thumbnailImgUrl'], 1, group['compoundmediaCount'])", [attr.alt]="group.name", (load)="group.imgLoaded = true", aria-role="image")
                     .col-9
                       .title {{ group.name }}
-                  .loading-dots(*ngIf="loading.allGroups")
+                  .loading-dots(*ngIf="loading.allGroups && !groupSearchTerm")
                     .dot
                     .dot
                     .dot
