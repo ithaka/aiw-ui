@@ -23,8 +23,8 @@
       i.icon.icon-cluster(*ngIf="thumbnail.clustered == 1", [id]="thumbnail.objectId + '_clustered_images'", (click)="openLink($event, ['/cluster', thumbnail.objectId, { objTitle :  thumbnail.thumbnail1 }])", title="View related media button icon. Press enter to click this button", (keyup.enter)="openLink($event, ['/cluster', thumbnail.objectId, { objTitle :  thumbnail.thumbnail1 }])", tabindex="3", aria-role="button")
       //- IAP Icon
       i.icon.icon-iap(
-        *ngIf="thumbnail.iap", 
-        tabindex="3", 
+        *ngIf="thumbnail.iap",
+        tabindex="3",
         aria-role="button",
         [ngbTooltip]="iapTooltip",
         triggers="focusin:focusout mouseenter:mouseleave",
@@ -43,7 +43,7 @@
       )
       i.icon.icon-collab(*ngIf="thumbnail.frequentlygroupedwith && thumbnail.frequentlygroupedwith.length > 0", (click)="openLink($event, ['/associated', thumbnail.artstorid ? thumbnail.artstorid : thumbnail.objectId])", title="Others are also interested in button icon. Press enter to click this button", tabIndex="3", (keyup.enter)="openLink($event, ['/associated', thumbnail.artstorid])")
       //- ang-collection-badge([collectionType]="getCollectionType()", tabIndex="3")
-      i( *ngIf="thumbnail.media && thumbnail.media.adlObjectType && (thumbnail.media.adlObjectType != 10) && (multiviewItemCount == 0)", 
+      i( *ngIf="thumbnail.media && thumbnail.media.adlObjectType && (thumbnail.media.adlObjectType != 10) && (multiviewItemCount == 0)",
           class="icon icon-{{thumbnail.media.adlObjectType | typeIdPipe}}",
           [ngbTooltip]="mediaTooltip",
           triggers="focusin:focusout mouseenter:mouseleave",
@@ -55,7 +55,7 @@
       i( *ngIf="!thumbnail.media && thumbnail.objectTypeId && thumbnail.objectTypeId != 10", class="icon icon-{{thumbnail.objectTypeId | typeIdPipe}}")
       //- Detail view icon
       i.icon(*ngIf="thumbnail.zoom", [ngClass]="[ mouseOverDetailIcon ? 'icon-detail-hover' : 'icon-detail' ]", [ngbTooltip]="tipDetailView", ngbTooltip, triggers="focusin:focusout mouseenter:mouseleave", placement="right", aria-haspopup="true", tabIndex="3", (mouseover)="mouseOverDetailIcon=true", (mouseout)="mouseOverDetailIcon=false")
-      
+
       .multiview-indicator(*ngIf="multiviewItemCount > 1", [ngbTooltip]="tipMultiView", ngbTooltip, triggers="focusin:focusout mouseenter:mouseleave", placement="right", aria-haspopup="true", title="See multiview items button icon. Press enter to click this button", tabIndex="3", aria-role="button")
         i.icon.icon-multiview
         span.multiview-count {{multiviewItemCount}}
