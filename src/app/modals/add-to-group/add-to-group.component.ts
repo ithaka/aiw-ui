@@ -244,6 +244,7 @@ export class AddToGroupModal implements OnInit, OnDestroy {
 
   public searchGroups(event?): void {
     // Execute search after every third character of the search term
+    // Use ">=" instead of ">" so that when we have empty search term (when we type something and delete it), we will reload the groups
     if ((this.groupSearchTerm.length >= 0) && (this.groupSearchTerm.length % 3 === 0)) {
       this.groupsCurrentPage = 1
       this.allGroups = []
@@ -259,32 +260,35 @@ export class AddToGroupModal implements OnInit, OnDestroy {
       'created', 3, 1, [], '', '', 'date', 'desc'
     ).pipe(
     take(1),
-      map(data  => {
+      map(data => {
         let itemIds: string[] = []
-        for(let group of data.groups){
-          if(group.items.length > 0){
+        for(let group of data.groups) {
+          if(group.items.length > 0) {
             itemIds.push(group.items[0])
           }
         }
 
-        this._assets.getAllThumbnails(itemIds)
-        .then( allThumbnails => {
-          allThumbnails = allThumbnails.map( thmbObj => {
-            for (let group of data.groups) {
-              if(group.items[0] && group.items[0] === thmbObj.objectId){
-                group['thumbnailImgUrl'] = thmbObj['thumbnailImgUrl']
-                group['compoundmediaCount'] = thmbObj['compoundmediaCount']
+        // Check the length of itemIds to remove invalid call with object_id=null
+        if(itemIds.length !== 0) {
+          this._assets.getAllThumbnails(itemIds)
+          .then( allThumbnails => {
+            allThumbnails = allThumbnails.map( thmbObj => {
+              for (let group of data.groups) {
+                if(group.items[0] && group.items[0] === thmbObj.objectId){
+                  group['thumbnailImgUrl'] = thmbObj['thumbnailImgUrl']
+                  group['compoundmediaCount'] = thmbObj['compoundmediaCount']
+                }
               }
-            }
-            return thmbObj
+              return thmbObj
+            })
+            
+            this.recentGroups = data.groups
+            this.loading.recentGroups = false
           })
-          
-          this.recentGroups = data.groups
-          this.loading.recentGroups = false
-        })
-        .catch( error => {
-          console.error(error)
-        })
+          .catch( error => {
+            console.error(error)
+          })
+        }  
       },
       (error) => {
         console.error(error)
@@ -309,25 +313,28 @@ export class AddToGroupModal implements OnInit, OnDestroy {
           }
         }
 
-        this._assets.getAllThumbnails(itemIds)
-        .then( allThumbnails => {
-          allThumbnails = allThumbnails.map( thmbObj => {
-            for (let group of data.groups) {
-              if(group.items[0] && group.items[0] === thmbObj.objectId){
-                group['thumbnailImgUrl'] = thmbObj['thumbnailImgUrl']
-                group['compoundmediaCount'] = thmbObj['compoundmediaCount']
+        // Check the length of itemIds to remove invalid call with object_id=null
+        if(itemIds.length !== 0) {
+          this._assets.getAllThumbnails(itemIds)
+          .then( allThumbnails => {
+            allThumbnails = allThumbnails.map( thmbObj => {
+              for (let group of data.groups) {
+                if(group.items[0] && group.items[0] === thmbObj.objectId){
+                  group['thumbnailImgUrl'] = thmbObj['thumbnailImgUrl']
+                  group['compoundmediaCount'] = thmbObj['compoundmediaCount']
+                }
               }
+              return thmbObj
+            })
+            
+            if(timeStamp === this.allGroupSearchTS) {
+              this.allGroups = this.allGroups.concat(data.groups)
             }
-            return thmbObj
           })
-          
-          if(timeStamp === this.allGroupSearchTS) {
-            this.allGroups = this.allGroups.concat(data.groups)
-          }
-        })
-        .catch( error => {
-          console.error(error)
-        })
+          .catch( error => {
+            console.error(error)
+          })
+        }
         this.loading.allGroups = false
       },
       (error) => {
