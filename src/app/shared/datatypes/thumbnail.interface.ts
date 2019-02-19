@@ -25,7 +25,6 @@ export interface Thumbnail {
     adlObjectType: number
     thumbnailSizeOnePath: string
   }
-  zoom?: any
   thumbnailImgUrl: string
   thumbnail1: any
   thumbnail2: any
