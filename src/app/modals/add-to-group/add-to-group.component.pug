@@ -36,6 +36,8 @@
                 .all-my-groups
                   .hdr(*ngIf="!groupSearchTerm")
                     label All My Groups
+                  .no-result-row(*ngIf="groupSearchTerm && totalGroups === 0")
+                    b.no-result-msg Sorry, we couldn’t find any groups related to your search. Please try a different search.
                   .row.no-gutters(*ngFor="let group of allGroups", [ngClass]="{ 'selectedGroup' : group.selected }", (click)="selectGroup(group, 'all')")
                     .col-3
                       .ig-thmbnail-wrapper

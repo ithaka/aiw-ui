@@ -244,7 +244,7 @@ export class AddToGroupModal implements OnInit, OnDestroy {
 
   public searchGroups(event?): void {
     // Execute search after every third character of the search term
-    if ((this.groupSearchTerm.length > 0) && (this.groupSearchTerm.length % 3 === 0)) {
+    if ((this.groupSearchTerm.length >= 0) && (this.groupSearchTerm.length % 3 === 0)) {
       this.groupsCurrentPage = 1
       this.allGroups = []
       this.clearSelectedGroup()
@@ -301,9 +301,9 @@ export class AddToGroupModal implements OnInit, OnDestroy {
     take(1),
       map(data  => {
         this.totalGroups = data.total
-        
+
         let itemIds: string[] = []
-        for(let group of data.groups){
+        for(let group of data.groups) {
           if(group.items.length > 0){
             itemIds.push(group.items[0])
           }
@@ -324,11 +324,11 @@ export class AddToGroupModal implements OnInit, OnDestroy {
           if(timeStamp === this.allGroupSearchTS) {
             this.allGroups = this.allGroups.concat(data.groups)
           }
-          this.loading.allGroups = false
         })
         .catch( error => {
           console.error(error)
         })
+        this.loading.allGroups = false
       },
       (error) => {
         console.error(error)
