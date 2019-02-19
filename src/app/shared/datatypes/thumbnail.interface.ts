@@ -32,6 +32,13 @@ export interface Thumbnail {
   thumbnail3: any
   thumbnail4: any
   navigationCommands: any[] // added when thumbnail is constructed, allows proper navigation from search
+  zoom?: { // optional zoom params to be available only for detail view thumbnails
+    index: number
+    pointHeight: number
+    pointWidth: number
+    viewerX: number
+    viewerY: number
+  }
 }
 
 // export interface SearchThumbnail {
