@@ -11,16 +11,10 @@ export class ToastComponent implements OnInit, OnDestroy {
   @Input() public stringHTML: string = ''
   @Output() public closeToast: EventEmitter<any> = new EventEmitter()
 
-  public hideToast: boolean = false
-
   constructor() {}
 
   ngOnInit() {
-    this.hideToast = false
-    setTimeout(() => {
-      this.hideToast = true
-      this.closeToast.emit()
-    }, 5000)
+    
   }
 
   ngOnDestroy() {

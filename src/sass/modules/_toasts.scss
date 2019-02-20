@@ -1,0 +1,15 @@
+
+// Custom style for toast content links
+.toast-content-links {
+    color: #0039C6 !important;
+    text-decoration: underline !important;
+  }
+  
+.toast-stack {
+    z-index: 8000;
+    position: fixed;
+    top: 75px;
+    right: 0px;
+    width: 400px;
+    margin-right: 24px;
+}

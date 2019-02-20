@@ -8,6 +8,7 @@ import { Angulartics2 } from 'angulartics2'
 import { Router } from '@angular/router'
 
 import { AssetService, GroupService, ImageGroup, AuthService, AssetSearchService } from './../../shared'
+import { ToastService } from 'app/_services';
 
 @Component({
   selector: 'ang-add-to-group',
@@ -17,7 +18,6 @@ import { AssetService, GroupService, ImageGroup, AuthService, AssetSearchService
 export class AddToGroupModal implements OnInit, OnDestroy {
   @Output() closeModal: EventEmitter<any> = new EventEmitter()
   @Output() createGroup: EventEmitter<any> = new EventEmitter()
-  @Output() showToast: EventEmitter<any> = new EventEmitter()
   @Input() public copySelectionStr: string = 'ADD_TO_GROUP_MODAL.FROM_SELECTED'
   @Input() showCreateGroup: boolean = true
   @Input() public selectedAssets: any[] = [] // this is used in the asset page, where a single asset can be injected directly
@@ -66,7 +66,8 @@ export class AddToGroupModal implements OnInit, OnDestroy {
     private _angulartics: Angulartics2,
     private completerService: CompleterService,
     private _auth: AuthService,
-    private router: Router
+    private router: Router,
+    private _toasts: ToastService
       ) {}
 
     ngOnInit() {
@@ -207,7 +208,8 @@ export class AddToGroupModal implements OnInit, OnDestroy {
               this.serviceResponse.success = true
               this._assets.clearSelectMode.next(true)
               this.closeModal.emit()
-              this.showToast.emit({
+              this._toasts.sendToast({
+                id: 'addToGroup',
                 type: 'success',
                 stringHTML: '<p>You have successfully added item to <b>' + data.name + '</b>.</p><a class="toast-content-links" href="/#/group/' + data.id + '">Go to Group</a>'
               })
@@ -216,7 +218,8 @@ export class AddToGroupModal implements OnInit, OnDestroy {
             },
             (err) => {
               console.error(err); this.serviceResponse.failure = true;
-              this.showToast.emit({
+              this._toasts.sendToast({
+                id: 'addToGroup',
                 type: 'error',
                 stringHTML: '<p>Unable to add item to group. Try again later or if the problem persists contact <a href="http://support.artstor.org/">support</a>.</p>'
               })
@@ -226,7 +229,8 @@ export class AddToGroupModal implements OnInit, OnDestroy {
       })
       .catch((error) => {
           console.error(error);
-          this.showToast.emit({
+          this._toasts.sendToast({
+            id: 'addToGroup',
             type: 'error',
             stringHTML: '<p>Unable to add item to group. Try again later or if the problem persists contact <a href="http://support.artstor.org/">support</a>.</p>'
           })
