@@ -1,28 +1,28 @@
-.modal.fade.show(id="modal", tabindex="-1")
+.modal.fade.show(id="modal")
   .modal-dialog(role="document", [ngClass]="{ 'large': detailViewBounds.width }")
     .modal-content
       .row.no-gutters
         .col-lg-6.detail-preview(*ngIf="detailViewBounds.width")
           .preview-cntnr
-            img([attr.src]="detailPreviewURL", role="image")
+            img([attr.src]="detailPreviewURL", tabindex="10", [attr.aria-label]="selectedAssets[0].title + ', ' + selectedAssets[0].creator + ', ' + selectedAssets[0].date + ' of image.'", role="image", (keydown.shift.tab)="focusLastElement($event)")
             i.icon.icon-detail-overlay
         div([ngClass]="[ detailViewBounds.width ? 'col-lg-6' : 'col-lg-12' ]")
           .modal-header
-            h4.modal-title {{ detailViewBounds.width ? 'Add Detail to Group' : 'Add ' + ( selectedAssets.length > 1 ? selectedAssets.length + ' Items' : 'Item' ) + ' to Group' }}
-            button.close((click)="closeModal.emit()", type="button", data-dismiss="modal", aria-label="Close")
+            h4.modal-title(tabindex="10", (keydown.shift.tab)="detailViewBounds.width ? null : focusLastElement($event)") {{ detailViewBounds.width ? 'Add Detail to Group' : 'Add ' + ( selectedAssets.length > 1 ? selectedAssets.length + ' Items' : 'Item' ) + ' to Group' }}
+            button.close((click)="closeModal.emit()", type="button", data-dismiss="modal", tabindex="10", aria-label="Close")
               span(aria-hidden="true") &times;
           form(#igForm="ngForm", (ngSubmit)="submitGroupUpdate(igForm)")
             .modal-body
               .search-cntnr([ngClass]="{ 'shadow' : scrollCntnr.scrollTop > 50 }")
                 .input-group
-                  input#inputGroupSearchTerm.form-control.has-icon([(ngModel)]="groupSearchTerm", name="term", type="text", placeholder="Search groups...", (keyup)="searchGroups($event)")
-                  i#iconClearGroupSearch.icon.icon-clear.form-control__icon(*ngIf="groupSearchTerm", (click)="clearGroupSearch()", placement="bottom", ngbTooltip="Clear search", role="button")
-                  i#iconGroupSearchSubmit.icon.icon-search.form-control__icon(*ngIf="!groupSearchTerm", role="button", placement="bottom", ngbTooltip="Submit search")
+                  input#inputGroupSearchTerm.form-control.has-icon([(ngModel)]="groupSearchTerm", name="term", type="text", placeholder="Search by group title...", (keyup)="searchGroups()", tabindex="10")
+                  i#iconClearGroupSearch.icon.icon-clear.form-control__icon(*ngIf="groupSearchTerm", (click)="clearGroupSearch()", (keyup.enter)="clearGroupSearch()", placement="bottom", triggers="focusin:focusout mouseenter:mouseleave", ngbTooltip="Clear search", role="button", tabindex="10", aria-label="Clear search")
+                  i#iconGroupSearchSubmit.icon.icon-search.form-control__icon(*ngIf="!groupSearchTerm", (click)="searchGroups(true)", (keyup.enter)="searchGroups(true)", placement="bottom", triggers="focusin:focusout mouseenter:mouseleave", ngbTooltip="Submit search", role="button", tabindex="10", aria-label="Submit search")
               .scroll-cntnr(#scrollCntnr, infiniteScroll, [scrollWindow]="false", [infiniteScrollDistance]="1", [infiniteScrollThrottle]="150", [infiniteScrollDisabled]="allGroups.length < totalGroups && !loading.allGroups ? false : true", (scrolled)="loadMoreGroups()")
                 .recent-groups(*ngIf="!groupSearchTerm")
                   .hdr
-                    label Recent Groups
-                  .row.no-gutters(*ngFor="let recentGroup of recentGroups", [ngClass]="{ 'selectedGroup' : recentGroup.selected }", (click)="selectGroup(recentGroup, 'recent')")
+                    label(tabindex="10") Recent Groups
+                  .row.no-gutters(*ngFor="let recentGroup of recentGroups", [ngClass]="{ 'selectedGroup' : recentGroup.selected }", (click)="selectGroup(recentGroup, 'recent')", (keydown.enter)="selectGroup(recentGroup, 'recent')", (keydown.space)="$event.stopPropagation(); $event.preventDefault(); selectGroup(recentGroup, 'recent')", (keydown)="groupSelectKeyDown($event, recentGroup.selected)", tabindex="10", [attr.aria-label]="recentGroup.name + ', ' + (recentGroup.selected ? 'selected' : 'unselected') + ', press enter or spacebar to ' + (recentGroup.selected ? 'unselect' : 'select') + ' this group'")
                     .col-3
                       .ig-thmbnail-wrapper
                         img([ngClass]="{ 'loaded' : recentGroup.imgLoaded }", [attr.src]="_search.makeThumbUrl(recentGroup['thumbnailImgUrl'], 1, recentGroup['compoundmediaCount'])", [attr.alt]="recentGroup.name", (load)="recentGroup.imgLoaded = true", aria-role="image")
@@ -35,8 +35,8 @@
                 
                 .all-my-groups
                   .hdr(*ngIf="!groupSearchTerm")
-                    label All My Groups
-                  .row.no-gutters(*ngFor="let group of allGroups", [ngClass]="{ 'selectedGroup' : group.selected }", (click)="selectGroup(group, 'all')")
+                    label(tabindex="10") All My Groups
+                  .row.no-gutters(*ngFor="let group of allGroups", [ngClass]="{ 'selectedGroup' : group.selected }", (click)="selectGroup(group, 'all')", (keydown.enter)="selectGroup(group, 'all')", (keydown.space)="$event.stopPropagation(); $event.preventDefault(); selectGroup(group, 'all')", (keydown)="groupSelectKeyDown($event, group.selected)", tabindex="10", [attr.aria-label]="group.name + ', ' + (group.selected ? 'selected' : 'unselected') + ', press enter or spacebar to ' + (group.selected ? 'unselect' : 'select') + ' this group'")
                     .col-3
                       .ig-thmbnail-wrapper
                         img([ngClass]="{ 'loaded' : group.imgLoaded }", [attr.src]="_search.makeThumbUrl(group['thumbnailImgUrl'], 1, group['compoundmediaCount'])", [attr.alt]="group.name", (load)="group.imgLoaded = true", aria-role="image")
@@ -49,8 +49,8 @@
             .modal-footer
               ng-container(*ngIf="!serviceResponse.success")
                 .wrapper
-                  a.help-link.mr-2(href="http://support.artstor.org/?article=create-and-manage-image-groups", target="_blank") ?
-                  .link(*ngIf="showCreateGroup", (click)="createGroup.emit()") Create new group
+                  a.help-link.mr-2(href="http://support.artstor.org/?article=create-and-manage-image-groups", target="_blank", tabindex="13", aria-label="Learn more about groups", (keydown.tab)="$event.stopPropagation(); $event.preventDefault(); startModalFocus()") ?
+                  .link(*ngIf="showCreateGroup", (click)="createGroup.emit()", (keyup.enter)="createGroup.emit()", tabindex="12", aria-label="Add to New Group", role="link") Create new group
                 .wrapper
-                  button.btn.btn-secondary.mr-2((click)="closeModal.emit()", type="button", data-dismiss="modal") {{ 'ADD_TO_GROUP_MODAL.CONTROLS.CANCEL' | translate}}
-                  button.btn.btn-primary([ngClass]="{ 'disabled-btn' : !selectedGroup.id }", type="submit") {{ 'ADD_TO_GROUP_MODAL.CONTROLS.ADD' | translate }}
+                  button.btn.btn-secondary.mr-2((click)="closeModal.emit()", type="button", data-dismiss="modal", tabindex="11", aria-label="Cancel") {{ 'ADD_TO_GROUP_MODAL.CONTROLS.CANCEL' | translate}}
+                  button#addBtn.btn.btn-primary([ngClass]="{ 'disabled-btn' : !selectedGroup.id }", type="submit", tabindex="10", [attr.aria-label]="'Add this item to ' + selectedGroup.name") {{ 'ADD_TO_GROUP_MODAL.CONTROLS.ADD' | translate }}
