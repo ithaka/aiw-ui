@@ -771,9 +771,12 @@ export class AssetGrid implements OnInit, OnDestroy {
   }
 
   private convertCollectionTypes(collectionId: number): string {
+    console.log('CALLED: ', collectionId)
     switch (collectionId) {
       case 3:
         return 'personal-asset';
+      case 7:
+        return 'open-artstor';
       default:
         return '';
     }
