@@ -7,4 +7,4 @@
       .col-9
         div([innerHTML]="stringHTML")
       .col-1.text-center
-        i.icon.icon-close((click)="hideToast = true; closeToast.emit()")
+        i.icon.icon-close((click)="triggerDismiss()")

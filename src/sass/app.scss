@@ -29,6 +29,7 @@
 // [II] Core Imports (Order of import matters)
 // ----------------------------------------------------
 
+@import './core/mixins';
 @import './core/reset';
 @import './core/helpers';
 @import './core/layout';

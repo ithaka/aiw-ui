@@ -1,8 +1,9 @@
 @import '../../../sass/core/variables';
+@import '../../../sass/core/mixins';
 
 .toast-cntnr {
     min-width: 400px;
-    min-height: 100px;  
+    min-height: 50px;  
     margin-bottom: $basePadding/2;
     background-color: $bgDefault;
     z-index: 10000;
@@ -25,29 +26,33 @@
     }
     
     &.slide-out {
+        min-height: 0px;
         margin-right: 0px;
         animation: slide-out 0.5s forwards;
         -webkit-animation: slide-out 0.5s forwards;
     }
         
-    @keyframes slide-in {
+    @include keyframes('slide-in') {
         0% { transform: translateX(100%); }
         100% { transform: translateX(0%); }
     }
-    
-    @-webkit-keyframes slide-in {
-        0% { -webkit-transform: translateX(100%); }
-        100% { -webkit-transform: translateX(0%); }
-    }
         
-    @keyframes slide-out {
-        0% { transform: translateX(0%); }
-        100% { transform: translateX(100%); }
-    }
-    
-    @-webkit-keyframes slide-out {
-        0% { -webkit-transform: translateX(0%); }
-        100% { -webkit-transform: translateX(100%); }
+    @include keyframes('slide-out') {
+        0% { 
+            transform: translateX(0%); 
+            max-height: 120px;
+            margin-bottom: $basePadding/2;
+            opacity: 1;
+        }
+        50% {
+            max-height: 120px;
+            opacity: 0;
+        }
+        100% { 
+            transform: translateX(150%); 
+            max-height: 0px;
+            margin-bottom: 0px;
+        }
     }
 
     .toast-body{

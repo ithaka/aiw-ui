@@ -53,7 +53,7 @@
           | Institution: {{ institutionObj.shortName ? institutionObj.shortName : institutionObj.institutionName }}
 .toast-stack
   ng-container(*ngFor="let toast of toasts")
-    ang-toast([type]="toast.type", [stringHTML]="toast.stringHTML", (closeToast)="closeToast()")
+    ang-toast([toast]="toast", [dismiss]="toast.dismiss")
 ang-delete-ig-modal(*ngIf="showDeleteIgModal", (closeModal)="showDeleteIgModal = false", [ig]="ig", [igId]="route.snapshot.params.igId", [igName]="route.snapshot.params.name")
 ang-new-ig-modal(*ngIf="showImageGroupModal", [copyIG]="copyIG", [editIG]="editIG", [ig]="ig", (igReloadTriggered)="reloadIG()", (closeModal)="showImageGroupModal = false")
 ang-share-link-modal(*ngIf="showShareLinkModal", [asset]="selectedAssets[0]", (closeModal)="showShareLinkModal = false")

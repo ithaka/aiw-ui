@@ -76,14 +76,18 @@ const DEFAULT_DISPLAY_TIME: number = 9000
        * Dismiss Toast Message
        * @param toastId Toast for message to dismiss
        */
-      public dismissToast(toastId: string) : void {
+      public dismissToast(toastId: string, removeImmediately?: boolean) : void {
         let toasts = this.toastUpdatesSource.value
         // Cancel timer, if exists
         this.cancelToastTimer(toastId)
         // Remove toast
         for (let i = 0; i < toasts.length; i++) {
           if (toasts[i].id === toastId) {
-            toasts.splice(i, 1)
+            if (removeImmediately) {
+                toasts.splice(i, 1)
+            } else {
+                toasts[i].dismiss = true
+            }
             break
           }
         }
@@ -106,6 +110,7 @@ export interface Toast {
     id: string
     type: string
     stringHTML: string
+    dismiss?: boolean
     date?: Date
     requireDismiss?: boolean
 }
