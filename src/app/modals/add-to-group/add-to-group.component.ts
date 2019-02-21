@@ -217,7 +217,7 @@ export class AddToGroupModal implements OnInit, OnDestroy {
               this._toasts.sendToast({
                 id: 'addToGroup',
                 type: 'success',
-                stringHTML: '<p>' + (multipleSelected ? 'The items were added ' : 'The item was added') + 'to <b>' + data.name + '</b>.</p>',
+                stringHTML: '<p>' + (multipleSelected ? 'The items were added' : 'The item was added') + ' to <b>' + data.name + '</b>.</p>',
                 links: [{
                   routerLink: ['/group/'+ data.id],
                   label: 'Go to Group'
@@ -231,7 +231,7 @@ export class AddToGroupModal implements OnInit, OnDestroy {
               this._toasts.sendToast({
                 id: 'addToGroup',
                 type: 'error',
-                stringHTML: '<p>Unable to add item to group. Try again later or if the problem persists contact <a href="http://support.artstor.org/">support</a>.</p>'
+                stringHTML: '<p>Sorry, we weren’t able to add the '+ (multipleSelected ? 'items' : 'item') +' at this time. Try again later or contact <a href="http://support.artstor.org/">support</a>.</p>'
               })
             }
         )).subscribe()
@@ -242,7 +242,7 @@ export class AddToGroupModal implements OnInit, OnDestroy {
           this._toasts.sendToast({
             id: 'addToGroup',
             type: 'error',
-            stringHTML: '<p>Unable to add item to group. Try again later or if the problem persists contact <a href="http://support.artstor.org/">support</a>.</p>'
+            stringHTML: '<p>Sorry, we weren’t able to add the '+ (multipleSelected ? 'items' : 'item') +' at this time. Try again later or contact <a href="http://support.artstor.org/">support</a>.</p>'
           })
       });
 
