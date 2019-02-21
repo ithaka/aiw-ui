@@ -150,6 +150,7 @@ export class AddToGroupModal implements OnInit, OnDestroy {
 
     // Create object for new modified group
     let putGroup: ImageGroup = Object.assign({}, this.selectedGroup)
+    let multipleSelected: boolean = this.selectedAssets.length > 1
 
     // assets come from different places and sometimes have id and sometimes objectId
     this.selectedAssets.forEach((asset: any, index) => {
@@ -216,7 +217,7 @@ export class AddToGroupModal implements OnInit, OnDestroy {
               this._toasts.sendToast({
                 id: 'addToGroup',
                 type: 'success',
-                stringHTML: '<p>You have successfully added item to <b>' + data.name + '</b>.',
+                stringHTML: '<p>' + (multipleSelected ? 'The items were added ' : 'The item was added') + 'to <b>' + data.name + '</b>.</p>',
                 links: [{
                   routerLink: ['/group/'+ data.id],
                   label: 'Go to Group'
