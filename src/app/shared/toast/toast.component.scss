@@ -14,7 +14,7 @@
     -webkit-transform: translateX(100%);
 
     &.success {
-        border-color: #87AA55;
+        border-color: $green;
     }
     &.error{
         border-color: #ED3323;
