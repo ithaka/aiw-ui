@@ -276,8 +276,8 @@
     "PERMISSION_FIELD_HELPER": "Who can see this group?",
     "PERMISSIONS": {
       "GLOBAL": "Everyone",
-      "INSTITUTIONAL": "Institutional",
-      "PRIVATE": "Private"
+      "INSTITUTIONAL": "This Institution",
+      "PRIVATE": "Only me"
     },
     "TAGS_FIELD_LABEL": "Tags",
     "SHOW_ADD_TO_IMAGE_GROUP": "Add item to existing group",

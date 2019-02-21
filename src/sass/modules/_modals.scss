@@ -116,26 +116,30 @@
   color: #4F5557;
 }
 
-/** Override media editor placeholder */
-$medium-editor-placeholder-color: $color-gray-5 !important;
-span.placeholder-text, .placeholder-text::placeholder, .medium-editor-element::placeholder {
-  color: $color-gray-5 !important;
+/** Create Group Modal Specific Styles */
+ang-new-ig-modal .modal-content {
+    margin-top: 10em;
 }
 
-/** Create Group Modal Specific Styles */
 #newIgForm {
+
+  /** Override media editor placeholder */
+  .placeholder-text::placeholder, .me-editable.medium-editor-placeholder::after {
+    color: $color-gray-5 !important;
+  }
 
   & .modal-label, .modal-label:hover {
     color: $color-gray-6;
-    font-weight: 900;
+    text-transform: none;
   }
-  & .orange-label, .orange-label:hover {
-    color: $orange;
+
+  & .btn.modal-label {
+    font-weight: 400;
   }
 
   .form-group {
     .btn-group {
-      & .modal-label, .orange-label {
+      & .modal-label {
         padding-left: 0;
         box-shadow: none; /** :focus :active override for radio buttons */
       }
@@ -158,6 +162,7 @@ span.placeholder-text, .placeholder-text::placeholder, .medium-editor-element::p
       color: $color-gray-5 !important;
       }
     }
+
   }
 
   /** New IG Create button disabled style */
@@ -202,4 +207,15 @@ span.placeholder-text, .placeholder-text::placeholder, .medium-editor-element::p
         line-height: 22px;
     }
   }
+
+  #who-can-see {
+    font-weight: 400;
+    color: $color-gray-5;
+  }
+
+  .modal-label.btn.active {
+    color: $orange;
+    font-weight: 900;
+  }
+
 }
