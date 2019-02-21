@@ -57,6 +57,8 @@ export class AddToGroupModal implements OnInit, OnDestroy {
 
   private subscriptions: Subscription[] = []
 
+  private lastSearchTerm: string = ''
+
   @ViewChild("modal", {read: ElementRef}) modalElement: ElementRef
 
   constructor(
@@ -245,13 +247,17 @@ export class AddToGroupModal implements OnInit, OnDestroy {
   public searchGroups(event?): void {
     // Execute search after every third character of the search term
     // Use ">=" instead of ">" so that when we have empty search term (when we type something and delete it), we will reload the groups
-    if ((this.groupSearchTerm.length >= 0)) {
+    // Use setTimeout to make a brief pause in keypress events to prevent from overloading the backend
+    setTimeout((event?) => {
+      if ((this.groupSearchTerm.length >= 0) && this.groupSearchTerm !== this.lastSearchTerm) {
       this.groupsCurrentPage = 1
       this.allGroups = []
       this.clearSelectedGroup()
       this.allGroupSearchTS = Date.now()
       this.loadMyGroups()
     }
+    this.lastSearchTerm = this.groupSearchTerm
+    }, 200)
   }
 
   private loadRecentGroups(): void{
@@ -299,10 +305,11 @@ export class AddToGroupModal implements OnInit, OnDestroy {
   private loadMyGroups(): void{
     this.loading.allGroups = true
     let timeStamp = this.allGroupSearchTS
+
     this._group.getAll(
       'created', 10, this.groupsCurrentPage, [], this.groupSearchTerm, '', 'alpha', 'asc'
     ).pipe(
-    take(1),
+      take(1),
       map(data  => {
         this.totalGroups = data.total
 
