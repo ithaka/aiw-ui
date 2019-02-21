@@ -34,6 +34,7 @@ export class Login implements OnInit, OnDestroy {
   public forcePwdRst = false
   public successMsgPwdRst = ''
   public loginInstitutions = [] /** Stores the institutions returned by the server */
+  public samlAvailable = false
 
   // Use environment for forum urls
   // This is temporary until stage deployment build is updated for env vars
@@ -72,6 +73,7 @@ export class Login implements OnInit, OnDestroy {
     private _storage: ArtstorStorageService
   ) {
     // console.log("Constructing login component...")
+    this.samlAvailable = this._auth.samlAvailable
   }
 
   ngOnInit() {
