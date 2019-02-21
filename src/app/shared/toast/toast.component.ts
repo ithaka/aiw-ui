@@ -21,7 +21,7 @@ export class ToastComponent implements OnInit, OnDestroy {
   public stringHTML: string
   public type: string
   public hideToast: boolean
-  
+  public links: { routerLink: string[], label: string }[] = []
 
   constructor(public _toasts: ToastService) {}
 
@@ -29,6 +29,7 @@ export class ToastComponent implements OnInit, OnDestroy {
     // Assign vars used in template
     this.stringHTML = this.toast.stringHTML
     this.type = this.toast.type
+    this.links = this.toast.links
   }
 
   triggerDismiss() {

@@ -6,5 +6,7 @@
         .toast-icon
       .col-9
         div([innerHTML]="stringHTML")
+        ng-container(*ngFor="let link of links")
+          a.toast-content-links.mr-1([routerLink]="link.routerLink") {{ link.label }}
       .col-1.text-center
         i.icon.icon-close((click)="triggerDismiss()")

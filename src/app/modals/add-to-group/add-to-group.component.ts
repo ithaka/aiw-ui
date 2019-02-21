@@ -211,7 +211,11 @@ export class AddToGroupModal implements OnInit, OnDestroy {
               this._toasts.sendToast({
                 id: 'addToGroup',
                 type: 'success',
-                stringHTML: '<p>You have successfully added item to <b>' + data.name + '</b>.</p><a class="toast-content-links" href="/#/group/' + data.id + '">Go to Group</a>'
+                stringHTML: '<p>You have successfully added item to <b>' + data.name + '</b>.',
+                links: [{
+                  routerLink: ['/group/'+ data.id],
+                  label: 'Go to Group'
+                }]
               })
               // Add to Group GA event
               this._angulartics.eventTrack.next({ action: 'addToGroup', properties: { category: this._auth.getGACategory(), label: this.router.url }})

@@ -29,8 +29,8 @@ const DEFAULT_DISPLAY_TIME: number = 9000
         this.sendToast({
             id: 'savedToGroup',
             type: 'success',
-            requireDismiss: true,
-            stringHTML: '<p>You have successfully added item to <b>Example</b>.</p><a class="toast-content-links" href="/#/group/example">Go to Group</a>'
+            stringHTML: '<p>You have successfully added item to <b>Example</b>.</p>',
+            links: [{routerLink:["/group/example"], label: 'Go to Group'}]
         })
         this.sendToast({
             id: 'example',
@@ -110,6 +110,10 @@ export interface Toast {
     id: string
     type: string
     stringHTML: string
+    links?: {
+        routerLink: string[],
+        label: string
+    }[]
     dismiss?: boolean
     date?: Date
     requireDismiss?: boolean
