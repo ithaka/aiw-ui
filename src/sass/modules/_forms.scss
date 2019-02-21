@@ -163,23 +163,23 @@ ngx-tag-input-item {
     background: #fff;
     padding-left: 5px !important;
     margin-bottom: 12px !important;
-    border: 1px dotted #cdcdcd !important;
+    border: 1px solid $orange !important;
     line-height: 12px !important;
     position: relative !important;
     overflow: visible !important;
     display: inline-block !important;
 
     &::-webkit-input-placeholder {
-    color: $inputPlaceholderColor !important;
+    color: $orange !important;
     }
     &:-moz-placeholder {
-    color: $inputPlaceholderColor !important;
+    color: $orange !important;
     }
     &::-moz-placeholder {
-    color: $inputPlaceholderColor !important;
+    color: $orange !important;
     }
     &:-ms-input-placeholder {
-    color: $inputPlaceholderColor !important;
+    color: $orange !important;
     }
 }
 

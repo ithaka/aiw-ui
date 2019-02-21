@@ -268,14 +268,16 @@
     "CREATE_TITLE": "Create New Group",
     "EDIT_TITLE": "Edit Group",
     "COPY_TITLE": "Copy Group",
+    "FIRST_GROUP_MSG": "You haven't created a group yet! Create your first group.",
     "TITLE_FIELD_LABEL": "Title",
-    "TITLE_REQUIRED_MSG": "A title is required",
+    "TITLE_REQUIRED_MSG": "Don't forget to add a title!",
     "DESCRIPTION_FIELD_LABEL": "Description",
-    "PERMISSION_FIELD_LABEL": "Who should see this group?",
+    "PERMISSION_FIELD_LABEL": "Sharing Permissions",
+    "PERMISSION_FIELD_HELPER": "Who can see this group?",
     "PERMISSIONS": {
       "GLOBAL": "Everyone",
       "INSTITUTIONAL": "This Institution",
-      "PRIVATE": "Only Me"
+      "PRIVATE": "Only me"
     },
     "TAGS_FIELD_LABEL": "Tags",
     "SHOW_ADD_TO_IMAGE_GROUP": "Add item to existing group",
@@ -286,7 +288,7 @@
       "RETURN_TO_RESULTS": "Return",
       "NAV_TO_GROUP": "Go to group",
       "CLOSE": "Close",
-      "SAVE_EDIT": "Save changes"
+      "SAVE_EDIT": "Create"
     }
   },
   "ADVANCED_SEARCH_MODAL": {
@@ -488,7 +490,7 @@
       "TEACHING_HEADING": "Teaching Resources",
       "TEACHING_LIST": "<a href=\"/#/browse/groups/public?tags=Curriculum%2520Guides&page=1\" class=\"link\">Curriculum Guides</a>, <a href=\"/#/browse/groups/public?page=1&tags=Case%2520Studies\" class=\"link\">Case Studies</a>, <a href=\"/#/browse/groups/search?level=public&tags=Art%2520%2526%2520Architecture%2520Overviews&page=1\" class=\"link\">Arts & Architecture Overviews</a>, <a href=\"/#/browse/groups/search?level=public&page=1&tags=Social%2520Studies%2520and%2520Humanities%2520Overviews\" class=\"link\">Social Sciences & Humanities Overviews</a>, <a href=\"http://artstor.libguides.com/APArtHistory\" target=\"_blank\" class=\"link\">AP Art History</a>, <a href=\"http://artstor.libguides.com/APUSH\" target=\"_blank\" class=\"link\">AP US History</a>, <a href=\"http://artstor.libguides.com/APEURO\" target=\"_blank\" class=\"link\">AP European History</a>, and <a href=\"/#/browse/groups/public\" class=\"link\">more...</a>",
       "GROUPS_HEADING": "Groups",
-      "GROUPS_LIST": "Groups of images created by Artstor, other users at your institution, and you",
+      "GROUPS_LIST": "Groups of items created by Artstor, other users at your institution, and you",
       "GROUPS_LIST_SAHARA": "Groups created by you and others at your institution",
       "PUB_COLL_HEADING": "Public Collections",
       "PUB_COLL_LIST": "Open content provided by multiple institutions",

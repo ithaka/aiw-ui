@@ -129,12 +129,21 @@ export class GroupService {
         return everyGroupObservable
     }
 
+    /**
+     * Check if a user has at least one Private Group
+     */
+    public hasPrivateGroups(): Observable<any> {
+      return this.http.get(this.groupUrl + '?size=1&level=private', this.options)
+    }
+
      /**
      * Get Individual Group
      */
-    public get(groupId: string): Observable<any> {
+    public get(groupId: string, detailViewFlag?: boolean): Observable<any> {
+        // Use v2 endpoint under the detailView feature flag
+        let url = detailViewFlag ? environment.API_URL + '/api/v2/group/' + groupId : this.groupUrl + '/' + groupId
         return this.http.get(
-            this.groupUrl + '/' + groupId, this.options
+            url, this.options
         )
     }
 

@@ -54,3 +54,5 @@
       #buttonDateFilterReset.btn(role="button", (keydown.enter)="clearDateFilter()", tabindex="2", (click)="clearDateFilter()") RESET
       #buttonDateFilterSubmit.btn(role="button", (keydown.enter)="applyDateFilter()", tabindex="2", (click)="applyDateFilter()") APPLY
     .date-filter-error-msg(*ngIf="dateError") End date must be greater than or equal to Start date.
+.row.has-icon-overlay([hidden]="keys(availableFilters).length !== 0")
+  i.icon-lg.icon-overlay.icon-loading-large.move-up

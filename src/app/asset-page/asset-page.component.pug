@@ -22,6 +22,7 @@
             [assetId]="assetId",
             [encrypted]="encryptedAccess",
             [groupId]="assetGroupId",
+            [zoom]="zoomParams",
             (assetMetadata)="handleLoadedMetadata($event, i)",
             [ngClass]="[ 'asset-viewer-' + assetIds.length ]",
             (fullscreenChange)="updateFullscreenVar($event)",
@@ -85,26 +86,29 @@
           button#assetpage-btn.btn.btn-secondary(*ngIf="user.isLoggedIn && assets[0].personalCollectionOwner === user['baseProfileId']", [class.active]="showEditDetails", (click)="loadEditDetailsForm()", tabindex="2", aria-label="Edit details for this item")
             | {{ 'ASSET_PAGE.BUTTONS.EDIT_DETAILS' | translate}}
 
-          .dropdown.d-inline-block(*ngIf="detailViewsFlag", ngbDropdown, aria-haspopup="true")
-            button#addToGroupDropdown.btn.btn-secondary(ngbDropdownToggle, tabindex="2", aria-label="Add to groups")
+          .dropdown.d-inline-block(*ngIf="detailViewsFlag && assets[0].typeId === 10 && !multiviewItems", ngbDropdown, aria-haspopup="true")
+            button#addToGroupDropdown.btn.btn-primary(ngbDropdownToggle, tabindex="2", aria-label="Add to groups")
               | {{ 'ASSET_PAGE.BUTTONS.ADD_TO_GROUP' | translate}}
               = " "
             .dropdown-menu(ngbDropdownMenu)
-              a#downloadAssetLink.dropdown-item(
-                (click)="addAssetToIG(true)",
-                tabindex="2",
-                aria-label="Add View to Group",
-                role="button")
-                | &nbsp;Add View to Group
               a#downloadViewLink.dropdown-item(
                 (click)="addAssetToIG()",
                 tabindex="2",
                 aria-label="Add Item to Group",
                 role="button")
-                | &nbsp;Add Item to Group
+                i.icon.icon-add-item
+                | &nbsp;Add item
+              a#downloadAssetLink.dropdown-item(
+                [ngClass]="{ 'disabled' : assetViewer.osdViewer.viewport.getBounds(true)['width'] > 1 || assetViewer.osdViewer.viewport.getBounds(true)['height'] > 1 || assetViewer.osdViewer.viewport.getBounds(true)['x'] > 1 || assetViewer.osdViewer.viewport.getBounds(true)['y'] > 1 }",
+                (click)="addAssetToIG(true)",
+                tabindex="2",
+                aria-label="Add View to Group",
+                role="button")
+                i.icon.icon-add-detail
+                | &nbsp;Add detail view
 
           //- the .driver-find-group-btn class is important for the tour to find it, be careful when removing or changing it
-          button#assetpage-btn.btn.btn-primary.driver-find-group-btn(*ngIf="!detailViewsFlag", (click)="addAssetToIG()", (focus)="closeDropdowns()", (keydown.enter)="addAssetToIG()", tabindex="2", aria-label="Add this item to a group")
+          button#assetpage-btn.btn.btn-primary.driver-find-group-btn(*ngIf="!detailViewsFlag || assets[0].typeId !== 10 || multiviewItems", (click)="addAssetToIG()", (focus)="closeDropdowns()", (keydown.enter)="addAssetToIG()", tabindex="2", aria-label="Add this item to a group")
             | {{ 'ASSET_PAGE.BUTTONS.ADD_TO_GROUP' | translate }}
             //- i.icon.icon-add-white(aria-hidden="true")
           //- Download dropdown options
@@ -113,7 +117,7 @@
             button#downloadAssetDropdown.btn.btn-secondary(ngbDropdownToggle [class.loading]="downloadLoading", (click)="genDownloadViewLink()", (keydown.enter)="genDownloadViewLink()", (keyup.arrowdown)="downloadOptsArrowDown($event.target)", [disabled]="multiviewItems", tabindex="2", aria-label="Download")
               | {{ 'ASSET_PAGE.BUTTONS.DOWNLOAD' | translate}}
               = " "
-            .dropdown-menu(ngbDropdownMenu, aria-labelledby="dropdownBasic1")
+            .dropdown-menu.download-menu(ngbDropdownMenu, aria-labelledby="dropdownBasic1")
               a#downloadAssetLink.dropdown-item(download,
                 [attr.href]="((assets[0].publicDownload || !assets[0].disableDownload) && acceptedTerms) ? generatedFullURL : null",
                 (click)="((assets[0].publicDownload || !assets[0].disableDownload) && acceptedTerms) ? trackDownloadImage() : setDownloadImage()",
@@ -126,8 +130,8 @@
                 tabindex="2",
                 aria-label="Download item",
                 role="button")
-                i.icon.icon-download-black
-                | &nbsp;Download File
+                i.icon.icon-download-item
+                | &nbsp;Download Item
               a#downloadViewLink.dropdown-item(*ngIf="isMSAgent || !downloadViewAsBlob",
                 [attr.href]="((assets[0].publicDownload || !assets[0].disableDownload) && acceptedTerms) ? downloadViewLink : null",
                 (click)="((assets[0].publicDownload || !assets[0].disableDownload) && acceptedTerms) ? trackDownloadView() : setDownloadView()",
@@ -138,8 +142,8 @@
                 tabindex="2",
                 aria-label="Download item’s detail view",
                 role="button")
-                i.icon.icon-download-black
-                | &nbsp;Download View
+                i.icon.icon-download-detail
+                | &nbsp;Download detail view
               a#downloadViewLink.dropdown-item(*ngIf="!isMSAgent && downloadViewAsBlob" download="download.jpg",
                 type="image/jpeg",
                 [attr.href]="((assets[0].publicDownload || !assets[0].disableDownload) && acceptedTerms) ? generatedBlobURL : null",
@@ -151,8 +155,8 @@
                 tabindex="2",
                 aria-label="Download item’s detail view",
                 role="button")
-                i.icon.icon-download-black
-                | &nbsp;Download View
+                i.icon.icon-download-detail
+                | &nbsp;Download detail view
           //- False door button if user is not logged in
           button#assetpage-btn.btn.btn-secondary(*ngIf="assets[0].downloadLink && !(user.isLoggedIn || hasExternalAccess) && !assets[0].publicDownload", (click)="showLoginModal = true", (keydown.enter)="showLoginModal = true", tabindex="2", aria-label="Download")
             | {{ 'ASSET_PAGE.BUTTONS.DOWNLOAD' | translate}}

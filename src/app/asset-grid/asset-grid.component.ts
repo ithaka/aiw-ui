@@ -572,6 +572,12 @@ export class AssetGrid implements OnInit, OnDestroy {
     let params: any = {
       prevRouteTS: this.prevRouteTS // for fetching previous route params from session storage, on asset page
     }
+    if(thumbnail.zoom) {
+      params['x'] = thumbnail.zoom.viewerX
+      params ['y'] = thumbnail.zoom.viewerY
+      params['w'] = thumbnail.zoom.pointWidth
+      params['h'] = thumbnail.zoom.pointHeight
+    }
     let url = []
     thumbnail.iap && (params.iap = 'true')
     this.ig && this.ig.id && (params.groupId = this.ig.id)
