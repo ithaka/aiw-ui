@@ -85,8 +85,7 @@ export class NavMenu implements OnInit, OnDestroy {
     private _group: GroupService,
     private route: ActivatedRoute,
     public _auth: AuthService,
-    public _flags: FlagService,
-    public _toasts: ToastService
+    public _flags: FlagService
   ) {
     this.browseOpts = this._app.config.browseOptions
     this.siteID = this._appConfig.config.siteID
@@ -130,13 +129,7 @@ export class NavMenu implements OnInit, OnDestroy {
       this._auth.getInstitution().pipe(
         map(institutionObj => {
           this.institutionObj = institutionObj;
-      })).subscribe(),
-      // Toast updates subscription
-      this._toasts.toastUpdates.subscribe(
-        toasts => {
-          this.toasts = toasts
-        }
-      )
+      })).subscribe()
     )
 
   } // onInit
@@ -267,15 +260,5 @@ export class NavMenu implements OnInit, OnDestroy {
           this._router.navigate(['/home'])
         }
       })
-  }
-
-  public handleToast(event: any): void{
-    this.toastType = event.type
-    this.toastHTML = event.stringHTML
-    this.showToast = true
-  }
-
-  public closeToast(): void{
-      setTimeout(()=>{ this.showToast = false }, 1000)
   }
 }

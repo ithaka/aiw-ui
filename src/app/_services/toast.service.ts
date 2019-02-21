@@ -26,18 +26,12 @@ const DEFAULT_DISPLAY_TIME: number = 9000
         this.toastUpdatesSource = new BehaviorSubject([])
         this.toastUpdates = this.toastUpdatesSource.asObservable()
 
-        this.sendToast({
-            id: 'savedToGroup',
-            type: 'success',
-            stringHTML: '<p>You have successfully added item to <b>Example</b>.</p>',
-            links: [{routerLink:["/group/example"], label: 'Go to Group'}]
-        })
-        this.sendToast({
-            id: 'example',
-            type: 'success',
-            requireDismiss: true,
-            stringHTML: '<p>Another example toast!</p>'
-        })
+        // this.sendToast({
+        //     id: 'example',
+        //     type: 'success',
+        //     requireDismiss: true,
+        //     stringHTML: '<p>Another example toast!</p>'
+        // })
     }
 
     public sendToast(newToast: Toast) {
