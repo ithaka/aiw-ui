@@ -48,7 +48,8 @@ export class AssetPPPage implements OnInit {
     this._metadata.buildAsset(this.assetId, {}).pipe(
       map(asset => {
         // Is this a multiview asset?
-        if (typeof(asset.image_compound_urls) !== 'undefined' && asset.image_compound_urls.length) {
+        // We are tranforming image_compound_urls to tileSource in Asset constructor, check tileSource instead
+        if (typeof(asset.tileSource) === 'object' && asset.tileSource.length) {
           this.isMultiView = true
         }
         
