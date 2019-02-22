@@ -20,7 +20,12 @@
       .card.card--v-pad
         .card-header
           h2.h1#institutionHeading {{ 'LOGIN.INSTITUTION_LOGIN.HEADING' | translate }}
-        .card-body
+        .card-body(*ngIf="!samlAvailable")
+          .alert.alert-warning
+            b Institutional Login Unavailable
+            | Institution login is not available on this version of Artstor. If you require institutional login, please use 
+            a.link(href="https://library.artstor.org") library.artstor.org
+        .card-body(*ngIf="samlAvailable")
           .form-group
             label(for="completer") {{ 'LOGIN.INSTITUTION_LOGIN.SELECT_LABEL' | translate }}
             ng2-completer#completer(
