@@ -17,7 +17,8 @@ import {
   Thumbnail,
   ToolboxService,
   FlagService,
-  DomUtilityService
+  DomUtilityService,
+  ImageGroup
 } from '../shared'
 import { AssetFiltersService } from '../asset-filters/asset-filters.service'
 import { APP_CONST } from '../app.constants'
@@ -120,6 +121,9 @@ export class AssetGrid implements OnInit, OnDestroy {
 
   @Input()
   private actionOptions: any = {};
+  @Input()
+  private igMetaData: ImageGroup
+  private igDescExpanded: boolean = true
 
   // With most pages using Solr, we want to default assuming a max of 5000
   @Input()
@@ -157,7 +161,7 @@ export class AssetGrid implements OnInit, OnDestroy {
   // Collection Id parameter
   private colId: string = '';
   // Image group
-  private ig: any = {};
+  private ig: any = {}
 
   // Used as a key to save the previous route params in session storage (incase of image group)
   private prevRouteTS: string = ''
@@ -865,5 +869,25 @@ export class AssetGrid implements OnInit, OnDestroy {
       dropdownElement.children[0].setAttribute('aria-expanded', 'false')
       dropdownElement.children[1].classList.remove('show')
     }
+  }
+
+  /**
+   * Show Description, returns true if:
+   * - A description exists
+   * - View hasn't changed to hide the description
+   */
+  public showIgDesc(): boolean {
+    if (this.igMetaData && this.igMetaData.id && ((this.igMetaData.description && this.igMetaData.description.length > 0) || (this.igMetaData.tags && this.igMetaData.tags.length > 0)) && !this.reorderMode && this.igDescExpanded) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  /**
+   * Encode Tag: Encode the tag before using it for search
+   */
+  public encodeTag(tag) {
+    return encodeURIComponent(tag);
   }
 }
