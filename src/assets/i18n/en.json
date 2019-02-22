@@ -241,7 +241,7 @@
       "SELECT_PROMPT": "Select a group",
       "ADD_SUCCESS": "Images successfully added to group",
       "ADD_FAILURE": "Oops, something went wrong and images were not added to your group. Please try again.",
-      "TOO_MANY_ASSETS": "This group has exceeded the 1000 image limit.",
+      "TOO_MANY_ASSETS": "This group has exceeded the 1000 item limit.",
       "OPEN_CREATE_GROUP_MODAL": "Create a new group with images"
     },
     "FROM_ASSET": {
@@ -250,7 +250,7 @@
       "SELECT_PROMPT": "Select a group",
       "ADD_SUCCESS": "Image successfully added to group",
       "ADD_FAILURE": "Unable to add image to group. Sorry about that.",
-      "TOO_MANY_ASSETS": "This group has exceeded the 1000 image limit.",
+      "TOO_MANY_ASSETS": "This group has exceeded the 1000 item limit.",
       "OPEN_CREATE_GROUP_MODAL": "Create a new group with image"
     },
     "CONTROLS": {
