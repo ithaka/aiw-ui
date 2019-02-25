@@ -72,11 +72,7 @@ export class AddToGroupModal implements OnInit, OnDestroy, AfterViewInit {
       ) {}
 
     ngOnInit() {
-    // // Set focus to the modal to make the links in the modal first thing to tab for accessibility
-    // if (this.modalElement && this.modalElement.nativeElement){
-    //   this.modalElement.nativeElement.focus()
-    // }
-    
+
     if (this.selectedAssets.length < 1) { // if no assets were added when component was initialized, the component gets the current selection list
       // Subscribe to asset selection
       this.subscriptions.push(
@@ -275,14 +271,25 @@ export class AddToGroupModal implements OnInit, OnDestroy, AfterViewInit {
   }
 
   public groupSelectKeyDown(event: any, selected: boolean): void{
-    // Focus Add button if the user presses Tab right after Enter to select the group
-    if( (this.groupSelectLastKeyCode === 'Enter' || this.groupSelectLastKeyCode === 'Space') && (event.code === 'Tab') && selected) {
+    // Focus Add button if the user presses Tab right after Enter, Space, or click to select the group
+    if( (this.groupSelectLastKeyCode === 'Enter' || this.groupSelectLastKeyCode === 'Space' || this.groupSelectLastKeyCode === 'click')
+        && (event.code === 'Tab') && selected) {
+
       let primaryBtn: HTMLElement = <HTMLElement>this._dom.bySelector('#addBtn')
       primaryBtn.focus()
       event.stopPropagation()
       event.preventDefault()
     }
-    this.groupSelectLastKeyCode = event.code
+    this.groupSelectLastKeyCode = event.type === 'click' ? event.type : event.code
+  }
+
+  // Set focus on selected group, for backward tab from 'Add' button
+  public focusOnSelectedGroup() {
+
+    setTimeout(() => {
+      let focusedGroup = this._dom.byId(this.selectedGroup.id)
+      focusedGroup.focus()
+    }, 100)
   }
 
   private loadRecentGroups(): void{
@@ -310,7 +317,7 @@ export class AddToGroupModal implements OnInit, OnDestroy, AfterViewInit {
             }
             return thmbObj
           })
-          
+
           this.recentGroups = data.groups
           this.loading.recentGroups = false
         })
@@ -333,7 +340,7 @@ export class AddToGroupModal implements OnInit, OnDestroy, AfterViewInit {
     take(1),
       map(data  => {
         this.totalGroups = data.total
-        
+
         let itemIds: string[] = []
         for(let group of data.groups){
           if(group.items.length > 0){
@@ -352,7 +359,7 @@ export class AddToGroupModal implements OnInit, OnDestroy, AfterViewInit {
             }
             return thmbObj
           })
-          
+
           if(timeStamp === this.allGroupSearchTS) {
             this.allGroups = this.allGroups.concat(data.groups)
           }
