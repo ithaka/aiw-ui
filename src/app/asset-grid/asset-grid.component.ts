@@ -67,6 +67,10 @@ export class AssetGrid implements OnInit, OnDestroy {
   // Value
   public totalAssets: number = 0;
 
+  // Passed in from groups only
+  @Input()
+  public igMetaData: ImageGroup
+
   // @Input()
   // private allowSearchInRes:boolean;
 
@@ -121,8 +125,7 @@ export class AssetGrid implements OnInit, OnDestroy {
 
   @Input()
   private actionOptions: any = {};
-  @Input()
-  private igMetaData: ImageGroup
+
   private igDescExpanded: boolean = true
 
   // With most pages using Solr, we want to default assuming a max of 5000
