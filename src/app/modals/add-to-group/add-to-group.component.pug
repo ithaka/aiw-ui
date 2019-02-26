@@ -46,6 +46,9 @@
                     .dot
                     .dot
                     .dot
+            .alert.alert-danger.mx-2(*ngIf="errorMsg")
+              i.icon.icon-error
+              span([innerHtml]="errorMsg")
             .modal-footer
               ng-container(*ngIf="!serviceResponse.success")
                 .wrapper

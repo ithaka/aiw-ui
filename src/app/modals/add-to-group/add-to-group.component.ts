@@ -31,6 +31,7 @@ export class AddToGroupModal implements OnInit, OnDestroy {
     failure?: boolean,
     tooManyAssets?: boolean
   } = {}
+  public errorMsg: string = ''
 
   public dataService: any
 
@@ -142,6 +143,7 @@ export class AddToGroupModal implements OnInit, OnDestroy {
     // clear any service status
     this.serviceResponse = {}
     this.selectedGroupError = ''
+    this.errorMsg = ''
 
     if (!this.selectedGroup.id) {
       this.selectedGroupError = 'ADD_TO_GROUP_MODAL.NO_GROUP'
@@ -228,22 +230,14 @@ export class AddToGroupModal implements OnInit, OnDestroy {
             },
             (err) => {
               console.error(err); this.serviceResponse.failure = true;
-              this._toasts.sendToast({
-                id: 'addToGroup',
-                type: 'error',
-                stringHTML: '<p>Sorry, we weren’t able to add the '+ (multipleSelected ? 'items' : 'item') +' at this time. Try again later or contact <a href="http://support.artstor.org/">support</a>.</p>'
-              })
+              this.errorMsg = '<p>Sorry, we weren’t able to add the '+ (multipleSelected ? 'items' : 'item') +' at this time. Try again later or contact <a href="http://support.artstor.org/">support</a>.</p>'
             }
         )).subscribe()
 
       })
       .catch((error) => {
           console.error(error);
-          this._toasts.sendToast({
-            id: 'addToGroup',
-            type: 'error',
-            stringHTML: '<p>Sorry, we weren’t able to add the '+ (multipleSelected ? 'items' : 'item') +' at this time. Try again later or contact <a href="http://support.artstor.org/">support</a>.</p>'
-          })
+          this.errorMsg = '<p>Sorry, we weren’t able to add the '+ (multipleSelected ? 'items' : 'item') +' at this time. Try again later or contact <a href="http://support.artstor.org/">support</a>.</p>'
       });
 
 
