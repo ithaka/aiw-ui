@@ -89,11 +89,11 @@ export class Asset {
             default:
                 if (Array.isArray(this.tileSource) && this.tileSource.length >= 1) {
                     // Handle Multi View downloads using IIIF
-                    let url = 'https:' + this.tileSource[0].replace('info.json', '') + 'full/full/0/default.jpg' 
+                    let url = 'https:' + this.tileSource[0].replace('info.json', '') + 'full/full/0/default.jpg'
                     // Pass IIIF url to Download Service for processing metadata
                     // Include "iiif" param in this case
                     downloadLink = data.baseUrl + "/api/download?imgid=" + this.id + "&url=" + encodeURIComponent(url) + "&iiif=true"
-                } else if (data.image_url) { 
+                } else if (data.image_url) {
                     // Handle images and video thumbnails
                     let imageServer = 'http://imgserver.artstor.net/'
                     // Pass Image url to Download Service for processing metadata
@@ -123,6 +123,7 @@ export class Asset {
             11: 'panorama',
             12: 'audio',
             13: '3d',
+            //20: 'pdf',
             21: 'powerpoint',
             22: 'document',
             23: 'excel',
@@ -147,7 +148,7 @@ export class Asset {
      * - Reports status via 'this.dataLoadedSource' observable
      */
     private initAssetProperties(data: AssetData, testEnv?: boolean): void {
-        let storUrl: string = testEnv ? '//stor.stage.artstor.org' : '//stor.artstor.org' 
+        let storUrl: string = testEnv ? '//stor.stage.artstor.org' : '//stor.artstor.org'
         // Set array of asset metadata fields to Asset, and format
         if (data.metadata_json) {
             this.formattedMetadata = this.formatMetadata(data.metadata_json)
@@ -168,6 +169,8 @@ export class Asset {
         this.thumbnail_url = this.replaceThumbnailSize(data.thumbnail_url, this.thumbnail_size)
         this.typeId = data.object_type_id
         this.typeName = this.initTypeName(data.object_type_id)
+        console.log('OBJECT TYPE ID: ', data.object_type_id)
+        console.log('TYPENAME: ', this.typeName)
         console.log("Download size: " + data.download_size )
         this.disableDownload =  data.download_size === '0,0'
         this.SSID = data.SSID
@@ -202,7 +205,13 @@ export class Asset {
                 data.image_compound_urls[i] = storUrl + '/fcgi-bin/iipsrv.fcgi?IIIF=' + path
             }
             this.tileSource = data.image_compound_urls
-        } else {
+
+        } else if(data.image_compound_urls && data.image_compound_urls.length === 0) {
+          this.tileSource = storUrl + '/stor' + data.image_url
+          console.log('EMPTY COMPOUND ARRAY, DOWNGRADED', this.tileSource)
+        }
+
+        else {
             this.tileSource = data.tileSourceHostname + '/rosa-iiif-endpoint-1.0-SNAPSHOT/fpx' + encodeURIComponent(imgPath) + '/info.json'
         }
         // Set download after tilesource determined
@@ -240,7 +249,7 @@ export interface MetadataResponse {
     success: boolean
     total: 1 // the total number of items returned
   }
-  
+
   export interface AssetData {
     groupId?: string
     SSID?: string
@@ -266,7 +275,7 @@ export interface MetadataResponse {
     tileSourceHostname: string
     title: string
     updated_on: string
-  
+
     viewer_data?: {
         base_asset_url?: string,
         panorama_xml?: string
@@ -275,7 +284,7 @@ export interface MetadataResponse {
     baseUrl: string
     fpxInfo?: ImageFPXResponse
   }
-  
+
   export interface AssetDataResponse {
     SSID?: string
     category_id: string
@@ -304,7 +313,7 @@ export interface MetadataResponse {
     }
     width: number
   }
-  
+
   export interface MetadataField {
     count: number // the number of fields with this name
     fieldName: string
@@ -312,13 +321,13 @@ export interface MetadataResponse {
     index: number
     link?: string
   }
-  
+
   export interface CollectionValue {
     type: string
     name: string
     id: string
   }
-  
+
   export interface ImageFPXResponse {
     height: number
     id: {
@@ -331,5 +340,5 @@ export interface MetadataResponse {
     resolutionY: number
     width: number
   }
-  
+
   export interface FileProperty { [key: string]: string }
