@@ -123,7 +123,6 @@ export class Asset {
             11: 'panorama',
             12: 'audio',
             13: '3d',
-            //20: 'pdf',
             21: 'powerpoint',
             22: 'document',
             23: 'excel',
@@ -169,9 +168,6 @@ export class Asset {
         this.thumbnail_url = this.replaceThumbnailSize(data.thumbnail_url, this.thumbnail_size)
         this.typeId = data.object_type_id
         this.typeName = this.initTypeName(data.object_type_id)
-        console.log('OBJECT TYPE ID: ', data.object_type_id)
-        console.log('TYPENAME: ', this.typeName)
-        console.log("Download size: " + data.download_size )
         this.disableDownload =  data.download_size === '0,0'
         this.SSID = data.SSID
         // Set filename
@@ -206,11 +202,11 @@ export class Asset {
             }
             this.tileSource = data.image_compound_urls
 
-        } else if(data.image_compound_urls && data.image_compound_urls.length === 0) {
-          this.tileSource = storUrl + '/stor' + data.image_url
-          console.log('EMPTY COMPOUND ARRAY, DOWNGRADED', this.tileSource)
         }
-
+        // Handle Downgraded from Multiview.
+        else if(data.image_compound_urls && data.image_compound_urls.length === 0) {
+          this.tileSource = this.thumbnail_url = storUrl + '/stor' + data.image_url
+        }
         else {
             this.tileSource = data.tileSourceHostname + '/rosa-iiif-endpoint-1.0-SNAPSHOT/fpx' + encodeURIComponent(imgPath) + '/info.json'
         }

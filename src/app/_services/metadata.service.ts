@@ -34,7 +34,7 @@ export class MetadataService {
                     assetData.fpxInfo = res
                     return assetData
                 }))
-            default: 
+            default:
                 return of(assetData)
             }
         }),map((assetData: AssetData) => {
@@ -48,10 +48,10 @@ export class MetadataService {
      * @param groupId The group from which the asset was accessed, if it exists (helps with authorization)
      */
     private getMetadata(assetId: string, { groupId, legacyFlag, openlib }): Observable<AssetData> {
-        let url = this._auth.getUrl() + '/v1/metadata?object_ids=' + assetId + '&legacy=' + legacyFlag 
+        let url = this._auth.getUrl() + '/v1/metadata?object_ids=' + assetId + '&legacy=' + legacyFlag
         if (groupId){
             // Groups service modifies certain access rights for shared assets
-            url = this._auth.getUrl() + '/v1/group/'+ groupId +'/metadata?object_ids=' + encodeURIComponent(assetId) + '&legacy=' + legacyFlag 
+            url = this._auth.getUrl() + '/v1/group/'+ groupId +'/metadata?object_ids=' + encodeURIComponent(assetId) + '&legacy=' + legacyFlag
         }
         if (openlib) {
             // Open Library IDs need to be mapped to Artstor IDs, so we need to flag for the metadata service
@@ -80,7 +80,7 @@ export class MetadataService {
     public getEncryptedMetadata(secretId: string, legacyFlag?: boolean, openlib?: boolean): Observable<any> {
     let headers: HttpHeaders = new HttpHeaders({ fromKress: 'true'})
     let referrer: string = document.referrer
-    let url: string = this._auth.getUrl() + "/v2/items/resolve?encrypted_id=" + encodeURIComponent(secretId) + "&ref=" + encodeURIComponent(referrer) + '&legacy=' + legacyFlag 
+    let url: string = this._auth.getUrl() + "/v2/items/resolve?encrypted_id=" + encodeURIComponent(secretId) + "&ref=" + encodeURIComponent(referrer) + '&legacy=' + legacyFlag
 
     if (openlib) {
         // Open Library IDs need to be mapped to Artstor IDs, so we need to flag for the items service
@@ -126,7 +126,7 @@ export class MetadataService {
             object_type_id: data.object_type_id,
             resolution_x: data.resolution_x,
             resolution_y: data.resolution_y,
-            thumbnail_url: this._auth.getThumbUrl(typeof(data.image_compound_urls) !== 'undefined' && data.image_compound_urls.length) + data.thumbnail_url,
+            thumbnail_url: this.setThumbnailUrl(data),
             tileSourceHostname: (this._auth.getEnv() == 'test') ? '//tsstage.artstor.org' : '//tsprod.artstor.org',
             title: data.title && data.title !== "" ? data.title : 'Untitled',
             updated_on: data.updated_on,
@@ -134,7 +134,19 @@ export class MetadataService {
             width: data.width,
             baseUrl: this._auth.getHostname()
             }
-      } 
+      }
+
+      private setThumbnailUrl(data) {
+        let isMultiView = data.image_compound_urls !== 'undefined' && data.image_compound_urls.length
+        let downgradedMultiView = data.image_compound_urls !== 'undefined' && !data.image_compound_urls.length
+
+        if (downgradedMultiView) {
+          return data.image_url
+        }
+        else {
+          return this._auth.getThumbUrl(isMultiView) + data.thumbnail_url
+        }
+      }
 
       /**
        * Gets the relevant Kaltura info for an asset - should only be used when necessary
@@ -143,7 +155,7 @@ export class MetadataService {
        */
       private getFpxInfo(assetId: string): Observable<ImageFPXResponse> {
         let requestUrl = this._auth.getUrl() + '/imagefpx/' + assetId + '/24'
-    
+
         let headers: HttpHeaders = new HttpHeaders().set('Content-Type', 'application/json')
         return this._http
             .get<ImageFPXResponse>(requestUrl, { headers: headers, withCredentials: true })
@@ -164,7 +176,7 @@ export interface MetadataResponse {
     success: boolean
     total: 1 // the total number of items returned
   }
-  
+
   export interface AssetData {
     groupId?: string
     SSID?: string
@@ -190,7 +202,7 @@ export interface MetadataResponse {
     tileSourceHostname: string
     title: string
     updated_on: string
-  
+
     viewer_data?: {
         base_asset_url?: string,
         panorama_xml?: string
@@ -199,7 +211,7 @@ export interface MetadataResponse {
     baseUrl: string
     fpxInfo?: ImageFPXResponse
   }
-  
+
   export interface AssetDataResponse {
     SSID?: string
     category_id: string
@@ -230,7 +242,7 @@ export interface MetadataResponse {
     }
     width: number
   }
-  
+
   export interface MetadataField {
     count: number // the number of fields with this name
     fieldName: string
@@ -238,13 +250,13 @@ export interface MetadataResponse {
     index: number
     link?: string
   }
-  
+
   export interface CollectionValue {
     type: string
     name: string
     id: string
   }
-  
+
   export interface ImageFPXResponse {
     height: number
     id: {
@@ -257,5 +269,5 @@ export interface MetadataResponse {
     resolutionY: number
     width: number
   }
-  
+
   export interface FileProperty { [key: string]: string }

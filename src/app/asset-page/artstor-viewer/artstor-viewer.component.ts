@@ -200,8 +200,6 @@ export class ArtstorViewerComponent implements OnInit, OnDestroy, AfterViewInit 
                 }
 
                 this.asset = asset
-
-                console.log(this.asset)
                 this.assetMetadata.emit(asset)
                 this.loadViewer(asset)
             }, (err) => {
@@ -210,14 +208,12 @@ export class ArtstorViewerComponent implements OnInit, OnDestroy, AfterViewInit 
     }
 
     private loadViewer(asset: Asset): void {
-      console.log('LOAD VIEWER CALLED')
         // Reset options
         this.isMultiView = false
         // Display thumbnail
         this.state = viewState.thumbnailFallback
-        if (this.thumbnailMode) { console.log('stopped here!!!') } // leave state on thumbnail if thumbnail mode is triggered
+        if (this.thumbnailMode) {} // leave state on thumbnail if thumbnail mode is triggered
 
-        console.log('SWITCH ON TYPE NAME: ', asset.typeName)
         // Object types that need loaders
         switch (asset.typeName) {
             case 'image':
@@ -249,13 +245,10 @@ export class ArtstorViewerComponent implements OnInit, OnDestroy, AfterViewInit 
      */
     private loadIIIF(): void {
         if (this.asset.tileSource) {
-            console.log('VIEWER TILES SOURCE: ', this.asset.tileSource)
             this.tileSource = this.asset.tileSource
             this.loadOpenSea()
         } else {
             this.state = viewState.thumbnailFallback
-
-          console.log('LOAD IIIF ', this.state)
         }
     }
 
@@ -264,8 +257,6 @@ export class ArtstorViewerComponent implements OnInit, OnDestroy, AfterViewInit 
      * - Requires this.asset to have an id
      */
     private loadOpenSea(): void {
-
-        console.log('LOAD THE OPEN SEA: ', this.tileSource)
 
         // Single view "multi views" are treated as single images
         this.isMultiView = Array.isArray(this.tileSource) && this.tileSource.length > 1
