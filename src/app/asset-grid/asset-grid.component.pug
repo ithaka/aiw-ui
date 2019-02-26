@@ -1,7 +1,7 @@
 .reorder-shade([class.fade-in]="reorderMode && !showLoseReorder", (click)="shouldSaveModal($event)")
 .reorder-wrap([class.in-front]="reorderMode")
   .row.no-gutters
-    .row.no-gutters.animating-width([ngClass]="[ igMetaData && igMetaData.id && !reorderMode ? ( showIgDesc() ? 'col-9' : 'col-10' ) : 'col-12']")
+    .row.no-gutters.animating-width([ngClass]="[ igMetaData && igMetaData.id && !reorderMode ? ( showIgDescBool ? 'col-9' : 'col-10' ) : 'col-12']")
       .mobile--hide.grid-tool-bar([ngClass]="[ reorderMode ? 'col-12' : 'col-sm-8 col-md-8 col-lg-9']")
         .row.no-gutters
           .col-12
@@ -83,10 +83,10 @@
       .col-sm-4.col-md-4.col-lg-3.text-right.grid-pagination-bar(*ngIf="!reorderMode")
         pagination([pageObj]="pagination", (goToPage)="goToPage($event)", [right]="true")
     
-    .animating-width(*ngIf="igMetaData && igMetaData.id && !reorderMode", [ngClass]="[ showIgDesc() ? 'col-3' : 'col-2']")
-      .group-details-header(*ngIf="(igMetaData.tags && igMetaData.tags.length > 0) || igMetaData.description", (click)="igDescExpanded = !igDescExpanded")
+    .animating-width(*ngIf="igMetaData && igMetaData.id && !reorderMode", [ngClass]="[ showIgDescBool ? 'col-3' : 'col-2']")
+      .group-details-header(*ngIf="(igMetaData.tags && igMetaData.tags.length > 0) || igMetaData.description", (click)="toggleDetailDisplay()")
         span Group Details
-        i.icon.icon-down([ngClass]="{'collapsed' : showIgDesc()}")
+        i.icon.icon-down([ngClass]="{'collapsed' : showIgDescBool}")
       .group-details-header.no-details-available(*ngIf="(!igMetaData.tags || igMetaData.tags.length === 0) && !igMetaData.description")
         span No Group Details
 
@@ -95,7 +95,7 @@
 
   //- Thumbnail Grid
   .row.pb-5([ngClass]="{'edit': editMode}")
-    .animating-width([ngClass]="[ igMetaData && igMetaData.id ? ( showIgDesc() ? 'col-9' : 'col-12' ) : 'col-12' ]")
+    .animating-width([ngClass]="[ igMetaData && igMetaData.id ? ( showIgDescBool ? 'col-9' : 'col-12' ) : 'col-12' ]")
       .col-md-12.col--thumbnails.col--expanding.has-icon-overlay([ngClass]="{ 'col--expand-12' : !showFilters }")
         i.icon-lg.icon-overlay.icon-loading-large([hidden]="!isLoading")
         //- Error Row
@@ -151,8 +151,8 @@
             .alert.alert-warning(*ngIf="!isLoading && (searchError.length < 1) && ((isPartialPage && hasMaxAssetLimit) || searchLimitError)")
               | {{ "BROWSE.WARNINGS.ADDITIONAL_RESULTS" | translate }}
     
-    .group-details.animating-width(*ngIf="igMetaData && igMetaData.id", [ngClass]="[ showIgDesc() ? 'col-3' : 'col-0'  ]")
-      .group-details-wrapper([ngClass]="{ 'show' : showIgDesc() }")
+    .group-details.animating-width(*ngIf="igMetaData && igMetaData.id && animationFinished", [ngClass]="[ showIgDescBool ? 'col-3' : 'col-0'  ]")
+      .group-details-wrapper([ngClass]="{ 'show' : showIgDescBool }")
         .ig-tags.meta-block(*ngIf!="igMetaData.tags && igMetaData.tags.length > 0")
           .label.pb-2 Tags
           ul.filter-list.pad-top(#groupTagsList="")
@@ -165,10 +165,10 @@
         #pageDescription.page__description(*ngIf!="igMetaData && igMetaData.description", [innerHTML]="igMetaData.description")
   
   .row
-    div([ngClass]="[ showIgDesc() ? 'col-9' : 'col-12']")
+    div([ngClass]="[ showIgDescBool ? 'col-9' : 'col-12']")
       ang-prompt(*ngIf="_auth.isPublicOnly() && searchTerm", style='width:100%; margin-top:36px; margin-bottom:20px;')
   .row.no-gutters
-    .row.no-gutters([ngClass]="[ showIgDesc() ? 'col-9' : 'col-12']")
+    .row.no-gutters([ngClass]="[ showIgDescBool ? 'col-9' : 'col-12']")
       .mobile--hide.grid-tool-bar([ngClass]="[ reorderMode ? 'col-12' : 'col-sm-8 col-md-8 col-lg-9']")
       .col-sm-4.col-md-4.col-lg-3.text-right.grid-pagination-bar(*ngIf="!reorderMode")
         pagination([pageObj]="pagination", (goToPage)="goToPage($event)", [right]="true")

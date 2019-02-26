@@ -123,6 +123,9 @@ export class AssetGrid implements OnInit, OnDestroy {
   private excludedAssetsCount: number = 0;
   private sortFilterByDateTotal: number = 0;
 
+  private showIgDescBool: boolean = true;
+  private animationFinished: boolean = true;
+
   @Input()
   private actionOptions: any = {};
 
@@ -446,7 +449,8 @@ export class AssetGrid implements OnInit, OnDestroy {
           }
       })).subscribe()
     )
-  }
+
+  } // ngOninit
 
   ngOnDestroy() {
     // Kill subscriptions
@@ -875,16 +879,27 @@ export class AssetGrid implements OnInit, OnDestroy {
   }
 
   /**
-   * Show Description, returns true if:
+   * Set showIgDescBool to be true when
    * - A description exists
    * - View hasn't changed to hide the description
+   * Set animationFinished 400ms after setting showIgDescBool to be true
+   * This is to make sure we display the details when animation is finished
    */
-  public showIgDesc(): boolean {
+  public setShowIgDesc(): void {
     if (this.igMetaData && this.igMetaData.id && ((this.igMetaData.description && this.igMetaData.description.length > 0) || (this.igMetaData.tags && this.igMetaData.tags.length > 0)) && !this.reorderMode && this.igDescExpanded) {
-      return true;
+      this.showIgDescBool = true;
+      setTimeout(()=>{
+        this.animationFinished = true;
+      }, 400)
     } else {
-      return false;
+      this.showIgDescBool = false;
+      this.animationFinished = false;
     }
+  }
+
+  public toggleDetailDisplay(): void {
+    this.igDescExpanded = !this.igDescExpanded;
+    this.setShowIgDesc()
   }
 
   /**
