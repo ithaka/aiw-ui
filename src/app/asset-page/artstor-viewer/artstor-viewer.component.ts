@@ -48,6 +48,12 @@ export class ArtstorViewerComponent implements OnInit, OnDestroy, AfterViewInit 
     @Input() testEnv: boolean
     @Input() thumbnailMode: boolean
     @Input() encrypted: boolean
+    @Input() zoom: {
+        x: number
+        y: number
+        width: number
+        height: number
+    }
 
     // Required Input
     private _assetId: string = ''
@@ -358,6 +364,11 @@ export class ArtstorViewerComponent implements OnInit, OnDestroy, AfterViewInit 
                 this.osdViewer.nextButton.addHandler('press', () => {
                     this.multiViewArrowPressed = true
                 })
+            }
+            // For detailed views set the viewport bouds based on the zoom params passed
+            if(this.zoom && this.zoom.x){
+                let bounds = this.osdViewer.viewport.imageToViewportRectangle(this.zoom.x, this.zoom.y, this.zoom.width, this.zoom.height)
+                this.osdViewer.viewport.fitBounds(bounds, true)
             }
         })
 

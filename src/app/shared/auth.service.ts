@@ -30,6 +30,7 @@ export class AuthService implements CanActivate {
   public userSessionFresh: boolean = false
   public showUserInactiveModal: Subject<boolean> = new Subject(); // Set up subject observable for showing inactive user modal
   public clientHostname: string;
+  public samlAvailable: boolean = false
   private ENV: string;
   private baseUrl;
   private imageFpxUrl: string;
@@ -115,6 +116,13 @@ export class AuthService implements CanActivate {
       'sahara.artstor.org'
     ]
 
+    let samlHostnames = [
+      'library.artstor.org',
+      'stage.artstor.org',
+      'localhost',
+      'localhost:3000'
+    ]
+
     // Check domain
     if (  new RegExp(prodHostnames.join('|')).test(this.clientHostname)  ) {
       // Explicit live endpoints
@@ -142,6 +150,11 @@ export class AuthService implements CanActivate {
       this.solrUrl = '/api/search/v1.0/search'
       this.IIIFUrl = '//tsstage.artstor.org/rosa-iiif-endpoint-1.0-SNAPSHOT/fpx'
       this.ENV = 'test'
+    }
+
+    // Set Saml availability
+    if (new RegExp(samlHostnames.join('|')).test(this.clientHostname)) {
+      this.samlAvailable = true
     }
     
     // Additional Local dev domains

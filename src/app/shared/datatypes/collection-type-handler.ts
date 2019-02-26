@@ -10,7 +10,8 @@ export class CollectionTypeHandler {
     3: { name: 'personal-asset', alt: 'Available only to the owner\n unless shared in a group', badgeText: 'Personal', type: 3 },
     4: { name: 'institution-asset', alt: 'Available to your institution only', badgeText: 'Institutional', type: 4 },
     5: { name: 'ssc-asset', alt: 'Available to everyone', badgeText: 'Public', type: 5 },
-    6: { name: 'personal-asset', alt: 'Available only to the owner\n unless shared in a group', badgeText: 'Personal', type: 6 }
+    6: { name: 'personal-asset', alt: 'Available only to the owner\n unless shared in a group', badgeText: 'Personal', type: 6 },
+    7: { name: 'open-artstor', alt: 'Available to everyone', badgeText: 'Open Artstor', type: 7 }
   }
 
   /**
@@ -22,7 +23,8 @@ export class CollectionTypeHandler {
     4,
     2,
     1,
-    5
+    5,
+    7
   ]
 
  /**
@@ -38,6 +40,12 @@ export class CollectionTypeHandler {
 
   // find which type has highest index in collectionTypePriorityArray and assign that as type
   typeIds.forEach((type) => {
+
+    // Display Open Artstor badge for type 5 published by institution 1000, badge # 7
+    if (type === 5 && contributinginstitutionid === 1000) {
+      type = 7
+    }
+
     let currentPriority: number = this.collectionTypePriorityArray.indexOf(typeId)
     let nextPriority: number = this.collectionTypePriorityArray.indexOf(type)
 

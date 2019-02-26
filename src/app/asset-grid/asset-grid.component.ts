@@ -17,7 +17,8 @@ import {
   Thumbnail,
   ToolboxService,
   FlagService,
-  DomUtilityService
+  DomUtilityService,
+  ImageGroup
 } from '../shared'
 import { AssetFiltersService } from '../asset-filters/asset-filters.service'
 import { APP_CONST } from '../app.constants'
@@ -65,6 +66,10 @@ export class AssetGrid implements OnInit, OnDestroy {
 
   // Value
   public totalAssets: number = 0;
+
+  // Passed in from groups only
+  @Input()
+  public igMetaData: ImageGroup
 
   // @Input()
   // private allowSearchInRes:boolean;
@@ -121,6 +126,8 @@ export class AssetGrid implements OnInit, OnDestroy {
   @Input()
   private actionOptions: any = {};
 
+  private igDescExpanded: boolean = true
+
   // With most pages using Solr, we want to default assuming a max of 5000
   @Input()
   private hasMaxAssetLimit: boolean = true
@@ -157,7 +164,7 @@ export class AssetGrid implements OnInit, OnDestroy {
   // Collection Id parameter
   private colId: string = '';
   // Image group
-  private ig: any = {};
+  private ig: any = {}
 
   // Used as a key to save the previous route params in session storage (incase of image group)
   private prevRouteTS: string = ''
@@ -572,6 +579,12 @@ export class AssetGrid implements OnInit, OnDestroy {
     let params: any = {
       prevRouteTS: this.prevRouteTS // for fetching previous route params from session storage, on asset page
     }
+    if(thumbnail.zoom) {
+      params['x'] = thumbnail.zoom.viewerX
+      params ['y'] = thumbnail.zoom.viewerY
+      params['w'] = thumbnail.zoom.pointWidth
+      params['h'] = thumbnail.zoom.pointHeight
+    }
     let url = []
     thumbnail.iap && (params.iap = 'true')
     this.ig && this.ig.id && (params.groupId = this.ig.id)
@@ -859,5 +872,25 @@ export class AssetGrid implements OnInit, OnDestroy {
       dropdownElement.children[0].setAttribute('aria-expanded', 'false')
       dropdownElement.children[1].classList.remove('show')
     }
+  }
+
+  /**
+   * Show Description, returns true if:
+   * - A description exists
+   * - View hasn't changed to hide the description
+   */
+  public showIgDesc(): boolean {
+    if (this.igMetaData && this.igMetaData.id && ((this.igMetaData.description && this.igMetaData.description.length > 0) || (this.igMetaData.tags && this.igMetaData.tags.length > 0)) && !this.reorderMode && this.igDescExpanded) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  /**
+   * Encode Tag: Encode the tag before using it for search
+   */
+  public encodeTag(tag) {
+    return encodeURIComponent(tag);
   }
 }

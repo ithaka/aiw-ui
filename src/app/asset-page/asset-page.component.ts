@@ -172,6 +172,8 @@ export class AssetPage implements OnInit, OnDestroy {
     // Flag for show/hide page tooltip
     private showPageToolTip: boolean = false
 
+    private zoomParams: any = {}
+
     constructor(
         public _appConfig: AppConfig,
         private _assets: AssetService,
@@ -288,6 +290,17 @@ export class AssetPage implements OnInit, OnDestroy {
                     this.detailViewsFlag = this._flags['detailViews'] ? true : false
                 } else {
                     this.relatedResFlag = false
+                }
+
+                if (routeParams['x'] && routeParams['y'] && routeParams['w'] && routeParams['h']) {
+                    this.zoomParams = {
+                        x: parseInt(routeParams['x']),
+                        y: parseInt(routeParams['y']),
+                        width: parseInt(routeParams['w']),
+                        height: parseInt(routeParams['h'])
+                    }
+                } else {
+                    this.zoomParams = {}
                 }
 
                 if (routeParams['encryptedId']) {

@@ -241,7 +241,7 @@
       "SELECT_PROMPT": "Select a group",
       "ADD_SUCCESS": "Images successfully added to group",
       "ADD_FAILURE": "Oops, something went wrong and images were not added to your group. Please try again.",
-      "TOO_MANY_ASSETS": "This group has exceeded the 1000 image limit.",
+      "TOO_MANY_ASSETS": "This group has exceeded the 1000 item limit.",
       "OPEN_CREATE_GROUP_MODAL": "Create a new group with images"
     },
     "FROM_ASSET": {
@@ -250,7 +250,7 @@
       "SELECT_PROMPT": "Select a group",
       "ADD_SUCCESS": "Image successfully added to group",
       "ADD_FAILURE": "Unable to add image to group. Sorry about that.",
-      "TOO_MANY_ASSETS": "This group has exceeded the 1000 image limit.",
+      "TOO_MANY_ASSETS": "This group has exceeded the 1000 item limit.",
       "OPEN_CREATE_GROUP_MODAL": "Create a new group with image"
     },
     "CONTROLS": {
@@ -270,14 +270,14 @@
     "COPY_TITLE": "Copy Group",
     "FIRST_GROUP_MSG": "You haven't created a group yet! Create your first group.",
     "TITLE_FIELD_LABEL": "Title",
-    "TITLE_REQUIRED_MSG": "Dont forget to add a title!",
+    "TITLE_REQUIRED_MSG": "Don't forget to add a title!",
     "DESCRIPTION_FIELD_LABEL": "Description",
     "PERMISSION_FIELD_LABEL": "Sharing Permissions",
     "PERMISSION_FIELD_HELPER": "Who can see this group?",
     "PERMISSIONS": {
       "GLOBAL": "Everyone",
-      "INSTITUTIONAL": "Institutional",
-      "PRIVATE": "Private"
+      "INSTITUTIONAL": "This Institution",
+      "PRIVATE": "Only me"
     },
     "TAGS_FIELD_LABEL": "Tags",
     "SHOW_ADD_TO_IMAGE_GROUP": "Add item to existing group",
@@ -505,31 +505,31 @@
         "VIEW_PUBLIC_LINK": "View All Public Collections"
       },
       "COLLECTIONS": [{
-          "SUBHEADING": "Saint Louis Art Museum",
-          "DESCRIPTION": "Cotemporary art and much more",
-          "CAPTION": "Sandy Skoglund. Radioactive Cats. 1980. Dye destruction print. ©1980 Sandy Skoglund. Image and data provided by Saint Louis Art Museum.",
-          "LINK": "/#/category/1034993392 ",
-          "IMG_SOURCE": "/assets/img/featured-collections/cats_slam.jpg",
-          "LINK_TITLE": "Saint Louis Art Museum",
-          "ALT_TEXT": "Saint Louis Art Museum"
+          "SUBHEADING": "The Museum of Fine Arts, Houston",
+          "DESCRIPTION": "Quilts from Gee's Bend",
+          "CAPTION": "America Irby. Quilt. 1970. Image and data provided by The Museum of Fine Arts, Houston.",
+          "LINK": "/#/category/1035295331 ",
+          "IMG_SOURCE": "/assets/img/featured-collections/houston_quilt.jpg",
+          "LINK_TITLE": "The Museum of Fine Arts, Houston",
+          "ALT_TEXT": "The Museum of Fine Arts, Houston"
         },
         {
-          "SUBHEADING": "Brooklyn College: Farm Labor Project",
-          "DESCRIPTION": "Brooklyn goes to the farm for the war effort",
-          "CAPTION": "Men Standing in Front of Truck. 1944?. Photograph. Brooklyn College Archives and Special Collections.",
-          "LINK": "/#/collection/87730215 ",
-          "IMG_SOURCE": "/assets/img/featured-collections/truck_brooklyn.jpg",
-          "LINK_TITLE": "Brooklyn College: Farm Labor Project",
-          "ALT_TEXT": "Brooklyn College: Farm Labor Project"
+          "SUBHEADING": "Berlin State Museums",
+          "DESCRIPTION": "African jewelry",
+          "CAPTION": "Nupe People, Nigeria. Glass bracelet. 19th century. Image and data provided by Berlin State Museums.",
+          "LINK": "/#/category/1034125175 ",
+          "IMG_SOURCE": "/assets/img/featured-collections/berlin_bracelet.jpg",
+          "LINK_TITLE": "Berlin State Museums",
+          "ALT_TEXT": "Berlin State Museums"
         },
         {
-          "SUBHEADING": "The Museum of Modern Art",
-          "DESCRIPTION": "20th century design",
-          "CAPTION": "Robert Budlong, design. Zenith Radio Corporation.The Pacemaker Table Radio. Before 1950. Image and data provided by The Museum of Modern Art.",
-          "LINK": "/#/category/1034213935 ",
-          "IMG_SOURCE": "/assets/img/featured-collections/clock_moma.jpg",
-          "LINK_TITLE": "The Museum of Modern Art",
-          "ALT_TEXT": "The Museum of Modern Art"
+          "SUBHEADING": "The Minneapolis Institute of Art",
+          "DESCRIPTION": "Photography of the Harlem Renaissance",
+          "CAPTION": "James Van DerZee. Couple, Harlem. 1932. Gelatin silver print. Image and data provided by The Minneapolis Institute of Art.",
+          "LINK": "/#/category/1031896062 ",
+          "IMG_SOURCE": "/assets/img/featured-collections/mia_couple.jpg",
+          "LINK_TITLE": "The Minneapolis Institute of Art",
+          "ALT_TEXT": "The Minneapolis Institute of Art"
         }
       ],
       "PUBLIC_COLLECTIONS": [

@@ -1,5 +1,4 @@
-import { DomUtilityService } from 'app/shared';
-import { Component, OnInit, OnDestroy, Input, Output, EventEmitter, ElementRef, ViewChild } from '@angular/core'
+import { Component, OnInit, AfterViewInit, OnDestroy, Input, Output, EventEmitter, ElementRef, ViewChild } from '@angular/core'
 import { NgForm } from '@angular/forms'
 import { BehaviorSubject, Observable, Subscription } from 'rxjs'
 import { map, take } from 'rxjs/operators'
@@ -7,14 +6,14 @@ import { CompleterService, CompleterData } from 'ng2-completer'
 import { Angulartics2 } from 'angulartics2'
 import { Router } from '@angular/router'
 
-import { AssetService, GroupService, ImageGroup, AuthService, AssetSearchService } from './../../shared'
+import { AssetService, GroupService, ImageGroup, AuthService, AssetSearchService, DomUtilityService } from './../../shared'
 
 @Component({
   selector: 'ang-add-to-group',
   templateUrl: 'add-to-group.component.pug',
   styleUrls: ["./add-to-group.component.scss"]
 })
-export class AddToGroupModal implements OnInit, OnDestroy {
+export class AddToGroupModal implements OnInit, OnDestroy, AfterViewInit {
   @Output() closeModal: EventEmitter<any> = new EventEmitter()
   @Output() createGroup: EventEmitter<any> = new EventEmitter()
   @Output() showToast: EventEmitter<any> = new EventEmitter()
@@ -55,6 +54,8 @@ export class AddToGroupModal implements OnInit, OnDestroy {
 
   private allGroupSearchTS: number = 0
 
+  private groupSelectLastKeyCode: string = ''
+
   private subscriptions: Subscription[] = []
 
   private lastSearchTerm: string = ''
@@ -65,6 +66,7 @@ export class AddToGroupModal implements OnInit, OnDestroy {
     private _assets: AssetService,
     private _search: AssetSearchService,
     private _group: GroupService,
+    private _dom: DomUtilityService,
     private _angulartics: Angulartics2,
     private completerService: CompleterService,
     private _auth: AuthService,
@@ -72,10 +74,6 @@ export class AddToGroupModal implements OnInit, OnDestroy {
       ) {}
 
     ngOnInit() {
-    // Set focus to the modal to make the links in the modal first thing to tab for accessibility
-    if (this.modalElement && this.modalElement.nativeElement){
-      this.modalElement.nativeElement.focus()
-    }
 
     if (this.selectedAssets.length < 1) { // if no assets were added when component was initialized, the component gets the current selection list
       // Subscribe to asset selection
@@ -110,6 +108,25 @@ export class AddToGroupModal implements OnInit, OnDestroy {
 
     // Unfreeze background body scroll
     document.getElementsByTagName('body')[0].style['overflow'] = 'initial'
+  }
+
+  ngAfterViewInit() {
+    this.startModalFocus()
+  }
+
+  // Set initial focus on the modal Title h1
+  public startModalFocus() {
+    let elementSelector: string = this.detailViewBounds.width ? '.preview-cntnr img' : '.modal-title'
+    let modalStartFocus: HTMLElement = <HTMLElement>this._dom.bySelector(elementSelector)
+    modalStartFocus.focus()
+  }
+
+  // Set focus on the last modal element in tab order
+  public focusLastElement(event: any) {
+    let lastElement: HTMLElement = <HTMLElement>this._dom.bySelector('.help-link')
+    lastElement.focus()
+    event.stopPropagation()
+    event.preventDefault()
   }
 
   /**
@@ -244,11 +261,11 @@ export class AddToGroupModal implements OnInit, OnDestroy {
     }
   }
 
-  public searchGroups(event?): void {
+  public searchGroups(force?: boolean): void {
     // Use ">=" instead of ">" so that when we have empty search term (when we type something and delete it), we will reload the groups
-    // Use setTimeout to make a brief pause in keypress events to prevent from overloading the backend
-    setTimeout((event?) => {
-      if ((this.groupSearchTerm.length >= 0) && this.groupSearchTerm !== this.lastSearchTerm) {
+	  // Use setTimeout to make a brief pause in keypress events to prevent from overloading the backend
+    setTimeout((force?) => {
+    if ((this.groupSearchTerm.length >= 0 && this.groupSearchTerm !== this.lastSearchTerm) || force) {
       this.groupsCurrentPage = 1
       this.allGroups = []
       this.clearSelectedGroup()
@@ -257,6 +274,28 @@ export class AddToGroupModal implements OnInit, OnDestroy {
     }
     this.lastSearchTerm = this.groupSearchTerm
     }, 200)
+  }
+
+  public groupSelectKeyDown(event: any, selected: boolean): void{
+    // Focus Add button if the user presses Tab right after Enter, Space, or click to select the group
+    if( (this.groupSelectLastKeyCode === 'Enter' || this.groupSelectLastKeyCode === 'Space' || this.groupSelectLastKeyCode === 'click')
+        && (event.code === 'Tab') && selected) {
+
+      let primaryBtn: HTMLElement = <HTMLElement>this._dom.bySelector('#addBtn')
+      primaryBtn.focus()
+      event.stopPropagation()
+      event.preventDefault()
+    }
+    this.groupSelectLastKeyCode = event.type === 'click' ? event.type : event.code
+  }
+
+  // Set focus on selected group, for backward tab from 'Add' button
+  public focusOnSelectedGroup() {
+
+    setTimeout(() => {
+      let focusedGroup = this._dom.byId(this.selectedGroup.id)
+      focusedGroup.focus()
+    }, 100)
   }
 
   private loadRecentGroups(): void{
