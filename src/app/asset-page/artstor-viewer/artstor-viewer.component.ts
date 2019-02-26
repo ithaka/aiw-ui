@@ -212,7 +212,7 @@ export class ArtstorViewerComponent implements OnInit, OnDestroy, AfterViewInit 
         this.isMultiView = false
         // Display thumbnail
         this.state = viewState.thumbnailFallback
-        if (this.thumbnailMode) {} // leave state on thumbnail if thumbnail mode is triggered
+        if (this.thumbnailMode) { return } // leave state on thumbnail if thumbnail mode is triggered
 
         // Object types that need loaders
         switch (asset.typeName) {
@@ -220,10 +220,6 @@ export class ArtstorViewerComponent implements OnInit, OnDestroy, AfterViewInit 
                 // Image, try IIF
                 this.loadIIIF();
                 break;
-            // case 'pdf':
-            //   // PDF, try IIF
-            //   this.loadIIIF();
-            //   break;
             case 'audio':
                 // Kaltura media
                 this.loadKaltura();
@@ -257,7 +253,6 @@ export class ArtstorViewerComponent implements OnInit, OnDestroy, AfterViewInit 
      * - Requires this.asset to have an id
      */
     private loadOpenSea(): void {
-
         // Single view "multi views" are treated as single images
         this.isMultiView = Array.isArray(this.tileSource) && this.tileSource.length > 1
         this.multiViewPage = 1
@@ -359,7 +354,6 @@ export class ArtstorViewerComponent implements OnInit, OnDestroy, AfterViewInit 
             // Load Reference Strip once viewer is ready
             if (this.isMultiView) {
                 this.osdViewer.addReferenceStrip()
-
                 this.osdViewer.nextButton.element.title = 'Next Item'
                 this.osdViewer.previousButton.element.title = 'Previous Item'
 

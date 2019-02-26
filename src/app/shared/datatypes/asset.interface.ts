@@ -168,6 +168,7 @@ export class Asset {
         this.thumbnail_url = this.replaceThumbnailSize(data.thumbnail_url, this.thumbnail_size)
         this.typeId = data.object_type_id
         this.typeName = this.initTypeName(data.object_type_id)
+        console.log("Download size: " + data.download_size)
         this.disableDownload =  data.download_size === '0,0'
         this.SSID = data.SSID
         // Set filename
