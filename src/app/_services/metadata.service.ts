@@ -137,8 +137,8 @@ export class MetadataService {
       }
 
       private setThumbnailUrl(data) {
-        let isMultiView = data.image_compound_urls !== 'undefined' && data.image_compound_urls.length
-        let downgradedMultiView = data.image_compound_urls !== 'undefined' && !data.image_compound_urls.length
+        let isMultiView = data.image_compound_urls && data.image_compound_urls.length
+        let downgradedMultiView = data.image_compound_urls && !data.image_compound_urls.length
 
         if (downgradedMultiView) {
           return data.image_url
