@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core'
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { BehaviorSubject, Observable, Subject } from 'rxjs';
+import { BehaviorSubject, Observable, Subject, pipe } from 'rxjs';
 import { catchError } from 'rxjs/operators'
 import { GroupList } from './datatypes';
 

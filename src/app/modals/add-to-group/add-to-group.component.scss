@@ -130,6 +130,22 @@
                     margin: 0px;
                 }
 
+                .no-result-row{
+                    padding: 8px 24px;
+
+                    .no-result-msg{
+                        position: absolute;
+                        top: 43%;
+                        left: 12%;
+                        right: 12%;
+                        font-size: 17.5px;
+                        font-family: Verdana;
+                        text-align: center;
+                        line-height: 24.5px;
+                        color: #333333;
+                    }
+                }
+
                 .row{
                     padding: 8px 24px;
                     cursor: pointer;
