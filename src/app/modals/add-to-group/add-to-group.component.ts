@@ -245,7 +245,6 @@ export class AddToGroupModal implements OnInit, OnDestroy {
   }
 
   public searchGroups(event?): void {
-    // Execute search after every third character of the search term
     // Use ">=" instead of ">" so that when we have empty search term (when we type something and delete it), we will reload the groups
     // Use setTimeout to make a brief pause in keypress events to prevent from overloading the backend
     setTimeout((event?) => {
