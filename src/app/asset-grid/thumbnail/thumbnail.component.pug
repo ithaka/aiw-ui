@@ -53,6 +53,11 @@
           div {{thumbnail.media.adlObjectType | typeIdPipe:true }}
         </ng-template>
       i( *ngIf="!thumbnail.media && thumbnail.objectTypeId && thumbnail.objectTypeId != 10", class="icon icon-{{thumbnail.objectTypeId | typeIdPipe}}")
+
+      //- Workaround for downgraded multiview items, until services around this are consistent.
+      //- 'media.format' is null, and we also have compound_media - where compund_media.mediaType is still '10' or other invalid media type
+      //- So the reliable way we can display the correct icon is via media.adlObjectType
+      i( *ngIf="thumbnail.media && thumbnail.compound_media", class="icon icon-{{thumbnail.media.adlObjectType | typeIdPipe}}")
       //- Detail view icon
       i.icon(*ngIf="thumbnail.zoom", [ngClass]="[ mouseOverDetailIcon ? 'icon-detail-hover' : 'icon-detail' ]", [ngbTooltip]="tipDetailView", ngbTooltip, triggers="focusin:focusout mouseenter:mouseleave", placement="right", aria-haspopup="true", tabIndex="3", (mouseover)="mouseOverDetailIcon=true", (mouseout)="mouseOverDetailIcon=false")
 
