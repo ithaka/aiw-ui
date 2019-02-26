@@ -67,6 +67,9 @@ export class AssetGrid implements OnInit, OnDestroy {
   // Value
   public totalAssets: number = 0;
 
+  public showIgDescBool: boolean = true;
+  public animationFinished: boolean = true;
+
   // Passed in from groups only
   @Input()
   public igMetaData: ImageGroup
@@ -122,9 +125,6 @@ export class AssetGrid implements OnInit, OnDestroy {
 
   private excludedAssetsCount: number = 0;
   private sortFilterByDateTotal: number = 0;
-
-  private showIgDescBool: boolean = true;
-  private animationFinished: boolean = true;
 
   @Input()
   private actionOptions: any = {};
