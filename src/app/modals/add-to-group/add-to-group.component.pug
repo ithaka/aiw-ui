@@ -36,13 +36,15 @@
                 .all-my-groups
                   .hdr(*ngIf="!groupSearchTerm")
                     label(tabindex="10") All My Groups
+                  .no-result-row(*ngIf="groupSearchTerm && totalGroups === 0")
+                    b.no-result-msg Sorry, we couldn’t find any groups related to your search. Please try a different search.
                   .row.no-gutters(*ngFor="let group of allGroups", [ngClass]="{ 'selectedGroup' : group.selected }", [attr.id]="group.id", (click)="selectGroup(group, 'all');groupSelectKeyDown($event, group.selected)", (keydown.enter)="selectGroup(group, 'all')", (keydown.space)="$event.stopPropagation(); $event.preventDefault(); selectGroup(group, 'all')", (keydown)="groupSelectKeyDown($event, group.selected)", tabindex="10", [attr.aria-label]="group.name + ', ' + (group.selected ? 'selected' : 'unselected') + ', press enter or spacebar to ' + (group.selected ? 'unselect' : 'select') + ' this group'")
                     .col-3
                       .ig-thmbnail-wrapper
                         img([ngClass]="{ 'loaded' : group.imgLoaded }", [attr.src]="_search.makeThumbUrl(group['thumbnailImgUrl'], 1, group['compoundmediaCount'])", [attr.alt]="group.name", (load)="group.imgLoaded = true", aria-role="image")
                     .col-9
                       .title {{ group.name }}
-                  .loading-dots(*ngIf="loading.allGroups")
+                  .loading-dots(*ngIf="loading.allGroups && !groupSearchTerm")
                     .dot
                     .dot
                     .dot

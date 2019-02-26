@@ -58,6 +58,8 @@ export class AddToGroupModal implements OnInit, OnDestroy, AfterViewInit {
 
   private subscriptions: Subscription[] = []
 
+  private lastSearchTerm: string = ''
+
   @ViewChild("modal", {read: ElementRef}) modalElement: ElementRef
 
   constructor(
@@ -260,14 +262,18 @@ export class AddToGroupModal implements OnInit, OnDestroy, AfterViewInit {
   }
 
   public searchGroups(force?: boolean): void {
-    // Execute search after every third character of the search term
-    if (((this.groupSearchTerm.length > 0) && (this.groupSearchTerm.length % 3 === 0)) || force) {
+    // Use ">=" instead of ">" so that when we have empty search term (when we type something and delete it), we will reload the groups
+	  // Use setTimeout to make a brief pause in keypress events to prevent from overloading the backend
+    setTimeout((force?) => {
+    if ((this.groupSearchTerm.length >= 0 && this.groupSearchTerm !== this.lastSearchTerm) || force) {
       this.groupsCurrentPage = 1
       this.allGroups = []
       this.clearSelectedGroup()
       this.allGroupSearchTS = Date.now()
       this.loadMyGroups()
     }
+    this.lastSearchTerm = this.groupSearchTerm
+    }, 200)
   }
 
   public groupSelectKeyDown(event: any, selected: boolean): void{
@@ -298,32 +304,35 @@ export class AddToGroupModal implements OnInit, OnDestroy, AfterViewInit {
       'created', 3, 1, [], '', '', 'date', 'desc'
     ).pipe(
     take(1),
-      map(data  => {
+      map(data => {
         let itemIds: string[] = []
-        for(let group of data.groups){
-          if(group.items.length > 0){
+        for(let group of data.groups) {
+          if(group.items.length > 0) {
             itemIds.push(group.items[0])
           }
         }
 
-        this._assets.getAllThumbnails(itemIds)
-        .then( allThumbnails => {
-          allThumbnails = allThumbnails.map( thmbObj => {
-            for (let group of data.groups) {
-              if(group.items[0] && group.items[0] === thmbObj.objectId){
-                group['thumbnailImgUrl'] = thmbObj['thumbnailImgUrl']
-                group['compoundmediaCount'] = thmbObj['compoundmediaCount']
+        // Check the length of itemIds to remove invalid call with object_id=null
+        if(itemIds.length !== 0) {
+          this._assets.getAllThumbnails(itemIds)
+          .then( allThumbnails => {
+            allThumbnails = allThumbnails.map( thmbObj => {
+              for (let group of data.groups) {
+                if(group.items[0] && group.items[0] === thmbObj.objectId){
+                  group['thumbnailImgUrl'] = thmbObj['thumbnailImgUrl']
+                  group['compoundmediaCount'] = thmbObj['compoundmediaCount']
+                }
               }
-            }
-            return thmbObj
+              return thmbObj
+            })
+            
+            this.recentGroups = data.groups
+            this.loading.recentGroups = false
           })
-
-          this.recentGroups = data.groups
-          this.loading.recentGroups = false
-        })
-        .catch( error => {
-          console.error(error)
-        })
+          .catch( error => {
+            console.error(error)
+          })
+        }  
       },
       (error) => {
         console.error(error)
@@ -334,40 +343,44 @@ export class AddToGroupModal implements OnInit, OnDestroy, AfterViewInit {
   private loadMyGroups(): void{
     this.loading.allGroups = true
     let timeStamp = this.allGroupSearchTS
+
     this._group.getAll(
       'created', 10, this.groupsCurrentPage, [], this.groupSearchTerm, '', 'alpha', 'asc'
     ).pipe(
-    take(1),
+      take(1),
       map(data  => {
         this.totalGroups = data.total
 
         let itemIds: string[] = []
-        for(let group of data.groups){
+        for(let group of data.groups) {
           if(group.items.length > 0){
             itemIds.push(group.items[0])
           }
         }
 
-        this._assets.getAllThumbnails(itemIds)
-        .then( allThumbnails => {
-          allThumbnails = allThumbnails.map( thmbObj => {
-            for (let group of data.groups) {
-              if(group.items[0] && group.items[0] === thmbObj.objectId){
-                group['thumbnailImgUrl'] = thmbObj['thumbnailImgUrl']
-                group['compoundmediaCount'] = thmbObj['compoundmediaCount']
+        // Check the length of itemIds to remove invalid call with object_id=null
+        if(itemIds.length !== 0) {
+          this._assets.getAllThumbnails(itemIds)
+          .then( allThumbnails => {
+            allThumbnails = allThumbnails.map( thmbObj => {
+              for (let group of data.groups) {
+                if(group.items[0] && group.items[0] === thmbObj.objectId){
+                  group['thumbnailImgUrl'] = thmbObj['thumbnailImgUrl']
+                  group['compoundmediaCount'] = thmbObj['compoundmediaCount']
+                }
               }
+              return thmbObj
+            })
+            
+            if(timeStamp === this.allGroupSearchTS) {
+              this.allGroups = this.allGroups.concat(data.groups)
             }
-            return thmbObj
+            this.loading.allGroups = false
           })
-
-          if(timeStamp === this.allGroupSearchTS) {
-            this.allGroups = this.allGroups.concat(data.groups)
-          }
-          this.loading.allGroups = false
-        })
-        .catch( error => {
-          console.error(error)
-        })
+          .catch( error => {
+            console.error(error)
+          })
+        }
       },
       (error) => {
         console.error(error)
