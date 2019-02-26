@@ -227,12 +227,12 @@ input[type=number] {
     }
 }
 .group-details-wrapper {
-    opacity: 0;
+    display: none;
     transition: opacity 400ms ease-in 200ms;
     -webkit-transition: opacity 400ms ease-in 200ms;
 
     &.show {
-        opacity: 1;
+        display: block;
     }
 }
 .animating-width {
