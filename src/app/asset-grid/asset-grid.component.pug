@@ -84,9 +84,11 @@
         pagination([pageObj]="pagination", (goToPage)="goToPage($event)", [right]="true")
     
     .animating-width(*ngIf="igMetaData && igMetaData.id && !reorderMode", [ngClass]="[ showIgDesc() ? 'col-3' : 'col-2']")
-      .group-details-header((click)="igDescExpanded = !igDescExpanded")
+      .group-details-header(*ngIf="(igMetaData.tags && igMetaData.tags.length > 0) || igMetaData.description", (click)="igDescExpanded = !igDescExpanded")
         span Group Details
         i.icon.icon-down([ngClass]="{'collapsed' : showIgDesc()}")
+      .group-details-header.no-details-available(*ngIf="(!igMetaData.tags || igMetaData.tags.length === 0) && !igMetaData.description")
+        span No Group Details
 
 
 

@@ -201,6 +201,11 @@ input[type=number] {
     border-bottom: 1px solid #989898;
     display: flex;
     justify-content: space-between;
+    
+    &.no-details-available {
+        cursor: default;
+        display: inline;
+    }
 
     span {
         font-family: Verdana;
