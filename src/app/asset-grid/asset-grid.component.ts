@@ -81,7 +81,7 @@ export class AssetGrid implements OnInit, OnDestroy {
       this.igDisplay = true
       // Details Display state for groups with no tags and no description
       if (!metadata.tags.length && !metadata.description) {
-        this.igDisplay = false
+        this.showIgDescBool = false
       }
     } else {
       this.igDisplay = false
