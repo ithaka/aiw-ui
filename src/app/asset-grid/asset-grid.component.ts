@@ -617,9 +617,12 @@ export class AssetGrid implements OnInit, OnDestroy {
    */
   private toggleReorderMode(): void {
     this.reorderMode = !this.reorderMode;
-    this.reordering.emit(this.reorderMode);
+    this.reordering.emit(this.reorderMode)
 
     if (this.reorderMode == true) {
+
+      this.showIgDescBool = false
+
       // Start loading
       this.isLoading = true;
 
