@@ -6,7 +6,7 @@ import { CompleterService, CompleterData } from 'ng2-completer'
 import { Angulartics2 } from 'angulartics2'
 import { Router } from '@angular/router'
 
-import { AssetService, GroupService, ImageGroup, AuthService, AssetSearchService } from './../../shared'
+import { AssetService, GroupService, ImageGroup, AuthService, AssetSearchService, DomUtilityService } from './../../shared'
 import { ToastService } from 'app/_services';
 
 @Component({
@@ -71,7 +71,8 @@ export class AddToGroupModal implements OnInit, OnDestroy, AfterViewInit {
     private completerService: CompleterService,
     private _auth: AuthService,
     private router: Router,
-    private _toasts: ToastService
+    private _toasts: ToastService,
+    private _dom: DomUtilityService
       ) {}
 
     ngOnInit() {

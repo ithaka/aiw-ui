@@ -26,6 +26,7 @@ export class NewIgModal implements OnInit {
     success?: boolean,
     failure?: boolean
   } = {};
+  public errorMsg: string = ''
 
   public hasPrivateGroups: boolean = false // If a user has at least one image group
 
@@ -88,7 +89,6 @@ export class NewIgModal implements OnInit {
   }
 
   ngOnInit() {
-
     // Does user have any private groups yet?
     // Check local storage first, otherwise call group service
     let hasPrivate = this._storage.getLocal('hasPrivateGroups')
@@ -229,6 +229,7 @@ export class NewIgModal implements OnInit {
           },
           error => {
             console.error(error);
+            this.errorMsg = '<p>Sorry, we weren’t able create update this group. Try again later or contact <a href="http://support.artstor.org/">support</a>.</p>'
             this.serviceResponse.failure = true;
             this.isLoading = false;
           }
@@ -286,6 +287,7 @@ export class NewIgModal implements OnInit {
         },
         error => {
           console.error(error)
+          this.errorMsg = '<p>Sorry, we weren’t able create the new group or add the '+ (group.items.length > 1 ? 'items' : 'item') +' at this time. Try again later or contact <a href="http://support.artstor.org/">support</a>.</p>'
           this.serviceResponse.failure = true
           this.isLoading = false;
         }
