@@ -74,12 +74,15 @@ export class AssetGrid implements OnInit, OnDestroy {
   public animationFinished: boolean = true
 
   // Passed in from groups page only
-  @Input() 
+  @Input()
   set igMetaData(metadata: ImageGroup) {
-    console.log("Set meta! ", metadata)
     this._igMetaData = metadata
     if (metadata.id){
       this.igDisplay = true
+      // Details Display state for groups with no tags and no description
+      if (!metadata.tags.length && !metadata.description) {
+        this.igDisplay = false
+      }
     } else {
       this.igDisplay = false
     }
@@ -87,7 +90,7 @@ export class AssetGrid implements OnInit, OnDestroy {
   get igMetaData(): ImageGroup {
     return this._igMetaData
   }
-  
+
   // @Input()
   // private allowSearchInRes:boolean;
 
