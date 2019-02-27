@@ -67,19 +67,36 @@ export class AssetGrid implements OnInit, OnDestroy {
   // Value
   public totalAssets: number = 0;
 
-  public showIgDescBool: boolean = true;
-  public animationFinished: boolean = true;
+  // Group display
+  private _igMetaData: ImageGroup = {}
+  public igDisplay: boolean = false
+  public showIgDescBool: boolean = true
+  public animationFinished: boolean = true
 
-  // Passed in from groups only
+  // Passed in from groups page only
   @Input()
-  public igMetaData: ImageGroup
+  set igMetaData(metadata: ImageGroup) {
+    this._igMetaData = metadata
+    if (metadata.id){
+      this.igDisplay = true
+      // Details Display state for groups with no tags and no description
+      if (!metadata.tags.length && !metadata.description) {
+        this.showIgDescBool = false
+      }
+    } else {
+      this.igDisplay = false
+    }
+  }
+  get igMetaData(): ImageGroup {
+    return this._igMetaData
+  }
 
   // @Input()
   // private allowSearchInRes:boolean;
 
   @Output() reordering: EventEmitter<boolean> = new EventEmitter();
 
-  dateFacet = {
+  public dateFacet = {
     earliest : {
       date : 1000,
       era : 'BCE'
@@ -91,11 +108,10 @@ export class AssetGrid implements OnInit, OnDestroy {
     modified : false
   };
 
-  activeSort = {
+  public activeSort = {
     index : '0',
     label : 'Relevance'
   };
-  sub;
 
   // Options for Sortablejs reordering of assets
   public sortableOptions: SortablejsOptions = {
@@ -128,8 +144,6 @@ export class AssetGrid implements OnInit, OnDestroy {
 
   @Input()
   private actionOptions: any = {};
-
-  private igDescExpanded: boolean = true
 
   // With most pages using Solr, we want to default assuming a max of 5000
   @Input()
@@ -460,11 +474,6 @@ export class AssetGrid implements OnInit, OnDestroy {
     this._assets.setSelectedAssets([]);
   }
 
-  public showGroupDetails() {
-    return this.igMetaData && this.igMetaData.id &&
-        (this.igMetaData.tags && this.igMetaData.tags.length > 0) ||
-            (this.igMetaData.description && this.igMetaData.description.length > 0)
-  }
   /**
    * Format the search term to display advance search queries nicely
    */
@@ -893,21 +902,20 @@ export class AssetGrid implements OnInit, OnDestroy {
    * Set animationFinished 400ms after setting showIgDescBool to be true
    * This is to make sure we display the details when animation is finished
    */
-  public setShowIgDesc(): void {
-    if (this.igMetaData && this.igMetaData.id && ((this.igMetaData.description && this.igMetaData.description.length > 0) || (this.igMetaData.tags && this.igMetaData.tags.length > 0)) && !this.reorderMode && this.igDescExpanded) {
+  public toggleShowIgDesc(noAnimation?: boolean): void {
+    if (!this.showIgDescBool && this.igDisplay && ((this.igMetaData.description && this.igMetaData.description.length > 0) || (this.igMetaData.tags && this.igMetaData.tags.length > 0)) && !this.reorderMode) {
       this.showIgDescBool = true;
-      setTimeout(()=>{
-        this.animationFinished = true;
-      }, 400)
+      if (noAnimation) {
+        this.animationFinished = true
+      } else {
+        setTimeout(()=>{
+          this.animationFinished = true
+        }, 400)
+      }
     } else {
-      this.showIgDescBool = false;
-      this.animationFinished = false;
+      this.showIgDescBool = false
+      this.animationFinished = false
     }
-  }
-
-  public toggleDetailDisplay(): void {
-    this.igDescExpanded = !this.igDescExpanded;
-    this.setShowIgDesc()
   }
 
   /**
