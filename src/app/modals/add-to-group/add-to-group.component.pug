@@ -15,7 +15,7 @@
             .modal-body
               .search-cntnr([ngClass]="{ 'shadow' : scrollCntnr.scrollTop > 50 }")
                 .input-group
-                  input#inputGroupSearchTerm.form-control.has-icon([(ngModel)]="groupSearchTerm", name="term", type="text", placeholder="Search by group title...", (keyup)="searchGroups()", tabindex="10")
+                  input#inputGroupSearchTerm.form-control.has-icon([(ngModel)]="groupSearchTerm", name="term", type="text", placeholder="Search groups by title or tag...", (keyup)="searchGroups()", tabindex="10")
                   i#iconClearGroupSearch.icon.icon-clear.form-control__icon(*ngIf="groupSearchTerm", (click)="clearGroupSearch()", (keyup.enter)="clearGroupSearch()", placement="bottom", triggers="focusin:focusout mouseenter:mouseleave", ngbTooltip="Clear search", role="button", tabindex="10", aria-label="Clear search")
                   i#iconGroupSearchSubmit.icon.icon-search.form-control__icon(*ngIf="!groupSearchTerm", (click)="searchGroups(true)", (keyup.enter)="searchGroups(true)", placement="bottom", triggers="focusin:focusout mouseenter:mouseleave", ngbTooltip="Submit search", role="button", tabindex="10", aria-label="Submit search")
               .scroll-cntnr(#scrollCntnr, infiniteScroll, [scrollWindow]="false", [infiniteScrollDistance]="1", [infiniteScrollThrottle]="150", [infiniteScrollDisabled]="allGroups.length < totalGroups && !loading.allGroups ? false : true", (scrolled)="loadMoreGroups()")
