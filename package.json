@@ -120,6 +120,7 @@
     "@types/source-map": "^0.5.7",
     "@types/uglify-js": "^3.0.4",
     "@types/webpack": "^4.4.17",
+    "appdynamics": "^4.5.11",
     "apply-loader": "^2.0.0",
     "bootstrap": "^4.1.3",
     "gh-pages": "^2.0.1",
