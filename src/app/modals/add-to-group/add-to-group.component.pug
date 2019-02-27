@@ -5,7 +5,6 @@
         .col-lg-6.detail-preview(*ngIf="detailViewBounds.width")
           .preview-cntnr
             img([attr.src]="detailPreviewURL", tabindex="10", [attr.aria-label]="selectedAssets[0].title + ', ' + selectedAssets[0].creator + ', ' + selectedAssets[0].date + ' of image.'", role="image", (keydown.shift.tab)="focusLastElement($event)")
-            i.icon.icon-detail-overlay
         div([ngClass]="[ detailViewBounds.width ? 'col-lg-6' : 'col-lg-12' ]")
           .modal-header
             h4.modal-title(tabindex="10", (keydown.shift.tab)="detailViewBounds.width ? null : focusLastElement($event)") {{ detailViewBounds.width ? 'Add Detail to Group' : 'Add ' + ( selectedAssets.length > 1 ? selectedAssets.length + ' Items' : 'Item' ) + ' to Group' }}
