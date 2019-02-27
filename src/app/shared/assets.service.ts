@@ -318,67 +318,11 @@ export class AssetService {
     }
 
     /**
-     * DEPRECATED
-     * Generates Image URL
-     * @param assetId: string Asset or object ID
-     */
-    public generateImageURL(assetId: string) {
-
-        return this.http
-            .get(this._auth.getUrl() + '/encrypt/' + assetId + '?_method=encrypt', this.defaultOptions)
-            .toPromise()
-    }
-
-    /**
      * Generate asset share link
      */
     public getShareLink(assetId: string, externalAsset?: boolean) {
         //   Links in the clipboard need a protocol defined
         return  `https://${this._app.clientHostname}/#/asset/${assetId}`
-
-        // For Reference: Old service for generating share url:
-        // this._assets.genrateImageURL( this.assets[0].id )
-        //   .then((imgURLData) => {
-        //       this._assets.encryptuserId()
-        //         .then((userEncryptData) => {
-        //           var imgEncryptId = imgURLData.encryptId;
-        //           var usrEncryptId = userEncryptData.encryptId;
-        //         //   Links in the clipboard need a protocol defined
-        //             this.generatedImgURL =  'http:' + this._auth.getUrl() + '/ViewImages?id=' + imgEncryptId + '&userId=' + usrEncryptId + '&zoomparams=&fs=true';
-        //         })
-        //         .catch(function(err){
-        //           console.log('Unable to Encrypt userid');
-        //           console.error(err);
-        //         });
-        //   })
-        //   .catch(function(err) {
-        //       console.log('Unable to generate image URL');
-        //       console.error(err);
-        //   });
-    }
-
-    /**
-     * Encrypt User Id
-     */
-    public encryptuserId() {
-
-        return this.http
-            .get(this._auth.getUrl() + '/encrypt/?_method=encryptuserId', this.defaultOptions)
-            .toPromise()
-    }
-
-    /**
-     * Gets File Properties table for an asset
-     * @param assetId Id for an asset/object
-     */
-    public getFileProperties(assetId: string): Promise<any> {
-        return this.http
-            .get(this._auth.getUrl(true) + '/metadata/' + assetId + '?_method=FpHtml', this.defaultOptions)
-            .toPromise()
-            .then(data => {
-                // This call only returns Html!
-                return data['_body'].toString();
-            });
     }
 
     /**
@@ -584,52 +528,7 @@ export class AssetService {
             .get(this._auth.getUrl() + '/v1/categorydesc/' + catId, options)
             .toPromise();
     }
-
-    nodeDesc(descId, widgetId){
-        let options = { withCredentials: true };
-
-        // Can be removed once region specific ids are no longer used
-        if (descId.indexOf('103') == 1) {
-            descId = descId.slice(1)
-        }
-
-        return this.http
-            .get(this._auth.getHostname() + '/api/v1/categorydesc/' + descId + '/' + widgetId, options)
-            .toPromise()
-    }
-
-    /**
-     * DEPRECATED - Get Collection
-     * @param colId id of collection to fetch
-     * @returns thumbnails of assets for a collection, and collection information
-     */
-    public getCollectionThumbs(colId: string, pageNo?: number, size?: number) {
-        let options = {withCredentials: true};
-        let imageSize = 0;
-
-        if (!pageNo) { pageNo = 1; }
-        if (!size) { size = 72; }
-
-        let requestString = [this._auth.getUrl(), 'collections', colId, 'thumbnails', pageNo, size, imageSize].join('/');
-
-        return this.http
-            .get(requestString, options)
-            .toPromise()
-    }
-
-    /**
-     * Wrapper function for HTTP call to get subImageGroups. Used by browse/groups component
-     * @param subImageGroup id
-     * @returns Chainable promise containing subImageGroups data
-     */
-    public subGroups(id: string){
-        let options = { withCredentials: true };
-
-        return this.http
-            .get(this._auth.getUrl() + '/folders/' + id + '/imagegroups?studWkFldrs=true&parentWritable=true', options)
-            .toPromise()
-    }
-
+    
     /**
      * Wrapper function for HTTP call to get collections. Used by home component
      * @param type Can either be 'ssc' or 'institution'
@@ -661,16 +560,6 @@ export class AssetService {
                 }
               }
             ))
-    }
-
-    public getFolders() {
-        let options = { withCredentials: true };
-
-        let requestString = [this._auth.getUrl(), 'folders'].join('/');
-
-        return this.http
-            .get(requestString)
-            .toPromise()
     }
 
     public getBlogEntries(query ?: string) {
