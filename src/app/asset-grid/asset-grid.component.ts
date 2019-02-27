@@ -460,6 +460,11 @@ export class AssetGrid implements OnInit, OnDestroy {
     this._assets.setSelectedAssets([]);
   }
 
+  public showGroupDetails() {
+    return this.igMetaData && this.igMetaData.id &&
+        (this.igMetaData.tags && this.igMetaData.tags.length > 0) ||
+            (this.igMetaData.description && this.igMetaData.description.length > 0)
+  }
   /**
    * Format the search term to display advance search queries nicely
    */

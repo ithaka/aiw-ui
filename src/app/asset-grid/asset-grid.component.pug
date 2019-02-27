@@ -38,10 +38,10 @@
                 | Download
               //- Select
               li.btn.btn-link([class.disabled]="reorderMode", (click)="toggleEditMode()", style="position:relative;", [ngClass]="{'active': editMode}", (keyup.enter)="toggleEditMode()", tabindex="3", role="button", attr.aria-label="{{selectedAssets.length}} items selected, tap enter to deselect all. To take an action on these selected items, tab to the Organize menu.")
-                ng-container(*ngIf="!editMode") 
+                ng-container(*ngIf="!editMode")
                   i.icon.icon-select-white
                   | Select
-                ng-container(*ngIf="editMode") 
+                ng-container(*ngIf="editMode")
                   i.icon([ngClass]="[ selectedAssets.length >= 1 ? 'icon-select-orange-filled' : 'icon-select-empty-orange' ]")
                   span {{ selectedAssets.length }} selected item{{ selectedAssets.length == 1 ? '' : 's' }}
                   .tooltip.bs-tooltip-top.show-on-hover(role="tooltip")
@@ -82,7 +82,7 @@
 
       .col-sm-4.col-md-4.col-lg-3.text-right.grid-pagination-bar(*ngIf="!reorderMode")
         pagination([pageObj]="pagination", (goToPage)="goToPage($event)", [right]="true")
-    
+
     .animating-width(*ngIf="igMetaData && igMetaData.id && !reorderMode", [ngClass]="[ showIgDescBool ? 'col-3' : 'col-2']")
       .group-details-header(*ngIf="(igMetaData.tags && igMetaData.tags.length > 0) || igMetaData.description", (click)="toggleDetailDisplay()")
         span Group Details
@@ -95,7 +95,7 @@
 
   //- Thumbnail Grid
   .row.pb-5([ngClass]="{'edit': editMode}")
-    .animating-width([ngClass]="[ igMetaData && igMetaData.id ? ( showIgDescBool ? 'col-9' : 'col-12' ) : 'col-12' ]")
+    .animating-width([ngClass]="[ igMetaData && igMetaData.id ? (showGroupDetails() && showIgDescBool ? 'col-9' : 'col-12' ) : 'col-12' ]")
       .col-md-12.col--thumbnails.col--expanding.has-icon-overlay([ngClass]="{ 'col--expand-12' : !showFilters }")
         i.icon-lg.icon-overlay.icon-loading-large([hidden]="!isLoading")
         //- Error Row
@@ -150,20 +150,20 @@
                     [attr.aria-controls]="reorder-status")
             .alert.alert-warning(*ngIf="!isLoading && (searchError.length < 1) && ((isPartialPage && hasMaxAssetLimit) || searchLimitError)")
               | {{ "BROWSE.WARNINGS.ADDITIONAL_RESULTS" | translate }}
-    
-    .group-details.animating-width(*ngIf="igMetaData && igMetaData.id && animationFinished", [ngClass]="[ showIgDescBool ? 'col-3' : 'col-0'  ]")
+
+    .group-details.animating-width(*ngIf="showGroupDetails() && showIgDescBool && animationFinished", [ngClass]="[ animationFinished && showGroupDetails() && showIgDescBool ? 'col-3' : 'col-0'  ]")
       .group-details-wrapper([ngClass]="{ 'show' : showIgDescBool }")
-        .ig-tags.meta-block(*ngIf!="igMetaData.tags && igMetaData.tags.length > 0")
+        .ig-tags.meta-block(*ngIf="igMetaData.tags && igMetaData.tags.length > 0")
           .label.pb-2 Tags
           ul.filter-list.pad-top(#groupTagsList="")
             li.filter-item(*ngFor="let tag of igMetaData.tags")
               a.font-weight-bold([routerLink]="['/browse', 'groups', 'search']", [queryParams]="{ 'level': 'all', 'tags' : encodeTag(tag), 'page' : '1' }") {{ tag }}
-        .meta-block(*ngIf!="igMetaData.description && igMetaData.description.length > 0")
+        .meta-block(*ngIf="igMetaData.description && igMetaData.description.length > 0")
           .label Description
         .desc-no-expand.meta-block(*ngIf="!igMetaData.description || igMetaData.description.length <= 0")
           .label No Description
-        #pageDescription.page__description(*ngIf!="igMetaData && igMetaData.description", [innerHTML]="igMetaData.description")
-  
+        #pageDescription.page__description(*ngIf="igMetaData && igMetaData.description", [innerHTML]="igMetaData.description")
+
   .row
     div([ngClass]="[ showIgDescBool ? 'col-9' : 'col-12']")
       ang-prompt(*ngIf="_auth.isPublicOnly() && searchTerm", style='width:100%; margin-top:36px; margin-bottom:20px;')
