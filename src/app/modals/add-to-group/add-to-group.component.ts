@@ -215,11 +215,7 @@ export class AddToGroupModal implements OnInit, OnDestroy, AfterViewInit {
     // throw an error if the image group is going to be larger than 1000 images
     //  otherwise the server will do that when we call it
     if (putGroup.items && putGroup.items.length > 1000) {
-      this._toasts.sendToast({
-        id: 'addToGroup',
-        type: 'error',
-        stringHTML: '<p>Sorry, that group would exceed 1000 assets. You will need to remove some before adding more.</p>'
-      })
+      this.errorMsg = '<p>Sorry, that group would exceed 1000 assets. You will need to remove some before adding more.</p>'
       return this.serviceResponse.tooManyAssets = true
     }
 
