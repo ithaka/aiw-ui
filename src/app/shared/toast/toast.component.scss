@@ -1,6 +1,8 @@
 @import '../../../sass/core/variables';
 @import '../../../sass/core/mixins';
 
+$toastPad: 14px;
+
 .toast-cntnr {
     min-width: 400px;
     min-height: 50px;  
@@ -57,7 +59,9 @@
 
     .toast-body{
         display: block;
-        padding: 8px 0px;
+        padding: $toastPad;
+        // Space for close icon
+        padding-right: ($toastPad*2 + 18px);
 
         .icon {
             font-size: 24px;
@@ -69,4 +73,20 @@
             }
         }
     }
+
+    .toast-message {
+        display: inline-block;
+    }
+
+    .icon-close {
+        position: absolute;
+        top: $toastPad;
+        right: $toastPad;
+    }
+}
+
+.toast-icon {
+    display: inline-block;
+    margin-right: $toastPad;
+    vertical-align: top;
 }
