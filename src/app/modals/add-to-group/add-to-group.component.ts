@@ -53,6 +53,8 @@ export class AddToGroupModal implements OnInit, OnDestroy, AfterViewInit {
   public detailViewBounds: any = {}
   public selectedGroup: any = {}
 
+  private groupsPageSize: number = 30
+
   private allGroupSearchTS: number = 0
 
   private groupSelectLastKeyCode: string = ''
@@ -353,7 +355,7 @@ export class AddToGroupModal implements OnInit, OnDestroy, AfterViewInit {
     let timeStamp = this.allGroupSearchTS
 
     this._group.getAll(
-      'created', 10, this.groupsCurrentPage, [], this.groupSearchTerm, '', 'alpha', 'asc'
+      'created', this.groupsPageSize, this.groupsCurrentPage, [], this.groupSearchTerm, '', 'alpha', 'asc'
     ).pipe(
       take(1),
       map(data  => {
