@@ -3,7 +3,7 @@ import { HttpClient } from "@angular/common/http";
 import { BehaviorSubject, Observable } from "rxjs";
 
 
-const DEFAULT_DISPLAY_TIME: number = 9000
+const DEFAULT_DISPLAY_TIME: number = 6000
 
 @Injectable({
     providedIn: 'root',
