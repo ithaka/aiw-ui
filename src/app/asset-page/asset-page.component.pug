@@ -91,14 +91,14 @@
               | {{ 'ASSET_PAGE.BUTTONS.ADD_TO_GROUP' | translate}}
               = " "
             .dropdown-menu(ngbDropdownMenu)
-              a#downloadViewLink.dropdown-item(
+              a#addItemToGroupLink.dropdown-item(
                 (click)="addAssetToIG()",
                 tabindex="2",
                 aria-label="Add Item to Group",
                 role="button")
                 i.icon.icon-add-item
                 | &nbsp;Add item
-              a#downloadAssetLink.dropdown-item(
+              a#addViewToGroupLink.dropdown-item(
                 (click)="addAssetToIG(true)",
                 tabindex="2",
                 aria-label="Add View to Group",
