@@ -1,23 +1,26 @@
 @import '../../../sass/core/variables';
 @import '../../../sass/core/mixins';
 
+$toastPad: 14px;
+
 .toast-cntnr {
     min-width: 400px;
     min-height: 50px;  
     margin-bottom: $basePadding/2;
     background-color: $bgDefault;
     z-index: 10000;
-    box-shadow: 0 1px 3px 0 rgba(0,0,0,0.3);
+    border: 1px solid #CCCCCC;
+    box-shadow: 0 3px 9px 0 rgba(0,0,0,0.30);
     border-top: 4px solid;
     
     transform: translateX(100%);
     -webkit-transform: translateX(100%);
 
     &.success {
-        border-color: $green;
+        border-top-color: $green;
     }
     &.error{
-        border-color: #ED3323;
+        border-top-color: #ED3323;
     }
 
     &.slide-in {
@@ -57,7 +60,9 @@
 
     .toast-body{
         display: block;
-        padding: 8px 0px;
+        padding: $toastPad;
+        // Space for close icon
+        padding-right: ($toastPad*2 + 18px);
 
         .icon {
             font-size: 24px;
@@ -69,4 +74,20 @@
             }
         }
     }
+
+    .toast-message {
+        display: inline-block;
+    }
+
+    .icon-close {
+        position: absolute;
+        top: $toastPad;
+        right: $toastPad;
+    }
+}
+
+.toast-icon {
+    display: inline-block;
+    margin-right: $toastPad;
+    vertical-align: top;
 }

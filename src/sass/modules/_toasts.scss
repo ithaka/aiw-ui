@@ -13,3 +13,10 @@
     width: 400px;
     margin-right: 24px;
 }
+
+.toast-message {
+  & p {
+    vertical-align: middle;
+    margin-bottom: 8px !important;
+  }
+}
