@@ -10,11 +10,6 @@ import { ImageGroup } from './../'
     @Input()
     public ig: ImageGroup
 
-    public startModalShow: boolean = false
-
-    private driver: any
-    private isBrowser
-
     constructor(
     ){ }
 
