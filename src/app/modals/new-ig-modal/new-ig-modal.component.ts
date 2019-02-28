@@ -36,7 +36,7 @@ export class NewIgModal implements OnInit {
   /** The image group object */
   @Input() private ig: ImageGroup = <ImageGroup>{};
   /** Controls the user seeing the toggle to add images to group or create a new group */
-  @Input() private showAddToGroup: boolean = false;
+  @Input() private showAddToGroup: boolean = true
 
   @ViewChild("modal", {read: ElementRef}) modalElement: ElementRef;
 
