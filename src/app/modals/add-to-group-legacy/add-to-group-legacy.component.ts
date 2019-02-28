@@ -15,7 +15,7 @@ import { AssetService, GroupService, ImageGroup, AuthService } from './../../sha
 export class AddToGroupLegacyModal implements OnInit, OnDestroy {
   @Output() closeModal: EventEmitter<any> = new EventEmitter();
   @Output() createGroup: EventEmitter<any> = new EventEmitter();
-  @Input() showCreateGroup: boolean = false;
+  @Input() showCreateGroup: boolean = true;
   public selectedIg: ImageGroup;
   public selectedGroupName: string;
   public selectedGroupError: string;

@@ -52,10 +52,10 @@
         .nav-item(*ngIf="!mobileCollapsed && institutionObj")
           | Institution: {{ institutionObj.shortName ? institutionObj.shortName : institutionObj.institutionName }}
 ang-delete-ig-modal(*ngIf="showDeleteIgModal", (closeModal)="showDeleteIgModal = false", [ig]="ig", [igId]="route.snapshot.params.igId", [igName]="route.snapshot.params.name")
-ang-new-ig-modal(*ngIf="showImageGroupModal", [copyIG]="copyIG", [editIG]="editIG", [ig]="ig", (igReloadTriggered)="reloadIG()", (closeModal)="showImageGroupModal = false")
+ang-new-ig-modal(*ngIf="showImageGroupModal", [copyIG]="copyIG", [editIG]="editIG", [ig]="ig", (igReloadTriggered)="reloadIG()", (closeModal)="showImageGroupModal = false", (addToGroup)="showAddToGroupModal = true; showImageGroupModal = false;")
 ang-share-link-modal(*ngIf="showShareLinkModal", [asset]="selectedAssets[0]", (closeModal)="showShareLinkModal = false")
 ang-add-to-group(*ngIf="showAddToGroupModal && detailViewsFlag", (closeModal)="showAddToGroupModal = false", (showToast)="handleToast($event)", (createGroup)="showImageGroupModal = true; showAddToGroupModal = false;")
-ang-add-to-group-legacy(*ngIf="showAddToGroupModal && !detailViewsFlag", (closeModal)="showAddToGroupModal = false")
+ang-add-to-group-legacy(*ngIf="showAddToGroupModal && !detailViewsFlag", (closeModal)="showAddToGroupModal = false", (createGroup)="showImageGroupModal = true; showAddToGroupModal = false;")
 ang-share-ig-link(*ngIf="showShareIgModal", [ig]="ig", (closeModal)="showShareIgModal = false")
 ang-confirm-modal(*ngIf="showConfirmationModal", (closeModal)="closeConfirmationModal($event)", [title]="'Delete Selected Asset(s)'",
   [description]="'Are you sure you want to delete ' + _assets.getSelectedAssets().length + ' selected image(s) from the group? <br><b>Group name: ' +  ig.name + '</b>'",
