@@ -6,6 +6,28 @@
             span {{ ig.total }} items
             span &nbsp;&nbsp;•&nbsp;&nbsp;
             span Last updated {{ ig.update_date | date:'MMMM dd, yyyy' }}
-    .col-3.pb-24.pt-24.z-1000
-        button.btn.btn-primary.ml-3 Export
+    .col-3.pb-24.pt-24.z-1000.center-align
+        //- button.btn.btn-secondary.ml-3 Export
+        .dropdown.d-inline-block(ngbDropdown, aria-haspopup="true")
+            button#exportDropdown.btn.btn-secondary.text-capitalize(ngbDropdownToggle, tabindex="2", aria-label="Export group")
+              i.icon.icon-export-btn
+              | Export
+              = " "
+            .dropdown-menu(ngbDropdownMenu)
+              a#exportPptLink.dropdown-item(
+                tabindex="2",
+                aria-label="Powerpoint",
+                role="button")
+                | &nbsp;Powerpoint
+              a#exportGsLink.dropdown-item(
+                tabindex="2",
+                aria-label="Google Slides",
+                role="button")
+                | &nbsp;Google Slides
+              a#exportZipLink.dropdown-item(
+                tabindex="2",
+                aria-label="Zip File",
+                role="button")
+                | &nbsp;Zip File
+
         button.btn.btn-primary.ml-3 Present
