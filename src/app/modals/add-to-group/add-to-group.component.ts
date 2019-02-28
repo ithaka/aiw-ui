@@ -77,8 +77,7 @@ export class AddToGroupModal implements OnInit, OnDestroy, AfterViewInit {
     private _dom: DomUtilityService
       ) {}
 
-    ngOnInit() {
-
+    ngOnInit() {    
     if (this.selectedAssets.length < 1) { // if no assets were added when component was initialized, the component gets the current selection list
       // Subscribe to asset selection
       this.subscriptions.push(
@@ -100,7 +99,7 @@ export class AddToGroupModal implements OnInit, OnDestroy, AfterViewInit {
 
     if(this.selectedAssets[0]['detailViewBounds'] && this.selectedAssets[0]['detailViewBounds']['width']){
       this.detailViewBounds = this.selectedAssets[0]['detailViewBounds']
-      this.detailPreviewURL = this.selectedAssets[0].tileSource.replace('info.json', '') + 'pct:' + (this.detailViewBounds['x'] * 100) + ',' + (this.detailViewBounds['y'] * 100) + ',' + (this.detailViewBounds['width'] * 100) + ',' + (this.detailViewBounds['height'] * 100) + '/352,/0/native.jpg'
+      this.detailPreviewURL = this.selectedAssets[0].tileSource.replace('info.json', '') + Math.round( this.detailViewBounds['x'] ) + ',' + Math.round( this.detailViewBounds['y'] ) + ',' + Math.round( this.detailViewBounds['width'] ) + ',' + Math.round( this.detailViewBounds['height'] ) + '/352,/0/native.jpg'
     }
 
     // Freeze background body scroll

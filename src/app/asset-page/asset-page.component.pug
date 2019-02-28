@@ -99,7 +99,6 @@
                 i.icon.icon-add-item
                 | &nbsp;Add item
               a#downloadAssetLink.dropdown-item(
-                [ngClass]="{ 'disabled' : assetViewer.osdViewer.viewport.getBounds(true)['width'] > 1 || assetViewer.osdViewer.viewport.getBounds(true)['height'] > 1 || assetViewer.osdViewer.viewport.getBounds(true)['x'] > 1 || assetViewer.osdViewer.viewport.getBounds(true)['y'] > 1 }",
                 (click)="addAssetToIG(true)",
                 tabindex="2",
                 aria-label="Add View to Group",
