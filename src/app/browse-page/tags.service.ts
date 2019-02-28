@@ -18,8 +18,6 @@ export class TagsService {
       return this.loadCollectionsList('ssc');
     } else if (switchObj.type === 'institution') {
       return this.loadCollectionsList('institution');
-    } else if (switchObj.type === 'library' && switchObj.collectionId) {
-      return this.getCategories(null, switchObj.collectionId);
     }
   }
 
@@ -74,38 +72,5 @@ export class TagsService {
           }
         })
       }
-  }
-
-  /**
-   * Called by both getChildTags and initTags
-   * @returns a chainable promise, resolved with an array of tags
-   */
-  private getCategories(tag?: Tag, collectionId?: string): Promise<Tag[]> {
-    // the tag doesn't have any children, so we run a call to get any
-    let childArr: Tag[] = [];
-    if (tag && tag.type && tag.type.label === 'collection') {
-      collectionId = tag.tagId;
-    }
-
-    if (tag.type.label === 'group') {
-      // Image Group folders come through with ugly widgetIds
-      let tagId = tag.tagId.replace('fldr_', '');
-
-      return this._assets.subGroups(tagId)
-        .then((data) => {
-          let arr: any = data;
-          for (let group of arr) {
-            let groupTag = new Tag(group.widgetId.replace('fldr_', ''), group.title, true, tag, { label: 'group', folder: group.isFolder }, true);
-            // Is folder property cleaning: comes through as string
-            group.isFolder = (group.isFolder === 'true') ?  true : false;
-            // Set description if it exists
-            if (group.igDesc) {
-              groupTag.setDescription(group.igDesc);
-            }
-            childArr.push(groupTag);
-          }
-          return childArr;
-        });
-    }
   }
 }
