@@ -293,15 +293,20 @@
           pagination([pageObj]="pagination", (goToPage)="goToPage($event)", style="display:inline-block")
 ang-agree-modal(*ngIf="showAgreeModal", (closeModal)="showAgreeModal = false", (acceptedTerms)="acceptedTerms = true", [downloadUrl]="downloadUrl", [downloadName]="downloadName", [isMSAgent]="isMSAgent", [setDownloadView]="setDownloadView")
 ang-login-req-modal(*ngIf="showLoginModal", (closeModal)="showLoginModal = false")
+<<<<<<< HEAD
 ang-add-to-group(*ngIf="showAddModal && detailViewsFlag", [selectedAssets]="[ assets[0] ]", [copySelectionStr]=" 'ADD_TO_GROUP_MODAL.FROM_ASSET' ", (createGroup)="showCreateGroupModal = true; showAddModal = false;", (closeModal)="showAddModal = false", (showToast)="handleToast($event)")
 ang-add-to-group-legacy(*ngIf="showAddModal && !detailViewsFlag", [selectedAssets]="[ assets[0] ]", [copySelectionStr]=" 'ADD_TO_GROUP_MODAL.FROM_ASSET' ", (createGroup)="showCreateGroupModal = true; showAddModal = false;", (closeModal)="showAddModal = false")
 ang-new-ig-modal(*ngIf="showCreateGroupModal", [selectedAssets]="[ assets[0] ]", (addToGroup)="showAddModal = true; showCreateGroupModal = false;", (closeModal)="showCreateGroupModal = false")
+=======
+ang-add-to-group(*ngIf="showAddModal && detailViewsFlag", [selectedAssets]="[ assets[0] ]", [showCreateGroup]="true", [copySelectionStr]=" 'ADD_TO_GROUP_MODAL.FROM_ASSET' ", (createGroup)="showCreateGroupModal = true; showAddModal = false;", (closeModal)="showAddModal = false")
+ang-add-to-group-legacy(*ngIf="showAddModal && !detailViewsFlag", [selectedAssets]="[ assets[0] ]", [showCreateGroup]="true", [copySelectionStr]=" 'ADD_TO_GROUP_MODAL.FROM_ASSET' ", (createGroup)="showCreateGroupModal = true; showAddModal = false;", (closeModal)="showAddModal = false")
+ang-new-ig-modal(*ngIf="showCreateGroupModal", [selectedAssets]="[ assets[0] ]", [showAddToGroup]="true", (addToGroup)="showAddModal = true; showCreateGroupModal = false;", (closeModal)="showCreateGroupModal = false")
+>>>>>>> stage
 ang-access-denied-modal(*ngIf="showAccessDeniedModal", [showSkipAsset]="isFullscreen && isAssetSkipable()", (skipAsset)="handleSkipAsset()", (exitFullScreen)="assetViewer.exitFullScreen(); assetViewer.setFullscreen(false)")
 ang-server-error-modal(*ngIf="showServerErrorModal", (exitFullScreen)="assetViewer.exitFullScreen(); assetViewer.setFullscreen(false)")
 ang-generate-citation(*ngIf="showGenerateCitation", [asset]="assets[0]", (closeModal)="showGenerateCitation = false")
 ang-confirm-modal(*ngIf="showExitEdit", (closeModal)="closeEditDetails($event)", title="{{ 'ASSET_PAGE.EXIT_EDIT_CONFIRM_MODAL.TITLE' | translate }}", description="{{ 'ASSET_PAGE.EXIT_EDIT_CONFIRM_MODAL.DESC' | translate }}", dismiss="{{ 'ASSET_PAGE.EXIT_EDIT_CONFIRM_MODAL.CANCEL' | translate }}", primary="{{ 'ASSET_PAGE.EXIT_EDIT_CONFIRM_MODAL.CONTINUE' | translate }}")
 ang-confirm-modal(*ngIf="showDeletePCModal", (closeModal)="closeDeletePC($event)", title="{{ 'ASSET_PAGE.DELETE_PC_MODAL.TITLE' | translate }}", description="{{ 'ASSET_PAGE.DELETE_PC_MODAL.DESCRIPTION' | translate }}", primary="Confirm")
-ang-toast(*ngIf="showToast", [type]="toastType", [stringHTML]="toastHTML", (closeToast)="closeToast()")
 
 <ng-template #multiViewDownloadDisabled>
   div This is not available for download at this time.

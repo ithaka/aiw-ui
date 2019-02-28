@@ -9,6 +9,7 @@ import { AuthService } from '../auth.service'
 import { AssetService } from '../assets.service'
 import { ToolboxService } from '../toolbox.service'
 import { AppConfig } from '../../app.service'
+import { Toast, ToastService } from 'app/_services';
 
 @Component({
   selector: 'nav-bar',
@@ -20,6 +21,9 @@ export class Nav implements OnInit, OnDestroy {
   public allowExpiredModal = false;
 
   public showinactiveUserLogoutModal: boolean = false;
+
+  // Toasts display
+  public toasts: Toast[] = []
 
   // Display variables
   public logoUrl = ''
@@ -38,7 +42,8 @@ export class Nav implements OnInit, OnDestroy {
     private _assets: AssetService,
     private _router: Router,
     private route: ActivatedRoute,
-    private location: Location
+    private location: Location,
+    private _toasts: ToastService
   ) {
       // console.log("Constructing nav component...")
       this.logoUrl = this._app.config.logoUrl
@@ -113,11 +118,7 @@ export class Nav implements OnInit, OnDestroy {
       this._auth.showUserInactiveModal.pipe(
         map(value => {
           this.showinactiveUserLogoutModal = value;
-        })).subscribe()
-    )
-
-    // Subscribe to Institution object updates
-    this.subscriptions.push(
+        })).subscribe(),
       this._auth.getInstitution().pipe(
         map(
           (institutionObj) => {
@@ -126,7 +127,13 @@ export class Nav implements OnInit, OnDestroy {
           (err) => {
             console.error('Nav failed to load Institution information', err)
           }
-        )).subscribe()
+        )).subscribe(),
+      // Toast updates subscription
+      this._toasts.toastUpdates.subscribe(
+        toasts => {
+          this.toasts = toasts
+        }
+      )
     );
   }
 

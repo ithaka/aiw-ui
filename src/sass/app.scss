@@ -29,6 +29,7 @@
 // [II] Core Imports (Order of import matters)
 // ----------------------------------------------------
 
+@import './core/mixins';
 @import './core/reset';
 @import './core/helpers';
 @import './core/layout';
@@ -50,6 +51,7 @@
 @import './modules/medium-editor/themes/default';
 @import './modules/filters';
 @import './modules/styleguide';
+@import './modules/toasts';
 @import './modules/tour';
 @import './modules/viewer';
 
@@ -325,10 +327,4 @@ body body{
   & .arrow {
     left: calc(50% - 0.4rem);
   }
-}
-
-// Custom style for toast content links
-.toast-content-links {
-  color: #0039C6 !important;
-  text-decoration: underline !important;
 }
