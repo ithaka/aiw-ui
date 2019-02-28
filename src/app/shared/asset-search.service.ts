@@ -395,7 +395,9 @@ export class AssetSearchService {
               return item['sequenceNum'] === 1
             })
 
-            cleanedAsset.thumbnailUrls.push(this._auth.getThumbUrl(true) + compoundAsset[0].thumbnailSizeOnePath)
+            if (compoundAsset[0]) {
+              cleanedAsset.thumbnailUrls.push(this._auth.getThumbUrl(true) + compoundAsset[0].thumbnailSizeOnePath)
+            }
           }
           else { // make the thumbnail urls and add them to the array
             for (let i = 1; i <= 5; i++) {
@@ -486,8 +488,12 @@ export class AssetSearchService {
   /**
    * Generate Thumbnail URL
    */
-  public makeThumbUrl(imagePath: string, size: number, isCompound?: boolean): string {
-    if (isCompound) {
+  public makeThumbUrl(imagePath: string, size: number, isCompound?: boolean, isthumbnailImgUrl?: boolean): string {
+    // Check if the url passed in has gone through metadata service, if not, add host to the url
+    if (isCompound && !isthumbnailImgUrl) {
+      return imagePath;
+    }
+    else if (isCompound && isthumbnailImgUrl) {
       return this._auth.getThumbUrl(isCompound) + imagePath;
     }
     else if (imagePath) {

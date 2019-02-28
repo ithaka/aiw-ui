@@ -193,3 +193,49 @@ input[type=number] {
     // We need to maintain enough space for the icons/labels on thumbnails to sit on the same row
     min-width: 140px;
 }
+
+.group-details-header {
+    cursor: pointer;
+    padding: 5px 0px;
+    margin-left: 25px;
+    border-bottom: 1px solid #989898;
+    display: flex;
+    justify-content: space-between;
+    
+    &.no-details-available {
+        cursor: default;
+        display: inline;
+    }
+
+    span {
+        font-family: Verdana;
+        font-size: 12px;
+        font-weight: bold;
+    }
+    .icon {
+        font-size: 12px;
+        align-self: center;
+
+        -webkit-transition: all 400ms ease;
+        transition: all 400ms ease;
+
+        &.collapsed {
+            transform: rotate(180deg);
+            -webkit-transform:rotate(180deg);
+        }
+
+    }
+}
+.group-details-wrapper {
+    display: none;
+    transition: opacity 400ms ease-in 200ms;
+    -webkit-transition: opacity 400ms ease-in 200ms;
+
+    &.show {
+        display: block;
+    }
+}
+.animating-width {
+  -webkit-transition: all 400ms ease;
+  transition: all 400ms ease;
+}

@@ -126,7 +126,7 @@ export class MetadataService {
             object_type_id: data.object_type_id,
             resolution_x: data.resolution_x,
             resolution_y: data.resolution_y,
-            thumbnail_url: this._auth.getThumbUrl() + data.thumbnail_url,
+            thumbnail_url: this._auth.getThumbUrl(typeof(data.image_compound_urls) !== 'undefined' && data.image_compound_urls.length) + data.thumbnail_url,
             tileSourceHostname: (this._auth.getEnv() == 'test') ? '//tsstage.artstor.org' : '//tsprod.artstor.org',
             title: data.title && data.title !== "" ? data.title : 'Untitled',
             updated_on: data.updated_on,

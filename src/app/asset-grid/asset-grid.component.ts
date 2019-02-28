@@ -17,7 +17,8 @@ import {
   Thumbnail,
   ToolboxService,
   FlagService,
-  DomUtilityService
+  DomUtilityService,
+  ImageGroup
 } from '../shared'
 import { AssetFiltersService } from '../asset-filters/asset-filters.service'
 import { APP_CONST } from '../app.constants'
@@ -66,12 +67,36 @@ export class AssetGrid implements OnInit, OnDestroy {
   // Value
   public totalAssets: number = 0;
 
+  // Group display
+  private _igMetaData: ImageGroup = {}
+  public igDisplay: boolean = false
+  public showIgDescBool: boolean = true
+  public animationFinished: boolean = true
+
+  // Passed in from groups page only
+  @Input()
+  set igMetaData(metadata: ImageGroup) {
+    this._igMetaData = metadata
+    if (metadata.id){
+      this.igDisplay = true
+      // Details Display state for groups with no tags and no description
+      if (!metadata.tags.length && !metadata.description) {
+        this.showIgDescBool = false
+      }
+    } else {
+      this.igDisplay = false
+    }
+  }
+  get igMetaData(): ImageGroup {
+    return this._igMetaData
+  }
+
   // @Input()
   // private allowSearchInRes:boolean;
 
   @Output() reordering: EventEmitter<boolean> = new EventEmitter();
 
-  dateFacet = {
+  public dateFacet = {
     earliest : {
       date : 1000,
       era : 'BCE'
@@ -83,11 +108,10 @@ export class AssetGrid implements OnInit, OnDestroy {
     modified : false
   };
 
-  activeSort = {
+  public activeSort = {
     index : '0',
     label : 'Relevance'
   };
-  sub;
 
   // Options for Sortablejs reordering of assets
   public sortableOptions: SortablejsOptions = {
@@ -157,7 +181,7 @@ export class AssetGrid implements OnInit, OnDestroy {
   // Collection Id parameter
   private colId: string = '';
   // Image group
-  private ig: any = {};
+  private ig: any = {}
 
   // Used as a key to save the previous route params in session storage (incase of image group)
   private prevRouteTS: string = ''
@@ -439,7 +463,8 @@ export class AssetGrid implements OnInit, OnDestroy {
           }
       })).subscribe()
     )
-  }
+
+  } // ngOninit
 
   ngOnDestroy() {
     // Kill subscriptions
@@ -606,9 +631,12 @@ export class AssetGrid implements OnInit, OnDestroy {
    */
   private toggleReorderMode(): void {
     this.reorderMode = !this.reorderMode;
-    this.reordering.emit(this.reorderMode);
+    this.reordering.emit(this.reorderMode)
 
     if (this.reorderMode == true) {
+
+      this.showIgDescBool = false
+
       // Start loading
       this.isLoading = true;
 
@@ -865,5 +893,35 @@ export class AssetGrid implements OnInit, OnDestroy {
       dropdownElement.children[0].setAttribute('aria-expanded', 'false')
       dropdownElement.children[1].classList.remove('show')
     }
+  }
+
+  /**
+   * Set showIgDescBool to be true when
+   * - A description exists
+   * - View hasn't changed to hide the description
+   * Set animationFinished 400ms after setting showIgDescBool to be true
+   * This is to make sure we display the details when animation is finished
+   */
+  public toggleShowIgDesc(noAnimation?: boolean): void {
+    if (!this.showIgDescBool && this.igDisplay && ((this.igMetaData.description && this.igMetaData.description.length > 0) || (this.igMetaData.tags && this.igMetaData.tags.length > 0)) && !this.reorderMode) {
+      this.showIgDescBool = true;
+      if (noAnimation) {
+        this.animationFinished = true
+      } else {
+        setTimeout(()=>{
+          this.animationFinished = true
+        }, 400)
+      }
+    } else {
+      this.showIgDescBool = false
+      this.animationFinished = false
+    }
+  }
+
+  /**
+   * Encode Tag: Encode the tag before using it for search
+   */
+  public encodeTag(tag) {
+    return encodeURIComponent(tag);
   }
 }
