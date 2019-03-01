@@ -30,7 +30,11 @@ const DEFAULT_DISPLAY_TIME: number = 6000
         //     id: 'example',
         //     type: 'success',
         //     requireDismiss: true,
-        //     stringHTML: '<p>Another example toast!</p>'
+        //     stringHTML: '<p>Another example toast!</p>',
+        //     links: [{
+        //       routerLink: ['/home'],
+        //       label: "Example link"
+        //     }]
         // })
     }
 
