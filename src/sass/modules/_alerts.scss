@@ -11,7 +11,7 @@ $infoColor: $blue;
 .alert {
     @extend %SansRegular;
     font-size: 12px;
-    line-height: 14px;
+    line-height: 16px;
     margin: $basePadding/2 0;
     background: #fafafa;
     border-radius: 0;
@@ -24,6 +24,21 @@ $infoColor: $blue;
         &:after {
             content: ' ';
         }
+    }
+
+    p {
+        margin-bottom: 0px;
+    }
+
+    .icon {
+        width: 2em;
+        height: 2em;
+        float: left;
+        margin-right: 1em;
+    }
+
+    a {
+        text-decoration: underline;
     }
 }
 

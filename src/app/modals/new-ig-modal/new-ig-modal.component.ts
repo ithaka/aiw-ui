@@ -6,6 +6,7 @@ import { Angulartics2 } from 'angulartics2'
 
 // Project dependencies
 import { AssetService, AuthService, GroupService, ImageGroup, LogService } from './../../shared'
+import { ToastService } from 'app/_services';
 import { IgFormValue, IgFormUtil } from './new-ig'
 import { isPlatformBrowser } from '@angular/common'
 import { Router } from '@angular/router'
@@ -26,6 +27,7 @@ export class NewIgModal implements OnInit {
     success?: boolean,
     failure?: boolean
   } = {};
+  public errorMsg: string = ''
 
   public hasPrivateGroups: boolean = false // If a user has at least one image group
 
@@ -34,7 +36,7 @@ export class NewIgModal implements OnInit {
   /** The image group object */
   @Input() private ig: ImageGroup = <ImageGroup>{};
   /** Controls the user seeing the toggle to add images to group or create a new group */
-  @Input() private showAddToGroup: boolean = false;
+  @Input() private showAddToGroup: boolean = true
 
   @ViewChild("modal", {read: ElementRef}) modalElement: ElementRef;
 
@@ -77,7 +79,8 @@ export class NewIgModal implements OnInit {
       private _angulartics: Angulartics2,
       private el: ElementRef,
       private router: Router,
-      private _storage: ArtstorStorageService
+      private _storage: ArtstorStorageService,
+      private _toasts: ToastService
 
   ) {
     this.newIgForm = _fb.group({
@@ -88,7 +91,6 @@ export class NewIgModal implements OnInit {
   }
 
   ngOnInit() {
-
     // Does user have any private groups yet?
     // Check local storage first, otherwise call group service
     let hasPrivate = this._storage.getLocal('hasPrivateGroups')
@@ -213,6 +215,7 @@ export class NewIgModal implements OnInit {
       this._auth.getUser(),
       this.ig
     )
+    let multipleSelected: boolean = this.selectedAssets.length > 1
 
     if (this.editIG) {
       // Editing group
@@ -229,6 +232,7 @@ export class NewIgModal implements OnInit {
           },
           error => {
             console.error(error);
+            this.errorMsg = '<p>Sorry, we weren’t able create update this group. Try again later or contact <a href="http://support.artstor.org/">support</a>.</p>'
             this.serviceResponse.failure = true;
             this.isLoading = false;
           }
@@ -283,9 +287,21 @@ export class NewIgModal implements OnInit {
             // Add to Group GA event
             this._angulartics.eventTrack.next({ action: 'addToGroup', properties: { category: this._auth.getGACategory(), label: this.router.url }})
           }
+          
+          this.closeModal.emit()
+          this._toasts.sendToast({
+            id: 'createNewGroup',
+            type: 'success',
+            stringHTML: '<p>' + (multipleSelected ? 'The items were' : 'The item was') + ' added to your new group, <b>' + data.name + '</b>.</p>',
+            links: [{
+              routerLink: ['/group/'+ data.id],
+              label: 'Go to group'
+            }]
+          })
         },
         error => {
           console.error(error)
+          this.errorMsg = '<p>Sorry, we weren’t able create the new group or add the '+ (group.items.length > 1 ? 'items' : 'item') +' at this time. Try again later or contact <a href="http://support.artstor.org/">support</a>.</p>'
           this.serviceResponse.failure = true
           this.isLoading = false;
         }
