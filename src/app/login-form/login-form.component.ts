@@ -129,7 +129,7 @@ export class LoginFormComponent implements OnInit {
         }
       })
       .catch((error) => {
-        this.errorMsg = this.getLoginErrorMsg(error.message);
+        this.errorMsg = this.getLoginErrorMsg(error.message, error);
       });
   }
 
@@ -184,7 +184,7 @@ export class LoginFormComponent implements OnInit {
       ).catch((err) => {
         this.loginLoading = false;
         let errObj = err.error
-        this.errorMsg = this.getLoginErrorMsg(errObj && errObj.message)
+        this.errorMsg = this.getLoginErrorMsg(errObj && errObj.message, err)
         if (!this.errorMsg){
           this.getLoginError(user)
           this.angulartics.eventTrack.next({ action: 'remoteLogin', properties: { category: this._auth.getGACategory(), label: 'failed' }});
@@ -198,8 +198,12 @@ export class LoginFormComponent implements OnInit {
       });
   }
 
-  getLoginErrorMsg(serverMsg: string): string {
-    if (serverMsg) {
+  getLoginErrorMsg(serverMsg: string, err?: any): string {
+    // Better to check by serverMsg when the response message is decided by Auth
+    if (err && err.status === 422) {
+      return 'LOGIN.LOST_PASSWORD'
+    }
+    else if (serverMsg) {
        if (serverMsg === 'loginFailed' || serverMsg === 'Invalid credentials'){
         return 'LOGIN.WRONG_PASSWORD'
       } else if (serverMsg === 'loginExpired' || serverMsg === 'Login Expired') {
@@ -211,7 +215,8 @@ export class LoginFormComponent implements OnInit {
       } else {
         return 'LOGIN.SERVER_ERROR'
       }
-    } else {
+    } 
+    else {
       return 'LOGIN.SERVER_ERROR'
     }
   }
