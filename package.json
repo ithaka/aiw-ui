@@ -1,6 +1,6 @@
 {
   "name": "avatar",
-  "version": "1.12.31",
+  "version": "1.12.36",
   "description": "Front End for the Artstor Digital Library",
   "author": "Artstor Team Air",
   "license": "MIT",
@@ -91,7 +91,7 @@
     "popper.js": "^1.14.4",
     "raven-js": "^3.20.1",
     "rxjs": "^6.0.0",
-    "rxjs-compat": "^6.3.3",
+    "rxjs-compat": "^6.4.0",
     "sortablejs": "^1.7.0",
     "ts-loader": "^5.3.0",
     "url-loader": "^1.0.1",

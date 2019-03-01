@@ -7,6 +7,7 @@ import { Angulartics2 } from 'angulartics2'
 import { Router } from '@angular/router'
 
 import { AssetService, GroupService, ImageGroup, AuthService, AssetSearchService, DomUtilityService } from './../../shared'
+import { ToastService } from 'app/_services';
 
 @Component({
   selector: 'ang-add-to-group',
@@ -16,7 +17,6 @@ import { AssetService, GroupService, ImageGroup, AuthService, AssetSearchService
 export class AddToGroupModal implements OnInit, OnDestroy, AfterViewInit {
   @Output() closeModal: EventEmitter<any> = new EventEmitter()
   @Output() createGroup: EventEmitter<any> = new EventEmitter()
-  @Output() showToast: EventEmitter<any> = new EventEmitter()
   @Input() public copySelectionStr: string = 'ADD_TO_GROUP_MODAL.FROM_SELECTED'
   @Input() showCreateGroup: boolean = true
   @Input() public selectedAssets: any[] = [] // this is used in the asset page, where a single asset can be injected directly
@@ -30,6 +30,7 @@ export class AddToGroupModal implements OnInit, OnDestroy, AfterViewInit {
     failure?: boolean,
     tooManyAssets?: boolean
   } = {}
+  public errorMsg: string = ''
 
   public dataService: any
 
@@ -52,6 +53,8 @@ export class AddToGroupModal implements OnInit, OnDestroy, AfterViewInit {
   public detailViewBounds: any = {}
   public selectedGroup: any = {}
 
+  private groupsPageSize: number = 30
+
   private allGroupSearchTS: number = 0
 
   private groupSelectLastKeyCode: string = ''
@@ -66,15 +69,15 @@ export class AddToGroupModal implements OnInit, OnDestroy, AfterViewInit {
     private _assets: AssetService,
     private _search: AssetSearchService,
     private _group: GroupService,
-    private _dom: DomUtilityService,
     private _angulartics: Angulartics2,
     private completerService: CompleterService,
     private _auth: AuthService,
-    private router: Router
+    private router: Router,
+    private _toasts: ToastService,
+    private _dom: DomUtilityService
       ) {}
 
-    ngOnInit() {
-
+    ngOnInit() {    
     if (this.selectedAssets.length < 1) { // if no assets were added when component was initialized, the component gets the current selection list
       // Subscribe to asset selection
       this.subscriptions.push(
@@ -96,7 +99,7 @@ export class AddToGroupModal implements OnInit, OnDestroy, AfterViewInit {
 
     if(this.selectedAssets[0]['detailViewBounds'] && this.selectedAssets[0]['detailViewBounds']['width']){
       this.detailViewBounds = this.selectedAssets[0]['detailViewBounds']
-      this.detailPreviewURL = this.selectedAssets[0].tileSource.replace('info.json', '') + 'pct:' + (this.detailViewBounds['x'] * 100) + ',' + (this.detailViewBounds['y'] * 100) + ',' + (this.detailViewBounds['width'] * 100) + ',' + (this.detailViewBounds['height'] * 100) + '/352,/0/native.jpg'
+      this.detailPreviewURL = this.selectedAssets[0].tileSource.replace('info.json', '') + Math.round( this.detailViewBounds['x'] ) + ',' + Math.round( this.detailViewBounds['y'] ) + ',' + Math.round( this.detailViewBounds['width'] ) + ',' + Math.round( this.detailViewBounds['height'] ) + '/352,/0/native.jpg'
     }
 
     // Freeze background body scroll
@@ -160,6 +163,7 @@ export class AddToGroupModal implements OnInit, OnDestroy, AfterViewInit {
     // clear any service status
     this.serviceResponse = {}
     this.selectedGroupError = ''
+    this.errorMsg = ''
 
     if (!this.selectedGroup.id) {
       this.selectedGroupError = 'ADD_TO_GROUP_MODAL.NO_GROUP'
@@ -168,6 +172,7 @@ export class AddToGroupModal implements OnInit, OnDestroy, AfterViewInit {
 
     // Create object for new modified group
     let putGroup: ImageGroup = Object.assign({}, this.selectedGroup)
+    let multipleSelected: boolean = this.selectedAssets.length > 1
 
     // assets come from different places and sometimes have id and sometimes objectId
     this.selectedAssets.forEach((asset: any, index) => {
@@ -210,6 +215,7 @@ export class AddToGroupModal implements OnInit, OnDestroy, AfterViewInit {
     // throw an error if the image group is going to be larger than 1000 images
     //  otherwise the server will do that when we call it
     if (putGroup.items && putGroup.items.length > 1000) {
+      this.errorMsg = '<p>Sorry, that group would exceed 1000 assets. You will need to remove some before adding more.</p>'
       return this.serviceResponse.tooManyAssets = true
     }
 
@@ -226,29 +232,28 @@ export class AddToGroupModal implements OnInit, OnDestroy, AfterViewInit {
               this.serviceResponse.success = true
               this._assets.clearSelectMode.next(true)
               this.closeModal.emit()
-              this.showToast.emit({
+              this._toasts.sendToast({
+                id: 'addToGroup',
                 type: 'success',
-                stringHTML: '<p>You have successfully added item to <b>' + data.name + '</b>.</p><a class="toast-content-links" href="/#/group/' + data.id + '">Go to Group</a>'
+                stringHTML: '<p>' + (multipleSelected ? 'The items were added' : 'The item was added') + ' to <b>' + data.name + '</b>.</p>',
+                links: [{
+                  routerLink: ['/group/'+ data.id],
+                  label: 'Go to group'
+                }]
               })
               // Add to Group GA event
               this._angulartics.eventTrack.next({ action: 'addToGroup', properties: { category: this._auth.getGACategory(), label: this.router.url }})
             },
             (err) => {
               console.error(err); this.serviceResponse.failure = true;
-              this.showToast.emit({
-                type: 'error',
-                stringHTML: '<p>Unable to add item to group. Try again later or if the problem persists contact <a href="http://support.artstor.org/">support</a>.</p>'
-              })
+              this.errorMsg = '<p>Sorry, we weren’t able to add the '+ (multipleSelected ? 'items' : 'item') +' at this time. Try again later or contact <a href="http://support.artstor.org/">support</a>.</p>'
             }
         )).subscribe()
 
       })
       .catch((error) => {
           console.error(error);
-          this.showToast.emit({
-            type: 'error',
-            stringHTML: '<p>Unable to add item to group. Try again later or if the problem persists contact <a href="http://support.artstor.org/">support</a>.</p>'
-          })
+          this.errorMsg = '<p>Sorry, we weren’t able to add the '+ (multipleSelected ? 'items' : 'item') +' at this time. Try again later or contact <a href="http://support.artstor.org/">support</a>.</p>'
       });
 
 
@@ -345,7 +350,7 @@ export class AddToGroupModal implements OnInit, OnDestroy, AfterViewInit {
     let timeStamp = this.allGroupSearchTS
 
     this._group.getAll(
-      'created', 10, this.groupsCurrentPage, [], this.groupSearchTerm, '', 'alpha', 'asc'
+      'created', this.groupsPageSize, this.groupsCurrentPage, [], this.groupSearchTerm, '', 'alpha', 'asc'
     ).pipe(
       take(1),
       map(data  => {

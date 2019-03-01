@@ -744,7 +744,17 @@ export class AssetPage implements OnInit, OnDestroy {
 
         if (this.user && this.user.isLoggedIn) {
             if(this.detailViewsFlag) {
-                this.assets[0]['detailViewBounds'] = detailView ? this.assetViewer.osdViewer.viewport.getBounds(true) : {}
+                // Get Bounds from OSD viewer for the saved detail
+                let bounds = detailView ? this.assetViewer.osdViewer.viewport.viewportToImageRectangle(this.assetViewer.osdViewer.viewport.getBounds(true)) : {}
+                // Make sure the bounds are adjusted for the negative x and y values
+                bounds['width'] = bounds['x'] < 0 ? bounds['width'] + bounds['x'] : bounds['width']
+                bounds['height'] = bounds['y'] < 0 ? bounds['height'] + bounds['y'] : bounds['height']
+                // Make sure the bounds are within the content size for the IIIF endpoint.
+                bounds['width'] = bounds['width'] > this.assets[0].viewportDimensions.contentSize['x'] ? this.assets[0].viewportDimensions.contentSize['x'] : bounds['width']                
+                bounds['height'] = bounds['height'] > this.assets[0].viewportDimensions.contentSize['y'] ? this.assets[0].viewportDimensions.contentSize['y'] : bounds['height']
+                
+                this.assets[0]['detailViewBounds'] = bounds
+                
                 this.showAddModal = true
 
             } else {

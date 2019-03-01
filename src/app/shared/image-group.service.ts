@@ -62,22 +62,6 @@ export class ImageGroupService {
           });
   }
 
-  /**
-   * Returns the numbers for how many images a user can download
-   * @param igId The image group's id
-   * @returns observable resolved with object containing: alreadyDwnldImgCnt, curAllowedDwnldCnt, igImgCount<number>, pptExportAllowed<boolean>, nonPrivateImgCnt
-  */
-  public getDownloadCount(igId: string): Observable<any> {
-    let header = new HttpHeaders().set('content-type', 'application/x-www-form-urlencoded');
-    let options = { headers: header, withCredentials: true};
-    let data = this._auth.formEncode({
-      _method: 'isExportToPPTAllowed',
-      igId: igId
-    });
-
-    return this.http.post(this._auth.getUrl() + '/downloadpptimages', data, options)
-  }
-
   public triggerIgDownload(): void {
     this.igDownloadTrigger.emit();
   }

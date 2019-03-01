@@ -5,7 +5,6 @@
         .col-lg-6.detail-preview(*ngIf="detailViewBounds.width")
           .preview-cntnr
             img([attr.src]="detailPreviewURL", tabindex="10", [attr.aria-label]="selectedAssets[0].title + ', ' + selectedAssets[0].creator + ', ' + selectedAssets[0].date + ' of image.'", role="image", (keydown.shift.tab)="focusLastElement($event)")
-            i.icon.icon-detail-overlay
         div([ngClass]="[ detailViewBounds.width ? 'col-lg-6' : 'col-lg-12' ]")
           .modal-header
             h4.modal-title(tabindex="10", (keydown.shift.tab)="detailViewBounds.width ? null : focusLastElement($event)") {{ detailViewBounds.width ? 'Add Detail to Group' : 'Add ' + ( selectedAssets.length > 1 ? selectedAssets.length + ' Items' : 'Item' ) + ' to Group' }}
@@ -15,7 +14,7 @@
             .modal-body
               .search-cntnr([ngClass]="{ 'shadow' : scrollCntnr.scrollTop > 50 }")
                 .input-group
-                  input#inputGroupSearchTerm.form-control.has-icon([(ngModel)]="groupSearchTerm", name="term", type="text", placeholder="Search by group title...", (keyup)="searchGroups()", tabindex="10")
+                  input#inputGroupSearchTerm.form-control.has-icon([(ngModel)]="groupSearchTerm", name="term", type="text", placeholder="Search groups by title or tag...", (keyup)="searchGroups()", tabindex="10")
                   i#iconClearGroupSearch.icon.icon-clear.form-control__icon(*ngIf="groupSearchTerm", (click)="clearGroupSearch()", (keyup.enter)="clearGroupSearch()", placement="bottom", triggers="focusin:focusout mouseenter:mouseleave", ngbTooltip="Clear search", role="button", tabindex="10", aria-label="Clear search")
                   i#iconGroupSearchSubmit.icon.icon-search.form-control__icon(*ngIf="!groupSearchTerm", (click)="searchGroups(true)", (keyup.enter)="searchGroups(true)", placement="bottom", triggers="focusin:focusout mouseenter:mouseleave", ngbTooltip="Submit search", role="button", tabindex="10", aria-label="Submit search")
               .scroll-cntnr(#scrollCntnr, infiniteScroll, [scrollWindow]="false", [infiniteScrollDistance]="1", [infiniteScrollThrottle]="150", [infiniteScrollDisabled]="allGroups.length < totalGroups && !loading.allGroups ? false : true", (scrolled)="loadMoreGroups()")
@@ -48,6 +47,9 @@
                     .dot
                     .dot
                     .dot
+            .alert.alert-danger.mx-2(*ngIf="errorMsg")
+              i.icon.icon-error
+              span([innerHtml]="errorMsg")
             .modal-footer
               ng-container(*ngIf="!serviceResponse.success")
                 .wrapper

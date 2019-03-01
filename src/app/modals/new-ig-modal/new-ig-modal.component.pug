@@ -47,7 +47,9 @@
               [autocompleteItems]="tagSuggestions",
               [autocompleteMustMatch]="false",
               (keyup)="getTagSuggestions($event)")
-            .form-control-feedback(*ngIf="serviceResponse.failure") {{ 'NEW_GROUP_MODAL.CREATE_FAILURE' | translate }}
+          .alert.alert-danger(*ngIf="errorMsg")
+            i.icon.icon-error
+            span([innerHtml]="errorMsg")
         .modal-footer
           .wrapper
             a.help-link.mr-2(href="http://support.artstor.org/?article=create-and-manage-image-groups", target="_blank") ?

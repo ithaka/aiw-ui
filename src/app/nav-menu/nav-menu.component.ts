@@ -7,6 +7,7 @@ import { Location } from '@angular/common'
 // Project Dependencies
 import { AssetService, ImageGroupService, ImageGroup, GroupService, AuthService, FlagService } from '../shared'
 import { AppConfig } from '../app.service'
+import { Toast, ToastService } from 'app/_services';
 
 @Component({
   selector: 'nav-menu',
@@ -67,6 +68,8 @@ export class NavMenu implements OnInit, OnDestroy {
   public detailViewsFlag: boolean = false
 
   // Toast Variables
+  public toasts: Toast[] = []
+
   public showToast: boolean = false
   public toastType: string = ''
   public toastHTML: string = ''
@@ -91,15 +94,14 @@ export class NavMenu implements OnInit, OnDestroy {
   ngOnInit() {
     // Subscribe to User object updates
     this.subscriptions.push(
+      // User data subscription
       this._auth.currentUser.pipe(
         map(userObj => {
           this.user = userObj
         },
         (err) => { console.error(err) }
-      )).subscribe()
-    )
-
-    this.subscriptions.push(
+      )).subscribe(),
+      // Asset selection subscription
       this._assets.selection.pipe(
         map(selectedAssets => {
           this.selectedAssets = selectedAssets
@@ -107,10 +109,8 @@ export class NavMenu implements OnInit, OnDestroy {
         error => {
           console.error(error)
         }
-      )).subscribe()
-    )
-
-    this.subscriptions.push(
+      )).subscribe(),
+      // Route params subscription
       this.route.params.subscribe((routeParams) => {
         this.params = routeParams
         if (routeParams['igId'] && !routeParams['page']){
@@ -124,10 +124,8 @@ export class NavMenu implements OnInit, OnDestroy {
         } else {
             this.detailViewsFlag = false
         }
-      })
-    )
-
-    this.subscriptions.push(
+      }),
+      // Institution Object subscription
       this._auth.getInstitution().pipe(
         map(institutionObj => {
           this.institutionObj = institutionObj;
@@ -262,15 +260,5 @@ export class NavMenu implements OnInit, OnDestroy {
           this._router.navigate(['/home'])
         }
       })
-  }
-
-  public handleToast(event: any): void{
-    this.toastType = event.type
-    this.toastHTML = event.stringHTML
-    this.showToast = true
-  }
-
-  public closeToast(): void{
-      setTimeout(()=>{ this.showToast = false }, 1000)
   }
 }
