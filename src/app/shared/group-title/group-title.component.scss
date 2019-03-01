@@ -29,13 +29,13 @@
 }
 
 .item-last-updated:after {
-  position: fixed;
-  left: 0;
+  position: absolute;
+  left: -50%;
   content: " ";
   display: block;
   min-height: 40px;
-  width: 100%;
-  border-bottom: solid 1px #E8E8E8;
+  width: 300%;
+  border-bottom: solid 1px rgba(232, 232, 232, 0.021);
   z-index: 0;
 }
 
