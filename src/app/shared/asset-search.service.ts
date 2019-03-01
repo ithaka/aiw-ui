@@ -488,16 +488,30 @@ export class AssetSearchService {
 
   /**
    * Generate Thumbnail URL
+   * @param thumbData: AssetData | Thumbnail - returned by search service, metadata service, or group service
+   * @param size: number - sizes 0 through 4 are acceptable
    */
   public makeThumbUrl(thumbData: any, size?: number): string {
     let imagePath: string
     let isMultiView: boolean
     let isThumbnailImgUrl: boolean
+    let isDowngradedMultiView: boolean
     // Set default size
     if (!size) {
       size = 1
     }
-
+    // Handle variations of Multi Views
+    console.log("Downgraded?", thumbData)
+    if (thumbData.thumbnail_url === thumbData.tileSource) {
+      // Handle downgraded Multi View
+      isDowngradedMultiView = true
+    } else if (typeof(thumbData.tileSource) === 'object' && thumbData.tileSource.length) {
+      // Check if multi-view, when via search service
+      isMultiView = true
+    } else if (thumbData.compoundmediaCount) {
+      // Check if multi-view, when via group service
+      isMultiView = true
+    }
     // Check thumbnail url source
     if (thumbData.thumbnailImgUrl) {
       isThumbnailImgUrl = true
@@ -505,16 +519,8 @@ export class AssetSearchService {
     } else {
       imagePath = thumbData.thumbnail_url
     }
-
-    // Check if Compound, when via search service
-    if (typeof(thumbData.tileSource) === 'object' && thumbData.tileSource.length) {
-      isMultiView = true
-    } else if (thumbData.compoundmediaCount) {
-      isMultiView = true
-    }
-
-    // Check if the url passed in has gone through metadata service, if not, add host to the url
-    if (isMultiView && !isThumbnailImgUrl) {
+    // Multiviews and downgraded views receive FULL URLS via "thumbnail_url"
+    if ((isMultiView || isDowngradedMultiView) && !isThumbnailImgUrl) {
       return imagePath;
     }
     else if (isMultiView && isThumbnailImgUrl) {
@@ -539,7 +545,7 @@ export class AssetSearchService {
     } else {
       imagePath = '';
     }
-    // Clean-up
+    // Determine if hostname should be appended
     return this._auth.getThumbHostname() + imagePath;
   }
 

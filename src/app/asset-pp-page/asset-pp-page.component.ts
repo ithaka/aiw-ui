@@ -17,7 +17,6 @@ import { MetadataService } from './../_services'
 export class AssetPPPage implements OnInit {
   public asset: any = {}
   public isMultiView: boolean = false // flag for print preview of multiview asset
-  public isDowngradedMultiView: boolean = false
   private header = new HttpHeaders().set('Content-Type', 'application/json') // ... Set content type to JSON
   private options = { headers: this.header, withCredentials: true } // Create a request option\
   private assetId: string
@@ -43,12 +42,7 @@ export class AssetPPPage implements OnInit {
   }
 
   setThumbnail(asset) {
-    if (this.isDowngradedMultiView) {
-      return asset.thumbnail_url
-    }
-    else {
-      return this._search.makeThumbUrl(asset, 2)
-    }
+    return this._search.makeThumbUrl(asset, 2)
   }
 
   // Load Image Group Assets
@@ -60,10 +54,6 @@ export class AssetPPPage implements OnInit {
         // We are tranforming image_compound_urls to tileSource in Asset constructor, check tileSource instead
         if (typeof(asset.tileSource) === 'object' && asset.tileSource.length) {
           this.isMultiView = true
-        }
-        // Handle downgraded Multi View
-        else if (asset.thumbnail_url === asset.tileSource) {
-          this.isDowngradedMultiView = true
         }
 
         self.asset = asset
