@@ -72,7 +72,7 @@ export class PptModalComponent implements OnInit, AfterViewInit {
       // Goal: A downlink that looks like:
       // http://mdxdv.artstor.org/thumb/imgstor/...
       if (data.path) {
-        this.downloadLink = this._auth.getThumbUrl() + data.path.replace('/nas/', '/thumb/')
+        this.downloadLink = this._auth.getThumbHostname() + data.path.replace('/nas/', '/thumb/')
       }
     })
     .catch((err) => {
@@ -91,7 +91,7 @@ export class PptModalComponent implements OnInit, AfterViewInit {
       // Goal: A downlink that looks like:
       // http://mdxdv.artstor.org/thumb/imgstor/...
       if (data.path) {
-        this.zipDownloadLink = this._auth.getThumbUrl() + data.path.replace('/nas/', '/thumb/');
+        this.zipDownloadLink = this._auth.getThumbHostname() + data.path.replace('/nas/', '/thumb/');
       }
     })
     .catch((err) => {

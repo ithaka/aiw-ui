@@ -47,7 +47,7 @@ export class AssetPPPage implements OnInit {
       return asset.thumbnail_url
     }
     else {
-      return this._search.makeThumbUrl(asset.thumbnail_url, 2, this.isMultiView)
+      return this._search.makeThumbUrl(asset, 2)
     }
   }
 

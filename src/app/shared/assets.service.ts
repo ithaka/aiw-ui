@@ -818,7 +818,7 @@ export class AssetService {
                                 }
                               }
                               if (thumbnail['thumbnailImgUrl'] && thumbnail['compoundmediaCount'] > 0) {
-                                thumbnail.thumbnailImgUrl = this._auth.getThumbUrl(true) + thumbnail.thumbnailImgUrl
+                                thumbnail.thumbnailImgUrl = this._auth.getThumbHostname(true) + thumbnail.thumbnailImgUrl
                               }
                               return thumbnail
                             })

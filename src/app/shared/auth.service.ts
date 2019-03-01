@@ -415,7 +415,7 @@ export class AuthService implements CanActivate {
   /**
    * Our thumbnails come
    */
-  public getThumbUrl(compound?: boolean): string {
+  public getThumbHostname(compound?: boolean): string {
     if (compound) {
       return this.compoundUrl;
     }

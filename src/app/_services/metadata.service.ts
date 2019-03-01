@@ -126,7 +126,7 @@ export class MetadataService {
             object_type_id: data.object_type_id,
             resolution_x: data.resolution_x,
             resolution_y: data.resolution_y,
-            thumbnail_url: this.setThumbnailUrl(data),
+            thumbnail_url: this.buildThumbnailUrl(data),
             tileSourceHostname: (this._auth.getEnv() == 'test') ? '//tsstage.artstor.org' : '//tsprod.artstor.org',
             title: data.title && data.title !== "" ? data.title : 'Untitled',
             updated_on: data.updated_on,
@@ -136,15 +136,18 @@ export class MetadataService {
             }
       }
 
-      private setThumbnailUrl(data) {
-        let isMultiView = data.image_compound_urls && data.image_compound_urls.length
-        let downgradedMultiView = data.image_compound_urls && !data.image_compound_urls.length
+      /**
+       * Takes 
+       */
+      private buildThumbnailUrl(asset: AssetData) {
+        let isMultiView: boolean = !!(asset.image_compound_urls && asset.image_compound_urls.length)
+        let downgradedMultiView = asset.image_compound_urls && !asset.image_compound_urls.length
 
         if (downgradedMultiView) {
-          return data.image_url
+          return asset.image_url
         }
         else {
-          return this._auth.getThumbUrl(isMultiView) + data.thumbnail_url
+          return this._auth.getThumbHostname(isMultiView) + asset.thumbnail_url
         }
       }
 
