@@ -501,8 +501,7 @@ export class AssetSearchService {
       size = 1
     }
     // Handle variations of Multi Views
-    console.log("Downgraded?", thumbData)
-    if (thumbData.thumbnail_url === thumbData.tileSource) {
+    if (typeof(thumbData.tileSource) !== 'undefined' && thumbData.thumbnail_url === thumbData.tileSource) {
       // Handle downgraded Multi View
       isDowngradedMultiView = true
     } else if (typeof(thumbData.tileSource) === 'object' && thumbData.tileSource.length) {
