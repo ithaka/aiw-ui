@@ -24,7 +24,7 @@
     "ARCHIVED_ERROR": "That login has been disabled. Please contact your institutional contact.",
     "TERMS": "By using Artstor Digital Library, I agree to the <a id=\"linkTermsAndConditions\" tabindex=\"1\" data-automation-component=\"artstor-login-terms\" href=\"http://www.artstor.org/terms\" class=\"link\" target=\"_blank\">Terms</a>",
     "WRONG_PASSWORD" : "Invalid email address or password. Try again.",
-    "LOST_PASSWORD" : "Wrong password. Try again.",
+    "LOST_PASSWORD" : "Your password has expired. Please click \"Forgot password?\" to set a new one.",
     "INVALID_EMAIL" : "Please enter a valid email address",
     "PASSWORD_REQUIRED": "Password must be 7-20 characters",
     "EXPIRED" : "That login is expired. Please log in from campus to renew your account.",

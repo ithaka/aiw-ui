@@ -199,7 +199,8 @@ export class LoginFormComponent implements OnInit {
   }
 
   getLoginErrorMsg(serverMsg: string, err?: any): string {
-    // Better to check by serverMsg when the response message is decided by Auth
+    // Check for error code 422 for lost password
+    // Maybe better to check by serverMsg later when the response message is decided by Auth
     if (err && err.status === 422) {
       return 'LOGIN.LOST_PASSWORD'
     }
