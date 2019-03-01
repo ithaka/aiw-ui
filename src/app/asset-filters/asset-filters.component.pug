@@ -1,7 +1,7 @@
 .col--filter-border.col--sliding([ngClass]="{ 'slide-up' : !showFilters }")
   // New Search Filters
   div(*ngFor="let filterKey of keys(availableFilters); let i = index")
-    .filter-group(*ngIf="availableFilters[filterKey] && isArray(availableFilters[filterKey]) && availableFilters[filterKey].length > 0")
+    .filter-group(*ngIf="availableFilters[filterKey] && isArray(availableFilters[filterKey]) && availableFilters[filterKey].length > 0 && !(availableFilters[filterKey].length === 1 && availableFilters[filterKey][0].name === '')")
       span.filter-group__label
         h3 {{ 'FILTERS.' + filterKey | translate }}
           a#buttonCollectionTypeClear.link--accent.small((keydown.enter)="clearAllFilterGroup(filterKey)", [tabindex]="hasAppliedFilters(filterKey) ? 2 : -1", [ngClass]="{ 'disable': !hasAppliedFilters(filterKey) }", (click)="clearAllFilterGroup(filterKey)", attr.aria-label="Clear, click to clear all selected {{ 'FILTERS.' + filterKey | translate }} filters") Clear
