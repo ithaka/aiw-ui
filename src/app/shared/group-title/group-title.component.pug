@@ -4,7 +4,7 @@
             h1.title {{ ig.name }}
         .row.m-sm-0.item-last-updated
             span {{ ig.total }} items
-            span &nbsp;&nbsp;•&nbsp;&nbsp;
+            span.dot •
             span Last updated {{ ig.update_date | date:'MMMM dd, yyyy' }}
     .col-3.pb-24.pt-24.z-1000
         button.btn.btn-primary.ml-3 Export

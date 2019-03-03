@@ -35,7 +35,7 @@
   display: block;
   min-height: 40px;
   width: 300%;
-  border-bottom: solid 1px rgba(232, 232, 232, 0.021);
+  border-bottom: solid 1px $color-gray-3;
   z-index: 0;
 }
 
@@ -50,6 +50,12 @@
   line-height: normal;
   letter-spacing: normal;
   color: $color-gray-5;
+}
+
+.dot {
+  display: inline-block;
+  margin-left: 5px;
+  margin-right: 5px;
 }
 
 .pb-24 {
