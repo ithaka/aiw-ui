@@ -1,11 +1,11 @@
 .row.group-border
-    .col-9.pb-24.pt-24.z-1000
+    .col-9.btn-row
         .row.m-sm-0.pb-3(#titlerow="")
             h1.title {{ ig.name }}
         .row.m-sm-0.item-last-updated
             span {{ ig.total }} items
             span.dot •
             span Last updated {{ ig.update_date | date:'MMMM dd, yyyy' }}
-    .col-3.pb-24.pt-24.z-1000
+    .col-3.btn-row
         button.btn.btn-primary.ml-3 Export
         button.btn.btn-primary.ml-3 Present

@@ -54,26 +54,12 @@
 
 .dot {
   display: inline-block;
-  margin-left: 5px;
-  margin-right: 5px;
+  margin-left: 8px;
+  margin-right: 8px;
 }
 
-.pb-24 {
-  padding-bottom: 24px;
-}
-
-.pt-24 {
+.btn-row {
   padding-top: 24px;
-}
-
-.pl-30 {
-  padding-left: 30px;
-}
-
-.pr-30 {
-  padding-right: 30px;
-}
-
-.z-1000 {
+  padding-bottom: 24px;
   z-index: 1000;
 }
