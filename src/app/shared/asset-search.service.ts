@@ -13,6 +13,7 @@ import { AppConfig } from '../app.service'
 import { Observable } from 'rxjs'
 import { map } from 'rxjs/operators'
 import { APP_CONST } from '../app.constants'
+import { Thumbnail, AssetData } from './datatypes';
 @Injectable()
 export class AssetSearchService {
 
@@ -396,7 +397,7 @@ export class AssetSearchService {
             })
 
             if (compoundAsset[0]) {
-              cleanedAsset.thumbnailUrls.push(this._auth.getThumbUrl(true) + compoundAsset[0].thumbnailSizeOnePath)
+              cleanedAsset.thumbnailUrls.push(this._auth.getThumbHostname(true) + compoundAsset[0].thumbnailSizeOnePath)
             }
           }
           else { // make the thumbnail urls and add them to the array
@@ -487,14 +488,42 @@ export class AssetSearchService {
 
   /**
    * Generate Thumbnail URL
+   * @param thumbData: AssetData | Thumbnail - returned by search service, metadata service, or group service
+   * @param size: number - sizes 0 through 4 are acceptable
    */
-  public makeThumbUrl(imagePath: string, size: number, isCompound?: boolean, isthumbnailImgUrl?: boolean): string {
-    // Check if the url passed in has gone through metadata service, if not, add host to the url
-    if (isCompound && !isthumbnailImgUrl) {
+  public makeThumbUrl(thumbData: any, size?: number): string {
+    let imagePath: string
+    let isMultiView: boolean
+    let isThumbnailImgUrl: boolean
+    let isDowngradedMultiView: boolean
+    // Set default size
+    if (!size) {
+      size = 1
+    }
+    // Handle variations of Multi Views
+    if (typeof(thumbData.tileSource) !== 'undefined' && thumbData.thumbnail_url === thumbData.tileSource) {
+      // Handle downgraded Multi View
+      isDowngradedMultiView = true
+    } else if (typeof(thumbData.tileSource) === 'object' && thumbData.tileSource.length) {
+      // Check if multi-view, when via search service
+      isMultiView = true
+    } else if (thumbData.compoundmediaCount) {
+      // Check if multi-view, when via group service
+      isMultiView = true
+    }
+    // Check thumbnail url source
+    if (thumbData.thumbnailImgUrl) {
+      isThumbnailImgUrl = true
+      imagePath = thumbData.thumbnailImgUrl
+    } else {
+      imagePath = thumbData.thumbnail_url
+    }
+    // Multiviews and downgraded views receive FULL URLS via "thumbnail_url"
+    if ((isMultiView || isDowngradedMultiView) && !isThumbnailImgUrl) {
       return imagePath;
     }
-    else if (isCompound && isthumbnailImgUrl) {
-      return this._auth.getThumbUrl(isCompound) + imagePath;
+    else if (isMultiView && isThumbnailImgUrl) {
+      return this._auth.getThumbHostname(isMultiView) + imagePath;
     }
     else if (imagePath) {
       if (size) {
@@ -515,8 +544,8 @@ export class AssetSearchService {
     } else {
       imagePath = '';
     }
-    // Ceanup
-    return this._auth.getThumbUrl() + imagePath;
+    // Determine if hostname should be appended
+    return this._auth.getThumbHostname() + imagePath;
   }
 
 

@@ -5,7 +5,7 @@ import { Subscription }   from 'rxjs'
 import { map, take } from 'rxjs/operators'
 
 // Internal Dependencies
-import { AssetService, AuthService, ImageGroupDescription, ImageGroupService } from './../shared';
+import { AssetService, AssetSearchService, AuthService, ImageGroupDescription, ImageGroupService } from './../shared';
 
 @Component({
   selector: 'ang-image-group-pp-page',
@@ -28,6 +28,7 @@ export class ImageGroupPPPage implements OnInit, OnDestroy {
 
   constructor(
     private _assets: AssetService,
+    public _search: AssetSearchService,
     private _auth: AuthService,
     private _igService: ImageGroupService,
     private _router: Router,
