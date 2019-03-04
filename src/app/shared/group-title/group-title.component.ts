@@ -10,7 +10,15 @@ import { ImageGroup } from './../'
     @Input()
     public ig: ImageGroup
 
+    public dropDownBtnFocused: boolean = false
+    public dropDownBtnHovered: boolean = false
+    public dropDownOpen: boolean = false
+
     constructor(
     ){ }
+
+    abc(as){
+      console.log(as)
+    }
 
 }
