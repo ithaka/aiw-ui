@@ -1,9 +1,10 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Inject, PLATFORM_ID, Injector } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { HttpHeaders, HttpClient } from '@angular/common/http';
 
 import { AuthService, Asset } from 'app/shared';
 import { map, mergeMap } from 'rxjs/operators';
+import { isPlatformBrowser } from '@angular/common';
 
 @Injectable({
   providedIn: 'root',
@@ -11,10 +12,10 @@ import { map, mergeMap } from 'rxjs/operators';
 export class MetadataService {
 
   constructor(
-      private _auth: AuthService,
-      private _http: HttpClient
-  ) { }
-
+    private _auth: AuthService,
+    private _http: HttpClient
+  ) {
+  }
 
     public buildAsset(assetId: string, { groupId = '', legacyFlag = false, openlib = false, encrypted = false }={}): Observable<Asset> {
         let metadataObservable
@@ -58,9 +59,8 @@ export class MetadataService {
             // Open Library IDs need to be mapped to Artstor IDs, so we need to flag for the metadata service
             url += '&openlib=' + openlib
         }
-        let headers: HttpHeaders = new HttpHeaders().set('Content-Type', 'application/json')
         return this._http
-            .get<MetadataResponse>( url, { headers: headers, withCredentials: true })
+            .get<MetadataResponse>( url, { headers: this._auth.getHeaders(), withCredentials: true })
             .pipe(map((res) => {
                 if (!res.metadata[0]) {
                     throw new Error('Unable to load metadata!')
@@ -79,7 +79,8 @@ export class MetadataService {
      * @param token The encrypted token that you want to know the asset id for
      */
     public getEncryptedMetadata(secretId: string, legacyFlag?: boolean, openlib?: boolean): Observable<any> {
-    let headers: HttpHeaders = new HttpHeaders({ fromKress: 'true'})
+    let headers: HttpHeaders =  this._auth.getHeaders()
+    headers = headers.append('fromKress', 'true')
     let referrer: string = document.referrer
     let url: string = this._auth.getUrl() + "/v2/items/resolve?encrypted_id=" + encodeURIComponent(secretId) + "&ref=" + encodeURIComponent(referrer) + '&legacy=' + legacyFlag 
 
@@ -145,9 +146,8 @@ export class MetadataService {
       private getFpxInfo(assetId: string): Observable<ImageFPXResponse> {
         let requestUrl = this._auth.getUrl() + '/imagefpx/' + assetId + '/24'
     
-        let headers: HttpHeaders = new HttpHeaders().set('Content-Type', 'application/json')
         return this._http
-            .get<ImageFPXResponse>(requestUrl, { headers: headers, withCredentials: true })
+            .get<ImageFPXResponse>(requestUrl, { headers: this._auth.getHeaders(), withCredentials: true })
             .pipe(map((res) => {
                 // replace imageUrl with stage url if we are in rest mode
                 if (this._auth.getEnv() == 'test') {

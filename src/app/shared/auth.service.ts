@@ -1,4 +1,4 @@
-import { Injectable, Inject, PLATFORM_ID } from '@angular/core'
+import { Injectable, Inject, PLATFORM_ID, Injector } from '@angular/core'
 import { Location, isPlatformBrowser } from '@angular/common'
 import { HttpClient, HttpHeaders } from '@angular/common/http'
 import {
@@ -17,7 +17,6 @@ import { AppConfig } from '../app.service'
 import { IdleWatcherUtil } from './idle-watcher'
 import {Idle, DEFAULT_INTERRUPTSOURCES} from '@ng-idle/core'
 import { FlagService } from './flag.service'
-import { error } from '@angular/compiler/src/util';
 import { ArtstorStorageService } from '../../../projects/artstor-storage/src/public_api';
 /**
  * Controls authorization through IP address and locally stored user object
@@ -74,7 +73,8 @@ export class AuthService implements CanActivate {
     private location: Location,
     private _app: AppConfig,
     private _flags: FlagService,
-    private idle: Idle
+    private idle: Idle,
+    private injector: Injector
   ) {
     this.isBrowser = isPlatformBrowser(this.platformId)
     // Set WLV and App Config variables
@@ -434,6 +434,28 @@ export class AuthService implements CanActivate {
   }
 
   /**
+   * Get Headers
+   * - wraps logic for forwarding client ip on SSR
+   */
+  public getHeaders() : HttpHeaders {
+      let headers: HttpHeaders = new HttpHeaders().set('Content-Type', 'application/json')
+      if (!this.isBrowser) {
+          console.log("Get Headers, server-side")
+          let req = this.injector.get('request');
+          // Server rendered app needs to pass along the Fastly IP
+          import('request-ip')
+              .then((requestIp) => {
+                  let clientIp = requestIp.getClientIp(req); 
+                  console.log("Found client ip: " + clientIp)
+                  headers = headers.append('Fastly-Client-Ip', clientIp)
+                  return headers
+              });
+      } else {
+          return headers
+      }
+  }
+
+  /**
    * Saves user to local storage
    * @param user The user should be an object to store in sessionstorage
    */
@@ -482,7 +504,7 @@ export class AuthService implements CanActivate {
    */
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
     console.log("Running canActivate...")
-    let options = { headers: this.userInfoHeader, withCredentials: true }
+    let options = { headers: this.getHeaders(), withCredentials: true }
 
     // TO-DO: Enable the server to call the user info call
     if (!this.isBrowser) {
@@ -557,7 +579,7 @@ export class AuthService implements CanActivate {
    * @param triggerSessionExpModal Sometimes this is called after unsuccessful logins, and we don't want failovers to always trigger the modal, so it's an option
    */
   public getUserInfo(triggerSessionExpModal?: boolean): Observable<any> {
-    let options = { headers: this.userInfoHeader, withCredentials: true };
+    let options = { headers: this.getHeaders(), withCredentials: true };
 
     return this.http
       .get(this.genUserInfoUrl(), options).pipe(
