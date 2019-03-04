@@ -67,6 +67,7 @@
 .center-align{
   display: flex;
   align-items: center;
+  justify-content: flex-end;
 }
 
 
@@ -75,6 +76,11 @@
   .btn-secondary.dropdown-toggle {
     background-color: $orange !important;
   }
+
+  // &.dropdown-menu {
+  //   max-height: 300px;
+  //   opacity: 1;
+  // }
 }
 
 .btn-secondary.dropdown-toggle {
@@ -85,38 +91,51 @@
 
   &:focus {
     background-color: $orange !important;
+    color: $color-white;
   }
 }
 
 .dropdown-menu {
-
   border: 1px solid $color-border-gray;
-  margin-top: 8px;
+  margin-top: 11px;
   left: 0 !important;
   width: 275px;
   padding: 0;
   box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.2) !important;
 
+  // display: block;
+  // max-height: 0px;
+  // opacity: 0;
+  // -webkit-transition: all 300ms ease;
+  // transition: all 200ms ease;
+
   &:before, &:after{
-      content: '';
-      display: block;
-      position: absolute;
-      left: 36%;
-      width: 0;
-      height: 0;
-      border-style: solid;
+    content: '';
+    display: block;
+    position: absolute;
+    left: 40%;
+    width: 0;
+    height: 0;
+    border-style: solid;
   }
 
   &:before{
-      top: -14px;
-      border-color: transparent transparent $color-border-gray transparent;
-      border-width: 7px;
+    top: -20px;
+    border-color: transparent transparent $color-border-gray transparent;
+    border-width: 10px;
   }
 
   &:after{
-      top: -12px;
-      border-color: transparent transparent $color-white transparent;
-      border-width: 7px;
+    top: -19px;
+    border-color: transparent transparent $color-white transparent;
+    border-width: 10px;
+
+    -webkit-transition: all 200ms ease;
+    transition: all 200ms ease;
+  }
+
+  &.hovered:after{
+    border-color: transparent transparent $color-gray-2 transparent !important;
   }
 
   .dropdown-item {
@@ -125,7 +144,10 @@
       width: 100%;
       border-bottom: 1px solid $color-gray-4;
 
-      &:hover{
+      -webkit-transition: all 200ms ease;
+      transition: all 200ms ease;
+
+      &:hover, &:focus{
           background-color: $color-gray-2;
       }
 
@@ -148,6 +170,23 @@
           margin-bottom: 8px;
           color: $color-gray-7;
           vertical-align: top;
+        }
+
+        .new-badge {
+          display: inline-block;
+          vertical-align: top;
+          font-family: Verdana;
+          font-size: 8px;
+          font-weight: bold;
+          width: 37px;
+          height: 16px;
+          line-height: 16px;
+          border-radius: 2px;
+          margin-left: 10px;
+          text-align: center;
+          text-transform: uppercase;
+          background-color: $faint-orange;
+          color: $orange;
         }
 
         .caption{

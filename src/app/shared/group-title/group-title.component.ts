@@ -14,6 +14,9 @@ import { ImageGroup } from './../'
     public dropDownBtnHovered: boolean = false
     public dropDownOpen: boolean = false
 
+    public dropDownOptFocused: boolean = false
+    public dropDownOptHovered: boolean = false
+
     constructor(
     ){ }
 
