@@ -4,12 +4,8 @@ div
     .row.no-gutters.row--search-bar
       .col-md-5
         ang-search
-    .row
-      .col-12.pb-4
-        h3#pageType Browse Group
-        .row
-          h1#pageTitle.h1--title-block.col-md-9 {{ ig.name }}
-          
+    ang-group-title([ig]="ig")
+    .row 
       .col-md-12
         ang-asset-grid([actionOptions]="actionOptions", (reordering)="toggleReorder($event)", [igMetaData]="ig")
         .alert.alert-warning(*ngIf!="ig.items && ig.items.length > 0 && !ig.thumbnails")
