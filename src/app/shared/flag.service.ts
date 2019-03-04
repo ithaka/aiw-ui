@@ -18,6 +18,7 @@ export class FlagService {
   public bannerCopy: string = ''
   public solrMetadata: boolean = false
   public detailViews: boolean = false
+  public exportReframe: boolean = false
 
   constructor(
     private _http: HttpClient

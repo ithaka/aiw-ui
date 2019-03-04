@@ -1,12 +1,15 @@
-import { Component, Input, OnInit } from '@angular/core'
-import { ImageGroup } from './../'
+import { Component, Input, OnInit, OnDestroy } from '@angular/core'
+import { Subscription } from 'rxjs'
+import { ActivatedRoute } from '@angular/router'
+import { ImageGroup, FlagService } from './../'
+
 
 @Component({
     selector: 'ang-group-title',
     templateUrl: 'group-title.component.pug',
     styleUrls: ['./group-title.component.scss']
   })
-  export class GroupTitleComponent {
+  export class GroupTitleComponent implements OnInit, OnDestroy {
     @Input()
     public ig: ImageGroup
 
@@ -17,11 +20,33 @@ import { ImageGroup } from './../'
     public dropDownOptFocused: boolean = false
     public dropDownOptHovered: boolean = false
 
+    public exportReframeFlag: boolean = false
+
+    private subscriptions: Subscription[] = []
+
     constructor(
+      private route: ActivatedRoute,
+      public _flags: FlagService
     ){ }
 
-    abc(as){
-      console.log(as)
+    ngOnInit() {
+      // Subscribe to Route Params
+      this.subscriptions.push(
+        this.route.params.subscribe((routeParams) => {
+          if (routeParams && routeParams['featureFlag']) {
+            this._flags[routeParams['featureFlag']] = true
+            this.exportReframeFlag = this._flags['exportReframe'] ? true : false
+  
+          } else {
+              this.exportReframeFlag = false
+          }
+        })
+      )
+  
+    } // onInit
+
+    ngOnDestroy() {
+      this.subscriptions.forEach((sub) => { sub.unsubscribe() })
     }
 
 }
