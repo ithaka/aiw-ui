@@ -29,13 +29,13 @@
 }
 
 .item-last-updated:after {
-  position: fixed;
-  left: 0;
+  position: absolute;
+  left: -50%;
   content: " ";
   display: block;
   min-height: 40px;
-  width: 100%;
-  border-bottom: solid 1px #E8E8E8;
+  width: 300%;
+  border-bottom: solid 1px $color-gray-3;
   z-index: 0;
 }
 
@@ -52,23 +52,15 @@
   color: $color-gray-5;
 }
 
-.pb-24 {
-  padding-bottom: 24px;
+.dot {
+  display: inline-block;
+  margin-left: 8px;
+  margin-right: 8px;
 }
 
-.pt-24 {
+.btn-row {
   padding-top: 24px;
-}
-
-.pl-30 {
-  padding-left: 30px;
-}
-
-.pr-30 {
-  padding-right: 30px;
-}
-
-.z-1000 {
+  padding-bottom: 24px;
   z-index: 1000;
 }
 
