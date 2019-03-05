@@ -64,6 +64,8 @@ export class AuthService implements CanActivate {
 
   private isBrowser: boolean
 
+  private cookies: any
+
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
     private _router: Router,
@@ -461,7 +463,10 @@ export class AuthService implements CanActivate {
           cookies = req.headers.cookie
           headers = headers.append("CLIENTIP", clientIp)
           headers = headers.append('Fastly-Client-Ip', clientIp)
-          headers = headers.append('Cookie', cookies)
+          if (this.cookies) {
+            console.log("Set cookies", this.cookies)
+            headers = headers.append('Cookie', this.cookies)
+          }
           return headers
       } else {
           return headers
@@ -592,14 +597,24 @@ export class AuthService implements CanActivate {
    * @param triggerSessionExpModal Sometimes this is called after unsuccessful logins, and we don't want failovers to always trigger the modal, so it's an option
    */
   public getUserInfo(triggerSessionExpModal?: boolean): Observable<any> {
-    let options = { headers: this.getHeaders(), withCredentials: true };
+    let options = { 
+      headers: this.getHeaders(), 
+      withCredentials: true, 
+      observe: "response" as 'body'
+    };
 
     return this.http
       .get(this.genUserInfoUrl(), options).pipe(
-      map((data)  => {
+      map((res: Response)  => {
+          let data = res.body
           let user = this.decorateValidUser(data)
           // Track whether or not user object has been refreshed since app opened
           this.userSessionFresh = true
+
+          console.log("HEADERS:" + res.headers)
+          if (res.headers['set-cookie']) {
+            this.cookies = res.headers['set-cookie']
+          }
 
           if (user && (this.isOpenAccess || user.status)) {
             // Clear expired session modal
