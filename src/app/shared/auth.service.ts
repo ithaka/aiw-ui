@@ -442,14 +442,20 @@ export class AuthService implements CanActivate {
       if (!this.isBrowser) {
           console.log("Get Headers, server-side")
           let req = this.injector.get('request');
+          let clientIp: string
           // Server rendered app needs to pass along the Fastly IP
-          import('request-ip')
-              .then((requestIp) => {
-                  let clientIp = requestIp.getClientIp(req); 
-                  console.log("Found client ip: " + clientIp)
-                  headers = headers.append('Fastly-Client-Ip', clientIp)
-                  return headers
-              });
+          if (req.headers['Fastly-Client-Ip']) {
+            clientIp = req.headers['Fastly-Client-Ip']
+            console.log("Fastly client ip: "+clientIp)
+          } else if (req.headers['Forwarded']) {
+            clientIp = req.headers['Forwarded']
+            console.log("Forwarded: "+clientIp)
+          } else {
+            clientIp = req.ip
+            console.log("Request ip: " + clientIp)
+          }
+          headers = headers.append('Fastly-Client-Ip', clientIp)
+          return headers
       } else {
           return headers
       }
