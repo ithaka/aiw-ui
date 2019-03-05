@@ -3,7 +3,8 @@
         .row.m-sm-0.pb-3(#titlerow="")
             h1.title {{ ig.name }}
         .row.m-sm-0.item-last-updated
-            span {{ ig.total }} items
+            span(*ngIf="ig.total != 1") {{ ig.total }} items
+            span(*ngIf="ig.total === 1") {{ ig.total }} item
             span.dot •
             span Last updated {{ ig.update_date | date:'MMMM dd, yyyy' }}
     .col-3.btn-row.center-align
@@ -19,7 +20,7 @@
                 .content
                   label Powerpoint
                   .caption Exports as one image per slide, with metadata in the speaker notes
-                
+
               a#exportGsLink.dropdown-item(tabindex="3", aria-label="Google Slides", role="button")
                 i.icon.icon-google-slides
                 .content
