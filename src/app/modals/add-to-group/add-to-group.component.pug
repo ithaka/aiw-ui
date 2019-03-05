@@ -24,7 +24,7 @@
                   .row.no-gutters(*ngFor="let recentGroup of recentGroups", [ngClass]="{ 'selectedGroup' : recentGroup.selected }", [attr.id]="recentGroup.id", (click)="selectGroup(recentGroup, 'recent');groupSelectKeyDown($event, recentGroup.selected)", (keydown.enter)="selectGroup(recentGroup, 'recent')", (keydown.space)="$event.stopPropagation(); $event.preventDefault(); selectGroup(recentGroup, 'recent')", (keydown)="groupSelectKeyDown($event, recentGroup.selected)", tabindex="10", [attr.aria-label]="recentGroup.name + ', ' + (recentGroup.selected ? 'selected' : 'unselected') + ', press enter or spacebar to ' + (recentGroup.selected ? 'unselect' : 'select') + ' this group'")
                     .col-3
                       .ig-thmbnail-wrapper
-                        img([ngClass]="{ 'loaded' : recentGroup.imgLoaded }", [attr.src]="_search.makeThumbUrl(recentGroup['thumbnailImgUrl'], 1, recentGroup['compoundmediaCount'])", [attr.alt]="recentGroup.name", (load)="recentGroup.imgLoaded = true", aria-role="image")
+                        img([ngClass]="{ 'loaded' : recentGroup.imgLoaded }", [attr.src]="_search.makeThumbUrl(recentGroup, 1)", [attr.alt]="recentGroup.name", (load)="recentGroup.imgLoaded = true", aria-role="image")
                     .col-9
                       .title {{ recentGroup.name }}
                   .loading-dots(*ngIf="loading.recentGroups")
@@ -40,7 +40,7 @@
                   .row.no-gutters(*ngFor="let group of allGroups", [ngClass]="{ 'selectedGroup' : group.selected }", [attr.id]="group.id", (click)="selectGroup(group, 'all');groupSelectKeyDown($event, group.selected)", (keydown.enter)="selectGroup(group, 'all')", (keydown.space)="$event.stopPropagation(); $event.preventDefault(); selectGroup(group, 'all')", (keydown)="groupSelectKeyDown($event, group.selected)", tabindex="10", [attr.aria-label]="group.name + ', ' + (group.selected ? 'selected' : 'unselected') + ', press enter or spacebar to ' + (group.selected ? 'unselect' : 'select') + ' this group'")
                     .col-3
                       .ig-thmbnail-wrapper
-                        img([ngClass]="{ 'loaded' : group.imgLoaded }", [attr.src]="_search.makeThumbUrl(group['thumbnailImgUrl'], 1, group['compoundmediaCount'])", [attr.alt]="group.name", (load)="group.imgLoaded = true", aria-role="image")
+                        img([ngClass]="{ 'loaded' : group.imgLoaded }", [attr.src]="_search.makeThumbUrl(group, 1)", [attr.alt]="group.name", (load)="group.imgLoaded = true", aria-role="image")
                     .col-9
                       .title {{ group.name }}
                   .loading-dots(*ngIf="loading.allGroups && !groupSearchTerm")

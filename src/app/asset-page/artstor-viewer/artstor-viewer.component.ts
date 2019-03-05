@@ -17,7 +17,7 @@ declare var embedpano: any
 export enum viewState {
   loading, // 0
   openSeaReady, // 1
-  kalturaReady, // 2 
+  kalturaReady, // 2
   krpanoReady, // 3
   thumbnailFallback, // 4
   audioFallback //5
@@ -130,7 +130,7 @@ export class ArtstorViewerComponent implements OnInit, OnDestroy, AfterViewInit 
         private _metadata: MetadataService,
         private _auth: AuthService,
         @Inject(PLATFORM_ID) private platformId: Object
-    ) { 
+    ) {
         if(!this.index) {
             this.index = 0
         }
@@ -169,7 +169,7 @@ export class ArtstorViewerComponent implements OnInit, OnDestroy, AfterViewInit 
         if (this.osdViewer) {
             this.osdViewer.destroy()
         }
-        
+
         this.subscriptions.forEach((sub) => {
             sub.unsubscribe();
         });
@@ -187,7 +187,7 @@ export class ArtstorViewerComponent implements OnInit, OnDestroy, AfterViewInit 
         this.osdViewerId = 'osd-' + assetId + '-' + this.index
         // Set viewer to "loading"
         this.state = viewState.loading
-        
+
         this._metadata.buildAsset(assetId, {groupId, legacyFlag: this.legacyFlag, openlib: this.openLibraryFlag, encrypted: this.encrypted })
             .subscribe((asset) => {
                 // Replace <br/> tags from title, creator & date values with a space
@@ -272,7 +272,7 @@ export class ArtstorViewerComponent implements OnInit, OnDestroy, AfterViewInit 
             referenceStripScroll: 'horizontal',
             /**
              * Workaround: Turn off "lazy loading" in reference strip
-             * OpenSeaDragon uses panelWidth to calc which reference images to load: 
+             * OpenSeaDragon uses panelWidth to calc which reference images to load:
              * https://github.com/openseadragon/openseadragon/blob/869a3f6a134cdd143347b215a5da7796f8a7356d/src/referencestrip.js#L410
              * This functionality is arguably broken, so by passing a small sizeRatio, OSD determines it should load ~100 thumbs at a time
              */
@@ -299,7 +299,7 @@ export class ArtstorViewerComponent implements OnInit, OnDestroy, AfterViewInit 
             timeout: 60000,
             // useCanvas: false,
             // defaultZoomLevel: 1.2, // We don't want the image to be covered on load
-            // visibilityRatio: 0.2, // Determines percentage of background that has to be covered by the image while panning 
+            // visibilityRatio: 0.2, // Determines percentage of background that has to be covered by the image while panning
             // debugMode: true,
         });
 
@@ -354,7 +354,6 @@ export class ArtstorViewerComponent implements OnInit, OnDestroy, AfterViewInit 
             // Load Reference Strip once viewer is ready
             if (this.isMultiView) {
                 this.osdViewer.addReferenceStrip()
-                
                 this.osdViewer.nextButton.element.title = 'Next Item'
                 this.osdViewer.previousButton.element.title = 'Previous Item'
 
@@ -382,7 +381,7 @@ export class ArtstorViewerComponent implements OnInit, OnDestroy, AfterViewInit 
         if( this.asset.viewerData && this.asset.viewerData.panorama_xml ){
             let headers = new HttpHeaders({ 'Content-Type': 'text/xml' }).set('Accept', 'text/xml');
 
-            // Format pano_xml url incase it comes badly formatted from backend 
+            // Format pano_xml url incase it comes badly formatted from backend
             this.asset.viewerData.panorama_xml = this.asset.viewerData.panorama_xml.replace('stor//', 'stor/')
             // Ensure URL uses relative protocol
             this.asset.viewerData.panorama_xml = this.asset.viewerData.panorama_xml.replace('http://', '//')
@@ -414,11 +413,11 @@ export class ArtstorViewerComponent implements OnInit, OnDestroy, AfterViewInit 
     private embedKrpano() : void {
          // Run if Pano xml is accessible
         this.state = viewState.krpanoReady
-        embedpano({ 
+        embedpano({
             html5: "always",
             localfallback: "error",
-            xml: this.asset.viewerData.panorama_xml,  
-            target: "pano-" + this.index, 
+            xml: this.asset.viewerData.panorama_xml,
+            target: "pano-" + this.index,
             onready: (viewer) => {
                 console.log("KR Pano has loaded", viewer)
                 // See if there was an unreported error during final load
@@ -561,5 +560,5 @@ export class ArtstorViewerComponent implements OnInit, OnDestroy, AfterViewInit 
     public hasMultiViewHelp(): boolean {
         return this.multiViewHelp.observers.length > 0
     }
-     
+
 }

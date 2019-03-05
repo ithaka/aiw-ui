@@ -156,7 +156,7 @@ export class AuthService implements CanActivate {
     if (new RegExp(samlHostnames.join('|')).test(this.clientHostname)) {
       this.samlAvailable = true
     }
-    
+
     // Additional Local dev domains
     if (this.clientHostname.indexOf('local.sahara') > -1) {
       this.hostname = '//sahara.beta.stage.artstor.org'
@@ -205,14 +205,14 @@ export class AuthService implements CanActivate {
      this.idle.setIdle(IdleWatcherUtil.generateIdleTime()); // Set an idle time of 1 min, before starting to watch for timeout
      this.idle.setTimeout(IdleWatcherUtil.generateSessionLength()); // Log user out after 90 mins of inactivity
      this.idle.setInterrupts(DEFAULT_INTERRUPTSOURCES);
- 
+
      this.idle.onIdleEnd.pipe(
        map(() => {
          this.idleState = 'No longer idle.';
          // We want to ensure a user is refreshed as soon as they return to the tab
          this.refreshUserSession(true)
        })).subscribe()
- 
+
      this.idle.onTimeout.pipe(
        map(() => {
          let user = this.getUser();
@@ -226,20 +226,20 @@ export class AuthService implements CanActivate {
            this.resetIdleWatcher()
          }
        })).subscribe()
- 
+
      this.idle.onIdleStart.pipe(
        map(() => {
          this.idleState = 'You\'ve gone idle!';
          let currentDateTime = new Date().toUTCString();
          this._storage.setLocal('userGoneIdleAt', currentDateTime);
        })).subscribe()
- 
+
     this.idle.onTimeoutWarning.pipe(
        map((countdown) => {
          this.idleState = 'You will time out in ' + countdown + ' seconds!'
          // console.log(this.idleState);
        })).subscribe()
- 
+
      // Init idle watcher (this will also run getUserInfo)
      this.resetIdleWatcher()
   }
@@ -415,7 +415,7 @@ export class AuthService implements CanActivate {
   /**
    * Our thumbnails come
    */
-  public getThumbUrl(compound?: boolean): string {
+  public getThumbHostname(compound?: boolean): string {
     if (compound) {
       return this.compoundUrl;
     }

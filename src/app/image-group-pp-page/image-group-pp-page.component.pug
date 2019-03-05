@@ -6,7 +6,10 @@
       .row
         .col-md-4
           .thmbnail-cntnr
-            img(src="http://viewer2.artstor.org/{{ asset.largeImgUrl }}", alt="{{ asset.tombstone[0] }}")
+            img(
+              [attr.src]="_search.makeThumbUrl(asset, 2)",
+              [attr.alt]="asset.title ? 'Thumbnail of ' + asset.title : 'No title available'"
+            )
         .col-md-8
           .meta-block(*ngFor="let metadata of asset.tombstone")
             .label

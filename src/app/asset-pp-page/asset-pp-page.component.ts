@@ -31,7 +31,6 @@ export class AssetPPPage implements OnInit {
   ) {}
 
   ngOnInit() {
-
     // Subscribe to ID in params
     this.subscriptions.push(
       this.route.params.pipe(
@@ -40,6 +39,10 @@ export class AssetPPPage implements OnInit {
         this.loadAsset()
     })).subscribe()
     )
+  }
+
+  setThumbnail(asset) {
+    return this._search.makeThumbUrl(asset, 2)
   }
 
   // Load Image Group Assets
@@ -52,7 +55,7 @@ export class AssetPPPage implements OnInit {
         if (typeof(asset.tileSource) === 'object' && asset.tileSource.length) {
           this.isMultiView = true
         }
-        
+
         self.asset = asset
     }, (err) => {
         console.error('Unable to load asset metadata.')
