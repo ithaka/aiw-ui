@@ -68,7 +68,7 @@
                 i.icon.icon-close-white--round
                 | Cancel Reorder
             //- Asset Counts
-            .number-results(*ngIf="!isLoading", [class.float-right]="reorderMode")
+            .number-results(*ngIf="!isLoading && !igDisplay")
               span.font-weight-bold {{ totalAssets }}{{ totalAssets == 2000 ? '+' : '' }} results
               span(*ngIf="searchTerm && !UrlParams.catId && !UrlParams.pcolId && !UrlParams.clusterId")
                 = " for "
