@@ -443,7 +443,6 @@ export class AuthService implements CanActivate {
           console.log("Get Headers, server-side")
           let req = this.injector.get('request');
           let clientIp: string = ''
-          let cookies: string = ''
           // Server rendered app needs to pass along the fastly IP
           if (req.headers['fastly-client-ip']) {
             clientIp = req.headers['fastly-client-ip']
@@ -457,11 +456,8 @@ export class AuthService implements CanActivate {
             clientIp = "65.128.116.207"
             console.log("JK! Hard-coded to: 65.128.116.207")
           }
-          // Reference cookies off request
-          cookies = req.headers.cookie
           headers = headers.append("CLIENTIP", clientIp)
           headers = headers.append('Fastly-Client-Ip', clientIp)
-          headers = headers.append('Cookie', cookies)
           return headers
       } else {
           return headers
