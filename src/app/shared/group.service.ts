@@ -12,12 +12,14 @@ import { environment } from 'environments/environment';
 export class GroupService {
 
     private groupUrl: string = ''
+    private groupV2: string = ''
     private options: {}
 
     constructor(
         private http: HttpClient
     ) {
         this.groupUrl = environment.API_URL + '/api/v1/group'
+        this.groupV2 = environment.API_URL + '/api/v2/group'
         this.options = { withCredentials: true }
     }
 
@@ -141,7 +143,7 @@ export class GroupService {
      */
     public get(groupId: string, detailViewFlag?: boolean): Observable<any> {
         // Use v2 endpoint under the detailView feature flag
-        let url = detailViewFlag ? environment.API_URL + '/api/v2/group/' + groupId : this.groupUrl + '/' + groupId
+        let url = detailViewFlag ? this.groupV2 + groupId : this.groupUrl + '/' + groupId
         return this.http.get(
             url, this.options
         )
@@ -151,9 +153,6 @@ export class GroupService {
      * Create Group
      */
     public create(group: any): Observable<any> {
-
-        console.log('OPTIONS: ', this.options)
-
         return this.http.post(
             this.groupUrl,
             group,
@@ -200,16 +199,22 @@ export class GroupService {
     public update(group: any): Observable<any> {
         let id = group.id
         let putGroup = {}
-        let reqUrl = this.groupUrl + '/' + id
+        let reqUrl = this.groupV2 + '/' + id
         let updateProperties: string[] = [
-            'description', 'tags', 'sequence_number', 'update_date', 'name', 'creation_date', 'access', 'items'
+            'description', 'owner_name', 'tags', 'owner_id', 'sequence_number', 'update_date', 'name', 'creation_date', 'access', 'items'
         ]
 
         // Contruct putGroup object, based on expected properties on backend groups update call
-        for (let key in group){
-            if (updateProperties.indexOf(key) > -1) {
-                putGroup[key] = group[key]
+        for (let key in group) {
+          if (updateProperties.indexOf(key) > -1) {
+
+            if (key === 'items') {
+              group.items = group.items.map(item => {
+                return typeof(item) === 'string' ? { id: item } : item
+              })
             }
+              putGroup[key] = group[key]
+          }
         }
 
         if (!putGroup['tags'] || putGroup['tags'][0] == null) { putGroup['tags'] = [] }

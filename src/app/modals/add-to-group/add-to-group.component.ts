@@ -77,7 +77,7 @@ export class AddToGroupModal implements OnInit, OnDestroy, AfterViewInit {
     private _dom: DomUtilityService
       ) {}
 
-    ngOnInit() {    
+    ngOnInit() {
     if (this.selectedAssets.length < 1) { // if no assets were added when component was initialized, the component gets the current selection list
       // Subscribe to asset selection
       this.subscriptions.push(
@@ -176,7 +176,7 @@ export class AddToGroupModal implements OnInit, OnDestroy, AfterViewInit {
 
     // assets come from different places and sometimes have id and sometimes objectId
     this.selectedAssets.forEach((asset: any, index) => {
-      let assetId: string
+      let assetId
       if (!asset) {
         console.error('Attempted selecting undefined asset')
       } else {
@@ -193,16 +193,19 @@ export class AddToGroupModal implements OnInit, OnDestroy, AfterViewInit {
         } else {
           console.error('Asset id not found when adding to group', asset)
         }
+
         // Add id to group if it's not already in the group
+        // 1810 TODO: THIS WON'T ALLOW THE SAME ASSET TWICE!
         if (assetId && putGroup.items.indexOf(assetId) < 0) {
-          if( index === 0 && this.detailViewBounds['width']){
+          if( index === 0 && this.detailViewBounds['width']) {
             putGroup.items.push({
-              "artstorid": assetId,
+              "id": assetId,
               "zoom": {
-                "viewerX":this.detailViewBounds['x'],
+                "viewerX": this.detailViewBounds['x'],
                 "viewerY": this.detailViewBounds['y'],
                 "pointWidth": this.detailViewBounds['width'],
-                "pointHeight": this.detailViewBounds['height']
+                "pointHeight": this.detailViewBounds['height'],
+                "index": 0
               }
             })
           } else {
@@ -224,8 +227,7 @@ export class AddToGroupModal implements OnInit, OnDestroy, AfterViewInit {
       .toPromise()
       .then((data) => {
         data.items = putGroup.items
-        console.log('Update data from new modal:- ', data)
-        this._group.update(data).pipe(
+        this._group.update(putGroup).pipe(
           take(1),
           map(
             (res) => {
@@ -330,14 +332,14 @@ export class AddToGroupModal implements OnInit, OnDestroy, AfterViewInit {
               }
               return thmbObj
             })
-            
+
             this.recentGroups = data.groups
             this.loading.recentGroups = false
           })
           .catch( error => {
             console.error(error)
           })
-        }  
+        }
       },
       (error) => {
         console.error(error)
@@ -376,7 +378,7 @@ export class AddToGroupModal implements OnInit, OnDestroy, AfterViewInit {
               }
               return thmbObj
             })
-            
+
             if(timeStamp === this.allGroupSearchTS) {
               this.allGroups = this.allGroups.concat(data.groups)
             }
