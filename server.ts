@@ -2,7 +2,7 @@
 require("appdynamics").profile({
   controllerHostName: 'Ithaka.saas.appdynamics.com',
   controllerPort: 443, 
-  controllerSslEnabled: false,  // Set to true if controllerPort is SSL
+  controllerSslEnabled: true,  // Set to true if controllerPort is SSL
   accountName: 'Ithaka', // Required for SaaS accounts
   accountAccessKey: '8e51d6a16fb3', // Required for SaaS accounts
   applicationName: 'Artstor_TEST',
