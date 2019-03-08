@@ -194,24 +194,26 @@ export class AddToGroupModal implements OnInit, OnDestroy, AfterViewInit {
           console.error('Asset id not found when adding to group', asset)
         }
 
-        // Add id to group if it's not already in the group
-        // 1810 TODO: THIS WON'T ALLOW THE SAME ASSET TWICE!
-        if (assetId && putGroup.items.indexOf(assetId) < 0) {
-          if( index === 0 && this.detailViewBounds['width']) {
-            putGroup.items.push({
-              "id": assetId,
-              "zoom": {
-                "viewerX": this.detailViewBounds['x'],
-                "viewerY": this.detailViewBounds['y'],
-                "pointWidth": this.detailViewBounds['width'],
-                "pointHeight": this.detailViewBounds['height'],
-                "index": 0
-              }
-            })
-          } else {
-            putGroup.items.push(assetId);
+        // Update a group with a zoomed details
+        if(index === 0 && this.detailViewBounds['width']) {
+
+          let zoom: ZoomDetails = this.setZoomDetails({
+            "viewerX": Math.round(this.detailViewBounds['x']),
+            "viewerY": Math.round(this.detailViewBounds['y']),
+            "pointWidth": Math.round(this.detailViewBounds['width']),
+            "pointHeight": Math.round(this.detailViewBounds['height']),
+            "index": 0
+          })
+
+          putGroup.items.push({ "id": assetId, zoom })
+
+        } else {
+          // Add id to group if it's not already in the group
+          if (assetId && putGroup.items.indexOf(assetId) < 0) {
+            putGroup.items.push(assetId)
           }
         }
+
       }
     })
 
@@ -257,8 +259,6 @@ export class AddToGroupModal implements OnInit, OnDestroy, AfterViewInit {
           console.error(error);
           this.errorMsg = '<p>Sorry, we weren’t able to add the '+ (multipleSelected ? 'items' : 'item') +' at this time. Try again later or contact <a href="http://support.artstor.org/">support</a>.</p>'
       });
-
-
   }
 
   public loadMoreGroups(): void {
@@ -450,4 +450,16 @@ export class AddToGroupModal implements OnInit, OnDestroy, AfterViewInit {
       return group
     })
   }
+
+  private setZoomDetails(zoom: ZoomDetails): ZoomDetails {
+    return zoom
+  }
+}
+
+interface ZoomDetails {
+  viewerX: number
+  viewerY: number
+  pointWidth: number
+  pointHeight: number
+  index: number
 }

@@ -11,14 +11,14 @@ import { environment } from 'environments/environment';
 @Injectable()
 export class GroupService {
 
-    private groupUrl: string = ''
+    private groupV1: string = ''
     private groupV2: string = ''
     private options: {}
 
     constructor(
         private http: HttpClient
     ) {
-        this.groupUrl = environment.API_URL + '/api/v1/group'
+        this.groupV1 = environment.API_URL + '/api/v1/group'
         this.groupV2 = environment.API_URL + '/api/v2/group'
         this.options = { withCredentials: true }
     }
@@ -79,7 +79,7 @@ export class GroupService {
         }
 
         return this.http.get<GroupList>(
-            [this.groupUrl, '?size=', size, '&level=', level, '&from=', ( (pageNo - 1) * size),  tagParam, sortParam, orderParam, queryParam].join(''), options
+            [this.groupV1, '?size=', size, '&level=', level, '&from=', ( (pageNo - 1) * size),  tagParam, sortParam, orderParam, queryParam].join(''), options
         )
     }
 
@@ -97,7 +97,7 @@ export class GroupService {
 
         // Get first page to find out how many Groups are available
         this.http.get(
-            this.groupUrl + '?size=' + size + '&level=' + level + '&from=0', this.options
+            this.groupV1 + '?size=' + size + '&level=' + level + '&from=0', this.options
         ).toPromise()
         .then( data => {
             // Load first page
@@ -114,7 +114,7 @@ export class GroupService {
                 // Timeout for debouncing to prevent spamming the service
                 setTimeout(() => {
                     this.http.get(
-                        this.groupUrl + '?size=' + size + '&level=' + level + '&from=' + ( (thisPageNo - 1) * size), this.options
+                        this.groupV1 + '?size=' + size + '&level=' + level + '&from=' + ( (thisPageNo - 1) * size), this.options
                     ).toPromise()
                     .then(data => {
                         groups = groups.concat(data['groups'])
@@ -135,7 +135,7 @@ export class GroupService {
      * Check if a user has at least one Private Group
      */
     public hasPrivateGroups(): Observable<any> {
-      return this.http.get(this.groupUrl + '?size=1&level=private', this.options)
+      return this.http.get(this.groupV1 + '?size=1&level=private', this.options)
     }
 
      /**
@@ -143,10 +143,11 @@ export class GroupService {
      */
     public get(groupId: string, detailViewFlag?: boolean): Observable<any> {
         // Use v2 endpoint under the detailView feature flag
-        let url = detailViewFlag ? this.groupV2 + groupId : this.groupUrl + '/' + groupId
-        return this.http.get(
-            url, this.options
-        )
+      let url = detailViewFlag ? this.groupV2 + '/' + groupId : this.groupV1 + '/' + groupId
+
+      return this.http.get(
+          url, this.options
+      )
     }
 
     /**
@@ -154,7 +155,7 @@ export class GroupService {
      */
     public create(group: any): Observable<any> {
         return this.http.post(
-            this.groupUrl,
+            this.groupV1,
             group,
             this.options
         )
@@ -165,7 +166,7 @@ export class GroupService {
      */
     public copy(igId: string, copygroup: any): Observable<any> {
         return this.http.post(
-            this.groupUrl + '/' + igId + '/copy',
+            this.groupV1 + '/' + igId + '/copy',
             copygroup,
             this.options
         )
@@ -175,7 +176,7 @@ export class GroupService {
      * Remove Group
      */
     public delete(groupId: string): Observable<any> {
-        let reqUrl = this.groupUrl + '/' + groupId
+        let reqUrl = this.groupV1 + '/' + groupId
         let headers = new HttpHeaders().set('Accept', 'application/json')
         let options = { headers: headers }
 
@@ -213,7 +214,8 @@ export class GroupService {
                 return typeof(item) === 'string' ? { id: item } : item
               })
             }
-              putGroup[key] = group[key]
+
+            putGroup[key] = group[key]
           }
         }
 
@@ -242,7 +244,7 @@ export class GroupService {
      */
     public generateToken(id: string, options: { access_type: number, expiration_time?: Date }): Observable<any> {
         return this.http.post(
-            [this.groupUrl, id, 'share'].join('/'),
+            [this.groupV1, id, 'share'].join('/'),
             {}, // this call does not have any options for a body
             this.options
         )
@@ -255,7 +257,7 @@ export class GroupService {
      */
     public redeemToken(token: string): Observable<{ success: boolean, group: any }> {
         return this.http.post<{ success: boolean, group: any }>(
-            [this.groupUrl, 'redeem', token].join('/'),
+            [this.groupV1, 'redeem', token].join('/'),
             {},
             this.options
         );
@@ -267,7 +269,7 @@ export class GroupService {
      * @returns Observable resolved with { success: boolean, message: string }
      */
     public updateIgPublic(igId: string, makePublic: boolean) {
-        let reqUrl = [this.groupUrl, igId, 'admin', 'public'].join('/')
+        let reqUrl = [this.groupV1, igId, 'admin', 'public'].join('/')
         let body = { public: makePublic }
 
         return this.http.put(
@@ -292,6 +294,6 @@ export class GroupService {
      * Get a list of Tag suggestions
      */
     public getTagSuggestions(term: string) {
-        return this.http.get( this.groupUrl + '/tags/suggest?q=' + term + '&size=20', this.options)
+        return this.http.get( this.groupV1 + '/tags/suggest?q=' + term + '&size=20', this.options)
     }
 }
