@@ -523,12 +523,12 @@ export class AssetService {
      */
     public getCategoryInfo(catId: string) {
         let options = { withCredentials: true };
-        
+
         return this.http
             .get(this._auth.getUrl() + '/v1/categorydesc/' + catId, options)
             .toPromise();
     }
-    
+
     /**
      * Wrapper function for HTTP call to get collections. Used by home component
      * @param type Can either be 'ssc' or 'institution'
@@ -773,7 +773,7 @@ export class AssetService {
                 if (!Object.keys(data).length) {
                     throw new Error('No data in image group thumbnails response')
                 }
-                
+
                 data.total = data.items.length
 
                 // Fetch the asset(s) via items call only if the IG has atleast one asset
@@ -807,14 +807,6 @@ export class AssetService {
                               for(let item of data.items){
                                 if(item['zoom'] && item['id'] === thumbnail['objectId']){
                                     thumbnail['zoom'] = item['zoom']
-
-                                    // Setting dummy values untill we get correct values from the backend
-                                    // thumbnail['zoom'] = {
-                                    //     "viewerX": 0.49138915291172104,
-                                    //     "viewerY": 0.3638532628030086,
-                                    //     "pointWidth": 0.44454747774480715,
-                                    //     "pointHeight": 0.375
-                                    // }
                                 }
                               }
                               if (thumbnail['thumbnailImgUrl'] && thumbnail['compoundmediaCount'] > 0) {
