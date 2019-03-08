@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core'
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { BehaviorSubject, Observable, Subject, pipe } from 'rxjs';
+import { HttpClient, HttpHeaders } from '@angular/common/http'
+import { BehaviorSubject, Observable, Subject, pipe } from 'rxjs'
 import { catchError } from 'rxjs/operators'
-import { GroupList } from './datatypes';
+import { GroupList } from './datatypes'
 
 // Project Dependencies
-import { AuthService } from '.';
-import { environment } from 'environments/environment';
+import { AuthService } from '.'
+import { environment } from 'environments/environment'
 
 @Injectable()
 export class GroupService {
@@ -306,6 +306,9 @@ export class GroupService {
      * @returns returns an instance of ZoomDetails
      */
     public setZoomDetails(zoom: ZoomDetails): ZoomDetails {
+      for (let prop in zoom) {
+        zoom[prop] = Math.round(zoom[prop])
+      }
       return zoom
     }
 }

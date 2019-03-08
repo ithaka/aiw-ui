@@ -198,10 +198,10 @@ export class AddToGroupModal implements OnInit, OnDestroy, AfterViewInit {
         if(index === 0 && this.detailViewBounds['width']) {
 
           let zoom = this._group.setZoomDetails({
-            "viewerX": Math.round(this.detailViewBounds['x']),
-            "viewerY": Math.round(this.detailViewBounds['y']),
-            "pointWidth": Math.round(this.detailViewBounds['width']),
-            "pointHeight": Math.round(this.detailViewBounds['height']),
+            "viewerX": this.detailViewBounds['x'],
+            "viewerY": this.detailViewBounds['y'],
+            "pointWidth": this.detailViewBounds['width'],
+            "pointHeight": this.detailViewBounds['height'],
             "index": 0
           })
 
