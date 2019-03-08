@@ -209,6 +209,8 @@ export class GroupService {
         for (let key in group) {
           if (updateProperties.indexOf(key) > -1) {
 
+            // Group V2 Endpoint 'items' is no longer an array of strings,
+            // it is an array of objects, with each a single key named 'id' and value of type string
             if (key === 'items') {
               group.items = group.items.map(item => {
                 return typeof(item) === 'string' ? { id: item } : item
